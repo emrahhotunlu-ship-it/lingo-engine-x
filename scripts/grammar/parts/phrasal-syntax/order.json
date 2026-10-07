@@ -1,0 +1,194 @@
+[
+ {
+  "pat": "ph.separable",
+  "en": "Could you look the contract over before Friday?",
+  "de": "Kannst du dir den Vertrag bis Freitag mal ansehen?",
+  "chunks": [
+   "could you",
+   "look",
+   "the contract",
+   "over",
+   "before Friday"
+  ],
+  "alt": [
+   "Could you look over the contract before Friday?",
+   "Before Friday, could you look the contract over?",
+   "Before Friday, could you look over the contract?"
+  ],
+  "why": [
+   "Bei einem Nomen darf die Partikel vor oder nach dem Objekt stehen: look over the contract oder look the contract over.",
+   "With a noun the particle can go before or after the object: look over the contract or look the contract over."
+  ]
+ },
+ {
+  "pat": "ph.separable",
+  "en": "I picked it up from reception this morning.",
+  "de": "Ich habe es heute Morgen an der Rezeption abgeholt.",
+  "chunks": [
+   "I",
+   "picked",
+   "it",
+   "up",
+   "from reception",
+   "this morning"
+  ],
+  "alt": [
+   "This morning, I picked it up from reception.",
+   "I picked it up this morning from reception."
+  ],
+  "why": [
+   "Ein Pronomen steht bei trennbaren Verben immer in der Mitte: picked it up. Die Folge picked up it ist falsch.",
+   "A pronoun always goes in the middle of a separable verb: picked it up. The order picked up it is wrong."
+  ],
+  "bad": "I picked up it from reception this morning."
+ },
+ {
+  "pat": "ph.separable",
+  "en": "She turned the proposal down because of the price.",
+  "de": "Sie hat das Angebot wegen des Preises abgelehnt.",
+  "chunks": [
+   "she",
+   "turned",
+   "the proposal",
+   "down",
+   "because of",
+   "the price"
+  ],
+  "alt": [
+   "She turned down the proposal because of the price.",
+   "Because of the price, she turned the proposal down.",
+   "Because of the price, she turned down the proposal."
+  ],
+  "why": [
+   "Das Nomen the proposal darf zwischen turned und down stehen oder dahinter. Beides ist richtig.",
+   "The noun the proposal can sit between turned and down or come after it. Both are correct."
+  ]
+ },
+ {
+  "pat": "ph.together",
+  "en": "Our analyst will look into the delay this week.",
+  "de": "Unser Analyst wird die Verzögerung diese Woche untersuchen.",
+  "chunks": [
+   "our analyst",
+   "will",
+   "look",
+   "into",
+   "the delay",
+   "this week"
+  ],
+  "alt": [
+   "This week our analyst will look into the delay."
+  ],
+  "why": [
+   "look into bleibt zusammen, das Objekt folgt danach. Die Folge look the delay into ist falsch.",
+   "Look into stays together and the object follows. The order look the delay into is wrong."
+  ],
+  "bad": "Our analyst will look the delay into this week."
+ },
+ {
+  "pat": "ph.together",
+  "en": "Unfortunately, the deal with the supplier fell through at the last minute.",
+  "de": "Leider ist das Geschäft mit dem Lieferanten in letzter Minute gescheitert.",
+  "chunks": [
+   "unfortunately",
+   "the deal",
+   "with the supplier",
+   "fell through",
+   "at the last minute"
+  ],
+  "alt": [
+   "The deal with the supplier unfortunately fell through at the last minute."
+  ],
+  "why": [
+   "fall through braucht kein Objekt, deshalb bleiben beide Wörter zusammen und stehen vor der Zeitangabe.",
+   "Fall through takes no object, so both words stay together and come before the time phrase."
+  ]
+ },
+ {
+  "pat": "ph.three-word",
+  "en": "I'm really looking forward to meeting you in person.",
+  "de": "Ich freue mich wirklich darauf, dich persönlich zu treffen.",
+  "chunks": [
+   "I'm really",
+   "looking forward",
+   "to meeting",
+   "you",
+   "in person"
+  ],
+  "alt": [
+   "In person, I'm really looking forward to meeting you."
+  ],
+  "why": [
+   "Bei look forward to ist to eine Präposition, deshalb folgt die -ing-Form: to meeting, nicht to meet.",
+   "In look forward to, the to is a preposition, so the -ing form follows: to meeting, not to meet."
+  ],
+  "bad": "I'm really looking forward to meet you in person.",
+  "trap": {
+   "tile": "to meeting",
+   "instead": "to meet",
+   "why": {
+    "de": "Im Deutschen folgt „zu“ + Infinitiv. Im Englischen ist to hier eine Präposition und braucht die -ing-Form.",
+    "en": "German uses “zu” + infinitive. In English, to is a preposition here and needs the -ing form."
+   }
+  }
+ },
+ {
+  "pat": "ph.three-word",
+  "en": "Sadly, we have run out of spare parts for the old model.",
+  "de": "Leider sind uns die Ersatzteile für das alte Modell ausgegangen.",
+  "chunks": [
+   "sadly",
+   "we have",
+   "run out",
+   "of spare parts",
+   "for the old model"
+  ],
+  "alt": [
+   "We have sadly run out of spare parts for the old model."
+  ],
+  "why": [
+   "run out of ist ein Drei-Wort-Verb. Das of gehört fest dazu, danach folgt das Objekt.",
+   "Run out of is a three-word verb. The of is a fixed part, and the object follows."
+  ],
+  "bad": "Sadly, we have run out spare parts for the old model.",
+  "trap": {
+   "tile": "of spare parts",
+   "instead": "spare parts",
+   "why": {
+    "de": "Ohne das of fehlt die Präposition vor dem Objekt. Das Verb heißt run out of und bleibt zusammen.",
+    "en": "Without the of, the preposition before the object is missing. The verb is run out of and stays together."
+   }
+  }
+ },
+ {
+  "pat": "ph.particle",
+  "en": "Please turn the music down because it's far too loud.",
+  "de": "Bitte stell die Musik leiser, denn sie ist viel zu laut.",
+  "chunks": [
+   "please",
+   "turn",
+   "the music",
+   "down",
+   "because it's",
+   "far too loud"
+  ],
+  "alt": [
+   "Please turn down the music because it's far too loud.",
+   "Because it's far too loud, please turn the music down.",
+   "Because it's far too loud, please turn down the music."
+  ],
+  "why": [
+   "Die Partikel trägt den Sinn: turn down = leiser, turn up = lauter. Hier ist es zu laut, also down.",
+   "The particle carries the meaning: turn down = quieter, turn up = louder. It is too loud here, so down."
+  ],
+  "bad": "Please turn the music up because it's far too loud.",
+  "trap": {
+   "tile": "down",
+   "instead": "up",
+   "why": {
+    "de": "Die Partikel up macht lauter. Weil es schon zu laut ist, passt nur down.",
+    "en": "The particle up makes it louder. Since it is already too loud, only down fits."
+   }
+  }
+ }
+]

@@ -1,0 +1,245 @@
+[
+ {
+  "pat": "wo.verb-object",
+  "en": "She explained the new process clearly to the whole team.",
+  "de": "Sie hat dem ganzen Team den neuen Prozess klar erklärt.",
+  "chunks": [
+   "she",
+   "explained",
+   "the new process",
+   "clearly",
+   "to the whole team"
+  ],
+  "alt": [
+   "She clearly explained the new process to the whole team.",
+   "She explained the new process to the whole team clearly."
+  ],
+  "why": [
+   "Verb und Objekt bleiben zusammen: explained the new process. Das Adverb steht davor oder dahinter, nicht dazwischen.",
+   "Verb and object stay together: explained the new process. The adverb goes before or after, not in between."
+  ],
+  "bad": "She explained clearly the new process to the whole team."
+ },
+ {
+  "pat": "wo.place-time",
+  "en": "We are meeting the client in Denver on Thursday.",
+  "de": "Wir treffen den Kunden am Donnerstag in Denver.",
+  "chunks": [
+   "we",
+   "are meeting",
+   "the client",
+   "in Denver",
+   "on Thursday"
+  ],
+  "alt": [
+   "We are meeting the client on Thursday in Denver.",
+   "On Thursday, we are meeting the client in Denver.",
+   "In Denver, we are meeting the client on Thursday.",
+   "In Denver on Thursday, we are meeting the client.",
+   "On Thursday in Denver, we are meeting the client."
+  ],
+  "why": [
+   "Ort und Zeit folgen dem Objekt: the client in Denver on Thursday. Der Ort steht meist vor der Zeit.",
+   "Place and time follow the object: the client in Denver on Thursday. Place usually comes before time."
+  ],
+  "bad": "We are meeting in Denver on Thursday the client."
+ },
+ {
+  "pat": "wo.neg-inv",
+  "en": "Seldom does a vendor respond to complaints so quickly.",
+  "de": "Selten reagiert ein Anbieter so schnell auf Beschwerden.",
+  "chunks": [
+   "seldom",
+   "does",
+   "a vendor",
+   "respond",
+   "to complaints",
+   "so quickly"
+  ],
+  "why": [
+   "Mit „seldom“ vorn steht does vor dem Subjekt, danach die Grundform respond. Die Endung -s gehört schon zu does.",
+   "With “seldom” up front, does goes before the subject, then the base form respond. The -s ending already belongs to does."
+  ],
+  "bad": "Seldom does a vendor responds to complaints so quickly.",
+  "trap": {
+   "tile": "respond",
+   "instead": "responds",
+   "why": {
+    "de": "Im Deutschen trägt das Verb selbst die Endung („reagiert“). Im Englischen trägt does sie, das Vollverb bleibt in der Grundform.",
+    "en": "In German the verb itself carries the ending (“reagiert”). In English does carries it, and the main verb stays in the base form."
+   }
+  },
+  "alt": [
+   "Seldom does a vendor respond so quickly to complaints."
+  ]
+ },
+ {
+  "pat": "wo.neg-inv",
+  "en": "Never have we seen such a smooth rollout.",
+  "de": "Noch nie haben wir einen so reibungslosen Rollout erlebt.",
+  "chunks": [
+   "never",
+   "have",
+   "we",
+   "seen",
+   "such a smooth rollout"
+  ],
+  "alt": [
+   "We have never seen such a smooth rollout."
+  ],
+  "why": [
+   "Nach „never“ vorn steht have vor dem Subjekt: Never have we seen. Mitten im Satz bleibt die normale Reihenfolge.",
+   "After “never” up front, have goes before the subject: Never have we seen. In mid-sentence the normal order stays."
+  ],
+  "bad": "Never we have seen such a smooth rollout."
+ },
+ {
+  "pat": "wo.not-only",
+  "en": "Not only did the vendor deliver late, but it also billed us twice.",
+  "de": "Der Anbieter hat nicht nur zu spät geliefert, sondern uns auch doppelt berechnet.",
+  "chunks": [
+   "not only",
+   "did",
+   "the vendor",
+   "deliver late",
+   "but",
+   "it also",
+   "billed us twice"
+  ],
+  "single": "Mit „not only“ vorn steht did vor dem Subjekt. Andere Reihenfolgen verändern den Satz.",
+  "why": [
+   "Nach „not only“ vorn steht did vor dem Subjekt, danach die Grundform. Der zweite Teil mit but also bleibt normal.",
+   "After “not only” up front, did goes before the subject, then the base form. The but also part stays normal."
+  ],
+  "bad": "Not only did the vendor delivered late, but it also billed us twice.",
+  "trap": {
+   "tile": "deliver late",
+   "instead": "delivered late",
+   "why": {
+    "de": "Im Deutschen steht die Vergangenheit am Verb („lieferte“). Im Englischen trägt did sie, danach folgt die Grundform deliver.",
+    "en": "In German the past is marked on the verb (“lieferte”). In English did carries it, and the base form deliver follows."
+   }
+  }
+ },
+ {
+  "pat": "wo.not-only",
+  "en": "Not only has the pilot cut costs, but it has also improved quality.",
+  "de": "Das Pilotprojekt hat nicht nur Kosten gesenkt, sondern auch die Qualität verbessert.",
+  "chunks": [
+   "not only",
+   "has",
+   "the pilot",
+   "cut costs",
+   "but",
+   "it has also",
+   "improved quality"
+  ],
+  "alt": [
+   "The pilot has not only cut costs, but it has also improved quality."
+  ],
+  "why": [
+   "Nach „not only“ vorn steht has vor dem Subjekt: Not only has the pilot cut costs. Der zweite Teil ist ein normaler Satz.",
+   "After “not only” up front, has goes before the subject: Not only has the pilot cut costs. The second part is a normal clause."
+  ],
+  "bad": "Not only the pilot has cut costs, but it has also improved quality."
+ },
+ {
+  "pat": "wo.hardly-sooner",
+  "en": "Hardly had we posted the update when the first bug report arrived.",
+  "de": "Kaum hatten wir das Update veröffentlicht, kam der erste Fehlerbericht.",
+  "chunks": [
+   "hardly",
+   "had",
+   "we",
+   "posted the update",
+   "when",
+   "the first bug report",
+   "arrived"
+  ],
+  "alt": [
+   "We had hardly posted the update when the first bug report arrived."
+  ],
+  "why": [
+   "Hardly + had + Subjekt + Partizip nennt das erste Ereignis. Das zweite folgt nach when im Past Simple.",
+   "Hardly + had + subject + participle names the first event. The second follows after when in the simple past."
+  ],
+  "bad": "Hardly we had posted the update when the first bug report arrived."
+ },
+ {
+  "pat": "wo.hardly-sooner",
+  "en": "No sooner had I sent the draft than the client called back.",
+  "de": "Kaum hatte ich den Entwurf geschickt, rief der Kunde zurück.",
+  "chunks": [
+   "no sooner",
+   "had",
+   "I",
+   "sent the draft",
+   "than",
+   "the client",
+   "called back"
+  ],
+  "alt": [
+   "I had no sooner sent the draft than the client called back."
+  ],
+  "why": [
+   "No sooner + had + Subjekt + Partizip, dann than und das Past Simple. Die feste Paarung ist no sooner … than.",
+   "No sooner + had + subject + participle, then than and the simple past. The fixed pair is no sooner … than."
+  ],
+  "bad": "No sooner had I sent the draft when the client called back.",
+  "trap": {
+   "tile": "than",
+   "instead": "when",
+   "why": {
+    "de": "Hier gibt es kein Übersetzungsproblem, sondern eine Verwechslung der Paare: hardly … when, aber no sooner … than.",
+    "en": "This is no translation problem but a mix-up of the pairs: hardly … when, but no sooner … than."
+   }
+  }
+ },
+ {
+  "pat": "wo.only-inv",
+  "en": "Not until the audit finished did we see the full picture.",
+  "de": "Erst als die Prüfung abgeschlossen war, sahen wir das ganze Bild.",
+  "chunks": [
+   "not until",
+   "the audit",
+   "finished",
+   "did",
+   "we",
+   "see",
+   "the full picture"
+  ],
+  "single": "Mit „not until“ vorn steht did vor dem Subjekt. Andere Reihenfolgen verändern den Satz.",
+  "why": [
+   "Nach „not until …“ vorn folgt die Inversion im Hauptsatz: did we see. Der Teil mit not until bleibt am Anfang.",
+   "After “not until …” up front, the main clause is inverted: did we see. The not until part stays at the start."
+  ],
+  "bad": "Not until the audit finished we did see the full picture."
+ },
+ {
+  "pat": "wo.only-inv",
+  "en": "Only after the call did she send the contract.",
+  "de": "Erst nach dem Anruf hat sie den Vertrag geschickt.",
+  "chunks": [
+   "only after",
+   "the call",
+   "did",
+   "she",
+   "send",
+   "the contract"
+  ],
+  "why": [
+   "Nach „only after …“ vorn steht did vor dem Subjekt, danach die Grundform send. Das Hilfsverb trägt die Vergangenheit.",
+   "After “only after …” up front, did goes before the subject, then the base form send. The auxiliary carries the past."
+  ],
+  "bad": "Only after the call did she sent the contract.",
+  "trap": {
+   "tile": "send",
+   "instead": "sent",
+   "why": {
+    "de": "Im Deutschen trägt das Verb die Vergangenheit („schickte“). Im Englischen trägt did sie, danach folgt die Grundform send.",
+    "en": "In German the verb carries the past (“schickte”). In English did carries it, and the base form send follows."
+   }
+  },
+  "single": "Mit only after vorn steht did vor dem Subjekt."
+ }
+]

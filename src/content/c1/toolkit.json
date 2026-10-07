@@ -3308,6 +3308,10 @@
    "type": "gap",
    "prompt": "We need your decision ___ the end of Q3.",
    "answer": "by",
+   "accepted": [
+    "no later than",
+    "before"
+   ],
    "expl": "Für eine Frist („spätestens bis“) nimmst du „by“: by the end of Q3.",
    "expl_en": "For a deadline (“no later than”) use “by”: by the end of Q3."
   },
@@ -3316,6 +3320,10 @@
    "type": "gap",
    "prompt": "The trial runs ___ June 30, then it ends automatically.",
    "answer": "until",
+   "accepted": [
+    "through",
+    "up to"
+   ],
    "expl": "Für eine Dauer „bis zu“ einem Zeitpunkt nimmst du „until“: The trial runs until June 30.",
    "expl_en": "For a duration “up to” a point in time use “until”: The trial runs until June 30."
   },
@@ -3324,6 +3332,10 @@
    "type": "gap",
    "prompt": "We can set up the test system ___ two weeks.",
    "answer": "within",
+   "accepted": [
+    "in less than",
+    "in"
+   ],
    "expl": "Für „innerhalb“ eines Zeitraums nimmst du „within“: within two weeks.",
    "expl_en": "For “inside” a period of time use “within”: within two weeks."
   },
@@ -3332,7 +3344,15 @@
    "type": "gap",
    "prompt": "___ June 1, all invoices must be archived electronically.",
    "answer": "As of",
-   "expl": "Für „ab“ einem Stichtag nimmst du „As of“: As of June 1, …",
+   "accepted": [
+    "From",
+    "Starting",
+    "Beginning",
+    "Effective",
+    "Starting from",
+    "Effective as of"
+   ],
+   "expl":"Für „ab“ einem Stichtag nimmst du „As of“: As of June 1, …",
    "expl_en": "For “from” a key date onward use “As of”: As of June 1, …"
   },
   {
@@ -3409,7 +3429,8 @@
    "prompt": "The rollout must be finished before September 30 at the latest. → The rollout must be finished ___ September 30.",
    "answer": "by",
    "accepted": [
-    "no later than"
+    "no later than",
+    "on or before"
    ],
    "expl": "Frist: „by September 30“.",
    "expl_en": "Deadline: by September 30."
@@ -3419,6 +3440,10 @@
    "type": "correct",
    "prompt": "We will send you the offer until Wednesday.",
    "answer": "We will send you the offer by Wednesday.",
+   "accepted": [
+    "We will send you the offer no later than Wednesday.",
+    "We will send you the offer on or before Wednesday."
+   ],
    "expl": "Frist heißt „by“, nicht „until“.",
    "expl_en": "A deadline is “by”, not “until”."
   },
@@ -3428,7 +3453,9 @@
    "prompt": "The new system is two times faster as the old one.",
    "answer": "The new system is twice as fast as the old one.",
    "accepted": [
-    "The new system is twice as fast as the old system."
+    "The new system is twice as fast as the old system.",
+    "The new system is two times as fast as the old one.",
+    "The new system is two times as fast as the old system."
    ],
    "expl": "Vergleich: „twice as“ + Adjektiv + „as“.",
    "expl_en": "Comparison: twice as + adjective + as."
@@ -5364,7 +5391,9 @@
    "type": "gap",
    "prompt": "The deal fell ___ at the last minute because of a legal issue.",
    "answer": "through",
-   "accepted": [],
+   "accepted": [
+    "apart"
+   ],
    "hint": "(scheitern)",
    "expl": "„fall through“ bedeutet „scheitern“.",
    "expl_en": "“Fall through” means to fail."
@@ -5389,7 +5418,8 @@
    "accepted": [
     "dig",
     "delve",
-    "go"
+    "go",
+    "check"
    ],
    "expl": "„look into“ bedeutet „untersuchen“.",
    "expl_en": "“Look into” means to investigate."
@@ -5417,7 +5447,9 @@
    "type": "correct",
    "prompt": "I'm looking forward to see you at the conference.",
    "answer": "I'm looking forward to seeing you at the conference.",
-   "accepted": [],
+   "accepted": [
+    "I look forward to seeing you at the conference."
+   ],
    "expl": "„to“ ist hier eine Präposition und braucht die -ing-Form.",
    "expl_en": "“To” is a preposition here and needs the -ing form."
   },
@@ -5493,7 +5525,9 @@
    "type": "gap",
    "prompt": "Never ___ I seen such a well-organized conference.",
    "answer": "have",
-   "accepted": [],
+   "accepted": [
+    "had"
+   ],
    "hint": "(Hilfsverb)",
    "expl": "Nach „never“ steht das Hilfsverb vor dem Subjekt.",
    "expl_en": "After “never” the auxiliary comes before the subject."
@@ -5516,7 +5550,10 @@
    "prompt": "Seldom ___ a company respond so quickly to a complaint.",
    "answer": "does",
    "accepted": [
-    "did"
+    "did",
+    "will",
+    "would",
+    "can"
    ],
    "hint": "(Hilfsverb)",
    "expl": "Nach „seldom“ folgt Inversion mit „do“.",
@@ -5645,7 +5682,9 @@
    "answer": "however",
    "accepted": [
     "nevertheless",
-    "nonetheless"
+    "nonetheless",
+    "even so",
+    "that said"
    ],
    "hint": "(Gegensatz, nach Semikolon)",
    "expl": "„however“ steht nach Semikolon und bekommt ein Komma.",
@@ -5657,7 +5696,9 @@
    "prompt": "Prices are rising, ___ wages are staying flat.",
    "answer": "while",
    "accepted": [
-    "whereas"
+    "whereas",
+    "but",
+    "yet"
    ],
    "hint": "(Kontrast, Konjunktion)",
    "expl": "„while“ oder „whereas“ stellt zwei Dinge gegenüber.",
@@ -5691,7 +5732,12 @@
    "answer": "Although we were short on time, we completed the audit.",
    "accepted": [
     "Despite being short on time, we completed the audit.",
-    "Despite the lack of time, we completed the audit."
+    "Despite the lack of time, we completed the audit.",
+    "Even though we were short on time, we completed the audit.",
+    "Though we were short on time, we completed the audit.",
+    "Despite the fact that we were short on time, we completed the audit.",
+    "In spite of being short on time, we completed the audit.",
+    "In spite of the lack of time, we completed the audit."
    ],
    "expl": "Vor einem Satz steht „although“; „despite“ braucht Nomen oder -ing.",
    "expl_en": "A clause takes “although”; “despite” needs a noun or -ing."
@@ -5701,7 +5747,9 @@
    "type": "correct",
    "prompt": "In spite the delay, the project was a success.",
    "answer": "In spite of the delay, the project was a success.",
-   "accepted": [],
+   "accepted": [
+    "Despite the delay, the project was a success."
+   ],
    "expl": "„in spite“ braucht „of“.",
    "expl_en": "“In spite” needs “of”."
   },
@@ -5712,7 +5760,11 @@
    "answer": "The budget was approved; however, the project is still on hold.",
    "accepted": [
     "The budget was approved. However, the project is still on hold.",
-    "The budget was approved, but the project is still on hold."
+    "The budget was approved, but the project is still on hold.",
+    "The budget was approved; nevertheless, the project is still on hold.",
+    "The budget was approved. Nevertheless, the project is still on hold.",
+    "The budget was approved; nonetheless, the project is still on hold.",
+    "Although the budget was approved, the project is still on hold."
    ],
    "expl": "„however“ verbindet keine Sätze mit bloßem Komma.",
    "expl_en": "“However” cannot join clauses with just a comma."
@@ -5846,7 +5898,9 @@
    "type": "correct",
    "prompt": "Our sales are higher as last year.",
    "answer": "Our sales are higher than last year.",
-   "accepted": [],
+   "accepted": [
+    "Our sales are higher than last year's."
+   ],
    "expl": "Nach dem Komparativ steht „than“.",
    "expl_en": "After the comparative comes “than”."
   },

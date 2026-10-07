@@ -104,13 +104,13 @@ describe('selectRound', () => {
   });
 
   it('Quellen: offene daily-Aufgaben vor dem Pool, gesehene nie (außer als Notnagel)', () => {
-    const d: GrammarTask = normalizeTask({ topic: 'comparison', type: 'gap', prompt: 'If it ___ (rain), we stay in.', answer: 'rains' }, 'daily', 'daily/2026-09-27')!;
-    const p: GrammarTask = normalizeTask({ topic: 'comparison', type: 'gap', prompt: 'If I ___ (be) you, I would wait.', answer: 'were' }, 'pool')!;
-    const r = selectRound({ ...input, mode: 'topic', topic: 'comparison', dailyOpen: [d], pool: [p], size: 3 });
+    const d: GrammarTask = normalizeTask({ topic: 'conditionals', pat: 'cn.first', type: 'gap', prompt: 'If it ___ (rain), we stay in.', answer: 'rains' }, 'daily', 'daily/2026-09-27')!;
+    const p: GrammarTask = normalizeTask({ topic: 'conditionals', pat: 'cn.second', type: 'gap', prompt: 'If I ___ (be) you, I would wait.', answer: 'were' }, 'pool')!;
+    const r = selectRound({ ...input, mode: 'topic', topic: 'conditionals', dailyOpen: [d], pool: [p], size: 3 });
     expect(r.map((t) => t.src)).toEqual(['daily', 'pool', 'seed']);
     expect(r[0]!.key).toBe(d.key);
-    const seenDocs = new Map([['comparison', { p: 0.2, n: 6, seen: [d.key] }]]);
-    const r2 = selectRound({ ...input, grammarDocs: seenDocs, mode: 'topic', topic: 'comparison', dailyOpen: [d], pool: [], size: 3 });
+    const seenDocs = new Map([['conditionals', { p: 0.2, n: 6, seen: [d.key] }]]);
+    const r2 = selectRound({ ...input, grammarDocs: seenDocs, mode: 'topic', topic: 'conditionals', dailyOpen: [d], pool: [], size: 3 });
     expect(r2.some((t) => t.key === d.key)).toBe(false);
   });
 

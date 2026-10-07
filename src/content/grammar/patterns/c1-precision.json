@@ -1,0 +1,433 @@
+{
+ "topic": "c1-precision",
+ "canDo": {
+  "de": "Ich kann Zeit und Menge genau angeben: Frist mit by, Dauer mit until, Zeitspanne mit within, Stichtag mit as of, gerundete Zahlen mit roughly oder just under und Vielfache mit twice as … as.",
+  "en": "I can state time and amount precisely: a deadline with by, a duration with until, a time span with within, a key date with as of, rounded numbers with roughly or just under, and multiples with twice as … as."
+ },
+ "order": [
+  "cp.by-until",
+  "cp.within",
+  "cp.as-of",
+  "cp.approx",
+  "cp.multiples"
+ ],
+ "introPlan": [
+  [
+   "cp.by-until",
+   "cp.within"
+  ],
+  [
+   "cp.as-of",
+   "cp.approx"
+  ],
+  [
+   "cp.multiples"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Muss etwas bis dahin fertig sein (by) oder läuft es die ganze Zeit bis dahin (until)?",
+   "Geht es um eine Spanne ab jetzt (within) oder um einen Stichtag, ab dem etwas gilt (as of)?",
+   "Ist die Zahl gerundet (roughly, just under, well over) oder ein Vielfaches (twice as … as)?"
+  ],
+  "en": [
+   "Must something be finished by then (by) or does it last the whole time up to then (until)?",
+   "Is it a span starting now (within) or a key date from which something applies (as of)?",
+   "Is the number rounded (roughly, just under, well over) or a multiple (twice as … as)?"
+  ]
+ },
+ "patterns": [
+  {
+   "id": "cp.by-until",
+   "name": {
+    "de": "by / until · Frist oder Dauer",
+    "en": "by / until · deadline or duration"
+   },
+   "form": {
+    "de": "by + Zeitpunkt (Frist) · until + Zeitpunkt (Dauer)",
+    "en": "by + time (deadline) · until + time (duration)"
+   },
+   "use": {
+    "de": "by nennt die Frist: spätestens dann ist es erledigt. until nennt die Dauer: bis dahin besteht ein Zustand ohne Pause.",
+    "en": "by names the deadline: it is done by then at the latest. until names the duration: a state lasts without a break up to then."
+   },
+   "signals": [
+    "by",
+    "no later than",
+    "at the latest",
+    "on or before",
+    "until",
+    "till",
+    "through"
+   ],
+   "ex": [
+    {
+     "en": "Please confirm the numbers by noon.",
+     "de": "Bitte bestätigen Sie die Zahlen bis spätestens zwölf Uhr.",
+     "ctx": "mail"
+    },
+    {
+     "en": "The system stays offline until 6 p.m.",
+     "de": "Das System bleibt bis 18 Uhr offline.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I'm in workshops until Thursday.",
+     "de": "Ich bin bis Donnerstag in Workshops.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Please send me the draft until Friday.",
+    "good": "Please send me the draft by Friday.",
+    "cause": {
+     "de": "Deutsch hat nur ein Wort: „bis Freitag“ deckt Frist und Dauer ab. Im Kopf wird daraus automatisch until.",
+     "en": "German has one word: “bis Freitag” covers both deadline and duration. In your head it automatically becomes until."
+    }
+   },
+   "contrast": {
+    "with": "cp.within",
+    "a": "We'll reply by Friday.",
+    "b": "We'll reply within two days.",
+    "diff": {
+     "de": "by nennt einen festen Zeitpunkt im Kalender, within eine Zeitspanne ab jetzt.",
+     "en": "by names a fixed point on the calendar; within names a span of time starting now."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The proposal must reach us by Friday.",
+     "q": {
+      "de": "Darf das Angebot schon am Mittwoch bei uns eintreffen?",
+      "en": "Can the proposal arrive on Wednesday?"
+     },
+     "a": true
+    },
+    {
+     "s": "The office is closed until Monday.",
+     "q": {
+      "de": "Ist das Büro am Samstag geöffnet?",
+      "en": "Is the office open on Saturday?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Muss bis dahin etwas fertig sein, oder dauert etwas bis dahin ununterbrochen an?",
+    "en": "Must something be finished by then, or does something continue without a break up to then?"
+   }
+  },
+  {
+   "id": "cp.within",
+   "name": {
+    "de": "within · innerhalb einer Spanne",
+    "en": "within · inside a time span"
+   },
+   "form": {
+    "de": "within + Zeitspanne",
+    "en": "within + time span"
+   },
+   "use": {
+    "de": "within nennt die Zeitspanne ab jetzt, an deren Ende es spätestens passiert. in two weeks nennt dagegen den Zeitpunkt nach zwei Wochen.",
+    "en": "within names the span from now by whose end it happens at the latest. in two weeks names the point in time after two weeks."
+   },
+   "signals": [
+    "within",
+    "within the next",
+    "inside of"
+   ],
+   "ex": [
+    {
+     "en": "We respond to every ticket within one business day.",
+     "de": "Wir beantworten jedes Ticket innerhalb eines Werktags.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Please ping me within the hour if anything breaks.",
+     "de": "Schreib mir bitte innerhalb einer Stunde, falls etwas ausfällt.",
+     "ctx": "talk"
+    },
+    {
+     "en": "Refunds are issued within seven days of the return.",
+     "de": "Erstattungen erfolgen innerhalb von sieben Tagen nach der Rückgabe.",
+     "ctx": "mail"
+    }
+   ],
+   "trap": {
+    "bad": "We'll reply to every ticket by one business day.",
+    "good": "We'll reply to every ticket within one business day.",
+    "cause": {
+     "de": "Aus „bis zu einem Werktag“ wird schnell by one business day. Doch by verlangt einen Zeitpunkt (by noon), within eine Spanne.",
+     "en": "From “bis zu einem Werktag” it is easy to get by one business day. But by needs a point in time (by noon), within needs a span."
+    }
+   },
+   "contrast": {
+    "with": "cp.by-until",
+    "a": "We'll reply within two days.",
+    "b": "We'll reply by Friday.",
+    "diff": {
+     "de": "within zählt eine Spanne ab jetzt, by nennt einen festen Termin im Kalender.",
+     "en": "within counts a span starting now; by names a fixed date on the calendar."
+    }
+   },
+   "ccq": [
+    {
+     "s": "We'll respond within two days.",
+     "q": {
+      "de": "Kann die Antwort schon morgen kommen?",
+      "en": "Can the answer come as early as tomorrow?"
+     },
+     "a": true
+    },
+    {
+     "s": "Your account will be ready in two days.",
+     "q": {
+      "de": "Ist das Konto heute Abend schon fertig?",
+      "en": "Is the account ready tonight?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Wann ist es spätestens fertig: irgendwann innerhalb der Spanne oder erst an ihrem Ende?",
+    "en": "When is it done at the latest: sometime inside the span or only at its end?"
+   }
+  },
+  {
+   "id": "cp.as-of",
+   "name": {
+    "de": "as of · ab einem Stichtag",
+    "en": "as of · from a key date"
+   },
+   "form": {
+    "de": "as of + Stichtag",
+    "en": "as of + key date"
+   },
+   "use": {
+    "de": "as of nennt den Stichtag, ab dem etwas gilt oder gemessen wird: As of June 1 … Es steht auch für den Stand: as of today.",
+    "en": "as of names the key date from which something applies or is measured: As of June 1 … It also gives the status: as of today."
+   },
+   "signals": [
+    "as of",
+    "effective",
+    "starting",
+    "beginning",
+    "from … on"
+   ],
+   "ex": [
+    {
+     "en": "As of March 1, the new travel policy applies.",
+     "de": "Ab dem 1. März gilt die neue Reiserichtlinie.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "As of today, 82 licenses are active.",
+     "de": "Stand heute sind 82 Lizenzen aktiv.",
+     "ctx": "mail"
+    },
+    {
+     "en": "I'm off the project as of next week.",
+     "de": "Ab nächster Woche bin ich nicht mehr im Projekt.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Since next Monday, the new rules apply.",
+    "good": "As of next Monday, the new rules apply.",
+    "cause": {
+     "de": "Kein reiner Übersetzungsfehler: Deutsch trennt „ab“ und „seit“ ebenfalls. Der Griff zu since kommt aus dem Wunsch nach einem Startdatum-Wort, doch since blickt zurück.",
+     "en": "Not a pure translation error: German also separates “ab” and “seit”. Reaching for since comes from wanting a start-date word, but since looks back."
+    }
+   },
+   "contrast": {
+    "with": "cp.by-until",
+    "a": "As of Friday, the form is mandatory.",
+    "b": "By Friday, the form must be submitted.",
+    "diff": {
+     "de": "as of lässt eine Regel an einem Stichtag beginnen. by nennt den letzten Tag für eine Aufgabe.",
+     "en": "as of starts a rule on a key date. by names the last day for a task."
+    }
+   },
+   "ccq": [
+    {
+     "s": "As of June 1, all orders go through the portal.",
+     "q": {
+      "de": "Gilt das auch für Bestellungen vom 15. Mai?",
+      "en": "Does that apply to orders from May 15?"
+     },
+     "a": false
+    },
+    {
+     "s": "As of Monday, remote days are limited to two.",
+     "q": {
+      "de": "Gilt die Begrenzung schon am Montag?",
+      "en": "Does the limit already apply on Monday?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Beginnt eine Regel oder ein Stand an einem Stichtag, und blickt dein Wort zurück oder nach vorn?",
+    "en": "Does a rule or status begin on a key date, and does your word look back or forward?"
+   }
+  },
+  {
+   "id": "cp.approx",
+   "name": {
+    "de": "roughly, just under · Näherung",
+    "en": "roughly, just under · approximation"
+   },
+   "form": {
+    "de": "roughly / just under / well over + Zahl",
+    "en": "roughly / just under / well over + number"
+   },
+   "use": {
+    "de": "Zahlen werden gerundet und eingeordnet: roughly = ungefähr, just under = knapp darunter, well over = deutlich darüber. a fraction of = nur ein kleiner Teil davon.",
+    "en": "Numbers are rounded and placed: roughly = about, just under = slightly below, well over = clearly above. a fraction of = only a small part of it."
+   },
+   "signals": [
+    "roughly",
+    "around",
+    "approximately",
+    "just under",
+    "just over",
+    "well over",
+    "a fraction of"
+   ],
+   "ex": [
+    {
+     "en": "Roughly 40 percent of our leads come from referrals.",
+     "de": "Etwa 40 Prozent unserer Leads kommen über Empfehlungen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "We closed just under 30 deals last quarter.",
+     "de": "Im letzten Quartal haben wir knapp 30 Abschlüsse erzielt.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Well over 200 people joined the webinar.",
+     "de": "Weit über 200 Leute nahmen am Webinar teil.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The new plan costs only a fraction from what we paid before.",
+    "good": "The new plan costs only a fraction of what we paid before.",
+    "cause": {
+     "de": "Deutsch sagt „ein Bruchteil von“. Das von wird leicht zu from übersetzt, doch Englisch braucht of.",
+     "en": "German says “ein Bruchteil von”. The von is easily translated as from, but English needs of."
+    }
+   },
+   "contrast": {
+    "with": "cp.multiples",
+    "a": "We have roughly 2,000 users.",
+    "b": "We have twice as many users as last year.",
+    "diff": {
+     "de": "roughly rundet eine einzelne Zahl. twice as … as vergleicht zwei Größen miteinander.",
+     "en": "roughly rounds a single number. twice as … as compares two quantities with each other."
+    }
+   },
+   "ccq": [
+    {
+     "s": "We process just under 40,000 invoices a month.",
+     "q": {
+      "de": "Sind es mehr als 40.000 Rechnungen?",
+      "en": "Are there more than 40,000 invoices?"
+     },
+     "a": false
+    },
+    {
+     "s": "Well over 200 people attended.",
+     "q": {
+      "de": "Waren es höchstens 205 Leute?",
+      "en": "Were there at most 205 people?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Wie genau ist die Zahl, und liegt sie knapp darunter, ungefähr darauf oder deutlich darüber?",
+    "en": "How exact is the number, and is it slightly below, about equal or clearly above?"
+   }
+  },
+  {
+   "id": "cp.multiples",
+   "name": {
+    "de": "twice as … as · Vielfache",
+    "en": "twice as … as · multiples"
+   },
+   "form": {
+    "de": "twice / three times as + Adj. + as",
+    "en": "twice / three times as + adj. + as"
+   },
+   "use": {
+    "de": "Vielfache stehen direkt vor as … as: twice as fast as, three times as many as. Der Vergleich endet mit as, nicht mit than.",
+    "en": "Multiples sit directly before as … as: twice as fast as, three times as many as. The comparison ends with as, not than."
+   },
+   "signals": [
+    "twice as",
+    "three times as",
+    "half as",
+    "as many as",
+    "as much as"
+   ],
+   "ex": [
+    {
+     "en": "The premium plan costs twice as much as the basic one.",
+     "de": "Der Premium-Tarif kostet doppelt so viel wie der Basis-Tarif.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Support tickets take half as long as last year.",
+     "de": "Support-Tickets dauern halb so lange wie im letzten Jahr.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "We have three times as many leads as in Q1.",
+     "de": "Wir haben dreimal so viele Leads wie im ersten Quartal.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The update is twice as fast than the old one.",
+    "good": "The update is twice as fast as the old one.",
+    "cause": {
+     "de": "Kein reiner Übersetzungsfehler: Deutsch hat „doppelt so schnell wie“. Der Fehler entsteht, weil than nach dem Komparativ so vertraut ist.",
+     "en": "Not a pure translation error: German has “doppelt so schnell wie”. The slip happens because than is so familiar after a comparative."
+    }
+   },
+   "contrast": {
+    "with": "cp.approx",
+    "a": "We have twice as many users.",
+    "b": "We have roughly 2,000 users.",
+    "diff": {
+     "de": "twice as … as vergleicht zwei Größen miteinander. roughly rundet eine einzelne Zahl.",
+     "en": "twice as … as compares two quantities with each other. roughly rounds a single number."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The premium plan costs twice as much as the basic plan.",
+     "q": {
+      "de": "Kostet Premium 40, wenn Basic 20 kostet?",
+      "en": "Does premium cost 40 if basic costs 20?"
+     },
+     "a": true
+    },
+    {
+     "s": "We have half as many open tickets as last month.",
+     "q": {
+      "de": "Gibt es mehr offene Tickets als im letzten Monat?",
+      "en": "Are there more open tickets than last month?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Wo steht das Vielfache, und womit endet der Vergleich?",
+    "en": "Where does the multiple go, and how does the comparison end?"
+   }
+  }
+ ]
+}

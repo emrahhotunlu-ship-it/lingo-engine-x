@@ -1,0 +1,203 @@
+[
+ {
+  "pat": "cp.by-until",
+  "en": "Please upload the final report by Thursday at noon.",
+  "de": "Bitte laden Sie den Abschlussbericht bis Donnerstagmittag hoch.",
+  "chunks": [
+   "please",
+   "upload",
+   "the final report",
+   "by Thursday",
+   "at noon"
+  ],
+  "alt": [
+   "By Thursday at noon, please upload the final report."
+  ],
+  "why": [
+   "Eine Frist heißt by: „by Thursday“ bleibt ein Baustein, die Uhrzeit folgt mit at noon. Until würde eine Dauer meinen.",
+   "A deadline takes by: “by Thursday” stays one block, and the time follows as at noon. Until would mean a duration."
+  ],
+  "bad": "Please upload the final report until Thursday at noon.",
+  "trap": {
+   "tile": "by Thursday",
+   "instead": "until Thursday",
+   "why": {
+    "de": "Aus „bis Donnerstag“ wird im Kopf leicht until. Eine Frist braucht aber by.",
+    "en": "“Bis Donnerstag” easily turns into until. A deadline needs by."
+   }
+  }
+ },
+ {
+  "pat": "cp.by-until",
+  "en": "The maintenance window will stay open until midnight tonight.",
+  "de": "Das Wartungsfenster bleibt heute Nacht bis Mitternacht geöffnet.",
+  "chunks": [
+   "the maintenance window",
+   "will",
+   "stay open",
+   "until midnight",
+   "tonight"
+  ],
+  "alt": [
+   "Tonight, the maintenance window will stay open until midnight.",
+   "The maintenance window will stay open tonight until midnight.",
+   "Until midnight tonight, the maintenance window will stay open."
+  ],
+  "why": [
+   "Das Fenster bleibt die ganze Zeit offen, also until. Die Zeitangabe tonight kann vorn, mitten oder hinten stehen.",
+   "The window stays open the whole time, so until. The time word tonight can sit at the front, in the middle or at the end."
+  ],
+  "bad": "The maintenance window will stay open by midnight tonight.",
+  "trap": {
+   "tile": "until midnight",
+   "instead": "by midnight",
+   "why": {
+    "de": "Beim Zustand „bleibt offen“ greift man zu by, weil Mitternacht ein Termin ist. Ein Zustand bis dahin braucht aber until.",
+    "en": "With the state “stays open”, learners reach for by because midnight is a date. A state up to then needs until."
+   }
+  }
+ },
+ {
+  "pat": "cp.within",
+  "en": "We usually confirm your booking within one business day.",
+  "de": "Wir bestätigen Ihre Buchung in der Regel innerhalb eines Werktags.",
+  "chunks": [
+   "we",
+   "usually",
+   "confirm",
+   "your booking",
+   "within one business day"
+  ],
+  "alt": [
+   "Within one business day, we usually confirm your booking.",
+   "Usually, we confirm your booking within one business day.",
+   "Usually, within one business day, we confirm your booking."
+  ],
+  "why": [
+   "Within nennt die Spanne ab jetzt: „within one business day“ bleibt zusammen. Das Adverb usually steht vor dem Verb oder vorn.",
+   "Within names the span from now: “within one business day” stays together. The adverb usually goes before the verb or at the front."
+  ],
+  "bad": "We usually confirm your booking by one business day.",
+  "trap": {
+   "tile": "within one business day",
+   "instead": "by one business day",
+   "why": {
+    "de": "Aus „bis zu einem Werktag“ wird leicht by. Eine Spanne braucht aber within, by verlangt einen Zeitpunkt.",
+    "en": "From “bis zu einem Werktag” it is easy to get by. A span needs within; by needs a point in time."
+   }
+  }
+ },
+ {
+  "pat": "cp.within",
+  "en": "Could you send me the revised figures within the next hour?",
+  "de": "Könntest du mir die überarbeiteten Zahlen innerhalb der nächsten Stunde schicken?",
+  "chunks": [
+   "could",
+   "you",
+   "send me",
+   "the revised figures",
+   "within the next hour"
+  ],
+  "alt": [
+   "Within the next hour, could you send me the revised figures?"
+  ],
+  "why": [
+   "Die Spanne within the next hour bleibt ein Block und steht am Ende oder ganz vorn. Die Frage beginnt mit could you.",
+   "The span within the next hour stays one block and goes at the end or right at the front. The question starts with could you."
+  ],
+  "bad": "Could you send me the revised figures until the next hour?",
+  "trap": {
+   "tile": "within the next hour",
+   "instead": "until the next hour",
+   "why": {
+    "de": "Aus „bis zur nächsten Stunde“ wird leicht until. Gemeint ist aber eine Spanne ab jetzt: within.",
+    "en": "“Bis zur nächsten Stunde” easily becomes until. A span from now is meant: within."
+   }
+  }
+ },
+ {
+  "pat": "cp.as-of",
+  "en": "As of next Monday, remote days are limited to two per week.",
+  "de": "Ab nächstem Montag sind Homeoffice-Tage auf zwei pro Woche begrenzt.",
+  "chunks": [
+   "as of next Monday",
+   "remote days",
+   "are limited",
+   "to two",
+   "per week"
+  ],
+  "alt": [
+   "Remote days are limited to two per week as of next Monday."
+  ],
+  "why": [
+   "As of nennt den Stichtag und bleibt mit dem Datum in einem Block. Er steht vorn oder am Satzende.",
+   "As of names the key date and stays in one block with the date. It goes at the front or at the end of the sentence."
+  ],
+  "bad": "Since next Monday, remote days are limited to two per week.",
+  "trap": {
+   "tile": "as of next Monday",
+   "instead": "since next Monday",
+   "why": {
+    "de": "Man nimmt since als Startdatum-Wort. Es blickt aber zurück und passt nicht zu einem künftigen Datum.",
+    "en": "Learners take since as a start-date word. But it looks back and does not fit a future date."
+   }
+  }
+ },
+ {
+  "pat": "cp.approx",
+  "en": "Just under half of our customers automatically renew after year one.",
+  "de": "Knapp die Hälfte unserer Kunden verlängert nach dem ersten Jahr automatisch.",
+  "chunks": [
+   "just under half",
+   "of our customers",
+   "automatically",
+   "renew",
+   "after year one"
+  ],
+  "alt": [
+   "After year one, just under half of our customers automatically renew.",
+   "Just under half of our customers renew automatically after year one.",
+   "Just under half of our customers renew after year one automatically.",
+   "After year one, just under half of our customers renew automatically."
+  ],
+  "why": [
+   "Just under half steht ohne Artikel direkt am Satzanfang. Das Adverb automatically steht vor oder nach dem Verb.",
+   "Just under half goes without an article straight at the start. The adverb automatically goes before or after the verb."
+  ],
+  "bad": "Just under the half of our customers automatically renew after year one.",
+  "trap": {
+   "tile": "just under half",
+   "instead": "just under the half",
+   "why": {
+    "de": "Deutsch sagt „die Hälfte“ mit Artikel. Englisch lässt ihn bei just under half weg.",
+    "en": "German says “die Hälfte” with an article. English drops it in just under half."
+   }
+  }
+ },
+ {
+  "pat": "cp.multiples",
+  "en": "Our team closed three times as many deals as last quarter.",
+  "de": "Unser Team hat dreimal so viele Abschlüsse gemacht wie im letzten Quartal.",
+  "chunks": [
+   "our team",
+   "closed",
+   "three times as many",
+   "deals",
+   "as last quarter"
+  ],
+  "single": "Das Vielfache steht direkt vor as many, und der Vergleich as last quarter muss ans Satzende. Eine zweite Reihenfolge gibt es nicht.",
+  "why": [
+   "Das Vielfache three times steht direkt vor as many, und der Vergleich schließt mit as … ab. Deutsch sagt dafür „wie“.",
+   "The multiple three times goes directly before as many, and the comparison closes with as …. German uses “wie” for that."
+  ],
+  "bad": "Our team closed three times more deals as last quarter.",
+  "trap": {
+   "tile": "three times as many",
+   "instead": "three times more",
+   "why": {
+    "de": "Vermischt wird „dreimal mehr“ mit as … as. Mit more passt am Ende nur than, nicht as.",
+    "en": "Learners mix “dreimal mehr” with as … as. With more only than fits at the end, not as."
+   }
+  }
+ }
+]

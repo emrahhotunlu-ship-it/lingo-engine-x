@@ -1,0 +1,186 @@
+[
+  {
+    "pat": "cmp.the-the",
+    "en": "The earlier we align, the fewer surprises we get.",
+    "de": "Je früher wir uns abstimmen, desto weniger Überraschungen erleben wir.",
+    "chunks": [
+      "the earlier",
+      "we align",
+      "the fewer",
+      "surprises",
+      "we get"
+    ],
+    "single": "Hier ist nur diese eine Reihenfolge richtig.",
+    "why": [
+      "Beide Teile beginnen mit the + Komparativ. Danach bleibt die normale Reihenfolge: Subjekt vor Verb (we align, we get).",
+      "Both parts start with the + comparative. After that normal order stays: subject before verb (we align, we get)."
+    ],
+    "bad": "The earlier we align, the fewer surprises get we.",
+    "trap": {
+      "tile": "we get",
+      "instead": "get we",
+      "why": {
+        "de": "Im Deutschen steht nach „desto“ das Verb vor dem Subjekt („desto weniger Überraschungen erleben wir“). Im Englischen bleibt Subjekt vor Verb.",
+        "en": "In German the verb comes before the subject after “desto”. English keeps the subject before the verb: we get."
+      }
+    }
+  },
+  {
+    "pat": "cmp.the-the",
+    "en": "The longer the call lasts, the less people listen.",
+    "de": "Je länger das Telefonat dauert, desto weniger hören die Leute zu.",
+    "chunks": [
+      "the longer",
+      "the call",
+      "lasts",
+      "the less",
+      "people",
+      "listen"
+    ],
+    "single": "Hier ist nur diese eine Reihenfolge richtig.",
+    "why": [
+      "Beide Teile stehen mit the + Komparativ vorn: erst die Ursache (the longer), dann die Folge (the less).",
+      "Both parts start with the + comparative: first the cause (the longer), then the result (the less)."
+    ]
+  },
+  {
+    "pat": "cmp.as-as",
+    "en": "Our new quote is not as high as theirs.",
+    "de": "Unser neues Angebot ist nicht so hoch wie ihres.",
+    "chunks": [
+      "our new quote",
+      "is not",
+      "as",
+      "high",
+      "as theirs"
+    ],
+    "single": "Hier ist nur diese eine Reihenfolge richtig.",
+    "why": [
+      "Bei not as … as steht das Adjektiv zwischen den beiden as. Danach folgt der Vergleichspartner.",
+      "In not as … as the adjective stands between the two as. The comparison partner follows."
+    ],
+    "bad": "Our new quote is not as high like theirs.",
+    "trap": {
+      "tile": "as theirs",
+      "instead": "like theirs",
+      "why": {
+        "de": "Deutsch sagt „so hoch wie“, und „wie“ klingt nach like. Im Englischen schließt aber as den Vergleich: as high as.",
+        "en": "German says “so hoch wie”, and “wie” sounds like like. In English, as closes the comparison: as high as."
+      }
+    }
+  },
+  {
+    "pat": "cmp.as-as",
+    "en": "The new process is twice as fast as the old one.",
+    "de": "Der neue Ablauf ist doppelt so schnell wie der alte.",
+    "chunks": [
+      "the new process",
+      "is",
+      "twice as",
+      "fast",
+      "as the old one"
+    ],
+    "single": "Hier ist nur diese eine Reihenfolge richtig.",
+    "why": [
+      "Das Vielfache steht vor dem ersten as: twice as fast as. Das Adjektiv sitzt zwischen den beiden as.",
+      "The multiple goes before the first as: twice as fast as. The adjective sits between the two as."
+    ]
+  },
+  {
+    "pat": "cmp.form",
+    "en": "The second option is cheaper and more flexible.",
+    "de": "Die zweite Option ist günstiger und flexibler.",
+    "chunks": [
+      "the second option",
+      "is",
+      "cheaper",
+      "and",
+      "more flexible"
+    ],
+    "why": [
+      "Cheaper ist kurz und bekommt -er. Flexible ist lang und bekommt more: more flexible.",
+      "Cheap is short and takes -er. Flexible is long and takes more: more flexible."
+    ],
+    "bad": "The second option is more cheaper and more flexible.",
+    "trap": {
+      "tile": "cheaper",
+      "instead": "more cheaper",
+      "why": {
+        "de": "Kein Übersetzungsfehler: Deutsch steigert immer mit -er („billiger“). Der Fehler entsteht, wenn man das englische more auch auf kurze Adjektive überträgt.",
+        "en": "Not a translation error: German always uses -er (“billiger”). The error comes from carrying English more over to short adjectives."
+      }
+    },
+    "alt": [
+      "The second option is more flexible and cheaper."
+    ]
+  },
+  {
+    "pat": "cmp.than",
+    "en": "Demand grew faster than we had planned.",
+    "de": "Die Nachfrage wuchs schneller, als wir geplant hatten.",
+    "chunks": [
+      "demand",
+      "grew",
+      "faster",
+      "than",
+      "we had planned"
+    ],
+    "single": "Hier ist nur diese eine Reihenfolge richtig.",
+    "why": [
+      "Nach dem Komparativ faster verbindet than den Vergleichspartner: than we had planned.",
+      "After the comparative faster, than links the comparison partner: than we had planned."
+    ],
+    "bad": "Demand grew faster as we had planned.",
+    "trap": {
+      "tile": "than",
+      "instead": "as",
+      "why": {
+        "de": "Nach dem Komparativ steht im Deutschen „als“ („schneller als“), und „als“ klingt wie as. Im Englischen heißt es than.",
+        "en": "After a comparative German uses “als” (“schneller als”), and “als” sounds like as. English needs than."
+      }
+    }
+  },
+  {
+    "pat": "cmp.degree",
+    "en": "The new route is far faster than the old one.",
+    "de": "Die neue Route ist viel schneller als die alte.",
+    "chunks": [
+      "the new route",
+      "is",
+      "far",
+      "faster",
+      "than the old one"
+    ],
+    "single": "Hier ist nur diese eine Reihenfolge richtig.",
+    "why": [
+      "Far steht direkt vor dem Komparativ faster und zeigt den großen Abstand. Danach folgt than.",
+      "Far goes directly before the comparative faster and shows the big gap. Then than follows."
+    ],
+    "bad": "The new route is very faster than the old one.",
+    "trap": {
+      "tile": "far",
+      "instead": "very",
+      "why": {
+        "de": "Kein Übersetzungsfehler: Deutsch sagt „viel schneller“, nicht „sehr schneller“. Der Fehler entsteht, weil very bei Grundformen (very fast) so häufig ist.",
+        "en": "Not a translation error: German says “viel schneller”, not “sehr schneller”. The error comes from very being so common with base forms (very fast)."
+      }
+    }
+  },
+  {
+    "pat": "cmp.degree",
+    "en": "Our results are slightly better than last year.",
+    "de": "Unsere Ergebnisse sind etwas besser als letztes Jahr.",
+    "chunks": [
+      "our results",
+      "are",
+      "slightly",
+      "better",
+      "than last year"
+    ],
+    "single": "Hier ist nur diese eine Reihenfolge richtig.",
+    "why": [
+      "Slightly steht vor dem Komparativ better und nennt einen kleinen Unterschied. Danach folgt than.",
+      "Slightly goes before the comparative better and names a small difference. Then than follows."
+    ]
+  }
+]

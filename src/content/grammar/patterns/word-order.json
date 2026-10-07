@@ -1,0 +1,510 @@
+{
+ "topic": "word-order",
+ "canDo": {
+  "de": "Ich kann Sätze genau bauen: Verb und Objekt zusammenhalten, meist Ort vor Zeit setzen und nach never, not only, hardly, no sooner und only förmlich invertieren.",
+  "en": "I can build sentences precisely: keep verb and object together, put place before time, and invert formally after never, not only, hardly, no sooner and only."
+ },
+ "order": [
+  "wo.verb-object",
+  "wo.place-time",
+  "wo.neg-inv",
+  "wo.not-only",
+  "wo.hardly-sooner",
+  "wo.only-inv"
+ ],
+ "introPlan": [
+  [
+   "wo.verb-object",
+   "wo.place-time"
+  ],
+  [
+   "wo.neg-inv",
+   "wo.not-only"
+  ],
+  [
+   "wo.hardly-sooner",
+   "wo.only-inv"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Steht ein verneinendes oder einschränkendes Wort (never, only after) am Satzanfang? Dann Hilfsverb vor das Subjekt.",
+   "Hängt das Adverb zwischen Verb und Objekt? Dann davor oder dahinter setzen.",
+   "Folgen mehrere Angaben am Satzende? Meist Art und Weise, dann Ort, dann Zeit."
+  ],
+  "en": [
+   "Does a negative or limiting word (never, only after) open the sentence? Then put the auxiliary before the subject.",
+   "Is the adverb between verb and object? Move it before the verb or after the object.",
+   "Do several details close the sentence? Usually manner, then place, then time."
+  ]
+ },
+ "patterns": [
+  {
+   "id": "wo.verb-object",
+   "name": {
+    "de": "Verb und Objekt bleiben zusammen",
+    "en": "Verb and object stay together"
+   },
+   "form": {
+    "de": "Subjekt + Verb + Objekt, Adverb davor oder danach",
+    "en": "subject + verb + object, adverb before or after"
+   },
+   "use": {
+    "de": "In der Regel steht zwischen Verb und direktem Objekt kein Adverb. Es steht vor dem Verb (clearly explained) oder hinter dem Objekt (explained the plan clearly).",
+    "en": "Usually no adverb goes between the verb and its direct object. It sits before the verb (clearly explained) or after the object (explained the plan clearly)."
+   },
+   "signals": [
+    "clearly",
+    "carefully",
+    "quickly",
+    "completely",
+    "very much"
+   ],
+   "ex": [
+    {
+     "en": "She explained the new process clearly to the team.",
+     "de": "Sie erklärte dem Team den neuen Prozess klar.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I fully support your proposal.",
+     "de": "Ich unterstütze Ihren Vorschlag voll und ganz.",
+     "ctx": "mail"
+    },
+    {
+     "en": "We like the new office very much.",
+     "de": "Das neue Büro gefällt uns sehr.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "She explained clearly the new process to the team.",
+    "good": "She explained the new process clearly to the team.",
+    "cause": {
+     "de": "Im Deutschen darf das Adverb vor dem Objekt stehen („Sie erklärte klar den Prozess“). Englisch lässt Verb und Objekt nicht auseinander.",
+     "en": "German allows the adverb before the object (“Sie erklärte klar den Prozess”). English keeps verb and object together."
+    }
+   },
+   "contrast": {
+    "with": "wo.place-time",
+    "a": "He explained the plan clearly in Berlin.",
+    "b": "He explained the plan in Berlin yesterday.",
+    "diff": {
+     "de": "Die Art und Weise (clearly) steht meist vor dem Ort, der Ort meist vor der Zeit. Alles bleibt hinter dem Objekt.",
+     "en": "Manner (clearly) usually comes before place, and place before time. All of it stays after the object."
+    }
+   },
+   "ccq": [
+    {
+     "s": "We carefully checked every invoice.",
+     "q": {
+      "de": "Haben wir jede Rechnung sorgfältig geprüft?",
+      "en": "Did we check every invoice with care?"
+     },
+     "a": true
+    },
+    {
+     "s": "I like coffee very much.",
+     "q": {
+      "de": "Mag ich Kaffee?",
+      "en": "Do I like coffee?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Gehören Verb und Objekt zusammen, und wo ist dann Platz für das Adverb?",
+    "en": "Do verb and object belong together, and where is there room for the adverb?"
+   }
+  },
+  {
+   "id": "wo.place-time",
+   "name": {
+    "de": "Ort und Zeit hinter dem Objekt",
+    "en": "Place and time after the object"
+   },
+   "form": {
+    "de": "Verb + Objekt + Art und Weise + Ort + Zeit",
+    "en": "verb + object + manner + place + time"
+   },
+   "use": {
+    "de": "Am Satzende steht meist erst die Art und Weise, dann der Ort, dann die Zeit: in Munich tomorrow. Im Deutschen kommt die Zeit zuerst („morgen in München“).",
+    "en": "At the end of a clause the usual order is manner, then place, then time: in Munich tomorrow. German puts time first (“morgen in München”)."
+   },
+   "signals": [
+    "tomorrow",
+    "next week",
+    "on Friday",
+    "at the office",
+    "in Munich"
+   ],
+   "ex": [
+    {
+     "en": "The kickoff takes place at our office on Monday.",
+     "de": "Der Kickoff findet am Montag in unserem Büro statt.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I'll work from our Berlin office next week.",
+     "de": "Ich arbeite nächste Woche in unserem Berliner Büro.",
+     "ctx": "mail"
+    },
+    {
+     "en": "We met at a conference last year.",
+     "de": "Wir haben uns letztes Jahr auf einer Konferenz kennengelernt.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "We are holding tomorrow in Munich the workshop.",
+    "good": "We are holding the workshop in Munich tomorrow.",
+    "cause": {
+     "de": "Im Deutschen rutschen Zeit und Ort vor das Objekt („Wir halten morgen in München den Workshop ab“). Im Englischen folgen sie dem Objekt.",
+     "en": "German moves time and place before the object (“Wir halten morgen in München den Workshop ab”). In English they follow the object."
+    }
+   },
+   "contrast": {
+    "with": "wo.verb-object",
+    "a": "She presented the results confidently in Berlin.",
+    "b": "She presented the results in Berlin last week.",
+    "diff": {
+     "de": "Beide Male folgt alles dem Objekt. Zuerst kommt die Art und Weise, dann der Ort, zuletzt die Zeit.",
+     "en": "Both times everything follows the object. Manner comes first, then place, and time last."
+    }
+   },
+   "ccq": [
+    {
+     "s": "We hold the workshop in Munich on Tuesday.",
+     "q": {
+      "de": "Findet der Workshop in München statt?",
+      "en": "Is the workshop held in Munich?"
+     },
+     "a": true
+    },
+    {
+     "s": "The kickoff is on Monday at our office.",
+     "q": {
+      "de": "Ist der Kickoff am Dienstag?",
+      "en": "Is the kickoff on Tuesday?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Welche Teile gehören hinter das Objekt, und was folgt meist zuerst, Ort oder Zeit?",
+    "en": "Which parts belong after the object, and which usually comes first, place or time?"
+   }
+  },
+  {
+   "id": "wo.neg-inv",
+   "name": {
+    "de": "Negatives Adverb vorn · Inversion",
+    "en": "Negative adverb first · inversion"
+   },
+   "form": {
+    "de": "Never / Rarely + Hilfsverb + Subjekt + Verb",
+    "en": "Never / Rarely + auxiliary + subject + verb"
+   },
+   "use": {
+    "de": "Steht ein verneinendes Adverb am Satzanfang, kommt das Hilfsverb vor das Subjekt. Fehlt eines, wird do/does/did ergänzt. Das Vollverb bleibt hinter dem Subjekt.",
+    "en": "When a negative adverb opens the sentence, the auxiliary goes before the subject. If there is none, do/does/did is added. The main verb stays after the subject."
+   },
+   "signals": [
+    "never",
+    "rarely",
+    "seldom",
+    "little",
+    "under no circumstances",
+    "at no time",
+    "on no account",
+    "nowhere"
+   ],
+   "ex": [
+    {
+     "en": "Rarely do we see such clear customer feedback.",
+     "de": "Selten bekommen wir so klares Kundenfeedback.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Under no circumstances should you share your login details.",
+     "de": "Geben Sie Ihre Zugangsdaten unter keinen Umständen weiter.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Never have I worked with such a fast team.",
+     "de": "Noch nie habe ich mit einem so schnellen Team gearbeitet.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Seldom hear we such clear feedback from users.",
+    "good": "Seldom do we hear such clear feedback from users.",
+    "cause": {
+     "de": "Im Deutschen rückt das ganze Verb vor das Subjekt („Selten hören wir …“). Englisch rückt nur das Hilfsverb vor, das Vollverb bleibt hinten.",
+     "en": "German moves the whole verb before the subject (“Selten hören wir …”). English moves only the auxiliary; the main verb stays behind."
+    }
+   },
+   "contrast": {
+    "with": "wo.verb-object",
+    "a": "Rarely do we miss a deadline.",
+    "b": "We rarely miss a deadline.",
+    "diff": {
+     "de": "Vorn löst das Adverb die Inversion aus. Vor dem Verb bleibt die normale Reihenfolge.",
+     "en": "At the start the adverb triggers inversion. Before the verb the normal order stays."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Seldom do we miss a deadline.",
+     "q": {
+      "de": "Verpassen wir oft Fristen?",
+      "en": "Do we often miss deadlines?"
+     },
+     "a": false
+    },
+    {
+     "s": "Never have I seen such a clear contract.",
+     "q": {
+      "de": "Habe ich schon einmal einen so klaren Vertrag gesehen?",
+      "en": "Have I ever seen such a clear contract?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Steht vorn ein Wort mit verneinender Bedeutung, und was rückt dann vor das Subjekt?",
+    "en": "Does a word with negative meaning open the sentence, and what then moves before the subject?"
+   }
+  },
+  {
+   "id": "wo.not-only",
+   "name": {
+    "de": "Not only … but also · Inversion",
+    "en": "Not only … but also · inversion"
+   },
+   "form": {
+    "de": "Not only + Hilfsverb + Subjekt + Verb … but … also",
+    "en": "Not only + auxiliary + subject + verb … but … also"
+   },
+   "use": {
+    "de": "Not only am Satzanfang betont zwei Dinge. Danach steht die Inversion (Not only did she …). Der zweite Teil mit but also hat die normale Reihenfolge.",
+    "en": "Not only at the start stresses two things. Inversion follows (Not only did she …). The but also part keeps the normal order."
+   },
+   "signals": [
+    "not only",
+    "but also"
+   ],
+   "ex": [
+    {
+     "en": "Not only did the update fix the bug, but it also sped up the app.",
+     "de": "Das Update hat nicht nur den Fehler behoben, sondern auch die App beschleunigt.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Not only have we met the deadline, but we also saved money.",
+     "de": "Wir haben nicht nur die Frist eingehalten, sondern auch Geld gespart.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Not only was the demo late, but it also crashed.",
+     "de": "Die Demo kam nicht nur zu spät, sie ist auch abgestürzt.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Not only offered they a discount, but they also extended the warranty.",
+    "good": "Not only did they offer a discount, but they also extended the warranty.",
+    "cause": {
+     "de": "Im Deutschen rückt das ganze Verb nach vorn („Nicht nur boten sie einen Rabatt an“). Englisch setzt dort das Hilfsverb did ein.",
+     "en": "German moves the whole verb forward (“Nicht nur boten sie einen Rabatt an”). English uses the auxiliary did there."
+    }
+   },
+   "contrast": {
+    "with": "wo.neg-inv",
+    "a": "Not only did we lose the client, but we also lost the contract.",
+    "b": "We lost not only the client but also the contract.",
+    "diff": {
+     "de": "Not only vorn löst die Inversion aus (did we lose). Mitten im Satz bleibt die normale Reihenfolge.",
+     "en": "Not only at the start triggers inversion (did we lose). In mid-sentence the normal order stays."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Not only did she email the client, but she also called.",
+     "q": {
+      "de": "Hat sie den Kunden angerufen?",
+      "en": "Did she call the client?"
+     },
+     "a": true
+    },
+    {
+     "s": "Not only did we meet the deadline, but we also stayed under budget.",
+     "q": {
+      "de": "Blieben wir unter dem Budget?",
+      "en": "Did we stay under budget?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Was steht nach „not only“ vor dem Subjekt, und wie sieht dann das Vollverb aus?",
+    "en": "What comes before the subject after “not only”, and what form does the main verb take then?"
+   }
+  },
+  {
+   "id": "wo.hardly-sooner",
+   "name": {
+    "de": "Hardly … when · No sooner … than",
+    "en": "Hardly … when · No sooner … than"
+   },
+   "form": {
+    "de": "Hardly / No sooner + had + Subjekt + Partizip … when / than + Past Simple",
+    "en": "Hardly / No sooner + had + subject + participle … when / than + simple past"
+   },
+   "use": {
+    "de": "Zwei Ereignisse folgen direkt aufeinander. Das erste steht im Past Perfect mit Inversion (Hardly had we …), das zweite im Past Simple nach when (bei no sooner: than).",
+    "en": "Two events follow each other immediately. The first is in the past perfect with inversion (Hardly had we …), the second in the simple past after when (after no sooner: than)."
+   },
+   "signals": [
+    "hardly",
+    "scarcely",
+    "barely",
+    "no sooner"
+   ],
+   "ex": [
+    {
+     "en": "Hardly had we posted the update when the first bug report arrived.",
+     "de": "Kaum hatten wir das Update veröffentlicht, kam der erste Fehlerbericht.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "No sooner had I hit send than I spotted a typo.",
+     "de": "Kaum hatte ich auf Senden geklickt, sah ich einen Tippfehler.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Scarcely had we sat down when the food arrived.",
+     "de": "Kaum hatten wir uns gesetzt, kam das Essen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "No sooner had I sent the draft, the client called back.",
+    "good": "No sooner had I sent the draft than the client called back.",
+    "cause": {
+     "de": "Im Deutschen geht es ohne Bindewort („Kaum hatte ich den Entwurf geschickt, rief der Kunde zurück“). Englisch braucht hier than (bei hardly: when).",
+     "en": "German works without a connecting word (“Kaum hatte ich den Entwurf geschickt, rief der Kunde zurück”). English needs than here (after hardly: when)."
+    }
+   },
+   "contrast": {
+    "with": "wo.neg-inv",
+    "a": "Hardly had we started when it rained.",
+    "b": "Hardly ever do we start on time.",
+    "diff": {
+     "de": "Hardly had … when meint „kaum … da“ und verbindet zwei Ereignisse. Hardly ever meint „fast nie“ und braucht do.",
+     "en": "Hardly had … when means two events in quick succession. Hardly ever means “almost never” and takes do."
+    }
+   },
+   "ccq": [
+    {
+     "s": "No sooner had we left than it started to rain.",
+     "q": {
+      "de": "Hat es geregnet, bevor wir gegangen waren?",
+      "en": "Did it rain before we had left?"
+     },
+     "a": false
+    },
+    {
+     "s": "Hardly had the call ended when the CEO phoned again.",
+     "q": {
+      "de": "Rief der CEO kurz nach dem Ende des Gesprächs wieder an?",
+      "en": "Did the CEO phone again right after the call ended?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Folgen zwei Ereignisse direkt aufeinander, und welche Zeitform trägt das zuerst geschehene?",
+    "en": "Do two events follow each other at once, and which tense carries the one that happened first?"
+   }
+  },
+  {
+   "id": "wo.only-inv",
+   "name": {
+    "de": "Only + Zeit oder Bedingung · Inversion",
+    "en": "Only + time or condition · inversion"
+   },
+   "form": {
+    "de": "Only after / Not until + Zeitangabe, dann Hilfsverb + Subjekt",
+    "en": "Only after / Not until + time phrase, then auxiliary + subject"
+   },
+   "use": {
+    "de": "Beginnt der Satz mit only + Zeit oder Bedingung (only after, only when, only then) oder mit not until, steht danach das Hilfsverb vor dem Subjekt. Bei einem Nebensatz folgt die Inversion im Hauptsatz.",
+    "en": "When a sentence opens with only + a time or condition (only after, only when, only then) or with not until, the auxiliary goes before the subject. After a clause, the main clause is inverted."
+   },
+   "signals": [
+    "only after",
+    "only when",
+    "only then",
+    "only if",
+    "not until"
+   ],
+   "ex": [
+    {
+     "en": "Only after the audit did we notice the error.",
+     "de": "Erst nach der Prüfung bemerkten wir den Fehler.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Not until Friday will we know the results.",
+     "de": "Erst am Freitag wissen wir die Ergebnisse.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Only then did I understand the problem.",
+     "de": "Erst da verstand ich das Problem.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Only when the client signs we can start.",
+    "good": "Only when the client signs can we start.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler: Deutsch invertiert hier genauso („können wir“). Nach dem langen Nebensatz wird die Inversion im Hauptsatz leicht vergessen.",
+     "en": "Not a translation error: German inverts here too (“können wir”). After the long clause the inversion in the main clause is easily forgotten."
+    }
+   },
+   "contrast": {
+    "with": "wo.neg-inv",
+    "a": "Only then did we see the problem.",
+    "b": "We saw the problem only then.",
+    "diff": {
+     "de": "Only vorn löst die Inversion aus. Am Satzende bleibt die normale Reihenfolge.",
+     "en": "Only at the start triggers inversion. At the end the normal order stays."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Only after the vote did we tell the team.",
+     "q": {
+      "de": "Haben wir das Team vor der Abstimmung informiert?",
+      "en": "Did we tell the team before the vote?"
+     },
+     "a": false
+    },
+    {
+     "s": "Not until Monday will we know the outcome.",
+     "q": {
+      "de": "Wissen wir das Ergebnis schon am Freitag?",
+      "en": "Do we know the outcome on Friday?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Folgt nach „only“ oder „not until“ am Anfang erst das Hilfsverb oder erst das Subjekt?",
+    "en": "After “only” or “not until” at the start, does the auxiliary or the subject come first?"
+   }
+  }
+ ]
+}

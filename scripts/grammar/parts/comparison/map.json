@@ -1,0 +1,170 @@
+{
+  "The ___ we prepare, the more confident we feel.": {
+    "pat": "cmp.the-the",
+    "why": {
+      "ok": {
+        "de": "Richtig: the more …, the more … zeigt: Mit mehr Vorbereitung wächst die Sicherheit.",
+        "en": "Right: the more …, the more … links the two: more preparation, more confidence."
+      },
+      "wrong": [
+        { "opt": "most", "de": "„Most“ ist ein Superlativ. Hier steht der Komparativ more.", "en": "“Most” is a superlative. This pattern needs the comparative more." },
+        { "opt": "many", "de": "„Many“ steht vor Zählbarem (many people) und bildet hier keinen Vergleich.", "en": "“Many” goes before countable nouns and forms no comparison here." },
+        { "opt": "very", "de": "„Very“ verstärkt ein Adjektiv, bildet aber keinen Komparativ.", "en": "“Very” intensifies an adjective but forms no comparative." }
+      ]
+    }
+  },
+  "This year's results are ___ better than last year's.": {
+    "pat": "cmp.degree",
+    "why": {
+      "ok": {
+        "de": "Richtig: far steht vor dem Komparativ better und betont den großen Abstand.",
+        "en": "Right: far goes before the comparative better and stresses a big gap."
+      },
+      "wrong": [
+        { "opt": "more", "de": "„More better“ steigert doppelt: better ist schon der Komparativ.", "en": "“More better” doubles the comparison: better is already comparative." },
+        { "opt": "very", "de": "„Very“ steht nicht vor einem Komparativ. Hier passt far oder much.", "en": "“Very” does not go before a comparative. Far or much fits here." },
+        { "opt": "most", "de": "„Most“ ist ein Superlativ, hier folgt aber ein Vergleich mit than.", "en": "“Most” is a superlative, but a comparison with than follows here." }
+      ]
+    }
+  },
+  "The new tool isn't as complicated ___ the old one.": {
+    "pat": "cmp.as-as",
+    "why": {
+      "ok": {
+        "de": "Richtig: not as … as. Das neue Werkzeug ist weniger kompliziert als das alte.",
+        "en": "Right: not as … as. The new tool is less complicated than the old one."
+      },
+      "wrong": [
+        { "opt": "than", "de": "„Than“ folgt auf einen Komparativ. Nach as + Adjektiv steht wieder as.", "en": "“Than” follows a comparative. After as + adjective comes as again." },
+        { "opt": "like", "de": "„Like“ kann das zweite as nicht ersetzen. Es braucht as … as.", "en": "“Like” cannot replace the second as. The pattern needs as … as." },
+        { "opt": "that", "de": "„That“ leitet einen Nebensatz ein. Hier fehlt das zweite as.", "en": "“That” opens a clause. The second as is missing here." }
+      ]
+    }
+  },
+  "Our office is ___ than theirs.": {
+    "pat": "cmp.form",
+    "why": {
+      "ok": {
+        "de": "Richtig: Big ist kurz und bekommt -er. Mit than folgt der Vergleichspartner.",
+        "en": "Right: big is short and takes -er. Then than introduces the comparison partner."
+      },
+      "wrong": [
+        { "opt": "more bigger", "de": "„More bigger“ steigert doppelt. Bei big reicht -er.", "en": "“More bigger” doubles the comparison. Big only needs -er." },
+        { "opt": "more big", "de": "Big ist kurz und bekommt -er statt more: bigger.", "en": "Big is short and takes -er instead of more: bigger." },
+        { "opt": "biggest", "de": "„Biggest“ ist ein Superlativ. Mit than braucht es den Komparativ.", "en": "“Biggest” is a superlative. With than you need the comparative." }
+      ]
+    }
+  },
+  "The ___ the deadline, the more stressed the team gets.": {
+    "pat": "cmp.the-the",
+    "why": {
+      "ok": {
+        "de": "Richtig: the closer …, the more … Je näher die Frist, desto gestresster das Team.",
+        "en": "Right: the closer …, the more … The nearer the deadline, the more stressed the team."
+      },
+      "wrong": [
+        { "if": ["more"], "de": "Close ist kurz: Der Komparativ heißt closer, nicht more close.", "en": "Close is short: the comparative is closer, not more close." },
+        { "if": ["closest"], "de": "„Closest“ ist ein Superlativ. Hier steht der Komparativ.", "en": "“Closest” is a superlative. This pattern needs the comparative." },
+        { "if": ["close"], "de": "Nach the steht der Komparativ closer, die Grundform close reicht nicht.", "en": "After the comes the comparative closer; the base form close is not enough." }
+      ]
+    }
+  },
+  "Our competitor's prices are far ___ than ours, so we win customers.": {
+    "pat": "cmp.degree",
+    "why": {
+      "ok": {
+        "de": "Richtig: far + Komparativ + than. Der Komparativ lower steht nach far.",
+        "en": "Right: far + comparative + than. The comparative lower follows far."
+      },
+      "wrong": [
+        { "if": ["more"], "de": "„More lower“ steigert doppelt. Bei low reicht -er.", "en": "“More lower” doubles the comparison. Low only needs -er." },
+        { "if": ["low"], "de": "Nach far und vor than steht der Komparativ lower, nicht die Grundform.", "en": "After far and before than comes the comparative lower, not the base form." },
+        { "if": ["lowest"], "de": "„Lowest“ ist ein Superlativ. Mit than braucht es den Komparativ.", "en": "“Lowest” is a superlative. With than you need the comparative." }
+      ]
+    }
+  },
+  "This quarter's profit is twice ___ high as last quarter's.": {
+    "pat": "cmp.as-as",
+    "why": {
+      "ok": {
+        "de": "Richtig: twice as high as. Vielfache stehen vor dem ersten as.",
+        "en": "Right: twice as high as. Multiples go before the first as."
+      },
+      "wrong": [
+        { "if": ["than"], "de": "Vielfache bilden twice as … as, nicht twice … than.", "en": "Multiples use twice as … as, not twice … than." },
+        { "if": ["so"], "de": "Im Deutschen heißt es „so … wie“. Englisch braucht as … as.", "en": "German says “so … wie”. English needs as … as." },
+        { "not": ["as"], "de": "Hier fehlt das erste as: Vielfache bilden twice as … as.", "en": "As is missing here: multiples use twice as … as." }
+      ]
+    }
+  },
+  "The train is faster than the bus. → The bus is not ___ fast as the train.": {
+    "pat": "cmp.as-as",
+    "why": {
+      "ok": {
+        "de": "Richtig: not as … as dreht den Vergleich um. Der Bus ist weniger schnell.",
+        "en": "Right: not as … as reverses the comparison. The bus is less fast."
+      },
+      "wrong": [
+        { "if": ["than"], "de": "„Than“ folgt auf einen Komparativ. Bei fast steht as … as.", "en": "“Than” follows a comparative. With fast you need as … as." },
+        { "if": ["like"], "de": "„Like“ kann as hier nicht ersetzen. Es braucht as … as.", "en": "“Like” cannot replace as here. The pattern needs as … as." },
+        { "not": ["as", "so"], "de": "Die Lücke braucht as: not as fast as the train.", "en": "The gap needs as: not as fast as the train." }
+      ]
+    }
+  },
+  "If we work more, we finish earlier. → The more we work, the ___ we finish.": {
+    "pat": "cmp.the-the",
+    "why": {
+      "ok": {
+        "de": "Richtig: the more …, the earlier … Beide Teile haben ein the + Komparativ.",
+        "en": "Right: the more …, the earlier … Both parts have the + comparative."
+      },
+      "wrong": [
+        { "if": ["more"], "de": "Early ist kurz: earlier, nicht more early.", "en": "Early is short: earlier, not more early." },
+        { "if": ["earliest"], "de": "„Earliest“ ist ein Superlativ. Nach the more … steht der Komparativ.", "en": "“Earliest” is a superlative. After the more … comes the comparative." },
+        { "if": ["early"], "de": "Die Grundform early reicht nicht: Nach the steht der Komparativ.", "en": "The base form early is not enough: after the comes the comparative." }
+      ]
+    }
+  },
+  "This solution is more cheaper than the previous one.": {
+    "pat": "cmp.form",
+    "why": {
+      "ok": {
+        "de": "Richtig: cheaper reicht. Kurze Adjektive bekommen -er statt more + -er.",
+        "en": "Right: cheaper is enough. Short adjectives take -er instead of more + -er."
+      },
+      "wrong": [
+        { "if": ["more", "cheaper"], "de": "Doppelt gesteigert: more und -er zusammen geht nicht, nur cheaper.", "en": "Doubled comparison: more and -er together is wrong, use cheaper." },
+        { "if": ["more", "cheap"], "de": "Cheap ist kurz: -er statt more, also cheaper.", "en": "Cheap is short: -er instead of more, so cheaper." },
+        { "if": ["cheapest"], "de": "„Cheapest“ ist ein Superlativ. Mit than steht der Komparativ.", "en": "“Cheapest” is a superlative. With than use the comparative." }
+      ]
+    }
+  },
+  "Our sales are higher as last year.": {
+    "pat": "cmp.than",
+    "why": {
+      "ok": {
+        "de": "Richtig: Nach dem Komparativ higher folgt than, nicht as.",
+        "en": "Right: after the comparative higher comes than, not as."
+      },
+      "wrong": [
+        { "if": ["as"], "de": "Nach einem Komparativ steht than. As gehört in as … as.", "en": "After a comparative comes than. As belongs in as … as." },
+        { "if": ["like"], "de": "„Like“ passt nach dem Komparativ nicht. Dort steht than.", "en": "“Like” does not fit after the comparative. Use than there." },
+        { "not": ["than"], "de": "Hier fehlt than nach dem Komparativ higher.", "en": "Than is missing after the comparative higher." }
+      ]
+    }
+  },
+  "More we practice, better we get.": {
+    "pat": "cmp.the-the",
+    "why": {
+      "ok": {
+        "de": "Richtig: the more …, the better … Beide Teile brauchen ein the.",
+        "en": "Right: the more …, the better … Both parts need the."
+      },
+      "wrong": [
+        { "if": ["better we get"], "not": ["the better"], "de": "Im zweiten Teil fehlt the: the better we get.", "en": "The second part needs the too: the better we get." },
+        { "if": ["more we practice"], "not": ["the more"], "de": "Im ersten Teil fehlt the: the more we practice.", "en": "The first part needs the too: the more we practice." },
+        { "pat": "cmp.the-the", "de": "Beide Teile beginnen mit the + Komparativ: the more …, the better …", "en": "Both parts start with the + comparative: the more …, the better …" }
+      ]
+    }
+  }
+}

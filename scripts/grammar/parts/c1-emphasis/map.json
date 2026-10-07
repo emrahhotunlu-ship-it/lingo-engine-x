@@ -336,7 +336,8 @@
      "en": "After did comes the base form: cut, not cutted."
     }
    ]
-  }
+  },
+  "dup": "Not only ___ we reduce storage costs, but we also improved compliance."
  },
  "What we need are a partner who understands compliance.": {
   "pat": "em.what-cleft",
@@ -394,7 +395,8 @@
      "en": "With seen keep have, not do: Rarely have we seen."
     }
    ]
-  }
+  },
+  "dup": "Rarely ___ we seen such a fast rollout."
  },
  "Not only it saves time, but it also reduces errors.": {
   "pat": "em.not-only",

@@ -1,0 +1,827 @@
+[
+  {
+    "id": "ph-sep-k1",
+    "type": "kwt",
+    "pat": "ph.separable",
+    "from": "The projector must not stay on when you leave the room.",
+    "key": "SWITCH",
+    "frame": "Please ___ when you leave the room.",
+    "answer": "switch the projector off",
+    "accepted": [
+      "switch off the projector",
+      "switch it off"
+    ],
+    "words": [
+      3,
+      4
+    ],
+    "why": {
+      "ok": {
+        "de": "Richtig: Ein Nomen darf vor oder nach off stehen, ein Pronomen nur davor: switch it off.",
+        "en": "Right: a noun can go before or after off, a pronoun only before: switch it off."
+      },
+      "wrong": [
+        {
+          "not": [
+            "switch"
+          ],
+          "de": "Das Schlüsselwort switch muss unverändert in der Lücke stehen.",
+          "en": "The key word switch must stay unchanged in the gap."
+        },
+        {
+          "if": [
+            "off",
+            "it"
+          ],
+          "de": "Das Pronomen steht in der Mitte: switch it off, nicht switch off it.",
+          "en": "The pronoun goes in the middle: switch it off, not switch off it."
+        },
+        {
+          "not": [
+            "off"
+          ],
+          "de": "Es fehlt die Partikel: switch off bedeutet ausschalten.",
+          "en": "The particle is missing: switch off means turn off a device."
+        }
+      ]
+    }
+  },
+  {
+    "id": "ph-sep-k2",
+    "type": "kwt",
+    "pat": "ph.separable",
+    "from": "We need to postpone the kickoff until next week.",
+    "key": "KICKOFF",
+    "frame": "We'll have to ___ until next week.",
+    "answer": "put off the kickoff",
+    "accepted": [
+      "put the kickoff off",
+      "push back the kickoff",
+      "push the kickoff back",
+      "move the kickoff back",
+      "move back the kickoff"
+    ],
+    "words": [
+      4,
+      4
+    ],
+    "why": {
+      "ok": {
+        "de": "Richtig: put off = verschieben. Das Nomen kann vor oder nach off stehen.",
+        "en": "Right: put off = postpone. The noun can go before or after off."
+      },
+      "wrong": [
+        {
+          "not": [
+            "kickoff"
+          ],
+          "de": "Das Schlüsselwort kickoff muss unverändert in der Lücke stehen.",
+          "en": "The key word kickoff must stay unchanged in the gap."
+        },
+        {
+          "if": [
+            "postpone"
+          ],
+          "de": "Richtig gedacht, doch gefragt ist ein Phrasal Verb wie put off.",
+          "en": "Good thinking, but a phrasal verb such as put off is asked for."
+        },
+        {
+          "if": [
+            "call",
+            "off"
+          ],
+          "de": "„call off“ heißt absagen, nicht verschieben. Verschieben: put off.",
+          "en": "“Call off” means cancel, not postpone. To postpone use put off."
+        }
+      ]
+    }
+  },
+  {
+    "id": "ph-sep-f1",
+    "type": "find",
+    "pat": "ph.separable",
+    "prompt": "The package arrived, so I picked up it from reception.",
+    "err": [
+      5,
+      7
+    ],
+    "answer": "picked it up",
+    "fixed": "The package arrived, so I picked it up from reception.",
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: Ein Pronomen steht in der Mitte: picked it up, nicht picked up it.",
+        "en": "The error: a pronoun goes in the middle: picked it up, not picked up it."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: Das Pronomen it steht an der falschen Stelle.",
+          "en": "There is an error: the pronoun it is in the wrong place."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei picked up it: Das Pronomen gehört zwischen Verb und up.",
+          "en": "The error is in picked up it: the pronoun belongs between verb and up."
+        }
+      ]
+    }
+  },
+  {
+    "id": "ph-sep-f2",
+    "type": "find",
+    "pat": "ph.separable",
+    "prompt": "Our offer was fair, but the client turned down it.",
+    "err": [
+      7,
+      9
+    ],
+    "answer": "turned it down.",
+    "fixed": "Our offer was fair, but the client turned it down.",
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: turned down it. Mit Pronomen heißt es turned it down.",
+        "en": "The error: turned down it. With a pronoun it is turned it down."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: turned down it stellt das Pronomen falsch.",
+          "en": "There is an error: turned down it places the pronoun wrongly."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei turned down it: it gehört zwischen turned und down.",
+          "en": "The error is in turned down it: it belongs between turned and down."
+        }
+      ]
+    }
+  },
+  {
+    "id": "ph-sep-f3",
+    "type": "find",
+    "pat": "ph.separable",
+    "prompt": "I printed the form, so please fill it out before Friday.",
+    "err": null,
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Kein Fehler: Das Pronomen steht in der Mitte: fill it out.",
+        "en": "No error: the pronoun goes in the middle: fill it out."
+      },
+      "wrong": [
+        {
+          "tap": "*",
+          "de": "Kein Fehler: fill it out stellt das Pronomen genau richtig.",
+          "en": "No error: fill it out places the pronoun correctly."
+        }
+      ]
+    }
+  },
+  {
+    "id": "ph-sep-m1",
+    "type": "meaning",
+    "pat": "ph.separable",
+    "a": "Please fill the form out.",
+    "b": "Please fill out the form.",
+    "q": {
+      "de": "Welche Sätze sind richtig?",
+      "en": "Which sentences are correct?"
+    },
+    "answer": "both",
+    "why": {
+      "ok": {
+        "de": "Beide stimmen: Ein Nomen darf zwischen Verb und Partikel stehen oder danach.",
+        "en": "Both work: a noun can sit between verb and particle or after it."
+      },
+      "wrong": [
+        {
+          "opt": "a",
+          "de": "Auch b ist richtig: Das Nomen darf hinter der Partikel stehen.",
+          "en": "B is correct too: the noun can follow the particle."
+        },
+        {
+          "opt": "b",
+          "de": "Auch a ist richtig: Das Nomen darf zwischen Verb und Partikel stehen.",
+          "en": "A is correct too: the noun can sit between verb and particle."
+        }
+      ]
+    }
+  },
+  {
+    "id": "ph-tog-k1",
+    "type": "kwt",
+    "pat": "ph.together",
+    "from": "Our team is investigating the delay.",
+    "key": "TEAM",
+    "frame": "Our ___ the delay.",
+    "answer": "team is looking into",
+    "accepted": [
+      "team is digging into",
+      "team is delving into",
+      "team is checking into",
+      "team is looking at",
+      "team is working on"
+    ],
+    "words": [
+      4,
+      4
+    ],
+    "why": {
+      "ok": {
+        "de": "Richtig: look into bleibt zusammen, das Objekt the delay folgt danach.",
+        "en": "Right: look into stays together and the object the delay follows."
+      },
+      "wrong": [
+        {
+          "not": [
+            "team"
+          ],
+          "de": "Das Schlüsselwort team muss unverändert in der Lücke stehen.",
+          "en": "The key word team must stay unchanged in the gap."
+        },
+        {
+          "if": [
+            "investigating"
+          ],
+          "de": "Richtig gedacht, doch gefragt ist ein Phrasal Verb mit into: look into.",
+          "en": "Good thinking, but a phrasal verb with into is asked for: look into."
+        },
+        {
+          "not": [
+            "into"
+          ],
+          "de": "Es fehlt das into: look into = untersuchen.",
+          "en": "The into is missing: look into = investigate."
+        }
+      ]
+    }
+  },
+  {
+    "id": "ph-tog-k2",
+    "type": "kwt",
+    "pat": "ph.together",
+    "from": "The merger failed at the last minute.",
+    "key": "MERGER",
+    "frame": "At the last minute, the ___.",
+    "answer": "merger fell through",
+    "accepted": [
+      "merger fell apart"
+    ],
+    "words": [
+      3,
+      3
+    ],
+    "why": {
+      "ok": {
+        "de": "Richtig: fall through = scheitern. Ohne Objekt steht through am Ende.",
+        "en": "Right: fall through = fail. With no object, through comes last."
+      },
+      "wrong": [
+        {
+          "not": [
+            "merger"
+          ],
+          "de": "Das Schlüsselwort merger muss unverändert in der Lücke stehen.",
+          "en": "The key word merger must stay unchanged in the gap."
+        },
+        {
+          "if": [
+            "failed"
+          ],
+          "de": "Richtig gedacht, doch gefragt ist ein Phrasal Verb: fall through.",
+          "en": "Good thinking, but a phrasal verb is asked for: fall through."
+        },
+        {
+          "not": [
+            "through",
+            "apart"
+          ],
+          "de": "Es fehlt die Partikel: fall through = scheitern.",
+          "en": "The particle is missing: fall through = fail."
+        }
+      ]
+    }
+  },
+  {
+    "id": "ph-tog-f1",
+    "type": "find",
+    "pat": "ph.together",
+    "prompt": "Our analyst will look the delay into this week.",
+    "err": [
+      3,
+      6
+    ],
+    "answer": "look into the delay",
+    "fixed": "Our analyst will look into the delay this week.",
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: look into bleibt zusammen. Richtig: look into the delay.",
+        "en": "The error: look into stays together. Correct: look into the delay."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: look into darf man nicht trennen.",
+          "en": "There is an error: look into cannot be split."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei look the delay into: Verb und into bleiben zusammen.",
+          "en": "The error is in look the delay into: verb and into stay together."
+        }
+      ]
+    }
+  },
+  {
+    "id": "ph-tog-f2",
+    "type": "find",
+    "pat": "ph.together",
+    "prompt": "Who will look the visitors after tomorrow?",
+    "err": [
+      2,
+      5
+    ],
+    "answer": "look after the visitors",
+    "fixed": "Who will look after the visitors tomorrow?",
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: look after bleibt zusammen, das Objekt folgt: look after the visitors.",
+        "en": "The error: look after stays together and the object follows: look after the visitors."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: look after wurde durch das Objekt getrennt.",
+          "en": "There is an error: the object splits look after."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei look the visitors after: look after bleibt zusammen.",
+          "en": "The error is in look the visitors after: look after stays together."
+        }
+      ]
+    }
+  },
+  {
+    "id": "ph-tog-f3",
+    "type": "find",
+    "pat": "ph.together",
+    "prompt": "Our largest deal fell through at the last minute.",
+    "err": null,
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Kein Fehler: fall through hat kein Objekt, through steht am Ende.",
+        "en": "No error: fall through takes no object, so through comes last."
+      },
+      "wrong": [
+        {
+          "tap": "*",
+          "de": "Kein Fehler: fell through ist hier richtig gebaut.",
+          "en": "No error: fell through is correctly built here."
+        }
+      ]
+    }
+  },
+  {
+    "id": "ph-tog-m1",
+    "type": "meaning",
+    "pat": "ph.together",
+    "a": "We looked into the complaint.",
+    "b": "We looked the complaint into.",
+    "q": {
+      "de": "Welcher Satz ist richtig?",
+      "en": "Which sentence is correct?"
+    },
+    "answer": "a",
+    "why": {
+      "ok": {
+        "de": "Richtig: Satz a. look into bleibt zusammen, das Objekt folgt danach.",
+        "en": "Right: sentence a. Look into stays together and the object follows."
+      },
+      "wrong": [
+        {
+          "opt": "b",
+          "de": "In b trennt das Objekt look into. Dieses Verb bleibt zusammen.",
+          "en": "In b the object splits look into. This verb stays together."
+        },
+        {
+          "opt": "both",
+          "de": "Nur a stimmt: look into trennt man nicht.",
+          "en": "Only a is correct: look into cannot be split."
+        }
+      ]
+    }
+  },
+  {
+    "id": "ph-3w-k1",
+    "type": "kwt",
+    "pat": "ph.three-word",
+    "from": "There are hardly any spare parts left.",
+    "key": "PARTS",
+    "frame": "We are about to ___.",
+    "answer": "run out of spare parts",
+    "accepted": [
+      "run out of parts",
+      "run short of spare parts",
+      "run short of parts"
+    ],
+    "words": [
+      4,
+      5
+    ],
+    "why": {
+      "ok": {
+        "de": "Richtig: run out of = ausgehen. Alle drei Wörter bleiben zusammen, das Objekt folgt.",
+        "en": "Right: run out of = be used up. All three words stay together, the object follows."
+      },
+      "wrong": [
+        {
+          "not": [
+            "parts"
+          ],
+          "de": "Das Schlüsselwort parts muss unverändert in der Lücke stehen.",
+          "en": "The key word parts must stay unchanged in the gap."
+        },
+        {
+          "if": [
+            "run",
+            "out",
+            "parts"
+          ],
+          "not": [
+            "of"
+          ],
+          "de": "Es fehlt das of: run out of spare parts.",
+          "en": "The of is missing: run out of spare parts."
+        },
+        {
+          "if": [
+            "hardly"
+          ],
+          "de": "Gesucht ist ein Drei-Wort-Verb wie run out of, kein Adverb.",
+          "en": "A three-word verb like run out of is needed, not an adverb."
+        }
+      ]
+    }
+  },
+  {
+    "id": "ph-3w-k2",
+    "type": "kwt",
+    "pat": "ph.three-word",
+    "from": "I can't wait to see you at the conference.",
+    "key": "YOU",
+    "frame": "I'm ___ at the conference.",
+    "answer": "looking forward to seeing you",
+    "accepted": [],
+    "words": [
+      5,
+      5
+    ],
+    "why": {
+      "ok": {
+        "de": "Richtig: look forward to + -ing. To ist hier eine Präposition.",
+        "en": "Right: look forward to + -ing. To is a preposition here."
+      },
+      "wrong": [
+        {
+          "not": [
+            "you"
+          ],
+          "de": "Das Schlüsselwort you muss unverändert in der Lücke stehen.",
+          "en": "The key word you must stay unchanged in the gap."
+        },
+        {
+          "if": [
+            "see"
+          ],
+          "de": "Nach look forward to steht -ing: seeing you, nicht see you.",
+          "en": "After look forward to use -ing: seeing you, not see you."
+        },
+        {
+          "if": [
+            "meet"
+          ],
+          "de": "Nach look forward to steht -ing: meeting you, nicht meet you.",
+          "en": "After look forward to use -ing: meeting you, not meet you."
+        },
+        {
+          "not": [
+            "forward"
+          ],
+          "de": "Gesucht ist die Wendung look forward to + -ing.",
+          "en": "The phrase look forward to + -ing is needed."
+        }
+      ]
+    }
+  },
+  {
+    "id": "ph-3w-f1",
+    "type": "find",
+    "pat": "ph.three-word",
+    "prompt": "The whole team looks forward to meet the new director.",
+    "err": [
+      6,
+      6
+    ],
+    "answer": "meeting",
+    "fixed": "The whole team looks forward to meeting the new director.",
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: to ist hier eine Präposition, also meeting statt meet.",
+        "en": "The error: to is a preposition here, so meeting instead of meet."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: Nach looks forward to folgt -ing.",
+          "en": "There is an error: after looks forward to comes -ing."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei meet: Nach look forward to steht die -ing-Form.",
+          "en": "The error is in meet: after look forward to use the -ing form."
+        }
+      ]
+    }
+  },
+  {
+    "id": "ph-3w-f2",
+    "type": "find",
+    "pat": "ph.three-word",
+    "prompt": "Our department ran out budget well before March.",
+    "err": [
+      3,
+      4
+    ],
+    "answer": "out of budget",
+    "fixed": "Our department ran out of budget well before March.",
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: run out of braucht of. Richtig: ran out of budget.",
+        "en": "The error: run out of needs of. Correct: ran out of budget."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: Bei ran out fehlt das of.",
+          "en": "There is an error: ran out is missing the of."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei out budget: Es fehlt of vor dem Objekt.",
+          "en": "The error is in out budget: of is missing before the object."
+        }
+      ]
+    }
+  },
+  {
+    "id": "ph-3w-f3",
+    "type": "find",
+    "pat": "ph.three-word",
+    "prompt": "I'm still catching up on last week's emails.",
+    "err": null,
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Kein Fehler: catch up on bleibt zusammen, das Objekt folgt.",
+        "en": "No error: catch up on stays together and the object follows."
+      },
+      "wrong": [
+        {
+          "tap": "*",
+          "de": "Kein Fehler: catching up on ist hier richtig gebaut.",
+          "en": "No error: catching up on is correctly built here."
+        }
+      ]
+    }
+  },
+  {
+    "id": "ph-3w-m1",
+    "type": "meaning",
+    "pat": "ph.three-word",
+    "a": "We ran out of time.",
+    "b": "We ran out time.",
+    "q": {
+      "de": "Welcher Satz ist richtig?",
+      "en": "Which sentence is correct?"
+    },
+    "answer": "a",
+    "why": {
+      "ok": {
+        "de": "Richtig: Satz a. run out of ist ein Drei-Wort-Verb mit festem of.",
+        "en": "Right: sentence a. Run out of is a three-word verb with a fixed of."
+      },
+      "wrong": [
+        {
+          "opt": "b",
+          "de": "In b fehlt of. Das Verb heißt run out of, nicht run out.",
+          "en": "In b the of is missing. The verb is run out of, not run out."
+        },
+        {
+          "opt": "both",
+          "de": "Nur a stimmt: of gehört fest zu run out of.",
+          "en": "Only a is correct: of is a fixed part of run out of."
+        }
+      ]
+    }
+  },
+  {
+    "id": "ph-par-k1",
+    "type": "kwt",
+    "pat": "ph.particle",
+    "from": "The board decided to cancel the launch.",
+    "key": "LAUNCH",
+    "frame": "The board ___.",
+    "answer": "called off the launch",
+    "accepted": [
+      "called the launch off",
+      "has called off the launch",
+      "has called the launch off",
+      "will call off the launch",
+      "will call the launch off",
+      "is calling off the launch",
+      "is calling the launch off"
+    ],
+    "words": [
+      4,
+      5
+    ],
+    "why": {
+      "ok": {
+        "de": "Richtig: call off = absagen. Das Nomen darf auch vor off stehen.",
+        "en": "Right: call off = cancel. The noun can also go before off."
+      },
+      "wrong": [
+        {
+          "not": [
+            "launch"
+          ],
+          "de": "Das Schlüsselwort launch muss unverändert in der Lücke stehen.",
+          "en": "The key word launch must stay unchanged in the gap."
+        },
+        {
+          "if": [
+            "call",
+            "up"
+          ],
+          "de": "„call up“ heißt anrufen, nicht absagen. Gesucht: call off.",
+          "en": "“Call up” means phone. To cancel use call off."
+        },
+        {
+          "if": [
+            "canceled"
+          ],
+          "de": "Richtig gedacht, doch gefragt ist ein Phrasal Verb: call off.",
+          "en": "Good thinking, but a phrasal verb is asked for: call off."
+        }
+      ]
+    }
+  },
+  {
+    "id": "ph-par-k2",
+    "type": "kwt",
+    "pat": "ph.particle",
+    "from": "Could you please make the music quieter?",
+    "key": "MUSIC",
+    "frame": "Could you ___?",
+    "answer": "turn the music down",
+    "accepted": [
+      "turn down the music"
+    ],
+    "words": [
+      4,
+      4
+    ],
+    "why": {
+      "ok": {
+        "de": "Richtig: turn down = leiser stellen. Das Nomen kann vor oder nach down stehen.",
+        "en": "Right: turn down = make quieter. The noun can go before or after down."
+      },
+      "wrong": [
+        {
+          "not": [
+            "music"
+          ],
+          "de": "Das Schlüsselwort music muss unverändert in der Lücke stehen.",
+          "en": "The key word music must stay unchanged in the gap."
+        },
+        {
+          "if": [
+            "up"
+          ],
+          "de": "„turn up“ heißt lauter stellen, nicht leiser. Gesucht: turn down.",
+          "en": "“Turn up” means make louder. Quieter is turn down."
+        },
+        {
+          "if": [
+            "off"
+          ],
+          "de": "„turn off“ heißt ausschalten, nicht leiser stellen. Gesucht: turn down.",
+          "en": "“Turn off” means switch off. Making it quieter is turn down."
+        }
+      ]
+    }
+  },
+  {
+    "id": "ph-par-f1",
+    "type": "find",
+    "pat": "ph.particle",
+    "prompt": "Please turn up the volume because the neighbors are complaining about the noise.",
+    "err": [
+      2,
+      2
+    ],
+    "answer": "down",
+    "fixed": "Please turn down the volume because the neighbors are complaining about the noise.",
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: turn up macht lauter. Zu laut verlangt turn down.",
+        "en": "The error: turn up makes it louder. Too loud calls for turn down."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: Die Partikel up passt nicht zum Sinn.",
+          "en": "There is an error: the particle up does not fit the meaning."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei up: Die Partikel dreht die Bedeutung um.",
+          "en": "The error is in up: the particle reverses the meaning."
+        }
+      ]
+    }
+  },
+  {
+    "id": "ph-par-f2",
+    "type": "find",
+    "pat": "ph.particle",
+    "prompt": "I'll look after the report tonight and send you my comments.",
+    "err": [
+      2,
+      2
+    ],
+    "answer": "over",
+    "fixed": "I'll look over the report tonight and send you my comments.",
+    "accepted": [
+      "through",
+      "at"
+    ],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: look after = sich kümmern um. Durchsehen heißt look over.",
+        "en": "The error: look after = take care of. To review is look over."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: look after passt nicht zu Kommentaren.",
+          "en": "There is an error: look after does not fit giving comments."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei after: Gemeint ist durchsehen, also look over.",
+          "en": "The error is in after: review is meant, so look over."
+        }
+      ]
+    }
+  },
+  {
+    "id": "ph-par-m1",
+    "type": "meaning",
+    "pat": "ph.particle",
+    "a": "The CEO called off the meeting.",
+    "b": "The CEO called the meeting.",
+    "q": {
+      "de": "Welcher Satz sagt: Das Treffen findet nicht statt?",
+      "en": "Which sentence says the meeting is not happening?"
+    },
+    "answer": "a",
+    "why": {
+      "ok": {
+        "de": "Richtig: Satz a. call off = absagen, call a meeting = ein Treffen einberufen.",
+        "en": "Right: sentence a. Call off = cancel, call a meeting = convene it."
+      },
+      "wrong": [
+        {
+          "opt": "b",
+          "de": "In b beruft der CEO das Treffen ein. Ohne off gibt es keine Absage.",
+          "en": "In b the CEO convenes the meeting. Without off there is no cancellation."
+        },
+        {
+          "opt": "both",
+          "de": "Nicht gleich: off dreht die Bedeutung um, von einberufen zu absagen.",
+          "en": "Not the same: off turns convene into cancel."
+        }
+      ]
+    }
+  }
+]

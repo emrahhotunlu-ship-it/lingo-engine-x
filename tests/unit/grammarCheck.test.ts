@@ -71,11 +71,11 @@ describe('alignWords', () => {
 
 describe('Regelwerk und Hilfen', () => {
   it('Form-Hinweis in der Oberflächensprache, sonst der Kernsatz des Regelwerks', () => {
-    const t = task({ topic: 'comparison', expl: { de: 'Hier steht das Passiv, weil der Vertrag nicht selbst handelt.', en: null } });
+    const t = task({ topic: 'comparison', prompt: 'zz zz', pat: null, expl: { de: 'Hier steht das Passiv, weil der Vertrag nicht selbst handelt.', en: null } });
     expect(formHint(t, 'de')).toBe('Hier steht das Passiv, weil der Vertrag nicht selbst handelt.');
     expect(formHint(t, 'en')).toBe(ruleOf('comparison', 'en')!.core);
     // Falsche Sprache im gespeicherten Text → Regelwerk statt gemischter Sprache.
-    const wrong = task({ topic: 'comparison', expl: { de: 'The passive uses be plus the past participle here.', en: null } });
+    const wrong = task({ topic: 'comparison', prompt: 'zz zz', pat: null, expl: { de: 'The passive uses be plus the past participle here.', en: null } });
     expect(formHint(wrong, 'de')).toBe(ruleOf('comparison', 'de')!.core);
   });
 

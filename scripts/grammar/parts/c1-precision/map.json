@@ -1,0 +1,416 @@
+{
+ "We need your decision ___ the end of Q3.": {
+  "pat": "cp.by-until",
+  "why": {
+   "ok": {
+    "de": "Richtig: Eine Frist heißt by. Die Entscheidung muss spätestens Ende Q3 vorliegen.",
+    "en": "Right: a deadline takes by. The decision must be in by the end of Q3 at the latest."
+   },
+   "wrong": [
+    {
+     "if": [
+      "until"
+     ],
+     "pat": "cp.by-until",
+     "de": "„Until“ meint eine Dauer ohne Pause. Gemeint ist aber ein letzter Termin für die Entscheidung.",
+     "en": "“Until” means a duration without a break. Here a last date for the decision is meant."
+    },
+    {
+     "if": [
+      "within"
+     ],
+     "pat": "cp.within",
+     "de": "„Within“ braucht eine Spanne wie two weeks, kein Datum wie the end of Q3.",
+     "en": "“Within” needs a span like two weeks, not a date like the end of Q3."
+    },
+    {
+     "not": [
+      "by",
+      "before",
+      "later"
+     ],
+     "de": "Gesucht ist das Frist-Wort: by (oder no later than) vor dem Termin.",
+     "en": "A deadline word is needed before the date: by (or no later than)."
+    }
+   ]
+  }
+ },
+ "The trial runs ___ June 30, then it ends automatically.": {
+  "pat": "cp.by-until",
+  "why": {
+   "ok": {
+    "de": "Richtig: until beschreibt eine Dauer. Die Testphase läuft durchgehend bis zum 30. Juni.",
+    "en": "Right: until describes a duration. The trial runs without a break up to June 30."
+   },
+   "wrong": [
+    {
+     "if": [
+      "by"
+     ],
+     "pat": "cp.by-until",
+     "de": "„By“ nennt eine Frist. Eine Testphase, die läuft, ist aber ein Zustand: bis dahin durchgehend.",
+     "en": "“By” names a deadline. A running trial is a state: continuous up to that date."
+    },
+    {
+     "if": [
+      "within"
+     ],
+     "pat": "cp.within",
+     "de": "„Within“ braucht eine Spanne (within two weeks), hier folgt ein Datum.",
+     "en": "“Within” needs a span (within two weeks); a date follows here."
+    },
+    {
+     "if": [
+      "before"
+     ],
+     "de": "„Before“ schließt den 30. Juni aus. Die Testphase läuft aber bis zu diesem Tag.",
+     "en": "“Before” excludes June 30. The trial runs up to that day."
+    },
+    {
+     "not": [
+      "until",
+      "till",
+      "through",
+      "up"
+     ],
+     "de": "Gesucht ist das Dauer-Wort: until, die ganze Zeit bis zu diesem Datum.",
+     "en": "A duration word is needed: until, all the time up to this date."
+    }
+   ]
+  }
+ },
+ "We can set up the test system ___ two weeks.": {
+  "pat": "cp.within",
+  "why": {
+   "ok": {
+    "de": "Richtig: within nennt die Obergrenze (innerhalb von). „In two weeks“ nennt den Zeitpunkt.",
+    "en": "Right: within names the upper limit. “In two weeks” names the point in time."
+   },
+   "wrong": [
+    {
+     "if": [
+      "by"
+     ],
+     "pat": "cp.by-until",
+     "de": "„By“ braucht einen Zeitpunkt (by Friday), keine Spanne wie two weeks.",
+     "en": "“By” needs a point in time (by Friday), not a span like two weeks."
+    },
+    {
+     "if": [
+      "until"
+     ],
+     "pat": "cp.by-until",
+     "de": "„Until“ meint eine Dauer ohne Pause, nicht eine Frist innerhalb einer Spanne.",
+     "en": "“Until” means a duration without a break, not a limit inside a span."
+    },
+    {
+     "not": [
+      "within",
+      "less"
+     ],
+     "de": "Gesucht ist das Wort für „innerhalb“: within vor der Zeitspanne.",
+     "en": "The word for “inside” is needed: within, before the time span."
+    }
+   ]
+  }
+ },
+ "___ June 1, all invoices must be archived electronically.": {
+  "pat": "cp.as-of",
+  "why": {
+   "ok": {
+    "de": "Richtig: As of nennt den Stichtag. Ab dem 1. Juni gilt die Regel.",
+    "en": "Right: As of names the key date. The rule applies from June 1."
+   },
+   "wrong": [
+    {
+     "if": [
+      "since"
+     ],
+     "pat": "cp.as-of",
+     "de": "„Since“ blickt zurück und passt nicht zu einer Regel, die am Stichtag beginnt.",
+     "en": "“Since” looks back and does not fit a rule that begins on the key date."
+    },
+    {
+     "if": [
+      "until"
+     ],
+     "pat": "cp.by-until",
+     "de": "„Until“ nennt ein Ende. Hier beginnt die Regel aber am Stichtag.",
+     "en": "“Until” names an end. Here the rule begins on the key date."
+    },
+    {
+     "if": [
+      "by"
+     ],
+     "pat": "cp.by-until",
+     "de": "„By“ wäre eine Frist bis zum 1. Juni. Gemeint ist: ab diesem Tag.",
+     "en": "“By” would be a deadline up to June 1. The meaning here: from that day on."
+    },
+    {
+     "not": [
+      "as",
+      "from",
+      "starting",
+      "effective",
+      "beginning"
+     ],
+     "de": "Gesucht ist das Stichtag-Wort: As of (oder From, Starting) vor dem Datum.",
+     "en": "A key-date word is needed: As of (or From, Starting) before the date."
+    }
+   ]
+  }
+ },
+ "The cloud version costs ___ of the on-premise license.": {
+  "pat": "cp.approx",
+  "why": {
+   "ok": {
+    "de": "Richtig: a fraction of = nur ein kleiner Teil davon, hier des alten Preises.",
+    "en": "Right: a fraction of = only a small part of it, here of the old price."
+   },
+   "wrong": [
+    {
+     "opt": "a part",
+     "de": "„A part“ nennt irgendeinen Teil, nicht den sehr kleinen, den der Preisvergleich meint.",
+     "en": "“A part” names just any part, not the very small one the price comparison means."
+    },
+    {
+     "opt": "a few",
+     "de": "„A few“ zählt einzelne Dinge (a few users), nicht den Anteil einer Lizenz.",
+     "en": "“A few” counts single things (a few users), not a share of a license."
+    },
+    {
+     "opt": "a little",
+     "de": "„A little“ passt zu Unzählbarem und nicht vor „of the license“ als Preisanteil.",
+     "en": "“A little” suits uncountable things, not a price share before “of the license”."
+    }
+   ]
+  }
+ },
+ "We process ___ 40,000 invoices a month – the exact number is 39,600.": {
+  "pat": "cp.approx",
+  "why": {
+   "ok": {
+    "de": "Richtig: just under = knapp darunter. Die 39.600 liegen knapp unter 40.000.",
+    "en": "Right: just under = slightly below. 39,600 is slightly below 40,000."
+   },
+   "wrong": [
+    {
+     "opt": "well over",
+     "de": "„Well over“ heißt deutlich mehr als 40.000, hier sind es weniger.",
+     "en": "“Well over” means clearly more than 40,000; here it is less."
+    },
+    {
+     "opt": "exactly",
+     "de": "„Exactly“ heißt genau. 39.600 sind nicht genau 40.000.",
+     "en": "“Exactly” means precisely. 39,600 is not exactly 40,000."
+    },
+    {
+     "opt": "more than",
+     "de": "„More than“ heißt über 40.000. Die 39.600 liegen darunter.",
+     "en": "“More than” means above 40,000. 39,600 is below."
+    }
+   ]
+  }
+ },
+ "Our new client has ___ many users as the old one – 2,000 instead of 1,000.": {
+  "pat": "cp.multiples",
+  "why": {
+   "ok": {
+    "de": "Richtig: twice as many … as = doppelt so viele wie. Das Vielfache steht vor as many.",
+    "en": "Right: twice as many … as = double the number. The multiple goes before as many."
+   },
+   "wrong": [
+    {
+     "opt": "two times more",
+     "de": "Nach „two times more“ passt „many … as“ nicht. Der Rahmen heißt as … as.",
+     "en": "After “two times more”, “many … as” does not fit. The frame is as … as.",
+     "pat": "cp.multiples"
+    },
+    {
+     "opt": "double as",
+     "de": "„Double“ ist kein Vielfaches vor as. Dafür nimmt man twice.",
+     "en": "“Double” is not a multiple before as. Use twice for that."
+    },
+    {
+     "opt": "twice so",
+     "de": "Aus „doppelt so viele wie“ wird twice as many as, nicht „twice so“.",
+     "en": "From “doppelt so viele wie” you get twice as many as, not “twice so”."
+    }
+   ]
+  }
+ },
+ "Please send the signed offer ___ Friday at the latest.": {
+  "pat": "cp.by-until",
+  "why": {
+   "ok": {
+    "de": "Richtig: „at the latest“ zeigt eine Frist, und die heißt by.",
+    "en": "Right: “at the latest” signals a deadline, and that takes by."
+   },
+   "wrong": [
+    {
+     "opt": "until",
+     "de": "„Until“ meint eine Dauer ohne Pause. „At the latest“ verlangt eine Frist.",
+     "en": "“Until” means a duration without a break. “At the latest” asks for a deadline.",
+     "pat": "cp.by-until"
+    },
+    {
+     "opt": "till",
+     "de": "„Till“ ist die lockere Form von until und meint ebenfalls eine Dauer.",
+     "en": "“Till” is the casual form of until and also means a duration.",
+     "pat": "cp.by-until"
+    },
+    {
+     "opt": "within",
+     "de": "„Within“ braucht eine Spanne (within two days), keinen Wochentag.",
+     "en": "“Within” needs a span (within two days), not a weekday.",
+     "pat": "cp.within"
+    }
+   ]
+  }
+ },
+ "About 60% of the documents are scanned. → ___ 60% of the documents are scanned.": {
+  "pat": "cp.approx",
+  "why": {
+   "ok": {
+    "de": "Richtig: Roughly kündigt eine gerundete Zahl an, ebenso around oder approximately.",
+    "en": "Right: Roughly signals a rounded number, as do around or approximately."
+   },
+   "wrong": [
+    {
+     "if": [
+      "about"
+     ],
+     "de": "„About“ steht schon im Ausgangssatz. Gesucht ist ein präziseres Näherungswort.",
+     "en": "“About” is already in the starting sentence. A more precise approximation word is needed."
+    },
+    {
+     "not": [
+      "roughly",
+      "around",
+      "approximately",
+      "some"
+     ],
+     "de": "Gesucht ist ein Näherungswort vor der Zahl: roughly, around oder approximately.",
+     "en": "An approximation word before the number is needed: roughly, around or approximately."
+    }
+   ]
+  }
+ },
+ "The rollout must be finished before September 30 at the latest. → The rollout must be finished ___ September 30.": {
+  "pat": "cp.by-until",
+  "why": {
+   "ok": {
+    "de": "Richtig: by September 30 = spätestens bis zum 30. September, eine Frist.",
+    "en": "Right: by September 30 = no later than September 30, a deadline."
+   },
+   "wrong": [
+    {
+     "if": [
+      "until"
+     ],
+     "pat": "cp.by-until",
+     "de": "„Until“ meint eine Dauer ohne Pause. Der Rollout soll aber spätestens fertig sein.",
+     "en": "“Until” means a duration without a break. The rollout must be finished at the latest."
+    },
+    {
+     "if": [
+      "before"
+     ],
+     "de": "„Before“ schließt den 30. aus. Die Frist at the latest meint den 30. selbst: by.",
+     "en": "“Before” excludes the 30th. The at the latest deadline includes the 30th itself: by."
+    },
+    {
+     "not": [
+      "by",
+      "later",
+      "or"
+     ],
+     "de": "Gesucht ist das Frist-Wort: by oder no later than vor dem Datum.",
+     "en": "A deadline word is needed before the date: by or no later than."
+    }
+   ]
+  }
+ },
+ "We will send you the offer until Wednesday.": {
+  "pat": "cp.by-until",
+  "why": {
+   "ok": {
+    "de": "Richtig: Das Senden ist ein einmaliger Schritt mit Frist. Dafür steht by Wednesday.",
+    "en": "Right: sending is a one-time step with a deadline. That takes by Wednesday."
+   },
+   "wrong": [
+    {
+     "if": [
+      "until"
+     ],
+     "pat": "cp.by-until",
+     "de": "„Until“ meint eine Dauer. Senden ist aber einmalig und hat eine Frist: by.",
+     "en": "“Until” means a duration. Sending is a one-time act with a deadline: by."
+    },
+    {
+     "not": [
+      "by",
+      "later",
+      "before"
+     ],
+     "de": "Gesucht ist das Frist-Wort by (oder no later than) vor Wednesday.",
+     "en": "A deadline word is needed before Wednesday: by (or no later than)."
+    }
+   ]
+  }
+ },
+ "The new system is two times faster as the old one.": {
+  "pat": "cp.multiples",
+  "why": {
+   "ok": {
+    "de": "Richtig: Das Vielfache steht vor as … as: twice as fast as the old one.",
+    "en": "Right: the multiple goes before as … as: twice as fast as the old one."
+   },
+   "wrong": [
+    {
+     "if": [
+      "faster"
+     ],
+     "de": "„Faster as“ mischt zwei Vergleiche. Nach faster steht than, hier gilt as … as.",
+     "en": "“Faster as” mixes two comparisons. After faster comes than; here use as … as."
+    },
+    {
+     "if": [
+      "than"
+     ],
+     "de": "Nach dem Vielfachen endet der Vergleich mit as, nicht mit than.",
+     "en": "After the multiple the comparison ends with as, not than."
+    }
+   ]
+  }
+ },
+ "We need your feedback until Friday.": {
+  "pat": "cp.by-until",
+  "dup": "We will send you the offer until Wednesday.",
+  "why": {
+   "ok": {
+    "de": "Richtig: Eine Frist für das Feedback heißt by Friday.",
+    "en": "Right: a deadline for the feedback takes by Friday."
+   },
+   "wrong": [
+    {
+     "if": [
+      "until"
+     ],
+     "pat": "cp.by-until",
+     "de": "„Until“ meint eine Dauer. Das Feedback soll aber bis spätestens Freitag da sein.",
+     "en": "“Until” means a duration. The feedback should be in by Friday at the latest."
+    },
+    {
+     "not": [
+      "by",
+      "later",
+      "before"
+     ],
+     "de": "Gesucht ist das Frist-Wort by (oder no later than) vor Friday.",
+     "en": "A deadline word is needed before Friday: by (or no later than)."
+    }
+   ]
+  }
+ }
+}

@@ -2512,6 +2512,406 @@
    "topic": "c1-participle"
   },
   {
+   "pat": "cp.by-until",
+   "en": "Please upload the final report by Thursday at noon.",
+   "de": "Bitte laden Sie den Abschlussbericht bis Donnerstagmittag hoch.",
+   "chunks": [
+    "please",
+    "upload",
+    "the final report",
+    "by Thursday",
+    "at noon"
+   ],
+   "alt": [
+    "By Thursday at noon, please upload the final report."
+   ],
+   "why": [
+    "Eine Frist heißt by: „by Thursday“ bleibt ein Baustein, die Uhrzeit folgt mit at noon. Until würde eine Dauer meinen.",
+    "A deadline takes by: “by Thursday” stays one block, and the time follows as at noon. Until would mean a duration."
+   ],
+   "bad": "Please upload the final report until Thursday at noon.",
+   "trap": {
+    "tile": "by Thursday",
+    "instead": "until Thursday",
+    "why": {
+     "de": "Aus „bis Donnerstag“ wird im Kopf leicht until. Eine Frist braucht aber by.",
+     "en": "“Bis Donnerstag” easily turns into until. A deadline needs by."
+    }
+   },
+   "topic": "c1-precision"
+  },
+  {
+   "pat": "cp.by-until",
+   "en": "The maintenance window will stay open until midnight tonight.",
+   "de": "Das Wartungsfenster bleibt heute Nacht bis Mitternacht geöffnet.",
+   "chunks": [
+    "the maintenance window",
+    "will",
+    "stay open",
+    "until midnight",
+    "tonight"
+   ],
+   "alt": [
+    "Tonight, the maintenance window will stay open until midnight.",
+    "The maintenance window will stay open tonight until midnight.",
+    "Until midnight tonight, the maintenance window will stay open."
+   ],
+   "why": [
+    "Das Fenster bleibt die ganze Zeit offen, also until. Die Zeitangabe tonight kann vorn, mitten oder hinten stehen.",
+    "The window stays open the whole time, so until. The time word tonight can sit at the front, in the middle or at the end."
+   ],
+   "bad": "The maintenance window will stay open by midnight tonight.",
+   "trap": {
+    "tile": "until midnight",
+    "instead": "by midnight",
+    "why": {
+     "de": "Beim Zustand „bleibt offen“ greift man zu by, weil Mitternacht ein Termin ist. Ein Zustand bis dahin braucht aber until.",
+     "en": "With the state “stays open”, learners reach for by because midnight is a date. A state up to then needs until."
+    }
+   },
+   "topic": "c1-precision"
+  },
+  {
+   "pat": "cp.within",
+   "en": "We usually confirm your booking within one business day.",
+   "de": "Wir bestätigen Ihre Buchung in der Regel innerhalb eines Werktags.",
+   "chunks": [
+    "we",
+    "usually",
+    "confirm",
+    "your booking",
+    "within one business day"
+   ],
+   "alt": [
+    "Within one business day, we usually confirm your booking.",
+    "Usually, we confirm your booking within one business day.",
+    "Usually, within one business day, we confirm your booking."
+   ],
+   "why": [
+    "Within nennt die Spanne ab jetzt: „within one business day“ bleibt zusammen. Das Adverb usually steht vor dem Verb oder vorn.",
+    "Within names the span from now: “within one business day” stays together. The adverb usually goes before the verb or at the front."
+   ],
+   "bad": "We usually confirm your booking by one business day.",
+   "trap": {
+    "tile": "within one business day",
+    "instead": "by one business day",
+    "why": {
+     "de": "Aus „bis zu einem Werktag“ wird leicht by. Eine Spanne braucht aber within, by verlangt einen Zeitpunkt.",
+     "en": "From “bis zu einem Werktag” it is easy to get by. A span needs within; by needs a point in time."
+    }
+   },
+   "topic": "c1-precision"
+  },
+  {
+   "pat": "cp.within",
+   "en": "Could you send me the revised figures within the next hour?",
+   "de": "Könntest du mir die überarbeiteten Zahlen innerhalb der nächsten Stunde schicken?",
+   "chunks": [
+    "could",
+    "you",
+    "send me",
+    "the revised figures",
+    "within the next hour"
+   ],
+   "alt": [
+    "Within the next hour, could you send me the revised figures?"
+   ],
+   "why": [
+    "Die Spanne within the next hour bleibt ein Block und steht am Ende oder ganz vorn. Die Frage beginnt mit could you.",
+    "The span within the next hour stays one block and goes at the end or right at the front. The question starts with could you."
+   ],
+   "bad": "Could you send me the revised figures until the next hour?",
+   "trap": {
+    "tile": "within the next hour",
+    "instead": "until the next hour",
+    "why": {
+     "de": "Aus „bis zur nächsten Stunde“ wird leicht until. Gemeint ist aber eine Spanne ab jetzt: within.",
+     "en": "“Bis zur nächsten Stunde” easily becomes until. A span from now is meant: within."
+    }
+   },
+   "topic": "c1-precision"
+  },
+  {
+   "pat": "cp.as-of",
+   "en": "As of next Monday, remote days are limited to two per week.",
+   "de": "Ab nächstem Montag sind Homeoffice-Tage auf zwei pro Woche begrenzt.",
+   "chunks": [
+    "as of next Monday",
+    "remote days",
+    "are limited",
+    "to two",
+    "per week"
+   ],
+   "alt": [
+    "Remote days are limited to two per week as of next Monday."
+   ],
+   "why": [
+    "As of nennt den Stichtag und bleibt mit dem Datum in einem Block. Er steht vorn oder am Satzende.",
+    "As of names the key date and stays in one block with the date. It goes at the front or at the end of the sentence."
+   ],
+   "bad": "Since next Monday, remote days are limited to two per week.",
+   "trap": {
+    "tile": "as of next Monday",
+    "instead": "since next Monday",
+    "why": {
+     "de": "Man nimmt since als Startdatum-Wort. Es blickt aber zurück und passt nicht zu einem künftigen Datum.",
+     "en": "Learners take since as a start-date word. But it looks back and does not fit a future date."
+    }
+   },
+   "topic": "c1-precision"
+  },
+  {
+   "pat": "cp.approx",
+   "en": "Just under half of our customers automatically renew after year one.",
+   "de": "Knapp die Hälfte unserer Kunden verlängert nach dem ersten Jahr automatisch.",
+   "chunks": [
+    "just under half",
+    "of our customers",
+    "automatically",
+    "renew",
+    "after year one"
+   ],
+   "alt": [
+    "After year one, just under half of our customers automatically renew.",
+    "Just under half of our customers renew automatically after year one.",
+    "Just under half of our customers renew after year one automatically.",
+    "After year one, just under half of our customers renew automatically."
+   ],
+   "why": [
+    "Just under half steht ohne Artikel direkt am Satzanfang. Das Adverb automatically steht vor oder nach dem Verb.",
+    "Just under half goes without an article straight at the start. The adverb automatically goes before or after the verb."
+   ],
+   "bad": "Just under the half of our customers automatically renew after year one.",
+   "trap": {
+    "tile": "just under half",
+    "instead": "just under the half",
+    "why": {
+     "de": "Deutsch sagt „die Hälfte“ mit Artikel. Englisch lässt ihn bei just under half weg.",
+     "en": "German says “die Hälfte” with an article. English drops it in just under half."
+    }
+   },
+   "topic": "c1-precision"
+  },
+  {
+   "pat": "cp.multiples",
+   "en": "Our team closed three times as many deals as last quarter.",
+   "de": "Unser Team hat dreimal so viele Abschlüsse gemacht wie im letzten Quartal.",
+   "chunks": [
+    "our team",
+    "closed",
+    "three times as many",
+    "deals",
+    "as last quarter"
+   ],
+   "single": "Das Vielfache steht direkt vor as many, und der Vergleich as last quarter muss ans Satzende. Eine zweite Reihenfolge gibt es nicht.",
+   "why": [
+    "Das Vielfache three times steht direkt vor as many, und der Vergleich schließt mit as … ab. Deutsch sagt dafür „wie“.",
+    "The multiple three times goes directly before as many, and the comparison closes with as …. German uses “wie” for that."
+   ],
+   "bad": "Our team closed three times more deals as last quarter.",
+   "trap": {
+    "tile": "three times as many",
+    "instead": "three times more",
+    "why": {
+     "de": "Vermischt wird „dreimal mehr“ mit as … as. Mit more passt am Ende nur than, nicht as.",
+     "en": "Learners mix “dreimal mehr” with as … as. With more only than fits at the end, not as."
+    }
+   },
+   "topic": "c1-precision"
+  },
+  {
+   "pat": "cmp.the-the",
+   "en": "The earlier we align, the fewer surprises we get.",
+   "de": "Je früher wir uns abstimmen, desto weniger Überraschungen erleben wir.",
+   "chunks": [
+    "the earlier",
+    "we align",
+    "the fewer",
+    "surprises",
+    "we get"
+   ],
+   "single": "Hier ist nur diese eine Reihenfolge richtig.",
+   "why": [
+    "Beide Teile beginnen mit the + Komparativ. Danach bleibt die normale Reihenfolge: Subjekt vor Verb (we align, we get).",
+    "Both parts start with the + comparative. After that normal order stays: subject before verb (we align, we get)."
+   ],
+   "bad": "The earlier we align, the fewer surprises get we.",
+   "trap": {
+    "tile": "we get",
+    "instead": "get we",
+    "why": {
+     "de": "Im Deutschen steht nach „desto“ das Verb vor dem Subjekt („desto weniger Überraschungen erleben wir“). Im Englischen bleibt Subjekt vor Verb.",
+     "en": "In German the verb comes before the subject after “desto”. English keeps the subject before the verb: we get."
+    }
+   },
+   "topic": "comparison"
+  },
+  {
+   "pat": "cmp.the-the",
+   "en": "The longer the call lasts, the less people listen.",
+   "de": "Je länger das Telefonat dauert, desto weniger hören die Leute zu.",
+   "chunks": [
+    "the longer",
+    "the call",
+    "lasts",
+    "the less",
+    "people",
+    "listen"
+   ],
+   "single": "Hier ist nur diese eine Reihenfolge richtig.",
+   "why": [
+    "Beide Teile stehen mit the + Komparativ vorn: erst die Ursache (the longer), dann die Folge (the less).",
+    "Both parts start with the + comparative: first the cause (the longer), then the result (the less)."
+   ],
+   "topic": "comparison"
+  },
+  {
+   "pat": "cmp.as-as",
+   "en": "Our new quote is not as high as theirs.",
+   "de": "Unser neues Angebot ist nicht so hoch wie ihres.",
+   "chunks": [
+    "our new quote",
+    "is not",
+    "as",
+    "high",
+    "as theirs"
+   ],
+   "single": "Hier ist nur diese eine Reihenfolge richtig.",
+   "why": [
+    "Bei not as … as steht das Adjektiv zwischen den beiden as. Danach folgt der Vergleichspartner.",
+    "In not as … as the adjective stands between the two as. The comparison partner follows."
+   ],
+   "bad": "Our new quote is not as high like theirs.",
+   "trap": {
+    "tile": "as theirs",
+    "instead": "like theirs",
+    "why": {
+     "de": "Deutsch sagt „so hoch wie“, und „wie“ klingt nach like. Im Englischen schließt aber as den Vergleich: as high as.",
+     "en": "German says “so hoch wie”, and “wie” sounds like like. In English, as closes the comparison: as high as."
+    }
+   },
+   "topic": "comparison"
+  },
+  {
+   "pat": "cmp.as-as",
+   "en": "The new process is twice as fast as the old one.",
+   "de": "Der neue Ablauf ist doppelt so schnell wie der alte.",
+   "chunks": [
+    "the new process",
+    "is",
+    "twice as",
+    "fast",
+    "as the old one"
+   ],
+   "single": "Hier ist nur diese eine Reihenfolge richtig.",
+   "why": [
+    "Das Vielfache steht vor dem ersten as: twice as fast as. Das Adjektiv sitzt zwischen den beiden as.",
+    "The multiple goes before the first as: twice as fast as. The adjective sits between the two as."
+   ],
+   "topic": "comparison"
+  },
+  {
+   "pat": "cmp.form",
+   "en": "The second option is cheaper and more flexible.",
+   "de": "Die zweite Option ist günstiger und flexibler.",
+   "chunks": [
+    "the second option",
+    "is",
+    "cheaper",
+    "and",
+    "more flexible"
+   ],
+   "why": [
+    "Cheaper ist kurz und bekommt -er. Flexible ist lang und bekommt more: more flexible.",
+    "Cheap is short and takes -er. Flexible is long and takes more: more flexible."
+   ],
+   "bad": "The second option is more cheaper and more flexible.",
+   "trap": {
+    "tile": "cheaper",
+    "instead": "more cheaper",
+    "why": {
+     "de": "Kein Übersetzungsfehler: Deutsch steigert immer mit -er („billiger“). Der Fehler entsteht, wenn man das englische more auch auf kurze Adjektive überträgt.",
+     "en": "Not a translation error: German always uses -er (“billiger”). The error comes from carrying English more over to short adjectives."
+    }
+   },
+   "alt": [
+    "The second option is more flexible and cheaper."
+   ],
+   "topic": "comparison"
+  },
+  {
+   "pat": "cmp.than",
+   "en": "Demand grew faster than we had planned.",
+   "de": "Die Nachfrage wuchs schneller, als wir geplant hatten.",
+   "chunks": [
+    "demand",
+    "grew",
+    "faster",
+    "than",
+    "we had planned"
+   ],
+   "single": "Hier ist nur diese eine Reihenfolge richtig.",
+   "why": [
+    "Nach dem Komparativ faster verbindet than den Vergleichspartner: than we had planned.",
+    "After the comparative faster, than links the comparison partner: than we had planned."
+   ],
+   "bad": "Demand grew faster as we had planned.",
+   "trap": {
+    "tile": "than",
+    "instead": "as",
+    "why": {
+     "de": "Nach dem Komparativ steht im Deutschen „als“ („schneller als“), und „als“ klingt wie as. Im Englischen heißt es than.",
+     "en": "After a comparative German uses “als” (“schneller als”), and “als” sounds like as. English needs than."
+    }
+   },
+   "topic": "comparison"
+  },
+  {
+   "pat": "cmp.degree",
+   "en": "The new route is far faster than the old one.",
+   "de": "Die neue Route ist viel schneller als die alte.",
+   "chunks": [
+    "the new route",
+    "is",
+    "far",
+    "faster",
+    "than the old one"
+   ],
+   "single": "Hier ist nur diese eine Reihenfolge richtig.",
+   "why": [
+    "Far steht direkt vor dem Komparativ faster und zeigt den großen Abstand. Danach folgt than.",
+    "Far goes directly before the comparative faster and shows the big gap. Then than follows."
+   ],
+   "bad": "The new route is very faster than the old one.",
+   "trap": {
+    "tile": "far",
+    "instead": "very",
+    "why": {
+     "de": "Kein Übersetzungsfehler: Deutsch sagt „viel schneller“, nicht „sehr schneller“. Der Fehler entsteht, weil very bei Grundformen (very fast) so häufig ist.",
+     "en": "Not a translation error: German says “viel schneller”, not “sehr schneller”. The error comes from very being so common with base forms (very fast)."
+    }
+   },
+   "topic": "comparison"
+  },
+  {
+   "pat": "cmp.degree",
+   "en": "Our results are slightly better than last year.",
+   "de": "Unsere Ergebnisse sind etwas besser als letztes Jahr.",
+   "chunks": [
+    "our results",
+    "are",
+    "slightly",
+    "better",
+    "than last year"
+   ],
+   "single": "Hier ist nur diese eine Reihenfolge richtig.",
+   "why": [
+    "Slightly steht vor dem Komparativ better und nennt einen kleinen Unterschied. Danach folgt than.",
+    "Slightly goes before the comparative better and names a small difference. Then than follows."
+   ],
+   "topic": "comparison"
+  },
+  {
    "pat": "cm.measure",
    "en": "We booked a two-day workshop for the sales team.",
    "de": "Wir haben einen zweitägigen Workshop für das Vertriebsteam gebucht.",
@@ -3962,6 +4362,219 @@
     "After make + person the base form follows without to: made the team revise. The object comes last."
    ],
    "topic": "gerund-inf"
+  },
+  {
+   "pat": "lk.although",
+   "en": "Although the client was unhappy, we kept the contract.",
+   "de": "Obwohl der Kunde unzufrieden war, haben wir den Vertrag behalten.",
+   "chunks": [
+    "although",
+    "the client",
+    "was unhappy",
+    "we kept",
+    "the contract"
+   ],
+   "alt": [
+    "We kept the contract although the client was unhappy."
+   ],
+   "why": [
+    "Although leitet einen Nebensatz ein: Auf although the client folgt was unhappy, und ein zweites but ist nicht nötig.",
+    "Although opens a subordinate clause: although the client is followed by was unhappy, and a second but is not needed."
+   ],
+   "bad": "Despite the client was unhappy, we kept the contract.",
+   "trap": {
+    "tile": "although",
+    "instead": "despite",
+    "why": {
+     "de": "Wer „trotz“ denkt, nimmt despite. Das braucht aber ein Nomen oder -ing, vor einem Satz steht although.",
+     "en": "Thinking “trotz”, learners pick despite. But it needs a noun or -ing; before a clause comes although."
+    }
+   },
+   "topic": "linkers"
+  },
+  {
+   "pat": "lk.despite",
+   "en": "Despite the delay, the launch went ahead as planned.",
+   "de": "Trotz der Verzögerung fand der Launch wie geplant statt.",
+   "chunks": [
+    "despite",
+    "the delay",
+    "the launch",
+    "went ahead",
+    "as planned"
+   ],
+   "alt": [
+    "The launch went ahead as planned despite the delay."
+   ],
+   "why": [
+    "Despite steht vor einem Nomen (the delay) und braucht kein of. Der Hauptsatz folgt nach dem Komma.",
+    "Despite goes before a noun (the delay) and needs no of. The main clause follows after the comma."
+   ],
+   "bad": "In spite the delay, the launch went ahead as planned.",
+   "trap": {
+    "tile": "despite",
+    "instead": "in spite",
+    "why": {
+     "de": "Wer in spite wählt, lässt oft das of weg. Die Kurzform ohne of ist nur despite.",
+     "en": "Learners who pick in spite often drop the of. The short form without of is only despite."
+    }
+   },
+   "topic": "linkers"
+  },
+  {
+   "pat": "lk.whereas",
+   "en": "Our online sales grew, whereas in-store sales fell.",
+   "de": "Unser Online-Umsatz stieg, während der Ladenumsatz sank.",
+   "chunks": [
+    "our online sales",
+    "grew",
+    "whereas",
+    "in-store sales",
+    "fell"
+   ],
+   "alt": [
+    "Whereas our online sales grew, in-store sales fell.",
+    "In-store sales fell, whereas our online sales grew."
+   ],
+   "why": [
+    "Whereas stellt zwei Entwicklungen gegenüber und leitet einen ganzen Satz ein, nicht nur ein Nomen.",
+    "Whereas sets two trends against each other and opens a full clause, not just a noun."
+   ],
+   "bad": "Our online sales grew, during in-store sales fell.",
+   "trap": {
+    "tile": "whereas",
+    "instead": "during",
+    "why": {
+     "de": "Deutsch „während“ steht vor Satz und Nomen. Englisch trennt: during + Nomen, whereas oder while + Satz.",
+     "en": "German “während” works before a clause and a noun. English splits them: during + noun, whereas or while + clause."
+    }
+   },
+   "topic": "linkers"
+  },
+  {
+   "pat": "lk.however",
+   "en": "The tests passed; however, we are not ready to launch.",
+   "de": "Die Tests sind durchgelaufen; wir sind jedoch noch nicht startklar.",
+   "chunks": [
+    "the tests",
+    "passed",
+    "however",
+    "we are",
+    "not ready",
+    "to launch"
+   ],
+   "alt": [
+    "The tests passed; we are not ready to launch, however.",
+    "The tests passed; we are, however, not ready to launch."
+   ],
+   "why": [
+    "However verbindet zwei Sätze: Davor steht ein Semikolon oder Punkt, danach ein Komma, und der Satz geht normal weiter.",
+    "However links two sentences: a semicolon or period comes before it, a comma after it, and the clause continues normally."
+   ],
+   "bad": "The tests passed; therefore, we are not ready to launch.",
+   "trap": {
+    "tile": "however",
+    "instead": "therefore",
+    "why": {
+     "de": "Kein Übersetzungsfehler, sondern eine Verwechslung: therefore nennt eine Folge, however den Gegensatz.",
+     "en": "Not a translation error but a mix-up: therefore names a result, however the contrast."
+    }
+   },
+   "topic": "linkers"
+  },
+  {
+   "pat": "lk.therefore",
+   "en": "Demand doubled; therefore, we hired two more agents.",
+   "de": "Die Nachfrage hat sich verdoppelt; deshalb haben wir zwei weitere Mitarbeiter eingestellt.",
+   "chunks": [
+    "demand",
+    "doubled",
+    "therefore",
+    "we",
+    "hired",
+    "two more agents"
+   ],
+   "alt": [
+    "Demand doubled; we therefore hired two more agents."
+   ],
+   "why": [
+    "Therefore nennt die Folge des ersten Satzes. Es steht nach Semikolon oder Punkt und bekommt ein Komma.",
+    "Therefore names the result of the first clause. It follows a semicolon or period and takes a comma."
+   ],
+   "bad": "Demand doubled; however, we hired two more agents.",
+   "trap": {
+    "tile": "therefore",
+    "instead": "however",
+    "why": {
+     "de": "Wer nur auf den zweiten Satz schaut, wählt leicht however. Hier folgt aber eine Folge, kein Gegensatz.",
+     "en": "Looking only at the second clause, it is easy to pick however. But a result follows here, not a contrast."
+    }
+   },
+   "topic": "linkers"
+  },
+  {
+   "pat": "lk.although",
+   "en": "Even though we had a tight budget, we finished early.",
+   "de": "Obwohl wir ein knappes Budget hatten, waren wir früh fertig.",
+   "chunks": [
+    "even though",
+    "we had",
+    "a tight budget",
+    "we",
+    "finished",
+    "early"
+   ],
+   "alt": [
+    "We finished early even though we had a tight budget."
+   ],
+   "why": [
+    "Even though leitet wie although einen ganzen Satz ein (we had a tight budget). Danach folgt der Hauptsatz.",
+    "Even though opens a full clause just like although (we had a tight budget). The main clause follows."
+   ],
+   "topic": "linkers"
+  },
+  {
+   "pat": "lk.despite",
+   "en": "She won the contract despite lacking experience.",
+   "de": "Sie hat den Auftrag bekommen, obwohl ihr Erfahrung fehlte.",
+   "chunks": [
+    "she",
+    "won",
+    "the contract",
+    "despite",
+    "lacking",
+    "experience"
+   ],
+   "alt": [
+    "Despite lacking experience, she won the contract."
+   ],
+   "why": [
+    "Nach despite steht ein Nomen oder eine -ing-Form (lacking experience), kein Satz mit eigenem Subjekt.",
+    "Despite is followed by a noun or an -ing form (lacking experience), not by a clause with its own subject."
+   ],
+   "topic": "linkers"
+  },
+  {
+   "pat": "lk.whereas",
+   "en": "Anna prefers email, while Ben likes to call.",
+   "de": "Anna schreibt lieber E-Mails, während Ben lieber anruft.",
+   "chunks": [
+    "Anna",
+    "prefers email",
+    "while",
+    "Ben",
+    "likes to call"
+   ],
+   "alt": [
+    "While Anna prefers email, Ben likes to call.",
+    "Ben likes to call, while Anna prefers email.",
+    "While Ben likes to call, Anna prefers email."
+   ],
+   "why": [
+    "While stellt hier zwei Vorlieben gegenüber. Beide Teile sind ganze Sätze mit eigenem Subjekt und Verb.",
+    "While sets two preferences against each other here. Both parts are full clauses with their own subject and verb."
+   ],
+   "topic": "linkers"
   },
   {
    "pat": "mnd.verbs",
@@ -5548,6 +6161,206 @@
     }
    },
    "topic": "past-simple-perfect"
+  },
+  {
+   "pat": "ph.separable",
+   "en": "Could you look the contract over before Friday?",
+   "de": "Kannst du dir den Vertrag bis Freitag mal ansehen?",
+   "chunks": [
+    "could you",
+    "look",
+    "the contract",
+    "over",
+    "before Friday"
+   ],
+   "alt": [
+    "Could you look over the contract before Friday?",
+    "Before Friday, could you look the contract over?",
+    "Before Friday, could you look over the contract?"
+   ],
+   "why": [
+    "Bei einem Nomen darf die Partikel vor oder nach dem Objekt stehen: look over the contract oder look the contract over.",
+    "With a noun the particle can go before or after the object: look over the contract or look the contract over."
+   ],
+   "topic": "phrasal-syntax"
+  },
+  {
+   "pat": "ph.separable",
+   "en": "I picked it up from reception this morning.",
+   "de": "Ich habe es heute Morgen an der Rezeption abgeholt.",
+   "chunks": [
+    "I",
+    "picked",
+    "it",
+    "up",
+    "from reception",
+    "this morning"
+   ],
+   "alt": [
+    "This morning, I picked it up from reception.",
+    "I picked it up this morning from reception."
+   ],
+   "why": [
+    "Ein Pronomen steht bei trennbaren Verben immer in der Mitte: picked it up. Die Folge picked up it ist falsch.",
+    "A pronoun always goes in the middle of a separable verb: picked it up. The order picked up it is wrong."
+   ],
+   "bad": "I picked up it from reception this morning.",
+   "topic": "phrasal-syntax"
+  },
+  {
+   "pat": "ph.separable",
+   "en": "She turned the proposal down because of the price.",
+   "de": "Sie hat das Angebot wegen des Preises abgelehnt.",
+   "chunks": [
+    "she",
+    "turned",
+    "the proposal",
+    "down",
+    "because of",
+    "the price"
+   ],
+   "alt": [
+    "She turned down the proposal because of the price.",
+    "Because of the price, she turned the proposal down.",
+    "Because of the price, she turned down the proposal."
+   ],
+   "why": [
+    "Das Nomen the proposal darf zwischen turned und down stehen oder dahinter. Beides ist richtig.",
+    "The noun the proposal can sit between turned and down or come after it. Both are correct."
+   ],
+   "topic": "phrasal-syntax"
+  },
+  {
+   "pat": "ph.together",
+   "en": "Our analyst will look into the delay this week.",
+   "de": "Unser Analyst wird die Verzögerung diese Woche untersuchen.",
+   "chunks": [
+    "our analyst",
+    "will",
+    "look",
+    "into",
+    "the delay",
+    "this week"
+   ],
+   "alt": [
+    "This week our analyst will look into the delay."
+   ],
+   "why": [
+    "look into bleibt zusammen, das Objekt folgt danach. Die Folge look the delay into ist falsch.",
+    "Look into stays together and the object follows. The order look the delay into is wrong."
+   ],
+   "bad": "Our analyst will look the delay into this week.",
+   "topic": "phrasal-syntax"
+  },
+  {
+   "pat": "ph.together",
+   "en": "Unfortunately, the deal with the supplier fell through at the last minute.",
+   "de": "Leider ist das Geschäft mit dem Lieferanten in letzter Minute gescheitert.",
+   "chunks": [
+    "unfortunately",
+    "the deal",
+    "with the supplier",
+    "fell through",
+    "at the last minute"
+   ],
+   "alt": [
+    "The deal with the supplier unfortunately fell through at the last minute."
+   ],
+   "why": [
+    "fall through braucht kein Objekt, deshalb bleiben beide Wörter zusammen und stehen vor der Zeitangabe.",
+    "Fall through takes no object, so both words stay together and come before the time phrase."
+   ],
+   "topic": "phrasal-syntax"
+  },
+  {
+   "pat": "ph.three-word",
+   "en": "I'm really looking forward to meeting you in person.",
+   "de": "Ich freue mich wirklich darauf, dich persönlich zu treffen.",
+   "chunks": [
+    "I'm really",
+    "looking forward",
+    "to meeting",
+    "you",
+    "in person"
+   ],
+   "alt": [
+    "In person, I'm really looking forward to meeting you."
+   ],
+   "why": [
+    "Bei look forward to ist to eine Präposition, deshalb folgt die -ing-Form: to meeting, nicht to meet.",
+    "In look forward to, the to is a preposition, so the -ing form follows: to meeting, not to meet."
+   ],
+   "bad": "I'm really looking forward to meet you in person.",
+   "trap": {
+    "tile": "to meeting",
+    "instead": "to meet",
+    "why": {
+     "de": "Im Deutschen folgt „zu“ + Infinitiv. Im Englischen ist to hier eine Präposition und braucht die -ing-Form.",
+     "en": "German uses “zu” + infinitive. In English, to is a preposition here and needs the -ing form."
+    }
+   },
+   "topic": "phrasal-syntax"
+  },
+  {
+   "pat": "ph.three-word",
+   "en": "Sadly, we have run out of spare parts for the old model.",
+   "de": "Leider sind uns die Ersatzteile für das alte Modell ausgegangen.",
+   "chunks": [
+    "sadly",
+    "we have",
+    "run out",
+    "of spare parts",
+    "for the old model"
+   ],
+   "alt": [
+    "We have sadly run out of spare parts for the old model."
+   ],
+   "why": [
+    "run out of ist ein Drei-Wort-Verb. Das of gehört fest dazu, danach folgt das Objekt.",
+    "Run out of is a three-word verb. The of is a fixed part, and the object follows."
+   ],
+   "bad": "Sadly, we have run out spare parts for the old model.",
+   "trap": {
+    "tile": "of spare parts",
+    "instead": "spare parts",
+    "why": {
+     "de": "Ohne das of fehlt die Präposition vor dem Objekt. Das Verb heißt run out of und bleibt zusammen.",
+     "en": "Without the of, the preposition before the object is missing. The verb is run out of and stays together."
+    }
+   },
+   "topic": "phrasal-syntax"
+  },
+  {
+   "pat": "ph.particle",
+   "en": "Please turn the music down because it's far too loud.",
+   "de": "Bitte stell die Musik leiser, denn sie ist viel zu laut.",
+   "chunks": [
+    "please",
+    "turn",
+    "the music",
+    "down",
+    "because it's",
+    "far too loud"
+   ],
+   "alt": [
+    "Please turn down the music because it's far too loud.",
+    "Because it's far too loud, please turn the music down.",
+    "Because it's far too loud, please turn down the music."
+   ],
+   "why": [
+    "Die Partikel trägt den Sinn: turn down = leiser, turn up = lauter. Hier ist es zu laut, also down.",
+    "The particle carries the meaning: turn down = quieter, turn up = louder. It is too loud here, so down."
+   ],
+   "bad": "Please turn the music up because it's far too loud.",
+   "trap": {
+    "tile": "down",
+    "instead": "up",
+    "why": {
+     "de": "Die Partikel up macht lauter. Weil es schon zu laut ist, passt nur down.",
+     "en": "The particle up makes it louder. Since it is already too loud, only down fits."
+    }
+   },
+   "topic": "phrasal-syntax"
   },
   {
    "pat": "pn.for",
@@ -7999,6 +8812,259 @@
     }
    },
    "topic": "verb-patterns"
+  },
+  {
+   "pat": "wo.verb-object",
+   "en": "She explained the new process clearly to the whole team.",
+   "de": "Sie hat dem ganzen Team den neuen Prozess klar erklärt.",
+   "chunks": [
+    "she",
+    "explained",
+    "the new process",
+    "clearly",
+    "to the whole team"
+   ],
+   "alt": [
+    "She clearly explained the new process to the whole team.",
+    "She explained the new process to the whole team clearly."
+   ],
+   "why": [
+    "Verb und Objekt bleiben zusammen: explained the new process. Das Adverb steht davor oder dahinter, nicht dazwischen.",
+    "Verb and object stay together: explained the new process. The adverb goes before or after, not in between."
+   ],
+   "bad": "She explained clearly the new process to the whole team.",
+   "topic": "word-order"
+  },
+  {
+   "pat": "wo.place-time",
+   "en": "We are meeting the client in Denver on Thursday.",
+   "de": "Wir treffen den Kunden am Donnerstag in Denver.",
+   "chunks": [
+    "we",
+    "are meeting",
+    "the client",
+    "in Denver",
+    "on Thursday"
+   ],
+   "alt": [
+    "We are meeting the client on Thursday in Denver.",
+    "On Thursday, we are meeting the client in Denver.",
+    "In Denver, we are meeting the client on Thursday.",
+    "In Denver on Thursday, we are meeting the client.",
+    "On Thursday in Denver, we are meeting the client."
+   ],
+   "why": [
+    "Ort und Zeit folgen dem Objekt: the client in Denver on Thursday. Der Ort steht meist vor der Zeit.",
+    "Place and time follow the object: the client in Denver on Thursday. Place usually comes before time."
+   ],
+   "bad": "We are meeting in Denver on Thursday the client.",
+   "topic": "word-order"
+  },
+  {
+   "pat": "wo.neg-inv",
+   "en": "Seldom does a vendor respond to complaints so quickly.",
+   "de": "Selten reagiert ein Anbieter so schnell auf Beschwerden.",
+   "chunks": [
+    "seldom",
+    "does",
+    "a vendor",
+    "respond",
+    "to complaints",
+    "so quickly"
+   ],
+   "why": [
+    "Mit „seldom“ vorn steht does vor dem Subjekt, danach die Grundform respond. Die Endung -s gehört schon zu does.",
+    "With “seldom” up front, does goes before the subject, then the base form respond. The -s ending already belongs to does."
+   ],
+   "bad": "Seldom does a vendor responds to complaints so quickly.",
+   "trap": {
+    "tile": "respond",
+    "instead": "responds",
+    "why": {
+     "de": "Im Deutschen trägt das Verb selbst die Endung („reagiert“). Im Englischen trägt does sie, das Vollverb bleibt in der Grundform.",
+     "en": "In German the verb itself carries the ending (“reagiert”). In English does carries it, and the main verb stays in the base form."
+    }
+   },
+   "alt": [
+    "Seldom does a vendor respond so quickly to complaints."
+   ],
+   "topic": "word-order"
+  },
+  {
+   "pat": "wo.neg-inv",
+   "en": "Never have we seen such a smooth rollout.",
+   "de": "Noch nie haben wir einen so reibungslosen Rollout erlebt.",
+   "chunks": [
+    "never",
+    "have",
+    "we",
+    "seen",
+    "such a smooth rollout"
+   ],
+   "alt": [
+    "We have never seen such a smooth rollout."
+   ],
+   "why": [
+    "Nach „never“ vorn steht have vor dem Subjekt: Never have we seen. Mitten im Satz bleibt die normale Reihenfolge.",
+    "After “never” up front, have goes before the subject: Never have we seen. In mid-sentence the normal order stays."
+   ],
+   "bad": "Never we have seen such a smooth rollout.",
+   "topic": "word-order"
+  },
+  {
+   "pat": "wo.not-only",
+   "en": "Not only did the vendor deliver late, but it also billed us twice.",
+   "de": "Der Anbieter hat nicht nur zu spät geliefert, sondern uns auch doppelt berechnet.",
+   "chunks": [
+    "not only",
+    "did",
+    "the vendor",
+    "deliver late",
+    "but",
+    "it also",
+    "billed us twice"
+   ],
+   "single": "Mit „not only“ vorn steht did vor dem Subjekt. Andere Reihenfolgen verändern den Satz.",
+   "why": [
+    "Nach „not only“ vorn steht did vor dem Subjekt, danach die Grundform. Der zweite Teil mit but also bleibt normal.",
+    "After “not only” up front, did goes before the subject, then the base form. The but also part stays normal."
+   ],
+   "bad": "Not only did the vendor delivered late, but it also billed us twice.",
+   "trap": {
+    "tile": "deliver late",
+    "instead": "delivered late",
+    "why": {
+     "de": "Im Deutschen steht die Vergangenheit am Verb („lieferte“). Im Englischen trägt did sie, danach folgt die Grundform deliver.",
+     "en": "In German the past is marked on the verb (“lieferte”). In English did carries it, and the base form deliver follows."
+    }
+   },
+   "topic": "word-order"
+  },
+  {
+   "pat": "wo.not-only",
+   "en": "Not only has the pilot cut costs, but it has also improved quality.",
+   "de": "Das Pilotprojekt hat nicht nur Kosten gesenkt, sondern auch die Qualität verbessert.",
+   "chunks": [
+    "not only",
+    "has",
+    "the pilot",
+    "cut costs",
+    "but",
+    "it has also",
+    "improved quality"
+   ],
+   "alt": [
+    "The pilot has not only cut costs, but it has also improved quality."
+   ],
+   "why": [
+    "Nach „not only“ vorn steht has vor dem Subjekt: Not only has the pilot cut costs. Der zweite Teil ist ein normaler Satz.",
+    "After “not only” up front, has goes before the subject: Not only has the pilot cut costs. The second part is a normal clause."
+   ],
+   "bad": "Not only the pilot has cut costs, but it has also improved quality.",
+   "topic": "word-order"
+  },
+  {
+   "pat": "wo.hardly-sooner",
+   "en": "Hardly had we posted the update when the first bug report arrived.",
+   "de": "Kaum hatten wir das Update veröffentlicht, kam der erste Fehlerbericht.",
+   "chunks": [
+    "hardly",
+    "had",
+    "we",
+    "posted the update",
+    "when",
+    "the first bug report",
+    "arrived"
+   ],
+   "alt": [
+    "We had hardly posted the update when the first bug report arrived."
+   ],
+   "why": [
+    "Hardly + had + Subjekt + Partizip nennt das erste Ereignis. Das zweite folgt nach when im Past Simple.",
+    "Hardly + had + subject + participle names the first event. The second follows after when in the simple past."
+   ],
+   "bad": "Hardly we had posted the update when the first bug report arrived.",
+   "topic": "word-order"
+  },
+  {
+   "pat": "wo.hardly-sooner",
+   "en": "No sooner had I sent the draft than the client called back.",
+   "de": "Kaum hatte ich den Entwurf geschickt, rief der Kunde zurück.",
+   "chunks": [
+    "no sooner",
+    "had",
+    "I",
+    "sent the draft",
+    "than",
+    "the client",
+    "called back"
+   ],
+   "alt": [
+    "I had no sooner sent the draft than the client called back."
+   ],
+   "why": [
+    "No sooner + had + Subjekt + Partizip, dann than und das Past Simple. Die feste Paarung ist no sooner … than.",
+    "No sooner + had + subject + participle, then than and the simple past. The fixed pair is no sooner … than."
+   ],
+   "bad": "No sooner had I sent the draft when the client called back.",
+   "trap": {
+    "tile": "than",
+    "instead": "when",
+    "why": {
+     "de": "Hier gibt es kein Übersetzungsproblem, sondern eine Verwechslung der Paare: hardly … when, aber no sooner … than.",
+     "en": "This is no translation problem but a mix-up of the pairs: hardly … when, but no sooner … than."
+    }
+   },
+   "topic": "word-order"
+  },
+  {
+   "pat": "wo.only-inv",
+   "en": "Not until the audit finished did we see the full picture.",
+   "de": "Erst als die Prüfung abgeschlossen war, sahen wir das ganze Bild.",
+   "chunks": [
+    "not until",
+    "the audit",
+    "finished",
+    "did",
+    "we",
+    "see",
+    "the full picture"
+   ],
+   "single": "Mit „not until“ vorn steht did vor dem Subjekt. Andere Reihenfolgen verändern den Satz.",
+   "why": [
+    "Nach „not until …“ vorn folgt die Inversion im Hauptsatz: did we see. Der Teil mit not until bleibt am Anfang.",
+    "After “not until …” up front, the main clause is inverted: did we see. The not until part stays at the start."
+   ],
+   "bad": "Not until the audit finished we did see the full picture.",
+   "topic": "word-order"
+  },
+  {
+   "pat": "wo.only-inv",
+   "en": "Only after the call did she send the contract.",
+   "de": "Erst nach dem Anruf hat sie den Vertrag geschickt.",
+   "chunks": [
+    "only after",
+    "the call",
+    "did",
+    "she",
+    "send",
+    "the contract"
+   ],
+   "why": [
+    "Nach „only after …“ vorn steht did vor dem Subjekt, danach die Grundform send. Das Hilfsverb trägt die Vergangenheit.",
+    "After “only after …” up front, did goes before the subject, then the base form send. The auxiliary carries the past."
+   ],
+   "bad": "Only after the call did she sent the contract.",
+   "trap": {
+    "tile": "send",
+    "instead": "sent",
+    "why": {
+     "de": "Im Deutschen trägt das Verb die Vergangenheit („schickte“). Im Englischen trägt did sie, danach folgt die Grundform send.",
+     "en": "In German the verb carries the past (“schickte”). In English did carries it, and the base form send follows."
+    }
+   },
+   "single": "Mit only after vorn steht did vor dem Subjekt.",
+   "topic": "word-order"
   }
  ]
 }

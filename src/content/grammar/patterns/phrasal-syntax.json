@@ -1,0 +1,361 @@
+{
+  "topic": "phrasal-syntax",
+  "canDo": {
+    "de": "Ich kann Phrasal Verbs richtig stellen: trennbar mit Nomen oder Pronomen, mit dem Objekt danach, wenn sie zusammenbleiben, als Drei-Wort-Verb und mit der Partikel, die zur Bedeutung passt.",
+    "en": "I can place phrasal verbs correctly: separable with a noun or pronoun, with the object after when they stay together, as three-word verbs, and with the particle that fits the meaning."
+  },
+  "order": [
+    "ph.separable",
+    "ph.together",
+    "ph.three-word",
+    "ph.particle"
+  ],
+  "introPlan": [
+    [
+      "ph.separable",
+      "ph.together"
+    ],
+    [
+      "ph.three-word",
+      "ph.particle"
+    ]
+  ],
+  "decide": {
+    "de": [
+      "Ist das Objekt ein Pronomen (dann in die Mitte) oder ein Nomen (dann sind beide Stellungen möglich)?",
+      "Darf ein Objekt zwischen Verb und Partikel stehen (turn it down) oder bleibt beides zusammen (look into it)?",
+      "Welche Partikel trägt die Bedeutung, die du brauchst: off, up, over oder after?"
+    ],
+    "en": [
+      "Is the object a pronoun (then in the middle) or a noun (then both positions work)?",
+      "Can an object sit between verb and particle (turn it down) or does the pair stay together (look into it)?",
+      "Which particle carries the meaning you need: off, up, over, or after?"
+    ]
+  },
+  "patterns": [
+    {
+      "id": "ph.separable",
+      "name": {
+        "de": "Trennbar · Nomen oder Pronomen",
+        "en": "Separable · noun or pronoun"
+      },
+      "form": {
+        "de": "Verb + Partikel + Nomen oder Verb + Nomen + Partikel; Pronomen: Verb + it + Partikel",
+        "en": "verb + particle + noun or verb + noun + particle; pronoun: verb + it + particle"
+      },
+      "use": {
+        "de": "Bei trennbaren Phrasal Verbs darf ein Nomen vor oder hinter der Partikel stehen. Ein Pronomen steht immer dazwischen: pick it up.",
+        "en": "With separable phrasal verbs a noun can go before or after the particle. A pronoun always goes in between: pick it up."
+      },
+      "signals": [
+        "pick it up",
+        "look it over",
+        "turn it down",
+        "fill it out",
+        "switch it off",
+        "set it up",
+        "send it back",
+        "put it off"
+      ],
+      "ex": [
+        {
+          "en": "Let's set the meeting up for Thursday.",
+          "de": "Lass uns das Meeting für Donnerstag ansetzen.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "I printed the contract, so please look it over.",
+          "de": "Ich habe den Vertrag ausgedruckt, also sieh ihn bitte durch.",
+          "ctx": "mail"
+        },
+        {
+          "en": "He offered me the job, but I turned it down.",
+          "de": "Er bot mir den Job an, aber ich habe ihn abgelehnt.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "The package is ready, so please pick up it after lunch.",
+        "good": "The package is ready, so please pick it up after lunch.",
+        "cause": {
+          "de": "Kein Übersetzungsfehler: Auch im Deutschen steht es davor („hol es ab“). Der Fehler entsteht, wenn man pick up the box auf ein Pronomen überträgt.",
+          "en": "Not a translation error: German also puts it first (“hol es ab”). The slip comes from copying pick up the box onto a pronoun."
+        }
+      },
+      "contrast": {
+        "with": "ph.together",
+        "a": "She turned the offer down.",
+        "b": "She looked into the offer.",
+        "diff": {
+          "de": "Trennbar: Das Objekt darf zwischen Verb und Partikel stehen. Bleibt das Verb zusammen, folgt das Objekt immer danach.",
+          "en": "Separable: the object can sit between verb and particle. When the verb stays together, the object always follows."
+        }
+      },
+      "ccq": [
+        {
+          "s": "She turned down the offer.",
+          "q": {
+            "de": "Hat sie das Angebot angenommen?",
+            "en": "Did she accept the offer?"
+          },
+          "a": false
+        },
+        {
+          "s": "I'll pick up the box later.",
+          "q": {
+            "de": "Hole ich die Kiste später ab?",
+            "en": "Will I collect the box later?"
+          },
+          "a": true
+        }
+      ],
+      "nudge": {
+        "de": "Ist das Objekt ein Nomen oder ein Pronomen, und wo darf es dann stehen?",
+        "en": "Is the object a noun or a pronoun, and where can it go then?"
+      }
+    },
+    {
+      "id": "ph.together",
+      "name": {
+        "de": "Bleibt zusammen · Objekt danach",
+        "en": "Stays together · object after"
+      },
+      "form": {
+        "de": "Verb + Präposition + Objekt; ohne Objekt: Verb + Partikel am Ende",
+        "en": "verb + preposition + object; with no object: verb + particle at the end"
+      },
+      "use": {
+        "de": "Bei Verben wie look into oder go over bleibt die Partikel direkt am Verb, das Objekt folgt danach: look into it. Ohne Objekt steht sie am Ende: The deal fell through.",
+        "en": "With verbs like look into or go over the particle stays next to the verb and the object follows: look into it. With no object it ends the clause: The deal fell through."
+      },
+      "signals": [
+        "look into",
+        "go over",
+        "look after",
+        "deal with",
+        "fall through",
+        "show up",
+        "run into",
+        "come across"
+      ],
+      "ex": [
+        {
+          "en": "We will go over the figures after lunch.",
+          "de": "Wir gehen die Zahlen nach der Mittagspause durch.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "Our team is looking into the delay.",
+          "de": "Unser Team untersucht die Verzögerung.",
+          "ctx": "mail"
+        },
+        {
+          "en": "Sorry, the dinner plan fell through.",
+          "de": "Tut mir leid, aus dem Abendessen wurde nichts.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "We need to look the delay into before Friday.",
+        "good": "We need to look into the delay before Friday.",
+        "cause": {
+          "de": "Im Deutschen trennt man viele Verben vom Zusatz („wir gehen die Zahlen durch“). Dieser Reflex trägt die Trennung in look into, das aber zusammenbleibt.",
+          "en": "German splits many verbs from their prefix (“wir gehen die Zahlen durch”). That reflex carries the split into look into, which stays together."
+        }
+      },
+      "contrast": {
+        "with": "ph.three-word",
+        "a": "I looked into the delay.",
+        "b": "I put up with the delay.",
+        "diff": {
+          "de": "Bei zwei Wörtern folgt das Objekt direkt auf die Partikel. Bei drei Wörtern hängt die Präposition mit dran: put up with.",
+          "en": "With two words the object follows the particle directly. With three words the preposition is part of the verb: put up with."
+        }
+      },
+      "ccq": [
+        {
+          "s": "We'll look into the complaint tomorrow.",
+          "q": {
+            "de": "Untersuchen wir die Beschwerde?",
+            "en": "Will we investigate the complaint?"
+          },
+          "a": true
+        },
+        {
+          "s": "The deal fell through.",
+          "q": {
+            "de": "Kam der Abschluss zustande?",
+            "en": "Did the deal go ahead?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Gibt es ein Objekt, und darf es zwischen Verb und Partikel stehen?",
+        "en": "Is there an object, and can it go between verb and particle?"
+      }
+    },
+    {
+      "id": "ph.three-word",
+      "name": {
+        "de": "Drei Wörter · bleiben zusammen",
+        "en": "Three-word verbs · stay together"
+      },
+      "form": {
+        "de": "Verb + Partikel + Präposition + Objekt (nach to: -ing)",
+        "en": "verb + particle + preposition + object (after to: -ing)"
+      },
+      "use": {
+        "de": "Drei-Wort-Verben wie put up with oder run out of bleiben zusammen, das Objekt folgt danach. Bei look forward to ist to eine Präposition, also folgt -ing.",
+        "en": "Three-word verbs like put up with or run out of stay together and the object follows. In look forward to, to is a preposition, so -ing follows."
+      },
+      "signals": [
+        "put up with",
+        "look forward to",
+        "run out of",
+        "catch up on",
+        "get on with",
+        "come up with",
+        "get away with",
+        "cut down on"
+      ],
+      "ex": [
+        {
+          "en": "We've run out of time, so let's continue tomorrow.",
+          "de": "Uns ist die Zeit ausgegangen, also machen wir morgen weiter.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "I look forward to hearing your thoughts.",
+          "de": "Ich freue mich darauf, Ihre Meinung zu hören.",
+          "ctx": "mail"
+        },
+        {
+          "en": "I can't put up with this noise any longer.",
+          "de": "Ich halte diesen Lärm nicht länger aus.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "I look forward to meet you next week.",
+        "good": "I look forward to meeting you next week.",
+        "cause": {
+          "de": "Im Deutschen heißt es „ich freue mich darauf, dich zu treffen“ mit zu + Infinitiv. Im Englischen ist to hier eine Präposition und braucht -ing.",
+          "en": "German says “ich freue mich darauf, dich zu treffen” with zu + infinitive. In English, to is a preposition here and needs -ing."
+        }
+      },
+      "contrast": {
+        "with": "ph.particle",
+        "a": "I caught up on my emails.",
+        "b": "I caught on to the joke.",
+        "diff": {
+          "de": "Eine andere Partikel ändert den Sinn: catch up on = nachholen, catch on = begreifen.",
+          "en": "A different particle changes the meaning: catch up on = deal with a backlog, catch on = understand."
+        }
+      },
+      "ccq": [
+        {
+          "s": "We've run out of coffee.",
+          "q": {
+            "de": "Ist noch Kaffee da?",
+            "en": "Is there any coffee left?"
+          },
+          "a": false
+        },
+        {
+          "s": "I look forward to seeing you.",
+          "q": {
+            "de": "Freue ich mich auf das Treffen?",
+            "en": "Am I happy about the meeting?"
+          },
+          "a": true
+        }
+      ],
+      "nudge": {
+        "de": "Wie viele Wörter hat das Verb, und was steht nach dem to?",
+        "en": "How many words does the verb have, and what follows the to?"
+      }
+    },
+    {
+      "id": "ph.particle",
+      "name": {
+        "de": "Partikel · ändert die Bedeutung",
+        "en": "Particle · changes the meaning"
+      },
+      "form": {
+        "de": "gleiches Verb + andere Partikel = andere Bedeutung",
+        "en": "same verb + different particle = different meaning"
+      },
+      "use": {
+        "de": "Die Partikel bestimmt den Sinn: call off = absagen, call up = anrufen, turn up = lauter, turn down = leiser oder ablehnen. Lerne Verb und Partikel als ein Wort.",
+        "en": "The particle sets the meaning: call off = cancel, call up = phone, turn up = raise, turn down = lower or reject. Learn verb and particle as one word."
+      },
+      "signals": [
+        "call off",
+        "call up",
+        "turn up",
+        "turn down",
+        "look over",
+        "look after",
+        "give up",
+        "take over"
+      ],
+      "ex": [
+        {
+          "en": "The board called off the launch.",
+          "de": "Der Vorstand hat den Start abgesagt.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "Please fill out the form before you leave.",
+          "de": "Bitte füllen Sie das Formular aus, bevor Sie gehen.",
+          "ctx": "mail"
+        },
+        {
+          "en": "Could you turn the radio down a little?",
+          "de": "Kannst du das Radio etwas leiser stellen?",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "I'll look after the report tonight and send you comments.",
+        "good": "I'll look over the report tonight and send you comments.",
+        "cause": {
+          "de": "Die Vorsilbe nach- führt leicht zu after: „nachsehen“ wird look after. Doch look after heißt „sich kümmern um“; „durchsehen“ ist look over.",
+          "en": "The prefix nach- tends to become after: “nachsehen” turns into look after. But look after means “take care of”; “durchsehen” is look over."
+        }
+      },
+      "contrast": {
+        "with": "ph.together",
+        "a": "I'll look over the report tonight.",
+        "b": "I'll look after the kids tonight.",
+        "diff": {
+          "de": "Gleiches Verb, andere Partikel: look over = durchsehen, look after = sich kümmern um (bleibt zusammen).",
+          "en": "Same verb, different particle: look over = review, look after = take care of (stays together)."
+        }
+      },
+      "ccq": [
+        {
+          "s": "The board called off the launch.",
+          "q": {
+            "de": "Findet der Start statt?",
+            "en": "Is the launch going ahead?"
+          },
+          "a": false
+        },
+        {
+          "s": "Please turn the music down.",
+          "q": {
+            "de": "Soll die Musik leiser werden?",
+            "en": "Should the music get quieter?"
+          },
+          "a": true
+        }
+      ],
+      "nudge": {
+        "de": "Welche Bedeutung brauchst du, und welche Partikel trägt sie?",
+        "en": "Which meaning do you need, and which particle carries it?"
+      }
+    }
+  ]
+}

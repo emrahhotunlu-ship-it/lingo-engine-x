@@ -1,0 +1,132 @@
+{
+  "I've drafted the proposal. Could you ___?": {
+    "pat": "ph.separable",
+    "why": {
+      "ok": { "de": "Richtig: look it over. Das Pronomen it steht in der Mitte des Verbs.", "en": "Right: look it over. The pronoun it goes in the middle of the verb." },
+      "wrong": [
+        { "opt": "look after it", "pat": "ph.particle", "de": "„look after“ heißt sich kümmern um. Gemeint ist durchsehen: look over.", "en": "“Look after” means take care of. Here you need to review: look over." },
+        { "opt": "look over it", "de": "Ein Pronomen steht in der Mitte: look it over, nicht look over it.", "en": "A pronoun goes in the middle: look it over, not look over it." },
+        { "opt": "over look it", "de": "Die Partikel folgt dem Verb: look it over, nicht over look.", "en": "The particle follows the verb: look it over, not over look." }
+      ]
+    }
+  },
+  "Sorry, I'm still catching ___ on emails after my vacation.": {
+    "pat": "ph.three-word",
+    "why": {
+      "ok": { "de": "Richtig: catch up on = nachholen. Die drei Wörter bleiben zusammen.", "en": "Right: catch up on = deal with a backlog. All three words stay together." },
+      "wrong": [
+        { "opt": "on", "pat": "ph.particle", "de": "„catch on“ heißt begreifen. Zum Nachholen gehört das up: catch up on.", "en": "“Catch on” means understand. To deal with a backlog use up: catch up on." },
+        { "opt": "out", "pat": "ph.particle", "de": "„catch out“ heißt ertappen, nicht nachholen. Gesucht: catch up on.", "en": "“Catch out” means to trip someone up. To deal with a backlog use catch up on." },
+        { "opt": "in", "de": "„catch in“ gibt es hier nicht. Gesucht ist catch up on.", "en": "“Catch in” is not a phrasal verb here. The one you need is catch up on." }
+      ]
+    }
+  },
+  "The new manager wants to ___ the quarterly figures with the whole team.": {
+    "pat": "ph.together",
+    "why": {
+      "ok": { "de": "Richtig: go over = durchgehen. Das Objekt folgt direkt danach.", "en": "Right: go over = review. The object follows directly." },
+      "wrong": [
+        { "opt": "go in", "pat": "ph.particle", "de": "„go in“ heißt hineingehen, nicht durchgehen. Gesucht: go over.", "en": "“Go in” means enter. To review you need go over." },
+        { "opt": "go at", "pat": "ph.particle", "de": "„go at“ heißt auf etwas losgehen. Durchgehen heißt go over.", "en": "“Go at” means attack something. To review you need go over." },
+        { "opt": "go on", "pat": "ph.particle", "de": "„go on“ heißt weitermachen, nicht durchgehen. Gesucht: go over.", "en": "“Go on” means continue. To review you need go over." }
+      ]
+    }
+  },
+  "The meeting was called ___ because the CEO was ill.": {
+    "pat": "ph.particle",
+    "why": {
+      "ok": { "de": "Richtig: call off = absagen. Die Partikel off bleibt direkt am Verb.", "en": "Right: call off = cancel. The particle off stays right next to the verb." },
+      "wrong": [
+        { "opt": "out", "de": "„call out“ heißt laut rufen oder anprangern. Absagen heißt call off.", "en": "“Call out” means shout or criticize. To cancel use call off." },
+        { "opt": "up", "de": "„call up“ heißt anrufen, nicht absagen. Gesucht: call off.", "en": "“Call up” means phone. To cancel use call off." },
+        { "opt": "away", "de": "Mit away passt hier keine Absage. Gesucht ist call off.", "en": "“Away” does not give a cancellation here. You need call off." }
+      ]
+    }
+  },
+  "I can't ___ up with the constant interruptions any longer.": {
+    "pat": "ph.three-word",
+    "why": {
+      "ok": { "de": "Richtig: put up with = ertragen. Die drei Wörter bleiben zusammen.", "en": "Right: put up with = tolerate. All three words stay together." },
+      "wrong": [
+        { "if": ["come"], "pat": "ph.particle", "de": "„come up with“ heißt sich etwas ausdenken, nicht ertragen.", "en": "“Come up with” means think of an idea, not tolerate." },
+        { "if": ["keep"], "pat": "ph.particle", "de": "„keep up with“ heißt mithalten, nicht ertragen.", "en": "“Keep up with” means stay level with, not tolerate." },
+        { "if": ["catch"], "pat": "ph.particle", "de": "„catch up with“ heißt aufholen, nicht ertragen.", "en": "“Catch up with” means reach someone ahead, not tolerate." },
+        { "not": ["put"], "de": "Gesucht ist put: put up with = ertragen.", "en": "You need put: put up with = tolerate." }
+      ]
+    }
+  },
+  "The deal fell ___ at the last minute because of a legal issue.": {
+    "pat": "ph.together",
+    "why": {
+      "ok": { "de": "Richtig: fall through = scheitern. Ohne Objekt steht through am Ende.", "en": "Right: fall through = fail. With no object, through comes last." },
+      "wrong": [
+        { "if": ["down"], "pat": "ph.particle", "de": "„fall down“ heißt hinfallen, nicht scheitern. Gesucht: fall through.", "en": "“Fall down” means drop to the ground. To fail use fall through." },
+        { "if": ["out"], "pat": "ph.particle", "de": "„fall out“ heißt sich zerstreiten, nicht scheitern. Gesucht: fall through.", "en": "“Fall out” means quarrel. To fail use fall through." },
+        { "not": ["through", "apart"], "de": "Gesucht ist through: fall through = scheitern.", "en": "You need through: fall through = fail." }
+      ]
+    }
+  },
+  "Please fill ___ this form and send it back to HR.": {
+    "pat": "ph.separable",
+    "why": {
+      "ok": { "de": "Richtig: fill in oder fill out = ausfüllen. Das Nomen darf auch davor stehen.", "en": "Right: fill in or fill out = complete. The noun can also go before the particle." },
+      "wrong": [
+        { "if": ["up"], "pat": "ph.particle", "de": "„fill up“ heißt vollmachen, etwa einen Tank. Formulare füllt man mit in oder out aus.", "en": "“Fill up” means make full, like a tank. For forms use in or out." },
+        { "if": ["on"], "de": "„fill on“ gibt es nicht. Ausfüllen heißt fill in oder fill out.", "en": "“Fill on” does not exist. To complete a form use fill in or fill out." },
+        { "not": ["in", "out"], "de": "Gesucht ist in oder out: fill in this form.", "en": "You need in or out: fill in this form." }
+      ]
+    }
+  },
+  "I'll investigate the problem tomorrow. → I'll ___ into the problem tomorrow.": {
+    "pat": "ph.together",
+    "why": {
+      "ok": { "de": "Richtig: look into = untersuchen. Verb und into bleiben zusammen.", "en": "Right: look into = investigate. Verb and into stay together." },
+      "wrong": [
+        { "if": ["run"], "pat": "ph.particle", "de": "„run into“ heißt zufällig treffen oder auf etwas stoßen, nicht untersuchen.", "en": "“Run into” means meet by chance or hit a problem, not investigate." },
+        { "if": ["investigate"], "de": "Gesucht ist das Verb vor into: look into = untersuchen.", "en": "You need the verb before into: look into = investigate." },
+        { "not": ["look", "dig", "delve", "go", "check"], "de": "Gesucht ist look: look into = untersuchen.", "en": "You need look: look into = investigate." }
+      ]
+    }
+  },
+  "We have no more coffee left. → We have ___ out of coffee.": {
+    "pat": "ph.three-word",
+    "why": {
+      "ok": { "de": "Richtig: have run out of = ausgegangen. Nach have steht das Partizip run.", "en": "Right: have run out of = used up. After have comes the participle run." },
+      "wrong": [
+        { "if": ["ran"], "de": "Nach have steht das Partizip run, nicht ran: have run out of.", "en": "After have use the participle run, not ran: have run out of." },
+        { "if": ["running"], "de": "Nach have steht run, nicht running: have run out of.", "en": "After have use run, not running: have run out of." },
+        { "not": ["run"], "de": "Gesucht ist run: run out of = ausgehen.", "en": "You need run: run out of = be used up." }
+      ]
+    }
+  },
+  "Your package is at reception, so please pick up it after lunch.": {
+    "pat": "ph.separable",
+    "why": {
+      "ok": { "de": "Richtig: pick it up. Ein Pronomen steht bei trennbaren Verben in der Mitte.", "en": "Right: pick it up. A pronoun goes in the middle of a separable verb." },
+      "wrong": [
+        { "if": ["pick", "up", "it"], "de": "Das Pronomen gehört zwischen pick und up: pick it up.", "en": "The pronoun belongs between pick and up: pick it up." },
+        { "not": ["up"], "de": "Die Partikel up gehört zum Verb: pick it up.", "en": "The particle up belongs to the verb: pick it up." }
+      ]
+    }
+  },
+  "I'm looking forward to see you at the conference.": {
+    "pat": "ph.three-word",
+    "why": {
+      "ok": { "de": "Richtig: look forward to + -ing. To ist hier eine Präposition: seeing.", "en": "Right: look forward to + -ing. To is a preposition here: seeing." },
+      "wrong": [
+        { "if": ["see"], "de": "To ist hier eine Präposition, danach folgt -ing: seeing.", "en": "To is a preposition here, so -ing follows: seeing." },
+        { "not": ["to"], "de": "Das to gehört zur Wendung: look forward to + -ing.", "en": "The to is part of the phrase: look forward to + -ing." }
+      ]
+    }
+  },
+  "She quickly got on well her new team.": {
+    "pat": "ph.three-word",
+    "why": {
+      "ok": { "de": "Richtig: get on with = sich verstehen mit. Die Präposition with fehlte.", "en": "Right: get on with = have a good relationship with. The preposition with was missing." },
+      "wrong": [
+        { "not": ["with"], "de": "Es fehlt with: get on with = sich verstehen mit.", "en": "The with is missing: get on with = have a good relationship with." },
+        { "if": ["with", "well"], "de": "well steht vor with: got on well with her new team.", "en": "Well goes before with: got on well with her new team." }
+      ]
+    }
+  }
+}

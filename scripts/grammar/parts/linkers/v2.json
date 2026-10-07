@@ -1,0 +1,1102 @@
+[
+ {
+  "id": "lk-alt-k1",
+  "type": "kwt",
+  "pat": "lk.although",
+  "from": "We lost the bid, but we learned a lot.",
+  "key": "LOST",
+  "frame": "___ the bid, we learned a lot.",
+  "answer": "Although we lost",
+  "accepted": [
+   "Though we lost",
+   "Even though we lost",
+   "Although we had lost",
+   "Though we had lost",
+   "Even though we had lost"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: although + Satz (we lost), dann ein Komma, ohne zusätzliches but.",
+    "en": "Right: although + clause (we lost), then a comma, with no extra but."
+   },
+   "wrong": [
+    {
+     "not": [
+      "lost"
+     ],
+     "de": "Das Schlüsselwort lost muss unverändert in der Lücke stehen.",
+     "en": "The key word lost must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "despite"
+     ],
+     "pat": "lk.despite",
+     "de": "„Despite“ braucht ein Nomen oder -ing, hier folgt aber ein Satz.",
+     "en": "“Despite” needs a noun or -ing, but a clause follows here."
+    },
+    {
+     "if": [
+      "but"
+     ],
+     "de": "Mit but davor entsteht ein Kommafehler. Although trägt den Gegensatz schon.",
+     "en": "With but in front you get a comma splice. Although already carries the contrast."
+    }
+   ]
+  }
+ },
+ {
+  "id": "lk-alt-k2",
+  "type": "kwt",
+  "pat": "lk.although",
+  "from": "The client approved the plan, but he still asked for changes.",
+  "key": "APPROVED",
+  "frame": "___ the plan, the client still asked for changes.",
+  "answer": "Although the client approved",
+  "accepted": [
+   "Though the client approved",
+   "Even though the client approved",
+   "Although the client had approved",
+   "Though the client had approved"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: although + Satz (the client approved). Danach folgt der Hauptsatz.",
+    "en": "Right: although + clause (the client approved). The main clause follows."
+   },
+   "wrong": [
+    {
+     "not": [
+      "approved"
+     ],
+     "de": "Das Schlüsselwort approved muss unverändert in der Lücke stehen.",
+     "en": "The key word approved must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "despite"
+     ],
+     "pat": "lk.despite",
+     "de": "„Despite“ braucht ein Nomen oder -ing. Nach „the client“ folgt aber ein Verb.",
+     "en": "“Despite” needs a noun or -ing. After “the client” a verb follows, though."
+    },
+    {
+     "if": [
+      "whereas"
+     ],
+     "pat": "lk.whereas",
+     "de": "„Whereas“ stellt zwei Dinge gegenüber. Hier geht es aber um einen Widerspruch.",
+     "en": "“Whereas” contrasts two things. Here a contradiction is meant."
+    }
+   ]
+  }
+ },
+ {
+  "id": "lk-dsp-k1",
+  "type": "kwt",
+  "pat": "lk.despite",
+  "from": "There was a long delay, but the launch went ahead.",
+  "key": "DELAY",
+  "frame": "___, the launch went ahead.",
+  "answer": "Despite the long delay",
+  "accepted": [
+   "Despite the delay",
+   "Despite a long delay",
+   "Despite the lengthy delay",
+   "Despite a delay",
+   "Despite this delay",
+   "In spite of the delay",
+   "In spite of a delay"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: despite + Nomen (the long delay), ohne of.",
+    "en": "Right: despite + noun (the long delay), with no of."
+   },
+   "wrong": [
+    {
+     "not": [
+      "delay"
+     ],
+     "de": "Das Schlüsselwort delay muss unverändert in der Lücke stehen.",
+     "en": "The key word delay must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "in",
+      "spite"
+     ],
+     "not": [
+      "of"
+     ],
+     "pat": "lk.despite",
+     "de": "„In spite“ ist unvollständig und braucht of: in spite of the delay.",
+     "en": "“In spite” needs “of”: in spite of the delay."
+    },
+    {
+     "if": [
+      "despite",
+      "of"
+     ],
+     "pat": "lk.despite",
+     "de": "„Despite“ steht ohne of. Mit of heißt es in spite of.",
+     "en": "“Despite” takes no “of”. With “of” it is in spite of."
+    },
+    {
+     "if": [
+      "although"
+     ],
+     "pat": "lk.although",
+     "de": "„Although“ braucht Subjekt und Verb. Zum Nomen delay passt despite.",
+     "en": "“Although” needs a subject and verb. The noun delay goes with despite."
+    }
+   ]
+  }
+ },
+ {
+  "id": "lk-dsp-k2",
+  "type": "kwt",
+  "pat": "lk.despite",
+  "from": "She was nervous, but she gave a great talk.",
+  "key": "NERVOUSNESS",
+  "frame": "She gave a great talk ___.",
+  "answer": "despite her nervousness",
+  "accepted": [
+   "in spite of her nervousness",
+   "despite all her nervousness",
+   "despite some nervousness",
+   "despite the nervousness",
+   "in spite of some nervousness"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: despite + Nomen (her nervousness). Despite kommt ohne of aus.",
+    "en": "Right: despite + noun (her nervousness). Despite needs no of."
+   },
+   "wrong": [
+    {
+     "not": [
+      "nervousness"
+     ],
+     "de": "Das Schlüsselwort nervousness muss unverändert in der Lücke stehen.",
+     "en": "The key word nervousness must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "in",
+      "spite"
+     ],
+     "not": [
+      "of"
+     ],
+     "pat": "lk.despite",
+     "de": "„In spite“ ist unvollständig und braucht of: in spite of her nervousness.",
+     "en": "“In spite” needs “of”: in spite of her nervousness."
+    },
+    {
+     "if": [
+      "despite",
+      "of"
+     ],
+     "pat": "lk.despite",
+     "de": "„Despite“ steht ohne of. Mit of heißt es in spite of.",
+     "en": "“Despite” takes no “of”. With “of” it is in spite of."
+    },
+    {
+     "if": [
+      "although"
+     ],
+     "pat": "lk.although",
+     "de": "„Although“ braucht ein Verb. Zum Nomen nervousness passt despite.",
+     "en": "“Although” needs a verb. The noun nervousness goes with despite."
+    }
+   ]
+  }
+ },
+ {
+  "id": "lk-whr-k1",
+  "type": "kwt",
+  "pat": "lk.whereas",
+  "from": "Anna prefers email, but Ben prefers calls.",
+  "key": "ANNA",
+  "frame": "___ email, Ben prefers calls.",
+  "answer": "Whereas Anna prefers",
+  "accepted": [
+   "While Anna prefers"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: whereas + Satz stellt Anna und Ben gegenüber, dann ein Komma.",
+    "en": "Right: whereas + clause sets Anna and Ben against each other, then a comma."
+   },
+   "wrong": [
+    {
+     "not": [
+      "anna"
+     ],
+     "de": "Das Schlüsselwort anna muss unverändert in der Lücke stehen.",
+     "en": "The key word anna must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "during"
+     ],
+     "pat": "lk.whereas",
+     "de": "„During“ steht vor einem Nomen. Vor einem Satz brauchst du while oder whereas.",
+     "en": "“During” goes before a noun. Before a clause you need while or whereas."
+    },
+    {
+     "if": [
+      "although"
+     ],
+     "pat": "lk.although",
+     "de": "„Although“ räumt Unerwartetes ein. Hier stehen zwei Vorlieben nebeneinander.",
+     "en": "“Although” concedes something unexpected. Here two preferences stand side by side."
+    },
+    {
+     "if": [
+      "but"
+     ],
+     "de": "Mit but vorn entsteht ein Kommafehler. Gesucht ist ein Bindewort für den Vergleich.",
+     "en": "But at the start gives a comma splice. A linker for the comparison is needed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "lk-whr-k2",
+  "type": "kwt",
+  "pat": "lk.whereas",
+  "from": "The old tool is slow, but the new tool is fast.",
+  "key": "OLD",
+  "frame": "___ one is slow, the new tool is fast.",
+  "answer": "Whereas the old",
+  "accepted": [
+   "While the old"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: whereas + Satz stellt altes und neues Tool gegenüber.",
+    "en": "Right: whereas + clause sets the old and the new tool against each other."
+   },
+   "wrong": [
+    {
+     "not": [
+      "old"
+     ],
+     "de": "Das Schlüsselwort old muss unverändert in der Lücke stehen.",
+     "en": "The key word old must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "during"
+     ],
+     "pat": "lk.whereas",
+     "de": "„During“ steht vor einem Nomen. Hier folgt ein Satz mit Verb.",
+     "en": "“During” goes before a noun. Here a clause with a verb follows."
+    },
+    {
+     "if": [
+      "despite"
+     ],
+     "pat": "lk.despite",
+     "de": "„Despite“ braucht ein Nomen oder -ing. Hier folgt ein Satz.",
+     "en": "“Despite” needs a noun or -ing. A clause follows here."
+    },
+    {
+     "if": [
+      "but"
+     ],
+     "de": "Mit but vorn entsteht ein Kommafehler. Gesucht ist ein Bindewort für den Vergleich.",
+     "en": "But at the start gives a comma splice. A linker for the comparison is needed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "lk-hwv-k1",
+  "type": "kwt",
+  "pat": "lk.however",
+  "from": "The results were strong, but the board wanted more data.",
+  "key": "BOARD",
+  "frame": "The results were strong; ___ wanted more data.",
+  "answer": "however, the board",
+  "accepted": [
+   "nevertheless, the board",
+   "nonetheless, the board",
+   "even so, the board",
+   "that said, the board",
+   "the board, however,",
+   "the board, nevertheless,",
+   "the board, nonetheless,"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach dem Semikolon steht however, dann ein Komma und der neue Satz.",
+    "en": "Right: after the semicolon comes however, then a comma and the new clause."
+   },
+   "wrong": [
+    {
+     "not": [
+      "board"
+     ],
+     "de": "Das Schlüsselwort board muss unverändert in der Lücke stehen.",
+     "en": "The key word board must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "but"
+     ],
+     "pat": "lk.however",
+     "de": "Nach einem Semikolon ist but unüblich. Gesucht ist ein Satzadverb mit Komma.",
+     "en": "But after a semicolon is unusual. A linking adverb with a comma is needed."
+    },
+    {
+     "if": [
+      "therefore"
+     ],
+     "pat": "lk.therefore",
+     "de": "„Therefore“ nennt eine Folge. Hier steht aber ein Gegensatz.",
+     "en": "“Therefore” names a result. Here a contrast follows."
+    },
+    {
+     "if": [
+      "although"
+     ],
+     "pat": "lk.although",
+     "de": "Nach dem Semikolon beginnt ein Hauptsatz, kein Nebensatz mit although.",
+     "en": "After the semicolon a main clause begins, not a subordinate clause with although."
+    }
+   ]
+  }
+ },
+ {
+  "id": "lk-hwv-k2",
+  "type": "kwt",
+  "pat": "lk.however",
+  "from": "Sales met every target, but the team received no bonus.",
+  "key": "TEAM",
+  "frame": "Sales met every target; ___ received no bonus.",
+  "answer": "nevertheless, the team",
+  "accepted": [
+   "however, the team",
+   "nonetheless, the team",
+   "even so, the team",
+   "that said, the team",
+   "the team, however,",
+   "the team, nevertheless,",
+   "the team, nonetheless,"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: nevertheless nach dem Semikolon, dann ein Komma und der neue Satz.",
+    "en": "Right: nevertheless after the semicolon, then a comma and the new clause."
+   },
+   "wrong": [
+    {
+     "not": [
+      "team"
+     ],
+     "de": "Das Schlüsselwort team muss unverändert in der Lücke stehen.",
+     "en": "The key word team must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "but"
+     ],
+     "pat": "lk.however",
+     "de": "Nach einem Semikolon ist but unüblich. Gesucht ist ein Satzadverb mit Komma.",
+     "en": "But after a semicolon is unusual. A linking adverb with a comma is needed."
+    },
+    {
+     "if": [
+      "therefore"
+     ],
+     "pat": "lk.therefore",
+     "de": "„Therefore“ nennt eine Folge. Hier steht aber ein Gegensatz.",
+     "en": "“Therefore” names a result. Here a contrast follows."
+    },
+    {
+     "if": [
+      "whereas"
+     ],
+     "pat": "lk.whereas",
+     "de": "„Whereas“ steht ohne Semikolon und Komma direkt vor dem Satz.",
+     "en": "“Whereas” stands directly before the clause, without semicolon and comma."
+    }
+   ]
+  }
+ },
+ {
+  "id": "lk-thr-k1",
+  "type": "kwt",
+  "pat": "lk.therefore",
+  "from": "Demand doubled, so we hired more agents.",
+  "key": "HIRED",
+  "frame": "Demand doubled; ___ more agents.",
+  "answer": "therefore, we hired",
+  "accepted": [
+   "consequently, we hired",
+   "as a result, we hired",
+   "thus, we hired",
+   "for this reason, we hired",
+   "accordingly, we hired",
+   "we therefore hired",
+   "we consequently hired"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: therefore nennt die Folge der verdoppelten Nachfrage, danach ein Komma.",
+    "en": "Right: therefore names the result of the doubled demand, followed by a comma."
+   },
+   "wrong": [
+    {
+     "not": [
+      "hired"
+     ],
+     "de": "Das Schlüsselwort hired muss unverändert in der Lücke stehen.",
+     "en": "The key word hired must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "however"
+     ],
+     "pat": "lk.however",
+     "de": "„However“ nennt einen Gegensatz. Das Einstellen folgt aber aus dem Anstieg.",
+     "en": "“However” names a contrast. Hiring follows from the rise, though."
+    },
+    {
+     "if": [
+      "so"
+     ],
+     "de": "Nach einem Semikolon ist so selten. Gesucht ist ein Satzadverb für die Folge.",
+     "en": "So after a semicolon is rare. A linking adverb for the result is needed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "lk-thr-k2",
+  "type": "kwt",
+  "pat": "lk.therefore",
+  "from": "The supplier closed, so we need a new vendor.",
+  "key": "NEED",
+  "frame": "The supplier closed. ___ a new vendor.",
+  "answer": "As a result, we need",
+  "accepted": [
+   "Therefore, we need",
+   "Consequently, we need",
+   "Thus, we need",
+   "Hence, we need",
+   "As a consequence, we need",
+   "For this reason, we need",
+   "Accordingly, we need"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach dem Punkt nennt as a result die Folge, danach folgt ein Komma.",
+    "en": "Right: after the period, as a result names the consequence, followed by a comma."
+   },
+   "wrong": [
+    {
+     "not": [
+      "need"
+     ],
+     "de": "Das Schlüsselwort need muss unverändert in der Lücke stehen.",
+     "en": "The key word need must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "however"
+     ],
+     "pat": "lk.however",
+     "de": "„However“ nennt einen Gegensatz. Hier ist die Folge gefragt.",
+     "en": "“However” names a contrast. The result is asked for here."
+    },
+    {
+     "if": [
+      "but"
+     ],
+     "pat": "lk.however",
+     "de": "„But“ nennt einen Gegensatz. Hier ist die Folge gefragt.",
+     "en": "“But” names a contrast. The result is asked for here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "lk-alt-f1",
+  "type": "find",
+  "pat": "lk.although",
+  "prompt": "Although the budget was cut, but the team met its goals.",
+  "err": [
+   5,
+   5
+  ],
+  "answer": "",
+  "fixed": "Although the budget was cut, the team met its goals.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: although und but zugleich. Although trägt den Gegensatz schon, also but streichen.",
+    "en": "The error: although and but together. Although already carries the contrast, so drop but."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: although und but doppeln den Gegensatz.",
+     "en": "There is an error: although and but double the contrast."
+    },
+    {
+     "tap": "*",
+     "pat": "lk.although",
+     "de": "Der Fehler liegt bei but: Nach although steht kein weiteres Bindewort.",
+     "en": "The error is at but: no second linker follows although."
+    }
+   ]
+  }
+ },
+ {
+  "id": "lk-alt-f2",
+  "type": "find",
+  "pat": "lk.although",
+  "prompt": "Although did the plan fail, we learned a lot.",
+  "err": [
+   1,
+   4
+  ],
+  "answer": "the plan failed,",
+  "fixed": "Although the plan failed, we learned a lot.",
+  "accepted": [
+   "the plan failed"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach although steht kein umgestellter Satz. Richtig: although the plan failed.",
+    "en": "The error: no inverted clause follows although. Correct: although the plan failed."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Die Wortstellung nach although stimmt nicht.",
+     "en": "There is an error: the word order after although is wrong."
+    },
+    {
+     "tap": "*",
+     "pat": "lk.although",
+     "de": "Der Fehler liegt bei „did the plan fail“: Nach although gilt normale Wortstellung.",
+     "en": "The error is at “did the plan fail”: normal word order follows although."
+    }
+   ]
+  }
+ },
+ {
+  "id": "lk-alt-f3",
+  "type": "find",
+  "pat": "lk.although",
+  "prompt": "Even though the vendor was cheaper, we stayed with our current supplier.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Richtig: Even though steht korrekt vor einem Satz, danach folgt der Hauptsatz ohne but.",
+    "en": "Correct: even though rightly comes before a clause, and the main clause follows without but."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "pat": "lk.although",
+     "de": "Hier ist kein Fehler: even though + Satz, dann der Hauptsatz.",
+     "en": "There is no error here: even though + clause, then the main clause."
+    }
+   ]
+  }
+ },
+ {
+  "id": "lk-dsp-f1",
+  "type": "find",
+  "pat": "lk.despite",
+  "prompt": "Despite the project was late, the client stayed loyal.",
+  "err": [
+   0,
+   0
+  ],
+  "answer": "Although",
+  "fixed": "Although the project was late, the client stayed loyal.",
+  "accepted": [
+   "Even though",
+   "Though"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Despite steht vor einem Satz (the project was late). Dafür gehört although.",
+    "en": "The error: despite is followed by a clause (the project was late). That takes although."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Despite passt nicht vor einen ganzen Satz.",
+     "en": "There is an error: despite does not fit before a full clause."
+    },
+    {
+     "tap": "*",
+     "pat": "lk.although",
+     "de": "Der Fehler liegt bei Despite: Danach folgen Subjekt und Verb, nicht ein Nomen.",
+     "en": "The error is at Despite: subject and verb follow it, not a noun."
+    }
+   ]
+  }
+ },
+ {
+  "id": "lk-dsp-f2",
+  "type": "find",
+  "pat": "lk.despite",
+  "prompt": "Despite of the high costs, the board approved the project.",
+  "err": [
+   0,
+   1
+  ],
+  "answer": "Despite",
+  "fixed": "Despite the high costs, the board approved the project.",
+  "accepted": [
+   "In spite of"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Despite steht ohne of. Mit of heißt es in spite of.",
+    "en": "The error: despite takes no of. With of it is in spite of."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Despite und of passen nicht zusammen.",
+     "en": "There is an error: despite and of do not go together."
+    },
+    {
+     "tap": "*",
+     "pat": "lk.despite",
+     "de": "Der Fehler liegt bei „Despite of“: Entweder despite ohne of oder in spite of.",
+     "en": "The error is at “Despite of”: either despite without of, or in spite of."
+    }
+   ]
+  }
+ },
+ {
+  "id": "lk-whr-f1",
+  "type": "find",
+  "pat": "lk.whereas",
+  "prompt": "During the old system was slow, the new one is fast.",
+  "err": [
+   0,
+   0
+  ],
+  "answer": "While",
+  "fixed": "While the old system was slow, the new one is fast.",
+  "accepted": [
+   "Whereas"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: During steht vor einem Nomen. Vor einem Satz brauchst du while oder whereas.",
+    "en": "The error: during goes before a noun. Before a clause you need while or whereas."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Das erste Wort passt nicht vor einen Satz.",
+     "en": "There is an error: the first word does not fit before a clause."
+    },
+    {
+     "tap": "*",
+     "pat": "lk.whereas",
+     "de": "Der Fehler liegt bei During: Danach folgt ein ganzer Satz.",
+     "en": "The error is at During: a full clause follows it."
+    }
+   ]
+  }
+ },
+ {
+  "id": "lk-whr-f2",
+  "type": "find",
+  "pat": "lk.whereas",
+  "prompt": "Our European team grew by ten percent, whereas the Asian team shrank.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Richtig: whereas stellt die beiden Teams gegenüber, ohne weiteres Bindewort.",
+    "en": "Correct: whereas sets the two teams against each other, with no extra linker."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "pat": "lk.whereas",
+     "de": "Hier ist kein Fehler: whereas verbindet beide Teams in einem Satz.",
+     "en": "There is no error here: whereas joins both teams in one sentence."
+    }
+   ]
+  }
+ },
+ {
+  "id": "lk-hwv-f1",
+  "type": "find",
+  "pat": "lk.however",
+  "prompt": "The pilot was a success, however the board wants more data.",
+  "err": [
+   4,
+   5
+  ],
+  "answer": "success; however,",
+  "fixed": "The pilot was a success; however, the board wants more data.",
+  "accepted": [
+   "success. However,",
+   "success; nevertheless,",
+   "success. Nevertheless,",
+   "success; nonetheless,",
+   "success, but"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Vor however steht nur ein Komma. Richtig ist ein Semikolon, danach ein Komma.",
+    "en": "The error: only a comma stands before however. Use a semicolon, then a comma."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Vor however fehlt Punkt oder Semikolon.",
+     "en": "There is an error: a period or semicolon is missing before however."
+    },
+    {
+     "tap": "*",
+     "pat": "lk.however",
+     "de": "Der Fehler liegt bei „success, however“: Das Komma allein verbindet die Sätze nicht.",
+     "en": "The error is at “success, however”: the comma alone cannot join the sentences."
+    }
+   ]
+  }
+ },
+ {
+  "id": "lk-hwv-f2",
+  "type": "find",
+  "pat": "lk.however",
+  "prompt": "The tests passed; however, but we are not ready to launch.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "",
+  "fixed": "The tests passed; however, we are not ready to launch.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: however und but zugleich. Beide nennen den Gegensatz, also but streichen.",
+    "en": "The error: however and but together. Both name the contrast, so drop but."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: however und but doppeln den Gegensatz.",
+     "en": "There is an error: however and but double the contrast."
+    },
+    {
+     "tap": "*",
+     "pat": "lk.however",
+     "de": "Der Fehler liegt bei but: Nach however steht kein weiteres Bindewort.",
+     "en": "The error is at but: no second linker follows however."
+    }
+   ]
+  }
+ },
+ {
+  "id": "lk-hwv-f3",
+  "type": "find",
+  "pat": "lk.however",
+  "prompt": "Costs fell by ten percent, nevertheless profits stayed flat.",
+  "err": [
+   4,
+   5
+  ],
+  "answer": "percent; nevertheless,",
+  "fixed": "Costs fell by ten percent; nevertheless, profits stayed flat.",
+  "accepted": [
+   "percent. Nevertheless,",
+   "percent; however,",
+   "percent. However,",
+   "percent, but",
+   "percent; nonetheless,"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Vor nevertheless steht nur ein Komma. Richtig ist ein Semikolon, danach ein Komma.",
+    "en": "The error: only a comma stands before nevertheless. Use a semicolon, then a comma."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Vor nevertheless fehlt Punkt oder Semikolon.",
+     "en": "There is an error: a period or semicolon is missing before nevertheless."
+    },
+    {
+     "tap": "*",
+     "pat": "lk.however",
+     "de": "Der Fehler liegt bei „percent, nevertheless“: Das Komma allein verbindet die Sätze nicht.",
+     "en": "The error is at “percent, nevertheless”: the comma alone cannot join the sentences."
+    }
+   ]
+  }
+ },
+ {
+  "id": "lk-thr-f1",
+  "type": "find",
+  "pat": "lk.therefore",
+  "prompt": "Demand doubled, therefore we hired two more agents.",
+  "err": [
+   1,
+   2
+  ],
+  "answer": "doubled; therefore,",
+  "fixed": "Demand doubled; therefore, we hired two more agents.",
+  "accepted": [
+   "doubled. Therefore,",
+   "doubled; consequently,",
+   "doubled. Consequently,",
+   "doubled; as a result,",
+   "doubled. As a result,",
+   "doubled, so"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Vor therefore steht nur ein Komma. Richtig ist ein Semikolon, danach ein Komma.",
+    "en": "The error: only a comma stands before therefore. Use a semicolon, then a comma."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Vor therefore fehlt Punkt oder Semikolon.",
+     "en": "There is an error: a period or semicolon is missing before therefore."
+    },
+    {
+     "tap": "*",
+     "pat": "lk.therefore",
+     "de": "Der Fehler liegt bei „doubled, therefore“: Das Komma allein verbindet die Sätze nicht.",
+     "en": "The error is at “doubled, therefore”: the comma alone cannot join the sentences."
+    }
+   ]
+  }
+ },
+ {
+  "id": "lk-thr-f2",
+  "type": "find",
+  "pat": "lk.therefore",
+  "prompt": "Orders tripled in May; consequently, we extended the shifts.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Richtig: Semikolon davor, Komma danach. Die Folge steht klar im zweiten Satz.",
+    "en": "Correct: semicolon before, comma after. The result is clear in the second clause."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "pat": "lk.therefore",
+     "de": "Hier ist kein Fehler: consequently steht mit Semikolon davor und Komma danach.",
+     "en": "There is no error here: consequently has a semicolon before and a comma after."
+    }
+   ]
+  }
+ },
+ {
+  "id": "lk-alt-m1",
+  "type": "meaning",
+  "pat": "lk.although",
+  "a": "Although the client was unhappy, we kept the contract.",
+  "b": "We kept the contract because the client was unhappy.",
+  "q": {
+   "de": "Welcher Satz sagt: Der Kunde war unzufrieden, wir haben den Vertrag trotzdem behalten?",
+   "en": "Which sentence says the client was unhappy, but we kept the contract anyway?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Although räumt den Widerspruch ein: unzufrieden, aber Vertrag behalten.",
+    "en": "Right: sentence a. Although concedes the contradiction: unhappy, yet we kept the contract."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b nennt because den Grund: Der Kunde war der Anlass, den Vertrag zu behalten.",
+     "en": "In b, because gives the reason: the client was the cause for keeping the contract."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: although nennt einen Widerspruch, because einen Grund.",
+     "en": "Not the same: although names a contradiction, because names a reason."
+    }
+   ]
+  }
+ },
+ {
+  "id": "lk-dsp-m1",
+  "type": "meaning",
+  "pat": "lk.despite",
+  "a": "Despite the strike, the trains ran on time.",
+  "b": "Because of the strike, the trains ran late.",
+  "q": {
+   "de": "Welcher Satz sagt: Der Streik hat die Züge nicht aufgehalten?",
+   "en": "Which sentence says the strike did not stop the trains?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Despite heißt trotz: Der Streik hat die Pünktlichkeit nicht verhindert.",
+    "en": "Right: sentence a. Despite means in spite of: the strike did not prevent punctuality."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b nennt because of den Grund für die Verspätung. Der Streik hat also aufgehalten.",
+     "en": "In b, because of gives the reason for the delay. So the strike did hold things up."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: despite sagt trotz, because of sagt wegen.",
+     "en": "Not the same: despite says in spite of, because of says due to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "lk-whr-m1",
+  "type": "meaning",
+  "pat": "lk.whereas",
+  "a": "Whereas the first plan was cheap, the second was fast.",
+  "b": "While we were drafting the plan, the budget changed.",
+  "q": {
+   "de": "Welcher Satz stellt zwei Dinge gegenüber?",
+   "en": "Which sentence contrasts two things?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Whereas stellt zwei Pläne gegenüber, und es geht um Eigenschaften.",
+    "en": "Right: sentence a. Whereas contrasts two plans; it is about their qualities."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "pat": "lk.whereas",
+     "de": "In b heißt while „während“ (gleichzeitig). Der Satz vergleicht nichts.",
+     "en": "In b, while means “at the same time”. It compares nothing."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: b nennt einen Zeitraum, a einen Vergleich.",
+     "en": "Not the same: b names a time span, a names a comparison."
+    }
+   ]
+  }
+ },
+ {
+  "id": "lk-hwv-m1",
+  "type": "meaning",
+  "pat": "lk.however",
+  "a": "The report was late; however, the client was satisfied.",
+  "b": "The report was late; therefore, the client was satisfied.",
+  "q": {
+   "de": "Welcher Satz sagt: Trotz der Verspätung war der Kunde zufrieden?",
+   "en": "Which sentence says the client was satisfied in spite of the delay?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. However nennt den Gegensatz: spät, aber zufrieden.",
+    "en": "Right: sentence a. However names the contrast: late, but satisfied."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "pat": "lk.therefore",
+     "de": "In b nennt therefore eine Folge: Verspätung macht zufrieden? Das ergibt keinen Sinn.",
+     "en": "In b, therefore gives a result: lateness makes people satisfied? That makes no sense."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: however zeigt einen Gegensatz, therefore eine Folge.",
+     "en": "Not the same: however shows a contrast, therefore shows a result."
+    }
+   ]
+  }
+ },
+ {
+  "id": "lk-thr-m1",
+  "type": "meaning",
+  "pat": "lk.therefore",
+  "a": "Sales dropped; therefore, we cut the budget.",
+  "b": "Sales dropped; however, we cut the budget.",
+  "q": {
+   "de": "In welchem Satz ist das Kürzen des Budgets die Folge des Umsatzrückgangs?",
+   "en": "In which sentence is cutting the budget the result of the sales drop?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Therefore nennt die Folge: Umsatz sinkt, deshalb wird gekürzt.",
+    "en": "Right: sentence a. Therefore names the result: sales fall, so the budget is cut."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "pat": "lk.however",
+     "de": "In b zeigt however einen Gegensatz: Gekürzt wird trotz des Rückgangs.",
+     "en": "In b, however shows a contrast: the cut happens in spite of the drop."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: therefore nennt die Folge, however den Gegensatz.",
+     "en": "Not the same: therefore names the result, however the contrast."
+    }
+   ]
+  }
+ }
+]

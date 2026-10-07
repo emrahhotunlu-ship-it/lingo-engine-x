@@ -1,0 +1,1073 @@
+[
+  {
+    "id": "cmp-tt-k1",
+    "type": "kwt",
+    "pat": "cmp.the-the",
+    "from": "If we test more often, we find more bugs.",
+    "key": "TEST",
+    "frame": "___, the more bugs we find.",
+    "answer": "the more often we test",
+    "accepted": [
+      "the more frequently we test",
+      "the more regularly we test",
+      "the more we test"
+    ],
+    "words": [
+      4,
+      5
+    ],
+    "why": {
+      "ok": {
+        "de": "Richtig: the more often we test. Beide Teile beginnen mit the + Komparativ.",
+        "en": "Right: the more often we test. Both parts start with the + comparative."
+      },
+      "wrong": [
+        {
+          "not": [
+            "test"
+          ],
+          "de": "Das Schlüsselwort test muss unverändert in der Lücke stehen.",
+          "en": "The key word test must stay unchanged in the gap."
+        },
+        {
+          "if": [
+            "more"
+          ],
+          "not": [
+            "the more"
+          ],
+          "de": "Im ersten Teil fehlt the: the more often we test.",
+          "en": "The first part needs the too: the more often we test."
+        },
+        {
+          "if": [
+            "we test often"
+          ],
+          "de": "Often gehört zu more: the more often we test.",
+          "en": "Often belongs with more: the more often we test."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-tt-k2",
+    "type": "kwt",
+    "pat": "cmp.the-the",
+    "from": "If the deadline gets tighter, we get more nervous.",
+    "key": "NERVOUS",
+    "frame": "The tighter the deadline gets, ___.",
+    "answer": "the more nervous we get",
+    "accepted": [
+      "the more nervous we become",
+      "the more nervous we feel",
+      "the more nervous we are"
+    ],
+    "words": [
+      4,
+      5
+    ],
+    "why": {
+      "ok": {
+        "de": "Richtig: the more nervous we get. Auch der zweite Teil braucht the + Komparativ.",
+        "en": "Right: the more nervous we get. The second part needs the + comparative too."
+      },
+      "wrong": [
+        {
+          "not": [
+            "nervous"
+          ],
+          "de": "Das Schlüsselwort nervous muss unverändert in der Lücke stehen.",
+          "en": "The key word nervous must stay unchanged in the gap."
+        },
+        {
+          "if": [
+            "more nervous"
+          ],
+          "not": [
+            "the more"
+          ],
+          "de": "Im zweiten Teil fehlt the: the more nervous we get.",
+          "en": "The second part needs the too: the more nervous we get."
+        },
+        {
+          "if": [
+            "nervouser"
+          ],
+          "de": "Nervous ist lang: more nervous, nicht nervouser.",
+          "en": "Nervous is long: more nervous, not nervouser."
+        },
+        {
+          "if": [
+            "get we"
+          ],
+          "de": "Subjekt vor Verb: we get, nicht get we.",
+          "en": "Subject before verb: we get, not get we."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-tt-f1",
+    "type": "find",
+    "pat": "cmp.the-the",
+    "prompt": "The more clients we visit, more deals we close.",
+    "err": [
+      5,
+      5
+    ],
+    "answer": "the more",
+    "fixed": "The more clients we visit, the more deals we close.",
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: Im zweiten Teil fehlt the. Richtig: the more deals we close.",
+        "en": "The error: the is missing in the second part. Correct: the more deals we close."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: Im zweiten Teil fehlt the.",
+          "en": "There is an error: the is missing in the second part."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei „more“: Davor fehlt im zweiten Teil das the.",
+          "en": "The error is at “more”: the is missing before it in the second part."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-tt-f2",
+    "type": "find",
+    "pat": "cmp.the-the",
+    "prompt": "The earlier we align, the better get we.",
+    "err": [
+      6,
+      7
+    ],
+    "answer": "we get.",
+    "fixed": "The earlier we align, the better we get.",
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: „get we“. Im Englischen bleibt das Subjekt vor dem Verb: we get.",
+        "en": "The error: “get we”. In English the subject stays before the verb: we get."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: Subjekt und Verb sind vertauscht.",
+          "en": "There is an error: subject and verb are swapped."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei „get we“: Das Subjekt steht vor dem Verb.",
+          "en": "The error is at “get we”: the subject goes before the verb."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-tt-f3",
+    "type": "find",
+    "pat": "cmp.the-the",
+    "prompt": "The longer the meeting runs, the less everyone listens.",
+    "err": null,
+    "why": {
+      "ok": {
+        "de": "Kein Fehler: Beide Teile haben the + Komparativ, danach steht Subjekt vor Verb.",
+        "en": "No error: both parts have the + comparative, then subject before verb."
+      },
+      "wrong": [
+        {
+          "tap": "*",
+          "de": "Kein Fehler: the longer …, the less … ist richtig gebaut.",
+          "en": "No error: the longer …, the less … is built correctly."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-tt-m1",
+    "type": "meaning",
+    "pat": "cmp.the-the",
+    "a": "The later we ship, the more customers complain.",
+    "b": "The more customers complain, the later we ship.",
+    "q": {
+      "de": "Welcher Satz sagt: Unsere späte Lieferung führt zu mehr Beschwerden?",
+      "en": "Which sentence says: our late delivery leads to more complaints?"
+    },
+    "answer": "a",
+    "why": {
+      "ok": {
+        "de": "Richtig: Satz a. Der erste Teil nennt die Ursache: später liefern, mehr Beschwerden.",
+        "en": "Right: sentence a. The first part gives the cause: later shipping, more complaints."
+      },
+      "wrong": [
+        {
+          "opt": "b",
+          "de": "In b dreht sich die Richtung um: Dort sind die Beschwerden die Ursache.",
+          "en": "In b the direction is reversed: there the complaints are the cause."
+        },
+        {
+          "opt": "both",
+          "de": "Nicht gleich: Der erste Teil nennt jeweils die Ursache, und die wechselt.",
+          "en": "Not the same: the first part names the cause, and it changes."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-as-k1",
+    "type": "kwt",
+    "pat": "cmp.as-as",
+    "from": "The old system was slower than the new one.",
+    "key": "SLOW",
+    "frame": "The new system was ___ the old one.",
+    "answer": "not as slow as",
+    "accepted": [
+      "less slow than"
+    ],
+    "words": [
+      3,
+      4
+    ],
+    "why": {
+      "ok": {
+        "de": "Richtig: not as slow as. Das neue System ist weniger langsam als das alte.",
+        "en": "Right: not as slow as. The new system is less slow than the old one."
+      },
+      "wrong": [
+        {
+          "not": [
+            "slow"
+          ],
+          "de": "Das Schlüsselwort slow muss unverändert in der Lücke stehen.",
+          "en": "The key word slow must stay unchanged in the gap."
+        },
+        {
+          "if": [
+            "than"
+          ],
+          "de": "Hier braucht es as … as, nicht than: not as slow as.",
+          "en": "This needs as … as, not than: not as slow as."
+        },
+        {
+          "if": [
+            "like"
+          ],
+          "de": "„Like“ ersetzt das zweite as nicht: not as slow as.",
+          "en": "“Like” cannot replace the second as: not as slow as."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-as-k2",
+    "type": "kwt",
+    "pat": "cmp.as-as",
+    "from": "Our team and theirs are equally experienced.",
+    "key": "EXPERIENCED",
+    "frame": "Our team is ___ theirs.",
+    "answer": "just as experienced as",
+    "accepted": [
+      "as experienced as",
+      "every bit as experienced as",
+      "exactly as experienced as"
+    ],
+    "words": [
+      3,
+      5
+    ],
+    "why": {
+      "ok": {
+        "de": "Richtig: as experienced as. Das Adjektiv steht zwischen den beiden as.",
+        "en": "Right: as experienced as. The adjective stands between the two as."
+      },
+      "wrong": [
+        {
+          "not": [
+            "experienced"
+          ],
+          "de": "Das Schlüsselwort experienced muss unverändert in der Lücke stehen.",
+          "en": "The key word experienced must stay unchanged in the gap."
+        },
+        {
+          "if": [
+            "than"
+          ],
+          "de": "„Than“ folgt auf einen Komparativ. Für Gleichheit steht as … as.",
+          "en": "“Than” follows a comparative. Equality needs as … as."
+        },
+        {
+          "if": [
+            "like"
+          ],
+          "de": "„Like“ ersetzt das zweite as nicht: as experienced as.",
+          "en": "“Like” cannot replace the second as: as experienced as."
+        },
+        {
+          "if": [
+            "more"
+          ],
+          "de": "„More experienced than“ sagt: nicht gleich. Gesucht ist Gleichheit.",
+          "en": "“More experienced than” says: not equal. Equality is needed."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-as-f1",
+    "type": "find",
+    "pat": "cmp.as-as",
+    "prompt": "The new interface is as intuitive like the old one.",
+    "err": [
+      6,
+      6
+    ],
+    "answer": "as",
+    "fixed": "The new interface is as intuitive as the old one.",
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: „like“. Nach as + Adjektiv schließt wieder as den Vergleich.",
+        "en": "The error: “like”. After as + adjective, as closes the comparison."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: as intuitive braucht ein zweites as.",
+          "en": "There is an error: as intuitive needs a second as."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei „like“: Dort muss as stehen.",
+          "en": "The error is at “like”: it must be as there."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-as-f2",
+    "type": "find",
+    "pat": "cmp.as-as",
+    "prompt": "Their quote isn't as high than ours.",
+    "err": [
+      5,
+      5
+    ],
+    "answer": "as",
+    "fixed": "Their quote isn't as high as ours.",
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: „than“. Bei as … as steht als zweites Wort wieder as.",
+        "en": "The error: “than”. In as … as the second word is as again."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: as high verlangt ein zweites as.",
+          "en": "There is an error: as high takes a second as."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei „than“: Nach as + Adjektiv steht as.",
+          "en": "The error is at “than”: after as + adjective comes as."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-as-m1",
+    "type": "meaning",
+    "pat": "cmp.as-as",
+    "a": "The new plan is not as risky as the old one.",
+    "b": "The new plan is less risky than the old one.",
+    "q": {
+      "de": "Welcher Satz sagt: Der neue Plan ist weniger riskant?",
+      "en": "Which sentence says the new plan is less risky?"
+    },
+    "answer": "both",
+    "why": {
+      "ok": {
+        "de": "Richtig: beide. Not as … as und less … than sagen hier dasselbe.",
+        "en": "Right: both. Not as … as and less … than say the same thing here."
+      },
+      "wrong": [
+        {
+          "opt": "a",
+          "de": "A stimmt: not as risky as heißt weniger riskant. Aber b stimmt auch.",
+          "en": "A is right: not as risky as means less risky. But b is right too."
+        },
+        {
+          "opt": "b",
+          "de": "B stimmt: less risky than heißt weniger riskant. Aber a stimmt auch.",
+          "en": "B is right: less risky than means less risky. But a is right too."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-form-k1",
+    "type": "kwt",
+    "pat": "cmp.form",
+    "from": "The old report was hard to read, but the new one is clear.",
+    "key": "READ",
+    "frame": "The new report is ___ than the old one.",
+    "answer": "easier to read",
+    "accepted": [
+      "much easier to read",
+      "far easier to read",
+      "a lot easier to read",
+      "way easier to read"
+    ],
+    "words": [
+      3,
+      5
+    ],
+    "why": {
+      "ok": {
+        "de": "Richtig: Easy ist kurz und bekommt -er: easier to read.",
+        "en": "Right: easy is short and takes -er: easier to read."
+      },
+      "wrong": [
+        {
+          "not": [
+            "read"
+          ],
+          "de": "Das Schlüsselwort read muss unverändert in der Lücke stehen.",
+          "en": "The key word read must stay unchanged in the gap."
+        },
+        {
+          "if": [
+            "more",
+            "easier"
+          ],
+          "de": "Doppelt gesteigert: more und -er zusammen geht nicht, nur easier.",
+          "en": "Doubled comparison: more and -er together is wrong, use easier."
+        },
+        {
+          "if": [
+            "more",
+            "easy"
+          ],
+          "de": "Easy ist kurz: easier, nicht more easy.",
+          "en": "Easy is short: easier, not more easy."
+        },
+        {
+          "if": [
+            "easy"
+          ],
+          "de": "Nach dem Rahmen mit than braucht es den Komparativ easier.",
+          "en": "With than in the frame you need the comparative easier."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-form-k2",
+    "type": "kwt",
+    "pat": "cmp.form",
+    "from": "Option A offers little flexibility, but option B offers a lot.",
+    "key": "FLEXIBLE",
+    "frame": "Option B is ___ than option A.",
+    "answer": "more flexible",
+    "accepted": [
+      "much more flexible",
+      "far more flexible",
+      "a lot more flexible",
+      "even more flexible",
+      "considerably more flexible"
+    ],
+    "words": [
+      2,
+      4
+    ],
+    "why": {
+      "ok": {
+        "de": "Richtig: Flexible ist lang und bekommt more: more flexible.",
+        "en": "Right: flexible is long and takes more: more flexible."
+      },
+      "wrong": [
+        {
+          "not": [
+            "flexible"
+          ],
+          "de": "Das Schlüsselwort flexible muss unverändert in der Lücke stehen.",
+          "en": "The key word flexible must stay unchanged in the gap."
+        },
+        {
+          "if": [
+            "flexibler"
+          ],
+          "de": "Flexible ist lang: more flexible statt -er.",
+          "en": "Flexible is long: more flexible instead of -er."
+        },
+        {
+          "not": [
+            "more"
+          ],
+          "de": "Hier fehlt more: Lange Adjektive steigern mit more.",
+          "en": "More is missing: long adjectives take more."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-form-f1",
+    "type": "find",
+    "pat": "cmp.form",
+    "prompt": "This tool is more simpler than the old spreadsheet.",
+    "err": [
+      3,
+      4
+    ],
+    "answer": "simpler",
+    "fixed": "This tool is simpler than the old spreadsheet.",
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: „more simpler“ ist doppelt gesteigert. Richtig: simpler.",
+        "en": "The error: “more simpler” doubles the comparison. Correct: simpler."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: more und -er stehen zugleich.",
+          "en": "There is an error: more and -er appear together."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei „more simpler“: Es reicht -er.",
+          "en": "The error is at “more simpler”: -er alone is enough."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-form-f2",
+    "type": "find",
+    "pat": "cmp.form",
+    "prompt": "The second route is more fast than the first.",
+    "err": [
+      4,
+      5
+    ],
+    "answer": "faster",
+    "fixed": "The second route is faster than the first.",
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: „more fast“. Fast ist kurz und bekommt -er: faster.",
+        "en": "The error: “more fast”. Fast is short and takes -er: faster."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: Ein kurzes Adjektiv steigert nicht mit more.",
+          "en": "There is an error: a short adjective does not take more."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei „more fast“: Dort muss faster stehen.",
+          "en": "The error is at “more fast”: it must be faster there."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-form-m1",
+    "type": "meaning",
+    "pat": "cmp.form",
+    "a": "This plan is more expensive than the old one.",
+    "b": "This plan is the most expensive one.",
+    "q": {
+      "de": "Welcher Satz vergleicht genau zwei Pläne?",
+      "en": "Which sentence compares exactly two plans?"
+    },
+    "answer": "a",
+    "why": {
+      "ok": {
+        "de": "Richtig: Satz a. Der Komparativ mit than vergleicht zwei Dinge.",
+        "en": "Right: sentence a. The comparative with than compares two things."
+      },
+      "wrong": [
+        {
+          "opt": "b",
+          "de": "In b hebt der Superlativ einen Plan aus mehreren heraus.",
+          "en": "In b the superlative picks one plan out of several."
+        },
+        {
+          "opt": "both",
+          "de": "Nicht gleich: Der Komparativ vergleicht zwei, der Superlativ nennt den höchsten Wert.",
+          "en": "Not the same: the comparative compares two, the superlative names the top one."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-than-k1",
+    "type": "kwt",
+    "pat": "cmp.than",
+    "from": "We expected 500 sign-ups, but 800 people registered.",
+    "key": "EXPECTED",
+    "frame": "More people registered ___.",
+    "answer": "than we expected",
+    "accepted": [
+      "than we had expected",
+      "than we'd expected",
+      "than we originally expected",
+      "than we initially expected",
+      "than expected"
+    ],
+    "words": [
+      2,
+      5
+    ],
+    "why": {
+      "ok": {
+        "de": "Richtig: more … than we expected. Nach dem Komparativ folgt than.",
+        "en": "Right: more … than we expected. After the comparative comes than."
+      },
+      "wrong": [
+        {
+          "not": [
+            "expected"
+          ],
+          "de": "Das Schlüsselwort expected muss unverändert in der Lücke stehen.",
+          "en": "The key word expected must stay unchanged in the gap."
+        },
+        {
+          "if": [
+            "as"
+          ],
+          "de": "Nach more steht than, nicht as.",
+          "en": "After more comes than, not as."
+        },
+        {
+          "if": [
+            "like"
+          ],
+          "de": "„Like“ passt hier nicht. Nach more steht than.",
+          "en": "“Like” does not fit here. After more comes than."
+        },
+        {
+          "not": [
+            "than"
+          ],
+          "de": "Hier fehlt das Wort than: more … than we expected.",
+          "en": "Than is missing: more … than we expected."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-than-k2",
+    "type": "kwt",
+    "pat": "cmp.than",
+    "from": "We had planned for two hours, but the test took three.",
+    "key": "PLANNED",
+    "frame": "The test took ___.",
+    "answer": "longer than we planned",
+    "accepted": [
+      "longer than we had planned",
+      "longer than we'd planned",
+      "much longer than we planned",
+      "longer than we originally planned",
+      "longer than planned"
+    ],
+    "words": [
+      3,
+      5
+    ],
+    "why": {
+      "ok": {
+        "de": "Richtig: longer than we planned. Nach dem Komparativ folgt than.",
+        "en": "Right: longer than we planned. After the comparative comes than."
+      },
+      "wrong": [
+        {
+          "not": [
+            "planned"
+          ],
+          "de": "Das Schlüsselwort planned muss unverändert in der Lücke stehen.",
+          "en": "The key word planned must stay unchanged in the gap."
+        },
+        {
+          "if": [
+            "as"
+          ],
+          "de": "Nach longer steht than, nicht as.",
+          "en": "After longer comes than, not as."
+        },
+        {
+          "if": [
+            "like"
+          ],
+          "de": "„Like“ passt hier nicht. Nach longer steht than.",
+          "en": "“Like” does not fit here. After longer comes than."
+        },
+        {
+          "not": [
+            "than"
+          ],
+          "de": "Hier fehlt than nach dem Komparativ longer.",
+          "en": "Than is missing after the comparative longer."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-than-f1",
+    "type": "find",
+    "pat": "cmp.than",
+    "prompt": "The new vendor is cheaper as the old one.",
+    "err": [
+      5,
+      5
+    ],
+    "answer": "than",
+    "fixed": "The new vendor is cheaper than the old one.",
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: „as“. Nach dem Komparativ cheaper steht than.",
+        "en": "The error: “as”. After the comparative cheaper comes than."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: Nach einem Komparativ steht nicht as.",
+          "en": "There is an error: as does not follow a comparative."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei „as“: Dort muss than stehen.",
+          "en": "The error is at “as”: it must be than there."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-than-f2",
+    "type": "find",
+    "pat": "cmp.than",
+    "prompt": "Our competitors are faster like we are.",
+    "err": [
+      4,
+      4
+    ],
+    "answer": "than",
+    "fixed": "Our competitors are faster than we are.",
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: „like“. Nach dem Komparativ faster steht than.",
+        "en": "The error: “like”. After the comparative faster comes than."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: Nach einem Komparativ steht nicht like.",
+          "en": "There is an error: like does not follow a comparative."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei „like“: Dort muss than stehen.",
+          "en": "The error is at “like”: it must be than there."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-than-f3",
+    "type": "find",
+    "pat": "cmp.than",
+    "prompt": "Customer demand grew faster than we had planned.",
+    "err": null,
+    "why": {
+      "ok": {
+        "de": "Kein Fehler: Nach dem Komparativ faster folgt than.",
+        "en": "No error: than follows the comparative faster."
+      },
+      "wrong": [
+        {
+          "tap": "*",
+          "de": "Kein Fehler: faster than we had planned ist richtig gebaut.",
+          "en": "No error: faster than we had planned is built correctly."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-than-m1",
+    "type": "meaning",
+    "pat": "cmp.than",
+    "a": "Sales are higher than last year.",
+    "b": "Sales are as high as last year.",
+    "q": {
+      "de": "Welcher Satz sagt: Der Umsatz ist gestiegen?",
+      "en": "Which sentence says sales have gone up?"
+    },
+    "answer": "a",
+    "why": {
+      "ok": {
+        "de": "Richtig: Satz a. Higher than zeigt einen Unterschied nach oben.",
+        "en": "Right: sentence a. Higher than shows a difference upward."
+      },
+      "wrong": [
+        {
+          "opt": "b",
+          "de": "In b sagt as … as: Der Umsatz ist gleich hoch, also keine Veränderung.",
+          "en": "In b, as … as says equally high, so no change."
+        },
+        {
+          "opt": "both",
+          "de": "Nicht gleich: than zeigt einen Unterschied, as … as zeigt Gleichheit.",
+          "en": "Not the same: than shows a difference, as … as shows equality."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-deg-k1",
+    "type": "kwt",
+    "pat": "cmp.degree",
+    "from": "The price gap between our new and our old supplier is tiny.",
+    "key": "CHEAPER",
+    "frame": "Our new supplier is ___ than the old one.",
+    "answer": "slightly cheaper",
+    "accepted": [
+      "a bit cheaper",
+      "a little cheaper",
+      "somewhat cheaper",
+      "marginally cheaper",
+      "just slightly cheaper",
+      "a little bit cheaper",
+      "only slightly cheaper"
+    ],
+    "words": [
+      2,
+      4
+    ],
+    "why": {
+      "ok": {
+        "de": "Richtig: slightly cheaper. Ein kleiner Unterschied braucht ein mildes Wort.",
+        "en": "Right: slightly cheaper. A small difference needs a mild word."
+      },
+      "wrong": [
+        {
+          "not": [
+            "cheaper"
+          ],
+          "de": "Das Schlüsselwort cheaper muss unverändert in der Lücke stehen.",
+          "en": "The key word cheaper must stay unchanged in the gap."
+        },
+        {
+          "if": [
+            "very"
+          ],
+          "de": "„Very“ steht nicht vor einem Komparativ. Hier passt slightly.",
+          "en": "“Very” does not go before a comparative. Slightly fits here."
+        },
+        {
+          "if": [
+            "much"
+          ],
+          "de": "Much nennt einen großen Unterschied. Der Satz sagt: nur ein kleiner.",
+          "en": "Much names a big difference. The sentence says: only a small one."
+        },
+        {
+          "if": [
+            "far"
+          ],
+          "de": "Far nennt einen großen Unterschied. Der Satz sagt: nur ein kleiner.",
+          "en": "Far names a big difference. The sentence says: only a small one."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-deg-k2",
+    "type": "kwt",
+    "pat": "cmp.degree",
+    "from": "The train takes four hours, but flying takes only one, which makes it faster.",
+    "key": "FASTER",
+    "frame": "Flying is ___ than taking the train.",
+    "answer": "much faster",
+    "accepted": [
+      "far faster",
+      "a lot faster",
+      "way faster",
+      "so much faster",
+      "a whole lot faster",
+      "considerably faster",
+      "significantly faster"
+    ],
+    "words": [
+      2,
+      4
+    ],
+    "why": {
+      "ok": {
+        "de": "Richtig: much faster. Much steht vor dem Komparativ und zeigt den großen Abstand.",
+        "en": "Right: much faster. Much goes before the comparative and shows the big gap."
+      },
+      "wrong": [
+        {
+          "not": [
+            "faster"
+          ],
+          "de": "Das Schlüsselwort faster muss unverändert in der Lücke stehen.",
+          "en": "The key word faster must stay unchanged in the gap."
+        },
+        {
+          "if": [
+            "very"
+          ],
+          "de": "„Very“ steht nicht vor einem Komparativ. Hier passt much oder far.",
+          "en": "“Very” does not go before a comparative. Much or far fits here."
+        },
+        {
+          "if": [
+            "slightly"
+          ],
+          "de": "Slightly nennt einen kleinen Unterschied. Hier ist er groß.",
+          "en": "Slightly names a small difference. Here it is big."
+        },
+        {
+          "if": [
+            "more"
+          ],
+          "de": "„More faster“ steigert doppelt. Faster ist schon der Komparativ.",
+          "en": "“More faster” doubles the comparison. Faster is already comparative."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-deg-f1",
+    "type": "find",
+    "pat": "cmp.degree",
+    "prompt": "The updated report is very clearer than the first draft.",
+    "err": [
+      4,
+      5
+    ],
+    "answer": "much clearer",
+    "fixed": "The updated report is much clearer than the first draft.",
+    "accepted": [
+      "far clearer",
+      "a lot clearer",
+      "considerably clearer",
+      "significantly clearer",
+      "so much clearer"
+    ],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: „very clearer“. Vor einem Komparativ steht much oder far, nicht very.",
+        "en": "The error: “very clearer”. Before a comparative use much or far, not very."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: very passt nicht vor einen Komparativ.",
+          "en": "There is an error: very does not fit before a comparative."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei „very clearer“: Dort passt much oder far.",
+          "en": "The error is at “very clearer”: much or far fits there."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-deg-f2",
+    "type": "find",
+    "pat": "cmp.degree",
+    "prompt": "The new route is very more efficient than the old one.",
+    "err": [
+      4,
+      5
+    ],
+    "answer": "much more",
+    "fixed": "The new route is much more efficient than the old one.",
+    "accepted": [
+      "far more",
+      "a lot more",
+      "considerably more",
+      "significantly more"
+    ],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: „very more“. Vor more steht much oder far, nicht very.",
+        "en": "The error: “very more”. Before more use much or far, not very."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: very passt nicht vor more.",
+          "en": "There is an error: very does not fit before more."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei „very more“: Dort passt much oder far.",
+          "en": "The error is at “very more”: much or far fits there."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-deg-f3",
+    "type": "find",
+    "pat": "cmp.degree",
+    "prompt": "The second quote is slightly cheaper than the first.",
+    "err": null,
+    "why": {
+      "ok": {
+        "de": "Kein Fehler: slightly steht richtig vor dem Komparativ cheaper.",
+        "en": "No error: slightly correctly stands before the comparative cheaper."
+      },
+      "wrong": [
+        {
+          "tap": "*",
+          "de": "Kein Fehler: slightly cheaper than ist richtig gebaut.",
+          "en": "No error: slightly cheaper than is built correctly."
+        }
+      ]
+    }
+  },
+  {
+    "id": "cmp-deg-m1",
+    "type": "meaning",
+    "pat": "cmp.degree",
+    "a": "The new tool is slightly faster than the old one.",
+    "b": "The new tool is far faster than the old one.",
+    "q": {
+      "de": "Welcher Satz sagt: Der Unterschied ist groß?",
+      "en": "Which sentence says the difference is big?"
+    },
+    "answer": "b",
+    "why": {
+      "ok": {
+        "de": "Richtig: Satz b. Far nennt den großen Abstand.",
+        "en": "Right: sentence b. Far names a big gap."
+      },
+      "wrong": [
+        {
+          "opt": "a",
+          "de": "In a nennt slightly nur einen kleinen Unterschied.",
+          "en": "In a, slightly names only a small difference."
+        },
+        {
+          "opt": "both",
+          "de": "Nicht gleich: slightly ist klein, far ist groß.",
+          "en": "Not the same: slightly is small, far is big."
+        }
+      ]
+    }
+  }
+]

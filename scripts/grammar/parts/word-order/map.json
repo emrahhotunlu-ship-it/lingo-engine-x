@@ -1,0 +1,352 @@
+{
+ "Rarely ___ such a strong response from customers.": {
+  "pat": "wo.neg-inv",
+  "why": {
+   "ok": {
+    "de": "Richtig: „Rarely“ steht vorn, also kommt have vor we: Rarely have we seen …",
+    "en": "Right: “Rarely” comes first, so have goes before we: Rarely have we seen …"
+   },
+   "wrong": [
+    {
+     "opt": "we have seen",
+     "pat": "wo.neg-inv",
+     "de": "Nach „rarely“ vorn muss das Hilfsverb vor das Subjekt. Hier steht we vor have.",
+     "en": "After sentence-initial “rarely” the auxiliary must precede the subject. Here we comes first."
+    },
+    {
+     "opt": "we did see",
+     "de": "„we did“ ist keine Inversion: Das Hilfsverb müsste vor we stehen (did we see).",
+     "en": "“we did” is not inversion: the auxiliary would have to precede we (did we see)."
+    },
+    {
+     "opt": "we saw",
+     "de": "Ohne Hilfsverb vor dem Subjekt bleibt es die normale Reihenfolge. Nach „rarely“ falsch.",
+     "en": "Without an auxiliary before the subject the order stays normal. Wrong after “rarely”."
+    }
+   ]
+  }
+ },
+ "We are holding the workshop ___.": {
+  "pat": "wo.place-time",
+  "why": {
+   "ok": {
+    "de": "Richtig: Ort vor Zeit ist üblich, beides hinter dem Objekt: in Munich tomorrow.",
+    "en": "Right: place before time is usual, both after the object: in Munich tomorrow."
+   },
+   "wrong": [
+    {
+     "opt": "in tomorrow Munich",
+     "de": "„in“ und Munich gehören zusammen. Die Zeit tomorrow darf nicht dazwischen stehen.",
+     "en": "“in” and Munich belong together. The time word tomorrow cannot sit between them."
+    },
+    {
+     "opt": "Munich in tomorrow",
+     "de": "Die Präposition steht vor ihrem Nomen: in Munich, nicht Munich in.",
+     "en": "The preposition comes before its noun: in Munich, not Munich in."
+    },
+    {
+     "opt": "tomorrow Munich in",
+     "de": "Die Reihenfolge ist ganz verdreht. Die Präposition in gehört direkt vor Munich.",
+     "en": "The order is scrambled. The preposition in belongs directly before Munich."
+    }
+   ]
+  }
+ },
+ "Not only ___ the deadline, but they also exceeded the budget.": {
+  "pat": "wo.not-only",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „not only“ vorn steht did vor they, dann die Grundform: did they miss.",
+    "en": "Right: after “not only” up front, did goes before they, then the base form: did they miss."
+   },
+   "wrong": [
+    {
+     "opt": "they did miss",
+     "pat": "wo.not-only",
+     "de": "Nach „not only“ vorn muss did vor das Subjekt rücken. Hier steht they vor did.",
+     "en": "After “not only” up front, did must precede the subject. Here they comes first."
+    },
+    {
+     "opt": "they missed",
+     "de": "Ohne Inversion ist der Satz falsch: erst did, dann they, dann die Grundform.",
+     "en": "Without inversion the sentence is wrong: first did, then they, then the base form."
+    },
+    {
+     "opt": "missed they",
+     "de": "Nur das Hilfsverb rückt vor das Subjekt, nicht das Vollverb. Richtig: did they miss.",
+     "en": "Only the auxiliary moves before the subject, not the main verb. Correct: did they miss."
+    }
+   ]
+  }
+ },
+ "Under no circumstances ___ share the password with anyone.": {
+  "pat": "wo.neg-inv",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „under no circumstances“ vorn steht should vor you: should you share.",
+    "en": "Right: after “under no circumstances” up front, should goes before you."
+   },
+   "wrong": [
+    {
+     "opt": "you should",
+     "de": "Hier steht you vor should. Nach der Wendung vorn muss das Modalverb vor das Subjekt.",
+     "en": "Here you precedes should. After the opening phrase the modal must come before the subject."
+    },
+    {
+     "opt": "do you should",
+     "de": "do und should zusammen geht nicht. Das Modalverb bildet die Inversion allein.",
+     "en": "do and should cannot be combined. The modal forms the inversion by itself."
+    },
+    {
+     "opt": "you shall",
+     "de": "Auch bei shall steht you davor. Das Hilfsverb muss vor dem Subjekt stehen.",
+     "en": "With shall, too, you comes first. The auxiliary must come before the subject."
+    }
+   ]
+  }
+ },
+ "Never ___ I seen such a well-organized conference.": {
+  "pat": "wo.neg-inv",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „never“ vorn steht have vor I, dann das Partizip: Never have I seen …",
+    "en": "Right: after “never” up front, have goes before I, then the participle: Never have I seen …"
+   },
+   "wrong": [
+    {
+     "if": [
+      "did"
+     ],
+     "de": "seen braucht have oder had davor. Mit did folgt die Grundform: Never did I see.",
+     "en": "seen needs have or had. With did the base form follows: Never did I see."
+    },
+    {
+     "if": [
+      "do"
+     ],
+     "de": "Mit do folgt die Grundform. Hier steht aber seen, also braucht es have oder had.",
+     "en": "With do the base form follows. Here seen follows, so have or had is needed."
+    },
+    {
+     "not": [
+      "have",
+      "had"
+     ],
+     "de": "Hier fehlt das passende Hilfsverb vor I: have oder had, passend zu seen.",
+     "en": "The matching auxiliary before I is missing: have or had, matching seen."
+    }
+   ]
+  }
+ },
+ "Hardly had we started the meeting ___ the fire alarm went off.": {
+  "pat": "wo.hardly-sooner",
+  "why": {
+   "ok": {
+    "de": "Richtig: Die feste Paarung ist hardly … when: zwei Ereignisse kurz nacheinander.",
+    "en": "Right: the fixed pair is hardly … when: two events in quick succession."
+   },
+   "wrong": [
+    {
+     "if": [
+      "than"
+     ],
+     "pat": "wo.hardly-sooner",
+     "de": "than gehört zu no sooner. Bei hardly steht when.",
+     "en": "than belongs with no sooner. With hardly use when."
+    },
+    {
+     "not": [
+      "when",
+      "before"
+     ],
+     "de": "Zu hardly passt als Bindewort when. Das gesuchte Wort ist ein anderes.",
+     "en": "Hardly pairs with when as the linking word. The word you need is a different one."
+    }
+   ]
+  }
+ },
+ "Seldom ___ a company respond so quickly to a complaint.": {
+  "pat": "wo.neg-inv",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „seldom“ vorn steht does vor a company, dann die Grundform respond.",
+    "en": "Right: after “seldom” up front, does goes before a company, then the base form respond."
+   },
+   "wrong": [
+    {
+     "if": [
+      "do"
+     ],
+     "de": "a company ist Singular. Das Hilfsverb heißt does (oder did), nicht do.",
+     "en": "a company is singular. The auxiliary is does (or did), not do."
+    },
+    {
+     "not": [
+      "does",
+      "did",
+      "will",
+      "would",
+      "can"
+     ],
+     "de": "Nach seldom braucht respond ein Hilfsverb mit Grundform: does oder did.",
+     "en": "After seldom, respond needs an auxiliary taking the base form: does or did."
+    }
+   ]
+  }
+ },
+ "We had never seen such a mess. → Never ___ we seen such a mess.": {
+  "pat": "wo.neg-inv",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Ausgangssatz steht im Past Perfect, also Never had we seen …",
+    "en": "Right: the original is in the past perfect, so Never had we seen …"
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "de": "Der Ausgangssatz steht im Past Perfect: Nötig ist had, nicht have.",
+     "en": "The original is in the past perfect: you need had, not have."
+    },
+    {
+     "if": [
+      "did"
+     ],
+     "de": "Mit did folgt die Grundform. Hier steht seen, also had.",
+     "en": "With did the base form follows. Here seen follows, so had."
+    },
+    {
+     "not": [
+      "had"
+     ],
+     "de": "Vor we braucht seen das Hilfsverb had, wie im Ausgangssatz.",
+     "en": "Before we, seen needs the auxiliary had, as in the original."
+    }
+   ]
+  }
+ },
+ "She not only wrote the report, she also presented it. → Not only ___ she write the report, but she also presented it.": {
+  "pat": "wo.not-only",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „not only“ vorn steht did vor she, dann die Grundform write.",
+    "en": "Right: after “not only” up front, did goes before she, then the base form write."
+   },
+   "wrong": [
+    {
+     "if": [
+      "do"
+     ],
+     "de": "write ist die Grundform, aber es geht um die Vergangenheit: did, nicht do.",
+     "en": "write is the base form, but this is about the past: did, not do."
+    },
+    {
+     "if": [
+      "does"
+     ],
+     "de": "Das Hilfsverb muss zur Vergangenheit passen: did, nicht does.",
+     "en": "The auxiliary must match the past: did, not does."
+    },
+    {
+     "not": [
+      "did"
+     ],
+     "de": "Nach „not only“ steht did plus Grundform. Das gesuchte Wort ist did.",
+     "en": "After “not only” comes did plus the base form. The word you need is did."
+    }
+   ]
+  }
+ },
+ "Rarely we get such positive feedback from clients.": {
+  "pat": "wo.neg-inv",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „rarely“ vorn steht do vor we: Rarely do we get …",
+    "en": "Right: after “rarely” up front, do goes before we: Rarely do we get …"
+   },
+   "wrong": [
+    {
+     "if": [
+      "we do"
+     ],
+     "de": "Das Hilfsverb muss vor we stehen: do we, nicht we do.",
+     "en": "The auxiliary must come before we: do we, not we do."
+    },
+    {
+     "if": [
+      "get we"
+     ],
+     "de": "Nur das Hilfsverb rückt vor das Subjekt, nicht get: do we get.",
+     "en": "Only the auxiliary moves before the subject, not get: do we get."
+    },
+    {
+     "not": [
+      "do we"
+     ],
+     "de": "„Rarely“ vorn löst Inversion aus: do muss vor we stehen.",
+     "en": "“Rarely” up front triggers inversion: do must come before we."
+    }
+   ]
+  }
+ },
+ "He explained clearly the plan to the team.": {
+  "pat": "wo.verb-object",
+  "why": {
+   "ok": {
+    "de": "Richtig: explained und the plan bleiben zusammen, clearly steht davor oder dahinter.",
+    "en": "Right: explained and the plan stay together; clearly goes before or after."
+   },
+   "wrong": [
+    {
+     "if": [
+      "explained clearly"
+     ],
+     "pat": "wo.verb-object",
+     "de": "clearly darf nicht zwischen explained und the plan stehen.",
+     "en": "clearly cannot sit between explained and the plan."
+    },
+    {
+     "not": [
+      "plan clearly",
+      "clearly explained"
+     ],
+     "de": "Das Objekt the plan folgt direkt auf explained. Das Adverb steht davor oder dahinter.",
+     "en": "The object the plan follows explained directly. The adverb goes before or after."
+    }
+   ]
+  }
+ },
+ "No sooner we had signed the contract than the prices rose.": {
+  "pat": "wo.hardly-sooner",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „no sooner“ vorn steht had vor we: No sooner had we signed …",
+    "en": "Right: after “no sooner” up front, had goes before we: No sooner had we signed …"
+   },
+   "wrong": [
+    {
+     "if": [
+      "we had"
+     ],
+     "de": "Das Hilfsverb muss vor we stehen: had we, nicht we had.",
+     "en": "The auxiliary must come before we: had we, not we had."
+    },
+    {
+     "if": [
+      "did we"
+     ],
+     "de": "Hier braucht es das Past Perfect: had we signed, nicht did we sign.",
+     "en": "The past perfect is needed here: had we signed, not did we sign."
+    },
+    {
+     "not": [
+      "had we"
+     ],
+     "de": "Nach „no sooner“ vorn rückt had vor das Subjekt: had we.",
+     "en": "After “no sooner” up front, had moves before the subject: had we."
+    }
+   ]
+  }
+ }
+}

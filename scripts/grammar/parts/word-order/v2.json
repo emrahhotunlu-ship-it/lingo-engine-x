@@ -1,0 +1,1248 @@
+[
+ {
+  "id": "wo-vo-k1",
+  "type": "kwt",
+  "pat": "wo.verb-object",
+  "from": "The manager's explanation of the plan was clear to everyone.",
+  "key": "CLEARLY",
+  "frame": "The manager ___ to everyone.",
+  "answer": "explained the plan clearly",
+  "accepted": [
+   "clearly explained the plan",
+   "explained the plan very clearly",
+   "very clearly explained the plan"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: explained the plan bleibt zusammen, clearly steht davor oder dahinter.",
+    "en": "Right: explained the plan stays together; clearly goes before or after."
+   },
+   "wrong": [
+    {
+     "not": [
+      "clearly"
+     ],
+     "de": "Das Schlüsselwort clearly muss unverändert in der Lücke stehen.",
+     "en": "The key word clearly must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "explained clearly"
+     ],
+     "de": "clearly darf nicht zwischen explained und the plan stehen.",
+     "en": "clearly cannot sit between explained and the plan."
+    },
+    {
+     "not": [
+      "plan clearly",
+      "clearly explained",
+      "plan very clearly",
+      "very clearly explained"
+     ],
+     "de": "Das Verb steht mit seinem Objekt zusammen, das Adverb davor oder dahinter.",
+     "en": "Verb and object stay together; the adverb goes before or after."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-vo-k2",
+  "type": "kwt",
+  "pat": "wo.verb-object",
+  "from": "The intern made a careful check of every number for the audit.",
+  "key": "CAREFULLY",
+  "frame": "The intern ___ for the audit.",
+  "answer": "checked every number carefully",
+  "accepted": [
+   "carefully checked every number",
+   "checked every number very carefully",
+   "very carefully checked every number"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: checked every number carefully. Das Adverb trennt Verb und Objekt nicht.",
+    "en": "Right: checked every number carefully. The adverb does not split verb and object."
+   },
+   "wrong": [
+    {
+     "not": [
+      "carefully"
+     ],
+     "de": "Das Schlüsselwort carefully muss unverändert in der Lücke stehen.",
+     "en": "The key word carefully must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "checked carefully"
+     ],
+     "de": "carefully darf nicht zwischen checked und every number stehen.",
+     "en": "carefully cannot sit between checked and every number."
+    },
+    {
+     "not": [
+      "number carefully",
+      "carefully checked",
+      "number very carefully",
+      "very carefully checked"
+     ],
+     "de": "Das Objekt every number folgt direkt dem Verb. Das Adverb steht davor oder dahinter.",
+     "en": "The object every number follows the verb directly. The adverb goes before or after."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-vo-f1",
+  "type": "find",
+  "pat": "wo.verb-object",
+  "prompt": "The consultant presented clearly the results to the board.",
+  "err": [
+   3,
+   5
+  ],
+  "answer": "the results clearly",
+  "fixed": "The consultant presented the results clearly to the board.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Das Adverb trennt presented und das Objekt. Richtig: the results clearly.",
+    "en": "The error: the adverb splits presented and its object. Correct: the results clearly."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: clearly steht zwischen Verb und Objekt.",
+     "en": "There is an error: clearly sits between verb and object."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „clearly the results“: Verb und Objekt bleiben zusammen.",
+     "en": "The error is in “clearly the results”: verb and object stay together."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-vo-f2",
+  "type": "find",
+  "pat": "wo.verb-object",
+  "prompt": "She summarized briefly the key risks for the board.",
+  "err": [
+   2,
+   5
+  ],
+  "answer": "the key risks briefly",
+  "fixed": "She summarized the key risks briefly for the board.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: briefly steht zwischen summarized und dem Objekt. Richtig: the key risks briefly.",
+    "en": "The error: briefly sits between summarized and its object. Correct: the key risks briefly."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Ein Adverb trennt Verb und Objekt.",
+     "en": "There is an error: an adverb splits verb and object."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „briefly the key risks“: Das Adverb gehört dahinter oder davor.",
+     "en": "The error is in “briefly the key risks”: the adverb belongs after or before."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-vo-f3",
+  "type": "find",
+  "pat": "wo.verb-object",
+  "prompt": "We really like the new dashboard.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: really steht vor dem Verb, Verb und Objekt bleiben zusammen.",
+    "en": "No error: really sits before the verb, and verb and object stay together."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Das Adverb really steht vor dem Verb. Das ist richtig.",
+     "en": "No error: the adverb really goes before the verb. That is correct."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-vo-m1",
+  "type": "meaning",
+  "pat": "wo.verb-object",
+  "a": "He quickly answered the question.",
+  "b": "He answered the question quickly.",
+  "q": {
+   "de": "Welche Sätze sagen: Er hat schnell geantwortet?",
+   "en": "Which sentences say he answered fast?"
+  },
+  "answer": "both",
+  "why": {
+   "ok": {
+    "de": "Richtig: beide. Das Adverb steht vor dem Verb oder hinter dem Objekt.",
+    "en": "Right: both. The adverb goes before the verb or after the object."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "Satz a stimmt, aber b sagt dasselbe: Das Adverb darf auch hinter dem Objekt stehen.",
+     "en": "Sentence a is right, but b says the same: the adverb may also follow the object."
+    },
+    {
+     "opt": "b",
+     "de": "Satz b stimmt, aber a sagt dasselbe: Das Adverb darf auch vor dem Verb stehen.",
+     "en": "Sentence b is right, but a says the same: the adverb may also precede the verb."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-pt-k1",
+  "type": "kwt",
+  "pat": "wo.place-time",
+  "from": "Tomorrow we will present the results in Denver.",
+  "key": "RESULTS",
+  "frame": "We will present ___.",
+  "answer": "the results in Denver tomorrow",
+  "accepted": [
+   "the results tomorrow in Denver",
+   "our results in Denver tomorrow",
+   "our results tomorrow in Denver"
+  ],
+  "words": [
+   5,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Objekt zuerst, danach Ort und Zeit: the results in Denver tomorrow.",
+    "en": "Right: object first, then place and time: the results in Denver tomorrow."
+   },
+   "wrong": [
+    {
+     "not": [
+      "results"
+     ],
+     "de": "Das Schlüsselwort results muss unverändert in der Lücke stehen.",
+     "en": "The key word results must stay unchanged in the gap."
+    },
+    {
+     "not": [
+      "results in denver",
+      "results tomorrow"
+     ],
+     "de": "Das Objekt results kommt zuerst. Ort und Zeit folgen danach.",
+     "en": "The object results comes first. Place and time follow it."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-pt-k2",
+  "type": "kwt",
+  "pat": "wo.place-time",
+  "from": "Last year, we opened our second office in Austin.",
+  "key": "OFFICE",
+  "frame": "We opened our second ___.",
+  "answer": "office in Austin last year",
+  "accepted": [
+   "office last year in Austin"
+  ],
+  "words": [
+   5,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nomen zuerst, danach Ort und Zeit: office in Austin last year.",
+    "en": "Right: noun first, then place and time: office in Austin last year."
+   },
+   "wrong": [
+    {
+     "not": [
+      "office"
+     ],
+     "de": "Das Schlüsselwort office muss unverändert in der Lücke stehen.",
+     "en": "The key word office must stay unchanged in the gap."
+    },
+    {
+     "not": [
+      "office in austin",
+      "office last year"
+     ],
+     "de": "Das Nomen office kommt zuerst. Ort und Zeit folgen dahinter.",
+     "en": "The noun office comes first. Place and time follow it."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-pt-f1",
+  "type": "find",
+  "pat": "wo.place-time",
+  "prompt": "We are meeting in Denver the client tomorrow.",
+  "err": [
+   3,
+   6
+  ],
+  "answer": "the client in Denver",
+  "fixed": "We are meeting the client in Denver tomorrow.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Der Ort steht vor dem Objekt. Richtig: the client in Denver.",
+    "en": "The error: the place comes before the object. Correct: the client in Denver."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: in Denver steht vor dem Objekt.",
+     "en": "There is an error: in Denver comes before the object."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „in Denver the client“: Der Ort gehört hinter das Objekt.",
+     "en": "The error is in “in Denver the client”: the place belongs after the object."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-pt-f2",
+  "type": "find",
+  "pat": "wo.place-time",
+  "prompt": "We will visit in Boston the client next week.",
+  "err": [
+   3,
+   6
+  ],
+  "answer": "the client in Boston",
+  "fixed": "We will visit the client in Boston next week.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: in Boston trennt Verb und Objekt. Richtig: the client in Boston.",
+    "en": "The error: in Boston splits verb and object. Correct: the client in Boston."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Der Ort trennt visit und das Objekt.",
+     "en": "There is an error: the place splits visit and its object."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „in Boston the client“: Das Objekt folgt direkt dem Verb.",
+     "en": "The error is in “in Boston the client”: the object follows the verb directly."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-pt-f3",
+  "type": "find",
+  "pat": "wo.place-time",
+  "prompt": "We are holding the workshop in Munich on Friday.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: Objekt, dann Ort, dann Zeit. Das ist die übliche Reihenfolge.",
+    "en": "No error: object, then place, then time. That is the usual order."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Ort und Zeit stehen hinter dem Objekt, der Ort vor der Zeit.",
+     "en": "No error: place and time follow the object, with place before time."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-pt-m1",
+  "type": "meaning",
+  "pat": "wo.place-time",
+  "a": "The workshop is in Munich on Tuesday.",
+  "b": "The workshop is on Tuesday in Munich.",
+  "q": {
+   "de": "Welche Sätze nennen Ort und Tag des Workshops?",
+   "en": "Which sentences give the place and day of the workshop?"
+  },
+  "answer": "both",
+  "why": {
+   "ok": {
+    "de": "Richtig: beide. Die Reihenfolge Ort vor Zeit ist üblich, die andere ebenfalls möglich.",
+    "en": "Right: both. Place before time is usual; the other order is possible too."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "Satz a stimmt, aber b nennt dasselbe: Ort und Zeit dürfen hier tauschen.",
+     "en": "Sentence a is right, but b gives the same facts: place and time may swap here."
+    },
+    {
+     "opt": "b",
+     "de": "Satz b stimmt, aber a nennt dasselbe: Ort und Zeit dürfen hier tauschen.",
+     "en": "Sentence b is right, but a gives the same facts: place and time may swap here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-ni-k1",
+  "type": "kwt",
+  "pat": "wo.neg-inv",
+  "from": "We seldom get such detailed feedback.",
+  "key": "SUCH",
+  "frame": "Seldom ___ detailed feedback.",
+  "answer": "do we get such",
+  "accepted": [
+   "do we receive such",
+   "do we see such",
+   "do we have such",
+   "do we ever get such"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „seldom“ vorn steht do vor we: Seldom do we get such …",
+    "en": "Right: after “seldom” up front, do goes before we: Seldom do we get such …"
+   },
+   "wrong": [
+    {
+     "not": [
+      "such"
+     ],
+     "de": "Das Schlüsselwort such muss unverändert in der Lücke stehen.",
+     "en": "The key word such must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "we do"
+     ],
+     "de": "Das Hilfsverb muss vor we stehen: do we, nicht we do.",
+     "en": "The auxiliary must come before we: do we, not we do."
+    },
+    {
+     "if": [
+      "get we"
+     ],
+     "de": "Nur do rückt vor das Subjekt. Das Vollverb bleibt danach: do we get.",
+     "en": "Only do moves before the subject. The main verb stays after it: do we get."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-ni-k2",
+  "type": "kwt",
+  "pat": "wo.neg-inv",
+  "from": "They rarely admit mistakes in public.",
+  "key": "MISTAKES",
+  "frame": "Rarely ___ in public.",
+  "answer": "do they admit mistakes",
+  "accepted": [
+   "do they admit their mistakes",
+   "do they acknowledge mistakes",
+   "do they acknowledge their mistakes",
+   "do they admit to mistakes",
+   "do they ever admit mistakes"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „rarely“ vorn steht do vor they: Rarely do they admit mistakes.",
+    "en": "Right: after “rarely” up front, do goes before they: Rarely do they admit mistakes."
+   },
+   "wrong": [
+    {
+     "not": [
+      "mistakes"
+     ],
+     "de": "Das Schlüsselwort mistakes muss unverändert in der Lücke stehen.",
+     "en": "The key word mistakes must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "admit they"
+     ],
+     "de": "Nur do rückt vor das Subjekt: do they admit, nicht admit they.",
+     "en": "Only do moves before the subject: do they admit, not admit they."
+    },
+    {
+     "if": [
+      "they do"
+     ],
+     "de": "Das Hilfsverb muss vor they stehen: do they, nicht they do.",
+     "en": "The auxiliary must come before they: do they, not they do."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-ni-f1",
+  "type": "find",
+  "pat": "wo.neg-inv",
+  "prompt": "Seldom we have seen such a fast rollout.",
+  "err": [
+   1,
+   2
+  ],
+  "answer": "have we",
+  "fixed": "Seldom have we seen such a fast rollout.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach „seldom“ vorn fehlt die Inversion. Richtig: have we.",
+    "en": "The error: inversion is missing after “seldom” up front. Correct: have we."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach seldom steht das Hilfsverb vor dem Subjekt.",
+     "en": "There is an error: after seldom the auxiliary comes before the subject."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „we have“: Das Hilfsverb gehört vor we.",
+     "en": "The error is in “we have”: the auxiliary belongs before we."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-ni-f2",
+  "type": "find",
+  "pat": "wo.neg-inv",
+  "prompt": "Never I have felt so well prepared for an audit.",
+  "err": [
+   1,
+   2
+  ],
+  "answer": "have I",
+  "fixed": "Never have I felt so well prepared for an audit.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach „never“ vorn fehlt die Inversion. Richtig: have I.",
+    "en": "The error: inversion is missing after “never” up front. Correct: have I."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach never steht das Hilfsverb vor dem Subjekt.",
+     "en": "There is an error: after never the auxiliary comes before the subject."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „I have“: Das Hilfsverb gehört vor I.",
+     "en": "The error is in “I have”: the auxiliary belongs before I."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-ni-f3",
+  "type": "find",
+  "pat": "wo.neg-inv",
+  "prompt": "Rarely makes the team a mistake like this.",
+  "err": [
+   1,
+   3
+  ],
+  "answer": "does the team make",
+  "fixed": "Rarely does the team make a mistake like this.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nur does rückt vor das Subjekt, make bleibt danach. Richtig: does the team make.",
+    "en": "The error: only does moves before the subject; make stays after. Correct: does the team make."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Das Vollverb makes steht vor dem Subjekt.",
+     "en": "There is an error: the main verb makes sits before the subject."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „makes the team“: Hier gehört does vor das Subjekt.",
+     "en": "The error is in “makes the team”: does belongs before the subject."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-ni-f4",
+  "type": "find",
+  "pat": "wo.neg-inv",
+  "prompt": "Under no circumstances should the data leave our servers.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: should steht vor dem Subjekt, wie nach „under no circumstances“ nötig.",
+    "en": "No error: should precedes the subject, as required after “under no circumstances”."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach der Wendung vorn steht should vor the data. Das ist richtig.",
+     "en": "No error: after the opening phrase should comes before the data. That is correct."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-ni-m1",
+  "type": "meaning",
+  "pat": "wo.neg-inv",
+  "a": "Seldom do we miss a deadline.",
+  "b": "We seldom miss a deadline.",
+  "q": {
+   "de": "Welche Sätze sagen: Wir halten Termine fast immer ein?",
+   "en": "Which sentences say we almost always meet deadlines?"
+  },
+  "answer": "both",
+  "why": {
+   "ok": {
+    "de": "Richtig: beide. Die Inversion ändert nur den Ton, nicht die Bedeutung.",
+    "en": "Right: both. Inversion changes only the tone, not the meaning."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "Satz a stimmt, aber b sagt dasselbe, nur ohne Inversion.",
+     "en": "Sentence a is right, but b says the same without inversion."
+    },
+    {
+     "opt": "b",
+     "de": "Satz b stimmt, aber a sagt dasselbe, nur förmlicher.",
+     "en": "Sentence b is right, but a says the same, only more formally."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-no-k1",
+  "type": "kwt",
+  "pat": "wo.not-only",
+  "from": "The vendor delivered late, and it also sent the wrong parts.",
+  "key": "LATE",
+  "frame": "Not only ___, but it also sent the wrong parts.",
+  "answer": "did the vendor deliver late",
+  "accepted": [
+   "did the supplier deliver late",
+   "did it deliver late",
+   "did they deliver late"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „not only“ vorn steht did vor das Subjekt: did the vendor deliver.",
+    "en": "Right: after “not only” up front, did precedes the subject: did the vendor deliver."
+   },
+   "wrong": [
+    {
+     "not": [
+      "late"
+     ],
+     "de": "Das Schlüsselwort late muss unverändert in der Lücke stehen.",
+     "en": "The key word late must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "delivered"
+     ],
+     "de": "Nach did steht die Grundform: deliver, nicht delivered.",
+     "en": "After did comes the base form: deliver, not delivered."
+    },
+    {
+     "if": [
+      "vendor did"
+     ],
+     "de": "did muss vor dem Subjekt stehen: Not only did the vendor …",
+     "en": "did must come before the subject: Not only did the vendor …"
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-no-k2",
+  "type": "kwt",
+  "pat": "wo.not-only",
+  "from": "The update has fixed the bug, and it has also improved speed.",
+  "key": "BUG",
+  "frame": "Not only ___, but it has also improved speed.",
+  "answer": "has it fixed the bug",
+  "accepted": [],
+  "words": [
+   5,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „not only“ vorn steht has vor it: Not only has it fixed the bug.",
+    "en": "Right: after “not only” up front, has goes before it: Not only has it fixed the bug."
+   },
+   "wrong": [
+    {
+     "not": [
+      "bug"
+     ],
+     "de": "Das Schlüsselwort bug muss unverändert in der Lücke stehen.",
+     "en": "The key word bug must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "it has"
+     ],
+     "de": "has muss vor dem Subjekt stehen: Not only has it fixed …",
+     "en": "has must come before the subject: Not only has it fixed …"
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-no-f1",
+  "type": "find",
+  "pat": "wo.not-only",
+  "prompt": "Not only the new tool saved time, but it also reduced errors.",
+  "err": [
+   2,
+   5
+  ],
+  "answer": "did the new tool save",
+  "fixed": "Not only did the new tool save time, but it also reduced errors.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach „not only“ vorn fehlt did. Richtig: did the new tool save.",
+    "en": "The error: did is missing after “not only” up front. Correct: did the new tool save."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach not only steht did vor dem Subjekt.",
+     "en": "There is an error: after not only did comes before the subject."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „the new tool saved“: Hier gehört did vor das Subjekt.",
+     "en": "The error is in “the new tool saved”: did belongs before the subject."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-no-f2",
+  "type": "find",
+  "pat": "wo.not-only",
+  "prompt": "Not only wrote she the summary, but she also sent it to the board.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "did she write",
+  "fixed": "Not only did she write the summary, but she also sent it to the board.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nur did rückt vor das Subjekt, write bleibt danach. Richtig: did she write.",
+    "en": "The error: only did moves before the subject; write stays after. Correct: did she write."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Das Vollverb wrote steht vor dem Subjekt.",
+     "en": "There is an error: the main verb wrote sits before the subject."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „wrote she“: Hier gehört did vor das Subjekt.",
+     "en": "The error is in “wrote she”: did belongs before the subject."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-no-f3",
+  "type": "find",
+  "pat": "wo.not-only",
+  "prompt": "Not only did the pilot succeed, but it also cut costs.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: did steht vor dem Subjekt, danach die Grundform succeed.",
+    "en": "No error: did precedes the subject, followed by the base form succeed."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach not only steht did plus Grundform, der zweite Teil ist normal.",
+     "en": "No error: after not only comes did plus the base form; the second part is normal."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-no-m1",
+  "type": "meaning",
+  "pat": "wo.not-only",
+  "a": "Not only did the vendor repair the printer, but it also replaced the toner.",
+  "b": "The vendor repaired the printer but did not replace the toner.",
+  "q": {
+   "de": "Welcher Satz sagt: Der Anbieter hat beides gemacht?",
+   "en": "Which sentence says the vendor did both things?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Not only … but also nennt zwei Dinge, die beide geschehen sind.",
+    "en": "Right: sentence a. Not only … but also names two things that both happened."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b wurde der Toner nicht ersetzt. Dort fehlt das zweite Ereignis.",
+     "en": "In b the toner was not replaced. The second event is missing."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: In a geschieht beides, in b nur das Reparieren.",
+     "en": "Not the same: in a both happen, in b only the repair."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-hs-k1",
+  "type": "kwt",
+  "pat": "wo.hardly-sooner",
+  "from": "She finished the call, and right after that her manager walked in.",
+  "key": "CALL",
+  "frame": "Hardly ___ when her manager walked in.",
+  "answer": "had she finished the call",
+  "accepted": [
+   "had she ended the call",
+   "had she completed the call",
+   "had she finished her call"
+  ],
+  "words": [
+   5,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „hardly“ vorn steht had vor she, dann das Partizip: had she finished.",
+    "en": "Right: after “hardly” up front, had goes before she, then the participle: had she finished."
+   },
+   "wrong": [
+    {
+     "not": [
+      "call"
+     ],
+     "de": "Das Schlüsselwort call muss unverändert in der Lücke stehen.",
+     "en": "The key word call must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "she had"
+     ],
+     "de": "had muss vor dem Subjekt stehen: Hardly had she finished …",
+     "en": "had must come before the subject: Hardly had she finished …"
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-hs-k2",
+  "type": "kwt",
+  "pat": "wo.hardly-sooner",
+  "from": "As soon as we posted the update, users reported a bug.",
+  "key": "UPDATE",
+  "frame": "No sooner ___ than users reported a bug.",
+  "answer": "had we posted the update",
+  "accepted": [
+   "had we released the update",
+   "had we published the update",
+   "had we pushed the update",
+   "had we shipped the update"
+  ],
+  "words": [
+   5,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „no sooner“ vorn steht had vor we: No sooner had we posted the update.",
+    "en": "Right: after “no sooner” up front, had goes before we: No sooner had we posted the update."
+   },
+   "wrong": [
+    {
+     "not": [
+      "update"
+     ],
+     "de": "Das Schlüsselwort update muss unverändert in der Lücke stehen.",
+     "en": "The key word update must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "we had"
+     ],
+     "de": "had muss vor dem Subjekt stehen: had we, nicht we had.",
+     "en": "had must come before the subject: had we, not we had."
+    },
+    {
+     "if": [
+      "did we"
+     ],
+     "de": "Hier braucht es das Past Perfect: had we posted, nicht did we post.",
+     "en": "The past perfect is needed here: had we posted, not did we post."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-hs-f1",
+  "type": "find",
+  "pat": "wo.hardly-sooner",
+  "prompt": "No sooner we had left the office than the storm began.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "had we",
+  "fixed": "No sooner had we left the office than the storm began.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach „no sooner“ vorn fehlt die Inversion. Richtig: had we.",
+    "en": "The error: inversion is missing after “no sooner” up front. Correct: had we."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach no sooner steht had vor dem Subjekt.",
+     "en": "There is an error: after no sooner had comes before the subject."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „we had“: Das Hilfsverb gehört vor we.",
+     "en": "The error is in “we had”: the auxiliary belongs before we."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-hs-f2",
+  "type": "find",
+  "pat": "wo.hardly-sooner",
+  "prompt": "Hardly the meeting had started when the power failed.",
+  "err": [
+   1,
+   3
+  ],
+  "answer": "had the meeting",
+  "fixed": "Hardly had the meeting started when the power failed.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach „hardly“ vorn fehlt die Inversion. Richtig: had the meeting.",
+    "en": "The error: inversion is missing after “hardly” up front. Correct: had the meeting."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach hardly steht had vor dem Subjekt.",
+     "en": "There is an error: after hardly had comes before the subject."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „the meeting had“: Hier gehört had vor das Subjekt.",
+     "en": "The error is in “the meeting had”: had belongs before the subject."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-hs-f3",
+  "type": "find",
+  "pat": "wo.hardly-sooner",
+  "prompt": "No sooner had I sent the report than the client replied.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: had I sent mit Inversion, dann than und das Past Simple.",
+    "en": "No error: had I sent with inversion, then than and the simple past."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: no sooner … than mit Inversion ist hier richtig gebaut.",
+     "en": "No error: no sooner … than is built correctly here, with inversion."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-hs-m1",
+  "type": "meaning",
+  "pat": "wo.hardly-sooner",
+  "a": "Hardly had we started when the power failed.",
+  "b": "We had barely started when the power failed.",
+  "q": {
+   "de": "Welche Sätze sagen: Der Strom fiel kurz nach dem Start aus?",
+   "en": "Which sentences say the power failed soon after we started?"
+  },
+  "answer": "both",
+  "why": {
+   "ok": {
+    "de": "Richtig: beide. Hardly mit Inversion und barely im Normalsatz meinen dasselbe.",
+    "en": "Right: both. Hardly with inversion and barely in a normal sentence mean the same."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "Satz a stimmt, aber b sagt dasselbe, nur ohne Inversion.",
+     "en": "Sentence a is right, but b says the same without inversion."
+    },
+    {
+     "opt": "b",
+     "de": "Satz b stimmt, aber a sagt dasselbe, nur förmlicher.",
+     "en": "Sentence b is right, but a says the same, only more formally."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-oi-k1",
+  "type": "kwt",
+  "pat": "wo.only-inv",
+  "from": "We noticed the error only after the audit.",
+  "key": "ERROR",
+  "frame": "Only after the audit ___.",
+  "answer": "did we notice the error",
+  "accepted": [
+   "did we find the error",
+   "did we see the error",
+   "did we spot the error",
+   "did we discover the error"
+  ],
+  "words": [
+   5,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „only after …“ vorn steht did vor we, dann die Grundform: did we notice.",
+    "en": "Right: after “only after …” up front, did goes before we, then the base form: did we notice."
+   },
+   "wrong": [
+    {
+     "not": [
+      "error"
+     ],
+     "de": "Das Schlüsselwort error muss unverändert in der Lücke stehen.",
+     "en": "The key word error must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "noticed"
+     ],
+     "de": "Nach did steht die Grundform: notice, nicht noticed.",
+     "en": "After did comes the base form: notice, not noticed."
+    },
+    {
+     "if": [
+      "we did"
+     ],
+     "de": "did muss vor dem Subjekt stehen: Only after the audit did we …",
+     "en": "did must come before the subject: Only after the audit did we …"
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-oi-k2",
+  "type": "kwt",
+  "pat": "wo.only-inv",
+  "from": "We will send the invoice only after the work is approved.",
+  "key": "INVOICE",
+  "frame": "Only after the work is approved ___.",
+  "answer": "will we send the invoice",
+  "accepted": [
+   "can we send the invoice",
+   "will we issue the invoice",
+   "can we issue the invoice"
+  ],
+  "words": [
+   5,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „only after …“ vorn steht will vor we: will we send the invoice.",
+    "en": "Right: after “only after …” up front, will goes before we: will we send the invoice."
+   },
+   "wrong": [
+    {
+     "not": [
+      "invoice"
+     ],
+     "de": "Das Schlüsselwort invoice muss unverändert in der Lücke stehen.",
+     "en": "The key word invoice must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "we will"
+     ],
+     "de": "will muss vor dem Subjekt stehen: will we, nicht we will.",
+     "en": "will must come before the subject: will we, not we will."
+    },
+    {
+     "if": [
+      "we can"
+     ],
+     "de": "can muss vor dem Subjekt stehen: can we, nicht we can.",
+     "en": "can must come before the subject: can we, not we can."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-oi-f1",
+  "type": "find",
+  "pat": "wo.only-inv",
+  "prompt": "Only after the migration the team could access the data.",
+  "err": [
+   4,
+   6
+  ],
+  "answer": "could the team",
+  "fixed": "Only after the migration could the team access the data.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach „only after …“ vorn fehlt die Inversion. Richtig: could the team.",
+    "en": "The error: inversion is missing after “only after …” up front. Correct: could the team."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach only after steht das Hilfsverb vor dem Subjekt.",
+     "en": "There is an error: after only after the auxiliary comes before the subject."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „the team could“: Hier gehört could vor das Subjekt.",
+     "en": "The error is in “the team could”: could belongs before the subject."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-oi-f2",
+  "type": "find",
+  "pat": "wo.only-inv",
+  "prompt": "Not until Friday we will know the results.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "will we",
+  "fixed": "Not until Friday will we know the results.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach „not until …“ vorn fehlt die Inversion. Richtig: will we.",
+    "en": "The error: inversion is missing after “not until …” up front. Correct: will we."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach not until steht das Hilfsverb vor dem Subjekt.",
+     "en": "There is an error: after not until the auxiliary comes before the subject."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „we will“: Hier gehört will vor we.",
+     "en": "The error is in “we will”: will belongs before we."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-oi-f3",
+  "type": "find",
+  "pat": "wo.only-inv",
+  "prompt": "Only then did we realize how large the gap was.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: Nach „only then“ vorn steht did vor we, dann die Grundform.",
+    "en": "No error: after “only then” up front, did precedes we, then the base form."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Die Inversion did we realize ist nach only then richtig.",
+     "en": "No error: the inversion did we realize is correct after only then."
+    }
+   ]
+  }
+ },
+ {
+  "id": "wo-oi-m1",
+  "type": "meaning",
+  "pat": "wo.only-inv",
+  "a": "Only the manager approved the plan.",
+  "b": "The manager approved only the plan.",
+  "q": {
+   "de": "Welcher Satz sagt: Außer dem Plan wurde nichts genehmigt?",
+   "en": "Which sentence says nothing besides the plan was approved?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. Only steht vor the plan und gilt für das Objekt.",
+    "en": "Right: sentence b. Only stands before the plan and applies to the object."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a gilt only für the manager: Sonst hat niemand den Plan genehmigt.",
+     "en": "In a only applies to the manager: nobody else approved the plan."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: only bezieht sich in a und b auf verschiedene Teile.",
+     "en": "Not the same: only refers to different parts in a and b."
+    }
+   ]
+  }
+ }
+]

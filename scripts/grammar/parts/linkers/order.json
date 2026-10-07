@@ -1,0 +1,207 @@
+[
+ {
+  "pat": "lk.although",
+  "en": "Although the client was unhappy, we kept the contract.",
+  "de": "Obwohl der Kunde unzufrieden war, haben wir den Vertrag behalten.",
+  "chunks": [
+   "although",
+   "the client",
+   "was unhappy",
+   "we kept",
+   "the contract"
+  ],
+  "alt": [
+   "We kept the contract although the client was unhappy."
+  ],
+  "why": [
+   "Although leitet einen Nebensatz ein: Auf although the client folgt was unhappy, und ein zweites but ist nicht nötig.",
+   "Although opens a subordinate clause: although the client is followed by was unhappy, and a second but is not needed."
+  ],
+  "bad": "Despite the client was unhappy, we kept the contract.",
+  "trap": {
+   "tile": "although",
+   "instead": "despite",
+   "why": {
+    "de": "Wer „trotz“ denkt, nimmt despite. Das braucht aber ein Nomen oder -ing, vor einem Satz steht although.",
+    "en": "Thinking “trotz”, learners pick despite. But it needs a noun or -ing; before a clause comes although."
+   }
+  }
+ },
+ {
+  "pat": "lk.despite",
+  "en": "Despite the delay, the launch went ahead as planned.",
+  "de": "Trotz der Verzögerung fand der Launch wie geplant statt.",
+  "chunks": [
+   "despite",
+   "the delay",
+   "the launch",
+   "went ahead",
+   "as planned"
+  ],
+  "alt": [
+   "The launch went ahead as planned despite the delay."
+  ],
+  "why": [
+   "Despite steht vor einem Nomen (the delay) und braucht kein of. Der Hauptsatz folgt nach dem Komma.",
+   "Despite goes before a noun (the delay) and needs no of. The main clause follows after the comma."
+  ],
+  "bad": "In spite the delay, the launch went ahead as planned.",
+  "trap": {
+   "tile": "despite",
+   "instead": "in spite",
+   "why": {
+    "de": "Wer in spite wählt, lässt oft das of weg. Die Kurzform ohne of ist nur despite.",
+    "en": "Learners who pick in spite often drop the of. The short form without of is only despite."
+   }
+  }
+ },
+ {
+  "pat": "lk.whereas",
+  "en": "Our online sales grew, whereas in-store sales fell.",
+  "de": "Unser Online-Umsatz stieg, während der Ladenumsatz sank.",
+  "chunks": [
+   "our online sales",
+   "grew",
+   "whereas",
+   "in-store sales",
+   "fell"
+  ],
+  "alt": [
+   "Whereas our online sales grew, in-store sales fell.",
+   "In-store sales fell, whereas our online sales grew."
+  ],
+  "why": [
+   "Whereas stellt zwei Entwicklungen gegenüber und leitet einen ganzen Satz ein, nicht nur ein Nomen.",
+   "Whereas sets two trends against each other and opens a full clause, not just a noun."
+  ],
+  "bad": "Our online sales grew, during in-store sales fell.",
+  "trap": {
+   "tile": "whereas",
+   "instead": "during",
+   "why": {
+    "de": "Deutsch „während“ steht vor Satz und Nomen. Englisch trennt: during + Nomen, whereas oder while + Satz.",
+    "en": "German “während” works before a clause and a noun. English splits them: during + noun, whereas or while + clause."
+   }
+  }
+ },
+ {
+  "pat": "lk.however",
+  "en": "The tests passed; however, we are not ready to launch.",
+  "de": "Die Tests sind durchgelaufen; wir sind jedoch noch nicht startklar.",
+  "chunks": [
+   "the tests",
+   "passed",
+   "however",
+   "we are",
+   "not ready",
+   "to launch"
+  ],
+  "alt": [
+   "The tests passed; we are not ready to launch, however.",
+   "The tests passed; we are, however, not ready to launch."
+  ],
+  "why": [
+   "However verbindet zwei Sätze: Davor steht ein Semikolon oder Punkt, danach ein Komma, und der Satz geht normal weiter.",
+   "However links two sentences: a semicolon or period comes before it, a comma after it, and the clause continues normally."
+  ],
+  "bad": "The tests passed; therefore, we are not ready to launch.",
+  "trap": {
+   "tile": "however",
+   "instead": "therefore",
+   "why": {
+    "de": "Kein Übersetzungsfehler, sondern eine Verwechslung: therefore nennt eine Folge, however den Gegensatz.",
+    "en": "Not a translation error but a mix-up: therefore names a result, however the contrast."
+   }
+  }
+ },
+ {
+  "pat": "lk.therefore",
+  "en": "Demand doubled; therefore, we hired two more agents.",
+  "de": "Die Nachfrage hat sich verdoppelt; deshalb haben wir zwei weitere Mitarbeiter eingestellt.",
+  "chunks": [
+   "demand",
+   "doubled",
+   "therefore",
+   "we",
+   "hired",
+   "two more agents"
+  ],
+  "alt": [
+   "Demand doubled; we therefore hired two more agents."
+  ],
+  "why": [
+   "Therefore nennt die Folge des ersten Satzes. Es steht nach Semikolon oder Punkt und bekommt ein Komma.",
+   "Therefore names the result of the first clause. It follows a semicolon or period and takes a comma."
+  ],
+  "bad": "Demand doubled; however, we hired two more agents.",
+  "trap": {
+   "tile": "therefore",
+   "instead": "however",
+   "why": {
+    "de": "Wer nur auf den zweiten Satz schaut, wählt leicht however. Hier folgt aber eine Folge, kein Gegensatz.",
+    "en": "Looking only at the second clause, it is easy to pick however. But a result follows here, not a contrast."
+   }
+  }
+ },
+ {
+  "pat": "lk.although",
+  "en": "Even though we had a tight budget, we finished early.",
+  "de": "Obwohl wir ein knappes Budget hatten, waren wir früh fertig.",
+  "chunks": [
+   "even though",
+   "we had",
+   "a tight budget",
+   "we",
+   "finished",
+   "early"
+  ],
+  "alt": [
+   "We finished early even though we had a tight budget."
+  ],
+  "why": [
+   "Even though leitet wie although einen ganzen Satz ein (we had a tight budget). Danach folgt der Hauptsatz.",
+   "Even though opens a full clause just like although (we had a tight budget). The main clause follows."
+  ]
+ },
+ {
+  "pat": "lk.despite",
+  "en": "She won the contract despite lacking experience.",
+  "de": "Sie hat den Auftrag bekommen, obwohl ihr Erfahrung fehlte.",
+  "chunks": [
+   "she",
+   "won",
+   "the contract",
+   "despite",
+   "lacking",
+   "experience"
+  ],
+  "alt": [
+   "Despite lacking experience, she won the contract."
+  ],
+  "why": [
+   "Nach despite steht ein Nomen oder eine -ing-Form (lacking experience), kein Satz mit eigenem Subjekt.",
+   "Despite is followed by a noun or an -ing form (lacking experience), not by a clause with its own subject."
+  ]
+ },
+ {
+  "pat": "lk.whereas",
+  "en": "Anna prefers email, while Ben likes to call.",
+  "de": "Anna schreibt lieber E-Mails, während Ben lieber anruft.",
+  "chunks": [
+   "Anna",
+   "prefers email",
+   "while",
+   "Ben",
+   "likes to call"
+  ],
+  "alt": [
+   "While Anna prefers email, Ben likes to call.",
+   "Ben likes to call, while Anna prefers email.",
+   "While Ben likes to call, Anna prefers email."
+  ],
+  "why": [
+   "While stellt hier zwei Vorlieben gegenüber. Beide Teile sind ganze Sätze mit eigenem Subjekt und Verb.",
+   "While sets two preferences against each other here. Both parts are full clauses with their own subject and verb."
+  ]
+ }
+]

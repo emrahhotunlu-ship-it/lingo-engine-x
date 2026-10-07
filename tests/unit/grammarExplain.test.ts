@@ -100,7 +100,8 @@ describe('grammarExplanation', () => {
   });
 
   it('Aufgabe ohne Muster: nur die aufgabeneigene Erklärung, keine Beispiele, kein Themen-Zufallsbeispiel', () => {
-    const t = seedTasks().find((x) => x.topic === 'comparison')!;
+    const base = seedTasks().find((x) => x.topic === 'comparison')!;
+    const t = { ...base, pat: null, why: undefined, prompt: 'zz zz ___', key: 'zzzz' } as unknown as GrammarTask;
     const m = grammarExplanation({ task: t, verdict: 'wrong', given: 'zzz', lang: 'de', learning: true });
     expect(m.examples).toEqual([]);
     expect(m.mark).toEqual([]);
@@ -136,7 +137,7 @@ describe('Zweitversuch-Hinweis (nudge)', () => {
     const t = wish();
     const h = grammarRetryHint(t, 'Mixed Conditionals', false, { task: t, given: 'sent', picked: 'sent', lang: 'de' });
     expect(h.kind).toBe('nudge');
-    const plain: GrammarTask = { ...t, topic: 'comparison' };
+    const plain: GrammarTask = { ...t, topic: 'comparison', pat: null, prompt: 'zz zz' };
     expect(grammarRetryHint({ hint: 'since/for' }, 'X', false, { task: plain, lang: 'de' })).toEqual({ kind: 'hint', text: 'since/for' });
     expect(grammarRetryHint({ hint: null }, 'X', false)).toEqual({ kind: 'topic', name: 'X' });
   });

@@ -1705,7 +1705,8 @@
      "en": "After did comes the base form: cut, not cutted."
     }
    ]
-  }
+  },
+  "dup": "c1-emphasis|notonlywereducestoragecostsbutwealsoimprovedcompliance"
  },
  "c1-emphasis|whatweneedareapartnerwhounderstandscompliance": {
   "pat": "em.what-cleft",
@@ -1763,7 +1764,8 @@
      "en": "With seen keep have, not do: Rarely have we seen."
     }
    ]
-  }
+  },
+  "dup": "c1-emphasis|rarelyweseensuchafastrollout"
  },
  "c1-emphasis|notonlyitsavestimebutitalsoreduceserrors": {
   "pat": "em.not-only",
@@ -3134,6 +3136,787 @@
      ],
      "de": "Ändere die Form nach Having zur 3. Form: reviewed.",
      "en": "Change the form after Having to the past participle: reviewed."
+    }
+   ]
+  }
+ },
+ "c1-precision|weneedyourdecisiontheendofq": {
+  "pat": "cp.by-until",
+  "why": {
+   "ok": {
+    "de": "Richtig: Eine Frist heißt by. Die Entscheidung muss spätestens Ende Q3 vorliegen.",
+    "en": "Right: a deadline takes by. The decision must be in by the end of Q3 at the latest."
+   },
+   "wrong": [
+    {
+     "if": [
+      "until"
+     ],
+     "pat": "cp.by-until",
+     "de": "„Until“ meint eine Dauer ohne Pause. Gemeint ist aber ein letzter Termin für die Entscheidung.",
+     "en": "“Until” means a duration without a break. Here a last date for the decision is meant."
+    },
+    {
+     "if": [
+      "within"
+     ],
+     "pat": "cp.within",
+     "de": "„Within“ braucht eine Spanne wie two weeks, kein Datum wie the end of Q3.",
+     "en": "“Within” needs a span like two weeks, not a date like the end of Q3."
+    },
+    {
+     "not": [
+      "by",
+      "before",
+      "later"
+     ],
+     "de": "Gesucht ist das Frist-Wort: by (oder no later than) vor dem Termin.",
+     "en": "A deadline word is needed before the date: by (or no later than)."
+    }
+   ]
+  }
+ },
+ "c1-precision|thetrialrunsjunethenitendsautomatically": {
+  "pat": "cp.by-until",
+  "why": {
+   "ok": {
+    "de": "Richtig: until beschreibt eine Dauer. Die Testphase läuft durchgehend bis zum 30. Juni.",
+    "en": "Right: until describes a duration. The trial runs without a break up to June 30."
+   },
+   "wrong": [
+    {
+     "if": [
+      "by"
+     ],
+     "pat": "cp.by-until",
+     "de": "„By“ nennt eine Frist. Eine Testphase, die läuft, ist aber ein Zustand: bis dahin durchgehend.",
+     "en": "“By” names a deadline. A running trial is a state: continuous up to that date."
+    },
+    {
+     "if": [
+      "within"
+     ],
+     "pat": "cp.within",
+     "de": "„Within“ braucht eine Spanne (within two weeks), hier folgt ein Datum.",
+     "en": "“Within” needs a span (within two weeks); a date follows here."
+    },
+    {
+     "if": [
+      "before"
+     ],
+     "de": "„Before“ schließt den 30. Juni aus. Die Testphase läuft aber bis zu diesem Tag.",
+     "en": "“Before” excludes June 30. The trial runs up to that day."
+    },
+    {
+     "not": [
+      "until",
+      "till",
+      "through",
+      "up"
+     ],
+     "de": "Gesucht ist das Dauer-Wort: until, die ganze Zeit bis zu diesem Datum.",
+     "en": "A duration word is needed: until, all the time up to this date."
+    }
+   ]
+  }
+ },
+ "c1-precision|wecansetupthetestsystemtwoweeks": {
+  "pat": "cp.within",
+  "why": {
+   "ok": {
+    "de": "Richtig: within nennt die Obergrenze (innerhalb von). „In two weeks“ nennt den Zeitpunkt.",
+    "en": "Right: within names the upper limit. “In two weeks” names the point in time."
+   },
+   "wrong": [
+    {
+     "if": [
+      "by"
+     ],
+     "pat": "cp.by-until",
+     "de": "„By“ braucht einen Zeitpunkt (by Friday), keine Spanne wie two weeks.",
+     "en": "“By” needs a point in time (by Friday), not a span like two weeks."
+    },
+    {
+     "if": [
+      "until"
+     ],
+     "pat": "cp.by-until",
+     "de": "„Until“ meint eine Dauer ohne Pause, nicht eine Frist innerhalb einer Spanne.",
+     "en": "“Until” means a duration without a break, not a limit inside a span."
+    },
+    {
+     "not": [
+      "within",
+      "less"
+     ],
+     "de": "Gesucht ist das Wort für „innerhalb“: within vor der Zeitspanne.",
+     "en": "The word for “inside” is needed: within, before the time span."
+    }
+   ]
+  }
+ },
+ "c1-precision|juneallinvoicesmustbearchivedelectronically": {
+  "pat": "cp.as-of",
+  "why": {
+   "ok": {
+    "de": "Richtig: As of nennt den Stichtag. Ab dem 1. Juni gilt die Regel.",
+    "en": "Right: As of names the key date. The rule applies from June 1."
+   },
+   "wrong": [
+    {
+     "if": [
+      "since"
+     ],
+     "pat": "cp.as-of",
+     "de": "„Since“ blickt zurück und passt nicht zu einer Regel, die am Stichtag beginnt.",
+     "en": "“Since” looks back and does not fit a rule that begins on the key date."
+    },
+    {
+     "if": [
+      "until"
+     ],
+     "pat": "cp.by-until",
+     "de": "„Until“ nennt ein Ende. Hier beginnt die Regel aber am Stichtag.",
+     "en": "“Until” names an end. Here the rule begins on the key date."
+    },
+    {
+     "if": [
+      "by"
+     ],
+     "pat": "cp.by-until",
+     "de": "„By“ wäre eine Frist bis zum 1. Juni. Gemeint ist: ab diesem Tag.",
+     "en": "“By” would be a deadline up to June 1. The meaning here: from that day on."
+    },
+    {
+     "not": [
+      "as",
+      "from",
+      "starting",
+      "effective",
+      "beginning"
+     ],
+     "de": "Gesucht ist das Stichtag-Wort: As of (oder From, Starting) vor dem Datum.",
+     "en": "A key-date word is needed: As of (or From, Starting) before the date."
+    }
+   ]
+  }
+ },
+ "c1-precision|thecloudversioncostsoftheonpremiselicense": {
+  "pat": "cp.approx",
+  "why": {
+   "ok": {
+    "de": "Richtig: a fraction of = nur ein kleiner Teil davon, hier des alten Preises.",
+    "en": "Right: a fraction of = only a small part of it, here of the old price."
+   },
+   "wrong": [
+    {
+     "opt": "a part",
+     "de": "„A part“ nennt irgendeinen Teil, nicht den sehr kleinen, den der Preisvergleich meint.",
+     "en": "“A part” names just any part, not the very small one the price comparison means."
+    },
+    {
+     "opt": "a few",
+     "de": "„A few“ zählt einzelne Dinge (a few users), nicht den Anteil einer Lizenz.",
+     "en": "“A few” counts single things (a few users), not a share of a license."
+    },
+    {
+     "opt": "a little",
+     "de": "„A little“ passt zu Unzählbarem und nicht vor „of the license“ als Preisanteil.",
+     "en": "“A little” suits uncountable things, not a price share before “of the license”."
+    }
+   ]
+  }
+ },
+ "c1-precision|weprocessinvoicesamonththeexactnumberis": {
+  "pat": "cp.approx",
+  "why": {
+   "ok": {
+    "de": "Richtig: just under = knapp darunter. Die 39.600 liegen knapp unter 40.000.",
+    "en": "Right: just under = slightly below. 39,600 is slightly below 40,000."
+   },
+   "wrong": [
+    {
+     "opt": "well over",
+     "de": "„Well over“ heißt deutlich mehr als 40.000, hier sind es weniger.",
+     "en": "“Well over” means clearly more than 40,000; here it is less."
+    },
+    {
+     "opt": "exactly",
+     "de": "„Exactly“ heißt genau. 39.600 sind nicht genau 40.000.",
+     "en": "“Exactly” means precisely. 39,600 is not exactly 40,000."
+    },
+    {
+     "opt": "more than",
+     "de": "„More than“ heißt über 40.000. Die 39.600 liegen darunter.",
+     "en": "“More than” means above 40,000. 39,600 is below."
+    }
+   ]
+  }
+ },
+ "c1-precision|ournewclienthasmanyusersastheoldoneinsteadof": {
+  "pat": "cp.multiples",
+  "why": {
+   "ok": {
+    "de": "Richtig: twice as many … as = doppelt so viele wie. Das Vielfache steht vor as many.",
+    "en": "Right: twice as many … as = double the number. The multiple goes before as many."
+   },
+   "wrong": [
+    {
+     "opt": "two times more",
+     "de": "Nach „two times more“ passt „many … as“ nicht. Der Rahmen heißt as … as.",
+     "en": "After “two times more”, “many … as” does not fit. The frame is as … as.",
+     "pat": "cp.multiples"
+    },
+    {
+     "opt": "double as",
+     "de": "„Double“ ist kein Vielfaches vor as. Dafür nimmt man twice.",
+     "en": "“Double” is not a multiple before as. Use twice for that."
+    },
+    {
+     "opt": "twice so",
+     "de": "Aus „doppelt so viele wie“ wird twice as many as, nicht „twice so“.",
+     "en": "From “doppelt so viele wie” you get twice as many as, not “twice so”."
+    }
+   ]
+  }
+ },
+ "c1-precision|pleasesendthesignedofferfridayatthelatest": {
+  "pat": "cp.by-until",
+  "why": {
+   "ok": {
+    "de": "Richtig: „at the latest“ zeigt eine Frist, und die heißt by.",
+    "en": "Right: “at the latest” signals a deadline, and that takes by."
+   },
+   "wrong": [
+    {
+     "opt": "until",
+     "de": "„Until“ meint eine Dauer ohne Pause. „At the latest“ verlangt eine Frist.",
+     "en": "“Until” means a duration without a break. “At the latest” asks for a deadline.",
+     "pat": "cp.by-until"
+    },
+    {
+     "opt": "till",
+     "de": "„Till“ ist die lockere Form von until und meint ebenfalls eine Dauer.",
+     "en": "“Till” is the casual form of until and also means a duration.",
+     "pat": "cp.by-until"
+    },
+    {
+     "opt": "within",
+     "de": "„Within“ braucht eine Spanne (within two days), keinen Wochentag.",
+     "en": "“Within” needs a span (within two days), not a weekday.",
+     "pat": "cp.within"
+    }
+   ]
+  }
+ },
+ "c1-precision|aboutofthedocumentsarescannedofthedocumentsarescanned": {
+  "pat": "cp.approx",
+  "why": {
+   "ok": {
+    "de": "Richtig: Roughly kündigt eine gerundete Zahl an, ebenso around oder approximately.",
+    "en": "Right: Roughly signals a rounded number, as do around or approximately."
+   },
+   "wrong": [
+    {
+     "if": [
+      "about"
+     ],
+     "de": "„About“ steht schon im Ausgangssatz. Gesucht ist ein präziseres Näherungswort.",
+     "en": "“About” is already in the starting sentence. A more precise approximation word is needed."
+    },
+    {
+     "not": [
+      "roughly",
+      "around",
+      "approximately",
+      "some"
+     ],
+     "de": "Gesucht ist ein Näherungswort vor der Zahl: roughly, around oder approximately.",
+     "en": "An approximation word before the number is needed: roughly, around or approximately."
+    }
+   ]
+  }
+ },
+ "c1-precision|therolloutmustbefinishedbeforeseptemberatthelatesttherolloutmustbefinishedseptem": {
+  "pat": "cp.by-until",
+  "why": {
+   "ok": {
+    "de": "Richtig: by September 30 = spätestens bis zum 30. September, eine Frist.",
+    "en": "Right: by September 30 = no later than September 30, a deadline."
+   },
+   "wrong": [
+    {
+     "if": [
+      "until"
+     ],
+     "pat": "cp.by-until",
+     "de": "„Until“ meint eine Dauer ohne Pause. Der Rollout soll aber spätestens fertig sein.",
+     "en": "“Until” means a duration without a break. The rollout must be finished at the latest."
+    },
+    {
+     "if": [
+      "before"
+     ],
+     "de": "„Before“ schließt den 30. aus. Die Frist at the latest meint den 30. selbst: by.",
+     "en": "“Before” excludes the 30th. The at the latest deadline includes the 30th itself: by."
+    },
+    {
+     "not": [
+      "by",
+      "later",
+      "or"
+     ],
+     "de": "Gesucht ist das Frist-Wort: by oder no later than vor dem Datum.",
+     "en": "A deadline word is needed before the date: by or no later than."
+    }
+   ]
+  }
+ },
+ "c1-precision|wewillsendyoutheofferuntilwednesday": {
+  "pat": "cp.by-until",
+  "why": {
+   "ok": {
+    "de": "Richtig: Das Senden ist ein einmaliger Schritt mit Frist. Dafür steht by Wednesday.",
+    "en": "Right: sending is a one-time step with a deadline. That takes by Wednesday."
+   },
+   "wrong": [
+    {
+     "if": [
+      "until"
+     ],
+     "pat": "cp.by-until",
+     "de": "„Until“ meint eine Dauer. Senden ist aber einmalig und hat eine Frist: by.",
+     "en": "“Until” means a duration. Sending is a one-time act with a deadline: by."
+    },
+    {
+     "not": [
+      "by",
+      "later",
+      "before"
+     ],
+     "de": "Gesucht ist das Frist-Wort by (oder no later than) vor Wednesday.",
+     "en": "A deadline word is needed before Wednesday: by (or no later than)."
+    }
+   ]
+  }
+ },
+ "c1-precision|thenewsystemistwotimesfasterastheoldone": {
+  "pat": "cp.multiples",
+  "why": {
+   "ok": {
+    "de": "Richtig: Das Vielfache steht vor as … as: twice as fast as the old one.",
+    "en": "Right: the multiple goes before as … as: twice as fast as the old one."
+   },
+   "wrong": [
+    {
+     "if": [
+      "faster"
+     ],
+     "de": "„Faster as“ mischt zwei Vergleiche. Nach faster steht than, hier gilt as … as.",
+     "en": "“Faster as” mixes two comparisons. After faster comes than; here use as … as."
+    },
+    {
+     "if": [
+      "than"
+     ],
+     "de": "Nach dem Vielfachen endet der Vergleich mit as, nicht mit than.",
+     "en": "After the multiple the comparison ends with as, not than."
+    }
+   ]
+  }
+ },
+ "c1-precision|weneedyourfeedbackuntilfriday": {
+  "pat": "cp.by-until",
+  "dup": "c1-precision|wewillsendyoutheofferuntilwednesday",
+  "why": {
+   "ok": {
+    "de": "Richtig: Eine Frist für das Feedback heißt by Friday.",
+    "en": "Right: a deadline for the feedback takes by Friday."
+   },
+   "wrong": [
+    {
+     "if": [
+      "until"
+     ],
+     "pat": "cp.by-until",
+     "de": "„Until“ meint eine Dauer. Das Feedback soll aber bis spätestens Freitag da sein.",
+     "en": "“Until” means a duration. The feedback should be in by Friday at the latest."
+    },
+    {
+     "not": [
+      "by",
+      "later",
+      "before"
+     ],
+     "de": "Gesucht ist das Frist-Wort by (oder no later than) vor Friday.",
+     "en": "A deadline word is needed before Friday: by (or no later than)."
+    }
+   ]
+  }
+ },
+ "comparison|thewepreparethemoreconfidentwefeel": {
+  "pat": "cmp.the-the",
+  "why": {
+   "ok": {
+    "de": "Richtig: the more …, the more … zeigt: Mit mehr Vorbereitung wächst die Sicherheit.",
+    "en": "Right: the more …, the more … links the two: more preparation, more confidence."
+   },
+   "wrong": [
+    {
+     "opt": "most",
+     "de": "„Most“ ist ein Superlativ. Hier steht der Komparativ more.",
+     "en": "“Most” is a superlative. This pattern needs the comparative more."
+    },
+    {
+     "opt": "many",
+     "de": "„Many“ steht vor Zählbarem (many people) und bildet hier keinen Vergleich.",
+     "en": "“Many” goes before countable nouns and forms no comparison here."
+    },
+    {
+     "opt": "very",
+     "de": "„Very“ verstärkt ein Adjektiv, bildet aber keinen Komparativ.",
+     "en": "“Very” intensifies an adjective but forms no comparative."
+    }
+   ]
+  }
+ },
+ "comparison|thisyearsresultsarebetterthanlastyears": {
+  "pat": "cmp.degree",
+  "why": {
+   "ok": {
+    "de": "Richtig: far steht vor dem Komparativ better und betont den großen Abstand.",
+    "en": "Right: far goes before the comparative better and stresses a big gap."
+   },
+   "wrong": [
+    {
+     "opt": "more",
+     "de": "„More better“ steigert doppelt: better ist schon der Komparativ.",
+     "en": "“More better” doubles the comparison: better is already comparative."
+    },
+    {
+     "opt": "very",
+     "de": "„Very“ steht nicht vor einem Komparativ. Hier passt far oder much.",
+     "en": "“Very” does not go before a comparative. Far or much fits here."
+    },
+    {
+     "opt": "most",
+     "de": "„Most“ ist ein Superlativ, hier folgt aber ein Vergleich mit than.",
+     "en": "“Most” is a superlative, but a comparison with than follows here."
+    }
+   ]
+  }
+ },
+ "comparison|thenewtoolisnotascomplicatedtheoldone": {
+  "pat": "cmp.as-as",
+  "why": {
+   "ok": {
+    "de": "Richtig: not as … as. Das neue Werkzeug ist weniger kompliziert als das alte.",
+    "en": "Right: not as … as. The new tool is less complicated than the old one."
+   },
+   "wrong": [
+    {
+     "opt": "than",
+     "de": "„Than“ folgt auf einen Komparativ. Nach as + Adjektiv steht wieder as.",
+     "en": "“Than” follows a comparative. After as + adjective comes as again."
+    },
+    {
+     "opt": "like",
+     "de": "„Like“ kann das zweite as nicht ersetzen. Es braucht as … as.",
+     "en": "“Like” cannot replace the second as. The pattern needs as … as."
+    },
+    {
+     "opt": "that",
+     "de": "„That“ leitet einen Nebensatz ein. Hier fehlt das zweite as.",
+     "en": "“That” opens a clause. The second as is missing here."
+    }
+   ]
+  }
+ },
+ "comparison|ourofficeisthantheirs": {
+  "pat": "cmp.form",
+  "why": {
+   "ok": {
+    "de": "Richtig: Big ist kurz und bekommt -er. Mit than folgt der Vergleichspartner.",
+    "en": "Right: big is short and takes -er. Then than introduces the comparison partner."
+   },
+   "wrong": [
+    {
+     "opt": "more bigger",
+     "de": "„More bigger“ steigert doppelt. Bei big reicht -er.",
+     "en": "“More bigger” doubles the comparison. Big only needs -er."
+    },
+    {
+     "opt": "more big",
+     "de": "Big ist kurz und bekommt -er statt more: bigger.",
+     "en": "Big is short and takes -er instead of more: bigger."
+    },
+    {
+     "opt": "biggest",
+     "de": "„Biggest“ ist ein Superlativ. Mit than braucht es den Komparativ.",
+     "en": "“Biggest” is a superlative. With than you need the comparative."
+    }
+   ]
+  }
+ },
+ "comparison|thethedeadlinethemorestressedtheteamgets": {
+  "pat": "cmp.the-the",
+  "why": {
+   "ok": {
+    "de": "Richtig: the closer …, the more … Je näher die Frist, desto gestresster das Team.",
+    "en": "Right: the closer …, the more … The nearer the deadline, the more stressed the team."
+   },
+   "wrong": [
+    {
+     "if": [
+      "more"
+     ],
+     "de": "Close ist kurz: Der Komparativ heißt closer, nicht more close.",
+     "en": "Close is short: the comparative is closer, not more close."
+    },
+    {
+     "if": [
+      "closest"
+     ],
+     "de": "„Closest“ ist ein Superlativ. Hier steht der Komparativ.",
+     "en": "“Closest” is a superlative. This pattern needs the comparative."
+    },
+    {
+     "if": [
+      "close"
+     ],
+     "de": "Nach the steht der Komparativ closer, die Grundform close reicht nicht.",
+     "en": "After the comes the comparative closer; the base form close is not enough."
+    }
+   ]
+  }
+ },
+ "comparison|ourcompetitorspricesarefarthanourssowewincustomers": {
+  "pat": "cmp.degree",
+  "why": {
+   "ok": {
+    "de": "Richtig: far + Komparativ + than. Der Komparativ lower steht nach far.",
+    "en": "Right: far + comparative + than. The comparative lower follows far."
+   },
+   "wrong": [
+    {
+     "if": [
+      "more"
+     ],
+     "de": "„More lower“ steigert doppelt. Bei low reicht -er.",
+     "en": "“More lower” doubles the comparison. Low only needs -er."
+    },
+    {
+     "if": [
+      "low"
+     ],
+     "de": "Nach far und vor than steht der Komparativ lower, nicht die Grundform.",
+     "en": "After far and before than comes the comparative lower, not the base form."
+    },
+    {
+     "if": [
+      "lowest"
+     ],
+     "de": "„Lowest“ ist ein Superlativ. Mit than braucht es den Komparativ.",
+     "en": "“Lowest” is a superlative. With than you need the comparative."
+    }
+   ]
+  }
+ },
+ "comparison|thisquartersprofitistwicehighaslastquarters": {
+  "pat": "cmp.as-as",
+  "why": {
+   "ok": {
+    "de": "Richtig: twice as high as. Vielfache stehen vor dem ersten as.",
+    "en": "Right: twice as high as. Multiples go before the first as."
+   },
+   "wrong": [
+    {
+     "if": [
+      "than"
+     ],
+     "de": "Vielfache bilden twice as … as, nicht twice … than.",
+     "en": "Multiples use twice as … as, not twice … than."
+    },
+    {
+     "if": [
+      "so"
+     ],
+     "de": "Im Deutschen heißt es „so … wie“. Englisch braucht as … as.",
+     "en": "German says “so … wie”. English needs as … as."
+    },
+    {
+     "not": [
+      "as"
+     ],
+     "de": "Hier fehlt das erste as: Vielfache bilden twice as … as.",
+     "en": "As is missing here: multiples use twice as … as."
+    }
+   ]
+  }
+ },
+ "comparison|thetrainisfasterthanthebusthebusisnotfastasthetrain": {
+  "pat": "cmp.as-as",
+  "why": {
+   "ok": {
+    "de": "Richtig: not as … as dreht den Vergleich um. Der Bus ist weniger schnell.",
+    "en": "Right: not as … as reverses the comparison. The bus is less fast."
+   },
+   "wrong": [
+    {
+     "if": [
+      "than"
+     ],
+     "de": "„Than“ folgt auf einen Komparativ. Bei fast steht as … as.",
+     "en": "“Than” follows a comparative. With fast you need as … as."
+    },
+    {
+     "if": [
+      "like"
+     ],
+     "de": "„Like“ kann as hier nicht ersetzen. Es braucht as … as.",
+     "en": "“Like” cannot replace as here. The pattern needs as … as."
+    },
+    {
+     "not": [
+      "as",
+      "so"
+     ],
+     "de": "Die Lücke braucht as: not as fast as the train.",
+     "en": "The gap needs as: not as fast as the train."
+    }
+   ]
+  }
+ },
+ "comparison|ifweworkmorewefinishearlierthemoreweworkthewefinish": {
+  "pat": "cmp.the-the",
+  "why": {
+   "ok": {
+    "de": "Richtig: the more …, the earlier … Beide Teile haben ein the + Komparativ.",
+    "en": "Right: the more …, the earlier … Both parts have the + comparative."
+   },
+   "wrong": [
+    {
+     "if": [
+      "more"
+     ],
+     "de": "Early ist kurz: earlier, nicht more early.",
+     "en": "Early is short: earlier, not more early."
+    },
+    {
+     "if": [
+      "earliest"
+     ],
+     "de": "„Earliest“ ist ein Superlativ. Nach the more … steht der Komparativ.",
+     "en": "“Earliest” is a superlative. After the more … comes the comparative."
+    },
+    {
+     "if": [
+      "early"
+     ],
+     "de": "Die Grundform early reicht nicht: Nach the steht der Komparativ.",
+     "en": "The base form early is not enough: after the comes the comparative."
+    }
+   ]
+  }
+ },
+ "comparison|thissolutionismorecheaperthanthepreviousone": {
+  "pat": "cmp.form",
+  "why": {
+   "ok": {
+    "de": "Richtig: cheaper reicht. Kurze Adjektive bekommen -er statt more + -er.",
+    "en": "Right: cheaper is enough. Short adjectives take -er instead of more + -er."
+   },
+   "wrong": [
+    {
+     "if": [
+      "more",
+      "cheaper"
+     ],
+     "de": "Doppelt gesteigert: more und -er zusammen geht nicht, nur cheaper.",
+     "en": "Doubled comparison: more and -er together is wrong, use cheaper."
+    },
+    {
+     "if": [
+      "more",
+      "cheap"
+     ],
+     "de": "Cheap ist kurz: -er statt more, also cheaper.",
+     "en": "Cheap is short: -er instead of more, so cheaper."
+    },
+    {
+     "if": [
+      "cheapest"
+     ],
+     "de": "„Cheapest“ ist ein Superlativ. Mit than steht der Komparativ.",
+     "en": "“Cheapest” is a superlative. With than use the comparative."
+    }
+   ]
+  }
+ },
+ "comparison|oursalesarehigheraslastyear": {
+  "pat": "cmp.than",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach dem Komparativ higher folgt than, nicht as.",
+    "en": "Right: after the comparative higher comes than, not as."
+   },
+   "wrong": [
+    {
+     "if": [
+      "as"
+     ],
+     "de": "Nach einem Komparativ steht than. As gehört in as … as.",
+     "en": "After a comparative comes than. As belongs in as … as."
+    },
+    {
+     "if": [
+      "like"
+     ],
+     "de": "„Like“ passt nach dem Komparativ nicht. Dort steht than.",
+     "en": "“Like” does not fit after the comparative. Use than there."
+    },
+    {
+     "not": [
+      "than"
+     ],
+     "de": "Hier fehlt than nach dem Komparativ higher.",
+     "en": "Than is missing after the comparative higher."
+    }
+   ]
+  }
+ },
+ "comparison|morewepracticebetterweget": {
+  "pat": "cmp.the-the",
+  "why": {
+   "ok": {
+    "de": "Richtig: the more …, the better … Beide Teile brauchen ein the.",
+    "en": "Right: the more …, the better … Both parts need the."
+   },
+   "wrong": [
+    {
+     "if": [
+      "better we get"
+     ],
+     "not": [
+      "the better"
+     ],
+     "de": "Im zweiten Teil fehlt the: the better we get.",
+     "en": "The second part needs the too: the better we get."
+    },
+    {
+     "if": [
+      "more we practice"
+     ],
+     "not": [
+      "the more"
+     ],
+     "de": "Im ersten Teil fehlt the: the more we practice.",
+     "en": "The first part needs the too: the more we practice."
+    },
+    {
+     "pat": "cmp.the-the",
+     "de": "Beide Teile beginnen mit the + Komparativ: the more …, the better …",
+     "en": "Both parts start with the + comparative: the more …, the better …"
     }
    ]
   }
@@ -6980,6 +7763,428 @@
      "pat": "gi.ing-verbs",
      "de": "Nach enjoy folgt die -ing-Form.",
      "en": "After enjoy the -ing form follows."
+    }
+   ]
+  }
+ },
+ "linkers|theheavytrafficwearrivedontime": {
+  "pat": "lk.despite",
+  "why": {
+   "ok": {
+    "de": "Richtig: Danach folgt ein Nomen (the heavy traffic), also despite.",
+    "en": "Right: a noun follows (the heavy traffic), so despite."
+   },
+   "wrong": [
+    {
+     "opt": "Whereas",
+     "pat": "lk.whereas",
+     "de": "„Whereas“ stellt zwei Dinge gegenüber und braucht einen Satz. Hier folgt nur ein Nomen.",
+     "en": "“Whereas” contrasts two things and needs a clause. Only a noun follows here."
+    },
+    {
+     "opt": "Although",
+     "pat": "lk.although",
+     "de": "„Although“ braucht Subjekt und Verb. „the heavy traffic“ ist nur ein Nomen.",
+     "en": "“Although” needs a subject and verb. “the heavy traffic” is only a noun."
+    },
+    {
+     "opt": "However",
+     "pat": "lk.however",
+     "de": "„However“ verbindet zwei vollständige Sätze. Vor einem bloßen Nomen passt es nicht.",
+     "en": "“However” links two complete sentences. It does not fit before a bare noun."
+    }
+   ]
+  }
+ },
+ "linkers|thesalesteamhititstargetthesupportteammissedtheirs": {
+  "pat": "lk.whereas",
+  "why": {
+   "ok": {
+    "de": "Richtig: Zwei Teams werden gegenübergestellt, danach folgt ein Satz: whereas.",
+    "en": "Right: two teams are contrasted and a clause follows: whereas."
+   },
+   "wrong": [
+    {
+     "opt": "in spite",
+     "pat": "lk.despite",
+     "de": "„In spite“ braucht of und ein Nomen. Hier folgt ein ganzer Satz.",
+     "en": "“In spite” needs “of” and a noun. A full clause follows here."
+    },
+    {
+     "opt": "therefore",
+     "pat": "lk.therefore",
+     "de": "„Therefore“ nennt eine Folge. Das Verfehlen folgt nicht aus dem Erreichen des Ziels.",
+     "en": "“Therefore” gives a result. Missing a target does not follow from hitting one."
+    },
+    {
+     "opt": "despite",
+     "pat": "lk.despite",
+     "de": "„Despite“ steht vor einem Nomen oder einer -ing-Form, nicht vor einem Satz.",
+     "en": "“Despite” goes before a noun or -ing form, not before a clause."
+    }
+   ]
+  }
+ },
+ "linkers|theservercrashedtwicelastweekwearemovingtoanewprovider": {
+  "pat": "lk.therefore",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Wechsel ist die Folge der Abstürze, also therefore.",
+    "en": "Right: the move is the result of the crashes, so therefore."
+   },
+   "wrong": [
+    {
+     "opt": "whereas",
+     "pat": "lk.whereas",
+     "de": "„Whereas“ stellt zwei Dinge gegenüber. Hier folgt aber eine Folge.",
+     "en": "“Whereas” contrasts two things. Here a result follows."
+    },
+    {
+     "opt": "although",
+     "pat": "lk.although",
+     "de": "„Although“ räumt einen Widerspruch ein. Der Wechsel folgt aber aus den Abstürzen.",
+     "en": "“Although” concedes a contradiction. The move follows from the crashes, though."
+    },
+    {
+     "opt": "nevertheless",
+     "pat": "lk.however",
+     "de": "„Nevertheless“ heißt trotzdem. Die Abstürze sind aber der Grund für den Wechsel.",
+     "en": "“Nevertheless” means all the same. The crashes are the reason for the move, though."
+    }
+   ]
+  }
+ },
+ "linkers|theofferwasgenerousheturneditdown": {
+  "pat": "lk.although",
+  "why": {
+   "ok": {
+    "de": "Richtig: Es folgt ein ganzer Satz (the offer was generous), also although.",
+    "en": "Right: a full clause follows (the offer was generous), so although."
+   },
+   "wrong": [
+    {
+     "opt": "Nevertheless",
+     "pat": "lk.however",
+     "de": "„Nevertheless“ steht zwischen zwei Sätzen, nicht vor einem Nebensatz.",
+     "en": "“Nevertheless” sits between two sentences, not before a subordinate clause."
+    },
+    {
+     "opt": "In spite",
+     "pat": "lk.despite",
+     "de": "„In spite“ braucht of und danach ein Nomen. Hier folgt ein Satz.",
+     "en": "“In spite” needs “of” and then a noun. A clause follows here."
+    },
+    {
+     "opt": "Despite",
+     "pat": "lk.despite",
+     "de": "„Despite“ steht vor einem Nomen oder -ing, nicht vor einem Satz.",
+     "en": "“Despite” goes before a noun or -ing, not before a clause."
+    }
+   ]
+  }
+ },
+ "linkers|shegotthejobherlackofexperience": {
+  "pat": "lk.despite",
+  "why": {
+   "ok": {
+    "de": "Richtig: Danach folgt ein Nomen (her lack of experience): despite.",
+    "en": "Right: a noun follows (her lack of experience): despite."
+   },
+   "wrong": [
+    {
+     "if": [
+      "although"
+     ],
+     "pat": "lk.although",
+     "de": "„Although“ braucht Subjekt und Verb. Hier folgt nur ein Nomen.",
+     "en": "“Although” needs a subject and verb. Only a noun follows here."
+    },
+    {
+     "if": [
+      "in",
+      "spite"
+     ],
+     "not": [
+      "of"
+     ],
+     "pat": "lk.despite",
+     "de": "„In spite“ ist unvollständig und braucht of: in spite of her lack of experience.",
+     "en": "“In spite” needs “of”: in spite of her lack of experience."
+    },
+    {
+     "if": [
+      "despite",
+      "of"
+     ],
+     "pat": "lk.despite",
+     "de": "„Despite“ steht ohne of. Mit of heißt es in spite of.",
+     "en": "“Despite” takes no “of”. With “of” it is in spite of."
+    },
+    {
+     "if": [
+      "however"
+     ],
+     "pat": "lk.however",
+     "de": "„However“ verbindet zwei Sätze. Hier folgt aber ein Nomen.",
+     "en": "“However” links two sentences. Here a noun follows."
+    }
+   ]
+  }
+ },
+ "linkers|theprototypelooksgreatitstillneedsalotoftesting": {
+  "pat": "lk.however",
+  "why": {
+   "ok": {
+    "de": "Richtig: however nach dem Semikolon, danach ein Komma. Es nennt den Gegensatz.",
+    "en": "Right: however after the semicolon, then a comma. It names the contrast."
+   },
+   "wrong": [
+    {
+     "if": [
+      "although"
+     ],
+     "pat": "lk.although",
+     "de": "„Although“ steht direkt vor Subjekt und Verb, nicht vor einem Komma.",
+     "en": "“Although” comes directly before subject and verb, not before a comma."
+    },
+    {
+     "if": [
+      "therefore"
+     ],
+     "pat": "lk.therefore",
+     "de": "„Therefore“ nennt eine Folge. Hier steht aber ein Gegensatz.",
+     "en": "“Therefore” names a result. Here a contrast follows."
+    },
+    {
+     "if": [
+      "whereas"
+     ],
+     "pat": "lk.whereas",
+     "de": "„Whereas“ steht direkt vor Subjekt und Verb, nicht vor einem Komma.",
+     "en": "“Whereas” comes directly before subject and verb, not before a comma."
+    },
+    {
+     "not": [
+      "however",
+      "nevertheless",
+      "nonetheless"
+     ],
+     "pat": "lk.however",
+     "de": "Gesucht ist ein Wort für den Gegensatz: Semikolon davor, Komma danach.",
+     "en": "A word for the contrast is needed: semicolon before, comma after."
+    }
+   ]
+  }
+ },
+ "linkers|pricesarerisingwagesarestayingflat": {
+  "pat": "lk.whereas",
+  "why": {
+   "ok": {
+    "de": "Richtig: Zwei Entwicklungen stehen gegenüber, danach folgt ein Satz: while.",
+    "en": "Right: two developments are contrasted and a clause follows: while."
+   },
+   "wrong": [
+    {
+     "if": [
+      "despite"
+     ],
+     "pat": "lk.despite",
+     "de": "„Despite“ braucht ein Nomen oder -ing. Hier folgt ein Satz.",
+     "en": "“Despite” needs a noun or -ing. A clause follows here."
+    },
+    {
+     "if": [
+      "although"
+     ],
+     "pat": "lk.although",
+     "de": "„Although“ räumt Unerwartetes ein. Hier stehen zwei Entwicklungen nur nebeneinander.",
+     "en": "“Although” concedes something unexpected. Here two trends just stand side by side."
+    },
+    {
+     "if": [
+      "however"
+     ],
+     "pat": "lk.however",
+     "de": "Mit „however“ und bloßem Komma entsteht ein Kommafehler. Gesucht ist eine Konjunktion.",
+     "en": "“However” after a bare comma is a comma splice. A conjunction is needed."
+    }
+   ]
+  }
+ },
+ "linkers|itwasrainingbutweheldtheoutdooreventweheldtheoutdooreventinoftherain": {
+  "pat": "lk.despite",
+  "why": {
+   "ok": {
+    "de": "Richtig: in spite of + Nomen (the rain) heißt trotz, und die Lücke ist das Nomen.",
+    "en": "Right: in spite of + noun (the rain) means despite."
+   },
+   "wrong": [
+    {
+     "if": [
+      "despite"
+     ],
+     "pat": "lk.despite",
+     "de": "„Despite“ steht ohne in und of. Hier ist der Ausdruck in … of schon da.",
+     "en": "“Despite” takes no “in” or “of”. The phrase in … of is already there."
+    },
+    {
+     "not": [
+      "spite"
+     ],
+     "pat": "lk.despite",
+     "de": "Zwischen in und of fehlt das Nomen des Ausdrucks: in spite of.",
+     "en": "The noun of the phrase is missing between in and of: in spite of."
+    }
+   ]
+  }
+ },
+ "linkers|hewastiredhefinishedthepresentationhewastiredhefinishedthepresentation": {
+  "pat": "lk.although",
+  "why": {
+   "ok": {
+    "de": "Richtig: Es folgt ein Satz (he was tired), also although.",
+    "en": "Right: a clause follows (he was tired), so although."
+   },
+   "wrong": [
+    {
+     "if": [
+      "despite"
+     ],
+     "pat": "lk.despite",
+     "de": "„Despite“ braucht ein Nomen oder -ing. Hier folgt ein Satz.",
+     "en": "“Despite” needs a noun or -ing. A clause follows here."
+    },
+    {
+     "if": [
+      "in",
+      "spite"
+     ],
+     "pat": "lk.despite",
+     "de": "„In spite“ braucht of und ein Nomen. Hier folgt ein Satz.",
+     "en": "“In spite” needs “of” and a noun. A clause follows here."
+    },
+    {
+     "if": [
+      "however"
+     ],
+     "pat": "lk.however",
+     "de": "„However“ verbindet zwei Sätze. Es leitet keinen Nebensatz ein.",
+     "en": "“However” links two sentences. It does not open a subordinate clause."
+    },
+    {
+     "if": [
+      "whereas"
+     ],
+     "pat": "lk.whereas",
+     "de": "„Whereas“ stellt Dinge gegenüber. Hier geht es aber um einen Widerspruch.",
+     "en": "“Whereas” contrasts things. Here a contradiction is meant."
+    }
+   ]
+  }
+ },
+ "linkers|despitewewereshortontimewecompletedtheaudit": {
+  "pat": "lk.despite",
+  "why": {
+   "ok": {
+    "de": "Richtig: Despite braucht ein Nomen oder -ing. Vor einem Satz steht although.",
+    "en": "Right: despite needs a noun or -ing. A clause takes although."
+   },
+   "wrong": [
+    {
+     "if": [
+      "despite",
+      "we"
+     ],
+     "pat": "lk.although",
+     "de": "„Despite“ leitet keinen Satz mit Subjekt und Verb ein. Nimm although.",
+     "en": "“Despite” cannot open a clause with subject and verb. Use although."
+    },
+    {
+     "if": [
+      "spite"
+     ],
+     "pat": "lk.despite",
+     "de": "Auch „in spite of“ steht nur vor Nomen oder -ing, nicht vor einem Satz.",
+     "en": "“In spite of” also takes only a noun or -ing, not a clause."
+    }
+   ]
+  }
+ },
+ "linkers|inspitethedelaytheprojectwasasuccess": {
+  "pat": "lk.despite",
+  "why": {
+   "ok": {
+    "de": "Richtig: in spite braucht of (in spite of the delay), oder kurz despite.",
+    "en": "Right: in spite needs “of” (in spite of the delay), or just despite."
+   },
+   "wrong": [
+    {
+     "if": [
+      "spite"
+     ],
+     "not": [
+      "of"
+     ],
+     "pat": "lk.despite",
+     "de": "„In spite“ ist unvollständig: Es heißt in spite of.",
+     "en": "“In spite” is incomplete: it is in spite of."
+    },
+    {
+     "if": [
+      "despite",
+      "of"
+     ],
+     "pat": "lk.despite",
+     "de": "„Despite“ steht ohne of.",
+     "en": "“Despite” takes no “of”."
+    },
+    {
+     "if": [
+      "although"
+     ],
+     "pat": "lk.although",
+     "de": "„Although“ braucht einen Satz. Hier steht nur das Nomen „the delay“.",
+     "en": "“Although” needs a clause. Only the noun “the delay” follows here."
+    }
+   ]
+  }
+ },
+ "linkers|thebudgetwasapprovedhowevertheprojectisstillonhold": {
+  "pat": "lk.however",
+  "why": {
+   "ok": {
+    "de": "Richtig: Vor however steht Punkt oder Semikolon, danach ein Komma.",
+    "en": "Right: a period or semicolon goes before however, a comma after."
+   },
+   "wrong": [
+    {
+     "if": [
+      "however"
+     ],
+     "pat": "lk.however",
+     "de": "Davor braucht es Punkt oder Semikolon, danach ein Komma. Das Komma nach however fehlt.",
+     "en": "A period or semicolon goes before, a comma after. The comma after however is missing."
+    },
+    {
+     "if": [
+      "and"
+     ],
+     "pat": "lk.however",
+     "de": "Hier steht ein Gegensatz. And reiht nur aneinander.",
+     "en": "Here a contrast is meant. And just adds things."
+    },
+    {
+     "not": [
+      "however",
+      "nevertheless",
+      "nonetheless",
+      "but",
+      "although",
+      "though"
+     ],
+     "pat": "lk.however",
+     "de": "Gesucht ist die Fassung mit Punkt oder Semikolon, dann however und Komma.",
+     "en": "The version with a period or semicolon, then however and a comma, is needed."
     }
    ]
   }
@@ -11528,6 +12733,374 @@
      ],
      "de": "Die Frage im Past Simple braucht did + Grundform.",
      "en": "The Past Simple question needs did + base form."
+    }
+   ]
+  }
+ },
+ "phrasal-syntax|ihavedraftedtheproposalcouldyou": {
+  "pat": "ph.separable",
+  "why": {
+   "ok": {
+    "de": "Richtig: look it over. Das Pronomen it steht in der Mitte des Verbs.",
+    "en": "Right: look it over. The pronoun it goes in the middle of the verb."
+   },
+   "wrong": [
+    {
+     "opt": "look after it",
+     "pat": "ph.particle",
+     "de": "„look after“ heißt sich kümmern um. Gemeint ist durchsehen: look over.",
+     "en": "“Look after” means take care of. Here you need to review: look over."
+    },
+    {
+     "opt": "look over it",
+     "de": "Ein Pronomen steht in der Mitte: look it over, nicht look over it.",
+     "en": "A pronoun goes in the middle: look it over, not look over it."
+    },
+    {
+     "opt": "over look it",
+     "de": "Die Partikel folgt dem Verb: look it over, nicht over look.",
+     "en": "The particle follows the verb: look it over, not over look."
+    }
+   ]
+  }
+ },
+ "phrasal-syntax|sorryiamstillcatchingonemailsaftermyvacation": {
+  "pat": "ph.three-word",
+  "why": {
+   "ok": {
+    "de": "Richtig: catch up on = nachholen. Die drei Wörter bleiben zusammen.",
+    "en": "Right: catch up on = deal with a backlog. All three words stay together."
+   },
+   "wrong": [
+    {
+     "opt": "on",
+     "pat": "ph.particle",
+     "de": "„catch on“ heißt begreifen. Zum Nachholen gehört das up: catch up on.",
+     "en": "“Catch on” means understand. To deal with a backlog use up: catch up on."
+    },
+    {
+     "opt": "out",
+     "pat": "ph.particle",
+     "de": "„catch out“ heißt ertappen, nicht nachholen. Gesucht: catch up on.",
+     "en": "“Catch out” means to trip someone up. To deal with a backlog use catch up on."
+    },
+    {
+     "opt": "in",
+     "de": "„catch in“ gibt es hier nicht. Gesucht ist catch up on.",
+     "en": "“Catch in” is not a phrasal verb here. The one you need is catch up on."
+    }
+   ]
+  }
+ },
+ "phrasal-syntax|thenewmanagerwantstothequarterlyfigureswiththewholeteam": {
+  "pat": "ph.together",
+  "why": {
+   "ok": {
+    "de": "Richtig: go over = durchgehen. Das Objekt folgt direkt danach.",
+    "en": "Right: go over = review. The object follows directly."
+   },
+   "wrong": [
+    {
+     "opt": "go in",
+     "pat": "ph.particle",
+     "de": "„go in“ heißt hineingehen, nicht durchgehen. Gesucht: go over.",
+     "en": "“Go in” means enter. To review you need go over."
+    },
+    {
+     "opt": "go at",
+     "pat": "ph.particle",
+     "de": "„go at“ heißt auf etwas losgehen. Durchgehen heißt go over.",
+     "en": "“Go at” means attack something. To review you need go over."
+    },
+    {
+     "opt": "go on",
+     "pat": "ph.particle",
+     "de": "„go on“ heißt weitermachen, nicht durchgehen. Gesucht: go over.",
+     "en": "“Go on” means continue. To review you need go over."
+    }
+   ]
+  }
+ },
+ "phrasal-syntax|themeetingwascalledbecausetheceowasill": {
+  "pat": "ph.particle",
+  "why": {
+   "ok": {
+    "de": "Richtig: call off = absagen. Die Partikel off bleibt direkt am Verb.",
+    "en": "Right: call off = cancel. The particle off stays right next to the verb."
+   },
+   "wrong": [
+    {
+     "opt": "out",
+     "de": "„call out“ heißt laut rufen oder anprangern. Absagen heißt call off.",
+     "en": "“Call out” means shout or criticize. To cancel use call off."
+    },
+    {
+     "opt": "up",
+     "de": "„call up“ heißt anrufen, nicht absagen. Gesucht: call off.",
+     "en": "“Call up” means phone. To cancel use call off."
+    },
+    {
+     "opt": "away",
+     "de": "Mit away passt hier keine Absage. Gesucht ist call off.",
+     "en": "“Away” does not give a cancellation here. You need call off."
+    }
+   ]
+  }
+ },
+ "phrasal-syntax|icannotupwiththeconstantinterruptionsanylonger": {
+  "pat": "ph.three-word",
+  "why": {
+   "ok": {
+    "de": "Richtig: put up with = ertragen. Die drei Wörter bleiben zusammen.",
+    "en": "Right: put up with = tolerate. All three words stay together."
+   },
+   "wrong": [
+    {
+     "if": [
+      "come"
+     ],
+     "pat": "ph.particle",
+     "de": "„come up with“ heißt sich etwas ausdenken, nicht ertragen.",
+     "en": "“Come up with” means think of an idea, not tolerate."
+    },
+    {
+     "if": [
+      "keep"
+     ],
+     "pat": "ph.particle",
+     "de": "„keep up with“ heißt mithalten, nicht ertragen.",
+     "en": "“Keep up with” means stay level with, not tolerate."
+    },
+    {
+     "if": [
+      "catch"
+     ],
+     "pat": "ph.particle",
+     "de": "„catch up with“ heißt aufholen, nicht ertragen.",
+     "en": "“Catch up with” means reach someone ahead, not tolerate."
+    },
+    {
+     "not": [
+      "put"
+     ],
+     "de": "Gesucht ist put: put up with = ertragen.",
+     "en": "You need put: put up with = tolerate."
+    }
+   ]
+  }
+ },
+ "phrasal-syntax|thedealfellatthelastminutebecauseofalegalissue": {
+  "pat": "ph.together",
+  "why": {
+   "ok": {
+    "de": "Richtig: fall through = scheitern. Ohne Objekt steht through am Ende.",
+    "en": "Right: fall through = fail. With no object, through comes last."
+   },
+   "wrong": [
+    {
+     "if": [
+      "down"
+     ],
+     "pat": "ph.particle",
+     "de": "„fall down“ heißt hinfallen, nicht scheitern. Gesucht: fall through.",
+     "en": "“Fall down” means drop to the ground. To fail use fall through."
+    },
+    {
+     "if": [
+      "out"
+     ],
+     "pat": "ph.particle",
+     "de": "„fall out“ heißt sich zerstreiten, nicht scheitern. Gesucht: fall through.",
+     "en": "“Fall out” means quarrel. To fail use fall through."
+    },
+    {
+     "not": [
+      "through",
+      "apart"
+     ],
+     "de": "Gesucht ist through: fall through = scheitern.",
+     "en": "You need through: fall through = fail."
+    }
+   ]
+  }
+ },
+ "phrasal-syntax|pleasefillthisformandsenditbacktohr": {
+  "pat": "ph.separable",
+  "why": {
+   "ok": {
+    "de": "Richtig: fill in oder fill out = ausfüllen. Das Nomen darf auch davor stehen.",
+    "en": "Right: fill in or fill out = complete. The noun can also go before the particle."
+   },
+   "wrong": [
+    {
+     "if": [
+      "up"
+     ],
+     "pat": "ph.particle",
+     "de": "„fill up“ heißt vollmachen, etwa einen Tank. Formulare füllt man mit in oder out aus.",
+     "en": "“Fill up” means make full, like a tank. For forms use in or out."
+    },
+    {
+     "if": [
+      "on"
+     ],
+     "de": "„fill on“ gibt es nicht. Ausfüllen heißt fill in oder fill out.",
+     "en": "“Fill on” does not exist. To complete a form use fill in or fill out."
+    },
+    {
+     "not": [
+      "in",
+      "out"
+     ],
+     "de": "Gesucht ist in oder out: fill in this form.",
+     "en": "You need in or out: fill in this form."
+    }
+   ]
+  }
+ },
+ "phrasal-syntax|iwillinvestigatetheproblemtomorrowiwillintotheproblemtomorrow": {
+  "pat": "ph.together",
+  "why": {
+   "ok": {
+    "de": "Richtig: look into = untersuchen. Verb und into bleiben zusammen.",
+    "en": "Right: look into = investigate. Verb and into stay together."
+   },
+   "wrong": [
+    {
+     "if": [
+      "run"
+     ],
+     "pat": "ph.particle",
+     "de": "„run into“ heißt zufällig treffen oder auf etwas stoßen, nicht untersuchen.",
+     "en": "“Run into” means meet by chance or hit a problem, not investigate."
+    },
+    {
+     "if": [
+      "investigate"
+     ],
+     "de": "Gesucht ist das Verb vor into: look into = untersuchen.",
+     "en": "You need the verb before into: look into = investigate."
+    },
+    {
+     "not": [
+      "look",
+      "dig",
+      "delve",
+      "go",
+      "check"
+     ],
+     "de": "Gesucht ist look: look into = untersuchen.",
+     "en": "You need look: look into = investigate."
+    }
+   ]
+  }
+ },
+ "phrasal-syntax|wehavenomorecoffeeleftwehaveoutofcoffee": {
+  "pat": "ph.three-word",
+  "why": {
+   "ok": {
+    "de": "Richtig: have run out of = ausgegangen. Nach have steht das Partizip run.",
+    "en": "Right: have run out of = used up. After have comes the participle run."
+   },
+   "wrong": [
+    {
+     "if": [
+      "ran"
+     ],
+     "de": "Nach have steht das Partizip run, nicht ran: have run out of.",
+     "en": "After have use the participle run, not ran: have run out of."
+    },
+    {
+     "if": [
+      "running"
+     ],
+     "de": "Nach have steht run, nicht running: have run out of.",
+     "en": "After have use run, not running: have run out of."
+    },
+    {
+     "not": [
+      "run"
+     ],
+     "de": "Gesucht ist run: run out of = ausgehen.",
+     "en": "You need run: run out of = be used up."
+    }
+   ]
+  }
+ },
+ "phrasal-syntax|yourpackageisatreceptionsopleasepickupitafterlunch": {
+  "pat": "ph.separable",
+  "why": {
+   "ok": {
+    "de": "Richtig: pick it up. Ein Pronomen steht bei trennbaren Verben in der Mitte.",
+    "en": "Right: pick it up. A pronoun goes in the middle of a separable verb."
+   },
+   "wrong": [
+    {
+     "if": [
+      "pick",
+      "up",
+      "it"
+     ],
+     "de": "Das Pronomen gehört zwischen pick und up: pick it up.",
+     "en": "The pronoun belongs between pick and up: pick it up."
+    },
+    {
+     "not": [
+      "up"
+     ],
+     "de": "Die Partikel up gehört zum Verb: pick it up.",
+     "en": "The particle up belongs to the verb: pick it up."
+    }
+   ]
+  }
+ },
+ "phrasal-syntax|iamlookingforwardtoseeyouattheconference": {
+  "pat": "ph.three-word",
+  "why": {
+   "ok": {
+    "de": "Richtig: look forward to + -ing. To ist hier eine Präposition: seeing.",
+    "en": "Right: look forward to + -ing. To is a preposition here: seeing."
+   },
+   "wrong": [
+    {
+     "if": [
+      "see"
+     ],
+     "de": "To ist hier eine Präposition, danach folgt -ing: seeing.",
+     "en": "To is a preposition here, so -ing follows: seeing."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Das to gehört zur Wendung: look forward to + -ing.",
+     "en": "The to is part of the phrase: look forward to + -ing."
+    }
+   ]
+  }
+ },
+ "phrasal-syntax|shequicklygotonwellhernewteam": {
+  "pat": "ph.three-word",
+  "why": {
+   "ok": {
+    "de": "Richtig: get on with = sich verstehen mit. Die Präposition with fehlte.",
+    "en": "Right: get on with = have a good relationship with. The preposition with was missing."
+   },
+   "wrong": [
+    {
+     "not": [
+      "with"
+     ],
+     "de": "Es fehlt with: get on with = sich verstehen mit.",
+     "en": "The with is missing: get on with = have a good relationship with."
+    },
+    {
+     "if": [
+      "with",
+      "well"
+     ],
+     "de": "well steht vor with: got on well with her new team.",
+     "en": "Well goes before with: got on well with her new team."
     }
    ]
   }
@@ -17854,6 +19427,356 @@
      ],
      "de": "Es fehlt to: Für eine Aufgabe steht forget + to + Grundform.",
      "en": "The to is missing: for a task use forget + to + base form."
+    }
+   ]
+  }
+ },
+ "word-order|rarelysuchastrongresponsefromcustomers": {
+  "pat": "wo.neg-inv",
+  "why": {
+   "ok": {
+    "de": "Richtig: „Rarely“ steht vorn, also kommt have vor we: Rarely have we seen …",
+    "en": "Right: “Rarely” comes first, so have goes before we: Rarely have we seen …"
+   },
+   "wrong": [
+    {
+     "opt": "we have seen",
+     "pat": "wo.neg-inv",
+     "de": "Nach „rarely“ vorn muss das Hilfsverb vor das Subjekt. Hier steht we vor have.",
+     "en": "After sentence-initial “rarely” the auxiliary must precede the subject. Here we comes first."
+    },
+    {
+     "opt": "we did see",
+     "de": "„we did“ ist keine Inversion: Das Hilfsverb müsste vor we stehen (did we see).",
+     "en": "“we did” is not inversion: the auxiliary would have to precede we (did we see)."
+    },
+    {
+     "opt": "we saw",
+     "de": "Ohne Hilfsverb vor dem Subjekt bleibt es die normale Reihenfolge. Nach „rarely“ falsch.",
+     "en": "Without an auxiliary before the subject the order stays normal. Wrong after “rarely”."
+    }
+   ]
+  }
+ },
+ "word-order|weareholdingtheworkshop": {
+  "pat": "wo.place-time",
+  "why": {
+   "ok": {
+    "de": "Richtig: Ort vor Zeit ist üblich, beides hinter dem Objekt: in Munich tomorrow.",
+    "en": "Right: place before time is usual, both after the object: in Munich tomorrow."
+   },
+   "wrong": [
+    {
+     "opt": "in tomorrow Munich",
+     "de": "„in“ und Munich gehören zusammen. Die Zeit tomorrow darf nicht dazwischen stehen.",
+     "en": "“in” and Munich belong together. The time word tomorrow cannot sit between them."
+    },
+    {
+     "opt": "Munich in tomorrow",
+     "de": "Die Präposition steht vor ihrem Nomen: in Munich, nicht Munich in.",
+     "en": "The preposition comes before its noun: in Munich, not Munich in."
+    },
+    {
+     "opt": "tomorrow Munich in",
+     "de": "Die Reihenfolge ist ganz verdreht. Die Präposition in gehört direkt vor Munich.",
+     "en": "The order is scrambled. The preposition in belongs directly before Munich."
+    }
+   ]
+  }
+ },
+ "word-order|notonlythedeadlinebuttheyalsoexceededthebudget": {
+  "pat": "wo.not-only",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „not only“ vorn steht did vor they, dann die Grundform: did they miss.",
+    "en": "Right: after “not only” up front, did goes before they, then the base form: did they miss."
+   },
+   "wrong": [
+    {
+     "opt": "they did miss",
+     "pat": "wo.not-only",
+     "de": "Nach „not only“ vorn muss did vor das Subjekt rücken. Hier steht they vor did.",
+     "en": "After “not only” up front, did must precede the subject. Here they comes first."
+    },
+    {
+     "opt": "they missed",
+     "de": "Ohne Inversion ist der Satz falsch: erst did, dann they, dann die Grundform.",
+     "en": "Without inversion the sentence is wrong: first did, then they, then the base form."
+    },
+    {
+     "opt": "missed they",
+     "de": "Nur das Hilfsverb rückt vor das Subjekt, nicht das Vollverb. Richtig: did they miss.",
+     "en": "Only the auxiliary moves before the subject, not the main verb. Correct: did they miss."
+    }
+   ]
+  }
+ },
+ "word-order|undernocircumstancessharethepasswordwithanyone": {
+  "pat": "wo.neg-inv",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „under no circumstances“ vorn steht should vor you: should you share.",
+    "en": "Right: after “under no circumstances” up front, should goes before you."
+   },
+   "wrong": [
+    {
+     "opt": "you should",
+     "de": "Hier steht you vor should. Nach der Wendung vorn muss das Modalverb vor das Subjekt.",
+     "en": "Here you precedes should. After the opening phrase the modal must come before the subject."
+    },
+    {
+     "opt": "do you should",
+     "de": "do und should zusammen geht nicht. Das Modalverb bildet die Inversion allein.",
+     "en": "do and should cannot be combined. The modal forms the inversion by itself."
+    },
+    {
+     "opt": "you shall",
+     "de": "Auch bei shall steht you davor. Das Hilfsverb muss vor dem Subjekt stehen.",
+     "en": "With shall, too, you comes first. The auxiliary must come before the subject."
+    }
+   ]
+  }
+ },
+ "word-order|neveriseensuchawellorganizedconference": {
+  "pat": "wo.neg-inv",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „never“ vorn steht have vor I, dann das Partizip: Never have I seen …",
+    "en": "Right: after “never” up front, have goes before I, then the participle: Never have I seen …"
+   },
+   "wrong": [
+    {
+     "if": [
+      "did"
+     ],
+     "de": "seen braucht have oder had davor. Mit did folgt die Grundform: Never did I see.",
+     "en": "seen needs have or had. With did the base form follows: Never did I see."
+    },
+    {
+     "if": [
+      "do"
+     ],
+     "de": "Mit do folgt die Grundform. Hier steht aber seen, also braucht es have oder had.",
+     "en": "With do the base form follows. Here seen follows, so have or had is needed."
+    },
+    {
+     "not": [
+      "have",
+      "had"
+     ],
+     "de": "Hier fehlt das passende Hilfsverb vor I: have oder had, passend zu seen.",
+     "en": "The matching auxiliary before I is missing: have or had, matching seen."
+    }
+   ]
+  }
+ },
+ "word-order|hardlyhadwestartedthemeetingthefirealarmwentoff": {
+  "pat": "wo.hardly-sooner",
+  "why": {
+   "ok": {
+    "de": "Richtig: Die feste Paarung ist hardly … when: zwei Ereignisse kurz nacheinander.",
+    "en": "Right: the fixed pair is hardly … when: two events in quick succession."
+   },
+   "wrong": [
+    {
+     "if": [
+      "than"
+     ],
+     "pat": "wo.hardly-sooner",
+     "de": "than gehört zu no sooner. Bei hardly steht when.",
+     "en": "than belongs with no sooner. With hardly use when."
+    },
+    {
+     "not": [
+      "when",
+      "before"
+     ],
+     "de": "Zu hardly passt als Bindewort when. Das gesuchte Wort ist ein anderes.",
+     "en": "Hardly pairs with when as the linking word. The word you need is a different one."
+    }
+   ]
+  }
+ },
+ "word-order|seldomacompanyrespondsoquicklytoacomplaint": {
+  "pat": "wo.neg-inv",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „seldom“ vorn steht does vor a company, dann die Grundform respond.",
+    "en": "Right: after “seldom” up front, does goes before a company, then the base form respond."
+   },
+   "wrong": [
+    {
+     "if": [
+      "do"
+     ],
+     "de": "a company ist Singular. Das Hilfsverb heißt does (oder did), nicht do.",
+     "en": "a company is singular. The auxiliary is does (or did), not do."
+    },
+    {
+     "not": [
+      "does",
+      "did",
+      "will",
+      "would",
+      "can"
+     ],
+     "de": "Nach seldom braucht respond ein Hilfsverb mit Grundform: does oder did.",
+     "en": "After seldom, respond needs an auxiliary taking the base form: does or did."
+    }
+   ]
+  }
+ },
+ "word-order|wehadneverseensuchamessneverweseensuchamess": {
+  "pat": "wo.neg-inv",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Ausgangssatz steht im Past Perfect, also Never had we seen …",
+    "en": "Right: the original is in the past perfect, so Never had we seen …"
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "de": "Der Ausgangssatz steht im Past Perfect: Nötig ist had, nicht have.",
+     "en": "The original is in the past perfect: you need had, not have."
+    },
+    {
+     "if": [
+      "did"
+     ],
+     "de": "Mit did folgt die Grundform. Hier steht seen, also had.",
+     "en": "With did the base form follows. Here seen follows, so had."
+    },
+    {
+     "not": [
+      "had"
+     ],
+     "de": "Vor we braucht seen das Hilfsverb had, wie im Ausgangssatz.",
+     "en": "Before we, seen needs the auxiliary had, as in the original."
+    }
+   ]
+  }
+ },
+ "word-order|shenotonlywrotethereportshealsopresenteditnotonlyshewritethereportbutshealsopres": {
+  "pat": "wo.not-only",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „not only“ vorn steht did vor she, dann die Grundform write.",
+    "en": "Right: after “not only” up front, did goes before she, then the base form write."
+   },
+   "wrong": [
+    {
+     "if": [
+      "do"
+     ],
+     "de": "write ist die Grundform, aber es geht um die Vergangenheit: did, nicht do.",
+     "en": "write is the base form, but this is about the past: did, not do."
+    },
+    {
+     "if": [
+      "does"
+     ],
+     "de": "Das Hilfsverb muss zur Vergangenheit passen: did, nicht does.",
+     "en": "The auxiliary must match the past: did, not does."
+    },
+    {
+     "not": [
+      "did"
+     ],
+     "de": "Nach „not only“ steht did plus Grundform. Das gesuchte Wort ist did.",
+     "en": "After “not only” comes did plus the base form. The word you need is did."
+    }
+   ]
+  }
+ },
+ "word-order|rarelywegetsuchpositivefeedbackfromclients": {
+  "pat": "wo.neg-inv",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „rarely“ vorn steht do vor we: Rarely do we get …",
+    "en": "Right: after “rarely” up front, do goes before we: Rarely do we get …"
+   },
+   "wrong": [
+    {
+     "if": [
+      "we do"
+     ],
+     "de": "Das Hilfsverb muss vor we stehen: do we, nicht we do.",
+     "en": "The auxiliary must come before we: do we, not we do."
+    },
+    {
+     "if": [
+      "get we"
+     ],
+     "de": "Nur das Hilfsverb rückt vor das Subjekt, nicht get: do we get.",
+     "en": "Only the auxiliary moves before the subject, not get: do we get."
+    },
+    {
+     "not": [
+      "do we"
+     ],
+     "de": "„Rarely“ vorn löst Inversion aus: do muss vor we stehen.",
+     "en": "“Rarely” up front triggers inversion: do must come before we."
+    }
+   ]
+  }
+ },
+ "word-order|heexplainedclearlytheplantotheteam": {
+  "pat": "wo.verb-object",
+  "why": {
+   "ok": {
+    "de": "Richtig: explained und the plan bleiben zusammen, clearly steht davor oder dahinter.",
+    "en": "Right: explained and the plan stay together; clearly goes before or after."
+   },
+   "wrong": [
+    {
+     "if": [
+      "explained clearly"
+     ],
+     "pat": "wo.verb-object",
+     "de": "clearly darf nicht zwischen explained und the plan stehen.",
+     "en": "clearly cannot sit between explained and the plan."
+    },
+    {
+     "not": [
+      "plan clearly",
+      "clearly explained"
+     ],
+     "de": "Das Objekt the plan folgt direkt auf explained. Das Adverb steht davor oder dahinter.",
+     "en": "The object the plan follows explained directly. The adverb goes before or after."
+    }
+   ]
+  }
+ },
+ "word-order|nosoonerwehadsignedthecontractthanthepricesrose": {
+  "pat": "wo.hardly-sooner",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „no sooner“ vorn steht had vor we: No sooner had we signed …",
+    "en": "Right: after “no sooner” up front, had goes before we: No sooner had we signed …"
+   },
+   "wrong": [
+    {
+     "if": [
+      "we had"
+     ],
+     "de": "Das Hilfsverb muss vor we stehen: had we, nicht we had.",
+     "en": "The auxiliary must come before we: had we, not we had."
+    },
+    {
+     "if": [
+      "did we"
+     ],
+     "de": "Hier braucht es das Past Perfect: had we signed, nicht did we sign.",
+     "en": "The past perfect is needed here: had we signed, not did we sign."
+    },
+    {
+     "not": [
+      "had we"
+     ],
+     "de": "Nach „no sooner“ vorn rückt had vor das Subjekt: had we.",
+     "en": "After “no sooner” up front, had moves before the subject: had we."
     }
    ]
   }

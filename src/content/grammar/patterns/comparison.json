@@ -1,0 +1,417 @@
+{
+  "topic": "comparison",
+  "canDo": {
+    "de": "Ich kann Unterschiede und Entwicklungen genau vergleichen: mit -er/more und than, mit as … as, mit the … the … und mit far, much oder slightly vor dem Komparativ.",
+    "en": "I can compare precisely: with -er/more and than, with as … as, with the … the …, and with far, much or slightly before a comparative."
+  },
+  "order": [
+    "cmp.as-as",
+    "cmp.than",
+    "cmp.form",
+    "cmp.degree",
+    "cmp.the-the"
+  ],
+  "introPlan": [
+    [
+      "cmp.as-as",
+      "cmp.than"
+    ],
+    [
+      "cmp.form",
+      "cmp.degree"
+    ],
+    [
+      "cmp.the-the"
+    ]
+  ],
+  "decide": {
+    "de": [
+      "Vergleichst du zwei Dinge als gleich (as … as) oder als ungleich (Komparativ + than)?",
+      "Verändern sich zwei Dinge gemeinsam, je mehr desto mehr (the … the …)?",
+      "Willst du sagen, wie groß der Unterschied ist (far, much, slightly + Komparativ)?"
+    ],
+    "en": [
+      "Do you compare two things as equal (as … as) or as unequal (comparative + than)?",
+      "Do two things change together, the more … the more … (the … the …)?",
+      "Do you want to say how big the difference is (far, much, slightly + comparative)?"
+    ]
+  },
+  "patterns": [
+    {
+      "id": "cmp.as-as",
+      "name": {
+        "de": "as … as · Gleichheit und Vielfache",
+        "en": "as … as · equality and multiples"
+      },
+      "form": {
+        "de": "as + Adjektiv + as · not as + Adjektiv + as · twice as + Adjektiv + as",
+        "en": "as + adjective + as · not as + adjective + as · twice as + adjective + as"
+      },
+      "use": {
+        "de": "Sagt, dass zwei Dinge gleich sind (as … as), dass eines weniger hat (not as … as) oder um wie viel mehr (twice as … as). Das Adjektiv steht in der Grundform zwischen den beiden as.",
+        "en": "Says two things are equal (as … as), that one has less (not as … as), or how many times more (twice as … as). The adjective stays in its base form between the two as."
+      },
+      "signals": [
+        "as much as",
+        "just as",
+        "not as",
+        "twice as",
+        "half as"
+      ],
+      "ex": [
+        {
+          "en": "The new process is just as fast as the old one.",
+          "de": "Der neue Ablauf ist genauso schnell wie der alte.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "Our quote is not as high as theirs.",
+          "de": "Unser Angebot ist nicht so hoch wie ihres.",
+          "ctx": "mail"
+        },
+        {
+          "en": "The new office is half as big as the old one.",
+          "de": "Das neue Büro ist halb so groß wie das alte.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "The new tool is as fast like the old one.",
+        "good": "The new tool is as fast as the old one.",
+        "cause": {
+          "de": "Deutsch sagt „so schnell wie“, und „wie“ wird oft mit like übersetzt. Im Englischen schließt aber as den Vergleich.",
+          "en": "German says “so schnell wie”, and “wie” is often translated as like. In English, as closes the comparison."
+        }
+      },
+      "contrast": {
+        "with": "cmp.than",
+        "a": "The new tool is as fast as the old one.",
+        "b": "The new tool is faster than the old one.",
+        "diff": {
+          "de": "as … as sagt: gleich schnell. Der Komparativ mit than sagt: Einer ist schneller.",
+          "en": "as … as says: equally fast. The comparative with than says: one is faster."
+        }
+      },
+      "ccq": [
+        {
+          "s": "The new plan is not as risky as the old one.",
+          "q": {
+            "de": "Ist der neue Plan riskanter?",
+            "en": "Is the new plan riskier?"
+          },
+          "a": false
+        },
+        {
+          "s": "Our team is just as experienced as theirs.",
+          "q": {
+            "de": "Haben beide Teams ähnlich viel Erfahrung?",
+            "en": "Do both teams have similar experience?"
+          },
+          "a": true
+        }
+      ],
+      "nudge": {
+        "de": "Sind beide Dinge gleich, und was steht dann auf beiden Seiten des Adjektivs?",
+        "en": "Are both things equal, and what then stands on both sides of the adjective?"
+      }
+    },
+    {
+      "id": "cmp.than",
+      "name": {
+        "de": "Komparativ + than",
+        "en": "comparative + than"
+      },
+      "form": {
+        "de": "Komparativ + than (nicht as, nicht like)",
+        "en": "comparative + than (not as, not like)"
+      },
+      "use": {
+        "de": "Nach einem Komparativ nennt than den Vergleichspartner: higher than last year, longer than planned. Gleichheit dagegen braucht as … as.",
+        "en": "After a comparative, than names the thing you compare with: higher than last year, longer than planned. Equality needs as … as instead."
+      },
+      "signals": [
+        "than"
+      ],
+      "ex": [
+        {
+          "en": "Revenue is higher than we expected.",
+          "de": "Der Umsatz ist höher, als wir erwartet haben.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "The delivery took longer than the supplier promised.",
+          "de": "Die Lieferung dauerte länger, als der Lieferant versprochen hatte.",
+          "ctx": "mail"
+        },
+        {
+          "en": "She works harder than anyone else on the team.",
+          "de": "Sie arbeitet härter als alle anderen im Team.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "The report is shorter as I thought.",
+        "good": "The report is shorter than I thought.",
+        "cause": {
+          "de": "Nach dem Komparativ steht im Deutschen „als“, und „als“ klingt wie as. Im Englischen heißt es aber than.",
+          "en": "After a comparative German uses “als”, and “als” sounds like as. English needs than."
+        }
+      },
+      "contrast": {
+        "with": "cmp.as-as",
+        "a": "Our costs are higher than last year.",
+        "b": "Our costs are as high as last year.",
+        "diff": {
+          "de": "than markiert einen Unterschied: Die Kosten sind gestiegen. as … as markiert Gleichheit: Sie sind gleich geblieben.",
+          "en": "than marks a difference: costs have gone up. as … as marks equality: they stayed the same."
+        }
+      },
+      "ccq": [
+        {
+          "s": "Sales are higher than we forecast.",
+          "q": {
+            "de": "Haben wir weniger verkauft als geplant?",
+            "en": "Did we sell less than planned?"
+          },
+          "a": false
+        },
+        {
+          "s": "The meeting was shorter than I expected.",
+          "q": {
+            "de": "Hatte ich mit einer längeren Sitzung gerechnet?",
+            "en": "Did I expect a longer meeting?"
+          },
+          "a": true
+        }
+      ],
+      "nudge": {
+        "de": "Steht vor dem Vergleichspartner ein Komparativ, und welches kleine Wort verbindet beide?",
+        "en": "Does a comparative come before the comparison partner, and which small word links the two?"
+      }
+    },
+    {
+      "id": "cmp.form",
+      "name": {
+        "de": "-er oder more · Komparativ bilden",
+        "en": "-er or more · forming the comparative"
+      },
+      "form": {
+        "de": "kurzes Adjektiv + -er · langes Adjektiv: more + Adjektiv · nicht beides",
+        "en": "short adjective + -er · long adjective: more + adjective · never both together"
+      },
+      "use": {
+        "de": "Kurze Adjektive bekommen -er (cheaper, bigger), lange bekommen more (more flexible). Beides zusammen, etwa more cheaper, ist falsch.",
+        "en": "Short adjectives take -er (cheaper, bigger), long ones take more (more flexible). Using both, as in more cheaper, is wrong."
+      },
+      "signals": [
+        "cheaper",
+        "bigger",
+        "more expensive",
+        "more flexible"
+      ],
+      "ex": [
+        {
+          "en": "The second option is cheaper and more flexible.",
+          "de": "Die zweite Option ist günstiger und flexibler.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "The revised schedule is more realistic than the first one.",
+          "de": "Der überarbeitete Zeitplan ist realistischer als der erste.",
+          "ctx": "mail"
+        },
+        {
+          "en": "My new commute is shorter than the old one.",
+          "de": "Mein neuer Arbeitsweg ist kürzer als der alte.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "The new interface is more easier to use than the old one.",
+        "good": "The new interface is easier to use than the old one.",
+        "cause": {
+          "de": "Kein Übersetzungsfehler: Deutsch steigert fast immer mit -er („einfacher“). Der Fehler entsteht, wenn man das englische more von langen Adjektiven auf kurze überträgt.",
+          "en": "Not a translation error: German almost always uses -er (“einfacher”). The error comes from carrying English more over from long adjectives to short ones."
+        }
+      },
+      "ccq": [
+        {
+          "s": "This option is more affordable than the other one.",
+          "q": {
+            "de": "Ist die andere Option teurer?",
+            "en": "Is the other option more expensive?"
+          },
+          "a": true
+        },
+        {
+          "s": "Our office is smaller than theirs.",
+          "q": {
+            "de": "Ist unser Büro größer als ihres?",
+            "en": "Is our office bigger than theirs?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Wie viele Silben hat das Adjektiv, und wie wird es deshalb gesteigert?",
+        "en": "How many syllables does the adjective have, and so how is it made comparative?"
+      }
+    },
+    {
+      "id": "cmp.degree",
+      "name": {
+        "de": "far, much, slightly + Komparativ",
+        "en": "far, much, slightly + comparative"
+      },
+      "form": {
+        "de": "far/much/a lot/slightly + Komparativ (nicht very allein)",
+        "en": "far/much/a lot/slightly + comparative (not very alone)"
+      },
+      "use": {
+        "de": "Vor dem Komparativ zeigt far, much, a lot oder slightly, wie groß der Unterschied ist. Das Wort very allein passt nicht vor einen Komparativ.",
+        "en": "Before a comparative, far, much, a lot or slightly shows how big the difference is. The word very alone does not fit before a comparative."
+      },
+      "signals": [
+        "far",
+        "much",
+        "a lot",
+        "slightly",
+        "a bit"
+      ],
+      "ex": [
+        {
+          "en": "The new layout is far clearer than the old one.",
+          "de": "Das neue Layout ist viel übersichtlicher als das alte.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "The second quote is slightly cheaper than the first.",
+          "de": "Das zweite Angebot ist etwas günstiger als das erste.",
+          "ctx": "mail"
+        },
+        {
+          "en": "Taking the train is a lot faster than driving.",
+          "de": "Mit dem Zug zu fahren ist viel schneller als Autofahren.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "The new system is very faster than the old one.",
+        "good": "The new system is much faster than the old one.",
+        "cause": {
+          "de": "Kein Übersetzungsfehler: Deutsch sagt auch „viel schneller“, nicht „sehr schneller“. Der Fehler entsteht, weil very bei Grundformen (very fast) so häufig vorkommt.",
+          "en": "Not a translation error: German also says “viel schneller”, not “sehr schneller”. The error comes from very being so common with base forms (very fast)."
+        }
+      },
+      "contrast": {
+        "with": "cmp.form",
+        "a": "The new tool is far easier to use.",
+        "b": "The new tool is very easy to use.",
+        "diff": {
+          "de": "far und much stehen vor dem Komparativ (easier), very steht vor der Grundform (easy).",
+          "en": "far and much go before the comparative (easier), very goes before the base form (easy)."
+        }
+      },
+      "ccq": [
+        {
+          "s": "The second quote is slightly cheaper than the first.",
+          "q": {
+            "de": "Ist der Preisunterschied groß?",
+            "en": "Is the price difference big?"
+          },
+          "a": false
+        },
+        {
+          "s": "Our new process is far quicker than the old one.",
+          "q": {
+            "de": "Ist der Unterschied groß?",
+            "en": "Is the difference big?"
+          },
+          "a": true
+        }
+      ],
+      "nudge": {
+        "de": "Wie groß ist der Unterschied, und welches Wort davor passt zu einem Komparativ?",
+        "en": "How big is the difference, and which word before it fits a comparative?"
+      }
+    },
+    {
+      "id": "cmp.the-the",
+      "name": {
+        "de": "the … the … · je mehr, desto mehr",
+        "en": "the … the … · the more, the more"
+      },
+      "form": {
+        "de": "the + Komparativ + Subjekt + Verb, the + Komparativ + Subjekt + Verb",
+        "en": "the + comparative + subject + verb, the + comparative + subject + verb"
+      },
+      "use": {
+        "de": "Zeigt, dass sich zwei Dinge gemeinsam entwickeln. Beide Satzteile beginnen mit the + Komparativ, danach bleibt die normale Reihenfolge Subjekt vor Verb.",
+        "en": "Shows that two things change together. Both parts start with the + comparative, and then normal order stays: subject before verb."
+      },
+      "signals": [
+        "the more",
+        "the less",
+        "the sooner",
+        "the longer",
+        "the earlier"
+      ],
+      "ex": [
+        {
+          "en": "The earlier we align, the fewer surprises we get.",
+          "de": "Je früher wir uns abstimmen, desto weniger Überraschungen erleben wir.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "The sooner you send the figures, the faster we can finalize the budget.",
+          "de": "Je eher Sie die Zahlen schicken, desto schneller können wir das Budget fertigstellen.",
+          "ctx": "mail"
+        },
+        {
+          "en": "The longer I think about it, the less sure I am.",
+          "de": "Je länger ich darüber nachdenke, desto unsicherer bin ich.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "The more we practice, the better get we.",
+        "good": "The more we practice, the better we get.",
+        "cause": {
+          "de": "Im Deutschen steht nach „desto“ das Verb vor dem Subjekt („desto besser werden wir“). Im Englischen bleibt Subjekt vor Verb.",
+          "en": "In German the verb comes before the subject after “desto” (“desto besser werden wir”). English keeps the subject before the verb."
+        }
+      },
+      "contrast": {
+        "with": "cmp.than",
+        "a": "Sales are higher than last year.",
+        "b": "The longer we wait, the higher the price.",
+        "diff": {
+          "de": "than vergleicht zwei Dinge an einem Punkt. the … the … verbindet zwei Entwicklungen miteinander.",
+          "en": "than compares two things at one point. the … the … links two developments with each other."
+        }
+      },
+      "ccq": [
+        {
+          "s": "The more we test, the fewer bugs we ship.",
+          "q": {
+            "de": "Gibt es weniger Fehler, wenn wir mehr testen?",
+            "en": "Are there fewer bugs when we test more?"
+          },
+          "a": true
+        },
+        {
+          "s": "The later we start, the less time we have.",
+          "q": {
+            "de": "Haben wir mehr Zeit, wenn wir später anfangen?",
+            "en": "Do we have more time if we start later?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Verändern sich zwei Dinge gemeinsam, und womit beginnt dann jeder Teil?",
+        "en": "Do two things change together, and what then starts each part?"
+      }
+    }
+  ]
+}

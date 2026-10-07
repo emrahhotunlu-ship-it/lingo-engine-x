@@ -1,0 +1,1013 @@
+[
+ {
+  "id": "cp-bu-k1",
+  "type": "kwt",
+  "pat": "cp.by-until",
+  "from": "Please send the signed form on Friday at the latest.",
+  "key": "FORM",
+  "frame": "Please send the signed ___ Friday.",
+  "answer": "form by",
+  "accepted": [
+   "form no later than",
+   "form on or before"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Eine Frist heißt by. Das Formular muss spätestens am Freitag da sein.",
+    "en": "Right: a deadline takes by. The form must be there on Friday at the latest."
+   },
+   "wrong": [
+    {
+     "not": [
+      "form"
+     ],
+     "de": "Das Schlüsselwort form muss unverändert in der Lücke stehen.",
+     "en": "The key word form must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "until"
+     ],
+     "de": "„Until“ meint eine Dauer. Hier geht es um eine Frist: by Friday.",
+     "en": "“Until” means a duration. This is a deadline: by Friday."
+    },
+    {
+     "if": [
+      "within"
+     ],
+     "de": "„Within“ braucht eine Spanne, hier folgt ein Wochentag.",
+     "en": "“Within” needs a span; a weekday follows here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-bu-k2",
+  "type": "kwt",
+  "pat": "cp.by-until",
+  "from": "The portal stays locked and opens on Monday morning.",
+  "key": "ACCESS",
+  "frame": "Nobody can ___ Monday morning.",
+  "answer": "access the portal until",
+  "accepted": [
+   "access the portal till"
+  ],
+  "words": [
+   4,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Das Portal ist die ganze Zeit gesperrt. Dafür steht until Monday morning.",
+    "en": "Right: the portal is locked the whole time. That takes until Monday morning."
+   },
+   "wrong": [
+    {
+     "not": [
+      "access"
+     ],
+     "de": "Das Schlüsselwort access muss unverändert in der Lücke stehen.",
+     "en": "The key word access must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "by"
+     ],
+     "de": "„By“ nennt eine Frist, hier geht es um die ganze Sperrzeit.",
+     "en": "“By” names a deadline; here it is about the whole locked period."
+    },
+    {
+     "not": [
+      "until",
+      "till"
+     ],
+     "de": "Gesucht ist das Dauer-Wort until (oder till) vor dem Zeitpunkt.",
+     "en": "A duration word is needed before the time: until (or till)."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-wi-k1",
+  "type": "kwt",
+  "pat": "cp.within",
+  "from": "We never take longer than one business day to reply to emails.",
+  "key": "REPLY",
+  "frame": "We ___ one business day.",
+  "answer": "reply to emails within",
+  "accepted": [
+   "reply to all emails within",
+   "reply to every email within",
+   "reply within",
+   "always reply to emails within"
+  ],
+  "words": [
+   2,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: within nennt die Spanne. Jede Antwort kommt innerhalb eines Werktags.",
+    "en": "Right: within names the span. Every reply comes inside one business day."
+   },
+   "wrong": [
+    {
+     "not": [
+      "reply"
+     ],
+     "de": "Das Schlüsselwort reply muss unverändert in der Lücke stehen.",
+     "en": "The key word reply must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "by"
+     ],
+     "de": "„By“ braucht einen Zeitpunkt, nicht eine Spanne wie one business day.",
+     "en": "“By” needs a point in time, not a span like one business day."
+    },
+    {
+     "if": [
+      "until"
+     ],
+     "de": "„Until“ meint eine Dauer ohne Pause, hier ist eine Zeitspanne gemeint.",
+     "en": "“Until” means a duration without a break; here a time span is meant."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-wi-k2",
+  "type": "kwt",
+  "pat": "cp.within",
+  "from": "The auditors need three weeks at most to finish.",
+  "key": "FINISH",
+  "frame": "The auditors will ___ three weeks.",
+  "answer": "finish within",
+  "accepted": [
+   "finish in less than",
+   "finish in under"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: finish within three weeks = spätestens nach drei Wochen sind sie fertig.",
+    "en": "Right: finish within three weeks = they are done after three weeks at the latest."
+   },
+   "wrong": [
+    {
+     "not": [
+      "finish"
+     ],
+     "de": "Das Schlüsselwort finish muss unverändert in der Lücke stehen.",
+     "en": "The key word finish must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "by"
+     ],
+     "de": "„By“ verlangt einen Zeitpunkt (by May 3), keine Spanne wie three weeks.",
+     "en": "“By” needs a point in time (by May 3), not a span like three weeks."
+    },
+    {
+     "if": [
+      "until"
+     ],
+     "de": "„Until“ meint eine Dauer. Die Prüfer arbeiten aber auf ein Ende hin.",
+     "en": "“Until” means a duration. The auditors work toward an end."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-as-k1",
+  "type": "kwt",
+  "pat": "cp.as-of",
+  "from": "The new expense policy starts on July 1.",
+  "key": "APPLIES",
+  "frame": "The new expense policy ___ July 1.",
+  "answer": "applies as of",
+  "accepted": [
+   "applies from",
+   "applies starting",
+   "applies effective",
+   "applies beginning",
+   "applies starting from"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: as of nennt den Stichtag. Ab dem 1. Juli gilt die neue Richtlinie.",
+    "en": "Right: as of names the key date. The new policy applies from July 1."
+   },
+   "wrong": [
+    {
+     "not": [
+      "applies"
+     ],
+     "de": "Das Schlüsselwort applies muss unverändert in der Lücke stehen.",
+     "en": "The key word applies must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "since"
+     ],
+     "de": "„Since“ blickt zurück, die Regel beginnt hier aber erst am Stichtag.",
+     "en": "“Since” looks back, but here the rule only begins on the key date."
+    },
+    {
+     "if": [
+      "until"
+     ],
+     "de": "„Until“ nennt ein Ende, hier beginnt die Richtlinie.",
+     "en": "“Until” names an end; here the policy begins."
+    },
+    {
+     "if": [
+      "by"
+     ],
+     "de": "„By“ wäre eine Frist, gemeint ist der Beginn ab dem 1. Juli.",
+     "en": "“By” would be a deadline; the start from July 1 is meant."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-as-k2",
+  "type": "kwt",
+  "pat": "cp.as-of",
+  "from": "Our records show that 120 users are active at this moment.",
+  "key": "ACTIVE",
+  "frame": "We have 120 ___ today.",
+  "answer": "active users as of",
+  "accepted": [],
+  "words": [
+   4,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: as of today gibt den Stand von heute an: 120 aktive Nutzer.",
+    "en": "Right: as of today gives today’s status: 120 active users."
+   },
+   "wrong": [
+    {
+     "not": [
+      "active"
+     ],
+     "de": "Das Schlüsselwort active muss unverändert in der Lücke stehen.",
+     "en": "The key word active must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "since"
+     ],
+     "de": "„Since today“ blickt zurück, hier geht es um den Stand heute: as of today.",
+     "en": "“Since today” looks back; here the status today is meant: as of today."
+    },
+    {
+     "if": [
+      "by"
+     ],
+     "de": "„By today“ wäre eine Frist, gemeint ist der aktuelle Stand.",
+     "en": "“By today” would be a deadline; the current status is meant."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-ap-k1",
+  "type": "kwt",
+  "pat": "cp.approx",
+  "from": "The cloud plan costs only a small part of what the old license cost.",
+  "key": "COSTS",
+  "frame": "The cloud plan ___ the old license.",
+  "answer": "costs a fraction of",
+  "accepted": [
+   "costs only a fraction of",
+   "costs just a fraction of"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: a fraction of = nur ein kleiner Teil davon, hier der alten Lizenz.",
+    "en": "Right: a fraction of = only a small part of it, here of the old license."
+   },
+   "wrong": [
+    {
+     "not": [
+      "costs"
+     ],
+     "de": "Das Schlüsselwort costs muss unverändert in der Lücke stehen.",
+     "en": "The key word costs must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "from"
+     ],
+     "de": "Nach fraction folgt of, nicht from: a fraction of the old license.",
+     "en": "After fraction comes of, not from: a fraction of the old license."
+    },
+    {
+     "not": [
+      "fraction"
+     ],
+     "de": "Gesucht ist der feste Block a fraction of mit of am Ende.",
+     "en": "The fixed block a fraction of with of at the end is needed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-ap-k2",
+  "type": "kwt",
+  "pat": "cp.approx",
+  "from": "The pilot reached 39,500 users, a bit less than the 40,000 target.",
+  "key": "REACHED",
+  "frame": "The pilot ___ 40,000 users.",
+  "answer": "reached just under",
+  "accepted": [
+   "reached just below",
+   "reached slightly under",
+   "reached slightly below",
+   "reached almost",
+   "reached nearly"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: just under = knapp darunter. Die 39.500 liegen knapp unter 40.000.",
+    "en": "Right: just under = slightly below. 39,500 is slightly below 40,000."
+   },
+   "wrong": [
+    {
+     "not": [
+      "reached"
+     ],
+     "de": "Das Schlüsselwort reached muss unverändert in der Lücke stehen.",
+     "en": "The key word reached must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "over"
+     ],
+     "not": [
+      "under"
+     ],
+     "de": "„Well over“ oder „just over“ hieße mehr als 40.000, hier sind es weniger.",
+     "en": "“Well over” or “just over” would mean more than 40,000; here it is less."
+    },
+    {
+     "not": [
+      "under",
+      "below",
+      "almost",
+      "nearly"
+     ],
+     "de": "Gesucht ist ein Wort für knapp darunter: just under.",
+     "en": "A word for slightly below is needed: just under."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-mu-k1",
+  "type": "kwt",
+  "pat": "cp.multiples",
+  "from": "The old tool needs ten minutes; the new tool needs five.",
+  "key": "FAST",
+  "frame": "The new tool is ___ the old one.",
+  "answer": "twice as fast as",
+  "accepted": [
+   "two times as fast as"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Das Vielfache steht vor as … as: twice as fast as the old one.",
+    "en": "Right: the multiple goes before as … as: twice as fast as the old one."
+   },
+   "wrong": [
+    {
+     "not": [
+      "fast"
+     ],
+     "de": "Das Schlüsselwort fast muss unverändert in der Lücke stehen.",
+     "en": "The key word fast must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "than"
+     ],
+     "de": "Nach dem Vielfachen endet der Vergleich mit as, nicht mit than.",
+     "en": "After the multiple the comparison ends with as, not than."
+    },
+    {
+     "not": [
+      "twice",
+      "two"
+     ],
+     "de": "Gesucht ist der Rahmen twice as … as mit fast in der Mitte.",
+     "en": "The frame twice as … as with fast in the middle is needed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-mu-k2",
+  "type": "kwt",
+  "pat": "cp.multiples",
+  "from": "Last year we had 40 open tickets; this year we have 120.",
+  "key": "MANY",
+  "frame": "This year we have ___ tickets as last year.",
+  "answer": "three times as many",
+  "accepted": [
+   "3 times as many"
+  ],
+  "words": [
+   4,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: three times as many … as = dreimal so viele wie im letzten Jahr.",
+    "en": "Right: three times as many … as = three times the number from last year."
+   },
+   "wrong": [
+    {
+     "not": [
+      "many"
+     ],
+     "de": "Das Schlüsselwort many muss unverändert in der Lücke stehen.",
+     "en": "The key word many must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "more"
+     ],
+     "de": "„More“ passt nicht in den Rahmen. Nach dem Vielfachen kommt as many.",
+     "en": "“More” does not fit the frame. After the multiple comes as many."
+    },
+    {
+     "not": [
+      "three",
+      "3"
+     ],
+     "de": "Gesucht ist das Vielfache vor as many: three times as many.",
+     "en": "The multiple before as many is needed: three times as many."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-bu-f1",
+  "type": "find",
+  "pat": "cp.by-until",
+  "prompt": "The vendor must confirm the delivery date until the end of the week.",
+  "err": [
+   7,
+   7
+  ],
+  "answer": "by",
+  "fixed": "The vendor must confirm the delivery date by the end of the week.",
+  "accepted": [
+   "no later than",
+   "before"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Bestätigen ist ein einmaliger Schritt mit Frist, also by statt until.",
+    "en": "The error: confirming is a one-time step with a deadline, so by instead of until."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Für eine Frist passt until nicht.",
+     "en": "There is an error: until does not fit a deadline."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „until“: Eine Frist braucht by.",
+     "en": "The error is “until”: a deadline needs by."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-bu-f2",
+  "type": "find",
+  "pat": "cp.by-until",
+  "prompt": "The offer stays valid by Sunday, so there is no rush.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "until",
+  "fixed": "The offer stays valid until Sunday, so there is no rush.",
+  "accepted": [
+   "through",
+   "till"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Das Angebot gilt die ganze Zeit bis Sonntag. Das ist until, keine Frist.",
+    "en": "The error: the offer is valid the whole time up to Sunday. That is until, not a deadline."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Bei einer Dauer passt by nicht.",
+     "en": "There is an error: by does not fit a duration."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „by“: Eine Dauer braucht until.",
+     "en": "The error is “by”: a duration needs until."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-bu-f3",
+  "type": "find",
+  "pat": "cp.by-until",
+  "prompt": "We'll keep the booking open until Friday, but we need your answer by Thursday.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: until nennt die Dauer der Reservierung, by die Frist für die Antwort.",
+    "en": "No error: until names how long the booking stays open, by the deadline for the answer."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: until passt zur Dauer, by zur Frist für die Antwort.",
+     "en": "No error: until fits the duration, by fits the deadline for the answer."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-wi-f1",
+  "type": "find",
+  "pat": "cp.within",
+  "prompt": "We will respond to your complaint until 48 hours.",
+  "err": [
+   6,
+   6
+  ],
+  "answer": "within",
+  "fixed": "We will respond to your complaint within 48 hours.",
+  "accepted": [
+   "in under"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Vor einer Zeitspanne steht within, nicht until.",
+    "en": "The error: before a time span use within, not until."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Vor 48 hours passt until nicht.",
+     "en": "There is an error: until does not fit before 48 hours."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „until“: Vor einer Spanne steht within.",
+     "en": "The error is “until”: a span takes within."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-wi-f2",
+  "type": "find",
+  "pat": "cp.within",
+  "prompt": "Please let me know by two days if you cannot attend.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "within",
+  "fixed": "Please let me know within two days if you cannot attend.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Vor einer Spanne wie two days steht within, nicht by.",
+    "en": "The error: before a span like two days use within, not by."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Vor two days passt by nicht.",
+     "en": "There is an error: by does not fit before two days."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „by“: by braucht einen Zeitpunkt.",
+     "en": "The error is “by”: by needs a point in time."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-as-f1",
+  "type": "find",
+  "pat": "cp.as-of",
+  "prompt": "Since next Monday, all travel requests need a manager's approval.",
+  "err": [
+   0,
+   0
+  ],
+  "answer": "As of",
+  "fixed": "As of next Monday, all travel requests need a manager's approval.",
+  "accepted": [
+   "Starting",
+   "From",
+   "Effective",
+   "Beginning"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Since blickt zurück. Ein Stichtag in der Zukunft braucht As of.",
+    "en": "The error: Since looks back. A key date in the future needs As of."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Since passt nicht zu einem künftigen Datum.",
+     "en": "There is an error: Since does not fit a future date."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „Since“: Für einen künftigen Stichtag steht As of.",
+     "en": "The error is “Since”: a future key date takes As of."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-as-f2",
+  "type": "find",
+  "pat": "cp.as-of",
+  "prompt": "As of June 1 on all invoices must be sent as PDFs.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "1,",
+  "fixed": "As of June 1, all invoices must be sent as PDFs.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: As of June 1 ist komplett. Das zusätzliche on gehört zu from June 1 on.",
+    "en": "The error: As of June 1 is complete. The extra on belongs to from June 1 on."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Hinter As of June 1 steht kein on.",
+     "en": "There is an error: no on follows As of June 1."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „1 on“: Das on ist zu viel.",
+     "en": "The error is “1 on”: the on is extra."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-ap-f1",
+  "type": "find",
+  "pat": "cp.approx",
+  "prompt": "The new plan costs only a fraction from what we paid before.",
+  "err": [
+   7,
+   7
+  ],
+  "answer": "of",
+  "fixed": "The new plan costs only a fraction of what we paid before.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach a fraction steht of, nicht from.",
+    "en": "The error: after a fraction comes of, not from."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: a fraction braucht of.",
+     "en": "There is an error: a fraction needs of."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „from“: Es heißt a fraction of.",
+     "en": "The error is “from”: it is a fraction of."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-ap-f2",
+  "type": "find",
+  "pat": "cp.approx",
+  "prompt": "The webinar attracted well over than 200 people.",
+  "err": [
+   5,
+   5
+  ],
+  "answer": "",
+  "fixed": "The webinar attracted well over 200 people.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: well over braucht kein than. Die Zahl folgt direkt.",
+    "en": "The error: well over takes no than. The number follows directly."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach well over steht kein than.",
+     "en": "There is an error: no than follows well over."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „than“: Das Wort ist zu viel.",
+     "en": "The error is “than”: the word is extra."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-ap-f3",
+  "type": "find",
+  "pat": "cp.approx",
+  "prompt": "Roughly 40 percent of the leads came from referrals, and just under a third came from ads.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: roughly und just under stehen richtig direkt vor dem Anteil.",
+    "en": "No error: roughly and just under correctly sit directly before the share."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Beide Näherungswörter stehen richtig vor der Angabe.",
+     "en": "No error: both approximation words correctly sit before the figure."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-mu-f1",
+  "type": "find",
+  "pat": "cp.multiples",
+  "prompt": "The premium plan costs twice as much than the basic plan.",
+  "err": [
+   7,
+   7
+  ],
+  "answer": "as",
+  "fixed": "The premium plan costs twice as much as the basic plan.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach twice as much endet der Vergleich mit as, nicht mit than.",
+    "en": "The error: after twice as much the comparison ends with as, not than."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Der Vergleich endet falsch.",
+     "en": "There is an error: the comparison ends wrongly."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „than“: Der Rahmen heißt twice as … as.",
+     "en": "The error is “than”: the frame is twice as … as."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-mu-f2",
+  "type": "find",
+  "pat": "cp.multiples",
+  "prompt": "We now have three times more as many clients as last year.",
+  "err": [
+   5,
+   5
+  ],
+  "answer": "",
+  "fixed": "We now have three times as many clients as last year.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Im Rahmen three times as many steht kein more.",
+    "en": "The error: the frame three times as many has no more."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Vor as many steht kein more.",
+     "en": "There is an error: no more goes before as many."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „more“: Das Wort ist zu viel.",
+     "en": "The error is “more”: the word is extra."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-mu-f3",
+  "type": "find",
+  "pat": "cp.multiples",
+  "prompt": "Response times are half as long as last year, and we handle twice as many tickets.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: half as long as und twice as many sind beide richtig gebaut.",
+    "en": "No error: half as long as and twice as many are both built correctly."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Beide Vielfache stehen richtig vor ihrem as … as.",
+     "en": "No error: both multiples correctly sit before their as … as."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-bu-m1",
+  "type": "meaning",
+  "pat": "cp.by-until",
+  "a": "The contract is valid until June 30.",
+  "b": "The contract must be signed by June 30.",
+  "q": {
+   "de": "Welcher Satz sagt, wie lange der Vertrag gilt?",
+   "en": "Which sentence says how long the contract is valid?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. until nennt die Dauer der Gültigkeit, danach endet sie.",
+    "en": "Right: sentence a. until names how long it is valid; after that it ends."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b nennt by nur die Frist fürs Unterschreiben, nicht das Ende der Gültigkeit.",
+     "en": "In b, by only names the signing deadline, not the end of validity."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: until beschreibt eine Dauer, by eine Frist.",
+     "en": "Not the same: until describes a duration, by a deadline."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-wi-m1",
+  "type": "meaning",
+  "pat": "cp.within",
+  "a": "We'll deliver in two weeks.",
+  "b": "We'll deliver within two weeks.",
+  "q": {
+   "de": "Welcher Satz lässt eine Lieferung schon nach einer Woche zu?",
+   "en": "Which sentence allows delivery after just one week?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. within nennt die Spanne, die Lieferung kann früher kommen.",
+    "en": "Right: sentence b. within names the span; delivery can come earlier."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a nennt in den Zeitpunkt nach zwei Wochen, früher ist nicht gemeint.",
+     "en": "In a, in names the point after two weeks; earlier is not meant."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: within erlaubt früher, in two weeks meint den Zeitpunkt.",
+     "en": "Not the same: within allows earlier, in two weeks means that point."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-as-m1",
+  "type": "meaning",
+  "pat": "cp.as-of",
+  "a": "As of next Monday, the new rules apply.",
+  "b": "Since last Monday, the new rules have applied.",
+  "q": {
+   "de": "Welcher Satz sagt: Die neuen Regeln gelten noch nicht?",
+   "en": "Which sentence says the new rules do not apply yet?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. as of next Monday nennt einen künftigen Stichtag, der noch aussteht.",
+    "en": "Right: sentence a. as of next Monday names a future key date."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b blickt since zurück: Die Regeln gelten schon seit letztem Montag.",
+     "en": "In b, since looks back: the rules have applied since last Monday."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a beginnt in Zukunft, b begann in der Vergangenheit.",
+     "en": "Not the same: a begins in the future, b began in the past."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-ap-m1",
+  "type": "meaning",
+  "pat": "cp.approx",
+  "a": "We processed just under 5,000 invoices.",
+  "b": "We processed just over 5,000 invoices.",
+  "q": {
+   "de": "Welcher Satz sagt: Es waren mehr als 5.000 Rechnungen?",
+   "en": "Which sentence says there were more than 5,000 invoices?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. just over = knapp darüber, also etwas mehr als 5.000.",
+    "en": "Right: sentence b. just over = slightly above, so a bit more than 5,000."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a heißt just under knapp darunter, also weniger als 5.000.",
+     "en": "In a, just under means slightly below, so fewer than 5,000."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: under und over drehen die Richtung um.",
+     "en": "Not the same: under and over reverse the direction."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-mu-m1",
+  "type": "meaning",
+  "pat": "cp.multiples",
+  "a": "The new plan costs twice as much as the old one.",
+  "b": "The old plan costs half as much as the new one.",
+  "q": {
+   "de": "Beschreiben beide Sätze dasselbe Preisverhältnis?",
+   "en": "Do both sentences describe the same price relation?"
+  },
+  "answer": "both",
+  "why": {
+   "ok": {
+    "de": "Richtig: Beide. Neu = 2 × alt und alt = ½ × neu sagen dasselbe.",
+    "en": "Right: both. New = 2 × old and old = ½ × new say the same."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a ist der neue Tarif doppelt so teuer, und b sagt dasselbe von der anderen Seite.",
+     "en": "In a the new plan is twice as expensive, and b says the same from the other side."
+    },
+    {
+     "opt": "b",
+     "de": "Auch b stimmt: Der alte Tarif kostet halb so viel wie der neue.",
+     "en": "b is also right: the old plan costs half as much as the new one."
+    }
+   ]
+  }
+ }
+]

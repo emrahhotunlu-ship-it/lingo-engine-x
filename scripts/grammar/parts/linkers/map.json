@@ -1,0 +1,424 @@
+{
+ "___ the heavy traffic, we arrived on time.": {
+  "pat": "lk.despite",
+  "why": {
+   "ok": {
+    "de": "Richtig: Danach folgt ein Nomen (the heavy traffic), also despite.",
+    "en": "Right: a noun follows (the heavy traffic), so despite."
+   },
+   "wrong": [
+    {
+     "opt": "Whereas",
+     "pat": "lk.whereas",
+     "de": "„Whereas“ stellt zwei Dinge gegenüber und braucht einen Satz. Hier folgt nur ein Nomen.",
+     "en": "“Whereas” contrasts two things and needs a clause. Only a noun follows here."
+    },
+    {
+     "opt": "Although",
+     "pat": "lk.although",
+     "de": "„Although“ braucht Subjekt und Verb. „the heavy traffic“ ist nur ein Nomen.",
+     "en": "“Although” needs a subject and verb. “the heavy traffic” is only a noun."
+    },
+    {
+     "opt": "However",
+     "pat": "lk.however",
+     "de": "„However“ verbindet zwei vollständige Sätze. Vor einem bloßen Nomen passt es nicht.",
+     "en": "“However” links two complete sentences. It does not fit before a bare noun."
+    }
+   ]
+  }
+ },
+ "The sales team hit its target, ___ the support team missed theirs.": {
+  "pat": "lk.whereas",
+  "why": {
+   "ok": {
+    "de": "Richtig: Zwei Teams werden gegenübergestellt, danach folgt ein Satz: whereas.",
+    "en": "Right: two teams are contrasted and a clause follows: whereas."
+   },
+   "wrong": [
+    {
+     "opt": "in spite",
+     "pat": "lk.despite",
+     "de": "„In spite“ braucht of und ein Nomen. Hier folgt ein ganzer Satz.",
+     "en": "“In spite” needs “of” and a noun. A full clause follows here."
+    },
+    {
+     "opt": "therefore",
+     "pat": "lk.therefore",
+     "de": "„Therefore“ nennt eine Folge. Das Verfehlen folgt nicht aus dem Erreichen des Ziels.",
+     "en": "“Therefore” gives a result. Missing a target does not follow from hitting one."
+    },
+    {
+     "opt": "despite",
+     "pat": "lk.despite",
+     "de": "„Despite“ steht vor einem Nomen oder einer -ing-Form, nicht vor einem Satz.",
+     "en": "“Despite” goes before a noun or -ing form, not before a clause."
+    }
+   ]
+  }
+ },
+ "The server crashed twice last week; ___, we are moving to a new provider.": {
+  "pat": "lk.therefore",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Wechsel ist die Folge der Abstürze, also therefore.",
+    "en": "Right: the move is the result of the crashes, so therefore."
+   },
+   "wrong": [
+    {
+     "opt": "whereas",
+     "pat": "lk.whereas",
+     "de": "„Whereas“ stellt zwei Dinge gegenüber. Hier folgt aber eine Folge.",
+     "en": "“Whereas” contrasts two things. Here a result follows."
+    },
+    {
+     "opt": "although",
+     "pat": "lk.although",
+     "de": "„Although“ räumt einen Widerspruch ein. Der Wechsel folgt aber aus den Abstürzen.",
+     "en": "“Although” concedes a contradiction. The move follows from the crashes, though."
+    },
+    {
+     "opt": "nevertheless",
+     "pat": "lk.however",
+     "de": "„Nevertheless“ heißt trotzdem. Die Abstürze sind aber der Grund für den Wechsel.",
+     "en": "“Nevertheless” means all the same. The crashes are the reason for the move, though."
+    }
+   ]
+  }
+ },
+ "___ the offer was generous, he turned it down.": {
+  "pat": "lk.although",
+  "why": {
+   "ok": {
+    "de": "Richtig: Es folgt ein ganzer Satz (the offer was generous), also although.",
+    "en": "Right: a full clause follows (the offer was generous), so although."
+   },
+   "wrong": [
+    {
+     "opt": "Nevertheless",
+     "pat": "lk.however",
+     "de": "„Nevertheless“ steht zwischen zwei Sätzen, nicht vor einem Nebensatz.",
+     "en": "“Nevertheless” sits between two sentences, not before a subordinate clause."
+    },
+    {
+     "opt": "In spite",
+     "pat": "lk.despite",
+     "de": "„In spite“ braucht of und danach ein Nomen. Hier folgt ein Satz.",
+     "en": "“In spite” needs “of” and then a noun. A clause follows here."
+    },
+    {
+     "opt": "Despite",
+     "pat": "lk.despite",
+     "de": "„Despite“ steht vor einem Nomen oder -ing, nicht vor einem Satz.",
+     "en": "“Despite” goes before a noun or -ing, not before a clause."
+    }
+   ]
+  }
+ },
+ "She got the job ___ her lack of experience.": {
+  "pat": "lk.despite",
+  "why": {
+   "ok": {
+    "de": "Richtig: Danach folgt ein Nomen (her lack of experience): despite.",
+    "en": "Right: a noun follows (her lack of experience): despite."
+   },
+   "wrong": [
+    {
+     "if": [
+      "although"
+     ],
+     "pat": "lk.although",
+     "de": "„Although“ braucht Subjekt und Verb. Hier folgt nur ein Nomen.",
+     "en": "“Although” needs a subject and verb. Only a noun follows here."
+    },
+    {
+     "if": [
+      "in",
+      "spite"
+     ],
+     "not": [
+      "of"
+     ],
+     "pat": "lk.despite",
+     "de": "„In spite“ ist unvollständig und braucht of: in spite of her lack of experience.",
+     "en": "“In spite” needs “of”: in spite of her lack of experience."
+    },
+    {
+     "if": [
+      "despite",
+      "of"
+     ],
+     "pat": "lk.despite",
+     "de": "„Despite“ steht ohne of. Mit of heißt es in spite of.",
+     "en": "“Despite” takes no “of”. With “of” it is in spite of."
+    },
+    {
+     "if": [
+      "however"
+     ],
+     "pat": "lk.however",
+     "de": "„However“ verbindet zwei Sätze. Hier folgt aber ein Nomen.",
+     "en": "“However” links two sentences. Here a noun follows."
+    }
+   ]
+  }
+ },
+ "The prototype looks great; ___, it still needs a lot of testing.": {
+  "pat": "lk.however",
+  "why": {
+   "ok": {
+    "de": "Richtig: however nach dem Semikolon, danach ein Komma. Es nennt den Gegensatz.",
+    "en": "Right: however after the semicolon, then a comma. It names the contrast."
+   },
+   "wrong": [
+    {
+     "if": [
+      "although"
+     ],
+     "pat": "lk.although",
+     "de": "„Although“ steht direkt vor Subjekt und Verb, nicht vor einem Komma.",
+     "en": "“Although” comes directly before subject and verb, not before a comma."
+    },
+    {
+     "if": [
+      "therefore"
+     ],
+     "pat": "lk.therefore",
+     "de": "„Therefore“ nennt eine Folge. Hier steht aber ein Gegensatz.",
+     "en": "“Therefore” names a result. Here a contrast follows."
+    },
+    {
+     "if": [
+      "whereas"
+     ],
+     "pat": "lk.whereas",
+     "de": "„Whereas“ steht direkt vor Subjekt und Verb, nicht vor einem Komma.",
+     "en": "“Whereas” comes directly before subject and verb, not before a comma."
+    },
+    {
+     "not": [
+      "however",
+      "nevertheless",
+      "nonetheless"
+     ],
+     "pat": "lk.however",
+     "de": "Gesucht ist ein Wort für den Gegensatz: Semikolon davor, Komma danach.",
+     "en": "A word for the contrast is needed: semicolon before, comma after."
+    }
+   ]
+  }
+ },
+ "Prices are rising, ___ wages are staying flat.": {
+  "pat": "lk.whereas",
+  "why": {
+   "ok": {
+    "de": "Richtig: Zwei Entwicklungen stehen gegenüber, danach folgt ein Satz: while.",
+    "en": "Right: two developments are contrasted and a clause follows: while."
+   },
+   "wrong": [
+    {
+     "if": [
+      "despite"
+     ],
+     "pat": "lk.despite",
+     "de": "„Despite“ braucht ein Nomen oder -ing. Hier folgt ein Satz.",
+     "en": "“Despite” needs a noun or -ing. A clause follows here."
+    },
+    {
+     "if": [
+      "although"
+     ],
+     "pat": "lk.although",
+     "de": "„Although“ räumt Unerwartetes ein. Hier stehen zwei Entwicklungen nur nebeneinander.",
+     "en": "“Although” concedes something unexpected. Here two trends just stand side by side."
+    },
+    {
+     "if": [
+      "however"
+     ],
+     "pat": "lk.however",
+     "de": "Mit „however“ und bloßem Komma entsteht ein Kommafehler. Gesucht ist eine Konjunktion.",
+     "en": "“However” after a bare comma is a comma splice. A conjunction is needed."
+    }
+   ]
+  }
+ },
+ "It was raining, but we held the outdoor event. → We held the outdoor event in ___ of the rain.": {
+  "pat": "lk.despite",
+  "why": {
+   "ok": {
+    "de": "Richtig: in spite of + Nomen (the rain) heißt trotz, und die Lücke ist das Nomen.",
+    "en": "Right: in spite of + noun (the rain) means despite."
+   },
+   "wrong": [
+    {
+     "if": [
+      "despite"
+     ],
+     "pat": "lk.despite",
+     "de": "„Despite“ steht ohne in und of. Hier ist der Ausdruck in … of schon da.",
+     "en": "“Despite” takes no “in” or “of”. The phrase in … of is already there."
+    },
+    {
+     "not": [
+      "spite"
+     ],
+     "pat": "lk.despite",
+     "de": "Zwischen in und of fehlt das Nomen des Ausdrucks: in spite of.",
+     "en": "The noun of the phrase is missing between in and of: in spite of."
+    }
+   ]
+  }
+ },
+ "He was tired. He finished the presentation. → ___ he was tired, he finished the presentation.": {
+  "pat": "lk.although",
+  "why": {
+   "ok": {
+    "de": "Richtig: Es folgt ein Satz (he was tired), also although.",
+    "en": "Right: a clause follows (he was tired), so although."
+   },
+   "wrong": [
+    {
+     "if": [
+      "despite"
+     ],
+     "pat": "lk.despite",
+     "de": "„Despite“ braucht ein Nomen oder -ing. Hier folgt ein Satz.",
+     "en": "“Despite” needs a noun or -ing. A clause follows here."
+    },
+    {
+     "if": [
+      "in",
+      "spite"
+     ],
+     "pat": "lk.despite",
+     "de": "„In spite“ braucht of und ein Nomen. Hier folgt ein Satz.",
+     "en": "“In spite” needs “of” and a noun. A clause follows here."
+    },
+    {
+     "if": [
+      "however"
+     ],
+     "pat": "lk.however",
+     "de": "„However“ verbindet zwei Sätze. Es leitet keinen Nebensatz ein.",
+     "en": "“However” links two sentences. It does not open a subordinate clause."
+    },
+    {
+     "if": [
+      "whereas"
+     ],
+     "pat": "lk.whereas",
+     "de": "„Whereas“ stellt Dinge gegenüber. Hier geht es aber um einen Widerspruch.",
+     "en": "“Whereas” contrasts things. Here a contradiction is meant."
+    }
+   ]
+  }
+ },
+ "Despite we were short on time, we completed the audit.": {
+  "pat": "lk.despite",
+  "why": {
+   "ok": {
+    "de": "Richtig: Despite braucht ein Nomen oder -ing. Vor einem Satz steht although.",
+    "en": "Right: despite needs a noun or -ing. A clause takes although."
+   },
+   "wrong": [
+    {
+     "if": [
+      "despite",
+      "we"
+     ],
+     "pat": "lk.although",
+     "de": "„Despite“ leitet keinen Satz mit Subjekt und Verb ein. Nimm although.",
+     "en": "“Despite” cannot open a clause with subject and verb. Use although."
+    },
+    {
+     "if": [
+      "spite"
+     ],
+     "pat": "lk.despite",
+     "de": "Auch „in spite of“ steht nur vor Nomen oder -ing, nicht vor einem Satz.",
+     "en": "“In spite of” also takes only a noun or -ing, not a clause."
+    }
+   ]
+  }
+ },
+ "In spite the delay, the project was a success.": {
+  "pat": "lk.despite",
+  "why": {
+   "ok": {
+    "de": "Richtig: in spite braucht of (in spite of the delay), oder kurz despite.",
+    "en": "Right: in spite needs “of” (in spite of the delay), or just despite."
+   },
+   "wrong": [
+    {
+     "if": [
+      "spite"
+     ],
+     "not": [
+      "of"
+     ],
+     "pat": "lk.despite",
+     "de": "„In spite“ ist unvollständig: Es heißt in spite of.",
+     "en": "“In spite” is incomplete: it is in spite of."
+    },
+    {
+     "if": [
+      "despite",
+      "of"
+     ],
+     "pat": "lk.despite",
+     "de": "„Despite“ steht ohne of.",
+     "en": "“Despite” takes no “of”."
+    },
+    {
+     "if": [
+      "although"
+     ],
+     "pat": "lk.although",
+     "de": "„Although“ braucht einen Satz. Hier steht nur das Nomen „the delay“.",
+     "en": "“Although” needs a clause. Only the noun “the delay” follows here."
+    }
+   ]
+  }
+ },
+ "The budget was approved, however the project is still on hold.": {
+  "pat": "lk.however",
+  "why": {
+   "ok": {
+    "de": "Richtig: Vor however steht Punkt oder Semikolon, danach ein Komma.",
+    "en": "Right: a period or semicolon goes before however, a comma after."
+   },
+   "wrong": [
+    {
+     "if": [
+      "however"
+     ],
+     "pat": "lk.however",
+     "de": "Davor braucht es Punkt oder Semikolon, danach ein Komma. Das Komma nach however fehlt.",
+     "en": "A period or semicolon goes before, a comma after. The comma after however is missing."
+    },
+    {
+     "if": [
+      "and"
+     ],
+     "pat": "lk.however",
+     "de": "Hier steht ein Gegensatz. And reiht nur aneinander.",
+     "en": "Here a contrast is meant. And just adds things."
+    },
+    {
+     "not": [
+      "however",
+      "nevertheless",
+      "nonetheless",
+      "but",
+      "although",
+      "though"
+     ],
+     "pat": "lk.however",
+     "de": "Gesucht ist die Fassung mit Punkt oder Semikolon, dann however und Komma.",
+     "en": "The version with a period or semicolon, then however and a comma, is needed."
+    }
+   ]
+  }
+ }
+}

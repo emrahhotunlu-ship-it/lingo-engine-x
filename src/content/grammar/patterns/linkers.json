@@ -1,0 +1,426 @@
+{
+ "topic": "linkers",
+ "canDo": {
+  "de": "Ich kann Gegensatz und Folge sauber verbinden: although mit Satz, despite mit Nomen, whereas für Vergleiche, however und therefore mit richtiger Zeichensetzung.",
+  "en": "I can link contrast and result cleanly: although with a clause, despite with a noun, whereas for comparisons, and however and therefore with correct punctuation."
+ },
+ "order": [
+  "lk.although",
+  "lk.despite",
+  "lk.whereas",
+  "lk.however",
+  "lk.therefore"
+ ],
+ "introPlan": [
+  [
+   "lk.although",
+   "lk.despite"
+  ],
+  [
+   "lk.whereas",
+   "lk.however"
+  ],
+  [
+   "lk.therefore"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Folgt ein ganzer Satz (although) oder ein Nomen bzw. eine -ing-Form (despite / in spite of)?",
+   "Stellst du zwei Dinge gegenüber (whereas / while) oder räumst du einen Widerspruch ein (although)?",
+   "Verbindest du zwei Sätze mit Gegensatz (however) oder mit Folge (therefore), getrennt durch Punkt oder Semikolon?"
+  ],
+  "en": [
+   "Does a full clause follow (although) or a noun or -ing form (despite / in spite of)?",
+   "Are you setting two things against each other (whereas / while) or conceding a contradiction (although)?",
+   "Do you link two sentences with a contrast (however) or a result (therefore), separated by a period or semicolon?"
+  ]
+ },
+ "patterns": [
+  {
+   "id": "lk.although",
+   "name": {
+    "de": "although · Gegensatz mit Satz",
+    "en": "although · contrast with a clause"
+   },
+   "form": {
+    "de": "although + Subjekt + Verb, Hauptsatz",
+    "en": "although + subject + verb, main clause"
+   },
+   "use": {
+    "de": "Räumt einen Widerspruch ein: Beides stimmt. Danach folgt ein ganzer Satz, und ein zweites but ist überflüssig.",
+    "en": "Concedes a contradiction: both things are true. A full clause follows, and a second but is redundant."
+   },
+   "signals": [
+    "although",
+    "though",
+    "even though"
+   ],
+   "ex": [
+    {
+     "en": "Although the quote was higher than expected, we accepted it.",
+     "de": "Obwohl das Angebot höher war als erwartet, haben wir es angenommen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Though the first draft was weak, the client liked the concept.",
+     "de": "Obwohl der erste Entwurf schwach war, gefiel dem Kunden das Konzept.",
+     "ctx": "mail"
+    },
+    {
+     "en": "I will join the call, even though I am still on the train.",
+     "de": "Ich nehme am Anruf teil, obwohl ich noch im Zug sitze.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Although the demo failed, but the client signed.",
+    "good": "Although the demo failed, the client signed.",
+    "cause": {
+     "de": "Kein typischer Übersetzungsfehler: Auch im Deutschen steht nach „obwohl“ kein „aber“. Es ist ein Doppelungsreflex, although trägt den Gegensatz schon.",
+     "en": "Not a typical translation error: German has no “aber” after “obwohl” either. It is a doubling reflex; although already carries the contrast."
+    }
+   },
+   "contrast": {
+    "with": "lk.despite",
+    "a": "Although it was late, we kept working.",
+    "b": "Despite the late hour, we kept working.",
+    "diff": {
+     "de": "although leitet einen ganzen Satz mit Subjekt und Verb ein. despite braucht ein Nomen oder eine -ing-Form.",
+     "en": "although opens a full clause with subject and verb. despite needs a noun or an -ing form."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Although the price was low, we declined.",
+     "q": {
+      "de": "Haben wir abgelehnt?",
+      "en": "Did we decline?"
+     },
+     "a": true
+    },
+    {
+     "s": "Even though she was invited, she stayed home.",
+     "q": {
+      "de": "Ist sie hingegangen?",
+      "en": "Did she go?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Folgt hier ein ganzer Satz oder nur ein Nomen, und trägt das Wort den Gegensatz schon allein?",
+    "en": "Does a full clause or just a noun follow, and does the word carry the contrast on its own?"
+   }
+  },
+  {
+   "id": "lk.despite",
+   "name": {
+    "de": "despite · Gegensatz mit Nomen",
+    "en": "despite · contrast with a noun"
+   },
+   "form": {
+    "de": "despite / in spite of + Nomen oder -ing",
+    "en": "despite / in spite of + noun or -ing"
+   },
+   "use": {
+    "de": "Gegensatz vor einem Nomen oder einer -ing-Form. Despite steht ohne of, in spite braucht immer of.",
+    "en": "Contrast before a noun or an -ing form. Despite takes no of, while in spite always needs of."
+   },
+   "signals": [
+    "despite",
+    "in spite of"
+   ],
+   "ex": [
+    {
+     "en": "Despite the delay, the launch went ahead.",
+     "de": "Trotz der Verzögerung fand der Launch statt.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "She was promoted despite working part-time.",
+     "de": "Sie wurde befördert, obwohl sie in Teilzeit arbeitet.",
+     "ctx": "mail"
+    },
+    {
+     "en": "In spite of the heavy rain, the event drew a crowd.",
+     "de": "Trotz des starken Regens kamen viele Besucher.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Despite of the delay, we launched on time.",
+    "good": "Despite the delay, we launched on time.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler: Das of aus in spite of wird auf despite übertragen. Despite steht ohne of.",
+     "en": "Not a translation error: the of from in spite of is carried over to despite. Despite takes no of."
+    }
+   },
+   "contrast": {
+    "with": "lk.although",
+    "a": "Despite the traffic, we arrived early.",
+    "b": "Although there was traffic, we arrived early.",
+    "diff": {
+     "de": "despite steht vor einem Nomen. although braucht dafür einen Satz mit Subjekt und Verb.",
+     "en": "despite goes before a noun. although needs a clause with subject and verb instead."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Despite the bad weather, we held the picnic.",
+     "q": {
+      "de": "Hat das Picknick stattgefunden?",
+      "en": "Did the picnic take place?"
+     },
+     "a": true
+    },
+    {
+     "s": "Despite strong demand, we canceled the event.",
+     "q": {
+      "de": "War die Nachfrage schwach?",
+      "en": "Was demand weak?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Folgt hier ein Nomen oder ein ganzer Satz, und stimmt die feste Form des Ausdrucks?",
+    "en": "Does a noun or a full clause follow, and is the fixed form of the phrase right?"
+   }
+  },
+  {
+   "id": "lk.whereas",
+   "name": {
+    "de": "whereas / while · Gegenüberstellung",
+    "en": "whereas / while · contrast of two things"
+   },
+   "form": {
+    "de": "A, whereas B (Satz + Satz)",
+    "en": "A, whereas B (clause + clause)"
+   },
+   "use": {
+    "de": "Stellt zwei Dinge nebeneinander und betont den Unterschied. Whereas ist förmlicher, while ist im Gespräch üblicher.",
+    "en": "Sets two things side by side and stresses the difference. Whereas is more formal, while is common in speech."
+   },
+   "signals": [
+    "whereas",
+    "while"
+   ],
+   "ex": [
+    {
+     "en": "Our online sales grew 12%, whereas in-store sales fell.",
+     "de": "Unser Online-Umsatz stieg um 12 %, während der Ladenumsatz sank.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "The old plan was cheap, whereas the new one offers more flexibility.",
+     "de": "Der alte Tarif war günstig, während der neue mehr Flexibilität bietet.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Anna prefers email, while Ben likes to call.",
+     "de": "Anna schreibt lieber E-Mails, während Ben lieber anruft.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "During sales rose in Europe, they fell in Asia.",
+    "good": "While sales rose in Europe, they fell in Asia.",
+    "cause": {
+     "de": "Deutsch „während“ steht vor einem Satz und vor einem Nomen. Englisch trennt: during + Nomen, while oder whereas + Satz.",
+     "en": "German “während” works before a clause and before a noun. English splits them: during + noun, while or whereas + clause."
+    }
+   },
+   "contrast": {
+    "with": "lk.although",
+    "a": "Our team grew, whereas the other teams shrank.",
+    "b": "Although our team grew, we missed the target.",
+    "diff": {
+     "de": "whereas stellt zwei Dinge gegenüber. although räumt ein, dass etwas trotz einer Erwartung passiert.",
+     "en": "whereas sets two things against each other. although concedes that something happens despite an expectation."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Anna prefers email, whereas Ben prefers calls.",
+     "q": {
+      "de": "Mögen beide am liebsten E-Mails?",
+      "en": "Do both prefer email?"
+     },
+     "a": false
+    },
+    {
+     "s": "While the first option is cheap, the second is fast.",
+     "q": {
+      "de": "Ist die zweite Option schnell?",
+      "en": "Is the second option fast?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Werden zwei Dinge nebeneinandergestellt, und folgt danach ein Satz oder nur ein Nomen?",
+    "en": "Are two things set side by side, and does a clause or just a noun follow?"
+   },
+   "usNote": {
+    "de": "In US-Business-Englisch ist while im Gespräch häufiger als whereas.",
+    "en": "In US business English, while is more common in speech than whereas."
+   }
+  },
+  {
+   "id": "lk.however",
+   "name": {
+    "de": "however / nevertheless · Zeichensetzung",
+    "en": "however / nevertheless · punctuation"
+   },
+   "form": {
+    "de": "Satz. However, Satz  /  Satz; however, Satz",
+    "en": "Clause. However, clause  /  clause; however, clause"
+   },
+   "use": {
+    "de": "Verbindet zwei Sätze mit Gegensatz. Davor steht ein Punkt oder Semikolon, danach ein Komma. Ein bloßes Komma davor ist ein Fehler.",
+    "en": "Links two clauses with a contrast. A period or semicolon comes before it and a comma after it. A bare comma before it is an error."
+   },
+   "signals": [
+    "however",
+    "nevertheless",
+    "nonetheless",
+    "even so"
+   ],
+   "ex": [
+    {
+     "en": "The budget was approved; however, the hiring freeze remains.",
+     "de": "Das Budget wurde genehmigt; der Einstellungsstopp bleibt jedoch bestehen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "We missed the deadline. Nevertheless, the client stayed with us.",
+     "de": "Wir haben die Frist verpasst. Trotzdem ist der Kunde bei uns geblieben.",
+     "ctx": "mail"
+    },
+    {
+     "en": "The route is longer; even so, it is faster at rush hour.",
+     "de": "Die Strecke ist länger; trotzdem geht sie zur Stoßzeit schneller.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Sales rose, however profits fell.",
+    "good": "Sales rose; however, profits fell.",
+    "cause": {
+     "de": "Im Deutschen darf vor „jedoch“ ein Komma stehen („…, jedoch fielen …“). Im Englischen braucht however davor einen Punkt oder ein Semikolon.",
+     "en": "German allows a comma before “jedoch” (“…, jedoch fielen …”). English needs a period or semicolon before however."
+    }
+   },
+   "contrast": {
+    "with": "lk.whereas",
+    "a": "Sales grew; however, profits fell.",
+    "b": "Sales grew, whereas profits fell.",
+    "diff": {
+     "de": "however beginnt einen neuen Satz, davor steht ein Punkt oder Semikolon. whereas verbindet beide Teile mit einem Komma.",
+     "en": "however starts a new sentence, with a period or semicolon before it. whereas joins both parts with a comma."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The report was late; however, the client was happy.",
+     "q": {
+      "de": "War der Kunde zufrieden?",
+      "en": "Was the client happy?"
+     },
+     "a": true
+    },
+    {
+     "s": "We expected losses. Nevertheless, profits rose.",
+     "q": {
+      "de": "Sind die Gewinne gesunken?",
+      "en": "Did profits fall?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Verbindet dein Wort zwei vollständige Sätze, und wie sind diese dann getrennt?",
+    "en": "Does your word join two complete sentences, and how are they separated then?"
+   }
+  },
+  {
+   "id": "lk.therefore",
+   "name": {
+    "de": "therefore / as a result · Folge",
+    "en": "therefore / as a result · result"
+   },
+   "form": {
+    "de": "Satz; therefore, Satz  /  Satz. As a result, Satz",
+    "en": "Clause; therefore, clause  /  Clause. As a result, clause"
+   },
+   "use": {
+    "de": "Nennt die Folge des ersten Satzes. Wie however steht es zwischen zwei Sätzen: Punkt oder Semikolon davor, Komma danach.",
+    "en": "Names the result of the first sentence. Like however, it sits between two clauses: period or semicolon before, comma after."
+   },
+   "signals": [
+    "therefore",
+    "consequently",
+    "as a result",
+    "thus",
+    "hence"
+   ],
+   "ex": [
+    {
+     "en": "Demand doubled; therefore, we hired two more agents.",
+     "de": "Die Nachfrage hat sich verdoppelt; deshalb haben wir zwei weitere Mitarbeiter eingestellt.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "The supplier closed. As a result, we need a new vendor.",
+     "de": "Der Lieferant hat geschlossen. Deshalb brauchen wir einen neuen Anbieter.",
+     "ctx": "mail"
+    },
+    {
+     "en": "It is raining, so we are moving the lunch inside.",
+     "de": "Es regnet, deshalb verlegen wir das Mittagessen nach drinnen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The server failed, therefore we lost the data.",
+    "good": "The server failed; therefore, we lost the data.",
+    "cause": {
+     "de": "Im Deutschen ist „…, deshalb verloren wir …“ mit Komma richtig. Im Englischen braucht therefore davor einen Punkt oder ein Semikolon.",
+     "en": "In German “…, deshalb verloren wir …” with a comma is correct. English needs a period or semicolon before therefore."
+    }
+   },
+   "contrast": {
+    "with": "lk.however",
+    "a": "Demand doubled; therefore, we hired more agents.",
+    "b": "Demand doubled; however, we kept the team small.",
+    "diff": {
+     "de": "therefore nennt die Folge, however den Gegensatz. Beide stehen mit Punkt oder Semikolon davor und Komma danach.",
+     "en": "therefore names the result, however the contrast. Both take a period or semicolon before and a comma after."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The server crashed; therefore, we moved to a new provider.",
+     "q": {
+      "de": "Haben wir den Anbieter wegen des Absturzes gewechselt?",
+      "en": "Did we switch providers because of the crash?"
+     },
+     "a": true
+    },
+    {
+     "s": "Sales dropped. As a result, we cut the budget.",
+     "q": {
+      "de": "Haben wir das Budget gekürzt, bevor die Umsätze sanken?",
+      "en": "Did we cut the budget before sales dropped?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Folgt der zweite Satz aus dem ersten, oder widerspricht er ihm?",
+    "en": "Does the second sentence follow from the first, or does it contradict it?"
+   }
+  }
+ ]
+}
