@@ -1,1 +1,4 @@
-/* Lernplattform 2.0 (docs/umbau/lernplattform-2.md §10.0): Stile des Pakets `fx`. Besitzer siehe §10.3. */
+/* Lernplattform 2.0 P8 */
+@import './fxo.css';
+@import './fxl.css';
+@import './fxr.css';
