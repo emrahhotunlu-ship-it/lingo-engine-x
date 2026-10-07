@@ -110,6 +110,10 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
 ## A7. Entscheidungsprotokoll
 Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktentscheidungen mit Datum eingetragen.
 
+**07.10.2026 – Mehr-Datei-Artefakt erlaubt (Emrahs Entscheidung; lockert „eine einzige HTML-Datei“ aus A1/Kap. 3.1)**
+- Am iPhone belegt (privater Test-Artefakt): ES-Module-Skript, WebGL, Web Worker (Blob) und das Laden einer eigenen Zusatzdatei (3 MB) funktionieren; **externe Anfragen bleiben blockiert** (Kap. 3.1 sonst unverändert: kein Server, keine Schlüssel, `claude.use` nur in `src/platform`).
+- Zwei Bauweisen: `npm run build`/`build:single` = genau eine `dist/index.html` (Standard und Rückweg); `npm run build:multi` = `dist/index.html` + **flache** Zusatzdateien (kein Unterordner), je Datei < 16 MB, gesamt ≤ 64 MB (Hinweis ab 12 MiB). Veröffentlichen mit `files` laut `docs/umbau/mehr-datei.md` (`npm run publish:manifest`). `check:platform` prüft beide Modi. Umgestellt wird der Standard erst nach Emrahs Entscheidung.
+
 **06.10.2026 – Lernplattform 2.0: Vertrags-Commit (Plan `docs/umbau/lernplattform-2.md`)**
 - **Eingabeprofil statt Handy-Modus (nie planwirksam):** Die neue Datei `src/platform/input.ts` (kommt mit P1) wählt nur die **Form** einer Aufgabe (Touch oder Tastatur), nie die Pflicht. Der alte Handy-Modus änderte die Pflicht; sein Verbot (`src/platform/device.ts`, `phoneMode`, `PhoneModeSection`, `setPhoneModeLocal`) bleibt. Abgesichert durch einen Fall in `tests/unit/removalAudit.test.ts`: `src/domain/**` und `src/features/today/store.ts` importieren nichts aus `src/platform/input`.
 - **Regelversion `u.rv`, Planversion bleibt 1:** Tagesplan v2 läuft über das rein ergänzende Feld `u.rv` (`rv !== 2` = alte Regel). `u.v` und `p.v` bleiben 1, damit jeder Leser (auch die Live-Version) jeden neuen Plan liest und der Rückweg sicher ist. Schalter `PLAN_RV` stellt nur die Koordination am Ende von Welle 2 um.
