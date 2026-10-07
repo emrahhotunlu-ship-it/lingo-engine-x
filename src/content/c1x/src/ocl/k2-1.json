@@ -944,7 +944,7 @@
    "level": "B2",
    "dom": "biz",
    "src": "seed",
-   "text": "You are right, the invoice contains a mistake. Thank you for telling me; I ___ correct it today.",
+   "text": "You are right, the invoice contains a mistake. Thank you for telling me; I ___ send you a corrected one this afternoon, I promise.",
    "accept": [
     "will",
     "shall"
@@ -1197,7 +1197,7 @@
    "cls": "conj",
    "chips": [
     "if",
-    "when",
+    "since",
     "although"
    ],
    "why": {
@@ -1215,10 +1215,10 @@
      },
      {
       "if": [
-       "when"
+       "since"
       ],
-      "de": "when meint einen sicheren Zeitpunkt, hier geht es um eine Bedingung.",
-      "en": "when means a certain point in time, but this is a condition."
+      "de": "since heißt „weil“ oder „seit“; hier geht es um eine Voraussetzung.",
+      "en": "since means “because” or “from the time”; this is a requirement."
      },
      {
       "if": [
@@ -1437,33 +1437,28 @@
    "src": "seed",
    "text": "I do not know ___ the new software will be ready, but I will ask our IT department tomorrow.",
    "accept": [
-    "when"
+    "when",
+    "if",
+    "whether"
    ],
    "cls": "conj",
    "chips": [
-    "if",
     "unless",
-    "until"
+    "until",
+    "while"
    ],
    "why": {
     "ok": {
-     "de": "In einer indirekten Frage bleibt will: I do not know when it will be ready.",
-     "en": "In an indirect question will stays: I do not know when it will be ready."
+     "de": "In einer indirekten Frage bleibt will (when/if/whether it will be ready); die Gegenwart gilt nur im Zeitsatz.",
+     "en": "In an indirect question will stays (when/if/whether it will be ready); the present is only for time clauses."
     },
     "wrong": [
      {
       "if": [
-       "if"
-      ],
-      "de": "if bedeutet „ob“; die Lücke fragt nach dem Zeitpunkt.",
-      "en": "if means “whether”; the gap asks about the point in time."
-     },
-     {
-      "if": [
        "unless"
       ],
-      "de": "unless heißt „außer wenn“ und passt nicht zu einem Zeitpunkt.",
-      "en": "unless means “except if” and does not fit a point in time."
+      "de": "unless heißt „außer wenn“ und leitet keine indirekte Frage ein.",
+      "en": "unless means “except if” and does not introduce an indirect question."
      },
      {
       "if": [
@@ -1471,6 +1466,13 @@
       ],
       "de": "until nennt einen Endpunkt und leitet hier keine indirekte Frage ein.",
       "en": "until names an end point and does not introduce an indirect question here."
+     },
+     {
+      "if": [
+       "while"
+      ],
+      "de": "while heißt „während“ und leitet hier keine indirekte Frage ein.",
+      "en": "while means “during the time that” and does not introduce an indirect question here."
      }
     ]
    }
@@ -1493,7 +1495,7 @@
    "chips": [
     "when",
     "unless",
-    "that"
+    "about"
    ],
    "why": {
     "ok": {
@@ -1517,10 +1519,10 @@
      },
      {
       "if": [
-       "that"
+       "about"
       ],
-      "de": "that passt nicht zu „not sure“ mit einer offenen Frage.",
-      "en": "that does not fit “not sure” with an open question."
+      "de": "about braucht ein Nomen oder -ing, keinen ganzen Satz.",
+      "en": "about needs a noun or -ing, not a full clause."
      }
     ]
    }

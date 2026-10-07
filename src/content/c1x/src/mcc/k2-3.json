@@ -108,7 +108,7 @@
    "options": [
     "shut",
     "lock",
-    "end",
+    "fasten",
     "close"
    ],
    "answer": 3,
@@ -131,10 +131,10 @@
       "en": "lock means “secure with a key”."
      },
      {
-      "opt": "end",
-      "cat": "meaning",
-      "de": "end a deal heißt, ein bestehendes Geschäft zu beenden.",
-      "en": "end a deal means to terminate an existing deal."
+      "opt": "fasten",
+      "cat": "calque",
+      "de": "Deutsch „festmachen“ führt zu fasten; fasten heißt „befestigen“ (Gurt, Knopf).",
+      "en": "German “festmachen” leads to fasten; fasten means “attach” (a belt, a button)."
      }
     ]
    }
@@ -155,7 +155,7 @@
     "keep",
     "meet",
     "hold",
-    "reach"
+    "catch"
    ],
    "answer": 1,
    "why": {
@@ -177,10 +177,10 @@
       "en": "German “einhalten/halten” leads to hold; deadlines are met."
      },
      {
-      "opt": "reach",
-      "cat": "meaning",
-      "de": "reach heißt „ankommen“; nach reach passt kein deadline als Ziel dieser Art.",
-      "en": "reach means “arrive at”; it does not fit a deadline in this sense."
+      "opt": "catch",
+      "cat": "partner",
+      "de": "catch passt zu Zügen und Bällen, nicht zu Fristen.",
+      "en": "catch goes with trains and balls, not deadlines."
      }
     ]
    }
@@ -706,7 +706,7 @@
    "options": [
     "hard",
     "rough",
-    "heavy",
+    "thick",
     "fierce"
    ],
    "answer": 3,
@@ -729,10 +729,10 @@
       "en": "rough means “coarse”; for competition you say fierce."
      },
      {
-      "opt": "heavy",
+      "opt": "thick",
       "cat": "partner",
-      "de": "heavy passt zu Verkehr, Regen oder Lasten, nicht zu Konkurrenz.",
-      "en": "heavy goes with traffic, rain or loads, not competition."
+      "de": "thick passt zu Dicke (thick fog), nicht zu Konkurrenz.",
+      "en": "thick goes with thickness (thick fog), not competition."
      }
     ]
    }
@@ -1121,7 +1121,7 @@
     "known",
     "familiar",
     "aware",
-    "sure"
+    "knowing"
    ],
    "answer": 2,
    "why": {
@@ -1143,10 +1143,10 @@
       "en": "familiar takes with: familiar with the rules."
      },
      {
-      "opt": "sure",
+      "opt": "knowing",
       "cat": "grammar",
-      "de": "sure passt nicht zu of in dieser Bedeutung.",
-      "en": "sure does not fit of in this meaning."
+      "de": "knowing ist eine -ing-Form; nach Are you steht ein Adjektiv.",
+      "en": "knowing is an -ing form; after Are you comes an adjective."
      }
     ]
    }

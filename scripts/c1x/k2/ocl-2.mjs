@@ -78,7 +78,7 @@ export const items = [
     t: 'At ___ time tomorrow, I will be meeting the new CFO in Zurich, so I will not read any e-mails.',
     c: {
       the: 'at the time tomorrow passt nicht; es braucht this time. || at the time tomorrow does not fit; it needs this time.',
-      any: 'at any time tomorrow heißt „jederzeit“, nicht „zu dieser Uhrzeit“. || at any time tomorrow means “whenever”, not “at this hour”.',
+      every: 'at every time tomorrow ist keine Wendung. || at every time tomorrow is not a phrase.',
       each: 'at each time tomorrow ist keine Wendung. || at each time tomorrow is not a phrase.',
     },
     ok: 'This time tomorrow nennt den künftigen Zeitpunkt, an dem die Handlung läuft: will be meeting. || This time tomorrow names the future moment when the action is in progress: will be meeting.',
@@ -296,14 +296,14 @@ export const items = [
     ok: 'Sich gewöhnen: get used to + Nomen oder -ing. || Becoming accustomed: get used to + noun or -ing.',
   },
   {
-    p: 'ut.be-used-to', lv: 'B2', dom: 'life', cls: 'part', a: ['used', 'accustomed'],
-    t: 'I am not ___ to working without a second monitor, so the trip to the client site is a challenge.',
+    p: 'psp.finished-time', lv: 'B2', dom: 'biz', cls: 'rel', a: ['that', 'which'],
+    t: 'The report ___ I sent you yesterday contains the figures for all regions, so please read the first page carefully.',
     c: {
-      use: 'am not use to gibt es nicht; die Wendung heißt be used to. || am not use to does not exist; the phrase is be used to.',
-      getting: 'am not getting to working ist keine Wendung. || am not getting to working is not a phrase.',
-      going: 'am not going to working wäre „ich gehe nicht zur Arbeit“. || am not going to working would mean “I am not going to work”.',
+      who: 'who steht für Personen; ein Bericht ist eine Sache. || who stands for people; a report is a thing.',
+      whose: 'whose zeigt Besitz („dessen“), hier fehlt ein Besitzer. || whose shows possession, but there is no owner here.',
+      what: 'what leitet keinen Relativsatz zu einem Nomen ein. || what does not introduce a relative clause to a noun.',
     },
-    ok: 'Nicht gewöhnt an etwas: not be used to + -ing. || Not accustomed to something: not be used to + -ing.',
+    ok: 'Relativsatz zu einer Sache: that oder which; yesterday verlangt das Past Simple (sent). || A relative clause about a thing: that or which; yesterday needs the past simple (sent).',
   },
   // ---- c1-diplomacy ----
   {
@@ -311,7 +311,7 @@ export const items = [
     t: 'I was wondering ___ you could send me the updated price list by tomorrow afternoon.',
     c: {
       that: 'wondering that passt nicht vor einer Bitte; gebraucht wird if oder whether. || wondering that does not fit before a request; if or whether is needed.',
-      when: 'wondering when fragt nach einem Zeitpunkt, nicht nach einer Bitte. || wondering when asks for a point in time, not a request.',
+      about: 'wondering about braucht ein Nomen oder -ing, keinen ganzen Satz. || wondering about needs a noun or -ing, not a full clause.',
       unless: 'unless heißt „außer wenn“ und leitet keine höfliche Frage ein. || unless means “except if” and does not introduce a polite question.',
     },
     ok: 'Weiche Bitte: I was wondering if/whether you could … (Vergangenheitsform macht es höflicher). || A soft request: I was wondering if/whether you could … (the past form makes it more polite).',

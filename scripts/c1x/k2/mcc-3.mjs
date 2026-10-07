@@ -17,13 +17,13 @@ export const items = [
   {
     p: 'lx.close-deal', area: 'lex', lex: ['close a deal'], lv: 'B2+', dom: 'biz',
     t: 'Our sales team managed to ___ the deal with the Swiss distributor just before the end of the quarter.',
-    o: [['close'], W('shut', 'calque', 'Deutsch „einen Abschluss schließen“ führt zu shut; shut gilt für Türen und Läden. || German “einen Abschluss schließen” leads to shut; shut is for doors and shops.'), W('lock', 'partner', 'lock heißt „abschließen mit Schlüssel“. || lock means “secure with a key”.'), W('end', 'meaning', 'end a deal heißt, ein bestehendes Geschäft zu beenden. || end a deal means to terminate an existing deal.')],
+    o: [['close'], W('shut', 'calque', 'Deutsch „einen Abschluss schließen“ führt zu shut; shut gilt für Türen und Läden. || German “einen Abschluss schließen” leads to shut; shut is for doors and shops.'), W('lock', 'partner', 'lock heißt „abschließen mit Schlüssel“. || lock means “secure with a key”.'), W('fasten', 'calque', 'Deutsch „festmachen“ führt zu fasten; fasten heißt „befestigen“ (Gurt, Knopf). || German “festmachen” leads to fasten; fasten means “attach” (a belt, a button).')],
     ok: 'Im Vertrieb schließt man ein Geschäft ab: close a deal. || In sales you complete a deal: close a deal.',
   },
   {
     p: 'lx.meet-deadline', area: 'lex', lex: ['meet a deadline'], lv: 'B2', dom: 'biz',
     t: 'We worked all weekend to ___ the deadline for the tender submission, and we made it with minutes to spare.',
-    o: [['meet'], W('keep', 'calque', 'Deutsch „eine Frist einhalten“ führt zu keep; die feste Wendung ist meet a deadline. || German “eine Frist einhalten” leads to keep; the fixed phrase is meet a deadline.'), W('hold', 'calque', 'Deutsch „einhalten/halten“ führt zu hold; Fristen werden met. || German “einhalten/halten” leads to hold; deadlines are met.'), W('reach', 'meaning', 'reach heißt „ankommen“; nach reach passt kein deadline als Ziel dieser Art. || reach means “arrive at”; it does not fit a deadline in this sense.')],
+    o: [['meet'], W('keep', 'calque', 'Deutsch „eine Frist einhalten“ führt zu keep; die feste Wendung ist meet a deadline. || German “eine Frist einhalten” leads to keep; the fixed phrase is meet a deadline.'), W('hold', 'calque', 'Deutsch „einhalten/halten“ führt zu hold; Fristen werden met. || German “einhalten/halten” leads to hold; deadlines are met.'), W('catch', 'partner', 'catch passt zu Zügen und Bällen, nicht zu Fristen. || catch goes with trains and balls, not deadlines.')],
     ok: 'Feste Verbindung: meet a deadline. || Fixed collocation: meet a deadline.',
   },
   {
@@ -95,7 +95,7 @@ export const items = [
   {
     p: 'lx.fierce-competition', area: 'lex', lex: ['fierce competition'], lv: 'C1', dom: 'biz',
     t: 'We are facing ___ competition from two new providers in the Nordic market, and our margins are shrinking.',
-    o: [['fierce'], W('hard', 'calque', 'Deutsch „harte Konkurrenz“ führt zu hard; üblich ist fierce competition. || German “harte Konkurrenz” leads to hard; fierce competition is usual.'), W('rough', 'calque', 'rough heißt „grob, rau“; für Konkurrenz sagt man fierce. || rough means “coarse”; for competition you say fierce.'), W('heavy', 'partner', 'heavy passt zu Verkehr, Regen oder Lasten, nicht zu Konkurrenz. || heavy goes with traffic, rain or loads, not competition.')],
+    o: [['fierce'], W('hard', 'calque', 'Deutsch „harte Konkurrenz“ führt zu hard; üblich ist fierce competition. || German “harte Konkurrenz” leads to hard; fierce competition is usual.'), W('rough', 'calque', 'rough heißt „grob, rau“; für Konkurrenz sagt man fierce. || rough means “coarse”; for competition you say fierce.'), W('thick', 'partner', 'thick passt zu Dicke (thick fog), nicht zu Konkurrenz. || thick goes with thickness (thick fog), not competition.')],
     ok: 'Starke Konkurrenz: fierce competition. || Strong competition: fierce competition.',
   },
   {
@@ -149,7 +149,7 @@ export const items = [
   {
     p: 'lx.aware-of', area: 'lex', lex: ['be aware of'], lv: 'B2+', dom: 'biz',
     t: 'Are you ___ of the new data protection rules that come into force in January and apply to all our customers?',
-    o: [['aware'], W('known', 'calque', 'Deutsch „bekannt“ (bekannt mit) führt zu known; „sich bewusst sein“ heißt be aware of. || German “bekannt” leads to known; “to be aware” is be aware of.'), W('familiar', 'grammar', 'familiar braucht with: familiar with the rules. || familiar takes with: familiar with the rules.'), W('sure', 'grammar', 'sure passt nicht zu of in dieser Bedeutung. || sure does not fit of in this meaning.')],
+    o: [['aware'], W('known', 'calque', 'Deutsch „bekannt“ (bekannt mit) führt zu known; „sich bewusst sein“ heißt be aware of. || German “bekannt” leads to known; “to be aware” is be aware of.'), W('familiar', 'grammar', 'familiar braucht with: familiar with the rules. || familiar takes with: familiar with the rules.'), W('knowing', 'grammar', 'knowing ist eine -ing-Form; nach Are you steht ein Adjektiv. || knowing is an -ing form; after Are you comes an adjective.')],
     ok: 'Sich bewusst sein: be aware of. || To be conscious of: be aware of.',
   },
   {

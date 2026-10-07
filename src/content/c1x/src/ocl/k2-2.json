@@ -367,7 +367,7 @@
    "cls": "det",
    "chips": [
     "the",
-    "any",
+    "every",
     "each"
    ],
    "why": {
@@ -385,10 +385,10 @@
      },
      {
       "if": [
-       "any"
+       "every"
       ],
-      "de": "at any time tomorrow heißt „jederzeit“, nicht „zu dieser Uhrzeit“.",
-      "en": "at any time tomorrow means “whenever”, not “at this hour”."
+      "de": "at every time tomorrow ist keine Wendung.",
+      "en": "at every time tomorrow is not a phrase."
      },
      {
       "if": [
@@ -1437,48 +1437,48 @@
    "id": "ocl-0062",
    "kind": "ocl",
    "area": "gram",
-   "pat": "ut.be-used-to",
-   "topic": "used-to",
+   "pat": "psp.finished-time",
+   "topic": "past-simple-perfect",
    "level": "B2",
-   "dom": "life",
+   "dom": "biz",
    "src": "seed",
-   "text": "I am not ___ to working without a second monitor, so the trip to the client site is a challenge.",
+   "text": "The report ___ I sent you yesterday contains the figures for all regions, so please read the first page carefully.",
    "accept": [
-    "used",
-    "accustomed"
+    "that",
+    "which"
    ],
-   "cls": "part",
+   "cls": "rel",
    "chips": [
-    "use",
-    "getting",
-    "going"
+    "who",
+    "whose",
+    "what"
    ],
    "why": {
     "ok": {
-     "de": "Nicht gewöhnt an etwas: not be used to + -ing.",
-     "en": "Not accustomed to something: not be used to + -ing."
+     "de": "Relativsatz zu einer Sache: that oder which; yesterday verlangt das Past Simple (sent).",
+     "en": "A relative clause about a thing: that or which; yesterday needs the past simple (sent)."
     },
     "wrong": [
      {
       "if": [
-       "use"
+       "who"
       ],
-      "de": "am not use to gibt es nicht; die Wendung heißt be used to.",
-      "en": "am not use to does not exist; the phrase is be used to."
+      "de": "who steht für Personen; ein Bericht ist eine Sache.",
+      "en": "who stands for people; a report is a thing."
      },
      {
       "if": [
-       "getting"
+       "whose"
       ],
-      "de": "am not getting to working ist keine Wendung.",
-      "en": "am not getting to working is not a phrase."
+      "de": "whose zeigt Besitz („dessen“), hier fehlt ein Besitzer.",
+      "en": "whose shows possession, but there is no owner here."
      },
      {
       "if": [
-       "going"
+       "what"
       ],
-      "de": "am not going to working wäre „ich gehe nicht zur Arbeit“.",
-      "en": "am not going to working would mean “I am not going to work”."
+      "de": "what leitet keinen Relativsatz zu einem Nomen ein.",
+      "en": "what does not introduce a relative clause to a noun."
      }
     ]
    }
@@ -1500,7 +1500,7 @@
    "cls": "conj",
    "chips": [
     "that",
-    "when",
+    "about",
     "unless"
    ],
    "why": {
@@ -1518,10 +1518,10 @@
      },
      {
       "if": [
-       "when"
+       "about"
       ],
-      "de": "wondering when fragt nach einem Zeitpunkt, nicht nach einer Bitte.",
-      "en": "wondering when asks for a point in time, not a request."
+      "de": "wondering about braucht ein Nomen oder -ing, keinen ganzen Satz.",
+      "en": "wondering about needs a noun or -ing, not a full clause."
      },
      {
       "if": [

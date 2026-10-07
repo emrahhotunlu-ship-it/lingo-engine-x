@@ -29,7 +29,7 @@ export const items = [
   {
     p: 'lx.back-up', area: 'lex', lex: ['back up'], lv: 'B2', dom: 'biz',
     t: 'Please make sure that all important files are ___ every night, because the old server has failed twice this month.',
-    o: [['backed up'], W('secured', 'calque', 'Deutsch „sichern“ führt zu secured; Dateien sichern heißt back up. || German “sichern” leads to secured; to save files is back up.'), W('saved up', 'calque', 'save up heißt „Geld ansparen“. || save up means “put money aside”.'), W('backup', 'grammar', 'backup ist ein Nomen; das Verb heißt back up (zwei Wörter). || backup is a noun; the verb is back up (two words).')],
+    o: [['backed up'], W('backed', 'grammar', 'backed braucht up: backed up (zwei Wörter). || backed needs up: backed up (two words).'), W('saved up', 'calque', 'save up heißt „Geld ansparen“. || save up means “put money aside”.'), W('backup', 'grammar', 'backup ist ein Nomen; das Verb heißt back up (zwei Wörter). || backup is a noun; the verb is back up (two words).')],
     ok: 'Daten sichern: back up (Verb), backup (Nomen). || To save data safely: back up (verb), backup (noun).',
   },
   {

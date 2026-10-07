@@ -3,7 +3,7 @@ import { invalidIdsOf, useLive } from '../../data/live';
 import { learningDayEnd, dayKey } from '../../domain/date';
 import { lexBookings, lexEvent, lexOut, type LexCard } from '../../domain/c1x/lexBook';
 import type { C1Item, C1Score } from '../../domain/c1x/types';
-import { buildTrainCards } from '../../domain/srs/cards';
+import { buildTrainCards } from '../../domain/metrics';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
 import type { Grade, Lang } from '../../domain/srs/types';
 import { logError } from '../../platform/diagnostics';

@@ -198,7 +198,7 @@
    "src": "seed",
    "text": "Please make sure that all important files are ___ every night, because the old server has failed twice this month.",
    "options": [
-    "secured",
+    "backed",
     "saved up",
     "backup",
     "backed up"
@@ -211,10 +211,10 @@
     },
     "wrong": [
      {
-      "opt": "secured",
-      "cat": "calque",
-      "de": "Deutsch „sichern“ führt zu secured; Dateien sichern heißt back up.",
-      "en": "German “sichern” leads to secured; to save files is back up."
+      "opt": "backed",
+      "cat": "grammar",
+      "de": "backed braucht up: backed up (zwei Wörter).",
+      "en": "backed needs up: backed up (two words)."
      },
      {
       "opt": "saved up",

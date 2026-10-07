@@ -184,7 +184,7 @@ export const items = [
     ok: 'as soon as + Gegenwart (I land), im Hauptsatz will. || as soon as + present (I land), will in the main clause.',
   },
   {
-    p: 'ff.will-now', lv: 'B2', dom: 'biz', cls: 'aux', a: ['shall', 'should'],
+    p: 'ff.will-now', lv: 'B2', dom: 'biz', cls: 'aux', a: ['shall', 'should', 'can', 'could', 'may'],
     t: '___ I send you the updated figures right now, or would you prefer to have them tomorrow morning?',
     c: {
       will: 'Will I send you klingt wie eine Frage nach der Zukunft, nicht wie ein Angebot. || Will I send you sounds like a question about the future, not like an offer.',
@@ -238,7 +238,7 @@ export const items = [
     t: 'I was wondering ___ it would be possible to reschedule our call to Thursday, because of a customer visit.',
     c: {
       that: 'wondering that passt nicht vor einer Frage nach Möglichkeit. || wondering that does not fit before a question about possibility.',
-      when: 'wondering when fragt nach der Zeit; hier geht es um ja oder nein. || wondering when asks about time; this is a yes/no question.',
+      about: 'wondering about braucht ein Nomen oder -ing, keinen ganzen Satz. || wondering about needs a noun or -ing, not a full clause.',
       what: 'wondering what braucht eine offene Frage mit einem Fragewort als Teil. || wondering what needs an open question with a question word as part.',
     },
     ok: 'Weiche Bitte: I was wondering if/whether + Satz. || A soft request: I was wondering if/whether + clause.',
@@ -255,7 +255,7 @@ export const items = [
   },
   {
     p: 'cn.third', lv: 'B2', dom: 'biz', cls: 'aux', a: ['had'],
-    t: 'I would have called you earlier if I ___ known that the meeting had been cancelled until this morning.',
+    t: 'I would have called you earlier if I ___ known that the meeting had been cancelled.',
     c: {
       have: 'if I have known passt nicht zu would have; hier braucht der if-Satz had known. || if I have known does not fit would have; the if-clause needs had known.',
       would: 'would steht im Hauptsatz, nicht nach if. || would belongs in the main clause, not after if.',

@@ -318,37 +318,37 @@
    "level": "B2",
    "dom": "life",
    "src": "seed",
-   "text": "My colleague ___ a coffee every afternoon at three, and he never skips it, not even on busy days.",
+   "text": "My colleague ___ a short walk every afternoon at three, and he never skips it, not even on busy days.",
    "options": [
     "makes",
-    "has",
-    "is having",
-    "would have"
+    "takes",
+    "does",
+    "is taking"
    ],
    "answer": 1,
    "why": {
     "ok": {
-     "de": "Gewohnheit mit every afternoon: Present Simple; have a coffee = einen Kaffee trinken.",
-     "en": "A habit with every afternoon: present simple; have a coffee = to drink a coffee."
+     "de": "Gewohnheit mit every afternoon: Present Simple; take a walk = spazieren gehen.",
+     "en": "A habit with every afternoon: present simple; take a walk = go for a walk."
     },
     "wrong": [
      {
       "opt": "makes",
       "cat": "calque",
-      "de": "„Einen Kaffee machen“ heißt im Englischen zubereiten; zum Trinken sagt man have.",
-      "en": "“To make a coffee” means preparing it in English; for drinking you say have."
+      "de": "Deutsch „einen Spaziergang machen“ führt zu makes; im Englischen heißt es take a walk.",
+      "en": "German “einen Spaziergang machen” leads to makes; English says take a walk."
      },
      {
-      "opt": "is having",
+      "opt": "does",
+      "cat": "calque",
+      "de": "Deutsch „macht“ ist hier nicht do; es heißt take a walk.",
+      "en": "German “macht” is not do here; it is take a walk."
+     },
+     {
+      "opt": "is taking",
       "cat": "grammar",
       "de": "Für eine Gewohnheit („every afternoon“) steht das Present Simple.",
       "en": "A habit (“every afternoon”) takes the present simple."
-     },
-     {
-      "opt": "would have",
-      "cat": "grammar",
-      "de": "would have braucht eine Bedingung oder ein Partizip.",
-      "en": "would have needs a condition or a participle."
      }
     ]
    }

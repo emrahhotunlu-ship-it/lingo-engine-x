@@ -207,48 +207,47 @@
    "id": "ocl-0072",
    "kind": "ocl",
    "area": "gram",
-   "pat": "cn.were",
-   "topic": "conditionals",
-   "level": "B2",
-   "dom": "life",
+   "pat": "tc.noun-clause",
+   "topic": "time-clauses",
+   "level": "B2+",
+   "dom": "biz",
    "src": "seed",
-   "text": "If I ___ you, I would talk to the manager before the weekend instead of waiting until Monday.",
+   "text": "Could you tell me ___ is responsible for the archive migration, because I need to send them the contract?",
    "accept": [
-    "were",
-    "was"
+    "who"
    ],
-   "cls": "aux",
+   "cls": "pron",
    "chips": [
-    "am",
-    "be",
-    "would"
+    "whom",
+    "whose",
+    "what"
    ],
    "why": {
     "ok": {
-     "de": "Ratschlag: If I were you, I would …",
-     "en": "Advice: If I were you, I would …"
+     "de": "Indirekte Frage nach einer Person als Subjekt: tell me who is responsible (kein do, keine Umstellung).",
+     "en": "An indirect question about a person as subject: tell me who is responsible (no do, no inversion)."
     },
     "wrong": [
      {
       "if": [
-       "am"
+       "whom"
       ],
-      "de": "am passt nicht in einen Ratschlag mit if I … would.",
-      "en": "am does not fit advice with if I … would."
+      "de": "whom wäre Objektform; hier ist die Lücke das Subjekt von is responsible.",
+      "en": "whom is the object form; here the gap is the subject of is responsible."
      },
      {
       "if": [
-       "be"
+       "whose"
       ],
-      "de": "if I be you ist falsch.",
-      "en": "if I be you is wrong."
+      "de": "whose zeigt Besitz („wessen“), hier wird nach der Person gefragt.",
+      "en": "whose shows possession, but here the person is asked for."
      },
      {
       "if": [
-       "would"
+       "what"
       ],
-      "de": "would steht im Hauptsatz, nicht im if-Satz.",
-      "en": "would belongs in the main clause, not the if-clause."
+      "de": "what fragt nach Sachen, nicht nach einer verantwortlichen Person.",
+      "en": "what asks about things, not about a responsible person."
      }
     ]
    }
@@ -462,7 +461,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "text": "You may use the company car this weekend ___ you promise to bring it back with a full tank by Monday.",
+   "text": "You may use the company car this weekend ___ that you promise to bring it back with a full tank by Monday.",
    "accept": [
     "provided",
     "providing"

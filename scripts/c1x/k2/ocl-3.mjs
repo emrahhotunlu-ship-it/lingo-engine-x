@@ -43,14 +43,14 @@ export const items = [
     ok: 'Rat und Annahme: If I were you, … (were auch bei I). || Advice and assumption: If I were you, … (were even with I).',
   },
   {
-    p: 'cn.were', lv: 'B2', dom: 'life', cls: 'aux', a: ['were', 'was'],
-    t: 'If I ___ you, I would talk to the manager before the weekend instead of waiting until Monday.',
+    p: 'tc.noun-clause', lv: 'B2+', dom: 'biz', cls: 'pron', a: ['who'],
+    t: 'Could you tell me ___ is responsible for the archive migration, because I need to send them the contract?',
     c: {
-      am: 'am passt nicht in einen Ratschlag mit if I … would. || am does not fit advice with if I … would.',
-      be: 'if I be you ist falsch. || if I be you is wrong.',
-      would: 'would steht im Hauptsatz, nicht im if-Satz. || would belongs in the main clause, not the if-clause.',
+      whom: 'whom wäre Objektform; hier ist die Lücke das Subjekt von is responsible. || whom is the object form; here the gap is the subject of is responsible.',
+      whose: 'whose zeigt Besitz („wessen“), hier wird nach der Person gefragt. || whose shows possession, but here the person is asked for.',
+      what: 'what fragt nach Sachen, nicht nach einer verantwortlichen Person. || what asks about things, not about a responsible person.',
     },
-    ok: 'Ratschlag: If I were you, I would … || Advice: If I were you, I would …',
+    ok: 'Indirekte Frage nach einer Person als Subjekt: tell me who is responsible (kein do, keine Umstellung). || An indirect question about a person as subject: tell me who is responsible (no do, no inversion).',
   },
   {
     p: 'cn.second', lv: 'B2', dom: 'biz', cls: 'aux', a: ['had'],
@@ -94,7 +94,7 @@ export const items = [
   },
   {
     p: 'cn.if-words', lv: 'B2+', dom: 'biz', cls: 'conj', a: ['provided', 'providing'],
-    t: 'You may use the company car this weekend ___ you promise to bring it back with a full tank by Monday.',
+    t: 'You may use the company car this weekend ___ that you promise to bring it back with a full tank by Monday.',
     c: {
       unless: 'unless würde die Bedingung umkehren: nur wenn du es nicht versprichst. || unless would reverse the condition: only if you do not promise it.',
       although: 'although heißt „obwohl“ und nennt keine Bedingung. || although means “even though” and names no condition.',

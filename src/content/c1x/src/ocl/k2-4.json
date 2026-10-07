@@ -900,7 +900,10 @@
    "text": "___ I send you the updated figures right now, or would you prefer to have them tomorrow morning?",
    "accept": [
     "shall",
-    "should"
+    "should",
+    "can",
+    "could",
+    "may"
    ],
    "cls": "aux",
    "chips": [
@@ -1151,7 +1154,7 @@
    "cls": "conj",
    "chips": [
     "that",
-    "when",
+    "about",
     "what"
    ],
    "why": {
@@ -1169,10 +1172,10 @@
      },
      {
       "if": [
-       "when"
+       "about"
       ],
-      "de": "wondering when fragt nach der Zeit; hier geht es um ja oder nein.",
-      "en": "wondering when asks about time; this is a yes/no question."
+      "de": "wondering about braucht ein Nomen oder -ing, keinen ganzen Satz.",
+      "en": "wondering about needs a noun or -ing, not a full clause."
      },
      {
       "if": [
@@ -1243,7 +1246,7 @@
    "level": "B2",
    "dom": "biz",
    "src": "seed",
-   "text": "I would have called you earlier if I ___ known that the meeting had been cancelled until this morning.",
+   "text": "I would have called you earlier if I ___ known that the meeting had been cancelled.",
    "accept": [
     "had"
    ],

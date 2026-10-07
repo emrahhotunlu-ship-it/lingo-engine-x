@@ -197,7 +197,7 @@ export const items = [
   // ---- future-forms ----
   {
     p: 'ff.will-now', lv: 'B2', dom: 'biz', cls: 'aux', a: ['will', 'shall'],
-    t: 'You are right, the invoice contains a mistake. Thank you for telling me; I ___ correct it today.',
+    t: 'You are right, the invoice contains a mistake. Thank you for telling me; I ___ send you a corrected one this afternoon, I promise.',
     c: {
       am: 'am correct ergibt keinen Satz; für eine spontane Entscheidung steht will + Grundform. || am correct does not make a sentence; a spontaneous decision takes will + base form.',
       do: 'do correct sagt nichts über die Zukunft. || do correct says nothing about the future.',
@@ -250,7 +250,7 @@ export const items = [
     t: 'We will not be able to deliver the update on Friday ___ the client sends us the missing data today.',
     c: {
       if: 'if ergäbe die falsche Bedeutung: Wir liefern nicht, falls er sendet. || if would give the wrong meaning: we do not deliver if he sends it.',
-      when: 'when meint einen sicheren Zeitpunkt, hier geht es um eine Bedingung. || when means a certain point in time, but this is a condition.',
+      since: 'since heißt „weil“ oder „seit“; hier geht es um eine Voraussetzung. || since means “because” or “from the time”; this is a requirement.',
       although: 'although heißt „obwohl“; es gibt keinen Gegensatz, sondern eine Voraussetzung. || although means “even though”; there is no contrast, only a requirement.',
     },
     ok: 'unless = außer wenn, mit Gegenwart statt will: unless the client sends. || unless = except if, with the present instead of will: unless the client sends.',
@@ -297,14 +297,14 @@ export const items = [
     ok: 'By the time + Gegenwart: spätestens bis dahin; im Hauptsatz Future Perfect. || By the time + present: no later than then; the main clause takes the future perfect.',
   },
   {
-    p: 'tc.noun-clause', lv: 'B2+', dom: 'biz', cls: 'conj', a: ['when'],
+    p: 'tc.noun-clause', lv: 'B2+', dom: 'biz', cls: 'conj', a: ['when', 'if', 'whether'],
     t: 'I do not know ___ the new software will be ready, but I will ask our IT department tomorrow.',
     c: {
-      if: 'if bedeutet „ob“; die Lücke fragt nach dem Zeitpunkt. || if means “whether”; the gap asks about the point in time.',
-      unless: 'unless heißt „außer wenn“ und passt nicht zu einem Zeitpunkt. || unless means “except if” and does not fit a point in time.',
+      unless: 'unless heißt „außer wenn“ und leitet keine indirekte Frage ein. || unless means “except if” and does not introduce an indirect question.',
       until: 'until nennt einen Endpunkt und leitet hier keine indirekte Frage ein. || until names an end point and does not introduce an indirect question here.',
+      while: 'while heißt „während“ und leitet hier keine indirekte Frage ein. || while means “during the time that” and does not introduce an indirect question here.',
     },
-    ok: 'In einer indirekten Frage bleibt will: I do not know when it will be ready. || In an indirect question will stays: I do not know when it will be ready.',
+    ok: 'In einer indirekten Frage bleibt will (when/if/whether it will be ready); die Gegenwart gilt nur im Zeitsatz. || In an indirect question will stays (when/if/whether it will be ready); the present is only for time clauses.',
   },
   {
     p: 'tc.noun-clause', lv: 'B2', dom: 'life', cls: 'conj', a: ['whether', 'if'],
@@ -312,7 +312,7 @@ export const items = [
     c: {
       when: 'when fragt nach einem Zeitpunkt; hier geht es um ja oder nein. || when asks for a point in time; this is a yes/no question.',
       unless: 'unless heißt „außer wenn“ und leitet keine Frage ein. || unless means “except if” and does not introduce a question.',
-      that: 'that passt nicht zu „not sure“ mit einer offenen Frage. || that does not fit “not sure” with an open question.',
+      about: 'about braucht ein Nomen oder -ing, keinen ganzen Satz. || about needs a noun or -ing, not a full clause.',
     },
     ok: 'Ja/Nein-Frage nach not sure: whether oder if, und will bleibt. || A yes/no question after not sure: whether or if, and will stays.',
   },

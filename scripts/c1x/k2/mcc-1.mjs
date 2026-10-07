@@ -47,9 +47,9 @@ export const items = [
   },
   {
     p: 'psc.habit', lv: 'B2', dom: 'life',
-    t: 'My colleague ___ a coffee every afternoon at three, and he never skips it, not even on busy days.',
-    o: [['has'], W('makes', 'calque', '„Einen Kaffee machen“ heißt im Englischen zubereiten; zum Trinken sagt man have. || “To make a coffee” means preparing it in English; for drinking you say have.'), W('is having', 'grammar', 'Für eine Gewohnheit („every afternoon“) steht das Present Simple. || A habit (“every afternoon”) takes the present simple.'), W('would have', 'grammar', 'would have braucht eine Bedingung oder ein Partizip. || would have needs a condition or a participle.')],
-    ok: 'Gewohnheit mit every afternoon: Present Simple; have a coffee = einen Kaffee trinken. || A habit with every afternoon: present simple; have a coffee = to drink a coffee.',
+    t: 'My colleague ___ a short walk every afternoon at three, and he never skips it, not even on busy days.',
+    o: [['takes'], W('makes', 'calque', 'Deutsch „einen Spaziergang machen“ führt zu makes; im Englischen heißt es take a walk. || German “einen Spaziergang machen” leads to makes; English says take a walk.'), W('does', 'calque', 'Deutsch „macht“ ist hier nicht do; es heißt take a walk. || German “macht” is not do here; it is take a walk.'), W('is taking', 'grammar', 'Für eine Gewohnheit („every afternoon“) steht das Present Simple. || A habit (“every afternoon”) takes the present simple.')],
+    ok: 'Gewohnheit mit every afternoon: Present Simple; take a walk = spazieren gehen. || A habit with every afternoon: present simple; take a walk = go for a walk.',
   },
   {
     p: 'psp.finished-time', lv: 'B2', dom: 'biz',
