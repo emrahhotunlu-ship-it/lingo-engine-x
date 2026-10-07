@@ -2,6 +2,1166 @@
  "v": 1,
  "tasks": [
   {
+   "id": "art-ind-k1",
+   "type": "kwt",
+   "pat": "art.indefinite",
+   "from": "Daniel is a lawyer.",
+   "key": "AS",
+   "frame": "Daniel works ___ lawyer.",
+   "answer": "as a",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: as a lawyer. Ein Beruf nach as braucht im Singular a/an.",
+     "en": "Right: as a lawyer. A singular job after as takes a/an."
+    },
+    "wrong": [
+     {
+      "not": [
+       "as"
+      ],
+      "de": "Das Schlüsselwort as muss unverändert in der Lücke stehen.",
+      "en": "The key word as must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "as",
+       "an"
+      ],
+      "de": "„an“ steht vor Vokallaut. Lawyer beginnt mit Konsonantlaut, also a.",
+      "en": "“an” goes before a vowel sound. Lawyer starts with a consonant sound, so a."
+     },
+     {
+      "if": [
+       "as",
+       "the"
+      ],
+      "de": "„the lawyer“ meint einen bekannten Anwalt. Hier wird nur sein Beruf genannt.",
+      "en": "“the lawyer” means a known lawyer. Here only his job is named."
+     },
+     {
+      "not": [
+       "a"
+      ],
+      "de": "Es fehlt der Artikel: Ein Beruf im Singular braucht a/an.",
+      "en": "The article is missing: a singular job needs a/an."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-ind-k2",
+   "type": "kwt",
+   "pat": "art.indefinite",
+   "from": "What a great idea!",
+   "key": "SUCH",
+   "frame": "That was ___ great idea.",
+   "answer": "such a",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: such a great idea. Nach such steht a/an vor dem Nomen im Singular.",
+     "en": "Right: such a great idea. After such use a/an before a singular noun."
+    },
+    "wrong": [
+     {
+      "not": [
+       "such"
+      ],
+      "de": "Das Schlüsselwort such muss unverändert in der Lücke stehen.",
+      "en": "The key word such must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "such",
+       "an"
+      ],
+      "de": "„an“ steht vor Vokallaut. Great beginnt mit Konsonantlaut, also a.",
+      "en": "“an” goes before a vowel sound. Great starts with a consonant sound, so a."
+     },
+     {
+      "if": [
+       "such",
+       "the"
+      ],
+      "de": "„such the“ geht nicht. Nach such steht a/an: such a great idea.",
+      "en": "“such the” fails. After such use a/an: such a great idea."
+     },
+     {
+      "not": [
+       "a"
+      ],
+      "de": "Es fehlt das a: such great idea geht im Singular nicht.",
+      "en": "The a is missing: such great idea does not work in the singular."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-ind-f1",
+   "type": "find",
+   "pat": "art.indefinite",
+   "prompt": "My sister is lawyer in Boston.",
+   "err": [
+    3,
+    3
+   ],
+   "answer": "a lawyer",
+   "fixed": "My sister is a lawyer in Boston.",
+   "accepted": [
+    "an attorney"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Ein Beruf braucht a/an: is a lawyer.",
+     "en": "The error: a job takes a/an: is a lawyer."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Es fehlt der Artikel vor lawyer.",
+      "en": "There is an error: the article is missing before lawyer."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „lawyer“: Ein Beruf im Singular braucht a/an.",
+      "en": "The error is “lawyer”: a singular job needs a/an."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-ind-f2",
+   "type": "find",
+   "pat": "art.indefinite",
+   "prompt": "That was such great meeting, and I learned a lot.",
+   "err": [
+    2,
+    4
+   ],
+   "answer": "such a great meeting,",
+   "fixed": "That was such a great meeting, and I learned a lot.",
+   "accepted": [
+    "quite a great meeting,",
+    "a great meeting,"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach such steht a/an: such a great meeting.",
+     "en": "The error: after such use a/an: such a great meeting."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Vor great meeting fehlt das a.",
+      "en": "There is an error: the a is missing before great meeting."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „such great meeting“: such verlangt hier a.",
+      "en": "The error is “such great meeting”: such needs a here."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-ind-m1",
+   "type": "meaning",
+   "pat": "art.indefinite",
+   "a": "We're hiring a designer.",
+   "b": "We're hiring the designer.",
+   "q": {
+    "de": "Welcher Satz sagt: Es ist noch offen, wer genau eingestellt wird?",
+    "en": "Which sentence says it is still open who exactly will be hired?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. a designer ist irgendein Designer, noch niemand bestimmt.",
+     "en": "Right: sentence a. a designer = any designer, nobody chosen yet."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b meint the designer eine bestimmte Person, die beide schon kennen.",
+      "en": "In b, the designer means one particular person both of you know."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a nennt einen offenen Posten, b eine bekannte Person.",
+      "en": "Not the same: a names an open position, b a known person."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-snd-k1",
+   "type": "kwt",
+   "pat": "art.sound",
+   "from": "The meeting lasts sixty minutes.",
+   "key": "HOUR",
+   "frame": "The meeting lasts ___.",
+   "answer": "an hour",
+   "accepted": [
+    "one hour",
+    "about an hour",
+    "about one hour",
+    "just an hour",
+    "only an hour",
+    "a full hour",
+    "a whole hour"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: an hour. Das h ist stumm, der Laut beginnt mit einem Vokal.",
+     "en": "Right: an hour. The h is silent, so the sound starts with a vowel."
+    },
+    "wrong": [
+     {
+      "not": [
+       "hour"
+      ],
+      "de": "Das Schlüsselwort hour muss unverändert in der Lücke stehen.",
+      "en": "The key word hour must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "a",
+       "hour"
+      ],
+      "de": "„a hour“ geht nicht: Das h ist stumm, daher steht an hour.",
+      "en": "“a hour” fails: the h is silent, so it is an hour."
+     },
+     {
+      "not": [
+       "an",
+       "one"
+      ],
+      "de": "Die Dauer braucht an hour oder one hour, nicht einen anderen Artikel.",
+      "en": "The duration needs an hour or one hour, not another article."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-snd-k2",
+   "type": "kwt",
+   "pat": "art.sound",
+   "from": "She has completed a Master of Business Administration.",
+   "key": "MBA",
+   "frame": "She has completed ___.",
+   "answer": "an MBA",
+   "accepted": [
+    "her MBA",
+    "an MBA degree",
+    "an MBA program",
+    "an MBA course",
+    "her MBA degree",
+    "her MBA program"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: an MBA. MBA beginnt mit dem Vokallaut /e/ (em), nicht mit b.",
+     "en": "Right: an MBA. MBA starts with the vowel sound /e/ (em), not with b."
+    },
+    "wrong": [
+     {
+      "not": [
+       "mba"
+      ],
+      "de": "Das Schlüsselwort mba muss unverändert in der Lücke stehen.",
+      "en": "The key word mba must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "a",
+       "mba"
+      ],
+      "de": "„a MBA“ geht nicht: MBA wird „em-bee-ay“ gesprochen, also an.",
+      "en": "“a MBA” fails: MBA is said “em-bee-ay”, so an."
+     },
+     {
+      "not": [
+       "an",
+       "her",
+       "the"
+      ],
+      "de": "Ein Abschluss im Singular braucht einen Artikel oder ein Possessivwort.",
+      "en": "A degree in the singular needs an article or a possessive."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-snd-f1",
+   "type": "find",
+   "pat": "art.sound",
+   "prompt": "We'll need an unique approach for this client.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "a unique",
+   "fixed": "We'll need a unique approach for this client.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: unique beginnt mit /j/, also Konsonantlaut: a unique approach.",
+     "en": "The error: unique starts with /j/, a consonant sound: a unique approach."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Vor unique steht nicht an.",
+      "en": "There is an error: an does not stand before unique."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „an unique“: Es zählt der Laut /j/, nicht der Buchstabe u.",
+      "en": "The error is “an unique”: the sound /j/ counts, not the letter u."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-snd-f2",
+   "type": "find",
+   "pat": "art.sound",
+   "prompt": "She is an HR specialist with a European background.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: an HR (Vokallaut /e/) und a European (Laut /j/) sind richtig.",
+     "en": "No error: an HR (vowel sound /e/) and a European (sound /j/) are right."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Hier zählt der Laut, also an HR, aber a European.",
+      "en": "No error: the sound counts here, so an HR, but a European."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-snd-m1",
+   "type": "meaning",
+   "pat": "art.sound",
+   "a": "I'll need an hour.",
+   "b": "I'll need one hour.",
+   "q": {
+    "de": "Sagen beide Sätze, dass es um 60 Minuten geht?",
+    "en": "Do both sentences say it takes 60 minutes?"
+   },
+   "answer": "both",
+   "why": {
+    "ok": {
+     "de": "Richtig: beide. an hour und one hour nennen dieselbe Dauer.",
+     "en": "Right: both. an hour and one hour name the same length of time."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "Auch b nennt 60 Minuten: one hour heißt dasselbe wie an hour.",
+      "en": "b names 60 minutes too: one hour means the same as an hour."
+     },
+     {
+      "opt": "b",
+      "de": "Auch a nennt 60 Minuten: an hour heißt dasselbe wie one hour.",
+      "en": "a names 60 minutes too: an hour means the same as one hour."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-def-k1",
+   "type": "kwt",
+   "pat": "art.definite",
+   "from": "Can you forward me the agenda that we agreed on yesterday?",
+   "key": "AGREED",
+   "frame": "Can you forward me ___ on yesterday?",
+   "answer": "the agenda we agreed",
+   "accepted": [
+    "the agenda that we agreed",
+    "the agenda which we agreed",
+    "that agenda we agreed",
+    "the agenda we had agreed"
+   ],
+   "words": [
+    4,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: the agenda we agreed on. Beide kennen die Tagesordnung von gestern.",
+     "en": "Right: the agenda we agreed on. Both know yesterday's agenda."
+    },
+    "wrong": [
+     {
+      "not": [
+       "agreed"
+      ],
+      "de": "Das Schlüsselwort agreed muss unverändert in der Lücke stehen.",
+      "en": "The key word agreed must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "an"
+      ],
+      "de": "„an agenda“ meint irgendeine Tagesordnung. Hier ist die von gestern gemeint.",
+      "en": "“an agenda” means any agenda. Here yesterday's agenda is meant."
+     },
+     {
+      "if": [
+       "a"
+      ],
+      "de": "„a agenda“ geht nicht, und gemeint ist die bekannte Tagesordnung: the agenda.",
+      "en": "“a agenda” fails, and the known agenda is meant: the agenda."
+     },
+     {
+      "not": [
+       "the",
+       "that"
+      ],
+      "de": "Die Tagesordnung ist bekannt und festgelegt, daher braucht sie the.",
+      "en": "The agenda is known and fixed, so it needs the."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-def-k2",
+   "type": "kwt",
+   "pat": "art.definite",
+   "from": "Anna raised a risk earlier. Can we discuss that risk now?",
+   "key": "MENTIONED",
+   "frame": "Can we discuss ___ earlier?",
+   "answer": "the risk Anna mentioned",
+   "accepted": [
+    "the risk that Anna mentioned",
+    "the risk which Anna mentioned",
+    "that risk Anna mentioned",
+    "the risk Anna had mentioned"
+   ],
+   "words": [
+    4,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: the risk Anna mentioned. Das Risiko ist schon genannt, nun ist es bekannt.",
+     "en": "Right: the risk Anna mentioned. The risk was raised already, so it is now known."
+    },
+    "wrong": [
+     {
+      "not": [
+       "mentioned"
+      ],
+      "de": "Das Schlüsselwort mentioned muss unverändert in der Lücke stehen.",
+      "en": "The key word mentioned must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "a",
+       "risk"
+      ],
+      "de": "„a risk“ wäre ein neues, unbekanntes Risiko. Hier ist das genannte gemeint.",
+      "en": "“a risk” would be a new, unknown risk. Here the one already raised is meant."
+     },
+     {
+      "not": [
+       "the",
+       "that"
+      ],
+      "de": "Das Risiko ist schon genannt, daher braucht es the oder that.",
+      "en": "The risk was raised already, so it needs the or that."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-def-f1",
+   "type": "find",
+   "pat": "art.definite",
+   "prompt": "Sorry for delay in my reply.",
+   "err": [
+    2,
+    2
+   ],
+   "answer": "the delay",
+   "fixed": "Sorry for the delay in my reply.",
+   "accepted": [
+    "this delay",
+    "any delay",
+    "a delay"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Hier ist meist eine bestimmte Verzögerung gemeint: Sorry for the delay.",
+     "en": "The error: usually one particular delay is meant: Sorry for the delay."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Vor delay fehlt der Artikel.",
+      "en": "There is an error: the article is missing before delay."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „delay“: Es heißt for the delay, nicht for delay.",
+      "en": "The error is “delay”: it is for the delay, not for delay."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-def-f2",
+   "type": "find",
+   "pat": "art.definite",
+   "prompt": "The first item on agenda is the budget.",
+   "err": [
+    3,
+    4
+   ],
+   "answer": "on the agenda",
+   "fixed": "The first item on the agenda is the budget.",
+   "accepted": [
+    "on our agenda",
+    "on today's agenda"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Die Tagesordnung ist bekannt: on the agenda.",
+     "en": "The error: the agenda is known: on the agenda."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Vor agenda fehlt der Artikel.",
+      "en": "There is an error: the article is missing before agenda."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „on agenda“: Beide kennen die Tagesordnung, also the.",
+      "en": "The error is “on agenda”: both know the agenda, so the."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-def-m1",
+   "type": "meaning",
+   "pat": "art.definite",
+   "a": "I'll call a client.",
+   "b": "I'll call the client.",
+   "q": {
+    "de": "Bei welchem Satz weiß der Hörer, welcher Kunde gemeint ist?",
+    "en": "In which sentence does the listener know which client is meant?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. the client = ein bestimmter Kunde, den beide kennen.",
+     "en": "Right: sentence b. the client = one particular client both know."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a meint a client irgendeinen Kunden, noch ohne Namen.",
+      "en": "In a, a client means any client, not yet named."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a nennt einen offenen Kunden, b einen bekannten.",
+      "en": "Not the same: a names an open client, b a known one."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-uni-k1",
+   "type": "kwt",
+   "pat": "art.the-unique",
+   "from": "No other option is better than this one.",
+   "key": "BEST",
+   "frame": "This is ___ option.",
+   "answer": "the best",
+   "accepted": [
+    "the very best",
+    "the best possible",
+    "by far the best",
+    "easily the best"
+   ],
+   "words": [
+    2,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: the best. Ein Superlativ steht mit the.",
+     "en": "Right: the best. A superlative takes the."
+    },
+    "wrong": [
+     {
+      "not": [
+       "best"
+      ],
+      "de": "Das Schlüsselwort best muss unverändert in der Lücke stehen.",
+      "en": "The key word best must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "a",
+       "best"
+      ],
+      "de": "„a best“ passt nicht: Das Beste ist einzigartig und braucht the.",
+      "en": "“a best” does not fit: the best is unique and needs the."
+     },
+     {
+      "not": [
+       "the"
+      ],
+      "de": "Ein Superlativ braucht den Artikel the: the best option.",
+      "en": "A superlative needs the article the: the best option."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-uni-k2",
+   "type": "kwt",
+   "pat": "art.the-unique",
+   "from": "Nobody except Anna has access to the files.",
+   "key": "ONLY",
+   "frame": "Anna is ___ person with access to the files.",
+   "answer": "the only",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: the only person. only steht mit the, denn es gibt nur eine.",
+     "en": "Right: the only person. only takes the, because there is just one."
+    },
+    "wrong": [
+     {
+      "not": [
+       "only"
+      ],
+      "de": "Das Schlüsselwort only muss unverändert in der Lücke stehen.",
+      "en": "The key word only must stay unchanged in the gap."
+     },
+     {
+      "not": [
+       "the"
+      ],
+      "de": "Vor only braucht es den Artikel the: the only person.",
+      "en": "Before only you need the article the: the only person."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-uni-f1",
+   "type": "find",
+   "pat": "art.the-unique",
+   "prompt": "This is most important client we have in Asia.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "the most important",
+   "fixed": "This is the most important client we have in Asia.",
+   "accepted": [
+    "our most important"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Ein Superlativ braucht the: the most important client.",
+     "en": "The error: a superlative needs the: the most important client."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Vor most important fehlt the.",
+      "en": "There is an error: the is missing before most important."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „most important“: Der Superlativ steht mit the.",
+      "en": "The error is “most important”: the superlative takes the."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-uni-f2",
+   "type": "find",
+   "pat": "art.the-unique",
+   "prompt": "He was the only candidate who asked about the pension plan.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: the only candidate ist richtig, denn only steht mit the.",
+     "en": "No error: the only candidate is right, because only takes the."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Nach only passt the, und the pension plan ist bekannt.",
+      "en": "No error: the fits after only, and the pension plan is a known one."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-uni-m1",
+   "type": "meaning",
+   "pat": "art.the-unique",
+   "a": "He is the best candidate.",
+   "b": "He is a good candidate.",
+   "q": {
+    "de": "Welcher Satz sagt, dass kein anderer Kandidat besser ist?",
+    "en": "Which sentence says that no other candidate is better?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. the best ist der Spitzenreiter, keiner ist besser.",
+     "en": "Right: sentence a. the best = number one, nobody is better."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b nennt a good candidate nur eine gute Person von vielen.",
+      "en": "In b, a good candidate is just one good person among many."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a nennt den besten, b nur einen guten Kandidaten.",
+      "en": "Not the same: a names the best one, b only a good candidate."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-zer-k1",
+   "type": "kwt",
+   "pat": "art.zero",
+   "from": "Could you advise me on the contract?",
+   "key": "PIECE",
+   "frame": "Could you give me ___ advice on the contract?",
+   "answer": "a piece of",
+   "accepted": [
+    "one piece of"
+   ],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: a piece of advice. advice ist unzählbar, daher die Mengenangabe.",
+     "en": "Right: a piece of advice. advice is uncountable, hence the unit word."
+    },
+    "wrong": [
+     {
+      "not": [
+       "piece"
+      ],
+      "de": "Das Schlüsselwort piece muss unverändert in der Lücke stehen.",
+      "en": "The key word piece must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "piece"
+      ],
+      "de": "Mit piece gehört of dahinter, davor steht a: a piece of advice.",
+      "en": "With piece, of follows, and a comes before: a piece of advice."
+     },
+     {
+      "not": [
+       "a",
+       "one"
+      ],
+      "de": "Vor piece fehlt a oder one: a piece of advice.",
+      "en": "Before piece, a or one is missing: a piece of advice."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-zer-k2",
+   "type": "kwt",
+   "pat": "art.zero",
+   "from": "We don't know enough about the client yet.",
+   "key": "MORE",
+   "frame": "We need ___ about the client.",
+   "answer": "more information",
+   "accepted": [
+    "a lot more information",
+    "much more information",
+    "more data",
+    "more details",
+    "more background information",
+    "more detailed information"
+   ],
+   "words": [
+    2,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: more information. information ist unzählbar: ohne a, ohne -s.",
+     "en": "Right: more information. information is uncountable: no a, no -s."
+    },
+    "wrong": [
+     {
+      "not": [
+       "more"
+      ],
+      "de": "Das Schlüsselwort more muss unverändert in der Lücke stehen.",
+      "en": "The key word more must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "informations"
+      ],
+      "de": "„informations“ gibt es nicht: information bleibt in der Einzahl.",
+      "en": "There is no “informations”: information stays singular."
+     },
+     {
+      "if": [
+       "an",
+       "information"
+      ],
+      "de": "„an information“ geht nicht: information ist unzählbar und braucht kein an.",
+      "en": "“an information” fails: information is uncountable and needs no an."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-zer-f1",
+   "type": "find",
+   "pat": "art.zero",
+   "prompt": "Thanks for the informations you sent us last week.",
+   "err": [
+    3,
+    3
+   ],
+   "answer": "information",
+   "fixed": "Thanks for the information you sent us last week.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: information ist unzählbar und hat keinen Plural.",
+     "en": "The error: information is uncountable and has no plural."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: informations gibt es nicht.",
+      "en": "There is an error: there is no such word as informations."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „informations“: Das Wort bleibt in der Einzahl.",
+      "en": "The error is “informations”: the word stays singular."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-zer-f2",
+   "type": "find",
+   "pat": "art.zero",
+   "prompt": "Could you give me an advice on how to handle this client?",
+   "err": [
+    4,
+    5
+   ],
+   "answer": "some advice",
+   "fixed": "Could you give me some advice on how to handle this client?",
+   "accepted": [
+    "advice",
+    "any advice",
+    "a piece of advice",
+    "a bit of advice",
+    "some good advice"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: advice ist unzählbar, also kein an: some advice.",
+     "en": "The error: advice is uncountable, so no an: some advice."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Vor advice steht kein an.",
+      "en": "There is an error: no an goes before advice."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „an advice“: Man sagt some advice oder a piece of advice.",
+      "en": "The error is “an advice”: say some advice or a piece of advice."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-zer-m1",
+   "type": "meaning",
+   "pat": "art.zero",
+   "a": "She loves the music.",
+   "b": "She loves music.",
+   "q": {
+    "de": "Welcher Satz sagt, dass sie Musik ganz allgemein liebt?",
+    "en": "Which sentence says that she loves music in general?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. Ohne Artikel ist Musik allgemein gemeint.",
+     "en": "Right: sentence b. Without an article, music is meant in general."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a zeigt the music auf bestimmte Musik, etwa die gerade gespielte.",
+      "en": "In a, the music points to particular music, such as what is playing."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a meint bestimmte Musik, b Musik im Allgemeinen.",
+      "en": "Not the same: a means particular music, b music in general."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-fix-k1",
+   "type": "kwt",
+   "pat": "art.fixed",
+   "from": "Tom commutes to his office by train.",
+   "key": "WORK",
+   "frame": "Tom goes ___ by train.",
+   "answer": "to work",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: go to work. Die feste Wendung steht ohne Artikel.",
+     "en": "Right: go to work. The set phrase takes no article."
+    },
+    "wrong": [
+     {
+      "not": [
+       "work"
+      ],
+      "de": "Das Schlüsselwort work muss unverändert in der Lücke stehen.",
+      "en": "The key word work must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "the",
+       "work"
+      ],
+      "de": "„to the work“ klingt wie ein Ort. Die Wendung heißt to work, ohne Artikel.",
+      "en": "“to the work” sounds like a place. The phrase is to work, without an article."
+     },
+     {
+      "not": [
+       "to"
+      ],
+      "de": "Nach go steht to: go to work.",
+      "en": "After go comes to: go to work."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-fix-k2",
+   "type": "kwt",
+   "pat": "art.fixed",
+   "from": "Our kids attend lessons five days a week.",
+   "key": "SCHOOL",
+   "frame": "Our kids ___ five days a week.",
+   "answer": "go to school",
+   "accepted": [
+    "attend school",
+    "attend a school",
+    "go to a school"
+   ],
+   "words": [
+    2,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: go to school. Der Schulbesuch ist eine feste Wendung ohne Artikel.",
+     "en": "Right: go to school. Attending lessons is a set phrase without an article."
+    },
+    "wrong": [
+     {
+      "not": [
+       "school"
+      ],
+      "de": "Das Schlüsselwort school muss unverändert in der Lücke stehen.",
+      "en": "The key word school must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "the",
+       "school"
+      ],
+      "de": "„the school“ meint ein bekanntes Gebäude. Hier geht es um den Schulbesuch.",
+      "en": "“the school” means a known building. Here it is about attending school."
+     },
+     {
+      "not": [
+       "to",
+       "attend"
+      ],
+      "de": "Nach dem Verb fehlt to oder attend: go to school.",
+      "en": "After the verb, to or attend is missing: go to school."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-fix-f1",
+   "type": "find",
+   "pat": "art.fixed",
+   "prompt": "We usually have lunch at the work with the team.",
+   "err": [
+    4,
+    6
+   ],
+   "answer": "at work",
+   "fixed": "We usually have lunch at work with the team.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Die feste Wendung lautet at work, ohne Artikel.",
+     "en": "The error: the set phrase is at work, without an article."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: In at work steht kein Artikel.",
+      "en": "There is an error: at work takes no article."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „at the work“: Gemeint ist at work, am Arbeitsplatz.",
+      "en": "The error is “at the work”: at work is meant, at the workplace."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-fix-f2",
+   "type": "find",
+   "pat": "art.fixed",
+   "prompt": "I'll call you in the morning, before the first meeting.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: in the morning ist fest, und the first meeting ist eindeutig.",
+     "en": "No error: in the morning is fixed, and the first meeting is clear."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Die Wendung in the morning verlangt the, so wie hier.",
+      "en": "No error: the phrase in the morning needs the, just as here."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
+   "id": "art-fix-m1",
+   "type": "meaning",
+   "pat": "art.fixed",
+   "a": "She is in school.",
+   "b": "She is in the school.",
+   "q": {
+    "de": "Bei welchem Satz geht es darum, dass sie Schülerin ist?",
+    "en": "In which sentence is the point that she is a student?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. in school = sie lernt dort, als Schülerin.",
+     "en": "Right: sentence a. in school = she studies there, as a student."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b nennt in the school nur den Ort, das Gebäude, nicht ihre Rolle.",
+      "en": "In b, in the school names only the place, the building, not her role."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a nennt ihre Rolle, b den Ort.",
+      "en": "Not the same: a names her role, b the place."
+     }
+    ]
+   },
+   "topic": "articles"
+  },
+  {
    "id": "dp-wo-k1",
    "type": "kwt",
    "pat": "dip.wondering",
@@ -3980,6 +5140,846 @@
     ]
    },
    "topic": "c1-hedging"
+  },
+  {
+   "id": "cp-hav-k1",
+   "type": "kwt",
+   "pat": "cp.having",
+   "from": "After I had read the contract, I called the supplier.",
+   "key": "HAVING",
+   "frame": "___ the contract, I called the supplier.",
+   "answer": "Having read",
+   "accepted": [
+    "Having just read",
+    "Having already read",
+    "Having now read",
+    "After having read"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Having read. Erst gelesen, dann angerufen: gleiches Subjekt.",
+     "en": "Right: Having read. First read, then called: same subject."
+    },
+    "wrong": [
+     {
+      "not": [
+       "having"
+      ],
+      "de": "Das Schlüsselwort Having muss unverändert in der Lücke stehen.",
+      "en": "The key word Having must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "having",
+       "reading"
+      ],
+      "de": "Nach Having folgt die 3. Form: read, nicht reading.",
+      "en": "After Having comes the past participle: read, not reading."
+     },
+     {
+      "if": [
+       "having",
+       "been"
+      ],
+      "de": "Having been read ist passiv. Du liest den Vertrag selbst: Having read.",
+      "en": "Having been read is passive. You read the contract yourself: Having read."
+     }
+    ]
+   },
+   "topic": "c1-participle"
+  },
+  {
+   "id": "cp-hav-k2",
+   "type": "kwt",
+   "pat": "cp.having",
+   "from": "The client released the funds after he had approved the final report.",
+   "key": "HAVING",
+   "frame": "The client released the funds, ___ the final report.",
+   "answer": "having approved",
+   "accepted": [
+    "having already approved",
+    "having just approved",
+    "after having approved"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: having approved. Erst genehmigt, dann freigegeben.",
+     "en": "Right: having approved. First approved, then released."
+    },
+    "wrong": [
+     {
+      "not": [
+       "having"
+      ],
+      "de": "Das Schlüsselwort having muss unverändert in der Lücke stehen.",
+      "en": "The key word having must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "having",
+       "approving"
+      ],
+      "de": "Nach having folgt die 3. Form: approved, nicht approving.",
+      "en": "After having comes the past participle: approved, not approving."
+     },
+     {
+      "if": [
+       "having",
+       "been"
+      ],
+      "de": "Having been approved ist passiv. Der Kunde genehmigt selbst: having approved.",
+      "en": "Having been approved is passive. The client approves it himself: having approved."
+     }
+    ]
+   },
+   "topic": "c1-participle"
+  },
+  {
+   "id": "cp-hav-f1",
+   "type": "find",
+   "pat": "cp.having",
+   "prompt": "Having wrote the proposal, she sent it to the board.",
+   "err": [
+    1,
+    1
+   ],
+   "answer": "written",
+   "fixed": "Having written the proposal, she sent it to the board.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach Having steht die 3. Form von write: written, nicht wrote.",
+     "en": "The error: after Having comes the past participle of write: written, not wrote."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach Having passt wrote nicht.",
+      "en": "There is an error: wrote does not fit after Having."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „wrote“: Nach Having braucht es die 3. Form.",
+      "en": "The error is at “wrote”: after Having you need the past participle."
+     }
+    ]
+   },
+   "topic": "c1-participle"
+  },
+  {
+   "id": "cp-hav-f2",
+   "type": "find",
+   "pat": "cp.having",
+   "prompt": "Having took the minutes, Lena shared them with the group.",
+   "err": [
+    1,
+    1
+   ],
+   "answer": "taken",
+   "fixed": "Having taken the minutes, Lena shared them with the group.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach Having steht die 3. Form von take: taken, nicht took.",
+     "en": "The error: after Having comes the past participle of take: taken, not took."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach Having passt took nicht.",
+      "en": "There is an error: took does not fit after Having."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „took“: Nach Having braucht es die 3. Form.",
+      "en": "The error is at “took”: after Having you need the past participle."
+     }
+    ]
+   },
+   "topic": "c1-participle"
+  },
+  {
+   "id": "cp-hav-f3",
+   "type": "find",
+   "pat": "cp.having",
+   "prompt": "Having sent the quote on Monday, we are still waiting for an answer.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Having sent zeigt: Das Senden war zuerst fertig. Danach wartet man.",
+     "en": "No error: Having sent shows the sending came first. Waiting follows."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Having + 3. Form (sent) passt, das Subjekt we gehört dazu.",
+      "en": "No error: Having + past participle (sent) fits, and the subject we belongs to it."
+     }
+    ]
+   },
+   "topic": "c1-participle"
+  },
+  {
+   "id": "cp-hav-m1",
+   "type": "meaning",
+   "pat": "cp.having",
+   "a": "Having left the office, Tom realized he had forgotten his badge.",
+   "b": "Leaving the office, Tom realized he had forgotten his badge.",
+   "q": {
+    "de": "In welchem Satz hatte Tom das Büro schon verlassen, als er es merkte?",
+    "en": "In which sentence had Tom already left the office when he noticed?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Having left heißt: Tom ist schon draußen, dann merkt er es.",
+     "en": "Right: sentence a. Having left = already outside, noticed afterwards."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b merkt Tom es beim Hinausgehen: Leaving läuft nur gleichzeitig.",
+      "en": "In b Tom notices on his way out: Leaving happens at the same time."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Having left ist abgeschlossen, Leaving läuft noch.",
+      "en": "Not the same: Having left is finished, Leaving is still going on."
+     }
+    ]
+   },
+   "topic": "c1-participle"
+  },
+  {
+   "id": "cp-ing-k1",
+   "type": "kwt",
+   "pat": "cp.ing",
+   "from": "Because the team works with live data, it spots errors faster.",
+   "key": "WORKING",
+   "frame": "___ live data, the team spots errors faster.",
+   "answer": "Working with",
+   "accepted": [
+    "By working with"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Working with. Das Mittel, gleichzeitig: -ing statt Because.",
+     "en": "Right: Working with. The means, at the same time: -ing instead of Because."
+    },
+    "wrong": [
+     {
+      "not": [
+       "working"
+      ],
+      "de": "Das Schlüsselwort Working muss unverändert in der Lücke stehen.",
+      "en": "The key word Working must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "because"
+      ],
+      "de": "Because gehört nicht in die Lücke: Das Partizip ersetzt den ganzen Nebensatz.",
+      "en": "Because does not belong in the gap: the participle replaces the whole clause."
+     },
+     {
+      "if": [
+       "being"
+      ],
+      "de": "Being working ist keine Form. Das Partizip ist einfach Working.",
+      "en": "Being working is not a form. The participle is simply Working."
+     }
+    ]
+   },
+   "topic": "c1-participle"
+  },
+  {
+   "id": "cp-ing-k2",
+   "type": "kwt",
+   "pat": "cp.ing",
+   "from": "As she walked to the station, Anna called her manager.",
+   "key": "WALKING",
+   "frame": "___ the station, Anna called her manager.",
+   "answer": "Walking to",
+   "accepted": [
+    "While walking to",
+    "When walking to"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Walking to. Gleichzeitig: Anna ging und rief dabei an.",
+     "en": "Right: Walking to. At the same time: Anna walked and called while doing so."
+    },
+    "wrong": [
+     {
+      "not": [
+       "walking"
+      ],
+      "de": "Das Schlüsselwort Walking muss unverändert in der Lücke stehen.",
+      "en": "The key word Walking must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "she"
+      ],
+      "de": "As she gehört nicht in die Lücke: Das Partizip ersetzt den Nebensatz.",
+      "en": "As she does not belong in the gap: the participle replaces the clause."
+     },
+     {
+      "if": [
+       "having"
+      ],
+      "de": "Having walked hieße: erst gegangen. Hier ist beides gleichzeitig: Walking to.",
+      "en": "Having walked means: walked first. Here both happen together: Walking to."
+     }
+    ]
+   },
+   "topic": "c1-participle"
+  },
+  {
+   "id": "cp-ing-f1",
+   "type": "find",
+   "pat": "cp.ing",
+   "prompt": "Used the new scanner, the clerk processed every invoice in minutes.",
+   "err": [
+    0,
+    0
+   ],
+   "answer": "Using",
+   "fixed": "Using the new scanner, the clerk processed every invoice in minutes.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Der Angestellte nutzt den Scanner selbst, also -ing: Using, nicht Used.",
+     "en": "The error: the clerk uses the scanner himself, so -ing: Using, not Used."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Used passt nicht zum aktiven Sinn.",
+      "en": "There is an error: Used does not fit the active meaning."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „Used“: Der Sinn ist aktiv, also -ing.",
+      "en": "The error is at “Used”: the meaning is active, so -ing."
+     }
+    ]
+   },
+   "topic": "c1-participle"
+  },
+  {
+   "id": "cp-ing-f2",
+   "type": "find",
+   "pat": "cp.ing",
+   "prompt": "Open the file, the analyst found three formatting errors.",
+   "err": [
+    0,
+    0
+   ],
+   "answer": "Opening",
+   "fixed": "Opening the file, the analyst found three formatting errors.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Am Satzanfang braucht das Partizip -ing: Opening, nicht Open.",
+     "en": "The error: at the start the participle needs -ing: Opening, not Open."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Open wirkt wie ein Befehl, nicht wie ein Partizip.",
+      "en": "There is an error: Open reads like a command, not like a participle."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „Open“: Ohne -ing ist es kein Partizip.",
+      "en": "The error is at “Open”: without -ing it is not a participle."
+     }
+    ]
+   },
+   "topic": "c1-participle"
+  },
+  {
+   "id": "cp-ing-m1",
+   "type": "meaning",
+   "pat": "cp.ing",
+   "a": "Welcoming the guests, Sara handed out badges.",
+   "b": "Welcomed by Sara, the guests received their badges.",
+   "q": {
+    "de": "Welcher Satz sagt: Die Gäste wurden von Sara begrüßt?",
+    "en": "Which sentence says the guests were welcomed by Sara?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. Welcomed by = Die Gäste werden begrüßt.",
+     "en": "Right: sentence b. Welcomed by = the guests receive the welcome."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a begrüßt Sara selbst: -ing heißt, das Subjekt handelt.",
+      "en": "In a Sara welcomes them herself: -ing means the subject acts."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: -ing = Subjekt handelt, 3. Form = Subjekt erlebt es.",
+      "en": "Not the same: -ing = the subject acts, past participle = the subject receives it."
+     }
+    ]
+   },
+   "topic": "c1-participle"
+  },
+  {
+   "id": "cp-pp-k1",
+   "type": "kwt",
+   "pat": "cp.pp",
+   "from": "The product was designed for small teams, so it is easy to set up.",
+   "key": "DESIGNED",
+   "frame": "___ small teams, the product is easy to set up.",
+   "answer": "Designed for",
+   "accepted": [
+    "Designed specifically for",
+    "Designed especially for",
+    "Designed primarily for"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Designed for. Das Produkt wird entworfen: passiv, nur die 3. Form.",
+     "en": "Right: Designed for. The product is designed: passive, just the past participle."
+    },
+    "wrong": [
+     {
+      "not": [
+       "designed"
+      ],
+      "de": "Das Schlüsselwort Designed muss unverändert in der Lücke stehen.",
+      "en": "The key word Designed must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "designing"
+      ],
+      "de": "Designing hieße: Das Produkt entwirft selbst. Es wird entworfen: Designed.",
+      "en": "Designing would mean the product designs. It is designed: Designed."
+     },
+     {
+      "if": [
+       "was"
+      ],
+      "de": "Was designed ist ein finiter Satzteil. Das Partizip steht allein: Designed for.",
+      "en": "Was designed is a finite verb phrase. The participle stands alone: Designed for."
+     }
+    ]
+   },
+   "topic": "c1-participle"
+  },
+  {
+   "id": "cp-pp-k2",
+   "type": "kwt",
+   "pat": "cp.pp",
+   "from": "As the offer was based on old figures, it was rejected.",
+   "key": "BASED",
+   "frame": "___ old figures, the offer was rejected.",
+   "answer": "Based on",
+   "accepted": [
+    "Based upon",
+    "Being based on",
+    "Based solely on",
+    "Based only on"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Based on. Das Angebot beruht auf alten Zahlen: passiv, nur die 3. Form.",
+     "en": "Right: Based on. The offer rests on old figures: passive, just the past participle."
+    },
+    "wrong": [
+     {
+      "not": [
+       "based"
+      ],
+      "de": "Das Schlüsselwort Based muss unverändert in der Lücke stehen.",
+      "en": "The key word Based must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "basing"
+      ],
+      "de": "Basing hieße: Das Angebot gründet selbst etwas. Es beruht auf Zahlen: Based.",
+      "en": "Basing would mean the offer bases something. It rests on figures: Based."
+     },
+     {
+      "if": [
+       "as"
+      ],
+      "de": "As gehört nicht in die Lücke: Das Partizip ersetzt den ganzen Nebensatz.",
+      "en": "As does not belong in the gap: the participle replaces the whole clause."
+     }
+    ]
+   },
+   "topic": "c1-participle"
+  },
+  {
+   "id": "cp-pp-f1",
+   "type": "find",
+   "pat": "cp.pp",
+   "prompt": "Writing in plain English, the manual is easy to follow.",
+   "err": [
+    0,
+    0
+   ],
+   "answer": "Written",
+   "fixed": "Written in plain English, the manual is easy to follow.",
+   "accepted": [
+    "Being written"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Das Handbuch wird geschrieben, es schreibt nicht: Written, nicht Writing.",
+     "en": "The error: the manual is written, it does not write: Written, not Writing."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Writing passt nicht zum passiven Sinn.",
+      "en": "There is an error: Writing does not fit the passive meaning."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „Writing“: Das Handbuch schreibt nicht selbst.",
+      "en": "The error is at “Writing”: the manual does not write itself."
+     }
+    ]
+   },
+   "topic": "c1-participle"
+  },
+  {
+   "id": "cp-pp-f2",
+   "type": "find",
+   "pat": "cp.pp",
+   "prompt": "Delaying by the storm, the flight arrived two hours late.",
+   "err": [
+    0,
+    1
+   ],
+   "answer": "Delayed by",
+   "fixed": "Delayed by the storm, the flight arrived two hours late.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Der Flug wird verspätet, er verspätet nichts: Delayed by, nicht Delaying by.",
+     "en": "The error: the flight is delayed, it delays nothing: Delayed by, not Delaying by."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Delaying by passt nicht zum passiven Sinn.",
+      "en": "There is an error: Delaying by does not fit the passive meaning."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „Delaying by“: Der Flug erlebt die Verspätung.",
+      "en": "The error is at “Delaying by”: the flight receives the delay."
+     }
+    ]
+   },
+   "topic": "c1-participle"
+  },
+  {
+   "id": "cp-pp-f3",
+   "type": "find",
+   "pat": "cp.pp",
+   "prompt": "Located in the city center, the office is close to the station.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Located in = Das Büro liegt dort. Passiver Sinn, nur die 3. Form.",
+     "en": "No error: Located in = the office lies there. Passive meaning, just the past participle."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Located passt, denn das Büro wird irgendwo platziert, es platziert nichts.",
+      "en": "No error: Located fits, because the office is placed somewhere and places nothing."
+     }
+    ]
+   },
+   "topic": "c1-participle"
+  },
+  {
+   "id": "cp-pp-m1",
+   "type": "meaning",
+   "pat": "cp.pp",
+   "a": "Called by the client, Mia left the meeting early.",
+   "b": "Calling the client, Mia left the meeting early.",
+   "q": {
+    "de": "In welchem Satz hat der Kunde angerufen?",
+    "en": "In which sentence did the client make the call?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Called by = Der Kunde ruft Mia an.",
+     "en": "Right: sentence a. Called by = the client calls Mia."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b ruft Mia selbst an: -ing heißt, das Subjekt handelt.",
+      "en": "In b Mia makes the call herself: -ing means the subject acts."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: 3. Form = Subjekt erlebt es, -ing = Subjekt tut es.",
+      "en": "Not the same: past participle = the subject receives it, -ing = the subject does it."
+     }
+    ]
+   },
+   "topic": "c1-participle"
+  },
+  {
+   "id": "cp-sub-k1",
+   "type": "kwt",
+   "pat": "cp.subject",
+   "from": "As I was waiting for my flight, I met an old classmate.",
+   "key": "WAITING",
+   "frame": "___ my flight, I met an old classmate.",
+   "answer": "Waiting for",
+   "accepted": [
+    "While waiting for",
+    "When waiting for"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Waiting for. Ich warte und ich treffe: dasselbe Subjekt.",
+     "en": "Right: Waiting for. I wait and I meet: the same subject."
+    },
+    "wrong": [
+     {
+      "not": [
+       "waiting"
+      ],
+      "de": "Das Schlüsselwort Waiting muss unverändert in der Lücke stehen.",
+      "en": "The key word Waiting must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "was"
+      ],
+      "de": "As I was gehört nicht in die Lücke: Das Partizip ersetzt den Nebensatz.",
+      "en": "As I was does not belong in the gap: the participle replaces the clause."
+     },
+     {
+      "if": [
+       "waited"
+      ],
+      "de": "Waited for ist die einfache Vergangenheit und ersetzt keinen Nebensatz.",
+      "en": "Waited for is the simple past and does not replace a clause."
+     }
+    ]
+   },
+   "topic": "c1-participle"
+  },
+  {
+   "id": "cp-sub-k2",
+   "type": "kwt",
+   "pat": "cp.subject",
+   "from": "Because I had checked the figures twice, I was sure of the result.",
+   "key": "HAVING",
+   "frame": "___ the figures twice, I was sure of the result.",
+   "answer": "Having checked",
+   "accepted": [
+    "After having checked"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Having checked. Ich prüfe und ich bin sicher: dasselbe Subjekt.",
+     "en": "Right: Having checked. I check and I am sure: the same subject."
+    },
+    "wrong": [
+     {
+      "not": [
+       "having"
+      ],
+      "de": "Das Schlüsselwort Having muss unverändert in der Lücke stehen.",
+      "en": "The key word Having must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "having",
+       "checking"
+      ],
+      "de": "Nach Having folgt die 3. Form: checked, nicht checking.",
+      "en": "After Having comes the past participle: checked, not checking."
+     },
+     {
+      "if": [
+       "having",
+       "been"
+      ],
+      "de": "Having been checked ist passiv. Hier prüfst du selbst: Having checked.",
+      "en": "Having been checked is passive. Here you check yourself: Having checked."
+     }
+    ]
+   },
+   "topic": "c1-participle"
+  },
+  {
+   "id": "cp-sub-f1",
+   "type": "find",
+   "pat": "cp.subject",
+   "prompt": "Walking to work, my phone rang twice.",
+   "err": [
+    0,
+    2
+   ],
+   "answer": "While I was walking to work,",
+   "fixed": "While I was walking to work, my phone rang twice.",
+   "accepted": [
+    "As I walked to work,",
+    "When I was walking to work,",
+    "When I walked to work,",
+    "While I walked to work,",
+    "As I was walking to work,"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Dein Telefon geht nicht zur Arbeit. Das Partizip braucht ein passendes Subjekt.",
+     "en": "The error: your phone does not walk to work. The participle needs a matching subject."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Walking gehört nicht zu my phone.",
+      "en": "There is an error: Walking does not belong to my phone."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt am Anfang: Wer geht zur Arbeit? Nicht das Telefon.",
+      "en": "The error is at the start: who walks to work? Not the phone."
+     }
+    ]
+   },
+   "topic": "c1-participle"
+  },
+  {
+   "id": "cp-sub-f2",
+   "type": "find",
+   "pat": "cp.subject",
+   "prompt": "Reading the report, the figures seemed wrong to me.",
+   "err": [
+    0,
+    2
+   ],
+   "answer": "When I read the report,",
+   "fixed": "When I read the report, the figures seemed wrong to me.",
+   "accepted": [
+    "As I read the report,",
+    "While I was reading the report,"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Die Zahlen lesen den Bericht nicht. Das Partizip braucht ein passendes Subjekt.",
+     "en": "The error: the figures do not read the report. The participle needs a matching subject."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Reading gehört nicht zu the figures.",
+      "en": "There is an error: Reading does not belong to the figures."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt am Anfang: Wer liest den Bericht? Nicht die Zahlen.",
+      "en": "The error is at the start: who reads the report? Not the figures."
+     }
+    ]
+   },
+   "topic": "c1-participle"
+  },
+  {
+   "id": "cp-sub-f3",
+   "type": "find",
+   "pat": "cp.subject",
+   "prompt": "Reading the minutes, I noticed two missing names.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Ich lese und ich bemerke: Das Partizip passt zum Subjekt I.",
+     "en": "No error: I read and I notice: the participle fits the subject I."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Reading gehört zu I, dem Subjekt nach dem Komma.",
+      "en": "No error: Reading belongs to I, the subject after the comma."
+     }
+    ]
+   },
+   "topic": "c1-participle"
+  },
+  {
+   "id": "cp-sub-m1",
+   "type": "meaning",
+   "pat": "cp.subject",
+   "a": "Having read the report, the manager spoke to the client.",
+   "b": "The manager spoke to the client who had read the report.",
+   "q": {
+    "de": "In welchem Satz hat der Kunde den Bericht gelesen?",
+    "en": "In which sentence did the client read the report?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. Der Relativsatz gehört zum Kunden, das Partizip zum Manager.",
+     "en": "Right: sentence b. The relative clause belongs to the client, the participle to the manager."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a gehört Having read zum Manager (Subjekt): Er hat den Bericht gelesen.",
+      "en": "In a Having read belongs to the manager (the subject): he did the reading."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Das Partizip bezieht sich aufs Subjekt, der Relativsatz auf den Kunden.",
+      "en": "Not the same: the participle refers to the subject, the relative clause to the client."
+     }
+    ]
+   },
+   "topic": "c1-participle"
   },
   {
    "id": "ca-unl-k1",
@@ -8733,6 +10733,2058 @@
    "topic": "future-perf-cont"
   },
   {
+   "id": "gi-ing-k1",
+   "type": "kwt",
+   "pat": "gi.ing-verbs",
+   "from": "We deliberately didn't mention the price in front of the client.",
+   "key": "AVOIDED",
+   "frame": "We ___ the price in front of the client.",
+   "answer": "avoided mentioning",
+   "accepted": [
+    "avoided discussing",
+    "avoided naming",
+    "avoided stating",
+    "avoided disclosing",
+    "avoided revealing",
+    "avoided talking about",
+    "avoided bringing up",
+    "avoided referring to"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: avoid + -ing, also avoided mentioning. Kein to nach avoid.",
+     "en": "Right: avoid + -ing, so avoided mentioning. No to after avoid."
+    },
+    "wrong": [
+     {
+      "not": [
+       "avoided"
+      ],
+      "de": "Das Schlüsselwort avoided muss unverändert in der Lücke stehen.",
+      "en": "The key word avoided must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "to"
+      ],
+      "de": "Nach avoid steht -ing, kein to: avoided mentioning.",
+      "en": "After avoid use -ing, not to: avoided mentioning."
+     },
+     {
+      "pat": "gi.ing-verbs",
+      "de": "Nach avoid folgt die -ing-Form: avoided mentioning the price.",
+      "en": "After avoid the -ing form follows: avoided mentioning the price."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-ing-k2",
+   "type": "kwt",
+   "pat": "gi.ing-verbs",
+   "from": "Could you wait a bit longer, please?",
+   "key": "MIND",
+   "frame": "Would you ___ a bit longer?",
+   "answer": "mind waiting",
+   "accepted": [],
+   "words": [
+    2,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Would you mind waiting. Mind nimmt -ing und kein to.",
+     "en": "Right: Would you mind waiting. Mind takes -ing, no to."
+    },
+    "wrong": [
+     {
+      "not": [
+       "mind"
+      ],
+      "de": "Das Schlüsselwort mind muss unverändert in der Lücke stehen.",
+      "en": "The key word mind must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "to"
+      ],
+      "de": "Nach mind steht -ing, kein to: mind waiting.",
+      "en": "After mind use -ing, not to: mind waiting."
+     },
+     {
+      "pat": "gi.ing-verbs",
+      "de": "Nach mind folgt die -ing-Form: mind waiting.",
+      "en": "After mind the -ing form follows: mind waiting."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-ing-f1",
+   "type": "find",
+   "pat": "gi.ing-verbs",
+   "prompt": "We postponed to sign the contract until the audit is done.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "signing",
+   "fixed": "We postponed signing the contract until the audit is done.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach postpone steht -ing: postponed signing.",
+     "en": "The error: after postpone use -ing: postponed signing."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach postpone steht kein to.",
+      "en": "There is an error: no to after postpone."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „to sign“: postpone gehört zur -ing-Gruppe.",
+      "en": "The error is “to sign”: postpone belongs to the -ing group."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-ing-f2",
+   "type": "find",
+   "pat": "gi.ing-verbs",
+   "prompt": "He admitted to forward the confidential file to a friend.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "forwarding",
+   "fixed": "He admitted forwarding the confidential file to a friend.",
+   "accepted": [
+    "to forwarding",
+    "having forwarded"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach admit steht -ing: admitted forwarding.",
+     "en": "The error: after admit use -ing: admitted forwarding."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Admit to + Grundform gibt es nicht.",
+      "en": "There is an error: admit to + base form does not exist."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „to forward“: Es folgt -ing.",
+      "en": "The error is “to forward”: -ing follows."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-ing-f3",
+   "type": "find",
+   "pat": "gi.ing-verbs",
+   "prompt": "Would you mind sending me the updated slides before noon?",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Nach mind steht -ing: mind sending.",
+     "en": "No error: after mind comes -ing: mind sending."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Mind + -ing ist richtig.",
+      "en": "No error: mind + -ing is correct."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-ing-m1",
+   "type": "meaning",
+   "pat": "gi.ing-verbs",
+   "a": "She denied taking the file.",
+   "b": "She refused to take the file.",
+   "q": {
+    "de": "Welcher Satz sagt: Sie behauptet, die Datei nicht genommen zu haben?",
+    "en": "Which sentence says she claims she did not take the file?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Deny + -ing bezieht sich auf Geschehenes: Sie bestreitet die Tat.",
+     "en": "Right: sentence a. Deny + -ing refers to what happened: she denies the act."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b geht es um ein Nein zu einer Handlung (refuse + to), nicht um Vergangenes.",
+      "en": "In b it is a no to an action (refuse + to), not about the past."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: -ing nach deny blickt zurück, refuse + to meint ein Nein.",
+      "en": "Not the same: -ing after deny looks back, refuse + to means a no."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-to-k1",
+   "type": "kwt",
+   "pat": "gi.to-verbs",
+   "from": "We have decided that we will hire two more developers.",
+   "key": "DECIDED",
+   "frame": "We ___ two more developers.",
+   "answer": "decided to hire",
+   "accepted": [
+    "decided to recruit",
+    "decided to take on",
+    "decided to bring on",
+    "decided to employ"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Nach decide steht to + Verb, also decided to hire.",
+     "en": "Right: decide + to + verb, so decided to hire."
+    },
+    "wrong": [
+     {
+      "not": [
+       "decided"
+      ],
+      "de": "Das Schlüsselwort decided muss unverändert in der Lücke stehen.",
+      "en": "The key word decided must stay unchanged in the gap."
+     },
+     {
+      "not": [
+       "to"
+      ],
+      "de": "Nach decide fehlt to: decided + to + Verb, nicht -ing.",
+      "en": "After decide to is needed: decided + to + verb, not -ing."
+     },
+     {
+      "pat": "gi.to-verbs",
+      "de": "Nach decide steht to + Grundform: decided to hire.",
+      "en": "After decide comes to + base form: decided to hire."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-to-k2",
+   "type": "kwt",
+   "pat": "gi.to-verbs",
+   "from": "After three attempts, we finally reached the supplier.",
+   "key": "MANAGED",
+   "frame": "After three attempts, we finally ___ the supplier.",
+   "answer": "managed to reach",
+   "accepted": [
+    "managed to contact",
+    "managed to get hold of",
+    "managed to get through to",
+    "managed to speak to",
+    "managed to talk to",
+    "managed to catch"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Nach manage steht to + Verb, also managed to reach.",
+     "en": "Right: manage + to + verb, so managed to reach."
+    },
+    "wrong": [
+     {
+      "not": [
+       "managed"
+      ],
+      "de": "Das Schlüsselwort managed muss unverändert in der Lücke stehen.",
+      "en": "The key word managed must stay unchanged in the gap."
+     },
+     {
+      "not": [
+       "to"
+      ],
+      "de": "Nach manage fehlt to: managed + to + Verb, nicht -ing.",
+      "en": "After manage to is needed: managed + to + verb, not -ing."
+     },
+     {
+      "pat": "gi.to-verbs",
+      "de": "Nach manage steht to + Grundform: managed to reach.",
+      "en": "After manage comes to + base form: managed to reach."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-to-f1",
+   "type": "find",
+   "pat": "gi.to-verbs",
+   "prompt": "She refused answering questions about the merger.",
+   "err": [
+    2,
+    2
+   ],
+   "answer": "to answer",
+   "fixed": "She refused to answer questions about the merger.",
+   "accepted": [
+    "to respond to"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach refuse steht to + Verb: refused to answer.",
+     "en": "The error: after refuse comes to + verb: refused to answer."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach refuse steht kein -ing.",
+      "en": "There is an error: no -ing after refuse."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „answering“: refuse gehört zur to-Gruppe.",
+      "en": "The error is “answering”: refuse belongs to the to group."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-to-f2",
+   "type": "find",
+   "pat": "gi.to-verbs",
+   "prompt": "They plan opening a second office next year.",
+   "err": [
+    2,
+    2
+   ],
+   "answer": "to open",
+   "fixed": "They plan to open a second office next year.",
+   "accepted": [
+    "on opening"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Plan nimmt to + Verb (oder plan on + -ing): plan to open.",
+     "en": "The error: plan takes to + verb (or plan on + -ing): plan to open."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Plan + -ing ohne on gibt es nicht.",
+      "en": "There is an error: plan + -ing without on does not exist."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „opening“: Es fehlt to oder on.",
+      "en": "The error is “opening”: to or on is missing."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-to-f3",
+   "type": "find",
+   "pat": "gi.to-verbs",
+   "prompt": "She promised to send the revised draft by Friday.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: promise + to + Verb ist richtig.",
+     "en": "No error: promise + to + verb is correct."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Nach promise steht to + Grundform.",
+      "en": "No error: after promise comes to + base form."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-to-m1",
+   "type": "meaning",
+   "pat": "gi.to-verbs",
+   "a": "He pretended to read the report.",
+   "b": "He read the report.",
+   "q": {
+    "de": "Welcher Satz sagt: Er hat den Bericht nicht gelesen, sondern nur so getan?",
+    "en": "Which sentence says he did not read the report but only acted as if?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Pretend + to + Verb heißt „so tun, als ob“.",
+     "en": "Right: sentence a. Pretend + to + verb means acting as if."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b hat er den Bericht wirklich gelesen. Das ist kein Vortäuschen.",
+      "en": "In b he really read the report. That is not pretending."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Nur a sagt, dass er nur so tat.",
+      "en": "Not the same: only a says he was only acting."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-prep-k1",
+   "type": "kwt",
+   "pat": "gi.prep-ing",
+   "from": "I'll call her; I won't write an email.",
+   "key": "INSTEAD",
+   "frame": "I'll call her ___ an email.",
+   "answer": "instead of writing",
+   "accepted": [
+    "instead of sending",
+    "instead of typing",
+    "instead of drafting",
+    "instead of composing"
+   ],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Nach instead of steht -ing, also instead of writing.",
+     "en": "Right: instead of + -ing, so instead of writing."
+    },
+    "wrong": [
+     {
+      "not": [
+       "instead"
+      ],
+      "de": "Das Schlüsselwort instead muss unverändert in der Lücke stehen.",
+      "en": "The key word instead must stay unchanged in the gap."
+     },
+     {
+      "not": [
+       "of"
+      ],
+      "de": "Es fehlt das of: instead of + -ing.",
+      "en": "The of is missing: instead of + -ing."
+     },
+     {
+      "pat": "gi.prep-ing",
+      "de": "Nach der Präposition of steht -ing: instead of writing.",
+      "en": "After the preposition of comes -ing: instead of writing."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-prep-k2",
+   "type": "kwt",
+   "pat": "gi.prep-ing",
+   "from": "He left the meeting and didn't say a word to anyone.",
+   "key": "WITHOUT",
+   "frame": "He left the meeting ___ a word to anyone.",
+   "answer": "without saying",
+   "accepted": [
+    "without uttering",
+    "without breathing",
+    "without even saying",
+    "without once saying",
+    "without ever saying"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: without + -ing, also without saying. Deutsch „ohne … zu sagen“ braucht kein to.",
+     "en": "Right: without + -ing, so without saying. German “ohne … zu sagen” needs no to."
+    },
+    "wrong": [
+     {
+      "not": [
+       "without"
+      ],
+      "de": "Das Schlüsselwort without muss unverändert in der Lücke stehen.",
+      "en": "The key word without must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "to"
+      ],
+      "de": "Nach without steht -ing, kein to: without saying.",
+      "en": "After without use -ing, not to: without saying."
+     },
+     {
+      "pat": "gi.prep-ing",
+      "de": "Nach der Präposition without steht -ing.",
+      "en": "After the preposition without comes -ing."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-prep-f1",
+   "type": "find",
+   "pat": "gi.prep-ing",
+   "prompt": "He is worried about to lose the account.",
+   "err": [
+    3,
+    5
+   ],
+   "answer": "about losing",
+   "fixed": "He is worried about losing the account.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach der Präposition about steht -ing: about losing.",
+     "en": "The error: after the preposition about comes -ing: about losing."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach about steht kein to + Verb.",
+      "en": "There is an error: no to + verb after about."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „about to lose“: Nach einer Präposition folgt -ing.",
+      "en": "The error is “about to lose”: after a preposition comes -ing."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-prep-f2",
+   "type": "find",
+   "pat": "gi.prep-ing",
+   "prompt": "Thank you for to send the report so quickly.",
+   "err": [
+    2,
+    4
+   ],
+   "answer": "for sending",
+   "fixed": "Thank you for sending the report so quickly.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach for steht -ing: for sending.",
+     "en": "The error: after for comes -ing: for sending."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach for steht kein to + Verb.",
+      "en": "There is an error: no to + verb after for."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „for to send“: Nach for folgt -ing.",
+      "en": "The error is “for to send”: after for comes -ing."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-prep-f3",
+   "type": "find",
+   "pat": "gi.prep-ing",
+   "prompt": "We apologized to the client for missing the deadline.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Nach der Präposition for steht -ing: for missing.",
+     "en": "No error: after the preposition for comes -ing: for missing."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: for + -ing ist richtig.",
+      "en": "No error: for + -ing is correct."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-prep-m1",
+   "type": "meaning",
+   "pat": "gi.prep-ing",
+   "a": "I'm used to working at night.",
+   "b": "I used to work at night.",
+   "q": {
+    "de": "Welcher Satz sagt: Nachtarbeit ist für mich inzwischen normal?",
+    "en": "Which sentence says working at night has become normal for me?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Be used to + -ing: to ist Präposition, es geht um Gewöhnung.",
+     "en": "Right: sentence a. Be used to + -ing: to is a preposition, it is about being accustomed."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b steht used to + Grundform: Früher war es so, heute nicht mehr.",
+      "en": "In b used to + base form means: it was so before, not now."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a meint Gewöhnung, b eine frühere Gewohnheit.",
+      "en": "Not the same: a means being accustomed, b a past habit."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-mean-k1",
+   "type": "kwt",
+   "pat": "gi.meaning",
+   "from": "We don't hold the weekly sync any more.",
+   "key": "STOPPED",
+   "frame": "We ___ the weekly sync.",
+   "answer": "stopped holding",
+   "accepted": [
+    "stopped having",
+    "stopped running",
+    "stopped doing",
+    "stopped scheduling",
+    "stopped organizing"
+   ],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Nach stop heißt -ing aufhören: stopped holding.",
+     "en": "Right: stop + -ing means quit: stopped holding."
+    },
+    "wrong": [
+     {
+      "not": [
+       "stopped"
+      ],
+      "de": "Das Schlüsselwort stopped muss unverändert in der Lücke stehen.",
+      "en": "The key word stopped must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "to"
+      ],
+      "de": "Stopped + to hieße: anhalten, um etwas zu tun. Hier hört etwas auf: -ing.",
+      "en": "Stopped + to would mean pausing to do something. Here it ends: -ing."
+     },
+     {
+      "pat": "gi.meaning",
+      "de": "Wenn etwas aufhört, steht stop + -ing.",
+      "en": "When something ends, use stop + -ing."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-mean-k2",
+   "type": "kwt",
+   "pat": "gi.meaning",
+   "from": "Sarah didn't remember that she had to send the invoice.",
+   "key": "FORGOT",
+   "frame": "Sarah ___ the invoice.",
+   "answer": "forgot to send",
+   "accepted": [
+    "forgot to email",
+    "forgot to mail",
+    "forgot to forward",
+    "forgot to issue",
+    "forgot to attach",
+    "forgot to submit"
+   ],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: forget + to = die Aufgabe vergessen: forgot to send.",
+     "en": "Right: forget + to = forgot the task: forgot to send."
+    },
+    "wrong": [
+     {
+      "not": [
+       "forgot"
+      ],
+      "de": "Das Schlüsselwort forgot muss unverändert in der Lücke stehen.",
+      "en": "The key word forgot must stay unchanged in the gap."
+     },
+     {
+      "not": [
+       "to"
+      ],
+      "de": "Forgot + -ing meint die Erinnerung an Geschehenes. Hier blieb etwas ungetan: forgot to.",
+      "en": "Forgot + -ing is the memory of what happened. Here something stayed undone: forgot to."
+     },
+     {
+      "pat": "gi.meaning",
+      "de": "Wer eine Aufgabe vergisst, nutzt forget + to + Verb.",
+      "en": "Forgetting a task takes forget + to + verb."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-mean-f1",
+   "type": "find",
+   "pat": "gi.meaning",
+   "prompt": "Please don't forget locking the server room when you leave.",
+   "err": [
+    3,
+    3
+   ],
+   "answer": "to lock",
+   "fixed": "Please don't forget to lock the server room when you leave.",
+   "accepted": [
+    "to lock up"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Hier geht es um eine Aufgabe, also forget + to: to lock.",
+     "en": "The error: this is a task, so forget + to: to lock."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Die Bitte meint etwas Künftiges.",
+      "en": "There is an error: the request is about the future."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „locking“: Eine noch offene Aufgabe verlangt to.",
+      "en": "The error is “locking”: a task still open takes to."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-mean-f2",
+   "type": "find",
+   "pat": "gi.meaning",
+   "prompt": "He stopped to work on weekends after the burnout.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "working",
+   "fixed": "He stopped working on weekends after the burnout.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Hier hört er damit auf, also stop + -ing: stopped working.",
+     "en": "The error: he quits doing it, so stop + -ing: stopped working."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „Stop to work“ passt nicht zu „after the burnout“.",
+      "en": "There is an error: “stop to work” clashes with “after the burnout”."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „to work“: Das Aufhören verlangt -ing.",
+      "en": "The error is “to work”: quitting takes -ing."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-mean-f3",
+   "type": "find",
+   "pat": "gi.meaning",
+   "prompt": "I remember talking to her at the conference last year.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Nach remember erinnert -ing an Geschehenes: remember talking.",
+     "en": "No error: remember + -ing recalls what happened: remember talking."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Das Gespräch fand letztes Jahr statt, also remember + -ing.",
+      "en": "No error: the talk took place last year, so remember + -ing."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-mean-m1",
+   "type": "meaning",
+   "pat": "gi.meaning",
+   "a": "I tried restarting the router.",
+   "b": "I tried to restart the router.",
+   "q": {
+    "de": "Welcher Satz sagt: Ich habe es ausprobiert, um zu sehen, ob es hilft?",
+    "en": "Which sentence says I experimented to see whether it helps?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Try + -ing heißt ausprobieren, um die Wirkung zu sehen: den Router neu starten.",
+     "en": "Right: sentence a. Try + -ing means testing something to see the effect: restarting the router."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b ist es ein Versuch, etwas zu schaffen (try + to), kein Ausprobieren.",
+      "en": "In b it is an attempt to manage something (try + to), not an experiment."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: -ing probiert aus, to versucht zu schaffen.",
+      "en": "Not the same: -ing tests it out, to attempts to manage it."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-bare-k1",
+   "type": "kwt",
+   "pat": "gi.bare-inf",
+   "from": "The delay forced everyone to work through the weekend.",
+   "key": "MADE",
+   "frame": "The delay ___ through the weekend.",
+   "answer": "made everyone work",
+   "accepted": [
+    "made everybody work",
+    "made us all work",
+    "made all of us work",
+    "made us work",
+    "made them work",
+    "made the team work",
+    "made everyone stay",
+    "made everybody stay",
+    "made us stay",
+    "made them stay",
+    "made us all stay"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: make + Person + Grundform: made everyone work, ohne to.",
+     "en": "Right: make + person + base form: made everyone work, no to."
+    },
+    "wrong": [
+     {
+      "not": [
+       "made"
+      ],
+      "de": "Das Schlüsselwort made muss unverändert in der Lücke stehen.",
+      "en": "The key word made must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "to"
+      ],
+      "de": "Nach make steht kein to: made everyone work.",
+      "en": "No to after make: made everyone work."
+     },
+     {
+      "pat": "gi.bare-inf",
+      "de": "Nach make + Person steht die Grundform ohne to.",
+      "en": "After make + person the base form follows without to."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-bare-k2",
+   "type": "kwt",
+   "pat": "gi.bare-inf",
+   "from": "Our manager allowed us to leave early on Friday.",
+   "key": "LET",
+   "frame": "Our manager ___ early on Friday.",
+   "answer": "let us leave",
+   "accepted": [
+    "let us all leave",
+    "let everyone leave",
+    "let everybody leave",
+    "let the team leave",
+    "let them leave",
+    "let us go",
+    "let us all go",
+    "let everyone go",
+    "let everybody go",
+    "let us finish",
+    "let us log off"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: let + Person + Grundform: let us leave, ohne to.",
+     "en": "Right: let + person + base form: let us leave, no to."
+    },
+    "wrong": [
+     {
+      "not": [
+       "let"
+      ],
+      "de": "Das Schlüsselwort let muss unverändert in der Lücke stehen.",
+      "en": "The key word let must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "to"
+      ],
+      "de": "Nach let steht kein to: let us leave.",
+      "en": "No to after let: let us leave."
+     },
+     {
+      "pat": "gi.bare-inf",
+      "de": "Nach let + Person steht die Grundform ohne to.",
+      "en": "After let + person the base form follows without to."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-bare-f1",
+   "type": "find",
+   "pat": "gi.bare-inf",
+   "prompt": "The new policy lets us to work from home on Fridays.",
+   "err": [
+    5,
+    6
+   ],
+   "answer": "work",
+   "fixed": "The new policy lets us work from home on Fridays.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach let steht die Grundform ohne to: lets us work.",
+     "en": "The error: after let the base form follows without to: lets us work."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach let steht kein to.",
+      "en": "There is an error: no to after let."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „to work“: Das to entfällt.",
+      "en": "The error is “to work”: the to drops out."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-bare-f2",
+   "type": "find",
+   "pat": "gi.bare-inf",
+   "prompt": "My boss made me staying late again last Friday.",
+   "err": [
+    4,
+    4
+   ],
+   "answer": "stay",
+   "fixed": "My boss made me stay late again last Friday.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach make + Person steht die Grundform: made me stay.",
+     "en": "The error: after make + person comes the base form: made me stay."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach make steht kein -ing.",
+      "en": "There is an error: no -ing after make."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „staying“: Es folgt die Grundform.",
+      "en": "The error is “staying”: the base form follows."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "gi-bare-m1",
+   "type": "meaning",
+   "pat": "gi.bare-inf",
+   "a": "She let us leave early.",
+   "b": "She made us leave early.",
+   "q": {
+    "de": "Welcher Satz sagt: Wir hatten keine Wahl und mussten früher gehen?",
+    "en": "Which sentence says we had no choice and had to leave early?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. Make + Person + Grundform meint Zwang, let die Erlaubnis.",
+     "en": "Right: sentence b. Make + person + base form means force, let means permission."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a erlaubt sie es nur: let = „lassen, erlauben“, kein Zwang.",
+      "en": "In a she only allows it: let = permit, no force."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: let erlaubt, make zwingt.",
+      "en": "Not the same: let permits, make forces."
+     }
+    ]
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "id": "mnd-v-k1",
+   "type": "kwt",
+   "pat": "mnd.verbs",
+   "from": "The client says our team must send the revised proposal today.",
+   "key": "INSISTS",
+   "frame": "The client ___ the revised proposal today.",
+   "answer": "insists that our team send",
+   "accepted": [
+    "insists that we send",
+    "insists we send",
+    "insists our team send",
+    "insists that they send",
+    "insists they send",
+    "insists that we should send",
+    "insists we should send",
+    "insists our team should send",
+    "insists that they should send"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: insists that + Subjekt + Grundform: that our team send, ohne -s und ohne will.",
+     "en": "Right: insists that + subject + base form: that our team send, no -s and no will."
+    },
+    "wrong": [
+     {
+      "not": [
+       "insists"
+      ],
+      "de": "Das Schlüsselwort insists muss unverändert in der Lücke stehen.",
+      "en": "The key word insists must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "Nach insists that steht hier kein will; send bleibt die Grundform.",
+      "en": "No will after insists that here; send stays the base form."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
+   "id": "mnd-v-k2",
+   "type": "kwt",
+   "pat": "mnd.verbs",
+   "from": "Legal thinks the team should postpone the launch.",
+   "key": "RECOMMENDS",
+   "frame": "Legal ___ the launch.",
+   "answer": "recommends that the team postpone",
+   "accepted": [
+    "recommends the team postpone",
+    "recommends that we postpone",
+    "recommends we postpone",
+    "recommends that they postpone",
+    "recommends they postpone",
+    "recommends the team should postpone",
+    "recommends that we should postpone",
+    "recommends we should postpone",
+    "recommends that they should postpone"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Nach recommends that steht die Grundform: that the team postpone, ohne -s.",
+     "en": "Right: after recommends that the base form follows: that the team postpone, no -s."
+    },
+    "wrong": [
+     {
+      "not": [
+       "recommends"
+      ],
+      "de": "Das Schlüsselwort recommends muss unverändert in der Lücke stehen.",
+      "en": "The key word recommends must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "Nach recommends that steht kein will; postpone bleibt die Grundform.",
+      "en": "No will after recommends that; postpone stays the base form."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
+   "id": "mnd-a-k1",
+   "type": "kwt",
+   "pat": "mnd.adjectives",
+   "from": "Every manager must attend the kickoff.",
+   "key": "ESSENTIAL",
+   "frame": "It is ___ the kickoff.",
+   "answer": "essential that every manager attend",
+   "accepted": [
+    "essential that each manager attend",
+    "essential that all managers attend",
+    "essential that managers attend",
+    "essential every manager attend",
+    "essential that they attend",
+    "essential that all attend",
+    "essential for managers to attend",
+    "essential for them to attend",
+    "essential for all to attend",
+    "essential every manager should attend"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Nach essential that steht die Grundform: that every manager attend, ohne -s.",
+     "en": "Right: after essential that the base form follows: that every manager attend, no -s."
+    },
+    "wrong": [
+     {
+      "not": [
+       "essential"
+      ],
+      "de": "Das Schlüsselwort essential muss unverändert in der Lücke stehen.",
+      "en": "The key word essential must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "Nach essential that steht kein will. Die Forderung braucht die Grundform attend.",
+      "en": "No will after essential that. The demand needs the base form attend."
+     },
+     {
+      "if": [
+       "attends"
+      ],
+      "de": "Mit -s wie im normalen Präsens. Nach essential that bleibt es attend.",
+      "en": "The -s of the normal present. After essential that it stays attend."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
+   "id": "mnd-a-k2",
+   "type": "kwt",
+   "pat": "mnd.adjectives",
+   "from": "The client has to get the draft today.",
+   "key": "IMPERATIVE",
+   "frame": "It is ___ the draft today.",
+   "answer": "imperative that the client get",
+   "accepted": [
+    "imperative the client get",
+    "imperative that our client get",
+    "imperative that they get",
+    "imperative that clients get",
+    "imperative that they should get"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Nach imperative that folgt die Grundform: that the client get, ohne -s.",
+     "en": "Right: after imperative that the base form follows: that the client get, no -s."
+    },
+    "wrong": [
+     {
+      "not": [
+       "imperative"
+      ],
+      "de": "Das Schlüsselwort imperative muss unverändert in der Lücke stehen.",
+      "en": "The key word imperative must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "Nach imperative that steht kein will; get bleibt die Grundform.",
+      "en": "No will after imperative that; get stays the base form."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
+   "id": "mnd-p-k1",
+   "type": "kwt",
+   "pat": "mnd.passive",
+   "from": "Finance wants the budget to be approved by Friday.",
+   "key": "REQUESTS",
+   "frame": "Finance ___ approved by Friday.",
+   "answer": "requests that the budget be",
+   "accepted": [
+    "requests the budget be",
+    "requests that it be",
+    "requests it be",
+    "requests that it should be",
+    "requests the budget should be"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Das Passiv der Bitte lautet be + 3. Form: that the budget be approved.",
+     "en": "Right: the passive of a request is be + past participle: that the budget be approved."
+    },
+    "wrong": [
+     {
+      "not": [
+       "requests"
+      ],
+      "de": "Das Schlüsselwort requests muss unverändert in der Lücke stehen.",
+      "en": "The key word requests must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "Nach requests that steht kein will be; es bleibt be.",
+      "en": "No will be after requests that; it stays be."
+     },
+     {
+      "if": [
+       "is"
+      ],
+      "de": "Is ist die normale Form. Im Mandativ-Passiv steht be.",
+      "en": "Is is the normal form. The mandative passive takes be."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
+   "id": "mnd-p-k2",
+   "type": "kwt",
+   "pat": "mnd.passive",
+   "from": "The bank said the form had to be signed by both partners.",
+   "key": "REQUIRED",
+   "frame": "The bank ___ signed by both partners.",
+   "answer": "required that the form be",
+   "accepted": [
+    "required the form be",
+    "required that it be",
+    "required it be",
+    "required that it should be",
+    "required the form should be"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Nach required that steht be + 3. Form: that the form be signed.",
+     "en": "Right: after required that comes be + past participle: that the form be signed."
+    },
+    "wrong": [
+     {
+      "not": [
+       "required"
+      ],
+      "de": "Das Schlüsselwort required muss unverändert in der Lücke stehen.",
+      "en": "The key word required must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "was"
+      ],
+      "de": "Was meldet eine Tatsache. Die Forderung braucht be + 3. Form.",
+      "en": "Was reports a fact. The demand needs be + past participle."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "Would be passt nicht zur Forderung; im Mandativ steht schlicht be.",
+      "en": "Would be does not suit a demand; the mandative simply uses be."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
+   "id": "mnd-n-k1",
+   "type": "kwt",
+   "pat": "mnd.negation",
+   "from": "I think we shouldn't share the numbers yet.",
+   "key": "SUGGEST",
+   "frame": "I ___ share the numbers yet.",
+   "answer": "suggest that we not",
+   "accepted": [
+    "suggest we not",
+    "suggest that we should not",
+    "suggest we should not",
+    "suggest that we shouldn't",
+    "suggest we shouldn't"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Die Verneinung steht vor der Grundform: suggest that we not share.",
+     "en": "Right: the negation goes before the base form: suggest that we not share."
+    },
+    "wrong": [
+     {
+      "not": [
+       "suggest"
+      ],
+      "de": "Das Schlüsselwort suggest muss unverändert in der Lücke stehen.",
+      "en": "The key word suggest must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "Nach suggest that steht kein will not; es bleibt not + Grundform.",
+      "en": "No will not after suggest that; it stays not + base form."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
+   "id": "mnd-n-k2",
+   "type": "kwt",
+   "pat": "mnd.negation",
+   "from": "We think the CEO shouldn't comment on the lawsuit.",
+   "key": "RECOMMEND",
+   "frame": "We ___ comment on the lawsuit.",
+   "answer": "recommend that the CEO not",
+   "accepted": [
+    "recommend the CEO not",
+    "recommend that they not",
+    "recommend they not",
+    "recommend that the CEO shouldn't",
+    "recommend the CEO shouldn't",
+    "recommend the CEO should not"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Die Verneinung steht direkt vor der Grundform: that the CEO not comment.",
+     "en": "Right: the negation goes right before the base form: that the CEO not comment."
+    },
+    "wrong": [
+     {
+      "not": [
+       "recommend"
+      ],
+      "de": "Das Schlüsselwort recommend muss unverändert in der Lücke stehen.",
+      "en": "The key word recommend must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "does",
+       "not"
+      ],
+      "de": "Mit doesn't kommt ein Hilfsverb dazu. Im Mandativ steht nur not.",
+      "en": "Doesn't adds a helper verb. The mandative takes only not."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "Nach recommend that steht kein would; die Verneinung braucht nur not.",
+      "en": "No would after recommend that; the negation needs only not."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
+   "id": "mnd-f-k1",
+   "type": "kwt",
+   "pat": "mnd.fact",
+   "from": "He claimed that he had sent the file on Monday.",
+   "key": "INSISTED",
+   "frame": "He ___ the file on Monday; we have his email.",
+   "answer": "insisted that he had sent",
+   "accepted": [
+    "insisted he had sent",
+    "insisted that he'd sent",
+    "insisted he'd sent",
+    "insisted that he sent",
+    "insisted he sent"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Hier geht es um eine Behauptung über früher, deshalb steht had sent.",
+     "en": "Right: this is a claim about the past, so had sent follows."
+    },
+    "wrong": [
+     {
+      "not": [
+       "insisted"
+      ],
+      "de": "Das Schlüsselwort insisted muss unverändert in der Lücke stehen.",
+      "en": "The key word insisted must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "send"
+      ],
+      "pat": "mnd.verbs",
+      "de": "Send wäre eine Forderung. Der Satz berichtet aber eine Behauptung: sent.",
+      "en": "Send would be a demand. This sentence reports a claim: sent."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
+   "id": "mnd-f-k2",
+   "type": "kwt",
+   "pat": "mnd.fact",
+   "from": "The survey indicates that customers prefer shorter emails.",
+   "key": "SUGGESTS",
+   "frame": "The survey ___ shorter emails.",
+   "answer": "suggests that customers prefer",
+   "accepted": [
+    "suggests customers prefer"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Suggests meldet hier einen Befund, deshalb steht die normale Form: customers prefer.",
+     "en": "Right: suggests reports a finding here, so the normal form follows: customers prefer."
+    },
+    "wrong": [
+     {
+      "not": [
+       "suggests"
+      ],
+      "de": "Das Schlüsselwort suggests muss unverändert in der Lücke stehen.",
+      "en": "The key word suggests must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "suggests",
+       "prefers"
+      ],
+      "de": "Hier steht die Gegenwart wie sonst. Suggests meldet einen Befund, keine Forderung.",
+      "en": "The present is used as usual here. Suggests reports a finding, not a demand."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
+   "id": "mnd-v-f1",
+   "type": "find",
+   "pat": "mnd.verbs",
+   "prompt": "The union demands that management will reopen the talks this week.",
+   "err": [
+    5,
+    6
+   ],
+   "answer": "reopen",
+   "fixed": "The union demands that management reopen the talks this week.",
+   "accepted": [
+    "should reopen"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach demands that steht die Grundform: that management reopen, ohne will.",
+     "en": "The error: after demands that use the base form: that management reopen, no will."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach demands that steht kein will.",
+      "en": "There is an error: no will after demands that."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „will reopen“: Die Forderung braucht die Grundform.",
+      "en": "The error is in “will reopen”: the demand needs the base form."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
+   "id": "mnd-v-f2",
+   "type": "find",
+   "pat": "mnd.verbs",
+   "prompt": "Our advisor recommends that we are holding the vote after the audit.",
+   "err": [
+    5,
+    6
+   ],
+   "answer": "hold",
+   "fixed": "Our advisor recommends that we hold the vote after the audit.",
+   "accepted": [
+    "should hold"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach recommends that steht die Grundform: that we hold, nicht are holding.",
+     "en": "The error: after recommends that use the base form: that we hold, not are holding."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Eine Empfehlung braucht die Grundform.",
+      "en": "There is an error: a recommendation takes the base form."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „are holding“: Hier folgt die Grundform hold.",
+      "en": "The error is in “are holding”: the base form hold follows here."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
+   "id": "mnd-v-f3",
+   "type": "find",
+   "pat": "mnd.verbs",
+   "prompt": "Legal recommends that every vendor sign the new terms before March.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Nach recommends that steht die Grundform: that every vendor sign.",
+     "en": "No error: after recommends that the base form follows: that every vendor sign."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: sign ohne -s ist hier richtig, auch bei every vendor.",
+      "en": "No error: sign without -s is right here, even after every vendor."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
+   "id": "mnd-a-f1",
+   "type": "find",
+   "pat": "mnd.adjectives",
+   "prompt": "It is crucial that every analyst will submit the figures by noon.",
+   "err": [
+    6,
+    7
+   ],
+   "answer": "submit",
+   "fixed": "It is crucial that every analyst submit the figures by noon.",
+   "accepted": [
+    "should submit"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach crucial that steht die Grundform: that every analyst submit, ohne will.",
+     "en": "The error: after crucial that use the base form: that every analyst submit, no will."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach crucial that steht kein will.",
+      "en": "There is an error: no will after crucial that."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „will submit“: Hier folgt die Grundform.",
+      "en": "The error is in “will submit”: the base form follows here."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
+   "id": "mnd-a-f2",
+   "type": "find",
+   "pat": "mnd.adjectives",
+   "prompt": "It is imperative that the client would receive the draft today.",
+   "err": [
+    6,
+    7
+   ],
+   "answer": "receive",
+   "fixed": "It is imperative that the client receive the draft today.",
+   "accepted": [
+    "should receive"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach imperative that steht die Grundform: that the client receive, ohne would.",
+     "en": "The error: after imperative that use the base form: that the client receive, no would."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach imperative that steht kein would.",
+      "en": "There is an error: no would after imperative that."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „would receive“: Die Forderung braucht die Grundform.",
+      "en": "The error is in “would receive”: the demand needs the base form."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
+   "id": "mnd-p-f1",
+   "type": "find",
+   "pat": "mnd.passive",
+   "prompt": "The bank requests that the loan will be repaid within ten days.",
+   "err": [
+    6,
+    7
+   ],
+   "answer": "be",
+   "fixed": "The bank requests that the loan be repaid within ten days.",
+   "accepted": [
+    "should be"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach requests that steht be + 3. Form: that the loan be repaid, ohne will.",
+     "en": "The error: after requests that use be + past participle: that the loan be repaid, no will."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach requests that steht kein will be.",
+      "en": "There is an error: no will be after requests that."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „will be“: Im Mandativ-Passiv steht nur be.",
+      "en": "The error is in “will be”: the mandative passive takes only be."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
+   "id": "mnd-p-f2",
+   "type": "find",
+   "pat": "mnd.passive",
+   "prompt": "The client asked that the invoice be corrected before payment.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Nach asked that steht be + 3. Form: that the invoice be corrected.",
+     "en": "No error: after asked that comes be + past participle: that the invoice be corrected."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: be corrected ist die richtige Passivform nach einer Bitte.",
+      "en": "No error: be corrected is the right passive form after a request."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
+   "id": "mnd-n-f1",
+   "type": "find",
+   "pat": "mnd.negation",
+   "prompt": "I recommend that you would not forward this message to clients.",
+   "err": [
+    4,
+    5
+   ],
+   "answer": "not",
+   "fixed": "I recommend that you not forward this message to clients.",
+   "accepted": [
+    "should not"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach recommend that steht not + Grundform: that you not forward, ohne would.",
+     "en": "The error: after recommend that use not + base form: that you not forward, no would."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: would not passt nicht nach recommend that.",
+      "en": "There is an error: would not does not fit after recommend that."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „would not“: Hier steht nur not vor der Grundform.",
+      "en": "The error is in “would not”: only not goes before the base form here."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
+   "id": "mnd-n-f2",
+   "type": "find",
+   "pat": "mnd.negation",
+   "prompt": "The committee requests that the vendor to not change the terms.",
+   "err": [
+    6,
+    7
+   ],
+   "answer": "not",
+   "fixed": "The committee requests that the vendor not change the terms.",
+   "accepted": [
+    "should not"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach that + Subjekt folgt kein to: that the vendor not change.",
+     "en": "The error: after that + subject no to follows: that the vendor not change."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach that + Subjekt steht kein to.",
+      "en": "There is an error: no to after that + subject."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „to not“: Die Verneinung steht direkt vor change.",
+      "en": "The error is in “to not”: the negation goes right before change."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
+   "id": "mnd-n-f3",
+   "type": "find",
+   "pat": "mnd.negation",
+   "prompt": "We insist that she not attend the meeting without legal.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: that she not attend ist die richtige Form der Verneinung.",
+     "en": "No error: that she not attend is the right form of the negation."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: not steht direkt vor der Grundform attend, ganz ohne Hilfsverb.",
+      "en": "No error: not goes right before the base form attend, with no helper verb."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
+   "id": "mnd-f-f1",
+   "type": "find",
+   "pat": "mnd.fact",
+   "prompt": "The survey suggests that most customers be satisfied with the new app.",
+   "err": [
+    6,
+    6
+   ],
+   "answer": "are",
+   "fixed": "The survey suggests that most customers are satisfied with the new app.",
+   "accepted": [
+    "were"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Hier meldet suggests einen Befund, deshalb steht are statt be.",
+     "en": "The error: here suggests reports a finding, so are is needed instead of be."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Ein Befund braucht die normale Form, nicht be.",
+      "en": "There is an error: a finding needs the normal form, not be."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „be“: Suggests meldet hier eine Tatsache.",
+      "en": "The error is in “be”: suggests reports a fact here."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
+   "id": "mnd-f-f2",
+   "type": "find",
+   "pat": "mnd.fact",
+   "prompt": "Her reply suggests that she be unhappy with the proposal.",
+   "err": [
+    5,
+    5
+   ],
+   "answer": "is",
+   "fixed": "Her reply suggests that she is unhappy with the proposal.",
+   "accepted": [
+    "was"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Suggests deutet hier auf eine Tatsache hin, deshalb steht is statt be.",
+     "en": "The error: suggests points to a fact here, so is is needed instead of be."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Ein Hinweis auf eine Tatsache braucht is, nicht be.",
+      "en": "There is an error: a hint at a fact needs is, not be."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „be“: Hier wird keine Forderung genannt.",
+      "en": "The error is in “be”: no demand is named here."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
+   "id": "mnd-v-m1",
+   "type": "meaning",
+   "pat": "mnd.verbs",
+   "a": "The manager insisted that Ben review the plan.",
+   "b": "The manager insisted that Ben reviewed the plan.",
+   "q": {
+    "de": "Welcher Satz sagt, dass Ben den Plan noch prüfen soll?",
+    "en": "Which sentence says Ben is supposed to review the plan?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Die Grundform review zeigt eine Forderung an Ben.",
+     "en": "Right: sentence a. The base form review shows a demand on Ben."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b meldet reviewed eine Behauptung: Ben hat den Plan schon geprüft.",
+      "en": "In b, reviewed reports a claim: Ben has already reviewed the plan."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a fordert etwas, b behauptet etwas.",
+      "en": "Not the same: a demands something, b claims something."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
+   "id": "mnd-a-m1",
+   "type": "meaning",
+   "pat": "mnd.adjectives",
+   "a": "It is essential that Mia be at the meeting.",
+   "b": "It is likely that Mia is at the meeting.",
+   "q": {
+    "de": "Welcher Satz fordert, dass Mia beim Meeting dabei ist?",
+    "en": "Which sentence demands that Mia be at the meeting?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Essential fordert etwas, deshalb steht be.",
+     "en": "Right: sentence a. Essential demands something, so be follows."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b schätzt likely nur ein, wo Mia vermutlich ist. Das ist keine Forderung.",
+      "en": "In b, likely only estimates where Mia probably is. That is no demand."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a fordert, b vermutet.",
+      "en": "Not the same: a demands, b assumes."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
+   "id": "mnd-p-m1",
+   "type": "meaning",
+   "pat": "mnd.passive",
+   "a": "We ask that the files be deleted today.",
+   "b": "We ask that you delete the files today.",
+   "q": {
+    "de": "Welche Sätze bitten darum, dass die Dateien heute gelöscht werden?",
+    "en": "Which sentences ask for the files to be deleted today?"
+   },
+   "answer": "both",
+   "why": {
+    "ok": {
+     "de": "Richtig: beide. a nutzt das Passiv be deleted, b das Aktiv mit you delete.",
+     "en": "Right: both. a uses the passive be deleted, b the active with you delete."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "Auch b bittet darum, nur mit Handelndem: you delete, ohne -s.",
+      "en": "B asks for it too, but with an actor: you delete, no -s."
+     },
+     {
+      "opt": "b",
+      "de": "Auch a bittet darum, ohne Handelnden: be deleted.",
+      "en": "A asks for it too, without an actor: be deleted."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
+   "id": "mnd-n-m1",
+   "type": "meaning",
+   "pat": "mnd.negation",
+   "a": "I don't insist that she attend.",
+   "b": "I insist that she not attend.",
+   "q": {
+    "de": "Welcher Satz sagt: Sie soll nicht teilnehmen?",
+    "en": "Which sentence says she is not to attend?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. Das not im that-Satz verbietet die Teilnahme.",
+     "en": "Right: sentence b. The not in the that clause rules out attending."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a steht die Verneinung vor insist: Sie darf teilnehmen, es ist freigestellt.",
+      "en": "In a, the negation sits before insist: she may attend, it is optional."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a lässt es offen, b verbietet es.",
+      "en": "Not the same: a leaves it open, b forbids it."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
+   "id": "mnd-f-m1",
+   "type": "meaning",
+   "pat": "mnd.fact",
+   "a": "The numbers suggest that Dana is ill.",
+   "b": "I suggest that Dana see a doctor.",
+   "q": {
+    "de": "Welcher Satz gibt einen Rat?",
+    "en": "Which sentence gives advice?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. Der Rat braucht die Grundform: that Dana see.",
+     "en": "Right: sentence b. Advice takes the base form: that Dana see."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a deuten die Zahlen auf eine Tatsache hin: Dana ist krank, kein Rat.",
+      "en": "In a, the numbers point to a fact: Dana is ill, no advice."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a nennt einen Befund, b einen Rat.",
+      "en": "Not the same: a names a finding, b gives advice."
+     }
+    ]
+   },
+   "topic": "mandative"
+  },
+  {
    "id": "mc.kwt1",
    "type": "kwt",
    "pat": "mc.past-cond",
@@ -9781,6 +13833,945 @@
     ]
    },
    "topic": "mixed-cond"
+  },
+  {
+   "id": "ma-sho-k1",
+   "type": "kwt",
+   "pat": "ma.should",
+   "from": "It would be wise to double-check the figures.",
+   "key": "SHOULD",
+   "frame": "You ___ the figures.",
+   "answer": "should double-check",
+   "accepted": [
+    "should double check",
+    "should check",
+    "should recheck",
+    "should review",
+    "should verify"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: should + Grundform, ohne to: You should double-check the figures.",
+     "en": "Right: should + base form, no to: You should double-check the figures."
+    },
+    "wrong": [
+     {
+      "not": [
+       "should"
+      ],
+      "de": "Das Schlüsselwort SHOULD muss unverändert in der Lücke stehen.",
+      "en": "The key word SHOULD must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "to"
+      ],
+      "de": "Nach should steht kein to: should double-check.",
+      "en": "No to after should: should double-check."
+     }
+    ]
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "id": "ma-sho-k2",
+   "type": "kwt",
+   "pat": "ma.should",
+   "from": "It is advisable that you read the contract before signing.",
+   "key": "OUGHT",
+   "frame": "You ___ the contract before signing.",
+   "answer": "ought to read",
+   "accepted": [
+    "ought to review",
+    "ought to check",
+    "ought to reread",
+    "ought to read through",
+    "ought to go through",
+    "ought to study",
+    "ought to look over",
+    "ought to look at"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: ought to + Grundform, mit to: ought to read.",
+     "en": "Right: ought to + base form, with to: ought to read."
+    },
+    "wrong": [
+     {
+      "not": [
+       "ought"
+      ],
+      "de": "Das Schlüsselwort OUGHT muss unverändert in der Lücke stehen.",
+      "en": "The key word OUGHT must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "ought"
+      ],
+      "not": [
+       "to"
+      ],
+      "de": "Ought braucht ein to: ought to read.",
+      "en": "Ought needs to: ought to read."
+     }
+    ]
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "id": "ma-sho-f1",
+   "type": "find",
+   "pat": "ma.should",
+   "prompt": "I think we should to postpone the launch until June.",
+   "err": [
+    3,
+    4
+   ],
+   "answer": "should",
+   "fixed": "I think we should postpone the launch until June.",
+   "accepted": [
+    "ought to"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach should steht kein to: should postpone.",
+     "en": "The error: no to after should: should postpone."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: should steht ohne to.",
+      "en": "There is an error: should is used without to."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „should to“: Nach should steht kein to.",
+      "en": "The error is “should to”: no to after should."
+     }
+    ]
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "id": "ma-sho-f2",
+   "type": "find",
+   "pat": "ma.should",
+   "prompt": "We shouldn't announce the new pricing before legal has signed off.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: shouldn't + Grundform rät davon ab, es zu früh zu verkünden.",
+     "en": "No error: shouldn't + base form advises against announcing it too early."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Nach shouldn't steht die Grundform, hier announce.",
+      "en": "No error: the base form follows shouldn't, here announce."
+     }
+    ]
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "id": "ma-sho-m1",
+   "type": "meaning",
+   "pat": "ma.should",
+   "a": "You should reply to the invitation.",
+   "b": "You must reply to the invitation.",
+   "q": {
+    "de": "Welcher Satz ist nur ein Rat, keine Pflicht?",
+    "en": "Which sentence is only advice, not an obligation?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. should rät freundlich, die Entscheidung bleibt bei dir.",
+     "en": "Right: sentence a. should advises gently, the decision stays with you."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b ist es eine Pflicht: must lässt keine Wahl.",
+      "en": "In b it is an obligation: must leaves no choice."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: should rät, must verlangt.",
+      "en": "Not the same: should advises, must demands."
+     }
+    ]
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "id": "ma-hb-k1",
+   "type": "kwt",
+   "pat": "ma.had-better",
+   "from": "If you don't confirm today, you will lose the room.",
+   "key": "BETTER",
+   "frame": "You ___ today, or you'll lose the room.",
+   "answer": "had better confirm",
+   "accepted": [
+    "'d better confirm",
+    "had better confirm it",
+    "'d better confirm it"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: had better + Grundform warnt: sonst ist der Raum weg.",
+     "en": "Right: had better + base form warns: otherwise the room is gone."
+    },
+    "wrong": [
+     {
+      "not": [
+       "better"
+      ],
+      "de": "Das Schlüsselwort BETTER muss unverändert in der Lücke stehen.",
+      "en": "The key word BETTER must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "better",
+       "to"
+      ],
+      "de": "Nach had better steht kein to: had better confirm.",
+      "en": "No to after had better: had better confirm."
+     },
+     {
+      "if": [
+       "should"
+      ],
+      "de": "Vor better steht had: had better confirm.",
+      "en": "Had goes before better: had better confirm."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "Would better gibt es nicht: had better confirm.",
+      "en": "There is no would better: had better confirm."
+     }
+    ]
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "id": "ma-hb-k2",
+   "type": "kwt",
+   "pat": "ma.had-better",
+   "from": "It's best if we don't skip the safety briefing.",
+   "key": "BETTER",
+   "frame": "We ___ the safety briefing.",
+   "answer": "had better not skip",
+   "accepted": [
+    "'d better not skip",
+    "had better not miss",
+    "'d better not miss"
+   ],
+   "words": [
+    4,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: had better not + Grundform: not steht hinter better.",
+     "en": "Right: had better not + base form: not comes after better."
+    },
+    "wrong": [
+     {
+      "not": [
+       "better"
+      ],
+      "de": "Das Schlüsselwort BETTER muss unverändert in der Lücke stehen.",
+      "en": "The key word BETTER must stay unchanged in the gap."
+     },
+     {
+      "not": [
+       "not"
+      ],
+      "de": "Verneint heißt es had better not: not steht hinter better.",
+      "en": "The negative is had better not: not comes after better."
+     },
+     {
+      "if": [
+       "to"
+      ],
+      "de": "Nach had better not steht kein to.",
+      "en": "No to after had better not."
+     }
+    ]
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "id": "ma-hb-f1",
+   "type": "find",
+   "pat": "ma.had-better",
+   "prompt": "We had better to double-check the invoice before sending it.",
+   "err": [
+    1,
+    3
+   ],
+   "answer": "had better",
+   "fixed": "We had better double-check the invoice before sending it.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach had better steht die Grundform ohne to.",
+     "en": "The error: after had better use the base form with no to."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: had better steht ohne to.",
+      "en": "There is an error: had better takes no to."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „better to“: Nach had better steht kein to.",
+      "en": "The error is “better to”: no to after had better."
+     }
+    ]
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "id": "ma-hb-f2",
+   "type": "find",
+   "pat": "ma.had-better",
+   "prompt": "You had better don't miss the registration deadline.",
+   "err": [
+    1,
+    3
+   ],
+   "answer": "had better not",
+   "fixed": "You had better not miss the registration deadline.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach had better steht not, nicht don't: had better not.",
+     "en": "The error: after had better comes not, not don't: had better not."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Nach better steht kein don't.",
+      "en": "There is an error: after better there is no don't."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „had better don't“: Es heißt had better not.",
+      "en": "The error is “had better don't”: it is had better not."
+     }
+    ]
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "id": "ma-hb-m1",
+   "type": "meaning",
+   "pat": "ma.had-better",
+   "a": "You'd better update the slides.",
+   "b": "You should update the slides.",
+   "q": {
+    "de": "Welcher Satz droht mit einer Folge, wenn man es nicht tut?",
+    "en": "Which sentence hints at a consequence if you don't do it?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. had better warnt: Sonst droht Ärger.",
+     "en": "Right: sentence a. had better warns: otherwise there is trouble."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b rät should nur freundlich, ohne Folge.",
+      "en": "In b should only advises gently, with no consequence."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: had better warnt, should rät nur.",
+      "en": "Not the same: had better warns, should only advises."
+     }
+    ]
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "id": "ma-pol-k1",
+   "type": "kwt",
+   "pat": "ma.polite",
+   "from": "Why not ask Lena for a short extension?",
+   "key": "COULD",
+   "frame": "Perhaps you ___ for a short extension.",
+   "answer": "could ask Lena",
+   "accepted": [
+    "could ask her"
+   ],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Perhaps you could + Grundform ist ein höflicher Vorschlag.",
+     "en": "Right: Perhaps you could + base form makes a polite suggestion."
+    },
+    "wrong": [
+     {
+      "not": [
+       "could"
+      ],
+      "de": "Das Schlüsselwort COULD muss unverändert in der Lücke stehen.",
+      "en": "The key word COULD must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "could",
+       "to"
+      ],
+      "de": "Nach could steht kein to: could ask.",
+      "en": "No to after could: could ask."
+     }
+    ]
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "id": "ma-pol-k2",
+   "type": "kwt",
+   "pat": "ma.polite",
+   "from": "I'd suggest sending the client a short summary.",
+   "key": "COULD",
+   "frame": "Perhaps you ___ a short summary.",
+   "answer": "could send the client",
+   "accepted": [
+    "could send them",
+    "could email them",
+    "could email the client",
+    "could give the client",
+    "could send our client"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: could + Grundform ist der höfliche Vorschlag: could send.",
+     "en": "Right: could + base form: Perhaps you could send the client a short summary."
+    },
+    "wrong": [
+     {
+      "not": [
+       "could"
+      ],
+      "de": "Das Schlüsselwort COULD muss unverändert in der Lücke stehen.",
+      "en": "The key word COULD must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "could",
+       "to"
+      ],
+      "de": "Nach could steht kein to: could send.",
+      "en": "No to after could: could send."
+     }
+    ]
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "id": "ma-pol-f1",
+   "type": "find",
+   "pat": "ma.polite",
+   "prompt": "Why you don't send the client a short summary first?",
+   "err": [
+    1,
+    2
+   ],
+   "answer": "don't you",
+   "fixed": "Why don't you send the client a short summary first?",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Der Vorschlag ist eine Frage: Why don't you …?",
+     "en": "The error: the suggestion is a question: Why don't you …?"
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Die Frage braucht do vor dem Subjekt.",
+      "en": "There is an error: the question needs do before the subject."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „you don't“: Es heißt Why don't you.",
+      "en": "The error is “you don't”: it is Why don't you."
+     }
+    ]
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "id": "ma-pol-f2",
+   "type": "find",
+   "pat": "ma.polite",
+   "prompt": "Perhaps you could to ask Dana for an update.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "could",
+   "fixed": "Perhaps you could ask Dana for an update.",
+   "accepted": [
+    "might"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach could steht kein to: could ask.",
+     "en": "The error: no to after could: could ask."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: could steht ohne to.",
+      "en": "There is an error: could is used without to."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „could to“: Nach could steht kein to.",
+      "en": "The error is “could to”: no to after could."
+     }
+    ]
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "id": "ma-pol-m1",
+   "type": "meaning",
+   "pat": "ma.polite",
+   "a": "Perhaps you could take the lead on this.",
+   "b": "You must take the lead on this.",
+   "q": {
+    "de": "Welcher Satz lässt dem anderen die Wahl?",
+    "en": "Which sentence leaves the other person a choice?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Perhaps you could ist ein Vorschlag, keine Anweisung.",
+     "en": "Right: sentence a. Perhaps you could is a suggestion, not an instruction."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b ist es eine Pflicht: must lässt keine Wahl.",
+      "en": "In b it is an obligation: must leaves no choice."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a schlägt vor, b verlangt.",
+      "en": "Not the same: a suggests, b demands."
+     }
+    ]
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "id": "ma-dht-k1",
+   "type": "kwt",
+   "pat": "ma.dont-have-to",
+   "from": "It isn't necessary to sign the form today.",
+   "key": "HAVE",
+   "frame": "You ___ sign the form today.",
+   "answer": "don't have to",
+   "accepted": [
+    "do not have to",
+    "don't really have to",
+    "do not really have to"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: don't have to heißt „nicht nötig“: Du kannst es lassen.",
+     "en": "Right: don't have to means “not necessary”: you may skip it."
+    },
+    "wrong": [
+     {
+      "not": [
+       "have"
+      ],
+      "de": "Das Schlüsselwort HAVE muss unverändert in der Lücke stehen.",
+      "en": "The key word HAVE must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "have"
+      ],
+      "not": [
+       "not"
+      ],
+      "de": "Have to ohne Verneinung heißt „müssen“. Gesucht ist „nicht nötig“.",
+      "en": "Have to without a negative means “must”. “Not necessary” is needed."
+     }
+    ]
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "id": "ma-dht-k2",
+   "type": "kwt",
+   "pat": "ma.dont-have-to",
+   "from": "Taking photos in the lab is forbidden.",
+   "key": "MUST",
+   "frame": "Visitors ___ photos in the lab.",
+   "answer": "must not take",
+   "accepted": [
+    "must never take"
+   ],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: must not + Grundform sagt, dass es verboten ist.",
+     "en": "Right: must not + base form says: forbidden."
+    },
+    "wrong": [
+     {
+      "not": [
+       "must"
+      ],
+      "de": "Das Schlüsselwort MUST muss unverändert in der Lücke stehen.",
+      "en": "The key word MUST must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "must"
+      ],
+      "not": [
+       "not"
+      ],
+      "de": "Must allein ist Pflicht. Für ein Verbot braucht es must not.",
+      "en": "Must alone is an obligation. A prohibition needs must not."
+     }
+    ]
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "id": "ma-dht-f1",
+   "type": "find",
+   "pat": "ma.dont-have-to",
+   "prompt": "Attendance is optional, so you mustn't join the call if you don't want to.",
+   "err": [
+    5,
+    5
+   ],
+   "answer": "don't have to",
+   "fixed": "Attendance is optional, so you don't have to join the call if you don't want to.",
+   "accepted": [
+    "needn't",
+    "do not have to",
+    "don't need to",
+    "do not need to"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: optional heißt „nicht nötig“: don't have to, nicht mustn't.",
+     "en": "The error: optional means “not necessary”: don't have to, not mustn't."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: mustn't verbietet, aber es ist optional.",
+      "en": "There is an error: mustn't forbids it, but it is optional."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „mustn't“: Optional heißt nicht verboten.",
+      "en": "The error is “mustn't”: optional does not mean forbidden."
+     }
+    ]
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "id": "ma-dht-f2",
+   "type": "find",
+   "pat": "ma.dont-have-to",
+   "prompt": "You don't have to log in again; the session stays active for a week.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: don't have to + Grundform sagt, dass es nicht nötig ist.",
+     "en": "No error: don't have to + base form says it is not necessary."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Gemeint ist „nicht nötig“, und dafür passt don't have to.",
+      "en": "No error: “not necessary” is meant, and don't have to fits that."
+     }
+    ]
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "id": "ma-dht-m1",
+   "type": "meaning",
+   "pat": "ma.dont-have-to",
+   "a": "You don't have to sign the form.",
+   "b": "You must not sign the form.",
+   "q": {
+    "de": "Welcher Satz verbietet das Unterschreiben?",
+    "en": "Which sentence forbids signing?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. must not verbietet, don't have to heißt nur „nicht nötig“.",
+     "en": "Right: sentence b. must not forbids, don't have to only means “not necessary”."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a ist das Unterschreiben nur nicht nötig, aber erlaubt.",
+      "en": "In a signing is merely not necessary, but allowed."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a erlaubt es, b verbietet es.",
+      "en": "Not the same: a allows it, b forbids it."
+     }
+    ]
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "id": "ma-shh-k1",
+   "type": "kwt",
+   "pat": "ma.should-have",
+   "from": "It was a mistake not to tell the client earlier.",
+   "key": "SHOULD",
+   "frame": "We ___ the client earlier.",
+   "answer": "should have told",
+   "accepted": [
+    "should have informed",
+    "should have notified",
+    "should have warned",
+    "should have updated"
+   ],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: should have + Partizip blickt zurück: Das Informieren blieb aus.",
+     "en": "Right: should have + participle looks back: the informing did not happen."
+    },
+    "wrong": [
+     {
+      "not": [
+       "should"
+      ],
+      "de": "Das Schlüsselwort SHOULD muss unverändert in der Lücke stehen.",
+      "en": "The key word SHOULD must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "should",
+       "had"
+      ],
+      "de": "Nach should steht have, nicht had: should have told.",
+      "en": "After should comes have, not had: should have told."
+     },
+     {
+      "if": [
+       "should"
+      ],
+      "not": [
+       "have"
+      ],
+      "de": "Für den Rückblick fehlt have + Partizip: should have told.",
+      "en": "The hindsight form needs have + participle: should have told."
+     }
+    ]
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "id": "ma-shh-k2",
+   "type": "kwt",
+   "pat": "ma.should-have",
+   "from": "It was wrong of me to share the draft so early.",
+   "key": "SHOULD",
+   "frame": "I ___ the draft so early.",
+   "answer": "should not have shared",
+   "accepted": [
+    "should not have sent",
+    "should not have forwarded",
+    "should not have circulated",
+    "should not have released"
+   ],
+   "words": [
+    4,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: should not have + Partizip: Es war ein Fehler, es zu tun.",
+     "en": "Right: should not have + participle: it was a mistake to do it."
+    },
+    "wrong": [
+     {
+      "not": [
+       "should"
+      ],
+      "de": "Das Schlüsselwort SHOULD muss unverändert in der Lücke stehen.",
+      "en": "The key word SHOULD must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "should",
+       "had"
+      ],
+      "de": "Nach should steht have, nicht had: should not have shared.",
+      "en": "After should comes have, not had: should not have shared."
+     },
+     {
+      "if": [
+       "should"
+      ],
+      "not": [
+       "have"
+      ],
+      "de": "Der Rückblick braucht have + Partizip: should not have shared.",
+      "en": "Hindsight needs have + participle: should not have shared."
+     }
+    ]
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "id": "ma-shh-f1",
+   "type": "find",
+   "pat": "ma.should-have",
+   "prompt": "We should had told the client about the delay last week.",
+   "err": [
+    1,
+    2
+   ],
+   "answer": "should have",
+   "fixed": "We should have told the client about the delay last week.",
+   "accepted": [
+    "ought to have"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach should steht have, nicht had: should have told.",
+     "en": "The error: should takes have, not had: should have told."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Nach should steht kein had.",
+      "en": "There is an error: no had after should."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „should had“: Es heißt should have.",
+      "en": "The error is “should had”: it is should have."
+     }
+    ]
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "id": "ma-shh-f2",
+   "type": "find",
+   "pat": "ma.should-have",
+   "prompt": "I shouldn't sent the draft to the whole team last night.",
+   "err": [
+    1,
+    2
+   ],
+   "answer": "shouldn't have sent",
+   "fixed": "I shouldn't have sent the draft to the whole team last night.",
+   "accepted": [
+    "should not have sent",
+    "ought not to have sent"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Der Rückblick braucht have + Partizip: shouldn't have sent.",
+     "en": "The error: hindsight needs have + participle: shouldn't have sent."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Nach shouldn't fehlt have.",
+      "en": "There is an error: have is missing after shouldn't."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „shouldn't sent“: Es fehlt have.",
+      "en": "The error is “shouldn't sent”: have is missing."
+     }
+    ]
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "id": "ma-shh-m1",
+   "type": "meaning",
+   "pat": "ma.should-have",
+   "a": "We should send the report today.",
+   "b": "We should have sent the report yesterday.",
+   "q": {
+    "de": "Welcher Satz blickt auf etwas zurück, das nicht passiert ist?",
+    "en": "Which sentence looks back at something that did not happen?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. should have + Partizip blickt zurück: Der Bericht ging nicht raus.",
+     "en": "Right: sentence b. should have + participle looks back: the report was not sent."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a geht es um heute: should + Grundform rät für jetzt.",
+      "en": "In a it is about today: should + base form advises for now."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a rät für heute, b blickt zurück.",
+      "en": "Not the same: a advises for today, b looks back."
+     }
+    ]
+   },
+   "topic": "modals-advice"
   },
   {
    "id": "md-mn-k1",
@@ -24016,6 +29007,1331 @@
     ]
    },
    "topic": "used-to"
+  },
+  {
+   "id": "vp-ing-k1",
+   "type": "kwt",
+   "pat": "vp.ing-verbs",
+   "from": "He deliberately didn't answer questions about the layoffs.",
+   "key": "AVOIDED",
+   "frame": "He ___ about the layoffs.",
+   "answer": "avoided answering questions",
+   "accepted": [
+    "avoided answering any questions",
+    "avoided taking questions",
+    "avoided taking any questions",
+    "avoided talking",
+    "avoided speaking"
+   ],
+   "words": [
+    2,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Nach avoid steht -ing: avoided answering questions.",
+     "en": "Right: after avoid use -ing: avoided answering questions."
+    },
+    "wrong": [
+     {
+      "not": [
+       "avoided"
+      ],
+      "de": "Das Schlüsselwort avoided muss unverändert in der Lücke stehen.",
+      "en": "The key word avoided must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "avoided",
+       "to"
+      ],
+      "de": "Nach avoid steht kein to + Grundform, sondern -ing.",
+      "en": "After avoid there is no to + base form; use -ing."
+     },
+     {
+      "if": [
+       "avoided",
+       "answer"
+      ],
+      "de": "Die Grundform passt nicht: Nach avoid folgt -ing (answering).",
+      "en": "The base form does not fit: after avoid use -ing (answering)."
+     },
+     {
+      "pat": "vp.ing-verbs",
+      "de": "Nach avoid steht das nächste Verb in der -ing-Form.",
+      "en": "After avoid the next verb takes the -ing form."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-ing-k2",
+   "type": "kwt",
+   "pat": "vp.ing-verbs",
+   "from": "Let's wait until Friday before we choose the vendor.",
+   "key": "POSTPONE",
+   "frame": "Let's ___ the vendor until Friday.",
+   "answer": "postpone choosing",
+   "accepted": [
+    "postpone selecting",
+    "postpone picking",
+    "postpone deciding on",
+    "postpone making a decision on"
+   ],
+   "words": [
+    2,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Nach postpone steht -ing: postpone choosing the vendor.",
+     "en": "Right: after postpone use -ing: postpone choosing the vendor."
+    },
+    "wrong": [
+     {
+      "not": [
+       "postpone"
+      ],
+      "de": "Das Schlüsselwort postpone muss unverändert in der Lücke stehen.",
+      "en": "The key word postpone must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "postpone",
+       "to"
+      ],
+      "de": "Nach postpone steht kein to + Grundform, sondern -ing.",
+      "en": "After postpone there is no to + base form; use -ing."
+     },
+     {
+      "if": [
+       "postpone",
+       "choose"
+      ],
+      "de": "Die Grundform passt nicht: Postpone verlangt -ing (choosing).",
+      "en": "The base form does not fit: postpone takes -ing (choosing)."
+     },
+     {
+      "pat": "vp.ing-verbs",
+      "de": "Nach postpone steht das nächste Verb in der -ing-Form.",
+      "en": "After postpone the next verb takes the -ing form."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-ing-f1",
+   "type": "find",
+   "pat": "vp.ing-verbs",
+   "prompt": "We're considering to move the kickoff to Monday.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "moving",
+   "fixed": "We're considering moving the kickoff to Monday.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „considering to move“. Nach consider steht -ing: moving.",
+     "en": "The error: “considering to move”. After consider use -ing: moving."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Consider nimmt kein to + Grundform.",
+      "en": "There is an error: consider takes no to + base form."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „to move“: Consider verlangt -ing.",
+      "en": "The error is “to move”: consider takes -ing."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-ing-f2",
+   "type": "find",
+   "pat": "vp.ing-verbs",
+   "prompt": "She finished to write the summary before the call.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "writing",
+   "fixed": "She finished writing the summary before the call.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „finished to write“. Nach finish steht -ing: writing.",
+     "en": "The error: “finished to write”. After finish use -ing: writing."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Finish nimmt kein to + Grundform.",
+      "en": "There is an error: finish takes no to + base form."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „to write“: Finish verlangt -ing.",
+      "en": "The error is “to write”: finish takes -ing."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-ing-f3",
+   "type": "find",
+   "pat": "vp.ing-verbs",
+   "prompt": "Our team enjoys experimenting with new formats.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: enjoy + -ing („experimenting“) ist richtig.",
+     "en": "No error: enjoy + -ing (“experimenting”) is correct."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Nach enjoy steht -ing, genau wie hier.",
+      "en": "No error: after enjoy comes -ing, exactly as here."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-ing-m1",
+   "type": "meaning",
+   "pat": "vp.ing-verbs",
+   "a": "We considered hiring her.",
+   "b": "We hired her.",
+   "q": {
+    "de": "Welcher Satz sagt, dass sie schon eingestellt wurde?",
+    "en": "Which sentence says she has already been hired?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. Hired ist geschehen, considered hiring war nur eine Überlegung.",
+     "en": "Right: sentence b. Hired happened; considered hiring was only a thought."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a wurde nur überlegt: Considered hiring heißt, sie war noch nicht eingestellt.",
+      "en": "In a it was only considered: considered hiring means she was not hired yet."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: considered hiring ist eine Überlegung, hired eine Tatsache.",
+      "en": "Not the same: considered hiring is a thought, hired is a fact."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-to-k1",
+   "type": "kwt",
+   "pat": "vp.to-verbs",
+   "from": "She finally succeeded in getting the budget approved.",
+   "key": "MANAGED",
+   "frame": "She ___ the budget approved.",
+   "answer": "managed to get",
+   "accepted": [],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Nach manage steht to + Grundform: managed to get.",
+     "en": "Right: after manage use to + base form: managed to get."
+    },
+    "wrong": [
+     {
+      "not": [
+       "managed"
+      ],
+      "de": "Das Schlüsselwort managed muss unverändert in der Lücke stehen.",
+      "en": "The key word managed must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "managed",
+       "getting"
+      ],
+      "de": "Nach manage steht to + Grundform, nicht -ing.",
+      "en": "After manage use to + base form, not -ing."
+     },
+     {
+      "if": [
+       "managed",
+       "get"
+      ],
+      "not": [
+       "to"
+      ],
+      "de": "Es fehlt das to: manage + to + Grundform.",
+      "en": "The to is missing: manage + to + base form."
+     },
+     {
+      "pat": "vp.to-verbs",
+      "de": "Nach manage folgt to und die Grundform des Verbs.",
+      "en": "After manage comes to and the base form of the verb."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-to-k2",
+   "type": "kwt",
+   "pat": "vp.to-verbs",
+   "from": "We can't pay for another consultant.",
+   "key": "AFFORD",
+   "frame": "We can't ___ another consultant.",
+   "answer": "afford to hire",
+   "accepted": [
+    "afford to bring in",
+    "afford to pay",
+    "afford to engage",
+    "afford to get",
+    "afford to take on"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Nach afford steht to + Grundform: afford to hire.",
+     "en": "Right: after afford use to + base form: afford to hire."
+    },
+    "wrong": [
+     {
+      "not": [
+       "afford"
+      ],
+      "de": "Das Schlüsselwort afford muss unverändert in der Lücke stehen.",
+      "en": "The key word afford must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "afford"
+      ],
+      "not": [
+       "to"
+      ],
+      "de": "Es fehlt das to: afford + to + Grundform.",
+      "en": "The to is missing: afford + to + base form."
+     },
+     {
+      "pat": "vp.to-verbs",
+      "de": "Nach afford folgt to und die Grundform des Verbs.",
+      "en": "After afford comes to and the base form of the verb."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-to-f1",
+   "type": "find",
+   "pat": "vp.to-verbs",
+   "prompt": "She refused answering the journalist's question.",
+   "err": [
+    2,
+    2
+   ],
+   "answer": "to answer",
+   "fixed": "She refused to answer the journalist's question.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „refused answering“. Nach refuse steht to + Grundform: to answer.",
+     "en": "The error: “refused answering”. After refuse use to + base form: to answer."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Refuse nimmt kein -ing.",
+      "en": "There is an error: refuse takes no -ing."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „answering“: Refuse verlangt to + Grundform.",
+      "en": "The error is “answering”: refuse takes to + base form."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-to-f2",
+   "type": "find",
+   "pat": "vp.to-verbs",
+   "prompt": "We agreed meeting again after the audit.",
+   "err": [
+    2,
+    2
+   ],
+   "answer": "to meet",
+   "fixed": "We agreed to meet again after the audit.",
+   "accepted": [
+    "to meet up",
+    "on meeting"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „agreed meeting“. Nach agree steht to + Grundform: to meet.",
+     "en": "The error: “agreed meeting”. After agree use to + base form: to meet."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Agree nimmt kein -ing.",
+      "en": "There is an error: agree takes no -ing."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „meeting“: Agree verlangt to + Grundform.",
+      "en": "The error is “meeting”: agree takes to + base form."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-to-m1",
+   "type": "meaning",
+   "pat": "vp.to-verbs",
+   "a": "She managed to reach the client.",
+   "b": "She tried to reach the client.",
+   "q": {
+    "de": "Welcher Satz sagt, dass sie den Kunden erreicht hat?",
+    "en": "Which sentence says she reached the client?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Bei managed to hat es geklappt.",
+     "en": "Right: sentence a. Managed to means it worked."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b blieb offen, ob es klappte: Tried to ist nur ein Versuch.",
+      "en": "In b it is open whether it worked: tried to is only an attempt."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: managed to hat geklappt, tried to nicht unbedingt.",
+      "en": "Not the same: managed to worked, tried to not necessarily."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-lf-k1",
+   "type": "kwt",
+   "pat": "vp.look-forward",
+   "from": "I'm excited about seeing you in Berlin next week.",
+   "key": "LOOKING",
+   "frame": "I'm ___ you in Berlin next week.",
+   "answer": "looking forward to seeing",
+   "accepted": [
+    "looking forward to meeting",
+    "really looking forward to seeing",
+    "really looking forward to meeting"
+   ],
+   "words": [
+    4,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Hier ist to eine Präposition, deshalb looking forward to seeing.",
+     "en": "Right: here to is a preposition, so looking forward to seeing."
+    },
+    "wrong": [
+     {
+      "not": [
+       "looking"
+      ],
+      "de": "Das Schlüsselwort looking muss unverändert in der Lücke stehen.",
+      "en": "The key word looking must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "looking"
+      ],
+      "not": [
+       "forward"
+      ],
+      "de": "Es fehlt forward: Die feste Wendung heißt look forward to.",
+      "en": "The word forward is missing: the fixed phrase is look forward to."
+     },
+     {
+      "if": [
+       "looking",
+       "forward"
+      ],
+      "not": [
+       "to"
+      ],
+      "de": "Es fehlt das to: look forward to + -ing.",
+      "en": "The to is missing: look forward to + -ing."
+     },
+     {
+      "if": [
+       "looking",
+       "forward",
+       "to"
+      ],
+      "not": [
+       "seeing",
+       "meeting"
+      ],
+      "de": "Nach look forward to steht -ing, weil to eine Präposition ist.",
+      "en": "After look forward to use -ing, because to is a preposition."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-lf-k2",
+   "type": "kwt",
+   "pat": "vp.look-forward",
+   "from": "We have promised to meet the deadline.",
+   "key": "COMMITTED",
+   "frame": "We're ___ the deadline.",
+   "answer": "committed to meeting",
+   "accepted": [
+    "committed to hitting",
+    "committed to making",
+    "fully committed to meeting",
+    "completely committed to meeting"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: In committed to ist to eine Präposition: committed to meeting.",
+     "en": "Right: in committed to, to is a preposition: committed to meeting."
+    },
+    "wrong": [
+     {
+      "not": [
+       "committed"
+      ],
+      "de": "Das Schlüsselwort committed muss unverändert in der Lücke stehen.",
+      "en": "The key word committed must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "committed"
+      ],
+      "not": [
+       "to"
+      ],
+      "de": "Es fehlt das to: be committed to + -ing.",
+      "en": "The to is missing: be committed to + -ing."
+     },
+     {
+      "if": [
+       "committed",
+       "to",
+       "meet"
+      ],
+      "de": "Nach committed to steht -ing, weil to eine Präposition ist: meeting.",
+      "en": "After committed to use -ing, because to is a preposition: meeting."
+     },
+     {
+      "pat": "vp.look-forward",
+      "de": "Nach committed to folgt -ing oder ein Nomen.",
+      "en": "After committed to comes -ing or a noun."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-lf-f1",
+   "type": "find",
+   "pat": "vp.look-forward",
+   "prompt": "We look forward to see the final designs on Friday.",
+   "err": [
+    4,
+    4
+   ],
+   "answer": "seeing",
+   "fixed": "We look forward to seeing the final designs on Friday.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „to see“. Nach look forward to steht -ing: seeing.",
+     "en": "The error: “to see”. After look forward to use -ing: seeing."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: To ist hier eine Präposition.",
+      "en": "There is an error: to is a preposition here."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „see“: Nach look forward to folgt -ing.",
+      "en": "The error is “see”: look forward to is followed by -ing."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-lf-f2",
+   "type": "find",
+   "pat": "vp.look-forward",
+   "prompt": "She objects to pay extra for the shipping.",
+   "err": [
+    3,
+    3
+   ],
+   "answer": "paying",
+   "fixed": "She objects to paying extra for the shipping.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „objects to pay“. Nach object to steht -ing: paying.",
+     "en": "The error: “objects to pay”. After object to use -ing: paying."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: To ist nach object eine Präposition.",
+      "en": "There is an error: to is a preposition after object."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „pay“: Nach object to folgt -ing.",
+      "en": "The error is “pay”: object to is followed by -ing."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-lf-f3",
+   "type": "find",
+   "pat": "vp.look-forward",
+   "prompt": "I'm looking forward to the workshop next month.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: look forward to + Nomen („the workshop“) ist richtig.",
+     "en": "No error: look forward to + noun (“the workshop”) is correct."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Nach look forward to darf auch ein Nomen stehen.",
+      "en": "No error: a noun may also follow look forward to."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-lf-m1",
+   "type": "meaning",
+   "pat": "vp.look-forward",
+   "a": "I look forward to hearing from you.",
+   "b": "I look forward to your reply.",
+   "q": {
+    "de": "Sagen beide Sätze etwa dasselbe?",
+    "en": "Do both sentences say roughly the same thing?"
+   },
+   "answer": "both",
+   "why": {
+    "ok": {
+     "de": "Richtig: beide. Hinter look forward to steht -ing oder ein Nomen.",
+     "en": "Right: both. After look forward to comes -ing or a noun."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "Doch, auch b ist richtig: Hinter to darf auch ein Nomen stehen.",
+      "en": "Yes, b is correct too: a noun may follow to as well."
+     },
+     {
+      "opt": "b",
+      "de": "Doch, auch a ist richtig: Hinter to darf auch -ing stehen.",
+      "en": "Yes, a is correct too: -ing may follow to as well."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-rf-k1",
+   "type": "kwt",
+   "pat": "vp.remember-forget",
+   "from": "I recall that I sent her the file last week.",
+   "key": "REMEMBER",
+   "frame": "I ___ her the file last week.",
+   "answer": "remember sending",
+   "accepted": [
+    "remember having sent",
+    "do remember sending",
+    "clearly remember sending",
+    "definitely remember sending",
+    "distinctly remember sending"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Der Rückblick heißt remember + -ing: remember sending.",
+     "en": "Right: looking back is remember + -ing: remember sending."
+    },
+    "wrong": [
+     {
+      "not": [
+       "remember"
+      ],
+      "de": "Das Schlüsselwort remember muss unverändert in der Lücke stehen.",
+      "en": "The key word remember must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "remember",
+       "to"
+      ],
+      "de": "Remember + to meint eine Aufgabe. Hier erinnerst du dich an Früheres: -ing.",
+      "en": "Remember + to means a task. Here you recall the past: -ing."
+     },
+     {
+      "if": [
+       "remember",
+       "send"
+      ],
+      "de": "Die Grundform passt nicht: Ein Rückblick heißt remember + -ing.",
+      "en": "The base form does not fit: looking back is remember + -ing."
+     },
+     {
+      "pat": "vp.remember-forget",
+      "de": "Für Vergangenes steht remember + -ing.",
+      "en": "For the past use remember + -ing."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-rf-k2",
+   "type": "kwt",
+   "pat": "vp.remember-forget",
+   "from": "Don't forget that you have to call the supplier today.",
+   "key": "FORGET",
+   "frame": "Don't ___ the supplier today.",
+   "answer": "forget to call",
+   "accepted": [
+    "forget to phone",
+    "forget to contact"
+   ],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Eine Aufgabe, die noch ansteht, heißt forget + to: forget to call.",
+     "en": "Right: a task still ahead is forget + to: forget to call."
+    },
+    "wrong": [
+     {
+      "not": [
+       "forget"
+      ],
+      "de": "Das Schlüsselwort forget muss unverändert in der Lücke stehen.",
+      "en": "The key word forget must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "forget",
+       "calling"
+      ],
+      "de": "Forget + -ing blickt zurück. Die Aufgabe liegt noch vor dir: forget to call.",
+      "en": "Forget + -ing looks back. The task is still ahead: forget to call."
+     },
+     {
+      "if": [
+       "forget"
+      ],
+      "not": [
+       "to"
+      ],
+      "de": "Es fehlt to: Für eine Aufgabe steht forget + to + Grundform.",
+      "en": "The to is missing: for a task use forget + to + base form."
+     },
+     {
+      "pat": "vp.remember-forget",
+      "de": "Für eine anstehende Aufgabe steht forget + to.",
+      "en": "For a task still ahead use forget + to."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-rf-f1",
+   "type": "find",
+   "pat": "vp.remember-forget",
+   "prompt": "I remember to meet her at a conference in 2019.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "meeting",
+   "fixed": "I remember meeting her at a conference in 2019.",
+   "accepted": [
+    "having met"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „remember to meet“. „In 2019“ blickt zurück: remember meeting.",
+     "en": "The error: “remember to meet”. “In 2019” looks back: remember meeting."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Für Vergangenes steht remember + -ing.",
+      "en": "There is an error: for the past use remember + -ing."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „to meet“: Hier wird Früheres erinnert.",
+      "en": "The error is “to meet”: here something past is recalled."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-rf-f2",
+   "type": "find",
+   "pat": "vp.remember-forget",
+   "prompt": "Don't forget locking the server room before you leave.",
+   "err": [
+    2,
+    2
+   ],
+   "answer": "to lock",
+   "fixed": "Don't forget to lock the server room before you leave.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „forget locking“. „Before you leave“ nennt eine Aufgabe: forget to lock.",
+     "en": "The error: “forget locking”. “Before you leave” names a task: forget to lock."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Für eine Aufgabe steht forget + to.",
+      "en": "There is an error: for a task use forget + to."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „locking“: Die Aufgabe liegt noch vor dir.",
+      "en": "The error is “locking”: the task is still ahead of you."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-rf-m1",
+   "type": "meaning",
+   "pat": "vp.remember-forget",
+   "a": "I remembered to lock the door.",
+   "b": "I remembered locking the door.",
+   "q": {
+    "de": "Welcher Satz sagt, dass ich mich an einen früheren Moment erinnere?",
+    "en": "Which sentence says I recall an earlier moment?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. Remembered locking = ich weiß noch, dass ich die Tür abgeschlossen habe.",
+     "en": "Right: sentence b. Remembered locking = I recall having locked it."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a denke ich an die Aufgabe und tue sie: remembered to lock.",
+      "en": "In a I think of the task and do it: remembered to lock."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: to lock ist die Aufgabe, locking die Erinnerung.",
+      "en": "Not the same: to lock is the task, locking is the memory."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-st-k1",
+   "type": "kwt",
+   "pat": "vp.stop-try",
+   "from": "Last year we gave up paper forms.",
+   "key": "STOPPED",
+   "frame": "We ___ paper forms last year.",
+   "answer": "stopped using",
+   "accepted": [
+    "stopped printing",
+    "stopped accepting",
+    "stopped issuing",
+    "stopped sending",
+    "stopped filling out"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Das Aufhören ist stop + -ing: stopped using.",
+     "en": "Right: quitting is stop + -ing: stopped using."
+    },
+    "wrong": [
+     {
+      "not": [
+       "stopped"
+      ],
+      "de": "Das Schlüsselwort stopped muss unverändert in der Lücke stehen.",
+      "en": "The key word stopped must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "stopped",
+       "to"
+      ],
+      "de": "Stop + to nennt den Zweck einer Pause. Hier hört es auf: stop + -ing.",
+      "en": "Stop + to gives the purpose of a pause. Here it ends: stop + -ing."
+     },
+     {
+      "if": [
+       "stopped",
+       "use"
+      ],
+      "de": "Die Grundform passt nicht: Aufhören heißt stop + -ing (using).",
+      "en": "The base form does not fit: quitting is stop + -ing (using)."
+     },
+     {
+      "pat": "vp.stop-try",
+      "de": "Wer mit etwas aufhört, sagt stop + -ing.",
+      "en": "To quit something, use stop + -ing."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-st-k2",
+   "type": "kwt",
+   "pat": "vp.stop-try",
+   "from": "She paused her work to take a call.",
+   "key": "STOPPED",
+   "frame": "She ___ a call.",
+   "answer": "stopped to take",
+   "accepted": [
+    "stopped to answer",
+    "stopped working to take",
+    "stopped working to answer"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Der Zweck einer Pause heißt stop + to: stopped to take.",
+     "en": "Right: the purpose of a pause is stop + to: stopped to take."
+    },
+    "wrong": [
+     {
+      "not": [
+       "stopped"
+      ],
+      "de": "Das Schlüsselwort stopped muss unverändert in der Lücke stehen.",
+      "en": "The key word stopped must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "stopped",
+       "taking"
+      ],
+      "de": "Stop + -ing heißt aufhören. Hier ist das Telefonat der Grund der Pause: to take.",
+      "en": "Stop + -ing means quitting. Here the call is the reason for the pause: to take."
+     },
+     {
+      "if": [
+       "stopped"
+      ],
+      "not": [
+       "to"
+      ],
+      "de": "Es fehlt to: Der Zweck einer Pause heißt stop + to + Grundform.",
+      "en": "The to is missing: the purpose of a pause is stop + to + base form."
+     },
+     {
+      "pat": "vp.stop-try",
+      "de": "Für eine Pause mit Grund steht stop + to + Grundform.",
+      "en": "To pause because of something, use stop + to + base form."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-st-f1",
+   "type": "find",
+   "pat": "vp.stop-try",
+   "prompt": "She stopped to work for the bank in 2020 and started her own firm.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "working",
+   "fixed": "She stopped working for the bank in 2020 and started her own firm.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „stopped to work“. Aufhören heißt stop + -ing: stopped working.",
+     "en": "The error: “stopped to work”. Quitting is stop + -ing: stopped working."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Hier hört sie auf, also stop + -ing.",
+      "en": "There is an error: she quits here, so stop + -ing."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „to work“: Sie hat die Arbeit beendet.",
+      "en": "The error is “to work”: she ended that job."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-st-f2",
+   "type": "find",
+   "pat": "vp.stop-try",
+   "prompt": "We stopped to using the old CRM last year.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "using",
+   "fixed": "We stopped using the old CRM last year.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „stopped to using“. Es folgt nur -ing, ohne to: stopped using.",
+     "en": "The error: “stopped to using”. Only -ing follows, without to: stopped using."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach stop steht entweder to + Grundform oder -ing, nie beides.",
+      "en": "There is an error: after stop use either to + base form or -ing, not both."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „to using“: Das to ist zu viel.",
+      "en": "The error is “to using”: the to is one word too many."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-st-f3",
+   "type": "find",
+   "pat": "vp.stop-try",
+   "prompt": "We stopped at the pharmacy to pick up some tape.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: stop + to nennt hier den Zweck des Halts.",
+     "en": "No error: stop + to gives the purpose of the stop here."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Sie haben angehalten, um Klebeband zu holen.",
+      "en": "No error: they paused in order to get tape."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-st-m1",
+   "type": "meaning",
+   "pat": "vp.stop-try",
+   "a": "We stopped sending reminders.",
+   "b": "We stopped to send reminders.",
+   "q": {
+    "de": "Welcher Satz nennt den Grund für eine Pause?",
+    "en": "Which sentence gives the reason for a pause?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. Stopped to send = wir hielten an, um etwas zu schicken.",
+     "en": "Right: sentence b. Stopped to send = we paused in order to send something."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a hören wir auf: Stopped sending heißt, es gibt keine Erinnerungen mehr.",
+      "en": "In a we quit: stopped sending means there are no more reminders."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: -ing heißt aufhören, to nennt den Zweck.",
+      "en": "Not the same: -ing means quitting, to gives the purpose."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-rg-k1",
+   "type": "kwt",
+   "pat": "vp.regret",
+   "from": "We are sorry to announce that the event has been canceled.",
+   "key": "REGRET",
+   "frame": "We ___ that the event has been canceled.",
+   "answer": "regret to announce",
+   "accepted": [
+    "regret to say",
+    "regret to report",
+    "regret to confirm",
+    "regret to inform you",
+    "regret to tell you",
+    "regret to let you know",
+    "deeply regret to announce"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Eine Mitteilung, die jetzt kommt, heißt regret + to: regret to announce.",
+     "en": "Right: an announcement made now is regret + to: regret to announce."
+    },
+    "wrong": [
+     {
+      "not": [
+       "regret"
+      ],
+      "de": "Das Schlüsselwort regret muss unverändert in der Lücke stehen.",
+      "en": "The key word regret must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "regret"
+      ],
+      "not": [
+       "to"
+      ],
+      "de": "Regret + -ing bereut Früheres. Eine Mitteilung heißt regret + to + Grundform.",
+      "en": "Regret + -ing feels sorry about the past. An announcement is regret + to + base form."
+     },
+     {
+      "pat": "vp.regret",
+      "de": "Eine Mitteilung jetzt heißt regret + to + Grundform.",
+      "en": "An announcement made now is regret + to + base form."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-rg-k2",
+   "type": "kwt",
+   "pat": "vp.regret",
+   "from": "I wish I hadn't signed that contract.",
+   "key": "REGRET",
+   "frame": "I ___ that contract.",
+   "answer": "regret signing",
+   "accepted": [
+    "regret having signed",
+    "really regret signing",
+    "do regret signing",
+    "deeply regret signing",
+    "bitterly regret signing",
+    "really regret having signed"
+   ],
+   "words": [
+    2,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Das Bereuen ist regret + -ing: regret signing.",
+     "en": "Right: feeling sorry about the past is regret + -ing: regret signing."
+    },
+    "wrong": [
+     {
+      "not": [
+       "regret"
+      ],
+      "de": "Das Schlüsselwort regret muss unverändert in der Lücke stehen.",
+      "en": "The key word regret must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "regret",
+       "to"
+      ],
+      "de": "Regret + to kündigt eine Nachricht an. Wer etwas bereut, sagt regret + -ing.",
+      "en": "Regret + to announces news. Feeling sorry about the past is regret + -ing."
+     },
+     {
+      "if": [
+       "regret",
+       "sign"
+      ],
+      "de": "Die Grundform passt nicht: Bereuen heißt regret + -ing (signing).",
+      "en": "The base form does not fit: feeling sorry is regret + -ing (signing)."
+     },
+     {
+      "pat": "vp.regret",
+      "de": "Bedauern über früher heißt regret + -ing.",
+      "en": "Regret about the past is regret + -ing."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-rg-f1",
+   "type": "find",
+   "pat": "vp.regret",
+   "prompt": "He regrets to leave the team two years ago.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "leaving",
+   "fixed": "He regrets leaving the team two years ago.",
+   "accepted": [
+    "having left"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „regrets to leave“. „Two years ago“ blickt zurück: regrets leaving.",
+     "en": "The error: “regrets to leave”. “Two years ago” looks back: regrets leaving."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Bedauern über früher heißt regret + -ing.",
+      "en": "There is an error: regret about the past is regret + -ing."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „to leave“: Der Weggang liegt in der Vergangenheit.",
+      "en": "The error is “to leave”: leaving the team lies in the past."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-rg-f2",
+   "type": "find",
+   "pat": "vp.regret",
+   "prompt": "She regrets to not have taken the job last spring.",
+   "err": [
+    2,
+    5
+   ],
+   "answer": "not taking",
+   "fixed": "She regrets not taking the job last spring.",
+   "accepted": [
+    "not having taken"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „regrets to not have taken“. Für Früheres steht regret + -ing: not taking.",
+     "en": "The error: “regrets to not have taken”. For the past use regret + -ing: not taking."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Regret + to kündigt nur eine Nachricht an.",
+      "en": "There is an error: regret + to only announces news."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „to not have taken“: Hier wird Früheres bereut.",
+      "en": "The error is “to not have taken”: here something past is regretted."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "id": "vp-rg-m1",
+   "type": "meaning",
+   "pat": "vp.regret",
+   "a": "I regret telling her.",
+   "b": "I regret to tell her.",
+   "q": {
+    "de": "Welcher Satz sagt, dass ich es ihr schon gesagt habe?",
+    "en": "Which sentence says I have already told her?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Regret telling = ich habe es gesagt und bereue es.",
+     "en": "Right: sentence a. Regret telling = I told her and I regret it."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b sage ich es gerade jetzt: Regret to tell kündigt die Nachricht an.",
+      "en": "In b I say it right now: regret to tell announces the news."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: regret -ing blickt zurück, regret to kündigt etwas an.",
+      "en": "Not the same: regret -ing looks back, regret to announces something."
+     }
+    ]
+   },
+   "topic": "verb-patterns"
   }
  ]
 }

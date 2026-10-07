@@ -1,0 +1,204 @@
+[
+ {
+  "pat": "vp.ing-verbs",
+  "en": "We're considering postponing the launch because of the delay.",
+  "de": "Wegen der Verzögerung überlegen wir, den Start zu verschieben.",
+  "chunks": [
+   "we're",
+   "considering",
+   "postponing",
+   "the launch",
+   "because of the delay"
+  ],
+  "alt": [
+   "Because of the delay, we're considering postponing the launch."
+  ],
+  "why": [
+   "Consider und postpone verlangen beide -ing: „considering postponing“. Dazwischen steht kein to.",
+   "Consider and postpone both take -ing: “considering postponing”. No to comes in between."
+  ],
+  "bad": "We're considering to postpone the launch because of the delay.",
+  "trap": {
+   "tile": "postponing",
+   "instead": "to postpone",
+   "why": {
+    "de": "Aus „überlegen, zu verschieben“ wird leicht considering to postpone. Nach consider steht aber -ing.",
+    "en": "From “überlegen, zu verschieben” it is easy to get considering to postpone. After consider use -ing."
+   }
+  }
+ },
+ {
+  "pat": "vp.to-verbs",
+  "en": "Our supplier refused to lower the price for the second batch.",
+  "de": "Unser Lieferant weigerte sich, den Preis für die zweite Charge zu senken.",
+  "chunks": [
+   "our supplier",
+   "refused",
+   "to lower",
+   "the price",
+   "for the second batch"
+  ],
+  "alt": [
+   "For the second batch, our supplier refused to lower the price."
+  ],
+  "why": [
+   "Refuse verbindet sich mit to + Grundform: „refused to lower“. Der Preis folgt danach.",
+   "Refuse combines with to + base form: “refused to lower”. The price follows."
+  ],
+  "bad": "Our supplier refused lowering the price for the second batch.",
+  "trap": {
+   "tile": "to lower",
+   "instead": "lowering",
+   "why": {
+    "de": "Ein Reflex von avoid und consider: -ing wird auf alle Verben übertragen. Refuse verlangt aber to + Grundform.",
+    "en": "A reflex from avoid and consider: -ing is carried over to every verb. But refuse takes to + base form."
+   }
+  }
+ },
+ {
+  "pat": "vp.look-forward",
+  "en": "We're looking forward to working with your team next quarter.",
+  "de": "Wir freuen uns darauf, nächstes Quartal mit Ihrem Team zu arbeiten.",
+  "chunks": [
+   "we're",
+   "looking forward to",
+   "working",
+   "with your team",
+   "next quarter"
+  ],
+  "alt": [
+   "Next quarter, we're looking forward to working with your team."
+  ],
+  "why": [
+   "In look forward to ist to eine Präposition, deshalb folgt -ing: „to working“.",
+   "In look forward to, to is a preposition, so -ing follows: “to working”."
+  ],
+  "bad": "We're looking forward to work with your team next quarter.",
+  "trap": {
+   "tile": "working",
+   "instead": "work",
+   "why": {
+    "de": "Aus „uns darauf freuen, zu arbeiten“ wird leicht to work. Doch to ist hier eine Präposition.",
+    "en": "From “uns darauf freuen, zu arbeiten” it is easy to get to work. But to is a preposition here."
+   }
+  }
+ },
+ {
+  "pat": "vp.remember-forget",
+  "en": "Remember to send the notes to the whole team after the call.",
+  "de": "Denk daran, nach dem Call die Notizen an das ganze Team zu schicken.",
+  "chunks": [
+   "remember",
+   "to send",
+   "the notes",
+   "to the whole team",
+   "after the call"
+  ],
+  "alt": [
+   "After the call, remember to send the notes to the whole team."
+  ],
+  "why": [
+   "Remember + to meint eine Aufgabe, die noch ansteht: „remember to send“. Die Notizen folgen danach.",
+   "Remember + to means a task still ahead: “remember to send”. The notes follow."
+  ]
+ },
+ {
+  "pat": "vp.remember-forget",
+  "en": "I clearly remember meeting your manager at the Berlin conference.",
+  "de": "Ich erinnere mich genau, Ihren Manager auf der Berliner Konferenz getroffen zu haben.",
+  "chunks": [
+   "I",
+   "clearly remember",
+   "meeting",
+   "your manager",
+   "at the Berlin conference"
+  ],
+  "alt": [
+   "At the Berlin conference, I clearly remember meeting your manager."
+  ],
+  "why": [
+   "Der Rückblick auf Geschehenes ist remember + -ing: „remember meeting“.",
+   "Looking back at what happened is remember + -ing: “remember meeting”."
+  ],
+  "bad": "I clearly remember to meet your manager at the Berlin conference.",
+  "trap": {
+   "tile": "meeting",
+   "instead": "to meet",
+   "why": {
+    "de": "Das Deutsche nutzt bei erinnern ein zu („getroffen zu haben“). Englisch braucht für den Rückblick -ing.",
+    "en": "German uses a zu with erinnern (“getroffen zu haben”). English needs -ing to look back."
+   }
+  }
+ },
+ {
+  "pat": "vp.stop-try",
+  "en": "We stopped using the old system after the migration.",
+  "de": "Nach der Migration haben wir aufgehört, das alte System zu nutzen.",
+  "chunks": [
+   "we",
+   "stopped",
+   "using",
+   "the old system",
+   "after the migration"
+  ],
+  "alt": [
+   "After the migration, we stopped using the old system."
+  ],
+  "why": [
+   "Aufhören heißt stop + -ing: „stopped using“. Das System und die Zeit folgen danach.",
+   "Quitting is stop + -ing: “stopped using”. The system and the time follow."
+  ],
+  "bad": "We stopped to use the old system after the migration.",
+  "trap": {
+   "tile": "using",
+   "instead": "to use",
+   "why": {
+    "de": "Aus „aufhören, zu nutzen“ wird leicht stopped to use. Das hieße aber: anhalten, um es zu nutzen.",
+    "en": "From “aufhören, zu nutzen” it is easy to get stopped to use. That would mean: pausing in order to use it."
+   }
+  }
+ },
+ {
+  "pat": "vp.regret",
+  "en": "We regret to inform you that the session is full.",
+  "de": "Wir bedauern, Ihnen mitteilen zu müssen, dass die Sitzung ausgebucht ist.",
+  "chunks": [
+   "we regret",
+   "to inform you",
+   "that",
+   "the session",
+   "is full"
+  ],
+  "single": "Nach regret folgt to inform you, danach beginnt mit that der Nebensatz, dessen Teile zusammenbleiben.",
+  "why": [
+   "Regret + to kündigt eine schlechte Nachricht an, die jetzt kommt: „regret to inform you“.",
+   "Regret + to announces bad news that comes now: “regret to inform you”."
+  ]
+ },
+ {
+  "pat": "vp.regret",
+  "en": "I regret signing that contract last spring.",
+  "de": "Ich bereue es, diesen Vertrag letzten Frühling unterschrieben zu haben.",
+  "chunks": [
+   "I",
+   "regret",
+   "signing",
+   "that contract",
+   "last spring"
+  ],
+  "single": "Nach regret steht die -ing-Form, that contract bleibt zusammen und last spring steht am Ende.",
+  "why": [
+   "Bedauern über Früheres heißt regret + -ing: „regret signing“. Die Zeitangabe steht am Ende.",
+   "Regret about the past is regret + -ing: “regret signing”. The time phrase comes last."
+  ],
+  "bad": "I regret to sign that contract last spring.",
+  "trap": {
+   "tile": "signing",
+   "instead": "to sign",
+   "why": {
+    "de": "Das Deutsche hat bedauern und bereuen. Beim „bereuen, zu unterschreiben“ rutscht to hinein, doch bereuen heißt regret + -ing.",
+    "en": "German has bedauern and bereuen. With “bereuen” a to slips in, but feeling sorry about the past is regret + -ing."
+   }
+  }
+ }
+]

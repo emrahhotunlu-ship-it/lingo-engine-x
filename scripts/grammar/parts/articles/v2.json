@@ -1,0 +1,1132 @@
+[
+ {
+  "id": "art-ind-k1",
+  "type": "kwt",
+  "pat": "art.indefinite",
+  "from": "Daniel is a lawyer.",
+  "key": "AS",
+  "frame": "Daniel works ___ lawyer.",
+  "answer": "as a",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: as a lawyer. Ein Beruf nach as braucht im Singular a/an.",
+    "en": "Right: as a lawyer. A singular job after as takes a/an."
+   },
+   "wrong": [
+    {
+     "not": [
+      "as"
+     ],
+     "de": "Das Schlüsselwort as muss unverändert in der Lücke stehen.",
+     "en": "The key word as must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "as",
+      "an"
+     ],
+     "de": "„an“ steht vor Vokallaut. Lawyer beginnt mit Konsonantlaut, also a.",
+     "en": "“an” goes before a vowel sound. Lawyer starts with a consonant sound, so a."
+    },
+    {
+     "if": [
+      "as",
+      "the"
+     ],
+     "de": "„the lawyer“ meint einen bekannten Anwalt. Hier wird nur sein Beruf genannt.",
+     "en": "“the lawyer” means a known lawyer. Here only his job is named."
+    },
+    {
+     "not": [
+      "a"
+     ],
+     "de": "Es fehlt der Artikel: Ein Beruf im Singular braucht a/an.",
+     "en": "The article is missing: a singular job needs a/an."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-ind-k2",
+  "type": "kwt",
+  "pat": "art.indefinite",
+  "from": "What a great idea!",
+  "key": "SUCH",
+  "frame": "That was ___ great idea.",
+  "answer": "such a",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: such a great idea. Nach such steht a/an vor dem Nomen im Singular.",
+    "en": "Right: such a great idea. After such use a/an before a singular noun."
+   },
+   "wrong": [
+    {
+     "not": [
+      "such"
+     ],
+     "de": "Das Schlüsselwort such muss unverändert in der Lücke stehen.",
+     "en": "The key word such must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "such",
+      "an"
+     ],
+     "de": "„an“ steht vor Vokallaut. Great beginnt mit Konsonantlaut, also a.",
+     "en": "“an” goes before a vowel sound. Great starts with a consonant sound, so a."
+    },
+    {
+     "if": [
+      "such",
+      "the"
+     ],
+     "de": "„such the“ geht nicht. Nach such steht a/an: such a great idea.",
+     "en": "“such the” fails. After such use a/an: such a great idea."
+    },
+    {
+     "not": [
+      "a"
+     ],
+     "de": "Es fehlt das a: such great idea geht im Singular nicht.",
+     "en": "The a is missing: such great idea does not work in the singular."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-ind-f1",
+  "type": "find",
+  "pat": "art.indefinite",
+  "prompt": "My sister is lawyer in Boston.",
+  "err": [
+   3,
+   3
+  ],
+  "answer": "a lawyer",
+  "fixed": "My sister is a lawyer in Boston.",
+  "accepted": [
+   "an attorney"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Ein Beruf braucht a/an: is a lawyer.",
+    "en": "The error: a job takes a/an: is a lawyer."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Es fehlt der Artikel vor lawyer.",
+     "en": "There is an error: the article is missing before lawyer."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „lawyer“: Ein Beruf im Singular braucht a/an.",
+     "en": "The error is “lawyer”: a singular job needs a/an."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-ind-f2",
+  "type": "find",
+  "pat": "art.indefinite",
+  "prompt": "That was such great meeting, and I learned a lot.",
+  "err": [
+   2,
+   4
+  ],
+  "answer": "such a great meeting,",
+  "fixed": "That was such a great meeting, and I learned a lot.",
+  "accepted": [
+   "quite a great meeting,",
+   "a great meeting,"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach such steht a/an: such a great meeting.",
+    "en": "The error: after such use a/an: such a great meeting."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Vor great meeting fehlt das a.",
+     "en": "There is an error: the a is missing before great meeting."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „such great meeting“: such verlangt hier a.",
+     "en": "The error is “such great meeting”: such needs a here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-ind-m1",
+  "type": "meaning",
+  "pat": "art.indefinite",
+  "a": "We're hiring a designer.",
+  "b": "We're hiring the designer.",
+  "q": {
+   "de": "Welcher Satz sagt: Es ist noch offen, wer genau eingestellt wird?",
+   "en": "Which sentence says it is still open who exactly will be hired?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. a designer ist irgendein Designer, noch niemand bestimmt.",
+    "en": "Right: sentence a. a designer = any designer, nobody chosen yet."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b meint the designer eine bestimmte Person, die beide schon kennen.",
+     "en": "In b, the designer means one particular person both of you know."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a nennt einen offenen Posten, b eine bekannte Person.",
+     "en": "Not the same: a names an open position, b a known person."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-snd-k1",
+  "type": "kwt",
+  "pat": "art.sound",
+  "from": "The meeting lasts sixty minutes.",
+  "key": "HOUR",
+  "frame": "The meeting lasts ___.",
+  "answer": "an hour",
+  "accepted": [
+   "one hour",
+   "about an hour",
+   "about one hour",
+   "just an hour",
+   "only an hour",
+   "a full hour",
+   "a whole hour"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: an hour. Das h ist stumm, der Laut beginnt mit einem Vokal.",
+    "en": "Right: an hour. The h is silent, so the sound starts with a vowel."
+   },
+   "wrong": [
+    {
+     "not": [
+      "hour"
+     ],
+     "de": "Das Schlüsselwort hour muss unverändert in der Lücke stehen.",
+     "en": "The key word hour must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "a",
+      "hour"
+     ],
+     "de": "„a hour“ geht nicht: Das h ist stumm, daher steht an hour.",
+     "en": "“a hour” fails: the h is silent, so it is an hour."
+    },
+    {
+     "not": [
+      "an",
+      "one"
+     ],
+     "de": "Die Dauer braucht an hour oder one hour, nicht einen anderen Artikel.",
+     "en": "The duration needs an hour or one hour, not another article."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-snd-k2",
+  "type": "kwt",
+  "pat": "art.sound",
+  "from": "She has completed a Master of Business Administration.",
+  "key": "MBA",
+  "frame": "She has completed ___.",
+  "answer": "an MBA",
+  "accepted": [
+   "her MBA",
+   "an MBA degree",
+   "an MBA program",
+   "an MBA course",
+   "her MBA degree",
+   "her MBA program"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: an MBA. MBA beginnt mit dem Vokallaut /e/ (em), nicht mit b.",
+    "en": "Right: an MBA. MBA starts with the vowel sound /e/ (em), not with b."
+   },
+   "wrong": [
+    {
+     "not": [
+      "mba"
+     ],
+     "de": "Das Schlüsselwort mba muss unverändert in der Lücke stehen.",
+     "en": "The key word mba must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "a",
+      "mba"
+     ],
+     "de": "„a MBA“ geht nicht: MBA wird „em-bee-ay“ gesprochen, also an.",
+     "en": "“a MBA” fails: MBA is said “em-bee-ay”, so an."
+    },
+    {
+     "not": [
+      "an",
+      "her",
+      "the"
+     ],
+     "de": "Ein Abschluss im Singular braucht einen Artikel oder ein Possessivwort.",
+     "en": "A degree in the singular needs an article or a possessive."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-snd-f1",
+  "type": "find",
+  "pat": "art.sound",
+  "prompt": "We'll need an unique approach for this client.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "a unique",
+  "fixed": "We'll need a unique approach for this client.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: unique beginnt mit /j/, also Konsonantlaut: a unique approach.",
+    "en": "The error: unique starts with /j/, a consonant sound: a unique approach."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Vor unique steht nicht an.",
+     "en": "There is an error: an does not stand before unique."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „an unique“: Es zählt der Laut /j/, nicht der Buchstabe u.",
+     "en": "The error is “an unique”: the sound /j/ counts, not the letter u."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-snd-f2",
+  "type": "find",
+  "pat": "art.sound",
+  "prompt": "She is an HR specialist with a European background.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: an HR (Vokallaut /e/) und a European (Laut /j/) sind richtig.",
+    "en": "No error: an HR (vowel sound /e/) and a European (sound /j/) are right."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Hier zählt der Laut, also an HR, aber a European.",
+     "en": "No error: the sound counts here, so an HR, but a European."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-snd-m1",
+  "type": "meaning",
+  "pat": "art.sound",
+  "a": "I'll need an hour.",
+  "b": "I'll need one hour.",
+  "q": {
+   "de": "Sagen beide Sätze, dass es um 60 Minuten geht?",
+   "en": "Do both sentences say it takes 60 minutes?"
+  },
+  "answer": "both",
+  "why": {
+   "ok": {
+    "de": "Richtig: beide. an hour und one hour nennen dieselbe Dauer.",
+    "en": "Right: both. an hour and one hour name the same length of time."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "Auch b nennt 60 Minuten: one hour heißt dasselbe wie an hour.",
+     "en": "b names 60 minutes too: one hour means the same as an hour."
+    },
+    {
+     "opt": "b",
+     "de": "Auch a nennt 60 Minuten: an hour heißt dasselbe wie one hour.",
+     "en": "a names 60 minutes too: an hour means the same as one hour."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-def-k1",
+  "type": "kwt",
+  "pat": "art.definite",
+  "from": "Can you forward me the agenda that we agreed on yesterday?",
+  "key": "AGREED",
+  "frame": "Can you forward me ___ on yesterday?",
+  "answer": "the agenda we agreed",
+  "accepted": [
+   "the agenda that we agreed",
+   "the agenda which we agreed",
+   "that agenda we agreed",
+   "the agenda we had agreed"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: the agenda we agreed on. Beide kennen die Tagesordnung von gestern.",
+    "en": "Right: the agenda we agreed on. Both know yesterday's agenda."
+   },
+   "wrong": [
+    {
+     "not": [
+      "agreed"
+     ],
+     "de": "Das Schlüsselwort agreed muss unverändert in der Lücke stehen.",
+     "en": "The key word agreed must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "an"
+     ],
+     "de": "„an agenda“ meint irgendeine Tagesordnung. Hier ist die von gestern gemeint.",
+     "en": "“an agenda” means any agenda. Here yesterday's agenda is meant."
+    },
+    {
+     "if": [
+      "a"
+     ],
+     "de": "„a agenda“ geht nicht, und gemeint ist die bekannte Tagesordnung: the agenda.",
+     "en": "“a agenda” fails, and the known agenda is meant: the agenda."
+    },
+    {
+     "not": [
+      "the",
+      "that"
+     ],
+     "de": "Die Tagesordnung ist bekannt und festgelegt, daher braucht sie the.",
+     "en": "The agenda is known and fixed, so it needs the."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-def-k2",
+  "type": "kwt",
+  "pat": "art.definite",
+  "from": "Anna raised a risk earlier. Can we discuss that risk now?",
+  "key": "MENTIONED",
+  "frame": "Can we discuss ___ earlier?",
+  "answer": "the risk Anna mentioned",
+  "accepted": [
+   "the risk that Anna mentioned",
+   "the risk which Anna mentioned",
+   "that risk Anna mentioned",
+   "the risk Anna had mentioned"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: the risk Anna mentioned. Das Risiko ist schon genannt, nun ist es bekannt.",
+    "en": "Right: the risk Anna mentioned. The risk was raised already, so it is now known."
+   },
+   "wrong": [
+    {
+     "not": [
+      "mentioned"
+     ],
+     "de": "Das Schlüsselwort mentioned muss unverändert in der Lücke stehen.",
+     "en": "The key word mentioned must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "a",
+      "risk"
+     ],
+     "de": "„a risk“ wäre ein neues, unbekanntes Risiko. Hier ist das genannte gemeint.",
+     "en": "“a risk” would be a new, unknown risk. Here the one already raised is meant."
+    },
+    {
+     "not": [
+      "the",
+      "that"
+     ],
+     "de": "Das Risiko ist schon genannt, daher braucht es the oder that.",
+     "en": "The risk was raised already, so it needs the or that."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-def-f1",
+  "type": "find",
+  "pat": "art.definite",
+  "prompt": "Sorry for delay in my reply.",
+  "err": [
+   2,
+   2
+  ],
+  "answer": "the delay",
+  "fixed": "Sorry for the delay in my reply.",
+  "accepted": [
+   "this delay",
+   "any delay",
+   "a delay"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Hier ist meist eine bestimmte Verzögerung gemeint: Sorry for the delay.",
+    "en": "The error: usually one particular delay is meant: Sorry for the delay."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Vor delay fehlt der Artikel.",
+     "en": "There is an error: the article is missing before delay."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „delay“: Es heißt for the delay, nicht for delay.",
+     "en": "The error is “delay”: it is for the delay, not for delay."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-def-f2",
+  "type": "find",
+  "pat": "art.definite",
+  "prompt": "The first item on agenda is the budget.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "on the agenda",
+  "fixed": "The first item on the agenda is the budget.",
+  "accepted": [
+   "on our agenda",
+   "on today's agenda"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Die Tagesordnung ist bekannt: on the agenda.",
+    "en": "The error: the agenda is known: on the agenda."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Vor agenda fehlt der Artikel.",
+     "en": "There is an error: the article is missing before agenda."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „on agenda“: Beide kennen die Tagesordnung, also the.",
+     "en": "The error is “on agenda”: both know the agenda, so the."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-def-m1",
+  "type": "meaning",
+  "pat": "art.definite",
+  "a": "I'll call a client.",
+  "b": "I'll call the client.",
+  "q": {
+   "de": "Bei welchem Satz weiß der Hörer, welcher Kunde gemeint ist?",
+   "en": "In which sentence does the listener know which client is meant?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. the client = ein bestimmter Kunde, den beide kennen.",
+    "en": "Right: sentence b. the client = one particular client both know."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a meint a client irgendeinen Kunden, noch ohne Namen.",
+     "en": "In a, a client means any client, not yet named."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a nennt einen offenen Kunden, b einen bekannten.",
+     "en": "Not the same: a names an open client, b a known one."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-uni-k1",
+  "type": "kwt",
+  "pat": "art.the-unique",
+  "from": "No other option is better than this one.",
+  "key": "BEST",
+  "frame": "This is ___ option.",
+  "answer": "the best",
+  "accepted": [
+   "the very best",
+   "the best possible",
+   "by far the best",
+   "easily the best"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: the best. Ein Superlativ steht mit the.",
+    "en": "Right: the best. A superlative takes the."
+   },
+   "wrong": [
+    {
+     "not": [
+      "best"
+     ],
+     "de": "Das Schlüsselwort best muss unverändert in der Lücke stehen.",
+     "en": "The key word best must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "a",
+      "best"
+     ],
+     "de": "„a best“ passt nicht: Das Beste ist einzigartig und braucht the.",
+     "en": "“a best” does not fit: the best is unique and needs the."
+    },
+    {
+     "not": [
+      "the"
+     ],
+     "de": "Ein Superlativ braucht den Artikel the: the best option.",
+     "en": "A superlative needs the article the: the best option."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-uni-k2",
+  "type": "kwt",
+  "pat": "art.the-unique",
+  "from": "Nobody except Anna has access to the files.",
+  "key": "ONLY",
+  "frame": "Anna is ___ person with access to the files.",
+  "answer": "the only",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: the only person. only steht mit the, denn es gibt nur eine.",
+    "en": "Right: the only person. only takes the, because there is just one."
+   },
+   "wrong": [
+    {
+     "not": [
+      "only"
+     ],
+     "de": "Das Schlüsselwort only muss unverändert in der Lücke stehen.",
+     "en": "The key word only must stay unchanged in the gap."
+    },
+    {
+     "not": [
+      "the"
+     ],
+     "de": "Vor only braucht es den Artikel the: the only person.",
+     "en": "Before only you need the article the: the only person."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-uni-f1",
+  "type": "find",
+  "pat": "art.the-unique",
+  "prompt": "This is most important client we have in Asia.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "the most important",
+  "fixed": "This is the most important client we have in Asia.",
+  "accepted": [
+   "our most important"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Ein Superlativ braucht the: the most important client.",
+    "en": "The error: a superlative needs the: the most important client."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Vor most important fehlt the.",
+     "en": "There is an error: the is missing before most important."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „most important“: Der Superlativ steht mit the.",
+     "en": "The error is “most important”: the superlative takes the."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-uni-f2",
+  "type": "find",
+  "pat": "art.the-unique",
+  "prompt": "He was the only candidate who asked about the pension plan.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: the only candidate ist richtig, denn only steht mit the.",
+    "en": "No error: the only candidate is right, because only takes the."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach only passt the, und the pension plan ist bekannt.",
+     "en": "No error: the fits after only, and the pension plan is a known one."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-uni-m1",
+  "type": "meaning",
+  "pat": "art.the-unique",
+  "a": "He is the best candidate.",
+  "b": "He is a good candidate.",
+  "q": {
+   "de": "Welcher Satz sagt, dass kein anderer Kandidat besser ist?",
+   "en": "Which sentence says that no other candidate is better?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. the best ist der Spitzenreiter, keiner ist besser.",
+    "en": "Right: sentence a. the best = number one, nobody is better."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b nennt a good candidate nur eine gute Person von vielen.",
+     "en": "In b, a good candidate is just one good person among many."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a nennt den besten, b nur einen guten Kandidaten.",
+     "en": "Not the same: a names the best one, b only a good candidate."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-zer-k1",
+  "type": "kwt",
+  "pat": "art.zero",
+  "from": "Could you advise me on the contract?",
+  "key": "PIECE",
+  "frame": "Could you give me ___ advice on the contract?",
+  "answer": "a piece of",
+  "accepted": [
+   "one piece of"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: a piece of advice. advice ist unzählbar, daher die Mengenangabe.",
+    "en": "Right: a piece of advice. advice is uncountable, hence the unit word."
+   },
+   "wrong": [
+    {
+     "not": [
+      "piece"
+     ],
+     "de": "Das Schlüsselwort piece muss unverändert in der Lücke stehen.",
+     "en": "The key word piece must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "piece"
+     ],
+     "de": "Mit piece gehört of dahinter, davor steht a: a piece of advice.",
+     "en": "With piece, of follows, and a comes before: a piece of advice."
+    },
+    {
+     "not": [
+      "a",
+      "one"
+     ],
+     "de": "Vor piece fehlt a oder one: a piece of advice.",
+     "en": "Before piece, a or one is missing: a piece of advice."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-zer-k2",
+  "type": "kwt",
+  "pat": "art.zero",
+  "from": "We don't know enough about the client yet.",
+  "key": "MORE",
+  "frame": "We need ___ about the client.",
+  "answer": "more information",
+  "accepted": [
+   "a lot more information",
+   "much more information",
+   "more data",
+   "more details",
+   "more background information",
+   "more detailed information"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: more information. information ist unzählbar: ohne a, ohne -s.",
+    "en": "Right: more information. information is uncountable: no a, no -s."
+   },
+   "wrong": [
+    {
+     "not": [
+      "more"
+     ],
+     "de": "Das Schlüsselwort more muss unverändert in der Lücke stehen.",
+     "en": "The key word more must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "informations"
+     ],
+     "de": "„informations“ gibt es nicht: information bleibt in der Einzahl.",
+     "en": "There is no “informations”: information stays singular."
+    },
+    {
+     "if": [
+      "an",
+      "information"
+     ],
+     "de": "„an information“ geht nicht: information ist unzählbar und braucht kein an.",
+     "en": "“an information” fails: information is uncountable and needs no an."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-zer-f1",
+  "type": "find",
+  "pat": "art.zero",
+  "prompt": "Thanks for the informations you sent us last week.",
+  "err": [
+   3,
+   3
+  ],
+  "answer": "information",
+  "fixed": "Thanks for the information you sent us last week.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: information ist unzählbar und hat keinen Plural.",
+    "en": "The error: information is uncountable and has no plural."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: informations gibt es nicht.",
+     "en": "There is an error: there is no such word as informations."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „informations“: Das Wort bleibt in der Einzahl.",
+     "en": "The error is “informations”: the word stays singular."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-zer-f2",
+  "type": "find",
+  "pat": "art.zero",
+  "prompt": "Could you give me an advice on how to handle this client?",
+  "err": [
+   4,
+   5
+  ],
+  "answer": "some advice",
+  "fixed": "Could you give me some advice on how to handle this client?",
+  "accepted": [
+   "advice",
+   "any advice",
+   "a piece of advice",
+   "a bit of advice",
+   "some good advice"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: advice ist unzählbar, also kein an: some advice.",
+    "en": "The error: advice is uncountable, so no an: some advice."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Vor advice steht kein an.",
+     "en": "There is an error: no an goes before advice."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „an advice“: Man sagt some advice oder a piece of advice.",
+     "en": "The error is “an advice”: say some advice or a piece of advice."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-zer-m1",
+  "type": "meaning",
+  "pat": "art.zero",
+  "a": "She loves the music.",
+  "b": "She loves music.",
+  "q": {
+   "de": "Welcher Satz sagt, dass sie Musik ganz allgemein liebt?",
+   "en": "Which sentence says that she loves music in general?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. Ohne Artikel ist Musik allgemein gemeint.",
+    "en": "Right: sentence b. Without an article, music is meant in general."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a zeigt the music auf bestimmte Musik, etwa die gerade gespielte.",
+     "en": "In a, the music points to particular music, such as what is playing."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a meint bestimmte Musik, b Musik im Allgemeinen.",
+     "en": "Not the same: a means particular music, b music in general."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-fix-k1",
+  "type": "kwt",
+  "pat": "art.fixed",
+  "from": "Tom commutes to his office by train.",
+  "key": "WORK",
+  "frame": "Tom goes ___ by train.",
+  "answer": "to work",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: go to work. Die feste Wendung steht ohne Artikel.",
+    "en": "Right: go to work. The set phrase takes no article."
+   },
+   "wrong": [
+    {
+     "not": [
+      "work"
+     ],
+     "de": "Das Schlüsselwort work muss unverändert in der Lücke stehen.",
+     "en": "The key word work must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "the",
+      "work"
+     ],
+     "de": "„to the work“ klingt wie ein Ort. Die Wendung heißt to work, ohne Artikel.",
+     "en": "“to the work” sounds like a place. The phrase is to work, without an article."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Nach go steht to: go to work.",
+     "en": "After go comes to: go to work."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-fix-k2",
+  "type": "kwt",
+  "pat": "art.fixed",
+  "from": "Our kids attend lessons five days a week.",
+  "key": "SCHOOL",
+  "frame": "Our kids ___ five days a week.",
+  "answer": "go to school",
+  "accepted": [
+   "attend school",
+   "attend a school",
+   "go to a school"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: go to school. Der Schulbesuch ist eine feste Wendung ohne Artikel.",
+    "en": "Right: go to school. Attending lessons is a set phrase without an article."
+   },
+   "wrong": [
+    {
+     "not": [
+      "school"
+     ],
+     "de": "Das Schlüsselwort school muss unverändert in der Lücke stehen.",
+     "en": "The key word school must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "the",
+      "school"
+     ],
+     "de": "„the school“ meint ein bekanntes Gebäude. Hier geht es um den Schulbesuch.",
+     "en": "“the school” means a known building. Here it is about attending school."
+    },
+    {
+     "not": [
+      "to",
+      "attend"
+     ],
+     "de": "Nach dem Verb fehlt to oder attend: go to school.",
+     "en": "After the verb, to or attend is missing: go to school."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-fix-f1",
+  "type": "find",
+  "pat": "art.fixed",
+  "prompt": "We usually have lunch at the work with the team.",
+  "err": [
+   4,
+   6
+  ],
+  "answer": "at work",
+  "fixed": "We usually have lunch at work with the team.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Die feste Wendung lautet at work, ohne Artikel.",
+    "en": "The error: the set phrase is at work, without an article."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: In at work steht kein Artikel.",
+     "en": "There is an error: at work takes no article."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „at the work“: Gemeint ist at work, am Arbeitsplatz.",
+     "en": "The error is “at the work”: at work is meant, at the workplace."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-fix-f2",
+  "type": "find",
+  "pat": "art.fixed",
+  "prompt": "I'll call you in the morning, before the first meeting.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: in the morning ist fest, und the first meeting ist eindeutig.",
+    "en": "No error: in the morning is fixed, and the first meeting is clear."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Die Wendung in the morning verlangt the, so wie hier.",
+     "en": "No error: the phrase in the morning needs the, just as here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "art-fix-m1",
+  "type": "meaning",
+  "pat": "art.fixed",
+  "a": "She is in school.",
+  "b": "She is in the school.",
+  "q": {
+   "de": "Bei welchem Satz geht es darum, dass sie Schülerin ist?",
+   "en": "In which sentence is the point that she is a student?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. in school = sie lernt dort, als Schülerin.",
+    "en": "Right: sentence a. in school = she studies there, as a student."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b nennt in the school nur den Ort, das Gebäude, nicht ihre Rolle.",
+     "en": "In b, in the school names only the place, the building, not her role."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a nennt ihre Rolle, b den Ort.",
+     "en": "Not the same: a names her role, b the place."
+    }
+   ]
+  }
+ }
+]

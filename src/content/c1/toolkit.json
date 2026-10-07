@@ -3159,6 +3159,9 @@
    "type": "gap",
    "prompt": "___ the contract, our legal team approved it.",
    "answer": "Having reviewed",
+   "accepted": [
+    "After reviewing"
+   ],
    "hint": "(review)",
    "expl": "Erst geprüft, dann freigegeben: Having + 3. Form.",
    "expl_en": "First reviewed, then approved: Having + past participle."
@@ -3168,6 +3171,9 @@
    "type": "gap",
    "prompt": "___ OCR, the system reads every incoming invoice.",
    "answer": "Using",
+   "accepted": [
+    "By using"
+   ],
    "hint": "(use)",
    "expl": "Wenn etwas das Mittel ist oder gleichzeitig passiert, nimmst du die -ing-Form: Using OCR, the system reads every invoice.",
    "expl_en": "When something is the means or happens at the same time, use the -ing form: Using OCR, the system reads every invoice."
@@ -3177,6 +3183,12 @@
    "type": "gap",
    "prompt": "___ in German data centers, the documents stay GDPR-compliant.",
    "answer": "Stored",
+   "accepted": [
+    "Being stored",
+    "When stored",
+    "If stored",
+    "Once stored"
+   ],
    "hint": "(store)",
    "expl": "Passive Bedeutung (die Dokumente werden gespeichert): 3. Form.",
    "expl_en": "Passive meaning (the documents are stored): past participle."
@@ -3187,7 +3199,9 @@
    "prompt": "Having ___ the pilot, we moved on to the rollout.",
    "answer": "finished",
    "accepted": [
-    "completed"
+    "completed",
+    "concluded",
+    "wrapped up"
    ],
    "hint": "(finish)",
    "expl": "Nach „Having“ folgt die 3. Verbform: Having finished the pilot, we moved on.",
@@ -3227,8 +3241,8 @@
    "prompt": "___ in the cloud, the archive needs no local servers.",
    "options": [
     "Running",
-    "Run",
-    "Having run in",
+    "Runs",
+    "Being running in",
     "Ran"
    ],
    "answer": "Running",
@@ -3240,6 +3254,9 @@
    "type": "transform",
    "prompt": "After we had tested the workflow, we trained the users. → ___ the workflow, we trained the users.",
    "answer": "Having tested",
+   "accepted": [
+    "After testing"
+   ],
    "expl": "Vorzeitig und gleiches Subjekt: Having + 3. Form.",
    "expl_en": "Completed before, same subject: Having + past participle."
   },
@@ -3256,6 +3273,9 @@
    "type": "transform",
    "prompt": "The report was written in May, and it is already out of date. → ___ in May, the report is already out of date.",
    "answer": "Written",
+   "accepted": [
+    "Having been written"
+   ],
    "expl": "Der Bericht wurde geschrieben, er schreibt nicht selbst. Das ist passiv, deshalb steht nur die 3. Verbform: Written in May, …",
    "expl_en": "The report was written; it does not write anything itself. That is passive, so use only the past participle: Written in May, …"
   },
@@ -4251,7 +4271,7 @@
    "type": "mc",
    "prompt": "You ___ tell your manager today, or she'll hear it from the client.",
    "options": [
-    "could",
+    "should to",
     "ought",
     "had better",
     "would better"
@@ -4268,7 +4288,7 @@
     "don't have to",
     "mustn't",
     "can't",
-    "shouldn't"
+    "must"
    ],
    "answer": "don't have to",
    "expl": "„Don't have to“ heißt „nicht nötig“; „mustn't“ wäre ein Verbot.",
@@ -4333,7 +4353,8 @@
     "don't need to",
     "do not need to",
     "needn't",
-    "need not"
+    "need not",
+    "will not have to"
    ],
    "hint": "(nicht nötig)",
    "expl": "„Needn't“ oder „don't have to“ heißt „nicht nötig“.",
@@ -4345,8 +4366,7 @@
    "prompt": "It would be wise to back up the data. → You ___ back up the data.",
    "answer": "should",
    "accepted": [
-    "ought to",
-    "had better"
+    "ought to"
    ],
    "expl": "„Should“ gibt einen Rat.",
    "expl_en": "“Should” gives advice."
@@ -4360,7 +4380,8 @@
     "should not",
     "ought not to",
     "had better not",
-    "oughtn't to"
+    "oughtn't to",
+    "'d better not"
    ],
    "expl": "„Shouldn't“ rät von etwas ab.",
    "expl_en": "“Shouldn't” advises against something."
@@ -4370,6 +4391,9 @@
    "type": "correct",
    "prompt": "You should to call the client before noon.",
    "answer": "You should call the client before noon.",
+   "accepted": [
+    "You ought to call the client before noon."
+   ],
    "expl": "Nach „should“ steht kein „to“.",
    "expl_en": "After “should” no “to” is used."
   },
@@ -4390,7 +4414,8 @@
    "prompt": "You mustn't come to the workshop if you don't want to; it's optional.",
    "answer": "You don't have to come to the workshop if you don't want to; it's optional.",
    "accepted": [
-    "You needn't come to the workshop if you don't want to; it's optional."
+    "You needn't come to the workshop if you don't want to; it's optional.",
+    "You don't need to come to the workshop if you don't want to; it's optional."
    ],
    "expl": "„Mustn't“ verbietet; „nicht nötig“ ist „don't have to“.",
    "expl_en": "“Mustn't” forbids; “not necessary” is “don't have to”."
@@ -4458,7 +4483,11 @@
    "answer": "checking",
    "accepted": [
     "answering",
-    "reading"
+    "reading",
+    "opening",
+    "replying to",
+    "responding to",
+    "looking at"
    ],
    "hint": "(check)",
    "expl": "„Stop + -ing“ heißt aufhören mit etwas.",
@@ -4483,7 +4512,11 @@
    "answer": "mentioning",
    "accepted": [
     "raising",
-    "discussing"
+    "discussing",
+    "addressing",
+    "bringing up",
+    "touching on",
+    "talking about"
    ],
    "hint": "(mention)",
    "expl": "Nach „avoid“ steht immer -ing.",
@@ -4496,7 +4529,10 @@
    "answer": "to tell",
    "accepted": [
     "to inform",
-    "having to tell"
+    "having to tell",
+    "to have to tell",
+    "to notify",
+    "to advise"
    ],
    "expl": "„Regret + to“ kündigt eine schlechte Nachricht an.",
    "expl_en": "“Regret + to” introduces bad news."
@@ -4597,6 +4633,9 @@
    "type": "gap",
    "prompt": "It's vital that the data ___ stored securely.",
    "answer": "be",
+   "accepted": [
+    "should be"
+   ],
    "hint": "(Grundform von „sein“)",
    "expl": "Nach „vital that“ steht „be“, nicht „is“.",
    "expl_en": "After “vital that” use “be”, not “is”."
@@ -4630,6 +4669,9 @@
    "type": "transform",
    "prompt": "He should be informed immediately. It is essential. → It is essential that he ___ informed immediately.",
    "answer": "be",
+   "accepted": [
+    "should be"
+   ],
    "expl": "Nach „essential that“ steht „be“ + Partizip.",
    "expl_en": "After “essential that” use “be” + participle."
   },
@@ -4639,7 +4681,9 @@
    "prompt": "'You must submit the form,' the manager insisted. → The manager insisted that I ___ the form.",
    "answer": "submit",
    "accepted": [
-    "should submit"
+    "should submit",
+    "must submit",
+    "had to submit"
    ],
    "expl": "Nach „insist that“ steht die Grundform.",
    "expl_en": "After “insist that” the base form is used."
@@ -4660,9 +4704,11 @@
    "type": "correct",
    "prompt": "The board requires that the report will be submitted by Friday.",
    "answer": "The board requires that the report be submitted by Friday.",
-   "accepted": [],
-   "expl": "Formell steht nach „important that“ die Grundform „be“.",
-   "expl_en": "In formal English the base form “be” follows “important that”."
+   "accepted": [
+    "The board requires that the report should be submitted by Friday."
+   ],
+   "expl": "Nach „require that“ steht be + Partizip, kein will.",
+   "expl_en": "After “require that” comes be + past participle, not will."
   },
   {
    "topic": "mandative",
@@ -4673,8 +4719,8 @@
     "I suggest that he should not sign the contract yet.",
     "I suggest that he shouldn't sign the contract yet."
    ],
-   "expl": "Im Mandativ steht „not“ + Grundform, kein „doesn't“.",
-   "expl_en": "In the mandative use “not” + base form, not “doesn't”."
+   "expl": "Im Mandativ steht im formellen Stil „not“ + Grundform, kein „doesn't“.",
+   "expl_en": "In the mandative, formal style uses “not” + base form, not “doesn't”."
   },
   {
    "topic": "countable",

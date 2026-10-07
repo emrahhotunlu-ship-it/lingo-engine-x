@@ -1,0 +1,518 @@
+{
+ "topic": "verb-patterns",
+ "canDo": {
+  "de": "Ich wähle nach dem Verb die richtige Form: -ing oder to + Grundform, und ich unterscheide remember, forget, stop, try und regret nach ihrer Bedeutung.",
+  "en": "I choose the right form after a verb: -ing or to + base form, and I tell remember, forget, stop, try, and regret apart by meaning."
+ },
+ "order": [
+  "vp.ing-verbs",
+  "vp.to-verbs",
+  "vp.look-forward",
+  "vp.remember-forget",
+  "vp.stop-try",
+  "vp.regret"
+ ],
+ "introPlan": [
+  [
+   "vp.ing-verbs",
+   "vp.to-verbs"
+  ],
+  [
+   "vp.look-forward",
+   "vp.remember-forget"
+  ],
+  [
+   "vp.stop-try",
+   "vp.regret"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Steht das Verb auf einer festen Liste (avoid, decide …), oder ändert die Form die Bedeutung (remember, stop, try, regret)?",
+   "Ist das to ein Infinitiv-Zeichen oder eine Präposition wie in look forward to?",
+   "Liegt die Handlung noch vor mir oder schon hinter mir, hört sie auf oder ist sie ein Zweck?"
+  ],
+  "en": [
+   "Is the verb on a fixed list (avoid, decide …), or does the form change the meaning (remember, stop, try, regret)?",
+   "Is the to an infinitive marker or a preposition as in look forward to?",
+   "Is the action still ahead or already behind me, does it end or is it a purpose?"
+  ]
+ },
+ "patterns": [
+  {
+   "id": "vp.ing-verbs",
+   "name": {
+    "de": "avoid, consider · -ing",
+    "en": "avoid, consider · -ing"
+   },
+   "form": {
+    "de": "Verb + -ing (kein to)",
+    "en": "verb + -ing (no to)"
+   },
+   "use": {
+    "de": "Diese Verben nehmen direkt die -ing-Form: avoid, consider, postpone, finish, enjoy, mind. Dazwischen steht kein to.",
+    "en": "These verbs take the -ing form directly: avoid, consider, postpone, finish, enjoy, mind. No to comes in between."
+   },
+   "signals": [
+    "avoid",
+    "avoided",
+    "consider",
+    "considering",
+    "postpone",
+    "finish",
+    "enjoy",
+    "mind"
+   ],
+   "ex": [
+    {
+     "en": "I don't mind working late this week.",
+     "de": "Mir macht es nichts aus, diese Woche länger zu arbeiten.",
+     "ctx": "talk"
+    },
+    {
+     "en": "Please avoid sharing this file outside the team.",
+     "de": "Bitte teile diese Datei nicht außerhalb des Teams.",
+     "ctx": "mail"
+    },
+    {
+     "en": "We're considering postponing the launch.",
+     "de": "Wir überlegen, den Start zu verschieben.",
+     "ctx": "meeting"
+    }
+   ],
+   "trap": {
+    "bad": "We're considering to postpone the launch.",
+    "good": "We're considering postponing the launch.",
+    "cause": {
+     "de": "Im Deutschen folgt nach „überlegen“ ein zu-Infinitiv („zu verschieben“), und das to kommt mit. Englisch consider verlangt -ing.",
+     "en": "German “überlegen” takes a zu-infinitive (“zu verschieben”), and the to comes along. English consider takes -ing."
+    }
+   },
+   "contrast": {
+    "with": "vp.to-verbs",
+    "a": "We considered moving the deadline.",
+    "b": "We agreed to move the deadline.",
+    "diff": {
+     "de": "consider, avoid, postpone: direkt -ing. decide, agree, plan: to + Grundform. Die Form gehört fest zum Verb.",
+     "en": "consider, avoid, postpone: -ing directly. decide, agree, plan: to + base form. The form belongs to the verb."
+    }
+   },
+   "ccq": [
+    {
+     "s": "I avoid answering calls during focus time.",
+     "q": {
+      "de": "Nehme ich in dieser Zeit Anrufe an?",
+      "en": "Do I take calls during that time?"
+     },
+     "a": false
+    },
+    {
+     "s": "We postponed signing the contract.",
+     "q": {
+      "de": "Ist der Vertrag schon unterschrieben?",
+      "en": "Is the contract signed yet?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Gehört dieses Verb zu denen, die direkt die -ing-Form verlangen?",
+    "en": "Is this one of the verbs that ask for the -ing form directly?"
+   }
+  },
+  {
+   "id": "vp.to-verbs",
+   "name": {
+    "de": "decide, agree · to + Grundform",
+    "en": "decide, agree · to + base form"
+   },
+   "form": {
+    "de": "Verb + to + Grundform",
+    "en": "verb + to + base form"
+   },
+   "use": {
+    "de": "Diese Verben verbinden sich mit to + Grundform: decide, agree, plan, manage, refuse, afford, hope.",
+    "en": "These verbs combine with to + base form: decide, agree, plan, manage, refuse, afford, hope."
+   },
+   "signals": [
+    "decide",
+    "decided",
+    "agree",
+    "plan",
+    "manage",
+    "refuse",
+    "afford",
+    "hope"
+   ],
+   "ex": [
+    {
+     "en": "I hope to hear from you soon.",
+     "de": "Ich hoffe, bald von Ihnen zu hören.",
+     "ctx": "mail"
+    },
+    {
+     "en": "We agreed to share the figures on Friday.",
+     "de": "Wir haben vereinbart, die Zahlen am Freitag zu teilen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "We can't afford to wait any longer.",
+     "de": "Wir können es uns nicht leisten, länger zu warten.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "She refused answering the question.",
+    "good": "She refused to answer the question.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler, denn das Deutsche hat hier auch zu + Infinitiv. Es ist ein Reflex: das -ing von avoid und consider wird auf alle Verben übertragen.",
+     "en": "Not a translation error, since German also uses zu + infinitive here. It is a reflex: the -ing of avoid and consider is carried over to every verb."
+    }
+   },
+   "contrast": {
+    "with": "vp.ing-verbs",
+    "a": "We agreed to review the plan.",
+    "b": "We avoided reviewing the plan.",
+    "diff": {
+     "de": "agree, decide, plan: to + Grundform. avoid, consider, postpone: -ing. Die Form lernst du mit dem Verb.",
+     "en": "agree, decide, plan: to + base form. avoid, consider, postpone: -ing. You learn the form together with the verb."
+    }
+   },
+   "ccq": [
+    {
+     "s": "She managed to finish the report.",
+     "q": {
+      "de": "Ist der Bericht fertig?",
+      "en": "Is the report finished?"
+     },
+     "a": true
+    },
+    {
+     "s": "We can't afford to hire anyone.",
+     "q": {
+      "de": "Haben wir Budget, um jemanden einzustellen?",
+      "en": "Do we have budget to hire someone?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Welche Form verlangt dieses Verb: -ing, to + Grundform oder die Grundform allein?",
+    "en": "Which form does this verb ask for: -ing, to + base form, or the bare base form?"
+   }
+  },
+  {
+   "id": "vp.look-forward",
+   "name": {
+    "de": "look forward to · -ing",
+    "en": "look forward to · -ing"
+   },
+   "form": {
+    "de": "look forward to + -ing",
+    "en": "look forward to + -ing"
+   },
+   "use": {
+    "de": "Hier ist to eine Präposition und kein Infinitiv-Zeichen, deshalb folgt -ing oder ein Nomen. Ebenso: committed to, object to, in addition to.",
+    "en": "Here to is a preposition, not an infinitive marker, so -ing or a noun follows. The same goes for committed to, object to, in addition to."
+   },
+   "signals": [
+    "look forward to",
+    "looking forward to",
+    "looks forward to",
+    "looked forward to",
+    "committed to",
+    "object to",
+    "in addition to"
+   ],
+   "ex": [
+    {
+     "en": "I look forward to hearing from you.",
+     "de": "Ich freue mich darauf, von Ihnen zu hören.",
+     "ctx": "mail"
+    },
+    {
+     "en": "I'm committed to finishing this by Friday.",
+     "de": "Ich bin entschlossen, das bis Freitag abzuschließen.",
+     "ctx": "talk"
+    },
+    {
+     "en": "We're looking forward to working with your team.",
+     "de": "Wir freuen uns darauf, mit Ihrem Team zu arbeiten.",
+     "ctx": "meeting"
+    }
+   ],
+   "trap": {
+    "bad": "I look forward to hear from you.",
+    "good": "I look forward to hearing from you.",
+    "cause": {
+     "de": "Das Deutsche sagt „Ich freue mich darauf, von Ihnen zu hören“ mit zu + Infinitiv, deshalb klingt to hear vertraut. Im Englischen ist to hier eine Präposition.",
+     "en": "German says “Ich freue mich darauf, … zu hören” with zu + infinitive, so to hear sounds familiar. In English to is a preposition here."
+    }
+   },
+   "contrast": {
+    "with": "vp.to-verbs",
+    "a": "I look forward to meeting you.",
+    "b": "I hope to meet you.",
+    "diff": {
+     "de": "Bei look forward to ist to eine Präposition, danach folgt -ing. Bei hope gehört to zum Infinitiv, danach folgt die Grundform.",
+     "en": "After look forward to, to is a preposition and -ing follows. After hope, to belongs to the infinitive and the base form follows."
+    }
+   },
+   "ccq": [
+    {
+     "s": "We look forward to seeing the results.",
+     "q": {
+      "de": "Sind die Ergebnisse schon da?",
+      "en": "Are the results here yet?"
+     },
+     "a": false
+    },
+    {
+     "s": "She objects to paying extra fees.",
+     "q": {
+      "de": "Will sie die Zusatzgebühren zahlen?",
+      "en": "Does she want to pay the extra fees?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Was für ein Wort ist das to an dieser Stelle, und was kann danach stehen?",
+    "en": "What kind of word is the to here, and what can follow it?"
+   }
+  },
+  {
+   "id": "vp.remember-forget",
+   "name": {
+    "de": "remember, forget · to oder -ing",
+    "en": "remember, forget · to or -ing"
+   },
+   "form": {
+    "de": "+ to = Aufgabe · + -ing = Rückblick",
+    "en": "+ to = task · + -ing = looking back"
+   },
+   "use": {
+    "de": "Mit to + Grundform meint das Verb eine Aufgabe, die noch ansteht. Mit -ing blickt es auf etwas, das schon geschehen ist.",
+    "en": "With to + base form the verb means a task that is still ahead. With -ing it looks back at something that already happened."
+   },
+   "signals": [
+    "remember",
+    "remembered",
+    "forget",
+    "forgot",
+    "forgotten"
+   ],
+   "ex": [
+    {
+     "en": "I forgot to attach the file, sorry.",
+     "de": "Ich habe vergessen, die Datei anzuhängen, entschuldige.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Remember to send the notes after the call.",
+     "de": "Denk daran, die Notizen nach dem Call zu schicken.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I'll never forget meeting her for the first time.",
+     "de": "Ich werde nie vergessen, wie ich sie zum ersten Mal traf.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "I remember to meet her at a conference in 2019.",
+    "good": "I remember meeting her at a conference in 2019.",
+    "cause": {
+     "de": "Das Deutsche trennt beides über zwei Verben (sich erinnern, daran denken), beide mit zu + Infinitiv. Englisch hat ein Verb und trennt über to oder -ing.",
+     "en": "German splits the two meanings across two verbs (sich erinnern, daran denken), both with zu + infinitive. English has one verb and splits them with to or -ing."
+    }
+   },
+   "contrast": {
+    "with": "vp.regret",
+    "a": "I remember locking the door.",
+    "b": "I regret to say the door was open.",
+    "diff": {
+     "de": "Bei remember zeigt -ing zurück auf Geschehenes. Bei regret kündigt to eine Mitteilung an, die jetzt kommt.",
+     "en": "After remember, -ing looks back at what happened. After regret, to announces a message that comes now."
+    }
+   },
+   "ccq": [
+    {
+     "s": "I remembered to lock the door.",
+     "q": {
+      "de": "Ist die Tür abgeschlossen?",
+      "en": "Is the door locked?"
+     },
+     "a": true
+    },
+    {
+     "s": "I'll never forget meeting the CEO.",
+     "q": {
+      "de": "Habe ich den CEO schon getroffen?",
+      "en": "Have I met the CEO already?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Liegt die Handlung noch vor mir oder schon hinter mir?",
+    "en": "Is the action still ahead of me or already behind me?"
+   }
+  },
+  {
+   "id": "vp.stop-try",
+   "name": {
+    "de": "stop, try · to oder -ing",
+    "en": "stop, try · to or -ing"
+   },
+   "form": {
+    "de": "-ing = Tätigkeit · to = Zweck oder Versuch",
+    "en": "-ing = the activity · to = purpose or attempt"
+   },
+   "use": {
+    "de": "Stop + -ing heißt aufhören, stop + to nennt den Zweck einer Pause. Try + -ing heißt ausprobieren, try + to heißt versuchen, etwas zu schaffen.",
+    "en": "Stop + -ing means quitting, stop + to gives the purpose of a pause. Try + -ing means experimenting, try + to means attempting something hard."
+   },
+   "signals": [
+    "stop",
+    "stopped",
+    "stopping",
+    "try",
+    "tried",
+    "trying"
+   ],
+   "ex": [
+    {
+     "en": "We stopped to grab coffee on the way.",
+     "de": "Wir haben unterwegs angehalten, um einen Kaffee zu holen.",
+     "ctx": "talk"
+    },
+    {
+     "en": "Please try restarting the app if it freezes.",
+     "de": "Probier einen Neustart der App, wenn sie hängt.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Let's stop debating the format and pick one.",
+     "de": "Lass uns aufhören, übers Format zu diskutieren, und eins wählen.",
+     "ctx": "meeting"
+    }
+   ],
+   "trap": {
+    "bad": "We stopped to use paper forms last year; now everything is digital.",
+    "good": "We stopped using paper forms last year; now everything is digital.",
+    "cause": {
+     "de": "Das Deutsche sagt „aufhören, Formulare zu benutzen“ mit zu + Infinitiv, deshalb wirkt stopped to use vertraut. Im Englischen nennt stop + to den Zweck einer Pause.",
+     "en": "German says “aufhören, Formulare zu benutzen” with zu + infinitive, so stopped to use feels familiar. In English stop + to gives the purpose of a pause."
+    }
+   },
+   "contrast": {
+    "with": "vp.ing-verbs",
+    "a": "We stopped using the old tool.",
+    "b": "We avoided using the old tool.",
+    "diff": {
+     "de": "stop + -ing: Es lief und hört jetzt auf. avoid + -ing: Es wurde gar nicht erst getan.",
+     "en": "stop + -ing: it was happening and now it ends. avoid + -ing: it was not done in the first place."
+    }
+   },
+   "ccq": [
+    {
+     "s": "She stopped to call the client.",
+     "q": {
+      "de": "Hat sie angehalten, um den Kunden anzurufen?",
+      "en": "Did she pause in order to call the client?"
+     },
+     "a": true
+    },
+    {
+     "s": "We tried changing the password, but the error stayed.",
+     "q": {
+      "de": "Haben wir das Passwort geändert?",
+      "en": "Did we change the password?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Soll die Handlung aufhören, oder ist sie der Grund für eine Pause?",
+    "en": "Does the action end, or is it the reason for a pause?"
+   }
+  },
+  {
+   "id": "vp.regret",
+   "name": {
+    "de": "regret · to oder -ing",
+    "en": "regret · to or -ing"
+   },
+   "form": {
+    "de": "regret to + Grundform · regret + -ing",
+    "en": "regret to + base form · regret + -ing"
+   },
+   "use": {
+    "de": "Regret + to kündigt förmlich eine schlechte Nachricht an, die jetzt kommt. Regret + -ing bedauert etwas, das man früher getan hat.",
+    "en": "Regret + to formally announces bad news that comes now. Regret + -ing feels sorry about something done earlier."
+   },
+   "signals": [
+    "regret",
+    "regretted",
+    "regrets"
+   ],
+   "ex": [
+    {
+     "en": "I regret not asking for more time.",
+     "de": "Ich bereue es, nicht um mehr Zeit gebeten zu haben.",
+     "ctx": "talk"
+    },
+    {
+     "en": "We regret to announce that the event is canceled.",
+     "de": "Wir bedauern, mitteilen zu müssen, dass die Veranstaltung abgesagt ist.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I regret to inform you that your application was unsuccessful.",
+     "de": "Ich bedauere, Ihnen mitteilen zu müssen, dass Ihre Bewerbung nicht erfolgreich war.",
+     "ctx": "mail"
+    }
+   ],
+   "trap": {
+    "bad": "I regret to sign the contract last year; the terms were bad.",
+    "good": "I regret signing the contract last year; the terms were bad.",
+    "cause": {
+     "de": "Das Deutsche hat zwei Verben: bedauern (etwas mitteilen zu müssen) und bereuen. Englisch nutzt regret für beide, nur die Form trennt sie.",
+     "en": "German has two verbs: bedauern (having to announce something) and bereuen. English uses regret for both, and only the form tells them apart."
+    }
+   },
+   "contrast": {
+    "with": "vp.remember-forget",
+    "a": "I regret to tell you the news.",
+    "b": "I regret telling you the news.",
+    "diff": {
+     "de": "regret to: Ich sage es jetzt, und es tut mir leid. regret -ing: Ich habe es gesagt und bereue es.",
+     "en": "regret to: I say it now and I am sorry. regret -ing: I said it and I wish I had not."
+    }
+   },
+   "ccq": [
+    {
+     "s": "I regret to say that we missed the target.",
+     "q": {
+      "de": "Sage ich die Nachricht gerade jetzt?",
+      "en": "Am I giving the news right now?"
+     },
+     "a": true
+    },
+    {
+     "s": "She regrets leaving the team.",
+     "q": {
+      "de": "Hat sie das Team verlassen?",
+      "en": "Did she leave the team?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Kommt die schlechte Nachricht jetzt, oder bezieht sich das Bedauern auf etwas Früheres?",
+    "en": "Is the bad news coming now, or does the regret refer to something earlier?"
+   }
+  }
+ ]
+}

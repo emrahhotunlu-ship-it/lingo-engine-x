@@ -1,0 +1,449 @@
+{
+ "topic": "mandative",
+ "canDo": {
+  "de": "Ich kann formell fordern und empfehlen: that + Grundform nach Verben und Adjektiven, im Passiv mit be, verneint mit not, und ich erkenne, wann insist oder suggest nur eine Tatsache berichten.",
+  "en": "I can demand and recommend formally: that + base form after verbs and adjectives, be in the passive, not for the negative, and I can tell when insist or suggest only report a fact."
+ },
+ "order": [
+  "mnd.verbs",
+  "mnd.adjectives",
+  "mnd.passive",
+  "mnd.negation",
+  "mnd.fact"
+ ],
+ "introPlan": [
+  [
+   "mnd.verbs",
+   "mnd.adjectives"
+  ],
+  [
+   "mnd.passive",
+   "mnd.negation"
+  ],
+  [
+   "mnd.fact"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Fordert oder empfiehlt jemand etwas (Grundform) oder wird nur etwas behauptet (normale Zeitform)?",
+   "Steht vor that ein Verb des Forderns oder ein Adjektiv wie essential?",
+   "Ist der that-Satz passiv (be + 3. Form) oder verneint (not + Grundform)?"
+  ],
+  "en": [
+   "Does someone demand or recommend something (base form) or is something merely claimed (normal tense)?",
+   "Does a demand verb or an adjective such as essential come before that?",
+   "Is the that clause passive (be + past participle) or negative (not + base form)?"
+  ]
+ },
+ "patterns": [
+  {
+   "id": "mnd.verbs",
+   "name": {
+    "de": "Verb + that · Grundform",
+    "en": "verb + that · base form"
+   },
+   "form": {
+    "de": "Verb des Forderns + that + Grundform",
+    "en": "demand verb + that + base form"
+   },
+   "use": {
+    "de": "Nach insist, demand, recommend, suggest, propose und urge steht die Grundform, auch bei he, she, it: that he leave, nicht leaves.",
+    "en": "After insist, demand, recommend, suggest, propose and urge the base form follows, even after he, she or it: that he leave, not leaves."
+   },
+   "signals": [
+    "insist that",
+    "insists that",
+    "demand that",
+    "demands that",
+    "demanded that",
+    "recommend that",
+    "suggest that",
+    "propose that"
+   ],
+   "ex": [
+    {
+     "en": "Legal recommends that we delay the launch.",
+     "de": "Die Rechtsabteilung empfiehlt, den Start zu verschieben.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I propose that she lead the pilot.",
+     "de": "Ich schlage vor, dass sie den Pilot leitet.",
+     "ctx": "mail"
+    },
+    {
+     "en": "My manager insisted that I take a day off.",
+     "de": "Meine Chefin bestand darauf, dass ich einen Tag freinehme.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The client demands that she approves every draft.",
+    "good": "The client demands that she approve every draft.",
+    "cause": {
+     "de": "Das Deutsche hat dafür den Konjunktiv I („dass sie genehmige“), der im Alltag selten ist. Man sagt meist „dass sie genehmigt“, und daraus wird approves. Im formellen Stil bleibt es approve.",
+     "en": "German has the subjunctive I for this (“dass sie genehmige”), which is rare in daily speech. People usually say “dass sie genehmigt”, and that turns into approves. In formal style it stays approve."
+    }
+   },
+   "contrast": {
+    "with": "mnd.fact",
+    "a": "I suggest that he go home.",
+    "b": "The tests suggest that he is ill.",
+    "diff": {
+     "de": "a gibt einen Rat, deshalb steht die Grundform go. b meldet eine Tatsache, deshalb steht die normale Form is.",
+     "en": "a gives advice, so the base form go follows. b reports a fact, so the normal form is follows."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The board demands that he resign.",
+     "q": {
+      "de": "Ist der Rücktritt schon passiert?",
+      "en": "Has he already resigned?"
+     },
+     "a": false
+    },
+    {
+     "s": "We recommend that she join the call.",
+     "q": {
+      "de": "Ist das ein Rat?",
+      "en": "Is this a piece of advice?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Welche Verbform brauchst du nach that, wenn jemand etwas fordert oder empfiehlt?",
+    "en": "Which verb form follows that when someone demands or recommends something?"
+   },
+   "usNote": {
+    "de": "Im US-Englisch ist die Grundform Standard. Das britische should + Grundform ist ebenfalls richtig.",
+    "en": "US English prefers the bare base form. The British should + base form is also correct."
+   }
+  },
+  {
+   "id": "mnd.adjectives",
+   "name": {
+    "de": "It is essential that · Grundform",
+    "en": "it is essential that · base form"
+   },
+   "form": {
+    "de": "it is + Adjektiv + that + Grundform",
+    "en": "it is + adjective + that + base form"
+   },
+   "use": {
+    "de": "Nach essential, vital, crucial, imperative und important steht in that-Sätzen die Grundform: It is vital that she attend.",
+    "en": "After essential, vital, crucial, imperative and important a that clause takes the base form: It is vital that she attend."
+   },
+   "signals": [
+    "essential that",
+    "vital that",
+    "crucial that",
+    "imperative that",
+    "important that",
+    "necessary that",
+    "critical that"
+   ],
+   "ex": [
+    {
+     "en": "It is crucial that every team lead join the call.",
+     "de": "Es ist entscheidend, dass jede Teamleitung am Call teilnimmt.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "It is imperative that the client receive the draft today.",
+     "de": "Es ist zwingend, dass der Kunde den Entwurf heute erhält.",
+     "ctx": "mail"
+    },
+    {
+     "en": "It's important that she hear it from us first.",
+     "de": "Es ist wichtig, dass sie es zuerst von uns erfährt.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "It is essential that the team will finish the audit by May.",
+    "good": "It is essential that the team finish the audit by May.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler, sondern der Reflex „Zukunft = will“. Nach Adjektiv + that steht aber die Grundform.",
+     "en": "Not a translation error but the “future = will” reflex. After adjective + that the base form follows."
+    }
+   },
+   "contrast": {
+    "with": "mnd.fact",
+    "a": "It is essential that he be present.",
+    "b": "It is likely that he is present.",
+    "diff": {
+     "de": "essential fordert etwas, deshalb steht be. likely schätzt nur ein, deshalb steht die normale Form is.",
+     "en": "essential demands something, so be follows. likely only estimates, so the normal form is follows."
+    }
+   },
+   "ccq": [
+    {
+     "s": "It is vital that he sign today.",
+     "q": {
+      "de": "Wird hier die Unterschrift verlangt?",
+      "en": "Is the signature required here?"
+     },
+     "a": true
+    },
+    {
+     "s": "It is essential that she be informed.",
+     "q": {
+      "de": "Ist sie schon informiert?",
+      "en": "Has she already been informed?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Verlangt der Ausdruck vor that etwas, oder schätzt er nur ein, und welche Form folgt?",
+    "en": "Does the phrase before that demand something or only estimate, and which form follows?"
+   }
+  },
+  {
+   "id": "mnd.passive",
+   "name": {
+    "de": "that + be + Partizip",
+    "en": "that + be + participle"
+   },
+   "form": {
+    "de": "that + Subjekt + be + 3. Form",
+    "en": "that + subject + be + past participle"
+   },
+   "use": {
+    "de": "Im Passiv steht be + 3. Form: that the report be corrected, nicht is, was oder would be.",
+    "en": "In the passive use be + past participle: that the report be corrected, not is, was or would be."
+   },
+   "signals": [
+    "be corrected",
+    "be approved",
+    "be signed",
+    "be stored",
+    "be submitted",
+    "be kept",
+    "be informed",
+    "be deleted"
+   ],
+   "ex": [
+    {
+     "en": "Finance requests that the budget be approved by Friday.",
+     "de": "Die Finanzabteilung beantragt, dass das Budget bis Freitag genehmigt wird.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "We ask that all invoices be sent to this address.",
+     "de": "Wir bitten darum, dass alle Rechnungen an diese Adresse geschickt werden.",
+     "ctx": "mail"
+    },
+    {
+     "en": "He demanded that the mistake be fixed right away.",
+     "de": "Er verlangte, dass der Fehler sofort behoben wird.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The client requires that the contract is signed by Monday.",
+    "good": "The client requires that the contract be signed by Monday.",
+    "cause": {
+     "de": "Deutsch nutzt hier das normale Passiv („wird unterschrieben“). Englisch braucht be + 3. Form.",
+     "en": "German uses the normal passive here (“wird unterschrieben”). English needs be + past participle."
+    }
+   },
+   "contrast": {
+    "with": "mnd.verbs",
+    "a": "We ask that the form be returned.",
+    "b": "We ask that you return the form.",
+    "diff": {
+     "de": "Beide Sätze sind richtig. Das Passiv nennt keine handelnde Person, das Aktiv nutzt die Grundform ohne -s.",
+     "en": "Both are correct. The passive names no actor, the active uses the base form with no -s."
+    }
+   },
+   "ccq": [
+    {
+     "s": "I request that the files be deleted.",
+     "q": {
+      "de": "Sind die Dateien schon gelöscht?",
+      "en": "Have the files already been deleted?"
+     },
+     "a": false
+    },
+    {
+     "s": "She insisted that the door be locked.",
+     "q": {
+      "de": "Wollte sie, dass die Tür verschlossen wird?",
+      "en": "Did she want the door to be locked?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Welche Form von „sein“ folgt nach dem Subjekt, wenn etwas verlangt wird?",
+    "en": "Which form of “sein” follows the subject when something is demanded?"
+   }
+  },
+  {
+   "id": "mnd.negation",
+   "name": {
+    "de": "that + not + Grundform",
+    "en": "that + not + base form"
+   },
+   "form": {
+    "de": "that + Subjekt + not + Grundform",
+    "en": "that + subject + not + base form"
+   },
+   "use": {
+    "de": "Die Verneinung steht direkt vor der Grundform: that he not sign. Ein Hilfsverb wie doesn't kommt nicht dazu. Auch should not ist richtig.",
+    "en": "The negation goes right before the base form: that he not sign. No helper such as doesn't is added. Should not is also correct."
+   },
+   "signals": [
+    "that he not",
+    "that she not",
+    "that we not",
+    "that you not",
+    "that they not",
+    "doesn't",
+    "does not"
+   ],
+   "ex": [
+    {
+     "en": "I suggest that we not announce the date yet.",
+     "de": "Ich schlage vor, das Datum noch nicht bekanntzugeben.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "We recommend that you not forward this message.",
+     "de": "Wir empfehlen, diese Nachricht nicht weiterzuleiten.",
+     "ctx": "mail"
+    },
+    {
+     "en": "She insisted that he not drive tonight.",
+     "de": "Sie bestand darauf, dass er heute Abend nicht fährt.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The lawyer advises that he would not answer any questions.",
+    "good": "The lawyer advises that he not answer any questions.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler: Sonst verneint das Englische mit Hilfsverben (does, would). Hier steht aber nur not + Grundform.",
+     "en": "Not a translation error: elsewhere English negates with helper verbs (does, would). Here only not + base form is used."
+    }
+   },
+   "contrast": {
+    "with": "mnd.verbs",
+    "a": "We insist that she not attend.",
+    "b": "We don't insist that she attend.",
+    "diff": {
+     "de": "a: Sie soll fernbleiben. b: Wir bestehen nicht darauf, dass sie teilnimmt; es ist ihr freigestellt.",
+     "en": "a: she is to stay away. b: we do not insist on her attending; it is up to her."
+    }
+   },
+   "ccq": [
+    {
+     "s": "We insist that she not attend.",
+     "q": {
+      "de": "Darf sie teilnehmen?",
+      "en": "May she attend?"
+     },
+     "a": false
+    },
+    {
+     "s": "I recommend that he not sign.",
+     "q": {
+      "de": "Rate ich ihm vom Unterschreiben ab?",
+      "en": "Am I advising him against signing?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Wo steht die Verneinung, und braucht das Verb noch ein Hilfsverb?",
+    "en": "Where does the negation go, and does the verb still need a helper?"
+   },
+   "usNote": {
+    "de": "Im US-Englisch ist not + Grundform in formellen Texten üblich. Should not ist die verbreitete Alternative.",
+    "en": "In US English not + base form is common in formal writing. Should not is the usual alternative."
+   }
+  },
+  {
+   "id": "mnd.fact",
+   "name": {
+    "de": "Fordern oder Tatsache",
+    "en": "demand or fact"
+   },
+   "form": {
+    "de": "Grundform = Forderung, normale Zeit = Tatsache",
+    "en": "base form = demand, normal tense = fact"
+   },
+   "use": {
+    "de": "Insist und suggest können auch eine Tatsache melden. Dann steht die normale Zeitform: Sie beharrte darauf, dass er gegangen war.",
+    "en": "Insist and suggest can also report a fact. Then the normal tense follows: she insisted that he had left."
+   },
+   "signals": [
+    "suggests that",
+    "indicates that",
+    "shows that",
+    "insisted he had",
+    "insisted that he had"
+   ],
+   "ex": [
+    {
+     "en": "The report suggests that costs are rising.",
+     "de": "Der Bericht deutet darauf hin, dass die Kosten steigen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "He insisted that he had sent the file.",
+     "de": "Er beharrte darauf, dass er die Datei geschickt hatte.",
+     "ctx": "mail"
+    },
+    {
+     "en": "She suggested that we meet earlier.",
+     "de": "Sie schlug vor, dass wir uns früher treffen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The survey suggests that most customers be satisfied with the app.",
+    "good": "The survey suggests that most customers are satisfied with the app.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler: Wer gelernt hat „nach suggest steht die Grundform“, überträgt das auch auf Tatsachen.",
+     "en": "Not a translation error: after learning “suggest takes the base form”, people carry it over to facts."
+    }
+   },
+   "contrast": {
+    "with": "mnd.verbs",
+    "a": "I suggest that she go home.",
+    "b": "The numbers suggest that she is ill.",
+    "diff": {
+     "de": "a ist ein Vorschlag, deshalb steht go. b ist ein Hinweis auf eine Tatsache, deshalb steht is.",
+     "en": "a is a proposal, so go follows. b points to a fact, so is follows."
+    }
+   },
+   "ccq": [
+    {
+     "s": "She insisted that he leave.",
+     "q": {
+      "de": "Hat sie etwas verlangt?",
+      "en": "Did she demand something?"
+     },
+     "a": true
+    },
+    {
+     "s": "She insisted that he had left early.",
+     "q": {
+      "de": "Behauptet sie, dass er früh gegangen ist?",
+      "en": "Does she claim he left early?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Wird etwas verlangt oder nur etwas über die Wirklichkeit gesagt?",
+    "en": "Is something demanded, or is something just said about reality?"
+   }
+  }
+ ]
+}

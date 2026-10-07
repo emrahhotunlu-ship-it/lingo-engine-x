@@ -1,0 +1,254 @@
+[
+ {
+  "pat": "ma.should",
+  "en": "I think we should postpone the launch until June.",
+  "de": "Ich finde, wir sollten den Start bis Juni verschieben.",
+  "chunks": [
+   "I think",
+   "we",
+   "should",
+   "postpone",
+   "the launch",
+   "until June"
+  ],
+  "alt": [
+   "We should postpone the launch until June, I think."
+  ],
+  "why": [
+   "Should gibt einen freundlichen Rat und steht ohne to direkt vor der Grundform: should postpone.",
+   "Should gives friendly advice and stands directly before the bare verb, with no to: should postpone."
+  ],
+  "bad": "I think we should to postpone the launch until June.",
+  "trap": {
+   "tile": "should",
+   "instead": "should to",
+   "why": {
+    "de": "Nach should steht kein to. Das to gehört nur zu ought, nicht zu should.",
+    "en": "No to after should. The to belongs to ought only, not to should."
+   }
+  }
+ },
+ {
+  "pat": "ma.should",
+  "en": "You shouldn't reply to that email while you're upset.",
+  "de": "Du solltest nicht auf diese Mail antworten, solange du aufgebracht bist.",
+  "chunks": [
+   "you",
+   "shouldn't",
+   "reply",
+   "to that email",
+   "while you're upset"
+  ],
+  "alt": [
+   "While you're upset, you shouldn't reply to that email."
+  ],
+  "why": [
+   "Shouldn't rät von etwas ab und steht direkt vor der Grundform: shouldn't reply, ohne to.",
+   "Shouldn't advises against something and stands directly before the base form: shouldn't reply, no to."
+  ],
+  "bad": "You shouldn't to reply to that email while you're upset."
+ },
+ {
+  "pat": "ma.had-better",
+  "en": "We had better confirm the room today, or we'll lose it.",
+  "de": "Wir sollten den Raum heute besser bestätigen, sonst verlieren wir ihn.",
+  "chunks": [
+   "we",
+   "had better",
+   "confirm",
+   "the room",
+   "today",
+   "or we'll lose it"
+  ],
+  "alt": [
+   "Today we had better confirm the room, or we'll lose it."
+  ],
+  "why": [
+   "Had better warnt vor einer Folge: Sonst ist der Raum weg. Danach steht die Grundform, ohne to.",
+   "Had better warns of a consequence: otherwise the room is gone. The base form follows, with no to."
+  ],
+  "bad": "We would better confirm the room today, or we'll lose it.",
+  "trap": {
+   "tile": "had better",
+   "instead": "would better",
+   "why": {
+    "de": "Would better gibt es nicht. Die feste Wendung für die Warnung heißt had better.",
+    "en": "There is no would better. The fixed phrase for the warning is had better."
+   }
+  }
+ },
+ {
+  "pat": "ma.had-better",
+  "en": "You had better not forward that draft to the client.",
+  "de": "Du solltest diesen Entwurf besser nicht an den Kunden weiterleiten.",
+  "chunks": [
+   "you",
+   "had better not",
+   "forward",
+   "that draft",
+   "to the client"
+  ],
+  "single": "Not hängt direkt hinter better, danach folgen die Grundform, das Objekt und der Empfänger in genau dieser Reihenfolge.",
+  "why": [
+   "Verneint heißt es had better not. Danach folgt die Grundform ohne to, hier forward.",
+   "The negative is had better not. The base form follows with no to, here forward."
+  ],
+  "bad": "You had better don't forward that draft to the client.",
+  "trap": {
+   "tile": "had better not",
+   "instead": "had better don't",
+   "why": {
+    "de": "Bei den meisten Verben bildet man die Verneinung mit don't. Bei had better steht dagegen nur not, direkt hinter better.",
+    "en": "With most verbs the negative uses don't. With had better it is only not, right after better."
+   }
+  }
+ },
+ {
+  "pat": "ma.polite",
+  "en": "Perhaps you could ask Dana for a short extension.",
+  "de": "Vielleicht könntest du Dana um eine kurze Fristverlängerung bitten.",
+  "chunks": [
+   "perhaps",
+   "you could",
+   "ask",
+   "Dana",
+   "for a short extension"
+  ],
+  "alt": [
+   "You could perhaps ask Dana for a short extension."
+  ],
+  "why": [
+   "Perhaps you could macht einen höflichen Vorschlag und lässt die Wahl offen. Danach steht die Grundform ohne to.",
+   "Perhaps you could makes a polite suggestion and leaves the choice open. The base form follows with no to."
+  ],
+  "bad": "Perhaps you could to ask Dana for a short extension.",
+  "trap": {
+   "tile": "ask",
+   "instead": "to ask",
+   "why": {
+    "de": "Nach could steht die Grundform ohne to. Das to gehört nicht zu den Modalverben.",
+    "en": "After could use the bare base form. The to does not go with modal verbs."
+   }
+  }
+ },
+ {
+  "pat": "ma.polite",
+  "en": "Why don't you send the client a short summary first?",
+  "de": "Warum schickst du dem Kunden nicht zuerst eine kurze Zusammenfassung?",
+  "chunks": [
+   "why don't you",
+   "send",
+   "the client",
+   "a short summary",
+   "first"
+  ],
+  "alt": [
+   "Why don't you first send the client a short summary?"
+  ],
+  "why": [
+   "Why don't you macht einen Vorschlag in Frageform, mit do vor dem Subjekt. Danach folgt die Grundform.",
+   "Why don't you makes a suggestion in question form, with do before the subject. The base form follows."
+  ],
+  "bad": "Why you don't send the client a short summary first?",
+  "trap": {
+   "tile": "why don't you",
+   "instead": "why you don't",
+   "why": {
+    "de": "Der Vorschlag ist eine Frage und braucht do vor dem Subjekt: why don't you, nicht why you don't.",
+    "en": "The suggestion is a question and needs do before the subject: why don't you, not why you don't."
+   }
+  }
+ },
+ {
+  "pat": "ma.dont-have-to",
+  "en": "You don't have to attend the kickoff; it's optional.",
+  "de": "Du musst nicht am Kickoff teilnehmen; er ist freiwillig.",
+  "chunks": [
+   "you",
+   "don't have to",
+   "attend",
+   "the kickoff",
+   "it's optional"
+  ],
+  "alt": [
+   "It's optional; you don't have to attend the kickoff."
+  ],
+  "why": [
+   "Don't have to heißt „nicht nötig“, passend zu optional. Ein Verbot wäre must not.",
+   "Don't have to means “not necessary”, which fits optional. A prohibition would be must not."
+  ],
+  "bad": "You must not attend the kickoff; it's optional.",
+  "trap": {
+   "tile": "don't have to",
+   "instead": "must not",
+   "why": {
+    "de": "Deutsch „du musst nicht“ heißt „nicht nötig“. Wörtlich übersetzt wird daraus must not, ein Verbot.",
+    "en": "German “du musst nicht” means “not necessary”. Translated word for word it becomes must not, a prohibition."
+   }
+  }
+ },
+ {
+  "pat": "ma.dont-have-to",
+  "en": "Visitors must not take photos inside the lab.",
+  "de": "Besucher dürfen im Labor keine Fotos machen.",
+  "chunks": [
+   "visitors",
+   "must not",
+   "take",
+   "photos",
+   "inside the lab"
+  ],
+  "alt": [
+   "Inside the lab, visitors must not take photos."
+  ],
+  "why": [
+   "Must not drückt ein Verbot aus und steht direkt vor der Grundform: must not take, ohne to.",
+   "Must not expresses a prohibition and stands directly before the base form: must not take, no to."
+  ]
+ },
+ {
+  "pat": "ma.should-have",
+  "en": "We should have told the client about the delay earlier.",
+  "de": "Wir hätten dem Kunden früher von der Verzögerung erzählen sollen.",
+  "chunks": [
+   "we",
+   "should have told",
+   "the client",
+   "about the delay",
+   "earlier"
+  ],
+  "why": [
+   "Should have + Partizip blickt zurück: Es wäre richtig gewesen, ist aber nicht passiert.",
+   "Should have + participle looks back: it would have been right, but it did not happen."
+  ],
+  "bad": "We should had told the client about the delay earlier.",
+  "trap": {
+   "tile": "should have told",
+   "instead": "should had told",
+   "why": {
+    "de": "Der Anklang von „hätten“ an had verleitet zu should had. Nach should steht aber have.",
+    "en": "The echo of German “hätten” in had invites should had. But should takes have."
+   }
+  },
+  "alt": [
+   "We should have told the client earlier about the delay."
+  ]
+ },
+ {
+  "pat": "ma.should-have",
+  "en": "I shouldn't have shared the draft so early.",
+  "de": "Ich hätte den Entwurf nicht so früh teilen sollen.",
+  "chunks": [
+   "I",
+   "shouldn't",
+   "have shared",
+   "the draft",
+   "so early"
+  ],
+  "single": "Shouldn't steht direkt nach dem Subjekt, danach folgt have shared, und die Zeitangabe so early bleibt am Ende.",
+  "why": [
+   "Shouldn't have + Partizip blickt zurück: Es war ein Fehler, den Entwurf zu teilen.",
+   "Shouldn't have + participle looks back: it was a mistake to share the draft."
+  ]
+ }
+]

@@ -1,0 +1,522 @@
+{
+ "___ the contract, our legal team approved it.": {
+  "pat": "cp.having",
+  "why": {
+   "ok": {
+    "de": "Richtig: Having reviewed. Erst geprüft, dann freigegeben.",
+    "en": "Right: Having reviewed. First checked, then approved."
+   },
+   "wrong": [
+    {
+     "if": [
+      "having",
+      "reviewing"
+     ],
+     "de": "Nach Having folgt die 3. Form: reviewed, nicht reviewing.",
+     "en": "After Having comes the past participle: reviewed, not reviewing."
+    },
+    {
+     "if": [
+      "having",
+      "review"
+     ],
+     "de": "Nach Having braucht es die 3. Form: reviewed, nicht die Grundform.",
+     "en": "After Having you need the past participle: reviewed, not the base form."
+    },
+    {
+     "if": [
+      "reviewing"
+     ],
+     "pat": "cp.ing",
+     "de": "Reviewing hieße: beim Prüfen. Hier war die Prüfung zuerst fertig: Having reviewed.",
+     "en": "Reviewing means while checking. Here the review was done first: Having reviewed."
+    },
+    {
+     "if": [
+      "reviewed"
+     ],
+     "not": [
+      "having"
+     ],
+     "pat": "cp.pp",
+     "de": "Reviewed allein ist passiv. Das Team prüft selbst und war zuerst fertig: Having reviewed.",
+     "en": "Reviewed alone is passive. The team did the review itself, first: Having reviewed."
+    }
+   ]
+  }
+ },
+ "___ OCR, the system reads every incoming invoice.": {
+  "pat": "cp.ing",
+  "why": {
+   "ok": {
+    "de": "Richtig: Using = mithilfe von. Das System liest, indem es OCR nutzt.",
+    "en": "Right: Using = by means of. The system reads by using OCR."
+   },
+   "wrong": [
+    {
+     "if": [
+      "having"
+     ],
+     "de": "Having used hieße: erst fertig. Hier ist OCR das Mittel beim Lesen: Using.",
+     "en": "Having used means finished first. Here OCR is the means while reading: Using."
+    },
+    {
+     "if": [
+      "used"
+     ],
+     "pat": "cp.pp",
+     "de": "Used allein ist passiv. Das System nutzt OCR selbst: Using.",
+     "en": "Used alone is passive. The system uses OCR itself: Using."
+    },
+    {
+     "if": [
+      "use"
+     ],
+     "de": "Das Partizip braucht -ing: Using. Die Grundform wirkt wie ein Befehl.",
+     "en": "The participle needs -ing: Using. The base form reads like a command."
+    },
+    {
+     "not": [
+      "using"
+     ],
+     "de": "Gesucht ist die -ing-Form von use: das Mittel, gleichzeitig.",
+     "en": "You need the -ing form of use: the means, at the same time."
+    }
+   ]
+  }
+ },
+ "___ in German data centers, the documents stay GDPR-compliant.": {
+  "pat": "cp.pp",
+  "why": {
+   "ok": {
+    "de": "Richtig: Stored. Die Dokumente werden gespeichert: nur die 3. Form.",
+    "en": "Right: Stored. The documents are stored: just the past participle."
+   },
+   "wrong": [
+    {
+     "if": [
+      "storing"
+     ],
+     "pat": "cp.ing",
+     "de": "Storing hieße: Die Dokumente speichern selbst. Sie werden gespeichert: Stored.",
+     "en": "Storing would mean the documents store something. They are stored: Stored."
+    },
+    {
+     "if": [
+      "having"
+     ],
+     "not": [
+      "been"
+     ],
+     "pat": "cp.having",
+     "de": "Having stored hieße: Die Dokumente haben gespeichert. Sie wurden gespeichert: Stored.",
+     "en": "Having stored would mean the documents did the storing. They were stored: Stored."
+    },
+    {
+     "if": [
+      "store"
+     ],
+     "de": "Die Grundform ist kein Partizip. Der passive Sinn braucht die 3. Form: Stored.",
+     "en": "The base form is not a participle. Passive meaning needs the past participle: Stored."
+    },
+    {
+     "not": [
+      "stored"
+     ],
+     "de": "Gesucht ist die 3. Form von store, meist ohne being: Stored.",
+     "en": "You need the past participle of store, usually with no being: Stored."
+    }
+   ]
+  }
+ },
+ "Having ___ the pilot, we moved on to the rollout.": {
+  "pat": "cp.having",
+  "why": {
+   "ok": {
+    "de": "Richtig: Having + 3. Form, hier finished. Erst fertig, dann weiter.",
+    "en": "Right: Having + past participle, here finished. First done, then moved on."
+   },
+   "wrong": [
+    {
+     "if": [
+      "finishing"
+     ],
+     "de": "Nach Having folgt die 3. Form: finished, nicht finishing.",
+     "en": "After Having comes the past participle: finished, not finishing."
+    },
+    {
+     "if": [
+      "finish"
+     ],
+     "de": "Nach Having braucht es die 3. Form: finished, nicht die Grundform.",
+     "en": "After Having you need the past participle: finished, not the base form."
+    },
+    {
+     "not": [
+      "finished",
+      "completed",
+      "concluded",
+      "wrapped"
+     ],
+     "de": "Gesucht ist die 3. Form von finish: Having finished.",
+     "en": "You need the past participle of finish: Having finished."
+    }
+   ]
+  }
+ },
+ "___ the demo, the IT lead asked about single sign-on.": {
+  "pat": "cp.having",
+  "why": {
+   "ok": {
+    "de": "Richtig: Having seen. Erst die Demo gesehen, dann gefragt.",
+    "en": "Right: Having seen. First saw the demo, then asked."
+   },
+   "wrong": [
+    {
+     "opt": "Having see",
+     "de": "Nach Having folgt die 3. Form: seen, nicht die Grundform see.",
+     "en": "After Having comes the past participle: seen, not the base form see."
+    },
+    {
+     "opt": "Seen",
+     "pat": "cp.pp",
+     "de": "Seen allein ist passiv und nimmt kein Objekt. Hier handelt der Leiter: Having seen.",
+     "en": "Seen alone is passive and takes no object. The lead acts here: Having seen."
+    },
+    {
+     "opt": "Have seen",
+     "de": "Have seen ist eine finite Verbform, keine Verkürzung. Hier gehört Having seen hin.",
+     "en": "Have seen is a finite verb form, not a shortening. Having seen belongs here."
+    }
+   ]
+  }
+ },
+ "___ by the auditors, the new process is now standard.": {
+  "pat": "cp.pp",
+  "why": {
+   "ok": {
+    "de": "Richtig: Approved. Die Prüfer genehmigen ihn: passiv, nur die 3. Form.",
+    "en": "Right: Approved. The auditors approved it: passive, just the past participle."
+   },
+   "wrong": [
+    {
+     "opt": "Approving",
+     "pat": "cp.ing",
+     "de": "Approving hieße: Der Prozess genehmigt selbst. Die Prüfer genehmigen ihn: Approved.",
+     "en": "Approving would mean the process approves. The auditors approve it: Approved."
+    },
+    {
+     "opt": "Having approve",
+     "de": "Having approve ist keine Form. Passiv braucht nur die 3. Form: Approved by …",
+     "en": "Having approve is not a form. Passive needs only the past participle: Approved by …"
+    },
+    {
+     "opt": "Approve",
+     "de": "Die Grundform ist kein Partizip. Passiv braucht die 3. Form: Approved by …",
+     "en": "The base form is not a participle. Passive needs the past participle: Approved by …"
+    }
+   ]
+  }
+ },
+ "___ in the cloud, the archive needs no local servers.": {
+  "pat": "cp.ing",
+  "why": {
+   "ok": {
+    "de": "Richtig: Running. Das Archiv läuft selbst und zugleich: -ing-Form.",
+    "en": "Right: Running. The archive runs by itself, at the same time: -ing form."
+   },
+   "wrong": [
+    {
+     "opt": "Runs",
+     "de": "Runs ist ein finites Verb. Gesucht ist das Partizip: Running.",
+     "en": "Runs is a finite verb. You need the participle: Running."
+    },
+    {
+     "opt": "Being running in",
+     "de": "Being running ist keine übliche Form: Das Partizip steht allein, Running.",
+     "en": "Being running is not a usual form: the participle stands alone, Running."
+    },
+    {
+     "opt": "Ran",
+     "de": "Ran ist die einfache Vergangenheit, kein Partizip. Gesucht ist Running.",
+     "en": "Ran is the simple past, not a participle. You need Running."
+    }
+   ]
+  }
+ },
+ "After we had tested the workflow, we trained the users. → ___ the workflow, we trained the users.": {
+  "pat": "cp.having",
+  "why": {
+   "ok": {
+    "de": "Richtig: Having tested. Erst getestet, dann geschult: gleiches Subjekt.",
+    "en": "Right: Having tested. First tested, then trained: same subject."
+   },
+   "wrong": [
+    {
+     "if": [
+      "having",
+      "testing"
+     ],
+     "de": "Nach Having folgt die 3. Form: tested, nicht testing.",
+     "en": "After Having comes the past participle: tested, not testing."
+    },
+    {
+     "if": [
+      "having",
+      "test"
+     ],
+     "de": "Nach Having braucht es die 3. Form: tested, nicht die Grundform.",
+     "en": "After Having you need the past participle: tested, not the base form."
+    },
+    {
+     "if": [
+      "testing"
+     ],
+     "pat": "cp.ing",
+     "de": "Testing hieße: beim Testen. Das Testen war zuerst fertig: Having tested.",
+     "en": "Testing means while testing. The testing was finished first: Having tested."
+    },
+    {
+     "if": [
+      "tested"
+     ],
+     "not": [
+      "having"
+     ],
+     "pat": "cp.pp",
+     "de": "Tested allein ist passiv. Wir haben selbst getestet: Having tested.",
+     "en": "Tested alone is passive. We did the testing ourselves: Having tested."
+    }
+   ]
+  }
+ },
+ "Because it runs in the cloud, the archive scales automatically. → ___ in the cloud, the archive scales automatically.": {
+  "pat": "cp.ing",
+  "why": {
+   "ok": {
+    "de": "Richtig: Running. Grund und zugleich: Das Archiv läuft in der Cloud.",
+    "en": "Right: Running. Reason and at the same time: the archive runs in the cloud."
+   },
+   "wrong": [
+    {
+     "if": [
+      "having"
+     ],
+     "pat": "cp.having",
+     "de": "Having run hieße: erst gelaufen. Es läuft aber gerade: Running.",
+     "en": "Having run means: ran first. It is running now: Running."
+    },
+    {
+     "if": [
+      "run"
+     ],
+     "pat": "cp.pp",
+     "de": "Run allein hieße: Es wird betrieben. Hier läuft es selbst: Running.",
+     "en": "Run alone means: it is operated. Here it runs by itself: Running."
+    },
+    {
+     "if": [
+      "ran"
+     ],
+     "de": "Ran ist die einfache Vergangenheit, kein Partizip. Gesucht ist Running.",
+     "en": "Ran is the simple past, not a participle. You need Running."
+    },
+    {
+     "not": [
+      "running"
+     ],
+     "de": "Gesucht ist die -ing-Form von run: Running.",
+     "en": "You need the -ing form of run: Running."
+    }
+   ]
+  }
+ },
+ "The report was written in May, and it is already out of date. → ___ in May, the report is already out of date.": {
+  "pat": "cp.pp",
+  "why": {
+   "ok": {
+    "de": "Richtig: Written. Der Bericht wurde geschrieben: passiv, nur die 3. Form.",
+    "en": "Right: Written. The report was written: passive, just the past participle."
+   },
+   "wrong": [
+    {
+     "if": [
+      "writing"
+     ],
+     "pat": "cp.ing",
+     "de": "Writing hieße: Der Bericht schreibt selbst. Er wurde geschrieben: Written.",
+     "en": "Writing would mean the report writes. It was written: Written."
+    },
+    {
+     "if": [
+      "write"
+     ],
+     "de": "Die Grundform ist kein Partizip. Passiv braucht die 3. Form: Written.",
+     "en": "The base form is not a participle. Passive needs the past participle: Written."
+    },
+    {
+     "if": [
+      "having"
+     ],
+     "not": [
+      "been"
+     ],
+     "pat": "cp.having",
+     "de": "Having written hieße: Der Bericht hat selbst geschrieben. Passiv: Written.",
+     "en": "Having written means the report did the writing. Passive: Written."
+    },
+    {
+     "not": [
+      "written"
+     ],
+     "de": "Gesucht ist die 3. Form von write: Written.",
+     "en": "You need the past participle of write: Written."
+    }
+   ]
+  }
+ },
+ "Having sign the contract, the customer received the access data.": {
+  "pat": "cp.having",
+  "why": {
+   "ok": {
+    "de": "Richtig: Having signed. Nach Having steht die 3. Form.",
+    "en": "Right: Having signed. After Having comes the past participle."
+   },
+   "wrong": [
+    {
+     "if": [
+      "having",
+      "signing"
+     ],
+     "de": "Nach Having folgt die 3. Form: signed, nicht signing.",
+     "en": "After Having comes the past participle: signed, not signing."
+    },
+    {
+     "if": [
+      "having",
+      "sign"
+     ],
+     "de": "Die Grundform sign passt nicht. Nach Having steht die 3. Form: signed.",
+     "en": "The base form sign does not fit. After Having comes the past participle: signed."
+    },
+    {
+     "not": [
+      "signed"
+     ],
+     "de": "Ändere die Form nach Having zur 3. Form: signed.",
+     "en": "Change the form after Having to the past participle: signed."
+    }
+   ]
+  }
+ },
+ "Having receiving your feedback, we updated the offer.": {
+  "pat": "cp.having",
+  "why": {
+   "ok": {
+    "de": "Richtig: Having received. Nach Having steht die 3. Form, nicht -ing.",
+    "en": "Right: Having received. After Having comes the past participle, not -ing."
+   },
+   "wrong": [
+    {
+     "if": [
+      "having",
+      "receiving"
+     ],
+     "de": "Nach Having folgt die 3. Form: received, nicht receiving.",
+     "en": "After Having comes the past participle: received, not receiving."
+    },
+    {
+     "if": [
+      "having",
+      "receive"
+     ],
+     "de": "Die Grundform receive passt nicht. Nach Having steht die 3. Form: received.",
+     "en": "The base form receive does not fit. After Having comes the past participle: received."
+    },
+    {
+     "not": [
+      "received"
+     ],
+     "de": "Ändere die Form nach Having zur 3. Form: received.",
+     "en": "Change the form after Having to the past participle: received."
+    }
+   ]
+  }
+ },
+ "Use the new search, you can find any invoice in seconds.": {
+  "pat": "cp.ing",
+  "why": {
+   "ok": {
+    "de": "Richtig: Using. Am Satzanfang braucht das Mittel die -ing-Form.",
+    "en": "Right: Using. At the start, the means takes the -ing form."
+   },
+   "wrong": [
+    {
+     "if": [
+      "use"
+     ],
+     "de": "Use ist die Grundform und wirkt wie ein Befehl. Das Partizip braucht -ing: Using.",
+     "en": "Use is the base form and reads like a command. The participle needs -ing: Using."
+    },
+    {
+     "if": [
+      "used"
+     ],
+     "pat": "cp.pp",
+     "de": "Used allein ist passiv. Du nutzt die Suche selbst: Using.",
+     "en": "Used alone is passive. You use the search yourself: Using."
+    },
+    {
+     "if": [
+      "having"
+     ],
+     "pat": "cp.having",
+     "de": "Having used hieße: erst fertig. Die Suche ist das Mittel: Using.",
+     "en": "Having used means finished first. The search is the means: Using."
+    },
+    {
+     "not": [
+      "using"
+     ],
+     "de": "Gesucht ist die -ing-Form von use: Using the new search, …",
+     "en": "You need the -ing form of use: Using the new search, …"
+    }
+   ]
+  }
+ },
+ "Having review the offer, the CFO asked for a discount.": {
+  "pat": "cp.having",
+  "dup": "Having sign the contract, the customer received the access data.",
+  "why": {
+   "ok": {
+    "de": "Richtig: Having reviewed. Nach Having steht die 3. Form.",
+    "en": "Right: Having reviewed. After Having comes the past participle."
+   },
+   "wrong": [
+    {
+     "if": [
+      "having",
+      "reviewing"
+     ],
+     "de": "Nach Having folgt die 3. Form: reviewed, nicht reviewing.",
+     "en": "After Having comes the past participle: reviewed, not reviewing."
+    },
+    {
+     "if": [
+      "having",
+      "review"
+     ],
+     "de": "Die Grundform review passt nicht. Nach Having steht die 3. Form: reviewed.",
+     "en": "The base form review does not fit. After Having comes the past participle: reviewed."
+    },
+    {
+     "not": [
+      "reviewed"
+     ],
+     "de": "Ändere die Form nach Having zur 3. Form: reviewed.",
+     "en": "Change the form after Having to the past participle: reviewed."
+    }
+   ]
+  }
+ }
+}

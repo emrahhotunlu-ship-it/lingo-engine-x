@@ -1,0 +1,916 @@
+[
+ {
+  "id": "ma-sho-k1",
+  "type": "kwt",
+  "pat": "ma.should",
+  "from": "It would be wise to double-check the figures.",
+  "key": "SHOULD",
+  "frame": "You ___ the figures.",
+  "answer": "should double-check",
+  "accepted": [
+   "should double check",
+   "should check",
+   "should recheck",
+   "should review",
+   "should verify"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: should + Grundform, ohne to: You should double-check the figures.",
+    "en": "Right: should + base form, no to: You should double-check the figures."
+   },
+   "wrong": [
+    {
+     "not": [
+      "should"
+     ],
+     "de": "Das Schlüsselwort SHOULD muss unverändert in der Lücke stehen.",
+     "en": "The key word SHOULD must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Nach should steht kein to: should double-check.",
+     "en": "No to after should: should double-check."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ma-sho-k2",
+  "type": "kwt",
+  "pat": "ma.should",
+  "from": "It is advisable that you read the contract before signing.",
+  "key": "OUGHT",
+  "frame": "You ___ the contract before signing.",
+  "answer": "ought to read",
+  "accepted": [
+   "ought to review",
+   "ought to check",
+   "ought to reread",
+   "ought to read through",
+   "ought to go through",
+   "ought to study",
+   "ought to look over",
+   "ought to look at"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: ought to + Grundform, mit to: ought to read.",
+    "en": "Right: ought to + base form, with to: ought to read."
+   },
+   "wrong": [
+    {
+     "not": [
+      "ought"
+     ],
+     "de": "Das Schlüsselwort OUGHT muss unverändert in der Lücke stehen.",
+     "en": "The key word OUGHT must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "ought"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Ought braucht ein to: ought to read.",
+     "en": "Ought needs to: ought to read."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ma-sho-f1",
+  "type": "find",
+  "pat": "ma.should",
+  "prompt": "I think we should to postpone the launch until June.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "should",
+  "fixed": "I think we should postpone the launch until June.",
+  "accepted": [
+   "ought to"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach should steht kein to: should postpone.",
+    "en": "The error: no to after should: should postpone."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: should steht ohne to.",
+     "en": "There is an error: should is used without to."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „should to“: Nach should steht kein to.",
+     "en": "The error is “should to”: no to after should."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ma-sho-f2",
+  "type": "find",
+  "pat": "ma.should",
+  "prompt": "We shouldn't announce the new pricing before legal has signed off.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: shouldn't + Grundform rät davon ab, es zu früh zu verkünden.",
+    "en": "No error: shouldn't + base form advises against announcing it too early."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach shouldn't steht die Grundform, hier announce.",
+     "en": "No error: the base form follows shouldn't, here announce."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ma-sho-m1",
+  "type": "meaning",
+  "pat": "ma.should",
+  "a": "You should reply to the invitation.",
+  "b": "You must reply to the invitation.",
+  "q": {
+   "de": "Welcher Satz ist nur ein Rat, keine Pflicht?",
+   "en": "Which sentence is only advice, not an obligation?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. should rät freundlich, die Entscheidung bleibt bei dir.",
+    "en": "Right: sentence a. should advises gently, the decision stays with you."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b ist es eine Pflicht: must lässt keine Wahl.",
+     "en": "In b it is an obligation: must leaves no choice."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: should rät, must verlangt.",
+     "en": "Not the same: should advises, must demands."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ma-hb-k1",
+  "type": "kwt",
+  "pat": "ma.had-better",
+  "from": "If you don't confirm today, you will lose the room.",
+  "key": "BETTER",
+  "frame": "You ___ today, or you'll lose the room.",
+  "answer": "had better confirm",
+  "accepted": [
+   "'d better confirm",
+   "had better confirm it",
+   "'d better confirm it"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: had better + Grundform warnt: sonst ist der Raum weg.",
+    "en": "Right: had better + base form warns: otherwise the room is gone."
+   },
+   "wrong": [
+    {
+     "not": [
+      "better"
+     ],
+     "de": "Das Schlüsselwort BETTER muss unverändert in der Lücke stehen.",
+     "en": "The key word BETTER must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "better",
+      "to"
+     ],
+     "de": "Nach had better steht kein to: had better confirm.",
+     "en": "No to after had better: had better confirm."
+    },
+    {
+     "if": [
+      "should"
+     ],
+     "de": "Vor better steht had: had better confirm.",
+     "en": "Had goes before better: had better confirm."
+    },
+    {
+     "if": [
+      "would"
+     ],
+     "de": "Would better gibt es nicht: had better confirm.",
+     "en": "There is no would better: had better confirm."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ma-hb-k2",
+  "type": "kwt",
+  "pat": "ma.had-better",
+  "from": "It's best if we don't skip the safety briefing.",
+  "key": "BETTER",
+  "frame": "We ___ the safety briefing.",
+  "answer": "had better not skip",
+  "accepted": [
+   "'d better not skip",
+   "had better not miss",
+   "'d better not miss"
+  ],
+  "words": [
+   4,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: had better not + Grundform: not steht hinter better.",
+    "en": "Right: had better not + base form: not comes after better."
+   },
+   "wrong": [
+    {
+     "not": [
+      "better"
+     ],
+     "de": "Das Schlüsselwort BETTER muss unverändert in der Lücke stehen.",
+     "en": "The key word BETTER must stay unchanged in the gap."
+    },
+    {
+     "not": [
+      "not"
+     ],
+     "de": "Verneint heißt es had better not: not steht hinter better.",
+     "en": "The negative is had better not: not comes after better."
+    },
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Nach had better not steht kein to.",
+     "en": "No to after had better not."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ma-hb-f1",
+  "type": "find",
+  "pat": "ma.had-better",
+  "prompt": "We had better to double-check the invoice before sending it.",
+  "err": [
+   1,
+   3
+  ],
+  "answer": "had better",
+  "fixed": "We had better double-check the invoice before sending it.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach had better steht die Grundform ohne to.",
+    "en": "The error: after had better use the base form with no to."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: had better steht ohne to.",
+     "en": "There is an error: had better takes no to."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „better to“: Nach had better steht kein to.",
+     "en": "The error is “better to”: no to after had better."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ma-hb-f2",
+  "type": "find",
+  "pat": "ma.had-better",
+  "prompt": "You had better don't miss the registration deadline.",
+  "err": [
+   1,
+   3
+  ],
+  "answer": "had better not",
+  "fixed": "You had better not miss the registration deadline.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach had better steht not, nicht don't: had better not.",
+    "en": "The error: after had better comes not, not don't: had better not."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach better steht kein don't.",
+     "en": "There is an error: after better there is no don't."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „had better don't“: Es heißt had better not.",
+     "en": "The error is “had better don't”: it is had better not."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ma-hb-m1",
+  "type": "meaning",
+  "pat": "ma.had-better",
+  "a": "You'd better update the slides.",
+  "b": "You should update the slides.",
+  "q": {
+   "de": "Welcher Satz droht mit einer Folge, wenn man es nicht tut?",
+   "en": "Which sentence hints at a consequence if you don't do it?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. had better warnt: Sonst droht Ärger.",
+    "en": "Right: sentence a. had better warns: otherwise there is trouble."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b rät should nur freundlich, ohne Folge.",
+     "en": "In b should only advises gently, with no consequence."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: had better warnt, should rät nur.",
+     "en": "Not the same: had better warns, should only advises."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ma-pol-k1",
+  "type": "kwt",
+  "pat": "ma.polite",
+  "from": "Why not ask Lena for a short extension?",
+  "key": "COULD",
+  "frame": "Perhaps you ___ for a short extension.",
+  "answer": "could ask Lena",
+  "accepted": [
+   "could ask her"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Perhaps you could + Grundform ist ein höflicher Vorschlag.",
+    "en": "Right: Perhaps you could + base form makes a polite suggestion."
+   },
+   "wrong": [
+    {
+     "not": [
+      "could"
+     ],
+     "de": "Das Schlüsselwort COULD muss unverändert in der Lücke stehen.",
+     "en": "The key word COULD must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "could",
+      "to"
+     ],
+     "de": "Nach could steht kein to: could ask.",
+     "en": "No to after could: could ask."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ma-pol-k2",
+  "type": "kwt",
+  "pat": "ma.polite",
+  "from": "I'd suggest sending the client a short summary.",
+  "key": "COULD",
+  "frame": "Perhaps you ___ a short summary.",
+  "answer": "could send the client",
+  "accepted": [
+   "could send them",
+   "could email them",
+   "could email the client",
+   "could give the client",
+   "could send our client"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: could + Grundform ist der höfliche Vorschlag: could send.",
+    "en": "Right: could + base form: Perhaps you could send the client a short summary."
+   },
+   "wrong": [
+    {
+     "not": [
+      "could"
+     ],
+     "de": "Das Schlüsselwort COULD muss unverändert in der Lücke stehen.",
+     "en": "The key word COULD must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "could",
+      "to"
+     ],
+     "de": "Nach could steht kein to: could send.",
+     "en": "No to after could: could send."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ma-pol-f1",
+  "type": "find",
+  "pat": "ma.polite",
+  "prompt": "Why you don't send the client a short summary first?",
+  "err": [
+   1,
+   2
+  ],
+  "answer": "don't you",
+  "fixed": "Why don't you send the client a short summary first?",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Der Vorschlag ist eine Frage: Why don't you …?",
+    "en": "The error: the suggestion is a question: Why don't you …?"
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Die Frage braucht do vor dem Subjekt.",
+     "en": "There is an error: the question needs do before the subject."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „you don't“: Es heißt Why don't you.",
+     "en": "The error is “you don't”: it is Why don't you."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ma-pol-f2",
+  "type": "find",
+  "pat": "ma.polite",
+  "prompt": "Perhaps you could to ask Dana for an update.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "could",
+  "fixed": "Perhaps you could ask Dana for an update.",
+  "accepted": [
+   "might"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach could steht kein to: could ask.",
+    "en": "The error: no to after could: could ask."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: could steht ohne to.",
+     "en": "There is an error: could is used without to."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „could to“: Nach could steht kein to.",
+     "en": "The error is “could to”: no to after could."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ma-pol-m1",
+  "type": "meaning",
+  "pat": "ma.polite",
+  "a": "Perhaps you could take the lead on this.",
+  "b": "You must take the lead on this.",
+  "q": {
+   "de": "Welcher Satz lässt dem anderen die Wahl?",
+   "en": "Which sentence leaves the other person a choice?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Perhaps you could ist ein Vorschlag, keine Anweisung.",
+    "en": "Right: sentence a. Perhaps you could is a suggestion, not an instruction."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b ist es eine Pflicht: must lässt keine Wahl.",
+     "en": "In b it is an obligation: must leaves no choice."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a schlägt vor, b verlangt.",
+     "en": "Not the same: a suggests, b demands."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ma-dht-k1",
+  "type": "kwt",
+  "pat": "ma.dont-have-to",
+  "from": "It isn't necessary to sign the form today.",
+  "key": "HAVE",
+  "frame": "You ___ sign the form today.",
+  "answer": "don't have to",
+  "accepted": [
+   "do not have to",
+   "don't really have to",
+   "do not really have to"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: don't have to heißt „nicht nötig“: Du kannst es lassen.",
+    "en": "Right: don't have to means “not necessary”: you may skip it."
+   },
+   "wrong": [
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Das Schlüsselwort HAVE muss unverändert in der Lücke stehen.",
+     "en": "The key word HAVE must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "not": [
+      "not"
+     ],
+     "de": "Have to ohne Verneinung heißt „müssen“. Gesucht ist „nicht nötig“.",
+     "en": "Have to without a negative means “must”. “Not necessary” is needed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ma-dht-k2",
+  "type": "kwt",
+  "pat": "ma.dont-have-to",
+  "from": "Taking photos in the lab is forbidden.",
+  "key": "MUST",
+  "frame": "Visitors ___ photos in the lab.",
+  "answer": "must not take",
+  "accepted": [
+   "must never take"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: must not + Grundform sagt, dass es verboten ist.",
+    "en": "Right: must not + base form says: forbidden."
+   },
+   "wrong": [
+    {
+     "not": [
+      "must"
+     ],
+     "de": "Das Schlüsselwort MUST muss unverändert in der Lücke stehen.",
+     "en": "The key word MUST must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "must"
+     ],
+     "not": [
+      "not"
+     ],
+     "de": "Must allein ist Pflicht. Für ein Verbot braucht es must not.",
+     "en": "Must alone is an obligation. A prohibition needs must not."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ma-dht-f1",
+  "type": "find",
+  "pat": "ma.dont-have-to",
+  "prompt": "Attendance is optional, so you mustn't join the call if you don't want to.",
+  "err": [
+   5,
+   5
+  ],
+  "answer": "don't have to",
+  "fixed": "Attendance is optional, so you don't have to join the call if you don't want to.",
+  "accepted": [
+   "needn't",
+   "do not have to",
+   "don't need to",
+   "do not need to"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: optional heißt „nicht nötig“: don't have to, nicht mustn't.",
+    "en": "The error: optional means “not necessary”: don't have to, not mustn't."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: mustn't verbietet, aber es ist optional.",
+     "en": "There is an error: mustn't forbids it, but it is optional."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „mustn't“: Optional heißt nicht verboten.",
+     "en": "The error is “mustn't”: optional does not mean forbidden."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ma-dht-f2",
+  "type": "find",
+  "pat": "ma.dont-have-to",
+  "prompt": "You don't have to log in again; the session stays active for a week.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: don't have to + Grundform sagt, dass es nicht nötig ist.",
+    "en": "No error: don't have to + base form says it is not necessary."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Gemeint ist „nicht nötig“, und dafür passt don't have to.",
+     "en": "No error: “not necessary” is meant, and don't have to fits that."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ma-dht-m1",
+  "type": "meaning",
+  "pat": "ma.dont-have-to",
+  "a": "You don't have to sign the form.",
+  "b": "You must not sign the form.",
+  "q": {
+   "de": "Welcher Satz verbietet das Unterschreiben?",
+   "en": "Which sentence forbids signing?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. must not verbietet, don't have to heißt nur „nicht nötig“.",
+    "en": "Right: sentence b. must not forbids, don't have to only means “not necessary”."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a ist das Unterschreiben nur nicht nötig, aber erlaubt.",
+     "en": "In a signing is merely not necessary, but allowed."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a erlaubt es, b verbietet es.",
+     "en": "Not the same: a allows it, b forbids it."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ma-shh-k1",
+  "type": "kwt",
+  "pat": "ma.should-have",
+  "from": "It was a mistake not to tell the client earlier.",
+  "key": "SHOULD",
+  "frame": "We ___ the client earlier.",
+  "answer": "should have told",
+  "accepted": [
+   "should have informed",
+   "should have notified",
+   "should have warned",
+   "should have updated"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: should have + Partizip blickt zurück: Das Informieren blieb aus.",
+    "en": "Right: should have + participle looks back: the informing did not happen."
+   },
+   "wrong": [
+    {
+     "not": [
+      "should"
+     ],
+     "de": "Das Schlüsselwort SHOULD muss unverändert in der Lücke stehen.",
+     "en": "The key word SHOULD must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "should",
+      "had"
+     ],
+     "de": "Nach should steht have, nicht had: should have told.",
+     "en": "After should comes have, not had: should have told."
+    },
+    {
+     "if": [
+      "should"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Für den Rückblick fehlt have + Partizip: should have told.",
+     "en": "The hindsight form needs have + participle: should have told."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ma-shh-k2",
+  "type": "kwt",
+  "pat": "ma.should-have",
+  "from": "It was wrong of me to share the draft so early.",
+  "key": "SHOULD",
+  "frame": "I ___ the draft so early.",
+  "answer": "should not have shared",
+  "accepted": [
+   "should not have sent",
+   "should not have forwarded",
+   "should not have circulated",
+   "should not have released"
+  ],
+  "words": [
+   4,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: should not have + Partizip: Es war ein Fehler, es zu tun.",
+    "en": "Right: should not have + participle: it was a mistake to do it."
+   },
+   "wrong": [
+    {
+     "not": [
+      "should"
+     ],
+     "de": "Das Schlüsselwort SHOULD muss unverändert in der Lücke stehen.",
+     "en": "The key word SHOULD must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "should",
+      "had"
+     ],
+     "de": "Nach should steht have, nicht had: should not have shared.",
+     "en": "After should comes have, not had: should not have shared."
+    },
+    {
+     "if": [
+      "should"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Der Rückblick braucht have + Partizip: should not have shared.",
+     "en": "Hindsight needs have + participle: should not have shared."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ma-shh-f1",
+  "type": "find",
+  "pat": "ma.should-have",
+  "prompt": "We should had told the client about the delay last week.",
+  "err": [
+   1,
+   2
+  ],
+  "answer": "should have",
+  "fixed": "We should have told the client about the delay last week.",
+  "accepted": [
+   "ought to have"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach should steht have, nicht had: should have told.",
+    "en": "The error: should takes have, not had: should have told."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach should steht kein had.",
+     "en": "There is an error: no had after should."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „should had“: Es heißt should have.",
+     "en": "The error is “should had”: it is should have."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ma-shh-f2",
+  "type": "find",
+  "pat": "ma.should-have",
+  "prompt": "I shouldn't sent the draft to the whole team last night.",
+  "err": [
+   1,
+   2
+  ],
+  "answer": "shouldn't have sent",
+  "fixed": "I shouldn't have sent the draft to the whole team last night.",
+  "accepted": [
+   "should not have sent",
+   "ought not to have sent"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Der Rückblick braucht have + Partizip: shouldn't have sent.",
+    "en": "The error: hindsight needs have + participle: shouldn't have sent."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach shouldn't fehlt have.",
+     "en": "There is an error: have is missing after shouldn't."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „shouldn't sent“: Es fehlt have.",
+     "en": "The error is “shouldn't sent”: have is missing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ma-shh-m1",
+  "type": "meaning",
+  "pat": "ma.should-have",
+  "a": "We should send the report today.",
+  "b": "We should have sent the report yesterday.",
+  "q": {
+   "de": "Welcher Satz blickt auf etwas zurück, das nicht passiert ist?",
+   "en": "Which sentence looks back at something that did not happen?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. should have + Partizip blickt zurück: Der Bericht ging nicht raus.",
+    "en": "Right: sentence b. should have + participle looks back: the report was not sent."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a geht es um heute: should + Grundform rät für jetzt.",
+     "en": "In a it is about today: should + base form advises for now."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a rät für heute, b blickt zurück.",
+     "en": "Not the same: a advises for today, b looks back."
+    }
+   ]
+  }
+ }
+]

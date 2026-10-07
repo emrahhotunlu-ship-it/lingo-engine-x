@@ -15,7 +15,11 @@
       "type": "transform",
       "prompt": "Working with US customers is normal for me now. → I ___ with US customers.",
       "answer": "am used to working",
-      "accepted": ["'m used to working", "am accustomed to working", "'m accustomed to working"],
+      "accepted": [
+        "'m used to working",
+        "am accustomed to working",
+        "'m accustomed to working"
+      ],
       "expl": "Etwas ist normal für dich: „be used to“ + Wort auf -ing. „to“ ist hier eine Präposition, deshalb -ing.",
       "expl_en": "Something is normal for you → be used to + -ing (to is a preposition here)."
     },
@@ -26,7 +30,11 @@
       "hint": "(a / an / the / –)",
       "answer": "the",
       "expl": "Beide wissen, welcher Vertrag gemeint ist (we discussed yesterday) → the.",
-      "expl_en": "Both people know which contract is meant (we discussed yesterday) → the."
+      "expl_en": "Both people know which contract is meant (we discussed yesterday) → the.",
+      "accepted": [
+        "that",
+        "this"
+      ]
     },
     {
       "topic": "relative",
@@ -34,7 +42,9 @@
       "prompt": "The customer ___ called this morning wants a demo.",
       "hint": "(who / which / whose)",
       "answer": "who",
-      "accepted": ["that"],
+      "accepted": [
+        "that"
+      ],
       "expl": "Für eine Person ohne Komma nimmst du „who“ (oder „that“): The customer who called this morning wants a demo.",
       "expl_en": "For a person without a comma use “who” (or “that”): The customer who called this morning wants a demo."
     },
@@ -44,7 +54,12 @@
       "prompt": "The lights are off, so they ___ (be) in the office any more.",
       "hint": "(be)",
       "answer": "can't be",
-      "accepted": ["cannot be", "couldn't be", "could not be", "must not be"],
+      "accepted": [
+        "cannot be",
+        "couldn't be",
+        "could not be",
+        "must not be"
+      ],
       "expl": "Du bist sicher, dass etwas NICHT stimmt: „can’t“ + Grundform.",
       "expl_en": "You are sure something is NOT true → can't + base form."
     },
@@ -53,7 +68,9 @@
       "type": "transform",
       "prompt": "I'm sure he forgot the meeting. → He ___ the meeting.",
       "answer": "must have forgotten",
-      "accepted": ["must've forgotten"],
+      "accepted": [
+        "must've forgotten"
+      ],
       "expl": "Du bist fast sicher, was früher war: „must have“ + 3. Verbform (z. B. must have forgotten).",
       "expl_en": "A confident guess about the past → must have + past participle."
     },
@@ -72,7 +89,9 @@
       "prompt": "I ___ (meet) the new client at 3 pm tomorrow – it's in my calendar.",
       "hint": "(meet)",
       "answer": "am meeting",
-      "accepted": ["'m meeting"],
+      "accepted": [
+        "'m meeting"
+      ],
       "expl": "Ein fester Termin im Kalender: Dafür nimmst du das Present Continuous, auch für die Zukunft.",
       "expl_en": "A fixed arrangement (in the calendar) → present continuous for the future."
     },

@@ -1,0 +1,365 @@
+{
+ "I remember ___ the door, so it can't be my fault.": {
+  "pat": "vp.remember-forget",
+  "why": {
+   "ok": {
+    "de": "Richtig: „so it can't be my fault“ blickt zurück, das ist remember + -ing.",
+    "en": "Right: “so it can't be my fault” looks back, so remember + -ing."
+   },
+   "wrong": [
+    {
+     "opt": "to have locking",
+     "de": "„to have locking“ ist keine Form. Der Rückblick heißt remember + -ing.",
+     "en": "“to have locking” is not a form. Looking back is remember + -ing."
+    },
+    {
+     "opt": "lock",
+     "de": "Die Grundform allein passt hinter remember nicht: Es braucht to oder -ing.",
+     "en": "The bare form does not follow remember: it needs to or -ing."
+    },
+    {
+     "opt": "to lock",
+     "pat": "vp.remember-forget",
+     "de": "Remember + to meint eine Aufgabe, die noch kommt. Hier ist es schon passiert.",
+     "en": "Remember + to means a task still ahead. Here it already happened."
+    }
+   ]
+  }
+ },
+ "Please remember ___ the report before you leave.": {
+  "pat": "vp.remember-forget",
+  "why": {
+   "ok": {
+    "de": "Richtig: „before you leave“ nennt eine Aufgabe, die noch kommt: remember + to send.",
+    "en": "Right: “before you leave” names a task still ahead: remember + to send."
+   },
+   "wrong": [
+    {
+     "opt": "having sent",
+     "de": "Having sent blickt zurück. Die Aufgabe liegt aber noch vor dir.",
+     "en": "Having sent looks back. The task is still ahead of you."
+    },
+    {
+     "opt": "send",
+     "de": "Die Grundform allein passt nicht: Nach remember folgt to oder -ing.",
+     "en": "The bare form does not fit: remember is followed by to or -ing."
+    },
+    {
+     "opt": "sending",
+     "pat": "vp.remember-forget",
+     "de": "Remember + -ing blickt zurück. „Please“ und „before you leave“ zeigen nach vorn.",
+     "en": "Remember + -ing looks back. “Please” and “before you leave” point ahead."
+    }
+   ]
+  }
+ },
+ "We regret ___ you that the position has been filled.": {
+  "pat": "vp.regret",
+  "why": {
+   "ok": {
+    "de": "Richtig: Die schlechte Nachricht kommt jetzt, also regret + to inform.",
+    "en": "Right: the bad news comes now, so regret + to inform."
+   },
+   "wrong": [
+    {
+     "opt": "to informing",
+     "de": "„to informing“ mischt zwei Formen. Die Mitteilung heißt regret + to + Grundform.",
+     "en": "“to informing” mixes two forms. The announcement is regret + to + base form."
+    },
+    {
+     "opt": "informing",
+     "pat": "vp.regret",
+     "de": "Regret + -ing bereut Früheres. Hier wird die Nachricht jetzt überbracht.",
+     "en": "Regret + -ing feels sorry about the past. Here the news is delivered now."
+    },
+    {
+     "opt": "inform",
+     "de": "Die Grundform allein passt nicht: Nach regret folgt to oder -ing.",
+     "en": "The bare form does not fit: regret is followed by to or -ing."
+    }
+   ]
+  }
+ },
+ "I look forward to ___ you at the conference.": {
+  "pat": "vp.look-forward",
+  "why": {
+   "ok": {
+    "de": "Richtig: In look forward to ist to eine Präposition, deshalb folgt -ing.",
+    "en": "Right: in look forward to, to is a preposition, so -ing follows."
+   },
+   "wrong": [
+    {
+     "opt": "to meet",
+     "de": "Das to steht schon in look forward to. Danach folgt -ing, kein zweites to.",
+     "en": "The to is already in look forward to. After it comes -ing, not a second to."
+    },
+    {
+     "opt": "have met",
+     "de": "Die Perfektform passt nicht: Nach der Präposition to folgt -ing.",
+     "en": "The perfect form does not fit: after the preposition to comes -ing."
+    },
+    {
+     "opt": "meet",
+     "pat": "vp.look-forward",
+     "de": "Das to ist hier eine Präposition, deshalb -ing und nicht die Grundform.",
+     "en": "Here to is a preposition, so -ing and not the base form."
+    }
+   ]
+  }
+ },
+ "He stopped ___ work emails as soon as he went on leave.": {
+  "pat": "vp.stop-try",
+  "why": {
+   "ok": {
+    "de": "Richtig: Er hört auf, Mails zu prüfen. Aufhören heißt stop + -ing.",
+    "en": "Right: he quits checking emails. Quitting is stop + -ing."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Stop + to heißt anhalten, um etwas zu tun. Hier hört er auf: stop + -ing.",
+     "en": "Stop + to means pausing in order to do something. Here he quits: stop + -ing."
+    },
+    {
+     "if": [
+      "check"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Die Grundform passt nicht: Nach stop (aufhören) steht -ing.",
+     "en": "The base form does not fit: after stop (quit) comes -ing."
+    },
+    {
+     "if": [
+      "checked"
+     ],
+     "de": "Die Vergangenheitsform passt nicht: Nach stop steht -ing.",
+     "en": "The past form does not fit: after stop comes -ing."
+    }
+   ]
+  }
+ },
+ "Try ___ the router off and on; that often solves the problem.": {
+  "pat": "vp.stop-try",
+  "why": {
+   "ok": {
+    "de": "Richtig: Hier wird etwas ausprobiert, also try + -ing.",
+    "en": "Right: here something is tested, so try + -ing."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Try + to heißt versuchen, etwas Schwieriges zu schaffen. Hier: ausprobieren, also -ing.",
+     "en": "Try + to means attempting something hard. Here it is testing: -ing."
+    },
+    {
+     "if": [
+      "turn"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Die Grundform passt nicht: Beim Ausprobieren steht try + -ing.",
+     "en": "The base form does not fit: testing something is try + -ing."
+    },
+    {
+     "if": [
+      "turned"
+     ],
+     "de": "Die Vergangenheitsform passt nicht: Nach try steht -ing.",
+     "en": "The past form does not fit: after try comes -ing."
+    }
+   ]
+  }
+ },
+ "She avoided ___ the issue in the meeting.": {
+  "pat": "vp.ing-verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Avoid verlangt direkt die -ing-Form: avoided mentioning.",
+    "en": "Right: avoid takes the -ing form directly: avoided mentioning."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Nach avoid steht kein to + Grundform, sondern -ing: avoided mentioning.",
+     "en": "After avoid there is no to + base form, only -ing: avoided mentioning."
+    },
+    {
+     "if": [
+      "mention"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Die Grundform passt nicht: Avoid verlangt -ing.",
+     "en": "The base form does not fit: avoid takes -ing."
+    },
+    {
+     "if": [
+      "mentioned"
+     ],
+     "de": "Die Vergangenheitsform passt nicht: Avoid verlangt -ing.",
+     "en": "The past form does not fit: avoid takes -ing."
+    }
+   ]
+  }
+ },
+ "I'm sorry that I have to tell you that the shipment is late. → I regret ___ you that the shipment is late.": {
+  "pat": "vp.regret",
+  "why": {
+   "ok": {
+    "de": "Richtig: „I'm sorry that I have to tell“ wird zu regret to tell, eine Nachricht jetzt.",
+    "en": "Right: “I'm sorry that I have to tell” becomes regret to tell, news given now."
+   },
+   "wrong": [
+    {
+     "if": [
+      "telling"
+     ],
+     "de": "Regret + -ing bereut Früheres. Hier kündigt regret die Nachricht jetzt an: to tell.",
+     "en": "Regret + -ing feels sorry about the past. Here regret announces the news now: to tell."
+    },
+    {
+     "if": [
+      "tell"
+     ],
+     "not": [
+      "to",
+      "having"
+     ],
+     "de": "Es fehlt das to: Eine Mitteilung heißt regret + to + Grundform.",
+     "en": "The to is missing: an announcement is regret + to + base form."
+    },
+    {
+     "if": [
+      "told"
+     ],
+     "de": "Die Vergangenheitsform passt nicht: Es folgt to + Grundform.",
+     "en": "The past form does not fit: to + base form follows."
+    }
+   ]
+  }
+ },
+ "He didn't remember that he had met her before. → He didn't remember ___ her before.": {
+  "pat": "vp.remember-forget",
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Erinnerung an Früheres heißt remember + -ing: remember meeting.",
+    "en": "Right: recalling the past is remember + -ing: remember meeting."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Remember + to meint eine Aufgabe. Hier geht es um Früheres: -ing.",
+     "en": "Remember + to means a task. Here it is about the past: -ing."
+    },
+    {
+     "if": [
+      "meet"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Die Grundform passt nicht: Ein Rückblick heißt remember + -ing.",
+     "en": "The base form does not fit: looking back is remember + -ing."
+    },
+    {
+     "if": [
+      "met"
+     ],
+     "de": "Nach remember steht -ing oder having + Partizip, nicht das Simple Past.",
+     "en": "After remember use -ing or having + participle, not the simple past."
+    }
+   ]
+  }
+ },
+ "I'm looking forward to meet you next week.": {
+  "pat": "vp.look-forward",
+  "why": {
+   "ok": {
+    "de": "Richtig: In look forward to ist to eine Präposition, danach folgt meeting.",
+    "en": "Right: in look forward to, to is a preposition, then meeting follows."
+   },
+   "wrong": [
+    {
+     "if": [
+      "meet"
+     ],
+     "de": "Meet bleibt falsch: Nach look forward to steht -ing (meeting).",
+     "en": "Meet is still wrong: after look forward to use -ing (meeting)."
+    },
+    {
+     "pat": "vp.look-forward",
+     "de": "Nach look forward to steht -ing, weil to hier Präposition ist.",
+     "en": "After look forward to use -ing, because to is a preposition here."
+    }
+   ]
+  }
+ },
+ "We decided discussing the budget next week.": {
+  "pat": "vp.to-verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Decide verbindet sich mit to + Grundform: decided to discuss.",
+    "en": "Right: decide combines with to + base form: decided to discuss."
+   },
+   "wrong": [
+    {
+     "if": [
+      "discussing"
+     ],
+     "de": "Decide verlangt to + Grundform, nicht -ing: decided to discuss.",
+     "en": "Decide takes to + base form, not -ing: decided to discuss."
+    },
+    {
+     "if": [
+      "discuss"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Es fehlt das to: decide + to + Grundform.",
+     "en": "The to is missing: decide + to + base form."
+    }
+   ]
+  }
+ },
+ "Don't forget calling the supplier before noon.": {
+  "pat": "vp.remember-forget",
+  "why": {
+   "ok": {
+    "de": "Richtig: „before noon“ nennt eine Aufgabe, die noch kommt: forget to call.",
+    "en": "Right: “before noon” names a task still ahead: forget to call."
+   },
+   "wrong": [
+    {
+     "if": [
+      "calling"
+     ],
+     "de": "Forget + -ing blickt zurück. Die Aufgabe liegt noch vor dir: forget to call.",
+     "en": "Forget + -ing looks back. The task is still ahead: forget to call."
+    },
+    {
+     "if": [
+      "call"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Es fehlt to: Für eine Aufgabe steht forget + to + Grundform.",
+     "en": "The to is missing: for a task use forget + to + base form."
+    }
+   ]
+  }
+ }
+}

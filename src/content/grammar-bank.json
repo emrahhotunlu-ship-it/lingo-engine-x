@@ -2895,7 +2895,7 @@
     "an",
     "–",
     "a",
-    "the"
+    "many"
    ],
    "answer": "an",
    "expl": "Nach dem Klang entscheidet es: „MBA“ beginnt mit dem Vokallaut /em/ → an. „a“ wäre falsch, obwohl „M“ ein Konsonantenbuchstabe ist: Es zählt der Laut.",
@@ -2924,7 +2924,9 @@
    "expl_en": "The attachment belongs to that known email → the.",
    "accepted": [
     "your",
-    "that"
+    "that",
+    "this",
+    "its"
    ]
   },
   {
@@ -2933,7 +2935,10 @@
    "prompt": "She is ___ honest person who always tells clients the truth.",
    "answer": "an",
    "expl": "„honest“ beginnt mit stummem h, also mit Vokallaut → an.",
-   "expl_en": "\"honest\" starts with a silent h, so with a vowel sound → an."
+   "expl_en": "\"honest\" starts with a silent h, so with a vowel sound → an.",
+   "accepted": [
+    "the"
+   ]
   },
   {
    "topic": "articles",
@@ -2941,7 +2946,10 @@
    "prompt": "He is ___ university professor.",
    "answer": "a",
    "expl": "„university“ beginnt mit dem Konsonantenlaut /j/ → a, nicht an.",
-   "expl_en": "\"university\" starts with the consonant sound /j/ → a, not an."
+   "expl_en": "\"university\" starts with the consonant sound /j/ → a, not an.",
+   "accepted": [
+    "the"
+   ]
   },
   {
    "topic": "articles",
@@ -2964,6 +2972,7 @@
    "type": "transform",
    "prompt": "No other product in our range sells better than this one. → This is ___ best-selling product in our range.",
    "answer": "the",
+   "accepted": ["our"],
    "expl": "Vor einem Superlativ steht „the“: This is the best-selling product.",
    "expl_en": "Put “the” before a superlative: This is the best-selling product."
   },

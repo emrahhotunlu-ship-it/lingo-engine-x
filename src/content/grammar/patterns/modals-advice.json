@@ -1,0 +1,430 @@
+{
+  "topic": "modals-advice",
+  "canDo": {
+    "de": "Ich kann Rat gezielt abstufen: freundlich mit should, mit Folge mit had better, höflich mit Perhaps you could. Ich trenne „nicht nötig“ von „verboten“ und blicke mit should have zurück.",
+    "en": "I can grade advice precisely: gently with should, with a consequence with had better, politely with Perhaps you could. I tell “not necessary” from “not allowed” and look back with should have."
+  },
+  "order": [
+    "ma.should",
+    "ma.had-better",
+    "ma.polite",
+    "ma.dont-have-to",
+    "ma.should-have"
+  ],
+  "introPlan": [
+    [
+      "ma.should",
+      "ma.had-better"
+    ],
+    [
+      "ma.polite",
+      "ma.dont-have-to"
+    ],
+    [
+      "ma.should-have"
+    ]
+  ],
+  "decide": {
+    "de": [
+      "Rätst du freundlich (should), warnst du vor einer Folge (had better) oder schlägst du nur etwas vor (could)?",
+      "Geht es um etwas Verbotenes (must not) oder nur um etwas, das nicht nötig ist (don't have to)?",
+      "Blickst du nach vorn (should + Grundform) oder zurück auf etwas Verpasstes (should have + Partizip)?"
+    ],
+    "en": [
+      "Do you advise gently (should), warn of a consequence (had better) or only suggest something (could)?",
+      "Is something forbidden (must not) or merely not necessary (don't have to)?",
+      "Are you looking ahead (should + base form) or back at something missed (should have + participle)?"
+    ]
+  },
+  "patterns": [
+    {
+      "id": "ma.should",
+      "name": {
+        "de": "should / ought to · freundlicher Rat",
+        "en": "should / ought to · friendly advice"
+      },
+      "form": {
+        "de": "should + Grundform ohne to · ought to + Grundform",
+        "en": "should + base form, no to · ought to + base form"
+      },
+      "use": {
+        "de": "Gibt einen freundlichen Rat oder eine Empfehlung. Nach should steht die Grundform ohne to, ought braucht dagegen to.",
+        "en": "Gives friendly advice or a recommendation. Should takes the bare base form, whereas ought needs to."
+      },
+      "signals": [
+        "should",
+        "shouldn't",
+        "ought to",
+        "I think you",
+        "my advice"
+      ],
+      "ex": [
+        {
+          "en": "I think we should move the launch to May.",
+          "de": "Ich finde, wir sollten den Start auf Mai verschieben.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "You shouldn't forward that draft before legal checks it.",
+          "de": "Du solltest den Entwurf nicht weiterleiten, bevor die Rechtsabteilung ihn prüft.",
+          "ctx": "mail"
+        },
+        {
+          "en": "You ought to read the contract before you sign.",
+          "de": "Du solltest den Vertrag lesen, bevor du unterschreibst.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "I think you ought finish the draft before lunch.",
+        "good": "I think you ought to finish the draft before lunch.",
+        "cause": {
+          "de": "Kein Übersetzungsfehler. Nach should steht kein to, und dieses Muster wird auf ought übertragen. Ought braucht aber to.",
+          "en": "Not a translation error. After should there is no to, and that habit carries over to ought, which does need to."
+        }
+      },
+      "contrast": {
+        "with": "ma.had-better",
+        "a": "You should call her today.",
+        "b": "You had better call her today.",
+        "diff": {
+          "de": "should rät freundlich. had better warnt: Wenn du es nicht tust, droht eine Folge.",
+          "en": "should advises gently. had better warns: if you don't, there is a consequence."
+        }
+      },
+      "ccq": [
+        {
+          "s": "You should update the slides.",
+          "q": {
+            "de": "Muss ich die Folien aktualisieren?",
+            "en": "Do I have to update the slides?"
+          },
+          "a": false
+        },
+        {
+          "s": "You shouldn't forward the draft.",
+          "q": {
+            "de": "Rate ich dir ab, den Entwurf weiterzuleiten?",
+            "en": "Am I advising you not to forward the draft?"
+          },
+          "a": true
+        }
+      ],
+      "nudge": {
+        "de": "Rätst du nur, und folgt nach dem Modalverb ein to oder gleich die Grundform?",
+        "en": "Are you only advising, and does a to follow the modal or the bare verb?"
+      }
+    },
+    {
+      "id": "ma.had-better",
+      "name": {
+        "de": "had better · Rat mit Folge",
+        "en": "had better · advice with a consequence"
+      },
+      "form": {
+        "de": "had better (not) + Grundform ohne to",
+        "en": "had better (not) + base form, no to"
+      },
+      "use": {
+        "de": "Warnt: Sonst droht eine Folge. Es geht um jetzt oder die nahe Zukunft, nicht um die Vergangenheit. Verneint heißt es had better not.",
+        "en": "Warns that a consequence follows otherwise. It points to now or the near future, not the past. The negative is had better not."
+      },
+      "signals": [
+        "had better",
+        "'d better",
+        "had better not",
+        "or else",
+        "before it's too late"
+      ],
+      "ex": [
+        {
+          "en": "We'd better confirm the room today, or it'll be gone.",
+          "de": "Wir sollten den Raum heute besser bestätigen, sonst ist er weg.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "I had better send the report now; the client expects it by noon.",
+          "de": "Ich schicke den Bericht besser jetzt; der Kunde erwartet ihn bis mittags.",
+          "ctx": "mail"
+        },
+        {
+          "en": "You'd better not miss the deadline again.",
+          "de": "Du solltest die Frist besser nicht noch einmal verpassen.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "You had better don't miss the registration deadline.",
+        "good": "You had better not miss the registration deadline.",
+        "cause": {
+          "de": "Kein Übersetzungsfehler. Bei den meisten Verben verneint man mit don't. Hier steht nur not, direkt hinter better.",
+          "en": "Not a translation error. Most verbs take don't in the negative. Here only not follows, right after better."
+        }
+      },
+      "contrast": {
+        "with": "ma.polite",
+        "a": "You had better ask Dana.",
+        "b": "Perhaps you could ask Dana.",
+        "diff": {
+          "de": "had better droht mit einer Folge. Perhaps you could lässt dem anderen die Wahl.",
+          "en": "had better hints at a consequence. Perhaps you could leaves the other person a choice."
+        }
+      },
+      "ccq": [
+        {
+          "s": "You'd better back up the files.",
+          "q": {
+            "de": "Droht eine unangenehme Folge, wenn du es nicht tust?",
+            "en": "Is there an unpleasant consequence if you don't?"
+          },
+          "a": true
+        },
+        {
+          "s": "You'd better not forward that email.",
+          "q": {
+            "de": "Soll ich die Mail weiterleiten?",
+            "en": "Should I forward the email?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Droht eine Folge, und wo steht die Verneinung: vor oder nach better?",
+        "en": "Does a consequence loom, and where does the negation go: before or after better?"
+      }
+    },
+    {
+      "id": "ma.polite",
+      "name": {
+        "de": "could · höflicher Vorschlag",
+        "en": "could · polite suggestion"
+      },
+      "form": {
+        "de": "Perhaps you could + Grundform · Why don't you + Grundform · If I were you, I'd + Grundform",
+        "en": "Perhaps you could + base form · Why don't you + base form · If I were you, I'd + base form"
+      },
+      "use": {
+        "de": "Macht einen Vorschlag und lässt dem anderen die Wahl. Im Beruf, besonders gegenüber Vorgesetzten, klingt das höflicher als should.",
+        "en": "Makes a suggestion and leaves the choice to the other person. At work, especially with senior colleagues, it sounds more polite than should."
+      },
+      "signals": [
+        "perhaps you could",
+        "maybe you could",
+        "why don't you",
+        "if I were you"
+      ],
+      "ex": [
+        {
+          "en": "Perhaps you could share the numbers before Friday.",
+          "de": "Vielleicht könntest du die Zahlen vor Freitag teilen.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "If I were you, I'd confirm the details in writing.",
+          "de": "An deiner Stelle würde ich die Details schriftlich bestätigen.",
+          "ctx": "mail"
+        },
+        {
+          "en": "Why don't you ask Lena for a short extension?",
+          "de": "Warum fragst du Lena nicht nach einer kurzen Fristverlängerung?",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "Why you don't ask Lena for a short extension?",
+        "good": "Why don't you ask Lena for a short extension?",
+        "cause": {
+          "de": "Kein Übersetzungsfehler. Der Vorschlag ist eine Frage und braucht do vor dem Subjekt: Why don't you …?",
+          "en": "Not a translation error. The suggestion is a question and needs do before the subject: Why don't you …?"
+        }
+      },
+      "contrast": {
+        "with": "ma.should",
+        "a": "Perhaps you could ask Dana.",
+        "b": "You should ask Dana.",
+        "diff": {
+          "de": "could ist eine Idee, die Wahl bleibt offen. should ist eine klare Empfehlung.",
+          "en": "could is an idea and the choice stays open. should is a clear recommendation."
+        }
+      },
+      "ccq": [
+        {
+          "s": "Perhaps you could send a short summary.",
+          "q": {
+            "de": "Lässt der Sprecher dir die Wahl?",
+            "en": "Does the speaker leave the choice to you?"
+          },
+          "a": true
+        },
+        {
+          "s": "Why don't you ask Lena?",
+          "q": {
+            "de": "Fragt der Sprecher nach dem Grund?",
+            "en": "Is the speaker asking for a reason?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Wie stark soll der Rat wirken, und wie viel Spielraum soll der andere behalten?",
+        "en": "How strong should the advice feel, and how much room should the other person keep?"
+      }
+    },
+    {
+      "id": "ma.dont-have-to",
+      "name": {
+        "de": "don't have to · nicht nötig",
+        "en": "don't have to · not necessary"
+      },
+      "form": {
+        "de": "don't have to / don't need to + Grundform · must not = verboten",
+        "en": "don't have to / don't need to + base form · must not = forbidden"
+      },
+      "use": {
+        "de": "Sagt, dass etwas nicht nötig ist. Ein Verbot heißt must not oder can't. Das deutsche „du musst nicht“ ist also kein must not.",
+        "en": "Says something is not necessary. A prohibition is must not or can't. German “du musst nicht” is therefore not must not."
+      },
+      "signals": [
+        "don't have to",
+        "don't need to",
+        "needn't",
+        "must not",
+        "can't",
+        "optional"
+      ],
+      "ex": [
+        {
+          "en": "You don't have to attend the kickoff; it's optional.",
+          "de": "Du musst nicht am Kickoff teilnehmen; er ist freiwillig.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "You don't need to reply to this email.",
+          "de": "Du musst auf diese Mail nicht antworten.",
+          "ctx": "mail"
+        },
+        {
+          "en": "You must not share the access code with anyone.",
+          "de": "Du darfst den Zugangscode an niemanden weitergeben.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "You must not submit the form today; the deadline is Friday.",
+        "good": "You don't have to submit the form today; the deadline is Friday.",
+        "cause": {
+          "de": "Deutsch „du musst nicht“ heißt „nicht nötig“. Wörtlich übersetzt wird daraus must not, und das ist ein Verbot.",
+          "en": "German “du musst nicht” means “not necessary”. Translated word for word it becomes must not, which is a prohibition."
+        }
+      },
+      "contrast": {
+        "with": "ma.should",
+        "a": "You don't have to sign today.",
+        "b": "You shouldn't sign today.",
+        "diff": {
+          "de": "don't have to heißt: Du kannst es lassen. shouldn't ist ein Rat, es nicht zu tun.",
+          "en": "don't have to means you may skip it. shouldn't advises against doing it."
+        }
+      },
+      "ccq": [
+        {
+          "s": "You must not share the password.",
+          "q": {
+            "de": "Ist es verboten, das Passwort weiterzugeben?",
+            "en": "Is it forbidden to share the password?"
+          },
+          "a": true
+        },
+        {
+          "s": "You don't need to bring a laptop.",
+          "q": {
+            "de": "Ist es verboten, einen Laptop mitzubringen?",
+            "en": "Is it forbidden to bring a laptop?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Ist es nur unnötig, oder wirklich verboten?",
+        "en": "Is it merely unnecessary, or actually forbidden?"
+      }
+    },
+    {
+      "id": "ma.should-have",
+      "name": {
+        "de": "should have · Rückblick",
+        "en": "should have · hindsight"
+      },
+      "form": {
+        "de": "should (not) have + Partizip",
+        "en": "should (not) have + past participle"
+      },
+      "use": {
+        "de": "Blickt zurück: Es wäre richtig gewesen, ist aber nicht passiert (should have). Mit should not have war es ein Fehler, es zu tun.",
+        "en": "Looks back: it would have been right but did not happen (should have). With should not have it was a mistake to do it."
+      },
+      "signals": [
+        "should have",
+        "shouldn't have",
+        "ought to have",
+        "in hindsight"
+      ],
+      "ex": [
+        {
+          "en": "We should have sent the invoice on Monday.",
+          "de": "Wir hätten die Rechnung am Montag schicken sollen.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "You should have told me about the delay.",
+          "de": "Du hättest mir von der Verzögerung erzählen sollen.",
+          "ctx": "talk"
+        },
+        {
+          "en": "I shouldn't have shared the draft so early.",
+          "de": "Ich hätte den Entwurf nicht so früh teilen sollen.",
+          "ctx": "mail"
+        }
+      ],
+      "trap": {
+        "bad": "We should had told the client earlier.",
+        "good": "We should have told the client earlier.",
+        "cause": {
+          "de": "Der Anklang von „hätten“ an had verleitet vermutlich zu should had. Nach should steht aber have, nicht had.",
+          "en": "The echo of German “hätten” in had probably invites should had. But should takes have, not had."
+        }
+      },
+      "contrast": {
+        "with": "ma.should",
+        "a": "You should call her.",
+        "b": "You should have called her.",
+        "diff": {
+          "de": "should + Grundform rät für jetzt. should have + Partizip blickt auf etwas zurück, das besser anders gelaufen wäre.",
+          "en": "should + base form advises for now. should have + participle looks back at something that should have gone differently."
+        }
+      },
+      "ccq": [
+        {
+          "s": "We should have sent the invoice on Monday.",
+          "q": {
+            "de": "Haben wir die Rechnung am Montag geschickt?",
+            "en": "Did we send the invoice on Monday?"
+          },
+          "a": false
+        },
+        {
+          "s": "You shouldn't have shared the draft.",
+          "q": {
+            "de": "Hast du den Entwurf weitergegeben?",
+            "en": "Did you share the draft?"
+          },
+          "a": true
+        }
+      ],
+      "nudge": {
+        "de": "Rätst du für jetzt oder blickst du zurück, und welche Form des Verbs folgt?",
+        "en": "Are you advising for now or looking back, and which verb form follows?"
+      }
+    }
+  ]
+}

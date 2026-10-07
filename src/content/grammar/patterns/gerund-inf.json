@@ -1,0 +1,439 @@
+{
+ "topic": "gerund-inf",
+ "canDo": {
+  "de": "Ich kann die richtige Verbform wählen: -ing nach enjoy, avoid und Präpositionen, to nach decide und hope, die Grundform nach make und let, und den Sinn von stop, remember und regret unterscheiden.",
+  "en": "I can choose the right verb form: -ing after enjoy, avoid and prepositions, to after decide and hope, the base form after make and let, and tell apart the meaning of stop, remember and regret."
+ },
+ "order": [
+  "gi.ing-verbs",
+  "gi.to-verbs",
+  "gi.prep-ing",
+  "gi.meaning",
+  "gi.bare-inf"
+ ],
+ "introPlan": [
+  [
+   "gi.ing-verbs",
+   "gi.to-verbs"
+  ],
+  [
+   "gi.prep-ing",
+   "gi.meaning"
+  ],
+  [
+   "gi.bare-inf"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Steht direkt vor der Lücke eine Präposition (auch look forward to)? Dann folgt -ing.",
+   "Ist es stop, remember, forget, regret oder try? Dann entscheidet der Sinn zwischen -ing und to.",
+   "Geht es um einen Plan oder Entschluss (decide, hope, manage) oder um ein Verb wie enjoy, avoid, suggest? Das erste nimmt to, das zweite -ing."
+  ],
+  "en": [
+   "Is there a preposition right before the gap (also look forward to)? Then -ing follows.",
+   "Is it stop, remember, forget, regret or try? Then the meaning decides between -ing and to.",
+   "Is it a plan or decision (decide, hope, manage) or a verb like enjoy, avoid, suggest? The first takes to, the second -ing."
+  ]
+ },
+ "patterns": [
+  {
+   "id": "gi.ing-verbs",
+   "name": {
+    "de": "enjoy, avoid … · Verb + -ing",
+    "en": "enjoy, avoid … · verb + -ing"
+   },
+   "form": {
+    "de": "Verb + -ing (kein to)",
+    "en": "verb + -ing (no to)"
+   },
+   "use": {
+    "de": "Nach Verben wie enjoy, avoid, consider, suggest, mind, finish und postpone folgt die -ing-Form, nicht to + Verb.",
+    "en": "After verbs like enjoy, avoid, consider, suggest, mind, finish and postpone, the -ing form follows, not to + verb."
+   },
+   "signals": [
+    "enjoy",
+    "avoid",
+    "consider",
+    "suggest",
+    "mind",
+    "finish",
+    "postpone",
+    "can't help"
+   ],
+   "ex": [
+    {
+     "en": "We're considering moving the launch to May.",
+     "de": "Wir überlegen, den Start auf Mai zu verschieben.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I'd recommend postponing the call until Friday.",
+     "de": "Ich würde empfehlen, den Anruf auf Freitag zu verschieben.",
+     "ctx": "mail"
+    },
+    {
+     "en": "I don't mind waiting a few more minutes.",
+     "de": "Es macht mir nichts aus, noch ein paar Minuten zu warten.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "We finished to review the contract at noon.",
+    "good": "We finished reviewing the contract at noon.",
+    "cause": {
+     "de": "Nach vielen deutschen Verben steht zu + Infinitiv („beschließen, den Vertrag zu prüfen“); das zu wird oft als to übernommen.",
+     "en": "After many German verbs comes zu + infinitive (“beschließen, den Vertrag zu prüfen”); the zu is often carried over as to."
+    }
+   },
+   "contrast": {
+    "with": "gi.to-verbs",
+    "a": "We avoided telling the client.",
+    "b": "We decided to tell the client.",
+    "diff": {
+     "de": "Welche Form folgt, hängt vom Verb davor ab: avoid + -ing, decide + to + Verb.",
+     "en": "The verb before decides the form: avoid + -ing, decide + to + verb."
+    }
+   },
+   "ccq": [
+    {
+     "s": "I don't mind working late.",
+     "q": {
+      "de": "Ist es für mich in Ordnung, spät zu arbeiten?",
+      "en": "Is it fine with me to work late?"
+     },
+     "a": true
+    },
+    {
+     "s": "We postponed signing the contract.",
+     "q": {
+      "de": "Ist der Vertrag schon unterschrieben?",
+      "en": "Has the contract been signed yet?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Zu welcher Verbgruppe gehört das Verb vor der Lücke?",
+    "en": "Which verb group does the verb before the gap belong to?"
+   }
+  },
+  {
+   "id": "gi.to-verbs",
+   "name": {
+    "de": "decide, hope … · Verb + to",
+    "en": "decide, hope … · verb + to"
+   },
+   "form": {
+    "de": "Verb + to + Grundform",
+    "en": "verb + to + base form"
+   },
+   "use": {
+    "de": "Verben des Planens, Wollens und Schaffens nehmen to + Grundform: decide, hope, plan, manage, refuse, afford, pretend. Verneint: not to + Verb.",
+    "en": "Verbs of planning, wanting and managing take to + base form: decide, hope, plan, manage, refuse, afford, pretend. Negative: not to + verb."
+   },
+   "signals": [
+    "decide",
+    "hope",
+    "plan",
+    "manage",
+    "refuse",
+    "afford",
+    "pretend",
+    "agree"
+   ],
+   "ex": [
+    {
+     "en": "We've agreed to review the budget in June.",
+     "de": "Wir haben vereinbart, das Budget im Juni zu prüfen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I hope to send you the draft by Friday.",
+     "de": "Ich hoffe, dir den Entwurf bis Freitag zu schicken.",
+     "ctx": "mail"
+    },
+    {
+     "en": "She managed to get the last seat on the train.",
+     "de": "Sie hat es geschafft, den letzten Sitzplatz im Zug zu bekommen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "We decided hiring a second analyst.",
+    "good": "We decided to hire a second analyst.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler, sondern der umgekehrte Reflex: Wer die -ing-Liste gelernt hat, setzt -ing auch nach decide.",
+     "en": "Not a translation error but the reverse reflex: after learning the -ing list, people add -ing after decide too."
+    }
+   },
+   "contrast": {
+    "with": "gi.ing-verbs",
+    "a": "We hope to finish by noon.",
+    "b": "We finished working by noon.",
+    "diff": {
+     "de": "hope richtet sich auf etwas Künftiges (to + Verb). finish meint etwas, das erledigt wird (-ing).",
+     "en": "hope points to something ahead (to + verb). finish means something being completed (-ing)."
+    }
+   },
+   "ccq": [
+    {
+     "s": "She managed to reach the client.",
+     "q": {
+      "de": "Hat sie den Kunden erreicht?",
+      "en": "Did she reach the client?"
+     },
+     "a": true
+    },
+    {
+     "s": "He pretended to know the answer.",
+     "q": {
+      "de": "Kannte er die Antwort wirklich?",
+      "en": "Did he really know the answer?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Drückt das Verb einen Plan, einen Wunsch oder einen Entschluss aus?",
+    "en": "Does the verb express a plan, a wish or a decision?"
+   }
+  },
+  {
+   "id": "gi.prep-ing",
+   "name": {
+    "de": "Präposition + -ing · look forward to",
+    "en": "preposition + -ing · look forward to"
+   },
+   "form": {
+    "de": "Präposition + -ing",
+    "en": "preposition + -ing"
+   },
+   "use": {
+    "de": "Nach einer Präposition steht die -ing-Form, auch wenn sie wie to aussieht: look forward to, succeed in, instead of. Faustregel: Passt ein Nomen dahinter, steht -ing.",
+    "en": "After a preposition the -ing form follows, even when it looks like to: look forward to, succeed in, instead of. Rule of thumb: if a noun fits, use -ing."
+   },
+   "signals": [
+    "look forward to",
+    "succeed in",
+    "insist on",
+    "instead of",
+    "interested in",
+    "without",
+    "responsible for",
+    "worried about"
+   ],
+   "ex": [
+    {
+     "en": "We're responsible for keeping the data secure.",
+     "de": "Wir sind dafür verantwortlich, die Daten sicher zu halten.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Thank you for sending the files so quickly.",
+     "de": "Danke, dass du die Dateien so schnell geschickt hast.",
+     "ctx": "mail"
+    },
+    {
+     "en": "He left without saying goodbye.",
+     "de": "Er ging, ohne sich zu verabschieden.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "We look forward to meet you in Berlin.",
+    "good": "We look forward to meeting you in Berlin.",
+    "cause": {
+     "de": "Im Deutschen folgt „freuen uns darauf, Sie zu treffen“. Das englische to sieht aus wie zu und wird für den Infinitiv gehalten.",
+     "en": "German says “freuen uns darauf, Sie zu treffen”. English to looks like zu and is mistaken for the infinitive marker."
+    }
+   },
+   "contrast": {
+    "with": "gi.to-verbs",
+    "a": "We're interested in joining the pilot.",
+    "b": "We hope to join the pilot.",
+    "diff": {
+     "de": "Nach der Präposition in steht -ing. Nach hope folgt to + Verb.",
+     "en": "After the preposition in comes -ing. After hope comes to + verb."
+    }
+   },
+   "ccq": [
+    {
+     "s": "She left without saying goodbye.",
+     "q": {
+      "de": "Hat sie sich verabschiedet?",
+      "en": "Did she say goodbye?"
+     },
+     "a": false
+    },
+    {
+     "s": "Thanks for helping me with the slides.",
+     "q": {
+      "de": "Hat er mir mit den Folien geholfen?",
+      "en": "Did he help me with the slides?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Könnte hinter dem Wort vor der Lücke auch ein Nomen stehen?",
+    "en": "Could a noun also follow the word before the gap?"
+   }
+  },
+  {
+   "id": "gi.meaning",
+   "name": {
+    "de": "stop, remember … · Sinn ändert sich",
+    "en": "stop, remember … · meaning changes"
+   },
+   "form": {
+    "de": "stop / remember / forget / regret / try + -ing oder to",
+    "en": "stop / remember / forget / regret / try + -ing or to"
+   },
+   "use": {
+    "de": "Bei remember, forget und regret legt die Form den Sinn fest: -ing meint die Handlung selbst (schon geschehen), to das noch Offene oder die Pflicht.",
+    "en": "With remember, forget and regret the form sets the meaning: -ing names the action itself (already done), to names what is still open or a duty."
+   },
+   "signals": [
+    "stop",
+    "remember",
+    "forget",
+    "regret",
+    "try",
+    "go on"
+   ],
+   "ex": [
+    {
+     "en": "Please remember to attach the agenda.",
+     "de": "Bitte denk daran, die Tagesordnung anzuhängen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Try restarting the app before you call support.",
+     "de": "Starte die App neu, bevor du den Support anrufst.",
+     "ctx": "mail"
+    },
+    {
+     "en": "I'll never forget meeting her for the first time.",
+     "de": "Ich vergesse nie, wie ich sie zum ersten Mal getroffen habe.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "I remember to lock the door last night.",
+    "good": "I remember locking the door last night.",
+    "cause": {
+     "de": "Kein reiner Übersetzungsfehler: Deutsch trennt „daran denken“ und „sich erinnern“, Englisch hat ein Verb. Die Form entscheidet.",
+     "en": "Not a pure translation error: German separates “daran denken” and “sich erinnern”, English has one verb. The form decides."
+    }
+   },
+   "contrast": {
+    "with": "gi.ing-verbs",
+    "a": "We stopped talking to the supplier.",
+    "b": "We stopped to talk to the supplier.",
+    "diff": {
+     "de": "-ing: Das Gespräch hört auf. to: Wir halten an, um zu sprechen.",
+     "en": "-ing: the conversation ends. to: we pause in order to talk."
+    }
+   },
+   "ccq": [
+    {
+     "s": "We stopped meeting on Fridays.",
+     "q": {
+      "de": "Treffen wir uns freitags noch?",
+      "en": "Do we still meet on Fridays?"
+     },
+     "a": false
+    },
+    {
+     "s": "I remember calling the client.",
+     "q": {
+      "de": "Habe ich den Kunden angerufen?",
+      "en": "Did I call the client?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Geht es um etwas, das schon geschehen ist, oder um etwas, das noch zu tun ist?",
+    "en": "Is it about something that already happened or something still to do?"
+   }
+  },
+  {
+   "id": "gi.bare-inf",
+   "name": {
+    "de": "make, let · Grundform ohne to",
+    "en": "make, let · base form without to"
+   },
+   "form": {
+    "de": "make / let + Person + Grundform",
+    "en": "make / let + person + base form"
+   },
+   "use": {
+    "de": "Nach make und let steht die Grundform ohne to: made me write, let us know. Nur im Passiv kommt to zurück: I was made to write it.",
+    "en": "After make and let the base form follows without to: made me write, let us know. Only in the passive does to return: I was made to write it."
+   },
+   "signals": [
+    "make",
+    "made",
+    "let"
+   ],
+   "ex": [
+    {
+     "en": "The new tool lets us track every request.",
+     "de": "Das neue Tool ermöglicht es uns, jede Anfrage zu verfolgen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Please let me know if the date works for you.",
+     "de": "Sag mir bitte Bescheid, ob der Termin für dich passt.",
+     "ctx": "mail"
+    },
+    {
+     "en": "The delay made everyone miss the connection.",
+     "de": "Die Verspätung führte dazu, dass alle den Anschluss verpassten.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The client made us to rewrite the proposal.",
+    "good": "The client made us rewrite the proposal.",
+    "cause": {
+     "de": "Das deutsche „uns zwingen, … umzuschreiben“ steht mit zu. Im Englischen entfällt to nach make im Aktiv.",
+     "en": "German “uns zwingen, … umzuschreiben” takes zu. In English to drops after make in the active."
+    }
+   },
+   "contrast": {
+    "with": "gi.to-verbs",
+    "a": "She made us rewrite the report.",
+    "b": "She told us to rewrite the report.",
+    "diff": {
+     "de": "make + Person + Grundform (ohne to). Nach tell folgt Person + to + Verb.",
+     "en": "make + person + base form (no to). After tell comes person + to + verb."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The manager let us leave early.",
+     "q": {
+      "de": "Durften wir früher gehen?",
+      "en": "Were we allowed to leave early?"
+     },
+     "a": true
+    },
+    {
+     "s": "The audit made them change the process.",
+     "q": {
+      "de": "Haben sie den Prozess freiwillig geändert?",
+      "en": "Did they change the process voluntarily?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Welche Form hat das zweite Verb, wenn jemand zu etwas gezwungen wird oder etwas erlaubt bekommt?",
+    "en": "Which form does the second verb take when someone is forced or allowed to do something?"
+   }
+  }
+ ]
+}

@@ -1,0 +1,819 @@
+[
+ {
+  "id": "cp-hav-k1",
+  "type": "kwt",
+  "pat": "cp.having",
+  "from": "After I had read the contract, I called the supplier.",
+  "key": "HAVING",
+  "frame": "___ the contract, I called the supplier.",
+  "answer": "Having read",
+  "accepted": [
+   "Having just read",
+   "Having already read",
+   "Having now read",
+   "After having read"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Having read. Erst gelesen, dann angerufen: gleiches Subjekt.",
+    "en": "Right: Having read. First read, then called: same subject."
+   },
+   "wrong": [
+    {
+     "not": [
+      "having"
+     ],
+     "de": "Das Schlüsselwort Having muss unverändert in der Lücke stehen.",
+     "en": "The key word Having must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "having",
+      "reading"
+     ],
+     "de": "Nach Having folgt die 3. Form: read, nicht reading.",
+     "en": "After Having comes the past participle: read, not reading."
+    },
+    {
+     "if": [
+      "having",
+      "been"
+     ],
+     "de": "Having been read ist passiv. Du liest den Vertrag selbst: Having read.",
+     "en": "Having been read is passive. You read the contract yourself: Having read."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-hav-k2",
+  "type": "kwt",
+  "pat": "cp.having",
+  "from": "The client released the funds after he had approved the final report.",
+  "key": "HAVING",
+  "frame": "The client released the funds, ___ the final report.",
+  "answer": "having approved",
+  "accepted": [
+   "having already approved",
+   "having just approved",
+   "after having approved"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: having approved. Erst genehmigt, dann freigegeben.",
+    "en": "Right: having approved. First approved, then released."
+   },
+   "wrong": [
+    {
+     "not": [
+      "having"
+     ],
+     "de": "Das Schlüsselwort having muss unverändert in der Lücke stehen.",
+     "en": "The key word having must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "having",
+      "approving"
+     ],
+     "de": "Nach having folgt die 3. Form: approved, nicht approving.",
+     "en": "After having comes the past participle: approved, not approving."
+    },
+    {
+     "if": [
+      "having",
+      "been"
+     ],
+     "de": "Having been approved ist passiv. Der Kunde genehmigt selbst: having approved.",
+     "en": "Having been approved is passive. The client approves it himself: having approved."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-hav-f1",
+  "type": "find",
+  "pat": "cp.having",
+  "prompt": "Having wrote the proposal, she sent it to the board.",
+  "err": [
+   1,
+   1
+  ],
+  "answer": "written",
+  "fixed": "Having written the proposal, she sent it to the board.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach Having steht die 3. Form von write: written, nicht wrote.",
+    "en": "The error: after Having comes the past participle of write: written, not wrote."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach Having passt wrote nicht.",
+     "en": "There is an error: wrote does not fit after Having."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „wrote“: Nach Having braucht es die 3. Form.",
+     "en": "The error is at “wrote”: after Having you need the past participle."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-hav-f2",
+  "type": "find",
+  "pat": "cp.having",
+  "prompt": "Having took the minutes, Lena shared them with the group.",
+  "err": [
+   1,
+   1
+  ],
+  "answer": "taken",
+  "fixed": "Having taken the minutes, Lena shared them with the group.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach Having steht die 3. Form von take: taken, nicht took.",
+    "en": "The error: after Having comes the past participle of take: taken, not took."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach Having passt took nicht.",
+     "en": "There is an error: took does not fit after Having."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „took“: Nach Having braucht es die 3. Form.",
+     "en": "The error is at “took”: after Having you need the past participle."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-hav-f3",
+  "type": "find",
+  "pat": "cp.having",
+  "prompt": "Having sent the quote on Monday, we are still waiting for an answer.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: Having sent zeigt: Das Senden war zuerst fertig. Danach wartet man.",
+    "en": "No error: Having sent shows the sending came first. Waiting follows."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Having + 3. Form (sent) passt, das Subjekt we gehört dazu.",
+     "en": "No error: Having + past participle (sent) fits, and the subject we belongs to it."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-hav-m1",
+  "type": "meaning",
+  "pat": "cp.having",
+  "a": "Having left the office, Tom realized he had forgotten his badge.",
+  "b": "Leaving the office, Tom realized he had forgotten his badge.",
+  "q": {
+   "de": "In welchem Satz hatte Tom das Büro schon verlassen, als er es merkte?",
+   "en": "In which sentence had Tom already left the office when he noticed?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Having left heißt: Tom ist schon draußen, dann merkt er es.",
+    "en": "Right: sentence a. Having left = already outside, noticed afterwards."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b merkt Tom es beim Hinausgehen: Leaving läuft nur gleichzeitig.",
+     "en": "In b Tom notices on his way out: Leaving happens at the same time."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Having left ist abgeschlossen, Leaving läuft noch.",
+     "en": "Not the same: Having left is finished, Leaving is still going on."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-ing-k1",
+  "type": "kwt",
+  "pat": "cp.ing",
+  "from": "Because the team works with live data, it spots errors faster.",
+  "key": "WORKING",
+  "frame": "___ live data, the team spots errors faster.",
+  "answer": "Working with",
+  "accepted": [
+   "By working with"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Working with. Das Mittel, gleichzeitig: -ing statt Because.",
+    "en": "Right: Working with. The means, at the same time: -ing instead of Because."
+   },
+   "wrong": [
+    {
+     "not": [
+      "working"
+     ],
+     "de": "Das Schlüsselwort Working muss unverändert in der Lücke stehen.",
+     "en": "The key word Working must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "because"
+     ],
+     "de": "Because gehört nicht in die Lücke: Das Partizip ersetzt den ganzen Nebensatz.",
+     "en": "Because does not belong in the gap: the participle replaces the whole clause."
+    },
+    {
+     "if": [
+      "being"
+     ],
+     "de": "Being working ist keine Form. Das Partizip ist einfach Working.",
+     "en": "Being working is not a form. The participle is simply Working."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-ing-k2",
+  "type": "kwt",
+  "pat": "cp.ing",
+  "from": "As she walked to the station, Anna called her manager.",
+  "key": "WALKING",
+  "frame": "___ the station, Anna called her manager.",
+  "answer": "Walking to",
+  "accepted": [
+   "While walking to",
+   "When walking to"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Walking to. Gleichzeitig: Anna ging und rief dabei an.",
+    "en": "Right: Walking to. At the same time: Anna walked and called while doing so."
+   },
+   "wrong": [
+    {
+     "not": [
+      "walking"
+     ],
+     "de": "Das Schlüsselwort Walking muss unverändert in der Lücke stehen.",
+     "en": "The key word Walking must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "she"
+     ],
+     "de": "As she gehört nicht in die Lücke: Das Partizip ersetzt den Nebensatz.",
+     "en": "As she does not belong in the gap: the participle replaces the clause."
+    },
+    {
+     "if": [
+      "having"
+     ],
+     "de": "Having walked hieße: erst gegangen. Hier ist beides gleichzeitig: Walking to.",
+     "en": "Having walked means: walked first. Here both happen together: Walking to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-ing-f1",
+  "type": "find",
+  "pat": "cp.ing",
+  "prompt": "Used the new scanner, the clerk processed every invoice in minutes.",
+  "err": [
+   0,
+   0
+  ],
+  "answer": "Using",
+  "fixed": "Using the new scanner, the clerk processed every invoice in minutes.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Der Angestellte nutzt den Scanner selbst, also -ing: Using, nicht Used.",
+    "en": "The error: the clerk uses the scanner himself, so -ing: Using, not Used."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Used passt nicht zum aktiven Sinn.",
+     "en": "There is an error: Used does not fit the active meaning."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „Used“: Der Sinn ist aktiv, also -ing.",
+     "en": "The error is at “Used”: the meaning is active, so -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-ing-f2",
+  "type": "find",
+  "pat": "cp.ing",
+  "prompt": "Open the file, the analyst found three formatting errors.",
+  "err": [
+   0,
+   0
+  ],
+  "answer": "Opening",
+  "fixed": "Opening the file, the analyst found three formatting errors.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Am Satzanfang braucht das Partizip -ing: Opening, nicht Open.",
+    "en": "The error: at the start the participle needs -ing: Opening, not Open."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Open wirkt wie ein Befehl, nicht wie ein Partizip.",
+     "en": "There is an error: Open reads like a command, not like a participle."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „Open“: Ohne -ing ist es kein Partizip.",
+     "en": "The error is at “Open”: without -ing it is not a participle."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-ing-m1",
+  "type": "meaning",
+  "pat": "cp.ing",
+  "a": "Welcoming the guests, Sara handed out badges.",
+  "b": "Welcomed by Sara, the guests received their badges.",
+  "q": {
+   "de": "Welcher Satz sagt: Die Gäste wurden von Sara begrüßt?",
+   "en": "Which sentence says the guests were welcomed by Sara?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. Welcomed by = Die Gäste werden begrüßt.",
+    "en": "Right: sentence b. Welcomed by = the guests receive the welcome."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a begrüßt Sara selbst: -ing heißt, das Subjekt handelt.",
+     "en": "In a Sara welcomes them herself: -ing means the subject acts."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: -ing = Subjekt handelt, 3. Form = Subjekt erlebt es.",
+     "en": "Not the same: -ing = the subject acts, past participle = the subject receives it."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-pp-k1",
+  "type": "kwt",
+  "pat": "cp.pp",
+  "from": "The product was designed for small teams, so it is easy to set up.",
+  "key": "DESIGNED",
+  "frame": "___ small teams, the product is easy to set up.",
+  "answer": "Designed for",
+  "accepted": [
+   "Designed specifically for",
+   "Designed especially for",
+   "Designed primarily for"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Designed for. Das Produkt wird entworfen: passiv, nur die 3. Form.",
+    "en": "Right: Designed for. The product is designed: passive, just the past participle."
+   },
+   "wrong": [
+    {
+     "not": [
+      "designed"
+     ],
+     "de": "Das Schlüsselwort Designed muss unverändert in der Lücke stehen.",
+     "en": "The key word Designed must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "designing"
+     ],
+     "de": "Designing hieße: Das Produkt entwirft selbst. Es wird entworfen: Designed.",
+     "en": "Designing would mean the product designs. It is designed: Designed."
+    },
+    {
+     "if": [
+      "was"
+     ],
+     "de": "Was designed ist ein finiter Satzteil. Das Partizip steht allein: Designed for.",
+     "en": "Was designed is a finite verb phrase. The participle stands alone: Designed for."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-pp-k2",
+  "type": "kwt",
+  "pat": "cp.pp",
+  "from": "As the offer was based on old figures, it was rejected.",
+  "key": "BASED",
+  "frame": "___ old figures, the offer was rejected.",
+  "answer": "Based on",
+  "accepted": [
+   "Based upon",
+   "Being based on",
+   "Based solely on",
+   "Based only on"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Based on. Das Angebot beruht auf alten Zahlen: passiv, nur die 3. Form.",
+    "en": "Right: Based on. The offer rests on old figures: passive, just the past participle."
+   },
+   "wrong": [
+    {
+     "not": [
+      "based"
+     ],
+     "de": "Das Schlüsselwort Based muss unverändert in der Lücke stehen.",
+     "en": "The key word Based must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "basing"
+     ],
+     "de": "Basing hieße: Das Angebot gründet selbst etwas. Es beruht auf Zahlen: Based.",
+     "en": "Basing would mean the offer bases something. It rests on figures: Based."
+    },
+    {
+     "if": [
+      "as"
+     ],
+     "de": "As gehört nicht in die Lücke: Das Partizip ersetzt den ganzen Nebensatz.",
+     "en": "As does not belong in the gap: the participle replaces the whole clause."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-pp-f1",
+  "type": "find",
+  "pat": "cp.pp",
+  "prompt": "Writing in plain English, the manual is easy to follow.",
+  "err": [
+   0,
+   0
+  ],
+  "answer": "Written",
+  "fixed": "Written in plain English, the manual is easy to follow.",
+  "accepted": [
+   "Being written"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Das Handbuch wird geschrieben, es schreibt nicht: Written, nicht Writing.",
+    "en": "The error: the manual is written, it does not write: Written, not Writing."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Writing passt nicht zum passiven Sinn.",
+     "en": "There is an error: Writing does not fit the passive meaning."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „Writing“: Das Handbuch schreibt nicht selbst.",
+     "en": "The error is at “Writing”: the manual does not write itself."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-pp-f2",
+  "type": "find",
+  "pat": "cp.pp",
+  "prompt": "Delaying by the storm, the flight arrived two hours late.",
+  "err": [
+   0,
+   1
+  ],
+  "answer": "Delayed by",
+  "fixed": "Delayed by the storm, the flight arrived two hours late.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Der Flug wird verspätet, er verspätet nichts: Delayed by, nicht Delaying by.",
+    "en": "The error: the flight is delayed, it delays nothing: Delayed by, not Delaying by."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Delaying by passt nicht zum passiven Sinn.",
+     "en": "There is an error: Delaying by does not fit the passive meaning."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „Delaying by“: Der Flug erlebt die Verspätung.",
+     "en": "The error is at “Delaying by”: the flight receives the delay."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-pp-f3",
+  "type": "find",
+  "pat": "cp.pp",
+  "prompt": "Located in the city center, the office is close to the station.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: Located in = Das Büro liegt dort. Passiver Sinn, nur die 3. Form.",
+    "en": "No error: Located in = the office lies there. Passive meaning, just the past participle."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Located passt, denn das Büro wird irgendwo platziert, es platziert nichts.",
+     "en": "No error: Located fits, because the office is placed somewhere and places nothing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-pp-m1",
+  "type": "meaning",
+  "pat": "cp.pp",
+  "a": "Called by the client, Mia left the meeting early.",
+  "b": "Calling the client, Mia left the meeting early.",
+  "q": {
+   "de": "In welchem Satz hat der Kunde angerufen?",
+   "en": "In which sentence did the client make the call?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Called by = Der Kunde ruft Mia an.",
+    "en": "Right: sentence a. Called by = the client calls Mia."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b ruft Mia selbst an: -ing heißt, das Subjekt handelt.",
+     "en": "In b Mia makes the call herself: -ing means the subject acts."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: 3. Form = Subjekt erlebt es, -ing = Subjekt tut es.",
+     "en": "Not the same: past participle = the subject receives it, -ing = the subject does it."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-sub-k1",
+  "type": "kwt",
+  "pat": "cp.subject",
+  "from": "As I was waiting for my flight, I met an old classmate.",
+  "key": "WAITING",
+  "frame": "___ my flight, I met an old classmate.",
+  "answer": "Waiting for",
+  "accepted": [
+   "While waiting for",
+   "When waiting for"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Waiting for. Ich warte und ich treffe: dasselbe Subjekt.",
+    "en": "Right: Waiting for. I wait and I meet: the same subject."
+   },
+   "wrong": [
+    {
+     "not": [
+      "waiting"
+     ],
+     "de": "Das Schlüsselwort Waiting muss unverändert in der Lücke stehen.",
+     "en": "The key word Waiting must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "was"
+     ],
+     "de": "As I was gehört nicht in die Lücke: Das Partizip ersetzt den Nebensatz.",
+     "en": "As I was does not belong in the gap: the participle replaces the clause."
+    },
+    {
+     "if": [
+      "waited"
+     ],
+     "de": "Waited for ist die einfache Vergangenheit und ersetzt keinen Nebensatz.",
+     "en": "Waited for is the simple past and does not replace a clause."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-sub-k2",
+  "type": "kwt",
+  "pat": "cp.subject",
+  "from": "Because I had checked the figures twice, I was sure of the result.",
+  "key": "HAVING",
+  "frame": "___ the figures twice, I was sure of the result.",
+  "answer": "Having checked",
+  "accepted": [
+   "After having checked"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Having checked. Ich prüfe und ich bin sicher: dasselbe Subjekt.",
+    "en": "Right: Having checked. I check and I am sure: the same subject."
+   },
+   "wrong": [
+    {
+     "not": [
+      "having"
+     ],
+     "de": "Das Schlüsselwort Having muss unverändert in der Lücke stehen.",
+     "en": "The key word Having must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "having",
+      "checking"
+     ],
+     "de": "Nach Having folgt die 3. Form: checked, nicht checking.",
+     "en": "After Having comes the past participle: checked, not checking."
+    },
+    {
+     "if": [
+      "having",
+      "been"
+     ],
+     "de": "Having been checked ist passiv. Hier prüfst du selbst: Having checked.",
+     "en": "Having been checked is passive. Here you check yourself: Having checked."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-sub-f1",
+  "type": "find",
+  "pat": "cp.subject",
+  "prompt": "Walking to work, my phone rang twice.",
+  "err": [
+   0,
+   2
+  ],
+  "answer": "While I was walking to work,",
+  "fixed": "While I was walking to work, my phone rang twice.",
+  "accepted": [
+   "As I walked to work,",
+   "When I was walking to work,",
+   "When I walked to work,",
+   "While I walked to work,",
+   "As I was walking to work,"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Dein Telefon geht nicht zur Arbeit. Das Partizip braucht ein passendes Subjekt.",
+    "en": "The error: your phone does not walk to work. The participle needs a matching subject."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Walking gehört nicht zu my phone.",
+     "en": "There is an error: Walking does not belong to my phone."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt am Anfang: Wer geht zur Arbeit? Nicht das Telefon.",
+     "en": "The error is at the start: who walks to work? Not the phone."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-sub-f2",
+  "type": "find",
+  "pat": "cp.subject",
+  "prompt": "Reading the report, the figures seemed wrong to me.",
+  "err": [
+   0,
+   2
+  ],
+  "answer": "When I read the report,",
+  "fixed": "When I read the report, the figures seemed wrong to me.",
+  "accepted": [
+   "As I read the report,",
+   "While I was reading the report,"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Die Zahlen lesen den Bericht nicht. Das Partizip braucht ein passendes Subjekt.",
+    "en": "The error: the figures do not read the report. The participle needs a matching subject."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Reading gehört nicht zu the figures.",
+     "en": "There is an error: Reading does not belong to the figures."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt am Anfang: Wer liest den Bericht? Nicht die Zahlen.",
+     "en": "The error is at the start: who reads the report? Not the figures."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-sub-f3",
+  "type": "find",
+  "pat": "cp.subject",
+  "prompt": "Reading the minutes, I noticed two missing names.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: Ich lese und ich bemerke: Das Partizip passt zum Subjekt I.",
+    "en": "No error: I read and I notice: the participle fits the subject I."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Reading gehört zu I, dem Subjekt nach dem Komma.",
+     "en": "No error: Reading belongs to I, the subject after the comma."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cp-sub-m1",
+  "type": "meaning",
+  "pat": "cp.subject",
+  "a": "Having read the report, the manager spoke to the client.",
+  "b": "The manager spoke to the client who had read the report.",
+  "q": {
+   "de": "In welchem Satz hat der Kunde den Bericht gelesen?",
+   "en": "In which sentence did the client read the report?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. Der Relativsatz gehört zum Kunden, das Partizip zum Manager.",
+    "en": "Right: sentence b. The relative clause belongs to the client, the participle to the manager."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a gehört Having read zum Manager (Subjekt): Er hat den Bericht gelesen.",
+     "en": "In a Having read belongs to the manager (the subject): he did the reading."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Das Partizip bezieht sich aufs Subjekt, der Relativsatz auf den Kunden.",
+     "en": "Not the same: the participle refers to the subject, the relative clause to the client."
+    }
+   ]
+  }
+ }
+]

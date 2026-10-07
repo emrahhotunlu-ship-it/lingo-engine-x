@@ -1,0 +1,335 @@
+{
+  "topic": "c1-participle",
+  "canDo": {
+    "de": "Ich kann Sätze mit Partizipien verkürzen: Having + 3. Form für Vorheriges, -ing für Gleichzeitiges, die 3. Form für Passives, und das Subjekt passt dazu.",
+    "en": "I can shorten sentences with participles: Having + past participle for what came before, -ing for what happens at the same time, the past participle for passive meaning, and the subject fits."
+  },
+  "order": [
+    "cp.having",
+    "cp.ing",
+    "cp.pp",
+    "cp.subject"
+  ],
+  "introPlan": [
+    [
+      "cp.having",
+      "cp.ing"
+    ],
+    [
+      "cp.pp",
+      "cp.subject"
+    ]
+  ],
+  "decide": {
+    "de": [
+      "Ist die erste Handlung schon vorbei, bevor die zweite beginnt (Having + 3. Form)?",
+      "Läuft beides gleichzeitig, oder ist die erste das Mittel (-ing)?",
+      "Wird mit dem Subjekt etwas gemacht (3. Form allein), und passt das Subjekt nach dem Komma zum Partizip?"
+    ],
+    "en": [
+      "Is the first action over before the second begins (Having + past participle)?",
+      "Do both happen at the same time, or is the first one the means (-ing)?",
+      "Is something done to the subject (past participle alone), and does the subject after the comma fit the participle?"
+    ]
+  },
+  "patterns": [
+    {
+      "id": "cp.having",
+      "name": {
+        "de": "Having + 3. Form · vorher erledigt",
+        "en": "Having + past participle · done before"
+      },
+      "form": {
+        "de": "Having + 3. Verbform, Subjekt wie im Hauptsatz",
+        "en": "Having + past participle, same subject as the main clause"
+      },
+      "use": {
+        "de": "Zeigt: Die erste Handlung war fertig, bevor die zweite begann (nachdem). Beide Teile haben dasselbe Subjekt.",
+        "en": "Shows that the first action was finished before the second began (after). Both parts share one subject."
+      },
+      "signals": [
+        "having",
+        "not having",
+        "after having"
+      ],
+      "ex": [
+        {
+          "en": "Having tested both tools, the team picked the faster one.",
+          "de": "Nachdem das Team beide Tools getestet hatte, wählte es das schnellere.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "Having checked the figures, I've attached the corrected sheet.",
+          "de": "Nachdem ich die Zahlen geprüft habe, habe ich die korrigierte Tabelle angehängt.",
+          "ctx": "mail"
+        },
+        {
+          "en": "Having missed the last train, she took a taxi home.",
+          "de": "Weil sie den letzten Zug verpasst hatte, nahm sie ein Taxi nach Hause.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "Having finishing the report, I sent it to the team.",
+        "good": "Having finished the report, I sent it to the team.",
+        "cause": {
+          "de": "Kein Übersetzungsfehler, sondern ein Formfehler: Nach Having steht die 3. Verbform, nicht -ing.",
+          "en": "Not a translation error but a form error: after Having comes the past participle, not -ing."
+        }
+      },
+      "contrast": {
+        "with": "cp.ing",
+        "a": "Having left the office, I realized I had forgotten my keys.",
+        "b": "Leaving the office, I realized I had forgotten my keys.",
+        "diff": {
+          "de": "Having left: Du warst schon draußen. Leaving: Du hast es beim Hinausgehen gemerkt.",
+          "en": "Having left: you were already outside. Leaving: you noticed it on your way out."
+        }
+      },
+      "ccq": [
+        {
+          "s": "Having paid the invoice, we received the goods.",
+          "q": {
+            "de": "Haben wir die Ware vor der Zahlung bekommen?",
+            "en": "Did we get the goods before paying?"
+          },
+          "a": false
+        },
+        {
+          "s": "Having read the contract, she signed it.",
+          "q": {
+            "de": "Hat sie erst gelesen und dann unterschrieben?",
+            "en": "Did she read first and sign afterwards?"
+          },
+          "a": true
+        }
+      ],
+      "nudge": {
+        "de": "Ist die erste Handlung schon vorbei, bevor die zweite beginnt, und welche Verbform folgt auf das Hilfswort?",
+        "en": "Is the first action over before the second begins, and which verb form follows the helper word?"
+      }
+    },
+    {
+      "id": "cp.ing",
+      "name": {
+        "de": "-ing · gleichzeitig, Mittel, Grund",
+        "en": "-ing · at the same time, means, reason"
+      },
+      "form": {
+        "de": "Verb + -ing, aktiver Sinn, Subjekt wie im Hauptsatz",
+        "en": "verb + -ing, active meaning, same subject as the main clause"
+      },
+      "use": {
+        "de": "Zeigt eine Handlung, die gleichzeitig läuft, das Mittel oder den Grund. Das Subjekt führt sie selbst aus.",
+        "en": "Shows an action that runs at the same time, the means or the reason. The subject does it itself."
+      },
+      "signals": [
+        "using",
+        "knowing",
+        "working",
+        "walking"
+      ],
+      "ex": [
+        {
+          "en": "Working with live data, the team spots errors faster.",
+          "de": "Weil das Team mit Live-Daten arbeitet, entdeckt es Fehler schneller.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "Knowing the deadline is tight, I've started early.",
+          "de": "Da ich weiß, dass die Frist knapp ist, habe ich früh angefangen.",
+          "ctx": "mail"
+        },
+        {
+          "en": "Walking to work, I ran into my old boss.",
+          "de": "Auf dem Weg zur Arbeit traf ich meinen alten Chef.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "Know the deadline is tight, I started early.",
+        "good": "Knowing the deadline is tight, I started early.",
+        "cause": {
+          "de": "Kein reiner Übersetzungsfehler: Ohne -ing wirkt das Verb am Satzanfang wie ein Befehl. Das Partizip braucht die Endung.",
+          "en": "Not a pure translation error: without -ing the verb at the start reads like a command. The participle needs the ending."
+        }
+      },
+      "contrast": {
+        "with": "cp.pp",
+        "a": "Using the template, the team saves hours.",
+        "b": "Used by the whole team, the template saves hours.",
+        "diff": {
+          "de": "-ing: Das Subjekt tut es selbst. 3. Form: Mit dem Subjekt wird etwas gemacht.",
+          "en": "-ing: the subject does it itself. Past participle: something is done to the subject."
+        }
+      },
+      "ccq": [
+        {
+          "s": "Seeing the error, Tom stopped the upload.",
+          "q": {
+            "de": "Hat Tom den Upload gestoppt, bevor er den Fehler sah?",
+            "en": "Did Tom stop the upload before he saw the error?"
+          },
+          "a": false
+        },
+        {
+          "s": "Using the new tool, he cut the setup time in half.",
+          "q": {
+            "de": "Hat er die Einrichtungszeit mithilfe des neuen Tools halbiert?",
+            "en": "Did he halve the setup time with the help of the new tool?"
+          },
+          "a": true
+        }
+      ],
+      "nudge": {
+        "de": "Passiert beides gleichzeitig, und führt das Subjekt die Handlung selbst aus?",
+        "en": "Do both happen at the same time, and does the subject do the action itself?"
+      }
+    },
+    {
+      "id": "cp.pp",
+      "name": {
+        "de": "3. Form · passiver Sinn",
+        "en": "past participle · passive meaning"
+      },
+      "form": {
+        "de": "3. Verbform allein, mit dem Subjekt wird etwas gemacht",
+        "en": "past participle alone, something is done to the subject"
+      },
+      "use": {
+        "de": "Steht für ein Passiv ohne Hilfsverb: Das Subjekt wird behandelt, es handelt nicht selbst. Es steht meist ohne being.",
+        "en": "Stands for a passive without a helper verb: the subject receives the action and does not act itself. It usually comes without being."
+      },
+      "signals": [
+        "based on",
+        "given",
+        "located in",
+        "written in"
+      ],
+      "ex": [
+        {
+          "en": "Based on last year's data, the forecast looks realistic.",
+          "de": "Auf Basis der Daten vom letzten Jahr wirkt die Prognose realistisch.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "Revised after your feedback, the schedule is now attached.",
+          "de": "Nach Ihrem Feedback überarbeitet, ist der Zeitplan jetzt angehängt.",
+          "ctx": "mail"
+        },
+        {
+          "en": "Raised in a small town, she found the city loud.",
+          "de": "In einer Kleinstadt aufgewachsen, fand sie die Stadt laut.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "Building in 1920, the old factory is now a restaurant.",
+        "good": "Built in 1920, the old factory is now a restaurant.",
+        "cause": {
+          "de": "Kein Übersetzungsfehler: Auch im Deutschen steht die 3. Form („1920 gebaut“). Ein häufiger Fehler ist, jedes Partizip auf -ing zu bilden.",
+          "en": "Not a translation error: German also uses the past participle (“1920 gebaut”). A common error is forming every participle with -ing."
+        }
+      },
+      "contrast": {
+        "with": "cp.ing",
+        "a": "Used by the whole team, the template saves hours.",
+        "b": "Using the template, the team saves hours.",
+        "diff": {
+          "de": "3. Form: Mit dem Subjekt wird etwas gemacht. -ing: Das Subjekt tut es selbst.",
+          "en": "Past participle: something is done to the subject. -ing: the subject does it itself."
+        }
+      },
+      "ccq": [
+        {
+          "s": "Driven by demand, prices rose last quarter.",
+          "q": {
+            "de": "Wurden die Preise von der Nachfrage angetrieben?",
+            "en": "Were the prices driven by demand?"
+          },
+          "a": true
+        },
+        {
+          "s": "Built in 1920, the factory is a restaurant now.",
+          "q": {
+            "de": "Hat die Fabrik selbst etwas gebaut?",
+            "en": "Did the factory build something itself?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Wird mit dem Subjekt etwas gemacht, oder tut es selbst etwas?",
+        "en": "Is something done to the subject, or does the subject do something itself?"
+      }
+    },
+    {
+      "id": "cp.subject",
+      "name": {
+        "de": "gleiches Subjekt · Bezug des Partizips",
+        "en": "same subject · what the participle refers to"
+      },
+      "form": {
+        "de": "Das Partizip gehört zum Subjekt, das nach dem Komma steht",
+        "en": "the participle belongs to the subject that follows the comma"
+      },
+      "use": {
+        "de": "Wer die Handlung im Partizip ausführt, muss das Subjekt des Hauptsatzes sein. Sonst passt der Bezug nicht.",
+        "en": "Whoever performs the action in the participle must be the subject of the main clause. Otherwise the reference does not fit."
+      },
+      "signals": [
+        "Having …,",
+        "Using …,",
+        "Based on …,"
+      ],
+      "ex": [
+        {
+          "en": "Looking at the data, we saw a clear trend.",
+          "de": "Beim Blick auf die Daten sahen wir einen klaren Trend.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "Having read your proposal, we would like to schedule a call.",
+          "de": "Nachdem wir Ihren Vorschlag gelesen haben, möchten wir einen Termin vereinbaren.",
+          "ctx": "mail"
+        },
+        {
+          "en": "Leaving the party early, Tom missed the surprise.",
+          "de": "Weil Tom die Party früh verließ, verpasste er die Überraschung.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "Having read the contract, the deadline seemed unrealistic.",
+        "good": "Having read the contract, I found the deadline unrealistic.",
+        "cause": {
+          "de": "Kein Übersetzungsfehler, sondern ein Bezugsfehler: Die Handlung im Partizip gehört zum Subjekt nach dem Komma, hier aber zu niemandem.",
+          "en": "Not a translation error but a reference error: the action in the participle belongs to the subject after the comma, but here it belongs to no one."
+        }
+      },
+      "contrast": {
+        "with": "cp.having",
+        "a": "Having checked the logs, the engineer found the bug.",
+        "b": "After the engineer checked the logs, the server restarted.",
+        "diff": {
+          "de": "Gleiches Subjekt: Partizip möglich. Zwei verschiedene Subjekte: voller Nebensatz mit After.",
+          "en": "Same subject: a participle works. Two different subjects: a full clause with After."
+        }
+      },
+      "ccq": [
+        {
+          "s": "Having checked the logs, the engineer found the bug.",
+          "q": {
+            "de": "Hat der Techniker selbst die Logs geprüft?",
+            "en": "Did the engineer check the logs himself?"
+          },
+          "a": true
+        }
+      ],
+      "nudge": {
+        "de": "Wer führt die Handlung im ersten Teil aus, und wird diese Person oder Sache nach dem Komma genannt?",
+        "en": "Who performs the action in the first part, and is that person or thing named after the comma?"
+      }
+    }
+  ]
+}

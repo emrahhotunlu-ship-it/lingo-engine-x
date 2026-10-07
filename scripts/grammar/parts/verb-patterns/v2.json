@@ -1,0 +1,1294 @@
+[
+ {
+  "id": "vp-ing-k1",
+  "type": "kwt",
+  "pat": "vp.ing-verbs",
+  "from": "He deliberately didn't answer questions about the layoffs.",
+  "key": "AVOIDED",
+  "frame": "He ___ about the layoffs.",
+  "answer": "avoided answering questions",
+  "accepted": [
+   "avoided answering any questions",
+   "avoided taking questions",
+   "avoided taking any questions",
+   "avoided talking",
+   "avoided speaking"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach avoid steht -ing: avoided answering questions.",
+    "en": "Right: after avoid use -ing: avoided answering questions."
+   },
+   "wrong": [
+    {
+     "not": [
+      "avoided"
+     ],
+     "de": "Das Schlüsselwort avoided muss unverändert in der Lücke stehen.",
+     "en": "The key word avoided must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "avoided",
+      "to"
+     ],
+     "de": "Nach avoid steht kein to + Grundform, sondern -ing.",
+     "en": "After avoid there is no to + base form; use -ing."
+    },
+    {
+     "if": [
+      "avoided",
+      "answer"
+     ],
+     "de": "Die Grundform passt nicht: Nach avoid folgt -ing (answering).",
+     "en": "The base form does not fit: after avoid use -ing (answering)."
+    },
+    {
+     "pat": "vp.ing-verbs",
+     "de": "Nach avoid steht das nächste Verb in der -ing-Form.",
+     "en": "After avoid the next verb takes the -ing form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-ing-k2",
+  "type": "kwt",
+  "pat": "vp.ing-verbs",
+  "from": "Let's wait until Friday before we choose the vendor.",
+  "key": "POSTPONE",
+  "frame": "Let's ___ the vendor until Friday.",
+  "answer": "postpone choosing",
+  "accepted": [
+   "postpone selecting",
+   "postpone picking",
+   "postpone deciding on",
+   "postpone making a decision on"
+  ],
+  "words": [
+   2,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach postpone steht -ing: postpone choosing the vendor.",
+    "en": "Right: after postpone use -ing: postpone choosing the vendor."
+   },
+   "wrong": [
+    {
+     "not": [
+      "postpone"
+     ],
+     "de": "Das Schlüsselwort postpone muss unverändert in der Lücke stehen.",
+     "en": "The key word postpone must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "postpone",
+      "to"
+     ],
+     "de": "Nach postpone steht kein to + Grundform, sondern -ing.",
+     "en": "After postpone there is no to + base form; use -ing."
+    },
+    {
+     "if": [
+      "postpone",
+      "choose"
+     ],
+     "de": "Die Grundform passt nicht: Postpone verlangt -ing (choosing).",
+     "en": "The base form does not fit: postpone takes -ing (choosing)."
+    },
+    {
+     "pat": "vp.ing-verbs",
+     "de": "Nach postpone steht das nächste Verb in der -ing-Form.",
+     "en": "After postpone the next verb takes the -ing form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-ing-f1",
+  "type": "find",
+  "pat": "vp.ing-verbs",
+  "prompt": "We're considering to move the kickoff to Monday.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "moving",
+  "fixed": "We're considering moving the kickoff to Monday.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „considering to move“. Nach consider steht -ing: moving.",
+    "en": "The error: “considering to move”. After consider use -ing: moving."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Consider nimmt kein to + Grundform.",
+     "en": "There is an error: consider takes no to + base form."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „to move“: Consider verlangt -ing.",
+     "en": "The error is “to move”: consider takes -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-ing-f2",
+  "type": "find",
+  "pat": "vp.ing-verbs",
+  "prompt": "She finished to write the summary before the call.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "writing",
+  "fixed": "She finished writing the summary before the call.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „finished to write“. Nach finish steht -ing: writing.",
+    "en": "The error: “finished to write”. After finish use -ing: writing."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Finish nimmt kein to + Grundform.",
+     "en": "There is an error: finish takes no to + base form."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „to write“: Finish verlangt -ing.",
+     "en": "The error is “to write”: finish takes -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-ing-f3",
+  "type": "find",
+  "pat": "vp.ing-verbs",
+  "prompt": "Our team enjoys experimenting with new formats.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: enjoy + -ing („experimenting“) ist richtig.",
+    "en": "No error: enjoy + -ing (“experimenting”) is correct."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach enjoy steht -ing, genau wie hier.",
+     "en": "No error: after enjoy comes -ing, exactly as here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-ing-m1",
+  "type": "meaning",
+  "pat": "vp.ing-verbs",
+  "a": "We considered hiring her.",
+  "b": "We hired her.",
+  "q": {
+   "de": "Welcher Satz sagt, dass sie schon eingestellt wurde?",
+   "en": "Which sentence says she has already been hired?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. Hired ist geschehen, considered hiring war nur eine Überlegung.",
+    "en": "Right: sentence b. Hired happened; considered hiring was only a thought."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a wurde nur überlegt: Considered hiring heißt, sie war noch nicht eingestellt.",
+     "en": "In a it was only considered: considered hiring means she was not hired yet."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: considered hiring ist eine Überlegung, hired eine Tatsache.",
+     "en": "Not the same: considered hiring is a thought, hired is a fact."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-to-k1",
+  "type": "kwt",
+  "pat": "vp.to-verbs",
+  "from": "She finally succeeded in getting the budget approved.",
+  "key": "MANAGED",
+  "frame": "She ___ the budget approved.",
+  "answer": "managed to get",
+  "accepted": [],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach manage steht to + Grundform: managed to get.",
+    "en": "Right: after manage use to + base form: managed to get."
+   },
+   "wrong": [
+    {
+     "not": [
+      "managed"
+     ],
+     "de": "Das Schlüsselwort managed muss unverändert in der Lücke stehen.",
+     "en": "The key word managed must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "managed",
+      "getting"
+     ],
+     "de": "Nach manage steht to + Grundform, nicht -ing.",
+     "en": "After manage use to + base form, not -ing."
+    },
+    {
+     "if": [
+      "managed",
+      "get"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Es fehlt das to: manage + to + Grundform.",
+     "en": "The to is missing: manage + to + base form."
+    },
+    {
+     "pat": "vp.to-verbs",
+     "de": "Nach manage folgt to und die Grundform des Verbs.",
+     "en": "After manage comes to and the base form of the verb."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-to-k2",
+  "type": "kwt",
+  "pat": "vp.to-verbs",
+  "from": "We can't pay for another consultant.",
+  "key": "AFFORD",
+  "frame": "We can't ___ another consultant.",
+  "answer": "afford to hire",
+  "accepted": [
+   "afford to bring in",
+   "afford to pay",
+   "afford to engage",
+   "afford to get",
+   "afford to take on"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach afford steht to + Grundform: afford to hire.",
+    "en": "Right: after afford use to + base form: afford to hire."
+   },
+   "wrong": [
+    {
+     "not": [
+      "afford"
+     ],
+     "de": "Das Schlüsselwort afford muss unverändert in der Lücke stehen.",
+     "en": "The key word afford must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "afford"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Es fehlt das to: afford + to + Grundform.",
+     "en": "The to is missing: afford + to + base form."
+    },
+    {
+     "pat": "vp.to-verbs",
+     "de": "Nach afford folgt to und die Grundform des Verbs.",
+     "en": "After afford comes to and the base form of the verb."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-to-f1",
+  "type": "find",
+  "pat": "vp.to-verbs",
+  "prompt": "She refused answering the journalist's question.",
+  "err": [
+   2,
+   2
+  ],
+  "answer": "to answer",
+  "fixed": "She refused to answer the journalist's question.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „refused answering“. Nach refuse steht to + Grundform: to answer.",
+    "en": "The error: “refused answering”. After refuse use to + base form: to answer."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Refuse nimmt kein -ing.",
+     "en": "There is an error: refuse takes no -ing."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „answering“: Refuse verlangt to + Grundform.",
+     "en": "The error is “answering”: refuse takes to + base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-to-f2",
+  "type": "find",
+  "pat": "vp.to-verbs",
+  "prompt": "We agreed meeting again after the audit.",
+  "err": [
+   2,
+   2
+  ],
+  "answer": "to meet",
+  "fixed": "We agreed to meet again after the audit.",
+  "accepted": [
+   "to meet up",
+   "on meeting"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „agreed meeting“. Nach agree steht to + Grundform: to meet.",
+    "en": "The error: “agreed meeting”. After agree use to + base form: to meet."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Agree nimmt kein -ing.",
+     "en": "There is an error: agree takes no -ing."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „meeting“: Agree verlangt to + Grundform.",
+     "en": "The error is “meeting”: agree takes to + base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-to-m1",
+  "type": "meaning",
+  "pat": "vp.to-verbs",
+  "a": "She managed to reach the client.",
+  "b": "She tried to reach the client.",
+  "q": {
+   "de": "Welcher Satz sagt, dass sie den Kunden erreicht hat?",
+   "en": "Which sentence says she reached the client?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Bei managed to hat es geklappt.",
+    "en": "Right: sentence a. Managed to means it worked."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b blieb offen, ob es klappte: Tried to ist nur ein Versuch.",
+     "en": "In b it is open whether it worked: tried to is only an attempt."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: managed to hat geklappt, tried to nicht unbedingt.",
+     "en": "Not the same: managed to worked, tried to not necessarily."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-lf-k1",
+  "type": "kwt",
+  "pat": "vp.look-forward",
+  "from": "I'm excited about seeing you in Berlin next week.",
+  "key": "LOOKING",
+  "frame": "I'm ___ you in Berlin next week.",
+  "answer": "looking forward to seeing",
+  "accepted": [
+   "looking forward to meeting",
+   "really looking forward to seeing",
+   "really looking forward to meeting"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Hier ist to eine Präposition, deshalb looking forward to seeing.",
+    "en": "Right: here to is a preposition, so looking forward to seeing."
+   },
+   "wrong": [
+    {
+     "not": [
+      "looking"
+     ],
+     "de": "Das Schlüsselwort looking muss unverändert in der Lücke stehen.",
+     "en": "The key word looking must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "looking"
+     ],
+     "not": [
+      "forward"
+     ],
+     "de": "Es fehlt forward: Die feste Wendung heißt look forward to.",
+     "en": "The word forward is missing: the fixed phrase is look forward to."
+    },
+    {
+     "if": [
+      "looking",
+      "forward"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Es fehlt das to: look forward to + -ing.",
+     "en": "The to is missing: look forward to + -ing."
+    },
+    {
+     "if": [
+      "looking",
+      "forward",
+      "to"
+     ],
+     "not": [
+      "seeing",
+      "meeting"
+     ],
+     "de": "Nach look forward to steht -ing, weil to eine Präposition ist.",
+     "en": "After look forward to use -ing, because to is a preposition."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-lf-k2",
+  "type": "kwt",
+  "pat": "vp.look-forward",
+  "from": "We have promised to meet the deadline.",
+  "key": "COMMITTED",
+  "frame": "We're ___ the deadline.",
+  "answer": "committed to meeting",
+  "accepted": [
+   "committed to hitting",
+   "committed to making",
+   "fully committed to meeting",
+   "completely committed to meeting"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: In committed to ist to eine Präposition: committed to meeting.",
+    "en": "Right: in committed to, to is a preposition: committed to meeting."
+   },
+   "wrong": [
+    {
+     "not": [
+      "committed"
+     ],
+     "de": "Das Schlüsselwort committed muss unverändert in der Lücke stehen.",
+     "en": "The key word committed must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "committed"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Es fehlt das to: be committed to + -ing.",
+     "en": "The to is missing: be committed to + -ing."
+    },
+    {
+     "if": [
+      "committed",
+      "to",
+      "meet"
+     ],
+     "de": "Nach committed to steht -ing, weil to eine Präposition ist: meeting.",
+     "en": "After committed to use -ing, because to is a preposition: meeting."
+    },
+    {
+     "pat": "vp.look-forward",
+     "de": "Nach committed to folgt -ing oder ein Nomen.",
+     "en": "After committed to comes -ing or a noun."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-lf-f1",
+  "type": "find",
+  "pat": "vp.look-forward",
+  "prompt": "We look forward to see the final designs on Friday.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "seeing",
+  "fixed": "We look forward to seeing the final designs on Friday.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „to see“. Nach look forward to steht -ing: seeing.",
+    "en": "The error: “to see”. After look forward to use -ing: seeing."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: To ist hier eine Präposition.",
+     "en": "There is an error: to is a preposition here."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „see“: Nach look forward to folgt -ing.",
+     "en": "The error is “see”: look forward to is followed by -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-lf-f2",
+  "type": "find",
+  "pat": "vp.look-forward",
+  "prompt": "She objects to pay extra for the shipping.",
+  "err": [
+   3,
+   3
+  ],
+  "answer": "paying",
+  "fixed": "She objects to paying extra for the shipping.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „objects to pay“. Nach object to steht -ing: paying.",
+    "en": "The error: “objects to pay”. After object to use -ing: paying."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: To ist nach object eine Präposition.",
+     "en": "There is an error: to is a preposition after object."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „pay“: Nach object to folgt -ing.",
+     "en": "The error is “pay”: object to is followed by -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-lf-f3",
+  "type": "find",
+  "pat": "vp.look-forward",
+  "prompt": "I'm looking forward to the workshop next month.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: look forward to + Nomen („the workshop“) ist richtig.",
+    "en": "No error: look forward to + noun (“the workshop”) is correct."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach look forward to darf auch ein Nomen stehen.",
+     "en": "No error: a noun may also follow look forward to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-lf-m1",
+  "type": "meaning",
+  "pat": "vp.look-forward",
+  "a": "I look forward to hearing from you.",
+  "b": "I look forward to your reply.",
+  "q": {
+   "de": "Sagen beide Sätze etwa dasselbe?",
+   "en": "Do both sentences say roughly the same thing?"
+  },
+  "answer": "both",
+  "why": {
+   "ok": {
+    "de": "Richtig: beide. Hinter look forward to steht -ing oder ein Nomen.",
+    "en": "Right: both. After look forward to comes -ing or a noun."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "Doch, auch b ist richtig: Hinter to darf auch ein Nomen stehen.",
+     "en": "Yes, b is correct too: a noun may follow to as well."
+    },
+    {
+     "opt": "b",
+     "de": "Doch, auch a ist richtig: Hinter to darf auch -ing stehen.",
+     "en": "Yes, a is correct too: -ing may follow to as well."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-rf-k1",
+  "type": "kwt",
+  "pat": "vp.remember-forget",
+  "from": "I recall that I sent her the file last week.",
+  "key": "REMEMBER",
+  "frame": "I ___ her the file last week.",
+  "answer": "remember sending",
+  "accepted": [
+   "remember having sent",
+   "do remember sending",
+   "clearly remember sending",
+   "definitely remember sending",
+   "distinctly remember sending"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Rückblick heißt remember + -ing: remember sending.",
+    "en": "Right: looking back is remember + -ing: remember sending."
+   },
+   "wrong": [
+    {
+     "not": [
+      "remember"
+     ],
+     "de": "Das Schlüsselwort remember muss unverändert in der Lücke stehen.",
+     "en": "The key word remember must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "remember",
+      "to"
+     ],
+     "de": "Remember + to meint eine Aufgabe. Hier erinnerst du dich an Früheres: -ing.",
+     "en": "Remember + to means a task. Here you recall the past: -ing."
+    },
+    {
+     "if": [
+      "remember",
+      "send"
+     ],
+     "de": "Die Grundform passt nicht: Ein Rückblick heißt remember + -ing.",
+     "en": "The base form does not fit: looking back is remember + -ing."
+    },
+    {
+     "pat": "vp.remember-forget",
+     "de": "Für Vergangenes steht remember + -ing.",
+     "en": "For the past use remember + -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-rf-k2",
+  "type": "kwt",
+  "pat": "vp.remember-forget",
+  "from": "Don't forget that you have to call the supplier today.",
+  "key": "FORGET",
+  "frame": "Don't ___ the supplier today.",
+  "answer": "forget to call",
+  "accepted": [
+   "forget to phone",
+   "forget to contact"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Eine Aufgabe, die noch ansteht, heißt forget + to: forget to call.",
+    "en": "Right: a task still ahead is forget + to: forget to call."
+   },
+   "wrong": [
+    {
+     "not": [
+      "forget"
+     ],
+     "de": "Das Schlüsselwort forget muss unverändert in der Lücke stehen.",
+     "en": "The key word forget must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "forget",
+      "calling"
+     ],
+     "de": "Forget + -ing blickt zurück. Die Aufgabe liegt noch vor dir: forget to call.",
+     "en": "Forget + -ing looks back. The task is still ahead: forget to call."
+    },
+    {
+     "if": [
+      "forget"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Es fehlt to: Für eine Aufgabe steht forget + to + Grundform.",
+     "en": "The to is missing: for a task use forget + to + base form."
+    },
+    {
+     "pat": "vp.remember-forget",
+     "de": "Für eine anstehende Aufgabe steht forget + to.",
+     "en": "For a task still ahead use forget + to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-rf-f1",
+  "type": "find",
+  "pat": "vp.remember-forget",
+  "prompt": "I remember to meet her at a conference in 2019.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "meeting",
+  "fixed": "I remember meeting her at a conference in 2019.",
+  "accepted": [
+   "having met"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „remember to meet“. „In 2019“ blickt zurück: remember meeting.",
+    "en": "The error: “remember to meet”. “In 2019” looks back: remember meeting."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Für Vergangenes steht remember + -ing.",
+     "en": "There is an error: for the past use remember + -ing."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „to meet“: Hier wird Früheres erinnert.",
+     "en": "The error is “to meet”: here something past is recalled."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-rf-f2",
+  "type": "find",
+  "pat": "vp.remember-forget",
+  "prompt": "Don't forget locking the server room before you leave.",
+  "err": [
+   2,
+   2
+  ],
+  "answer": "to lock",
+  "fixed": "Don't forget to lock the server room before you leave.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „forget locking“. „Before you leave“ nennt eine Aufgabe: forget to lock.",
+    "en": "The error: “forget locking”. “Before you leave” names a task: forget to lock."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Für eine Aufgabe steht forget + to.",
+     "en": "There is an error: for a task use forget + to."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „locking“: Die Aufgabe liegt noch vor dir.",
+     "en": "The error is “locking”: the task is still ahead of you."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-rf-m1",
+  "type": "meaning",
+  "pat": "vp.remember-forget",
+  "a": "I remembered to lock the door.",
+  "b": "I remembered locking the door.",
+  "q": {
+   "de": "Welcher Satz sagt, dass ich mich an einen früheren Moment erinnere?",
+   "en": "Which sentence says I recall an earlier moment?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. Remembered locking = ich weiß noch, dass ich die Tür abgeschlossen habe.",
+    "en": "Right: sentence b. Remembered locking = I recall having locked it."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a denke ich an die Aufgabe und tue sie: remembered to lock.",
+     "en": "In a I think of the task and do it: remembered to lock."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: to lock ist die Aufgabe, locking die Erinnerung.",
+     "en": "Not the same: to lock is the task, locking is the memory."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-st-k1",
+  "type": "kwt",
+  "pat": "vp.stop-try",
+  "from": "Last year we gave up paper forms.",
+  "key": "STOPPED",
+  "frame": "We ___ paper forms last year.",
+  "answer": "stopped using",
+  "accepted": [
+   "stopped printing",
+   "stopped accepting",
+   "stopped issuing",
+   "stopped sending",
+   "stopped filling out"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Das Aufhören ist stop + -ing: stopped using.",
+    "en": "Right: quitting is stop + -ing: stopped using."
+   },
+   "wrong": [
+    {
+     "not": [
+      "stopped"
+     ],
+     "de": "Das Schlüsselwort stopped muss unverändert in der Lücke stehen.",
+     "en": "The key word stopped must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "stopped",
+      "to"
+     ],
+     "de": "Stop + to nennt den Zweck einer Pause. Hier hört es auf: stop + -ing.",
+     "en": "Stop + to gives the purpose of a pause. Here it ends: stop + -ing."
+    },
+    {
+     "if": [
+      "stopped",
+      "use"
+     ],
+     "de": "Die Grundform passt nicht: Aufhören heißt stop + -ing (using).",
+     "en": "The base form does not fit: quitting is stop + -ing (using)."
+    },
+    {
+     "pat": "vp.stop-try",
+     "de": "Wer mit etwas aufhört, sagt stop + -ing.",
+     "en": "To quit something, use stop + -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-st-k2",
+  "type": "kwt",
+  "pat": "vp.stop-try",
+  "from": "She paused her work to take a call.",
+  "key": "STOPPED",
+  "frame": "She ___ a call.",
+  "answer": "stopped to take",
+  "accepted": [
+   "stopped to answer",
+   "stopped working to take",
+   "stopped working to answer"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Zweck einer Pause heißt stop + to: stopped to take.",
+    "en": "Right: the purpose of a pause is stop + to: stopped to take."
+   },
+   "wrong": [
+    {
+     "not": [
+      "stopped"
+     ],
+     "de": "Das Schlüsselwort stopped muss unverändert in der Lücke stehen.",
+     "en": "The key word stopped must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "stopped",
+      "taking"
+     ],
+     "de": "Stop + -ing heißt aufhören. Hier ist das Telefonat der Grund der Pause: to take.",
+     "en": "Stop + -ing means quitting. Here the call is the reason for the pause: to take."
+    },
+    {
+     "if": [
+      "stopped"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Es fehlt to: Der Zweck einer Pause heißt stop + to + Grundform.",
+     "en": "The to is missing: the purpose of a pause is stop + to + base form."
+    },
+    {
+     "pat": "vp.stop-try",
+     "de": "Für eine Pause mit Grund steht stop + to + Grundform.",
+     "en": "To pause because of something, use stop + to + base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-st-f1",
+  "type": "find",
+  "pat": "vp.stop-try",
+  "prompt": "She stopped to work for the bank in 2020 and started her own firm.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "working",
+  "fixed": "She stopped working for the bank in 2020 and started her own firm.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „stopped to work“. Aufhören heißt stop + -ing: stopped working.",
+    "en": "The error: “stopped to work”. Quitting is stop + -ing: stopped working."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Hier hört sie auf, also stop + -ing.",
+     "en": "There is an error: she quits here, so stop + -ing."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „to work“: Sie hat die Arbeit beendet.",
+     "en": "The error is “to work”: she ended that job."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-st-f2",
+  "type": "find",
+  "pat": "vp.stop-try",
+  "prompt": "We stopped to using the old CRM last year.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "using",
+  "fixed": "We stopped using the old CRM last year.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „stopped to using“. Es folgt nur -ing, ohne to: stopped using.",
+    "en": "The error: “stopped to using”. Only -ing follows, without to: stopped using."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach stop steht entweder to + Grundform oder -ing, nie beides.",
+     "en": "There is an error: after stop use either to + base form or -ing, not both."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „to using“: Das to ist zu viel.",
+     "en": "The error is “to using”: the to is one word too many."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-st-f3",
+  "type": "find",
+  "pat": "vp.stop-try",
+  "prompt": "We stopped at the pharmacy to pick up some tape.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: stop + to nennt hier den Zweck des Halts.",
+    "en": "No error: stop + to gives the purpose of the stop here."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Sie haben angehalten, um Klebeband zu holen.",
+     "en": "No error: they paused in order to get tape."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-st-m1",
+  "type": "meaning",
+  "pat": "vp.stop-try",
+  "a": "We stopped sending reminders.",
+  "b": "We stopped to send reminders.",
+  "q": {
+   "de": "Welcher Satz nennt den Grund für eine Pause?",
+   "en": "Which sentence gives the reason for a pause?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. Stopped to send = wir hielten an, um etwas zu schicken.",
+    "en": "Right: sentence b. Stopped to send = we paused in order to send something."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a hören wir auf: Stopped sending heißt, es gibt keine Erinnerungen mehr.",
+     "en": "In a we quit: stopped sending means there are no more reminders."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: -ing heißt aufhören, to nennt den Zweck.",
+     "en": "Not the same: -ing means quitting, to gives the purpose."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-rg-k1",
+  "type": "kwt",
+  "pat": "vp.regret",
+  "from": "We are sorry to announce that the event has been canceled.",
+  "key": "REGRET",
+  "frame": "We ___ that the event has been canceled.",
+  "answer": "regret to announce",
+  "accepted": [
+   "regret to say",
+   "regret to report",
+   "regret to confirm",
+   "regret to inform you",
+   "regret to tell you",
+   "regret to let you know",
+   "deeply regret to announce"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Eine Mitteilung, die jetzt kommt, heißt regret + to: regret to announce.",
+    "en": "Right: an announcement made now is regret + to: regret to announce."
+   },
+   "wrong": [
+    {
+     "not": [
+      "regret"
+     ],
+     "de": "Das Schlüsselwort regret muss unverändert in der Lücke stehen.",
+     "en": "The key word regret must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "regret"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Regret + -ing bereut Früheres. Eine Mitteilung heißt regret + to + Grundform.",
+     "en": "Regret + -ing feels sorry about the past. An announcement is regret + to + base form."
+    },
+    {
+     "pat": "vp.regret",
+     "de": "Eine Mitteilung jetzt heißt regret + to + Grundform.",
+     "en": "An announcement made now is regret + to + base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-rg-k2",
+  "type": "kwt",
+  "pat": "vp.regret",
+  "from": "I wish I hadn't signed that contract.",
+  "key": "REGRET",
+  "frame": "I ___ that contract.",
+  "answer": "regret signing",
+  "accepted": [
+   "regret having signed",
+   "really regret signing",
+   "do regret signing",
+   "deeply regret signing",
+   "bitterly regret signing",
+   "really regret having signed"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Das Bereuen ist regret + -ing: regret signing.",
+    "en": "Right: feeling sorry about the past is regret + -ing: regret signing."
+   },
+   "wrong": [
+    {
+     "not": [
+      "regret"
+     ],
+     "de": "Das Schlüsselwort regret muss unverändert in der Lücke stehen.",
+     "en": "The key word regret must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "regret",
+      "to"
+     ],
+     "de": "Regret + to kündigt eine Nachricht an. Wer etwas bereut, sagt regret + -ing.",
+     "en": "Regret + to announces news. Feeling sorry about the past is regret + -ing."
+    },
+    {
+     "if": [
+      "regret",
+      "sign"
+     ],
+     "de": "Die Grundform passt nicht: Bereuen heißt regret + -ing (signing).",
+     "en": "The base form does not fit: feeling sorry is regret + -ing (signing)."
+    },
+    {
+     "pat": "vp.regret",
+     "de": "Bedauern über früher heißt regret + -ing.",
+     "en": "Regret about the past is regret + -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-rg-f1",
+  "type": "find",
+  "pat": "vp.regret",
+  "prompt": "He regrets to leave the team two years ago.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "leaving",
+  "fixed": "He regrets leaving the team two years ago.",
+  "accepted": [
+   "having left"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „regrets to leave“. „Two years ago“ blickt zurück: regrets leaving.",
+    "en": "The error: “regrets to leave”. “Two years ago” looks back: regrets leaving."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Bedauern über früher heißt regret + -ing.",
+     "en": "There is an error: regret about the past is regret + -ing."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „to leave“: Der Weggang liegt in der Vergangenheit.",
+     "en": "The error is “to leave”: leaving the team lies in the past."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-rg-f2",
+  "type": "find",
+  "pat": "vp.regret",
+  "prompt": "She regrets to not have taken the job last spring.",
+  "err": [
+   2,
+   5
+  ],
+  "answer": "not taking",
+  "fixed": "She regrets not taking the job last spring.",
+  "accepted": [
+   "not having taken"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „regrets to not have taken“. Für Früheres steht regret + -ing: not taking.",
+    "en": "The error: “regrets to not have taken”. For the past use regret + -ing: not taking."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Regret + to kündigt nur eine Nachricht an.",
+     "en": "There is an error: regret + to only announces news."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „to not have taken“: Hier wird Früheres bereut.",
+     "en": "The error is “to not have taken”: here something past is regretted."
+    }
+   ]
+  }
+ },
+ {
+  "id": "vp-rg-m1",
+  "type": "meaning",
+  "pat": "vp.regret",
+  "a": "I regret telling her.",
+  "b": "I regret to tell her.",
+  "q": {
+   "de": "Welcher Satz sagt, dass ich es ihr schon gesagt habe?",
+   "en": "Which sentence says I have already told her?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Regret telling = ich habe es gesagt und bereue es.",
+    "en": "Right: sentence a. Regret telling = I told her and I regret it."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b sage ich es gerade jetzt: Regret to tell kündigt die Nachricht an.",
+     "en": "In b I say it right now: regret to tell announces the news."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: regret -ing blickt zurück, regret to kündigt etwas an.",
+     "en": "Not the same: regret -ing looks back, regret to announces something."
+    }
+   ]
+  }
+ }
+]

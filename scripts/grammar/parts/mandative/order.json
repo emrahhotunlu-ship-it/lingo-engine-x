@@ -1,0 +1,233 @@
+[
+ {
+  "pat": "mnd.verbs",
+  "en": "The board demands that the CEO approve every proposal personally.",
+  "de": "Der Vorstand verlangt, dass der Geschäftsführer jeden Vorschlag persönlich genehmigt.",
+  "chunks": [
+   "the board",
+   "demands",
+   "that",
+   "the CEO",
+   "approve",
+   "every proposal",
+   "personally"
+  ],
+  "alt": [
+   "The board demands that the CEO personally approve every proposal."
+  ],
+  "why": [
+   "Nach demands that steht die Grundform: the CEO approve, ohne -s. Personally darf auch vor approve stehen.",
+   "After demands that the base form follows: the CEO approve, no -s. Personally can also go before approve."
+  ],
+  "bad": "The board demands that the CEO approves every proposal personally.",
+  "trap": {
+   "tile": "approve",
+   "instead": "approves",
+   "why": {
+    "de": "Im Deutschen heißt es „dass er genehmigt“, daraus wird gern approves. Nach demands that bleibt das Verb im formellen Stil aber ohne -s.",
+    "en": "German says “dass er genehmigt”, which easily turns into approves. After demands that the verb stays without -s in formal style."
+   }
+  }
+ },
+ {
+  "pat": "mnd.verbs",
+  "en": "Legal recommends that we delay the launch until May.",
+  "de": "Die Rechtsabteilung empfiehlt, den Start bis Mai zu verschieben.",
+  "chunks": [
+   "legal",
+   "recommends",
+   "that we",
+   "delay",
+   "the launch",
+   "until May"
+  ],
+  "single": "Nach that we folgt delay in der Grundform; the launch und until May bleiben danach, sonst ändert sich der Bezug.",
+  "why": [
+   "Nach recommends that steht die Grundform: that we delay, ohne will. Die Empfehlung ist noch keine Tatsache.",
+   "After recommends that the base form follows: that we delay, no will. The recommendation is not yet a fact."
+  ],
+  "bad": "Legal recommends that we will delay the launch until May.",
+  "trap": {
+   "tile": "delay",
+   "instead": "will delay",
+   "why": {
+    "de": "Der Reflex „Zukunft = will“ verführt zu will delay. Nach recommends that steht aber die Grundform.",
+    "en": "The “future = will” reflex tempts you into will delay. After recommends that the base form is used."
+   }
+  }
+ },
+ {
+  "pat": "mnd.adjectives",
+  "en": "It is crucial that all new hires attend the briefing before Monday.",
+  "de": "Es ist entscheidend, dass alle neuen Mitarbeiter vor Montag am Briefing teilnehmen.",
+  "chunks": [
+   "it is",
+   "crucial",
+   "that",
+   "all new hires",
+   "attend",
+   "the briefing",
+   "before Monday"
+  ],
+  "alt": [
+   "Before Monday, it is crucial that all new hires attend the briefing."
+  ],
+  "why": [
+   "Nach crucial that steht die Grundform: all new hires attend. Before Monday steht vorn oder am Ende.",
+   "After crucial that the base form follows: all new hires attend. Before Monday can go at the start or the end."
+  ],
+  "bad": "It is crucial that all new hires will attend the briefing before Monday.",
+  "trap": {
+   "tile": "attend",
+   "instead": "will attend",
+   "why": {
+    "de": "Der Reflex „Zukunft = will“ liegt nahe. Nach Adjektiv + that steht aber die Grundform ohne will.",
+    "en": "The “future = will” reflex is tempting. After adjective + that the base form follows, without will."
+   }
+  }
+ },
+ {
+  "pat": "mnd.passive",
+  "en": "The regulator ordered that all records be kept for seven years.",
+  "de": "Die Aufsichtsbehörde ordnete an, dass alle Unterlagen sieben Jahre aufbewahrt werden.",
+  "chunks": [
+   "the regulator",
+   "ordered",
+   "that",
+   "all records",
+   "be kept",
+   "for seven years"
+  ],
+  "single": "Nach that all records folgt be kept als feste Folge; for seven years beschreibt die Dauer und bleibt am Ende.",
+  "why": [
+   "Das Passiv der Anordnung lautet be + 3. Form: all records be kept. Ein will oder is gehört nicht davor.",
+   "The passive of an order is be + past participle: all records be kept. No will or is goes before it."
+  ],
+  "bad": "The regulator ordered that all records will be kept for seven years.",
+  "trap": {
+   "tile": "be kept",
+   "instead": "will be kept",
+   "why": {
+    "de": "Der Reflex „Zukunft = will“ liegt nahe. Nach ordered that steht aber be + 3. Form.",
+    "en": "The “future = will” reflex is tempting. After ordered that comes be + past participle."
+   }
+  }
+ },
+ {
+  "pat": "mnd.passive",
+  "en": "The client requested that the contract be reviewed by legal first.",
+  "de": "Der Kunde bat darum, dass der Vertrag zuerst von der Rechtsabteilung geprüft wird.",
+  "chunks": [
+   "the client",
+   "requested",
+   "that",
+   "the contract",
+   "be reviewed",
+   "by legal",
+   "first"
+  ],
+  "alt": [
+   "The client requested that the contract first be reviewed by legal."
+  ],
+  "why": [
+   "Nach requested that steht be + 3. Form: the contract be reviewed. First steht hinten oder vor be reviewed.",
+   "After requested that comes be + past participle: the contract be reviewed. First can go at the end or before be reviewed."
+  ],
+  "bad": "The client requested that the contract would be reviewed by legal first.",
+  "trap": {
+   "tile": "be reviewed",
+   "instead": "would be reviewed",
+   "why": {
+    "de": "Would be passt nicht zu einer Bitte. Nach requested that steht schlicht be + 3. Form.",
+    "en": "Would be does not suit a request. After requested that simply use be + past participle."
+   }
+  }
+ },
+ {
+  "pat": "mnd.negation",
+  "en": "Our lawyer advises that Tom not sign anything before Monday.",
+  "de": "Unser Anwalt rät, dass Tom vor Montag nichts unterschreibt.",
+  "chunks": [
+   "our lawyer",
+   "advises",
+   "that Tom",
+   "not",
+   "sign",
+   "anything",
+   "before Monday"
+  ],
+  "alt": [
+   "Before Monday, our lawyer advises that Tom not sign anything."
+  ],
+  "why": [
+   "Die Verneinung not steht direkt vor der Grundform sign, ohne Hilfsverb. Before Monday steht vorn oder am Ende.",
+   "The negation not goes right before the base form sign, with no helper verb. Before Monday can go at the start or the end."
+  ],
+  "bad": "Our lawyer advises that Tom to not sign anything before Monday.",
+  "trap": {
+   "tile": "not",
+   "instead": "to not",
+   "why": {
+    "de": "Nach that Tom braucht das Verb kein to. Die Verneinung not steht direkt vor sign.",
+    "en": "After that Tom the verb takes no to. The negation not goes right before sign."
+   }
+  }
+ },
+ {
+  "pat": "mnd.negation",
+  "en": "The union asked that management not change the schedule without notice.",
+  "de": "Die Gewerkschaft bat darum, dass die Leitung den Zeitplan nicht ohne Vorwarnung ändert.",
+  "chunks": [
+   "the union",
+   "asked",
+   "that management",
+   "not",
+   "change",
+   "the schedule",
+   "without notice"
+  ],
+  "single": "Not steht direkt vor change; without notice gehört ans Ende, denn es beschreibt das Ändern des Plans.",
+  "why": [
+   "Nach asked that steht not + Grundform: management not change. Ein Hilfsverb kommt nicht dazu.",
+   "After asked that comes not + base form: management not change. No helper verb is added."
+  ],
+  "bad": "The union asked that management would not change the schedule without notice.",
+  "trap": {
+   "tile": "not",
+   "instead": "would not",
+   "why": {
+    "de": "Would not passt nicht zu einer Bitte. Nach asked that steht nur not + Grundform.",
+    "en": "Would not does not suit a request. After asked that only not + base form is used."
+   }
+  }
+ },
+ {
+  "pat": "mnd.fact",
+  "en": "The data suggests that demand is falling in Europe.",
+  "de": "Die Daten deuten darauf hin, dass die Nachfrage in Europa sinkt.",
+  "chunks": [
+   "the data",
+   "suggests",
+   "that",
+   "demand",
+   "is falling",
+   "in Europe"
+  ],
+  "alt": [
+   "In Europe, the data suggests that demand is falling."
+  ],
+  "why": [
+   "Hier meldet suggests einen Befund, deshalb steht die normale Form is falling, nicht be falling.",
+   "Here suggests reports a finding, so the normal form is falling is used, not be falling."
+  ],
+  "bad": "The data suggests that demand be falling in Europe.",
+  "trap": {
+   "tile": "is falling",
+   "instead": "be falling",
+   "why": {
+    "de": "Weil suggest oft die Grundform verlangt, wird sie hier fälschlich übernommen. Ein Befund braucht is falling.",
+    "en": "Because suggest often takes the base form, it is wrongly carried over here. A finding needs is falling."
+   }
+  }
+ }
+]

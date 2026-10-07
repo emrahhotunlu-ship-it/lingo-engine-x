@@ -1,4 +1,592 @@
 {
+ "articles|sheplayspianobeautifully": {
+  "pat": "art.fixed",
+  "why": {
+   "ok": {
+    "de": "Richtig: Instrumente stehen mit the: play the piano, play the guitar.",
+    "en": "Right: instruments take the: play the piano, play the guitar."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "„a piano“ meint ein einzelnes, beliebiges Klavier. Das Instrument als Gattung nimmt the.",
+     "en": "“a piano” means one random piano. The instrument as a kind takes the."
+    },
+    {
+     "opt": "an",
+     "de": "„an“ steht nur vor einem Vokallaut, und piano beginnt mit p.",
+     "en": "“an” needs a vowel sound, and piano starts with p."
+    }
+   ]
+  }
+ },
+ "articles|lifeistooshorttobeunhappy": {
+  "pat": "art.zero",
+  "why": {
+   "ok": {
+    "de": "Richtig: life ist allgemein gemeint, daher kein Artikel am Satzanfang.",
+    "en": "Right: life is meant in general, so no article at the start."
+   },
+   "wrong": [
+    {
+     "opt": "The",
+     "pat": "art.definite",
+     "de": "„The life“ zeigt auf ein bestimmtes Leben. Hier geht es um das Leben allgemein.",
+     "en": "“The life” points to one particular life. This is about life in general."
+    },
+    {
+     "opt": "A",
+     "pat": "art.indefinite",
+     "de": "„A life“ wäre ein einzelnes Leben unter vielen, nicht das Leben allgemein.",
+     "en": "“A life” would be one life among many, not life in general."
+    }
+   ]
+  }
+ },
+ "articles|mybrotherisengineer": {
+  "pat": "art.sound",
+  "why": {
+   "ok": {
+    "de": "Richtig: Ein Beruf braucht den Artikel, und engineer beginnt mit Vokallaut: an engineer.",
+    "en": "Right: a job takes an article, and engineer starts with a vowel sound: an engineer."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "„a“ steht nur vor Konsonantlaut. Engineer beginnt mit dem Vokallaut /e/.",
+     "en": "“a” goes only before a consonant sound. Engineer starts with the vowel sound /e/."
+    },
+    {
+     "opt": "the",
+     "pat": "art.definite",
+     "de": "„the“ hieße: der Ingenieur, den beide kennen. Hier nennst du nur seinen Beruf.",
+     "en": "“the” would mean the engineer both of you know. Here you only name his job."
+    },
+    {
+     "opt": "–",
+     "pat": "art.indefinite",
+     "de": "Im Englischen braucht ein Beruf im Singular einen Artikel, anders als im Deutschen.",
+     "en": "In English a singular job needs an article, unlike in German."
+    }
+   ]
+  }
+ },
+ "articles|couldyousendmecontractwediscussedyesterday": {
+  "pat": "art.definite",
+  "why": {
+   "ok": {
+    "de": "Richtig: Beide wissen, welcher Vertrag gemeint ist (we discussed yesterday): the.",
+    "en": "Right: both know which contract is meant (we discussed yesterday): the."
+   },
+   "wrong": [
+    {
+     "if": [
+      "a"
+     ],
+     "pat": "art.indefinite",
+     "de": "„a“ meint irgendeinen Vertrag. Hier ist ein ganz bestimmter gemeint.",
+     "en": "“a” means any contract. Here one particular contract is meant."
+    },
+    {
+     "if": [
+      "an"
+     ],
+     "de": "„an“ passt nicht vor contract (Konsonantlaut), und der Vertrag ist ja bestimmt.",
+     "en": "“an” does not fit before contract (consonant sound), and the contract is a known one."
+    },
+    {
+     "if": [
+      "–"
+     ],
+     "de": "Ohne Artikel wäre Vertrag allgemein gemeint. Hier ist es aber der bekannte.",
+     "en": "Without an article contract would be general. Here it is the known one."
+    }
+   ]
+  }
+ },
+ "articles|sheworksasengineeratasoftwarecompany": {
+  "pat": "art.indefinite",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach as nimmt ein Beruf im Singular a/an: as an engineer.",
+    "en": "Right: after as a singular job takes a/an: as an engineer."
+   },
+   "wrong": [
+    {
+     "if": [
+      "a engineer"
+     ],
+     "pat": "art.sound",
+     "de": "„a engineer“ geht nicht: Vor dem Vokallaut von engineer steht an.",
+     "en": "“a engineer” fails: before the vowel sound of engineer use an."
+    },
+    {
+     "if": [
+      "the engineer"
+     ],
+     "pat": "art.definite",
+     "de": "„the engineer“ meint einen bekannten Ingenieur. Hier wird nur ihr Beruf genannt.",
+     "en": "“the engineer” means a known engineer. Here only her job is named."
+    },
+    {
+     "not": [
+      "an engineer",
+      "a engineer"
+     ],
+     "de": "Es fehlt der Artikel: Ein Beruf im Singular braucht a/an, im Deutschen nicht.",
+     "en": "The article is missing: a singular job needs a/an, unlike in German."
+    }
+   ]
+  }
+ },
+ "articles|wesenttheclienttwoproposalsfirstproposalwasrejected": {
+  "pat": "art.the-unique",
+  "why": {
+   "ok": {
+    "de": "Richtig: first legt genau einen der beiden Vorschläge fest: The first proposal.",
+    "en": "Right: first picks out exactly one of the two proposals: The first proposal."
+   },
+   "wrong": [
+    {
+     "opt": "An",
+     "pat": "art.sound",
+     "de": "„An“ passt nicht vor first (Konsonantlaut) und meint keinen bestimmten Vorschlag.",
+     "en": "“An” does not fit before first (consonant sound) and picks no particular proposal."
+    },
+    {
+     "opt": "–",
+     "pat": "art.indefinite",
+     "de": "Ein zählbares Nomen im Singular braucht hier einen Artikel.",
+     "en": "A singular countable noun needs an article here."
+    },
+    {
+     "opt": "A",
+     "pat": "art.indefinite",
+     "de": "„A first proposal“ hieße irgendein erster. Hier ist es der erste von zweien.",
+     "en": "“A first proposal” would be just any first one. Here it is the first of two."
+    }
+   ]
+  }
+ },
+ "articles|wearehiringnewsalesrepifyouknowsomeonetellus": {
+  "pat": "art.indefinite",
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Stelle ist neu, niemand ist gemeint: a new sales rep.",
+    "en": "Right: the position is new and nobody in particular is meant: a new sales rep."
+   },
+   "wrong": [
+    {
+     "opt": "–",
+     "pat": "art.indefinite",
+     "de": "Ein zählbares Nomen im Singular braucht einen Artikel; rep ist hier nicht allgemein gemeint.",
+     "en": "A singular countable noun needs an article; rep is not meant in general here."
+    },
+    {
+     "opt": "an",
+     "de": "„an“ steht vor Vokallaut. New beginnt mit dem Konsonantlaut /n/.",
+     "en": "“an” goes before a vowel sound. New starts with the consonant sound /n/."
+    },
+    {
+     "opt": "the",
+     "pat": "art.definite",
+     "de": "„the“ meint jemand Bestimmten, aber die Stelle ist neu und noch niemand ausgewählt.",
+     "en": "“the” means someone specific, but the job is new and nobody is chosen yet."
+    }
+   ]
+  }
+ },
+ "articles|weneedmoreinformationbeforewedecide": {
+  "pat": "art.zero",
+  "why": {
+   "ok": {
+    "de": "Richtig: information ist unzählbar, nach more steht kein Artikel.",
+    "en": "Right: information is uncountable, so no article follows more."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "„a“ gibt es nur bei zählbaren Nomen im Singular. Information ist unzählbar.",
+     "en": "“a” is only for singular countable nouns. Information is uncountable."
+    },
+    {
+     "opt": "the",
+     "pat": "art.definite",
+     "de": "Nach more steht kein the. Es geht um mehr Information allgemein.",
+     "en": "No the follows more. It is about more information in general."
+    },
+    {
+     "opt": "an",
+     "de": "„an“ steht nur bei zählbaren Nomen im Singular. Information ist unzählbar.",
+     "en": "“an” is only for singular countable nouns. Information is uncountable."
+    }
+   ]
+  }
+ },
+ "articles|thisisbestofferwehavereceivedsofar": {
+  "pat": "art.the-unique",
+  "why": {
+   "ok": {
+    "de": "Richtig: Superlative stehen mit the: the best offer.",
+    "en": "Right: superlatives take the: the best offer."
+   },
+   "wrong": [
+    {
+     "opt": "an",
+     "de": "„an“ geht nicht, denn best beginnt mit Konsonantlaut, und ein Superlativ braucht the.",
+     "en": "“an” fails: best starts with a consonant sound, and a superlative needs the."
+    },
+    {
+     "opt": "a",
+     "de": "„a“ passt nicht zu einem Superlativ: Das Beste ist einzigartig.",
+     "en": "“a” does not fit a superlative: the best one is unique."
+    },
+    {
+     "opt": "–",
+     "de": "Ein Superlativ mit Nomen braucht hier den Artikel the.",
+     "en": "A superlative with a noun needs the article the here."
+    }
+   ]
+  }
+ },
+ "articles|heholdsmbafrominsead": {
+  "pat": "art.sound",
+  "why": {
+   "ok": {
+    "de": "Richtig: MBA beginnt mit dem Vokallaut /e/ (em): an MBA.",
+    "en": "Right: MBA starts with the vowel sound /e/ (em): an MBA."
+   },
+   "wrong": [
+    {
+     "opt": "–",
+     "pat": "art.indefinite",
+     "de": "Ein Abschluss im Singular braucht einen Artikel.",
+     "en": "A degree in the singular needs an article."
+    },
+    {
+     "opt": "a",
+     "de": "„a“ steht vor Konsonantlaut. MBA wird „em-bee-ay“ gesprochen, also mit Vokallaut.",
+     "en": "“a” goes before a consonant sound. MBA is said “em-bee-ay”, a vowel sound."
+    },
+    {
+     "opt": "many",
+     "de": "„many“ braucht einen Plural. Hier ist ein einzelner Abschluss gemeint.",
+     "en": "“many” needs a plural. Here one single degree is meant."
+    }
+   ]
+  }
+ },
+ "articles|iusuallygotoworkbytrain": {
+  "pat": "art.fixed",
+  "why": {
+   "ok": {
+    "de": "Richtig: go to work ist eine feste Wendung ohne Artikel.",
+    "en": "Right: go to work is a set phrase without an article."
+   },
+   "wrong": [
+    {
+     "opt": "an",
+     "de": "„an“ gehört nicht in die Wendung: go to work steht ohne Artikel.",
+     "en": "“an” does not belong in the phrase: go to work takes no article."
+    },
+    {
+     "opt": "a",
+     "de": "„a work“ ergibt hier keinen Sinn. Die Wendung heißt go to work.",
+     "en": "“a work” makes no sense here. The phrase is go to work."
+    },
+    {
+     "opt": "the",
+     "de": "„to the work“ klingt wie ein Ort. Gemeint ist die Arbeit allgemein: go to work.",
+     "en": "“to the work” sounds like a place. The phrase means work in general: go to work."
+    }
+   ]
+  }
+ },
+ "articles|adidyougetmyemailbyesbutattachmentwasempty": {
+  "pat": "art.definite",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Anhang gehört zu der bekannten Mail: the attachment.",
+    "en": "Right: the attachment belongs to the known email: the attachment."
+   },
+   "wrong": [
+    {
+     "if": [
+      "a"
+     ],
+     "pat": "art.sound",
+     "de": "„a attachment“ geht nicht: Vor Vokallaut steht an, und der Anhang ist bekannt.",
+     "en": "“a attachment” fails: use an before a vowel sound, and the attachment is a known one."
+    },
+    {
+     "if": [
+      "an"
+     ],
+     "pat": "art.indefinite",
+     "de": "„an attachment“ meint irgendeinen Anhang. Hier ist der Anhang dieser Mail gemeint.",
+     "en": "“an attachment” means any attachment. Here it is the attachment of this email."
+    },
+    {
+     "if": [
+      "–"
+     ],
+     "de": "Ohne Artikel fehlt die Bestimmung: Es ist der Anhang dieser einen Mail.",
+     "en": "Without an article the identification is missing: it is the attachment of this one email."
+    }
+   ]
+  }
+ },
+ "articles|sheishonestpersonwhoalwaystellsclientsthetruth": {
+  "pat": "art.sound",
+  "why": {
+   "ok": {
+    "de": "Richtig: honest beginnt mit stummem h, also mit Vokallaut: an honest person.",
+    "en": "Right: honest starts with a silent h, so a vowel sound: an honest person."
+   },
+   "wrong": [
+    {
+     "if": [
+      "a"
+     ],
+     "de": "„a“ steht vor Konsonantlaut. Das h in honest ist stumm, daher an.",
+     "en": "“a” goes before a consonant sound. The h in honest is silent, so an."
+    },
+    {
+     "if": [
+      "–"
+     ],
+     "pat": "art.indefinite",
+     "de": "Eine Person im Singular braucht einen Artikel: an honest person.",
+     "en": "A person in the singular needs an article: an honest person."
+    }
+   ]
+  }
+ },
+ "articles|heisuniversityprofessor": {
+  "pat": "art.sound",
+  "why": {
+   "ok": {
+    "de": "Richtig: university beginnt mit dem Konsonantlaut /j/: a university professor.",
+    "en": "Right: university starts with the consonant sound /j/: a university professor."
+   },
+   "wrong": [
+    {
+     "if": [
+      "an"
+     ],
+     "de": "„an“ steht vor Vokallaut. University beginnt mit /j/, also a.",
+     "en": "“an” goes before a vowel sound. University starts with /j/, so a."
+    },
+    {
+     "if": [
+      "–"
+     ],
+     "pat": "art.indefinite",
+     "de": "Ein Beruf im Singular braucht einen Artikel: a university professor.",
+     "en": "A singular job needs an article: a university professor."
+    }
+   ]
+  }
+ },
+ "articles|whatgreatidea": {
+  "pat": "art.indefinite",
+  "why": {
+   "ok": {
+    "de": "Richtig: Im Ausruf mit What steht a/an + zählbares Nomen: What a great idea!",
+    "en": "Right: in an exclamation with What use a/an + a countable noun: What a great idea!"
+   },
+   "wrong": [
+    {
+     "if": [
+      "an"
+     ],
+     "pat": "art.sound",
+     "de": "„an“ passt nicht vor great (Konsonantlaut): What a great idea.",
+     "en": "“an” does not fit before great (consonant sound): What a great idea."
+    },
+    {
+     "if": [
+      "the"
+     ],
+     "pat": "art.definite",
+     "de": "Im Ausruf mit What steht a/an, nicht the.",
+     "en": "In an exclamation with What use a/an, not the."
+    },
+    {
+     "if": [
+      "–"
+     ],
+     "de": "Nach What braucht idea im Singular einen Artikel: What a great idea!",
+     "en": "After What a singular idea needs an article: What a great idea!"
+    }
+   ]
+  }
+ },
+ "articles|ineveningweusuallyhavedinnerwiththekids": {
+  "pat": "art.fixed",
+  "why": {
+   "ok": {
+    "de": "Richtig: in the evening ist eine feste Wendung mit the.",
+    "en": "Right: in the evening is a set phrase with the."
+   },
+   "wrong": [
+    {
+     "if": [
+      "an"
+     ],
+     "pat": "art.indefinite",
+     "de": "„in an evening“ meint irgendeinen einzelnen Abend. Die Wendung heißt in the evening.",
+     "en": "“in an evening” means one random evening. The phrase is in the evening."
+    },
+    {
+     "if": [
+      "a"
+     ],
+     "pat": "art.sound",
+     "de": "„a evening“ geht nicht: Vor Vokallaut steht an, und die Wendung nimmt the.",
+     "en": "“a evening” fails: use an before a vowel sound, and the phrase takes the."
+    },
+    {
+     "if": [
+      "–"
+     ],
+     "de": "Ohne Artikel geht es nicht: Die feste Wendung lautet in the evening.",
+     "en": "It does not work without an article: the set phrase is in the evening."
+    }
+   ]
+  }
+ },
+ "articles|nootherproductinourrangesellsbetterthanthisonethisisbestsellingproductinourrange": {
+  "pat": "art.the-unique",
+  "why": {
+   "ok": {
+    "de": "Richtig: Vor einem Superlativ steht the: the best-selling product.",
+    "en": "Right: before a superlative use the: the best-selling product."
+   },
+   "wrong": [
+    {
+     "if": [
+      "a"
+     ],
+     "pat": "art.indefinite",
+     "de": "„a“ passt nicht zur Bedeutung: kein anderes Produkt verkauft sich besser, also the.",
+     "en": "“a” does not fit the meaning: no other product sells better, so the."
+    },
+    {
+     "if": [
+      "an"
+     ],
+     "pat": "art.sound",
+     "de": "„an“ passt nicht vor best (Konsonantlaut), und ein Superlativ braucht the.",
+     "en": "“an” does not fit before best (consonant sound), and a superlative needs the."
+    },
+    {
+     "if": [
+      "–"
+     ],
+     "de": "Ein Superlativ braucht den Artikel the: the best-selling product.",
+     "en": "A superlative needs the article the: the best-selling product."
+    }
+   ]
+  }
+ },
+ "articles|therearemanyreasonsforthedelaythemainoneisthatwedonothaveenoughstaffthemainreaso": {
+  "pat": "art.fixed",
+  "why": {
+   "ok": {
+    "de": "Richtig: a lack of ist eine feste Verbindung. Auch the lack of ist möglich.",
+    "en": "Right: a lack of is a set phrase. The lack of is also possible."
+   },
+   "wrong": [
+    {
+     "if": [
+      "an"
+     ],
+     "pat": "art.sound",
+     "de": "„an lack“ geht nicht: lack beginnt mit Konsonantlaut, also a.",
+     "en": "“an lack” fails: lack starts with a consonant sound, so a."
+    },
+    {
+     "if": [
+      "–"
+     ],
+     "pat": "art.indefinite",
+     "de": "Ohne Artikel geht es nicht: lack im Singular braucht a oder the.",
+     "en": "It does not work without an article: singular lack needs a or the."
+    }
+   ]
+  }
+ },
+ "articles|shegavemeanadviceabouthowtonegotiate": {
+  "pat": "art.zero",
+  "why": {
+   "ok": {
+    "de": "Richtig: advice ist unzählbar, deshalb kein an: gave me advice.",
+    "en": "Right: advice is uncountable, so no an: gave me advice."
+   },
+   "wrong": [
+    {
+     "if": [
+      "an advice"
+     ],
+     "pat": "art.indefinite",
+     "de": "„an advice“ geht nicht, denn advice ist unzählbar. Sag some advice oder a piece of advice.",
+     "en": "“an advice” fails because advice is uncountable. Say some advice or a piece of advice."
+    },
+    {
+     "if": [
+      "advices"
+     ],
+     "de": "„advices“ gibt es nicht: advice hat keinen Plural.",
+     "en": "There is no “advices”: advice has no plural."
+    },
+    {
+     "if": [
+      "a advice"
+     ],
+     "pat": "art.indefinite",
+     "de": "„a advice“ geht nicht: advice ist unzählbar und braucht kein a.",
+     "en": "“a advice” fails: advice is uncountable and takes no a."
+    }
+   ]
+  }
+ },
+ "articles|heisworkingasengineeratsiemens": {
+  "pat": "art.indefinite",
+  "why": {
+   "ok": {
+    "de": "Richtig: Ein Beruf nach as braucht im Singular a/an: as an engineer.",
+    "en": "Right: after as a singular job takes a/an: as an engineer."
+   },
+   "wrong": [
+    {
+     "if": [
+      "a engineer"
+     ],
+     "pat": "art.sound",
+     "de": "„a engineer“ geht nicht: Vor dem Vokallaut von engineer steht an.",
+     "en": "“a engineer” fails: before the vowel sound of engineer use an."
+    },
+    {
+     "if": [
+      "the engineer"
+     ],
+     "pat": "art.definite",
+     "de": "„the engineer“ meint einen bekannten Ingenieur. Hier wird nur seine Rolle genannt.",
+     "en": "“the engineer” means a known engineer. Here only his role is named."
+    },
+    {
+     "not": [
+      "an engineer",
+      "a engineer"
+     ],
+     "de": "Es fehlt der Artikel: Ein Beruf im Singular braucht a/an, im Deutschen nicht.",
+     "en": "The article is missing: a singular job needs a/an, unlike in German."
+    }
+   ]
+  },
+  "dup": "articles|sheworksasengineeratasoftwarecompany"
+ },
  "c1-diplomacy|iwhetheryoucouldsharetherequirementsbyfriday": {
   "pat": "dip.wondering",
   "why": {
@@ -1650,6 +2238,526 @@
      ],
      "de": "Verändert werden muss nur wait: worth waiting until Q3.",
      "en": "Only wait needs to change: worth waiting until Q3."
+    }
+   ]
+  }
+ },
+ "c1-participle|thecontractourlegalteamapprovedit": {
+  "pat": "cp.having",
+  "why": {
+   "ok": {
+    "de": "Richtig: Having reviewed. Erst geprüft, dann freigegeben.",
+    "en": "Right: Having reviewed. First checked, then approved."
+   },
+   "wrong": [
+    {
+     "if": [
+      "having",
+      "reviewing"
+     ],
+     "de": "Nach Having folgt die 3. Form: reviewed, nicht reviewing.",
+     "en": "After Having comes the past participle: reviewed, not reviewing."
+    },
+    {
+     "if": [
+      "having",
+      "review"
+     ],
+     "de": "Nach Having braucht es die 3. Form: reviewed, nicht die Grundform.",
+     "en": "After Having you need the past participle: reviewed, not the base form."
+    },
+    {
+     "if": [
+      "reviewing"
+     ],
+     "pat": "cp.ing",
+     "de": "Reviewing hieße: beim Prüfen. Hier war die Prüfung zuerst fertig: Having reviewed.",
+     "en": "Reviewing means while checking. Here the review was done first: Having reviewed."
+    },
+    {
+     "if": [
+      "reviewed"
+     ],
+     "not": [
+      "having"
+     ],
+     "pat": "cp.pp",
+     "de": "Reviewed allein ist passiv. Das Team prüft selbst und war zuerst fertig: Having reviewed.",
+     "en": "Reviewed alone is passive. The team did the review itself, first: Having reviewed."
+    }
+   ]
+  }
+ },
+ "c1-participle|ocrthesystemreadseveryincominginvoice": {
+  "pat": "cp.ing",
+  "why": {
+   "ok": {
+    "de": "Richtig: Using = mithilfe von. Das System liest, indem es OCR nutzt.",
+    "en": "Right: Using = by means of. The system reads by using OCR."
+   },
+   "wrong": [
+    {
+     "if": [
+      "having"
+     ],
+     "de": "Having used hieße: erst fertig. Hier ist OCR das Mittel beim Lesen: Using.",
+     "en": "Having used means finished first. Here OCR is the means while reading: Using."
+    },
+    {
+     "if": [
+      "used"
+     ],
+     "pat": "cp.pp",
+     "de": "Used allein ist passiv. Das System nutzt OCR selbst: Using.",
+     "en": "Used alone is passive. The system uses OCR itself: Using."
+    },
+    {
+     "if": [
+      "use"
+     ],
+     "de": "Das Partizip braucht -ing: Using. Die Grundform wirkt wie ein Befehl.",
+     "en": "The participle needs -ing: Using. The base form reads like a command."
+    },
+    {
+     "not": [
+      "using"
+     ],
+     "de": "Gesucht ist die -ing-Form von use: das Mittel, gleichzeitig.",
+     "en": "You need the -ing form of use: the means, at the same time."
+    }
+   ]
+  }
+ },
+ "c1-participle|ingermandatacentersthedocumentsstaygdprcompliant": {
+  "pat": "cp.pp",
+  "why": {
+   "ok": {
+    "de": "Richtig: Stored. Die Dokumente werden gespeichert: nur die 3. Form.",
+    "en": "Right: Stored. The documents are stored: just the past participle."
+   },
+   "wrong": [
+    {
+     "if": [
+      "storing"
+     ],
+     "pat": "cp.ing",
+     "de": "Storing hieße: Die Dokumente speichern selbst. Sie werden gespeichert: Stored.",
+     "en": "Storing would mean the documents store something. They are stored: Stored."
+    },
+    {
+     "if": [
+      "having"
+     ],
+     "not": [
+      "been"
+     ],
+     "pat": "cp.having",
+     "de": "Having stored hieße: Die Dokumente haben gespeichert. Sie wurden gespeichert: Stored.",
+     "en": "Having stored would mean the documents did the storing. They were stored: Stored."
+    },
+    {
+     "if": [
+      "store"
+     ],
+     "de": "Die Grundform ist kein Partizip. Der passive Sinn braucht die 3. Form: Stored.",
+     "en": "The base form is not a participle. Passive meaning needs the past participle: Stored."
+    },
+    {
+     "not": [
+      "stored"
+     ],
+     "de": "Gesucht ist die 3. Form von store, meist ohne being: Stored.",
+     "en": "You need the past participle of store, usually with no being: Stored."
+    }
+   ]
+  }
+ },
+ "c1-participle|havingthepilotwemovedontotherollout": {
+  "pat": "cp.having",
+  "why": {
+   "ok": {
+    "de": "Richtig: Having + 3. Form, hier finished. Erst fertig, dann weiter.",
+    "en": "Right: Having + past participle, here finished. First done, then moved on."
+   },
+   "wrong": [
+    {
+     "if": [
+      "finishing"
+     ],
+     "de": "Nach Having folgt die 3. Form: finished, nicht finishing.",
+     "en": "After Having comes the past participle: finished, not finishing."
+    },
+    {
+     "if": [
+      "finish"
+     ],
+     "de": "Nach Having braucht es die 3. Form: finished, nicht die Grundform.",
+     "en": "After Having you need the past participle: finished, not the base form."
+    },
+    {
+     "not": [
+      "finished",
+      "completed",
+      "concluded",
+      "wrapped"
+     ],
+     "de": "Gesucht ist die 3. Form von finish: Having finished.",
+     "en": "You need the past participle of finish: Having finished."
+    }
+   ]
+  }
+ },
+ "c1-participle|thedemotheitleadaskedaboutsinglesignon": {
+  "pat": "cp.having",
+  "why": {
+   "ok": {
+    "de": "Richtig: Having seen. Erst die Demo gesehen, dann gefragt.",
+    "en": "Right: Having seen. First saw the demo, then asked."
+   },
+   "wrong": [
+    {
+     "opt": "Having see",
+     "de": "Nach Having folgt die 3. Form: seen, nicht die Grundform see.",
+     "en": "After Having comes the past participle: seen, not the base form see."
+    },
+    {
+     "opt": "Seen",
+     "pat": "cp.pp",
+     "de": "Seen allein ist passiv und nimmt kein Objekt. Hier handelt der Leiter: Having seen.",
+     "en": "Seen alone is passive and takes no object. The lead acts here: Having seen."
+    },
+    {
+     "opt": "Have seen",
+     "de": "Have seen ist eine finite Verbform, keine Verkürzung. Hier gehört Having seen hin.",
+     "en": "Have seen is a finite verb form, not a shortening. Having seen belongs here."
+    }
+   ]
+  }
+ },
+ "c1-participle|bytheauditorsthenewprocessisnowstandard": {
+  "pat": "cp.pp",
+  "why": {
+   "ok": {
+    "de": "Richtig: Approved. Die Prüfer genehmigen ihn: passiv, nur die 3. Form.",
+    "en": "Right: Approved. The auditors approved it: passive, just the past participle."
+   },
+   "wrong": [
+    {
+     "opt": "Approving",
+     "pat": "cp.ing",
+     "de": "Approving hieße: Der Prozess genehmigt selbst. Die Prüfer genehmigen ihn: Approved.",
+     "en": "Approving would mean the process approves. The auditors approve it: Approved."
+    },
+    {
+     "opt": "Having approve",
+     "de": "Having approve ist keine Form. Passiv braucht nur die 3. Form: Approved by …",
+     "en": "Having approve is not a form. Passive needs only the past participle: Approved by …"
+    },
+    {
+     "opt": "Approve",
+     "de": "Die Grundform ist kein Partizip. Passiv braucht die 3. Form: Approved by …",
+     "en": "The base form is not a participle. Passive needs the past participle: Approved by …"
+    }
+   ]
+  }
+ },
+ "c1-participle|inthecloudthearchiveneedsnolocalservers": {
+  "pat": "cp.ing",
+  "why": {
+   "ok": {
+    "de": "Richtig: Running. Das Archiv läuft selbst und zugleich: -ing-Form.",
+    "en": "Right: Running. The archive runs by itself, at the same time: -ing form."
+   },
+   "wrong": [
+    {
+     "opt": "Runs",
+     "de": "Runs ist ein finites Verb. Gesucht ist das Partizip: Running.",
+     "en": "Runs is a finite verb. You need the participle: Running."
+    },
+    {
+     "opt": "Being running in",
+     "de": "Being running ist keine übliche Form: Das Partizip steht allein, Running.",
+     "en": "Being running is not a usual form: the participle stands alone, Running."
+    },
+    {
+     "opt": "Ran",
+     "de": "Ran ist die einfache Vergangenheit, kein Partizip. Gesucht ist Running.",
+     "en": "Ran is the simple past, not a participle. You need Running."
+    }
+   ]
+  }
+ },
+ "c1-participle|afterwehadtestedtheworkflowwetrainedtheuserstheworkflowwetrainedtheusers": {
+  "pat": "cp.having",
+  "why": {
+   "ok": {
+    "de": "Richtig: Having tested. Erst getestet, dann geschult: gleiches Subjekt.",
+    "en": "Right: Having tested. First tested, then trained: same subject."
+   },
+   "wrong": [
+    {
+     "if": [
+      "having",
+      "testing"
+     ],
+     "de": "Nach Having folgt die 3. Form: tested, nicht testing.",
+     "en": "After Having comes the past participle: tested, not testing."
+    },
+    {
+     "if": [
+      "having",
+      "test"
+     ],
+     "de": "Nach Having braucht es die 3. Form: tested, nicht die Grundform.",
+     "en": "After Having you need the past participle: tested, not the base form."
+    },
+    {
+     "if": [
+      "testing"
+     ],
+     "pat": "cp.ing",
+     "de": "Testing hieße: beim Testen. Das Testen war zuerst fertig: Having tested.",
+     "en": "Testing means while testing. The testing was finished first: Having tested."
+    },
+    {
+     "if": [
+      "tested"
+     ],
+     "not": [
+      "having"
+     ],
+     "pat": "cp.pp",
+     "de": "Tested allein ist passiv. Wir haben selbst getestet: Having tested.",
+     "en": "Tested alone is passive. We did the testing ourselves: Having tested."
+    }
+   ]
+  }
+ },
+ "c1-participle|becauseitrunsinthecloudthearchivescalesautomaticallyinthecloudthearchivescalesau": {
+  "pat": "cp.ing",
+  "why": {
+   "ok": {
+    "de": "Richtig: Running. Grund und zugleich: Das Archiv läuft in der Cloud.",
+    "en": "Right: Running. Reason and at the same time: the archive runs in the cloud."
+   },
+   "wrong": [
+    {
+     "if": [
+      "having"
+     ],
+     "pat": "cp.having",
+     "de": "Having run hieße: erst gelaufen. Es läuft aber gerade: Running.",
+     "en": "Having run means: ran first. It is running now: Running."
+    },
+    {
+     "if": [
+      "run"
+     ],
+     "pat": "cp.pp",
+     "de": "Run allein hieße: Es wird betrieben. Hier läuft es selbst: Running.",
+     "en": "Run alone means: it is operated. Here it runs by itself: Running."
+    },
+    {
+     "if": [
+      "ran"
+     ],
+     "de": "Ran ist die einfache Vergangenheit, kein Partizip. Gesucht ist Running.",
+     "en": "Ran is the simple past, not a participle. You need Running."
+    },
+    {
+     "not": [
+      "running"
+     ],
+     "de": "Gesucht ist die -ing-Form von run: Running.",
+     "en": "You need the -ing form of run: Running."
+    }
+   ]
+  }
+ },
+ "c1-participle|thereportwaswritteninmayanditisalreadyoutofdateinmaythereportisalreadyoutofdate": {
+  "pat": "cp.pp",
+  "why": {
+   "ok": {
+    "de": "Richtig: Written. Der Bericht wurde geschrieben: passiv, nur die 3. Form.",
+    "en": "Right: Written. The report was written: passive, just the past participle."
+   },
+   "wrong": [
+    {
+     "if": [
+      "writing"
+     ],
+     "pat": "cp.ing",
+     "de": "Writing hieße: Der Bericht schreibt selbst. Er wurde geschrieben: Written.",
+     "en": "Writing would mean the report writes. It was written: Written."
+    },
+    {
+     "if": [
+      "write"
+     ],
+     "de": "Die Grundform ist kein Partizip. Passiv braucht die 3. Form: Written.",
+     "en": "The base form is not a participle. Passive needs the past participle: Written."
+    },
+    {
+     "if": [
+      "having"
+     ],
+     "not": [
+      "been"
+     ],
+     "pat": "cp.having",
+     "de": "Having written hieße: Der Bericht hat selbst geschrieben. Passiv: Written.",
+     "en": "Having written means the report did the writing. Passive: Written."
+    },
+    {
+     "not": [
+      "written"
+     ],
+     "de": "Gesucht ist die 3. Form von write: Written.",
+     "en": "You need the past participle of write: Written."
+    }
+   ]
+  }
+ },
+ "c1-participle|havingsignthecontractthecustomerreceivedtheaccessdata": {
+  "pat": "cp.having",
+  "why": {
+   "ok": {
+    "de": "Richtig: Having signed. Nach Having steht die 3. Form.",
+    "en": "Right: Having signed. After Having comes the past participle."
+   },
+   "wrong": [
+    {
+     "if": [
+      "having",
+      "signing"
+     ],
+     "de": "Nach Having folgt die 3. Form: signed, nicht signing.",
+     "en": "After Having comes the past participle: signed, not signing."
+    },
+    {
+     "if": [
+      "having",
+      "sign"
+     ],
+     "de": "Die Grundform sign passt nicht. Nach Having steht die 3. Form: signed.",
+     "en": "The base form sign does not fit. After Having comes the past participle: signed."
+    },
+    {
+     "not": [
+      "signed"
+     ],
+     "de": "Ändere die Form nach Having zur 3. Form: signed.",
+     "en": "Change the form after Having to the past participle: signed."
+    }
+   ]
+  }
+ },
+ "c1-participle|havingreceivingyourfeedbackweupdatedtheoffer": {
+  "pat": "cp.having",
+  "why": {
+   "ok": {
+    "de": "Richtig: Having received. Nach Having steht die 3. Form, nicht -ing.",
+    "en": "Right: Having received. After Having comes the past participle, not -ing."
+   },
+   "wrong": [
+    {
+     "if": [
+      "having",
+      "receiving"
+     ],
+     "de": "Nach Having folgt die 3. Form: received, nicht receiving.",
+     "en": "After Having comes the past participle: received, not receiving."
+    },
+    {
+     "if": [
+      "having",
+      "receive"
+     ],
+     "de": "Die Grundform receive passt nicht. Nach Having steht die 3. Form: received.",
+     "en": "The base form receive does not fit. After Having comes the past participle: received."
+    },
+    {
+     "not": [
+      "received"
+     ],
+     "de": "Ändere die Form nach Having zur 3. Form: received.",
+     "en": "Change the form after Having to the past participle: received."
+    }
+   ]
+  }
+ },
+ "c1-participle|usethenewsearchyoucanfindanyinvoiceinseconds": {
+  "pat": "cp.ing",
+  "why": {
+   "ok": {
+    "de": "Richtig: Using. Am Satzanfang braucht das Mittel die -ing-Form.",
+    "en": "Right: Using. At the start, the means takes the -ing form."
+   },
+   "wrong": [
+    {
+     "if": [
+      "use"
+     ],
+     "de": "Use ist die Grundform und wirkt wie ein Befehl. Das Partizip braucht -ing: Using.",
+     "en": "Use is the base form and reads like a command. The participle needs -ing: Using."
+    },
+    {
+     "if": [
+      "used"
+     ],
+     "pat": "cp.pp",
+     "de": "Used allein ist passiv. Du nutzt die Suche selbst: Using.",
+     "en": "Used alone is passive. You use the search yourself: Using."
+    },
+    {
+     "if": [
+      "having"
+     ],
+     "pat": "cp.having",
+     "de": "Having used hieße: erst fertig. Die Suche ist das Mittel: Using.",
+     "en": "Having used means finished first. The search is the means: Using."
+    },
+    {
+     "not": [
+      "using"
+     ],
+     "de": "Gesucht ist die -ing-Form von use: Using the new search, …",
+     "en": "You need the -ing form of use: Using the new search, …"
+    }
+   ]
+  }
+ },
+ "c1-participle|havingreviewtheofferthecfoaskedforadiscount": {
+  "pat": "cp.having",
+  "dup": "c1-participle|havingsignthecontractthecustomerreceivedtheaccessdata",
+  "why": {
+   "ok": {
+    "de": "Richtig: Having reviewed. Nach Having steht die 3. Form.",
+    "en": "Right: Having reviewed. After Having comes the past participle."
+   },
+   "wrong": [
+    {
+     "if": [
+      "having",
+      "reviewing"
+     ],
+     "de": "Nach Having folgt die 3. Form: reviewed, nicht reviewing.",
+     "en": "After Having comes the past participle: reviewed, not reviewing."
+    },
+    {
+     "if": [
+      "having",
+      "review"
+     ],
+     "de": "Die Grundform review passt nicht. Nach Having steht die 3. Form: reviewed.",
+     "en": "The base form review does not fit. After Having comes the past participle: reviewed."
+    },
+    {
+     "not": [
+      "reviewed"
+     ],
+     "de": "Ändere die Form nach Having zur 3. Form: reviewed.",
+     "en": "Change the form after Having to the past participle: reviewed."
     }
    ]
   }
@@ -4143,6 +5251,973 @@
    ]
   }
  },
+ "gerund-inf|iamlookingforwardtoyou": {
+  "pat": "gi.prep-ing",
+  "why": {
+   "ok": {
+    "de": "Richtig: Hinter „looking forward to“ ist to eine Präposition, also seeing.",
+    "en": "Right: after “looking forward to”, to is a preposition, so seeing."
+   },
+   "wrong": [
+    {
+     "opt": "see",
+     "de": "Nach der Präposition to steht keine Grundform, sondern -ing: seeing.",
+     "en": "After the preposition to a bare verb is wrong; use -ing: seeing."
+    },
+    {
+     "opt": "to see",
+     "de": "Das to gehört schon zu „look forward to“. Ein zweites to passt nicht.",
+     "en": "The to already belongs to “look forward to”. A second to does not fit."
+    },
+    {
+     "opt": "seen",
+     "de": "„Seen“ ist ein Partizip der Vergangenheit. Nach einer Präposition passt -ing.",
+     "en": "“Seen” is a past participle. After a preposition use -ing."
+    }
+   ]
+  }
+ },
+ "gerund-inf|wedecidedthetrain": {
+  "pat": "gi.to-verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: decide + to + Verb, also to take. Ein Entschluss zielt auf Künftiges.",
+    "en": "Right: decide + to + verb, so to take. A decision aims at what comes next."
+   },
+   "wrong": [
+    {
+     "if": [
+      "taking"
+     ],
+     "de": "Nach decide steht to + Verb, kein -ing: to take.",
+     "en": "After decide use to + verb, not -ing: to take."
+    },
+    {
+     "if": [
+      "take"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Es fehlt das to: decide + to + Verb.",
+     "en": "The to is missing: decide + to + verb."
+    },
+    {
+     "pat": "gi.to-verbs",
+     "de": "Nach decide steht to + Grundform: to take.",
+     "en": "After decide comes to + base form: to take."
+    }
+   ]
+  }
+ },
+ "gerund-inf|istoppedbecauseitsbadformyhealth": {
+  "pat": "gi.meaning",
+  "why": {
+   "ok": {
+    "de": "Richtig: stop + -ing heißt aufhören. Hier gibt er das Rauchen auf.",
+    "en": "Right: stop + -ing means quit. Here he gives up smoking."
+   },
+   "wrong": [
+    {
+     "opt": "to smoke",
+     "de": "„Stop to smoke“ hieße anhalten, um zu rauchen. Das passt nicht zu „bad for my health“.",
+     "en": "“Stop to smoke” means pausing in order to smoke. That clashes with “bad for my health”."
+    },
+    {
+     "opt": "smoke",
+     "de": "Nach stop folgt -ing oder to + Verb. Die bloße Grundform passt nicht.",
+     "en": "After stop comes -ing or to + verb. The bare base form does not fit."
+    },
+    {
+     "opt": "smoked",
+     "de": "Nach stop steht keine Vergangenheitsform, sondern -ing oder to + Verb.",
+     "en": "After stop there is no past form, but -ing or to + verb."
+    }
+   ]
+  }
+ },
+ "gerund-inf|wecannotaffordtheproductlaunchagain": {
+  "pat": "gi.to-verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach afford steht to + Verb, also can't afford to delay.",
+    "en": "Right: afford + to + verb, so can't afford to delay."
+   },
+   "wrong": [
+    {
+     "opt": "delay",
+     "de": "Es fehlt das to: afford + to + Verb.",
+     "en": "The to is missing: afford + to + verb."
+    },
+    {
+     "opt": "delaying",
+     "de": "Afford gehört zur to-Gruppe (decide, hope, manage), nicht zur -ing-Gruppe.",
+     "en": "Afford belongs to the to group (decide, hope, manage), not the -ing group."
+    },
+    {
+     "opt": "to delaying",
+     "de": "To und -ing zugleich gibt es hier nicht: afford + to + Grundform.",
+     "en": "To and -ing together do not occur here: afford + to + base form."
+    }
+   ]
+  }
+ },
+ "gerund-inf|isuggestthemeetingtothursday": {
+  "pat": "gi.ing-verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach suggest steht -ing, also suggest moving.",
+    "en": "Right: suggest takes -ing, so suggest moving."
+   },
+   "wrong": [
+    {
+     "opt": "to move",
+     "de": "Deutsch „vorschlagen, … zu verschieben“ verleitet zu to. Suggest nimmt aber kein to.",
+     "en": "German “vorschlagen, … zu verschieben” tempts to, but suggest takes no to."
+    },
+    {
+     "opt": "to moving",
+     "de": "Zwei Formen vermischt: Nach suggest steht -ing, ohne to.",
+     "en": "Two forms mixed: after suggest comes -ing, without to."
+    },
+    {
+     "opt": "move",
+     "de": "Nach suggest steht -ing. Die Grundform geht nur im Satz: I suggest we move.",
+     "en": "After suggest comes -ing. The base form only works in a clause: I suggest we move."
+    }
+   ]
+  }
+ },
+ "gerund-inf|pleaseremembertheclientbeforethecallshedoesnotknowtheagendayet": {
+  "pat": "gi.meaning",
+  "why": {
+   "ok": {
+    "de": "Richtig: remember + to = daran denken. Die E-Mail ist noch nicht geschickt.",
+    "en": "Right: remember + to = remember to do it. The email has not been sent yet."
+   },
+   "wrong": [
+    {
+     "opt": "email",
+     "de": "Die bloße Grundform passt nicht: remember + to + Verb.",
+     "en": "The bare base form does not fit: remember + to + verb."
+    },
+    {
+     "opt": "emailed",
+     "de": "Eine Vergangenheitsform passt nicht: Es folgt to + Verb oder -ing.",
+     "en": "A past form does not fit: to + verb or -ing follows."
+    },
+    {
+     "opt": "emailing",
+     "de": "Remember + -ing heißt, sich an Geschehenes erinnern. Hier ist es noch offen.",
+     "en": "Remember + -ing means recalling what happened. Here it is still open."
+    }
+   ]
+  }
+ },
+ "gerund-inf|iwillneverforgetmyfirstbigdealiwasshakingwithexcitement": {
+  "pat": "gi.meaning",
+  "why": {
+   "ok": {
+    "de": "Richtig: forget + -ing = die Erinnerung. Der erste Abschluss liegt schon zurück.",
+    "en": "Right: forget + -ing = the memory. The first deal is already behind him."
+   },
+   "wrong": [
+    {
+     "opt": "close",
+     "de": "Die Grundform allein passt nicht: forget + -ing oder to + Verb.",
+     "en": "The base form alone does not fit: forget + -ing or to + verb."
+    },
+    {
+     "opt": "to closing",
+     "de": "To und -ing zusammen gibt es nicht. Für die Erinnerung steht -ing.",
+     "en": "To and -ing together do not occur. For the memory use -ing."
+    },
+    {
+     "opt": "to close",
+     "de": "Forget + to hieße: nie vergessen, es noch zu tun. Hier ist es schon passiert.",
+     "en": "Forget + to would mean: never forget to do it. Here it already happened."
+    }
+   ]
+  }
+ },
+ "gerund-inf|weareconsideringasecondofficeinvienna": {
+  "pat": "gi.ing-verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach consider steht -ing, also considering opening.",
+    "en": "Right: consider + -ing, so considering opening."
+   },
+   "wrong": [
+    {
+     "opt": "to opening",
+     "de": "Zwei Formen vermischt: Consider nimmt -ing, ohne to.",
+     "en": "Two forms mixed: consider takes -ing, without to."
+    },
+    {
+     "opt": "to open",
+     "de": "Consider gehört zur -ing-Gruppe, nicht zur to-Gruppe.",
+     "en": "Consider belongs to the -ing group, not the to group."
+    },
+    {
+     "opt": "open",
+     "de": "Nach consider steht -ing, nicht die bloße Grundform.",
+     "en": "After consider comes -ing, not the bare base form."
+    }
+   ]
+  }
+ },
+ "gerund-inf|icannothelpwheniseethatvideo": {
+  "pat": "gi.ing-verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: can't help + -ing = nicht anders können, als zu lachen.",
+    "en": "Right: can't help + -ing = unable to stop yourself laughing."
+   },
+   "wrong": [
+    {
+     "opt": "to laughing",
+     "de": "Kein to nach can't help, sondern -ing.",
+     "en": "No to: can't help + -ing."
+    },
+    {
+     "opt": "to laugh",
+     "de": "Can't help + to + Verb gibt es nicht. Es heißt can't help + -ing.",
+     "en": "Can't help + to + verb does not exist. It is can't help + -ing."
+    },
+    {
+     "opt": "laugh",
+     "de": "Ohne but geht die Grundform nicht: can't help laughing oder can't help but laugh.",
+     "en": "Without but the base form fails: can't help laughing or can't help but laugh."
+    }
+   ]
+  }
+ },
+ "gerund-inf|iregretyouthattheprojecthasbeencanceled": {
+  "pat": "gi.meaning",
+  "why": {
+   "ok": {
+    "de": "Richtig: regret + to = bedauern, etwas jetzt mitteilen zu müssen.",
+    "en": "Right: regret + to = to be sorry to have to say something now."
+   },
+   "wrong": [
+    {
+     "if": [
+      "informing"
+     ],
+     "de": "Regret + -ing blickt zurück (bereuen). Hier geht es um die Mitteilung jetzt: to inform.",
+     "en": "Regret + -ing looks back (feel sorry for). Here it is about telling now: to inform."
+    },
+    {
+     "if": [
+      "inform"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Es fehlt das to: regret to inform.",
+     "en": "The to is missing: regret to inform."
+    },
+    {
+     "pat": "gi.meaning",
+     "de": "Für die Mitteilung jetzt steht regret + to + Verb.",
+     "en": "For telling someone now use regret + to + verb."
+    }
+   ]
+  }
+ },
+ "gerund-inf|mymanagermademethereportagain": {
+  "pat": "gi.bare-inf",
+  "why": {
+   "ok": {
+    "de": "Richtig: make + Person + Grundform: made me write, ohne to.",
+    "en": "Right: make + person + base form: made me write, no to."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to write"
+     ],
+     "de": "Nach make steht kein to: made me write. Nur im Passiv kommt to zurück.",
+     "en": "No to after make: made me write. Only in the passive does to return."
+    },
+    {
+     "if": [
+      "writing"
+     ],
+     "de": "Nach make folgt die Grundform, nicht -ing: made me write.",
+     "en": "After make comes the base form, not -ing: made me write."
+    },
+    {
+     "pat": "gi.bare-inf",
+     "de": "Nach make + Person steht die Grundform ohne to.",
+     "en": "After make + person the base form follows without to."
+    }
+   ]
+  }
+ },
+ "gerund-inf|shesucceededintheclienttosignathreeyearcontract": {
+  "pat": "gi.prep-ing",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach der Präposition in steht -ing: succeeded in persuading.",
+    "en": "Right: after the preposition in comes -ing: succeeded in persuading."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to persuade"
+     ],
+     "de": "Nach in steht kein to + Verb, sondern -ing.",
+     "en": "After in comes -ing, not to + verb."
+    },
+    {
+     "if": [
+      "persuade"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach einer Präposition steht -ing, nicht die Grundform.",
+     "en": "After a preposition comes -ing, not the base form."
+    },
+    {
+     "pat": "gi.prep-ing",
+     "de": "Nach der Präposition in steht die -ing-Form.",
+     "en": "After the preposition in use the -ing form."
+    }
+   ]
+  }
+ },
+ "gerund-inf|idonotmindlateiftheprojectneedsit": {
+  "pat": "gi.ing-verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach mind steht -ing: I don't mind working late.",
+    "en": "Right: mind + -ing: I don't mind working late."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to work"
+     ],
+     "de": "Nach mind steht -ing, kein to: don't mind working.",
+     "en": "After mind comes -ing, not to: don't mind working."
+    },
+    {
+     "if": [
+      "work"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Mind gehört zur -ing-Gruppe, die Grundform passt nicht.",
+     "en": "Mind belongs to the -ing group; the base form does not fit."
+    },
+    {
+     "pat": "gi.ing-verbs",
+     "de": "Nach mind folgt die -ing-Form.",
+     "en": "After mind the -ing form follows."
+    }
+   ]
+  }
+ },
+ "gerund-inf|hepretendednothingaboutthesurpriseparty": {
+  "pat": "gi.to-verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach pretend steht to + Verb, also pretended to know.",
+    "en": "Right: pretend + to + verb, so pretended to know."
+   },
+   "wrong": [
+    {
+     "if": [
+      "knowing"
+     ],
+     "de": "Nach pretend steht to + Verb, kein -ing: pretended to know.",
+     "en": "After pretend use to + verb, not -ing: pretended to know."
+    },
+    {
+     "if": [
+      "know"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Es fehlt das to: pretend + to + Verb.",
+     "en": "The to is missing: pretend + to + verb."
+    },
+    {
+     "if": [
+      "knew"
+     ],
+     "de": "Nach pretend steht keine Vergangenheitsform, sondern to + Grundform.",
+     "en": "After pretend there is no past form, but to + base form."
+    },
+    {
+     "pat": "gi.to-verbs",
+     "de": "Nach pretend folgt to + Grundform.",
+     "en": "After pretend comes to + base form."
+    }
+   ]
+  }
+ },
+ "gerund-inf|itwasamistaketohirehimiregrethim": {
+  "pat": "gi.meaning",
+  "why": {
+   "ok": {
+    "de": "Richtig: regret + -ing = bereuen, es getan zu haben: regret hiring him.",
+    "en": "Right: regret + -ing = feel sorry about what you did: regret hiring him."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to hire"
+     ],
+     "de": "Regret + to meint, etwas jetzt mitteilen zu müssen. Bereuen heißt -ing.",
+     "en": "Regret + to means being sorry to say something now. Feeling sorry for it is -ing."
+    },
+    {
+     "if": [
+      "hire"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach regret steht -ing, nicht die Grundform.",
+     "en": "After regret comes -ing, not the base form."
+    },
+    {
+     "if": [
+      "hired"
+     ],
+     "de": "Nach regret folgt -ing oder having + Partizip, keine einfache Vergangenheit.",
+     "en": "After regret comes -ing or having + participle, not a simple past."
+    },
+    {
+     "pat": "gi.meaning",
+     "de": "Das Bereuen der Tat ist regret + -ing.",
+     "en": "Feeling sorry for something is regret + -ing."
+    }
+   ]
+  }
+ },
+ "gerund-inf|shedidnotwanttospeakabouttheproblemsoshechangedthesubjectsheavoidedabouttheprobl": {
+  "pat": "gi.ing-verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach avoid steht -ing: avoided speaking about the problem.",
+    "en": "Right: avoid + -ing: avoided speaking about the problem."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to speak"
+     ],
+     "de": "Nach avoid steht -ing, kein to.",
+     "en": "After avoid comes -ing, not to."
+    },
+    {
+     "if": [
+      "speak"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Avoid braucht -ing, nicht die Grundform.",
+     "en": "Avoid needs -ing, not the base form."
+    },
+    {
+     "pat": "gi.ing-verbs",
+     "de": "Nach avoid folgt die -ing-Form.",
+     "en": "After avoid the -ing form follows."
+    }
+   ]
+  }
+ },
+ "gerund-inf|welookforwardtohearfromyousoon": {
+  "pat": "gi.prep-ing",
+  "why": {
+   "ok": {
+    "de": "Richtig: look forward to + -ing, denn to ist hier eine Präposition: hearing.",
+    "en": "Right: look forward to + -ing, because to is a preposition here: hearing."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to hear"
+     ],
+     "de": "Das to in look forward to ist eine Präposition. Es folgt -ing: hearing.",
+     "en": "The to in look forward to is a preposition. -ing follows: hearing."
+    },
+    {
+     "if": [
+      "forward hearing"
+     ],
+     "de": "Das to fehlt: look forward to hearing.",
+     "en": "The to is missing: look forward to hearing."
+    },
+    {
+     "pat": "gi.prep-ing",
+     "de": "Nach look forward to steht die -ing-Form.",
+     "en": "After look forward to use the -ing form."
+    }
+   ]
+  }
+ },
+ "gerund-inf|hesuggestedtopostponethemeeting": {
+  "pat": "gi.ing-verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: suggest + -ing (oder suggest that we postpone): suggested postponing.",
+    "en": "Right: suggest + -ing (or suggest that we postpone): suggested postponing."
+   },
+   "wrong": [
+    {
+     "if": [
+      "suggested to"
+     ],
+     "de": "„Suggest to + Verb“ gibt es nicht. Nimm -ing oder einen that-Satz.",
+     "en": "“Suggest to + verb” does not exist. Use -ing or a that-clause."
+    },
+    {
+     "if": [
+      "suggested postpone"
+     ],
+     "de": "Nach suggest steht -ing: postponing.",
+     "en": "After suggest comes -ing: postponing."
+    },
+    {
+     "pat": "gi.ing-verbs",
+     "de": "Nach suggest folgt -ing oder ein that-Satz.",
+     "en": "After suggest comes -ing or a that-clause."
+    }
+   ]
+  }
+ },
+ "gerund-inf|hesuggestedtomeetattheoffice": {
+  "pat": "gi.ing-verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach suggest steht -ing: suggested meeting at the office.",
+    "en": "Right: suggest + -ing: suggested meeting at the office."
+   },
+   "wrong": [
+    {
+     "if": [
+      "suggested to"
+     ],
+     "de": "Nach suggest folgt -ing oder ein that-Satz, nie to + Grundform.",
+     "en": "After suggest comes -ing or a that-clause, never to + base form."
+    },
+    {
+     "if": [
+      "suggested meet"
+     ],
+     "de": "Nach suggest steht -ing: meeting.",
+     "en": "After suggest comes -ing: meeting."
+    },
+    {
+     "pat": "gi.ing-verbs",
+     "de": "Nach suggest folgt -ing oder ein that-Satz.",
+     "en": "After suggest comes -ing or a that-clause."
+    }
+   ]
+  }
+ },
+ "gerund-inf|ilookforwardtoseeyou": {
+  "pat": "gi.prep-ing",
+  "why": {
+   "ok": {
+    "de": "Richtig: to ist hier Präposition, darum look forward to seeing you.",
+    "en": "Right: to is a preposition here, so look forward to seeing you."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to see"
+     ],
+     "de": "Look forward to ist eine Wendung mit Präposition: seeing, nicht see.",
+     "en": "Look forward to is a phrase with a preposition: seeing, not see."
+    },
+    {
+     "if": [
+      "forward seeing"
+     ],
+     "de": "Das to fehlt: look forward to seeing.",
+     "en": "The to is missing: look forward to seeing."
+    },
+    {
+     "pat": "gi.prep-ing",
+     "de": "Nach look forward to steht die -ing-Form.",
+     "en": "After look forward to use the -ing form."
+    }
+   ]
+  }
+ },
+ "gerund-inf|sheenjoystoworkinateam": {
+  "pat": "gi.ing-verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach enjoy steht -ing: enjoys working in a team.",
+    "en": "Right: enjoy + -ing: enjoys working in a team."
+   },
+   "wrong": [
+    {
+     "if": [
+      "enjoys to"
+     ],
+     "de": "Enjoy gehört zur -ing-Gruppe, nicht zur to-Gruppe.",
+     "en": "Enjoy belongs to the -ing group, not the to group."
+    },
+    {
+     "if": [
+      "enjoys work"
+     ],
+     "de": "Nach enjoy steht -ing: working.",
+     "en": "After enjoy comes -ing: working."
+    },
+    {
+     "pat": "gi.ing-verbs",
+     "de": "Nach enjoy folgt die -ing-Form.",
+     "en": "After enjoy the -ing form follows."
+    }
+   ]
+  }
+ },
+ "mandative|theboardinsiststhathetheprojectimmediately": {
+  "pat": "mnd.verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Das Board verlangt etwas, deshalb steht die Grundform: that he leave, ohne -s.",
+    "en": "Right: the board demands something, so the base form follows: that he leave, no -s."
+   },
+   "wrong": [
+    {
+     "opt": "will leave",
+     "de": "Hier wird etwas verlangt. Dann folgt die Grundform, kein will.",
+     "en": "Something is demanded here, so the base form follows, not will."
+    },
+    {
+     "opt": "left",
+     "pat": "mnd.fact",
+     "de": "„Left“ meldet etwas Vergangenes. Das Board fordert aber, dass er geht: leave.",
+     "en": "Left reports the past. The board demands that he go: leave."
+    },
+    {
+     "opt": "leaves",
+     "pat": "mnd.fact",
+     "de": "Mit -s wie im normalen Präsens. Nach insist that (Forderung) bleibt es leave.",
+     "en": "The -s of the normal present. After insist that (a demand) it stays leave."
+    }
+   ]
+  }
+ },
+ "mandative|itisessentialthateveryemployeethetraining": {
+  "pat": "mnd.adjectives",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach essential that steht die Grundform: that every employee complete, ohne -s.",
+    "en": "Right: after essential that the base form follows: that every employee complete, no -s."
+   },
+   "wrong": [
+    {
+     "opt": "is completing",
+     "de": "Die -ing-Form passt nicht in diesen that-Satz. Es folgt die Grundform.",
+     "en": "The -ing form does not fit this that clause. The base form follows."
+    },
+    {
+     "opt": "completes",
+     "pat": "mnd.fact",
+     "de": "Mit -s wie im normalen Präsens. Nach essential that bleibt es complete.",
+     "en": "The -s of the normal present. After essential that it stays complete."
+    },
+    {
+     "opt": "completed",
+     "de": "Die Vergangenheitsform sagt, dass es schon geschah. Hier wird es verlangt.",
+     "en": "The past form says it already happened. Here it is demanded."
+    }
+   ]
+  }
+ },
+ "mandative|theauditordemandedthatthereportcorrected": {
+  "pat": "mnd.passive",
+  "why": {
+   "ok": {
+    "de": "Richtig: Das Passiv der Forderung lautet be + 3. Form: that the report be corrected.",
+    "en": "Right: the passive of a demand is be + past participle: that the report be corrected."
+   },
+   "wrong": [
+    {
+     "opt": "would be",
+     "de": "Would be umschreibt etwas Mögliches. Die Forderung braucht schlicht be.",
+     "en": "Would be describes something possible. The demand simply needs be."
+    },
+    {
+     "opt": "was",
+     "pat": "mnd.fact",
+     "de": "Was meldet eine Tatsache. Die Forderung braucht be + 3. Form.",
+     "en": "Was reports a fact. The demand needs be + past participle."
+    },
+    {
+     "opt": "is",
+     "de": "Is ist die normale Präsensform. Im Mandativ-Passiv steht be.",
+     "en": "Is is the normal present form. The mandative passive takes be."
+    }
+   ]
+  }
+ },
+ "mandative|isuggestthatshetheclientherself": {
+  "pat": "mnd.verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Ein Vorschlag verlangt die Grundform: that she call, auch bei she.",
+    "en": "Right: a proposal takes the base form: that she call, even after she."
+   },
+   "wrong": [
+    {
+     "opt": "is calling",
+     "de": "Die -ing-Form passt nicht. Nach suggest that (Vorschlag) folgt die Grundform.",
+     "en": "The -ing form does not fit. After suggest that (a proposal) the base form follows."
+    },
+    {
+     "opt": "called",
+     "pat": "mnd.fact",
+     "de": "Called meldet Vergangenes. Ein Vorschlag braucht die Grundform call.",
+     "en": "Called reports the past. A proposal needs the base form call."
+    },
+    {
+     "opt": "calls",
+     "pat": "mnd.fact",
+     "de": "Mit -s wie bei she im Präsens. Im Mandativ bleibt es call.",
+     "en": "The -s of she in the present. In the mandative it stays call."
+    }
+   ]
+  }
+ },
+ "mandative|itsvitalthatthedatastoredsecurely": {
+  "pat": "mnd.passive",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach vital that steht be + 3. Form: that the data be stored.",
+    "en": "Right: after vital that comes be + past participle: that the data be stored."
+   },
+   "wrong": [
+    {
+     "if": [
+      "is"
+     ],
+     "de": "Is ist die normale Form. Nach vital that braucht das Passiv be.",
+     "en": "Is is the normal form. After vital that the passive needs be."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach vital that steht kein will; die Forderung braucht be.",
+     "en": "No will after vital that; the demand needs be."
+    },
+    {
+     "not": [
+      "be",
+      "should"
+     ],
+     "de": "Die Lücke braucht die Grundform von sein, also be.",
+     "en": "The gap needs the base form of the verb to be, so be."
+    }
+   ]
+  }
+ },
+ "mandative|thecourtorderedthatthecompanythefinewithindays": {
+  "pat": "mnd.verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach ordered that steht die Grundform: that the company pay, ohne -s.",
+    "en": "Right: after ordered that the base form follows: that the company pay, no -s."
+   },
+   "wrong": [
+    {
+     "if": [
+      "pays"
+     ],
+     "de": "Mit -s wie im normalen Präsens. Nach ordered that bleibt es pay.",
+     "en": "The -s of the normal present. After ordered that it stays pay."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach ordered that steht kein will; das Gericht verlangt es.",
+     "en": "No will after ordered that; the court demands it."
+    },
+    {
+     "if": [
+      "paid"
+     ],
+     "de": "Paid meldet Vergangenes. Das Gericht verlangt die Zahlung noch.",
+     "en": "Paid reports the past. The court still demands the payment."
+    }
+   ]
+  }
+ },
+ "mandative|werecommendthatheattendtheworkshop": {
+  "pat": "mnd.negation",
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Verneinung steht direkt vor der Grundform: that he not attend.",
+    "en": "Right: the negation goes right before the base form: that he not attend."
+   },
+   "wrong": [
+    {
+     "if": [
+      "does",
+      "not"
+     ],
+     "de": "Mit doesn't kommt ein Hilfsverb dazu. Hier steht nur not vor attend.",
+     "en": "Doesn't adds a helper verb. Here only not goes before attend."
+    },
+    {
+     "not": [
+      "not"
+     ],
+     "de": "Die Lücke braucht die Verneinung: not steht direkt vor attend.",
+     "en": "The gap needs the negation: not goes right before attend."
+    }
+   ]
+  }
+ },
+ "mandative|heshouldbeinformedimmediatelyitisessentialitisessentialthatheinformedimmediately": {
+  "pat": "mnd.passive",
+  "why": {
+   "ok": {
+    "de": "Richtig: Aus should be informed wird nach essential that: be informed.",
+    "en": "Right: should be informed becomes be informed after essential that."
+   },
+   "wrong": [
+    {
+     "if": [
+      "is"
+     ],
+     "de": "Is ist die normale Form. Nach essential that steht be.",
+     "en": "Is is the normal form. After essential that comes be."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach essential that steht kein will; die Forderung braucht be.",
+     "en": "No will after essential that; the demand needs be."
+    }
+   ]
+  }
+ },
+ "mandative|youmustsubmittheformthemanagerinsistedthemanagerinsistedthatitheform": {
+  "pat": "mnd.verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Aus der Forderung wird that I submit, die Grundform ohne -s oder -ed.",
+    "en": "Right: the demand becomes that I submit, the base form with no -s or -ed."
+   },
+   "wrong": [
+    {
+     "if": [
+      "submitted"
+     ],
+     "de": "Submitted meldet Vergangenes. Die Chefin fordert aber die Abgabe: submit.",
+     "en": "Submitted reports the past. The manager demands the submission: submit."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach insisted that steht hier kein will; es bleibt die Grundform.",
+     "en": "No will after insisted that here; the base form stays."
+    },
+    {
+     "if": [
+      "submits"
+     ],
+     "de": "Mit -s passt das Verb nicht zu I. Es folgt die Grundform submit.",
+     "en": "With -s the verb does not fit I. The base form submit follows."
+    }
+   ]
+  }
+ },
+ "mandative|thecommitteedemandsthathewillresignimmediately": {
+  "pat": "mnd.verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach demands that steht die Grundform: that he resign, ohne will.",
+    "en": "Right: after demands that the base form follows: that he resign, no will."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach demands that bleibt will draußen. Das Komitee verlangt etwas.",
+     "en": "Will stays out after demands that. The committee demands something."
+    },
+    {
+     "if": [
+      "resigns"
+     ],
+     "de": "Mit -s wie im Präsens. Nach demands that steht resign ohne -s.",
+     "en": "The -s of the present. After demands that comes resign with no -s."
+    }
+   ]
+  }
+ },
+ "mandative|theboardrequiresthatthereportwillbesubmittedbyfriday": {
+  "pat": "mnd.passive",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach requires that steht be + 3. Form: that the report be submitted.",
+    "en": "Right: after requires that comes be + past participle: that the report be submitted."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach requires that steht kein will be; die Forderung braucht be.",
+     "en": "No will be after requires that; the demand needs be."
+    },
+    {
+     "if": [
+      "is"
+     ],
+     "de": "Is ist die normale Form. Im Mandativ-Passiv steht be.",
+     "en": "Is is the normal form. The mandative passive takes be."
+    }
+   ]
+  }
+ },
+ "mandative|isuggestthathedoesnotsignthecontractyet": {
+  "pat": "mnd.negation",
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Verneinung steht vor der Grundform: that he not sign.",
+    "en": "Right: the negation goes before the base form: that he not sign."
+   },
+   "wrong": [
+    {
+     "if": [
+      "does",
+      "not"
+     ],
+     "de": "Doesn't bringt ein Hilfsverb mit. Im Mandativ steht nur not + Grundform.",
+     "en": "Doesn't brings a helper verb. The mandative takes only not + base form."
+    },
+    {
+     "not": [
+      "not"
+     ],
+     "de": "Achte auf die Verneinung: not steht direkt vor der Grundform sign.",
+     "en": "Watch the negation: not goes right before the base form sign."
+    }
+   ]
+  }
+ },
  "mixed-cond|iwishispeakspanish": {
   "pat": "mc.wish-now",
   "why": {
@@ -4745,6 +6820,428 @@
      ],
      "de": "have ist Präsens; nach wish rückt die Form eine Stufe zurück: had.",
      "en": "have is present; after wish the verb moves one step back: had."
+    }
+   ]
+  }
+ },
+ "modals-advice|youtellyourmanagertodayorshewillhearitfromtheclient": {
+  "pat": "ma.had-better",
+  "why": {
+   "ok": {
+    "de": "Richtig: had better warnt vor einer Folge, sonst erfährt sie es vom Kunden.",
+    "en": "Right: had better warns of a consequence, or else she hears it from the client."
+   },
+   "wrong": [
+    {
+     "opt": "should to",
+     "pat": "ma.should",
+     "de": "Nach should steht kein to. Auch ohne to fehlt hier die drohende Folge.",
+     "en": "No to after should. Even without to, the looming consequence is missing."
+    },
+    {
+     "opt": "ought",
+     "pat": "ma.should",
+     "de": "Ought braucht to (ought to tell) und warnt nicht vor einer Folge.",
+     "en": "Ought needs to (ought to tell) and does not warn of a consequence."
+    },
+    {
+     "opt": "would better",
+     "de": "Die feste Wendung heißt had better, nicht would better.",
+     "en": "The fixed phrase is had better, not would better."
+    }
+   ]
+  }
+ },
+ "modals-advice|youattendtheoptionaltrainingitsuptoyou": {
+  "pat": "ma.dont-have-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: optional und freie Wahl heißt „nicht nötig“: don't have to.",
+    "en": "Right: optional and your choice means “not necessary”: don't have to."
+   },
+   "wrong": [
+    {
+     "opt": "mustn't",
+     "de": "„Mustn't“ verbietet. Das passt nicht zu optional und freier Wahl.",
+     "en": "Mustn't forbids it. That clashes with optional and up to you."
+    },
+    {
+     "opt": "can't",
+     "de": "„Can't“ heißt nicht erlaubt oder nicht möglich, hier hast du aber die Wahl.",
+     "en": "Can't means not allowed or not possible, but here the choice is yours."
+    },
+    {
+     "opt": "must",
+     "de": "„Must“ macht es zur Pflicht. Das widerspricht optional und it's up to you.",
+     "en": "Must makes it an obligation. That contradicts optional and up to you."
+    }
+   ]
+  }
+ },
+ "modals-advice|ithinkyoudoublecheckthefiguresbeforetheboardmeeting": {
+  "pat": "ma.should",
+  "why": {
+   "ok": {
+    "de": "Richtig: ought to + Grundform ist ein freundlicher Rat, und das to ist nötig.",
+    "en": "Right: ought to + base form gives friendly advice."
+   },
+   "wrong": [
+    {
+     "opt": "had",
+     "pat": "ma.had-better",
+     "de": "Had braucht better (had better double-check). Allein passt es hier nicht.",
+     "en": "Had needs better (had better double-check). On its own it does not fit."
+    },
+    {
+     "opt": "would to",
+     "de": "„Would to“ ist keine Form für einen Rat. Es passt ought to oder should.",
+     "en": "Would to is not a form for advice. Ought to or should fits here."
+    },
+    {
+     "opt": "should to",
+     "pat": "ma.should",
+     "de": "Nach should steht kein to. Mit to heißt es ought to.",
+     "en": "No to after should. With to it is ought to."
+    }
+   ]
+  }
+ },
+ "modals-advice|whichisthemostpolitewaytogiveadvicetoaseniorcolleague": {
+  "pat": "ma.polite",
+  "why": {
+   "ok": {
+    "de": "Richtig: Perhaps you could lässt die Wahl offen und ist am höflichsten.",
+    "en": "Right: Perhaps you could leaves the choice open and is the most polite."
+   },
+   "wrong": [
+    {
+     "opt": "You had better change the slides.",
+     "pat": "ma.had-better",
+     "de": "„Had better“ droht mit einer Folge und wirkt gegenüber Vorgesetzten schroff.",
+     "en": "Had better hints at a consequence and sounds blunt toward a senior colleague."
+    },
+    {
+     "opt": "You must change the slides.",
+     "de": "„Must“ nennt eine Pflicht und klingt wie ein Befehl.",
+     "en": "Must states an obligation and sounds like an order."
+    },
+    {
+     "opt": "Change the slides.",
+     "de": "Der Imperativ ist ein Befehl und für Rat an Ranghöhere zu direkt.",
+     "en": "The imperative is a command and too direct for advice to a senior colleague."
+    }
+   ]
+  }
+ },
+ "modals-advice|youbettercalltheclientnowthedeadlineistoday": {
+  "pat": "ma.had-better",
+  "why": {
+   "ok": {
+    "de": "Richtig: had better + Grundform warnt, denn die Frist läuft heute ab.",
+    "en": "Right: had better + base form warns, because the deadline is today."
+   },
+   "wrong": [
+    {
+     "if": [
+      "should"
+     ],
+     "pat": "ma.should",
+     "de": "Vor better steht had: Die feste Wendung heißt had better.",
+     "en": "Had goes before better: the fixed phrase is had better."
+    },
+    {
+     "if": [
+      "would"
+     ],
+     "de": "Would better gibt es nicht, es muss had better heißen.",
+     "en": "There is no would better, it has to be had better."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "de": "Have better passt nicht zu you, die Form ist had better.",
+     "en": "Have better does not fit with you, the form is had better."
+    },
+    {
+     "not": [
+      "had"
+     ],
+     "de": "Gesucht ist das Hilfsverb der Wendung: had better.",
+     "en": "The auxiliary of the phrase is needed: had better."
+    }
+   ]
+  }
+ },
+ "modals-advice|wetofinishbyfridayifwewanttokeeptheclienthappy": {
+  "pat": "ma.should",
+  "why": {
+   "ok": {
+    "de": "Richtig: ought to + Grundform gibt einen Rat, have to und need to gehen auch.",
+    "en": "Right: ought to + base form gives advice, have to and need to also work."
+   },
+   "wrong": [
+    {
+     "if": [
+      "should"
+     ],
+     "pat": "ma.should",
+     "de": "Should steht ohne to. Im Satz steht aber schon to.",
+     "en": "Should takes no to. But the sentence already has to."
+    },
+    {
+     "if": [
+      "must"
+     ],
+     "de": "Must steht ohne to. Im Satz steht aber schon to.",
+     "en": "Must takes no to. But the sentence already has to."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "de": "Had to meint Vergangenes, der Satz spricht aber von jetzt und morgen.",
+     "en": "Had to means the past, but the sentence is about now and the future."
+    },
+    {
+     "not": [
+      "ought",
+      "have",
+      "need"
+     ],
+     "de": "Gesucht ist ein Modal mit to für Rat oder Pflicht: ought, have oder need.",
+     "en": "A modal with to for advice or duty is needed: ought, have or need."
+    }
+   ]
+  }
+ },
+ "modals-advice|youbringalaptopwewillprovideone": {
+  "pat": "ma.dont-have-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: Wir stellen einen, also ist es nicht nötig: don't have to.",
+    "en": "Right: we provide one, so it is not necessary: don't have to."
+   },
+   "wrong": [
+    {
+     "if": [
+      "must",
+      "not"
+     ],
+     "de": "Must not verbietet das Mitbringen. Gemeint ist: nicht nötig.",
+     "en": "Must not forbids bringing one. The point is: not necessary."
+    },
+    {
+     "if": [
+      "cannot"
+     ],
+     "de": "Can't heißt nicht erlaubt oder nicht möglich. Hier ist es nur unnötig.",
+     "en": "Can't means not allowed or not possible. Here it is just unnecessary."
+    },
+    {
+     "if": [
+      "should",
+      "not"
+     ],
+     "pat": "ma.should",
+     "de": "Shouldn't rät davon ab. Hier ist es aber nur unnötig, nicht schlecht.",
+     "en": "Shouldn't advises against it. Here it is merely unnecessary, not bad."
+    },
+    {
+     "not": [
+      "have",
+      "need"
+     ],
+     "de": "Gesucht ist eine Form für „nicht nötig“: don't have to oder don't need to.",
+     "en": "A form for “not necessary” is needed: don't have to or don't need to."
+    }
+   ]
+  }
+ },
+ "modals-advice|itwouldbewisetobackupthedatayoubackupthedata": {
+  "pat": "ma.should",
+  "why": {
+   "ok": {
+    "de": "Richtig: „it would be wise“ ist ein Rat, also should + Grundform.",
+    "en": "Right: “it would be wise” is advice, so should + base form."
+   },
+   "wrong": [
+    {
+     "if": [
+      "must"
+     ],
+     "de": "Must ist eine Pflicht. „It would be wise“ ist nur ein Rat.",
+     "en": "Must is an obligation. “It would be wise” is only advice."
+    },
+    {
+     "if": [
+      "should",
+      "to"
+     ],
+     "de": "Nach should steht kein to: should back up.",
+     "en": "No to after should: should back up."
+    },
+    {
+     "if": [
+      "could"
+     ],
+     "pat": "ma.polite",
+     "de": "Could ist nur ein Vorschlag. „Wise“ drückt einen klareren Rat aus.",
+     "en": "Could is only a suggestion. “Wise” expresses clearer advice."
+    },
+    {
+     "not": [
+      "should",
+      "ought",
+      "had"
+     ],
+     "de": "Gesucht ist ein Modal für klaren Rat: should, ought to oder had better.",
+     "en": "A modal for clear advice is needed: should, ought to or had better."
+    }
+   ]
+  }
+ },
+ "modals-advice|donotsendthatemailwhileyouareangryyousendthatemailwhileyouareangry": {
+  "pat": "ma.should",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Rat dagegen ist shouldn't + Grundform.",
+    "en": "Right: advice against it is shouldn't + base form."
+   },
+   "wrong": [
+    {
+     "if": [
+      "should"
+     ],
+     "not": [
+      "not"
+     ],
+     "de": "Should ohne not rät dazu. Gemeint ist das Gegenteil.",
+     "en": "Should without not advises doing it. The opposite is meant."
+    },
+    {
+     "if": [
+      "need",
+      "not"
+     ],
+     "pat": "ma.dont-have-to",
+     "de": "Needn't heißt „nicht nötig“. Hier wird davon abgeraten.",
+     "en": "Needn't means “not necessary”. Here the advice is against it."
+    },
+    {
+     "not": [
+      "not"
+     ],
+     "de": "Der Rat dagegen braucht eine Verneinung: shouldn't oder should not.",
+     "en": "Advice against it needs a negative: shouldn't or should not."
+    }
+   ]
+  }
+ },
+ "modals-advice|youshouldtocalltheclientbeforenoon": {
+  "pat": "ma.should",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach should steht die Grundform ohne to: should call.",
+    "en": "Right: after should use the base form with no to: should call."
+   },
+   "wrong": [
+    {
+     "if": [
+      "should",
+      "to"
+     ],
+     "de": "Das to ist zu viel: should + call, ohne to.",
+     "en": "The to is extra: should + call, with no to."
+    },
+    {
+     "not": [
+      "should",
+      "ought"
+     ],
+     "de": "Der Satz soll bei should bleiben, nur das to ist zu viel.",
+     "en": "Keep should in the sentence, only the to is extra."
+    }
+   ]
+  }
+ },
+ "modals-advice|youhadbettertoaskyourmanagerbeforeyousign": {
+  "pat": "ma.had-better",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach had better steht die Grundform ohne to: had better ask.",
+    "en": "Right: after had better use the base form with no to: had better ask."
+   },
+   "wrong": [
+    {
+     "if": [
+      "better",
+      "to"
+     ],
+     "de": "Das to ist zu viel: had better + ask, ohne to.",
+     "en": "The to is extra: had better + ask, with no to."
+    },
+    {
+     "not": [
+      "better"
+     ],
+     "de": "Die Wendung had better soll bleiben, nur das to ist zu viel.",
+     "en": "Keep the phrase had better, only the to is extra."
+    }
+   ]
+  }
+ },
+ "modals-advice|youmustnotcometotheworkshopifyoudonotwanttoitsoptional": {
+  "pat": "ma.dont-have-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: optional heißt „nicht nötig“: don't have to, nicht mustn't.",
+    "en": "Right: optional means “not necessary”: don't have to, not mustn't."
+   },
+   "wrong": [
+    {
+     "if": [
+      "must",
+      "not"
+     ],
+     "de": "Must not verbietet. Bei optional ist es nur unnötig: don't have to.",
+     "en": "Must not forbids. For optional it is only unnecessary: don't have to."
+    },
+    {
+     "not": [
+      "have",
+      "need"
+     ],
+     "de": "Gesucht ist eine Form für „nicht nötig“: don't have to oder needn't.",
+     "en": "A form for “not necessary” is needed: don't have to or needn't."
+    }
+   ]
+  }
+ },
+ "modals-advice|youmustnotcometothemeetingifyoudonotwanttoitsoptional": {
+  "pat": "ma.dont-have-to",
+  "dup": "modals-advice|youmustnotcometotheworkshopifyoudonotwanttoitsoptional",
+  "why": {
+   "ok": {
+    "de": "Richtig: optional heißt „nicht nötig“: don't have to, nicht mustn't.",
+    "en": "Right: optional means “not necessary”: don't have to, not mustn't."
+   },
+   "wrong": [
+    {
+     "if": [
+      "must",
+      "not"
+     ],
+     "de": "Must not verbietet. Bei optional ist es nur unnötig: don't have to.",
+     "en": "Must not forbids. For optional it is only unnecessary: don't have to."
+    },
+    {
+     "not": [
+      "have",
+      "need"
+     ],
+     "de": "Gesucht ist eine Form für „nicht nötig“: don't have to oder needn't.",
+     "en": "A form for “not necessary” is needed: don't have to or needn't."
     }
    ]
   }
@@ -12558,6 +15055,369 @@
      "pat": "ut.be-used-to",
      "de": "„Be used to“ = gewöhnt sein. Gemeint ist der Vorgang: get used to.",
      "en": "“Be used to” = be accustomed. The process is meant: get used to."
+    }
+   ]
+  }
+ },
+ "verb-patterns|irememberthedoorsoitcannotbemyfault": {
+  "pat": "vp.remember-forget",
+  "why": {
+   "ok": {
+    "de": "Richtig: „so it can't be my fault“ blickt zurück, das ist remember + -ing.",
+    "en": "Right: “so it can't be my fault” looks back, so remember + -ing."
+   },
+   "wrong": [
+    {
+     "opt": "to have locking",
+     "de": "„to have locking“ ist keine Form. Der Rückblick heißt remember + -ing.",
+     "en": "“to have locking” is not a form. Looking back is remember + -ing."
+    },
+    {
+     "opt": "lock",
+     "de": "Die Grundform allein passt hinter remember nicht: Es braucht to oder -ing.",
+     "en": "The bare form does not follow remember: it needs to or -ing."
+    },
+    {
+     "opt": "to lock",
+     "pat": "vp.remember-forget",
+     "de": "Remember + to meint eine Aufgabe, die noch kommt. Hier ist es schon passiert.",
+     "en": "Remember + to means a task still ahead. Here it already happened."
+    }
+   ]
+  }
+ },
+ "verb-patterns|pleaserememberthereportbeforeyouleave": {
+  "pat": "vp.remember-forget",
+  "why": {
+   "ok": {
+    "de": "Richtig: „before you leave“ nennt eine Aufgabe, die noch kommt: remember + to send.",
+    "en": "Right: “before you leave” names a task still ahead: remember + to send."
+   },
+   "wrong": [
+    {
+     "opt": "having sent",
+     "de": "Having sent blickt zurück. Die Aufgabe liegt aber noch vor dir.",
+     "en": "Having sent looks back. The task is still ahead of you."
+    },
+    {
+     "opt": "send",
+     "de": "Die Grundform allein passt nicht: Nach remember folgt to oder -ing.",
+     "en": "The bare form does not fit: remember is followed by to or -ing."
+    },
+    {
+     "opt": "sending",
+     "pat": "vp.remember-forget",
+     "de": "Remember + -ing blickt zurück. „Please“ und „before you leave“ zeigen nach vorn.",
+     "en": "Remember + -ing looks back. “Please” and “before you leave” point ahead."
+    }
+   ]
+  }
+ },
+ "verb-patterns|weregretyouthatthepositionhasbeenfilled": {
+  "pat": "vp.regret",
+  "why": {
+   "ok": {
+    "de": "Richtig: Die schlechte Nachricht kommt jetzt, also regret + to inform.",
+    "en": "Right: the bad news comes now, so regret + to inform."
+   },
+   "wrong": [
+    {
+     "opt": "to informing",
+     "de": "„to informing“ mischt zwei Formen. Die Mitteilung heißt regret + to + Grundform.",
+     "en": "“to informing” mixes two forms. The announcement is regret + to + base form."
+    },
+    {
+     "opt": "informing",
+     "pat": "vp.regret",
+     "de": "Regret + -ing bereut Früheres. Hier wird die Nachricht jetzt überbracht.",
+     "en": "Regret + -ing feels sorry about the past. Here the news is delivered now."
+    },
+    {
+     "opt": "inform",
+     "de": "Die Grundform allein passt nicht: Nach regret folgt to oder -ing.",
+     "en": "The bare form does not fit: regret is followed by to or -ing."
+    }
+   ]
+  }
+ },
+ "verb-patterns|ilookforwardtoyouattheconference": {
+  "pat": "vp.look-forward",
+  "why": {
+   "ok": {
+    "de": "Richtig: In look forward to ist to eine Präposition, deshalb folgt -ing.",
+    "en": "Right: in look forward to, to is a preposition, so -ing follows."
+   },
+   "wrong": [
+    {
+     "opt": "to meet",
+     "de": "Das to steht schon in look forward to. Danach folgt -ing, kein zweites to.",
+     "en": "The to is already in look forward to. After it comes -ing, not a second to."
+    },
+    {
+     "opt": "have met",
+     "de": "Die Perfektform passt nicht: Nach der Präposition to folgt -ing.",
+     "en": "The perfect form does not fit: after the preposition to comes -ing."
+    },
+    {
+     "opt": "meet",
+     "pat": "vp.look-forward",
+     "de": "Das to ist hier eine Präposition, deshalb -ing und nicht die Grundform.",
+     "en": "Here to is a preposition, so -ing and not the base form."
+    }
+   ]
+  }
+ },
+ "verb-patterns|hestoppedworkemailsassoonashewentonleave": {
+  "pat": "vp.stop-try",
+  "why": {
+   "ok": {
+    "de": "Richtig: Er hört auf, Mails zu prüfen. Aufhören heißt stop + -ing.",
+    "en": "Right: he quits checking emails. Quitting is stop + -ing."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Stop + to heißt anhalten, um etwas zu tun. Hier hört er auf: stop + -ing.",
+     "en": "Stop + to means pausing in order to do something. Here he quits: stop + -ing."
+    },
+    {
+     "if": [
+      "check"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Die Grundform passt nicht: Nach stop (aufhören) steht -ing.",
+     "en": "The base form does not fit: after stop (quit) comes -ing."
+    },
+    {
+     "if": [
+      "checked"
+     ],
+     "de": "Die Vergangenheitsform passt nicht: Nach stop steht -ing.",
+     "en": "The past form does not fit: after stop comes -ing."
+    }
+   ]
+  }
+ },
+ "verb-patterns|trytherouteroffandonthatoftensolvestheproblem": {
+  "pat": "vp.stop-try",
+  "why": {
+   "ok": {
+    "de": "Richtig: Hier wird etwas ausprobiert, also try + -ing.",
+    "en": "Right: here something is tested, so try + -ing."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Try + to heißt versuchen, etwas Schwieriges zu schaffen. Hier: ausprobieren, also -ing.",
+     "en": "Try + to means attempting something hard. Here it is testing: -ing."
+    },
+    {
+     "if": [
+      "turn"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Die Grundform passt nicht: Beim Ausprobieren steht try + -ing.",
+     "en": "The base form does not fit: testing something is try + -ing."
+    },
+    {
+     "if": [
+      "turned"
+     ],
+     "de": "Die Vergangenheitsform passt nicht: Nach try steht -ing.",
+     "en": "The past form does not fit: after try comes -ing."
+    }
+   ]
+  }
+ },
+ "verb-patterns|sheavoidedtheissueinthemeeting": {
+  "pat": "vp.ing-verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Avoid verlangt direkt die -ing-Form: avoided mentioning.",
+    "en": "Right: avoid takes the -ing form directly: avoided mentioning."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Nach avoid steht kein to + Grundform, sondern -ing: avoided mentioning.",
+     "en": "After avoid there is no to + base form, only -ing: avoided mentioning."
+    },
+    {
+     "if": [
+      "mention"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Die Grundform passt nicht: Avoid verlangt -ing.",
+     "en": "The base form does not fit: avoid takes -ing."
+    },
+    {
+     "if": [
+      "mentioned"
+     ],
+     "de": "Die Vergangenheitsform passt nicht: Avoid verlangt -ing.",
+     "en": "The past form does not fit: avoid takes -ing."
+    }
+   ]
+  }
+ },
+ "verb-patterns|iamsorrythatihavetotellyouthattheshipmentislateiregretyouthattheshipmentislate": {
+  "pat": "vp.regret",
+  "why": {
+   "ok": {
+    "de": "Richtig: „I'm sorry that I have to tell“ wird zu regret to tell, eine Nachricht jetzt.",
+    "en": "Right: “I'm sorry that I have to tell” becomes regret to tell, news given now."
+   },
+   "wrong": [
+    {
+     "if": [
+      "telling"
+     ],
+     "de": "Regret + -ing bereut Früheres. Hier kündigt regret die Nachricht jetzt an: to tell.",
+     "en": "Regret + -ing feels sorry about the past. Here regret announces the news now: to tell."
+    },
+    {
+     "if": [
+      "tell"
+     ],
+     "not": [
+      "to",
+      "having"
+     ],
+     "de": "Es fehlt das to: Eine Mitteilung heißt regret + to + Grundform.",
+     "en": "The to is missing: an announcement is regret + to + base form."
+    },
+    {
+     "if": [
+      "told"
+     ],
+     "de": "Die Vergangenheitsform passt nicht: Es folgt to + Grundform.",
+     "en": "The past form does not fit: to + base form follows."
+    }
+   ]
+  }
+ },
+ "verb-patterns|hedidnotrememberthathehadmetherbeforehedidnotrememberherbefore": {
+  "pat": "vp.remember-forget",
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Erinnerung an Früheres heißt remember + -ing: remember meeting.",
+    "en": "Right: recalling the past is remember + -ing: remember meeting."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Remember + to meint eine Aufgabe. Hier geht es um Früheres: -ing.",
+     "en": "Remember + to means a task. Here it is about the past: -ing."
+    },
+    {
+     "if": [
+      "meet"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Die Grundform passt nicht: Ein Rückblick heißt remember + -ing.",
+     "en": "The base form does not fit: looking back is remember + -ing."
+    },
+    {
+     "if": [
+      "met"
+     ],
+     "de": "Nach remember steht -ing oder having + Partizip, nicht das Simple Past.",
+     "en": "After remember use -ing or having + participle, not the simple past."
+    }
+   ]
+  }
+ },
+ "verb-patterns|iamlookingforwardtomeetyounextweek": {
+  "pat": "vp.look-forward",
+  "why": {
+   "ok": {
+    "de": "Richtig: In look forward to ist to eine Präposition, danach folgt meeting.",
+    "en": "Right: in look forward to, to is a preposition, then meeting follows."
+   },
+   "wrong": [
+    {
+     "if": [
+      "meet"
+     ],
+     "de": "Meet bleibt falsch: Nach look forward to steht -ing (meeting).",
+     "en": "Meet is still wrong: after look forward to use -ing (meeting)."
+    },
+    {
+     "pat": "vp.look-forward",
+     "de": "Nach look forward to steht -ing, weil to hier Präposition ist.",
+     "en": "After look forward to use -ing, because to is a preposition here."
+    }
+   ]
+  }
+ },
+ "verb-patterns|wedecideddiscussingthebudgetnextweek": {
+  "pat": "vp.to-verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Decide verbindet sich mit to + Grundform: decided to discuss.",
+    "en": "Right: decide combines with to + base form: decided to discuss."
+   },
+   "wrong": [
+    {
+     "if": [
+      "discussing"
+     ],
+     "de": "Decide verlangt to + Grundform, nicht -ing: decided to discuss.",
+     "en": "Decide takes to + base form, not -ing: decided to discuss."
+    },
+    {
+     "if": [
+      "discuss"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Es fehlt das to: decide + to + Grundform.",
+     "en": "The to is missing: decide + to + base form."
+    }
+   ]
+  }
+ },
+ "verb-patterns|donotforgetcallingthesupplierbeforenoon": {
+  "pat": "vp.remember-forget",
+  "why": {
+   "ok": {
+    "de": "Richtig: „before noon“ nennt eine Aufgabe, die noch kommt: forget to call.",
+    "en": "Right: “before noon” names a task still ahead: forget to call."
+   },
+   "wrong": [
+    {
+     "if": [
+      "calling"
+     ],
+     "de": "Forget + -ing blickt zurück. Die Aufgabe liegt noch vor dir: forget to call.",
+     "en": "Forget + -ing looks back. The task is still ahead: forget to call."
+    },
+    {
+     "if": [
+      "call"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Es fehlt to: Für eine Aufgabe steht forget + to + Grundform.",
+     "en": "The to is missing: for a task use forget + to + base form."
     }
    ]
   }

@@ -1,0 +1,336 @@
+{
+ "The board insists that he ___ the project immediately.": {
+  "pat": "mnd.verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Das Board verlangt etwas, deshalb steht die Grundform: that he leave, ohne -s.",
+    "en": "Right: the board demands something, so the base form follows: that he leave, no -s."
+   },
+   "wrong": [
+    {
+     "opt": "will leave",
+     "de": "Hier wird etwas verlangt. Dann folgt die Grundform, kein will.",
+     "en": "Something is demanded here, so the base form follows, not will."
+    },
+    {
+     "opt": "left",
+     "pat": "mnd.fact",
+     "de": "„Left“ meldet etwas Vergangenes. Das Board fordert aber, dass er geht: leave.",
+     "en": "Left reports the past. The board demands that he go: leave."
+    },
+    {
+     "opt": "leaves",
+     "pat": "mnd.fact",
+     "de": "Mit -s wie im normalen Präsens. Nach insist that (Forderung) bleibt es leave.",
+     "en": "The -s of the normal present. After insist that (a demand) it stays leave."
+    }
+   ]
+  }
+ },
+ "It is essential that every employee ___ the training.": {
+  "pat": "mnd.adjectives",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach essential that steht die Grundform: that every employee complete, ohne -s.",
+    "en": "Right: after essential that the base form follows: that every employee complete, no -s."
+   },
+   "wrong": [
+    {
+     "opt": "is completing",
+     "de": "Die -ing-Form passt nicht in diesen that-Satz. Es folgt die Grundform.",
+     "en": "The -ing form does not fit this that clause. The base form follows."
+    },
+    {
+     "opt": "completes",
+     "pat": "mnd.fact",
+     "de": "Mit -s wie im normalen Präsens. Nach essential that bleibt es complete.",
+     "en": "The -s of the normal present. After essential that it stays complete."
+    },
+    {
+     "opt": "completed",
+     "de": "Die Vergangenheitsform sagt, dass es schon geschah. Hier wird es verlangt.",
+     "en": "The past form says it already happened. Here it is demanded."
+    }
+   ]
+  }
+ },
+ "The auditor demanded that the report ___ corrected.": {
+  "pat": "mnd.passive",
+  "why": {
+   "ok": {
+    "de": "Richtig: Das Passiv der Forderung lautet be + 3. Form: that the report be corrected.",
+    "en": "Right: the passive of a demand is be + past participle: that the report be corrected."
+   },
+   "wrong": [
+    {
+     "opt": "would be",
+     "de": "Would be umschreibt etwas Mögliches. Die Forderung braucht schlicht be.",
+     "en": "Would be describes something possible. The demand simply needs be."
+    },
+    {
+     "opt": "was",
+     "pat": "mnd.fact",
+     "de": "Was meldet eine Tatsache. Die Forderung braucht be + 3. Form.",
+     "en": "Was reports a fact. The demand needs be + past participle."
+    },
+    {
+     "opt": "is",
+     "de": "Is ist die normale Präsensform. Im Mandativ-Passiv steht be.",
+     "en": "Is is the normal present form. The mandative passive takes be."
+    }
+   ]
+  }
+ },
+ "I suggest that she ___ the client herself.": {
+  "pat": "mnd.verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Ein Vorschlag verlangt die Grundform: that she call, auch bei she.",
+    "en": "Right: a proposal takes the base form: that she call, even after she."
+   },
+   "wrong": [
+    {
+     "opt": "is calling",
+     "de": "Die -ing-Form passt nicht. Nach suggest that (Vorschlag) folgt die Grundform.",
+     "en": "The -ing form does not fit. After suggest that (a proposal) the base form follows."
+    },
+    {
+     "opt": "called",
+     "pat": "mnd.fact",
+     "de": "Called meldet Vergangenes. Ein Vorschlag braucht die Grundform call.",
+     "en": "Called reports the past. A proposal needs the base form call."
+    },
+    {
+     "opt": "calls",
+     "pat": "mnd.fact",
+     "de": "Mit -s wie bei she im Präsens. Im Mandativ bleibt es call.",
+     "en": "The -s of she in the present. In the mandative it stays call."
+    }
+   ]
+  }
+ },
+ "It's vital that the data ___ stored securely.": {
+  "pat": "mnd.passive",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach vital that steht be + 3. Form: that the data be stored.",
+    "en": "Right: after vital that comes be + past participle: that the data be stored."
+   },
+   "wrong": [
+    {
+     "if": [
+      "is"
+     ],
+     "de": "Is ist die normale Form. Nach vital that braucht das Passiv be.",
+     "en": "Is is the normal form. After vital that the passive needs be."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach vital that steht kein will; die Forderung braucht be.",
+     "en": "No will after vital that; the demand needs be."
+    },
+    {
+     "not": [
+      "be",
+      "should"
+     ],
+     "de": "Die Lücke braucht die Grundform von sein, also be.",
+     "en": "The gap needs the base form of the verb to be, so be."
+    }
+   ]
+  }
+ },
+ "The court ordered that the company ___ the fine within 30 days.": {
+  "pat": "mnd.verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach ordered that steht die Grundform: that the company pay, ohne -s.",
+    "en": "Right: after ordered that the base form follows: that the company pay, no -s."
+   },
+   "wrong": [
+    {
+     "if": [
+      "pays"
+     ],
+     "de": "Mit -s wie im normalen Präsens. Nach ordered that bleibt es pay.",
+     "en": "The -s of the normal present. After ordered that it stays pay."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach ordered that steht kein will; das Gericht verlangt es.",
+     "en": "No will after ordered that; the court demands it."
+    },
+    {
+     "if": [
+      "paid"
+     ],
+     "de": "Paid meldet Vergangenes. Das Gericht verlangt die Zahlung noch.",
+     "en": "Paid reports the past. The court still demands the payment."
+    }
+   ]
+  }
+ },
+ "We recommend that he ___ attend the workshop.": {
+  "pat": "mnd.negation",
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Verneinung steht direkt vor der Grundform: that he not attend.",
+    "en": "Right: the negation goes right before the base form: that he not attend."
+   },
+   "wrong": [
+    {
+     "if": [
+      "does",
+      "not"
+     ],
+     "de": "Mit doesn't kommt ein Hilfsverb dazu. Hier steht nur not vor attend.",
+     "en": "Doesn't adds a helper verb. Here only not goes before attend."
+    },
+    {
+     "not": [
+      "not"
+     ],
+     "de": "Die Lücke braucht die Verneinung: not steht direkt vor attend.",
+     "en": "The gap needs the negation: not goes right before attend."
+    }
+   ]
+  }
+ },
+ "He should be informed immediately. It is essential. → It is essential that he ___ informed immediately.": {
+  "pat": "mnd.passive",
+  "why": {
+   "ok": {
+    "de": "Richtig: Aus should be informed wird nach essential that: be informed.",
+    "en": "Right: should be informed becomes be informed after essential that."
+   },
+   "wrong": [
+    {
+     "if": [
+      "is"
+     ],
+     "de": "Is ist die normale Form. Nach essential that steht be.",
+     "en": "Is is the normal form. After essential that comes be."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach essential that steht kein will; die Forderung braucht be.",
+     "en": "No will after essential that; the demand needs be."
+    }
+   ]
+  }
+ },
+ "'You must submit the form,' the manager insisted. → The manager insisted that I ___ the form.": {
+  "pat": "mnd.verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Aus der Forderung wird that I submit, die Grundform ohne -s oder -ed.",
+    "en": "Right: the demand becomes that I submit, the base form with no -s or -ed."
+   },
+   "wrong": [
+    {
+     "if": [
+      "submitted"
+     ],
+     "de": "Submitted meldet Vergangenes. Die Chefin fordert aber die Abgabe: submit.",
+     "en": "Submitted reports the past. The manager demands the submission: submit."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach insisted that steht hier kein will; es bleibt die Grundform.",
+     "en": "No will after insisted that here; the base form stays."
+    },
+    {
+     "if": [
+      "submits"
+     ],
+     "de": "Mit -s passt das Verb nicht zu I. Es folgt die Grundform submit.",
+     "en": "With -s the verb does not fit I. The base form submit follows."
+    }
+   ]
+  }
+ },
+ "The committee demands that he will resign immediately.": {
+  "pat": "mnd.verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach demands that steht die Grundform: that he resign, ohne will.",
+    "en": "Right: after demands that the base form follows: that he resign, no will."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach demands that bleibt will draußen. Das Komitee verlangt etwas.",
+     "en": "Will stays out after demands that. The committee demands something."
+    },
+    {
+     "if": [
+      "resigns"
+     ],
+     "de": "Mit -s wie im Präsens. Nach demands that steht resign ohne -s.",
+     "en": "The -s of the present. After demands that comes resign with no -s."
+    }
+   ]
+  }
+ },
+ "The board requires that the report will be submitted by Friday.": {
+  "pat": "mnd.passive",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach requires that steht be + 3. Form: that the report be submitted.",
+    "en": "Right: after requires that comes be + past participle: that the report be submitted."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach requires that steht kein will be; die Forderung braucht be.",
+     "en": "No will be after requires that; the demand needs be."
+    },
+    {
+     "if": [
+      "is"
+     ],
+     "de": "Is ist die normale Form. Im Mandativ-Passiv steht be.",
+     "en": "Is is the normal form. The mandative passive takes be."
+    }
+   ]
+  }
+ },
+ "I suggest that he doesn't sign the contract yet.": {
+  "pat": "mnd.negation",
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Verneinung steht vor der Grundform: that he not sign.",
+    "en": "Right: the negation goes before the base form: that he not sign."
+   },
+   "wrong": [
+    {
+     "if": [
+      "does",
+      "not"
+     ],
+     "de": "Doesn't bringt ein Hilfsverb mit. Im Mandativ steht nur not + Grundform.",
+     "en": "Doesn't brings a helper verb. The mandative takes only not + base form."
+    },
+    {
+     "not": [
+      "not"
+     ],
+     "de": "Achte auf die Verneinung: not steht direkt vor der Grundform sign.",
+     "en": "Watch the negation: not goes right before the base form sign."
+    }
+   ]
+  }
+ }
+}

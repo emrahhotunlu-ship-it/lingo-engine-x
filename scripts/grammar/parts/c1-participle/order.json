@@ -1,0 +1,196 @@
+[
+ {
+  "pat": "cp.having",
+  "en": "Having compared three vendors, we chose the cheapest one.",
+  "de": "Nachdem wir drei Anbieter verglichen hatten, wählten wir den günstigsten.",
+  "chunks": [
+   "having",
+   "compared",
+   "three vendors",
+   "we",
+   "chose",
+   "the cheapest one"
+  ],
+  "alt": [
+   "We chose the cheapest one, having compared three vendors."
+  ],
+  "why": [
+   "Having + 3. Form zeigt: Erst wurde verglichen, dann gewählt. Das Subjekt we vergleicht und wählt selbst, deshalb passt das Partizip.",
+   "Having + past participle shows: first compared, then chose. The subject we does both, so the participle fits."
+  ],
+  "bad": "Having comparing three vendors, we chose the cheapest one.",
+  "trap": {
+   "tile": "compared",
+   "instead": "comparing",
+   "why": {
+    "de": "Nach Having steht die 3. Verbform: compared. Die Form mit -ing passt nur zu gleichzeitigen Handlungen, nicht nach Having.",
+    "en": "After Having comes the past participle: compared. The -ing form only suits simultaneous actions, not after Having."
+   }
+  }
+ },
+ {
+  "pat": "cp.having",
+  "en": "Having missed the deadline, she apologized to the client.",
+  "de": "Nachdem sie die Frist verpasst hatte, entschuldigte sie sich beim Kunden.",
+  "chunks": [
+   "having",
+   "missed",
+   "the deadline",
+   "she",
+   "apologized",
+   "to the client"
+  ],
+  "alt": [
+   "She apologized to the client, having missed the deadline."
+  ],
+  "why": [
+   "Das Verpassen war zuerst, die Entschuldigung kam danach: Having + 3. Form. Dieselbe Person verpasst und entschuldigt sich.",
+   "The missing came first, the apology followed: Having + past participle. The same person misses and apologizes."
+  ]
+ },
+ {
+  "pat": "cp.ing",
+  "en": "Maria, working from home, answered emails faster.",
+  "de": "Weil Maria von zu Hause arbeitete, beantwortete sie E-Mails schneller.",
+  "chunks": [
+   "Maria",
+   "working",
+   "from home",
+   "answered",
+   "emails",
+   "faster"
+  ],
+  "alt": [
+   "Working from home, Maria answered emails faster.",
+   "Maria answered emails faster, working from home."
+  ],
+  "why": [
+   "Arbeiten und Antworten laufen zugleich und gehören zu Maria: -ing. Das Partizip kann vorn, in der Mitte oder hinten stehen.",
+   "Working and answering happen together and belong to Maria: -ing. The participle can come first, in the middle or last."
+  ],
+  "bad": "Maria, worked from home, answered emails faster.",
+  "trap": {
+   "tile": "working",
+   "instead": "worked",
+   "why": {
+    "de": "Worked wäre die 3. Form und klingt passiv oder vorzeitig. Maria arbeitet aber selbst und zugleich: working.",
+    "en": "Worked would be the past participle and sounds passive or earlier. Maria works herself, at the same time: working."
+   }
+  }
+ },
+ {
+  "pat": "cp.ing",
+  "en": "Knowing the risks, the board delayed the launch.",
+  "de": "Da der Vorstand die Risiken kannte, verschob er den Start.",
+  "chunks": [
+   "knowing",
+   "the risks",
+   "the board",
+   "delayed",
+   "the launch"
+  ],
+  "alt": [
+   "The board delayed the launch, knowing the risks.",
+   "The board, knowing the risks, delayed the launch."
+  ],
+  "why": [
+   "Knowing nennt den Grund und gehört zum Vorstand, der auch verschiebt. Deshalb steht die -ing-Form, kein Hilfsverb.",
+   "Knowing gives the reason and belongs to the board, which also delays. So the -ing form is used, with no helper verb."
+  ]
+ },
+ {
+  "pat": "cp.pp",
+  "en": "Written in plain English, the guide is easy to follow.",
+  "de": "Weil der Leitfaden in einfachem Englisch geschrieben ist, lässt er sich leicht befolgen.",
+  "chunks": [
+   "written",
+   "in plain English",
+   "the guide",
+   "is",
+   "easy to follow"
+  ],
+  "alt": [
+   "The guide, written in plain English, is easy to follow."
+  ],
+  "why": [
+   "Der Leitfaden wird geschrieben, er schreibt nicht selbst: nur die 3. Form, ohne being. Das Subjekt guide steht nach dem Komma.",
+   "The guide is written, it does not write: just the past participle, with no being. The subject guide follows the comma."
+  ]
+ },
+ {
+  "pat": "cp.pp",
+  "en": "The company, founded in 1998, now has offices in nine countries.",
+  "de": "Das Unternehmen, 1998 gegründet, hat heute Büros in neun Ländern.",
+  "chunks": [
+   "the company",
+   "founded",
+   "in 1998",
+   "now has",
+   "offices",
+   "in nine countries"
+  ],
+  "alt": [
+   "Founded in 1998, the company now has offices in nine countries."
+  ],
+  "why": [
+   "Das Unternehmen wird gegründet, es gründet nicht selbst: 3. Form. Der Einschub steht direkt hinter dem Wort, auf das er sich bezieht.",
+   "The company is founded, it does not found itself: past participle. The insert stands right after the word it refers to."
+  ],
+  "bad": "The company, founding in 1998, now has offices in nine countries.",
+  "trap": {
+   "tile": "founded",
+   "instead": "founding",
+   "why": {
+    "de": "Founding hieße: Das Unternehmen gründet selbst. Es wurde aber gegründet, also passiv: founded.",
+    "en": "Founding would mean the company founds something itself. It was founded, so passive: founded."
+   }
+  }
+ },
+ {
+  "pat": "cp.subject",
+  "en": "Waiting for my flight, I read the whole report.",
+  "de": "Während ich auf meinen Flug wartete, las ich den ganzen Bericht.",
+  "chunks": [
+   "waiting",
+   "for my flight",
+   "I",
+   "read",
+   "the whole report"
+  ],
+  "alt": [
+   "I read the whole report, waiting for my flight."
+  ],
+  "why": [
+   "Wer wartet, liest auch: Das Subjekt I nach dem Komma passt zum Partizip waiting. Ohne passendes Subjekt wäre der Satz falsch.",
+   "Whoever waits also reads: the subject I after the comma fits the participle waiting. Without a fitting subject the sentence would be wrong."
+  ]
+ },
+ {
+  "pat": "cp.subject",
+  "en": "The CFO, surprised by the results, ordered a new analysis.",
+  "de": "Überrascht von den Ergebnissen, ordnete der Finanzchef eine neue Analyse an.",
+  "chunks": [
+   "the CFO",
+   "surprised",
+   "by the results",
+   "ordered",
+   "a new analysis"
+  ],
+  "alt": [
+   "Surprised by the results, the CFO ordered a new analysis."
+  ],
+  "why": [
+   "Der Finanzchef ist überrascht, er überrascht nicht: 3. Form. Das Partizip passt zum Subjekt, das gleich danach genannt wird.",
+   "The CFO is surprised, he does not surprise: past participle. The participle fits the subject named right after it."
+  ],
+  "bad": "The CFO, surprising by the results, ordered a new analysis.",
+  "trap": {
+   "tile": "surprised",
+   "instead": "surprising",
+   "why": {
+    "de": "Surprising hieße: Der Finanzchef überrascht andere. Er wird aber überrascht, also surprised.",
+    "en": "Surprising would mean the CFO surprises others. He is the one surprised, so surprised."
+   }
+  }
+ }
+]

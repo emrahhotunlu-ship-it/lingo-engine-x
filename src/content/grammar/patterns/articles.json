@@ -1,0 +1,521 @@
+{
+ "topic": "articles",
+ "canDo": {
+  "de": "Ich kann Artikel sicher wählen: a/an für Neues und Berufe, the für Bekanntes und Einzigartiges, keinen Artikel bei Allgemeinem, dazu feste Wendungen.",
+  "en": "I can choose articles with confidence: a/an for new things and jobs, the for known and unique things, no article for general statements, plus fixed phrases."
+ },
+ "order": [
+  "art.indefinite",
+  "art.sound",
+  "art.definite",
+  "art.the-unique",
+  "art.zero",
+  "art.fixed"
+ ],
+ "introPlan": [
+  [
+   "art.indefinite",
+   "art.sound"
+  ],
+  [
+   "art.definite",
+   "art.the-unique"
+  ],
+  [
+   "art.zero",
+   "art.fixed"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Ist es neu oder einer von mehreren (a/an), oder wissen beide schon, welches gemeint ist (the)?",
+   "Meinst du etwas allgemein, im Plural oder unzählbar? Dann steht meist kein Artikel.",
+   "Bei a oder an zählt der Laut des nächsten Wortes. Bei Superlativ, first, only und same steht the."
+  ],
+  "en": [
+   "Is it new or one of several (a/an), or do both of you already know which one is meant (the)?",
+   "Do you mean something in general, plural or uncountable? Then there is usually no article.",
+   "For a or an the sound of the next word counts. With a superlative, first, only and same use the."
+  ]
+ },
+ "patterns": [
+  {
+   "id": "art.indefinite",
+   "name": {
+    "de": "a/an · neu oder Beruf",
+    "en": "a/an · new or a job"
+   },
+   "form": {
+    "de": "a/an + Nomen im Singular, zählbar",
+    "en": "a/an + singular countable noun"
+   },
+   "use": {
+    "de": "Für etwas Neues, einen von mehreren und für Berufe und Rollen. Der Hörer weiß noch nicht, welches genau gemeint ist.",
+    "en": "For something new, one of several, and for jobs and roles. The listener does not yet know which one is meant."
+   },
+   "signals": [
+    "as a",
+    "as an",
+    "what a",
+    "what an",
+    "such a",
+    "such an"
+   ],
+   "ex": [
+    {
+     "en": "We're hiring a project manager for the Berlin office.",
+     "de": "Wir stellen einen Projektmanager für das Berliner Büro ein.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I work as a consultant for a logistics firm.",
+     "de": "Ich arbeite als Berater für eine Logistikfirma.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Honestly, what a relief that was.",
+     "de": "Ehrlich, was für eine Erleichterung das war.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "She works as consultant for a bank.",
+    "good": "She works as a consultant for a bank.",
+    "cause": {
+     "de": "Im Deutschen steht bei Berufen kein Artikel („Sie arbeitet als Beraterin“, „Sie ist Beraterin“). Diese Gewohnheit wird ins Englische übertragen.",
+     "en": "German uses no article with jobs (“Sie arbeitet als Beraterin”, “Sie ist Beraterin”). That habit is carried over into English."
+    }
+   },
+   "contrast": {
+    "with": "art.zero",
+    "a": "We need a new tool.",
+    "b": "We need new tools.",
+    "diff": {
+     "de": "a/an meint ein einzelnes, zählbares Ding. Der Plural ohne Artikel meint mehrere, ohne eine Zahl zu nennen.",
+     "en": "a/an means one single countable thing. The plural without an article means several, without naming a number."
+    }
+   },
+   "ccq": [
+    {
+     "s": "We're hiring a designer.",
+     "q": {
+      "de": "Weiß man schon, welcher Designer gemeint ist?",
+      "en": "Do we already know which designer is meant?"
+     },
+     "a": false
+    },
+    {
+     "s": "She works as an analyst.",
+     "q": {
+      "de": "Beschreibt „an analyst“ ihre Rolle im Job?",
+      "en": "Does “an analyst” describe her role at work?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Ist das Nomen zählbar, im Singular und für den Hörer neu?",
+    "en": "Is the noun countable, singular and new to the listener?"
+   }
+  },
+  {
+   "id": "art.sound",
+   "name": {
+    "de": "a oder an · nach dem Laut",
+    "en": "a or an · by sound"
+   },
+   "form": {
+    "de": "an vor Vokallaut, a vor Konsonantlaut",
+    "en": "an + vowel sound, a + consonant sound"
+   },
+   "use": {
+    "de": "Entscheidend ist, wie das nächste Wort klingt, nicht wie es geschrieben wird: an hour, an MBA, a university.",
+    "en": "What counts is how the next word sounds, not how it is spelled: an hour, an MBA, a university."
+   },
+   "signals": [
+    "hour",
+    "honest",
+    "MBA",
+    "HR",
+    "university",
+    "European",
+    "unique",
+    "FAQ"
+   ],
+   "ex": [
+    {
+     "en": "Let's block an hour for the budget review.",
+     "de": "Lass uns eine Stunde für die Budgetrunde einplanen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Our new hire has an MBA from a European school.",
+     "de": "Unser neuer Kollege hat einen MBA von einer europäischen Hochschule.",
+     "ctx": "mail"
+    },
+    {
+     "en": "He gave us an honest answer.",
+     "de": "Er hat uns eine ehrliche Antwort gegeben.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "She teaches at an university in Boston.",
+    "good": "She teaches at a university in Boston.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler: Deutsch kennt kein a/an. Man folgt dem Buchstaben u (ein Vokal) statt dem Laut /j/.",
+     "en": "Not a translation error: German has no a/an. Learners follow the letter u (a vowel) instead of the sound /j/."
+    }
+   },
+   "contrast": {
+    "with": "art.indefinite",
+    "a": "She is an MBA graduate.",
+    "b": "She is a university graduate.",
+    "diff": {
+     "de": "Beide Sätze nennen eine einzelne Person. Welcher Artikel passt, entscheidet nur der erste Laut des nächsten Wortes.",
+     "en": "Both sentences name one person. Which article fits depends only on the first sound of the next word."
+    }
+   },
+   "ccq": [
+    {
+     "s": "He works for an HR team.",
+     "q": {
+      "de": "Beginnt „HR“ mit einem Vokallaut?",
+      "en": "Does “HR” start with a vowel sound?"
+     },
+     "a": true
+    },
+    {
+     "s": "She's a European client.",
+     "q": {
+      "de": "Beginnt „European“ mit einem Vokallaut?",
+      "en": "Does “European” start with a vowel sound?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Wie klingt der Anfang des nächsten Wortes für das Ohr, nicht fürs Auge?",
+    "en": "How does the next word start to the ear, not to the eye?"
+   }
+  },
+  {
+   "id": "art.definite",
+   "name": {
+    "de": "the · beide wissen, welches",
+    "en": "the · both know which"
+   },
+   "form": {
+    "de": "the + Nomen, das beide eindeutig erkennen",
+    "en": "the + a noun both sides can identify"
+   },
+   "use": {
+    "de": "Wenn Sprecher und Hörer wissen, welches gemeint ist: schon erwähnt, durch den Satz festgelegt oder in der Situation klar.",
+    "en": "When speaker and listener know which one is meant: already mentioned, fixed by the sentence, or clear from the situation."
+   },
+   "signals": [
+    "we discussed",
+    "you mentioned",
+    "you sent",
+    "I attached",
+    "as agreed"
+   ],
+   "ex": [
+    {
+     "en": "Could you open the shared folder and find the budget file?",
+     "de": "Kannst du den geteilten Ordner öffnen und die Budgetdatei suchen?",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I attached the report you asked for.",
+     "de": "Ich habe den Bericht angehängt, den du angefragt hast.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Did you ever fix the printer?",
+     "de": "Hast du den Drucker eigentlich repariert?",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Could you close door? We're about to start.",
+    "good": "Could you close the door? We're about to start.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler: Deutsch sagt auch „die Tür“. Eher fällt der Artikel im Schnellsprechen aus, wenn das Ding direkt vor einem steht.",
+     "en": "Not a translation error: German also says “die Tür”. The article more likely drops out in quick speech when the thing is right in front of you."
+    }
+   },
+   "contrast": {
+    "with": "art.indefinite",
+    "a": "Please send me the contract.",
+    "b": "Please send me a contract.",
+    "diff": {
+     "de": "the meint den einen Vertrag, den beide kennen. a meint irgendeinen Vertrag, der noch nicht festgelegt ist.",
+     "en": "the means the one contract both know. a means any contract that is not yet fixed."
+    }
+   },
+   "ccq": [
+    {
+     "s": "I forwarded the invoice to finance.",
+     "q": {
+      "de": "Weiß der Hörer, welche Rechnung gemeint ist?",
+      "en": "Does the listener know which invoice is meant?"
+     },
+     "a": true
+    },
+    {
+     "s": "We need a lawyer for the deal.",
+     "q": {
+      "de": "Steht schon fest, welcher Anwalt gemeint ist?",
+      "en": "Is it already clear which lawyer is meant?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Wissen beide schon, welches Ding genau gemeint ist?",
+    "en": "Do both of you already know which exact thing is meant?"
+   }
+  },
+  {
+   "id": "art.the-unique",
+   "name": {
+    "de": "the · Superlativ, first, only",
+    "en": "the · superlative, first, only"
+   },
+   "form": {
+    "de": "the + best / first / only / same + Nomen",
+    "en": "the + best / first / only / same + noun"
+   },
+   "use": {
+    "de": "Für Einzigartiges: Superlative (the best), Ordnungszahlen (the first) sowie only und same stehen mit the.",
+    "en": "For one-of-a-kind things: superlatives (the best), ordinals (the first), and only and same take the."
+   },
+   "signals": [
+    "best",
+    "worst",
+    "biggest",
+    "first",
+    "only",
+    "same",
+    "main"
+   ],
+   "ex": [
+    {
+     "en": "This is the biggest risk on our roadmap.",
+     "de": "Das ist das größte Risiko auf unserer Roadmap.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Monday is the last day to submit your timesheet.",
+     "de": "Montag ist der letzte Tag, um die Zeiterfassung einzureichen.",
+     "ctx": "mail"
+    },
+    {
+     "en": "She's the only one who read the whole contract.",
+     "de": "Sie hat als Einzige den ganzen Vertrag gelesen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "It was most difficult negotiation of my career.",
+    "good": "It was the most difficult negotiation of my career.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler: Deutsch sagt „die schwierigste Verhandlung“ mit Artikel. Der Superlativ wird wie ein gewöhnliches Adjektiv behandelt, und der Artikel rutscht weg.",
+     "en": "Not a translation error: German says “die schwierigste Verhandlung” with an article. The superlative is treated like an ordinary adjective and the article slips away."
+    }
+   },
+   "contrast": {
+    "with": "art.definite",
+    "a": "We chose the cheapest option.",
+    "b": "We chose the option you suggested.",
+    "diff": {
+     "de": "Beide nehmen the, aber aus anderem Grund: Oben macht der Superlativ den Punkt einzigartig, unten die Angabe, die beide kennen.",
+     "en": "Both take the, but for different reasons: above, the superlative makes it unique; below, the detail both of you know."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Anna was the first person to reply.",
+     "q": {
+      "de": "Hat vor Anna schon jemand geantwortet?",
+      "en": "Had anyone replied before Anna?"
+     },
+     "a": false
+    },
+    {
+     "s": "We asked for the same report twice.",
+     "q": {
+      "de": "Haben wir zweimal denselben Bericht angefragt?",
+      "en": "Did we ask for one and the same report twice?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Steht vor dem Nomen ein Wort, das nur ein einziges Ding zulässt?",
+    "en": "Is there a word before the noun that allows only one single thing?"
+   }
+  },
+  {
+   "id": "art.zero",
+   "name": {
+    "de": "kein Artikel · allgemein, unzählbar",
+    "en": "no article · general, uncountable"
+   },
+   "form": {
+    "de": "– + Plural oder unzählbar, allgemein gemeint",
+    "en": "– + plural or uncountable, meant in general"
+   },
+   "use": {
+    "de": "Wer allgemein spricht, lässt den Artikel weg: bei Plural (clients), unzählbaren Wörtern (information, advice) und abstrakten Begriffen (life).",
+    "en": "Speaking in general, you leave out the article: with plurals (clients), uncountable words (information, advice) and abstract ideas (life)."
+   },
+   "signals": [
+    "information",
+    "advice",
+    "news",
+    "feedback",
+    "equipment",
+    "knowledge",
+    "research"
+   ],
+   "ex": [
+    {
+     "en": "We still need more information from the client.",
+     "de": "Wir brauchen noch mehr Informationen vom Kunden.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Thanks for your feedback; it was really useful.",
+     "de": "Danke für dein Feedback, es war wirklich nützlich.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Honestly, trust takes years to build.",
+     "de": "Ehrlich, Vertrauen aufzubauen dauert Jahre.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Can you give me an information about the schedule?",
+    "good": "Can you give me information about the schedule?",
+    "cause": {
+     "de": "Im Deutschen sind „eine Information“ und „ein Rat“ zählbar. Englisch information und advice sind unzählbar: kein a/an und kein Plural.",
+     "en": "In German “eine Information” and “ein Rat” are countable. In English information and advice are uncountable: no a/an and no plural."
+    }
+   },
+   "contrast": {
+    "with": "art.definite",
+    "a": "We need information.",
+    "b": "We need the information you promised.",
+    "diff": {
+     "de": "Ohne Artikel meinst du Information ganz allgemein. Mit the meinst du genau die, die beide kennen.",
+     "en": "Without an article you mean information in general. With the you mean exactly the one both of you know."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Life is short.",
+     "q": {
+      "de": "Ist ein bestimmtes Leben gemeint?",
+      "en": "Is one particular life meant?"
+     },
+     "a": false
+    },
+    {
+     "s": "The advice from legal was clear.",
+     "q": {
+      "de": "Ist ein bestimmter Rat gemeint?",
+      "en": "Is one particular piece of advice meant?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Meinst du etwas im Allgemeinen, und ist das Wort zählbar?",
+    "en": "Do you mean something in general, and is the word countable?"
+   }
+  },
+  {
+   "id": "art.fixed",
+   "name": {
+    "de": "feste Wendungen · the oder –",
+    "en": "fixed phrases · the or –"
+   },
+   "form": {
+    "de": "feste Verbindung, als Block lernen",
+    "en": "set phrase, learn it as one block"
+   },
+   "use": {
+    "de": "Manche Verbindungen haben einen festen Artikel oder keinen: go to work, play the piano, in the evening, a lack of. Man lernt sie als Block.",
+    "en": "Some phrases have a fixed article or none: go to work, play the piano, in the evening, a lack of. You learn them as blocks."
+   },
+   "signals": [
+    "go to work",
+    "go to school",
+    "in the evening",
+    "in the morning",
+    "play the",
+    "by train",
+    "a lack of"
+   ],
+   "ex": [
+    {
+     "en": "We'll sort out the details in the morning.",
+     "de": "Die Details klären wir morgen früh.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I'll be working from home on Friday.",
+     "de": "Ich arbeite am Freitag von zu Hause.",
+     "ctx": "mail"
+    },
+    {
+     "en": "He plays the guitar in a band.",
+     "de": "Er spielt Gitarre in einer Band.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "I take the train to the work every day.",
+    "good": "I take the train to work every day.",
+    "cause": {
+     "de": "Im Deutschen steckt der Artikel in „zur Arbeit“ (zu + der). Wörtlich übertragen wird daraus to the work.",
+     "en": "In German the article hides in “zur Arbeit” (zu + der). Translated word for word it becomes to the work."
+    }
+   },
+   "contrast": {
+    "with": "art.definite",
+    "a": "I'm at work until six.",
+    "b": "I'm at the office until six.",
+    "diff": {
+     "de": "at work ist eine feste Wendung ohne Artikel. at the office nennt einen bestimmten Ort.",
+     "en": "at work is a set phrase without an article. at the office names one specific place."
+    }
+   },
+   "ccq": [
+    {
+     "s": "He goes to school every day.",
+     "q": {
+      "de": "Besucht er die Schule als Schüler?",
+      "en": "Does he attend school as a student?"
+     },
+     "a": true
+    },
+    {
+     "s": "We met at the school for a parents' evening.",
+     "q": {
+      "de": "Geht es nur um den Ort, nicht um den Unterricht?",
+      "en": "Is it only about the place, not about lessons?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Klingt die Verbindung wie ein Block, den man so gelernt hat?",
+    "en": "Does the phrase sound like a block you learned as it is?"
+   }
+  }
+ ]
+}

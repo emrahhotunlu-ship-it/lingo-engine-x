@@ -1,0 +1,1030 @@
+[
+ {
+  "id": "gi-ing-k1",
+  "type": "kwt",
+  "pat": "gi.ing-verbs",
+  "from": "We deliberately didn't mention the price in front of the client.",
+  "key": "AVOIDED",
+  "frame": "We ___ the price in front of the client.",
+  "answer": "avoided mentioning",
+  "accepted": [
+   "avoided discussing",
+   "avoided naming",
+   "avoided stating",
+   "avoided disclosing",
+   "avoided revealing",
+   "avoided talking about",
+   "avoided bringing up",
+   "avoided referring to"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: avoid + -ing, also avoided mentioning. Kein to nach avoid.",
+    "en": "Right: avoid + -ing, so avoided mentioning. No to after avoid."
+   },
+   "wrong": [
+    {
+     "not": [
+      "avoided"
+     ],
+     "de": "Das Schlüsselwort avoided muss unverändert in der Lücke stehen.",
+     "en": "The key word avoided must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Nach avoid steht -ing, kein to: avoided mentioning.",
+     "en": "After avoid use -ing, not to: avoided mentioning."
+    },
+    {
+     "pat": "gi.ing-verbs",
+     "de": "Nach avoid folgt die -ing-Form: avoided mentioning the price.",
+     "en": "After avoid the -ing form follows: avoided mentioning the price."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-ing-k2",
+  "type": "kwt",
+  "pat": "gi.ing-verbs",
+  "from": "Could you wait a bit longer, please?",
+  "key": "MIND",
+  "frame": "Would you ___ a bit longer?",
+  "answer": "mind waiting",
+  "accepted": [],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Would you mind waiting. Mind nimmt -ing und kein to.",
+    "en": "Right: Would you mind waiting. Mind takes -ing, no to."
+   },
+   "wrong": [
+    {
+     "not": [
+      "mind"
+     ],
+     "de": "Das Schlüsselwort mind muss unverändert in der Lücke stehen.",
+     "en": "The key word mind must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Nach mind steht -ing, kein to: mind waiting.",
+     "en": "After mind use -ing, not to: mind waiting."
+    },
+    {
+     "pat": "gi.ing-verbs",
+     "de": "Nach mind folgt die -ing-Form: mind waiting.",
+     "en": "After mind the -ing form follows: mind waiting."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-ing-f1",
+  "type": "find",
+  "pat": "gi.ing-verbs",
+  "prompt": "We postponed to sign the contract until the audit is done.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "signing",
+  "fixed": "We postponed signing the contract until the audit is done.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach postpone steht -ing: postponed signing.",
+    "en": "The error: after postpone use -ing: postponed signing."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach postpone steht kein to.",
+     "en": "There is an error: no to after postpone."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „to sign“: postpone gehört zur -ing-Gruppe.",
+     "en": "The error is “to sign”: postpone belongs to the -ing group."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-ing-f2",
+  "type": "find",
+  "pat": "gi.ing-verbs",
+  "prompt": "He admitted to forward the confidential file to a friend.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "forwarding",
+  "fixed": "He admitted forwarding the confidential file to a friend.",
+  "accepted": [
+   "to forwarding",
+   "having forwarded"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach admit steht -ing: admitted forwarding.",
+    "en": "The error: after admit use -ing: admitted forwarding."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Admit to + Grundform gibt es nicht.",
+     "en": "There is an error: admit to + base form does not exist."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „to forward“: Es folgt -ing.",
+     "en": "The error is “to forward”: -ing follows."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-ing-f3",
+  "type": "find",
+  "pat": "gi.ing-verbs",
+  "prompt": "Would you mind sending me the updated slides before noon?",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: Nach mind steht -ing: mind sending.",
+    "en": "No error: after mind comes -ing: mind sending."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Mind + -ing ist richtig.",
+     "en": "No error: mind + -ing is correct."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-ing-m1",
+  "type": "meaning",
+  "pat": "gi.ing-verbs",
+  "a": "She denied taking the file.",
+  "b": "She refused to take the file.",
+  "q": {
+   "de": "Welcher Satz sagt: Sie behauptet, die Datei nicht genommen zu haben?",
+   "en": "Which sentence says she claims she did not take the file?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Deny + -ing bezieht sich auf Geschehenes: Sie bestreitet die Tat.",
+    "en": "Right: sentence a. Deny + -ing refers to what happened: she denies the act."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b geht es um ein Nein zu einer Handlung (refuse + to), nicht um Vergangenes.",
+     "en": "In b it is a no to an action (refuse + to), not about the past."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: -ing nach deny blickt zurück, refuse + to meint ein Nein.",
+     "en": "Not the same: -ing after deny looks back, refuse + to means a no."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-to-k1",
+  "type": "kwt",
+  "pat": "gi.to-verbs",
+  "from": "We have decided that we will hire two more developers.",
+  "key": "DECIDED",
+  "frame": "We ___ two more developers.",
+  "answer": "decided to hire",
+  "accepted": [
+   "decided to recruit",
+   "decided to take on",
+   "decided to bring on",
+   "decided to employ"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach decide steht to + Verb, also decided to hire.",
+    "en": "Right: decide + to + verb, so decided to hire."
+   },
+   "wrong": [
+    {
+     "not": [
+      "decided"
+     ],
+     "de": "Das Schlüsselwort decided muss unverändert in der Lücke stehen.",
+     "en": "The key word decided must stay unchanged in the gap."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Nach decide fehlt to: decided + to + Verb, nicht -ing.",
+     "en": "After decide to is needed: decided + to + verb, not -ing."
+    },
+    {
+     "pat": "gi.to-verbs",
+     "de": "Nach decide steht to + Grundform: decided to hire.",
+     "en": "After decide comes to + base form: decided to hire."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-to-k2",
+  "type": "kwt",
+  "pat": "gi.to-verbs",
+  "from": "After three attempts, we finally reached the supplier.",
+  "key": "MANAGED",
+  "frame": "After three attempts, we finally ___ the supplier.",
+  "answer": "managed to reach",
+  "accepted": [
+   "managed to contact",
+   "managed to get hold of",
+   "managed to get through to",
+   "managed to speak to",
+   "managed to talk to",
+   "managed to catch"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach manage steht to + Verb, also managed to reach.",
+    "en": "Right: manage + to + verb, so managed to reach."
+   },
+   "wrong": [
+    {
+     "not": [
+      "managed"
+     ],
+     "de": "Das Schlüsselwort managed muss unverändert in der Lücke stehen.",
+     "en": "The key word managed must stay unchanged in the gap."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Nach manage fehlt to: managed + to + Verb, nicht -ing.",
+     "en": "After manage to is needed: managed + to + verb, not -ing."
+    },
+    {
+     "pat": "gi.to-verbs",
+     "de": "Nach manage steht to + Grundform: managed to reach.",
+     "en": "After manage comes to + base form: managed to reach."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-to-f1",
+  "type": "find",
+  "pat": "gi.to-verbs",
+  "prompt": "She refused answering questions about the merger.",
+  "err": [
+   2,
+   2
+  ],
+  "answer": "to answer",
+  "fixed": "She refused to answer questions about the merger.",
+  "accepted": [
+   "to respond to"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach refuse steht to + Verb: refused to answer.",
+    "en": "The error: after refuse comes to + verb: refused to answer."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach refuse steht kein -ing.",
+     "en": "There is an error: no -ing after refuse."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „answering“: refuse gehört zur to-Gruppe.",
+     "en": "The error is “answering”: refuse belongs to the to group."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-to-f2",
+  "type": "find",
+  "pat": "gi.to-verbs",
+  "prompt": "They plan opening a second office next year.",
+  "err": [
+   2,
+   2
+  ],
+  "answer": "to open",
+  "fixed": "They plan to open a second office next year.",
+  "accepted": [
+   "on opening"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Plan nimmt to + Verb (oder plan on + -ing): plan to open.",
+    "en": "The error: plan takes to + verb (or plan on + -ing): plan to open."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Plan + -ing ohne on gibt es nicht.",
+     "en": "There is an error: plan + -ing without on does not exist."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „opening“: Es fehlt to oder on.",
+     "en": "The error is “opening”: to or on is missing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-to-f3",
+  "type": "find",
+  "pat": "gi.to-verbs",
+  "prompt": "She promised to send the revised draft by Friday.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: promise + to + Verb ist richtig.",
+    "en": "No error: promise + to + verb is correct."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach promise steht to + Grundform.",
+     "en": "No error: after promise comes to + base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-to-m1",
+  "type": "meaning",
+  "pat": "gi.to-verbs",
+  "a": "He pretended to read the report.",
+  "b": "He read the report.",
+  "q": {
+   "de": "Welcher Satz sagt: Er hat den Bericht nicht gelesen, sondern nur so getan?",
+   "en": "Which sentence says he did not read the report but only acted as if?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Pretend + to + Verb heißt „so tun, als ob“.",
+    "en": "Right: sentence a. Pretend + to + verb means acting as if."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b hat er den Bericht wirklich gelesen. Das ist kein Vortäuschen.",
+     "en": "In b he really read the report. That is not pretending."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Nur a sagt, dass er nur so tat.",
+     "en": "Not the same: only a says he was only acting."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-prep-k1",
+  "type": "kwt",
+  "pat": "gi.prep-ing",
+  "from": "I'll call her; I won't write an email.",
+  "key": "INSTEAD",
+  "frame": "I'll call her ___ an email.",
+  "answer": "instead of writing",
+  "accepted": [
+   "instead of sending",
+   "instead of typing",
+   "instead of drafting",
+   "instead of composing"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach instead of steht -ing, also instead of writing.",
+    "en": "Right: instead of + -ing, so instead of writing."
+   },
+   "wrong": [
+    {
+     "not": [
+      "instead"
+     ],
+     "de": "Das Schlüsselwort instead muss unverändert in der Lücke stehen.",
+     "en": "The key word instead must stay unchanged in the gap."
+    },
+    {
+     "not": [
+      "of"
+     ],
+     "de": "Es fehlt das of: instead of + -ing.",
+     "en": "The of is missing: instead of + -ing."
+    },
+    {
+     "pat": "gi.prep-ing",
+     "de": "Nach der Präposition of steht -ing: instead of writing.",
+     "en": "After the preposition of comes -ing: instead of writing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-prep-k2",
+  "type": "kwt",
+  "pat": "gi.prep-ing",
+  "from": "He left the meeting and didn't say a word to anyone.",
+  "key": "WITHOUT",
+  "frame": "He left the meeting ___ a word to anyone.",
+  "answer": "without saying",
+  "accepted": [
+   "without uttering",
+   "without breathing",
+   "without even saying",
+   "without once saying",
+   "without ever saying"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: without + -ing, also without saying. Deutsch „ohne … zu sagen“ braucht kein to.",
+    "en": "Right: without + -ing, so without saying. German “ohne … zu sagen” needs no to."
+   },
+   "wrong": [
+    {
+     "not": [
+      "without"
+     ],
+     "de": "Das Schlüsselwort without muss unverändert in der Lücke stehen.",
+     "en": "The key word without must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Nach without steht -ing, kein to: without saying.",
+     "en": "After without use -ing, not to: without saying."
+    },
+    {
+     "pat": "gi.prep-ing",
+     "de": "Nach der Präposition without steht -ing.",
+     "en": "After the preposition without comes -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-prep-f1",
+  "type": "find",
+  "pat": "gi.prep-ing",
+  "prompt": "He is worried about to lose the account.",
+  "err": [
+   3,
+   5
+  ],
+  "answer": "about losing",
+  "fixed": "He is worried about losing the account.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach der Präposition about steht -ing: about losing.",
+    "en": "The error: after the preposition about comes -ing: about losing."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach about steht kein to + Verb.",
+     "en": "There is an error: no to + verb after about."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „about to lose“: Nach einer Präposition folgt -ing.",
+     "en": "The error is “about to lose”: after a preposition comes -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-prep-f2",
+  "type": "find",
+  "pat": "gi.prep-ing",
+  "prompt": "Thank you for to send the report so quickly.",
+  "err": [
+   2,
+   4
+  ],
+  "answer": "for sending",
+  "fixed": "Thank you for sending the report so quickly.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach for steht -ing: for sending.",
+    "en": "The error: after for comes -ing: for sending."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach for steht kein to + Verb.",
+     "en": "There is an error: no to + verb after for."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „for to send“: Nach for folgt -ing.",
+     "en": "The error is “for to send”: after for comes -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-prep-f3",
+  "type": "find",
+  "pat": "gi.prep-ing",
+  "prompt": "We apologized to the client for missing the deadline.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: Nach der Präposition for steht -ing: for missing.",
+    "en": "No error: after the preposition for comes -ing: for missing."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: for + -ing ist richtig.",
+     "en": "No error: for + -ing is correct."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-prep-m1",
+  "type": "meaning",
+  "pat": "gi.prep-ing",
+  "a": "I'm used to working at night.",
+  "b": "I used to work at night.",
+  "q": {
+   "de": "Welcher Satz sagt: Nachtarbeit ist für mich inzwischen normal?",
+   "en": "Which sentence says working at night has become normal for me?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Be used to + -ing: to ist Präposition, es geht um Gewöhnung.",
+    "en": "Right: sentence a. Be used to + -ing: to is a preposition, it is about being accustomed."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b steht used to + Grundform: Früher war es so, heute nicht mehr.",
+     "en": "In b used to + base form means: it was so before, not now."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a meint Gewöhnung, b eine frühere Gewohnheit.",
+     "en": "Not the same: a means being accustomed, b a past habit."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-mean-k1",
+  "type": "kwt",
+  "pat": "gi.meaning",
+  "from": "We don't hold the weekly sync any more.",
+  "key": "STOPPED",
+  "frame": "We ___ the weekly sync.",
+  "answer": "stopped holding",
+  "accepted": [
+   "stopped having",
+   "stopped running",
+   "stopped doing",
+   "stopped scheduling",
+   "stopped organizing"
+  ],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach stop heißt -ing aufhören: stopped holding.",
+    "en": "Right: stop + -ing means quit: stopped holding."
+   },
+   "wrong": [
+    {
+     "not": [
+      "stopped"
+     ],
+     "de": "Das Schlüsselwort stopped muss unverändert in der Lücke stehen.",
+     "en": "The key word stopped must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Stopped + to hieße: anhalten, um etwas zu tun. Hier hört etwas auf: -ing.",
+     "en": "Stopped + to would mean pausing to do something. Here it ends: -ing."
+    },
+    {
+     "pat": "gi.meaning",
+     "de": "Wenn etwas aufhört, steht stop + -ing.",
+     "en": "When something ends, use stop + -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-mean-k2",
+  "type": "kwt",
+  "pat": "gi.meaning",
+  "from": "Sarah didn't remember that she had to send the invoice.",
+  "key": "FORGOT",
+  "frame": "Sarah ___ the invoice.",
+  "answer": "forgot to send",
+  "accepted": [
+   "forgot to email",
+   "forgot to mail",
+   "forgot to forward",
+   "forgot to issue",
+   "forgot to attach",
+   "forgot to submit"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: forget + to = die Aufgabe vergessen: forgot to send.",
+    "en": "Right: forget + to = forgot the task: forgot to send."
+   },
+   "wrong": [
+    {
+     "not": [
+      "forgot"
+     ],
+     "de": "Das Schlüsselwort forgot muss unverändert in der Lücke stehen.",
+     "en": "The key word forgot must stay unchanged in the gap."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Forgot + -ing meint die Erinnerung an Geschehenes. Hier blieb etwas ungetan: forgot to.",
+     "en": "Forgot + -ing is the memory of what happened. Here something stayed undone: forgot to."
+    },
+    {
+     "pat": "gi.meaning",
+     "de": "Wer eine Aufgabe vergisst, nutzt forget + to + Verb.",
+     "en": "Forgetting a task takes forget + to + verb."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-mean-f1",
+  "type": "find",
+  "pat": "gi.meaning",
+  "prompt": "Please don't forget locking the server room when you leave.",
+  "err": [
+   3,
+   3
+  ],
+  "answer": "to lock",
+  "fixed": "Please don't forget to lock the server room when you leave.",
+  "accepted": [
+   "to lock up"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Hier geht es um eine Aufgabe, also forget + to: to lock.",
+    "en": "The error: this is a task, so forget + to: to lock."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Die Bitte meint etwas Künftiges.",
+     "en": "There is an error: the request is about the future."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „locking“: Eine noch offene Aufgabe verlangt to.",
+     "en": "The error is “locking”: a task still open takes to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-mean-f2",
+  "type": "find",
+  "pat": "gi.meaning",
+  "prompt": "He stopped to work on weekends after the burnout.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "working",
+  "fixed": "He stopped working on weekends after the burnout.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Hier hört er damit auf, also stop + -ing: stopped working.",
+    "en": "The error: he quits doing it, so stop + -ing: stopped working."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: „Stop to work“ passt nicht zu „after the burnout“.",
+     "en": "There is an error: “stop to work” clashes with “after the burnout”."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „to work“: Das Aufhören verlangt -ing.",
+     "en": "The error is “to work”: quitting takes -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-mean-f3",
+  "type": "find",
+  "pat": "gi.meaning",
+  "prompt": "I remember talking to her at the conference last year.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: Nach remember erinnert -ing an Geschehenes: remember talking.",
+    "en": "No error: remember + -ing recalls what happened: remember talking."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Das Gespräch fand letztes Jahr statt, also remember + -ing.",
+     "en": "No error: the talk took place last year, so remember + -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-mean-m1",
+  "type": "meaning",
+  "pat": "gi.meaning",
+  "a": "I tried restarting the router.",
+  "b": "I tried to restart the router.",
+  "q": {
+   "de": "Welcher Satz sagt: Ich habe es ausprobiert, um zu sehen, ob es hilft?",
+   "en": "Which sentence says I experimented to see whether it helps?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Try + -ing heißt ausprobieren, um die Wirkung zu sehen: den Router neu starten.",
+    "en": "Right: sentence a. Try + -ing means testing something to see the effect: restarting the router."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b ist es ein Versuch, etwas zu schaffen (try + to), kein Ausprobieren.",
+     "en": "In b it is an attempt to manage something (try + to), not an experiment."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: -ing probiert aus, to versucht zu schaffen.",
+     "en": "Not the same: -ing tests it out, to attempts to manage it."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-bare-k1",
+  "type": "kwt",
+  "pat": "gi.bare-inf",
+  "from": "The delay forced everyone to work through the weekend.",
+  "key": "MADE",
+  "frame": "The delay ___ through the weekend.",
+  "answer": "made everyone work",
+  "accepted": [
+   "made everybody work",
+   "made us all work",
+   "made all of us work",
+   "made us work",
+   "made them work",
+   "made the team work",
+   "made everyone stay",
+   "made everybody stay",
+   "made us stay",
+   "made them stay",
+   "made us all stay"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: make + Person + Grundform: made everyone work, ohne to.",
+    "en": "Right: make + person + base form: made everyone work, no to."
+   },
+   "wrong": [
+    {
+     "not": [
+      "made"
+     ],
+     "de": "Das Schlüsselwort made muss unverändert in der Lücke stehen.",
+     "en": "The key word made must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Nach make steht kein to: made everyone work.",
+     "en": "No to after make: made everyone work."
+    },
+    {
+     "pat": "gi.bare-inf",
+     "de": "Nach make + Person steht die Grundform ohne to.",
+     "en": "After make + person the base form follows without to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-bare-k2",
+  "type": "kwt",
+  "pat": "gi.bare-inf",
+  "from": "Our manager allowed us to leave early on Friday.",
+  "key": "LET",
+  "frame": "Our manager ___ early on Friday.",
+  "answer": "let us leave",
+  "accepted": [
+   "let us all leave",
+   "let everyone leave",
+   "let everybody leave",
+   "let the team leave",
+   "let them leave",
+   "let us go",
+   "let us all go",
+   "let everyone go",
+   "let everybody go",
+   "let us finish",
+   "let us log off"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: let + Person + Grundform: let us leave, ohne to.",
+    "en": "Right: let + person + base form: let us leave, no to."
+   },
+   "wrong": [
+    {
+     "not": [
+      "let"
+     ],
+     "de": "Das Schlüsselwort let muss unverändert in der Lücke stehen.",
+     "en": "The key word let must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Nach let steht kein to: let us leave.",
+     "en": "No to after let: let us leave."
+    },
+    {
+     "pat": "gi.bare-inf",
+     "de": "Nach let + Person steht die Grundform ohne to.",
+     "en": "After let + person the base form follows without to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-bare-f1",
+  "type": "find",
+  "pat": "gi.bare-inf",
+  "prompt": "The new policy lets us to work from home on Fridays.",
+  "err": [
+   5,
+   6
+  ],
+  "answer": "work",
+  "fixed": "The new policy lets us work from home on Fridays.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach let steht die Grundform ohne to: lets us work.",
+    "en": "The error: after let the base form follows without to: lets us work."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach let steht kein to.",
+     "en": "There is an error: no to after let."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „to work“: Das to entfällt.",
+     "en": "The error is “to work”: the to drops out."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-bare-f2",
+  "type": "find",
+  "pat": "gi.bare-inf",
+  "prompt": "My boss made me staying late again last Friday.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "stay",
+  "fixed": "My boss made me stay late again last Friday.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach make + Person steht die Grundform: made me stay.",
+    "en": "The error: after make + person comes the base form: made me stay."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach make steht kein -ing.",
+     "en": "There is an error: no -ing after make."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „staying“: Es folgt die Grundform.",
+     "en": "The error is “staying”: the base form follows."
+    }
+   ]
+  }
+ },
+ {
+  "id": "gi-bare-m1",
+  "type": "meaning",
+  "pat": "gi.bare-inf",
+  "a": "She let us leave early.",
+  "b": "She made us leave early.",
+  "q": {
+   "de": "Welcher Satz sagt: Wir hatten keine Wahl und mussten früher gehen?",
+   "en": "Which sentence says we had no choice and had to leave early?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. Make + Person + Grundform meint Zwang, let die Erlaubnis.",
+    "en": "Right: sentence b. Make + person + base form means force, let means permission."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a erlaubt sie es nur: let = „lassen, erlauben“, kein Zwang.",
+     "en": "In a she only allows it: let = permit, no force."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: let erlaubt, make zwingt.",
+     "en": "Not the same: let permits, make forces."
+    }
+   ]
+  }
+ }
+]

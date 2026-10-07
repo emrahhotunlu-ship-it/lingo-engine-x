@@ -1,0 +1,635 @@
+{
+ "I'm looking forward to ___ you.": {
+  "pat": "gi.prep-ing",
+  "why": {
+   "ok": {
+    "de": "Richtig: Hinter „looking forward to“ ist to eine Präposition, also seeing.",
+    "en": "Right: after “looking forward to”, to is a preposition, so seeing."
+   },
+   "wrong": [
+    {
+     "opt": "see",
+     "de": "Nach der Präposition to steht keine Grundform, sondern -ing: seeing.",
+     "en": "After the preposition to a bare verb is wrong; use -ing: seeing."
+    },
+    {
+     "opt": "to see",
+     "de": "Das to gehört schon zu „look forward to“. Ein zweites to passt nicht.",
+     "en": "The to already belongs to “look forward to”. A second to does not fit."
+    },
+    {
+     "opt": "seen",
+     "de": "„Seen“ ist ein Partizip der Vergangenheit. Nach einer Präposition passt -ing.",
+     "en": "“Seen” is a past participle. After a preposition use -ing."
+    }
+   ]
+  }
+ },
+ "We decided ___ the train.": {
+  "pat": "gi.to-verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: decide + to + Verb, also to take. Ein Entschluss zielt auf Künftiges.",
+    "en": "Right: decide + to + verb, so to take. A decision aims at what comes next."
+   },
+   "wrong": [
+    {
+     "if": [
+      "taking"
+     ],
+     "de": "Nach decide steht to + Verb, kein -ing: to take.",
+     "en": "After decide use to + verb, not -ing: to take."
+    },
+    {
+     "if": [
+      "take"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Es fehlt das to: decide + to + Verb.",
+     "en": "The to is missing: decide + to + verb."
+    },
+    {
+     "pat": "gi.to-verbs",
+     "de": "Nach decide steht to + Grundform: to take.",
+     "en": "After decide comes to + base form: to take."
+    }
+   ]
+  }
+ },
+ "I stopped ___ because it's bad for my health.": {
+  "pat": "gi.meaning",
+  "why": {
+   "ok": {
+    "de": "Richtig: stop + -ing heißt aufhören. Hier gibt er das Rauchen auf.",
+    "en": "Right: stop + -ing means quit. Here he gives up smoking."
+   },
+   "wrong": [
+    {
+     "opt": "to smoke",
+     "de": "„Stop to smoke“ hieße anhalten, um zu rauchen. Das passt nicht zu „bad for my health“.",
+     "en": "“Stop to smoke” means pausing in order to smoke. That clashes with “bad for my health”."
+    },
+    {
+     "opt": "smoke",
+     "de": "Nach stop folgt -ing oder to + Verb. Die bloße Grundform passt nicht.",
+     "en": "After stop comes -ing or to + verb. The bare base form does not fit."
+    },
+    {
+     "opt": "smoked",
+     "de": "Nach stop steht keine Vergangenheitsform, sondern -ing oder to + Verb.",
+     "en": "After stop there is no past form, but -ing or to + verb."
+    }
+   ]
+  }
+ },
+ "We can't afford ___ the product launch again.": {
+  "pat": "gi.to-verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach afford steht to + Verb, also can't afford to delay.",
+    "en": "Right: afford + to + verb, so can't afford to delay."
+   },
+   "wrong": [
+    {
+     "opt": "delay",
+     "de": "Es fehlt das to: afford + to + Verb.",
+     "en": "The to is missing: afford + to + verb."
+    },
+    {
+     "opt": "delaying",
+     "de": "Afford gehört zur to-Gruppe (decide, hope, manage), nicht zur -ing-Gruppe.",
+     "en": "Afford belongs to the to group (decide, hope, manage), not the -ing group."
+    },
+    {
+     "opt": "to delaying",
+     "de": "To und -ing zugleich gibt es hier nicht: afford + to + Grundform.",
+     "en": "To and -ing together do not occur here: afford + to + base form."
+    }
+   ]
+  }
+ },
+ "I suggest ___ the meeting to Thursday.": {
+  "pat": "gi.ing-verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach suggest steht -ing, also suggest moving.",
+    "en": "Right: suggest takes -ing, so suggest moving."
+   },
+   "wrong": [
+    {
+     "opt": "to move",
+     "de": "Deutsch „vorschlagen, … zu verschieben“ verleitet zu to. Suggest nimmt aber kein to.",
+     "en": "German “vorschlagen, … zu verschieben” tempts to, but suggest takes no to."
+    },
+    {
+     "opt": "to moving",
+     "de": "Zwei Formen vermischt: Nach suggest steht -ing, ohne to.",
+     "en": "Two forms mixed: after suggest comes -ing, without to."
+    },
+    {
+     "opt": "move",
+     "de": "Nach suggest steht -ing. Die Grundform geht nur im Satz: I suggest we move.",
+     "en": "After suggest comes -ing. The base form only works in a clause: I suggest we move."
+    }
+   ]
+  }
+ },
+ "Please remember ___ the client before the call; she doesn't know the agenda yet.": {
+  "pat": "gi.meaning",
+  "why": {
+   "ok": {
+    "de": "Richtig: remember + to = daran denken. Die E-Mail ist noch nicht geschickt.",
+    "en": "Right: remember + to = remember to do it. The email has not been sent yet."
+   },
+   "wrong": [
+    {
+     "opt": "email",
+     "de": "Die bloße Grundform passt nicht: remember + to + Verb.",
+     "en": "The bare base form does not fit: remember + to + verb."
+    },
+    {
+     "opt": "emailed",
+     "de": "Eine Vergangenheitsform passt nicht: Es folgt to + Verb oder -ing.",
+     "en": "A past form does not fit: to + verb or -ing follows."
+    },
+    {
+     "opt": "emailing",
+     "de": "Remember + -ing heißt, sich an Geschehenes erinnern. Hier ist es noch offen.",
+     "en": "Remember + -ing means recalling what happened. Here it is still open."
+    }
+   ]
+  }
+ },
+ "I'll never forget ___ my first big deal. I was shaking with excitement.": {
+  "pat": "gi.meaning",
+  "why": {
+   "ok": {
+    "de": "Richtig: forget + -ing = die Erinnerung. Der erste Abschluss liegt schon zurück.",
+    "en": "Right: forget + -ing = the memory. The first deal is already behind him."
+   },
+   "wrong": [
+    {
+     "opt": "close",
+     "de": "Die Grundform allein passt nicht: forget + -ing oder to + Verb.",
+     "en": "The base form alone does not fit: forget + -ing or to + verb."
+    },
+    {
+     "opt": "to closing",
+     "de": "To und -ing zusammen gibt es nicht. Für die Erinnerung steht -ing.",
+     "en": "To and -ing together do not occur. For the memory use -ing."
+    },
+    {
+     "opt": "to close",
+     "de": "Forget + to hieße: nie vergessen, es noch zu tun. Hier ist es schon passiert.",
+     "en": "Forget + to would mean: never forget to do it. Here it already happened."
+    }
+   ]
+  }
+ },
+ "We're considering ___ a second office in Vienna.": {
+  "pat": "gi.ing-verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach consider steht -ing, also considering opening.",
+    "en": "Right: consider + -ing, so considering opening."
+   },
+   "wrong": [
+    {
+     "opt": "to opening",
+     "de": "Zwei Formen vermischt: Consider nimmt -ing, ohne to.",
+     "en": "Two forms mixed: consider takes -ing, without to."
+    },
+    {
+     "opt": "to open",
+     "de": "Consider gehört zur -ing-Gruppe, nicht zur to-Gruppe.",
+     "en": "Consider belongs to the -ing group, not the to group."
+    },
+    {
+     "opt": "open",
+     "de": "Nach consider steht -ing, nicht die bloße Grundform.",
+     "en": "After consider comes -ing, not the bare base form."
+    }
+   ]
+  }
+ },
+ "I can't help ___ when I see that video.": {
+  "pat": "gi.ing-verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: can't help + -ing = nicht anders können, als zu lachen.",
+    "en": "Right: can't help + -ing = unable to stop yourself laughing."
+   },
+   "wrong": [
+    {
+     "opt": "to laughing",
+     "de": "Kein to nach can't help, sondern -ing.",
+     "en": "No to: can't help + -ing."
+    },
+    {
+     "opt": "to laugh",
+     "de": "Can't help + to + Verb gibt es nicht. Es heißt can't help + -ing.",
+     "en": "Can't help + to + verb does not exist. It is can't help + -ing."
+    },
+    {
+     "opt": "laugh",
+     "de": "Ohne but geht die Grundform nicht: can't help laughing oder can't help but laugh.",
+     "en": "Without but the base form fails: can't help laughing or can't help but laugh."
+    }
+   ]
+  }
+ },
+ "I regret ___ you that the project has been canceled.": {
+  "pat": "gi.meaning",
+  "why": {
+   "ok": {
+    "de": "Richtig: regret + to = bedauern, etwas jetzt mitteilen zu müssen.",
+    "en": "Right: regret + to = to be sorry to have to say something now."
+   },
+   "wrong": [
+    {
+     "if": [
+      "informing"
+     ],
+     "de": "Regret + -ing blickt zurück (bereuen). Hier geht es um die Mitteilung jetzt: to inform.",
+     "en": "Regret + -ing looks back (feel sorry for). Here it is about telling now: to inform."
+    },
+    {
+     "if": [
+      "inform"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Es fehlt das to: regret to inform.",
+     "en": "The to is missing: regret to inform."
+    },
+    {
+     "pat": "gi.meaning",
+     "de": "Für die Mitteilung jetzt steht regret + to + Verb.",
+     "en": "For telling someone now use regret + to + verb."
+    }
+   ]
+  }
+ },
+ "My manager made me ___ the report again.": {
+  "pat": "gi.bare-inf",
+  "why": {
+   "ok": {
+    "de": "Richtig: make + Person + Grundform: made me write, ohne to.",
+    "en": "Right: make + person + base form: made me write, no to."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to write"
+     ],
+     "de": "Nach make steht kein to: made me write. Nur im Passiv kommt to zurück.",
+     "en": "No to after make: made me write. Only in the passive does to return."
+    },
+    {
+     "if": [
+      "writing"
+     ],
+     "de": "Nach make folgt die Grundform, nicht -ing: made me write.",
+     "en": "After make comes the base form, not -ing: made me write."
+    },
+    {
+     "pat": "gi.bare-inf",
+     "de": "Nach make + Person steht die Grundform ohne to.",
+     "en": "After make + person the base form follows without to."
+    }
+   ]
+  }
+ },
+ "She succeeded in ___ the client to sign a three-year contract.": {
+  "pat": "gi.prep-ing",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach der Präposition in steht -ing: succeeded in persuading.",
+    "en": "Right: after the preposition in comes -ing: succeeded in persuading."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to persuade"
+     ],
+     "de": "Nach in steht kein to + Verb, sondern -ing.",
+     "en": "After in comes -ing, not to + verb."
+    },
+    {
+     "if": [
+      "persuade"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach einer Präposition steht -ing, nicht die Grundform.",
+     "en": "After a preposition comes -ing, not the base form."
+    },
+    {
+     "pat": "gi.prep-ing",
+     "de": "Nach der Präposition in steht die -ing-Form.",
+     "en": "After the preposition in use the -ing form."
+    }
+   ]
+  }
+ },
+ "I don't mind ___ late if the project needs it.": {
+  "pat": "gi.ing-verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach mind steht -ing: I don't mind working late.",
+    "en": "Right: mind + -ing: I don't mind working late."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to work"
+     ],
+     "de": "Nach mind steht -ing, kein to: don't mind working.",
+     "en": "After mind comes -ing, not to: don't mind working."
+    },
+    {
+     "if": [
+      "work"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Mind gehört zur -ing-Gruppe, die Grundform passt nicht.",
+     "en": "Mind belongs to the -ing group; the base form does not fit."
+    },
+    {
+     "pat": "gi.ing-verbs",
+     "de": "Nach mind folgt die -ing-Form.",
+     "en": "After mind the -ing form follows."
+    }
+   ]
+  }
+ },
+ "He pretended ___ nothing about the surprise party.": {
+  "pat": "gi.to-verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach pretend steht to + Verb, also pretended to know.",
+    "en": "Right: pretend + to + verb, so pretended to know."
+   },
+   "wrong": [
+    {
+     "if": [
+      "knowing"
+     ],
+     "de": "Nach pretend steht to + Verb, kein -ing: pretended to know.",
+     "en": "After pretend use to + verb, not -ing: pretended to know."
+    },
+    {
+     "if": [
+      "know"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Es fehlt das to: pretend + to + Verb.",
+     "en": "The to is missing: pretend + to + verb."
+    },
+    {
+     "if": [
+      "knew"
+     ],
+     "de": "Nach pretend steht keine Vergangenheitsform, sondern to + Grundform.",
+     "en": "After pretend there is no past form, but to + base form."
+    },
+    {
+     "pat": "gi.to-verbs",
+     "de": "Nach pretend folgt to + Grundform.",
+     "en": "After pretend comes to + base form."
+    }
+   ]
+  }
+ },
+ "It was a mistake to hire him. → I regret ___ him.": {
+  "pat": "gi.meaning",
+  "why": {
+   "ok": {
+    "de": "Richtig: regret + -ing = bereuen, es getan zu haben: regret hiring him.",
+    "en": "Right: regret + -ing = feel sorry about what you did: regret hiring him."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to hire"
+     ],
+     "de": "Regret + to meint, etwas jetzt mitteilen zu müssen. Bereuen heißt -ing.",
+     "en": "Regret + to means being sorry to say something now. Feeling sorry for it is -ing."
+    },
+    {
+     "if": [
+      "hire"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach regret steht -ing, nicht die Grundform.",
+     "en": "After regret comes -ing, not the base form."
+    },
+    {
+     "if": [
+      "hired"
+     ],
+     "de": "Nach regret folgt -ing oder having + Partizip, keine einfache Vergangenheit.",
+     "en": "After regret comes -ing or having + participle, not a simple past."
+    },
+    {
+     "pat": "gi.meaning",
+     "de": "Das Bereuen der Tat ist regret + -ing.",
+     "en": "Feeling sorry for something is regret + -ing."
+    }
+   ]
+  }
+ },
+ "She didn't want to speak about the problem, so she changed the subject. → She avoided ___ about the problem.": {
+  "pat": "gi.ing-verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach avoid steht -ing: avoided speaking about the problem.",
+    "en": "Right: avoid + -ing: avoided speaking about the problem."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to speak"
+     ],
+     "de": "Nach avoid steht -ing, kein to.",
+     "en": "After avoid comes -ing, not to."
+    },
+    {
+     "if": [
+      "speak"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Avoid braucht -ing, nicht die Grundform.",
+     "en": "Avoid needs -ing, not the base form."
+    },
+    {
+     "pat": "gi.ing-verbs",
+     "de": "Nach avoid folgt die -ing-Form.",
+     "en": "After avoid the -ing form follows."
+    }
+   ]
+  }
+ },
+ "We look forward to hear from you soon.": {
+  "pat": "gi.prep-ing",
+  "why": {
+   "ok": {
+    "de": "Richtig: look forward to + -ing, denn to ist hier eine Präposition: hearing.",
+    "en": "Right: look forward to + -ing, because to is a preposition here: hearing."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to hear"
+     ],
+     "de": "Das to in look forward to ist eine Präposition. Es folgt -ing: hearing.",
+     "en": "The to in look forward to is a preposition. -ing follows: hearing."
+    },
+    {
+     "if": [
+      "forward hearing"
+     ],
+     "de": "Das to fehlt: look forward to hearing.",
+     "en": "The to is missing: look forward to hearing."
+    },
+    {
+     "pat": "gi.prep-ing",
+     "de": "Nach look forward to steht die -ing-Form.",
+     "en": "After look forward to use the -ing form."
+    }
+   ]
+  }
+ },
+ "He suggested to postpone the meeting.": {
+  "pat": "gi.ing-verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: suggest + -ing (oder suggest that we postpone): suggested postponing.",
+    "en": "Right: suggest + -ing (or suggest that we postpone): suggested postponing."
+   },
+   "wrong": [
+    {
+     "if": [
+      "suggested to"
+     ],
+     "de": "„Suggest to + Verb“ gibt es nicht. Nimm -ing oder einen that-Satz.",
+     "en": "“Suggest to + verb” does not exist. Use -ing or a that-clause."
+    },
+    {
+     "if": [
+      "suggested postpone"
+     ],
+     "de": "Nach suggest steht -ing: postponing.",
+     "en": "After suggest comes -ing: postponing."
+    },
+    {
+     "pat": "gi.ing-verbs",
+     "de": "Nach suggest folgt -ing oder ein that-Satz.",
+     "en": "After suggest comes -ing or a that-clause."
+    }
+   ]
+  }
+ },
+ "He suggested to meet at the office.": {
+  "pat": "gi.ing-verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach suggest steht -ing: suggested meeting at the office.",
+    "en": "Right: suggest + -ing: suggested meeting at the office."
+   },
+   "wrong": [
+    {
+     "if": [
+      "suggested to"
+     ],
+     "de": "Nach suggest folgt -ing oder ein that-Satz, nie to + Grundform.",
+     "en": "After suggest comes -ing or a that-clause, never to + base form."
+    },
+    {
+     "if": [
+      "suggested meet"
+     ],
+     "de": "Nach suggest steht -ing: meeting.",
+     "en": "After suggest comes -ing: meeting."
+    },
+    {
+     "pat": "gi.ing-verbs",
+     "de": "Nach suggest folgt -ing oder ein that-Satz.",
+     "en": "After suggest comes -ing or a that-clause."
+    }
+   ]
+  }
+ },
+ "I look forward to see you.": {
+  "pat": "gi.prep-ing",
+  "why": {
+   "ok": {
+    "de": "Richtig: to ist hier Präposition, darum look forward to seeing you.",
+    "en": "Right: to is a preposition here, so look forward to seeing you."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to see"
+     ],
+     "de": "Look forward to ist eine Wendung mit Präposition: seeing, nicht see.",
+     "en": "Look forward to is a phrase with a preposition: seeing, not see."
+    },
+    {
+     "if": [
+      "forward seeing"
+     ],
+     "de": "Das to fehlt: look forward to seeing.",
+     "en": "The to is missing: look forward to seeing."
+    },
+    {
+     "pat": "gi.prep-ing",
+     "de": "Nach look forward to steht die -ing-Form.",
+     "en": "After look forward to use the -ing form."
+    }
+   ]
+  }
+ },
+ "She enjoys to work in a team.": {
+  "pat": "gi.ing-verbs",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach enjoy steht -ing: enjoys working in a team.",
+    "en": "Right: enjoy + -ing: enjoys working in a team."
+   },
+   "wrong": [
+    {
+     "if": [
+      "enjoys to"
+     ],
+     "de": "Enjoy gehört zur -ing-Gruppe, nicht zur to-Gruppe.",
+     "en": "Enjoy belongs to the -ing group, not the to group."
+    },
+    {
+     "if": [
+      "enjoys work"
+     ],
+     "de": "Nach enjoy steht -ing: working.",
+     "en": "After enjoy comes -ing: working."
+    },
+    {
+     "pat": "gi.ing-verbs",
+     "de": "Nach enjoy folgt die -ing-Form.",
+     "en": "After enjoy the -ing form follows."
+    }
+   ]
+  }
+ }
+}

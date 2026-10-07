@@ -1,0 +1,177 @@
+[
+ {
+  "pat": "art.indefinite",
+  "en": "Our new colleague works as a consultant for a logistics firm in Munich.",
+  "de": "Unser neuer Kollege arbeitet als Berater für eine Logistikfirma in München.",
+  "chunks": [
+   "our new colleague",
+   "works",
+   "as a consultant",
+   "for a logistics firm",
+   "in Munich"
+  ],
+  "alt": [
+   "Our new colleague works for a logistics firm in Munich as a consultant.",
+   "Our new colleague works as a consultant in Munich for a logistics firm.",
+   "Our new colleague works in Munich for a logistics firm as a consultant.",
+   "Our new colleague works in Munich as a consultant for a logistics firm.",
+   "Our new colleague works for a logistics firm as a consultant in Munich."
+  ],
+  "why": [
+   "Ein Beruf nach „as“ braucht im Englischen a/an: as a consultant. Im Deutschen steht hier kein Artikel.",
+   "A job after “as” needs a/an in English: as a consultant. German uses no article here."
+  ],
+  "bad": "Our new colleague works as consultant for a logistics firm in Munich.",
+  "trap": {
+   "tile": "as a consultant",
+   "instead": "as consultant",
+   "why": {
+    "de": "Im Deutschen fehlt bei Berufen der Artikel („als Berater“). Daher rutscht a im Englischen oft weg.",
+    "en": "German has no article with jobs (“als Berater”). That is why the a often slips away in English."
+   }
+  }
+ },
+ {
+  "pat": "art.sound",
+  "en": "Please book an hour for the review before the client call.",
+  "de": "Bitte reservieren Sie eine Stunde für die Durchsicht vor dem Kundentermin.",
+  "chunks": [
+   "please",
+   "book",
+   "an hour",
+   "for the review",
+   "before the client call"
+  ],
+  "alt": [
+   "Before the client call, please book an hour for the review.",
+   "For the review, please book an hour before the client call."
+  ],
+  "why": [
+   "Vor hour steht an, weil das h stumm ist und der Laut mit einem Vokal beginnt. Es zählt der Klang.",
+   "Before hour use an, because the h is silent and the sound starts with a vowel. Sound decides."
+  ],
+  "bad": "Please book a hour for the review before the client call.",
+  "trap": {
+   "tile": "an hour",
+   "instead": "a hour",
+   "why": {
+    "de": "Man folgt dem Buchstaben h, einem Konsonanten, und wählt a. Doch das h in hour ist stumm.",
+    "en": "Learners follow the letter h, a consonant, and pick a. But the h in hour is silent."
+   }
+  }
+ },
+ {
+  "pat": "art.definite",
+  "en": "Could you please close the door before the call starts?",
+  "de": "Könntest du bitte die Tür schließen, bevor der Anruf beginnt?",
+  "chunks": [
+   "could you",
+   "please",
+   "close",
+   "the door",
+   "before the call starts"
+  ],
+  "alt": [
+   "Before the call starts, could you please close the door?"
+  ],
+  "why": [
+   "Beide wissen, welche Tür gemeint ist, deshalb steht the. Das Ding ist bekannt und eindeutig.",
+   "Both know which door is meant, so use the. The thing is known and clear."
+  ],
+  "bad": "Could you please close door before the call starts?",
+  "trap": {
+   "tile": "the door",
+   "instead": "door",
+   "why": {
+    "de": "Deutsch sagt auch „die Tür“. Der Artikel fällt eher im Schnellsprechen weg, nicht durch Übersetzung.",
+    "en": "German also says “die Tür”. The article more likely drops in quick speech, not through translation."
+   }
+  }
+ },
+ {
+  "pat": "art.the-unique",
+  "en": "Honestly, this was the most difficult negotiation of my career.",
+  "de": "Ehrlich gesagt war das die schwierigste Verhandlung meiner Karriere.",
+  "chunks": [
+   "honestly",
+   "this was",
+   "the most difficult",
+   "negotiation",
+   "of my career"
+  ],
+  "alt": [
+   "This was honestly the most difficult negotiation of my career.",
+   "This was the most difficult negotiation of my career, honestly."
+  ],
+  "why": [
+   "Der Superlativ nimmt the: the most difficult negotiation. Es gibt nur eine schwierigste Verhandlung.",
+   "A superlative takes the: the most difficult negotiation. There is only one most difficult one."
+  ],
+  "bad": "Honestly, this was most difficult negotiation of my career.",
+  "trap": {
+   "tile": "the most difficult",
+   "instead": "most difficult",
+   "why": {
+    "de": "Kein Übersetzungsfehler, eher Flüchtigkeitsfehler: Deutsch sagt auch „die schwierigste“, und the fällt beim Schreiben leicht weg.",
+    "en": "Not a translation error, more a slip: German also says “die schwierigste”, and the easily drops out when writing."
+   }
+  }
+ },
+ {
+  "pat": "art.zero",
+  "en": "At the moment, we still need more information from the client.",
+  "de": "Im Moment brauchen wir noch mehr Informationen vom Kunden.",
+  "chunks": [
+   "at the moment",
+   "we",
+   "still need",
+   "more information",
+   "from the client"
+  ],
+  "alt": [
+   "We still need more information from the client at the moment."
+  ],
+  "why": [
+   "information ist unzählbar: Es steht ohne a/an und ohne -s. Mit more bleibt es in der Einzahl.",
+   "information is uncountable: no a/an and no -s. With more it stays singular."
+  ],
+  "bad": "At the moment, we still need more informations from the client.",
+  "trap": {
+   "tile": "more information",
+   "instead": "more informations",
+   "why": {
+    "de": "Im Deutschen heißt es „Informationen“, also Plural. Englisch information bleibt in der Einzahl, ohne -s.",
+    "en": "German says “Informationen”, a plural. English information stays singular, with no -s."
+   }
+  }
+ },
+ {
+  "pat": "art.fixed",
+  "en": "On weekdays, I usually go to work by train before the morning rush.",
+  "de": "Werktags fahre ich meist mit dem Zug zur Arbeit, bevor der Berufsverkehr beginnt.",
+  "chunks": [
+   "on weekdays",
+   "I usually",
+   "go to work",
+   "by train",
+   "before the morning rush"
+  ],
+  "alt": [
+   "I usually go to work by train on weekdays before the morning rush.",
+   "I usually go to work by train before the morning rush on weekdays."
+  ],
+  "why": [
+   "go to work ist eine feste Wendung ohne Artikel; by train steht ebenfalls ohne Artikel.",
+   "go to work is a set phrase without an article; by train also takes none."
+  ],
+  "bad": "On weekdays, I usually go to the work by train before the morning rush.",
+  "trap": {
+   "tile": "go to work",
+   "instead": "go to the work",
+   "why": {
+    "de": "Im Deutschen steckt der Artikel in „zur Arbeit“ (zu + der). Wörtlich wird daraus to the work.",
+    "en": "In German the article hides in “zur Arbeit” (zu + der). Word for word it becomes to the work."
+   }
+  }
+ }
+]

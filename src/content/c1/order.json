@@ -1146,6 +1146,187 @@
    "bad": "With using the new search, you can find any invoice in seconds."
   },
   {
+   "pat": "art.indefinite",
+   "en": "Our new colleague works as a consultant for a logistics firm in Munich.",
+   "de": "Unser neuer Kollege arbeitet als Berater für eine Logistikfirma in München.",
+   "chunks": [
+    "our new colleague",
+    "works",
+    "as a consultant",
+    "for a logistics firm",
+    "in Munich"
+   ],
+   "alt": [
+    "Our new colleague works for a logistics firm in Munich as a consultant.",
+    "Our new colleague works as a consultant in Munich for a logistics firm.",
+    "Our new colleague works in Munich for a logistics firm as a consultant.",
+    "Our new colleague works in Munich as a consultant for a logistics firm.",
+    "Our new colleague works for a logistics firm as a consultant in Munich."
+   ],
+   "why": [
+    "Ein Beruf nach „as“ braucht im Englischen a/an: as a consultant. Im Deutschen steht hier kein Artikel.",
+    "A job after “as” needs a/an in English: as a consultant. German uses no article here."
+   ],
+   "bad": "Our new colleague works as consultant for a logistics firm in Munich.",
+   "trap": {
+    "tile": "as a consultant",
+    "instead": "as consultant",
+    "why": {
+     "de": "Im Deutschen fehlt bei Berufen der Artikel („als Berater“). Daher rutscht a im Englischen oft weg.",
+     "en": "German has no article with jobs (“als Berater”). That is why the a often slips away in English."
+    }
+   },
+   "topic": "articles"
+  },
+  {
+   "pat": "art.sound",
+   "en": "Please book an hour for the review before the client call.",
+   "de": "Bitte reservieren Sie eine Stunde für die Durchsicht vor dem Kundentermin.",
+   "chunks": [
+    "please",
+    "book",
+    "an hour",
+    "for the review",
+    "before the client call"
+   ],
+   "alt": [
+    "Before the client call, please book an hour for the review.",
+    "For the review, please book an hour before the client call."
+   ],
+   "why": [
+    "Vor hour steht an, weil das h stumm ist und der Laut mit einem Vokal beginnt. Es zählt der Klang.",
+    "Before hour use an, because the h is silent and the sound starts with a vowel. Sound decides."
+   ],
+   "bad": "Please book a hour for the review before the client call.",
+   "trap": {
+    "tile": "an hour",
+    "instead": "a hour",
+    "why": {
+     "de": "Man folgt dem Buchstaben h, einem Konsonanten, und wählt a. Doch das h in hour ist stumm.",
+     "en": "Learners follow the letter h, a consonant, and pick a. But the h in hour is silent."
+    }
+   },
+   "topic": "articles"
+  },
+  {
+   "pat": "art.definite",
+   "en": "Could you please close the door before the call starts?",
+   "de": "Könntest du bitte die Tür schließen, bevor der Anruf beginnt?",
+   "chunks": [
+    "could you",
+    "please",
+    "close",
+    "the door",
+    "before the call starts"
+   ],
+   "alt": [
+    "Before the call starts, could you please close the door?"
+   ],
+   "why": [
+    "Beide wissen, welche Tür gemeint ist, deshalb steht the. Das Ding ist bekannt und eindeutig.",
+    "Both know which door is meant, so use the. The thing is known and clear."
+   ],
+   "bad": "Could you please close door before the call starts?",
+   "trap": {
+    "tile": "the door",
+    "instead": "door",
+    "why": {
+     "de": "Deutsch sagt auch „die Tür“. Der Artikel fällt eher im Schnellsprechen weg, nicht durch Übersetzung.",
+     "en": "German also says “die Tür”. The article more likely drops in quick speech, not through translation."
+    }
+   },
+   "topic": "articles"
+  },
+  {
+   "pat": "art.the-unique",
+   "en": "Honestly, this was the most difficult negotiation of my career.",
+   "de": "Ehrlich gesagt war das die schwierigste Verhandlung meiner Karriere.",
+   "chunks": [
+    "honestly",
+    "this was",
+    "the most difficult",
+    "negotiation",
+    "of my career"
+   ],
+   "alt": [
+    "This was honestly the most difficult negotiation of my career.",
+    "This was the most difficult negotiation of my career, honestly."
+   ],
+   "why": [
+    "Der Superlativ nimmt the: the most difficult negotiation. Es gibt nur eine schwierigste Verhandlung.",
+    "A superlative takes the: the most difficult negotiation. There is only one most difficult one."
+   ],
+   "bad": "Honestly, this was most difficult negotiation of my career.",
+   "trap": {
+    "tile": "the most difficult",
+    "instead": "most difficult",
+    "why": {
+     "de": "Kein Übersetzungsfehler, eher Flüchtigkeitsfehler: Deutsch sagt auch „die schwierigste“, und the fällt beim Schreiben leicht weg.",
+     "en": "Not a translation error, more a slip: German also says “die schwierigste”, and the easily drops out when writing."
+    }
+   },
+   "topic": "articles"
+  },
+  {
+   "pat": "art.zero",
+   "en": "At the moment, we still need more information from the client.",
+   "de": "Im Moment brauchen wir noch mehr Informationen vom Kunden.",
+   "chunks": [
+    "at the moment",
+    "we",
+    "still need",
+    "more information",
+    "from the client"
+   ],
+   "alt": [
+    "We still need more information from the client at the moment."
+   ],
+   "why": [
+    "information ist unzählbar: Es steht ohne a/an und ohne -s. Mit more bleibt es in der Einzahl.",
+    "information is uncountable: no a/an and no -s. With more it stays singular."
+   ],
+   "bad": "At the moment, we still need more informations from the client.",
+   "trap": {
+    "tile": "more information",
+    "instead": "more informations",
+    "why": {
+     "de": "Im Deutschen heißt es „Informationen“, also Plural. Englisch information bleibt in der Einzahl, ohne -s.",
+     "en": "German says “Informationen”, a plural. English information stays singular, with no -s."
+    }
+   },
+   "topic": "articles"
+  },
+  {
+   "pat": "art.fixed",
+   "en": "On weekdays, I usually go to work by train before the morning rush.",
+   "de": "Werktags fahre ich meist mit dem Zug zur Arbeit, bevor der Berufsverkehr beginnt.",
+   "chunks": [
+    "on weekdays",
+    "I usually",
+    "go to work",
+    "by train",
+    "before the morning rush"
+   ],
+   "alt": [
+    "I usually go to work by train on weekdays before the morning rush.",
+    "I usually go to work by train before the morning rush on weekdays."
+   ],
+   "why": [
+    "go to work ist eine feste Wendung ohne Artikel; by train steht ebenfalls ohne Artikel.",
+    "go to work is a set phrase without an article; by train also takes none."
+   ],
+   "bad": "On weekdays, I usually go to the work by train before the morning rush.",
+   "trap": {
+    "tile": "go to work",
+    "instead": "go to the work",
+    "why": {
+     "de": "Im Deutschen steckt der Artikel in „zur Arbeit“ (zu + der). Wörtlich wird daraus to the work.",
+     "en": "In German the article hides in “zur Arbeit” (zu + der). Word for word it becomes to the work."
+    }
+   },
+   "topic": "articles"
+  },
+  {
    "pat": "dip.wondering",
    "en": "I was wondering whether you could walk me through the proposal.",
    "de": "Ich wollte fragen, ob Sie mir das Angebot Schritt für Schritt erklären könnten. (höflich, vorsichtig)",
@@ -1917,6 +2098,208 @@
    ],
    "bad": "I'm quite not convinced this approach scales.",
    "topic": "c1-hedging"
+  },
+  {
+   "pat": "cp.having",
+   "en": "Having compared three vendors, we chose the cheapest one.",
+   "de": "Nachdem wir drei Anbieter verglichen hatten, wählten wir den günstigsten.",
+   "chunks": [
+    "having",
+    "compared",
+    "three vendors",
+    "we",
+    "chose",
+    "the cheapest one"
+   ],
+   "alt": [
+    "We chose the cheapest one, having compared three vendors."
+   ],
+   "why": [
+    "Having + 3. Form zeigt: Erst wurde verglichen, dann gewählt. Das Subjekt we vergleicht und wählt selbst, deshalb passt das Partizip.",
+    "Having + past participle shows: first compared, then chose. The subject we does both, so the participle fits."
+   ],
+   "bad": "Having comparing three vendors, we chose the cheapest one.",
+   "trap": {
+    "tile": "compared",
+    "instead": "comparing",
+    "why": {
+     "de": "Nach Having steht die 3. Verbform: compared. Die Form mit -ing passt nur zu gleichzeitigen Handlungen, nicht nach Having.",
+     "en": "After Having comes the past participle: compared. The -ing form only suits simultaneous actions, not after Having."
+    }
+   },
+   "topic": "c1-participle"
+  },
+  {
+   "pat": "cp.having",
+   "en": "Having missed the deadline, she apologized to the client.",
+   "de": "Nachdem sie die Frist verpasst hatte, entschuldigte sie sich beim Kunden.",
+   "chunks": [
+    "having",
+    "missed",
+    "the deadline",
+    "she",
+    "apologized",
+    "to the client"
+   ],
+   "alt": [
+    "She apologized to the client, having missed the deadline."
+   ],
+   "why": [
+    "Das Verpassen war zuerst, die Entschuldigung kam danach: Having + 3. Form. Dieselbe Person verpasst und entschuldigt sich.",
+    "The missing came first, the apology followed: Having + past participle. The same person misses and apologizes."
+   ],
+   "topic": "c1-participle"
+  },
+  {
+   "pat": "cp.ing",
+   "en": "Maria, working from home, answered emails faster.",
+   "de": "Weil Maria von zu Hause arbeitete, beantwortete sie E-Mails schneller.",
+   "chunks": [
+    "Maria",
+    "working",
+    "from home",
+    "answered",
+    "emails",
+    "faster"
+   ],
+   "alt": [
+    "Working from home, Maria answered emails faster.",
+    "Maria answered emails faster, working from home."
+   ],
+   "why": [
+    "Arbeiten und Antworten laufen zugleich und gehören zu Maria: -ing. Das Partizip kann vorn, in der Mitte oder hinten stehen.",
+    "Working and answering happen together and belong to Maria: -ing. The participle can come first, in the middle or last."
+   ],
+   "bad": "Maria, worked from home, answered emails faster.",
+   "trap": {
+    "tile": "working",
+    "instead": "worked",
+    "why": {
+     "de": "Worked wäre die 3. Form und klingt passiv oder vorzeitig. Maria arbeitet aber selbst und zugleich: working.",
+     "en": "Worked would be the past participle and sounds passive or earlier. Maria works herself, at the same time: working."
+    }
+   },
+   "topic": "c1-participle"
+  },
+  {
+   "pat": "cp.ing",
+   "en": "Knowing the risks, the board delayed the launch.",
+   "de": "Da der Vorstand die Risiken kannte, verschob er den Start.",
+   "chunks": [
+    "knowing",
+    "the risks",
+    "the board",
+    "delayed",
+    "the launch"
+   ],
+   "alt": [
+    "The board delayed the launch, knowing the risks.",
+    "The board, knowing the risks, delayed the launch."
+   ],
+   "why": [
+    "Knowing nennt den Grund und gehört zum Vorstand, der auch verschiebt. Deshalb steht die -ing-Form, kein Hilfsverb.",
+    "Knowing gives the reason and belongs to the board, which also delays. So the -ing form is used, with no helper verb."
+   ],
+   "topic": "c1-participle"
+  },
+  {
+   "pat": "cp.pp",
+   "en": "Written in plain English, the guide is easy to follow.",
+   "de": "Weil der Leitfaden in einfachem Englisch geschrieben ist, lässt er sich leicht befolgen.",
+   "chunks": [
+    "written",
+    "in plain English",
+    "the guide",
+    "is",
+    "easy to follow"
+   ],
+   "alt": [
+    "The guide, written in plain English, is easy to follow."
+   ],
+   "why": [
+    "Der Leitfaden wird geschrieben, er schreibt nicht selbst: nur die 3. Form, ohne being. Das Subjekt guide steht nach dem Komma.",
+    "The guide is written, it does not write: just the past participle, with no being. The subject guide follows the comma."
+   ],
+   "topic": "c1-participle"
+  },
+  {
+   "pat": "cp.pp",
+   "en": "The company, founded in 1998, now has offices in nine countries.",
+   "de": "Das Unternehmen, 1998 gegründet, hat heute Büros in neun Ländern.",
+   "chunks": [
+    "the company",
+    "founded",
+    "in 1998",
+    "now has",
+    "offices",
+    "in nine countries"
+   ],
+   "alt": [
+    "Founded in 1998, the company now has offices in nine countries."
+   ],
+   "why": [
+    "Das Unternehmen wird gegründet, es gründet nicht selbst: 3. Form. Der Einschub steht direkt hinter dem Wort, auf das er sich bezieht.",
+    "The company is founded, it does not found itself: past participle. The insert stands right after the word it refers to."
+   ],
+   "bad": "The company, founding in 1998, now has offices in nine countries.",
+   "trap": {
+    "tile": "founded",
+    "instead": "founding",
+    "why": {
+     "de": "Founding hieße: Das Unternehmen gründet selbst. Es wurde aber gegründet, also passiv: founded.",
+     "en": "Founding would mean the company founds something itself. It was founded, so passive: founded."
+    }
+   },
+   "topic": "c1-participle"
+  },
+  {
+   "pat": "cp.subject",
+   "en": "Waiting for my flight, I read the whole report.",
+   "de": "Während ich auf meinen Flug wartete, las ich den ganzen Bericht.",
+   "chunks": [
+    "waiting",
+    "for my flight",
+    "I",
+    "read",
+    "the whole report"
+   ],
+   "alt": [
+    "I read the whole report, waiting for my flight."
+   ],
+   "why": [
+    "Wer wartet, liest auch: Das Subjekt I nach dem Komma passt zum Partizip waiting. Ohne passendes Subjekt wäre der Satz falsch.",
+    "Whoever waits also reads: the subject I after the comma fits the participle waiting. Without a fitting subject the sentence would be wrong."
+   ],
+   "topic": "c1-participle"
+  },
+  {
+   "pat": "cp.subject",
+   "en": "The CFO, surprised by the results, ordered a new analysis.",
+   "de": "Überrascht von den Ergebnissen, ordnete der Finanzchef eine neue Analyse an.",
+   "chunks": [
+    "the CFO",
+    "surprised",
+    "by the results",
+    "ordered",
+    "a new analysis"
+   ],
+   "alt": [
+    "Surprised by the results, the CFO ordered a new analysis."
+   ],
+   "why": [
+    "Der Finanzchef ist überrascht, er überrascht nicht: 3. Form. Das Partizip passt zum Subjekt, das gleich danach genannt wird.",
+    "The CFO is surprised, he does not surprise: past participle. The participle fits the subject named right after it."
+   ],
+   "bad": "The CFO, surprising by the results, ordered a new analysis.",
+   "trap": {
+    "tile": "surprised",
+    "instead": "surprising",
+    "why": {
+     "de": "Surprising hieße: Der Finanzchef überrascht andere. Er wird aber überrascht, also surprised.",
+     "en": "Surprising would mean the CFO surprises others. He is the one surprised, so surprised."
+    }
+   },
+   "topic": "c1-participle"
   },
   {
    "pat": "ca.unless",
@@ -2729,6 +3112,488 @@
    "topic": "future-perf-cont"
   },
   {
+   "pat": "gi.ing-verbs",
+   "en": "We're considering moving the launch to May.",
+   "de": "Wir überlegen, den Start auf Mai zu verschieben.",
+   "chunks": [
+    "we're",
+    "considering",
+    "moving",
+    "the launch",
+    "to May"
+   ],
+   "single": "Considering moving bildet eine feste Folge; the launch und to May hängen am Ende davon ab.",
+   "why": [
+    "Nach consider steht -ing: considering moving. Das Ziel to May bezieht sich auf moving und steht am Ende.",
+    "After consider comes -ing: considering moving. The target to May belongs to moving and goes last."
+   ],
+   "bad": "We're considering to move the launch to May.",
+   "trap": {
+    "tile": "moving",
+    "instead": "to move",
+    "why": {
+     "de": "Im Deutschen folgt „überlegen, … zu verschieben“ mit zu. Nach consider steht aber -ing, kein to.",
+     "en": "German takes zu in “überlegen, … zu verschieben”. After consider, though, comes -ing, not to."
+    }
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "pat": "gi.ing-verbs",
+   "en": "We avoided mentioning the price in front of the client.",
+   "de": "Wir haben es vermieden, vor dem Kunden den Preis zu nennen.",
+   "chunks": [
+    "we",
+    "avoided",
+    "mentioning",
+    "the price",
+    "in front of the client"
+   ],
+   "alt": [
+    "In front of the client, we avoided mentioning the price."
+   ],
+   "why": [
+    "Nach avoid steht -ing: avoided mentioning. Danach folgt das Objekt the price, zuletzt die Ortsangabe.",
+    "After avoid comes -ing: avoided mentioning. The object the price follows, the place phrase goes last."
+   ],
+   "topic": "gerund-inf"
+  },
+  {
+   "pat": "gi.to-verbs",
+   "en": "We decided in June to hire a second analyst.",
+   "de": "Wir haben im Juni entschieden, einen zweiten Analysten einzustellen.",
+   "chunks": [
+    "we",
+    "decided",
+    "in June",
+    "to hire",
+    "a second analyst"
+   ],
+   "alt": [
+    "We decided to hire a second analyst in June.",
+    "In June, we decided to hire a second analyst."
+   ],
+   "why": [
+    "Nach decide steht to + Grundform: decided to hire. In June kann direkt nach decided stehen oder am Anfang.",
+    "After decide comes to + base form: decided to hire. In June can follow decided or open the sentence."
+   ],
+   "bad": "We decided in June hiring a second analyst.",
+   "trap": {
+    "tile": "to hire",
+    "instead": "hiring",
+    "why": {
+     "de": "Kein Übersetzungsfehler, sondern der umgekehrte Reflex: -ing von enjoy wird auf decide übertragen.",
+     "en": "Not a translation error but the reverse reflex: the -ing of enjoy is carried over to decide."
+    }
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "pat": "gi.to-verbs",
+   "en": "She managed to reach the supplier before noon.",
+   "de": "Sie hat es geschafft, den Lieferanten vor Mittag zu erreichen.",
+   "chunks": [
+    "she",
+    "managed",
+    "to reach",
+    "the supplier",
+    "before noon"
+   ],
+   "alt": [
+    "Before noon, she managed to reach the supplier."
+   ],
+   "why": [
+    "Nach manage steht to + Grundform: managed to reach. Die Zeitangabe before noon kann auch vorn stehen.",
+    "After manage comes to + base form: managed to reach. The time phrase before noon can also open the sentence."
+   ],
+   "topic": "gerund-inf"
+  },
+  {
+   "pat": "gi.prep-ing",
+   "en": "Thanks for sending the files over so quickly.",
+   "de": "Danke, dass du die Dateien so schnell rübergeschickt hast.",
+   "chunks": [
+    "thanks",
+    "for sending",
+    "the files",
+    "over",
+    "so quickly"
+   ],
+   "alt": [
+    "Thanks for sending over the files so quickly."
+   ],
+   "why": [
+    "Nach der Präposition for steht -ing: for sending. Over kann vor oder nach the files stehen.",
+    "After the preposition for comes -ing: for sending. Over can stand before or after the files."
+   ],
+   "bad": "Thanks for to send the files over so quickly.",
+   "trap": {
+    "tile": "for sending",
+    "instead": "for to send",
+    "why": {
+     "de": "Nach einer Präposition steht -ing. „For to send“ mischt eine Präposition mit dem Infinitiv-to.",
+     "en": "After a preposition comes -ing. “For to send” mixes a preposition with the infinitive to."
+    }
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "pat": "gi.prep-ing",
+   "en": "He left the meeting without saying a word.",
+   "de": "Er verließ das Meeting, ohne ein Wort zu sagen.",
+   "chunks": [
+    "he",
+    "left",
+    "the meeting",
+    "without saying",
+    "a word"
+   ],
+   "alt": [
+    "Without saying a word, he left the meeting."
+   ],
+   "why": [
+    "Nach der Präposition without steht -ing: without saying. Der Block kann auch vorn stehen.",
+    "After the preposition without comes -ing: without saying. The block can also open the sentence."
+   ],
+   "bad": "He left the meeting without to say a word.",
+   "trap": {
+    "tile": "without saying",
+    "instead": "without to say",
+    "why": {
+     "de": "Deutsch sagt „ohne … zu sagen“. Das zu wird als to übernommen, doch nach without steht -ing.",
+     "en": "German says “ohne … zu sagen”. The zu is carried over as to, but after without comes -ing."
+    }
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "pat": "gi.meaning",
+   "en": "Please remember to attach the agenda before the call.",
+   "de": "Bitte denk daran, vor dem Anruf die Tagesordnung anzuhängen.",
+   "chunks": [
+    "please",
+    "remember",
+    "to attach",
+    "the agenda",
+    "before the call"
+   ],
+   "alt": [
+    "Before the call, please remember to attach the agenda."
+   ],
+   "why": [
+    "Remember + to meint, etwas nicht zu vergessen. Before the call kann auch am Anfang stehen.",
+    "Remember + to means not forgetting to do something. Before the call can also open the sentence."
+   ],
+   "topic": "gerund-inf"
+  },
+  {
+   "pat": "gi.meaning",
+   "en": "We stopped meeting on Fridays after the reorganization.",
+   "de": "Seit der Umstrukturierung treffen wir uns freitags nicht mehr.",
+   "chunks": [
+    "we",
+    "stopped",
+    "meeting",
+    "on Fridays",
+    "after the reorganization"
+   ],
+   "alt": [
+    "After the reorganization, we stopped meeting on Fridays."
+   ],
+   "why": [
+    "Stop + -ing heißt aufhören: stopped meeting. Die Zeitangabe after the reorganization kann auch vorn stehen.",
+    "Stop + -ing means quit: stopped meeting. The time phrase after the reorganization can also open the sentence."
+   ],
+   "topic": "gerund-inf"
+  },
+  {
+   "pat": "gi.bare-inf",
+   "en": "The new policy lets us work from home on Fridays.",
+   "de": "Die neue Regel erlaubt es uns, freitags von zu Hause zu arbeiten.",
+   "chunks": [
+    "the new policy",
+    "lets",
+    "us",
+    "work",
+    "from home",
+    "on Fridays"
+   ],
+   "alt": [
+    "On Fridays, the new policy lets us work from home."
+   ],
+   "why": [
+    "Nach let + Person steht die Grundform ohne to: lets us work. On Fridays kann auch vorn stehen.",
+    "After let + person the base form follows without to: lets us work. On Fridays can also open the sentence."
+   ],
+   "bad": "The new policy lets us to work from home on Fridays.",
+   "trap": {
+    "tile": "work",
+    "instead": "to work",
+    "why": {
+     "de": "Deutsch „erlaubt uns, … zu arbeiten“ hat zu. Nach let entfällt to.",
+     "en": "German “erlaubt uns, … zu arbeiten” has zu. After let the to drops out."
+    }
+   },
+   "topic": "gerund-inf"
+  },
+  {
+   "pat": "gi.bare-inf",
+   "en": "The audit made the team revise the entire process.",
+   "de": "Die Prüfung hat das Team dazu gebracht, den ganzen Prozess zu überarbeiten.",
+   "chunks": [
+    "the audit",
+    "made",
+    "the team",
+    "revise",
+    "the entire process"
+   ],
+   "single": "Made the team revise ist eine feste Folge; the entire process ist das Objekt und steht am Ende.",
+   "why": [
+    "Nach make + Person steht die Grundform ohne to: made the team revise. Das Objekt kommt zuletzt.",
+    "After make + person the base form follows without to: made the team revise. The object comes last."
+   ],
+   "topic": "gerund-inf"
+  },
+  {
+   "pat": "mnd.verbs",
+   "en": "The board demands that the CEO approve every proposal personally.",
+   "de": "Der Vorstand verlangt, dass der Geschäftsführer jeden Vorschlag persönlich genehmigt.",
+   "chunks": [
+    "the board",
+    "demands",
+    "that",
+    "the CEO",
+    "approve",
+    "every proposal",
+    "personally"
+   ],
+   "alt": [
+    "The board demands that the CEO personally approve every proposal."
+   ],
+   "why": [
+    "Nach demands that steht die Grundform: the CEO approve, ohne -s. Personally darf auch vor approve stehen.",
+    "After demands that the base form follows: the CEO approve, no -s. Personally can also go before approve."
+   ],
+   "bad": "The board demands that the CEO approves every proposal personally.",
+   "trap": {
+    "tile": "approve",
+    "instead": "approves",
+    "why": {
+     "de": "Im Deutschen heißt es „dass er genehmigt“, daraus wird gern approves. Nach demands that bleibt das Verb im formellen Stil aber ohne -s.",
+     "en": "German says “dass er genehmigt”, which easily turns into approves. After demands that the verb stays without -s in formal style."
+    }
+   },
+   "topic": "mandative"
+  },
+  {
+   "pat": "mnd.verbs",
+   "en": "Legal recommends that we delay the launch until May.",
+   "de": "Die Rechtsabteilung empfiehlt, den Start bis Mai zu verschieben.",
+   "chunks": [
+    "legal",
+    "recommends",
+    "that we",
+    "delay",
+    "the launch",
+    "until May"
+   ],
+   "single": "Nach that we folgt delay in der Grundform; the launch und until May bleiben danach, sonst ändert sich der Bezug.",
+   "why": [
+    "Nach recommends that steht die Grundform: that we delay, ohne will. Die Empfehlung ist noch keine Tatsache.",
+    "After recommends that the base form follows: that we delay, no will. The recommendation is not yet a fact."
+   ],
+   "bad": "Legal recommends that we will delay the launch until May.",
+   "trap": {
+    "tile": "delay",
+    "instead": "will delay",
+    "why": {
+     "de": "Der Reflex „Zukunft = will“ verführt zu will delay. Nach recommends that steht aber die Grundform.",
+     "en": "The “future = will” reflex tempts you into will delay. After recommends that the base form is used."
+    }
+   },
+   "topic": "mandative"
+  },
+  {
+   "pat": "mnd.adjectives",
+   "en": "It is crucial that all new hires attend the briefing before Monday.",
+   "de": "Es ist entscheidend, dass alle neuen Mitarbeiter vor Montag am Briefing teilnehmen.",
+   "chunks": [
+    "it is",
+    "crucial",
+    "that",
+    "all new hires",
+    "attend",
+    "the briefing",
+    "before Monday"
+   ],
+   "alt": [
+    "Before Monday, it is crucial that all new hires attend the briefing."
+   ],
+   "why": [
+    "Nach crucial that steht die Grundform: all new hires attend. Before Monday steht vorn oder am Ende.",
+    "After crucial that the base form follows: all new hires attend. Before Monday can go at the start or the end."
+   ],
+   "bad": "It is crucial that all new hires will attend the briefing before Monday.",
+   "trap": {
+    "tile": "attend",
+    "instead": "will attend",
+    "why": {
+     "de": "Der Reflex „Zukunft = will“ liegt nahe. Nach Adjektiv + that steht aber die Grundform ohne will.",
+     "en": "The “future = will” reflex is tempting. After adjective + that the base form follows, without will."
+    }
+   },
+   "topic": "mandative"
+  },
+  {
+   "pat": "mnd.passive",
+   "en": "The regulator ordered that all records be kept for seven years.",
+   "de": "Die Aufsichtsbehörde ordnete an, dass alle Unterlagen sieben Jahre aufbewahrt werden.",
+   "chunks": [
+    "the regulator",
+    "ordered",
+    "that",
+    "all records",
+    "be kept",
+    "for seven years"
+   ],
+   "single": "Nach that all records folgt be kept als feste Folge; for seven years beschreibt die Dauer und bleibt am Ende.",
+   "why": [
+    "Das Passiv der Anordnung lautet be + 3. Form: all records be kept. Ein will oder is gehört nicht davor.",
+    "The passive of an order is be + past participle: all records be kept. No will or is goes before it."
+   ],
+   "bad": "The regulator ordered that all records will be kept for seven years.",
+   "trap": {
+    "tile": "be kept",
+    "instead": "will be kept",
+    "why": {
+     "de": "Der Reflex „Zukunft = will“ liegt nahe. Nach ordered that steht aber be + 3. Form.",
+     "en": "The “future = will” reflex is tempting. After ordered that comes be + past participle."
+    }
+   },
+   "topic": "mandative"
+  },
+  {
+   "pat": "mnd.passive",
+   "en": "The client requested that the contract be reviewed by legal first.",
+   "de": "Der Kunde bat darum, dass der Vertrag zuerst von der Rechtsabteilung geprüft wird.",
+   "chunks": [
+    "the client",
+    "requested",
+    "that",
+    "the contract",
+    "be reviewed",
+    "by legal",
+    "first"
+   ],
+   "alt": [
+    "The client requested that the contract first be reviewed by legal."
+   ],
+   "why": [
+    "Nach requested that steht be + 3. Form: the contract be reviewed. First steht hinten oder vor be reviewed.",
+    "After requested that comes be + past participle: the contract be reviewed. First can go at the end or before be reviewed."
+   ],
+   "bad": "The client requested that the contract would be reviewed by legal first.",
+   "trap": {
+    "tile": "be reviewed",
+    "instead": "would be reviewed",
+    "why": {
+     "de": "Would be passt nicht zu einer Bitte. Nach requested that steht schlicht be + 3. Form.",
+     "en": "Would be does not suit a request. After requested that simply use be + past participle."
+    }
+   },
+   "topic": "mandative"
+  },
+  {
+   "pat": "mnd.negation",
+   "en": "Our lawyer advises that Tom not sign anything before Monday.",
+   "de": "Unser Anwalt rät, dass Tom vor Montag nichts unterschreibt.",
+   "chunks": [
+    "our lawyer",
+    "advises",
+    "that Tom",
+    "not",
+    "sign",
+    "anything",
+    "before Monday"
+   ],
+   "alt": [
+    "Before Monday, our lawyer advises that Tom not sign anything."
+   ],
+   "why": [
+    "Die Verneinung not steht direkt vor der Grundform sign, ohne Hilfsverb. Before Monday steht vorn oder am Ende.",
+    "The negation not goes right before the base form sign, with no helper verb. Before Monday can go at the start or the end."
+   ],
+   "bad": "Our lawyer advises that Tom to not sign anything before Monday.",
+   "trap": {
+    "tile": "not",
+    "instead": "to not",
+    "why": {
+     "de": "Nach that Tom braucht das Verb kein to. Die Verneinung not steht direkt vor sign.",
+     "en": "After that Tom the verb takes no to. The negation not goes right before sign."
+    }
+   },
+   "topic": "mandative"
+  },
+  {
+   "pat": "mnd.negation",
+   "en": "The union asked that management not change the schedule without notice.",
+   "de": "Die Gewerkschaft bat darum, dass die Leitung den Zeitplan nicht ohne Vorwarnung ändert.",
+   "chunks": [
+    "the union",
+    "asked",
+    "that management",
+    "not",
+    "change",
+    "the schedule",
+    "without notice"
+   ],
+   "single": "Not steht direkt vor change; without notice gehört ans Ende, denn es beschreibt das Ändern des Plans.",
+   "why": [
+    "Nach asked that steht not + Grundform: management not change. Ein Hilfsverb kommt nicht dazu.",
+    "After asked that comes not + base form: management not change. No helper verb is added."
+   ],
+   "bad": "The union asked that management would not change the schedule without notice.",
+   "trap": {
+    "tile": "not",
+    "instead": "would not",
+    "why": {
+     "de": "Would not passt nicht zu einer Bitte. Nach asked that steht nur not + Grundform.",
+     "en": "Would not does not suit a request. After asked that only not + base form is used."
+    }
+   },
+   "topic": "mandative"
+  },
+  {
+   "pat": "mnd.fact",
+   "en": "The data suggests that demand is falling in Europe.",
+   "de": "Die Daten deuten darauf hin, dass die Nachfrage in Europa sinkt.",
+   "chunks": [
+    "the data",
+    "suggests",
+    "that",
+    "demand",
+    "is falling",
+    "in Europe"
+   ],
+   "alt": [
+    "In Europe, the data suggests that demand is falling."
+   ],
+   "why": [
+    "Hier meldet suggests einen Befund, deshalb steht die normale Form is falling, nicht be falling.",
+    "Here suggests reports a finding, so the normal form is falling is used, not be falling."
+   ],
+   "bad": "The data suggests that demand be falling in Europe.",
+   "trap": {
+    "tile": "is falling",
+    "instead": "be falling",
+    "why": {
+     "de": "Weil suggest oft die Grundform verlangt, wird sie hier fälschlich übernommen. Ein Befund braucht is falling.",
+     "en": "Because suggest often takes the base form, it is wrongly carried over here. A finding needs is falling."
+    }
+   },
+   "topic": "mandative"
+  },
+  {
    "en": "If we had hired a QA lead earlier, we would have fewer bugs now.",
    "de": "Hätten wir früher einen QA-Leiter eingestellt, hätten wir jetzt weniger Fehler.",
    "chunks": [
@@ -2889,6 +3754,268 @@
     }
    },
    "topic": "mixed-cond"
+  },
+  {
+   "pat": "ma.should",
+   "en": "I think we should postpone the launch until June.",
+   "de": "Ich finde, wir sollten den Start bis Juni verschieben.",
+   "chunks": [
+    "I think",
+    "we",
+    "should",
+    "postpone",
+    "the launch",
+    "until June"
+   ],
+   "alt": [
+    "We should postpone the launch until June, I think."
+   ],
+   "why": [
+    "Should gibt einen freundlichen Rat und steht ohne to direkt vor der Grundform: should postpone.",
+    "Should gives friendly advice and stands directly before the bare verb, with no to: should postpone."
+   ],
+   "bad": "I think we should to postpone the launch until June.",
+   "trap": {
+    "tile": "should",
+    "instead": "should to",
+    "why": {
+     "de": "Nach should steht kein to. Das to gehört nur zu ought, nicht zu should.",
+     "en": "No to after should. The to belongs to ought only, not to should."
+    }
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "pat": "ma.should",
+   "en": "You shouldn't reply to that email while you're upset.",
+   "de": "Du solltest nicht auf diese Mail antworten, solange du aufgebracht bist.",
+   "chunks": [
+    "you",
+    "shouldn't",
+    "reply",
+    "to that email",
+    "while you're upset"
+   ],
+   "alt": [
+    "While you're upset, you shouldn't reply to that email."
+   ],
+   "why": [
+    "Shouldn't rät von etwas ab und steht direkt vor der Grundform: shouldn't reply, ohne to.",
+    "Shouldn't advises against something and stands directly before the base form: shouldn't reply, no to."
+   ],
+   "bad": "You shouldn't to reply to that email while you're upset.",
+   "topic": "modals-advice"
+  },
+  {
+   "pat": "ma.had-better",
+   "en": "We had better confirm the room today, or we'll lose it.",
+   "de": "Wir sollten den Raum heute besser bestätigen, sonst verlieren wir ihn.",
+   "chunks": [
+    "we",
+    "had better",
+    "confirm",
+    "the room",
+    "today",
+    "or we'll lose it"
+   ],
+   "alt": [
+    "Today we had better confirm the room, or we'll lose it."
+   ],
+   "why": [
+    "Had better warnt vor einer Folge: Sonst ist der Raum weg. Danach steht die Grundform, ohne to.",
+    "Had better warns of a consequence: otherwise the room is gone. The base form follows, with no to."
+   ],
+   "bad": "We would better confirm the room today, or we'll lose it.",
+   "trap": {
+    "tile": "had better",
+    "instead": "would better",
+    "why": {
+     "de": "Would better gibt es nicht. Die feste Wendung für die Warnung heißt had better.",
+     "en": "There is no would better. The fixed phrase for the warning is had better."
+    }
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "pat": "ma.had-better",
+   "en": "You had better not forward that draft to the client.",
+   "de": "Du solltest diesen Entwurf besser nicht an den Kunden weiterleiten.",
+   "chunks": [
+    "you",
+    "had better not",
+    "forward",
+    "that draft",
+    "to the client"
+   ],
+   "single": "Not hängt direkt hinter better, danach folgen die Grundform, das Objekt und der Empfänger in genau dieser Reihenfolge.",
+   "why": [
+    "Verneint heißt es had better not. Danach folgt die Grundform ohne to, hier forward.",
+    "The negative is had better not. The base form follows with no to, here forward."
+   ],
+   "bad": "You had better don't forward that draft to the client.",
+   "trap": {
+    "tile": "had better not",
+    "instead": "had better don't",
+    "why": {
+     "de": "Bei den meisten Verben bildet man die Verneinung mit don't. Bei had better steht dagegen nur not, direkt hinter better.",
+     "en": "With most verbs the negative uses don't. With had better it is only not, right after better."
+    }
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "pat": "ma.polite",
+   "en": "Perhaps you could ask Dana for a short extension.",
+   "de": "Vielleicht könntest du Dana um eine kurze Fristverlängerung bitten.",
+   "chunks": [
+    "perhaps",
+    "you could",
+    "ask",
+    "Dana",
+    "for a short extension"
+   ],
+   "alt": [
+    "You could perhaps ask Dana for a short extension."
+   ],
+   "why": [
+    "Perhaps you could macht einen höflichen Vorschlag und lässt die Wahl offen. Danach steht die Grundform ohne to.",
+    "Perhaps you could makes a polite suggestion and leaves the choice open. The base form follows with no to."
+   ],
+   "bad": "Perhaps you could to ask Dana for a short extension.",
+   "trap": {
+    "tile": "ask",
+    "instead": "to ask",
+    "why": {
+     "de": "Nach could steht die Grundform ohne to. Das to gehört nicht zu den Modalverben.",
+     "en": "After could use the bare base form. The to does not go with modal verbs."
+    }
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "pat": "ma.polite",
+   "en": "Why don't you send the client a short summary first?",
+   "de": "Warum schickst du dem Kunden nicht zuerst eine kurze Zusammenfassung?",
+   "chunks": [
+    "why don't you",
+    "send",
+    "the client",
+    "a short summary",
+    "first"
+   ],
+   "alt": [
+    "Why don't you first send the client a short summary?"
+   ],
+   "why": [
+    "Why don't you macht einen Vorschlag in Frageform, mit do vor dem Subjekt. Danach folgt die Grundform.",
+    "Why don't you makes a suggestion in question form, with do before the subject. The base form follows."
+   ],
+   "bad": "Why you don't send the client a short summary first?",
+   "trap": {
+    "tile": "why don't you",
+    "instead": "why you don't",
+    "why": {
+     "de": "Der Vorschlag ist eine Frage und braucht do vor dem Subjekt: why don't you, nicht why you don't.",
+     "en": "The suggestion is a question and needs do before the subject: why don't you, not why you don't."
+    }
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "pat": "ma.dont-have-to",
+   "en": "You don't have to attend the kickoff; it's optional.",
+   "de": "Du musst nicht am Kickoff teilnehmen; er ist freiwillig.",
+   "chunks": [
+    "you",
+    "don't have to",
+    "attend",
+    "the kickoff",
+    "it's optional"
+   ],
+   "alt": [
+    "It's optional; you don't have to attend the kickoff."
+   ],
+   "why": [
+    "Don't have to heißt „nicht nötig“, passend zu optional. Ein Verbot wäre must not.",
+    "Don't have to means “not necessary”, which fits optional. A prohibition would be must not."
+   ],
+   "bad": "You must not attend the kickoff; it's optional.",
+   "trap": {
+    "tile": "don't have to",
+    "instead": "must not",
+    "why": {
+     "de": "Deutsch „du musst nicht“ heißt „nicht nötig“. Wörtlich übersetzt wird daraus must not, ein Verbot.",
+     "en": "German “du musst nicht” means “not necessary”. Translated word for word it becomes must not, a prohibition."
+    }
+   },
+   "topic": "modals-advice"
+  },
+  {
+   "pat": "ma.dont-have-to",
+   "en": "Visitors must not take photos inside the lab.",
+   "de": "Besucher dürfen im Labor keine Fotos machen.",
+   "chunks": [
+    "visitors",
+    "must not",
+    "take",
+    "photos",
+    "inside the lab"
+   ],
+   "alt": [
+    "Inside the lab, visitors must not take photos."
+   ],
+   "why": [
+    "Must not drückt ein Verbot aus und steht direkt vor der Grundform: must not take, ohne to.",
+    "Must not expresses a prohibition and stands directly before the base form: must not take, no to."
+   ],
+   "topic": "modals-advice"
+  },
+  {
+   "pat": "ma.should-have",
+   "en": "We should have told the client about the delay earlier.",
+   "de": "Wir hätten dem Kunden früher von der Verzögerung erzählen sollen.",
+   "chunks": [
+    "we",
+    "should have told",
+    "the client",
+    "about the delay",
+    "earlier"
+   ],
+   "why": [
+    "Should have + Partizip blickt zurück: Es wäre richtig gewesen, ist aber nicht passiert.",
+    "Should have + participle looks back: it would have been right, but it did not happen."
+   ],
+   "bad": "We should had told the client about the delay earlier.",
+   "trap": {
+    "tile": "should have told",
+    "instead": "should had told",
+    "why": {
+     "de": "Der Anklang von „hätten“ an had verleitet zu should had. Nach should steht aber have.",
+     "en": "The echo of German “hätten” in had invites should had. But should takes have."
+    }
+   },
+   "alt": [
+    "We should have told the client earlier about the delay."
+   ],
+   "topic": "modals-advice"
+  },
+  {
+   "pat": "ma.should-have",
+   "en": "I shouldn't have shared the draft so early.",
+   "de": "Ich hätte den Entwurf nicht so früh teilen sollen.",
+   "chunks": [
+    "I",
+    "shouldn't",
+    "have shared",
+    "the draft",
+    "so early"
+   ],
+   "single": "Shouldn't steht direkt nach dem Subjekt, danach folgt have shared, und die Zeitangabe so early bleibt am Ende.",
+   "why": [
+    "Shouldn't have + Partizip blickt zurück: Es war ein Fehler, den Entwurf zu teilen.",
+    "Shouldn't have + participle looks back: it was a mistake to share the draft."
+   ],
+   "topic": "modals-advice"
   },
   {
    "pat": "md.must-now",
@@ -5426,6 +6553,216 @@
     }
    },
    "topic": "used-to"
+  },
+  {
+   "pat": "vp.ing-verbs",
+   "en": "We're considering postponing the launch because of the delay.",
+   "de": "Wegen der Verzögerung überlegen wir, den Start zu verschieben.",
+   "chunks": [
+    "we're",
+    "considering",
+    "postponing",
+    "the launch",
+    "because of the delay"
+   ],
+   "alt": [
+    "Because of the delay, we're considering postponing the launch."
+   ],
+   "why": [
+    "Consider und postpone verlangen beide -ing: „considering postponing“. Dazwischen steht kein to.",
+    "Consider and postpone both take -ing: “considering postponing”. No to comes in between."
+   ],
+   "bad": "We're considering to postpone the launch because of the delay.",
+   "trap": {
+    "tile": "postponing",
+    "instead": "to postpone",
+    "why": {
+     "de": "Aus „überlegen, zu verschieben“ wird leicht considering to postpone. Nach consider steht aber -ing.",
+     "en": "From “überlegen, zu verschieben” it is easy to get considering to postpone. After consider use -ing."
+    }
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "pat": "vp.to-verbs",
+   "en": "Our supplier refused to lower the price for the second batch.",
+   "de": "Unser Lieferant weigerte sich, den Preis für die zweite Charge zu senken.",
+   "chunks": [
+    "our supplier",
+    "refused",
+    "to lower",
+    "the price",
+    "for the second batch"
+   ],
+   "alt": [
+    "For the second batch, our supplier refused to lower the price."
+   ],
+   "why": [
+    "Refuse verbindet sich mit to + Grundform: „refused to lower“. Der Preis folgt danach.",
+    "Refuse combines with to + base form: “refused to lower”. The price follows."
+   ],
+   "bad": "Our supplier refused lowering the price for the second batch.",
+   "trap": {
+    "tile": "to lower",
+    "instead": "lowering",
+    "why": {
+     "de": "Ein Reflex von avoid und consider: -ing wird auf alle Verben übertragen. Refuse verlangt aber to + Grundform.",
+     "en": "A reflex from avoid and consider: -ing is carried over to every verb. But refuse takes to + base form."
+    }
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "pat": "vp.look-forward",
+   "en": "We're looking forward to working with your team next quarter.",
+   "de": "Wir freuen uns darauf, nächstes Quartal mit Ihrem Team zu arbeiten.",
+   "chunks": [
+    "we're",
+    "looking forward to",
+    "working",
+    "with your team",
+    "next quarter"
+   ],
+   "alt": [
+    "Next quarter, we're looking forward to working with your team."
+   ],
+   "why": [
+    "In look forward to ist to eine Präposition, deshalb folgt -ing: „to working“.",
+    "In look forward to, to is a preposition, so -ing follows: “to working”."
+   ],
+   "bad": "We're looking forward to work with your team next quarter.",
+   "trap": {
+    "tile": "working",
+    "instead": "work",
+    "why": {
+     "de": "Aus „uns darauf freuen, zu arbeiten“ wird leicht to work. Doch to ist hier eine Präposition.",
+     "en": "From “uns darauf freuen, zu arbeiten” it is easy to get to work. But to is a preposition here."
+    }
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "pat": "vp.remember-forget",
+   "en": "Remember to send the notes to the whole team after the call.",
+   "de": "Denk daran, nach dem Call die Notizen an das ganze Team zu schicken.",
+   "chunks": [
+    "remember",
+    "to send",
+    "the notes",
+    "to the whole team",
+    "after the call"
+   ],
+   "alt": [
+    "After the call, remember to send the notes to the whole team."
+   ],
+   "why": [
+    "Remember + to meint eine Aufgabe, die noch ansteht: „remember to send“. Die Notizen folgen danach.",
+    "Remember + to means a task still ahead: “remember to send”. The notes follow."
+   ],
+   "topic": "verb-patterns"
+  },
+  {
+   "pat": "vp.remember-forget",
+   "en": "I clearly remember meeting your manager at the Berlin conference.",
+   "de": "Ich erinnere mich genau, Ihren Manager auf der Berliner Konferenz getroffen zu haben.",
+   "chunks": [
+    "I",
+    "clearly remember",
+    "meeting",
+    "your manager",
+    "at the Berlin conference"
+   ],
+   "alt": [
+    "At the Berlin conference, I clearly remember meeting your manager."
+   ],
+   "why": [
+    "Der Rückblick auf Geschehenes ist remember + -ing: „remember meeting“.",
+    "Looking back at what happened is remember + -ing: “remember meeting”."
+   ],
+   "bad": "I clearly remember to meet your manager at the Berlin conference.",
+   "trap": {
+    "tile": "meeting",
+    "instead": "to meet",
+    "why": {
+     "de": "Das Deutsche nutzt bei erinnern ein zu („getroffen zu haben“). Englisch braucht für den Rückblick -ing.",
+     "en": "German uses a zu with erinnern (“getroffen zu haben”). English needs -ing to look back."
+    }
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "pat": "vp.stop-try",
+   "en": "We stopped using the old system after the migration.",
+   "de": "Nach der Migration haben wir aufgehört, das alte System zu nutzen.",
+   "chunks": [
+    "we",
+    "stopped",
+    "using",
+    "the old system",
+    "after the migration"
+   ],
+   "alt": [
+    "After the migration, we stopped using the old system."
+   ],
+   "why": [
+    "Aufhören heißt stop + -ing: „stopped using“. Das System und die Zeit folgen danach.",
+    "Quitting is stop + -ing: “stopped using”. The system and the time follow."
+   ],
+   "bad": "We stopped to use the old system after the migration.",
+   "trap": {
+    "tile": "using",
+    "instead": "to use",
+    "why": {
+     "de": "Aus „aufhören, zu nutzen“ wird leicht stopped to use. Das hieße aber: anhalten, um es zu nutzen.",
+     "en": "From “aufhören, zu nutzen” it is easy to get stopped to use. That would mean: pausing in order to use it."
+    }
+   },
+   "topic": "verb-patterns"
+  },
+  {
+   "pat": "vp.regret",
+   "en": "We regret to inform you that the session is full.",
+   "de": "Wir bedauern, Ihnen mitteilen zu müssen, dass die Sitzung ausgebucht ist.",
+   "chunks": [
+    "we regret",
+    "to inform you",
+    "that",
+    "the session",
+    "is full"
+   ],
+   "single": "Nach regret folgt to inform you, danach beginnt mit that der Nebensatz, dessen Teile zusammenbleiben.",
+   "why": [
+    "Regret + to kündigt eine schlechte Nachricht an, die jetzt kommt: „regret to inform you“.",
+    "Regret + to announces bad news that comes now: “regret to inform you”."
+   ],
+   "topic": "verb-patterns"
+  },
+  {
+   "pat": "vp.regret",
+   "en": "I regret signing that contract last spring.",
+   "de": "Ich bereue es, diesen Vertrag letzten Frühling unterschrieben zu haben.",
+   "chunks": [
+    "I",
+    "regret",
+    "signing",
+    "that contract",
+    "last spring"
+   ],
+   "single": "Nach regret steht die -ing-Form, that contract bleibt zusammen und last spring steht am Ende.",
+   "why": [
+    "Bedauern über Früheres heißt regret + -ing: „regret signing“. Die Zeitangabe steht am Ende.",
+    "Regret about the past is regret + -ing: “regret signing”. The time phrase comes last."
+   ],
+   "bad": "I regret to sign that contract last spring.",
+   "trap": {
+    "tile": "signing",
+    "instead": "to sign",
+    "why": {
+     "de": "Das Deutsche hat bedauern und bereuen. Beim „bereuen, zu unterschreiben“ rutscht to hinein, doch bereuen heißt regret + -ing.",
+     "en": "German has bedauern and bereuen. With “bereuen” a to slips in, but feeling sorry about the past is regret + -ing."
+    }
+   },
+   "topic": "verb-patterns"
   }
  ]
 }

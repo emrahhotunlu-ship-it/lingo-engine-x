@@ -1,0 +1,235 @@
+[
+ {
+  "pat": "gi.ing-verbs",
+  "en": "We're considering moving the launch to May.",
+  "de": "Wir überlegen, den Start auf Mai zu verschieben.",
+  "chunks": [
+   "we're",
+   "considering",
+   "moving",
+   "the launch",
+   "to May"
+  ],
+  "single": "Considering moving bildet eine feste Folge; the launch und to May hängen am Ende davon ab.",
+  "why": [
+   "Nach consider steht -ing: considering moving. Das Ziel to May bezieht sich auf moving und steht am Ende.",
+   "After consider comes -ing: considering moving. The target to May belongs to moving and goes last."
+  ],
+  "bad": "We're considering to move the launch to May.",
+  "trap": {
+   "tile": "moving",
+   "instead": "to move",
+   "why": {
+    "de": "Im Deutschen folgt „überlegen, … zu verschieben“ mit zu. Nach consider steht aber -ing, kein to.",
+    "en": "German takes zu in “überlegen, … zu verschieben”. After consider, though, comes -ing, not to."
+   }
+  }
+ },
+ {
+  "pat": "gi.ing-verbs",
+  "en": "We avoided mentioning the price in front of the client.",
+  "de": "Wir haben es vermieden, vor dem Kunden den Preis zu nennen.",
+  "chunks": [
+   "we",
+   "avoided",
+   "mentioning",
+   "the price",
+   "in front of the client"
+  ],
+  "alt": [
+   "In front of the client, we avoided mentioning the price."
+  ],
+  "why": [
+   "Nach avoid steht -ing: avoided mentioning. Danach folgt das Objekt the price, zuletzt die Ortsangabe.",
+   "After avoid comes -ing: avoided mentioning. The object the price follows, the place phrase goes last."
+  ]
+ },
+ {
+  "pat": "gi.to-verbs",
+  "en": "We decided in June to hire a second analyst.",
+  "de": "Wir haben im Juni entschieden, einen zweiten Analysten einzustellen.",
+  "chunks": [
+   "we",
+   "decided",
+   "in June",
+   "to hire",
+   "a second analyst"
+  ],
+  "alt": [
+   "We decided to hire a second analyst in June.",
+   "In June, we decided to hire a second analyst."
+  ],
+  "why": [
+   "Nach decide steht to + Grundform: decided to hire. In June kann direkt nach decided stehen oder am Anfang.",
+   "After decide comes to + base form: decided to hire. In June can follow decided or open the sentence."
+  ],
+  "bad": "We decided in June hiring a second analyst.",
+  "trap": {
+   "tile": "to hire",
+   "instead": "hiring",
+   "why": {
+    "de": "Kein Übersetzungsfehler, sondern der umgekehrte Reflex: -ing von enjoy wird auf decide übertragen.",
+    "en": "Not a translation error but the reverse reflex: the -ing of enjoy is carried over to decide."
+   }
+  }
+ },
+ {
+  "pat": "gi.to-verbs",
+  "en": "She managed to reach the supplier before noon.",
+  "de": "Sie hat es geschafft, den Lieferanten vor Mittag zu erreichen.",
+  "chunks": [
+   "she",
+   "managed",
+   "to reach",
+   "the supplier",
+   "before noon"
+  ],
+  "alt": [
+   "Before noon, she managed to reach the supplier."
+  ],
+  "why": [
+   "Nach manage steht to + Grundform: managed to reach. Die Zeitangabe before noon kann auch vorn stehen.",
+   "After manage comes to + base form: managed to reach. The time phrase before noon can also open the sentence."
+  ]
+ },
+ {
+  "pat": "gi.prep-ing",
+  "en": "Thanks for sending the files over so quickly.",
+  "de": "Danke, dass du die Dateien so schnell rübergeschickt hast.",
+  "chunks": [
+   "thanks",
+   "for sending",
+   "the files",
+   "over",
+   "so quickly"
+  ],
+  "alt": [
+   "Thanks for sending over the files so quickly."
+  ],
+  "why": [
+   "Nach der Präposition for steht -ing: for sending. Over kann vor oder nach the files stehen.",
+   "After the preposition for comes -ing: for sending. Over can stand before or after the files."
+  ],
+  "bad": "Thanks for to send the files over so quickly.",
+  "trap": {
+   "tile": "for sending",
+   "instead": "for to send",
+   "why": {
+    "de": "Nach einer Präposition steht -ing. „For to send“ mischt eine Präposition mit dem Infinitiv-to.",
+    "en": "After a preposition comes -ing. “For to send” mixes a preposition with the infinitive to."
+   }
+  }
+ },
+ {
+  "pat": "gi.prep-ing",
+  "en": "He left the meeting without saying a word.",
+  "de": "Er verließ das Meeting, ohne ein Wort zu sagen.",
+  "chunks": [
+   "he",
+   "left",
+   "the meeting",
+   "without saying",
+   "a word"
+  ],
+  "alt": [
+   "Without saying a word, he left the meeting."
+  ],
+  "why": [
+   "Nach der Präposition without steht -ing: without saying. Der Block kann auch vorn stehen.",
+   "After the preposition without comes -ing: without saying. The block can also open the sentence."
+  ],
+  "bad": "He left the meeting without to say a word.",
+  "trap": {
+   "tile": "without saying",
+   "instead": "without to say",
+   "why": {
+    "de": "Deutsch sagt „ohne … zu sagen“. Das zu wird als to übernommen, doch nach without steht -ing.",
+    "en": "German says “ohne … zu sagen”. The zu is carried over as to, but after without comes -ing."
+   }
+  }
+ },
+ {
+  "pat": "gi.meaning",
+  "en": "Please remember to attach the agenda before the call.",
+  "de": "Bitte denk daran, vor dem Anruf die Tagesordnung anzuhängen.",
+  "chunks": [
+   "please",
+   "remember",
+   "to attach",
+   "the agenda",
+   "before the call"
+  ],
+  "alt": [
+   "Before the call, please remember to attach the agenda."
+  ],
+  "why": [
+   "Remember + to meint, etwas nicht zu vergessen. Before the call kann auch am Anfang stehen.",
+   "Remember + to means not forgetting to do something. Before the call can also open the sentence."
+  ]
+ },
+ {
+  "pat": "gi.meaning",
+  "en": "We stopped meeting on Fridays after the reorganization.",
+  "de": "Seit der Umstrukturierung treffen wir uns freitags nicht mehr.",
+  "chunks": [
+   "we",
+   "stopped",
+   "meeting",
+   "on Fridays",
+   "after the reorganization"
+  ],
+  "alt": [
+   "After the reorganization, we stopped meeting on Fridays."
+  ],
+  "why": [
+   "Stop + -ing heißt aufhören: stopped meeting. Die Zeitangabe after the reorganization kann auch vorn stehen.",
+   "Stop + -ing means quit: stopped meeting. The time phrase after the reorganization can also open the sentence."
+  ]
+ },
+ {
+  "pat": "gi.bare-inf",
+  "en": "The new policy lets us work from home on Fridays.",
+  "de": "Die neue Regel erlaubt es uns, freitags von zu Hause zu arbeiten.",
+  "chunks": [
+   "the new policy",
+   "lets",
+   "us",
+   "work",
+   "from home",
+   "on Fridays"
+  ],
+  "alt": [
+   "On Fridays, the new policy lets us work from home."
+  ],
+  "why": [
+   "Nach let + Person steht die Grundform ohne to: lets us work. On Fridays kann auch vorn stehen.",
+   "After let + person the base form follows without to: lets us work. On Fridays can also open the sentence."
+  ],
+  "bad": "The new policy lets us to work from home on Fridays.",
+  "trap": {
+   "tile": "work",
+   "instead": "to work",
+   "why": {
+    "de": "Deutsch „erlaubt uns, … zu arbeiten“ hat zu. Nach let entfällt to.",
+    "en": "German “erlaubt uns, … zu arbeiten” has zu. After let the to drops out."
+   }
+  }
+ },
+ {
+  "pat": "gi.bare-inf",
+  "en": "The audit made the team revise the entire process.",
+  "de": "Die Prüfung hat das Team dazu gebracht, den ganzen Prozess zu überarbeiten.",
+  "chunks": [
+   "the audit",
+   "made",
+   "the team",
+   "revise",
+   "the entire process"
+  ],
+  "single": "Made the team revise ist eine feste Folge; the entire process ist das Objekt und steht am Ende.",
+  "why": [
+   "Nach make + Person steht die Grundform ohne to: made the team revise. Das Objekt kommt zuletzt.",
+   "After make + person the base form follows without to: made the team revise. The object comes last."
+  ]
+ }
+]

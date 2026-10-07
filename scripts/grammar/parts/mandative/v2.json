@@ -1,0 +1,970 @@
+[
+ {
+  "id": "mnd-v-k1",
+  "type": "kwt",
+  "pat": "mnd.verbs",
+  "from": "The client says our team must send the revised proposal today.",
+  "key": "INSISTS",
+  "frame": "The client ___ the revised proposal today.",
+  "answer": "insists that our team send",
+  "accepted": [
+   "insists that we send",
+   "insists we send",
+   "insists our team send",
+   "insists that they send",
+   "insists they send",
+   "insists that we should send",
+   "insists we should send",
+   "insists our team should send",
+   "insists that they should send"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: insists that + Subjekt + Grundform: that our team send, ohne -s und ohne will.",
+    "en": "Right: insists that + subject + base form: that our team send, no -s and no will."
+   },
+   "wrong": [
+    {
+     "not": [
+      "insists"
+     ],
+     "de": "Das Schlüsselwort insists muss unverändert in der Lücke stehen.",
+     "en": "The key word insists must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach insists that steht hier kein will; send bleibt die Grundform.",
+     "en": "No will after insists that here; send stays the base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mnd-v-k2",
+  "type": "kwt",
+  "pat": "mnd.verbs",
+  "from": "Legal thinks the team should postpone the launch.",
+  "key": "RECOMMENDS",
+  "frame": "Legal ___ the launch.",
+  "answer": "recommends that the team postpone",
+  "accepted": [
+   "recommends the team postpone",
+   "recommends that we postpone",
+   "recommends we postpone",
+   "recommends that they postpone",
+   "recommends they postpone",
+   "recommends the team should postpone",
+   "recommends that we should postpone",
+   "recommends we should postpone",
+   "recommends that they should postpone"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach recommends that steht die Grundform: that the team postpone, ohne -s.",
+    "en": "Right: after recommends that the base form follows: that the team postpone, no -s."
+   },
+   "wrong": [
+    {
+     "not": [
+      "recommends"
+     ],
+     "de": "Das Schlüsselwort recommends muss unverändert in der Lücke stehen.",
+     "en": "The key word recommends must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach recommends that steht kein will; postpone bleibt die Grundform.",
+     "en": "No will after recommends that; postpone stays the base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mnd-a-k1",
+  "type": "kwt",
+  "pat": "mnd.adjectives",
+  "from": "Every manager must attend the kickoff.",
+  "key": "ESSENTIAL",
+  "frame": "It is ___ the kickoff.",
+  "answer": "essential that every manager attend",
+  "accepted": [
+   "essential that each manager attend",
+   "essential that all managers attend",
+   "essential that managers attend",
+   "essential every manager attend",
+   "essential that they attend",
+   "essential that all attend",
+   "essential for managers to attend",
+   "essential for them to attend",
+   "essential for all to attend",
+   "essential every manager should attend"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach essential that steht die Grundform: that every manager attend, ohne -s.",
+    "en": "Right: after essential that the base form follows: that every manager attend, no -s."
+   },
+   "wrong": [
+    {
+     "not": [
+      "essential"
+     ],
+     "de": "Das Schlüsselwort essential muss unverändert in der Lücke stehen.",
+     "en": "The key word essential must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach essential that steht kein will. Die Forderung braucht die Grundform attend.",
+     "en": "No will after essential that. The demand needs the base form attend."
+    },
+    {
+     "if": [
+      "attends"
+     ],
+     "de": "Mit -s wie im normalen Präsens. Nach essential that bleibt es attend.",
+     "en": "The -s of the normal present. After essential that it stays attend."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mnd-a-k2",
+  "type": "kwt",
+  "pat": "mnd.adjectives",
+  "from": "The client has to get the draft today.",
+  "key": "IMPERATIVE",
+  "frame": "It is ___ the draft today.",
+  "answer": "imperative that the client get",
+  "accepted": [
+   "imperative the client get",
+   "imperative that our client get",
+   "imperative that they get",
+   "imperative that clients get",
+   "imperative that they should get"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach imperative that folgt die Grundform: that the client get, ohne -s.",
+    "en": "Right: after imperative that the base form follows: that the client get, no -s."
+   },
+   "wrong": [
+    {
+     "not": [
+      "imperative"
+     ],
+     "de": "Das Schlüsselwort imperative muss unverändert in der Lücke stehen.",
+     "en": "The key word imperative must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach imperative that steht kein will; get bleibt die Grundform.",
+     "en": "No will after imperative that; get stays the base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mnd-p-k1",
+  "type": "kwt",
+  "pat": "mnd.passive",
+  "from": "Finance wants the budget to be approved by Friday.",
+  "key": "REQUESTS",
+  "frame": "Finance ___ approved by Friday.",
+  "answer": "requests that the budget be",
+  "accepted": [
+   "requests the budget be",
+   "requests that it be",
+   "requests it be",
+   "requests that it should be",
+   "requests the budget should be"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Das Passiv der Bitte lautet be + 3. Form: that the budget be approved.",
+    "en": "Right: the passive of a request is be + past participle: that the budget be approved."
+   },
+   "wrong": [
+    {
+     "not": [
+      "requests"
+     ],
+     "de": "Das Schlüsselwort requests muss unverändert in der Lücke stehen.",
+     "en": "The key word requests must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach requests that steht kein will be; es bleibt be.",
+     "en": "No will be after requests that; it stays be."
+    },
+    {
+     "if": [
+      "is"
+     ],
+     "de": "Is ist die normale Form. Im Mandativ-Passiv steht be.",
+     "en": "Is is the normal form. The mandative passive takes be."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mnd-p-k2",
+  "type": "kwt",
+  "pat": "mnd.passive",
+  "from": "The bank said the form had to be signed by both partners.",
+  "key": "REQUIRED",
+  "frame": "The bank ___ signed by both partners.",
+  "answer": "required that the form be",
+  "accepted": [
+   "required the form be",
+   "required that it be",
+   "required it be",
+   "required that it should be",
+   "required the form should be"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach required that steht be + 3. Form: that the form be signed.",
+    "en": "Right: after required that comes be + past participle: that the form be signed."
+   },
+   "wrong": [
+    {
+     "not": [
+      "required"
+     ],
+     "de": "Das Schlüsselwort required muss unverändert in der Lücke stehen.",
+     "en": "The key word required must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "was"
+     ],
+     "de": "Was meldet eine Tatsache. Die Forderung braucht be + 3. Form.",
+     "en": "Was reports a fact. The demand needs be + past participle."
+    },
+    {
+     "if": [
+      "would"
+     ],
+     "de": "Would be passt nicht zur Forderung; im Mandativ steht schlicht be.",
+     "en": "Would be does not suit a demand; the mandative simply uses be."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mnd-n-k1",
+  "type": "kwt",
+  "pat": "mnd.negation",
+  "from": "I think we shouldn't share the numbers yet.",
+  "key": "SUGGEST",
+  "frame": "I ___ share the numbers yet.",
+  "answer": "suggest that we not",
+  "accepted": [
+   "suggest we not",
+   "suggest that we should not",
+   "suggest we should not",
+   "suggest that we shouldn't",
+   "suggest we shouldn't"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Verneinung steht vor der Grundform: suggest that we not share.",
+    "en": "Right: the negation goes before the base form: suggest that we not share."
+   },
+   "wrong": [
+    {
+     "not": [
+      "suggest"
+     ],
+     "de": "Das Schlüsselwort suggest muss unverändert in der Lücke stehen.",
+     "en": "The key word suggest must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach suggest that steht kein will not; es bleibt not + Grundform.",
+     "en": "No will not after suggest that; it stays not + base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mnd-n-k2",
+  "type": "kwt",
+  "pat": "mnd.negation",
+  "from": "We think the CEO shouldn't comment on the lawsuit.",
+  "key": "RECOMMEND",
+  "frame": "We ___ comment on the lawsuit.",
+  "answer": "recommend that the CEO not",
+  "accepted": [
+   "recommend the CEO not",
+   "recommend that they not",
+   "recommend they not",
+   "recommend that the CEO shouldn't",
+   "recommend the CEO shouldn't",
+   "recommend the CEO should not"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Verneinung steht direkt vor der Grundform: that the CEO not comment.",
+    "en": "Right: the negation goes right before the base form: that the CEO not comment."
+   },
+   "wrong": [
+    {
+     "not": [
+      "recommend"
+     ],
+     "de": "Das Schlüsselwort recommend muss unverändert in der Lücke stehen.",
+     "en": "The key word recommend must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "does",
+      "not"
+     ],
+     "de": "Mit doesn't kommt ein Hilfsverb dazu. Im Mandativ steht nur not.",
+     "en": "Doesn't adds a helper verb. The mandative takes only not."
+    },
+    {
+     "if": [
+      "would"
+     ],
+     "de": "Nach recommend that steht kein would; die Verneinung braucht nur not.",
+     "en": "No would after recommend that; the negation needs only not."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mnd-f-k1",
+  "type": "kwt",
+  "pat": "mnd.fact",
+  "from": "He claimed that he had sent the file on Monday.",
+  "key": "INSISTED",
+  "frame": "He ___ the file on Monday; we have his email.",
+  "answer": "insisted that he had sent",
+  "accepted": [
+   "insisted he had sent",
+   "insisted that he'd sent",
+   "insisted he'd sent",
+   "insisted that he sent",
+   "insisted he sent"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Hier geht es um eine Behauptung über früher, deshalb steht had sent.",
+    "en": "Right: this is a claim about the past, so had sent follows."
+   },
+   "wrong": [
+    {
+     "not": [
+      "insisted"
+     ],
+     "de": "Das Schlüsselwort insisted muss unverändert in der Lücke stehen.",
+     "en": "The key word insisted must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "send"
+     ],
+     "pat": "mnd.verbs",
+     "de": "Send wäre eine Forderung. Der Satz berichtet aber eine Behauptung: sent.",
+     "en": "Send would be a demand. This sentence reports a claim: sent."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mnd-f-k2",
+  "type": "kwt",
+  "pat": "mnd.fact",
+  "from": "The survey indicates that customers prefer shorter emails.",
+  "key": "SUGGESTS",
+  "frame": "The survey ___ shorter emails.",
+  "answer": "suggests that customers prefer",
+  "accepted": [
+   "suggests customers prefer"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Suggests meldet hier einen Befund, deshalb steht die normale Form: customers prefer.",
+    "en": "Right: suggests reports a finding here, so the normal form follows: customers prefer."
+   },
+   "wrong": [
+    {
+     "not": [
+      "suggests"
+     ],
+     "de": "Das Schlüsselwort suggests muss unverändert in der Lücke stehen.",
+     "en": "The key word suggests must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "suggests",
+      "prefers"
+     ],
+     "de": "Hier steht die Gegenwart wie sonst. Suggests meldet einen Befund, keine Forderung.",
+     "en": "The present is used as usual here. Suggests reports a finding, not a demand."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mnd-v-f1",
+  "type": "find",
+  "pat": "mnd.verbs",
+  "prompt": "The union demands that management will reopen the talks this week.",
+  "err": [
+   5,
+   6
+  ],
+  "answer": "reopen",
+  "fixed": "The union demands that management reopen the talks this week.",
+  "accepted": [
+   "should reopen"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach demands that steht die Grundform: that management reopen, ohne will.",
+    "en": "The error: after demands that use the base form: that management reopen, no will."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach demands that steht kein will.",
+     "en": "There is an error: no will after demands that."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „will reopen“: Die Forderung braucht die Grundform.",
+     "en": "The error is in “will reopen”: the demand needs the base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mnd-v-f2",
+  "type": "find",
+  "pat": "mnd.verbs",
+  "prompt": "Our advisor recommends that we are holding the vote after the audit.",
+  "err": [
+   5,
+   6
+  ],
+  "answer": "hold",
+  "fixed": "Our advisor recommends that we hold the vote after the audit.",
+  "accepted": [
+   "should hold"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach recommends that steht die Grundform: that we hold, nicht are holding.",
+    "en": "The error: after recommends that use the base form: that we hold, not are holding."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Eine Empfehlung braucht die Grundform.",
+     "en": "There is an error: a recommendation takes the base form."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „are holding“: Hier folgt die Grundform hold.",
+     "en": "The error is in “are holding”: the base form hold follows here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mnd-v-f3",
+  "type": "find",
+  "pat": "mnd.verbs",
+  "prompt": "Legal recommends that every vendor sign the new terms before March.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: Nach recommends that steht die Grundform: that every vendor sign.",
+    "en": "No error: after recommends that the base form follows: that every vendor sign."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: sign ohne -s ist hier richtig, auch bei every vendor.",
+     "en": "No error: sign without -s is right here, even after every vendor."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mnd-a-f1",
+  "type": "find",
+  "pat": "mnd.adjectives",
+  "prompt": "It is crucial that every analyst will submit the figures by noon.",
+  "err": [
+   6,
+   7
+  ],
+  "answer": "submit",
+  "fixed": "It is crucial that every analyst submit the figures by noon.",
+  "accepted": [
+   "should submit"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach crucial that steht die Grundform: that every analyst submit, ohne will.",
+    "en": "The error: after crucial that use the base form: that every analyst submit, no will."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach crucial that steht kein will.",
+     "en": "There is an error: no will after crucial that."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „will submit“: Hier folgt die Grundform.",
+     "en": "The error is in “will submit”: the base form follows here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mnd-a-f2",
+  "type": "find",
+  "pat": "mnd.adjectives",
+  "prompt": "It is imperative that the client would receive the draft today.",
+  "err": [
+   6,
+   7
+  ],
+  "answer": "receive",
+  "fixed": "It is imperative that the client receive the draft today.",
+  "accepted": [
+   "should receive"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach imperative that steht die Grundform: that the client receive, ohne would.",
+    "en": "The error: after imperative that use the base form: that the client receive, no would."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach imperative that steht kein would.",
+     "en": "There is an error: no would after imperative that."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „would receive“: Die Forderung braucht die Grundform.",
+     "en": "The error is in “would receive”: the demand needs the base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mnd-p-f1",
+  "type": "find",
+  "pat": "mnd.passive",
+  "prompt": "The bank requests that the loan will be repaid within ten days.",
+  "err": [
+   6,
+   7
+  ],
+  "answer": "be",
+  "fixed": "The bank requests that the loan be repaid within ten days.",
+  "accepted": [
+   "should be"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach requests that steht be + 3. Form: that the loan be repaid, ohne will.",
+    "en": "The error: after requests that use be + past participle: that the loan be repaid, no will."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach requests that steht kein will be.",
+     "en": "There is an error: no will be after requests that."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „will be“: Im Mandativ-Passiv steht nur be.",
+     "en": "The error is in “will be”: the mandative passive takes only be."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mnd-p-f2",
+  "type": "find",
+  "pat": "mnd.passive",
+  "prompt": "The client asked that the invoice be corrected before payment.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: Nach asked that steht be + 3. Form: that the invoice be corrected.",
+    "en": "No error: after asked that comes be + past participle: that the invoice be corrected."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: be corrected ist die richtige Passivform nach einer Bitte.",
+     "en": "No error: be corrected is the right passive form after a request."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mnd-n-f1",
+  "type": "find",
+  "pat": "mnd.negation",
+  "prompt": "I recommend that you would not forward this message to clients.",
+  "err": [
+   4,
+   5
+  ],
+  "answer": "not",
+  "fixed": "I recommend that you not forward this message to clients.",
+  "accepted": [
+   "should not"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach recommend that steht not + Grundform: that you not forward, ohne would.",
+    "en": "The error: after recommend that use not + base form: that you not forward, no would."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: would not passt nicht nach recommend that.",
+     "en": "There is an error: would not does not fit after recommend that."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „would not“: Hier steht nur not vor der Grundform.",
+     "en": "The error is in “would not”: only not goes before the base form here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mnd-n-f2",
+  "type": "find",
+  "pat": "mnd.negation",
+  "prompt": "The committee requests that the vendor to not change the terms.",
+  "err": [
+   6,
+   7
+  ],
+  "answer": "not",
+  "fixed": "The committee requests that the vendor not change the terms.",
+  "accepted": [
+   "should not"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach that + Subjekt folgt kein to: that the vendor not change.",
+    "en": "The error: after that + subject no to follows: that the vendor not change."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach that + Subjekt steht kein to.",
+     "en": "There is an error: no to after that + subject."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „to not“: Die Verneinung steht direkt vor change.",
+     "en": "The error is in “to not”: the negation goes right before change."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mnd-n-f3",
+  "type": "find",
+  "pat": "mnd.negation",
+  "prompt": "We insist that she not attend the meeting without legal.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: that she not attend ist die richtige Form der Verneinung.",
+    "en": "No error: that she not attend is the right form of the negation."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: not steht direkt vor der Grundform attend, ganz ohne Hilfsverb.",
+     "en": "No error: not goes right before the base form attend, with no helper verb."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mnd-f-f1",
+  "type": "find",
+  "pat": "mnd.fact",
+  "prompt": "The survey suggests that most customers be satisfied with the new app.",
+  "err": [
+   6,
+   6
+  ],
+  "answer": "are",
+  "fixed": "The survey suggests that most customers are satisfied with the new app.",
+  "accepted": [
+   "were"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Hier meldet suggests einen Befund, deshalb steht are statt be.",
+    "en": "The error: here suggests reports a finding, so are is needed instead of be."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Ein Befund braucht die normale Form, nicht be.",
+     "en": "There is an error: a finding needs the normal form, not be."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „be“: Suggests meldet hier eine Tatsache.",
+     "en": "The error is in “be”: suggests reports a fact here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mnd-f-f2",
+  "type": "find",
+  "pat": "mnd.fact",
+  "prompt": "Her reply suggests that she be unhappy with the proposal.",
+  "err": [
+   5,
+   5
+  ],
+  "answer": "is",
+  "fixed": "Her reply suggests that she is unhappy with the proposal.",
+  "accepted": [
+   "was"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Suggests deutet hier auf eine Tatsache hin, deshalb steht is statt be.",
+    "en": "The error: suggests points to a fact here, so is is needed instead of be."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Ein Hinweis auf eine Tatsache braucht is, nicht be.",
+     "en": "There is an error: a hint at a fact needs is, not be."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „be“: Hier wird keine Forderung genannt.",
+     "en": "The error is in “be”: no demand is named here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mnd-v-m1",
+  "type": "meaning",
+  "pat": "mnd.verbs",
+  "a": "The manager insisted that Ben review the plan.",
+  "b": "The manager insisted that Ben reviewed the plan.",
+  "q": {
+   "de": "Welcher Satz sagt, dass Ben den Plan noch prüfen soll?",
+   "en": "Which sentence says Ben is supposed to review the plan?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Die Grundform review zeigt eine Forderung an Ben.",
+    "en": "Right: sentence a. The base form review shows a demand on Ben."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b meldet reviewed eine Behauptung: Ben hat den Plan schon geprüft.",
+     "en": "In b, reviewed reports a claim: Ben has already reviewed the plan."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a fordert etwas, b behauptet etwas.",
+     "en": "Not the same: a demands something, b claims something."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mnd-a-m1",
+  "type": "meaning",
+  "pat": "mnd.adjectives",
+  "a": "It is essential that Mia be at the meeting.",
+  "b": "It is likely that Mia is at the meeting.",
+  "q": {
+   "de": "Welcher Satz fordert, dass Mia beim Meeting dabei ist?",
+   "en": "Which sentence demands that Mia be at the meeting?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Essential fordert etwas, deshalb steht be.",
+    "en": "Right: sentence a. Essential demands something, so be follows."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b schätzt likely nur ein, wo Mia vermutlich ist. Das ist keine Forderung.",
+     "en": "In b, likely only estimates where Mia probably is. That is no demand."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a fordert, b vermutet.",
+     "en": "Not the same: a demands, b assumes."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mnd-p-m1",
+  "type": "meaning",
+  "pat": "mnd.passive",
+  "a": "We ask that the files be deleted today.",
+  "b": "We ask that you delete the files today.",
+  "q": {
+   "de": "Welche Sätze bitten darum, dass die Dateien heute gelöscht werden?",
+   "en": "Which sentences ask for the files to be deleted today?"
+  },
+  "answer": "both",
+  "why": {
+   "ok": {
+    "de": "Richtig: beide. a nutzt das Passiv be deleted, b das Aktiv mit you delete.",
+    "en": "Right: both. a uses the passive be deleted, b the active with you delete."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "Auch b bittet darum, nur mit Handelndem: you delete, ohne -s.",
+     "en": "B asks for it too, but with an actor: you delete, no -s."
+    },
+    {
+     "opt": "b",
+     "de": "Auch a bittet darum, ohne Handelnden: be deleted.",
+     "en": "A asks for it too, without an actor: be deleted."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mnd-n-m1",
+  "type": "meaning",
+  "pat": "mnd.negation",
+  "a": "I don't insist that she attend.",
+  "b": "I insist that she not attend.",
+  "q": {
+   "de": "Welcher Satz sagt: Sie soll nicht teilnehmen?",
+   "en": "Which sentence says she is not to attend?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. Das not im that-Satz verbietet die Teilnahme.",
+    "en": "Right: sentence b. The not in the that clause rules out attending."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a steht die Verneinung vor insist: Sie darf teilnehmen, es ist freigestellt.",
+     "en": "In a, the negation sits before insist: she may attend, it is optional."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a lässt es offen, b verbietet es.",
+     "en": "Not the same: a leaves it open, b forbids it."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mnd-f-m1",
+  "type": "meaning",
+  "pat": "mnd.fact",
+  "a": "The numbers suggest that Dana is ill.",
+  "b": "I suggest that Dana see a doctor.",
+  "q": {
+   "de": "Welcher Satz gibt einen Rat?",
+   "en": "Which sentence gives advice?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. Der Rat braucht die Grundform: that Dana see.",
+    "en": "Right: sentence b. Advice takes the base form: that Dana see."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a deuten die Zahlen auf eine Tatsache hin: Dana ist krank, kein Rat.",
+     "en": "In a, the numbers point to a fact: Dana is ill, no advice."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a nennt einen Befund, b einen Rat.",
+     "en": "Not the same: a names a finding, b gives advice."
+    }
+   ]
+  }
+ }
+]
