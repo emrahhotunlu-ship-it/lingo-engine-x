@@ -13,7 +13,7 @@
    "text": "The delay ___ be caused by the new firewall, but we have not checked the server logs yet.",
    "options": [
     "must",
-    "can",
+    "shall",
     "would",
     "might"
    ],
@@ -31,10 +31,10 @@
       "en": "must expresses certainty, but you have not checked yet."
      },
      {
-      "opt": "can",
-      "cat": "calque",
-      "de": "„Das kann an der Firewall liegen“ ist Deutsch gedacht; can heißt „grundsätzlich möglich“, für eine Vermutung gilt might/could.",
-      "en": "“Das kann an der Firewall liegen” is German thinking; can means “possible in general”, for a guess use might/could."
+      "opt": "shall",
+      "cat": "grammar",
+      "de": "shall passt nicht zu einer vermuteten Ursache.",
+      "en": "shall does not fit a suspected cause."
      },
      {
       "opt": "would",
@@ -209,8 +209,8 @@
      {
       "opt": "Do",
       "cat": "calque",
-      "de": "Deutsch fragt „Benutzt du den Beamer um zwei?“ im Präsens; Englisch: Will you be using …?",
-      "en": "German asks “Benutzt du den Beamer um zwei?” in the present; English: Will you be using …?"
+      "de": "Deutsch fragt „Benutzt du den Besprechungsraum um vier?“ im Präsens; Englisch: Will you be using …?",
+      "en": "German asks “Benutzt du den Besprechungsraum um vier?” in the present; English: Will you be using …?"
      },
      {
       "opt": "Have",
@@ -341,14 +341,14 @@
      {
       "opt": "was",
       "cat": "calque",
-      "de": "Deutsch sagt „war schon gestartet“ (mit sein); Englisch bildet das Past Perfect mit had.",
-      "en": "German says “war schon gestartet” (with sein); English builds the past perfect with had."
+      "de": "Deutsch sagt „war schon abgestürzt“ (mit sein); Englisch bildet das Past Perfect mit had.",
+      "en": "German says “war schon abgestürzt” (with sein); English builds the past perfect with had."
      },
      {
       "opt": "did",
       "cat": "grammar",
-      "de": "did already started gibt es nicht; nach did steht die Grundform.",
-      "en": "did already started does not exist; after did comes the base form."
+      "de": "did already crashed gibt es nicht; nach did steht die Grundform.",
+      "en": "did already crashed does not exist; after did comes the base form."
      }
     ]
    }
@@ -423,20 +423,20 @@
      {
       "opt": "have",
       "cat": "calque",
-      "de": "Deutsch sagt „das erste Mal, dass ich gesprochen habe“ (Perfekt); nach „It was“ steht im Englischen had.",
-      "en": "German says “das erste Mal, dass ich gesprochen habe” (perfect); after “It was” English uses had."
+      "de": "Deutsch sagt „das erste Mal, dass sie präsentiert hat“ (Perfekt); nach „It was“ steht im Englischen had.",
+      "en": "German says “das erste Mal, dass sie präsentiert hat” (perfect); after “It was” English uses had."
      },
      {
       "opt": "was",
       "cat": "grammar",
-      "de": "was spoken wäre Passiv.",
-      "en": "was spoken would be passive."
+      "de": "was presented wäre Passiv: „wurde präsentiert“.",
+      "en": "was presented would be passive."
      },
      {
       "opt": "did",
       "cat": "grammar",
-      "de": "did spoken gibt es nicht; nach did steht die Grundform.",
-      "en": "did spoken does not exist; after did comes the base form."
+      "de": "did presented gibt es nicht; nach did steht die Grundform.",
+      "en": "did presented does not exist; after did comes the base form."
      }
     ]
    }
@@ -473,8 +473,8 @@
      {
       "opt": "have",
       "cat": "grammar",
-      "de": "have wird in der berichteten Rede zu had, und board passt hier auch nicht zu have.",
-      "en": "have becomes had in reported speech, and board does not take have here either."
+      "de": "have wird in der berichteten Rede zu had.",
+      "en": "have becomes had in reported speech."
      },
      {
       "opt": "would",
@@ -599,20 +599,20 @@
      {
       "opt": "used",
       "cat": "grammar",
-      "de": "used invite gibt es nicht; es heißt used to invite.",
-      "en": "used invite does not exist; it is used to invite."
+      "de": "used order gibt es nicht; es heißt used to order.",
+      "en": "used order does not exist; it is used to order."
      },
      {
       "opt": "does",
       "cat": "grammar",
-      "de": "does ist Gegenwart; „old boss“ liegt in der Vergangenheit.",
-      "en": "does is present; “old boss” is in the past."
+      "de": "does ist Gegenwart; „previous manager“ liegt in der Vergangenheit.",
+      "en": "does is present; “previous manager” is in the past."
      },
      {
       "opt": "was",
       "cat": "calque",
-      "de": "Deutsch „er war es gewohnt einzuladen“ klingt wie was; wiederholte Handlungen in der Vergangenheit: would.",
-      "en": "German “er pflegte einzuladen” sounds like was; repeated past actions: would."
+      "de": "Deutsch „er pflegte zu bestellen“ verleitet zu was; wiederholte Handlungen in der Vergangenheit: would.",
+      "en": "German “er pflegte zu bestellen” tempts you to say was; repeated past actions: would."
      }
     ]
    }
@@ -988,15 +988,15 @@
    "answer": 2,
    "why": {
     "ok": {
-     "de": "unless = außer wenn; im Nebensatz steht die Gegenwart ohne zweites not.",
-     "en": "unless = except if; the clause takes the present with no second not."
+     "de": "unless = außer wenn: Wir kündigen, außer der Anbieter behebt das Problem.",
+     "en": "unless = except if: we terminate, unless the vendor fixes the problem."
     },
     "wrong": [
      {
       "opt": "if",
       "cat": "meaning",
-      "de": "if würde die Bedeutung umkehren: Wir stornieren, falls er bestätigt.",
-      "en": "if would reverse the meaning: we cancel if he confirms."
+      "de": "if würde die Bedeutung umkehren: Wir kündigen, falls der Anbieter das Problem behebt.",
+      "en": "if would reverse the meaning: we terminate if the vendor fixes the problem."
      },
      {
       "opt": "except",
@@ -1183,8 +1183,8 @@
      {
       "opt": "has",
       "cat": "grammar",
-      "de": "has passt nicht zu we.",
-      "en": "has does not fit we."
+      "de": "wish + has gibt es nicht; ein Wunsch über die Gegenwart braucht die Vergangenheit (had).",
+      "en": "wish + has does not exist; a wish about the present needs the past (had)."
      }
     ]
    }

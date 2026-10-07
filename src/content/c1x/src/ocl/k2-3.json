@@ -14,7 +14,8 @@
    "accept": [
     "if",
     "when",
-    "whenever"
+    "whenever",
+    "once"
    ],
    "cls": "conj",
    "chips": [
@@ -61,9 +62,11 @@
    "level": "B2",
    "dom": "life",
    "src": "seed",
-   "text": "If the sun ___ shining all day, the plants on my balcony grow much faster than in cloudy weeks.",
+   "text": "If the sun ___ out all day, the plants on my balcony grow much faster than in cloudy weeks.",
    "accept": [
-    "is"
+    "is",
+    "stays",
+    "shines"
    ],
    "cls": "aux",
    "chips": [
@@ -73,8 +76,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Zero Conditional: if + Gegenwart, Gegenwart; hier is shining.",
-     "en": "Zero conditional: if + present, present; here is shining."
+     "de": "Zero Conditional: if + Gegenwart, Gegenwart; hier is out (oder stays out).",
+     "en": "Zero conditional: if + present, present; here is out (or stays out)."
     },
     "wrong": [
      {
@@ -162,7 +165,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "text": "If I ___ you, I would ask for a written confirmation before sending any money to that supplier.",
+   "text": "If I ___ you, I would sleep on it before signing such a long-term contract.",
    "accept": [
     "were",
     "was"
@@ -361,7 +364,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "text": "If we had checked the figures twice, we ___ have noticed the mistake long before the audit.",
+   "text": "If the vendor had warned us earlier, we ___ have switched the provider before the outage.",
    "accept": [
     "would",
     "could",
@@ -410,9 +413,9 @@
    "pat": "cn.third",
    "topic": "conditionals",
    "level": "B2",
-   "dom": "biz",
+   "dom": "life",
    "src": "seed",
-   "text": "If the client had signed on time, we would ___ delivered the whole project by the end of March.",
+   "text": "If the weather had been better, we would ___ finished the roof by the end of March.",
    "accept": [
     "have"
    ],
@@ -709,9 +712,9 @@
    "pat": "ca.as-long-as",
    "topic": "cond-alt",
    "level": "B2+",
-   "dom": "biz",
+   "dom": "life",
    "src": "seed",
-   "text": "We will keep the old archive system running as long ___ the migration to the new platform is not finished.",
+   "text": "You can stay in our guest room as long ___ you need; we are not using it before June.",
    "accept": [
     "as"
    ],
@@ -856,9 +859,9 @@
    "pat": "ca.but-for",
    "topic": "cond-alt",
    "level": "C1",
-   "dom": "biz",
+   "dom": "life",
    "src": "seed",
-   "text": "___ for the quick help of our IT team, the whole customer database would have been lost last night.",
+   "text": "___ for the quick help of our neighbors, the whole cellar would have been flooded last night.",
    "accept": [
     "but"
    ],
@@ -1103,7 +1106,7 @@
    "level": "B2",
    "dom": "life",
    "src": "seed",
-   "text": "Take an umbrella ___ case it rains later this afternoon, because the forecast is not very reliable.",
+   "text": "Pack a warm jacket ___ case the evening gets cold, because the mountain weather can change quickly.",
    "accept": [
     "in"
    ],
@@ -1152,7 +1155,7 @@
    "level": "B2",
    "dom": "biz",
    "src": "seed",
-   "text": "Let me give you my mobile number just ___ case you cannot reach me at the office during the trade fair.",
+   "text": "Let me give you my cell phone number just ___ case you cannot reach me at the office during the trade fair.",
    "accept": [
     "in"
    ],
@@ -1196,47 +1199,50 @@
    "id": "ocl-0092",
    "kind": "ocl",
    "area": "gram",
-   "pat": "cn.first",
-   "topic": "conditionals",
-   "level": "B2",
-   "dom": "life",
+   "pat": "dip.possible",
+   "topic": "c1-diplomacy",
+   "level": "C1",
+   "dom": "biz",
    "src": "seed",
-   "text": "If we do ___ leave before six, we will miss the beginning of the concert and the best seats.",
+   "text": "I would be grateful if you ___ send me the revised draft by Friday, so that I can forward it to the board.",
    "accept": [
-    "not"
+    "could",
+    "would",
+    "can",
+    "will"
    ],
-   "cls": "part",
+   "cls": "aux",
    "chips": [
-    "no",
-    "never",
-    "neither"
+    "did",
+    "were",
+    "had"
    ],
    "why": {
     "ok": {
-     "de": "Verneinung im if-Satz: do/does not + Grundform.",
-     "en": "Negation in the if-clause: do/does not + base form."
+     "de": "Höfliche Bitte: I would be grateful if you could/would + Grundform.",
+     "en": "A polite request: I would be grateful if you could/would + base form."
     },
     "wrong": [
      {
       "if": [
-       "no"
+       "did"
       ],
-      "de": "do no leave ist falsch; do verneint man mit not.",
-      "en": "do no leave is wrong; do is negated with not."
+      "de": "if you did send ist betont und passt nicht zu einer höflichen Bitte.",
+      "en": "if you did send is emphatic and does not fit a polite request."
      },
      {
       "if": [
-       "never"
+       "were"
       ],
-      "de": "do never leave ist ungewöhnlich und passt nicht zur einmaligen Situation.",
-      "en": "do never leave is unusual and does not fit this one situation."
+      "de": "if you were send gibt es nicht.",
+      "en": "if you were send does not exist."
      },
      {
       "if": [
-       "neither"
+       "had"
       ],
-      "de": "do neither leave ist falsch.",
-      "en": "do neither leave is wrong."
+      "de": "if you had send gibt es nicht; had braucht ein Partizip (sent).",
+      "en": "if you had send does not exist; had needs a participle (sent)."
      }
     ]
    }
@@ -1297,9 +1303,9 @@
    "pat": "ca.unless",
    "topic": "cond-alt",
    "level": "B2+",
-   "dom": "biz",
+   "dom": "life",
    "src": "seed",
-   "text": "The new archive will go live on Monday ___ the final security test shows any serious problems this weekend.",
+   "text": "The street festival will take place on Saturday ___ the forecast shows heavy rain on Friday night.",
    "accept": [
     "unless"
    ],

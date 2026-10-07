@@ -6,7 +6,7 @@ export const items = [
   {
     p: 'hg.modal', lv: 'B2+', dom: 'biz',
     t: 'The delay ___ be caused by the new firewall, but we have not checked the server logs yet.',
-    o: [['might'], W('must', 'meaning', 'must drückt Sicherheit aus, ihr habt aber noch nicht geprüft. || must expresses certainty, but you have not checked yet.'), W('can', 'calque', '„Das kann an der Firewall liegen“ ist Deutsch gedacht; can heißt „grundsätzlich möglich“, für eine Vermutung gilt might/could. || “Das kann an der Firewall liegen” is German thinking; can means “possible in general”, for a guess use might/could.'), W('would', 'grammar', 'would braucht eine Bedingung (if …). || would needs a condition (if …).')],
+    o: [['might'], W('must', 'meaning', 'must drückt Sicherheit aus, ihr habt aber noch nicht geprüft. || must expresses certainty, but you have not checked yet.'), W('shall', 'grammar', 'shall passt nicht zu einer vermuteten Ursache. || shall does not fit a suspected cause.'), W('would', 'grammar', 'would braucht eine Bedingung (if …). || would needs a condition (if …).')],
     ok: 'Vorsichtige Vermutung ohne Beleg: might/could/may + Grundform. || A cautious guess without proof: might/could/may + base form.',
   },
   {
@@ -31,7 +31,7 @@ export const items = [
   {
     p: 'fut.cont-plan', lv: 'B2+', dom: 'biz',
     t: '___ you be using the meeting room at four, or may I book it for a quick team workshop?',
-    o: [['Will'], W('Are', 'grammar', 'Are you be using ist keine Form; mit be + -ing braucht es will be. || Are you be using is not a form; with be + -ing it needs will be.'), W('Do', 'calque', 'Deutsch fragt „Benutzt du den Beamer um zwei?“ im Präsens; Englisch: Will you be using …? || German asks “Benutzt du den Beamer um zwei?” in the present; English: Will you be using …?'), W('Have', 'grammar', 'Have you be using ist keine Form. || Have you be using is not a form.')],
+    o: [['Will'], W('Are', 'grammar', 'Are you be using ist keine Form; mit be + -ing braucht es will be. || Are you be using is not a form; with be + -ing it needs will be.'), W('Do', 'calque', 'Deutsch fragt „Benutzt du den Besprechungsraum um vier?“ im Präsens; Englisch: Will you be using …? || German asks “Benutzt du den Besprechungsraum um vier?” in the present; English: Will you be using …?'), W('Have', 'grammar', 'Have you be using ist keine Form. || Have you be using is not a form.')],
     ok: 'Höfliche Frage nach Plänen: Will you be + -ing? || A polite question about plans: Will you be + -ing?',
   },
   {
@@ -50,7 +50,7 @@ export const items = [
   {
     p: 'pp.earlier', lv: 'B2', dom: 'biz',
     t: 'By the time the technician arrived at the office, the main server ___ already crashed twice.',
-    o: [['had'], W('has', 'grammar', 'has gehört zur Gegenwart; gemeint ist früher als „arrived“. || has is present; earlier than “arrived” is meant.'), W('was', 'calque', 'Deutsch sagt „war schon gestartet“ (mit sein); Englisch bildet das Past Perfect mit had. || German says “war schon gestartet” (with sein); English builds the past perfect with had.'), W('did', 'grammar', 'did already started gibt es nicht; nach did steht die Grundform. || did already started does not exist; after did comes the base form.')],
+    o: [['had'], W('has', 'grammar', 'has gehört zur Gegenwart; gemeint ist früher als „arrived“. || has is present; earlier than “arrived” is meant.'), W('was', 'calque', 'Deutsch sagt „war schon abgestürzt“ (mit sein); Englisch bildet das Past Perfect mit had. || German says “war schon abgestürzt” (with sein); English builds the past perfect with had.'), W('did', 'grammar', 'did already crashed gibt es nicht; nach did steht die Grundform. || did already crashed does not exist; after did comes the base form.')],
     ok: 'Das frühere von zwei Ereignissen in der Vergangenheit: had + Partizip. || The earlier of two past events: had + participle.',
   },
   {
@@ -62,13 +62,13 @@ export const items = [
   {
     p: 'pp.first-time', lv: 'B2+', dom: 'biz',
     t: 'It was the first time she ___ ever presented to a board in English, and her hands were shaking.',
-    o: [['had'], W('have', 'calque', 'Deutsch sagt „das erste Mal, dass ich gesprochen habe“ (Perfekt); nach „It was“ steht im Englischen had. || German says “das erste Mal, dass ich gesprochen habe” (perfect); after “It was” English uses had.'), W('was', 'grammar', 'was spoken wäre Passiv. || was spoken would be passive.'), W('did', 'grammar', 'did spoken gibt es nicht; nach did steht die Grundform. || did spoken does not exist; after did comes the base form.')],
+    o: [['had'], W('have', 'calque', 'Deutsch sagt „das erste Mal, dass sie präsentiert hat“ (Perfekt); nach „It was“ steht im Englischen had. || German says “das erste Mal, dass sie präsentiert hat” (perfect); after “It was” English uses had.'), W('was', 'grammar', 'was presented wäre Passiv: „wurde präsentiert“. || was presented would be passive.'), W('did', 'grammar', 'did presented gibt es nicht; nach did steht die Grundform. || did presented does not exist; after did comes the base form.')],
     ok: 'It was the first time + had + Partizip. || It was the first time + had + participle.',
   },
   {
     p: 'pp.reported', lv: 'B2', dom: 'biz',
     t: 'She told me that the board ___ already approved the budget the day before the public announcement.',
-    o: [['had'], W('has', 'calque', 'Deutsch sagt „sie sagte, der Vorstand hat genehmigt“ (Perfekt); nach „told“ rutscht has einen Schritt zurück zu had. || German says “sie sagte, der Vorstand hat genehmigt” (perfect); after “told” has moves one step back to had.'), W('have', 'grammar', 'have wird in der berichteten Rede zu had, und board passt hier auch nicht zu have. || have becomes had in reported speech, and board does not take have here either.'), W('would', 'grammar', 'would approved gibt es nicht; had + Partizip steht für das Frühere. || would approved does not exist; had + participle expresses the earlier action.')],
+    o: [['had'], W('has', 'calque', 'Deutsch sagt „sie sagte, der Vorstand hat genehmigt“ (Perfekt); nach „told“ rutscht has einen Schritt zurück zu had. || German says “sie sagte, der Vorstand hat genehmigt” (perfect); after “told” has moves one step back to had.'), W('have', 'grammar', 'have wird in der berichteten Rede zu had. || have becomes had in reported speech.'), W('would', 'grammar', 'would approved gibt es nicht; had + Partizip steht für das Frühere. || would approved does not exist; had + participle expresses the earlier action.')],
     ok: 'Berichtete Rede in der Vergangenheit: has/have + Partizip wird zu had + Partizip. || Reported speech in the past: has/have + participle becomes had + participle.',
   },
   {
@@ -87,7 +87,7 @@ export const items = [
   {
     p: 'ut.would', lv: 'B2+', dom: 'biz',
     t: 'On Friday evenings, our previous manager ___ order pizza for the whole team and stay until the last ticket was closed.',
-    o: [['would'], W('used', 'grammar', 'used invite gibt es nicht; es heißt used to invite. || used invite does not exist; it is used to invite.'), W('does', 'grammar', 'does ist Gegenwart; „old boss“ liegt in der Vergangenheit. || does is present; “old boss” is in the past.'), W('was', 'calque', 'Deutsch „er war es gewohnt einzuladen“ klingt wie was; wiederholte Handlungen in der Vergangenheit: would. || German “er pflegte einzuladen” sounds like was; repeated past actions: would.')],
+    o: [['would'], W('used', 'grammar', 'used order gibt es nicht; es heißt used to order. || used order does not exist; it is used to order.'), W('does', 'grammar', 'does ist Gegenwart; „previous manager“ liegt in der Vergangenheit. || does is present; “previous manager” is in the past.'), W('was', 'calque', 'Deutsch „er pflegte zu bestellen“ verleitet zu was; wiederholte Handlungen in der Vergangenheit: would. || German “er pflegte zu bestellen” tempts you to say was; repeated past actions: would.')],
     ok: 'Wiederholte Handlungen in der Vergangenheit: would + Grundform. || Repeated actions in the past: would + base form.',
   },
   {
@@ -144,8 +144,8 @@ export const items = [
   {
     p: 'ca.unless', lv: 'B2+', dom: 'biz',
     t: 'We will terminate the contract ___ the vendor fixes the security problem within the next two weeks.',
-    o: [['unless'], W('if', 'meaning', 'if würde die Bedeutung umkehren: Wir stornieren, falls er bestätigt. || if would reverse the meaning: we cancel if he confirms.'), W('except', 'calque', 'Deutsch „außer wenn“ führt zu except; vor einem Satz heißt es unless. || German “außer wenn” leads to except; before a clause it is unless.'), W('without', 'calque', 'Deutsch „ohne dass“ führt zu without; mit einem Satz steht unless. || German “ohne dass” leads to without; with a clause use unless.')],
-    ok: 'unless = außer wenn; im Nebensatz steht die Gegenwart ohne zweites not. || unless = except if; the clause takes the present with no second not.',
+    o: [['unless'], W('if', 'meaning', 'if würde die Bedeutung umkehren: Wir kündigen, falls der Anbieter das Problem behebt. || if would reverse the meaning: we terminate if the vendor fixes the problem.'), W('except', 'calque', 'Deutsch „außer wenn“ führt zu except; vor einem Satz heißt es unless. || German “außer wenn” leads to except; before a clause it is unless.'), W('without', 'calque', 'Deutsch „ohne dass“ führt zu without; mit einem Satz steht unless. || German “ohne dass” leads to without; with a clause use unless.')],
+    ok: 'unless = außer wenn: Wir kündigen, außer der Anbieter behebt das Problem. || unless = except if: we terminate, unless the vendor fixes the problem.',
   },
   {
     p: 'ca.otherwise', lv: 'B2', dom: 'biz',
@@ -169,7 +169,7 @@ export const items = [
   {
     p: 'mc.wish-now', lv: 'B2+', dom: 'biz',
     t: 'I wish our office ___ a bigger kitchen; twenty people share one tiny coffee machine every single morning.',
-    o: [['had'], W('have', 'calque', 'Deutsch „ich wünschte, wir haben“ steht im Präsens; wish braucht für die Gegenwart die Vergangenheit. || German “ich wünschte, wir haben” is in the present; wish needs the past for the present.'), W('would have', 'calque', 'Deutsch „ich wünschte, wir würden haben“ führt zu would have; für einen Zustand steht die Vergangenheit. || German “ich wünschte, wir würden haben” leads to would have; for a state the past is used.'), W('has', 'grammar', 'has passt nicht zu we. || has does not fit we.')],
+    o: [['had'], W('have', 'calque', 'Deutsch „ich wünschte, wir haben“ steht im Präsens; wish braucht für die Gegenwart die Vergangenheit. || German “ich wünschte, wir haben” is in the present; wish needs the past for the present.'), W('would have', 'calque', 'Deutsch „ich wünschte, wir würden haben“ führt zu would have; für einen Zustand steht die Vergangenheit. || German “ich wünschte, wir würden haben” leads to would have; for a state the past is used.'), W('has', 'grammar', 'wish + has gibt es nicht; ein Wunsch über die Gegenwart braucht die Vergangenheit (had). || wish + has does not exist; a wish about the present needs the past (had).')],
     ok: 'Wunsch über die Gegenwart: wish + Past Simple (had). || A wish about the present: wish + past simple (had).',
   },
   {

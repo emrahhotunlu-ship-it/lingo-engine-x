@@ -108,7 +108,7 @@
    "level": "B2",
    "dom": "biz",
    "src": "seed",
-   "text": "Sorry, I cannot talk right now because we ___ running a live demo for a prospect.",
+   "text": "Please do not come in; the engineers ___ testing the new scanner right now.",
    "accept": [
     "are"
    ],
@@ -159,7 +159,8 @@
    "src": "seed",
    "text": "At the moment I ___ not understand why the report shows two different totals for May.",
    "accept": [
-    "do"
+    "do",
+    "can"
    ],
    "cls": "aux",
    "chips": [
@@ -400,9 +401,9 @@
    "pat": "psp.since-for",
    "topic": "past-simple-perfect",
    "level": "B2",
-   "dom": "biz",
+   "dom": "life",
    "src": "seed",
-   "text": "Our company has used the same document management system ___ 2018, and nobody wants to change it.",
+   "text": "Our family has used the same holiday cottage ___ 2018, and nobody wants to change it.",
    "accept": [
     "since"
    ],
@@ -451,7 +452,7 @@
    "level": "B2",
    "dom": "life",
    "src": "seed",
-   "text": "I have known my business partner ___ almost fifteen years, and we have never had a serious argument.",
+   "text": "Our firm has supplied the regional hospital ___ more than twenty years, and we have never missed a delivery.",
    "accept": [
     "for"
    ],
@@ -602,7 +603,10 @@
    "text": "Could you check the figures again? The finance team has ___ sent me a corrected version.",
    "accept": [
     "just",
-    "already"
+    "already",
+    "recently",
+    "now",
+    "finally"
    ],
    "cls": "adv",
    "chips": [
@@ -698,7 +702,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "text": "We ___ been working on the migration to the cloud since January, and we are still not finished.",
+   "text": "Our two developers ___ been fixing the login bug since Monday morning, and it is still not solved.",
    "accept": [
     "have"
    ],
@@ -710,8 +714,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Dauer bis jetzt mit Handlung: have/has been + -ing; zu we passt have.",
-     "en": "Duration up to now with an activity: have/has been + -ing; we goes with have."
+     "de": "Dauer bis jetzt mit Handlung: have/has been + -ing; zu two developers (Plural) passt have.",
+     "en": "Duration up to now with an activity: have/has been + -ing; the plural two developers goes with have."
     },
     "wrong": [
      {
@@ -725,8 +729,8 @@
       "if": [
        "had"
       ],
-      "de": "had been bezieht sich auf einen früheren Zeitpunkt; „since January … still“ reicht bis jetzt.",
-      "en": "had been refers to an earlier point; “since January … still” reaches up to now."
+      "de": "had been bezieht sich auf einen früheren Zeitpunkt; „since Monday … still“ reicht bis jetzt.",
+      "en": "had been refers to an earlier point; “since Monday … still” reaches up to now."
      },
      {
       "if": [
@@ -747,7 +751,7 @@
    "level": "B2",
    "dom": "life",
    "src": "seed",
-   "text": "My neighbor has been playing the drums ___ three hours, and I really need some quiet to work.",
+   "text": "The construction crew has been drilling next door ___ four hours, and I cannot make a single phone call.",
    "accept": [
     "for"
    ],
@@ -759,8 +763,8 @@
    ],
    "why": {
     "ok": {
-     "de": "for + Länge der Zeit (three hours), since + Zeitpunkt (since noon).",
-     "en": "for + length of time (three hours), since + point in time (since noon)."
+     "de": "for + Länge der Zeit (four hours), since + Zeitpunkt (since noon).",
+     "en": "for + length of time (four hours), since + point in time (since noon)."
     },
     "wrong": [
      {
@@ -796,43 +800,43 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "text": "Our sales figures have been going up ___, and the board is finally starting to take notice.",
+   "text": "Over the ___ few months, orders from the Nordic region have been going up, and the board is finally starting to take notice.",
    "accept": [
-    "lately",
-    "recently"
+    "last",
+    "past"
    ],
-   "cls": "adv",
+   "cls": "det",
    "chips": [
-    "ago",
-    "yesterday",
-    "tomorrow"
+    "next",
+    "following",
+    "every"
    ],
    "why": {
     "ok": {
-     "de": "Eine Entwicklung in letzter Zeit, noch sichtbar: have been + -ing mit lately oder recently.",
-     "en": "A recent development you can still see: have been + -ing with lately or recently."
+     "de": "Entwicklung in letzter Zeit: over the last/past few months + have been + -ing.",
+     "en": "A recent development: over the last/past few months + have been + -ing."
     },
     "wrong": [
      {
       "if": [
-       "ago"
+       "next"
       ],
-      "de": "ago braucht eine Zeitangabe davor und das Past Simple.",
-      "en": "ago needs a time expression before it and the past simple."
+      "de": "next verlangt die Zukunft; have been going up beschreibt die Zeit bis jetzt.",
+      "en": "next needs the future; have been going up describes the time up to now."
      },
      {
       "if": [
-       "yesterday"
+       "following"
       ],
-      "de": "yesterday verlangt das Past Simple, nicht have been going.",
-      "en": "yesterday needs the past simple, not have been going."
+      "de": "following passt zu einem Zeitraum nach einem genannten Ereignis.",
+      "en": "following fits a period after a named event."
      },
      {
       "if": [
-       "tomorrow"
+       "every"
       ],
-      "de": "tomorrow meint die Zukunft und passt nicht zu have been going.",
-      "en": "tomorrow means the future and does not fit have been going."
+      "de": "every few months heißt „alle paar Monate“ und beschreibt keine Entwicklung bis jetzt.",
+      "en": "every few months means “once in a while” and describes no development up to now."
      }
     ]
    }
@@ -846,7 +850,7 @@
    "level": "B2",
    "dom": "life",
    "src": "seed",
-   "text": "Your sister looks exhausted. How long ___ she been waiting at the airport for her connecting flight?",
+   "text": "How long ___ the delivery truck been standing outside, and has anybody asked the driver what he wants?",
    "accept": [
     "has"
    ],
@@ -858,16 +862,16 @@
    ],
    "why": {
     "ok": {
-     "de": "Frage nach der Dauer bis jetzt: How long + has/have + Subjekt + been + -ing. Zu she gehört has.",
-     "en": "A question about duration up to now: How long + has/have + subject + been + -ing. She takes has."
+     "de": "Frage nach der Dauer bis jetzt: How long + has/have + Subjekt + been + -ing. Zu truck gehört has.",
+     "en": "A question about duration up to now: How long + has/have + subject + been + -ing. truck takes has."
     },
     "wrong": [
      {
       "if": [
        "have"
       ],
-      "de": "have passt zu I, you, we, they; she verlangt has.",
-      "en": "have goes with I, you, we, they; she needs has."
+      "de": "have passt zu I, you, we, they; ein einzelner Lastwagen verlangt has.",
+      "en": "have goes with I, you, we, they; a single truck needs has."
      },
      {
       "if": [
@@ -944,7 +948,7 @@
    "level": "B2",
    "dom": "biz",
    "src": "seed",
-   "text": "You are right, the invoice contains a mistake. Thank you for telling me; I ___ send you a corrected one this afternoon, I promise.",
+   "text": "Thanks for the reminder about the missing signature; I ___ get it signed by the end of the day, I promise.",
    "accept": [
     "will",
     "shall"
@@ -957,30 +961,30 @@
    ],
    "why": {
     "ok": {
-     "de": "Spontane Entscheidung im Gespräch: I will + Grundform.",
-     "en": "A spontaneous decision during the conversation: I will + base form."
+     "de": "Entschluss und Versprechen im Gespräch: I will + Grundform.",
+     "en": "A decision and promise during the conversation: I will + base form."
     },
     "wrong": [
      {
       "if": [
        "am"
       ],
-      "de": "am correct ergibt keinen Satz; für eine spontane Entscheidung steht will + Grundform.",
-      "en": "am correct does not make a sentence; a spontaneous decision takes will + base form."
+      "de": "am get ergibt keinen Satz; für ein Versprechen steht will + Grundform.",
+      "en": "am get does not make a sentence; a promise takes will + base form."
      },
      {
       "if": [
        "do"
       ],
-      "de": "do correct sagt nichts über die Zukunft.",
-      "en": "do correct says nothing about the future."
+      "de": "do get sagt nichts über die Zukunft.",
+      "en": "do get says nothing about the future."
      },
      {
       "if": [
        "have"
       ],
-      "de": "have correct gibt es nicht; have braucht corrected.",
-      "en": "have correct does not exist; have needs corrected."
+      "de": "have get gibt es nicht; have braucht got oder gotten.",
+      "en": "have get does not exist; have needs got or gotten."
      }
     ]
    }
@@ -1043,7 +1047,7 @@
    "level": "B2",
    "dom": "biz",
    "src": "seed",
-   "text": "I ___ going to call the customer this morning, but then the system crashed and I forgot.",
+   "text": "I ___ going to send you the minutes yesterday, but my laptop broke and I lost all my notes.",
    "accept": [
     "was"
    ],
@@ -1063,8 +1067,8 @@
       "if": [
        "am"
       ],
-      "de": "am going to meint die Gegenwart; „but then … forgot“ zeigt, dass der Plan Vergangenheit ist.",
-      "en": "am going to is present; “but then … forgot” shows the plan is past."
+      "de": "am going to meint die Gegenwart; „my laptop broke“ zeigt, dass der Plan Vergangenheit ist.",
+      "en": "am going to is present; “my laptop broke” shows the plan is past."
      },
      {
       "if": [
@@ -1090,9 +1094,9 @@
    "pat": "ff.fixed-times",
    "topic": "future-forms",
    "level": "B2",
-   "dom": "biz",
+   "dom": "life",
    "src": "seed",
-   "text": "Our train to the trade fair in Hanover leaves ___ 7:45 tomorrow morning, so please be at the station by 7:15.",
+   "text": "Our train to the lake in Bavaria leaves ___ 7:45 tomorrow morning, so please be at the station by 7:15.",
    "accept": [
     "at"
    ],
@@ -1192,7 +1196,8 @@
    "src": "seed",
    "text": "We will not be able to deliver the update on Friday ___ the client sends us the missing data today.",
    "accept": [
-    "unless"
+    "unless",
+    "until"
    ],
    "cls": "conj",
    "chips": [
@@ -1239,7 +1244,7 @@
    "level": "B2",
    "dom": "biz",
    "src": "seed",
-   "text": "I will send you the proposal as ___ as I have finished the calculation for the second option.",
+   "text": "We will start the rollout as ___ as the client has signed off the test report.",
    "accept": [
     "soon"
    ],
@@ -1251,16 +1256,16 @@
    ],
    "why": {
     "ok": {
-     "de": "Zeitsatz mit as soon as und Gegenwart statt will: as soon as I have finished.",
-     "en": "A time clause with as soon as and the present instead of will: as soon as I have finished."
+     "de": "Zeitsatz mit as soon as und Gegenwart statt will: as soon as the client has signed off.",
+     "en": "A time clause with as soon as and the present instead of will: as soon as the client has signed off."
     },
     "wrong": [
      {
       "if": [
        "long"
       ],
-      "de": "as long as bedeutet „solange“ und passt nicht zu „sobald ich fertig bin“.",
-      "en": "as long as means “provided that” and does not fit “as soon as I am done”."
+      "de": "as long as bedeutet „solange“ und passt nicht zu „sobald es abgenommen ist“.",
+      "en": "as long as means “provided that” and does not fit “as soon as it is signed off”."
      },
      {
       "if": [
@@ -1337,9 +1342,9 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "text": "Once we ___ received the signed order form, our team will start setting up your account.",
+   "text": "Once the supplier ___ confirmed the delivery slot, we will inform all regional offices.",
    "accept": [
-    "have"
+    "has"
    ],
    "cls": "aux",
    "chips": [
@@ -1364,15 +1369,15 @@
       "if": [
        "are"
       ],
-      "de": "are received ist keine Form; es fehlt have + Partizip.",
-      "en": "are received is not a form; it needs have + participle."
+      "de": "are confirmed passt nicht zu supplier (Singular) und ist keine Perfektform.",
+      "en": "are confirmed does not fit supplier (singular) and is not a perfect form."
      },
      {
       "if": [
        "had"
       ],
-      "de": "had received ist Vergangenheit; hier wird eine künftige Voraussetzung beschrieben.",
-      "en": "had received is past; this describes a future condition."
+      "de": "had confirmed ist Vergangenheit; hier wird eine künftige Voraussetzung beschrieben.",
+      "en": "had confirmed is past; this describes a future condition."
      }
     ]
    }
@@ -1386,7 +1391,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "text": "___ the time the auditors arrive next Monday, we will already have archived all of the old contracts.",
+   "text": "___ the time the new CEO starts in January, we will already have moved the whole team into the new building.",
    "accept": [
     "by"
    ],

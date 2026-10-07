@@ -51,44 +51,44 @@
    "id": "mcc-0062",
    "kind": "mcc",
    "area": "lex",
-   "pat": "lx.make-decision",
+   "pat": "lx.rule-out",
    "lex": [
-    "make a decision"
+    "rule out"
    ],
-   "level": "B2",
-   "dom": "biz",
+   "level": "C1",
+   "dom": "life",
    "src": "seed",
-   "text": "After weeks of discussion, the board finally ___ a decision about the location of the new data center.",
+   "text": "We cannot rule ___ the possibility of heavy rain on Saturday, so please bring a spare jacket.",
    "options": [
-    "made",
-    "met",
-    "did",
-    "set"
+    "out",
+    "off",
+    "down",
+    "away"
    ],
    "answer": 0,
    "why": {
     "ok": {
-     "de": "Feste Verbindung: make a decision (US-Standard).",
-     "en": "Fixed collocation: make a decision (US standard)."
+     "de": "etwas ausschließen: rule out.",
+     "en": "to exclude something as a possibility: rule out."
     },
     "wrong": [
      {
-      "opt": "met",
-      "cat": "calque",
-      "de": "Deutsch „eine Entscheidung treffen“ führt zu met; im Englischen heißt es make a decision.",
-      "en": "German “eine Entscheidung treffen” leads to met; English says make a decision."
+      "opt": "off",
+      "cat": "meaning",
+      "de": "rule off heißt „einen Strich unter etwas ziehen“.",
+      "en": "rule off means “draw a line under something”."
      },
      {
-      "opt": "did",
-      "cat": "calque",
-      "de": "Deutsch „machen“ ist hier nicht do; für Entscheidungen steht make.",
-      "en": "German “machen” is not do here; decisions take make."
+      "opt": "down",
+      "cat": "grammar",
+      "de": "rule down gibt es nicht.",
+      "en": "rule down does not exist."
      },
      {
-      "opt": "set",
-      "cat": "partner",
-      "de": "set passt zu Zielen und Terminen, nicht zu Entscheidungen.",
-      "en": "set goes with goals and dates, not with decisions."
+      "opt": "away",
+      "cat": "calque",
+      "de": "Deutsch „ausschließen“ klingt nach „weg“; die Wendung ist rule out.",
+      "en": "German “ausschließen” sounds like “away”; the phrase is rule out."
      }
     ]
    }
@@ -150,7 +150,7 @@
    "level": "B2",
    "dom": "biz",
    "src": "seed",
-   "text": "We worked all weekend to ___ the deadline for the tender submission, and we made it with minutes to spare.",
+   "text": "We worked all weekend to ___ the deadline for the bid submission, and we made it with minutes to spare.",
    "options": [
     "keep",
     "meet",
@@ -194,9 +194,9 @@
     "raise concerns"
    ],
    "level": "B2+",
-   "dom": "biz",
+   "dom": "life",
    "src": "seed",
-   "text": "Several customers have ___ concerns about the security of the new cloud platform during the pilot phase.",
+   "text": "Several neighbors have ___ concerns about the noise from the new construction site during the night shifts.",
    "options": [
     "raised",
     "lifted",
@@ -240,9 +240,9 @@
     "draw a conclusion"
    ],
    "level": "B2+",
-   "dom": "biz",
+   "dom": "life",
    "src": "seed",
-   "text": "Based on the data from the last six months, we can ___ a clear conclusion about the success of the campaign.",
+   "text": "After talking to both families, the school board can ___ a clear conclusion about what caused the argument.",
    "options": [
     "pull",
     "draw",
@@ -332,9 +332,9 @@
     "make a profit"
    ],
    "level": "B2",
-   "dom": "biz",
+   "dom": "life",
    "src": "seed",
-   "text": "In the third quarter, the company ___ a profit of two million euros for the first time in four years.",
+   "text": "In its third season, the small theater ___ a profit of fifty thousand euros for the first time.",
    "options": [
     "did",
     "won",
@@ -373,38 +373,38 @@
    "id": "mcc-0069",
    "kind": "mcc",
    "area": "lex",
-   "pat": "lx.file-complaint",
+   "pat": "lx.lodge-complaint",
    "lex": [
-    "file a complaint"
+    "lodge a complaint"
    ],
-   "level": "B2+",
-   "dom": "biz",
+   "level": "C1",
+   "dom": "life",
    "src": "seed",
-   "text": "Customers can ___ a complaint through the online portal at any time of day, and they get a reference number.",
+   "text": "Passengers who wish to ___ a formal complaint about the delay should use the online form of the airline.",
    "options": [
     "put",
     "give",
-    "file",
+    "lodge",
     "do"
    ],
    "answer": 2,
    "why": {
     "ok": {
-     "de": "Offizielle Beschwerde einreichen: file a complaint.",
-     "en": "To submit an official complaint: file a complaint."
+     "de": "förmlich Beschwerde einlegen: lodge a complaint.",
+     "en": "to make a formal complaint: lodge a complaint."
     },
     "wrong": [
      {
       "opt": "put",
       "cat": "calque",
-      "de": "Deutsch „eine Beschwerde einlegen“ führt zu put; die Wendung ist file a complaint.",
-      "en": "German “eine Beschwerde einlegen” leads to put; the phrase is file a complaint."
+      "de": "Deutsch „eine Beschwerde einlegen“ führt zu put; die Wendung ist lodge a complaint.",
+      "en": "German “eine Beschwerde einlegen” leads to put; the phrase is lodge a complaint."
      },
      {
       "opt": "give",
       "cat": "calque",
-      "de": "Deutsch „eine Beschwerde abgeben“ führt zu give; üblich ist file.",
-      "en": "German “eine Beschwerde abgeben” leads to give; file is usual."
+      "de": "Deutsch „abgeben“ führt zu give; förmlich heißt es lodge.",
+      "en": "German “abgeben” leads to give; formally it is lodge."
      },
      {
       "opt": "do",
@@ -465,44 +465,44 @@
    "id": "mcc-0071",
    "kind": "mcc",
    "area": "lex",
-   "pat": "lx.pay-attention",
+   "pat": "lx.follow-up-on",
    "lex": [
-    "pay attention to"
+    "follow up on"
    ],
-   "level": "B2",
-   "dom": "life",
+   "level": "C1",
+   "dom": "biz",
    "src": "seed",
-   "text": "Please ___ attention to the small print before you sign the contract, especially the clauses about termination.",
+   "text": "I will ___ up on the open points after the call and send you a short summary by tomorrow.",
    "options": [
-    "present",
-    "do",
+    "carry",
     "take",
-    "pay"
+    "go",
+    "follow"
    ],
    "answer": 3,
    "why": {
     "ok": {
-     "de": "Feste Verbindung: pay attention (to).",
-     "en": "Fixed collocation: pay attention (to)."
+     "de": "Nachfassen: follow up on sth.",
+     "en": "To pursue sth further: follow up on sth."
     },
     "wrong": [
      {
-      "opt": "present",
-      "cat": "calque",
-      "de": "Deutsch „Aufmerksamkeit schenken“ führt zu Wörtern wie present oder give; üblich ist pay attention.",
-      "en": "German “Aufmerksamkeit schenken” leads to words like present or give; pay attention is usual."
-     },
-     {
-      "opt": "do",
-      "cat": "grammar",
-      "de": "do attention gibt es nicht.",
-      "en": "do attention does not exist."
+      "opt": "carry",
+      "cat": "partner",
+      "de": "carry on heißt „weitermachen“, nicht „nachfassen“.",
+      "en": "carry on means “continue”, not “follow up”."
      },
      {
       "opt": "take",
-      "cat": "partner",
-      "de": "take attention gibt es nicht; take notice ist eine andere Wendung.",
-      "en": "take attention does not exist; take notice is a different phrase."
+      "cat": "meaning",
+      "de": "take up heißt „aufgreifen, anfangen mit“.",
+      "en": "take up means “start” or “pick up”."
+     },
+     {
+      "opt": "go",
+      "cat": "calque",
+      "de": "Deutsch „nachgehen“ führt zu go up; die Wendung ist follow up on.",
+      "en": "German “nachgehen” leads to go up; the phrase is follow up on."
      }
     ]
    }
@@ -511,44 +511,44 @@
    "id": "mcc-0072",
    "kind": "mcc",
    "area": "lex",
-   "pat": "lx.take-place",
+   "pat": "lx.subject-to",
    "lex": [
-    "take place"
+    "be subject to"
    ],
-   "level": "B2",
-   "dom": "biz",
+   "level": "C1",
+   "dom": "life",
    "src": "seed",
-   "text": "The annual trade fair will ___ place in Hanover from the third to the sixth of March, and we have a booth.",
+   "text": "Our hiking trip on Saturday is ___ to the weather, so please keep your phone nearby.",
    "options": [
-    "have",
-    "take",
-    "make",
-    "hold"
+    "due",
+    "subject",
+    "bound",
+    "dependent"
    ],
    "answer": 1,
    "why": {
     "ok": {
-     "de": "Veranstaltungen finden statt: take place.",
-     "en": "Events happen: take place."
+     "de": "abhängig von, vorbehaltlich: be subject to.",
+     "en": "depending on, conditional on: be subject to."
     },
     "wrong": [
      {
-      "opt": "have",
-      "cat": "calque",
-      "de": "Deutsch „findet statt“ führt zu have place; die Wendung ist take place.",
-      "en": "German “findet statt” leads to have place; the phrase is take place."
-     },
-     {
-      "opt": "make",
-      "cat": "grammar",
-      "de": "make place gibt es nicht.",
-      "en": "make place does not exist."
-     },
-     {
-      "opt": "hold",
+      "opt": "due",
       "cat": "partner",
-      "de": "hold passt zu Veranstaltern (hold a fair), nicht zu einer Veranstaltung selbst.",
-      "en": "hold goes with organizers (hold a fair), not with the event itself."
+      "de": "due to heißt „wegen“; „abhängig von“ heißt subject to.",
+      "en": "due to means “because of”; “depending on” is subject to."
+     },
+     {
+      "opt": "bound",
+      "cat": "meaning",
+      "de": "bound to heißt „ganz sicher“ (bound to happen).",
+      "en": "bound to means “certain to” (bound to happen)."
+     },
+     {
+      "opt": "dependent",
+      "cat": "calque",
+      "de": "Deutsch „abhängig“ führt zu dependent; dependent braucht on.",
+      "en": "German “abhängig” leads to dependent; dependent needs on."
      }
     ]
    }
@@ -557,44 +557,44 @@
    "id": "mcc-0073",
    "kind": "mcc",
    "area": "lex",
-   "pat": "lx.make-sense",
+   "pat": "lx.in-the-wake-of",
    "lex": [
-    "make sense"
+    "in the wake of"
    ],
-   "level": "B2",
-   "dom": "biz",
+   "level": "C1",
+   "dom": "life",
    "src": "seed",
-   "text": "Your proposal does not really ___ sense to me, because the numbers in the second table do not add up.",
+   "text": "___ the wake of the storm, volunteers cleared the roads and opened the school gym for families.",
    "options": [
-    "make",
-    "have",
-    "give",
-    "do"
+    "In",
+    "After",
+    "On",
+    "By"
    ],
    "answer": 0,
    "why": {
     "ok": {
-     "de": "Feste Verbindung: make sense.",
-     "en": "Fixed collocation: make sense."
+     "de": "im Gefolge von, nach: in the wake of.",
+     "en": "following, as a result of: in the wake of."
     },
     "wrong": [
      {
-      "opt": "have",
+      "opt": "After",
       "cat": "calque",
-      "de": "Deutsch „hat keinen Sinn“ führt zu have sense; die Wendung ist make sense.",
-      "en": "German “hat keinen Sinn” leads to have sense; the phrase is make sense."
+      "de": "Deutsch „nach dem Sturm“ führt zu After the wake; die Wendung ist In the wake of.",
+      "en": "German “nach dem Sturm” leads to After the wake; the phrase is In the wake of."
      },
      {
-      "opt": "give",
+      "opt": "On",
       "cat": "grammar",
-      "de": "give sense passt hier nicht.",
-      "en": "give sense does not fit here."
+      "de": "On the wake gibt es in dieser Bedeutung nicht.",
+      "en": "On the wake does not exist in this meaning."
      },
      {
-      "opt": "do",
+      "opt": "By",
       "cat": "grammar",
-      "de": "do sense gibt es nicht.",
-      "en": "do sense does not exist."
+      "de": "By the wake gibt es nicht.",
+      "en": "By the wake does not exist."
      }
     ]
    }
@@ -603,44 +603,44 @@
    "id": "mcc-0074",
    "kind": "mcc",
    "area": "lex",
-   "pat": "lx.keep-promise",
+   "pat": "lx.shed-light",
    "lex": [
-    "keep a promise"
+    "shed light on"
    ],
-   "level": "B2",
-   "dom": "biz",
+   "level": "C1",
+   "dom": "life",
    "src": "seed",
-   "text": "We always ___ our promises, so you can rely on our delivery dates even in the busiest weeks of the year.",
+   "text": "The investigation may ___ some light on why the bridge was closed without any warning.",
    "options": [
-    "hold",
-    "keep",
-    "stay",
-    "maintain"
+    "make",
+    "shed",
+    "bring",
+    "give"
    ],
    "answer": 1,
    "why": {
     "ok": {
-     "de": "Feste Verbindung: keep a promise.",
-     "en": "Fixed collocation: keep a promise."
+     "de": "etwas aufklären: shed light on sth.",
+     "en": "to clarify sth: shed light on sth."
     },
     "wrong": [
      {
-      "opt": "hold",
+      "opt": "make",
       "cat": "calque",
-      "de": "Deutsch „Versprechen halten“ führt zu hold; im Englischen heißt es keep a promise.",
-      "en": "German “Versprechen halten” leads to hold; English says keep a promise."
+      "de": "Deutsch „Licht machen“ führt zu make; die Wendung ist shed light on.",
+      "en": "German “Licht machen” leads to make; the phrase is shed light on."
      },
      {
-      "opt": "stay",
+      "opt": "bring",
       "cat": "grammar",
-      "de": "stay braucht kein Objekt und passt nicht zu promises.",
-      "en": "stay takes no object and does not fit promises."
+      "de": "bring some light on gibt es nicht; es heißt bring to light.",
+      "en": "bring some light on does not exist; it is bring to light."
      },
      {
-      "opt": "maintain",
-      "cat": "partner",
-      "de": "maintain passt zu Systemen und Beziehungen, nicht zu Versprechen.",
-      "en": "maintain goes with systems and relationships, not promises."
+      "opt": "give",
+      "cat": "grammar",
+      "de": "give some light on gibt es nicht.",
+      "en": "give some light on does not exist."
      }
     ]
    }
@@ -649,44 +649,44 @@
    "id": "mcc-0075",
    "kind": "mcc",
    "area": "lex",
-   "pat": "lx.take-risk",
+   "pat": "lx.mitigate",
    "lex": [
-    "take a risk"
+    "mitigate the risk"
    ],
-   "level": "B2",
-   "dom": "biz",
+   "level": "C1",
+   "dom": "life",
    "src": "seed",
-   "text": "Nobody on the board wanted to ___ a risk with such an important client, so they chose the safe option.",
+   "text": "The city built higher walls along the river to ___ the risk of flooding in the old town.",
    "options": [
-    "make",
-    "do",
-    "take",
-    "go"
+    "militate",
+    "mediate",
+    "mitigate",
+    "medicate"
    ],
    "answer": 2,
    "why": {
     "ok": {
-     "de": "Feste Verbindung: take a risk.",
-     "en": "Fixed collocation: take a risk."
+     "de": "ein Risiko mindern: mitigate a risk.",
+     "en": "to reduce a risk: mitigate a risk."
     },
     "wrong": [
      {
-      "opt": "make",
-      "cat": "calque",
-      "de": "Deutsch „ein Risiko eingehen“ führt zu make; die Wendung ist take a risk.",
-      "en": "German “ein Risiko eingehen” leads to make; the phrase is take a risk."
+      "opt": "militate",
+      "cat": "meaning",
+      "de": "militate gibt es nur mit „against“ (sprechen gegen).",
+      "en": "militate exists only with “against” (argue against)."
      },
      {
-      "opt": "do",
-      "cat": "grammar",
-      "de": "do a risk gibt es nicht.",
-      "en": "do a risk does not exist."
+      "opt": "mediate",
+      "cat": "meaning",
+      "de": "mediate heißt „vermitteln“.",
+      "en": "mediate means “settle a dispute”."
      },
      {
-      "opt": "go",
-      "cat": "calque",
-      "de": "Deutsch „eingehen“ führt zu go; die Wendung ist take a risk.",
-      "en": "German “eingehen” leads to go; the phrase is take a risk."
+      "opt": "medicate",
+      "cat": "meaning",
+      "de": "medicate heißt „medikamentös behandeln“.",
+      "en": "medicate means “treat with medicine”."
      }
     ]
    }
@@ -700,9 +700,9 @@
     "fierce competition"
    ],
    "level": "C1",
-   "dom": "biz",
+   "dom": "life",
    "src": "seed",
-   "text": "We are facing ___ competition from two new providers in the Nordic market, and our margins are shrinking.",
+   "text": "Local teams face ___ competition from two new clubs in the youth league, and many parents are worried.",
    "options": [
     "hard",
     "rough",
@@ -746,9 +746,9 @@
     "make an effort"
    ],
    "level": "B2+",
-   "dom": "biz",
+   "dom": "life",
    "src": "seed",
-   "text": "We have ___ every effort to deliver the system on time, but the supplier delayed all the hardware.",
+   "text": "We have ___ every effort to repair the old bridge on time, but the weather delayed everything.",
    "options": [
     "done",
     "taken",
@@ -792,9 +792,9 @@
     "reach an agreement"
    ],
    "level": "B2+",
-   "dom": "biz",
+   "dom": "life",
    "src": "seed",
-   "text": "After three days of difficult talks, both parties finally ___ an agreement on the delivery terms.",
+   "text": "After three days of difficult talks, both families finally ___ an agreement on the inheritance of the house.",
    "options": [
     "reached",
     "met",
@@ -838,13 +838,13 @@
     "give a presentation"
    ],
    "level": "B2",
-   "dom": "biz",
+   "dom": "life",
    "src": "seed",
-   "text": "She will ___ a presentation on the new archiving strategy at the conference in Frankfurt next Thursday.",
+   "text": "She will ___ a presentation on the history of our village at the library next Thursday.",
    "options": [
     "hold",
     "keep",
-    "do",
+    "bring",
     "give"
    ],
    "answer": 3,
@@ -857,8 +857,8 @@
      {
       "opt": "hold",
       "cat": "calque",
-      "de": "Deutsch „einen Vortrag halten“ führt zu hold; im Englischen heißt es give a presentation.",
-      "en": "German “einen Vortrag halten” leads to hold; English says give a presentation."
+      "de": "Deutsch „einen Vortrag halten“ führt zu hold; üblicher ist give a presentation.",
+      "en": "German “einen Vortrag halten” leads to hold; give a presentation is more usual."
      },
      {
       "opt": "keep",
@@ -867,10 +867,10 @@
       "en": "German “halten” leads to keep; talks are given (give)."
      },
      {
-      "opt": "do",
-      "cat": "grammar",
-      "de": "do a presentation ist ungewöhnlich; Standard ist give.",
-      "en": "do a presentation is uncommon; the standard is give."
+      "opt": "bring",
+      "cat": "partner",
+      "de": "bring passt zu Dingen, nicht zu Vorträgen.",
+      "en": "bring goes with things, not talks."
      }
     ]
    }
@@ -886,9 +886,9 @@
    "level": "B2",
    "dom": "life",
    "src": "seed",
-   "text": "He ___ a small consulting business from his home office in Cologne and has three regular clients.",
+   "text": "He ___ a small bakery from a converted barn near Cologne and has three regular helpers.",
    "options": [
-    "leads",
+    "carries",
     "runs",
     "drives",
     "guides"
@@ -901,10 +901,10 @@
     },
     "wrong": [
      {
-      "opt": "leads",
+      "opt": "carries",
       "cat": "calque",
-      "de": "Deutsch „führt ein Geschäft“ führt zu leads; ein Unternehmen betreibt man mit run.",
-      "en": "German “führt ein Geschäft” leads to leads; you operate a business with run."
+      "de": "carry heißt „tragen“; ein Geschäft betreibt man mit run (oder carry on).",
+      "en": "carry means “bear”; a business is operated with run (or carry on)."
      },
      {
       "opt": "drives",
@@ -925,44 +925,44 @@
    "id": "mcc-0081",
    "kind": "mcc",
    "area": "lex",
-   "pat": "lx.look-forward-to",
+   "pat": "lx.hold-accountable",
    "lex": [
-    "look forward to"
+    "hold sb accountable"
    ],
-   "level": "B2",
+   "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "text": "We are looking forward ___ meeting you at the trade fair in September and showing you the new platform.",
+   "text": "Managers must be ___ accountable for the results of their teams, not only for their own tasks.",
    "options": [
-    "to",
-    "for",
-    "at",
-    "on"
+    "held",
+    "pulled",
+    "taken",
+    "brought"
    ],
    "answer": 0,
    "why": {
     "ok": {
-     "de": "look forward to + -ing: sich auf etwas freuen.",
-     "en": "look forward to + -ing: to be excited about something."
+     "de": "jemanden verantwortlich machen: hold sb accountable.",
+     "en": "to make sb responsible: hold sb accountable."
     },
     "wrong": [
      {
-      "opt": "for",
+      "opt": "pulled",
       "cat": "calque",
-      "de": "Deutsch „sich freuen auf“ führt zu for; die Wendung ist look forward to.",
-      "en": "German “sich freuen auf” leads to for; the phrase is look forward to."
+      "de": "Deutsch „zur Rechenschaft ziehen“ führt zu pulled; die Wendung ist hold sb accountable.",
+      "en": "German “zur Rechenschaft ziehen” leads to pulled; the phrase is hold sb accountable."
      },
      {
-      "opt": "at",
+      "opt": "taken",
       "cat": "calque",
-      "de": "Deutsch „auf“ kann zu at führen; hier steht to.",
-      "en": "German “auf” can lead to at; here it is to."
+      "de": "take sb accountable gibt es nicht.",
+      "en": "take sb accountable does not exist."
      },
      {
-      "opt": "on",
-      "cat": "calque",
-      "de": "Deutsch „auf“ kann zu on führen; hier steht to.",
-      "en": "German “auf” can lead to on; here it is to."
+      "opt": "brought",
+      "cat": "grammar",
+      "de": "brought accountable ist keine Wendung.",
+      "en": "brought accountable is not a phrase."
      }
     ]
    }
@@ -971,44 +971,44 @@
    "id": "mcc-0082",
    "kind": "mcc",
    "area": "lex",
-   "pat": "lx.depend-on",
+   "pat": "lx.hinge-on",
    "lex": [
-    "depend on"
+    "hinge on"
    ],
-   "level": "B2",
-   "dom": "biz",
+   "level": "C1",
+   "dom": "life",
    "src": "seed",
-   "text": "Our delivery date ___ on the approval of the final design by the client, so please remind them today.",
+   "text": "Whether we can afford the new apartment hinges ___ whether the bank approves our loan next week.",
    "options": [
-    "hangs",
-    "depends",
-    "stands",
-    "bases"
+    "at",
+    "on",
+    "of",
+    "in"
    ],
    "answer": 1,
    "why": {
     "ok": {
-     "de": "Abhängigkeit: depend on.",
-     "en": "Dependence: depend on."
+     "de": "von etwas abhängen (förmlich): hinge on.",
+     "en": "to depend on sth (formal): hinge on."
     },
     "wrong": [
      {
-      "opt": "hangs",
-      "cat": "calque",
-      "de": "Deutsch „hängt davon ab“ führt zu hangs; die Wendung ist depends on.",
-      "en": "German “hängt davon ab” leads to hangs; the phrase is depends on."
-     },
-     {
-      "opt": "stands",
-      "cat": "meaning",
-      "de": "stands on heißt „steht auf“.",
-      "en": "stands on means “is standing on”."
-     },
-     {
-      "opt": "bases",
+      "opt": "at",
       "cat": "grammar",
-      "de": "bases on gibt es hier nicht; es heißt is based on.",
-      "en": "bases on does not exist here; it is is based on."
+      "de": "hinges at gibt es nicht.",
+      "en": "hinges at does not exist."
+     },
+     {
+      "opt": "of",
+      "cat": "calque",
+      "de": "Deutsch „hängt von … ab“ führt zu of; hinge braucht on.",
+      "en": "German “hängt von … ab” leads to of; hinge needs on."
+     },
+     {
+      "opt": "in",
+      "cat": "grammar",
+      "de": "hinges in gibt es nicht.",
+      "en": "hinges in does not exist."
      }
     ]
    }
@@ -1017,44 +1017,44 @@
    "id": "mcc-0083",
    "kind": "mcc",
    "area": "lex",
-   "pat": "lx.interested-in",
+   "pat": "lx.address-concerns",
    "lex": [
-    "interested in"
+    "address concerns"
    ],
-   "level": "B2",
-   "dom": "biz",
+   "level": "C1",
+   "dom": "life",
    "src": "seed",
-   "text": "Our customers are increasingly interested ___ sustainable and energy-efficient data centers across Europe.",
+   "text": "The mayor ___ the concerns of the residents in a clear and honest speech at the town hall.",
    "options": [
-    "for",
-    "at",
-    "in",
-    "on"
+    "treated",
+    "spoke",
+    "addressed",
+    "told"
    ],
    "answer": 2,
    "why": {
     "ok": {
-     "de": "Feste Verbindung: interested in.",
-     "en": "Fixed collocation: interested in."
+     "de": "auf Bedenken eingehen: address concerns.",
+     "en": "to deal with concerns: address concerns."
     },
     "wrong": [
      {
-      "opt": "for",
+      "opt": "treated",
       "cat": "calque",
-      "de": "Deutsch „interessiert an“ oder „Interesse für“ führt zu for; die Wendung ist interested in.",
-      "en": "German “interessiert an” or “Interesse für” leads to for; the phrase is interested in."
+      "de": "Deutsch „behandelte die Bedenken“ führt zu treated; Bedenken geht man an: addressed.",
+      "en": "German “behandelte die Bedenken” leads to treated; concerns are addressed."
      },
      {
-      "opt": "at",
-      "cat": "calque",
-      "de": "Deutsch „an“ führt zu at; die Wendung ist interested in.",
-      "en": "German “an” leads to at; the phrase is interested in."
+      "opt": "spoke",
+      "cat": "grammar",
+      "de": "spoke braucht „about“ oder „to“.",
+      "en": "spoke needs “about” or “to”."
      },
      {
-      "opt": "on",
-      "cat": "calque",
-      "de": "Deutsch „auf/an“ führt zu on; die Wendung ist interested in.",
-      "en": "German “auf/an” leads to on; the phrase is interested in."
+      "opt": "told",
+      "cat": "grammar",
+      "de": "told braucht eine Person als Objekt.",
+      "en": "told needs a person as its object."
      }
     ]
    }
@@ -1063,44 +1063,44 @@
    "id": "mcc-0084",
    "kind": "mcc",
    "area": "lex",
-   "pat": "lx.good-at",
+   "pat": "lx.streamline",
    "lex": [
-    "good at"
+    "streamline"
    ],
-   "level": "B2",
-   "dom": "life",
+   "level": "C1",
+   "dom": "biz",
    "src": "seed",
-   "text": "I am not very good ___ negotiating prices in a foreign language, so I always prepare my main arguments in advance.",
+   "text": "We want to ___ the approval process so that contracts are signed within two days instead of two weeks.",
    "options": [
-    "in",
-    "for",
-    "with",
-    "at"
+    "straighten",
+    "slim",
+    "flow",
+    "streamline"
    ],
    "answer": 3,
    "why": {
     "ok": {
-     "de": "Fähigkeit: good at + -ing.",
-     "en": "Ability: good at + -ing."
+     "de": "Abläufe straffen: streamline a process.",
+     "en": "to make a process more efficient: streamline a process."
     },
     "wrong": [
      {
-      "opt": "in",
-      "cat": "calque",
-      "de": "Deutsch „gut in“ führt zu in; die Wendung ist good at.",
-      "en": "German “gut in” leads to in; the phrase is good at."
-     },
-     {
-      "opt": "for",
-      "cat": "calque",
-      "de": "Deutsch „gut für“ führt zu for; good for heißt „nützlich für“.",
-      "en": "German “gut für” leads to for; good for means “useful for”."
-     },
-     {
-      "opt": "with",
+      "opt": "straighten",
       "cat": "meaning",
-      "de": "good with heißt „geschickt im Umgang mit“ (Menschen, Werkzeug).",
-      "en": "good with means “skilled in dealing with” (people, tools)."
+      "de": "straighten heißt „gerade machen“.",
+      "en": "straighten means “make straight”."
+     },
+     {
+      "opt": "slim",
+      "cat": "grammar",
+      "de": "slim braucht down: slim down the process.",
+      "en": "slim needs down: slim down the process."
+     },
+     {
+      "opt": "flow",
+      "cat": "meaning",
+      "de": "flow heißt „fließen“ und hat kein Objekt.",
+      "en": "flow means “run smoothly” and takes no object."
      }
     ]
    }

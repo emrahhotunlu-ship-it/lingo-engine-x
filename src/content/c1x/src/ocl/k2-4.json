@@ -211,7 +211,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "text": "I wish I ___ asked for a written confirmation before sending the goods, because now the customer denies everything.",
+   "text": "I wish we ___ tested the update on a small group first; now half of the branches cannot log in.",
    "accept": [
     "had"
    ],
@@ -306,10 +306,10 @@
    "area": "gram",
    "pat": "mc.wish-would",
    "topic": "mixed-cond",
-   "level": "B2+",
+   "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "text": "I wish the client ___ stop changing the requirements every other day; we can never finish anything.",
+   "text": "I wish our colleagues ___ stop forwarding every e-mail to the whole department; my inbox is a mess.",
    "accept": [
     "would"
    ],
@@ -355,7 +355,7 @@
    "area": "gram",
    "pat": "mc.wish-would",
    "topic": "mixed-cond",
-   "level": "B2",
+   "level": "C1",
    "dom": "life",
    "src": "seed",
    "text": "I wish you ___ not leave your coffee cups all over the meeting room; it looks terrible every afternoon.",
@@ -598,47 +598,47 @@
    "id": "ocl-0107",
    "kind": "ocl",
    "area": "gram",
-   "pat": "pc.cont-simple",
-   "topic": "pres-perf-cont",
-   "level": "B2+",
+   "pat": "pp.inversion",
+   "topic": "past-perfect",
+   "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "text": "How ___ emails have you written since this morning, and have you replied to the customers?",
+   "text": "Until that quarter, seldom ___ the sales team faced such a tough negotiation with a single customer.",
    "accept": [
-    "many"
+    "had"
    ],
-   "cls": "det",
+   "cls": "aux",
    "chips": [
-    "much",
-    "long",
-    "often"
+    "have",
+    "did",
+    "was"
    ],
    "why": {
     "ok": {
-     "de": "Zahl als Ergebnis fragt man mit How many + have written (einfache Form).",
-     "en": "A number as the result is asked with How many + have written (simple form)."
+     "de": "Verneinende Adverbien am Satzanfang lösen die Umstellung aus: Seldom had + Subjekt + Partizip.",
+     "en": "Negative adverbs at the start trigger inversion: Seldom had + subject + participle."
     },
     "wrong": [
      {
       "if": [
-       "much"
+       "have"
       ],
-      "de": "much steht bei nicht zählbaren Dingen; emails sind zählbar.",
-      "en": "much goes with uncountable things; emails are countable."
+      "de": "have passt nicht zu „Until that quarter“ (Vergangenheit) und nicht zu team (Singular).",
+      "en": "have does not fit “Until that quarter” (past) or team (singular)."
      },
      {
       "if": [
-       "long"
+       "did"
       ],
-      "de": "How long fragt nach der Dauer, nicht nach der Zahl.",
-      "en": "How long asks about duration, not about number."
+      "de": "did faced gibt es nicht; nach did steht die Grundform.",
+      "en": "did faced does not exist; after did comes the base form."
      },
      {
       "if": [
-       "often"
+       "was"
       ],
-      "de": "How often fragt nach der Häufigkeit.",
-      "en": "How often asks about frequency."
+      "de": "was faced wäre Passiv.",
+      "en": "was faced would be passive."
      }
     ]
    }
@@ -752,7 +752,8 @@
    "src": "seed",
    "text": "We ___ thinking about moving the whole archive to a new data center next year, but nothing is decided yet.",
    "accept": [
-    "are"
+    "are",
+    "were"
    ],
    "cls": "aux",
    "chips": [
@@ -843,47 +844,49 @@
    "id": "ocl-0112",
    "kind": "ocl",
    "area": "gram",
-   "pat": "ff.no-will-after",
-   "topic": "future-forms",
-   "level": "B2",
+   "pat": "ca.inversion",
+   "topic": "cond-alt",
+   "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "text": "I will call you as soon ___ I land in Frankfurt, so please keep your phone nearby this evening.",
+   "text": "Had the auditors arrived a day earlier, we ___ have had no time to prepare the documents properly.",
    "accept": [
-    "as"
+    "would",
+    "could",
+    "might"
    ],
-   "cls": "adv",
+   "cls": "aux",
    "chips": [
-    "so",
-    "at",
-    "how"
+    "will",
+    "had",
+    "did"
    ],
    "why": {
     "ok": {
-     "de": "as soon as + Gegenwart (I land), im Hauptsatz will.",
-     "en": "as soon as + present (I land), will in the main clause."
+     "de": "Förmlich ohne if: Had + Subjekt + Partizip, would have …",
+     "en": "Formal without if: Had + subject + participle, would have …"
     },
     "wrong": [
      {
       "if": [
-       "so"
+       "will"
       ],
-      "de": "as soon so gibt es nicht; die Wendung heißt as soon as.",
-      "en": "as soon so does not exist; the phrase is as soon as."
+      "de": "will gehört nicht zu einer unwirklichen Bedingung in der Vergangenheit.",
+      "en": "will does not belong to an unreal condition in the past."
      },
      {
       "if": [
-       "at"
+       "had"
       ],
-      "de": "as soon at gibt es nicht.",
-      "en": "as soon at does not exist."
+      "de": "had have gibt es nicht; im Hauptsatz steht would have + Partizip.",
+      "en": "had have does not exist; the main clause takes would have + participle."
      },
      {
       "if": [
-       "how"
+       "did"
       ],
-      "de": "as soon how gibt es nicht.",
-      "en": "as soon how does not exist."
+      "de": "did have drückt keine verpasste Möglichkeit aus.",
+      "en": "did have does not express a missed possibility."
      }
     ]
    }
@@ -899,11 +902,11 @@
    "src": "seed",
    "text": "___ I send you the updated figures right now, or would you prefer to have them tomorrow morning?",
    "accept": [
-    "shall",
     "should",
     "can",
     "could",
-    "may"
+    "may",
+    "shall"
    ],
    "cls": "aux",
    "chips": [
@@ -1097,7 +1100,7 @@
    "level": "B2",
    "dom": "life",
    "src": "seed",
-   "text": "There ___ to be a small café on this corner, but it closed last year and now it is a phone shop.",
+   "text": "There ___ to be a small coffee shop on this corner, but it closed last year and now it is a phone store.",
    "accept": [
     "used"
    ],
@@ -1143,7 +1146,7 @@
    "area": "gram",
    "pat": "dip.wondering",
    "topic": "c1-diplomacy",
-   "level": "B2+",
+   "level": "C1",
    "dom": "biz",
    "src": "seed",
    "text": "I was wondering ___ it would be possible to reschedule our call to Thursday, because of a customer visit.",
@@ -1246,7 +1249,7 @@
    "level": "B2",
    "dom": "biz",
    "src": "seed",
-   "text": "I would have called you earlier if I ___ known that the meeting had been cancelled.",
+   "text": "I would have called you earlier if I ___ known that the meeting had been canceled.",
    "accept": [
     "had"
    ],

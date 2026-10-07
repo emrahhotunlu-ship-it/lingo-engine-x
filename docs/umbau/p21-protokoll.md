@@ -33,3 +33,12 @@ Summe: ocl 120, mcc 120 (60 Grammatik, 60 Wortschatz). Alle `src: 'seed'`, eigen
 
 ## Größe
 Roh: ocl ≈ 148 KB, mcc ≈ 156 KB (Verzeichnisgröße). `dist/index.html` wuchs mit P20 und P21 um 81.911 Byte auf 4.545.191 Byte (4,33 MiB, Zeile in `docs/umbau/budget.md`).
+
+## Nacharbeit nach der Gegenlesung K2 (07.10.2026)
+- B: Begründungen mit falschem Bezug korrigiert (mcc-0035, 0038, 0040, 0041, 0044, 0053, 0057).
+- A: Zweitlösungen ergänzt (ocl-0004 can, 0013 recently/now/finally, 0025 until, 0034 should, 0068 once, 0069 stays/shines, 0110 were); ocl-0017 geschärft (over the last/past few months); weiche Ablenker ersetzt (mcc-0030 while, 0031 shall, 0079 bring, 0080 carries, 0117 heighten); mcc-0028 abgeschwächt.
+- C: US-Englisch (apartment, traveling, coffee shop/phone store, cell phone number, canceled, bid statt tender); ocl-0113 Reihenfolge should/can zuerst.
+- E: wortgleiche ocl/mcc-Paare umgeschrieben; ocl-0062 hat das Muster `rc.who-which` (Thema relative); der calque-Ablenker ist nicht mehr erzwungen, der Test verlangt ihn bei mindestens 80 % der mcc.
+- D: 20 der 60 Wortschatz-mcc durch C1-Verbindungen ersetzt (rule out, follow up on, subject to, in the wake of, hold sb accountable, hinge on, address concerns, streamline, shed light on, mitigate, lodge a complaint, bear in mind, comply with, on the basis of, with regard to, pose a risk, take into account, implement, exceed expectations, leverage); ocl: Inversion (Seldom had, Had the auditors) und Diplomatie (I would be grateful if you could) ergänzt, Stufen der Inversions-/Hedging-/Diplomatie-Muster auf C1. C1: ocl 30, mcc 29 von je 120. Alltag: ocl 40, mcc 37 von je 120.
+- Sperre: Aufgaben mit area lex werden nie nach grammar/<topic> gebucht (grammarWrite überspringt sie, Test in c1xMcc.test.ts).
+- Offen: Löser-Probe (Prüfbogen neu erzeugt).

@@ -3,7 +3,7 @@ export const meta = { file: 'k2-3' };
 export const items = [
   // ---- conditionals ----
   {
-    p: 'cn.zero', lv: 'B2', dom: 'biz', cls: 'conj', a: ['if', 'when', 'whenever'],
+    p: 'cn.zero', lv: 'B2', dom: 'biz', cls: 'conj', a: ['if', 'when', 'whenever', 'once'],
     t: '___ a customer pays by credit card, our system automatically sends a receipt to the registered address.',
     c: {
       although: 'although heißt „obwohl“ und passt nicht zu einer festen Regel. || although means “even though” and does not fit a fixed rule.',
@@ -13,14 +13,14 @@ export const items = [
     ok: 'Feste Regel, die immer gilt: if/when + Gegenwart, Gegenwart. || A fixed rule that always applies: if/when + present, present.',
   },
   {
-    p: 'cn.zero', lv: 'B2', dom: 'life', cls: 'aux', a: ['is'],
-    t: 'If the sun ___ shining all day, the plants on my balcony grow much faster than in cloudy weeks.',
+    p: 'cn.zero', lv: 'B2', dom: 'life', cls: 'aux', a: ['is', 'stays', 'shines'],
+    t: 'If the sun ___ out all day, the plants on my balcony grow much faster than in cloudy weeks.',
     c: {
       will: 'will steht nicht im if-Satz; nach if bleibt die Gegenwart. || will does not belong in the if-clause; after if the present stays.',
       was: 'was ist Vergangenheit, die Regel gilt aber immer (grow). || was is past, but the rule always applies (grow).',
       would: 'would steht nicht im if-Satz. || would does not belong in the if-clause.',
     },
-    ok: 'Zero Conditional: if + Gegenwart, Gegenwart; hier is shining. || Zero conditional: if + present, present; here is shining.',
+    ok: 'Zero Conditional: if + Gegenwart, Gegenwart; hier is out (oder stays out). || Zero conditional: if + present, present; here is out (or stays out).',
   },
   {
     p: 'cn.first', lv: 'B2', dom: 'biz', cls: 'aux', a: ['will', 'may', 'might', 'could'],
@@ -34,7 +34,7 @@ export const items = [
   },
   {
     p: 'cn.were', lv: 'B2+', dom: 'biz', cls: 'aux', a: ['were', 'was'],
-    t: 'If I ___ you, I would ask for a written confirmation before sending any money to that supplier.',
+    t: 'If I ___ you, I would sleep on it before signing such a long-term contract.',
     c: {
       am: 'Nach if I steht in dieser Rede were; „if I am you“ passt nicht zu einem Ratschlag. || After if I this advice form takes were; “if I am you” does not fit advice.',
       be: 'if I be you gibt es im modernen Englisch nicht. || if I be you does not exist in modern English.',
@@ -74,7 +74,7 @@ export const items = [
   },
   {
     p: 'cn.third', lv: 'B2+', dom: 'biz', cls: 'aux', a: ['would', 'could', 'might'],
-    t: 'If we had checked the figures twice, we ___ have noticed the mistake long before the audit.',
+    t: 'If the vendor had warned us earlier, we ___ have switched the provider before the outage.',
     c: {
       will: 'will have steht nicht in einer verpassten Vergangenheit. || will have does not belong to a missed past.',
       had: 'had have gibt es nicht; im Hauptsatz steht would have + Partizip. || had have does not exist; the main clause takes would have + participle.',
@@ -83,8 +83,8 @@ export const items = [
     ok: 'Verpasste Chance: if + Past Perfect, would have + Partizip. || A missed chance: if + past perfect, would have + participle.',
   },
   {
-    p: 'cn.third', lv: 'B2', dom: 'biz', cls: 'aux', a: ['have'],
-    t: 'If the client had signed on time, we would ___ delivered the whole project by the end of March.',
+    p: 'cn.third', lv: 'B2', dom: 'life', cls: 'aux', a: ['have'],
+    t: 'If the weather had been better, we would ___ finished the roof by the end of March.',
     c: {
       had: 'would had gibt es nicht; nach would steht have. || would had does not exist; would is followed by have.',
       be: 'would be delivered wäre Passiv und passt nicht zum Sinn. || would be delivered would be passive and does not fit the meaning.',
@@ -144,8 +144,8 @@ export const items = [
     ok: 'Nur unter einer Bedingung: as long as (oder so long as) + Gegenwart. || Only under one condition: as long as (or so long as) + present.',
   },
   {
-    p: 'ca.as-long-as', lv: 'B2+', dom: 'biz', cls: 'conj', a: ['as'],
-    t: 'We will keep the old archive system running as long ___ the migration to the new platform is not finished.',
+    p: 'ca.as-long-as', lv: 'B2+', dom: 'life', cls: 'conj', a: ['as'],
+    t: 'You can stay in our guest room as long ___ you need; we are not using it before June.',
     c: {
       than: 'as long than ist falsch; die Wendung ist as long as. || as long than is wrong; the phrase is as long as.',
       so: 'as long so gibt es nicht. || as long so does not exist.',
@@ -174,8 +174,8 @@ export const items = [
     ok: 'Otherwise = sonst: die Folge, falls man es nicht tut. || Otherwise = or else: the consequence if you do not do it.',
   },
   {
-    p: 'ca.but-for', lv: 'C1', dom: 'biz', cls: 'conj', a: ['but'],
-    t: '___ for the quick help of our IT team, the whole customer database would have been lost last night.',
+    p: 'ca.but-for', lv: 'C1', dom: 'life', cls: 'conj', a: ['but'],
+    t: '___ for the quick help of our neighbors, the whole cellar would have been flooded last night.',
     c: {
       only: 'Only for gibt es hier nicht; die Wendung heißt But for. || Only for does not fit here; the phrase is But for.',
       not: 'Not for ergibt eine andere Bedeutung. || Not for gives a different meaning.',
@@ -225,7 +225,7 @@ export const items = [
   },
   {
     p: 'ca.in-case', lv: 'B2', dom: 'life', cls: 'prep', a: ['in'],
-    t: 'Take an umbrella ___ case it rains later this afternoon, because the forecast is not very reliable.',
+    t: 'Pack a warm jacket ___ case the evening gets cold, because the mountain weather can change quickly.',
     c: {
       on: 'on case gibt es nicht; die feste Wendung heißt in case. || on case does not exist; the fixed phrase is in case.',
       at: 'at case gibt es nicht. || at case does not exist.',
@@ -235,7 +235,7 @@ export const items = [
   },
   {
     p: 'ca.in-case', lv: 'B2', dom: 'biz', cls: 'prep', a: ['in'],
-    t: 'Let me give you my mobile number just ___ case you cannot reach me at the office during the trade fair.',
+    t: 'Let me give you my cell phone number just ___ case you cannot reach me at the office during the trade fair.',
     c: {
       on: 'just on case gibt es nicht. || just on case does not exist.',
       at: 'just at case gibt es nicht. || just at case does not exist.',
@@ -244,14 +244,14 @@ export const items = [
     ok: 'Just in case = für alle Fälle, mit Gegenwart im Nebensatz. || Just in case = to be on the safe side, with the present in the clause.',
   },
   {
-    p: 'cn.first', lv: 'B2', dom: 'life', cls: 'part', a: ['not'],
-    t: 'If we do ___ leave before six, we will miss the beginning of the concert and the best seats.',
+    p: 'dip.possible', lv: 'C1', dom: 'biz', cls: 'aux', a: ['could', 'would', 'can', 'will'],
+    t: 'I would be grateful if you ___ send me the revised draft by Friday, so that I can forward it to the board.',
     c: {
-      no: 'do no leave ist falsch; do verneint man mit not. || do no leave is wrong; do is negated with not.',
-      never: 'do never leave ist ungewöhnlich und passt nicht zur einmaligen Situation. || do never leave is unusual and does not fit this one situation.',
-      neither: 'do neither leave ist falsch. || do neither leave is wrong.',
+      did: 'if you did send ist betont und passt nicht zu einer höflichen Bitte. || if you did send is emphatic and does not fit a polite request.',
+      were: 'if you were send gibt es nicht. || if you were send does not exist.',
+      had: 'if you had send gibt es nicht; had braucht ein Partizip (sent). || if you had send does not exist; had needs a participle (sent).',
     },
-    ok: 'Verneinung im if-Satz: do/does not + Grundform. || Negation in the if-clause: do/does not + base form.',
+    ok: 'Höfliche Bitte: I would be grateful if you could/would + Grundform. || A polite request: I would be grateful if you could/would + base form.',
   },
   {
     p: 'cn.if-words', lv: 'B2+', dom: 'life', cls: 'conj', a: ['unless'],
@@ -264,8 +264,8 @@ export const items = [
     ok: 'unless = außer wenn: nur eine Ausnahme verhindert es. || unless = except if: only one exception would stop it.',
   },
   {
-    p: 'ca.unless', lv: 'B2+', dom: 'biz', cls: 'conj', a: ['unless'],
-    t: 'The new archive will go live on Monday ___ the final security test shows any serious problems this weekend.',
+    p: 'ca.unless', lv: 'B2+', dom: 'life', cls: 'conj', a: ['unless'],
+    t: 'The street festival will take place on Saturday ___ the forecast shows heavy rain on Friday night.',
     c: {
       if: 'if würde die Bedeutung umkehren: Start, falls Probleme auftauchen. || if would reverse the meaning: go live if problems appear.',
       although: 'although passt nicht zu einer möglichen Ausnahme. || although does not fit a possible exception.',

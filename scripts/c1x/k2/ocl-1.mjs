@@ -24,7 +24,7 @@ export const items = [
   },
   {
     p: 'psc.now', lv: 'B2', dom: 'biz', cls: 'aux', a: ['are'],
-    t: 'Sorry, I cannot talk right now because we ___ running a live demo for a prospect.',
+    t: 'Please do not come in; the engineers ___ testing the new scanner right now.',
     c: {
       do: 'do + running gibt es nicht; vor -ing steht eine Form von be. || do + running does not exist; -ing needs a form of be.',
       have: 'have + running ist keine Zeitform; „gerade jetzt“ braucht am/is/are + -ing. || have + running is not a tense; “right now” needs am/is/are + -ing.',
@@ -33,7 +33,7 @@ export const items = [
     ok: 'Was gerade passiert: am/is/are + -ing. Zu we passt are. || What is happening now: am/is/are + -ing. We goes with are.',
   },
   {
-    p: 'psc.state', lv: 'B2+', dom: 'biz', cls: 'aux', a: ['do'],
+    p: 'psc.state', lv: 'B2+', dom: 'biz', cls: 'aux', a: ['do', 'can'],
     t: 'At the moment I ___ not understand why the report shows two different totals for May.',
     c: {
       am: 'am not understand ist keine Form; und understand hat kein -ing. || am not understand is not a form, and understand has no -ing form.',
@@ -84,8 +84,8 @@ export const items = [
     ok: 'Abgeschlossene Zeit mit Jahreszahl: Past Simple und in 2019. || A finished time with a year: past simple and in 2019.',
   },
   {
-    p: 'psp.since-for', lv: 'B2', dom: 'biz', cls: 'prep', a: ['since'],
-    t: 'Our company has used the same document management system ___ 2018, and nobody wants to change it.',
+    p: 'psp.since-for', lv: 'B2', dom: 'life', cls: 'prep', a: ['since'],
+    t: 'Our family has used the same holiday cottage ___ 2018, and nobody wants to change it.',
     c: {
       for: 'for braucht eine Länge („for six years“), keine Jahreszahl. || for needs a length of time (“for six years”), not a year.',
       in: 'in 2018 passt zum Past Simple, nicht zu has used. || in 2018 goes with the past simple, not with has used.',
@@ -95,7 +95,7 @@ export const items = [
   },
   {
     p: 'psp.since-for', lv: 'B2', dom: 'life', cls: 'prep', a: ['for'],
-    t: 'I have known my business partner ___ almost fifteen years, and we have never had a serious argument.',
+    t: 'Our firm has supplied the regional hospital ___ more than twenty years, and we have never missed a delivery.',
     c: {
       since: 'since braucht einen Zeitpunkt („since 2011“), keine Länge. || since needs a point in time (“since 2011”), not a length.',
       during: 'during nennt einen Zeitraum, in dem etwas geschieht, nicht die Länge bis heute. || during names a period in which something happens, not the length up to now.',
@@ -124,7 +124,7 @@ export const items = [
     ok: 'Keine Erfahrung bis jetzt: have never been (oder have not been). || No experience so far: have never been (or have not been).',
   },
   {
-    p: 'psp.result-now', lv: 'B2', dom: 'biz', cls: 'adv', a: ['just', 'already'],
+    p: 'psp.result-now', lv: 'B2', dom: 'biz', cls: 'adv', a: ['just', 'already', 'recently', 'now', 'finally'],
     t: 'Could you check the figures again? The finance team has ___ sent me a corrected version.',
     c: {
       ever: 'ever steht in Fragen und Verneinungen, nicht in einer solchen Aussage. || ever belongs in questions and negatives, not in a statement like this.',
@@ -146,43 +146,43 @@ export const items = [
   // ---- pres-perf-cont ----
   {
     p: 'pc.duration', lv: 'B2+', dom: 'biz', cls: 'aux', a: ['have'],
-    t: 'We ___ been working on the migration to the cloud since January, and we are still not finished.',
+    t: 'Our two developers ___ been fixing the login bug since Monday morning, and it is still not solved.',
     c: {
       are: 'are been gibt es nicht; vor been steht have/has. || are been does not exist; been needs have/has.',
-      had: 'had been bezieht sich auf einen früheren Zeitpunkt; „since January … still“ reicht bis jetzt. || had been refers to an earlier point; “since January … still” reaches up to now.',
+      had: 'had been bezieht sich auf einen früheren Zeitpunkt; „since Monday … still“ reicht bis jetzt. || had been refers to an earlier point; “since Monday … still” reaches up to now.',
       were: 'were been ist falsch; die Form heißt have/has been + -ing. || were been is wrong; the form is have/has been + -ing.',
     },
-    ok: 'Dauer bis jetzt mit Handlung: have/has been + -ing; zu we passt have. || Duration up to now with an activity: have/has been + -ing; we goes with have.',
+    ok: 'Dauer bis jetzt mit Handlung: have/has been + -ing; zu two developers (Plural) passt have. || Duration up to now with an activity: have/has been + -ing; the plural two developers goes with have.',
   },
   {
     p: 'pc.since-for', lv: 'B2', dom: 'life', cls: 'prep', a: ['for'],
-    t: 'My neighbor has been playing the drums ___ three hours, and I really need some quiet to work.',
+    t: 'The construction crew has been drilling next door ___ four hours, and I cannot make a single phone call.',
     c: {
       since: 'since braucht einen Startpunkt („since noon“), hier steht eine Länge. || since needs a starting point (“since noon”), but here is a length.',
       during: 'during passt nicht zu has been playing + Länge der Zeit. || during does not fit has been playing + a length of time.',
       from: 'from passt nicht ohne „to“; die Länge nennt for. || from does not work without “to”; for names the length.',
     },
-    ok: 'for + Länge der Zeit (three hours), since + Zeitpunkt (since noon). || for + length of time (three hours), since + point in time (since noon).',
+    ok: 'for + Länge der Zeit (four hours), since + Zeitpunkt (since noon). || for + length of time (four hours), since + point in time (since noon).',
   },
   {
-    p: 'pc.recent', lv: 'B2+', dom: 'biz', cls: 'adv', a: ['lately', 'recently'],
-    t: 'Our sales figures have been going up ___, and the board is finally starting to take notice.',
+    p: 'pc.recent', lv: 'B2+', dom: 'biz', cls: 'det', a: ['last', 'past'],
+    t: 'Over the ___ few months, orders from the Nordic region have been going up, and the board is finally starting to take notice.',
     c: {
-      ago: 'ago braucht eine Zeitangabe davor und das Past Simple. || ago needs a time expression before it and the past simple.',
-      yesterday: 'yesterday verlangt das Past Simple, nicht have been going. || yesterday needs the past simple, not have been going.',
-      tomorrow: 'tomorrow meint die Zukunft und passt nicht zu have been going. || tomorrow means the future and does not fit have been going.',
+      next: 'next verlangt die Zukunft; have been going up beschreibt die Zeit bis jetzt. || next needs the future; have been going up describes the time up to now.',
+      following: 'following passt zu einem Zeitraum nach einem genannten Ereignis. || following fits a period after a named event.',
+      every: 'every few months heißt „alle paar Monate“ und beschreibt keine Entwicklung bis jetzt. || every few months means “once in a while” and describes no development up to now.',
     },
-    ok: 'Eine Entwicklung in letzter Zeit, noch sichtbar: have been + -ing mit lately oder recently. || A recent development you can still see: have been + -ing with lately or recently.',
+    ok: 'Entwicklung in letzter Zeit: over the last/past few months + have been + -ing. || A recent development: over the last/past few months + have been + -ing.',
   },
   {
     p: 'pc.form', lv: 'B2', dom: 'life', cls: 'aux', a: ['has'],
-    t: 'Your sister looks exhausted. How long ___ she been waiting at the airport for her connecting flight?',
+    t: 'How long ___ the delivery truck been standing outside, and has anybody asked the driver what he wants?',
     c: {
-      have: 'have passt zu I, you, we, they; she verlangt has. || have goes with I, you, we, they; she needs has.',
+      have: 'have passt zu I, you, we, they; ein einzelner Lastwagen verlangt has. || have goes with I, you, we, they; a single truck needs has.',
       is: 'is been ist keine Form; vor been steht has/have. || is been is not a form; been needs has/have.',
       did: 'did + been gibt es nicht; die Dauer bis jetzt braucht has been + -ing. || did + been does not exist; duration up to now needs has been + -ing.',
     },
-    ok: 'Frage nach der Dauer bis jetzt: How long + has/have + Subjekt + been + -ing. Zu she gehört has. || A question about duration up to now: How long + has/have + subject + been + -ing. She takes has.',
+    ok: 'Frage nach der Dauer bis jetzt: How long + has/have + Subjekt + been + -ing. Zu truck gehört has. || A question about duration up to now: How long + has/have + subject + been + -ing. truck takes has.',
   },
   {
     p: 'pc.cont-simple', lv: 'B2+', dom: 'biz', cls: 'adv', a: ['far'],
@@ -197,13 +197,13 @@ export const items = [
   // ---- future-forms ----
   {
     p: 'ff.will-now', lv: 'B2', dom: 'biz', cls: 'aux', a: ['will', 'shall'],
-    t: 'You are right, the invoice contains a mistake. Thank you for telling me; I ___ send you a corrected one this afternoon, I promise.',
+    t: 'Thanks for the reminder about the missing signature; I ___ get it signed by the end of the day, I promise.',
     c: {
-      am: 'am correct ergibt keinen Satz; für eine spontane Entscheidung steht will + Grundform. || am correct does not make a sentence; a spontaneous decision takes will + base form.',
-      do: 'do correct sagt nichts über die Zukunft. || do correct says nothing about the future.',
-      have: 'have correct gibt es nicht; have braucht corrected. || have correct does not exist; have needs corrected.',
+      am: 'am get ergibt keinen Satz; für ein Versprechen steht will + Grundform. || am get does not make a sentence; a promise takes will + base form.',
+      do: 'do get sagt nichts über die Zukunft. || do get says nothing about the future.',
+      have: 'have get gibt es nicht; have braucht got oder gotten. || have get does not exist; have needs got or gotten.',
     },
-    ok: 'Spontane Entscheidung im Gespräch: I will + Grundform. || A spontaneous decision during the conversation: I will + base form.',
+    ok: 'Entschluss und Versprechen im Gespräch: I will + Grundform. || A decision and promise during the conversation: I will + base form.',
   },
   {
     p: 'ff.going-to', lv: 'B2', dom: 'life', cls: 'aux', a: ['are'],
@@ -217,17 +217,17 @@ export const items = [
   },
   {
     p: 'ff.was-going-to', lv: 'B2', dom: 'biz', cls: 'aux', a: ['was'],
-    t: 'I ___ going to call the customer this morning, but then the system crashed and I forgot.',
+    t: 'I ___ going to send you the minutes yesterday, but my laptop broke and I lost all my notes.',
     c: {
-      am: 'am going to meint die Gegenwart; „but then … forgot“ zeigt, dass der Plan Vergangenheit ist. || am going to is present; “but then … forgot” shows the plan is past.',
+      am: 'am going to meint die Gegenwart; „my laptop broke“ zeigt, dass der Plan Vergangenheit ist. || am going to is present; “my laptop broke” shows the plan is past.',
       were: 'were passt zu you, we, they; I verlangt was. || were goes with you, we, they; I needs was.',
       will: 'will ist Zukunft; hier geht es um einen geplatzten Plan in der Vergangenheit. || will is future; this is about a plan that fell through in the past.',
     },
     ok: 'Plan, der nicht klappte: was/were going to + Grundform; zu I gehört was. || A plan that fell through: was/were going to + base form; I goes with was.',
   },
   {
-    p: 'ff.fixed-times', lv: 'B2', dom: 'biz', cls: 'prep', a: ['at'],
-    t: 'Our train to the trade fair in Hanover leaves ___ 7:45 tomorrow morning, so please be at the station by 7:15.',
+    p: 'ff.fixed-times', lv: 'B2', dom: 'life', cls: 'prep', a: ['at'],
+    t: 'Our train to the lake in Bavaria leaves ___ 7:45 tomorrow morning, so please be at the station by 7:15.',
     c: {
       in: 'in steht bei Zeiträumen („in May“), nicht bei einer Uhrzeit. || in goes with periods (“in May”), not with a clock time.',
       on: 'on steht bei Tagen und Daten („on Monday“). || on goes with days and dates (“on Monday”).',
@@ -246,7 +246,7 @@ export const items = [
     ok: 'Gleich passiert es: be about to + Grundform. || It happens any moment now: be about to + base form.',
   },
   {
-    p: 'ff.no-will-after', lv: 'B2', dom: 'biz', cls: 'conj', a: ['unless'],
+    p: 'ff.no-will-after', lv: 'B2', dom: 'biz', cls: 'conj', a: ['unless', 'until'],
     t: 'We will not be able to deliver the update on Friday ___ the client sends us the missing data today.',
     c: {
       if: 'if ergäbe die falsche Bedeutung: Wir liefern nicht, falls er sendet. || if would give the wrong meaning: we do not deliver if he sends it.',
@@ -258,13 +258,13 @@ export const items = [
   // ---- time-clauses ----
   {
     p: 'tc.present-for-future', lv: 'B2', dom: 'biz', cls: 'adv', a: ['soon'],
-    t: 'I will send you the proposal as ___ as I have finished the calculation for the second option.',
+    t: 'We will start the rollout as ___ as the client has signed off the test report.',
     c: {
-      long: 'as long as bedeutet „solange“ und passt nicht zu „sobald ich fertig bin“. || as long as means “provided that” and does not fit “as soon as I am done”.',
+      long: 'as long as bedeutet „solange“ und passt nicht zu „sobald es abgenommen ist“. || as long as means “provided that” and does not fit “as soon as it is signed off”.',
       well: 'as well as heißt „sowie“ und hat keinen Zeitbezug. || as well as means “and also” and has no time reference.',
       much: 'as much as nennt eine Menge, keinen Zeitpunkt. || as much as names an amount, not a point in time.',
     },
-    ok: 'Zeitsatz mit as soon as und Gegenwart statt will: as soon as I have finished. || A time clause with as soon as and the present instead of will: as soon as I have finished.',
+    ok: 'Zeitsatz mit as soon as und Gegenwart statt will: as soon as the client has signed off. || A time clause with as soon as and the present instead of will: as soon as the client has signed off.',
   },
   {
     p: 'tc.present-for-future', lv: 'B2', dom: 'life', cls: 'aux', a: ['are'],
@@ -277,18 +277,18 @@ export const items = [
     ok: 'Nach when steht die Gegenwart (arrive), nicht will; der Plan selbst: are going to. || After when the present is used (arrive), not will; the plan itself: are going to.',
   },
   {
-    p: 'tc.present-perfect', lv: 'B2+', dom: 'biz', cls: 'aux', a: ['have'],
-    t: 'Once we ___ received the signed order form, our team will start setting up your account.',
+    p: 'tc.present-perfect', lv: 'B2+', dom: 'biz', cls: 'aux', a: ['has'],
+    t: 'Once the supplier ___ confirmed the delivery slot, we will inform all regional offices.',
     c: {
       will: 'Nach once steht keine Zukunft mit will. || After once you do not use will.',
-      are: 'are received ist keine Form; es fehlt have + Partizip. || are received is not a form; it needs have + participle.',
-      had: 'had received ist Vergangenheit; hier wird eine künftige Voraussetzung beschrieben. || had received is past; this describes a future condition.',
+      are: 'are confirmed passt nicht zu supplier (Singular) und ist keine Perfektform. || are confirmed does not fit supplier (singular) and is not a perfect form.',
+      had: 'had confirmed ist Vergangenheit; hier wird eine künftige Voraussetzung beschrieben. || had confirmed is past; this describes a future condition.',
     },
     ok: 'Eine Handlung muss vorher abgeschlossen sein: once + Present Perfect, im Hauptsatz will. || An action must be completed first: once + present perfect, will in the main clause.',
   },
   {
     p: 'tc.by-the-time', lv: 'B2+', dom: 'biz', cls: 'prep', a: ['by'],
-    t: '___ the time the auditors arrive next Monday, we will already have archived all of the old contracts.',
+    t: '___ the time the new CEO starts in January, we will already have moved the whole team into the new building.',
     c: {
       at: 'at the time heißt „damals“ und passt nicht zu einer künftigen Frist. || at the time means “back then” and does not fit a future deadline.',
       on: 'on the time ist keine Wendung. || on the time is not a phrase.',

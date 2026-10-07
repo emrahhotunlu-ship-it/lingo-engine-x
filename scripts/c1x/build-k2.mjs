@@ -24,7 +24,7 @@ const wc = (s) => s.split(/\s+/).filter(Boolean).length;
 
 // Themen der Kapitel 1–3 je Muster (aus src/content/grammar/patterns/*.json)
 const topicOfPattern = new Map();
-const KAP13 = ['pres-simple-cont', 'past-simple-perfect', 'pres-perf-cont', 'future-forms', 'time-clauses', 'c1-hedging', 'future-perf-cont', 'past-perfect', 'used-to', 'c1-diplomacy', 'conditionals', 'cond-alt', 'mixed-cond'];
+const KAP13 = ['pres-simple-cont', 'past-simple-perfect', 'pres-perf-cont', 'future-forms', 'time-clauses', 'c1-hedging', 'future-perf-cont', 'past-perfect', 'used-to', 'c1-diplomacy', 'conditionals', 'cond-alt', 'mixed-cond', 'relative'];
 for (const t of KAP13) {
   const d = JSON.parse(readFileSync(join(ROOT, 'src/content/grammar/patterns', `${t}.json`), 'utf8'));
   for (const p of d.patterns) topicOfPattern.set(p.id, t);
@@ -72,7 +72,7 @@ function buildMcc(src, id, pos) {
   const words = wrong.map((w) => w[0]);
   words.splice(pos, 0, right[0]);
   Object.assign(item, { text: src.t, options: words, answer: pos });
-  if (!wrong.some((w) => w[1] === 'calque')) fail(id, 'kein calque-Ablenker');
+  // Ein calque-Ablenker nur, wo ein Deutscher es wirklich sagt (Gegenlesung K2): nicht erzwungen; der Test verlangt ihn bei mindestens 80 % der Aufgaben.
   item.why = {
     ok: bi(src.ok, id),
     wrong: wrong.map((w) => ({ opt: w[0], cat: w[1], ...bi(w[2], id) })),

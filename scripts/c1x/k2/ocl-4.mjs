@@ -44,7 +44,7 @@ export const items = [
   },
   {
     p: 'mc.wish-past', lv: 'B2+', dom: 'biz', cls: 'aux', a: ['had'],
-    t: 'I wish I ___ asked for a written confirmation before sending the goods, because now the customer denies everything.',
+    t: 'I wish we ___ tested the update on a small group first; now half of the branches cannot log in.',
     c: {
       have: 'wish + have asked gibt es nicht; für Bedauern über früher braucht wish had + Partizip. || wish + have asked does not exist; regret about the past needs wish + had + participle.',
       would: 'wish + would asked gibt es nicht. || wish + would asked does not exist.',
@@ -63,8 +63,8 @@ export const items = [
     ok: 'Bedauern: wish + had (not) + Partizip. || Regret: wish + had (not) + participle.',
   },
   {
-    p: 'mc.wish-would', lv: 'B2+', dom: 'biz', cls: 'aux', a: ['would'],
-    t: 'I wish the client ___ stop changing the requirements every other day; we can never finish anything.',
+    p: 'mc.wish-would', lv: 'C1', dom: 'biz', cls: 'aux', a: ['would'],
+    t: 'I wish our colleagues ___ stop forwarding every e-mail to the whole department; my inbox is a mess.',
     c: {
       will: 'wish + will gibt es nicht; für Ärger über Verhalten steht wish + would. || wish + will does not exist; annoyance at behavior takes wish + would.',
       had: 'wish + had stop gibt es nicht; had braucht ein Partizip (stopped). || wish + had stop does not exist; had needs a participle (stopped).',
@@ -73,7 +73,7 @@ export const items = [
     ok: 'Ärger über wiederholtes Verhalten anderer: wish + would + Grundform. || Annoyance at other people\'s repeated behavior: wish + would + base form.',
   },
   {
-    p: 'mc.wish-would', lv: 'B2', dom: 'life', cls: 'aux', a: ['would'],
+    p: 'mc.wish-would', lv: 'C1', dom: 'life', cls: 'aux', a: ['would'],
     t: 'I wish you ___ not leave your coffee cups all over the meeting room; it looks terrible every afternoon.',
     c: {
       will: 'wish you will not leave ist falsch; hier steht wish + would. || wish you will not leave is wrong; here it is wish + would.',
@@ -124,14 +124,14 @@ export const items = [
     ok: 'Zustand bis jetzt mit since: have known (Present Perfect, keine -ing-Form). || A state up to now with since: have known (present perfect, no -ing form).',
   },
   {
-    p: 'pc.cont-simple', lv: 'B2+', dom: 'biz', cls: 'det', a: ['many'],
-    t: 'How ___ emails have you written since this morning, and have you replied to the customers?',
+    p: 'pp.inversion', lv: 'C1', dom: 'biz', cls: 'aux', a: ['had'],
+    t: 'Until that quarter, seldom ___ the sales team faced such a tough negotiation with a single customer.',
     c: {
-      much: 'much steht bei nicht zählbaren Dingen; emails sind zählbar. || much goes with uncountable things; emails are countable.',
-      long: 'How long fragt nach der Dauer, nicht nach der Zahl. || How long asks about duration, not about number.',
-      often: 'How often fragt nach der Häufigkeit. || How often asks about frequency.',
+      have: 'have passt nicht zu „Until that quarter“ (Vergangenheit) und nicht zu team (Singular). || have does not fit “Until that quarter” (past) or team (singular).',
+      did: 'did faced gibt es nicht; nach did steht die Grundform. || did faced does not exist; after did comes the base form.',
+      was: 'was faced wäre Passiv. || was faced would be passive.',
     },
-    ok: 'Zahl als Ergebnis fragt man mit How many + have written (einfache Form). || A number as the result is asked with How many + have written (simple form).',
+    ok: 'Verneinende Adverbien am Satzanfang lösen die Umstellung aus: Seldom had + Subjekt + Partizip. || Negative adverbs at the start trigger inversion: Seldom had + subject + participle.',
   },
   {
     p: 'pc.cont-simple', lv: 'B2', dom: 'biz', cls: 'adv', a: ['long'],
@@ -154,7 +154,7 @@ export const items = [
     ok: 'belong ist ein Zustandsverb: Present Simple, Verneinung does not belong. || belong is a state verb: present simple, negative does not belong.',
   },
   {
-    p: 'psc.dual', lv: 'B2', dom: 'biz', cls: 'aux', a: ['are'],
+    p: 'psc.dual', lv: 'B2', dom: 'biz', cls: 'aux', a: ['are', 'were'],
     t: 'We ___ thinking about moving the whole archive to a new data center next year, but nothing is decided yet.',
     c: {
       do: 'do thinking gibt es nicht; vor -ing steht eine Form von be. || do thinking does not exist; -ing needs a form of be.',
@@ -174,17 +174,17 @@ export const items = [
     ok: 'Wochentage mit on: starts on Tuesday (Fahrplan im Present Simple). || Weekdays take on: starts on Tuesday (a timetable in the present simple).',
   },
   {
-    p: 'ff.no-will-after', lv: 'B2', dom: 'biz', cls: 'adv', a: ['as'],
-    t: 'I will call you as soon ___ I land in Frankfurt, so please keep your phone nearby this evening.',
+    p: 'ca.inversion', lv: 'C1', dom: 'biz', cls: 'aux', a: ['would', 'could', 'might'],
+    t: 'Had the auditors arrived a day earlier, we ___ have had no time to prepare the documents properly.',
     c: {
-      so: 'as soon so gibt es nicht; die Wendung heißt as soon as. || as soon so does not exist; the phrase is as soon as.',
-      at: 'as soon at gibt es nicht. || as soon at does not exist.',
-      how: 'as soon how gibt es nicht. || as soon how does not exist.',
+      will: 'will gehört nicht zu einer unwirklichen Bedingung in der Vergangenheit. || will does not belong to an unreal condition in the past.',
+      had: 'had have gibt es nicht; im Hauptsatz steht would have + Partizip. || had have does not exist; the main clause takes would have + participle.',
+      did: 'did have drückt keine verpasste Möglichkeit aus. || did have does not express a missed possibility.',
     },
-    ok: 'as soon as + Gegenwart (I land), im Hauptsatz will. || as soon as + present (I land), will in the main clause.',
+    ok: 'Förmlich ohne if: Had + Subjekt + Partizip, would have … || Formal without if: Had + subject + participle, would have …',
   },
   {
-    p: 'ff.will-now', lv: 'B2', dom: 'biz', cls: 'aux', a: ['shall', 'should', 'can', 'could', 'may'],
+    p: 'ff.will-now', lv: 'B2', dom: 'biz', cls: 'aux', a: ['should', 'can', 'could', 'may', 'shall'],
     t: '___ I send you the updated figures right now, or would you prefer to have them tomorrow morning?',
     c: {
       will: 'Will I send you klingt wie eine Frage nach der Zukunft, nicht wie ein Angebot. || Will I send you sounds like a question about the future, not like an offer.',
@@ -225,7 +225,7 @@ export const items = [
   },
   {
     p: 'ut.used-to', lv: 'B2', dom: 'life', cls: 'aux', a: ['used'],
-    t: 'There ___ to be a small café on this corner, but it closed last year and now it is a phone shop.',
+    t: 'There ___ to be a small coffee shop on this corner, but it closed last year and now it is a phone store.',
     c: {
       use: 'there use to gibt es in der Aussage nicht; es heißt used to. || there use to does not exist in a statement; it is used to.',
       would: 'would gilt nicht für Zustände wie „es gab ein Café“; hier steht used to. || would does not work for states like “there was a café”; here used to is needed.',
@@ -234,7 +234,7 @@ export const items = [
     ok: 'Zustand in der Vergangenheit, der nicht mehr gilt: used to + Grundform (nicht would). || A past state that no longer holds: used to + base form (not would).',
   },
   {
-    p: 'dip.wondering', lv: 'B2+', dom: 'biz', cls: 'conj', a: ['if', 'whether'],
+    p: 'dip.wondering', lv: 'C1', dom: 'biz', cls: 'conj', a: ['if', 'whether'],
     t: 'I was wondering ___ it would be possible to reschedule our call to Thursday, because of a customer visit.',
     c: {
       that: 'wondering that passt nicht vor einer Frage nach Möglichkeit. || wondering that does not fit before a question about possibility.',
@@ -255,7 +255,7 @@ export const items = [
   },
   {
     p: 'cn.third', lv: 'B2', dom: 'biz', cls: 'aux', a: ['had'],
-    t: 'I would have called you earlier if I ___ known that the meeting had been cancelled.',
+    t: 'I would have called you earlier if I ___ known that the meeting had been canceled.',
     c: {
       have: 'if I have known passt nicht zu would have; hier braucht der if-Satz had known. || if I have known does not fit would have; the if-clause needs had known.',
       would: 'would steht im Hauptsatz, nicht nach if. || would belongs in the main clause, not after if.',

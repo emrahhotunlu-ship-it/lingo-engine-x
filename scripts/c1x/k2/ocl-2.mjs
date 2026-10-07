@@ -3,8 +3,8 @@ export const meta = { file: 'k2-2' };
 export const items = [
   // ---- c1-hedging ----
   {
-    p: 'hg.modal', lv: 'B2+', dom: 'biz', cls: 'aux', a: ['might', 'may', 'could'],
-    t: 'The delay ___ be caused by the new firewall, but we have not checked the logs yet.',
+    p: 'hg.modal', lv: 'C1', dom: 'biz', cls: 'aux', a: ['might', 'may', 'could'],
+    t: 'The drop in orders ___ be linked to the price increase, but we have not analyzed the data yet.',
     c: {
       must: 'must drückt Sicherheit aus, ihr habt aber noch nicht geprüft. || must expresses certainty, but you have not checked yet.',
       shall: 'shall passt nicht zu einer vermuteten Ursache. || shall does not fit a suspected cause.',
@@ -13,7 +13,7 @@ export const items = [
     ok: 'Vorsichtige Möglichkeit: might/could/may + Grundform statt einer festen Behauptung. || Cautious possibility: might/could/may + base form instead of a flat claim.',
   },
   {
-    p: 'hg.modal', lv: 'B2+', dom: 'biz', cls: 'aux', a: ['might', 'may', 'could'],
+    p: 'hg.modal', lv: 'C1', dom: 'biz', cls: 'aux', a: ['might', 'may', 'could', 'should'],
     t: 'The new vendor ___ be cheaper than our current one, but we need to compare both offers first.',
     c: {
       must: 'must wäre eine Schlussfolgerung mit Sicherheit; der Vergleich steht noch aus. || must would be a confident conclusion; the comparison is still to come.',
@@ -23,14 +23,14 @@ export const items = [
     ok: 'Noch nicht belegt, also vorsichtig: might/may/could be statt is. || Not yet proven, so cautious: might/may/could be instead of is.',
   },
   {
-    p: 'hg.worth', lv: 'B2+', dom: 'biz', cls: 'aux', a: ['be'],
-    t: 'It might ___ worth checking the contract once more before we sign anything on Friday.',
+    p: 'hg.worth', lv: 'C1', dom: 'biz', cls: 'aux', a: ['be'],
+    t: 'It could ___ worth asking the vendor for a written guarantee before we place the order.',
     c: {
-      is: 'Nach might steht die Grundform be, nicht is. || After might comes the base form be, not is.',
-      been: 'might been ist keine Form; es braucht be oder have been. || might been is not a form; it needs be or have been.',
-      being: 'might being gibt es nicht; nach einem Modalverb steht die Grundform. || might being does not exist; a modal verb takes the base form.',
+      is: 'Nach could steht die Grundform be, nicht is. || After could comes the base form be, not is.',
+      been: 'could been ist keine Form; es braucht be oder have been. || could been is not a form; it needs be or have been.',
+      being: 'could being gibt es nicht; nach einem Modalverb steht die Grundform. || could being does not exist; a modal verb takes the base form.',
     },
-    ok: 'Höfliche Empfehlung: It might be worth + -ing. || A polite suggestion: It might be worth + -ing.',
+    ok: 'Höfliche Empfehlung: It could/might be worth + -ing. || A polite suggestion: It could/might be worth + -ing.',
   },
   {
     p: 'hg.inclined', lv: 'C1', dom: 'biz', cls: 'part', a: ['to'],
@@ -43,8 +43,8 @@ export const items = [
     ok: 'Eigene Neigung vorsichtig sagen: I would be inclined to + Grundform. || Stating your own leaning cautiously: I would be inclined to + base form.',
   },
   {
-    p: 'hg.seems', lv: 'B2+', dom: 'biz', cls: 'conj', a: ['if', 'though'],
-    t: 'It seems as ___ the client has changed his mind about the budget, because nobody has replied to our offer.',
+    p: 'hg.seems', lv: 'C1', dom: 'biz', cls: 'conj', a: ['if', 'though'],
+    t: 'It seems as ___ our competitor has lowered its prices again, because several customers have stopped ordering.',
     c: {
       when: 'as when ist keine Wendung nach seems; es heißt as if oder as though. || as when is not used after seems; it is as if or as though.',
       unless: 'unless heißt „außer wenn“ und passt nicht nach as. || unless means “except if” and does not follow as.',
@@ -53,7 +53,7 @@ export const items = [
     ok: 'Eindruck vorsichtig ausdrücken: It seems as if/as though + Satz. || Expressing an impression cautiously: It seems as if/as though + clause.',
   },
   {
-    p: 'hg.downtoner', lv: 'B2+', dom: 'biz', cls: 'adv', a: ['not', 'never'],
+    p: 'hg.downtoner', lv: 'C1', dom: 'biz', cls: 'adv', a: ['not', 'never'],
     t: 'To be honest, the new interface is ___ quite as intuitive as the old one, at least for our sales team.',
     c: {
       very: 'very quite gibt es nicht; very und quite stehen nicht zusammen. || very quite does not exist; very and quite do not go together.',
@@ -65,7 +65,7 @@ export const items = [
   // ---- future-perf-cont ----
   {
     p: 'fut.continuous', lv: 'B2', dom: 'life', cls: 'aux', a: ['be'],
-    t: 'This time next week, we will ___ sitting on a beach in Portugal, far away from our inboxes.',
+    t: 'This time tomorrow, the whole team will ___ sitting in the board meeting, so nobody will answer the phone.',
     c: {
       are: 'will are gibt es nicht; nach will steht die Grundform be. || will are does not exist; will takes the base form be.',
       been: 'will been ist falsch; will be + -ing ist die Form. || will been is wrong; will be + -ing is the form.',
@@ -85,7 +85,7 @@ export const items = [
   },
   {
     p: 'fut.cont-plan', lv: 'B2+', dom: 'biz', cls: 'aux', a: ['will', 'would'],
-    t: '___ you be using the projector at two, or can I borrow it for a short customer call?',
+    t: '___ you be needing the company car on Thursday, or may I take it to the airport?',
     c: {
       are: 'Are you be using ist falsch; mit be + -ing braucht es Will you be using. || Are you be using is wrong; with be + -ing it is Will you be using.',
       do: 'Do you be using gibt es nicht. || Do you be using does not exist.',
@@ -95,7 +95,7 @@ export const items = [
   },
   {
     p: 'fut.perfect', lv: 'B2', dom: 'biz', cls: 'aux', a: ['have'],
-    t: 'By the end of this quarter, we will ___ signed fifty new customers in the Nordic region.',
+    t: 'By the end of next year, our team will ___ opened twelve new offices across Europe.',
     c: {
       be: 'will be signed wäre Passiv; hier sind wir die, die unterschreiben lassen: will have signed. || will be signed would be passive; here we are the ones doing it: will have signed.',
       had: 'will had gibt es nicht; nach will steht have. || will had does not exist; will is followed by have.',
@@ -114,8 +114,8 @@ export const items = [
     ok: 'By the time + Gegenwart, im Hauptsatz will have + Partizip: schon passiert bis dahin. || By the time + present, the main clause takes will have + participle: already done by then.',
   },
   {
-    p: 'fut.perf-cont', lv: 'B2+', dom: 'biz', cls: 'aux', a: ['been'],
-    t: 'Next June, I will have ___ working for this company for exactly ten years.',
+    p: 'fut.perf-cont', lv: 'C1', dom: 'biz', cls: 'aux', a: ['been'],
+    t: 'In October, the CFO will have ___ leading the finance department for exactly twelve years.',
     c: {
       be: 'will have be ist falsch; die Form heißt will have been + -ing. || will have be is wrong; the form is will have been + -ing.',
       being: 'will have being ist falsch. || will have being is wrong.',
@@ -124,7 +124,7 @@ export const items = [
     ok: 'Dauer bis zu einem künftigen Zeitpunkt: will have been + -ing. || Duration up to a future moment: will have been + -ing.',
   },
   {
-    p: 'fut.perf-cont', lv: 'B2+', dom: 'biz', cls: 'prep', a: ['for'],
+    p: 'fut.perf-cont', lv: 'C1', dom: 'biz', cls: 'prep', a: ['for'],
     t: 'By December, she will have been managing the sales team ___ nearly eight years.',
     c: {
       since: 'since braucht einen Zeitpunkt („since 2017“), hier steht eine Länge. || since needs a point in time (“since 2017”), but here is a length.',
@@ -146,7 +146,7 @@ export const items = [
   },
   {
     p: 'pp.earlier', lv: 'B2', dom: 'life', cls: 'aux', a: ['had'],
-    t: 'I could not open the door of my flat because I ___ left my keys at the office again.',
+    t: 'I could not open the door of my apartment because I ___ left my keys at the office again.',
     c: {
       have: 'have left passt zur Gegenwart; „could not“ liegt schon in der Vergangenheit. || have left is present; “could not” is already in the past.',
       was: 'was left wäre Passiv; gemeint ist, dass ich sie liegen ließ. || was left would be passive; what is meant is that I left them.',
@@ -166,7 +166,7 @@ export const items = [
   },
   {
     p: 'pp.duration', lv: 'B2+', dom: 'life', cls: 'prep', a: ['since', 'from'],
-    t: 'She looked exhausted because she had been working ___ six o\'clock that morning without a single break.',
+    t: 'The engineers were tired because they had been testing the system ___ midnight without a break.',
     c: {
       for: 'for braucht eine Länge („for ten hours“), hier steht eine Uhrzeit. || for needs a length of time (“for ten hours”), but here is a clock time.',
       during: 'during passt nicht vor einer Uhrzeit. || during does not fit before a clock time.',
@@ -176,11 +176,11 @@ export const items = [
   },
   {
     p: 'pp.first-time', lv: 'B2+', dom: 'biz', cls: 'aux', a: ['had'],
-    t: 'It was the first time I ___ ever spoken to a customer in Japanese, and I was very nervous.',
+    t: 'It was the first time we ___ ever lost a bid against a smaller competitor, and the mood in the team was bad.',
     c: {
       have: 'have passt zur Gegenwart; „It was“ steht schon in der Vergangenheit. || have is present; “It was” is already in the past.',
-      did: 'did spoken gibt es nicht; nach did steht die Grundform. || did spoken does not exist; did takes the base form.',
-      was: 'was spoken wäre Passiv: „mit mir wurde gesprochen“. || was spoken would be passive: “was spoken to”.',
+      did: 'did lost gibt es nicht; nach did steht die Grundform. || did lost does not exist; did takes the base form.',
+      was: 'was lost wäre Passiv: „wurde verloren“. || was lost would be passive.',
     },
     ok: 'It was the first time + had + Partizip: die Erfahrung liegt vor „was“. || It was the first time + had + participle: the experience lies before “was”.',
   },
@@ -196,11 +196,11 @@ export const items = [
   },
   {
     p: 'pp.reported', lv: 'B2', dom: 'biz', cls: 'aux', a: ['had'],
-    t: 'She told me that the board ___ already approved the budget the day before the announcement.',
+    t: 'He explained that the committee ___ already rejected the first draft before the meeting started.',
     c: {
-      has: 'has gehört zur Gegenwart; nach „told“ rutscht have/has einen Schritt zurück zu had. || has is present; after “told” have/has moves one step back to had.',
+      has: 'has gehört zur Gegenwart; nach einem Berichtsverb in der Vergangenheit rutscht has/have zu had. || has is present; after a reporting verb in the past has/have moves back to had.',
       have: 'have wird in der berichteten Rede zu had. || have becomes had in reported speech.',
-      would: 'would approved gibt es nicht; had + Partizip steht für das Frühere. || would approved does not exist; had + participle expresses the earlier action.',
+      would: 'would rejected gibt es nicht; had + Partizip steht für das Frühere. || would rejected does not exist; had + participle expresses the earlier action.',
     },
     ok: 'Berichtete Rede in der Vergangenheit: have/has + Partizip wird zu had + Partizip. || Reported speech in the past: have/has + participle becomes had + participle.',
   },
@@ -216,7 +216,7 @@ export const items = [
   },
   {
     p: 'pp.inversion', lv: 'C1', dom: 'biz', cls: 'conj', a: ['than'],
-    t: 'No sooner had we signed the contract ___ the client asked for several changes to the terms.',
+    t: 'No sooner had the new software been installed ___ the first complaints arrived from the sales team.',
     c: {
       when: 'when gehört zu Hardly … when; zu No sooner gehört than. || when belongs to Hardly … when; No sooner takes than.',
       then: 'then ist kein Bindewort für diesen Vergleich. || then is not the linking word for this comparison.',
@@ -277,7 +277,7 @@ export const items = [
   },
   {
     p: 'ut.be-used-to', lv: 'B2+', dom: 'life', cls: 'part', a: ['used', 'accustomed'],
-    t: 'After ten years in Spain, she is completely ___ to eating dinner at ten o\'clock at night.',
+    t: 'Having lived in Seoul for years, he is perfectly ___ to working late into the evening.',
     c: {
       use: 'is use to gibt es nicht; die Wendung heißt be used to. || is use to does not exist; the phrase is be used to.',
       got: 'is got to ist keine Form; gewöhnt sein heißt is used to. || is got to is not a form; being accustomed is is used to.',
@@ -287,7 +287,7 @@ export const items = [
   },
   {
     p: 'ut.get-used-to', lv: 'B2', dom: 'biz', cls: 'prep', a: ['to'],
-    t: 'It took me a few weeks to get used ___ the new software, but now I could not work without it.',
+    t: 'It will take the team some time to get used ___ the new approval workflow, but the training helps.',
     c: {
       for: 'get used for hat eine andere Bedeutung („verwendet werden für“). || get used for has a different meaning (“be used for”).',
       with: 'get used with ist falsch; es heißt get used to. || get used with is wrong; it is get used to.',
@@ -296,7 +296,7 @@ export const items = [
     ok: 'Sich gewöhnen: get used to + Nomen oder -ing. || Becoming accustomed: get used to + noun or -ing.',
   },
   {
-    p: 'psp.finished-time', lv: 'B2', dom: 'biz', cls: 'rel', a: ['that', 'which'],
+    p: 'rc.who-which', lv: 'B2', dom: 'biz', cls: 'rel', a: ['that', 'which'],
     t: 'The report ___ I sent you yesterday contains the figures for all regions, so please read the first page carefully.',
     c: {
       who: 'who steht für Personen; ein Bericht ist eine Sache. || who stands for people; a report is a thing.',
@@ -307,7 +307,7 @@ export const items = [
   },
   // ---- c1-diplomacy ----
   {
-    p: 'dip.wondering', lv: 'B2+', dom: 'biz', cls: 'conj', a: ['if', 'whether'],
+    p: 'dip.wondering', lv: 'C1', dom: 'biz', cls: 'conj', a: ['if', 'whether'],
     t: 'I was wondering ___ you could send me the updated price list by tomorrow afternoon.',
     c: {
       that: 'wondering that passt nicht vor einer Bitte; gebraucht wird if oder whether. || wondering that does not fit before a request; if or whether is needed.',
@@ -317,7 +317,7 @@ export const items = [
     ok: 'Weiche Bitte: I was wondering if/whether you could … (Vergangenheitsform macht es höflicher). || A soft request: I was wondering if/whether you could … (the past form makes it more polite).',
   },
   {
-    p: 'dip.hoping', lv: 'B2+', dom: 'biz', cls: 'part', a: ['to'],
+    p: 'dip.hoping', lv: 'C1', dom: 'biz', cls: 'part', a: ['to'],
     t: 'We were hoping ___ extend the deadline by two days, if that would be possible for your team.',
     c: {
       for: 'hoping for braucht ein Nomen, hier folgt ein Verb. || hoping for needs a noun, but a verb follows here.',
@@ -327,8 +327,8 @@ export const items = [
     ok: 'Höflicher Wunsch: We were hoping to + Grundform. || A polite wish: We were hoping to + base form.',
   },
   {
-    p: 'dip.possible', lv: 'B2', dom: 'biz', cls: 'part', a: ['to'],
-    t: 'Would it be possible ___ move the meeting to Thursday morning, because several people are travelling on Wednesday?',
+    p: 'dip.possible', lv: 'C1', dom: 'biz', cls: 'part', a: ['to'],
+    t: 'Would it be possible ___ move the meeting to Thursday morning, because several people are traveling on Wednesday?',
     c: {
       for: 'possible for braucht eine Person danach („for us to move“). || possible for needs a person after it (“for us to move”).',
       if: 'possible if + Grundform passt nicht; if braucht einen ganzen Satz. || possible if + base form does not fit; if needs a full clause.',
@@ -337,7 +337,7 @@ export const items = [
     ok: 'Höfliche Frage: Would it be possible + to + Grundform? || A polite question: Would it be possible + to + base form?',
   },
   {
-    p: 'dip.possible', lv: 'B2+', dom: 'biz', cls: 'prep', a: ['for'],
+    p: 'dip.possible', lv: 'C1', dom: 'biz', cls: 'prep', a: ['for'],
     t: 'Would it be possible ___ us to join the call about ten minutes late, because of a customer meeting?',
     c: {
       to: 'possible to us ist falsch; vor der Person steht for. || possible to us is wrong; for goes before the person.',

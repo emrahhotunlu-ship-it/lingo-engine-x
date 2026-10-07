@@ -7,10 +7,10 @@
    "area": "gram",
    "pat": "hg.modal",
    "topic": "c1-hedging",
-   "level": "B2+",
+   "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "text": "The delay ___ be caused by the new firewall, but we have not checked the logs yet.",
+   "text": "The drop in orders ___ be linked to the price increase, but we have not analyzed the data yet.",
    "accept": [
     "might",
     "may",
@@ -58,14 +58,15 @@
    "area": "gram",
    "pat": "hg.modal",
    "topic": "c1-hedging",
-   "level": "B2+",
+   "level": "C1",
    "dom": "biz",
    "src": "seed",
    "text": "The new vendor ___ be cheaper than our current one, but we need to compare both offers first.",
    "accept": [
     "might",
     "may",
-    "could"
+    "could",
+    "should"
    ],
    "cls": "aux",
    "chips": [
@@ -109,10 +110,10 @@
    "area": "gram",
    "pat": "hg.worth",
    "topic": "c1-hedging",
-   "level": "B2+",
+   "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "text": "It might ___ worth checking the contract once more before we sign anything on Friday.",
+   "text": "It could ___ worth asking the vendor for a written guarantee before we place the order.",
    "accept": [
     "be"
    ],
@@ -124,30 +125,30 @@
    ],
    "why": {
     "ok": {
-     "de": "Höfliche Empfehlung: It might be worth + -ing.",
-     "en": "A polite suggestion: It might be worth + -ing."
+     "de": "Höfliche Empfehlung: It could/might be worth + -ing.",
+     "en": "A polite suggestion: It could/might be worth + -ing."
     },
     "wrong": [
      {
       "if": [
        "is"
       ],
-      "de": "Nach might steht die Grundform be, nicht is.",
-      "en": "After might comes the base form be, not is."
+      "de": "Nach could steht die Grundform be, nicht is.",
+      "en": "After could comes the base form be, not is."
      },
      {
       "if": [
        "been"
       ],
-      "de": "might been ist keine Form; es braucht be oder have been.",
-      "en": "might been is not a form; it needs be or have been."
+      "de": "could been ist keine Form; es braucht be oder have been.",
+      "en": "could been is not a form; it needs be or have been."
      },
      {
       "if": [
        "being"
       ],
-      "de": "might being gibt es nicht; nach einem Modalverb steht die Grundform.",
-      "en": "might being does not exist; a modal verb takes the base form."
+      "de": "could being gibt es nicht; nach einem Modalverb steht die Grundform.",
+      "en": "could being does not exist; a modal verb takes the base form."
      }
     ]
    }
@@ -207,10 +208,10 @@
    "area": "gram",
    "pat": "hg.seems",
    "topic": "c1-hedging",
-   "level": "B2+",
+   "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "text": "It seems as ___ the client has changed his mind about the budget, because nobody has replied to our offer.",
+   "text": "It seems as ___ our competitor has lowered its prices again, because several customers have stopped ordering.",
    "accept": [
     "if",
     "though"
@@ -257,7 +258,7 @@
    "area": "gram",
    "pat": "hg.downtoner",
    "topic": "c1-hedging",
-   "level": "B2+",
+   "level": "C1",
    "dom": "biz",
    "src": "seed",
    "text": "To be honest, the new interface is ___ quite as intuitive as the old one, at least for our sales team.",
@@ -310,7 +311,7 @@
    "level": "B2",
    "dom": "life",
    "src": "seed",
-   "text": "This time next week, we will ___ sitting on a beach in Portugal, far away from our inboxes.",
+   "text": "This time tomorrow, the whole team will ___ sitting in the board meeting, so nobody will answer the phone.",
    "accept": [
     "be"
    ],
@@ -409,7 +410,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "text": "___ you be using the projector at two, or can I borrow it for a short customer call?",
+   "text": "___ you be needing the company car on Thursday, or may I take it to the airport?",
    "accept": [
     "will",
     "would"
@@ -459,7 +460,7 @@
    "level": "B2",
    "dom": "biz",
    "src": "seed",
-   "text": "By the end of this quarter, we will ___ signed fifty new customers in the Nordic region.",
+   "text": "By the end of next year, our team will ___ opened twelve new offices across Europe.",
    "accept": [
     "have"
    ],
@@ -554,10 +555,10 @@
    "area": "gram",
    "pat": "fut.perf-cont",
    "topic": "future-perf-cont",
-   "level": "B2+",
+   "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "text": "Next June, I will have ___ working for this company for exactly ten years.",
+   "text": "In October, the CFO will have ___ leading the finance department for exactly twelve years.",
    "accept": [
     "been"
    ],
@@ -603,7 +604,7 @@
    "area": "gram",
    "pat": "fut.perf-cont",
    "topic": "future-perf-cont",
-   "level": "B2+",
+   "level": "C1",
    "dom": "biz",
    "src": "seed",
    "text": "By December, she will have been managing the sales team ___ nearly eight years.",
@@ -704,7 +705,7 @@
    "level": "B2",
    "dom": "life",
    "src": "seed",
-   "text": "I could not open the door of my flat because I ___ left my keys at the office again.",
+   "text": "I could not open the door of my apartment because I ___ left my keys at the office again.",
    "accept": [
     "had"
    ],
@@ -802,7 +803,7 @@
    "level": "B2+",
    "dom": "life",
    "src": "seed",
-   "text": "She looked exhausted because she had been working ___ six o'clock that morning without a single break.",
+   "text": "The engineers were tired because they had been testing the system ___ midnight without a break.",
    "accept": [
     "since",
     "from"
@@ -852,7 +853,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "text": "It was the first time I ___ ever spoken to a customer in Japanese, and I was very nervous.",
+   "text": "It was the first time we ___ ever lost a bid against a smaller competitor, and the mood in the team was bad.",
    "accept": [
     "had"
    ],
@@ -879,15 +880,15 @@
       "if": [
        "did"
       ],
-      "de": "did spoken gibt es nicht; nach did steht die Grundform.",
-      "en": "did spoken does not exist; did takes the base form."
+      "de": "did lost gibt es nicht; nach did steht die Grundform.",
+      "en": "did lost does not exist; did takes the base form."
      },
      {
       "if": [
        "was"
       ],
-      "de": "was spoken wäre Passiv: „mit mir wurde gesprochen“.",
-      "en": "was spoken would be passive: “was spoken to”."
+      "de": "was lost wäre Passiv: „wurde verloren“.",
+      "en": "was lost would be passive."
      }
     ]
    }
@@ -950,7 +951,7 @@
    "level": "B2",
    "dom": "biz",
    "src": "seed",
-   "text": "She told me that the board ___ already approved the budget the day before the announcement.",
+   "text": "He explained that the committee ___ already rejected the first draft before the meeting started.",
    "accept": [
     "had"
    ],
@@ -970,8 +971,8 @@
       "if": [
        "has"
       ],
-      "de": "has gehört zur Gegenwart; nach „told“ rutscht have/has einen Schritt zurück zu had.",
-      "en": "has is present; after “told” have/has moves one step back to had."
+      "de": "has gehört zur Gegenwart; nach einem Berichtsverb in der Vergangenheit rutscht has/have zu had.",
+      "en": "has is present; after a reporting verb in the past has/have moves back to had."
      },
      {
       "if": [
@@ -984,8 +985,8 @@
       "if": [
        "would"
       ],
-      "de": "would approved gibt es nicht; had + Partizip steht für das Frühere.",
-      "en": "would approved does not exist; had + participle expresses the earlier action."
+      "de": "would rejected gibt es nicht; had + Partizip steht für das Frühere.",
+      "en": "would rejected does not exist; had + participle expresses the earlier action."
      }
     ]
    }
@@ -1048,7 +1049,7 @@
    "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "text": "No sooner had we signed the contract ___ the client asked for several changes to the terms.",
+   "text": "No sooner had the new software been installed ___ the first complaints arrived from the sales team.",
    "accept": [
     "than"
    ],
@@ -1343,7 +1344,7 @@
    "level": "B2+",
    "dom": "life",
    "src": "seed",
-   "text": "After ten years in Spain, she is completely ___ to eating dinner at ten o'clock at night.",
+   "text": "Having lived in Seoul for years, he is perfectly ___ to working late into the evening.",
    "accept": [
     "used",
     "accustomed"
@@ -1393,7 +1394,7 @@
    "level": "B2",
    "dom": "biz",
    "src": "seed",
-   "text": "It took me a few weeks to get used ___ the new software, but now I could not work without it.",
+   "text": "It will take the team some time to get used ___ the new approval workflow, but the training helps.",
    "accept": [
     "to"
    ],
@@ -1437,8 +1438,8 @@
    "id": "ocl-0062",
    "kind": "ocl",
    "area": "gram",
-   "pat": "psp.finished-time",
-   "topic": "past-simple-perfect",
+   "pat": "rc.who-which",
+   "topic": "relative",
    "level": "B2",
    "dom": "biz",
    "src": "seed",
@@ -1489,7 +1490,7 @@
    "area": "gram",
    "pat": "dip.wondering",
    "topic": "c1-diplomacy",
-   "level": "B2+",
+   "level": "C1",
    "dom": "biz",
    "src": "seed",
    "text": "I was wondering ___ you could send me the updated price list by tomorrow afternoon.",
@@ -1539,7 +1540,7 @@
    "area": "gram",
    "pat": "dip.hoping",
    "topic": "c1-diplomacy",
-   "level": "B2+",
+   "level": "C1",
    "dom": "biz",
    "src": "seed",
    "text": "We were hoping ___ extend the deadline by two days, if that would be possible for your team.",
@@ -1588,10 +1589,10 @@
    "area": "gram",
    "pat": "dip.possible",
    "topic": "c1-diplomacy",
-   "level": "B2",
+   "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "text": "Would it be possible ___ move the meeting to Thursday morning, because several people are travelling on Wednesday?",
+   "text": "Would it be possible ___ move the meeting to Thursday morning, because several people are traveling on Wednesday?",
    "accept": [
     "to"
    ],
@@ -1637,7 +1638,7 @@
    "area": "gram",
    "pat": "dip.possible",
    "topic": "c1-diplomacy",
-   "level": "B2+",
+   "level": "C1",
    "dom": "biz",
    "src": "seed",
    "text": "Would it be possible ___ us to join the call about ten minutes late, because of a customer meeting?",

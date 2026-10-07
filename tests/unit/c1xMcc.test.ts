@@ -47,7 +47,7 @@ describe('mcc: Bestand', () => {
     for (let i = 0; i + 10 <= items.length; i += 10) expect(new Set(items.slice(i, i + 10).map((x) => x.answer)).size).toBeGreaterThanOrEqual(3);
   });
 
-  it('jede falsche Option hat genau eine Begründung mit Kategorie; mindestens ein Ablenker je Aufgabe ist „calque“ (Deutsch gedacht)', () => {
+  it('jede falsche Option hat genau eine Begründung mit Kategorie', () => {
     const bad: string[] = [];
     for (const it of items) {
       const wrong = it.options.filter((_, i) => i !== it.answer);
@@ -56,10 +56,14 @@ describe('mcc: Bestand', () => {
         if (rules.length !== 1) bad.push(`${it.id}: ${w} hat ${rules.length} Regeln`);
         else if (!rules[0]?.cat) bad.push(`${it.id}: ${w} ohne Kategorie`);
       }
-      if (!it.why.wrong.some((r) => r.cat === 'calque')) bad.push(`${it.id}: kein calque`);
       if (it.why.wrong.length !== 3) bad.push(`${it.id}: ${it.why.wrong.length} Regeln statt 3`);
     }
     expect(bad).toEqual([]);
+  });
+
+  it('ein calque-Ablenker (Deutsch gedacht) steht nur, wo ein Deutscher es wirklich sagt: bei mindestens 80 % der Aufgaben', () => {
+    const withCalque = items.filter((it) => it.why.wrong.some((r) => r.cat === 'calque')).length;
+    expect(withCalque / items.length).toBeGreaterThanOrEqual(0.8);
   });
 
   it('die Inhaltsprüfung findet keine Befunde; die Lösung steht nie im Satz', () => {
@@ -84,5 +88,16 @@ describe('mcc: Hinweis 2 (eine falsche Option wird ausgegraut)', () => {
         expect(k).not.toBe(avoid);
       }
     }
+  });
+});
+
+describe('mcc: Wortschatz-Aufgaben erzeugen nie ein Grammatik-Dokument', () => {
+  it('der Schreibweg überspringt jede area-lex-Aufgabe (auch mit vorhandenem Dokument)', async () => {
+    const { grammarWrite } = await import('../../src/domain/grammar/write');
+    const { toTask } = await import('../../src/domain/c1x/runtime');
+    const lex = items.find((i) => i.area === 'lex') as Mcc;
+    const a = { kind: 'g', t: 1, day: '2026-09-20', task: toTask(lex), dontKnow: false, help: { level: 0 }, grade: 3, verdict: 'wrong', given: 'x', ms: 1000, lang: 'de', ctx: 'duty', judged: 'local' } as never;
+    expect(grammarWrite(undefined, a).kind).toBe('skip');
+    expect(grammarWrite({ id: 'lex', p: 0.5 }, a).kind).toBe('skip');
   });
 });

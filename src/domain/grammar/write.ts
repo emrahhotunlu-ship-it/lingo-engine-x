@@ -154,6 +154,8 @@ function overflowRepair(a: GrammarAnswer): NewRepair | undefined {
 
 export function grammarWrite(cur: Readonly<Doc> | undefined, a: GrammarAnswer): GrammarWrite {
   const topic = a.task.topic;
+  // Wortschatz-Aufgaben des Aufgabensystems c1x (area 'lex') gehören zu keinem Grammatikthema: nie nach grammar/<topic> buchen.
+  if (a.task.c1?.area === 'lex') return { kind: 'skip', reason: 'unknown_topic' };
   const tp = topicById(topic);
   if (!cur) {
     if (!tp) return { kind: 'skip', reason: 'unknown_topic' };

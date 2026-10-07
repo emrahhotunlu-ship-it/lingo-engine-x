@@ -1227,8 +1227,8 @@
      {
       "opt": "are arriving",
       "cat": "grammar",
-      "de": "are arriving passt nicht in einen by-the-time-Satz.",
-      "en": "are arriving does not fit a by-the-time clause."
+      "de": "are arriving ist in einem by-the-time-Satz ungewöhnlich; üblich ist die einfache Gegenwart.",
+      "en": "are arriving is unusual in a by-the-time clause; the simple present is usual."
      }
     ]
    }
@@ -1291,7 +1291,7 @@
     "since",
     "from",
     "for",
-    "after"
+    "while"
    ],
    "answer": 0,
    "why": {
@@ -1313,10 +1313,10 @@
       "en": "for needs a length of time; here a clause with a point in time follows."
      },
      {
-      "opt": "after",
+      "opt": "while",
       "cat": "meaning",
-      "de": "after nennt nur die Reihenfolge, nicht die Dauer bis heute.",
-      "en": "after names only the order, not the duration up to now."
+      "de": "while heißt „während“ und beschreibt Gleichzeitigkeit, nicht den Startpunkt.",
+      "en": "while means “during the time that” and describes simultaneity, not a starting point."
      }
     ]
    }

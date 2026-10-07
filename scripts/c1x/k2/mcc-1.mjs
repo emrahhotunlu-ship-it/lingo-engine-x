@@ -168,7 +168,7 @@ export const items = [
   {
     p: 'tc.by-the-time', lv: 'C1', dom: 'biz',
     t: 'By the time the auditors ___ next Monday, we will have archived all of the old contracts and invoices.',
-    o: [['arrive'], W('will arrive', 'calque', 'Deutsch sagt „bis die Prüfer ankommen werden“; nach by the time steht im Englischen keine Zukunftsform. || German says “bis die Prüfer ankommen werden”; English uses no future form after by the time.'), W('would arrive', 'grammar', 'would arrive braucht eine Bedingung. || would arrive needs a condition.'), W('are arriving', 'grammar', 'are arriving passt nicht in einen by-the-time-Satz. || are arriving does not fit a by-the-time clause.')],
+    o: [['arrive'], W('will arrive', 'calque', 'Deutsch sagt „bis die Prüfer ankommen werden“; nach by the time steht im Englischen keine Zukunftsform. || German says “bis die Prüfer ankommen werden”; English uses no future form after by the time.'), W('would arrive', 'grammar', 'would arrive braucht eine Bedingung. || would arrive needs a condition.'), W('are arriving', 'grammar', 'are arriving ist in einem by-the-time-Satz ungewöhnlich; üblich ist die einfache Gegenwart. || are arriving is unusual in a by-the-time clause; the simple present is usual.')],
     ok: 'By the time + Gegenwart (arrive), im Hauptsatz will have + Partizip. || By the time + present (arrive), the main clause takes will have + participle.',
   },
   {
@@ -180,7 +180,7 @@ export const items = [
   {
     p: 'psp.since-for', lv: 'B2', dom: 'biz',
     t: 'She has worked for this company ___ she graduated in 2010, and she has been promoted twice.',
-    o: [['since'], W('from', 'calque', 'Deutsch „von 2010 an“ klingt wie from; mit has worked steht since + Zeitpunkt. || German “von 2010 an” sounds like from; with has worked use since + point in time.'), W('for', 'grammar', 'for braucht eine Länge; hier folgt ein Satz mit einem Zeitpunkt. || for needs a length of time; here a clause with a point in time follows.'), W('after', 'meaning', 'after nennt nur die Reihenfolge, nicht die Dauer bis heute. || after names only the order, not the duration up to now.')],
+    o: [['since'], W('from', 'calque', 'Deutsch „von 2010 an“ klingt wie from; mit has worked steht since + Zeitpunkt. || German “von 2010 an” sounds like from; with has worked use since + point in time.'), W('for', 'grammar', 'for braucht eine Länge; hier folgt ein Satz mit einem Zeitpunkt. || for needs a length of time; here a clause with a point in time follows.'), W('while', 'meaning', 'while heißt „während“ und beschreibt Gleichzeitigkeit, nicht den Startpunkt. || while means “during the time that” and describes simultaneity, not a starting point.')],
     ok: 'since + Zeitpunkt oder Satz mit Vergangenheit: Dauer bis jetzt. || since + point in time or past clause: duration up to now.',
   },
 ];
