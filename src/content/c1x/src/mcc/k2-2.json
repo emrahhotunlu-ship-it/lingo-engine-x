@@ -1,0 +1,1325 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "mcc-0031",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "hg.modal",
+   "topic": "c1-hedging",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The delay ___ be caused by the new firewall, but we have not checked the server logs yet.",
+   "options": [
+    "must",
+    "can",
+    "would",
+    "might"
+   ],
+   "answer": 3,
+   "why": {
+    "ok": {
+     "de": "Vorsichtige Vermutung ohne Beleg: might/could/may + Grundform.",
+     "en": "A cautious guess without proof: might/could/may + base form."
+    },
+    "wrong": [
+     {
+      "opt": "must",
+      "cat": "meaning",
+      "de": "must drückt Sicherheit aus, ihr habt aber noch nicht geprüft.",
+      "en": "must expresses certainty, but you have not checked yet."
+     },
+     {
+      "opt": "can",
+      "cat": "calque",
+      "de": "„Das kann an der Firewall liegen“ ist Deutsch gedacht; can heißt „grundsätzlich möglich“, für eine Vermutung gilt might/could.",
+      "en": "“Das kann an der Firewall liegen” is German thinking; can means “possible in general”, for a guess use might/could."
+     },
+     {
+      "opt": "would",
+      "cat": "grammar",
+      "de": "would braucht eine Bedingung (if …).",
+      "en": "would needs a condition (if …)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0032",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "hg.worth",
+   "topic": "c1-hedging",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "It might be ___ checking the contract once more before we sign anything on Friday afternoon.",
+   "options": [
+    "worthy",
+    "worth",
+    "valuable",
+    "value"
+   ],
+   "answer": 1,
+   "why": {
+    "ok": {
+     "de": "Höfliche Empfehlung: It might be worth + -ing.",
+     "en": "A polite suggestion: It might be worth + -ing."
+    },
+    "wrong": [
+     {
+      "opt": "worthy",
+      "cat": "calque",
+      "de": "worthy heißt „würdig“; „es lohnt sich“ heißt worth + -ing.",
+      "en": "worthy means “deserving”; “it is worth the effort” is worth + -ing."
+     },
+     {
+      "opt": "valuable",
+      "cat": "calque",
+      "de": "valuable beschreibt Dinge mit Wert, nicht „es lohnt sich zu prüfen“.",
+      "en": "valuable describes things with value, not “it pays to check”."
+     },
+     {
+      "opt": "value",
+      "cat": "grammar",
+      "de": "value ist ein Nomen oder Verb; vor -ing steht worth.",
+      "en": "value is a noun or verb; worth goes before -ing."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0033",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "hg.seems",
+   "topic": "c1-hedging",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "It ___ that the client has changed his mind about the budget, because nobody has replied to our offer.",
+   "options": [
+    "seems",
+    "shines",
+    "looks like",
+    "seem"
+   ],
+   "answer": 0,
+   "why": {
+    "ok": {
+     "de": "Eindruck vorsichtig ausdrücken: It seems (that) + Satz.",
+     "en": "Expressing an impression cautiously: It seems (that) + clause."
+    },
+    "wrong": [
+     {
+      "opt": "shines",
+      "cat": "calque",
+      "de": "Deutsch „es scheint“ ist englisch seem; shine heißt „leuchten“.",
+      "en": "German “es scheint” is seem in English; shine means “give light”."
+     },
+     {
+      "opt": "looks like",
+      "cat": "grammar",
+      "de": "looks like + that-Satz gibt es nicht; es heißt It seems that … oder It looks like + Satz ohne that.",
+      "en": "looks like + that-clause does not exist; it is It seems that … or It looks like + clause without that."
+     },
+     {
+      "opt": "seem",
+      "cat": "grammar",
+      "de": "It braucht seems mit -s.",
+      "en": "It needs seems with -s."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0034",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "fut.continuous",
+   "topic": "future-perf-cont",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "This time next week, we ___ on a beach in Portugal, far away from our inboxes and from every meeting.",
+   "options": [
+    "sit",
+    "will be sitting",
+    "will have sat",
+    "would be sitting"
+   ],
+   "answer": 1,
+   "why": {
+    "ok": {
+     "de": "Was zu einem künftigen Zeitpunkt gerade läuft: will be + -ing.",
+     "en": "What will be in progress at a future moment: will be + -ing."
+    },
+    "wrong": [
+     {
+      "opt": "sit",
+      "cat": "calque",
+      "de": "Deutsch nutzt das Präsens für die Zukunft („wir sitzen am Strand“); Englisch braucht will be + -ing.",
+      "en": "German uses the present for the future (“wir sitzen am Strand”); English needs will be + -ing."
+     },
+     {
+      "opt": "will have sat",
+      "cat": "grammar",
+      "de": "will have sat beschreibt etwas Abgeschlossenes, nicht „gerade dabei“.",
+      "en": "will have sat describes something completed, not “in the middle of”."
+     },
+     {
+      "opt": "would be sitting",
+      "cat": "grammar",
+      "de": "would be sitting braucht eine Bedingung.",
+      "en": "would be sitting needs a condition."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0035",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "fut.cont-plan",
+   "topic": "future-perf-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "___ you be using the meeting room at four, or may I book it for a quick team workshop?",
+   "options": [
+    "Are",
+    "Do",
+    "Will",
+    "Have"
+   ],
+   "answer": 2,
+   "why": {
+    "ok": {
+     "de": "Höfliche Frage nach Plänen: Will you be + -ing?",
+     "en": "A polite question about plans: Will you be + -ing?"
+    },
+    "wrong": [
+     {
+      "opt": "Are",
+      "cat": "grammar",
+      "de": "Are you be using ist keine Form; mit be + -ing braucht es will be.",
+      "en": "Are you be using is not a form; with be + -ing it needs will be."
+     },
+     {
+      "opt": "Do",
+      "cat": "calque",
+      "de": "Deutsch fragt „Benutzt du den Beamer um zwei?“ im Präsens; Englisch: Will you be using …?",
+      "en": "German asks “Benutzt du den Beamer um zwei?” in the present; English: Will you be using …?"
+     },
+     {
+      "opt": "Have",
+      "cat": "grammar",
+      "de": "Have you be using ist keine Form.",
+      "en": "Have you be using is not a form."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0036",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "fut.perfect",
+   "topic": "future-perf-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "By the end of this quarter, we ___ fifty new customers in the Nordic region, as our plan says.",
+   "options": [
+    "have signed",
+    "will be signed",
+    "would have signed",
+    "will have signed"
+   ],
+   "answer": 3,
+   "why": {
+    "ok": {
+     "de": "Bis zu einem künftigen Zeitpunkt abgeschlossen: will have + Partizip.",
+     "en": "Completed by a future moment: will have + participle."
+    },
+    "wrong": [
+     {
+      "opt": "have signed",
+      "cat": "calque",
+      "de": "Deutsch sagt „bis Quartalsende haben wir 50 gewonnen“ im Perfekt; Englisch braucht für die Zukunft will have signed.",
+      "en": "German says “bis Quartalsende haben wir 50 gewonnen” in the perfect; English needs will have signed for the future."
+     },
+     {
+      "opt": "will be signed",
+      "cat": "grammar",
+      "de": "will be signed ist Passiv: die Kunden würden unterschrieben.",
+      "en": "will be signed is passive: the customers would be signed."
+     },
+     {
+      "opt": "would have signed",
+      "cat": "grammar",
+      "de": "would have signed braucht eine Bedingung.",
+      "en": "would have signed needs a condition."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0037",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "fut.perf-cont",
+   "topic": "future-perf-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Next June, I ___ for this company for exactly ten years, and I still enjoy my job every day.",
+   "options": [
+    "will work",
+    "am working",
+    "will have been working",
+    "have been working"
+   ],
+   "answer": 2,
+   "why": {
+    "ok": {
+     "de": "Dauer bis zu einem künftigen Zeitpunkt: will have been + -ing.",
+     "en": "Duration up to a future moment: will have been + -ing."
+    },
+    "wrong": [
+     {
+      "opt": "will work",
+      "cat": "calque",
+      "de": "Deutsch sagt „ich werde zehn Jahre hier arbeiten“; für die Dauer bis zu einem künftigen Zeitpunkt braucht Englisch will have been working.",
+      "en": "German says “ich werde zehn Jahre hier arbeiten”; for duration up to a future point English needs will have been working."
+     },
+     {
+      "opt": "am working",
+      "cat": "calque",
+      "de": "am working beschreibt nur das Jetzt.",
+      "en": "am working describes only the present."
+     },
+     {
+      "opt": "have been working",
+      "cat": "grammar",
+      "de": "have been working reicht nur bis heute, „next June“ liegt in der Zukunft.",
+      "en": "have been working reaches only to today, but “next June” is in the future."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0038",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "pp.earlier",
+   "topic": "past-perfect",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "By the time the technician arrived at the office, the main server ___ already crashed twice.",
+   "options": [
+    "had",
+    "has",
+    "was",
+    "did"
+   ],
+   "answer": 0,
+   "why": {
+    "ok": {
+     "de": "Das frühere von zwei Ereignissen in der Vergangenheit: had + Partizip.",
+     "en": "The earlier of two past events: had + participle."
+    },
+    "wrong": [
+     {
+      "opt": "has",
+      "cat": "grammar",
+      "de": "has gehört zur Gegenwart; gemeint ist früher als „arrived“.",
+      "en": "has is present; earlier than “arrived” is meant."
+     },
+     {
+      "opt": "was",
+      "cat": "calque",
+      "de": "Deutsch sagt „war schon gestartet“ (mit sein); Englisch bildet das Past Perfect mit had.",
+      "en": "German says “war schon gestartet” (with sein); English builds the past perfect with had."
+     },
+     {
+      "opt": "did",
+      "cat": "grammar",
+      "de": "did already started gibt es nicht; nach did steht die Grundform.",
+      "en": "did already started does not exist; after did comes the base form."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0039",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "pp.duration",
+   "topic": "past-perfect",
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "text": "He looked exhausted because he had been driving ___ five o'clock that morning without a proper break.",
+   "options": [
+    "for",
+    "during",
+    "by",
+    "since"
+   ],
+   "answer": 3,
+   "why": {
+    "ok": {
+     "de": "Startpunkt einer Dauer in der Vergangenheit: had been + -ing + since + Uhrzeit.",
+     "en": "The starting point of a past duration: had been + -ing + since + clock time."
+    },
+    "wrong": [
+     {
+      "opt": "for",
+      "cat": "grammar",
+      "de": "for braucht eine Länge („for ten hours“), hier steht eine Uhrzeit.",
+      "en": "for needs a length of time (“for ten hours”), but here is a clock time."
+     },
+     {
+      "opt": "during",
+      "cat": "grammar",
+      "de": "during passt nicht vor einer Uhrzeit.",
+      "en": "during does not fit before a clock time."
+     },
+     {
+      "opt": "by",
+      "cat": "calque",
+      "de": "Deutsch „bis sechs Uhr“ klingt wie by; gemeint ist der Anfang, also since.",
+      "en": "German “bis sechs Uhr” sounds like by; the start is meant, so since."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0040",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "pp.first-time",
+   "topic": "past-perfect",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "It was the first time she ___ ever presented to a board in English, and her hands were shaking.",
+   "options": [
+    "have",
+    "had",
+    "was",
+    "did"
+   ],
+   "answer": 1,
+   "why": {
+    "ok": {
+     "de": "It was the first time + had + Partizip.",
+     "en": "It was the first time + had + participle."
+    },
+    "wrong": [
+     {
+      "opt": "have",
+      "cat": "calque",
+      "de": "Deutsch sagt „das erste Mal, dass ich gesprochen habe“ (Perfekt); nach „It was“ steht im Englischen had.",
+      "en": "German says “das erste Mal, dass ich gesprochen habe” (perfect); after “It was” English uses had."
+     },
+     {
+      "opt": "was",
+      "cat": "grammar",
+      "de": "was spoken wäre Passiv.",
+      "en": "was spoken would be passive."
+     },
+     {
+      "opt": "did",
+      "cat": "grammar",
+      "de": "did spoken gibt es nicht; nach did steht die Grundform.",
+      "en": "did spoken does not exist; after did comes the base form."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0041",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "pp.reported",
+   "topic": "past-perfect",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "She told me that the board ___ already approved the budget the day before the public announcement.",
+   "options": [
+    "had",
+    "has",
+    "have",
+    "would"
+   ],
+   "answer": 0,
+   "why": {
+    "ok": {
+     "de": "Berichtete Rede in der Vergangenheit: has/have + Partizip wird zu had + Partizip.",
+     "en": "Reported speech in the past: has/have + participle becomes had + participle."
+    },
+    "wrong": [
+     {
+      "opt": "has",
+      "cat": "calque",
+      "de": "Deutsch sagt „sie sagte, der Vorstand hat genehmigt“ (Perfekt); nach „told“ rutscht has einen Schritt zurück zu had.",
+      "en": "German says “sie sagte, der Vorstand hat genehmigt” (perfect); after “told” has moves one step back to had."
+     },
+     {
+      "opt": "have",
+      "cat": "grammar",
+      "de": "have wird in der berichteten Rede zu had, und board passt hier auch nicht zu have.",
+      "en": "have becomes had in reported speech, and board does not take have here either."
+     },
+     {
+      "opt": "would",
+      "cat": "grammar",
+      "de": "would approved gibt es nicht; had + Partizip steht für das Frühere.",
+      "en": "would approved does not exist; had + participle expresses the earlier action."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0042",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "pp.inversion",
+   "topic": "past-perfect",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "No sooner had we signed the contract ___ the client asked for several changes to the payment terms.",
+   "options": [
+    "when",
+    "than",
+    "then",
+    "as"
+   ],
+   "answer": 1,
+   "why": {
+    "ok": {
+     "de": "No sooner had + Subjekt + Partizip … than.",
+     "en": "No sooner had + subject + participle … than."
+    },
+    "wrong": [
+     {
+      "opt": "when",
+      "cat": "grammar",
+      "de": "when gehört zu Hardly … when; zu No sooner gehört than.",
+      "en": "when belongs to Hardly … when; No sooner takes than."
+     },
+     {
+      "opt": "then",
+      "cat": "calque",
+      "de": "Deutsch „kaum …, dann“ klingt wie then; Englisch braucht than.",
+      "en": "German “kaum …, dann” sounds like then; English needs than."
+     },
+     {
+      "opt": "as",
+      "cat": "calque",
+      "de": "Deutsch „kaum …, als“ klingt wie as; Englisch braucht than.",
+      "en": "German “kaum …, als” sounds like as; English needs than."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0043",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "ut.used-to",
+   "topic": "used-to",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Our team ___ to work in a tiny office near the river before the company moved into the new tower.",
+   "options": [
+    "use",
+    "would",
+    "used",
+    "were"
+   ],
+   "answer": 2,
+   "why": {
+    "ok": {
+     "de": "Frühere Gewohnheit oder Lage: used to + Grundform.",
+     "en": "A past habit or situation: used to + base form."
+    },
+    "wrong": [
+     {
+      "opt": "use",
+      "cat": "calque",
+      "de": "Deutsch „wir pflegten zu arbeiten“ führt zu use to; in der Aussage heißt es used to.",
+      "en": "German “wir pflegten zu arbeiten” leads to use to; in a statement it is used to."
+     },
+     {
+      "opt": "would",
+      "cat": "grammar",
+      "de": "would to work gibt es nicht; would steht ohne to.",
+      "en": "would to work does not exist; would takes no to."
+     },
+     {
+      "opt": "were",
+      "cat": "grammar",
+      "de": "were to work hat eine andere Bedeutung („sollten arbeiten“).",
+      "en": "were to work has a different meaning (“were supposed to work”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0044",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "ut.would",
+   "topic": "used-to",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "On Friday evenings, our previous manager ___ order pizza for the whole team and stay until the last ticket was closed.",
+   "options": [
+    "used",
+    "does",
+    "was",
+    "would"
+   ],
+   "answer": 3,
+   "why": {
+    "ok": {
+     "de": "Wiederholte Handlungen in der Vergangenheit: would + Grundform.",
+     "en": "Repeated actions in the past: would + base form."
+    },
+    "wrong": [
+     {
+      "opt": "used",
+      "cat": "grammar",
+      "de": "used invite gibt es nicht; es heißt used to invite.",
+      "en": "used invite does not exist; it is used to invite."
+     },
+     {
+      "opt": "does",
+      "cat": "grammar",
+      "de": "does ist Gegenwart; „old boss“ liegt in der Vergangenheit.",
+      "en": "does is present; “old boss” is in the past."
+     },
+     {
+      "opt": "was",
+      "cat": "calque",
+      "de": "Deutsch „er war es gewohnt einzuladen“ klingt wie was; wiederholte Handlungen in der Vergangenheit: would.",
+      "en": "German “er pflegte einzuladen” sounds like was; repeated past actions: would."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0045",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "ut.be-used-to",
+   "topic": "used-to",
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "text": "After a decade in Madrid, my sister is completely ___ to having dinner at ten o'clock in the evening.",
+   "options": [
+    "use",
+    "usual",
+    "used",
+    "usually"
+   ],
+   "answer": 2,
+   "why": {
+    "ok": {
+     "de": "Schon gewöhnt: be used to + -ing.",
+     "en": "Already accustomed: be used to + -ing."
+    },
+    "wrong": [
+     {
+      "opt": "use",
+      "cat": "grammar",
+      "de": "is use to gibt es nicht; die Wendung heißt be used to.",
+      "en": "is use to does not exist; the phrase is be used to."
+     },
+     {
+      "opt": "usual",
+      "cat": "calque",
+      "de": "usual heißt „üblich“, nicht „gewohnt“ (false friend zu „gewöhnlich“).",
+      "en": "usual means “common”, not “accustomed” (a false friend of “gewöhnlich”)."
+     },
+     {
+      "opt": "usually",
+      "cat": "grammar",
+      "de": "usually ist ein Adverb („normalerweise“) und passt nicht vor to.",
+      "en": "usually is an adverb (“normally”) and does not fit before to."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0046",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "ut.get-used-to",
+   "topic": "used-to",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "It took me a few weeks before I got used ___ the new ticket system, but now I could not work without it.",
+   "options": [
+    "to",
+    "on",
+    "with",
+    "for"
+   ],
+   "answer": 0,
+   "why": {
+    "ok": {
+     "de": "Sich gewöhnen: get used to + Nomen oder -ing.",
+     "en": "Becoming accustomed: get used to + noun or -ing."
+    },
+    "wrong": [
+     {
+      "opt": "on",
+      "cat": "calque",
+      "de": "Deutsch „gewöhnen an“ verleitet zu on; Englisch sagt get used to.",
+      "en": "German “gewöhnen an” tempts you to say on; English says get used to."
+     },
+     {
+      "opt": "with",
+      "cat": "grammar",
+      "de": "get used with ist falsch; es heißt get used to.",
+      "en": "get used with is wrong; it is get used to."
+     },
+     {
+      "opt": "for",
+      "cat": "grammar",
+      "de": "get used for hat eine andere Bedeutung („verwendet werden für“).",
+      "en": "get used for has a different meaning (“be used for”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0047",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "dip.possible",
+   "topic": "c1-diplomacy",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Would it be possible ___ our team to start the workshop half an hour later, because of a delayed flight?",
+   "options": [
+    "to",
+    "by",
+    "with",
+    "for"
+   ],
+   "answer": 3,
+   "why": {
+    "ok": {
+     "de": "Mit Person: Would it be possible for us to + Grundform?",
+     "en": "With a person: Would it be possible for us to + base form?"
+    },
+    "wrong": [
+     {
+      "opt": "to",
+      "cat": "calque",
+      "de": "„Möglich für uns“ ist possible for us; to wäre „zu uns“.",
+      "en": "“Möglich für uns” is possible for us; to would mean “towards us”."
+     },
+     {
+      "opt": "by",
+      "cat": "grammar",
+      "de": "by passt nicht nach possible.",
+      "en": "by does not fit after possible."
+     },
+     {
+      "opt": "with",
+      "cat": "grammar",
+      "de": "with passt nicht nach possible.",
+      "en": "with does not fit after possible."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0048",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "cn.zero",
+   "topic": "conditionals",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Whenever our system ___ a payment error, it automatically sends an alert to the finance team.",
+   "options": [
+    "will detect",
+    "detects",
+    "would detect",
+    "is detecting"
+   ],
+   "answer": 1,
+   "why": {
+    "ok": {
+     "de": "Feste Regel: whenever/if + Gegenwart, Gegenwart.",
+     "en": "A fixed rule: whenever/if + present, present."
+    },
+    "wrong": [
+     {
+      "opt": "will detect",
+      "cat": "calque",
+      "de": "Deutsch sagt „wann immer es einen Fehler erkennen wird“; nach whenever steht im Englischen die Gegenwart.",
+      "en": "German says “wann immer es einen Fehler erkennen wird”; English uses the present after whenever."
+     },
+     {
+      "opt": "would detect",
+      "cat": "grammar",
+      "de": "would detect braucht eine unwirkliche Bedingung.",
+      "en": "would detect needs an unreal condition."
+     },
+     {
+      "opt": "is detecting",
+      "cat": "grammar",
+      "de": "is detecting beschreibt einen Vorgang jetzt, nicht eine feste Regel.",
+      "en": "is detecting describes a process now, not a fixed rule."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0049",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "cn.were",
+   "topic": "conditionals",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "If I ___ you, I would double-check the bank details before transferring any money to that new supplier.",
+   "options": [
+    "were",
+    "am",
+    "would be",
+    "be"
+   ],
+   "answer": 0,
+   "why": {
+    "ok": {
+     "de": "Ratschlag: If I were you, I would …",
+     "en": "Advice: If I were you, I would …"
+    },
+    "wrong": [
+     {
+      "opt": "am",
+      "cat": "grammar",
+      "de": "am passt nicht zu einem Ratschlag mit would.",
+      "en": "am does not fit advice with would."
+     },
+     {
+      "opt": "would be",
+      "cat": "calque",
+      "de": "Deutsch sagt „wenn ich du wäre“ oder „würde sein“; im Englischen steht im if-Satz were, nie would.",
+      "en": "German says “wenn ich du wäre”; in English the if-clause takes were, never would."
+     },
+     {
+      "opt": "be",
+      "cat": "grammar",
+      "de": "if I be you ist veraltet.",
+      "en": "if I be you is archaic."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0050",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "cn.second",
+   "topic": "conditionals",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "If our department ___ a bigger budget, we would buy a second server for the archive right away.",
+   "options": [
+    "would have",
+    "had",
+    "has",
+    "have"
+   ],
+   "answer": 1,
+   "why": {
+    "ok": {
+     "de": "Unwirkliche Gegenwart: if + Past Simple, would + Grundform.",
+     "en": "Unreal present: if + past simple, would + base form."
+    },
+    "wrong": [
+     {
+      "opt": "would have",
+      "cat": "calque",
+      "de": "Deutsch sagt „wenn wir mehr Geld haben würden“; im Englischen steht im if-Satz die Vergangenheit, nie would.",
+      "en": "German says “wenn wir mehr Geld haben würden”; in English the if-clause takes the past, never would."
+     },
+     {
+      "opt": "has",
+      "cat": "grammar",
+      "de": "has passt nicht zu einer unwirklichen Annahme.",
+      "en": "has does not fit an unreal assumption."
+     },
+     {
+      "opt": "have",
+      "cat": "grammar",
+      "de": "have ist Gegenwart; für die unwirkliche Annahme braucht der if-Satz die Vergangenheit.",
+      "en": "have is present; the unreal if-clause needs the past."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0051",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "cn.third",
+   "topic": "conditionals",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "If we ___ the figures twice, we would have noticed the mistake long before the audit.",
+   "options": [
+    "would have checked",
+    "checked",
+    "had checked",
+    "have checked"
+   ],
+   "answer": 2,
+   "why": {
+    "ok": {
+     "de": "Verpasste Chance: if + Past Perfect, would have + Partizip.",
+     "en": "A missed chance: if + past perfect, would have + participle."
+    },
+    "wrong": [
+     {
+      "opt": "would have checked",
+      "cat": "calque",
+      "de": "Deutsch sagt „wenn wir geprüft hätten“ oder „würden geprüft haben“; im if-Satz steht im Englischen kein would.",
+      "en": "German says “wenn wir geprüft hätten”; in English the if-clause has no would."
+     },
+     {
+      "opt": "checked",
+      "cat": "grammar",
+      "de": "checked im if-Satz meint die Gegenwart; hier geht es um die verpasste Vergangenheit.",
+      "en": "checked in the if-clause means the present; this is about the missed past."
+     },
+     {
+      "opt": "have checked",
+      "cat": "grammar",
+      "de": "have checked passt nicht zu would have im Hauptsatz.",
+      "en": "have checked does not fit would have in the main clause."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0052",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "cn.if-words",
+   "topic": "conditionals",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "You may borrow the company laptop over the holidays ___ you promise to keep it locked away at night.",
+   "options": [
+    "unless",
+    "supposed",
+    "until",
+    "provided"
+   ],
+   "answer": 3,
+   "why": {
+    "ok": {
+     "de": "Bedingung mit Auflage: provided/providing (that) + Gegenwart.",
+     "en": "A condition with a requirement: provided/providing (that) + present."
+    },
+    "wrong": [
+     {
+      "opt": "unless",
+      "cat": "meaning",
+      "de": "unless würde die Bedingung umkehren: nur wenn du es nicht versprichst.",
+      "en": "unless would reverse the condition: only if you do not promise it."
+     },
+     {
+      "opt": "supposed",
+      "cat": "calque",
+      "de": "Deutsch „vorausgesetzt“ führt zu supposed; die Wendung ist provided (that).",
+      "en": "German “vorausgesetzt” leads to supposed; the phrase is provided (that)."
+     },
+     {
+      "opt": "until",
+      "cat": "meaning",
+      "de": "until nennt einen Zeitpunkt, keine Bedingung.",
+      "en": "until names a point in time, not a condition."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0053",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "ca.unless",
+   "topic": "cond-alt",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We will terminate the contract ___ the vendor fixes the security problem within the next two weeks.",
+   "options": [
+    "if",
+    "except",
+    "unless",
+    "without"
+   ],
+   "answer": 2,
+   "why": {
+    "ok": {
+     "de": "unless = außer wenn; im Nebensatz steht die Gegenwart ohne zweites not.",
+     "en": "unless = except if; the clause takes the present with no second not."
+    },
+    "wrong": [
+     {
+      "opt": "if",
+      "cat": "meaning",
+      "de": "if würde die Bedeutung umkehren: Wir stornieren, falls er bestätigt.",
+      "en": "if would reverse the meaning: we cancel if he confirms."
+     },
+     {
+      "opt": "except",
+      "cat": "calque",
+      "de": "Deutsch „außer wenn“ führt zu except; vor einem Satz heißt es unless.",
+      "en": "German “außer wenn” leads to except; before a clause it is unless."
+     },
+     {
+      "opt": "without",
+      "cat": "calque",
+      "de": "Deutsch „ohne dass“ führt zu without; mit einem Satz steht unless.",
+      "en": "German “ohne dass” leads to without; with a clause use unless."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0054",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "ca.otherwise",
+   "topic": "cond-alt",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Please confirm the booking by noon tomorrow. ___, we cannot hold the conference room for your team.",
+   "options": [
+    "Otherwise",
+    "Else",
+    "Therefore",
+    "Moreover"
+   ],
+   "answer": 0,
+   "why": {
+    "ok": {
+     "de": "Otherwise = sonst: was passiert, wenn die Bitte nicht erfüllt wird.",
+     "en": "Otherwise = or else: what happens if the request is not met."
+    },
+    "wrong": [
+     {
+      "opt": "Else",
+      "cat": "calque",
+      "de": "Deutsch „sonst“ führt zu else; allein heißt es otherwise (oder or else).",
+      "en": "German “sonst” leads to else; on its own it is otherwise (or or else)."
+     },
+     {
+      "opt": "Therefore",
+      "cat": "meaning",
+      "de": "Therefore nennt eine Folge, hier folgt eine Warnung.",
+      "en": "Therefore names a result, but here a warning follows."
+     },
+     {
+      "opt": "Moreover",
+      "cat": "meaning",
+      "de": "Moreover fügt Gleichartiges hinzu, keine Warnung.",
+      "en": "Moreover adds something similar, not a warning."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0055",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "ca.inversion",
+   "topic": "cond-alt",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "___ the board known about the security gap earlier, it would have approved the new budget months ago.",
+   "options": [
+    "If",
+    "Have",
+    "Did",
+    "Had"
+   ],
+   "answer": 3,
+   "why": {
+    "ok": {
+     "de": "Förmlich ohne if: Had + Subjekt + Partizip, would have …",
+     "en": "Formal without if: Had + subject + participle, would have …"
+    },
+    "wrong": [
+     {
+      "opt": "If",
+      "cat": "grammar",
+      "de": "If we known gibt es nicht; mit if braucht es had known.",
+      "en": "If we known does not exist; with if it needs had known."
+     },
+     {
+      "opt": "Have",
+      "cat": "calque",
+      "de": "Deutsch „Hätten wir gewusst“ verleitet zu Have; die englische Umstellung beginnt mit Had.",
+      "en": "German “Hätten wir gewusst” tempts you to say Have; the English inversion starts with Had."
+     },
+     {
+      "opt": "Did",
+      "cat": "grammar",
+      "de": "Did we known ist falsch; nach did steht die Grundform.",
+      "en": "Did we known is wrong; after did comes the base form."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0056",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "ca.in-case",
+   "topic": "cond-alt",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "Take an umbrella ___ it rains later this afternoon, because the weather forecast is not very reliable.",
+   "options": [
+    "in the case",
+    "in case",
+    "in any case",
+    "for case"
+   ],
+   "answer": 1,
+   "why": {
+    "ok": {
+     "de": "Vorsorge: in case + Gegenwart.",
+     "en": "Precaution: in case + present."
+    },
+    "wrong": [
+     {
+      "opt": "in the case",
+      "cat": "grammar",
+      "de": "in the case braucht „that“ oder „of“; für Vorsorge heißt es in case.",
+      "en": "in the case needs “that” or “of”; for precaution it is in case."
+     },
+     {
+      "opt": "in any case",
+      "cat": "meaning",
+      "de": "in any case heißt „jedenfalls“, nicht „für den Fall“.",
+      "en": "in any case means “anyway”, not “just in case”."
+     },
+     {
+      "opt": "for case",
+      "cat": "calque",
+      "de": "Deutsch „für den Fall“ führt zu for case; im Englischen heißt es in case.",
+      "en": "German “für den Fall” leads to for case; English says in case."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0057",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "mc.wish-now",
+   "topic": "mixed-cond",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I wish our office ___ a bigger kitchen; twenty people share one tiny coffee machine every single morning.",
+   "options": [
+    "had",
+    "have",
+    "would have",
+    "has"
+   ],
+   "answer": 0,
+   "why": {
+    "ok": {
+     "de": "Wunsch über die Gegenwart: wish + Past Simple (had).",
+     "en": "A wish about the present: wish + past simple (had)."
+    },
+    "wrong": [
+     {
+      "opt": "have",
+      "cat": "calque",
+      "de": "Deutsch „ich wünschte, wir haben“ steht im Präsens; wish braucht für die Gegenwart die Vergangenheit.",
+      "en": "German “ich wünschte, wir haben” is in the present; wish needs the past for the present."
+     },
+     {
+      "opt": "would have",
+      "cat": "calque",
+      "de": "Deutsch „ich wünschte, wir würden haben“ führt zu would have; für einen Zustand steht die Vergangenheit.",
+      "en": "German “ich wünschte, wir würden haben” leads to would have; for a state the past is used."
+     },
+     {
+      "opt": "has",
+      "cat": "grammar",
+      "de": "has passt nicht zu we.",
+      "en": "has does not fit we."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0058",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "mc.wish-past",
+   "topic": "mixed-cond",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I wish I ___ for a written confirmation before sending the goods, because now the customer denies everything.",
+   "options": [
+    "would ask",
+    "had asked",
+    "asked",
+    "have asked"
+   ],
+   "answer": 1,
+   "why": {
+    "ok": {
+     "de": "Bedauern über die Vergangenheit: wish + Past Perfect (had asked).",
+     "en": "Regret about the past: wish + past perfect (had asked)."
+    },
+    "wrong": [
+     {
+      "opt": "would ask",
+      "cat": "calque",
+      "de": "Deutsch „ich wünschte, ich würde fragen“ führt zu would ask; Bedauern über früher braucht had + Partizip.",
+      "en": "German “ich wünschte, ich würde fragen” leads to would ask; regret about the past needs had + participle."
+     },
+     {
+      "opt": "asked",
+      "cat": "grammar",
+      "de": "asked nach wish meint die Gegenwart, hier geht es um früher.",
+      "en": "asked after wish means the present, but this is about the past."
+     },
+     {
+      "opt": "have asked",
+      "cat": "calque",
+      "de": "Deutsch „ich wünschte, ich habe gefragt“ (Perfekt) führt zu have asked; nach wish steht had asked.",
+      "en": "German “ich wünschte, ich habe gefragt” (perfect) leads to have asked; after wish use had asked."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0059",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "mc.wish-would",
+   "topic": "mixed-cond",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I wish the client ___ changing the requirements every other day; we can never finish anything.",
+   "options": [
+    "will stop",
+    "stops",
+    "would stop",
+    "is stopping"
+   ],
+   "answer": 2,
+   "why": {
+    "ok": {
+     "de": "Ärger über wiederholtes Verhalten: wish + would + Grundform.",
+     "en": "Annoyance at repeated behavior: wish + would + base form."
+    },
+    "wrong": [
+     {
+      "opt": "will stop",
+      "cat": "calque",
+      "de": "Deutsch „ich wünschte, er wird aufhören“ führt zu will stop; nach wish steht would.",
+      "en": "German “ich wünschte, er wird aufhören” leads to will stop; after wish use would."
+     },
+     {
+      "opt": "stops",
+      "cat": "grammar",
+      "de": "stops (Präsens) nach wish geht nicht; für Ärger steht would.",
+      "en": "stops (present) after wish does not work; for annoyance use would."
+     },
+     {
+      "opt": "is stopping",
+      "cat": "grammar",
+      "de": "is stopping nach wish gibt es nicht.",
+      "en": "is stopping after wish does not exist."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0060",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "mc.inversion",
+   "topic": "mixed-cond",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "___ I known about the strike, I would have booked a different flight instead of waiting at the airport.",
+   "options": [
+    "If",
+    "Have",
+    "Would",
+    "Had"
+   ],
+   "answer": 3,
+   "why": {
+    "ok": {
+     "de": "Förmlich ohne if: Had + Subjekt + Partizip, would have …",
+     "en": "Formal without if: Had + subject + participle, would have …"
+    },
+    "wrong": [
+     {
+      "opt": "If",
+      "cat": "grammar",
+      "de": "If I known gibt es nicht; mit if braucht es had known.",
+      "en": "If I known does not exist; with if it needs had known."
+     },
+     {
+      "opt": "Have",
+      "cat": "calque",
+      "de": "Deutsch „Hätte ich gewusst“ verleitet zu Have; die englische Umstellung beginnt mit Had.",
+      "en": "German “Hätte ich gewusst” tempts you to say Have; the English inversion starts with Had."
+     },
+     {
+      "opt": "Would",
+      "cat": "calque",
+      "de": "Deutsch „Würde ich gewusst haben“ führt zu Would; in der Umstellung steht Had.",
+      "en": "German “Würde ich gewusst haben” leads to Would; the inversion uses Had."
+     }
+    ]
+   }
+  }
+ ]
+}

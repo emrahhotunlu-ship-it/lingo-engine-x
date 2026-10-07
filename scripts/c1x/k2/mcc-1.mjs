@@ -1,0 +1,186 @@
+// P21 Charge mcc-1: Passendes Wort, Bereich Grammatik, Kapitel 1 (Zeiten im Alltag). Quellformat: o = [Lösung, [falsch, Kategorie, 'DE || EN'] × 3].
+// Kategorien: calque (Deutsch gedacht) · grammar · meaning · partner · register. Die Lösung steht zuerst; der Build setzt sie auf den geplanten Platz.
+export const meta = { file: 'k2-1' };
+const W = (w, cat, text) => [w, cat, text];
+export const items = [
+  {
+    p: 'psc.habit', lv: 'B2', dom: 'biz',
+    t: 'Our sales director ___ the pipeline report every Monday morning before the team call.',
+    o: [['reviews'], W('controls', 'calque', 'control heißt „steuern“; „kontrollieren“ im Sinn von prüfen ist review oder check. || control means “to have power over”; German “kontrollieren” (to check) is review or check.'), W('is reviewing', 'grammar', 'Für eine Gewohnheit („every Monday“) steht das Present Simple, nicht -ing. || A habit (“every Monday”) takes the present simple, not -ing.'), W('has reviewed', 'grammar', 'Das Present Perfect passt nicht zu einer Gewohnheit mit „every Monday“. || The present perfect does not fit a habit with “every Monday”.')],
+    ok: 'Gewohnheit mit every Monday: Present Simple, bei he/she/it mit -s: reviews. || A habit with every Monday: present simple, with -s for he/she/it: reviews.',
+  },
+  {
+    p: 'psc.now', lv: 'B2', dom: 'biz',
+    t: 'Sorry, I cannot talk right now because we ___ a live demo for a prospect in the next room.',
+    o: [['are running'], W('run', 'calque', 'Deutsch sagt „wir führen gerade vor“ im Präsens; Englisch braucht für „gerade jetzt“ am/is/are + -ing. || German says “wir führen gerade vor” in the present; English needs am/is/are + -ing for “right now”.'), W('will run', 'grammar', 'will run ist Zukunft; „right now“ meint die Gegenwart. || will run is future; “right now” means the present.'), W('have run', 'grammar', 'have run beschreibt ein Ergebnis, nicht „gerade jetzt“. || have run describes a result, not “right now”.')],
+    ok: 'Was gerade passiert: am/is/are + -ing. || What is happening now: am/is/are + -ing.',
+  },
+  {
+    p: 'psc.state', lv: 'B2', dom: 'biz',
+    t: 'We ___ a faster way to share large files with our customers, because e-mail attachments keep bouncing back.',
+    o: [['need'], W('are needing', 'grammar', 'need ist ein Zustandsverb und hat im Alltag kein -ing. || need is a state verb and normally has no -ing form.'), W('have need', 'calque', '„Wir haben Bedarf an“ ist Deutsch gedacht; Englisch sagt we need. || “Wir haben Bedarf an” is German thinking; English says we need.'), W('are in need', 'grammar', 'are in need braucht „of“ und ein Nomen: are in need of. || are in need needs “of” and a noun: are in need of.')],
+    ok: 'Zustandsverben wie need stehen im Present Simple, nicht in der -ing-Form. || State verbs such as need take the present simple, not the -ing form.',
+  },
+  {
+    p: 'psc.state', lv: 'B2+', dom: 'biz',
+    t: 'I ___ that the client will accept our revised offer, but I cannot be sure before Friday.',
+    o: [['believe'], W('mean', 'calque', '„Ich meine, dass“ ist im Englischen think oder believe; mean heißt „beabsichtigen“. || German “ich meine, dass” is think or believe in English; mean means “intend”.'), W('am believing', 'grammar', 'believe ist ein Zustandsverb und steht nicht in der -ing-Form. || believe is a state verb and does not take the -ing form.'), W('will believe', 'grammar', 'will believe sagt etwas über die Zukunft, gemeint ist die jetzige Meinung. || will believe is about the future, but a present opinion is meant.')],
+    ok: 'Meinungen mit Zustandsverben: believe/think im Present Simple. || Opinions use state verbs: believe/think in the present simple.',
+  },
+  {
+    p: 'psc.dual', lv: 'B2+', dom: 'biz',
+    t: 'Please call back in an hour; we ___ lunch with the client right now and cannot answer the phone.',
+    o: [['are having'], W('have', 'calque', 'Deutsch „wir haben Mittagessen“ steht im Präsens; für „gerade jetzt“ braucht have als Handlung -ing. || German “wir haben Mittagessen” is in the present; for “right now” the action have needs -ing.'), W('will have', 'grammar', 'will have ist Zukunft; „right now“ meint jetzt. || will have is future; “right now” means now.'), W('had', 'grammar', 'had ist Vergangenheit. || had is past.')],
+    ok: 'have als Handlung („essen“) steht mit -ing, wenn es gerade passiert. || have as an action (“to eat”) takes -ing when it is happening now.',
+  },
+  {
+    p: 'psc.always', lv: 'B2+', dom: 'biz',
+    t: 'Our vendor ___ the delivery dates again, and it is driving our logistics team crazy.',
+    o: [['is always changing'], W('changes always', 'calque', 'Deutsch stellt „immer“ hinten („ändert immer“); Englisch: is always changing, always steht vor -ing. || German puts “immer” last; English: is always changing, always goes before -ing.'), W('always is changing', 'grammar', 'always steht nach dem Hilfsverb: is always changing. || always goes after the auxiliary: is always changing.'), W('has always changing', 'grammar', 'has always changing ist keine Form. || has always changing is not a form.')],
+    ok: 'Ärger über ständige Wiederholung: is/are + always + -ing. || Annoyance at constant repetition: is/are + always + -ing.',
+  },
+  {
+    p: 'psc.always', lv: 'B2', dom: 'life',
+    t: 'My neighbor ___ his car in front of my garage, and it makes me furious every single time.',
+    o: [['is always parking'], W('parks always', 'calque', 'Deutsch stellt „immer“ hinten („parkt immer“); Englisch: is always parking. || German puts “immer” last; English: is always parking.'), W('always is parking', 'grammar', 'always steht nach dem Hilfsverb: is always parking. || always goes after the auxiliary: is always parking.'), W('has always parking', 'grammar', 'has always parking ist keine Form. || has always parking is not a form.')],
+    ok: 'Ärger über wiederholtes Verhalten: is always + -ing. || Annoyance at repeated behavior: is always + -ing.',
+  },
+  {
+    p: 'psc.habit', lv: 'B2', dom: 'life',
+    t: 'My colleague ___ a coffee every afternoon at three, and he never skips it, not even on busy days.',
+    o: [['has'], W('makes', 'calque', '„Einen Kaffee machen“ heißt im Englischen zubereiten; zum Trinken sagt man have. || “To make a coffee” means preparing it in English; for drinking you say have.'), W('is having', 'grammar', 'Für eine Gewohnheit („every afternoon“) steht das Present Simple. || A habit (“every afternoon”) takes the present simple.'), W('would have', 'grammar', 'would have braucht eine Bedingung oder ein Partizip. || would have needs a condition or a participle.')],
+    ok: 'Gewohnheit mit every afternoon: Present Simple; have a coffee = einen Kaffee trinken. || A habit with every afternoon: present simple; have a coffee = to drink a coffee.',
+  },
+  {
+    p: 'psp.finished-time', lv: 'B2', dom: 'biz',
+    t: 'We ___ the contract with Rhein Logistics in March last year, after three rounds of difficult negotiations.',
+    o: [['signed'], W('have signed', 'calque', 'Deutsch sagt „haben unterschrieben“ (Perfekt); mit einer genannten Zeit („in March last year“) steht im Englischen das Past Simple. || German says “haben unterschrieben” (perfect); with a named time (“in March last year”) English uses the past simple.'), W('were signing', 'grammar', 'were signing beschreibt etwas, das gerade lief, nicht ein abgeschlossenes Ereignis. || were signing describes something in progress, not a completed event.'), W('are signing', 'grammar', 'are signing ist Gegenwart. || are signing is present.')],
+    ok: 'Abgeschlossene Zeit (in March last year): Past Simple. || A finished time (in March last year): past simple.',
+  },
+  {
+    p: 'psp.finished-time', lv: 'B2', dom: 'life',
+    t: '___ you meet our new CEO at the conference last week, or was it somebody from the Berlin office?',
+    o: [['Did'], W('Have', 'calque', 'Deutsch fragt „Hast du … getroffen?“ (Perfekt); mit „last week“ braucht Englisch did + Grundform. || German asks “Hast du … getroffen?” (perfect); with “last week” English needs did + base form.'), W('Do', 'grammar', 'Do fragt nach Gegenwart oder Gewohnheit, hier geht es um letzte Woche. || Do asks about the present or a habit, but this is about last week.'), W('Were', 'grammar', 'Were you meet ist keine Form. || Were you meet is not a form.')],
+    ok: 'Frage mit abgeschlossener Zeit (last week): did + Grundform. || A question with a finished time (last week): did + base form.',
+  },
+  {
+    p: 'psp.since-for', lv: 'B2', dom: 'biz',
+    t: 'We ___ with the same logistics partner since 2018, and we have never had a serious problem.',
+    o: [['have worked'], W('work', 'calque', 'Deutsch sagt „wir arbeiten seit 2018 zusammen“ im Präsens; Englisch braucht für „seit“ das Present Perfect. || German says “wir arbeiten seit 2018 zusammen” in the present; English needs the present perfect for “since”.'), W('worked', 'grammar', 'worked wäre abgeschlossen; die Zusammenarbeit läuft aber noch. || worked would be finished, but the cooperation is still going on.'), W('were working', 'grammar', 'were working ist Vergangenheit; „since 2018“ reicht bis heute. || were working is past; “since 2018” reaches up to now.')],
+    ok: 'Dauer bis heute mit since: Present Perfect (have worked). || Duration up to now with since: present perfect (have worked).',
+  },
+  {
+    p: 'psp.since-for', lv: 'B2', dom: 'life',
+    t: 'I ___ in this city for almost ten years now, and I still love the old town on a sunny evening.',
+    o: [['have lived'], W('live', 'calque', 'Deutsch sagt „ich wohne seit zehn Jahren hier“ im Präsens; Englisch braucht have lived. || German says “ich wohne seit zehn Jahren hier” in the present; English needs have lived.'), W('lived', 'grammar', 'lived wäre abgeschlossen; du wohnst noch dort. || lived would be finished, but you still live there.'), W('have been live', 'grammar', 'have been live ist keine Form (live ist hier kein Adjektiv). || have been live is not a form (live is not an adjective here).')],
+    ok: 'Dauer bis jetzt mit for: Present Perfect (have lived). || Duration up to now with for: present perfect (have lived).',
+  },
+  {
+    p: 'psp.experience', lv: 'B2', dom: 'life',
+    t: 'I ___ to Singapore twice, but I have never been to Japan, and I would love to go.',
+    o: [['have been'], W('have gone', 'meaning', 'have gone heißt „ist hingefahren und noch dort“; für Reiseerfahrung steht have been. || have gone means “went and is still there”; for travel experience use have been.'), W('was', 'calque', 'Deutsch sagt „ich war zweimal in Singapur“; im Englischen steht dafür have been to. || German says “ich war zweimal in Singapur”; English uses have been to.'), W('had been', 'grammar', 'had been braucht einen früheren Bezugspunkt in der Vergangenheit. || had been needs an earlier reference point in the past.')],
+    ok: 'Erfahrung bis jetzt: have been to (nicht have gone to). || Experience up to now: have been to (not have gone to).',
+  },
+  {
+    p: 'pc.duration', lv: 'B2+', dom: 'biz',
+    t: 'We ___ on the migration to the cloud since January, and we are still not finished with the archive.',
+    o: [['have been working'], W('are working', 'calque', 'Deutsch sagt „wir arbeiten seit Januar daran“ im Präsens; Englisch braucht für „seit“ have been + -ing. || German says “wir arbeiten seit Januar daran” in the present; English needs have been + -ing for “since”.'), W('worked', 'grammar', 'worked wäre abgeschlossen; „still not finished“ zeigt, dass es weitergeht. || worked would be finished, but “still not finished” shows it continues.'), W('had been working', 'grammar', 'had been working braucht einen früheren Zeitpunkt in der Vergangenheit. || had been working needs an earlier point in the past.')],
+    ok: 'Laufende Tätigkeit seit einem Zeitpunkt: have been + -ing. || An ongoing activity since a point in time: have been + -ing.',
+  },
+  {
+    p: 'pc.since-for', lv: 'B2', dom: 'life',
+    t: 'My neighbor ___ the drums for three hours now, and I really need some quiet to finish my report.',
+    o: [['has been playing'], W('is playing', 'calque', 'Deutsch sagt „spielt seit drei Stunden“ im Präsens; Englisch braucht has been playing. || German says “spielt seit drei Stunden” in the present; English needs has been playing.'), W('plays', 'grammar', 'plays ist eine Gewohnheit; hier läuft es gerade seit drei Stunden. || plays is a habit; here it has been going on for three hours.'), W('played', 'grammar', 'played wäre abgeschlossen; er spielt noch. || played would be finished, but he is still playing.')],
+    ok: 'Dauer bis jetzt: has/have been + -ing mit for + Länge. || Duration up to now: has/have been + -ing with for + length.',
+  },
+  {
+    p: 'pc.form', lv: 'B2', dom: 'life',
+    t: 'Your sister looks exhausted. How long ___ she waiting at the airport for her connecting flight?',
+    o: [['has been'], W('is', 'calque', 'Deutsch fragt „Wie lange wartet sie schon?“ im Präsens; Englisch braucht has been waiting. || German asks “Wie lange wartet sie schon?” in the present; English needs has been waiting.'), W('does', 'grammar', 'does + waiting gibt es nicht. || does + waiting does not exist.'), W('will', 'grammar', 'will + waiting gibt es nicht; will braucht be. || will + waiting does not exist; will needs be.')],
+    ok: 'Frage nach der Dauer bis jetzt: How long + has/have + Subjekt + been + -ing. || A question about duration up to now: How long + has/have + subject + been + -ing.',
+  },
+  {
+    p: 'pc.recent', lv: 'B2+', dom: 'biz',
+    t: 'Our sales figures ___ going up since last spring, and the board is finally starting to take notice.',
+    o: [['have been'], W('are', 'calque', 'Deutsch sagt „steigen seit dem Frühjahr“ im Präsens; Englisch braucht have been going. || German says “steigen seit dem Frühjahr” in the present; English needs have been going.'), W('were', 'grammar', 'were going up wäre abgeschlossen; die Entwicklung läuft noch. || were going up would be finished, but the trend continues.'), W('had been', 'grammar', 'had been braucht einen früheren Bezugspunkt in der Vergangenheit. || had been needs an earlier reference point in the past.')],
+    ok: 'Entwicklung bis heute: have been + -ing mit since. || A development up to now: have been + -ing with since.',
+  },
+  {
+    p: 'pc.state-verbs', lv: 'B2+', dom: 'life',
+    t: 'I ___ my business partner for almost fifteen years, and we have never had a serious argument.',
+    o: [['have known'], W('have been knowing', 'grammar', 'know ist ein Zustandsverb und hat keine -ing-Form. || know is a state verb and has no -ing form.'), W('know', 'calque', 'Deutsch sagt „ich kenne ihn seit 15 Jahren“ im Präsens; Englisch braucht have known. || German says “ich kenne ihn seit 15 Jahren” in the present; English needs have known.'), W('knew', 'grammar', 'knew wäre abgeschlossen; ihr kennt euch noch. || knew would be finished, but you still know each other.')],
+    ok: 'Zustandsverb mit Dauer bis jetzt: have known (Present Perfect, nicht -ing). || A state verb with duration up to now: have known (present perfect, not -ing).',
+  },
+  {
+    p: 'pc.cont-simple', lv: 'B2+', dom: 'biz',
+    t: 'I ___ twelve e-mails since this morning, but I still have not heard anything from the customer.',
+    o: [['have written'], W('have been writing', 'grammar', 'Bei einer Zahl (twelve) zählt das Ergebnis: have written, nicht have been writing. || With a number (twelve) the result counts: have written, not have been writing.'), W('write', 'calque', 'Deutsch sagt „ich schreibe seit heute Morgen zwölf Mails“ im Präsens; Englisch braucht das Present Perfect. || German says “ich schreibe seit heute Morgen zwölf Mails” in the present; English needs the present perfect.'), W('wrote', 'grammar', 'wrote passt nicht zu since this morning (bis jetzt). || wrote does not fit since this morning (up to now).')],
+    ok: 'Zahl als Ergebnis: have + Partizip (have written twelve). || A number as the result: have + participle (have written twelve).',
+  },
+  {
+    p: 'ff.will-now', lv: 'B2', dom: 'biz',
+    t: 'You are right, there is a mistake in the invoice. Thank you for telling me; I ___ it today.',
+    o: [['will correct'], W('correct', 'calque', 'Deutsch sagt „ich korrigiere das heute“ im Präsens; für einen spontanen Entschluss braucht Englisch will. || German says “ich korrigiere das heute” in the present; for a spontaneous decision English needs will.'), W('would correct', 'grammar', 'would correct braucht eine Bedingung. || would correct needs a condition.'), W('have corrected', 'grammar', 'have corrected beschreibt etwas Fertiges, hier geht es um die Zukunft. || have corrected describes something done, but this is about the future.')],
+    ok: 'Spontane Entscheidung im Gespräch: will + Grundform. || A spontaneous decision in conversation: will + base form.',
+  },
+  {
+    p: 'ff.going-to', lv: 'B2', dom: 'life',
+    t: 'We ___ the kitchen next spring; we have already chosen the new cabinets and booked the carpenter.',
+    o: [['are going to renovate'], W('renovate', 'calque', 'Deutsch sagt „wir renovieren nächstes Frühjahr“ im Präsens; für einen Plan braucht Englisch be going to. || German says “wir renovieren nächstes Frühjahr” in the present; for a plan English needs be going to.'), W('would renovate', 'grammar', 'would renovate braucht eine Bedingung. || would renovate needs a condition.'), W('are renovated', 'grammar', 'are renovated ist Passiv: „werden renoviert“. || are renovated is passive: “are being redone”.')],
+    ok: 'Schon beschlossener Plan: am/is/are going to + Grundform. || A plan already made: am/is/are going to + base form.',
+  },
+  {
+    p: 'ff.was-going-to', lv: 'B2', dom: 'biz',
+    t: 'I ___ call the customer this morning, but then the system crashed, and I completely forgot about it.',
+    o: [['was going to'], W('should', 'calque', '„Ich sollte anrufen“ ist Deutsch gedacht; für einen Plan, der nicht klappte, steht was going to. || “Ich sollte anrufen” is German thinking; for a plan that fell through, use was going to.'), W('will', 'grammar', 'will ist Zukunft; der Plan liegt in der Vergangenheit. || will is future; the plan lies in the past.'), W('am going to', 'grammar', 'am going to ist Gegenwart; „then the system crashed“ zeigt Vergangenheit. || am going to is present; “then the system crashed” shows the past.')],
+    ok: 'Plan, der nicht klappte: was/were going to + Grundform. || A plan that fell through: was/were going to + base form.',
+  },
+  {
+    p: 'ff.about-to', lv: 'B2+', dom: 'life',
+    t: 'Hurry up, the train ___ to leave, and the next one does not go for another hour!',
+    o: [['is about'], W('is close', 'calque', '„Der Zug ist kurz davor“ klingt wie close to; die feste Wendung ist is about to. || “Der Zug ist kurz davor” sounds like close to; the fixed phrase is is about to.'), W('is nearly', 'calque', '„Der Zug fährt fast ab“ ist Deutsch gedacht; nearly passt nicht vor to + Verb. || “Der Zug fährt fast ab” is German thinking; nearly does not fit before to + verb.'), W('is on the point', 'grammar', 'Die Wendung ist on the point of leaving (mit „of“ und -ing), nicht „to“. || on the point needs of + -ing: on the point of leaving.')],
+    ok: 'Gleich passiert es: be about to + Grundform. || It happens any moment now: be about to + base form.',
+  },
+  {
+    p: 'ff.no-will-after', lv: 'B2+', dom: 'biz',
+    t: 'We cannot start the implementation before the client ___ the first invoice, so please remind him today.',
+    o: [['has paid'], W('will pay', 'calque', 'Deutsch sagt „bevor der Kunde bezahlen wird“; nach before steht im Englischen keine Zukunftsform. || German says “bevor der Kunde bezahlen wird”; English uses no future form after before.'), W('would pay', 'grammar', 'would pay braucht eine Bedingung. || would pay needs a condition.'), W('is paying', 'grammar', 'is paying beschreibt etwas, das gerade läuft; hier geht es um den Abschluss. || is paying describes something in progress; here the completion matters.')],
+    ok: 'Nach before/until/as soon as steht die Gegenwart (hier has paid), nie will. || After before/until/as soon as the present is used (here has paid), never will.',
+  },
+  {
+    p: 'tc.present-for-future', lv: 'B2', dom: 'biz',
+    t: 'I will send you the proposal as soon as I ___ the calculation for the second option.',
+    o: [['have finished'], W('will finish', 'calque', 'Deutsch sagt „sobald ich fertig sein werde“; nach as soon as steht im Englischen keine Zukunftsform. || German says “sobald ich fertig sein werde”; English uses no future form after as soon as.'), W('would finish', 'grammar', 'would finish braucht eine Bedingung. || would finish needs a condition.'), W('am finishing', 'grammar', 'am finishing beschreibt etwas, das gerade läuft, nicht den Abschluss. || am finishing describes something in progress, not completion.')],
+    ok: 'Zeitsatz mit as soon as: Gegenwart oder Present Perfect statt will. || A time clause with as soon as: present or present perfect instead of will.',
+  },
+  {
+    p: 'tc.present-for-future', lv: 'B2+', dom: 'biz',
+    t: 'Please do not forward the offer to the customer before the legal team ___ the final wording.',
+    o: [['has approved'], W('will approve', 'calque', 'Deutsch sagt „bevor die Rechtsabteilung zustimmen wird“; nach before steht im Englischen keine Zukunftsform. || German says “bevor die Rechtsabteilung zustimmen wird”; English uses no future form after before.'), W('would approve', 'grammar', 'would approve braucht eine Bedingung. || would approve needs a condition.'), W('is approving', 'grammar', 'is approving beschreibt etwas, das gerade läuft, nicht das Ergebnis. || is approving describes something in progress, not the result.')],
+    ok: 'Nach before steht die Gegenwart (has approved), nie will. || After before the present is used (has approved), never will.',
+  },
+  {
+    p: 'tc.present-perfect', lv: 'B2+', dom: 'biz',
+    t: 'Once we ___ the signed order form, our team will start setting up your account and send the login details.',
+    o: [['have received'], W('will receive', 'calque', 'Deutsch sagt „sobald wir das Formular erhalten werden“; nach once steht im Englischen keine Zukunftsform. || German says “sobald wir das Formular erhalten werden”; English uses no future form after once.'), W('would receive', 'grammar', 'would receive braucht eine Bedingung. || would receive needs a condition.'), W('are receiving', 'grammar', 'are receiving beschreibt etwas, das gerade läuft, nicht den Abschluss. || are receiving describes something in progress, not completion.')],
+    ok: 'Erst nach Abschluss der ersten Handlung: once + Present Perfect, im Hauptsatz will. || Only after the first action is complete: once + present perfect, will in the main clause.',
+  },
+  {
+    p: 'tc.by-the-time', lv: 'C1', dom: 'biz',
+    t: 'By the time the auditors ___ next Monday, we will have archived all of the old contracts and invoices.',
+    o: [['arrive'], W('will arrive', 'calque', 'Deutsch sagt „bis die Prüfer ankommen werden“; nach by the time steht im Englischen keine Zukunftsform. || German says “bis die Prüfer ankommen werden”; English uses no future form after by the time.'), W('would arrive', 'grammar', 'would arrive braucht eine Bedingung. || would arrive needs a condition.'), W('are arriving', 'grammar', 'are arriving passt nicht in einen by-the-time-Satz. || are arriving does not fit a by-the-time clause.')],
+    ok: 'By the time + Gegenwart (arrive), im Hauptsatz will have + Partizip. || By the time + present (arrive), the main clause takes will have + participle.',
+  },
+  {
+    p: 'pc.duration', lv: 'B2', dom: 'life',
+    t: 'I ___ English for about two years now, and my pronunciation is slowly getting better.',
+    o: [['have been learning'], W('am learning', 'calque', 'Deutsch sagt „ich lerne seit zwei Jahren Englisch“ im Präsens; Englisch braucht have been learning. || German says “ich lerne seit zwei Jahren Englisch” in the present; English needs have been learning.'), W('learned', 'grammar', 'learned wäre abgeschlossen; du lernst noch. || learned would be finished, but you are still learning.'), W('learn', 'calque', 'learn im Präsens sagt nichts über die Dauer bis jetzt. || learn in the present says nothing about the duration up to now.')],
+    ok: 'Laufende Tätigkeit mit Dauer: have been + -ing mit for. || An ongoing activity with duration: have been + -ing with for.',
+  },
+  {
+    p: 'psp.since-for', lv: 'B2', dom: 'biz',
+    t: 'She has worked for this company ___ she graduated in 2010, and she has been promoted twice.',
+    o: [['since'], W('from', 'calque', 'Deutsch „von 2010 an“ klingt wie from; mit has worked steht since + Zeitpunkt. || German “von 2010 an” sounds like from; with has worked use since + point in time.'), W('for', 'grammar', 'for braucht eine Länge; hier folgt ein Satz mit einem Zeitpunkt. || for needs a length of time; here a clause with a point in time follows.'), W('after', 'meaning', 'after nennt nur die Reihenfolge, nicht die Dauer bis heute. || after names only the order, not the duration up to now.')],
+    ok: 'since + Zeitpunkt oder Satz mit Vergangenheit: Dauer bis jetzt. || since + point in time or past clause: duration up to now.',
+  },
+];

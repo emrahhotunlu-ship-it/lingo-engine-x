@@ -1,0 +1,1385 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "mcc-0091",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.possibly-eventually",
+   "lex": [
+    "possibly"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We could ___ move the meeting to Friday if the client agrees, but I need to check with the team first.",
+   "options": [
+    "eventually",
+    "finally",
+    "possibly",
+    "lastly"
+   ],
+   "answer": 2,
+   "why": {
+    "ok": {
+     "de": "possibly = eventuell, vielleicht; eventually = schließlich.",
+     "en": "possibly = perhaps; eventually = in the end."
+    },
+    "wrong": [
+     {
+      "opt": "eventually",
+      "cat": "calque",
+      "de": "Deutsch „eventuell“ heißt possibly; eventually bedeutet „schließlich“ (false friend).",
+      "en": "German “eventuell” means possibly; eventually means “in the end” (a false friend)."
+     },
+     {
+      "opt": "finally",
+      "cat": "meaning",
+      "de": "finally heißt „endlich, zum Schluss“.",
+      "en": "finally means “at last, in the end”."
+     },
+     {
+      "opt": "lastly",
+      "cat": "meaning",
+      "de": "lastly leitet den letzten Punkt einer Aufzählung ein.",
+      "en": "lastly introduces the last point in a list."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0092",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.sensitive-data",
+   "lex": [
+    "sensitive data"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Our customer data is highly ___ and must be encrypted at all times, both in transit and in storage.",
+   "options": [
+    "sensible",
+    "sensual",
+    "senseless",
+    "sensitive"
+   ],
+   "answer": 3,
+   "why": {
+    "ok": {
+     "de": "Sensible Daten: sensitive data.",
+     "en": "Delicate data: sensitive data."
+    },
+    "wrong": [
+     {
+      "opt": "sensible",
+      "cat": "calque",
+      "de": "Deutsch „sensibel“ heißt sensitive; sensible bedeutet „vernünftig“ (false friend).",
+      "en": "German “sensibel” means sensitive; sensible means “reasonable” (a false friend)."
+     },
+     {
+      "opt": "sensual",
+      "cat": "meaning",
+      "de": "sensual heißt „sinnlich“.",
+      "en": "sensual means “relating to the senses, erotic”."
+     },
+     {
+      "opt": "senseless",
+      "cat": "meaning",
+      "de": "senseless heißt „sinnlos“ oder „bewusstlos“.",
+      "en": "senseless means “pointless” or “unconscious”."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0093",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.current-actual",
+   "lex": [
+    "current version"
+   ],
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The ___ version of the software has several security problems that we need to fix before the audit.",
+   "options": [
+    "actual",
+    "topical",
+    "current",
+    "modern"
+   ],
+   "answer": 2,
+   "why": {
+    "ok": {
+     "de": "Die derzeit gültige Version: current version.",
+     "en": "The version in use now: current version."
+    },
+    "wrong": [
+     {
+      "opt": "actual",
+      "cat": "calque",
+      "de": "Deutsch „aktuell“ heißt current; actual bedeutet „tatsächlich“ (false friend).",
+      "en": "German “aktuell” means current; actual means “real” (a false friend)."
+     },
+     {
+      "opt": "topical",
+      "cat": "meaning",
+      "de": "topical heißt „zum Thema passend, tagesaktuell“.",
+      "en": "topical means “relating to current events”."
+     },
+     {
+      "opt": "modern",
+      "cat": "meaning",
+      "de": "modern heißt „zeitgemäß“, nicht „derzeit gültig“.",
+      "en": "modern means “up to date in style”, not “in use now”."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0094",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.check-control",
+   "lex": [
+    "check the figures"
+   ],
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Please ___ the figures again before you send the report to the board; last time there were two mistakes.",
+   "options": [
+    "check",
+    "control",
+    "steer",
+    "command"
+   ],
+   "answer": 0,
+   "why": {
+    "ok": {
+     "de": "Zahlen prüfen: check the figures (oder review).",
+     "en": "To verify figures: check the figures (or review)."
+    },
+    "wrong": [
+     {
+      "opt": "control",
+      "cat": "calque",
+      "de": "Deutsch „kontrollieren“ heißt check; control bedeutet „steuern, beherrschen“ (false friend).",
+      "en": "German “kontrollieren” means check; control means “steer, have power over” (a false friend)."
+     },
+     {
+      "opt": "steer",
+      "cat": "meaning",
+      "de": "steer heißt „lenken“.",
+      "en": "steer means “guide a vehicle”."
+     },
+     {
+      "opt": "command",
+      "cat": "meaning",
+      "de": "command heißt „befehlen“.",
+      "en": "command means “give orders”."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0095",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.back-up",
+   "lex": [
+    "back up"
+   ],
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Please make sure that all important files are ___ every night, because the old server has failed twice this month.",
+   "options": [
+    "secured",
+    "saved up",
+    "backup",
+    "backed up"
+   ],
+   "answer": 3,
+   "why": {
+    "ok": {
+     "de": "Daten sichern: back up (Verb), backup (Nomen).",
+     "en": "To save data safely: back up (verb), backup (noun)."
+    },
+    "wrong": [
+     {
+      "opt": "secured",
+      "cat": "calque",
+      "de": "Deutsch „sichern“ führt zu secured; Dateien sichern heißt back up.",
+      "en": "German “sichern” leads to secured; to save files is back up."
+     },
+     {
+      "opt": "saved up",
+      "cat": "calque",
+      "de": "save up heißt „Geld ansparen“.",
+      "en": "save up means “put money aside”."
+     },
+     {
+      "opt": "backup",
+      "cat": "grammar",
+      "de": "backup ist ein Nomen; das Verb heißt back up (zwei Wörter).",
+      "en": "backup is a noun; the verb is back up (two words)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0096",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.give-up-hope",
+   "lex": [
+    "give up hope"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We lost the tender, but nobody is ready to ___ up hope just yet, because the client may still reopen it.",
+   "options": [
+    "let",
+    "give",
+    "take",
+    "throw"
+   ],
+   "answer": 1,
+   "why": {
+    "ok": {
+     "de": "Die ganze Wendung lernen: give up hope.",
+     "en": "Learn the whole phrase: give up hope."
+    },
+    "wrong": [
+     {
+      "opt": "let",
+      "cat": "meaning",
+      "de": "let up heißt „nachlassen“ und steht ohne Objekt.",
+      "en": "let up means “become weaker” and takes no object."
+     },
+     {
+      "opt": "take",
+      "cat": "meaning",
+      "de": "take up heißt „anfangen mit“ (a hobby).",
+      "en": "take up means “start” (a hobby)."
+     },
+     {
+      "opt": "throw",
+      "cat": "calque",
+      "de": "Deutsch „die Hoffnung wegwerfen“ führt zu throw; die Wendung ist give up hope.",
+      "en": "German “die Hoffnung wegwerfen” leads to throw; the phrase is give up hope."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0097",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.intensify-better",
+   "lex": [
+    "considerably better"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Our sales figures for the third quarter are ___ better than we expected, thanks to the new product line.",
+   "options": [
+    "considerably",
+    "highly",
+    "strongly",
+    "heavily"
+   ],
+   "answer": 0,
+   "why": {
+    "ok": {
+     "de": "Komparative verstärkt man mit much/far/considerably.",
+     "en": "Comparatives are intensified with much/far/considerably."
+    },
+    "wrong": [
+     {
+      "opt": "highly",
+      "cat": "partner",
+      "de": "highly steht vor Grundformen (highly effective), nie vor einem Komparativ.",
+      "en": "highly goes with base adjectives (highly effective), never with a comparative."
+     },
+     {
+      "opt": "strongly",
+      "cat": "calque",
+      "de": "„Stark besser“ ist Deutsch gedacht; strongly passt zu Verben (strongly recommend).",
+      "en": "“Stark besser” is German thinking; strongly goes with verbs (strongly recommend)."
+     },
+     {
+      "opt": "heavily",
+      "cat": "partner",
+      "de": "heavily passt zu Menge oder Last (heavily invested), nicht zu Vergleichen.",
+      "en": "heavily goes with amount or weight (heavily invested), not comparisons."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0098",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.intensify-adj",
+   "lex": [
+    "highly intuitive"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The new interface is ___ intuitive, and our employees learned it within an hour without any training.",
+   "options": [
+    "strongly",
+    "highly",
+    "heavily",
+    "deeply"
+   ],
+   "answer": 1,
+   "why": {
+    "ok": {
+     "de": "highly + Adjektiv wie effective, intuitive, skilled.",
+     "en": "highly + adjectives such as effective, intuitive, skilled."
+    },
+    "wrong": [
+     {
+      "opt": "strongly",
+      "cat": "calque",
+      "de": "„Stark intuitiv“ ist Deutsch gedacht; strongly passt zu Verben und Meinungen.",
+      "en": "“Stark intuitiv” is German thinking; strongly goes with verbs and opinions."
+     },
+     {
+      "opt": "heavily",
+      "cat": "partner",
+      "de": "heavily passt zu Menge oder Last, nicht zu Eigenschaften.",
+      "en": "heavily goes with amount or weight, not with qualities."
+     },
+     {
+      "opt": "deeply",
+      "cat": "partner",
+      "de": "deeply passt zu Gefühlen (deeply grateful), nicht zu intuitive.",
+      "en": "deeply goes with feelings (deeply grateful), not with intuitive."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0099",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.highly-recommend",
+   "lex": [
+    "highly recommend"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I can ___ recommend the new archiving solution to anyone who still struggles with paper files and shared folders.",
+   "options": [
+    "heavily",
+    "hardly",
+    "highly",
+    "firmly"
+   ],
+   "answer": 2,
+   "why": {
+    "ok": {
+     "de": "Feste Verbindung: highly recommend.",
+     "en": "Fixed collocation: highly recommend."
+    },
+    "wrong": [
+     {
+      "opt": "heavily",
+      "cat": "partner",
+      "de": "heavily passt zu Menge oder Last, nicht zu recommend.",
+      "en": "heavily goes with amount or weight, not with recommend."
+     },
+     {
+      "opt": "hardly",
+      "cat": "calque",
+      "de": "hardly heißt „kaum“, nicht „hart“ (false friend).",
+      "en": "hardly means “barely”, not “hard” (a false friend)."
+     },
+     {
+      "opt": "firmly",
+      "cat": "partner",
+      "de": "firmly passt zu Überzeugungen (firmly believe), recommend verbindet sich mit highly.",
+      "en": "firmly goes with convictions (firmly believe), while recommend pairs with highly."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0100",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.deeply-regret",
+   "lex": [
+    "deeply regret"
+   ],
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We ___ regret that we are unable to deliver your order on the agreed date because of the strike at the port.",
+   "options": [
+    "highly",
+    "heavily",
+    "strongly",
+    "deeply"
+   ],
+   "answer": 3,
+   "why": {
+    "ok": {
+     "de": "Feste Verbindung: deeply regret (förmlich).",
+     "en": "Fixed collocation: deeply regret (formal)."
+    },
+    "wrong": [
+     {
+      "opt": "highly",
+      "cat": "partner",
+      "de": "highly steht nicht vor regret.",
+      "en": "highly does not go before regret."
+     },
+     {
+      "opt": "heavily",
+      "cat": "partner",
+      "de": "heavily passt zu Menge oder Last, nicht zu Gefühlen.",
+      "en": "heavily goes with amount or weight, not with feelings."
+     },
+     {
+      "opt": "strongly",
+      "cat": "calque",
+      "de": "„Stark bedauern“ ist Deutsch gedacht; im Englischen sagt man deeply regret.",
+      "en": "“Stark bedauern” is German thinking; English says deeply regret."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0101",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.depend-heavily",
+   "lex": [
+    "depend heavily on"
+   ],
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Our business depends ___ on a handful of key accounts in the automotive sector, which is a real risk.",
+   "options": [
+    "highly",
+    "hardly",
+    "heavily",
+    "fiercely"
+   ],
+   "answer": 2,
+   "why": {
+    "ok": {
+     "de": "Feste Verbindung: depend heavily on.",
+     "en": "Fixed collocation: depend heavily on."
+    },
+    "wrong": [
+     {
+      "opt": "highly",
+      "cat": "partner",
+      "de": "highly steht vor Adjektiven (highly dependent), nicht nach depends.",
+      "en": "highly goes before adjectives (highly dependent), not after depends."
+     },
+     {
+      "opt": "hardly",
+      "cat": "calque",
+      "de": "hardly heißt „kaum“, nicht „hart“ (false friend).",
+      "en": "hardly means “barely”, not “hard” (a false friend)."
+     },
+     {
+      "opt": "fiercely",
+      "cat": "partner",
+      "de": "fiercely passt zu Konkurrenz oder Verteidigung.",
+      "en": "fiercely goes with competition or defense."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0102",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.make-impression",
+   "lex": [
+    "make an impression"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The new account manager made a very good ___ on our largest customer at the first meeting last week.",
+   "options": [
+    "impression",
+    "print",
+    "impress",
+    "effect"
+   ],
+   "answer": 0,
+   "why": {
+    "ok": {
+     "de": "Feste Verbindung: make a good impression on sb.",
+     "en": "Fixed collocation: make a good impression on sb."
+    },
+    "wrong": [
+     {
+      "opt": "print",
+      "cat": "calque",
+      "de": "Deutsch „Eindruck“ klingt wie Abdruck (print); im Englischen heißt es impression.",
+      "en": "German “Eindruck” sounds like imprint (print); English says impression."
+     },
+     {
+      "opt": "impress",
+      "cat": "grammar",
+      "de": "impress ist ein Verb; nach „a very good“ steht ein Nomen.",
+      "en": "impress is a verb; a noun follows “a very good”."
+     },
+     {
+      "opt": "effect",
+      "cat": "meaning",
+      "de": "effect heißt „Wirkung“; make a good effect gibt es so nicht.",
+      "en": "effect means “result”; make a good effect does not exist like this."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0103",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.in-charge-of",
+   "lex": [
+    "in charge of"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Who is in ___ of the migration project while the director is on vacation for the next two weeks?",
+   "options": [
+    "lead",
+    "head",
+    "guidance",
+    "charge"
+   ],
+   "answer": 3,
+   "why": {
+    "ok": {
+     "de": "Verantwortlich sein: be in charge of.",
+     "en": "To be responsible: be in charge of."
+    },
+    "wrong": [
+     {
+      "opt": "lead",
+      "cat": "calque",
+      "de": "Deutsch „Leitung“ führt zu lead; die Wendung ist in charge of.",
+      "en": "German “Leitung” leads to lead; the phrase is in charge of."
+     },
+     {
+      "opt": "head",
+      "cat": "calque",
+      "de": "Deutsch „Chef“ führt zu head; die Wendung ist in charge of.",
+      "en": "German “Chef” leads to head; the phrase is in charge of."
+     },
+     {
+      "opt": "guidance",
+      "cat": "partner",
+      "de": "in guidance of ist keine Wendung.",
+      "en": "in guidance of is not a phrase."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0104",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.on-behalf-of",
+   "lex": [
+    "on behalf of"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I am writing ___ behalf of the sales department to thank you for your cooperation during the last quarter.",
+   "options": [
+    "at",
+    "on",
+    "for",
+    "by"
+   ],
+   "answer": 1,
+   "why": {
+    "ok": {
+     "de": "Feste Wendung: on behalf of = im Namen von.",
+     "en": "Fixed phrase: on behalf of = representing."
+    },
+    "wrong": [
+     {
+      "opt": "at",
+      "cat": "calque",
+      "de": "Deutsch „im Namen von“ führt zu at; die Wendung ist on behalf of.",
+      "en": "German “im Namen von” leads to at; the phrase is on behalf of."
+     },
+     {
+      "opt": "for",
+      "cat": "calque",
+      "de": "Deutsch „für“ führt zu for; die Wendung ist on behalf of.",
+      "en": "German “für” leads to for; the phrase is on behalf of."
+     },
+     {
+      "opt": "by",
+      "cat": "grammar",
+      "de": "by behalf of gibt es nicht.",
+      "en": "by behalf of does not exist."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0105",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.in-addition",
+   "lex": [
+    "in addition to"
+   ],
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "___ addition to the license fee, there will be a one-time setup cost for each regional office.",
+   "options": [
+    "In",
+    "At",
+    "On",
+    "By"
+   ],
+   "answer": 0,
+   "why": {
+    "ok": {
+     "de": "Feste Wendung: in addition to.",
+     "en": "Fixed phrase: in addition to."
+    },
+    "wrong": [
+     {
+      "opt": "At",
+      "cat": "calque",
+      "de": "Deutsch „zusätzlich zu“ führt zu At; die Wendung ist In addition to.",
+      "en": "German “zusätzlich zu” leads to At; the phrase is In addition to."
+     },
+     {
+      "opt": "On",
+      "cat": "grammar",
+      "de": "On addition gibt es nicht.",
+      "en": "On addition does not exist."
+     },
+     {
+      "opt": "By",
+      "cat": "grammar",
+      "de": "By addition gibt es nicht.",
+      "en": "By addition does not exist."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0106",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.as-a-result",
+   "lex": [
+    "as a result"
+   ],
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The server crashed twice last week. ___ a result, we lost almost two hours of work on the quarterly report.",
+   "options": [
+    "In",
+    "As",
+    "At",
+    "With"
+   ],
+   "answer": 1,
+   "why": {
+    "ok": {
+     "de": "Folge ausdrücken: as a result.",
+     "en": "Expressing a consequence: as a result."
+    },
+    "wrong": [
+     {
+      "opt": "In",
+      "cat": "calque",
+      "de": "Deutsch „in der Folge“ führt zu In; die Wendung ist As a result.",
+      "en": "German “in der Folge” leads to In; the phrase is As a result."
+     },
+     {
+      "opt": "At",
+      "cat": "calque",
+      "de": "Deutsch „am Ergebnis“ führt zu At; die Wendung ist As a result.",
+      "en": "German “am Ergebnis” leads to At; the phrase is As a result."
+     },
+     {
+      "opt": "With",
+      "cat": "grammar",
+      "de": "With a result passt nicht für eine Folge.",
+      "en": "With a result does not work for a consequence."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0107",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.by-mistake",
+   "lex": [
+    "by mistake"
+   ],
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I sent the offer to the wrong customer ___ mistake and had to apologize immediately to both parties.",
+   "options": [
+    "with",
+    "in",
+    "by",
+    "on"
+   ],
+   "answer": 2,
+   "why": {
+    "ok": {
+     "de": "Aus Versehen: by mistake.",
+     "en": "Not on purpose: by mistake."
+    },
+    "wrong": [
+     {
+      "opt": "with",
+      "cat": "calque",
+      "de": "Deutsch „mit einem Fehler“ führt zu with; „aus Versehen“ heißt by mistake.",
+      "en": "German “mit einem Fehler” leads to with; “aus Versehen” is by mistake."
+     },
+     {
+      "opt": "in",
+      "cat": "calque",
+      "de": "Deutsch „im Irrtum“ führt zu in; die Wendung ist by mistake.",
+      "en": "German “im Irrtum” leads to in; the phrase is by mistake."
+     },
+     {
+      "opt": "on",
+      "cat": "grammar",
+      "de": "on mistake gibt es nicht.",
+      "en": "on mistake does not exist."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0108",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.in-fact",
+   "lex": [
+    "in fact"
+   ],
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Everyone expected a delay, but ___ fact the project was finished two days early and under budget.",
+   "options": [
+    "by",
+    "at",
+    "on",
+    "in"
+   ],
+   "answer": 3,
+   "why": {
+    "ok": {
+     "de": "Feste Wendung: in fact = tatsächlich.",
+     "en": "Fixed phrase: in fact = actually."
+    },
+    "wrong": [
+     {
+      "opt": "by",
+      "cat": "calque",
+      "de": "Deutsch „tatsächlich“ führt nicht zu by fact; die Wendung ist in fact.",
+      "en": "German “tatsächlich” does not lead to by fact; the phrase is in fact."
+     },
+     {
+      "opt": "at",
+      "cat": "grammar",
+      "de": "at fact gibt es nicht.",
+      "en": "at fact does not exist."
+     },
+     {
+      "opt": "on",
+      "cat": "grammar",
+      "de": "on fact gibt es nicht.",
+      "en": "on fact does not exist."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0109",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.run-out-of",
+   "lex": [
+    "run out of"
+   ],
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "We have ___ out of printer paper again; could you please order some more before the audit on Monday?",
+   "options": [
+    "gone",
+    "got",
+    "run",
+    "come"
+   ],
+   "answer": 2,
+   "why": {
+    "ok": {
+     "de": "Etwas ist aufgebraucht: run out of.",
+     "en": "Something is used up: run out of."
+    },
+    "wrong": [
+     {
+      "opt": "gone",
+      "cat": "calque",
+      "de": "Deutsch „ist uns ausgegangen“ führt zu gone out of; die Wendung ist run out of.",
+      "en": "German “ist uns ausgegangen” leads to gone out of; the phrase is run out of."
+     },
+     {
+      "opt": "got",
+      "cat": "meaning",
+      "de": "get out of heißt „herauskommen aus, sich drücken vor“.",
+      "en": "get out of means “escape from, avoid”."
+     },
+     {
+      "opt": "come",
+      "cat": "meaning",
+      "de": "come out of heißt „herauskommen aus“.",
+      "en": "come out of means “emerge from”."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0110",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.find-out",
+   "lex": [
+    "find out"
+   ],
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "Could you please ___ out when the next shuttle bus to the airport leaves and send me the time?",
+   "options": [
+    "find",
+    "look",
+    "search",
+    "seek"
+   ],
+   "answer": 0,
+   "why": {
+    "ok": {
+     "de": "Informationen herausfinden: find out.",
+     "en": "To learn information: find out."
+    },
+    "wrong": [
+     {
+      "opt": "look",
+      "cat": "meaning",
+      "de": "look out heißt „aufpassen“.",
+      "en": "look out means “be careful”."
+     },
+     {
+      "opt": "search",
+      "cat": "calque",
+      "de": "Deutsch „herausfinden/suchen“ führt zu search out; für Informationen heißt es find out.",
+      "en": "German “herausfinden/suchen” leads to search out; for information it is find out."
+     },
+     {
+      "opt": "seek",
+      "cat": "partner",
+      "de": "seek out heißt „gezielt aufsuchen“ (Personen, Orte).",
+      "en": "seek out means “look for deliberately” (people, places)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0111",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.turn-down",
+   "lex": [
+    "turn down"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The customer decided to ___ down our offer because the delivery time was too long for their project.",
+   "options": [
+    "put",
+    "take",
+    "lay",
+    "turn"
+   ],
+   "answer": 3,
+   "why": {
+    "ok": {
+     "de": "Ein Angebot ablehnen: turn down an offer.",
+     "en": "To reject an offer: turn down an offer."
+    },
+    "wrong": [
+     {
+      "opt": "put",
+      "cat": "meaning",
+      "de": "put down heißt „ablegen“ oder „kritisieren“.",
+      "en": "put down means “place” or “criticize”."
+     },
+     {
+      "opt": "take",
+      "cat": "meaning",
+      "de": "take down heißt „abbauen, notieren“.",
+      "en": "take down means “dismantle, write down”."
+     },
+     {
+      "opt": "lay",
+      "cat": "calque",
+      "de": "Deutsch „niederlegen/ablehnen“ führt zu lay down; das heißt „festlegen“.",
+      "en": "German “niederlegen” leads to lay down; that means “set out” (rules)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0112",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.carry-on",
+   "lex": [
+    "carry on with"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We need to ___ on with the project even though the budget has been cut by a third.",
+   "options": [
+    "take",
+    "carry",
+    "follow",
+    "hold"
+   ],
+   "answer": 1,
+   "why": {
+    "ok": {
+     "de": "Weitermachen: carry on with sth.",
+     "en": "To continue: carry on with sth."
+    },
+    "wrong": [
+     {
+      "opt": "take",
+      "cat": "partner",
+      "de": "take on heißt „übernehmen“ (eine Aufgabe).",
+      "en": "take on means “accept” (a task)."
+     },
+     {
+      "opt": "follow",
+      "cat": "calque",
+      "de": "Deutsch „fortfahren, weiterverfolgen“ führt zu follow on; die Wendung ist carry on with.",
+      "en": "German “fortfahren, weiterverfolgen” leads to follow on; the phrase is carry on with."
+     },
+     {
+      "opt": "hold",
+      "cat": "partner",
+      "de": "hold on heißt „warten“.",
+      "en": "hold on means “wait”."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0113",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.come-to-nothing",
+   "lex": [
+    "come to nothing"
+   ],
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The negotiations ___ to nothing because neither side was willing to compromise on the price.",
+   "options": [
+    "came",
+    "ended",
+    "went",
+    "ran"
+   ],
+   "answer": 0,
+   "why": {
+    "ok": {
+     "de": "Feste Wendung: come to nothing = zu nichts führen.",
+     "en": "Fixed phrase: come to nothing = have no result."
+    },
+    "wrong": [
+     {
+      "opt": "ended",
+      "cat": "calque",
+      "de": "Deutsch „endeten im Nichts“ führt zu ended; die Wendung ist came to nothing.",
+      "en": "German “endeten im Nichts” leads to ended; the phrase is came to nothing."
+     },
+     {
+      "opt": "went",
+      "cat": "partner",
+      "de": "went to nothing gibt es nicht.",
+      "en": "went to nothing does not exist."
+     },
+     {
+      "opt": "ran",
+      "cat": "meaning",
+      "de": "ran to heißt „lief zu“ oder „betrug“.",
+      "en": "ran to means “went to” or “amounted to”."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0114",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.tight-schedule",
+   "lex": [
+    "tight schedule"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We are working to a very ___ schedule this month because of the product launch and two customer events.",
+   "options": [
+    "narrow",
+    "tight",
+    "close",
+    "thin"
+   ],
+   "answer": 1,
+   "why": {
+    "ok": {
+     "de": "Feste Verbindung: a tight schedule.",
+     "en": "Fixed collocation: a tight schedule."
+    },
+    "wrong": [
+     {
+      "opt": "narrow",
+      "cat": "calque",
+      "de": "Deutsch „enger Zeitplan“ führt zu narrow; üblich ist tight schedule.",
+      "en": "German “enger Zeitplan” leads to narrow; tight schedule is usual."
+     },
+     {
+      "opt": "close",
+      "cat": "calque",
+      "de": "close heißt „nah“; ein Zeitplan ist tight.",
+      "en": "close means “near”; a schedule is tight."
+     },
+     {
+      "opt": "thin",
+      "cat": "partner",
+      "de": "thin passt zu Dingen mit wenig Dicke, nicht zu Zeitplänen.",
+      "en": "thin goes with things of little thickness, not schedules."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0115",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.heavy-workload",
+   "lex": [
+    "heavy workload"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Our support team has a very ___ workload before the holidays, so replies may take a little longer.",
+   "options": [
+    "strong",
+    "hard",
+    "heavy",
+    "thick"
+   ],
+   "answer": 2,
+   "why": {
+    "ok": {
+     "de": "Feste Verbindung: a heavy workload.",
+     "en": "Fixed collocation: a heavy workload."
+    },
+    "wrong": [
+     {
+      "opt": "strong",
+      "cat": "calque",
+      "de": "Deutsch „starke Arbeitsbelastung“ führt zu strong; üblich ist heavy workload.",
+      "en": "German “starke Arbeitsbelastung” leads to strong; heavy workload is usual."
+     },
+     {
+      "opt": "hard",
+      "cat": "calque",
+      "de": "Deutsch „harte Arbeit“ führt zu hard; eine Arbeitsmenge ist heavy.",
+      "en": "German “harte Arbeit” leads to hard; an amount of work is heavy."
+     },
+     {
+      "opt": "thick",
+      "cat": "partner",
+      "de": "thick passt zu Dicke, nicht zu Arbeitsmenge.",
+      "en": "thick goes with thickness, not an amount of work."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0116",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.agree-with",
+   "lex": [
+    "agree with"
+   ],
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I fully agree ___ you that we should postpone the release until the security tests are finished.",
+   "options": [
+    "to",
+    "on",
+    "in",
+    "with"
+   ],
+   "answer": 3,
+   "why": {
+    "ok": {
+     "de": "Zustimmen (einer Person): agree with sb.",
+     "en": "To share sb's view: agree with sb."
+    },
+    "wrong": [
+     {
+      "opt": "to",
+      "cat": "meaning",
+      "de": "agree to heißt „zustimmen“ bei Vorschlägen und Bedingungen, nicht bei Personen.",
+      "en": "agree to means “consent” to proposals and terms, not to people."
+     },
+     {
+      "opt": "on",
+      "cat": "meaning",
+      "de": "agree on heißt „sich einigen auf“ (ein Thema).",
+      "en": "agree on means “reach agreement about” (a topic)."
+     },
+     {
+      "opt": "in",
+      "cat": "calque",
+      "de": "Deutsch „einverstanden in“ gibt es nicht; mit Personen steht agree with.",
+      "en": "German has no “einverstanden in”; with people it is agree with."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0117",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.raise-prices",
+   "lex": [
+    "raise prices"
+   ],
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The company plans to ___ its prices by three percent from January because of higher energy costs.",
+   "options": [
+    "rise",
+    "lift",
+    "raise",
+    "grow"
+   ],
+   "answer": 2,
+   "why": {
+    "ok": {
+     "de": "Preise erhöhen: raise prices (Preise steigen: prices rise).",
+     "en": "To increase prices: raise prices (prices go up: prices rise)."
+    },
+    "wrong": [
+     {
+      "opt": "rise",
+      "cat": "grammar",
+      "de": "rise ist intransitiv und hat kein Objekt (prices rise).",
+      "en": "rise is intransitive and takes no object (prices rise)."
+     },
+     {
+      "opt": "lift",
+      "cat": "calque",
+      "de": "Deutsch „Preise anheben“ führt zu lift; üblich ist raise prices.",
+      "en": "German “Preise anheben” leads to lift; raise prices is usual."
+     },
+     {
+      "opt": "grow",
+      "cat": "calque",
+      "de": "Deutsch „wachsen lassen“ führt zu grow; grow ist hier intransitiv.",
+      "en": "German “wachsen lassen” leads to grow; grow is intransitive here."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0118",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.earn-deserve",
+   "lex": [
+    "earn"
+   ],
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "She ___ about eighty thousand euros a year as a senior account manager in the cloud division.",
+   "options": [
+    "earns",
+    "deserves",
+    "wins",
+    "gains"
+   ],
+   "answer": 0,
+   "why": {
+    "ok": {
+     "de": "Geld verdienen: earn money.",
+     "en": "Making money: earn money."
+    },
+    "wrong": [
+     {
+      "opt": "deserves",
+      "cat": "calque",
+      "de": "Deutsch „verdient“ kann auch „verdient haben“ heißen; deserve bedeutet nur „verdienen im Sinn von wert sein“.",
+      "en": "German “verdient” can also mean “deserves”; deserve means only “be worthy of”."
+     },
+     {
+      "opt": "wins",
+      "cat": "calque",
+      "de": "Deutsch „gewinnt“ führt zu wins; Gehalt wird earned.",
+      "en": "German “gewinnt” leads to wins; salary is earned."
+     },
+     {
+      "opt": "gains",
+      "cat": "partner",
+      "de": "gain passt zu Erfahrung oder Vorteilen, nicht zu Gehalt.",
+      "en": "gain goes with experience or advantages, not salary."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0119",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.borrow-lend",
+   "lex": [
+    "borrow"
+   ],
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Could I ___ your laptop for the demo this afternoon? Mine is being repaired and I need it back tomorrow.",
+   "options": [
+    "lend",
+    "rent",
+    "lease",
+    "borrow"
+   ],
+   "answer": 3,
+   "why": {
+    "ok": {
+     "de": "Von jemandem leihen: borrow from sb.",
+     "en": "To get sth from sb for a while: borrow from sb."
+    },
+    "wrong": [
+     {
+      "opt": "lend",
+      "cat": "grammar",
+      "de": "lend heißt „verleihen“; der Besitzer lendet, du borgst.",
+      "en": "lend means to give someone something; the owner lends, you borrow."
+     },
+     {
+      "opt": "rent",
+      "cat": "calque",
+      "de": "Deutsch „ausleihen“ führt zu rent; rent bedeutet „gegen Gebühr mieten“.",
+      "en": "German “ausleihen” leads to rent; rent means “hire for a fee”."
+     },
+     {
+      "opt": "lease",
+      "cat": "meaning",
+      "de": "lease heißt „leasen, längerfristig mieten“.",
+      "en": "lease means to rent for a longer period."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0120",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.make-appointment",
+   "lex": [
+    "make an appointment"
+   ],
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I would like to ___ an appointment with your sales manager for next Tuesday afternoon, if she is available.",
+   "options": [
+    "agree",
+    "make",
+    "take",
+    "hold"
+   ],
+   "answer": 1,
+   "why": {
+    "ok": {
+     "de": "Einen Termin vereinbaren: make an appointment.",
+     "en": "To arrange a date: make an appointment."
+    },
+    "wrong": [
+     {
+      "opt": "agree",
+      "cat": "calque",
+      "de": "Deutsch „einen Termin vereinbaren“ führt zu agree; die Wendung ist make an appointment.",
+      "en": "German “einen Termin vereinbaren” leads to agree; the phrase is make an appointment."
+     },
+     {
+      "opt": "take",
+      "cat": "partner",
+      "de": "take an appointment ist unüblich.",
+      "en": "take an appointment is uncommon."
+     },
+     {
+      "opt": "hold",
+      "cat": "partner",
+      "de": "hold an appointment gibt es nicht.",
+      "en": "hold an appointment does not exist."
+     }
+    ]
+   }
+  }
+ ]
+}

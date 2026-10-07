@@ -1,0 +1,1325 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "mcc-0001",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "psc.habit",
+   "topic": "pres-simple-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Our sales director ___ the pipeline report every Monday morning before the team call.",
+   "options": [
+    "reviews",
+    "controls",
+    "is reviewing",
+    "has reviewed"
+   ],
+   "answer": 0,
+   "why": {
+    "ok": {
+     "de": "Gewohnheit mit every Monday: Present Simple, bei he/she/it mit -s: reviews.",
+     "en": "A habit with every Monday: present simple, with -s for he/she/it: reviews."
+    },
+    "wrong": [
+     {
+      "opt": "controls",
+      "cat": "calque",
+      "de": "control heißt „steuern“; „kontrollieren“ im Sinn von prüfen ist review oder check.",
+      "en": "control means “to have power over”; German “kontrollieren” (to check) is review or check."
+     },
+     {
+      "opt": "is reviewing",
+      "cat": "grammar",
+      "de": "Für eine Gewohnheit („every Monday“) steht das Present Simple, nicht -ing.",
+      "en": "A habit (“every Monday”) takes the present simple, not -ing."
+     },
+     {
+      "opt": "has reviewed",
+      "cat": "grammar",
+      "de": "Das Present Perfect passt nicht zu einer Gewohnheit mit „every Monday“.",
+      "en": "The present perfect does not fit a habit with “every Monday”."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0002",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "psc.now",
+   "topic": "pres-simple-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Sorry, I cannot talk right now because we ___ a live demo for a prospect in the next room.",
+   "options": [
+    "run",
+    "are running",
+    "will run",
+    "have run"
+   ],
+   "answer": 1,
+   "why": {
+    "ok": {
+     "de": "Was gerade passiert: am/is/are + -ing.",
+     "en": "What is happening now: am/is/are + -ing."
+    },
+    "wrong": [
+     {
+      "opt": "run",
+      "cat": "calque",
+      "de": "Deutsch sagt „wir führen gerade vor“ im Präsens; Englisch braucht für „gerade jetzt“ am/is/are + -ing.",
+      "en": "German says “wir führen gerade vor” in the present; English needs am/is/are + -ing for “right now”."
+     },
+     {
+      "opt": "will run",
+      "cat": "grammar",
+      "de": "will run ist Zukunft; „right now“ meint die Gegenwart.",
+      "en": "will run is future; “right now” means the present."
+     },
+     {
+      "opt": "have run",
+      "cat": "grammar",
+      "de": "have run beschreibt ein Ergebnis, nicht „gerade jetzt“.",
+      "en": "have run describes a result, not “right now”."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0003",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "psc.state",
+   "topic": "pres-simple-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We ___ a faster way to share large files with our customers, because e-mail attachments keep bouncing back.",
+   "options": [
+    "are needing",
+    "have need",
+    "need",
+    "are in need"
+   ],
+   "answer": 2,
+   "why": {
+    "ok": {
+     "de": "Zustandsverben wie need stehen im Present Simple, nicht in der -ing-Form.",
+     "en": "State verbs such as need take the present simple, not the -ing form."
+    },
+    "wrong": [
+     {
+      "opt": "are needing",
+      "cat": "grammar",
+      "de": "need ist ein Zustandsverb und hat im Alltag kein -ing.",
+      "en": "need is a state verb and normally has no -ing form."
+     },
+     {
+      "opt": "have need",
+      "cat": "calque",
+      "de": "„Wir haben Bedarf an“ ist Deutsch gedacht; Englisch sagt we need.",
+      "en": "“Wir haben Bedarf an” is German thinking; English says we need."
+     },
+     {
+      "opt": "are in need",
+      "cat": "grammar",
+      "de": "are in need braucht „of“ und ein Nomen: are in need of.",
+      "en": "are in need needs “of” and a noun: are in need of."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0004",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "psc.state",
+   "topic": "pres-simple-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I ___ that the client will accept our revised offer, but I cannot be sure before Friday.",
+   "options": [
+    "mean",
+    "am believing",
+    "will believe",
+    "believe"
+   ],
+   "answer": 3,
+   "why": {
+    "ok": {
+     "de": "Meinungen mit Zustandsverben: believe/think im Present Simple.",
+     "en": "Opinions use state verbs: believe/think in the present simple."
+    },
+    "wrong": [
+     {
+      "opt": "mean",
+      "cat": "calque",
+      "de": "„Ich meine, dass“ ist im Englischen think oder believe; mean heißt „beabsichtigen“.",
+      "en": "German “ich meine, dass” is think or believe in English; mean means “intend”."
+     },
+     {
+      "opt": "am believing",
+      "cat": "grammar",
+      "de": "believe ist ein Zustandsverb und steht nicht in der -ing-Form.",
+      "en": "believe is a state verb and does not take the -ing form."
+     },
+     {
+      "opt": "will believe",
+      "cat": "grammar",
+      "de": "will believe sagt etwas über die Zukunft, gemeint ist die jetzige Meinung.",
+      "en": "will believe is about the future, but a present opinion is meant."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0005",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "psc.dual",
+   "topic": "pres-simple-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Please call back in an hour; we ___ lunch with the client right now and cannot answer the phone.",
+   "options": [
+    "have",
+    "will have",
+    "are having",
+    "had"
+   ],
+   "answer": 2,
+   "why": {
+    "ok": {
+     "de": "have als Handlung („essen“) steht mit -ing, wenn es gerade passiert.",
+     "en": "have as an action (“to eat”) takes -ing when it is happening now."
+    },
+    "wrong": [
+     {
+      "opt": "have",
+      "cat": "calque",
+      "de": "Deutsch „wir haben Mittagessen“ steht im Präsens; für „gerade jetzt“ braucht have als Handlung -ing.",
+      "en": "German “wir haben Mittagessen” is in the present; for “right now” the action have needs -ing."
+     },
+     {
+      "opt": "will have",
+      "cat": "grammar",
+      "de": "will have ist Zukunft; „right now“ meint jetzt.",
+      "en": "will have is future; “right now” means now."
+     },
+     {
+      "opt": "had",
+      "cat": "grammar",
+      "de": "had ist Vergangenheit.",
+      "en": "had is past."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0006",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "psc.always",
+   "topic": "pres-simple-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Our vendor ___ the delivery dates again, and it is driving our logistics team crazy.",
+   "options": [
+    "is always changing",
+    "changes always",
+    "always is changing",
+    "has always changing"
+   ],
+   "answer": 0,
+   "why": {
+    "ok": {
+     "de": "Ärger über ständige Wiederholung: is/are + always + -ing.",
+     "en": "Annoyance at constant repetition: is/are + always + -ing."
+    },
+    "wrong": [
+     {
+      "opt": "changes always",
+      "cat": "calque",
+      "de": "Deutsch stellt „immer“ hinten („ändert immer“); Englisch: is always changing, always steht vor -ing.",
+      "en": "German puts “immer” last; English: is always changing, always goes before -ing."
+     },
+     {
+      "opt": "always is changing",
+      "cat": "grammar",
+      "de": "always steht nach dem Hilfsverb: is always changing.",
+      "en": "always goes after the auxiliary: is always changing."
+     },
+     {
+      "opt": "has always changing",
+      "cat": "grammar",
+      "de": "has always changing ist keine Form.",
+      "en": "has always changing is not a form."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0007",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "psc.always",
+   "topic": "pres-simple-cont",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "My neighbor ___ his car in front of my garage, and it makes me furious every single time.",
+   "options": [
+    "parks always",
+    "always is parking",
+    "has always parking",
+    "is always parking"
+   ],
+   "answer": 3,
+   "why": {
+    "ok": {
+     "de": "Ärger über wiederholtes Verhalten: is always + -ing.",
+     "en": "Annoyance at repeated behavior: is always + -ing."
+    },
+    "wrong": [
+     {
+      "opt": "parks always",
+      "cat": "calque",
+      "de": "Deutsch stellt „immer“ hinten („parkt immer“); Englisch: is always parking.",
+      "en": "German puts “immer” last; English: is always parking."
+     },
+     {
+      "opt": "always is parking",
+      "cat": "grammar",
+      "de": "always steht nach dem Hilfsverb: is always parking.",
+      "en": "always goes after the auxiliary: is always parking."
+     },
+     {
+      "opt": "has always parking",
+      "cat": "grammar",
+      "de": "has always parking ist keine Form.",
+      "en": "has always parking is not a form."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0008",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "psc.habit",
+   "topic": "pres-simple-cont",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "My colleague ___ a coffee every afternoon at three, and he never skips it, not even on busy days.",
+   "options": [
+    "makes",
+    "has",
+    "is having",
+    "would have"
+   ],
+   "answer": 1,
+   "why": {
+    "ok": {
+     "de": "Gewohnheit mit every afternoon: Present Simple; have a coffee = einen Kaffee trinken.",
+     "en": "A habit with every afternoon: present simple; have a coffee = to drink a coffee."
+    },
+    "wrong": [
+     {
+      "opt": "makes",
+      "cat": "calque",
+      "de": "„Einen Kaffee machen“ heißt im Englischen zubereiten; zum Trinken sagt man have.",
+      "en": "“To make a coffee” means preparing it in English; for drinking you say have."
+     },
+     {
+      "opt": "is having",
+      "cat": "grammar",
+      "de": "Für eine Gewohnheit („every afternoon“) steht das Present Simple.",
+      "en": "A habit (“every afternoon”) takes the present simple."
+     },
+     {
+      "opt": "would have",
+      "cat": "grammar",
+      "de": "would have braucht eine Bedingung oder ein Partizip.",
+      "en": "would have needs a condition or a participle."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0009",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "psp.finished-time",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We ___ the contract with Rhein Logistics in March last year, after three rounds of difficult negotiations.",
+   "options": [
+    "signed",
+    "have signed",
+    "were signing",
+    "are signing"
+   ],
+   "answer": 0,
+   "why": {
+    "ok": {
+     "de": "Abgeschlossene Zeit (in March last year): Past Simple.",
+     "en": "A finished time (in March last year): past simple."
+    },
+    "wrong": [
+     {
+      "opt": "have signed",
+      "cat": "calque",
+      "de": "Deutsch sagt „haben unterschrieben“ (Perfekt); mit einer genannten Zeit („in March last year“) steht im Englischen das Past Simple.",
+      "en": "German says “haben unterschrieben” (perfect); with a named time (“in March last year”) English uses the past simple."
+     },
+     {
+      "opt": "were signing",
+      "cat": "grammar",
+      "de": "were signing beschreibt etwas, das gerade lief, nicht ein abgeschlossenes Ereignis.",
+      "en": "were signing describes something in progress, not a completed event."
+     },
+     {
+      "opt": "are signing",
+      "cat": "grammar",
+      "de": "are signing ist Gegenwart.",
+      "en": "are signing is present."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0010",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "psp.finished-time",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "___ you meet our new CEO at the conference last week, or was it somebody from the Berlin office?",
+   "options": [
+    "Have",
+    "Did",
+    "Do",
+    "Were"
+   ],
+   "answer": 1,
+   "why": {
+    "ok": {
+     "de": "Frage mit abgeschlossener Zeit (last week): did + Grundform.",
+     "en": "A question with a finished time (last week): did + base form."
+    },
+    "wrong": [
+     {
+      "opt": "Have",
+      "cat": "calque",
+      "de": "Deutsch fragt „Hast du … getroffen?“ (Perfekt); mit „last week“ braucht Englisch did + Grundform.",
+      "en": "German asks “Hast du … getroffen?” (perfect); with “last week” English needs did + base form."
+     },
+     {
+      "opt": "Do",
+      "cat": "grammar",
+      "de": "Do fragt nach Gegenwart oder Gewohnheit, hier geht es um letzte Woche.",
+      "en": "Do asks about the present or a habit, but this is about last week."
+     },
+     {
+      "opt": "Were",
+      "cat": "grammar",
+      "de": "Were you meet ist keine Form.",
+      "en": "Were you meet is not a form."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0011",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "psp.since-for",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We ___ with the same logistics partner since 2018, and we have never had a serious problem.",
+   "options": [
+    "work",
+    "worked",
+    "have worked",
+    "were working"
+   ],
+   "answer": 2,
+   "why": {
+    "ok": {
+     "de": "Dauer bis heute mit since: Present Perfect (have worked).",
+     "en": "Duration up to now with since: present perfect (have worked)."
+    },
+    "wrong": [
+     {
+      "opt": "work",
+      "cat": "calque",
+      "de": "Deutsch sagt „wir arbeiten seit 2018 zusammen“ im Präsens; Englisch braucht für „seit“ das Present Perfect.",
+      "en": "German says “wir arbeiten seit 2018 zusammen” in the present; English needs the present perfect for “since”."
+     },
+     {
+      "opt": "worked",
+      "cat": "grammar",
+      "de": "worked wäre abgeschlossen; die Zusammenarbeit läuft aber noch.",
+      "en": "worked would be finished, but the cooperation is still going on."
+     },
+     {
+      "opt": "were working",
+      "cat": "grammar",
+      "de": "were working ist Vergangenheit; „since 2018“ reicht bis heute.",
+      "en": "were working is past; “since 2018” reaches up to now."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0012",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "psp.since-for",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "I ___ in this city for almost ten years now, and I still love the old town on a sunny evening.",
+   "options": [
+    "live",
+    "lived",
+    "have been live",
+    "have lived"
+   ],
+   "answer": 3,
+   "why": {
+    "ok": {
+     "de": "Dauer bis jetzt mit for: Present Perfect (have lived).",
+     "en": "Duration up to now with for: present perfect (have lived)."
+    },
+    "wrong": [
+     {
+      "opt": "live",
+      "cat": "calque",
+      "de": "Deutsch sagt „ich wohne seit zehn Jahren hier“ im Präsens; Englisch braucht have lived.",
+      "en": "German says “ich wohne seit zehn Jahren hier” in the present; English needs have lived."
+     },
+     {
+      "opt": "lived",
+      "cat": "grammar",
+      "de": "lived wäre abgeschlossen; du wohnst noch dort.",
+      "en": "lived would be finished, but you still live there."
+     },
+     {
+      "opt": "have been live",
+      "cat": "grammar",
+      "de": "have been live ist keine Form (live ist hier kein Adjektiv).",
+      "en": "have been live is not a form (live is not an adjective here)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0013",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "psp.experience",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "I ___ to Singapore twice, but I have never been to Japan, and I would love to go.",
+   "options": [
+    "have gone",
+    "was",
+    "have been",
+    "had been"
+   ],
+   "answer": 2,
+   "why": {
+    "ok": {
+     "de": "Erfahrung bis jetzt: have been to (nicht have gone to).",
+     "en": "Experience up to now: have been to (not have gone to)."
+    },
+    "wrong": [
+     {
+      "opt": "have gone",
+      "cat": "meaning",
+      "de": "have gone heißt „ist hingefahren und noch dort“; für Reiseerfahrung steht have been.",
+      "en": "have gone means “went and is still there”; for travel experience use have been."
+     },
+     {
+      "opt": "was",
+      "cat": "calque",
+      "de": "Deutsch sagt „ich war zweimal in Singapur“; im Englischen steht dafür have been to.",
+      "en": "German says “ich war zweimal in Singapur”; English uses have been to."
+     },
+     {
+      "opt": "had been",
+      "cat": "grammar",
+      "de": "had been braucht einen früheren Bezugspunkt in der Vergangenheit.",
+      "en": "had been needs an earlier reference point in the past."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0014",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "pc.duration",
+   "topic": "pres-perf-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We ___ on the migration to the cloud since January, and we are still not finished with the archive.",
+   "options": [
+    "have been working",
+    "are working",
+    "worked",
+    "had been working"
+   ],
+   "answer": 0,
+   "why": {
+    "ok": {
+     "de": "Laufende Tätigkeit seit einem Zeitpunkt: have been + -ing.",
+     "en": "An ongoing activity since a point in time: have been + -ing."
+    },
+    "wrong": [
+     {
+      "opt": "are working",
+      "cat": "calque",
+      "de": "Deutsch sagt „wir arbeiten seit Januar daran“ im Präsens; Englisch braucht für „seit“ have been + -ing.",
+      "en": "German says “wir arbeiten seit Januar daran” in the present; English needs have been + -ing for “since”."
+     },
+     {
+      "opt": "worked",
+      "cat": "grammar",
+      "de": "worked wäre abgeschlossen; „still not finished“ zeigt, dass es weitergeht.",
+      "en": "worked would be finished, but “still not finished” shows it continues."
+     },
+     {
+      "opt": "had been working",
+      "cat": "grammar",
+      "de": "had been working braucht einen früheren Zeitpunkt in der Vergangenheit.",
+      "en": "had been working needs an earlier point in the past."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0015",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "pc.since-for",
+   "topic": "pres-perf-cont",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "My neighbor ___ the drums for three hours now, and I really need some quiet to finish my report.",
+   "options": [
+    "is playing",
+    "plays",
+    "played",
+    "has been playing"
+   ],
+   "answer": 3,
+   "why": {
+    "ok": {
+     "de": "Dauer bis jetzt: has/have been + -ing mit for + Länge.",
+     "en": "Duration up to now: has/have been + -ing with for + length."
+    },
+    "wrong": [
+     {
+      "opt": "is playing",
+      "cat": "calque",
+      "de": "Deutsch sagt „spielt seit drei Stunden“ im Präsens; Englisch braucht has been playing.",
+      "en": "German says “spielt seit drei Stunden” in the present; English needs has been playing."
+     },
+     {
+      "opt": "plays",
+      "cat": "grammar",
+      "de": "plays ist eine Gewohnheit; hier läuft es gerade seit drei Stunden.",
+      "en": "plays is a habit; here it has been going on for three hours."
+     },
+     {
+      "opt": "played",
+      "cat": "grammar",
+      "de": "played wäre abgeschlossen; er spielt noch.",
+      "en": "played would be finished, but he is still playing."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0016",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "pc.form",
+   "topic": "pres-perf-cont",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "Your sister looks exhausted. How long ___ she waiting at the airport for her connecting flight?",
+   "options": [
+    "is",
+    "has been",
+    "does",
+    "will"
+   ],
+   "answer": 1,
+   "why": {
+    "ok": {
+     "de": "Frage nach der Dauer bis jetzt: How long + has/have + Subjekt + been + -ing.",
+     "en": "A question about duration up to now: How long + has/have + subject + been + -ing."
+    },
+    "wrong": [
+     {
+      "opt": "is",
+      "cat": "calque",
+      "de": "Deutsch fragt „Wie lange wartet sie schon?“ im Präsens; Englisch braucht has been waiting.",
+      "en": "German asks “Wie lange wartet sie schon?” in the present; English needs has been waiting."
+     },
+     {
+      "opt": "does",
+      "cat": "grammar",
+      "de": "does + waiting gibt es nicht.",
+      "en": "does + waiting does not exist."
+     },
+     {
+      "opt": "will",
+      "cat": "grammar",
+      "de": "will + waiting gibt es nicht; will braucht be.",
+      "en": "will + waiting does not exist; will needs be."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0017",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "pc.recent",
+   "topic": "pres-perf-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Our sales figures ___ going up since last spring, and the board is finally starting to take notice.",
+   "options": [
+    "have been",
+    "are",
+    "were",
+    "had been"
+   ],
+   "answer": 0,
+   "why": {
+    "ok": {
+     "de": "Entwicklung bis heute: have been + -ing mit since.",
+     "en": "A development up to now: have been + -ing with since."
+    },
+    "wrong": [
+     {
+      "opt": "are",
+      "cat": "calque",
+      "de": "Deutsch sagt „steigen seit dem Frühjahr“ im Präsens; Englisch braucht have been going.",
+      "en": "German says “steigen seit dem Frühjahr” in the present; English needs have been going."
+     },
+     {
+      "opt": "were",
+      "cat": "grammar",
+      "de": "were going up wäre abgeschlossen; die Entwicklung läuft noch.",
+      "en": "were going up would be finished, but the trend continues."
+     },
+     {
+      "opt": "had been",
+      "cat": "grammar",
+      "de": "had been braucht einen früheren Bezugspunkt in der Vergangenheit.",
+      "en": "had been needs an earlier reference point in the past."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0018",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "pc.state-verbs",
+   "topic": "pres-perf-cont",
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "text": "I ___ my business partner for almost fifteen years, and we have never had a serious argument.",
+   "options": [
+    "have been knowing",
+    "have known",
+    "know",
+    "knew"
+   ],
+   "answer": 1,
+   "why": {
+    "ok": {
+     "de": "Zustandsverb mit Dauer bis jetzt: have known (Present Perfect, nicht -ing).",
+     "en": "A state verb with duration up to now: have known (present perfect, not -ing)."
+    },
+    "wrong": [
+     {
+      "opt": "have been knowing",
+      "cat": "grammar",
+      "de": "know ist ein Zustandsverb und hat keine -ing-Form.",
+      "en": "know is a state verb and has no -ing form."
+     },
+     {
+      "opt": "know",
+      "cat": "calque",
+      "de": "Deutsch sagt „ich kenne ihn seit 15 Jahren“ im Präsens; Englisch braucht have known.",
+      "en": "German says “ich kenne ihn seit 15 Jahren” in the present; English needs have known."
+     },
+     {
+      "opt": "knew",
+      "cat": "grammar",
+      "de": "knew wäre abgeschlossen; ihr kennt euch noch.",
+      "en": "knew would be finished, but you still know each other."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0019",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "pc.cont-simple",
+   "topic": "pres-perf-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I ___ twelve e-mails since this morning, but I still have not heard anything from the customer.",
+   "options": [
+    "have been writing",
+    "write",
+    "have written",
+    "wrote"
+   ],
+   "answer": 2,
+   "why": {
+    "ok": {
+     "de": "Zahl als Ergebnis: have + Partizip (have written twelve).",
+     "en": "A number as the result: have + participle (have written twelve)."
+    },
+    "wrong": [
+     {
+      "opt": "have been writing",
+      "cat": "grammar",
+      "de": "Bei einer Zahl (twelve) zählt das Ergebnis: have written, nicht have been writing.",
+      "en": "With a number (twelve) the result counts: have written, not have been writing."
+     },
+     {
+      "opt": "write",
+      "cat": "calque",
+      "de": "Deutsch sagt „ich schreibe seit heute Morgen zwölf Mails“ im Präsens; Englisch braucht das Present Perfect.",
+      "en": "German says “ich schreibe seit heute Morgen zwölf Mails” in the present; English needs the present perfect."
+     },
+     {
+      "opt": "wrote",
+      "cat": "grammar",
+      "de": "wrote passt nicht zu since this morning (bis jetzt).",
+      "en": "wrote does not fit since this morning (up to now)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0020",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "ff.will-now",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "You are right, there is a mistake in the invoice. Thank you for telling me; I ___ it today.",
+   "options": [
+    "correct",
+    "would correct",
+    "have corrected",
+    "will correct"
+   ],
+   "answer": 3,
+   "why": {
+    "ok": {
+     "de": "Spontane Entscheidung im Gespräch: will + Grundform.",
+     "en": "A spontaneous decision in conversation: will + base form."
+    },
+    "wrong": [
+     {
+      "opt": "correct",
+      "cat": "calque",
+      "de": "Deutsch sagt „ich korrigiere das heute“ im Präsens; für einen spontanen Entschluss braucht Englisch will.",
+      "en": "German says “ich korrigiere das heute” in the present; for a spontaneous decision English needs will."
+     },
+     {
+      "opt": "would correct",
+      "cat": "grammar",
+      "de": "would correct braucht eine Bedingung.",
+      "en": "would correct needs a condition."
+     },
+     {
+      "opt": "have corrected",
+      "cat": "grammar",
+      "de": "have corrected beschreibt etwas Fertiges, hier geht es um die Zukunft.",
+      "en": "have corrected describes something done, but this is about the future."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0021",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "ff.going-to",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "We ___ the kitchen next spring; we have already chosen the new cabinets and booked the carpenter.",
+   "options": [
+    "renovate",
+    "would renovate",
+    "are going to renovate",
+    "are renovated"
+   ],
+   "answer": 2,
+   "why": {
+    "ok": {
+     "de": "Schon beschlossener Plan: am/is/are going to + Grundform.",
+     "en": "A plan already made: am/is/are going to + base form."
+    },
+    "wrong": [
+     {
+      "opt": "renovate",
+      "cat": "calque",
+      "de": "Deutsch sagt „wir renovieren nächstes Frühjahr“ im Präsens; für einen Plan braucht Englisch be going to.",
+      "en": "German says “wir renovieren nächstes Frühjahr” in the present; for a plan English needs be going to."
+     },
+     {
+      "opt": "would renovate",
+      "cat": "grammar",
+      "de": "would renovate braucht eine Bedingung.",
+      "en": "would renovate needs a condition."
+     },
+     {
+      "opt": "are renovated",
+      "cat": "grammar",
+      "de": "are renovated ist Passiv: „werden renoviert“.",
+      "en": "are renovated is passive: “are being redone”."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0022",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "ff.was-going-to",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I ___ call the customer this morning, but then the system crashed, and I completely forgot about it.",
+   "options": [
+    "was going to",
+    "should",
+    "will",
+    "am going to"
+   ],
+   "answer": 0,
+   "why": {
+    "ok": {
+     "de": "Plan, der nicht klappte: was/were going to + Grundform.",
+     "en": "A plan that fell through: was/were going to + base form."
+    },
+    "wrong": [
+     {
+      "opt": "should",
+      "cat": "calque",
+      "de": "„Ich sollte anrufen“ ist Deutsch gedacht; für einen Plan, der nicht klappte, steht was going to.",
+      "en": "“Ich sollte anrufen” is German thinking; for a plan that fell through, use was going to."
+     },
+     {
+      "opt": "will",
+      "cat": "grammar",
+      "de": "will ist Zukunft; der Plan liegt in der Vergangenheit.",
+      "en": "will is future; the plan lies in the past."
+     },
+     {
+      "opt": "am going to",
+      "cat": "grammar",
+      "de": "am going to ist Gegenwart; „then the system crashed“ zeigt Vergangenheit.",
+      "en": "am going to is present; “then the system crashed” shows the past."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0023",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "ff.about-to",
+   "topic": "future-forms",
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "text": "Hurry up, the train ___ to leave, and the next one does not go for another hour!",
+   "options": [
+    "is close",
+    "is nearly",
+    "is on the point",
+    "is about"
+   ],
+   "answer": 3,
+   "why": {
+    "ok": {
+     "de": "Gleich passiert es: be about to + Grundform.",
+     "en": "It happens any moment now: be about to + base form."
+    },
+    "wrong": [
+     {
+      "opt": "is close",
+      "cat": "calque",
+      "de": "„Der Zug ist kurz davor“ klingt wie close to; die feste Wendung ist is about to.",
+      "en": "“Der Zug ist kurz davor” sounds like close to; the fixed phrase is is about to."
+     },
+     {
+      "opt": "is nearly",
+      "cat": "calque",
+      "de": "„Der Zug fährt fast ab“ ist Deutsch gedacht; nearly passt nicht vor to + Verb.",
+      "en": "“Der Zug fährt fast ab” is German thinking; nearly does not fit before to + verb."
+     },
+     {
+      "opt": "is on the point",
+      "cat": "grammar",
+      "de": "Die Wendung ist on the point of leaving (mit „of“ und -ing), nicht „to“.",
+      "en": "on the point needs of + -ing: on the point of leaving."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0024",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "ff.no-will-after",
+   "topic": "future-forms",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We cannot start the implementation before the client ___ the first invoice, so please remind him today.",
+   "options": [
+    "will pay",
+    "has paid",
+    "would pay",
+    "is paying"
+   ],
+   "answer": 1,
+   "why": {
+    "ok": {
+     "de": "Nach before/until/as soon as steht die Gegenwart (hier has paid), nie will.",
+     "en": "After before/until/as soon as the present is used (here has paid), never will."
+    },
+    "wrong": [
+     {
+      "opt": "will pay",
+      "cat": "calque",
+      "de": "Deutsch sagt „bevor der Kunde bezahlen wird“; nach before steht im Englischen keine Zukunftsform.",
+      "en": "German says “bevor der Kunde bezahlen wird”; English uses no future form after before."
+     },
+     {
+      "opt": "would pay",
+      "cat": "grammar",
+      "de": "would pay braucht eine Bedingung.",
+      "en": "would pay needs a condition."
+     },
+     {
+      "opt": "is paying",
+      "cat": "grammar",
+      "de": "is paying beschreibt etwas, das gerade läuft; hier geht es um den Abschluss.",
+      "en": "is paying describes something in progress; here the completion matters."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0025",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "tc.present-for-future",
+   "topic": "time-clauses",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I will send you the proposal as soon as I ___ the calculation for the second option.",
+   "options": [
+    "have finished",
+    "will finish",
+    "would finish",
+    "am finishing"
+   ],
+   "answer": 0,
+   "why": {
+    "ok": {
+     "de": "Zeitsatz mit as soon as: Gegenwart oder Present Perfect statt will.",
+     "en": "A time clause with as soon as: present or present perfect instead of will."
+    },
+    "wrong": [
+     {
+      "opt": "will finish",
+      "cat": "calque",
+      "de": "Deutsch sagt „sobald ich fertig sein werde“; nach as soon as steht im Englischen keine Zukunftsform.",
+      "en": "German says “sobald ich fertig sein werde”; English uses no future form after as soon as."
+     },
+     {
+      "opt": "would finish",
+      "cat": "grammar",
+      "de": "would finish braucht eine Bedingung.",
+      "en": "would finish needs a condition."
+     },
+     {
+      "opt": "am finishing",
+      "cat": "grammar",
+      "de": "am finishing beschreibt etwas, das gerade läuft, nicht den Abschluss.",
+      "en": "am finishing describes something in progress, not completion."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0026",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "tc.present-for-future",
+   "topic": "time-clauses",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Please do not forward the offer to the customer before the legal team ___ the final wording.",
+   "options": [
+    "will approve",
+    "has approved",
+    "would approve",
+    "is approving"
+   ],
+   "answer": 1,
+   "why": {
+    "ok": {
+     "de": "Nach before steht die Gegenwart (has approved), nie will.",
+     "en": "After before the present is used (has approved), never will."
+    },
+    "wrong": [
+     {
+      "opt": "will approve",
+      "cat": "calque",
+      "de": "Deutsch sagt „bevor die Rechtsabteilung zustimmen wird“; nach before steht im Englischen keine Zukunftsform.",
+      "en": "German says “bevor die Rechtsabteilung zustimmen wird”; English uses no future form after before."
+     },
+     {
+      "opt": "would approve",
+      "cat": "grammar",
+      "de": "would approve braucht eine Bedingung.",
+      "en": "would approve needs a condition."
+     },
+     {
+      "opt": "is approving",
+      "cat": "grammar",
+      "de": "is approving beschreibt etwas, das gerade läuft, nicht das Ergebnis.",
+      "en": "is approving describes something in progress, not the result."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0027",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "tc.present-perfect",
+   "topic": "time-clauses",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Once we ___ the signed order form, our team will start setting up your account and send the login details.",
+   "options": [
+    "will receive",
+    "would receive",
+    "have received",
+    "are receiving"
+   ],
+   "answer": 2,
+   "why": {
+    "ok": {
+     "de": "Erst nach Abschluss der ersten Handlung: once + Present Perfect, im Hauptsatz will.",
+     "en": "Only after the first action is complete: once + present perfect, will in the main clause."
+    },
+    "wrong": [
+     {
+      "opt": "will receive",
+      "cat": "calque",
+      "de": "Deutsch sagt „sobald wir das Formular erhalten werden“; nach once steht im Englischen keine Zukunftsform.",
+      "en": "German says “sobald wir das Formular erhalten werden”; English uses no future form after once."
+     },
+     {
+      "opt": "would receive",
+      "cat": "grammar",
+      "de": "would receive braucht eine Bedingung.",
+      "en": "would receive needs a condition."
+     },
+     {
+      "opt": "are receiving",
+      "cat": "grammar",
+      "de": "are receiving beschreibt etwas, das gerade läuft, nicht den Abschluss.",
+      "en": "are receiving describes something in progress, not completion."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0028",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "tc.by-the-time",
+   "topic": "time-clauses",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "By the time the auditors ___ next Monday, we will have archived all of the old contracts and invoices.",
+   "options": [
+    "will arrive",
+    "would arrive",
+    "are arriving",
+    "arrive"
+   ],
+   "answer": 3,
+   "why": {
+    "ok": {
+     "de": "By the time + Gegenwart (arrive), im Hauptsatz will have + Partizip.",
+     "en": "By the time + present (arrive), the main clause takes will have + participle."
+    },
+    "wrong": [
+     {
+      "opt": "will arrive",
+      "cat": "calque",
+      "de": "Deutsch sagt „bis die Prüfer ankommen werden“; nach by the time steht im Englischen keine Zukunftsform.",
+      "en": "German says “bis die Prüfer ankommen werden”; English uses no future form after by the time."
+     },
+     {
+      "opt": "would arrive",
+      "cat": "grammar",
+      "de": "would arrive braucht eine Bedingung.",
+      "en": "would arrive needs a condition."
+     },
+     {
+      "opt": "are arriving",
+      "cat": "grammar",
+      "de": "are arriving passt nicht in einen by-the-time-Satz.",
+      "en": "are arriving does not fit a by-the-time clause."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0029",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "pc.duration",
+   "topic": "pres-perf-cont",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "I ___ English for about two years now, and my pronunciation is slowly getting better.",
+   "options": [
+    "am learning",
+    "learned",
+    "have been learning",
+    "learn"
+   ],
+   "answer": 2,
+   "why": {
+    "ok": {
+     "de": "Laufende Tätigkeit mit Dauer: have been + -ing mit for.",
+     "en": "An ongoing activity with duration: have been + -ing with for."
+    },
+    "wrong": [
+     {
+      "opt": "am learning",
+      "cat": "calque",
+      "de": "Deutsch sagt „ich lerne seit zwei Jahren Englisch“ im Präsens; Englisch braucht have been learning.",
+      "en": "German says “ich lerne seit zwei Jahren Englisch” in the present; English needs have been learning."
+     },
+     {
+      "opt": "learned",
+      "cat": "grammar",
+      "de": "learned wäre abgeschlossen; du lernst noch.",
+      "en": "learned would be finished, but you are still learning."
+     },
+     {
+      "opt": "learn",
+      "cat": "calque",
+      "de": "learn im Präsens sagt nichts über die Dauer bis jetzt.",
+      "en": "learn in the present says nothing about the duration up to now."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0030",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "psp.since-for",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "She has worked for this company ___ she graduated in 2010, and she has been promoted twice.",
+   "options": [
+    "since",
+    "from",
+    "for",
+    "after"
+   ],
+   "answer": 0,
+   "why": {
+    "ok": {
+     "de": "since + Zeitpunkt oder Satz mit Vergangenheit: Dauer bis jetzt.",
+     "en": "since + point in time or past clause: duration up to now."
+    },
+    "wrong": [
+     {
+      "opt": "from",
+      "cat": "calque",
+      "de": "Deutsch „von 2010 an“ klingt wie from; mit has worked steht since + Zeitpunkt.",
+      "en": "German “von 2010 an” sounds like from; with has worked use since + point in time."
+     },
+     {
+      "opt": "for",
+      "cat": "grammar",
+      "de": "for braucht eine Länge; hier folgt ein Satz mit einem Zeitpunkt.",
+      "en": "for needs a length of time; here a clause with a point in time follows."
+     },
+     {
+      "opt": "after",
+      "cat": "meaning",
+      "de": "after nennt nur die Reihenfolge, nicht die Dauer bis heute.",
+      "en": "after names only the order, not the duration up to now."
+     }
+    ]
+   }
+  }
+ ]
+}
