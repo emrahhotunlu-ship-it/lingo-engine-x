@@ -353,3 +353,273 @@
     transition: none !important;
   }
 }
+
+/* ============================================================ C1-Reise (P58) */
+
+.lx-jr {
+  --lx-jr-node-bg: var(--lx-surface-solid);
+}
+.lx-jr-stage {
+  position: relative;
+  isolation: isolate;
+  border-radius: 1rem;
+  border: 1px solid var(--lx-border);
+  padding: 0.75rem 0.75rem 0.5rem;
+  background:
+    radial-gradient(90% 60% at 80% 0%, color-mix(in srgb, var(--lx-gold-text) 7%, transparent), transparent 70%),
+    radial-gradient(80% 60% at 10% 100%, color-mix(in srgb, var(--lx-ch-grammar) 9%, transparent), transparent 70%),
+    var(--lx-surface-solid);
+}
+.lx-jr[data-orient='horizontal'] .lx-jr-stage {
+  padding: 1rem 0.75rem 0.75rem;
+}
+
+/* Untergrund: Höhenlinien und Sternenstaub, leicht nach hinten gekippt (nur Stufe Voll/Ruhig). */
+.lx-jr-ground-clip {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.lx-jr-ground {
+  position: absolute;
+  inset: -14% -8%;
+  transform-origin: 50% 100%;
+}
+:root[data-fx='full'] .lx-jr-ground,
+:root[data-fx='calm'] .lx-jr-ground {
+  transform: perspective(900px) rotateX(22deg);
+}
+.lx-jr-ground-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.lx-jr-contours path {
+  fill: none;
+  stroke: var(--lx-line-strong);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.6;
+}
+.lx-jr-dust circle {
+  fill: var(--lx-fg);
+}
+:root[data-theme='light'] .lx-jr-dust {
+  opacity: 0.45;
+}
+:root[data-theme='light'] .lx-jr-contours path {
+  opacity: 0.8;
+}
+/* Parallaxe nur, wo der Browser scrollgebundene Animationen kann (keine Zeitschleife, kein Skript). */
+@supports (animation-timeline: view()) {
+  :root[data-fx='full'] .lx-jr-ground {
+    animation: lx-jr-parallax linear both;
+    animation-timeline: view();
+  }
+}
+@keyframes lx-jr-parallax {
+  from {
+    transform: perspective(900px) rotateX(22deg) translateY(-5%);
+  }
+  to {
+    transform: perspective(900px) rotateX(22deg) translateY(5%);
+  }
+}
+
+/* Route: gelaufen = grün durchgezogen, Ankunft beim aktuellen Kapitel = Grammatik-Farbe, voraus = gepunktet. */
+.lx-jr-route {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  overflow: visible;
+  pointer-events: none;
+}
+.lx-jr-route-line,
+.lx-jr-route-glow {
+  fill: none;
+  stroke-linecap: round;
+}
+.lx-jr-route-line {
+  stroke-width: 3;
+}
+.lx-jr-route-glow {
+  stroke-width: 10;
+  opacity: 0.16;
+}
+.lx-jr-route [data-tone='walked'] path {
+  stroke: var(--lx-ok);
+}
+.lx-jr-route [data-tone='arrive'] path {
+  stroke: var(--lx-ch-grammar);
+}
+.lx-jr-route [data-tone='ahead'] .lx-jr-route-line {
+  stroke: var(--lx-line-strong);
+  stroke-width: 2.5;
+  stroke-dasharray: 0.5 8;
+}
+
+.lx-jr-list {
+  position: relative;
+  z-index: 2;
+}
+.lx-jr-btn {
+  display: flex;
+  width: 100%;
+  min-height: 4.75rem;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.375rem 0.5rem 0.375rem var(--jr-x, 0);
+  border-radius: 0.875rem;
+  text-align: left;
+  color: var(--lx-fg);
+  cursor: pointer;
+}
+.lx-jr-btn:focus-visible {
+  outline: 2px solid var(--lx-focus);
+  outline-offset: 2px;
+}
+.lx-jr-text {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+.lx-jr-btn:hover .lx-jr-text > span:first-child {
+  text-decoration: underline;
+  text-decoration-color: var(--lx-line-strong);
+  text-underline-offset: 4px;
+}
+.lx-jr[data-orient='horizontal'] .lx-jr-btn {
+  min-height: 8rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  padding: calc(0.5rem + var(--jr-y, 0rem)) 0.375rem 0.625rem;
+  text-align: center;
+  border: 1px solid transparent;
+}
+.lx-jr[data-orient='horizontal'] .lx-jr-text {
+  align-items: center;
+  flex: none;
+  width: 100%;
+}
+.lx-jr-name {
+  hyphens: auto;
+  overflow-wrap: break-word;
+}
+.lx-jr-pats {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+.lx-jr-pats-bar {
+  position: relative;
+  display: block;
+  width: 2.75rem;
+  height: 4px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--lx-track);
+}
+.lx-jr-pats-bar > span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+  background: var(--lx-ch-grammar);
+}
+.lx-jr[data-orient='horizontal'] .lx-jr-btn:hover {
+  background: color-mix(in srgb, var(--lx-surface-strong) 70%, transparent);
+}
+.lx-jr[data-orient='horizontal'] .lx-jr-btn[aria-pressed='true'] {
+  background: color-mix(in srgb, var(--lx-surface-strong) 85%, transparent);
+  border-color: var(--lx-line-strong);
+}
+
+/* Station und Lichthof der aktuellen Station (atmet dreimal, dann still). */
+.lx-jr-node {
+  position: relative;
+  display: block;
+  flex: none;
+  border-radius: 999px;
+}
+.lx-jr-node[data-state='current']::before {
+  content: '';
+  position: absolute;
+  inset: -16px;
+  border-radius: 999px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--lx-ch-grammar) 60%, transparent) 0%, transparent 68%);
+  opacity: 0.3;
+}
+.lx-jr-node[data-state='done'] svg {
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--lx-ok) 35%, transparent));
+}
+:root[data-theme='light'] .lx-jr-node[data-state='done'] svg {
+  filter: none;
+}
+:root[data-fx='full'] .lx-jr-node[data-state='current']::before,
+:root[data-fx='calm'] .lx-jr-node[data-state='current']::before {
+  animation: lx-jr-halo 2.4s ease-in-out 3;
+}
+@keyframes lx-jr-halo {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Gipfel „C1“ über Kapitel 7 (nur senkrecht, Schmuck). */
+.lx-jr-summit {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.25rem 0 0.375rem 1.25rem;
+}
+.lx-jr-summit-node {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: 999px;
+  border: 2px dashed color-mix(in srgb, var(--lx-gold-text) 70%, transparent);
+  background: var(--lx-jr-node-bg);
+  color: var(--lx-gold-text);
+}
+.lx-jr-summit-label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--lx-gold-text);
+}
+
+:root[data-fx='off'] .lx-jr *,
+:root[data-fx='off'] .lx-jr *::before {
+  animation: none !important;
+  transition: none !important;
+}
+:root[data-fx='off'] .lx-jr-ground {
+  transform: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lx-jr *,
+  .lx-jr *::before {
+    animation: none !important;
+    transition: none !important;
+  }
+  .lx-jr-ground {
+    transform: none !important;
+  }
+}
