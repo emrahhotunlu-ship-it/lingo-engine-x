@@ -197,7 +197,7 @@ export function FlipCard({ exercise, again = false, onDone }: { exercise: Exerci
       shown
         ? explainWord({ card, ex: 'flip', verdict: 'ok', given: '', check: { verdict: 'correct' }, lang, examples: cardExamples(card, null, extras).map((x) => ({ en: x.en, de: null, ctx: null })) })
         : null,
-    [shown, card, lang, ctx?.sentence, extras],
+    [shown, card, lang, extras],
   );
   const reg = registerOf(card);
   const prompt =

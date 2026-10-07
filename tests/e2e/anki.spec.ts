@@ -159,6 +159,8 @@ for (const theme of ['dark', 'dim', 'light'] as const) {
     const { patch } = ankiPatch(3);
     await boot(page, { theme, migrated: true, fake: { patch: { 'app/profile': planPatch(3), ...patch, 'app/decks': { v: 1, prefs: { mode: 'flip' } } } } });
     const scan = async (name: string) => {
+      // Kartenwechsel (`itemEnter`, 150 ms) abwarten: axe rechnet den Kontrast sonst mit der halb eingeblendeten Karte.
+      await page.waitForTimeout(450);
       const res = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
       const serious = res.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical');
       expect(serious.map((v) => `${name} ${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
@@ -227,6 +229,7 @@ test('Karte ohne Beispielsatz: Claude ergänzt beim Aufdecken einen Satz (einmal
   const id = ids[0] ?? '';
   await expect(page.getByTestId('flip')).toHaveAttribute('data-card', id);
   await page.getByTestId('flip-show').click();
+  await page.getByTestId('examples-more').click();
   await expect(page.getByTestId('example').first()).toBeVisible();
   await expect
     .poll(async () => ((await dump(page))[`vocab/${id}`]?.xEx as Doc[] | undefined)?.length ?? 0)

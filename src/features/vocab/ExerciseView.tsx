@@ -7,6 +7,7 @@ import { EnglishText } from '../../engine/EnglishText';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { KineticGap, hintOffset, type GapState } from '../../engine/KineticGap';
 import { SpotSentence } from '../../engine/SpotSentence';
+import { useSwipeLeft } from '../../engine/swipe';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { lookupOpenMs, useLookup } from '../../engine/wordTap';
 import { alignWords } from '../../domain/answer/align';
@@ -402,6 +403,9 @@ export function ExerciseView({
     api.isInput,
   );
 
+  // Am Handy: nach der Rückmeldung nach links wischen = „Weiter“ (Kap. 4.5); Knopf, Enter und Autoweiter bleiben.
+  useSwipeLeft(next, fb !== null);
+
   const when = (ms: number): string => {
     const min = Math.round(ms / 60_000);
     if (min < 60) return t('ivMin', { n: Math.max(1, min) });
@@ -525,10 +529,10 @@ export function ExerciseView({
       <div className="flex flex-col gap-3">
         {e.ex === 'situation' && e.situation && (
           <>
-            <div className="lx-inset flex flex-col gap-1 lx-t-support" data-testid="situation-scene">
+            <div className="lx-inset lx-t-support flex flex-col gap-1" data-testid="situation-scene">
               <p className="font-semibold">{e.situation.sceneTitle}</p>
               {e.situation.situation && <p className="text-muted">{e.situation.situation}</p>}
-              {e.situation.counterpart && <p className="lx-t-meta text-subtle">{e.situation.counterpart}</p>}
+              {e.situation.counterpart && <p className="lx-t-meta text-muted">{e.situation.counterpart}</p>}
             </div>
             <p className="lx-t-support" data-testid="situation-intent" lang={lang}>
               <span className="text-muted">{t('trSituationIntent')}</span> <span className="font-semibold">{e.situation.intent}</span>
@@ -736,6 +740,11 @@ export function ExerciseView({
     answer = (
       <>
         {answer}
+        {(e.ex === 'colloc' || e.ex === 'colloc_gap') && e.colloc?.ai && (
+          <p className="lx-t-meta text-subtle" data-testid="colloc-ai-note">
+            {t('nbWsColAiNote')}
+          </p>
+        )}
         {e.ex === 'situation' && e.situation?.then && (
           <p className="lx-t-support" data-testid="situation-then">
             <span className="text-muted">{t('sitThen')}</span> <span lang="en">„{e.situation.then}“</span>

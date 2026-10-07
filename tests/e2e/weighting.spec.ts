@@ -54,7 +54,9 @@ const offerWhy = async (page: Page): Promise<{ channel: string | null; why: stri
   return { channel: await offer.getAttribute('data-channel'), why: await offer.getByTestId('reason').getAttribute('data-why') };
 };
 
-test('Claudes Fokus (Mixed Conditionals, gültig bis 20.09.) wirkt auf „Lohnt sich jetzt“ mit Grund', async ({ page }) => {
+// Die Karte „Lohnt sich jetzt“ (`WorthNow`) gibt es seit Lernplattform 2.0 nicht mehr (Plan §2.2, Heute P7): Der Vorschlag steht als erster Eintrag im Blatt „Extra ›“.
+// Die beiden Erwartungen zur Wirkung von Claudes Fokus auf diese Karte ruhen, bis P7/Koordination sie auf das Blatt umstellt (Befund in stand.md).
+test.fixme('Claudes Fokus (Mixed Conditionals, gültig bis 20.09.) wirkt auf „Lohnt sich jetzt“ mit Grund', async ({ page }) => {
   await boot(page, { migrated: true, fake: { capabilities: { sample: false }, patch: { 'app/profile': donePlan('2026-09-20') } } });
   await screen(page, 'today');
   const o = await offerWhy(page);
@@ -62,7 +64,7 @@ test('Claudes Fokus (Mixed Conditionals, gültig bis 20.09.) wirkt auf „Lohnt 
   expect(o.why).toContain('whyFocus');
 });
 
-test('am nächsten Tag: abgelaufener Fokus wirkt nicht mehr, eine neue Einschätzung wirkt', async ({ browser }) => {
+test.fixme('am nächsten Tag: abgelaufener Fokus wirkt nicht mehr, eine neue Einschätzung wirkt', async ({ browser }) => {
   const at = '2026-09-21T09:00:00+02:00';
   const ctx1 = await browser.newContext({ timezoneId: 'Europe/Berlin', locale: 'de-DE' });
   const p1 = await ctx1.newPage();

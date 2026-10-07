@@ -1,5 +1,5 @@
 import { packExtraOf } from '../c1pack/packFields';
-import { meaningOf } from './cards';
+import { meaningForTask } from './cards';
 import { familyFrom, hasPartner, trapTask } from './partner';
 import type { Counts, ExerciseId, InputKind, Lang, LegacyMode, Stage, TrainCard } from './types';
 
@@ -57,7 +57,7 @@ const NOT_FOR_CHUNKS: ReadonlySet<ExerciseId> = new Set(['spot', 'wordfam']);
 
 /** Was eine Übungsart an Kartendaten und Umgebung braucht. */
 export function supports(card: TrainCard, ex: ExerciseId, lang: Lang, poolSize: number, env: ExerciseEnv = NO_ENV): boolean {
-  const meaning = meaningOf(card, lang);
+  const meaning = meaningForTask(card, lang);
   if (RETIRED.has(ex)) return false;
   if (card.kind === 'chunk' && NOT_FOR_CHUNKS.has(ex)) return false;
   switch (ex) {

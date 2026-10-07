@@ -1,6 +1,6 @@
 import { hash32, mulberry32, shuffle } from '../random';
 import { typedForm } from '../chunks/situation';
-import { meaningOf, shortMeaning } from './cards';
+import { meaningForTask, shortMeaning } from './cards';
 import { exerciseDef } from './modes';
 import { familyFrom, partnerOf, trapTask } from './partner';
 import { packExtraOf } from '../c1pack/packFields';
@@ -66,7 +66,7 @@ function tooClose(a: TrainCard, b: TrainCard): boolean {
 const stemPenalty = (a: TrainCard, b: TrainCard): number => (sameGermanStem(a.de, b.de) ? 10 : 0);
 
 type Scored = { card: TrainCard; label: string; score: number };
-const m = (c: TrainCard, lang: Lang) => meaningOf(c, lang) ?? '';
+const m = (c: TrainCard, lang: Lang) => meaningForTask(c, lang) ?? '';
 
 function pick(candidates: Scored[], n: number): Scored[] {
   const seen = new Set<string>();
@@ -83,11 +83,11 @@ function pick(candidates: Scored[], n: number): Scored[] {
 
 /** Drei Bedeutungen anderer Karten als Ablenker (gleiche Wortart bevorzugt, keine Synonyme). */
 function meaningDistractors(card: TrainCard, pool: readonly TrainCard[], lang: Lang, rng: () => number): Option[] {
-  const target = meaningOf(card, lang) ?? '';
+  const target = meaningForTask(card, lang) ?? '';
   const targetLabel = shortMeaning(target, lang);
   const cands: Scored[] = [];
   for (const c of pool) {
-    const m = meaningOf(c, lang);
+    const m = meaningForTask(c, lang);
     if (c.key === card.key || !m) continue;
     const label = shortMeaning(m, lang);
     if (norm(label) === norm(targetLabel) || sharesWord(m, target) || norm(c.lemma) === norm(card.lemma) || tooClose(card, c)) continue;
@@ -103,11 +103,11 @@ function meaningDistractors(card: TrainCard, pool: readonly TrainCard[], lang: L
 function wordDistractors(card: TrainCard, pool: readonly TrainCard[], lang: Lang, rng: () => number): Option[] {
   const cands: Scored[] = [];
   const head = norm(card.lemma).slice(0, 5);
-  const target = meaningOf(card, lang) ?? '';
+  const target = meaningForTask(card, lang) ?? '';
   for (const c of pool) {
     if (c.key === card.key) continue;
     if (norm(c.lemma) === norm(card.lemma) || norm(c.lemma).slice(0, 5) === head) continue;
-    const cm = meaningOf(c, lang);
+    const cm = meaningForTask(c, lang);
     if (cm && target && sharesWord(cm, target)) continue;
     if (tooClose(card, c)) continue;
     // Wendungen bekommen Wendungen als Ablenker, Wörter Wörter (sonst verrät die Länge die Lösung).
@@ -199,7 +199,7 @@ function situationTask(card: TrainCard, lang: Lang, sceneOf?: SceneLookup): Situ
     sceneTitle: scene?.title || c?.sceneTitle || c?.scene || '',
     situation: scene?.situation ?? '',
     counterpart: scene?.counterpart ?? '',
-    intent: meaningOf(card, lang) ?? '',
+    intent: meaningForTask(card, lang) ?? '',
     then: c?.utterance ?? '',
     upgraded: c?.upgraded ?? '',
   };
@@ -216,7 +216,7 @@ const bareAnswer = (card: TrainCard): string => (card.kind === 'chunk' ? typedFo
 export function buildExercise(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly TrainCard[], seed: string, opts: { sceneOf?: SceneLookup; origin?: boolean } = {}): Exercise {
   const def = exerciseDef(ex);
   const rng = mulberry32(hash32(`${card.key}|${ex}|${seed}`));
-  const meaning = meaningOf(card, lang);
+  const meaning = meaningForTask(card, lang);
   const stage = Math.max(1, card.stage) as Stage;
   const base: Exercise = { ex, input: def.input, card, stage, sentence: null, meaning, firstLetter: null, colloc: null, options: [], accepted: [] };
   const ctx = opts.origin ? card.context : rotatedContext(card, ex);

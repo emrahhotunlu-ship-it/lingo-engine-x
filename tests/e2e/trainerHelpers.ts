@@ -182,7 +182,8 @@ export async function answerOnly(page: Page, opts: { wrong?: boolean } = {}): Pr
     await page.getByTestId('check').click();
   } else if (ex === 'find_trap') {
     const words = page.getByTestId('spot-word');
-    const target = String(SEED[`vocab/${id}`]?.word ?? '').replace(/^to\s+/i, '');
+    const w = SEED[`vocab/${id}`]?.word;
+    const target = typeof w === 'string' ? w.replace(/^to\s+/i, '') : '';
     if (opts.wrong) await words.filter({ hasNotText: new RegExp(`^${target}`, 'i') }).first().click();
     else await words.filter({ hasText: new RegExp(`^${target}`, 'i') }).first().click();
     await page.getByTestId('check').click();
@@ -209,19 +210,31 @@ export async function answerOnly(page: Page, opts: { wrong?: boolean } = {}): Pr
  * erste fällig ist und deren schwächste Art feststeht – in dieser Reihenfolge. Dazu die Wendung
  * „aus der Situation“ und das Blatt einer Wendung in der Wortschatzliste.
  */
-export const TOUR: ReadonlyArray<{ path: string; ex: string; stage: number; others: string[] }> = [
+type TourStop = { path: string; ex: string; stage: number; others: string[] };
+/** Tastatur-Profil: mit Hören, Diktat und eigenem Satz (Geräte-Matrix, Lernplattform 2.0 §6). */
+export const TOUR: ReadonlyArray<TourStop> = [
   // „Im Satz finden“, Tempo und Bausteine sind aus der Wörter-Leiter entfernt (Umbau Fokus).
-  { path: 'vocab/deserve', ex: 'listen_mc', stage: 1, others: ['mc_en'] },
+  { path: 'vocab/deserve', ex: 'listen_mc', stage: 1, others: ['mc_en', 'ctx_mc'] },
   { path: 'vocab/convince', ex: 'match', stage: 2, others: ['mc_de'] },
-  { path: 'vocab/achieve', ex: 'dictation', stage: 5, others: ['produce'] },
-  { path: 'vocab/affect', ex: 'produce', stage: 5, others: ['dictation'] },
+  { path: 'vocab/achieve', ex: 'dictation', stage: 5, others: ['produce', 'complete', 'cloze'] },
+  { path: 'vocab/affect', ex: 'produce', stage: 5, others: ['dictation', 'complete', 'cloze'] },
   { path: 'chunk/c-non-negotiable', ex: 'situation', stage: 4, others: ['type', 'cloze'] },
 ];
+/** Touch-Profil (Handy): ohne Hören, Diktat und eigenen Satz; dafür „Was heißt das hier?“ und „Satz vervollständigen“. */
+export const TOUR_TOUCH: ReadonlyArray<TourStop> = [
+  { path: 'vocab/deserve', ex: 'ctx_mc', stage: 1, others: ['mc_en'] },
+  { path: 'vocab/convince', ex: 'match', stage: 2, others: ['mc_de'] },
+  { path: 'vocab/achieve', ex: 'complete', stage: 5, others: ['cloze'] },
+  { path: 'vocab/affect', ex: 'cloze', stage: 5, others: ['complete'] },
+  { path: 'chunk/c-non-negotiable', ex: 'situation', stage: 4, others: ['type', 'cloze'] },
+];
+export const tourOf = (touch: boolean): ReadonlyArray<TourStop> => (touch ? TOUR_TOUCH : TOUR);
 
-export function tourPatch(): Record<string, Doc> {
+export function tourPatch(touch = false): Record<string, Doc> {
+  const tour = tourOf(touch);
   // Ohne „Automatisch weiter“ (M6): die Prüfung des Ergebnisses dauert länger als 1,2 s.
-  const out: Record<string, Doc> = { ...TYPE_MODE, 'app/profile': { ...planPatch(TOUR.length), autoNext: false } };
-  TOUR.forEach((t, i) => {
+  const out: Record<string, Doc> = { ...TYPE_MODE, 'app/profile': { ...planPatch(tour.length), autoNext: false } };
+  tour.forEach((t, i) => {
     const xs: Record<string, { c: number; w: number }> = { [t.ex]: { c: 0, w: 6 } };
     for (const o of t.others) xs[o] = { c: 6, w: 0 };
     out[t.path] = { state: 'learning', stage: t.stage, S: 1, D: 5, due: 1_680_000_000_000 + i * 1000, last: 1_679_900_000_000, reps: 3, lapses: 0, xs };
@@ -233,6 +246,7 @@ export function tourPatch(): Record<string, Doc> {
 
 /** Besucht jede neue Abfrageart (Frage und Ergebnis) und das Wendungsblatt; `scan` prüft den Zustand. */
 export async function trainerTour(page: Page, scan: (name: string) => Promise<void>): Promise<void> {
+  const TOUR = tourOf(await isTouch(page));
   await page.getByTestId('start').click();
   await page.getByTestId('trainer').waitFor();
   const visited = new Set<string>();

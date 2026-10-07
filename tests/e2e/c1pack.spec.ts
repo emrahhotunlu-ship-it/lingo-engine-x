@@ -96,10 +96,11 @@ test.describe('Desktop', () => {
     await screen(page, 'trainer');
     await expect(page.getByTestId('flip')).toHaveAttribute('data-card', 'colqrun');
     await page.keyboard.press(' ');
-    const col = page.getByTestId('flip-col');
+    await page.getByTestId('word-more').click();
+    const col = page.getByTestId('word-col');
     await expect(col).toBeVisible();
     await expect(col).toContainText('colqrun the plan');
-    await expect(page.getByTestId('flip-col-ai')).toContainText('von Claude');
+    await expect(page.getByTestId('word-col-ai')).toContainText('von Claude');
     await expect.poll(async () => ((await dump(page))['vocab/colqrun']?.col as Doc[] | undefined)?.length ?? 0).toBe(1);
     const saved = ((await dump(page))['vocab/colqrun']?.col as Doc[])[0];
     expect(saved).toMatchObject({ p: 'colqrun the plan', gap: 'plan', ai: 1 });
@@ -120,10 +121,12 @@ test.describe('Desktop', () => {
     await page.getByTestId('start').click();
     await screen(page, 'trainer');
     await expect(page.getByTestId('exercise')).toHaveAttribute('data-ex', 'colloc');
-    const labels = await page.getByTestId('choice').allInnerTexts();
-    const wrong = labels.findIndex((l) => l.replace(/^\d+\s*/, '').trim() !== own.gap);
-    expect(wrong).toBeGreaterThanOrEqual(0);
-    await page.getByTestId('choice').nth(wrong).click();
+    // Der Wortpartner wird getippt; eine falsche Eingabe bekommt erst einen Hinweis, dann das Ergebnis.
+    await page.getByTestId('gap-input').click();
+    await page.keyboard.type('zzzz', { delay: 20 });
+    await page.keyboard.press('Enter');
+    await expect(page.getByTestId('hint-line')).toBeVisible();
+    await page.keyboard.press('Enter');
     await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'wrong');
     return booted;
   }
@@ -131,16 +134,15 @@ test.describe('Desktop', () => {
   test('Wortpartner von Claude: bei falscher Wahl der Hinweis „kann Fehler enthalten“ und der Einspruch „Ich lag richtig“ wertet als richtig', async ({ page }) => {
     const { errors } = await collocRound(page, true);
     await expect(page.getByTestId('colloc-ai-note')).toContainText('kann Fehler enthalten');
-    await page.getByTestId('override').click();
-    await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'correct');
-    await expect(page.getByTestId('due-in')).toHaveAttribute('data-grade', '3');
+    await page.getByTestId('exercise-menu').click();
+    await page.getByTestId('menu-override').click();
+    await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
     expect(errors).toEqual([]);
   });
 
-  test('eigene Wortpartner (ohne ai): bei falscher Wahl weder Hinweis noch Einspruch', async ({ page }) => {
+  test('eigene Wortpartner (ohne ai): kein Hinweis „von Claude“', async ({ page }) => {
     const { errors } = await collocRound(page, false);
     await expect(page.getByTestId('colloc-ai-note')).toHaveCount(0);
-    await expect(page.getByTestId('override')).toHaveCount(0);
     expect(errors).toEqual([]);
   });
 });

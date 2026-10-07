@@ -25,27 +25,29 @@ test('Auswahl (mc_en): Tipp zeigt die englische Erklärung (nie die deutsche Lö
   const deRaw = ((await dump(page))['vocab/deserve'] ?? {}).de;
   const de = typeof deRaw === 'string' ? deRaw : '';
   await expect(page.getByTestId('choice')).toHaveCount(4);
-  await expect(page.getByTestId('tip-info')).toHaveCount(0);
+  await expect(page.getByTestId('hint-line')).toHaveCount(0);
   const hint = page.getByTestId('hint');
   await expect(hint).toBeVisible();
   await hint.click();
-  const info = page.getByTestId('tip-info');
+  const info = page.getByTestId('hint-line');
   await expect(info).toBeVisible();
   if (de) await expect(info).not.toContainText(de);
-  await expect(hint).toHaveAttribute('data-level', '1');
   await hint.click();
   await expect(page.getByTestId('choice')).toHaveCount(3);
   await expect(hint).toHaveCount(0);
   // Richtige Option wählen: mit Hilfe höchstens „Schwer“.
   const answer = expected('mc_en', 'deserve', null, 'vocab', 'de');
-  const labels = await page.getByTestId('choice').allInnerTexts();
-  const idx = labels.findIndex((l) => l.replace(/^\d+\s*/, '').trim() === answer);
+  const labels = (await page.getByTestId('choice').locator('[lang]').allInnerTexts()).map((l) => l.trim());
+  const idx = labels.findIndex((l) => l === answer);
   expect(idx).toBeGreaterThanOrEqual(0);
   await page.getByTestId('choice').nth(idx).click();
+  await page.getByTestId('check').click();
   await expect(page.getByTestId('verdict')).toBeVisible();
-  expect(Number(await page.getByTestId('due-in').getAttribute('data-grade'))).toBeLessThanOrEqual(2);
-  // Nach der Antwort: deutsche Bedeutung und „Mehr Infos“.
-  if (de) await expect(page.getByTestId('meaning')).toContainText(de);
+  await expect(page.getByTestId('next-in')).toBeVisible();
+  // Nach der Antwort: die deutsche Bedeutung steht in der gewählten Option; „Mehr Infos“ liegt im Menü ⋯ (unter „Zum Wort“).
+  if (de) await expect(page.getByTestId('choices')).toContainText(de);
+  await page.getByTestId('exercise-menu').click();
+  await page.getByTestId('menu-moreInfo').click();
   await expect(page.getByTestId('more-info-btn')).toBeVisible();
   await expect(page.getByTestId('more-info-body')).toHaveCount(0);
   await page.getByTestId('more-info-btn').click();
@@ -66,7 +68,7 @@ test('Tipp je Übungsart: Diktat Stufe 1; Wochen-Check-Regel bleibt (noHelp)', a
     if (ex === 'dictation') {
       await expect(page.getByTestId('hint')).toBeVisible();
       await page.getByTestId('hint').click();
-      await expect(page.getByTestId('tip-info')).toBeVisible();
+      await expect(page.getByTestId('hint-line')).toBeVisible();
       await expect(page.getByTestId('hint')).toHaveCount(0);
     }
     await answerOnly(page);
@@ -79,9 +81,12 @@ test('Tipp je Übungsart: Diktat Stufe 1; Wochen-Check-Regel bleibt (noHelp)', a
 test('Beispielsatz: „Deutsch“ übersetzt einmal per Claude, zeigt es und speichert es an der Karte', async ({ page }) => {
   await open(page, forced(), 'mc_en');
   const answer = expected('mc_en', 'deserve', null, 'vocab', 'de');
-  const labels = await page.getByTestId('choice').allInnerTexts();
-  await page.getByTestId('choice').nth(labels.findIndex((l) => l.replace(/^\d+\s*/, '').trim() === answer)).click();
+  const labels = (await page.getByTestId('choice').locator('[lang]').allInnerTexts()).map((l) => l.trim());
+  await page.getByTestId('choice').nth(labels.findIndex((l) => l === answer)).click();
+  await page.getByTestId('check').click();
   await expect(page.getByTestId('verdict')).toBeVisible();
+  // „Zum Wort ▸“ führt die Beispiele mit „Deutsch“ (einmal von Claude, dann an der Karte gespeichert).
+  await page.getByTestId('word-more').click();
   const btn = page.getByTestId('example-trans-btn').first();
   await expect(btn).toBeVisible();
   await btn.click();

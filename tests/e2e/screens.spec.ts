@@ -121,7 +121,7 @@ for (const vp of VIEWPORTS) {
           reducedMotion: 'reduce',
         });
         const page = await context.newPage();
-        const { errors, external } = await boot(page, { theme, lang, migrated: true, fake: { patch: tourPatch() } });
+        const { errors, external } = await boot(page, { theme, lang, migrated: true, fake: { patch: tourPatch(vp.mobile) } });
         await screen(page, 'today');
         await trainerTour(page, async (name) => {
           expect(await page.evaluate(() => getComputedStyle(document.documentElement).backgroundColor), name).toBe(BG[theme]);

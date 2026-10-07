@@ -6,6 +6,7 @@ import { cardExamples } from '../../domain/srs/examples';
 import type { StoredExample } from '../../domain/srs/examples';
 import type { TrainCard } from '../../domain/srs/types';
 import { useT } from '../../i18n';
+import { useExamples } from './examples';
 import { ExampleTranslation } from './ExampleTranslation';
 import { MnemonicBlock } from './mnemonic';
 import { MoreInfo } from './MoreInfo';
@@ -20,7 +21,9 @@ export function WordExtras({ card, open: forced, lang, extras }: { card: TrainCa
   const ipa = ipaOf(card.word);
   // Die Beispiele selbst stehen in der Erklär-Karte; hier nur ihre deutsche Übersetzung (auf Antippen, einmal von Claude).
   const more = cardExamples(card, null, extras);
-  const col = card.col.filter((c) => c.p).slice(0, 3);
+  const fresh = useExamples((s) => s.byCard[card.id]?.col);
+  // Eigene Wortpartner der Karte; fehlen sie, zeigt „Zum Wort“ sofort, was Claude eben ergänzt hat (gespeichert, `ai`).
+  const col = (card.col.length ? card.col.map((c) => ({ p: c.p, de: c.de, ai: !!c.ai })) : (fresh ?? []).map((c) => ({ p: c.p, de: c.de, ai: true }))).filter((c) => c.p).slice(0, 3);
   const src = { area: 'trainer' as const, source: card.path, title: card.word };
   const shown = open || forced;
   return (
@@ -71,6 +74,11 @@ export function WordExtras({ card, open: forced, lang, extras }: { card: TrainCa
                 </li>
               ))}
             </ul>
+          )}
+          {col.some((c) => c.ai) && (
+            <p className="lx-t-meta text-subtle" data-testid="word-col-ai">
+              {t('nbWsColAiNote')}
+            </p>
           )}
           <MoreInfo card={card} />
           <MnemonicBlock card={card} />

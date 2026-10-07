@@ -90,7 +90,7 @@ describe('pickMode: alle 7 Regeln in ihrer Reihenfolge', () => {
   const base = { day: DAY, lang: 'de' as const, due: true };
   it('1: Tippen gewünscht oder keine Bedeutung', () => {
     expect(pickMode({ ...base, card: reviewed(1, []), requested: 'type' })).toBe('type');
-    const noMeaning = card({ de: undefined, def: undefined });
+    const noMeaning = card({ de: undefined });
     expect(pickMode({ ...base, card: noMeaning, requested: 'auto' })).toBe('type');
     expect(pickMode({ ...base, card: noMeaning, requested: 'flip' })).toBe('type');
   });

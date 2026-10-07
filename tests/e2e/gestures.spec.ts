@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { boot, openSettings, screen } from './fixtures';
-import { expected, forcedPatch, planPatch } from './trainerHelpers';
+import { answerOnly as sharedAnswerOnly, forcedPatch, planPatch } from './trainerHelpers';
 
 // Kap. 4.5 Wischgesten, sparsam: (1) im Trainer nach der Rückmeldung nach links wischen =
 // „Weiter“; nie aus der Lücke heraus, nie beim senkrechten Wischen (Bildlauf). (2) Blätter am
@@ -28,23 +28,7 @@ async function swipe(page: Page, selector: string, dx: number, dy: number, ms = 
 }
 
 async function answerOnly(page: Page): Promise<string> {
-  await expect(page.locator('[data-step]')).toHaveCount(1);
-  const step = (await page.locator('[data-step]').getAttribute('data-step')) ?? '';
-  const ex = page.getByTestId('exercise');
-  const kind = (await ex.getAttribute('data-ex')) ?? '';
-  const card = (await ex.getAttribute('data-card')) ?? '';
-  const col = await ex.getAttribute('data-col');
-  const answer = expected(kind, card, col === null ? null : Number(col));
-  if (kind === 'mc_en' || kind === 'mc_de' || kind === 'colloc') {
-    const labels = await page.getByTestId('choice').allInnerTexts();
-    await page.getByTestId('choice').nth(labels.findIndex((l) => l.replace(/^\d+\s*/, '').trim() === answer)).click();
-  } else {
-    await page.getByTestId('gap-input').click();
-    await page.keyboard.type(answer, { delay: 20 });
-    await page.keyboard.press('Enter');
-  }
-  await expect(page.getByTestId('next')).toBeVisible();
-  return step;
+  return (await sharedAnswerOnly(page)).step;
 }
 
 test('Trainer: nach der Rückmeldung nach links wischen = „Weiter“; senkrecht und aus der Lücke nicht', async ({ page }) => {
