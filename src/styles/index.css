@@ -722,16 +722,16 @@ h3 {
   }
   /* Ausgewählt ist nicht Richtig (§7): neutraler 2-px-Rahmen in der Schriftfarbe, Fläche `--lx-line-strong`. */
   .lx-choice[aria-pressed='true'] {
-    border: 1.5px solid var(--lx-fg);
+    border: 2px solid var(--lx-fg);
     background: var(--lx-line-strong);
   }
   .lx-choice[data-state='correct'] {
     background: var(--lx-ok-soft);
-    border: 1.5px solid var(--lx-ok);
+    border: 2px solid var(--lx-ok);
   }
   .lx-choice[data-state='wrong'] {
     background: var(--lx-wrong-soft);
-    border: 1.5px solid var(--lx-wrong);
+    border: 2px solid var(--lx-wrong);
   }
   .lx-choice[data-state='correct'] .lx-choice-key,
   .lx-choice[data-state='correct'] .lx-choice-letter {
