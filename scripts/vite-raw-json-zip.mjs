@@ -2,7 +2,7 @@
 // (base64) in die eine HTML-Datei und werden beim Laden einmal entpackt (fflate, synchron).
 // Nur im Produktions-Build; Tests und Dev-Server lesen die Dateien unverändert.
 import { readFileSync } from 'node:fs';
-import { deflateSync } from 'node:zlib';
+import { deflateRawSync } from 'node:zlib';
 
 const MIN_BYTES = 12_000;
 
@@ -17,7 +17,7 @@ export function rawJsonZip() {
       const text = readFileSync(file, 'utf8');
       const min = JSON.stringify(JSON.parse(text));
       if (min.length < MIN_BYTES) return `export default ${JSON.stringify(min)};`;
-      const b64 = deflateSync(Buffer.from(min, 'utf8'), { level: 9 }).toString('base64');
+      const b64 = deflateRawSync(Buffer.from(min, 'utf8'), { level: 9 }).toString('base64');
       return `import { inflateSync, strFromU8 } from 'fflate';\nconst b = atob(${JSON.stringify(b64)});\nconst u = new Uint8Array(b.length);\nfor (let i = 0; i < b.length; i++) u[i] = b.charCodeAt(i);\nexport default strFromU8(inflateSync(u));`;
     },
   };
