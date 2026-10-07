@@ -260,6 +260,8 @@ test('Eigener Satz: am Handy ein kurzer Satz (höchstens 8 Wörter), am Laptop f
   await boot(page, { migrated: true });
   await screen(page, 'today');
   await openTab(page, 'apply');
+  // Am Handy liegt „Eigener Satz“ unter „Übungen für den Laptop“ (Lernplattform 2.0 §2.6).
+  await openApplyFolds(page);
   await page.getByTestId('hub-combo-own').click();
   await expect(page.getByTestId('combo-item')).toHaveAttribute('data-profile', 'touch');
   const input = page.getByTestId('combo-input');

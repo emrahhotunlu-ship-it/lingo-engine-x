@@ -65,7 +65,8 @@ export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabe
       const placedRows = new Set(placedEls.map((n) => Math.round(n.offsetTop))).size;
       let guess = 1;
       if (avail > 0 && poolEls.length === tiles.length) {
-        const widths = tiles.flatMap((x, k) => (x.distractor ? [] : [(poolEls[k]?.offsetWidth ?? 0) + 4]));
+        // Auch der Fallen-Baustein zählt: Man kann ihn legen, dann braucht die Zeile Platz für alle Bausteine des Vorrats.
+        const widths = tiles.map((_, k) => (poolEls[k]?.offsetWidth ?? 0) + 4);
         const pack = (ws: number[]): number => {
           let rows = 1;
           let used = 0;
