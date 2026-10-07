@@ -79,7 +79,7 @@ test.describe('Handy', () => {
     const s = [...d].sort((a, b) => a - b);
     const med = s[Math.floor(s.length / 2)] ?? 0;
     const p95 = s[Math.floor(s.length * 0.95)] ?? 0;
-    console.log(`fx-moment 4x: median ${med.toFixed(1)} ms, p95 ${p95.toFixed(1)} ms, max ${(s[s.length - 1] ?? 0).toFixed(1)} ms`);
+    test.info().annotations.push({ type: "fx", description: `fx-moment 4x: median ${med.toFixed(1)} ms, p95 ${p95.toFixed(1)} ms, max ${(s[s.length - 1] ?? 0).toFixed(1)} ms` });
     await cdp.send('Emulation.setCPUThrottlingRate', { rate: 1 });
     // Die Cloud hat kein iPhone: nur eine grobe Schranke gegen Ausreißer (Messung am Gerät: Einstellungen › Effekte).
     expect(med).toBeLessThanOrEqual(50);
