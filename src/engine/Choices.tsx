@@ -105,7 +105,7 @@ function Mark({ state }: { state: 'correct' | 'wrong' }) {
 
 function ModernChoices({ options, chosen, correct, revealed, onPick, lang = 'en', langs, collapse = false, why, label, keys = true, muted, testId = 'choices' }: ChoicesProps) {
   const reduce = useReducedMotion();
-  const live = useRef({ onPick, revealed, n: options.length, muted: (muted ?? []) as readonly number[] });
+  const live = useRef({ onPick, revealed, n: options.length, muted: muted ?? [] });
   useEffect(() => {
     live.current = { onPick, revealed, n: options.length, muted: muted ?? [] };
   });
