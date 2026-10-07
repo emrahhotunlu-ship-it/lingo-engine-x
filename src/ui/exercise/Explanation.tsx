@@ -40,7 +40,7 @@ export function Explanation({ model, depth, learning = true, area = 'trainer', o
           <>
             <span className="font-semibold">{l.name}</span>
             {l.formula && (
-              <span className="ml-2 inline-block rounded-[var(--radius-inline)] bg-hint-soft px-1.5 text-hint-text" lang="en">
+              <span className="ml-1 inline-block rounded-full bg-hint-soft px-3 py-1 text-hint-text" lang="en">
                 {l.formula}
               </span>
             )}
@@ -80,14 +80,14 @@ export function Explanation({ model, depth, learning = true, area = 'trainer', o
   };
 
   const row = (l: ExplainLine, i: number): ReactNode => (
-    <li key={`${l.k}-${i}`} className="flex gap-2" data-line={l.k}>
-      <span aria-hidden="true" className="lx-t-meta mt-0.5 w-4 flex-none text-center font-semibold text-muted">
-        {SYMBOL[l.k]}
+    <li key={`${l.k}-${i}`} className="flex flex-col gap-1 border-t border-line px-4 py-3.5" data-line={l.k}>
+      <span className="lx-eyebrow text-subtle">
+        <span aria-hidden="true" className="sr-only">
+          {SYMBOL[l.k]}
+        </span>
+        {t(LABEL[l.k])}
       </span>
-      <span className="min-w-0">
-        <span className="lx-t-meta mr-2 font-medium text-muted">{t(LABEL[l.k])}</span>
-        {body(l)}
-      </span>
+      <span className="lx-t-support min-w-0 text-fg">{body(l)}</span>
     </li>
   );
 
@@ -97,7 +97,7 @@ export function Explanation({ model, depth, learning = true, area = 'trainer', o
     const w = v.open.find((l): l is Extract<ExplainLine, { k: 'why' }> => l.k === 'why');
     const text = [p?.name, w?.text].filter((x): x is string => !!x).join(' · ');
     main = text ? (
-      <p className="flex gap-2" data-line="one">
+      <p className="flex gap-2 border-t border-line px-4 py-3.5" data-line="one">
         <span aria-hidden="true" className="font-semibold text-ok-text">
           ✓
         </span>
@@ -105,17 +105,19 @@ export function Explanation({ model, depth, learning = true, area = 'trainer', o
       </p>
     ) : null;
   } else {
-    main = v.open.length ? <ul className="flex flex-col gap-2">{v.open.map(row)}</ul> : null;
+    main = v.open.length ? <ul className="m-0 flex list-none flex-col p-0">{v.open.map(row)}</ul> : null;
   }
 
   if (!main && !v.folded.length && !model.ai) return null;
   return (
-    <div className="lx-inset lx-t-support flex flex-col gap-2" data-testid="explanation" data-depth={depth} data-source={model.source}>
+    <div className="-mx-4 flex flex-col" data-testid="explanation" data-depth={depth} data-source={model.source}>
       {main}
       {v.folded.length > 0 && (
-        <FoldToggle label={t('exMore')} {...(onFoldChange ? { onOpenChange: onFoldChange } : {})} testId="explanation-more">
-          <ul className="flex flex-col gap-2">{v.folded.map(row)}</ul>
-        </FoldToggle>
+        <div className="border-t border-line px-4 py-1">
+          <FoldToggle label={t('exMore')} {...(onFoldChange ? { onOpenChange: onFoldChange } : {})} testId="explanation-more">
+            <ul className="-mx-4 m-0 flex list-none flex-col p-0">{v.folded.map(row)}</ul>
+          </FoldToggle>
+        </div>
       )}
       {model.ai && (
         <p className="lx-t-meta text-muted" data-testid="ai-note">

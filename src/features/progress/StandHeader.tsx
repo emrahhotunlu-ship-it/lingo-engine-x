@@ -84,6 +84,7 @@ export function LevelScale({ data }: { data: Pick<AssessData, 'cefr' | 'dims'> }
 
 /** Position einer Stufe auf der kleinen Skala B1 … C1+ (0–1); die C1-Marke steht fest bei `C1_POS`. */
 const scalePos = (level: Level): number => Math.min(1, Math.max(0, (levelRank(level) - 1) / (SCALE.length - 1)));
+const dimColor = (id: string): string => (id === 'vocabulary' ? 'var(--lx-ch-cards)' : 'var(--lx-ch-grammar)');
 const C1_POS = SCALE.indexOf('C1') / (SCALE.length - 1);
 
 /**
@@ -106,11 +107,18 @@ export function StandLevels({ dims, cefr, sameLang }: { dims: readonly AssessDim
             <span className="text-sm font-medium">{label(d)}</span>
             {d.level ? (
               <>
-                <div className="relative h-2 rounded-full bg-track" role="img" aria-label={t('hxStandScale', { dim: label(d), level: d.level })}>
-                  <span className="absolute inset-y-0 left-0 rounded-full bg-accent" style={{ width: `${Math.max(4, scalePos(d.level) * 100)}%` }} />
-                  <span className="absolute -top-1 h-4 w-0.5 bg-fg" style={{ left: `${C1_POS * 100}%` }} aria-hidden="true" data-testid="c1-mark" />
+                <div className="relative mt-7 mb-1 h-3.5 rounded-full bg-surface-strong" role="img" aria-label={t('hxStandScale', { dim: label(d), level: d.level })}>
+                  <span className="absolute inset-y-0 left-0 rounded-full" style={{ width: `${Math.max(4, scalePos(d.level) * 100)}%`, background: dimColor(d.id) }} />
+                  <span
+                    className="absolute top-1/2 size-[1.625rem] -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] bg-bg"
+                    style={{ left: `${Math.max(4, scalePos(d.level) * 100)}%`, borderColor: dimColor(d.id) }}
+                    aria-hidden="true"
+                  />
+                  <span className="absolute -top-2 -bottom-2 w-0.5 bg-fg" style={{ left: `${C1_POS * 100}%` }} aria-hidden="true" data-testid="c1-mark" />
+                  <span className="absolute -top-7 -translate-x-1/2 text-xs font-semibold whitespace-nowrap text-fg" style={{ left: `${C1_POS * 100}%` }} aria-hidden="true">
+                    {t('hxStandC1')}
+                  </span>
                 </div>
-                <span className="text-xs text-subtle">{t('hxStandC1')}</span>
                 {sameLang && d.why && (
                   <span className="text-sm text-muted" data-testid="dim-why">
                     {d.why}

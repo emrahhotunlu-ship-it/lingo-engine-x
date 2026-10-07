@@ -115,6 +115,14 @@ export function ExerciseShell(props: ExerciseShellProps) {
     resultRef.current?.scrollIntoView?.({ block: 'start', behavior: 'auto' });
   }, [hasResult, resultKey, split, tablet]);
 
+  // Hauptknopf in der Bereichsfarbe (Design LP2): Wörter violett, Grammatik blau; nur solange die Übung steht.
+  const area = status.area;
+  useEffect(() => {
+    const root = document.documentElement;
+    if (area) root.setAttribute('data-lx-area', area);
+    return () => root.removeAttribute('data-lx-area');
+  }, [area]);
+
   if (state === 'loading') {
     return (
       <article className="lx-glass lx-exercise flex flex-col gap-4" data-testid="exercise" data-area={status.area} data-state="loading" aria-busy="true" aria-label={t('exLoading')} data-ex={meta.ex} data-card={meta.id}>

@@ -1,9 +1,9 @@
-import { useEffect, useState, type ReactNode } from 'react';
-import type { UnitState } from '../domain/metrics';
-import { useT, type MessageKey } from '../i18n';
-import { ActionBar, PrimaryAction } from './ActionBar';
-import { Button } from './Button';
-import { Eyebrow } from './Eyebrow';
+import { useEffect, useState, type ReactNode } from "react";
+import type { UnitState } from "../domain/metrics";
+import { useT, type MessageKey } from "../i18n";
+import { ActionBar, PrimaryAction } from "./ActionBar";
+import { Button } from "./Button";
+import { Eyebrow } from "./Eyebrow";
 
 // Gemeinsames Ende einer Runde (N06, plan.md §4.10, Prototyp v1): Kacheln Richtig · Zeit · Neu,
 // „Das nimmst du mit“ (antippbar – die Übung reicht antippbare Wörter herein), GENAU EIN nächster
@@ -33,28 +33,60 @@ type SessionEndPropsAlt = {
  * Ohne `mode` bleibt alles wie bisher (Kacheln).
  */
 export type SessionEndProps = SessionEndPropsAlt & {
-  mode?: 'tiles' | 'growth';
+  mode?: "tiles" | "growth";
   /** Je geübter Einheit eine Zeile; die Punkte wandern in 300 ms von `from` zu `to` (von `max`). */
-  items?: Array<{ label: string; from: number; to: number; max: number; state: UnitState | null }>;
+  items?: Array<{
+    label: string;
+    from: number;
+    to: number;
+    max: number;
+    state: UnitState | null;
+  }>;
   /** „Neu sicher: wish + Past (3 von 3 ohne Hilfe)“ – nur Tatsachen, die wirklich eintraten. */
   facts?: string[];
-  mistakes?: Array<{ wrong: string; right: string; rule: string; when: string }>;
+  mistakes?: Array<{
+    wrong: string;
+    right: string;
+    rule: string;
+    when: string;
+  }>;
   warning?: { text: string; retry: () => void } | null;
   /** „Noch 12 fällig · Noch eine Runde“. */
   more?: { label: string; run: () => void } | null;
 };
 
-const STATE_KEY: Record<UnitState, MessageKey> = { new: 'exStateNew', learning: 'exStateLearning', safe: 'exStateSafe', firm: 'exStateFirm' };
+const STATE_KEY: Record<UnitState, MessageKey> = {
+  new: "exStateNew",
+  learning: "exStateLearning",
+  safe: "exStateSafe",
+  firm: "exStateFirm",
+};
 
 /** Punkte, die sich von `from` auf `to` füllen (300 ms; bei reduzierter Bewegung sofort, das regelt die globale CSS-Regel). */
-function GrowthDots({ from, to, max, label }: { from: number; to: number; max: number; label: string }) {
+function GrowthDots({
+  from,
+  to,
+  max,
+  label,
+}: {
+  from: number;
+  to: number;
+  max: number;
+  label: string;
+}) {
   const [shown, setShown] = useState(from);
   useEffect(() => {
     const id = window.requestAnimationFrame(() => setShown(to));
     return () => window.cancelAnimationFrame(id);
   }, [to]);
   return (
-    <span className="lx-dots lx-dots-grow" role="img" aria-label={label} data-from={from} data-to={to}>
+    <span
+      className="lx-dots lx-dots-grow"
+      role="img"
+      aria-label={label}
+      data-from={from}
+      data-to={to}
+    >
       {Array.from({ length: max }, (_, i) => (
         <span key={i} className="lx-dot" data-on={i < shown || undefined} />
       ))}
@@ -62,49 +94,107 @@ function GrowthDots({ from, to, max, label }: { from: number; to: number; max: n
   );
 }
 
-function Tile({ value, label, testId }: { value: ReactNode; label: string; testId: string }) {
+function Tile({
+  value,
+  label,
+  testId,
+}: {
+  value: ReactNode;
+  label: string;
+  testId: string;
+}) {
   return (
-    <div className="flex flex-col items-center gap-0.5 rounded-[var(--radius-control)] bg-surface px-2 py-3 text-center" data-testid={testId}>
-      <span className="lx-tnum text-xl font-semibold tracking-tight">{value}</span>
+    <div
+      className="flex flex-col items-center gap-0.5 rounded-[var(--radius-control)] bg-surface px-2 py-3 text-center"
+      data-testid={testId}
+    >
+      <span className="lx-tnum text-xl font-semibold tracking-tight">
+        {value}
+      </span>
       <span className="text-xs text-muted">{label}</span>
     </div>
   );
 }
 
-function GrowthEnd({ title, items = [], facts = [], mistakes = [], warning = null, more = null, next, secondary, takeaways, right, total }: SessionEndProps) {
+function GrowthEnd({
+  title,
+  items = [],
+  facts = [],
+  mistakes = [],
+  warning = null,
+  more = null,
+  next,
+  secondary,
+  takeaways,
+  right,
+  total,
+}: SessionEndProps) {
   const { t } = useT();
   return (
-    <section className="lx-card flex flex-col gap-4 p-[1.125rem]" data-testid="session-end" data-mode="growth" data-right={right} data-total={total}>
+    <section
+      className="flex flex-col gap-4"
+      data-testid="session-end"
+      data-mode="growth"
+      data-right={right}
+      data-total={total}
+    >
       <div className="flex flex-col gap-1">
-        <Eyebrow tone="accent">{t('hxEndRoundDone')}</Eyebrow>
-        <h1 className="m-0 text-2xl leading-8 font-semibold tracking-tight text-balance">{title ?? t('nbShEndTitle')}</h1>
-        {total > 0 && <p className="lx-tnum lx-t-support m-0 text-muted">{t('nbShEndScore', { right, total })}</p>}
+        <Eyebrow tone="accent">{t("hxEndRoundDone")}</Eyebrow>
+        <h1 className="m-0 text-2xl leading-8 font-semibold tracking-tight text-balance">
+          {title ?? t("nbShEndTitle")}
+        </h1>
+        {total > 0 && (
+          <p className="lx-tnum lx-t-support m-0 text-muted">
+            {t("nbShEndScore", { right, total })}
+          </p>
+        )}
       </div>
       {items.length > 0 && (
-        <ul className="m-0 flex list-none flex-col gap-2 p-0" data-testid="session-end-items">
-          {items.map((it) => {
-            const word = it.state ? t(STATE_KEY[it.state]) : null;
-            const label = t('exEndFrom', { from: it.from, to: it.to }) + (word ? ` · ${word}` : '');
-            return (
-              <li key={it.label} className="flex items-center justify-between gap-3" data-testid="session-end-item">
-                <span className="lx-t-support min-w-0" lang="en">
-                  {it.label}
-                </span>
-                <span className="flex flex-none items-center gap-2">
-                  <GrowthDots from={it.from} to={it.to} max={it.max} label={label} />
-                  {word && (
-                    <span className="lx-t-meta text-muted" aria-hidden="true">
-                      {word}
+        <div className="lx-card flex flex-col gap-1 p-4">
+          <Eyebrow>{t("hxEndMoved")}</Eyebrow>
+          <ul
+            className="m-0 flex list-none flex-col p-0"
+            data-testid="session-end-items"
+          >
+            {items.map((it) => {
+              const word = it.state ? t(STATE_KEY[it.state]) : null;
+              const label =
+                t("exEndFrom", { from: it.from, to: it.to }) +
+                (word ? ` · ${word}` : "");
+              return (
+                <li
+                  key={it.label}
+                  className="flex items-center justify-between gap-3 border-t border-line py-3 first:border-t-0"
+                  data-testid="session-end-item"
+                >
+                  <span className="flex min-w-0 flex-col gap-0.5">
+                    <span className="lx-t-answer" lang="en">
+                      {it.label}
                     </span>
-                  )}
-                </span>
-              </li>
-            );
-          })}
-        </ul>
+                    {word && (
+                      <span className="lx-t-meta text-muted" aria-hidden="true">
+                        {word}
+                      </span>
+                    )}
+                  </span>
+                  <GrowthDots
+                    from={it.from}
+                    to={it.to}
+                    max={it.max}
+                    label={label}
+                  />
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       )}
       {facts.length > 0 && (
-        <ul className="m-0 flex list-none flex-col gap-1 p-0" data-testid="session-end-facts" aria-label={t('exEndFacts')}>
+        <ul
+          className="lx-card m-0 flex list-none flex-col gap-1 p-4"
+          data-testid="session-end-facts"
+          aria-label={t("exEndFacts")}
+        >
           {facts.map((f) => (
             <li key={f} className="lx-t-body">
               {f}
@@ -113,18 +203,27 @@ function GrowthEnd({ title, items = [], facts = [], mistakes = [], warning = nul
         </ul>
       )}
       {mistakes.length > 0 && (
-        <div className="flex flex-col gap-2" data-testid="session-end-mistakes">
-          <Eyebrow>{t('exEndMistakes')}</Eyebrow>
+        <div
+          className="lx-card flex flex-col gap-2 p-4"
+          data-testid="session-end-mistakes"
+        >
+          <Eyebrow>{t("exEndMistakes")}</Eyebrow>
           <ul className="m-0 flex list-none flex-col gap-2 p-0">
             {mistakes.map((m) => (
-              <li key={`${m.wrong}|${m.right}`} className="lx-inset flex flex-col gap-0.5" data-testid="session-end-mistake">
+              <li
+                key={`${m.wrong}|${m.right}`}
+                className="lx-inset flex flex-col gap-0.5"
+                data-testid="session-end-mistake"
+              >
                 <span className="lx-t-support" lang="en">
-                  <span className="text-muted line-through decoration-wrong/60">{m.wrong}</span>
-                  {' → '}
+                  <span className="text-muted line-through decoration-wrong/60">
+                    {m.wrong}
+                  </span>
+                  {" → "}
                   <span className="font-semibold text-ok-text">{m.right}</span>
                 </span>
                 <span className="lx-t-meta text-muted">
-                  {m.rule} · {t('exEndWhen', { when: m.when })}
+                  {m.rule} · {t("exEndWhen", { when: m.when })}
                 </span>
               </li>
             ))}
@@ -132,35 +231,58 @@ function GrowthEnd({ title, items = [], facts = [], mistakes = [], warning = nul
         </div>
       )}
       {takeaways && (
-        <div className="flex flex-col gap-2" data-testid="session-end-takeaways">
-          <Eyebrow>{t('nbShEndTakeaways')}</Eyebrow>
+        <div
+          className="flex flex-col gap-2"
+          data-testid="session-end-takeaways"
+        >
+          <Eyebrow>{t("nbShEndTakeaways")}</Eyebrow>
           {takeaways}
         </div>
       )}
       {warning && (
-        <div className="lx-inset flex items-center justify-between gap-3" data-testid="session-end-warning" role="status">
+        <div
+          className="lx-inset flex items-center justify-between gap-3"
+          data-testid="session-end-warning"
+          role="status"
+        >
           <span className="lx-t-support">{warning.text}</span>
-          <Button variant="secondary" onClick={warning.retry} data-testid="session-end-retry">
-            {t('exRetry')}
+          <Button
+            variant="secondary"
+            onClick={warning.retry}
+            data-testid="session-end-retry"
+          >
+            {t("exRetry")}
           </Button>
         </div>
       )}
       {(more || secondary) && (
         <div className="flex flex-col gap-1">
           {more && (
-            <Button variant="secondary" onClick={more.run} data-testid="session-end-more">
+            <Button
+              variant="secondary"
+              onClick={more.run}
+              data-testid="session-end-more"
+            >
               {more.label}
             </Button>
           )}
           {secondary && (
-            <Button variant="ghost" onClick={secondary.run} data-testid="session-end-secondary">
+            <Button
+              variant="ghost"
+              onClick={secondary.run}
+              data-testid="session-end-secondary"
+            >
               {secondary.label}
             </Button>
           )}
         </div>
       )}
       <ActionBar stateKey="end">
-        <PrimaryAction iconAfter="arrowRight" onClick={next.run} testId="session-end-next">
+        <PrimaryAction
+          iconAfter="arrowRight"
+          onClick={next.run}
+          testId="session-end-next"
+        >
           {next.label}
         </PrimaryAction>
       </ActionBar>
@@ -169,31 +291,61 @@ function GrowthEnd({ title, items = [], facts = [], mistakes = [], warning = nul
 }
 
 export function SessionEnd(props: SessionEndProps) {
-  if (props.mode === 'growth') return <GrowthEnd {...props} />;
+  if (props.mode === "growth") return <GrowthEnd {...props} />;
   return <TilesEnd {...props} />;
 }
 
-function TilesEnd({ right, total, ms, newItems = [], takeaways, next, secondary, title }: SessionEndProps) {
+function TilesEnd({
+  right,
+  total,
+  ms,
+  newItems = [],
+  takeaways,
+  next,
+  secondary,
+  title,
+}: SessionEndProps) {
   const { t } = useT();
   const min = Math.max(1, Math.round(ms / 60_000));
   const shown = newItems.slice(0, 8);
   return (
-    <section className="lx-card flex flex-col gap-4 p-[1.125rem]" data-testid="session-end" data-right={right} data-total={total}>
-      <Eyebrow tone="accent">{title ?? t('nbShEndTitle')}</Eyebrow>
+    <section
+      className="lx-card flex flex-col gap-4 p-[1.125rem]"
+      data-testid="session-end"
+      data-right={right}
+      data-total={total}
+    >
+      <Eyebrow tone="accent">{title ?? t("nbShEndTitle")}</Eyebrow>
       <p className="sr-only" data-testid="session-end-score">
-        {t('nbShEndScore', { right, total })} · {t('nbShEndMinutes', { min })}
+        {t("nbShEndScore", { right, total })} · {t("nbShEndMinutes", { min })}
       </p>
       <div className="grid grid-cols-3 gap-2" aria-hidden="true">
-        <Tile value={`${right}/${total}`} label={t('nbShEndRight')} testId="session-end-right" />
-        <Tile value={t('nbShEndMin', { min })} label={t('nbShEndTime')} testId="session-end-time" />
-        <Tile value={newItems.length} label={t('nbShEndNewShort')} testId="session-end-newcount" />
+        <Tile
+          value={`${right}/${total}`}
+          label={t("nbShEndRight")}
+          testId="session-end-right"
+        />
+        <Tile
+          value={t("nbShEndMin", { min })}
+          label={t("nbShEndTime")}
+          testId="session-end-time"
+        />
+        <Tile
+          value={newItems.length}
+          label={t("nbShEndNewShort")}
+          testId="session-end-newcount"
+        />
       </div>
       {shown.length > 0 && (
         <div className="flex flex-col gap-2" data-testid="session-end-new">
-          <Eyebrow>{t('nbShEndNew')}</Eyebrow>
+          <Eyebrow>{t("nbShEndNew")}</Eyebrow>
           <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
             {shown.map((w) => (
-              <li key={w} className="inline-flex min-h-9 items-center rounded-full bg-surface-strong px-3 text-sm" lang="en">
+              <li
+                key={w}
+                className="inline-flex min-h-9 items-center rounded-full bg-surface-strong px-3 text-sm"
+                lang="en"
+              >
                 {w}
               </li>
             ))}
@@ -201,17 +353,31 @@ function TilesEnd({ right, total, ms, newItems = [], takeaways, next, secondary,
         </div>
       )}
       {takeaways && (
-        <div className="flex flex-col gap-2" data-testid="session-end-takeaways">
-          <Eyebrow>{t('nbShEndTakeaways')}</Eyebrow>
+        <div
+          className="flex flex-col gap-2"
+          data-testid="session-end-takeaways"
+        >
+          <Eyebrow>{t("nbShEndTakeaways")}</Eyebrow>
           {takeaways}
         </div>
       )}
       <div className="flex flex-col gap-2">
-        <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={next.run} data-testid="session-end-next" className="w-full sm:w-full">
+        <Button
+          variant="primary"
+          size="lg"
+          iconAfter="arrowRight"
+          onClick={next.run}
+          data-testid="session-end-next"
+          className="w-full sm:w-full"
+        >
           {next.label}
         </Button>
         {secondary && (
-          <Button variant="ghost" onClick={secondary.run} data-testid="session-end-secondary">
+          <Button
+            variant="ghost"
+            onClick={secondary.run}
+            data-testid="session-end-secondary"
+          >
             {secondary.label}
           </Button>
         )}

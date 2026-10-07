@@ -145,11 +145,15 @@ function StreakFoot() {
 function BlockDot({ state }: { state: CardRow['state'] }) {
   if (state === 'done')
     return (
-      <span className="inline-flex size-6 flex-none items-center justify-center rounded-full bg-ok-soft text-ok-text" aria-hidden="true">
+      <span className="inline-flex size-6 flex-none items-center justify-center rounded-full bg-ok" style={{ color: 'var(--lx-accent-fg)' }} aria-hidden="true">
         <Icon name="check" size={14} />
       </span>
     );
-  return <span className={`inline-flex size-6 flex-none items-center justify-center rounded-full border-2 ${state === 'now' ? 'border-accent' : 'border-line'}`} aria-hidden="true" />;
+  return (
+    <span className="inline-flex size-6 flex-none items-center justify-center rounded-full border-2" style={{ borderColor: state === 'now' ? 'var(--lx-ch-grammar)' : 'var(--lx-line-strong)' }} aria-hidden="true">
+      {state === 'now' && <span className="size-2 rounded-full" style={{ background: 'var(--lx-ch-grammar)' }} />}
+    </span>
+  );
 }
 
 /** Start der Tageseinheit (Tageskarte und Willkommens-Karte): der erste offene Block, sonst der alte Weg. SYNCHRON im Klick (iPhone-Tastatur). */
@@ -203,7 +207,7 @@ function UnitCard({ view, rows, minLeft, fixNone }: { view: TodayView; rows: Car
         </div>
       </div>
       <div className="flex flex-col gap-4" data-testid="hero" data-duty={now?.id}>
-        <ol className="flex flex-col" aria-label={t('tdPflicht')} data-testid="duties">
+        <ol className="flex flex-col gap-1.5" aria-label={t('tdPflicht')} data-testid="duties">
           {rows.map((r) => (
             <li
               key={r.id}
@@ -211,11 +215,11 @@ function UnitCard({ view, rows, minLeft, fixNone }: { view: TodayView; rows: Car
               data-duty={r.id}
               data-state={r.state === 'done' ? 'done' : 'open'}
               data-now={r.state === 'now' ? 'true' : undefined}
-              className="flex min-h-12 items-center gap-3 border-t border-line py-1.5 first:border-t-0"
+              className={`flex min-h-[3.25rem] items-center gap-3 rounded-[0.875rem] px-3 py-1.5 ${r.state === 'now' ? 'bg-surface-strong' : ''}`}
             >
               <BlockDot state={r.state} />
               <span className="flex min-w-0 flex-1 flex-col">
-                <span className={`text-sm font-semibold ${r.state === 'done' ? 'text-muted' : ''}`}>{r.name}</span>
+                <span className={`text-base font-medium ${r.state === 'now' ? 'text-fg' : 'text-muted'}`}>{r.name}</span>
                 <span className="text-xs text-muted" data-testid="reason" data-why={r.whyKey}>
                   {r.id === 'review' && r.progress && r.state !== 'done' && r.progress.done > 0
                     ? t('tdProgressLabel', {
@@ -282,21 +286,21 @@ function DoneCard({ view, tomorrow, today }: { view: TodayView; tomorrow: string
   const msText = ms ? (ms.id.startsWith('fest') ? t('nbHeuteMsFest', { n: ms.n ?? 0 }) : ms.id === 'topic1' ? t('nbHeuteMsTopic') : ms.id === 'fix10' ? t('nbHeuteMsFix', { n: ms.n ?? 0 }) : t('nbHeuteMsOver')) : null;
   return (
     <section className="lx-card flex flex-col gap-3.5 p-[1.125rem]" data-testid="today-card" data-done="true" aria-labelledby="td-done-title">
-      <div className="flex items-center gap-3.5">
-        <SegmentRing segments={Math.max(1, blocks)} done={blocks} label={t('nbHeuteRingLabel', { done: blocks, total: blocks })}>
-          <Icon name="check" size={20} />
-        </SegmentRing>
-        <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <p className="lx-eyebrow text-ok-text">
-            <span aria-hidden="true">✓ </span>
-            <span data-testid="today-status" data-status={view.status} data-done={view.duties.done} data-total={view.duties.total}>
-              {t('nbHeuteDoneTitle')}
-            </span>
-          </p>
-          <h2 id="td-done-title" className="lx-tnum text-2xl font-bold tracking-tight" data-testid="balance" data-kind={big?.kind ?? 'steps'}>
-            {big ? t(big.kind === 'words' ? 'hxDoneBigWords' : 'hxDoneBigPatterns', { n: big.n }) : t('nbHeuteDoneSteps', { blocks })}
-          </h2>
-        </div>
+      <div className="flex flex-col items-center gap-4 text-center">
+        <p className="lx-eyebrow text-ok-text">
+          <span aria-hidden="true">✓ </span>
+          <span data-testid="today-status" data-status={view.status} data-done={view.duties.done} data-total={view.duties.total}>
+            {t('nbHeuteDoneTitle')}
+          </span>
+        </p>
+        <span className="relative inline-flex" style={{ filter: 'drop-shadow(0 0 28px var(--lx-ok-soft))' }}>
+          <SegmentRing segments={Math.max(1, blocks)} done={blocks} size={168} stroke={12} label={t('nbHeuteRingLabel', { done: blocks, total: blocks })}>
+            <Icon name="check" size={72} />
+          </SegmentRing>
+        </span>
+        <h2 id="td-done-title" className="lx-tnum text-4xl leading-none font-semibold tracking-tight text-balance" data-testid="balance" data-kind={big?.kind ?? 'steps'}>
+          {big ? t(big.kind === 'words' ? 'hxDoneBigWords' : 'hxDoneBigPatterns', { n: big.n }) : t('nbHeuteDoneSteps', { blocks })}
+        </h2>
       </div>
       {truth.length > 0 && (
         <p className="lx-tnum text-sm text-muted" data-testid="today-truth">

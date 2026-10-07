@@ -22,7 +22,7 @@ const base =
   'transition-[background-color,box-shadow,opacity] disabled:cursor-not-allowed disabled:opacity-60';
 
 const variants: Record<Variant, string> = {
-  primary: 'bg-accent text-accent-fg shadow-[0_8px_24px_-12px_var(--lx-accent)] hover:brightness-110',
+  primary: 'lx-btn-primary bg-accent text-accent-fg hover:brightness-110',
   secondary: 'lx-glass text-fg hover:bg-surface-strong',
   ghost: 'text-muted hover:bg-surface hover:text-fg',
 };

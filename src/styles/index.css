@@ -1350,3 +1350,39 @@ html[data-actionbar] #main {
 .lx-spot-glyph[data-mark='wrong'] {
   color: var(--lx-wrong-text);
 }
+
+
+/* ---------------------------------------------------------------- Design LP2 (Vorschau „Design-Entwurf“, 07.10.2026) */
+/* Hauptknopf: neutral hell (Heute), im Bereich Wörter violett, in der Grammatik blau; Sperre als flache Fläche. */
+:root {
+  --lx-btn-n: #f1f3f8;
+  --lx-btn-nf: #0d1016;
+  --lx-btn-words: #6b4de6;
+  --lx-btn-grammar: #2f62e0;
+}
+:root[data-theme='light'] {
+  --lx-btn-n: #11141c;
+  --lx-btn-nf: #ffffff;
+  --lx-btn-words: #5b3fd6;
+  --lx-btn-grammar: #2553c9;
+}
+html[data-lx-area='words'] {
+  --lx-btn-bg: var(--lx-btn-words);
+  --lx-btn-fg: #ffffff;
+}
+html[data-lx-area='grammar'] {
+  --lx-btn-bg: var(--lx-btn-grammar);
+  --lx-btn-fg: #ffffff;
+}
+button.lx-btn-primary {
+  background: var(--lx-btn-bg, var(--lx-btn-n));
+  color: var(--lx-btn-fg, var(--lx-btn-nf));
+  box-shadow: none;
+  border-radius: 1rem;
+  font-size: 1.0625rem;
+}
+button.lx-btn-primary:disabled {
+  background: var(--lx-surface-strong);
+  color: var(--lx-fg-subtle);
+  opacity: 1;
+}
