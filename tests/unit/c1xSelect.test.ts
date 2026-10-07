@@ -12,6 +12,7 @@ const ALL = new Set<C1Kind>(['mcc', 'ocl', 'wf', 'kwt', 'err', 'pair', 'cnet', '
 const kwt = (over: Record<string, unknown>): C1Item => c1Item.parse({ ...pilotKwt.items[0], ...over });
 
 beforeEach(() => {
+  for (const k of Object.keys(flags.c1xKinds) as C1Kind[]) flags.c1xKinds[k] = false;
   resetC1Store();
   resetPackedCache();
 });

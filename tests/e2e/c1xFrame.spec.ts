@@ -163,7 +163,7 @@ test.describe('Laptop', () => {
   });
 
   test('ohne eingeschalteten Schalter bleibt der Fehlersatz ein gewöhnlicher Fehlersatz (kein c1x-Rahmen)', async ({ page }) => {
-    const { errors } = await start(page, [KWT_ERROR], 'passive-plus');
+    const { errors } = await start(page, [KWT_ERROR], 'passive-plus', flags('{"c1xKinds":{"kwt":false}}'));
     const item = page.getByTestId('gr-item');
     await expect(item).toBeVisible();
     await expect(item).not.toHaveAttribute('data-c1x', /.+/);

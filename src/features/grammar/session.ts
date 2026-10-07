@@ -5,6 +5,8 @@ import { useClock } from '../../app/clock';
 import { useSettings } from '../../app/settings';
 import { answerRight } from '../../domain/learn/right';
 import { flags } from '../../app/flags';
+import { kindRound } from '../../domain/grammar/kindRound';
+import type { C1Kind } from '../../domain/c1x/types';
 import { c1ErrorResolver, ensureC1xLoaded } from '../c1x/resolve';
 import { useLive } from '../../data/live';
 import { topicById } from '../../domain/content';
@@ -149,7 +151,7 @@ export function setExtraTasks(tasks: readonly GrammarTask[]): void {
 let ctxInput: Pick<RoundInput, 'grammarDocs' | 'dailyOpen' | 'pool' | 'seed' | 'gt' | 'profile' | 'wordsToday'> | null = null;
 
 /** `block`/`size`: als Block der Tageseinheit (immer Pflicht, Rundengröße aus dem Plan). `pat`: nur dieses Muster üben (Themenblatt, 4 Aufgaben). */
-export type StartOpts = { mode: RoundMode; topic?: string | null; day?: string; block?: UnitBlockNo | null; size?: number; pat?: string | null };
+export type StartOpts = { /** Nur Anwenden: eine Runde nur dieser c1x-Art (freiwillig, nie Pflicht). */ kind?: C1Kind; mode: RoundMode; topic?: string | null; day?: string; block?: UnitBlockNo | null; size?: number; pat?: string | null };
 
 /** Lemmata der Karten von heute (Gleichstand-Brecher der Rundenwahl); ohne Karten leer. */
 function safeWords(nowMs: number, plan: ReturnType<typeof useTodayPlan.getState>['plan']): string[] {
@@ -177,7 +179,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
   const lang = useSettings.getState().lang;
   const inputs = useLearnInputs.getState();
   // D9: Eine Grammatikrunde, solange „Grammatik" heute Pflicht und offen ist, zählt als Pflicht.
-  const ctx: Ctx = o.block ? 'duty' : roundCtx('gram', day);
+  const ctx: Ctx = o.block ? 'duty' : o.kind ? 'xtra' : roundCtx('gram', day);
   let mode: RoundMode = o.mode;
   if (mode === 'xtra' && ctx === 'duty') mode = 'duty';
   if (mode === 'duty' && ctx !== 'duty') mode = 'xtra';
@@ -209,7 +211,10 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
   const size = o.size ?? ROUND_SIZE[mode];
   const introTopicId = gt ? gt.intro : null;
 
-  if (o.pat && o.topic) {
+  if (o.kind) {
+    // Anwenden: eine Runde nur einer c1x-Art, über die eingeführten Muster.
+    tasks = kindRound({ kind: o.kind, size: o.size ?? 6, grammarDocs: docs, seed, wordsToday: words });
+  } else if (o.pat && o.topic) {
     // Ein Muster üben (Themenblatt): 4 Aufgaben nur dieses Musters.
     tasks = selectRound({ ...common, mode: 'topic', size: 4, errorsMax: 0, introBlock: { topic: o.topic, pats: [o.pat] }, gt: null });
   } else if (gt && introTopicId && topicById(introTopicId)) {
