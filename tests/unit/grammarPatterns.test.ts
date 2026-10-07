@@ -47,7 +47,7 @@ describe('Lader', () => {
     expect(familyOf('comparison')).toEqual([]);
     const ch = chapters();
     expect(ch).toHaveLength(7);
-    expect(ch.flatMap((c) => c.topics)).toHaveLength(43);
+    expect(ch.flatMap((c) => c.topics)).toHaveLength(47);
   });
 
   it('neue Aufgaben je Thema', () => {

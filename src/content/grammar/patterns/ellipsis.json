@@ -1,318 +1,318 @@
 {
-  "topic": "ellipsis",
-  "canDo": {
-    "de": "Ich kann Wiederholungen vermeiden: mit so und not, do so, one und ones, those of und mit einem allein stehenden to oder Hilfsverb.",
-    "en": "I can avoid repetition: with so and not, do so, one and ones, those of, and with a bare to or auxiliary."
-  },
-  "order": [
-    "el.so-not",
-    "el.do-so",
-    "el.one-ones",
-    "el.to-aux"
+ "topic": "ellipsis",
+ "canDo": {
+  "de": "Ich kann Wiederholungen vermeiden: mit so und not, do so, one und ones, those of und mit einem allein stehenden to oder Hilfsverb.",
+  "en": "I can avoid repetition: with so and not, do so, one and ones, those of, and with a bare to or auxiliary."
+ },
+ "order": [
+  "el.so-not",
+  "el.do-so",
+  "el.one-ones",
+  "el.to-aux"
+ ],
+ "introPlan": [
+  [
+   "el.so-not",
+   "el.do-so"
   ],
-  "introPlan": [
-    [
-      "el.so-not",
-      "el.do-so"
-    ],
-    [
-      "el.one-ones",
-      "el.to-aux"
-    ]
-  ],
-  "decide": {
-    "de": [
-      "Ist ein ganzer Gedanke schon gesagt (nach think, hope, expect)? Dann genügt so oder not.",
-      "Wurde eine Handlung schon genannt? Dann ersetzt do so oder do the same das Verb samt Objekt.",
-      "Soll ein Nomen nicht wiederholt werden? Nimm one(s), im Vergleich those of oder that of."
-    ],
-    "en": [
-      "Has a whole thought been said already (after think, hope, expect)? Then so or not is enough.",
-      "Has an action been named already? Then do so or do the same replaces the verb and its object.",
-      "Should a noun not be repeated? Use one(s), and in a comparison those of or that of."
-    ]
-  },
-  "patterns": [
-    {
-      "id": "el.so-not",
-      "name": {
-        "de": "so und not statt eines Satzes",
-        "en": "so and not instead of a clause"
-      },
-      "form": {
-        "de": "think / hope / expect / suppose / be afraid + so / not",
-        "en": "think / hope / expect / suppose / be afraid + so / not"
-      },
-      "use": {
-        "de": "Nach think, hope, expect, suppose und be afraid ersetzt so einen ganzen Satz in der Antwort, und not steht für die Verneinung. Auch „If so“ und „If not“ stehen für einen ganzen Gedanken.",
-        "en": "After think, hope, expect, suppose and be afraid, so replaces a whole clause in the answer, and not stands for the negative. “If so” and “If not” also stand for a whole thought."
-      },
-      "signals": [
-        "i think so",
-        "i hope so",
-        "i hope not",
-        "if so",
-        "if not",
-        "i am afraid not"
-      ],
-      "ex": [
-        {
-          "en": "Will the update be ready on Friday? I think so.",
-          "de": "Wird das Update am Freitag fertig? Ich denke schon.",
-          "ctx": "talk"
-        },
-        {
-          "en": "Is the budget approved? I am afraid not.",
-          "de": "Ist das Budget genehmigt? Leider nicht.",
-          "ctx": "meeting"
-        },
-        {
-          "en": "If so, please send me the new date.",
-          "de": "Falls ja, schicken Sie mir bitte das neue Datum.",
-          "ctx": "mail"
-        }
-      ],
-      "trap": {
-        "bad": "Is it ready? I hope that not.",
-        "good": "Is it ready? I hope not.",
-        "cause": {
-          "de": "Nach hope steht not direkt. Ein that davor ist falsch, weil not keinen Nebensatz einleitet. Das Deutsche hat „dass“ hier nicht.",
-          "en": "After hope, not follows directly. A that before it is wrong, because not does not introduce a clause. German has no “dass” here."
-        }
-      },
-      "contrast": {
-        "with": "el.do-so",
-        "a": "Will you sign? I hope so.",
-        "b": "You may sign. Please do so.",
-        "diff": {
-          "de": "So nach hope ersetzt den Gedanken. Do so ersetzt die Handlung.",
-          "en": "So after hope replaces the thought. Do so replaces the action."
-        }
-      },
-      "ccq": [
-        {
-          "s": "Will they sign? I hope not.",
-          "q": {
-            "de": "Möchte ich, dass sie unterschreiben?",
-            "en": "Do I want them to sign?"
-          },
-          "a": false
-        }
-      ],
-      "nudge": {
-        "de": "Steht schon ein ganzer Gedanke vor der Antwort? Dann genügt so oder not hinter dem Verb.",
-        "en": "Has the whole thought been said already? Then so or not after the verb is enough."
-      }
-    },
-    {
-      "id": "el.do-so",
-      "name": {
-        "de": "do so, do the same · Verb ersetzen",
-        "en": "do so, do the same · replacing a verb"
-      },
-      "form": {
-        "de": "do so / do the same / do it ersetzt eine Handlung",
-        "en": "do so / do the same / do it replaces an action"
-      },
-      "use": {
-        "de": "Statt ein Verb mit seinem Objekt zu wiederholen, steht do so (förmlich), do the same oder do it. Auch ein Hilfsverb kann allein stehen: „She did, too.“",
-        "en": "Instead of repeating a verb with its object you use do so (formal), do the same or do it. An auxiliary can also stand alone: “She did, too.”"
-      },
-      "signals": [
-        "do so",
-        "did so",
-        "do the same",
-        "did the same",
-        "do it"
-      ],
-      "ex": [
-        {
-          "en": "The client asked us to review the draft, and we did so on Monday.",
-          "de": "Der Kunde bat uns, den Entwurf zu prüfen, und das taten wir am Montag.",
-          "ctx": "mail"
-        },
-        {
-          "en": "She signed the contract, and I did the same.",
-          "de": "Sie unterschrieb den Vertrag, und ich tat dasselbe.",
-          "ctx": "talk"
-        },
-        {
-          "en": "Anyone who wants to cancel may do so before Friday.",
-          "de": "Wer stornieren möchte, kann das vor Freitag tun.",
-          "ctx": "meeting"
-        }
-      ],
-      "trap": {
-        "bad": "She signed the contract, and I did same.",
-        "good": "She signed the contract, and I did the same.",
-        "cause": {
-          "de": "Im Deutschen sagt man „ich tat dasselbe“. Im Englischen darf the nicht fehlen: the same.",
-          "en": "German says “ich tat dasselbe”. In English the must not be missing: the same."
-        }
-      },
-      "contrast": {
-        "with": "el.so-not",
-        "a": "Will you sign? I hope so.",
-        "b": "You may sign. Please do so.",
-        "diff": {
-          "de": "So nach hope ersetzt den Gedanken. Do so ersetzt die Handlung.",
-          "en": "So after hope replaces the thought. Do so replaces the action."
-        }
-      },
-      "ccq": [
-        {
-          "s": "He reviewed the report and I did the same.",
-          "q": {
-            "de": "Habe ich den Bericht geprüft?",
-            "en": "Did I review the report?"
-          },
-          "a": true
-        }
-      ],
-      "nudge": {
-        "de": "Welche Handlung wurde schon genannt, und welches kurze Wort kann sie ersetzen?",
-        "en": "Which action has been named already, and which short word can replace it?"
-      }
-    },
-    {
-      "id": "el.one-ones",
-      "name": {
-        "de": "one, ones · that of, those of",
-        "en": "one, ones · that of, those of"
-      },
-      "form": {
-        "de": "Adjektiv + one(s) / that of / those of statt eines Nomens",
-        "en": "Adjective + one(s) / that of / those of instead of a noun"
-      },
-      "use": {
-        "de": "One ersetzt ein zählbares Nomen. That of und those of ersetzen ein Nomen im Vergleich: Kosten werden mit Kosten verglichen, nicht mit einem Plan.",
-        "en": "One replaces a countable noun. That of and those of replace a noun in a comparison: costs are compared with costs, not with a plan."
-      },
-      "signals": [
-        "the new one",
-        "the ones",
-        "that of",
-        "those of",
-        "which one"
-      ],
-      "ex": [
-        {
-          "en": "Our old system is slow, but the new one is fast.",
-          "de": "Unser altes System ist langsam, aber das neue ist schnell.",
-          "ctx": "meeting"
-        },
-        {
-          "en": "The costs of the new plan are lower than those of the old plan.",
-          "de": "Die Kosten des neuen Plans sind niedriger als die des alten.",
-          "ctx": "mail"
-        },
-        {
-          "en": "I prefer the ones we tested last year.",
-          "de": "Ich bevorzuge die, die wir letztes Jahr getestet haben.",
-          "ctx": "talk"
-        }
-      ],
-      "trap": {
-        "bad": "The costs of the new plan are lower than the old plan.",
-        "good": "The costs of the new plan are lower than those of the old plan.",
-        "cause": {
-          "de": "Verglichen werden Kosten mit Kosten, nicht Kosten mit einem Plan. Das Deutsche sagt „als die des alten Plans“, im Englischen braucht man those of.",
-          "en": "Costs are compared with costs, not costs with a plan. German says “als die des alten Plans”, English needs those of."
-        }
-      },
-      "contrast": {
-        "with": "cmp.than",
-        "a": "The new plan is cheaper than the old one.",
-        "b": "The costs of the new plan are lower than those of the old one.",
-        "diff": {
-          "de": "One ersetzt ein Nomen im Singular. Those of ersetzt ein Pluralnomen mit of-Zusatz.",
-          "en": "One replaces a singular noun. Those of replaces a plural noun with an of-phrase."
-        }
-      },
-      "ccq": [
-        {
-          "s": "The new office is bigger than the old one.",
-          "q": {
-            "de": "Vergleiche ich zwei Büros?",
-            "en": "Am I comparing two offices?"
-          },
-          "a": true
-        }
-      ],
-      "nudge": {
-        "de": "Welches Nomen soll nicht wiederholt werden, und ist es Singular oder Plural?",
-        "en": "Which noun should not be repeated, and is it singular or plural?"
-      }
-    },
-    {
-      "id": "el.to-aux",
-      "name": {
-        "de": "to und Hilfsverb allein · I'd love to",
-        "en": "bare to and bare auxiliary · I'd love to"
-      },
-      "form": {
-        "de": "Hilfsverb oder to ohne Verb am Ende",
-        "en": "Auxiliary or to without a verb at the end"
-      },
-      "use": {
-        "de": "Ist das Verb schon bekannt, bleibt nur das Hilfsverb oder to stehen: „She can, but he can’t.“ „I’d love to.“ Das Verb wird nicht wiederholt, to darf nicht fehlen.",
-        "en": "When the verb is already known, only the auxiliary or to is left: “She can, but he can’t.” “I’d love to.” The verb is not repeated, and to must not be missing."
-      },
-      "signals": [
-        "i'd love to",
-        "i would like to",
-        "she can",
-        "he can't",
-        "if you want to"
-      ],
-      "ex": [
-        {
-          "en": "Can you join the call? I'd love to, but I have another meeting.",
-          "de": "Kannst du am Anruf teilnehmen? Sehr gern, aber ich habe ein anderes Meeting.",
-          "ctx": "talk"
-        },
-        {
-          "en": "She can attend the workshop, but he cannot.",
-          "de": "Sie kann am Workshop teilnehmen, er nicht.",
-          "ctx": "meeting"
-        },
-        {
-          "en": "Please feel free to call me if you want to.",
-          "de": "Rufen Sie mich gern an, wenn Sie möchten.",
-          "ctx": "mail"
-        }
-      ],
-      "trap": {
-        "bad": "Can you join us? Yes, I would like.",
-        "good": "Can you join us? Yes, I would like to.",
-        "cause": {
-          "de": "Das Deutsche lässt „zu“ bei „Ich möchte gern“ am Satzende weg. Im Englischen muss to stehen bleiben, damit klar ist, dass ein Infinitiv gemeint ist.",
-          "en": "German drops “zu” after “Ich möchte gern” at the end. English must keep to, so it is clear that an infinitive is meant."
-        }
-      },
-      "contrast": {
-        "with": "el.do-so",
-        "a": "I'd love to.",
-        "b": "I'd love to do so.",
-        "diff": {
-          "de": "Beide sind richtig. Das kurze to klingt im Gespräch natürlicher, do so förmlicher.",
-          "en": "Both are correct. The short to sounds more natural in conversation, do so more formal."
-        }
-      },
-      "ccq": [
-        {
-          "s": "Can you come? I'd love to, but I can't.",
-          "q": {
-            "de": "Würde ich gern kommen?",
-            "en": "Would I like to come?"
-          },
-          "a": true
-        }
-      ],
-      "nudge": {
-        "de": "Ist das Verb schon genannt? Dann bleibt nur das Hilfsverb oder to übrig.",
-        "en": "Has the verb been named already? Then only the auxiliary or to is left."
-      }
-    }
+  [
+   "el.one-ones",
+   "el.to-aux"
   ]
+ ],
+ "decide": {
+  "de": [
+   "Ist ein ganzer Gedanke schon gesagt (nach think, hope, expect)? Dann genügt so oder not.",
+   "Wurde eine Handlung schon genannt? Dann ersetzt do so oder do the same das Verb samt Objekt.",
+   "Soll ein Nomen nicht wiederholt werden? Nimm one(s), im Vergleich those of oder that of."
+  ],
+  "en": [
+   "Has a whole thought been said already (after think, hope, expect)? Then so or not is enough.",
+   "Has an action been named already? Then do so or do the same replaces the verb and its object.",
+   "Should a noun not be repeated? Use one(s), and in a comparison those of or that of."
+  ]
+ },
+ "patterns": [
+  {
+   "id": "el.so-not",
+   "name": {
+    "de": "so und not statt eines Satzes",
+    "en": "so and not instead of a clause"
+   },
+   "form": {
+    "de": "think / hope / expect / suppose / be afraid + so / not",
+    "en": "think / hope / expect / suppose / be afraid + so / not"
+   },
+   "use": {
+    "de": "Nach think, hope, expect, suppose und be afraid ersetzt so einen ganzen Satz in der Antwort, und not steht für die Verneinung. Auch „If so“ und „If not“ stehen für einen ganzen Gedanken.",
+    "en": "After think, hope, expect, suppose and be afraid, so replaces a whole clause in the answer, and not stands for the negative. “If so” and “If not” also stand for a whole thought."
+   },
+   "signals": [
+    "i think so",
+    "i hope so",
+    "i hope not",
+    "if so",
+    "if not",
+    "i am afraid not"
+   ],
+   "ex": [
+    {
+     "en": "Will the update be ready on Friday? I think so.",
+     "de": "Wird das Update am Freitag fertig? Ich denke schon.",
+     "ctx": "talk"
+    },
+    {
+     "en": "Is the budget approved? I am afraid not.",
+     "de": "Ist das Budget genehmigt? Leider nicht.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "If so, please send me the new date.",
+     "de": "Falls ja, schicken Sie mir bitte das neue Datum.",
+     "ctx": "mail"
+    }
+   ],
+   "trap": {
+    "bad": "Is it ready? I hope that not.",
+    "good": "Is it ready? I hope not.",
+    "cause": {
+     "de": "Nach hope steht not direkt. Ein that davor ist falsch, weil not keinen Nebensatz einleitet. Das Deutsche hat „dass“ hier nicht.",
+     "en": "After hope, not follows directly. A that before it is wrong, because not does not introduce a clause. German has no “dass” here."
+    }
+   },
+   "contrast": {
+    "with": "el.do-so",
+    "a": "Will you sign? I hope so.",
+    "b": "You may sign. Please do so.",
+    "diff": {
+     "de": "So nach hope ersetzt den Gedanken. Do so ersetzt die Handlung.",
+     "en": "So after hope replaces the thought. Do so replaces the action."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Will they sign? I hope not.",
+     "q": {
+      "de": "Möchte ich, dass sie unterschreiben?",
+      "en": "Do I want them to sign?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Steht schon ein ganzer Gedanke vor der Antwort? Dann genügt so oder not hinter dem Verb.",
+    "en": "Has the whole thought been said already? Then so or not after the verb is enough."
+   }
+  },
+  {
+   "id": "el.do-so",
+   "name": {
+    "de": "do so, do the same · Verb ersetzen",
+    "en": "do so, do the same · replacing a verb"
+   },
+   "form": {
+    "de": "do so / do the same / do it ersetzt eine Handlung",
+    "en": "do so / do the same / do it replaces an action"
+   },
+   "use": {
+    "de": "Statt ein Verb mit seinem Objekt zu wiederholen, steht do so (förmlich), do the same oder do it. Auch ein Hilfsverb kann allein stehen: „She did, too.“",
+    "en": "Instead of repeating a verb with its object you use do so (formal), do the same or do it. An auxiliary can also stand alone: “She did, too.”"
+   },
+   "signals": [
+    "do so",
+    "did so",
+    "do the same",
+    "did the same",
+    "do it"
+   ],
+   "ex": [
+    {
+     "en": "The client asked us to review the draft, and we did so on Monday.",
+     "de": "Der Kunde bat uns, den Entwurf zu prüfen, und das taten wir am Montag.",
+     "ctx": "mail"
+    },
+    {
+     "en": "She signed the contract, and I did the same.",
+     "de": "Sie unterschrieb den Vertrag, und ich tat dasselbe.",
+     "ctx": "talk"
+    },
+    {
+     "en": "Anyone who wants to cancel may do so before Friday.",
+     "de": "Wer stornieren möchte, kann das vor Freitag tun.",
+     "ctx": "meeting"
+    }
+   ],
+   "trap": {
+    "bad": "She signed the contract, and I did same.",
+    "good": "She signed the contract, and I did the same.",
+    "cause": {
+     "de": "Im Deutschen sagt man „ich tat dasselbe“. Im Englischen darf the nicht fehlen: the same.",
+     "en": "German says “ich tat dasselbe”. In English the must not be missing: the same."
+    }
+   },
+   "contrast": {
+    "with": "el.so-not",
+    "a": "Will you sign? I hope so.",
+    "b": "You may sign. Please do so.",
+    "diff": {
+     "de": "So nach hope ersetzt den Gedanken. Do so ersetzt die Handlung.",
+     "en": "So after hope replaces the thought. Do so replaces the action."
+    }
+   },
+   "ccq": [
+    {
+     "s": "He reviewed the report and I did the same.",
+     "q": {
+      "de": "Habe ich den Bericht geprüft?",
+      "en": "Did I review the report?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Welche Handlung wurde schon genannt, und welches kurze Wort kann sie ersetzen?",
+    "en": "Which action has been named already, and which short word can replace it?"
+   }
+  },
+  {
+   "id": "el.one-ones",
+   "name": {
+    "de": "one, ones · that of, those of",
+    "en": "one, ones · that of, those of"
+   },
+   "form": {
+    "de": "Adjektiv + one(s) / that of / those of statt eines Nomens",
+    "en": "Adjective + one(s) / that of / those of instead of a noun"
+   },
+   "use": {
+    "de": "One ersetzt ein zählbares Nomen. That of und those of ersetzen ein Nomen im Vergleich: Kosten werden mit Kosten verglichen, nicht mit einem Plan.",
+    "en": "One replaces a countable noun. That of and those of replace a noun in a comparison: costs are compared with costs, not with a plan."
+   },
+   "signals": [
+    "the new one",
+    "the ones",
+    "that of",
+    "those of",
+    "which one"
+   ],
+   "ex": [
+    {
+     "en": "Our old system is slow, but the new one is fast.",
+     "de": "Unser altes System ist langsam, aber das neue ist schnell.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "The costs of the new plan are lower than those of the old plan.",
+     "de": "Die Kosten des neuen Plans sind niedriger als die des alten.",
+     "ctx": "mail"
+    },
+    {
+     "en": "I prefer the ones we tested last year.",
+     "de": "Ich bevorzuge die, die wir letztes Jahr getestet haben.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The costs of the new plan are lower than the old plan.",
+    "good": "The costs of the new plan are lower than those of the old plan.",
+    "cause": {
+     "de": "Verglichen werden Kosten mit Kosten, nicht Kosten mit einem Plan. Das Deutsche sagt „als die des alten Plans“, im Englischen braucht man those of.",
+     "en": "Costs are compared with costs, not costs with a plan. German says “als die des alten Plans”, English needs those of."
+    }
+   },
+   "contrast": {
+    "with": "cmp.than",
+    "a": "The new plan is cheaper than the old one.",
+    "b": "The costs of the new plan are lower than those of the old one.",
+    "diff": {
+     "de": "One ersetzt ein Nomen im Singular. Those of ersetzt ein Pluralnomen mit of-Zusatz.",
+     "en": "One replaces a singular noun. Those of replaces a plural noun with an of-phrase."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The new office is bigger than the old one.",
+     "q": {
+      "de": "Vergleiche ich zwei Büros?",
+      "en": "Am I comparing two offices?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Welches Nomen soll nicht wiederholt werden, und ist es Singular oder Plural?",
+    "en": "Which noun should not be repeated, and is it singular or plural?"
+   }
+  },
+  {
+   "id": "el.to-aux",
+   "name": {
+    "de": "to und Hilfsverb allein · I'd love to",
+    "en": "bare to and bare auxiliary · I'd love to"
+   },
+   "form": {
+    "de": "Hilfsverb oder to ohne Verb am Ende",
+    "en": "Auxiliary or to without a verb at the end"
+   },
+   "use": {
+    "de": "Ist das Verb schon bekannt, bleibt nur das Hilfsverb oder to stehen: „She can, but he can’t.“ „I’d love to.“ Das Verb wird nicht wiederholt, to darf nicht fehlen.",
+    "en": "When the verb is already known, only the auxiliary or to is left: “She can, but he can’t.” “I’d love to.” The verb is not repeated, and to must not be missing."
+   },
+   "signals": [
+    "i'd love to",
+    "i would like to",
+    "she can",
+    "he can't",
+    "if you want to"
+   ],
+   "ex": [
+    {
+     "en": "Can you join the call? I'd love to, but I have another meeting.",
+     "de": "Kannst du am Anruf teilnehmen? Sehr gern, aber ich habe ein anderes Meeting.",
+     "ctx": "talk"
+    },
+    {
+     "en": "She can attend the workshop, but he cannot.",
+     "de": "Sie kann am Workshop teilnehmen, er nicht.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Please feel free to call me if you want to.",
+     "de": "Rufen Sie mich gern an, wenn Sie möchten.",
+     "ctx": "mail"
+    }
+   ],
+   "trap": {
+    "bad": "Can you join us? Yes, I would like.",
+    "good": "Can you join us? Yes, I would like to.",
+    "cause": {
+     "de": "Das Deutsche lässt „zu“ bei „Ich möchte gern“ am Satzende weg. Im Englischen muss to stehen bleiben, damit klar ist, dass ein Infinitiv gemeint ist.",
+     "en": "German drops “zu” after “Ich möchte gern” at the end. English must keep to, so it is clear that an infinitive is meant."
+    }
+   },
+   "contrast": {
+    "with": "el.do-so",
+    "a": "I'd love to.",
+    "b": "I'd love to do so.",
+    "diff": {
+     "de": "Beide sind richtig. Das kurze to klingt im Gespräch natürlicher, do so förmlicher.",
+     "en": "Both are correct. The short to sounds more natural in conversation, do so more formal."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Can you come? I'd love to, but I can't.",
+     "q": {
+      "de": "Würde ich gern kommen?",
+      "en": "Would I like to come?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Ist das Verb schon genannt? Dann bleibt nur das Hilfsverb oder to übrig.",
+    "en": "Has the verb been named already? Then only the auxiliary or to is left."
+   }
+  }
+ ]
 }

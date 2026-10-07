@@ -1,0 +1,104 @@
+{
+ "The client may be well reject the first offer.": {
+  "pat": "mp.may-well",
+  "why": {
+   "ok": {
+    "de": "Well steht direkt hinter may: The client may well reject the first offer.",
+    "en": "Well stands right after may: The client may well reject the first offer."
+   },
+   "wrong": [
+    {
+     "if": [
+      "be",
+      "well"
+     ],
+     "de": "Zwischen may und well steht kein be.",
+     "en": "There is no be between may and well."
+    },
+    {
+     "not": [
+      "well"
+     ],
+     "de": "Die Verstärkung heißt may well.",
+     "en": "The strengthening is may well."
+    }
+   ]
+  }
+ },
+ "Prices are bound rising after the merger.": {
+  "pat": "mp.bound",
+  "why": {
+   "ok": {
+    "de": "Nach bound steht to und die Grundform: Prices are bound to rise.",
+    "en": "After bound comes to and the base form: Prices are bound to rise."
+   },
+   "wrong": [
+    {
+     "if": [
+      "rising"
+     ],
+     "de": "Nach bound steht kein -ing, sondern to rise.",
+     "en": "After bound there is no -ing but to rise."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Nach bound braucht es to.",
+     "en": "After bound you need to."
+    }
+   ]
+  }
+ },
+ "The update is likely that it is ready on Friday.": {
+  "pat": "mp.likely",
+  "why": {
+   "ok": {
+    "de": "Mit dem Subjekt vorn folgt likely to: The update is likely to be ready.",
+    "en": "With the subject first, likely to follows: The update is likely to be ready."
+   },
+   "wrong": [
+    {
+     "if": [
+      "that"
+     ],
+     "de": "Nach dem Subjekt steht kein that-Satz, sondern to be.",
+     "en": "After the subject there is no that-clause but to be."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Nach likely braucht es to + Grundform.",
+     "en": "After likely you need to + base form."
+    }
+   ]
+  }
+ },
+ "It exists a good chance that the supplier will agree.": {
+  "pat": "mp.chance",
+  "why": {
+   "ok": {
+    "de": "Englisch sagt nicht it exists, sondern there is: There is a good chance that the supplier will agree.",
+    "en": "English says there is: There is a good chance that the supplier will agree."
+   },
+   "wrong": [
+    {
+     "if": [
+      "it",
+      "exists"
+     ],
+     "de": "Das deutsche „es besteht“ heißt there is, nicht it exists.",
+     "en": "The German “es besteht” is there is, not it exists."
+    },
+    {
+     "not": [
+      "there"
+     ],
+     "de": "Der Satz beginnt mit there is.",
+     "en": "The sentence starts with there is."
+    }
+   ]
+  }
+ }
+}

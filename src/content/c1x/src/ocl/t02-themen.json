@@ -1,0 +1,1185 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "ocl-0601",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "mp.may-well",
+   "why": {
+    "ok": {
+     "de": "Well steht direkt hinter may und macht die Möglichkeit stärker: may well refuse.",
+     "en": "Well stands right after may and makes the possibility stronger: may well refuse."
+    },
+    "wrong": [
+     {
+      "if": [
+       "good"
+      ],
+      "de": "„good“ passt hier nicht. Gesucht ist „well“.",
+      "en": "“good” does not fit here. The word needed is “well”."
+     },
+     {
+      "if": [
+       "very"
+      ],
+      "de": "„very“ passt hier nicht. Gesucht ist „well“.",
+      "en": "“very” does not fit here. The word needed is “well”."
+     },
+     {
+      "if": [
+       "much"
+      ],
+      "de": "„much“ passt hier nicht. Gesucht ist „well“.",
+      "en": "“much” does not fit here. The word needed is “well”."
+     }
+    ]
+   },
+   "text": "The supplier may ___ refuse to change the delivery date at this stage.",
+   "accept": [
+    "well"
+   ],
+   "cls": "adv",
+   "chips": [
+    "good",
+    "very",
+    "much"
+   ]
+  },
+  {
+   "id": "ocl-0602",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "mp.may-well",
+   "why": {
+    "ok": {
+     "de": "Well steht direkt hinter could: could well be.",
+     "en": "Well stands right after could: could well be."
+    },
+    "wrong": [
+     {
+      "if": [
+       "good"
+      ],
+      "de": "„good“ passt hier nicht. Gesucht ist „well“.",
+      "en": "“good” does not fit here. The word needed is “well”."
+     },
+     {
+      "if": [
+       "best"
+      ],
+      "de": "„best“ passt hier nicht. Gesucht ist „well“.",
+      "en": "“best” does not fit here. The word needed is “well”."
+     },
+     {
+      "if": [
+       "more"
+      ],
+      "de": "„more“ passt hier nicht. Gesucht ist „well“.",
+      "en": "“more” does not fit here. The word needed is “well”."
+     }
+    ]
+   },
+   "text": "This could ___ be the warmest autumn we have had in years.",
+   "accept": [
+    "well"
+   ],
+   "cls": "adv",
+   "chips": [
+    "good",
+    "best",
+    "more"
+   ]
+  },
+  {
+   "id": "ocl-0603",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "mp.bound",
+   "why": {
+    "ok": {
+     "de": "Nach bound steht to und die Grundform: bound to ask.",
+     "en": "After bound comes to and the base form: bound to ask."
+    },
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "„for“ passt hier nicht. Gesucht ist „to“.",
+      "en": "“for” does not fit here. The word needed is “to”."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "„at“ passt hier nicht. Gesucht ist „to“.",
+      "en": "“at” does not fit here. The word needed is “to”."
+     },
+     {
+      "if": [
+       "on"
+      ],
+      "de": "„on“ passt hier nicht. Gesucht ist „to“.",
+      "en": "“on” does not fit here. The word needed is “to”."
+     }
+    ]
+   },
+   "text": "Someone is bound ___ ask about the price sooner or later.",
+   "accept": [
+    "to"
+   ],
+   "cls": "prep",
+   "chips": [
+    "for",
+    "at",
+    "on"
+   ]
+  },
+  {
+   "id": "ocl-0604",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "mp.likely",
+   "why": {
+    "ok": {
+     "de": "Nach unlikely steht to und die Grundform: unlikely to affect.",
+     "en": "After unlikely comes to and the base form: unlikely to affect."
+    },
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "„for“ passt hier nicht. Gesucht ist „to“.",
+      "en": "“for” does not fit here. The word needed is “to”."
+     },
+     {
+      "if": [
+       "of"
+      ],
+      "de": "„of“ passt hier nicht. Gesucht ist „to“.",
+      "en": "“of” does not fit here. The word needed is “to”."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "„at“ passt hier nicht. Gesucht ist „to“.",
+      "en": "“at” does not fit here. The word needed is “to”."
+     }
+    ]
+   },
+   "text": "The delay is unlikely ___ affect the launch date.",
+   "accept": [
+    "to"
+   ],
+   "cls": "prep",
+   "chips": [
+    "for",
+    "of",
+    "at"
+   ]
+  },
+  {
+   "id": "ocl-0605",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "mp.likely",
+   "why": {
+    "ok": {
+     "de": "Mit it folgt ein that-Satz: It is highly likely that the board will approve.",
+     "en": "With it a that-clause follows: It is highly likely that the board will approve."
+    },
+    "wrong": [
+     {
+      "if": [
+       "to"
+      ],
+      "de": "„to“ passt hier nicht. Gesucht ist „that“.",
+      "en": "“to” does not fit here. The word needed is “that”."
+     },
+     {
+      "if": [
+       "if"
+      ],
+      "de": "„if“ passt hier nicht. Gesucht ist „that“.",
+      "en": "“if” does not fit here. The word needed is “that”."
+     },
+     {
+      "if": [
+       "which"
+      ],
+      "de": "„which“ passt hier nicht. Gesucht ist „that“.",
+      "en": "“which” does not fit here. The word needed is “that”."
+     }
+    ]
+   },
+   "text": "It is highly likely ___ the board will approve the plan next week.",
+   "accept": [
+    "that"
+   ],
+   "cls": "conj",
+   "chips": [
+    "to",
+    "if",
+    "which"
+   ]
+  },
+  {
+   "id": "ocl-0606",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "mp.chance",
+   "why": {
+    "ok": {
+     "de": "Nach chance steht of und das Nomen: a chance of a refund.",
+     "en": "After chance comes of and the noun: a chance of a refund."
+    },
+    "wrong": [
+     {
+      "if": [
+       "on"
+      ],
+      "de": "„on“ passt hier nicht. Gesucht ist „of“.",
+      "en": "“on” does not fit here. The word needed is “of”."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "„at“ passt hier nicht. Gesucht ist „of“.",
+      "en": "“at” does not fit here. The word needed is “of”."
+     },
+     {
+      "if": [
+       "by"
+      ],
+      "de": "„by“ passt hier nicht. Gesucht ist „of“.",
+      "en": "“by” does not fit here. The word needed is “of”."
+     }
+    ]
+   },
+   "text": "There is only a slim chance ___ finding a table without a booking.",
+   "accept": [
+    "of"
+   ],
+   "cls": "prep",
+   "chips": [
+    "on",
+    "at",
+    "by"
+   ]
+  },
+  {
+   "id": "ocl-0607",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "sa.trend",
+   "why": {
+    "ok": {
+     "de": "Increasingly steht als Adverb zwischen are und asking: are increasingly asking.",
+     "en": "Increasingly stands as an adverb between are and asking: are increasingly asking."
+    },
+    "wrong": [
+     {
+      "if": [
+       "increase"
+      ],
+      "de": "„increase“ passt hier nicht. Gesucht ist „increasingly“.",
+      "en": "“increase” does not fit here. The word needed is “increasingly”."
+     },
+     {
+      "if": [
+       "increased"
+      ],
+      "de": "„increased“ passt hier nicht. Gesucht ist „increasingly“.",
+      "en": "“increased” does not fit here. The word needed is “increasingly”."
+     },
+     {
+      "if": [
+       "increasing"
+      ],
+      "de": "„increasing“ passt hier nicht. Gesucht ist „increasingly“.",
+      "en": "“increasing” does not fit here. The word needed is “increasingly”."
+     }
+    ]
+   },
+   "text": "Our clients are ___ requesting flexible payment terms, and we have to react.",
+   "accept": [
+    "increasingly"
+   ],
+   "cls": "adv",
+   "chips": [
+    "increase",
+    "increased",
+    "increasing"
+   ]
+  },
+  {
+   "id": "ocl-0608",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "sa.soft",
+   "why": {
+    "ok": {
+     "de": "Are hoping macht den Wunsch weicher als hope.",
+     "en": "Are hoping makes the wish softer than hope."
+    },
+    "wrong": [
+     {
+      "if": [
+       "hope"
+      ],
+      "de": "„hope“ passt hier nicht. Gesucht ist „hoping“.",
+      "en": "“hope” does not fit here. The word needed is “hoping”."
+     },
+     {
+      "if": [
+       "hoped"
+      ],
+      "de": "„hoped“ passt hier nicht. Gesucht ist „hoping“.",
+      "en": "“hoped” does not fit here. The word needed is “hoping”."
+     },
+     {
+      "if": [
+       "hopeful"
+      ],
+      "de": "„hopeful“ passt hier nicht. Gesucht ist „hoping“.",
+      "en": "“hopeful” does not fit here. The word needed is “hoping”."
+     }
+    ]
+   },
+   "text": "We are ___ to hear from you by the end of the week.",
+   "accept": [
+    "hoping"
+   ],
+   "cls": "part",
+   "chips": [
+    "hope",
+    "hoped",
+    "hopeful"
+   ]
+  },
+  {
+   "id": "ocl-0609",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "sa.being",
+   "why": {
+    "ok": {
+     "de": "Are being zeigt Verhalten für begrenzte Zeit.",
+     "en": "Are being shows behavior for a limited time."
+    },
+    "wrong": [
+     {
+      "if": [
+       "be"
+      ],
+      "de": "„be“ passt hier nicht. Gesucht ist „being“.",
+      "en": "“be” does not fit here. The word needed is “being”."
+     },
+     {
+      "if": [
+       "been"
+      ],
+      "de": "„been“ passt hier nicht. Gesucht ist „being“.",
+      "en": "“been” does not fit here. The word needed is “being”."
+     },
+     {
+      "if": [
+       "are"
+      ],
+      "de": "„are“ passt hier nicht. Gesucht ist „being“.",
+      "en": "“are” does not fit here. The word needed is “being”."
+     }
+    ]
+   },
+   "text": "You are ___ unreasonable about the schedule, and the whole team has noticed.",
+   "accept": [
+    "being"
+   ],
+   "cls": "aux",
+   "chips": [
+    "be",
+    "been",
+    "are"
+   ]
+  },
+  {
+   "id": "ocl-0610",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "sa.no-ing",
+   "why": {
+    "ok": {
+     "de": "Belong ist ein Zustandsverb und bleibt einfach: belongs to.",
+     "en": "Belong is a stative verb and stays simple: belongs to."
+    },
+    "wrong": [
+     {
+      "if": [
+       "belonging"
+      ],
+      "de": "„belonging“ passt hier nicht. Gesucht ist „belongs“.",
+      "en": "“belonging” does not fit here. The word needed is “belongs”."
+     },
+     {
+      "if": [
+       "belong"
+      ],
+      "de": "„belong“ passt hier nicht. Gesucht ist „belongs“.",
+      "en": "“belong” does not fit here. The word needed is “belongs”."
+     },
+     {
+      "if": [
+       "belonged"
+      ],
+      "de": "„belonged“ passt hier nicht. Gesucht ist „belongs“.",
+      "en": "“belonged” does not fit here. The word needed is “belongs”."
+     }
+    ]
+   },
+   "text": "The data center ___ to our parent company, so we need their approval.",
+   "accept": [
+    "belongs"
+   ],
+   "cls": "part",
+   "chips": [
+    "belonging",
+    "belong",
+    "belonged"
+   ]
+  },
+  {
+   "id": "ocl-0611",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "sa.trend",
+   "why": {
+    "ok": {
+     "de": "Is getting + Komparativ beschreibt eine Entwicklung: is getting harder.",
+     "en": "Is getting + comparative describes a change: is getting harder."
+    },
+    "wrong": [
+     {
+      "if": [
+       "hardly"
+      ],
+      "de": "„hardly“ passt hier nicht. Gesucht ist „harder“.",
+      "en": "“hardly” does not fit here. The word needed is “harder”."
+     },
+     {
+      "if": [
+       "hardest"
+      ],
+      "de": "„hardest“ passt hier nicht. Gesucht ist „harder“.",
+      "en": "“hardest” does not fit here. The word needed is “harder”."
+     },
+     {
+      "if": [
+       "hardness"
+      ],
+      "de": "„hardness“ passt hier nicht. Gesucht ist „harder“.",
+      "en": "“hardness” does not fit here. The word needed is “harder”."
+     }
+    ]
+   },
+   "text": "It is getting ___ to find a flat in this city, even for a small family.",
+   "accept": [
+    "harder"
+   ],
+   "cls": "adv",
+   "chips": [
+    "hardly",
+    "hardest",
+    "hardness"
+   ]
+  },
+  {
+   "id": "ocl-0612",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "sa.being",
+   "why": {
+    "ok": {
+     "de": "Is being zeigt Verhalten für begrenzte Zeit: is being silly.",
+     "en": "Is being shows behavior for a limited time: is being silly."
+    },
+    "wrong": [
+     {
+      "if": [
+       "be"
+      ],
+      "de": "„be“ passt hier nicht. Gesucht ist „being“.",
+      "en": "“be” does not fit here. The word needed is “being”."
+     },
+     {
+      "if": [
+       "been"
+      ],
+      "de": "„been“ passt hier nicht. Gesucht ist „being“.",
+      "en": "“been” does not fit here. The word needed is “being”."
+     },
+     {
+      "if": [
+       "having"
+      ],
+      "de": "„having“ passt hier nicht. Gesucht ist „being“.",
+      "en": "“having” does not fit here. The word needed is “being”."
+     }
+    ]
+   },
+   "text": "My brother is ___ silly today because he wants to cheer us up.",
+   "accept": [
+    "being"
+   ],
+   "cls": "aux",
+   "chips": [
+    "be",
+    "been",
+    "having"
+   ]
+  },
+  {
+   "id": "ocl-0613",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "fp.was-going",
+   "why": {
+    "ok": {
+     "de": "Was going to nennt den Plan von damals.",
+     "en": "Was going to names the plan from back then."
+    },
+    "wrong": [
+     {
+      "if": [
+       "go"
+      ],
+      "de": "„go“ passt hier nicht. Gesucht ist „going“.",
+      "en": "“go” does not fit here. The word needed is “going”."
+     },
+     {
+      "if": [
+       "went"
+      ],
+      "de": "„went“ passt hier nicht. Gesucht ist „going“.",
+      "en": "“went” does not fit here. The word needed is “going”."
+     },
+     {
+      "if": [
+       "gone"
+      ],
+      "de": "„gone“ passt hier nicht. Gesucht ist „going“.",
+      "en": "“gone” does not fit here. The word needed is “going”."
+     }
+    ]
+   },
+   "text": "The team was ___ to present the results on Monday, but the data was incomplete.",
+   "accept": [
+    "going"
+   ],
+   "cls": "part",
+   "chips": [
+    "go",
+    "went",
+    "gone"
+   ]
+  },
+  {
+   "id": "ocl-0614",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "fp.about-to",
+   "why": {
+    "ok": {
+     "de": "Nach about steht to und die Grundform: about to sign.",
+     "en": "After about comes to and the base form: about to sign."
+    },
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "„for“ passt hier nicht. Gesucht ist „to“.",
+      "en": "“for” does not fit here. The word needed is “to”."
+     },
+     {
+      "if": [
+       "of"
+      ],
+      "de": "„of“ passt hier nicht. Gesucht ist „to“.",
+      "en": "“of” does not fit here. The word needed is “to”."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "„at“ passt hier nicht. Gesucht ist „to“.",
+      "en": "“at” does not fit here. The word needed is “to”."
+     }
+    ]
+   },
+   "text": "The auditors were about ___ present their findings when the fire alarm went off.",
+   "accept": [
+    "to"
+   ],
+   "cls": "part",
+   "chips": [
+    "for",
+    "of",
+    "at"
+   ]
+  },
+  {
+   "id": "ocl-0615",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "fp.would-narr",
+   "why": {
+    "ok": {
+     "de": "Aus der Vergangenheit auf Späteres: would later become.",
+     "en": "From the past at something later: would later become."
+    },
+    "wrong": [
+     {
+      "if": [
+       "will"
+      ],
+      "de": "„will“ passt hier nicht. Gesucht ist „would“.",
+      "en": "“will” does not fit here. The word needed is “would”."
+     },
+     {
+      "if": [
+       "shall"
+      ],
+      "de": "„shall“ passt hier nicht. Gesucht ist „would“.",
+      "en": "“shall” does not fit here. The word needed is “would”."
+     },
+     {
+      "if": [
+       "is"
+      ],
+      "de": "„is“ passt hier nicht. Gesucht ist „would“.",
+      "en": "“is” does not fit here. The word needed is “would”."
+     }
+    ]
+   },
+   "text": "She started as an intern in 2014 and ___ later become our head of design.",
+   "accept": [
+    "would"
+   ],
+   "cls": "aux",
+   "chips": [
+    "will",
+    "shall",
+    "is"
+   ]
+  },
+  {
+   "id": "ocl-0616",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "fp.was-to",
+   "why": {
+    "ok": {
+     "de": "Was to nennt den Plan: was to go live.",
+     "en": "Was to names the plan: was to go live."
+    },
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "„for“ passt hier nicht. Gesucht ist „to“.",
+      "en": "“for” does not fit here. The word needed is “to”."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "„at“ passt hier nicht. Gesucht ist „to“.",
+      "en": "“at” does not fit here. The word needed is “to”."
+     },
+     {
+      "if": [
+       "on"
+      ],
+      "de": "„on“ passt hier nicht. Gesucht ist „to“.",
+      "en": "“on” does not fit here. The word needed is “to”."
+     }
+    ]
+   },
+   "text": "The new system was ___ go live in October, but testing took longer.",
+   "accept": [
+    "to"
+   ],
+   "cls": "part",
+   "chips": [
+    "for",
+    "at",
+    "on"
+   ]
+  },
+  {
+   "id": "ocl-0617",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "fp.would-narr",
+   "why": {
+    "ok": {
+     "de": "Aus der Vergangenheit auf Späteres: would later open.",
+     "en": "From the past at something later: would later open."
+    },
+    "wrong": [
+     {
+      "if": [
+       "will"
+      ],
+      "de": "„will“ passt hier nicht. Gesucht ist „would“.",
+      "en": "“will” does not fit here. The word needed is “would”."
+     },
+     {
+      "if": [
+       "shall"
+      ],
+      "de": "„shall“ passt hier nicht. Gesucht ist „would“.",
+      "en": "“shall” does not fit here. The word needed is “would”."
+     },
+     {
+      "if": [
+       "are"
+      ],
+      "de": "„are“ passt hier nicht. Gesucht ist „would“.",
+      "en": "“are” does not fit here. The word needed is “would”."
+     }
+    ]
+   },
+   "text": "My grandparents moved to Hamburg in 1960, where they ___ later open a small bakery.",
+   "accept": [
+    "would"
+   ],
+   "cls": "aux",
+   "chips": [
+    "will",
+    "shall",
+    "are"
+   ]
+  },
+  {
+   "id": "ocl-0618",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "fp.was-to",
+   "why": {
+    "ok": {
+     "de": "Was to nennt den Plan: The trip was to start on Friday.",
+     "en": "Was to names the plan: The trip was to start on Friday."
+    },
+    "wrong": [
+     {
+      "if": [
+       "is"
+      ],
+      "de": "„is“ passt hier nicht. Gesucht ist „was“.",
+      "en": "“is” does not fit here. The word needed is “was”."
+     },
+     {
+      "if": [
+       "has"
+      ],
+      "de": "„has“ passt hier nicht. Gesucht ist „was“.",
+      "en": "“has” does not fit here. The word needed is “was”."
+     },
+     {
+      "if": [
+       "be"
+      ],
+      "de": "„be“ passt hier nicht. Gesucht ist „was“.",
+      "en": "“be” does not fit here. The word needed is “was”."
+     }
+    ]
+   },
+   "text": "The trip ___ to start on Friday, but the storm changed our plans.",
+   "accept": [
+    "was"
+   ],
+   "cls": "aux",
+   "chips": [
+    "is",
+    "has",
+    "be"
+   ]
+  },
+  {
+   "id": "ocl-0619",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "qn.none",
+   "why": {
+    "ok": {
+     "de": "Nach neither steht of und das bestimmte Nomen: neither of the proposals.",
+     "en": "After neither comes of and the specific noun: neither of the proposals."
+    },
+    "wrong": [
+     {
+      "if": [
+       "from"
+      ],
+      "de": "„from“ passt hier nicht. Gesucht ist „of“.",
+      "en": "“from” does not fit here. The word needed is “of”."
+     },
+     {
+      "if": [
+       "to"
+      ],
+      "de": "„to“ passt hier nicht. Gesucht ist „of“.",
+      "en": "“to” does not fit here. The word needed is “of”."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "„for“ passt hier nicht. Gesucht ist „of“.",
+      "en": "“for” does not fit here. The word needed is “of”."
+     }
+    ]
+   },
+   "text": "Neither ___ the two proposals fits our timeline, so we need a third option.",
+   "accept": [
+    "of"
+   ],
+   "cls": "prep",
+   "chips": [
+    "from",
+    "to",
+    "for"
+   ]
+  },
+  {
+   "id": "ocl-0620",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "qn.hardly",
+   "why": {
+    "ok": {
+     "de": "Hardly ever heißt „fast nie“. Hardly ist schon verneint.",
+     "en": "Hardly ever means “almost never”. Hardly is already negative."
+    },
+    "wrong": [
+     {
+      "if": [
+       "nearly"
+      ],
+      "de": "„nearly“ passt hier nicht. Gesucht ist „hardly“.",
+      "en": "“nearly” does not fit here. The word needed is “hardly”."
+     },
+     {
+      "if": [
+       "almost"
+      ],
+      "de": "„almost“ passt hier nicht. Gesucht ist „hardly“.",
+      "en": "“almost” does not fit here. The word needed is “hardly”."
+     },
+     {
+      "if": [
+       "none"
+      ],
+      "de": "„none“ passt hier nicht. Gesucht ist „hardly“.",
+      "en": "“none” does not fit here. The word needed is “hardly”."
+     }
+    ]
+   },
+   "text": "We have ___ ever had a complaint about this product line.",
+   "accept": [
+    "hardly",
+    "scarcely",
+    "barely"
+   ],
+   "cls": "adv",
+   "chips": [
+    "nearly",
+    "almost",
+    "none"
+   ]
+  },
+  {
+   "id": "ocl-0621",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "qn.no-longer",
+   "why": {
+    "ok": {
+     "de": "No longer heißt „nicht mehr“.",
+     "en": "No longer means “not any more”."
+    },
+    "wrong": [
+     {
+      "if": [
+       "later"
+      ],
+      "de": "„later“ passt hier nicht. Gesucht ist „longer“.",
+      "en": "“later” does not fit here. The word needed is “longer”."
+     },
+     {
+      "if": [
+       "farther"
+      ],
+      "de": "„farther“ passt hier nicht. Gesucht ist „longer“.",
+      "en": "“farther” does not fit here. The word needed is “longer”."
+     },
+     {
+      "if": [
+       "shorter"
+      ],
+      "de": "„shorter“ passt hier nicht. Gesucht ist „longer“.",
+      "en": "“shorter” does not fit here. The word needed is “longer”."
+     }
+    ]
+   },
+   "text": "The old contract is no ___ valid because it expired in June.",
+   "accept": [
+    "longer"
+   ],
+   "cls": "adv",
+   "chips": [
+    "later",
+    "farther",
+    "shorter"
+   ]
+  },
+  {
+   "id": "ocl-0622",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "qn.number",
+   "why": {
+    "ok": {
+     "de": "A large number of steht vor zählbaren Nomen im Plural.",
+     "en": "A large number of is used before countable plural nouns."
+    },
+    "wrong": [
+     {
+      "if": [
+       "amount"
+      ],
+      "de": "„amount“ passt hier nicht. Gesucht ist „number“.",
+      "en": "“amount” does not fit here. The word needed is “number”."
+     },
+     {
+      "if": [
+       "deal"
+      ],
+      "de": "„deal“ passt hier nicht. Gesucht ist „number“.",
+      "en": "“deal” does not fit here. The word needed is “number”."
+     },
+     {
+      "if": [
+       "quantity"
+      ],
+      "de": "„quantity“ passt hier nicht. Gesucht ist „number“.",
+      "en": "“quantity” does not fit here. The word needed is “number”."
+     }
+    ]
+   },
+   "text": "A large ___ of our customers have switched to the annual plan.",
+   "accept": [
+    "number"
+   ],
+   "cls": "det",
+   "chips": [
+    "amount",
+    "deal",
+    "quantity"
+   ]
+  },
+  {
+   "id": "ocl-0623",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "qn.hardly",
+   "why": {
+    "ok": {
+     "de": "Hardly any heißt „kaum etwas“. Hardly ist schon verneint.",
+     "en": "Hardly any means “almost none”. Hardly is already negative."
+    },
+    "wrong": [
+     {
+      "if": [
+       "nearly"
+      ],
+      "de": "„nearly“ passt hier nicht. Gesucht ist „hardly“.",
+      "en": "“nearly” does not fit here. The word needed is “hardly”."
+     },
+     {
+      "if": [
+       "almost"
+      ],
+      "de": "„almost“ passt hier nicht. Gesucht ist „hardly“.",
+      "en": "“almost” does not fit here. The word needed is “hardly”."
+     },
+     {
+      "if": [
+       "none"
+      ],
+      "de": "„none“ passt hier nicht. Gesucht ist „hardly“.",
+      "en": "“none” does not fit here. The word needed is “hardly”."
+     }
+    ]
+   },
+   "text": "There is ___ any milk left, so I will go to the shop.",
+   "accept": [
+    "hardly",
+    "barely",
+    "scarcely"
+   ],
+   "cls": "adv",
+   "chips": [
+    "nearly",
+    "almost",
+    "none"
+   ]
+  },
+  {
+   "id": "ocl-0624",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "qn.none",
+   "why": {
+    "ok": {
+     "de": "None of them heißt „keiner von ihnen“.",
+     "en": "None of them means “not one of them”."
+    },
+    "wrong": [
+     {
+      "if": [
+       "no"
+      ],
+      "de": "„no“ passt hier nicht. Gesucht ist „none“.",
+      "en": "“no” does not fit here. The word needed is “none”."
+     },
+     {
+      "if": [
+       "nobody"
+      ],
+      "de": "„nobody“ passt hier nicht. Gesucht ist „none“.",
+      "en": "“nobody” does not fit here. The word needed is “none”."
+     },
+     {
+      "if": [
+       "not"
+      ],
+      "de": "„not“ passt hier nicht. Gesucht ist „none“.",
+      "en": "“not” does not fit here. The word needed is “none”."
+     }
+    ]
+   },
+   "text": "I invited ten colleagues, but ___ of them could come on Saturday.",
+   "accept": [
+    "none"
+   ],
+   "cls": "pron",
+   "chips": [
+    "no",
+    "nobody",
+    "not"
+   ]
+  }
+ ]
+}

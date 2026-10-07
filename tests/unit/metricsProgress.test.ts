@@ -116,7 +116,7 @@ describe('grammarDistribution', () => {
   it('alle Themen ohne Dokumente: Verteilung nach Startwert, Neu = nie geübt', () => {
     const d = grammarDistribution(ids, new Map(), NOW);
     expect(d.total).toBe(ids.length);
-    expect(ids.length).toBe(43);
+    expect(ids.length).toBe(47);
     expect(d.counts.new).toBe(ids.length);
     expect(d.safe).toBe(0);
     expect(d.perTopic).toHaveLength(ids.length);

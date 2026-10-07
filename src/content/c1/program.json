@@ -1,23 +1,6 @@
 {
  "v": 1,
- "pending": {
-  "stative-adv": {
-   "de": "Verlaufsform mit Zustandsverben",
-   "en": "Continuous with stative verbs"
-  },
-  "future-past": {
-   "de": "Zukunft in der Vergangenheit",
-   "en": "Future in the past"
-  },
-  "modals-prob": {
-   "de": "Wahrscheinlichkeit mit Modalverben",
-   "en": "Probability with modals"
-  },
-  "quant-neg": {
-   "de": "Verneinung und Mengen",
-   "en": "Negation and quantity"
-  }
- },
+ "pending": {},
  "chapters": [
   {
    "id": "k1",

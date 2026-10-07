@@ -50,13 +50,12 @@ test.describe('Handy 360', () => {
     expect(errors).toEqual([]);
   });
 
-  test('Kapitel 5 hat noch ein neues Thema ohne Inhalte (P37): „Kommt bald“ statt leer; Zahlen gleich dem Lernpfad', async ({ page }) => {
+  test('Kapitel 5 hat alle Themen mit Inhalten (kein „Kommt bald“ mehr); Zahlen gleich dem Lernpfad', async ({ page }) => {
     const { errors } = await start(page);
     await page.locator('[data-testid="program-chapter"][data-chapter="k5"] [data-testid="program-chapter-open"]').click();
     const sheet = page.getByTestId('chapter-sheet');
     await expect(sheet).toHaveAttribute('data-chapter', 'k5');
-    await expect(sheet.locator('[data-testid="chapter-topic"][data-exists="false"]')).toHaveCount(1);
-    await expect(sheet.locator('[data-testid="chapter-topic"][data-exists="false"]').first()).toContainText('Kommt bald');
+    await expect(sheet.locator('[data-testid="chapter-topic"][data-exists="false"]')).toHaveCount(0);
     await page.keyboard.press('Escape');
 
     // Invariante: Muster sicher je Kapitel = Summe der Themenzeilen des Lernpfads.

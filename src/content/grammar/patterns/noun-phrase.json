@@ -1,317 +1,317 @@
 {
-  "topic": "noun-phrase",
-  "canDo": {
-    "de": "Ich kann Nomen ausbauen: mit Sätzen ohne that, mit Partizipien, mit ’s und of und mit to-Infinitiv („the most reliable system we have tested“).",
-    "en": "I can build around nouns: with clauses without that, with participles, with ’s and of, and with the to-infinitive (“the most reliable system we have tested”)."
-  },
-  "order": [
-    "np.contact",
-    "np.participle",
-    "np.of-s",
-    "np.to-inf"
+ "topic": "noun-phrase",
+ "canDo": {
+  "de": "Ich kann Nomen ausbauen: mit Sätzen ohne that, mit Partizipien, mit ’s und of und mit to-Infinitiv („the most reliable system we have tested“).",
+  "en": "I can build around nouns: with clauses without that, with participles, with ’s and of, and with the to-infinitive (“the most reliable system we have tested”)."
+ },
+ "order": [
+  "np.contact",
+  "np.participle",
+  "np.of-s",
+  "np.to-inf"
+ ],
+ "introPlan": [
+  [
+   "np.contact",
+   "np.participle"
   ],
-  "introPlan": [
-    [
-      "np.contact",
-      "np.participle"
-    ],
-    [
-      "np.of-s",
-      "np.to-inf"
-    ]
-  ],
-  "decide": {
-    "de": [
-      "Ist das Relativpronomen Objekt? Dann darf es wegfallen: the system we tested.",
-      "Gibt es ein Verb, das das Nomen tut oder erleidet? Nimm -ing oder die 3. Form: the team working, the files stored.",
-      "Folgt first, last, only oder way? Dann passt to + Grundform: the first to sign."
-    ],
-    "en": [
-      "Is the relative pronoun the object? Then it may be dropped: the system we tested.",
-      "Is there a verb the noun does or undergoes? Use -ing or the past participle: the team working, the files stored.",
-      "Does first, last, only or way come before? Then to + base form fits: the first to sign."
-    ]
-  },
-  "patterns": [
-    {
-      "id": "np.contact",
-      "name": {
-        "de": "Nomen + Satz ohne that · the system we tested",
-        "en": "noun + clause without that · the system we tested"
-      },
-      "form": {
-        "de": "the + Superlativ / first / only + Nomen + (that) + Subjekt + Verb",
-        "en": "the + superlative / first / only + noun + (that) + subject + verb"
-      },
-      "use": {
-        "de": "Ein Relativsatz darf sein Relativpronomen verlieren, wenn es Objekt ist. Nach Superlativen, first, last und only steht er besonders oft.",
-        "en": "A relative clause may drop its pronoun when the pronoun is the object. It does so most often after superlatives, first, last and only."
-      },
-      "signals": [
-        "the most reliable",
-        "the only",
-        "the first",
-        "the best",
-        "the one we"
-      ],
-      "ex": [
-        {
-          "en": "This is the most reliable system we have tested.",
-          "de": "Das ist das zuverlässigste System, das wir getestet haben.",
-          "ctx": "meeting"
-        },
-        {
-          "en": "The report you sent was very helpful.",
-          "de": "Der Bericht, den Sie geschickt haben, war sehr hilfreich.",
-          "ctx": "mail"
-        },
-        {
-          "en": "Is this the only option we have?",
-          "de": "Ist das die einzige Möglichkeit, die wir haben?",
-          "ctx": "talk"
-        }
-      ],
-      "trap": {
-        "bad": "This is the most reliable system what we have tested.",
-        "good": "This is the most reliable system we have tested.",
-        "cause": {
-          "de": "Das Deutsche sagt „das System, das wir getestet haben“ mit Relativpronomen. Im Englischen entfällt es oft ganz, und „what“ ist nach einem Nomen nie ein Relativpronomen.",
-          "en": "German says “das System, das wir getestet haben” with a relative pronoun. English often drops it, and “what” is never a relative pronoun after a noun."
-        }
-      },
-      "contrast": {
-        "with": "rc.who-which",
-        "a": "the system we tested",
-        "b": "the system that we tested",
-        "diff": {
-          "de": "Gleiche Bedeutung. Ohne that klingt es knapper.",
-          "en": "Same meaning. Without that it sounds shorter."
-        }
-      },
-      "ccq": [
-        {
-          "s": "This is the best offer we have received.",
-          "q": {
-            "de": "Ist es das beste Angebot, das wir bekommen haben?",
-            "en": "Is it the best offer we have received?"
-          },
-          "a": true
-        }
-      ],
-      "nudge": {
-        "de": "Ist das Relativpronomen Objekt? Dann darf es wegfallen. Subjekt und Verb folgen direkt auf das Nomen.",
-        "en": "Is the relative pronoun the object? Then it may be dropped. Subject and verb follow the noun directly."
-      }
-    },
-    {
-      "id": "np.participle",
-      "name": {
-        "de": "Partizip statt Relativsatz · the files stored",
-        "en": "participle instead of a clause · the files stored"
-      },
-      "form": {
-        "de": "Nomen + -ing / 3. Form (+ Zusatz)",
-        "en": "noun + -ing / past participle (+ phrase)"
-      },
-      "use": {
-        "de": "Statt eines Relativsatzes steht ein Partizip direkt hinter dem Nomen: -ing für aktive, die 3. Form für passive Bedeutung. Das macht den Satz kürzer.",
-        "en": "Instead of a relative clause a participle stands right after the noun: -ing for active, the past participle for passive meaning. This makes the sentence shorter."
-      },
-      "signals": [
-        "the team working",
-        "the files stored",
-        "the people involved",
-        "any questions raised",
-        "the issues related"
-      ],
-      "ex": [
-        {
-          "en": "The team working on the migration meets every Monday.",
-          "de": "Das Team, das an der Migration arbeitet, trifft sich montags.",
-          "ctx": "meeting"
-        },
-        {
-          "en": "All files stored in the cloud are encrypted.",
-          "de": "Alle in der Cloud gespeicherten Dateien sind verschlüsselt.",
-          "ctx": "mail"
-        },
-        {
-          "en": "Please contact the people involved in the project.",
-          "de": "Bitte kontaktieren Sie die am Projekt Beteiligten.",
-          "ctx": "talk"
-        }
-      ],
-      "trap": {
-        "bad": "The people involving in the project agreed.",
-        "good": "The people involved in the project agreed.",
-        "cause": {
-          "de": "Die Beteiligten werden beteiligt, sie beteiligen nichts. Passive Bedeutung braucht die 3. Form, nicht -ing.",
-          "en": "The people are involved by others, they do not involve anything. Passive meaning needs the past participle, not -ing."
-        }
-      },
-      "contrast": {
-        "with": "rc.who-which",
-        "a": "the files that are stored in the cloud",
-        "b": "the files stored in the cloud",
-        "diff": {
-          "de": "Gleiche Bedeutung. Das Partizip lässt that are weg.",
-          "en": "Same meaning. The participle drops that are."
-        }
-      },
-      "ccq": [
-        {
-          "s": "The people involved in the project agreed.",
-          "q": {
-            "de": "Sind die Personen am Projekt beteiligt?",
-            "en": "Are the people involved in the project?"
-          },
-          "a": true
-        }
-      ],
-      "nudge": {
-        "de": "Hat das Nomen etwas getan (-ing) oder wurde mit ihm etwas getan (3. Form)?",
-        "en": "Is the noun doing something (-ing) or having something done to it (past participle)?"
-      }
-    },
-    {
-      "id": "np.of-s",
-      "name": {
-        "de": "'s oder of · the company's CEO",
-        "en": "'s or of · the company's CEO"
-      },
-      "form": {
-        "de": "Person / Firma + 's + Nomen · Nomen + of + Sache",
-        "en": "Person / company + 's + noun · noun + of + thing"
-      },
-      "use": {
-        "de": "Bei Personen, Firmen und Zeitangaben steht oft ’s: the manager’s decision, today’s meeting. Bei Dingen und längeren Gruppen steht of: the end of the year.",
-        "en": "With people, companies and time words ’s is common: the manager’s decision, today’s meeting. With things and longer groups of is used: the end of the year."
-      },
-      "signals": [
-        "'s",
-        "s'",
-        "of the",
-        "a day's",
-        "today's"
-      ],
-      "ex": [
-        {
-          "en": "The company's new CEO starts on Monday.",
-          "de": "Der neue Chef der Firma fängt am Montag an.",
-          "ctx": "meeting"
-        },
-        {
-          "en": "We reached the end of the quarter.",
-          "de": "Wir haben das Ende des Quartals erreicht.",
-          "ctx": "talk"
-        },
-        {
-          "en": "Please send me yesterday's figures.",
-          "de": "Schicken Sie mir bitte die Zahlen von gestern.",
-          "ctx": "mail"
-        }
-      ],
-      "trap": {
-        "bad": "The managers decision surprised everyone.",
-        "good": "The manager's decision surprised everyone.",
-        "cause": {
-          "de": "Der Besitz steht mit Apostroph und s. Das Deutsche kennt diesen Apostroph nicht, daher fehlt er leicht.",
-          "en": "Possession takes an apostrophe and s. German has no such apostrophe, so it is easily missing."
-        }
-      },
-      "contrast": {
-        "with": "pn.of",
-        "a": "the manager's decision",
-        "b": "the decision of the manager",
-        "diff": {
-          "de": "Beides ist möglich. Das ’s klingt bei Personen natürlicher, of bei längeren Gruppen.",
-          "en": "Both are possible. The ’s sounds more natural with people, of with longer groups."
-        }
-      },
-      "ccq": [
-        {
-          "s": "Today's meeting was cancelled.",
-          "q": {
-            "de": "Wurde das Meeting von heute abgesagt?",
-            "en": "Was the meeting from today cancelled?"
-          },
-          "a": true
-        }
-      ],
-      "nudge": {
-        "de": "Ist der Besitzer eine Person, eine Firma oder eine Zeitangabe? Dann ’s. Sonst of.",
-        "en": "Is the owner a person, a company or a time word? Then ’s. Otherwise of."
-      }
-    },
-    {
-      "id": "np.to-inf",
-      "name": {
-        "de": "Nomen + to-Infinitiv · the first to sign",
-        "en": "noun + to-infinitive · the first to sign"
-      },
-      "form": {
-        "de": "the first / last / only / best way + to + Grundform",
-        "en": "the first / last / only / best way + to + base form"
-      },
-      "use": {
-        "de": "Nach first, last, only, next und nach Nomen wie way, time, chance steht der to-Infinitiv. Er bestimmt das Nomen näher.",
-        "en": "After first, last, only, next and after nouns like way, time, chance the to-infinitive follows. It describes the noun more closely."
-      },
-      "signals": [
-        "the first to",
-        "the only one to",
-        "the best way to",
-        "a chance to",
-        "the last to"
-      ],
-      "ex": [
-        {
-          "en": "She was the first customer to sign the new contract.",
-          "de": "Sie war die erste Kundin, die den neuen Vertrag unterschrieb.",
-          "ctx": "talk"
-        },
-        {
-          "en": "This is the best way to reduce costs.",
-          "de": "Das ist der beste Weg, die Kosten zu senken.",
-          "ctx": "meeting"
-        },
-        {
-          "en": "We need someone to lead the migration.",
-          "de": "Wir brauchen jemanden, der die Migration leitet.",
-          "ctx": "mail"
-        }
-      ],
-      "trap": {
-        "bad": "This is the best way for reduce costs.",
-        "good": "This is the best way to reduce costs.",
-        "cause": {
-          "de": "Das Deutsche sagt „der beste Weg, um … zu“. Im Englischen folgt nach way direkt to + Grundform, nicht for.",
-          "en": "German says “der beste Weg, um … zu”. In English to + base form follows way directly, not for."
-        }
-      },
-      "contrast": {
-        "with": "np.contact",
-        "a": "the first customer to sign",
-        "b": "the first customer who signed",
-        "diff": {
-          "de": "Gleiche Aussage. To sign ist knapper und passt nach first, last und only.",
-          "en": "Same statement. To sign is shorter and fits after first, last and only."
-        }
-      },
-      "ccq": [
-        {
-          "s": "She was the first customer to sign.",
-          "q": {
-            "de": "Haben andere Kunden vor ihr unterschrieben?",
-            "en": "Did other customers sign before her?"
-          },
-          "a": false
-        }
-      ],
-      "nudge": {
-        "de": "Folgt auf first, last, only oder way eine Handlung? Dann passt to + Grundform.",
-        "en": "Does an action follow first, last, only or way? Then to + base form fits."
-      }
-    }
+  [
+   "np.of-s",
+   "np.to-inf"
   ]
+ ],
+ "decide": {
+  "de": [
+   "Ist das Relativpronomen Objekt? Dann darf es wegfallen: the system we tested.",
+   "Gibt es ein Verb, das das Nomen tut oder erleidet? Nimm -ing oder die 3. Form: the team working, the files stored.",
+   "Folgt first, last, only oder way? Dann passt to + Grundform: the first to sign."
+  ],
+  "en": [
+   "Is the relative pronoun the object? Then it may be dropped: the system we tested.",
+   "Is there a verb the noun does or undergoes? Use -ing or the past participle: the team working, the files stored.",
+   "Does first, last, only or way come before? Then to + base form fits: the first to sign."
+  ]
+ },
+ "patterns": [
+  {
+   "id": "np.contact",
+   "name": {
+    "de": "Nomen + Satz ohne that · the system we tested",
+    "en": "noun + clause without that · the system we tested"
+   },
+   "form": {
+    "de": "the + Superlativ / first / only + Nomen + (that) + Subjekt + Verb",
+    "en": "the + superlative / first / only + noun + (that) + subject + verb"
+   },
+   "use": {
+    "de": "Ein Relativsatz darf sein Relativpronomen verlieren, wenn es Objekt ist. Nach Superlativen, first, last und only steht er besonders oft.",
+    "en": "A relative clause may drop its pronoun when the pronoun is the object. It does so most often after superlatives, first, last and only."
+   },
+   "signals": [
+    "the most reliable",
+    "the only",
+    "the first",
+    "the best",
+    "the one we"
+   ],
+   "ex": [
+    {
+     "en": "This is the most reliable system we have tested.",
+     "de": "Das ist das zuverlässigste System, das wir getestet haben.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "The report you sent was very helpful.",
+     "de": "Der Bericht, den Sie geschickt haben, war sehr hilfreich.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Is this the only option we have?",
+     "de": "Ist das die einzige Möglichkeit, die wir haben?",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "This is the most reliable system what we have tested.",
+    "good": "This is the most reliable system we have tested.",
+    "cause": {
+     "de": "Das Deutsche sagt „das System, das wir getestet haben“ mit Relativpronomen. Im Englischen entfällt es oft ganz, und „what“ ist nach einem Nomen nie ein Relativpronomen.",
+     "en": "German says “das System, das wir getestet haben” with a relative pronoun. English often drops it, and “what” is never a relative pronoun after a noun."
+    }
+   },
+   "contrast": {
+    "with": "rc.who-which",
+    "a": "the system we tested",
+    "b": "the system that we tested",
+    "diff": {
+     "de": "Gleiche Bedeutung. Ohne that klingt es knapper.",
+     "en": "Same meaning. Without that it sounds shorter."
+    }
+   },
+   "ccq": [
+    {
+     "s": "This is the best offer we have received.",
+     "q": {
+      "de": "Ist es das beste Angebot, das wir bekommen haben?",
+      "en": "Is it the best offer we have received?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Ist das Relativpronomen Objekt? Dann darf es wegfallen. Subjekt und Verb folgen direkt auf das Nomen.",
+    "en": "Is the relative pronoun the object? Then it may be dropped. Subject and verb follow the noun directly."
+   }
+  },
+  {
+   "id": "np.participle",
+   "name": {
+    "de": "Partizip statt Relativsatz · the files stored",
+    "en": "participle instead of a clause · the files stored"
+   },
+   "form": {
+    "de": "Nomen + -ing / 3. Form (+ Zusatz)",
+    "en": "noun + -ing / past participle (+ phrase)"
+   },
+   "use": {
+    "de": "Statt eines Relativsatzes steht ein Partizip direkt hinter dem Nomen: -ing für aktive, die 3. Form für passive Bedeutung. Das macht den Satz kürzer.",
+    "en": "Instead of a relative clause a participle stands right after the noun: -ing for active, the past participle for passive meaning. This makes the sentence shorter."
+   },
+   "signals": [
+    "the team working",
+    "the files stored",
+    "the people involved",
+    "any questions raised",
+    "the issues related"
+   ],
+   "ex": [
+    {
+     "en": "The team working on the migration meets every Monday.",
+     "de": "Das Team, das an der Migration arbeitet, trifft sich montags.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "All files stored in the cloud are encrypted.",
+     "de": "Alle in der Cloud gespeicherten Dateien sind verschlüsselt.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Please contact the people involved in the project.",
+     "de": "Bitte kontaktieren Sie die am Projekt Beteiligten.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The people involving in the project agreed.",
+    "good": "The people involved in the project agreed.",
+    "cause": {
+     "de": "Die Beteiligten werden beteiligt, sie beteiligen nichts. Passive Bedeutung braucht die 3. Form, nicht -ing.",
+     "en": "The people are involved by others, they do not involve anything. Passive meaning needs the past participle, not -ing."
+    }
+   },
+   "contrast": {
+    "with": "rc.who-which",
+    "a": "the files that are stored in the cloud",
+    "b": "the files stored in the cloud",
+    "diff": {
+     "de": "Gleiche Bedeutung. Das Partizip lässt that are weg.",
+     "en": "Same meaning. The participle drops that are."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The people involved in the project agreed.",
+     "q": {
+      "de": "Sind die Personen am Projekt beteiligt?",
+      "en": "Are the people involved in the project?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Hat das Nomen etwas getan (-ing) oder wurde mit ihm etwas getan (3. Form)?",
+    "en": "Is the noun doing something (-ing) or having something done to it (past participle)?"
+   }
+  },
+  {
+   "id": "np.of-s",
+   "name": {
+    "de": "'s oder of · the company's CEO",
+    "en": "'s or of · the company's CEO"
+   },
+   "form": {
+    "de": "Person / Firma + 's + Nomen · Nomen + of + Sache",
+    "en": "Person / company + 's + noun · noun + of + thing"
+   },
+   "use": {
+    "de": "Bei Personen, Firmen und Zeitangaben steht oft ’s: the manager’s decision, today’s meeting. Bei Dingen und längeren Gruppen steht of: the end of the year.",
+    "en": "With people, companies and time words ’s is common: the manager’s decision, today’s meeting. With things and longer groups of is used: the end of the year."
+   },
+   "signals": [
+    "'s",
+    "s'",
+    "of the",
+    "a day's",
+    "today's"
+   ],
+   "ex": [
+    {
+     "en": "The company's new CEO starts on Monday.",
+     "de": "Der neue Chef der Firma fängt am Montag an.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "We reached the end of the quarter.",
+     "de": "Wir haben das Ende des Quartals erreicht.",
+     "ctx": "talk"
+    },
+    {
+     "en": "Please send me yesterday's figures.",
+     "de": "Schicken Sie mir bitte die Zahlen von gestern.",
+     "ctx": "mail"
+    }
+   ],
+   "trap": {
+    "bad": "The managers decision surprised everyone.",
+    "good": "The manager's decision surprised everyone.",
+    "cause": {
+     "de": "Der Besitz steht mit Apostroph und s. Das Deutsche kennt diesen Apostroph nicht, daher fehlt er leicht.",
+     "en": "Possession takes an apostrophe and s. German has no such apostrophe, so it is easily missing."
+    }
+   },
+   "contrast": {
+    "with": "pn.of",
+    "a": "the manager's decision",
+    "b": "the decision of the manager",
+    "diff": {
+     "de": "Beides ist möglich. Das ’s klingt bei Personen natürlicher, of bei längeren Gruppen.",
+     "en": "Both are possible. The ’s sounds more natural with people, of with longer groups."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Today's meeting was cancelled.",
+     "q": {
+      "de": "Wurde das Meeting von heute abgesagt?",
+      "en": "Was the meeting from today cancelled?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Ist der Besitzer eine Person, eine Firma oder eine Zeitangabe? Dann ’s. Sonst of.",
+    "en": "Is the owner a person, a company or a time word? Then ’s. Otherwise of."
+   }
+  },
+  {
+   "id": "np.to-inf",
+   "name": {
+    "de": "Nomen + to-Infinitiv · the first to sign",
+    "en": "noun + to-infinitive · the first to sign"
+   },
+   "form": {
+    "de": "the first / last / only / best way + to + Grundform",
+    "en": "the first / last / only / best way + to + base form"
+   },
+   "use": {
+    "de": "Nach first, last, only, next und nach Nomen wie way, time, chance steht der to-Infinitiv. Er bestimmt das Nomen näher.",
+    "en": "After first, last, only, next and after nouns like way, time, chance the to-infinitive follows. It describes the noun more closely."
+   },
+   "signals": [
+    "the first to",
+    "the only one to",
+    "the best way to",
+    "a chance to",
+    "the last to"
+   ],
+   "ex": [
+    {
+     "en": "She was the first customer to sign the new contract.",
+     "de": "Sie war die erste Kundin, die den neuen Vertrag unterschrieb.",
+     "ctx": "talk"
+    },
+    {
+     "en": "This is the best way to reduce costs.",
+     "de": "Das ist der beste Weg, die Kosten zu senken.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "We need someone to lead the migration.",
+     "de": "Wir brauchen jemanden, der die Migration leitet.",
+     "ctx": "mail"
+    }
+   ],
+   "trap": {
+    "bad": "This is the best way for reduce costs.",
+    "good": "This is the best way to reduce costs.",
+    "cause": {
+     "de": "Das Deutsche sagt „der beste Weg, um … zu“. Im Englischen folgt nach way direkt to + Grundform, nicht for.",
+     "en": "German says “der beste Weg, um … zu”. In English to + base form follows way directly, not for."
+    }
+   },
+   "contrast": {
+    "with": "np.contact",
+    "a": "the first customer to sign",
+    "b": "the first customer who signed",
+    "diff": {
+     "de": "Gleiche Aussage. To sign ist knapper und passt nach first, last und only.",
+     "en": "Same statement. To sign is shorter and fits after first, last and only."
+    }
+   },
+   "ccq": [
+    {
+     "s": "She was the first customer to sign.",
+     "q": {
+      "de": "Haben andere Kunden vor ihr unterschrieben?",
+      "en": "Did other customers sign before her?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Folgt auf first, last, only oder way eine Handlung? Dann passt to + Grundform.",
+    "en": "Does an action follow first, last, only or way? Then to + base form fits."
+   }
+  }
+ ]
 }

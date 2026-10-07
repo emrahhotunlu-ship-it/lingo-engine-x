@@ -386,6 +386,62 @@
     "This is the most reliable system we have tested.",
     "She was the first customer to sign the new contract."
    ]
+  },
+  {
+   "id": "modals-prob",
+   "group": "Grammatik-Pfad",
+   "level": "C1",
+   "p0": 0.45,
+   "name": "Wahrscheinlichkeit mit Modalverben",
+   "name_en": "Probability with modals",
+   "rule": "Wie wahrscheinlich etwas ist, sagst du in Stufen: „may well“ (durchaus möglich), „is likely to“ (wahrscheinlich), „is bound to“ (so gut wie sicher) und „There is a good chance that …“.",
+   "rule_en": "You express how probable something is in steps: “may well” (quite possible), “is likely to” (probable), “is bound to” (almost certain) and “There is a good chance that …”.",
+   "ex": [
+    "The client may well reject the first offer.",
+    "Prices are bound to rise after the merger."
+   ]
+  },
+  {
+   "id": "stative-adv",
+   "group": "Grammatik-Pfad",
+   "level": "C1",
+   "p0": 0.45,
+   "name": "Verlaufsform mit Zustandsverben",
+   "name_en": "Continuous with stative verbs",
+   "rule": "Die Verlaufsform zeigt Wandel, Höflichkeit und Verhalten: „We are seeing growth“, „I was hoping you could help“, „You are being difficult“. Reine Zustände wie know, need oder belong stehen dagegen in der einfachen Form.",
+   "rule_en": "The continuous shows change, politeness and behavior: “We are seeing growth”, “I was hoping you could help”, “You are being difficult”. Pure states like know, need or belong stay in the simple form.",
+   "ex": [
+    "We are seeing a clear rise in demand.",
+    "I was hoping you could review the draft."
+   ]
+  },
+  {
+   "id": "future-past",
+   "group": "Grammatik-Pfad",
+   "level": "C1",
+   "p0": 0.45,
+   "name": "Zukunft in der Vergangenheit",
+   "name_en": "Future in the past",
+   "rule": "Wenn du aus der Vergangenheit auf etwas Späteres blickst, ändern sich die Formen: „was going to“ (Plan), „was about to“ (gerade im Begriff), „would“ (später geschah) und „was to“ (vorgesehen). Häufig ging der Plan nicht auf.",
+   "rule_en": "When you look from the past at something later, the forms change: “was going to” (plan), “was about to” (on the point of), “would” (later happened) and “was to” (meant to). Often the plan did not work out.",
+   "ex": [
+    "We were going to launch in May, but the supplier was late.",
+    "She joined in 2015 and would later lead the Berlin office."
+   ]
+  },
+  {
+   "id": "quant-neg",
+   "group": "Grammatik-Pfad",
+   "level": "C1",
+   "p0": 0.45,
+   "name": "Verneinung und Mengen",
+   "name_en": "Negation and quantity",
+   "rule": "Verneinung und Mengen haben feste Formen: „none of“ und „neither of“ für „keiner“, „hardly“ und „scarcely“ für „kaum“ (schon verneint), „no longer“ für „nicht mehr“ und „a number of“ gegen „the number of“.",
+   "rule_en": "Negation and quantity have fixed forms: “none of” and “neither of” for “not one”, “hardly” and “scarcely” for “barely” (already negative), “no longer” for “not any more” and “a number of” versus “the number of”.",
+   "ex": [
+    "None of the suppliers has replied yet.",
+    "We no longer offer this service."
+   ]
   }
  ],
  "rules": {
@@ -3005,6 +3061,510 @@
      "why": [
       "Das Deutsche sagt „der beste Weg, um … zu“. Im Englischen folgt nach way direkt to + Grundform, nicht for.",
       "German says “der beste Weg, um … zu”. In English to + base form follows way directly, not for."
+     ]
+    }
+   ]
+  },
+  "modals-prob": {
+   "core": [
+    "Wahrscheinlichkeit hat Stufen: may well (durchaus möglich), is likely to (wahrscheinlich), is bound to (so gut wie sicher). Dazu kommt der Nominalstil: There is a good chance that …",
+    "Probability comes in steps: may well (quite possible), is likely to (probable), is bound to (almost certain). The noun style adds: There is a good chance that …"
+   ],
+   "why": [
+    "Im Berufsalltag sagst du nicht nur „vielleicht“. Wer Stufen kennt, schätzt klar ein und bleibt trotzdem vorsichtig, etwa in Prognosen, Risikoberichten und Meetings.",
+    "At work you say more than “maybe”. If you know the steps you can judge clearly and still stay careful, for example in forecasts, risk reports and meetings."
+   ],
+   "contrast": [
+    "Nicht verwechseln: may well ist stärker als may, aber schwächer als bound to. Nach bound und likely steht to + Grundform, nach chance ein that-Satz oder of.",
+    "Do not mix up: may well is stronger than may but weaker than bound to. After bound and likely comes to + base form, after chance a that-clause or of."
+   ],
+   "steps": [
+    [
+     "Wie sicher bist du? Wähle die Stufe.",
+     "Durchaus möglich: may/might/could well + Grundform.",
+     "Wahrscheinlich oder fast sicher: likely to, bound to + Grundform.",
+     "Sachlich: there is a good chance that …"
+    ],
+    [
+     "How sure are you? Choose the step.",
+     "Quite possible: may/might/could well + base form.",
+     "Probable or almost certain: likely to, bound to + base form.",
+     "Factual: there is a good chance that …"
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "may well, might well",
+      "may well, might well"
+     ],
+     "may / might / could + well + base form",
+     "The client may well reject the first offer."
+    ],
+    [
+     [
+      "be bound to, be sure to",
+      "be bound to, be sure to"
+     ],
+     "be bound / sure / certain + to + base form",
+     "Prices are bound to rise after the merger."
+    ],
+    [
+     [
+      "be likely to, be unlikely to",
+      "be likely to, be unlikely to"
+     ],
+     "be (un)likely + to + base form · It is likely that …",
+     "The update is likely to be ready on Friday."
+    ],
+    [
+     [
+      "a good chance, highly probable",
+      "a good chance, highly probable"
+     ],
+     "There is a (good) chance that … · It is (highly) probable that …",
+     "There is a good chance that the supplier will agree."
+    ]
+   ],
+   "signals": [
+    [
+     "may well / might well",
+     [
+      "may well, might well",
+      "may well, might well"
+     ]
+    ],
+    [
+     "is bound to / are bound to",
+     [
+      "be bound to, be sure to",
+      "be bound to, be sure to"
+     ]
+    ],
+    [
+     "is likely to / is unlikely to",
+     [
+      "be likely to, be unlikely to",
+      "be likely to, be unlikely to"
+     ]
+    ],
+    [
+     "a good chance / a slim chance",
+     [
+      "a good chance, highly probable",
+      "a good chance, highly probable"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "The client may be well reject the first offer.",
+     "good": "The client may well reject the first offer.",
+     "why": [
+      "Das deutsche „durchaus“ steht frei im Satz. Im Englischen steht well fest direkt hinter may, might oder could, ohne be dazwischen.",
+      "The German “durchaus” can stand almost anywhere. In English well stands right after may, might or could, with no be between them."
+     ]
+    },
+    {
+     "bad": "Prices are bound rising after the merger.",
+     "good": "Prices are bound to rise after the merger.",
+     "why": [
+      "Nach bound steht to und die Grundform. Das -ing kommt von Wendungen wie „look forward to“ und passt hier nicht.",
+      "After bound comes to and the base form. The -ing comes from phrases like “look forward to” and does not fit here."
+     ]
+    },
+    {
+     "bad": "The update is likely that it is ready on Friday.",
+     "good": "The update is likely to be ready on Friday.",
+     "why": [
+      "Nach dem Subjekt steht likely + to + Grundform. „It is likely that …“ geht auch, aber dann beginnt der Satz mit it.",
+      "After the subject comes likely + to + base form. “It is likely that …” works too, but then the sentence starts with it."
+     ]
+    },
+    {
+     "bad": "It exists a good chance that the supplier will agree.",
+     "good": "There is a good chance that the supplier will agree.",
+     "why": [
+      "Das deutsche „es besteht“ führt zu „it exists“. Englisch sagt there is.",
+      "German “es besteht” leads to “it exists”. English says there is."
+     ]
+    }
+   ]
+  },
+  "stative-adv": {
+   "core": [
+    "Die Verlaufsform zeigt, dass etwas läuft, vorläufig ist oder höflich klingen soll. Zustände (know, need, belong) bleiben in der einfachen Form.",
+    "The continuous shows that something is under way, temporary, or meant to sound polite. States (know, need, belong) stay in the simple form."
+   ],
+   "why": [
+    "Im Beruf beschreibst du Trends („We are seeing …“) und bittest weich („I was wondering if …“). Wer die Grenze zu den Zustandsverben kennt, klingt sicher und nicht übertrieben.",
+    "At work you describe trends (“We are seeing …”) and ask softly (“I was wondering if …”). If you know the border to stative verbs you sound sure and not overdone."
+   ],
+   "contrast": [
+    "Nicht verwechseln: Im Deutschen gibt es keine Verlaufsform. Aus „ich kenne“ wird nie „I am knowing“. Aus „er ist müde“ wird nie „he is being tired“.",
+    "Do not mix up: German has no continuous. “Ich kenne” never becomes “I am knowing”. “Er ist müde” never becomes “he is being tired”."
+   ],
+   "steps": [
+    [
+     "Zustand, Meinung oder Besitz? Einfache Form.",
+     "Läuft die Veränderung gerade? are seeing, is getting.",
+     "Weiche Bitte? was hoping, was wondering + if you could.",
+     "Verhalten für kurze Zeit? is being + Adjektiv."
+    ],
+    [
+     "State, opinion or possession? Simple form.",
+     "Is a change under way? are seeing, is getting.",
+     "Soft request? was hoping, was wondering + if you could.",
+     "Behavior for a short time? is being + adjective."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "are seeing, are getting",
+      "are seeing, are getting"
+     ],
+     "be + -ing with seeing, finding, getting, becoming, growing",
+     "We are seeing a clear rise in demand."
+    ],
+    [
+     [
+      "was hoping, was wondering",
+      "was hoping, was wondering"
+     ],
+     "I was hoping / wondering / thinking + (that / if) + you could …",
+     "I was hoping you could review the draft."
+    ],
+    [
+     [
+      "is being, is always -ing",
+      "is being, is always -ing"
+     ],
+     "be being + behavior adjective · always + -ing for annoyance",
+     "You are being unreasonable about the deadline."
+    ],
+    [
+     [
+      "know, need, belong",
+      "know, need, belong"
+     ],
+     "Stative verb in the simple form: know, believe, understand, need, want, belong, own",
+     "We need a decision by Friday."
+    ]
+   ],
+   "signals": [
+    [
+     "are seeing / are finding",
+     [
+      "are seeing, are getting",
+      "are seeing, are getting"
+     ]
+    ],
+    [
+     "i was hoping / i am hoping",
+     [
+      "was hoping, was wondering",
+      "was hoping, was wondering"
+     ]
+    ],
+    [
+     "is being / are being",
+     [
+      "is being, is always -ing",
+      "is being, is always -ing"
+     ]
+    ],
+    [
+     "we need / i understand",
+     [
+      "know, need, belong",
+      "know, need, belong"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "Prices rise at the moment because of the new tax.",
+     "good": "Prices are rising at the moment because of the new tax.",
+     "why": [
+      "Mit „at the moment“ oder „currently“ läuft der Vorgang gerade. Dafür braucht das Englische die Verlaufsform, die einfache Form passt nicht.",
+      "With “at the moment” or “currently” the process is under way right now. English needs the continuous for that, the simple form does not fit."
+     ]
+    },
+    {
+     "bad": "I was wondering could you send me the file.",
+     "good": "I was wondering if you could send me the file.",
+     "why": [
+      "Nach wondering folgt ein Nebensatz mit if und normaler Satzstellung. Eine Frage mit vorgezogenem could passt hier nicht.",
+      "After wondering a clause with if and normal word order follows. A question with could in front does not fit here."
+     ]
+    },
+    {
+     "bad": "She is being tired after the long flight.",
+     "good": "She is tired after the long flight.",
+     "why": [
+      "Being steht nur bei Verhalten, das man steuern kann. Müdigkeit ist ein Zustand, deshalb heißt es einfach is tired.",
+      "Being is used only for behavior you can control. Tiredness is a state, so it is simply is tired."
+     ]
+    },
+    {
+     "bad": "I am knowing the answer to your question.",
+     "good": "I know the answer to your question.",
+     "why": [
+      "Know beschreibt einen Zustand. Zustände stehen in der einfachen Form, nicht mit be + -ing.",
+      "Know describes a state. States stay in the simple form, not with be + -ing."
+     ]
+    }
+   ]
+  },
+  "future-past": {
+   "core": [
+    "Von der Vergangenheit aus gesehen verschieben sich die Zukunftsformen: will wird would, am going to wird was going to. Dazu kommen was about to und was to.",
+    "Seen from the past, the future forms shift: will becomes would, am going to becomes was going to. Was about to and was to are added."
+   ],
+   "why": [
+    "Im Beruf erzählst du von geplatzten Plänen („We were going to launch …“) und Verläufen („She would later lead …“). Das klingt genau und erzählend.",
+    "At work you talk about plans that fell through (“We were going to launch …”) and careers (“She would later lead …”). It sounds precise and narrative."
+   ],
+   "contrast": [
+    "Nicht verwechseln: Das deutsche „sollte“ ist nicht immer should. Für Vorgesehenes aus der Vergangenheit sagt Englisch was to oder was supposed to.",
+    "Do not mix up: the German “sollte” is not always should. For something meant to happen in the past English says was to or was supposed to."
+   ],
+   "steps": [
+    [
+     "Blickst du aus der Vergangenheit auf Späteres?",
+     "Plan von damals: was going to.",
+     "Kurz davor: was about to + Grundform.",
+     "Später geschah es: would. Vorgesehen: was to."
+    ],
+    [
+     "Do you look from the past at something later?",
+     "Plan from back then: was going to.",
+     "Just before: was about to + base form.",
+     "It happened later: would. Meant to be: was to."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "was going to",
+      "was going to"
+     ],
+     "was / were going to + base form",
+     "We were going to launch in May, but the supplier was late."
+    ],
+    [
+     [
+      "was about to",
+      "was about to"
+     ],
+     "was / were about to + base form (… when …)",
+     "I was about to leave when the client called."
+    ],
+    [
+     [
+      "would",
+      "would"
+     ],
+     "would (later / soon / eventually) + base form",
+     "She joined the firm in 2015 and would later lead the Berlin office."
+    ],
+    [
+     [
+      "was to",
+      "was to"
+     ],
+     "was / were to + base form · was / were to have + participle",
+     "The new office was to open in June, but the permit was delayed."
+    ]
+   ],
+   "signals": [
+    [
+     "was going to / were going to",
+     [
+      "was going to",
+      "was going to"
+     ]
+    ],
+    [
+     "was about to / were about to",
+     [
+      "was about to",
+      "was about to"
+     ]
+    ],
+    [
+     "would later / would soon",
+     [
+      "would",
+      "would"
+     ]
+    ],
+    [
+     "was to / were to",
+     [
+      "was to",
+      "was to"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "We are going to launch in May, but the supplier was late.",
+     "good": "We were going to launch in May, but the supplier was late.",
+     "why": [
+      "Ein Plan aus der Vergangenheit braucht was oder were going to. Das Hilfsverb are gehört in die Gegenwart.",
+      "A plan from the past needs was or were going to. The auxiliary are belongs to the present."
+     ]
+    },
+    {
+     "bad": "I was about leaving when the client called.",
+     "good": "I was about to leave when the client called.",
+     "why": [
+      "Das deutsche „gerade am Gehen“ führt zu „about leaving“. Englisch sagt about to und die Grundform.",
+      "The German “gerade am Gehen” leads to “about leaving”. English says about to and the base form."
+     ]
+    },
+    {
+     "bad": "In 2015 she joined the firm and will later lead the Berlin office.",
+     "good": "In 2015 she joined the firm and would later lead the Berlin office.",
+     "why": [
+      "Wer aus der Vergangenheit auf Späteres blickt, braucht would. Will gehört in die Gegenwart.",
+      "If you look from the past at something later, you need would. Will belongs to the present."
+     ]
+    },
+    {
+     "bad": "The new office should open in June, but the permit was delayed.",
+     "good": "The new office was to open in June, but the permit was delayed.",
+     "why": [
+      "Das deutsche „sollte“ wird hier nicht zu should. Für einen Plan in der Vergangenheit gilt was to.",
+      "The German “sollte” does not become should here. For a plan in the past was to is used."
+     ]
+    }
+   ]
+  },
+  "quant-neg": {
+   "core": [
+    "Hardly, scarcely und barely sind schon verneint. None of und neither of stehen für „keiner“. No longer heißt „nicht mehr“. A number of nimmt Plural, the number of Singular.",
+    "Hardly, scarcely and barely are already negative. None of and neither of stand for “not one”. No longer means “not any more”. A number of takes plural, the number of singular."
+   ],
+   "why": [
+    "Im Beruf brauchst du genaue Mengen: „None of the suppliers …“, „We no longer offer …“, „The number of complaints has fallen“. Das klingt klar und sicher.",
+    "At work you need exact amounts: “None of the suppliers …”, “We no longer offer …”, “The number of complaints has fallen”. It sounds clear and sure."
+   ],
+   "contrast": [
+    "Nicht verwechseln: Das deutsche „nicht mehr“ ist bei der Zeit no longer, nicht no more. „Kaum“ braucht kein zweites not.",
+    "Do not mix up: the German “nicht mehr” is no longer for time, not no more. “Kaum” needs no second not."
+   ],
+   "steps": [
+    [
+     "Keiner von diesen? none of / neither of.",
+     "Kaum? hardly / scarcely / barely, ohne not.",
+     "Nicht mehr? no longer.",
+     "Einige oder die Zahl? a number of / the number of."
+    ],
+    [
+     "Not one of these? none of / neither of.",
+     "Barely? hardly / scarcely / barely, without not.",
+     "Not any more? no longer.",
+     "Several or the figure? a number of / the number of."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "none of, neither of",
+      "none of, neither of"
+     ],
+     "none of / neither of (two) / not any of + the + noun",
+     "None of the suppliers has replied yet."
+    ],
+    [
+     [
+      "hardly, scarcely, barely",
+      "hardly, scarcely, barely"
+     ],
+     "hardly / scarcely / barely + any / ever / enough (without not)",
+     "There was hardly any time left to prepare."
+    ],
+    [
+     [
+      "no longer, any more",
+      "no longer, any more"
+     ],
+     "no longer + verb · not … any longer / any more (at the end)",
+     "We no longer offer this service."
+    ],
+    [
+     [
+      "a number of, the number of",
+      "a number of, the number of"
+     ],
+     "a number of + plural (plural verb) · the number of + plural (singular verb)",
+     "A number of customers have complained about the delay."
+    ]
+   ],
+   "signals": [
+    [
+     "none of / neither of",
+     [
+      "none of, neither of",
+      "none of, neither of"
+     ]
+    ],
+    [
+     "hardly any / hardly ever",
+     [
+      "hardly, scarcely, barely",
+      "hardly, scarcely, barely"
+     ]
+    ],
+    [
+     "no longer / not any longer",
+     [
+      "no longer, any more",
+      "no longer, any more"
+     ]
+    ],
+    [
+     "a number of / the number of",
+     [
+      "a number of, the number of",
+      "a number of, the number of"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "No one of the suppliers has replied yet.",
+     "good": "None of the suppliers has replied yet.",
+     "why": [
+      "Für „keiner von …“ mit Nomen sagt man none of. No one of ist deutsch gedacht.",
+      "For “not one of …” with a noun you say none of. No one of is German thinking."
+     ]
+    },
+    {
+     "bad": "We did not hardly have any time to prepare.",
+     "good": "We hardly had any time to prepare.",
+     "why": [
+      "Hardly ist schon verneint. Das deutsche „kaum“ braucht im Englischen kein zweites not.",
+      "Hardly is already negative. The German “kaum” needs no second not in English."
+     ]
+    },
+    {
+     "bad": "We no more offer this service.",
+     "good": "We no longer offer this service.",
+     "why": [
+      "Für „nicht mehr“ bei der Zeit sagt man no longer. No more steht bei Mengen und vor Nomen.",
+      "For “not any more” in time you say no longer. No more is used with amounts and before nouns."
+     ]
+    },
+    {
+     "bad": "The number of customers have risen sharply this year.",
+     "good": "The number of customers has risen sharply this year.",
+     "why": [
+      "Beim Kern „the number“ steht das Verb im Singular. Bei „a number of“ steht es im Plural.",
+      "With the core “the number” the verb is singular. With “a number of” it is plural."
      ]
     }
    ]

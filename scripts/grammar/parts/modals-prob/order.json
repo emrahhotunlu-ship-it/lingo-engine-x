@@ -1,0 +1,212 @@
+[
+ {
+  "pat": "mp.may-well",
+  "en": "The client may well reject the first offer.",
+  "de": "Der Kunde lehnt das erste Angebot gut möglich ab.",
+  "chunks": [
+   "the client",
+   "may",
+   "well",
+   "reject",
+   "the first",
+   "offer"
+  ],
+  "single": "The client may well bildet den Anfang; reject the first offer folgt danach.",
+  "why": [
+   "Well steht direkt hinter dem Modalverb may und macht die Möglichkeit stärker. Danach folgt die Grundform reject.",
+   "Well stands right after the modal may and makes the possibility stronger. The base form reject follows."
+  ],
+  "bad": "The client may be well reject the first offer.",
+  "trap": {
+   "tile": "well",
+   "instead": "be well",
+   "why": {
+    "de": "Zwischen may und well steht kein be.",
+    "en": "There is no be between may and well."
+   }
+  }
+ },
+ {
+  "pat": "mp.may-well",
+  "en": "You might well need a second server by autumn.",
+  "de": "Es kann gut sein, dass Sie bis zum Herbst einen zweiten Server brauchen.",
+  "chunks": [
+   "you",
+   "might well",
+   "need",
+   "a second server",
+   "by autumn"
+  ],
+  "single": "You might well need bildet den ersten Teil; a second server by autumn folgt danach.",
+  "why": [
+   "Might well heißt „durchaus möglich“. Danach folgt die Grundform need ohne to.",
+   "Might well means “quite possibly”. The base form need follows, without to."
+  ],
+  "bad": "You might to well need a second server by autumn.",
+  "trap": {
+   "tile": "might well",
+   "instead": "might to well",
+   "why": {
+    "de": "Nach might steht kein to.",
+    "en": "After might there is no to."
+   }
+  }
+ },
+ {
+  "pat": "mp.bound",
+  "en": "Prices are bound to rise after the merger.",
+  "de": "Die Preise werden nach der Fusion mit Sicherheit steigen.",
+  "chunks": [
+   "prices",
+   "are bound",
+   "to rise",
+   "after",
+   "the merger"
+  ],
+  "single": "Prices are bound bildet den Anfang; to rise after the merger folgt danach.",
+  "why": [
+   "Be bound to nennt etwas fast Sicheres. Nach bound steht to und die Grundform rise.",
+   "Be bound to names something almost certain. After bound comes to and the base form rise."
+  ],
+  "bad": "Prices are bound rising after the merger.",
+  "trap": {
+   "tile": "to rise",
+   "instead": "rising",
+   "why": {
+    "de": "Nach bound steht to + Grundform, kein -ing.",
+    "en": "After bound comes to + base form, no -ing."
+   }
+  }
+ },
+ {
+  "pat": "mp.bound",
+  "en": "Someone is bound to notice the error.",
+  "de": "Irgendjemand wird den Fehler ganz sicher bemerken.",
+  "chunks": [
+   "someone",
+   "is",
+   "bound",
+   "to notice",
+   "the error"
+  ],
+  "single": "Someone is bound bildet den Anfang; to notice the error folgt danach.",
+  "why": [
+   "Is bound to ist fast sicher. Nach bound steht to und die Grundform notice.",
+   "Is bound to is almost certain. After bound comes to and the base form notice."
+  ],
+  "bad": "Someone is bound notice the error.",
+  "trap": {
+   "tile": "to notice",
+   "instead": "notice",
+   "why": {
+    "de": "Nach bound braucht es to.",
+    "en": "After bound you need to."
+   }
+  }
+ },
+ {
+  "pat": "mp.likely",
+  "en": "The update is likely to be ready on Friday.",
+  "de": "Das Update wird voraussichtlich am Freitag fertig.",
+  "chunks": [
+   "the update",
+   "is likely",
+   "to be",
+   "ready",
+   "on Friday"
+  ],
+  "single": "The update is likely bildet den Anfang; to be ready on Friday folgt danach.",
+  "why": [
+   "Nach is likely steht to und die Grundform be. Das Subjekt the update steht vorn.",
+   "After is likely comes to and the base form be. The subject the update comes first."
+  ],
+  "bad": "The update is likely that it is ready on Friday.",
+  "trap": {
+   "tile": "to be",
+   "instead": "that it is",
+   "why": {
+    "de": "Mit dem Subjekt vorn folgt likely to, kein that-Satz.",
+    "en": "With the subject first, likely to follows, not a that-clause."
+   }
+  }
+ },
+ {
+  "pat": "mp.likely",
+  "en": "The delay is unlikely to affect the launch.",
+  "de": "Die Verzögerung wird den Start wahrscheinlich nicht beeinträchtigen.",
+  "chunks": [
+   "the delay",
+   "is",
+   "unlikely",
+   "to affect",
+   "the launch"
+  ],
+  "single": "The delay is unlikely bildet den Anfang; to affect the launch folgt danach.",
+  "why": [
+   "Unlikely ist schon verneint. Nach unlikely steht to und die Grundform affect.",
+   "Unlikely is already negative. After unlikely comes to and the base form affect."
+  ],
+  "bad": "The delay is not likely affect the launch.",
+  "trap": {
+   "tile": "to affect",
+   "instead": "affect",
+   "why": {
+    "de": "Nach unlikely braucht es to.",
+    "en": "After unlikely you need to."
+   }
+  }
+ },
+ {
+  "pat": "mp.chance",
+  "en": "There is a good chance that the supplier will agree.",
+  "de": "Es besteht eine gute Chance, dass der Lieferant zustimmt.",
+  "chunks": [
+   "there is",
+   "a good chance",
+   "that",
+   "the supplier",
+   "will agree"
+  ],
+  "single": "There is a good chance bildet den Anfang; that the supplier will agree folgt danach.",
+  "why": [
+   "There is a good chance nennt eine Möglichkeit. Danach folgt ein that-Satz mit dem Subjekt the supplier.",
+   "There is a good chance names a possibility. A that-clause with the subject the supplier follows."
+  ],
+  "bad": "It exists a good chance that the supplier will agree.",
+  "trap": {
+   "tile": "there is",
+   "instead": "it exists",
+   "why": {
+    "de": "Englisch sagt there is, nicht it exists.",
+    "en": "English says there is, not it exists."
+   }
+  }
+ },
+ {
+  "pat": "mp.chance",
+  "en": "It is highly probable that costs will rise.",
+  "de": "Es ist sehr wahrscheinlich, dass die Kosten steigen.",
+  "chunks": [
+   "it is",
+   "highly",
+   "probable",
+   "that",
+   "costs",
+   "will rise"
+  ],
+  "single": "It is highly probable bildet den Anfang; that costs will rise folgt danach.",
+  "why": [
+   "Highly verstärkt probable. Danach folgt ein that-Satz mit der Prognose.",
+   "Highly strengthens probable. A that-clause with the forecast follows."
+  ],
+  "bad": "It is high probable that costs will rise.",
+  "trap": {
+   "tile": "highly",
+   "instead": "high",
+   "why": {
+    "de": "Vor einem Adjektiv steht das Adverb highly, nicht high.",
+    "en": "Before an adjective the adverb highly is used, not high."
+   }
+  }
+ }
+]

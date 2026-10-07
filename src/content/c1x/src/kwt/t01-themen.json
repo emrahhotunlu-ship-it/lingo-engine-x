@@ -295,6 +295,152 @@
    "id": "kwt-0507",
    "kind": "kwt",
    "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "inv.negative",
+   "why": {
+    "ok": {
+     "de": "Nach Never steht das Hilfsverb vor dem Subjekt: Never have I felt.",
+     "en": "After Never, the auxiliary comes before the subject: Never have I felt."
+    },
+    "wrong": [
+     {
+      "if": [
+       "i",
+       "have"
+      ],
+      "de": "Nach Never kommt have vor I: have I.",
+      "en": "After Never, have comes before I: have I."
+     }
+    ]
+   },
+   "lead": "This was the first time I felt so tired after such a short hike.",
+   "key": "NEVER",
+   "before": "",
+   "after": "felt so tired after such a short hike.",
+   "keys": [
+    {
+     "a": [
+      "Never have"
+     ],
+     "b": [
+      "I"
+     ]
+    }
+   ],
+   "tiles": [
+    "have",
+    "I"
+   ],
+   "extra": [
+    "had",
+    "did",
+    "been"
+   ],
+   "traps": [
+    "Never I have"
+   ]
+  },
+  {
+   "id": "kwt-0508",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "inv.only",
+   "why": {
+    "ok": {
+     "de": "Only after you have rung the bell can you enter … Nach dem Nebensatz steht can vor dem Subjekt.",
+     "en": "Only after you have rung the bell can you enter … After the clause, can comes before the subject."
+    },
+    "wrong": []
+   },
+   "lead": "You can enter the garden once you have rung the bell, and not before.",
+   "key": "ONLY",
+   "before": "",
+   "after": "rung the bell can you enter the garden.",
+   "keys": [
+    {
+     "a": [
+      "Only after"
+     ],
+     "b": [
+      "you have"
+     ]
+    }
+   ],
+   "tiles": [
+    "after",
+    "you",
+    "have"
+   ],
+   "extra": [
+    "did",
+    "will",
+    "had"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0509",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "inv.cond",
+   "why": {
+    "ok": {
+     "de": "Should you want … ist eine Bedingung ohne if und ohne will.",
+     "en": "Should you want … is a condition without if and without will."
+    },
+    "wrong": [
+     {
+      "if": [
+       "should",
+       "will"
+      ],
+      "de": "Nach Should you steht die Grundform, kein will.",
+      "en": "After Should you the base form follows, no will."
+     }
+    ]
+   },
+   "lead": "If you want a lift to the station, just text me.",
+   "key": "SHOULD",
+   "before": "",
+   "after": "a lift to the station, just text me.",
+   "keys": [
+    {
+     "a": [
+      "Should"
+     ],
+     "b": [
+      "you want"
+     ]
+    }
+   ],
+   "tiles": [
+    "you",
+    "want"
+   ],
+   "extra": [
+    "will",
+    "would",
+    "if"
+   ],
+   "traps": [
+    "Should you will want"
+   ]
+  },
+  {
+   "id": "kwt-0510",
+   "kind": "kwt",
+   "area": "gram",
    "topic": "emph-plus",
    "level": "C1",
    "dom": "biz",
@@ -344,7 +490,7 @@
    ]
   },
   {
-   "id": "kwt-0508",
+   "id": "kwt-0511",
    "kind": "kwt",
    "area": "gram",
    "topic": "emph-plus",
@@ -396,7 +542,7 @@
    ]
   },
   {
-   "id": "kwt-0509",
+   "id": "kwt-0512",
    "kind": "kwt",
    "area": "gram",
    "topic": "emph-plus",
@@ -438,7 +584,7 @@
    "traps": []
   },
   {
-   "id": "kwt-0510",
+   "id": "kwt-0513",
    "kind": "kwt",
    "area": "gram",
    "topic": "emph-plus",
@@ -480,7 +626,7 @@
    "traps": []
   },
   {
-   "id": "kwt-0511",
+   "id": "kwt-0514",
    "kind": "kwt",
    "area": "gram",
    "topic": "emph-plus",
@@ -522,7 +668,7 @@
    "traps": []
   },
   {
-   "id": "kwt-0512",
+   "id": "kwt-0515",
    "kind": "kwt",
    "area": "gram",
    "topic": "emph-plus",
@@ -565,7 +711,144 @@
    "traps": []
   },
   {
-   "id": "kwt-0513",
+   "id": "kwt-0516",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "ep.concession",
+   "why": {
+    "ok": {
+     "de": "Tempting as the offer is, … Das Adjektiv steht vor as, dann die normale Stellung.",
+     "en": "Tempting as the offer is, … The adjective stands before as, then the normal order."
+    },
+    "wrong": []
+   },
+   "lead": "Although the offer sounds attractive, I will stay at home tonight.",
+   "key": "TEMPTING",
+   "before": "",
+   "after": "is, I will stay at home tonight.",
+   "keys": [
+    {
+     "a": [
+      "Tempting as"
+     ],
+     "b": [
+      "the offer"
+     ]
+    }
+   ],
+   "tiles": [
+    "as",
+    "the",
+    "offer"
+   ],
+   "extra": [
+    "that",
+    "so",
+    "it"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0517",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "ep.do-emph",
+   "why": {
+    "ok": {
+     "de": "Das betonte did steht vor der Grundform enjoy.",
+     "en": "The stressed did stands before the base form enjoy."
+    },
+    "wrong": [
+     {
+      "if": [
+       "did",
+       "enjoyed"
+      ],
+      "de": "Nach did steht die Grundform enjoy.",
+      "en": "After did the base form enjoy follows."
+     }
+    ]
+   },
+   "lead": "I really enjoyed the concert last night.",
+   "key": "DID",
+   "before": "I",
+   "after": "the concert last night.",
+   "keys": [
+    {
+     "a": [
+      "really did"
+     ],
+     "b": [
+      "enjoy"
+     ]
+    }
+   ],
+   "tiles": [
+    "really",
+    "enjoy"
+   ],
+   "extra": [
+    "enjoyed",
+    "do",
+    "was"
+   ],
+   "traps": [
+    "really did enjoyed"
+   ]
+  },
+  {
+   "id": "kwt-0518",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "ep.object-front",
+   "why": {
+    "ok": {
+     "de": "Pop I do not like. Das Objekt steht vorn, die Reihenfolge danach bleibt normal.",
+     "en": "Pop I do not like. The object comes first, the order after it stays normal."
+    },
+    "wrong": []
+   },
+   "lead": "I enjoy jazz, but I am not a fan of pop.",
+   "key": "LIKE",
+   "before": "I enjoy jazz, but",
+   "after": ".",
+   "keys": [
+    {
+     "a": [
+      "pop I do"
+     ],
+     "b": [
+      "not like"
+     ]
+    }
+   ],
+   "tiles": [
+    "pop",
+    "I",
+    "do",
+    "not"
+   ],
+   "extra": [
+    "does",
+    "am",
+    "it"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0519",
    "kind": "kwt",
    "area": "gram",
    "topic": "ellipsis",
@@ -606,7 +889,7 @@
    "traps": []
   },
   {
-   "id": "kwt-0514",
+   "id": "kwt-0520",
    "kind": "kwt",
    "area": "gram",
    "topic": "ellipsis",
@@ -660,7 +943,7 @@
    ]
   },
   {
-   "id": "kwt-0515",
+   "id": "kwt-0521",
    "kind": "kwt",
    "area": "gram",
    "topic": "ellipsis",
@@ -715,7 +998,7 @@
    ]
   },
   {
-   "id": "kwt-0516",
+   "id": "kwt-0522",
    "kind": "kwt",
    "area": "gram",
    "topic": "ellipsis",
@@ -766,7 +1049,7 @@
    ]
   },
   {
-   "id": "kwt-0517",
+   "id": "kwt-0523",
    "kind": "kwt",
    "area": "gram",
    "topic": "ellipsis",
@@ -808,7 +1091,7 @@
    "traps": []
   },
   {
-   "id": "kwt-0518",
+   "id": "kwt-0524",
    "kind": "kwt",
    "area": "gram",
    "topic": "ellipsis",
@@ -849,7 +1132,155 @@
    "traps": []
   },
   {
-   "id": "kwt-0519",
+   "id": "kwt-0525",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "el.so-not",
+   "why": {
+    "ok": {
+     "de": "I suppose so. So steht direkt hinter dem Verb und ersetzt den Gedanken.",
+     "en": "I suppose so. So follows the verb directly and replaces the thought."
+    },
+    "wrong": [
+     {
+      "if": [
+       "suppose",
+       "it"
+      ],
+      "de": "Nach suppose steht so, nicht it.",
+      "en": "After suppose comes so, not it."
+     }
+    ]
+   },
+   "lead": "Is Tom coming to the party? I suppose he is coming.",
+   "key": "SO",
+   "before": "Is Tom coming to the party?",
+   "after": ".",
+   "keys": [
+    {
+     "a": [
+      "I suppose"
+     ],
+     "b": [
+      "so"
+     ]
+    }
+   ],
+   "tiles": [
+    "I",
+    "suppose"
+   ],
+   "extra": [
+    "it",
+    "that",
+    "yes"
+   ],
+   "traps": [
+    "I suppose it"
+   ]
+  },
+  {
+   "id": "kwt-0526",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "el.do-so",
+   "why": {
+    "ok": {
+     "de": "Does the same ersetzt die Handlung takes the bus.",
+     "en": "Does the same replaces the action takes the bus."
+    },
+    "wrong": [
+     {
+      "if": [
+       "does",
+       "same"
+      ],
+      "not": [
+       "the"
+      ],
+      "de": "Vor same steht the: the same.",
+      "en": "Before same you need the: the same."
+     }
+    ]
+   },
+   "lead": "My brother always takes the bus, and my sister takes the bus too.",
+   "key": "DOES",
+   "before": "My brother always takes the bus, and my sister",
+   "after": ".",
+   "keys": [
+    {
+     "a": [
+      "does the"
+     ],
+     "b": [
+      "same"
+     ]
+    }
+   ],
+   "tiles": [
+    "the",
+    "same"
+   ],
+   "extra": [
+    "do",
+    "so",
+    "it"
+   ],
+   "traps": [
+    "does same"
+   ]
+  },
+  {
+   "id": "kwt-0527",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "el.one-ones",
+   "why": {
+    "ok": {
+     "de": "The ones ersetzt das Pluralnomen apples.",
+     "en": "The ones replaces the plural noun apples."
+    },
+    "wrong": []
+   },
+   "lead": "These apples are sweeter than the apples that we bought last week.",
+   "key": "ONES",
+   "before": "These apples are sweeter than",
+   "after": "we bought last week.",
+   "keys": [
+    {
+     "a": [
+      "the ones"
+     ],
+     "b": [
+      "that"
+     ]
+    }
+   ],
+   "tiles": [
+    "the",
+    "that"
+   ],
+   "extra": [
+    "those",
+    "it",
+    "what"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0528",
    "kind": "kwt",
    "area": "gram",
    "topic": "noun-phrase",
@@ -891,7 +1322,7 @@
    "traps": []
   },
   {
-   "id": "kwt-0520",
+   "id": "kwt-0529",
    "kind": "kwt",
    "area": "gram",
    "topic": "noun-phrase",
@@ -933,7 +1364,7 @@
    "traps": []
   },
   {
-   "id": "kwt-0521",
+   "id": "kwt-0530",
    "kind": "kwt",
    "area": "gram",
    "topic": "noun-phrase",
@@ -974,7 +1405,7 @@
    "traps": []
   },
   {
-   "id": "kwt-0522",
+   "id": "kwt-0531",
    "kind": "kwt",
    "area": "gram",
    "topic": "noun-phrase",
@@ -1015,7 +1446,7 @@
    "traps": []
   },
   {
-   "id": "kwt-0523",
+   "id": "kwt-0532",
    "kind": "kwt",
    "area": "gram",
    "topic": "noun-phrase",
@@ -1056,7 +1487,7 @@
    "traps": []
   },
   {
-   "id": "kwt-0524",
+   "id": "kwt-0533",
    "kind": "kwt",
    "area": "gram",
    "topic": "noun-phrase",
@@ -1093,6 +1524,131 @@
    "extra": [
     "who",
     "signed",
+    "for"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0534",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "np.contact",
+   "why": {
+    "ok": {
+     "de": "the best flight I could find. Das Pronomen that darf fehlen.",
+     "en": "the best flight I could find. The pronoun that may be dropped."
+    },
+    "wrong": []
+   },
+   "lead": "This is the best flight that my search turned up.",
+   "key": "FIND",
+   "before": "This is the best flight",
+   "after": ".",
+   "keys": [
+    {
+     "a": [
+      "I could"
+     ],
+     "b": [
+      "find"
+     ]
+    }
+   ],
+   "tiles": [
+    "I",
+    "could"
+   ],
+   "extra": [
+    "what",
+    "who",
+    "it"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0535",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "np.participle",
+   "why": {
+    "ok": {
+     "de": "everyone invited to the wedding. Das passive Partizip ersetzt who is invited.",
+     "en": "everyone invited to the wedding. The passive participle replaces who is invited."
+    },
+    "wrong": []
+   },
+   "lead": "Everyone who received an invitation to the wedding must reply by Friday.",
+   "key": "INVITED",
+   "before": "Everyone",
+   "after": "must reply by Friday.",
+   "keys": [
+    {
+     "a": [
+      "invited"
+     ],
+     "b": [
+      "to the wedding"
+     ]
+    }
+   ],
+   "tiles": [
+    "to",
+    "the",
+    "wedding"
+   ],
+   "extra": [
+    "who",
+    "is",
+    "inviting"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0536",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "np.to-inf",
+   "why": {
+    "ok": {
+     "de": "the only person to answer. Nach only steht to + Grundform.",
+     "en": "the only person to answer. After only comes to + base form."
+    },
+    "wrong": []
+   },
+   "lead": "Anna was the only person who answered the question.",
+   "key": "TO",
+   "before": "Anna was the",
+   "after": "the question.",
+   "keys": [
+    {
+     "a": [
+      "only person"
+     ],
+     "b": [
+      "to answer"
+     ]
+    }
+   ],
+   "tiles": [
+    "only",
+    "person",
+    "answer"
+   ],
+   "extra": [
+    "who",
+    "answered",
     "for"
    ],
    "traps": []

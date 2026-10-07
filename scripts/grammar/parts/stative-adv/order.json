@@ -1,0 +1,210 @@
+[
+ {
+  "pat": "sa.trend",
+  "en": "We are seeing a clear rise in demand this quarter.",
+  "de": "Wir erleben in diesem Quartal einen deutlichen Anstieg der Nachfrage.",
+  "chunks": [
+   "we",
+   "are seeing",
+   "a clear rise",
+   "in demand",
+   "this quarter"
+  ],
+  "single": "We are seeing bildet den Anfang; a clear rise in demand this quarter folgt danach.",
+  "why": [
+   "Are seeing ist die Verlaufsform für eine Entwicklung, die gerade läuft. Danach folgt das Objekt a clear rise.",
+   "Are seeing is the continuous for a change under way. The object a clear rise follows."
+  ],
+  "bad": "We see a clear rise in demand this quarter.",
+  "trap": {
+   "tile": "are seeing",
+   "instead": "see",
+   "why": {
+    "de": "Für einen laufenden Trend steht die Verlaufsform.",
+    "en": "For a trend under way the continuous is used."
+   }
+  }
+ },
+ {
+  "pat": "sa.trend",
+  "en": "Customers are increasingly asking for shorter contracts.",
+  "de": "Kunden fragen immer häufiger nach kürzeren Verträgen.",
+  "chunks": [
+   "customers",
+   "are",
+   "increasingly",
+   "asking",
+   "for shorter contracts"
+  ],
+  "single": "Customers are increasingly bildet den Anfang; asking for shorter contracts folgt danach.",
+  "why": [
+   "Increasingly steht zwischen are und asking. Die Verlaufsform zeigt den Trend.",
+   "Increasingly stands between are and asking. The continuous shows the trend."
+  ],
+  "bad": "Customers are increasingly ask for shorter contracts.",
+  "trap": {
+   "tile": "asking",
+   "instead": "ask",
+   "why": {
+    "de": "Nach are steht die -ing-Form.",
+    "en": "After are comes the -ing form."
+   }
+  }
+ },
+ {
+  "pat": "sa.soft",
+  "en": "I was wondering if you could send me the file.",
+  "de": "Ich habe mich gefragt, ob Sie mir die Datei schicken könnten.",
+  "chunks": [
+   "I was wondering",
+   "if",
+   "you could",
+   "send me",
+   "the file"
+  ],
+  "single": "I was wondering bildet den Anfang; if you could send me the file folgt danach.",
+  "why": [
+   "Nach was wondering folgt if und normale Satzstellung: if you could send me.",
+   "After was wondering comes if and normal word order: if you could send me."
+  ],
+  "bad": "I was wondering could you send me the file.",
+  "trap": {
+   "tile": "if",
+   "instead": "could you",
+   "why": {
+    "de": "Nach wondering steht if und das Subjekt vor could.",
+    "en": "After wondering comes if and the subject before could."
+   }
+  }
+ },
+ {
+  "pat": "sa.soft",
+  "en": "We are hoping to hear from you by Friday.",
+  "de": "Wir hoffen, bis Freitag von Ihnen zu hören.",
+  "chunks": [
+   "we",
+   "are hoping",
+   "to hear",
+   "from you",
+   "by Friday"
+  ],
+  "single": "We are hoping bildet den Anfang; to hear from you by Friday folgt danach.",
+  "why": [
+   "Are hoping macht den Wunsch weicher als hope. Danach folgt to hear.",
+   "Are hoping makes the wish softer than hope. To hear follows."
+  ],
+  "bad": "We hoping to hear from you by Friday.",
+  "trap": {
+   "tile": "are hoping",
+   "instead": "hoping",
+   "why": {
+    "de": "Ohne are fehlt das Hilfsverb der Verlaufsform.",
+    "en": "Without are the auxiliary of the continuous is missing."
+   }
+  }
+ },
+ {
+  "pat": "sa.being",
+  "en": "You are being unreasonable about the deadline.",
+  "de": "Sie sind, was die Frist betrifft, gerade unvernünftig.",
+  "chunks": [
+   "you",
+   "are being",
+   "unreasonable",
+   "about",
+   "the deadline"
+  ],
+  "single": "You are being bildet den Anfang; unreasonable about the deadline folgt danach.",
+  "why": [
+   "Are being zeigt Verhalten für begrenzte Zeit. Danach folgt das Adjektiv unreasonable.",
+   "Are being shows behavior for a limited time. The adjective unreasonable follows."
+  ],
+  "bad": "You are being unreasonably about the deadline.",
+  "trap": {
+   "tile": "unreasonable",
+   "instead": "unreasonably",
+   "why": {
+    "de": "Nach being steht ein Adjektiv, kein Adverb.",
+    "en": "After being comes an adjective, not an adverb."
+   }
+  }
+ },
+ {
+  "pat": "sa.being",
+  "en": "He is always complaining about the coffee.",
+  "de": "Er beschwert sich ständig über den Kaffee.",
+  "chunks": [
+   "he",
+   "is always",
+   "complaining",
+   "about",
+   "the coffee"
+  ],
+  "single": "He is always bildet den Anfang; complaining about the coffee folgt danach.",
+  "why": [
+   "Always steht zwischen is und -ing und zeigt den Ärger über die Gewohnheit.",
+   "Always stands between is and -ing and shows the annoyance at the habit."
+  ],
+  "bad": "He always is complaining about the coffee.",
+  "trap": {
+   "tile": "is always",
+   "instead": "always is",
+   "why": {
+    "de": "Always steht hinter is, nicht davor.",
+    "en": "Always stands after is, not before it."
+   }
+  }
+ },
+ {
+  "pat": "sa.no-ing",
+  "en": "I understand your concern about the delivery date.",
+  "de": "Ich verstehe Ihr Anliegen zum Liefertermin.",
+  "chunks": [
+   "I",
+   "understand",
+   "your concern",
+   "about",
+   "the delivery date"
+  ],
+  "single": "I understand bildet den Anfang; your concern about the delivery date folgt danach.",
+  "why": [
+   "Understand ist ein Zustandsverb und bleibt in der einfachen Form.",
+   "Understand is a stative verb and stays in the simple form."
+  ],
+  "bad": "I am understanding your concern about the delivery date.",
+  "trap": {
+   "tile": "understand",
+   "instead": "am understanding",
+   "why": {
+    "de": "Zustandsverben nehmen keine Verlaufsform.",
+    "en": "Stative verbs take no continuous."
+   }
+  }
+ },
+ {
+  "pat": "sa.no-ing",
+  "en": "This folder belongs to the finance team.",
+  "de": "Dieser Ordner gehört dem Finanzteam.",
+  "chunks": [
+   "this folder",
+   "belongs",
+   "to",
+   "the",
+   "finance team"
+  ],
+  "single": "This folder belongs bildet den Anfang; to the finance team folgt danach.",
+  "why": [
+   "Belong ist ein Zustandsverb und bleibt einfach: belongs to.",
+   "Belong is a stative verb and stays simple: belongs to."
+  ],
+  "bad": "This folder is belonging to the finance team.",
+  "trap": {
+   "tile": "belongs",
+   "instead": "is belonging",
+   "why": {
+    "de": "Besitz steht in der einfachen Form.",
+    "en": "Possession is expressed in the simple form."
+   }
+  }
+ }
+]

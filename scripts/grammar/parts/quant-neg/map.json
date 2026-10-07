@@ -1,0 +1,106 @@
+{
+ "No one of the suppliers has replied yet.": {
+  "pat": "qn.none",
+  "why": {
+   "ok": {
+    "de": "Für „keiner von“ steht none of: None of the suppliers has replied.",
+    "en": "For “not one of” none of is used: None of the suppliers has replied."
+   },
+   "wrong": [
+    {
+     "if": [
+      "no",
+      "one",
+      "of"
+     ],
+     "de": "No one of ist deutsch gedacht. Es braucht none of.",
+     "en": "No one of is German thinking. It needs none of."
+    },
+    {
+     "not": [
+      "none"
+     ],
+     "de": "Hier steht none of.",
+     "en": "Here none of is used."
+    }
+   ]
+  }
+ },
+ "We did not hardly have any time to prepare.": {
+  "pat": "qn.hardly",
+  "why": {
+   "ok": {
+    "de": "Hardly ist schon verneint: We hardly had any time.",
+    "en": "Hardly is already negative: We hardly had any time."
+   },
+   "wrong": [
+    {
+     "if": [
+      "not",
+      "hardly"
+     ],
+     "de": "Hardly ist schon verneint, ein zweites not ist zu viel.",
+     "en": "Hardly needs no second not."
+    },
+    {
+     "not": [
+      "hardly"
+     ],
+     "de": "Das Wort für „kaum“ fehlt: hardly.",
+     "en": "The word for “barely” is missing: hardly."
+    }
+   ]
+  }
+ },
+ "We no more offer this service.": {
+  "pat": "qn.no-longer",
+  "why": {
+   "ok": {
+    "de": "Für „nicht mehr“ bei der Zeit steht no longer: We no longer offer this service.",
+    "en": "For “not any more” in time no longer is used: We no longer offer this service."
+   },
+   "wrong": [
+    {
+     "if": [
+      "no",
+      "more"
+     ],
+     "de": "No more steht bei Mengen. Hier gilt no longer.",
+     "en": "No more is used with amounts. Here no longer applies."
+    },
+    {
+     "not": [
+      "longer"
+     ],
+     "de": "Hier ist no longer nötig, nicht no more.",
+     "en": "It needs no longer."
+    }
+   ]
+  }
+ },
+ "The number of customers have risen sharply this year.": {
+  "pat": "qn.number",
+  "why": {
+   "ok": {
+    "de": "Bei the number of steht das Verb im Singular: The number of customers has risen.",
+    "en": "With the number of the verb is singular: The number of customers has risen."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "de": "Kern ist number, deshalb has statt have.",
+     "en": "The core is number, so has instead of have."
+    },
+    {
+     "not": [
+      "has"
+     ],
+     "de": "Das Verb heißt has.",
+     "en": "The verb is has."
+    }
+   ]
+  }
+ }
+}

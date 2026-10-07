@@ -1,0 +1,621 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "err-0601",
+   "kind": "err",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "mp.may-well",
+   "why": {
+    "ok": {
+     "de": "Well steht direkt hinter may, ohne be: may well reject.",
+     "en": "Well stands right after may, without be: may well reject."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "may be well reject",
+    "fix": [
+     "may well reject"
+    ],
+    "choices": [
+     "may well reject",
+     "may be reject",
+     "may well rejecting"
+    ]
+   },
+   "text": "The client may be well reject our first offer, so we should prepare alternatives."
+  },
+  {
+   "id": "err-0602",
+   "kind": "err",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "mp.bound",
+   "why": {
+    "ok": {
+     "de": "Nach bound steht to und die Grundform: bound to get.",
+     "en": "After bound comes to and the base form: bound to get."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "bound getting",
+    "fix": [
+     "bound to get"
+    ],
+    "choices": [
+     "bound to get",
+     "bound to getting",
+     "bound get"
+    ]
+   },
+   "text": "My sister is bound getting lost without a map, so I will drive her there."
+  },
+  {
+   "id": "err-0603",
+   "kind": "err",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "mp.likely",
+   "why": {
+    "ok": {
+     "de": "Mit dem Subjekt vorn folgt likely to und die Grundform.",
+     "en": "With the subject first, likely to and the base form follow."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "likely that finish",
+    "fix": [
+     "likely to finish"
+    ],
+    "choices": [
+     "likely to finish",
+     "likely finishing",
+     "likely finishes"
+    ]
+   },
+   "text": "The project is likely that finish a week late because of the delay."
+  },
+  {
+   "id": "err-0604",
+   "kind": "err",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "mp.chance",
+   "why": {
+    "ok": {
+     "de": "Englisch sagt there is, nicht it exists.",
+     "en": "English says there is, not it exists."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "It exists",
+    "fix": [
+     "There is"
+    ],
+    "choices": [
+     "There is",
+     "There exist",
+     "It has"
+    ]
+   },
+   "text": "It exists a slim chance that the board will reject the budget."
+  },
+  {
+   "id": "err-0605",
+   "kind": "err",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "mp.likely",
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Unlikely to + Grundform nennt eine unwahrscheinliche Handlung.",
+     "en": "No mistake: Unlikely to + base form names an improbable action."
+    },
+    "wrong": []
+   },
+   "bad": null,
+   "text": "Our neighbors are unlikely to move before the summer."
+  },
+  {
+   "id": "err-0606",
+   "kind": "err",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "mp.chance",
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: There is a high chance that … nennt eine Möglichkeit.",
+     "en": "No mistake: There is a high chance that … names a possibility."
+    },
+    "wrong": []
+   },
+   "bad": null,
+   "text": "There is a high chance that the supplier will ask for an extension."
+  },
+  {
+   "id": "err-0607",
+   "kind": "err",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "sa.trend",
+   "why": {
+    "ok": {
+     "de": "Mit at the moment braucht es die Verlaufsform: are rising.",
+     "en": "With at the moment you need the continuous: are rising."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "rise at the moment",
+    "fix": [
+     "are rising at the moment"
+    ],
+    "choices": [
+     "are rising at the moment",
+     "rises at the moment",
+     "rising at the moment"
+    ]
+   },
+   "text": "Prices in the sector rise at the moment, so we are reviewing our offers."
+  },
+  {
+   "id": "err-0608",
+   "kind": "err",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "sa.soft",
+   "why": {
+    "ok": {
+     "de": "Nach wondering folgt if und normale Satzstellung: if we could shift.",
+     "en": "After wondering comes if and normal word order: if we could shift."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "could we shift",
+    "fix": [
+     "if we could shift"
+    ],
+    "choices": [
+     "if we could shift",
+     "if could we shift",
+     "whether could we shift"
+    ]
+   },
+   "text": "I was wondering could we shift the review to Thursday afternoon."
+  },
+  {
+   "id": "err-0609",
+   "kind": "err",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "sa.being",
+   "why": {
+    "ok": {
+     "de": "Erschöpfung ist ein Zustand, deshalb ohne being: is very exhausted.",
+     "en": "Exhaustion is a state, so no being: is very exhausted."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "being very exhausted",
+    "fix": [
+     "very exhausted"
+    ],
+    "choices": [
+     "very exhausted",
+     "been very exhausted",
+     "being exhausted very"
+    ]
+   },
+   "text": "The client is being very exhausted after the long negotiation, so let us end early."
+  },
+  {
+   "id": "err-0610",
+   "kind": "err",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "sa.no-ing",
+   "why": {
+    "ok": {
+     "de": "Need ist ein Zustandsverb und bleibt einfach: We need.",
+     "en": "Need is a stative verb and stays simple: We need."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "are needing",
+    "fix": [
+     "need"
+    ],
+    "choices": [
+     "need",
+     "needing",
+     "do needing"
+    ]
+   },
+   "text": "We are needing written confirmation before we can release the budget."
+  },
+  {
+   "id": "err-0611",
+   "kind": "err",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "sa.being",
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Silly beschreibt Verhalten, deshalb passt is being.",
+     "en": "No mistake: silly describes behavior, so is being fits."
+    },
+    "wrong": []
+   },
+   "bad": null,
+   "text": "My little brother is being silly today because he wants us to laugh."
+  },
+  {
+   "id": "err-0612",
+   "kind": "err",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "sa.soft",
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Are hoping macht die Einladung freundlich und weich.",
+     "en": "No mistake: are hoping makes the invitation friendly and soft."
+    },
+    "wrong": []
+   },
+   "bad": null,
+   "text": "We are hoping to see you at the barbecue on Saturday."
+  },
+  {
+   "id": "err-0613",
+   "kind": "err",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "fp.was-going",
+   "why": {
+    "ok": {
+     "de": "Der Plan liegt in der Vergangenheit: were going to.",
+     "en": "The plan lies in the past: were going to."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "are going to",
+    "fix": [
+     "were going to"
+    ],
+    "choices": [
+     "were going to",
+     "was going to",
+     "had going to"
+    ]
+   },
+   "text": "We are going to publish the report in March, but the board asked for changes."
+  },
+  {
+   "id": "err-0614",
+   "kind": "err",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "fp.about-to",
+   "why": {
+    "ok": {
+     "de": "Nach about steht to und die Grundform: about to announce.",
+     "en": "After about comes to and the base form: about to announce."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "about announcing",
+    "fix": [
+     "about to announce"
+    ],
+    "choices": [
+     "about to announce",
+     "about to announcing",
+     "about for announce"
+    ]
+   },
+   "text": "The CEO was about announcing the merger when the news leaked."
+  },
+  {
+   "id": "err-0615",
+   "kind": "err",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "fp.would-narr",
+   "why": {
+    "ok": {
+     "de": "Aus der Vergangenheit auf Späteres: would later employ.",
+     "en": "From the past at something later: would later employ."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "will later employ",
+    "fix": [
+     "would later employ"
+    ],
+    "choices": [
+     "would later employ",
+     "would later employs",
+     "is later employing"
+    ]
+   },
+   "text": "The startup began with three people in 2015 and will later employ two hundred."
+  },
+  {
+   "id": "err-0616",
+   "kind": "err",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "fp.was-to",
+   "why": {
+    "ok": {
+     "de": "Für einen Plan in der Vergangenheit gilt was to: was to join.",
+     "en": "For a plan in the past was to is used: was to join."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "should join",
+    "fix": [
+     "was to join"
+    ],
+    "choices": [
+     "was to join",
+     "was to joining",
+     "is to join"
+    ]
+   },
+   "text": "The new director should join us in January, but she took another job."
+  },
+  {
+   "id": "err-0617",
+   "kind": "err",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "fp.about-to",
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Was about to + Grundform, dann kommt etwas dazwischen.",
+     "en": "No mistake: was about to + base form, then something intervenes."
+    },
+    "wrong": []
+   },
+   "bad": null,
+   "text": "I was about to leave the house when I noticed that the oven was still on."
+  },
+  {
+   "id": "err-0618",
+   "kind": "err",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "fp.was-going",
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Were going to nennt den Plan von damals.",
+     "en": "No mistake: were going to names the plan from back then."
+    },
+    "wrong": []
+   },
+   "bad": null,
+   "text": "We were going to move to Lisbon, but the flat prices changed our minds."
+  },
+  {
+   "id": "err-0619",
+   "kind": "err",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "qn.none",
+   "why": {
+    "ok": {
+     "de": "Für „keiner von“ mit Nomen steht none of.",
+     "en": "For “not one of” with a noun none of is used."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "No one of",
+    "fix": [
+     "None of"
+    ],
+    "choices": [
+     "None of",
+     "Nothing of",
+     "No of"
+    ]
+   },
+   "text": "No one of the shortlisted vendors has submitted a complete proposal."
+  },
+  {
+   "id": "err-0620",
+   "kind": "err",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "qn.hardly",
+   "why": {
+    "ok": {
+     "de": "Hardly ist schon verneint, ein zweites not ist zu viel.",
+     "en": "Hardly is already negative, a second not is too much."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "did not hardly change",
+    "fix": [
+     "hardly changed"
+    ],
+    "choices": [
+     "hardly changed",
+     "did hardly changed",
+     "not hardly changed"
+    ]
+   },
+   "text": "We did not hardly change the layout, only the colors."
+  },
+  {
+   "id": "err-0621",
+   "kind": "err",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "qn.no-longer",
+   "why": {
+    "ok": {
+     "de": "Die feste Form heißt no longer.",
+     "en": "The fixed form is no longer."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "not longer",
+    "fix": [
+     "no longer"
+    ],
+    "choices": [
+     "no longer",
+     "not later",
+     "non longer"
+    ]
+   },
+   "text": "The platform is not longer available for customers in the EU."
+  },
+  {
+   "id": "err-0622",
+   "kind": "err",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "qn.number",
+   "why": {
+    "ok": {
+     "de": "Bei the number of steht das Verb im Singular: has.",
+     "en": "With the number of the verb is singular: has."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "number of defects have",
+    "fix": [
+     "number of defects has"
+    ],
+    "choices": [
+     "number of defects has",
+     "number of defects are",
+     "numbers of defects have"
+    ]
+   },
+   "text": "The number of defects have fallen sharply since we changed supplier."
+  },
+  {
+   "id": "err-0623",
+   "kind": "err",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "qn.hardly",
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Hardly any heißt „kaum“ und braucht kein not.",
+     "en": "No mistake: hardly any means “barely any” and needs no not."
+    },
+    "wrong": []
+   },
+   "bad": null,
+   "text": "There was hardly any traffic, so we arrived early."
+  },
+  {
+   "id": "err-0624",
+   "kind": "err",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "qn.none",
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: None of + Nomen heißt „keiner von“.",
+     "en": "No mistake: none of + noun means “not one of”."
+    },
+    "wrong": []
+   },
+   "bad": null,
+   "text": "None of my cousins lives in the same city as my parents."
+  }
+ ]
+}

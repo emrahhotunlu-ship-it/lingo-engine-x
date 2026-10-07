@@ -1,0 +1,667 @@
+[
+ {
+  "id": "fp-k1",
+  "type": "kwt",
+  "pat": "fp.was-going",
+  "from": "We planned to launch in May, but the supplier was late.",
+  "key": "GOING",
+  "frame": "We ___ launch in May, but the supplier was late.",
+  "answer": "were going to",
+  "accepted": [],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: We were going to launch in May. Was oder were going to nennt den Plan.",
+    "en": "Right: We were going to launch in May. Was or were going to names the plan."
+   },
+   "wrong": [
+    {
+     "not": [
+      "going"
+     ],
+     "de": "Das Schlüsselwort going muss unverändert in der Lücke stehen.",
+     "en": "The key word going must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "going"
+     ],
+     "not": [
+      "were"
+     ],
+     "de": "Zu we passt were: were going to.",
+     "en": "With we, were fits: were going to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fp-k2",
+  "type": "kwt",
+  "pat": "fp.was-going",
+  "from": "I intended to call you, but the line was busy.",
+  "key": "GOING",
+  "frame": "I ___ call you, but the line was busy.",
+  "answer": "was going to",
+  "accepted": [],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: I was going to call you. Was going to nennt den Plan.",
+    "en": "Right: I was going to call you. Was going to names the plan."
+   },
+   "wrong": [
+    {
+     "not": [
+      "going"
+     ],
+     "de": "Das Schlüsselwort going muss unverändert in der Lücke stehen.",
+     "en": "The key word going must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "going"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach going braucht es to und die Grundform.",
+     "en": "After going you need to and the base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fp-k3",
+  "type": "kwt",
+  "pat": "fp.about-to",
+  "from": "I almost left when the client called.",
+  "key": "ABOUT",
+  "frame": "I was ___ leave when the client called.",
+  "answer": "about to",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: I was about to leave. Nach about steht to und die Grundform.",
+    "en": "Right: I was about to leave. After about comes to and the base form."
+   },
+   "wrong": [
+    {
+     "not": [
+      "about"
+     ],
+     "de": "Das Schlüsselwort about muss unverändert in der Lücke stehen.",
+     "en": "The key word about must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "about"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach about braucht es to.",
+     "en": "After about you need to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fp-k4",
+  "type": "kwt",
+  "pat": "fp.about-to",
+  "from": "We nearly signed the contract when the lawyer found an error.",
+  "key": "ABOUT",
+  "frame": "We were ___ sign the contract when the lawyer found an error.",
+  "answer": "about to",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: We were about to sign. Danach kam der Fehler dazwischen.",
+    "en": "Right: We were about to sign. Then the error intervened."
+   },
+   "wrong": [
+    {
+     "not": [
+      "about"
+     ],
+     "de": "Das Schlüsselwort about muss unverändert in der Lücke stehen.",
+     "en": "The key word about must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "about"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach about braucht es to.",
+     "en": "After about you need to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fp-k5",
+  "type": "kwt",
+  "pat": "fp.would-narr",
+  "from": "In 2015 she joined the firm, and she became head of the Berlin office later.",
+  "key": "WOULD",
+  "frame": "In 2015 she joined the firm and ___ lead the Berlin office.",
+  "answer": "would later",
+  "accepted": [
+   "would soon",
+   "would eventually"
+  ],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: she would later lead the Berlin office. Would blickt aus der Vergangenheit auf Späteres.",
+    "en": "Right: she would later lead the Berlin office. Would looks from the past at something later."
+   },
+   "wrong": [
+    {
+     "not": [
+      "would"
+     ],
+     "de": "Das Schlüsselwort would muss unverändert in der Lücke stehen.",
+     "en": "The key word would must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "would"
+     ],
+     "not": [
+      "later",
+      "soon",
+      "eventually"
+     ],
+     "de": "Hier fehlt das Wort, das „später“ ausdrückt: would later.",
+     "en": "The word for “later” is missing here: would later."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fp-k6",
+  "type": "kwt",
+  "pat": "fp.would-narr",
+  "from": "He promised: I will send the report by Monday.",
+  "key": "WOULD",
+  "frame": "He promised that he ___ the report by Monday.",
+  "answer": "would send",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: he would send the report. Nach promised steht would statt will.",
+    "en": "Right: he would send the report. After promised, would replaces will."
+   },
+   "wrong": [
+    {
+     "not": [
+      "would"
+     ],
+     "de": "Das Schlüsselwort would muss unverändert in der Lücke stehen.",
+     "en": "The key word would must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "would"
+     ],
+     "not": [
+      "send"
+     ],
+     "de": "Nach would steht die Grundform send.",
+     "en": "After would comes the base form send."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fp-k7",
+  "type": "kwt",
+  "pat": "fp.was-to",
+  "from": "The talks had been planned for Friday.",
+  "key": "WERE",
+  "frame": "The talks ___ end on Friday.",
+  "answer": "were to",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: The talks were to end on Friday. Were to nennt das, was vorgesehen war.",
+    "en": "Right: The talks were to end on Friday. Were to names what was planned."
+   },
+   "wrong": [
+    {
+     "not": [
+      "were"
+     ],
+     "de": "Das Schlüsselwort were muss unverändert in der Lücke stehen.",
+     "en": "The key word were must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "were"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach were braucht es to und die Grundform.",
+     "en": "After were you need to and the base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fp-k8",
+  "type": "kwt",
+  "pat": "fp.was-to",
+  "from": "The new office has been scheduled for June, but the permit was delayed.",
+  "key": "OPEN",
+  "frame": "The new office ___ in June, but the permit was delayed.",
+  "answer": "was to open",
+  "accepted": [],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: The new office was to open in June. Was to nennt den Plan.",
+    "en": "Right: The new office was to open in June. Was to names the plan."
+   },
+   "wrong": [
+    {
+     "not": [
+      "open"
+     ],
+     "de": "Das Schlüsselwort open muss unverändert in der Lücke stehen.",
+     "en": "The key word open must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "open"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Vor open braucht es was to.",
+     "en": "Before open you need was to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fp-f1",
+  "type": "find",
+  "pat": "fp.was-going",
+  "prompt": "We are going to launch in June, but the supplier delayed everything.",
+  "err": [
+   1,
+   2
+  ],
+  "answer": "were going",
+  "fixed": "We were going to launch in June, but the supplier delayed everything.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Der Plan liegt in der Vergangenheit. Richtig: were going to.",
+    "en": "The error: the plan lies in the past. Correct: were going to."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Ein Plan von damals braucht was oder were going to.",
+     "en": "There is an error: A plan from back then needs was or were going to."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Ein Plan von damals braucht was oder were going to.",
+     "en": "The error is elsewhere: A plan from back then needs was or were going to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fp-f2",
+  "type": "find",
+  "pat": "fp.was-going",
+  "prompt": "I was going to call you earlier, but the line was busy all morning.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Richtig: was going to call nennt den Plan von damals.",
+    "en": "Right: was going to call names the plan from back then."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist alles richtig: was going to call ist richtig gebildet.",
+     "en": "Everything is right here: was going to call is correctly formed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fp-f3",
+  "type": "find",
+  "pat": "fp.about-to",
+  "prompt": "Our guests were about arriving when we noticed the missing chairs.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "about to arrive",
+  "fixed": "Our guests were about to arrive when we noticed the missing chairs.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach about steht to und die Grundform. Richtig: about to arrive.",
+    "en": "The error: after about comes to and the base form. Correct: about to arrive."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach about steht to und die Grundform.",
+     "en": "There is an error: After about comes to and the base form."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Nach about steht to und die Grundform.",
+     "en": "The error is elsewhere: After about comes to and the base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fp-f4",
+  "type": "find",
+  "pat": "fp.about-to",
+  "prompt": "She was about to hang up when the call finally connected.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Richtig: was about to hang up, dann kam der Anruf dazwischen.",
+    "en": "Right: was about to hang up, then the call intervened."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist alles richtig: was about to hang up ist richtig gebildet.",
+     "en": "Everything is right here: was about to hang up is correctly formed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fp-f5",
+  "type": "find",
+  "pat": "fp.would-narr",
+  "prompt": "He joined as a trainee in 2012 and will later become the head of sales.",
+  "err": [
+   8,
+   10
+  ],
+  "answer": "would later become",
+  "fixed": "He joined as a trainee in 2012 and would later become the head of sales.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Aus der Vergangenheit auf Späteres braucht es would. Richtig: would later become.",
+    "en": "The error: looking from the past at something later needs would. Correct: would later become."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Beim Erzählen aus der Vergangenheit steht would.",
+     "en": "There is an error: When telling from the past, would is used."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Beim Erzählen aus der Vergangenheit steht would.",
+     "en": "The error is elsewhere: When telling from the past, would is used."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fp-f6",
+  "type": "find",
+  "pat": "fp.would-narr",
+  "prompt": "She promised that she will review the draft by Monday.",
+  "err": [
+   4,
+   5
+  ],
+  "answer": "would review",
+  "fixed": "She promised that she would review the draft by Monday.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach promised steht would statt will. Richtig: would review.",
+    "en": "The error: after promised, would replaces will. Correct: would review."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach einem Verb der Vergangenheit rückt will zu would.",
+     "en": "There is an error: After a verb in the past, will shifts to would."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Nach einem Verb der Vergangenheit rückt will zu would.",
+     "en": "The error is elsewhere: After a verb in the past, will shifts to would."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fp-f7",
+  "type": "find",
+  "pat": "fp.was-to",
+  "prompt": "The new warehouse should open in March, but the permit was delayed.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "was to open",
+  "fixed": "The new warehouse was to open in March, but the permit was delayed.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Für einen Plan in der Vergangenheit gilt was to. Richtig: was to open.",
+    "en": "The error: for a plan in the past was to is used. Correct: was to open."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Statt should steht was to.",
+     "en": "There is an error: Instead of should, was to is used."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Statt should steht was to.",
+     "en": "The error is elsewhere: Instead of should, was to is used."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fp-f8",
+  "type": "find",
+  "pat": "fp.was-to",
+  "prompt": "The talks was to end on Friday, but they ran into the weekend.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "were to",
+  "fixed": "The talks were to end on Friday, but they ran into the weekend.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Talks ist Plural, deshalb were to. Richtig: The talks were to end.",
+    "en": "The error: talks is plural, so were to. Correct: The talks were to end."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Zu einem Plural passt were to.",
+     "en": "There is an error: With a plural, were to fits."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Zu einem Plural passt were to.",
+     "en": "The error is elsewhere: With a plural, were to fits."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fp-m1",
+  "type": "meaning",
+  "pat": "fp.was-going",
+  "a": "We were going to launch in May.",
+  "b": "We launched in May.",
+  "q": {
+   "de": "Welcher Satz sagt, dass der Plan vermutlich nicht aufging?",
+   "en": "Which sentence suggests the plan probably did not work out?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Was going to nennt einen Plan, der oft nicht eintrat.",
+    "en": "Right: sentence a. Was going to names a plan that often did not happen."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b hat der Start stattgefunden.",
+     "en": "In b the launch took place."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Nur a nennt einen Plan.",
+     "en": "Not the same: only a names a plan."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fp-m2",
+  "type": "meaning",
+  "pat": "fp.about-to",
+  "a": "I was about to leave when she called.",
+  "b": "I had already left when she called.",
+  "q": {
+   "de": "Welcher Satz sagt, dass ich noch da war?",
+   "en": "Which sentence says I was still there?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Was about to heißt: kurz davor, aber noch nicht geschehen.",
+    "en": "Right: sentence a. Was about to means: just before, but not yet done."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b war ich schon weg und nicht mehr da.",
+     "en": "In b I was already gone."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Nur a meint, dass ich noch da war.",
+     "en": "Not the same: only a means I was still there."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fp-m3",
+  "type": "meaning",
+  "pat": "fp.would-narr",
+  "a": "She would later lead the office.",
+  "b": "She will lead the office.",
+  "q": {
+   "de": "Welcher Satz blickt aus der Vergangenheit auf Späteres?",
+   "en": "Which sentence looks from the past at something later?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Would blickt aus der Vergangenheit voraus.",
+    "en": "Right: sentence a. Would looks ahead from the past."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "Satz b spricht von der Zukunft aus der Gegenwart.",
+     "en": "Sentence b speaks of the future from the present."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Nur a blickt aus der Vergangenheit.",
+     "en": "Not the same: only a looks from the past."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fp-m4",
+  "type": "meaning",
+  "pat": "fp.was-to",
+  "a": "The talks were to end on Friday.",
+  "b": "The talks ended on Friday.",
+  "q": {
+   "de": "Welcher Satz nennt, was geplant war?",
+   "en": "Which sentence names what was planned?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Were to nennt das Vorgesehene.",
+    "en": "Right: sentence a. Were to names what was meant to be."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b endeten die Gespräche, es war kein Plan.",
+     "en": "In b the talks ended, it was not a plan."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Nur a nennt einen Plan.",
+     "en": "Not the same: only a names a plan."
+    }
+   ]
+  }
+ }
+]

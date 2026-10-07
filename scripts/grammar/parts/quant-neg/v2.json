@@ -1,0 +1,662 @@
+[
+ {
+  "id": "qn-k1",
+  "type": "kwt",
+  "pat": "qn.none",
+  "from": "No supplier among those we asked has replied yet.",
+  "key": "NONE",
+  "frame": "___ the suppliers has replied yet.",
+  "answer": "None of",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: None of the suppliers has replied. None of heißt „keiner von“.",
+    "en": "Right: None of the suppliers has replied. None of means “not one of”."
+   },
+   "wrong": [
+    {
+     "not": [
+      "none"
+     ],
+     "de": "Das Schlüsselwort none muss unverändert in der Lücke stehen.",
+     "en": "The key word none must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "none"
+     ],
+     "not": [
+      "of"
+     ],
+     "de": "Vor einem bestimmten Nomen braucht es none of.",
+     "en": "Before a specific noun you need none of."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qn-k2",
+  "type": "kwt",
+  "pat": "qn.none",
+  "from": "Both offers fail to meet our budget.",
+  "key": "NEITHER",
+  "frame": "___ the offers meets our budget.",
+  "answer": "Neither of",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Neither of the offers meets our budget. Neither of steht bei genau zwei Dingen.",
+    "en": "Right: Neither of the offers meets our budget. Neither of is used with exactly two things."
+   },
+   "wrong": [
+    {
+     "not": [
+      "neither"
+     ],
+     "de": "Das Schlüsselwort neither muss unverändert in der Lücke stehen.",
+     "en": "The key word neither must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "neither"
+     ],
+     "not": [
+      "of"
+     ],
+     "de": "Vor einem bestimmten Nomen braucht es neither of.",
+     "en": "Before a specific noun you need neither of."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qn-k3",
+  "type": "kwt",
+  "pat": "qn.hardly",
+  "from": "We had almost no time to prepare.",
+  "key": "HARDLY",
+  "frame": "We ___ any time to prepare.",
+  "answer": "hardly had",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: We hardly had any time. Hardly ist schon verneint, deshalb kein not.",
+    "en": "Right: We hardly had any time. Hardly is already negative, so no not."
+   },
+   "wrong": [
+    {
+     "not": [
+      "hardly"
+     ],
+     "de": "Das Schlüsselwort hardly muss unverändert in der Lücke stehen.",
+     "en": "The key word hardly must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "hardly"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "Hardly steht vor dem Verb: hardly had.",
+     "en": "Hardly stands before the verb: hardly had."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qn-k4",
+  "type": "kwt",
+  "pat": "qn.hardly",
+  "from": "The team almost never misses a deadline.",
+  "key": "SCARCELY",
+  "frame": "The team ___ misses a deadline.",
+  "answer": "scarcely ever",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: The team scarcely ever misses a deadline. Scarcely ever ist die Wendung für „fast nie“.",
+    "en": "Right: The team scarcely ever misses a deadline. Scarcely ever means “almost never”."
+   },
+   "wrong": [
+    {
+     "not": [
+      "scarcely"
+     ],
+     "de": "Das Schlüsselwort scarcely muss unverändert in der Lücke stehen.",
+     "en": "The key word scarcely must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "scarcely"
+     ],
+     "not": [
+      "ever"
+     ],
+     "de": "Zu scarcely gehört hier ever: scarcely ever.",
+     "en": "Scarcely goes with ever here: scarcely ever."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qn-k5",
+  "type": "kwt",
+  "pat": "qn.no-longer",
+  "from": "We stopped offering this service last year.",
+  "key": "LONGER",
+  "frame": "We ___ offer this service.",
+  "answer": "no longer",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: We no longer offer this service. No longer steht vor dem Verb.",
+    "en": "Right: We no longer offer this service. No longer stands before the verb."
+   },
+   "wrong": [
+    {
+     "not": [
+      "longer"
+     ],
+     "de": "Das Schlüsselwort longer muss unverändert in der Lücke stehen.",
+     "en": "The key word longer must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "longer"
+     ],
+     "not": [
+      "no"
+     ],
+     "de": "Vor longer braucht es no: no longer.",
+     "en": "Before longer you need no: no longer."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qn-k6",
+  "type": "kwt",
+  "pat": "qn.no-longer",
+  "from": "He left the company last spring.",
+  "key": "MORE",
+  "frame": "He does not work here ___.",
+  "answer": "any more",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: He does not work here any more. Am Ende steht any more oder any longer.",
+    "en": "Right: He does not work here any more. At the end any more or any longer is used."
+   },
+   "wrong": [
+    {
+     "not": [
+      "more"
+     ],
+     "de": "Das Schlüsselwort more muss unverändert in der Lücke stehen.",
+     "en": "The key word more must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "more"
+     ],
+     "not": [
+      "any"
+     ],
+     "de": "Nach not braucht es any more.",
+     "en": "After not you need any more."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qn-k7",
+  "type": "kwt",
+  "pat": "qn.number",
+  "from": "Many customers have complained about the delay.",
+  "key": "NUMBER",
+  "frame": "___ customers have complained about the delay.",
+  "answer": "A number of",
+  "accepted": [],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: A number of customers have complained. A number of heißt „einige“ und nimmt das Verb im Plural.",
+    "en": "Right: A number of customers have complained. A number of means “several” and takes a plural verb."
+   },
+   "wrong": [
+    {
+     "not": [
+      "number"
+     ],
+     "de": "Das Schlüsselwort number muss unverändert in der Lücke stehen.",
+     "en": "The key word number must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "number"
+     ],
+     "not": [
+      "of"
+     ],
+     "de": "Nach number braucht es of.",
+     "en": "After number you need of."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qn-k8",
+  "type": "kwt",
+  "pat": "qn.number",
+  "from": "Complaints have fallen over the last quarter.",
+  "key": "NUMBER",
+  "frame": "___ complaints has fallen over the last quarter.",
+  "answer": "The number of",
+  "accepted": [],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: The number of complaints has fallen. Bei the number of steht das Verb im Singular.",
+    "en": "Right: The number of complaints has fallen. With the number of the verb is singular."
+   },
+   "wrong": [
+    {
+     "not": [
+      "number"
+     ],
+     "de": "Das Schlüsselwort number muss unverändert in der Lücke stehen.",
+     "en": "The key word number must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "number"
+     ],
+     "not": [
+      "the"
+     ],
+     "de": "Für die Zahl selbst braucht es the number of.",
+     "en": "For the figure itself you need the number of."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qn-f1",
+  "type": "find",
+  "pat": "qn.none",
+  "prompt": "No one of the suppliers has replied to our inquiry yet.",
+  "err": [
+   0,
+   2
+  ],
+  "answer": "None of",
+  "fixed": "None of the suppliers has replied to our inquiry yet.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Für „keiner von“ steht none of. Richtig: None of the suppliers.",
+    "en": "The error: for “not one of” none of is used. Correct: None of the suppliers."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Statt no one of steht none of.",
+     "en": "There is an error: Instead of no one of, none of is used."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Statt no one of steht none of.",
+     "en": "The error is elsewhere: Instead of no one of, none of is used."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qn-f2",
+  "type": "find",
+  "pat": "qn.none",
+  "prompt": "I did not receive any of the documents you mentioned.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Richtig: not … any of heißt „keines von“.",
+    "en": "Right: not … any of means “none of”."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist alles richtig: not any of ist richtig gebildet.",
+     "en": "Everything is right here: not any of is correctly formed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qn-f3",
+  "type": "find",
+  "pat": "qn.hardly",
+  "prompt": "There was not hardly any time left to prepare for the audit.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "hardly",
+  "fixed": "There was hardly any time left to prepare for the audit.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Hardly ist schon verneint, ein zweites not ist zu viel.",
+    "en": "The error: hardly is already negative, a second not is too much."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Hardly braucht kein not.",
+     "en": "There is an error: Hardly needs no not."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Hardly braucht kein not.",
+     "en": "The error is elsewhere: Hardly needs no not."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qn-f4",
+  "type": "find",
+  "pat": "qn.hardly",
+  "prompt": "We barely noticed the change in the schedule.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Richtig: barely noticed ist „kaum bemerkt“.",
+    "en": "Right: barely noticed means “hardly noticed”."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist alles richtig: barely noticed ist richtig gebildet.",
+     "en": "Everything is right here: barely noticed is correctly formed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qn-f5",
+  "type": "find",
+  "pat": "qn.no-longer",
+  "prompt": "Our team no more supports the old software version.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "no longer",
+  "fixed": "Our team no longer supports the old software version.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Für „nicht mehr“ bei der Zeit steht no longer.",
+    "en": "The error: for “not any more” in time no longer is used."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: No more steht bei Mengen, hier gilt no longer.",
+     "en": "There is an error: No more is used with amounts, here no longer applies."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: No more steht bei Mengen, hier gilt no longer.",
+     "en": "The error is elsewhere: No more is used with amounts, here no longer applies."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qn-f6",
+  "type": "find",
+  "pat": "qn.no-longer",
+  "prompt": "The old system is not longer supported by the vendor.",
+  "err": [
+   4,
+   5
+  ],
+  "answer": "no longer",
+  "fixed": "The old system is no longer supported by the vendor.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Es heißt no longer, nicht not longer.",
+    "en": "The error: it is no longer, not not longer."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Die feste Form heißt no longer.",
+     "en": "There is an error: The fixed form is no longer."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Die feste Form heißt no longer.",
+     "en": "The error is elsewhere: The fixed form is no longer."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qn-f7",
+  "type": "find",
+  "pat": "qn.number",
+  "prompt": "The number of requests have doubled since the update.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "has",
+  "fixed": "The number of requests has doubled since the update.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Bei the number of steht das Verb im Singular: has.",
+    "en": "The error: with the number of the verb is singular: has."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Kern ist number, deshalb Singular.",
+     "en": "There is an error: The core is number, so singular."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Kern ist number, deshalb Singular.",
+     "en": "The error is elsewhere: The core is number, so singular."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qn-f8",
+  "type": "find",
+  "pat": "qn.number",
+  "prompt": "A number of clients has asked about the new tariff.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "have",
+  "fixed": "A number of clients have asked about the new tariff.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Bei a number of steht das Verb im Plural: have.",
+    "en": "The error: with a number of the verb is plural: have."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: A number of heißt „einige“, deshalb Plural.",
+     "en": "There is an error: A number of means “several”, so plural."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: A number of heißt „einige“, deshalb Plural.",
+     "en": "The error is elsewhere: A number of means “several”, so plural."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qn-m1",
+  "type": "meaning",
+  "pat": "qn.none",
+  "a": "None of the offers is ready.",
+  "b": "Not all of the offers are ready.",
+  "q": {
+   "de": "Welcher Satz sagt, dass kein einziges Angebot fertig ist?",
+   "en": "Which sentence says that not a single offer is ready?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. None of ist: kein einziges.",
+    "en": "Right: sentence a. None of means: not a single one."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b sind einige Angebote fertig.",
+     "en": "In b some offers are ready."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Nur a sagt, dass keines fertig ist.",
+     "en": "Not the same: only a says none is ready."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qn-m2",
+  "type": "meaning",
+  "pat": "qn.hardly",
+  "a": "We hardly had any time.",
+  "b": "We had plenty of time.",
+  "q": {
+   "de": "Welcher Satz sagt, dass fast keine Zeit da war?",
+   "en": "Which sentence says that there was almost no time?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Hardly any ist: kaum etwas.",
+    "en": "Right: sentence a. Hardly any means: almost none."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b war viel Zeit da, nicht wenig.",
+     "en": "In b there was plenty of time."
+    },
+    {
+     "opt": "both",
+     "de": "Die Sätze sagen Gegensätzliches.",
+     "en": "The sentences say opposite things."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qn-m3",
+  "type": "meaning",
+  "pat": "qn.no-longer",
+  "a": "He no longer works here.",
+  "b": "He does not work here yet.",
+  "q": {
+   "de": "Welcher Satz sagt, dass er früher hier gearbeitet hat?",
+   "en": "Which sentence says that he used to work here?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. No longer heißt: früher ja, jetzt nein.",
+    "en": "Right: sentence a. No longer means: before yes, now no."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b hat er noch nicht angefangen. Das ist etwas anderes.",
+     "en": "In b he has not started yet. That is something else."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Nur a meint, dass er früher hier war.",
+     "en": "Not the same: only a means he was here before."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qn-m4",
+  "type": "meaning",
+  "pat": "qn.number",
+  "a": "A number of clients have left.",
+  "b": "The number of clients has fallen.",
+  "q": {
+   "de": "Welcher Satz sagt, dass einige Kunden gegangen sind?",
+   "en": "Which sentence says that several clients have left?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. A number of ist „einige“.",
+    "en": "Right: sentence a. A number of means “several”."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b geht es um die Zahl der Kunden, die gesunken ist.",
+     "en": "In b it is about the figure of clients, which has fallen."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Nur a nennt einige Kunden.",
+     "en": "Not the same: only a names several clients."
+    }
+   ]
+  }
+ }
+]

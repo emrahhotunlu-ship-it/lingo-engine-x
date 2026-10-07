@@ -1,0 +1,317 @@
+{
+ "topic": "quant-neg",
+ "canDo": {
+  "de": "Ich kann Verneinung und Mengen genau ausdrücken: none of und neither of, hardly und scarcely, no longer sowie a number of und the number of.",
+  "en": "I can express negation and quantity precisely: none of and neither of, hardly and scarcely, no longer, and a number of versus the number of."
+ },
+ "order": [
+  "qn.none",
+  "qn.hardly",
+  "qn.no-longer",
+  "qn.number"
+ ],
+ "introPlan": [
+  [
+   "qn.none",
+   "qn.hardly"
+  ],
+  [
+   "qn.no-longer",
+   "qn.number"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Meinst du „keiner von diesen“? Nimm none of, bei zwei neither of.",
+   "Meinst du „kaum“? Nimm hardly, scarcely oder barely, ohne zweites not.",
+   "Meinst du „nicht mehr“? Nimm no longer. Geht es um Mengen? Prüfe a number of und the number of."
+  ],
+  "en": [
+   "Do you mean “not one of these”? Use none of, with two things neither of.",
+   "Do you mean “barely”? Use hardly, scarcely or barely, without a second not.",
+   "Do you mean “not any more”? Use no longer. Is it about amounts? Check a number of and the number of."
+  ]
+ },
+ "patterns": [
+  {
+   "id": "qn.none",
+   "name": {
+    "de": "none of, neither of · keiner von",
+    "en": "none of, neither of · not one of"
+   },
+   "form": {
+    "de": "none of / neither of (zwei) / not any of + the + Nomen",
+    "en": "none of / neither of (two) / not any of + the + noun"
+   },
+   "use": {
+    "de": "Für „keiner von …“ mit einem bestimmten Nomen sagt man none of. Bei genau zwei Dingen steht neither of. Das Verb ist nicht nochmal verneint.",
+    "en": "For “not one of …” with a specific noun you say none of. With exactly two things neither of is used. The verb is not negated again."
+   },
+   "signals": [
+    "none of",
+    "neither of",
+    "not any of",
+    "either of"
+   ],
+   "ex": [
+    {
+     "en": "None of the suppliers has replied yet.",
+     "de": "Keiner der Lieferanten hat bisher geantwortet.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Neither of the offers meets our budget.",
+     "de": "Keines der beiden Angebote passt in unser Budget.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I did not receive any of the documents.",
+     "de": "Ich habe keines der Dokumente erhalten.",
+     "ctx": "mail"
+    }
+   ],
+   "trap": {
+    "bad": "No one of the suppliers has replied yet.",
+    "good": "None of the suppliers has replied yet.",
+    "cause": {
+     "de": "Für „keiner von …“ mit Nomen sagt man none of. No one of ist deutsch gedacht.",
+     "en": "For “not one of …” with a noun you say none of. No one of is German thinking."
+    }
+   },
+   "contrast": {
+    "with": "qn.hardly",
+    "a": "None of the files were lost.",
+    "b": "Hardly any files were lost.",
+    "diff": {
+     "de": "None of heißt: kein einziges. Hardly any heißt: sehr wenige.",
+     "en": "None of means: not a single one. Hardly any means: very few."
+    }
+   },
+   "ccq": [
+    {
+     "s": "None of the offers is ready.",
+     "q": {
+      "de": "Ist mindestens ein Angebot fertig?",
+      "en": "Is at least one offer ready?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Meinst du „keiner von diesen“? Dann nimm none of, bei zwei Dingen neither of.",
+    "en": "Do you mean “not one of these”? Then use none of, with two things neither of."
+   }
+  },
+  {
+   "id": "qn.hardly",
+   "name": {
+    "de": "hardly, scarcely, barely · kaum",
+    "en": "hardly, scarcely, barely · barely"
+   },
+   "form": {
+    "de": "hardly / scarcely / barely + any / ever / enough (ohne not)",
+    "en": "hardly / scarcely / barely + any / ever / enough (without not)"
+   },
+   "use": {
+    "de": "Hardly, scarcely und barely sind schon verneint. Ein zweites not macht daraus Unsinn. Sie stehen oft vor any, ever oder enough: „We hardly had any time.“",
+    "en": "Hardly, scarcely and barely are already negative. A second not turns it into nonsense. They often stand before any, ever or enough: “We hardly had any time.”"
+   },
+   "signals": [
+    "hardly any",
+    "hardly ever",
+    "scarcely",
+    "barely",
+    "rarely"
+   ],
+   "ex": [
+    {
+     "en": "There was hardly any time left to prepare.",
+     "de": "Es blieb kaum Zeit zur Vorbereitung.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "We barely noticed the change.",
+     "de": "Wir haben die Änderung kaum bemerkt.",
+     "ctx": "talk"
+    },
+    {
+     "en": "The team scarcely ever misses a deadline.",
+     "de": "Das Team verpasst fast nie eine Frist.",
+     "ctx": "mail"
+    }
+   ],
+   "trap": {
+    "bad": "We did not hardly have any time to prepare.",
+    "good": "We hardly had any time to prepare.",
+    "cause": {
+     "de": "Hardly ist schon verneint. Das deutsche „kaum“ braucht im Englischen kein zweites not.",
+     "en": "Hardly is already negative. The German “kaum” needs no second not in English."
+    }
+   },
+   "contrast": {
+    "with": "qn.none",
+    "a": "Hardly any files were lost.",
+    "b": "None of the files were lost.",
+    "diff": {
+     "de": "Hardly any heißt: sehr wenige. None of heißt: kein einziges.",
+     "en": "Hardly any means: very few. None of means: not a single one."
+    }
+   },
+   "ccq": [
+    {
+     "s": "We hardly had any time.",
+     "q": {
+      "de": "Hatten wir viel Zeit?",
+      "en": "Did we have a lot of time?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Meinst du „kaum“? Dann nimm hardly, scarcely oder barely, ohne zweites not.",
+    "en": "Do you mean “barely”? Then use hardly, scarcely or barely, without a second not."
+   }
+  },
+  {
+   "id": "qn.no-longer",
+   "name": {
+    "de": "no longer, any more · nicht mehr",
+    "en": "no longer, any more · not any more"
+   },
+   "form": {
+    "de": "no longer + Verb · not … any longer / any more (am Ende)",
+    "en": "no longer + verb · not … any longer / any more (at the end)"
+   },
+   "use": {
+    "de": "Für „nicht mehr“ bei der Zeit sagt man no longer vor dem Verb oder not … any longer am Ende. No more steht bei Mengen: „no more questions“.",
+    "en": "For “not any more” in time you say no longer before the verb or not … any longer at the end. No more is used with amounts: “no more questions”."
+   },
+   "signals": [
+    "no longer",
+    "not any longer",
+    "not any more",
+    "no more",
+    "anymore"
+   ],
+   "ex": [
+    {
+     "en": "We no longer offer this service.",
+     "de": "Wir bieten diesen Service nicht mehr an.",
+     "ctx": "mail"
+    },
+    {
+     "en": "The old system is no longer supported.",
+     "de": "Das alte System wird nicht mehr unterstützt.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "He does not work here any more.",
+     "de": "Er arbeitet nicht mehr hier.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "We no more offer this service.",
+    "good": "We no longer offer this service.",
+    "cause": {
+     "de": "Für „nicht mehr“ bei der Zeit sagt man no longer. No more steht bei Mengen und vor Nomen.",
+     "en": "For “not any more” in time you say no longer. No more is used with amounts and before nouns."
+    }
+   },
+   "contrast": {
+    "with": "qn.hardly",
+    "a": "He no longer works here.",
+    "b": "He hardly works here.",
+    "diff": {
+     "de": "No longer heißt: früher ja, jetzt nein. Hardly heißt: fast nie.",
+     "en": "No longer means: before yes, now no. Hardly means: almost never."
+    }
+   },
+   "ccq": [
+    {
+     "s": "He no longer works here.",
+     "q": {
+      "de": "Hat er früher hier gearbeitet?",
+      "en": "Did he work here before?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Meinst du „früher ja, jetzt nicht mehr“? Dann nimm no longer oder not any more.",
+    "en": "Do you mean “before yes, now no”? Then use no longer or not any more."
+   }
+  },
+  {
+   "id": "qn.number",
+   "name": {
+    "de": "a number of, the number of · Mengen",
+    "en": "a number of, the number of · amounts"
+   },
+   "form": {
+    "de": "a number of + Plural (Verb Plural) · the number of + Plural (Verb Singular)",
+    "en": "a number of + plural (plural verb) · the number of + plural (singular verb)"
+   },
+   "use": {
+    "de": "A number of heißt „einige“ und nimmt das Verb im Plural. The number of meint die Zahl selbst und nimmt das Verb im Singular. Dazu: few und little ohne a sind knapp, a few und a little sind genug.",
+    "en": "A number of means “several” and takes a plural verb. The number of means the figure itself and takes a singular verb. Also: few and little without a are scarce, a few and a little are enough."
+   },
+   "signals": [
+    "a number of",
+    "the number of",
+    "a great deal of",
+    "a few",
+    "few",
+    "a little"
+   ],
+   "ex": [
+    {
+     "en": "A number of customers have complained about the delay.",
+     "de": "Einige Kunden haben sich über die Verzögerung beschwert.",
+     "ctx": "mail"
+    },
+    {
+     "en": "The number of complaints has fallen.",
+     "de": "Die Zahl der Beschwerden ist gesunken.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "There is little we can do before Monday.",
+     "de": "Vor Montag können wir kaum etwas tun.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The number of customers have risen sharply this year.",
+    "good": "The number of customers has risen sharply this year.",
+    "cause": {
+     "de": "Beim Kern „the number“ steht das Verb im Singular. Bei „a number of“ steht es im Plural.",
+     "en": "With the core “the number” the verb is singular. With “a number of” it is plural."
+    }
+   },
+   "contrast": {
+    "with": "qn.hardly",
+    "a": "Few people came.",
+    "b": "A few people came.",
+    "diff": {
+     "de": "Few heißt: zu wenige. A few heißt: einige, genug.",
+     "en": "Few means: too few. A few means: some, enough."
+    }
+   },
+   "ccq": [
+    {
+     "s": "A number of clients have left.",
+     "q": {
+      "de": "Sind es einige Kunden?",
+      "en": "Are there several clients?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Geht es um einige Dinge oder um die Zahl selbst? A number of: Plural. The number of: Singular.",
+    "en": "Is it about several things or the figure itself? A number of: plural. The number of: singular."
+   }
+  }
+ ]
+}

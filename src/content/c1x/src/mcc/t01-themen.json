@@ -269,6 +269,138 @@
    "id": "mcc-0507",
    "kind": "mcc",
    "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "inv.negative",
+   "why": {
+    "ok": {
+     "de": "Nach Rarely am Satzanfang steht das Hilfsverb vor dem Subjekt: Rarely have we had.",
+     "en": "After Rarely at the start, the auxiliary comes before the subject: Rarely have we had."
+    },
+    "wrong": [
+     {
+      "opt": "we have had",
+      "cat": "grammar",
+      "de": "Ohne Umstellung fehlt die Inversion, die Rarely am Anfang verlangt.",
+      "en": "Without inversion the order that Rarely at the start requires is missing."
+     },
+     {
+      "opt": "have had we",
+      "cat": "grammar",
+      "de": "Das Subjekt we muss hinter have stehen, nicht hinter had.",
+      "en": "The subject we has to follow have, not had."
+     },
+     {
+      "opt": "we do have",
+      "cat": "grammar",
+      "de": "Do passt nicht zu Rarely have. Hier braucht es die 3. Form had.",
+      "en": "Do does not fit Rarely have. Here the participle had is needed."
+     }
+    ]
+   },
+   "text": "Rarely ___ such a quiet weekend with the kids at home.",
+   "options": [
+    "we have had",
+    "have had we",
+    "have we had",
+    "we do have"
+   ],
+   "answer": 2
+  },
+  {
+   "id": "mcc-0508",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "inv.only",
+   "why": {
+    "ok": {
+     "de": "Nach Only after und dem Nebensatz steht did vor dem Subjekt, das Verb in der Grundform: did I notice.",
+     "en": "After Only after and the clause, did stands before the subject and the verb takes the base form: did I notice."
+    },
+    "wrong": [
+     {
+      "opt": "I noticed",
+      "cat": "grammar",
+      "de": "Hier fehlt die Umstellung nach Only after.",
+      "en": "The inversion after Only after is missing here."
+     },
+     {
+      "opt": "noticed I",
+      "cat": "grammar",
+      "de": "Das Verb steht vor dem Subjekt, aber ohne Hilfsverb. Man braucht did I notice.",
+      "en": "The verb stands before the subject but without an auxiliary. You need did I notice."
+     },
+     {
+      "opt": "I did notice",
+      "cat": "grammar",
+      "de": "did gehört vor das Subjekt, nicht dahinter.",
+      "en": "did belongs before the subject, not after it."
+     }
+    ]
+   },
+   "text": "Only after I had cleaned the whole kitchen ___ that the oven was still on.",
+   "options": [
+    "I noticed",
+    "noticed I",
+    "I did notice",
+    "did I notice"
+   ],
+   "answer": 3
+  },
+  {
+   "id": "mcc-0509",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "inv.cond",
+   "why": {
+    "ok": {
+     "de": "Should you be … ist eine Bedingung ohne if: Should steht vor dem Subjekt, danach die Grundform.",
+     "en": "Should you be … is a condition without if: Should stands before the subject, then the base form."
+    },
+    "wrong": [
+     {
+      "opt": "You should be",
+      "cat": "grammar",
+      "de": "Ohne Umstellung entsteht eine Aussage, keine Bedingung.",
+      "en": "Without inversion you get a statement, not a condition."
+     },
+     {
+      "opt": "If you would be",
+      "cat": "grammar",
+      "de": "Nach if steht kein would. Außerdem ist if ein anderes Muster.",
+      "en": "After if there is no would. Besides, if is a different pattern."
+     },
+     {
+      "opt": "Were you being",
+      "cat": "grammar",
+      "de": "Were you being ist eine Frage in der Verlaufsform und keine Bedingung.",
+      "en": "Were you being is a question in the continuous form and not a condition."
+     }
+    ]
+   },
+   "text": "___ late tonight, text me and I will keep your dinner warm.",
+   "options": [
+    "Should you be",
+    "You should be",
+    "If you would be",
+    "Were you being"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "mcc-0510",
+   "kind": "mcc",
+   "area": "gram",
    "topic": "emph-plus",
    "level": "C1",
    "dom": "biz",
@@ -303,14 +435,14 @@
    "text": "You say nobody warned you, but we ___ warn you in last month's email.",
    "options": [
     "do",
-    "does",
     "did",
+    "does",
     "were"
    ],
-   "answer": 2
+   "answer": 1
   },
   {
-   "id": "mcc-0508",
+   "id": "mcc-0511",
    "kind": "mcc",
    "area": "gram",
    "topic": "emph-plus",
@@ -348,13 +480,13 @@
    "options": [
     "do",
     "did",
-    "is",
-    "does"
+    "does",
+    "is"
    ],
-   "answer": 3
+   "answer": 2
   },
   {
-   "id": "mcc-0509",
+   "id": "mcc-0512",
    "kind": "mcc",
    "area": "gram",
    "topic": "emph-plus",
@@ -390,15 +522,15 @@
    },
    "text": "___ as it sounds, the old tool is still faster than the new one.",
    "options": [
-    "Odd",
     "Oddly",
     "Odder",
-    "Odd that"
+    "Odd that",
+    "Odd"
    ],
-   "answer": 0
+   "answer": 3
   },
   {
-   "id": "mcc-0510",
+   "id": "mcc-0513",
    "kind": "mcc",
    "area": "gram",
    "topic": "emph-plus",
@@ -434,15 +566,15 @@
    },
    "text": "___ I respect your opinion, I cannot agree with this decision.",
    "options": [
-    "As much",
     "Much as",
+    "As much",
     "Much that",
     "Much how"
    ],
-   "answer": 1
+   "answer": 0
   },
   {
-   "id": "mcc-0511",
+   "id": "mcc-0514",
    "kind": "mcc",
    "area": "gram",
    "topic": "emph-plus",
@@ -479,14 +611,14 @@
    "text": "___ was the response that the website crashed within minutes.",
    "options": [
     "So",
-    "Such a",
     "Such",
+    "Such a",
     "Very"
    ],
-   "answer": 2
+   "answer": 1
   },
   {
-   "id": "mcc-0512",
+   "id": "mcc-0515",
    "kind": "mcc",
    "area": "gram",
    "topic": "emph-plus",
@@ -524,13 +656,145 @@
    "options": [
     "must we avoid",
     "avoid we must",
-    "we avoid must",
-    "we must avoid"
+    "we must avoid",
+    "we avoid must"
+   ],
+   "answer": 2
+  },
+  {
+   "id": "mcc-0516",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "ep.do-emph",
+   "why": {
+    "ok": {
+     "de": "Das betonte did steht vor der Grundform: I really did buy the milk.",
+     "en": "The stressed did stands before the base form: I really did buy the milk."
+    },
+    "wrong": [
+     {
+      "opt": "did bought",
+      "cat": "grammar",
+      "de": "Nach did steht die Grundform buy, nicht bought.",
+      "en": "After did the base form buy follows, not bought."
+     },
+     {
+      "opt": "do buy",
+      "cat": "grammar",
+      "de": "Do passt nicht zur Vergangenheit. Hier braucht es did.",
+      "en": "Do does not fit the past. Here did is needed."
+     },
+     {
+      "opt": "bought did",
+      "cat": "grammar",
+      "de": "did steht vor dem Verb, nicht dahinter.",
+      "en": "did stands before the verb, not after it."
+     }
+    ]
+   },
+   "text": "I know you think I forgot, but I really ___ the milk this morning.",
+   "options": [
+    "did bought",
+    "do buy",
+    "bought did",
+    "did buy"
    ],
    "answer": 3
   },
   {
-   "id": "mcc-0513",
+   "id": "mcc-0517",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "ep.concession",
+   "why": {
+    "ok": {
+     "de": "Tempting as it is … räumt etwas ein: Adjektiv, as, dann Subjekt und Verb in normaler Stellung.",
+     "en": "Tempting as it is … concedes a point: adjective, as, then subject and verb in normal order."
+    },
+    "wrong": [
+     {
+      "opt": "Tempting that",
+      "cat": "grammar",
+      "de": "That leitet hier keinen Einwand ein. Es braucht as.",
+      "en": "That does not introduce a concession here. It needs as."
+     },
+     {
+      "opt": "Tempting but",
+      "cat": "grammar",
+      "de": "But ist eine Konjunktion und kann nicht hinter dem Adjektiv stehen.",
+      "en": "But is a conjunction and cannot follow the adjective."
+     },
+     {
+      "opt": "Although tempting as",
+      "cat": "grammar",
+      "de": "Although und as zusammen doppeln den Einwand.",
+      "en": "Although and as together double the concession."
+     }
+    ]
+   },
+   "text": "___ it is, we cannot afford a holiday abroad this year.",
+   "options": [
+    "Tempting as",
+    "Tempting that",
+    "Tempting but",
+    "Although tempting as"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "mcc-0518",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "ep.so-such",
+   "why": {
+    "ok": {
+     "de": "Nach So + Adjektiv am Anfang steht das Verb vor dem Subjekt: So loud was the music.",
+     "en": "After So + adjective at the start, the verb comes before the subject: So loud was the music."
+    },
+    "wrong": [
+     {
+      "opt": "the music was",
+      "cat": "grammar",
+      "de": "Ohne Umstellung fehlt die Inversion nach So loud.",
+      "en": "Without inversion the order after So loud is missing."
+     },
+     {
+      "opt": "the music were",
+      "cat": "grammar",
+      "de": "Music ist Singular, deshalb was, nicht were.",
+      "en": "Music is singular, so was, not were."
+     },
+     {
+      "opt": "were the music",
+      "cat": "grammar",
+      "de": "Music ist Singular. Were passt nicht dazu.",
+      "en": "Music is singular. Were does not fit."
+     }
+    ]
+   },
+   "text": "So loud ___ that the neighbors called the police.",
+   "options": [
+    "the music was",
+    "was the music",
+    "the music were",
+    "were the music"
+   ],
+   "answer": 1
+  },
+  {
+   "id": "mcc-0519",
    "kind": "mcc",
    "area": "gram",
    "topic": "ellipsis",
@@ -566,15 +830,15 @@
    },
    "text": "Will the migration finish by Friday? I ___, but we should prepare a plan B.",
    "options": [
-    "hope so",
     "hope it so",
     "hope that",
+    "hope so",
     "hope yes"
    ],
-   "answer": 0
+   "answer": 2
   },
   {
-   "id": "mcc-0514",
+   "id": "mcc-0520",
    "kind": "mcc",
    "area": "gram",
    "topic": "ellipsis",
@@ -611,14 +875,14 @@
    "text": "Has the client approved the offer? I ___; they still have questions.",
    "options": [
     "am afraid no",
-    "am afraid not",
     "am afraid that not",
-    "am afraid so"
+    "am afraid so",
+    "am afraid not"
    ],
-   "answer": 1
+   "answer": 3
   },
   {
-   "id": "mcc-0515",
+   "id": "mcc-0521",
    "kind": "mcc",
    "area": "gram",
    "topic": "ellipsis",
@@ -654,15 +918,15 @@
    },
    "text": "Employees who wish to change their working hours must ___ in writing.",
    "options": [
+    "do so",
     "do it so",
     "so do",
-    "do so",
     "do such"
    ],
-   "answer": 2
+   "answer": 0
   },
   {
-   "id": "mcc-0516",
+   "id": "mcc-0522",
    "kind": "mcc",
    "area": "gram",
    "topic": "ellipsis",
@@ -699,14 +963,14 @@
    "text": "He reviewed every contract carefully, and his colleagues ___.",
    "options": [
     "did same",
+    "did the same",
     "did it the same",
-    "did so same",
-    "did the same"
+    "did so same"
    ],
-   "answer": 3
+   "answer": 1
   },
   {
-   "id": "mcc-0517",
+   "id": "mcc-0523",
    "kind": "mcc",
    "area": "gram",
    "topic": "ellipsis",
@@ -742,15 +1006,15 @@
    },
    "text": "These laptops are older than ___ of the sales team.",
    "options": [
-    "those",
     "that",
     "these",
+    "those",
     "them"
    ],
-   "answer": 0
+   "answer": 2
   },
   {
-   "id": "mcc-0518",
+   "id": "mcc-0524",
    "kind": "mcc",
    "area": "gram",
    "topic": "ellipsis",
@@ -787,14 +1051,146 @@
    "text": "Are you joining the training on Friday? Yes, I would love ___, but my flight is late.",
    "options": [
     "so",
-    "to",
     "for",
-    "at"
+    "at",
+    "to"
+   ],
+   "answer": 3
+  },
+  {
+   "id": "mcc-0525",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "el.so-not",
+   "why": {
+    "ok": {
+     "de": "Nach hope steht not direkt für den verneinten Gedanken: I hope not.",
+     "en": "After hope, not stands directly for the negative thought: I hope not."
+    },
+    "wrong": [
+     {
+      "opt": "no",
+      "cat": "grammar",
+      "de": "No steht nicht hinter hope. Dort braucht es not.",
+      "en": "No does not follow hope. There it needs not."
+     },
+     {
+      "opt": "that not",
+      "cat": "grammar",
+      "de": "Nach hope folgt not direkt, ohne that.",
+      "en": "After hope, not follows directly, without that."
+     },
+     {
+      "opt": "not so",
+      "cat": "grammar",
+      "de": "So not ist keine feste Folge nach hope.",
+      "en": "Not so is not a fixed sequence after hope."
+     }
+    ]
+   },
+   "text": "\"Will it rain tomorrow?\" \"I hope ___, because we are planning a picnic.\"",
+   "options": [
+    "not",
+    "no",
+    "that not",
+    "not so"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "mcc-0526",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "el.do-so",
+   "why": {
+    "ok": {
+     "de": "Does the same ersetzt die Handlung leaves her shoes in the hall.",
+     "en": "Does the same replaces the action leaves her shoes in the hall."
+    },
+    "wrong": [
+     {
+      "opt": "does same",
+      "cat": "grammar",
+      "de": "Vor same steht the: the same.",
+      "en": "Before same you need the: the same."
+     },
+     {
+      "opt": "does it the same",
+      "cat": "grammar",
+      "de": "Does the same braucht kein it.",
+      "en": "Does the same needs no it."
+     },
+     {
+      "opt": "is the same",
+      "cat": "grammar",
+      "de": "Is the same wäre ein Vergleich und ersetzt keine Handlung.",
+      "en": "Is the same would be a comparison and does not replace an action."
+     }
+    ]
+   },
+   "text": "My brother always leaves his shoes in the hall, and my sister ___.",
+   "options": [
+    "does same",
+    "does the same",
+    "does it the same",
+    "is the same"
    ],
    "answer": 1
   },
   {
-   "id": "mcc-0519",
+   "id": "mcc-0527",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "el.one-ones",
+   "why": {
+    "ok": {
+     "de": "One ersetzt das Nomen phone. Hinter new darf es nicht fehlen.",
+     "en": "One replaces the noun phone. After new it must not be missing."
+    },
+    "wrong": [
+     {
+      "opt": "ones",
+      "cat": "grammar",
+      "de": "Phone ist Singular, deshalb one, nicht ones.",
+      "en": "Phone is singular, so one, not ones."
+     },
+     {
+      "opt": "it",
+      "cat": "grammar",
+      "de": "It kann kein Adjektiv-Nomen ersetzen. Es braucht one.",
+      "en": "It cannot replace an adjective-noun phrase. It needs one."
+     },
+     {
+      "opt": "that",
+      "cat": "grammar",
+      "de": "That steht nicht hinter einem Adjektiv.",
+      "en": "That does not follow an adjective."
+     }
+    ]
+   },
+   "text": "My old phone is slow, so I am thinking of buying a new ___.",
+   "options": [
+    "ones",
+    "it",
+    "one",
+    "that"
+   ],
+   "answer": 2
+  },
+  {
+   "id": "mcc-0528",
    "kind": "mcc",
    "area": "gram",
    "topic": "noun-phrase",
@@ -832,13 +1228,13 @@
    "options": [
     "what I have seen",
     "I have seen it",
-    "I have seen",
-    "who I have seen"
+    "who I have seen",
+    "I have seen"
    ],
-   "answer": 2
+   "answer": 3
   },
   {
-   "id": "mcc-0520",
+   "id": "mcc-0529",
    "kind": "mcc",
    "area": "gram",
    "topic": "noun-phrase",
@@ -874,15 +1270,15 @@
    },
    "text": "The report ___ was very helpful for the preparation of the meeting.",
    "options": [
+    "you sent",
     "what you sent",
     "you sent it",
-    "who you sent",
-    "you sent"
+    "who you sent"
    ],
-   "answer": 3
+   "answer": 0
   },
   {
-   "id": "mcc-0521",
+   "id": "mcc-0530",
    "kind": "mcc",
    "area": "gram",
    "topic": "noun-phrase",
@@ -918,15 +1314,15 @@
    },
    "text": "All employees ___ in the project must complete the security training.",
    "options": [
-    "involved",
     "involving",
+    "involved",
     "involve",
     "are involving"
    ],
-   "answer": 0
+   "answer": 1
   },
   {
-   "id": "mcc-0522",
+   "id": "mcc-0531",
    "kind": "mcc",
    "area": "gram",
    "topic": "noun-phrase",
@@ -963,14 +1359,14 @@
    "text": "Any questions ___ during the workshop will be answered in writing.",
    "options": [
     "raising",
-    "raised",
     "raise",
+    "raised",
     "arisen"
    ],
-   "answer": 1
+   "answer": 2
   },
   {
-   "id": "mcc-0523",
+   "id": "mcc-0532",
    "kind": "mcc",
    "area": "gram",
    "topic": "noun-phrase",
@@ -1008,13 +1404,13 @@
    "options": [
     "Toms",
     "Tom",
-    "Tom's",
-    "of Tom"
+    "of Tom",
+    "Tom's"
    ],
-   "answer": 2
+   "answer": 3
   },
   {
-   "id": "mcc-0524",
+   "id": "mcc-0533",
    "kind": "mcc",
    "area": "gram",
    "topic": "noun-phrase",
@@ -1050,10 +1446,142 @@
    },
    "text": "She was the first customer ___ the new subscription.",
    "options": [
+    "to buy",
     "buying",
     "who buy",
-    "for buy",
-    "to buy"
+    "for buy"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "mcc-0534",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "np.contact",
+   "why": {
+    "ok": {
+     "de": "Nach the best kann das Relativpronomen fehlen: the best pizza I have had.",
+     "en": "After the best, the relative pronoun may be dropped: the best pizza I have had."
+    },
+    "wrong": [
+     {
+      "opt": "what I have had",
+      "cat": "grammar",
+      "de": "What leitet hier keinen Relativsatz ein.",
+      "en": "What does not introduce a relative clause here."
+     },
+     {
+      "opt": "that had I",
+      "cat": "grammar",
+      "de": "Nach that steht das Subjekt vor dem Verb: that I had.",
+      "en": "After that the subject comes before the verb: that I had."
+     },
+     {
+      "opt": "I have had it",
+      "cat": "grammar",
+      "de": "Das Objekt pizza steht schon vorn, it ist doppelt.",
+      "en": "The object pizza already stands first, so it is doubled."
+     }
+    ]
+   },
+   "text": "This is the best pizza ___ in years.",
+   "options": [
+    "what I have had",
+    "I have had",
+    "that had I",
+    "I have had it"
+   ],
+   "answer": 1
+  },
+  {
+   "id": "mcc-0535",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "np.participle",
+   "why": {
+    "ok": {
+     "de": "Das Partizip playing ersetzt who are playing: the kids playing in the garden.",
+     "en": "The participle playing replaces who are playing: the kids playing in the garden."
+    },
+    "wrong": [
+     {
+      "opt": "play",
+      "cat": "grammar",
+      "de": "Ein zweites Verb ohne who geht nicht: playing statt play.",
+      "en": "A second verb without who does not work: playing instead of play."
+     },
+     {
+      "opt": "played",
+      "cat": "grammar",
+      "de": "Played ist passiv und passt nicht zu Kindern, die selbst spielen.",
+      "en": "Played is passive and does not fit kids who play themselves."
+     },
+     {
+      "opt": "are playing",
+      "cat": "grammar",
+      "de": "Are playing doppelt das Verb are.",
+      "en": "Are playing doubles the verb are."
+     }
+    ]
+   },
+   "text": "The kids ___ in the garden are my neighbor’s.",
+   "options": [
+    "play",
+    "played",
+    "playing",
+    "are playing"
+   ],
+   "answer": 2
+  },
+  {
+   "id": "mcc-0536",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "np.of-s",
+   "why": {
+    "ok": {
+     "de": "Bei Personen steht ’s oder s’: my parents’ house (Plural mit Apostroph hinter dem s).",
+     "en": "With people ’s or s’ is used: my parents’ house (plural with the apostrophe after the s)."
+    },
+    "wrong": [
+     {
+      "opt": "my parent’s",
+      "cat": "meaning",
+      "de": "My parent’s heißt nur ein Elternteil.",
+      "en": "My parent’s means only one parent."
+     },
+     {
+      "opt": "of my parents",
+      "cat": "grammar",
+      "de": "Of my parents house ist falsch gestellt. Bei Personen steht ’s.",
+      "en": "Of my parents house is out of place. With people ’s is used."
+     },
+     {
+      "opt": "my parents house",
+      "cat": "grammar",
+      "de": "Ohne Apostroph fehlt die Besitzform.",
+      "en": "Without an apostrophe the possessive form is missing."
+     }
+    ]
+   },
+   "text": "We stayed at ___ house for the weekend.",
+   "options": [
+    "my parent’s",
+    "of my parents",
+    "my parents house",
+    "my parents’"
    ],
    "answer": 3
   }

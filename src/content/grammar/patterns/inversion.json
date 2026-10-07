@@ -1,319 +1,319 @@
 {
-  "topic": "inversion",
-  "canDo": {
-    "de": "Ich kann Aussagen förmlich und wirkungsvoll betonen: mit Umstellung nach Never, Rarely, Only after, No sooner und bei Bedingungen ohne if.",
-    "en": "I can make statements formal and emphatic: with inversion after Never, Rarely, Only after, No sooner, and in conditions without if."
-  },
-  "order": [
-    "inv.negative",
-    "inv.only",
-    "inv.sooner",
-    "inv.cond"
+ "topic": "inversion",
+ "canDo": {
+  "de": "Ich kann Aussagen förmlich und wirkungsvoll betonen: mit Umstellung nach Never, Rarely, Only after, No sooner und bei Bedingungen ohne if.",
+  "en": "I can make statements formal and emphatic: with inversion after Never, Rarely, Only after, No sooner, and in conditions without if."
+ },
+ "order": [
+  "inv.negative",
+  "inv.only",
+  "inv.sooner",
+  "inv.cond"
+ ],
+ "introPlan": [
+  [
+   "inv.negative",
+   "inv.only"
   ],
-  "introPlan": [
-    [
-      "inv.negative",
-      "inv.only"
-    ],
-    [
-      "inv.sooner",
-      "inv.cond"
-    ]
-  ],
-  "decide": {
-    "de": [
-      "Beginnt der Satz mit Never, Rarely, Seldom, Little oder At no point: Hilfsverb vor das Subjekt.",
-      "Steht „Only“ mit Zeit oder Bedingung vorn: auch hier steht im Hauptsatz das Hilfsverb zuerst.",
-      "Fehlt das if in einer förmlichen Bedingung (Should you, Were we to, Had we): Hilfsverb zuerst."
-    ],
-    "en": [
-      "Does the sentence open with Never, Rarely, Seldom, Little or At no point? Then put the auxiliary before the subject.",
-      "Does “Only” with a time or condition come first? Then the main clause also starts with the auxiliary.",
-      "Is the if missing from a formal condition (Should you, Were we to, Had we)? Then the auxiliary comes first."
-    ]
-  },
-  "patterns": [
-    {
-      "id": "inv.negative",
-      "name": {
-        "de": "Never, Rarely, Little · Hilfsverb vor Subjekt",
-        "en": "Never, Rarely, Little · auxiliary before subject"
-      },
-      "form": {
-        "de": "Never / Rarely / Seldom / Little + Hilfsverb + Subjekt + 3. Form",
-        "en": "Never / Rarely / Seldom / Little + auxiliary + subject + participle"
-      },
-      "use": {
-        "de": "Ein verneinendes oder einschränkendes Wort am Satzanfang betont die Aussage. Danach steht das Hilfsverb vor dem Subjekt, wie in einer Frage.",
-        "en": "A negative or limiting word at the start stresses the statement. The auxiliary then comes before the subject, as in a question."
-      },
-      "signals": [
-        "never",
-        "rarely",
-        "seldom",
-        "little",
-        "at no point",
-        "under no circumstances"
-      ],
-      "ex": [
-        {
-          "en": "Rarely have I seen such a clear proposal.",
-          "de": "Selten habe ich einen so klaren Vorschlag gesehen.",
-          "ctx": "meeting"
-        },
-        {
-          "en": "Never before had the team met a deadline so early.",
-          "de": "Noch nie hatte das Team eine Frist so früh eingehalten.",
-          "ctx": "talk"
-        },
-        {
-          "en": "At no point did the client mention the budget.",
-          "de": "Zu keinem Zeitpunkt erwähnte der Kunde das Budget.",
-          "ctx": "mail"
-        }
-      ],
-      "trap": {
-        "bad": "Rarely we have seen such a clear proposal.",
-        "good": "Rarely have we seen such a clear proposal.",
-        "cause": {
-          "de": "Im Deutschen rückt das Verb nach dem ersten Satzglied von selbst an die zweite Stelle. Im Englischen geschieht das nur nach solchen Einleitern, und man vergisst es, wenn der Satz sonst normal läuft.",
-          "en": "In German the verb moves to second place on its own after the first element. In English that only happens after words like these, and it is easy to forget when the sentence otherwise runs normally."
-        }
-      },
-      "contrast": {
-        "with": "em.neg-inversion",
-        "a": "Rarely have we seen such a fast rollout.",
-        "b": "We have rarely seen such a fast rollout.",
-        "diff": {
-          "de": "Am Satzanfang braucht rarely die Umstellung. Mitten im Satz steht es normal vor dem Verb.",
-          "en": "At the start, rarely needs inversion. Inside the sentence it stands before the verb as usual."
-        }
-      },
-      "ccq": [
-        {
-          "s": "Never had we seen such demand.",
-          "q": {
-            "de": "Hatten wir diese Nachfrage schon einmal gesehen?",
-            "en": "Had we seen such demand before?"
-          },
-          "a": false
-        }
-      ],
-      "nudge": {
-        "de": "Welches Hilfsverb gehört vor das Subjekt, wenn der Satz mit diesem Einleiter beginnt?",
-        "en": "Which auxiliary has to move in front of the subject when the sentence opens with this word?"
-      }
-    },
-    {
-      "id": "inv.only",
-      "name": {
-        "de": "Only after, Only when · Umstellung im Hauptsatz",
-        "en": "Only after, Only when · main clause inverted"
-      },
-      "form": {
-        "de": "Only + Zeit oder Bedingung + Hilfsverb + Subjekt + Verb",
-        "en": "Only + time or condition + auxiliary + subject + verb"
-      },
-      "use": {
-        "de": "Nach „Only after“, „Only when“ oder „Only then“ am Anfang folgt im Hauptsatz die Umstellung. Der Nebensatz davor bleibt normal.",
-        "en": "After “Only after”, “Only when” or “Only then” at the start, the main clause is inverted. The clause before it stays normal."
-      },
-      "signals": [
-        "only after",
-        "only when",
-        "only then",
-        "only if",
-        "only by"
-      ],
-      "ex": [
-        {
-          "en": "Only after the pilot did we approve the full rollout.",
-          "de": "Erst nach dem Pilotbetrieb gaben wir den ganzen Rollout frei.",
-          "ctx": "meeting"
-        },
-        {
-          "en": "Only then did I understand the problem.",
-          "de": "Erst dann habe ich das Problem verstanden.",
-          "ctx": "talk"
-        },
-        {
-          "en": "Only when the client signs will we start the work.",
-          "de": "Erst wenn der Kunde unterschreibt, fangen wir an.",
-          "ctx": "mail"
-        }
-      ],
-      "trap": {
-        "bad": "Only after the pilot we approved the full rollout.",
-        "good": "Only after the pilot did we approve the full rollout.",
-        "cause": {
-          "de": "Das Deutsche sagt „Erst nach dem Pilot haben wir …“, dort ist die Umstellung selbstverständlich. Im Englischen fehlt sie leicht, weil „only“ nicht wie ein Verneinungswort wirkt.",
-          "en": "German says “Erst nach dem Pilot haben wir …”, where the inverted order is natural. In English it is easy to miss, because “only” does not look like a negative word."
-        }
-      },
-      "contrast": {
-        "with": "inv.negative",
-        "a": "Only then did I understand it.",
-        "b": "Never did I understand it.",
-        "diff": {
-          "de": "Beide stellen um. Only grenzt den Zeitpunkt ein, Never verneint die ganze Aussage.",
-          "en": "Both invert. Only limits the point in time, Never negates the whole statement."
-        }
-      },
-      "ccq": [
-        {
-          "s": "Only after the audit did we change the process.",
-          "q": {
-            "de": "Haben wir den Prozess vor der Prüfung geändert?",
-            "en": "Did we change the process before the audit?"
-          },
-          "a": false
-        }
-      ],
-      "nudge": {
-        "de": "Steht „Only“ mit Zeit oder Bedingung vorn? Dann braucht der Hauptsatz das Hilfsverb vor dem Subjekt.",
-        "en": "Does “Only” with a time or condition open the sentence? Then the main clause needs the auxiliary before the subject."
-      }
-    },
-    {
-      "id": "inv.sooner",
-      "name": {
-        "de": "No sooner … than, Hardly … when",
-        "en": "No sooner … than, Hardly … when"
-      },
-      "form": {
-        "de": "No sooner + had + Subjekt + 3. Form + than + Past Simple",
-        "en": "No sooner + had + subject + participle + than + past simple"
-      },
-      "use": {
-        "de": "Zwei Ereignisse folgen unmittelbar aufeinander. Das erste steht im Past Perfect mit Umstellung, das zweite im Past Simple.",
-        "en": "Two events follow each other immediately. The first is in the past perfect with inversion, the second in the past simple."
-      },
-      "signals": [
-        "no sooner",
-        "hardly",
-        "scarcely",
-        "barely",
-        "than",
-        "when"
-      ],
-      "ex": [
-        {
-          "en": "No sooner had we signed than the prices rose.",
-          "de": "Kaum hatten wir unterschrieben, stiegen die Preise.",
-          "ctx": "talk"
-        },
-        {
-          "en": "Hardly had the meeting started when the alarm went off.",
-          "de": "Das Meeting hatte kaum begonnen, da ging der Alarm los.",
-          "ctx": "meeting"
-        },
-        {
-          "en": "Scarcely had she arrived when the call began.",
-          "de": "Sie war kaum angekommen, da begann der Anruf.",
-          "ctx": "mail"
-        }
-      ],
-      "trap": {
-        "bad": "No sooner had we signed when the prices rose.",
-        "good": "No sooner had we signed than the prices rose.",
-        "cause": {
-          "de": "Zu „no sooner“ gehört „than“, zu „hardly“ und „scarcely“ gehört „when“. Beides wird leicht vertauscht, weil das Deutsche beides mit „als“ oder „da“ wiedergibt.",
-          "en": "No sooner goes with than, hardly and scarcely go with when. The two are easily mixed up, because German renders both with “als” or “da”."
-        }
-      },
-      "contrast": {
-        "with": "wo.hardly-sooner",
-        "a": "Hardly had we started when it began to rain.",
-        "b": "As soon as we started, it began to rain.",
-        "diff": {
-          "de": "Beide meinen „kaum … da“. Die Umstellung ist förmlicher und betont, wie plötzlich es kam.",
-          "en": "Both mean “hardly … when”. The inversion is more formal and stresses how sudden it was."
-        }
-      },
-      "ccq": [
-        {
-          "s": "No sooner had she left than the phone rang.",
-          "q": {
-            "de": "Hat das Telefon geklingelt, bevor sie ging?",
-            "en": "Did the phone ring before she left?"
-          },
-          "a": false
-        }
-      ],
-      "nudge": {
-        "de": "Welches Wort gehört zu „no sooner“ und welches zu „hardly“? Und wo steht das Hilfsverb?",
-        "en": "Which word goes with “no sooner” and which with “hardly”? And where does the auxiliary stand?"
-      }
-    },
-    {
-      "id": "inv.cond",
-      "name": {
-        "de": "Should you, Had we · Bedingung ohne if",
-        "en": "Should you, Had we · condition without if"
-      },
-      "form": {
-        "de": "Should / Were / Had + Subjekt + …, Hauptsatz",
-        "en": "Should / Were / Had + subject + …, main clause"
-      },
-      "use": {
-        "de": "Förmliche Bedingungen ohne „if“: Das Hilfsverb steht vorn. Should nennt eine Möglichkeit, Were … to eine Vorstellung, Had etwas Vergangenes.",
-        "en": "Formal conditions without “if”: the auxiliary comes first. Should names a possibility, Were … to an imagined case, Had something in the past."
-      },
-      "signals": [
-        "should you",
-        "were we to",
-        "were it not for",
-        "had we",
-        "had i"
-      ],
-      "ex": [
-        {
-          "en": "Should you need any help, please let us know.",
-          "de": "Falls Sie Hilfe brauchen, sagen Sie uns bitte Bescheid.",
-          "ctx": "mail"
-        },
-        {
-          "en": "Were we to postpone the launch, costs would rise.",
-          "de": "Würden wir den Start verschieben, stiegen die Kosten.",
-          "ctx": "meeting"
-        },
-        {
-          "en": "Had we known about the outage, we would have warned you.",
-          "de": "Hätten wir von dem Ausfall gewusst, hätten wir Sie gewarnt.",
-          "ctx": "talk"
-        }
-      ],
-      "trap": {
-        "bad": "Should you will need help, please call us.",
-        "good": "Should you need help, please call us.",
-        "cause": {
-          "de": "Das Deutsche sagt „Sollten Sie Hilfe brauchen“, und man fügt gern ein will hinzu, weil es um die Zukunft geht. Nach Should you steht aber die Grundform.",
-          "en": "German says “Sollten Sie Hilfe brauchen”, and people like to add will because it is about the future. After Should you, though, the base form follows."
-        }
-      },
-      "contrast": {
-        "with": "ca.inversion",
-        "a": "Had we known, we would have acted.",
-        "b": "If we had known, we would have acted.",
-        "diff": {
-          "de": "Gleiche Bedeutung. Die Fassung ohne if klingt förmlicher, etwa in Mails und Verträgen.",
-          "en": "Same meaning. The version without if sounds more formal, for example in emails and contracts."
-        }
-      },
-      "ccq": [
-        {
-          "s": "Should you need help, call me.",
-          "q": {
-            "de": "Erwarte ich, dass Sie Hilfe brauchen werden?",
-            "en": "Do I expect that you will need help?"
-          },
-          "a": false
-        }
-      ],
-      "nudge": {
-        "de": "Welches Hilfsverb ersetzt das if, und welche Form folgt danach?",
-        "en": "Which auxiliary replaces the if, and which form follows it?"
-      }
-    }
+  [
+   "inv.sooner",
+   "inv.cond"
   ]
+ ],
+ "decide": {
+  "de": [
+   "Beginnt der Satz mit Never, Rarely, Seldom, Little oder At no point: Hilfsverb vor das Subjekt.",
+   "Steht „Only“ mit Zeit oder Bedingung vorn: auch hier steht im Hauptsatz das Hilfsverb zuerst.",
+   "Fehlt das if in einer förmlichen Bedingung (Should you, Were we to, Had we): Hilfsverb zuerst."
+  ],
+  "en": [
+   "Does the sentence open with Never, Rarely, Seldom, Little or At no point? Then put the auxiliary before the subject.",
+   "Does “Only” with a time or condition come first? Then the main clause also starts with the auxiliary.",
+   "Is the if missing from a formal condition (Should you, Were we to, Had we)? Then the auxiliary comes first."
+  ]
+ },
+ "patterns": [
+  {
+   "id": "inv.negative",
+   "name": {
+    "de": "Never, Rarely, Little · Hilfsverb vor Subjekt",
+    "en": "Never, Rarely, Little · auxiliary before subject"
+   },
+   "form": {
+    "de": "Never / Rarely / Seldom / Little + Hilfsverb + Subjekt + 3. Form",
+    "en": "Never / Rarely / Seldom / Little + auxiliary + subject + participle"
+   },
+   "use": {
+    "de": "Ein verneinendes oder einschränkendes Wort am Satzanfang betont die Aussage. Danach steht das Hilfsverb vor dem Subjekt, wie in einer Frage.",
+    "en": "A negative or limiting word at the start stresses the statement. The auxiliary then comes before the subject, as in a question."
+   },
+   "signals": [
+    "never",
+    "rarely",
+    "seldom",
+    "little",
+    "at no point",
+    "under no circumstances"
+   ],
+   "ex": [
+    {
+     "en": "Rarely have I seen such a clear proposal.",
+     "de": "Selten habe ich einen so klaren Vorschlag gesehen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Never before had the team met a deadline so early.",
+     "de": "Noch nie hatte das Team eine Frist so früh eingehalten.",
+     "ctx": "talk"
+    },
+    {
+     "en": "At no point did the client mention the budget.",
+     "de": "Zu keinem Zeitpunkt erwähnte der Kunde das Budget.",
+     "ctx": "mail"
+    }
+   ],
+   "trap": {
+    "bad": "Rarely we have seen such a clear proposal.",
+    "good": "Rarely have we seen such a clear proposal.",
+    "cause": {
+     "de": "Im Deutschen rückt das Verb nach dem ersten Satzglied von selbst an die zweite Stelle. Im Englischen geschieht das nur nach solchen Einleitern, und man vergisst es, wenn der Satz sonst normal läuft.",
+     "en": "In German the verb moves to second place on its own after the first element. In English that only happens after words like these, and it is easy to forget when the sentence otherwise runs normally."
+    }
+   },
+   "contrast": {
+    "with": "em.neg-inversion",
+    "a": "Rarely have we seen such a fast rollout.",
+    "b": "We have rarely seen such a fast rollout.",
+    "diff": {
+     "de": "Am Satzanfang braucht rarely die Umstellung. Mitten im Satz steht es normal vor dem Verb.",
+     "en": "At the start, rarely needs inversion. Inside the sentence it stands before the verb as usual."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Never had we seen such demand.",
+     "q": {
+      "de": "Hatten wir diese Nachfrage schon einmal gesehen?",
+      "en": "Had we seen such demand before?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Welches Hilfsverb gehört vor das Subjekt, wenn der Satz mit diesem Einleiter beginnt?",
+    "en": "Which auxiliary has to move in front of the subject when the sentence opens with this word?"
+   }
+  },
+  {
+   "id": "inv.only",
+   "name": {
+    "de": "Only after, Only when · Umstellung im Hauptsatz",
+    "en": "Only after, Only when · main clause inverted"
+   },
+   "form": {
+    "de": "Only + Zeit oder Bedingung + Hilfsverb + Subjekt + Verb",
+    "en": "Only + time or condition + auxiliary + subject + verb"
+   },
+   "use": {
+    "de": "Nach „Only after“, „Only when“ oder „Only then“ am Anfang folgt im Hauptsatz die Umstellung. Der Nebensatz davor bleibt normal.",
+    "en": "After “Only after”, “Only when” or “Only then” at the start, the main clause is inverted. The clause before it stays normal."
+   },
+   "signals": [
+    "only after",
+    "only when",
+    "only then",
+    "only if",
+    "only by"
+   ],
+   "ex": [
+    {
+     "en": "Only after the pilot did we approve the full rollout.",
+     "de": "Erst nach dem Pilotbetrieb gaben wir den ganzen Rollout frei.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Only then did I understand the problem.",
+     "de": "Erst dann habe ich das Problem verstanden.",
+     "ctx": "talk"
+    },
+    {
+     "en": "Only when the client signs will we start the work.",
+     "de": "Erst wenn der Kunde unterschreibt, fangen wir an.",
+     "ctx": "mail"
+    }
+   ],
+   "trap": {
+    "bad": "Only after the pilot we approved the full rollout.",
+    "good": "Only after the pilot did we approve the full rollout.",
+    "cause": {
+     "de": "Das Deutsche sagt „Erst nach dem Pilot haben wir …“, dort ist die Umstellung selbstverständlich. Im Englischen fehlt sie leicht, weil „only“ nicht wie ein Verneinungswort wirkt.",
+     "en": "German says “Erst nach dem Pilot haben wir …”, where the inverted order is natural. In English it is easy to miss, because “only” does not look like a negative word."
+    }
+   },
+   "contrast": {
+    "with": "inv.negative",
+    "a": "Only then did I understand it.",
+    "b": "Never did I understand it.",
+    "diff": {
+     "de": "Beide stellen um. Only grenzt den Zeitpunkt ein, Never verneint die ganze Aussage.",
+     "en": "Both invert. Only limits the point in time, Never negates the whole statement."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Only after the audit did we change the process.",
+     "q": {
+      "de": "Haben wir den Prozess vor der Prüfung geändert?",
+      "en": "Did we change the process before the audit?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Steht „Only“ mit Zeit oder Bedingung vorn? Dann braucht der Hauptsatz das Hilfsverb vor dem Subjekt.",
+    "en": "Does “Only” with a time or condition open the sentence? Then the main clause needs the auxiliary before the subject."
+   }
+  },
+  {
+   "id": "inv.sooner",
+   "name": {
+    "de": "No sooner … than, Hardly … when",
+    "en": "No sooner … than, Hardly … when"
+   },
+   "form": {
+    "de": "No sooner + had + Subjekt + 3. Form + than + Past Simple",
+    "en": "No sooner + had + subject + participle + than + past simple"
+   },
+   "use": {
+    "de": "Zwei Ereignisse folgen unmittelbar aufeinander. Das erste steht im Past Perfect mit Umstellung, das zweite im Past Simple.",
+    "en": "Two events follow each other immediately. The first is in the past perfect with inversion, the second in the past simple."
+   },
+   "signals": [
+    "no sooner",
+    "hardly",
+    "scarcely",
+    "barely",
+    "than",
+    "when"
+   ],
+   "ex": [
+    {
+     "en": "No sooner had we signed than the prices rose.",
+     "de": "Kaum hatten wir unterschrieben, stiegen die Preise.",
+     "ctx": "talk"
+    },
+    {
+     "en": "Hardly had the meeting started when the alarm went off.",
+     "de": "Das Meeting hatte kaum begonnen, da ging der Alarm los.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Scarcely had she arrived when the call began.",
+     "de": "Sie war kaum angekommen, da begann der Anruf.",
+     "ctx": "mail"
+    }
+   ],
+   "trap": {
+    "bad": "No sooner had we signed when the prices rose.",
+    "good": "No sooner had we signed than the prices rose.",
+    "cause": {
+     "de": "Zu „no sooner“ gehört „than“, zu „hardly“ und „scarcely“ gehört „when“. Beides wird leicht vertauscht, weil das Deutsche beides mit „als“ oder „da“ wiedergibt.",
+     "en": "No sooner goes with than, hardly and scarcely go with when. The two are easily mixed up, because German renders both with “als” or “da”."
+    }
+   },
+   "contrast": {
+    "with": "wo.hardly-sooner",
+    "a": "Hardly had we started when it began to rain.",
+    "b": "As soon as we started, it began to rain.",
+    "diff": {
+     "de": "Beide meinen „kaum … da“. Die Umstellung ist förmlicher und betont, wie plötzlich es kam.",
+     "en": "Both mean “hardly … when”. The inversion is more formal and stresses how sudden it was."
+    }
+   },
+   "ccq": [
+    {
+     "s": "No sooner had she left than the phone rang.",
+     "q": {
+      "de": "Hat das Telefon geklingelt, bevor sie ging?",
+      "en": "Did the phone ring before she left?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Welches Wort gehört zu „no sooner“ und welches zu „hardly“? Und wo steht das Hilfsverb?",
+    "en": "Which word goes with “no sooner” and which with “hardly”? And where does the auxiliary stand?"
+   }
+  },
+  {
+   "id": "inv.cond",
+   "name": {
+    "de": "Should you, Had we · Bedingung ohne if",
+    "en": "Should you, Had we · condition without if"
+   },
+   "form": {
+    "de": "Should / Were / Had + Subjekt + …, Hauptsatz",
+    "en": "Should / Were / Had + subject + …, main clause"
+   },
+   "use": {
+    "de": "Förmliche Bedingungen ohne „if“: Das Hilfsverb steht vorn. Should nennt eine Möglichkeit, Were … to eine Vorstellung, Had etwas Vergangenes.",
+    "en": "Formal conditions without “if”: the auxiliary comes first. Should names a possibility, Were … to an imagined case, Had something in the past."
+   },
+   "signals": [
+    "should you",
+    "were we to",
+    "were it not for",
+    "had we",
+    "had i"
+   ],
+   "ex": [
+    {
+     "en": "Should you need any help, please let us know.",
+     "de": "Falls Sie Hilfe brauchen, sagen Sie uns bitte Bescheid.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Were we to postpone the launch, costs would rise.",
+     "de": "Würden wir den Start verschieben, stiegen die Kosten.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Had we known about the outage, we would have warned you.",
+     "de": "Hätten wir von dem Ausfall gewusst, hätten wir Sie gewarnt.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Should you will need help, please call us.",
+    "good": "Should you need help, please call us.",
+    "cause": {
+     "de": "Das Deutsche sagt „Sollten Sie Hilfe brauchen“, und man fügt gern ein will hinzu, weil es um die Zukunft geht. Nach Should you steht aber die Grundform.",
+     "en": "German says “Sollten Sie Hilfe brauchen”, and people like to add will because it is about the future. After Should you, though, the base form follows."
+    }
+   },
+   "contrast": {
+    "with": "ca.inversion",
+    "a": "Had we known, we would have acted.",
+    "b": "If we had known, we would have acted.",
+    "diff": {
+     "de": "Gleiche Bedeutung. Die Fassung ohne if klingt förmlicher, etwa in Mails und Verträgen.",
+     "en": "Same meaning. The version without if sounds more formal, for example in emails and contracts."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Should you need help, call me.",
+     "q": {
+      "de": "Erwarte ich, dass Sie Hilfe brauchen werden?",
+      "en": "Do I expect that you will need help?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Welches Hilfsverb ersetzt das if, und welche Form folgt danach?",
+    "en": "Which auxiliary replaces the if, and which form follows it?"
+   }
+  }
+ ]
 }

@@ -1,0 +1,211 @@
+[
+ {
+  "pat": "qn.none",
+  "en": "None of the offers meets our budget.",
+  "de": "Keines der Angebote passt in unser Budget.",
+  "chunks": [
+   "none of",
+   "the offers",
+   "meets",
+   "our",
+   "budget"
+  ],
+  "single": "None of bildet den Anfang; the offers meets our budget folgt danach.",
+  "why": [
+   "None of heißt „keiner von“. Danach folgt das bestimmte Nomen the offers.",
+   "None of means “not one of”. The specific noun the offers follows."
+  ],
+  "bad": "No one of the offers meets our budget.",
+  "trap": {
+   "tile": "none of",
+   "instead": "no one of",
+   "why": {
+    "de": "Für „keiner von“ steht none of.",
+    "en": "For “not one of” none of is used."
+   }
+  }
+ },
+ {
+  "pat": "qn.none",
+  "en": "Neither of the managers attended the workshop.",
+  "de": "Keiner der beiden Manager nahm am Workshop teil.",
+  "chunks": [
+   "neither of",
+   "the managers",
+   "attended",
+   "the",
+   "workshop"
+  ],
+  "single": "Neither of bildet den Anfang; the managers attended the workshop folgt danach.",
+  "why": [
+   "Neither of steht bei genau zwei Personen. Danach folgt das Nomen the managers.",
+   "Neither of is used with exactly two people. The noun the managers follows."
+  ],
+  "bad": "Not of the managers attended the workshop.",
+  "trap": {
+   "tile": "neither of",
+   "instead": "not of",
+   "why": {
+    "de": "Für „keiner von beiden“ steht neither of.",
+    "en": "For “neither of the two” neither of is used."
+   }
+  }
+ },
+ {
+  "pat": "qn.hardly",
+  "en": "We hardly had any time to prepare for the call.",
+  "de": "Wir hatten kaum Zeit, uns auf das Gespräch vorzubereiten.",
+  "chunks": [
+   "we",
+   "hardly",
+   "had",
+   "any time",
+   "to prepare",
+   "for the call"
+  ],
+  "single": "We hardly had bildet den Anfang; any time to prepare for the call folgt danach.",
+  "why": [
+   "Hardly steht vor dem Verb und ist schon verneint. Danach folgt any time.",
+   "Hardly stands before the verb and is already negative. Any time follows."
+  ],
+  "bad": "We did not hardly have any time to prepare for the call.",
+  "trap": {
+   "tile": "hardly",
+   "instead": "did not hardly",
+   "why": {
+    "de": "Hardly braucht kein zweites not.",
+    "en": "Hardly needs no second not."
+   }
+  }
+ },
+ {
+  "pat": "qn.hardly",
+  "en": "The team scarcely ever misses a deadline.",
+  "de": "Das Team verpasst fast nie eine Frist.",
+  "chunks": [
+   "the team",
+   "scarcely ever",
+   "misses",
+   "a",
+   "deadline"
+  ],
+  "single": "The team scarcely ever bildet den Anfang; misses a deadline folgt danach.",
+  "why": [
+   "Scarcely ever heißt „fast nie“ und ist schon verneint.",
+   "Scarcely ever means “almost never” and is already negative."
+  ],
+  "bad": "The team does not scarcely ever miss a deadline.",
+  "trap": {
+   "tile": "scarcely ever",
+   "instead": "does not scarcely ever",
+   "why": {
+    "de": "Scarcely braucht kein not.",
+    "en": "Scarcely needs no not."
+   }
+  }
+ },
+ {
+  "pat": "qn.no-longer",
+  "en": "We no longer offer this service to private customers.",
+  "de": "Wir bieten diesen Service privaten Kunden nicht mehr an.",
+  "chunks": [
+   "we",
+   "no longer",
+   "offer",
+   "this service",
+   "to private customers"
+  ],
+  "single": "We no longer bildet den Anfang; offer this service to private customers folgt danach.",
+  "why": [
+   "No longer steht vor dem Verb und heißt „nicht mehr“.",
+   "No longer stands before the verb and means “not any more”."
+  ],
+  "bad": "We no more offer this service to private customers.",
+  "trap": {
+   "tile": "no longer",
+   "instead": "no more",
+   "why": {
+    "de": "Für „nicht mehr“ bei der Zeit steht no longer.",
+    "en": "For “not any more” in time no longer is used."
+   }
+  }
+ },
+ {
+  "pat": "qn.no-longer",
+  "en": "He does not work here any more.",
+  "de": "Er arbeitet nicht mehr hier.",
+  "chunks": [
+   "he",
+   "does not",
+   "work",
+   "here",
+   "any more"
+  ],
+  "single": "He does not work bildet den Anfang; here any more folgt danach.",
+  "why": [
+   "Nach does not steht am Ende any more und bedeutet „nicht mehr“.",
+   "After does not, any more at the end means “not any more”."
+  ],
+  "bad": "He does not work here no more.",
+  "trap": {
+   "tile": "any more",
+   "instead": "no more",
+   "why": {
+    "de": "Nach not steht kein zweites no.",
+    "en": "After not no second no follows."
+   }
+  }
+ },
+ {
+  "pat": "qn.number",
+  "en": "A number of customers have complained about the delay.",
+  "de": "Einige Kunden haben sich über die Verzögerung beschwert.",
+  "chunks": [
+   "a number of",
+   "customers",
+   "have",
+   "complained",
+   "about the delay"
+  ],
+  "single": "A number of customers bildet den Anfang; have complained about the delay folgt danach.",
+  "why": [
+   "A number of heißt „einige“ und nimmt das Verb im Plural: have.",
+   "A number of means “several” and takes a plural verb: have."
+  ],
+  "bad": "A number of customers has complained about the delay.",
+  "trap": {
+   "tile": "have",
+   "instead": "has",
+   "why": {
+    "de": "Bei a number of steht das Verb im Plural.",
+    "en": "With a number of the verb is plural."
+   }
+  }
+ },
+ {
+  "pat": "qn.number",
+  "en": "The number of complaints has fallen since March.",
+  "de": "Die Zahl der Beschwerden ist seit März gesunken.",
+  "chunks": [
+   "the number of",
+   "complaints",
+   "has",
+   "fallen",
+   "since March"
+  ],
+  "single": "The number of complaints bildet den Anfang; has fallen since March folgt danach.",
+  "why": [
+   "The number of meint die Zahl selbst und nimmt das Verb im Singular: has.",
+   "The number of means the figure itself and takes a singular verb: has."
+  ],
+  "bad": "The number of complaints have fallen since March.",
+  "trap": {
+   "tile": "has",
+   "instead": "have",
+   "why": {
+    "de": "Bei the number of steht das Verb im Singular.",
+    "en": "With the number of the verb is singular."
+   }
+  }
+ }
+]

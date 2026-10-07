@@ -159,6 +159,83 @@
    "id": "err-0507",
    "kind": "err",
    "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "inv.negative",
+   "why": {
+    "ok": {
+     "de": "Nach Never am Satzanfang steht have vor dem Subjekt: Never have I seen.",
+     "en": "After Never at the start, have stands before the subject: Never have I seen."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "I have seen",
+    "fix": [
+     "have I seen"
+    ],
+    "choices": [
+     "have I seen",
+     "I did see",
+     "saw I"
+    ]
+   },
+   "text": "Never I have seen my grandmother so happy as at the wedding."
+  },
+  {
+   "id": "err-0508",
+   "kind": "err",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "inv.sooner",
+   "why": {
+    "ok": {
+     "de": "Nach No sooner steht had vor dem Subjekt: No sooner had we left.",
+     "en": "After No sooner, had stands before the subject: No sooner had we left."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "we had left",
+    "fix": [
+     "had we left"
+    ],
+    "choices": [
+     "had we left",
+     "we left",
+     "did we leave"
+    ]
+   },
+   "text": "No sooner we had left the house than we remembered the keys."
+  },
+  {
+   "id": "err-0509",
+   "kind": "err",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "inv.only",
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Nach Only after und dem Nebensatz steht did vor dem Subjekt, wie hier.",
+     "en": "No mistake: after Only after and the clause, did stands before the subject, as here."
+    },
+    "wrong": []
+   },
+   "bad": null,
+   "text": "Only after the movie had ended did the children admit that they were scared."
+  },
+  {
+   "id": "err-0510",
+   "kind": "err",
+   "area": "gram",
    "topic": "emph-plus",
    "level": "C1",
    "dom": "biz",
@@ -185,7 +262,7 @@
    "text": "He does sends the weekly report on time, so please stop worrying."
   },
   {
-   "id": "err-0508",
+   "id": "err-0511",
    "kind": "err",
    "area": "gram",
    "topic": "emph-plus",
@@ -214,7 +291,7 @@
    "text": "Hard as we tried, we not could reach the client by phone."
   },
   {
-   "id": "err-0509",
+   "id": "err-0512",
    "kind": "err",
    "area": "gram",
    "topic": "emph-plus",
@@ -243,7 +320,7 @@
    "text": "Such was the demand what the shop ran out of stock within an hour."
   },
   {
-   "id": "err-0510",
+   "id": "err-0513",
    "kind": "err",
    "area": "gram",
    "topic": "emph-plus",
@@ -272,7 +349,7 @@
    "text": "This decision must we reverse before the end of the quarter."
   },
   {
-   "id": "err-0511",
+   "id": "err-0514",
    "kind": "err",
    "area": "gram",
    "topic": "emph-plus",
@@ -291,7 +368,7 @@
    "text": "Tempting as it is, we should not skip the final review."
   },
   {
-   "id": "err-0512",
+   "id": "err-0515",
    "kind": "err",
    "area": "gram",
    "topic": "emph-plus",
@@ -310,7 +387,84 @@
    "text": "So great was the interest that we added a second session on Friday."
   },
   {
-   "id": "err-0513",
+   "id": "err-0516",
+   "kind": "err",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "ep.object-front",
+   "why": {
+    "ok": {
+     "de": "Bei vorangestelltem Objekt bleibt die Reihenfolge danach normal: This we must always remember.",
+     "en": "With a fronted object the order after it stays normal: This we must always remember."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "must we always remember",
+    "fix": [
+     "we must always remember"
+    ],
+    "choices": [
+     "we must always remember",
+     "must always we remember",
+     "we always must to remember"
+    ]
+   },
+   "text": "This must we always remember when we plan a family trip."
+  },
+  {
+   "id": "err-0517",
+   "kind": "err",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "ep.do-emph",
+   "why": {
+    "ok": {
+     "de": "Nach does steht die Grundform: does love.",
+     "en": "After does the base form follows: does love."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "does loves",
+    "fix": [
+     "does love"
+    ],
+    "choices": [
+     "does love",
+     "do love",
+     "does loving"
+    ]
+   },
+   "text": "She does loves her new flat, even though it is small."
+  },
+  {
+   "id": "err-0518",
+   "kind": "err",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "ep.concession",
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Adjektiv + as + it may seem räumt etwas ein.",
+     "en": "No mistake: adjective + as + it may seem concedes a point."
+    },
+    "wrong": []
+   },
+   "bad": null,
+   "text": "Strange as it may seem, the best coffee in town is sold at the petrol station."
+  },
+  {
+   "id": "err-0519",
    "kind": "err",
    "area": "gram",
    "topic": "ellipsis",
@@ -339,7 +493,7 @@
    "text": "Will the update be ready by Monday? I hope that not, because the testers are away."
   },
   {
-   "id": "err-0514",
+   "id": "err-0520",
    "kind": "err",
    "area": "gram",
    "topic": "ellipsis",
@@ -358,7 +512,7 @@
    "text": "Our rivals lowered their prices, and we did the same last month."
   },
   {
-   "id": "err-0515",
+   "id": "err-0521",
    "kind": "err",
    "area": "gram",
    "topic": "ellipsis",
@@ -387,7 +541,7 @@
    "text": "Our current provider is expensive, so we are looking for a cheaper."
   },
   {
-   "id": "err-0516",
+   "id": "err-0522",
    "kind": "err",
    "area": "gram",
    "topic": "ellipsis",
@@ -416,7 +570,7 @@
    "text": "Can you attend the workshop on Friday? Yes, I would like."
   },
   {
-   "id": "err-0517",
+   "id": "err-0523",
    "kind": "err",
    "area": "gram",
    "topic": "ellipsis",
@@ -445,7 +599,7 @@
    "text": "The fees of our provider are higher than the new provider."
   },
   {
-   "id": "err-0518",
+   "id": "err-0524",
    "kind": "err",
    "area": "gram",
    "topic": "ellipsis",
@@ -464,7 +618,84 @@
    "text": "The new tool is faster than the old one, but the old one is cheaper to run."
   },
   {
-   "id": "err-0519",
+   "id": "err-0525",
+   "kind": "err",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "el.do-so",
+   "why": {
+    "ok": {
+     "de": "Vor same steht the: do the same.",
+     "en": "Before same you need the: do the same."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "do same",
+    "fix": [
+     "do the same"
+    ],
+    "choices": [
+     "do the same",
+     "do it same",
+     "does same"
+    ]
+   },
+   "text": "My sister cleaned the kitchen yesterday, and I will do same tomorrow."
+  },
+  {
+   "id": "err-0526",
+   "kind": "err",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "el.so-not",
+   "why": {
+    "ok": {
+     "de": "Nach be afraid steht not für den verneinten Gedanken: I am afraid not.",
+     "en": "After be afraid, not stands for the negative thought: I am afraid not."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "afraid no",
+    "fix": [
+     "afraid not"
+    ],
+    "choices": [
+     "afraid not",
+     "afraid that no",
+     "afraid nothing"
+    ]
+   },
+   "text": "Is the café open today? I am afraid no, it closes on Mondays."
+  },
+  {
+   "id": "err-0527",
+   "kind": "err",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "el.to-aux",
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Das Verb join entfällt, aber to bleibt: told me not to.",
+     "en": "No mistake: the verb join is dropped, but to stays: told me not to."
+    },
+    "wrong": []
+   },
+   "bad": null,
+   "text": "I wanted to join the choir, but my friends told me not to."
+  },
+  {
+   "id": "err-0528",
    "kind": "err",
    "area": "gram",
    "topic": "noun-phrase",
@@ -494,7 +725,7 @@
    "text": "Is this the only offer what we have received so far?"
   },
   {
-   "id": "err-0520",
+   "id": "err-0529",
    "kind": "err",
    "area": "gram",
    "topic": "noun-phrase",
@@ -523,7 +754,7 @@
    "text": "The employees involving in the pilot project received a bonus."
   },
   {
-   "id": "err-0521",
+   "id": "err-0530",
    "kind": "err",
    "area": "gram",
    "topic": "noun-phrase",
@@ -552,7 +783,7 @@
    "text": "The manager decision surprised the whole team on Monday."
   },
   {
-   "id": "err-0522",
+   "id": "err-0531",
    "kind": "err",
    "area": "gram",
    "topic": "noun-phrase",
@@ -581,7 +812,7 @@
    "text": "This is the best way for increase our sales in Asia."
   },
   {
-   "id": "err-0523",
+   "id": "err-0532",
    "kind": "err",
    "area": "gram",
    "topic": "noun-phrase",
@@ -600,7 +831,7 @@
    "text": "Everyone working on the migration received the new access rules."
   },
   {
-   "id": "err-0524",
+   "id": "err-0533",
    "kind": "err",
    "area": "gram",
    "topic": "noun-phrase",
@@ -617,6 +848,83 @@
    },
    "bad": null,
    "text": "She was the last customer to sign the contract before the deadline."
+  },
+  {
+   "id": "err-0534",
+   "kind": "err",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "np.participle",
+   "why": {
+    "ok": {
+     "de": "Die Kinder werden einbezogen, deshalb das passive Partizip: the children involved.",
+     "en": "The children are involved, so the passive participle is used: the children involved."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "involving",
+    "fix": [
+     "involved"
+    ],
+    "choices": [
+     "involved",
+     "involve",
+     "involves"
+    ]
+   },
+   "text": "The children involving in the school play need to arrive by eight."
+  },
+  {
+   "id": "err-0535",
+   "kind": "err",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "np.to-inf",
+   "why": {
+    "ok": {
+     "de": "Nach the best way steht to + Grundform: the best way to save.",
+     "en": "After the best way comes to + base form: the best way to save."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "for save",
+    "fix": [
+     "to save"
+    ],
+    "choices": [
+     "to save",
+     "for to save",
+     "of saving"
+    ]
+   },
+   "text": "The best way for save money is to cook at home."
+  },
+  {
+   "id": "err-0536",
+   "kind": "err",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "np.of-s",
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Zeitangaben nehmen ’s, und last week’s ersetzt das Nomen.",
+     "en": "No mistake: time words take ’s, and last week’s replaces the noun."
+    },
+    "wrong": []
+   },
+   "bad": null,
+   "text": "Yesterday’s lesson was much shorter than last week’s."
   }
  ]
 }

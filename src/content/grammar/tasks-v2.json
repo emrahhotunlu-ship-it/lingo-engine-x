@@ -16121,6 +16121,691 @@
    "topic": "future-forms"
   },
   {
+   "id": "fp-k1",
+   "type": "kwt",
+   "pat": "fp.was-going",
+   "from": "We planned to launch in May, but the supplier was late.",
+   "key": "GOING",
+   "frame": "We ___ launch in May, but the supplier was late.",
+   "answer": "were going to",
+   "accepted": [],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: We were going to launch in May. Was oder were going to nennt den Plan.",
+     "en": "Right: We were going to launch in May. Was or were going to names the plan."
+    },
+    "wrong": [
+     {
+      "not": [
+       "going"
+      ],
+      "de": "Das Schlüsselwort going muss unverändert in der Lücke stehen.",
+      "en": "The key word going must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "going"
+      ],
+      "not": [
+       "were"
+      ],
+      "de": "Zu we passt were: were going to.",
+      "en": "With we, were fits: were going to."
+     }
+    ]
+   },
+   "topic": "future-past"
+  },
+  {
+   "id": "fp-k2",
+   "type": "kwt",
+   "pat": "fp.was-going",
+   "from": "I intended to call you, but the line was busy.",
+   "key": "GOING",
+   "frame": "I ___ call you, but the line was busy.",
+   "answer": "was going to",
+   "accepted": [],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: I was going to call you. Was going to nennt den Plan.",
+     "en": "Right: I was going to call you. Was going to names the plan."
+    },
+    "wrong": [
+     {
+      "not": [
+       "going"
+      ],
+      "de": "Das Schlüsselwort going muss unverändert in der Lücke stehen.",
+      "en": "The key word going must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "going"
+      ],
+      "not": [
+       "to"
+      ],
+      "de": "Nach going braucht es to und die Grundform.",
+      "en": "After going you need to and the base form."
+     }
+    ]
+   },
+   "topic": "future-past"
+  },
+  {
+   "id": "fp-k3",
+   "type": "kwt",
+   "pat": "fp.about-to",
+   "from": "I almost left when the client called.",
+   "key": "ABOUT",
+   "frame": "I was ___ leave when the client called.",
+   "answer": "about to",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: I was about to leave. Nach about steht to und die Grundform.",
+     "en": "Right: I was about to leave. After about comes to and the base form."
+    },
+    "wrong": [
+     {
+      "not": [
+       "about"
+      ],
+      "de": "Das Schlüsselwort about muss unverändert in der Lücke stehen.",
+      "en": "The key word about must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "about"
+      ],
+      "not": [
+       "to"
+      ],
+      "de": "Nach about braucht es to.",
+      "en": "After about you need to."
+     }
+    ]
+   },
+   "topic": "future-past"
+  },
+  {
+   "id": "fp-k4",
+   "type": "kwt",
+   "pat": "fp.about-to",
+   "from": "We nearly signed the contract when the lawyer found an error.",
+   "key": "ABOUT",
+   "frame": "We were ___ sign the contract when the lawyer found an error.",
+   "answer": "about to",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: We were about to sign. Danach kam der Fehler dazwischen.",
+     "en": "Right: We were about to sign. Then the error intervened."
+    },
+    "wrong": [
+     {
+      "not": [
+       "about"
+      ],
+      "de": "Das Schlüsselwort about muss unverändert in der Lücke stehen.",
+      "en": "The key word about must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "about"
+      ],
+      "not": [
+       "to"
+      ],
+      "de": "Nach about braucht es to.",
+      "en": "After about you need to."
+     }
+    ]
+   },
+   "topic": "future-past"
+  },
+  {
+   "id": "fp-k5",
+   "type": "kwt",
+   "pat": "fp.would-narr",
+   "from": "In 2015 she joined the firm, and she became head of the Berlin office later.",
+   "key": "WOULD",
+   "frame": "In 2015 she joined the firm and ___ lead the Berlin office.",
+   "answer": "would later",
+   "accepted": [
+    "would soon",
+    "would eventually"
+   ],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: she would later lead the Berlin office. Would blickt aus der Vergangenheit auf Späteres.",
+     "en": "Right: she would later lead the Berlin office. Would looks from the past at something later."
+    },
+    "wrong": [
+     {
+      "not": [
+       "would"
+      ],
+      "de": "Das Schlüsselwort would muss unverändert in der Lücke stehen.",
+      "en": "The key word would must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "not": [
+       "later",
+       "soon",
+       "eventually"
+      ],
+      "de": "Hier fehlt das Wort, das „später“ ausdrückt: would later.",
+      "en": "The word for “later” is missing here: would later."
+     }
+    ]
+   },
+   "topic": "future-past"
+  },
+  {
+   "id": "fp-k6",
+   "type": "kwt",
+   "pat": "fp.would-narr",
+   "from": "He promised: I will send the report by Monday.",
+   "key": "WOULD",
+   "frame": "He promised that he ___ the report by Monday.",
+   "answer": "would send",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: he would send the report. Nach promised steht would statt will.",
+     "en": "Right: he would send the report. After promised, would replaces will."
+    },
+    "wrong": [
+     {
+      "not": [
+       "would"
+      ],
+      "de": "Das Schlüsselwort would muss unverändert in der Lücke stehen.",
+      "en": "The key word would must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "not": [
+       "send"
+      ],
+      "de": "Nach would steht die Grundform send.",
+      "en": "After would comes the base form send."
+     }
+    ]
+   },
+   "topic": "future-past"
+  },
+  {
+   "id": "fp-k7",
+   "type": "kwt",
+   "pat": "fp.was-to",
+   "from": "The talks had been planned for Friday.",
+   "key": "WERE",
+   "frame": "The talks ___ end on Friday.",
+   "answer": "were to",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: The talks were to end on Friday. Were to nennt das, was vorgesehen war.",
+     "en": "Right: The talks were to end on Friday. Were to names what was planned."
+    },
+    "wrong": [
+     {
+      "not": [
+       "were"
+      ],
+      "de": "Das Schlüsselwort were muss unverändert in der Lücke stehen.",
+      "en": "The key word were must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "were"
+      ],
+      "not": [
+       "to"
+      ],
+      "de": "Nach were braucht es to und die Grundform.",
+      "en": "After were you need to and the base form."
+     }
+    ]
+   },
+   "topic": "future-past"
+  },
+  {
+   "id": "fp-k8",
+   "type": "kwt",
+   "pat": "fp.was-to",
+   "from": "The new office has been scheduled for June, but the permit was delayed.",
+   "key": "OPEN",
+   "frame": "The new office ___ in June, but the permit was delayed.",
+   "answer": "was to open",
+   "accepted": [],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: The new office was to open in June. Was to nennt den Plan.",
+     "en": "Right: The new office was to open in June. Was to names the plan."
+    },
+    "wrong": [
+     {
+      "not": [
+       "open"
+      ],
+      "de": "Das Schlüsselwort open muss unverändert in der Lücke stehen.",
+      "en": "The key word open must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "open"
+      ],
+      "not": [
+       "to"
+      ],
+      "de": "Vor open braucht es was to.",
+      "en": "Before open you need was to."
+     }
+    ]
+   },
+   "topic": "future-past"
+  },
+  {
+   "id": "fp-f1",
+   "type": "find",
+   "pat": "fp.was-going",
+   "prompt": "We are going to launch in June, but the supplier delayed everything.",
+   "err": [
+    1,
+    2
+   ],
+   "answer": "were going",
+   "fixed": "We were going to launch in June, but the supplier delayed everything.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Der Plan liegt in der Vergangenheit. Richtig: were going to.",
+     "en": "The error: the plan lies in the past. Correct: were going to."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Ein Plan von damals braucht was oder were going to.",
+      "en": "There is an error: A plan from back then needs was or were going to."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: Ein Plan von damals braucht was oder were going to.",
+      "en": "The error is elsewhere: A plan from back then needs was or were going to."
+     }
+    ]
+   },
+   "topic": "future-past"
+  },
+  {
+   "id": "fp-f2",
+   "type": "find",
+   "pat": "fp.was-going",
+   "prompt": "I was going to call you earlier, but the line was busy all morning.",
+   "err": null,
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Richtig: was going to call nennt den Plan von damals.",
+     "en": "Right: was going to call names the plan from back then."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Hier ist alles richtig: was going to call ist richtig gebildet.",
+      "en": "Everything is right here: was going to call is correctly formed."
+     }
+    ]
+   },
+   "topic": "future-past"
+  },
+  {
+   "id": "fp-f3",
+   "type": "find",
+   "pat": "fp.about-to",
+   "prompt": "Our guests were about arriving when we noticed the missing chairs.",
+   "err": [
+    3,
+    4
+   ],
+   "answer": "about to arrive",
+   "fixed": "Our guests were about to arrive when we noticed the missing chairs.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach about steht to und die Grundform. Richtig: about to arrive.",
+     "en": "The error: after about comes to and the base form. Correct: about to arrive."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach about steht to und die Grundform.",
+      "en": "There is an error: After about comes to and the base form."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: Nach about steht to und die Grundform.",
+      "en": "The error is elsewhere: After about comes to and the base form."
+     }
+    ]
+   },
+   "topic": "future-past"
+  },
+  {
+   "id": "fp-f4",
+   "type": "find",
+   "pat": "fp.about-to",
+   "prompt": "She was about to hang up when the call finally connected.",
+   "err": null,
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Richtig: was about to hang up, dann kam der Anruf dazwischen.",
+     "en": "Right: was about to hang up, then the call intervened."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Hier ist alles richtig: was about to hang up ist richtig gebildet.",
+      "en": "Everything is right here: was about to hang up is correctly formed."
+     }
+    ]
+   },
+   "topic": "future-past"
+  },
+  {
+   "id": "fp-f5",
+   "type": "find",
+   "pat": "fp.would-narr",
+   "prompt": "He joined as a trainee in 2012 and will later become the head of sales.",
+   "err": [
+    8,
+    10
+   ],
+   "answer": "would later become",
+   "fixed": "He joined as a trainee in 2012 and would later become the head of sales.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Aus der Vergangenheit auf Späteres braucht es would. Richtig: would later become.",
+     "en": "The error: looking from the past at something later needs would. Correct: would later become."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Beim Erzählen aus der Vergangenheit steht would.",
+      "en": "There is an error: When telling from the past, would is used."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: Beim Erzählen aus der Vergangenheit steht would.",
+      "en": "The error is elsewhere: When telling from the past, would is used."
+     }
+    ]
+   },
+   "topic": "future-past"
+  },
+  {
+   "id": "fp-f6",
+   "type": "find",
+   "pat": "fp.would-narr",
+   "prompt": "She promised that she will review the draft by Monday.",
+   "err": [
+    4,
+    5
+   ],
+   "answer": "would review",
+   "fixed": "She promised that she would review the draft by Monday.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach promised steht would statt will. Richtig: would review.",
+     "en": "The error: after promised, would replaces will. Correct: would review."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach einem Verb der Vergangenheit rückt will zu would.",
+      "en": "There is an error: After a verb in the past, will shifts to would."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: Nach einem Verb der Vergangenheit rückt will zu would.",
+      "en": "The error is elsewhere: After a verb in the past, will shifts to would."
+     }
+    ]
+   },
+   "topic": "future-past"
+  },
+  {
+   "id": "fp-f7",
+   "type": "find",
+   "pat": "fp.was-to",
+   "prompt": "The new warehouse should open in March, but the permit was delayed.",
+   "err": [
+    3,
+    4
+   ],
+   "answer": "was to open",
+   "fixed": "The new warehouse was to open in March, but the permit was delayed.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Für einen Plan in der Vergangenheit gilt was to. Richtig: was to open.",
+     "en": "The error: for a plan in the past was to is used. Correct: was to open."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Statt should steht was to.",
+      "en": "There is an error: Instead of should, was to is used."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: Statt should steht was to.",
+      "en": "The error is elsewhere: Instead of should, was to is used."
+     }
+    ]
+   },
+   "topic": "future-past"
+  },
+  {
+   "id": "fp-f8",
+   "type": "find",
+   "pat": "fp.was-to",
+   "prompt": "The talks was to end on Friday, but they ran into the weekend.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "were to",
+   "fixed": "The talks were to end on Friday, but they ran into the weekend.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Talks ist Plural, deshalb were to. Richtig: The talks were to end.",
+     "en": "The error: talks is plural, so were to. Correct: The talks were to end."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Zu einem Plural passt were to.",
+      "en": "There is an error: With a plural, were to fits."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: Zu einem Plural passt were to.",
+      "en": "The error is elsewhere: With a plural, were to fits."
+     }
+    ]
+   },
+   "topic": "future-past"
+  },
+  {
+   "id": "fp-m1",
+   "type": "meaning",
+   "pat": "fp.was-going",
+   "a": "We were going to launch in May.",
+   "b": "We launched in May.",
+   "q": {
+    "de": "Welcher Satz sagt, dass der Plan vermutlich nicht aufging?",
+    "en": "Which sentence suggests the plan probably did not work out?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Was going to nennt einen Plan, der oft nicht eintrat.",
+     "en": "Right: sentence a. Was going to names a plan that often did not happen."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b hat der Start stattgefunden.",
+      "en": "In b the launch took place."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Nur a nennt einen Plan.",
+      "en": "Not the same: only a names a plan."
+     }
+    ]
+   },
+   "topic": "future-past"
+  },
+  {
+   "id": "fp-m2",
+   "type": "meaning",
+   "pat": "fp.about-to",
+   "a": "I was about to leave when she called.",
+   "b": "I had already left when she called.",
+   "q": {
+    "de": "Welcher Satz sagt, dass ich noch da war?",
+    "en": "Which sentence says I was still there?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Was about to heißt: kurz davor, aber noch nicht geschehen.",
+     "en": "Right: sentence a. Was about to means: just before, but not yet done."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b war ich schon weg und nicht mehr da.",
+      "en": "In b I was already gone."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Nur a meint, dass ich noch da war.",
+      "en": "Not the same: only a means I was still there."
+     }
+    ]
+   },
+   "topic": "future-past"
+  },
+  {
+   "id": "fp-m3",
+   "type": "meaning",
+   "pat": "fp.would-narr",
+   "a": "She would later lead the office.",
+   "b": "She will lead the office.",
+   "q": {
+    "de": "Welcher Satz blickt aus der Vergangenheit auf Späteres?",
+    "en": "Which sentence looks from the past at something later?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Would blickt aus der Vergangenheit voraus.",
+     "en": "Right: sentence a. Would looks ahead from the past."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "Satz b spricht von der Zukunft aus der Gegenwart.",
+      "en": "Sentence b speaks of the future from the present."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Nur a blickt aus der Vergangenheit.",
+      "en": "Not the same: only a looks from the past."
+     }
+    ]
+   },
+   "topic": "future-past"
+  },
+  {
+   "id": "fp-m4",
+   "type": "meaning",
+   "pat": "fp.was-to",
+   "a": "The talks were to end on Friday.",
+   "b": "The talks ended on Friday.",
+   "q": {
+    "de": "Welcher Satz nennt, was geplant war?",
+    "en": "Which sentence names what was planned?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Were to nennt das Vorgesehene.",
+     "en": "Right: sentence a. Were to names what was meant to be."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b endeten die Gespräche, es war kein Plan.",
+      "en": "In b the talks ended, it was not a plan."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Nur a nennt einen Plan.",
+      "en": "Not the same: only a names a plan."
+     }
+    ]
+   },
+   "topic": "future-past"
+  },
+  {
    "id": "fpc-cn-k1",
    "type": "kwt",
    "pat": "fut.continuous",
@@ -24277,6 +24962,694 @@
     ]
    },
    "topic": "modals-deduction"
+  },
+  {
+   "id": "mp-k1",
+   "type": "kwt",
+   "pat": "mp.may-well",
+   "from": "It is quite possible that the client will reject the offer.",
+   "key": "WELL",
+   "frame": "The client ___ reject the offer.",
+   "answer": "may well",
+   "accepted": [
+    "might well",
+    "could well"
+   ],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: The client may well reject the offer. Well steht direkt hinter may.",
+     "en": "Right: The client may well reject the offer. Well stands right after may."
+    },
+    "wrong": [
+     {
+      "not": [
+       "well"
+      ],
+      "de": "Das Schlüsselwort well muss unverändert in der Lücke stehen.",
+      "en": "The key word well must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "may"
+      ],
+      "not": [
+       "well"
+      ],
+      "de": "Ohne well fehlt die Verstärkung: may well.",
+      "en": "Without well the strengthening is missing: may well."
+     }
+    ]
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "id": "mp-k2",
+   "type": "kwt",
+   "pat": "mp.may-well",
+   "from": "It is quite possible that this will be our best quarter.",
+   "key": "WELL",
+   "frame": "This ___ be our best quarter.",
+   "answer": "could well",
+   "accepted": [
+    "may well",
+    "might well"
+   ],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: This could well be our best quarter. Well steht direkt hinter could.",
+     "en": "Right: This could well be our best quarter. Well stands right after could."
+    },
+    "wrong": [
+     {
+      "not": [
+       "well"
+      ],
+      "de": "Das Schlüsselwort well muss unverändert in der Lücke stehen.",
+      "en": "The key word well must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "could"
+      ],
+      "not": [
+       "well"
+      ],
+      "de": "Ohne well fehlt die Verstärkung: could well.",
+      "en": "Without well the strengthening is missing: could well."
+     }
+    ]
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "id": "mp-k3",
+   "type": "kwt",
+   "pat": "mp.bound",
+   "from": "It is almost certain that prices will rise after the merger.",
+   "key": "BOUND",
+   "frame": "Prices are ___ rise after the merger.",
+   "answer": "bound to",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Prices are bound to rise. Nach bound steht to und die Grundform.",
+     "en": "Right: Prices are bound to rise. After bound comes to and the base form."
+    },
+    "wrong": [
+     {
+      "not": [
+       "bound"
+      ],
+      "de": "Das Schlüsselwort bound muss unverändert in der Lücke stehen.",
+      "en": "The key word bound must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "bound"
+      ],
+      "not": [
+       "to"
+      ],
+      "de": "Nach bound braucht es to: bound to rise.",
+      "en": "After bound you need to: bound to rise."
+     }
+    ]
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "id": "mp-k4",
+   "type": "kwt",
+   "pat": "mp.bound",
+   "from": "I am sure that someone will notice the error.",
+   "key": "SURE",
+   "frame": "Someone is ___ notice the error.",
+   "answer": "sure to",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Someone is sure to notice the error. Nach sure steht to und die Grundform.",
+     "en": "Right: Someone is sure to notice the error. After sure comes to and the base form."
+    },
+    "wrong": [
+     {
+      "not": [
+       "sure"
+      ],
+      "de": "Das Schlüsselwort sure muss unverändert in der Lücke stehen.",
+      "en": "The key word sure must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "sure"
+      ],
+      "not": [
+       "to"
+      ],
+      "de": "Nach sure braucht es to: sure to notice.",
+      "en": "After sure you need to: sure to notice."
+     }
+    ]
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "id": "mp-k5",
+   "type": "kwt",
+   "pat": "mp.likely",
+   "from": "I expect the update to be ready on Friday.",
+   "key": "LIKELY",
+   "frame": "The update is ___ ready on Friday.",
+   "answer": "likely to be",
+   "accepted": [],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: The update is likely to be ready. Nach likely steht to und die Grundform.",
+     "en": "Right: The update is likely to be ready. After likely comes to and the base form."
+    },
+    "wrong": [
+     {
+      "not": [
+       "likely"
+      ],
+      "de": "Das Schlüsselwort likely muss unverändert in der Lücke stehen.",
+      "en": "The key word likely must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "likely",
+       "be"
+      ],
+      "not": [
+       "to"
+      ],
+      "de": "Nach likely braucht es to: likely to be.",
+      "en": "After likely you need to: likely to be."
+     }
+    ]
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "id": "mp-k6",
+   "type": "kwt",
+   "pat": "mp.likely",
+   "from": "It is improbable that the delay will affect the launch.",
+   "key": "UNLIKELY",
+   "frame": "The delay is ___ the launch.",
+   "answer": "unlikely to affect",
+   "accepted": [],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: The delay is unlikely to affect the launch. Unlikely ist schon verneint.",
+     "en": "Right: The delay is unlikely to affect the launch. Unlikely is already negative."
+    },
+    "wrong": [
+     {
+      "not": [
+       "unlikely"
+      ],
+      "de": "Das Schlüsselwort unlikely muss unverändert in der Lücke stehen.",
+      "en": "The key word unlikely must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "unlikely",
+       "affect"
+      ],
+      "not": [
+       "to"
+      ],
+      "de": "Nach unlikely braucht es to: unlikely to affect.",
+      "en": "After unlikely you need to: unlikely to affect."
+     }
+    ]
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "id": "mp-k7",
+   "type": "kwt",
+   "pat": "mp.chance",
+   "from": "Probably the supplier will agree.",
+   "key": "CHANCE",
+   "frame": "There is a good ___ the supplier will agree.",
+   "answer": "chance that",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: There is a good chance that the supplier will agree. Danach folgt ein that-Satz.",
+     "en": "Right: There is a good chance that the supplier will agree. A that-clause follows."
+    },
+    "wrong": [
+     {
+      "not": [
+       "chance"
+      ],
+      "de": "Das Schlüsselwort chance muss unverändert in der Lücke stehen.",
+      "en": "The key word chance must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "chance"
+      ],
+      "not": [
+       "that"
+      ],
+      "de": "Nach chance folgt that und der Satz.",
+      "en": "After chance comes that and the clause."
+     }
+    ]
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "id": "mp-k8",
+   "type": "kwt",
+   "pat": "mp.chance",
+   "from": "It is very probable that costs will rise.",
+   "key": "HIGHLY",
+   "frame": "It is ___ that costs will rise.",
+   "answer": "highly probable",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: It is highly probable that costs will rise. Das Adverb highly verstärkt probable.",
+     "en": "Right: It is highly probable that costs will rise. The adverb highly strengthens probable."
+    },
+    "wrong": [
+     {
+      "not": [
+       "highly"
+      ],
+      "de": "Das Schlüsselwort highly muss unverändert in der Lücke stehen.",
+      "en": "The key word highly must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "highly"
+      ],
+      "not": [
+       "probable"
+      ],
+      "de": "Hinter highly steht das Wort probable.",
+      "en": "After highly you need probable."
+     }
+    ]
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "id": "mp-f1",
+   "type": "find",
+   "pat": "mp.may-well",
+   "prompt": "You might to well need a second server by autumn.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "well",
+   "fixed": "You might well need a second server by autumn.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: nach might steht kein to. Richtig: You might well need …",
+     "en": "The error: there is no to after might. Correct: You might well need …"
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach might steht well direkt, ohne to.",
+      "en": "There is an error: After might, well follows directly, with no to."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: Nach might steht well direkt, ohne to.",
+      "en": "The error is elsewhere: After might, well follows directly, with no to."
+     }
+    ]
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "id": "mp-f2",
+   "type": "find",
+   "pat": "mp.may-well",
+   "prompt": "This could well be our best quarter so far.",
+   "err": null,
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Richtig: could well be. Well steht direkt hinter could.",
+     "en": "Right: could well be. Well stands right after could."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Hier ist alles richtig: could well be ist richtig gebildet.",
+      "en": "Everything is right here: could well be is correctly formed."
+     }
+    ]
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "id": "mp-f3",
+   "type": "find",
+   "pat": "mp.bound",
+   "prompt": "Sales are bound falling after the price increase.",
+   "err": [
+    3,
+    3
+   ],
+   "answer": "to fall",
+   "fixed": "Sales are bound to fall after the price increase.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: nach bound steht to + Grundform. Richtig: bound to fall.",
+     "en": "The error: after bound comes to + base form. Correct: bound to fall."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach bound steht to und die Grundform.",
+      "en": "There is an error: After bound comes to and the base form."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: Nach bound steht to und die Grundform.",
+      "en": "The error is elsewhere: After bound comes to and the base form."
+     }
+    ]
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "id": "mp-f4",
+   "type": "find",
+   "pat": "mp.bound",
+   "prompt": "The customer is certain ask about the deadline.",
+   "err": [
+    4,
+    4
+   ],
+   "answer": "to ask",
+   "fixed": "The customer is certain to ask about the deadline.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: nach certain steht to + Grundform. Richtig: certain to ask.",
+     "en": "The error: after certain comes to + base form. Correct: certain to ask."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach certain steht to und die Grundform.",
+      "en": "There is an error: After certain comes to and the base form."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: Nach certain steht to und die Grundform.",
+      "en": "The error is elsewhere: After certain comes to and the base form."
+     }
+    ]
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "id": "mp-f5",
+   "type": "find",
+   "pat": "mp.likely",
+   "prompt": "The update is likely finish on Friday.",
+   "err": [
+    3,
+    4
+   ],
+   "answer": "likely to finish",
+   "fixed": "The update is likely to finish on Friday.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: nach likely fehlt to. Richtig: likely to finish.",
+     "en": "The error: to is missing after likely. Correct: likely to finish."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach likely steht to und die Grundform.",
+      "en": "There is an error: After likely comes to and the base form."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: Nach likely steht to und die Grundform.",
+      "en": "The error is elsewhere: After likely comes to and the base form."
+     }
+    ]
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "id": "mp-f6",
+   "type": "find",
+   "pat": "mp.likely",
+   "prompt": "A price cut is highly unlikely this year.",
+   "err": null,
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Richtig: highly unlikely. Highly verstärkt das Wort unlikely.",
+     "en": "Right: highly unlikely. Highly strengthens unlikely."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Hier ist alles richtig: highly unlikely ist richtig gebildet.",
+      "en": "Everything is right here: highly unlikely is correctly formed."
+     }
+    ]
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "id": "mp-f7",
+   "type": "find",
+   "pat": "mp.chance",
+   "prompt": "It exists only a slim chance of a refund.",
+   "err": [
+    0,
+    1
+   ],
+   "answer": "There is",
+   "fixed": "There is only a slim chance of a refund.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „es besteht“ heißt there is, nicht it exists. Richtig: There is only a slim chance …",
+     "en": "The error: “es besteht” is there is, not it exists. Correct: There is only a slim chance …"
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Englisch sagt there is, nicht it exists.",
+      "en": "There is an error: English says there is, not it exists."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: Englisch sagt there is, nicht it exists.",
+      "en": "The error is elsewhere: English says there is, not it exists."
+     }
+    ]
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "id": "mp-f8",
+   "type": "find",
+   "pat": "mp.chance",
+   "prompt": "There is slim chances of a refund this year.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "a slim chance",
+   "fixed": "There is a slim chance of a refund this year.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: chance steht im Singular mit a. Richtig: a slim chance.",
+     "en": "The error: chance is singular with a. Correct: a slim chance."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Hier braucht chance den Artikel a und den Singular.",
+      "en": "There is an error: Here chance needs the article a and the singular."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: Hier braucht chance den Artikel a und den Singular.",
+      "en": "The error is elsewhere: Here chance needs the article a and the singular."
+     }
+    ]
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "id": "mp-m1",
+   "type": "meaning",
+   "pat": "mp.may-well",
+   "a": "The client may well reject it.",
+   "b": "The client may reject it.",
+   "q": {
+    "de": "Welcher Satz macht die Ablehnung wahrscheinlicher?",
+    "en": "Which sentence makes the rejection more likely?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. May well macht die Möglichkeit stärker.",
+     "en": "Right: sentence a. May well makes the possibility stronger."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b bleibt die Möglichkeit offen, ohne Verstärkung.",
+      "en": "In b the possibility stays open, without strengthening."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich stark: Nur a verstärkt die Möglichkeit.",
+      "en": "Not equally strong: only a strengthens the possibility."
+     }
+    ]
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "id": "mp-m2",
+   "type": "meaning",
+   "pat": "mp.bound",
+   "a": "Prices are bound to rise.",
+   "b": "Prices may well rise.",
+   "q": {
+    "de": "Welcher Satz sagt, dass der Anstieg fast sicher ist?",
+    "en": "Which sentence says the rise is almost certain?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Be bound to nennt etwas, das fast sicher ist.",
+     "en": "Right: sentence a. Be bound to names something almost certain."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b ist der Anstieg nur durchaus möglich, nicht fast sicher.",
+      "en": "In b the rise is only quite possible, not almost certain."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich sicher: Nur a ist fast sicher.",
+      "en": "Not equally sure: only a is almost certain."
+     }
+    ]
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "id": "mp-m3",
+   "type": "meaning",
+   "pat": "mp.likely",
+   "a": "The delay is unlikely to affect the launch.",
+   "b": "The delay is likely to affect the launch.",
+   "q": {
+    "de": "Welcher Satz sagt, dass der Start wahrscheinlich nicht betroffen ist?",
+    "en": "Which sentence says the launch is probably not affected?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Unlikely ist das Wort für „unwahrscheinlich“.",
+     "en": "Right: sentence a. Unlikely means “improbable”."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b ist die Auswirkung wahrscheinlich. Das ist das Gegenteil.",
+      "en": "In b the effect is probable. That is the opposite."
+     },
+     {
+      "opt": "both",
+      "de": "Die beiden Sätze sagen Gegensätzliches.",
+      "en": "The two sentences say opposite things."
+     }
+    ]
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "id": "mp-m4",
+   "type": "meaning",
+   "pat": "mp.chance",
+   "a": "There is a good chance that the supplier will agree.",
+   "b": "The supplier will agree for certain.",
+   "q": {
+    "de": "Welcher Satz sagt, dass die Zustimmung möglich, aber nicht sicher ist?",
+    "en": "Which sentence says the agreement is possible but not certain?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. A good chance nennt eine Möglichkeit, keine Sicherheit.",
+     "en": "Right: sentence a. A good chance names a possibility, not certainty."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b ist die Zustimmung sicher. Das ist stärker als eine Chance.",
+      "en": "In b the agreement is certain. That is stronger than a chance."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich sicher: Nur b ist sicher.",
+      "en": "Not equally sure: only b is certain."
+     }
+    ]
+   },
+   "topic": "modals-prob"
   },
   {
    "id": "np-k1",
@@ -35699,6 +37072,686 @@
    "topic": "pres-simple-cont"
   },
   {
+   "id": "qn-k1",
+   "type": "kwt",
+   "pat": "qn.none",
+   "from": "No supplier among those we asked has replied yet.",
+   "key": "NONE",
+   "frame": "___ the suppliers has replied yet.",
+   "answer": "None of",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: None of the suppliers has replied. None of heißt „keiner von“.",
+     "en": "Right: None of the suppliers has replied. None of means “not one of”."
+    },
+    "wrong": [
+     {
+      "not": [
+       "none"
+      ],
+      "de": "Das Schlüsselwort none muss unverändert in der Lücke stehen.",
+      "en": "The key word none must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "none"
+      ],
+      "not": [
+       "of"
+      ],
+      "de": "Vor einem bestimmten Nomen braucht es none of.",
+      "en": "Before a specific noun you need none of."
+     }
+    ]
+   },
+   "topic": "quant-neg"
+  },
+  {
+   "id": "qn-k2",
+   "type": "kwt",
+   "pat": "qn.none",
+   "from": "Both offers fail to meet our budget.",
+   "key": "NEITHER",
+   "frame": "___ the offers meets our budget.",
+   "answer": "Neither of",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Neither of the offers meets our budget. Neither of steht bei genau zwei Dingen.",
+     "en": "Right: Neither of the offers meets our budget. Neither of is used with exactly two things."
+    },
+    "wrong": [
+     {
+      "not": [
+       "neither"
+      ],
+      "de": "Das Schlüsselwort neither muss unverändert in der Lücke stehen.",
+      "en": "The key word neither must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "neither"
+      ],
+      "not": [
+       "of"
+      ],
+      "de": "Vor einem bestimmten Nomen braucht es neither of.",
+      "en": "Before a specific noun you need neither of."
+     }
+    ]
+   },
+   "topic": "quant-neg"
+  },
+  {
+   "id": "qn-k3",
+   "type": "kwt",
+   "pat": "qn.hardly",
+   "from": "We had almost no time to prepare.",
+   "key": "HARDLY",
+   "frame": "We ___ any time to prepare.",
+   "answer": "hardly had",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: We hardly had any time. Hardly ist schon verneint, deshalb kein not.",
+     "en": "Right: We hardly had any time. Hardly is already negative, so no not."
+    },
+    "wrong": [
+     {
+      "not": [
+       "hardly"
+      ],
+      "de": "Das Schlüsselwort hardly muss unverändert in der Lücke stehen.",
+      "en": "The key word hardly must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "hardly"
+      ],
+      "not": [
+       "had"
+      ],
+      "de": "Hardly steht vor dem Verb: hardly had.",
+      "en": "Hardly stands before the verb: hardly had."
+     }
+    ]
+   },
+   "topic": "quant-neg"
+  },
+  {
+   "id": "qn-k4",
+   "type": "kwt",
+   "pat": "qn.hardly",
+   "from": "The team almost never misses a deadline.",
+   "key": "SCARCELY",
+   "frame": "The team ___ misses a deadline.",
+   "answer": "scarcely ever",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: The team scarcely ever misses a deadline. Scarcely ever ist die Wendung für „fast nie“.",
+     "en": "Right: The team scarcely ever misses a deadline. Scarcely ever means “almost never”."
+    },
+    "wrong": [
+     {
+      "not": [
+       "scarcely"
+      ],
+      "de": "Das Schlüsselwort scarcely muss unverändert in der Lücke stehen.",
+      "en": "The key word scarcely must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "scarcely"
+      ],
+      "not": [
+       "ever"
+      ],
+      "de": "Zu scarcely gehört hier ever: scarcely ever.",
+      "en": "Scarcely goes with ever here: scarcely ever."
+     }
+    ]
+   },
+   "topic": "quant-neg"
+  },
+  {
+   "id": "qn-k5",
+   "type": "kwt",
+   "pat": "qn.no-longer",
+   "from": "We stopped offering this service last year.",
+   "key": "LONGER",
+   "frame": "We ___ offer this service.",
+   "answer": "no longer",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: We no longer offer this service. No longer steht vor dem Verb.",
+     "en": "Right: We no longer offer this service. No longer stands before the verb."
+    },
+    "wrong": [
+     {
+      "not": [
+       "longer"
+      ],
+      "de": "Das Schlüsselwort longer muss unverändert in der Lücke stehen.",
+      "en": "The key word longer must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "longer"
+      ],
+      "not": [
+       "no"
+      ],
+      "de": "Vor longer braucht es no: no longer.",
+      "en": "Before longer you need no: no longer."
+     }
+    ]
+   },
+   "topic": "quant-neg"
+  },
+  {
+   "id": "qn-k6",
+   "type": "kwt",
+   "pat": "qn.no-longer",
+   "from": "He left the company last spring.",
+   "key": "MORE",
+   "frame": "He does not work here ___.",
+   "answer": "any more",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: He does not work here any more. Am Ende steht any more oder any longer.",
+     "en": "Right: He does not work here any more. At the end any more or any longer is used."
+    },
+    "wrong": [
+     {
+      "not": [
+       "more"
+      ],
+      "de": "Das Schlüsselwort more muss unverändert in der Lücke stehen.",
+      "en": "The key word more must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "more"
+      ],
+      "not": [
+       "any"
+      ],
+      "de": "Nach not braucht es any more.",
+      "en": "After not you need any more."
+     }
+    ]
+   },
+   "topic": "quant-neg"
+  },
+  {
+   "id": "qn-k7",
+   "type": "kwt",
+   "pat": "qn.number",
+   "from": "Many customers have complained about the delay.",
+   "key": "NUMBER",
+   "frame": "___ customers have complained about the delay.",
+   "answer": "A number of",
+   "accepted": [],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: A number of customers have complained. A number of heißt „einige“ und nimmt das Verb im Plural.",
+     "en": "Right: A number of customers have complained. A number of means “several” and takes a plural verb."
+    },
+    "wrong": [
+     {
+      "not": [
+       "number"
+      ],
+      "de": "Das Schlüsselwort number muss unverändert in der Lücke stehen.",
+      "en": "The key word number must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "number"
+      ],
+      "not": [
+       "of"
+      ],
+      "de": "Nach number braucht es of.",
+      "en": "After number you need of."
+     }
+    ]
+   },
+   "topic": "quant-neg"
+  },
+  {
+   "id": "qn-k8",
+   "type": "kwt",
+   "pat": "qn.number",
+   "from": "Complaints have fallen over the last quarter.",
+   "key": "NUMBER",
+   "frame": "___ complaints has fallen over the last quarter.",
+   "answer": "The number of",
+   "accepted": [],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: The number of complaints has fallen. Bei the number of steht das Verb im Singular.",
+     "en": "Right: The number of complaints has fallen. With the number of the verb is singular."
+    },
+    "wrong": [
+     {
+      "not": [
+       "number"
+      ],
+      "de": "Das Schlüsselwort number muss unverändert in der Lücke stehen.",
+      "en": "The key word number must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "number"
+      ],
+      "not": [
+       "the"
+      ],
+      "de": "Für die Zahl selbst braucht es the number of.",
+      "en": "For the figure itself you need the number of."
+     }
+    ]
+   },
+   "topic": "quant-neg"
+  },
+  {
+   "id": "qn-f1",
+   "type": "find",
+   "pat": "qn.none",
+   "prompt": "No one of the suppliers has replied to our inquiry yet.",
+   "err": [
+    0,
+    2
+   ],
+   "answer": "None of",
+   "fixed": "None of the suppliers has replied to our inquiry yet.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Für „keiner von“ steht none of. Richtig: None of the suppliers.",
+     "en": "The error: for “not one of” none of is used. Correct: None of the suppliers."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Statt no one of steht none of.",
+      "en": "There is an error: Instead of no one of, none of is used."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: Statt no one of steht none of.",
+      "en": "The error is elsewhere: Instead of no one of, none of is used."
+     }
+    ]
+   },
+   "topic": "quant-neg"
+  },
+  {
+   "id": "qn-f2",
+   "type": "find",
+   "pat": "qn.none",
+   "prompt": "I did not receive any of the documents you mentioned.",
+   "err": null,
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Richtig: not … any of heißt „keines von“.",
+     "en": "Right: not … any of means “none of”."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Hier ist alles richtig: not any of ist richtig gebildet.",
+      "en": "Everything is right here: not any of is correctly formed."
+     }
+    ]
+   },
+   "topic": "quant-neg"
+  },
+  {
+   "id": "qn-f3",
+   "type": "find",
+   "pat": "qn.hardly",
+   "prompt": "There was not hardly any time left to prepare for the audit.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "hardly",
+   "fixed": "There was hardly any time left to prepare for the audit.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Hardly ist schon verneint, ein zweites not ist zu viel.",
+     "en": "The error: hardly is already negative, a second not is too much."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Hardly braucht kein not.",
+      "en": "There is an error: Hardly needs no not."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: Hardly braucht kein not.",
+      "en": "The error is elsewhere: Hardly needs no not."
+     }
+    ]
+   },
+   "topic": "quant-neg"
+  },
+  {
+   "id": "qn-f4",
+   "type": "find",
+   "pat": "qn.hardly",
+   "prompt": "We barely noticed the change in the schedule.",
+   "err": null,
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Richtig: barely noticed ist „kaum bemerkt“.",
+     "en": "Right: barely noticed means “hardly noticed”."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Hier ist alles richtig: barely noticed ist richtig gebildet.",
+      "en": "Everything is right here: barely noticed is correctly formed."
+     }
+    ]
+   },
+   "topic": "quant-neg"
+  },
+  {
+   "id": "qn-f5",
+   "type": "find",
+   "pat": "qn.no-longer",
+   "prompt": "Our team no more supports the old software version.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "no longer",
+   "fixed": "Our team no longer supports the old software version.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Für „nicht mehr“ bei der Zeit steht no longer.",
+     "en": "The error: for “not any more” in time no longer is used."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: No more steht bei Mengen, hier gilt no longer.",
+      "en": "There is an error: No more is used with amounts, here no longer applies."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: No more steht bei Mengen, hier gilt no longer.",
+      "en": "The error is elsewhere: No more is used with amounts, here no longer applies."
+     }
+    ]
+   },
+   "topic": "quant-neg"
+  },
+  {
+   "id": "qn-f6",
+   "type": "find",
+   "pat": "qn.no-longer",
+   "prompt": "The old system is not longer supported by the vendor.",
+   "err": [
+    4,
+    5
+   ],
+   "answer": "no longer",
+   "fixed": "The old system is no longer supported by the vendor.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Es heißt no longer, nicht not longer.",
+     "en": "The error: it is no longer, not not longer."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Die feste Form heißt no longer.",
+      "en": "There is an error: The fixed form is no longer."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: Die feste Form heißt no longer.",
+      "en": "The error is elsewhere: The fixed form is no longer."
+     }
+    ]
+   },
+   "topic": "quant-neg"
+  },
+  {
+   "id": "qn-f7",
+   "type": "find",
+   "pat": "qn.number",
+   "prompt": "The number of requests have doubled since the update.",
+   "err": [
+    4,
+    4
+   ],
+   "answer": "has",
+   "fixed": "The number of requests has doubled since the update.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Bei the number of steht das Verb im Singular: has.",
+     "en": "The error: with the number of the verb is singular: has."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Kern ist number, deshalb Singular.",
+      "en": "There is an error: The core is number, so singular."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: Kern ist number, deshalb Singular.",
+      "en": "The error is elsewhere: The core is number, so singular."
+     }
+    ]
+   },
+   "topic": "quant-neg"
+  },
+  {
+   "id": "qn-f8",
+   "type": "find",
+   "pat": "qn.number",
+   "prompt": "A number of clients has asked about the new tariff.",
+   "err": [
+    4,
+    4
+   ],
+   "answer": "have",
+   "fixed": "A number of clients have asked about the new tariff.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Bei a number of steht das Verb im Plural: have.",
+     "en": "The error: with a number of the verb is plural: have."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: A number of heißt „einige“, deshalb Plural.",
+      "en": "There is an error: A number of means “several”, so plural."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: A number of heißt „einige“, deshalb Plural.",
+      "en": "The error is elsewhere: A number of means “several”, so plural."
+     }
+    ]
+   },
+   "topic": "quant-neg"
+  },
+  {
+   "id": "qn-m1",
+   "type": "meaning",
+   "pat": "qn.none",
+   "a": "None of the offers is ready.",
+   "b": "Not all of the offers are ready.",
+   "q": {
+    "de": "Welcher Satz sagt, dass kein einziges Angebot fertig ist?",
+    "en": "Which sentence says that not a single offer is ready?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. None of ist: kein einziges.",
+     "en": "Right: sentence a. None of means: not a single one."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b sind einige Angebote fertig.",
+      "en": "In b some offers are ready."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Nur a sagt, dass keines fertig ist.",
+      "en": "Not the same: only a says none is ready."
+     }
+    ]
+   },
+   "topic": "quant-neg"
+  },
+  {
+   "id": "qn-m2",
+   "type": "meaning",
+   "pat": "qn.hardly",
+   "a": "We hardly had any time.",
+   "b": "We had plenty of time.",
+   "q": {
+    "de": "Welcher Satz sagt, dass fast keine Zeit da war?",
+    "en": "Which sentence says that there was almost no time?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Hardly any ist: kaum etwas.",
+     "en": "Right: sentence a. Hardly any means: almost none."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b war viel Zeit da, nicht wenig.",
+      "en": "In b there was plenty of time."
+     },
+     {
+      "opt": "both",
+      "de": "Die Sätze sagen Gegensätzliches.",
+      "en": "The sentences say opposite things."
+     }
+    ]
+   },
+   "topic": "quant-neg"
+  },
+  {
+   "id": "qn-m3",
+   "type": "meaning",
+   "pat": "qn.no-longer",
+   "a": "He no longer works here.",
+   "b": "He does not work here yet.",
+   "q": {
+    "de": "Welcher Satz sagt, dass er früher hier gearbeitet hat?",
+    "en": "Which sentence says that he used to work here?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. No longer heißt: früher ja, jetzt nein.",
+     "en": "Right: sentence a. No longer means: before yes, now no."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b hat er noch nicht angefangen. Das ist etwas anderes.",
+      "en": "In b he has not started yet. That is something else."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Nur a meint, dass er früher hier war.",
+      "en": "Not the same: only a means he was here before."
+     }
+    ]
+   },
+   "topic": "quant-neg"
+  },
+  {
+   "id": "qn-m4",
+   "type": "meaning",
+   "pat": "qn.number",
+   "a": "A number of clients have left.",
+   "b": "The number of clients has fallen.",
+   "q": {
+    "de": "Welcher Satz sagt, dass einige Kunden gegangen sind?",
+    "en": "Which sentence says that several clients have left?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. A number of ist „einige“.",
+     "en": "Right: sentence a. A number of means “several”."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b geht es um die Zahl der Kunden, die gesunken ist.",
+      "en": "In b it is about the figure of clients, which has fallen."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Nur a nennt einige Kunden.",
+      "en": "Not the same: only a names several clients."
+     }
+    ]
+   },
+   "topic": "quant-neg"
+  },
+  {
    "id": "qu-ind-k1",
    "type": "kwt",
    "pat": "qu.indirect",
@@ -40161,6 +42214,689 @@
     ]
    },
    "topic": "reported"
+  },
+  {
+   "id": "sa-k1",
+   "type": "kwt",
+   "pat": "sa.trend",
+   "from": "Prices are going up at the moment because of the new tax.",
+   "key": "RISING",
+   "frame": "Prices ___ at the moment because of the new tax.",
+   "answer": "are rising",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Prices are rising at the moment. Mit at the moment braucht es die Verlaufsform.",
+     "en": "Right: Prices are rising at the moment. With at the moment you need the continuous."
+    },
+    "wrong": [
+     {
+      "not": [
+       "rising"
+      ],
+      "de": "Das Schlüsselwort rising muss unverändert in der Lücke stehen.",
+      "en": "The key word rising must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "rising"
+      ],
+      "not": [
+       "are"
+      ],
+      "de": "Ohne are fehlt das Hilfsverb der Verlaufsform: are rising.",
+      "en": "Without are the auxiliary of the continuous is missing: are rising."
+     }
+    ]
+   },
+   "topic": "stative-adv"
+  },
+  {
+   "id": "sa-k2",
+   "type": "kwt",
+   "pat": "sa.trend",
+   "from": "More and more customers ask for shorter contracts.",
+   "key": "INCREASINGLY",
+   "frame": "Customers ___ asking for shorter contracts.",
+   "answer": "are increasingly",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Customers are increasingly asking. Das Adverb steht zwischen are und asking.",
+     "en": "Right: Customers are increasingly asking. The adverb stands between are and asking."
+    },
+    "wrong": [
+     {
+      "not": [
+       "increasingly"
+      ],
+      "de": "Das Schlüsselwort increasingly muss unverändert in der Lücke stehen.",
+      "en": "The key word increasingly must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "increasingly"
+      ],
+      "not": [
+       "are"
+      ],
+      "de": "Vor increasingly braucht es are: are increasingly asking.",
+      "en": "Before increasingly you need are: are increasingly asking."
+     }
+    ]
+   },
+   "topic": "stative-adv"
+  },
+  {
+   "id": "sa-k3",
+   "type": "kwt",
+   "pat": "sa.soft",
+   "from": "Could you send me the file by noon?",
+   "key": "WONDERING",
+   "frame": "I was ___ you could send me the file by noon.",
+   "answer": "wondering if",
+   "accepted": [
+    "wondering whether"
+   ],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: I was wondering if you could send me the file. Nach wondering folgt if und normale Satzstellung.",
+     "en": "Right: I was wondering if you could send me the file. After wondering comes if and normal word order."
+    },
+    "wrong": [
+     {
+      "not": [
+       "wondering"
+      ],
+      "de": "Das Schlüsselwort wondering muss unverändert in der Lücke stehen.",
+      "en": "The key word wondering must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "wondering"
+      ],
+      "not": [
+       "if",
+       "whether"
+      ],
+      "de": "Nach wondering folgt if oder whether.",
+      "en": "After wondering comes if or whether."
+     }
+    ]
+   },
+   "topic": "stative-adv"
+  },
+  {
+   "id": "sa-k4",
+   "type": "kwt",
+   "pat": "sa.soft",
+   "from": "We hope to hear from you by Friday.",
+   "key": "HOPING",
+   "frame": "We ___ to hear from you by Friday.",
+   "answer": "are hoping",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: We are hoping to hear from you. Die Verlaufsform macht den Wunsch weicher.",
+     "en": "Right: We are hoping to hear from you. The continuous makes the wish softer."
+    },
+    "wrong": [
+     {
+      "not": [
+       "hoping"
+      ],
+      "de": "Das Schlüsselwort hoping muss unverändert in der Lücke stehen.",
+      "en": "The key word hoping must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "hoping"
+      ],
+      "not": [
+       "are"
+      ],
+      "de": "Ohne are fehlt das Hilfsverb: are hoping.",
+      "en": "Without are the auxiliary is missing: are hoping."
+     }
+    ]
+   },
+   "topic": "stative-adv"
+  },
+  {
+   "id": "sa-k5",
+   "type": "kwt",
+   "pat": "sa.being",
+   "from": "He is rude to everyone at the moment.",
+   "key": "BEING",
+   "frame": "He ___ rude to everyone at the moment.",
+   "answer": "is being",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: He is being rude. Being zeigt Verhalten für begrenzte Zeit.",
+     "en": "Right: He is being rude. Being shows behavior for a limited time."
+    },
+    "wrong": [
+     {
+      "not": [
+       "being"
+      ],
+      "de": "Das Schlüsselwort being muss unverändert in der Lücke stehen.",
+      "en": "The key word being must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "being"
+      ],
+      "not": [
+       "is"
+      ],
+      "de": "Ohne is fehlt das Hilfsverb: is being.",
+      "en": "Without is the auxiliary is missing: is being."
+     }
+    ]
+   },
+   "topic": "stative-adv"
+  },
+  {
+   "id": "sa-k6",
+   "type": "kwt",
+   "pat": "sa.being",
+   "from": "She complains about the coffee all the time, which is annoying.",
+   "key": "ALWAYS",
+   "frame": "She ___ complaining about the coffee.",
+   "answer": "is always",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: She is always complaining. Always + -ing zeigt Ärger über eine Gewohnheit.",
+     "en": "Right: She is always complaining. Always + -ing shows annoyance at a habit."
+    },
+    "wrong": [
+     {
+      "not": [
+       "always"
+      ],
+      "de": "Das Schlüsselwort always muss unverändert in der Lücke stehen.",
+      "en": "The key word always must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "always"
+      ],
+      "not": [
+       "is"
+      ],
+      "de": "Vor always braucht es is: is always complaining.",
+      "en": "Before always you need is: is always complaining."
+     }
+    ]
+   },
+   "topic": "stative-adv"
+  },
+  {
+   "id": "sa-k7",
+   "type": "kwt",
+   "pat": "sa.no-ing",
+   "from": "We cannot continue without a decision by Friday.",
+   "key": "NEED",
+   "frame": "We ___ a decision by Friday.",
+   "answer": "urgently need",
+   "accepted": [
+    "really need",
+    "simply need"
+   ],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: We urgently need a decision. Need ist ein Zustandsverb und bleibt einfach.",
+     "en": "Right: We urgently need a decision. Need is a stative verb and stays simple."
+    },
+    "wrong": [
+     {
+      "not": [
+       "need"
+      ],
+      "de": "Das Schlüsselwort need muss unverändert in der Lücke stehen.",
+      "en": "The key word need must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "needing"
+      ],
+      "de": "Need ist ein Zustandsverb und steht nicht in der Verlaufsform.",
+      "en": "Need is a stative verb and does not take the continuous."
+     }
+    ]
+   },
+   "topic": "stative-adv"
+  },
+  {
+   "id": "sa-k8",
+   "type": "kwt",
+   "pat": "sa.no-ing",
+   "from": "Your concern is clear to me.",
+   "key": "UNDERSTAND",
+   "frame": "I ___ your concern.",
+   "answer": "fully understand",
+   "accepted": [
+    "completely understand",
+    "totally understand"
+   ],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: I fully understand your concern. Understand ist ein Zustandsverb und bleibt einfach.",
+     "en": "Right: I fully understand your concern. Understand is a stative verb and stays simple."
+    },
+    "wrong": [
+     {
+      "not": [
+       "understand"
+      ],
+      "de": "Das Schlüsselwort understand muss unverändert in der Lücke stehen.",
+      "en": "The key word understand must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "understanding"
+      ],
+      "de": "Understand steht nicht in der Verlaufsform.",
+      "en": "Understand does not take the continuous."
+     }
+    ]
+   },
+   "topic": "stative-adv"
+  },
+  {
+   "id": "sa-f1",
+   "type": "find",
+   "pat": "sa.trend",
+   "prompt": "Our costs rise at the moment because of the new supplier.",
+   "err": [
+    2,
+    2
+   ],
+   "answer": "are rising",
+   "fixed": "Our costs are rising at the moment because of the new supplier.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Mit at the moment braucht es die Verlaufsform. Richtig: are rising.",
+     "en": "The error: with at the moment you need the continuous. Correct: are rising."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Ein Vorgang, der gerade läuft, steht in der Verlaufsform.",
+      "en": "There is an error: A process that is under way takes the continuous."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: Ein Vorgang, der gerade läuft, steht in der Verlaufsform.",
+      "en": "The error is elsewhere: A process that is under way takes the continuous."
+     }
+    ]
+   },
+   "topic": "stative-adv"
+  },
+  {
+   "id": "sa-f2",
+   "type": "find",
+   "pat": "sa.trend",
+   "prompt": "We are seeing a steady rise in orders, and the market is becoming more competitive.",
+   "err": null,
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Richtig: are seeing und is becoming beschreiben laufende Entwicklungen.",
+     "en": "Right: are seeing and is becoming describe changes under way."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Hier ist alles richtig: Beide Verlaufsformen sind richtig gebildet.",
+      "en": "Everything is right here: Both continuous forms are correctly formed."
+     }
+    ]
+   },
+   "topic": "stative-adv"
+  },
+  {
+   "id": "sa-f3",
+   "type": "find",
+   "pat": "sa.soft",
+   "prompt": "I was wondering could we move the call to Thursday.",
+   "err": [
+    3,
+    4
+   ],
+   "answer": "if we could",
+   "fixed": "I was wondering if we could move the call to Thursday.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach wondering folgt if und normale Satzstellung. Richtig: if we could move.",
+     "en": "The error: after wondering comes if and normal word order. Correct: if we could move."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach wondering steht ein Nebensatz mit if.",
+      "en": "There is an error: After wondering a clause with if follows."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: Nach wondering steht ein Nebensatz mit if.",
+      "en": "The error is elsewhere: After wondering a clause with if follows."
+     }
+    ]
+   },
+   "topic": "stative-adv"
+  },
+  {
+   "id": "sa-f4",
+   "type": "find",
+   "pat": "sa.soft",
+   "prompt": "I am hoping that you could review the draft before the meeting.",
+   "err": null,
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Richtig: I am hoping that you could … ist eine weiche Bitte.",
+     "en": "Right: I am hoping that you could … is a soft request."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Hier ist alles richtig: am hoping that you could ist richtig gebildet.",
+      "en": "Everything is right here: am hoping that you could is correctly formed."
+     }
+    ]
+   },
+   "topic": "stative-adv"
+  },
+  {
+   "id": "sa-f5",
+   "type": "find",
+   "pat": "sa.being",
+   "prompt": "The whole team is being exhausted after the product launch, so we will close early.",
+   "err": [
+    4,
+    5
+   ],
+   "answer": "exhausted",
+   "fixed": "The whole team is exhausted after the product launch, so we will close early.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Erschöpfung ist ein Zustand, deshalb ohne being. Richtig: is exhausted.",
+     "en": "The error: exhaustion is a state, so no being. Correct: is exhausted."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Being steht nur bei Verhalten, nicht bei Zuständen.",
+      "en": "There is an error: Being is used for behavior, not for states."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: Being steht nur bei Verhalten, nicht bei Zuständen.",
+      "en": "The error is elsewhere: Being is used for behavior, not for states."
+     }
+    ]
+   },
+   "topic": "stative-adv"
+  },
+  {
+   "id": "sa-f6",
+   "type": "find",
+   "pat": "sa.being",
+   "prompt": "He always is complaining about the coffee in the office.",
+   "err": [
+    1,
+    3
+   ],
+   "answer": "is always complaining",
+   "fixed": "He is always complaining about the coffee in the office.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Always steht hinter is. Richtig: is always complaining.",
+     "en": "The error: always stands after is. Correct: is always complaining."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Das Adverb always steht zwischen is und -ing.",
+      "en": "There is an error: The adverb always stands between is and -ing."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: Das Adverb always steht zwischen is und -ing.",
+      "en": "The error is elsewhere: The adverb always stands between is and -ing."
+     }
+    ]
+   },
+   "topic": "stative-adv"
+  },
+  {
+   "id": "sa-f7",
+   "type": "find",
+   "pat": "sa.no-ing",
+   "prompt": "We are needing a decision from the board by Friday.",
+   "err": [
+    1,
+    2
+   ],
+   "answer": "need",
+   "fixed": "We need a decision from the board by Friday.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Need ist ein Zustandsverb. Richtig: We need a decision.",
+     "en": "The error: need is a stative verb. Correct: We need a decision."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Zustandsverben stehen nicht in der Verlaufsform.",
+      "en": "There is an error: Stative verbs do not take the continuous."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: Zustandsverben stehen nicht in der Verlaufsform.",
+      "en": "The error is elsewhere: Stative verbs do not take the continuous."
+     }
+    ]
+   },
+   "topic": "stative-adv"
+  },
+  {
+   "id": "sa-f8",
+   "type": "find",
+   "pat": "sa.no-ing",
+   "prompt": "The warehouse is belonging to our parent company.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "belongs",
+   "fixed": "The warehouse belongs to our parent company.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Belong ist ein Zustandsverb. Richtig: belongs to.",
+     "en": "The error: belong is a stative verb. Correct: belongs to."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Besitz wird einfach ausgedrückt.",
+      "en": "There is an error: Possession is expressed simply."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: Besitz wird einfach ausgedrückt.",
+      "en": "The error is elsewhere: Possession is expressed simply."
+     }
+    ]
+   },
+   "topic": "stative-adv"
+  },
+  {
+   "id": "sa-m1",
+   "type": "meaning",
+   "pat": "sa.trend",
+   "a": "Prices are rising.",
+   "b": "Prices rise.",
+   "q": {
+    "de": "Welcher Satz beschreibt einen Anstieg, der gerade läuft?",
+    "en": "Which sentence describes a rise that is happening now?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Die Verlaufsform zeigt den laufenden Vorgang.",
+     "en": "Right: sentence a. The continuous shows the process under way."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b ist es eine allgemeine Aussage, kein Vorgang jetzt.",
+      "en": "In b it is a general statement, not a process now."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Nur a beschreibt den Vorgang jetzt.",
+      "en": "Not the same: only a describes the process now."
+     }
+    ]
+   },
+   "topic": "stative-adv"
+  },
+  {
+   "id": "sa-m2",
+   "type": "meaning",
+   "pat": "sa.soft",
+   "a": "I was wondering if you could help.",
+   "b": "Can you help?",
+   "q": {
+    "de": "Welcher Satz klingt weicher und höflicher?",
+    "en": "Which sentence sounds softer and more polite?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Was wondering macht die Bitte weicher.",
+     "en": "Right: sentence a. Was wondering softens the request."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "Satz b ist eine direkte Frage und klingt härter.",
+      "en": "Sentence b is a direct question and sounds harder."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich höflich: Nur a ist weich.",
+      "en": "Not equally polite: only a is soft."
+     }
+    ]
+   },
+   "topic": "stative-adv"
+  },
+  {
+   "id": "sa-m3",
+   "type": "meaning",
+   "pat": "sa.being",
+   "a": "He is being rude.",
+   "b": "He is rude.",
+   "q": {
+    "de": "Welcher Satz sagt, dass er sich nur im Moment so verhält?",
+    "en": "Which sentence says he behaves like this only right now?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Is being zeigt Verhalten für begrenzte Zeit.",
+     "en": "Right: sentence a. Is being shows behavior for a limited time."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "Satz b beschreibt sein Wesen, nicht nur den Moment.",
+      "en": "Sentence b describes his nature, not just the moment."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Nur a meint den Moment.",
+      "en": "Not the same: only a means the moment."
+     }
+    ]
+   },
+   "topic": "stative-adv"
+  },
+  {
+   "id": "sa-m4",
+   "type": "meaning",
+   "pat": "sa.no-ing",
+   "a": "I think it is a good plan.",
+   "b": "I am thinking about the plan.",
+   "q": {
+    "de": "Welcher Satz sagt, dass ich gerade darüber nachdenke?",
+    "en": "Which sentence says I am considering it right now?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. Think als „nachdenken“ geht in der Verlaufsform.",
+     "en": "Right: sentence b. Think as “consider” takes the continuous."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a heißt think „meinen“ und bleibt einfach. Das ist eine Meinung.",
+      "en": "In a think means “believe” and stays simple. That is an opinion."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Nur b meint das Nachdenken.",
+      "en": "Not the same: only b means the considering."
+     }
+    ]
+   },
+   "topic": "stative-adv"
   },
   {
    "id": "tc.pff-kwt1",

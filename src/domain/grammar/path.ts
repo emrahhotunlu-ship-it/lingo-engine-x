@@ -17,7 +17,7 @@ type Doc = Record<string, unknown>;
 
 /**
  * Lehrreihenfolge in der Reihenfolge der sieben Kapitel des C1-Programms (`content/c1/program.json`, Lernplattform 3.0 §4.1, P31):
- * die Themen, die es gibt (39 alte, dazu die neuen Themen von P36). Die übrigen neuen Themen des Programms (`NEW_TOPICS`) stehen dort als Platzhalter und kommen mit P37 hinzu.
+ * alle 47 Themen (39 alte, dazu die 8 neuen Themen von P36 und P37).
  * Ein Test sichert, dass Programm, `path.json` und diese Liste dieselbe Reihenfolge haben.
  */
 export const GRAMMAR_PATH: readonly string[] = [
@@ -27,9 +27,11 @@ export const GRAMMAR_PATH: readonly string[] = [
   'past-perfect',
   'used-to',
   'prep-time',
+  'stative-adv',
   'future-forms',
   'future-perf-cont',
   'time-clauses',
+  'future-past',
   'c1-precision',
   'conditionals',
   'cond-alt',
@@ -43,6 +45,7 @@ export const GRAMMAR_PATH: readonly string[] = [
   'mandative',
   'c1-nominal',
   'modals-deduction',
+  'modals-prob',
   'modals-advice',
   'c1-hedging',
   'gerund-inf',
@@ -52,6 +55,7 @@ export const GRAMMAR_PATH: readonly string[] = [
   'phrasal-syntax',
   'articles',
   'countable',
+  'quant-neg',
   'relative',
   'linkers',
   'c1-participle',

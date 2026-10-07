@@ -1,0 +1,218 @@
+[
+ {
+  "pat": "fp.was-going",
+  "en": "We were going to launch the product in May.",
+  "de": "Wir wollten das Produkt im Mai auf den Markt bringen.",
+  "chunks": [
+   "we",
+   "were going to",
+   "launch",
+   "the product",
+   "in May"
+  ],
+  "single": "We were going to bildet den Anfang; launch the product in May folgt danach.",
+  "why": [
+   "Were going to nennt den Plan von damals. Danach folgt die Grundform launch.",
+   "Were going to names the plan from back then. The base form launch follows."
+  ],
+  "bad": "We are going to launch the product in May.",
+  "trap": {
+   "tile": "were going to",
+   "instead": "are going to",
+   "why": {
+    "de": "Ein Plan von damals braucht were, nicht are.",
+    "en": "A plan from back then needs were, not are."
+   }
+  }
+ },
+ {
+  "pat": "fp.was-going",
+  "en": "I was going to call you earlier this morning.",
+  "de": "Ich wollte dich heute früh anrufen.",
+  "chunks": [
+   "I",
+   "was going to",
+   "call you",
+   "earlier",
+   "this morning"
+  ],
+  "single": "I was going to bildet den Anfang; call you earlier this morning folgt danach.",
+  "why": [
+   "Was going to nennt den Plan. Danach folgt die Grundform call.",
+   "Was going to names the plan. The base form call follows."
+  ],
+  "bad": "I was going call you earlier this morning.",
+  "trap": {
+   "tile": "was going to",
+   "instead": "was going",
+   "why": {
+    "de": "Nach going braucht es to.",
+    "en": "After going you need to."
+   }
+  }
+ },
+ {
+  "pat": "fp.about-to",
+  "en": "We were about to sign when the lawyer found an error.",
+  "de": "Wir wollten gerade unterschreiben, als der Anwalt einen Fehler fand.",
+  "chunks": [
+   "we were",
+   "about to",
+   "sign",
+   "when",
+   "the lawyer",
+   "found",
+   "an error"
+  ],
+  "single": "We were about to bildet den Anfang; sign when the lawyer found an error folgt danach.",
+  "why": [
+   "Were about to heißt: kurz davor. Der Satz mit when zeigt, was dazwischen kam; das ist die Pointe.",
+   "Were about to means: just before. The when-clause shows what intervened."
+  ],
+  "bad": "We were about signing when the lawyer found an error.",
+  "trap": {
+   "tile": "about to",
+   "instead": "about",
+   "why": {
+    "de": "Nach about steht to und die Grundform.",
+    "en": "After about comes to and the base form."
+   }
+  }
+ },
+ {
+  "pat": "fp.about-to",
+  "en": "The meeting was about to start when the power failed.",
+  "de": "Die Besprechung sollte gerade beginnen, als der Strom ausfiel.",
+  "chunks": [
+   "the meeting",
+   "was",
+   "about to",
+   "start",
+   "when",
+   "the power",
+   "failed"
+  ],
+  "single": "The meeting was bildet den Anfang; about to start when the power failed folgt danach.",
+  "why": [
+   "Was about to heißt: kurz davor. Der Satz mit when zeigt, was dazwischen kam; das ist die Pointe.",
+   "Was about to means: just before. When shows what intervened."
+  ],
+  "bad": "The meeting was about starting when the power failed.",
+  "trap": {
+   "tile": "start",
+   "instead": "starting",
+   "why": {
+    "de": "Nach about to steht die Grundform.",
+    "en": "After about to comes the base form."
+   }
+  }
+ },
+ {
+  "pat": "fp.would-narr",
+  "en": "She joined the firm in 2015 and would later lead the Berlin office.",
+  "de": "Sie kam 2015 zur Firma und leitete später das Berliner Büro.",
+  "chunks": [
+   "she",
+   "joined",
+   "the firm",
+   "in 2015",
+   "and",
+   "would later",
+   "lead",
+   "the Berlin office"
+  ],
+  "single": "She joined the firm in 2015 bildet den Anfang; and would later lead the Berlin office folgt danach.",
+  "why": [
+   "Would later blickt aus der Vergangenheit auf Späteres. Danach folgt die Grundform lead.",
+   "Would later looks from the past at something later. The base form lead follows."
+  ],
+  "bad": "She joined the firm in 2015 and will later lead the Berlin office.",
+  "trap": {
+   "tile": "would later",
+   "instead": "will later",
+   "why": {
+    "de": "Aus der Vergangenheit heraus steht would, nicht will.",
+    "en": "Seen from the past, would is used, not will."
+   }
+  }
+ },
+ {
+  "pat": "fp.would-narr",
+  "en": "He promised that he would send the report by Monday.",
+  "de": "Er versprach, den Bericht bis Montag zu schicken.",
+  "chunks": [
+   "he promised",
+   "that",
+   "he",
+   "would send",
+   "the report",
+   "by Monday"
+  ],
+  "single": "He promised that he bildet den Anfang; would send the report by Monday folgt danach.",
+  "why": [
+   "Nach promised steht would statt will. Danach folgt die Grundform send.",
+   "After promised, would replaces will. The base form send follows."
+  ],
+  "bad": "He promised that he will send the report by Monday.",
+  "trap": {
+   "tile": "would send",
+   "instead": "will send",
+   "why": {
+    "de": "Nach einem Verb der Vergangenheit steht would.",
+    "en": "After a verb in the past, would is used."
+   }
+  }
+ },
+ {
+  "pat": "fp.was-to",
+  "en": "The new office was to open in June.",
+  "de": "Das neue Büro sollte im Juni eröffnen.",
+  "chunks": [
+   "the new office",
+   "was to",
+   "open",
+   "in",
+   "June"
+  ],
+  "single": "The new office was to bildet den Anfang; open in June folgt danach.",
+  "why": [
+   "Was to nennt, was vorgesehen war. Danach folgt die Grundform open.",
+   "Was to names what was meant to be. The base form open follows."
+  ],
+  "bad": "The new office should open in June.",
+  "trap": {
+   "tile": "was to",
+   "instead": "should",
+   "why": {
+    "de": "Für einen Plan in der Vergangenheit steht was to.",
+    "en": "For a plan in the past was to is used."
+   }
+  }
+ },
+ {
+  "pat": "fp.was-to",
+  "en": "She was to become the youngest director in the firm.",
+  "de": "Sie sollte die jüngste Direktorin der Firma werden.",
+  "chunks": [
+   "she",
+   "was to",
+   "become",
+   "the youngest director",
+   "in the firm"
+  ],
+  "single": "She was to bildet den Anfang; become the youngest director in the firm folgt danach.",
+  "why": [
+   "Was to nennt, was vorgesehen schien. Danach folgt die Grundform become.",
+   "Was to names what seemed meant to be. The base form become follows."
+  ],
+  "bad": "She was to became the youngest director in the firm.",
+  "trap": {
+   "tile": "become",
+   "instead": "became",
+   "why": {
+    "de": "Nach was to steht die Grundform.",
+    "en": "After was to comes the base form."
+   }
+  }
+ }
+]

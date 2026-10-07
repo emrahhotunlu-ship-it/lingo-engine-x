@@ -303,6 +303,154 @@
    "id": "ocl-0507",
    "kind": "ocl",
    "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "inv.sooner",
+   "why": {
+    "ok": {
+     "de": "Zu no sooner gehört than: No sooner had … than …",
+     "en": "No sooner goes with than: No sooner had … than …"
+    },
+    "wrong": [
+     {
+      "if": [
+       "when"
+      ],
+      "de": "„when“ passt hier nicht. Gesucht ist „than“.",
+      "en": "“when” does not fit here. The word needed is “than”."
+     },
+     {
+      "if": [
+       "that"
+      ],
+      "de": "„that“ passt hier nicht. Gesucht ist „than“.",
+      "en": "“that” does not fit here. The word needed is “than”."
+     },
+     {
+      "if": [
+       "then"
+      ],
+      "de": "„then“ passt hier nicht. Gesucht ist „than“.",
+      "en": "“then” does not fit here. The word needed is “than”."
+     }
+    ]
+   },
+   "text": "No sooner had we sat down at the café ___ it started to rain.",
+   "accept": [
+    "than"
+   ],
+   "cls": "conj",
+   "chips": [
+    "when",
+    "that",
+    "then"
+   ]
+  },
+  {
+   "id": "ocl-0508",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "inv.negative",
+   "why": {
+    "ok": {
+     "de": "Nach Seldom am Satzanfang steht does vor dem Subjekt: Seldom does my neighbor leave.",
+     "en": "After Seldom at the start, does stands before the subject: Seldom does my neighbor leave."
+    },
+    "wrong": [
+     {
+      "if": [
+       "do"
+      ],
+      "de": "„do“ passt hier nicht. Gesucht ist „does“.",
+      "en": "“do” does not fit here. The word needed is “does”."
+     },
+     {
+      "if": [
+       "is"
+      ],
+      "de": "„is“ passt hier nicht. Gesucht ist „does“.",
+      "en": "“is” does not fit here. The word needed is “does”."
+     },
+     {
+      "if": [
+       "has"
+      ],
+      "de": "„has“ passt hier nicht. Gesucht ist „does“.",
+      "en": "“has” does not fit here. The word needed is “does”."
+     }
+    ]
+   },
+   "text": "Seldom ___ my neighbor leave the house before noon.",
+   "accept": [
+    "does"
+   ],
+   "cls": "aux",
+   "chips": [
+    "do",
+    "is",
+    "has"
+   ]
+  },
+  {
+   "id": "ocl-0509",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "inv.only",
+   "why": {
+    "ok": {
+     "de": "Nach Only when und dem Nebensatz steht das Hilfsverb vor dem Subjekt: Only when … could we eat.",
+     "en": "After Only when and the clause, the auxiliary comes before the subject: Only when … could we eat."
+    },
+    "wrong": [
+     {
+      "if": [
+       "do"
+      ],
+      "de": "„do“ passt hier nicht. Gesucht ist „could“.",
+      "en": "“do” does not fit here. The word needed is “could”."
+     },
+     {
+      "if": [
+       "can"
+      ],
+      "de": "„can“ passt hier nicht. Gesucht ist „could“.",
+      "en": "“can” does not fit here. The word needed is “could”."
+     },
+     {
+      "if": [
+       "are"
+      ],
+      "de": "„are“ passt hier nicht. Gesucht ist „could“.",
+      "en": "“are” does not fit here. The word needed is “could”."
+     }
+    ]
+   },
+   "text": "Only when the baby fell asleep ___ we finally eat dinner.",
+   "accept": [
+    "could",
+    "did"
+   ],
+   "cls": "aux",
+   "chips": [
+    "do",
+    "can",
+    "are"
+   ]
+  },
+  {
+   "id": "ocl-0510",
+   "kind": "ocl",
+   "area": "gram",
    "topic": "emph-plus",
    "level": "C1",
    "dom": "biz",
@@ -349,7 +497,7 @@
    ]
   },
   {
-   "id": "ocl-0508",
+   "id": "ocl-0511",
    "kind": "ocl",
    "area": "gram",
    "topic": "emph-plus",
@@ -398,7 +546,7 @@
    ]
   },
   {
-   "id": "ocl-0509",
+   "id": "ocl-0512",
    "kind": "ocl",
    "area": "gram",
    "topic": "emph-plus",
@@ -448,7 +596,7 @@
    ]
   },
   {
-   "id": "ocl-0510",
+   "id": "ocl-0513",
    "kind": "ocl",
    "area": "gram",
    "topic": "emph-plus",
@@ -497,7 +645,7 @@
    ]
   },
   {
-   "id": "ocl-0511",
+   "id": "ocl-0514",
    "kind": "ocl",
    "area": "gram",
    "topic": "emph-plus",
@@ -546,7 +694,7 @@
    ]
   },
   {
-   "id": "ocl-0512",
+   "id": "ocl-0515",
    "kind": "ocl",
    "area": "gram",
    "topic": "emph-plus",
@@ -595,7 +743,155 @@
    ]
   },
   {
-   "id": "ocl-0513",
+   "id": "ocl-0516",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "ep.so-such",
+   "why": {
+    "ok": {
+     "de": "Nach Such am Anfang steht das Verb vor dem Subjekt: Such was his excitement.",
+     "en": "After Such at the start, the verb comes before the subject: Such was his excitement."
+    },
+    "wrong": [
+     {
+      "if": [
+       "is"
+      ],
+      "de": "„is“ passt hier nicht. Gesucht ist „was“.",
+      "en": "“is” does not fit here. The word needed is “was”."
+     },
+     {
+      "if": [
+       "has"
+      ],
+      "de": "„has“ passt hier nicht. Gesucht ist „was“.",
+      "en": "“has” does not fit here. The word needed is “was”."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "„did“ passt hier nicht. Gesucht ist „was“.",
+      "en": "“did” does not fit here. The word needed is “was”."
+     }
+    ]
+   },
+   "text": "Such ___ his excitement that he could not sleep the night before the trip.",
+   "accept": [
+    "was"
+   ],
+   "cls": "aux",
+   "chips": [
+    "is",
+    "has",
+    "did"
+   ]
+  },
+  {
+   "id": "ocl-0517",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "ep.concession",
+   "why": {
+    "ok": {
+     "de": "Much as I love … räumt etwas ein und heißt „so sehr ich … mag“.",
+     "en": "Much as I love … concedes a point and means “as much as I love …”."
+    },
+    "wrong": [
+     {
+      "if": [
+       "that"
+      ],
+      "de": "„that“ passt hier nicht. Gesucht ist „as“.",
+      "en": "“that” does not fit here. The word needed is “as”."
+     },
+     {
+      "if": [
+       "so"
+      ],
+      "de": "„so“ passt hier nicht. Gesucht ist „as“.",
+      "en": "“so” does not fit here. The word needed is “as”."
+     },
+     {
+      "if": [
+       "how"
+      ],
+      "de": "„how“ passt hier nicht. Gesucht ist „as“.",
+      "en": "“how” does not fit here. The word needed is “as”."
+     }
+    ]
+   },
+   "text": "Much ___ I love chocolate, I try to eat it only on weekends.",
+   "accept": [
+    "as",
+    "though"
+   ],
+   "cls": "conj",
+   "chips": [
+    "that",
+    "so",
+    "how"
+   ]
+  },
+  {
+   "id": "ocl-0518",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "ep.do-emph",
+   "why": {
+    "ok": {
+     "de": "Das betonte did steht vor der Grundform: I did tell you.",
+     "en": "The stressed did stands before the base form: I did tell you."
+    },
+    "wrong": [
+     {
+      "if": [
+       "told"
+      ],
+      "de": "„told“ passt hier nicht. Gesucht ist „tell“.",
+      "en": "“told” does not fit here. The word needed is “tell”."
+     },
+     {
+      "if": [
+       "telling"
+      ],
+      "de": "„telling“ passt hier nicht. Gesucht ist „tell“.",
+      "en": "“telling” does not fit here. The word needed is “tell”."
+     },
+     {
+      "if": [
+       "tells"
+      ],
+      "de": "„tells“ passt hier nicht. Gesucht ist „tell“.",
+      "en": "“tells” does not fit here. The word needed is “tell”."
+     }
+    ]
+   },
+   "text": "I did ___ you about the leak, but you were not listening.",
+   "accept": [
+    "tell"
+   ],
+   "cls": "part",
+   "chips": [
+    "told",
+    "telling",
+    "tells"
+   ]
+  },
+  {
+   "id": "ocl-0519",
    "kind": "ocl",
    "area": "gram",
    "topic": "ellipsis",
@@ -644,7 +940,7 @@
    ]
   },
   {
-   "id": "ocl-0514",
+   "id": "ocl-0520",
    "kind": "ocl",
    "area": "gram",
    "topic": "ellipsis",
@@ -693,7 +989,7 @@
    ]
   },
   {
-   "id": "ocl-0515",
+   "id": "ocl-0521",
    "kind": "ocl",
    "area": "gram",
    "topic": "ellipsis",
@@ -742,7 +1038,7 @@
    ]
   },
   {
-   "id": "ocl-0516",
+   "id": "ocl-0522",
    "kind": "ocl",
    "area": "gram",
    "topic": "ellipsis",
@@ -792,7 +1088,7 @@
    ]
   },
   {
-   "id": "ocl-0517",
+   "id": "ocl-0523",
    "kind": "ocl",
    "area": "gram",
    "topic": "ellipsis",
@@ -841,7 +1137,7 @@
    ]
   },
   {
-   "id": "ocl-0518",
+   "id": "ocl-0524",
    "kind": "ocl",
    "area": "gram",
    "topic": "ellipsis",
@@ -890,7 +1186,154 @@
    ]
   },
   {
-   "id": "ocl-0519",
+   "id": "ocl-0525",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "el.to-aux",
+   "why": {
+    "ok": {
+     "de": "Das Verb come entfällt, aber to bleibt: I would like to.",
+     "en": "The verb come is dropped, but to stays: I would like to."
+    },
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "„for“ passt hier nicht. Gesucht ist „to“.",
+      "en": "“for” does not fit here. The word needed is “to”."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "„at“ passt hier nicht. Gesucht ist „to“.",
+      "en": "“at” does not fit here. The word needed is “to”."
+     },
+     {
+      "if": [
+       "on"
+      ],
+      "de": "„on“ passt hier nicht. Gesucht ist „to“.",
+      "en": "“on” does not fit here. The word needed is “to”."
+     }
+    ]
+   },
+   "text": "\"Are you coming to the party?\" \"I would like ___, but I have to work.\"",
+   "accept": [
+    "to"
+   ],
+   "cls": "part",
+   "chips": [
+    "for",
+    "at",
+    "on"
+   ]
+  },
+  {
+   "id": "ocl-0526",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "el.so-not",
+   "why": {
+    "ok": {
+     "de": "Nach think ersetzt so den ganzen Gedanken: I think so.",
+     "en": "After think, so replaces the whole thought: I think so."
+    },
+    "wrong": [
+     {
+      "if": [
+       "it"
+      ],
+      "de": "„it“ passt hier nicht. Gesucht ist „so“.",
+      "en": "“it” does not fit here. The word needed is “so”."
+     },
+     {
+      "if": [
+       "yes"
+      ],
+      "de": "„yes“ passt hier nicht. Gesucht ist „so“.",
+      "en": "“yes” does not fit here. The word needed is “so”."
+     },
+     {
+      "if": [
+       "that"
+      ],
+      "de": "„that“ passt hier nicht. Gesucht ist „so“.",
+      "en": "“that” does not fit here. The word needed is “so”."
+     }
+    ]
+   },
+   "text": "\"Is the shop open on Sundays?\" \"I think ___.\"",
+   "accept": [
+    "so"
+   ],
+   "cls": "adv",
+   "chips": [
+    "it",
+    "yes",
+    "that"
+   ]
+  },
+  {
+   "id": "ocl-0527",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "el.one-ones",
+   "why": {
+    "ok": {
+     "de": "One ersetzt das Nomen jacket. Hinter red darf es nicht fehlen.",
+     "en": "One replaces the noun jacket. After red it must not be missing."
+    },
+    "wrong": [
+     {
+      "if": [
+       "ones"
+      ],
+      "de": "„ones“ passt hier nicht. Gesucht ist „one“.",
+      "en": "“ones” does not fit here. The word needed is “one”."
+     },
+     {
+      "if": [
+       "that"
+      ],
+      "de": "„that“ passt hier nicht. Gesucht ist „one“.",
+      "en": "“that” does not fit here. The word needed is “one”."
+     },
+     {
+      "if": [
+       "it"
+      ],
+      "de": "„it“ passt hier nicht. Gesucht ist „one“.",
+      "en": "“it” does not fit here. The word needed is “one”."
+     }
+    ]
+   },
+   "text": "I like both jackets, but the red ___ suits you better.",
+   "accept": [
+    "one"
+   ],
+   "cls": "pron",
+   "chips": [
+    "ones",
+    "that",
+    "it"
+   ]
+  },
+  {
+   "id": "ocl-0528",
    "kind": "ocl",
    "area": "gram",
    "topic": "noun-phrase",
@@ -942,7 +1385,7 @@
    ]
   },
   {
-   "id": "ocl-0520",
+   "id": "ocl-0529",
    "kind": "ocl",
    "area": "gram",
    "topic": "noun-phrase",
@@ -993,7 +1436,7 @@
    ]
   },
   {
-   "id": "ocl-0521",
+   "id": "ocl-0530",
    "kind": "ocl",
    "area": "gram",
    "topic": "noun-phrase",
@@ -1042,7 +1485,7 @@
    ]
   },
   {
-   "id": "ocl-0522",
+   "id": "ocl-0531",
    "kind": "ocl",
    "area": "gram",
    "topic": "noun-phrase",
@@ -1091,7 +1534,7 @@
    ]
   },
   {
-   "id": "ocl-0523",
+   "id": "ocl-0532",
    "kind": "ocl",
    "area": "gram",
    "topic": "noun-phrase",
@@ -1140,7 +1583,7 @@
    ]
   },
   {
-   "id": "ocl-0524",
+   "id": "ocl-0533",
    "kind": "ocl",
    "area": "gram",
    "topic": "noun-phrase",
@@ -1186,6 +1629,153 @@
     "for",
     "at",
     "of"
+   ]
+  },
+  {
+   "id": "ocl-0534",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "np.to-inf",
+   "why": {
+    "ok": {
+     "de": "Nach the last steht to + Grundform: the last guest to leave.",
+     "en": "After the last comes to + base form: the last guest to leave."
+    },
+    "wrong": [
+     {
+      "if": [
+       "who"
+      ],
+      "de": "„who“ passt hier nicht. Gesucht ist „to“.",
+      "en": "“who” does not fit here. The word needed is “to”."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "„for“ passt hier nicht. Gesucht ist „to“.",
+      "en": "“for” does not fit here. The word needed is “to”."
+     },
+     {
+      "if": [
+       "that"
+      ],
+      "de": "„that“ passt hier nicht. Gesucht ist „to“.",
+      "en": "“that” does not fit here. The word needed is “to”."
+     }
+    ]
+   },
+   "text": "She was the last guest ___ leave the party.",
+   "accept": [
+    "to"
+   ],
+   "cls": "part",
+   "chips": [
+    "who",
+    "for",
+    "that"
+   ]
+  },
+  {
+   "id": "ocl-0535",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "np.contact",
+   "why": {
+    "ok": {
+     "de": "Nach der Steigerung the best darf that stehen oder fehlen. What, who und where passen nicht.",
+     "en": "After the superlative the best, that may stay or be dropped. What, who and where do not fit."
+    },
+    "wrong": [
+     {
+      "if": [
+       "what"
+      ],
+      "de": "„what“ passt hier nicht. Gesucht ist „that“.",
+      "en": "“what” does not fit here. The word needed is “that”."
+     },
+     {
+      "if": [
+       "who"
+      ],
+      "de": "„who“ passt hier nicht. Gesucht ist „that“.",
+      "en": "“who” does not fit here. The word needed is “that”."
+     },
+     {
+      "if": [
+       "where"
+      ],
+      "de": "„where“ passt hier nicht. Gesucht ist „that“.",
+      "en": "“where” does not fit here. The word needed is “that”."
+     }
+    ]
+   },
+   "text": "This is the best present ___ I have ever received.",
+   "accept": [
+    "that"
+   ],
+   "cls": "rel",
+   "chips": [
+    "what",
+    "who",
+    "where"
+   ]
+  },
+  {
+   "id": "ocl-0536",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "np.of-s",
+   "why": {
+    "ok": {
+     "de": "Bei Sachen steht of: the name of the street.",
+     "en": "With things of is used: the name of the street."
+    },
+    "wrong": [
+     {
+      "if": [
+       "from"
+      ],
+      "de": "„from“ passt hier nicht. Gesucht ist „of“.",
+      "en": "“from” does not fit here. The word needed is “of”."
+     },
+     {
+      "if": [
+       "to"
+      ],
+      "de": "„to“ passt hier nicht. Gesucht ist „of“.",
+      "en": "“to” does not fit here. The word needed is “of”."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "„for“ passt hier nicht. Gesucht ist „of“.",
+      "en": "“for” does not fit here. The word needed is “of”."
+     }
+    ]
+   },
+   "text": "The name ___ the street is difficult to pronounce.",
+   "accept": [
+    "of"
+   ],
+   "cls": "prep",
+   "chips": [
+    "from",
+    "to",
+    "for"
    ]
   }
  ]

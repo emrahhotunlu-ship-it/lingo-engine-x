@@ -1,0 +1,1030 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "kwt-0601",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "mp.may-well",
+   "why": {
+    "ok": {
+     "de": "may well reject. Well steht direkt hinter may.",
+     "en": "may well reject. Well stands right after may."
+    },
+    "wrong": []
+   },
+   "lead": "It is quite possible that the regulator will reject our proposal.",
+   "key": "WELL",
+   "before": "The regulator",
+   "after": "our proposal.",
+   "keys": [
+    {
+     "a": [
+      "may well"
+     ],
+     "b": [
+      "reject"
+     ]
+    }
+   ],
+   "tiles": [
+    "may",
+    "reject"
+   ],
+   "extra": [
+    "be",
+    "to",
+    "good"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0602",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "mp.may-well",
+   "why": {
+    "ok": {
+     "de": "could well be. Well steht direkt hinter dem Modalverb.",
+     "en": "could well be. Well stands right after the modal."
+    },
+    "wrong": []
+   },
+   "lead": "Maybe this will turn out to be the best holiday we ever had.",
+   "key": "WELL",
+   "before": "This",
+   "after": "the best holiday we ever had.",
+   "keys": [
+    {
+     "a": [
+      "could well",
+      "may well",
+      "might well"
+     ],
+     "b": [
+      "be"
+     ]
+    }
+   ],
+   "tiles": [
+    "could",
+    "be"
+   ],
+   "extra": [
+    "to",
+    "very",
+    "good"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0603",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "mp.bound",
+   "why": {
+    "ok": {
+     "de": "bound to rise. Nach bound steht to und die Grundform.",
+     "en": "bound to rise. After bound comes to and the base form."
+    },
+    "wrong": [
+     {
+      "if": [
+       "bound",
+       "rising"
+      ],
+      "de": "Nach bound steht to + Grundform, kein -ing.",
+      "en": "After bound comes to + base form, no -ing."
+     }
+    ]
+   },
+   "lead": "Prices will almost certainly rise once the merger is complete.",
+   "key": "BOUND",
+   "before": "Prices are",
+   "after": "after the merger.",
+   "keys": [
+    {
+     "a": [
+      "bound to"
+     ],
+     "b": [
+      "rise"
+     ]
+    }
+   ],
+   "tiles": [
+    "to",
+    "rise"
+   ],
+   "extra": [
+    "for",
+    "rising",
+    "be"
+   ],
+   "traps": [
+    "bound rising"
+   ]
+  },
+  {
+   "id": "kwt-0604",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "mp.likely",
+   "why": {
+    "ok": {
+     "de": "is likely to be. Nach likely steht to und die Grundform.",
+     "en": "is likely to be. After likely comes to and the base form."
+    },
+    "wrong": []
+   },
+   "lead": "Most probably the update will be ready by Friday.",
+   "key": "LIKELY",
+   "before": "The update",
+   "after": "be ready by Friday.",
+   "keys": [
+    {
+     "a": [
+      "is"
+     ],
+     "b": [
+      "likely to"
+     ]
+    }
+   ],
+   "tiles": [
+    "is",
+    "to"
+   ],
+   "extra": [
+    "are",
+    "that",
+    "for"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0605",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "mp.chance",
+   "why": {
+    "ok": {
+     "de": "There is a good chance that … Danach folgt ein that-Satz.",
+     "en": "There is a good chance that … A that-clause follows."
+    },
+    "wrong": []
+   },
+   "lead": "My landlord will probably agree to a lower rent.",
+   "key": "CHANCE",
+   "before": "",
+   "after": "my landlord will agree to a lower rent.",
+   "keys": [
+    {
+     "a": [
+      "There is a"
+     ],
+     "b": [
+      "good chance that"
+     ]
+    }
+   ],
+   "tiles": [
+    "There",
+    "is",
+    "a",
+    "good",
+    "that"
+   ],
+   "extra": [
+    "exists",
+    "it",
+    "for"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0606",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "mp.likely",
+   "why": {
+    "ok": {
+     "de": "unlikely to affect. Nach unlikely steht to und die Grundform.",
+     "en": "unlikely to affect. After unlikely comes to and the base form."
+    },
+    "wrong": []
+   },
+   "lead": "The delay probably will not affect the launch.",
+   "key": "UNLIKELY",
+   "before": "The delay is",
+   "after": "the launch.",
+   "keys": [
+    {
+     "a": [
+      "unlikely"
+     ],
+     "b": [
+      "to affect"
+     ]
+    }
+   ],
+   "tiles": [
+    "to",
+    "affect"
+   ],
+   "extra": [
+    "not",
+    "likely",
+    "for"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0607",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "sa.trend",
+   "why": {
+    "ok": {
+     "de": "are seeing a fast rise. Die Verlaufsform zeigt die laufende Entwicklung.",
+     "en": "are seeing a fast rise. The continuous shows the change under way."
+    },
+    "wrong": []
+   },
+   "lead": "Orders are going up fast this month.",
+   "key": "SEEING",
+   "before": "We",
+   "after": "in orders this month.",
+   "keys": [
+    {
+     "a": [
+      "are seeing"
+     ],
+     "b": [
+      "a fast rise"
+     ]
+    }
+   ],
+   "tiles": [
+    "are",
+    "a",
+    "fast",
+    "rise"
+   ],
+   "extra": [
+    "see",
+    "saw",
+    "seen"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0608",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "sa.soft",
+   "why": {
+    "ok": {
+     "de": "was hoping you could. Die Verlaufsform macht die Bitte weicher.",
+     "en": "was hoping you could. The continuous softens the request."
+    },
+    "wrong": []
+   },
+   "lead": "Could you confirm the venue for the workshop?",
+   "key": "HOPING",
+   "before": "I was",
+   "after": "confirm the venue for the workshop.",
+   "keys": [
+    {
+     "a": [
+      "hoping"
+     ],
+     "b": [
+      "you could"
+     ]
+    }
+   ],
+   "tiles": [
+    "you",
+    "could"
+   ],
+   "extra": [
+    "hope",
+    "hoped",
+    "to"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0609",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "sa.being",
+   "why": {
+    "ok": {
+     "de": "is being very difficult. Being zeigt Verhalten für begrenzte Zeit.",
+     "en": "is being very difficult. Being shows behavior for a limited time."
+    },
+    "wrong": []
+   },
+   "lead": "The client behaves in a very difficult way today.",
+   "key": "BEING",
+   "before": "The client",
+   "after": "today.",
+   "keys": [
+    {
+     "a": [
+      "is being"
+     ],
+     "b": [
+      "very difficult"
+     ]
+    }
+   ],
+   "tiles": [
+    "is",
+    "very",
+    "difficult"
+   ],
+   "extra": [
+    "be",
+    "been",
+    "has"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0610",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "sa.no-ing",
+   "why": {
+    "ok": {
+     "de": "urgently need a decision. Need ist ein Zustandsverb und bleibt einfach.",
+     "en": "urgently need a decision. Need is a stative verb and stays simple."
+    },
+    "wrong": [
+     {
+      "if": [
+       "needing"
+      ],
+      "de": "Need ist ein Zustandsverb und steht nicht in der Verlaufsform.",
+      "en": "Need is a stative verb and does not take the continuous."
+     }
+    ]
+   },
+   "lead": "A decision is required by Friday.",
+   "key": "NEED",
+   "before": "We",
+   "after": "by Friday.",
+   "keys": [
+    {
+     "a": [
+      "urgently need"
+     ],
+     "b": [
+      "a decision"
+     ]
+    }
+   ],
+   "tiles": [
+    "urgently",
+    "a",
+    "decision"
+   ],
+   "extra": [
+    "are",
+    "needing",
+    "needed"
+   ],
+   "traps": [
+    "are needing"
+   ]
+  },
+  {
+   "id": "kwt-0611",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "sa.trend",
+   "why": {
+    "ok": {
+     "de": "are getting more expensive. Die Verlaufsform zeigt die laufende Entwicklung.",
+     "en": "are getting more expensive. The continuous shows the change under way."
+    },
+    "wrong": []
+   },
+   "lead": "Houses in this area become more expensive every year.",
+   "key": "GETTING",
+   "before": "Houses in this area are",
+   "after": "every year.",
+   "keys": [
+    {
+     "a": [
+      "getting"
+     ],
+     "b": [
+      "more expensive"
+     ]
+    }
+   ],
+   "tiles": [
+    "more",
+    "expensive"
+   ],
+   "extra": [
+    "get",
+    "got",
+    "gets"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0612",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "sa.soft",
+   "why": {
+    "ok": {
+     "de": "are hoping you can come. Die Verlaufsform macht die Einladung freundlicher.",
+     "en": "are hoping you can come. The continuous makes the invitation friendlier."
+    },
+    "wrong": []
+   },
+   "lead": "We hope you can come to our housewarming party.",
+   "key": "HOPING",
+   "before": "We",
+   "after": "come to our housewarming party.",
+   "keys": [
+    {
+     "a": [
+      "are hoping"
+     ],
+     "b": [
+      "you can"
+     ]
+    }
+   ],
+   "tiles": [
+    "are",
+    "you",
+    "can"
+   ],
+   "extra": [
+    "hope",
+    "hoped",
+    "to"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0613",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "fp.was-going",
+   "why": {
+    "ok": {
+     "de": "were going to open. Were going to nennt den Plan von damals.",
+     "en": "were going to open. Were going to names the plan from back then."
+    },
+    "wrong": []
+   },
+   "lead": "We planned to open a second office in Vienna, but the lease fell through.",
+   "key": "GOING",
+   "before": "We",
+   "after": "a second office in Vienna, but the lease fell through.",
+   "keys": [
+    {
+     "a": [
+      "were going"
+     ],
+     "b": [
+      "to open"
+     ]
+    }
+   ],
+   "tiles": [
+    "were",
+    "to",
+    "open"
+   ],
+   "extra": [
+    "are",
+    "went",
+    "gone"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0614",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "fp.about-to",
+   "why": {
+    "ok": {
+     "de": "was about to miss. Nach about steht to und die Grundform.",
+     "en": "was about to miss. After about comes to and the base form."
+    },
+    "wrong": []
+   },
+   "lead": "Our team nearly missed the deadline when the server crashed.",
+   "key": "ABOUT",
+   "before": "Our team was",
+   "after": "the deadline when the server crashed.",
+   "keys": [
+    {
+     "a": [
+      "about to"
+     ],
+     "b": [
+      "miss"
+     ]
+    }
+   ],
+   "tiles": [
+    "to",
+    "miss"
+   ],
+   "extra": [
+    "for",
+    "missing",
+    "at"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0615",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "fp.would-narr",
+   "why": {
+    "ok": {
+     "de": "would become CFO. Aus der Vergangenheit auf Späteres blickt would.",
+     "en": "would become CFO. Would looks from the past at something later."
+    },
+    "wrong": []
+   },
+   "lead": "He joined the firm in 2014 and became CFO six years later.",
+   "key": "WOULD",
+   "before": "He joined the firm in 2014 and",
+   "after": "six years later.",
+   "keys": [
+    {
+     "a": [
+      "would"
+     ],
+     "b": [
+      "become CFO"
+     ]
+    }
+   ],
+   "tiles": [
+    "become",
+    "CFO"
+   ],
+   "extra": [
+    "will",
+    "became",
+    "is"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0616",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "fp.was-to",
+   "why": {
+    "ok": {
+     "de": "was to take place. Was to nennt das Vorgesehene.",
+     "en": "was to take place. Was to names what was meant to be."
+    },
+    "wrong": []
+   },
+   "lead": "The conference had been planned for September, but a strike forced a delay.",
+   "key": "WAS",
+   "before": "The conference",
+   "after": "in September, but a strike forced a delay.",
+   "keys": [
+    {
+     "a": [
+      "was to"
+     ],
+     "b": [
+      "take place"
+     ]
+    }
+   ],
+   "tiles": [
+    "to",
+    "take",
+    "place"
+   ],
+   "extra": [
+    "should",
+    "is",
+    "were"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0617",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "fp.about-to",
+   "why": {
+    "ok": {
+     "de": "was about to fall asleep. Nach about steht to und die Grundform.",
+     "en": "was about to fall asleep. After about comes to and the base form."
+    },
+    "wrong": []
+   },
+   "lead": "I almost fell asleep when the phone rang.",
+   "key": "ABOUT",
+   "before": "I was",
+   "after": "when the phone rang.",
+   "keys": [
+    {
+     "a": [
+      "about to"
+     ],
+     "b": [
+      "fall asleep"
+     ]
+    }
+   ],
+   "tiles": [
+    "to",
+    "fall",
+    "asleep"
+   ],
+   "extra": [
+    "for",
+    "falling",
+    "at"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0618",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "fp.was-going",
+   "why": {
+    "ok": {
+     "de": "was going to bake. Was going to nennt den Plan von damals.",
+     "en": "was going to bake. Was going to names the plan from back then."
+    },
+    "wrong": []
+   },
+   "lead": "I intended to bake a cake for your birthday, but I ran out of time.",
+   "key": "GOING",
+   "before": "I",
+   "after": "a cake for your birthday, but I ran out of time.",
+   "keys": [
+    {
+     "a": [
+      "was going"
+     ],
+     "b": [
+      "to bake"
+     ]
+    }
+   ],
+   "tiles": [
+    "was",
+    "to",
+    "bake"
+   ],
+   "extra": [
+    "am",
+    "went",
+    "gone"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0619",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "qn.none",
+   "why": {
+    "ok": {
+     "de": "Neither of the proposals meets … Neither of steht bei genau zwei Dingen.",
+     "en": "Neither of the proposals meets … Neither of is used with exactly two things."
+    },
+    "wrong": []
+   },
+   "lead": "Both proposals fail to meet our requirements.",
+   "key": "NEITHER",
+   "before": "",
+   "after": "meets our requirements.",
+   "keys": [
+    {
+     "a": [
+      "Neither of"
+     ],
+     "b": [
+      "the proposals"
+     ]
+    }
+   ],
+   "tiles": [
+    "of",
+    "the",
+    "proposals"
+   ],
+   "extra": [
+    "No",
+    "none",
+    "not"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0620",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "qn.hardly",
+   "why": {
+    "ok": {
+     "de": "hardly had any time. Hardly ist schon verneint.",
+     "en": "hardly had any time. Hardly is already negative."
+    },
+    "wrong": []
+   },
+   "lead": "We had almost no time to prepare the presentation.",
+   "key": "HARDLY",
+   "before": "We",
+   "after": "to prepare the presentation.",
+   "keys": [
+    {
+     "a": [
+      "hardly"
+     ],
+     "b": [
+      "had any time"
+     ]
+    }
+   ],
+   "tiles": [
+    "had",
+    "any",
+    "time"
+   ],
+   "extra": [
+    "not",
+    "no",
+    "did"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0621",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "qn.no-longer",
+   "why": {
+    "ok": {
+     "de": "no longer supports. No longer steht vor dem Verb.",
+     "en": "no longer supports. No longer stands before the verb."
+    },
+    "wrong": []
+   },
+   "lead": "The vendor stopped supporting this version last year.",
+   "key": "LONGER",
+   "before": "The vendor",
+   "after": "this version.",
+   "keys": [
+    {
+     "a": [
+      "no longer"
+     ],
+     "b": [
+      "supports"
+     ]
+    }
+   ],
+   "tiles": [
+    "no",
+    "supports"
+   ],
+   "extra": [
+    "not",
+    "more",
+    "supported"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0622",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "qn.number",
+   "why": {
+    "ok": {
+     "de": "A number of clients have asked. A number of nimmt das Verb im Plural.",
+     "en": "A number of clients have asked. A number of takes a plural verb."
+    },
+    "wrong": []
+   },
+   "lead": "Many clients have asked for a refund this month.",
+   "key": "NUMBER",
+   "before": "",
+   "after": "for a refund this month.",
+   "keys": [
+    {
+     "a": [
+      "A number of"
+     ],
+     "b": [
+      "clients have asked"
+     ]
+    }
+   ],
+   "tiles": [
+    "A",
+    "of",
+    "clients",
+    "have",
+    "asked"
+   ],
+   "extra": [
+    "has",
+    "amount",
+    "deal"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0623",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "qn.hardly",
+   "why": {
+    "ok": {
+     "de": "scarcely ever watch. Scarcely ever heißt „fast nie“.",
+     "en": "scarcely ever watch. Scarcely ever means “almost never”."
+    },
+    "wrong": []
+   },
+   "lead": "I almost never watch television in the evening.",
+   "key": "SCARCELY",
+   "before": "I",
+   "after": "television in the evening.",
+   "keys": [
+    {
+     "a": [
+      "scarcely ever"
+     ],
+     "b": [
+      "watch"
+     ]
+    }
+   ],
+   "tiles": [
+    "ever",
+    "watch"
+   ],
+   "extra": [
+    "not",
+    "never",
+    "hardly"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0624",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "qn.none",
+   "why": {
+    "ok": {
+     "de": "None of my neighbors has a car. None of heißt „keiner von“.",
+     "en": "None of my neighbors has a car. None of means “not one of”."
+    },
+    "wrong": []
+   },
+   "lead": "Nobody among my neighbors owns a car.",
+   "key": "NONE",
+   "before": "",
+   "after": "has a car.",
+   "keys": [
+    {
+     "a": [
+      "None of"
+     ],
+     "b": [
+      "my neighbors"
+     ]
+    }
+   ],
+   "tiles": [
+    "of",
+    "my",
+    "neighbors"
+   ],
+   "extra": [
+    "No",
+    "nobody",
+    "not"
+   ],
+   "traps": []
+  }
+ ]
+}
