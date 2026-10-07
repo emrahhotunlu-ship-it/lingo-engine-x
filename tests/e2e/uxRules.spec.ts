@@ -11,12 +11,15 @@ import { skipMiniLesson } from './learnHelpers';
 test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
 
 /** Bekannte Befunde in Bereichen anderer Arbeitspakete (Heute-Karte, W3); hier nicht verdeckt, sondern gemeldet. */
-const KNOWN_DUPES = ['Heute'];
+const KNOWN_DUPES: string[] = [];
 /** Die Zahl fälliger Fehlersätze steht je Thema im Pfad und einmal als Summe in der Zeile „Fehler korrigieren“ (gleicher Text bei gleicher Zahl). */
 const DUE_BADGE = /^\d+ (Fehlersatz|Fehlersätze) fällig$/;
 
 type Measure = {
   primary: Array<{ id: string; bottom: number; top: number }>;
+  /** Gefüllte Knöpfe einer Übung außerhalb der ActionBar (Lernplattform 2.0 §10.4 P8). */
+  outside: string[];
+  exercise: boolean;
   small: Array<{ label: string; w: number; h: number }>;
   dupes: string[];
   vvh: number;
@@ -54,6 +57,9 @@ async function measure(page: Page): Promise<Measure> {
     const primary = Array.from(document.querySelectorAll('button'))
       .filter((b) => vis(b) && /(^|\s)bg-accent(\s|$)/.test(b.className) && inView(b.getBoundingClientRect()))
       .map((b) => ({ id: b.getAttribute('data-testid') ?? b.textContent?.trim().slice(0, 20) ?? '?', bottom: b.getBoundingClientRect().bottom, top: b.getBoundingClientRect().top }));
+    const outside = Array.from(document.querySelectorAll('button'))
+      .filter((b) => vis(b) && /(^|\s)bg-accent(\s|$)/.test(b.className) && !b.closest('.lx-actionbar'))
+      .map((b) => b.getAttribute('data-testid') ?? b.textContent?.trim().slice(0, 20) ?? '?');
     // R7: gleicher Text (≥ 12 Zeichen) höchstens einmal je Bild; Reiter und Ränder ausgenommen.
     const counts = new Map<string, number>();
     for (const el of Array.from(document.querySelectorAll('body *'))) {
@@ -66,6 +72,8 @@ async function measure(page: Page): Promise<Measure> {
     }
     return {
       primary,
+      outside,
+      exercise: !!document.querySelector('[data-testid="exercise"]'),
       small,
       dupes: [...counts].filter(([, n]) => n > 1).map(([tx]) => tx),
       vvh,
@@ -80,6 +88,7 @@ async function rules(page: Page, name: string, theme: Theme): Promise<void> {
   const m = await measure(page);
   const at = `${name} (${theme})`;
   expect(m.primary.map((p) => p.id), `R1 ${at}: gefüllte Hauptknöpfe im Bild`).toHaveLength(Math.min(m.primary.length, 1));
+  if (m.exercise) expect(m.outside, `${at}: gefüllter Knopf außerhalb der ActionBar`).toEqual([]);
   for (const p of m.primary) expect(p.bottom, `R2 ${at}: Hauptknopf „${p.id}“ im sichtbaren Bereich`).toBeLessThanOrEqual(m.vvh + 0.5);
   expect(m.small, `R8 ${at}: Ziele unter 44 pt`).toEqual([]);
   expect(m.dupes.filter((d) => !KNOWN_DUPES.includes(d) && !DUE_BADGE.test(d)), `R7 ${at}: doppelter Text`).toEqual([]);

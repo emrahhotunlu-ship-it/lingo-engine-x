@@ -47,6 +47,8 @@ export async function answerCheckItem(page: Page, n: number, total: number): Pro
     await item.getByTestId('dont-know').click();
   } else if (await item.getByTestId('choice').count()) {
     await item.getByTestId('choice').first().click();
+    // Auswahl, dann „Prüfen“ (Übungsgerüst, Lernplattform 2.0 §4.4).
+    if (await page.getByTestId('check').count()) await page.getByTestId('check').click();
   } else {
     await typeInGap(page, 'zzz');
     await page.getByTestId('check').click();

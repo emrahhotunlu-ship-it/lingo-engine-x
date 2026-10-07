@@ -2,7 +2,7 @@ import { readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 // Neubau (docs/neubau/architektur.md §2.8, R2): Die Texte stehen in Teilen (`src/i18n/parts/*`),
-// die `de.ts`/`en.ts` per Spread zusammensetzen. Spreads überschreiben still – deshalb darf kein
+// (fx.*.ts setzt nur die Teile fxo/fxl/fxr zusammen und ist ausgenommen) die `de.ts`/`en.ts` per Spread zusammensetzen. Spreads überschreiben still – deshalb darf kein
 // Schlüssel in zwei Teilen stehen. Die Neubau-Teile (`nb*`) tragen nur Schlüssel mit eigenem Präfix.
 
 const DIR = new URL('../../src/i18n/parts/', import.meta.url);
@@ -23,7 +23,7 @@ describe('i18n-Teile', () => {
     it(`kein Schlüssel steht in zwei Teilen (${lang})`, async () => {
       const seen = new Map<string, string>();
       const dupes: string[] = [];
-      for (const p of await parts(lang)) {
+      for (const p of (await parts(lang)).filter((x) => !x.file.startsWith('fx.'))) {
         for (const k of p.keys) {
           const prev = seen.get(k);
           if (prev) dupes.push(`${k}: ${prev} und ${p.file}`);

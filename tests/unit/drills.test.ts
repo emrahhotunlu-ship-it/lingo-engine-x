@@ -117,6 +117,8 @@ describe('Lückenjagd', () => {
 
 describe('Satzbau', () => {
   const entry = (over: Partial<PoolEntry> = {}): PoolEntry => ({
+    pat: null,
+    trap: null,
     topic: 'c1-precision',
     en: 'We need your decision by the end of Q3.',
     de: 'Wir brauchen Ihre Entscheidung bis Ende des dritten Quartals.',

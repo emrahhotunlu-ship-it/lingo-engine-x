@@ -40,6 +40,7 @@ for (const size of SIZES) {
     await expect(page.getByTestId('repair-right')).toHaveCount(0);
     await expect(page.getByTestId('trainer-progress')).toHaveText('1 / 3');
     expect(await layoutProblems(page)).toEqual([]);
+    await page.waitForTimeout(450);
     const axe = await new AxeBuilder({ page }).include('[data-testid="repair-item"]').analyze();
     expect(axe.violations.map((v) => v.id)).toEqual([]);
     await expect(page.getByTestId('repair-check')).toBeDisabled();
@@ -82,7 +83,7 @@ for (const size of SIZES) {
         ['ra1', true, 'rev'],
         ['rb2', false, 'rev'],
       ]);
-    await page.getByTestId('summary-back').click();
+    await page.getByTestId('session-end-secondary').or(page.getByTestId('session-end-next')).first().click();
     await screen(page, 'today');
     await expect(page.getByTestId('today-status')).toHaveText('Fertig für heute');
 

@@ -2,8 +2,5 @@
   "owner": "P8",
   "matchMedia": [],
   "textPx": [],
-  "card": [
-    "src/features/repair/RepairItem.tsx",
-    "src/features/repair/again/AgainScreen.tsx"
-  ]
+  "card": []
 }
