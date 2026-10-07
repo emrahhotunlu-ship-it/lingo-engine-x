@@ -20,6 +20,8 @@ for (const theme of THEMES) {
         await boot(page, { theme, migrated });
         if (migrated) await openOverview(page);
         else await screen(page, 'migration');
+        // Einblendung abwarten: sonst misst axe den Kontrast mitten im Übergang (sporadisch rot).
+        await page.waitForTimeout(500);
         const res = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
         expect(res.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
       });
@@ -147,7 +149,7 @@ for (const theme of THEMES) {
       await expect(page.getByTestId('late-rescue-hint')).toBeVisible();
       // Die Tageskarte blendet Zähler und Zeilen noch ein, wenn der Hinweis schon steht: erst ruhen lassen,
       // sonst misst axe den Kontrast mitten im Übergang (sporadisch rot, auch ohne Codeänderung).
-      await page.waitForTimeout(400);
+      await page.waitForTimeout(800);
       await scan('heute');
       // Der Wochen-Check startet (Neubau) über Profil → „Wochen-Check“, nicht mehr auf Heute.
       await openChecks(page);
