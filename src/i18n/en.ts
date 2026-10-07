@@ -1,4 +1,5 @@
 import type { MessageKey } from './de';
+import { ttEn } from './parts/tt.en';
 import { aiEn } from './parts/ai.en';
 import { learnEn } from './parts/learn.en';
 import { speakEn } from './parts/speak.en';
@@ -37,6 +38,8 @@ import { fxEn } from './parts/fx.en';
 
 export const en: Record<MessageKey, string> = {
   ...aiEn,
+  // KI-Tutor (MVP)
+  ...ttEn,
   ...learnEn,
   // Phase 3 – Sprechen, Business, Stimme
   ...speakEn,

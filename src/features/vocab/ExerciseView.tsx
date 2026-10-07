@@ -34,6 +34,7 @@ import type { CheckResult, Exercise, ExerciseId, Grade, Option } from '../../dom
 import { inputProfile } from '../../platform/input';
 import { speak, stopSpeech, useSpeech } from '../../platform/speech';
 import { produceCheck, type ProduceCheckOut } from '../../prompts/produceCheck';
+import { TutorButton } from '../../ui/exercise/TutorButton';
 import { ExerciseShell, SentenceInput, explainDepth, type ShellFeedback, type ShellMenuId, type ShellSecondary } from '../../ui/exercise';
 import { AiRunPanel } from '../../ui/AiRunPanel';
 import { Button } from '../../ui/Button';
@@ -730,10 +731,18 @@ export function ExerciseView({
     if (wrongTyped && (isTyped || card.col.some((x) => x.ai))) menu.override = override;
     if (wrongTyped && isTyped) menu.copyOnce = () => setCopyOpen(true);
     menu.moreInfo = () => setMoreOpen(true);
+    const tutor =
+      fb.result.verdict === 'correct' || fb.override ? null : (
+        <TutorButton
+          taskKey={`wd:${card.path}:${e.ex}:${fb.given}`}
+          vars={{ topic: card.word, prompt: shownSentence ?? card.word, answer: solution, given: fb.given, pattern: meaningText ? { name: card.word, form: meaningText } : null }}
+        />
+      );
     feedback = {
       verdict: rv,
       sub,
       comparison,
+      tutor,
       explanation: whyUnderRemoved(model, isChoice && fb.result.verdict === 'wrong' && chosen !== null),
       depth,
       menu,

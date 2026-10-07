@@ -25,7 +25,7 @@ describe('explain-answer@1', () => {
     expect(p).toContain('wish + had + Partizip');
     expect(p).toContain('{"de":"…","en":"…"}');
     expect(promptBytes(p)).toBeLessThan(PROMPT_MAX_BYTES);
-    expect(explainAnswer.tier).toBe('quick');
+    expect(explainAnswer.tier).toBe('default');
   });
 
   it('lange Eingaben werden gekürzt und können keine eigenen Prompt-Zeilen erzeugen', () => {

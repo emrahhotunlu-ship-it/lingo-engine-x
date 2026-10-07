@@ -283,3 +283,21 @@ test('ohne KI (?fake=nosample): kein Absturz, keine KI-Knöpfe, freie Antwort �
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
 });
+
+test('KI-Tutor: „Erklär mir meine Antwort“ nur auf Tipp, gekennzeichnet, genau ein Aufruf; „Weiter fragen“ öffnet den Begleiter', async ({ page }) => {
+  const { errors } = await bootAt(page, { name: 'grammarSession', mode: 'xtra' });
+  const calls = () => page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { sampleCalls: Array<{ id: string | null; tier: string }> } }).__LINGO_FAKE__.sampleCalls.map((c) => `${c.id}:${c.tier}`));
+  await expect(page.getByTestId('gr-item')).toBeVisible();
+  await expect(page.getByTestId('tutor')).toHaveCount(0);
+  await answerGrammar(page, solve, { wrong: true });
+  await expect(page.getByTestId('tutor-text')).toHaveCount(0);
+  expect((await calls()).filter((c) => c.startsWith('explain-answer'))).toEqual([]);
+  await page.getByTestId('tutor-ask').click();
+  await expect(page.getByTestId('tutor-text')).toBeVisible();
+  await expect(page.getByTestId('tutor-mark')).toContainText('Claude');
+  expect((await calls()).filter((c) => c.startsWith('explain-answer'))).toEqual(['explain-answer:default']);
+  await expect(page.getByTestId('tutor-ask')).toHaveCount(0);
+  await page.getByTestId('tutor-more').click();
+  await expect(page.getByTestId('companion')).toBeVisible();
+  expect(errors).toEqual([]);
+});

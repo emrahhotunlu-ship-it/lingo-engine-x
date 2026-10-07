@@ -46,7 +46,7 @@ const schema: z.ZodType<ExplainAnswerOut> = z
 export const explainAnswer: PromptTemplate<ExplainAnswerVars, ExplainAnswerOut> = {
   id: ID,
   version: VERSION,
-  tier: 'quick',
+  tier: 'default',
   cache: { gcTime: 86_400_000 },
   build(v) {
     return [

@@ -1,4 +1,5 @@
 // Oberflächentexte Deutsch. Platzhalter: {name}. Mehrzahl: Schlüssel mit _one / _other.
+import { ttDe } from './parts/tt.de';
 // Einfache Sprache, keine Fachwörter (CLAUDE.md A2).
 
 import { aiDe } from './parts/ai.de';
@@ -37,6 +38,8 @@ import { fxDe } from './parts/fx.de';
 
 export const de = {
   ...aiDe,
+  // KI-Tutor (MVP)
+  ...ttDe,
   ...learnDe,
   // Phase 3 – Sprechen, Business, Stimme
   ...speakDe,

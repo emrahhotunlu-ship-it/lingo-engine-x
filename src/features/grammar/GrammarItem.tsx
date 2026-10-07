@@ -1,6 +1,4 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { askJson } from '../../ai/gate';
-import { useAiAvailable } from '../../ai/scope';
 import { useClock } from '../../app/clock';
 import { useSharedTarget } from '../../engine/shared';
 import { useLive } from '../../data/live';
@@ -29,7 +27,7 @@ import { useHotkeys } from '../../engine/useHotkeys';
 import { lookupOpenMs, useLookup, type WordTapArea } from '../../engine/wordTap';
 import { useT, type MessageKey } from '../../i18n';
 import { inputProfile, useSplitLayout } from '../../platform/input';
-import { explainAnswer } from '../../prompts/explainAnswer';
+import { TutorButton } from '../../ui/exercise/TutorButton';
 import { ExerciseShell, PatternCard, SentenceInput, explainDepth, markSpans, type ShellFeedback, type ShellMenuId, type ShellSecondary } from '../../ui/exercise';
 import { useCompanionSee } from '../companion/seeing';
 import { nextT } from '../progress/persist';
@@ -91,7 +89,6 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
   const { t, lang } = useT();
   const api = useHiddenInput();
   const now = useClock((s) => s.now);
-  const ai = useAiAvailable();
   const split = useSplitLayout();
   const [profile] = useState<InputProfile>(() => profileProp ?? inputProfile());
   const doc = useLive((s) => s.collections.grammar?.get(task.topic));
@@ -124,15 +121,12 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
   const [locateMisses, setLocateMisses] = useState(0);
   const [copyOpen, setCopyOpen] = useState(false);
   const [sheet, setSheet] = useState(false);
-  const [aiText, setAiText] = useState<{ text: string } | null>(null);
-  const [aiState, setAiState] = useState<'idle' | 'busy' | 'error'>('idle');
   const firstWrong = useRef<string | null>(null);
   const typed = useRef('');
   const shownAt = useRef(0);
   const firstKeyAt = useRef<number | null>(null);
   const lookupAt = useRef(0);
   const root = useRef<HTMLDivElement>(null);
-  const aiCtl = useRef<AbortController | null>(null);
   // Kap. 4.4: Die Heldenkarte von Heute gleitet in die erste Aufgabe (nur direkt nach dem Start).
   const { ref: sharedRef, shared } = useSharedTarget<HTMLDivElement>('lx-hero');
 
@@ -141,7 +135,6 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
     lookupAt.current = lookupOpenMs();
     const a = document.activeElement;
     if (!a || a === document.body) root.current?.focus({ preventScroll: true });
-    return () => aiCtl.current?.abort();
   }, []);
 
   const solution = task.answer;
@@ -324,9 +317,9 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
   const model: ExplanationModel | null = useMemo(() => {
     if (!fb) return null;
     const verdict: ResultVerdict = fb.dontKnow ? 'dontKnow' : fb.override ? 'ok' : fb.verdict === 'correct' ? 'ok' : fb.verdict === 'near' ? 'near' : 'wrong';
-    return tighten(grammarExplanation({ task, verdict, given: fb.given, ...(picked !== undefined ? { picked } : {}), ...(fb.tapped !== undefined ? { tapped: fb.tapped } : {}), lang, learning, ai: aiText }));
+    return tighten(grammarExplanation({ task, verdict, given: fb.given, ...(picked !== undefined ? { picked } : {}), ...(fb.tapped !== undefined ? { tapped: fb.tapped } : {}), lang, learning }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fb, aiText, lang, learning, task]);
+  }, [fb, lang, learning, task]);
 
   const rv: ResultVerdict = !fb ? 'ok' : fb.dontKnow ? 'dontKnow' : fb.override ? 'ok' : fb.verdict === 'correct' ? 'ok' : fb.verdict === 'near' ? (fb.unsure ? 'near' : 'near') : 'wrong';
   const depth: ExplainDepth = explainDepth({ verdict: rv, p, learning });
@@ -533,35 +526,24 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
     const menu: Partial<Record<ShellMenuId, () => void>> = {};
     if (wrongTyped && !findTask) menu.override = override;
     if (wrongTyped) menu.copyOnce = () => setCopyOpen(true);
-    if (ai && fb.verdict === 'wrong' && !fb.dontKnow && aiState !== 'busy') menu.askClaude = () => void askClaude();
     menu.wholeTopic = () => setSheet(true);
-    feedback = { verdict: rv, sub, comparison, explanation: model, depth, menu, auto: fb.help.level === 0 && !fb.override };
-  }
-
-  async function askClaude(): Promise<void> {
-    if (!fb) return;
-    aiCtl.current?.abort();
-    const ctl = new AbortController();
-    aiCtl.current = ctl;
-    setAiState('busy');
-    try {
-      // Bedeutungsaufgabe: Frage und beide Sätze gehören in die Anfrage, Lösung und Wahl als Satztext (nicht „a“/„b“).
-      const m = task.x?.kind === 'meaning' ? task.x : null;
-      const meaningText = (k: string | null): string => (m ? (k === 'a' ? m.a : k === 'b' ? m.b : k === 'both' ? 'Both sentences mean the same' : (k ?? '')) : (k ?? ''));
-      const pickedKey = m && chosen !== null ? (MEANING_KEYS[chosen] ?? null) : null;
-      const vars = m
-        ? { prompt: `${m.q.en}\nA: ${m.a}\nB: ${m.b}`, answer: meaningText(solution), given: meaningText(pickedKey) }
-        : { prompt: task.prompt, answer: solution, given: fb.picked ?? fb.given };
-      const r = await askJson({
-        template: explainAnswer,
-        vars: { topic: task.topic, ...vars, pattern: pattern ? { name: lang === 'de' ? pattern.name.de : pattern.name.en, form: lang === 'de' ? pattern.form.de : pattern.form.en } : null, uiLang: lang },
-        signal: ctl.signal,
-      });
-      setAiText({ text: lang === 'de' ? r.data.de : r.data.en });
-      setAiState('idle');
-    } catch {
-      setAiState(ctl.signal.aborted ? 'idle' : 'error');
-    }
+    // KI-Tutor: Aufgabe, Antwort und Lösung wie bisher in „Erklär mir meine Antwort“ (Bedeutungsaufgabe: Sätze als Text).
+    const mx = task.x?.kind === 'meaning' ? task.x : null;
+    const meaningText = (k: string | null): string => (mx ? (k === 'a' ? mx.a : k === 'b' ? mx.b : k === 'both' ? 'Both sentences mean the same' : (k ?? '')) : (k ?? ''));
+    const pickedKey = mx && chosen !== null ? (MEANING_KEYS[chosen] ?? null) : null;
+    const tutor = fb.dontKnow || fb.verdict === 'correct' || fb.override ? null : (
+      <TutorButton
+        taskKey={`gr:${task.key}:${fb.picked ?? fb.given}`}
+        vars={{
+          topic: task.topic,
+          prompt: mx ? `${mx.q.en}\nA: ${mx.a}\nB: ${mx.b}` : task.prompt,
+          answer: mx ? meaningText(solution) : solution,
+          given: mx ? meaningText(pickedKey) : (fb.picked ?? fb.given),
+          pattern: pattern ? { name: lang === 'de' ? pattern.name.de : pattern.name.en, form: lang === 'de' ? pattern.form.de : pattern.form.en } : null,
+        }}
+      />
+    );
+    feedback = { verdict: rv, sub, comparison, explanation: model, depth, menu, tutor, auto: fb.help.level === 0 && !fb.override };
   }
 
   const kindLabel = t(findTask ? 'gxKind_find' : type === 'kwt' ? 'gxKind_kwt' : type === 'meaning' ? 'gxKind_meaning' : (`grKind_${type}` as MessageKey));
@@ -603,7 +585,7 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
         aid={!split && learning && !fb ? card : null}
         prompt={prompt}
         answer={answer}
-        hint={hint ?? (aiState === 'busy' ? { text: t('exThinking'), tone: 'hint' } : aiState === 'error' ? { text: t('exAiError'), tone: 'near' } : null)}
+        hint={hint}
         secondary={secondary}
         primary={primary}
         feedback={feedback}

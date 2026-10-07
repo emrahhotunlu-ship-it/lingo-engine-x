@@ -48,6 +48,8 @@ export type ShellFeedback = {
   explanation?: ExplanationModel | null;
   depth: ExplainDepth;
   menu?: Partial<Record<ShellMenuId, () => void>>;
+  /** KI-Tutor: sichtbarer Knopf „Erklär mir meine Antwort“ unter der Erklär-Karte (nur auf Tipp). */
+  tutor?: ReactNode;
   nextIn?: string | null;
   /**
    * Die Übung meldet: keine Hilfe genutzt. Zusammen mit Urteil `ok`, Tiefe `min` und `app/profile.autoNext`
@@ -178,6 +180,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
             <Explanation model={feedback.explanation} depth={feedback.depth} learning={learning} onFoldChange={onFold} />
           </div>
         )}
+        {feedback.tutor && <div data-slot="tutor">{feedback.tutor}</div>}
         {feedback.explanation && feedback.explanation.examples.length > 0 && (
           <div data-slot="examples">
             <Examples items={feedback.explanation.examples} open={depthLines?.examplesOpen ?? 0} onFoldChange={onFold} />
