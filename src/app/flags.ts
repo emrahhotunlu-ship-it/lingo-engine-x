@@ -23,7 +23,7 @@ export const flags: Flags = {
   c1check: false,
   program: false,
   tutor: { explain: false, gen: false, diagnose: false, clinic: false },
-  fx: { moments: false, rings: false, sparks: false, field: false, sky: false, film: false },
+  fx: { moments: false, rings: false, sparks: false, field: false, sky: true, film: true },
 };
 
 /** Ist die Aufgabenart angeboten? (Rahmen, Auswahl und Registry fragen nur diese Funktion.) */

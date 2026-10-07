@@ -35,7 +35,7 @@ for (const s of sizes) {
 
     test('Wort-Himmel', async ({ page }) => {
       await start(page, s.theme);
-      await openTab(page, 'words');
+      await openTab(page, 'vocab');
       await page.getByTestId('ws-atlas').click();
       const sky = page.getByTestId('word-sky');
       await sky.waitFor();
