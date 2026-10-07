@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { boot, layoutProblems, openSpeak, screen } from './fixtures';
+import { setInputProfile } from './input';
 import { installGoalCheckReply } from './sprechenHelpers';
 
 // Freiwilliges Extra „Sprechen“ (Umbau, 04.10.2026): Seite mit Rollenspiel-Szenen und Einwand-Training,
@@ -78,5 +79,22 @@ for (const [theme, lang] of [['dark', 'de'], ['dim', 'en'], ['light', 'de']] as 
       expect(res.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical').map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
       await page.screenshot({ path: `test-results/screens/sprechen-${theme}-${lang}.png`, fullPage: true });
     }
+  });
+}
+
+// Lernplattform 2.0 §6 (Zeile Rollenspiel): Mit Eingabeprofil `touch` steht der Hinweis auf die Diktiertaste da, mit `keys` nicht.
+for (const profile of ['touch', 'keys'] as const) {
+  test(`Rollenspiel: Hinweis auf die Diktiertaste nur mit Profil touch (${profile})`, async ({ page }) => {
+    await installGoalCheckReply(page);
+    await setInputProfile(page, profile);
+    const { errors } = await boot(page, { migrated: true });
+    await screen(page, 'today');
+    await openSpeak(page);
+    await page.getByTestId('scene-card').first().click();
+    await page.getByTestId('briefing-start').click();
+    await screen(page, 'roleplay');
+    await expect(page.getByTestId('rp-dictate-hint')).toHaveCount(profile === 'touch' ? 1 : 0);
+    if (profile === 'touch') await expect(page.getByTestId('rp-dictate-hint')).toContainText('Mikrofon-Taste');
+    expect(errors).toEqual([]);
   });
 }

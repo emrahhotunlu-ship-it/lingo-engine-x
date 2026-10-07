@@ -28,7 +28,7 @@ export function FocusList({ points, testId }: { points: readonly FocusPoint[]; t
   return (
     <ul className="flex flex-col gap-1.5" data-testid={testId}>
       {points.map((p) => (
-        <li key={p.id} className="flex gap-2 text-[0.95rem] leading-relaxed" data-testid="focus-point" data-id={p.id}>
+        <li key={p.id} className="flex gap-2 lx-t-support" data-testid="focus-point" data-id={p.id}>
           <span className="mt-2.5 size-1.5 flex-none rounded-full bg-accent" aria-hidden="true" />
           <span>{lang === 'en' ? p.en : p.de}</span>
         </li>

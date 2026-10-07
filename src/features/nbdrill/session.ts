@@ -8,7 +8,7 @@ import { collocDone, collocGiveUp, collocTry, collocVerdict, newCollocState, typ
 import { outId, outRef } from '../../domain/nbdrill/outDoc';
 import { pickRotating } from '../../domain/nbdrill/pick';
 import type { MessageKey } from '../../i18n';
-import { currentDay, logAnswers, nextRound, restoreSaved, saveOut, type NbLogType, type UnitRun } from './shared';
+import { currentDay, devOf, logAnswers, nextRound, restoreSaved, saveOut, type DevTag, type NbLogType, type UnitRun } from './shared';
 
 // Sitzung des Tipp-Drill-Motors (Plan N101/N102): Kollokationen und Satz-Umformung. Die Sitzung
 // wird SYNCHRON im Klick gebaut (iPhone-Tastatur), die Momentaufnahme hält nur Kennungen,
@@ -37,6 +37,8 @@ export type DrillSession = {
   lang: 'de' | 'en';
   unit: UnitRun | null;
   done: boolean;
+  /** Gerät der Runde; fehlt in alten Momentaufnahmen. */
+  dev?: DevTag;
 };
 
 type Store = { s: DrillSession | null };
@@ -101,6 +103,7 @@ export function startDrill(set: DrillSet, opts: { unit?: UnitRun | null; lang: '
     lang: opts.lang,
     unit: opts.unit ?? null,
     done: false,
+    dev: devOf(),
   };
   useDrill.setState({ s });
   return true;
@@ -122,6 +125,7 @@ function record(s: DrillSession, r: ItemResult, q: string, ans: string): DrillSe
       lang: s.lang,
       duty: !!s.unit,
       t: Date.now(),
+      ...(s.dev ? { dev: s.dev } : {}),
     },
   ]);
   return { ...s, results: [...s.results, r] };

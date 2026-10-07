@@ -1,5 +1,5 @@
 import { usePlayerSkip } from '../../app/shell/Player';
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState, type ReactNode } from 'react';
 import type { ScreenProps } from '../../app/registry';
 import { useSettings } from '../../app/settings';
 import type { Objection } from '../../content/nb/schemas';
@@ -25,13 +25,14 @@ import { EnglishText } from '../../engine/EnglishText';
 import { SpeakButton } from '../../engine/SpeakButton';
 import { useT, type MessageKey } from '../../i18n';
 import { Button } from '../../ui/Button';
-import { FeedbackPanel } from '../../ui/FeedbackPanel';
+import { ExerciseShell, type ExerciseShellProps, type ShellSecondary } from '../../ui/exercise';
 import type { Feedback } from '../../ui/feedback/types';
 import { Icon } from '../../ui/Icon';
 import { SessionEnd } from '../../ui/SessionEnd';
 import { AiRunPanel } from '../../ui/AiRunPanel';
 import { saveLookupCard } from '../lookup/store';
-import { finishUnit, Note, StepBoundary, TaskHead, TimeBar, TrainingBar, useCountdown } from '../nbdrill/shared';
+import { drillFeedback } from '../nbdrill/shell';
+import { finishUnit, Note, StepBoundary, TimeBar, TrainingBar, useCountdown } from '../nbdrill/shared';
 import {
   beginAnswer,
   bestOf,
@@ -125,10 +126,30 @@ const LEVEL_TASK: Record<Level, MessageKey> = {
   5: 'nbTrainingLevelTask_5',
 };
 
+type Common = Omit<ExerciseShellProps, 'answer' | 'primary' | 'feedback' | 'hint' | 'secondary'>;
+
+/** Der Einwand mit Vorlesen und „Auf Deutsch“ (Platz `prompt`). */
+function LineBlock({ id, line, de, area, source, speakId, lineId, level }: { id: string; line: string; de: string; area: 'business'; source: string; speakId: string; lineId: string; level?: ReactNode }) {
+  const { t } = useT();
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="flex flex-col gap-2" data-id={id}>
+      {level}
+      <div className="flex items-start gap-2">
+        <EnglishText text={line} area={area} source={source} className="flex-1" testId={lineId} />
+        <SpeakButton text={line} testId={speakId} />
+      </div>
+      <button type="button" className="lx-t-support self-start text-muted underline-offset-2 hover:underline" onClick={() => setOpen((v) => !v)} aria-expanded={open} data-testid={lineId === 'objection-line' ? 'objection-de-toggle' : undefined}>
+        {t('nbTrainingInGerman')}
+      </button>
+      {open && <p className="lx-t-support text-muted">{de}</p>}
+    </div>
+  );
+}
+
 function ObjectionStep({ s, o }: { s: PressureSession; o: Objection }) {
   const { t, lang } = useT();
   const field = useRef<HTMLTextAreaElement>(null);
-  const [de, setDe] = useState(false);
   const staged = s.lv !== undefined;
   const lv = levelAt(s);
   // Stufe 5 (und alte Runden ohne Stufe): Bedenkzeit, dann Zeitziel. Die Uhr gibt nie selbst ab (Lernpfad 03.10.2026).
@@ -140,31 +161,40 @@ function ObjectionStep({ s, o }: { s: PressureSession; o: Objection }) {
     beginAnswer();
     field.current?.focus();
   };
-  const status = staged ? (
-    <span data-testid="pressure-level" data-level={lv}>
-      {t('nbTrainingObjectionOf', { n: s.pos + 1, total: s.ids.length })} · {t('nbTrainingLevel', { n: lv, name: levelName(t, lv) })}
-    </span>
-  ) : (
-    t('nbTrainingObjectionOf', { n: s.pos + 1, total: s.ids.length })
+  const levelLine = staged ? (
+    <p className="lx-t-meta text-muted" data-testid="pressure-level" data-level={lv}>
+      {t('nbTrainingLevel', { n: lv, name: levelName(t, lv) })}
+    </p>
+  ) : null;
+  const common: Common = {
+    meta: { ex: 'objection', id: o.id, kind: lv <= 2 ? 'choose' : lv === 3 ? 'complete' : 'speak' },
+    status: { area: 'words', state: null, kindLabel: t('nbTrainingObjection'), badge: t('nbTrainingObjectionOf', { n: s.pos + 1, total: s.ids.length }) },
+    task: { text: staged ? t(LEVEL_TASK[lv]) : t('nbTrainingPressureTask'), purpose: staged ? t('nbTrainingLevelPurpose') : t('nbTrainingPressurePurpose') },
+    aid: lv > 2 ? <Pattern answer={s.phase === 'review' ? answer : null} /> : null,
+    prompt: <LineBlock id={o.id} line={o.line} de={o.de} area="business" source={`objection/${o.id}`} speakId="objection-speak" lineId="objection-line" level={levelLine} />,
+  };
+  const easier: ShellSecondary = { id: 'reset', label: t('nbTrainingEasier'), onClick: easierNow, testId: 'pressure-easier' };
+  const easierList = staged && lv > 1 ? [easier] : [];
+  const wrap = (node: ReactNode) => (
+    <div data-testid="objection-item" data-id={o.id} data-level={lv}>
+      {node}
+    </div>
   );
-  return (
-    <article className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="objection-item" data-id={o.id} data-level={lv}>
-      <TaskHead status={status} task={staged ? t(LEVEL_TASK[lv]) : t('nbTrainingPressureTask')} purpose={staged ? t('nbTrainingLevelPurpose') : t('nbTrainingPressurePurpose')} />
-      <div className="flex flex-col gap-2">
-        <div className="flex items-start gap-2">
-          <EnglishText text={o.line} area="business" source={`objection/${o.id}`} className="flex-1 text-lg font-medium leading-relaxed" testId="objection-line" />
-          <SpeakButton text={o.line} testId="objection-speak" />
-        </div>
-        <button type="button" className="self-start text-sm text-muted underline-offset-2 hover:underline" onClick={() => setDe((v) => !v)} aria-expanded={de} data-testid="objection-de-toggle">
-          {t('nbTrainingInGerman')}
-        </button>
-        {de && <p className="text-sm text-muted">{o.de}</p>}
-      </div>
-      {lv > 2 && <Pattern answer={s.phase === 'review' ? answer : null} />}
-      {s.phase !== 'review' && lv === 1 && <OrderLevel o={o} />}
-      {s.phase !== 'review' && lv === 2 && <ChoiceLevel o={o} />}
-      {s.phase !== 'review' && lv === 3 && <StarterLevel key={`${o.id}-${lv}`} o={o} />}
-      {s.phase !== 'review' && lv >= 4 && (
+
+  if (s.phase === 'review') {
+    const review = answer?.part !== undefined ? <StructuredReview o={o} answer={answer} common={common} /> : <Review s={s} o={o} answer={answer} lang={lang} common={common} />;
+    return wrap(review);
+  }
+  if (lv === 1) return wrap(<OrderLevel o={o} common={common} secondary={easierList} />);
+  if (lv === 2) return wrap(<ChoiceLevel o={o} common={common} secondary={easierList} />);
+  if (lv === 3) return wrap(<StarterLevel key={`${o.id}-${lv}`} o={o} common={common} secondary={easierList} />);
+  const secondary: ShellSecondary[] = [];
+  if (lv === 4 && staged && !s.hint) secondary.push({ id: 'hint', label: t('nbTrainingShowStarters'), onClick: showHint, testId: 'pressure-hint' });
+  secondary.push(...easierList);
+  return wrap(
+    <ExerciseShell
+      {...common}
+      answer={
         <div className="flex flex-col gap-3">
           {lv === 5 &&
             (s.phase === 'think' ? (
@@ -172,8 +202,7 @@ function ObjectionStep({ s, o }: { s: PressureSession; o: Objection }) {
             ) : (
               <TimeBar left={answerLeft} total={total} label={staged ? t('nbTrainingTimeGoal') : t('nbTrainingAnswerTime')} testId="pressure-answer" />
             ))}
-          <p className="text-xs text-muted">{t('nbTrainingSpeakHint')}</p>
-          {lv === 4 && staged && <StarterHint s={s} o={o} />}
+          {lv === 4 && staged && s.hint ? <StarterHint o={o} /> : null}
           <textarea
             ref={field}
             className="lx-field min-h-28 text-base"
@@ -192,33 +221,19 @@ function ObjectionStep({ s, o }: { s: PressureSession; o: Objection }) {
             spellCheck={false}
             data-testid="pressure-input"
           />
-          <div className="flex flex-wrap gap-3">
-            {s.phase === 'think' ? (
-              <Button variant="primary" onClick={start} data-testid="pressure-start">
-                {t('nbTrainingStartAnswer')}
-              </Button>
-            ) : (
-              <Button variant="primary" onClick={submitAnswer} data-testid="pressure-check">
-                {t('nbTrainingCheck')}
-              </Button>
-            )}
-          </div>
         </div>
-      )}
-      {s.phase !== 'review' && staged && lv > 1 && (
-        <Button variant="ghost" className="self-start" icon="arrowDown" onClick={easierNow} data-testid="pressure-easier">
-          {t('nbTrainingEasier')}
-        </Button>
-      )}
-      {s.phase === 'review' && (answer?.part !== undefined ? <StructuredReview o={o} answer={answer} /> : <Review s={s} o={o} answer={answer} lang={lang} />)}
-    </article>
+      }
+      hint={{ text: t('nbTrainingSpeakHint'), tone: 'hint' }}
+      secondary={secondary}
+      primary={s.phase === 'think' ? { label: t('nbTrainingStartAnswer'), onClick: start, testId: 'pressure-start' } : { label: t('nbTrainingCheck'), onClick: submitAnswer, testId: 'pressure-check' }}
+    />,
   );
 }
 
 const noop = () => undefined;
 
 /** Stufe 1: die vier Mustersätze antippen, sie füllen die Schritte der Reihe nach. */
-function OrderLevel({ o }: { o: Objection }) {
+function OrderLevel({ o, common, secondary }: { o: Objection; common: Common; secondary: ShellSecondary[] }) {
   const { t } = useT();
   const pool = useMemo(() => orderPool(o), [o]);
   const [slots, setSlots] = useState<(number | null)[]>([null, null, null, null]);
@@ -229,7 +244,7 @@ function OrderLevel({ o }: { o: Objection }) {
     setSlots(slots.map((x, k) => (k === free ? i : x)));
   };
   const full = slots.every((x) => x !== null);
-  return (
+  const input = (
     <div className="flex flex-col gap-4" data-testid="pressure-order">
       <ol className="flex flex-col gap-2">
         {MOVES.map((k, i) => {
@@ -273,33 +288,25 @@ function OrderLevel({ o }: { o: Objection }) {
           ),
         )}
       </div>
-      <Button
-        variant="primary"
-        className="self-start"
-        disabled={!full}
-        onClick={() =>
-          submitStructured(
-            slots.map((x) => (x === null ? null : (pool[x]?.move ?? null))),
-            slots.map((x) => (x === null ? '' : (pool[x]?.text ?? ''))),
-          )
-        }
-        data-testid="pressure-check"
-      >
-        {t('nbTrainingCheck')}
-      </Button>
     </div>
   );
+  const submit = () =>
+    submitStructured(
+      slots.map((x) => (x === null ? null : (pool[x]?.move ?? null))),
+      slots.map((x) => (x === null ? '' : (pool[x]?.text ?? ''))),
+    );
+  return <ExerciseShell {...common} answer={input} secondary={secondary} primary={{ label: t('nbTrainingCheck'), onClick: submit, testId: 'pressure-check', disabled: !full }} />;
 }
 
 /** Stufe 2: je Schritt den passenden Satz aus drei wählen. */
-function ChoiceLevel({ o }: { o: Objection }) {
+function ChoiceLevel({ o, common, secondary }: { o: Objection; common: Common; secondary: ShellSecondary[] }) {
   const { t } = useT();
   const opts = useMemo(() => MOVES.map((k) => choiceOptions(o, objections(), k)), [o]);
   // Anerkennen ist fast immer allgemein formuliert (passt zu jedem Einwand): dieser Schritt steht als Vorbild da,
   // gewählt wird bei nachfragen, antworten, absichern (Lernwissenschaft S3, 03.10.2026).
   const [picked, setPicked] = useState<(number | null)[]>(() => [(opts[0] ?? []).findIndex((x) => x.ok), null, null, null]);
   const full = picked.every((x) => x !== null);
-  return (
+  const input = (
     <div className="flex flex-col gap-4" data-testid="pressure-choice">
       {MOVES.map((k, i) =>
         i === 0 ? (
@@ -329,26 +336,18 @@ function ChoiceLevel({ o }: { o: Objection }) {
           </fieldset>
         ),
       )}
-      <Button
-        variant="primary"
-        className="self-start"
-        disabled={!full}
-        onClick={() =>
-          submitStructured(
-            picked.map((p, i) => (p !== null && opts[i]?.[p]?.ok ? (MOVES[i] ?? null) : null)),
-            picked.map((p, i) => (p !== null ? (opts[i]?.[p]?.text ?? '') : '')),
-          )
-        }
-        data-testid="pressure-check"
-      >
-        {t('nbTrainingCheck')}
-      </Button>
     </div>
   );
+  const submit = () =>
+    submitStructured(
+      picked.map((p, i) => (p !== null && opts[i]?.[p]?.ok ? (MOVES[i] ?? null) : null)),
+      picked.map((p, i) => (p !== null ? (opts[i]?.[p]?.text ?? '') : '')),
+    );
+  return <ExerciseShell {...common} answer={input} secondary={secondary} primary={{ label: t('nbTrainingCheck'), onClick: submit, testId: 'pressure-check', disabled: !full }} />;
 }
 
 /** Stufe 3: vier Felder mit Satzanfängen, Emrah schreibt jeden Satz zu Ende. */
-function StarterLevel({ o }: { o: Objection }) {
+function StarterLevel({ o, common, secondary }: { o: Objection; common: Common; secondary: ShellSecondary[] }) {
   const { t } = useT();
   const [parts, setParts] = useState<string[]>(() => MOVES.map((k) => starterPrefill(o.model[k])));
   const change = (i: number, v: string) => {
@@ -369,7 +368,7 @@ function StarterLevel({ o }: { o: Objection }) {
   });
   const written = ownWords.some((n) => n > 0);
   const own = ownWords.every((n) => n >= 3);
-  return (
+  const input = (
     <div className="flex flex-col gap-3" data-testid="pressure-starters-level">
       {MOVES.map((k, i) => (
         <label key={k} className="flex flex-col gap-1">
@@ -389,26 +388,18 @@ function StarterLevel({ o }: { o: Objection }) {
           />
         </label>
       ))}
-      <Button variant="primary" className="self-start" disabled={!written} onClick={() => submitStarters(own)} data-testid="pressure-check">
-        {t('nbTrainingCheck')}
-      </Button>
     </div>
   );
+  return <ExerciseShell {...common} answer={input} secondary={secondary} primary={{ label: t('nbTrainingCheck'), onClick: () => submitStarters(own), testId: 'pressure-check', disabled: !written }} />;
 }
 
 /** Stufe 4: Satzanfänge auf Abruf (zählt als Hilfe). */
-function StarterHint({ s, o }: { s: PressureSession; o: Objection }) {
+function StarterHint({ o }: { o: Objection }) {
   const { t } = useT();
-  if (!s.hint)
-    return (
-      <Button variant="secondary" className="self-start" icon="lightbulb" onClick={showHint} data-testid="pressure-hint">
-        {t('nbTrainingShowStarters')}
-      </Button>
-    );
   return (
     <div className="flex flex-col gap-1" data-testid="pressure-hint-list">
       <p className="lx-eyebrow">{t('nbTrainingStartersHelp')}</p>
-      <ol className="flex flex-col gap-1 text-sm">
+      <ol className="lx-t-support flex flex-col gap-1">
         {MOVES.map((k, i) => (
           <li key={k}>
             <span className="text-muted">
@@ -423,7 +414,7 @@ function StarterHint({ s, o }: { s: PressureSession; o: Objection }) {
 }
 
 /** Rückblick Stufe 1–2: je Schritt richtig/falsch, dazu der richtige Satz und warum das Muster trägt. */
-function StructuredReview({ o, answer }: { o: Objection; answer: PressureAnswer }) {
+function StructuredReview({ o, answer, common }: { o: Objection; answer: PressureAnswer; common: Common }) {
   const { t, lang } = useT();
   const n = Math.round((answer.part ?? 0) * 4);
   const pick = answer.pick ?? [];
@@ -441,8 +432,8 @@ function StructuredReview({ o, answer }: { o: Objection; answer: PressureAnswer 
       },
     ],
   };
-  return (
-    <div className="flex flex-col gap-4 border-t border-line pt-4" data-testid="pressure-review" data-mode="structured" data-part={n}>
+  const rows = (
+    <div className="flex flex-col gap-4" data-testid="pressure-review" data-mode="structured" data-part={n}>
       <ol className="flex flex-col gap-2">
         {MOVES.map((k, i) => {
           const ok = pick[i] === k;
@@ -455,7 +446,7 @@ function StructuredReview({ o, answer }: { o: Objection; answer: PressureAnswer 
                 {!ok && texts[i] && (
                   <span className="text-muted" data-testid={`struct-mine-${i}`}>
                     {t('nbTrainingStructYours')} <s lang="en">{texts[i]}</s>
-                    <span className="block text-xs">{answer.lv === 1 ? t('nbTrainingStructOtherStep') : t('nbTrainingStructOther')}</span>
+                    <span className="lx-t-meta block">{answer.lv === 1 ? t('nbTrainingStructOtherStep') : t('nbTrainingStructOther')}</span>
                   </span>
                 )}
                 <span className="text-muted">
@@ -471,12 +462,12 @@ function StructuredReview({ o, answer }: { o: Objection; answer: PressureAnswer 
         <SpeakButton text={modelText(o)} testId="pressure-model-speak" />
         <span className="text-sm text-muted">{t('nbTrainingModel')}</span>
       </div>
-      <FeedbackPanel fb={fb} onNext={nextObjection} />
     </div>
   );
+  return <ExerciseShell {...common} answer={rows} primary={{ label: t('exNext'), onClick: nextObjection, testId: 'next' }} feedback={drillFeedback(fb)} />;
 }
 
-function Review({ s, o, answer, lang }: { s: PressureSession; o: Objection; answer: PressureAnswer | null; lang: 'de' | 'en' }) {
+function Review({ s, o, answer, lang, common }: { s: PressureSession; o: Objection; answer: PressureAnswer | null; lang: 'de' | 'en'; common: Common }) {
   const { t } = useT();
   const slot = s.ai[o.id];
   const busy = !!slot && ['queued', 'thinking', 'streaming', 'slow'].includes(slot.phase);
@@ -512,8 +503,8 @@ function Review({ s, o, answer, lang }: { s: PressureSession; o: Objection; answ
           },
         ],
       };
-  return (
-    <div className="flex flex-col gap-4 border-t border-line pt-4" data-testid="pressure-review" data-mode={aiDone ? 'ai' : busy ? 'busy' : 'self'}>
+  const extras = (
+    <div className="flex flex-col gap-4" data-testid="pressure-review" data-mode={aiDone ? 'ai' : busy ? 'busy' : 'self'}>
       {timeUp && <Note tone="info">{answer?.lv === 5 ? t('nbTrainingTimeOver') : t('nbTrainingTimeUp')}</Note>}
       {busy && <AiRunPanel phase={slot.phase === 'idle' ? 'queued' : slot.phase} error={null} skeleton={false} />}
       {slot?.phase === 'error' && slot.error && <AiRunPanel phase="error" error={slot.error} onRetry={() => retryCheck(o.id)} skeleton={false} />}
@@ -536,15 +527,9 @@ function Review({ s, o, answer, lang }: { s: PressureSession; o: Objection; answ
           })}
         </fieldset>
       )}
-      <FeedbackPanel fb={fb} onNext={nextObjection} />
-      {self && (
-        <div className="flex flex-col gap-1" data-testid="pressure-model">
-          <p className="lx-eyebrow">{t('nbTrainingModel')}</p>
-          <EnglishText text={modelText(o)} area="business" source={`objection/${o.id}`} className="text-sm leading-relaxed" />
-        </div>
-      )}
     </div>
   );
+  return <ExerciseShell {...common} answer={extras} primary={{ label: t('exNext'), onClick: nextObjection, testId: 'next' }} feedback={drillFeedback(fb)} />;
 }
 
 const SET_TEXT = {
@@ -562,7 +547,6 @@ const SET_TEXT = {
 function QuestionStep({ s, p }: { s: PressureSession; p: PressureItem }) {
   const { t, lang } = useT();
   const field = useRef<HTMLTextAreaElement>(null);
-  const [de, setDe] = useState(false);
   const times = TIMES[p.set];
   const thinkLeft = useCountdown(times.think, s.phase === 'think' && times.think > 0, beginAnswer, `t${s.pos}`);
   const answerLeft = useCountdown(times.answer, s.phase === 'answer', noop, `a${s.pos}`);
@@ -576,89 +560,73 @@ function QuestionStep({ s, p }: { s: PressureSession; p: PressureItem }) {
     fixes: p.tip ? [{ kind: 'goal', mine: '', right: p.model, why: p.tip[lang] }] : [],
     ...(p.starters && p.starters.length > 1 ? { upgrades: p.starters.slice(1).map((x) => ({ to: x })) } : {}),
   };
+  const review = s.phase === 'review';
+  const start = () => {
+    beginAnswer();
+    field.current?.focus();
+  };
   return (
-    <article className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid={`${p.set}-item`} data-id={p.id}>
-      <TaskHead
-        status={t('nbTrainingQuestionOf', {
-          n: s.pos + 1,
-          total: s.ids.length,
-        })}
-        task={t(txt.task)}
-        purpose={t(txt.purpose)}
-      />
-      <div className="flex flex-col gap-2">
-        <div className="flex items-start gap-2">
-          <EnglishText text={p.line} area="business" source={`${p.set}/${p.id}`} className="flex-1 text-lg font-medium leading-relaxed" testId="question-line" />
-          <SpeakButton text={p.line} testId="question-speak" />
-        </div>
-        <button type="button" className="self-start text-sm text-muted underline-offset-2 hover:underline" onClick={() => setDe((v) => !v)} aria-expanded={de}>
-          {t('nbTrainingInGerman')}
-        </button>
-        {de && <p className="text-sm text-muted">{p.de}</p>}
-      </div>
-      {s.phase !== 'review' ? (
-        <div className="flex flex-col gap-3">
-          {s.phase === 'think' ? (
-            <TimeBar left={thinkLeft} total={times.think} label={t('nbTrainingThink')} testId="pressure-think" />
-          ) : (
-            <TimeBar left={answerLeft} total={times.answer} label={t('nbTrainingTimeGoal')} testId="pressure-answer" />
-          )}
-          <p className="text-xs text-muted">{t('nbTrainingSpeakHint')}</p>
-          <textarea
-            ref={field}
-            className="lx-field min-h-24 text-base"
-            lang="en"
-            rows={3}
-            maxLength={PRESSURE_TEXT_MAX}
-            value={s.draft}
-            readOnly={s.phase !== 'answer'}
-            onFocus={() => s.phase === 'think' && beginAnswer()}
-            onChange={(e) => setDraft(e.target.value)}
-            aria-label={t('nbTrainingAnswerLabel')}
-            placeholder={t('nbTrainingAnswerLabel')}
-            autoCapitalize="sentences"
-            autoComplete="off"
-            autoCorrect="off"
-            spellCheck={false}
-            data-testid="pressure-input"
-          />
-          <div className="flex flex-wrap gap-3">
-            {s.phase === 'think' ? (
-              <Button
-                variant="primary"
-                onClick={() => {
-                  beginAnswer();
-                  field.current?.focus();
-                }}
-                data-testid="pressure-start"
-              >
-                {t('nbTrainingStartAnswer')}
-              </Button>
-            ) : (
-              <Button variant="primary" onClick={submitAnswer} data-testid="pressure-check">
-                {t('nbTrainingCheck')}
-              </Button>
-            )}
-          </div>
-        </div>
-      ) : (
-        <div className="flex flex-col gap-4 border-t border-line pt-4" data-testid="pressure-review" data-mode="self">
-          {p.starters && (
-            <div className="flex flex-col gap-1" data-testid="pressure-starters">
-              <p className="lx-eyebrow">{t('nbTrainingStarters')}</p>
-              <ul className="flex flex-col gap-1">
-                {p.starters.map((x) => (
-                  <li key={x}>
-                    <EnglishText text={x} area="business" source={`${p.set}/${p.id}`} className="text-sm" />
-                  </li>
-                ))}
-              </ul>
+    <div data-testid={`${p.set}-item`} data-id={p.id}>
+      <ExerciseShell
+        meta={{ ex: p.set, id: p.id, kind: 'speak' }}
+        status={{ area: 'words', state: null, kindLabel: t(p.set === 'buytime' ? 'fxLKindBuytime' : 'fxLKindHotseat'), badge: t('nbTrainingQuestionOf', { n: s.pos + 1, total: s.ids.length }) }}
+        task={{ text: t(txt.task), purpose: t(txt.purpose) }}
+        prompt={<LineBlock id={p.id} line={p.line} de={p.de} area="business" source={`${p.set}/${p.id}`} speakId="question-speak" lineId="question-line" />}
+        answer={
+          !review ? (
+            <div className="flex flex-col gap-3">
+              {s.phase === 'think' ? (
+                <TimeBar left={thinkLeft} total={times.think} label={t('nbTrainingThink')} testId="pressure-think" />
+              ) : (
+                <TimeBar left={answerLeft} total={times.answer} label={t('nbTrainingTimeGoal')} testId="pressure-answer" />
+              )}
+              <textarea
+                ref={field}
+                className="lx-field min-h-24 text-base"
+                lang="en"
+                rows={3}
+                maxLength={PRESSURE_TEXT_MAX}
+                value={s.draft}
+                readOnly={s.phase !== 'answer'}
+                onFocus={() => s.phase === 'think' && beginAnswer()}
+                onChange={(e) => setDraft(e.target.value)}
+                aria-label={t('nbTrainingAnswerLabel')}
+                placeholder={t('nbTrainingAnswerLabel')}
+                autoCapitalize="sentences"
+                autoComplete="off"
+                autoCorrect="off"
+                spellCheck={false}
+                data-testid="pressure-input"
+              />
             </div>
-          )}
-          <FeedbackPanel fb={fb} onNext={nextObjection} />
-        </div>
-      )}
-    </article>
+          ) : p.starters ? (
+            <div className="flex flex-col gap-1" data-testid="pressure-review">
+              <div className="flex flex-col gap-1" data-testid="pressure-starters">
+                <p className="lx-eyebrow">{t('nbTrainingStarters')}</p>
+                <ul className="flex flex-col gap-1">
+                  {p.starters.map((x) => (
+                    <li key={x}>
+                      <EnglishText text={x} area="business" source={`${p.set}/${p.id}`} className="lx-t-support" />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ) : (
+            <span data-testid="pressure-review" data-mode="self" />
+          )
+        }
+        hint={!review ? { text: t('nbTrainingSpeakHint'), tone: 'hint' } : null}
+        primary={
+          review
+            ? { label: t('exNext'), onClick: nextObjection, testId: 'next' }
+            : s.phase === 'think'
+              ? { label: t('nbTrainingStartAnswer'), onClick: start, testId: 'pressure-start' }
+              : { label: t('nbTrainingCheck'), onClick: submitAnswer, testId: 'pressure-check' }
+        }
+        feedback={review ? drillFeedback(fb) : null}
+      />
+    </div>
   );
 }
 

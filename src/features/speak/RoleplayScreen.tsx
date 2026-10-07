@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { StepBoundary } from '../../app/shell/Boundary';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useInputProfile, useWide } from '../../platform/input';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
 import { useT } from '../../i18n';
@@ -32,17 +33,9 @@ import { ExerciseTop } from '../learn/ui';
 // Rollenspiel (Plan §5.2): Chat mit Streaming und Stopp, Analysepanel (Desktop rechts, Handy
 // inline unter dem Satz), Beenden → Bericht. Kopf: Status statt Text (Szene · Zug n · Ziel-Chip).
 
+/** Breite Fläche (≥ 1.024 px): Analysepanel rechts. Die Medienabfrage steht nur in `platform/input` (§4.1). */
 export function useIsDesktop(): boolean {
-  const q = '(min-width: 1024px)';
-  const [on, setOn] = useState(() => typeof window !== 'undefined' && !!window.matchMedia?.(q).matches);
-  useEffect(() => {
-    const mq = window.matchMedia?.(q);
-    if (!mq) return;
-    const f = () => setOn(mq.matches);
-    mq.addEventListener('change', f);
-    return () => mq.removeEventListener('change', f);
-  }, []);
-  return on;
+  return useWide();
 }
 
 export function RoleplayScreen() {
@@ -86,6 +79,7 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
   const persona = scene.persona as NonNullable<SceneView['persona']>;
   useCompanionSee({ area: 'speak', label: `${t('spTitle')} · ${lang === 'en' ? scene.titleEn : scene.title}`, phase: 'idle', detail: `Role play: ${scene.titleEn}\nSituation: ${scene.situationEn}\nGoal: ${scene.goalEn}` });
   const desktop = useIsDesktop();
+  const touch = useInputProfile() === 'touch';
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const [allOpen, setAllOpen] = useState(false);
   const [goalOpen, setGoalOpen] = useState(false);
@@ -260,6 +254,11 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
           {call && state === 'composing' && (
             <p className="text-xs text-muted" data-testid="rp-call-hint">
               {t('nbSprechenCallHint')}
+            </p>
+          )}
+          {touch && state === 'composing' && (
+            <p className="lx-t-meta text-muted" data-testid="rp-dictate-hint">
+              {t('fxLSpeakDictate')}
             </p>
           )}
           {(state === 'composing' || phase !== 'other') && (

@@ -3,6 +3,7 @@ import { expect, test } from '@playwright/test';
 import { boot, bootAt, crashOnce, layoutProblems, openEntry, openSpeak, openTab, screen } from './fixtures';
 import { nbLog, outItems, typeGap } from './trainingHelpers';
 import { dump } from './trainerHelpers';
+import { setInputProfile } from './input';
 
 // Training: Kollokationen, Satz-Umformung, Register, Überleitungen/Wortbildung und das Einwand-Training
 // (freiwilliges Extra). Posteingang, Nachsprechen und Aussprache entfallen seit dem Umbau (04.10.2026).
@@ -37,8 +38,8 @@ test('Kollokationen: 5 Aufgaben, Lehnübersetzung → Hinweis → Lösung, Ergeb
   await typeGap(page, 'strike');
   await expect(item).toHaveAttribute('data-state', 'close');
   // Lösung mit Grund (Lehnübersetzung als Kontrast), auch wenn es am Ende geklappt hat.
-  await expect(page.getByTestId('feedback-fixes')).toContainText('close a deal');
-  await expect(page.getByTestId('colloc-examples')).toContainText('seal');
+  await expect(page.getByTestId('result')).toContainText('close a deal');
+  await expect(page.getByTestId('result')).toContainText('seal');
   await page.getByTestId('next').click();
 
   // c02 deadline: falsch → Hinweis (Anfangsbuchstabe) → falsch → Lösung.
@@ -47,7 +48,7 @@ test('Kollokationen: 5 Aufgaben, Lehnübersetzung → Hinweis → Lösung, Ergeb
   await expect(page.getByTestId('drill-step')).toHaveAttribute('data-kind', 'hint');
   await typeGap(page, 'hit');
   await expect(page.getByTestId('colloc-item')).toHaveAttribute('data-state', 'wrong');
-  await expect(page.getByTestId('feedback-solution')).toContainText('meet');
+  await expect(page.getByTestId('result')).toContainText('meet');
   await page.getByTestId('next').click();
 
   for (let i = 3; i <= 5; i++) {
@@ -59,6 +60,8 @@ test('Kollokationen: 5 Aufgaben, Lehnübersetzung → Hinweis → Lösung, Ergeb
   await expect(page.getByTestId('session-end')).toHaveAttribute('data-total', '5');
   await expect.poll(async () => (await outItems(page)).filter((x) => x.k === 'colloc').length).toBe(1);
   await expect.poll(async () => (await nbLog(page)).filter((x) => x.type === 'nb-colloc' && x.ctx === 'xtra').length).toBe(5);
+  // Jede Antwort trägt das Gerät der Runde (§8: `dev` 't' Touch / 'k' Tastatur).
+  expect((await nbLog(page)).filter((x) => x.type === 'nb-colloc').every((x) => x.dev === 't' || x.dev === 'k')).toBe(true);
   await page.getByTestId('session-end-next').click();
   await screen(page, 'apply');
 });
@@ -70,10 +73,10 @@ test('Satz-Umformung: Hinweis, zweiter Versuch, Neuladen setzt an derselben Aufg
   await expect(item).toHaveAttribute('data-id', 'u01');
   await expect(page.getByTestId('motor-chip')).toHaveText('MAY');
   await typeGap(page, 'did not get');
-  await expect(page.getByTestId('drill-step')).toHaveAttribute('data-kind', 'keyword');
+  await expect(page.getByTestId('hint-line')).toContainText('MAY');
   await typeGap(page, 'may not have received');
   await expect(item).toHaveAttribute('data-state', 'close');
-  await expect(page.getByTestId('feedback-fixes')).toContainText('may not have');
+  await expect(page.getByTestId('result')).toContainText('may not have');
   await page.getByTestId('next').click();
   await expect(page.getByTestId('transform-item')).toHaveAttribute('data-id', 'u02');
   await page.waitForTimeout(500);
@@ -101,7 +104,7 @@ test('Einwand-Training ohne KI, Stufe 2 (gelenkt): je Schritt den passenden Satz
     const review = page.getByTestId('pressure-review');
     await expect(review).toHaveAttribute('data-mode', 'structured');
     await expect(review).toHaveAttribute('data-part', '4');
-    await expect(page.getByTestId('feedback')).toHaveAttribute('data-verdict', 'ok');
+    await expect(page.getByTestId('result')).toHaveAttribute('data-verdict', 'ok');
     await page.getByTestId('next').click();
   }
   await expect(page.getByTestId('session-end')).toHaveAttribute('data-right', '5');
@@ -125,7 +128,7 @@ test('Einwand-Training Stufe 1 (Vorbild): Sätze antippen, falsche Reihenfolge w
   await expect(page.getByTestId('pressure-review')).toHaveAttribute('data-part', '2');
   await expect(page.getByTestId('struct-row-0')).toHaveAttribute('data-ok', '0');
   await expect(page.getByTestId('struct-row-2')).toHaveAttribute('data-ok', '1');
-  await expect(page.getByTestId('feedback')).toHaveAttribute('data-verdict', 'close');
+  await expect(page.getByTestId('result')).toHaveAttribute('data-verdict', 'near');
 });
 
 test('Einwand-Training Stufe 3 und 4: Satzanfänge, Tipp auf Abruf, Knopf „Leichter“', async ({ page }) => {
@@ -157,7 +160,7 @@ test('Einwand-Training mit KI, Stufe 5: Bedenkzeit, Zeitziel, Claude prüft das 
   await page.getByTestId('pressure-check').click();
   await expect(page.getByTestId('pressure-review')).toHaveAttribute('data-mode', 'ai');
   await expect(page.getByTestId('pressure-pattern').locator('[data-move="ask"]')).toHaveAttribute('data-on', 'true');
-  await expect(page.getByTestId('feedback-solution')).toContainText('side by side');
+  await expect(page.getByTestId('result')).toContainText('side by side');
   await page.getByTestId('next').click();
   await expect(page.getByTestId('round-progress')).toHaveText('2 / 5');
 });
@@ -178,11 +181,11 @@ test('Soll N107: Register-Leiter – ganzer Satz, Hinweis, zweiter Versuch', asy
   await expect(page.getByTestId('motor-chip')).toHaveText('casual → neutral');
   await page.getByTestId('motor-input').fill('I have them.');
   await page.getByTestId('drill-check').click();
-  await expect(page.getByTestId('drill-step')).toHaveAttribute('data-kind', 'start');
+  await expect(page.getByTestId('hint-line')).toBeVisible();
   await page.getByTestId('motor-input').fill('I received the documents yesterday.');
   await page.getByTestId('drill-check').click();
   await expect(item).toHaveAttribute('data-state', 'close');
-  await expect(page.getByTestId('feedback-fixes')).toContainText('receive');
+  await expect(page.getByTestId('result')).toContainText('receive');
   await page.getByTestId('next').click();
   await expect(page.getByTestId('round-progress')).toHaveText('2 / 5');
 });
@@ -226,4 +229,41 @@ test('G4: lx:crash-once auch im Einwand-Training', async ({ page }) => {
   await screen(page, 'pressure');
   await page.getByTestId('boundary-skip').click();
   await expect(page.getByTestId('round-progress')).toHaveText('2 / 5');
+});
+
+// Lernplattform 2.0 P8 (§5.9, §6): Hörübung mit „Gerade kein Ton“, Eigener Satz je Eingabeprofil.
+test('Hörübung: „Gerade kein Ton“ gibt dieselbe Aufgabe als Lücke, ohne Hörwertung', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true });
+  await screen(page, 'today');
+  await openTab(page, 'apply');
+  await page.getByTestId('hub-listen-q').click();
+  await expect(page.getByTestId('listen-q-item')).toBeVisible();
+  // Hörphase: der Hauptknopf der Leiste heißt „Abspielen“, der Text bleibt verdeckt.
+  await expect(page.getByTestId('listen-q-play')).toBeVisible();
+  await expect(page.getByTestId('listen-q-text')).toHaveCount(0);
+  for (let i = 0; i < 3; i++) {
+    await page.getByTestId('listen-q-nosound').click();
+    await expect(page.getByTestId('listen-q-cloze')).toContainText('____');
+    await expect(page.getByTestId('listen-q-question')).toBeVisible();
+    await page.getByTestId('choice').first().click();
+    await expect(page.getByTestId('result')).toBeVisible();
+    await page.getByTestId('listen-q-next').click();
+  }
+  // Ohne Ton gibt es keine Hörwertung: nichts zählt als gehört.
+  await expect(page.getByTestId('session-end')).toHaveAttribute('data-right', '0');
+  expect(errors).toEqual([]);
+});
+
+test('Eigener Satz: am Handy ein kurzer Satz (höchstens 8 Wörter), am Laptop frei', async ({ page }) => {
+  await setInputProfile(page, 'touch');
+  await boot(page, { migrated: true });
+  await screen(page, 'today');
+  await openTab(page, 'apply');
+  await page.getByTestId('hub-combo-own').click();
+  await expect(page.getByTestId('combo-item')).toHaveAttribute('data-profile', 'touch');
+  const input = page.getByTestId('combo-input');
+  await input.fill('one two three four five six seven eight');
+  await expect(input).toHaveValue('one two three four five six seven eight');
+  await input.fill('one two three four five six seven eight nine');
+  await expect(input).toHaveValue('one two three four five six seven eight');
 });

@@ -1,1 +1,13 @@
 /* P8 Hören/Kombi/Trainings (fxL) */
+
+/* Hörübung, Antwortphase (§5.9): am Handy ist die Leiste ausgeblendet, die Optionen sind die Handlung.
+   Ab 768 px bleibt sie sichtbar, weil dort die Zusatzknöpfe („Nochmal hören“, „Gerade kein Ton“) in ihr stehen. */
+@media (max-width: 767px) {
+  .lx-actionbar:has([data-fxl-nobar]),
+  .lx-actionbar-column:has([data-fxl-nobar]) {
+    display: none;
+  }
+}
+[data-fxl-nobar] {
+  display: none;
+}

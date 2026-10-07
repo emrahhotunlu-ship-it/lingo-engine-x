@@ -13,6 +13,7 @@ import { channelLogEntry } from '../../domain/progress/channelLog';
 import type { WeekTargets } from '../../domain/unit/types';
 import { useT } from '../../i18n';
 import { logError } from '../../platform/diagnostics';
+import { inputProfile } from '../../platform/input';
 import { local } from '../../platform/storage';
 import { ExerciseBar } from '../../ui/ExerciseBar';
 import { Icon } from '../../ui/Icon';
@@ -91,7 +92,14 @@ export type NbAnswer = {
   /** Teil der Tageseinheit (Pflicht) oder freiwillig (Extra). */
   duty: boolean;
   t: number;
+  /** Gerät der Runde (`'t'` Touch, `'k'` Tastatur), einmal beim Start gelesen (§4.1, §8). */
+  dev?: DevTag;
 };
+
+export type DevTag = 't' | 'k';
+
+/** Das Eingabeprofil als Zeichen für das Tagesprotokoll; gilt für die ganze Runde. */
+export const devOf = (): DevTag => (inputProfile() === 'touch' ? 't' : 'k');
 
 /**
  * Antworten ins Tagesprotokoll über den gemeinsamen Puffer (`recordChannelEntries`). Das Format ist
@@ -104,7 +112,7 @@ export function logAnswers(rows: readonly NbAnswer[]): void {
     recordChannelEntries(
       rows.map((r) => {
         const base = channelLogEntry({ t: r.t, ok: r.ok, lang: r.lang, type: r.type, ref: r.ref, q: r.q, given: r.given, ans: r.ans, ms: r.ms, ctx: r.duty ? 'duty' : 'extra' });
-        return { ...base, day: r.day };
+        return { ...base, day: r.day, ...(r.dev ? { dev: r.dev } : {}) };
       }),
     );
   } catch (err) {

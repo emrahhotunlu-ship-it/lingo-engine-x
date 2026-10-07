@@ -17,7 +17,7 @@ import { logWarn } from '../../platform/diagnostics';
 import { useCapabilities } from '../../platform/capabilities';
 import { pressureCheck, type PressureFix } from '../../prompts/nb/p7/pressureCheck';
 import type { Fix } from '../../ui/feedback/types';
-import { currentDay, logAnswers, nextRound, restoreSaved, saveOut, type UnitRun } from '../nbdrill/shared';
+import { currentDay, devOf, logAnswers, nextRound, restoreSaved, saveOut, type DevTag, type UnitRun } from '../nbdrill/shared';
 
 // Einwand-Training (Plan N103) mit Lernpfad (docs/lernpfad-plan.md, 03.10.2026): Stufe 1–2 ordnen bzw. wählen
 // (ohne KI, sofort bewertet), Stufe 3–5 eigene Antwort; Bedenkzeit und Zeitziel nur auf Stufe 5, die Uhr gibt nie
@@ -78,6 +78,8 @@ export type PressureSession = {
   lvAfter?: Level;
   /** Stufen-Ergebnis dieser Runde gespeichert (einmal je Runde, ggf. nach den letzten KI-Prüfungen). */
   recorded?: boolean;
+  /** Gerät der Runde; fehlt in alten Momentaufnahmen. */
+  dev?: DevTag;
 };
 
 export const usePressure = create<{ s: PressureSession | null }>(() => ({ s: null }));
@@ -147,7 +149,7 @@ export function startPressure(opts: { unit?: UnitRun | null; lang: 'de' | 'en'; 
   ctl = null;
   const lv = set === 'objection' ? currentLevel('nb-objection') : undefined;
   const phase = phaseFor(set, lv);
-  put({ v: 1, set, ids: picked.map((o) => o.id), pos: 0, phase, draft: '', answers: [], ai: {}, day: opts.unit?.day ?? currentDay(), t0: Date.now(), lang: opts.lang, unit: opts.unit ?? null, answerAt: phase === 'answer' ? Date.now() : 0, done: false, saved: false, ...(lv ? { lv, lvs: [lv], hint: 0 as const } : {}) });
+  put({ v: 1, set, ids: picked.map((o) => o.id), pos: 0, phase, draft: '', answers: [], ai: {}, day: opts.unit?.day ?? currentDay(), t0: Date.now(), lang: opts.lang, unit: opts.unit ?? null, answerAt: phase === 'answer' ? Date.now() : 0, done: false, saved: false, dev: devOf(), ...(lv ? { lv, lvs: [lv], hint: 0 as const } : {}) });
   return true;
 }
 
@@ -295,7 +297,7 @@ export function nextObjection(): void {
   const a = s.answers.find((x) => x.id === o.id);
   const set = setOf(s);
   logAnswers([
-    { type: `nb-${set}`, ref: outRef({ id: outId(set, s.t0), d: s.day }), q: o.line, given: a?.text ?? '', ans: o.model, ok: answerOk(set, a), ms: a?.ms ?? 0, day: s.day, lang: s.lang, duty: !!s.unit, t: Date.now() },
+    { type: `nb-${set}`, ref: outRef({ id: outId(set, s.t0), d: s.day }), q: o.line, given: a?.text ?? '', ans: o.model, ok: answerOk(set, a), ms: a?.ms ?? 0, day: s.day, lang: s.lang, duty: !!s.unit, t: Date.now(), ...(s.dev ? { dev: s.dev } : {}) },
   ]);
   if (s.pos + 1 >= s.ids.length) {
     const done: PressureSession = { ...s, done: true };

@@ -1,5 +1,3 @@
-import { ActionBar, PrimaryAction } from '../../ui/ActionBar';
-import { motion } from 'framer-motion';
 import { useId, useMemo, useState } from 'react';
 import { useAiAvailable } from '../../ai/scope';
 import { useAsk } from '../../ai/useAsk';
@@ -8,19 +6,20 @@ import { useNav } from '../../app/nav';
 import { useLive } from '../../data/live';
 import { pickPairs, type ComboPair } from '../../domain/apply/combo';
 import { topicById, TOPICS } from '../../domain/content';
+import { laptopDeepen } from '../../domain/metrics';
 import { errorsOf } from '../../domain/grammar/errors';
+import { alignWords } from '../../domain/answer/align';
 import { normText } from '../../domain/text/normText';
 import { usesChunk } from '../../domain/text/chunkMatch';
-import { EnglishText } from '../../engine/EnglishText';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useT } from '../../i18n';
+import { useInputProfile } from '../../platform/input';
 import { comboCheck, type ComboCheckOut } from '../../prompts/comboCheck';
 import { AiRunPanel } from '../../ui/AiRunPanel';
-import { Button } from '../../ui/Button';
 import { Icon } from '../../ui/Icon';
-import { DURATION, EASE_OUT } from '../../ui/motion';
 import { SessionEnd } from '../../ui/SessionEnd';
-import { ExerciseTop, TaskLine } from '../learn/ui';
+import { ExerciseShell, SentenceInput, type ShellFeedback } from '../../ui/exercise';
+import { ExerciseTop } from '../learn/ui';
 import { saveRepairs } from '../repair/store';
 import { useVocabCards } from '../vocab/hub/data';
 
@@ -38,19 +37,25 @@ export function willRepair(out: ComboCheckOut, given: string): boolean {
 
 type Done = { word: boolean; rule: boolean | null; correct: boolean | null };
 
+/** Wörter aus „Am Laptop vertiefen“ sortieren `pickPairs` (nach Fehlern) vor alle anderen. */
+const DEEPEN_BOOST = 1000;
+
 /** Paare für die Runde: aus den Live-Daten, fest je Lerntag. */
 export function useComboPairs(): ComboPair[] {
   const cards = useVocabCards();
   const grammar = useLive((s) => s.collections.grammar);
   const today = useClock((s) => s.today);
+  const log = useLive((s) => s.day?.doc);
   return useMemo(() => {
+    // „Am Laptop vertiefen“ (Matrix §6): Wörter, die heute am Handy geübt wurden und fest sitzen, kommen zuerst.
+    const deepen = new Set(laptopDeepen({ log, cards, today }).map((w) => w.toLowerCase()));
     const num = (v: unknown): number => (typeof v === 'number' && Number.isFinite(v) ? v : 0);
     const words = cards
       .filter((c) => !c.hidden && !c.isNew && c.stage >= 1 && c.word.trim() && c.word.trim().split(/\s+/).length <= 2)
-      .map((c) => ({ word: c.word.trim(), lapses: num(c.doc.lapses), stage: c.stage }));
+      .map((c) => ({ word: c.word.trim(), lapses: num(c.doc.lapses) + (deepen.has(c.word.trim().toLowerCase()) ? DEEPEN_BOOST : 0), stage: c.stage }));
     const errorTopics = [...(grammar ?? new Map<string, Record<string, unknown>>()).entries()].filter(([, d]) => errorsOf(d).some((e) => e.done !== true)).map(([id]) => id);
     return pickPairs(words, TOPICS, errorTopics, today);
-  }, [cards, grammar, today]);
+  }, [cards, grammar, today, log]);
 }
 
 export function ComboSentenceScreen() {
@@ -59,13 +64,18 @@ export function ComboSentenceScreen() {
   const back = useNav((s) => s.back);
   const ai = useAiAvailable();
   const live = useComboPairs();
+  const liveProfile = useInputProfile();
+  // Das Eingabeprofil gilt für die ganze Runde (§4.1): am Handy ein kurzer Satz (höchstens 8 Wörter), am Laptop ein freier Satz.
+  const [profile] = useState(() => liveProfile);
+  const touch = profile === 'touch';
   // Paare erst einfrieren, sobald sie erstmals nicht leer sind (die Daten können nach dem Öffnen eintreffen; Prüfbefund S10).
   const [fixed, setFixed] = useState<ComboPair[]>(() => live);
   if (!fixed.length && live.length) setFixed(live);
   const ask = useAsk(comboCheck);
   const [pos, setPos] = useState(0);
   const [text, setText] = useState('');
-  const [res, setRes] = useState<(Done & { out: ComboCheckOut | null }) | null>(null);
+  const [miss, setMiss] = useState(false);
+  const [res, setRes] = useState<(Done & { out: ComboCheckOut; given: string }) | null>(null);
   const [results, setResults] = useState<Done[]>([]);
   const [info, setInfo] = useState(false);
   const infoId = useId();
@@ -89,151 +99,111 @@ export function ComboSentenceScreen() {
     api.blur();
     // Wort zuerst lokal: fehlt es, braucht es keine KI und keinen Verbrauch.
     if (!usesChunk(given, cur.word)) {
-      setRes({ word: false, rule: null, correct: null, out: null });
+      setMiss(true);
       return;
     }
+    setMiss(false);
     const out = await ask.run({ word: cur.word, topic: topic.name_en ?? topic.name, rule: topic.rule ?? '', sentence: given, uiLang: lang });
     // KI nicht erreichbar oder unlesbar: nicht als falsch werten, „Prüfen“ fragt erneut (Lernwissenschaft 27.09.).
     if (!out) return;
     const done: Done = { word: true, rule: out.ruleOk, correct: out.correct };
-    setRes({ ...done, out });
+    setRes({ ...done, out, given });
     setResults((l) => [...l, done]);
     // Ein falscher Satz wird zum Reparatur-Satz (nur mit belegter Korrektur, nie als Rückstand).
     if (willRepair(out, given)) void saveRepairs([{ wrong: given, right: out.fixed.trim(), why: out.why, src: 'write' }]);
   };
-  const retry = () => {
-    setRes(null);
-  };
   const next = () => {
-    // Nur echte Versuche zählen: übersprungene Sätze nie; ein fehlendes Wort zählt als Versuch (einmal, beim Weiter).
-    if (res && res.out === null) setResults((l) => [...l, { word: res.word, rule: res.rule, correct: res.correct }]);
+    // Nur echte Versuche zählen: übersprungene Sätze nie; ein fehlendes Wort zählt als Versuch (einmal, beim Überspringen).
+    if (!res && miss) setResults((l) => [...l, { word: false, rule: null, correct: null }]);
     setPos((p) => p + 1);
     setText('');
+    setMiss(false);
     setRes(null);
     setEndedAt(performance.now());
   };
   const right = results.filter((r) => r.word && r.rule && r.correct).length;
 
+  const fb: ShellFeedback | null =
+    res && cur
+      ? {
+          verdict: res.out.correct && res.out.ruleOk ? 'ok' : res.word && res.out.correct ? 'near' : 'wrong',
+          comparison: willRepair(res.out, res.given) ? { given: res.given, ops: alignWords(res.given, res.out.fixed.trim()) } : null,
+          explanation: { lines: [{ k: 'why', text: res.out.why }], examples: [], mark: [], ai: true, source: 'fallback' },
+          nextIn: willRepair(res.out, res.given) ? t('apComboRepairNote') : null,
+          depth: 'full',
+          auto: false,
+        }
+      : null;
+
+  const marks = res && cur && (
+    <ul className="flex flex-wrap gap-2" aria-label={t('rxResultLabel')}>
+      <li className="lx-chip" data-testid="combo-word-mark" data-ok={res.word ? 'true' : 'false'}>
+        <Icon name={res.word ? 'check' : 'close'} size={14} /> {t('apComboWordMark', { word: cur.word })}
+      </li>
+      {res.rule !== null && (
+        <li className="lx-chip" data-testid="combo-rule-mark" data-ok={res.rule ? 'true' : 'false'}>
+          <Icon name={res.rule ? 'check' : 'close'} size={14} /> {t('apComboRuleMark')}
+        </li>
+      )}
+    </ul>
+  );
+
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="combo" data-state={finished ? 'done' : 'open'}>
       <ExerciseTop onClose={close} progress={fixed.length && !finished ? { n: pos + 1, total: fixed.length } : null} ctx="xtra" />
       {!ai || !fixed.length ? (
-        <p className="lx-glass rounded-[var(--radius-card)] p-5 text-sm text-muted" data-testid="combo-unavailable">
+        <p className="lx-glass rounded-[var(--radius-card)] p-5 lx-t-support text-muted" data-testid="combo-unavailable">
           {t('apComboUnavailable')}
         </p>
       ) : finished ? (
         <SessionEnd right={right} total={Math.max(1, results.length)} ms={Math.max(1, endedAt - startedAt)} next={{ label: t('lrBackToApply'), run: close }} />
       ) : (
         cur && (
-          <article className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="combo-item" data-word={cur.word} data-topic={cur.topicId}>
-            <header className="flex flex-col gap-2">
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0 flex-1">
-                  <TaskLine task={t('apComboTask', { word: cur.word, topic: topicName })} purpose={t('apComboPurpose')} />
-                </div>
-              </div>
-              {topic?.rule && (
-                <>
-                  <button type="button" className="inline-flex min-h-11 items-center gap-1 self-start text-sm font-medium text-accent-text" aria-expanded={info} aria-controls={infoId} onClick={() => setInfo((v) => !v)} data-testid="combo-rule-toggle">
-                    <Icon name="info" size={16} />
-                    {t('apComboRule')}
-                  </button>
-                  {info && (
-                    <p id={infoId} className="rounded-xl bg-surface px-3 py-2 text-sm text-muted" data-testid="combo-rule">
-                      {topic.rule}
-                    </p>
-                  )}
-                </>
-              )}
-            </header>
-            <textarea
-              className="lx-field min-h-24 text-base"
-              lang="en"
-              rows={3}
-              value={text}
-              readOnly={!!res && res.out !== null}
-              onChange={(ev) => setText(ev.target.value)}
-              aria-label={t('apComboInput')}
-              placeholder={t('apComboInput')}
-              autoCapitalize="sentences"
-              autoComplete="off"
-              autoCorrect="off"
-              spellCheck={false}
-              data-testid="combo-input"
-              onKeyDown={(ev) => {
-                if (ev.key === 'Enter' && !ev.shiftKey && !ev.nativeEvent.isComposing) {
-                  ev.preventDefault();
-                  void check();
-                }
-              }}
-            />
-            {busy && <AiRunPanel phase={ask.phase} error={null} onStop={ask.stop} skeleton={false} />}
-            {!busy && !res && ask.error && <AiRunPanel phase="error" error={ask.error} onRetry={() => void check()} skeleton={false} />}
-            {!res && (
-              <div className="flex flex-wrap items-center gap-3">
-                <ActionBar stateKey="check">
-                  <PrimaryAction disabled={!text.trim() || busy} onClick={() => void check()} testId="combo-check">
-                    {t('rxCheck')}
-                  </PrimaryAction>
-                </ActionBar>
-                <Button variant="ghost" disabled={busy} onClick={next} data-testid="combo-skip">
-                  {t('rxSkip')}
-                </Button>
-              </div>
-            )}
-            {res && (
-              <motion.section initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: DURATION.base, ease: EASE_OUT }} className="flex flex-col gap-3 border-t border-line pt-4" data-testid="combo-result">
-                <ul className="flex flex-wrap gap-2" aria-label={t('rxResultLabel')}>
-                  <li className="lx-chip" data-testid="combo-word-mark" data-ok={res.word ? 'true' : 'false'}>
-                    <Icon name={res.word ? 'check' : 'close'} size={14} /> {t('apComboWordMark', { word: cur.word })}
-                  </li>
-                  {res.rule !== null && (
-                    <li className="lx-chip" data-testid="combo-rule-mark" data-ok={res.rule ? 'true' : 'false'}>
-                      <Icon name={res.rule ? 'check' : 'close'} size={14} /> {t('apComboRuleMark')}
-                    </li>
-                  )}
-                </ul>
-                {!res.word && (
-                  <p className="text-sm text-muted" data-testid="combo-word-missing">
-                    {t('apComboWordMissing', { word: cur.word })}
-                  </p>
-                )}
-                {res.out && (
-                  <>
-                    {!res.out.correct && res.out.fixed.trim() && (
-                      <div className="flex flex-col gap-1 rounded-xl bg-surface px-3 py-2">
-                        <p className="text-sm text-muted">{t('rxBetter')}</p>
-                        <EnglishText text={res.out.fixed.trim()} area="trainer" source={null} className="text-base font-medium leading-relaxed" testId="combo-fixed" />
-                      </div>
-                    )}
-                    <p className="text-sm text-muted" data-testid="combo-why">
-                      {t('rxWhy')}: {res.out.why}
-                    </p>
-                    {willRepair(res.out, text) && (
-                      <p className="text-sm text-muted" data-testid="combo-repair-note">
-                        {t('apComboRepairNote')}
+          <div data-testid="combo-item" data-word={cur.word} data-topic={cur.topicId} data-profile={profile}>
+            <ExerciseShell
+              meta={{ ex: 'combo', id: `${cur.word}|${cur.topicId}`, kind: touch ? 'complete' : 'produce' }}
+              status={{ area: 'words', state: null, kindLabel: t('fxLKindOwn'), badge: topicName }}
+              task={{ text: t(touch ? 'fxLComboTaskShort' : 'apComboTask', { word: cur.word, topic: topicName }), purpose: t('apComboPurpose') }}
+              aid={
+                topic?.rule ? (
+                  <div className="flex flex-col gap-1">
+                    <button type="button" className="inline-flex min-h-11 items-center gap-1 self-start lx-t-support font-medium text-accent-text" aria-expanded={info} aria-controls={infoId} onClick={() => setInfo((v) => !v)} data-testid="combo-rule-toggle">
+                      <Icon name="info" size={16} />
+                      {t('apComboRule')}
+                    </button>
+                    {info && (
+                      <p id={infoId} className="lx-t-support lx-inset text-muted" data-testid="combo-rule">
+                        {topic.rule}
                       </p>
                     )}
-                    <p className="text-xs text-subtle">{t('apComboNotice')}</p>
-                  </>
-                )}
-                <div className="flex flex-wrap items-center gap-3">
-                  {!res.out && (
-                    <Button variant="secondary" icon="refresh" onClick={retry} data-testid="combo-retry">
-                      {t('apComboRetry')}
-                    </Button>
-                  )}
-                  <ActionBar stateKey="next">
-                    <PrimaryAction iconAfter="arrowRight" onClick={next} testId="combo-next">
-                      {t('rxNext')}
-                    </PrimaryAction>
-                  </ActionBar>
+                  </div>
+                ) : null
+              }
+              prompt={
+                <span lang="en" data-testid="combo-prompt">
+                  {cur.word}
+                </span>
+              }
+              answer={
+                <div className="flex flex-col gap-3">
+                  <SentenceInput mode="free" value={text} onChange={setText} onSubmit={() => (res ? next() : void check())} disabled={!!res} maxWords={touch ? COMBO_PHONE_WORDS : undefined} testId="combo-input" />
+                  {busy && <AiRunPanel phase={ask.phase} error={null} onStop={ask.stop} skeleton={false} />}
+                  {!busy && !res && ask.error && <AiRunPanel phase="error" error={ask.error} onRetry={() => void check()} skeleton={false} />}
+                  {marks}
                 </div>
-              </motion.section>
-            )}
-          </article>
+              }
+              hint={!res && miss ? { text: t('apComboWordMissing', { word: cur.word }), tone: 'near' } : null}
+              state={!res && miss ? 'retry' : undefined}
+              secondary={[{ id: 'skip', label: t('rxSkip'), onClick: next, testId: 'combo-skip', disabled: busy }]}
+              primary={res ? { label: t('rxNext'), onClick: next, testId: 'combo-next' } : { label: t('rxCheck'), onClick: () => void check(), testId: 'combo-check', disabled: !text.trim() || busy, busy, busyLabel: t('exChecking') }}
+              feedback={fb}
+            />
+          </div>
         )
       )}
     </div>
   );
 }
+
+/** Am Handy ein kurzer Satz (Ersatz `complete`, Matrix §6). */
+export const COMBO_PHONE_WORDS = 8;

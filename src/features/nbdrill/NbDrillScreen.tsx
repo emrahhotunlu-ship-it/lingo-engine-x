@@ -1,22 +1,23 @@
-import { ActionBar, PrimaryAction } from '../../ui/ActionBar';
 import { usePlayerSkip } from '../../app/shell/Player';
 import { useRef, useState } from 'react';
 import type { ScreenProps } from '../../app/registry';
 import { useSettings } from '../../app/settings';
 import { transforms } from '../../content/nb/load';
 import type { Colloc } from '../../content/nb/schemas';
+import { alignWords } from '../../domain/answer/align';
+import type { ExplainExample } from '../../domain/explain/types';
 import { motorFilled, motorStart, type MotorItem, type MotorSet } from '../../domain/nbdrill/motor';
 import { calqueVerb, collocDone, collocNeed, collocVerdict, type CollocStep } from '../../domain/nbdrill/colloc';
 import { EnglishText } from '../../engine/EnglishText';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { KineticGap, type GapState as KGapState } from '../../engine/KineticGap';
 import { useT, type MessageKey } from '../../i18n';
-import { Button } from '../../ui/Button';
-import { FeedbackPanel } from '../../ui/FeedbackPanel';
+import { ExerciseShell, SentenceInput, type ShellFeedback } from '../../ui/exercise';
 import type { Feedback, Fix } from '../../ui/feedback/types';
 import { SessionEnd } from '../../ui/SessionEnd';
 import { collocOf, collocSubmit, drillMs, drillRight, endDrill, ensureDrill, gapSubmit, giveUp, nextItem, skipItem, motorOf, useDrill, type DrillSession } from './session';
-import { finishUnit, Note, StepBoundary, TaskHead, TrainingBar } from './shared';
+import { drillFeedback } from './shell';
+import { finishUnit, Note, StepBoundary, TrainingBar } from './shared';
 
 // Tipp-Drill-Motor (Plan N101/N102): Kollokationen tippen und Satz-Umformung mit Schlüsselwort.
 // Nur tippen, nie auswählen. Getippt wird direkt in die Lücke (Kap. 4.1). Lokal geprüft,
@@ -65,6 +66,7 @@ function CollocItem({ s, c }: { s: DrillSession; c: Colloc }) {
   if (!st) return null;
   const done = collocDone(c, st);
   const need = collocNeed(c);
+  const gapState: KGapState = 'input';
 
   const check = () => {
     if (done) return;
@@ -94,76 +96,65 @@ function CollocItem({ s, c }: { s: DrillSession; c: Colloc }) {
         why: { question: `${c.noun}: ${c.verbs.map((v) => v.v).join(', ')} – ${c.wrong.phrase} → ${c.wrong.right}` },
       }
     : null;
-  const gapState: KGapState = 'input';
+  // Alle passenden Verben mit je einem Beispiel (Wort antippbar im Nachschlagen) stehen unter der Erklärung.
+  const examples: ExplainExample[] = c.verbs.map((v) => ({ en: v.ex, de: v.de }));
 
   return (
-    <article className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="colloc-item" data-id={c.id} data-state={done ? (verdict ?? 'done') : 'open'}>
-      <TaskHead status={`${t('nbTrainingColloc')} · ${t('nbTrainingCollocNeed', { n: need })}`} task={t('nbTrainingCollocTask')} purpose={t('nbTrainingCollocPurpose')} />
-      <div className="flex flex-col items-center gap-1 py-2 text-center">
-        <p lang="en" className="text-3xl font-semibold tracking-tight" data-testid="colloc-noun">
-          {c.noun}
-        </p>
-        <p className="text-sm text-muted">{c.de}</p>
-      </div>
-      <ul className="flex flex-wrap justify-center gap-2" data-testid="colloc-found" data-n={st.found.length}>
-        {Array.from({ length: need }, (_, i) => {
-          const v = st.found[i];
-          return (
-            <li key={i} className={`lx-chip ${v ? '' : 'text-subtle'}`} data-found={v ? 'true' : 'false'}>
-              {v ? `${v} … ${c.noun}` : '…'}
-            </li>
-          );
-        })}
-      </ul>
-      {!done && (
-        <>
-          <p className="lx-sentence text-center" lang="en">
-            <KineticGap
-              key={attempt}
-              label={t('nbTrainingCollocInput', { noun: c.noun })}
-              maxLength={40}
-              state={gapState}
-              onChange={(v) => {
-                typed.current = v;
-              }}
-              onEnter={check}
-            />{' '}
-            <span className="text-muted">… {c.noun}</span>
-          </p>
-          {step && <StepNote step={step} c={c} />}
-          <div className="flex flex-wrap items-center gap-3">
-            <ActionBar stateKey="check">
-              <PrimaryAction onClick={check} testId="drill-check">
-                {t('nbTrainingCheck')}
-              </PrimaryAction>
-            </ActionBar>
-            <Button variant="ghost" onClick={dontKnow} data-testid="drill-dontknow">
-              {t('nbTrainingDontKnow')}
-            </Button>
+    <div data-testid="colloc-item" data-id={c.id} data-state={done ? (verdict ?? 'done') : 'open'}>
+      <ExerciseShell
+        meta={{ ex: 'colloc', id: c.id, kind: 'gap' }}
+        status={{ area: 'words', state: null, kindLabel: t('nbTrainingColloc'), badge: t('nbTrainingCollocNeed', { n: need }) }}
+        task={{ text: t('nbTrainingCollocTask'), purpose: t('nbTrainingCollocPurpose') }}
+        prompt={
+          <div className="flex flex-col items-center gap-2 text-center">
+            <p lang="en" data-testid="colloc-noun">
+              {c.noun}
+            </p>
+            <p className="lx-t-support text-muted">{c.de}</p>
+            <ul className="flex flex-wrap justify-center gap-2" data-testid="colloc-found" data-n={st.found.length}>
+              {Array.from({ length: need }, (_, i) => {
+                const v = st.found[i];
+                return (
+                  <li key={i} className={`lx-chip ${v ? '' : 'text-subtle'}`} data-found={v ? 'true' : 'false'}>
+                    {v ? `${v} … ${c.noun}` : '…'}
+                  </li>
+                );
+              })}
+            </ul>
           </div>
-        </>
-      )}
-      {done && fb && (
-        <div className="flex flex-col gap-4 border-t border-line pt-4" data-testid="drill-result">
-          {step?.kind === 'solution' && st.found.length < need && <Note tone="warn" kind="solution">{t('nbTrainingCollocAll')}</Note>}
-          <FeedbackPanel fb={fb} onNext={nextItem} />
-          <div className="flex flex-col gap-2" data-testid="colloc-examples">
-            <p className="lx-eyebrow">{t('nbTrainingCollocAll')}</p>
-            {c.verbs.map((v) => (
-              <div key={v.v} className="flex flex-col gap-0.5">
-                <p className="text-sm">
-                  <span className="font-medium" lang="en">
-                    {v.v}
-                  </span>{' '}
-                  <span className="text-muted">· {v.de}</span>
-                </p>
-                <EnglishText text={v.ex} area="lesson" source={`colloc/${c.id}`} className="text-sm leading-relaxed text-muted" />
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </article>
+        }
+        answer={
+          done ? (
+            step?.kind === 'solution' && st.found.length < need ? (
+              <Note tone="warn" kind="solution">
+                {t('nbTrainingCollocAll')}
+              </Note>
+            ) : null
+          ) : (
+            <div className="flex flex-col gap-3">
+              <p className="lx-sentence text-center" lang="en">
+                <KineticGap
+                  key={attempt}
+                  label={t('nbTrainingCollocInput', { noun: c.noun })}
+                  maxLength={40}
+                  state={gapState}
+                  silent
+                  onChange={(v) => {
+                    typed.current = v;
+                  }}
+                  onEnter={check}
+                />{' '}
+                <span className="text-muted">… {c.noun}</span>
+              </p>
+              {step && <StepNote step={step} c={c} />}
+            </div>
+          )
+        }
+        secondary={[{ id: 'dontKnow', label: t('nbTrainingDontKnow'), onClick: dontKnow, testId: 'drill-dontknow' }]}
+        primary={done ? { label: t('exNext'), onClick: nextItem, testId: 'next' } : { label: t('nbTrainingCheck'), onClick: check, testId: 'drill-check' }}
+        feedback={fb ? drillFeedback(fb, {}, examples) : null}
+      />
+    </div>
   );
 }
 
@@ -265,86 +256,50 @@ function MotorItemView({ s, m }: { s: DrillSession; m: MotorItem }) {
       {right}
     </span>
   ) : (
-    <KineticGap key={g.tries} label={t('nbTrainingTransformGap')} maxLength={60} state="input" onChange={(v) => (typed.current = v)} onEnter={check} />
+    <KineticGap key={g.tries} label={t('nbTrainingTransformGap')} maxLength={60} state="input" silent onChange={(v) => (typed.current = v)} onEnter={check} />
   );
   const txt = MOTOR_TEXT[m.set];
+  const given = last ? motorFilled(m, last) : '';
+  const finalFb: ShellFeedback | null = fb ? drillFeedback(fb, fb.verdict !== 'ok' && given ? { comparison: { given, ops: alignWords(given, motorFilled(m, right)) } } : {}) : null;
   return (
-    <article
-      className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7"
-      data-testid={`${m.set}-item`}
-      data-set={m.set}
-      data-id={m.id}
-      data-tries={g.tries}
-      data-state={g.final ? (fb?.verdict ?? 'done') : 'open'}
-    >
-      <TaskHead status={t(txt.name)} task={t(txt.task)} purpose={t(txt.purpose)} />
-      <div className="flex flex-col gap-3">
-        {m.source && (
-          <p className="text-lg leading-relaxed" lang="en" data-testid="motor-source">
-            {m.gap && <span className="mr-2 text-xs font-semibold text-subtle">A</span>}
-            {m.source}
-          </p>
-        )}
-        <div className="flex flex-wrap items-center gap-2 text-sm">
-          <span className="lx-chip font-semibold tracking-wide" data-testid="motor-chip" lang="en">
-            {m.chip}
-          </span>
-          {m.note && <span className="text-muted">{m.note[lang]}</span>}
-        </div>
-        {m.gap && (
-          <div className="flex items-baseline gap-2">
-            {m.source && <span className="text-xs font-semibold text-subtle">B</span>}
-            <EnglishText as="p" className="lx-sentence" testId="motor-gap" text={m.gap} area="lesson" source={`${m.set}/${m.id}`} slot={gapIdx >= 0 ? { start: gapIdx, end: gapIdx + 3, node: gapNode } : null} />
+    <div data-testid={`${m.set}-item`} data-set={m.set} data-id={m.id} data-tries={g.tries} data-state={g.final ? (fb?.verdict ?? 'done') : 'open'}>
+      <ExerciseShell
+        meta={{ ex: m.set, id: m.id, kind: full ? 'produce' : 'gap' }}
+        status={{ area: m.set === 'transform' ? 'grammar' : 'words', state: null, kindLabel: t(txt.name), badge: null }}
+        task={{ text: t(txt.task), purpose: t(txt.purpose) }}
+        prompt={
+          <div className="flex flex-col gap-3">
+            {m.source && (
+              <p lang="en" data-testid="motor-source">
+                {m.gap && <span className="lx-t-meta mr-2 font-semibold text-subtle">A</span>}
+                {m.source}
+              </p>
+            )}
+            <div className="lx-t-support flex flex-wrap items-center gap-2">
+              <span className="lx-chip font-semibold tracking-wide" data-testid="motor-chip" lang="en">
+                {m.chip}
+              </span>
+              {m.note && <span className="text-muted">{m.note[lang]}</span>}
+            </div>
+            {m.gap && (
+              <div className="flex items-baseline gap-2">
+                {m.source && <span className="lx-t-meta font-semibold text-subtle">B</span>}
+                <EnglishText as="p" className="lx-sentence" testId="motor-gap" text={m.gap} area="lesson" source={`${m.set}/${m.id}`} slot={gapIdx >= 0 ? { start: gapIdx, end: gapIdx + 3, node: gapNode } : null} />
+              </div>
+            )}
           </div>
-        )}
-        {full && !g.final && (
-          <textarea
-            className="lx-field min-h-20 text-base"
-            lang="en"
-            rows={2}
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                check();
-              }
-            }}
-            aria-label={t('nbTrainingMotorFull')}
-            placeholder={t('nbTrainingMotorFull')}
-            autoCapitalize="sentences"
-            autoComplete="off"
-            autoCorrect="off"
-            spellCheck={false}
-            data-testid="motor-input"
-          />
-        )}
-      </div>
-      {!g.final && (
-        <>
-          {hintText && (
-            <Note tone="warn" kind={hint ?? 'hint'} testId="drill-step">
-              {hintText}
-            </Note>
-          )}
-          <div className="flex flex-wrap items-center gap-3">
-            <ActionBar stateKey="check">
-              <PrimaryAction onClick={check} testId="drill-check">
-                {t('nbTrainingCheck')}
-              </PrimaryAction>
-            </ActionBar>
-            <Button variant="ghost" onClick={dontKnow} data-testid="drill-dontknow">
-              {t('nbTrainingDontKnow')}
-            </Button>
-          </div>
-        </>
-      )}
-      {fb && (
-        <div className="border-t border-line pt-4" data-testid="drill-result">
-          <FeedbackPanel fb={fb} onNext={nextItem} />
-        </div>
-      )}
-    </article>
+        }
+        answer={
+          full && !g.final ? (
+            <SentenceInput mode="free" value={draft} onChange={setDraft} onSubmit={check} testId="motor-input" />
+          ) : null
+        }
+        hint={!g.final && hintText ? { text: hintText, tone: 'hint' } : null}
+        secondary={g.final ? [] : [{ id: 'dontKnow', label: t('nbTrainingDontKnow'), onClick: dontKnow, testId: 'drill-dontknow' }]}
+        primary={g.final ? { label: t('exNext'), onClick: nextItem, testId: 'next' } : { label: t('nbTrainingCheck'), onClick: check, testId: 'drill-check' }}
+        feedback={finalFb}
+      />
+    </div>
   );
 }
 
