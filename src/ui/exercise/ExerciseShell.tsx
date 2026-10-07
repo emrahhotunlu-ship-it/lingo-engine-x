@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { useLive } from '../../data/live';
+import { useSharedTarget } from '../../engine/shared';
 import type { ExplainDepth, ExplanationModel, ResultVerdict } from '../../domain/explain/types';
 import type { WordOp } from '../../domain/learn/types';
 import type { UnitState } from '../../domain/metrics';
@@ -96,6 +97,8 @@ export function ExerciseShell(props: ExerciseShellProps) {
   const [folds, setFolds] = useState(0);
   const onFold = useCallback((open: boolean) => setFolds((n) => Math.max(0, n + (open ? 1 : -1))), []);
   const reduce = useReducedMotion();
+  // Kap. 4.4: Die Heldenkarte von Heute gleitet in die erste Übung (nur direkt nach dem Start; Grammatik und Drills nehmen sie vorher selbst).
+  const { ref: sharedRef, shared } = useSharedTarget<HTMLElement>('lx-hero');
   const autoPref = useLive((s) => s.docs['app/profile']?.autoNext);
 
   const resultKey = feedback ? `${meta.id}:${feedback.verdict}:${feedback.sub ?? ''}` : `${meta.id}:answering`;
@@ -253,8 +256,10 @@ export function ExerciseShell(props: ExerciseShellProps) {
 
   return (
     <article
+      ref={sharedRef}
       className="lx-glass lx-exercise flex flex-col gap-4 outline-none"
       tabIndex={-1}
+      data-shared={shared ? '' : undefined}
       data-testid="exercise"
       data-area={status.area}
       data-state={state}

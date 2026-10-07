@@ -78,7 +78,7 @@ test('„Neue Aufgaben zu {Thema}": gespeichert im Pool und in der nächsten The
   const seen = [
     ...(bank.tasks as Array<{ topic: string; prompt: string }>).filter((x) => x.topic === 'passive').map((x) => legacyTaskKey(x.prompt)),
     // Schlüssel der neuen Aufgabenarten: Rahmensatz (kwt), Satz (find), Satz a (meaning).
-    ...v2.filter((x) => x.topic === 'passive').map((x) => legacyTaskKey(x.type === 'kwt' ? x.frame : x.type === 'find' ? x.prompt : x.a)),
+    ...v2.filter((x) => x.topic === 'passive').map((x) => legacyTaskKey((x.type === 'kwt' ? x.frame : x.type === 'find' ? x.prompt : x.a) ?? '')),
   ];
   const { errors } = await boot(page, { migrated: true, fake: { patch: { 'grammar/passive': { seen } } } });
   await screen(page, 'today');
