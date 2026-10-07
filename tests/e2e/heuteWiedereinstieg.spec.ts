@@ -72,7 +72,7 @@ test('Serie: im Kopf nie, auf Heute nur im Kartenfuß ab 1 Tag, nach einer Pause
   const { errors } = await boot(page, { migrated: true, now: MON_9 });
   await screen(page, 'today');
   await expect(page.getByTestId('profile-streak')).toHaveCount(0);
-  await expect(page.getByTestId('today-streak')).toHaveText('Serie: 12 Tage');
+  await expect(page.getByTestId('today-streak')).toHaveText('Serie 12');
   await expect(page.getByTestId('today-card').getByTestId('today-streak')).toHaveCount(1);
   // Profil-Blatt zeigt sie auch.
   await page.getByTestId('open-profile').click();

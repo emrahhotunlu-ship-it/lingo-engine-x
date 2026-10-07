@@ -10,11 +10,8 @@ import { useT, type MessageKey } from '../../i18n';
 import { Button } from '../../ui/Button';
 import { Icon } from '../../ui/Icon';
 import { SegmentRing } from '../../ui/ProgressRing';
-import { WeekStrip } from '../progress/StandHeader';
-import { streakWeek } from '../../domain/metrics';
 import { topicName } from '../grammar/topicUi';
 import { ExtraRow } from './ExtraRow';
-import { bigGain, patternGains } from './doneCard';
 import { Skeleton } from '../../ui/Skeleton';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { invalidIdsOf, useLive } from '../../data/live';
@@ -26,10 +23,10 @@ import type { Lang } from '../../app/settings';
 import { actionLabel } from '../progress/actionRoute';
 import { maybeAutoAssess } from '../progress/assessRun';
 import { logWarn } from '../../platform/diagnostics';
-import { useStreakCount } from '../../app/shell/useStreak';
 import { isoWeek } from '../../domain/date';
 import { KEY_PREFIX, local } from '../../platform/storage';
-import { useDoneFacts } from './doneFacts';
+import { DoneCard3, StreakFoot } from './DoneCard3';
+import { StillThere } from './StillThere';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { flush, usePending } from '../progress/persist';
 import { startDuty } from '../learn/flow';
@@ -129,18 +126,6 @@ function legacyRows(plan: StoredPlan, items: TodayView['duties']['items'], t: T,
 /** Lerntag (Wechsel um 04:00), dieselbe Datumsfunktion wie der Plan: nachts gilt noch der Vortag. Der Titel von Heute ist das Datum (§2.2). */
 function dateLabelOf(today: string, lang: Lang): string {
   return new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { weekday: 'long', day: 'numeric', month: 'long' }).format(dayKeyNoon(today));
-}
-
-/** Serie im Fuß der Tageskarte: nur ab 1 Tag, nach einer Pause nichts (Gesamtkonzept 3.1, „Serie 0“ nie). Die einzige Stelle auf Heute. */
-function StreakFoot() {
-  const { tn } = useT();
-  const streak = useStreakCount();
-  if (streak === null || streak < 1) return null;
-  return (
-    <p className="lx-tnum text-xs text-muted" data-testid="today-streak">
-      {tn('tdStreak', streak)}
-    </p>
-  );
 }
 
 function BlockDot({ state }: { state: CardRow['state'] }) {
@@ -254,76 +239,6 @@ function UnitCard({ view, rows, minLeft, fixNone }: { view: TodayView; rows: Car
   );
 }
 
-/**
- * Abschlusskarte (§5.10): voller Ring mit Häkchen, EINE große Zahl tatsächlich Gefestigten (nie eine Antwortzahl), eine Wahrheitszeile
- * („Neu sicher: wish + Past · Fehlersätze erledigt: 2“, nur echte Zustandswechsel), der Wochenstreifen mit sichtbarem Ruhetag, „Morgen“
- * und höchstens ein Meilenstein-Satz. Ein Zustand, kein Knopf, kein Konfetti. Darunter steht die eine Zeile „Extra ›“.
- */
-function DoneCard({ view, tomorrow, today }: { view: TodayView; tomorrow: string; today: string }) {
-  const { t, lang } = useT();
-  const now = useClock((s) => s.now);
-  const facts = useDoneFacts(view, true);
-  const grammar = useLive((s) => s.collections.grammar);
-  const profile = useLive((s) => s.docs['app/profile']);
-  const schema = useLive((s) => s.docs['app/schema']);
-  const archive = useLive((s) => s.collections.archive);
-  const blocks = view.duties.total;
-  const gains = useMemo(() => patternGains({ ps: view.plan?.u?.ps, grammarDocs: grammar ?? new Map(), today, lang }), [view.plan, grammar, today, lang]);
-  const big = bigGain({ wordsSure: facts.sure, patterns: gains.count });
-  const week = useMemo(() => {
-    try {
-      return streakWeek({ nowMs: now, profile, schema, archives: (archive ?? new Map()).values() }).week;
-    } catch (err) {
-      logWarn('today:week', err);
-      return [];
-    }
-  }, [now, profile, schema, archive]);
-  const truth = [
-    gains.names.length > 0 ? t('hxDoneNewSafe', { names: gains.names.join(' + ') }) : null,
-    facts.fixed !== null && facts.fixed > 0 ? t('hxDoneFixed', { n: facts.fixed }) : null,
-    facts.over !== null ? t('nbHeuteTruthOver', { n: facts.over }) : null,
-  ].filter((x): x is string => x !== null);
-  const ms = facts.milestone;
-  const msText = ms ? (ms.id.startsWith('fest') ? t('nbHeuteMsFest', { n: ms.n ?? 0 }) : ms.id === 'topic1' ? t('nbHeuteMsTopic') : ms.id === 'fix10' ? t('nbHeuteMsFix', { n: ms.n ?? 0 }) : t('nbHeuteMsOver')) : null;
-  return (
-    <section className="lx-card flex flex-col gap-3.5 p-[1.125rem]" data-testid="today-card" data-done="true" aria-labelledby="td-done-title">
-      <div className="flex flex-col items-center gap-4 text-center">
-        <p className="lx-eyebrow text-ok-text">
-          <span aria-hidden="true">✓ </span>
-          <span data-testid="today-status" data-status={view.status} data-done={view.duties.done} data-total={view.duties.total}>
-            {t('nbHeuteDoneTitle')}
-          </span>
-        </p>
-        <span className="relative inline-flex" style={{ filter: 'drop-shadow(0 0 28px var(--lx-ok-soft))' }}>
-          <SegmentRing segments={Math.max(1, blocks)} done={blocks} size={168} stroke={12} label={t('nbHeuteRingLabel', { done: blocks, total: blocks })}>
-            <Icon name="check" size={72} />
-          </SegmentRing>
-        </span>
-        <h2 id="td-done-title" className="lx-tnum text-4xl leading-none font-semibold tracking-tight text-balance" data-testid="balance" data-kind={big?.kind ?? 'steps'}>
-          {big ? t(big.kind === 'words' ? 'hxDoneBigWords' : 'hxDoneBigPatterns', { n: big.n }) : t('nbHeuteDoneSteps', { blocks })}
-        </h2>
-      </div>
-      {truth.length > 0 && (
-        <p className="lx-tnum text-sm text-muted" data-testid="today-truth">
-          {truth.join(' · ')}
-        </p>
-      )}
-      {week.length > 0 && <WeekStrip week={week} />}
-      {msText && (
-        <p className="text-sm font-medium" data-testid="today-milestone" data-id={ms?.id}>
-          {msText}
-        </p>
-      )}
-      {tomorrow && (
-        <p className="text-sm text-muted" data-testid="today-tomorrow">
-          {tomorrow}
-        </p>
-      )}
-      <StreakFoot />
-    </section>
-  );
-}
-
 /** Willkommens-Karte der Neustart-Woche (Pause ≥ 14 Lerntage): steht statt der Tageskarte, solange heute noch nichts gestartet wurde. */
 function RestartCard({ view, gap, overdue, minutes }: { view: TodayView; gap: number; overdue: number; minutes: number }) {
   const { t } = useT();
@@ -340,6 +255,7 @@ function RestartCard({ view, gap, overdue, minutes }: { view: TodayView; gap: nu
       <p className="text-sm text-muted">
         {t('nbHeuteRestartPause', { gap })} {overdue > 0 ? t('nbHeuteRestartWords', { n: overdue }) : t('nbHeuteRestartNoWords')}
       </p>
+      <StillThere gap={gap} className="text-sm text-muted" />
       <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={go} data-testid="restart-start" className="w-full">
         {t('nbHeuteRestartStart', { min: minutes })}
       </Button>
@@ -475,6 +391,7 @@ export function TodayScreen() {
       {ok && !done && !welcome && comeback !== 'none' && comeback !== 'restart' && (
         <motion.p variants={item} className="lx-glass rounded-[var(--radius-card)] px-4 py-3 text-sm text-muted" role="status" data-testid="comeback-band" data-band={comeback}>
           {t(comeback === 'short' ? 'nbHeuteComebackShort' : 'nbHeuteComebackLong')}
+          <StillThere gap={gap} />
         </motion.p>
       )}
 
@@ -517,7 +434,7 @@ export function TodayScreen() {
 
       {ok && done && (
         <motion.div variants={item} className="flex flex-col gap-5">
-          <DoneCard view={view} tomorrow={tomorrow} today={today} />
+          <DoneCard3 view={view} tomorrow={tomorrow} today={today} />
           <Slot name="today.done" />
           <ExtraRow today={today} />
           <Slot name="today.extra" />

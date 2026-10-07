@@ -97,7 +97,7 @@ test('„Dein Stand" über die Navigation, zurück zu Heute', async ({ page }) =
   await page.setViewportSize({ width: 390, height: 844 });
   const { errors } = await boot(page, { migrated: true });
   await screen(page, 'today');
-  await expect(page.getByTestId('today-streak')).toHaveText('Serie: 12 Tage');
+  await expect(page.getByTestId('today-streak')).toHaveText('Serie 12 · Woche geschafft · 7 Tage');
   await expectStreak(page, '12');
   await openOverview(page);
   await screen(page, 'overview');
