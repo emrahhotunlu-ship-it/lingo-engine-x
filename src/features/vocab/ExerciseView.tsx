@@ -754,6 +754,8 @@ export function ExerciseView({
       nextIn: t('trAgainIn', { when: when(fb.dueInMs) }),
       // Design-Lead: Wort, Vorlesen, Lautschrift und „Zum Wort“ stehen in der Ergebnis-Karte, genau einmal, direkt unter dem Urteil.
       head: <WordExtras card={card} open={moreOpen} lang={lang} extras={extras} part="head" />,
+      // „War das auch richtig?“ als ruhige Zeile im Ergebnis-Block (Design-Lead), nicht mehr lose über der Karte.
+      parts: !fb.override && fb.result.verdict === 'wrong' && isTyped && ai && e.ex !== 'situation' ? <SynonymAsk card={card} given={fb.given} onOk={override} /> : undefined,
       foot: <WordExtras card={card} open={moreOpen} lang={lang} extras={extras} part="more" />,
       auto: fb.hint === 0 && !fb.override && !fb.sentence && !fb.dontKnow,
     };
@@ -774,7 +776,6 @@ export function ExerciseView({
           </p>
         )}
         {copyOpen && fb.result.verdict === 'wrong' && isTyped && <CopyOnceField solution={solution} />}
-        {!fb.override && fb.result.verdict === 'wrong' && isTyped && ai && e.ex !== 'situation' && <SynonymAsk card={card} given={fb.given} onOk={override} />}
       </>
     );
   }

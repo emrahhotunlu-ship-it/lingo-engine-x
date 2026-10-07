@@ -4,6 +4,7 @@ import type { UnitState } from "../domain/metrics";
 import { useT, type MessageKey } from "../i18n";
 import { ActionBar, PrimaryAction } from "./ActionBar";
 import { Button } from "./Button";
+import { CountUp } from "./CountUp";
 import { Eyebrow } from "./Eyebrow";
 import { emit } from "../engine/fx";
 
@@ -129,7 +130,7 @@ function Tile({
       data-testid={testId}
     >
       <span className="lx-tnum text-xl font-semibold tracking-tight">
-        {value}
+        {typeof value === "string" || typeof value === "number" ? <CountUp text={String(value)} /> : value}
       </span>
       <span className="text-xs text-muted">{label}</span>
     </div>

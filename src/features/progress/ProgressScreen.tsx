@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { CountUp } from '../../ui/CountUp';
 import { useEffect, useMemo, useState } from 'react';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
@@ -54,7 +55,7 @@ function Stat({ label, value, unit, testId }: { label: string; value: string; un
       {/* Nie mitten im Wort umbrechen (Befund H8): Zahl und Einheit dürfen untereinander stehen. */}
       <span className="flex flex-wrap items-baseline gap-x-1.5">
         <span className="lx-tnum text-2xl font-semibold tracking-tight" data-testid={testId}>
-          {value}
+          <CountUp text={value} />
         </span>
         <span className="text-xs text-muted">{unit}</span>
       </span>

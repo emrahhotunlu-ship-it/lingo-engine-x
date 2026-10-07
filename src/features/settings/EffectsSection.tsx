@@ -1,4 +1,4 @@
-import { effectiveLevel, FX_LEVELS, setFxPref, useFxState, type FxLevel } from '../../engine/fx/level';
+import { effectiveLevel, FX_DEFAULT, FX_LEVELS, setFxPref, useFxState, type FxLevel } from '../../engine/fx/level';
 import { useT, type MessageKey } from '../../i18n';
 import { Segmented } from '../../ui/Segmented';
 
@@ -9,9 +9,9 @@ export function EffectsSection() {
   const { t, num } = useT();
   const st = useFxState();
   const level = effectiveLevel(st);
-  const chosen: FxLevel = st.pref ?? 'calm';
+  const chosen: FxLevel = st.pref ?? FX_DEFAULT;
   const name = (l: FxLevel): string => t(`eeLevel_${l}` as MessageKey);
-  const why = st.reduced ? t('eeReduced') : st.lowPower && st.pref === 'full' ? t('eeSlow') : null;
+  const why = st.reduced ? t('eeReduced') : st.lowPower && chosen === 'full' ? t('eeSlow') : null;
   return (
     <section className="flex flex-col gap-3" data-testid="fx-section" data-level={level}>
       <h3 className="lx-eyebrow">{t('eeTitle')}</h3>

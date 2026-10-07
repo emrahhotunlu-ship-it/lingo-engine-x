@@ -44,6 +44,8 @@ import { startUnit } from '../unit/run';
 import { blockName, blockWhy } from '../unit/labels';
 import { lessonMeta } from '../../domain/course/catalog';
 import { Slot } from '../../app/slots';
+import { useMediaQuery } from '../../platform/input';
+import { StandSide } from './StandSide';
 
 // „Heute" (plan.md §1.3): die rote Linie. Unterzeile mit Datum und Serie, darunter EINE
 // Tageskarte – „Deine Tageseinheit“ mit Ring „2 von 5 · noch ca. 18 Min.“, Kernaufgabe der Woche,
@@ -362,6 +364,7 @@ export function TodayScreen() {
   }, [today, unit, t]);
 
   const ok = ready && dayLoaded;
+  const wide = useMediaQuery('(min-width: 1024px)');
   const gap = useMemo(() => comebackGap(obj(profile), today), [profile, today]);
   const comeback = comebackBand(gap);
   const ret = useMemo(() => lastReturn(obj(profile), today), [profile, today]);
@@ -385,10 +388,13 @@ export function TodayScreen() {
   const restartDay = ret && ret.gap >= RESTART_GAP && ret.since < RESTART_DAYS ? ret.since + 1 : null;
 
   return (
-    <motion.div className="mx-auto flex w-full max-w-[46rem] flex-col gap-5 py-4 sm:py-8" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.03 } } }}>
+    <motion.div className="mx-auto flex w-full max-w-[46rem] flex-col gap-5 py-4 sm:py-8 lg:max-w-[70rem]" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.03 } } }}>
       <motion.div variants={item}>
         <TabTitle title={dateLabelOf(today, lang)} testId="today-date" />
       </motion.div>
+      {/* Laptop (≥ 1.024 px): Tageskarte links (7/12), „Fortschritt“ rechts (5/12) wie in der Vorschau; am Handy eine Spalte wie bisher. */}
+      <div className="lg:grid lg:grid-cols-12 lg:items-start lg:gap-8">
+      <div className="flex flex-col gap-5 lg:col-span-7">
 
       {ok && !done && !welcome && comeback !== 'none' && comeback !== 'restart' && (
         <motion.p variants={item} className="lx-glass rounded-[var(--radius-card)] px-4 py-3 text-sm text-muted" role="status" data-testid="comeback-band" data-band={comeback}>
@@ -459,6 +465,13 @@ export function TodayScreen() {
         </div>
       )}
       {planStatus === 'local' && <p className="text-xs text-subtle">{t('nbHeuteLocal')}</p>}
+      </div>
+      {wide && ok && (
+        <motion.div variants={item} className="lg:sticky lg:top-4 lg:col-span-5">
+          <StandSide />
+        </motion.div>
+      )}
+      </div>
     </motion.div>
   );
 }

@@ -14,8 +14,9 @@ import { OPERATING_SPRINGS, SPRINGS, type SpringName } from '../../src/ui/motion
 
 describe('resolveLevel', () => {
   const lv = (pref: 'full' | 'calm' | 'off' | null, reduced = false, lowPower = false) => resolveLevel({ pref, reduced, lowPower });
-  it('ohne Wahl gilt „Ruhig“', () => {
-    expect(lv(null)).toBe('calm');
+  // Angepasst 07.10.2026 (Design-Lead): Standard ist jetzt „Voll“ (Emrahs ausdrücklicher Wunsch); langsames Gerät → „Ruhig“ bleibt.
+  it('ohne Wahl gilt „Voll“', () => {
+    expect(lv(null)).toBe('full');
   });
   it('die Wahl gilt, wenn nichts dagegen spricht', () => {
     expect(lv('full')).toBe('full');

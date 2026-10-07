@@ -23,7 +23,7 @@ export function SynonymCheck({ card, given, onOk }: { card: TrainCard; given: st
   return (
     <div className="flex flex-col gap-2" data-testid="synonym">
       {!out && (
-        <div>
+        <div className="-ml-4">
           <Button variant="ghost" onClick={() => void run()} disabled={busy} data-testid="synonym-ask">
             {t('wxSynonymAsk')}
           </Button>

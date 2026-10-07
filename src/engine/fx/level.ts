@@ -25,10 +25,13 @@ export function readPref(raw: string | null = local.get(FX_KEY)): FxLevel | null
   return isFxLevel(raw) ? raw : null;
 }
 
-/** Die wirksame Stufe aus Wahl, reduzierter Bewegung und Messung: reduziert → off · keine Wahl → calm · full bei langsamem Gerät → calm. */
+/** Standard ohne Wahl: „Voll“ (Emrahs Wunsch nach Spiel-Gefühl, 07.10.2026; vorher „Ruhig“). */
+export const FX_DEFAULT: FxLevel = 'full';
+
+/** Die wirksame Stufe aus Wahl, reduzierter Bewegung und Messung: reduziert → off · keine Wahl → full · full bei langsamem Gerät → calm. */
 export function resolveLevel(i: { pref: FxLevel | null; reduced: boolean; lowPower: boolean }): FxLevel {
   if (i.reduced) return 'off';
-  const pref = i.pref ?? 'calm';
+  const pref = i.pref ?? FX_DEFAULT;
   return pref === 'full' && i.lowPower ? 'calm' : pref;
 }
 

@@ -8,6 +8,7 @@ import { comebackGap } from '../../domain/plan/comeback';
 import type { WeekDay } from '../../domain/streak';
 import { logWarn } from '../../platform/diagnostics';
 import { KEY_PREFIX, local } from '../../platform/storage';
+import { CountUp } from '../../ui/CountUp';
 import { Icon } from '../../ui/Icon';
 import { SegmentRing } from '../../ui/ProgressRing';
 import { WeekStrip } from '../progress/StandHeader';
@@ -152,7 +153,9 @@ export function DoneCard3({ view, tomorrow, today }: { view: TodayView; tomorrow
         >
           {hero ? (
             <>
-              <span className="dz-hero-n">{hero[0]}</span> <span className="dz-hero-l">{hero[1]}</span>
+              <span className="dz-hero-n">
+                <CountUp text={hero[0]} play={play} delay={820} />
+              </span> <span className="dz-hero-l">{hero[1]}</span>
             </>
           ) : (
             heroText

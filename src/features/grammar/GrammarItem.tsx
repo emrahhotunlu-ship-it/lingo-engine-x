@@ -223,7 +223,8 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
         return;
       }
       const given = typed.current;
-      if (!given.trim()) return;
+      // Ein Wort zu viel (Ersatz leer, `checkFind` wertet leer dann als richtig): leer prüfen ist hier die Lösung. Vorher blieb „Prüfen“ wirkungslos (Altbefund grammarPatterns, Profil touch).
+      if (!given.trim() && task.answer.trim()) return;
       const res = checkFind(task, { replacement: given });
       if (res.verdict === 'wrong' && closeVariant({ answer: task.answer, accepted: task.accepted }, given)) finishCheck('near', res, given, { judged: 'noai', unsure: true, tapped: tappedWord() });
       else finishCheck(res.verdict, res, given, { tapped: tappedWord() });

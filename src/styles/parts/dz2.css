@@ -117,3 +117,9 @@
     transform: scale(1.03, 1.14);
   }
 }
+
+/* Ziffern, Stufe „Ruhig“: der Endwert steigt kurz auf (bei „Voll“ zählt `ui/CountUp.tsx`). */
+.dz-count-calm {
+  display: inline-block;
+  animation: dz-rise 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
