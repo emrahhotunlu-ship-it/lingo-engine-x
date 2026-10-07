@@ -4,6 +4,7 @@ import type { UnitBlockNo } from '../../app/unit/types';
 import { useClock } from '../../app/clock';
 import { useSettings } from '../../app/settings';
 import { answerRight } from '../../domain/learn/right';
+import { flags } from '../../app/flags';
 import { c1ErrorResolver, ensureC1xLoaded } from '../c1x/resolve';
 import { useLive } from '../../data/live';
 import { topicById } from '../../domain/content';
@@ -239,6 +240,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
       // Einführungsbremse (höchstens 1 neues Thema je 3 Lerntage, nie bei ≥ 10 offenen Fehlersätzen): nur die Pflichtrunde führt ein Thema ein.
       introduce: mode === 'duty' && !gt ? introTopic(docs, day, nowMs) : null,
       focusTopic: mode === 'duty' && !gt ? planFocusTopic(plan) : null,
+      ...(flags.slotPlan && (mode === 'duty' || mode === 'xtra') ? { slotPlan: { focus: null } } : {}),
     });
     // Regelkarte vor der ersten Runde eines neuen Themas (Lernweg ①): das erste Thema der Runde, das noch nie geübt wurde.
     const t0 = tasks.find((t) => t.errorT === null && isNewTopic(docs.get(t.topic)))?.topic ?? null;

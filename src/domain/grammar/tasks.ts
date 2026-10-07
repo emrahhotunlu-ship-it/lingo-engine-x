@@ -4,13 +4,18 @@ import { TOPICS, topicById } from '../content';
 import { splitWords } from '../answer/align';
 import type { GrammarTask, GrammarTaskType, TaskSrc } from '../learn/types';
 import { patsOf } from '../metrics/pattern';
+import { dayKey } from '../date';
+import { kindsFor, pickUnseen } from '../c1x/select';
+import { toTask } from '../c1x/runtime';
+import { errorsByPat, patInfos } from './slotInput';
+import { slotPlan } from './slotPlan';
 import { hash32, mulberry32, shuffle } from '../random';
 import { lemmaOf } from '../srs/context';
 import { topicP } from './bkt';
 import { dueErrors, type ErrorEntry } from './errors';
 import { isNewTopic, nextNewTopic } from './path';
 import { legacyTaskKey } from './key';
-import { familyOf, mapEntryOf, patternOf, patternsOf, v2Tasks } from './patterns';
+import { familyOf, mapEntryOf, patternById, patternOf, patternsOf, v2Tasks } from './patterns';
 import { TaskWhySchema, type V2Task } from './patternTypes';
 import { errorSpan } from './span';
 import { asText } from '../text/str';
@@ -242,6 +247,8 @@ export type RoundInput = {
   exclude?: ReadonlySet<string>;
   /** c1x (Lernplattform 3.0 §3.4): löst einen Fehlersatz mit `cid` zur Aufgabe im selben Baustein auf (`features/c1x/resolve.ts`); `null` = der Fehlersatz-Text. */
   c1?: (topic: string, e: ErrorEntry) => GrammarTask | null;
+  /** Schritt 2 über `slotPlan()` (P15, Schalter `flags.slotPlan`): die Plätze nach Prioritätstabelle; `focus` = Wochenfokus (Muster) oder `null`. Nur Pflicht und Extra, nie in der Einführung. */
+  slotPlan?: { focus: string | null } | null;
 };
 
 export const ROUND_SIZE = { duty: 6, xtra: 8, errors: 8, topic: 8 } as const;
@@ -492,7 +499,45 @@ export function selectRound(i: RoundInput): GrammarTask[] {
   // 4. Aufgaben je Thema, Formen nach Beherrschung im Wechsel.
   const pOf = (t: string) => topicP(t, i.grammarDocs.get(t), i.nowMs);
   const perTopic = new Map<string, GrammarTask[]>(topics.map((t) => [t, []]));
-  const slots = Math.max(0, i.size - errors.length - blockTasks.length);
+  let slots = Math.max(0, i.size - errors.length - blockTasks.length);
+  // Prioritätstabelle (P15): die Plätze werden Mustern zugeordnet; was sich so nicht füllen lässt, füllt der LP2-Weg darunter.
+  const planned: GrammarTask[] = [];
+  if (i.slotPlan && !block && (i.mode === 'duty' || i.mode === 'xtra') && slots > 0) {
+    const day = dayKey(i.nowMs);
+    const plan = slotPlan({
+      n: slots,
+      ctx: i.mode,
+      weekday: new Date(`${day}T12:00:00Z`).getUTCDay(),
+      today: day,
+      pats: patInfos(i.grammarDocs),
+      focus: i.slotPlan.focus,
+      errorsByPat: errorsByPat(i.grammarDocs),
+      seed: i.seed,
+    });
+    for (const sl of plan) {
+      const meta = sl.pat ? patternById(sl.pat) : null;
+      if (!sl.pat || !meta) continue;
+      const topic = meta.topic;
+      const p = pOf(topic);
+      const inp = profile === 'touch' ? 'touch' : 'desk';
+      let pick: GrammarTask | null = null;
+      const seen = seenOf(i.grammarDocs.get(topic));
+      for (const kind of kindsFor(p, inp, sl.pat)) {
+        const item = pickUnseen({ pat: sl.pat, kind, seen, used, seed: i.seed, ...(i.wordsToday ? { wordsToday: i.wordsToday } : {}) });
+        if (item) {
+          pick = take(toTask(item, { ref: `grammar/${topic}` }));
+          break;
+        }
+      }
+      if (!pick) {
+        const want = wantTypes(p, profile);
+        const prefer = [...new Set([...want, ...FALLBACK[profile]])];
+        pick = take(fresh({ topic, prefer, pats: [sl.pat] })) ?? take(fresh({ topic, prefer }));
+      }
+      if (pick) planned.push(pick);
+    }
+    slots -= planned.length;
+  }
   // Mit Fokus: jeder zweite Platz gehört dem Fokus-Thema (f, a, f, b, …).
   const turns = focus ? topics.filter((t) => t !== focus).flatMap((t) => [focus, t]) : [...topics];
   if (!turns.length) turns.push(...topics);
@@ -547,7 +592,7 @@ export function selectRound(i: RoundInput): GrammarTask[] {
     out.push(q.shift() as GrammarTask);
     emptyTurns = 0;
   }
-  return [...errors, ...blockTasks, ...out];
+  return [...errors, ...blockTasks, ...planned, ...out];
 }
 
 /**

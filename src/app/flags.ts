@@ -6,6 +6,8 @@ import { local } from '../platform/storage';
 
 export type Flags = {
   c1xKinds: Record<C1Kind, boolean>;
+  /** Schritt 2 über `slotPlan()` (Prioritätstabelle) statt der Themenwahl von LP2 (P15). */
+  slotPlan: boolean;
   tempo: boolean;
   c1check: boolean;
   tutor: { explain: boolean; gen: boolean; diagnose: boolean; clinic: boolean };
@@ -14,6 +16,7 @@ export type Flags = {
 
 export const flags: Flags = {
   c1xKinds: { mcc: false, ocl: false, wf: false, kwt: false, err: false, pair: false, cnet: false, reg: false, para: false },
+  slotPlan: false,
   tempo: false,
   c1check: false,
   tutor: { explain: false, gen: false, diagnose: false, clinic: false },
@@ -33,11 +36,15 @@ export function applyFlagOverrides(raw: string | null): void {
   try {
     const t = raw.trim();
     if (!t.startsWith('{')) {
-      for (const k of t.split(',').map((x) => x.trim())) if ((kinds as string[]).includes(k)) flags.c1xKinds[k as C1Kind] = true;
+      for (const k of t.split(',').map((x) => x.trim())) {
+        if ((kinds as string[]).includes(k)) flags.c1xKinds[k as C1Kind] = true;
+        if (k === 'slots') flags.slotPlan = true;
+      }
       return;
     }
-    const o = JSON.parse(t) as { c1xKinds?: Record<string, unknown>; tempo?: unknown; c1check?: unknown };
+    const o = JSON.parse(t) as { c1xKinds?: Record<string, unknown>; tempo?: unknown; slotPlan?: unknown; c1check?: unknown };
     for (const k of kinds) if (typeof o.c1xKinds?.[k] === 'boolean') flags.c1xKinds[k] = o.c1xKinds[k];
+    if (typeof o.slotPlan === 'boolean') flags.slotPlan = o.slotPlan;
     if (typeof o.tempo === 'boolean') flags.tempo = o.tempo;
     if (typeof o.c1check === 'boolean') flags.c1check = o.c1check;
   } catch {
