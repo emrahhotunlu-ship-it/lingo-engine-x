@@ -91,6 +91,8 @@ export type GrammarLogEntry = {
   cid?: string;
   ai?: true;
   free?: true;
+  /** Millisekunden bis zur Abgabe einer getippten c1x-Antwort (Lernplattform 3.0 P24, Tempo-Messung). */
+  tm?: number;
 };
 
 /** Übungs-Eintrag (Diktat, Lückenjagd, Satzbau, Lektionsfrage) in der Form der alten App. */
@@ -162,7 +164,7 @@ export function grammarLogEntry(a: GrammarAnswer): GrammarLogEntry {
     ...(a.c1k ? { c1k: a.c1k } : {}),
     ...(a.task.c1 ? { cid: a.task.c1.id, pat: a.task.c1.pat } : {}),
     ...(a.task.c1?.src === 'ai' ? { ai: true as const } : {}),
-    ...(a.pts && a.free ? { free: true as const } : {}),
+    ...(a.pts && a.free ? { free: true as const, tm: Math.max(1, Math.round(a.ms)) } : {}),
   };
 }
 

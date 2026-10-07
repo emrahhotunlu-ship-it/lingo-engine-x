@@ -88,3 +88,33 @@
   min-width: 2.75rem;
   justify-content: center;
 }
+
+/* Tempo-Runde (P24): ruhiger Zielzeit-Balken. Er füllt sich über die Zielzeit (nur transform, 60 fps) und wird danach neutral grau.
+   Keine Zahl, kein Ton, kein Rot, keine Sperre. */
+.cx-tempo-bar {
+  height: 0.375rem;
+  border-radius: 999px;
+  background: var(--lx-surface-strong);
+  overflow: hidden;
+}
+.cx-tempo-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--lx-accent);
+  transform-origin: left center;
+  transform: scaleX(0);
+  animation:
+    cx-tempo-fill var(--cx-tempo-ms, 6000ms) linear forwards,
+    cx-tempo-calm 1ms linear var(--cx-tempo-ms, 6000ms) forwards;
+}
+@keyframes cx-tempo-fill {
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes cx-tempo-calm {
+  to {
+    background: var(--lx-line-strong);
+  }
+}
