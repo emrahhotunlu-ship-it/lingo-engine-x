@@ -54,6 +54,8 @@ test('Plan und Pflicht hängen nie vom Eingabeprofil ab', async ({ page, browser
     await setInputProfile(p, profile);
     await bootAt(p, { name: 'today' }, { migrated: true });
     await screen(p, 'today');
+    // Erst vergleichen, wenn die App den Plan des Tages gespeichert hat (vorher steht noch der Plan der Testdaten darin).
+    await expect.poll(async () => ((await dump(p))['app/profile']?.plan as { u?: unknown } | undefined)?.u !== undefined).toBe(true);
     const doc = (await dump(p))['app/profile'];
     await ctx.close();
     return doc?.plan ?? null;
