@@ -89,7 +89,7 @@ test.describe('Laptop 1280', () => {
     await map.locator('[data-testid="program-chapter"][data-chapter="k5"] [data-testid="program-chapter-open"]').click();
     const detail = map.getByTestId('program-detail');
     await expect(detail).toHaveAttribute('data-chapter', 'k5');
-    await expect(detail.locator('[data-testid="program-topic"][data-exists="false"]')).toHaveCount(1);
+    await expect(detail.locator('[data-testid="program-topic"][data-exists="false"]')).toHaveCount(0);
     expect(await layoutProblems(page)).toEqual([]);
     const res = await new AxeBuilder({ page }).include('[data-testid="program-map"]').withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
     expect(res.violations.map((v) => v.id)).toEqual([]);
