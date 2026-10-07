@@ -28,21 +28,21 @@
  },
  {
   "pat": "mp.may-well",
-  "en": "You might well need a second server by autumn.",
+  "en": "You might well need a second server by fall.",
   "de": "Es kann gut sein, dass Sie bis zum Herbst einen zweiten Server brauchen.",
   "chunks": [
    "you",
    "might well",
    "need",
    "a second server",
-   "by autumn"
+   "by fall"
   ],
-  "single": "You might well need bildet den ersten Teil; a second server by autumn folgt danach.",
+  "single": "You might well need bildet den ersten Teil; a second server by fall folgt danach.",
   "why": [
    "Might well heißt „durchaus möglich“. Danach folgt die Grundform need ohne to.",
    "Might well means “quite possibly”. The base form need follows, without to."
   ],
-  "bad": "You might to well need a second server by autumn.",
+  "bad": "You might to well need a second server by fall.",
   "trap": {
    "tile": "might well",
    "instead": "might to well",

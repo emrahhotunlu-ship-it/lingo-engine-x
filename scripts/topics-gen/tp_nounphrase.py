@@ -57,7 +57,7 @@ PAT = [
              'With time words ’s is used: yesterday’s meeting. The German “das Meeting von gestern” leads to “from yesterday”.'),
             ('pn.of', "the manager's decision", 'the decision of the manager',
              'Beides ist möglich. Das ’s klingt bei Personen natürlicher, of bei längeren Gruppen.', 'Both are possible. The ’s sounds more natural with people, of with longer groups.'),
-            [("Was today's meeting canceled?", 'Geht es um das Meeting von heute?', 'Is it about the meeting from today?', True)],
+            [("Was today's meeting canceled?", 'Geht es um das heutige Meeting?', 'Is it about today’s meeting?', True)],
             ('Ist der Besitzer eine Person, eine Firma oder eine Zeitangabe? Dann ’s. Sonst of.', 'Is the owner a person, a company or a time word? Then ’s. Otherwise of.')),
     pattern('np.to-inf', ('Nomen + to-Infinitiv · the first to sign', 'noun + to-infinitive · the first to sign'),
             ('the first / last / only / best way + to + Grundform', 'the first / last / only / best way + to + base form'),
@@ -272,7 +272,7 @@ MAP = {
 def c1x():
     mcc(T, 'np.contact', 'C1', 'biz', 0.0, 'That was the most convincing presentation ___ at this conference.',
         'I have seen', ['what I have seen', 'I have seen it', 'who I have seen'],
-        ('Nach dem Superlativ presentation darf das Pronomen fehlen: I have seen.', 'After the superlative presentation the pronoun may be dropped: I have seen.'),
+        ('Nach dem Superlativ most convincing presentation darf das Pronomen that fehlen: I have seen.', 'After the superlative most convincing presentation the pronoun that may be dropped: I have seen.'),
         [(G, 'What ist nach einem Nomen kein Relativpronomen.', 'What is not a relative pronoun after a noun.'),
          (G, 'Das Objekt steht nur einmal. Ein zusätzliches it ist zu viel.', 'The object appears only once. An extra it is too much.'),
          (G, 'Who passt nur zu Personen, hier geht es um eine Präsentation.', 'Who only fits people; here it is about a presentation.')])
@@ -309,7 +309,7 @@ def c1x():
 
     ocl(T, 'np.contact', 'C1', 'biz', 0.0, 'This is the best solution ___ have found so far.',
         ['we', 'I', 'they', 'you'], 'pron', ['what', 'who', 'it'],
-        ('Nach dem Superlativ solution darf that fehlen: the best solution we have found.', 'After the superlative solution that may be dropped: the best solution we have found.'))
+        ('Nach dem Superlativ best solution darf that fehlen: the best solution we have found.', 'After the superlative best solution that may be dropped: the best solution we have found.'))
     ocl(T, 'np.contact', 'C1', 'biz', 0.0, 'The colleague ___ I spoke to yesterday has already left the company.',
         ['that', 'who', 'whom'], 'rel', ['what', 'which', 'whose'],
         ('Eine Person als Objekt: that, who oder whom (oder gar nichts).', 'A person as the object: that, who or whom (or nothing at all).'))
@@ -358,7 +358,7 @@ def c1x():
     kwt(T, 'np.of-s', 'C1', 'biz', 0.0, 'We need to know whether the meeting that was planned for today has been canceled.', "TODAY'S", 'We need to know whether', 'canceled.',
         [(["today's"], ['meeting has been'])], ['meeting', 'has', 'been'], ['of', 'the', 'from'], [],
         ('Bei Zeitangaben steht ’s: today’s meeting. Danach folgt has been canceled.', 'With time words ’s is used: today’s meeting. Has been canceled follows.'), [])
-    kwt(T, 'np.to-inf', 'C1', 'biz', 0.0, 'Ms Lee was the only applicant who passed all three tests.', 'TO', 'Ms Lee was the', 'all three tests.',
+    kwt(T, 'np.to-inf', 'C1', 'biz', 0.0, 'Ms. Lee was the only applicant who passed all three tests.', 'TO', 'Ms. Lee was the', 'all three tests.',
         [(['only applicant'], ['to pass'])], ['only', 'applicant', 'pass'], ['who', 'passed', 'for'], [],
         ('the only applicant to pass. Nach only steht to + Grundform.', 'the only applicant to pass. After only comes to + base form.'), [])
 
@@ -399,6 +399,6 @@ def place():
          (G, 'Involving wäre aktiv: die Kollegen würden etwas beteiligen.', 'Involving would be active: the colleagues would involve something.'),
          (G, 'To involved ist keine gültige Form.', 'To involved is not a valid form.')])
     kwt(T, 'np.to-inf', 'C1', 'biz', 0.0, 'Nobody in our department completed the certification before Dana did.', 'FIRST', 'Dana was', 'complete the certification in our department.',
-        [(['the first'], ['person to'])], ['the', 'person', 'to'], ['who', 'that', 'one'], ['the first person who'],
+        [(['the first'], ['person to', 'one to', 'to'])], ['the', 'person', 'to'], ['who', 'that', 'one'], ['the first person who'],
         ('the first person to complete. Nach first steht to + Grundform.', 'the first person to complete. After first comes to + base form.'),
         [W(['first', 'person', 'who'], 'Nach first person steht to + Grundform, kein who.', 'After first person comes to + base form, no who.')])

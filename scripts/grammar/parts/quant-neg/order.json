@@ -118,7 +118,7 @@
   "single": "We no longer bildet den Anfang; offer this service to private customers folgt danach.",
   "why": [
    "No longer steht vor dem Verb und heißt „nicht mehr“.",
-   "No longer stands before the verb and means “not any more”."
+   "No longer stands before the verb and means “not anymore”."
   ],
   "bad": "We no more offer this service to private customers.",
   "trap": {
@@ -126,29 +126,29 @@
    "instead": "no more",
    "why": {
     "de": "Für „nicht mehr“ bei der Zeit steht no longer.",
-    "en": "For “not any more” in time no longer is used."
+    "en": "For “not anymore” in time no longer is used."
    }
   }
  },
  {
   "pat": "qn.no-longer",
-  "en": "He does not work here any more.",
+  "en": "He does not work here anymore.",
   "de": "Er arbeitet nicht mehr hier.",
   "chunks": [
    "he",
    "does not",
    "work",
    "here",
-   "any more"
+   "anymore"
   ],
-  "single": "He does not work bildet den Anfang; here any more folgt danach.",
+  "single": "He does not work bildet den Anfang; here anymore folgt danach.",
   "why": [
-   "Nach does not steht am Ende any more und bedeutet „nicht mehr“.",
-   "After does not, any more at the end means “not any more”."
+   "Nach does not steht am Ende anymore und bedeutet „nicht mehr“.",
+   "After does not, anymore at the end means “not anymore”."
   ],
   "bad": "He does not work here no more.",
   "trap": {
-   "tile": "any more",
+   "tile": "anymore",
    "instead": "no more",
    "why": {
     "de": "Nach not steht kein zweites no.",

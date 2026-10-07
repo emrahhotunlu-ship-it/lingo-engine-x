@@ -182,7 +182,7 @@
      "rising at the moment"
     ]
    },
-   "text": "Prices in the sector rise at the moment, so we are reviewing our offers."
+   "text": "Fuel costs rise at the moment, so we are reviewing our delivery prices."
   },
   {
    "id": "err-0608",
@@ -224,23 +224,24 @@
    "pat": "sa.being",
    "why": {
     "ok": {
-     "de": "Erschöpfung ist ein Zustand, deshalb ohne being: is very exhausted.",
-     "en": "Exhaustion is a state, so no being: is very exhausted."
+     "de": "Müdigkeit ist ein Zustand, deshalb ohne being: is very tired.",
+     "en": "Tiredness is a state, so no being: is very tired."
     },
     "wrong": []
    },
    "bad": {
-    "span": "being very exhausted",
+    "span": "being very tired",
     "fix": [
-     "very exhausted"
+     "very tired",
+     "completely exhausted"
     ],
     "choices": [
-     "very exhausted",
-     "been very exhausted",
-     "being exhausted very"
+     "very tired",
+     "been very tired",
+     "being tired very"
     ]
    },
-   "text": "The client is being very exhausted after the long negotiation, so let us end early."
+   "text": "The client is being very tired after the long negotiation, so let us end early."
   },
   {
    "id": "err-0610",
@@ -288,7 +289,7 @@
     "wrong": []
    },
    "bad": null,
-   "text": "My little brother is being silly today because he wants us to laugh."
+   "text": "My cousin is being very funny tonight because he wants us all to laugh."
   },
   {
    "id": "err-0612",
@@ -386,7 +387,9 @@
    "bad": {
     "span": "will later employ",
     "fix": [
-     "would later employ"
+     "would later employ",
+     "went on to employ",
+     "later employed"
     ],
     "choices": [
      "would later employ",
@@ -415,7 +418,11 @@
    "bad": {
     "span": "should join",
     "fix": [
-     "was to join"
+     "was to join",
+     "was supposed to join",
+     "was going to join",
+     "was due to join",
+     "should have joined"
     ],
     "choices": [
      "was to join",
@@ -461,7 +468,7 @@
     "wrong": []
    },
    "bad": null,
-   "text": "We were going to move to Lisbon, but the flat prices changed our minds."
+   "text": "We were going to move to Lisbon, but the apartment prices changed our minds."
   },
   {
    "id": "err-0619",
@@ -511,7 +518,8 @@
    "bad": {
     "span": "did not hardly change",
     "fix": [
-     "hardly changed"
+     "hardly changed",
+     "barely changed"
     ],
     "choices": [
      "hardly changed",
@@ -577,7 +585,7 @@
      "numbers of defects have"
     ]
    },
-   "text": "The number of defects have fallen sharply since we changed supplier."
+   "text": "The number of defects have fallen sharply since we switched suppliers."
   },
   {
    "id": "err-0623",

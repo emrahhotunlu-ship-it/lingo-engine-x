@@ -199,9 +199,9 @@
   "type": "kwt",
   "pat": "qn.no-longer",
   "from": "He left the company last spring.",
-  "key": "MORE",
-  "frame": "He does not work here ___.",
-  "answer": "any more",
+  "key": "LONGER",
+  "frame": "He ___ works here.",
+  "answer": "no longer",
   "accepted": [],
   "words": [
    2,
@@ -209,26 +209,26 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: He does not work here any more. Am Ende steht any more oder any longer.",
-    "en": "Right: He does not work here any more. At the end any more or any longer is used."
+    "de": "Richtig: He no longer works here. No longer steht vor dem Verb.",
+    "en": "Right: He no longer works here. No longer stands before the verb."
    },
    "wrong": [
     {
      "not": [
-      "more"
+      "longer"
      ],
-     "de": "Das Schlüsselwort more muss unverändert in der Lücke stehen.",
-     "en": "The key word more must stay unchanged in the gap."
+     "de": "Das Schlüsselwort longer muss unverändert in der Lücke stehen.",
+     "en": "The key word longer must stay unchanged in the gap."
     },
     {
      "if": [
-      "more"
+      "longer"
      ],
      "not": [
-      "any"
+      "no"
      ],
-     "de": "Nach not braucht es any more.",
-     "en": "After not you need any more."
+     "de": "Vor longer braucht es no: no longer.",
+     "en": "Before longer you need no: no longer."
     }
    ]
   }
@@ -430,7 +430,7 @@
   "why": {
    "ok": {
     "de": "Der Fehler: Für „nicht mehr“ bei der Zeit steht no longer.",
-    "en": "The error: for “not any more” in time no longer is used."
+    "en": "The error: for “not anymore” in time no longer is used."
    },
    "wrong": [
     {

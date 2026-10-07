@@ -537,7 +537,8 @@
    },
    "text": "You say he does not speak French, but he really ___ speak it fluently.",
    "accept": [
-    "does"
+    "does",
+    "can"
    ],
    "cls": "aux",
    "chips": [
@@ -684,7 +685,7 @@
      }
     ]
    },
-   "text": "So strong was the signal ___ the technicians checked the antenna twice.",
+   "text": "So strong was the wind ___ the organizers canceled the outdoor concert.",
    "accept": [
     "that"
    ],
@@ -883,7 +884,9 @@
    },
    "text": "I did ___ you about the leak, but you were not listening.",
    "accept": [
-    "tell"
+    "tell",
+    "warn",
+    "remind"
    ],
    "cls": "part",
    "chips": [
@@ -1275,9 +1278,10 @@
      }
     ]
    },
-   "text": "\"Is the shop open on Sundays?\" \"I think ___.\"",
+   "text": "\"Is the store open on Sundays?\" \"I think ___.\"",
    "accept": [
-    "so"
+    "so",
+    "not"
    ],
    "cls": "adv",
    "chips": [
@@ -1346,8 +1350,8 @@
    "pat": "np.contact",
    "why": {
     "ok": {
-     "de": "Nach dem Superlativ solution darf that fehlen: the best solution we have found.",
-     "en": "After the superlative solution that may be dropped: the best solution we have found."
+     "de": "Nach dem Superlativ best solution darf that fehlen: the best solution we have found.",
+     "en": "After the superlative best solution that may be dropped: the best solution we have found."
     },
     "wrong": [
      {

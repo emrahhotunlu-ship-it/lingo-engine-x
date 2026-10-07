@@ -79,7 +79,8 @@
    "bad": {
     "span": "you should share",
     "fix": [
-     "should you share"
+     "should you share",
+     "must you share"
     ],
     "choices": [
      "should you share",
@@ -289,7 +290,7 @@
      "Hard so we tried"
     ]
    },
-   "text": "Hard we tried, but we could not reach the client by phone."
+   "text": "Hard we tried, we could not reach the client by phone."
   },
   {
    "id": "err-0512",
@@ -443,7 +444,7 @@
      "does loving"
     ]
    },
-   "text": "She does loves her new flat, even though it is small."
+   "text": "She does loves her new apartment, even though it is small."
   },
   {
    "id": "err-0518",
@@ -462,7 +463,7 @@
     "wrong": []
    },
    "bad": null,
-   "text": "Strange as it may seem, the best coffee in town is sold at the petrol station."
+   "text": "Strange as it may seem, the best coffee in town is sold at the gas station."
   },
   {
    "id": "err-0519",
@@ -723,7 +724,7 @@
      "hope so not"
     ]
    },
-   "text": "Will it rain at the weekend? I do not hope so, because we are planning a picnic."
+   "text": "Will it rain on the weekend? I do not hope so, because we are planning a picnic."
   },
   {
    "id": "err-0529",
@@ -752,7 +753,7 @@
      "so do I"
     ]
    },
-   "text": "I do not like coffee, and neither I do tea, so we ordered water."
+   "text": "I do not like coffee, and neither I do, so we ordered water."
   },
   {
    "id": "err-0530",
@@ -781,7 +782,7 @@
      "the new it"
     ]
    },
-   "text": "My phone is old, so I bought a new at the weekend."
+   "text": "My phone is old, so I bought a new on the weekend."
   },
   {
    "id": "err-0531",
@@ -1021,7 +1022,7 @@
     "choices": [
      "to save",
      "for to save",
-     "of saving"
+     "of save"
     ]
    },
    "text": "The best way for save money is to cook at home."

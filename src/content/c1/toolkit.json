@@ -437,7 +437,7 @@
    "name": "Verneinung und Mengen",
    "name_en": "Negation and quantity",
    "rule": "Verneinung und Mengen haben feste Formen: „none of“ und „neither of“ für „keiner“, „hardly“ und „scarcely“ für „kaum“ (schon verneint), „no longer“ für „nicht mehr“ und „a number of“ gegen „the number of“.",
-   "rule_en": "Negation and quantity have fixed forms: “none of” and “neither of” for “not one”, “hardly” and “scarcely” for “barely” (already negative), “no longer” for “not any more” and “a number of” versus “the number of”.",
+   "rule_en": "Negation and quantity have fixed forms: “none of” and “neither of” for “not one”, “hardly” and “scarcely” for “barely” (already negative), “no longer” for “not anymore” and “a number of” versus “the number of”.",
    "ex": [
     "None of the suppliers has replied yet.",
     "We no longer offer this service."
@@ -3208,8 +3208,8 @@
   },
   "stative-adv": {
    "core": [
-    "Die Verlaufsform zeigt, dass etwas läuft, vorläufig ist oder höflich klingen soll. Zustände (know, need, belong) bleiben in der einfachen Form.",
-    "The continuous shows that something is under way, temporary, or meant to sound polite. States (know, need, belong) stay in the simple form."
+    "Die Verlaufsform zeigt, dass etwas läuft, vorläufig ist oder höflich klingen soll. Zustände (know, need, belong) bleiben meist in der einfachen Form. Ausnahmen: think (nachdenken), have (essen), see (treffen).",
+    "The continuous shows that something is under way, temporary, or meant to sound polite. States (know, need, belong) mostly stay in the simple form. Exceptions: think (consider), have (eat), see (meet)."
    ],
    "why": [
     "Im Beruf beschreibst du Trends („We are seeing …“) und bittest weich („I was wondering if …“). Wann ja, wann nein: Die weiche Bitte passt bei Fremden und Vorgesetzten, unter Kollegen wirkt „Can you …?“ normal. Zustandsverben bleiben immer einfach.",
@@ -3461,11 +3461,11 @@
   "quant-neg": {
    "core": [
     "Hardly, scarcely und barely sind schon verneint. None of und neither of stehen für „keiner“. No longer heißt „nicht mehr“. A number of nimmt Plural, the number of Singular.",
-    "Hardly, scarcely and barely are already negative. None of and neither of stand for “not one”. No longer means “not any more”. A number of takes plural, the number of singular."
+    "Hardly, scarcely and barely are already negative. None of and neither of stand for “not one”. No longer means “not anymore”. A number of takes plural, the number of singular."
    ],
    "why": [
-    "Im Beruf brauchst du genaue Mengen: „None of the suppliers …“, „We no longer offer …“, „The number of complaints has fallen“. Wann ja, wann nein: Im Gespräch sagt man oft „nobody“ und „not any more“, in Berichten und Mails passen none of und no longer besser.",
-    "At work you need exact amounts: “None of the suppliers …”, “We no longer offer …”, “The number of complaints has fallen”. When yes, when no: in conversation people often say “nobody” and “not any more”, in reports and emails none of and no longer fit better."
+    "Im Beruf brauchst du genaue Mengen: „None of the suppliers …“, „We no longer offer …“, „The number of complaints has fallen“. Wann ja, wann nein: Im Gespräch sagt man oft „nobody“ und „not anymore“, in Berichten und Mails passen none of und no longer besser.",
+    "At work you need exact amounts: “None of the suppliers …”, “We no longer offer …”, “The number of complaints has fallen”. When yes, when no: in conversation people often say “nobody” and “not anymore”, in reports and emails none of and no longer fit better."
    ],
    "contrast": [
     "Nicht verwechseln: Das deutsche „nicht mehr“ ist bei der Zeit no longer, nicht no more. „Kaum“ braucht kein zweites not.",
@@ -3481,7 +3481,7 @@
     [
      "Not one of these? none of / neither of.",
      "Barely? hardly / scarcely / barely, without not.",
-     "Not any more? no longer.",
+     "Not anymore? no longer.",
      "Several or the figure? a number of / the number of."
     ]
    ],
@@ -3504,10 +3504,10 @@
     ],
     [
      [
-      "no longer, any more",
-      "no longer, any more"
+      "no longer, anymore",
+      "no longer, anymore"
      ],
-     "no longer + verb · not … any longer / any more (at the end)",
+     "no longer + verb · not … any longer / anymore (at the end)",
      "We no longer offer this service."
     ],
     [
@@ -3537,8 +3537,8 @@
     [
      "no longer / not any longer",
      [
-      "no longer, any more",
-      "no longer, any more"
+      "no longer, anymore",
+      "no longer, anymore"
      ]
     ],
     [
@@ -3571,7 +3571,7 @@
      "good": "We no longer offer this service.",
      "why": [
       "Für „nicht mehr“ bei der Zeit sagt man no longer. No more steht bei Mengen und vor Nomen.",
-      "For “not any more” in time you say no longer. No more is used with amounts and before nouns."
+      "For “not anymore” in time you say no longer. No more is used with amounts and before nouns."
      ]
     },
     {

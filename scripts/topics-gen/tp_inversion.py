@@ -270,7 +270,7 @@ def c1x():
         ('we could begin', ['could we begin', 'did we begin'], ['could we begin', 'could begin we', 'began we']),
         ('Nach Only after steht das Hilfsverb vor dem Subjekt: could we begin.', 'After Only after the auxiliary comes before the subject: could we begin.'))
     err(T, 'inv.negative', 'C1', 'biz', 0.0, 'Under no circumstances you should share your login details with colleagues.',
-        ('you should share', ['should you share'], ['should you share', 'you must share', 'should share you']),
+        ('you should share', ['should you share', 'must you share'], ['should you share', 'you must share', 'should share you']),
         ('Nach Under no circumstances steht should vor dem Subjekt: should you share.', 'After Under no circumstances, should stands before the subject: should you share.'))
     err(T, 'inv.cond', 'C1', 'biz', 0.0, 'Should you will have any questions, please contact the service team.',
         ('will have', ['have'], ['have', 'had', 'having']),
@@ -280,10 +280,10 @@ def c1x():
     err(T, 'inv.cond', 'C1', 'biz', 0.0, 'Had we invested in monitoring earlier, the outage would have been much shorter.', None,
         ('Kein Fehler: Had we invested ersetzt If we had invested.', 'No mistake: Had we invested replaces If we had invested.'))
 
-    kwt(T, 'inv.negative', 'C1', 'biz', 0.0, 'We saw such a high demand for the first time.', 'HAVE', 'Never', 'such a high demand.',
-        [(['have', 'before have'], ['we seen'])], ['we', 'seen'], ['has', 'been', 'saw'], ['we have seen'],
-        ('Nach Never steht das Hilfsverb vor dem Subjekt: Never have we seen. Never before have we seen geht auch.', 'After Never, the auxiliary comes before the subject: Never have we seen. Never before have we seen works too.'),
-        [W(['we', 'have', 'seen'], 'Nach Never kommt have vor we: have we seen.', 'After Never, have comes before we: have we seen.')])
+    kwt(T, 'inv.negative', 'C1', 'biz', 0.0, 'We saw such high demand for the first time.', 'NEVER', '', 'such high demand.',
+        [(['Never have', 'Never had', 'Never before have', 'Never before had'], ['we seen']), (['We have never', 'We had never'], ['seen'])], ['have', 'we', 'seen'], ['has', 'been', 'saw'], ['Never we have seen'],
+        ('Nach Never am Anfang steht das Hilfsverb vor dem Subjekt: Never have we seen. In normaler Stellung geht auch We have never seen.', 'After Never at the start, the auxiliary comes before the subject: Never have we seen. In normal order We have never seen works too.'),
+        [W(['never', 'we', 'have', 'seen'], 'Nach Never am Anfang kommt have vor we: Never have we seen.', 'After Never at the start, have comes before we: Never have we seen.')])
     kwt(T, 'inv.sooner', 'C1', 'biz', 0.0, 'The client changed the requirements right after we began the work.', 'HAD', 'No sooner', 'the work than the client changed the requirements.',
         [(['had'], ['we begun', 'we started'])], ['we', 'begun'], ['when', 'did', 'have'], ['we had begun'],
         ('No sooner had we begun the work than … Zu no sooner gehört than.', 'No sooner had we begun the work than … No sooner goes with than.'),

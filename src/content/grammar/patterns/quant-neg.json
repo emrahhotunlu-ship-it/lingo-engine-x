@@ -29,7 +29,7 @@
   "en": [
    "Do you mean “not one of these”? Use none of, with two things neither of.",
    "Do you mean “barely”? Use hardly, scarcely or barely, without a second not.",
-   "Do you mean “not any more”? Use no longer. Is it about amounts? Check a number of and the number of."
+   "Do you mean “not anymore”? Use no longer. Is it about amounts? Check a number of and the number of."
   ]
  },
  "patterns": [
@@ -175,21 +175,21 @@
   {
    "id": "qn.no-longer",
    "name": {
-    "de": "no longer, any more · nicht mehr",
-    "en": "no longer, any more · not any more"
+    "de": "no longer, anymore · nicht mehr",
+    "en": "no longer, anymore · not anymore"
    },
    "form": {
-    "de": "no longer + Verb · not … any longer / any more (am Ende)",
-    "en": "no longer + verb · not … any longer / any more (at the end)"
+    "de": "no longer + Verb · not … any longer / anymore (am Ende)",
+    "en": "no longer + verb · not … any longer / anymore (at the end)"
    },
    "use": {
     "de": "Für „nicht mehr“ bei der Zeit sagt man no longer vor dem Verb oder not … any longer am Ende. No more steht bei Mengen: „no more questions“.",
-    "en": "For “not any more” in time you say no longer before the verb or not … any longer at the end. No more is used with amounts: “no more questions”."
+    "en": "For “not anymore” in time you say no longer before the verb or not … any longer at the end. No more is used with amounts: “no more questions”."
    },
    "signals": [
     "no longer",
     "not any longer",
-    "not any more",
+    "not anymore",
     "no more",
     "anymore"
    ],
@@ -205,7 +205,7 @@
      "ctx": "meeting"
     },
     {
-     "en": "He does not work here any more.",
+     "en": "He does not work here anymore.",
      "de": "Er arbeitet nicht mehr hier.",
      "ctx": "talk"
     }
@@ -215,7 +215,7 @@
     "good": "We no longer offer this service.",
     "cause": {
      "de": "Für „nicht mehr“ bei der Zeit sagt man no longer. No more steht bei Mengen und vor Nomen.",
-     "en": "For “not any more” in time you say no longer. No more is used with amounts and before nouns."
+     "en": "For “not anymore” in time you say no longer. No more is used with amounts and before nouns."
     }
    },
    "contrast": {
@@ -238,8 +238,8 @@
     }
    ],
    "nudge": {
-    "de": "Meinst du „früher ja, jetzt nicht mehr“? Dann nimm no longer oder not any more.",
-    "en": "Do you mean “before yes, now no”? Then use no longer or not any more."
+    "de": "Meinst du „früher ja, jetzt nicht mehr“? Dann nimm no longer oder not anymore.",
+    "en": "Do you mean “before yes, now no”? Then use no longer or not anymore."
    }
   },
   {
@@ -253,8 +253,8 @@
     "en": "a number of + plural (plural verb) · the number of + plural (singular verb)"
    },
    "use": {
-    "de": "A number of heißt „einige“ und nimmt das Verb im Plural. The number of meint die Zahl selbst und nimmt das Verb im Singular. Dazu: few und little ohne a sind knapp, a few und a little sind genug.",
-    "en": "A number of means “several” and takes a plural verb. The number of means the figure itself and takes a singular verb. Also: few and little without a are scarce, a few and a little are enough."
+    "de": "A number of heißt „einige“ und nimmt das Verb im Plural. The number of meint die Zahl selbst und nimmt das Verb im Singular. Few klingt eher negativ („wenige“), a few neutral oder positiv („einige“). A great deal of steht nur vor nicht zählbaren Nomen (a great deal of time).",
+    "en": "A number of means “several” and takes a plural verb. The number of means the figure itself and takes a singular verb. Also: few sounds rather negative (“hardly any”), a few neutral or positive (“some”). A great deal of is used only before uncountable nouns (a great deal of time)."
    },
    "signals": [
     "a number of",

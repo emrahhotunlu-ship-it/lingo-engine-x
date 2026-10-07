@@ -61,8 +61,8 @@ PAT = [
             ('Blickst du aus der Vergangenheit auf Späteres? Dann passt would, nicht will.', 'Do you look from the past at something later? Then would fits, not will.')),
     pattern('fp.was-to', ('was to · vorgesehen', 'was to · meant to'),
             ('was / were to + Grundform · was / were to have + 3. Form', 'was / were to + base form · was / were to have + participle'),
-            ('Was to nennt, was vorgesehen war oder bestimmt schien: „The new office was to open in June.“ Mit was to have + 3. Form sagst du, dass es nicht geschah.',
-             'Was to names what was planned or seemed destined: “The new office was to open in June.” With was to have + participle you say it did not happen.'),
+            ('Was to nennt, was vorgesehen war oder bestimmt schien: „The new office was to open in June.“ Mit was to have + 3. Form sagst du, dass es nicht geschah. Im Alltag sagt man meist was supposed to, was to klingt förmlich.',
+             'Was to names what was planned or seemed destined: “The new office was to open in June.” With was to have + participle you say it did not happen. In everyday speech people mostly say was supposed to, was to sounds formal.'),
             ['was to', 'were to', 'was to have', 'was never to'],
             [('The new office was to open in June, but the permit was delayed.', 'Das neue Büro sollte im Juni eröffnen, aber die Genehmigung verzögerte sich.', 'mail'),
              ('She was to become the youngest director in the firm.', 'Sie sollte die jüngste Direktorin der Firma werden.', 'talk'),
@@ -263,7 +263,7 @@ def c1x():
          (G, 'Would to ist keine feste Form.', 'Would to is not a fixed form.')])
 
     ocl(T, 'fp.was-going', 'C1', 'biz', 0.0, 'The team was ___ to present the results on Monday, but the data was incomplete.',
-        ['going'], 'part', ['go', 'went', 'gone'],
+        ['going', 'supposed', 'due', 'meant'], 'part', ['go', 'went', 'gone'],
         ('Was going to nennt den Plan von damals.', 'Was going to names the plan from back then.'))
     ocl(T, 'fp.about-to', 'C1', 'biz', 0.0, 'The auditors were about ___ present their findings when the fire alarm went off.',
         ['to'], 'part', ['for', 'of', 'at'],
@@ -278,7 +278,7 @@ def c1x():
         ['would'], 'aux', ['will', 'shall', 'are'],
         ('Aus der Vergangenheit auf Späteres: would later open.', 'From the past at something later: would later open.'))
     ocl(T, 'fp.was-to', 'C1', 'life', 0.0, 'The trip ___ to start on Friday, but the storm changed our plans.',
-        ['was'], 'aux', ['is', 'has', 'be'],
+        ['was', 'had'], 'aux', ['is', 'has', 'be'],
         ('Was to nennt den Plan: The trip was to start on Friday.', 'Was to names the plan: The trip was to start on Friday.'))
 
     err(T, 'fp.was-going', 'C1', 'biz', 0.0, 'We are going to publish the report in March, but the board asked for changes.',
@@ -288,27 +288,27 @@ def c1x():
         ('about announcing', ['about to announce'], ['about to announce', 'about to announcing', 'about for announce']),
         ('Nach about steht to und die Grundform: about to announce.', 'After about comes to and the base form: about to announce.'))
     err(T, 'fp.would-narr', 'C1', 'biz', 0.0, 'The startup began with three people in 2015 and will later employ two hundred.',
-        ('will later employ', ['would later employ'], ['would later employ', 'would later employs', 'is later employing']),
+        ('will later employ', ['would later employ', 'went on to employ', 'later employed'], ['would later employ', 'would later employs', 'is later employing']),
         ('Aus der Vergangenheit auf Späteres: would later employ.', 'From the past at something later: would later employ.'))
     err(T, 'fp.was-to', 'C1', 'biz', 0.0, 'The new director should join us in January, but she took another job.',
-        ('should join', ['was to join'], ['was to join', 'was to joining', 'is to join']),
+        ('should join', ['was to join', 'was supposed to join', 'was going to join', 'was due to join', 'should have joined'], ['was to join', 'was to joining', 'is to join']),
         ('Für einen Plan in der Vergangenheit gilt was to: was to join.', 'For a plan in the past was to is used: was to join.'))
     err(T, 'fp.about-to', 'C1', 'life', 0.0, 'I was about to leave the house when I noticed that the oven was still on.', None,
         ('Kein Fehler: Was about to + Grundform, dann kommt etwas dazwischen.', 'No mistake: was about to + base form, then something intervenes.'))
-    err(T, 'fp.was-going', 'C1', 'life', 0.0, 'We were going to move to Lisbon, but the flat prices changed our minds.', None,
+    err(T, 'fp.was-going', 'C1', 'life', 0.0, 'We were going to move to Lisbon, but the apartment prices changed our minds.', None,
         ('Kein Fehler: Were going to nennt den Plan von damals.', 'No mistake: were going to names the plan from back then.'))
 
     kwt(T, 'fp.was-going', 'C1', 'biz', 0.0, 'We planned to open a second office in Vienna, but the lease fell through.', 'GOING', 'We', 'a second office in Vienna, but the lease fell through.',
         [(['were going'], ['to open'])], ['were', 'to', 'open'], ['are', 'went', 'gone'], [],
         ('were going to open. Were going to nennt den Plan von damals.', 'were going to open. Were going to names the plan from back then.'), [])
-    kwt(T, 'fp.about-to', 'C1', 'biz', 0.0, 'Our team nearly missed the deadline when the server crashed.', 'ABOUT', 'Our team was', 'the deadline when the server crashed.',
-        [(['about to'], ['miss'])], ['to', 'miss'], ['for', 'missing', 'at'], [],
-        ('was about to miss. Nach about steht to und die Grundform.', 'was about to miss. After about comes to and the base form.'), [])
+    kwt(T, 'fp.about-to', 'C1', 'biz', 0.0, 'The team was on the point of submitting the report when the server crashed.', 'ABOUT', 'The team was', 'the report when the server crashed.',
+        [(['about to'], ['submit'])], ['to', 'submit'], ['for', 'submitting', 'at'], [],
+        ('was about to submit. Nach about steht to und die Grundform.', 'was about to submit. After about comes to and the base form.'), [])
     kwt(T, 'fp.would-narr', 'C1', 'biz', 0.0, 'He joined the firm in 2014 and became CFO six years later.', 'WOULD', 'He joined the firm in 2014 and', 'six years later.',
         [(['would'], ['become CFO'])], ['become', 'CFO'], ['will', 'became', 'is'], [],
         ('would become CFO. Aus der Vergangenheit auf Späteres blickt would.', 'would become CFO. Would looks from the past at something later.'), [])
     kwt(T, 'fp.was-to', 'C1', 'biz', 0.0, 'The conference had been planned for September, but a strike forced a delay.', 'WAS', 'The conference', 'in September, but a strike forced a delay.',
-        [(['was to'], ['take place'])], ['to', 'take', 'place'], ['should', 'is', 'were'], [],
+        [(['was to', 'was supposed to', 'was going to', 'was due to', 'was meant to'], ['take place', 'be held'])], ['to', 'take', 'place'], ['should', 'is', 'were'], [],
         ('was to take place. Was to nennt das Vorgesehene.', 'was to take place. Was to names what was meant to be.'), [])
     kwt(T, 'fp.about-to', 'C1', 'life', 0.0, 'I almost fell asleep when the phone rang.', 'ABOUT', 'I was', 'when the phone rang.',
         [(['about to'], ['fall asleep'])], ['to', 'fall', 'asleep'], ['for', 'falling', 'at'], [],
@@ -324,6 +324,6 @@ def place():
         [(G, 'Are gehört in die Gegenwart.', 'Are belongs to the present.'),
          (G, 'Went to bedeutet „ging zu“, nicht „wollte“.', 'Went to means “walked to”, not “planned to”.'),
          (G, 'Would to ist keine feste Form.', 'Would to is not a fixed form.')])
-    ocl(T, 'fp.about-to', 'C1', 'life', 0.0, 'I was just about ___ leave when the phone rang.',
+    ocl(T, 'fp.about-to', 'C1', 'life', 0.0, 'My bus was just about ___ leave when I reached the stop.',
         ['to'], 'part', ['for', 'of', 'at'],
         ('Nach about steht to und die Grundform: about to leave.', 'After about comes to and the base form: about to leave.'))

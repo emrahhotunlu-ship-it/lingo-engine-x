@@ -24,7 +24,9 @@
    "keys": [
     {
      "a": [
-      "may well"
+      "may well",
+      "could well",
+      "might well"
      ],
      "b": [
       "reject"
@@ -58,10 +60,10 @@
     },
     "wrong": []
    },
-   "lead": "Maybe this will turn out to be the best holiday we ever had.",
+   "lead": "Maybe this will turn out to be the best vacation of our lives.",
    "key": "WELL",
    "before": "This",
-   "after": "the best holiday we ever had.",
+   "after": "the best vacation we have ever had.",
    "keys": [
     {
      "a": [
@@ -201,10 +203,14 @@
    "keys": [
     {
      "a": [
-      "There is a"
+      "There is a",
+      "There's a"
      ],
      "b": [
-      "good chance that"
+      "good chance that",
+      "fair chance that",
+      "high chance that",
+      "strong chance that"
      ]
     }
    ],
@@ -289,14 +295,16 @@
       "are seeing"
      ],
      "b": [
-      "a fast rise"
+      "a sharp rise",
+      "a rapid rise",
+      "a steep rise"
      ]
     }
    ],
    "tiles": [
     "are",
     "a",
-    "fast",
+    "sharp",
     "rise"
    ],
    "extra": [
@@ -363,7 +371,7 @@
     },
     "wrong": []
    },
-   "lead": "The client behaves in a very difficult way today.",
+   "lead": "The client is making life very hard for us today.",
    "key": "BEING",
    "before": "The client",
    "after": "today.",
@@ -413,7 +421,7 @@
      }
     ]
    },
-   "lead": "A decision is required by Friday.",
+   "lead": "A decision is urgently required by Friday.",
    "key": "NEED",
    "before": "We",
    "after": "by Friday.",
@@ -421,6 +429,14 @@
     {
      "a": [
       "urgently need"
+     ],
+     "b": [
+      "a decision"
+     ]
+    },
+    {
+     "a": [
+      "need"
      ],
      "b": [
       "a decision"
@@ -508,7 +524,9 @@
       "are hoping"
      ],
      "b": [
-      "you can"
+      "you can",
+      "you will",
+      "you'll"
      ]
     }
    ],
@@ -577,32 +595,32 @@
    "pat": "fp.about-to",
    "why": {
     "ok": {
-     "de": "was about to miss. Nach about steht to und die Grundform.",
-     "en": "was about to miss. After about comes to and the base form."
+     "de": "was about to submit. Nach about steht to und die Grundform.",
+     "en": "was about to submit. After about comes to and the base form."
     },
     "wrong": []
    },
-   "lead": "Our team nearly missed the deadline when the server crashed.",
+   "lead": "The team was on the point of submitting the report when the server crashed.",
    "key": "ABOUT",
-   "before": "Our team was",
-   "after": "the deadline when the server crashed.",
+   "before": "The team was",
+   "after": "the report when the server crashed.",
    "keys": [
     {
      "a": [
       "about to"
      ],
      "b": [
-      "miss"
+      "submit"
      ]
     }
    ],
    "tiles": [
     "to",
-    "miss"
+    "submit"
    ],
    "extra": [
     "for",
-    "missing",
+    "submitting",
     "at"
    ],
    "traps": []
@@ -671,10 +689,15 @@
    "keys": [
     {
      "a": [
-      "was to"
+      "was to",
+      "was supposed to",
+      "was going to",
+      "was due to",
+      "was meant to"
      ],
      "b": [
-      "take place"
+      "take place",
+      "be held"
      ]
     }
    ],
@@ -800,7 +823,8 @@
       "Neither of"
      ],
      "b": [
-      "the proposals"
+      "the proposals",
+      "the two proposals"
      ]
     }
    ],
@@ -832,7 +856,7 @@
     },
     "wrong": []
    },
-   "lead": "We had almost no time to prepare the presentation.",
+   "lead": "There was almost no time to prepare the presentation.",
    "key": "HARDLY",
    "before": "We",
    "after": "to prepare the presentation.",
@@ -843,6 +867,14 @@
      ],
      "b": [
       "had any time"
+     ]
+    },
+    {
+     "a": [
+      "had hardly"
+     ],
+     "b": [
+      "any time"
      ]
     }
    ],

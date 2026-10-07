@@ -21,7 +21,7 @@ def inversion():
          (G, 'did gehört vor das Subjekt, nicht dahinter.', 'did belongs before the subject, not after it.')])
     mcc(T, 'inv.cond', 'C1', L, 0.0, '___ late tonight, text me and I will keep your dinner warm.',
         'Should you be', ['You should be', 'If you would be', 'Were you being'],
-        ('Should you be … ist eine Bedingung ohne if: Should steht vor dem Subjekt, danach die Grundform.', 'Should you be … is a condition without if: Should stands before the subject, then the base form.'),
+        ('Should you be … ist eine Bedingung ohne if: Should steht vor dem Subjekt, danach die Grundform. Das klingt förmlich, unter Freunden sagt man eher If you are.', 'Should you be … is a condition without if: Should stands before the subject, then the base form. It sounds formal, among friends people prefer If you are.'),
         [(G, 'Ohne Umstellung entsteht eine Aussage, keine Bedingung.', 'Without inversion you get a statement, not a condition.'),
          (G, 'Nach if steht kein would. Außerdem ist if ein anderes Muster.', 'After if there is no would. Besides, if is a different pattern.'),
          (G, 'Were you being ist eine Frage in der Verlaufsform und keine Bedingung.', 'Were you being is a question in the continuous form and not a condition.')])
@@ -45,17 +45,17 @@ def inversion():
     err(T, 'inv.only', 'C1', L, 0.0, 'Only after the movie had ended did the children admit that they were scared.', None,
         ('Kein Fehler: Nach Only after und dem Nebensatz steht did vor dem Subjekt, wie hier.', 'No mistake: after Only after and the clause, did stands before the subject, as here.'))
 
-    kwt(T, 'inv.negative', 'C1', L, 0.0, 'This was the first time I felt so tired after such a short hike.', 'HAVE', 'Never', 'so tired after such a short hike.',
-        [(['have', 'before have'], ['I felt'])], ['I', 'felt'], ['had', 'did', 'been'], ['I have felt'],
-        ('Nach Never steht das Hilfsverb vor dem Subjekt: Never have I felt.', 'After Never, the auxiliary comes before the subject: Never have I felt.'),
-        [W(['i', 'have', 'felt'], 'Nach Never kommt have vor I: have I felt.', 'After Never, have comes before I: have I felt.')])
+    kwt(T, 'inv.negative', 'C1', L, 0.0, 'This was the first time I felt so tired after such a short hike.', 'NEVER', '', 'so tired after such a short hike.',
+        [(['Never have', 'Never had', 'Never before have', 'Never before had'], ['I felt']), (['I have never', 'I had never'], ['felt'])], ['have', 'I', 'felt'], ['has', 'did', 'been'], ['Never I have felt'],
+        ('Nach Never am Anfang steht das Hilfsverb vor dem Subjekt: Never have I felt. In normaler Stellung geht auch I have never felt.', 'After Never at the start, the auxiliary comes before the subject: Never have I felt. In normal order I have never felt works too.'),
+        [W(['never', 'i', 'have', 'felt'], 'Nach Never am Anfang kommt have vor I: Never have I felt.', 'After Never at the start, have comes before I: Never have I felt.')])
     kwt(T, 'inv.only', 'C1', L, 0.0, 'You are not allowed into the garden before you have rung the bell.', 'CAN', 'Only after you have rung the bell', 'the garden.',
         [(['can'], ['you enter'])], ['you', 'enter'], ['did', 'will', 'had'], ['you can enter'],
         ('Only after you have rung the bell can you enter … Nach dem Nebensatz steht can vor dem Subjekt.', 'Only after you have rung the bell can you enter … After the clause, can comes before the subject.'),
         [W(['you', 'can', 'enter'], 'Nach dem Nebensatz kommt can vor das Subjekt: can you enter.', 'After the clause, can comes before the subject: can you enter.')])
-    kwt(T, 'inv.cond', 'C1', L, 0.0, 'If you want a lift to the station, just text me.', 'SHOULD', '', 'a lift to the station, just text me.',
-        [(['Should'], ['you want'])], ['you', 'want'], ['will', 'would', 'if'], ['Should you will want'],
-        ('Should you want … ist eine Bedingung ohne if und ohne will.', 'Should you want … is a condition without if and without will.'),
+    kwt(T, 'inv.cond', 'C1', 'biz', 0.0, 'If you cannot attend the workshop, please let us know in advance.', 'SHOULD', '', 'unable to attend the workshop, please let us know in advance.',
+        [(['Should'], ['you be'])], ['you', 'be'], ['will', 'would', 'if'], ['Should you will be'],
+        ('Should you be … ist eine förmliche Bedingung ohne if und ohne will.', 'Should you be … is a formal condition without if and without will.'),
         [W(['should', 'will'], 'Nach Should you steht die Grundform, kein will.', 'After Should you the base form follows, no will.')])
 
 
@@ -67,7 +67,7 @@ def emph():
         [(G, 'Nach did steht die Grundform buy, nicht bought.', 'After did the base form buy follows, not bought.'),
          (G, 'Do passt nicht zur Vergangenheit. Hier braucht es did.', 'Do does not fit the past. Here did is needed.'),
          (G, 'did steht vor dem Verb, nicht dahinter.', 'did stands before the verb, not after it.')])
-    mcc(T, 'ep.concession', 'C1', L, 0.0, '___ it is, we cannot afford a holiday abroad this year.',
+    mcc(T, 'ep.concession', 'C1', L, 0.0, '___ it is, we cannot afford a vacation abroad this year.',
         'Tempting as', ['Tempting that', 'Tempting but', 'Although tempting as'],
         ('Tempting as it is … räumt etwas ein: Adjektiv, as, dann Subjekt und Verb in normaler Stellung.', 'Tempting as it is … concedes a point: adjective, as, then subject and verb in normal order.'),
         [(G, 'That leitet hier keinen Einwand ein. Es braucht as.', 'That does not introduce a concession here. It needs as.'),
@@ -87,19 +87,19 @@ def emph():
         ['as', 'though'], 'conj', ['that', 'so', 'how'],
         ('Much as I love … räumt etwas ein und heißt „so sehr ich … mag“.', 'Much as I love … concedes a point and means “as much as I love …”.'))
     ocl(T, 'ep.do-emph', 'C1', L, 0.0, 'I did ___ you about the leak, but you were not listening.',
-        ['tell'], 'part', ['told', 'telling', 'tells'],
+        ['tell', 'warn', 'remind'], 'part', ['told', 'telling', 'tells'],
         ('Das betonte did steht vor der Grundform: I did tell you.', 'The stressed did stands before the base form: I did tell you.'))
 
     err(T, 'ep.object-front', 'C1', L, 0.0, 'This must we always remember when we plan a family trip.',
         ('must we always remember', ['we must always remember'], ['we must always remember', 'must always we remember', 'we always must to remember']),
         ('Bei vorangestelltem Objekt bleibt die Reihenfolge danach normal: This we must always remember.', 'With a fronted object the order after it stays normal: This we must always remember.'))
-    err(T, 'ep.do-emph', 'C1', L, 0.0, 'She does loves her new flat, even though it is small.',
+    err(T, 'ep.do-emph', 'C1', L, 0.0, 'She does loves her new apartment, even though it is small.',
         ('does loves', ['does love'], ['does love', 'do love', 'does loving']),
         ('Nach does steht die Grundform: does love.', 'After does the base form follows: does love.'))
-    err(T, 'ep.concession', 'C1', L, 0.0, 'Strange as it may seem, the best coffee in town is sold at the petrol station.', None,
+    err(T, 'ep.concession', 'C1', L, 0.0, 'Strange as it may seem, the best coffee in town is sold at the gas station.', None,
         ('Kein Fehler: Adjektiv + as + it may seem räumt etwas ein.', 'No mistake: adjective + as + it may seem concedes a point.'))
 
-    kwt(T, 'ep.concession', 'C1', L, 0.0, 'Although the offer sounds attractive, I will stay at home tonight.', 'TEMPTING', '', 'is, I will stay at home tonight.',
+    kwt(T, 'ep.concession', 'C1', L, 0.0, 'Although the offer sounds attractive, I will stay home tonight.', 'TEMPTING', '', 'is, I will stay home tonight.',
         [(['Tempting as'], ['the offer'])], ['as', 'the', 'offer'], ['that', 'so', 'it'], [],
         ('Tempting as the offer is, … Das Adjektiv steht vor as, dann die normale Stellung.', 'Tempting as the offer is, … The adjective stands before as, then the normal order.'), [])
     kwt(T, 'ep.do-emph', 'C1', L, 0.0, 'I really enjoyed the concert last night.', 'DID', 'I', 'the concert last night.',
@@ -115,11 +115,11 @@ def emph():
 def ellipsis():
     T = 'ellipsis'
     mcc(T, 'el.so-not', 'C1', L, 0.0, '"Will it rain tomorrow?" "I hope ___, because we are planning a picnic."',
-        'not', ['no', 'that not', 'not so'],
+        'not', ['no', 'that not', 'never'],
         ('Nach hope steht not direkt für den verneinten Gedanken: I hope not.', 'After hope, not stands directly for the negative thought: I hope not.'),
         [(G, 'No steht nicht hinter hope. Dort braucht es not.', 'No does not follow hope. There it needs not.'),
          (G, 'Nach hope folgt not direkt, ohne that.', 'After hope, not follows directly, without that.'),
-         (G, 'So not ist keine feste Folge nach hope.', 'Not so is not a fixed sequence after hope.')])
+         (G, 'Never heißt „nie“ und ersetzt keinen Gedanken nach hope.', 'Never means “never” and does not replace a thought after hope.')])
     mcc(T, 'el.do-so', 'C1', L, 0.0, 'My brother always leaves his shoes in the hall, and my sister ___.',
         'does the same', ['does same', 'does it the same', 'is the same'],
         ('Does the same ersetzt die Handlung leaves her shoes in the hall.', 'Does the same replaces the action leaves her shoes in the hall.'),
@@ -136,8 +136,8 @@ def ellipsis():
     ocl(T, 'el.to-aux', 'C1', L, 0.0, '"Are you coming to the party?" "I would like ___, but I have to work."',
         ['to'], 'part', ['for', 'at', 'on'],
         ('Das Verb come entfällt, aber to bleibt: I would like to.', 'The verb come is dropped, but to stays: I would like to.'))
-    ocl(T, 'el.so-not', 'C1', L, 0.0, '"Is the shop open on Sundays?" "I think ___."',
-        ['so'], 'adv', ['it', 'yes', 'that'],
+    ocl(T, 'el.so-not', 'C1', L, 0.0, '"Is the store open on Sundays?" "I think ___."',
+        ['so', 'not'], 'adv', ['it', 'yes', 'that'],
         ('Nach think ersetzt so den ganzen Gedanken: I think so.', 'After think, so replaces the whole thought: I think so.'))
     ocl(T, 'el.one-ones', 'C1', L, 0.0, 'I like both jackets, but the red ___ suits you better.',
         ['one'], 'pron', ['ones', 'that', 'it'],
@@ -152,13 +152,13 @@ def ellipsis():
     err(T, 'el.to-aux', 'C1', L, 0.0, 'I wanted to join the choir, but my friends told me not to.', None,
         ('Kein Fehler: Das Verb join entfällt, aber to bleibt: told me not to.', 'No mistake: the verb join is dropped, but to stays: told me not to.'))
 
-    err(T, 'el.so-not', 'C1', L, 0.0, 'Will it rain at the weekend? I do not hope so, because we are planning a picnic.',
+    err(T, 'el.so-not', 'C1', L, 0.0, 'Will it rain on the weekend? I do not hope so, because we are planning a picnic.',
         ('do not hope so', ['hope not'], ['hope not', 'do not hope not', 'hope so not']),
         ('Es heißt I hope not, nicht I do not hope so. Not ersetzt den Gedanken.', 'It is I hope not, not I do not hope so. Not replaces the thought.'))
-    err(T, 'el.so-not', 'C1', L, 0.0, 'I do not like coffee, and neither I do tea, so we ordered water.',
+    err(T, 'el.so-not', 'C1', L, 0.0, 'I do not like coffee, and neither I do, so we ordered water.',
         ('neither I do', ['neither do I'], ['neither do I', 'neither I do', 'so do I']),
         ('Nach neither steht das Hilfsverb vor dem Subjekt: neither do I.', 'After neither the auxiliary comes before the subject: neither do I.'))
-    err(T, 'el.one-ones', 'C1', L, 0.0, 'My phone is old, so I bought a new at the weekend.',
+    err(T, 'el.one-ones', 'C1', L, 0.0, 'My phone is old, so I bought a new on the weekend.',
         ('a new', ['a new one'], ['a new one', 'a new ones', 'the new it']),
         ('Hinter dem Adjektiv new braucht es one.', 'After the adjective new you need one.'))
     kwt(T, 'el.so-not', 'C1', L, 0.0, 'Is Tom coming to the party? I suppose he is coming.', 'SO', 'Is Tom coming to the party?', '.',
@@ -170,7 +170,7 @@ def ellipsis():
         ('Does the same ersetzt die Handlung takes the bus.', 'Does the same replaces the action takes the bus.'),
         [W(['does', 'same'], 'Vor same steht the: the same.', 'Before same you need the: the same.', ['the'])])
     kwt(T, 'el.one-ones', 'C1', L, 0.0, 'These apples are sweeter than the apples that we bought last week.', 'ONES', 'These apples are sweeter than', 'we bought last week.',
-        [(['the ones'], ['that'])], ['the', 'that'], ['those', 'it', 'what'], [],
+        [(['the ones'], ['that', 'which'])], ['the', 'that'], ['those', 'it', 'what'], [],
         ('The ones ersetzt das Pluralnomen apples.', 'The ones replaces the plural noun apples.'), [])
 
 
@@ -209,7 +209,7 @@ def nounphrase():
         ('involving', ['involved'], ['involved', 'involve', 'involves']),
         ('Die Kinder werden einbezogen, deshalb das passive Partizip: the children involved.', 'The children are involved, so the passive participle is used: the children involved.'))
     err(T, 'np.to-inf', 'C1', L, 0.0, 'The best way for save money is to cook at home.',
-        ('for save', ['to save'], ['to save', 'for to save', 'of saving']),
+        ('for save', ['to save'], ['to save', 'for to save', 'of save']),
         ('Nach the best way steht to + Grundform: the best way to save.', 'After the best way comes to + base form: the best way to save.'))
     err(T, 'np.of-s', 'C1', L, 0.0, 'Yesterday’s lesson was much shorter than last week’s.', None,
         ('Kein Fehler: Zeitangaben nehmen ’s, und last week’s ersetzt das Nomen.', 'No mistake: time words take ’s, and last week’s replaces the noun.'))

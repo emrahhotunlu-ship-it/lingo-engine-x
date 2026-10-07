@@ -364,8 +364,8 @@
    "pat": "inv.cond",
    "why": {
     "ok": {
-     "de": "Should you be … ist eine Bedingung ohne if: Should steht vor dem Subjekt, danach die Grundform.",
-     "en": "Should you be … is a condition without if: Should stands before the subject, then the base form."
+     "de": "Should you be … ist eine Bedingung ohne if: Should steht vor dem Subjekt, danach die Grundform. Das klingt förmlich, unter Freunden sagt man eher If you are.",
+     "en": "Should you be … is a condition without if: Should stands before the subject, then the base form. It sounds formal, among friends people prefer If you are."
     },
     "wrong": [
      {
@@ -740,7 +740,7 @@
      }
     ]
    },
-   "text": "___ it is, we cannot afford a holiday abroad this year.",
+   "text": "___ it is, we cannot afford a vacation abroad this year.",
    "options": [
     "Tempting as",
     "Tempting that",
@@ -1048,7 +1048,7 @@
      }
     ]
    },
-   "text": "Are you joining the training on Friday? Yes, I would love ___, but my flight is late.",
+   "text": "Are you joining the training on Friday? I would love ___, but my flight is late.",
    "options": [
     "so",
     "for",
@@ -1085,10 +1085,10 @@
       "en": "After hope, not follows directly, without that."
      },
      {
-      "opt": "not so",
+      "opt": "never",
       "cat": "grammar",
-      "de": "So not ist keine feste Folge nach hope.",
-      "en": "Not so is not a fixed sequence after hope."
+      "de": "Never heißt „nie“ und ersetzt keinen Gedanken nach hope.",
+      "en": "Never means “never” and does not replace a thought after hope."
      }
     ]
    },
@@ -1097,7 +1097,7 @@
     "not",
     "no",
     "that not",
-    "not so"
+    "never"
    ],
    "answer": 0
   },
@@ -1200,8 +1200,8 @@
    "pat": "np.contact",
    "why": {
     "ok": {
-     "de": "Nach dem Superlativ presentation darf das Pronomen fehlen: I have seen.",
-     "en": "After the superlative presentation the pronoun may be dropped: I have seen."
+     "de": "Nach dem Superlativ most convincing presentation darf das Pronomen that fehlen: I have seen.",
+     "en": "After the superlative most convincing presentation the pronoun that may be dropped: I have seen."
     },
     "wrong": [
      {

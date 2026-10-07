@@ -265,7 +265,7 @@ def c1x():
         ['did'], 'aux', ['do', 'does', 'had'],
         ('Das betonte did widerspricht dem Vorwurf: we did reply (Grundform reply).', 'The stressed did rebuts the accusation: we did reply (base form reply).'))
     ocl(T, 'ep.do-emph', 'C1', 'biz', 0.0, 'You say he does not speak French, but he really ___ speak it fluently.',
-        ['does'], 'aux', ['do', 'did', 'is'],
+        ['does', 'can'], 'aux', ['do', 'did', 'is'],
         ('Zu he gehört does vor der Grundform speak. Das widerspricht dem Einwand und betont, dass es wirklich stimmt.', 'With he the form is does before the base form speak. It rebuts the objection and stresses that it is really true.'))
     ocl(T, 'ep.concession', 'C1', 'biz', 0.0, 'Much ___ I would like to attend, I have another meeting at that time.',
         ['as', 'though'], 'conj', ['that', 'so', 'if'],
@@ -273,7 +273,7 @@ def c1x():
     ocl(T, 'ep.concession', 'C1', 'biz', 0.0, 'Hard ___ we tried, the migration was not finished before the deadline.',
         ['as', 'though'], 'conj', ['that', 'so', 'if'],
         ('Hard as we tried … räumt etwas ein: „so sehr wir uns bemühten“. Danach folgt ein normaler Hauptsatz.', 'Hard as we tried … concedes a point: “however hard we tried”. A normal main clause follows.'))
-    ocl(T, 'ep.so-such', 'C1', 'biz', 0.0, 'So strong was the signal ___ the technicians checked the antenna twice.',
+    ocl(T, 'ep.so-such', 'C1', 'biz', 0.0, 'So strong was the wind ___ the organizers canceled the outdoor concert.',
         ['that'], 'conj', ['which', 'what', 'as'],
         ('So … was … that nennt die Folge: that leitet sie ein.', 'So … was … that names the result: that introduces it.'))
     ocl(T, 'ep.so-such', 'C1', 'biz', 0.0, 'It was ___ a good offer that we accepted it at once.',
@@ -283,7 +283,7 @@ def c1x():
     err(T, 'ep.do-emph', 'C1', 'biz', 0.0, 'He does sends the weekly report on time, so please stop worrying.',
         ('sends', ['send'], ['send', 'sent', 'sending']),
         ('Nach does steht die Grundform: does send.', 'After does the base form follows: does send.'))
-    err(T, 'ep.concession', 'C1', 'biz', 0.0, 'Hard we tried, but we could not reach the client by phone.',
+    err(T, 'ep.concession', 'C1', 'biz', 0.0, 'Hard we tried, we could not reach the client by phone.',
         ('Hard we tried', ['Hard as we tried'], ['Hard as we tried', 'Hard that we tried', 'Hard so we tried']),
         ('Bei der Voranstellung fehlt as: Hard as we tried, … Ohne as ist der Einwand nicht ausgedrückt.', 'The as is missing in the fronting: Hard as we tried, … Without as the concession is not expressed.'))
     err(T, 'ep.so-such', 'C1', 'biz', 0.0, 'Such was the demand what the shop ran out of stock within an hour.',
@@ -315,7 +315,7 @@ def c1x():
         [(['Such was'], ['the demand'])], ['was', 'the', 'demand'], ['so', 'a', 'very'], [],
         ('Such was the demand that … Das Verb steht vor dem Subjekt.', 'Such was the demand that … The verb stands before the subject.'), [])
     kwt(T, 'ep.do-emph', 'C1', 'biz', 0.0, 'They claim we never paid, but we settled the invoice in full.', 'DID', 'They claim we never paid, but we', 'the invoice in full.',
-        [(['really did'], ['pay'])], ['really', 'pay'], ['paid', 'do', 'had'], ['really did paid'],
+        [(['really did'], ['pay']), (['did actually', 'did really'], ['pay'])], ['really', 'pay'], ['paid', 'do', 'had'], ['really did paid'],
         ('Das betonte did widerspricht dem Vorwurf und steht vor der Grundform pay.', 'The stressed did rebuts the accusation and stands before the base form pay.'),
         [W(['did', 'paid'], 'Nach did steht die Grundform pay.', 'After did the base form pay follows.')])
 

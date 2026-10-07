@@ -206,22 +206,22 @@
       "if": [
        "for"
       ],
-      "de": "„for“ passt hier nicht. Gesucht ist „to“.",
-      "en": "“for” does not fit here. The word needed is “to”."
+      "de": "bound for heißt „unterwegs nach“, hier folgt aber eine Grundform.",
+      "en": "bound for means “heading to”, but a base form follows here."
      },
      {
       "if": [
        "at"
       ],
-      "de": "„at“ passt hier nicht. Gesucht ist „to“.",
-      "en": "“at” does not fit here. The word needed is “to”."
+      "de": "at passt nicht vor eine Grundform, es braucht to.",
+      "en": "at does not fit before a base form, it needs to."
      },
      {
       "if": [
        "on"
       ],
-      "de": "„on“ passt hier nicht. Gesucht ist „to“.",
-      "en": "“on” does not fit here. The word needed is “to”."
+      "de": "on passt nicht vor eine Grundform, es braucht to.",
+      "en": "on does not fit before a base form, it needs to."
      }
     ]
    },
@@ -257,26 +257,26 @@
       "if": [
        "for"
       ],
-      "de": "„for“ passt hier nicht. Gesucht ist „to“.",
-      "en": "“for” does not fit here. The word needed is “to”."
+      "de": "for gehört nicht zu about, hier folgt to + Grundform.",
+      "en": "for does not go with about, to + base form follows here."
      },
      {
       "if": [
        "of"
       ],
-      "de": "„of“ passt hier nicht. Gesucht ist „to“.",
-      "en": "“of” does not fit here. The word needed is “to”."
+      "de": "about of gibt es nicht, es heißt about to.",
+      "en": "about of does not exist, it is about to."
      },
      {
       "if": [
        "at"
       ],
-      "de": "„at“ passt hier nicht. Gesucht ist „to“.",
-      "en": "“at” does not fit here. The word needed is “to”."
+      "de": "about at gibt es nicht, es heißt about to.",
+      "en": "about at does not exist, it is about to."
      }
     ]
    },
-   "text": "I was just about ___ leave when the phone rang.",
+   "text": "My bus was just about ___ leave when I reached the stop.",
    "accept": [
     "to"
    ],
@@ -347,6 +347,14 @@
      ],
      "b": [
       "had any energy"
+     ]
+    },
+    {
+     "a": [
+      "had hardly"
+     ],
+     "b": [
+      "any energy"
      ]
     }
    ],

@@ -682,7 +682,7 @@
      }
     ]
    },
-   "text": "The new parking policy ___ by the city council, so we can finally park near our flat next week.",
+   "text": "The new parking policy ___ by the city council, so we can finally park near our apartment next week.",
    "options": [
     "has approved",
     "is approving",
@@ -1263,8 +1263,8 @@
      {
       "opt": "of",
       "cat": "calque",
-      "de": "Das deutsche „Nachfrage von“ verleitet zu „of“. Englisch sagt „demand for“.",
-      "en": "German “Nachfrage nach” does not map to “of”. English says “demand for”."
+      "de": "Nach demand steht hier nicht of. Das deutsche „Nachfrage nach“ heißt im Englischen „demand for“.",
+      "en": "Demand is not followed by of here. The German “Nachfrage nach” is “demand for” in English."
      },
      {
       "opt": "on",
@@ -1361,8 +1361,8 @@
      {
       "opt": "a happiness",
       "cat": "grammar",
-      "de": "„an happiness“ meint eine einzelne Zufriedenheit, nicht Zufriedenheit im Allgemeinen.",
-      "en": "“an happiness” means one particular happiness, not happiness in general."
+      "de": "„a happiness“ meint eine einzelne Zufriedenheit, nicht Zufriedenheit im Allgemeinen.",
+      "en": "“a happiness” means one particular happiness, not happiness in general."
      },
      {
       "opt": "happinesses",
@@ -1811,7 +1811,29 @@
      "de": "„always“ mit Verlaufsform drückt Ärger über Wiederholtes aus: is always forgetting.",
      "en": "“always” with the continuous expresses annoyance at repetition: is always forgetting."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "has"
+      ],
+      "de": "has verlangt eine 3. Form, nach always steht aber -ing: is always forgetting.",
+      "en": "has needs a participle, but always is followed by -ing: is always forgetting."
+     },
+     {
+      "if": [
+       "does"
+      ],
+      "de": "does braucht die Grundform, hier steht aber forgetting.",
+      "en": "does needs the base form, but forgetting stands here."
+     },
+     {
+      "if": [
+       "was"
+      ],
+      "de": "was liegt in der Vergangenheit, der Satz beschreibt aber jetzt.",
+      "en": "was lies in the past, but the sentence describes now."
+     }
+    ]
    },
    "text": "Our new intern ___ always forgetting to save his files, which drives the whole team crazy.",
    "accept": [
@@ -1841,7 +1863,29 @@
      "de": "Das Frühere vor einem Zeitpunkt in der Vergangenheit steht im Past Perfect: had left.",
      "en": "What happened earlier than a past point takes the past perfect: had left."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "has"
+      ],
+      "de": "has ist Präsens, der Satz erzählt aber von früher.",
+      "en": "has is present, but the sentence tells about the past."
+     },
+     {
+      "if": [
+       "was"
+      ],
+      "de": "was verlangt hier ein -ing oder Passiv, left ist aber aktiv.",
+      "en": "was would need an -ing or passive here, but left is active."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "did braucht die Grundform, hier steht aber left.",
+      "en": "did needs the base form, but left stands here."
+     }
+    ]
    },
    "text": "She told me that the shipment ___ already left the warehouse before the customer called.",
    "accept": [
@@ -1870,7 +1914,29 @@
      "de": "Nach „as soon as“ steht die Gegenwart, auch wenn die Zukunft gemeint ist: are available.",
      "en": "After “as soon as” the present is used even when the future is meant: are available."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "will"
+      ],
+      "de": "Nach as soon as steht kein will, sondern die Gegenwart.",
+      "en": "After as soon as there is no will, the present tense is used."
+     },
+     {
+      "if": [
+       "have"
+      ],
+      "de": "have passt nicht zu results ohne eine 3. Form danach.",
+      "en": "have does not fit results without a participle after it."
+     },
+     {
+      "if": [
+       "were"
+      ],
+      "de": "were liegt in der Vergangenheit, gemeint ist aber die Zukunft.",
+      "en": "were lies in the past, but the future is meant."
+     }
+    ]
    },
    "text": "The manager will call you back as soon as the test results ___ available.",
    "accept": [
@@ -1900,7 +1966,29 @@
      "de": "„by“ nennt die Frist (spätestens bis). „before“ ist ebenfalls möglich. „until“ meint, dass etwas bis dahin andauert.",
      "en": "“by” names the deadline (no later than). “before” is also possible. “until” means that something continues up to then."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "until"
+      ],
+      "de": "until meint „bis dahin andauernd“, hier geht es um eine Frist.",
+      "en": "until means “continuing up to then”, but here it is a deadline."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "for nennt eine Dauer, keine Frist.",
+      "en": "for names a duration, not a deadline."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "at nennt einen Punkt, hier aber keine Frist.",
+      "en": "at names a point, but here it is not a deadline."
+     }
+    ]
    },
    "text": "The new interface must be live ___ the end of the third quarter at the very latest.",
    "accept": [
@@ -1930,7 +2018,29 @@
      "de": "Mixed Conditional: if + Past Perfect (Ursache früher), would + Grundform (Folge jetzt).",
      "en": "Mixed conditional: if + past perfect (earlier cause), would + base form (result now)."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "would"
+      ],
+      "de": "would steht nicht im if-Satz, dort braucht es had.",
+      "en": "would does not stand in the if-clause, had is needed there."
+     },
+     {
+      "if": [
+       "has"
+      ],
+      "de": "has ist Präsens, last year verlangt die Vergangenheit.",
+      "en": "has is present, last year needs the past."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "did braucht die Grundform, hier steht aber chosen.",
+      "en": "did needs the base form, but chosen stands here."
+     }
+    ]
    },
    "text": "If we ___ chosen the cheaper supplier last year, we would not be facing these delays now.",
    "accept": [
@@ -1959,7 +2069,29 @@
      "de": "Berichtspassiv: Subjekt + is said + to + Grundform (is said to be planning).",
      "en": "Reporting passive: subject + is said + to + base form (is said to be planning)."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "is said for gibt es nicht, es heißt is said to.",
+      "en": "is said for does not exist, it is is said to."
+     },
+     {
+      "if": [
+       "of"
+      ],
+      "de": "is said of gibt es nicht, es heißt is said to.",
+      "en": "is said of does not exist, it is is said to."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "is said at gibt es nicht, es heißt is said to.",
+      "en": "is said at does not exist, it is is said to."
+     }
+    ]
    },
    "text": "The company is said ___ be planning to relocate its headquarters to Austin next year.",
    "accept": [
@@ -1988,7 +2120,29 @@
      "de": "Indirekte Frage: Aussagesatz-Stellung, also „where the printer is“, nicht „where is the printer“.",
      "en": "Indirect question: statement order, so “where the printer is”, not “where is the printer”."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "does"
+      ],
+      "de": "In der indirekten Frage steht kein does, die Satzstellung ist normal.",
+      "en": "In an indirect question there is no does, the word order is normal."
+     },
+     {
+      "if": [
+       "are"
+      ],
+      "de": "are passt nicht zu printer, das ist Einzahl.",
+      "en": "are does not fit printer, which is singular."
+     },
+     {
+      "if": [
+       "has"
+      ],
+      "de": "has verlangt eine 3. Form und passt nicht zu where.",
+      "en": "has needs a participle and does not fit where."
+     }
+    ]
    },
    "text": "Excuse me, could you tell me where the nearest printer ___, please?",
    "accept": [
@@ -2017,7 +2171,29 @@
      "de": "Nach „she was on vacation“ ist es unmöglich: can’t have come.",
      "en": "Since “she was on vacation” it is impossible: can’t have come."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "must"
+      ],
+      "de": "must have come hieße „bestimmt gekommen“, der Urlaub schließt das aber aus.",
+      "en": "must have come would mean “certainly came”, but the vacation rules that out."
+     },
+     {
+      "if": [
+       "might"
+      ],
+      "de": "might have come hieße „vielleicht“, die Aussage ist aber ein sicherer Ausschluss.",
+      "en": "might have come would mean “perhaps”, but the statement is a firm exclusion."
+     },
+     {
+      "if": [
+       "should"
+      ],
+      "de": "should have come hieße „hätte kommen sollen“, das ist ein anderer Sinn.",
+      "en": "should have come would mean “ought to have come”, which is a different meaning."
+     }
+    ]
    },
    "text": "The invoice ___ have come from Hanna: she was on vacation in Spain all of last week.",
    "accept": [
@@ -2048,7 +2224,29 @@
      "de": "„look forward to“ endet auf eine Präposition: danach steht -ing.",
      "en": "“look forward to” ends in a preposition: -ing follows."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "look forward for gibt es nicht, es heißt look forward to.",
+      "en": "look forward for does not exist, it is look forward to."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "look forward at gibt es nicht, es heißt look forward to.",
+      "en": "look forward at does not exist, it is look forward to."
+     },
+     {
+      "if": [
+       "on"
+      ],
+      "de": "look forward on gibt es nicht, es heißt look forward to.",
+      "en": "look forward on does not exist, it is look forward to."
+     }
+    ]
    },
    "text": "We are looking forward ___ working with your new team next month.",
    "accept": [
@@ -2077,7 +2275,29 @@
      "de": "Nach „increase“ (Veränderung in einem Bereich) steht „in“: an increase in demand.",
      "en": "After “increase” (change within an area) comes “in”: an increase in demand."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "of"
+      ],
+      "de": "increase of braucht danach eine Zahl, vor demand steht in.",
+      "en": "increase of needs a figure after it, before demand in is used."
+     },
+     {
+      "if": [
+       "on"
+      ],
+      "de": "increase on gibt es in dieser Bedeutung nicht, es heißt increase in.",
+      "en": "increase on does not exist in this meaning, it is increase in."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "increase for nennt den Nutznießer, nicht den Bereich.",
+      "en": "increase for names a beneficiary, not the area."
+     }
+    ]
    },
    "text": "There has been a sharp increase ___ demand for our cloud services since the new campaign started.",
    "accept": [
@@ -2106,7 +2326,29 @@
      "de": "Zählbares im Plural (complaints): too many.",
      "en": "Countable plural (complaints): too many."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "much"
+      ],
+      "de": "much steht vor nicht zählbaren Nomen, complaints ist zählbar.",
+      "en": "much stands before uncountable nouns, complaints is countable."
+     },
+     {
+      "if": [
+       "few"
+      ],
+      "de": "too few heißt „zu wenige“, das passt nicht zu einer Sorge über viele Beschwerden.",
+      "en": "too few means “not enough”, which does not fit worry about many complaints."
+     },
+     {
+      "if": [
+       "little"
+      ],
+      "de": "little steht vor nicht zählbaren Nomen, complaints ist zählbar.",
+      "en": "little stands before uncountable nouns, complaints is countable."
+     }
+    ]
    },
    "text": "We received too ___ complaints about the new app this month, so we must react quickly.",
    "accept": [
@@ -2135,7 +2377,29 @@
      "de": "Vorzeitigkeit in einer Partizipialkonstruktion: Having + 3. Form (Having completed).",
      "en": "Earlier action in a participle phrase: Having + past participle (Having completed)."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "Had"
+      ],
+      "de": "Had completed ohne Subjekt ergibt keinen Nebensatz.",
+      "en": "Had completed without a subject forms no clause."
+     },
+     {
+      "if": [
+       "Being"
+      ],
+      "de": "Being completed wäre Passiv und passt nicht zur Handlung des Teams.",
+      "en": "Being completed would be passive and does not fit the team’s action."
+     },
+     {
+      "if": [
+       "Been"
+      ],
+      "de": "Been allein steht nicht am Satzanfang, es braucht having.",
+      "en": "Been alone does not start a sentence, having is needed."
+     }
+    ]
    },
    "text": "___ completed the first phase, the team moved on to the integration tests.",
    "accept": [
@@ -2169,22 +2433,22 @@
       "if": [
        "days"
       ],
-      "de": "„days“ passt hier nicht. Gesucht ist „day“.",
-      "en": "“days” does not fit here. The word needed is “day”."
+      "de": "Vor einem Nomen bleibt die Maßangabe im Singular: ten-day.",
+      "en": "Before a noun the measure stays singular: ten-day."
      },
      {
       "if": [
        "daily"
       ],
-      "de": "„daily“ passt hier nicht. Gesucht ist „day“.",
-      "en": "“daily” does not fit here. The word needed is “day”."
+      "de": "daily heißt „täglich“ und nennt keine Dauer.",
+      "en": "daily means “every day” and names no duration."
      },
      {
       "if": [
        "date"
       ],
-      "de": "„date“ passt hier nicht. Gesucht ist „day“.",
-      "en": "“date” does not fit here. The word needed is “day”."
+      "de": "date heißt „Datum“ und nennt keine Dauer.",
+      "en": "date means a calendar date and names no duration."
      }
     ]
    },
@@ -2677,7 +2941,9 @@
     {
      "a": [
       "must be in",
-      "should be in"
+      "should be in",
+      "must be handed in",
+      "must be submitted"
      ],
      "b": [
       "by"
@@ -2894,19 +3160,29 @@
    },
    "lead": "He said that he had not deleted the file.",
    "key": "DENIED",
-   "before": "He",
+   "before": "",
    "after": "the file.",
    "keys": [
     {
      "a": [
-      "denied"
+      "He denied"
      ],
      "b": [
-      "having deleted"
+      "having deleted",
+      "deleting"
+     ]
+    },
+    {
+     "a": [
+      "He denied that"
+     ],
+     "b": [
+      "he had deleted"
      ]
     }
    ],
    "tiles": [
+    "He",
     "having",
     "deleted"
    ],

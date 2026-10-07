@@ -21,7 +21,7 @@ PAT = [
             ['may well', 'might well', 'could well'],
             [('The client may well reject the first offer.', 'Es ist gut möglich, dass der Kunde das erste Angebot ablehnt.', 'meeting'),
              ('This could well be our best quarter so far.', 'Das könnte durchaus unser bestes Quartal bisher werden.', 'talk'),
-             ('You might well need a second server by autumn.', 'Es kann gut sein, dass Sie bis zum Herbst einen zweiten Server brauchen.', 'mail')],
+             ('You might well need a second server by fall.', 'Es kann gut sein, dass Sie bis zum Herbst einen zweiten Server brauchen.', 'mail')],
             ('The client may be well reject the first offer.', 'The client may well reject the first offer.',
              'Das deutsche „durchaus“ steht frei im Satz. Im Englischen steht well fest direkt hinter may, might oder could, ohne be dazwischen.',
              'The German “durchaus” can stand almost anywhere. In English well stands right after may, might or could, with no be between them.'),
@@ -80,10 +80,10 @@ FILE = topic_file(T, ('Ich kann Wahrscheinlichkeit in Stufen ausdrücken: durcha
                   PAT, [['mp.may-well', 'mp.bound'], ['mp.likely', 'mp.chance']],
                   (['Ist es durchaus möglich, aber nicht sicher? Nimm may, might oder could mit well.',
                     'Ist es wahrscheinlich? Nimm be likely to, bei Verneinung be unlikely to.',
-                    'Ist es fast sicher? Nimm be bound to oder be sure to. Willst du es sachlich schreiben, nimm there is a good chance that.'],
+                    'Ist es fast sicher? Nimm be bound to oder be sure to. Willst du es sachlich schreiben, nimm it is highly probable that oder it is almost certain that.'],
                    ['Is it quite possible but not certain? Use may, might or could with well.',
                     'Is it probable? Use be likely to, for the negative be unlikely to.',
-                    'Is it almost certain? Use be bound to or be sure to. For a factual tone use there is a good chance that.']))
+                    'Is it almost certain? Use be bound to or be sure to. For a factual tone use it is highly probable that or it is almost certain that.']))
 
 RULES = rules_from(PAT,
     ('Wahrscheinlichkeit hat Stufen: may well (durchaus möglich), is likely to (wahrscheinlich), is bound to (so gut wie sicher). Dazu kommt der Nominalstil: There is a good chance that …',
@@ -120,7 +120,7 @@ V.kwt('mp.chance', 'Probably the supplier will agree.', 'CHANCE', 'There is a go
 V.kwt('mp.chance', 'It is very probable that costs will rise.', 'HIGHLY', 'It is ___ that costs will rise.', 'highly probable', (2, 2),
       ('Richtig: It is highly probable that costs will rise. Das Adverb highly verstärkt probable.', 'Right: It is highly probable that costs will rise. The adverb highly strengthens probable.'),
       [{'if': ['highly'], 'not': ['probable'], 'de': 'Hinter highly steht das Wort probable.', 'en': 'After highly you need probable.'}])
-V.find('mp.may-well', 'You might to well need a second server by autumn.', (2, 3), 'well', 'You might well need a second server by autumn.',
+V.find('mp.may-well', 'You might to well need a second server by fall.', (2, 3), 'well', 'You might well need a second server by fall.',
        ('Der Fehler: nach might steht kein to. Richtig: You might well need …', 'The error: there is no to after might. Correct: You might well need …'),
        ('Nach might steht well direkt, ohne to.', 'After might, well follows directly, with no to.'))
 V.find('mp.may-well', 'This could well be our best quarter so far.', None, None, None,
@@ -167,11 +167,11 @@ ORDER = [
                ('Well steht direkt hinter dem Modalverb may und macht die Möglichkeit stärker. Danach folgt die Grundform reject.', 'Well stands right after the modal may and makes the possibility stronger. The base form reject follows.'),
                'The client may be well reject the first offer.', ('well', 'be well', 'Zwischen may und well steht kein be.', 'There is no be between may and well.'),
                single='The client may well bildet den Anfang; reject the first offer folgt danach.'),
-    order_item('mp.may-well', 'You might well need a second server by autumn.', 'Es kann gut sein, dass Sie bis zum Herbst einen zweiten Server brauchen.',
-               ['you', 'might well', 'need', 'a second server', 'by autumn'],
+    order_item('mp.may-well', 'You might well need a second server by fall.', 'Es kann gut sein, dass Sie bis zum Herbst einen zweiten Server brauchen.',
+               ['you', 'might well', 'need', 'a second server', 'by fall'],
                ('Might well heißt „durchaus möglich“. Danach folgt die Grundform need ohne to.', 'Might well means “quite possibly”. The base form need follows, without to.'),
-               'You might to well need a second server by autumn.', ('might well', 'might to well', 'Nach might steht kein to.', 'After might there is no to.'),
-               single='You might well need bildet den ersten Teil; a second server by autumn folgt danach.'),
+               'You might to well need a second server by fall.', ('might well', 'might to well', 'Nach might steht kein to.', 'After might there is no to.'),
+               single='You might well need bildet den ersten Teil; a second server by fall folgt danach.'),
     order_item('mp.bound', 'Prices are bound to rise after the merger.', 'Die Preise werden nach der Fusion mit Sicherheit steigen.',
                ['prices', 'are bound', 'to rise', 'after', 'the merger'],
                ('Be bound to nennt etwas fast Sicheres. Nach bound steht to und die Grundform rise.', 'Be bound to names something almost certain. After bound comes to and the base form rise.'),
@@ -242,13 +242,13 @@ def c1x():
         [(G, 'Nach bound braucht es to.', 'After bound you need to.'),
          (G, 'Nach bound steht to, nicht for.', 'After bound comes to, not for.'),
          (M, 'Binding heißt „verbindlich“ und ist hier nicht gemeint.', 'Binding means “obligatory” and is not meant here.')])
-    mcc(T, 'mp.bound', 'C1', 'life', 0.0, 'Do not worry about the exam, you ___ pass; you have studied so hard.',
+    mcc(T, 'mp.bound', 'C1', 'life', 0.0, "Don't worry about the exam. You ___ pass; you've studied so hard.",
         'are sure to', ['are sure', 'are surely to', 'are sure for'],
         ('Be sure to nennt etwas fast Sicheres. Danach folgt die Grundform pass.', 'Be sure to names something almost certain. The base form pass follows.'),
         [(G, 'Nach sure braucht es to.', 'After sure you need to.'),
          (G, 'Das Adverb surely passt nicht in diese feste Wendung.', 'The adverb surely does not fit this fixed phrase.'),
          (G, 'Nach sure steht to, nicht for.', 'After sure comes to, not for.')])
-    mcc(T, 'mp.likely', 'C1', 'biz', 0.0, 'The new interface ___ confuse existing customers, so we planned a short guide.',
+    mcc(T, 'mp.likely', 'C1', 'biz', 0.0, "The new interface ___ confuse existing customers, so we've prepared a short guide.",
         'is likely to', ['is likely that', 'is likelihood to', 'is like to'],
         ('Mit dem Subjekt vorn folgt likely to und die Grundform confuse.', 'With the subject first, likely to follows with the base form confuse.'),
         [(G, 'Nach dem Subjekt steht kein that-Satz, sondern to + Grundform.', 'After the subject there is no that-clause but to + base form.'),
@@ -261,12 +261,12 @@ def c1x():
          (G, 'Chance steht im Singular, deshalb is, nicht are.', 'Chance is singular, so is, not are.'),
          (G, 'There has passt nicht zu einer Möglichkeit.', 'There has does not fit a possibility.')])
 
-    ocl(T, 'mp.may-well', 'C1', 'biz', 0.0, 'The supplier may ___ refuse to change the delivery date at this stage.',
-        ['well'], 'adv', ['good', 'very', 'much'],
-        ('Well steht direkt hinter may und macht die Möglichkeit stärker: may well refuse.', 'Well stands right after may and makes the possibility stronger: may well refuse.'))
-    ocl(T, 'mp.may-well', 'C1', 'life', 0.0, 'This could ___ be the warmest autumn we have had in years.',
-        ['well'], 'adv', ['good', 'best', 'more'],
-        ('Well steht direkt hinter could: could well be.', 'Well stands right after could: could well be.'))
+    ocl(T, 'mp.may-well', 'C1', 'biz', 0.0, 'The supplier ___ well refuse to change the delivery date at this stage.',
+        ['may', 'might', 'could'], 'aux', ['must', 'would', 'shall'],
+        ('May, might oder could steht direkt vor well und macht die Möglichkeit stärker: may well refuse.', 'May, might or could stands right before well and makes the possibility stronger: may well refuse.'))
+    ocl(T, 'mp.may-well', 'C1', 'life', 0.0, 'This ___ well be the warmest fall we have had in years.',
+        ['could', 'may', 'might'], 'aux', ['must', 'will', 'shall'],
+        ('Could, may oder might steht direkt vor well: could well be.', 'Could, may or might stands right before well: could well be.'))
     ocl(T, 'mp.bound', 'C1', 'biz', 0.0, 'Someone is bound ___ ask about the price sooner or later.',
         ['to'], 'prep', ['for', 'at', 'on'],
         ('Nach bound steht to und die Grundform: bound to ask.', 'After bound comes to and the base form: bound to ask.'))
@@ -298,9 +298,9 @@ def c1x():
         ('Kein Fehler: There is a high chance that … nennt eine Möglichkeit.', 'No mistake: There is a high chance that … names a possibility.'))
 
     kwt(T, 'mp.may-well', 'C1', 'biz', 0.0, 'It is quite possible that the regulator will reject our proposal.', 'WELL', 'The regulator', 'our proposal.',
-        [(['may well'], ['reject'])], ['may', 'reject'], ['be', 'to', 'good'], [],
+        [(['may well', 'could well', 'might well'], ['reject'])], ['may', 'reject'], ['be', 'to', 'good'], [],
         ('may well reject. Well steht direkt hinter may.', 'may well reject. Well stands right after may.'), [])
-    kwt(T, 'mp.may-well', 'C1', 'life', 0.0, 'Maybe this will turn out to be the best holiday we ever had.', 'WELL', 'This', 'the best holiday we ever had.',
+    kwt(T, 'mp.may-well', 'C1', 'life', 0.0, 'Maybe this will turn out to be the best vacation of our lives.', 'WELL', 'This', 'the best vacation we have ever had.',
         [(['could well', 'may well', 'might well'], ['be'])], ['could', 'be'], ['to', 'very', 'good'], [],
         ('could well be. Well steht direkt hinter dem Modalverb.', 'could well be. Well stands right after the modal.'), [])
     kwt(T, 'mp.bound', 'C1', 'biz', 0.0, 'Prices will almost certainly rise once the merger is complete.', 'BOUND', 'Prices are', 'after the merger.',
@@ -311,7 +311,7 @@ def c1x():
         [(['is'], ['likely to'])], ['is', 'to'], ['are', 'that', 'for'], [],
         ('is likely to be. Nach likely steht to und die Grundform.', 'is likely to be. After likely comes to and the base form.'), [])
     kwt(T, 'mp.chance', 'C1', 'life', 0.0, 'My landlord will probably agree to a lower rent.', 'CHANCE', '', 'my landlord will agree to a lower rent.',
-        [(['There is a'], ['good chance that'])], ['There', 'is', 'a', 'good', 'that'], ['exists', 'it', 'for'], [],
+        [(['There is a', "There's a"], ['good chance that', 'fair chance that', 'high chance that', 'strong chance that'])], ['There', 'is', 'a', 'good', 'that'], ['exists', 'it', 'for'], [],
         ('There is a good chance that … Danach folgt ein that-Satz.', 'There is a good chance that … A that-clause follows.'), [])
     kwt(T, 'mp.likely', 'C1', 'biz', 0.0, 'The delay probably will not affect the launch.', 'UNLIKELY', 'The delay is', 'the launch.',
         [(['unlikely'], ['to affect'])], ['to', 'affect'], ['not', 'likely', 'for'], [],

@@ -24,12 +24,12 @@
   "de": [
    "Ist es durchaus möglich, aber nicht sicher? Nimm may, might oder could mit well.",
    "Ist es wahrscheinlich? Nimm be likely to, bei Verneinung be unlikely to.",
-   "Ist es fast sicher? Nimm be bound to oder be sure to. Willst du es sachlich schreiben, nimm there is a good chance that."
+   "Ist es fast sicher? Nimm be bound to oder be sure to. Willst du es sachlich schreiben, nimm it is highly probable that oder it is almost certain that."
   ],
   "en": [
    "Is it quite possible but not certain? Use may, might or could with well.",
    "Is it probable? Use be likely to, for the negative be unlikely to.",
-   "Is it almost certain? Use be bound to or be sure to. For a factual tone use there is a good chance that."
+   "Is it almost certain? Use be bound to or be sure to. For a factual tone use it is highly probable that or it is almost certain that."
   ]
  },
  "patterns": [
@@ -64,7 +64,7 @@
      "ctx": "talk"
     },
     {
-     "en": "You might well need a second server by autumn.",
+     "en": "You might well need a second server by fall.",
      "de": "Es kann gut sein, dass Sie bis zum Herbst einen zweiten Server brauchen.",
      "ctx": "mail"
     }

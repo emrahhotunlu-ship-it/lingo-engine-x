@@ -54,7 +54,7 @@ R = {
         'that': ('Hard that we tried ist keine gültige Verbindung für einen Einwand.', 'Hard that we tried is not a valid combination for a concession.'),
         'so': ('Hard so we tried drückt keinen Einwand aus.', 'Hard so we tried does not express a concession.'),
         'if': ('if nennt eine Bedingung, hier soll aber ein Einwand stehen.', 'if names a condition, but a concession is needed here.')},
-    'So strong was the signal ___ the technicians checked the antenna twice.': {
+    'So strong was the wind ___ the organizers canceled the outdoor concert.': {
         'which': ('which bezieht sich auf ein Nomen, hier folgt aber die Folge des ganzen Satzes.', 'which refers to a noun, but here the result of the whole clause follows.'),
         'what': ('what leitet keinen Folgesatz ein, nach so … that braucht es that.', 'what does not start a result clause, so … that needs that.'),
         'as': ('as vergleicht, die Folge wird aber mit that angeschlossen.', 'as compares, but the result is joined with that.')},
@@ -102,7 +102,7 @@ R = {
         'for': ('for steht nicht für den weggelassenen Infinitiv, es braucht to.', 'for does not stand for the dropped infinitive, it needs to.'),
         'at': ('at steht nicht für den weggelassenen Infinitiv, es braucht to.', 'at does not stand for the dropped infinitive, it needs to.'),
         'on': ('on steht nicht für den weggelassenen Infinitiv, es braucht to.', 'on does not stand for the dropped infinitive, it needs to.')},
-    '"Is the shop open on Sundays?" "I think ___."': {
+    '"Is the store open on Sundays?" "I think ___."': {
         'it': ('it ersetzt den Gedanken nicht, nach think steht so.', 'it does not replace the thought, think takes so.'),
         'yes': ('yes ist eine Antwort für sich und steht nicht hinter think.', 'yes is an answer on its own and does not follow think.'),
         'that': ('that braucht danach einen Satz, allein ersetzt es nichts.', 'that needs a clause after it, alone it replaces nothing.')},

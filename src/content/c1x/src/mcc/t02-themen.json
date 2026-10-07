@@ -168,7 +168,7 @@
      }
     ]
    },
-   "text": "Do not worry about the exam, you ___ pass; you have studied so hard.",
+   "text": "Don't worry about the exam. You ___ pass; you've studied so hard.",
    "options": [
     "are sure",
     "are surely to",
@@ -212,7 +212,7 @@
      }
     ]
    },
-   "text": "The new interface ___ confuse existing customers, so we planned a short guide.",
+   "text": "The new interface ___ confuse existing customers, so we've prepared a short guide.",
    "options": [
     "is likely to",
     "is likely that",
@@ -520,7 +520,7 @@
      }
     ]
    },
-   "text": "This old watch ___ to my grandfather, so I treat it carefully.",
+   "text": "This old watch ___ to my grandfather, so I am careful with it.",
    "options": [
     "is belonging",
     "belonging",
@@ -531,6 +531,94 @@
   },
   {
    "id": "mcc-0613",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "sa.being",
+   "why": {
+    "ok": {
+     "de": "Are being zeigt Verhalten für begrenzte Zeit: You are being unreasonable.",
+     "en": "Are being shows behavior for a limited time: You are being unreasonable."
+    },
+    "wrong": [
+     {
+      "opt": "be",
+      "cat": "grammar",
+      "de": "Nach are steht being, nicht be.",
+      "en": "After are comes being, not be."
+     },
+     {
+      "opt": "been",
+      "cat": "grammar",
+      "de": "Been braucht have, nicht are.",
+      "en": "Been needs have, not are."
+     },
+     {
+      "opt": "are",
+      "cat": "grammar",
+      "de": "Are allein sagt, wie er ist, nicht, wie er sich gerade verhält.",
+      "en": "Are alone says what he is like, not how he is behaving right now."
+     }
+    ]
+   },
+   "text": "You are ___ unreasonable about the schedule, and the whole team has noticed.",
+   "options": [
+    "being",
+    "be",
+    "been",
+    "are"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "mcc-0614",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "sa.being",
+   "why": {
+    "ok": {
+     "de": "Is being zeigt Verhalten für begrenzte Zeit: is being silly.",
+     "en": "Is being shows behavior for a limited time: is being silly."
+    },
+    "wrong": [
+     {
+      "opt": "be",
+      "cat": "grammar",
+      "de": "Nach is steht being, nicht be.",
+      "en": "After is comes being, not be."
+     },
+     {
+      "opt": "been",
+      "cat": "grammar",
+      "de": "Been braucht have, nicht is.",
+      "en": "Been needs have, not is."
+     },
+     {
+      "opt": "having",
+      "cat": "grammar",
+      "de": "Having silly gibt es nicht, hier braucht es being.",
+      "en": "Having silly does not exist, being is needed here."
+     }
+    ]
+   },
+   "text": "My brother is ___ silly today because he wants to cheer us up.",
+   "options": [
+    "be",
+    "being",
+    "been",
+    "having"
+   ],
+   "answer": 1
+  },
+  {
+   "id": "mcc-0615",
    "kind": "mcc",
    "area": "gram",
    "topic": "future-past",
@@ -566,15 +654,15 @@
    },
    "text": "We ___ launch the new tool in May, but the vendor delayed the delivery.",
    "options": [
-    "were going to",
     "are going to",
     "went to",
+    "were going to",
     "would to"
    ],
-   "answer": 0
+   "answer": 2
   },
   {
-   "id": "mcc-0614",
+   "id": "mcc-0616",
    "kind": "mcc",
    "area": "gram",
    "topic": "future-past",
@@ -611,14 +699,14 @@
    "text": "I ___ close the file when the client called with a new request.",
    "options": [
     "was about",
-    "was about to",
     "am about to",
-    "was to about"
+    "was to about",
+    "was about to"
    ],
-   "answer": 1
+   "answer": 3
   },
   {
-   "id": "mcc-0615",
+   "id": "mcc-0617",
    "kind": "mcc",
    "area": "gram",
    "topic": "future-past",
@@ -654,15 +742,15 @@
    },
    "text": "In 2016 he joined our Munich office and ___ later run the whole region.",
    "options": [
+    "would",
     "will",
     "is going to",
-    "would",
     "shall"
    ],
-   "answer": 2
+   "answer": 0
   },
   {
-   "id": "mcc-0616",
+   "id": "mcc-0618",
    "kind": "mcc",
    "area": "gram",
    "topic": "future-past",
@@ -699,14 +787,14 @@
    "text": "The merger ___ be completed by June, but the regulator asked for more time.",
    "options": [
     "is to",
+    "was to",
     "was being to",
-    "were to",
-    "was to"
+    "were to"
    ],
-   "answer": 3
+   "answer": 1
   },
   {
-   "id": "mcc-0617",
+   "id": "mcc-0619",
    "kind": "mcc",
    "area": "gram",
    "topic": "future-past",
@@ -742,15 +830,15 @@
    },
    "text": "We ___ sit down for dinner when the neighbors rang the bell.",
    "options": [
-    "were about to",
     "were about",
     "are about to",
+    "were about to",
     "were to about"
    ],
-   "answer": 0
+   "answer": 2
   },
   {
-   "id": "mcc-0618",
+   "id": "mcc-0620",
    "kind": "mcc",
    "area": "gram",
    "topic": "future-past",
@@ -787,14 +875,14 @@
    "text": "I ___ tell you about the surprise, but my sister already did.",
    "options": [
     "am going to",
-    "was going to",
     "was go to",
-    "would to"
+    "would to",
+    "was going to"
    ],
-   "answer": 1
+   "answer": 3
   },
   {
-   "id": "mcc-0619",
+   "id": "mcc-0621",
    "kind": "mcc",
    "area": "gram",
    "topic": "quant-neg",
@@ -830,15 +918,15 @@
    },
    "text": "___ the candidates we interviewed meets all of the requirements.",
    "options": [
+    "None of",
     "No one of",
     "Not of",
-    "None of",
     "Nobody of"
    ],
-   "answer": 2
+   "answer": 0
   },
   {
-   "id": "mcc-0620",
+   "id": "mcc-0622",
    "kind": "mcc",
    "area": "gram",
    "topic": "quant-neg",
@@ -875,14 +963,14 @@
    "text": "The audit team ___ any errors in the final accounts.",
    "options": [
     "did not hardly find",
+    "hardly found",
     "found hardly not",
-    "hardly not found",
-    "hardly found"
+    "hardly not found"
    ],
-   "answer": 3
+   "answer": 1
   },
   {
-   "id": "mcc-0621",
+   "id": "mcc-0623",
    "kind": "mcc",
    "area": "gram",
    "topic": "quant-neg",
@@ -893,7 +981,7 @@
    "why": {
     "ok": {
      "de": "No longer steht vor dem Verb und heißt „nicht mehr“.",
-     "en": "No longer stands before the verb and means “not any more”."
+     "en": "No longer stands before the verb and means “not anymore”."
     },
     "wrong": [
      {
@@ -918,15 +1006,15 @@
    },
    "text": "Our supplier ___ the old model, so we have to switch to the new one.",
    "options": [
-    "no longer produces",
     "no more produces",
     "is not longer producing",
+    "no longer produces",
     "does not produce longer"
    ],
-   "answer": 0
+   "answer": 2
   },
   {
-   "id": "mcc-0622",
+   "id": "mcc-0624",
    "kind": "mcc",
    "area": "gram",
    "topic": "quant-neg",
@@ -963,14 +1051,14 @@
    "text": "The number of open tickets ___ since we hired two more engineers.",
    "options": [
     "have dropped",
-    "has dropped",
     "are dropping",
-    "were dropped"
+    "were dropped",
+    "has dropped"
    ],
-   "answer": 1
+   "answer": 3
   },
   {
-   "id": "mcc-0623",
+   "id": "mcc-0625",
    "kind": "mcc",
    "area": "gram",
    "topic": "quant-neg",
@@ -1000,21 +1088,21 @@
       "opt": "nothing of",
       "cat": "grammar",
       "de": "Nothing steht für Sachen ohne Zahl, hier geht es um vier Wohnungen.",
-      "en": "Nothing stands for things without number, here it is four flats."
+      "en": "Nothing stands for things without number, here it is four apartments."
      }
     ]
    },
-   "text": "I looked at four flats, but ___ them had a balcony.",
+   "text": "I looked at four apartments, but ___ them had a balcony.",
    "options": [
+    "none of",
     "no one of",
     "not of",
-    "none of",
     "nothing of"
    ],
-   "answer": 2
+   "answer": 0
   },
   {
-   "id": "mcc-0624",
+   "id": "mcc-0626",
    "kind": "mcc",
    "area": "gram",
    "topic": "quant-neg",
@@ -1051,11 +1139,11 @@
    "text": "A number of my friends ___ moved abroad in the last few years.",
    "options": [
     "has",
+    "have",
     "is",
-    "was",
-    "have"
+    "was"
    ],
-   "answer": 3
+   "answer": 1
   }
  ]
 }

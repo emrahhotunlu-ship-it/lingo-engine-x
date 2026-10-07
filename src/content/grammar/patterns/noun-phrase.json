@@ -236,8 +236,8 @@
     {
      "s": "Was today's meeting canceled?",
      "q": {
-      "de": "Geht es um das Meeting von heute?",
-      "en": "Is it about the meeting from today?"
+      "de": "Geht es um das heutige Meeting?",
+      "en": "Is it about today’s meeting?"
      },
      "a": true
     }

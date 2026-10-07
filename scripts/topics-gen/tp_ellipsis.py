@@ -254,7 +254,7 @@ def c1x():
         [(G, 'That of gehört zu einem Singular. Laptops ist Plural.', 'That of belongs to a singular. Laptops is plural.'),
          (G, 'These weist auf etwas Nahes hin und passt nicht in den Vergleich.', 'These points to something near and does not fit the comparison.'),
          (G, 'Them passt nicht hinter than … of.', 'Them does not fit after than … of.')])
-    mcc(T, 'el.to-aux', 'C1', 'biz', 0.0, "Are you joining the training on Friday? Yes, I would love ___, but my flight is late.",
+    mcc(T, 'el.to-aux', 'C1', 'biz', 0.0, "Are you joining the training on Friday? I would love ___, but my flight is late.",
         'to', ['so', 'for', 'at'],
         ('Das Verb attend entfällt, aber to bleibt: I’d love to.', 'The verb attend is dropped, but to stays: I’d love to.'),
         [(G, 'So gehört zu think und hope, nicht zu love.', 'So belongs to think and hope, not to love.'),
@@ -326,6 +326,6 @@ def place():
         [(G, 'It ersetzt keinen Teil einer Nominalgruppe nach einem Adjektiv.', 'It does not replace part of a noun phrase after an adjective.'),
          (G, 'Ones ist Plural, aber a shorter steht im Singular.', 'Ones is plural, but a shorter is singular.'),
          (G, 'That passt nicht hinter a shorter.', 'That does not fit after a shorter.')])
-    ocl(T, 'el.so-not', 'B2+', 'life', 0.0, 'Is the café still open? I hope ___, because I really need a coffee.',
+    ocl(T, 'el.so-not', 'B2+', 'life', 0.0, 'Is the café already closed? I hope ___, because I really need a coffee.',
         ['not'], 'adv', ['no', 'nor', 'never'],
         ('Nach hope steht not für den verneinten Gedanken: I hope not.', 'After hope, not stands for the negative thought: I hope not.'))

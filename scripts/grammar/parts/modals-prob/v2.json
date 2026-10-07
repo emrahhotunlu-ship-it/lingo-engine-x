@@ -323,13 +323,13 @@
   "id": "mp-f1",
   "type": "find",
   "pat": "mp.may-well",
-  "prompt": "You might to well need a second server by autumn.",
+  "prompt": "You might to well need a second server by fall.",
   "err": [
    2,
    3
   ],
   "answer": "well",
-  "fixed": "You might well need a second server by autumn.",
+  "fixed": "You might well need a second server by fall.",
   "accepted": [],
   "why": {
    "ok": {

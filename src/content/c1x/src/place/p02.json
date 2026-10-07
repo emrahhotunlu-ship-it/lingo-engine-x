@@ -206,26 +206,26 @@
       "if": [
        "no"
       ],
-      "de": "„no“ passt hier nicht. Gesucht ist „not“.",
-      "en": "“no” does not fit here. The word needed is “not”."
+      "de": "no ersetzt keinen Gedanken nach hope, dort steht not.",
+      "en": "no does not replace a thought after hope, not does."
      },
      {
       "if": [
        "nor"
       ],
-      "de": "„nor“ passt hier nicht. Gesucht ist „not“.",
-      "en": "“nor” does not fit here. The word needed is “not”."
+      "de": "nor verbindet zwei Verneinungen und ersetzt hier keinen Gedanken.",
+      "en": "nor joins two negatives and does not replace a thought here."
      },
      {
       "if": [
        "never"
       ],
-      "de": "„never“ passt hier nicht. Gesucht ist „not“.",
-      "en": "“never” does not fit here. The word needed is “not”."
+      "de": "never heißt „nie“ und ersetzt keinen Gedanken nach hope.",
+      "en": "never means “never” and does not replace a thought after hope."
      }
     ]
    },
-   "text": "Is the café still open? I hope ___, because I really need a coffee.",
+   "text": "Is the café already closed? I hope ___, because I really need a coffee.",
    "accept": [
     "not"
    ],
@@ -361,7 +361,9 @@
       "the first"
      ],
      "b": [
-      "person to"
+      "person to",
+      "one to",
+      "to"
      ]
     }
    ],

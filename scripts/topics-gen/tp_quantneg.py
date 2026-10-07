@@ -9,7 +9,7 @@ TOPIC = {
     'id': T, 'group': 'Grammatik-Pfad', 'level': 'C1', 'p0': 0.45,
     'name': 'Verneinung und Mengen', 'name_en': 'Negation and quantity',
     'rule': 'Verneinung und Mengen haben feste Formen: „none of“ und „neither of“ für „keiner“, „hardly“ und „scarcely“ für „kaum“ (schon verneint), „no longer“ für „nicht mehr“ und „a number of“ gegen „the number of“.',
-    'rule_en': 'Negation and quantity have fixed forms: “none of” and “neither of” for “not one”, “hardly” and “scarcely” for “barely” (already negative), “no longer” for “not any more” and “a number of” versus “the number of”.',
+    'rule_en': 'Negation and quantity have fixed forms: “none of” and “neither of” for “not one”, “hardly” and “scarcely” for “barely” (already negative), “no longer” for “not anymore” and “a number of” versus “the number of”.',
     'ex': ['None of the suppliers has replied yet.', 'We no longer offer this service.'],
 }
 
@@ -44,25 +44,25 @@ PAT = [
              'Hardly any heißt: sehr wenige. None of heißt: kein einziges.', 'Hardly any means: very few. None of means: not a single one.'),
             [('We hardly had any time.', 'Hatten wir viel Zeit?', 'Did we have a lot of time?', False)],
             ('Meinst du „kaum“? Dann nimm hardly, scarcely oder barely, ohne zweites not.', 'Do you mean “barely”? Then use hardly, scarcely or barely, without a second not.')),
-    pattern('qn.no-longer', ('no longer, any more · nicht mehr', 'no longer, any more · not any more'),
-            ('no longer + Verb · not … any longer / any more (am Ende)', 'no longer + verb · not … any longer / any more (at the end)'),
+    pattern('qn.no-longer', ('no longer, anymore · nicht mehr', 'no longer, anymore · not anymore'),
+            ('no longer + Verb · not … any longer / anymore (am Ende)', 'no longer + verb · not … any longer / anymore (at the end)'),
             ('Für „nicht mehr“ bei der Zeit sagt man no longer vor dem Verb oder not … any longer am Ende. No more steht bei Mengen: „no more questions“.',
-             'For “not any more” in time you say no longer before the verb or not … any longer at the end. No more is used with amounts: “no more questions”.'),
-            ['no longer', 'not any longer', 'not any more', 'no more', 'anymore'],
+             'For “not anymore” in time you say no longer before the verb or not … any longer at the end. No more is used with amounts: “no more questions”.'),
+            ['no longer', 'not any longer', 'not anymore', 'no more', 'anymore'],
             [('We no longer offer this service.', 'Wir bieten diesen Service nicht mehr an.', 'mail'),
              ('The old system is no longer supported.', 'Das alte System wird nicht mehr unterstützt.', 'meeting'),
-             ('He does not work here any more.', 'Er arbeitet nicht mehr hier.', 'talk')],
+             ('He does not work here anymore.', 'Er arbeitet nicht mehr hier.', 'talk')],
             ('We no more offer this service.', 'We no longer offer this service.',
              'Für „nicht mehr“ bei der Zeit sagt man no longer. No more steht bei Mengen und vor Nomen.',
-             'For “not any more” in time you say no longer. No more is used with amounts and before nouns.'),
+             'For “not anymore” in time you say no longer. No more is used with amounts and before nouns.'),
             ('qn.hardly', 'He no longer works here.', 'He hardly works here.',
              'No longer heißt: früher ja, jetzt nein. Hardly heißt: fast nie.', 'No longer means: before yes, now no. Hardly means: almost never.'),
             [('He no longer works here.', 'Hat er früher hier gearbeitet?', 'Did he work here before?', True)],
-            ('Meinst du „früher ja, jetzt nicht mehr“? Dann nimm no longer oder not any more.', 'Do you mean “before yes, now no”? Then use no longer or not any more.')),
+            ('Meinst du „früher ja, jetzt nicht mehr“? Dann nimm no longer oder not anymore.', 'Do you mean “before yes, now no”? Then use no longer or not anymore.')),
     pattern('qn.number', ('a number of, the number of · Mengen', 'a number of, the number of · amounts'),
             ('a number of + Plural (Verb Plural) · the number of + Plural (Verb Singular)', 'a number of + plural (plural verb) · the number of + plural (singular verb)'),
-            ('A number of heißt „einige“ und nimmt das Verb im Plural. The number of meint die Zahl selbst und nimmt das Verb im Singular. Dazu: few und little ohne a sind knapp, a few und a little sind genug.',
-             'A number of means “several” and takes a plural verb. The number of means the figure itself and takes a singular verb. Also: few and little without a are scarce, a few and a little are enough.'),
+            ('A number of heißt „einige“ und nimmt das Verb im Plural. The number of meint die Zahl selbst und nimmt das Verb im Singular. Few klingt eher negativ („wenige“), a few neutral oder positiv („einige“). A great deal of steht nur vor nicht zählbaren Nomen (a great deal of time).',
+             'A number of means “several” and takes a plural verb. The number of means the figure itself and takes a singular verb. Also: few sounds rather negative (“hardly any”), a few neutral or positive (“some”). A great deal of is used only before uncountable nouns (a great deal of time).'),
             ['a number of', 'the number of', 'a great deal of', 'a few', 'few', 'a little'],
             [('A number of customers have complained about the delay.', 'Einige Kunden haben sich über die Verzögerung beschwert.', 'mail'),
              ('The number of complaints has fallen.', 'Die Zahl der Beschwerden ist gesunken.', 'meeting'),
@@ -84,17 +84,17 @@ FILE = topic_file(T, ('Ich kann Verneinung und Mengen genau ausdrücken: none of
                     'Meinst du „nicht mehr“? Nimm no longer. Geht es um Mengen? Prüfe a number of und the number of.'],
                    ['Do you mean “not one of these”? Use none of, with two things neither of.',
                     'Do you mean “barely”? Use hardly, scarcely or barely, without a second not.',
-                    'Do you mean “not any more”? Use no longer. Is it about amounts? Check a number of and the number of.']))
+                    'Do you mean “not anymore”? Use no longer. Is it about amounts? Check a number of and the number of.']))
 
 RULES = rules_from(PAT,
     ('Hardly, scarcely und barely sind schon verneint. None of und neither of stehen für „keiner“. No longer heißt „nicht mehr“. A number of nimmt Plural, the number of Singular.',
-     'Hardly, scarcely and barely are already negative. None of and neither of stand for “not one”. No longer means “not any more”. A number of takes plural, the number of singular.'),
-    ('Im Beruf brauchst du genaue Mengen: „None of the suppliers …“, „We no longer offer …“, „The number of complaints has fallen“. Wann ja, wann nein: Im Gespräch sagt man oft „nobody“ und „not any more“, in Berichten und Mails passen none of und no longer besser.',
-     'At work you need exact amounts: “None of the suppliers …”, “We no longer offer …”, “The number of complaints has fallen”. When yes, when no: in conversation people often say “nobody” and “not any more”, in reports and emails none of and no longer fit better.'),
+     'Hardly, scarcely and barely are already negative. None of and neither of stand for “not one”. No longer means “not anymore”. A number of takes plural, the number of singular.'),
+    ('Im Beruf brauchst du genaue Mengen: „None of the suppliers …“, „We no longer offer …“, „The number of complaints has fallen“. Wann ja, wann nein: Im Gespräch sagt man oft „nobody“ und „not anymore“, in Berichten und Mails passen none of und no longer besser.',
+     'At work you need exact amounts: “None of the suppliers …”, “We no longer offer …”, “The number of complaints has fallen”. When yes, when no: in conversation people often say “nobody” and “not anymore”, in reports and emails none of and no longer fit better.'),
     ('Nicht verwechseln: Das deutsche „nicht mehr“ ist bei der Zeit no longer, nicht no more. „Kaum“ braucht kein zweites not.',
      'Do not mix up: the German “nicht mehr” is no longer for time, not no more. “Kaum” needs no second not.'),
     (['Keiner von diesen? none of / neither of.', 'Kaum? hardly / scarcely / barely, ohne not.', 'Nicht mehr? no longer.', 'Einige oder die Zahl? a number of / the number of.'],
-     ['Not one of these? none of / neither of.', 'Barely? hardly / scarcely / barely, without not.', 'Not any more? no longer.', 'Several or the figure? a number of / the number of.']))
+     ['Not one of these? none of / neither of.', 'Barely? hardly / scarcely / barely, without not.', 'Not anymore? no longer.', 'Several or the figure? a number of / the number of.']))
 
 V = V2('qn')
 V.kwt('qn.none', 'No supplier among those we asked has replied yet.', 'NONE', '___ the suppliers has replied yet.', 'None of', (2, 2),
@@ -112,9 +112,9 @@ V.kwt('qn.hardly', 'The team almost never misses a deadline.', 'SCARCELY', 'The 
 V.kwt('qn.no-longer', 'We stopped offering this service last year.', 'LONGER', 'We ___ offer this service.', 'no longer', (2, 2),
       ('Richtig: We no longer offer this service. No longer steht vor dem Verb.', 'Right: We no longer offer this service. No longer stands before the verb.'),
       [{'if': ['longer'], 'not': ['no'], 'de': 'Vor longer braucht es no: no longer.', 'en': 'Before longer you need no: no longer.'}])
-V.kwt('qn.no-longer', 'He left the company last spring.', 'MORE', 'He does not work here ___.', 'any more', (2, 2),
-      ('Richtig: He does not work here any more. Am Ende steht any more oder any longer.', 'Right: He does not work here any more. At the end any more or any longer is used.'),
-      [{'if': ['more'], 'not': ['any'], 'de': 'Nach not braucht es any more.', 'en': 'After not you need any more.'}], )
+V.kwt('qn.no-longer', 'He left the company last spring.', 'LONGER', 'He ___ works here.', 'no longer', (2, 2),
+      ('Richtig: He no longer works here. No longer steht vor dem Verb.', 'Right: He no longer works here. No longer stands before the verb.'),
+      [{'if': ['longer'], 'not': ['no'], 'de': 'Vor longer braucht es no: no longer.', 'en': 'Before longer you need no: no longer.'}])
 V.kwt('qn.number', 'Many customers have complained about the delay.', 'NUMBER', '___ customers have complained about the delay.', 'A number of', (3, 3),
       ('Richtig: A number of customers have complained. A number of heißt „einige“ und nimmt das Verb im Plural.', 'Right: A number of customers have complained. A number of means “several” and takes a plural verb.'),
       [{'if': ['number'], 'not': ['of'], 'de': 'Nach number braucht es of.', 'en': 'After number you need of.'}])
@@ -134,7 +134,7 @@ V.find('qn.hardly', 'We barely noticed the change in the schedule.', None, None,
        ('Richtig: barely noticed ist „kaum bemerkt“.', 'Right: barely noticed means “hardly noticed”.'),
        ('barely noticed ist richtig gebildet.', 'barely noticed is correctly formed.'))
 V.find('qn.no-longer', 'Our team no more supports the old software version.', (2, 3), 'no longer', 'Our team no longer supports the old software version.',
-       ('Der Fehler: Für „nicht mehr“ bei der Zeit steht no longer.', 'The error: for “not any more” in time no longer is used.'),
+       ('Der Fehler: Für „nicht mehr“ bei der Zeit steht no longer.', 'The error: for “not anymore” in time no longer is used.'),
        ('No more steht bei Mengen, hier gilt no longer.', 'No more is used with amounts, here no longer applies.'))
 V.find('qn.no-longer', 'The old system is not longer supported by the vendor.', (4, 5), 'no longer', 'The old system is no longer supported by the vendor.',
        ('Der Fehler: Es heißt no longer, nicht not longer.', 'The error: it is no longer, not not longer.'),
@@ -185,14 +185,14 @@ ORDER = [
                single='The team scarcely ever bildet den Anfang; misses a deadline folgt danach.'),
     order_item('qn.no-longer', 'We no longer offer this service to private customers.', 'Wir bieten diesen Service privaten Kunden nicht mehr an.',
                ['we', 'no longer', 'offer', 'this service', 'to private customers'],
-               ('No longer steht vor dem Verb und heißt „nicht mehr“.', 'No longer stands before the verb and means “not any more”.'),
-               'We no more offer this service to private customers.', ('no longer', 'no more', 'Für „nicht mehr“ bei der Zeit steht no longer.', 'For “not any more” in time no longer is used.'),
+               ('No longer steht vor dem Verb und heißt „nicht mehr“.', 'No longer stands before the verb and means “not anymore”.'),
+               'We no more offer this service to private customers.', ('no longer', 'no more', 'Für „nicht mehr“ bei der Zeit steht no longer.', 'For “not anymore” in time no longer is used.'),
                single='We no longer bildet den Anfang; offer this service to private customers folgt danach.'),
-    order_item('qn.no-longer', 'He does not work here any more.', 'Er arbeitet nicht mehr hier.',
-               ['he', 'does not', 'work', 'here', 'any more'],
-               ('Nach does not steht am Ende any more und bedeutet „nicht mehr“.', 'After does not, any more at the end means “not any more”.'),
-               'He does not work here no more.', ('any more', 'no more', 'Nach not steht kein zweites no.', 'After not no second no follows.'),
-               single='He does not work bildet den Anfang; here any more folgt danach.'),
+    order_item('qn.no-longer', 'He does not work here anymore.', 'Er arbeitet nicht mehr hier.',
+               ['he', 'does not', 'work', 'here', 'anymore'],
+               ('Nach does not steht am Ende anymore und bedeutet „nicht mehr“.', 'After does not, anymore at the end means “not anymore”.'),
+               'He does not work here no more.', ('anymore', 'no more', 'Nach not steht kein zweites no.', 'After not no second no follows.'),
+               single='He does not work bildet den Anfang; here anymore folgt danach.'),
     order_item('qn.number', 'A number of customers have complained about the delay.', 'Einige Kunden haben sich über die Verzögerung beschwert.',
                ['a number of', 'customers', 'have', 'complained', 'about the delay'],
                ('A number of heißt „einige“ und nimmt das Verb im Plural: have.', 'A number of means “several” and takes a plural verb: have.'),
@@ -215,7 +215,7 @@ MAP = {
         'wrong': [{'if': ['not', 'hardly'], 'de': 'Hardly ist schon verneint, ein zweites not ist zu viel.', 'en': 'Hardly needs no second not.'},
                   {'not': ['hardly'], 'de': 'Das Wort für „kaum“ fehlt: hardly.', 'en': 'The word for “barely” is missing: hardly.'}]}},
     'We no more offer this service.': {'pat': 'qn.no-longer', 'why': {
-        'ok': B('Für „nicht mehr“ bei der Zeit steht no longer: We no longer offer this service.', 'For “not any more” in time no longer is used: We no longer offer this service.'),
+        'ok': B('Für „nicht mehr“ bei der Zeit steht no longer: We no longer offer this service.', 'For “not anymore” in time no longer is used: We no longer offer this service.'),
         'wrong': [{'if': ['no', 'more'], 'de': 'No more steht bei Mengen. Hier gilt no longer.', 'en': 'No more is used with amounts. Here no longer applies.'},
                   {'not': ['longer'], 'de': 'Hier ist no longer nötig, nicht no more.', 'en': 'It needs no longer.'}]}},
     'The number of customers have risen sharply this year.': {'pat': 'qn.number', 'why': {
@@ -239,7 +239,7 @@ def c1x():
          (G, 'Zwei Verneinungen heben sich nicht auf, sie passen hier nicht.', 'Two negatives do not fit here.')])
     mcc(T, 'qn.no-longer', 'C1', 'biz', 0.0, 'Our supplier ___ the old model, so we have to switch to the new one.',
         'no longer produces', ['no more produces', 'is not longer producing', 'does not produce longer'],
-        ('No longer steht vor dem Verb und heißt „nicht mehr“.', 'No longer stands before the verb and means “not any more”.'),
+        ('No longer steht vor dem Verb und heißt „nicht mehr“.', 'No longer stands before the verb and means “not anymore”.'),
         [(G, 'No more steht bei Mengen. Für die Zeit gilt no longer.', 'No more is used with amounts. For time no longer applies.'),
          (G, 'Es heißt no longer, nicht not longer.', 'It is no longer, not not longer.'),
          (G, 'Longer steht nicht am Ende dieser Form.', 'Longer does not stand at the end of this form.')])
@@ -249,12 +249,12 @@ def c1x():
         [(G, 'Kern ist number, deshalb has statt have.', 'The core is number, so has instead of have.'),
          (G, 'Are dropping passt nicht zu since.', 'Are dropping does not fit since.'),
          (G, 'Were dropped ist Passiv, und die Zeitform stimmt nicht.', 'Were dropped is passive, and the tense is wrong.')])
-    mcc(T, 'qn.none', 'C1', 'life', 0.0, 'I looked at four flats, but ___ them had a balcony.',
+    mcc(T, 'qn.none', 'C1', 'life', 0.0, 'I looked at four apartments, but ___ them had a balcony.',
         'none of', ['no one of', 'not of', 'nothing of'],
         ('None of heißt „keine von“. Danach folgt das Pronomen them.', 'None of means “not one of”. The pronoun them follows.'),
         [(C, 'No one of ist deutsch gedacht. Es braucht none of.', 'No one of is German thinking. It needs none of.'),
          (G, 'Not of ist keine feste Form.', 'Not of is not a fixed form.'),
-         (G, 'Nothing steht für Sachen ohne Zahl, hier geht es um vier Wohnungen.', 'Nothing stands for things without number, here it is four flats.')])
+         (G, 'Nothing steht für Sachen ohne Zahl, hier geht es um vier Wohnungen.', 'Nothing stands for things without number, here it is four apartments.')])
     mcc(T, 'qn.number', 'C1', 'life', 0.0, 'A number of my friends ___ moved abroad in the last few years.',
         'have', ['has', 'is', 'was'],
         ('A number of heißt „einige“ und nimmt das Verb im Plural: have moved.', 'A number of means “several” and takes a plural verb: have moved.'),
@@ -270,27 +270,27 @@ def c1x():
         ('Hardly ever heißt „fast nie“. Hardly ist schon verneint.', 'Hardly ever means “almost never”. Hardly is already negative.'))
     ocl(T, 'qn.no-longer', 'C1', 'biz', 0.0, 'The old contract is no ___ valid because it expired in June.',
         ['longer'], 'adv', ['later', 'farther', 'shorter'],
-        ('No longer heißt „nicht mehr“.', 'No longer means “not any more”.'))
+        ('No longer heißt „nicht mehr“.', 'No longer means “not anymore”.'))
     ocl(T, 'qn.number', 'C1', 'biz', 0.0, 'A large ___ of our customers have switched to the annual plan.',
-        ['number'], 'det', ['amount', 'deal', 'quantity'],
+        ['number', 'majority', 'proportion', 'share'], 'det', ['amount', 'deal', 'quantity'],
         ('A large number of steht vor zählbaren Nomen im Plural.', 'A large number of is used before countable plural nouns.'))
-    ocl(T, 'qn.hardly', 'C1', 'life', 0.0, 'There is ___ any milk left, so I will go to the shop.',
+    ocl(T, 'qn.hardly', 'C1', 'life', 0.0, 'There is ___ any milk left, so I will go to the store.',
         ['hardly', 'barely', 'scarcely'], 'adv', ['nearly', 'almost', 'none'],
         ('Hardly any heißt „kaum etwas“. Hardly ist schon verneint.', 'Hardly any means “almost none”. Hardly is already negative.'))
     ocl(T, 'qn.none', 'C1', 'life', 0.0, 'I invited ten colleagues, but ___ of them could come on Saturday.',
-        ['none'], 'pron', ['no', 'nobody', 'not'],
+        ['none', 'few'], 'pron', ['no', 'nobody', 'not'],
         ('None of them heißt „keiner von ihnen“.', 'None of them means “not one of them”.'))
 
     err(T, 'qn.none', 'C1', 'biz', 0.0, 'No one of the shortlisted vendors has submitted a complete proposal.',
         ('No one of', ['None of'], ['None of', 'Nothing of', 'No of']),
         ('Für „keiner von“ mit Nomen steht none of.', 'For “not one of” with a noun none of is used.'))
     err(T, 'qn.hardly', 'C1', 'biz', 0.0, 'We did not hardly change the layout, only the colors.',
-        ('did not hardly change', ['hardly changed'], ['hardly changed', 'did hardly changed', 'not hardly changed']),
+        ('did not hardly change', ['hardly changed', 'barely changed'], ['hardly changed', 'did hardly changed', 'not hardly changed']),
         ('Hardly ist schon verneint, ein zweites not ist zu viel.', 'Hardly is already negative, a second not is too much.'))
     err(T, 'qn.no-longer', 'C1', 'biz', 0.0, 'The platform is not longer available for customers in the EU.',
         ('not longer', ['no longer'], ['no longer', 'not later', 'non longer']),
         ('Die feste Form heißt no longer.', 'The fixed form is no longer.'))
-    err(T, 'qn.number', 'C1', 'biz', 0.0, 'The number of defects have fallen sharply since we changed supplier.',
+    err(T, 'qn.number', 'C1', 'biz', 0.0, 'The number of defects have fallen sharply since we switched suppliers.',
         ('number of defects have', ['number of defects has'], ['number of defects has', 'number of defects are', 'numbers of defects have']),
         ('Bei the number of steht das Verb im Singular: has.', 'With the number of the verb is singular: has.'))
     err(T, 'qn.hardly', 'C1', 'life', 0.0, 'There was hardly any traffic, so we arrived early.', None,
@@ -299,10 +299,10 @@ def c1x():
         ('Kein Fehler: None of + Nomen heißt „keiner von“.', 'No mistake: none of + noun means “not one of”.'))
 
     kwt(T, 'qn.none', 'C1', 'biz', 0.0, 'Both proposals fail to meet our requirements.', 'NEITHER', '', 'meets our requirements.',
-        [(['Neither of'], ['the proposals'])], ['of', 'the', 'proposals'], ['No', 'none', 'not'], [],
+        [(['Neither of'], ['the proposals', 'the two proposals'])], ['of', 'the', 'proposals'], ['No', 'none', 'not'], [],
         ('Neither of the proposals meets … Neither of steht bei genau zwei Dingen.', 'Neither of the proposals meets … Neither of is used with exactly two things.'), [])
-    kwt(T, 'qn.hardly', 'C1', 'biz', 0.0, 'We had almost no time to prepare the presentation.', 'HARDLY', 'We', 'to prepare the presentation.',
-        [(['hardly'], ['had any time'])], ['had', 'any', 'time'], ['not', 'no', 'did'], [],
+    kwt(T, 'qn.hardly', 'C1', 'biz', 0.0, 'There was almost no time to prepare the presentation.', 'HARDLY', 'We', 'to prepare the presentation.',
+        [(['hardly'], ['had any time']), (['had hardly'], ['any time'])], ['had', 'any', 'time'], ['not', 'no', 'did'], [],
         ('hardly had any time. Hardly ist schon verneint.', 'hardly had any time. Hardly is already negative.'), [])
     kwt(T, 'qn.no-longer', 'C1', 'biz', 0.0, 'The vendor stopped supporting this version last year.', 'LONGER', 'The vendor', 'this version.',
         [(['no longer'], ['supports'])], ['no', 'supports'], ['not', 'more', 'supported'], [],
@@ -325,5 +325,5 @@ def place():
          (G, 'Are passt nicht zu risen.', 'Are does not fit risen.'),
          (G, 'Were passt nicht zu risen.', 'Were does not fit risen.')])
     kwt(T, 'qn.hardly', 'C1', 'life', 0.0, 'I had almost no energy left after the long hike.', 'HARDLY', 'I', 'left after the long hike.',
-        [(['hardly'], ['had any energy'])], ['had', 'any', 'energy'], ['not', 'no', 'did'], [],
+        [(['hardly'], ['had any energy']), (['had hardly'], ['any energy'])], ['had', 'any', 'energy'], ['not', 'no', 'did'], [],
         ('hardly had any energy. Hardly ist schon verneint.', 'hardly had any energy. Hardly is already negative.'), [])

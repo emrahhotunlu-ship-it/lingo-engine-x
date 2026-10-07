@@ -1,6 +1,8 @@
 import json, os
 try:
     from ocl_reasons import R as OCL_R
+    from ocl_reasons2 import R2 as _R2
+    OCL_R = {**OCL_R, **_R2}
 except ImportError:
     OCL_R = {}
 STAGE = {'B2': 0.0, 'B2+': 0.5, 'C1': 1.0}
