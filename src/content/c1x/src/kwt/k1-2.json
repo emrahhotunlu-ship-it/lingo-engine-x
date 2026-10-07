@@ -599,7 +599,7 @@
        "to",
        "holding"
       ],
-      "de": "Deutsch „wir pflegten zu halten“ kennt kein -ing. Nach used to steht die Grundform; -ing gehört zu be used to.",
+      "de": "Nach used to steht die Grundform; -ing gehört zu be used to.",
       "en": "After used to comes the base form; -ing belongs to be used to."
      }
     ]
@@ -1278,7 +1278,8 @@
     {
      "a": [
       "would have",
-      "'d have"
+      "'d have",
+      "could have"
      ],
      "b": [
       "caught",
@@ -1287,6 +1288,15 @@
       "noticed",
       "detected",
       "identified"
+     ]
+    },
+    {
+     "a": [
+      "would not have",
+      "wouldn't have"
+     ],
+     "b": [
+      "missed"
      ]
     }
    ],
@@ -1540,7 +1550,9 @@
       "we are unable to",
       "we're unable to",
       "we are not able to",
-      "we aren't able to"
+      "we aren't able to",
+      "we can't",
+      "we couldn't"
      ]
     }
    ],
@@ -1801,7 +1813,9 @@
      "b": [
       "our colleagues would update",
       "they would update",
-      "they'd update"
+      "they'd update",
+      "they updated",
+      "our colleagues updated"
      ]
     }
    ],
@@ -1860,7 +1874,9 @@
      "b": [
       "less",
       "much less",
-      "far less"
+      "far less",
+      "a lot less",
+      "so much less"
      ]
     },
     {

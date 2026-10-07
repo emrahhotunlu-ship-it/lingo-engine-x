@@ -165,7 +165,8 @@
    "bad": {
     "span": "uses",
     "fix": [
-     "will have been using"
+     "will have been using",
+     "will have used"
     ],
     "choices": [
      "will have been using",

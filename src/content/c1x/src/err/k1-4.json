@@ -457,7 +457,7 @@
    "level": "B2",
    "dom": "biz",
    "src": "seed",
-   "text": "Under our policy, if an invoice arrives after the cutoff, it would be processed on the next working day.",
+   "text": "Under our policy, if an invoice arrives after the cutoff, it would be processed on the next business day.",
    "bad": {
     "span": "would be processed",
     "fix": [
@@ -814,7 +814,7 @@
    "level": "B2",
    "dom": "biz",
    "src": "seed",
-   "text": "If an order arrives after 5 p.m., it ships the next working day.",
+   "text": "If an order arrives after 5 p.m., it ships the next business day.",
    "bad": null,
    "why": {
     "ok": {

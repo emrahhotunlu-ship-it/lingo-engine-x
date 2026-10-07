@@ -686,6 +686,14 @@
      "b": [
       "all afternoon working"
      ]
+    },
+    {
+     "a": [
+      "have spent"
+     ],
+     "b": [
+      "all afternoon"
+     ]
     }
    ],
    "tiles": [
@@ -842,8 +850,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Teil 1: have not felt / have not been feeling, weil die Zeit bis jetzt reicht. Teil 2: well lately, lately passt nur zum Present Perfect.",
-     "en": "Part 1: have not felt / have not been feeling, since the period runs up to now. Part 2: well lately, lately only goes with the present perfect."
+     "de": "Teil 1: have not felt / have not been feeling, weil die Zeit bis jetzt reicht. Teil 2: well lately, lately passt meist zum Present Perfect.",
+     "en": "Part 1: have not felt / have not been feeling, since the period runs up to now. Part 2: well lately, lately mostly goes with the present perfect."
     },
     "wrong": [
      {
@@ -908,7 +916,7 @@
        "i",
        "booked"
       ],
-      "de": "Nach Should I steht die Grundform: book, nicht booked. Deutsch „Soll ich gebucht“ gibt es nicht, die Form hängt am Hilfsverb.",
+      "de": "Nach Should I steht die Grundform: book, nicht booked.",
       "en": "After Should I comes the base form: book, not booked."
      }
     ]
@@ -1159,7 +1167,6 @@
      "b": [
       "I get",
       "I have",
-      "I've",
       "I receive",
       "I have got",
       "I've got",
@@ -1359,7 +1366,7 @@
    "why": {
     "ok": {
      "de": "Teil 1: wonder if/whether, eine indirekte Frage. Teil 2: will sign, in einer ob-Frage bleibt will, anders als nach when oder if im Bedingungssatz.",
-     "en": "Part 1: wonder if/whether, an indirect question. Part 2: will accept, will stays in an if-question, unlike in an if-condition."
+     "en": "Part 1: wonder if/whether, an indirect question. Part 2: will sign, will stays in an if-question, unlike in an if-condition."
     },
     "wrong": [
      {
@@ -1663,8 +1670,8 @@
        "above",
        "of"
       ],
-      "de": "Nach above folgt direkt der Vergleichswert, kein of. Deutsch „ein bisschen über von“ verleitet zu of.",
-      "en": "The compared value follows above directly, no of. German habits invite an extra of."
+      "de": "Nach above folgt direkt der Vergleichswert, kein of.",
+      "en": "The compared value follows above directly, no of."
      }
     ]
    }

@@ -29,9 +29,8 @@ export function scoreKwt(item: Kwt, r: Extract<C1Response, { kind: 'kwt' }>): C1
         const full = (whole.length === toks.length && whole.every((w, i) => w === toks[i])) || (single && a.length === toks.length && a.every((w, i) => w === toks[i]));
         const pa = startsWith(toks, a);
         const pb = endsWith(toks, b);
-        // Überlappen A und B (zusammen länger als die Antwort), zählt nur eines von beiden.
-        const overlap = a.length + b.length > toks.length;
-        const got = full ? 2 : pa && pb && !overlap ? 2 : pa || pb ? 1 : 0;
+        // Volle Punktzahl nur für die ganze Lösung; sitzen A und B, aber steht etwas dazwischen, ist es „fast“.
+        const got = full ? 2 : pa || pb ? 1 : 0;
         if (got > best.got) best = { a: full || pa, b: full || pb, got };
       }
     }

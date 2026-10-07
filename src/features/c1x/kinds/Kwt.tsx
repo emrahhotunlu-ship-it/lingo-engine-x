@@ -56,6 +56,8 @@ export function useKwtUi(ctrl: C1Ctrl): C1Ui {
   const src = { area: ctrl.area, source: `grammar/${ctrl.task.topic}` };
   const tiles = useMemo(() => kwtTiles(item, mode === 'part' ? 'a' : 'all'), [item, mode]);
   const atom = [item.key];
+  /** Teil B darf so lang sein wie die längste Lösung (mindestens 3 Wörter). */
+  const partMax = Math.max(PART_B_MAX, ...item.keys.flatMap((k) => k.b.map((x) => kwtWords(x, atom).length)));
 
   const tileText = (ids: readonly number[]): string => ids.map((id) => tiles.find((x) => x.id === id)?.text ?? '').join(' ');
   /** Antwort aus Bausteinen und (im Teil-Modus) dem getippten Teil B. */
@@ -63,7 +65,7 @@ export function useKwtUi(ctrl: C1Ctrl): C1Ui {
     const text = `${tileText(ids)} ${mode === 'part' ? typed : ''}`.trim();
     const words = kwtWords(text, atom);
     const bWords = mode === 'part' ? kwtCount(typed) : 0;
-    const ready = words.length >= lo && words.length <= hi && hasKey(words, item.key.toLowerCase()) && (mode !== 'part' || (bWords >= 1 && bWords <= PART_B_MAX));
+    const ready = words.length >= lo && words.length <= hi && hasKey(words, item.key.toLowerCase()) && (mode !== 'part' || (bWords >= 1 && bWords <= partMax));
     ctrl.setResponse(ready ? { kind: 'kwt', text, typed: mode !== 'tiles' } : null, { form: mode === 'tiles' ? 'tiles' : mode === 'part' ? 'part' : 'typed', chars: text.length, deletions: info?.deleted ?? 0, units: ids.length });
   };
 
@@ -122,9 +124,9 @@ export function useKwtUi(ctrl: C1Ctrl): C1Ui {
       <div className="flex flex-col gap-3" data-testid="kwt-part">
         <p className="lx-t-meta text-muted">{t('cxKwtPartA')}</p>
         {tilesNode}
-        <p className="lx-t-meta text-muted">{t('cxKwtPartB', { max: PART_B_MAX })}</p>
+        <p className="lx-t-meta text-muted">{t('cxKwtPartB', { max: partMax })}</p>
         <div data-testid="kwt-part-b">{gapInput}</div>
-        <WordCounter n={kwtCount(value)} min={1} max={PART_B_MAX} testId="word-counter-b" />
+        <WordCounter n={kwtCount(value)} min={1} max={partMax} testId="word-counter-b" />
         <WordCounter n={counterN} min={lo} max={hi} />
       </div>
     );

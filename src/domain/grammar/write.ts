@@ -94,7 +94,7 @@ function patchFor(cur: Doc, a: GrammarAnswer): { patch: Doc; overflow?: NewRepai
 
   const errors = errorsOf(cur);
   let overflow: NewRepair | undefined;
-  if (a.task.type === 'meaning' || (a.task.type === 'find' && a.task.x?.kind === 'find' && a.task.x.err === null)) {
+  if (a.task.errorT === null && (a.task.type === 'meaning' || (a.task.type === 'find' && a.task.x?.kind === 'find' && a.task.x.err === null))) {
     // Ein Bedeutungspaar und ein fehlerfreier Satz haben keine „falsch → richtig“-Fassung: kein Fehlersatz.
   } else if (a.task.errorT !== null) {
     const next = reviewError(errors, a.task.errorT, { ok, given: a.dontKnow ? '' : a.given, grade: a.grade, t, variant: a.task.src !== 'review' });
