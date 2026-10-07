@@ -25,7 +25,12 @@ export const ProgramChapterSchema = z.object({
   use: Bi.optional(),
 });
 
-export const ProgramFileSchema = z.object({ v: z.literal(1), chapters: z.array(ProgramChapterSchema).length(7) });
+export const ProgramFileSchema = z.object({
+  v: z.literal(1),
+  /** Anzeigenamen der Themen, die es noch nicht gibt (Platzhalter bis P36/P37). */
+  pending: z.record(z.string(), Bi).default({}),
+  chapters: z.array(ProgramChapterSchema).length(7),
+});
 
 export type ProgramChapter = z.infer<typeof ProgramChapterSchema>;
 export type ProgramFile = z.infer<typeof ProgramFileSchema>;

@@ -1,5 +1,39 @@
 {
  "v": 1,
+ "pending": {
+  "stative-adv": {
+   "de": "Verlaufsform mit Zustandsverben",
+   "en": "Continuous with stative verbs"
+  },
+  "future-past": {
+   "de": "Zukunft in der Vergangenheit",
+   "en": "Future in the past"
+  },
+  "modals-prob": {
+   "de": "Wahrscheinlichkeit mit Modalverben",
+   "en": "Probability with modals"
+  },
+  "quant-neg": {
+   "de": "Verneinung und Mengen",
+   "en": "Negation and quantity"
+  },
+  "inversion": {
+   "de": "Inversion",
+   "en": "Inversion"
+  },
+  "emph-plus": {
+   "de": "Hervorheben mit do und Voranstellung",
+   "en": "Emphasis with do and fronting"
+  },
+  "ellipsis": {
+   "de": "Ellipse",
+   "en": "Ellipsis"
+  },
+  "noun-phrase": {
+   "de": "Nominalgruppen",
+   "en": "Noun phrases"
+  }
+ },
  "chapters": [
   {
    "id": "k1",

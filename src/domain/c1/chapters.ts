@@ -7,6 +7,7 @@ import { ProgramFileSchema, type ProgramChapter } from './programTypes';
 // geparst. Ist sie ungültig, wird das protokolliert und das Programm ist leer (die Oberfläche zeigt dann nichts statt etwas Falschem).
 
 let cache: readonly ProgramChapter[] | null = null;
+let pending: Readonly<Record<string, { de: string; en: string }>> = {};
 
 /** Die Kapitel in Reihenfolge (leer, wenn `program.json` ungültig ist). */
 export function programChapters(): readonly ProgramChapter[] {
@@ -15,6 +16,7 @@ export function programChapters(): readonly ProgramChapter[] {
     const r = ProgramFileSchema.safeParse(JSON.parse(programRaw));
     if (!r.success) logError('c1:program', r.error, 'program.json');
     cache = r.success ? r.data.chapters : [];
+    pending = r.success ? r.data.pending : {};
   } catch (err) {
     logError('c1:program', err, 'program.json');
     cache = [];
@@ -45,4 +47,10 @@ export function liveTopics(ch: ProgramChapter): string[] {
 /** Alle Themen des Programms in Kapitelreihenfolge (auch Platzhalter). */
 export function programTopics(): string[] {
   return programChapters().flatMap((c) => c.topics);
+}
+
+/** Anzeigename eines Platzhalter-Themas (Thema, das es noch nicht gibt); `null`, wenn keiner hinterlegt ist. */
+export function pendingName(topic: string, lang: 'de' | 'en'): string | null {
+  programChapters();
+  return pending[topic]?.[lang] ?? null;
 }
