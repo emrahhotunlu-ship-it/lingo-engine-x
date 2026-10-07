@@ -4,6 +4,7 @@ import type { UnitBlockNo } from '../../app/unit/types';
 import { useClock } from '../../app/clock';
 import { useSettings } from '../../app/settings';
 import { answerRight } from '../../domain/learn/right';
+import { c1ErrorResolver, ensureC1xLoaded } from '../c1x/resolve';
 import { useLive } from '../../data/live';
 import { topicById } from '../../domain/content';
 import { isNewTopic, introTopic, stepDownTasks } from '../../domain/grammar/path';
@@ -198,7 +199,9 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
     profile,
     wordsToday: words,
   } as const;
-  const common = { ...base, nowMs, topic: o.topic ?? null, ...(errorsMax !== undefined ? { errorsMax } : {}) };
+  ensureC1xLoaded();
+  const c1 = c1ErrorResolver({ grammarDocs: docs, nowMs, seed, profile });
+  const common = { ...base, nowMs, topic: o.topic ?? null, ...(errorsMax !== undefined ? { errorsMax } : {}), ...(c1 ? { c1 } : {}) };
 
   let tasks: GrammarTask[];
   let intro: IntroState | null = null;

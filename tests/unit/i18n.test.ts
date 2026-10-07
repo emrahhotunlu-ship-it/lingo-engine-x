@@ -11,7 +11,7 @@ describe('Oberflächentexte', () => {
   });
 
   it('Platzhalter stimmen in beiden Sprachen überein', () => {
-    for (const k of Object.keys(de) as Array<keyof typeof de>) expect(placeholders(en[k]), k).toEqual(placeholders(de[k]));
+    for (const k of Object.keys(de) as Array<keyof typeof de>) expect(placeholders(en[k] ?? ''), k).toEqual(placeholders(de[k]));
   });
 
   it('Mehrzahl ist vollständig (_one und _other)', () => {

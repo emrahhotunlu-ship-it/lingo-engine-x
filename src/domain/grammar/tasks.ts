@@ -7,7 +7,7 @@ import { patsOf } from '../metrics/pattern';
 import { hash32, mulberry32, shuffle } from '../random';
 import { lemmaOf } from '../srs/context';
 import { topicP } from './bkt';
-import { dueErrors } from './errors';
+import { dueErrors, type ErrorEntry } from './errors';
 import { isNewTopic, nextNewTopic } from './path';
 import { legacyTaskKey } from './key';
 import { familyOf, mapEntryOf, patternOf, patternsOf, v2Tasks } from './patterns';
@@ -240,6 +240,8 @@ export type RoundInput = {
   wordsToday?: readonly string[];
   /** Schlüssel, die in dieser Runde nicht (mehr) vorkommen dürfen (z. B. die Aufgaben des Vortests). */
   exclude?: ReadonlySet<string>;
+  /** c1x (Lernplattform 3.0 §3.4): löst einen Fehlersatz mit `cid` zur Aufgabe im selben Baustein auf (`features/c1x/resolve.ts`); `null` = der Fehlersatz-Text. */
+  c1?: (topic: string, e: ErrorEntry) => GrammarTask | null;
 };
 
 export const ROUND_SIZE = { duty: 6, xtra: 8, errors: 8, topic: 8 } as const;
@@ -432,7 +434,7 @@ export function selectRound(i: RoundInput): GrammarTask[] {
 
   // 1. Fällige Fehler.
   const errors: GrammarTask[] = [];
-  const due = dueErrors(i.grammarDocs, i.nowMs).filter((d) => (i.mode === 'topic' ? d.topic === i.topic : true));
+  const due = dueErrors(i.grammarDocs, i.nowMs, i.c1).filter((d) => (i.mode === 'topic' ? d.topic === i.topic : true));
   const maxErr = i.mode === 'errors' ? i.size : Math.min(i.errorsMax ?? ERRORS_PER_ROUND, i.size);
   for (const d of due) {
     if (errors.length >= maxErr) break;

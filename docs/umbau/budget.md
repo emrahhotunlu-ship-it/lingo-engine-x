@@ -13,6 +13,7 @@ Messung nach **jedem** Paket (Byte der `dist/index.html`, Differenz zum Vorgäng
 | 07.10.2026 | P12 | 4.354.238 | 0 | 4,15 | c1x-Domäne noch nicht von der App importiert (Tree-Shaking) |
 | 07.10.2026 | P11 | 4.355.991 | +1.753 | 4,15 | Slot, Registry, 13 Stellen |
 | 07.10.2026 | P13 | 4.356.579 | +588 | 4,15 | Buchung (write.ts, answerRight); c1x-Domäne noch ohne Verbraucher in der App |
+| 07.10.2026 | P14 | 4.452.161 | +95.582 | 4,25 | c1x-Rahmen, Texte DE/EN, Stile, Kwt/Err-Gerüst, Verbraucher in der App |
 
 ## Planrechnung (LP3 §9, Modell)
 

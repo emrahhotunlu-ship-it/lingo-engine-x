@@ -1,5 +1,6 @@
 // Oberflächentexte Deutsch. Platzhalter: {name}. Mehrzahl: Schlüssel mit _one / _other.
 import { ttDe } from './parts/tt.de';
+import { lp3De, type Lp3Key } from './lp3';
 // Einfache Sprache, keine Fachwörter (CLAUDE.md A2).
 
 import { aiDe } from './parts/ai.de';
@@ -89,6 +90,8 @@ export const de = {
   ...wxDe,
   ...hxDe,
   ...fxDe,
+  // Lernplattform 3.0: Teile unter `parts/lp3/` (Glob, Präfix je Bereich)
+  ...lp3De,
   appName: 'Lingo-Engine X',
   openSettings: 'Einstellungen öffnen',
   settings: 'Einstellungen',
@@ -434,4 +437,5 @@ export const de = {
   pos_det: 'Begleiter',
 } as const;
 
-export type MessageKey = keyof typeof de;
+/** Alle Schlüssel: die festen Teile und die Schlüssel der Lernplattform-3.0-Teile (Präfix je Bereich, per Glob eingesammelt, `lp3.ts`). */
+export type MessageKey = keyof typeof de | Lp3Key;

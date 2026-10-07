@@ -40,7 +40,7 @@ export type ShellStatus = {
 };
 export type ShellAction = { label: string; onClick: () => void; testId: string; disabled?: boolean; busy?: boolean; busyLabel?: string };
 export type ShellSecondary = { id: 'hint' | 'dontKnow' | 'noError' | 'skip' | 'replay' | 'reset' | 'noSound'; label: string; onClick: () => void; testId: string; disabled?: boolean };
-export type ShellMenuId = 'override' | 'copyOnce' | 'translate' | 'moreInfo' | 'askClaude' | 'wholeTopic';
+export type ShellMenuId = 'override' | 'copyOnce' | 'translate' | 'moreInfo' | 'askClaude' | 'wholeTopic' | 'report';
 export type ShellFeedback = {
   verdict: ResultVerdict;
   sub?: string | null;
@@ -50,6 +50,10 @@ export type ShellFeedback = {
   menu?: Partial<Record<ShellMenuId, () => void>>;
   /** KI-Tutor: sichtbarer Knopf „Erklär mir meine Antwort“ unter der Erklär-Karte (nur auf Tipp). */
   tutor?: ReactNode;
+  /** Teilpunkte (c1x, `PartBar`): steht im Platz `verdict` unter dem Urteil. */
+  parts?: ReactNode;
+  /** Zusatz unter der Erklär-Karte (c1x: „Warum nicht …?“ je Option): steht im Platz `explanation`. */
+  after?: ReactNode;
   nextIn?: string | null;
   /**
    * Die Übung meldet: keine Hilfe genutzt. Zusammen mit Urteil `ok`, Tiefe `min` und `app/profile.autoNext`
@@ -164,6 +168,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
       >
         <div data-slot="verdict" className={`-mx-4 -mt-4 px-4 py-3.5 pr-14 ${feedback.verdict === 'ok' ? 'bg-ok-soft' : feedback.verdict === 'near' ? 'bg-near-soft' : feedback.verdict === 'wrong' ? 'bg-wrong-soft' : ''}`}>
           <Verdict verdict={feedback.verdict} sub={feedback.sub ?? null} />
+          {feedback.parts}
           {feedback.nextIn && (
             <p className="lx-t-meta mt-0.5 text-muted" data-testid="next-in">
               {feedback.nextIn}
@@ -175,9 +180,10 @@ export function ExerciseShell(props: ExerciseShellProps) {
             <Comparison given={feedback.comparison.given} ops={feedback.comparison.ops} />
           </div>
         )}
-        {feedback.explanation && (
+        {(feedback.explanation || feedback.after) && (
           <div data-slot="explanation">
-            <Explanation model={feedback.explanation} depth={feedback.depth} learning={learning} onFoldChange={onFold} />
+            {feedback.explanation && <Explanation model={feedback.explanation} depth={feedback.depth} learning={learning} onFoldChange={onFold} />}
+            {feedback.after}
           </div>
         )}
         {feedback.tutor && <div data-slot="tutor">{feedback.tutor}</div>}

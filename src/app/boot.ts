@@ -15,6 +15,7 @@ import type { RouteName } from './router/types';
 import { applyDocumentSettings, isLang, isPalette, isThemeMode, resolveTheme, useSettings } from './settings';
 import { settingsWritePending } from './actions';
 import { useDocTotal } from '../features/capacity/docTotal';
+import { useC1xReady } from '../features/c1x/ready';
 
 // Start des App-Rahmens (aus App.tsx verschoben, unverändert): Fähigkeiten starten, Daten genau
 // einmal abonnieren, Einstellungen anwenden, Tagesplan je Lerntag festlegen. Dazu die einmaligen
@@ -109,9 +110,11 @@ export function useScreen(): Screen {
   const status = useLive((s) => s.status);
   const schema = useLive((s) => s.docs['app/schema']);
   const schemaInvalid = useLive((s) => 'app/schema' in s.invalid);
+  // Gepackte c1x-Inhalte (nur wenn eine Aufgabenart eingeschaltet ist): der Rundenbau ist synchron und liest nur, was geladen ist.
+  const c1xReady = useC1xReady();
   if (db === 'absent') return 'nodb';
   if (status === 'error') return 'offline';
-  if (db === 'pending' || status !== 'ready') return 'loading';
+  if (db === 'pending' || status !== 'ready' || !c1xReady) return 'loading';
   const migrated = !!schema && !schemaInvalid && typeof schema.version === 'number' && schema.version >= 1;
   return migrated ? route.name : 'migration';
 }

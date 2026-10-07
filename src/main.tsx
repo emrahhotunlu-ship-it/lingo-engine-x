@@ -4,6 +4,7 @@ import './styles/index.css';
 import { App } from './app/App';
 import { initDiagnostics, logContext, logError, logWarn } from './platform/diagnostics';
 import { applyDocumentSettings, resolveTheme, useSettings } from './app/settings';
+import { startC1xPreload } from './features/c1x/ready';
 
 /** Komponenten-Stapel kurz fürs Protokoll. */
 const stackOf = (info: { componentStack?: string | null }): string => (info.componentStack ?? '').split('\n').slice(0, 6).join(' ‹ ').replace(/\s+/g, ' ').trim();
@@ -12,6 +13,8 @@ async function boot(): Promise<void> {
   // Messpunkt (P7-1): Skript geladen und ausgewertet, erstes Zeichnen folgt.
   performance.mark('lx:boot');
   initDiagnostics();
+  // Gepackte c1x-Inhalte laden; der Start wartet darauf nur, wenn eine Aufgabenart eingeschaltet ist (`useScreen`).
+  startC1xPreload();
   // Entwicklungs-Adapter nur im Dev-Server; im Produktions-Build ist dieser Zweig
   // entfernt (import.meta.env.DEV === false) – scripts/check-platform.mjs prüft das.
   if (import.meta.env.DEV) {

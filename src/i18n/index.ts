@@ -20,7 +20,8 @@ export function formatDate(lang: Lang, ms: number): string {
 }
 
 export function translate(lang: Lang, key: MessageKey, vars?: Vars): string {
-  const template = dicts[lang][key];
+  // Ein fehlender Schlüssel zeigt sich als er selbst (nie ein leerer Text); `i18nParts.test.ts` prüft, dass jeder benutzte Schlüssel existiert.
+  const template = dicts[lang][key] ?? key;
   if (!vars) return template;
   return template.replace(/\{(\w+)\}/g, (m, name: string) => {
     const v = vars[name];

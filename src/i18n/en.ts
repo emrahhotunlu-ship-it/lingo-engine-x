@@ -1,5 +1,6 @@
 import type { MessageKey } from './de';
 import { ttEn } from './parts/tt.en';
+import { lp3En } from './lp3';
 import { aiEn } from './parts/ai.en';
 import { learnEn } from './parts/learn.en';
 import { speakEn } from './parts/speak.en';
@@ -87,6 +88,8 @@ export const en: Record<MessageKey, string> = {
   ...wxEn,
   ...hxEn,
   ...fxEn,
+  // Lernplattform 3.0: Teile unter `parts/lp3/` (Glob, Präfix je Bereich)
+  ...lp3En,
   appName: 'Lingo-Engine X',
   openSettings: 'Open settings',
   settings: 'Settings',

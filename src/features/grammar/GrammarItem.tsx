@@ -31,6 +31,8 @@ import { TutorButton } from '../../ui/exercise/TutorButton';
 import { ExerciseShell, PatternCard, SentenceInput, explainDepth, markSpans, type ShellFeedback, type ShellMenuId, type ShellSecondary } from '../../ui/exercise';
 import { useCompanionSee } from '../companion/seeing';
 import { nextT } from '../progress/persist';
+import { isC1Task } from '../../domain/c1x/runtime';
+import { C1Item } from '../c1x/C1Item';
 import { TopicSheet } from './GrammarScreen';
 
 // Eine Grammatikaufgabe im Übungsgerüst (Lernplattform 2.0 §5.2). Das Gerüst (`ExerciseShell`) zeichnet Status, Aufgabenzeile, Satz,
@@ -85,7 +87,16 @@ const MEANING_KEYS = ['a', 'b', 'both'] as const;
 /** „Ohne Hilfe“ im Vortest: jede Antwort in höchstens 20 s (§5.3). */
 const nonEmpty = (s: string | null | undefined): s is string => !!s && s.trim().length > 0;
 
-export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = null, noHelp = false, profile: profileProp, topicRound = false }: GrammarItemProps) {
+/**
+ * Eine Grammatikaufgabe. Aufgaben des Aufgabensystems c1x (`task.c1`, Lernplattform 3.0) zeichnet `C1Item` im selben Gerüst;
+ * alle anderen die bisherige Oberfläche (`LegacyGrammarItem`).
+ */
+export function GrammarItem(props: GrammarItemProps) {
+  const { task } = props;
+  return isC1Task(task) ? <C1Item {...props} task={task} /> : <LegacyGrammarItem {...props} />;
+}
+
+function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = null, noHelp = false, profile: profileProp, topicRound = false }: GrammarItemProps) {
   const { t, lang } = useT();
   const api = useHiddenInput();
   const now = useClock((s) => s.now);
