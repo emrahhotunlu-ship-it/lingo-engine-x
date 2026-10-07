@@ -26335,6 +26335,213 @@
    "topic": "noun-phrase"
   },
   {
+   "id": "np-k9",
+   "type": "kwt",
+   "pat": "np.post",
+   "from": "The report shows how far costs have risen.",
+   "key": "EXTENT",
+   "frame": "The report shows the ___ costs have risen.",
+   "answer": "extent to which",
+   "accepted": [],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: the extent to which costs have risen. Nach extent steht to which.",
+     "en": "Right: the extent to which costs have risen. After extent comes to which."
+    },
+    "wrong": [
+     {
+      "not": [
+       "extent"
+      ],
+      "de": "Das Schlüsselwort extent muss unverändert in der Lücke stehen.",
+      "en": "The key word extent must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "extent"
+      ],
+      "not": [
+       "which"
+      ],
+      "de": "Nach extent braucht es to which.",
+      "en": "After extent you need to which."
+     }
+    ]
+   },
+   "topic": "noun-phrase"
+  },
+  {
+   "id": "np-k10",
+   "type": "kwt",
+   "pat": "np.post",
+   "from": "We offer a solution that is tailored to your needs.",
+   "key": "TAILORED",
+   "frame": "We offer a solution ___ your needs.",
+   "answer": "tailored to",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: a solution tailored to your needs. Das Partizip mit Ergänzung steht hinter dem Nomen.",
+     "en": "Right: a solution tailored to your needs. The participle with its phrase stands after the noun."
+    },
+    "wrong": [
+     {
+      "not": [
+       "tailored"
+      ],
+      "de": "Das Schlüsselwort tailored muss unverändert in der Lücke stehen.",
+      "en": "The key word tailored must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "tailored"
+      ],
+      "not": [
+       "to"
+      ],
+      "de": "Nach tailored braucht es to.",
+      "en": "After tailored you need to."
+     }
+    ]
+   },
+   "topic": "noun-phrase"
+  },
+  {
+   "id": "np-f9",
+   "type": "find",
+   "pat": "np.post",
+   "prompt": "Our team built a designed for beginners course.",
+   "err": [
+    4,
+    7
+   ],
+   "answer": "course designed for beginners.",
+   "fixed": "Our team built a course designed for beginners.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: das Partizip mit Ergänzung steht hinter dem Nomen. Richtig: a course designed for beginners.",
+     "en": "The error: the participle with its phrase stands after the noun. Correct: a course designed for beginners."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Das Partizip mit Ergänzung steht hinter dem Nomen.",
+      "en": "There is an error: The participle with its phrase stands after the noun."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: Das Partizip mit Ergänzung steht hinter dem Nomen.",
+      "en": "The error is elsewhere: The participle with its phrase stands after the noun."
+     }
+    ]
+   },
+   "topic": "noun-phrase"
+  },
+  {
+   "id": "np-f10",
+   "type": "find",
+   "pat": "np.post",
+   "prompt": "The report shows the extent to that costs have risen.",
+   "err": [
+    5,
+    6
+   ],
+   "answer": "to which",
+   "fixed": "The report shows the extent to which costs have risen.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: nach to steht which, nicht that. Richtig: the extent to which.",
+     "en": "The error: after to comes which, not that. Correct: the extent to which."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach einer Präposition steht which.",
+      "en": "There is an error: After a preposition comes which."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: Nach einer Präposition steht which.",
+      "en": "The error is elsewhere: After a preposition comes which."
+     }
+    ]
+   },
+   "topic": "noun-phrase"
+  },
+  {
+   "id": "np-f11",
+   "type": "find",
+   "pat": "np.post",
+   "prompt": "Those which register early will get the best seats.",
+   "err": [
+    1,
+    1
+   ],
+   "answer": "who",
+   "fixed": "Those who register early will get the best seats.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: bei Personen steht those who. Richtig: Those who register early.",
+     "en": "The error: for people those who is used. Correct: Those who register early."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Für Personen steht who, nicht which.",
+      "en": "There is an error: For people who is used, not which."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt woanders: Für Personen steht who, nicht which.",
+      "en": "The error is elsewhere: For people who is used, not which."
+     }
+    ]
+   },
+   "topic": "noun-phrase"
+  },
+  {
+   "id": "np-m5",
+   "type": "meaning",
+   "pat": "np.post",
+   "a": "Those who register early get a discount.",
+   "b": "Everyone gets a discount.",
+   "q": {
+    "de": "Welcher Satz sagt, dass nur manche einen Rabatt bekommen?",
+    "en": "Which sentence says that only some people get a discount?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Those who register early meint nur die früh Angemeldeten.",
+     "en": "Right: sentence a. Those who register early means only the early registrants."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b bekommen alle den Rabatt.",
+      "en": "In b everyone gets the discount."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Nur a nennt eine Bedingung.",
+      "en": "Not the same: only a names a condition."
+     }
+    ]
+   },
+   "topic": "noun-phrase"
+  },
+  {
    "id": "pv-sim-k1",
    "type": "kwt",
    "pat": "pv.simple",

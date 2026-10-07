@@ -23,7 +23,7 @@ PAT = [
              ('I do understand your concern, but the deadline stays.', 'Ich verstehe Ihre Sorge durchaus, aber die Frist bleibt.', 'meeting'),
              ('He does know the product, believe me.', 'Er kennt das Produkt wirklich, glauben Sie mir.', 'talk')],
             ('We did sent the invoice last week.', 'We did send the invoice last week.',
-             'Nach did steht die Grundform, auch wenn die Aussage in der Vergangenheit liegt. Das Deutsche hat keine solche Form, deshalb rutscht die Vergangenheitsform nach.',
+             'Nach did steht die Grundform, auch wenn die Aussage in der Vergangenheit liegt. Im Deutschen betont man mit Wörtern wie „wirklich“ oder „doch“. Im Englischen trägt did die Vergangenheit, deshalb folgt die Grundform: did send.',
              'After did the base form follows, even when the statement is in the past. German has no such form, so the past form slips in.'),
             ('em.what-cleft', 'I do like the design.', 'What I like is the design.',
              'Do betont, dass etwas wahr ist. Der What-Satz betont, was wichtig ist.', 'Do stresses that something is true. The what-cleft stresses what matters.'),
@@ -89,8 +89,8 @@ FILE = topic_file(T, ('Ich kann Wichtiges hervorheben: mit do, mit vorangestellt
 RULES = rules_from(PAT,
     ('Vier Wege zur Betonung: do vor der Grundform („I do think“), ein vorangestelltes Adjektiv mit as („Tempting as it is“), So/Such … that mit Umstellung und ein vorgezogenes Objekt („This we must avoid“).',
      'Four ways to stress: do before the base form (“I do think”), a fronted adjective with as (“Tempting as it is”), So/Such … that with inversion and a fronted object (“This we must avoid”).'),
-    ('Englisch hat eine feste Wortstellung. Wer etwas hervorheben will, nutzt diese Bauformen statt der Stimme, und klingt sachlich und überzeugend.',
-     'English has a fixed word order. To stress something you use these structures instead of your voice, and you sound factual and convincing.'),
+    ('Englisch betont mit der Stimme und mit dem Satzbau: do wird beim Sprechen betont, die anderen Formen ändern die Wortstellung. Wann ja, wann nein: do und Tempting as it is sind im Alltag und in Mails üblich. So … that und Such was … sind gehoben. Das vorgezogene Objekt (This we must avoid) ist selten, lies es zu erkennen, setze es sparsam ein.',
+     'English stresses with the voice and with sentence structure: do is stressed in speech, the other forms change the word order. When yes, when no: do and Tempting as it is are common in everyday speech and emails. So … that and Such was … are elevated. The fronted object (This we must avoid) is rare: learn to recognize it and use it sparingly.'),
     ('Nicht verwechseln: Nach as bleibt die normale Stellung („as it is“). Nach So/Such am Satzanfang kehrt sie sich um („So fast was …“). Nach do steht immer die Grundform.',
      'Do not mix up: after as the normal order stays (“as it is”). After So/Such at the start it flips (“So fast was …”). After do the base form always follows.'),
     (['Willst du bestätigen? Setze do/does/did vor die Grundform.', 'Willst du einräumen? Adjektiv + as + Subjekt + Verb.', 'Willst du die Folge betonen? So/Such vorn, Verb vor Subjekt, dann that.', 'Willst du ein Objekt hervorheben? Stelle es vor das Subjekt, ohne Umstellung.'],
@@ -238,13 +238,13 @@ def c1x():
          (G, 'Is know ist keine gültige Form.', 'Is know is not a valid form.')])
     mcc(T, 'ep.concession', 'C1', 'biz', 0.0, '___ as it sounds, the old tool is still faster than the new one.',
         'Odd', ['Oddly', 'Odder', 'Odd that'],
-        ('Das Adjektiv steht vor as: Odd as it sounds. Das räumt etwas ein: „so seltsam es klingt“.', 'The adjective stands before as: Odd as it sounds. It concedes a point: “as odd as it sounds”.'),
+        ('Das Adjektiv steht vor as: Odd as it sounds. Im amerikanischen Englisch ist As odd as it sounds üblicher.', 'The adjective stands before as: Odd as it sounds. In American English As odd as it sounds is more common.'),
         [(G, 'Ein Adverb passt nicht vor as + it sounds. Es braucht das Adjektiv.', 'An adverb does not fit before as + it sounds. It needs the adjective.'),
          (G, 'Odder ist ein Komparativ und passt nicht zu dieser Wendung.', 'Odder is a comparative and does not fit this phrase.'),
          (G, 'Odd that gehört zu einem anderen Muster. Hier folgt as it sounds.', 'Odd that belongs to a different pattern. Here as it sounds follows.')])
     mcc(T, 'ep.concession', 'C1', 'biz', 0.0, '___ I respect your opinion, I cannot agree with this decision.',
         'Much as', ['As much', 'Much that', 'Much how'],
-        ('Much as I respect … heißt „so sehr ich … respektiere“ und räumt etwas ein.', 'Much as I respect … means “although I respect it very much” and concedes a point.'),
+        ('Much as I respect … heißt „so sehr ich … respektiere“. Im amerikanischen Englisch ist As much as I respect üblicher.', 'Much as I respect … means “although I respect it very much”. In American English As much as I respect is more common.'),
         [(G, 'As much steht in einem anderen Muster (as much as), nicht am Satzanfang.', 'As much belongs to another pattern (as much as), not to the sentence start.'),
          (G, 'Much that ist keine gültige Verbindung.', 'Much that is not a valid combination.'),
          (G, 'Much how ist keine gültige Verbindung.', 'Much how is not a valid combination.')])
@@ -264,15 +264,15 @@ def c1x():
     ocl(T, 'ep.do-emph', 'C1', 'biz', 0.0, 'She said we never answered, but we ___ reply to her email on Tuesday.',
         ['did'], 'aux', ['do', 'does', 'had'],
         ('Das betonte did widerspricht dem Vorwurf: we did reply (Grundform reply).', 'The stressed did rebuts the accusation: we did reply (base form reply).'))
-    ocl(T, 'ep.do-emph', 'C1', 'biz', 0.0, 'I know it sounds unlikely, but he really ___ speak five languages fluently.',
+    ocl(T, 'ep.do-emph', 'C1', 'biz', 0.0, 'You say he does not speak French, but he really ___ speak it fluently.',
         ['does'], 'aux', ['do', 'did', 'is'],
-        ('Zu he gehört does vor der Grundform speak. Das betont, dass es wirklich stimmt.', 'With he the form is does before the base form speak. This stresses that it is really true.'))
+        ('Zu he gehört does vor der Grundform speak. Das widerspricht dem Einwand und betont, dass es wirklich stimmt.', 'With he the form is does before the base form speak. It rebuts the objection and stresses that it is really true.'))
     ocl(T, 'ep.concession', 'C1', 'biz', 0.0, 'Much ___ I would like to attend, I have another meeting at that time.',
         ['as', 'though'], 'conj', ['that', 'so', 'if'],
         ('Much as I would like to … räumt etwas ein: „so gern ich möchte“.', 'Much as I would like to … concedes a point: “as much as I would like to”.'))
-    ocl(T, 'ep.concession', 'C1', 'biz', 0.0, 'Hard as we tried, the migration ___ not finished before the deadline.',
-        ['was'], 'aux', ['is', 'has', 'did'],
-        ('Nach der Voranstellung folgt ein normaler Hauptsatz: the migration was not finished.', 'After the fronting a normal main clause follows: the migration was not finished.'))
+    ocl(T, 'ep.concession', 'C1', 'biz', 0.0, 'Hard ___ we tried, the migration was not finished before the deadline.',
+        ['as', 'though'], 'conj', ['that', 'so', 'if'],
+        ('Hard as we tried … räumt etwas ein: „so sehr wir uns bemühten“. Danach folgt ein normaler Hauptsatz.', 'Hard as we tried … concedes a point: “however hard we tried”. A normal main clause follows.'))
     ocl(T, 'ep.so-such', 'C1', 'biz', 0.0, 'So strong was the signal ___ the technicians checked the antenna twice.',
         ['that'], 'conj', ['which', 'what', 'as'],
         ('So … was … that nennt die Folge: that leitet sie ein.', 'So … was … that names the result: that introduces it.'))
@@ -283,9 +283,9 @@ def c1x():
     err(T, 'ep.do-emph', 'C1', 'biz', 0.0, 'He does sends the weekly report on time, so please stop worrying.',
         ('sends', ['send'], ['send', 'sent', 'sending']),
         ('Nach does steht die Grundform: does send.', 'After does the base form follows: does send.'))
-    err(T, 'ep.concession', 'C1', 'biz', 0.0, 'Hard as we tried, we not could reach the client by phone.',
-        ('we not could', ['we could not'], ['we could not', 'we did not could', 'we not can']),
-        ('Nach der Voranstellung ist der Hauptsatz normal: we could not reach.', 'After the fronting the main clause is normal: we could not reach.'))
+    err(T, 'ep.concession', 'C1', 'biz', 0.0, 'Hard we tried, but we could not reach the client by phone.',
+        ('Hard we tried', ['Hard as we tried'], ['Hard as we tried', 'Hard that we tried', 'Hard so we tried']),
+        ('Bei der Voranstellung fehlt as: Hard as we tried, … Ohne as ist der Einwand nicht ausgedrückt.', 'The as is missing in the fronting: Hard as we tried, … Without as the concession is not expressed.'))
     err(T, 'ep.so-such', 'C1', 'biz', 0.0, 'Such was the demand what the shop ran out of stock within an hour.',
         ('what', ['that'], ['that', 'which', 'as']),
         ('Der that-Satz nennt die Folge: Such was the demand that …', 'The that-clause names the result: Such was the demand that …'))
@@ -298,25 +298,26 @@ def c1x():
         ('Kein Fehler: Nach So great steht das Verb was vor dem Subjekt.', 'No mistake: after So great the verb was stands before the subject.'))
 
     kwt(T, 'ep.do-emph', 'C1', 'biz', 0.0, 'She truly knows the market better than anyone.', 'DOES', 'She', 'the market better than anyone.',
-        [(['truly'], ['does know'])], ['truly', 'know'], ['do', 'knows', 'did'], ['truly does knows'],
+        [(['truly'], ['does know']), (['does truly'], ['know'])], ['truly', 'know'], ['do', 'knows', 'did'], ['truly does knows'],
         ('Das betonte does steht vor der Grundform know.', 'The stressed does stands before the base form know.'),
         [W(['does', 'knows'], 'Nach does steht die Grundform know.', 'After does the base form know follows.')])
     kwt(T, 'ep.do-emph', 'C1', 'biz', 0.0, 'We definitely sent the invoice on the first of March.', 'DID', 'We', 'the invoice on the first of March.',
-        [(['definitely'], ['did send'])], ['definitely', 'send'], ['sent', 'do', 'had'], ['definitely did sent'],
+        [(['definitely'], ['did send']), (['did definitely'], ['send'])], ['definitely', 'send'], ['sent', 'do', 'had'], ['definitely did sent'],
         ('Das betonte did steht vor der Grundform send.', 'The stressed did stands before the base form send.'),
         [W(['did', 'sent'], 'Nach did steht die Grundform send.', 'After did the base form send follows.')])
     kwt(T, 'ep.concession', 'C1', 'biz', 0.0, 'Although I would like to help, I cannot approve this request.', 'MUCH', '', 'would like to help, I cannot approve this request.',
-        [(['Much as', 'Much though'], ['I'])], ['as', 'I'], ['that', 'so', 'of'], [],
+        [(['Much as', 'As much as'], ['I'])], ['as', 'I'], ['that', 'so', 'of'], [],
         ('Much as I would like to help … räumt etwas ein.', 'Much as I would like to help … concedes a point.'), [])
     kwt(T, 'ep.concession', 'C1', 'biz', 0.0, 'Even though it sounds unexpected, the old tool is faster.', 'SURPRISING', '', 'sounds, the old tool is faster.',
-        [(['Surprising as', 'Surprising though'], ['it'])], ['as', 'it'], ['is', 'that', 'so'], [],
+        [(['Surprising as', 'As surprising as'], ['it'])], ['as', 'it'], ['is', 'that', 'so'], [],
         ('Surprising as it sounds, … Das Adjektiv steht vor as, dann die normale Stellung.', 'Surprising as it sounds, … The adjective stands before as, then the normal order.'), [])
     kwt(T, 'ep.so-such', 'C1', 'biz', 0.0, 'The demand was so high that we ran out of stock.', 'SUCH', '', 'that we ran out of stock.',
         [(['Such was'], ['the demand'])], ['was', 'the', 'demand'], ['so', 'a', 'very'], [],
         ('Such was the demand that … Das Verb steht vor dem Subjekt.', 'Such was the demand that … The verb stands before the subject.'), [])
-    kwt(T, 'ep.object-front', 'C1', 'biz', 0.0, 'I will never agree to that proposal under any terms.', 'ACCEPT', '', 'under any terms.',
-        [(['That proposal'], ['I cannot accept'])], ['That', 'proposal', 'I', 'cannot'], ['must', 'do', 'is'], [],
-        ('That proposal I cannot accept … Das Objekt steht vorn, die Reihenfolge danach bleibt normal.', 'That proposal I cannot accept … The object comes first, the order after it stays normal.'), [])
+    kwt(T, 'ep.do-emph', 'C1', 'biz', 0.0, 'They claim we never paid, but we settled the invoice in full.', 'DID', 'They claim we never paid, but we', 'the invoice in full.',
+        [(['really did'], ['pay'])], ['really', 'pay'], ['paid', 'do', 'had'], ['really did paid'],
+        ('Das betonte did widerspricht dem Vorwurf und steht vor der Grundform pay.', 'The stressed did rebuts the accusation and stands before the base form pay.'),
+        [W(['did', 'paid'], 'Nach did steht die Grundform pay.', 'After did the base form pay follows.')])
 
 def place():
     mcc(T, 'ep.so-such', 'C1', 'biz', 0.0, 'So complex ___ the contract that even the lawyers needed two weeks to read it.',

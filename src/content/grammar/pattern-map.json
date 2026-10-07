@@ -10894,27 +10894,28 @@
    ]
   }
  },
- "noun-phrase|themanagersdecisionsurprisedeveryone": {
+ "noun-phrase|themeetingfromyesterdaywascanceled": {
   "pat": "np.of-s",
   "why": {
    "ok": {
-    "de": "Der Besitz steht mit Apostroph: the manager's decision.",
-    "en": "Possession takes an apostrophe: the manager's decision."
+    "de": "Bei Zeitangaben steht ’s: Yesterday's meeting was canceled.",
+    "en": "With time words ’s is used: Yesterday's meeting was canceled."
    },
    "wrong": [
     {
-     "not": [
-      "manager's"
+     "if": [
+      "from",
+      "yesterday"
      ],
-     "de": "Es fehlt das ’s nach manager.",
-     "en": "The ’s after manager is missing."
+     "de": "Das deutsche „von gestern“ wird hier zu yesterday’s.",
+     "en": "The German “von gestern” becomes yesterday’s here."
     },
     {
-     "if": [
-      "managers'"
+     "not": [
+      "yesterday's"
      ],
-     "de": "Eine Person: ’s steht nach dem Singular.",
-     "en": "One person: ’s comes after the singular."
+     "de": "Es fehlt yesterday’s vor meeting.",
+     "en": "Yesterday’s before meeting is missing."
     }
    ]
   }

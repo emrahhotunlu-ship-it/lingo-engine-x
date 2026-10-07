@@ -55,7 +55,7 @@
  {
   "pat": "inv.only",
   "en": "Only after the pilot did we approve the full rollout.",
-  "de": "Erst nach dem Pilotbetrieb gaben wir den ganzen Rollout frei.",
+  "de": "Erst nach der Pilotphase gaben wir den ganzen Rollout frei.",
   "chunks": [
    "only after",
    "the pilot",

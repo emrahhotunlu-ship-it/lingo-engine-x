@@ -15,7 +15,7 @@ TOPIC = {
 
 PAT = [
     pattern('inv.negative', ('Never, Rarely, Little · Hilfsverb vor Subjekt', 'Never, Rarely, Little · auxiliary before subject'),
-            ('Never / Rarely / Seldom / Little + Hilfsverb + Subjekt + 3. Form', 'Never / Rarely / Seldom / Little + auxiliary + subject + participle'),
+            ('Never / Rarely / Seldom / Little + Hilfsverb + Subjekt + Verb (nach have / had: 3. Form, nach do / does / did: Grundform)', 'Never / Rarely / Seldom / Little + auxiliary + subject + verb (after have / had: participle, after do / does / did: base form)'),
             ('Ein verneinendes oder einschränkendes Wort am Satzanfang betont die Aussage. Danach steht das Hilfsverb vor dem Subjekt, wie in einer Frage.',
              'A negative or limiting word at the start stresses the statement. The auxiliary then comes before the subject, as in a question.'),
             ['never', 'rarely', 'seldom', 'little', 'at no point', 'under no circumstances'],
@@ -31,15 +31,15 @@ PAT = [
             ('Welches Hilfsverb gehört vor das Subjekt, wenn der Satz mit diesem Einleiter beginnt?', 'Which auxiliary has to move in front of the subject when the sentence opens with this word?')),
     pattern('inv.only', ('Only after, Only when · Umstellung im Hauptsatz', 'Only after, Only when · main clause inverted'),
             ('Only + Zeit oder Bedingung + Hilfsverb + Subjekt + Verb', 'Only + time or condition + auxiliary + subject + verb'),
-            ('Nach „Only after“, „Only when“ oder „Only then“ am Anfang folgt im Hauptsatz die Umstellung. Der Nebensatz davor bleibt normal.',
-             'After “Only after”, “Only when” or “Only then” at the start, the main clause is inverted. The clause before it stays normal.'),
-            ['only after', 'only when', 'only then', 'only if', 'only by'],
-            [('Only after the pilot did we approve the full rollout.', 'Erst nach dem Pilotbetrieb gaben wir den ganzen Rollout frei.', 'meeting'),
+            ('Nach „Only after“, „Only when“, „Only then“ oder „Not until“ am Anfang folgt im Hauptsatz die Umstellung. Der Nebensatz davor bleibt normal.',
+             'After “Only after”, “Only when”, “Only then” or “Not until” at the start, the main clause is inverted. The clause before it stays normal.'),
+            ['only after', 'only when', 'only then', 'only if', 'only by', 'not until'],
+            [('Only after the pilot did we approve the full rollout.', 'Erst nach der Pilotphase gaben wir den ganzen Rollout frei.', 'meeting'),
              ('Only then did I understand the problem.', 'Erst dann habe ich das Problem verstanden.', 'talk'),
              ('Only when the client signs will we start the work.', 'Erst wenn der Kunde unterschreibt, fangen wir an.', 'mail')],
             ('Only after the pilot we approved the full rollout.', 'Only after the pilot did we approve the full rollout.',
-             'Das Deutsche sagt „Erst nach dem Pilot haben wir …“, dort ist die Umstellung selbstverständlich. Im Englischen fehlt sie leicht, weil „only“ nicht wie ein Verneinungswort wirkt.',
-             'German says “Erst nach dem Pilot haben wir …”, where the inverted order is natural. In English it is easy to miss, because “only” does not look like a negative word.'),
+             'Das Deutsche sagt „Erst nach der Pilotphase haben wir …“, dort ist die Umstellung selbstverständlich. Im Englischen fehlt sie leicht, weil „only“ nicht wie ein Verneinungswort wirkt.',
+             'German says “Erst nach der Pilotphase haben wir …”, where the inverted order is natural. In English it is easy to miss, because “only” does not look like a negative word.'),
             ('inv.negative', 'Only then did I understand it.', 'Never did I understand it.',
              'Beide stellen um. Only grenzt den Zeitpunkt ein, Never verneint die ganze Aussage.', 'Both invert. Only limits the point in time, Never negates the whole statement.'),
             [('Only after the audit did we change the process.', 'Haben wir den Prozess vor der Prüfung geändert?', 'Did we change the process before the audit?', False)],
@@ -48,7 +48,7 @@ PAT = [
             ('No sooner + had + Subjekt + 3. Form + than + Past Simple', 'No sooner + had + subject + participle + than + past simple'),
             ('Zwei Ereignisse folgen unmittelbar aufeinander. Das erste steht im Past Perfect mit Umstellung, das zweite im Past Simple.',
              'Two events follow each other immediately. The first is in the past perfect with inversion, the second in the past simple.'),
-            ['no sooner', 'hardly', 'scarcely', 'barely', 'than', 'when'],
+            ['no sooner had', 'hardly had', 'scarcely had', 'barely had'],
             [('No sooner had we signed than the prices rose.', 'Kaum hatten wir unterschrieben, stiegen die Preise.', 'talk'),
              ('Hardly had the meeting started when the alarm went off.', 'Das Meeting hatte kaum begonnen, da ging der Alarm los.', 'meeting'),
              ('Scarcely had she arrived when the call began.', 'Sie war kaum angekommen, da begann der Anruf.', 'mail')],
@@ -68,7 +68,7 @@ PAT = [
              ('Were we to postpone the launch, costs would rise.', 'Würden wir den Start verschieben, stiegen die Kosten.', 'meeting'),
              ('Had we known about the outage, we would have warned you.', 'Hätten wir von dem Ausfall gewusst, hätten wir Sie gewarnt.', 'talk')],
             ('Should you will need help, please call us.', 'Should you need help, please call us.',
-             'Das Deutsche sagt „Sollten Sie Hilfe brauchen“, und man fügt gern ein will hinzu, weil es um die Zukunft geht. Nach Should you steht aber die Grundform.',
+             'Im Deutschen heißt es „Sollten Sie Hilfe brauchen“ in der Gegenwartsform. Auch im Englischen steht nach Should you die Grundform, ohne will, obwohl die Bedingung in die Zukunft zeigt.',
              'German says “Sollten Sie Hilfe brauchen”, and people like to add will because it is about the future. After Should you, though, the base form follows.'),
             ('ca.inversion', 'Had we known, we would have acted.', 'If we had known, we would have acted.',
              'Gleiche Bedeutung. Die Fassung ohne if klingt förmlicher, etwa in Mails und Verträgen.', 'Same meaning. The version without if sounds more formal, for example in emails and contracts.'),
@@ -89,8 +89,8 @@ FILE = topic_file(T, ('Ich kann Aussagen förmlich und wirkungsvoll betonen: mit
 RULES = rules_from(PAT,
     ('Nach einem verneinenden oder einschränkenden Einleiter am Satzanfang steht das Hilfsverb vor dem Subjekt: „Never have we seen such demand.“ Das gilt auch für Only after, No sooner und für Bedingungen ohne if (Should you, Had we).',
      'After a negative or limiting word at the start, the auxiliary comes before the subject: “Never have we seen such demand.” The same holds for Only after, No sooner and for conditions without if (Should you, Had we).'),
-    ('Im Englischen betont man nicht mit der Stimme, sondern mit dem Satzbau. Die Umstellung macht aus einer Feststellung eine Betonung und klingt in Präsentationen und Mails souverän.',
-     'English does not stress with the voice alone but with sentence structure. Inversion turns a statement into emphasis and sounds confident in presentations and emails.'),
+    ('Im Englischen betont man nicht nur mit der Stimme, sondern auch mit dem Satzbau. Die Umstellung macht aus einer Feststellung eine Betonung. Wann ja, wann nein: „Should you need …“ ist in Mails Standard, „Rarely have we seen …“ wirkt im amerikanischen Alltag steif und passt eher in Reden und Berichte.',
+     'English stresses not only with the voice but also with sentence structure. Inversion turns a statement into emphasis. When yes, when no: “Should you need …” is standard in emails, “Rarely have we seen …” sounds stiff in everyday American speech and fits speeches and reports better.'),
     ('Aufpassen: Mitten im Satz bleibt alles normal („We have rarely seen …“). Nur am Satzanfang kehrt sich die Stellung um. Gibt es kein Hilfsverb, hilft do: „Rarely do we see …“.',
      'Careful: inside the sentence everything stays normal (“We have rarely seen …”). Only at the start does the order flip. If there is no auxiliary, do helps: “Rarely do we see …”.'),
     (['Steht ein Einleiter wie Never, Rarely, Only after, No sooner vorn?', 'Gibt es schon ein Hilfsverb? Dann kommt es vor das Subjekt.', 'Gibt es keines, setze do, does oder did davor.', 'Bei „No sooner“ folgt than, bei „Hardly“ folgt when.'],
@@ -173,7 +173,7 @@ ORDER = [
                ('Nach At no point steht did vor dem Subjekt, das Verb danach in der Grundform: did the client mention.', 'After At no point, did stands before the subject, and the verb follows in the base form: did the client mention.'),
                'At no point the client mentioned the budget.', ('did', 'mentioned', 'Nach did steht die Grundform mention, nicht mentioned.', 'After did the base form mention is used, not mentioned.'),
                single='At no point verlangt did vor the client; mention steht in der Grundform direkt vor the budget.'),
-    order_item('inv.only', 'Only after the pilot did we approve the full rollout.', 'Erst nach dem Pilotbetrieb gaben wir den ganzen Rollout frei.',
+    order_item('inv.only', 'Only after the pilot did we approve the full rollout.', 'Erst nach der Pilotphase gaben wir den ganzen Rollout frei.',
                ['only after', 'the pilot', 'did', 'we', 'approve', 'the full rollout'],
                ('Nach Only after und der Zeitangabe steht did vor dem Subjekt we. Das Verb bleibt in der Grundform.', 'After Only after and the time phrase, did stands before the subject we. The verb stays in the base form.'),
                'Only after the pilot we approved the full rollout.', ('did', 'approved', 'Ohne did bleibt die normale Stellung stehen, und das Verb wird zu approved. Hier muss did vor we.', 'Without did the normal order stays and the verb becomes approved. Here did must go before we.'),
@@ -257,17 +257,17 @@ def c1x():
         ['when', 'before'], 'conj', ['than', 'that', 'then'],
         ('Zu hardly gehört when (oder before): Hardly had … when …', 'Hardly goes with when (or before): Hardly had … when …'))
     ocl(T, 'inv.cond', 'C1', 'biz', 0.0, '___ you need further information, our team will be happy to help.',
-        ['Should'], 'aux', ['Would', 'Could', 'Might'],
-        ('Should you need … ist eine förmliche Bedingung ohne if.', 'Should you need … is a formal condition without if.'))
-    ocl(T, 'inv.cond', 'C1', 'biz', 0.0, 'Were it not ___ the support of our partners, we could not have finished on time.',
+        ['Should', 'If'], 'aux', ['Would', 'Could', 'Might'],
+        ('Should you need … ist die förmliche Fassung ohne if. If you need … ist ebenfalls richtig, klingt aber weniger förmlich.', 'Should you need … is the formal version without if. If you need … is also correct but sounds less formal.'))
+    ocl(T, 'inv.cond', 'C1', 'biz', 0.0, 'Had it not been ___ the support of our partners, we could not have finished on time.',
         ['for'], 'prep', ['of', 'to', 'by'],
-        ('Were it not for + Nomen heißt „wenn nicht … gewesen wäre“ und ersetzt but for.', 'Were it not for + noun means “if it had not been for” and replaces but for.'))
+        ('Had it not been for + Nomen heißt „wenn nicht … gewesen wäre“ und ersetzt but for.', 'Had it not been for + noun means “if it had not been for” and replaces but for.'))
 
     err(T, 'inv.sooner', 'C1', 'biz', 0.0, 'Hardly the update had finished when the first complaints arrived.',
         ('the update had finished', ['had the update finished'], ['had the update finished', 'the update has finished', 'has the update finished']),
         ('Nach Hardly steht had vor dem Subjekt: Hardly had the update finished when …', 'After Hardly, had stands before the subject: Hardly had the update finished when …'))
     err(T, 'inv.only', 'C1', 'biz', 0.0, 'Only after the contract was signed we could begin the migration.',
-        ('we could begin', ['could we begin'], ['could we begin', 'could begin we', 'began we']),
+        ('we could begin', ['could we begin', 'did we begin'], ['could we begin', 'could begin we', 'began we']),
         ('Nach Only after steht das Hilfsverb vor dem Subjekt: could we begin.', 'After Only after the auxiliary comes before the subject: could we begin.'))
     err(T, 'inv.negative', 'C1', 'biz', 0.0, 'Under no circumstances you should share your login details with colleagues.',
         ('you should share', ['should you share'], ['should you share', 'you must share', 'should share you']),
@@ -280,27 +280,29 @@ def c1x():
     err(T, 'inv.cond', 'C1', 'biz', 0.0, 'Had we invested in monitoring earlier, the outage would have been much shorter.', None,
         ('Kein Fehler: Had we invested ersetzt If we had invested.', 'No mistake: Had we invested replaces If we had invested.'))
 
-    kwt(T, 'inv.negative', 'C1', 'biz', 0.0, 'This is the first time we have seen such a high demand.', 'NEVER', '', 'such a high demand.',
-        [(['Never before'], ['have we seen'])], ['before', 'have', 'we', 'seen'], ['has', 'been', 'saw'], ['Never before we have seen'],
-        ('Nach Never before steht das Hilfsverb vor dem Subjekt: Never before have we seen.', 'After Never before, the auxiliary comes before the subject: Never before have we seen.'),
-        [W(['we', 'have', 'seen'], 'Nach Never before kommt have vor we: have we seen.', 'After Never before, have comes before we: have we seen.')])
-    kwt(T, 'inv.sooner', 'C1', 'biz', 0.0, 'The client changed the requirements right after we began the work.', 'SOONER', '', 'the work than the client changed the requirements.',
-        [(['No sooner'], ['had we begun'])], ['No', 'had', 'we', 'begun'], ['when', 'did', 'have'], [],
-        ('No sooner had we begun the work than … Zu no sooner gehört than.', 'No sooner had we begun the work than … No sooner goes with than.'), [])
-    kwt(T, 'inv.only', 'C1', 'biz', 0.0, 'The system can open to all users when the data check ends, but not before.', 'ONLY', '', 'can the system open to all users.',
-        [(['Only when'], ['the data check ends', 'the check is done'])], ['when', 'the', 'data', 'check', 'ends'], ['did', 'if', 'will'], [],
-        ('Only when the data check ends can the system open … Nach Only when kommt can vor das Subjekt.', 'Only when the data check ends can the system open … After Only when, can comes before the subject.'), [])
+    kwt(T, 'inv.negative', 'C1', 'biz', 0.0, 'We saw such a high demand for the first time.', 'HAVE', 'Never', 'such a high demand.',
+        [(['have', 'before have'], ['we seen'])], ['we', 'seen'], ['has', 'been', 'saw'], ['we have seen'],
+        ('Nach Never steht das Hilfsverb vor dem Subjekt: Never have we seen. Never before have we seen geht auch.', 'After Never, the auxiliary comes before the subject: Never have we seen. Never before have we seen works too.'),
+        [W(['we', 'have', 'seen'], 'Nach Never kommt have vor we: have we seen.', 'After Never, have comes before we: have we seen.')])
+    kwt(T, 'inv.sooner', 'C1', 'biz', 0.0, 'The client changed the requirements right after we began the work.', 'HAD', 'No sooner', 'the work than the client changed the requirements.',
+        [(['had'], ['we begun', 'we started'])], ['we', 'begun'], ['when', 'did', 'have'], ['we had begun'],
+        ('No sooner had we begun the work than … Zu no sooner gehört than.', 'No sooner had we begun the work than … No sooner goes with than.'),
+        [W(['we', 'had', 'begun'], 'Nach No sooner kommt had vor we: had we begun.', 'After No sooner, had comes before we: had we begun.')])
+    kwt(T, 'inv.only', 'C1', 'biz', 0.0, 'The system will not open to all users until the data check ends.', 'CAN', 'Only when the data check ends', 'open to all users.',
+        [(['can'], ['the system'])], ['the', 'system'], ['did', 'if', 'will'], ['the system can'],
+        ('Only when the data check ends can the system open … Nach Only when kommt can vor das Subjekt.', 'Only when the data check ends can the system open … After Only when, can comes before the subject.'),
+        [W(['the', 'system', 'can'], 'Nach Only when … kommt can vor das Subjekt: can the system.', 'After Only when …, can comes before the subject: can the system.')])
     kwt(T, 'inv.cond', 'C1', 'biz', 0.0, 'If you need further details, simply reply to this email.', 'SHOULD', '', 'further details, simply reply to this email.',
         [(['Should'], ['you need'])], ['you', 'need'], ['will', 'would', 'if'], ['Should you will need'],
         ('Should you need … ist eine förmliche Bedingung ohne if und ohne will.', 'Should you need … is a formal condition without if and without will.'),
         [W(['should', 'will'], 'Nach Should you steht die Grundform, kein will.', 'After Should you the base form follows, no will.')])
-    kwt(T, 'inv.cond', 'C1', 'biz', 0.0, 'Without the support of our partners, we could not have finished on time.', 'WERE', '', 'the support of our partners, we could not have finished on time.',
-        [(['Were it'], ['not for'])], ['it', 'not', 'for'], ['had', 'was', 'without'], [],
-        ('Were it not for + Nomen heißt „wenn nicht … gewesen wäre“.', 'Were it not for + noun means “if it had not been for”.'), [])
-    kwt(T, 'inv.sooner', 'C1', 'biz', 0.0, 'We had barely opened the report when the phone rang.', 'HARDLY', '', 'opened the report when the phone rang.',
-        [(['Hardly'], ['had we'])], ['had', 'we'], ['has', 'did', 'than'], ['Hardly we had'],
+    kwt(T, 'inv.cond', 'C1', 'biz', 0.0, 'Without the support of our partners, we could not have finished on time.', 'HAD', '', 'the support of our partners, we could not have finished on time.',
+        [(['Had it'], ['not been for'])], ['it', 'not', 'been', 'for'], ['was', 'were', 'without'], [],
+        ('Had it not been for + Nomen heißt „wenn nicht … gewesen wäre“ und bezieht sich auf die Vergangenheit.', 'Had it not been for + noun means “if it had not been for” and refers to the past.'), [])
+    kwt(T, 'inv.sooner', 'C1', 'biz', 0.0, 'The phone rang right after we opened the report.', 'HAD', 'Hardly', 'the report when the phone rang.',
+        [(['had'], ['we opened'])], ['we', 'opened'], ['has', 'did', 'than'], ['we had opened'],
         ('Hardly had we opened … when … Nach Hardly steht had vor dem Subjekt.', 'Hardly had we opened … when … After Hardly, had stands before the subject.'),
-        [W(['hardly', 'we', 'had'], 'Nach Hardly kommt had vor we: had we.', 'After Hardly, had comes before we: had we.')])
+        [W(['we', 'had', 'opened'], 'Nach Hardly kommt had vor we: had we opened.', 'After Hardly, had comes before we: had we opened.')])
 
 def place():
     mcc(T, 'inv.only', 'C1', 'biz', 0.0, 'Not until the contract was signed ___ the technical team begin its preparation.',

@@ -76,7 +76,7 @@
     "bad": "We did sent the invoice last week.",
     "good": "We did send the invoice last week.",
     "cause": {
-     "de": "Nach did steht die Grundform, auch wenn die Aussage in der Vergangenheit liegt. Das Deutsche hat keine solche Form, deshalb rutscht die Vergangenheitsform nach.",
+     "de": "Nach did steht die Grundform, auch wenn die Aussage in der Vergangenheit liegt. Im Deutschen betont man mit Wörtern wie „wirklich“ oder „doch“. Im Englischen trägt did die Vergangenheit, deshalb folgt die Grundform: did send.",
      "en": "After did the base form follows, even when the statement is in the past. German has no such form, so the past form slips in."
     }
    },

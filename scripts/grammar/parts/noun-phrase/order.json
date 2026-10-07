@@ -207,5 +207,57 @@
     "en": "After way comes to, not for."
    }
   }
+ },
+ {
+  "pat": "np.post",
+  "en": "We offer a solution tailored to your needs.",
+  "de": "Wir bieten eine auf Ihre Bedürfnisse zugeschnittene Lösung an.",
+  "chunks": [
+   "we",
+   "offer",
+   "a solution",
+   "tailored",
+   "to your needs"
+  ],
+  "single": "We offer a solution bildet den Anfang; tailored to your needs folgt danach.",
+  "why": [
+   "Das Partizip tailored steht mit seiner Ergänzung hinter dem Nomen solution.",
+   "The participle tailored stands with its phrase after the noun solution."
+  ],
+  "bad": "We offer a tailored to your needs solution.",
+  "trap": {
+   "tile": "tailored",
+   "instead": "a tailored",
+   "why": {
+    "de": "Das Partizip mit Ergänzung steht hinter dem Nomen.",
+    "en": "The participle with its phrase stands after the noun."
+   }
+  }
+ },
+ {
+  "pat": "np.post",
+  "en": "The report shows the extent to which costs have risen.",
+  "de": "Der Bericht zeigt, in welchem Maß die Kosten gestiegen sind.",
+  "chunks": [
+   "the report",
+   "shows",
+   "the extent",
+   "to which",
+   "costs have risen"
+  ],
+  "single": "The report shows the extent bildet den Anfang; to which costs have risen folgt danach.",
+  "why": [
+   "Nach the extent folgt die Präposition mit which: to which. Danach steht der Satz.",
+   "After the extent comes the preposition with which: to which. The clause follows."
+  ],
+  "bad": "The report shows the extent to that costs have risen.",
+  "trap": {
+   "tile": "to which",
+   "instead": "to that",
+   "why": {
+    "de": "Nach einer Präposition steht which, nicht that.",
+    "en": "After a preposition which is used, not that."
+   }
+  }
  }
 ]

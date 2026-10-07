@@ -496,8 +496,8 @@
    "pat": "ep.concession",
    "why": {
     "ok": {
-     "de": "Das Adjektiv steht vor as: Odd as it sounds. Das räumt etwas ein: „so seltsam es klingt“.",
-     "en": "The adjective stands before as: Odd as it sounds. It concedes a point: “as odd as it sounds”."
+     "de": "Das Adjektiv steht vor as: Odd as it sounds. Im amerikanischen Englisch ist As odd as it sounds üblicher.",
+     "en": "The adjective stands before as: Odd as it sounds. In American English As odd as it sounds is more common."
     },
     "wrong": [
      {
@@ -540,8 +540,8 @@
    "pat": "ep.concession",
    "why": {
     "ok": {
-     "de": "Much as I respect … heißt „so sehr ich … respektiere“ und räumt etwas ein.",
-     "en": "Much as I respect … means “although I respect it very much” and concedes a point."
+     "de": "Much as I respect … heißt „so sehr ich … respektiere“. Im amerikanischen Englisch ist As much as I respect üblicher.",
+     "en": "Much as I respect … means “although I respect it very much”. In American English As much as I respect is more common."
     },
     "wrong": [
      {
@@ -1370,7 +1370,7 @@
    "kind": "mcc",
    "area": "gram",
    "topic": "noun-phrase",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "np.of-s",
@@ -1414,47 +1414,135 @@
    "kind": "mcc",
    "area": "gram",
    "topic": "noun-phrase",
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "pat": "np.to-inf",
    "why": {
     "ok": {
-     "de": "Nach the first customer folgt to + Grundform: to buy.",
-     "en": "After the first customer comes to + base form: to buy."
+     "de": "Nach the first intern folgt to + Grundform: to learn.",
+     "en": "After the first intern comes to + base form: to learn."
     },
     "wrong": [
      {
-      "opt": "buying",
+      "opt": "learning",
       "cat": "grammar",
-      "de": "Nach first customer steht nicht -ing, sondern to + Grundform.",
-      "en": "After first customer comes not -ing but to + base form."
+      "de": "Nach first intern steht nicht -ing, sondern to + Grundform.",
+      "en": "After first intern comes not -ing but to + base form."
      },
      {
-      "opt": "who buy",
+      "opt": "who learn",
       "cat": "grammar",
-      "de": "Who buy ist falsch gebeugt, es müsste who bought heißen.",
-      "en": "Who buy is wrongly inflected; it would have to be who bought."
+      "de": "Who learn ist falsch gebeugt, es müsste who learned heißen.",
+      "en": "Who learn is wrongly inflected; it would have to be who learned."
      },
      {
-      "opt": "for buy",
+      "opt": "for learn",
       "cat": "grammar",
-      "de": "For buy gibt es nicht: nach dem Nomen steht to.",
-      "en": "For buy does not exist: to follows the noun."
+      "de": "For learn gibt es nicht: nach dem Nomen steht to.",
+      "en": "For learn does not exist: to follows the noun."
      }
     ]
    },
-   "text": "She was the first customer ___ the new subscription.",
+   "text": "Mia was the first intern ___ the new software without any help.",
    "options": [
-    "to buy",
-    "buying",
-    "who buy",
-    "for buy"
+    "to learn",
+    "learning",
+    "who learn",
+    "for learn"
    ],
    "answer": 0
   },
   {
    "id": "mcc-0534",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "np.post",
+   "why": {
+    "ok": {
+     "de": "Das Partizip tailored mit seiner Ergänzung steht hinter dem Nomen: a solution tailored to …",
+     "en": "The participle tailored with its phrase stands after the noun: a solution tailored to …"
+    },
+    "wrong": [
+     {
+      "opt": "tailoring",
+      "cat": "grammar",
+      "de": "Tailoring wäre aktiv: die Lösung würde etwas anpassen.",
+      "en": "Tailoring would be active: the solution would adapt something."
+     },
+     {
+      "opt": "tailors",
+      "cat": "grammar",
+      "de": "Tailors braucht ein Subjekt und ist hier ein zweites Verb.",
+      "en": "Tailors needs a subject and is a second verb here."
+     },
+     {
+      "opt": "tailor",
+      "cat": "grammar",
+      "de": "Hinter dem Nomen steht ein Partizip, keine Grundform.",
+      "en": "A participle follows the noun, not a base form."
+     }
+    ]
+   },
+   "text": "We offer a solution ___ to the specific needs of small teams.",
+   "options": [
+    "tailoring",
+    "tailored",
+    "tailors",
+    "tailor"
+   ],
+   "answer": 1
+  },
+  {
+   "id": "mcc-0535",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "np.post",
+   "why": {
+    "ok": {
+     "de": "Für Personen allgemein steht those who: Those who arrive early.",
+     "en": "For people in general those who is used: Those who arrive early."
+    },
+    "wrong": [
+     {
+      "opt": "whom",
+      "cat": "grammar",
+      "de": "Whom ist Objekt, hier ist die Gruppe Subjekt.",
+      "en": "Whom is an object; here the group is the subject."
+     },
+     {
+      "opt": "which",
+      "cat": "grammar",
+      "de": "Which gilt für Sachen, hier geht es um Menschen.",
+      "en": "Which is for things; here it is about people."
+     },
+     {
+      "opt": "whose",
+      "cat": "grammar",
+      "de": "Whose zeigt Besitz an und passt nicht.",
+      "en": "Whose shows possession and does not fit."
+     }
+    ]
+   },
+   "text": "Those ___ arrive early can choose the best seats.",
+   "options": [
+    "whom",
+    "which",
+    "who",
+    "whose"
+   ],
+   "answer": 2
+  },
+  {
+   "id": "mcc-0536",
    "kind": "mcc",
    "area": "gram",
    "topic": "noun-phrase",
@@ -1491,14 +1579,14 @@
    "text": "This is the best pizza ___ in years.",
    "options": [
     "what I have had",
-    "I have had",
     "that had I",
-    "I have had it"
+    "I have had it",
+    "I have had"
    ],
-   "answer": 1
+   "answer": 3
   },
   {
-   "id": "mcc-0535",
+   "id": "mcc-0537",
    "kind": "mcc",
    "area": "gram",
    "topic": "noun-phrase",
@@ -1534,15 +1622,15 @@
    },
    "text": "The kids ___ in the garden are my neighbor’s.",
    "options": [
+    "playing",
     "play",
     "played",
-    "playing",
     "are playing"
    ],
-   "answer": 2
+   "answer": 0
   },
   {
-   "id": "mcc-0536",
+   "id": "mcc-0538",
    "kind": "mcc",
    "area": "gram",
    "topic": "noun-phrase",
@@ -1579,11 +1667,11 @@
    "text": "We stayed at ___ house for the weekend.",
    "options": [
     "my parent’s",
+    "my parents’",
     "of my parents",
-    "my parents house",
-    "my parents’"
+    "my parents house"
    ],
-   "answer": 3
+   "answer": 1
   }
  ]
 }

@@ -49,7 +49,8 @@
    "bad": {
     "span": "we could begin",
     "fix": [
-     "could we begin"
+     "could we begin",
+     "did we begin"
     ],
     "choices": [
      "could we begin",
@@ -272,23 +273,23 @@
    "pat": "ep.concession",
    "why": {
     "ok": {
-     "de": "Nach der Voranstellung ist der Hauptsatz normal: we could not reach.",
-     "en": "After the fronting the main clause is normal: we could not reach."
+     "de": "Bei der Voranstellung fehlt as: Hard as we tried, … Ohne as ist der Einwand nicht ausgedrückt.",
+     "en": "The as is missing in the fronting: Hard as we tried, … Without as the concession is not expressed."
     },
     "wrong": []
    },
    "bad": {
-    "span": "we not could",
+    "span": "Hard we tried",
     "fix": [
-     "we could not"
+     "Hard as we tried"
     ],
     "choices": [
-     "we could not",
-     "we did not could",
-     "we not can"
+     "Hard as we tried",
+     "Hard that we tried",
+     "Hard so we tried"
     ]
    },
-   "text": "Hard as we tried, we not could reach the client by phone."
+   "text": "Hard we tried, but we could not reach the client by phone."
   },
   {
    "id": "err-0512",
@@ -474,8 +475,8 @@
    "pat": "el.so-not",
    "why": {
     "ok": {
-     "de": "Nach hope folgt not direkt, ohne that.",
-     "en": "After hope, not follows directly, without that."
+     "de": "Nach hope steht not direkt: I hope not. Hope that not ist im Englischen nicht üblich.",
+     "en": "After hope, not follows directly: I hope not. Hope that not is not used in English."
     },
     "wrong": []
    },
@@ -503,13 +504,13 @@
    "pat": "el.do-so",
    "why": {
     "ok": {
-     "de": "Kein Fehler: Did the same ersetzt lowered our prices.",
-     "en": "No mistake: Did the same replaces lowered our prices."
+     "de": "Kein Fehler: Did the same ersetzt changed our logo.",
+     "en": "No mistake: Did the same replaces changed our logo."
     },
     "wrong": []
    },
    "bad": null,
-   "text": "Our rivals lowered their prices, and we did the same last month."
+   "text": "Our rivals changed their logo, and we did the same last month."
   },
   {
    "id": "err-0521",
@@ -588,7 +589,8 @@
    "bad": {
     "span": "than the new provider",
     "fix": [
-     "than those of the new provider"
+     "than those of the new provider",
+     "than the new provider's"
     ],
     "choices": [
      "than those of the new provider",
@@ -698,6 +700,93 @@
    "id": "err-0528",
    "kind": "err",
    "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "el.so-not",
+   "why": {
+    "ok": {
+     "de": "Es heißt I hope not, nicht I do not hope so. Not ersetzt den Gedanken.",
+     "en": "It is I hope not, not I do not hope so. Not replaces the thought."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "do not hope so",
+    "fix": [
+     "hope not"
+    ],
+    "choices": [
+     "hope not",
+     "do not hope not",
+     "hope so not"
+    ]
+   },
+   "text": "Will it rain at the weekend? I do not hope so, because we are planning a picnic."
+  },
+  {
+   "id": "err-0529",
+   "kind": "err",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "el.so-not",
+   "why": {
+    "ok": {
+     "de": "Nach neither steht das Hilfsverb vor dem Subjekt: neither do I.",
+     "en": "After neither the auxiliary comes before the subject: neither do I."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "neither I do",
+    "fix": [
+     "neither do I"
+    ],
+    "choices": [
+     "neither do I",
+     "neither I do",
+     "so do I"
+    ]
+   },
+   "text": "I do not like coffee, and neither I do tea, so we ordered water."
+  },
+  {
+   "id": "err-0530",
+   "kind": "err",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "el.one-ones",
+   "why": {
+    "ok": {
+     "de": "Hinter dem Adjektiv new braucht es one.",
+     "en": "After the adjective new you need one."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "a new",
+    "fix": [
+     "a new one"
+    ],
+    "choices": [
+     "a new one",
+     "a new ones",
+     "the new it"
+    ]
+   },
+   "text": "My phone is old, so I bought a new at the weekend."
+  },
+  {
+   "id": "err-0531",
+   "kind": "err",
+   "area": "gram",
    "topic": "noun-phrase",
    "level": "C1",
    "dom": "biz",
@@ -725,7 +814,7 @@
    "text": "Is this the only offer what we have received so far?"
   },
   {
-   "id": "err-0529",
+   "id": "err-0532",
    "kind": "err",
    "area": "gram",
    "topic": "noun-phrase",
@@ -735,30 +824,30 @@
    "pat": "np.participle",
    "why": {
     "ok": {
-     "de": "Die Mitarbeiter sind beteiligt: Passiv braucht die 3. Form involved.",
-     "en": "The employees are involved: the passive needs the past participle involved."
+     "de": "Die Dokumente werden erstellt: Passiv braucht die 3. Form prepared.",
+     "en": "The documents are prepared: the passive needs the past participle prepared."
     },
     "wrong": []
    },
    "bad": {
-    "span": "involving",
+    "span": "prepare",
     "fix": [
-     "involved"
+     "prepared"
     ],
     "choices": [
-     "involved",
-     "involve",
-     "involves"
+     "prepared",
+     "preparing",
+     "prepares"
     ]
    },
-   "text": "The employees involving in the pilot project received a bonus."
+   "text": "The documents prepare by the finance team are stored on the shared drive."
   },
   {
-   "id": "err-0530",
+   "id": "err-0533",
    "kind": "err",
    "area": "gram",
    "topic": "noun-phrase",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "np.of-s",
@@ -783,7 +872,7 @@
    "text": "The manager decision surprised the whole team on Monday."
   },
   {
-   "id": "err-0531",
+   "id": "err-0534",
    "kind": "err",
    "area": "gram",
    "topic": "noun-phrase",
@@ -812,7 +901,7 @@
    "text": "This is the best way for increase our sales in Asia."
   },
   {
-   "id": "err-0532",
+   "id": "err-0535",
    "kind": "err",
    "area": "gram",
    "topic": "noun-phrase",
@@ -831,7 +920,7 @@
    "text": "Everyone working on the migration received the new access rules."
   },
   {
-   "id": "err-0533",
+   "id": "err-0536",
    "kind": "err",
    "area": "gram",
    "topic": "noun-phrase",
@@ -841,16 +930,45 @@
    "pat": "np.to-inf",
    "why": {
     "ok": {
-     "de": "Kein Fehler: Nach the last customer folgt to + Grundform.",
-     "en": "No mistake: after the last customer comes to + base form."
+     "de": "Kein Fehler: Nach the last speaker folgt to + Grundform.",
+     "en": "No mistake: after the last speaker comes to + base form."
     },
     "wrong": []
    },
    "bad": null,
-   "text": "She was the last customer to sign the contract before the deadline."
+   "text": "He was the last speaker to present at the conference on Thursday."
   },
   {
-   "id": "err-0534",
+   "id": "err-0537",
+   "kind": "err",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "np.post",
+   "why": {
+    "ok": {
+     "de": "Das Partizip mit Ergänzung steht hinter dem Nomen: a package tailored to small teams.",
+     "en": "The participle with its phrase stands after the noun: a package tailored to small teams."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "tailored to small teams package",
+    "fix": [
+     "package tailored to small teams"
+    ],
+    "choices": [
+     "package tailored to small teams",
+     "tailored package to small teams",
+     "package that tailored to small teams"
+    ]
+   },
+   "text": "We sell a tailored to small teams package this season."
+  },
+  {
+   "id": "err-0538",
    "kind": "err",
    "area": "gram",
    "topic": "noun-phrase",
@@ -879,7 +997,7 @@
    "text": "The children involving in the school play need to arrive by eight."
   },
   {
-   "id": "err-0535",
+   "id": "err-0539",
    "kind": "err",
    "area": "gram",
    "topic": "noun-phrase",
@@ -908,7 +1026,7 @@
    "text": "The best way for save money is to cook at home."
   },
   {
-   "id": "err-0536",
+   "id": "err-0540",
    "kind": "err",
    "area": "gram",
    "topic": "noun-phrase",

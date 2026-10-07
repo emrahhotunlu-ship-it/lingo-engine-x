@@ -12,8 +12,8 @@
    "pat": "inv.negative",
    "why": {
     "ok": {
-     "de": "Nach Never before steht das Hilfsverb vor dem Subjekt: Never before have we seen.",
-     "en": "After Never before, the auxiliary comes before the subject: Never before have we seen."
+     "de": "Nach Never steht das Hilfsverb vor dem Subjekt: Never have we seen. Never before have we seen geht auch.",
+     "en": "After Never, the auxiliary comes before the subject: Never have we seen. Never before have we seen works too."
     },
     "wrong": [
      {
@@ -22,28 +22,27 @@
        "have",
        "seen"
       ],
-      "de": "Nach Never before kommt have vor we: have we seen.",
-      "en": "After Never before, have comes before we: have we seen."
+      "de": "Nach Never kommt have vor we: have we seen.",
+      "en": "After Never, have comes before we: have we seen."
      }
     ]
    },
-   "lead": "This is the first time we have seen such a high demand.",
-   "key": "NEVER",
-   "before": "",
+   "lead": "We saw such a high demand for the first time.",
+   "key": "HAVE",
+   "before": "Never",
    "after": "such a high demand.",
    "keys": [
     {
      "a": [
-      "Never before"
+      "have",
+      "before have"
      ],
      "b": [
-      "have we seen"
+      "we seen"
      ]
     }
    ],
    "tiles": [
-    "before",
-    "have",
     "we",
     "seen"
    ],
@@ -53,7 +52,7 @@
     "saw"
    ],
    "traps": [
-    "Never before we have seen"
+    "we have seen"
    ]
   },
   {
@@ -70,25 +69,34 @@
      "de": "No sooner had we begun the work than … Zu no sooner gehört than.",
      "en": "No sooner had we begun the work than … No sooner goes with than."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "we",
+       "had",
+       "begun"
+      ],
+      "de": "Nach No sooner kommt had vor we: had we begun.",
+      "en": "After No sooner, had comes before we: had we begun."
+     }
+    ]
    },
    "lead": "The client changed the requirements right after we began the work.",
-   "key": "SOONER",
-   "before": "",
+   "key": "HAD",
+   "before": "No sooner",
    "after": "the work than the client changed the requirements.",
    "keys": [
     {
      "a": [
-      "No sooner"
+      "had"
      ],
      "b": [
-      "had we begun"
+      "we begun",
+      "we started"
      ]
     }
    ],
    "tiles": [
-    "No",
-    "had",
     "we",
     "begun"
    ],
@@ -97,7 +105,9 @@
     "did",
     "have"
    ],
-   "traps": []
+   "traps": [
+    "we had begun"
+   ]
   },
   {
    "id": "kwt-0503",
@@ -113,36 +123,44 @@
      "de": "Only when the data check ends can the system open … Nach Only when kommt can vor das Subjekt.",
      "en": "Only when the data check ends can the system open … After Only when, can comes before the subject."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "the",
+       "system",
+       "can"
+      ],
+      "de": "Nach Only when … kommt can vor das Subjekt: can the system.",
+      "en": "After Only when …, can comes before the subject: can the system."
+     }
+    ]
    },
-   "lead": "The system can open to all users when the data check ends, but not before.",
-   "key": "ONLY",
-   "before": "",
-   "after": "can the system open to all users.",
+   "lead": "The system will not open to all users until the data check ends.",
+   "key": "CAN",
+   "before": "Only when the data check ends",
+   "after": "open to all users.",
    "keys": [
     {
      "a": [
-      "Only when"
+      "can"
      ],
      "b": [
-      "the data check ends",
-      "the check is done"
+      "the system"
      ]
     }
    ],
    "tiles": [
-    "when",
     "the",
-    "data",
-    "check",
-    "ends"
+    "system"
    ],
    "extra": [
     "did",
     "if",
     "will"
    ],
-   "traps": []
+   "traps": [
+    "the system can"
+   ]
   },
   {
    "id": "kwt-0504",
@@ -207,33 +225,34 @@
    "pat": "inv.cond",
    "why": {
     "ok": {
-     "de": "Were it not for + Nomen heißt „wenn nicht … gewesen wäre“.",
-     "en": "Were it not for + noun means “if it had not been for”."
+     "de": "Had it not been for + Nomen heißt „wenn nicht … gewesen wäre“ und bezieht sich auf die Vergangenheit.",
+     "en": "Had it not been for + noun means “if it had not been for” and refers to the past."
     },
     "wrong": []
    },
    "lead": "Without the support of our partners, we could not have finished on time.",
-   "key": "WERE",
+   "key": "HAD",
    "before": "",
    "after": "the support of our partners, we could not have finished on time.",
    "keys": [
     {
      "a": [
-      "Were it"
+      "Had it"
      ],
      "b": [
-      "not for"
+      "not been for"
      ]
     }
    ],
    "tiles": [
     "it",
     "not",
+    "been",
     "for"
    ],
    "extra": [
-    "had",
     "was",
+    "were",
     "without"
    ],
    "traps": []
@@ -255,32 +274,32 @@
     "wrong": [
      {
       "if": [
-       "hardly",
        "we",
-       "had"
+       "had",
+       "opened"
       ],
-      "de": "Nach Hardly kommt had vor we: had we.",
-      "en": "After Hardly, had comes before we: had we."
+      "de": "Nach Hardly kommt had vor we: had we opened.",
+      "en": "After Hardly, had comes before we: had we opened."
      }
     ]
    },
-   "lead": "We had barely opened the report when the phone rang.",
-   "key": "HARDLY",
-   "before": "",
-   "after": "opened the report when the phone rang.",
+   "lead": "The phone rang right after we opened the report.",
+   "key": "HAD",
+   "before": "Hardly",
+   "after": "the report when the phone rang.",
    "keys": [
     {
      "a": [
-      "Hardly"
+      "had"
      ],
      "b": [
-      "had we"
+      "we opened"
      ]
     }
    ],
    "tiles": [
-    "had",
-    "we"
+    "we",
+    "opened"
    ],
    "extra": [
     "has",
@@ -288,7 +307,7 @@
     "than"
    ],
    "traps": [
-    "Hardly we had"
+    "we had opened"
    ]
   },
   {
@@ -309,30 +328,32 @@
      {
       "if": [
        "i",
-       "have"
+       "have",
+       "felt"
       ],
-      "de": "Nach Never kommt have vor I: have I.",
-      "en": "After Never, have comes before I: have I."
+      "de": "Nach Never kommt have vor I: have I felt.",
+      "en": "After Never, have comes before I: have I felt."
      }
     ]
    },
    "lead": "This was the first time I felt so tired after such a short hike.",
-   "key": "NEVER",
-   "before": "",
-   "after": "felt so tired after such a short hike.",
+   "key": "HAVE",
+   "before": "Never",
+   "after": "so tired after such a short hike.",
    "keys": [
     {
      "a": [
-      "Never have"
+      "have",
+      "before have"
      ],
      "b": [
-      "I"
+      "I felt"
      ]
     }
    ],
    "tiles": [
-    "have",
-    "I"
+    "I",
+    "felt"
    ],
    "extra": [
     "had",
@@ -340,7 +361,7 @@
     "been"
    ],
    "traps": [
-    "Never I have"
+    "I have felt"
    ]
   },
   {
@@ -357,33 +378,44 @@
      "de": "Only after you have rung the bell can you enter … Nach dem Nebensatz steht can vor dem Subjekt.",
      "en": "Only after you have rung the bell can you enter … After the clause, can comes before the subject."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "you",
+       "can",
+       "enter"
+      ],
+      "de": "Nach dem Nebensatz kommt can vor das Subjekt: can you enter.",
+      "en": "After the clause, can comes before the subject: can you enter."
+     }
+    ]
    },
-   "lead": "You can enter the garden once you have rung the bell, and not before.",
-   "key": "ONLY",
-   "before": "",
-   "after": "rung the bell can you enter the garden.",
+   "lead": "You are not allowed into the garden before you have rung the bell.",
+   "key": "CAN",
+   "before": "Only after you have rung the bell",
+   "after": "the garden.",
    "keys": [
     {
      "a": [
-      "Only after"
+      "can"
      ],
      "b": [
-      "you have"
+      "you enter"
      ]
     }
    ],
    "tiles": [
-    "after",
     "you",
-    "have"
+    "enter"
    ],
    "extra": [
     "did",
     "will",
     "had"
    ],
-   "traps": []
+   "traps": [
+    "you can enter"
+   ]
   },
   {
    "id": "kwt-0509",
@@ -474,6 +506,14 @@
      "b": [
       "does know"
      ]
+    },
+    {
+     "a": [
+      "does truly"
+     ],
+     "b": [
+      "know"
+     ]
     }
    ],
    "tiles": [
@@ -526,6 +566,14 @@
      "b": [
       "did send"
      ]
+    },
+    {
+     "a": [
+      "did definitely"
+     ],
+     "b": [
+      "send"
+     ]
     }
    ],
    "tiles": [
@@ -565,7 +613,7 @@
     {
      "a": [
       "Much as",
-      "Much though"
+      "As much as"
      ],
      "b": [
       "I"
@@ -607,7 +655,7 @@
     {
      "a": [
       "Surprising as",
-      "Surprising though"
+      "As surprising as"
      ],
      "b": [
       "it"
@@ -675,40 +723,49 @@
    "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "pat": "ep.object-front",
+   "pat": "ep.do-emph",
    "why": {
     "ok": {
-     "de": "That proposal I cannot accept … Das Objekt steht vorn, die Reihenfolge danach bleibt normal.",
-     "en": "That proposal I cannot accept … The object comes first, the order after it stays normal."
+     "de": "Das betonte did widerspricht dem Vorwurf und steht vor der Grundform pay.",
+     "en": "The stressed did rebuts the accusation and stands before the base form pay."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "did",
+       "paid"
+      ],
+      "de": "Nach did steht die Grundform pay.",
+      "en": "After did the base form pay follows."
+     }
+    ]
    },
-   "lead": "I will never agree to that proposal under any terms.",
-   "key": "ACCEPT",
-   "before": "",
-   "after": "under any terms.",
+   "lead": "They claim we never paid, but we settled the invoice in full.",
+   "key": "DID",
+   "before": "They claim we never paid, but we",
+   "after": "the invoice in full.",
    "keys": [
     {
      "a": [
-      "That proposal"
+      "really did"
      ],
      "b": [
-      "I cannot accept"
+      "pay"
      ]
     }
    ],
    "tiles": [
-    "That",
-    "proposal",
-    "I",
-    "cannot"
+    "really",
+    "pay"
    ],
    "extra": [
-    "must",
+    "paid",
     "do",
-    "is"
+    "had"
    ],
-   "traps": []
+   "traps": [
+    "really did paid"
+   ]
   },
   {
    "id": "kwt-0516",
@@ -812,40 +869,52 @@
    "level": "C1",
    "dom": "life",
    "src": "seed",
-   "pat": "ep.object-front",
+   "pat": "ep.so-such",
    "why": {
     "ok": {
-     "de": "Pop I do not like. Das Objekt steht vorn, die Reihenfolge danach bleibt normal.",
-     "en": "Pop I do not like. The object comes first, the order after it stays normal."
+     "de": "Such was the noise that … Das Verb steht vor dem Subjekt.",
+     "en": "Such was the noise that … The verb stands before the subject."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "such",
+       "the",
+       "noise",
+       "was"
+      ],
+      "de": "Nach Such am Anfang kommt was vor das Subjekt: Such was the noise.",
+      "en": "After Such at the start, was comes before the subject: Such was the noise."
+     }
+    ]
    },
-   "lead": "I enjoy jazz, but I am not a fan of pop.",
-   "key": "LIKE",
-   "before": "I enjoy jazz, but",
-   "after": ".",
+   "lead": "The noise was so loud that the neighbors complained.",
+   "key": "SUCH",
+   "before": "",
+   "after": "that the neighbors complained.",
    "keys": [
     {
      "a": [
-      "pop I do"
+      "Such was"
      ],
      "b": [
-      "not like"
+      "the noise"
      ]
     }
    ],
    "tiles": [
-    "pop",
-    "I",
-    "do",
-    "not"
+    "was",
+    "the",
+    "noise"
    ],
    "extra": [
-    "does",
-    "am",
+    "so",
+    "is",
     "it"
    ],
-   "traps": []
+   "traps": [
+    "Such the noise was"
+   ]
   },
   {
    "id": "kwt-0519",
@@ -921,7 +990,9 @@
    "keys": [
     {
      "a": [
-      "they must"
+      "they must",
+      "they have to",
+      "they need to"
      ],
      "b": [
       "do so"
@@ -953,8 +1024,8 @@
    "pat": "el.do-so",
    "why": {
     "ok": {
-     "de": "Did the same ersetzt die Handlung cut our prices.",
-     "en": "Did the same replaces the action cut our prices."
+     "de": "Did the same ersetzt die Handlung upgraded our servers.",
+     "en": "Did the same replaces the action upgraded our servers."
     },
     "wrong": [
      {
@@ -970,9 +1041,9 @@
      }
     ]
    },
-   "lead": "Our competitors cut their prices in May, and we cut ours in June, too.",
+   "lead": "Our competitors upgraded their servers in May, and we upgraded ours in June, too.",
    "key": "SAME",
-   "before": "Our competitors cut their prices in May, and we",
+   "before": "Our competitors upgraded their servers in May, and we",
    "after": "in June.",
    "keys": [
     {
@@ -1071,7 +1142,8 @@
    "keys": [
     {
      "a": [
-      "lower than"
+      "lower than",
+      "cheaper than"
      ],
      "b": [
       "those of"
@@ -1108,12 +1180,13 @@
    },
    "lead": "Yes, I would like to join you for lunch, but I have another meeting.",
    "key": "LOVE",
-   "before": "Would you join us for lunch? Yes,",
+   "before": "Would you join us for lunch?",
    "after": "but I have another meeting.",
    "keys": [
     {
      "a": [
-      "I'd"
+      "I'd",
+      "I would"
      ],
      "b": [
       "love to"
@@ -1456,33 +1529,34 @@
    "pat": "np.of-s",
    "why": {
     "ok": {
-     "de": "the decision of the manager. Bei einer Person ist auch ’s möglich, hier gilt of.",
-     "en": "the decision of the manager. With a person ’s is also possible, here of is used."
+     "de": "Bei Zeitangaben steht ’s: today’s meeting. Danach folgt has been canceled.",
+     "en": "With time words ’s is used: today’s meeting. Has been canceled follows."
     },
     "wrong": []
    },
-   "lead": "The decision made by the manager surprised everyone.",
-   "key": "OF",
-   "before": "The decision",
-   "after": "surprised everyone.",
+   "lead": "We need to know whether the meeting that was planned for today has been canceled.",
+   "key": "TODAY'S",
+   "before": "We need to know whether",
+   "after": "canceled.",
    "keys": [
     {
      "a": [
-      "of the"
+      "today's"
      ],
      "b": [
-      "manager"
+      "meeting has been"
      ]
     }
    ],
    "tiles": [
-    "the",
-    "manager"
+    "meeting",
+    "has",
+    "been"
    ],
    "extra": [
-    "by",
-    "from",
-    "for"
+    "of",
+    "the",
+    "from"
    ],
    "traps": []
   },
@@ -1497,39 +1571,80 @@
    "pat": "np.to-inf",
    "why": {
     "ok": {
-     "de": "the first customer to sign. Nach first steht to + Grundform.",
-     "en": "the first customer to sign. After first comes to + base form."
+     "de": "the only applicant to pass. Nach only steht to + Grundform.",
+     "en": "the only applicant to pass. After only comes to + base form."
     },
     "wrong": []
    },
-   "lead": "She was the first customer who signed the new contract.",
+   "lead": "Ms Lee was the only applicant who passed all three tests.",
    "key": "TO",
-   "before": "She was the",
-   "after": "the new contract.",
+   "before": "Ms Lee was the",
+   "after": "all three tests.",
    "keys": [
     {
      "a": [
-      "first customer"
+      "only applicant"
      ],
      "b": [
-      "to sign"
+      "to pass"
      ]
     }
    ],
    "tiles": [
-    "first",
-    "customer",
-    "sign"
+    "only",
+    "applicant",
+    "pass"
    ],
    "extra": [
     "who",
-    "signed",
+    "passed",
     "for"
    ],
    "traps": []
   },
   {
    "id": "kwt-0534",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "np.post",
+   "why": {
+    "ok": {
+     "de": "the extent to which. Nach extent steht to which.",
+     "en": "the extent to which. After extent comes to which."
+    },
+    "wrong": []
+   },
+   "lead": "The study measures how strongly customers trust our brand.",
+   "key": "EXTENT",
+   "before": "The study measures the",
+   "after": "customers trust our brand.",
+   "keys": [
+    {
+     "a": [
+      "extent"
+     ],
+     "b": [
+      "to which"
+     ]
+    }
+   ],
+   "tiles": [
+    "to",
+    "which"
+   ],
+   "extra": [
+    "of",
+    "that",
+    "how"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0535",
    "kind": "kwt",
    "area": "gram",
    "topic": "noun-phrase",
@@ -1570,7 +1685,7 @@
    "traps": []
   },
   {
-   "id": "kwt-0535",
+   "id": "kwt-0536",
    "kind": "kwt",
    "area": "gram",
    "topic": "noun-phrase",
@@ -1612,7 +1727,7 @@
    "traps": []
   },
   {
-   "id": "kwt-0536",
+   "id": "kwt-0537",
    "kind": "kwt",
    "area": "gram",
    "topic": "noun-phrase",

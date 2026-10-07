@@ -16,17 +16,17 @@ TOPIC = {
 PAT = [
     pattern('el.so-not', ('so und not statt eines Satzes', 'so and not instead of a clause'),
             ('think / hope / expect / suppose / be afraid + so / not', 'think / hope / expect / suppose / be afraid + so / not'),
-            ('Nach think, hope, expect, suppose und be afraid ersetzt so einen ganzen Satz in der Antwort, und not steht für die Verneinung. Auch „If so“ und „If not“ stehen für einen ganzen Gedanken.',
-             'After think, hope, expect, suppose and be afraid, so replaces a whole clause in the answer, and not stands for the negative. “If so” and “If not” also stand for a whole thought.'),
-            ['i think so', 'i hope so', 'i hope not', 'if so', 'if not', 'i am afraid not'],
+            ('Nach think, hope, expect, suppose und be afraid ersetzt so einen ganzen Satz in der Antwort, und not steht für die Verneinung. Bei think sagt man meist I don’t think so, I think not klingt förmlich. I don’t hope so gibt es nicht, es heißt I hope not. Auch „If so“, „If not“, „so do I“ und „neither do I“ stehen für einen ganzen Gedanken.',
+             'After think, hope, expect, suppose and be afraid, so replaces a whole clause in the answer, and not stands for the negative. With think people usually say I don’t think so, I think not sounds formal. There is no I don’t hope so, it is I hope not. “If so”, “If not”, “so do I” and “neither do I” also stand for a whole thought.'),
+            ['i think so', 'i hope so', 'i hope not', 'i don’t think so', 'if so', 'i am afraid not', 'so do i', 'neither do i'],
             [('Will the update be ready on Friday? I think so.', 'Wird das Update am Freitag fertig? Ich denke schon.', 'talk'),
              ('Is the budget approved? I am afraid not.', 'Ist das Budget genehmigt? Leider nicht.', 'meeting'),
              ('If so, please send me the new date.', 'Falls ja, schicken Sie mir bitte das neue Datum.', 'mail')],
             ('Is it ready? I hope that not.', 'Is it ready? I hope not.',
-             'Nach hope steht not direkt. Ein that davor ist falsch, weil not keinen Nebensatz einleitet. Das Deutsche hat „dass“ hier nicht.',
-             'After hope, not follows directly. A that before it is wrong, because not does not introduce a clause. German has no “dass” here.'),
-            ('el.do-so', 'Will you sign? I hope so.', 'You may sign. Please do so.',
-             'So nach hope ersetzt den Gedanken. Do so ersetzt die Handlung.', 'So after hope replaces the thought. Do so replaces the action.'),
+             'Nach hope steht not direkt: I hope not. Im Deutschen geht „Ich hoffe, dass nicht“, im Englischen ist „hope that not“ nicht üblich, weil not den Gedanken schon ersetzt.',
+             'After hope, not follows directly: I hope not. German allows “Ich hoffe, dass nicht”, but “hope that not” is not used in English, because not already replaces the thought.'),
+            ('el.do-so', 'Did she sign? I think so.', 'Please sign the form. She did so yesterday.',
+             'So nach think ersetzt den Gedanken. Do so ersetzt die Handlung.', 'So after think replaces the thought. Do so replaces the action.'),
             [('Will they sign? I hope not.', 'Möchte ich, dass sie unterschreiben?', 'Do I want them to sign?', False)],
             ('Steht schon ein ganzer Gedanke vor der Antwort? Dann genügt so oder not hinter dem Verb.', 'Has the whole thought been said already? Then so or not after the verb is enough.')),
     pattern('el.do-so', ('do so, do the same · Verb ersetzen', 'do so, do the same · replacing a verb'),
@@ -40,8 +40,8 @@ PAT = [
             ('She signed the contract, and I did same.', 'She signed the contract, and I did the same.',
              'Im Deutschen sagt man „ich tat dasselbe“. Im Englischen darf the nicht fehlen: the same.',
              'German says “ich tat dasselbe”. In English the must not be missing: the same.'),
-            ('el.so-not', 'Will you sign? I hope so.', 'You may sign. Please do so.',
-             'So nach hope ersetzt den Gedanken. Do so ersetzt die Handlung.', 'So after hope replaces the thought. Do so replaces the action.'),
+            ('el.so-not', 'Did she sign? I think so.', 'Please sign the form. She did so yesterday.',
+             'So nach think ersetzt den Gedanken. Do so ersetzt die Handlung.', 'So after think replaces the thought. Do so replaces the action.'),
             [('He reviewed the report and I did the same.', 'Habe ich den Bericht geprüft?', 'Did I review the report?', True)],
             ('Welche Handlung wurde schon genannt, und welches kurze Wort kann sie ersetzen?', 'Which action has been named already, and which short word can replace it?')),
     pattern('el.one-ones', ('one, ones · that of, those of', 'one, ones · that of, those of'),
@@ -68,8 +68,8 @@ PAT = [
              ('She can attend the workshop, but he cannot.', 'Sie kann am Workshop teilnehmen, er nicht.', 'meeting'),
              ('Please feel free to call me if you want to.', 'Rufen Sie mich gern an, wenn Sie möchten.', 'mail')],
             ('Can you join us? Yes, I would like.', 'Can you join us? Yes, I would like to.',
-             'Das Deutsche lässt „zu“ bei „Ich möchte gern“ am Satzende weg. Im Englischen muss to stehen bleiben, damit klar ist, dass ein Infinitiv gemeint ist.',
-             'German drops “zu” after “Ich möchte gern” at the end. English must keep to, so it is clear that an infinitive is meant.'),
+             'Im Deutschen antwortet man „Ich würde gern“ ohne Infinitiv. Im Englischen bleibt to als Platzhalter für den weggelassenen Infinitiv stehen: I would like to.',
+             'In German the answer is just “Ich würde gern”, without an infinitive. In English to stays as a stand-in for the dropped infinitive: I would like to.'),
             ('el.do-so', "I'd love to.", "I'd love to do so.",
              'Beide sind richtig. Das kurze to klingt im Gespräch natürlicher, do so förmlicher.', 'Both are correct. The short to sounds more natural in conversation, do so more formal.'),
             [("Can you come? I'd love to, but I can't.", 'Würde ich gern kommen?', 'Would I like to come?', True)],
@@ -89,8 +89,8 @@ FILE = topic_file(T, ('Ich kann Wiederholungen vermeiden: mit so und not, do so,
 RULES = rules_from(PAT,
     ('Englisch lässt Bekanntes weg: so/not nach think und hope, do so statt des Verbs, one(s) statt des Nomens, those of im Vergleich, und am Ende nur to oder das Hilfsverb.',
      'English leaves out what is known: so/not after think and hope, do so instead of the verb, one(s) instead of the noun, those of in a comparison, and only to or the auxiliary at the end.'),
-    ('Wiederholungen wirken im Englischen schwerfällig. Wer Ellipse beherrscht, klingt flüssig und muttersprachlich, vor allem in Mails und Meetings.',
-     'Repetition sounds heavy in English. If you master ellipsis you sound fluent and native, especially in emails and meetings.'),
+    ('Wiederholungen wirken im Englischen schwerfällig. Wann ja, wann nein: In Gesprächen und Mails ist die Kurzform Standard. In Verträgen und Berichten wiederholt man das Nomen lieber, damit nichts missverstanden wird.',
+     'Repetition sounds heavy in English. When yes, when no: in conversation and emails the short form is standard. In contracts and reports it is safer to repeat the noun so that nothing is misunderstood.'),
     ('Nicht verwechseln: so ersetzt einen Gedanken (I hope so), do so eine Handlung (please do so), one ein Nomen (the new one). Und to darf am Ende nie fehlen.',
      'Do not mix up: so replaces a thought (I hope so), do so an action (please do so), one a noun (the new one). And to must never be missing at the end.'),
     (['Was wurde schon gesagt: ein Gedanke, eine Handlung oder ein Nomen?', 'Gedanke: so oder not. Handlung: do so oder do the same. Nomen: one(s), those of.', 'Am Satzende steht to oder das Hilfsverb allein, wenn das Verb bekannt ist.'],
@@ -267,11 +267,11 @@ def c1x():
     ocl(T, 'el.so-not', 'C1', 'biz', 0.0, 'Is the report finished? I am afraid ___; we are still checking the figures.',
         ['not'], 'adv', ['no', 'nor', 'never'],
         ('Nach be afraid steht not für den verneinten Gedanken: I am afraid not.', 'After be afraid, not stands for the negative thought: I am afraid not.'))
-    ocl(T, 'el.do-so', 'C1', 'biz', 0.0, 'Our competitors reduced their prices in May, and we ___ the same in June.',
+    ocl(T, 'el.do-so', 'C1', 'biz', 0.0, 'Our competitors moved to a new platform in May, and we ___ the same in June.',
         ['did'], 'aux', ['do', 'had', 'were'],
-        ('Did the same ersetzt die Handlung reduced our prices.', 'Did the same replaces the action reduced our prices.'))
+        ('Did the same ersetzt die Handlung moved to a new platform.', 'Did the same replaces the action moved to a new platform.'))
     ocl(T, 'el.do-so', 'C1', 'biz', 0.0, 'Anyone who wants to withdraw from the course may do ___ until the end of the month.',
-        ['so', 'it'], 'adv', ['such', 'thus', 'either'],
+        ['so', 'it', 'that'], 'adv', ['such', 'thus', 'either'],
         ('Do so ersetzt die Handlung withdraw from the course.', 'Do so replaces the action withdraw from the course.'))
     ocl(T, 'el.one-ones', 'C1', 'biz', 0.0, 'I do not like the old design, but the new ___ looks much better.',
         ['one'], 'pron', ['ones', 'that', 'it'],
@@ -282,9 +282,9 @@ def c1x():
 
     err(T, 'el.so-not', 'C1', 'biz', 0.0, 'Will the update be ready by Monday? I hope that not, because the testers are away.',
         ('hope that not', ['hope not'], ['hope not', 'hope it not', 'hope no']),
-        ('Nach hope folgt not direkt, ohne that.', 'After hope, not follows directly, without that.'))
-    err(T, 'el.do-so', 'C1', 'biz', 0.0, 'Our rivals lowered their prices, and we did the same last month.', None,
-        ('Kein Fehler: Did the same ersetzt lowered our prices.', 'No mistake: Did the same replaces lowered our prices.'))
+        ('Nach hope steht not direkt: I hope not. Hope that not ist im Englischen nicht üblich.', 'After hope, not follows directly: I hope not. Hope that not is not used in English.'))
+    err(T, 'el.do-so', 'C1', 'biz', 0.0, 'Our rivals changed their logo, and we did the same last month.', None,
+        ('Kein Fehler: Did the same ersetzt changed our logo.', 'No mistake: Did the same replaces changed our logo.'))
     err(T, 'el.one-ones', 'C1', 'biz', 0.0, 'Our current provider is expensive, so we are looking for a cheaper.',
         ('a cheaper', ['a cheaper one'], ['a cheaper one', 'a cheaper it', 'cheaper one a']),
         ('Hinter dem Adjektiv cheaper braucht es one.', 'After the adjective cheaper you need one.'))
@@ -292,7 +292,7 @@ def c1x():
         ('would like', ['would like to'], ['would like to', 'would like for', 'would like of']),
         ('Am Ende muss to stehen bleiben: I would like to.', 'At the end to has to stay: I would like to.'))
     err(T, 'el.one-ones', 'C1', 'biz', 0.0, 'The fees of our provider are higher than the new provider.',
-        ('than the new provider', ['than those of the new provider'], ['than those of the new provider', 'than that of the new provider', 'than the ones the new provider']),
+        ('than the new provider', ['than those of the new provider', "than the new provider's"], ['than those of the new provider', 'than that of the new provider', 'than the ones the new provider']),
         ('Gebühren werden mit Gebühren verglichen: those of the new provider.', 'Fees are compared with fees: those of the new provider.'))
     err(T, 'el.one-ones', 'C1', 'biz', 0.0, 'The new tool is faster than the old one, but the old one is cheaper to run.', None,
         ('Kein Fehler: One ersetzt das Nomen tool.', 'No mistake: One replaces the noun tool.'))
@@ -301,22 +301,22 @@ def c1x():
         [(['I hope'], ['not'])], ['I', 'hope'], ['so', 'that', 'no'], [],
         ('I hope not. Not steht direkt hinter dem Verb und ersetzt den Gedanken.', 'I hope not. Not follows the verb directly and replaces the thought.'), [])
     kwt(T, 'el.do-so', 'C1', 'biz', 0.0, 'Anyone can cancel before Friday, but cancellations must be made in writing.', 'SO', 'Anyone can cancel before Friday, but', 'in writing.',
-        [(['they must'], ['do so'])], ['they', 'must', 'do'], ['it', 'such', 'does'], ['they must do it so'],
+        [(['they must', 'they have to', 'they need to'], ['do so'])], ['they', 'must', 'do'], ['it', 'such', 'does'], ['they must do it so'],
         ('Do so ersetzt die Handlung cancel.', 'Do so replaces the action cancel.'),
         [W(['do', 'it', 'so'], 'Es heißt do so, nicht do it so.', 'It is do so, not do it so.')])
-    kwt(T, 'el.do-so', 'C1', 'biz', 0.0, 'Our competitors cut their prices in May, and we cut ours in June, too.', 'SAME', 'Our competitors cut their prices in May, and we', 'in June.',
+    kwt(T, 'el.do-so', 'C1', 'biz', 0.0, 'Our competitors upgraded their servers in May, and we upgraded ours in June, too.', 'SAME', 'Our competitors upgraded their servers in May, and we', 'in June.',
         [(['did the'], ['same'])], ['did', 'the'], ['do', 'so', 'it'], ['did same'],
-        ('Did the same ersetzt die Handlung cut our prices.', 'Did the same replaces the action cut our prices.'),
+        ('Did the same ersetzt die Handlung upgraded our servers.', 'Did the same replaces the action upgraded our servers.'),
         [W(['did', 'same'], 'Vor same steht the: the same.', 'Before same you need the: the same.', ['the'])])
     kwt(T, 'el.one-ones', 'C1', 'biz', 0.0, 'The old printer is broken, so we bought a new printer.', 'ONE', 'The old printer is broken, so we bought', '.',
         [(['a new'], ['one'])], ['a', 'new'], ['it', 'ones', 'other'], ['a new ones'],
         ('One ersetzt das Nomen printer.', 'One replaces the noun printer.'),
         [W(['ones'], 'Printer ist Singular, deshalb one, nicht ones.', 'Printer is singular, so one, not ones.')])
     kwt(T, 'el.one-ones', 'C1', 'biz', 0.0, 'The fees of the new provider are lower than the fees of the old provider.', 'THOSE', 'The fees of the new provider are', 'the old provider.',
-        [(['lower than'], ['those of'])], ['lower', 'than', 'of'], ['that', 'the', 'ones'], [],
+        [(['lower than', 'cheaper than'], ['those of'])], ['lower', 'than', 'of'], ['that', 'the', 'ones'], [],
         ('Those of ersetzt das Pluralnomen fees im Vergleich.', 'Those of replaces the plural noun fees in the comparison.'), [])
-    kwt(T, 'el.to-aux', 'C1', 'biz', 0.0, 'Yes, I would like to join you for lunch, but I have another meeting.', 'LOVE', 'Would you join us for lunch? Yes,', 'but I have another meeting.',
-        [(["I'd"], ['love to'])], ["I'd", 'to'], ['it', 'so', 'of'], [],
+    kwt(T, 'el.to-aux', 'C1', 'biz', 0.0, 'Yes, I would like to join you for lunch, but I have another meeting.', 'LOVE', 'Would you join us for lunch?', 'but I have another meeting.',
+        [(["I'd", 'I would'], ['love to'])], ["I'd", 'to'], ['it', 'so', 'of'], [],
         ("I'd love to. Das Verb join entfällt, to bleibt.", "I'd love to. The verb join is dropped, to stays."), [])
 
 def place():

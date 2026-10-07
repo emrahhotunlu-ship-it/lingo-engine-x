@@ -212,8 +212,8 @@
    "pat": "inv.cond",
    "why": {
     "ok": {
-     "de": "Should you need … ist eine förmliche Bedingung ohne if.",
-     "en": "Should you need … is a formal condition without if."
+     "de": "Should you need … ist die förmliche Fassung ohne if. If you need … ist ebenfalls richtig, klingt aber weniger förmlich.",
+     "en": "Should you need … is the formal version without if. If you need … is also correct but sounds less formal."
     },
     "wrong": [
      {
@@ -241,7 +241,8 @@
    },
    "text": "___ you need further information, our team will be happy to help.",
    "accept": [
-    "Should"
+    "Should",
+    "If"
    ],
    "cls": "aux",
    "chips": [
@@ -261,8 +262,8 @@
    "pat": "inv.cond",
    "why": {
     "ok": {
-     "de": "Were it not for + Nomen heißt „wenn nicht … gewesen wäre“ und ersetzt but for.",
-     "en": "Were it not for + noun means “if it had not been for” and replaces but for."
+     "de": "Had it not been for + Nomen heißt „wenn nicht … gewesen wäre“ und ersetzt but for.",
+     "en": "Had it not been for + noun means “if it had not been for” and replaces but for."
     },
     "wrong": [
      {
@@ -288,7 +289,7 @@
      }
     ]
    },
-   "text": "Were it not ___ the support of our partners, we could not have finished on time.",
+   "text": "Had it not been ___ the support of our partners, we could not have finished on time.",
    "accept": [
     "for"
    ],
@@ -507,8 +508,8 @@
    "pat": "ep.do-emph",
    "why": {
     "ok": {
-     "de": "Zu he gehört does vor der Grundform speak. Das betont, dass es wirklich stimmt.",
-     "en": "With he the form is does before the base form speak. This stresses that it is really true."
+     "de": "Zu he gehört does vor der Grundform speak. Das widerspricht dem Einwand und betont, dass es wirklich stimmt.",
+     "en": "With he the form is does before the base form speak. It rebuts the objection and stresses that it is really true."
     },
     "wrong": [
      {
@@ -534,7 +535,7 @@
      }
     ]
    },
-   "text": "I know it sounds unlikely, but he really ___ speak five languages fluently.",
+   "text": "You say he does not speak French, but he really ___ speak it fluently.",
    "accept": [
     "does"
    ],
@@ -606,42 +607,43 @@
    "pat": "ep.concession",
    "why": {
     "ok": {
-     "de": "Nach der Voranstellung folgt ein normaler Hauptsatz: the migration was not finished.",
-     "en": "After the fronting a normal main clause follows: the migration was not finished."
+     "de": "Hard as we tried … räumt etwas ein: „so sehr wir uns bemühten“. Danach folgt ein normaler Hauptsatz.",
+     "en": "Hard as we tried … concedes a point: “however hard we tried”. A normal main clause follows."
     },
     "wrong": [
      {
       "if": [
-       "is"
+       "that"
       ],
-      "de": "„is“ passt hier nicht. Gesucht ist „was“.",
-      "en": "“is” does not fit here. The word needed is “was”."
+      "de": "„that“ passt hier nicht. Gesucht ist „as“.",
+      "en": "“that” does not fit here. The word needed is “as”."
      },
      {
       "if": [
-       "has"
+       "so"
       ],
-      "de": "„has“ passt hier nicht. Gesucht ist „was“.",
-      "en": "“has” does not fit here. The word needed is “was”."
+      "de": "„so“ passt hier nicht. Gesucht ist „as“.",
+      "en": "“so” does not fit here. The word needed is “as”."
      },
      {
       "if": [
-       "did"
+       "if"
       ],
-      "de": "„did“ passt hier nicht. Gesucht ist „was“.",
-      "en": "“did” does not fit here. The word needed is “was”."
+      "de": "„if“ passt hier nicht. Gesucht ist „as“.",
+      "en": "“if” does not fit here. The word needed is “as”."
      }
     ]
    },
-   "text": "Hard as we tried, the migration ___ not finished before the deadline.",
+   "text": "Hard ___ we tried, the migration was not finished before the deadline.",
    "accept": [
-    "was"
+    "as",
+    "though"
    ],
-   "cls": "aux",
+   "cls": "conj",
    "chips": [
-    "is",
-    "has",
-    "did"
+    "that",
+    "so",
+    "if"
    ]
   },
   {
@@ -999,8 +1001,8 @@
    "pat": "el.do-so",
    "why": {
     "ok": {
-     "de": "Did the same ersetzt die Handlung reduced our prices.",
-     "en": "Did the same replaces the action reduced our prices."
+     "de": "Did the same ersetzt die Handlung moved to a new platform.",
+     "en": "Did the same replaces the action moved to a new platform."
     },
     "wrong": [
      {
@@ -1026,7 +1028,7 @@
      }
     ]
    },
-   "text": "Our competitors reduced their prices in May, and we ___ the same in June.",
+   "text": "Our competitors moved to a new platform in May, and we ___ the same in June.",
    "accept": [
     "did"
    ],
@@ -1078,7 +1080,8 @@
    "text": "Anyone who wants to withdraw from the course may do ___ until the end of the month.",
    "accept": [
     "so",
-    "it"
+    "it",
+    "that"
    ],
    "cls": "adv",
    "chips": [
@@ -1446,40 +1449,40 @@
    "pat": "np.participle",
    "why": {
     "ok": {
-     "de": "Involved wird mit in verbunden: involved in the project.",
-     "en": "Involved goes with in: involved in the project."
+     "de": "Das passive Partizip proposed wird mit by verbunden: proposed by the committee.",
+     "en": "The passive participle proposed goes with by: proposed by the committee."
     },
     "wrong": [
      {
       "if": [
-       "on"
+       "from"
       ],
-      "de": "„on“ passt hier nicht. Gesucht ist „in“.",
-      "en": "“on” does not fit here. The word needed is “in”."
+      "de": "„from“ passt hier nicht. Gesucht ist „by“.",
+      "en": "“from” does not fit here. The word needed is “by”."
      },
      {
       "if": [
        "at"
       ],
-      "de": "„at“ passt hier nicht. Gesucht ist „in“.",
-      "en": "“at” does not fit here. The word needed is “in”."
+      "de": "„at“ passt hier nicht. Gesucht ist „by“.",
+      "en": "“at” does not fit here. The word needed is “by”."
      },
      {
       "if": [
        "of"
       ],
-      "de": "„of“ passt hier nicht. Gesucht ist „in“.",
-      "en": "“of” does not fit here. The word needed is “in”."
+      "de": "„of“ passt hier nicht. Gesucht ist „by“.",
+      "en": "“of” does not fit here. The word needed is “by”."
      }
     ]
    },
-   "text": "The people involved ___ the project agreed to the new schedule.",
+   "text": "The measures proposed ___ the committee were approved yesterday.",
    "accept": [
-    "in"
+    "by"
    ],
    "cls": "prep",
    "chips": [
-    "on",
+    "from",
     "at",
     "of"
    ]
@@ -1538,7 +1541,7 @@
    "kind": "ocl",
    "area": "gram",
    "topic": "noun-phrase",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "np.of-s",
@@ -1587,14 +1590,14 @@
    "kind": "ocl",
    "area": "gram",
    "topic": "noun-phrase",
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "pat": "np.to-inf",
    "why": {
     "ok": {
-     "de": "Nach the first customer folgt to + Grundform: to sign.",
-     "en": "After the first customer comes to + base form: to sign."
+     "de": "Nach the last colleague folgt to + Grundform: to leave.",
+     "en": "After the last colleague comes to + base form: to leave."
     },
     "wrong": [
      {
@@ -1620,11 +1623,11 @@
      }
     ]
    },
-   "text": "She was the first customer ___ sign the new contract.",
+   "text": "He was the last colleague ___ leave the office on Friday.",
    "accept": [
     "to"
    ],
-   "cls": "prep",
+   "cls": "part",
    "chips": [
     "for",
     "at",
@@ -1633,6 +1636,104 @@
   },
   {
    "id": "ocl-0534",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "np.post",
+   "why": {
+    "ok": {
+     "de": "Nach extent steht to which: the extent to which.",
+     "en": "After extent comes to which: the extent to which."
+    },
+    "wrong": [
+     {
+      "if": [
+       "of"
+      ],
+      "de": "„of“ passt hier nicht. Gesucht ist „to“.",
+      "en": "“of” does not fit here. The word needed is “to”."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "„at“ passt hier nicht. Gesucht ist „to“.",
+      "en": "“at” does not fit here. The word needed is “to”."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "„for“ passt hier nicht. Gesucht ist „to“.",
+      "en": "“for” does not fit here. The word needed is “to”."
+     }
+    ]
+   },
+   "text": "The report shows the extent ___ which costs have risen since January.",
+   "accept": [
+    "to"
+   ],
+   "cls": "prep",
+   "chips": [
+    "of",
+    "at",
+    "for"
+   ]
+  },
+  {
+   "id": "ocl-0535",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "np.post",
+   "why": {
+    "ok": {
+     "de": "Für Personen allgemein steht those who: Those who live near the station.",
+     "en": "For people in general those who is used: Those who live near the station."
+    },
+    "wrong": [
+     {
+      "if": [
+       "whom"
+      ],
+      "de": "„whom“ passt hier nicht. Gesucht ist „who“.",
+      "en": "“whom” does not fit here. The word needed is “who”."
+     },
+     {
+      "if": [
+       "which"
+      ],
+      "de": "„which“ passt hier nicht. Gesucht ist „who“.",
+      "en": "“which” does not fit here. The word needed is “who”."
+     },
+     {
+      "if": [
+       "what"
+      ],
+      "de": "„what“ passt hier nicht. Gesucht ist „who“.",
+      "en": "“what” does not fit here. The word needed is “who”."
+     }
+    ]
+   },
+   "text": "Those ___ live near the station can walk to work.",
+   "accept": [
+    "who"
+   ],
+   "cls": "rel",
+   "chips": [
+    "whom",
+    "which",
+    "what"
+   ]
+  },
+  {
+   "id": "ocl-0536",
    "kind": "ocl",
    "area": "gram",
    "topic": "noun-phrase",
@@ -1681,7 +1782,7 @@
    ]
   },
   {
-   "id": "ocl-0535",
+   "id": "ocl-0537",
    "kind": "ocl",
    "area": "gram",
    "topic": "noun-phrase",
@@ -1730,7 +1831,7 @@
    ]
   },
   {
-   "id": "ocl-0536",
+   "id": "ocl-0538",
    "kind": "ocl",
    "area": "gram",
    "topic": "noun-phrase",

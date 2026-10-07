@@ -40,8 +40,8 @@
     "en": "Never, Rarely, Little · auxiliary before subject"
    },
    "form": {
-    "de": "Never / Rarely / Seldom / Little + Hilfsverb + Subjekt + 3. Form",
-    "en": "Never / Rarely / Seldom / Little + auxiliary + subject + participle"
+    "de": "Never / Rarely / Seldom / Little + Hilfsverb + Subjekt + Verb (nach have / had: 3. Form, nach do / does / did: Grundform)",
+    "en": "Never / Rarely / Seldom / Little + auxiliary + subject + verb (after have / had: participle, after do / does / did: base form)"
    },
    "use": {
     "de": "Ein verneinendes oder einschränkendes Wort am Satzanfang betont die Aussage. Danach steht das Hilfsverb vor dem Subjekt, wie in einer Frage.",
@@ -115,20 +115,21 @@
     "en": "Only + time or condition + auxiliary + subject + verb"
    },
    "use": {
-    "de": "Nach „Only after“, „Only when“ oder „Only then“ am Anfang folgt im Hauptsatz die Umstellung. Der Nebensatz davor bleibt normal.",
-    "en": "After “Only after”, “Only when” or “Only then” at the start, the main clause is inverted. The clause before it stays normal."
+    "de": "Nach „Only after“, „Only when“, „Only then“ oder „Not until“ am Anfang folgt im Hauptsatz die Umstellung. Der Nebensatz davor bleibt normal.",
+    "en": "After “Only after”, “Only when”, “Only then” or “Not until” at the start, the main clause is inverted. The clause before it stays normal."
    },
    "signals": [
     "only after",
     "only when",
     "only then",
     "only if",
-    "only by"
+    "only by",
+    "not until"
    ],
    "ex": [
     {
      "en": "Only after the pilot did we approve the full rollout.",
-     "de": "Erst nach dem Pilotbetrieb gaben wir den ganzen Rollout frei.",
+     "de": "Erst nach der Pilotphase gaben wir den ganzen Rollout frei.",
      "ctx": "meeting"
     },
     {
@@ -146,8 +147,8 @@
     "bad": "Only after the pilot we approved the full rollout.",
     "good": "Only after the pilot did we approve the full rollout.",
     "cause": {
-     "de": "Das Deutsche sagt „Erst nach dem Pilot haben wir …“, dort ist die Umstellung selbstverständlich. Im Englischen fehlt sie leicht, weil „only“ nicht wie ein Verneinungswort wirkt.",
-     "en": "German says “Erst nach dem Pilot haben wir …”, where the inverted order is natural. In English it is easy to miss, because “only” does not look like a negative word."
+     "de": "Das Deutsche sagt „Erst nach der Pilotphase haben wir …“, dort ist die Umstellung selbstverständlich. Im Englischen fehlt sie leicht, weil „only“ nicht wie ein Verneinungswort wirkt.",
+     "en": "German says “Erst nach der Pilotphase haben wir …”, where the inverted order is natural. In English it is easy to miss, because “only” does not look like a negative word."
     }
    },
    "contrast": {
@@ -189,12 +190,10 @@
     "en": "Two events follow each other immediately. The first is in the past perfect with inversion, the second in the past simple."
    },
    "signals": [
-    "no sooner",
-    "hardly",
-    "scarcely",
-    "barely",
-    "than",
-    "when"
+    "no sooner had",
+    "hardly had",
+    "scarcely had",
+    "barely had"
    ],
    "ex": [
     {
@@ -287,7 +286,7 @@
     "bad": "Should you will need help, please call us.",
     "good": "Should you need help, please call us.",
     "cause": {
-     "de": "Das Deutsche sagt „Sollten Sie Hilfe brauchen“, und man fügt gern ein will hinzu, weil es um die Zukunft geht. Nach Should you steht aber die Grundform.",
+     "de": "Im Deutschen heißt es „Sollten Sie Hilfe brauchen“ in der Gegenwartsform. Auch im Englischen steht nach Should you die Grundform, ohne will, obwohl die Bedingung in die Zukunft zeigt.",
      "en": "German says “Sollten Sie Hilfe brauchen”, and people like to add will because it is about the future. After Should you, though, the base form follows."
     }
    },

@@ -8,7 +8,8 @@
   "np.contact",
   "np.participle",
   "np.of-s",
-  "np.to-inf"
+  "np.to-inf",
+  "np.post"
  ],
  "introPlan": [
   [
@@ -18,18 +19,21 @@
   [
    "np.of-s",
    "np.to-inf"
+  ],
+  [
+   "np.post"
   ]
  ],
  "decide": {
   "de": [
    "Ist das Relativpronomen Objekt? Dann darf es wegfallen: the system we tested.",
    "Gibt es ein Verb, das das Nomen tut oder erleidet? Nimm -ing oder die 3. Form: the team working, the files stored.",
-   "Folgt first, last, only oder way? Dann passt to + Grundform: the first to sign."
+   "Folgt first, last, only oder way? Dann passt to + Grundform: the first to sign. Soll das Nomen länger werden? Stelle das Partizip mit Ergänzung dahinter (tailored to …)."
   ],
   "en": [
    "Is the relative pronoun the object? Then it may be dropped: the system we tested.",
    "Is there a verb the noun does or undergoes? Use -ing or the past participle: the team working, the files stored.",
-   "Does first, last, only or way come before? Then to + base form fits: the first to sign."
+   "Does first, last, only or way come before? Then to + base form fits: the first to sign. Should the noun grow longer? Put the participle with its phrase after it (tailored to …)."
   ]
  },
  "patterns": [
@@ -212,11 +216,11 @@
     }
    ],
    "trap": {
-    "bad": "The managers decision surprised everyone.",
-    "good": "The manager's decision surprised everyone.",
+    "bad": "The meeting from yesterday was canceled.",
+    "good": "Yesterday's meeting was canceled.",
     "cause": {
-     "de": "Der Besitz steht mit Apostroph und s. Das Deutsche kennt diesen Apostroph nicht, daher fehlt er leicht.",
-     "en": "Possession takes an apostrophe and s. German has no such apostrophe, so it is easily missing."
+     "de": "Bei Zeitangaben steht ’s: yesterday’s meeting. Das deutsche „das Meeting von gestern“ führt zu „from yesterday“.",
+     "en": "With time words ’s is used: yesterday’s meeting. The German “das Meeting von gestern” leads to “from yesterday”."
     }
    },
    "contrast": {
@@ -230,10 +234,10 @@
    },
    "ccq": [
     {
-     "s": "Today's meeting was cancelled.",
+     "s": "Was today's meeting canceled?",
      "q": {
-      "de": "Wurde das Meeting von heute abgesagt?",
-      "en": "Was the meeting from today cancelled?"
+      "de": "Geht es um das Meeting von heute?",
+      "en": "Is it about the meeting from today?"
      },
      "a": true
     }
@@ -311,6 +315,76 @@
    "nudge": {
     "de": "Folgt auf first, last, only oder way eine Handlung? Dann passt to + Grundform.",
     "en": "Does an action follow first, last, only or way? Then to + base form fits."
+   }
+  },
+  {
+   "id": "np.post",
+   "name": {
+    "de": "Nachstellung · tailored to, extent to which",
+    "en": "postmodification · tailored to, extent to which"
+   },
+   "form": {
+    "de": "Nomen + Partizip + Ergänzung · the extent to which … · those who …",
+    "en": "noun + participle + phrase · the extent to which … · those who …"
+   },
+   "use": {
+    "de": "Auf C1 wird das Nomen durch längere Zusätze erweitert: a solution tailored to our needs (Partizip mit Ergänzung steht dahinter), the extent to which … (Präposition + which) und those who … (Personen allgemein). Gestapelte Nomen wie customer service quality sind kurz, aber nicht mehr als zwei bis drei.",
+    "en": "At C1 the noun is extended with longer additions: a solution tailored to our needs (a participle with its phrase stands after the noun), the extent to which … (preposition + which) and those who … (people in general). Stacked nouns like customer service quality are short, but no more than two or three."
+   },
+   "signals": [
+    "tailored to",
+    "the extent to which",
+    "those who",
+    "the way in which",
+    "customer service"
+   ],
+   "ex": [
+    {
+     "en": "We offer a solution tailored to your needs.",
+     "de": "Wir bieten eine auf Ihre Bedürfnisse zugeschnittene Lösung an.",
+     "ctx": "mail"
+    },
+    {
+     "en": "The report shows the extent to which costs have risen.",
+     "de": "Der Bericht zeigt, in welchem Maß die Kosten gestiegen sind.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Those who register early get a discount.",
+     "de": "Wer sich früh anmeldet, erhält einen Rabatt.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "We offer a tailored to your needs solution.",
+    "good": "We offer a solution tailored to your needs.",
+    "cause": {
+     "de": "Ein Partizip mit Ergänzung steht hinter dem Nomen. Im Deutschen steht es davor („eine auf Ihre Bedürfnisse zugeschnittene Lösung“), im Englischen nicht.",
+     "en": "A participle with its phrase stands after the noun. In German it stands before it (“eine auf Ihre Bedürfnisse zugeschnittene Lösung”), in English it does not."
+    }
+   },
+   "contrast": {
+    "with": "np.participle",
+    "a": "a solution tailored to your needs",
+    "b": "a tailored solution",
+    "diff": {
+     "de": "Mit Ergänzung steht das Partizip hinter dem Nomen. Allein steht es davor.",
+     "en": "With a phrase the participle stands after the noun. Alone it stands before."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Those who register early get a discount.",
+     "q": {
+      "de": "Gilt der Rabatt nur für manche?",
+      "en": "Does the discount apply only to some?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Hat das Partizip eine Ergänzung (tailored to …)? Dann steht es hinter dem Nomen. Geht es um Personen allgemein? Dann those who.",
+    "en": "Does the participle have a phrase (tailored to …)? Then it stands after the noun. Is it about people in general? Then those who."
    }
   }
  ]

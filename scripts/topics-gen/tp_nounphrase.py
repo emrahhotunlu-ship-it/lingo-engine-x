@@ -52,12 +52,12 @@ PAT = [
             [("The company's new CEO starts on Monday.", 'Der neue Chef der Firma fängt am Montag an.', 'meeting'),
              ('We reached the end of the quarter.', 'Wir haben das Ende des Quartals erreicht.', 'talk'),
              ("Please send me yesterday's figures.", 'Schicken Sie mir bitte die Zahlen von gestern.', 'mail')],
-            ('The managers decision surprised everyone.', "The manager's decision surprised everyone.",
-             'Der Besitz steht mit Apostroph und s. Das Deutsche kennt diesen Apostroph nicht, daher fehlt er leicht.',
-             'Possession takes an apostrophe and s. German has no such apostrophe, so it is easily missing.'),
+            ('The meeting from yesterday was canceled.', "Yesterday's meeting was canceled.",
+             'Bei Zeitangaben steht ’s: yesterday’s meeting. Das deutsche „das Meeting von gestern“ führt zu „from yesterday“.',
+             'With time words ’s is used: yesterday’s meeting. The German “das Meeting von gestern” leads to “from yesterday”.'),
             ('pn.of', "the manager's decision", 'the decision of the manager',
              'Beides ist möglich. Das ’s klingt bei Personen natürlicher, of bei längeren Gruppen.', 'Both are possible. The ’s sounds more natural with people, of with longer groups.'),
-            [("Today's meeting was cancelled.", 'Wurde das Meeting von heute abgesagt?', 'Was the meeting from today cancelled?', True)],
+            [("Was today's meeting canceled?", 'Geht es um das Meeting von heute?', 'Is it about the meeting from today?', True)],
             ('Ist der Besitzer eine Person, eine Firma oder eine Zeitangabe? Dann ’s. Sonst of.', 'Is the owner a person, a company or a time word? Then ’s. Otherwise of.')),
     pattern('np.to-inf', ('Nomen + to-Infinitiv · the first to sign', 'noun + to-infinitive · the first to sign'),
             ('the first / last / only / best way + to + Grundform', 'the first / last / only / best way + to + base form'),
@@ -74,23 +74,38 @@ PAT = [
              'Gleiche Aussage. To sign ist knapper und passt nach first, last und only.', 'Same statement. To sign is shorter and fits after first, last and only.'),
             [('She was the first customer to sign.', 'Haben andere Kunden vor ihr unterschrieben?', 'Did other customers sign before her?', False)],
             ('Folgt auf first, last, only oder way eine Handlung? Dann passt to + Grundform.', 'Does an action follow first, last, only or way? Then to + base form fits.')),
+    pattern('np.post', ('Nachstellung · tailored to, extent to which', 'postmodification · tailored to, extent to which'),
+            ('Nomen + Partizip + Ergänzung · the extent to which … · those who …', 'noun + participle + phrase · the extent to which … · those who …'),
+            ('Auf C1 wird das Nomen durch längere Zusätze erweitert: a solution tailored to our needs (Partizip mit Ergänzung steht dahinter), the extent to which … (Präposition + which) und those who … (Personen allgemein). Gestapelte Nomen wie customer service quality sind kurz, aber nicht mehr als zwei bis drei.',
+             'At C1 the noun is extended with longer additions: a solution tailored to our needs (a participle with its phrase stands after the noun), the extent to which … (preposition + which) and those who … (people in general). Stacked nouns like customer service quality are short, but no more than two or three.'),
+            ['tailored to', 'the extent to which', 'those who', 'the way in which', 'customer service'],
+            [('We offer a solution tailored to your needs.', 'Wir bieten eine auf Ihre Bedürfnisse zugeschnittene Lösung an.', 'mail'),
+             ('The report shows the extent to which costs have risen.', 'Der Bericht zeigt, in welchem Maß die Kosten gestiegen sind.', 'meeting'),
+             ('Those who register early get a discount.', 'Wer sich früh anmeldet, erhält einen Rabatt.', 'talk')],
+            ('We offer a tailored to your needs solution.', 'We offer a solution tailored to your needs.',
+             'Ein Partizip mit Ergänzung steht hinter dem Nomen. Im Deutschen steht es davor („eine auf Ihre Bedürfnisse zugeschnittene Lösung“), im Englischen nicht.',
+             'A participle with its phrase stands after the noun. In German it stands before it (“eine auf Ihre Bedürfnisse zugeschnittene Lösung”), in English it does not.'),
+            ('np.participle', 'a solution tailored to your needs', 'a tailored solution',
+             'Mit Ergänzung steht das Partizip hinter dem Nomen. Allein steht es davor.', 'With a phrase the participle stands after the noun. Alone it stands before.'),
+            [('Those who register early get a discount.', 'Gilt der Rabatt nur für manche?', 'Does the discount apply only to some?', True)],
+            ('Hat das Partizip eine Ergänzung (tailored to …)? Dann steht es hinter dem Nomen. Geht es um Personen allgemein? Dann those who.', 'Does the participle have a phrase (tailored to …)? Then it stands after the noun. Is it about people in general? Then those who.')),
 ]
 
 FILE = topic_file(T, ('Ich kann Nomen ausbauen: mit Sätzen ohne that, mit Partizipien, mit ’s und of und mit to-Infinitiv („the most reliable system we have tested“).',
                       'I can build around nouns: with clauses without that, with participles, with ’s and of, and with the to-infinitive (“the most reliable system we have tested”).'),
-                  PAT, [['np.contact', 'np.participle'], ['np.of-s', 'np.to-inf']],
+                  PAT, [['np.contact', 'np.participle'], ['np.of-s', 'np.to-inf'], ['np.post']],
                   (['Ist das Relativpronomen Objekt? Dann darf es wegfallen: the system we tested.',
                     'Gibt es ein Verb, das das Nomen tut oder erleidet? Nimm -ing oder die 3. Form: the team working, the files stored.',
-                    'Folgt first, last, only oder way? Dann passt to + Grundform: the first to sign.'],
+                    'Folgt first, last, only oder way? Dann passt to + Grundform: the first to sign. Soll das Nomen länger werden? Stelle das Partizip mit Ergänzung dahinter (tailored to …).'],
                    ['Is the relative pronoun the object? Then it may be dropped: the system we tested.',
                     'Is there a verb the noun does or undergoes? Use -ing or the past participle: the team working, the files stored.',
-                    'Does first, last, only or way come before? Then to + base form fits: the first to sign.']))
+                    'Does first, last, only or way come before? Then to + base form fits: the first to sign. Should the noun grow longer? Put the participle with its phrase after it (tailored to …).']))
 
 RULES = rules_from(PAT,
     ('Du baust Information um ein Nomen herum: ohne that („the system we tested“), mit Partizip („the files stored in the cloud“), mit ’s oder of und mit to + Grundform („the best way to reduce costs“).',
      'You build information around a noun: without that (“the system we tested”), with a participle (“the files stored in the cloud”), with ’s or of and with to + base form (“the best way to reduce costs”).'),
-    ('Gute Texte auf C1 packen viel Information in wenige Wörter. Statt zweier Sätze steht eine Nominalgruppe, und das macht Mails und Berichte klar und knapp.',
-     'Good C1 writing packs a lot of information into few words. Instead of two sentences there is one noun phrase, which makes emails and reports clear and short.'),
+    ('Gute Texte auf C1 packen viel Information in wenige Wörter. Statt zweier Sätze steht eine Nominalgruppe. Wann ja, wann nein: In Berichten und Mails spart das Platz. Im Gespräch klingen mehr als zwei Zusätze vor oder hinter einem Nomen schwer, dann lieber zwei Sätze.',
+     'Good C1 writing packs a lot of information into few words. Instead of two sentences there is one noun phrase. When yes, when no: in reports and emails this saves space. In conversation more than two additions around a noun sound heavy, so use two sentences.'),
     ('Nicht verwechseln: -ing hat das Nomen aktiv getan (the team working), die 3. Form passiv (the files stored). Ein that darf nur fehlen, wenn es Objekt ist, nie als Subjekt.',
      'Do not mix up: -ing means the noun is doing it (the team working), the past participle means it undergoes it (the files stored). A that may only be dropped when it is the object, never as the subject.'),
     (['Welche Information gehört zum Nomen? Packe sie direkt dahinter.', 'Satz ohne that: nur wenn das Pronomen Objekt ist.', 'Partizip: -ing aktiv, 3. Form passiv.', 'Nach first, last, only, way: to + Grundform.'],
@@ -162,6 +177,26 @@ V.meaning('np.to-inf', 'She was the first customer to sign.', 'She was the first
           ('Richtig: beide. To sign ersetzt who signed, nur knapper.', 'Right: both. To sign replaces who signed, just shorter.'),
           [('a', 'Nicht nur a: b sagt dasselbe mit einem Relativsatz.', 'Not only a: b says the same with a relative clause.'), ('b', 'Nicht nur b: a sagt dasselbe kürzer.', 'Not only b: a says the same more briefly.')])
 
+V.kwt('np.post', 'The report shows how far costs have risen.', 'EXTENT', 'The report shows the ___ costs have risen.', 'extent to which', (3, 3),
+      ('Richtig: the extent to which costs have risen. Nach extent steht to which.', 'Right: the extent to which costs have risen. After extent comes to which.'),
+      [{'if': ['extent'], 'not': ['which'], 'de': 'Nach extent braucht es to which.', 'en': 'After extent you need to which.'}])
+V.kwt('np.post', 'We offer a solution that is tailored to your needs.', 'TAILORED', 'We offer a solution ___ your needs.', 'tailored to', (2, 2),
+      ('Richtig: a solution tailored to your needs. Das Partizip mit Ergänzung steht hinter dem Nomen.', 'Right: a solution tailored to your needs. The participle with its phrase stands after the noun.'),
+      [{'if': ['tailored'], 'not': ['to'], 'de': 'Nach tailored braucht es to.', 'en': 'After tailored you need to.'}])
+V.find('np.post', 'Our team built a designed for beginners course.', (4, 7), 'course designed for beginners.', 'Our team built a course designed for beginners.',
+       ('Der Fehler: das Partizip mit Ergänzung steht hinter dem Nomen. Richtig: a course designed for beginners.', 'The error: the participle with its phrase stands after the noun. Correct: a course designed for beginners.'),
+       ('Das Partizip mit Ergänzung steht hinter dem Nomen.', 'The participle with its phrase stands after the noun.'))
+V.find('np.post', 'The report shows the extent to that costs have risen.', (5, 6), 'to which', 'The report shows the extent to which costs have risen since March.'.replace(' since March', ''),
+       ('Der Fehler: nach to steht which, nicht that. Richtig: the extent to which.', 'The error: after to comes which, not that. Correct: the extent to which.'),
+       ('Nach einer Präposition steht which.', 'After a preposition comes which.'))
+V.find('np.post', 'Those which register early will get the best seats.', (1, 1), 'who', 'Those who register early will get the best seats.',
+       ('Der Fehler: bei Personen steht those who. Richtig: Those who register early.', 'The error: for people those who is used. Correct: Those who register early.'),
+       ('Für Personen steht who, nicht which.', 'For people who is used, not which.'))
+V.meaning('np.post', 'Those who register early get a discount.', 'Everyone gets a discount.',
+          ('Welcher Satz sagt, dass nur manche einen Rabatt bekommen?', 'Which sentence says that only some people get a discount?'), 'a',
+          ('Richtig: Satz a. Those who register early meint nur die früh Angemeldeten.', 'Right: sentence a. Those who register early means only the early registrants.'),
+          [('b', 'In b bekommen alle den Rabatt.', 'In b everyone gets the discount.'), ('both', 'Nicht gleich: Nur a nennt eine Bedingung.', 'Not the same: only a names a condition.')])
+
 ORDER = [
     order_item('np.contact', 'This is the most reliable system we have tested.', 'Das ist das zuverlässigste System, das wir getestet haben.',
                ['this', 'is', 'the most reliable', 'system', 'we', 'have tested'],
@@ -203,6 +238,16 @@ ORDER = [
                ('Nach way folgt to + Grundform: to reduce. Das Deutsche sagt „um … zu“, das Englische nur to.', 'After way comes to + base form: to reduce. German says “um … zu”, English only to.'),
                'This is the best way for reduce costs.', ('to', 'for', 'Nach way steht to, nicht for.', 'After way comes to, not for.'),
                single='This is the best way bildet den Anfang; to reduce costs folgt danach.'),
+    order_item('np.post', 'We offer a solution tailored to your needs.', 'Wir bieten eine auf Ihre Bedürfnisse zugeschnittene Lösung an.',
+               ['we', 'offer', 'a solution', 'tailored', 'to your needs'],
+               ('Das Partizip tailored steht mit seiner Ergänzung hinter dem Nomen solution.', 'The participle tailored stands with its phrase after the noun solution.'),
+               'We offer a tailored to your needs solution.', ('tailored', 'a tailored', 'Das Partizip mit Ergänzung steht hinter dem Nomen.', 'The participle with its phrase stands after the noun.'),
+               single='We offer a solution bildet den Anfang; tailored to your needs folgt danach.'),
+    order_item('np.post', 'The report shows the extent to which costs have risen.', 'Der Bericht zeigt, in welchem Maß die Kosten gestiegen sind.',
+               ['the report', 'shows', 'the extent', 'to which', 'costs have risen'],
+               ('Nach the extent folgt die Präposition mit which: to which. Danach steht der Satz.', 'After the extent comes the preposition with which: to which. The clause follows.'),
+               'The report shows the extent to that costs have risen.', ('to which', 'to that', 'Nach einer Präposition steht which, nicht that.', 'After a preposition which is used, not that.'),
+               single='The report shows the extent bildet den Anfang; to which costs have risen folgt danach.'),
 ]
 
 MAP = {
@@ -214,10 +259,10 @@ MAP = {
         'ok': B('Die Beteiligten sind beteiligt: Passiv braucht die 3. Form involved.', 'The people are involved: the passive needs the past participle involved.'),
         'wrong': [{'if': ['involving'], 'de': 'Involving ist aktiv. Hier ist die 3. Form involved nötig.', 'en': 'Involving is active. Here the past participle involved is needed.'},
                   {'not': ['involved'], 'de': 'Es heißt hier: the people involved in the project, mit der 3. Form.', 'en': 'It is the people involved in the project.'}]}},
-    'The managers decision surprised everyone.': {'pat': 'np.of-s', 'why': {
-        'ok': B("Der Besitz steht mit Apostroph: the manager's decision.", "Possession takes an apostrophe: the manager's decision."),
-        'wrong': [{'not': ["manager's"], 'de': 'Es fehlt das ’s nach manager.', 'en': 'The ’s after manager is missing.'},
-                  {'if': ["managers'"], 'de': 'Eine Person: ’s steht nach dem Singular.', 'en': 'One person: ’s comes after the singular.'}]}},
+    'The meeting from yesterday was canceled.': {'pat': 'np.of-s', 'why': {
+        'ok': B("Bei Zeitangaben steht ’s: Yesterday's meeting was canceled.", "With time words ’s is used: Yesterday's meeting was canceled."),
+        'wrong': [{'if': ['from', 'yesterday'], 'de': 'Das deutsche „von gestern“ wird hier zu yesterday’s.', 'en': 'The German “von gestern” becomes yesterday’s here.'},
+                  {'not': ["yesterday's"], 'de': 'Es fehlt yesterday’s vor meeting.', 'en': 'Yesterday’s before meeting is missing.'}]}},
     'This is the best way for reduce costs.': {'pat': 'np.to-inf', 'why': {
         'ok': B('Nach way folgt to + Grundform: the best way to reduce costs.', 'After way comes to + base form: the best way to reduce costs.'),
         'wrong': [{'if': ['for'], 'de': 'Nach way steht to, nicht for.', 'en': 'After way comes to, not for.'},
@@ -249,18 +294,18 @@ def c1x():
         [(G, 'Raising wäre aktiv: die Fragen würden etwas aufwerfen.', 'Raising would be active: the questions would raise something.'),
          (G, 'Hinter dem Nomen steht ein Partizip, kein Infinitiv.', 'A participle follows the noun, not an infinitive.'),
          (M, 'Arisen heißt „entstanden“ und braucht ein anderes Verb.', 'Arisen means “come up” and needs a different verb.')])
-    mcc(T, 'np.of-s', 'C1', 'biz', 0.0, 'We have to wait for ___ decision before we can sign the contract.',
+    mcc(T, 'np.of-s', 'B2', 'biz', 0.0, 'We have to wait for ___ decision before we can sign the contract.',
         "Tom's", ['Toms', 'Tom', 'of Tom'],
         ('Der Besitz bei einer Person steht mit ’s: Tom’s decision.', 'Possession with a person takes ’s: Tom’s decision.'),
         [(G, 'Toms ohne Apostroph ist ein Plural, kein Besitz.', 'Toms without an apostrophe is a plural, not possession.'),
          (G, 'Tom allein zeigt keinen Besitz an.', 'Tom alone does not show possession.'),
          (G, 'Of Tom steht hinter dem Nomen, nicht davor.', 'Of Tom stands after the noun, not before it.')])
-    mcc(T, 'np.to-inf', 'C1', 'biz', 0.0, 'She was the first customer ___ the new subscription.',
-        'to buy', ['buying', 'who buy', 'for buy'],
-        ('Nach the first customer folgt to + Grundform: to buy.', 'After the first customer comes to + base form: to buy.'),
-        [(G, 'Nach first customer steht nicht -ing, sondern to + Grundform.', 'After first customer comes not -ing but to + base form.'),
-         (G, 'Who buy ist falsch gebeugt, es müsste who bought heißen.', 'Who buy is wrongly inflected; it would have to be who bought.'),
-         (G, 'For buy gibt es nicht: nach dem Nomen steht to.', 'For buy does not exist: to follows the noun.')])
+    mcc(T, 'np.to-inf', 'B2+', 'biz', 0.0, 'Mia was the first intern ___ the new software without any help.',
+        'to learn', ['learning', 'who learn', 'for learn'],
+        ('Nach the first intern folgt to + Grundform: to learn.', 'After the first intern comes to + base form: to learn.'),
+        [(G, 'Nach first intern steht nicht -ing, sondern to + Grundform.', 'After first intern comes not -ing but to + base form.'),
+         (G, 'Who learn ist falsch gebeugt, es müsste who learned heißen.', 'Who learn is wrongly inflected; it would have to be who learned.'),
+         (G, 'For learn gibt es nicht: nach dem Nomen steht to.', 'For learn does not exist: to follows the noun.')])
 
     ocl(T, 'np.contact', 'C1', 'biz', 0.0, 'This is the best solution ___ have found so far.',
         ['we', 'I', 'they', 'you'], 'pron', ['what', 'who', 'it'],
@@ -268,26 +313,26 @@ def c1x():
     ocl(T, 'np.contact', 'C1', 'biz', 0.0, 'The colleague ___ I spoke to yesterday has already left the company.',
         ['that', 'who', 'whom'], 'rel', ['what', 'which', 'whose'],
         ('Eine Person als Objekt: that, who oder whom (oder gar nichts).', 'A person as the object: that, who or whom (or nothing at all).'))
-    ocl(T, 'np.participle', 'C1', 'biz', 0.0, 'The people involved ___ the project agreed to the new schedule.',
-        ['in'], 'prep', ['on', 'at', 'of'],
-        ('Involved wird mit in verbunden: involved in the project.', 'Involved goes with in: involved in the project.'))
+    ocl(T, 'np.participle', 'C1', 'biz', 0.0, 'The measures proposed ___ the committee were approved yesterday.',
+        ['by'], 'prep', ['from', 'at', 'of'],
+        ('Das passive Partizip proposed wird mit by verbunden: proposed by the committee.', 'The passive participle proposed goes with by: proposed by the committee.'))
     ocl(T, 'np.participle', 'C1', 'biz', 0.0, 'Any issues related ___ the update should be reported today.',
         ['to'], 'prep', ['with', 'for', 'at'],
         ('Related wird mit to verbunden: related to the update.', 'Related goes with to: related to the update.'))
-    ocl(T, 'np.of-s', 'C1', 'biz', 0.0, 'We have reached the end ___ the quarter.',
+    ocl(T, 'np.of-s', 'B2', 'biz', 0.0, 'We have reached the end ___ the quarter.',
         ['of'], 'prep', ['from', 'in', 'at'],
         ('Bei einer Zeitangabe als Ding steht of: the end of the quarter.', 'With a time period as a thing, of is used: the end of the quarter.'))
-    ocl(T, 'np.to-inf', 'C1', 'biz', 0.0, 'She was the first customer ___ sign the new contract.',
-        ['to'], 'prep', ['for', 'at', 'of'],
-        ('Nach the first customer folgt to + Grundform: to sign.', 'After the first customer comes to + base form: to sign.'))
+    ocl(T, 'np.to-inf', 'B2+', 'biz', 0.0, 'He was the last colleague ___ leave the office on Friday.',
+        ['to'], 'part', ['for', 'at', 'of'],
+        ('Nach the last colleague folgt to + Grundform: to leave.', 'After the last colleague comes to + base form: to leave.'))
 
     err(T, 'np.contact', 'C1', 'biz', 0.0, 'Is this the only offer what we have received so far?',
         ('what', ['that', 'which'], ['that', 'who', 'whom']),
         ('Nach dem Nomen offer steht that, which oder nichts, nie what.', 'After the noun offer comes that, which or nothing, never what.'))
-    err(T, 'np.participle', 'C1', 'biz', 0.0, 'The employees involving in the pilot project received a bonus.',
-        ('involving', ['involved'], ['involved', 'involve', 'involves']),
-        ('Die Mitarbeiter sind beteiligt: Passiv braucht die 3. Form involved.', 'The employees are involved: the passive needs the past participle involved.'))
-    err(T, 'np.of-s', 'C1', 'biz', 0.0, 'The manager decision surprised the whole team on Monday.',
+    err(T, 'np.participle', 'C1', 'biz', 0.0, 'The documents prepare by the finance team are stored on the shared drive.',
+        ('prepare', ['prepared'], ['prepared', 'preparing', 'prepares']),
+        ('Die Dokumente werden erstellt: Passiv braucht die 3. Form prepared.', 'The documents are prepared: the passive needs the past participle prepared.'))
+    err(T, 'np.of-s', 'B2', 'biz', 0.0, 'The manager decision surprised the whole team on Monday.',
         ('manager decision', ["manager's decision"], ["manager's decision", 'managers decision', 'manager decisions']),
         ('Der Besitz steht mit ’s: the manager’s decision.', 'Possession takes ’s: the manager’s decision.'))
     err(T, 'np.to-inf', 'C1', 'biz', 0.0, 'This is the best way for increase our sales in Asia.',
@@ -295,8 +340,8 @@ def c1x():
         ('Nach way steht to + Grundform: to increase.', 'After way comes to + base form: to increase.'))
     err(T, 'np.participle', 'C1', 'biz', 0.0, 'Everyone working on the migration received the new access rules.', None,
         ('Kein Fehler: Working ersetzt who is working.', 'No mistake: Working replaces who is working.'))
-    err(T, 'np.to-inf', 'C1', 'biz', 0.0, 'She was the last customer to sign the contract before the deadline.', None,
-        ('Kein Fehler: Nach the last customer folgt to + Grundform.', 'No mistake: after the last customer comes to + base form.'))
+    err(T, 'np.to-inf', 'C1', 'biz', 0.0, 'He was the last speaker to present at the conference on Thursday.', None,
+        ('Kein Fehler: Nach the last speaker folgt to + Grundform.', 'No mistake: after the last speaker comes to + base form.'))
 
     kwt(T, 'np.contact', 'C1', 'biz', 0.0, 'That was the most useful training that I have ever joined.', 'ATTENDED', 'That was the most useful training', '.',
         [(['I have', 'that I have'], ['attended'])], ['I', 'have'], ['that', 'what', 'which'], [],
@@ -310,12 +355,41 @@ def c1x():
     kwt(T, 'np.participle', 'C1', 'biz', 0.0, 'All the documents that we mailed to the client are listed below.', 'SENT', 'All the', 'the client are listed below.',
         [(['documents'], ['sent to'])], ['documents', 'to'], ['mailing', 'that', 'are'], [],
         ('the documents sent to the client. Das passive Partizip ersetzt that were sent.', 'the documents sent to the client. The passive participle replaces that were sent.'), [])
-    kwt(T, 'np.of-s', 'C1', 'biz', 0.0, 'The decision made by the manager surprised everyone.', 'OF', 'The decision', 'surprised everyone.',
-        [(['of the'], ['manager'])], ['the', 'manager'], ['by', 'from', 'for'], [],
-        ('the decision of the manager. Bei einer Person ist auch ’s möglich, hier gilt of.', 'the decision of the manager. With a person ’s is also possible, here of is used.'), [])
-    kwt(T, 'np.to-inf', 'C1', 'biz', 0.0, 'She was the first customer who signed the new contract.', 'TO', 'She was the', 'the new contract.',
-        [(['first customer'], ['to sign'])], ['first', 'customer', 'sign'], ['who', 'signed', 'for'], [],
-        ('the first customer to sign. Nach first steht to + Grundform.', 'the first customer to sign. After first comes to + base form.'), [])
+    kwt(T, 'np.of-s', 'C1', 'biz', 0.0, 'We need to know whether the meeting that was planned for today has been canceled.', "TODAY'S", 'We need to know whether', 'canceled.',
+        [(["today's"], ['meeting has been'])], ['meeting', 'has', 'been'], ['of', 'the', 'from'], [],
+        ('Bei Zeitangaben steht ’s: today’s meeting. Danach folgt has been canceled.', 'With time words ’s is used: today’s meeting. Has been canceled follows.'), [])
+    kwt(T, 'np.to-inf', 'C1', 'biz', 0.0, 'Ms Lee was the only applicant who passed all three tests.', 'TO', 'Ms Lee was the', 'all three tests.',
+        [(['only applicant'], ['to pass'])], ['only', 'applicant', 'pass'], ['who', 'passed', 'for'], [],
+        ('the only applicant to pass. Nach only steht to + Grundform.', 'the only applicant to pass. After only comes to + base form.'), [])
+
+    post()
+
+def post():
+    mcc(T, 'np.post', 'C1', 'biz', 0.0, 'We offer a solution ___ to the specific needs of small teams.',
+        'tailored', ['tailoring', 'tailors', 'tailor'],
+        ('Das Partizip tailored mit seiner Ergänzung steht hinter dem Nomen: a solution tailored to …', 'The participle tailored with its phrase stands after the noun: a solution tailored to …'),
+        [(G, 'Tailoring wäre aktiv: die Lösung würde etwas anpassen.', 'Tailoring would be active: the solution would adapt something.'),
+         (G, 'Tailors braucht ein Subjekt und ist hier ein zweites Verb.', 'Tailors needs a subject and is a second verb here.'),
+         (G, 'Hinter dem Nomen steht ein Partizip, keine Grundform.', 'A participle follows the noun, not a base form.')])
+    mcc(T, 'np.post', 'C1', 'life', 0.0, 'Those ___ arrive early can choose the best seats.',
+        'who', ['whom', 'which', 'whose'],
+        ('Für Personen allgemein steht those who: Those who arrive early.', 'For people in general those who is used: Those who arrive early.'),
+        [(G, 'Whom ist Objekt, hier ist die Gruppe Subjekt.', 'Whom is an object; here the group is the subject.'),
+         (G, 'Which gilt für Sachen, hier geht es um Menschen.', 'Which is for things; here it is about people.'),
+         (G, 'Whose zeigt Besitz an und passt nicht.', 'Whose shows possession and does not fit.')])
+    ocl(T, 'np.post', 'C1', 'biz', 0.0, 'The report shows the extent ___ which costs have risen since January.',
+        ['to'], 'prep', ['of', 'at', 'for'],
+        ('Nach extent steht to which: the extent to which.', 'After extent comes to which: the extent to which.'))
+    ocl(T, 'np.post', 'C1', 'life', 0.0, 'Those ___ live near the station can walk to work.',
+        ['who'], 'rel', ['whom', 'which', 'what'],
+        ('Für Personen allgemein steht those who: Those who live near the station.', 'For people in general those who is used: Those who live near the station.'))
+    err(T, 'np.post', 'C1', 'biz', 0.0, 'We sell a tailored to small teams package this season.',
+        ('tailored to small teams package', ['package tailored to small teams'], ['package tailored to small teams', 'tailored package to small teams', 'package that tailored to small teams']),
+        ('Das Partizip mit Ergänzung steht hinter dem Nomen: a package tailored to small teams.', 'The participle with its phrase stands after the noun: a package tailored to small teams.'))
+    kwt(T, 'np.post', 'C1', 'biz', 0.0, 'The study measures how strongly customers trust our brand.', 'EXTENT', 'The study measures the', 'customers trust our brand.',
+        [(['extent'], ['to which'])], ['to', 'which'], ['of', 'that', 'how'], [],
+        ('the extent to which. Nach extent steht to which.', 'the extent to which. After extent comes to which.'), [])
+
 
 def place():
     mcc(T, 'np.participle', 'B2+', 'biz', 0.0, 'Please contact all colleagues ___ in the data migration before Friday.',
@@ -324,7 +398,7 @@ def place():
         [(G, 'Hinter dem Nomen steht ein Partizip, keine Grundform.', 'A participle follows the noun, not a base form.'),
          (G, 'Involving wäre aktiv: die Kollegen würden etwas beteiligen.', 'Involving would be active: the colleagues would involve something.'),
          (G, 'To involved ist keine gültige Form.', 'To involved is not a valid form.')])
-    kwt(T, 'np.to-inf', 'C1', 'biz', 0.0, 'Asking the supplier directly is the best method.', 'WAY', '', 'to ask the supplier directly.',
-        [(['The best'], ['way'])], ['The', 'best'], ['for', 'method', 'of'], ['The best way for'],
-        ('the best way to ask. Nach way steht to + Grundform.', 'the best way to ask. After way comes to + base form.'),
-        [W(['best', 'way', 'for'], 'Nach way folgt to, nicht for.', 'After way comes to, not for.')])
+    kwt(T, 'np.to-inf', 'C1', 'biz', 0.0, 'Nobody in our department completed the certification before Dana did.', 'FIRST', 'Dana was', 'complete the certification in our department.',
+        [(['the first'], ['person to'])], ['the', 'person', 'to'], ['who', 'that', 'one'], ['the first person who'],
+        ('the first person to complete. Nach first steht to + Grundform.', 'the first person to complete. After first comes to + base form.'),
+        [W(['first', 'person', 'who'], 'Nach first person steht to + Grundform, kein who.', 'After first person comes to + base form, no who.')])

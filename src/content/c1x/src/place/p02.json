@@ -336,46 +336,47 @@
    "pat": "np.to-inf",
    "why": {
     "ok": {
-     "de": "the best way to ask. Nach way steht to + Grundform.",
-     "en": "the best way to ask. After way comes to + base form."
+     "de": "the first person to complete. Nach first steht to + Grundform.",
+     "en": "the first person to complete. After first comes to + base form."
     },
     "wrong": [
      {
       "if": [
-       "best",
-       "way",
-       "for"
+       "first",
+       "person",
+       "who"
       ],
-      "de": "Nach way folgt to, nicht for.",
-      "en": "After way comes to, not for."
+      "de": "Nach first person steht to + Grundform, kein who.",
+      "en": "After first person comes to + base form, no who."
      }
     ]
    },
-   "lead": "Asking the supplier directly is the best method.",
-   "key": "WAY",
-   "before": "",
-   "after": "to ask the supplier directly.",
+   "lead": "Nobody in our department completed the certification before Dana did.",
+   "key": "FIRST",
+   "before": "Dana was",
+   "after": "complete the certification in our department.",
    "keys": [
     {
      "a": [
-      "The best"
+      "the first"
      ],
      "b": [
-      "way"
+      "person to"
      ]
     }
    ],
    "tiles": [
-    "The",
-    "best"
+    "the",
+    "person",
+    "to"
    ],
    "extra": [
-    "for",
-    "method",
-    "of"
+    "who",
+    "that",
+    "one"
    ],
    "traps": [
-    "The best way for"
+    "the first person who"
    ]
   }
  ]

@@ -45,13 +45,14 @@ def inversion():
     err(T, 'inv.only', 'C1', L, 0.0, 'Only after the movie had ended did the children admit that they were scared.', None,
         ('Kein Fehler: Nach Only after und dem Nebensatz steht did vor dem Subjekt, wie hier.', 'No mistake: after Only after and the clause, did stands before the subject, as here.'))
 
-    kwt(T, 'inv.negative', 'C1', L, 0.0, 'This was the first time I felt so tired after such a short hike.', 'NEVER', '', 'felt so tired after such a short hike.',
-        [(['Never have'], ['I'])], ['have', 'I'], ['had', 'did', 'been'], ['Never I have'],
+    kwt(T, 'inv.negative', 'C1', L, 0.0, 'This was the first time I felt so tired after such a short hike.', 'HAVE', 'Never', 'so tired after such a short hike.',
+        [(['have', 'before have'], ['I felt'])], ['I', 'felt'], ['had', 'did', 'been'], ['I have felt'],
         ('Nach Never steht das Hilfsverb vor dem Subjekt: Never have I felt.', 'After Never, the auxiliary comes before the subject: Never have I felt.'),
-        [W(['i', 'have'], 'Nach Never kommt have vor I: have I.', 'After Never, have comes before I: have I.')])
-    kwt(T, 'inv.only', 'C1', L, 0.0, 'You can enter the garden once you have rung the bell, and not before.', 'ONLY', '', 'rung the bell can you enter the garden.',
-        [(['Only after'], ['you have'])], ['after', 'you', 'have'], ['did', 'will', 'had'], [],
-        ('Only after you have rung the bell can you enter … Nach dem Nebensatz steht can vor dem Subjekt.', 'Only after you have rung the bell can you enter … After the clause, can comes before the subject.'), [])
+        [W(['i', 'have', 'felt'], 'Nach Never kommt have vor I: have I felt.', 'After Never, have comes before I: have I felt.')])
+    kwt(T, 'inv.only', 'C1', L, 0.0, 'You are not allowed into the garden before you have rung the bell.', 'CAN', 'Only after you have rung the bell', 'the garden.',
+        [(['can'], ['you enter'])], ['you', 'enter'], ['did', 'will', 'had'], ['you can enter'],
+        ('Only after you have rung the bell can you enter … Nach dem Nebensatz steht can vor dem Subjekt.', 'Only after you have rung the bell can you enter … After the clause, can comes before the subject.'),
+        [W(['you', 'can', 'enter'], 'Nach dem Nebensatz kommt can vor das Subjekt: can you enter.', 'After the clause, can comes before the subject: can you enter.')])
     kwt(T, 'inv.cond', 'C1', L, 0.0, 'If you want a lift to the station, just text me.', 'SHOULD', '', 'a lift to the station, just text me.',
         [(['Should'], ['you want'])], ['you', 'want'], ['will', 'would', 'if'], ['Should you will want'],
         ('Should you want … ist eine Bedingung ohne if und ohne will.', 'Should you want … is a condition without if and without will.'),
@@ -105,9 +106,10 @@ def emph():
         [(['really did'], ['enjoy'])], ['really', 'enjoy'], ['enjoyed', 'do', 'was'], ['really did enjoyed'],
         ('Das betonte did steht vor der Grundform enjoy.', 'The stressed did stands before the base form enjoy.'),
         [W(['did', 'enjoyed'], 'Nach did steht die Grundform enjoy.', 'After did the base form enjoy follows.')])
-    kwt(T, 'ep.object-front', 'C1', L, 0.0, 'I enjoy jazz, but I am not a fan of pop.', 'LIKE', 'I enjoy jazz, but', '.',
-        [(['pop I do'], ['not like'])], ['pop', 'I', 'do', 'not'], ['does', 'am', 'it'], [],
-        ('Pop I do not like. Das Objekt steht vorn, die Reihenfolge danach bleibt normal.', 'Pop I do not like. The object comes first, the order after it stays normal.'), [])
+    kwt(T, 'ep.so-such', 'C1', L, 0.0, 'The noise was so loud that the neighbors complained.', 'SUCH', '', 'that the neighbors complained.',
+        [(['Such was'], ['the noise'])], ['was', 'the', 'noise'], ['so', 'is', 'it'], ['Such the noise was'],
+        ('Such was the noise that … Das Verb steht vor dem Subjekt.', 'Such was the noise that … The verb stands before the subject.'),
+        [W(['such', 'the', 'noise', 'was'], 'Nach Such am Anfang kommt was vor das Subjekt: Such was the noise.', 'After Such at the start, was comes before the subject: Such was the noise.')])
 
 
 def ellipsis():
@@ -150,6 +152,15 @@ def ellipsis():
     err(T, 'el.to-aux', 'C1', L, 0.0, 'I wanted to join the choir, but my friends told me not to.', None,
         ('Kein Fehler: Das Verb join entfällt, aber to bleibt: told me not to.', 'No mistake: the verb join is dropped, but to stays: told me not to.'))
 
+    err(T, 'el.so-not', 'C1', L, 0.0, 'Will it rain at the weekend? I do not hope so, because we are planning a picnic.',
+        ('do not hope so', ['hope not'], ['hope not', 'do not hope not', 'hope so not']),
+        ('Es heißt I hope not, nicht I do not hope so. Not ersetzt den Gedanken.', 'It is I hope not, not I do not hope so. Not replaces the thought.'))
+    err(T, 'el.so-not', 'C1', L, 0.0, 'I do not like coffee, and neither I do tea, so we ordered water.',
+        ('neither I do', ['neither do I'], ['neither do I', 'neither I do', 'so do I']),
+        ('Nach neither steht das Hilfsverb vor dem Subjekt: neither do I.', 'After neither the auxiliary comes before the subject: neither do I.'))
+    err(T, 'el.one-ones', 'C1', L, 0.0, 'My phone is old, so I bought a new at the weekend.',
+        ('a new', ['a new one'], ['a new one', 'a new ones', 'the new it']),
+        ('Hinter dem Adjektiv new braucht es one.', 'After the adjective new you need one.'))
     kwt(T, 'el.so-not', 'C1', L, 0.0, 'Is Tom coming to the party? I suppose he is coming.', 'SO', 'Is Tom coming to the party?', '.',
         [(['I suppose'], ['so'])], ['I', 'suppose'], ['it', 'that', 'yes'], ['I suppose it'],
         ('I suppose so. So steht direkt hinter dem Verb und ersetzt den Gedanken.', 'I suppose so. So follows the verb directly and replaces the thought.'),

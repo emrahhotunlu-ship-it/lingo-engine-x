@@ -332,62 +332,6 @@
    ]
   },
   {
-   "id": "inversion",
-   "group": "Grammatik-Pfad",
-   "level": "C1",
-   "p0": 0.45,
-   "name": "Inversion – Umstellung nach Einleitern",
-   "name_en": "Inversion after fronted words",
-   "rule": "Steht ein verneinendes oder einschränkendes Wort vorn (Never, Rarely, Only after, No sooner, Should you), kommt das Hilfsverb vor das Subjekt: „Rarely have we seen such a plan.“ So klingt eine Aussage förmlich und betont.",
-   "rule_en": "When a negative or limiting word comes first (Never, Rarely, Only after, No sooner, Should you), the auxiliary goes before the subject: “Rarely have we seen such a plan.” This makes a statement formal and emphatic.",
-   "ex": [
-    "Never before had the team met a deadline so early.",
-    "Should you need any help, please let us know."
-   ]
-  },
-  {
-   "id": "emph-plus",
-   "group": "Grammatik-Pfad",
-   "level": "C1",
-   "p0": 0.45,
-   "name": "Hervorheben mit do und Voranstellung",
-   "name_en": "Emphasis with do and fronting",
-   "rule": "Mit do („I do think“), einem vorangestellten Adjektiv („Tempting as it is“), so/such … that und einem vorgezogenen Objekt („This we must avoid“) hebst du Wichtiges hervor, ohne laut zu werden.",
-   "rule_en": "With do (“I do think”), a fronted adjective (“Tempting as it is”), so/such … that and a fronted object (“This we must avoid”) you stress what matters without raising your voice.",
-   "ex": [
-    "We did send the invoice last week; please check your spam folder.",
-    "Much as I would like to help, I cannot approve this."
-   ]
-  },
-  {
-   "id": "ellipsis",
-   "group": "Grammatik-Pfad",
-   "level": "C1",
-   "p0": 0.45,
-   "name": "Ellipse – Wiederholung vermeiden",
-   "name_en": "Ellipsis and avoiding repetition",
-   "rule": "Was schon gesagt ist, lässt man weg oder ersetzt es: „I think so“, „we did so“, „the new one“, „those of the old plan“, „I’d love to“. So klingt Englisch knapp und natürlich.",
-   "rule_en": "What has already been said is left out or replaced: “I think so”, “we did so”, “the new one”, “those of the old plan”, “I’d love to”. This makes English sound short and natural.",
-   "ex": [
-    "Will the update be ready on Friday? I think so.",
-    "The costs of the new plan are lower than those of the old one."
-   ]
-  },
-  {
-   "id": "noun-phrase",
-   "group": "Grammatik-Pfad",
-   "level": "C1",
-   "p0": 0.45,
-   "name": "Nominalgruppen – das Nomen ausbauen",
-   "name_en": "Noun phrases: building around the noun",
-   "rule": "Um ein Nomen herum baut man Information auf: einen Satz ohne that („the system we tested“), ein Partizip („the files stored in the cloud“), ’s oder of („the manager’s decision“) und einen to-Infinitiv („the first to sign“).",
-   "rule_en": "You build information around a noun: a clause without that (“the system we tested”), a participle (“the files stored in the cloud”), ’s or of (“the manager’s decision”) and a to-infinitive (“the first to sign”).",
-   "ex": [
-    "This is the most reliable system we have tested.",
-    "She was the first customer to sign the new contract."
-   ]
-  },
-  {
    "id": "modals-prob",
    "group": "Grammatik-Pfad",
    "level": "C1",
@@ -441,6 +385,62 @@
    "ex": [
     "None of the suppliers has replied yet.",
     "We no longer offer this service."
+   ]
+  },
+  {
+   "id": "inversion",
+   "group": "Grammatik-Pfad",
+   "level": "C1",
+   "p0": 0.45,
+   "name": "Inversion – Umstellung nach Einleitern",
+   "name_en": "Inversion after fronted words",
+   "rule": "Steht ein verneinendes oder einschränkendes Wort vorn (Never, Rarely, Only after, No sooner, Should you), kommt das Hilfsverb vor das Subjekt: „Rarely have we seen such a plan.“ So klingt eine Aussage förmlich und betont.",
+   "rule_en": "When a negative or limiting word comes first (Never, Rarely, Only after, No sooner, Should you), the auxiliary goes before the subject: “Rarely have we seen such a plan.” This makes a statement formal and emphatic.",
+   "ex": [
+    "Never before had the team met a deadline so early.",
+    "Should you need any help, please let us know."
+   ]
+  },
+  {
+   "id": "emph-plus",
+   "group": "Grammatik-Pfad",
+   "level": "C1",
+   "p0": 0.45,
+   "name": "Hervorheben mit do und Voranstellung",
+   "name_en": "Emphasis with do and fronting",
+   "rule": "Mit do („I do think“), einem vorangestellten Adjektiv („Tempting as it is“), so/such … that und einem vorgezogenen Objekt („This we must avoid“) hebst du Wichtiges hervor, ohne laut zu werden.",
+   "rule_en": "With do (“I do think”), a fronted adjective (“Tempting as it is”), so/such … that and a fronted object (“This we must avoid”) you stress what matters without raising your voice.",
+   "ex": [
+    "We did send the invoice last week; please check your spam folder.",
+    "Much as I would like to help, I cannot approve this."
+   ]
+  },
+  {
+   "id": "ellipsis",
+   "group": "Grammatik-Pfad",
+   "level": "C1",
+   "p0": 0.45,
+   "name": "Ellipse – Wiederholung vermeiden",
+   "name_en": "Ellipsis and avoiding repetition",
+   "rule": "Was schon gesagt ist, lässt man weg oder ersetzt es: „I think so“, „we did so“, „the new one“, „those of the old plan“, „I’d love to“. So klingt Englisch knapp und natürlich.",
+   "rule_en": "What has already been said is left out or replaced: “I think so”, “we did so”, “the new one”, “those of the old plan”, “I’d love to”. This makes English sound short and natural.",
+   "ex": [
+    "Will the update be ready on Friday? I think so.",
+    "The costs of the new plan are lower than those of the old one."
+   ]
+  },
+  {
+   "id": "noun-phrase",
+   "group": "Grammatik-Pfad",
+   "level": "C1",
+   "p0": 0.45,
+   "name": "Nominalgruppen – das Nomen ausbauen",
+   "name_en": "Noun phrases: building around the noun",
+   "rule": "Um ein Nomen herum baut man Information auf: einen Satz ohne that („the system we tested“), ein Partizip („the files stored in the cloud“), ’s oder of („the manager’s decision“) und einen to-Infinitiv („the first to sign“).",
+   "rule_en": "You build information around a noun: a clause without that (“the system we tested”), a participle (“the files stored in the cloud”), ’s or of (“the manager’s decision”) and a to-infinitive (“the first to sign”).",
+   "ex": [
+    "This is the most reliable system we have tested.",
+    "She was the first customer to sign the new contract."
    ]
   }
  ],
@@ -2569,8 +2569,8 @@
     "After a negative or limiting word at the start, the auxiliary comes before the subject: “Never have we seen such demand.” The same holds for Only after, No sooner and for conditions without if (Should you, Had we)."
    ],
    "why": [
-    "Im Englischen betont man nicht mit der Stimme, sondern mit dem Satzbau. Die Umstellung macht aus einer Feststellung eine Betonung und klingt in Präsentationen und Mails souverän.",
-    "English does not stress with the voice alone but with sentence structure. Inversion turns a statement into emphasis and sounds confident in presentations and emails."
+    "Im Englischen betont man nicht nur mit der Stimme, sondern auch mit dem Satzbau. Die Umstellung macht aus einer Feststellung eine Betonung. Wann ja, wann nein: „Should you need …“ ist in Mails Standard, „Rarely have we seen …“ wirkt im amerikanischen Alltag steif und passt eher in Reden und Berichte.",
+    "English stresses not only with the voice but also with sentence structure. Inversion turns a statement into emphasis. When yes, when no: “Should you need …” is standard in emails, “Rarely have we seen …” sounds stiff in everyday American speech and fits speeches and reports better."
    ],
    "contrast": [
     "Aufpassen: Mitten im Satz bleibt alles normal („We have rarely seen …“). Nur am Satzanfang kehrt sich die Stellung um. Gibt es kein Hilfsverb, hilft do: „Rarely do we see …“.",
@@ -2596,7 +2596,7 @@
       "Never, Rarely, Little",
       "Never, Rarely, Little"
      ],
-     "Never / Rarely / Seldom / Little + auxiliary + subject + participle",
+     "Never / Rarely / Seldom / Little + auxiliary + subject + verb (after have / had: participle, after do / does / did: base form)",
      "Rarely have I seen such a clear proposal."
     ],
     [
@@ -2640,7 +2640,7 @@
      ]
     ],
     [
-     "no sooner / hardly",
+     "no sooner had / hardly had",
      [
       "No sooner … than, Hardly … when",
       "No sooner … than, Hardly … when"
@@ -2667,8 +2667,8 @@
      "bad": "Only after the pilot we approved the full rollout.",
      "good": "Only after the pilot did we approve the full rollout.",
      "why": [
-      "Das Deutsche sagt „Erst nach dem Pilot haben wir …“, dort ist die Umstellung selbstverständlich. Im Englischen fehlt sie leicht, weil „only“ nicht wie ein Verneinungswort wirkt.",
-      "German says “Erst nach dem Pilot haben wir …”, where the inverted order is natural. In English it is easy to miss, because “only” does not look like a negative word."
+      "Das Deutsche sagt „Erst nach der Pilotphase haben wir …“, dort ist die Umstellung selbstverständlich. Im Englischen fehlt sie leicht, weil „only“ nicht wie ein Verneinungswort wirkt.",
+      "German says “Erst nach der Pilotphase haben wir …”, where the inverted order is natural. In English it is easy to miss, because “only” does not look like a negative word."
      ]
     },
     {
@@ -2683,7 +2683,7 @@
      "bad": "Should you will need help, please call us.",
      "good": "Should you need help, please call us.",
      "why": [
-      "Das Deutsche sagt „Sollten Sie Hilfe brauchen“, und man fügt gern ein will hinzu, weil es um die Zukunft geht. Nach Should you steht aber die Grundform.",
+      "Im Deutschen heißt es „Sollten Sie Hilfe brauchen“ in der Gegenwartsform. Auch im Englischen steht nach Should you die Grundform, ohne will, obwohl die Bedingung in die Zukunft zeigt.",
       "German says “Sollten Sie Hilfe brauchen”, and people like to add will because it is about the future. After Should you, though, the base form follows."
      ]
     }
@@ -2695,8 +2695,8 @@
     "Four ways to stress: do before the base form (“I do think”), a fronted adjective with as (“Tempting as it is”), So/Such … that with inversion and a fronted object (“This we must avoid”)."
    ],
    "why": [
-    "Englisch hat eine feste Wortstellung. Wer etwas hervorheben will, nutzt diese Bauformen statt der Stimme, und klingt sachlich und überzeugend.",
-    "English has a fixed word order. To stress something you use these structures instead of your voice, and you sound factual and convincing."
+    "Englisch betont mit der Stimme und mit dem Satzbau: do wird beim Sprechen betont, die anderen Formen ändern die Wortstellung. Wann ja, wann nein: do und Tempting as it is sind im Alltag und in Mails üblich. So … that und Such was … sind gehoben. Das vorgezogene Objekt (This we must avoid) ist selten, lies es zu erkennen, setze es sparsam ein.",
+    "English stresses with the voice and with sentence structure: do is stressed in speech, the other forms change the word order. When yes, when no: do and Tempting as it is are common in everyday speech and emails. So … that and Such was … are elevated. The fronted object (This we must avoid) is rare: learn to recognize it and use it sparingly."
    ],
    "contrast": [
     "Nicht verwechseln: Nach as bleibt die normale Stellung („as it is“). Nach So/Such am Satzanfang kehrt sie sich um („So fast was …“). Nach do steht immer die Grundform.",
@@ -2785,7 +2785,7 @@
      "bad": "We did sent the invoice last week.",
      "good": "We did send the invoice last week.",
      "why": [
-      "Nach did steht die Grundform, auch wenn die Aussage in der Vergangenheit liegt. Das Deutsche hat keine solche Form, deshalb rutscht die Vergangenheitsform nach.",
+      "Nach did steht die Grundform, auch wenn die Aussage in der Vergangenheit liegt. Im Deutschen betont man mit Wörtern wie „wirklich“ oder „doch“. Im Englischen trägt did die Vergangenheit, deshalb folgt die Grundform: did send.",
       "After did the base form follows, even when the statement is in the past. German has no such form, so the past form slips in."
      ]
     },
@@ -2821,8 +2821,8 @@
     "English leaves out what is known: so/not after think and hope, do so instead of the verb, one(s) instead of the noun, those of in a comparison, and only to or the auxiliary at the end."
    ],
    "why": [
-    "Wiederholungen wirken im Englischen schwerfällig. Wer Ellipse beherrscht, klingt flüssig und muttersprachlich, vor allem in Mails und Meetings.",
-    "Repetition sounds heavy in English. If you master ellipsis you sound fluent and native, especially in emails and meetings."
+    "Wiederholungen wirken im Englischen schwerfällig. Wann ja, wann nein: In Gesprächen und Mails ist die Kurzform Standard. In Verträgen und Berichten wiederholt man das Nomen lieber, damit nichts missverstanden wird.",
+    "Repetition sounds heavy in English. When yes, when no: in conversation and emails the short form is standard. In contracts and reports it is safer to repeat the noun so that nothing is misunderstood."
    ],
    "contrast": [
     "Nicht verwechseln: so ersetzt einen Gedanken (I hope so), do so eine Handlung (please do so), one ein Nomen (the new one). Und to darf am Ende nie fehlen.",
@@ -2909,8 +2909,8 @@
      "bad": "Is it ready? I hope that not.",
      "good": "Is it ready? I hope not.",
      "why": [
-      "Nach hope steht not direkt. Ein that davor ist falsch, weil not keinen Nebensatz einleitet. Das Deutsche hat „dass“ hier nicht.",
-      "After hope, not follows directly. A that before it is wrong, because not does not introduce a clause. German has no “dass” here."
+      "Nach hope steht not direkt: I hope not. Im Deutschen geht „Ich hoffe, dass nicht“, im Englischen ist „hope that not“ nicht üblich, weil not den Gedanken schon ersetzt.",
+      "After hope, not follows directly: I hope not. German allows “Ich hoffe, dass nicht”, but “hope that not” is not used in English, because not already replaces the thought."
      ]
     },
     {
@@ -2933,8 +2933,8 @@
      "bad": "Can you join us? Yes, I would like.",
      "good": "Can you join us? Yes, I would like to.",
      "why": [
-      "Das Deutsche lässt „zu“ bei „Ich möchte gern“ am Satzende weg. Im Englischen muss to stehen bleiben, damit klar ist, dass ein Infinitiv gemeint ist.",
-      "German drops “zu” after “Ich möchte gern” at the end. English must keep to, so it is clear that an infinitive is meant."
+      "Im Deutschen antwortet man „Ich würde gern“ ohne Infinitiv. Im Englischen bleibt to als Platzhalter für den weggelassenen Infinitiv stehen: I would like to.",
+      "In German the answer is just “Ich würde gern”, without an infinitive. In English to stays as a stand-in for the dropped infinitive: I would like to."
      ]
     }
    ]
@@ -2945,8 +2945,8 @@
     "You build information around a noun: without that (“the system we tested”), with a participle (“the files stored in the cloud”), with ’s or of and with to + base form (“the best way to reduce costs”)."
    ],
    "why": [
-    "Gute Texte auf C1 packen viel Information in wenige Wörter. Statt zweier Sätze steht eine Nominalgruppe, und das macht Mails und Berichte klar und knapp.",
-    "Good C1 writing packs a lot of information into few words. Instead of two sentences there is one noun phrase, which makes emails and reports clear and short."
+    "Gute Texte auf C1 packen viel Information in wenige Wörter. Statt zweier Sätze steht eine Nominalgruppe. Wann ja, wann nein: In Berichten und Mails spart das Platz. Im Gespräch klingen mehr als zwei Zusätze vor oder hinter einem Nomen schwer, dann lieber zwei Sätze.",
+    "Good C1 writing packs a lot of information into few words. Instead of two sentences there is one noun phrase. When yes, when no: in reports and emails this saves space. In conversation more than two additions around a noun sound heavy, so use two sentences."
    ],
    "contrast": [
     "Nicht verwechseln: -ing hat das Nomen aktiv getan (the team working), die 3. Form passiv (the files stored). Ein that darf nur fehlen, wenn es Objekt ist, nie als Subjekt.",
@@ -2998,6 +2998,14 @@
      ],
      "the first / last / only / best way + to + base form",
      "She was the first customer to sign the new contract."
+    ],
+    [
+     [
+      "Nachstellung",
+      "postmodification"
+     ],
+     "noun + participle + phrase · the extent to which … · those who …",
+     "We offer a solution tailored to your needs."
     ]
    ],
    "signals": [
@@ -3028,6 +3036,13 @@
       "Nomen + to-Infinitiv",
       "noun + to-infinitive"
      ]
+    ],
+    [
+     "tailored to / the extent to which",
+     [
+      "Nachstellung",
+      "postmodification"
+     ]
     ]
    ],
    "traps": [
@@ -3048,11 +3063,11 @@
      ]
     },
     {
-     "bad": "The managers decision surprised everyone.",
-     "good": "The manager's decision surprised everyone.",
+     "bad": "The meeting from yesterday was canceled.",
+     "good": "Yesterday's meeting was canceled.",
      "why": [
-      "Der Besitz steht mit Apostroph und s. Das Deutsche kennt diesen Apostroph nicht, daher fehlt er leicht.",
-      "Possession takes an apostrophe and s. German has no such apostrophe, so it is easily missing."
+      "Bei Zeitangaben steht ’s: yesterday’s meeting. Das deutsche „das Meeting von gestern“ führt zu „from yesterday“.",
+      "With time words ’s is used: yesterday’s meeting. The German “das Meeting von gestern” leads to “from yesterday”."
      ]
     },
     {

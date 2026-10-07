@@ -41,9 +41,9 @@ describe('Eigenschaften über alle Inhalte', () => {
 
   it('der LP2-Adapter wandelt jede heutige kwt- und find-Aufgabe (ohne meaning)', () => {
     // 904 vor P36; die vier neuen Themen von P36 bringen je 8 kwt und 8 find (2 fehlerfrei) dazu.
-    expect(legacy.length).toBe(1032);
-    expect(legacy.filter((i) => i.kind === 'kwt')).toHaveLength(463);
-    expect(legacy.filter((i) => i.kind === 'err')).toHaveLength(569);
+    expect(legacy.length).toBe(1037);
+    expect(legacy.filter((i) => i.kind === 'kwt')).toHaveLength(465);
+    expect(legacy.filter((i) => i.kind === 'err')).toHaveLength(572);
     expect(new Set(legacy.map((i) => i.id)).size).toBe(legacy.length);
     expect(legacy.filter((i) => i.kind === 'err' && !i.bad)).toHaveLength(140);
   });

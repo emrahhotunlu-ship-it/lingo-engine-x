@@ -44,16 +44,18 @@
     "en": "think / hope / expect / suppose / be afraid + so / not"
    },
    "use": {
-    "de": "Nach think, hope, expect, suppose und be afraid ersetzt so einen ganzen Satz in der Antwort, und not steht für die Verneinung. Auch „If so“ und „If not“ stehen für einen ganzen Gedanken.",
-    "en": "After think, hope, expect, suppose and be afraid, so replaces a whole clause in the answer, and not stands for the negative. “If so” and “If not” also stand for a whole thought."
+    "de": "Nach think, hope, expect, suppose und be afraid ersetzt so einen ganzen Satz in der Antwort, und not steht für die Verneinung. Bei think sagt man meist I don’t think so, I think not klingt förmlich. I don’t hope so gibt es nicht, es heißt I hope not. Auch „If so“, „If not“, „so do I“ und „neither do I“ stehen für einen ganzen Gedanken.",
+    "en": "After think, hope, expect, suppose and be afraid, so replaces a whole clause in the answer, and not stands for the negative. With think people usually say I don’t think so, I think not sounds formal. There is no I don’t hope so, it is I hope not. “If so”, “If not”, “so do I” and “neither do I” also stand for a whole thought."
    },
    "signals": [
     "i think so",
     "i hope so",
     "i hope not",
+    "i don’t think so",
     "if so",
-    "if not",
-    "i am afraid not"
+    "i am afraid not",
+    "so do i",
+    "neither do i"
    ],
    "ex": [
     {
@@ -76,17 +78,17 @@
     "bad": "Is it ready? I hope that not.",
     "good": "Is it ready? I hope not.",
     "cause": {
-     "de": "Nach hope steht not direkt. Ein that davor ist falsch, weil not keinen Nebensatz einleitet. Das Deutsche hat „dass“ hier nicht.",
-     "en": "After hope, not follows directly. A that before it is wrong, because not does not introduce a clause. German has no “dass” here."
+     "de": "Nach hope steht not direkt: I hope not. Im Deutschen geht „Ich hoffe, dass nicht“, im Englischen ist „hope that not“ nicht üblich, weil not den Gedanken schon ersetzt.",
+     "en": "After hope, not follows directly: I hope not. German allows “Ich hoffe, dass nicht”, but “hope that not” is not used in English, because not already replaces the thought."
     }
    },
    "contrast": {
     "with": "el.do-so",
-    "a": "Will you sign? I hope so.",
-    "b": "You may sign. Please do so.",
+    "a": "Did she sign? I think so.",
+    "b": "Please sign the form. She did so yesterday.",
     "diff": {
-     "de": "So nach hope ersetzt den Gedanken. Do so ersetzt die Handlung.",
-     "en": "So after hope replaces the thought. Do so replaces the action."
+     "de": "So nach think ersetzt den Gedanken. Do so ersetzt die Handlung.",
+     "en": "So after think replaces the thought. Do so replaces the action."
     }
    },
    "ccq": [
@@ -152,11 +154,11 @@
    },
    "contrast": {
     "with": "el.so-not",
-    "a": "Will you sign? I hope so.",
-    "b": "You may sign. Please do so.",
+    "a": "Did she sign? I think so.",
+    "b": "Please sign the form. She did so yesterday.",
     "diff": {
-     "de": "So nach hope ersetzt den Gedanken. Do so ersetzt die Handlung.",
-     "en": "So after hope replaces the thought. Do so replaces the action."
+     "de": "So nach think ersetzt den Gedanken. Do so ersetzt die Handlung.",
+     "en": "So after think replaces the thought. Do so replaces the action."
     }
    },
    "ccq": [
@@ -286,8 +288,8 @@
     "bad": "Can you join us? Yes, I would like.",
     "good": "Can you join us? Yes, I would like to.",
     "cause": {
-     "de": "Das Deutsche lässt „zu“ bei „Ich möchte gern“ am Satzende weg. Im Englischen muss to stehen bleiben, damit klar ist, dass ein Infinitiv gemeint ist.",
-     "en": "German drops “zu” after “Ich möchte gern” at the end. English must keep to, so it is clear that an infinitive is meant."
+     "de": "Im Deutschen antwortet man „Ich würde gern“ ohne Infinitiv. Im Englischen bleibt to als Platzhalter für den weggelassenen Infinitiv stehen: I would like to.",
+     "en": "In German the answer is just “Ich würde gern”, without an infinitive. In English to stays as a stand-in for the dropped infinitive: I would like to."
     }
    },
    "contrast": {
