@@ -11,6 +11,7 @@ import { c1ErrorResolver, ensureC1xLoaded } from '../c1x/resolve';
 import { useLive } from '../../data/live';
 import { topicById } from '../../domain/content';
 import { isNewTopic, introTopic, stepDownTasks } from '../../domain/grammar/path';
+import { SKIP_TEST_N, SKIP_TEST_PASS, skipTopicsOf } from '../../domain/c1/placement/run';
 import { patternsOf } from '../../domain/grammar/patterns';
 import {
   allSeedTasks,
@@ -70,8 +71,10 @@ export type IntroState = {
   pats: string[];
   /** Erster Schritt eines neuen Themas. */
   fresh: boolean;
-  /** Zahl der Vortest-Aufgaben vorn (0 oder 2). */
+  /** Zahl der Vortest-Aufgaben vorn (0 oder 2; 4 beim Kurzweg der Einstufung). */
   vtN: number;
+  /** Kurzweg der Einstufung (Lernplattform 3.0 P34): 4 Aufgaben über alle Muster, bestanden bei mindestens 3 sauberen. */
+  kurz?: boolean;
   /** Karten schon gesehen? */
   cards: 'pending' | 'done';
   /** Vortest: `null` = noch nicht entschieden. */
@@ -221,8 +224,12 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
     const pats = gt.pats.filter((p) => patternsOf(introTopicId)?.patterns.some((x) => x.id === p));
     const fresh = isNewTopic(docs.get(introTopicId));
     if (pats.length) {
-      const vt = fresh ? selectVortest({ ...base, mode: 'duty', topic: introTopicId, pats, introduce: introTopicId }) : [];
-      const vtN = vt.length === 2 ? 2 : 0;
+      // Kurzweg (P34): Thema in `app/c1.place.skip` und neu → Kurztest mit 4 Aufgaben über alle Muster des Themas statt zwei.
+      const kurz = fresh && skipTopicsOf(live.docs['app/c1']).has(introTopicId);
+      const allPats = patternsOf(introTopicId)?.patterns.map((p) => p.id) ?? pats;
+      const vt0 = fresh ? selectVortest({ ...base, mode: 'duty', topic: introTopicId, pats: kurz ? allPats : pats, introduce: introTopicId, n: kurz ? SKIP_TEST_N : 2 }) : [];
+      const vtN = kurz && vt0.length === SKIP_TEST_N ? SKIP_TEST_N : vt0.length >= 2 ? 2 : 0;
+      const vt = vt0.slice(0, vtN);
       const exclude = new Set(vtN ? vt.map((x) => x.key) : []);
       const main = selectRound({ ...common, mode, size: Math.max(1, size - vtN), introBlock: { topic: introTopicId, pats }, exclude });
       // Lage des Einführungsblocks in `main` (Fehlersätze stehen davor).
@@ -231,7 +238,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
       while (at >= 0 && len < INTRO_TASKS && main[at + len] && main[at + len]!.topic === introTopicId && pats.includes(main[at + len]!.pat ?? '') && main[at + len]!.errorT === null) len++;
       const alt = vtN && len ? selectRound({ ...common, mode, size: len, introBlock: null, errorsMax: 0, exclude: new Set([...exclude, ...main.map((x) => x.key)]) }) : [];
       tasks = [...(vtN ? vt : []), ...main];
-      intro = { topic: introTopicId, pats, fresh, vtN, cards: 'pending', passed: null, alt, blockAt: Math.max(0, at) + vtN, blockLen: len };
+      intro = { topic: introTopicId, pats, fresh, vtN, ...(vtN === SKIP_TEST_N ? { kurz: true } : {}), cards: 'pending', passed: null, alt, blockAt: Math.max(0, at) + vtN, blockLen: len };
     } else {
       // Thema ohne Musterdatei: wie bisher eine Regelkarte vor der ersten Aufgabe.
       tasks = selectRound({ ...common, mode, size });
@@ -345,9 +352,11 @@ export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
   let intro = s.intro;
   let tasks = s.tasks;
   // Vortest: Mit der zweiten Antwort steht das Ergebnis fest und geht als `vt` mit dieser Antwort ins Thema.
-  if (intro && !repeating && intro.vtN === 2 && s.pos === 1 && intro.passed === null) {
-    const ok = s.results[0]?.clean === true && cleanAnswer(a);
-    const pats = [...new Set([tasks[0]?.pat, tasks[1]?.pat].filter((x): x is string => !!x))];
+  if (intro && !repeating && intro.vtN >= 2 && s.pos === intro.vtN - 1 && intro.passed === null) {
+    // 2 Aufgaben: beide sauber. Kurzweg (4 Aufgaben): mindestens 3 sauber (Lernplattform 3.0 P34). „Sauber“ = richtig, ohne Hilfe, unter 20 s.
+    const cleanN = s.results.slice(0, intro.vtN - 1).filter((r) => r.clean === true).length + (cleanAnswer(a) ? 1 : 0);
+    const ok = cleanN >= (intro.vtN === SKIP_TEST_N ? SKIP_TEST_PASS : 2);
+    const pats = [...new Set(tasks.slice(0, intro.vtN).map((x) => x.pat).filter((x): x is string => !!x))];
     a = { ...a, vt: { ok, pats } };
     intro = { ...intro, passed: ok };
     if (ok && intro.alt.length && intro.blockLen) {

@@ -53,6 +53,12 @@ describe('Schreibweg pats und vt (§8)', () => {
     expect(w3.vt).toMatchObject({ ok: false });
   });
 
+  it('Kurzweg (P34): ein Vortest mit vier Mustern wird vollständig gespeichert', () => {
+    const four = patternsOf('mixed-cond')!.patterns.map((p) => p.id).slice(0, 4);
+    const w = merge(undefined, ans(gap, '2026-10-06', t0, { vt: { ok: true, pats: four } }))!;
+    expect(w.vt).toEqual({ d: '2026-10-06', ok: true, pats: four });
+  });
+
   it('Aufgaben ohne Fehlerfassung: meaning und fehlerfreies find legen keinen Fehlersatz an', () => {
     const m = allSeedTasks().find((t) => t.type === 'meaning')!;
     const doc = merge(undefined, ans(m, '2026-10-06', t0, { verdict: 'wrong', given: 'b', grade: 1 }))!;

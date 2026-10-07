@@ -61,7 +61,7 @@ export function GrammarSessionScreen() {
 
   const showCards = cardsDue(s) && !!s.intro;
   const vortest = inVortest(s);
-  const badge = vortest ? t('gxBadgeVortest', { n: s.pos + 1 }) : inRepeat(s) ? t('nbLernenRepeatBadge') : task?.errorT !== null && task ? t('grReviewBadge') : null;
+  const badge = vortest ? t('gxBadgeVortest', { n: s.pos + 1, total: s.intro?.vtN ?? 2 }) : inRepeat(s) ? t('nbLernenRepeatBadge') : task?.errorT !== null && task ? t('grReviewBadge') : null;
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="grammar-session" data-mode={s.mode} data-ctx={s.ctx} data-profile={s.profile}>
       <RoundTop onClose={leave} progress={grammarProgress(s)} ctx={s.ctx} duty="ch:gram" />
@@ -73,6 +73,7 @@ export function GrammarSessionScreen() {
             topic={s.intro.topic}
             pats={s.intro.pats}
             fresh={s.intro.fresh}
+            kurzMiss={s.intro.kurz === true && s.intro.passed === false}
             onGo={() => {
               const first = startAfterIntro();
               if (first === 'typed') api.focusNow();

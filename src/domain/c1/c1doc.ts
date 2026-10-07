@@ -25,7 +25,8 @@ export const C1_LIMITS = {
 } as const;
 
 /** `th` = θ der Einstufung (Zusatzfeld zu §4.8, nur unter „Messwerte dahinter“ angezeigt). */
-export type C1Place = { d: string; se: number; n: number; th?: number; skip: string[]; it?: Array<[string, 0 | 1]> };
+/** `vw` = Spanne bekannter Wörter unter den 6.000 häufigsten (Teil 1 der Einstufung, P34; Zusatzfeld, nur ergänzend). */
+export type C1Place = { d: string; se: number; n: number; th?: number; skip: string[]; it?: Array<[string, 0 | 1]>; vw?: [number, number] };
 export type C1Check = {
   d: string;
   f: string;
