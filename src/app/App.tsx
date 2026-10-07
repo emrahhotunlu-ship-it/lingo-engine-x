@@ -1,4 +1,5 @@
 import '../areas';
+import './registerAll';
 import { useBoot } from './boot';
 import { Shell } from './shell/Shell';
 

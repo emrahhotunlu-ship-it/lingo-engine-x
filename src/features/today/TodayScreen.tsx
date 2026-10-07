@@ -46,6 +46,7 @@ import { buildChunkCards } from '../../domain/srs/chunkCards';
 import { startUnit } from '../unit/run';
 import { blockName, blockWhy } from '../unit/labels';
 import { lessonMeta } from '../../domain/course/catalog';
+import { Slot } from '../../app/slots';
 
 // „Heute" (plan.md §1.3): die rote Linie. Unterzeile mit Datum und Serie, darunter EINE
 // Tageskarte – „Deine Tageseinheit“ mit Ring „2 von 5 · noch ca. 18 Min.“, Kernaufgabe der Woche,
@@ -517,7 +518,9 @@ export function TodayScreen() {
       {ok && done && (
         <motion.div variants={item} className="flex flex-col gap-5">
           <DoneCard view={view} tomorrow={tomorrow} today={today} />
+          <Slot name="today.done" />
           <ExtraRow today={today} />
+          <Slot name="today.extra" />
         </motion.div>
       )}
 

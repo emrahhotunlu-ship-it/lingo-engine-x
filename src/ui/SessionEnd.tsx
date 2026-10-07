@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
+import { Slot } from "../app/slots";
 import type { UnitState } from "../domain/metrics";
 import { useT, type MessageKey } from "../i18n";
 import { ActionBar, PrimaryAction } from "./ActionBar";
@@ -239,6 +240,7 @@ function GrowthEnd({
           {takeaways}
         </div>
       )}
+      <Slot name="session.end" />
       {warning && (
         <div
           className="lx-inset flex items-center justify-between gap-3"
@@ -361,6 +363,7 @@ function TilesEnd({
           {takeaways}
         </div>
       )}
+      <Slot name="session.end" />
       <div className="flex flex-col gap-2">
         <Button
           variant="primary"

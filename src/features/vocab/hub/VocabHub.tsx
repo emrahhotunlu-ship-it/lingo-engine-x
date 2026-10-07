@@ -21,6 +21,7 @@ import { TabTitle } from '../../system/Chrome';
 import { useDecks } from '../decksStore';
 import { startAllDue } from '../start';
 import { useDeckCtx, useQuota, useVocabCards } from './data';
+import { Slot } from '../../../app/slots';
 
 // Wurzel des Reiters „Wörter“ (Gesamtkonzept 3.3): Suche · EINE Zielkarte (X von 8.000, Balken mit C1-Marke, Tempo) ·
 // Wiederholen-Karte (ein Hauptknopf, Modus als Textknopf) · „Neue Wörter heute“ · drei Stapel + „Alle Stapel ›“ (Blatt `x:decks`
@@ -215,6 +216,8 @@ export function VocabHub() {
                   : t('nbWsHGoalNoPace')}
         </p>
       </HeroCard>
+
+      <Slot name="vocab.hub" />
 
       <RowList testId="ws-newtoday">
         <Row

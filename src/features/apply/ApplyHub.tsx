@@ -21,6 +21,7 @@ import { fehlersaetzeDue, fixToday } from '../../domain/metrics';
 import { useInputProfile } from '../../platform/input';
 import { Disclosure } from '../../ui/Disclosure';
 import { useToday } from '../today/state';
+import { Slot } from '../../app/slots';
 
 // Reiter „Anwenden“ (Emrahs Wunsch 04.10.2026): Wörter und Grammatik zusammen benutzen – Hören und
 // Aufschreiben, Sätze bauen, freies Sprechen. Alles hier ist freiwillig und zählt nie zur Pflicht (Kap. 2.6);
@@ -191,6 +192,8 @@ export function ApplyHub() {
           </Section>
         </>
       )}
+
+      <Slot name="apply.tiles" />
 
       {more.length > 0 && (
         <motion.div variants={item}>

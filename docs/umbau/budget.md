@@ -9,6 +9,9 @@ Messung nach **jedem** Paket (Byte der `dist/index.html`, Differenz zum Vorgäng
 |---|---|---|---|---|---|
 | 07.10.2026 | Ausgangsstand (cf8134c) | 4.354.238 | – | 4,15 | LIVE 3 mit gepackten `?raw`-JSON (`scripts/vite-raw-json-zip.mjs`) |
 | 07.10.2026 | P9 | 4.354.238 | 0 | 4,15 | nur Skripte, ESLint, Tests (kein Einfluss auf dist) |
+| 07.10.2026 | P10 | 4.354.238 | 0 | 4,15 | Inhaltsspeicher ohne Verbraucher (kein Einfluss auf dist) |
+| 07.10.2026 | P12 | 4.354.238 | 0 | 4,15 | c1x-Domäne noch nicht von der App importiert (Tree-Shaking) |
+| 07.10.2026 | P11 | 4.355.991 | +1.753 | 4,15 | Slot, Registry, 13 Stellen |
 
 ## Planrechnung (LP3 §9, Modell)
 

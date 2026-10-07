@@ -3,6 +3,7 @@ import { useT, type MessageKey } from '../../i18n';
 import { useMediaQuery } from '../../platform/input';
 import { Sheet } from '../Sheet';
 import type { ShellMenuId } from './ExerciseShell';
+import { Slot } from '../../app/slots';
 
 // Menü ⋯ (§4.3) rechts in der Urteilszeile: am Handy ein Blatt von unten, ab 768 px ein kleines Menü.
 // (`Icon` kennt kein ⋯; das Symbol ist hier als drei Punkte inline gezeichnet.)
@@ -77,6 +78,7 @@ export function ExerciseMenu({ items, onOpenChange }: { items: Partial<Record<Sh
           </button>
         </li>
       ))}
+      <Slot name="exercise.menu" />
     </ul>
   );
   return (

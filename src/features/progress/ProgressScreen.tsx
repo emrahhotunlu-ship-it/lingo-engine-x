@@ -18,6 +18,7 @@ import { HistoryTab } from './HistoryTab';
 import { JudgeTab } from './JudgeTab';
 import { StandLevels } from './StandHeader';
 import { WordsSegment, useVocabMetrics } from './WordsSegment';
+import { Slot } from '../../app/slots';
 
 // „Fortschritt" (Kap. 6.13, Neubau plan.md §1.3; Fokus-Umbau 3.5: ohne Kurs, ohne „Wörter gesamt“): Kopf Fest · Niveau-Skala, darunter drei
 // Segmente Wörter · Grammatik · Rückblick – kein endloses Scrollen am Handy, nichts
@@ -123,6 +124,8 @@ export function ProgressScreen() {
         </div>
       </motion.section>
 
+      <Slot name="progress.head" />
+
       <LateRescueCard />
 
       {status === 'error' && (
@@ -133,12 +136,23 @@ export function ProgressScreen() {
 
       <motion.div variants={item}>
         <Tabs label={t('progTabs')} items={TABS.map((x) => ({ id: x.id, label: t(x.label), testId: `tab-${x.id}` }))} value={tab} onChange={choose} testId="progress-tabs">
-          {tab === 'words' && <WordsSegment />}
-          {tab === 'grammar' && <GrammarSegment />}
+          {tab === 'words' && (
+            <>
+              <WordsSegment />
+              <Slot name="progress.words" />
+            </>
+          )}
+          {tab === 'grammar' && (
+            <>
+              <GrammarSegment />
+              <Slot name="progress.grammar" />
+            </>
+          )}
           {tab === 'review' && (
             <div className="flex flex-col gap-6">
               <JudgeTab />
               <HistoryTab />
+              <Slot name="progress.review" />
             </div>
           )}
         </Tabs>

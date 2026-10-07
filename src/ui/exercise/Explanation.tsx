@@ -5,6 +5,7 @@ import type { WordTapArea } from '../../engine/wordTap';
 import { useT, type MessageKey } from '../../i18n';
 import { FoldToggle } from './FoldToggle';
 import { visibleLines } from './explainDepth';
+import { Slot } from '../../app/slots';
 
 // Erklär-Karte (§4.3/§4.6): EINE Innenfläche, feste Zeilen mit Symbol und kurzem Label (keine Großbuchstaben-
 // Überschriften), offen nach Tiefe, der Rest unter „Mehr ▸“. `min` ist eine einzige Zeile „✓ Muster · Richtig, weil …“.
@@ -124,6 +125,7 @@ export function Explanation({ model, depth, learning = true, area = 'trainer', o
           {t('exAiNote')}
         </p>
       )}
+      <Slot name="explain.after" />
     </div>
   );
 }

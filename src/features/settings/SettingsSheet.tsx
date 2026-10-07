@@ -25,6 +25,7 @@ import { Fold } from '../../ui/Fold';
 import { HapticSection } from './HapticSection';
 import { diagText } from './diagText';
 import { perfText, readPerfMarks, type PerfName } from './perfMarks';
+import { Slot } from '../../app/slots';
 
 // Einstellungen (Kap. 6.14, Neubau plan.md §1.2, N94, markt.md UI 24) in sechs Gruppen:
 //   1 Lernen          Tagesziel, Neue Wörter/Tag, Automatisch weiter
@@ -88,6 +89,7 @@ export function SettingsSheet({ open, onClose }: { open: boolean; onClose: () =>
           </div>
           <Registered groups={['data']} />
         </Group>
+        <Slot name="settings.sections" />
       </div>
     </Sheet>
   );

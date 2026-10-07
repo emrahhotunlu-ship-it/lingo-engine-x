@@ -22,6 +22,7 @@ import { TopicSheet } from '../grammar/GrammarScreen';
 import { PathList } from '../grammar/PathList';
 import { startGrammar } from '../grammar/session';
 import { topicName } from '../grammar/topicUi';
+import { Slot } from '../../app/slots';
 
 // Reiter „Grammatik“ (Gesamtkonzept 3.4, UX-Ziel Kap. 3.3): Weiter-Karte („Als Nächstes: Thema · n Min.“, ein Knopf),
 // der Pfad aller Themen in Lehrreihenfolge B2 → C1 mit Zustand je Thema, die Zeile „Fehler korrigieren · n fällig“
@@ -129,6 +130,8 @@ export function LearnHub() {
       <motion.div variants={item}>
         <TabTitle title={t('lhTitle')} />
       </motion.div>
+
+      <Slot name="grammar.head" />
 
       {next && (
         <motion.section variants={item} className="lx-glass flex flex-col gap-3 rounded-[var(--radius-card)] p-5" aria-labelledby="lh-next" data-testid="hub-next-topic" data-topic={next.id}>
