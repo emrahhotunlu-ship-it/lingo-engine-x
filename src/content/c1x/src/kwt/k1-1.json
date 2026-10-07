@@ -1,0 +1,1673 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "kwt-0001",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "psc.always",
+   "topic": "pres-simple-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "It annoys me that our vendor keeps changing the delivery dates.",
+   "key": "ALWAYS",
+   "before": "Our vendor",
+   "after": "the delivery dates.",
+   "keys": [
+    {
+     "a": [
+      "is always"
+     ],
+     "b": [
+      "changing"
+     ]
+    }
+   ],
+   "tiles": [
+    "is",
+    "changing"
+   ],
+   "extra": [
+    "changes",
+    "has",
+    "keeps"
+   ],
+   "traps": [
+    "is changing always"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: always steht nach is und vor dem Verb. Teil 2: -ing drückt den Ärger über die ständige Wiederholung aus.",
+     "en": "Part 1: always sits between is and the verb. Part 2: -ing shows annoyance at the constant repetition."
+    },
+    "wrong": [
+     {
+      "if": [
+       "is",
+       "changing",
+       "always"
+      ],
+      "de": "Im Deutschen steht „immer“ oft hinten. Englisch: always steht zwischen is und -ing.",
+      "en": "German often puts “immer” last. In English always goes between is and -ing."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0002",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "psc.state",
+   "topic": "pres-simple-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "A quick decision from the client is essential for us.",
+   "key": "REALLY",
+   "before": "We",
+   "after": "a quick decision from the client.",
+   "keys": [
+    {
+     "a": [
+      "really need",
+      "really want"
+     ],
+     "b": [
+      "to get",
+      "to have",
+      "to receive"
+     ]
+    }
+   ],
+   "tiles": [
+    "need",
+    "to",
+    "get"
+   ],
+   "extra": [
+    "wanting",
+    "are",
+    "much"
+   ],
+   "traps": [
+    "are really needing to get"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: really need/want, Zustandsverben stehen im Present Simple, nie in der -ing-Form. Teil 2: to get, danach to + Grundform.",
+     "en": "Part 1: really need/want, state verbs take the present simple, never -ing. Part 2: to get, to + base form follows."
+    },
+    "wrong": [
+     {
+      "if": [
+       "are",
+       "really",
+       "needing",
+       "to",
+       "get"
+      ],
+      "de": "Deutsch hat nur eine Präsensform. Englisch: need und want sind Zustandsverben und haben kein -ing.",
+      "en": "German has only one present form. In English need and want are state verbs and take no -ing."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0003",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "psc.now",
+   "topic": "pres-simple-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "Our team is normally based in Cork, but this week it is in the Dublin office.",
+   "key": "TEMPORARILY",
+   "before": "This week our team",
+   "after": "from the Dublin office.",
+   "keys": [
+    {
+     "a": [
+      "is temporarily"
+     ],
+     "b": [
+      "working"
+     ]
+    },
+    {
+     "a": [
+      "is"
+     ],
+     "b": [
+      "working temporarily"
+     ]
+    }
+   ],
+   "tiles": [
+    "is",
+    "working"
+   ],
+   "extra": [
+    "works",
+    "was",
+    "usually"
+   ],
+   "traps": [
+    "works here temporarily"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: temporarily passt zu einer vorübergehenden Lage. Teil 2: is working (Continuous), weil es nur diese Woche gilt, nicht dauerhaft.",
+     "en": "Part 1: temporarily fits a short-term situation. Part 2: is working (continuous) because it only applies this week, not permanently."
+    },
+    "wrong": [
+     {
+      "if": [
+       "works",
+       "here",
+       "temporarily"
+      ],
+      "de": "Deutsch sagt „arbeitet“ auch für Vorübergehendes. Englisch: vorübergehend = is working.",
+      "en": "German uses “arbeitet” for temporary things too. In English temporary means is working."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0004",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "psc.habit",
+   "topic": "pres-simple-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "In meetings, our CEO does not take notes at any time.",
+   "key": "NEVER",
+   "before": "Our CEO",
+   "after": "in meetings.",
+   "keys": [
+    {
+     "a": [
+      "never"
+     ],
+     "b": [
+      "takes notes",
+      "takes any notes"
+     ]
+    }
+   ],
+   "tiles": [
+    "takes",
+    "notes"
+   ],
+   "extra": [
+    "is",
+    "take",
+    "taking"
+   ],
+   "traps": [
+    "is never taking notes"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: never steht vor dem Verb. Teil 2: Gewohnheit = Present Simple, bei he/she/it mit -s: takes notes.",
+     "en": "Part 1: never goes before the verb. Part 2: a habit takes the present simple, with -s for he/she/it: takes notes."
+    },
+    "wrong": [
+     {
+      "if": [
+       "is",
+       "never",
+       "taking",
+       "notes"
+      ],
+      "de": "Deutsch hat nur eine Präsensform. Gewohnheit heißt im Englischen Present Simple; -ing wäre nur dieser Moment.",
+      "en": "German has one present form. A habit takes the present simple in English; -ing would be this one moment only."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0005",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "psp.finished-time",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "When was the contract signed by the client?",
+   "key": "DID",
+   "before": "When",
+   "after": "the contract?",
+   "keys": [
+    {
+     "a": [
+      "did"
+     ],
+     "b": [
+      "the client sign",
+      "the customer sign"
+     ]
+    }
+   ],
+   "tiles": [
+    "the",
+    "client",
+    "sign"
+   ],
+   "extra": [
+    "has",
+    "signed",
+    "does"
+   ],
+   "traps": [
+    "did the client signed"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: did + Grundform fragt im Past Simple. Teil 2: sign (Grundform), nicht signed. „When“ fragt nach einem Zeitpunkt.",
+     "en": "Part 1: did + base form asks in the past simple. Part 2: sign (base form), not signed. “When” asks for a point in time."
+    },
+    "wrong": [
+     {
+      "if": [
+       "did",
+       "the",
+       "client",
+       "signed"
+      ],
+      "de": "Nach did steht die Grundform: did … sign. Deutsch „hat unterschrieben“ trägt die Vergangenheit im Verb.",
+      "en": "After did comes the base form: did … sign. German “hat unterschrieben” carries the past in the verb."
+     }
+    ]
+   },
+   "trap": "f22"
+  },
+  {
+   "id": "kwt-0006",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "psp.since-for",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "We began working with Rhein Logistics in 2019, and we still work with them.",
+   "key": "SINCE",
+   "before": "We",
+   "after": "2019.",
+   "keys": [
+    {
+     "a": [
+      "have worked"
+     ],
+     "b": [
+      "with them since",
+      "together since",
+      "with Rhein since"
+     ]
+    },
+    {
+     "a": [
+      "have been working"
+     ],
+     "b": [
+      "with them since",
+      "together since"
+     ]
+    }
+   ],
+   "tiles": [
+    "have",
+    "worked",
+    "with",
+    "them"
+   ],
+   "extra": [
+    "for",
+    "are",
+    "work"
+   ],
+   "traps": [
+    "worked with them since",
+    "are working with them since"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: have worked / have been working, weil es bis heute dauert. Teil 2: since + Jahreszahl, since nennt den Startpunkt.",
+     "en": "Part 1: have worked / have been working because it lasts until now. Part 2: since + year, since names the starting point."
+    },
+    "wrong": [
+     {
+      "if": [
+       "worked",
+       "with",
+       "them",
+       "since"
+      ],
+      "de": "Past Simple endet in der Vergangenheit. Dauer bis heute (seit 2019) braucht have worked.",
+      "en": "The past simple ends in the past. Duration up to now (since 2019) needs have worked."
+     },
+     {
+      "if": [
+       "are",
+       "working",
+       "with",
+       "them",
+       "since"
+      ],
+      "de": "Deutsch: „seit 2019 arbeiten wir“ (Präsens). Englisch: Dauer bis jetzt = have worked / have been working.",
+      "en": "German: “seit 2019 arbeiten wir” (present). English: duration up to now = have worked / have been working."
+     }
+    ]
+   },
+   "trap": "f12"
+  },
+  {
+   "id": "kwt-0007",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "psp.experience",
+   "topic": "past-simple-perfect",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "I have never seen a smoother DMS migration.",
+   "key": "EVER",
+   "before": "It is the smoothest DMS migration I",
+   "after": ".",
+   "keys": [
+    {
+     "a": [
+      "have ever",
+      "'ve ever"
+     ],
+     "b": [
+      "seen",
+      "experienced",
+      "encountered"
+     ]
+    }
+   ],
+   "tiles": [
+    "have",
+    "seen"
+   ],
+   "extra": [
+    "saw",
+    "did",
+    "never"
+   ],
+   "traps": [
+    "have seen ever"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: have ever, denn Superlativ + ever blickt auf das ganze bisherige Leben. Teil 2: die 3. Form (seen).",
+     "en": "Part 1: have ever, because superlative + ever looks at your whole experience so far. Part 2: the past participle (seen)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "have",
+       "seen",
+       "ever"
+      ],
+      "de": "ever steht zwischen have und der 3. Form. Deutsch stellt „je“ gern ans Ende.",
+      "en": "Ever goes between have and the participle. German likes “je” at the end."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0008",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "psp.result-now",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "I sent the invoice a few minutes ago.",
+   "key": "JUST",
+   "before": "I",
+   "after": "the invoice.",
+   "keys": [
+    {
+     "a": [
+      "have just",
+      "'ve just"
+     ],
+     "b": [
+      "sent"
+     ]
+    }
+   ],
+   "tiles": [
+    "have",
+    "sent"
+   ],
+   "extra": [
+    "send",
+    "did",
+    "was"
+   ],
+   "traps": [
+    "have sent just"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: have just zeigt: gerade eben passiert, Folge jetzt. Teil 2: sent als 3. Form.",
+     "en": "Part 1: have just shows it happened a moment ago with a result now. Part 2: sent as the past participle."
+    },
+    "wrong": [
+     {
+      "if": [
+       "have",
+       "sent",
+       "just"
+      ],
+      "de": "Hinter dem Verb hieße just „nur“. „Gerade eben“ steht zwischen have und der 3. Form.",
+      "en": "After the verb just would mean “only”. “A moment ago” goes between have and the participle."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0009",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "psp.experience",
+   "topic": "past-simple-perfect",
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "lead": "I have never given a talk in English before today.",
+   "key": "FIRST",
+   "before": "This is the",
+   "after": "a talk in English.",
+   "keys": [
+    {
+     "a": [
+      "first time"
+     ],
+     "b": [
+      "I have given",
+      "I've given",
+      "I have ever given",
+      "I've ever given",
+      "that I have given",
+      "that I've given"
+     ]
+    }
+   ],
+   "tiles": [
+    "time",
+    "i",
+    "have",
+    "given"
+   ],
+   "extra": [
+    "I give",
+    "I gave",
+    "before"
+   ],
+   "traps": [
+    "first time I give"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: first time. Teil 2: I have given, denn nach „the first time“ steht das Present Perfect.",
+     "en": "Part 1: first time. Part 2: I have given, because the present perfect follows “the first time”."
+    },
+    "wrong": [
+     {
+      "if": [
+       "first",
+       "time",
+       "i",
+       "give"
+      ],
+      "de": "Deutsch: „das erste Mal, dass ich halte“ im Präsens. Englisch: the first time + Present Perfect.",
+      "en": "German: “das erste Mal, dass ich halte” in the present. English: the first time + present perfect."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0010",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "pc.duration",
+   "topic": "pres-perf-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "We started testing the beta module in March and are still testing it.",
+   "key": "BEEN",
+   "before": "We",
+   "after": "the beta module since March.",
+   "keys": [
+    {
+     "a": [
+      "have been",
+      "'ve been"
+     ],
+     "b": [
+      "testing"
+     ]
+    }
+   ],
+   "tiles": [
+    "have",
+    "testing"
+   ],
+   "extra": [
+    "tested",
+    "are",
+    "test"
+   ],
+   "traps": [
+    "have been tested"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: have been, weil es seit März bis jetzt läuft. Teil 2: testing, die -ing-Form betont die Dauer der Tätigkeit.",
+     "en": "Part 1: have been, because it has run from March until now. Part 2: testing, the -ing form stresses the ongoing activity."
+    },
+    "wrong": [
+     {
+      "if": [
+       "have",
+       "been",
+       "tested"
+      ],
+      "de": "Mit -ed wäre es Passiv („wurde getestet“). Die laufende Tätigkeit seit März braucht -ing.",
+      "en": "With -ed it would be passive (“was tested”). The activity running since March needs -ing."
+     }
+    ]
+   },
+   "trap": "f12"
+  },
+  {
+   "id": "kwt-0011",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "pc.since-for",
+   "topic": "pres-perf-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "When did you start using the DMS?",
+   "key": "LONG",
+   "before": "How",
+   "after": "the DMS?",
+   "keys": [
+    {
+     "a": [
+      "long have you"
+     ],
+     "b": [
+      "been using",
+      "used"
+     ]
+    }
+   ],
+   "tiles": [
+    "have",
+    "you",
+    "been",
+    "using"
+   ],
+   "extra": [
+    "did",
+    "since",
+    "for"
+   ],
+   "traps": [
+    "long do you use"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: long have you, weil „how long“ bis jetzt gilt. Teil 2: been using oder used (3. Form), nicht using allein.",
+     "en": "Part 1: long have you, since “how long” runs up to now. Part 2: been using or used (participle), not using alone."
+    },
+    "wrong": [
+     {
+      "if": [
+       "long",
+       "do",
+       "you",
+       "use"
+      ],
+      "de": "Deutsch: „Wie lange benutzt du …?“ im Präsens. Englisch fragt dafür mit have you been using oder used.",
+      "en": "German: “Wie lange benutzt du …?” in the present. English asks it with have you been using or used."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0012",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "pc.duration",
+   "topic": "pres-perf-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "I have spent the whole afternoon on the contract.",
+   "key": "ALL",
+   "before": "I",
+   "after": "on the contract.",
+   "keys": [
+    {
+     "a": [
+      "have been working"
+     ],
+     "b": [
+      "all afternoon"
+     ]
+    },
+    {
+     "a": [
+      "have worked"
+     ],
+     "b": [
+      "all afternoon"
+     ]
+    },
+    {
+     "a": [
+      "have spent"
+     ],
+     "b": [
+      "all afternoon working"
+     ]
+    }
+   ],
+   "tiles": [
+    "have",
+    "been",
+    "working",
+    "afternoon"
+   ],
+   "extra": [
+    "whole",
+    "is",
+    "am"
+   ],
+   "traps": [
+    "am working all afternoon"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: have been working, die Arbeit begann früher und ist gerade vorbei oder läuft noch. Teil 2: all afternoon nennt die Dauer.",
+     "en": "Part 1: have been working, the work started earlier and has just stopped or continues. Part 2: all afternoon names the duration."
+    },
+    "wrong": [
+     {
+      "if": [
+       "am",
+       "working",
+       "all",
+       "afternoon"
+      ],
+      "de": "Deutsch „ich arbeite den ganzen Nachmittag“ ist Präsens. Wenn der Nachmittag schon vergangen ist, braucht Englisch have been working.",
+      "en": "German “ich arbeite den ganzen Nachmittag” is present. If the afternoon is already over, English needs have been working."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0013",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "pc.state-verbs",
+   "topic": "pres-perf-cont",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "lead": "I met her ten years ago and we are still in touch.",
+   "key": "FOR",
+   "before": "I",
+   "after": "ten years.",
+   "keys": [
+    {
+     "a": [
+      "have known"
+     ],
+     "b": [
+      "her for"
+     ]
+    }
+   ],
+   "tiles": [
+    "have",
+    "known",
+    "her"
+   ],
+   "extra": [
+    "know",
+    "knew",
+    "since"
+   ],
+   "traps": [
+    "have been knowing her for"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: have known, Zustandsverben haben keine -ing-Form. Teil 2: her for, for + Zeitraum nennt die Dauer bis heute.",
+     "en": "Part 1: have known, state verbs take no -ing form. Part 2: her for, for + period names the duration up to now."
+    },
+    "wrong": [
+     {
+      "if": [
+       "have",
+       "been",
+       "knowing",
+       "her",
+       "for"
+      ],
+      "de": "Deutsch „ich kenne sie seit zehn Jahren“ ist Präsens. Englisch: know ist ein Zustandsverb, also have known, nie have been knowing.",
+      "en": "German “ich kenne sie seit zehn Jahren” is present. English: know is a state verb, so have known, never have been knowing."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0014",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "pc.recent",
+   "topic": "pres-perf-cont",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "lead": "I have been feeling unwell over the past few days.",
+   "key": "LATELY",
+   "before": "I",
+   "after": ".",
+   "keys": [
+    {
+     "a": [
+      "have not felt",
+      "haven't felt"
+     ],
+     "b": [
+      "well lately"
+     ]
+    },
+    {
+     "a": [
+      "have not been",
+      "haven't been"
+     ],
+     "b": [
+      "feeling well lately"
+     ]
+    },
+    {
+     "a": [
+      "have felt"
+     ],
+     "b": [
+      "unwell lately"
+     ]
+    },
+    {
+     "a": [
+      "have been"
+     ],
+     "b": [
+      "feeling unwell lately"
+     ]
+    }
+   ],
+   "tiles": [
+    "have",
+    "not",
+    "felt",
+    "well"
+   ],
+   "extra": [
+    "recently",
+    "feel",
+    "sick"
+   ],
+   "traps": [
+    "do not feel well lately"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: have not felt / have not been feeling, weil die Zeit bis jetzt reicht. Teil 2: well lately, lately passt nur zum Present Perfect.",
+     "en": "Part 1: have not felt / have not been feeling, since the period runs up to now. Part 2: well lately, lately only goes with the present perfect."
+    },
+    "wrong": [
+     {
+      "if": [
+       "do",
+       "not",
+       "feel",
+       "well",
+       "lately"
+      ],
+      "de": "Deutsch: „In letzter Zeit fühle ich mich nicht gut“ im Präsens. Englisch: lately + Present Perfect.",
+      "en": "German: “In letzter Zeit fühle ich mich nicht gut” in the present. English: lately + present perfect."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0015",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "ff.will-now",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "Do you want me to book the conference room for Thursday?",
+   "key": "SHOULD",
+   "before": "",
+   "after": "the conference room for Thursday?",
+   "keys": [
+    {
+     "a": [
+      "Should I"
+     ],
+     "b": [
+      "book",
+      "reserve"
+     ]
+    }
+   ],
+   "tiles": [
+    "i",
+    "book"
+   ],
+   "extra": [
+    "Will",
+    "Do",
+    "Am"
+   ],
+   "traps": [
+    "Should I booked"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: Should I bietet etwas an („soll ich?“). Teil 2: book steht in der Grundform, nach Should I folgt nie to.",
+     "en": "Part 1: Should I makes an offer (“soll ich?”). Part 2: book is the base form, to never follows Should I."
+    },
+    "wrong": [
+     {
+      "if": [
+       "should",
+       "i",
+       "booked"
+      ],
+      "de": "Nach Should I steht die Grundform: book, nicht booked. Deutsch „Soll ich gebucht“ gibt es nicht, die Form hängt am Hilfsverb.",
+      "en": "After Should I comes the base form: book, not booked."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0016",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "ff.going-to",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "We plan to roll out the new CRM in September.",
+   "key": "GOING",
+   "before": "We",
+   "after": "out the new CRM in September.",
+   "keys": [
+    {
+     "a": [
+      "are going to",
+      "'re going to"
+     ],
+     "b": [
+      "roll"
+     ]
+    }
+   ],
+   "tiles": [
+    "are",
+    "to",
+    "roll"
+   ],
+   "extra": [
+    "will",
+    "plan",
+    "rolling"
+   ],
+   "traps": [
+    "are going roll"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: are going to drückt einen festen Plan aus. Teil 2: roll als Grundform (going to + Grundform).",
+     "en": "Part 1: are going to expresses a firm plan. Part 2: roll as base form (going to + base form)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "are",
+       "going",
+       "roll"
+      ],
+      "de": "Vor der Grundform fehlt to: going to roll. Deutsch „werden … ausrollen“ hat kein Wort dafür.",
+      "en": "To is missing before the base form: going to roll. German “werden … ausrollen” has no word for it."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0017",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "ff.was-going-to",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "I planned to call the supplier yesterday, but I ran out of time.",
+   "key": "WAS",
+   "before": "I",
+   "after": "the supplier yesterday, but I ran out of time.",
+   "keys": [
+    {
+     "a": [
+      "was going to",
+      "was planning to",
+      "was intending to"
+     ],
+     "b": [
+      "call",
+      "phone"
+     ]
+    }
+   ],
+   "tiles": [
+    "going",
+    "to",
+    "call"
+   ],
+   "extra": [
+    "am",
+    "would",
+    "did"
+   ],
+   "traps": [
+    "was going call"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: was going to, weil der Plan in der Vergangenheit lag und nicht zustande kam. Teil 2: call als Grundform.",
+     "en": "Part 1: was going to, because the plan lay in the past and did not happen. Part 2: call as base form."
+    },
+    "wrong": [
+     {
+      "if": [
+       "was",
+       "going",
+       "call"
+      ],
+      "de": "Vor der Grundform fehlt to. Deutsch „ich wollte anrufen“ kennt kein Wort dafür.",
+      "en": "To is missing before the base form. German “ich wollte anrufen” has no word for it."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0018",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "ff.fixed-times",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "I have agreed to meet the client in Lisbon on Tuesday.",
+   "key": "MEETING",
+   "before": "I",
+   "after": "in Lisbon on Tuesday.",
+   "keys": [
+    {
+     "a": [
+      "am meeting",
+      "'m meeting"
+     ],
+     "b": [
+      "the client",
+      "with the client"
+     ]
+    }
+   ],
+   "tiles": [
+    "am",
+    "the",
+    "client"
+   ],
+   "extra": [
+    "will",
+    "meet",
+    "going"
+   ],
+   "traps": [
+    "meeting the client"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: am meeting, die -ing-Form beschreibt einen vereinbarten Termin. Teil 2: the client als Objekt.",
+     "en": "Part 1: am meeting, the -ing form describes an agreed arrangement. Part 2: the client as the object."
+    },
+    "wrong": [
+     {
+      "if": [
+       "meeting",
+       "the",
+       "client"
+      ],
+      "de": "Das Hilfsverb fehlt: am meeting. Deutsch „ich treffe“ braucht keins.",
+      "en": "The auxiliary is missing: am meeting. German “ich treffe” needs none."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0019",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "ff.about-to",
+   "topic": "future-forms",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "The CEO will begin her keynote any second.",
+   "key": "ABOUT",
+   "before": "The CEO",
+   "after": "her keynote.",
+   "keys": [
+    {
+     "a": [
+      "is about",
+      "is just about"
+     ],
+     "b": [
+      "to begin",
+      "to start"
+     ]
+    }
+   ],
+   "tiles": [
+    "is",
+    "to",
+    "begin"
+   ],
+   "extra": [
+    "will",
+    "going",
+    "soon"
+   ],
+   "traps": [
+    "is about begin"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: is about, die Wendung steht für „gleich“. Teil 2: to begin, nach be about steht immer to + Grundform.",
+     "en": "Part 1: is about, the phrase stands for “right away”. Part 2: to begin, be about is always followed by to + base form."
+    },
+    "wrong": [
+     {
+      "if": [
+       "is",
+       "about",
+       "begin"
+      ],
+      "de": "Nach about braucht Englisch to + Grundform. Deutsch hat dafür „gleich … beginnen“ ohne Wörtchen dazwischen.",
+      "en": "English needs to + base form after about. German just says “gleich … beginnen”."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0020",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "tc.present-for-future",
+   "topic": "time-clauses",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "I will not forward the file before I get the final numbers.",
+   "key": "UNTIL",
+   "before": "I will not forward the file",
+   "after": "the final numbers.",
+   "keys": [
+    {
+     "a": [
+      "until"
+     ],
+     "b": [
+      "I get",
+      "I have",
+      "I've",
+      "I receive",
+      "I have got",
+      "I've got",
+      "I have received",
+      "I've received",
+      "I have gotten",
+      "I've gotten"
+     ]
+    }
+   ],
+   "tiles": [
+    "i",
+    "get"
+   ],
+   "extra": [
+    "by",
+    "will",
+    "when"
+   ],
+   "traps": [
+    "until I will get"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: until bis zu einem Ereignis (bei by wäre es eine Frist). Teil 2: I get, nach until steht das Present, nie will.",
+     "en": "Part 1: until runs up to an event (by would mean a deadline). Part 2: I get, the present follows until, never will."
+    },
+    "wrong": [
+     {
+      "if": [
+       "until",
+       "i",
+       "will",
+       "get"
+      ],
+      "de": "Im Hauptsatz steht will, und es rutscht in den until-Satz. Nach until steht das Präsens.",
+      "en": "Will from the main clause slips into the until-clause. The present follows until."
+     }
+    ]
+   },
+   "trap": "f11"
+  },
+  {
+   "id": "kwt-0021",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "tc.present-perfect",
+   "topic": "time-clauses",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "We can start the migration after the legal team has approved the contract.",
+   "key": "ONCE",
+   "before": "We can start the migration",
+   "after": "the contract.",
+   "keys": [
+    {
+     "a": [
+      "once"
+     ],
+     "b": [
+      "the legal team has approved",
+      "legal has approved",
+      "the legal team approves",
+      "legal approves"
+     ]
+    }
+   ],
+   "tiles": [
+    "the",
+    "legal",
+    "team",
+    "has",
+    "approved"
+   ],
+   "extra": [
+    "when",
+    "will",
+    "after"
+   ],
+   "traps": [
+    "once the legal team will approve"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: once heißt „sobald“. Teil 2: has approved (oder approves): nach once steht Present Perfect oder Present, nie will.",
+     "en": "Part 1: once means “as soon as”. Part 2: has approved (or approves): present perfect or present follows once, never will."
+    },
+    "wrong": [
+     {
+      "if": [
+       "once",
+       "the",
+       "legal",
+       "team",
+       "will",
+       "approve"
+      ],
+      "de": "Das will des Hauptsatzes rutscht in den once-Satz. Nach once steht kein will.",
+      "en": "The will of the main clause slips into the once-clause. No will after once."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0022",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "tc.by-the-time",
+   "topic": "time-clauses",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "We will have completed the migration before the audit starts.",
+   "key": "TIME",
+   "before": "We will have completed the migration",
+   "after": "the audit starts.",
+   "keys": [
+    {
+     "a": [
+      "by the"
+     ],
+     "b": [
+      "time"
+     ]
+    }
+   ],
+   "tiles": [
+    "by",
+    "the"
+   ],
+   "extra": [
+    "until",
+    "when",
+    "moment"
+   ],
+   "traps": [
+    "until the time"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: by the markiert eine Frist („bis dahin fertig“). Teil 2: time, danach steht das Present (starts).",
+     "en": "Part 1: by the marks a deadline (“done by then”). Part 2: time, the present (starts) follows."
+    },
+    "wrong": [
+     {
+      "if": [
+       "until",
+       "the",
+       "time"
+      ],
+      "de": "Mit until würde die Handlung bis dahin laufen. „Bis dahin fertig“ ist im Englischen by the time.",
+      "en": "Until would mean the action lasts up to then. “Done by then” is by the time in English."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0023",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "tc.noun-clause",
+   "topic": "time-clauses",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "Will the client sign before Friday? I am not sure.",
+   "key": "WONDER",
+   "before": "I",
+   "after": "before Friday.",
+   "keys": [
+    {
+     "a": [
+      "wonder if",
+      "wonder whether"
+     ],
+     "b": [
+      "the client will sign"
+     ]
+    }
+   ],
+   "tiles": [
+    "if",
+    "the",
+    "client",
+    "will",
+    "sign"
+   ],
+   "extra": [
+    "wondering",
+    "signs",
+    "asked"
+   ],
+   "traps": [
+    "wonder if the client signs"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: wonder if/whether, eine indirekte Frage. Teil 2: will sign, in einer ob-Frage bleibt will, anders als nach when oder if im Bedingungssatz.",
+     "en": "Part 1: wonder if/whether, an indirect question. Part 2: will accept, will stays in an if-question, unlike in an if-condition."
+    },
+    "wrong": [
+     {
+      "if": [
+       "wonder",
+       "if",
+       "the",
+       "client",
+       "signs"
+      ],
+      "de": "Deutsch nutzt im ob-Satz das Präsens: „ob der Kunde unterschreibt“. Englisch: nach wonder if bleibt will, wenn es um die Zukunft geht.",
+      "en": "German uses the present in an ob-clause. In English will stays after wonder if when the future is meant."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0024",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "hg.modal",
+   "topic": "c1-hedging",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "It is possible that our competitor will lower its prices soon.",
+   "key": "MIGHT",
+   "before": "Our competitor",
+   "after": "prices soon.",
+   "keys": [
+    {
+     "a": [
+      "might",
+      "might well"
+     ],
+     "b": [
+      "lower its",
+      "cut its",
+      "reduce its",
+      "lower their",
+      "cut their",
+      "reduce their"
+     ]
+    }
+   ],
+   "tiles": [
+    "lower",
+    "its"
+   ],
+   "extra": [
+    "will",
+    "maybe",
+    "possible"
+   ],
+   "traps": [
+    "might lowering its"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: might macht die Aussage vorsichtig. Teil 2: lower its (Grundform + Besitz), will fällt weg.",
+     "en": "Part 1: might makes the statement cautious. Part 2: lower its (base form + possessive), will drops out."
+    },
+    "wrong": [
+     {
+      "if": [
+       "might",
+       "lowering",
+       "its"
+      ],
+      "de": "Nach might steht die Grundform: might lower. Das -ing passt hier nicht.",
+      "en": "The base form follows might: might lower. The -ing form does not fit."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0025",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "hg.worth",
+   "topic": "c1-hedging",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "I suggest that we talk to the security team before the launch.",
+   "key": "WORTH",
+   "before": "It might",
+   "after": "to the security team before the launch.",
+   "keys": [
+    {
+     "a": [
+      "be worth"
+     ],
+     "b": [
+      "talking",
+      "speaking",
+      "reaching out"
+     ]
+    }
+   ],
+   "tiles": [
+    "be",
+    "talking"
+   ],
+   "extra": [
+    "worthy",
+    "to talk",
+    "valuable"
+   ],
+   "traps": [
+    "be worth to talk"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: be worth, höflicher Vorschlag mit might. Teil 2: talking, nach worth immer die -ing-Form.",
+     "en": "Part 1: be worth, a polite suggestion with might. Part 2: talking, worth is always followed by the -ing form."
+    },
+    "wrong": [
+     {
+      "if": [
+       "be",
+       "worth",
+       "to",
+       "talk"
+      ],
+      "de": "Deutsch: „es lohnt sich, mit dem Team zu sprechen“ mit zu + Infinitiv. Nach worth steht im Englischen immer -ing.",
+      "en": "German: “es lohnt sich, mit dem Team zu sprechen” with zu + infinitive. After worth English always takes -ing."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0026",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "hg.inclined",
+   "topic": "c1-hedging",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "I lean towards postponing the rollout until January.",
+   "key": "INCLINED",
+   "before": "I",
+   "after": "the rollout until January.",
+   "keys": [
+    {
+     "a": [
+      "would be inclined",
+      "am inclined",
+      "'d be inclined",
+      "'m inclined"
+     ],
+     "b": [
+      "to postpone",
+      "to delay",
+      "to push back",
+      "to put off"
+     ]
+    }
+   ],
+   "tiles": [
+    "would",
+    "be",
+    "to",
+    "postpone"
+   ],
+   "extra": [
+    "inclining",
+    "postponing",
+    "will"
+   ],
+   "traps": [
+    "would be inclined postponing"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: would be inclined, die höfliche Abschwächung der eigenen Meinung. Teil 2: to postpone, danach steht to + Grundform.",
+     "en": "Part 1: would be inclined, the polite softening of your own view. Part 2: to postpone, to + base form follows."
+    },
+    "wrong": [
+     {
+      "if": [
+       "would",
+       "be",
+       "inclined",
+       "postponing"
+      ],
+      "de": "Nach be inclined steht to + Grundform. Das -ing wird oft von „worth“ übertragen.",
+      "en": "Be inclined takes to + base form. The -ing is often carried over from “worth”."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0027",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "hg.seems",
+   "topic": "c1-hedging",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "In my view, the timeline is unrealistic.",
+   "key": "SEEMS",
+   "before": "It",
+   "after": "the timeline is unrealistic.",
+   "keys": [
+    {
+     "a": [
+      "seems"
+     ],
+     "b": [
+      "to me that",
+      "to me",
+      "to me as if"
+     ]
+    }
+   ],
+   "tiles": [
+    "to",
+    "me",
+    "that"
+   ],
+   "extra": [
+    "seem",
+    "seeming",
+    "looks"
+   ],
+   "traps": [
+    "seems me that"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: seems, ein vorsichtiger Eindruck. Teil 2: to me (that), die Person braucht im Englischen to.",
+     "en": "Part 1: seems, a cautious impression. Part 2: to me (that), the person needs to in English."
+    },
+    "wrong": [
+     {
+      "if": [
+       "seems",
+       "me",
+       "that"
+      ],
+      "de": "Deutsch: „es scheint mir“ ohne Präposition (Dativ). Englisch: seems to me, mit to.",
+      "en": "German “es scheint mir” takes the dative without a preposition. English: seems to me, with to."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0028",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "hg.downtoner",
+   "topic": "c1-hedging",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "The offer is slightly above what we can pay.",
+   "key": "BIT",
+   "before": "The offer is",
+   "after": "what we can pay.",
+   "keys": [
+    {
+     "a": [
+      "a bit",
+      "just a bit",
+      "a little bit"
+     ],
+     "b": [
+      "above",
+      "over",
+      "higher than",
+      "more than",
+      "beyond"
+     ]
+    }
+   ],
+   "tiles": [
+    "a",
+    "above"
+   ],
+   "extra": [
+    "slightly",
+    "somewhat",
+    "pretty"
+   ],
+   "traps": [
+    "a bit above of"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: a bit macht die Kritik weicher. Teil 2: above (oder over/higher than) nennt den Vergleich.",
+     "en": "Part 1: a bit softens the criticism. Part 2: above (or over/higher than) names the comparison."
+    },
+    "wrong": [
+     {
+      "if": [
+       "a",
+       "bit",
+       "above",
+       "of"
+      ],
+      "de": "Nach above folgt direkt der Vergleichswert, kein of. Deutsch „ein bisschen über von“ verleitet zu of.",
+      "en": "The compared value follows above directly, no of. German habits invite an extra of."
+     }
+    ]
+   }
+  }
+ ]
+}
