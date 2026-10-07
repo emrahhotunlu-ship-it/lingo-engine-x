@@ -12,6 +12,7 @@ import { toTrainCard } from '../../domain/srs/cards';
 import { buildExercise } from '../../domain/srs/exercise';
 import type { AnswerEvent, Exercise, Lang, TrainCard } from '../../domain/srs/types';
 import { logWarn } from '../../platform/diagnostics';
+import { inputProfile, type InputProfile } from '../../platform/input';
 import { useLearnInputs } from '../learn/inputs';
 import { learnRecorder, nextT, recordAnswer, recordProfileFields, recordRoundEnd } from '../progress/persist';
 import { saveCard } from '../vocab/persist';
@@ -47,6 +48,8 @@ type State = {
   saved: 'idle' | 'saving' | 'saved' | 'failed';
   /** Neubau (P1): Block der Tageseinheit am Sonntag – Antworten zählen als Pflicht (`ctx:'duty'`). */
   unit: boolean;
+  /** Eingabeprofil der Runde, einmal beim Start gelesen (Lernplattform 2.0 §4.1). */
+  profile: InputProfile;
 };
 
 const initial = (): State => ({
@@ -66,6 +69,7 @@ const initial = (): State => ({
   prev: null,
   saved: 'idle',
   unit: false,
+  profile: 'keys',
 });
 
 export const useCheck = create<State>(initial);
@@ -93,7 +97,8 @@ function kindOf(s: Pick<State, 'items'>, pos: number, ex: Exercise | null): Chec
   const it = s.items[pos];
   if (!it) return null;
   if (it.kind === 'v') return ex ? (ex.input === 'typed' ? 'typed' : 'choice') : null;
-  return it.task.type === 'mc' || it.task.type === 'meaning' ? 'choice' : 'typed';
+  // Auswahl und „Fehler finden“ (erst antippen) öffnen keine Tastatur.
+  return it.task.type === 'mc' || it.task.type === 'meaning' || it.task.type === 'find' ? 'choice' : 'typed';
 }
 
 /** Aufgaben synchron im Klick zusammenstellen (Tastatur am iPhone). Rückgabe: Eingabeart der ersten Aufgabe. */
@@ -104,6 +109,7 @@ export function startCheck(opts: { unit?: boolean } = {}): CheckKind | 'empty' {
   const lang = useSettings.getState().lang;
   const inputs = useLearnInputs.getState();
   runNo++;
+  const profile = inputProfile();
   const all = buildTrainCards(live.collections.vocab ?? new Map<string, Doc>(), now, invalidIdsOf(live.invalid, 'vocab'));
   const pool = all.filter((c) => !c.hidden);
   const items = selectCheck({
@@ -114,6 +120,7 @@ export function startCheck(opts: { unit?: boolean } = {}): CheckKind | 'empty' {
     dayEndMs: learningDayEnd(now),
     lang,
     seed: `${day}|check|${runNo}`,
+    profile,
   });
   if (items.length < CHECK_MIN_SAVE) {
     useCheck.setState({ ...initial(), active: false });
@@ -127,6 +134,7 @@ export function startCheck(opts: { unit?: boolean } = {}): CheckKind | 'empty' {
     active: true,
     status: 'running',
     unit: !!opts.unit,
+    profile,
     day,
     step: useCheck.getState().step + 1,
     exercise,

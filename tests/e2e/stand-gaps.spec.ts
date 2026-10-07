@@ -84,8 +84,8 @@ test('M10: Wochen-Check – 12 Aufgaben ohne Tipps, Ergebnis im alten Format, Ve
   expect(entries.every((e) => e.ctx === 'xtra')).toBe(true);
 
   // Zurück: „Diese Woche erledigt", kein zweiter Check; Heute unverändert.
-  await page.getByTestId('summary-back').or(page.getByTestId('summary-next')).first().waitFor();
-  await page.getByTestId('summary-back').click();
+  await page.getByTestId('session-end-next').waitFor();
+  await page.getByTestId('session-end-secondary').or(page.getByTestId('session-end-next')).first().click();
   await expect(page.getByTestId('check-week-done')).toBeVisible();
   await expect(page.getByTestId('check-start')).toHaveCount(0);
   await page.getByTestId('checks-toggle').click();

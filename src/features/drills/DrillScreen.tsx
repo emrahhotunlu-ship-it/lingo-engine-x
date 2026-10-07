@@ -3,13 +3,13 @@ import { useEffect, useLayoutEffect } from 'react';
 import { useNav } from '../../app/nav';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useHotkeys } from '../../engine/useHotkeys';
-import { Button } from '../../ui/Button';
 import { useT, type MessageKey } from '../../i18n';
 import { stopSpeech } from '../../platform/speech';
-import { Icon } from '../../ui/Icon';
+import { SessionEnd } from '../../ui/SessionEnd';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { flush } from '../progress/persist';
-import { RoundTop, SummaryActions } from '../learn/ui';
+import { RoundTop } from '../learn/ui';
+import { useEndActions } from './endActions';
 import { ClozeItemView, DictationItem, OrderItemView } from './DrillItems';
 import { ensureDrill } from './resume';
 import { skipDrill, commitDrill, itemsOf, leaveDrill, reportDrillDone, touchDrill, useDrill } from './session';
@@ -60,7 +60,6 @@ export function DrillScreen() {
     };
   }, []);
 
-  const right = s.results.filter((r) => r.ok).length;
   const running = s.status === 'running';
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="drill" data-kind={s.kind} data-ctx={s.ctx}>
@@ -70,47 +69,43 @@ export function DrillScreen() {
       ) : (
         <motion.div key={running ? `d-${s.step}` : 'summary'} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: DURATION.fast, ease: EASE_OUT }}>
           <StepBoundary resetKey={`d-${s.step}`} scope="drill" onSkip={skipDrill}>
-            {running && s.kind === 'dictate' && s.dictate[s.pos] && <DictationItem item={s.dictate[s.pos]!} ctx={s.ctx} day={s.day} onDone={commitDrill} />}
-            {running && s.kind === 'cloze' && s.cloze[s.pos] && <ClozeItemView item={s.cloze[s.pos]!} ctx={s.ctx} day={s.day} onDone={commitDrill} />}
-            {running && s.kind === 'order' && s.order[s.pos] && <OrderItemView item={s.order[s.pos]!} ctx={s.ctx} day={s.day} onDone={commitDrill} />}
+            {running && s.kind === 'dictate' && s.dictate[s.pos] && <DictationItem item={s.dictate[s.pos]!} ctx={s.ctx} day={s.day} profile={s.profile} onDone={commitDrill} />}
+            {running && s.kind === 'cloze' && s.cloze[s.pos] && <ClozeItemView item={s.cloze[s.pos]!} ctx={s.ctx} day={s.day} profile={s.profile} onDone={commitDrill} />}
+            {running && s.kind === 'order' && s.order[s.pos] && <OrderItemView item={s.order[s.pos]!} ctx={s.ctx} day={s.day} profile={s.profile} onDone={commitDrill} />}
           </StepBoundary>
-          {!running && (
-            <article className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="summary">
-              <header className="flex items-start gap-3">
-                <span className="inline-flex size-10 items-center justify-center rounded-full bg-accent-soft text-accent-text">
-                  <Icon name="check" size={22} />
-                </span>
-                <div className="flex flex-col gap-1">
-                  <h2 className="text-xl font-semibold tracking-tight">{s.results.length ? t('sumTitle') : t(EMPTY_KEY[s.kind] ?? 'sumEmpty')}</h2>
-                  {s.results.length > 0 && (
-                    <p className="lx-tnum text-base text-muted" data-testid="summary-stats">
-                      {t('sumStats', { n: s.results.length, pct: Math.round((right / s.results.length) * 100) })}
-                    </p>
-                  )}
-                </div>
-              </header>
-              {s.results.length > 0 && (
-                <ul className="flex flex-col gap-1.5 text-sm" lang="en">
-                  {s.results.map((r, i) => (
-                    <li key={`${r.label}-${i}`} className={r.ok ? '' : 'text-danger-text'}>
-                      {r.label}
-                    </li>
-                  ))}
-                </ul>
-              )}
-              {s.block ? (
-                <div>
-                  <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={reportDrillDone} data-testid="summary-next">
-                    {t('nbShNext')}
-                  </Button>
-                </div>
-              ) : (
-                <SummaryActions onBack={leaveDrill} backTo={{ name: 'apply' }} backLabel={t('lrBackToApply')} />
-              )}
-            </article>
-          )}
+          {!running && <DrillEnd />}
         </motion.div>
       )}
     </div>
+  );
+}
+
+/** Rundenende im Übungsgerüst: Richtig · Zeit, die Sätze der Runde, genau ein Hauptknopf (`SessionEnd`). */
+function DrillEnd() {
+  const { t } = useT();
+  const s = useDrill();
+  const end = useEndActions({ onBack: leaveDrill, backTo: { name: 'apply' }, backLabel: t('lrBackToApply'), onDutyDone: s.block ? reportDrillDone : null });
+  const right = s.results.filter((r) => r.ok).length;
+  const list =
+    s.results.length > 0 ? (
+      <ul className="flex flex-col gap-1.5 lx-t-support" lang="en" data-testid="summary-list">
+        {s.results.map((r, i) => (
+          <li key={`${r.label}-${i}`} className={r.ok ? '' : 'text-wrong-text'}>
+            {r.label}
+          </li>
+        ))}
+      </ul>
+    ) : undefined;
+  return (
+    <SessionEnd
+      mode={s.results.length ? 'tiles' : 'growth'}
+      title={s.results.length ? t('sumTitle') : t(EMPTY_KEY[s.kind] ?? 'sumEmpty')}
+      right={right}
+      total={s.results.length}
+      ms={s.activeMs}
+      {...(list ? { takeaways: list } : {})}
+      next={end.main}
+      {...(end.secondary ? { secondary: end.secondary } : {})}
+    />
   );
 }

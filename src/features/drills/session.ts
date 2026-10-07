@@ -5,6 +5,11 @@ import { invalidIdsOf, useLive } from '../../data/live';
 import { buildCloze, CLOZE_ROUND, type ClozeItem } from '../../domain/drills/cloze';
 import { buildOrder, ORDER_ROUND, type OrderItem } from '../../domain/drills/order';
 import { orderPool, poolNorm, type PoolEntry } from '../../domain/drills/orderPool';
+import { pickOrderForDay, type GrammarDayLike } from '../../domain/drills/orderTopic';
+import { topicP } from '../../domain/grammar/bkt';
+import { familyOf } from '../../domain/grammar/patterns';
+import type { InputProfile } from '../../platform/input';
+import { inputProfile } from '../../platform/input';
 import { dictationSentences, type DrillSentence } from '../../domain/drills/sources';
 import { buildSprintDeck, type SprintItem } from '../../domain/drills/sprint';
 import type { Ctx, DrillAnswer, RadarEvent, SprintEntry } from '../../domain/learn/types';
@@ -15,6 +20,7 @@ import type { Lang, TrainCard } from '../../domain/srs/types';
 import { learnRecorder } from '../progress/persist';
 import { useLearnInputs } from '../learn/inputs';
 import { roundCtx } from '../today/state';
+import { useTodayPlan } from '../today/store';
 import { unitDone } from '../../app/unit/done';
 import type { UnitBlockNo } from '../../app/unit/types';
 import { noteResult, noteSeen, prefetchOrder, seenSentences, takeStock, wrongTopics } from './orderGen';
@@ -48,6 +54,8 @@ type State = {
   lastInteract: number;
   /** Block der Tageseinheit (Satzbau als Block 3 seit 04.10.2026), sonst `null`. */
   block: UnitBlockNo | null;
+  /** Eingabeprofil der Runde, einmal beim Start gelesen (Lernplattform 2.0 §4.1). */
+  profile: InputProfile;
 };
 
 export const DICTATE_ROUND = 8;
@@ -71,6 +79,7 @@ export const useDrill = create<State>(() => ({
   activeMs: 0,
   lastInteract: 0,
   block: null,
+  profile: 'keys',
 }));
 
 const IDLE_CAP_MS = 60_000;
@@ -94,7 +103,7 @@ export function dictationItems(cards: readonly TrainCard[], seed: string, n = DI
  * Kürzlich gesehene Sätze (`seen`) werden gemieden, solange genug übrig bleiben; Themen mit zuletzt falschen Sätzen
  * (`wrong`) bekommen bis zur Hälfte der festen Plätze, aber mit anderen Sätzen als zuletzt.
  */
-export function orderItems(seed: string, n = ORDER_ROUND, opts: { extra?: readonly PoolEntry[]; seen?: ReadonlySet<string>; wrong?: readonly string[] } = {}): OrderItem[] {
+export function orderItems(seed: string, n = ORDER_ROUND, opts: { extra?: readonly PoolEntry[]; seen?: ReadonlySet<string>; wrong?: readonly string[]; /** Beherrschung je Thema (ab 0,4 liegt der Fallen-Baustein im Vorrat). */ p?: (topic: string) => number | null } = {}): OrderItem[] {
   const rng = mulberry32(hash32(seed));
   const extra = (opts.extra ?? []).slice(0, Math.ceil(n / 2));
   const seen = opts.seen ?? new Set<string>();
@@ -104,7 +113,28 @@ export function orderItems(seed: string, n = ORDER_ROUND, opts: { extra?: readon
   const wrong = opts.wrong ?? [];
   const onWrong = base.filter((e) => wrong.includes(e.topic)).slice(0, Math.ceil(slots / 2));
   const fixed = [...onWrong, ...base.filter((e) => !onWrong.includes(e))].slice(0, slots);
-  return shuffle([...extra, ...fixed], rng).map((e) => buildOrder(e, { seed }));
+  return shuffle([...extra, ...fixed], rng).map((e) => buildOrder(e, { seed, p: opts.p?.(e.topic) ?? null }));
+}
+
+/**
+ * Satzbau zum eingefrorenen Tagesthema (`u.gt`, Lernplattform 2.0 §5.8). Rückfall: gleiches Muster → gleiches Thema →
+ * Familienpartner → C1-Werkzeuge. Reicht das Tagesthema nicht für alle Plätze, dürfen neue Sätze von Claude (nur C1-Werkzeuge)
+ * die Plätze der entfernten Stufen füllen. `null`, wenn der Plan kein Thema nennt (dann gilt `orderItems`).
+ */
+export function orderItemsForDay(
+  gt: GrammarDayLike,
+  seed: string,
+  n: number,
+  opts: { takeExtra?: (max: number) => readonly PoolEntry[]; seen?: ReadonlySet<string>; p?: (topic: string) => number | null } = {},
+): OrderItem[] | null {
+  const picks = pickOrderForDay(orderPool(), gt, { n, seed, ...(opts.seen ? { seen: opts.seen } : {}), family: familyOf });
+  if (!picks.length) return null;
+  const near = picks.filter((x) => x.tier <= 3);
+  const far = picks.filter((x) => x.tier > 3);
+  // Der Vorrat wird nur angetastet, wenn wirklich entfernte Plätze frei sind.
+  const extra = far.length ? (opts.takeExtra?.(Math.min(far.length, Math.ceil(n / 2))) ?? []).slice(0, far.length) : [];
+  const entries = [...near.map((x) => x.entry), ...extra, ...far.slice(0, far.length - extra.length).map((x) => x.entry)];
+  return entries.slice(0, n).map((e) => buildOrder(e, { seed, p: opts.p?.(e.topic) ?? null }));
 }
 
 /** Wörter aus Emrahs Wortschatz als Kontext für neue Sätze (gelernte zuerst, fällige vor den übrigen). */
@@ -149,13 +179,20 @@ export function startDrill(kind: DrillKind, day?: string, block: UnitBlockNo | n
     activeMs: 0,
     lastInteract: performance.now(),
     block,
+    profile: inputProfile(),
   };
   if (kind === 'dictate') base.dictate = dictationItems(cards, seed);
   else if (kind === 'cloze') base.cloze = buildCloze({ cards, seed, n: ctx === 'duty' ? DUTY_ROUND.cloze : CLOZE_ROUND });
   else if (kind === 'order') {
     const n = ctx === 'duty' ? DUTY_ROUND.order : ORDER_ROUND;
     const wrong = wrongTopics();
-    base.order = orderItems(seed, n, { extra: takeStock(Math.ceil(n / 2), wrong), seen: new Set(seenSentences()), wrong });
+    const grammarDocs = live.collections.grammar ?? new Map<string, Record<string, unknown>>();
+    const p = (topic: string): number => topicP(topic, grammarDocs.get(topic), nowMs);
+    const seen = new Set(seenSentences());
+    // Pflicht-Satzbau: Sätze zum eingefrorenen Tagesthema des Plans (`u.gt`); ohne Plan oder in der freien Übung der bisherige Pool.
+    const gt = ctx === 'duty' ? (useTodayPlan.getState().plan?.u?.gt ?? null) : null;
+    const dayItems = gt ? orderItemsForDay(gt, seed, n, { takeExtra: (max) => takeStock(max, wrong), seen, p }) : null;
+    base.order = dayItems ?? orderItems(seed, n, { extra: takeStock(Math.ceil(n / 2), wrong), seen, wrong, p });
     noteSeen(base.order.map((it) => it.sentence));
     // Nächste Runde vorbereiten (im Hintergrund, eine Handlung von Emrah: Runde gestartet).
     prefetchOrder(contextWords(cards));
@@ -240,13 +277,13 @@ export function leaveDrill(): void {
 // ------------------------------------------------------------------ Fortsetzen (architektur.md §3.2, G3)
 // Diktat, Lückenjagd, Satzbau: Aufgaben, Position und Ergebnisse. Sprint nicht (Wertung auf Zeit).
 
-export type DrillSnap = Pick<State, 'status' | 'kind' | 'ctx' | 'day' | 'lang' | 'dictate' | 'cloze' | 'order' | 'pos' | 'results'>;
+export type DrillSnap = Pick<State, 'status' | 'kind' | 'ctx' | 'day' | 'lang' | 'dictate' | 'cloze' | 'order' | 'pos' | 'results'> & { profile?: InputProfile };
 
 export function drillSnapshot(): DrillSnap | null {
   const s = useDrill.getState();
   if (!s.active || s.kind === 'sprint' || !itemsOf(s).length) return null;
-  const { status, kind, ctx, day, lang, dictate, cloze, order, pos, results } = s;
-  return { status, kind, ctx, day, lang, dictate, cloze, order, pos, results };
+  const { status, kind, ctx, day, lang, dictate, cloze, order, pos, results, profile } = s;
+  return { status, kind, ctx, day, lang, dictate, cloze, order, pos, results, profile };
 }
 
 /** Synchron herstellen; die Karten (Beispiele, Nachschlagen) kommen frisch aus den Live-Daten. */
@@ -261,6 +298,7 @@ export function restoreDrill(snap: DrillSnap): boolean {
     ...snap,
     sprint: [],
     results: Array.isArray(snap.results) ? snap.results : [],
+    profile: snap.profile === 'touch' || snap.profile === 'keys' ? snap.profile : inputProfile(),
     active: true,
     cards: new Map(cards.map((c) => [c.id, c])),
     allCols: cards.flatMap((c) => c.col.filter((x) => x.p && x.gap).map((x) => ({ p: x.p, gap: x.gap }))),

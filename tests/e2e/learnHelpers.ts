@@ -229,8 +229,9 @@ const normTile = (s: string) =>
     .trim();
 
 /** Indizes der Bausteine in der Reihenfolge eines Satzes (jeder Baustein genau einmal); `null`, wenn es nicht aufgeht. */
-function sequenceOf(tiles: readonly string[], sentence: string): number[] | null {
+function sequenceOf(tiles: readonly string[], sentence: string, skip: number | null = null): number[] | null {
   const used = new Array<boolean>(tiles.length).fill(false);
+  if (skip !== null) used[skip] = true;
   const seq: number[] = [];
   const dfs = (rest: string): boolean => {
     if (!rest) return used.every(Boolean);
@@ -259,8 +260,15 @@ export function orderSolutions(tiles: readonly string[]): number[][] {
   const key = (xs: readonly string[]) => xs.map(normTile).sort().join('|');
   const want = key(tiles);
   for (const it of pool.items ?? []) {
-    if (key(it.chunks) !== want) continue;
-    return [it.en, ...(it.alt ?? [])].map((s) => sequenceOf(tiles, s)).filter((s): s is number[] => s !== null);
+    // Ab p ≥ 0,4 liegt ein Fallen-Baustein (Ablenker) im Vorrat (Lernplattform 2.0 §5.8): er gehört zu keiner gültigen Reihenfolge.
+    let skip: number | null = null;
+    if (key(it.chunks) !== want) {
+      if (tiles.length !== it.chunks.length + 1) continue;
+      const extra = tiles.findIndex((_, i) => key(tiles.filter((__, k) => k !== i)) === key(it.chunks));
+      if (extra < 0) continue;
+      skip = extra;
+    }
+    return [it.en, ...(it.alt ?? [])].map((s) => sequenceOf(tiles, s, skip)).filter((s): s is number[] => s !== null);
   }
   return [];
 }

@@ -288,7 +288,7 @@ for (const vp of VIEWPORTS) {
         await playCheck(page);
         await check('wochencheck-ergebnis');
         // Zurück zur Herkunft (Seite Wochen-Check), dann in die Einstellungen.
-        await page.getByTestId('summary-back').click();
+        await page.getByTestId('session-end-secondary').or(page.getByTestId('session-end-next')).first().click();
         await screen(page, 'checks');
         await openSettings(page);
         await expect(page.getByTestId('work-ctx')).toBeVisible();

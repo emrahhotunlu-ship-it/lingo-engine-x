@@ -107,23 +107,24 @@ async function openOrder(page: Page) {
 test('Satzbau: Bedeutung vorab, klare Aufgabe, Tipp (guter Anfang, dann die ersten zwei Bausteine), Warum nach dem Prüfen', async ({ page }) => {
   const { errors } = await openOrder(page);
   const item = page.getByTestId('drill-item');
-  await expect(page.getByTestId('task-line')).toContainText('englischen Satz aus den Bausteinen');
+  await expect(page.getByTestId('task')).toContainText('Bau den Satz');
   // Die deutsche Bedeutung steht von Anfang an da (keine Hilfe, kein Knopf), die Warum-Zeile erst danach.
   await expect(item.getByTestId('order-de')).toBeVisible();
   expect(((await item.getByTestId('order-de').textContent()) ?? '').trim().length).toBeGreaterThan(10);
   await expect(item.getByTestId('order-de-btn')).toHaveCount(0);
-  await expect(item.getByTestId('order-why')).toHaveCount(0);
+  await expect(item.getByTestId('explanation')).toHaveCount(0);
   const texts = await item.getByTestId('tile-pool').getByTestId('tile').evaluateAll((els) => els.map((e) => e.getAttribute('data-tile') ?? ''));
   const order = (orderSolution(texts) ?? []).map((k) => texts[k] ?? '');
-  expect(order).toHaveLength(texts.length);
-  await expect(item.getByTestId('tip-info')).toHaveCount(0);
+  // Ab p ≥ 0,4 liegt zusätzlich ein Fallen-Baustein im Vorrat (gehört zu keiner Reihenfolge).
+  expect([texts.length, texts.length - 1]).toContain(order.length);
+  await expect(item.getByTestId('hint-line')).toHaveCount(0);
   // Erst einen falschen Baustein legen (der letzte der Lösung): Tipp 2 stellt trotzdem die ersten zwei nach vorn.
   const last = order[order.length - 1] ?? '';
   await item.getByTestId('tile-pool').locator(`[data-testid="tile"][data-tile="${last.replace(/"/g, '\\"')}"]`).first().click();
   await item.getByTestId('hint').click();
-  await expect(item.getByTestId('tip-info')).toContainText('guter Anfang');
+  await expect(item.getByTestId('hint-line')).toContainText('guter Anfang');
   await item.getByTestId('hint').click();
-  await expect(item.getByTestId('tip-info')).toContainText('Die ersten beiden Bausteine');
+  await expect(item.getByTestId('hint-line')).toContainText('Die ersten beiden Bausteine');
   await expect(item.getByTestId('tile-line').getByTestId('tile')).toHaveCount(2 + 1);
   const line = await item.getByTestId('tile-line').getByTestId('tile').evaluateAll((els) => els.map((e) => e.getAttribute('data-tile')));
   expect(line.slice(0, 2)).toEqual(order.slice(0, 2));
@@ -131,15 +132,15 @@ test('Satzbau: Bedeutung vorab, klare Aufgabe, Tipp (guter Anfang, dann die erst
   // „Neu legen“ räumt die Zeile; der Tipp-Text behauptet nicht, dass etwas liegt.
   await item.getByTestId('tiles-reset').click();
   await expect(item.getByTestId('tile-line').getByTestId('tile')).toHaveCount(0);
-  await expect(item.getByTestId('tip-info')).toContainText('Die ersten beiden Bausteine:');
+  await expect(item.getByTestId('hint-line')).toContainText('Die ersten beiden Bausteine:');
   for (const [n, text] of order.entries()) {
     await item.getByTestId('tile-pool').locator(`[data-testid="tile"][data-tile="${text.replace(/"/g, '\\"')}"]`).first().click();
     await expect(item.getByTestId('tile-line').getByTestId('tile')).toHaveCount(n + 1);
   }
   await page.getByTestId('check').click();
-  await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'correct');
-  await expect(page.getByTestId('verdict')).toContainText('mit Tipp');
-  await expect(item.getByTestId('order-why')).toBeVisible();
+  await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
+  await expect(page.getByTestId('verdict-sub')).toContainText('mit Tipp');
+  await expect(item.getByTestId('explanation')).toBeVisible();
   expect(errors).toEqual([]);
 });
 
@@ -166,7 +167,7 @@ test('Satzbau am Rechner: Wörter tippen legt die Bausteine, Enter im leeren Fel
   await expect(item.getByTestId('tile-line').getByTestId('tile')).toHaveCount(words.length);
   await page.keyboard.press('Enter');
   await expect(page.getByTestId('verdict')).toBeVisible();
-  await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'correct');
+  await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
   expect(errors).toEqual([]);
 });
 

@@ -1,6 +1,6 @@
 import type { Verdict } from '../learn/types';
 import { hash32, mulberry32, shuffle } from '../random';
-import { poolNorm, segment, type PoolEntry } from './orderPool';
+import { poolNorm, segment, type OrderTrap, type PoolEntry } from './orderPool';
 
 // Satzbau (phase2-plan §5.6, neu 02.10.2026): einen englischen Satz aus 5–9 Bausteinen legen, dessen deutsche
 // Bedeutung vorab dasteht. Alle Bausteine gehören dazu (keine Ablenker), feste Wendungen sind ein Baustein. Die
@@ -29,7 +29,14 @@ export type OrderItem = {
   tiles: Tile[];
   /** Neuer, von Claude erzeugter Satz (geprüft), nicht aus dem festen Pool. */
   ai?: boolean;
+  /** Muster des Satzes (Grammatik-Muster-Kennung), wenn bekannt. */
+  pat?: string | null;
+  /** Fallen-Baustein dieses Satzes (nur gesetzt, wenn er als Ablenker im Vorrat liegt). */
+  trap?: OrderTrap | null;
 };
+
+/** Ab dieser Beherrschung des Themas liegt ein Fallen-Baustein im Vorrat (Lernplattform 2.0 §5.8). */
+export const TRAP_FROM_P = 0.4;
 
 export const ORDER_ROUND = 6;
 
@@ -39,14 +46,16 @@ const key = (t: string) => poolNorm(t);
 const endOf = (s: string): string => /([.!?]+)["”']?$/.exec(s.trim())?.[0] ?? '';
 
 /** Aufgabe aus einem Pool-Eintrag. Die Mischung hängt nur von `seed` und dem Satz ab. */
-export function buildOrder(entry: PoolEntry, opts: { seed: string; topicRef?: string }): OrderItem {
+export function buildOrder(entry: PoolEntry, opts: { seed: string; topicRef?: string; /** Beherrschung des Themas (`topicP`); ab 0,4 kommt der Fallen-Baustein dazu. */ p?: number | null }): OrderItem {
   const solution = [...entry.chunks];
   const accepted = entry.alt.map((a) => segment(a, entry.chunks)).filter((s): s is string[] => s !== null);
   const rng = mulberry32(hash32(`${opts.seed}|${entry.en}`));
   const all: Tile[] = solution.map((text, id) => ({ id, text, distractor: false }));
+  const trap = entry.trap && typeof opts.p === 'number' && opts.p >= TRAP_FROM_P ? entry.trap : null;
+  if (trap) all.push({ id: all.length, text: trap.instead, distractor: true });
   let tiles = shuffle(all, rng);
   // Nie gleich der Lösung oder einer gültigen Umstellung: Liegen die Bausteine so, wird rotiert.
-  for (let guard = 0; guard < all.length && isSolved(tiles.map((t) => t.text), solution, accepted); guard++) {
+  for (let guard = 0; guard < all.length && isSolved(tiles.filter((t) => !t.distractor).map((t) => t.text), solution, accepted); guard++) {
     tiles = [...tiles.slice(1), tiles[0] as Tile];
   }
   return {
@@ -61,6 +70,8 @@ export function buildOrder(entry: PoolEntry, opts: { seed: string; topicRef?: st
     bad: entry.bad,
     tiles,
     ...(entry.ai ? { ai: true } : {}),
+    ...(entry.pat ? { pat: entry.pat } : {}),
+    ...(trap ? { trap } : {}),
   };
 }
 

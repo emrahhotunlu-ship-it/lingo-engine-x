@@ -1,39 +1,45 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useClock } from '../../app/clock';
+import { useLive } from '../../data/live';
 import { maskOf } from '../../domain/answer/mask';
-import { useSharedTarget } from '../../engine/shared';
 import { checkCloze, type ClozeCheck, type ClozeItem } from '../../domain/drills/cloze';
 import { missedWords, scoreDictation, type DictationScore } from '../../domain/drills/dictation';
 import { checkOrder, type OrderCheck, type OrderItem } from '../../domain/drills/order';
+import { orderExplanation } from '../../domain/drills/orderExplain';
+import type { ExplainDepth, ExplanationModel, ResultVerdict } from '../../domain/explain/types';
+import { topicById } from '../../domain/content';
 import { radarEvent } from '../../domain/grammar/radar';
-import { examplesFor } from '../../domain/grammar/rules';
+import { topicState } from '../../domain/grammar/path';
 import { learnGrade } from '../../domain/learn/grade';
 import type { Ctx, DrillAnswer, Help, RadarEvent, Verdict } from '../../domain/learn/types';
 import { cardExamples } from '../../domain/srs/examples';
+import { hash32 } from '../../domain/random';
 import type { Grade } from '../../domain/srs/types';
 import { EnglishText } from '../../engine/EnglishText';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { KineticGap, hintOffset } from '../../engine/KineticGap';
-import { SentenceDiff } from '../../engine/SentenceDiff';
+import { useSharedTarget } from '../../engine/shared';
 import { Tiles } from '../../engine/Tiles';
-import { hasFinePointer, TilesKeyboard } from '../../engine/TilesKeyboard';
+import { TilesKeyboard } from '../../engine/TilesKeyboard';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { lookupOpenMs, useLookup } from '../../engine/wordTap';
-import { useT, type MessageKey } from '../../i18n';
+import { useT } from '../../i18n';
+import type { InputProfile } from '../../platform/input';
 import { speak, useSpeech } from '../../platform/speech';
-import { ActionBar, PrimaryAction } from '../../ui/ActionBar';
 import { Button } from '../../ui/Button';
+import { ExerciseShell, SentenceInput, explainDepth, type ShellFeedback, type ShellMenuId, type ShellSecondary } from '../../ui/exercise';
+import { AlsoRight, CopyOnce } from '../learn/ui';
 import { nextT } from '../progress/persist';
-import { AlsoRight, CopyOnce, ExampleList, LearnStatus, NextButton, OverrideButton, ResultArea, TaskLine, VerdictLine } from '../learn/ui';
 import { orderTopic, useDrill } from './session';
 
-// Die drei Übungen mit Einzelaufgaben (phase2-plan §5.4–5.6) im gemeinsamen Rahmen (A7):
-// Status oben, Aufgabe in einer Zeile, Eingabe, „Prüfen", danach Vergleich, Hinweis und
-// Beispiele an fester Stelle – auch bei richtiger Antwort. Die Note bestimmt die App.
+// Die drei Übungen mit Einzelaufgaben (phase2-plan §5.4–5.6) im gemeinsamen Übungsgerüst (`ExerciseShell`, Lernplattform 2.0
+// §4.2): Status, Aufgabenzeile, Satz, Eingabe, Urteil und Erklär-Karte an fester Stelle – auch bei richtiger Antwort. Die Note
+// bestimmt die App. Das Eingabeprofil der Runde (`profile`) ist beim Start eingefroren; jede Antwort trägt es als `dev`.
 
 type Next = 'typed' | 'choice' | null;
-type ItemProps<T> = { item: T; ctx: Ctx; day: string; onDone: (a: DrillAnswer, label: string) => Next };
+type ItemProps<T> = { item: T; ctx: Ctx; day: string; profile: InputProfile; onDone: (a: DrillAnswer, label: string) => Next };
 
-const VERDICT_KEY: Record<Verdict, MessageKey> = { correct: 'trVerdictCorrect', near: 'trVerdictNear', wrong: 'trVerdictWrong' };
+const devOf = (p: InputProfile): 't' | 'k' => (p === 'touch' ? 't' : 'k');
 
 function useTiming() {
   const shownAt = useRef(0);
@@ -52,25 +58,21 @@ function useTiming() {
   };
 }
 
-function Frame({ status, task, purpose, kind, children, actions, result }: { status: ReactNode; task: string; purpose: string; kind: string; children: ReactNode; actions?: ReactNode; result?: ReactNode }) {
-  // Kap. 4.4: Die Heldenkarte von Heute gleitet in die erste Aufgabe (nur direkt nach dem Start).
-  const { ref: sharedRef, shared } = useSharedTarget<HTMLElement>('lx-hero');
+/** Hülle einer Aufgabe: Heldenkarte von Heute gleitet in die erste Aufgabe (Kap. 4.4); die Karte selbst zeichnet das Gerüst. */
+function Item({ kind, topic = null, pat = null, children }: { kind: string; topic?: string | null; pat?: string | null; children: ReactNode }) {
+  const { ref: sharedRef, shared } = useSharedTarget<HTMLDivElement>('lx-hero');
   return (
-    <article ref={sharedRef} data-shared={shared ? '' : undefined} className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="drill-item" data-kind={kind}>
-      <header className="flex flex-col gap-2">
-        {status}
-        <TaskLine task={task} purpose={purpose} />
-      </header>
-      <div className="flex flex-col gap-4">{children}</div>
-      {actions}
-      {result}
-    </article>
+    <div ref={sharedRef} data-shared={shared ? '' : undefined} data-testid="drill-item" data-kind={kind} data-topic={topic ?? undefined} data-pat={pat ?? undefined} className="outline-none">
+      {children}
+    </div>
   );
 }
 
+const rvOf = (v: Verdict, override = false): ResultVerdict => (override ? 'ok' : v === 'correct' ? 'ok' : v === 'near' ? 'near' : 'wrong');
+
 // ------------------------------------------------------------------ Diktat
 
-export function DictationItem({ item, ctx, day, onDone }: ItemProps<{ s: string; src: string; ref: string | null }>) {
+export function DictationItem({ item, ctx, day, profile, onDone }: ItemProps<{ s: string; src: string; ref: string | null }>) {
   const { t, lang } = useT();
   const tts = useSpeech((s) => s.status === 'ready');
   const timing = useTiming();
@@ -79,7 +81,7 @@ export function DictationItem({ item, ctx, day, onDone }: ItemProps<{ s: string;
   const [slow, setSlow] = useState(false);
   const [fb, setFb] = useState<{ score: DictationScore; grade: Grade; ms: number; given: string; override: boolean; replays: number } | null>(null);
   const audioEnd = useRef<number | null>(null);
-  const field = useRef<HTMLTextAreaElement>(null);
+  const root = useRef<HTMLDivElement>(null);
 
   const play = (rate?: number) => {
     plays.current += 1;
@@ -91,7 +93,7 @@ export function DictationItem({ item, ctx, day, onDone }: ItemProps<{ s: string;
   useEffect(() => {
     // Der Satz spielt einmal automatisch (§5.4).
     play();
-    field.current?.focus({ preventScroll: true });
+    root.current?.querySelector<HTMLTextAreaElement>('textarea')?.focus({ preventScroll: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps -- nur beim ersten Zeigen
   }, []);
 
@@ -110,105 +112,81 @@ export function DictationItem({ item, ctx, day, onDone }: ItemProps<{ s: string;
     const verdict: Verdict = fb.override ? 'correct' : fb.score.verdict;
     const tNow = nextT();
     const radar: RadarEvent | undefined = fb.score.typo > 0 && item.src === 'card' ? radarEvent('spelling', 'v', tNow, { q: item.s, g: fb.given, a: item.s }) : undefined;
-    const a: DrillAnswer = { kind: 'x', t: tNow, day, lang, ctx, type: 'dictate', q: item.s, given: fb.given, ans: item.s, verdict, grade: fb.override ? 3 : fb.grade, ms: fb.ms, ...(radar ? { radar } : {}), ...(fb.override ? { override: true } : {}) };
+    const a: DrillAnswer = { kind: 'x', t: tNow, day, lang, ctx, type: 'dictate', q: item.s, given: fb.given, ans: item.s, verdict, grade: fb.override ? 3 : fb.grade, ms: fb.ms, dev: devOf(profile), ...(radar ? { radar } : {}), ...(fb.override ? { override: true } : {}) };
     onDone(a, item.s);
   };
 
   useHotkeys({ enter: () => (useLookup.getState().req ? undefined : fb ? next() : undefined) }, () => false);
 
   const missed = fb ? missedWords(fb.score.ops) : [];
+  const verdict = fb ? rvOf(fb.score.verdict, fb.override) : 'ok';
+  const explanation: ExplanationModel | null = fb && missed.length > 0 ? { lines: [{ k: 'note', text: t('drMissed', { words: missed.join(', ') }) }], examples: [], mark: [], ai: false, source: 'fallback' } : null;
+  const depth: ExplainDepth = explainDepth({ verdict, learning: false });
+  const menu: Partial<Record<ShellMenuId, () => void>> = {};
+  if (fb && fb.score.verdict === 'wrong' && !fb.override) menu.override = () => setFb({ ...fb, override: true });
+  const feedback: ShellFeedback | null = fb
+    ? {
+        verdict,
+        sub: fb.override ? t('lrOverridden') : null,
+        comparison: fb.score.verdict === 'correct' || fb.override ? null : { given: fb.given, ops: fb.score.ops },
+        explanation,
+        depth,
+        menu,
+        auto: fb.score.verdict === 'correct' && !slow && fb.replays <= 2 && !fb.override,
+      }
+    : null;
+
+  const prompt = fb ? (
+    <div className="flex flex-col gap-2">
+      <EnglishText as="p" text={item.s} area="trainer" source={item.ref} testId="dictate-sentence" />
+      {tts && (
+        <div>
+          <Button variant="ghost" icon="speaker" onClick={() => void speak(item.s)} data-testid="drill-listen-again">
+            {t('drListenAgain')}
+          </Button>
+        </div>
+      )}
+    </div>
+  ) : (
+    tts && (
+      <div className="flex flex-wrap items-center gap-2">
+        <Button variant="secondary" icon="speaker" onClick={() => play()} data-testid="drill-replay">
+          {t('drReplay')}
+        </Button>
+        <Button
+          variant="ghost"
+          onClick={() => {
+            setSlow(true);
+            play(0.8);
+          }}
+          data-testid="drill-slow"
+        >
+          {t('drSlow')}
+        </Button>
+      </div>
+    )
+  );
+
   return (
-    <Frame
-      kind="dictate"
-      status={<LearnStatus p={null} kind={t('drDictate')} kindId="dictate" />}
-      task={t('drTaskDictate')}
-      purpose={t('purposeDictate')}
-      actions={
-        !fb && (
-          <div className="flex flex-wrap items-center gap-2">
-            <ActionBar stateKey="check">
-              <PrimaryAction onClick={check} disabled={!text.trim()} testId="check">
-                {t('trCheck')}
-              </PrimaryAction>
-            </ActionBar>
-            {tts && (
-              <Button variant="secondary" icon="speaker" onClick={() => play()} data-testid="drill-replay">
-                {t('drReplay')}
-              </Button>
-            )}
-            {tts && (
-              <Button
-                variant="ghost"
-                onClick={() => {
-                  setSlow(true);
-                  play(0.8);
-                }}
-                data-testid="drill-slow"
-              >
-                {t('drSlow')}
-              </Button>
-            )}
-          </div>
-        )
-      }
-      result={
-        fb && (
-          <ResultArea label={t('trResultLabel')}>
-            <VerdictLine verdict={fb.override ? 'correct' : fb.score.verdict} text={fb.override ? t('lrOverridden') : t(VERDICT_KEY[fb.score.verdict])} />
-            <SentenceDiff ops={fb.score.ops} given={fb.given} correct={item.s} onlyCorrect={fb.score.verdict === 'correct'} labels={{ yours: t('grYourAnswer'), correct: t('grCorrect'), empty: t('trEmpty'), missing: t('lrMissing') }} source={item.ref} />
-            {missed.length > 0 && (
-              <p className="text-sm text-muted" data-testid="missed" lang={lang}>
-                {t('drMissed', { words: missed.join(', ') })}
-              </p>
-            )}
-            {tts && (
-              <div>
-                <Button variant="ghost" icon="speaker" onClick={() => void speak(item.s)} data-testid="drill-listen-again">
-                  {t('drListenAgain')}
-                </Button>
-              </div>
-            )}
-            {fb.score.verdict === 'wrong' && !fb.override && <OverrideButton onOverride={() => setFb({ ...fb, override: true })} />}
-            <NextButton onNext={next} auto={fb.score.verdict === 'correct' && !slow && fb.replays <= 2} />
-          </ResultArea>
-        )
-      }
-    >
-      <textarea
-        ref={field}
-        className="lx-field"
-        data-sentence=""
-        data-testid="dictate-input"
-        data-state={fb ? (fb.override ? 'correct' : fb.score.verdict) : undefined}
-        lang="en"
-        rows={2}
-        value={text}
-        readOnly={!!fb}
-        autoCapitalize="sentences"
-        autoComplete="off"
-        autoCorrect="off"
-        spellCheck={false}
-        aria-label={t('drDictateLabel')}
-        placeholder={t('drDictatePlaceholder')}
-        onChange={(e) => {
-          timing.markKey();
-          setText(e.target.value);
-        }}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            if (fb) next();
-            else check();
-          }
-        }}
-      />
-    </Frame>
+    <Item kind="dictate">
+      <div ref={root}>
+        <ExerciseShell
+          meta={{ ex: 'drill_dictate', id: `dictate|${hash32(item.s)}`, kind: 'dictate' }}
+          status={{ area: 'words', state: null, kindLabel: t('drDictate') }}
+          task={{ text: t('drTaskDictate'), purpose: t('purposeDictate') }}
+          prompt={prompt || null}
+          answer={<SentenceInput mode="free" value={text} onChange={(v) => { timing.markKey(); setText(v); }} onSubmit={() => (fb ? next() : check())} disabled={!!fb} testId="dictate-input" />}
+          primary={fb ? { label: t('exNext'), onClick: next, testId: 'next' } : { label: t('exCheck'), onClick: check, testId: 'check', disabled: !text.trim() }}
+          feedback={feedback}
+        />
+      </div>
+    </Item>
   );
 }
 
 // ------------------------------------------------------------------ Lückenjagd
 
-export function ClozeItemView({ item, ctx, day, onDone }: ItemProps<ClozeItem>) {
+export function ClozeItemView({ item, ctx, day, profile, onDone }: ItemProps<ClozeItem>) {
   const { t, lang } = useT();
   const api = useHiddenInput();
   const timing = useTiming();
@@ -216,6 +194,7 @@ export function ClozeItemView({ item, ctx, day, onDone }: ItemProps<ClozeItem>) 
   const allCols = useDrill((s) => s.allCols);
   const [tip, setTip] = useState<0 | 1 | 2>(0);
   const [fb, setFb] = useState<{ res: ClozeCheck; grade: Grade; ms: number; given: string; override: boolean; help: Help } | null>(null);
+  const [copyOpen, setCopyOpen] = useState(false);
   const typed = useRef('');
   const mask = tip > 0 ? maskOf(item.gap, { firstLetter: tip >= 2 }) : null;
   const help: Help = { level: tip };
@@ -232,7 +211,7 @@ export function ClozeItemView({ item, ctx, day, onDone }: ItemProps<ClozeItem>) 
     const ms = timing.elapsed();
     const grade = learnGrade('cloze', res.verdict, { submitMs: ms, firstKeyMs: timing.firstKey() }, help);
     setFb({ res, grade, ms, given, override: false, help });
-    if (window.matchMedia('(pointer: coarse)').matches) api.blur();
+    if (profile === 'touch') api.blur();
   };
 
   const next = () => {
@@ -240,7 +219,7 @@ export function ClozeItemView({ item, ctx, day, onDone }: ItemProps<ClozeItem>) 
     const tNow = nextT();
     const verdict: Verdict = fb.override ? 'correct' : fb.res.verdict;
     const radar = fb.res.kind === 'confusable' && !fb.override ? radarEvent('wordchoice', 'v', tNow, { q: item.sentence.sentence, g: fb.given, a: item.gap }) : undefined;
-    const a: DrillAnswer = { kind: 'x', t: tNow, day, lang, ctx, type: 'cloze', q: item.sentence.sentence, given: fb.given, ans: item.gap, verdict, grade: fb.override ? 3 : fb.grade, ms: fb.ms, ...(radar ? { radar } : {}), ...(fb.override ? { override: true } : {}) };
+    const a: DrillAnswer = { kind: 'x', t: tNow, day, lang, ctx, type: 'cloze', q: item.sentence.sentence, given: fb.given, ans: item.gap, verdict, grade: fb.override ? 3 : fb.grade, ms: fb.ms, dev: devOf(profile), ...(radar ? { radar } : {}), ...(fb.override ? { override: true } : {}) };
     const kind = onDone(a, item.phrase);
     if (kind === 'typed') api.focusNow();
     else api.blur();
@@ -249,118 +228,106 @@ export function ClozeItemView({ item, ctx, day, onDone }: ItemProps<ClozeItem>) 
   useHotkeys({ enter: () => (useLookup.getState().req ? undefined : fb ? next() : check()) }, api.isInput);
 
   const s = item.sentence;
-  const verdictKey: MessageKey = fb?.override ? 'lrOverridden' : fb?.res.kind === 'uk' ? 'trVerdictUk' : fb?.res.kind === 'form' ? 'trVerdictForm' : fb?.res.kind === 'typo' ? 'trVerdictTypo' : VERDICT_KEY[fb?.res.verdict ?? 'wrong'];
-  const examples = card ? cardExamples(card, s.sentence).map((x) => x.en).slice(0, 2) : [];
+  const verdict = fb ? rvOf(fb.res.verdict, fb.override) : 'ok';
+  const examples = card ? cardExamples(card, s.sentence).map((x) => ({ en: x.en })).slice(0, 2) : [];
+  const sub: string | null = !fb
+    ? null
+    : fb.override
+      ? t('lrOverridden')
+      : fb.res.us
+        ? t('trUsHint', { us: fb.res.us })
+        : fb.res.kind === 'uk'
+          ? t('trVerdictUk')
+          : fb.res.kind === 'form'
+            ? t('trVerdictForm')
+            : fb.res.kind === 'typo'
+              ? t('trVerdictTypo')
+              : null;
+  const explanation: ExplanationModel | null = fb
+    ? {
+        lines: fb.res.belongsTo.length > 0 ? [{ k: 'why', text: t('clBelongs', { given: fb.given.trim(), list: fb.res.belongsTo.join(', ') }) }] : [],
+        examples,
+        mark: [],
+        ai: false,
+        source: 'card',
+      }
+    : null;
+  const menu: Partial<Record<ShellMenuId, () => void>> = {};
+  if (fb && fb.res.verdict === 'wrong' && !fb.override) {
+    menu.override = () => setFb({ ...fb, override: true });
+    menu.copyOnce = () => setCopyOpen(true);
+  }
+  const feedback: ShellFeedback | null = fb
+    ? { verdict, sub, explanation, depth: explainDepth({ verdict, stage: card?.stage ?? null, learning: false }), menu, auto: fb.res.verdict === 'correct' && fb.help.level === 0 && !fb.override }
+    : null;
+  const secondary: ShellSecondary[] = !fb && tip < 2 ? [{ id: 'hint', label: tip === 0 ? t('trTip') : t('trTipLetter'), onClick: () => { setTip((v) => (v === 0 ? 1 : 2)); api.focusNow(); }, testId: 'hint' }] : [];
+  const gapState = !fb ? 'input' : fb.override ? 'correct' : fb.res.verdict;
+
   return (
-    <Frame
-      kind="cloze"
-      status={<LearnStatus p={null} kind={t('drCloze')} kindId="cloze" />}
-      task={t('drTaskCloze')}
-      purpose={t('purposeColloc')}
-      actions={
-        !fb && (
-          <div className="flex flex-wrap items-center gap-2">
-            <ActionBar stateKey="check">
-              <PrimaryAction onClick={check} testId="check">
-                {t('trCheck')}
-              </PrimaryAction>
-            </ActionBar>
-            {tip < 2 && (
-              <Button
-                variant="ghost"
-                icon="lightbulb"
-                onClick={() => {
-                  setTip((v) => (v === 0 ? 1 : 2));
-                  api.focusNow();
-                }}
-                data-testid="hint"
-                data-level={tip}
-              >
-                {tip === 0 ? t('trTip') : t('trTipLetter')}
-              </Button>
+    <Item kind="cloze">
+      <ExerciseShell
+        meta={{ ex: 'drill_cloze', id: `cloze|${item.cardId}|${hash32(s.sentence)}`, kind: 'cloze' }}
+        status={{ area: 'words', state: null, kindLabel: t('drCloze') }}
+        task={{ text: t('drTaskCloze'), purpose: t('purposeColloc') }}
+        prompt={
+          <div className="flex flex-col gap-2">
+            <EnglishText
+              as="p"
+              testId="sentence"
+              text={s.sentence}
+              area="trainer"
+              source={`vocab/${item.cardId}`}
+              slot={{
+                start: s.start,
+                end: s.end,
+                node: (
+                  <KineticGap
+                    label={t('trGapLabel', { sentence: `${s.sentence.slice(0, s.start)}…${s.sentence.slice(s.end)}` })}
+                    maxLength={Math.max(30, item.gap.length + 10)}
+                    state={gapState}
+                    mask={mask}
+                    shown={fb ? fb.given : null}
+                    reveal={fb && fb.res.verdict === 'wrong' && !fb.override ? { solution: item.gap, given: fb.given.trim() ? fb.given : null } : null}
+                    silent
+                    onChange={(v, info) => {
+                      typed.current = v;
+                      if (info.firstKey) timing.markKey();
+                    }}
+                    onEnter={() => (fb ? next() : check())}
+                  />
+                ),
+              }}
+            />
+            {item.de && lang === 'de' && (
+              <p className="lx-t-support text-muted" data-testid={fb ? 'meaning' : 'cue'} lang="de">
+                {fb ? `${item.phrase} – ${item.de}` : t('clCue', { de: item.de })}
+              </p>
             )}
           </div>
-        )
-      }
-      result={
-        fb && (
-          <ResultArea label={t('trResultLabel')}>
-            <VerdictLine verdict={fb.override ? 'correct' : fb.res.verdict} text={t(verdictKey)} />
-            {fb.res.us && (
-              <p className="text-sm text-muted" data-testid="us-hint">
-                {t('trUsHint', { us: fb.res.us })}
-              </p>
-            )}
-            {fb.res.verdict !== 'correct' && (
-              <SentenceDiff ops={[]} given={fb.given} correct={item.gap} labels={{ yours: t('grYourAnswer'), correct: t('grCorrect'), empty: t('trEmpty'), missing: t('lrMissing') }} />
-            )}
-            <p className="text-sm" data-testid="meaning">
-              <span className="font-semibold" lang="en">
-                {item.phrase}
-              </span>
-              {lang === 'de' && item.de && (
-                <>
-                  <span className="text-muted"> – </span>
-                  <span lang="de">{item.de}</span>
-                </>
-              )}
-            </p>
-            {fb.res.belongsTo.length > 0 && (
-              <p className="text-sm" data-testid="belongs-to">
-                {t('clBelongs', { given: fb.given.trim(), list: fb.res.belongsTo.join(', ') })}
-              </p>
-            )}
-            <ExampleList items={examples} source={`vocab/${item.cardId}`} />
-            {fb.res.verdict === 'wrong' && !fb.override && <OverrideButton onOverride={() => setFb({ ...fb, override: true })} />}
-            {fb.res.verdict === 'wrong' && <CopyOnce solution={item.gap} />}
-            <NextButton onNext={next} auto={fb.res.verdict === 'correct' && fb.help.level === 0 && !fb.override} />
-          </ResultArea>
-        )
-      }
-    >
-      <EnglishText
-        as="p"
-        className="lx-sentence"
-        testId="sentence"
-        text={s.sentence}
-        area="trainer"
-        source={`vocab/${item.cardId}`}
-        slot={{
-          start: s.start,
-          end: s.end,
-          node: (
-            <KineticGap
-              label={t('trGapLabel', { sentence: `${s.sentence.slice(0, s.start)}…${s.sentence.slice(s.end)}` })}
-              maxLength={Math.max(30, item.gap.length + 10)}
-              state={!fb ? 'input' : fb.override ? 'correct' : fb.res.verdict}
-              mask={mask}
-              shown={fb ? fb.given : null}
-              onChange={(v, info) => {
-                typed.current = v;
-                if (info.firstKey) timing.markKey();
-              }}
-              onEnter={() => (fb ? next() : check())}
-            />
-          ),
-        }}
+        }
+        answer={fb && copyOpen && fb.res.verdict === 'wrong' ? <CopyOnce solution={item.gap} /> : null}
+        secondary={secondary}
+        primary={fb ? { label: t('exNext'), onClick: next, testId: 'next' } : { label: t('exCheck'), onClick: check, testId: 'check' }}
+        feedback={feedback}
       />
-      {!fb && item.de && lang === 'de' && (
-        <p className="text-sm text-muted" data-testid="cue" lang="de">
-          {t('clCue', { de: item.de })}
-        </p>
-      )}
-    </Frame>
+    </Item>
   );
 }
 
 // ------------------------------------------------------------------ Satzbau
 
-export function OrderItemView({ item, ctx, day, onDone }: ItemProps<OrderItem>) {
+export function OrderItemView({ item, ctx, day, profile, onDone }: ItemProps<OrderItem>) {
   const { t, lang } = useT();
   const timing = useTiming();
+  const now = useClock((s) => s.now);
   const [placed, setPlaced] = useState<number[]>([]);
   const [fb, setFb] = useState<{ res: OrderCheck; grade: Grade; ms: number } | null>(null);
   const topic = orderTopic(item);
+  const doc = useLive((s) => (topic ? s.collections.grammar?.get(topic) : undefined));
+  const tp = topic ? topicById(topic) : null;
+  const topicLabel = tp ? (lang === 'en' ? (tp.name_en ?? tp.name) : tp.name) : null;
+  // Die Punkte kommen aus der Beherrschung des Themas des Satzes (nie `null` bei bekanntem Thema, nie ein falsches „Neu“).
+  const state = tp && topic ? topicState(topic, doc, now) : null;
   const byId = useMemo(() => new Map(item.tiles.map((x) => [x.id, x])), [item]);
   const slots = item.tiles.filter((x) => !x.distractor).length;
   // Hilfen (Emrah 02.10.2026, nach Beratung Englischlehrer + Lernwissenschaft): Tipp 1 nennt einen guten Anfang
@@ -369,7 +336,7 @@ export function OrderItemView({ item, ctx, day, onDone }: ItemProps<OrderItem>) 
   const [tip, setTip] = useState<0 | 1 | 2>(0);
   const first = item.solution[0] ?? '';
   const second = item.solution[1] ?? '';
-  const leadIds = [first, second].map((x) => item.tiles.find((tile) => tile.text === x)?.id).filter((id): id is number => id !== undefined);
+  const leadIds = [first, second].map((x) => item.tiles.find((tile) => tile.text === x && !tile.distractor)?.id).filter((id): id is number => id !== undefined);
   const showTip = () => {
     if (tip === 0) setTip(1);
     else {
@@ -379,7 +346,7 @@ export function OrderItemView({ item, ctx, day, onDone }: ItemProps<OrderItem>) 
   };
 
   const check = () => {
-    if (fb || !placed.length) return;
+    if (fb || !placed.length || placed.length < slots) return;
     const res = checkOrder(item, placed);
     const ms = timing.elapsed();
     const grade = learnGrade('order', res.verdict, { submitMs: ms, units: item.tiles.length }, { level: tip });
@@ -389,7 +356,7 @@ export function OrderItemView({ item, ctx, day, onDone }: ItemProps<OrderItem>) 
   const next = () => {
     if (!fb) return;
     const given = placed.map((id) => byId.get(id)?.text ?? '').join(' ');
-    const a: DrillAnswer = { kind: 'x', t: nextT(), day, lang, ctx, type: 'order', q: item.sentence, given, ans: item.sentence, verdict: fb.res.verdict, grade: fb.grade, ms: fb.ms };
+    const a: DrillAnswer = { kind: 'x', t: nextT(), day, lang, ctx, type: 'order', q: item.sentence, given, ans: item.sentence, verdict: fb.res.verdict, grade: fb.grade, ms: fb.ms, dev: devOf(profile) };
     onDone(a, item.sentence);
   };
 
@@ -401,107 +368,83 @@ export function OrderItemView({ item, ctx, day, onDone }: ItemProps<OrderItem>) 
       const tile = byId.get(id);
       marks[id] = tile?.distractor || (fb.res.misplaced.includes(i) && fb.res.verdict === 'wrong') ? 'off' : fb.res.misplaced.includes(i) ? 'near' : 'ok';
     });
+    // Der Fallen-Baustein ist auch ungelegt als falsch gekennzeichnet (✕), damit klar ist, warum er nicht dazugehört.
+    for (const tile of item.tiles) if (tile.distractor) marks[tile.id] = 'off';
   }
-  const verdictKey: MessageKey = !fb ? 'trVerdictWrong' : fb.res.verdict === 'correct' ? (tip > 0 ? 'drVerdictHelp' : 'trVerdictCorrect') : fb.res.verdict === 'near' ? 'drVerdictNear' : 'trVerdictWrong';
+  const verdict: ResultVerdict = fb ? rvOf(fb.res.verdict) : 'ok';
+  const usedTrap = !!fb?.res.usedDistractor;
+  const model = fb ? orderExplanation({ item, lang, usedTrap, topicName: topicLabel, verdict }) : null;
+  // Die Erklärung gehört zum Satz und steht immer da (Warum je Satz): mindestens „kurz“, nie die Einzeile; Satzbau geht nie automatisch weiter.
+  const base = explainDepth({ verdict, learning: false });
+  const depth: ExplainDepth = verdict !== 'ok' ? 'full' : base === 'min' ? 'short' : base;
+  const sub = !fb ? null : fb.res.verdict === 'correct' ? (tip > 0 ? t('drVerdictHelp') : null) : fb.res.verdict === 'near' ? t('drVerdictNear') : null;
+  const feedback: ShellFeedback | null = fb && model ? { verdict, sub, explanation: model, depth, auto: false } : null;
+  const secondary: ShellSecondary[] = fb
+    ? []
+    : [
+        ...(tip < 2 ? [{ id: 'hint' as const, label: tip === 0 ? t('exHint') : t('drTipFirst'), onClick: showTip, testId: 'hint' }] : []),
+        ...(placed.length > 0 ? [{ id: 'reset' as const, label: t('drReset'), onClick: () => setPlaced([]), testId: 'tiles-reset' }] : []),
+      ];
+  const onTiles = (p: number[]) => {
+    timing.markKey();
+    setPlaced(p);
+  };
+  const hint = !fb && tip >= 1 ? { text: tip >= 2 ? t('drTipPlaced', { first, second }) : t('drTipStart', { first }), tone: 'hint' as const } : null;
+
   return (
-    <Frame
-      kind="order"
-      status={<LearnStatus p={null} kind={t('drOrder')} kindId="order" />}
-      task={t('drTaskOrder')}
-      purpose={t('purposeOrder')}
-      actions={
-        !fb && (
-          <div className="flex flex-wrap items-center gap-2">
-            <ActionBar stateKey="check">
-              <PrimaryAction onClick={check} disabled={placed.length < slots} testId="check">
-                {t('trCheck')}
-              </PrimaryAction>
-            </ActionBar>
-            {placed.length > 0 && (
-              <Button variant="ghost" icon="undo" onClick={() => setPlaced([])} data-testid="tiles-reset">
-                {t('drReset')}
-              </Button>
-            )}
-            {tip < 2 && (
-              <Button variant="ghost" icon="lightbulb" onClick={showTip} data-testid="hint" data-level={tip}>
-                {tip === 0 ? t('trTip') : t('drTipFirst')}
-              </Button>
+    <Item kind="order" topic={topic} pat={item.pat ?? null}>
+      <ExerciseShell
+        meta={{ ex: 'drill_order', id: item.key, kind: 'order' }}
+        status={{ area: 'grammar', state, kindLabel: t('drOrder'), topic: topicLabel }}
+        task={{ text: t('fxOTaskOrder'), purpose: t('purposeOrder') }}
+        prompt={
+          <div className="flex flex-col gap-1" data-testid="order-meaning">
+            <p lang="de" data-testid="order-de">
+              {item.de}
+            </p>
+            {item.ai && (
+              <p className="lx-t-meta text-muted" data-testid="order-ai">
+                {t('drOrderAi')}
+              </p>
             )}
           </div>
-        )
-      }
-      result={
-        fb && (
-          <ResultArea label={t('trResultLabel')}>
-            <VerdictLine verdict={fb.res.verdict} text={t(verdictKey)} />
-            <p className="text-[0.95rem] leading-relaxed">
-              <span className="text-muted">{t('grCorrect')}: </span>
-              <EnglishText as="span" className="font-semibold" text={item.sentence} area="trainer" source={topic ? `grammar/${topic}` : null} testId="diff-correct" />
-            </p>
-            <AlsoRight answers={item.alts} notes={[]} />
-            <div className="flex flex-col gap-1" data-testid="order-why">
-              <p className="lx-eyebrow">{t('drWhy')}</p>
-              <p className="text-sm" lang={lang}>
-                {item.why[lang]}
-              </p>
-              {item.bad && (
-                <p className="text-sm text-muted" lang={lang} data-testid="order-bad">
-                  {t('drTrapBad', { bad: item.bad })}
-                </p>
-              )}
-            </div>
-            {item.ai && (
-              <p className="text-sm text-muted" data-testid="order-ai-note">
-                {t('drOrderAiNote')}
+        }
+        answer={
+          <div className="flex flex-col gap-3">
+            <Tiles
+              tiles={item.tiles}
+              placed={placed}
+              onChange={onTiles}
+              locked={!!fb}
+              {...(fb ? { marks } : {})}
+              labels={{ line: t('drTileLine'), pool: t('drTilePool') }}
+              markLabels={{ ok: t('drMarkOk'), near: t('drMarkNear'), off: t('drMarkOff') }}
+              slots={slots}
+            />
+            {!fb && profile === 'keys' && (
+              <TilesKeyboard tiles={item.tiles} placed={placed} onChange={onTiles} onSubmit={check} locked={!!fb} mode="words" label={t('trTilesTypeLabel')} hint={t('trTilesTypeHint')} unknown={(tok) => t('trTilesTypeMiss', { word: tok })} />
+            )}
+            {!fb && item.end && (
+              <p className="lx-t-support text-subtle" data-testid="order-end">
+                {t('drEnd', { end: item.end.startsWith('?') ? t('drEndQuestion') : item.end.startsWith('!') ? t('drEndExclaim') : t('drEndDot') })}
               </p>
             )}
-            {topic && <ExampleList items={examplesFor(topic, { exclude: item.sentence, max: 2 })} source={`grammar/${topic}`} />}
-            <NextButton onNext={next} auto={false} />
-          </ResultArea>
-        )
-      }
-    >
-      <div className="flex flex-col gap-1" data-testid="order-meaning">
-        <p className="lx-eyebrow">{t('drOrderMeaning')}</p>
-        <p className="text-xl font-semibold leading-snug tracking-tight" lang="de" data-testid="order-de">
-          {item.de}
-        </p>
-        {item.ai && (
-          <p className="text-xs text-muted" data-testid="order-ai">
-            {t('drOrderAi')}
-          </p>
-        )}
-      </div>
-      {!fb && tip >= 1 && (
-        <p className="text-sm text-muted" role="status" data-testid="tip-info">
-          {tip >= 2 ? t('drTipPlaced', { first, second }) : t('drTipStart', { first })}
-        </p>
-      )}
-      <Tiles tiles={item.tiles} placed={placed} onChange={(p) => {
-        timing.markKey();
-        setPlaced(p);
-      }} locked={!!fb} marks={fb ? marks : undefined} labels={{ line: t('drTileLine'), pool: t('drTilePool') }} markLabels={{ ok: t('drMarkOk'), near: t('drMarkNear'), off: t('drMarkOff') }} />
-      {!fb && hasFinePointer() && (
-        <TilesKeyboard
-          tiles={item.tiles}
-          placed={placed}
-          onChange={(p) => {
-            timing.markKey();
-            setPlaced(p);
-          }}
-          onSubmit={check}
-          locked={!!fb}
-          mode="words"
-          label={t('trTilesTypeLabel')}
-          hint={t('trTilesTypeHint')}
-          unknown={(tok) => t('trTilesTypeMiss', { word: tok })}
-        />
-      )}
-      {!fb && item.end && (
-        <p className="text-sm text-subtle" data-testid="order-end">
-          {t('drEnd', { end: item.end.startsWith('?') ? t('drEndQuestion') : item.end.startsWith('!') ? t('drEndExclaim') : t('drEndDot') })}
-        </p>
-      )}
-    </Frame>
+            {fb && (
+              <div className="flex flex-col gap-2" data-testid="order-result">
+                <p className="lx-t-support">
+                  <span className="text-muted">{t('grCorrect')}: </span>
+                  <EnglishText as="span" className="font-semibold" text={item.sentence} area="trainer" source={topic ? `grammar/${topic}` : null} testId="diff-correct" />
+                </p>
+                <AlsoRight answers={item.alts} notes={[]} />
+              </div>
+            )}
+          </div>
+        }
+        hint={hint}
+        secondary={secondary}
+        primary={fb ? { label: t('exNext'), onClick: next, testId: 'next' } : { label: t('exCheck'), onClick: check, testId: 'check', disabled: placed.length < slots }}
+        feedback={feedback}
+      />
+    </Item>
   );
 }

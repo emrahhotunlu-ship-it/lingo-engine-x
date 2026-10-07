@@ -2,6 +2,8 @@ import { expect, test, type Locator, type Page } from '@playwright/test';
 import { boot, screen, openEntry } from './fixtures';
 import { clozeSolution, orderSolution, orderSolutions, typeInGap } from './learnHelpers';
 import { DAY, dump, writes, type Dump } from './trainerHelpers';
+import { MON, MON_9, WEEK_W39, profileWith, reviewedLog, vgPlan } from './heuteHelpers';
+import { readFileSync } from 'node:fs';
 
 // Übungen ohne KI (phase2-plan §5.4–5.7, §9.3): je Übung eine vollständige Runde. Diktat mit
 // nachgebildeter Sprachausgabe; Lückenjagd: Buchstaben landen in der Lücke, Platzhalter per Tipp;
@@ -48,8 +50,8 @@ test('Diktat: Satz wird gesprochen, nicht angezeigt; Runde vollständig; Log und
   // Zahl der bisher gehörten Sätze (inkl. „Nochmal hören"): Jede Aufgabe wartet auf ihren EIGENEN Satz.
   let heard = 0;
   for (let i = 0; i < 12; i++) {
-    await expect(page.getByTestId('drill-item').or(page.getByTestId('summary')).first()).toBeVisible();
-    if (await page.getByTestId('summary').isVisible()) break;
+    await expect(page.getByTestId('drill-item').or(page.getByTestId('session-end')).first()).toBeVisible();
+    if (await page.getByTestId('session-end').isVisible()) break;
     await expect(page.getByTestId('dictate-input')).toBeVisible();
     await expect.poll(async () => (await spoken(page)).length).toBeGreaterThan(heard);
     const all = await spoken(page);
@@ -67,9 +69,9 @@ test('Diktat: Satz wird gesprochen, nicht angezeigt; Runde vollständig; Log und
     await page.getByTestId('check').click();
     verdicts.push(await finishItem(page));
   }
-  await expect(page.getByTestId('summary')).toBeVisible();
+  await expect(page.getByTestId('session-end')).toBeVisible();
   expect(verdicts).toHaveLength(8);
-  expect(verdicts.filter((v) => v === 'correct').length).toBeGreaterThanOrEqual(7);
+  expect(verdicts.filter((v) => v === 'ok').length).toBeGreaterThanOrEqual(7);
   await expect.poll(async () => logOf(await dump(page), 'dictate').length).toBe(logOf(before, 'dictate').length + 8);
   await expect.poll(async () => actOf(await dump(page), 'dictate')).toBe(actOf(before, 'dictate') + 1);
   await noCardOrTopicWrites(page);
@@ -84,13 +86,14 @@ test('Lückenjagd: Buchstaben landen in der Lücke, Tipp zeigt Platzhalter; Rund
   await openDrill(page, 'cloze');
   const verdicts: string[] = [];
   for (let i = 0; i < 12; i++) {
-    await expect(page.getByTestId('drill-item').or(page.getByTestId('summary')).first()).toBeVisible();
-    if (await page.getByTestId('summary').isVisible()) break;
+    await expect(page.getByTestId('drill-item').or(page.getByTestId('session-end')).first()).toBeVisible();
+    if (await page.getByTestId('session-end').isVisible()) break;
     const item = page.getByTestId('drill-item');
     await expect(item).toHaveAttribute('data-kind', 'cloze');
-    await expect(item.getByTestId('task-line')).toBeVisible();
-    // Statuszeile ohne eigenen Beherrschungswert: 0 Punkte mit dem Wort „neu", nie leer.
-    await expect(item.getByTestId('confidence')).toHaveText('neu');
+    await expect(item.getByTestId('task')).toBeVisible();
+    // Statuszeile im Gerüst: die Übungsart steht da; ohne eigene Karte keine Punkte (nie ein falsches „Neu“).
+    await expect(item.getByTestId('status')).toContainText('Lückenjagd');
+    await expect(item.getByTestId('status')).not.toHaveAttribute('data-state', /.+/);
     const gap = item.getByTestId('gap');
     // U-04: die Lücke ist leer, kein Ergebnisbereich, keine Wendung.
     await expect(gap).toHaveText(/^\s*$/);
@@ -108,10 +111,10 @@ test('Lückenjagd: Buchstaben landen in der Lücke, Tipp zeigt Platzhalter; Rund
     await page.keyboard.press('Enter');
     verdicts.push(await finishItem(page));
   }
-  await expect(page.getByTestId('summary')).toBeVisible();
+  await expect(page.getByTestId('session-end')).toBeVisible();
   expect(verdicts).toHaveLength(8);
   // „near“ = akzeptierte andere Wortstellung (seit dem C1-Werkzeugkasten gibt es Sätze mit mehreren gültigen Stellungen).
-  expect(verdicts.every((v) => v === 'correct' || v === 'near'), verdicts.join(',')).toBe(true);
+  expect(verdicts.every((v) => v === 'ok' || v === 'near'), verdicts.join(',')).toBe(true);
   await expect.poll(async () => logOf(await dump(page), 'cloze').length).toBe(logOf(before, 'cloze').length + 8);
   await expect.poll(async () => actOf(await dump(page), 'cloze')).toBe(actOf(before, 'cloze') + 1);
   await noCardOrTopicWrites(page);
@@ -144,14 +147,14 @@ test('Satzbau: Tippen und Ziehen, Runde vollständig; Pflichtkanal auf Heute erl
   await expect(page.getByTestId('drill')).toHaveAttribute('data-ctx', 'duty');
   const verdicts: string[] = [];
   for (let i = 0; i < 10; i++) {
-    await expect(page.getByTestId('drill-item').or(page.getByTestId('summary')).first()).toBeVisible();
-    if (await page.getByTestId('summary').isVisible()) break;
+    await expect(page.getByTestId('drill-item').or(page.getByTestId('session-end')).first()).toBeVisible();
+    if (await page.getByTestId('session-end').isVisible()) break;
     const item = page.getByTestId('drill-item');
     await expect(item.getByTestId('tile-line').getByTestId('tile')).toHaveCount(0);
     await expect(item.getByTestId('diff-correct')).toHaveCount(0);
     // Die deutsche Bedeutung steht vorab da, die Warum-Zeile erst nach dem Prüfen.
     await expect(item.getByTestId('order-de')).toBeVisible();
-    await expect(item.getByTestId('order-why')).toHaveCount(0);
+    await expect(item.getByTestId('explanation')).toHaveCount(0);
     const pool = item.getByTestId('tile-pool').getByTestId('tile');
     const texts = await pool.evaluateAll((els) => els.map((e) => e.getAttribute('data-tile') ?? ''));
     const order = orderSolution(texts);
@@ -176,24 +179,24 @@ test('Satzbau: Tippen und Ziehen, Runde vollständig; Pflichtkanal auf Heute erl
     const line = await item.getByTestId('tile-line').getByTestId('tile').evaluateAll((els) => els.map((e) => e.getAttribute('data-tile')));
     expect(line).toEqual(ids);
     await page.getByTestId('check').click();
-    await expect(item.getByTestId('order-why')).toBeVisible();
+    await expect(item.getByTestId('explanation')).toBeVisible();
     if (i === 0) {
-      // Kein automatisches Weiter: Emrah liest die Warum-Zeile in Ruhe (nur der Knopf geht weiter).
+      // Kein automatisches Weiter: Emrah liest das Warum in Ruhe (nur der Knopf geht weiter).
       await page.waitForTimeout(1500);
-      await expect(item.getByTestId('order-why')).toBeVisible();
+      await expect(item.getByTestId('explanation')).toBeVisible();
     }
     verdicts.push(await finishItem(page));
   }
-  await expect(page.getByTestId('summary')).toBeVisible();
+  await expect(page.getByTestId('session-end')).toBeVisible();
   expect(verdicts).toHaveLength(6);
-  expect(verdicts.every((v) => v === 'correct'), verdicts.join(',')).toBe(true);
+  expect(verdicts.every((v) => v === 'ok'), verdicts.join(',')).toBe(true);
   await expect.poll(async () => logOf(await dump(page), 'order').length).toBe(logOf(before, 'order').length + 6);
   const d = await dump(page);
   expect(logOf(d, 'order').slice(-6).every((e) => e.ctx === 'duty')).toBe(true);
   await expect.poll(async () => actOf(await dump(page), 'order')).toBe(actOf(before, 'order') + 1);
   await noCardOrTopicWrites(page);
   // Heute: der einzige Pflichtkanal ist erledigt → Fertig-Karte (Zustand, kein Knopf; Neubau N15).
-  await page.getByTestId('summary-back').click();
+  await page.getByTestId('session-end-next').click();
   await expect(page.getByTestId('apply-hub')).toBeVisible();
   await page.getByTestId('tab-today').click();
   await screen(page, 'today');
@@ -235,7 +238,7 @@ test('Satzbau: eine zweite gültige Reihenfolge zählt als richtig, „Auch rich
     if (pick === 1) used++;
     await clickTiles(item, (sols[pick] ?? []).map((k) => texts[k] ?? ''));
     await page.getByTestId('check').click();
-    await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'correct');
+    await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
     if (pick === 1) {
       await expect(item.getByTestId('also-right')).toBeVisible();
       await expect(item.getByTestId('diff-correct')).toBeVisible();
@@ -288,7 +291,7 @@ test('Satzbau: ein versetzter Baustein ist „fast richtig“, die falsche Stell
       expect(m.sr.length, JSON.stringify(m)).toBeGreaterThan(3);
     }
     expect(new Set(marks.map((m) => m.glyph)).size, 'ok und falsch sind an den Zeichen unterscheidbar').toBeGreaterThan(1);
-    await expect(item.getByTestId('order-why')).toBeVisible();
+    await expect(item.getByTestId('explanation')).toBeVisible();
     await expect(item.getByTestId('diff-correct')).toBeVisible();
     await finishItem(page);
   }
@@ -364,8 +367,8 @@ async function aiSentencesInRound(page: Page): Promise<{ ai: number; quokka: num
     while ((await item.getByTestId('tile-slot').count()) > 0) await item.locator('[data-testid="tile"][data-where="pool"]').first().click();
     await page.getByTestId('check').click();
     // Bei Sätzen von Claude steht auch in der Rückmeldung der ehrliche Hinweis.
-    if (isAi) await expect(item.getByTestId('order-ai-note')).toBeVisible();
-    else await expect(item.getByTestId('order-ai-note')).toHaveCount(0);
+    if (isAi) await expect(item.getByTestId('ai-note')).toBeVisible();
+    else await expect(item.getByTestId('ai-note')).toHaveCount(0);
     await finishItem(page);
   }
   return { ai, quokka };
@@ -416,4 +419,85 @@ test('ohne KI (?fake=nosample): alle Übungen öffnen ohne Absturz, keine KI-Kn�
   }
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
+});
+
+// ------------------------------------------------------------------ Satzbau zum Tagesthema (Lernplattform 2.0 §5.8)
+
+const SEED = JSON.parse(readFileSync(new URL('../../seed/sample-data.json', import.meta.url), 'utf8')) as Record<string, Doc>;
+const GT_PLAN = (() => {
+  const plan = vgPlan() as { u: Doc } & Doc;
+  return { ...plan, u: { ...plan.u, gt: { intro: null, pats: ['pv.simple'], topics: ['passive'] } } };
+})();
+
+/** Pflicht-Satzbau (Block 3) aus Heute starten, mit dem Beherrschungswert `p` für „passive“. */
+async function openDayOrder(page: Page, p: number): Promise<{ errors: string[] }> {
+  const { errors } = await boot(page, {
+    migrated: true,
+    now: MON_9,
+    fake: {
+      capabilities: { sample: false },
+      patch: { ...WEEK_W39, ...profileWith(MON, GT_PLAN, ['u-focus']), ...reviewedLog(MON), 'grammar/passive': { ...SEED['grammar/passive'], p, anchor: p, last: Date.parse(MON_9) - 3_600_000 } },
+    },
+  });
+  await screen(page, 'today');
+  await expect(page.getByTestId('start')).toHaveAttribute('data-duty', 'ch:u-task');
+  await page.getByTestId('start').click();
+  await screen(page, 'drill');
+  await expect(page.getByTestId('drill')).toHaveAttribute('data-kind', 'order');
+  return { errors };
+}
+
+test('Satzbau als Pflicht: Sätze zum Tagesthema (u.gt), Muster vorn, Status mit Thema und Punkten; hoher Wert → Fallen-Baustein, ✕ an der Falle', async ({ page }) => {
+  const { errors } = await openDayOrder(page, 0.85);
+  const seen: Array<{ topic: string | null; pat: string | null; extra: boolean }> = [];
+  for (let i = 0; i < 6; i++) {
+    const item = page.getByTestId('drill-item');
+    await expect(item.getByTestId('order-de')).toBeVisible();
+    const topic = await item.getAttribute('data-topic');
+    const status = item.getByTestId('status');
+    // Status: Punkte aus dem Wert des Themas (nie ohne), die Übungsart und das Thema des Satzes.
+    await expect(status).toHaveAttribute('data-state', /^(new|learning|safe|firm)$/);
+    await expect(status).toContainText('Satzbau');
+    await expect(status.getByTestId('status-where')).toBeVisible();
+    // Die Aufgabe nennt die deutsche Bedeutung.
+    await expect(item.getByTestId('task')).toContainText('Du willst sagen');
+    const texts = await item.getByTestId('tile-pool').getByTestId('tile').evaluateAll((els) => els.map((e) => e.getAttribute('data-tile') ?? ''));
+    const sols = orderSolutions(texts);
+    expect(sols.length, `Satz aus ${texts.join(' | ')}`).toBeGreaterThan(0);
+    const seq = (sols[0] ?? []).map((k) => texts[k] ?? '');
+    const extra = texts.length === seq.length + 1;
+    seen.push({ topic, pat: await item.getAttribute('data-pat'), extra });
+    await clickTiles(item, seq);
+    await page.getByTestId('check').click();
+    await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
+    // Ergebnis an den Bausteinen (✓ in der Zeile); der Fallen-Baustein ist als falsch gekennzeichnet.
+    await expect(item.getByTestId('tile-line').getByTestId('tile').first()).toHaveAttribute('data-state', 'ok');
+    if (extra) await expect(item.locator('[data-testid="tile"][data-state="off"]')).toHaveCount(1);
+    await expect(item.getByTestId('explanation')).toBeVisible();
+    await page.getByTestId('next').click();
+    if (i < 5) await expect(page.getByTestId('drill-item').getByTestId('verdict')).toHaveCount(0);
+  }
+  // Alle sechs Sätze gehören zum Tagesthema; die Sätze mit dem Muster des Tages stehen vorn.
+  expect(seen.every((x) => x.topic === 'passive'), JSON.stringify(seen)).toBe(true);
+  expect(seen.slice(0, 2).every((x) => x.pat === 'pv.simple'), JSON.stringify(seen)).toBe(true);
+  expect(seen.some((x) => x.extra), 'bei p = 0,85 liegt in mindestens einem Satz ein Fallen-Baustein').toBe(true);
+  await expect(page.getByTestId('session-end')).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test('Satzbau als Pflicht: bei niedrigem Wert (p < 0,4) kein Fallen-Baustein im Vorrat', async ({ page }) => {
+  const { errors } = await openDayOrder(page, 0.2);
+  for (let i = 0; i < 6; i++) {
+    const item = page.getByTestId('drill-item');
+    await expect(item.getByTestId('order-de')).toBeVisible();
+    expect(await item.getAttribute('data-topic')).toBe('passive');
+    const texts = await item.getByTestId('tile-pool').getByTestId('tile').evaluateAll((els) => els.map((e) => e.getAttribute('data-tile') ?? ''));
+    const seq = (orderSolutions(texts)[0] ?? []).map((k) => texts[k] ?? '');
+    expect(seq.length, 'alle Bausteine gehören zum Satz').toBe(texts.length);
+    await clickTiles(item, seq);
+    await page.getByTestId('check').click();
+    await expect(item.locator('[data-testid="tile"][data-state="off"]')).toHaveCount(0);
+    await page.getByTestId('next').click();
+  }
+  expect(errors).toEqual([]);
 });

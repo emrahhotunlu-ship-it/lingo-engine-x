@@ -131,7 +131,7 @@ export function SprintView() {
 
   if (!deck.length)
     return (
-      <article className="lx-glass flex flex-col gap-4 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="drill-empty">
+      <article className="lx-glass lx-exercise flex flex-col gap-4" data-testid="drill-empty">
         <p className="text-base text-muted">{t('drSprintEmpty')}</p>
         <SummaryActions onBack={leaveDrill} backTo={{ name: 'apply' }} backLabel={t('lrBackToApply')} />
       </article>
@@ -142,7 +142,7 @@ export function SprintView() {
     const tempo = tempoPerMin(st.ok);
     const wrong = st.answers.filter((a) => !a.ok);
     return (
-      <article className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="sprint-summary">
+      <article className="lx-glass lx-exercise flex flex-col gap-5" data-testid="sprint-summary">
         <h2 className="text-xl font-semibold tracking-tight">{t('drSprintDone')}</h2>
         <p className="lx-tnum text-base text-muted" data-testid="sprint-tempo">
           {week === null ? t('drTempoFirst', { n: tempo }) : t('drTempo', { n: tempo, avg: week })}
@@ -182,7 +182,7 @@ export function SprintView() {
   }
 
   return (
-    <article className={`lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7 ${flash === 'ok' ? 'lx-flash-ok' : flash === 'wrong' ? 'lx-flash-wrong' : ''}`} data-testid="drill-item" data-kind="sprint" key={`sprint-${step}`}>
+    <article className={`lx-glass lx-exercise flex flex-col gap-5 ${flash === 'ok' ? 'lx-flash-ok' : flash === 'wrong' ? 'lx-flash-wrong' : ''}`} data-testid="drill-item" data-kind="sprint" key={`sprint-${step}`}>
       <header className="flex flex-col gap-2">
         <LearnStatus p={null} kind={t('drSprint')} kindId="sprint" />
         <TaskLine task={t('drTaskSprint')} purpose={t('purposeSprint')} />

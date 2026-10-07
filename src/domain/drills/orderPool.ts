@@ -8,8 +8,15 @@ import { isWrongLang } from '../lang/detect';
 // warum es keine zweite gibt (`single`), und einer Warum-Zeile zum Satz. Kein Claude-Aufruf, keine Ablenker.
 // Eingebettet als Text und erst beim ersten Gebrauch geparst (leistung.md §4 Nr. 5).
 
+/** Fallen-Baustein (Lernplattform 2.0 §3.6): `tile` steht richtig im Satz, `instead` ist die typische falsche Form (kommt ab p ≥ 0,4 als Baustein in den Vorrat). */
+export type OrderTrap = { tile: string; instead: string; why: { de: string; en: string } };
+
 export type PoolEntry = {
   topic: string;
+  /** Muster des Satzes (`pat`, Grammatik-Muster-Kennung), wenn bekannt. */
+  pat: string | null;
+  /** Fallen-Baustein, wenn der Satz einen hat. */
+  trap: OrderTrap | null;
   en: string;
   de: string;
   chunks: readonly string[];
@@ -33,6 +40,8 @@ const RawEntry = z.object({
   single: z.string().optional(),
   why: z.tuple([z.string().min(1), z.string().min(1)]),
   bad: z.string().optional(),
+  pat: z.string().optional(),
+  trap: z.object({ tile: z.string().min(1), instead: z.string().min(1), why: z.object({ de: z.string().min(1), en: z.string().min(1) }) }).optional(),
 });
 
 /** Vergleichsform: klein, ohne Satzzeichen, einfache Leerzeichen. */
@@ -79,7 +88,18 @@ function accept(raw: z.infer<typeof RawEntry>): PoolEntry | null {
     single: raw.single?.trim() || null,
     why: { de: raw.why[0].trim(), en: raw.why[1].trim() },
     bad: raw.bad?.trim() || null,
+    pat: raw.pat?.trim() || null,
+    trap: null,
   };
+  // Fallen-Baustein: gilt nur, wenn `tile` einer der Bausteine ist und `instead` nicht schon ein Baustein ist; sonst fällt nur die Falle weg.
+  if (raw.trap) {
+    const tile = raw.trap.tile.trim();
+    const instead = raw.trap.instead.trim();
+    const norm = e.chunks.map(poolNorm);
+    if (norm.includes(poolNorm(tile)) && poolNorm(instead) !== poolNorm(tile) && !norm.includes(poolNorm(instead))) {
+      e.trap = { tile: e.chunks[norm.indexOf(poolNorm(tile))] as string, instead, why: { de: raw.trap.why.de.trim(), en: raw.trap.why.en.trim() } };
+    }
+  }
   const main = segment(e.en, e.chunks);
   if (!main) return null;
   if (!e.alt.length === !e.single) return null; // genau eines von beiden
@@ -162,5 +182,6 @@ export function acceptGenerated(raw: unknown, known: ReadonlySet<string>): PoolE
   if (e.bad && [e.en, ...e.alt].some((x) => same(x, e.bad as string))) return null;
   // Dieselben Bausteine in anderer Reihenfolge wären vielleicht ein richtiger Satz: nur erlaubt, wenn es nach Normalisierung ein bekannter ist.
   if (e.bad && segment(e.bad, e.chunks) && ![e.en, ...e.alt].some((x) => poolNorm(x) === poolNorm(e.bad as string))) return null;
-  return { ...e, ai: true };
+  // Von Claude erzeugte Sätze tragen weder Muster noch Fallen-Baustein (beides nur aus dem handgelesenen Pool).
+  return { ...e, pat: null, trap: null, ai: true };
 }

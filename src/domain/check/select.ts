@@ -1,6 +1,6 @@
 import { TOPICS } from '../content';
 import { topicP } from '../grammar/bkt';
-import { seedTasks, wantTypes } from '../grammar/tasks';
+import { allSeedTasks, forProfile, wantTypes, type InputProfile } from '../grammar/tasks';
 import type { GrammarTask } from '../learn/types';
 import { hash32, mulberry32, shuffle } from '../random';
 import { supports } from '../srs/modes';
@@ -28,6 +28,8 @@ export type SelectInput = {
   dayEndMs: number;
   lang: Lang;
   seed: string;
+  /** Eingabeprofil der Runde (einmal eingefroren): `touch` stellt nie einen ganzen Satz (Lernplattform 2.0 §5.2). Ohne Angabe: Tastatur. */
+  profile?: InputProfile;
 };
 
 /** Übungsart eines Wortes im Check – nie eine Art mit eingebauter Hilfe (`cloze_hint`). */
@@ -69,16 +71,22 @@ export function selectCheck(i: SelectInput): CheckItem[] {
   const trained = TOPICS.filter((t) => typeof i.grammarDocs.get(t.id)?.n === 'number' && (i.grammarDocs.get(t.id)?.n as number) > 0).map((t) => t.id);
   const rest = TOPICS.map((t) => t.id).filter((id) => !trained.includes(id));
   const topics = [...shuffle(trained, rng), ...(trained.length >= CHECK_PLAN.gram ? [] : shuffle(rest, rng))].slice(0, CHECK_PLAN.gram);
-  const lists = [...i.sources, shuffle(seedTasks(), rng)];
+  // Quellen: Tagesauftrag und Pool vor den Startaufgaben; die Startaufgaben enthalten auch die neuen Arten (Schlüsselwort, Fehler
+  // finden, Bedeutungspaar). Im Wochen-Check zählt je Aufgabe genau ein Muster (`pat`): Aufgaben mit Muster kommen zuerst.
+  const profile = i.profile ?? 'keys';
+  const forP = (l: readonly GrammarTask[]): GrammarTask[] => l.flatMap((t) => forProfile(t, profile) ?? []);
+  const lists = [...i.sources, shuffle(allSeedTasks(), rng)].map(forP);
   const taken = new Set<string>();
   const gram: CheckItem[] = [];
-  for (const topic of topics) {
+  for (const [k, topic] of topics.entries()) {
     const seen = seenOf(i.grammarDocs.get(topic));
-    const want = wantTypes(topicP(topic, i.grammarDocs.get(topic), i.nowMs));
+    // Die Wunschformen reihum (Gedächtnis: Bedeutungspaar/Lücke, Fehler finden, Schlüsselwort), damit auch find, kwt und meaning drankommen.
+    const base = wantTypes(topicP(topic, i.grammarDocs.get(topic), i.nowMs), profile);
+    const want = [...base.slice(k % base.length), ...base.slice(0, k % base.length)];
     let pick: GrammarTask | null = null;
     for (const pass of [0, 1]) {
       for (const list of lists) {
-        const cands = list.filter((t) => t.topic === topic && !taken.has(t.key) && (pass === 1 || !seen.has(t.key)));
+        const cands = list.filter((t) => t.topic === topic && !taken.has(t.key) && (pass === 1 || !seen.has(t.key))).sort((a, b) => (b.pat ? 1 : 0) - (a.pat ? 1 : 0));
         pick = want.map((ty) => cands.find((t) => t.type === ty)).find(Boolean) ?? cands[0] ?? null;
         if (pick) break;
       }
