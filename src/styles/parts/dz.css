@@ -1,0 +1,450 @@
+/* Design-Lead 07.10.2026 (Präfix `dz`, Vorschau „Lingo-Engine X Design-Vorschau“ + Erlebnis-Engine §3–§8).
+   Ziel: Tiefe, Bereichslicht, Reiterfarben, Belohnungsmomente. Nur Darstellung, keine Logik.
+   Bewegung: nur transform, opacity, clip-path. Alles hängt an `data-fx` (full · calm · off) und an prefers-reduced-motion
+   (die globale Sofort-Regel in index.css gilt weiter). Bei `off` steht sofort der Endzustand. */
+
+/* ------------------------------------------------------------------ Tokens (EE §8.2, §8.3) */
+:root,
+:root[data-theme='dark'] {
+  --lx-elev-2: 0 1px 0 0 rgba(255, 255, 255, 0.06) inset, 0 18px 48px -18px rgba(0, 0, 0, 0.75);
+  --lx-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.028), rgba(255, 255, 255, 0) 42%);
+  --lx-glow-ok: rgba(16, 185, 129, 0.45);
+  --lx-spark-1: #34d399;
+  --lx-spark-2: #ecfdf5;
+  --lx-field-strength: 22%;
+}
+:root[data-theme='dim'] {
+  --lx-elev-2: 0 1px 0 0 var(--lx-edge) inset, 0 18px 44px -18px rgba(0, 0, 0, 0.6);
+  --lx-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0) 42%);
+  --lx-glow-ok: rgba(16, 185, 129, 0.35);
+  --lx-spark-1: #4ade9f;
+  --lx-spark-2: #ecfdf5;
+  --lx-field-strength: 16%;
+}
+:root[data-theme='light'] {
+  --lx-elev-2: 0 1px 0 0 var(--lx-edge) inset, 0 18px 40px -20px rgba(15, 23, 42, 0.3);
+  --lx-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0) 42%);
+  --lx-glow-ok: rgba(4, 120, 87, 0.22);
+  --lx-spark-1: #047857;
+  --lx-spark-2: #10b981;
+  --lx-field-strength: 13%;
+}
+
+/* Bereichsfarbe je Reiter (Vorschau: Wörter violett, Grammatik blau, Anwenden türkis). Der aktive Reiter und das Lichtfeld lesen sie. */
+:root {
+  --lx-field: var(--lx-ok);
+}
+:root[data-lx-tab='vocab'] {
+  --lx-field: var(--lx-ch-cards);
+}
+:root[data-lx-tab='learn'] {
+  --lx-field: var(--lx-ch-grammar);
+}
+:root[data-lx-tab='apply'] {
+  --lx-field: var(--lx-cyan);
+}
+:root[data-lx-tab='progress'] {
+  --lx-field: var(--lx-fg-subtle);
+}
+:root[data-lx-area='words'] {
+  --lx-field: var(--lx-ch-cards);
+}
+:root[data-lx-area='grammar'] {
+  --lx-field: var(--lx-ch-grammar);
+}
+
+/* Lichtfeld (EE §5.1, als CSS statt Canvas: ein fester Verlauf, kein Neuzeichnen beim Scrollen). Oben mittig in der Bereichsfarbe. */
+html body::before {
+  background:
+    radial-gradient(110% 420px at 50% -120px, color-mix(in srgb, var(--lx-field) var(--lx-field-strength), transparent), transparent 72%),
+    radial-gradient(1200px 520px at 12% -10%, var(--lx-bg-glow-1), transparent 60%),
+    radial-gradient(900px 460px at 100% 0%, var(--lx-bg-glow-2), transparent 55%);
+}
+
+/* ------------------------------------------------------------------ Flächen (EE §8.3: Ebene 1 mit Lichtkante oben) */
+.lx-card {
+  background-image: var(--lx-sheen);
+  box-shadow: var(--lx-shadow);
+}
+
+/* ------------------------------------------------------------------ Reiterleiste (EE B5): deckend, aktiver Reiter in Bereichsfarbe, gleitende Pille */
+.dz-tabbar {
+  background: var(--lx-surface-solid);
+}
+@media (min-width: 768px) {
+  .dz-tabbar {
+    background: color-mix(in srgb, var(--lx-surface-solid) 92%, transparent);
+    box-shadow: var(--lx-elev-2);
+  }
+}
+.dz-tab {
+  --dz-tc: var(--lx-fg);
+}
+.dz-tab[data-tab='vocab'] {
+  --dz-tc: var(--lx-ch-cards);
+}
+.dz-tab[data-tab='learn'] {
+  --dz-tc: var(--lx-ch-grammar);
+}
+.dz-tab[data-tab='apply'] {
+  --dz-tc: var(--lx-cyan-text);
+}
+.dz-tab[aria-current='page'] .dz-tab-icon {
+  color: var(--dz-tc);
+}
+.dz-tab-pill {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--dz-tc) 16%, transparent);
+}
+:root[data-fx='full'] .dz-tab[aria-current='page'] .dz-tab-icon,
+:root[data-fx='calm'] .dz-tab[aria-current='page'] .dz-tab-icon {
+  animation: dz-pop 240ms cubic-bezier(0.3, 1.5, 0.5, 1) both;
+}
+
+/* ------------------------------------------------------------------ Hauptknopf (EE B1): Lichtkante oben, in Wörtern/Grammatik ein Schein in der Bereichsfarbe */
+button.lx-btn-primary:not(:disabled) {
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.28) inset;
+}
+html[data-lx-area] button.lx-btn-primary:not(:disabled) {
+  box-shadow:
+    0 1px 0 0 rgba(255, 255, 255, 0.22) inset,
+    0 10px 26px -14px var(--lx-btn-bg);
+}
+
+/* ------------------------------------------------------------------ Gestaffelte Eintritte auf Reiter-Wurzeln (Vorschau `.stag`): ab Deckkraft .6, nie aus 0 (EE I4) */
+:root[data-fx='full'] [data-layer='tab'] .lx-card,
+:root[data-fx='calm'] [data-layer='tab'] .lx-card,
+:root[data-fx='full'] [data-layer='tab'] [data-testid='duty'],
+:root[data-fx='calm'] [data-layer='tab'] [data-testid='duty'] {
+  animation: dz-rise 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+[data-layer='tab'] .lx-card:nth-child(2),
+[data-layer='tab'] [data-testid='duty']:nth-child(2) {
+  animation-delay: 50ms;
+}
+[data-layer='tab'] .lx-card:nth-child(3),
+[data-layer='tab'] [data-testid='duty']:nth-child(3) {
+  animation-delay: 100ms;
+}
+[data-layer='tab'] .lx-card:nth-child(4),
+[data-layer='tab'] [data-testid='duty']:nth-child(4) {
+  animation-delay: 150ms;
+}
+[data-layer='tab'] .lx-card:nth-child(n + 5),
+[data-layer='tab'] [data-testid='duty']:nth-child(n + 5) {
+  animation-delay: 200ms;
+}
+
+/* ------------------------------------------------------------------ Heute: Tagesring und Abschluss (EE M7, als CSS) */
+/* Spur des Rings deutlicher (Vorschau `--line2`). */
+[data-testid='today-ring'] circle[stroke='var(--lx-track)'] {
+  stroke: var(--lx-line-strong);
+}
+.dz-done-ring {
+  position: relative;
+  display: inline-flex;
+  isolation: isolate;
+}
+/* Ruhiges Licht hinter dem fertigen Ring: im Endzustand still. */
+.dz-done-ring::before {
+  content: '';
+  position: absolute;
+  inset: -16%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--lx-glow-ok), transparent);
+  opacity: 0.55;
+  transform: scale(1.12);
+}
+.dz-done-check path {
+  stroke-dasharray: 30;
+  stroke-dashoffset: 0;
+}
+.dz-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+}
+.dz-hero-n {
+  display: block;
+  font-size: 3.5rem;
+  line-height: 0.95;
+  font-weight: 650;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+}
+@media (min-width: 640px) {
+  .dz-hero-n {
+    font-size: 4rem;
+  }
+}
+.dz-hero-l {
+  display: block;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--lx-fg);
+}
+.dz-sparks {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.dz-sparks i {
+  position: absolute;
+  left: -3px;
+  top: -3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--lx-spark-1);
+  opacity: 0;
+}
+.dz-sparks i:nth-child(even) {
+  background: var(--lx-spark-2);
+  width: 4px;
+  height: 4px;
+}
+/* Der Moment spielt nur einmal je Lerntag und Browser (`data-play`), sonst steht der Ring still (EE M7: erledigt ist Zustand). */
+:root[data-fx='full'] .dz-done-ring[data-play] svg circle[stroke='var(--lx-ok)'] {
+  animation: dz-fade 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+:root[data-fx='full'] .dz-done-ring[data-play] g:nth-child(2) circle[stroke='var(--lx-ok)'] {
+  animation-delay: 160ms;
+}
+:root[data-fx='full'] .dz-done-ring[data-play] g:nth-child(3) circle[stroke='var(--lx-ok)'] {
+  animation-delay: 320ms;
+}
+:root[data-fx='full'] .dz-done-ring[data-play] g:nth-child(n + 4) circle[stroke='var(--lx-ok)'] {
+  animation-delay: 480ms;
+}
+:root[data-fx='full'] .dz-done-ring[data-play]::before,
+:root[data-fx='calm'] .dz-done-ring[data-play]::before {
+  animation: dz-glow 1200ms ease-out 560ms both;
+}
+:root[data-fx='full'] .dz-done-ring[data-play] .dz-done-check path,
+:root[data-fx='calm'] .dz-done-ring[data-play] .dz-done-check path {
+  animation: dz-draw 300ms ease-out 700ms both;
+}
+:root[data-fx='full'] .dz-done-ring[data-play] .dz-sparks i {
+  animation: dz-spark 900ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+  animation-delay: calc(640ms + var(--d, 0ms));
+}
+:root[data-fx='full'] .dz-hero[data-play] .dz-hero-n,
+:root[data-fx='calm'] .dz-hero[data-play] .dz-hero-n {
+  animation: dz-count 640ms cubic-bezier(0.2, 0.8, 0.2, 1) 820ms both;
+}
+:root[data-fx='full'] .dz-hero[data-play] .dz-hero-l,
+:root[data-fx='calm'] .dz-hero[data-play] .dz-hero-l {
+  animation: dz-rise 320ms ease-out 980ms both;
+}
+:root[data-fx='full'] [data-play] ~ * .lx-ring[data-today][data-state='done'],
+:root[data-fx='full'] .dz-done-card[data-play] .lx-ring[data-today][data-state='done'] {
+  animation: dz-pop 420ms cubic-bezier(0.3, 1.6, 0.5, 1) 1100ms both;
+}
+
+/* ------------------------------------------------------------------ Grammatik-Weg: „Du bist hier“ leuchtet dreimal, dann ruhig (Vorschau `.halo`) */
+.dz-here {
+  position: relative;
+  isolation: isolate;
+}
+.dz-here::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  z-index: -1;
+  border-radius: 999px;
+  background: var(--lx-btn-grammar);
+  opacity: 0;
+}
+:root[data-fx='full'] .dz-here::before,
+:root[data-fx='calm'] .dz-here::before {
+  animation: dz-halo 2.4s ease-in-out 3 both;
+  filter: blur(6px);
+}
+
+/* ------------------------------------------------------------------ Übung: Fortschritt, Urteil, Antwort (EE B13, M1, M3) */
+/* Der Fortschrittsbalken trägt die Bereichsfarbe (Vorschau `.track i` = `--tc`), sonst Smaragd. */
+html[data-lx-area] [data-testid='exercise-bar'] [role='progressbar'] > div {
+  background: var(--lx-field);
+}
+/* Urteils-Zeichen springt kurz auf (pop) und sendet einen Lichtring (nur Stufe full/calm). */
+.dz-badge {
+  position: relative;
+  isolation: isolate;
+}
+.dz-badge::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0;
+}
+:root[data-fx='full'] .dz-badge,
+:root[data-fx='calm'] .dz-badge {
+  animation: dz-pop 300ms cubic-bezier(0.3, 1.6, 0.5, 1) both;
+}
+:root[data-fx='full'] .dz-badge[data-mark='ok']::after {
+  background: var(--lx-ok);
+  animation: dz-ring 520ms cubic-bezier(0.2, 0.8, 0.2, 1) 60ms both;
+}
+/* M1 Lichtimpuls hinter der richtigen Option (nur full); liegt in der Option, kein Überlauf. */
+:root[data-fx='full'] .lx-choice[data-state='correct'] {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+:root[data-fx='full'] .lx-choice[data-state='correct']::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(closest-side, var(--lx-glow-ok), transparent);
+  opacity: 0;
+  animation: dz-pulse 460ms ease-out 40ms both;
+}
+/* M3 sanftes Schütteln nur des Antwortelements (Lücke, gewählte Option, Baustein), 320 ms, verschiebt keine Nachbarn. */
+:root[data-fx='full'] .lx-choice[data-state='wrong'],
+:root[data-fx='calm'] .lx-choice[data-state='wrong'],
+:root[data-fx='full'] .lx-gap[data-state='wrong'],
+:root[data-fx='calm'] .lx-gap[data-state='wrong'],
+:root[data-fx='full'] .lx-gap-given,
+:root[data-fx='calm'] .lx-gap-given,
+:root[data-fx='full'] .lx-tile[data-state='off'],
+:root[data-fx='calm'] .lx-tile[data-state='off'] {
+  animation: dz-shake 320ms cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+/* ------------------------------------------------------------------ Keyframes */
+@keyframes dz-rise {
+  from {
+    opacity: 0.6;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes dz-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes dz-pop {
+  0% {
+    transform: scale(0.82);
+  }
+  60% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes dz-ring {
+  from {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(2.2);
+  }
+}
+@keyframes dz-pulse {
+  0% {
+    opacity: 0.6;
+    transform: scale(0.6);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+@keyframes dz-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(5px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(2px);
+  }
+}
+@keyframes dz-glow {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  45% {
+    opacity: 0.95;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 0.55;
+    transform: scale(1.12);
+  }
+}
+@keyframes dz-draw {
+  from {
+    stroke-dashoffset: 30;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes dz-spark {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.6);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) scale(1);
+  }
+}
+@keyframes dz-count {
+  0% {
+    opacity: 0.6;
+    transform: translateY(40%) scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes dz-halo {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(1.12);
+  }
+}

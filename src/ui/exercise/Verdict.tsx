@@ -33,7 +33,7 @@ export function Verdict({ verdict, sub = null }: { verdict: ResultVerdict; sub?:
     <div className="flex flex-col gap-0.5" data-testid="verdict-block">
       <p className={`flex items-center gap-3 text-xl leading-7 font-semibold tracking-tight ${TONE[verdict]}`} data-testid="verdict" data-verdict={verdict} role="status">
         {mark && (
-          <span aria-hidden="true" className={`inline-flex size-8 flex-none items-center justify-center rounded-full text-base font-bold ${BADGE[verdict]}`} style={{ color: 'var(--lx-accent-fg)' }} data-mark={verdict}>
+          <span aria-hidden="true" className={`dz-badge inline-flex size-8 flex-none items-center justify-center rounded-full text-base font-bold ${BADGE[verdict]}`} style={{ color: 'var(--lx-accent-fg)' }} data-mark={verdict}>
             <span className="ee-mark">{mark}</span>
           </span>
         )}

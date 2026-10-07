@@ -128,7 +128,9 @@ function dateLabelOf(today: string, lang: Lang): string {
   return new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { weekday: 'long', day: 'numeric', month: 'long' }).format(dayKeyNoon(today));
 }
 
-function BlockDot({ state }: { state: CardRow['state'] }) {
+function BlockDot({ state, kind }: { state: CardRow['state']; kind?: string }) {
+  // Design-Lead: der nächste Schritt trägt seine Bereichsfarbe (Wörter violett, sonst Grammatik blau), wie in der Vorschau.
+  const tc = kind === 'review' ? 'var(--lx-ch-cards)' : 'var(--lx-ch-grammar)';
   if (state === 'done')
     return (
       <span className="inline-flex size-6 flex-none items-center justify-center rounded-full bg-ok" style={{ color: 'var(--lx-accent-fg)' }} aria-hidden="true">
@@ -136,8 +138,8 @@ function BlockDot({ state }: { state: CardRow['state'] }) {
       </span>
     );
   return (
-    <span className="inline-flex size-6 flex-none items-center justify-center rounded-full border-2" style={{ borderColor: state === 'now' ? 'var(--lx-ch-grammar)' : 'var(--lx-line-strong)' }} aria-hidden="true">
-      {state === 'now' && <span className="size-2 rounded-full" style={{ background: 'var(--lx-ch-grammar)' }} />}
+    <span className="inline-flex size-6 flex-none items-center justify-center rounded-full border-2" style={{ borderColor: state === 'now' ? tc : 'var(--lx-line-strong)' }} aria-hidden="true">
+      {state === 'now' && <span className="size-2.5 rounded-full" style={{ background: tc }} />}
     </span>
   );
 }
@@ -170,7 +172,7 @@ function UnitCard({ view, rows, minLeft, fixNone }: { view: TodayView; rows: Car
   const title = nextTitle(now, view.plan?.u?.gt?.intro ?? null, t, lang);
   return (
     <section
-      className="lx-card flex flex-col gap-3.5 p-[1.125rem]"
+      className="lx-card flex flex-col gap-4 p-[1.125rem] sm:p-6"
       aria-labelledby="td-unit-title"
       data-testid="today-card"
       data-shape={view.plan?.u?.shape ?? 'legacy'}
@@ -179,12 +181,12 @@ function UnitCard({ view, rows, minLeft, fixNone }: { view: TodayView; rows: Car
       <div className="flex items-center gap-3.5">
         <SegmentRing segments={Math.max(1, total)} done={done} size={112} stroke={8} label={t('nbHeuteRingLabel', { done, total })}>
           <span className="flex flex-col items-center gap-0.5">
-            <span className="text-3xl leading-none font-semibold tracking-tight">{minLeft}</span>
+            <span className="text-2xl leading-none font-semibold tracking-tight">{minLeft}</span>
             <span className="text-xs font-normal text-subtle">{t('hxTodayRingOpen')}</span>
           </span>
         </SegmentRing>
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <h2 id="td-unit-title" className="text-xl leading-7 font-semibold tracking-tight text-balance" data-testid="today-title">
+          <h2 id="td-unit-title" className="text-lg leading-7 font-semibold tracking-tight text-balance" data-testid="today-title">
             {title}
           </h2>
           <span data-testid="today-status" data-status={view.status} data-done={done} data-total={total} className="lx-tnum text-xs text-muted">
@@ -203,7 +205,7 @@ function UnitCard({ view, rows, minLeft, fixNone }: { view: TodayView; rows: Car
               data-now={r.state === 'now' ? 'true' : undefined}
               className={`flex min-h-[3.25rem] items-center gap-3 rounded-[0.875rem] px-3 py-1.5 ${r.state === 'now' ? 'bg-surface-strong' : ''}`}
             >
-              <BlockDot state={r.state} />
+              <BlockDot state={r.state} kind={r.kind} />
               <span className="flex min-w-0 flex-1 flex-col">
                 <span className={`text-base font-medium ${r.state === 'now' ? 'text-fg' : 'text-muted'}`}>{r.name}</span>
                 <span className="text-xs text-muted" data-testid="reason" data-why={r.whyKey}>
@@ -383,7 +385,7 @@ export function TodayScreen() {
   const restartDay = ret && ret.gap >= RESTART_GAP && ret.since < RESTART_DAYS ? ret.since + 1 : null;
 
   return (
-    <motion.div className="mx-auto flex w-full max-w-[70rem] flex-col gap-5 py-4 sm:py-8" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.03 } } }}>
+    <motion.div className="mx-auto flex w-full max-w-[46rem] flex-col gap-5 py-4 sm:py-8" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.03 } } }}>
       <motion.div variants={item}>
         <TabTitle title={dateLabelOf(today, lang)} testId="today-date" />
       </motion.div>

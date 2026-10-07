@@ -40,7 +40,13 @@ function Container({ name, kind, visible, children }: { name: RouteName; kind: L
   useLayoutEffect(() => {
     const el = ref.current;
     if (!visible || !el || reducedMotion() || typeof el.animate !== 'function') return;
-    const a = el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: FADE_MS[kind], easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
+    // Design-Lead (EE B3): eine Seite schiebt sich von rechts herein (räumliche Richtung: tiefer im Stapel), nur bei Effekten full/calm.
+    // Übungen bleiben ohne Transform (Heldenkarten-Flug und Prüfen-Leiste), Reiter ebenso (dort steigen die Karten gestaffelt auf, dz.css).
+    const slide = kind === 'page' && document.documentElement.dataset.fx !== 'off';
+    const a = el.animate(slide ? [{ opacity: 0, transform: 'translateX(18px)' }, { opacity: 1, transform: 'none' }] : [{ opacity: 0 }, { opacity: 1 }], {
+      duration: slide ? 240 : FADE_MS[kind],
+      easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+    });
     return () => a.cancel();
   }, [visible, kind, name]);
   return (
