@@ -30,6 +30,16 @@ describe('Neue Themen', () => {
       expect(GRAMMAR_PATH, t).toContain(t);
     }
   });
+  it('Alltag und Beruf: je Thema etwa ein Drittel Alltag (30 bis 40 Prozent), in der Einstufung mindestens 20 Prozent', () => {
+    for (const topic of DONE) {
+      const mine = all.filter((i) => i.topic === topic && !i.pool);
+      const life = mine.filter((i) => i.dom === 'life').length / mine.length;
+      expect(life, topic).toBeGreaterThanOrEqual(0.3);
+      expect(life, topic).toBeLessThanOrEqual(0.42);
+    }
+    const place = all.filter((i) => i.pool === 'place');
+    expect(place.filter((i) => i.dom === 'life').length / place.length).toBeGreaterThanOrEqual(0.2);
+  });
   for (const topic of NEW_TOPICS.filter((t) => topicExists(t))) {
     describe(topic, () => {
       const pats = patternsOf(topic);

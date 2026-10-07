@@ -72,6 +72,11 @@ describe('Einstufungsvorrat: Inhalt', () => {
       expect(Math.max(...bs) - Math.min(...bs), `Kapitel ${c}`).toBeGreaterThan(0.3);
     }
   });
+  it('Inversion kommt in der Einstufung höchstens zweimal vor (Lehrer-Befund)', () => {
+    const inv = place.filter((i) => /^inv\.|neg-inv|only-inv|not-only|hardly-sooner/.test(i.pat ?? ''));
+    expect(inv.map((i) => i.id)).toHaveLength(inv.length);
+    expect(inv.length).toBeLessThanOrEqual(2);
+  });
   it('die Aufgaben stehen nie im Training', async () => {
     const { trainable } = await import('../../src/domain/c1x/select');
     for (const it of place) expect(trainable(it)).toBe(false);
