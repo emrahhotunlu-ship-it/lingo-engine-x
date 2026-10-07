@@ -63,8 +63,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: must be = Schluss über jetzt, kein Zwang.",
-    "en": "Right: must be = a conclusion about now, not an obligation."
+    "de": "Richtig: must be. Ein sicherer Schluss über jetzt, kein Zwang. Das Gegenteil wäre can't be.",
+    "en": "Right: must be. A confident conclusion about now, not an obligation. The opposite would be can't be."
    },
    "wrong": [
     {
@@ -157,8 +157,8 @@
   "answer": "a",
   "why": {
    "ok": {
-    "de": "Richtig: Satz a. must be = Schluss über jetzt.",
-    "en": "Right: sentence a. must be = a conclusion about now."
+    "de": "Satz a: must be ist ein Schluss über jetzt. Satz b (must have been) ist ein Schluss über früher.",
+    "en": "Sentence a: must be is a conclusion about now. Sentence b (must have been) is a conclusion about the past."
    },
    "wrong": [
     {
@@ -246,8 +246,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Im Urlaub, also ausgeschlossen: can't be + Grundform.",
-    "en": "Right: on vacation, so it is ruled out: can't be + base form."
+    "de": "Richtig: can't be. „she's on vacation“ schließt aus, dass sie es jetzt am Telefon ist: can't + Grundform.",
+    "en": "Right: can't be. “She's on vacation” rules out that she is on the phone now: can't + base form."
    },
    "wrong": [
     {
@@ -356,8 +356,8 @@
   "answer": "a",
   "why": {
    "ok": {
-    "de": "Richtig: Satz a. can't be = so gut wie ausgeschlossen.",
-    "en": "Right: sentence a. can't be = almost ruled out."
+    "de": "Satz a: can't be ist so gut wie ausgeschlossen. Satz b (might not be) ist nur eine Möglichkeit, er könnte auch da sein.",
+    "en": "Sentence a: can't be is as good as ruled out. Sentence b (might not be) is only a possibility, he could also be there."
    },
    "wrong": [
     {
@@ -441,8 +441,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: might be = nur eine Möglichkeit, kein sicherer Schluss.",
-    "en": "Right: might be = only a possibility, not a firm conclusion."
+    "de": "Richtig: might be. Wir wissen es nicht sicher („right now“): might ist nur eine Möglichkeit, kein Schluss.",
+    "en": "Right: might be. We do not know for sure (“right now”): might is only a possibility, not a conclusion."
    },
    "wrong": [
     {
@@ -513,8 +513,8 @@
   "err": null,
   "why": {
    "ok": {
-    "de": "Kein Fehler: could be nennt eine Möglichkeit, nicht mehr.",
-    "en": "No error: could be names a possibility, nothing more."
+    "de": "Kein Fehler: „but I can't tell yet“ zeigt Unsicherheit, deshalb could be als Möglichkeit.",
+    "en": "No error: “but I can't tell yet” shows uncertainty, hence could be as a possibility."
    },
    "wrong": [
     {
@@ -538,8 +538,8 @@
   "answer": "a",
   "why": {
    "ok": {
-    "de": "Richtig: Satz a. might be = nur eine Möglichkeit.",
-    "en": "Right: sentence a. might be = only a possibility."
+    "de": "Satz a: might be ist nur eine Möglichkeit. Satz b (must be) ist ein starker Schluss: Sie ist mit Sicherheit dort.",
+    "en": "Sentence a: might be is only a possibility. Sentence b (must be) is a strong conclusion: she is surely there."
    },
    "wrong": [
     {
@@ -619,8 +619,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: must have + misunderstood = klarer Schluss über früher.",
-    "en": "Right: must have + misunderstood = a clear conclusion about the past."
+    "de": "Richtig: must have misunderstood. Wir schließen aus dem Verhalten: Der Kunde hat es sicher falsch verstanden (früher).",
+    "en": "Right: must have misunderstood. We conclude from the behavior: the client surely misunderstood (earlier)."
    },
    "wrong": [
     {
@@ -725,8 +725,8 @@
   "answer": "a",
   "why": {
    "ok": {
-    "de": "Richtig: Satz a. must have signed = Schluss über früher.",
-    "en": "Right: sentence a. must have signed = a conclusion about the past."
+    "de": "Satz a: must have signed ist ein Schluss über früher. Satz b (had to sign) heißt: Er musste unterschreiben, Pflicht.",
+    "en": "Sentence a: must have signed is a conclusion about the past. Sentence b (had to sign) means: he was obliged to sign."
    },
    "wrong": [
     {
@@ -824,8 +824,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: can't have + received = ausgeschlossen, früher gedacht.",
-    "en": "Right: can't have + received = ruled out, thinking about the past."
+    "de": "Richtig: can't have received. „the email bounced“ schließt aus, dass er sie bekam: can't have + 3. Form für früher.",
+    "en": "Right: can't have received. “The email bounced” rules out that he got it: can't have + participle for the past."
    },
    "wrong": [
     {
@@ -908,8 +908,8 @@
   "err": null,
   "why": {
    "ok": {
-    "de": "Kein Fehler: can't have + come = ausgeschlossen, früher gedacht.",
-    "en": "No error: can't have + come = ruled out, thinking about the past."
+    "de": "Kein Fehler: „the logs are clean“ ist der Grund, die Ursache auszuschließen: can't have come für früher.",
+    "en": "No error: “the logs are clean” is the reason to rule out the cause: can't have come for the past."
    },
    "wrong": [
     {
@@ -933,8 +933,8 @@
   "answer": "a",
   "why": {
    "ok": {
-    "de": "Richtig: Satz a. can't have + Partizip = Schluss über früher.",
-    "en": "Right: sentence a. can't have + participle = a conclusion about the past."
+    "de": "Satz a: can't have signed ist ein Schluss: ausgeschlossen. Satz b (couldn't sign) nennt nur, dass sie es nicht konnte.",
+    "en": "Sentence a: can't have signed is a conclusion: ruled out. Sentence b (couldn't sign) only says she was unable to."
    },
    "wrong": [
     {
@@ -969,8 +969,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: might not have + gotten = vielleicht nicht angekommen.",
-    "en": "Right: might not have + gotten = maybe it did not arrive."
+    "de": "Richtig: might not have gotten. Eine Möglichkeit über früher: Die Mail kam vielleicht nicht an (US: gotten).",
+    "en": "Right: might not have gotten. A possibility about the past: the email may not have arrived (US: gotten)."
    },
    "wrong": [
     {
@@ -1025,8 +1025,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: might have moved = nur eine Möglichkeit über früher.",
-    "en": "Right: might have moved = only a possibility about the past."
+    "de": "Richtig: might have moved. Eine Möglichkeit über früher: Jemand hat die Dateien vielleicht verschoben.",
+    "en": "Right: might have moved. A possibility about the past: someone may have moved the files."
    },
    "wrong": [
     {
@@ -1071,8 +1071,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Der Fehler: Nach might fehlt have: might have lost.",
-    "en": "The error: have is missing after might: might have lost."
+    "de": "Der Fehler: „might lost“. Eine Möglichkeit über früher braucht might have + 3. Form: might have lost.",
+    "en": "The error: “might lost”. A possibility about the past needs might have + participle: might have lost."
    },
    "wrong": [
     {
@@ -1132,8 +1132,8 @@
   "answer": "a",
   "why": {
    "ok": {
-    "de": "Richtig: Satz a. might have + Partizip = Möglichkeit über früher.",
-    "en": "Right: sentence a. might have + participle = a possibility about the past."
+    "de": "Satz a: might have left ist eine Möglichkeit über früher (vielleicht ist er schon weg). Satz b: er geht vielleicht.",
+    "en": "Sentence a: might have left is a possibility about the past (maybe he already left). Sentence b: he may leave."
    },
    "wrong": [
     {

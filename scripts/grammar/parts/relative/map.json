@@ -3,8 +3,8 @@
   "pat": "rc.who-which",
   "why": {
    "ok": {
-    "de": "Richtig: woman ist eine Person, also who (oder that).",
-    "en": "Right: woman is a person, so who (or that)."
+    "de": "„woman“ ist eine Person und Subjekt des Relativsatzes: who lives (oder that). which ist für Sachen.",
+    "en": "“Woman” is a person and the subject of the relative clause: who lives (or that). Which is for things."
    },
    "wrong": [
     {
@@ -58,8 +58,8 @@
   "pat": "rc.commas",
   "why": {
    "ok": {
-    "de": "Richtig: Eine Zusatzinfo zwischen Kommas braucht which, nie that.",
-    "en": "Right: extra information between commas takes which, never that."
+    "de": "Die Zusatzinfo steht zwischen Kommas: Dort braucht es which, nie that. Ohne Kommas wäre that möglich.",
+    "en": "The extra information is between commas: there which is needed, never that. Without commas that would be possible."
    },
    "wrong": [
     {
@@ -90,8 +90,8 @@
   "pat": "rc.who-which",
   "why": {
    "ok": {
-    "de": "Richtig: customer ist eine Person, also who (oder that).",
-    "en": "Right: customer is a person, so who (or that)."
+    "de": "„customer“ ist eine Person und Subjekt: who called (that geht auch). which ist für Sachen.",
+    "en": "“Customer” is a person and the subject: who called (that also works). Which is for things."
    },
    "wrong": [
     {
@@ -158,8 +158,8 @@
   "pat": "rc.who-which",
   "why": {
    "ok": {
-    "de": "Richtig: software ist eine Sache, also which (oder that).",
-    "en": "Right: software is a thing, so which (or that)."
+    "de": "„software“ ist eine Sache und Objekt: which we use (that oder gar nichts geht auch). who ist für Personen.",
+    "en": "“Software” is a thing and the object: which we use (that or nothing also works). Who is for people."
    },
    "wrong": [
     {
@@ -214,8 +214,8 @@
   "pat": "rc.that-what",
   "why": {
    "ok": {
-    "de": "Richtig: report ist das Bezugswort, also that (oder which).",
-    "en": "Right: report is the antecedent, so that (or which)."
+    "de": "„the report“ ist eine Sache: that (oder which) you sent. what und who passen nicht zu einem Bezugswort.",
+    "en": "“The report” is a thing: that (or which) you sent. What and who do not fit a noun antecedent."
    },
    "wrong": [
     {
@@ -270,8 +270,8 @@
   "pat": "rc.that-what",
   "why": {
    "ok": {
-    "de": "Richtig: Nach everything, all und nothing steht that.",
-    "en": "Right: after everything, all and nothing, use that."
+    "de": "Nach everything (auch all, nothing) steht that, nie what oder which. Deutsch „alles, was“ verleitet zu what.",
+    "en": "After everything (also all, nothing) comes that, never what or which. German “alles, was” tempts you into what."
    },
    "wrong": [
     {
@@ -332,8 +332,8 @@
   "pat": "rc.whose",
   "why": {
    "ok": {
-    "de": "Richtig: „dessen Bruder“ = whose brother. whose zeigt den Besitz.",
-    "en": "Right: “whose brother” = his or her brother. whose shows possession."
+    "de": "„dessen Bruder“ heißt whose brother. whose zeigt Besitz und ersetzt das Possessivwort his.",
+    "en": "“Dessen Bruder” is whose brother. Whose shows possession and replaces the possessive his."
    },
    "wrong": [
     {
@@ -372,8 +372,8 @@
   "pat": "rc.where-why",
   "why": {
    "ok": {
-    "de": "Richtig: Nach reason steht why (oder that, for which).",
-    "en": "Right: after reason use why (or that, for which)."
+    "de": "Nach reason steht why (oder that): the reason why we lost. where ist nur für Orte.",
+    "en": "After reason comes why (or that): the reason why we lost. Where is only for places."
    },
    "wrong": [
     {
@@ -462,8 +462,8 @@
   "pat": "rc.prep",
   "why": {
    "ok": {
-    "de": "Richtig: Nach einer Präposition steht whom, nicht who.",
-    "en": "Right: after a preposition use whom, not who."
+    "de": "Nach der Präposition with steht whom (Person als Objekt), nicht who: the colleague with whom I worked.",
+    "en": "After the preposition with comes whom (person as object), not who: the colleague with whom I worked."
    },
    "wrong": [
     {
@@ -534,8 +534,8 @@
   "pat": "rc.whose",
   "why": {
    "ok": {
-    "de": "Richtig: whose ersetzt das Possessivwort his und zeigt Besitz.",
-    "en": "Right: whose replaces the possessive his and shows possession."
+    "de": "whose ersetzt das Possessivwort „his“ und verbindet die Sätze: Our client, whose company bought 500 licenses.",
+    "en": "Whose replaces the possessive “his” and joins the sentences: Our client, whose company bought 500 licenses."
    },
    "wrong": [
     {
@@ -640,8 +640,8 @@
   "pat": "rc.commas",
   "why": {
    "ok": {
-    "de": "Richtig: Eine Zusatzinfo zwischen Kommas braucht which, nie that.",
-    "en": "Right: extra information between commas takes which, never that."
+    "de": "Zusatzinfo zwischen Kommas braucht which, nie that. Der Satz bleibt auch ohne den Relativsatz verständlich.",
+    "en": "Extra information between commas needs which, never that. The sentence still makes sense without the relative clause."
    },
    "wrong": [
     {

@@ -636,8 +636,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Der Fehler: „insisted to review“. Richtig: insisted on reviewing.",
-    "en": "The error: “insisted to review”. Correct: insisted on reviewing."
+    "de": "Der Fehler: „insisted to review“. insist braucht on + -ing: insisted on reviewing. Ein Infinitiv mit to geht nach insist nicht.",
+    "en": "The error: “insisted to review”. Insist needs on + -ing: insisted on reviewing. A to-infinitive does not follow insist."
    },
    "wrong": [
     {
@@ -669,8 +669,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Der Fehler: „insisted for“. Die Präposition heißt on.",
-    "en": "The error: “insisted for”. The preposition is on."
+    "de": "Der Fehler: „insisted for“. insist verbindet sich mit on: insisted on a written confirmation. Deutsch „bestehen auf“ hilft hier.",
+    "en": "The error: “insisted for”. Insist goes with on: insisted on a written confirmation. German “bestehen auf” helps here."
    },
    "wrong": [
     {
@@ -694,8 +694,8 @@
   "err": null,
   "why": {
    "ok": {
-    "de": "Kein Fehler: insist on + -ing („being paid“) ist richtig.",
-    "en": "No error: insist on + -ing (“being paid”) is correct."
+    "de": "Kein Fehler: insist on + -ing, im Passiv on being paid. Die Zahlung „in advance“ ist die Forderung.",
+    "en": "No error: insist on + -ing, in the passive on being paid. The payment “in advance” is the demand."
    },
    "wrong": [
     {
@@ -1139,8 +1139,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Der Fehler: „offered covering“. Richtig: offered to cover.",
-    "en": "The error: “offered covering”. Correct: offered to cover."
+    "de": "Der Fehler: „offered covering“. Nach offer steht to + Grundform: offered to cover. -ing wäre hier falsch.",
+    "en": "The error: “offered covering”. After offer comes to + base form: offered to cover. -ing would be wrong here."
    },
    "wrong": [
     {
@@ -1176,8 +1176,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Der Fehler: „promised sending“. Richtig: promised to send.",
-    "en": "The error: “promised sending”. Correct: promised to send."
+    "de": "Der Fehler: „promised sending“. Nach promise steht to + Grundform: promised to send the report by noon.",
+    "en": "The error: “promised sending”. After promise comes to + base form: promised to send the report by noon."
    },
    "wrong": [
     {
@@ -1201,8 +1201,8 @@
   "err": null,
   "why": {
    "ok": {
-    "de": "Kein Fehler: refuse + to + Verb („to lower“) ist richtig.",
-    "en": "No error: refuse + to + verb (“to lower”) is correct."
+    "de": "Kein Fehler: refuse verlangt to + Grundform: refused to lower. Das ist ein Muster, das nicht mit -ing geht.",
+    "en": "No error: refuse takes to + base form: refused to lower. This pattern does not work with -ing."
    },
    "wrong": [
     {

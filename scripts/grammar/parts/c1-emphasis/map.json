@@ -368,8 +368,8 @@
   "pat": "em.neg-inversion",
   "why": {
    "ok": {
-    "de": "Richtig: Rarely vorn verlangt die Umstellung: have we seen.",
-    "en": "Right: Rarely first requires inversion: have we seen."
+    "de": "„Rarely“ am Satzanfang verlangt die Umstellung wie in einer Frage: Rarely have we seen. Das Hilfsverb steht vor dem Subjekt.",
+    "en": "“Rarely” at the start requires inversion as in a question: Rarely have we seen. The auxiliary comes before the subject."
    },
    "wrong": [
     {

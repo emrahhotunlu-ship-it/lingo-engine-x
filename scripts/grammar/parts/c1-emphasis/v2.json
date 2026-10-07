@@ -513,8 +513,8 @@
   "accepted": [],
   "why": {
    "ok": {
-    "de": "Der Fehler: „received“. Nach did steht die Grundform: receive.",
-    "en": "The error: “received”. After did comes the base form: receive."
+    "de": "Der Fehler: „did we received“. Nach did steht die Grundform: At no point did we receive. Das -ed steckt schon in did.",
+    "en": "The error: “did we received”. After did comes the base form: At no point did we receive. The past is already in did."
    },
    "wrong": [
     {

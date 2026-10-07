@@ -65,8 +65,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: ought to + Grundform, mit to: ought to read.",
-    "en": "Right: ought to + base form, with to: ought to read."
+    "de": "Richtig: ought to read. Anders als should steht ought mit to: ought to + Grundform. Der Rat ist stark.",
+    "en": "Right: ought to read. Unlike should, ought takes to: ought to + base form. The advice is strong."
    },
    "wrong": [
     {
@@ -105,8 +105,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Der Fehler: Nach should steht kein to: should postpone.",
-    "en": "The error: no to after should: should postpone."
+    "de": "Der Fehler: „should to“. Nach should steht kein to: should postpone. Deutsch „sollten … zu“ verleitet zu to.",
+    "en": "The error: “should to”. After should there is no to: should postpone. German “sollten … zu” tempts you into to."
    },
    "wrong": [
     {
@@ -246,8 +246,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: had better not + Grundform: not steht hinter better.",
-    "en": "Right: had better not + base form: not comes after better."
+    "de": "Richtig: had better not skip. not steht hinter better, nicht davor. Es ist eine Warnung mit Folgen.",
+    "en": "Right: had better not skip. Not comes after better, not before. It is a warning with consequences."
    },
    "wrong": [
     {
@@ -349,8 +349,8 @@
   "answer": "a",
   "why": {
    "ok": {
-    "de": "Richtig: Satz a. had better warnt: Sonst droht Ärger.",
-    "en": "Right: sentence a. had better warns: otherwise there is trouble."
+    "de": "Satz a: had better warnt, sonst droht Ärger. Satz b mit should ist nur ein Rat, mit weniger Druck.",
+    "en": "Sentence a: had better warns that trouble follows otherwise. Sentence b with should is only advice, with less pressure."
    },
    "wrong": [
     {

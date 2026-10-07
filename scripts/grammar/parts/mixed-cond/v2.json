@@ -596,8 +596,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Nach if steht nie would: If I were more patient. Die Folge im Hauptsatz ist would have waited.",
-    "en": "After if comes never would: If I were more patient. The result in the main clause is would have waited."
+    "de": "Im if-Teil steht hier die Past-Form, nicht would: If I were more patient (informell auch: was).",
+    "en": "Here the if-clause takes the past form, not would: If I were more patient (informal: was)."
    },
    "wrong": [
     {

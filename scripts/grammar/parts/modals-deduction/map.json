@@ -145,8 +145,8 @@
   "pat": "md.must-have",
   "why": {
    "ok": {
-    "de": "Richtig: „I'm sure“ = fast sicher, früher: must have + forgotten.",
-    "en": "Right: “I'm sure” = almost certain, in the past: must have + forgotten."
+    "de": "„I'm sure“ ist ein starker Schluss, und das Meeting liegt vorbei: must have + forgotten. Das Partizip von forget ist forgotten.",
+    "en": "“I'm sure” is a strong conclusion and the meeting is past: must have + forgotten. The participle of forget is forgotten."
    },
    "wrong": [
     {
@@ -187,8 +187,8 @@
   "pat": "md.might-have",
   "why": {
    "ok": {
-    "de": "Richtig: „or maybe“ = nur Möglichkeiten. might have been = vielleicht.",
-    "en": "Right: “or maybe” = only possibilities. might have been = maybe."
+    "de": "„or maybe“ zeigt: Es sind nur Möglichkeiten, kein Beweis. Deshalb might have been, nicht must have been.",
+    "en": "“Or maybe” shows these are only possibilities, no proof. So might have been, not must have been."
    },
    "wrong": [
     {
@@ -617,8 +617,8 @@
   "pat": "md.cant-have",
   "why": {
    "ok": {
-    "de": "Richtig: „impossible“ = ausgeschlossen, früher: can't have + written.",
-    "en": "Right: “impossible” = ruled out, in the past: can't have + written."
+    "de": "„impossible“ heißt ausgeschlossen, und die E-Mail ist schon da: can't have + written. Der Schluss gilt für früher.",
+    "en": "“Impossible” means ruled out, and the email already exists: can't have + written. The conclusion is about the past."
    },
    "wrong": [
     {
@@ -696,8 +696,8 @@
   "pat": "md.cant-have",
   "why": {
    "ok": {
-    "de": "Richtig: „yesterday“ = früher: can't have been, nicht can't be.",
-    "en": "Right: “yesterday” = earlier: can't have been, not can't be."
+    "de": "„yesterday“ liegt in der Vergangenheit: can't have been. can't be würde sich auf jetzt beziehen.",
+    "en": "“Yesterday” is in the past: can't have been. Can't be would refer to now."
    },
    "wrong": [
     {

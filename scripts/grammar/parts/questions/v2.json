@@ -1,1102 +1,1102 @@
 [
-  {
-    "id": "qu-ind-k1",
-    "type": "kwt",
-    "pat": "qu.indirect",
-    "from": "Where is the loading dock?",
-    "key": "KNOW",
-    "frame": "Do you ___ the loading dock is?",
-    "answer": "know where",
-    "accepted": [
-      "happen to know where",
-      "by any chance know where",
-      "even know where",
-      "really know where"
-    ],
-    "words": [
-      2,
-      5
-    ],
-    "why": {
-      "ok": {
-        "de": "Richtig: know where, danach Subjekt + Verb: where the loading dock is, ohne does.",
-        "en": "Right: know where, then subject + verb: where the loading dock is, without does."
-      },
-      "wrong": [
-        {
-          "not": [
-            "know"
-          ],
-          "de": "Das Schlüsselwort know muss unverändert in der Lücke stehen.",
-          "en": "The key word know must stay unchanged in the gap."
-        },
-        {
-          "if": [
-            "know",
-            "does"
-          ],
-          "de": "Kein does: Nach where steht erst das Subjekt, dann is.",
-          "en": "No does: after where the subject comes first, then is."
-        },
-        {
-          "if": [
-            "know"
-          ],
-          "not": [
-            "where"
-          ],
-          "de": "Es fehlt where, das die eingebettete Frage einleitet.",
-          "en": "Where is missing; it opens the embedded question."
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-ind-k2",
-    "type": "kwt",
-    "pat": "qu.indirect",
-    "from": "What time does the conference start?",
-    "key": "TELL",
-    "frame": "Could you ___ the conference starts?",
-    "answer": "tell me what time",
-    "accepted": [
-      "tell us what time",
-      "tell me when",
-      "tell us when",
-      "tell me at what time",
-      "tell us at what time",
-      "please tell me what time",
-      "please tell us what time",
-      "please tell me when",
-      "tell me exactly what time",
-      "tell me exactly when"
-    ],
-    "words": [
-      3,
-      5
-    ],
-    "why": {
-      "ok": {
-        "de": "Richtig: tell me what time, danach steht the conference starts in Aussageform.",
-        "en": "Right: tell me what time, then the conference starts in statement order."
-      },
-      "wrong": [
-        {
-          "not": [
-            "tell"
-          ],
-          "de": "Das Schlüsselwort tell muss unverändert in der Lücke stehen.",
-          "en": "The key word tell must stay unchanged in the gap."
-        },
-        {
-          "if": [
-            "tell",
-            "does"
-          ],
-          "de": "Kein does in der eingebetteten Frage: what time the conference starts.",
-          "en": "No does in the embedded question: what time the conference starts."
-        },
-        {
-          "if": [
-            "tell"
-          ],
-          "not": [
-            "what",
-            "when"
-          ],
-          "de": "Es fehlt das Fragewort (what time oder when) vor the conference starts.",
-          "en": "The wh-word (what time or when) is missing before the conference starts."
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-ind-f1",
-    "type": "find",
-    "pat": "qu.indirect",
-    "prompt": "I'd like to know how long does the review take.",
-    "err": [
-      6,
-      9
-    ],
-    "answer": "the review takes.",
-    "accepted": [
-      "the review will take.",
-      "the review is going to take."
-    ],
-    "fixed": "I'd like to know how long the review takes.",
-    "why": {
-      "ok": {
-        "de": "Der Fehler: „how long does …“ ist die direkte Form. Richtig: how long the review takes.",
-        "en": "The error: “how long does …” is the direct form. Correct: how long the review takes."
-      },
-      "wrong": [
-        {
-          "tap": "none",
-          "de": "Doch, hier steckt ein Fehler: Nach how long steht does vor dem Subjekt.",
-          "en": "There is an error: after how long, does stands before the subject."
-        },
-        {
-          "tap": "*",
-          "de": "Der Fehler liegt bei „does the review take“: eingebettet heißt es the review takes.",
-          "en": "The error is in “does the review take”: embedded it is the review takes."
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-ind-f2",
-    "type": "find",
-    "pat": "qu.indirect",
-    "prompt": "Please tell me where is the parking garage.",
-    "err": [
-      4,
-      7
-    ],
-    "answer": "the parking garage is.",
-    "accepted": [
-      "the parking garage is located."
-    ],
-    "fixed": "Please tell me where the parking garage is.",
-    "why": {
-      "ok": {
-        "de": "Der Fehler: „where is …“ ist die direkte Form. Richtig: where the parking garage is.",
-        "en": "The error: “where is …” is the direct form. Correct: where the parking garage is."
-      },
-      "wrong": [
-        {
-          "tap": "none",
-          "de": "Doch, hier steckt ein Fehler: is steht vor dem Subjekt.",
-          "en": "There is an error: is stands before the subject."
-        },
-        {
-          "tap": "*",
-          "de": "Der Fehler liegt bei „is the parking garage“: Das Subjekt gehört vor das Verb.",
-          "en": "The error is in “is the parking garage”: the subject belongs before the verb."
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-ind-f3",
-    "type": "find",
-    "pat": "qu.indirect",
-    "prompt": "I wonder how much the new licenses will cost.",
-    "err": null,
-    "why": {
-      "ok": {
-        "de": "Kein Fehler: how much + Subjekt + Verb ist die richtige Aussagestellung.",
-        "en": "No error: how much + subject + verb is the right statement order."
-      },
-      "wrong": [
-        {
-          "tap": "*",
-          "de": "Kein Fehler: Nach how much steht das Subjekt, dann das Verb, ohne does.",
-          "en": "No error: after how much the subject comes first, then the verb, without does."
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-ind-m1",
-    "type": "meaning",
-    "pat": "qu.indirect",
-    "a": "Could you tell me what the fee is?",
-    "b": "What is the fee?",
-    "q": {
-      "de": "Welche Frage klingt höflicher und indirekter?",
-      "en": "Which question sounds more polite and indirect?"
+ {
+  "id": "qu-ind-k1",
+  "type": "kwt",
+  "pat": "qu.indirect",
+  "from": "Where is the loading dock?",
+  "key": "KNOW",
+  "frame": "Do you ___ the loading dock is?",
+  "answer": "know where",
+  "accepted": [
+   "happen to know where",
+   "by any chance know where",
+   "even know where",
+   "really know where"
+  ],
+  "words": [
+   2,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: know where, danach Subjekt + Verb: where the loading dock is, ohne does.",
+    "en": "Right: know where, then subject + verb: where the loading dock is, without does."
+   },
+   "wrong": [
+    {
+     "not": [
+      "know"
+     ],
+     "de": "Das Schlüsselwort know muss unverändert in der Lücke stehen.",
+     "en": "The key word know must stay unchanged in the gap."
     },
-    "answer": "a",
-    "why": {
-      "ok": {
-        "de": "Richtig: Satz a. Die eingebettete Frage wirkt höflicher als die knappe direkte Frage.",
-        "en": "Right: sentence a. The embedded question sounds more polite than the short direct one."
-      },
-      "wrong": [
-        {
-          "opt": "b",
-          "de": "b ist die kurze, direkte Frage. Sie fragt dasselbe, klingt aber knapper.",
-          "en": "b is the short, direct question. It asks the same but sounds blunter."
-        },
-        {
-          "opt": "both",
-          "de": "Nicht gleich: Beide fragen dasselbe, doch die Höflichkeit unterscheidet sich.",
-          "en": "Not the same: both ask the same thing, but the politeness differs."
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-iw-k1",
-    "type": "kwt",
-    "pat": "qu.if-whether",
-    "from": "Has the client replied yet?",
-    "key": "WONDER",
-    "frame": "I ___ the client has replied yet.",
-    "answer": "wonder if",
-    "accepted": [
-      "wonder whether",
-      "just wonder if",
-      "just wonder whether",
-      "do wonder if",
-      "do wonder whether"
-    ],
-    "words": [
-      2,
-      3
-    ],
-    "why": {
-      "ok": {
-        "de": "Richtig: wonder if / whether leitet die Ja/Nein-Frage ein: if the client has replied.",
-        "en": "Right: wonder if / whether opens the yes/no question: if the client has replied."
-      },
-      "wrong": [
-        {
-          "not": [
-            "wonder"
-          ],
-          "de": "Das Schlüsselwort wonder muss unverändert in der Lücke stehen.",
-          "en": "The key word wonder must stay unchanged in the gap."
-        },
-        {
-          "if": [
-            "wonder",
-            "that"
-          ],
-          "de": "That leitet keine Ja/Nein-Frage ein. Nach wonder steht if oder whether.",
-          "en": "That does not open a yes/no question. After wonder use if or whether."
-        },
-        {
-          "if": [
-            "wonder"
-          ],
-          "not": [
-            "if",
-            "whether"
-          ],
-          "de": "Es fehlt if oder whether, das die Ja/Nein-Frage einleitet.",
-          "en": "If or whether is missing; it opens the yes/no question."
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-iw-k2",
-    "type": "kwt",
-    "pat": "qu.if-whether",
-    "from": "'Is the report ready?' my manager asked.",
-    "key": "ASKED",
-    "frame": "My manager ___ the report was ready.",
-    "answer": "asked if",
-    "accepted": [
-      "asked whether",
-      "asked me if",
-      "asked me whether",
-      "asked us if",
-      "asked us whether"
-    ],
-    "words": [
-      2,
-      3
-    ],
-    "why": {
-      "ok": {
-        "de": "Richtig: asked if / whether, danach der Aussagesatz: if the report was ready.",
-        "en": "Right: asked if / whether, then statement order: if the report was ready."
-      },
-      "wrong": [
-        {
-          "not": [
-            "asked"
-          ],
-          "de": "Das Schlüsselwort asked muss unverändert in der Lücke stehen.",
-          "en": "The key word asked must stay unchanged in the gap."
-        },
-        {
-          "if": [
-            "asked",
-            "that"
-          ],
-          "de": "That leitet eine Aussage ein. Eine Ja/Nein-Frage im Bericht braucht if oder whether.",
-          "en": "That opens a statement. A yes/no question in reported speech needs if or whether."
-        },
-        {
-          "if": [
-            "asked"
-          ],
-          "not": [
-            "if",
-            "whether"
-          ],
-          "de": "Es fehlt if oder whether vor the report was ready.",
-          "en": "If or whether is missing before the report was ready."
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-iw-f1",
-    "type": "find",
-    "pat": "qu.if-whether",
-    "prompt": "We haven't decided if to hire another analyst.",
-    "err": [
-      3,
-      4
-    ],
-    "answer": "whether to",
-    "accepted": [
-      "if we should",
-      "whether we should"
-    ],
-    "fixed": "We haven't decided whether to hire another analyst.",
-    "why": {
-      "ok": {
-        "de": "Der Fehler: Vor to + Verb steht whether, nicht if. Richtig: whether to hire.",
-        "en": "The error: before to + verb use whether, not if. Correct: whether to hire."
-      },
-      "wrong": [
-        {
-          "tap": "none",
-          "de": "Doch, hier steckt ein Fehler: „if to“ gibt es nicht.",
-          "en": "There is an error: “if to” does not exist."
-        },
-        {
-          "tap": "*",
-          "de": "Der Fehler liegt bei „if to“: Vor to + Verb braucht es whether.",
-          "en": "The error is in “if to”: before to + verb it needs whether."
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-iw-f2",
-    "type": "find",
-    "pat": "qu.if-whether",
-    "prompt": "He asked me did I need a ride to the airport.",
-    "err": [
-      3,
-      5
-    ],
-    "answer": "if I needed",
-    "accepted": [
-      "whether I needed",
-      "if I need",
-      "whether I need"
-    ],
-    "fixed": "He asked me if I needed a ride to the airport.",
-    "why": {
-      "ok": {
-        "de": "Der Fehler: Im Bericht fehlt if oder whether, und die Frageform bleibt. Richtig: if I needed.",
-        "en": "The error: the report lacks if or whether and keeps the question form. Correct: if I needed."
-      },
-      "wrong": [
-        {
-          "tap": "none",
-          "de": "Doch, hier steckt ein Fehler: „did I need“ ist noch die direkte Frage.",
-          "en": "There is an error: “did I need” is still the direct question."
-        },
-        {
-          "tap": "*",
-          "de": "Der Fehler liegt bei „did I need“: Es braucht if oder whether und Aussagestellung.",
-          "en": "The error is in “did I need”: it needs if or whether and statement order."
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-iw-f3",
-    "type": "find",
-    "pat": "qu.if-whether",
-    "prompt": "Please confirm whether or not you'll attend the workshop.",
-    "err": null,
-    "why": {
-      "ok": {
-        "de": "Kein Fehler: whether or not + Subjekt + Verb ist richtig.",
-        "en": "No error: whether or not + subject + verb is correct."
-      },
-      "wrong": [
-        {
-          "tap": "*",
-          "de": "Kein Fehler: Hier steht whether or not, und danach folgt die Aussagestellung.",
-          "en": "No error: whether or not stands here, followed by statement order."
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-iw-m1",
-    "type": "meaning",
-    "pat": "qu.if-whether",
-    "a": "Tell me if you need help.",
-    "b": "Tell me when you need help.",
-    "q": {
-      "de": "Bei welchem Satz ist noch offen, ob du überhaupt Hilfe brauchst?",
-      "en": "In which sentence is it still open whether you need help at all?"
+    {
+     "if": [
+      "know",
+      "does"
+     ],
+     "de": "Kein does: Nach where steht erst das Subjekt, dann is.",
+     "en": "No does: after where the subject comes first, then is."
     },
-    "answer": "a",
-    "why": {
-      "ok": {
-        "de": "Richtig: Satz a. If lässt offen, ob es so kommt, und when setzt voraus, dass es kommt.",
-        "en": "Right: sentence a. If leaves open whether it happens. When assumes that it will."
-      },
-      "wrong": [
-        {
-          "opt": "b",
-          "de": "In b setzt when voraus, dass du Hilfe brauchen wirst. Offen ist nur der Zeitpunkt.",
-          "en": "In b when assumes you will need help. Only the time is open."
-        },
-        {
-          "opt": "both",
-          "de": "Nicht gleich: if lässt offen, ob es passiert, when nicht.",
-          "en": "Not the same: if leaves open whether it happens, when does not."
-        }
-      ]
+    {
+     "if": [
+      "know"
+     ],
+     "not": [
+      "where"
+     ],
+     "de": "Es fehlt where, das die eingebettete Frage einleitet.",
+     "en": "Where is missing; it opens the embedded question."
     }
-  },
-  {
-    "id": "qu-sub-k1",
-    "type": "kwt",
-    "pat": "qu.subject",
-    "from": "I'd like to know the person who signed off on the budget last week.",
-    "key": "WHO",
-    "frame": "___ the budget last week?",
-    "answer": "Who signed off on",
-    "accepted": [
-      "Who approved",
-      "Who authorized",
-      "Who actually approved",
-      "Who okayed",
-      "Who finally approved",
-      "Who ultimately approved",
-      "Who ended up approving",
-      "Who actually signed off on"
-    ],
-    "words": [
-      2,
-      5
-    ],
-    "why": {
-      "ok": {
-        "de": "Richtig: Who ist das Subjekt, also folgt das Verb direkt: Who approved the budget?",
-        "en": "Right: Who is the subject, so the verb follows directly: Who approved the budget?"
-      },
-      "wrong": [
-        {
-          "not": [
-            "who"
-          ],
-          "de": "Das Schlüsselwort who muss unverändert in der Lücke stehen.",
-          "en": "The key word who must stay unchanged in the gap."
-        },
-        {
-          "if": [
-            "who",
-            "did"
-          ],
-          "de": "Kein did: Who ist selbst das Subjekt, das Verb folgt direkt.",
-          "en": "No did: Who is itself the subject; the verb follows directly."
-        },
-        {
-          "if": [
-            "who"
-          ],
-          "de": "Nach Who folgt direkt ein Verb in der Vergangenheit, passend zu last week.",
-          "en": "After Who comes a verb in the past directly, matching last week."
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-sub-k2",
-    "type": "kwt",
-    "pat": "qu.subject",
-    "from": "Last week something delayed the shipment, and nobody knows the cause.",
-    "key": "WHAT",
-    "frame": "___ the shipment last week?",
-    "answer": "What delayed",
-    "accepted": [
-      "What held up",
-      "What slowed down",
-      "What actually delayed",
-      "What was delaying",
-      "What caused a delay to",
-      "What caused the delay of"
-    ],
-    "words": [
-      2,
-      5
-    ],
-    "why": {
-      "ok": {
-        "de": "Richtig: What ist das Subjekt, also folgt das Verb direkt: What delayed the shipment?",
-        "en": "Right: What is the subject, so the verb follows directly: What delayed the shipment?"
-      },
-      "wrong": [
-        {
-          "not": [
-            "what"
-          ],
-          "de": "Das Schlüsselwort what muss unverändert in der Lücke stehen.",
-          "en": "The key word what must stay unchanged in the gap."
-        },
-        {
-          "if": [
-            "what",
-            "did"
-          ],
-          "de": "Kein did: What fragt nach der Ursache und ist das Subjekt.",
-          "en": "No did: What asks for the cause and is the subject."
-        },
-        {
-          "if": [
-            "what"
-          ],
-          "de": "Nach What folgt direkt ein Verb, passend zu last week.",
-          "en": "After What comes a verb directly, matching last week."
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-sub-f1",
-    "type": "find",
-    "pat": "qu.subject",
-    "prompt": "How many employees does work in the Austin office?",
-    "err": [
-      3,
-      4
-    ],
-    "answer": "work",
-    "accepted": [
-      "are working"
-    ],
-    "fixed": "How many employees work in the Austin office?",
-    "why": {
-      "ok": {
-        "de": "Der Fehler: does passt nicht zu how many employees. Subjektfrage: How many employees work …",
-        "en": "The error: does does not fit how many employees. Subject question: How many employees work …"
-      },
-      "wrong": [
-        {
-          "tap": "none",
-          "de": "Doch, hier steckt ein Fehler: does steht vor dem Verb einer Subjektfrage.",
-          "en": "There is an error: does stands before the verb of a subject question."
-        },
-        {
-          "tap": "*",
-          "de": "Der Fehler liegt bei „does work“: how many employees ist das Subjekt, das Verb folgt direkt.",
-          "en": "The error is in “does work”: how many employees is the subject; the verb follows directly."
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-sub-f2",
-    "type": "find",
-    "pat": "qu.subject",
-    "prompt": "Whom approved the new template last month?",
-    "err": [
-      0,
-      0
-    ],
-    "answer": "Who",
-    "accepted": [],
-    "fixed": "Who approved the new template last month?",
-    "why": {
-      "ok": {
-        "de": "Der Fehler: whom ist nur Objekt. Der Handelnde ist who: Who approved …",
-        "en": "The error: whom is only an object. The doer is who: Who approved …"
-      },
-      "wrong": [
-        {
-          "tap": "none",
-          "de": "Doch, hier steckt ein Fehler: Das erste Wort passt nicht zum Subjekt.",
-          "en": "There is an error: the first word does not fit a subject."
-        },
-        {
-          "tap": "*",
-          "de": "Der Fehler liegt bei „Whom“: Für den Handelnden steht who.",
-          "en": "The error is in “Whom”: for the doer use who."
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-sub-f3",
-    "type": "find",
-    "pat": "qu.subject",
-    "prompt": "Who is covering the support desk on Friday?",
-    "err": null,
-    "why": {
-      "ok": {
-        "de": "Kein Fehler: Who ist Subjekt, danach folgt direkt das Verb is covering.",
-        "en": "No error: Who is the subject, followed directly by the verb is covering."
-      },
-      "wrong": [
-        {
-          "tap": "*",
-          "de": "Kein Fehler: Who + Verb, ohne do, ist die richtige Subjektfrage.",
-          "en": "No error: Who + verb, without do, is the right subject question."
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-sub-m1",
-    "type": "meaning",
-    "pat": "qu.subject",
-    "a": "Who called the client?",
-    "b": "Who did the client call?",
-    "q": {
-      "de": "Welcher Satz fragt nach der Person, die angerufen hat?",
-      "en": "Which sentence asks for the person who made the call?"
-    },
-    "answer": "a",
-    "why": {
-      "ok": {
-        "de": "Richtig: Satz a. Who ist Subjekt: Gefragt ist der Anrufer.",
-        "en": "Right: sentence a. Who is the subject: the caller is asked for."
-      },
-      "wrong": [
-        {
-          "opt": "b",
-          "de": "In b fragt who nach dem Angerufenen. Der Kunde ist hier der Anrufer.",
-          "en": "In b who asks for the person called. The client is the caller here."
-        },
-        {
-          "opt": "both",
-          "de": "Nicht gleich: Mit did fragt man nach dem Objekt, ohne did nach dem Subjekt.",
-          "en": "Not the same: with did you ask for the object, without did for the subject."
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-dir-k1",
-    "type": "kwt",
-    "pat": "qu.direct",
-    "from": "At what time did the shipment arrive?",
-    "key": "WHEN",
-    "frame": "___ the shipment arrive?",
-    "answer": "When did",
-    "accepted": [
-      "When exactly did",
-      "When actually did",
-      "When precisely did"
-    ],
-    "words": [
-      2,
-      3
-    ],
-    "why": {
-      "ok": {
-        "de": "Richtig: When did, danach Subjekt und Grundform: When did the shipment arrive?",
-        "en": "Right: When did, then subject and base form: When did the shipment arrive?"
-      },
-      "wrong": [
-        {
-          "not": [
-            "when"
-          ],
-          "de": "Das Schlüsselwort when muss unverändert in der Lücke stehen.",
-          "en": "The key word when must stay unchanged in the gap."
-        },
-        {
-          "if": [
-            "when",
-            "does"
-          ],
-          "de": "Die Sendung kam in der Vergangenheit an: When did, nicht does.",
-          "en": "The shipment arrived in the past: When did, not does."
-        },
-        {
-          "if": [
-            "when"
-          ],
-          "not": [
-            "did"
-          ],
-          "de": "Es fehlt did: Die direkte Frage im Past Simple braucht did vor dem Subjekt.",
-          "en": "Did is missing: a direct simple past question needs did before the subject."
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-dir-k2",
-    "type": "kwt",
-    "pat": "qu.direct",
-    "from": "With whom are you meeting this afternoon?",
-    "key": "WITH",
-    "frame": "Who are you ___ this afternoon?",
-    "answer": "meeting with",
-    "accepted": [
-      "meeting up with",
-      "going to meet with",
-      "planning to meet with",
-      "scheduled to meet with"
-    ],
-    "words": [
-      2,
-      4
-    ],
-    "why": {
-      "ok": {
-        "de": "Richtig: Die Präposition with steht am Ende: Who are you meeting with?",
-        "en": "Right: the preposition with ends the question: Who are you meeting with?"
-      },
-      "wrong": [
-        {
-          "not": [
-            "with"
-          ],
-          "de": "Das Schlüsselwort with muss unverändert in der Lücke stehen.",
-          "en": "The key word with must stay unchanged in the gap."
-        },
-        {
-          "if": [
-            "meet"
-          ],
-          "not": [
-            "to"
-          ],
-          "de": "Nach are you braucht es -ing (meeting) oder going to + meet.",
-          "en": "After are you use -ing (meeting) or going to + meet."
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-dir-f1",
-    "type": "find",
-    "pat": "qu.direct",
-    "prompt": "What time starts the workshop on Friday?",
-    "err": [
-      2,
-      4
-    ],
-    "answer": "does the workshop start",
-    "accepted": [
-      "will the workshop start",
-      "is the workshop starting"
-    ],
-    "fixed": "What time does the workshop start on Friday?",
-    "why": {
-      "ok": {
-        "de": "Der Fehler: Im Englischen steht does vor dem Subjekt. Richtig: What time does the workshop start?",
-        "en": "The error: English puts does before the subject. Correct: What time does the workshop start?"
-      },
-      "wrong": [
-        {
-          "tap": "none",
-          "de": "Doch, hier steckt ein Fehler: Es fehlt does vor dem Subjekt.",
-          "en": "There is an error: does is missing before the subject."
-        },
-        {
-          "tap": "*",
-          "de": "Der Fehler liegt bei „starts the workshop“: Hier braucht es does + Subjekt + start.",
-          "en": "The error is in “starts the workshop”: here it needs does + subject + start."
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-dir-f2",
-    "type": "find",
-    "pat": "qu.direct",
-    "prompt": "How many languages does your team speaks?",
-    "err": [
-      6,
-      6
-    ],
-    "answer": "speak?",
-    "accepted": [],
-    "fixed": "How many languages does your team speak?",
-    "why": {
-      "ok": {
-        "de": "Der Fehler: does trägt schon das -s. Danach steht die Grundform: speak.",
-        "en": "The error: does already carries the -s. The base form follows: speak."
-      },
-      "wrong": [
-        {
-          "tap": "none",
-          "de": "Doch, hier steckt ein Fehler: Nach does steht die Grundform.",
-          "en": "There is an error: after does comes the base form."
-        },
-        {
-          "tap": "*",
-          "de": "Der Fehler liegt bei „speaks“: Nach does braucht das Verb kein -s.",
-          "en": "The error is in “speaks”: after does the verb takes no -s."
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-dir-f3",
-    "type": "find",
-    "pat": "qu.direct",
-    "prompt": "When did the client replied to your email?",
-    "err": [
-      4,
-      4
-    ],
-    "answer": "reply",
-    "accepted": [],
-    "fixed": "When did the client reply to your email?",
-    "why": {
-      "ok": {
-        "de": "Der Fehler: did zeigt schon die Vergangenheit. Danach steht die Grundform: reply.",
-        "en": "The error: did already shows the past. The base form follows: reply."
-      },
-      "wrong": [
-        {
-          "tap": "none",
-          "de": "Doch, hier steckt ein Fehler: Nach did steht die Grundform.",
-          "en": "There is an error: after did comes the base form."
-        },
-        {
-          "tap": "*",
-          "de": "Der Fehler liegt bei „replied“: Nach did braucht das Verb keine Vergangenheitsform.",
-          "en": "The error is in “replied”: after did the verb takes no past form."
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-dir-m1",
-    "type": "meaning",
-    "pat": "qu.direct",
-    "a": "Did you send the invoice?",
-    "b": "You sent the invoice, didn't you?",
-    "q": {
-      "de": "Welcher Satz fragt neutral, ohne schon ein Ja zu erwarten?",
-      "en": "Which sentence asks neutrally, without already expecting a yes?"
-    },
-    "answer": "a",
-    "why": {
-      "ok": {
-        "de": "Richtig: Satz a. Die direkte Frage ist offen. Ein Tag erwartet dagegen ein Ja.",
-        "en": "Right: sentence a. The direct question is open. A tag, however, expects a yes."
-      },
-      "wrong": [
-        {
-          "opt": "b",
-          "de": "In b erwartet der Sprecher durch das Tag ein Ja und bittet um Bestätigung.",
-          "en": "In b the tag shows the speaker expects a yes and wants confirmation."
-        },
-        {
-          "opt": "both",
-          "de": "Nicht gleich: Mit Tag erwartet der Sprecher ein Ja, ohne Tag fragt er offen.",
-          "en": "Not the same: with a tag the speaker expects a yes, without one the question is open."
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-tag-k1",
-    "type": "kwt",
-    "pat": "qu.tags",
-    "from": "Anna rarely works late. Please confirm.",
-    "key": "DOES",
-    "frame": "Anna rarely works late, ___?",
-    "answer": "does she",
-    "accepted": [],
-    "words": [
-      2,
-      2
-    ],
-    "why": {
-      "ok": {
-        "de": "Richtig: rarely wirkt verneinend, also folgt ein bejahtes Tag: does she?",
-        "en": "Right: rarely acts as a negative, so a positive tag follows: does she?"
-      },
-      "wrong": [
-        {
-          "not": [
-            "does"
-          ],
-          "de": "Das Schlüsselwort does muss unverändert in der Lücke stehen.",
-          "en": "The key word does must stay unchanged in the gap."
-        },
-        {
-          "if": [
-            "does",
-            "not"
-          ],
-          "de": "Rarely wirkt schon verneinend. Das Tag muss bejaht sein: does she?",
-          "en": "Rarely already acts as a negative. The tag must be positive: does she?"
-        },
-        {
-          "if": [
-            "does"
-          ],
-          "not": [
-            "she"
-          ],
-          "de": "Anna wird im Tag mit she aufgenommen: does she?",
-          "en": "Anna is picked up in the tag with she: does she?"
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-tag-k2",
-    "type": "kwt",
-    "pat": "qu.tags",
-    "from": "Nobody called while I was out.",
-    "key": "DID",
-    "frame": "Nobody called while I was out, ___?",
-    "answer": "did they",
-    "accepted": [],
-    "words": [
-      2,
-      2
-    ],
-    "why": {
-      "ok": {
-        "de": "Richtig: Nobody verneint schon, also folgt ein bejahtes Tag mit they: did they?",
-        "en": "Right: Nobody is already negative, so a positive tag with they follows: did they?"
-      },
-      "wrong": [
-        {
-          "not": [
-            "did"
-          ],
-          "de": "Das Schlüsselwort did muss unverändert in der Lücke stehen.",
-          "en": "The key word did must stay unchanged in the gap."
-        },
-        {
-          "if": [
-            "did",
-            "not"
-          ],
-          "de": "Nobody verneint schon. Das Tag muss bejaht sein: did they?",
-          "en": "Nobody is already negative. The tag must be positive: did they?"
-        },
-        {
-          "if": [
-            "did"
-          ],
-          "not": [
-            "they"
-          ],
-          "de": "Nobody wird im Tag mit they aufgenommen: did they?",
-          "en": "Nobody is picked up in the tag with they: did they?"
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-tag-f1",
-    "type": "find",
-    "pat": "qu.tags",
-    "prompt": "You booked the room for Friday, isn't it?",
-    "err": [
-      6,
-      7
-    ],
-    "answer": "didn't you?",
-    "accepted": [],
-    "fixed": "You booked the room for Friday, didn't you?",
-    "why": {
-      "ok": {
-        "de": "Der Fehler: isn't it passt nicht zu booked. Das Tag braucht das Hilfsverb did: didn't you?",
-        "en": "The error: isn't it does not fit booked. The tag needs the auxiliary did: didn't you?"
-      },
-      "wrong": [
-        {
-          "tap": "none",
-          "de": "Doch, hier steckt ein Fehler: Das Tag passt nicht zum Satz.",
-          "en": "There is an error: the tag does not match the sentence."
-        },
-        {
-          "tap": "*",
-          "de": "Der Fehler liegt bei „isn't it“: Das Tag muss zu Hilfsverb und Subjekt passen.",
-          "en": "The error is in “isn't it”: the tag must match the auxiliary and the subject."
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-tag-f2",
-    "type": "find",
-    "pat": "qu.tags",
-    "prompt": "Nobody has replied yet, haven't they?",
-    "err": [
-      4,
-      5
-    ],
-    "answer": "have they?",
-    "accepted": [],
-    "fixed": "Nobody has replied yet, have they?",
-    "why": {
-      "ok": {
-        "de": "Der Fehler: Nobody verneint schon, also muss das Tag bejaht sein: have they?",
-        "en": "The error: Nobody is already negative, so the tag must be positive: have they?"
-      },
-      "wrong": [
-        {
-          "tap": "none",
-          "de": "Doch, hier steckt ein Fehler: Aussage und Tag sind beide verneint.",
-          "en": "There is an error: the statement and the tag are both negative."
-        },
-        {
-          "tap": "*",
-          "de": "Der Fehler liegt bei „haven't they“: Nach Nobody steht ein bejahtes Tag.",
-          "en": "The error is in “haven't they”: after Nobody comes a positive tag."
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-tag-f3",
-    "type": "find",
-    "pat": "qu.tags",
-    "prompt": "I'm running late, aren't I?",
-    "err": null,
-    "why": {
-      "ok": {
-        "de": "Kein Fehler: Nach I am heißt das Tag aren't I?",
-        "en": "No error: after I am the tag is aren't I?"
-      },
-      "wrong": [
-        {
-          "tap": "*",
-          "de": "Kein Fehler: aren't I ist das feste Tag nach I'm.",
-          "en": "No error: aren't I is the fixed tag after I'm."
-        }
-      ]
-    }
-  },
-  {
-    "id": "qu-tag-m1",
-    "type": "meaning",
-    "pat": "qu.tags",
-    "a": "You like the proposal, don't you?",
-    "b": "You don't like the proposal, do you?",
-    "q": {
-      "de": "Bei welchem Satz erwartet der Sprecher eher ein Nein?",
-      "en": "In which sentence does the speaker rather expect a no?"
-    },
-    "answer": "b",
-    "why": {
-      "ok": {
-        "de": "Richtig: Satz b. Nach verneinter Aussage mit bejahtem Tag rechnet der Sprecher mit Nein.",
-        "en": "Right: sentence b. After a negative statement with a positive tag the speaker expects a no."
-      },
-      "wrong": [
-        {
-          "opt": "a",
-          "de": "In a stützt die bejahte Aussage ein erwartetes Ja.",
-          "en": "In a the positive statement supports an expected yes."
-        },
-        {
-          "opt": "both",
-          "de": "Nicht gleich: Aussage und Tag zeigen, welche Antwort erwartet wird.",
-          "en": "Not the same: statement and tag show which answer is expected."
-        }
-      ]
-    }
+   ]
   }
+ },
+ {
+  "id": "qu-ind-k2",
+  "type": "kwt",
+  "pat": "qu.indirect",
+  "from": "What time does the conference start?",
+  "key": "TELL",
+  "frame": "Could you ___ the conference starts?",
+  "answer": "tell me what time",
+  "accepted": [
+   "tell us what time",
+   "tell me when",
+   "tell us when",
+   "tell me at what time",
+   "tell us at what time",
+   "please tell me what time",
+   "please tell us what time",
+   "please tell me when",
+   "tell me exactly what time",
+   "tell me exactly when"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: tell me what time, danach steht the conference starts in Aussageform.",
+    "en": "Right: tell me what time, then the conference starts in statement order."
+   },
+   "wrong": [
+    {
+     "not": [
+      "tell"
+     ],
+     "de": "Das Schlüsselwort tell muss unverändert in der Lücke stehen.",
+     "en": "The key word tell must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "tell",
+      "does"
+     ],
+     "de": "Kein does in der eingebetteten Frage: what time the conference starts.",
+     "en": "No does in the embedded question: what time the conference starts."
+    },
+    {
+     "if": [
+      "tell"
+     ],
+     "not": [
+      "what",
+      "when"
+     ],
+     "de": "Es fehlt das Fragewort (what time oder when) vor the conference starts.",
+     "en": "The wh-word (what time or when) is missing before the conference starts."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-ind-f1",
+  "type": "find",
+  "pat": "qu.indirect",
+  "prompt": "I'd like to know how long does the review take.",
+  "err": [
+   6,
+   9
+  ],
+  "answer": "the review takes.",
+  "accepted": [
+   "the review will take.",
+   "the review is going to take."
+  ],
+  "fixed": "I'd like to know how long the review takes.",
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „how long does …“ ist die direkte Form. Richtig: how long the review takes.",
+    "en": "The error: “how long does …” is the direct form. Correct: how long the review takes."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach how long steht does vor dem Subjekt.",
+     "en": "There is an error: after how long, does stands before the subject."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „does the review take“: eingebettet heißt es the review takes.",
+     "en": "The error is in “does the review take”: embedded it is the review takes."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-ind-f2",
+  "type": "find",
+  "pat": "qu.indirect",
+  "prompt": "Please tell me where is the parking garage.",
+  "err": [
+   4,
+   7
+  ],
+  "answer": "the parking garage is.",
+  "accepted": [
+   "the parking garage is located."
+  ],
+  "fixed": "Please tell me where the parking garage is.",
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „where is …“ ist die direkte Form. Richtig: where the parking garage is.",
+    "en": "The error: “where is …” is the direct form. Correct: where the parking garage is."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: is steht vor dem Subjekt.",
+     "en": "There is an error: is stands before the subject."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „is the parking garage“: Das Subjekt gehört vor das Verb.",
+     "en": "The error is in “is the parking garage”: the subject belongs before the verb."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-ind-f3",
+  "type": "find",
+  "pat": "qu.indirect",
+  "prompt": "I wonder how much the new licenses will cost.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: how much + Subjekt + Verb ist die richtige Aussagestellung.",
+    "en": "No error: how much + subject + verb is the right statement order."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach how much steht das Subjekt, dann das Verb, ohne does.",
+     "en": "No error: after how much the subject comes first, then the verb, without does."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-ind-m1",
+  "type": "meaning",
+  "pat": "qu.indirect",
+  "a": "Could you tell me what the fee is?",
+  "b": "What is the fee?",
+  "q": {
+   "de": "Welche Frage klingt höflicher und indirekter?",
+   "en": "Which question sounds more polite and indirect?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Die eingebettete Frage wirkt höflicher als die knappe direkte Frage.",
+    "en": "Right: sentence a. The embedded question sounds more polite than the short direct one."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "b ist die kurze, direkte Frage. Sie fragt dasselbe, klingt aber knapper.",
+     "en": "b is the short, direct question. It asks the same but sounds blunter."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Beide fragen dasselbe, doch die Höflichkeit unterscheidet sich.",
+     "en": "Not the same: both ask the same thing, but the politeness differs."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-iw-k1",
+  "type": "kwt",
+  "pat": "qu.if-whether",
+  "from": "Has the client replied yet?",
+  "key": "WONDER",
+  "frame": "I ___ the client has replied yet.",
+  "answer": "wonder if",
+  "accepted": [
+   "wonder whether",
+   "just wonder if",
+   "just wonder whether",
+   "do wonder if",
+   "do wonder whether"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: wonder if / whether leitet die Ja/Nein-Frage ein: if the client has replied.",
+    "en": "Right: wonder if / whether opens the yes/no question: if the client has replied."
+   },
+   "wrong": [
+    {
+     "not": [
+      "wonder"
+     ],
+     "de": "Das Schlüsselwort wonder muss unverändert in der Lücke stehen.",
+     "en": "The key word wonder must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "wonder",
+      "that"
+     ],
+     "de": "That leitet keine Ja/Nein-Frage ein. Nach wonder steht if oder whether.",
+     "en": "That does not open a yes/no question. After wonder use if or whether."
+    },
+    {
+     "if": [
+      "wonder"
+     ],
+     "not": [
+      "if",
+      "whether"
+     ],
+     "de": "Es fehlt if oder whether, das die Ja/Nein-Frage einleitet.",
+     "en": "If or whether is missing; it opens the yes/no question."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-iw-k2",
+  "type": "kwt",
+  "pat": "qu.if-whether",
+  "from": "'Is the report ready?' my manager asked.",
+  "key": "ASKED",
+  "frame": "My manager ___ the report was ready.",
+  "answer": "asked if",
+  "accepted": [
+   "asked whether",
+   "asked me if",
+   "asked me whether",
+   "asked us if",
+   "asked us whether"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: asked if / whether, danach der Aussagesatz: if the report was ready.",
+    "en": "Right: asked if / whether, then statement order: if the report was ready."
+   },
+   "wrong": [
+    {
+     "not": [
+      "asked"
+     ],
+     "de": "Das Schlüsselwort asked muss unverändert in der Lücke stehen.",
+     "en": "The key word asked must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "asked",
+      "that"
+     ],
+     "de": "That leitet eine Aussage ein. Eine Ja/Nein-Frage im Bericht braucht if oder whether.",
+     "en": "That opens a statement. A yes/no question in reported speech needs if or whether."
+    },
+    {
+     "if": [
+      "asked"
+     ],
+     "not": [
+      "if",
+      "whether"
+     ],
+     "de": "Es fehlt if oder whether vor the report was ready.",
+     "en": "If or whether is missing before the report was ready."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-iw-f1",
+  "type": "find",
+  "pat": "qu.if-whether",
+  "prompt": "We haven't decided if to hire another analyst.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "whether to",
+  "accepted": [
+   "if we should",
+   "whether we should"
+  ],
+  "fixed": "We haven't decided whether to hire another analyst.",
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Vor to + Verb steht whether, nicht if. Richtig: whether to hire.",
+    "en": "The error: before to + verb use whether, not if. Correct: whether to hire."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: „if to“ gibt es nicht.",
+     "en": "There is an error: “if to” does not exist."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „if to“: Vor to + Verb braucht es whether.",
+     "en": "The error is in “if to”: before to + verb it needs whether."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-iw-f2",
+  "type": "find",
+  "pat": "qu.if-whether",
+  "prompt": "He asked me did I need a ride to the airport.",
+  "err": [
+   3,
+   5
+  ],
+  "answer": "if I needed",
+  "accepted": [
+   "whether I needed",
+   "if I need",
+   "whether I need"
+  ],
+  "fixed": "He asked me if I needed a ride to the airport.",
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Im Bericht fehlt if oder whether, und die Frageform bleibt. Richtig: if I needed.",
+    "en": "The error: the report lacks if or whether and keeps the question form. Correct: if I needed."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: „did I need“ ist noch die direkte Frage.",
+     "en": "There is an error: “did I need” is still the direct question."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „did I need“: Es braucht if oder whether und Aussagestellung.",
+     "en": "The error is in “did I need”: it needs if or whether and statement order."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-iw-f3",
+  "type": "find",
+  "pat": "qu.if-whether",
+  "prompt": "Please confirm whether or not you'll attend the workshop.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: „whether or not“ leitet eine indirekte Frage ein, danach folgt normale Satzstellung: you'll attend.",
+    "en": "No error: “whether or not” introduces an indirect question, followed by normal word order: you'll attend."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Hier steht whether or not, und danach folgt die Aussagestellung.",
+     "en": "No error: whether or not stands here, followed by statement order."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-iw-m1",
+  "type": "meaning",
+  "pat": "qu.if-whether",
+  "a": "Tell me if you need help.",
+  "b": "Tell me when you need help.",
+  "q": {
+   "de": "Bei welchem Satz ist noch offen, ob du überhaupt Hilfe brauchst?",
+   "en": "In which sentence is it still open whether you need help at all?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. If lässt offen, ob es so kommt, und when setzt voraus, dass es kommt.",
+    "en": "Right: sentence a. If leaves open whether it happens. When assumes that it will."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b setzt when voraus, dass du Hilfe brauchen wirst. Offen ist nur der Zeitpunkt.",
+     "en": "In b when assumes you will need help. Only the time is open."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: if lässt offen, ob es passiert, when nicht.",
+     "en": "Not the same: if leaves open whether it happens, when does not."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-sub-k1",
+  "type": "kwt",
+  "pat": "qu.subject",
+  "from": "I'd like to know the person who signed off on the budget last week.",
+  "key": "WHO",
+  "frame": "___ the budget last week?",
+  "answer": "Who signed off on",
+  "accepted": [
+   "Who approved",
+   "Who authorized",
+   "Who actually approved",
+   "Who okayed",
+   "Who finally approved",
+   "Who ultimately approved",
+   "Who ended up approving",
+   "Who actually signed off on"
+  ],
+  "words": [
+   2,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Who ist das Subjekt, also folgt das Verb direkt: Who approved the budget?",
+    "en": "Right: Who is the subject, so the verb follows directly: Who approved the budget?"
+   },
+   "wrong": [
+    {
+     "not": [
+      "who"
+     ],
+     "de": "Das Schlüsselwort who muss unverändert in der Lücke stehen.",
+     "en": "The key word who must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "who",
+      "did"
+     ],
+     "de": "Kein did: Who ist selbst das Subjekt, das Verb folgt direkt.",
+     "en": "No did: Who is itself the subject; the verb follows directly."
+    },
+    {
+     "if": [
+      "who"
+     ],
+     "de": "Nach Who folgt direkt ein Verb in der Vergangenheit, passend zu last week.",
+     "en": "After Who comes a verb in the past directly, matching last week."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-sub-k2",
+  "type": "kwt",
+  "pat": "qu.subject",
+  "from": "Last week something delayed the shipment, and nobody knows the cause.",
+  "key": "WHAT",
+  "frame": "___ the shipment last week?",
+  "answer": "What delayed",
+  "accepted": [
+   "What held up",
+   "What slowed down",
+   "What actually delayed",
+   "What was delaying",
+   "What caused a delay to",
+   "What caused the delay of"
+  ],
+  "words": [
+   2,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: What ist das Subjekt, also folgt das Verb direkt: What delayed the shipment?",
+    "en": "Right: What is the subject, so the verb follows directly: What delayed the shipment?"
+   },
+   "wrong": [
+    {
+     "not": [
+      "what"
+     ],
+     "de": "Das Schlüsselwort what muss unverändert in der Lücke stehen.",
+     "en": "The key word what must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "what",
+      "did"
+     ],
+     "de": "Kein did: What fragt nach der Ursache und ist das Subjekt.",
+     "en": "No did: What asks for the cause and is the subject."
+    },
+    {
+     "if": [
+      "what"
+     ],
+     "de": "Nach What folgt direkt ein Verb, passend zu last week.",
+     "en": "After What comes a verb directly, matching last week."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-sub-f1",
+  "type": "find",
+  "pat": "qu.subject",
+  "prompt": "How many employees does work in the Austin office?",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "work",
+  "accepted": [
+   "are working"
+  ],
+  "fixed": "How many employees work in the Austin office?",
+  "why": {
+   "ok": {
+    "de": "Der Fehler: does passt nicht zu how many employees. Subjektfrage: How many employees work …",
+    "en": "The error: does does not fit how many employees. Subject question: How many employees work …"
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: does steht vor dem Verb einer Subjektfrage.",
+     "en": "There is an error: does stands before the verb of a subject question."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „does work“: how many employees ist das Subjekt, das Verb folgt direkt.",
+     "en": "The error is in “does work”: how many employees is the subject; the verb follows directly."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-sub-f2",
+  "type": "find",
+  "pat": "qu.subject",
+  "prompt": "Whom approved the new template last month?",
+  "err": [
+   0,
+   0
+  ],
+  "answer": "Who",
+  "accepted": [],
+  "fixed": "Who approved the new template last month?",
+  "why": {
+   "ok": {
+    "de": "Der Fehler: whom ist nur Objekt. Der Handelnde ist who: Who approved …",
+    "en": "The error: whom is only an object. The doer is who: Who approved …"
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Das erste Wort passt nicht zum Subjekt.",
+     "en": "There is an error: the first word does not fit a subject."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „Whom“: Für den Handelnden steht who.",
+     "en": "The error is in “Whom”: for the doer use who."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-sub-f3",
+  "type": "find",
+  "pat": "qu.subject",
+  "prompt": "Who is covering the support desk on Friday?",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: Who ist Subjekt, danach folgt direkt das Verb is covering.",
+    "en": "No error: Who is the subject, followed directly by the verb is covering."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Who + Verb, ohne do, ist die richtige Subjektfrage.",
+     "en": "No error: Who + verb, without do, is the right subject question."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-sub-m1",
+  "type": "meaning",
+  "pat": "qu.subject",
+  "a": "Who called the client?",
+  "b": "Who did the client call?",
+  "q": {
+   "de": "Welcher Satz fragt nach der Person, die angerufen hat?",
+   "en": "Which sentence asks for the person who made the call?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Who ist Subjekt: Gefragt ist der Anrufer.",
+    "en": "Right: sentence a. Who is the subject: the caller is asked for."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b fragt who nach dem Angerufenen. Der Kunde ist hier der Anrufer.",
+     "en": "In b who asks for the person called. The client is the caller here."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Mit did fragt man nach dem Objekt, ohne did nach dem Subjekt.",
+     "en": "Not the same: with did you ask for the object, without did for the subject."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-dir-k1",
+  "type": "kwt",
+  "pat": "qu.direct",
+  "from": "At what time did the shipment arrive?",
+  "key": "WHEN",
+  "frame": "___ the shipment arrive?",
+  "answer": "When did",
+  "accepted": [
+   "When exactly did",
+   "When actually did",
+   "When precisely did"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: When did, danach Subjekt und Grundform: When did the shipment arrive?",
+    "en": "Right: When did, then subject and base form: When did the shipment arrive?"
+   },
+   "wrong": [
+    {
+     "not": [
+      "when"
+     ],
+     "de": "Das Schlüsselwort when muss unverändert in der Lücke stehen.",
+     "en": "The key word when must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "when",
+      "does"
+     ],
+     "de": "Die Sendung kam in der Vergangenheit an: When did, nicht does.",
+     "en": "The shipment arrived in the past: When did, not does."
+    },
+    {
+     "if": [
+      "when"
+     ],
+     "not": [
+      "did"
+     ],
+     "de": "Es fehlt did: Die direkte Frage im Past Simple braucht did vor dem Subjekt.",
+     "en": "Did is missing: a direct simple past question needs did before the subject."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-dir-k2",
+  "type": "kwt",
+  "pat": "qu.direct",
+  "from": "With whom are you meeting this afternoon?",
+  "key": "WITH",
+  "frame": "Who are you ___ this afternoon?",
+  "answer": "meeting with",
+  "accepted": [
+   "meeting up with",
+   "going to meet with",
+   "planning to meet with",
+   "scheduled to meet with"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Präposition with steht am Ende: Who are you meeting with?",
+    "en": "Right: the preposition with ends the question: Who are you meeting with?"
+   },
+   "wrong": [
+    {
+     "not": [
+      "with"
+     ],
+     "de": "Das Schlüsselwort with muss unverändert in der Lücke stehen.",
+     "en": "The key word with must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "meet"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach are you braucht es -ing (meeting) oder going to + meet.",
+     "en": "After are you use -ing (meeting) or going to + meet."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-dir-f1",
+  "type": "find",
+  "pat": "qu.direct",
+  "prompt": "What time starts the workshop on Friday?",
+  "err": [
+   2,
+   4
+  ],
+  "answer": "does the workshop start",
+  "accepted": [
+   "will the workshop start",
+   "is the workshop starting"
+  ],
+  "fixed": "What time does the workshop start on Friday?",
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Im Englischen steht does vor dem Subjekt. Richtig: What time does the workshop start?",
+    "en": "The error: English puts does before the subject. Correct: What time does the workshop start?"
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Es fehlt does vor dem Subjekt.",
+     "en": "There is an error: does is missing before the subject."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „starts the workshop“: Hier braucht es does + Subjekt + start.",
+     "en": "The error is in “starts the workshop”: here it needs does + subject + start."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-dir-f2",
+  "type": "find",
+  "pat": "qu.direct",
+  "prompt": "How many languages does your team speaks?",
+  "err": [
+   6,
+   6
+  ],
+  "answer": "speak?",
+  "accepted": [],
+  "fixed": "How many languages does your team speak?",
+  "why": {
+   "ok": {
+    "de": "Der Fehler: does trägt schon das -s. Danach steht die Grundform: speak.",
+    "en": "The error: does already carries the -s. The base form follows: speak."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach does steht die Grundform.",
+     "en": "There is an error: after does comes the base form."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „speaks“: Nach does braucht das Verb kein -s.",
+     "en": "The error is in “speaks”: after does the verb takes no -s."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-dir-f3",
+  "type": "find",
+  "pat": "qu.direct",
+  "prompt": "When did the client replied to your email?",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "reply",
+  "accepted": [],
+  "fixed": "When did the client reply to your email?",
+  "why": {
+   "ok": {
+    "de": "Der Fehler: did zeigt schon die Vergangenheit. Danach steht die Grundform: reply.",
+    "en": "The error: did already shows the past. The base form follows: reply."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach did steht die Grundform.",
+     "en": "There is an error: after did comes the base form."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „replied“: Nach did braucht das Verb keine Vergangenheitsform.",
+     "en": "The error is in “replied”: after did the verb takes no past form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-dir-m1",
+  "type": "meaning",
+  "pat": "qu.direct",
+  "a": "Did you send the invoice?",
+  "b": "You sent the invoice, didn't you?",
+  "q": {
+   "de": "Welcher Satz fragt neutral, ohne schon ein Ja zu erwarten?",
+   "en": "Which sentence asks neutrally, without already expecting a yes?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Die direkte Frage ist offen. Ein Tag erwartet dagegen ein Ja.",
+    "en": "Right: sentence a. The direct question is open. A tag, however, expects a yes."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b erwartet der Sprecher durch das Tag ein Ja und bittet um Bestätigung.",
+     "en": "In b the tag shows the speaker expects a yes and wants confirmation."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Mit Tag erwartet der Sprecher ein Ja, ohne Tag fragt er offen.",
+     "en": "Not the same: with a tag the speaker expects a yes, without one the question is open."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-tag-k1",
+  "type": "kwt",
+  "pat": "qu.tags",
+  "from": "Anna rarely works late. Please confirm.",
+  "key": "DOES",
+  "frame": "Anna rarely works late, ___?",
+  "answer": "does she",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: rarely wirkt verneinend, also folgt ein bejahtes Tag: does she?",
+    "en": "Right: rarely acts as a negative, so a positive tag follows: does she?"
+   },
+   "wrong": [
+    {
+     "not": [
+      "does"
+     ],
+     "de": "Das Schlüsselwort does muss unverändert in der Lücke stehen.",
+     "en": "The key word does must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "does",
+      "not"
+     ],
+     "de": "Rarely wirkt schon verneinend. Das Tag muss bejaht sein: does she?",
+     "en": "Rarely already acts as a negative. The tag must be positive: does she?"
+    },
+    {
+     "if": [
+      "does"
+     ],
+     "not": [
+      "she"
+     ],
+     "de": "Anna wird im Tag mit she aufgenommen: does she?",
+     "en": "Anna is picked up in the tag with she: does she?"
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-tag-k2",
+  "type": "kwt",
+  "pat": "qu.tags",
+  "from": "Nobody called while I was out.",
+  "key": "DID",
+  "frame": "Nobody called while I was out, ___?",
+  "answer": "did they",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nobody verneint schon, also folgt ein bejahtes Tag mit they: did they?",
+    "en": "Right: Nobody is already negative, so a positive tag with they follows: did they?"
+   },
+   "wrong": [
+    {
+     "not": [
+      "did"
+     ],
+     "de": "Das Schlüsselwort did muss unverändert in der Lücke stehen.",
+     "en": "The key word did must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "did",
+      "not"
+     ],
+     "de": "Nobody verneint schon. Das Tag muss bejaht sein: did they?",
+     "en": "Nobody is already negative. The tag must be positive: did they?"
+    },
+    {
+     "if": [
+      "did"
+     ],
+     "not": [
+      "they"
+     ],
+     "de": "Nobody wird im Tag mit they aufgenommen: did they?",
+     "en": "Nobody is picked up in the tag with they: did they?"
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-tag-f1",
+  "type": "find",
+  "pat": "qu.tags",
+  "prompt": "You booked the room for Friday, isn't it?",
+  "err": [
+   6,
+   7
+  ],
+  "answer": "didn't you?",
+  "accepted": [],
+  "fixed": "You booked the room for Friday, didn't you?",
+  "why": {
+   "ok": {
+    "de": "Der Fehler: isn't it passt nicht zu booked. Das Tag braucht das Hilfsverb did: didn't you?",
+    "en": "The error: isn't it does not fit booked. The tag needs the auxiliary did: didn't you?"
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Das Tag passt nicht zum Satz.",
+     "en": "There is an error: the tag does not match the sentence."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „isn't it“: Das Tag muss zu Hilfsverb und Subjekt passen.",
+     "en": "The error is in “isn't it”: the tag must match the auxiliary and the subject."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-tag-f2",
+  "type": "find",
+  "pat": "qu.tags",
+  "prompt": "Nobody has replied yet, haven't they?",
+  "err": [
+   4,
+   5
+  ],
+  "answer": "have they?",
+  "accepted": [],
+  "fixed": "Nobody has replied yet, have they?",
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nobody verneint schon, also muss das Tag bejaht sein: have they?",
+    "en": "The error: Nobody is already negative, so the tag must be positive: have they?"
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Aussage und Tag sind beide verneint.",
+     "en": "There is an error: the statement and the tag are both negative."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „haven't they“: Nach Nobody steht ein bejahtes Tag.",
+     "en": "The error is in “haven't they”: after Nobody comes a positive tag."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-tag-f3",
+  "type": "find",
+  "pat": "qu.tags",
+  "prompt": "I'm running late, aren't I?",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: Nach I am heißt das Tag aren't I?",
+    "en": "No error: after I am the tag is aren't I?"
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: aren't I ist das feste Tag nach I'm.",
+     "en": "No error: aren't I is the fixed tag after I'm."
+    }
+   ]
+  }
+ },
+ {
+  "id": "qu-tag-m1",
+  "type": "meaning",
+  "pat": "qu.tags",
+  "a": "You like the proposal, don't you?",
+  "b": "You don't like the proposal, do you?",
+  "q": {
+   "de": "Bei welchem Satz erwartet der Sprecher eher ein Nein?",
+   "en": "In which sentence does the speaker rather expect a no?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. Nach verneinter Aussage mit bejahtem Tag rechnet der Sprecher mit Nein.",
+    "en": "Right: sentence b. After a negative statement with a positive tag the speaker expects a no."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a stützt die bejahte Aussage ein erwartetes Ja.",
+     "en": "In a the positive statement supports an expected yes."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Aussage und Tag zeigen, welche Antwort erwartet wird.",
+     "en": "Not the same: statement and tag show which answer is expected."
+    }
+   ]
+  }
+ }
 ]

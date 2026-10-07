@@ -140,8 +140,8 @@
   "pat": "rs.time-shift",
   "why": {
    "ok": {
-    "de": "Der Bezugspunkt ist das Sagen in der Vergangenheit: Aus „tomorrow“ wird the following day. tomorrow bliebe in der Rede hängen.",
-    "en": "The reference point is the saying in the past: “tomorrow” becomes the following day. Tomorrow would stay stuck in the speech."
+    "de": "„tomorrow“ gilt vom Sagen aus gesehen. Im Bericht in der Vergangenheit heißt es the following day.",
+    "en": "“Tomorrow” is counted from the moment of speaking. In a past report use the following day."
    },
    "wrong": [
     {
@@ -278,8 +278,8 @@
   "pat": "rs.question",
   "why": {
    "ok": {
-    "de": "In der indirekten Frage steht normale Satzstellung und eine Zeit zurück: where the meeting room was (nicht is, nicht was it).",
-    "en": "In an indirect question normal word order and one tense back are used: where the meeting room was (not is, not was it)."
+    "de": "In der indirekten Frage steht normale Satzstellung: where the meeting room was (oder is, wenn es noch gilt). Nicht: was it.",
+    "en": "Indirect question: normal word order: where the meeting room was (or is, if still true). Not: was it."
    },
    "wrong": [
     {

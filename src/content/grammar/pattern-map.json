@@ -1737,8 +1737,8 @@
   "pat": "em.neg-inversion",
   "why": {
    "ok": {
-    "de": "Richtig: Rarely vorn verlangt die Umstellung: have we seen.",
-    "en": "Right: Rarely first requires inversion: have we seen."
+    "de": "„Rarely“ am Satzanfang verlangt die Umstellung wie in einer Frage: Rarely have we seen. Das Hilfsverb steht vor dem Subjekt.",
+    "en": "“Rarely” at the start requires inversion as in a question: Rarely have we seen. The auxiliary comes before the subject."
    },
    "wrong": [
     {
@@ -9410,8 +9410,8 @@
   "pat": "ma.should",
   "why": {
    "ok": {
-    "de": "Richtig: Der Rat dagegen ist shouldn't + Grundform.",
-    "en": "Right: advice against it is shouldn't + base form."
+    "de": "Der Rat dagegen heißt shouldn't + Grundform: You shouldn't send that email. Kein to nach should.",
+    "en": "The advice against is shouldn't + base form: You shouldn't send that email. No to after should."
    },
    "wrong": [
     {
@@ -9697,8 +9697,8 @@
   "pat": "md.must-have",
   "why": {
    "ok": {
-    "de": "Richtig: „I'm sure“ = fast sicher, früher: must have + forgotten.",
-    "en": "Right: “I'm sure” = almost certain, in the past: must have + forgotten."
+    "de": "„I'm sure“ ist ein starker Schluss, und das Meeting liegt vorbei: must have + forgotten. Das Partizip von forget ist forgotten.",
+    "en": "“I'm sure” is a strong conclusion and the meeting is past: must have + forgotten. The participle of forget is forgotten."
    },
    "wrong": [
     {
@@ -9739,8 +9739,8 @@
   "pat": "md.might-have",
   "why": {
    "ok": {
-    "de": "Richtig: „or maybe“ = nur Möglichkeiten. might have been = vielleicht.",
-    "en": "Right: “or maybe” = only possibilities. might have been = maybe."
+    "de": "„or maybe“ zeigt: Es sind nur Möglichkeiten, kein Beweis. Deshalb might have been, nicht must have been.",
+    "en": "“Or maybe” shows these are only possibilities, no proof. So might have been, not must have been."
    },
    "wrong": [
     {
@@ -10169,8 +10169,8 @@
   "pat": "md.cant-have",
   "why": {
    "ok": {
-    "de": "Richtig: „impossible“ = ausgeschlossen, früher: can't have + written.",
-    "en": "Right: “impossible” = ruled out, in the past: can't have + written."
+    "de": "„impossible“ heißt ausgeschlossen, und die E-Mail ist schon da: can't have + written. Der Schluss gilt für früher.",
+    "en": "“Impossible” means ruled out, and the email already exists: can't have + written. The conclusion is about the past."
    },
    "wrong": [
     {
@@ -10248,8 +10248,8 @@
   "pat": "md.cant-have",
   "why": {
    "ok": {
-    "de": "Richtig: „yesterday“ = früher: can't have been, nicht can't be.",
-    "en": "Right: “yesterday” = earlier: can't have been, not can't be."
+    "de": "„yesterday“ liegt in der Vergangenheit: can't have been. can't be würde sich auf jetzt beziehen.",
+    "en": "“Yesterday” is in the past: can't have been. Can't be would refer to now."
    },
    "wrong": [
     {
@@ -16109,8 +16109,8 @@
   "pat": "qu.tags",
   "why": {
    "ok": {
-    "de": "Richtig: Nach Let's lautet das Tag immer shall we?",
-    "en": "Right: after Let's the tag is always shall we?"
+    "de": "„Let's …“ ist ein Vorschlag, das Anhängsel ist immer shall we? Nicht will we und nicht do we.",
+    "en": "“Let's …” is a suggestion and the tag is always shall we? Not will we and not do we."
    },
    "wrong": [
     {
@@ -16284,8 +16284,8 @@
   "pat": "qu.tags",
   "why": {
    "ok": {
-    "de": "Richtig: Nach Let's lautet das Tag shall we?",
-    "en": "Right: after Let's the tag is shall we?"
+    "de": "Nach „Let's“ steht als Frageanhängsel immer shall we? (Vorschlag). „don't we“ passt nur zu normalen Aussagen mit we.",
+    "en": "After “Let's” the question tag is always shall we? (suggestion). “Don't we” only fits ordinary statements with we."
    },
    "wrong": [
     {
@@ -16307,8 +16307,8 @@
   "pat": "rc.who-which",
   "why": {
    "ok": {
-    "de": "Richtig: woman ist eine Person, also who (oder that).",
-    "en": "Right: woman is a person, so who (or that)."
+    "de": "„woman“ ist eine Person und Subjekt des Relativsatzes: who lives (oder that). which ist für Sachen.",
+    "en": "“Woman” is a person and the subject of the relative clause: who lives (or that). Which is for things."
    },
    "wrong": [
     {
@@ -16362,8 +16362,8 @@
   "pat": "rc.commas",
   "why": {
    "ok": {
-    "de": "Richtig: Eine Zusatzinfo zwischen Kommas braucht which, nie that.",
-    "en": "Right: extra information between commas takes which, never that."
+    "de": "Die Zusatzinfo steht zwischen Kommas: Dort braucht es which, nie that. Ohne Kommas wäre that möglich.",
+    "en": "The extra information is between commas: there which is needed, never that. Without commas that would be possible."
    },
    "wrong": [
     {
@@ -16394,8 +16394,8 @@
   "pat": "rc.who-which",
   "why": {
    "ok": {
-    "de": "Richtig: customer ist eine Person, also who (oder that).",
-    "en": "Right: customer is a person, so who (or that)."
+    "de": "„customer“ ist eine Person und Subjekt: who called (that geht auch). which ist für Sachen.",
+    "en": "“Customer” is a person and the subject: who called (that also works). Which is for things."
    },
    "wrong": [
     {
@@ -16462,8 +16462,8 @@
   "pat": "rc.who-which",
   "why": {
    "ok": {
-    "de": "Richtig: software ist eine Sache, also which (oder that).",
-    "en": "Right: software is a thing, so which (or that)."
+    "de": "„software“ ist eine Sache und Objekt: which we use (that oder gar nichts geht auch). who ist für Personen.",
+    "en": "“Software” is a thing and the object: which we use (that or nothing also works). Who is for people."
    },
    "wrong": [
     {
@@ -16518,8 +16518,8 @@
   "pat": "rc.that-what",
   "why": {
    "ok": {
-    "de": "Richtig: report ist das Bezugswort, also that (oder which).",
-    "en": "Right: report is the antecedent, so that (or which)."
+    "de": "„the report“ ist eine Sache: that (oder which) you sent. what und who passen nicht zu einem Bezugswort.",
+    "en": "“The report” is a thing: that (or which) you sent. What and who do not fit a noun antecedent."
    },
    "wrong": [
     {
@@ -16574,8 +16574,8 @@
   "pat": "rc.that-what",
   "why": {
    "ok": {
-    "de": "Richtig: Nach everything, all und nothing steht that.",
-    "en": "Right: after everything, all and nothing, use that."
+    "de": "Nach everything (auch all, nothing) steht that, nie what oder which. Deutsch „alles, was“ verleitet zu what.",
+    "en": "After everything (also all, nothing) comes that, never what or which. German “alles, was” tempts you into what."
    },
    "wrong": [
     {
@@ -16636,8 +16636,8 @@
   "pat": "rc.whose",
   "why": {
    "ok": {
-    "de": "Richtig: „dessen Bruder“ = whose brother. whose zeigt den Besitz.",
-    "en": "Right: “whose brother” = his or her brother. whose shows possession."
+    "de": "„dessen Bruder“ heißt whose brother. whose zeigt Besitz und ersetzt das Possessivwort his.",
+    "en": "“Dessen Bruder” is whose brother. Whose shows possession and replaces the possessive his."
    },
    "wrong": [
     {
@@ -16676,8 +16676,8 @@
   "pat": "rc.where-why",
   "why": {
    "ok": {
-    "de": "Richtig: Nach reason steht why (oder that, for which).",
-    "en": "Right: after reason use why (or that, for which)."
+    "de": "Nach reason steht why (oder that): the reason why we lost. where ist nur für Orte.",
+    "en": "After reason comes why (or that): the reason why we lost. Where is only for places."
    },
    "wrong": [
     {
@@ -16766,8 +16766,8 @@
   "pat": "rc.prep",
   "why": {
    "ok": {
-    "de": "Richtig: Nach einer Präposition steht whom, nicht who.",
-    "en": "Right: after a preposition use whom, not who."
+    "de": "Nach der Präposition with steht whom (Person als Objekt), nicht who: the colleague with whom I worked.",
+    "en": "After the preposition with comes whom (person as object), not who: the colleague with whom I worked."
    },
    "wrong": [
     {
@@ -16838,8 +16838,8 @@
   "pat": "rc.whose",
   "why": {
    "ok": {
-    "de": "Richtig: whose ersetzt das Possessivwort his und zeigt Besitz.",
-    "en": "Right: whose replaces the possessive his and shows possession."
+    "de": "whose ersetzt das Possessivwort „his“ und verbindet die Sätze: Our client, whose company bought 500 licenses.",
+    "en": "Whose replaces the possessive “his” and joins the sentences: Our client, whose company bought 500 licenses."
    },
    "wrong": [
     {
@@ -16944,8 +16944,8 @@
   "pat": "rc.commas",
   "why": {
    "ok": {
-    "de": "Richtig: Eine Zusatzinfo zwischen Kommas braucht which, nie that.",
-    "en": "Right: extra information between commas takes which, never that."
+    "de": "Zusatzinfo zwischen Kommas braucht which, nie that. Der Satz bleibt auch ohne den Relativsatz verständlich.",
+    "en": "Extra information between commas needs which, never that. The sentence still makes sense without the relative clause."
    },
    "wrong": [
     {
@@ -17520,8 +17520,8 @@
   "pat": "rs.time-shift",
   "why": {
    "ok": {
-    "de": "Der Bezugspunkt ist das Sagen in der Vergangenheit: Aus „tomorrow“ wird the following day. tomorrow bliebe in der Rede hängen.",
-    "en": "The reference point is the saying in the past: “tomorrow” becomes the following day. Tomorrow would stay stuck in the speech."
+    "de": "„tomorrow“ gilt vom Sagen aus gesehen. Im Bericht in der Vergangenheit heißt es the following day.",
+    "en": "“Tomorrow” is counted from the moment of speaking. In a past report use the following day."
    },
    "wrong": [
     {
@@ -17658,8 +17658,8 @@
   "pat": "rs.question",
   "why": {
    "ok": {
-    "de": "In der indirekten Frage steht normale Satzstellung und eine Zeit zurück: where the meeting room was (nicht is, nicht was it).",
-    "en": "In an indirect question normal word order and one tense back are used: where the meeting room was (not is, not was it)."
+    "de": "In der indirekten Frage steht normale Satzstellung: where the meeting room was (oder is, wenn es noch gilt). Nicht: was it.",
+    "en": "Indirect question: normal word order: where the meeting room was (or is, if still true). Not: was it."
    },
    "wrong": [
     {

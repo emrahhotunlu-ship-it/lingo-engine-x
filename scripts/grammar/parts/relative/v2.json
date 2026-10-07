@@ -134,8 +134,8 @@
   "err": null,
   "why": {
    "ok": {
-    "de": "Kein Fehler: tool ist eine Sache, und that passt.",
-    "en": "No error: tool is a thing, and that fits."
+    "de": "Kein Fehler: „tool“ ist eine Sache, und that powers ist ein notwendiger Relativsatz ohne Kommas. which wäre auch möglich.",
+    "en": "No error: “tool” is a thing, and that powers is a defining relative clause without commas. Which would also be possible."
    },
    "wrong": [
     {
@@ -336,8 +336,8 @@
   "answer": "a",
   "why": {
    "ok": {
-    "de": "Richtig: Satz a. whose lawyer = der Anwalt des Kunden.",
-    "en": "Right: sentence a. whose lawyer = the client's lawyer."
+    "de": "Satz a: whose lawyer = der Anwalt des Kunden, dem wir vertrauen. In b vertraut der Kunde unserem Anwalt.",
+    "en": "Sentence a: whose lawyer = the client's lawyer, whom we trust. In b the client trusts our lawyer."
    },
    "wrong": [
     {
@@ -485,8 +485,8 @@
   "err": null,
   "why": {
    "ok": {
-    "de": "Kein Fehler: Zusatzinfo zwischen Kommas mit which ist richtig.",
-    "en": "No error: extra information between commas with which is correct."
+    "de": "Kein Fehler: Die Zusatzinfo zwischen Kommas braucht which: „Her proposal, which the board approved in June“.",
+    "en": "No error: the extra information between commas takes which: “Her proposal, which the board approved in June”."
    },
    "wrong": [
     {
@@ -546,8 +546,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Nach einem Ort + Satz steht where (= in which).",
-    "en": "Right: place + clause = where (= in which)."
+    "de": "Richtig: where we signed. „office“ ist ein Ort, und where steht für in which: the office where we signed.",
+    "en": "Right: where we signed. “Office” is a place, and where stands for in which: the office where we signed."
    },
    "wrong": [
     {
@@ -814,8 +814,8 @@
   "fixed": "The partner to whom we sent the contract hasn't replied yet.",
   "why": {
    "ok": {
-    "de": "Der Fehler: Nach to steht whom, nicht who.",
-    "en": "The error: after to use whom, not who."
+    "de": "Der Fehler: „to who“. Nach einer Präposition steht whom: The partner to whom we sent the contract.",
+    "en": "The error: “to who”. After a preposition comes whom: The partner to whom we sent the contract."
    },
    "wrong": [
     {
@@ -874,8 +874,8 @@
   "answer": "both",
   "why": {
    "ok": {
-    "de": "Richtig: beide. Satz b klingt förmlicher, a ist alltäglicher.",
-    "en": "Right: both. b sounds more formal, a more everyday."
+    "de": "Beide Sätze sagen dasselbe. b mit „for which“ ist förmlicher, a mit der Präposition am Ende ist alltäglicher.",
+    "en": "Both sentences mean the same. B with “for which” is more formal, a with the preposition at the end is more everyday."
    },
    "wrong": [
     {
@@ -912,8 +912,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Nach everything steht that, nie what.",
-    "en": "Right: after everything use that, never what."
+    "de": "Richtig: that we discussed is. Nach everything steht that, nie what. Das Verb bleibt Singular: is.",
+    "en": "Right: that we discussed is. After everything comes that, never what. The verb stays singular: is."
    },
    "wrong": [
     {
@@ -986,8 +986,8 @@
   "fixed": "Everything that happens in the pilot is logged.",
   "why": {
    "ok": {
-    "de": "Der Fehler: Nach everything steht that, nie what.",
-    "en": "The error: after everything use that, never what."
+    "de": "Der Fehler: „everything what“. Nach everything steht that, nie what: Everything that happens in the pilot.",
+    "en": "The error: “everything what”. After everything comes that, never what: Everything that happens in the pilot."
    },
    "wrong": [
     {

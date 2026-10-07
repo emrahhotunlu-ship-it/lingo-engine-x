@@ -3521,8 +3521,8 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "Der Fehler: „received“. Nach did steht die Grundform: receive.",
-     "en": "The error: “received”. After did comes the base form: receive."
+     "de": "Der Fehler: „did we received“. Nach did steht die Grundform: At no point did we receive. Das -ed steckt schon in did.",
+     "en": "The error: “did we received”. After did comes the base form: At no point did we receive. The past is already in did."
     },
     "wrong": [
      {
@@ -19527,8 +19527,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Nach if steht nie would: If I were more patient. Die Folge im Hauptsatz ist would have waited.",
-     "en": "After if comes never would: If I were more patient. The result in the main clause is would have waited."
+     "de": "Im if-Teil steht hier die Past-Form, nicht would: If I were more patient (informell auch: was).",
+     "en": "Here the if-clause takes the past form, not would: If I were more patient (informal: was)."
     },
     "wrong": [
      {
@@ -20033,8 +20033,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: ought to + Grundform, mit to: ought to read.",
-     "en": "Right: ought to + base form, with to: ought to read."
+     "de": "Richtig: ought to read. Anders als should steht ought mit to: ought to + Grundform. Der Rat ist stark.",
+     "en": "Right: ought to read. Unlike should, ought takes to: ought to + base form. The advice is strong."
     },
     "wrong": [
      {
@@ -20074,8 +20074,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Der Fehler: Nach should steht kein to: should postpone.",
-     "en": "The error: no to after should: should postpone."
+     "de": "Der Fehler: „should to“. Nach should steht kein to: should postpone. Deutsch „sollten … zu“ verleitet zu to.",
+     "en": "The error: “should to”. After should there is no to: should postpone. German “sollten … zu” tempts you into to."
     },
     "wrong": [
      {
@@ -20219,8 +20219,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: had better not + Grundform: not steht hinter better.",
-     "en": "Right: had better not + base form: not comes after better."
+     "de": "Richtig: had better not skip. not steht hinter better, nicht davor. Es ist eine Warnung mit Folgen.",
+     "en": "Right: had better not skip. Not comes after better, not before. It is a warning with consequences."
     },
     "wrong": [
      {
@@ -20325,8 +20325,8 @@
    "answer": "a",
    "why": {
     "ok": {
-     "de": "Richtig: Satz a. had better warnt: Sonst droht Ärger.",
-     "en": "Right: sentence a. had better warns: otherwise there is trouble."
+     "de": "Satz a: had better warnt, sonst droht Ärger. Satz b mit should ist nur ein Rat, mit weniger Druck.",
+     "en": "Sentence a: had better warns that trouble follows otherwise. Sentence b with should is only advice, with less pressure."
     },
     "wrong": [
      {
@@ -20970,8 +20970,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: must be = Schluss über jetzt, kein Zwang.",
-     "en": "Right: must be = a conclusion about now, not an obligation."
+     "de": "Richtig: must be. Ein sicherer Schluss über jetzt, kein Zwang. Das Gegenteil wäre can't be.",
+     "en": "Right: must be. A confident conclusion about now, not an obligation. The opposite would be can't be."
     },
     "wrong": [
      {
@@ -21067,8 +21067,8 @@
    "answer": "a",
    "why": {
     "ok": {
-     "de": "Richtig: Satz a. must be = Schluss über jetzt.",
-     "en": "Right: sentence a. must be = a conclusion about now."
+     "de": "Satz a: must be ist ein Schluss über jetzt. Satz b (must have been) ist ein Schluss über früher.",
+     "en": "Sentence a: must be is a conclusion about now. Sentence b (must have been) is a conclusion about the past."
     },
     "wrong": [
      {
@@ -21158,8 +21158,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Im Urlaub, also ausgeschlossen: can't be + Grundform.",
-     "en": "Right: on vacation, so it is ruled out: can't be + base form."
+     "de": "Richtig: can't be. „she's on vacation“ schließt aus, dass sie es jetzt am Telefon ist: can't + Grundform.",
+     "en": "Right: can't be. “She's on vacation” rules out that she is on the phone now: can't + base form."
     },
     "wrong": [
      {
@@ -21271,8 +21271,8 @@
    "answer": "a",
    "why": {
     "ok": {
-     "de": "Richtig: Satz a. can't be = so gut wie ausgeschlossen.",
-     "en": "Right: sentence a. can't be = almost ruled out."
+     "de": "Satz a: can't be ist so gut wie ausgeschlossen. Satz b (might not be) ist nur eine Möglichkeit, er könnte auch da sein.",
+     "en": "Sentence a: can't be is as good as ruled out. Sentence b (might not be) is only a possibility, he could also be there."
     },
     "wrong": [
      {
@@ -21358,8 +21358,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: might be = nur eine Möglichkeit, kein sicherer Schluss.",
-     "en": "Right: might be = only a possibility, not a firm conclusion."
+     "de": "Richtig: might be. Wir wissen es nicht sicher („right now“): might ist nur eine Möglichkeit, kein Schluss.",
+     "en": "Right: might be. We do not know for sure (“right now”): might is only a possibility, not a conclusion."
     },
     "wrong": [
      {
@@ -21432,8 +21432,8 @@
    "err": null,
    "why": {
     "ok": {
-     "de": "Kein Fehler: could be nennt eine Möglichkeit, nicht mehr.",
-     "en": "No error: could be names a possibility, nothing more."
+     "de": "Kein Fehler: „but I can't tell yet“ zeigt Unsicherheit, deshalb could be als Möglichkeit.",
+     "en": "No error: “but I can't tell yet” shows uncertainty, hence could be as a possibility."
     },
     "wrong": [
      {
@@ -21458,8 +21458,8 @@
    "answer": "a",
    "why": {
     "ok": {
-     "de": "Richtig: Satz a. might be = nur eine Möglichkeit.",
-     "en": "Right: sentence a. might be = only a possibility."
+     "de": "Satz a: might be ist nur eine Möglichkeit. Satz b (must be) ist ein starker Schluss: Sie ist mit Sicherheit dort.",
+     "en": "Sentence a: might be is only a possibility. Sentence b (must be) is a strong conclusion: she is surely there."
     },
     "wrong": [
      {
@@ -21541,8 +21541,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: must have + misunderstood = klarer Schluss über früher.",
-     "en": "Right: must have + misunderstood = a clear conclusion about the past."
+     "de": "Richtig: must have misunderstood. Wir schließen aus dem Verhalten: Der Kunde hat es sicher falsch verstanden (früher).",
+     "en": "Right: must have misunderstood. We conclude from the behavior: the client surely misunderstood (earlier)."
     },
     "wrong": [
      {
@@ -21650,8 +21650,8 @@
    "answer": "a",
    "why": {
     "ok": {
-     "de": "Richtig: Satz a. must have signed = Schluss über früher.",
-     "en": "Right: sentence a. must have signed = a conclusion about the past."
+     "de": "Satz a: must have signed ist ein Schluss über früher. Satz b (had to sign) heißt: Er musste unterschreiben, Pflicht.",
+     "en": "Sentence a: must have signed is a conclusion about the past. Sentence b (had to sign) means: he was obliged to sign."
     },
     "wrong": [
      {
@@ -21751,8 +21751,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: can't have + received = ausgeschlossen, früher gedacht.",
-     "en": "Right: can't have + received = ruled out, thinking about the past."
+     "de": "Richtig: can't have received. „the email bounced“ schließt aus, dass er sie bekam: can't have + 3. Form für früher.",
+     "en": "Right: can't have received. “The email bounced” rules out that he got it: can't have + participle for the past."
     },
     "wrong": [
      {
@@ -21837,8 +21837,8 @@
    "err": null,
    "why": {
     "ok": {
-     "de": "Kein Fehler: can't have + come = ausgeschlossen, früher gedacht.",
-     "en": "No error: can't have + come = ruled out, thinking about the past."
+     "de": "Kein Fehler: „the logs are clean“ ist der Grund, die Ursache auszuschließen: can't have come für früher.",
+     "en": "No error: “the logs are clean” is the reason to rule out the cause: can't have come for the past."
     },
     "wrong": [
      {
@@ -21863,8 +21863,8 @@
    "answer": "a",
    "why": {
     "ok": {
-     "de": "Richtig: Satz a. can't have + Partizip = Schluss über früher.",
-     "en": "Right: sentence a. can't have + participle = a conclusion about the past."
+     "de": "Satz a: can't have signed ist ein Schluss: ausgeschlossen. Satz b (couldn't sign) nennt nur, dass sie es nicht konnte.",
+     "en": "Sentence a: can't have signed is a conclusion: ruled out. Sentence b (couldn't sign) only says she was unable to."
     },
     "wrong": [
      {
@@ -21900,8 +21900,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: might not have + gotten = vielleicht nicht angekommen.",
-     "en": "Right: might not have + gotten = maybe it did not arrive."
+     "de": "Richtig: might not have gotten. Eine Möglichkeit über früher: Die Mail kam vielleicht nicht an (US: gotten).",
+     "en": "Right: might not have gotten. A possibility about the past: the email may not have arrived (US: gotten)."
     },
     "wrong": [
      {
@@ -21957,8 +21957,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: might have moved = nur eine Möglichkeit über früher.",
-     "en": "Right: might have moved = only a possibility about the past."
+     "de": "Richtig: might have moved. Eine Möglichkeit über früher: Jemand hat die Dateien vielleicht verschoben.",
+     "en": "Right: might have moved. A possibility about the past: someone may have moved the files."
     },
     "wrong": [
      {
@@ -22004,8 +22004,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Der Fehler: Nach might fehlt have: might have lost.",
-     "en": "The error: have is missing after might: might have lost."
+     "de": "Der Fehler: „might lost“. Eine Möglichkeit über früher braucht might have + 3. Form: might have lost.",
+     "en": "The error: “might lost”. A possibility about the past needs might have + participle: might have lost."
     },
     "wrong": [
      {
@@ -22067,8 +22067,8 @@
    "answer": "a",
    "why": {
     "ok": {
-     "de": "Richtig: Satz a. might have + Partizip = Möglichkeit über früher.",
-     "en": "Right: sentence a. might have + participle = a possibility about the past."
+     "de": "Satz a: might have left ist eine Möglichkeit über früher (vielleicht ist er schon weg). Satz b: er geht vielleicht.",
+     "en": "Sentence a: might have left is a possibility about the past (maybe he already left). Sentence b: he may leave."
     },
     "wrong": [
      {
@@ -24238,8 +24238,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Der Fehler: „not been invited“. Nach about steht -ing, verneint not being invited. been ist eine andere Form.",
-     "en": "The error: “not been invited”. After about comes -ing, negated not being invited. Been is a different form."
+     "de": "Nach about steht -ing: not being invited (auch: not having been invited). Nicht: been.",
+     "en": "After about comes -ing: not being invited (also: not having been invited). Not: been."
     },
     "wrong": [
      {
@@ -33245,8 +33245,8 @@
    "err": null,
    "why": {
     "ok": {
-     "de": "Kein Fehler: whether or not + Subjekt + Verb ist richtig.",
-     "en": "No error: whether or not + subject + verb is correct."
+     "de": "Kein Fehler: „whether or not“ leitet eine indirekte Frage ein, danach folgt normale Satzstellung: you'll attend.",
+     "en": "No error: “whether or not” introduces an indirect question, followed by normal word order: you'll attend."
     },
     "wrong": [
      {
@@ -34090,8 +34090,8 @@
    "err": null,
    "why": {
     "ok": {
-     "de": "Kein Fehler: tool ist eine Sache, und that passt.",
-     "en": "No error: tool is a thing, and that fits."
+     "de": "Kein Fehler: „tool“ ist eine Sache, und that powers ist ein notwendiger Relativsatz ohne Kommas. which wäre auch möglich.",
+     "en": "No error: “tool” is a thing, and that powers is a defining relative clause without commas. Which would also be possible."
     },
     "wrong": [
      {
@@ -34298,8 +34298,8 @@
    "answer": "a",
    "why": {
     "ok": {
-     "de": "Richtig: Satz a. whose lawyer = der Anwalt des Kunden.",
-     "en": "Right: sentence a. whose lawyer = the client's lawyer."
+     "de": "Satz a: whose lawyer = der Anwalt des Kunden, dem wir vertrauen. In b vertraut der Kunde unserem Anwalt.",
+     "en": "Sentence a: whose lawyer = the client's lawyer, whom we trust. In b the client trusts our lawyer."
     },
     "wrong": [
      {
@@ -34451,8 +34451,8 @@
    "err": null,
    "why": {
     "ok": {
-     "de": "Kein Fehler: Zusatzinfo zwischen Kommas mit which ist richtig.",
-     "en": "No error: extra information between commas with which is correct."
+     "de": "Kein Fehler: Die Zusatzinfo zwischen Kommas braucht which: „Her proposal, which the board approved in June“.",
+     "en": "No error: the extra information between commas takes which: “Her proposal, which the board approved in June”."
     },
     "wrong": [
      {
@@ -34514,8 +34514,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Nach einem Ort + Satz steht where (= in which).",
-     "en": "Right: place + clause = where (= in which)."
+     "de": "Richtig: where we signed. „office“ ist ein Ort, und where steht für in which: the office where we signed.",
+     "en": "Right: where we signed. “Office” is a place, and where stands for in which: the office where we signed."
     },
     "wrong": [
      {
@@ -34789,8 +34789,8 @@
    "fixed": "The partner to whom we sent the contract hasn't replied yet.",
    "why": {
     "ok": {
-     "de": "Der Fehler: Nach to steht whom, nicht who.",
-     "en": "The error: after to use whom, not who."
+     "de": "Der Fehler: „to who“. Nach einer Präposition steht whom: The partner to whom we sent the contract.",
+     "en": "The error: “to who”. After a preposition comes whom: The partner to whom we sent the contract."
     },
     "wrong": [
      {
@@ -34851,8 +34851,8 @@
    "answer": "both",
    "why": {
     "ok": {
-     "de": "Richtig: beide. Satz b klingt förmlicher, a ist alltäglicher.",
-     "en": "Right: both. b sounds more formal, a more everyday."
+     "de": "Beide Sätze sagen dasselbe. b mit „for which“ ist förmlicher, a mit der Präposition am Ende ist alltäglicher.",
+     "en": "Both sentences mean the same. B with “for which” is more formal, a with the preposition at the end is more everyday."
     },
     "wrong": [
      {
@@ -34890,8 +34890,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Nach everything steht that, nie what.",
-     "en": "Right: after everything use that, never what."
+     "de": "Richtig: that we discussed is. Nach everything steht that, nie what. Das Verb bleibt Singular: is.",
+     "en": "Right: that we discussed is. After everything comes that, never what. The verb stays singular: is."
     },
     "wrong": [
      {
@@ -34966,8 +34966,8 @@
    "fixed": "Everything that happens in the pilot is logged.",
    "why": {
     "ok": {
-     "de": "Der Fehler: Nach everything steht that, nie what.",
-     "en": "The error: after everything use that, never what."
+     "de": "Der Fehler: „everything what“. Nach everything steht that, nie what: Everything that happens in the pilot.",
+     "en": "The error: “everything what”. After everything comes that, never what: Everything that happens in the pilot."
     },
     "wrong": [
      {
@@ -35701,8 +35701,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Der Fehler: „insisted to review“. Richtig: insisted on reviewing.",
-     "en": "The error: “insisted to review”. Correct: insisted on reviewing."
+     "de": "Der Fehler: „insisted to review“. insist braucht on + -ing: insisted on reviewing. Ein Infinitiv mit to geht nach insist nicht.",
+     "en": "The error: “insisted to review”. Insist needs on + -ing: insisted on reviewing. A to-infinitive does not follow insist."
     },
     "wrong": [
      {
@@ -35735,8 +35735,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Der Fehler: „insisted for“. Die Präposition heißt on.",
-     "en": "The error: “insisted for”. The preposition is on."
+     "de": "Der Fehler: „insisted for“. insist verbindet sich mit on: insisted on a written confirmation. Deutsch „bestehen auf“ hilft hier.",
+     "en": "The error: “insisted for”. Insist goes with on: insisted on a written confirmation. German “bestehen auf” helps here."
     },
     "wrong": [
      {
@@ -35761,8 +35761,8 @@
    "err": null,
    "why": {
     "ok": {
-     "de": "Kein Fehler: insist on + -ing („being paid“) ist richtig.",
-     "en": "No error: insist on + -ing (“being paid”) is correct."
+     "de": "Kein Fehler: insist on + -ing, im Passiv on being paid. Die Zahlung „in advance“ ist die Forderung.",
+     "en": "No error: insist on + -ing, in the passive on being paid. The payment “in advance” is the demand."
     },
     "wrong": [
      {
@@ -36216,8 +36216,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Der Fehler: „offered covering“. Richtig: offered to cover.",
-     "en": "The error: “offered covering”. Correct: offered to cover."
+     "de": "Der Fehler: „offered covering“. Nach offer steht to + Grundform: offered to cover. -ing wäre hier falsch.",
+     "en": "The error: “offered covering”. After offer comes to + base form: offered to cover. -ing would be wrong here."
     },
     "wrong": [
      {
@@ -36254,8 +36254,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Der Fehler: „promised sending“. Richtig: promised to send.",
-     "en": "The error: “promised sending”. Correct: promised to send."
+     "de": "Der Fehler: „promised sending“. Nach promise steht to + Grundform: promised to send the report by noon.",
+     "en": "The error: “promised sending”. After promise comes to + base form: promised to send the report by noon."
     },
     "wrong": [
      {
@@ -36280,8 +36280,8 @@
    "err": null,
    "why": {
     "ok": {
-     "de": "Kein Fehler: refuse + to + Verb („to lower“) ist richtig.",
-     "en": "No error: refuse + to + verb (“to lower”) is correct."
+     "de": "Kein Fehler: refuse verlangt to + Grundform: refused to lower. Das ist ein Muster, das nicht mit -ing geht.",
+     "en": "No error: refuse takes to + base form: refused to lower. This pattern does not work with -ing."
     },
     "wrong": [
      {

@@ -1,185 +1,424 @@
 {
-  "You ___ tell your manager today, or she'll hear it from the client.": {
-    "pat": "ma.had-better",
-    "why": {
-      "ok": {
-        "de": "Richtig: had better warnt vor einer Folge, sonst erfährt sie es vom Kunden.",
-        "en": "Right: had better warns of a consequence, or else she hears it from the client."
-      },
-      "wrong": [
-        { "opt": "should to", "pat": "ma.should", "de": "Nach should steht kein to. Auch ohne to fehlt hier die drohende Folge.", "en": "No to after should. Even without to, the looming consequence is missing." },
-        { "opt": "ought", "pat": "ma.should", "de": "Ought braucht to (ought to tell) und warnt nicht vor einer Folge.", "en": "Ought needs to (ought to tell) and does not warn of a consequence." },
-        { "opt": "would better", "de": "Die feste Wendung heißt had better, nicht would better.", "en": "The fixed phrase is had better, not would better." }
-      ]
+ "You ___ tell your manager today, or she'll hear it from the client.": {
+  "pat": "ma.had-better",
+  "why": {
+   "ok": {
+    "de": "Richtig: had better warnt vor einer Folge, sonst erfährt sie es vom Kunden.",
+    "en": "Right: had better warns of a consequence, or else she hears it from the client."
+   },
+   "wrong": [
+    {
+     "opt": "should to",
+     "pat": "ma.should",
+     "de": "Nach should steht kein to. Auch ohne to fehlt hier die drohende Folge.",
+     "en": "No to after should. Even without to, the looming consequence is missing."
+    },
+    {
+     "opt": "ought",
+     "pat": "ma.should",
+     "de": "Ought braucht to (ought to tell) und warnt nicht vor einer Folge.",
+     "en": "Ought needs to (ought to tell) and does not warn of a consequence."
+    },
+    {
+     "opt": "would better",
+     "de": "Die feste Wendung heißt had better, nicht would better.",
+     "en": "The fixed phrase is had better, not would better."
     }
-  },
-  "You ___ attend the optional training; it's up to you.": {
-    "pat": "ma.dont-have-to",
-    "why": {
-      "ok": {
-        "de": "Richtig: optional und freie Wahl heißt „nicht nötig“: don't have to.",
-        "en": "Right: optional and your choice means “not necessary”: don't have to."
-      },
-      "wrong": [
-        { "opt": "mustn't", "de": "„Mustn't“ verbietet. Das passt nicht zu optional und freier Wahl.", "en": "Mustn't forbids it. That clashes with optional and up to you." },
-        { "opt": "can't", "de": "„Can't“ heißt nicht erlaubt oder nicht möglich, hier hast du aber die Wahl.", "en": "Can't means not allowed or not possible, but here the choice is yours." },
-        { "opt": "must", "de": "„Must“ macht es zur Pflicht. Das widerspricht optional und it's up to you.", "en": "Must makes it an obligation. That contradicts optional and up to you." }
-      ]
-    }
-  },
-  "I think you ___ double-check the figures before the board meeting.": {
-    "pat": "ma.should",
-    "why": {
-      "ok": {
-        "de": "Richtig: ought to + Grundform ist ein freundlicher Rat, und das to ist nötig.",
-        "en": "Right: ought to + base form gives friendly advice."
-      },
-      "wrong": [
-        { "opt": "had", "pat": "ma.had-better", "de": "Had braucht better (had better double-check). Allein passt es hier nicht.", "en": "Had needs better (had better double-check). On its own it does not fit." },
-        { "opt": "would to", "de": "„Would to“ ist keine Form für einen Rat. Es passt ought to oder should.", "en": "Would to is not a form for advice. Ought to or should fits here." },
-        { "opt": "should to", "pat": "ma.should", "de": "Nach should steht kein to. Mit to heißt es ought to.", "en": "No to after should. With to it is ought to." }
-      ]
-    }
-  },
-  "Which is the most polite way to give advice to a senior colleague?": {
-    "pat": "ma.polite",
-    "why": {
-      "ok": {
-        "de": "Richtig: Perhaps you could lässt die Wahl offen und ist am höflichsten.",
-        "en": "Right: Perhaps you could leaves the choice open and is the most polite."
-      },
-      "wrong": [
-        { "opt": "You had better change the slides.", "pat": "ma.had-better", "de": "„Had better“ droht mit einer Folge und wirkt gegenüber Vorgesetzten schroff.", "en": "Had better hints at a consequence and sounds blunt toward a senior colleague." },
-        { "opt": "You must change the slides.", "de": "„Must“ nennt eine Pflicht und klingt wie ein Befehl.", "en": "Must states an obligation and sounds like an order." },
-        { "opt": "Change the slides.", "de": "Der Imperativ ist ein Befehl und für Rat an Ranghöhere zu direkt.", "en": "The imperative is a command and too direct for advice to a senior colleague." }
-      ]
-    }
-  },
-  "You ___ better call the client now; the deadline is today.": {
-    "pat": "ma.had-better",
-    "why": {
-      "ok": {
-        "de": "Richtig: had better + Grundform warnt, denn die Frist läuft heute ab.",
-        "en": "Right: had better + base form warns, because the deadline is today."
-      },
-      "wrong": [
-        { "if": ["should"], "pat": "ma.should", "de": "Vor better steht had: Die feste Wendung heißt had better.", "en": "Had goes before better: the fixed phrase is had better." },
-        { "if": ["would"], "de": "Would better gibt es nicht, es muss had better heißen.", "en": "There is no would better, it has to be had better." },
-        { "if": ["have"], "de": "Have better passt nicht zu you, die Form ist had better.", "en": "Have better does not fit with you, the form is had better." },
-        { "not": ["had"], "de": "Gesucht ist das Hilfsverb der Wendung: had better.", "en": "The auxiliary of the phrase is needed: had better." }
-      ]
-    }
-  },
-  "We ___ to finish by Friday if we want to keep the client happy.": {
-    "pat": "ma.should",
-    "why": {
-      "ok": {
-        "de": "Richtig: ought to + Grundform gibt einen Rat, have to und need to gehen auch.",
-        "en": "Right: ought to + base form gives advice, have to and need to also work."
-      },
-      "wrong": [
-        { "if": ["should"], "pat": "ma.should", "de": "Should steht ohne to. Im Satz steht aber schon to.", "en": "Should takes no to. But the sentence already has to." },
-        { "if": ["must"], "de": "Must steht ohne to. Im Satz steht aber schon to.", "en": "Must takes no to. But the sentence already has to." },
-        { "if": ["had"], "de": "Had to meint Vergangenes, der Satz spricht aber von jetzt und morgen.", "en": "Had to means the past, but the sentence is about now and the future." },
-        { "not": ["ought", "have", "need"], "de": "Gesucht ist ein Modal mit to für Rat oder Pflicht: ought, have oder need.", "en": "A modal with to for advice or duty is needed: ought, have or need." }
-      ]
-    }
-  },
-  "You ___ bring a laptop; we'll provide one.": {
-    "pat": "ma.dont-have-to",
-    "why": {
-      "ok": {
-        "de": "Richtig: Wir stellen einen, also ist es nicht nötig: don't have to.",
-        "en": "Right: we provide one, so it is not necessary: don't have to."
-      },
-      "wrong": [
-        { "if": ["must", "not"], "de": "Must not verbietet das Mitbringen. Gemeint ist: nicht nötig.", "en": "Must not forbids bringing one. The point is: not necessary." },
-        { "if": ["cannot"], "de": "Can't heißt nicht erlaubt oder nicht möglich. Hier ist es nur unnötig.", "en": "Can't means not allowed or not possible. Here it is just unnecessary." },
-        { "if": ["should", "not"], "pat": "ma.should", "de": "Shouldn't rät davon ab. Hier ist es aber nur unnötig, nicht schlecht.", "en": "Shouldn't advises against it. Here it is merely unnecessary, not bad." },
-        { "not": ["have", "need"], "de": "Gesucht ist eine Form für „nicht nötig“: don't have to oder don't need to.", "en": "A form for “not necessary” is needed: don't have to or don't need to." }
-      ]
-    }
-  },
-  "It would be wise to back up the data. → You ___ back up the data.": {
-    "pat": "ma.should",
-    "why": {
-      "ok": {
-        "de": "Richtig: „it would be wise“ ist ein Rat, also should + Grundform.",
-        "en": "Right: “it would be wise” is advice, so should + base form."
-      },
-      "wrong": [
-        { "if": ["must"], "de": "Must ist eine Pflicht. „It would be wise“ ist nur ein Rat.", "en": "Must is an obligation. “It would be wise” is only advice." },
-        { "if": ["should", "to"], "de": "Nach should steht kein to: should back up.", "en": "No to after should: should back up." },
-        { "if": ["could"], "pat": "ma.polite", "de": "Could ist nur ein Vorschlag. „Wise“ drückt einen klareren Rat aus.", "en": "Could is only a suggestion. “Wise” expresses clearer advice." },
-        { "not": ["should", "ought", "had"], "de": "Gesucht ist ein Modal für klaren Rat: should, ought to oder had better.", "en": "A modal for clear advice is needed: should, ought to or had better." }
-      ]
-    }
-  },
-  "Don't send that email while you're angry. → You ___ send that email while you're angry.": {
-    "pat": "ma.should",
-    "why": {
-      "ok": {
-        "de": "Richtig: Der Rat dagegen ist shouldn't + Grundform.",
-        "en": "Right: advice against it is shouldn't + base form."
-      },
-      "wrong": [
-        { "if": ["should"], "not": ["not"], "de": "Should ohne not rät dazu. Gemeint ist das Gegenteil.", "en": "Should without not advises doing it. The opposite is meant." },
-        { "if": ["need", "not"], "pat": "ma.dont-have-to", "de": "Needn't heißt „nicht nötig“. Hier wird davon abgeraten.", "en": "Needn't means “not necessary”. Here the advice is against it." },
-        { "not": ["not"], "de": "Der Rat dagegen braucht eine Verneinung: shouldn't oder should not.", "en": "Advice against it needs a negative: shouldn't or should not." }
-      ]
-    }
-  },
-  "You should to call the client before noon.": {
-    "pat": "ma.should",
-    "why": {
-      "ok": {
-        "de": "Richtig: Nach should steht die Grundform ohne to: should call.",
-        "en": "Right: after should use the base form with no to: should call."
-      },
-      "wrong": [
-        { "if": ["should", "to"], "de": "Das to ist zu viel: should + call, ohne to.", "en": "The to is extra: should + call, with no to." },
-        { "not": ["should", "ought"], "de": "Der Satz soll bei should bleiben, nur das to ist zu viel.", "en": "Keep should in the sentence, only the to is extra." }
-      ]
-    }
-  },
-  "You had better to ask your manager before you sign.": {
-    "pat": "ma.had-better",
-    "why": {
-      "ok": {
-        "de": "Richtig: Nach had better steht die Grundform ohne to: had better ask.",
-        "en": "Right: after had better use the base form with no to: had better ask."
-      },
-      "wrong": [
-        { "if": ["better", "to"], "de": "Das to ist zu viel: had better + ask, ohne to.", "en": "The to is extra: had better + ask, with no to." },
-        { "not": ["better"], "de": "Die Wendung had better soll bleiben, nur das to ist zu viel.", "en": "Keep the phrase had better, only the to is extra." }
-      ]
-    }
-  },
-  "You mustn't come to the workshop if you don't want to; it's optional.": {
-    "pat": "ma.dont-have-to",
-    "why": {
-      "ok": {
-        "de": "Richtig: optional heißt „nicht nötig“: don't have to, nicht mustn't.",
-        "en": "Right: optional means “not necessary”: don't have to, not mustn't."
-      },
-      "wrong": [
-        { "if": ["must", "not"], "de": "Must not verbietet. Bei optional ist es nur unnötig: don't have to.", "en": "Must not forbids. For optional it is only unnecessary: don't have to." },
-        { "not": ["have", "need"], "de": "Gesucht ist eine Form für „nicht nötig“: don't have to oder needn't.", "en": "A form for “not necessary” is needed: don't have to or needn't." }
-      ]
-    }
-  },
-  "You mustn't come to the meeting if you don't want to; it's optional.": {
-    "pat": "ma.dont-have-to",
-    "dup": "You mustn't come to the workshop if you don't want to; it's optional.",
-    "why": {
-      "ok": {
-        "de": "Richtig: optional heißt „nicht nötig“: don't have to, nicht mustn't.",
-        "en": "Right: optional means “not necessary”: don't have to, not mustn't."
-      },
-      "wrong": [
-        { "if": ["must", "not"], "de": "Must not verbietet. Bei optional ist es nur unnötig: don't have to.", "en": "Must not forbids. For optional it is only unnecessary: don't have to." },
-        { "not": ["have", "need"], "de": "Gesucht ist eine Form für „nicht nötig“: don't have to oder needn't.", "en": "A form for “not necessary” is needed: don't have to or needn't." }
-      ]
-    }
+   ]
   }
+ },
+ "You ___ attend the optional training; it's up to you.": {
+  "pat": "ma.dont-have-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: optional und freie Wahl heißt „nicht nötig“: don't have to.",
+    "en": "Right: optional and your choice means “not necessary”: don't have to."
+   },
+   "wrong": [
+    {
+     "opt": "mustn't",
+     "de": "„Mustn't“ verbietet. Das passt nicht zu optional und freier Wahl.",
+     "en": "Mustn't forbids it. That clashes with optional and up to you."
+    },
+    {
+     "opt": "can't",
+     "de": "„Can't“ heißt nicht erlaubt oder nicht möglich, hier hast du aber die Wahl.",
+     "en": "Can't means not allowed or not possible, but here the choice is yours."
+    },
+    {
+     "opt": "must",
+     "de": "„Must“ macht es zur Pflicht. Das widerspricht optional und it's up to you.",
+     "en": "Must makes it an obligation. That contradicts optional and up to you."
+    }
+   ]
+  }
+ },
+ "I think you ___ double-check the figures before the board meeting.": {
+  "pat": "ma.should",
+  "why": {
+   "ok": {
+    "de": "Richtig: ought to + Grundform ist ein freundlicher Rat, und das to ist nötig.",
+    "en": "Right: ought to + base form gives friendly advice."
+   },
+   "wrong": [
+    {
+     "opt": "had",
+     "pat": "ma.had-better",
+     "de": "Had braucht better (had better double-check). Allein passt es hier nicht.",
+     "en": "Had needs better (had better double-check). On its own it does not fit."
+    },
+    {
+     "opt": "would to",
+     "de": "„Would to“ ist keine Form für einen Rat. Es passt ought to oder should.",
+     "en": "Would to is not a form for advice. Ought to or should fits here."
+    },
+    {
+     "opt": "should to",
+     "pat": "ma.should",
+     "de": "Nach should steht kein to. Mit to heißt es ought to.",
+     "en": "No to after should. With to it is ought to."
+    }
+   ]
+  }
+ },
+ "Which is the most polite way to give advice to a senior colleague?": {
+  "pat": "ma.polite",
+  "why": {
+   "ok": {
+    "de": "Richtig: Perhaps you could lässt die Wahl offen und ist am höflichsten.",
+    "en": "Right: Perhaps you could leaves the choice open and is the most polite."
+   },
+   "wrong": [
+    {
+     "opt": "You had better change the slides.",
+     "pat": "ma.had-better",
+     "de": "„Had better“ droht mit einer Folge und wirkt gegenüber Vorgesetzten schroff.",
+     "en": "Had better hints at a consequence and sounds blunt toward a senior colleague."
+    },
+    {
+     "opt": "You must change the slides.",
+     "de": "„Must“ nennt eine Pflicht und klingt wie ein Befehl.",
+     "en": "Must states an obligation and sounds like an order."
+    },
+    {
+     "opt": "Change the slides.",
+     "de": "Der Imperativ ist ein Befehl und für Rat an Ranghöhere zu direkt.",
+     "en": "The imperative is a command and too direct for advice to a senior colleague."
+    }
+   ]
+  }
+ },
+ "You ___ better call the client now; the deadline is today.": {
+  "pat": "ma.had-better",
+  "why": {
+   "ok": {
+    "de": "Richtig: had better + Grundform warnt, denn die Frist läuft heute ab.",
+    "en": "Right: had better + base form warns, because the deadline is today."
+   },
+   "wrong": [
+    {
+     "if": [
+      "should"
+     ],
+     "pat": "ma.should",
+     "de": "Vor better steht had: Die feste Wendung heißt had better.",
+     "en": "Had goes before better: the fixed phrase is had better."
+    },
+    {
+     "if": [
+      "would"
+     ],
+     "de": "Would better gibt es nicht, es muss had better heißen.",
+     "en": "There is no would better, it has to be had better."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "de": "Have better passt nicht zu you, die Form ist had better.",
+     "en": "Have better does not fit with you, the form is had better."
+    },
+    {
+     "not": [
+      "had"
+     ],
+     "de": "Gesucht ist das Hilfsverb der Wendung: had better.",
+     "en": "The auxiliary of the phrase is needed: had better."
+    }
+   ]
+  }
+ },
+ "We ___ to finish by Friday if we want to keep the client happy.": {
+  "pat": "ma.should",
+  "why": {
+   "ok": {
+    "de": "Richtig: ought to + Grundform gibt einen Rat, have to und need to gehen auch.",
+    "en": "Right: ought to + base form gives advice, have to and need to also work."
+   },
+   "wrong": [
+    {
+     "if": [
+      "should"
+     ],
+     "pat": "ma.should",
+     "de": "Should steht ohne to. Im Satz steht aber schon to.",
+     "en": "Should takes no to. But the sentence already has to."
+    },
+    {
+     "if": [
+      "must"
+     ],
+     "de": "Must steht ohne to. Im Satz steht aber schon to.",
+     "en": "Must takes no to. But the sentence already has to."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "de": "Had to meint Vergangenes, der Satz spricht aber von jetzt und morgen.",
+     "en": "Had to means the past, but the sentence is about now and the future."
+    },
+    {
+     "not": [
+      "ought",
+      "have",
+      "need"
+     ],
+     "de": "Gesucht ist ein Modal mit to für Rat oder Pflicht: ought, have oder need.",
+     "en": "A modal with to for advice or duty is needed: ought, have or need."
+    }
+   ]
+  }
+ },
+ "You ___ bring a laptop; we'll provide one.": {
+  "pat": "ma.dont-have-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: Wir stellen einen, also ist es nicht nötig: don't have to.",
+    "en": "Right: we provide one, so it is not necessary: don't have to."
+   },
+   "wrong": [
+    {
+     "if": [
+      "must",
+      "not"
+     ],
+     "de": "Must not verbietet das Mitbringen. Gemeint ist: nicht nötig.",
+     "en": "Must not forbids bringing one. The point is: not necessary."
+    },
+    {
+     "if": [
+      "cannot"
+     ],
+     "de": "Can't heißt nicht erlaubt oder nicht möglich. Hier ist es nur unnötig.",
+     "en": "Can't means not allowed or not possible. Here it is just unnecessary."
+    },
+    {
+     "if": [
+      "should",
+      "not"
+     ],
+     "pat": "ma.should",
+     "de": "Shouldn't rät davon ab. Hier ist es aber nur unnötig, nicht schlecht.",
+     "en": "Shouldn't advises against it. Here it is merely unnecessary, not bad."
+    },
+    {
+     "not": [
+      "have",
+      "need"
+     ],
+     "de": "Gesucht ist eine Form für „nicht nötig“: don't have to oder don't need to.",
+     "en": "A form for “not necessary” is needed: don't have to or don't need to."
+    }
+   ]
+  }
+ },
+ "It would be wise to back up the data. → You ___ back up the data.": {
+  "pat": "ma.should",
+  "why": {
+   "ok": {
+    "de": "Richtig: „it would be wise“ ist ein Rat, also should + Grundform.",
+    "en": "Right: “it would be wise” is advice, so should + base form."
+   },
+   "wrong": [
+    {
+     "if": [
+      "must"
+     ],
+     "de": "Must ist eine Pflicht. „It would be wise“ ist nur ein Rat.",
+     "en": "Must is an obligation. “It would be wise” is only advice."
+    },
+    {
+     "if": [
+      "should",
+      "to"
+     ],
+     "de": "Nach should steht kein to: should back up.",
+     "en": "No to after should: should back up."
+    },
+    {
+     "if": [
+      "could"
+     ],
+     "pat": "ma.polite",
+     "de": "Could ist nur ein Vorschlag. „Wise“ drückt einen klareren Rat aus.",
+     "en": "Could is only a suggestion. “Wise” expresses clearer advice."
+    },
+    {
+     "not": [
+      "should",
+      "ought",
+      "had"
+     ],
+     "de": "Gesucht ist ein Modal für klaren Rat: should, ought to oder had better.",
+     "en": "A modal for clear advice is needed: should, ought to or had better."
+    }
+   ]
+  }
+ },
+ "Don't send that email while you're angry. → You ___ send that email while you're angry.": {
+  "pat": "ma.should",
+  "why": {
+   "ok": {
+    "de": "Der Rat dagegen heißt shouldn't + Grundform: You shouldn't send that email. Kein to nach should.",
+    "en": "The advice against is shouldn't + base form: You shouldn't send that email. No to after should."
+   },
+   "wrong": [
+    {
+     "if": [
+      "should"
+     ],
+     "not": [
+      "not"
+     ],
+     "de": "Should ohne not rät dazu. Gemeint ist das Gegenteil.",
+     "en": "Should without not advises doing it. The opposite is meant."
+    },
+    {
+     "if": [
+      "need",
+      "not"
+     ],
+     "pat": "ma.dont-have-to",
+     "de": "Needn't heißt „nicht nötig“. Hier wird davon abgeraten.",
+     "en": "Needn't means “not necessary”. Here the advice is against it."
+    },
+    {
+     "not": [
+      "not"
+     ],
+     "de": "Der Rat dagegen braucht eine Verneinung: shouldn't oder should not.",
+     "en": "Advice against it needs a negative: shouldn't or should not."
+    }
+   ]
+  }
+ },
+ "You should to call the client before noon.": {
+  "pat": "ma.should",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach should steht die Grundform ohne to: should call.",
+    "en": "Right: after should use the base form with no to: should call."
+   },
+   "wrong": [
+    {
+     "if": [
+      "should",
+      "to"
+     ],
+     "de": "Das to ist zu viel: should + call, ohne to.",
+     "en": "The to is extra: should + call, with no to."
+    },
+    {
+     "not": [
+      "should",
+      "ought"
+     ],
+     "de": "Der Satz soll bei should bleiben, nur das to ist zu viel.",
+     "en": "Keep should in the sentence, only the to is extra."
+    }
+   ]
+  }
+ },
+ "You had better to ask your manager before you sign.": {
+  "pat": "ma.had-better",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach had better steht die Grundform ohne to: had better ask.",
+    "en": "Right: after had better use the base form with no to: had better ask."
+   },
+   "wrong": [
+    {
+     "if": [
+      "better",
+      "to"
+     ],
+     "de": "Das to ist zu viel: had better + ask, ohne to.",
+     "en": "The to is extra: had better + ask, with no to."
+    },
+    {
+     "not": [
+      "better"
+     ],
+     "de": "Die Wendung had better soll bleiben, nur das to ist zu viel.",
+     "en": "Keep the phrase had better, only the to is extra."
+    }
+   ]
+  }
+ },
+ "You mustn't come to the workshop if you don't want to; it's optional.": {
+  "pat": "ma.dont-have-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: optional heißt „nicht nötig“: don't have to, nicht mustn't.",
+    "en": "Right: optional means “not necessary”: don't have to, not mustn't."
+   },
+   "wrong": [
+    {
+     "if": [
+      "must",
+      "not"
+     ],
+     "de": "Must not verbietet. Bei optional ist es nur unnötig: don't have to.",
+     "en": "Must not forbids. For optional it is only unnecessary: don't have to."
+    },
+    {
+     "not": [
+      "have",
+      "need"
+     ],
+     "de": "Gesucht ist eine Form für „nicht nötig“: don't have to oder needn't.",
+     "en": "A form for “not necessary” is needed: don't have to or needn't."
+    }
+   ]
+  }
+ },
+ "You mustn't come to the meeting if you don't want to; it's optional.": {
+  "pat": "ma.dont-have-to",
+  "dup": "You mustn't come to the workshop if you don't want to; it's optional.",
+  "why": {
+   "ok": {
+    "de": "Richtig: optional heißt „nicht nötig“: don't have to, nicht mustn't.",
+    "en": "Right: optional means “not necessary”: don't have to, not mustn't."
+   },
+   "wrong": [
+    {
+     "if": [
+      "must",
+      "not"
+     ],
+     "de": "Must not verbietet. Bei optional ist es nur unnötig: don't have to.",
+     "en": "Must not forbids. For optional it is only unnecessary: don't have to."
+    },
+    {
+     "not": [
+      "have",
+      "need"
+     ],
+     "de": "Gesucht ist eine Form für „nicht nötig“: don't have to oder needn't.",
+     "en": "A form for “not necessary” is needed: don't have to or needn't."
+    }
+   ]
+  }
+ }
 }
