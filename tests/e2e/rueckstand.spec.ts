@@ -52,7 +52,7 @@ test.describe('Handy 390', () => {
 test.describe('Desktop', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
 
-  test('Pflichtrunde mit 70 überfälligen Karten: danach „Noch 10 Karten sind fällig“ und „Noch eine Runde“ startet eine freie Runde', async ({ page }) => {
+  test('Pflichtrunde mit 70 überfälligen Karten: danach „Noch 10 fällig · Noch eine Runde“ startet eine freie Runde', async ({ page }) => {
     const { patch } = ankiPatch(70);
     const { errors } = await boot(page, {
       migrated: true,
@@ -73,9 +73,8 @@ test.describe('Desktop', () => {
     }
     await expect(page.getByTestId('summary')).toBeVisible();
     // Budget 480 s + höchstens 50 % = 720 s: 60 Karten zu je 12 s – nicht alle 70.
-    await expect(page.getByTestId('summary-left')).toHaveAttribute('data-n', '10');
-    await expect(page.getByTestId('summary-left')).toContainText('Noch 10 Karten sind fällig');
-    await page.getByTestId('summary-more').click();
+    await expect(page.getByTestId('session-end-more')).toContainText('Noch 10 fällig · Noch eine Runde');
+    await page.getByTestId('session-end-more').click();
     await screen(page, 'trainer');
     await expect(page.getByTestId('flip')).toBeVisible();
     expect(errors).toEqual([]);
