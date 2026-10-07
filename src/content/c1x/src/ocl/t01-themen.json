@@ -20,22 +20,22 @@
       "if": [
        "did"
       ],
-      "de": "„did“ passt hier nicht. Gesucht ist „has“.",
-      "en": "“did” does not fit here. The word needed is “has”."
+      "de": "did braucht die Grundform, hier steht aber faced (3. Form wäre nötig).",
+      "en": "did needs the base form, but faced is already a past form here."
      },
      {
       "if": [
        "was"
       ],
-      "de": "„was“ passt hier nicht. Gesucht ist „has“.",
-      "en": "“was” does not fit here. The word needed is “has”."
+      "de": "was passt nicht zu faced, es fehlt das Hilfsverb für die Vorzeitigkeit.",
+      "en": "was does not fit faced, the auxiliary for the earlier action is missing."
      },
      {
       "if": [
        "would"
       ],
-      "de": "„would“ passt hier nicht. Gesucht ist „has“.",
-      "en": "“would” does not fit here. The word needed is “has”."
+      "de": "would braucht die Grundform, hier folgt aber faced.",
+      "en": "would needs the base form, but faced follows."
      }
     ]
    },
@@ -70,22 +70,22 @@
       "if": [
        "do"
       ],
-      "de": "„do“ passt hier nicht. Gesucht ist „did“.",
-      "en": "“do” does not fit here. The word needed is “did”."
+      "de": "do ist Präsens, der Satz erzählt aber von früher (was).",
+      "en": "do is present, but the sentence tells about the past (was)."
      },
      {
       "if": [
        "are"
       ],
-      "de": "„are“ passt hier nicht. Gesucht ist „did“.",
-      "en": "“are” does not fit here. The word needed is “did”."
+      "de": "are passt nicht zu understand, es fehlt die Vergangenheit.",
+      "en": "are does not fit understand, the past tense is missing."
      },
      {
       "if": [
        "have"
       ],
-      "de": "„have“ passt hier nicht. Gesucht ist „did“.",
-      "en": "“have” does not fit here. The word needed is “did”."
+      "de": "have verlangt die 3. Form, hier folgt aber die Grundform understand.",
+      "en": "have needs the participle, but the base form understand follows."
      }
     ]
    },
@@ -121,22 +121,22 @@
       "if": [
        "when"
       ],
-      "de": "„when“ passt hier nicht. Gesucht ist „than“.",
-      "en": "“when” does not fit here. The word needed is “than”."
+      "de": "when gehört zu hardly, nicht zu no sooner.",
+      "en": "when goes with hardly, not with no sooner."
      },
      {
       "if": [
        "that"
       ],
-      "de": "„that“ passt hier nicht. Gesucht ist „than“.",
-      "en": "“that” does not fit here. The word needed is “than”."
+      "de": "that leitet hier keinen Vergleich ein, zu no sooner gehört than.",
+      "en": "that does not introduce a comparison here, no sooner goes with than."
      },
      {
       "if": [
        "then"
       ],
-      "de": "„then“ passt hier nicht. Gesucht ist „than“.",
-      "en": "“then” does not fit here. The word needed is “than”."
+      "de": "then ist ein Zeitwort („dann“), kein Bindewort für no sooner.",
+      "en": "then is a time word (“then”), not the connector for no sooner."
      }
     ]
    },
@@ -170,22 +170,22 @@
       "if": [
        "than"
       ],
-      "de": "„than“ passt hier nicht. Gesucht ist „when“.",
-      "en": "“than” does not fit here. The word needed is “when”."
+      "de": "than gehört zu no sooner, nicht zu hardly.",
+      "en": "than goes with no sooner, not with hardly."
      },
      {
       "if": [
        "that"
       ],
-      "de": "„that“ passt hier nicht. Gesucht ist „when“.",
-      "en": "“that” does not fit here. The word needed is “when”."
+      "de": "that verbindet hier nichts, zu hardly gehört when.",
+      "en": "that connects nothing here, hardly goes with when."
      },
      {
       "if": [
        "then"
       ],
-      "de": "„then“ passt hier nicht. Gesucht ist „when“.",
-      "en": "“then” does not fit here. The word needed is “when”."
+      "de": "then ist ein Zeitwort, es verbindet die beiden Sätze nicht.",
+      "en": "then is a time word, it does not join the two clauses."
      }
     ]
    },
@@ -220,22 +220,22 @@
       "if": [
        "Would"
       ],
-      "de": "„Would“ passt hier nicht. Gesucht ist „Should“.",
-      "en": "“Would” does not fit here. The word needed is “Should”."
+      "de": "Would you need … ist keine Bedingung, hier braucht es Should oder If.",
+      "en": "Would you need … is not a condition, Should or If is needed here."
      },
      {
       "if": [
        "Could"
       ],
-      "de": "„Could“ passt hier nicht. Gesucht ist „Should“.",
-      "en": "“Could” does not fit here. The word needed is “Should”."
+      "de": "Could you need … fragt nach Möglichkeit und leitet keine Bedingung ein.",
+      "en": "Could you need … asks about possibility and does not open a condition."
      },
      {
       "if": [
        "Might"
       ],
-      "de": "„Might“ passt hier nicht. Gesucht ist „Should“.",
-      "en": "“Might” does not fit here. The word needed is “Should”."
+      "de": "Might you need … klingt altmodisch und ist keine übliche Bedingung.",
+      "en": "Might you need … sounds old-fashioned and is not a usual condition."
      }
     ]
    },
@@ -270,22 +270,22 @@
       "if": [
        "of"
       ],
-      "de": "„of“ passt hier nicht. Gesucht ist „for“.",
-      "en": "“of” does not fit here. The word needed is “for”."
+      "de": "of passt nicht zu been, die feste Wendung ist had it not been for.",
+      "en": "of does not fit been, the fixed phrase is had it not been for."
      },
      {
       "if": [
        "to"
       ],
-      "de": "„to“ passt hier nicht. Gesucht ist „for“.",
-      "en": "“to” does not fit here. The word needed is “for”."
+      "de": "to nennt eine Richtung, die Wendung braucht for.",
+      "en": "to names a direction, the phrase needs for."
      },
      {
       "if": [
        "by"
       ],
-      "de": "„by“ passt hier nicht. Gesucht ist „for“.",
-      "en": "“by” does not fit here. The word needed is “for”."
+      "de": "by nennt den Urheber, die Wendung braucht for.",
+      "en": "by names the agent, the phrase needs for."
      }
     ]
    },
@@ -319,22 +319,22 @@
       "if": [
        "when"
       ],
-      "de": "„when“ passt hier nicht. Gesucht ist „than“.",
-      "en": "“when” does not fit here. The word needed is “than”."
+      "de": "when gehört zu hardly, zu no sooner gehört than.",
+      "en": "when goes with hardly, no sooner goes with than."
      },
      {
       "if": [
        "that"
       ],
-      "de": "„that“ passt hier nicht. Gesucht ist „than“.",
-      "en": "“that” does not fit here. The word needed is “than”."
+      "de": "that leitet hier keinen Vergleich ein, es braucht than.",
+      "en": "that does not introduce a comparison here, it needs than."
      },
      {
       "if": [
        "then"
       ],
-      "de": "„then“ passt hier nicht. Gesucht ist „than“.",
-      "en": "“then” does not fit here. The word needed is “than”."
+      "de": "then ist ein Zeitwort („dann“), kein Bindewort.",
+      "en": "then is a time word (“then”), not a connector."
      }
     ]
    },
@@ -368,22 +368,22 @@
       "if": [
        "do"
       ],
-      "de": "„do“ passt hier nicht. Gesucht ist „does“.",
-      "en": "“do” does not fit here. The word needed is “does”."
+      "de": "do passt zu Mehrzahl, my neighbor ist Einzahl.",
+      "en": "do goes with plural, my neighbor is singular."
      },
      {
       "if": [
        "is"
       ],
-      "de": "„is“ passt hier nicht. Gesucht ist „does“.",
-      "en": "“is” does not fit here. The word needed is “does”."
+      "de": "is braucht ein -ing oder eine 3. Form, hier steht die Grundform leave.",
+      "en": "is needs an -ing or a participle, but the base form leave stands here."
      },
      {
       "if": [
        "has"
       ],
-      "de": "„has“ passt hier nicht. Gesucht ist „does“.",
-      "en": "“has” does not fit here. The word needed is “does”."
+      "de": "has verlangt die 3. Form (left), hier steht die Grundform leave.",
+      "en": "has needs the participle (left), but the base form leave stands here."
      }
     ]
    },
@@ -417,22 +417,22 @@
       "if": [
        "do"
       ],
-      "de": "„do“ passt hier nicht. Gesucht ist „could“.",
-      "en": "“do” does not fit here. The word needed is “could”."
+      "de": "do ist Präsens, der Nebensatz steht aber in der Vergangenheit.",
+      "en": "do is present, but the clause before it is in the past."
      },
      {
       "if": [
        "can"
       ],
-      "de": "„can“ passt hier nicht. Gesucht ist „could“.",
-      "en": "“can” does not fit here. The word needed is “could”."
+      "de": "can ist Präsens und passt nicht zu fell asleep.",
+      "en": "can is present and does not fit fell asleep."
      },
      {
       "if": [
        "are"
       ],
-      "de": "„are“ passt hier nicht. Gesucht ist „could“.",
-      "en": "“are” does not fit here. The word needed is “could”."
+      "de": "are braucht ein -ing, hier steht die Grundform eat.",
+      "en": "are needs an -ing form, but the base form eat stands here."
      }
     ]
    },
@@ -467,22 +467,22 @@
       "if": [
        "do"
       ],
-      "de": "„do“ passt hier nicht. Gesucht ist „did“.",
-      "en": "“do” does not fit here. The word needed is “did”."
+      "de": "do ist Präsens, die Antwort liegt aber in der Vergangenheit (on Tuesday).",
+      "en": "do is present, but the reply lies in the past (on Tuesday)."
      },
      {
       "if": [
        "does"
       ],
-      "de": "„does“ passt hier nicht. Gesucht ist „did“.",
-      "en": "“does” does not fit here. The word needed is “did”."
+      "de": "does gehört zu he, she, it, nicht zu we.",
+      "en": "does goes with he, she, it, not with we."
      },
      {
       "if": [
        "had"
       ],
-      "de": "„had“ passt hier nicht. Gesucht ist „did“.",
-      "en": "“had” does not fit here. The word needed is “did”."
+      "de": "had verlangt die 3. Form, hier folgt die Grundform reply.",
+      "en": "had needs the participle, but the base form reply follows."
      }
     ]
    },
@@ -516,22 +516,22 @@
       "if": [
        "do"
       ],
-      "de": "„do“ passt hier nicht. Gesucht ist „does“.",
-      "en": "“do” does not fit here. The word needed is “does”."
+      "de": "do gehört zu I, you, we, they, nicht zu he.",
+      "en": "do goes with I, you, we, they, not with he."
      },
      {
       "if": [
        "did"
       ],
-      "de": "„did“ passt hier nicht. Gesucht ist „does“.",
-      "en": "“did” does not fit here. The word needed is “does”."
+      "de": "did ist Vergangenheit, der Satz spricht aber von seinem Können jetzt.",
+      "en": "did is past, but the sentence is about his ability now."
      },
      {
       "if": [
        "is"
       ],
-      "de": "„is“ passt hier nicht. Gesucht ist „does“.",
-      "en": "“is” does not fit here. The word needed is “does”."
+      "de": "is braucht ein -ing oder eine 3. Form, hier folgt die Grundform speak.",
+      "en": "is needs an -ing or a participle, but the base form speak follows."
      }
     ]
    },
@@ -565,22 +565,22 @@
       "if": [
        "that"
       ],
-      "de": "„that“ passt hier nicht. Gesucht ist „as“.",
-      "en": "“that” does not fit here. The word needed is “as”."
+      "de": "Much that ist keine gültige Verbindung für einen Einwand.",
+      "en": "Much that is not a valid combination for a concession."
      },
      {
       "if": [
        "so"
       ],
-      "de": "„so“ passt hier nicht. Gesucht ist „as“.",
-      "en": "“so” does not fit here. The word needed is “as”."
+      "de": "Much so bedeutet „sehr“ und leitet keinen Einwand ein.",
+      "en": "Much so means “very” and does not start a concession."
      },
      {
       "if": [
        "if"
       ],
-      "de": "„if“ passt hier nicht. Gesucht ist „as“.",
-      "en": "“if” does not fit here. The word needed is “as”."
+      "de": "if nennt eine Bedingung, hier soll aber ein Einwand stehen.",
+      "en": "if names a condition, but a concession is needed here."
      }
     ]
    },
@@ -615,22 +615,22 @@
       "if": [
        "that"
       ],
-      "de": "„that“ passt hier nicht. Gesucht ist „as“.",
-      "en": "“that” does not fit here. The word needed is “as”."
+      "de": "Hard that we tried ist keine gültige Verbindung für einen Einwand.",
+      "en": "Hard that we tried is not a valid combination for a concession."
      },
      {
       "if": [
        "so"
       ],
-      "de": "„so“ passt hier nicht. Gesucht ist „as“.",
-      "en": "“so” does not fit here. The word needed is “as”."
+      "de": "Hard so we tried drückt keinen Einwand aus.",
+      "en": "Hard so we tried does not express a concession."
      },
      {
       "if": [
        "if"
       ],
-      "de": "„if“ passt hier nicht. Gesucht ist „as“.",
-      "en": "“if” does not fit here. The word needed is “as”."
+      "de": "if nennt eine Bedingung, hier soll aber ein Einwand stehen.",
+      "en": "if names a condition, but a concession is needed here."
      }
     ]
    },
@@ -665,22 +665,22 @@
       "if": [
        "which"
       ],
-      "de": "„which“ passt hier nicht. Gesucht ist „that“.",
-      "en": "“which” does not fit here. The word needed is “that”."
+      "de": "which bezieht sich auf ein Nomen, hier folgt aber die Folge des ganzen Satzes.",
+      "en": "which refers to a noun, but here the result of the whole clause follows."
      },
      {
       "if": [
        "what"
       ],
-      "de": "„what“ passt hier nicht. Gesucht ist „that“.",
-      "en": "“what” does not fit here. The word needed is “that”."
+      "de": "what leitet keinen Folgesatz ein, nach so … that braucht es that.",
+      "en": "what does not start a result clause, so … that needs that."
      },
      {
       "if": [
        "as"
       ],
-      "de": "„as“ passt hier nicht. Gesucht ist „that“.",
-      "en": "“as” does not fit here. The word needed is “that”."
+      "de": "as vergleicht, die Folge wird aber mit that angeschlossen.",
+      "en": "as compares, but the result is joined with that."
      }
     ]
    },
@@ -714,22 +714,22 @@
       "if": [
        "so"
       ],
-      "de": "„so“ passt hier nicht. Gesucht ist „such“.",
-      "en": "“so” does not fit here. The word needed is “such”."
+      "de": "so steht vor einem Adjektiv allein, vor a + Nomen braucht es such.",
+      "en": "so goes before an adjective alone, before a + noun it needs such."
      },
      {
       "if": [
        "very"
       ],
-      "de": "„very“ passt hier nicht. Gesucht ist „such“.",
-      "en": "“very” does not fit here. The word needed is “such”."
+      "de": "very verstärkt nur ein Adjektiv und nennt keine Folge mit that.",
+      "en": "very only strengthens an adjective and names no result with that."
      },
      {
       "if": [
        "too"
       ],
-      "de": "„too“ passt hier nicht. Gesucht ist „such“.",
-      "en": "“too” does not fit here. The word needed is “such”."
+      "de": "too heißt „zu“ und passt nicht zu einer Folge mit that.",
+      "en": "too means “too” and does not fit a result with that."
      }
     ]
    },
@@ -763,22 +763,22 @@
       "if": [
        "is"
       ],
-      "de": "„is“ passt hier nicht. Gesucht ist „was“.",
-      "en": "“is” does not fit here. The word needed is “was”."
+      "de": "is ist Präsens, die Geschichte liegt aber in der Vergangenheit (could not).",
+      "en": "is is present, but the story lies in the past (could not)."
      },
      {
       "if": [
        "has"
       ],
-      "de": "„has“ passt hier nicht. Gesucht ist „was“.",
-      "en": "“has” does not fit here. The word needed is “was”."
+      "de": "has verlangt eine 3. Form und passt nicht zu Such … that.",
+      "en": "has needs a participle and does not fit Such … that."
      },
      {
       "if": [
        "did"
       ],
-      "de": "„did“ passt hier nicht. Gesucht ist „was“.",
-      "en": "“did” does not fit here. The word needed is “was”."
+      "de": "did braucht die Grundform, hier steht aber ein Nomen.",
+      "en": "did needs the base form, but a noun follows here."
      }
     ]
    },
@@ -812,22 +812,22 @@
       "if": [
        "that"
       ],
-      "de": "„that“ passt hier nicht. Gesucht ist „as“.",
-      "en": "“that” does not fit here. The word needed is “as”."
+      "de": "Much that ist keine gültige Verbindung für einen Einwand.",
+      "en": "Much that is not a valid combination for a concession."
      },
      {
       "if": [
        "so"
       ],
-      "de": "„so“ passt hier nicht. Gesucht ist „as“.",
-      "en": "“so” does not fit here. The word needed is “as”."
+      "de": "Much so bedeutet „sehr“ und leitet keinen Einwand ein.",
+      "en": "Much so means “very” and does not start a concession."
      },
      {
       "if": [
        "how"
       ],
-      "de": "„how“ passt hier nicht. Gesucht ist „as“.",
-      "en": "“how” does not fit here. The word needed is “as”."
+      "de": "how fragt nach der Art, hier soll aber ein Einwand stehen.",
+      "en": "how asks about manner, but a concession is needed here."
      }
     ]
    },
@@ -862,22 +862,22 @@
       "if": [
        "told"
       ],
-      "de": "„told“ passt hier nicht. Gesucht ist „tell“.",
-      "en": "“told” does not fit here. The word needed is “tell”."
+      "de": "Nach did steht die Grundform, nicht die 2. Form told.",
+      "en": "After did the base form follows, not the past form told."
      },
      {
       "if": [
        "telling"
       ],
-      "de": "„telling“ passt hier nicht. Gesucht ist „tell“.",
-      "en": "“telling” does not fit here. The word needed is “tell”."
+      "de": "Nach did steht die Grundform, nicht -ing.",
+      "en": "After did the base form follows, not -ing."
      },
      {
       "if": [
        "tells"
       ],
-      "de": "„tells“ passt hier nicht. Gesucht ist „tell“.",
-      "en": "“tells” does not fit here. The word needed is “tell”."
+      "de": "Nach did steht die Grundform, kein -s.",
+      "en": "After did the base form follows, no -s."
      }
     ]
    },
@@ -911,22 +911,22 @@
       "if": [
        "too"
       ],
-      "de": "„too“ passt hier nicht. Gesucht ist „so“.",
-      "en": "“too” does not fit here. The word needed is “so”."
+      "de": "too heißt „auch“ und ersetzt keinen Gedanken nach expect.",
+      "en": "too means “also” and does not replace a thought after expect."
      },
      {
       "if": [
        "also"
       ],
-      "de": "„also“ passt hier nicht. Gesucht ist „so“.",
-      "en": "“also” does not fit here. The word needed is “so”."
+      "de": "also heißt „auch“ und ersetzt keinen Gedanken nach expect.",
+      "en": "also means “also” and does not replace a thought after expect."
      },
      {
       "if": [
        "yet"
       ],
-      "de": "„yet“ passt hier nicht. Gesucht ist „so“.",
-      "en": "“yet” does not fit here. The word needed is “so”."
+      "de": "yet nennt „bisher“ und ersetzt den Gedanken nicht, nach expect steht so.",
+      "en": "yet means “so far” and does not replace the thought, expect takes so."
      }
     ]
    },
@@ -960,22 +960,22 @@
       "if": [
        "no"
       ],
-      "de": "„no“ passt hier nicht. Gesucht ist „not“.",
-      "en": "“no” does not fit here. The word needed is “not”."
+      "de": "no steht nicht für einen ganzen Gedanken nach be afraid, dort steht not.",
+      "en": "no does not stand for a whole thought after be afraid, not does."
      },
      {
       "if": [
        "nor"
       ],
-      "de": "„nor“ passt hier nicht. Gesucht ist „not“.",
-      "en": "“nor” does not fit here. The word needed is “not”."
+      "de": "nor verbindet zwei Verneinungen und ersetzt hier keinen Gedanken.",
+      "en": "nor joins two negatives and does not replace a thought here."
      },
      {
       "if": [
        "never"
       ],
-      "de": "„never“ passt hier nicht. Gesucht ist „not“.",
-      "en": "“never” does not fit here. The word needed is “not”."
+      "de": "never heißt „nie“ und die Antwort wäre viel zu stark.",
+      "en": "never means “never” and the answer would be far too strong."
      }
     ]
    },
@@ -1009,22 +1009,22 @@
       "if": [
        "do"
       ],
-      "de": "„do“ passt hier nicht. Gesucht ist „did“.",
-      "en": "“do” does not fit here. The word needed is “did”."
+      "de": "do ist Präsens, der Satz erzählt aber von Mai und Juni (Vergangenheit).",
+      "en": "do is present, but the sentence is about May and June (past)."
      },
      {
       "if": [
        "had"
       ],
-      "de": "„had“ passt hier nicht. Gesucht ist „did“.",
-      "en": "“had” does not fit here. The word needed is “did”."
+      "de": "had verlangt eine 3. Form, hier steht the same für die Handlung.",
+      "en": "had needs a participle, but the same stands for the action here."
      },
      {
       "if": [
        "were"
       ],
-      "de": "„were“ passt hier nicht. Gesucht ist „did“.",
-      "en": "“were” does not fit here. The word needed is “did”."
+      "de": "were braucht ein -ing oder eine 3. Form und ersetzt die Handlung nicht.",
+      "en": "were needs an -ing or a participle and does not replace the action."
      }
     ]
    },
@@ -1058,22 +1058,22 @@
       "if": [
        "such"
       ],
-      "de": "„such“ passt hier nicht. Gesucht ist „so“.",
-      "en": "“such” does not fit here. The word needed is “so”."
+      "de": "do such ist keine feste Wendung, es heißt do so.",
+      "en": "do such is not a fixed phrase, it is do so."
      },
      {
       "if": [
        "thus"
       ],
-      "de": "„thus“ passt hier nicht. Gesucht ist „so“.",
-      "en": "“thus” does not fit here. The word needed is “so”."
+      "de": "thus heißt „deshalb“ und ersetzt nicht die Handlung.",
+      "en": "thus means “therefore” and does not replace the action."
      },
      {
       "if": [
        "either"
       ],
-      "de": "„either“ passt hier nicht. Gesucht ist „so“.",
-      "en": "“either” does not fit here. The word needed is “so”."
+      "de": "either heißt „auch nicht“ und ersetzt die Handlung nicht.",
+      "en": "either means “not either” and does not replace the action."
      }
     ]
    },
@@ -1109,22 +1109,22 @@
       "if": [
        "ones"
       ],
-      "de": "„ones“ passt hier nicht. Gesucht ist „one“.",
-      "en": "“ones” does not fit here. The word needed is “one”."
+      "de": "ones ist Mehrzahl, design und looks stehen aber in der Einzahl.",
+      "en": "ones is plural, but design and looks are singular."
      },
      {
       "if": [
        "that"
       ],
-      "de": "„that“ passt hier nicht. Gesucht ist „one“.",
-      "en": "“that” does not fit here. The word needed is “one”."
+      "de": "that ersetzt kein Nomen hinter einem Adjektiv, es braucht one.",
+      "en": "that does not replace a noun after an adjective, it needs one."
      },
      {
       "if": [
        "it"
       ],
-      "de": "„it“ passt hier nicht. Gesucht ist „one“.",
-      "en": "“it” does not fit here. The word needed is “one”."
+      "de": "it kann nach einem Adjektiv nicht stehen, es braucht one.",
+      "en": "it cannot follow an adjective, it needs one."
      }
     ]
    },
@@ -1158,22 +1158,22 @@
       "if": [
        "for"
       ],
-      "de": "„for“ passt hier nicht. Gesucht ist „to“.",
-      "en": "“for” does not fit here. The word needed is “to”."
+      "de": "for gehört nicht zu dem weggelassenen Infinitiv, es braucht to.",
+      "en": "for does not belong to the dropped infinitive, it needs to."
      },
      {
       "if": [
        "at"
       ],
-      "de": "„at“ passt hier nicht. Gesucht ist „to“.",
-      "en": "“at” does not fit here. The word needed is “to”."
+      "de": "at gehört nicht zu dem weggelassenen Infinitiv, es braucht to.",
+      "en": "at does not belong to the dropped infinitive, it needs to."
      },
      {
       "if": [
        "on"
       ],
-      "de": "„on“ passt hier nicht. Gesucht ist „to“.",
-      "en": "“on” does not fit here. The word needed is “to”."
+      "de": "on gehört nicht zu dem weggelassenen Infinitiv, es braucht to.",
+      "en": "on does not belong to the dropped infinitive, it needs to."
      }
     ]
    },
@@ -1207,22 +1207,22 @@
       "if": [
        "for"
       ],
-      "de": "„for“ passt hier nicht. Gesucht ist „to“.",
-      "en": "“for” does not fit here. The word needed is “to”."
+      "de": "for steht nicht für den weggelassenen Infinitiv, es braucht to.",
+      "en": "for does not stand for the dropped infinitive, it needs to."
      },
      {
       "if": [
        "at"
       ],
-      "de": "„at“ passt hier nicht. Gesucht ist „to“.",
-      "en": "“at” does not fit here. The word needed is “to”."
+      "de": "at steht nicht für den weggelassenen Infinitiv, es braucht to.",
+      "en": "at does not stand for the dropped infinitive, it needs to."
      },
      {
       "if": [
        "on"
       ],
-      "de": "„on“ passt hier nicht. Gesucht ist „to“.",
-      "en": "“on” does not fit here. The word needed is “to”."
+      "de": "on steht nicht für den weggelassenen Infinitiv, es braucht to.",
+      "en": "on does not stand for the dropped infinitive, it needs to."
      }
     ]
    },
@@ -1256,22 +1256,22 @@
       "if": [
        "it"
       ],
-      "de": "„it“ passt hier nicht. Gesucht ist „so“.",
-      "en": "“it” does not fit here. The word needed is “so”."
+      "de": "it ersetzt den Gedanken nicht, nach think steht so.",
+      "en": "it does not replace the thought, think takes so."
      },
      {
       "if": [
        "yes"
       ],
-      "de": "„yes“ passt hier nicht. Gesucht ist „so“.",
-      "en": "“yes” does not fit here. The word needed is “so”."
+      "de": "yes ist eine Antwort für sich und steht nicht hinter think.",
+      "en": "yes is an answer on its own and does not follow think."
      },
      {
       "if": [
        "that"
       ],
-      "de": "„that“ passt hier nicht. Gesucht ist „so“.",
-      "en": "“that” does not fit here. The word needed is “so”."
+      "de": "that braucht danach einen Satz, allein ersetzt es nichts.",
+      "en": "that needs a clause after it, alone it replaces nothing."
      }
     ]
    },
@@ -1305,22 +1305,22 @@
       "if": [
        "ones"
       ],
-      "de": "„ones“ passt hier nicht. Gesucht ist „one“.",
-      "en": "“ones” does not fit here. The word needed is “one”."
+      "de": "ones ist Mehrzahl, jacket und suits stehen aber in der Einzahl.",
+      "en": "ones is plural, but jacket and suits are singular."
      },
      {
       "if": [
        "that"
       ],
-      "de": "„that“ passt hier nicht. Gesucht ist „one“.",
-      "en": "“that” does not fit here. The word needed is “one”."
+      "de": "that ersetzt kein Nomen hinter einem Adjektiv, es braucht one.",
+      "en": "that does not replace a noun after an adjective, it needs one."
      },
      {
       "if": [
        "it"
       ],
-      "de": "„it“ passt hier nicht. Gesucht ist „one“.",
-      "en": "“it” does not fit here. The word needed is “one”."
+      "de": "it kann nach einem Adjektiv nicht stehen, es braucht one.",
+      "en": "it cannot follow an adjective, it needs one."
      }
     ]
    },
@@ -1354,22 +1354,22 @@
       "if": [
        "what"
       ],
-      "de": "„what“ passt hier nicht. Gesucht ist „we“.",
-      "en": "“what” does not fit here. The word needed is “we”."
+      "de": "what ist nach einem Nomen kein Relativpronomen.",
+      "en": "what is not a relative pronoun after a noun."
      },
      {
       "if": [
        "who"
       ],
-      "de": "„who“ passt hier nicht. Gesucht ist „we“.",
-      "en": "“who” does not fit here. The word needed is “we”."
+      "de": "who passt nur zu Personen, solution ist eine Sache.",
+      "en": "who only fits people, solution is a thing."
      },
      {
       "if": [
        "it"
       ],
-      "de": "„it“ passt hier nicht. Gesucht ist „we“.",
-      "en": "“it” does not fit here. The word needed is “we”."
+      "de": "it ist kein Subjekt zu have found und ersetzt that nicht.",
+      "en": "it is not the subject of have found and does not replace that."
      }
     ]
    },
@@ -1406,22 +1406,22 @@
       "if": [
        "what"
       ],
-      "de": "„what“ passt hier nicht. Gesucht ist „that“.",
-      "en": "“what” does not fit here. The word needed is “that”."
+      "de": "what ist nach einem Nomen kein Relativpronomen.",
+      "en": "what is not a relative pronoun after a noun."
      },
      {
       "if": [
        "which"
       ],
-      "de": "„which“ passt hier nicht. Gesucht ist „that“.",
-      "en": "“which” does not fit here. The word needed is “that”."
+      "de": "which gilt für Sachen, colleague ist eine Person.",
+      "en": "which is for things, colleague is a person."
      },
      {
       "if": [
        "whose"
       ],
-      "de": "„whose“ passt hier nicht. Gesucht ist „that“.",
-      "en": "“whose” does not fit here. The word needed is “that”."
+      "de": "whose zeigt Besitz an, hier wird die Person nur genannt.",
+      "en": "whose shows possession, but here the person is only named."
      }
     ]
    },
@@ -1457,22 +1457,22 @@
       "if": [
        "from"
       ],
-      "de": "„from“ passt hier nicht. Gesucht ist „by“.",
-      "en": "“from” does not fit here. The word needed is “by”."
+      "de": "from nennt die Herkunft, der Urheber wird mit by angeschlossen.",
+      "en": "from names the origin, the agent is joined with by."
      },
      {
       "if": [
        "at"
       ],
-      "de": "„at“ passt hier nicht. Gesucht ist „by“.",
-      "en": "“at” does not fit here. The word needed is “by”."
+      "de": "at nennt einen Ort oder Punkt, nicht den Urheber.",
+      "en": "at names a place or point, not the agent."
      },
      {
       "if": [
        "of"
       ],
-      "de": "„of“ passt hier nicht. Gesucht ist „by“.",
-      "en": "“of” does not fit here. The word needed is “by”."
+      "de": "of nennt keinen Urheber nach einem passiven Partizip.",
+      "en": "of names no agent after a passive participle."
      }
     ]
    },
@@ -1506,22 +1506,22 @@
       "if": [
        "with"
       ],
-      "de": "„with“ passt hier nicht. Gesucht ist „to“.",
-      "en": "“with” does not fit here. The word needed is “to”."
+      "de": "related with ist unüblich, die feste Verbindung heißt related to.",
+      "en": "related with is unusual, the fixed combination is related to."
      },
      {
       "if": [
        "for"
       ],
-      "de": "„for“ passt hier nicht. Gesucht ist „to“.",
-      "en": "“for” does not fit here. The word needed is “to”."
+      "de": "related for gibt es nicht, es heißt related to.",
+      "en": "related for does not exist, it is related to."
      },
      {
       "if": [
        "at"
       ],
-      "de": "„at“ passt hier nicht. Gesucht ist „to“.",
-      "en": "“at” does not fit here. The word needed is “to”."
+      "de": "related at gibt es nicht, es heißt related to.",
+      "en": "related at does not exist, it is related to."
      }
     ]
    },
@@ -1555,22 +1555,22 @@
       "if": [
        "from"
       ],
-      "de": "„from“ passt hier nicht. Gesucht ist „of“.",
-      "en": "“from” does not fit here. The word needed is “of”."
+      "de": "from nennt den Anfangspunkt, the end of verlangt of.",
+      "en": "from names a starting point, the end of needs of."
      },
      {
       "if": [
        "in"
       ],
-      "de": "„in“ passt hier nicht. Gesucht ist „of“.",
-      "en": "“in” does not fit here. The word needed is “of”."
+      "de": "in nennt einen Zeitraum, nach the end steht of.",
+      "en": "in names a period, after the end comes of."
      },
      {
       "if": [
        "at"
       ],
-      "de": "„at“ passt hier nicht. Gesucht ist „of“.",
-      "en": "“at” does not fit here. The word needed is “of”."
+      "de": "at nennt einen Punkt, nach the end steht of.",
+      "en": "at names a point, after the end comes of."
      }
     ]
    },
@@ -1604,22 +1604,22 @@
       "if": [
        "for"
       ],
-      "de": "„for“ passt hier nicht. Gesucht ist „to“.",
-      "en": "“for” does not fit here. The word needed is “to”."
+      "de": "for gibt es nach the last colleague nicht, es folgt to + Grundform.",
+      "en": "for does not follow the last colleague, to + base form does."
      },
      {
       "if": [
        "at"
       ],
-      "de": "„at“ passt hier nicht. Gesucht ist „to“.",
-      "en": "“at” does not fit here. The word needed is “to”."
+      "de": "at passt nicht vor einer Grundform, es braucht to.",
+      "en": "at does not fit before a base form, it needs to."
      },
      {
       "if": [
        "of"
       ],
-      "de": "„of“ passt hier nicht. Gesucht ist „to“.",
-      "en": "“of” does not fit here. The word needed is “to”."
+      "de": "of passt nicht vor einer Grundform, es braucht to.",
+      "en": "of does not fit before a base form, it needs to."
      }
     ]
    },
@@ -1653,22 +1653,22 @@
       "if": [
        "of"
       ],
-      "de": "„of“ passt hier nicht. Gesucht ist „to“.",
-      "en": "“of” does not fit here. The word needed is “to”."
+      "de": "the extent of which klingt falsch, hier gehört to which.",
+      "en": "the extent of which sounds wrong, to which belongs here."
      },
      {
       "if": [
        "at"
       ],
-      "de": "„at“ passt hier nicht. Gesucht ist „to“.",
-      "en": "“at” does not fit here. The word needed is “to”."
+      "de": "at passt nicht zu extent, die feste Wendung ist to which.",
+      "en": "at does not fit extent, the fixed phrase is to which."
      },
      {
       "if": [
        "for"
       ],
-      "de": "„for“ passt hier nicht. Gesucht ist „to“.",
-      "en": "“for” does not fit here. The word needed is “to”."
+      "de": "for passt nicht zu extent, die feste Wendung ist to which.",
+      "en": "for does not fit extent, the fixed phrase is to which."
      }
     ]
    },
@@ -1702,22 +1702,22 @@
       "if": [
        "whom"
       ],
-      "de": "„whom“ passt hier nicht. Gesucht ist „who“.",
-      "en": "“whom” does not fit here. The word needed is “who”."
+      "de": "whom ist ein Objekt, hier ist die Gruppe Subjekt von live.",
+      "en": "whom is an object, here the group is the subject of live."
      },
      {
       "if": [
        "which"
       ],
-      "de": "„which“ passt hier nicht. Gesucht ist „who“.",
-      "en": "“which” does not fit here. The word needed is “who”."
+      "de": "which gilt für Sachen, hier geht es um Menschen.",
+      "en": "which is for things, here it is about people."
      },
      {
       "if": [
        "what"
       ],
-      "de": "„what“ passt hier nicht. Gesucht ist „who“.",
-      "en": "“what” does not fit here. The word needed is “who”."
+      "de": "what leitet keinen Relativsatz nach those ein.",
+      "en": "what does not start a relative clause after those."
      }
     ]
    },
@@ -1751,22 +1751,22 @@
       "if": [
        "who"
       ],
-      "de": "„who“ passt hier nicht. Gesucht ist „to“.",
-      "en": "“who” does not fit here. The word needed is “to”."
+      "de": "who bräuchte ein gebeugtes Verb (who left), hier folgt die Grundform.",
+      "en": "who would need an inflected verb (who left), but the base form follows."
      },
      {
       "if": [
        "for"
       ],
-      "de": "„for“ passt hier nicht. Gesucht ist „to“.",
-      "en": "“for” does not fit here. The word needed is “to”."
+      "de": "for gibt es nach the last guest nicht, es folgt to + Grundform.",
+      "en": "for does not follow the last guest, to + base form does."
      },
      {
       "if": [
        "that"
       ],
-      "de": "„that“ passt hier nicht. Gesucht ist „to“.",
-      "en": "“that” does not fit here. The word needed is “to”."
+      "de": "that bräuchte ein gebeugtes Verb (that left), hier folgt die Grundform.",
+      "en": "that would need an inflected verb (that left), but the base form follows."
      }
     ]
    },
@@ -1800,22 +1800,22 @@
       "if": [
        "what"
       ],
-      "de": "„what“ passt hier nicht. Gesucht ist „that“.",
-      "en": "“what” does not fit here. The word needed is “that”."
+      "de": "what ist nach einem Nomen kein Relativpronomen.",
+      "en": "what is not a relative pronoun after a noun."
      },
      {
       "if": [
        "who"
       ],
-      "de": "„who“ passt hier nicht. Gesucht ist „that“.",
-      "en": "“who” does not fit here. The word needed is “that”."
+      "de": "who passt nur zu Personen, present ist eine Sache.",
+      "en": "who only fits people, present is a thing."
      },
      {
       "if": [
        "where"
       ],
-      "de": "„where“ passt hier nicht. Gesucht ist „that“.",
-      "en": "“where” does not fit here. The word needed is “that”."
+      "de": "where fragt nach einem Ort, hier ist present das Objekt.",
+      "en": "where asks about a place, but present is the object here."
      }
     ]
    },
@@ -1849,22 +1849,22 @@
       "if": [
        "from"
       ],
-      "de": "„from“ passt hier nicht. Gesucht ist „of“.",
-      "en": "“from” does not fit here. The word needed is “of”."
+      "de": "from nennt die Herkunft, bei einem Namen steht of.",
+      "en": "from names the origin, with a name of is used."
      },
      {
       "if": [
        "to"
       ],
-      "de": "„to“ passt hier nicht. Gesucht ist „of“.",
-      "en": "“to” does not fit here. The word needed is “of”."
+      "de": "to nennt eine Richtung, nach the name steht of.",
+      "en": "to names a direction, after the name comes of."
      },
      {
       "if": [
        "for"
       ],
-      "de": "„for“ passt hier nicht. Gesucht ist „of“.",
-      "en": "“for” does not fit here. The word needed is “of”."
+      "de": "for nennt einen Zweck, nach the name steht of.",
+      "en": "for names a purpose, after the name comes of."
      }
     ]
    },

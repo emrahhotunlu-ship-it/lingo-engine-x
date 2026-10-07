@@ -1,4 +1,8 @@
 import json, os
+try:
+    from ocl_reasons import R as OCL_R
+except ImportError:
+    OCL_R = {}
 STAGE = {'B2': 0.0, 'B2+': 0.5, 'C1': 1.0}
 FMT = {'mcc': -0.4, 'ocl': 0.0, 'err': 0.3, 'kwt': 0.6}
 
@@ -44,10 +48,15 @@ def mcc(topic, pat, level, dom, adj, text, right, wrongs, ok, wr):
 
 def ocl(topic, pat, level, dom, adj, text, accept, cls, chips, ok, wr=()):
     wr = list(wr)
-    if not wr:
+    if not wr and text in OCL_R:
+        # Begründung je Ablenker aus ocl_reasons.py (ein Halbsatz mit dem Grund)
+        wr = [{'if': [c], 'de': OCL_R[text][c][0], 'en': OCL_R[text][c][1]} for c in chips if c in OCL_R[text]]
+    if len(wr) < len(chips):
+        have = {w['if'][0] for w in wr}
         # Begründung je Chip: sagt knapp, warum der Chip nicht passt und was gesucht ist (die Kernbegründung steht in why.ok).
         for c in chips:
-            wr.append({'if': [c], 'de': f'„{c}“ passt hier nicht. Gesucht ist „{accept[0]}“.', 'en': f'“{c}” does not fit here. The word needed is “{accept[0]}”.'})
+            if c not in have:
+                wr.append({'if': [c], 'de': f'„{c}“ passt hier nicht. Gesucht ist „{accept[0]}“.', 'en': f'“{c}” does not fit here. The word needed is “{accept[0]}”.'})
     it = base('ocl', topic, pat, level, dom, adj, ok, [dict(w) for w in wr])
     it.update({'text': text, 'accept': accept, 'cls': cls, 'chips': chips})
     CTX.out['ocl'].append(it)

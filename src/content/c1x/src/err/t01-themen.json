@@ -890,7 +890,8 @@
    "bad": {
     "span": "for increase",
     "fix": [
-     "to increase"
+     "to increase",
+     "of increasing"
     ],
     "choices": [
      "to increase",

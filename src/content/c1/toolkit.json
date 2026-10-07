@@ -332,62 +332,6 @@
    ]
   },
   {
-   "id": "modals-prob",
-   "group": "Grammatik-Pfad",
-   "level": "C1",
-   "p0": 0.45,
-   "name": "Wahrscheinlichkeit mit Modalverben",
-   "name_en": "Probability with modals",
-   "rule": "Wie wahrscheinlich etwas ist, sagst du in Stufen: „may well“ (durchaus möglich), „is likely to“ (wahrscheinlich), „is bound to“ (so gut wie sicher) und „There is a good chance that …“.",
-   "rule_en": "You express how probable something is in steps: “may well” (quite possible), “is likely to” (probable), “is bound to” (almost certain) and “There is a good chance that …”.",
-   "ex": [
-    "The client may well reject the first offer.",
-    "Prices are bound to rise after the merger."
-   ]
-  },
-  {
-   "id": "stative-adv",
-   "group": "Grammatik-Pfad",
-   "level": "C1",
-   "p0": 0.45,
-   "name": "Verlaufsform mit Zustandsverben",
-   "name_en": "Continuous with stative verbs",
-   "rule": "Die Verlaufsform zeigt Wandel, Höflichkeit und Verhalten: „We are seeing growth“, „I was hoping you could help“, „You are being difficult“. Reine Zustände wie know, need oder belong stehen dagegen in der einfachen Form.",
-   "rule_en": "The continuous shows change, politeness and behavior: “We are seeing growth”, “I was hoping you could help”, “You are being difficult”. Pure states like know, need or belong stay in the simple form.",
-   "ex": [
-    "We are seeing a clear rise in demand.",
-    "I was hoping you could review the draft."
-   ]
-  },
-  {
-   "id": "future-past",
-   "group": "Grammatik-Pfad",
-   "level": "C1",
-   "p0": 0.45,
-   "name": "Zukunft in der Vergangenheit",
-   "name_en": "Future in the past",
-   "rule": "Wenn du aus der Vergangenheit auf etwas Späteres blickst, ändern sich die Formen: „was going to“ (Plan), „was about to“ (gerade im Begriff), „would“ (später geschah) und „was to“ (vorgesehen). Häufig ging der Plan nicht auf.",
-   "rule_en": "When you look from the past at something later, the forms change: “was going to” (plan), “was about to” (on the point of), “would” (later happened) and “was to” (meant to). Often the plan did not work out.",
-   "ex": [
-    "We were going to launch in May, but the supplier was late.",
-    "She joined in 2015 and would later lead the Berlin office."
-   ]
-  },
-  {
-   "id": "quant-neg",
-   "group": "Grammatik-Pfad",
-   "level": "C1",
-   "p0": 0.45,
-   "name": "Verneinung und Mengen",
-   "name_en": "Negation and quantity",
-   "rule": "Verneinung und Mengen haben feste Formen: „none of“ und „neither of“ für „keiner“, „hardly“ und „scarcely“ für „kaum“ (schon verneint), „no longer“ für „nicht mehr“ und „a number of“ gegen „the number of“.",
-   "rule_en": "Negation and quantity have fixed forms: “none of” and “neither of” for “not one”, “hardly” and “scarcely” for “barely” (already negative), “no longer” for “not any more” and “a number of” versus “the number of”.",
-   "ex": [
-    "None of the suppliers has replied yet.",
-    "We no longer offer this service."
-   ]
-  },
-  {
    "id": "inversion",
    "group": "Grammatik-Pfad",
    "level": "C1",
@@ -441,6 +385,62 @@
    "ex": [
     "This is the most reliable system we have tested.",
     "She was the first customer to sign the new contract."
+   ]
+  },
+  {
+   "id": "modals-prob",
+   "group": "Grammatik-Pfad",
+   "level": "C1",
+   "p0": 0.45,
+   "name": "Wahrscheinlichkeit mit Modalverben",
+   "name_en": "Probability with modals",
+   "rule": "Wie wahrscheinlich etwas ist, sagst du in Stufen: „may well“ (durchaus möglich), „is likely to“ (wahrscheinlich), „is bound to“ (so gut wie sicher) und „There is a good chance that …“.",
+   "rule_en": "You express how probable something is in steps: “may well” (quite possible), “is likely to” (probable), “is bound to” (almost certain) and “There is a good chance that …”.",
+   "ex": [
+    "The client may well reject the first offer.",
+    "Prices are bound to rise after the merger."
+   ]
+  },
+  {
+   "id": "stative-adv",
+   "group": "Grammatik-Pfad",
+   "level": "C1",
+   "p0": 0.45,
+   "name": "Verlaufsform mit Zustandsverben",
+   "name_en": "Continuous with stative verbs",
+   "rule": "Die Verlaufsform zeigt Wandel, Höflichkeit und Verhalten: „We are seeing growth“, „I was hoping you could help“, „You are being difficult“. Reine Zustände wie know, need oder belong stehen dagegen in der einfachen Form.",
+   "rule_en": "The continuous shows change, politeness and behavior: “We are seeing growth”, “I was hoping you could help”, “You are being difficult”. Pure states like know, need or belong stay in the simple form.",
+   "ex": [
+    "We are seeing a clear rise in demand.",
+    "I was hoping you could review the draft."
+   ]
+  },
+  {
+   "id": "future-past",
+   "group": "Grammatik-Pfad",
+   "level": "C1",
+   "p0": 0.45,
+   "name": "Zukunft in der Vergangenheit",
+   "name_en": "Future in the past",
+   "rule": "Wenn du aus der Vergangenheit auf etwas Späteres blickst, ändern sich die Formen: „was going to“ (Plan), „was about to“ (gerade im Begriff), „would“ (später geschah) und „was to“ (vorgesehen). Häufig ging der Plan nicht auf.",
+   "rule_en": "When you look from the past at something later, the forms change: “was going to” (plan), “was about to” (on the point of), “would” (later happened) and “was to” (meant to). Often the plan did not work out.",
+   "ex": [
+    "We were going to launch in May, but the supplier was late.",
+    "She joined in 2015 and would later lead the Berlin office."
+   ]
+  },
+  {
+   "id": "quant-neg",
+   "group": "Grammatik-Pfad",
+   "level": "C1",
+   "p0": 0.45,
+   "name": "Verneinung und Mengen",
+   "name_en": "Negation and quantity",
+   "rule": "Verneinung und Mengen haben feste Formen: „none of“ und „neither of“ für „keiner“, „hardly“ und „scarcely“ für „kaum“ (schon verneint), „no longer“ für „nicht mehr“ und „a number of“ gegen „the number of“.",
+   "rule_en": "Negation and quantity have fixed forms: “none of” and “neither of” for “not one”, “hardly” and “scarcely” for “barely” (already negative), “no longer” for “not any more” and “a number of” versus “the number of”.",
+   "ex": [
+    "None of the suppliers has replied yet.",
+    "We no longer offer this service."
    ]
   }
  ],
@@ -3086,8 +3086,8 @@
     "Probability comes in steps: may well (quite possible), is likely to (probable), is bound to (almost certain). The noun style adds: There is a good chance that …"
    ],
    "why": [
-    "Im Berufsalltag sagst du nicht nur „vielleicht“. Wer Stufen kennt, schätzt klar ein und bleibt trotzdem vorsichtig, etwa in Prognosen, Risikoberichten und Meetings.",
-    "At work you say more than “maybe”. If you know the steps you can judge clearly and still stay careful, for example in forecasts, risk reports and meetings."
+    "Im Berufsalltag sagst du nicht nur „vielleicht“. Wer Stufen kennt, schätzt klar ein und bleibt trotzdem vorsichtig. Wann ja, wann nein: Prognosen und Risikoberichte brauchen die Stufen, im lockeren Gespräch genügt oft „probably“.",
+    "At work you say more than “maybe”. If you know the steps you can judge clearly and still stay careful. When yes, when no: forecasts and risk reports need the steps, in casual talk “probably” is often enough."
    ],
    "contrast": [
     "Nicht verwechseln: may well ist stärker als may, aber schwächer als bound to. Nach bound und likely steht to + Grundform, nach chance ein that-Satz oder of.",
@@ -3212,8 +3212,8 @@
     "The continuous shows that something is under way, temporary, or meant to sound polite. States (know, need, belong) stay in the simple form."
    ],
    "why": [
-    "Im Beruf beschreibst du Trends („We are seeing …“) und bittest weich („I was wondering if …“). Wer die Grenze zu den Zustandsverben kennt, klingt sicher und nicht übertrieben.",
-    "At work you describe trends (“We are seeing …”) and ask softly (“I was wondering if …”). If you know the border to stative verbs you sound sure and not overdone."
+    "Im Beruf beschreibst du Trends („We are seeing …“) und bittest weich („I was wondering if …“). Wann ja, wann nein: Die weiche Bitte passt bei Fremden und Vorgesetzten, unter Kollegen wirkt „Can you …?“ normal. Zustandsverben bleiben immer einfach.",
+    "At work you describe trends (“We are seeing …”) and ask softly (“I was wondering if …”). When yes, when no: the soft request fits strangers and superiors, among colleagues “Can you …?” sounds normal. Stative verbs always stay simple."
    ],
    "contrast": [
     "Nicht verwechseln: Im Deutschen gibt es keine Verlaufsform. Aus „ich kenne“ wird nie „I am knowing“. Aus „er ist müde“ wird nie „he is being tired“.",
@@ -3338,8 +3338,8 @@
     "Seen from the past, the future forms shift: will becomes would, am going to becomes was going to. Was about to and was to are added."
    ],
    "why": [
-    "Im Beruf erzählst du von geplatzten Plänen („We were going to launch …“) und Verläufen („She would later lead …“). Das klingt genau und erzählend.",
-    "At work you talk about plans that fell through (“We were going to launch …”) and careers (“She would later lead …”). It sounds precise and narrative."
+    "Im Beruf erzählst du von geplatzten Plänen („We were going to launch …“) und Verläufen („She would later lead …“). Wann ja, wann nein: Im Alltag genügt „was going to“, „was to“ und „would later“ gehören eher in Berichte und Erzählungen.",
+    "At work you talk about plans that fell through (“We were going to launch …”) and careers (“She would later lead …”). When yes, when no: in everyday talk “was going to” is enough, “was to” and “would later” fit reports and stories better."
    ],
    "contrast": [
     "Nicht verwechseln: Das deutsche „sollte“ ist nicht immer should. Für Vorgesehenes aus der Vergangenheit sagt Englisch was to oder was supposed to.",
@@ -3464,8 +3464,8 @@
     "Hardly, scarcely and barely are already negative. None of and neither of stand for “not one”. No longer means “not any more”. A number of takes plural, the number of singular."
    ],
    "why": [
-    "Im Beruf brauchst du genaue Mengen: „None of the suppliers …“, „We no longer offer …“, „The number of complaints has fallen“. Das klingt klar und sicher.",
-    "At work you need exact amounts: “None of the suppliers …”, “We no longer offer …”, “The number of complaints has fallen”. It sounds clear and sure."
+    "Im Beruf brauchst du genaue Mengen: „None of the suppliers …“, „We no longer offer …“, „The number of complaints has fallen“. Wann ja, wann nein: Im Gespräch sagt man oft „nobody“ und „not any more“, in Berichten und Mails passen none of und no longer besser.",
+    "At work you need exact amounts: “None of the suppliers …”, “We no longer offer …”, “The number of complaints has fallen”. When yes, when no: in conversation people often say “nobody” and “not any more”, in reports and emails none of and no longer fit better."
    ],
    "contrast": [
     "Nicht verwechseln: Das deutsche „nicht mehr“ ist bei der Zeit no longer, nicht no more. „Kaum“ braucht kein zweites not.",

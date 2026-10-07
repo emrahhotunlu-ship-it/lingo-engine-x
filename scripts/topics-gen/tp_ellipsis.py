@@ -326,6 +326,6 @@ def place():
         [(G, 'It ersetzt keinen Teil einer Nominalgruppe nach einem Adjektiv.', 'It does not replace part of a noun phrase after an adjective.'),
          (G, 'Ones ist Plural, aber a shorter steht im Singular.', 'Ones is plural, but a shorter is singular.'),
          (G, 'That passt nicht hinter a shorter.', 'That does not fit after a shorter.')])
-    ocl(T, 'el.so-not', 'C1', 'biz', 0.0, 'Are the results final? I hope ___, because we still want to correct two figures.',
+    ocl(T, 'el.so-not', 'B2+', 'life', 0.0, 'Is the café still open? I hope ___, because I really need a coffee.',
         ['not'], 'adv', ['no', 'nor', 'never'],
         ('Nach hope steht not für den verneinten Gedanken: I hope not.', 'After hope, not stands for the negative thought: I hope not.'))

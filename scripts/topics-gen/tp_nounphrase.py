@@ -336,7 +336,7 @@ def c1x():
         ('manager decision', ["manager's decision"], ["manager's decision", 'managers decision', 'manager decisions']),
         ('Der Besitz steht mit ’s: the manager’s decision.', 'Possession takes ’s: the manager’s decision.'))
     err(T, 'np.to-inf', 'C1', 'biz', 0.0, 'This is the best way for increase our sales in Asia.',
-        ('for increase', ['to increase'], ['to increase', 'for increase', 'to increasing']),
+        ('for increase', ['to increase', 'of increasing'], ['to increase', 'for increase', 'to increasing']),
         ('Nach way steht to + Grundform: to increase.', 'After way comes to + base form: to increase.'))
     err(T, 'np.participle', 'C1', 'biz', 0.0, 'Everyone working on the migration received the new access rules.', None,
         ('Kein Fehler: Working ersetzt who is working.', 'No mistake: Working replaces who is working.'))
@@ -344,16 +344,16 @@ def c1x():
         ('Kein Fehler: Nach the last speaker folgt to + Grundform.', 'No mistake: after the last speaker comes to + base form.'))
 
     kwt(T, 'np.contact', 'C1', 'biz', 0.0, 'That was the most useful training that I have ever joined.', 'ATTENDED', 'That was the most useful training', '.',
-        [(['I have', 'that I have'], ['attended'])], ['I', 'have'], ['that', 'what', 'which'], [],
+        [(['I have', 'that I have', 'I have ever', "I've ever", 'that I have ever', "that I've ever"], ['attended'])], ['I', 'have'], ['that', 'what', 'which'], [],
         ('the most useful training I have attended. Das Pronomen that darf fehlen.', 'the most useful training I have attended. The pronoun that may be dropped.'), [])
     kwt(T, 'np.contact', 'C1', 'biz', 0.0, 'The proposal which they handed to us last week was far too expensive.', 'SENT', 'The proposal', 'last week was far too expensive.',
-        [(['they', 'that they'], ['sent us'])], ['they', 'us'], ['what', 'who', 'it'], [],
+        [(['they', 'that they', 'which they'], ['sent us', 'sent to us'])], ['they', 'us'], ['what', 'who', 'it'], [],
         ('the proposal they sent us. Das Pronomen that darf fehlen.', 'the proposal they sent us. The pronoun that may be dropped.'), [])
     kwt(T, 'np.participle', 'C1', 'biz', 0.0, 'The employees who work on the pilot received a bonus.', 'WORKING', 'The', 'the pilot received a bonus.',
         [(['employees'], ['working on'])], ['employees', 'on'], ['work', 'who', 'are'], [],
         ('the employees working on the pilot. Das aktive Partizip ersetzt who work.', 'the employees working on the pilot. The active participle replaces who work.'), [])
     kwt(T, 'np.participle', 'C1', 'biz', 0.0, 'All the documents that we mailed to the client are listed below.', 'SENT', 'All the', 'the client are listed below.',
-        [(['documents'], ['sent to'])], ['documents', 'to'], ['mailing', 'that', 'are'], [],
+        [(['documents'], ['sent to']), (['documents we'], ['sent to'])], ['documents', 'to'], ['mailing', 'that', 'are'], [],
         ('the documents sent to the client. Das passive Partizip ersetzt that were sent.', 'the documents sent to the client. The passive participle replaces that were sent.'), [])
     kwt(T, 'np.of-s', 'C1', 'biz', 0.0, 'We need to know whether the meeting that was planned for today has been canceled.', "TODAY'S", 'We need to know whether', 'canceled.',
         [(["today's"], ['meeting has been'])], ['meeting', 'has', 'been'], ['of', 'the', 'from'], [],

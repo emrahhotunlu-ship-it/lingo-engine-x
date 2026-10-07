@@ -7,7 +7,7 @@
    "area": "gram",
    "topic": "pres-simple-cont",
    "level": "B2",
-   "dom": "biz",
+   "dom": "life",
    "src": "seed",
    "pool": "place",
    "b": -0.6,
@@ -38,7 +38,7 @@
      }
     ]
    },
-   "text": "Please don't interrupt the finance team: they ___ the quarterly figures at the moment.",
+   "text": "Please be quiet: my parents ___ the weather forecast at the moment.",
    "options": [
     "are checking",
     "check",
@@ -53,7 +53,7 @@
    "area": "gram",
    "topic": "past-simple-perfect",
    "level": "B2",
-   "dom": "biz",
+   "dom": "life",
    "src": "seed",
    "pool": "place",
    "b": -0.6,
@@ -84,7 +84,7 @@
      }
     ]
    },
-   "text": "Our CFO ___ the new budget last Tuesday, and since then every department has been planning its spending.",
+   "text": "My landlord ___ the repair last Tuesday, and since then the workers have been busy.",
    "options": [
     "has approved",
     "approved",
@@ -99,7 +99,7 @@
    "area": "gram",
    "topic": "pres-perf-cont",
    "level": "B2",
-   "dom": "biz",
+   "dom": "life",
    "src": "seed",
    "pool": "place",
    "b": -0.4,
@@ -130,7 +130,7 @@
      }
     ]
    },
-   "text": "I ___ on this proposal since eight o'clock, and I still haven't finished the pricing section.",
+   "text": "I ___ on this puzzle since eight o'clock, and I still haven't finished the last corner.",
    "options": [
     "work",
     "am working",
@@ -237,7 +237,7 @@
    "area": "gram",
    "topic": "prep-time",
    "level": "B2",
-   "dom": "biz",
+   "dom": "life",
    "src": "seed",
    "pool": "place",
    "b": -0.7,
@@ -268,7 +268,7 @@
      }
     ]
    },
-   "text": "Our quarterly review is always scheduled ___ the first week of April.",
+   "text": "Our family reunion is always planned ___ the first week of April.",
    "options": [
     "on",
     "in",
@@ -283,7 +283,7 @@
    "area": "gram",
    "topic": "future-forms",
    "level": "B2",
-   "dom": "biz",
+   "dom": "life",
    "src": "seed",
    "pool": "place",
    "b": -0.4,
@@ -314,7 +314,7 @@
      }
     ]
    },
-   "text": "I ___ to call you yesterday, but then a client walked in and I completely forgot.",
+   "text": "I ___ to call you yesterday, but then a neighbor rang the bell and I completely forgot.",
    "options": [
     "am going",
     "would go",
@@ -360,7 +360,7 @@
      }
     ]
    },
-   "text": "By the end of the quarter, we ___ over 500 new accounts, which would be a company record.",
+   "text": "By the end of the quarter, we ___ over 500 new accounts, which will be a company record.",
    "options": [
     "are opening",
     "opened",
@@ -375,7 +375,7 @@
    "area": "gram",
    "topic": "time-clauses",
    "level": "B2",
-   "dom": "biz",
+   "dom": "life",
    "src": "seed",
    "pool": "place",
    "b": -0.5,
@@ -406,7 +406,7 @@
      }
     ]
    },
-   "text": "We will send the invoice as soon as the client ___ the final delivery.",
+   "text": "We will order the pizza as soon as everyone ___ their choice.",
    "options": [
     "confirms",
     "will confirm",
@@ -420,11 +420,11 @@
    "kind": "mcc",
    "area": "gram",
    "topic": "c1-precision",
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "pool": "place",
-   "b": 0.5,
+   "b": 0.0,
    "pat": "cp.within",
    "why": {
     "ok": {
@@ -651,7 +651,7 @@
    "area": "gram",
    "topic": "passive",
    "level": "B2",
-   "dom": "biz",
+   "dom": "life",
    "src": "seed",
    "pool": "place",
    "b": -0.5,
@@ -682,7 +682,7 @@
      }
     ]
    },
-   "text": "The new security policy ___ by the board, so we can finally roll it out next week.",
+   "text": "The new parking policy ___ by the city council, so we can finally park near our flat next week.",
    "options": [
     "has approved",
     "is approving",
@@ -743,7 +743,7 @@
    "area": "gram",
    "topic": "reported",
    "level": "B2",
-   "dom": "biz",
+   "dom": "life",
    "src": "seed",
    "pool": "place",
    "b": -0.6,
@@ -774,7 +774,7 @@
      }
     ]
    },
-   "text": "She ___ me that the delivery would arrive on Monday, but nothing has come yet.",
+   "text": "She ___ me that the parcel would arrive on Monday, but nothing has come yet.",
    "options": [
     "told",
     "said",
@@ -792,7 +792,7 @@
    "dom": "biz",
    "src": "seed",
    "pool": "place",
-   "b": 0.1,
+   "b": 0.4,
    "pat": "rv.suggest-rec",
    "why": {
     "ok": {
@@ -835,7 +835,7 @@
    "area": "gram",
    "topic": "questions",
    "level": "B2",
-   "dom": "biz",
+   "dom": "life",
    "src": "seed",
    "pool": "place",
    "b": -0.4,
@@ -866,7 +866,7 @@
      }
     ]
    },
-   "text": "The client wants to know ___ we can deliver the prototype by the end of May.",
+   "text": "My mother wants to know ___ we can come for lunch on Sunday.",
    "options": [
     "do",
     "what",
@@ -1064,11 +1064,11 @@
    "kind": "mcc",
    "area": "gram",
    "topic": "c1-hedging",
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "pool": "place",
-   "b": 0.6,
+   "b": 0.1,
    "pat": "hg.seems",
    "why": {
     "ok": {
@@ -1203,7 +1203,7 @@
    "area": "gram",
    "topic": "prepositions",
    "level": "B2",
-   "dom": "biz",
+   "dom": "life",
    "src": "seed",
    "pool": "place",
    "b": -0.5,
@@ -1234,7 +1234,7 @@
      }
     ]
    },
-   "text": "Our new colleague is very good ___ explaining complex technical topics in simple words.",
+   "text": "My little sister is very good ___ explaining the rules of difficult board games in simple words.",
    "options": [
     "in",
     "on",
@@ -1344,40 +1344,40 @@
    "dom": "life",
    "src": "seed",
    "pool": "place",
-   "b": -0.5,
+   "b": -0.1,
    "pat": "art.zero",
    "why": {
     "ok": {
-     "de": "Allgemeine, nicht zählbare Begriffe stehen ohne Artikel: education is …",
-     "en": "General, uncountable ideas take no article: education is …"
+     "de": "Allgemeine, nicht zählbare Begriffe stehen ohne Artikel: happiness is …",
+     "en": "General, uncountable ideas take no article: happiness is …"
     },
     "wrong": [
      {
-      "opt": "the education",
+      "opt": "the happiness",
       "cat": "grammar",
-      "de": "Mit „the“ wäre eine bestimmte Ausbildung gemeint, hier geht es um Bildung allgemein.",
-      "en": "With “the” a particular education would be meant; here education in general is meant."
+      "de": "Mit „the“ wäre eine bestimmte Zufriedenheit gemeint, hier geht es um Zufriedenheit allgemein.",
+      "en": "With “the” a particular happiness would be meant; here happiness in general is meant."
      },
      {
-      "opt": "an education",
+      "opt": "a happiness",
       "cat": "grammar",
-      "de": "„an education“ meint eine einzelne Ausbildung, nicht Bildung im Allgemeinen.",
-      "en": "“an education” means one particular education, not education in general."
+      "de": "„an happiness“ meint eine einzelne Zufriedenheit, nicht Zufriedenheit im Allgemeinen.",
+      "en": "“an happiness” means one particular happiness, not happiness in general."
      },
      {
-      "opt": "educations",
+      "opt": "happinesses",
       "cat": "grammar",
-      "de": "„education“ ist hier nicht zählbar und hat kein Plural-s.",
-      "en": "“education” is uncountable here and has no plural -s."
+      "de": "„happiness“ ist hier nicht zählbar und hat kein Plural-s.",
+      "en": "“happiness” is uncountable here and has no plural -s."
      }
     ]
    },
-   "text": "We believe that ___ is the key to a successful career, so we pay for language courses.",
+   "text": "Many employees say that ___ is more important to them than a high salary, so we offer flexible hours.",
    "options": [
-    "the education",
-    "education",
-    "an education",
-    "educations"
+    "the happiness",
+    "happiness",
+    "a happiness",
+    "happinesses"
    ],
    "answer": 1
   },
@@ -1387,7 +1387,7 @@
    "area": "gram",
    "topic": "countable",
    "level": "B2",
-   "dom": "biz",
+   "dom": "life",
    "src": "seed",
    "pool": "place",
    "b": -0.4,
@@ -1418,7 +1418,7 @@
      }
     ]
    },
-   "text": "The latest news about the merger ___ very encouraging, so the share price went up.",
+   "text": "The latest news about the storm ___ very worrying, so many people stayed home.",
    "options": [
     "were",
     "are",
@@ -1433,22 +1433,22 @@
    "area": "gram",
    "topic": "relative",
    "level": "B2",
-   "dom": "biz",
+   "dom": "life",
    "src": "seed",
    "pool": "place",
    "b": -0.4,
    "pat": "rc.commas",
    "why": {
     "ok": {
-     "de": "„whose“ zeigt Besitz: whose headquarters.",
-     "en": "“whose” shows possession: whose headquarters."
+     "de": "„whose“ zeigt Besitz: whose house.",
+     "en": "“whose” shows possession: whose house."
     },
     "wrong": [
      {
       "opt": "which",
       "cat": "grammar",
-      "de": "„which“ kann den Besitz nicht ausdrücken und steht hier vor „headquarters“ falsch.",
-      "en": "“which” cannot express possession and does not fit before “headquarters”."
+      "de": "„which“ kann den Besitz nicht ausdrücken und steht hier vor „house“ falsch.",
+      "en": "“which” cannot express possession and does not fit before “house”."
      },
      {
       "opt": "who",
@@ -1464,7 +1464,7 @@
      }
     ]
    },
-   "text": "Our largest client, ___ headquarters is in Zurich, has just doubled its order.",
+   "text": "My oldest friend, ___ house is in Lisbon, has just invited us for the summer.",
    "options": [
     "which",
     "who",
@@ -1621,41 +1621,41 @@
    "src": "seed",
    "pool": "place",
    "b": 0.6,
-   "pat": "em.neg-inversion",
+   "pat": "em.what-cleft",
    "why": {
     "ok": {
-     "de": "Nach „Rarely“ am Satzanfang kehrt sich die Stellung um: Hilfsverb vor Subjekt (have we received).",
-     "en": "After “Rarely” at the start the order flips: auxiliary before subject (have we received)."
+     "de": "Der What-Satz betont: What matters most … is … Danach steht is.",
+     "en": "The what-cleft stresses: What matters most … is … Then is follows."
     },
     "wrong": [
      {
-      "opt": "we have received",
+      "opt": "That",
       "cat": "grammar",
-      "de": "Nach „Rarely“ am Satzanfang folgt die Umstellung, nicht die normale Stellung.",
-      "en": "After “Rarely” at the start the inverted order follows, not the normal one."
+      "de": "That leitet hier keinen Spaltsatz ein, der What-Satz braucht what.",
+      "en": "That does not start a cleft sentence here, the what-cleft needs what."
      },
      {
-      "opt": "we received",
+      "opt": "Which",
       "cat": "grammar",
-      "de": "Ohne Hilfsverb gibt es keine Umstellung. Es braucht „did we receive“.",
-      "en": "Without an auxiliary there is no inversion. You would need “did we receive”."
+      "de": "Which passt nicht an den Satzanfang eines Spaltsatzes.",
+      "en": "Which does not fit the start of a cleft sentence."
      },
      {
-      "opt": "received we",
+      "opt": "It",
       "cat": "grammar",
-      "de": "„received we“ ist veraltet und falsch gebildet.",
-      "en": "“received we” is archaic and wrongly formed."
+      "de": "It matters most … is ist kein vollständiger Satz.",
+      "en": "It matters most … is is not a complete sentence."
      }
     ]
    },
-   "text": "Rarely ___ such a detailed proposal from a first-time supplier, so we invited them for a presentation.",
+   "text": "___ matters most to our customers is a fast and honest answer.",
    "options": [
-    "we have received",
-    "we received",
-    "received we",
-    "have we received"
+    "What",
+    "That",
+    "Which",
+    "It"
    ],
-   "answer": 3
+   "answer": 0
   },
   {
    "id": "mcc-0437",
@@ -1708,46 +1708,46 @@
    "kind": "mcc",
    "area": "gram",
    "topic": "word-order",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pool": "place",
-   "b": 0.6,
-   "pat": "wo.neg-inv",
+   "b": -0.4,
+   "pat": "wo.verb-object",
    "why": {
     "ok": {
-     "de": "Nach einem verneinenden Ausdruck am Satzanfang steht das Hilfsverb vor dem Subjekt.",
-     "en": "After a negative expression at the start the auxiliary comes before the subject."
+     "de": "Zwischen Verb und Objekt steht kein Adverb: finish the report quickly.",
+     "en": "No adverb stands between verb and object: finish the report quickly."
     },
     "wrong": [
      {
-      "opt": "you should share",
+      "opt": "finish quickly the report",
       "cat": "grammar",
-      "de": "Die normale Stellung „you should“ ist nach „Under no circumstances“ falsch.",
-      "en": "The normal order “you should” is wrong after “Under no circumstances”."
+      "de": "Zwischen Verb und Objekt steht kein Adverb.",
+      "en": "No adverb stands between verb and object."
      },
      {
-      "opt": "should share you",
+      "opt": "the report finish quickly",
       "cat": "grammar",
-      "de": "„should share you“ stellt das Verb zu weit nach vorn.",
-      "en": "“should share you” puts the verb too far forward."
+      "de": "Das Objekt steht nach dem Verb, nicht davor.",
+      "en": "The object stands after the verb, not before it."
      },
      {
-      "opt": "you share",
+      "opt": "finish the quickly report",
       "cat": "grammar",
-      "de": "Ohne Hilfsverb bleibt die Umstellung aus. Das ergibt keinen gültigen Satz.",
-      "en": "Without an auxiliary there is no inversion. That makes no valid sentence."
+      "de": "Das Adverb steht nicht mitten in der Objektgruppe.",
+      "en": "The adverb does not stand inside the object phrase."
      }
     ]
    },
-   "text": "Under no circumstances ___ the password with anyone outside the project team.",
+   "text": "We need to ___ before the end of the week.",
    "options": [
-    "you should share",
-    "should you share",
-    "should share you",
-    "you share"
+    "finish the report quickly",
+    "finish quickly the report",
+    "the report finish quickly",
+    "finish the quickly report"
    ],
-   "answer": 1
+   "answer": 0
   },
   {
    "id": "mcc-0439",
@@ -1755,7 +1755,7 @@
    "area": "gram",
    "topic": "comparison",
    "level": "B2",
-   "dom": "biz",
+   "dom": "life",
    "src": "seed",
    "pool": "place",
    "b": -0.6,
@@ -1786,7 +1786,7 @@
      }
     ]
    },
-   "text": "The new model is ___ faster than the old one, so the whole team is very impressed.",
+   "text": "The new bike is ___ faster than the old one, so the whole family is very happy.",
    "options": [
     "very",
     "more",
@@ -1813,7 +1813,7 @@
     },
     "wrong": []
    },
-   "text": "Our new intern ___ always forgetting to save his files, which drives the whole team mad.",
+   "text": "Our new intern ___ always forgetting to save his files, which drives the whole team crazy.",
    "accept": [
     "is",
     "'s"
@@ -1874,7 +1874,8 @@
    },
    "text": "The manager will call you back as soon as the test results ___ available.",
    "accept": [
-    "are"
+    "are",
+    "become"
    ],
    "cls": "aux",
    "chips": [
@@ -1888,22 +1889,23 @@
    "kind": "ocl",
    "area": "gram",
    "topic": "c1-precision",
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "pool": "place",
-   "b": 1.0,
+   "b": 0.5,
    "pat": "cp.by-until",
    "why": {
     "ok": {
-     "de": "Eine Frist („spätestens bis“) heißt „by“.",
-     "en": "A deadline (“no later than”) is expressed with “by”."
+     "de": "„by“ nennt die Frist (spätestens bis). „before“ ist ebenfalls möglich. „until“ meint, dass etwas bis dahin andauert.",
+     "en": "“by” names the deadline (no later than). “before” is also possible. “until” means that something continues up to then."
     },
     "wrong": []
    },
    "text": "The new interface must be live ___ the end of the third quarter at the very latest.",
    "accept": [
-    "by"
+    "by",
+    "before"
    ],
    "cls": "prep",
    "chips": [
@@ -2012,12 +2014,12 @@
    "pat": "md.cant-have",
    "why": {
     "ok": {
-     "de": "Nach „she was on holiday“ ist es unmöglich: can’t have come.",
-     "en": "Since “she was on holiday” it is impossible: can’t have come."
+     "de": "Nach „she was on vacation“ ist es unmöglich: can’t have come.",
+     "en": "Since “she was on vacation” it is impossible: can’t have come."
     },
     "wrong": []
    },
-   "text": "The invoice ___ have come from Hanna: she was on holiday in Spain all of last week.",
+   "text": "The invoice ___ have come from Hanna: she was on vacation in Spain all of last week.",
    "accept": [
     "can't",
     "cannot",
@@ -2159,20 +2161,42 @@
    "pat": "cm.measure",
    "why": {
     "ok": {
-     "de": "Vor „twenty-minute walk“ steht „a“: ein Spaziergang von zwanzig Minuten.",
-     "en": "Before “twenty-minute walk” you use “a”: one walk of twenty minutes."
+     "de": "Vor einem Nomen steht die Maßangabe im Singular mit Bindestrich: a ten-day trip.",
+     "en": "Before a noun the measure stays singular with a hyphen: a ten-day trip."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "days"
+      ],
+      "de": "„days“ passt hier nicht. Gesucht ist „day“.",
+      "en": "“days” does not fit here. The word needed is “day”."
+     },
+     {
+      "if": [
+       "daily"
+      ],
+      "de": "„daily“ passt hier nicht. Gesucht ist „day“.",
+      "en": "“daily” does not fit here. The word needed is “day”."
+     },
+     {
+      "if": [
+       "date"
+      ],
+      "de": "„date“ passt hier nicht. Gesucht ist „day“.",
+      "en": "“date” does not fit here. The word needed is “day”."
+     }
+    ]
    },
-   "text": "The new office is ___ twenty-minute walk from the main station, so most people come on foot.",
+   "text": "We booked a ten-___ trip to Portugal for the summer vacation.",
    "accept": [
-    "a"
+    "day"
    ],
-   "cls": "art",
+   "cls": "part",
    "chips": [
-    "an",
-    "the",
-    "some"
+    "days",
+    "daily",
+    "date"
    ]
   },
   {
@@ -2305,11 +2329,11 @@
    "kind": "err",
    "area": "gram",
    "topic": "c1-diplomacy",
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "pool": "place",
-   "b": 1.3,
+   "b": 0.8,
    "pat": "dip.wondering",
    "why": {
     "ok": {
@@ -2494,11 +2518,11 @@
    "kind": "err",
    "area": "gram",
    "topic": "c1-discourse",
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "pool": "place",
-   "b": 1.3,
+   "b": 0.8,
    "pat": "dm.contrast",
    "why": {
     "ok": {
@@ -2525,21 +2549,21 @@
    "kind": "err",
    "area": "gram",
    "topic": "word-order",
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "pool": "place",
-   "b": 1.3,
-   "pat": "wo.not-only",
+   "b": 0.6,
+   "pat": "wo.place-time",
    "why": {
     "ok": {
-     "de": "Kein Fehler: Nach „Not only“ am Anfang steht die Umstellung (did the software reduce).",
-     "en": "No mistake: after “Not only” at the start the inverted order follows (did the software reduce)."
+     "de": "Kein Fehler: Ort vor Zeit ist die übliche Reihenfolge.",
+     "en": "No mistake: place before time is the usual order."
     },
     "wrong": []
    },
    "bad": null,
-   "text": "Not only did the new software reduce our costs, but it also made the whole process much faster."
+   "text": "The team will present the results at the head office on Friday morning."
   },
   {
    "id": "kwt-0401",
@@ -2588,6 +2612,14 @@
     {
      "a": [
       "has been working"
+     ],
+     "b": [
+      "here since"
+     ]
+    },
+    {
+     "a": [
+      "has been"
      ],
      "b": [
       "here since"
@@ -2927,7 +2959,8 @@
       "the sharp"
      ],
      "b": [
-      "rise in prices"
+      "rise in prices",
+      "price rise"
      ]
     }
    ],
@@ -2980,7 +3013,9 @@
    "keys": [
     {
      "a": [
-      "It might be"
+      "It might be",
+      "It may be",
+      "It could be"
      ],
      "b": [
       "worth waiting"
@@ -3042,6 +3077,15 @@
       "depends on",
       "depends upon"
      ]
+    },
+    {
+     "a": [
+      "depends mainly"
+     ],
+     "b": [
+      "on",
+      "upon"
+     ]
     }
    ],
    "tiles": [
@@ -3066,7 +3110,7 @@
    "dom": "biz",
    "src": "seed",
    "pool": "place",
-   "b": 0.6,
+   "b": 0.3,
    "pat": "art.the-unique",
    "why": {
     "ok": {
@@ -3097,7 +3141,8 @@
       "the"
      ],
      "b": [
-      "fastest product"
+      "fastest product",
+      "fastest one"
      ]
     }
    ],
@@ -3151,7 +3196,8 @@
       "despite the"
      ],
      "b": [
-      "attractive"
+      "attractive",
+      "very attractive"
      ]
     }
    ],
@@ -3248,6 +3294,22 @@
     {
      "a": [
       "costs as much"
+     ],
+     "b": [
+      "as"
+     ]
+    },
+    {
+     "a": [
+      "is as expensive"
+     ],
+     "b": [
+      "as"
+     ]
+    },
+    {
+     "a": [
+      "costs the same"
      ],
      "b": [
       "as"

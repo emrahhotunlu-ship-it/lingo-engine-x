@@ -190,11 +190,11 @@
    "kind": "ocl",
    "area": "gram",
    "topic": "ellipsis",
-   "level": "C1",
-   "dom": "biz",
+   "level": "B2+",
+   "dom": "life",
    "src": "seed",
    "pool": "place",
-   "b": 1.0,
+   "b": 0.5,
    "pat": "el.so-not",
    "why": {
     "ok": {
@@ -225,7 +225,7 @@
      }
     ]
    },
-   "text": "Are the results final? I hope ___, because we still want to correct two figures.",
+   "text": "Is the café still open? I hope ___, because I really need a coffee.",
    "accept": [
     "not"
    ],

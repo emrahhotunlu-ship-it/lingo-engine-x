@@ -1376,7 +1376,11 @@
     {
      "a": [
       "I have",
-      "that I have"
+      "that I have",
+      "I have ever",
+      "I've ever",
+      "that I have ever",
+      "that I've ever"
      ],
      "b": [
       "attended"
@@ -1418,10 +1422,12 @@
     {
      "a": [
       "they",
-      "that they"
+      "that they",
+      "which they"
      ],
      "b": [
-      "sent us"
+      "sent us",
+      "sent to us"
      ]
     }
    ],
@@ -1501,6 +1507,14 @@
     {
      "a": [
       "documents"
+     ],
+     "b": [
+      "sent to"
+     ]
+    },
+    {
+     "a": [
+      "documents we"
      ],
      "b": [
       "sent to"
