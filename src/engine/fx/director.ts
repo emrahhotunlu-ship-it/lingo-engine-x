@@ -1,5 +1,5 @@
 import { verdictHaptic } from '../../platform/haptics';
-import { playCue } from '../../platform/sound';
+import { playCue, playFx } from '../../platform/sound';
 import { subscribe, type LearnEvent } from './events';
 import { FRAME_SAMPLES, setFrameMeasure } from './level';
 import { playMoment } from './moments';
@@ -28,6 +28,17 @@ export function playVerdict(e: LearnEvent): void {
   const cue = CUE[e.v];
   playCue(cue);
   verdictHaptic(cue);
+}
+
+/**
+ * Klänge der Momente (P56, EE §6): Tag → `day`, Aufstieg → `level`, Runde nur, wenn etwas gestiegen ist → `up`. Der Ton folgt dem eigenen Schalter
+ * (`app/profile.sound`) und nicht der Effektstufe; er bleibt still vor der ersten Geste und während die Sprachausgabe spricht (`sound.ts`).
+ */
+export function playMomentSound(e: LearnEvent): void {
+  if (e.k !== 'moment') return;
+  if (e.m === 'day') playFx('day');
+  else if (e.m === 'level') playFx('level');
+  else if ((e.from ?? []).some((x) => !!x)) playFx('up');
 }
 
 /** Nur für Tests: Sperre lösen. */
@@ -64,6 +75,7 @@ export function installDirector(): void {
   installed = true;
   subscribe(playVerdict);
   subscribe(playMoment);
+  subscribe(playMomentSound);
   if (typeof window === 'undefined') return;
   const onFirst = (): void => {
     window.removeEventListener('pointerdown', onFirst);

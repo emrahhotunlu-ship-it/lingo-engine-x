@@ -2,6 +2,7 @@ import { logWarn } from '../../platform/diagnostics';
 import type { LearnEvent } from './events';
 import { effectiveLevel } from './level';
 import type * as Particles from './particles';
+import { ROUND_SPARK_MAX } from '../../domain/moments/detect';
 
 // Sichtbare Momente der Erlebnis-Engine (Design-Lead 07.10.2026, EE §4 M1/M6/M7): nur Stufe „Voll“ spielt Teilchen; „Ruhig“ behält Federn und
 // Zahlen (CSS), „Aus“ zeigt den Endzustand. Die Teilchen-Engine (`particles.ts`) wird erst beim ersten Effekt geladen.
@@ -65,24 +66,36 @@ export function playMoment(e: LearnEvent): void {
     });
     return;
   }
-  if (effectiveLevel() !== 'full') return;
-  const spot = e.el ?? null;
+  if (effectiveLevel() !== 'full' || e.m === 'level') return;
   const ok = cssVar('--lx-spark-1', '#34d399');
   const hi = cssVar('--lx-spark-2', '#ecfdf5');
-  const gold = cssVar('--lx-gold-text', '#f4c56a');
+  if (e.m === 'round') {
+    // Runde (P56, EE4): Funken nur dort, wo etwas gestiegen ist – höchstens drei Ursprünge, zusammen höchstens 16 Funken.
+    const from = (e.from ?? []).filter((x): x is Element => !!x && x.isConnected).slice(0, ROUND_SPARK_MAX);
+    if (from.length === 0) return;
+    const per = Math.floor(SPARK_MAX / from.length);
+    void load()
+      .then((p) => {
+        from.forEach((el, i) => {
+          const c = p.centerOf(el);
+          if (c) p.burst(c.x, c.y, { n: per, colors: [ok, hi], speed: [90, 180], angle: [-150, -30], gravity: 220, life: [450, 650], size: [1.4, 2.4], shape: 'spark', stagger: 40 + i * 60 });
+        });
+      })
+      .catch((err: unknown) => logWarn('fx:particles', err));
+    return;
+  }
+  const spot = e.el ?? null;
   void load()
     .then((p) => {
+      // Tag geschafft (EE M7): 16 Funken vom Ring nach außen, 360°, ohne Schwerkraft, verglühen (600 ms).
       const c = p.centerOf(spot) ?? { x: window.innerWidth / 2, y: window.innerHeight * 0.3 };
-      if (e.m === 'day') {
-        // Tag geschafft: Funkenkranz rund um den Ring, danach wenige Plättchen, die langsam fallen.
-        p.burst(c.x, c.y, { n: 28, colors: [ok, hi], speed: [90, 190], gravity: 40, life: [600, 900], size: [1.4, 2.6], shape: 'spark' });
-        p.burst(c.x, c.y - 40, { n: 26, colors: [ok, hi, gold], speed: [120, 260], angle: [-150, -30], gravity: 380, life: [1100, 1600], size: [3, 5], shape: 'flake', stagger: 160 });
-      } else {
-        p.burst(c.x, c.y, { n: 22, colors: [ok, hi], speed: [80, 200], angle: [-170, -10], gravity: 300, life: [600, 1000], size: [1.4, 2.6], shape: 'spark', stagger: 120 });
-      }
+      p.burst(c.x, c.y, { n: SPARK_MAX, colors: [ok, hi], speed: [60, 140], gravity: 0, life: [520, 640], size: [1.4, 2.6], shape: 'spark' });
     })
     .catch((err: unknown) => logWarn('fx:particles', err));
 }
+
+/** Höchstens so viele Funken je Moment (EE §3 Nr. 3: kein Konfetti-Regen). */
+export const SPARK_MAX = 16;
 
 /** Nur für Tests. */
 export function resetMoments(): void {

@@ -64,3 +64,19 @@ export const SPRINGS = {
 export type SpringName = keyof typeof SPRINGS;
 /** Die Federn der Bedienbewegung (≤ 300 ms wahrgenommen). */
 export const OPERATING_SPRINGS = ['snap', 'glide', 'settle', 'pop', 'sheet'] as const satisfies readonly SpringName[];
+
+// Lernplattform 3.0 P54 (Erlebnis-Engine B10/B11): Kartenstapel. Die alte Karte geht in 140 ms nach links (−28 px, −1,5°), die neue rückt aus dem
+// Stapel nach vorn (settle-Feder als CSS-Kurve mit leichtem Überschwingen, 280 ms); weggewischt fliegt sie in Wischrichtung hinaus (200 ms).
+// Reduzierte Bewegung: nur Überblenden (120 ms). Alles Bedienbewegung (≤ 300 ms).
+export const STACK = {
+  exitMs: 140,
+  exitX: -28,
+  exitRot: -1.5,
+  flyMs: 200,
+  enterMs: 280,
+  enterOpacity: 0.6,
+  enterY: 6,
+  enterScale: 0.96,
+  enterEase: 'cubic-bezier(0.34, 1.32, 0.64, 1)',
+  fadeMs: 120,
+} as const;

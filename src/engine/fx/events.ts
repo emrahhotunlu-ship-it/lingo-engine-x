@@ -6,8 +6,11 @@ export type FxArea = 'words' | 'grammar';
 
 export type LearnEvent = VerdictEvent | MomentEvent;
 
-/** Momente (Design-Lead, EE M6/M7): Runde geschafft, Tag geschafft. `el` = Ort des Effekts (Ring, Karte). */
-export type MomentEvent = { k: 'moment'; m: 'round' | 'day'; el?: Element | null };
+/**
+ * Momente (EE M6/M7/M8): Runde geschafft, Tag geschafft, Aufstieg. `el` = Ort des Effekts (Ring, Karte).
+ * `from` (nur Runde, P56): die höchstens drei Elemente, deren Zustand gestiegen ist (`domain/moments/detect.ts`); leer = keine Funken.
+ */
+export type MomentEvent = { k: 'moment'; m: 'round' | 'day' | 'level'; el?: Element | null; from?: ReadonlyArray<Element | null> };
 
 export type VerdictEvent = {
   k: 'verdict';

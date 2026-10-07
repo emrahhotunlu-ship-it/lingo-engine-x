@@ -1,4 +1,7 @@
+import { motion } from 'framer-motion';
+import { useFxLevel } from '../../engine/fx/level';
 import { useT } from '../../i18n';
+import { SPRINGS } from '../../ui/motion';
 import { Icon } from '../../ui/Icon';
 import { markNavStart } from '../perf';
 import { useNav } from '../nav';
@@ -47,10 +50,11 @@ function TabButton({ tab, active }: { tab: TabDef; active: boolean }) {
       className={`dz-tab relative isolate flex min-h-12 min-w-0 flex-auto flex-col items-center justify-center gap-0.5 rounded-[var(--radius-control)] px-0.5 pt-1.5 pb-1 text-2xs transition-colors md:min-h-11 md:flex-none md:flex-row md:gap-1.5 md:rounded-full md:px-4 md:text-sm ${active ? 'font-semibold text-fg' : 'font-medium text-subtle hover:text-fg'}`}
     >
       {/* Aktiver Reiter: Symbol auf heller Pille + fette Schrift (nicht nur Farbe). */}
-      {/* Design-Lead: Pille in der Bereichsfarbe hinter dem aktiven Reiter, das Symbol springt kurz auf (Erlebnis-Engine B5; keine Layout-Animation, leistung.md §4 Nr. 8). */}
-      {active && <span aria-hidden="true" className="dz-tab-pill hidden md:block" />}
+      {/* Design-Lead: Pille in der Bereichsfarbe hinter dem aktiven Reiter, das Symbol springt kurz auf (Erlebnis-Engine B5). P54: die Pille gleitet
+          als EIN gemeinsames Element zum neuen Reiter (`layoutId`, Feder `snap`; leistung.md §4 Nr. 8 erlaubt `layoutId` für Einzelelemente). */}
+      {active && <TabPill id="tab-pill-d" className="dz-tab-pill hidden md:block" />}
       <span className={`relative isolate inline-flex rounded-full px-3.5 py-0.5 transition-colors duration-150 md:py-0 md:pr-2 md:pl-0 `}>
-        {active && <span aria-hidden="true" className="dz-tab-pill md:hidden" />}
+        {active && <TabPill id="tab-pill-m" className="dz-tab-pill md:hidden" />}
         <span className="dz-tab-icon inline-flex">
           <Icon name={tab.icon} size={24} />
         </span>
@@ -75,4 +79,11 @@ export function TabBar() {
       ))}
     </nav>
   );
+}
+
+/** Die Pille des aktiven Reiters; bei Stufe „Aus“ ohne Bewegung (springt an den neuen Ort). */
+function TabPill({ id, className }: { id: string; className: string }) {
+  const fx = useFxLevel();
+  if (fx === 'off') return <span aria-hidden="true" className={className} />;
+  return <motion.span aria-hidden="true" className={className} layoutId={id} transition={SPRINGS.snap} />;
 }

@@ -32,7 +32,8 @@ const STORE_SYNTAX = [
   },
 ];
 /** Dauerhaft erlaubte Layout-Animationen (architektur.md §3.3). */
-const LAYOUT_OK = ['src/ui/Segmented.tsx', 'src/ui/Switch.tsx', 'src/ui/Sheet.tsx', 'src/engine/Tiles.tsx'];
+// Reiterleiste: gleitende Pille per `layoutId` (Lernplattform 3.0 P54, wie im Umschalter).
+const LAYOUT_OK = ['src/ui/Segmented.tsx', 'src/ui/Switch.tsx', 'src/ui/Sheet.tsx', 'src/engine/Tiles.tsx', 'src/app/shell/TabBar.tsx'];
 /** Befristet: Listen-Flüge der Besitzer-Pakete (P3 Wortliste, P4 Entdecken, P5 Szenen/Bausteine). */
 const LAYOUT_TEMP = ['src/features/vocab/list/VocabScreen.tsx', 'src/features/speak/SceneCard.tsx'];
 /** Befristet: `useToday()`/`usePending()` ohne Selektor (P1 stellt um). */

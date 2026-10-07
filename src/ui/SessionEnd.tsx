@@ -4,9 +4,11 @@ import type { UnitState } from "../domain/metrics";
 import { useT, type MessageKey } from "../i18n";
 import { ActionBar, PrimaryAction } from "./ActionBar";
 import { Button } from "./Button";
-import { CountUp } from "./CountUp";
+import { Odometer } from "./Odometer";
+import { roundSparks } from "../domain/moments/detect";
 import { Eyebrow } from "./Eyebrow";
 import { emit } from "../engine/fx";
+import { startMoment } from "../engine/fx/measure";
 
 // Gemeinsames Ende einer Runde (N06, plan.md §4.10, Prototyp v1): Kacheln Richtig · Zeit · Neu,
 // „Das nimmst du mit“ (antippbar – die Übung reicht antippbare Wörter herein), GENAU EIN nächster
@@ -130,7 +132,7 @@ function Tile({
       data-testid={testId}
     >
       <span className="lx-tnum text-xl font-semibold tracking-tight">
-        {typeof value === "string" || typeof value === "number" ? <CountUp text={String(value)} /> : value}
+        {typeof value === "string" || typeof value === "number" ? <Odometer text={String(value)} id={`end:${testId}`} delay={150} /> : value}
       </span>
       <span className="text-xs text-muted">{label}</span>
     </div>
@@ -157,12 +159,16 @@ function GrowthBlock({ growth }: { growth: GrowthView }) {
                     className="lx-t-support inline-flex min-h-11 items-center gap-1.5 rounded-full border border-line px-3 hover:bg-surface"
                     onClick={() => growth.onOpen?.(u.id)}
                     data-testid="growth-chip"
+                    data-id={u.id}
+                    data-to={u.to}
                   >
                     <span lang="en">{u.word}</span>
                     <span className="lx-t-meta text-muted">{t(STATE_KEY[u.to])}</span>
                   </button>
                 ) : (
-                  <span className="lx-t-support inline-flex min-h-9 items-center gap-1.5 rounded-full bg-surface-strong px-3" data-testid="growth-chip">
+                  <span className="lx-t-support inline-flex min-h-9 items-center gap-1.5 rounded-full bg-surface-strong px-3" data-testid="growth-chip"
+                    data-id={u.id}
+                    data-to={u.to}>
                     <span lang="en">{u.word}</span>
                     <span className="lx-t-meta text-muted">{t(STATE_KEY[u.to])}</span>
                   </span>
@@ -222,7 +228,7 @@ function GrowthEnd({
         </h1>
         {total > 0 && (
           <p className="lx-tnum lx-t-support m-0 text-muted">
-            {t("nbShEndScore", { right, total })}
+            <Odometer text={t("nbShEndScore", { right, total })} id="end:score" delay={150} />
           </p>
         )}
       </div>
@@ -371,9 +377,20 @@ function GrowthEnd({
 
 export function SessionEnd(props: SessionEndProps) {
   // Design-Lead (EE M6): der Moment „Runde geschafft“ einmal beim Erscheinen; was er zeigt, entscheidet der Dirigent (nur Stufe „Voll“ Teilchen).
+  // P56 (EE4): Funken nur aus den höchstens drei Chips, deren Zustand gestiegen ist; ohne Aufstieg keine Funken.
+  const ups = props.growth?.up ?? [];
   useEffect(() => {
-    const id = setTimeout(() => emit({ k: "moment", m: "round", el: document.querySelector('[data-testid="session-end"]') }), 180);
-    return () => clearTimeout(id);
+    const stop = startMoment("round", 900);
+    const id = setTimeout(() => {
+      const from = roundSparks(ups).map((u) => document.querySelector(`[data-testid="growth-chip"][data-id="${CSS.escape(u.id)}"]`));
+      emit({ k: "moment", m: "round", el: document.querySelector('[data-testid="session-end"]'), from });
+    }, 180);
+    return () => {
+      clearTimeout(id);
+      stop();
+    };
+    // Einmal beim Erscheinen.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   if (props.mode === "growth") return <GrowthEnd {...props} />;
   return <TilesEnd {...props} />;

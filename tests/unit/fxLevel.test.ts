@@ -2,7 +2,7 @@
 import { spring } from 'motion-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('../../src/platform/sound', () => ({ playCue: vi.fn(() => true) }));
+vi.mock('../../src/platform/sound', () => ({ playCue: vi.fn(() => true), playFx: vi.fn(() => true) }));
 vi.mock('../../src/platform/haptics', () => ({ verdictHaptic: vi.fn(() => true) }));
 
 import { VERDICT_GAP_MS, playVerdict, resetDirector } from '../../src/engine/fx/director';
