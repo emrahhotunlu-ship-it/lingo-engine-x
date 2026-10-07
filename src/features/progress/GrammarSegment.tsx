@@ -9,7 +9,7 @@ import { Disclosure } from '../../ui/Disclosure';
 import { PatternsStandCard } from '../patterns/StandCard';
 import { ErrorRadar } from './ErrorsTab';
 
-// Segment „Grammatik“ (Gesamtkonzept 3.5): höchstens drei Karten – Grammatik-Pfad („sicher z von 39“ mit
+// Segment „Grammatik“ (Gesamtkonzept 3.5): höchstens drei Karten – Grammatik-Pfad („sicher z von 47“ mit
 // Verteilung Neu · Lernt · Sicher · Fest), Fehlersätze (offen · fest · wiederkehrend) und Fehler-Radar.
 // Deutsch-Fallen stehen unter „Messwerte dahinter“.
 

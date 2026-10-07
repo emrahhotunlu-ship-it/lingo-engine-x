@@ -29,7 +29,7 @@ export function topicStage(p: number, doc: Doc | undefined): TopicStage {
 export type GrammarDistribution = {
   counts: Record<TopicStage, number>;
   total: number;
-  /** „sicher z von 39“: Sicher und Fest zusammen. */
+  /** „sicher z von 47“: Sicher und Fest zusammen. */
   safe: number;
   perTopic: Array<{ id: string; stage: TopicStage; p: number }>;
 };

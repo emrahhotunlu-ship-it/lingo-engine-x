@@ -287,18 +287,18 @@ test('Fortschritt Wörter: Fest-Zahl im Kopf, höchstens drei Karten, Messwerte 
   expect(errors).toEqual([]);
 });
 
-test('Fortschritt Grammatik: „sicher z von 39“ mit Verteilung, Fehlersätze, Fehler-Radar; Fallen unter den Messwerten', async ({ page }) => {
+test('Fortschritt Grammatik: „sicher z von 47“ mit Verteilung, Fehlersätze, Fehler-Radar; Fallen unter den Messwerten', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
   await openOverview(page);
   await tab(page, 'errors');
   const seg = page.getByTestId('seg-grammar');
-  await expect(seg.getByTestId('grammar-path')).toHaveAttribute('data-total', '39');
+  await expect(seg.getByTestId('grammar-path')).toHaveAttribute('data-total', '47');
   const safe = Number(await seg.getByTestId('grammar-path').getAttribute('data-safe'));
-  await expect(seg.getByTestId('grammar-safe')).toHaveText(`${safe} von 39`);
+  await expect(seg.getByTestId('grammar-safe')).toHaveText(`${safe} von 47`);
   const stages = await seg.getByTestId('grammar-legend').locator('[data-stage]').all();
   expect(stages).toHaveLength(4);
   const sum = (await Promise.all(stages.map(async (st) => Number((await st.locator('dd').textContent()) ?? 0)))).reduce((a, b) => a + b, 0);
-  expect(sum).toBe(39);
+  expect(sum).toBe(47);
   await expect(seg.getByTestId('error-sentences')).toBeVisible();
   const open = Number(await seg.getByTestId('error-sentences').getAttribute('data-open'));
   const firm = Number(await seg.getByTestId('error-sentences').getAttribute('data-firm'));
