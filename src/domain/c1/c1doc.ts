@@ -24,7 +24,8 @@ export const C1_LIMITS = {
   prodWeeks: 8,
 } as const;
 
-export type C1Place = { d: string; se: number; n: number; skip: string[]; it?: Array<[string, 0 | 1]> };
+/** `th` = θ der Einstufung (Zusatzfeld zu §4.8, nur unter „Messwerte dahinter“ angezeigt). */
+export type C1Place = { d: string; se: number; n: number; th?: number; skip: string[]; it?: Array<[string, 0 | 1]> };
 export type C1Check = {
   d: string;
   f: string;
