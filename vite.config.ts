@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { viteSingleFile } from 'vite-plugin-singlefile';
 import { execSync } from 'node:child_process';
+import { rawJsonZip } from './scripts/vite-raw-json-zip.mjs';
 
 // Versionskennung für die Diagnose (Emrah sieht, ob er den neuesten Stand offen hat).
 const commit = (() => {
@@ -19,7 +20,7 @@ const BUILD_ID = `${new Date().toISOString().slice(0, 16).replace('T', ' ')} · 
 // und wird im Build als toter Zweig entfernt; scripts/check-platform.mjs prüft das.
 export default defineConfig({
   define: { __LX_BUILD__: JSON.stringify(BUILD_ID) },
-  plugins: [react(), tailwindcss(), viteSingleFile({ removeViteModuleLoader: true })],
+  plugins: [rawJsonZip(), react(), tailwindcss(), viteSingleFile({ removeViteModuleLoader: true })],
   build: {
     target: ['es2022', 'safari16'],
     outDir: 'dist',
