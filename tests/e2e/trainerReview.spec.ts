@@ -97,7 +97,8 @@ test.describe('Desktop', () => {
     await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'wrong');
     await expect(page.getByTestId('gap')).toHaveAttribute('data-state', 'reveal');
     await expect(page.getByTestId('gap-solution')).toContainText(answer);
-    await expect(page.getByTestId('explanation')).toContainText(answer);
+    // UX-Prüfung W2: die Warum-Zeile zur eigenen Antwort steht im Block „Deine Antwort“ derselben Karte.
+    await expect(page.getByTestId('explanation-yours')).toContainText(answer);
     expect(errors).toEqual([]);
   });
 
@@ -130,7 +131,8 @@ test.describe('Desktop', () => {
     await expect(page.getByTestId('hint-line')).toBeVisible();
     await page.keyboard.press('Enter');
     await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'wrong');
-    const yours = page.getByTestId('explanation').locator('[data-line="yours"]');
+    // UX-Prüfung W2: eigener Block „Deine Antwort“ derselben Karte.
+    const yours = page.getByTestId('explanation-yours').locator('[data-line="yours"]');
     await expect(yours).toContainText('avoid');
     await expect(yours).toContainText('vermeiden');
     await expect(yours).toContainText('overcame');

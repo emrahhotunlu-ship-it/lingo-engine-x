@@ -158,7 +158,8 @@
   --lx-accent-soft: rgba(4, 120, 87, 0.1);
   --lx-cyan: #0891b2;
   --lx-cyan-text: #0e7490;
-  --lx-gold-text: #b45309;
+  /* Hell: etwas dunkler, damit die Plakette „fast richtig“ auf ihrer eigenen Tönung sicher über 4,5:1 bleibt (axe). */
+  --lx-gold-text: #96450a;
   --lx-danger-text: #b91c1c;
   --lx-danger-soft: rgba(185, 28, 28, 0.08);
   --lx-gold-soft: rgba(180, 83, 9, 0.1);

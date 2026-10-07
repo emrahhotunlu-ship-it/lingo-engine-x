@@ -164,16 +164,17 @@ export function useErrUi(ctrl: C1Ctrl): C1Ui {
           </label>
         )}
         {!ctrl.locked && (
-          <div className="flex flex-wrap gap-2">
+          // UX-Prüfung KLEIN: „Kein Fehler“ ist eine echte Antwort (Form wie die Bausteine), „Doch nicht“ steht in derselben Reihe.
+          <div className="flex flex-wrap items-center gap-2">
+            <button type="button" className="cx-chip" onClick={noError} data-testid="no-error">
+              {t('cxNoError')}
+              {mode === 'desk' && <span className="lx-t-meta ml-2 text-subtle">N</span>}
+            </button>
             {sel !== null && (
               <Button variant="ghost" onClick={undo} data-testid="err-undo">
                 {t('cxErrUndo')}
               </Button>
             )}
-            <Button variant="ghost" onClick={noError} data-testid="no-error">
-              {t('cxNoError')}
-              {mode === 'desk' && <span className="lx-t-meta ml-2 text-subtle">N</span>}
-            </Button>
           </div>
         )}
         {ctrl.locked && correctChip >= 0 && mode === 'tap' && choices && (

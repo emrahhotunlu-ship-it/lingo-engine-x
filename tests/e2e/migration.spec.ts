@@ -47,7 +47,8 @@ test('Trockenlauf zeigt alles, schreibt nichts; nach Bestätigung ist die Umstel
   // Nach dem Neuladen bleibt der Zustand (Daten liegen in db, nicht im Browser-Speicher).
   await page.reload();
   await screen(page, 'today');
-  await expect(page.getByTestId('today-streak')).toHaveText('Serie 12 · Woche geschafft · 7 Tage');
+  // UX-Prüfung KLEIN: Heute-Fußzeile in einem Format „Woche n von 6“ (Text geändert, Zahlen unverändert).
+  await expect(page.getByTestId('today-streak')).toHaveText('Serie 12 · Woche 6 von 6 ✓ · 7 Tage');
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
 });

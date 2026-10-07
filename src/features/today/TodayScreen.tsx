@@ -388,7 +388,7 @@ export function TodayScreen() {
   const restartDay = ret && ret.gap >= RESTART_GAP && ret.since < RESTART_DAYS ? ret.since + 1 : null;
 
   return (
-    <motion.div className="mx-auto flex w-full max-w-[46rem] flex-col gap-5 py-4 sm:py-8 lg:max-w-[70rem]" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.03 } } }}>
+    <motion.div className="mx-auto flex w-full max-w-[46rem] flex-col gap-5 pt-4 pb-10 sm:pt-8 lg:max-w-[70rem]" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.03 } } }}>
       <motion.div variants={item}>
         <TabTitle title={dateLabelOf(today, lang)} testId="today-date" />
       </motion.div>

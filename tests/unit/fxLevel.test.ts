@@ -124,7 +124,9 @@ describe('Dirigent: ein Urteil je 300 ms, „Weiß ich nicht“ bleibt still', (
 
   it('emit erreicht angemeldete Handler und die Abmeldung wirkt', () => {
     const seen: string[] = [];
-    const off = subscribe((e) => seen.push(e.v));
+    const off = subscribe((e) => {
+      if (e.k === 'verdict') seen.push(e.v);
+    });
     emit({ k: 'verdict', v: 'ok' });
     off();
     emit({ k: 'verdict', v: 'wrong' });

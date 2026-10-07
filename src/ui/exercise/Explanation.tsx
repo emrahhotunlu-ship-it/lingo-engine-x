@@ -62,15 +62,17 @@ export function Explanation({ model, depth, learning = true, area = 'trainer', o
       case 'yours': {
         // UX-Prüfung B1: die eigene Wahl steht genau einmal („am“), die Begründung beginnt oft schon mit ihr („am passt nicht …“) – dann nicht doppelt.
         const g = l.given.trim();
+        // UX-Prüfung W2/R7: ein ganzer Satz steht schon im Antwortfeld darüber – dann nennt die Zeile nur die Begründung (kein doppelter Text).
+        const short = !!g && g.split(/\s+/).length <= 3;
         const dup = !!g && l.text.trim().toLowerCase().startsWith(g.toLowerCase());
         return (
           <>
-            {g && (
+            {g && short && (
               <span className="mr-1.5 font-semibold text-wrong-text line-through decoration-1" lang="en">
                 {g}
               </span>
             )}
-            <span lang={lang}>{dup ? l.text.trim().slice(g.length).trimStart() : l.text}</span>
+            <span lang={lang}>{dup && short ? l.text.trim().slice(g.length).trimStart() : l.text}</span>
           </>
         );
       }

@@ -207,3 +207,34 @@ html:has(.dz-kwt-dock:not([data-locked])) #main {
 [data-testid='exercise']:has([data-testid='choice']) .dz-kh-typed {
   display: none;
 }
+
+/* ── UX-Prüfung KLEIN ───────────────────────────────────────────────────────── */
+/* Anwenden als ruhige Liste: eine Fläche je Abschnitt, Trennlinien zwischen den Zeilen. */
+.dz-list > * + * {
+  border-top: 1px solid var(--lx-border);
+}
+/* Wochenstreifen: ein erledigter heutiger Tag trägt keinen zweiten Ring (der gefüllte Kreis und der fette Name genügen). */
+.lx-ring[data-today][data-state='done'] {
+  box-shadow: none;
+}
+/* Durchgestrichene eigene Eingabe in der Lücke: volle Schriftfarbe, Strich in der Fehlerfarbe (lesbar, Kontrast). */
+.lx-gap-given {
+  color: var(--lx-fg);
+  text-decoration-color: var(--lx-wrong-text);
+  text-decoration-thickness: 2px;
+}
+/* Antippbare Wörter: Trefferfläche auch seitlich größer, kurze Wörter mindestens 2 rem breit (ohne Layoutänderung). */
+.lx-word::after {
+  inset: -0.5em auto;
+  left: 50%;
+  width: max(100% + 0.3em, 2rem);
+  transform: translateX(-50%);
+}
+/* Laptop: Reiterleiste deckend mit Unschärfe dahinter. */
+@media (min-width: 768px) {
+  .dz-tabbar {
+    background: var(--lx-surface-solid);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    backdrop-filter: blur(16px) saturate(1.2);
+  }
+}

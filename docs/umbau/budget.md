@@ -21,6 +21,7 @@ Messung nach **jedem** Paket (Byte der `dist/index.html`, Differenz zum Vorgäng
 | 07.10.2026 | P24 | 4.591.348 | +12.983 | 4,38 | Tempo-Runde: Auswahl, Messwerte, Runde, Eingabeformen kwt Teil B, Kachel, Texte DE/EN, Stile |
 | 07.10.2026 | P30 | 4.597.416 | +6.068 | 4,38 | Effekte-Fundament: `engine/fx` (Ereignisse, Dirigent, Stufe), Feder-Tokens, Stufe 1 als CSS, Einstellungen › Effekte |
 | 07.10.2026 | Design-Lead (Branch `claude/umbau-design`) | 4.632.093 | +34.677 ggü. eingechecktem Test-Link-6-`dist` | 4,42 | `styles/parts/dz.css` + `dz2.css` (Bereichslicht, Tiefe, Momente), Wort-Rückmeldung in Blöcken (`ui/exercise/wordParts.ts`), Canvas-2D-Teilchen (`engine/fx/particles.ts`, `moments.ts`). Eine Datei, keine Zusatzdateien; Warnschwelle 6 MiB unverändert |
+| 07.10.2026 | UX-Prüfung (Branch `claude/umbau-design`) | 4.661.088 | +28.995 ggü. Design-Lead | 4,45 | Eine Rückmeldekarte je Übung, Aufgabenzeile aus der Form, Bausteine in der Lücke, Anwenden als Liste, Grammatik-Pfad einzeilig, Einstellungen; überwiegend Umbau statt Zuwachs |
 
 ## Planrechnung (LP3 §9, Modell)
 

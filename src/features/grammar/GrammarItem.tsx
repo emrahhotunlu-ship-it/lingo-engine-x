@@ -426,7 +426,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       <>
         {sentenceWithSlot(task.prompt, gapNode)}
         {task.hint && !task.prompt.includes(task.hint) && (
-          <p className="lx-t-support text-muted" data-testid="cue">
+          <p className="lx-t-support text-muted" lang={/[äöüÄÖÜß]/.test(task.hint) ? 'de' : lang} data-testid="cue">
             {t('grCue', { cue: task.hint })}
           </p>
         )}
@@ -481,7 +481,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       <div className="flex flex-col gap-3">
         <EnglishText as="p" text={task.prompt} {...src} testId="transform-from" />
         {task.hint && !task.prompt.includes(task.hint) && (
-          <p className="lx-t-support text-muted" data-testid="cue">
+          <p className="lx-t-support text-muted" lang={/[äöüÄÖÜß]/.test(task.hint) ? 'de' : lang} data-testid="cue">
             {t('grCue', { cue: task.hint })}
           </p>
         )}
