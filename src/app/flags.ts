@@ -15,7 +15,7 @@ export type Flags = {
 };
 
 export const flags: Flags = {
-  c1xKinds: { mcc: false, ocl: false, wf: false, kwt: true, err: false, pair: false, cnet: false, reg: false, para: false },
+  c1xKinds: { mcc: false, ocl: false, wf: false, kwt: true, err: true, pair: false, cnet: false, reg: false, para: false },
   slotPlan: false,
   tempo: false,
   c1check: false,

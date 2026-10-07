@@ -82,3 +82,9 @@
 .cx-why-row[data-mine='true'] {
   font-weight: 500;
 }
+
+/* Wort antippen („Fehler finden“, TapSentence): jedes Wort mindestens 44 × 44 px, damit am Handy jedes einzeln trifft. */
+.lx-spot-wide {
+  min-width: 2.75rem;
+  justify-content: center;
+}

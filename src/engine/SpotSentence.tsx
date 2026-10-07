@@ -24,11 +24,13 @@ export type SpotSentenceProps = {
   /** Nachschlagen nach dem Prüfen (nur mit `locked`). */
   area?: WordTapArea;
   source?: string | null;
+  /** Jedes Wort mindestens 44 × 44 px (Handy, „Fehler finden“ `err`; P17). */
+  wide?: boolean;
 };
 
 const inSpan = (i: number, s: Span | null | undefined): boolean => !!s && i >= s[0] && i <= s[1];
 
-export function SpotSentence({ words, pick, selected, onSelect, locked = false, marks, testId = 'spot-sentence', label, area = 'trainer', source = null }: SpotSentenceProps) {
+export function SpotSentence({ words, pick, selected, onSelect, locked = false, marks, testId = 'spot-sentence', label, area = 'trainer', source = null, wide = false }: SpotSentenceProps) {
   const { t } = useT();
   const root = useRef<HTMLSpanElement>(null);
   // Bei `span`: Start gesetzt, Ende fehlt noch.
@@ -124,7 +126,7 @@ export function SpotSentence({ words, pick, selected, onSelect, locked = false, 
             aria-pressed={sel}
             tabIndex={i === rove ? 0 : -1}
             lang="en"
-            className="lx-spot lx-hit inline-flex items-center rounded px-0.5"
+            className={`lx-spot lx-hit inline-flex items-center rounded px-0.5${wide ? ' lx-spot-wide' : ''}`}
             onClick={() => tap(i)}
           >
             {m && i === m.span[0] && srMark(m)}

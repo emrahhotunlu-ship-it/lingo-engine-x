@@ -15,6 +15,7 @@ Messung nach **jedem** Paket (Byte der `dist/index.html`, Differenz zum Vorgäng
 | 07.10.2026 | P13 | 4.356.579 | +588 | 4,15 | Buchung (write.ts, answerRight); c1x-Domäne noch ohne Verbraucher in der App |
 | 07.10.2026 | P14 | 4.452.161 | +95.582 | 4,25 | c1x-Rahmen, Texte DE/EN, Stile, Kwt/Err-Gerüst, Verbraucher in der App |
 | 07.10.2026 | P16 | 4.459.761 | +3.761 | 4,25 | kwt: Handy-Bausteine, Teil B getippt, `kindRound`; Schalter `kwt` an |
+| 07.10.2026 | P17 | 4463280 | + | 4,25 | err: TapSentence, Chips, Teil-Tippen, Messwerte; Schalter `err` an |
 
 ## Planrechnung (LP3 §9, Modell)
 
