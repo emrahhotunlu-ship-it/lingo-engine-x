@@ -142,7 +142,7 @@ export function validateTopic(topic) {
     if (!r.success) return bad(`why ungültig ${where}: ${JSON.stringify(r.error.issues.slice(0, 3))}`);
     const texts = [['ok', why.ok], ...why.wrong.map((w, i) => [`wrong[${i}]`, w])];
     for (const [n, x] of texts) {
-      if (x.de.length > 100 || x.en.length > 100) bad(`why.${n} zu lang (> 100 Zeichen) ${where}`);
+      if (x.de.length > 140 || x.en.length > 140) bad(`why.${n} zu lang (> 140 Zeichen, Vertrag §3.1) ${where}`);
       if (BRITISH_STEMS.test(x.en)) bad(`britische Schreibweise in why.${n} ${where}`);
       if (/"/.test(x.de + x.en)) bad(`gerades Anführungszeichen in why.${n} ${where}`);
       if (/\b(und|der|die|das|ist|nicht|wird|steht)\b/i.test(withoutQuotes(x.en))) bad(`why.${n}.en wirkt nicht englisch ${where}: ${x.en}`);

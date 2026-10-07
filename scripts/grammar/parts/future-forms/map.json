@@ -200,8 +200,8 @@
   "pat": "ff.will-now",
   "why": {
    "ok": {
-    "de": "Richtig: Ein Versprechen machst du mit will (verneint: won't).",
-    "en": "Right: you make a promise with will (negative: won't)."
+    "de": "Ein Versprechen („I promise“) macht man mit will, verneint won't tell. Present Continuous wäre ein Termin, kein Versprechen.",
+    "en": "A promise (“I promise”) is made with will, negated won't tell. Present Continuous would be an arrangement, not a promise."
    },
    "wrong": [
     {
@@ -252,8 +252,8 @@
   "pat": "ff.fixed-times",
   "why": {
    "ok": {
-    "de": "Richtig: Verabredung mit Zeitangabe: Present Continuous (am attending).",
-    "en": "Right: an arrangement with a time: Present Continuous (am attending)."
+    "de": "Ein fester Termin mit Zeitangabe („on Thursday … all day“) ist ein Plan: Present Continuous, am attending.",
+    "en": "A fixed appointment with a time (“on Thursday … all day”) is an arrangement: Present Continuous, am attending."
    },
    "wrong": [
     {
@@ -428,8 +428,8 @@
   "pat": "ff.will-now",
   "why": {
    "ok": {
-    "de": "Richtig: Ein Versprechen machst du mit will: will send.",
-    "en": "Right: you make a promise with will: will send."
+    "de": "Ein Versprechen („I promise“) macht man mit will: will send. Das Present Simple nennt eine Gewohnheit.",
+    "en": "A promise (“I promise”) is made with will: will send. The Present Simple names a habit."
    },
    "wrong": [
     {
@@ -465,8 +465,8 @@
   "pat": "ff.will-now",
   "why": {
    "ok": {
-    "de": "Richtig: Spontaner Entschluss im Moment des Sprechens: will get.",
-    "en": "Right: a spontaneous decision at the moment of speaking: will get."
+    "de": "Spontaner Entschluss im Moment des Sprechens („Hold on“): will get. Vorgeplant wäre going to.",
+    "en": "A spontaneous decision at the moment of speaking (“Hold on”): will get. A prior plan would be going to."
    },
    "wrong": [
     {
@@ -634,8 +634,8 @@
   "pat": "ff.no-will-after",
   "why": {
    "ok": {
-    "de": "Richtig: Nach „unless“ steht das Present: Unless you sign.",
-    "en": "Right: after “unless” use the present: Unless you sign."
+    "de": "Nach „unless“ (= wenn nicht) steht das Present: Unless you sign. will gehört nur in den Hauptsatz.",
+    "en": "After “unless” (= if not) the Present is used: Unless you sign. Will belongs only in the main clause."
    },
    "wrong": [
     {

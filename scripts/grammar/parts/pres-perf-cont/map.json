@@ -3,8 +3,8 @@
   "pat": "pc.recent",
   "why": {
    "ok": {
-    "de": "Richtig: Müdigkeit jetzt + „all afternoon“ → have been studying, die Tätigkeit mit Spur im Jetzt.",
-    "en": "Right: tired now + “all afternoon” → have been studying, an activity with a trace in the present."
+    "de": "Du bist jetzt müde, weil du „all afternoon“ gelernt hast: have been studying. Die Tätigkeit wirkt bis jetzt nach.",
+    "en": "You are tired now because you studied “all afternoon”: have been studying. The activity has effects up to now."
    },
    "wrong": [
     {
@@ -50,8 +50,8 @@
   "pat": "pc.duration",
   "why": {
    "ok": {
-    "de": "„How long“ + Dauer bis jetzt → have you been learning, nicht das Präsens des Deutschen.",
-    "en": "“How long” + duration up to now → have you been learning, not the German-style present."
+    "de": "„How long“ fragt nach der Dauer bis jetzt: have you been learning. Deutsch fragt „wie lange lernst du“ im Präsens.",
+    "en": "“How long” asks for duration up to now: have you been learning. German asks “wie lange lernst du” in the present."
    },
    "wrong": [
     {
@@ -78,8 +78,8 @@
   "pat": "pc.duration",
   "why": {
    "ok": {
-    "de": "„since 2019“ + Dauer bis heute → has been living oder has lived. Beides stimmt.",
-    "en": "“since 2019” + duration until today → has been living or has lived. Both are right."
+    "de": "„since 2019“ läuft bis heute: has been living oder has lived. Beides ist richtig, Present Simple dagegen nicht.",
+    "en": "“Since 2019” runs up to today: has been living or has lived. Both are correct, Present Simple is not."
    },
    "wrong": [
     {
@@ -122,8 +122,8 @@
   "pat": "pc.duration",
   "why": {
    "ok": {
-    "de": "„since 8:15“ + die Suche läuft noch → have been looking.",
-    "en": "“since 8:15” + the search is still going → have been looking."
+    "de": "„since 8:15“ und die Suche läuft noch: have been looking. Present Continuous allein vergisst die Dauer seit 8:15.",
+    "en": "“Since 8:15” and the search is ongoing: have been looking. The present continuous alone ignores the time since 8:15."
    },
    "wrong": [
     {
@@ -176,8 +176,8 @@
   "pat": "pc.duration",
   "why": {
    "ok": {
-    "de": "„since January“ + die Arbeit läuft noch → has been working.",
-    "en": "“since January” + the work is still going → has been working."
+    "de": "„since January“ und die Arbeit läuft noch: has been working. Das Team ist Singular, deshalb has statt have.",
+    "en": "“Since January” and the work is ongoing: has been working. The team is singular here, so has instead of have."
    },
    "wrong": [
     {
@@ -203,8 +203,8 @@
   "pat": "pc.since-for",
   "why": {
    "ok": {
-    "de": "two years ist eine Zeitspanne → for. since braucht einen Zeitpunkt (since 2022).",
-    "en": "two years is a length of time → for. since needs a point in time (since 2022)."
+    "de": "„two years“ ist eine Zeitspanne, daher for. since steht nur mit einem Startpunkt wie 2022 oder Monday.",
+    "en": "“Two years” is a span of time, so for. Since needs a starting point such as 2022 or Monday."
    },
    "wrong": [
     {
@@ -230,8 +230,8 @@
   "pat": "pc.duration",
   "why": {
    "ok": {
-    "de": "„since Tuesday“ + Handlung bis jetzt → Have you been waiting.",
-    "en": "“since Tuesday” + an action up to now → Have you been waiting."
+    "de": "„since Tuesday“ und das Warten dauert an: Have you been waiting …? Deutsch fragt „wartest du seit“, Englisch braucht das Perfect.",
+    "en": "“Since Tuesday” and the waiting continues: Have you been waiting …? German asks “wartest du seit”, English needs the perfect."
    },
    "wrong": [
     {
@@ -257,8 +257,8 @@
   "pat": "pc.duration",
   "why": {
    "ok": {
-    "de": "„since 6 p.m.“ + die Musik läuft noch → have been playing.",
-    "en": "“since 6 p.m.” + the music is still on → have been playing."
+    "de": "„since 6 p.m.“ und die Musik läuft noch, das nervt jetzt: have been playing. Betont den Ablauf, nicht das Ergebnis.",
+    "en": "“Since 6 p.m.” and the music is still on, which bothers you now: have been playing. It stresses the activity, not a result."
    },
    "wrong": [
     {
@@ -284,8 +284,8 @@
   "pat": "pc.duration",
   "why": {
    "ok": {
-    "de": "„since 2017“ → Dauer bis jetzt → have been working. have worked geht auch.",
-    "en": "“since 2017” → duration up to now → have been working. have worked also works."
+    "de": "„since 2017“ läuft bis heute: have been working. have worked wäre auch möglich. Present Simple geht hier nie.",
+    "en": "“Since 2017” runs up to today: have been working. Have worked would also be possible. Present Simple never works here."
    },
    "wrong": [
     {
@@ -333,8 +333,8 @@
   "pat": "pc.duration",
   "why": {
    "ok": {
-    "de": "„all day“ betont die Dauer bis jetzt → have been trying. have tried geht auch.",
-    "en": "“all day” stresses the duration up to now → have been trying. have tried also works."
+    "de": "„all day“ betont die Dauer bis jetzt: have been trying. have tried wäre möglich, zählt aber die Versuche.",
+    "en": "“All day” stresses duration up to now: have been trying. Have tried is possible but counts the attempts."
    },
    "wrong": [
     {
@@ -382,8 +382,8 @@
   "pat": "pc.recent",
   "why": {
    "ok": {
-    "de": "Spur im Jetzt (schmutzige Hände) + „all morning“ → have been working. have worked geht auch.",
-    "en": "Trace in the present (dirty hands) + “all morning” → have been working. have worked also works."
+    "de": "Schmutzige Hände sind die Spur im Jetzt, „all morning“ die Dauer: have been working. have worked wäre auch möglich.",
+    "en": "Dirty hands are the trace in the present, “all morning” the duration: have been working. Have worked would also be possible."
    },
    "wrong": [
     {
@@ -431,8 +431,8 @@
   "pat": "pc.recent",
   "why": {
    "ok": {
-    "de": "„lately“ + Entwicklung bis jetzt → haven't been making. haven't made geht auch.",
-    "en": "“lately” + a development up to now → haven't been making. haven't made also works."
+    "de": "„lately“ blickt auf die letzte Zeit bis jetzt: haven't been making. haven't made wäre auch möglich.",
+    "en": "“Lately” looks at the recent period up to now: haven't been making. Haven't made would also be possible."
    },
    "wrong": [
     {
@@ -478,8 +478,8 @@
   "pat": "pc.duration",
   "why": {
    "ok": {
-    "de": "„for months“ + die Suche läuft noch → has been looking. has looked geht auch.",
-    "en": "“for months” + the search is still going → has been looking. has looked also works."
+    "de": "„for months“ und die Suche läuft noch: has been looking. has looked wäre möglich, betont aber das Ergebnis.",
+    "en": "“For months” and the search is ongoing: has been looking. Has looked is possible but stresses the result."
    },
    "wrong": [
     {
@@ -524,8 +524,8 @@
   "pat": "pc.duration",
   "why": {
    "ok": {
-    "de": "Beginn früher + noch im Gange + „since 9 a.m.“ → have been working. have worked geht auch.",
-    "en": "Earlier start + still going + “since 9 a.m.” → have been working. have worked also works."
+    "de": "Start um 9 Uhr und sie arbeiten noch: „since 9 a.m.“ braucht have been working. have worked wäre auch möglich.",
+    "en": "Started at 9 and they are still working: “since 9 a.m.” needs have been working. Have worked would also be possible."
    },
    "wrong": [
     {
@@ -573,8 +573,8 @@
   "pat": "pc.duration",
   "why": {
    "ok": {
-    "de": "„since 3 p.m.“ + der Regen dauert an → has been raining.",
-    "en": "“since 3 p.m.” + the rain is continuing → has been raining."
+    "de": "„since 3 p.m.“ und es regnet noch: has been raining. Ablauf bis jetzt, deshalb been + -ing.",
+    "en": "“Since 3 p.m.” and it is still raining: has been raining. Activity up to now, hence been + -ing."
    },
    "wrong": [
     {
@@ -665,8 +665,8 @@
   "pat": "pc.duration",
   "why": {
    "ok": {
-    "de": "„How long“ + Dauer bis jetzt → have you been working (oder have you worked).",
-    "en": "“How long” + duration up to now → have you been working (or have you worked)."
+    "de": "„How long“ fragt nach der Dauer bis jetzt: have you been working. Deutsch fragt „wie lange arbeitest du“ im Präsens.",
+    "en": "“How long” asks for duration up to now: have you been working. German asks “wie lange arbeitest du” in the present."
    },
    "wrong": [
     {
@@ -709,8 +709,8 @@
   "pat": "pc.form",
   "why": {
    "ok": {
-    "de": "Bei he/she/it steht has: He has been feeling tired.",
-    "en": "he/she/it takes has: He has been feeling tired."
+    "de": "he/she/it braucht has, auch in has been feeling. have steht nur bei I, you, we, they.",
+    "en": "He/she/it needs has, even in has been feeling. Have is only used with I, you, we, they."
    },
    "wrong": [
     {
@@ -793,8 +793,8 @@
   "pat": "pc.form",
   "why": {
    "ok": {
-    "de": "Nach been kommt die -ing-Form: have been studying.",
-    "en": "After been comes the -ing form: have been studying."
+    "de": "„all afternoon“ nennt die Dauer, deshalb Verlaufsform: have been studying. Nach been steht -ing, nie die 3. Form studied.",
+    "en": "“All afternoon” gives the duration, so the continuous form: have been studying. After been comes -ing, never the participle studied."
    },
    "wrong": [
     {

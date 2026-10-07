@@ -13782,8 +13782,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Der Fehler: Es fehlt to: going to open.",
-     "en": "The error: to is missing: going to open."
+     "de": "Der Fehler: „going open“. Ein Plan braucht going to + Grundform: We're going to open a second office.",
+     "en": "The error: “going open”. A plan needs going to + base form: We're going to open a second office."
     },
     "wrong": [
      {
@@ -14039,8 +14039,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Der Fehler: Es fehlt to: were going to send.",
-     "en": "The error: to is missing: were going to send."
+     "de": "Der Fehler: „going send“. Ein früherer Plan braucht were going to + Grundform: were going to send.",
+     "en": "The error: “going send”. A past plan needs were going to + base form: were going to send."
     },
     "wrong": [
      {
@@ -14509,8 +14509,8 @@
    "answer": "a",
    "why": {
     "ok": {
-     "de": "Richtig: Satz a. about to = in Sekunden oder Minuten.",
-     "en": "Right: sentence a. about to = within seconds or minutes."
+     "de": "Satz a: about to heißt „gleich“, in Sekunden oder Minuten. Satz b nennt „sometime this afternoon“, also irgendwann.",
+     "en": "Sentence a: about to means “right away”, in seconds or minutes. Sentence b says “sometime this afternoon”, so later."
     },
     "wrong": [
      {
@@ -15101,8 +15101,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: ein Ablauf, der ohnehin stattfindet → will be passing.",
-     "en": "Right: a plan that happens anyway → will be passing."
+     "de": "Richtig: will be passing. Das Vorbeikommen findet ohnehin heute statt, ein geplanter Ablauf in der Zukunft: will be + -ing.",
+     "en": "Right: will be passing. Passing by happens today anyway, a planned activity in the future: will be + -ing."
     },
     "wrong": [
      {
@@ -15258,8 +15258,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: bis du landest, ist es erledigt → will have sent.",
-     "en": "Right: by the time you land it is done → will have sent."
+     "de": "Richtig: will have sent. „By the time you land“ setzt eine Frist: Bis dahin ist die Aufgabe erledigt, also will have + 3. Form.",
+     "en": "Right: will have sent. “By the time you land” sets a deadline: the task is done by then, so will have + past participle."
     },
     "wrong": [
      {
@@ -15582,8 +15582,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: die Dauer bis September → will have been using.",
-     "en": "Right: duration up to September → will have been using."
+     "de": "Richtig: will have been using. „for six months“ nennt die Dauer bis September: will have been + -ing.",
+     "en": "Right: will have been using. “For six months” gives the duration up to September: will have been + -ing."
     },
     "wrong": [
      {
@@ -25410,8 +25410,8 @@
    ],
    "why": {
     "ok": {
-     "de": "„on Wednesday“ ist vorbei → Past Simple: last talked to.",
-     "en": "“on Wednesday” is over → Past Simple: last talked to."
+     "de": "„on Wednesday“ ist ein vergangener Zeitpunkt: Past Simple. last talked to oder last spoke to, ohne have.",
+     "en": "“On Wednesday” is a finished point in time: Past Simple. last talked to or last spoke to, without have."
     },
     "wrong": [
      {
@@ -25453,8 +25453,8 @@
    ],
    "why": {
     "ok": {
-     "de": "„when“ fragt nach einem Zeitpunkt → Past Simple: when you last visited.",
-     "en": "“when” asks for a point in time → Past Simple: when you last visited."
+     "de": "when fragt nach der Zeit eines vergangenen Besuchs: when you last visited (Past Simple). In der indirekten Frage ohne did.",
+     "en": "When asks for the time of a past visit: when you last visited (Past Simple). In an indirect question there is no did."
     },
     "wrong": [
      {
@@ -25492,8 +25492,8 @@
    ],
    "why": {
     "ok": {
-     "de": "„since January“ und wir nutzen es noch → have been using.",
-     "en": "“since January” + we still use it → have been using."
+     "de": "„since January“ und die Nutzung läuft noch: have been using. Deutsch „nutzen seit“ im Präsens, Englisch mit Perfect.",
+     "en": "“Since January” and the use is ongoing: have been using. German says “nutzen seit” in the present, English uses the perfect."
     },
     "wrong": [
      {
@@ -25538,8 +25538,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Der Zeitraum reicht bis jetzt → hasn't called us since.",
-     "en": "The period reaches up to now → hasn't called us since."
+     "de": "since September dauert bis jetzt: hasn't called us since. Ein bisher ausgebliebener Anruf braucht das Present Perfect.",
+     "en": "Since September lasts up to now: hasn't called us since. A call that has not happened so far needs the Present Perfect."
     },
     "wrong": [
      {
@@ -25582,8 +25582,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Erfahrung bis jetzt, ohne dass ein Zeitpunkt zählt → have never managed.",
-     "en": "Experience up to now, no time named → have never managed."
+     "de": "before und noch nie: Erfahrung bis jetzt, ohne Zeitpunkt. Deshalb have never managed, nicht „never managed“ allein.",
+     "en": "Before and never: experience up to now, with no point in time. So have never managed, not “never managed” alone."
     },
     "wrong": [
      {
@@ -25625,8 +25625,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Superlativ mit Erfahrung bis jetzt → I have ever seen.",
-     "en": "Superlative + experience up to now → I have ever seen."
+     "de": "Nach dem Superlativ („the best“) zählt alles bis jetzt: I have ever seen. Ohne Zeitpunkt steht das Present Perfect.",
+     "en": "After a superlative (“the best”) everything up to now counts: I have ever seen. With no point in time, Present Perfect is used."
     },
     "wrong": [
      {
@@ -25670,8 +25670,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Ganz neu, ohne dass ein Zeitpunkt zählt → has just announced.",
-     "en": "Brand new, no time named → has just announced."
+     "de": "just betont: ganz neu, die Nachricht gilt jetzt. Deshalb has just announced, ohne genannte Zeit.",
+     "en": "Just stresses: brand new, the news counts now. So has just announced, with no stated time."
     },
     "wrong": [
      {
@@ -25711,8 +25711,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Der Stand jetzt zählt → still hasn't replied.",
-     "en": "The status now counts → still hasn't replied."
+     "de": "still hasn't replied: Die Antwort fehlt bis jetzt, und es zählt der Stand heute. Kein Zeitpunkt, also kein Past Simple.",
+     "en": "still hasn't replied: the answer is missing as of now, and the current state matters. No point in time, so no Past Simple."
     },
     "wrong": [
      {
@@ -25754,8 +25754,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Schon erledigt, die Folge gilt jetzt → has already finished.",
-     "en": "Already done, the consequence holds now → has already finished."
+     "de": "already zeigt: Es ist schon erledigt und das Ergebnis zählt jetzt: has already finished, kein Zeitpunkt.",
+     "en": "Already shows it is done and the result matters now: has already finished, no point in time."
     },
     "wrong": [
      {
@@ -25791,8 +25791,8 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "„on Tuesday“ ist vorbei, daher reviewed statt has reviewed.",
-     "en": "“on Tuesday” is over, so reviewed instead of has reviewed."
+     "de": "„on Tuesday“ ist ein genannter Tag: Past Simple reviewed, nicht has reviewed. Das Perfect nennt keinen Zeitpunkt.",
+     "en": "“On Tuesday” is a stated day: Past Simple reviewed, not has reviewed. The perfect gives no point in time."
     },
     "wrong": [
      {
@@ -25852,8 +25852,8 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "„at 9 a.m. on Friday“ ist ein Zeitpunkt → Who opened …?",
-     "en": "“at 9 a.m. on Friday” is a point in time → Who opened …?"
+     "de": "„at 9 a.m. on Friday“ nennt Uhrzeit und Tag: Past Simple, also Who opened …? Has opened passt nicht dazu.",
+     "en": "“At 9 a.m. on Friday” names time and day: Past Simple, so Who opened …? Has opened does not fit."
     },
     "wrong": [
      {
@@ -25934,8 +25934,8 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "„How long“ fragt nach der Zeit bis jetzt → have you known (Zustandsverb, kein -ing).",
-     "en": "“How long” asks about the time up to now → have you known (stative verb, no -ing)."
+     "de": "„How long“ fragt nach der Dauer bis jetzt: have you known. Deutsch „kennst du seit“, Englisch braucht have, kein -ing.",
+     "en": "“How long” asks for duration up to now: have you known. German says “kennst du seit”, English needs have, and no -ing."
     },
     "wrong": [
      {
@@ -25983,8 +25983,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Nach „the second time“ zählt die Erfahrung bis jetzt → have lost.",
-     "en": "After “the second time” the experience up to now counts → have lost."
+     "de": "„the second time this month“ zählt bis jetzt: we have lost. Das Verb braucht das Present Perfect, kein Past Simple.",
+     "en": "“The second time this month” counts up to now: we have lost. The verb needs the Present Perfect, not the Past Simple."
     },
     "wrong": [
      {
@@ -26067,8 +26067,8 @@
    ],
    "why": {
     "ok": {
-     "de": "„noch nicht“ heißt haven't … yet; already passt hier nicht.",
-     "en": "“noch nicht” is haven't … yet; already does not fit here."
+     "de": "In der Verneinung heißt „noch nicht“ yet: haven't sent … yet. already steht in Fragen und Bejahungen, nicht hier.",
+     "en": "In a negation “noch nicht” is yet: haven't sent … yet. Already belongs in statements and questions, not here."
     },
     "wrong": [
      {
@@ -26101,8 +26101,8 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "Stimmt: Das Ergebnis zählt jetzt, ohne Zeitpunkt → has approved.",
-     "en": "Correct: the result counts now, with no time named → has approved."
+     "de": "Kein Fehler: has approved nennt das Ergebnis jetzt („so we can start hiring“) und keinen Zeitpunkt.",
+     "en": "No error: has approved states the result as of now (“so we can start hiring”) and gives no point in time."
     },
     "wrong": [
      {
@@ -26127,8 +26127,8 @@
    "answer": "a",
    "why": {
     "ok": {
-     "de": "„on Friday“ nennt die Zeit, deshalb Past Simple.",
-     "en": "“on Friday” names the time, so the Past Simple."
+     "de": "Satz a nennt „on Friday“, einen festen Zeitpunkt. Dann ist Past Simple richtig, das Perfect in b nennt keinen.",
+     "en": "Sentence a names “on Friday”, a fixed point in time, so Past Simple fits. The perfect in b names none."
     },
     "wrong": [
      {
@@ -26220,8 +26220,8 @@
    "answer": "b",
    "why": {
     "ok": {
-     "de": "has crashed ohne Zeitpunkt: Das Ergebnis gilt jetzt.",
-     "en": "has crashed with no time: the result holds now."
+     "de": "Satz b: has crashed nennt kein Datum, wichtig ist das Ergebnis jetzt (Server down). Satz a nennt nur die Uhrzeit.",
+     "en": "Sentence b: has crashed gives no time, the result now matters (server is down). Sentence a only names the time."
     },
     "wrong": [
      {
@@ -26252,8 +26252,8 @@
    "answer": "a",
    "why": {
     "ok": {
-     "de": "recently nennt keinen Zeitpunkt: Die Neuigkeit gilt jetzt.",
-     "en": "recently names no point in time: the news holds now."
+     "de": "Satz a: recently ohne Datum, die Preise sind jetzt höher. Satz b nennt „in January“ und erzählt ein Ereignis.",
+     "en": "Sentence a: recently without a date, prices are higher now. Sentence b names “in January” and tells an event."
     },
     "wrong": [
      {
@@ -30386,8 +30386,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: „since March“ und die Arbeit läuft noch → have been testing.",
-     "en": "Right: “since March” + still going → have been testing."
+     "de": "Richtig: „since March“ und der Test läuft noch: have been testing. Verlaufsform, weil die Dauer zählt, nicht das Ergebnis.",
+     "en": "Right: “since March” and the testing is ongoing: have been testing. Continuous form because the duration matters, not the result."
     },
     "wrong": [
      {
@@ -30438,8 +30438,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Start am Montag und noch im Gange → have been waiting since Monday.",
-     "en": "Right: started Monday, still going → have been waiting since Monday."
+     "de": "Richtig: have been waiting since Monday. since nennt den Startpunkt, das Warten dauert an: Perfect Continuous.",
+     "en": "Right: have been waiting since Monday. Since names the starting point and the waiting continues: perfect continuous."
     },
     "wrong": [
      {
@@ -30621,8 +30621,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: two weeks ist eine Zeitspanne → have been negotiating for.",
-     "en": "Right: two weeks is a length of time → have been negotiating for."
+     "de": "Richtig: have been negotiating for. two weeks ist eine Zeitspanne, daher for. Der Ablauf dauert an, am besten mit been + -ing.",
+     "en": "Right: have been negotiating for. Two weeks is a span of time, so for. The activity is ongoing, best with been + -ing."
     },
     "wrong": [
      {
@@ -30672,8 +30672,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: September ist ein Zeitpunkt → has been working remotely since.",
-     "en": "Right: September is a point in time → has been working remotely since."
+     "de": "Richtig: since September. September ist ein Startpunkt, daher since. Er arbeitet noch dort, also has been working.",
+     "en": "Right: since September. September is a starting point, so since. He still works there, so has been working."
     },
     "wrong": [
      {
@@ -30781,8 +30781,8 @@
    "answer": "a",
    "why": {
     "ok": {
-     "de": "Richtig: Satz a. for + Present Perfect gilt bis jetzt.",
-     "en": "Right: sentence a. for + Present Perfect runs up to now."
+     "de": "Satz a: have lived + for gilt bis jetzt, du wohnst noch in München. Satz b (lived) heißt: vorbei.",
+     "en": "Sentence a: have lived + for holds up to now, you still live in Munich. Sentence b (lived) means: over."
     },
     "wrong": [
      {
@@ -30864,8 +30864,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Verneinung mit haven't been + -ing: haven't been sleeping.",
-     "en": "Right: the negative uses haven't been + -ing: haven't been sleeping."
+     "de": "Richtig: haven't been sleeping. „recently“ blickt bis jetzt zurück, Verneinung: haven't been + -ing.",
+     "en": "Right: haven't been sleeping. “Recently” looks back up to now; negation: haven't been + -ing."
     },
     "wrong": [
      {
@@ -30909,8 +30909,8 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "Der Fehler: she verlangt has, nicht have.",
-     "en": "The error: she takes has, not have."
+     "de": "Der Fehler: have bei she. In der 3. Person Singular heißt das Hilfsverb has: She has been managing the account.",
+     "en": "The error: have with she. In the third person singular the auxiliary is has: She has been managing the account."
     },
     "wrong": [
      {
@@ -30943,8 +30943,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Der Fehler: Nach been steht die -ing-Form: receiving.",
-     "en": "The error: after been use the -ing form: receiving."
+     "de": "Der Fehler: receive nach been. Nach been steht die -ing-Form: haven't been receiving any replies.",
+     "en": "The error: receive after been. After been comes the -ing form: haven't been receiving any replies."
     },
     "wrong": [
      {
@@ -30974,8 +30974,8 @@
    "answer": "a",
    "why": {
     "ok": {
-     "de": "Richtig: Satz a. have been talking reicht bis jetzt.",
-     "en": "Right: sentence a. have been talking reaches up to now."
+     "de": "Satz a: have been talking läuft noch („all morning“). Satz b: had been talking war schon vorher im Gange, als der CEO kam.",
+     "en": "Sentence a: have been talking is still going on (“all morning”). Sentence b: had been talking was already in progress when the CEO came."
     },
     "wrong": [
      {
@@ -31020,8 +31020,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: lately + Entwicklung bis jetzt → have been getting longer lately.",
-     "en": "Right: lately + a development up to now → have been getting longer lately."
+     "de": "Richtig: have been getting longer lately. lately zeigt eine Entwicklung bis jetzt, also Perfect Continuous.",
+     "en": "Right: have been getting longer lately. Lately shows a development up to now, so the perfect continuous."
     },
     "wrong": [
      {
@@ -31082,8 +31082,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Spur im Jetzt (außer Atem) → has been running up the stairs.",
-     "en": "Right: trace in the present (out of breath) → has been running up the stairs."
+     "de": "Richtig: has been running up. Er ist jetzt außer Atem: Das Ergebnis der Tätigkeit sieht man jetzt, deshalb Perfect Continuous.",
+     "en": "Right: has been running up. He is out of breath now: you see the result of the activity now, hence perfect continuous."
     },
     "wrong": [
      {
@@ -31245,8 +31245,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: know ist ein Zustandsverb → have known her for, ohne -ing.",
-     "en": "Right: know is a state verb → have known her for, without -ing."
+     "de": "Richtig: have known her for ten years. know ist ein Zustandsverb: keine -ing-Form, auch wenn Deutsch „kenne seit“ sagt.",
+     "en": "Right: have known her for ten years. Know is a stative verb: no -ing form, even though German says “kenne seit”."
     },
     "wrong": [
      {
@@ -31301,8 +31301,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: have ist hier Zustand → have had this laptop since, ohne -ing.",
-     "en": "Right: have is a state here → have had this laptop since, without -ing."
+     "de": "Richtig: have had this laptop since. have bedeutet hier „besitzen“ (Zustand): Perfect, aber nie have been having.",
+     "en": "Right: have had this laptop since. Have means “own” here (state): perfect, but never have been having."
     },
     "wrong": [
      {
@@ -31435,8 +31435,8 @@
    "answer": "a",
    "why": {
     "ok": {
-     "de": "Richtig: Satz a. have known gilt bis jetzt.",
-     "en": "Right: sentence a. have known runs up to now."
+     "de": "Satz a: have known gilt bis jetzt, du kennst sie noch. Satz b (knew) beschreibt eine Zeit, die vorbei ist.",
+     "en": "Sentence a: have known holds up to now, you still know her. Sentence b (knew) describes a time that is over."
     },
     "wrong": [
      {
@@ -31470,8 +31470,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Die Tätigkeit läuft noch → have been writing.",
-     "en": "Right: the activity is still going on → have been writing."
+     "de": "Richtig: have been writing. „for an hour“ nennt die Dauer und das Schreiben läuft noch, also Verlaufsform mit been.",
+     "en": "Right: have been writing. “For an hour” gives the duration and the writing is ongoing, so the continuous form with been."
     },
     "wrong": [
      {
@@ -31525,8 +31525,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Eine Zahl zählt das Ergebnis → have written three reports.",
-     "en": "Right: a number counts the result → have written three reports."
+     "de": "Richtig: have written three reports. Eine Zahl nennt das Ergebnis, deshalb das einfache Perfect statt been writing.",
+     "en": "Right: have written three reports. A number states a result, so the simple perfect instead of been writing."
     },
     "wrong": [
      {
@@ -31596,8 +31596,8 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "Stimmt: „all morning“ + noch nicht fertig → have been reading ist richtig.",
-     "en": "Correct: “all morning” + not finished → have been reading is right."
+     "de": "Stimmt: „all morning“ und noch nicht fertig: have been reading passt, die Tätigkeit läuft noch. Kein Fehler.",
+     "en": "Correct: “all morning” and not finished yet: have been reading fits because the activity is ongoing. No error."
     },
     "wrong": [
      {
@@ -32209,8 +32209,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: understand ist ein Zustandsverb: don't understand, ohne -ing.",
-     "en": "Right: understand is a state verb: don't understand, with no -ing."
+     "de": "Richtig: don't understand. understand ist ein Zustandsverb und steht nie in der -ing-Form, auch nicht im Gespräch.",
+     "en": "Right: don't understand. Understand is a stative verb and never takes -ing, not even in conversation."
     },
     "wrong": [
      {
@@ -37374,8 +37374,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Nach „when“ (= sobald) steht Präsens: „the vendor replies“.",
-     "en": "Right: after “when” (= as soon as) use the present: “the vendor replies”."
+     "de": "Nach „when“ (= sobald) steht das Present: when the vendor replies. Das Futur trägt „I'll update“, nicht der Zeitsatz.",
+     "en": "After “when” (= as soon as) the Present is used: when the vendor replies. The future is carried by “I'll update”, not the clause."
     },
     "wrong": [
      {
@@ -37464,8 +37464,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Nach „until“ steht Präsens: „the client confirms“.",
-     "en": "Right: after “until” use the present: “the client confirms”."
+     "de": "Nach „until“ steht das Present, nicht will: until the client confirms. Das Futur trägt schon „don't send“.",
+     "en": "After “until” the Present is used, not will: until the client confirms. The future is already carried by “don't send”."
     },
     "wrong": [
      {
@@ -37868,8 +37868,8 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "Richtig: Nach „By the time“ steht Präsens: „you read“.",
-     "en": "Right: after “By the time” use the present: “you read”."
+     "de": "Nach „By the time“ steht das Present: By the time you read this. Das will gehört nicht in den Zeitsatz.",
+     "en": "After “By the time” the Present is used: By the time you read this. Will does not belong in the time clause."
     },
     "wrong": [
      {
@@ -38030,8 +38030,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: „whether“ ist hier „ob“ (Frage), deshalb bleibt will.",
-     "en": "Right: “whether” means “if” as a question here, so will stays."
+     "de": "„whether“ heißt hier „ob“ und leitet eine Frage ein, keinen Zeitsatz. Deshalb bleibt will: whether the client will sign.",
+     "en": "“Whether” means “ob” here and introduces a question, not a time clause. So will stays: whether the client will sign."
     },
     "wrong": [
      {
@@ -38075,8 +38075,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: „if“ meint hier „ob“ (Frage), deshalb steht will.",
-     "en": "Right: here “if” means “whether” (question), so will is needed."
+     "de": "„if“ heißt hier „ob“ (nach „not sure“) und ist kein Zeitsatz, deshalb will accept statt accepts.",
+     "en": "“If” means “ob” here (after “not sure”) and is not a time clause, so will accept instead of accepts."
     },
     "wrong": [
      {

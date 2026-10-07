@@ -312,8 +312,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: ein Ablauf, der ohnehin stattfindet → will be passing.",
-    "en": "Right: a plan that happens anyway → will be passing."
+    "de": "Richtig: will be passing. Das Vorbeikommen findet ohnehin heute statt, ein geplanter Ablauf in der Zukunft: will be + -ing.",
+    "en": "Right: will be passing. Passing by happens today anyway, a planned activity in the future: will be + -ing."
    },
    "wrong": [
     {
@@ -465,8 +465,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: bis du landest, ist es erledigt → will have sent.",
-    "en": "Right: by the time you land it is done → will have sent."
+    "de": "Richtig: will have sent. „By the time you land“ setzt eine Frist: Bis dahin ist die Aufgabe erledigt, also will have + 3. Form.",
+    "en": "Right: will have sent. “By the time you land” sets a deadline: the task is done by then, so will have + past participle."
    },
    "wrong": [
     {
@@ -781,8 +781,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: die Dauer bis September → will have been using.",
-    "en": "Right: duration up to September → will have been using."
+    "de": "Richtig: will have been using. „for six months“ nennt die Dauer bis September: will have been + -ing.",
+    "en": "Right: will have been using. “For six months” gives the duration up to September: will have been + -ing."
    },
    "wrong": [
     {

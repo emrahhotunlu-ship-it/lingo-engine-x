@@ -118,8 +118,8 @@
   "pat": "hg.inclined",
   "why": {
    "ok": {
-    "de": "Richtig: be inclined + to + Grundform nennt eine persönliche Tendenz.",
-    "en": "Right: be inclined + to + base verb names a personal leaning."
+    "de": "be inclined verlangt to + Grundform: I'd be inclined to start. Es drückt eine vorsichtige persönliche Tendenz aus.",
+    "en": "Be inclined takes to + base form: I'd be inclined to start. It expresses a cautious personal leaning."
    },
    "wrong": [
     {
@@ -310,8 +310,8 @@
   "pat": "hg.worth",
   "why": {
    "ok": {
-    "de": "Richtig: Nach worth steht die -ing-Form: worth checking.",
-    "en": "Right: worth is followed by the -ing form: worth checking."
+    "de": "Nach worth steht die -ing-Form: worth checking. Deutsch „es lohnt sich, zu prüfen“ verleitet zu worth to check.",
+    "en": "After worth comes the -ing form: worth checking. German “es lohnt sich, zu prüfen” tempts learners into worth to check."
    },
    "wrong": [
     {
@@ -336,8 +336,8 @@
   "pat": "hg.inclined",
   "why": {
    "ok": {
-    "de": "Richtig: Nach be inclined folgt to + Grundform: to start.",
-    "en": "Right: be inclined needs to + base verb: to start."
+    "de": "be inclined braucht to + Grundform, nicht -ing: I would be inclined to start. Wirkt vorsichtiger als „I'll start“.",
+    "en": "Be inclined needs to + base form, not -ing: I would be inclined to start. It sounds more tentative than “I'll start”."
    },
    "wrong": [
     {
@@ -390,8 +390,8 @@
   "pat": "hg.worth",
   "why": {
    "ok": {
-    "de": "Richtig: Nach worth steht immer die -ing-Form: worth waiting.",
-    "en": "Right: worth is always followed by the -ing form: worth waiting."
+    "de": "Nach worth steht immer die -ing-Form: worth waiting. „worth to wait“ gibt es im Englischen nicht.",
+    "en": "After worth the -ing form always follows: worth waiting. “Worth to wait” does not exist in English."
    },
    "wrong": [
     {

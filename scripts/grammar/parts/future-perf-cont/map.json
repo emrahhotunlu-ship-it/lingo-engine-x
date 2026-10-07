@@ -446,8 +446,8 @@
   "pat": "fut.cont-plan",
   "why": {
    "ok": {
-    "de": "Richtig: Vorhersage über etwas, das dann läuft → will be working.",
-    "en": "Right: a prediction about something that will be going on then → will be working."
+    "de": "Richtig: will be working. Das ist eine Vorhersage über einen Zustand „In 2030“, nicht über etwas, das dann schon erledigt ist.",
+    "en": "Right: will be working. This predicts a situation “in 2030”, not something already completed by then."
    },
    "wrong": [
     {

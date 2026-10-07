@@ -18,8 +18,8 @@
   ],
   "why": {
    "ok": {
-    "de": "„on Wednesday“ ist vorbei → Past Simple: last talked to.",
-    "en": "“on Wednesday” is over → Past Simple: last talked to."
+    "de": "„on Wednesday“ ist ein vergangener Zeitpunkt: Past Simple. last talked to oder last spoke to, ohne have.",
+    "en": "“On Wednesday” is a finished point in time: Past Simple. last talked to or last spoke to, without have."
    },
    "wrong": [
     {
@@ -60,8 +60,8 @@
   ],
   "why": {
    "ok": {
-    "de": "„when“ fragt nach einem Zeitpunkt → Past Simple: when you last visited.",
-    "en": "“when” asks for a point in time → Past Simple: when you last visited."
+    "de": "when fragt nach der Zeit eines vergangenen Besuchs: when you last visited (Past Simple). In der indirekten Frage ohne did.",
+    "en": "When asks for the time of a past visit: when you last visited (Past Simple). In an indirect question there is no did."
    },
    "wrong": [
     {
@@ -98,8 +98,8 @@
   ],
   "why": {
    "ok": {
-    "de": "„since January“ und wir nutzen es noch → have been using.",
-    "en": "“since January” + we still use it → have been using."
+    "de": "„since January“ und die Nutzung läuft noch: have been using. Deutsch „nutzen seit“ im Präsens, Englisch mit Perfect.",
+    "en": "“Since January” and the use is ongoing: have been using. German says “nutzen seit” in the present, English uses the perfect."
    },
    "wrong": [
     {
@@ -143,8 +143,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Der Zeitraum reicht bis jetzt → hasn't called us since.",
-    "en": "The period reaches up to now → hasn't called us since."
+    "de": "since September dauert bis jetzt: hasn't called us since. Ein bisher ausgebliebener Anruf braucht das Present Perfect.",
+    "en": "Since September lasts up to now: hasn't called us since. A call that has not happened so far needs the Present Perfect."
    },
    "wrong": [
     {
@@ -186,8 +186,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Erfahrung bis jetzt, ohne dass ein Zeitpunkt zählt → have never managed.",
-    "en": "Experience up to now, no time named → have never managed."
+    "de": "before und noch nie: Erfahrung bis jetzt, ohne Zeitpunkt. Deshalb have never managed, nicht „never managed“ allein.",
+    "en": "Before and never: experience up to now, with no point in time. So have never managed, not “never managed” alone."
    },
    "wrong": [
     {
@@ -228,8 +228,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Superlativ mit Erfahrung bis jetzt → I have ever seen.",
-    "en": "Superlative + experience up to now → I have ever seen."
+    "de": "Nach dem Superlativ („the best“) zählt alles bis jetzt: I have ever seen. Ohne Zeitpunkt steht das Present Perfect.",
+    "en": "After a superlative (“the best”) everything up to now counts: I have ever seen. With no point in time, Present Perfect is used."
    },
    "wrong": [
     {
@@ -272,8 +272,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Ganz neu, ohne dass ein Zeitpunkt zählt → has just announced.",
-    "en": "Brand new, no time named → has just announced."
+    "de": "just betont: ganz neu, die Nachricht gilt jetzt. Deshalb has just announced, ohne genannte Zeit.",
+    "en": "Just stresses: brand new, the news counts now. So has just announced, with no stated time."
    },
    "wrong": [
     {
@@ -312,8 +312,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Der Stand jetzt zählt → still hasn't replied.",
-    "en": "The status now counts → still hasn't replied."
+    "de": "still hasn't replied: Die Antwort fehlt bis jetzt, und es zählt der Stand heute. Kein Zeitpunkt, also kein Past Simple.",
+    "en": "still hasn't replied: the answer is missing as of now, and the current state matters. No point in time, so no Past Simple."
    },
    "wrong": [
     {
@@ -354,8 +354,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Schon erledigt, die Folge gilt jetzt → has already finished.",
-    "en": "Already done, the consequence holds now → has already finished."
+    "de": "already zeigt: Es ist schon erledigt und das Ergebnis zählt jetzt: has already finished, kein Zeitpunkt.",
+    "en": "Already shows it is done and the result matters now: has already finished, no point in time."
    },
    "wrong": [
     {
@@ -390,8 +390,8 @@
   "accepted": [],
   "why": {
    "ok": {
-    "de": "„on Tuesday“ ist vorbei, daher reviewed statt has reviewed.",
-    "en": "“on Tuesday” is over, so reviewed instead of has reviewed."
+    "de": "„on Tuesday“ ist ein genannter Tag: Past Simple reviewed, nicht has reviewed. Das Perfect nennt keinen Zeitpunkt.",
+    "en": "“On Tuesday” is a stated day: Past Simple reviewed, not has reviewed. The perfect gives no point in time."
    },
    "wrong": [
     {
@@ -449,8 +449,8 @@
   "accepted": [],
   "why": {
    "ok": {
-    "de": "„at 9 a.m. on Friday“ ist ein Zeitpunkt → Who opened …?",
-    "en": "“at 9 a.m. on Friday” is a point in time → Who opened …?"
+    "de": "„at 9 a.m. on Friday“ nennt Uhrzeit und Tag: Past Simple, also Who opened …? Has opened passt nicht dazu.",
+    "en": "“At 9 a.m. on Friday” names time and day: Past Simple, so Who opened …? Has opened does not fit."
    },
    "wrong": [
     {
@@ -529,8 +529,8 @@
   "accepted": [],
   "why": {
    "ok": {
-    "de": "„How long“ fragt nach der Zeit bis jetzt → have you known (Zustandsverb, kein -ing).",
-    "en": "“How long” asks about the time up to now → have you known (stative verb, no -ing)."
+    "de": "„How long“ fragt nach der Dauer bis jetzt: have you known. Deutsch „kennst du seit“, Englisch braucht have, kein -ing.",
+    "en": "“How long” asks for duration up to now: have you known. German says “kennst du seit”, English needs have, and no -ing."
    },
    "wrong": [
     {
@@ -577,8 +577,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Nach „the second time“ zählt die Erfahrung bis jetzt → have lost.",
-    "en": "After “the second time” the experience up to now counts → have lost."
+    "de": "„the second time this month“ zählt bis jetzt: we have lost. Das Verb braucht das Present Perfect, kein Past Simple.",
+    "en": "“The second time this month” counts up to now: we have lost. The verb needs the Present Perfect, not the Past Simple."
    },
    "wrong": [
     {
@@ -659,8 +659,8 @@
   ],
   "why": {
    "ok": {
-    "de": "„noch nicht“ heißt haven't … yet; already passt hier nicht.",
-    "en": "“noch nicht” is haven't … yet; already does not fit here."
+    "de": "In der Verneinung heißt „noch nicht“ yet: haven't sent … yet. already steht in Fragen und Bejahungen, nicht hier.",
+    "en": "In a negation “noch nicht” is yet: haven't sent … yet. Already belongs in statements and questions, not here."
    },
    "wrong": [
     {
@@ -692,8 +692,8 @@
   "accepted": [],
   "why": {
    "ok": {
-    "de": "Stimmt: Das Ergebnis zählt jetzt, ohne Zeitpunkt → has approved.",
-    "en": "Correct: the result counts now, with no time named → has approved."
+    "de": "Kein Fehler: has approved nennt das Ergebnis jetzt („so we can start hiring“) und keinen Zeitpunkt.",
+    "en": "No error: has approved states the result as of now (“so we can start hiring”) and gives no point in time."
    },
    "wrong": [
     {
@@ -717,8 +717,8 @@
   "answer": "a",
   "why": {
    "ok": {
-    "de": "„on Friday“ nennt die Zeit, deshalb Past Simple.",
-    "en": "“on Friday” names the time, so the Past Simple."
+    "de": "Satz a nennt „on Friday“, einen festen Zeitpunkt. Dann ist Past Simple richtig, das Perfect in b nennt keinen.",
+    "en": "Sentence a names “on Friday”, a fixed point in time, so Past Simple fits. The perfect in b names none."
    },
    "wrong": [
     {
@@ -807,8 +807,8 @@
   "answer": "b",
   "why": {
    "ok": {
-    "de": "has crashed ohne Zeitpunkt: Das Ergebnis gilt jetzt.",
-    "en": "has crashed with no time: the result holds now."
+    "de": "Satz b: has crashed nennt kein Datum, wichtig ist das Ergebnis jetzt (Server down). Satz a nennt nur die Uhrzeit.",
+    "en": "Sentence b: has crashed gives no time, the result now matters (server is down). Sentence a only names the time."
    },
    "wrong": [
     {
@@ -838,8 +838,8 @@
   "answer": "a",
   "why": {
    "ok": {
-    "de": "recently nennt keinen Zeitpunkt: Die Neuigkeit gilt jetzt.",
-    "en": "recently names no point in time: the news holds now."
+    "de": "Satz a: recently ohne Datum, die Preise sind jetzt höher. Satz b nennt „in January“ und erzählt ein Ereignis.",
+    "en": "Sentence a: recently without a date, prices are higher now. Sentence b names “in January” and tells an event."
    },
    "wrong": [
     {

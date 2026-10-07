@@ -406,8 +406,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Der Fehler: Es fehlt to: going to open.",
-    "en": "The error: to is missing: going to open."
+    "de": "Der Fehler: „going open“. Ein Plan braucht going to + Grundform: We're going to open a second office.",
+    "en": "The error: “going open”. A plan needs going to + base form: We're going to open a second office."
    },
    "wrong": [
     {
@@ -657,8 +657,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Der Fehler: Es fehlt to: were going to send.",
-    "en": "The error: to is missing: were going to send."
+    "de": "Der Fehler: „going send“. Ein früherer Plan braucht were going to + Grundform: were going to send.",
+    "en": "The error: “going send”. A past plan needs were going to + base form: were going to send."
    },
    "wrong": [
     {
@@ -1115,8 +1115,8 @@
   "answer": "a",
   "why": {
    "ok": {
-    "de": "Richtig: Satz a. about to = in Sekunden oder Minuten.",
-    "en": "Right: sentence a. about to = within seconds or minutes."
+    "de": "Satz a: about to heißt „gleich“, in Sekunden oder Minuten. Satz b nennt „sometime this afternoon“, also irgendwann.",
+    "en": "Sentence a: about to means “right away”, in seconds or minutes. Sentence b says “sometime this afternoon”, so later."
    },
    "wrong": [
     {

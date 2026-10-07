@@ -16,8 +16,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: „since March“ und die Arbeit läuft noch → have been testing.",
-    "en": "Right: “since March” + still going → have been testing."
+    "de": "Richtig: „since March“ und der Test läuft noch: have been testing. Verlaufsform, weil die Dauer zählt, nicht das Ergebnis.",
+    "en": "Right: “since March” and the testing is ongoing: have been testing. Continuous form because the duration matters, not the result."
    },
    "wrong": [
     {
@@ -67,8 +67,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Start am Montag und noch im Gange → have been waiting since Monday.",
-    "en": "Right: started Monday, still going → have been waiting since Monday."
+    "de": "Richtig: have been waiting since Monday. since nennt den Startpunkt, das Warten dauert an: Perfect Continuous.",
+    "en": "Right: have been waiting since Monday. Since names the starting point and the waiting continues: perfect continuous."
    },
    "wrong": [
     {
@@ -245,8 +245,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: two weeks ist eine Zeitspanne → have been negotiating for.",
-    "en": "Right: two weeks is a length of time → have been negotiating for."
+    "de": "Richtig: have been negotiating for. two weeks ist eine Zeitspanne, daher for. Der Ablauf dauert an, am besten mit been + -ing.",
+    "en": "Right: have been negotiating for. Two weeks is a span of time, so for. The activity is ongoing, best with been + -ing."
    },
    "wrong": [
     {
@@ -295,8 +295,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: September ist ein Zeitpunkt → has been working remotely since.",
-    "en": "Right: September is a point in time → has been working remotely since."
+    "de": "Richtig: since September. September ist ein Startpunkt, daher since. Er arbeitet noch dort, also has been working.",
+    "en": "Right: since September. September is a starting point, so since. He still works there, so has been working."
    },
    "wrong": [
     {
@@ -401,8 +401,8 @@
   "answer": "a",
   "why": {
    "ok": {
-    "de": "Richtig: Satz a. for + Present Perfect gilt bis jetzt.",
-    "en": "Right: sentence a. for + Present Perfect runs up to now."
+    "de": "Satz a: have lived + for gilt bis jetzt, du wohnst noch in München. Satz b (lived) heißt: vorbei.",
+    "en": "Sentence a: have lived + for holds up to now, you still live in Munich. Sentence b (lived) means: over."
    },
    "wrong": [
     {
@@ -482,8 +482,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Verneinung mit haven't been + -ing: haven't been sleeping.",
-    "en": "Right: the negative uses haven't been + -ing: haven't been sleeping."
+    "de": "Richtig: haven't been sleeping. „recently“ blickt bis jetzt zurück, Verneinung: haven't been + -ing.",
+    "en": "Right: haven't been sleeping. “Recently” looks back up to now; negation: haven't been + -ing."
    },
    "wrong": [
     {
@@ -526,8 +526,8 @@
   "accepted": [],
   "why": {
    "ok": {
-    "de": "Der Fehler: she verlangt has, nicht have.",
-    "en": "The error: she takes has, not have."
+    "de": "Der Fehler: have bei she. In der 3. Person Singular heißt das Hilfsverb has: She has been managing the account.",
+    "en": "The error: have with she. In the third person singular the auxiliary is has: She has been managing the account."
    },
    "wrong": [
     {
@@ -559,8 +559,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Der Fehler: Nach been steht die -ing-Form: receiving.",
-    "en": "The error: after been use the -ing form: receiving."
+    "de": "Der Fehler: receive nach been. Nach been steht die -ing-Form: haven't been receiving any replies.",
+    "en": "The error: receive after been. After been comes the -ing form: haven't been receiving any replies."
    },
    "wrong": [
     {
@@ -589,8 +589,8 @@
   "answer": "a",
   "why": {
    "ok": {
-    "de": "Richtig: Satz a. have been talking reicht bis jetzt.",
-    "en": "Right: sentence a. have been talking reaches up to now."
+    "de": "Satz a: have been talking läuft noch („all morning“). Satz b: had been talking war schon vorher im Gange, als der CEO kam.",
+    "en": "Sentence a: have been talking is still going on (“all morning”). Sentence b: had been talking was already in progress when the CEO came."
    },
    "wrong": [
     {
@@ -634,8 +634,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: lately + Entwicklung bis jetzt → have been getting longer lately.",
-    "en": "Right: lately + a development up to now → have been getting longer lately."
+    "de": "Richtig: have been getting longer lately. lately zeigt eine Entwicklung bis jetzt, also Perfect Continuous.",
+    "en": "Right: have been getting longer lately. Lately shows a development up to now, so the perfect continuous."
    },
    "wrong": [
     {
@@ -695,8 +695,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Spur im Jetzt (außer Atem) → has been running up the stairs.",
-    "en": "Right: trace in the present (out of breath) → has been running up the stairs."
+    "de": "Richtig: has been running up. Er ist jetzt außer Atem: Das Ergebnis der Tätigkeit sieht man jetzt, deshalb Perfect Continuous.",
+    "en": "Right: has been running up. He is out of breath now: you see the result of the activity now, hence perfect continuous."
    },
    "wrong": [
     {
@@ -854,8 +854,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: know ist ein Zustandsverb → have known her for, ohne -ing.",
-    "en": "Right: know is a state verb → have known her for, without -ing."
+    "de": "Richtig: have known her for ten years. know ist ein Zustandsverb: keine -ing-Form, auch wenn Deutsch „kenne seit“ sagt.",
+    "en": "Right: have known her for ten years. Know is a stative verb: no -ing form, even though German says “kenne seit”."
    },
    "wrong": [
     {
@@ -909,8 +909,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: have ist hier Zustand → have had this laptop since, ohne -ing.",
-    "en": "Right: have is a state here → have had this laptop since, without -ing."
+    "de": "Richtig: have had this laptop since. have bedeutet hier „besitzen“ (Zustand): Perfect, aber nie have been having.",
+    "en": "Right: have had this laptop since. Have means “own” here (state): perfect, but never have been having."
    },
    "wrong": [
     {
@@ -1039,8 +1039,8 @@
   "answer": "a",
   "why": {
    "ok": {
-    "de": "Richtig: Satz a. have known gilt bis jetzt.",
-    "en": "Right: sentence a. have known runs up to now."
+    "de": "Satz a: have known gilt bis jetzt, du kennst sie noch. Satz b (knew) beschreibt eine Zeit, die vorbei ist.",
+    "en": "Sentence a: have known holds up to now, you still know her. Sentence b (knew) describes a time that is over."
    },
    "wrong": [
     {
@@ -1073,8 +1073,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Die Tätigkeit läuft noch → have been writing.",
-    "en": "Right: the activity is still going on → have been writing."
+    "de": "Richtig: have been writing. „for an hour“ nennt die Dauer und das Schreiben läuft noch, also Verlaufsform mit been.",
+    "en": "Right: have been writing. “For an hour” gives the duration and the writing is ongoing, so the continuous form with been."
    },
    "wrong": [
     {
@@ -1127,8 +1127,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Eine Zahl zählt das Ergebnis → have written three reports.",
-    "en": "Right: a number counts the result → have written three reports."
+    "de": "Richtig: have written three reports. Eine Zahl nennt das Ergebnis, deshalb das einfache Perfect statt been writing.",
+    "en": "Right: have written three reports. A number states a result, so the simple perfect instead of been writing."
    },
    "wrong": [
     {
@@ -1196,8 +1196,8 @@
   "accepted": [],
   "why": {
    "ok": {
-    "de": "Stimmt: „all morning“ + noch nicht fertig → have been reading ist richtig.",
-    "en": "Correct: “all morning” + not finished → have been reading is right."
+    "de": "Stimmt: „all morning“ und noch nicht fertig: have been reading passt, die Tätigkeit läuft noch. Kein Fehler.",
+    "en": "Correct: “all morning” and not finished yet: have been reading fits because the activity is ongoing. No error."
    },
    "wrong": [
     {

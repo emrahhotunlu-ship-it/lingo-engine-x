@@ -86,8 +86,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Nach „when“ (= sobald) steht Präsens: „the vendor replies“.",
-    "en": "Right: after “when” (= as soon as) use the present: “the vendor replies”."
+    "de": "Nach „when“ (= sobald) steht das Present: when the vendor replies. Das Futur trägt „I'll update“, nicht der Zeitsatz.",
+    "en": "After “when” (= as soon as) the Present is used: when the vendor replies. The future is carried by “I'll update”, not the clause."
    },
    "wrong": [
     {
@@ -174,8 +174,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Nach „until“ steht Präsens: „the client confirms“.",
-    "en": "Right: after “until” use the present: “the client confirms”."
+    "de": "Nach „until“ steht das Present, nicht will: until the client confirms. Das Futur trägt schon „don't send“.",
+    "en": "After “until” the Present is used, not will: until the client confirms. The future is already carried by “don't send”."
    },
    "wrong": [
     {
@@ -568,8 +568,8 @@
   "accepted": [],
   "why": {
    "ok": {
-    "de": "Richtig: Nach „By the time“ steht Präsens: „you read“.",
-    "en": "Right: after “By the time” use the present: “you read”."
+    "de": "Nach „By the time“ steht das Present: By the time you read this. Das will gehört nicht in den Zeitsatz.",
+    "en": "After “By the time” the Present is used: By the time you read this. Will does not belong in the time clause."
    },
    "wrong": [
     {
@@ -726,8 +726,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: „whether“ ist hier „ob“ (Frage), deshalb bleibt will.",
-    "en": "Right: “whether” means “if” as a question here, so will stays."
+    "de": "„whether“ heißt hier „ob“ und leitet eine Frage ein, keinen Zeitsatz. Deshalb bleibt will: whether the client will sign.",
+    "en": "“Whether” means “ob” here and introduces a question, not a time clause. So will stays: whether the client will sign."
    },
    "wrong": [
     {
@@ -770,8 +770,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: „if“ meint hier „ob“ (Frage), deshalb steht will.",
-    "en": "Right: here “if” means “whether” (question), so will is needed."
+    "de": "„if“ heißt hier „ob“ (nach „not sure“) und ist kein Zeitsatz, deshalb will accept statt accepts.",
+    "en": "“If” means “ob” here (after “not sure”) and is not a time clause, so will accept instead of accepts."
    },
    "wrong": [
     {
