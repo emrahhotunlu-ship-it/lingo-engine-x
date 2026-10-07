@@ -8,10 +8,11 @@ import { Slot } from '../../app/slots';
 // Menü ⋯ (§4.3) rechts in der Urteilszeile: am Handy ein Blatt von unten, ab 768 px ein kleines Menü.
 // (`Icon` kennt kein ⋯; das Symbol ist hier als drei Punkte inline gezeichnet.)
 
-const ORDER: readonly ShellMenuId[] = ['override', 'copyOnce', 'translate', 'moreInfo', 'askClaude', 'wholeTopic', 'report'];
+const ORDER: readonly ShellMenuId[] = ['override', 'copyOnce', 'showMe', 'translate', 'moreInfo', 'askClaude', 'wholeTopic', 'report'];
 const LABEL: Record<ShellMenuId, MessageKey> = {
   override: 'exMenuOverride',
   copyOnce: 'exMenuCopyOnce',
+  showMe: 'eeFmShowMe',
   translate: 'exMenuTranslate',
   moreInfo: 'exMenuMoreInfo',
   askClaude: 'exMenuAskClaude',

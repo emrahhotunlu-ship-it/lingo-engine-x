@@ -1,0 +1,179 @@
+{
+  "v": 1,
+  "items": [
+    {
+      "id": "f.inv.negative",
+      "topic": "inversion",
+      "pat": "inv.negative",
+      "title": { "de": "Never nach vorn: Inversion", "en": "Never up front: inversion" },
+      "de": "So eine starke Nachfrage nach unseren Leistungen haben wir noch nie erlebt.",
+      "predict": {
+        "kind": "tap",
+        "q": { "de": "Welches Wort wandert gleich an den Satzanfang? Tippe es an.", "en": "Which word moves to the front? Tap it." },
+        "ans": [2]
+      },
+      "steps": [
+        {
+          "en": "We have never seen such strong demand for our services.",
+          "hi": [2],
+          "note": { "de": "Normale Wortstellung: Subjekt, dann have, dann never.", "en": "Normal word order: subject, then have, then never." }
+        },
+        {
+          "en": "Never have we seen such strong demand for our services.",
+          "hi": [0, 1, 2],
+          "note": {
+            "de": "Never rückt nach vorn, und das Hilfsverb have springt vor das Subjekt we. Das klingt formell und betont.",
+            "en": "Never moves to the front, and the auxiliary have jumps ahead of the subject we. It sounds formal and emphatic."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f.em.it-cleft",
+      "topic": "c1-emphasis",
+      "pat": "em.it-cleft",
+      "title": { "de": "It was … who: ein Satzglied herausheben", "en": "It was … who: singling out one part" },
+      "de": "Es war unser Kunde in Chicago, der das Problem angesprochen hat (nicht unser Team).",
+      "predict": {
+        "kind": "pick",
+        "q": { "de": "Du willst „our client in Chicago“ betonen. Wie beginnt der Satz?", "en": "You want to stress “our client in Chicago.” How does the sentence start?" },
+        "opts": ["It was our client in Chicago who …", "Was our client in Chicago who …"],
+        "ans": 0
+      },
+      "steps": [
+        {
+          "en": "Our client in Chicago raised the issue.",
+          "hi": [0, 1, 2, 3],
+          "note": { "de": "Ein neutraler Satz: Wer hat das Problem angesprochen?", "en": "A neutral sentence: who raised the issue?" }
+        },
+        {
+          "en": "It was our client in Chicago who raised the issue.",
+          "hi": [0, 1, 6],
+          "note": {
+            "de": "It was rahmt die Person ein, who schließt den Rest an. So rückst du eine falsche Annahme zurecht: der Kunde, nicht das Team.",
+            "en": "It was frames the person, and who links the rest. This corrects a wrong assumption: the client, not the team."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f.pp.personal",
+      "topic": "passive-plus",
+      "pat": "pp.personal",
+      "title": { "de": "is said to: sachlich berichten", "en": "is said to: neutral reporting" },
+      "de": "Das Unternehmen soll Entlassungen planen.",
+      "predict": {
+        "kind": "pick",
+        "q": { "de": "Die Quelle (People) soll verschwinden. Wie beginnt der Satz?", "en": "The source (People) should disappear. How does the sentence start?" },
+        "opts": ["It is said that …", "It says that …"],
+        "ans": 0
+      },
+      "steps": [
+        {
+          "en": "People say that the company is planning layoffs.",
+          "hi": [0, 1],
+          "note": { "de": "Wer es sagt, ist unwichtig: People ist nur ein Platzhalter.", "en": "Who says it doesn't matter: People is just a placeholder." }
+        },
+        {
+          "en": "It is said that the company is planning layoffs.",
+          "hi": [0, 1, 2],
+          "note": { "de": "It is said that …: unpersönliches Passiv, die Quelle fällt weg.", "en": "It is said that …: impersonal passive, the source drops out." }
+        },
+        {
+          "en": "The company is said to be planning layoffs.",
+          "hi": [2, 3, 4, 5],
+          "note": {
+            "de": "Noch knapper: Subjekt + is said to + Grundform. Hier to be planning, weil es gerade läuft.",
+            "en": "Even shorter: subject + is said to + base form. Here to be planning, because it's happening now."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f.mc.past-cond",
+      "topic": "mixed-cond",
+      "pat": "mc.past-cond",
+      "title": { "de": "Mixed Conditional: früher → jetzt", "en": "Mixed conditional: past → now" },
+      "de": "Hätten wir letztes Jahr mehr Entwickler eingestellt, lägen wir jetzt nicht hinter dem Zeitplan.",
+      "predict": {
+        "kind": "pick",
+        "q": { "de": "Welche Form kommt in die if-Hälfte?", "en": "Which form goes in the if-half?" },
+        "opts": ["If we had hired …", "If we would have hired …"],
+        "ans": 0
+      },
+      "steps": [
+        {
+          "en": "We didn't hire more engineers last year, so we are behind schedule now.",
+          "hi": [5, 6, 12],
+          "note": { "de": "Zwei Zeiten in einem Satz: last year (früher) und now (jetzt).", "en": "Two times in one sentence: last year (past) and now (present)." }
+        },
+        {
+          "en": "If we had hired more engineers last year, we wouldn't be behind schedule now.",
+          "move": [[2, 3], [9, 10]],
+          "hi": [0, 2, 3, 9, 10],
+          "note": {
+            "de": "If + had + 3. Form für das Frühere, would + Grundform für die Folge jetzt. Jede Hälfte behält ihre Zeit.",
+            "en": "If + had + past participle for the past, would + base form for the result now. Each half keeps its own time."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f.cp.having",
+      "topic": "c1-participle",
+      "pat": "cp.having",
+      "title": { "de": "Having + 3. Form: vorher erledigt", "en": "Having + past participle: done before" },
+      "de": "Nachdem wir die Daten analysiert hatten, haben wir die Prognose überarbeitet.",
+      "predict": {
+        "kind": "tap",
+        "q": { "de": "Zwei Wörter verschwinden gleich. Tippe eins davon an.", "en": "Two words are about to disappear. Tap one of them." },
+        "ans": [0, 1]
+      },
+      "steps": [
+        {
+          "en": "After we had analyzed the data, we revised the forecast.",
+          "hi": [0, 1, 2],
+          "note": { "de": "Zwei Teile, dasselbe Subjekt we: erst analysieren, dann überarbeiten.", "en": "Two parts, the same subject we: first analyze, then revise." }
+        },
+        {
+          "en": "Having analyzed the data, we revised the forecast.",
+          "move": [[2, 0]],
+          "hi": [0, 1],
+          "note": {
+            "de": "Having + 3. Form ersetzt After we had: kürzer und formeller. Das Subjekt steht nur noch einmal, im Hauptsatz.",
+            "en": "Having + past participle replaces After we had: shorter and more formal. The subject appears only once, in the main clause."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f.nm.noun-form",
+      "topic": "c1-nominal",
+      "pat": "nm.noun-form",
+      "title": { "de": "Verb → Nomen: formell verdichten", "en": "Verb → noun: formal and dense" },
+      "de": "Die zügige Einführung des Systems hat zu sinkenden Kosten geführt.",
+      "predict": {
+        "kind": "pick",
+        "q": { "de": "Welches Nomen gehört zu implement?", "en": "Which noun belongs to implement?" },
+        "opts": ["implementation", "implementing"],
+        "ans": 0
+      },
+      "steps": [
+        {
+          "en": "We implemented the system swiftly, so costs fell.",
+          "hi": [1, 4, 7],
+          "note": { "de": "Verb, Adverb, Verb: lebendig, aber eher mündlich.", "en": "Verb, adverb, verb: lively, but rather spoken." }
+        },
+        {
+          "en": "The swift implementation of the system led to a fall in costs.",
+          "move": [[1, 2], [4, 1], [2, 4], [7, 9]],
+          "hi": [1, 2, 3, 9],
+          "note": {
+            "de": "Formell wird aus dem Verb ein Nomen (implement → implementation), aus dem Adverb ein Adjektiv (swiftly → swift) und aus fell a fall in.",
+            "en": "In formal English the verb becomes a noun (implement → implementation), the adverb an adjective (swiftly → swift), and fell becomes a fall in."
+          }
+        }
+      ]
+    }
+  ]
+}
