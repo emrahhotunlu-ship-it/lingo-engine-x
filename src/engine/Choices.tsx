@@ -1,8 +1,7 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 import { DURATION } from '../ui/motion';
-import { verdictHaptic } from '../platform/haptics';
-import { playCue } from '../platform/sound';
+import { emit } from './fx';
 import { useT } from '../i18n';
 import { CHOICE_LETTERS, keyToIndex } from './choiceKeys';
 
@@ -54,10 +53,10 @@ export function Choices(props: Props) {
 
 function LegacyChoices({ items, chosen, onChoose, label, letters = false }: LegacyProps) {
   const done = chosen !== null;
-  // Vibration beim Wählen (Kap. 4.3) – auch bei Wahl per Ziffer; nur wo möglich und eingeschaltet.
-  const verdict = chosen === null ? null : items.find((o) => o.id === chosen)?.correct ? 'correct' : 'wrong';
+  // Ton und Vibration beim Wählen (Kap. 4.3, 4.7) – auch bei Wahl per Ziffer – melden wir als Lernereignis; der Dirigent (`engine/fx`) spielt sie einmal.
+  const verdict = chosen === null ? null : items.find((o) => o.id === chosen)?.correct ? 'ok' : 'wrong';
   useEffect(() => {
-    if (verdict) verdictHaptic(verdict);
+    if (verdict) emit({ k: 'verdict', v: verdict });
   }, [verdict, chosen]);
   return (
     <div role="group" aria-label={label} className={letters ? 'grid grid-cols-1 gap-3' : 'grid gap-2 sm:grid-cols-2'} data-testid="choices">
@@ -73,10 +72,7 @@ function LegacyChoices({ items, chosen, onChoose, label, letters = false }: Lega
             aria-pressed={o.id === chosen}
             whileTap={done ? undefined : { scale: 0.98 }}
             transition={{ duration: DURATION.fast }}
-            onClick={() => {
-              playCue(o.correct ? 'correct' : 'wrong');
-              onChoose(o.id);
-            }}
+            onClick={() => onChoose(o.id)}
             className={letters ? 'lx-choice lx-choice-big' : 'lx-choice'}
           >
             <span className={letters ? 'lx-choice-key lx-choice-letter' : 'lx-choice-key'} aria-hidden="true">

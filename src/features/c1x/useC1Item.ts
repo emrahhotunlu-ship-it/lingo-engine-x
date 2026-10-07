@@ -58,6 +58,8 @@ export type C1ItemProps = {
   noHelp?: boolean;
   profile?: InputProfile;
   topicRound?: boolean;
+  /** Kein automatisches Weiter nach einer richtigen Antwort (Tempo-Runde, P24). */
+  noAuto?: boolean;
 };
 
 const nonEmpty = (s: string | null | undefined): s is string => !!s && s.trim().length > 0;
@@ -65,7 +67,7 @@ const nonEmpty = (s: string | null | undefined): s is string => !!s && s.trim().
 const tick = (): number => performance.now();
 
 export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObject<HTMLDivElement | null>): ExerciseShellProps {
-  const { task, ctx, day, onDone, area = 'trainer', badge = null, noHelp = false, profile: profileProp, topicRound = false } = props;
+  const { task, ctx, day, onDone, area = 'trainer', badge = null, noHelp = false, profile: profileProp, topicRound = false, noAuto = false } = props;
   const item = task.c1;
   const { t, lang } = useT();
   const api = useHiddenInput();
@@ -283,7 +285,7 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
       tutor,
       parts: createElement(ResultParts, { score: fb.score }),
       after: createElement(ResultAfter, { item, matched }),
-      auto: fb.help === 0 && !fb.override && fb.score.free,
+      auto: !noAuto && fb.help === 0 && !fb.override && fb.score.free,
     };
   }
 

@@ -17,6 +17,9 @@ Messung nach **jedem** Paket (Byte der `dist/index.html`, Differenz zum Vorgäng
 | 07.10.2026 | P16 | 4.459.761 | +3.761 | 4,25 | kwt: Handy-Bausteine, Teil B getippt, `kindRound`; Schalter `kwt` an |
 | 07.10.2026 | P17 | 4.463.280 | +3.519 | 4,26 | err: TapSentence, Chips, Teil-Tippen, Messwerte; Schalter `err` an |
 | 07.10.2026 | P20/P21 | 4.545.191 | +81.911 | 4,33 | ocl/mcc: Oberfläche, Lexik-Buchung, Inhalt K2 (120 + 120 Aufgaben, gepackt); Schalter `mcc` und `ocl` an |
+| 07.10.2026 | Stand Test-Link 5 (7173d43) | 4.578.365 | – | 4,37 | Ausgangswert für Release 2 (zuletzt eingechecktes `dist`) |
+| 07.10.2026 | P24 | 4.591.348 | +12.983 | 4,38 | Tempo-Runde: Auswahl, Messwerte, Runde, Eingabeformen kwt Teil B, Kachel, Texte DE/EN, Stile |
+| 07.10.2026 | P30 | 4.597.416 | +6.068 | 4,38 | Effekte-Fundament: `engine/fx` (Ereignisse, Dirigent, Stufe), Feder-Tokens, Stufe 1 als CSS, Einstellungen › Effekte |
 
 ## Planrechnung (LP3 §9, Modell)
 

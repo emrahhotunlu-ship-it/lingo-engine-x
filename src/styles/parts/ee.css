@@ -1,1 +1,64 @@
-/* Lernplattform 3.0 (docs/umbau/lernplattform-3.md §10.0 Nr. 6): Stile des Bereichs ee, noch leer. */
+/* Lernplattform 3.0 (docs/umbau/lernplattform-3.md §10.0 Nr. 6): Stile der Erlebnis-Engine (Präfix `ee`). Besitzer: P30 und die folgenden Erlebnis-Pakete.
+
+   Stufe 1 „Antwort“ (§6.1, Erlebnis-Engine §4 M1–M3), nur im Übungsgerüst:
+     Farbe ≤ 120 ms · aufgezogenes ✓/≈/✕ 180 ms · Füllung der Lücke von links nach rechts 200 ms.
+   Nichts sonst: kein Lichtimpuls, keine Buchstabenwelle, kein Schütteln, keine Funken.
+   Alles hängt am Attribut `data-fx` des Wurzelelements (`engine/fx/level.ts`): `full` und `calm` spielen, `off` zeigt sofort den Endzustand.
+   Nur `transform`, `opacity` und `clip-path` bewegen sich. Im Lesefenster (Erklärung, Beispiele, Vergleich) läuft nach 300 ms keine Animation. */
+
+/* Farbwechsel der Lücke und der Optionen in 120 ms (vorher 150 bis 220 ms); bei `off` ohne Übergang. */
+:root[data-fx] .lx-gap,
+:root[data-fx] .lx-choice {
+  transition-duration: 120ms;
+}
+:root[data-fx='off'] .lx-gap,
+:root[data-fx='off'] .lx-gap *,
+:root[data-fx='off'] .lx-choice,
+:root[data-fx='off'] .lx-choice * {
+  transition: none;
+}
+
+/* Richtig, Lücke: kein Lichtimpuls mehr (der 300-ms-Schatten `lx-pulse` entfällt), stattdessen füllt sich die Lücke von links nach rechts.
+   Die Endfarbe bleibt `--lx-ok-soft` mit grünem Strich (LP2 §7); die Füllung liegt hinter den Buchstaben. */
+:root[data-fx] .lx-gap[data-state='correct'] {
+  animation: none;
+}
+:root[data-fx='full'] .lx-gap[data-state='correct'],
+:root[data-fx='calm'] .lx-gap[data-state='correct'] {
+  isolation: isolate;
+  background: var(--lx-surface);
+}
+:root[data-fx='full'] .lx-gap[data-state='correct']::before,
+:root[data-fx='calm'] .lx-gap[data-state='correct']::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--lx-ok-soft);
+  clip-path: inset(0 100% 0 0);
+  animation: ee-fill 200ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes ee-fill {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Das Zeichen im Urteil (✓, ≈, ✕) wird in 180 ms von links nach rechts aufgezogen (`clip-path`, nur die Zeichenfläche, nicht der Kreis dahinter).
+   Der Text bleibt im DOM (Vorlesen, Tests). Bei `off` steht es sofort da. */
+.ee-mark {
+  display: inline-block;
+  animation: ee-draw 180ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+:root[data-fx='off'] .ee-mark {
+  animation: none;
+}
+@keyframes ee-draw {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}

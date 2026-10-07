@@ -11,6 +11,9 @@ import type { C1KindEntry } from './types';
 
 export type { C1ItemProps } from './useC1Item';
 
+/** `entry`: eigene Oberfläche der Art statt der Registry (Tempo-Runde, P24). Sonst entscheidet die Registry. */
+export type C1ItemPropsWithEntry = C1ItemProps & { entry?: C1KindEntry };
+
 function C1ItemBody({ entry, ...props }: C1ItemProps & { entry: C1KindEntry }) {
   const root = useRef<HTMLDivElement | null>(null);
   const shell = useC1Item(props, entry, root);
@@ -38,9 +41,9 @@ function C1ItemBody({ entry, ...props }: C1ItemProps & { entry: C1KindEntry }) {
   );
 }
 
-export function C1Item(props: C1ItemProps) {
+export function C1Item({ entry: override, ...props }: C1ItemPropsWithEntry) {
   const { t } = useT();
-  const entry = kindEntry(props.task.c1.kind);
+  const entry = override ?? kindEntry(props.task.c1.kind);
   if (!entry) {
     return (
       <p className="text-muted" role="status" data-testid="c1x-unavailable">

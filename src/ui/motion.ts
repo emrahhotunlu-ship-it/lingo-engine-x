@@ -39,3 +39,28 @@ export const ringFill: Transition = { duration: 0.3, ease: EASE_OUT };
 
 /** Reduzierte Bewegung: sofort und ohne Dauer. Reiht sich vor jede Vorlage ein: `transition={motionSafe(reduce, gapMorph)}`. */
 export const motionSafe = (reduce: boolean | null, t: Transition): Transition => (reduce ? { duration: 0 } : t);
+
+// Lernplattform 3.0 P30 (Erlebnis-Engine §3.1): Feder-Tokens nach wahrgenommener Dauer und Federung (Apple-Weise), nicht nach Steifigkeit und Dämpfung.
+// Sie ersetzen `spring` oben schrittweise: neue Bewegung nimmt nur diese Namen, alte Stellen wechseln mit ihren Paketen.
+// `t95` = Zeit bis 95 % des Wegs (gemessen mit dem Federgenerator, `tests/unit/fxLevel.test.ts`). Bedienbewegung nutzt nur snap, glide, settle, pop und sheet
+// (t95 ≤ 286 ms, Kap. 4.4 „150–300 ms“); ring und morph sind nur für seltene Momente (Runde, Tag, Struktur-Film).
+export const SPRINGS = {
+  /** Drücken, Schalter, Reiter-Pille, Segmente. */
+  snap: { type: 'spring', visualDuration: 0.18, bounce: 0 },
+  /** Bildschirm- und Kartenwege, gemeinsame Elemente. */
+  glide: { type: 'spring', visualDuration: 0.28, bounce: 0 },
+  /** Karte landet, Baustein rastet ein, Lösung in der Lücke. */
+  settle: { type: 'spring', visualDuration: 0.32, bounce: 0.2 },
+  /** Nur kleine Dinge bis 32 px: Punkte, Häkchen, Ziffern. */
+  pop: { type: 'spring', visualDuration: 0.24, bounce: 0.3 },
+  /** Blätter. */
+  sheet: { type: 'spring', visualDuration: 0.36, bounce: 0.08 },
+  /** Nur Momente: Ringe füllen, Ziffern rollen. */
+  ring: { type: 'spring', visualDuration: 0.6, bounce: 0.1 },
+  /** Nur Momente: Wörter wandern im Struktur-Film. */
+  morph: { type: 'spring', visualDuration: 0.45, bounce: 0.15 },
+} as const satisfies Record<string, Transition>;
+
+export type SpringName = keyof typeof SPRINGS;
+/** Die Federn der Bedienbewegung (≤ 300 ms wahrgenommen). */
+export const OPERATING_SPRINGS = ['snap', 'glide', 'settle', 'pop', 'sheet'] as const satisfies readonly SpringName[];

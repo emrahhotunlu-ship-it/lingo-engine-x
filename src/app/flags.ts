@@ -17,7 +17,7 @@ export type Flags = {
 export const flags: Flags = {
   c1xKinds: { mcc: true, ocl: true, wf: false, kwt: true, err: true, pair: false, cnet: false, reg: false, para: false },
   slotPlan: false,
-  tempo: false,
+  tempo: true,
   c1check: false,
   tutor: { explain: false, gen: false, diagnose: false, clinic: false },
   fx: { moments: false, rings: false, sparks: false, field: false, sky: false, film: false },

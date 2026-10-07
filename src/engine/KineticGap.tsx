@@ -2,8 +2,7 @@ import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion } fr
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useHiddenInput } from './HiddenInput';
-import { verdictHaptic } from '../platform/haptics';
-import { playCue } from '../platform/sound';
+import { emit } from './fx';
 import { useT } from '../i18n';
 import type { MaskCell } from '../domain/answer/mask';
 
@@ -73,12 +72,10 @@ export function KineticGap({ label, maxLength, state, marks, mask, shown, onChan
   const [focused, setFocused] = useState(false);
   const width = useMotionValue<number | string>('3.5em');
   const locked = state !== 'input';
-  // Ton zur Rückmeldung (Kap. 4.7), nur wenn eingeschaltet – einmal je Wechsel des Zustands.
-  // Dazu eine kurze Vibration, wo das Gerät sie kann (Kap. 4.3; iPhone: nur sichtbar).
+  // Ton und Vibration zur Rückmeldung (Kap. 4.7, 4.3) melden wir nur als Lernereignis; der Dirigent (`engine/fx`) spielt sie, einmal je Prüfen.
   useEffect(() => {
     if (state === 'input' || silent) return;
-    playCue(state);
-    verdictHaptic(state);
+    emit({ k: 'verdict', v: state === 'correct' ? 'ok' : state === 'near' ? 'near' : 'wrong', el: gap.current });
   }, [state, silent]);
   const flyersNow = useRef<Flyer[]>([]);
   const timers = useRef(new Set<number>());

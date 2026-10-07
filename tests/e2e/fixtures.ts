@@ -60,6 +60,11 @@ export async function boot(page: Page, opts: BootOptions = {}): Promise<Booted> 
   if (!opts.whatsNew) {
     await page.addInitScript(([k, v]: [string, string]) => window.localStorage.setItem(k, v), [WHATS_NEW_KEY, WHATS_NEW_VERSION] as [string, string]);
   }
+  // Effekte stehen in allen Tests auf „Aus“ (Lernplattform 3.0 P30, Erlebnis-Engine §9.5): Bewegung erzeugt sonst Wackler. Das ist dieselbe Stufe, die Emrah wählen kann,
+  // also kein Test-Sondercode im Build. Ein Test, der Bewegung prüft, setzt `lx:fx` in `localStorage` selbst.
+  if (!opts.localStorage || !('lx:fx' in opts.localStorage)) {
+    await page.addInitScript(() => window.localStorage.setItem('lx:fx', 'off'));
+  }
   if (opts.localStorage) {
     await page.addInitScript((entries: Record<string, string>) => {
       for (const [k, v] of Object.entries(entries)) window.localStorage.setItem(k, v);
