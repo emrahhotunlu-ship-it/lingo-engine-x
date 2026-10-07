@@ -3,7 +3,7 @@ import { boot, screen } from './fixtures';
 import { dump } from './trainerHelpers';
 
 // Plan 3.0 (Lernplattform 3.0 §2.1, P23): Schritt 3 hängt vom Wochentag ab. Testuhr = fester Tag; der Plan wird beim ersten Öffnen angelegt und eingefroren.
-// Standard der Schalter: ocl, mcc, kwt an, wf und Tempo aus – eine nicht angebotene Art bleibt Satzbau.
+// Standard der Schalter: ocl, mcc, kwt und Tempo (P24) an, wf aus – eine nicht angebotene Art bleibt Satzbau.
 
 type Doc = Record<string, unknown>;
 const DAYS: Array<[string, string]> = [
@@ -28,7 +28,7 @@ const step3 = (p: Plan): Doc | undefined => p.u.b.find(([n]) => n === 3)?.[3];
 test.describe('Handy', () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
 
-  const EXPECT: Record<string, Doc | undefined> = { Mo: undefined, Di: { mode: 'format', fmt: 'ocl' }, Mi: undefined, Do: { mode: 'format', fmt: 'kwt' }, Fr: { mode: 'format', fmt: 'mcc' }, Sa: undefined };
+  const EXPECT: Record<string, Doc | undefined> = { Mo: undefined, Di: { mode: 'format', fmt: 'ocl' }, Mi: undefined, Do: { mode: 'format', fmt: 'kwt' }, Fr: { mode: 'format', fmt: 'mcc' }, Sa: { mode: 'tempo' } };
   const NAME: Record<string, string> = { Mo: 'Satzbau', Di: 'Kleines Wort', Mi: 'Satzbau', Do: 'Umformen', Fr: 'Passendes Wort', Sa: 'Satzbau' };
 
   for (const [wd, now] of DAYS) {
@@ -48,6 +48,14 @@ test.describe('Handy', () => {
       expect(errors).toEqual([]);
     });
   }
+
+  test('Schalter Tempo aus: Samstag fällt auf Satzbau zurück', async ({ page }) => {
+    await boot(page, { migrated: true, now: DAYS[5]![1], localStorage: { 'lx:flags': '{"tempo":false}' } });
+    const plan = await planOf(page, '2026-09-26');
+    expect(plan.u.b.find(([n]) => n === 3)?.[1]).toBe('task.order');
+    expect(step3(plan)).toBeUndefined();
+    await expect(page.locator('[data-testid="duty"][data-duty="ch:u-task"]')).toContainText('Satzbau');
+  });
 
   test('So: kein Schritt 3, kein Format', async ({ page }) => {
     await boot(page, { migrated: true, now: DAYS[6]![1] });
