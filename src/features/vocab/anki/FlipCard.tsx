@@ -202,14 +202,14 @@ export function FlipCard({ exercise, again = false, onDone }: { exercise: Exerci
   const reg = registerOf(card);
   const prompt =
     dir === 'de-en' ? (
-      <div className="flex flex-col items-center gap-3 text-center">
+      <div className="dz-flip flex flex-col items-center gap-3 text-center">
         <p className="lx-t-title" lang={lang} data-testid="flip-front">
           {meaning}
         </p>
         {ctx && !shown && <EnglishText as="p" className="max-w-[34ch] text-muted" text={ctx.sentence} {...src} slot={{ start: ctx.start, end: ctx.end, node: gapNode }} testId="flip-sentence" />}
       </div>
     ) : (
-      <div className="flex flex-col items-center gap-3 text-center">
+      <div className="dz-flip flex flex-col items-center gap-3 text-center">
         <p className="lx-t-title" lang="en" data-testid="flip-front">
           {card.word}
         </p>
