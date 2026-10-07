@@ -14,7 +14,8 @@ import { Icon } from '../../ui/Icon';
 const STATE_KEY: Record<WeekDayState, MessageKey> = { done: 'wkDone', rest: 'wkRest', open: 'wkOpen', future: 'wkFuture' };
 const CONF_KEY = { thin: 'confThin', fair: 'confFair', good: 'confGood' } as const;
 
-export function WeekStrip({ week }: { week: readonly WeekDay[] }) {
+/** `summary` ersetzt die Zählung rechts neben dem Titel (Abschlusskarte: „Serie 12 · Woche 4 von 6“); leer = keine Zeile. */
+export function WeekStrip({ week, summary }: { week: readonly WeekDay[]; summary?: { text: string; testId?: string } }) {
   const { t, tn, lang } = useT();
   const fmt = useMemo(() => {
     const short = new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { weekday: 'short' });
@@ -27,14 +28,22 @@ export function WeekStrip({ week }: { week: readonly WeekDay[] }) {
     <div className="flex flex-col gap-2" data-testid="week-strip">
       <div className="flex items-baseline justify-between gap-3">
         <h2 className="lx-eyebrow">{t('wkTitle')}</h2>
-        <p className="lx-tnum text-xs text-muted" data-testid="week-summary">
-          {tn('wkSummary', done)}
-          {rest > 0 && ` · ${t('wkRestN')}`}
-        </p>
+        {summary ? (
+          summary.text && (
+            <p className="lx-tnum text-xs text-muted" data-testid={summary.testId ?? 'week-summary'}>
+              {summary.text}
+            </p>
+          )
+        ) : (
+          <p className="lx-tnum text-xs text-muted" data-testid="week-summary">
+            {tn('wkSummary', done)}
+            {rest > 0 && ` · ${t('wkRestN')}`}
+          </p>
+        )}
       </div>
       <ol className="grid grid-cols-7 gap-1 sm:gap-2" aria-label={t('wkTitle')}>
         {week.map((d) => {
-          const label = `${fmt.long(d.day)}: ${d.state === 'open' && !d.today ? t('wkMissed') : t(STATE_KEY[d.state])}`;
+          const label = `${fmt.long(d.day)}: ${d.state === 'open' && !d.today ? t('moNoStudyDay') : t(STATE_KEY[d.state])}`;
           return (
             <li key={d.day} className="flex flex-col items-center gap-1" data-testid="week-day" data-day={d.day} data-state={d.state} data-today={d.today ? '' : undefined} title={label}>
               <span className="sr-only">{label}</span>

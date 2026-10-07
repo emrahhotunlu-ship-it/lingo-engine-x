@@ -26,7 +26,8 @@ test('Morgen-Journey: Tageskarte mit 4 Blöcken (Wortschatz · Grammatik · Satz
   await expect(page.getByTestId('duty')).toHaveCount(4);
   expect(await page.getByTestId('duty').evaluateAll((els) => els.map((e) => e.getAttribute('data-duty')))).toEqual(VG_DUTY);
   await expect(page.locator('[data-testid="duty"][data-duty="ch:u-focus"]')).toContainText('Grammatik');
-  await expect(page.locator('[data-testid="duty"][data-duty="ch:u-task"]')).toContainText('Satzbau');
+  // Dienstag ist Format-Tag (Plan 3.0, P23): Schritt 3 heißt dort wie die Aufgabenart, die Blockart bleibt task.order.
+  await expect(page.locator('[data-testid="duty"][data-duty="ch:u-task"]')).toContainText('Kleines Wort');
   await expect(page.locator('[data-testid="duty"][data-duty="ch:u-again"]')).toContainText('Fehler korrigieren');
   await expect(page.getByTestId('duty').first()).toHaveAttribute('data-now', 'true');
   await expect(page.getByTestId('today-theme')).toHaveCount(0);
@@ -87,7 +88,7 @@ test('Montag: ohne Bestätigungskarte, Blöcke bis „Fertig“, Serie +1, ohne 
   expect(act).toMatchObject({ 'u-focus': 1, 'u-task': 1, 'u-again': 1 });
   // `app/week` bleibt unberührt (kein Wochenthema mehr, nichts wird geschrieben).
   expect((await dump(page))['app/week']).toMatchObject({ cur: { wk: '2026-W38' } });
-  await expect(page.getByTestId('today-streak')).toHaveText('Serie: 13 Tage');
+  await expect(page.getByTestId('today-streak')).toHaveText('Serie 13 · Woche 1 von 6');
   expect(errors).toEqual([]);
 });
 

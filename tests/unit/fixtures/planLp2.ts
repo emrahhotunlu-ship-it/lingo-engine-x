@@ -1,4 +1,6 @@
-import type { GrammarDay, PatState, StepArgs, UnitMeta, UnitMetaBlock } from './types';
+// Kopie des Plan-Lesers von Lernplattform 2.0 (vor P23): `readUnitMeta` aus domain/plan/unitMeta.ts, wörtlich, nur umbenannt. NICHT anpassen.
+// Der Rückweg-Test (planRollbackV3.test.ts) zeigt damit, dass jeder Plan 3.0 vom LP2-Leser vollständig gelesen wird.
+import type { GrammarDay, PatState, StepArgs, UnitMeta, UnitMetaBlock } from '../../../src/domain/plan/types';
 
 // Neubau (plan.md §1.5, P1): tolerantes Lesen der eingefrorenen Eckdaten der Tageseinheit
 // (`app/profile.plan.u`). Fehlerhafte Einträge fallen weg, nichts wird erfunden.
@@ -20,12 +22,8 @@ function readArgs(v: unknown): StepArgs | null {
     const n = num(o[k]);
     if (n !== null && n < 100) out[k] = Math.round(n);
   }
-  if (o.mode === 'tempo' || o.mode === 'format') out.mode = o.mode;
-  if (o.fmt === 'ocl' || o.fmt === 'wf' || o.fmt === 'kwt' || o.fmt === 'mcc') out.fmt = o.fmt;
   return Object.keys(out).length ? out : null;
 }
-
-const NX_RE = /^[a-z0-9]{1,24}$/;
 
 const strList = (v: unknown, max: number): string[] | null =>
   Array.isArray(v) && v.length <= max && v.every((x) => typeof x === 'string' && x.length > 0 && x.length <= 80) ? (v as string[]) : null;
@@ -50,7 +48,7 @@ function readPs(v: unknown): Record<string, PatState> | null {
   return Object.keys(out).length ? out : null;
 }
 
-export function readUnitMeta(v: unknown): UnitMeta | null {
+export function readUnitMetaLp2(v: unknown): UnitMeta | null {
   const o = obj(v);
   if (!o || o.v !== 1 || !Array.isArray(o.b)) return null;
   const goalMin = num(o.goalMin);
@@ -80,8 +78,5 @@ export function readUnitMeta(v: unknown): UnitMeta | null {
   if (gt) out.gt = gt;
   const ps = readPs(o.ps);
   if (ps) out.ps = ps;
-  // Lernplattform 3.0 (§2.4), rein ergänzend: C1-Check-Tag und Kennung des nächsten Ziels.
-  if (o.c1 === 'check') out.c1 = 'check';
-  if (typeof o.nx === 'string' && NX_RE.test(o.nx)) out.nx = o.nx;
   return out;
 }

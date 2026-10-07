@@ -1,5 +1,5 @@
 import type { ThemeGoal, WeekTheme } from '../../content/nb/themes';
-import type { StepArgs } from '../plan/types';
+import type { StepArgs, Step3Fmt, Step3Mode } from '../plan/types';
 
 // Typen der Tageseinheit und des Wochenplans (Plan §1.5, §4.10, Prüfung Tageseinheit M1–M10, S1–S5).
 // Rein, ohne React und ohne Datenbank. `UnitBlockKind` entspricht wörtlich dem Vertrag in Plan §4.10.
@@ -121,6 +121,8 @@ export type UnitPrefs = {
   comeback?: ComebackMode;
   /** Regelversion; `2` schaltet Plan v2 ein (§2.3). Nur die Koordination stellt `PLAN_RV` um. */
   rv?: 1 | 2;
+  /** Plan 3.0 (P23): Format von Schritt 3 (nur volle Tage, nur Regelversion 2); fehlt = Satzbau. */
+  step3?: { mode: Step3Mode; fmt?: Step3Fmt } | null;
 };
 
 /**
