@@ -4,3 +4,7 @@ export const FAIL_BYTES: number;
 export const devMarkers: string[];
 export const removedTemplates: string[];
 export function checkHtml(html: string, size: number): { problems: string[]; notes: string[] };
+export function checkMulti(files: { name: string; size: number; text?: string }[]): { problems: string[]; notes: string[] };
+export const MULTI_MAX_FILE: number;
+export const MULTI_MAX_TOTAL: number;
+export const MULTI_WARN_TOTAL: number;

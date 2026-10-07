@@ -1,0 +1,1 @@
+export function buildManifest(entries: { name: string; size: number }[], dir: string, previous?: { files?: Record<string, string> }): { page: string; files: Record<string, string>; count: number; totalBytes: number; note: string; stale?: string[]; removeMap?: Record<string, null> };

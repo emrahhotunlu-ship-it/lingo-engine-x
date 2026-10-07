@@ -5,4 +5,6 @@ declare module 'virtual:content/manifest' {
 }
 declare module 'virtual:content/loaders' {
   export const loaders: Record<string, () => Promise<{ default: string }>>;
+  /** Mehr-Datei-Build: Dateiname je Bündel (flach, neben dem Skript); im Einzeldatei-Build `null`. */
+  export const remote: Record<string, string> | null;
 }

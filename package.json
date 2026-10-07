@@ -9,6 +9,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:single": "LX_BUILD=single vite build",
+    "build:multi": "LX_BUILD=multi vite build",
+    "publish:manifest": "node scripts/publish-manifest.mjs",
     "build:runtime": "vite build -c vite.runtime.config.ts",
     "seed": "node scripts/generate-seed.mjs",
     "pron": "node scripts/build-pron.mjs",
