@@ -1,0 +1,255 @@
+{
+ "v": 1,
+ "chapters": [
+  {
+   "id": "k1",
+   "n": 1,
+   "name": {
+    "de": "Zeiten",
+    "en": "Tenses"
+   },
+   "topics": [
+    "pres-simple-cont",
+    "past-simple-perfect",
+    "pres-perf-cont",
+    "past-perfect",
+    "used-to",
+    "prep-time",
+    "stative-adv"
+   ],
+   "done": {
+    "de": "Du erzählst Projektverläufe in der richtigen Zeit: Past Simple bei genanntem Zeitpunkt, Present Perfect (Continuous) mit since, for und so far, Past Perfect für das Frühere. Verlaufsformen nutzt du bewusst („We're seeing strong demand“). by und until verwechselst du nicht mehr.",
+    "en": "You tell the story of a project in the right tense: Past Simple with a stated time, Present Perfect (Continuous) with since, for and so far, Past Perfect for what came earlier. You use continuous forms on purpose (“We're seeing strong demand”). You no longer mix up by and until."
+   },
+   "pack": {
+    "ch": 1
+   },
+   "exam": {
+    "parts": [
+     2,
+     4
+    ],
+    "focus": {
+     "de": "Offene Lücke (Hilfsverben, Zeitpräpositionen) und Schlüsselwort",
+     "en": "Open cloze (auxiliaries, time prepositions) and key word transformation"
+    }
+   },
+   "note": "This month I'm working on tenses: Past Simple versus Present Perfect, and by versus until. Could you create speaking situations where I need them, for example a project update?",
+   "weeks": 3.5
+  },
+  {
+   "id": "k2",
+   "n": 2,
+   "name": {
+    "de": "Zukunft",
+    "en": "Future"
+   },
+   "topics": [
+    "future-forms",
+    "future-perf-cont",
+    "time-clauses",
+    "future-past",
+    "c1-precision"
+   ],
+   "done": {
+    "de": "Du sprichst über Pläne, Fristen und Prognosen genau: be due to und be set to, will have done bis zu einer Frist, Zeitsätze ohne will („as soon as we receive …“), was going to für geplatzte Pläne. Zahlen und Zeiträume sagst du ohne Deutsch-Fehler (within two weeks, by the end of Q3).",
+    "en": "You talk about plans, deadlines and forecasts precisely: be due to and be set to, will have done up to a deadline, time clauses without will (“as soon as we receive …”), was going to for plans that fell through. You say numbers and time spans without German-style mistakes (within two weeks, by the end of Q3)."
+   },
+   "pack": {
+    "ch": 2
+   },
+   "exam": {
+    "parts": [
+     4
+    ],
+    "focus": {
+     "de": "Schlüsselwort (DUE, TIME, BY, ABOUT)",
+     "en": "Key word transformation (DUE, TIME, BY, ABOUT)"
+    }
+   },
+   "note": "This month I'm working on talking about the future: plans, deadlines and forecasts. Could you create speaking situations where I need them, for example giving a status update before a deadline?",
+   "weeks": 2.5
+  },
+  {
+   "id": "k3",
+   "n": 3,
+   "name": {
+    "de": "Bedingung und Wunsch",
+    "en": "Conditions and wishes"
+   },
+   "topics": [
+    "conditionals",
+    "cond-alt",
+    "mixed-cond",
+    "c1-diplomacy"
+   ],
+   "done": {
+    "de": "Du formulierst Bedingungen und Bedauern wie in einer Verhandlung: unless, as long as und provided that ohne will im Bedingungsteil, Mixed Conditionals, wish, if only und would rather. Bitten und Einwände sagst du mit Abstand („Would it be possible to …?“).",
+    "en": "You put conditions and regrets the way people do in a negotiation: unless, as long as and provided that without will in the condition, mixed conditionals, wish, if only and would rather. You phrase requests and objections with distance (“Would it be possible to …?”)."
+   },
+   "pack": {
+    "ch": 3
+   },
+   "exam": {
+    "parts": [
+     4
+    ],
+    "focus": {
+     "de": "Schlüsselwort (UNLESS, PROVIDED, HAD, BUT FOR, WISH)",
+     "en": "Key word transformation (UNLESS, PROVIDED, HAD, BUT FOR, WISH)"
+    }
+   },
+   "note": "This month I'm working on conditionals and polite distance in negotiations. Could you create speaking situations where I need them, for example agreeing terms with a client?",
+   "weeks": 2
+  },
+  {
+   "id": "k4",
+   "n": 4,
+   "name": {
+    "de": "Passiv und Berichten",
+    "en": "Passive and reporting"
+   },
+   "topics": [
+    "passive",
+    "passive-plus",
+    "reported",
+    "report-verbs",
+    "questions",
+    "mandative",
+    "c1-nominal"
+   ],
+   "done": {
+    "de": "Du berichtest sachlich und unpersönlich: Passiv in allen Zeiten, „It is said that …“ und „He is believed to have …“, jedes Berichtsverb mit seinem Muster (suggest mit -ing oder that, insist on), indirekte Fragen ohne do, „recommend that he approve“ (US). In Mails nutzt du Nominalstil sparsam und richtig.",
+    "en": "You report in a factual, impersonal way: passive in all tenses, “It is said that …” and “He is believed to have …”, every reporting verb with its pattern (suggest with -ing or that, insist on), indirect questions without do, “recommend that he approve” (US). In emails you use noun style sparingly and correctly."
+   },
+   "pack": {
+    "ch": 4
+   },
+   "exam": {
+    "parts": [
+     3,
+     4
+    ],
+    "focus": {
+     "de": "Wortbildung (Nomen aus Verben) und Schlüsselwort („is said to have“)",
+     "en": "Word formation (nouns from verbs) and key word transformation (“is said to have”)"
+    }
+   },
+   "note": "This month I'm working on the passive and on reporting what others said. Could you create speaking situations where I need them, for example summarising a meeting or an audit result?",
+   "weeks": 3.5
+  },
+  {
+   "id": "k5",
+   "n": 5,
+   "name": {
+    "de": "Modalität",
+    "en": "Modality"
+   },
+   "topics": [
+    "modals-deduction",
+    "modals-prob",
+    "modals-advice",
+    "c1-hedging"
+   ],
+   "done": {
+    "de": "Du schätzt ein und schwächst ab wie im Meeting: must, might und can't have done, may well, is bound to und is unlikely to, should have und needn't have, mustn't ist nicht gleich don't have to. Kritik verpackst du vorsichtig, ohne unklar zu werden.",
+    "en": "You assess and soften like people do in meetings: must, might and can't have done, may well, is bound to and is unlikely to, should have and needn't have, mustn't is not the same as don't have to. You wrap criticism carefully without becoming unclear."
+   },
+   "pack": {
+    "ch": 5
+   },
+   "exam": {
+    "parts": [
+     1,
+     4
+    ],
+    "focus": {
+     "de": "Wortwahl (likely, probable, bound, liable) und Schlüsselwort (Modalperfekt)",
+     "en": "Multiple-choice cloze (likely, probable, bound, liable) and key word transformation (modal perfect)"
+    }
+   },
+   "note": "This month I'm working on modal verbs for assessing risks and softening criticism. Could you create speaking situations where I need them, for example discussing a risk with a colleague?",
+   "weeks": 2
+  },
+  {
+   "id": "k6",
+   "n": 6,
+   "name": {
+    "de": "Verbmuster",
+    "en": "Verb patterns"
+   },
+   "topics": [
+    "gerund-inf",
+    "verb-patterns",
+    "prepositions",
+    "prep-noun",
+    "phrasal-syntax",
+    "articles",
+    "countable",
+    "quant-neg",
+    "relative",
+    "linkers"
+   ],
+   "done": {
+    "de": "Du wählst die richtige Verbindung: -ing oder to, prevent sb from -ing, feste Präpositionen nach Verb, Nomen und Adjektiv, Artikel und Mengenwörter (information, a number of ist nicht gleich the number of, hardly any), Phrasal Verbs mit Pronomen (turn it down), Konnektoren mit dem richtigen Satzbau (despite + -ing, although ohne but).",
+    "en": "You choose the right combination: -ing or to, prevent sb from -ing, fixed prepositions after verbs, nouns and adjectives, articles and quantity words (information, a number of is not the same as the number of, hardly any), phrasal verbs with pronouns (turn it down), connectors with the right sentence structure (despite + -ing, although without but)."
+   },
+   "pack": {
+    "ch": 6
+   },
+   "exam": {
+    "parts": [
+     1,
+     2
+    ],
+    "focus": {
+     "de": "Wortwahl (Wortpartner, feste Präpositionen) und offene Lücke (Artikel, Relativpronomen, Konnektoren)",
+     "en": "Multiple-choice cloze (collocations, dependent prepositions) and open cloze (articles, relative pronouns, connectors)"
+    }
+   },
+   "note": "This month I'm working on verb patterns, prepositions and phrasal verbs. Could you create speaking situations where I need them, for example phoning a supplier about a late delivery?",
+   "weeks": 5
+  },
+  {
+   "id": "k7",
+   "n": 7,
+   "name": {
+    "de": "Satzbau und Betonung",
+    "en": "Sentence structure and emphasis"
+   },
+   "topics": [
+    "c1-participle",
+    "c1-discourse",
+    "c1-emphasis",
+    "inversion",
+    "emph-plus",
+    "ellipsis",
+    "noun-phrase",
+    "compound-mod",
+    "word-order",
+    "comparison"
+   ],
+   "done": {
+    "de": "Du baust und betonst Sätze auf C1-Niveau: Spaltsätze, Inversion nach Never, Rarely, Not only, Only after und No sooner, Partizipialsätze mit passendem Subjekt, Ellipse statt Wiederholung, längere Nominalgruppen („the most reliable system we have tested“), Diskursmarker. Dazu bestehst du den C1-Check zweimal hintereinander mit mindestens 60 %.",
+    "en": "You build and stress sentences at C1 level: cleft sentences, inversion after Never, Rarely, Not only, Only after and No sooner, participle clauses with a matching subject, ellipsis instead of repetition, longer noun phrases (“the most reliable system we have tested”), discourse markers. You also pass the C1 check twice in a row with at least 60%."
+   },
+   "pack": {
+    "ch": 7
+   },
+   "exam": {
+    "parts": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "focus": {
+     "de": "Alle vier Teile, auch auf Textebene; das Kapitel endet mit dem C1-Check",
+     "en": "All four parts, also at text level; the chapter ends with the C1 check"
+    }
+   },
+   "note": "This month I'm working on inversion and cleft sentences. Could you create speaking situations where I need them, for example presenting a proposal and stressing the key point?",
+   "weeks": 5
+  }
+ ]
+}

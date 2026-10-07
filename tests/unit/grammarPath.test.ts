@@ -118,8 +118,8 @@ describe('Einführungsbremse', () => {
   });
 
   it('die Pfadreihenfolge bestimmt das nächste neue Thema', () => {
-    expect(nextNewTopic(docs('2026-09-01'))).toBe('compound-mod');
-    expect(introTopic(docs('2026-09-01'), '2026-09-27', now)).toBe('compound-mod');
+    expect(nextNewTopic(docs('2026-09-01'))).toBe('linkers');
+    expect(introTopic(docs('2026-09-01'), '2026-09-27', now)).toBe('linkers');
     const all = new Map<string, Record<string, unknown>>();
     expect(nextNewTopic(all)).toBe(pathTopics()[0]);
   });

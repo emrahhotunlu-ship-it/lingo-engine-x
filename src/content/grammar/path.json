@@ -3,41 +3,42 @@
   {
    "id": "k1",
    "name": {
-    "de": "Zeiten im Alltag",
-    "en": "Everyday tenses"
+    "de": "Zeiten",
+    "en": "Tenses"
    },
    "topics": [
     "pres-simple-cont",
     "past-simple-perfect",
     "pres-perf-cont",
-    "future-forms",
-    "time-clauses"
+    "past-perfect",
+    "used-to",
+    "prep-time"
    ]
   },
   {
    "id": "k2",
    "name": {
-    "de": "Zeiten präzise und vorsichtig",
-    "en": "Precise tenses and caution"
+    "de": "Zukunft",
+    "en": "Future"
    },
    "topics": [
-    "c1-hedging",
+    "future-forms",
     "future-perf-cont",
-    "past-perfect",
-    "used-to",
-    "c1-diplomacy"
+    "time-clauses",
+    "c1-precision"
    ]
   },
   {
    "id": "k3",
    "name": {
-    "de": "Bedingungen",
-    "en": "Conditionals"
+    "de": "Bedingung und Wunsch",
+    "en": "Conditions and wishes"
    },
    "topics": [
     "conditionals",
     "cond-alt",
-    "mixed-cond"
+    "mixed-cond",
+    "c1-diplomacy"
    ]
   },
   {
@@ -48,57 +49,56 @@
    },
    "topics": [
     "passive",
-    "c1-discourse",
     "passive-plus",
     "reported",
     "report-verbs",
-    "questions"
+    "questions",
+    "mandative",
+    "c1-nominal"
    ]
   },
   {
    "id": "k5",
    "name": {
-    "de": "Betonen, Schließen, Raten",
-    "en": "Emphasis, deduction, advice"
+    "de": "Modalität",
+    "en": "Modality"
    },
    "topics": [
-    "c1-emphasis",
-    "relative",
     "modals-deduction",
     "modals-advice",
-    "gerund-inf"
+    "c1-hedging"
    ]
   },
   {
    "id": "k6",
    "name": {
-    "de": "Verbmuster, Artikel, Präpositionen",
-    "en": "Verb patterns, articles, prepositions"
+    "de": "Verbmuster",
+    "en": "Verb patterns"
    },
    "topics": [
+    "gerund-inf",
     "verb-patterns",
-    "c1-participle",
-    "mandative",
+    "prepositions",
+    "prep-noun",
+    "phrasal-syntax",
     "articles",
     "countable",
-    "prepositions",
-    "prep-noun"
+    "relative",
+    "linkers"
    ]
   },
   {
    "id": "k7",
    "name": {
-    "de": "Präzise Sprache und Satzbau",
-    "en": "Precise language and sentence building"
+    "de": "Satzbau und Betonung",
+    "en": "Sentence structure and emphasis"
    },
    "topics": [
-    "c1-nominal",
-    "prep-time",
+    "c1-participle",
+    "c1-discourse",
+    "c1-emphasis",
     "compound-mod",
-    "phrasal-syntax",
     "word-order",
-    "c1-precision",
-    "linkers",
     "comparison"
    ]
   }

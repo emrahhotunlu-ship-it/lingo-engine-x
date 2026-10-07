@@ -16,49 +16,49 @@ import { rankTopics } from './tasks';
 type Doc = Record<string, unknown>;
 
 /**
- * Lehrreihenfolge (Lehrplan Kap. 4, Zeilen 1–39 ohne `ellipsis`, das es noch nicht gibt). `pres-simple-cont`
- * (B1) steht vorn als Einstieg, damit jedes Thema der App im Pfad erreichbar ist; die sieben C1-Werkzeuge
- * sind alle vier bis fünf Themen eingeschoben.
+ * Lehrreihenfolge in der Reihenfolge der sieben Kapitel des C1-Programms (`content/c1/program.json`, Lernplattform 3.0 §4.1, P31):
+ * die 39 Themen, die es gibt. Die 8 neuen Themen des Programms (`NEW_TOPICS`) stehen dort als Platzhalter und kommen mit P36/P37 hinzu.
+ * Ein Test sichert, dass Programm, `path.json` und diese Liste dieselbe Reihenfolge haben.
  */
 export const GRAMMAR_PATH: readonly string[] = [
   'pres-simple-cont',
   'past-simple-perfect',
   'pres-perf-cont',
-  'future-forms',
-  'time-clauses',
-  'c1-hedging',
-  'future-perf-cont',
   'past-perfect',
   'used-to',
-  'c1-diplomacy',
+  'prep-time',
+  'future-forms',
+  'future-perf-cont',
+  'time-clauses',
+  'c1-precision',
   'conditionals',
   'cond-alt',
   'mixed-cond',
+  'c1-diplomacy',
   'passive',
-  'c1-discourse',
   'passive-plus',
   'reported',
   'report-verbs',
   'questions',
-  'c1-emphasis',
-  'relative',
+  'mandative',
+  'c1-nominal',
   'modals-deduction',
   'modals-advice',
+  'c1-hedging',
   'gerund-inf',
   'verb-patterns',
-  'c1-participle',
-  'mandative',
-  'articles',
-  'countable',
   'prepositions',
   'prep-noun',
-  'c1-nominal',
-  'prep-time',
-  'compound-mod',
   'phrasal-syntax',
-  'word-order',
-  'c1-precision',
+  'articles',
+  'countable',
+  'relative',
   'linkers',
+  'c1-participle',
+  'c1-discourse',
+  'c1-emphasis',
+  'compound-mod',
+  'word-order',
   'comparison',
 ];
 

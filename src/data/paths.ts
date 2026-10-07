@@ -38,6 +38,7 @@ import {
   outSchema,
   memorySchema,
   compareSchema,
+  c1Schema,
   teacherSchema,
 } from './schemas';
 
@@ -66,6 +67,8 @@ export const APP_DOCS = {
   'app/memory': memorySchema,
   // Paket B (Backlog B1): monatliche Vergleichsaufgabe.
   'app/compare': compareSchema,
+  // Lernplattform 3.0 (P31): C1-Programm (Einstufung, Checks, Kapitelprüfungen, Produktion, gemeldete Aufgaben).
+  'app/c1': c1Schema,
 } as const satisfies Record<string, ZodType>;
 
 export const COLLECTIONS = {
