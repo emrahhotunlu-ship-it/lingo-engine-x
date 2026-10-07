@@ -1,0 +1,1246 @@
+[
+ {
+  "id": "rv-ad-k1",
+  "type": "kwt",
+  "pat": "rv.admit-deny",
+  "from": "‘Yes, I skipped the safety check,’ she said.",
+  "key": "ADMITTED",
+  "frame": "She ___ the safety check.",
+  "answer": "admitted skipping",
+  "accepted": [
+   "admitted to skipping",
+   "admitted having skipped",
+   "admitted to having skipped",
+   "admitted she skipped",
+   "admitted that she skipped",
+   "admitted she had skipped",
+   "admitted that she had skipped",
+   "admitted she'd skipped"
+  ],
+  "words": [
+   2,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: admit + -ing, also admitted skipping. Sie gibt zu, es getan zu haben.",
+    "en": "Right: admit + -ing, so admitted skipping. She owns up to having done it."
+   },
+   "wrong": [
+    {
+     "not": [
+      "admitted"
+     ],
+     "de": "Das Schlüsselwort admitted muss unverändert in der Lücke stehen.",
+     "en": "The key word admitted must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "admitted",
+      "skip"
+     ],
+     "de": "Nach admit steht -ing: skipping, nicht skip.",
+     "en": "After admit use -ing: skipping, not skip."
+    },
+    {
+     "if": [
+      "admitted",
+      "skipped"
+     ],
+     "not": [
+      "she",
+      "he",
+      "they",
+      "i",
+      "we",
+      "that",
+      "had",
+      "having"
+     ],
+     "de": "Nach admit steht -ing: skipping, nicht skipped.",
+     "en": "After admit use -ing: skipping, not skipped."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-ad-k2",
+  "type": "kwt",
+  "pat": "rv.admit-deny",
+  "from": "‘I didn't see the email,’ he said.",
+  "key": "DENIED",
+  "frame": "He ___ the email.",
+  "answer": "denied seeing",
+  "accepted": [
+   "denied having seen",
+   "denied that he saw",
+   "denied he saw",
+   "denied that he had seen",
+   "denied he had seen",
+   "denied he'd seen"
+  ],
+  "words": [
+   2,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: deny + -ing, also denied seeing. Er bestreitet, die Mail gesehen zu haben.",
+    "en": "Right: deny + -ing, so denied seeing. He claims he did not see the email."
+   },
+   "wrong": [
+    {
+     "not": [
+      "denied"
+     ],
+     "de": "Das Schlüsselwort denied muss unverändert in der Lücke stehen.",
+     "en": "The key word denied must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "denied",
+      "see"
+     ],
+     "de": "Nach deny steht -ing: seeing, nicht see.",
+     "en": "After deny use -ing: seeing, not see."
+    },
+    {
+     "if": [
+      "denied",
+      "to"
+     ],
+     "de": "Deny nimmt kein to + Verb, sondern nur -ing: seeing.",
+     "en": "Deny takes no to + verb. Use seeing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-ad-f1",
+  "type": "find",
+  "pat": "rv.admit-deny",
+  "prompt": "The supplier admitted to deliver the wrong parts.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "delivering",
+  "fixed": "The supplier admitted delivering the wrong parts.",
+  "accepted": [
+   "to delivering",
+   "having delivered",
+   "to having delivered"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „admitted to deliver“. Nach admit steht -ing: delivering.",
+    "en": "The error: “admitted to deliver”. After admit use -ing: delivering."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach admit steht -ing.",
+     "en": "There is an error: after admit use -ing."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „to deliver“: admit nimmt -ing.",
+     "en": "The error is “to deliver”: admit takes -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-ad-f2",
+  "type": "find",
+  "pat": "rv.admit-deny",
+  "prompt": "The manager denied to have seen the draft before the call.",
+  "err": [
+   3,
+   5
+  ],
+  "answer": "having seen",
+  "fixed": "The manager denied having seen the draft before the call.",
+  "accepted": [
+   "seeing"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „denied to have seen“. Nach deny steht -ing: having seen.",
+    "en": "The error: “denied to have seen”. After deny use -ing: having seen."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Deny nimmt kein to + Verb.",
+     "en": "There is an error: deny takes no to + verb."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „to have seen“: Nach deny steht -ing.",
+     "en": "The error is “to have seen”: after deny use -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-ad-f3",
+  "type": "find",
+  "pat": "rv.admit-deny",
+  "prompt": "She admitted making the mistake in the forecast.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: admit + -ing („making“) ist richtig.",
+    "en": "No error: admit + -ing (“making”) is correct."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach admit steht -ing, genau wie hier.",
+     "en": "No error: after admit comes -ing, exactly as here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-ad-m1",
+  "type": "meaning",
+  "pat": "rv.admit-deny",
+  "a": "He denied taking the file.",
+  "b": "He admitted taking the file.",
+  "q": {
+   "de": "Welcher Satz sagt: Er hat die Datei genommen?",
+   "en": "Which sentence says he took the file?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. Admitted taking = er gibt zu, dass er es tat.",
+    "en": "Right: sentence b. Admitted taking = he owns up to it."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a leugnet er: Denied taking heißt, er hat sie nicht genommen.",
+     "en": "In a he denies it: denied taking means he did not take it."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: admit gibt zu, deny bestreitet.",
+     "en": "Not the same: admit owns up, deny rejects."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-sr-k1",
+  "type": "kwt",
+  "pat": "rv.suggest-rec",
+  "from": "‘Why don't we move the review to Friday?’ our manager said.",
+  "key": "SUGGESTED",
+  "frame": "Our manager ___ the review to Friday.",
+  "answer": "suggested moving",
+  "accepted": [
+   "suggested pushing",
+   "suggested shifting",
+   "suggested rescheduling",
+   "suggested postponing",
+   "suggested putting off",
+   "suggested that we move",
+   "suggested that we should move",
+   "suggested we move",
+   "suggested we should move",
+   "suggested that we push",
+   "suggested we push"
+  ],
+  "words": [
+   2,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: suggest + -ing, also suggested moving. Ein that-Satz geht auch.",
+    "en": "Right: suggest + -ing, so suggested moving. A that-clause works too."
+   },
+   "wrong": [
+    {
+     "not": [
+      "suggested"
+     ],
+     "de": "Das Schlüsselwort suggested muss unverändert in der Lücke stehen.",
+     "en": "The key word suggested must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "suggested",
+      "us"
+     ],
+     "de": "Suggest nimmt keine Person + to: moving oder that we move.",
+     "en": "Suggest takes no person + to: moving or that we move."
+    },
+    {
+     "if": [
+      "suggested",
+      "to"
+     ],
+     "de": "Suggest nimmt kein to + Verb. Es folgt -ing oder ein that-Satz.",
+     "en": "Suggest takes no to + verb. -ing or a that-clause follows."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-sr-k2",
+  "type": "kwt",
+  "pat": "rv.suggest-rec",
+  "from": "I think you should start the rollout in May.",
+  "key": "RECOMMEND",
+  "frame": "I ___ the rollout in May.",
+  "answer": "recommend starting",
+  "accepted": [
+   "recommend beginning",
+   "recommend launching",
+   "recommend that you start",
+   "recommend you start",
+   "recommend that you begin",
+   "recommend you begin",
+   "recommend that you should start",
+   "would recommend starting",
+   "would recommend that you start",
+   "would recommend you start",
+   "would recommend that you begin",
+   "'d recommend starting",
+   "'d recommend that you start"
+  ],
+  "words": [
+   2,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: recommend + -ing oder that-Satz: recommend starting, recommend that you start.",
+    "en": "Right: recommend + -ing or a that-clause: recommend starting, recommend that you start."
+   },
+   "wrong": [
+    {
+     "not": [
+      "recommend"
+     ],
+     "de": "Das Schlüsselwort recommend muss unverändert in der Lücke stehen.",
+     "en": "The key word recommend must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "recommend",
+      "you",
+      "to"
+     ],
+     "de": "Recommend + Person + to ist im US-Englisch unüblich: recommend that you start.",
+     "en": "Recommend + person + to is uncommon in US English: recommend that you start."
+    },
+    {
+     "if": [
+      "recommend",
+      "to"
+     ],
+     "not": [
+      "you"
+     ],
+     "de": "Recommend nimmt kein to + Verb: starting oder ein that-Satz.",
+     "en": "Recommend takes no to + verb: starting or a that-clause."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-sr-f1",
+  "type": "find",
+  "pat": "rv.suggest-rec",
+  "prompt": "Our CFO suggested us to cut the travel budget.",
+  "err": [
+   3,
+   5
+  ],
+  "answer": "cutting",
+  "fixed": "Our CFO suggested cutting the travel budget.",
+  "accepted": [
+   "that we cut",
+   "that we should cut"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „suggested us to“. Richtig: suggested cutting oder that we cut.",
+    "en": "The error: “suggested us to”. Correct: suggested cutting or that we cut."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Suggest nimmt keine Person + to.",
+     "en": "There is an error: suggest takes no person + to."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „us to cut“: Nach suggest folgt -ing oder that.",
+     "en": "The error is “us to cut”: after suggest comes -ing or that."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-sr-f2",
+  "type": "find",
+  "pat": "rv.suggest-rec",
+  "prompt": "We recommend to postpone the rollout until May.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "postponing",
+  "fixed": "We recommend postponing the rollout until May.",
+  "accepted": [
+   "that you postpone",
+   "that we postpone",
+   "that you should postpone",
+   "that we should postpone"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „recommend to postpone“. Richtig: recommend postponing.",
+    "en": "The error: “recommend to postpone”. Correct: recommend postponing."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Recommend nimmt kein to + Verb.",
+     "en": "There is an error: recommend takes no to + verb."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „to postpone“: Es folgt -ing oder ein that-Satz.",
+     "en": "The error is “to postpone”: -ing or a that-clause follows."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-sr-f3",
+  "type": "find",
+  "pat": "rv.suggest-rec",
+  "prompt": "She recommended that we renew the license early.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: recommend that we renew ist richtig (US: Grundform).",
+    "en": "No error: recommend that we renew is correct (US: base form)."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Im that-Satz steht die Grundform, ohne -s und ohne will.",
+     "en": "No error: the that-clause takes the base form, with no -s and no will."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-sr-m1",
+  "type": "meaning",
+  "pat": "rv.suggest-rec",
+  "a": "She suggested sending the invoice.",
+  "b": "She admitted sending the invoice.",
+  "q": {
+   "de": "Welcher Satz handelt von etwas, das noch nicht geschehen ist?",
+   "en": "Which sentence is about something that has not happened yet?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Suggest zeigt nach vorn: Der Vorschlag betrifft die Zukunft.",
+    "en": "Right: sentence a. Suggest points ahead: the proposal is about the future."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b ist es geschehen: admitted sending blickt zurück.",
+     "en": "In b it has happened: admitted sending looks back."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: suggest schaut nach vorn, admit zurück.",
+     "en": "Not the same: suggest looks ahead, admit looks back."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-sr-m2",
+  "type": "meaning",
+  "pat": "rv.suggest-rec",
+  "a": "I suggest meeting at nine.",
+  "b": "I suggest that we meet at nine.",
+  "q": {
+   "de": "Sagen beide Sätze dasselbe?",
+   "en": "Do both sentences say the same thing?"
+  },
+  "answer": "both",
+  "why": {
+   "ok": {
+    "de": "Richtig: beide. Suggest + -ing und suggest that we + Grundform sind gleichwertig.",
+    "en": "Right: both. Suggest + -ing and suggest that we + base form are equivalent."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "Doch, auch b ist richtig: that we meet sagt dasselbe wie meeting.",
+     "en": "Yes, b is correct too: that we meet says the same as meeting."
+    },
+    {
+     "opt": "b",
+     "de": "Doch, auch a ist richtig: meeting sagt dasselbe wie that we meet.",
+     "en": "Yes, a is correct too: meeting says the same as that we meet."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-in-k1",
+  "type": "kwt",
+  "pat": "rv.insist",
+  "from": "‘I want to see every invoice,’ the client said firmly.",
+  "key": "INSISTED",
+  "frame": "The client ___ every invoice.",
+  "answer": "insisted on seeing",
+  "accepted": [
+   "insisted on viewing",
+   "insisted on checking",
+   "insisted on reviewing",
+   "insisted on being shown",
+   "insisted on getting to see",
+   "insisted that they see",
+   "insisted that he see",
+   "insisted that she see",
+   "insisted they see",
+   "insisted he see",
+   "insisted she see",
+   "insisted on looking at"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: insist braucht on und danach -ing: insisted on seeing.",
+    "en": "Right: insist needs on + -ing: insisted on seeing."
+   },
+   "wrong": [
+    {
+     "not": [
+      "insisted"
+     ],
+     "de": "Das Schlüsselwort insisted muss unverändert in der Lücke stehen.",
+     "en": "The key word insisted must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "insisted",
+      "on",
+      "see"
+     ],
+     "de": "Nach on steht -ing, nicht die Grundform: on seeing.",
+     "en": "After on comes -ing, not the base form: on seeing."
+    },
+    {
+     "if": [
+      "insisted",
+      "to"
+     ],
+     "not": [
+      "on"
+     ],
+     "de": "Insist braucht die Präposition on: insisted on seeing.",
+     "en": "Insist needs the preposition on: insisted on seeing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-in-k2",
+  "type": "kwt",
+  "pat": "rv.insist",
+  "from": "‘Let me pay for the team lunch,’ she said again and again.",
+  "key": "INSISTED",
+  "frame": "She ___ the team lunch.",
+  "answer": "insisted on paying for",
+  "accepted": [
+   "insisted on covering",
+   "insisted on buying",
+   "insisted on treating us to",
+   "insisted that she pay for"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: insisted on paying for: on + -ing, dann das Objekt.",
+    "en": "Right: insisted on paying for: on + -ing, then the object."
+   },
+   "wrong": [
+    {
+     "not": [
+      "insisted"
+     ],
+     "de": "Das Schlüsselwort insisted muss unverändert in der Lücke stehen.",
+     "en": "The key word insisted must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "insisted",
+      "on",
+      "pay"
+     ],
+     "de": "Nach on steht -ing, nicht die Grundform: on paying for.",
+     "en": "After on comes -ing, not the base form: on paying for."
+    },
+    {
+     "if": [
+      "insisted",
+      "to"
+     ],
+     "not": [
+      "on"
+     ],
+     "de": "Insist braucht die Präposition on: insisted on paying for.",
+     "en": "Insist needs the preposition on: insisted on paying for."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-in-f1",
+  "type": "find",
+  "pat": "rv.insist",
+  "prompt": "The board insisted to review every contract.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "on reviewing",
+  "fixed": "The board insisted on reviewing every contract.",
+  "accepted": [
+   "on examining",
+   "on checking"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „insisted to review“. Richtig: insisted on reviewing.",
+    "en": "The error: “insisted to review”. Correct: insisted on reviewing."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Insist braucht on + -ing.",
+     "en": "There is an error: insist needs on + -ing."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „to review“: Nach insist steht on + -ing.",
+     "en": "The error is “to review”: after insist comes on + -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-in-f2",
+  "type": "find",
+  "pat": "rv.insist",
+  "prompt": "My boss insisted for a written confirmation.",
+  "err": [
+   3,
+   3
+  ],
+  "answer": "on",
+  "fixed": "My boss insisted on a written confirmation.",
+  "accepted": [
+   "upon"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „insisted for“. Die Präposition heißt on.",
+    "en": "The error: “insisted for”. The preposition is on."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Die Präposition nach insist ist falsch.",
+     "en": "There is an error: the preposition after insist is wrong."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „for“: Man besteht on etwas, nicht for.",
+     "en": "The error is “for”: you insist on something, not for."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-in-f3",
+  "type": "find",
+  "pat": "rv.insist",
+  "prompt": "They insisted on being paid in advance.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: insist on + -ing („being paid“) ist richtig.",
+    "en": "No error: insist on + -ing (“being paid”) is correct."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: on + -ing ist hier genau das richtige Muster.",
+     "en": "No error: on + -ing is exactly the right pattern here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-in-m1",
+  "type": "meaning",
+  "pat": "rv.insist",
+  "a": "She suggested moving the call.",
+  "b": "She insisted on moving the call.",
+  "q": {
+   "de": "Bei welchem Satz hat sie die Verschiebung nachdrücklich verlangt?",
+   "en": "In which sentence did she firmly demand the change?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. Insist on = sie bestand darauf, nicht nur ein Vorschlag.",
+    "en": "Right: sentence b. Insist on = she held firm; it was no mere proposal."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a ist es nur ein Vorschlag: suggest ist viel schwächer.",
+     "en": "In a it is only a proposal: suggest is much weaker."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: insist ist viel stärker als suggest.",
+     "en": "Not the same: insist is much stronger than suggest."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-aw-k1",
+  "type": "kwt",
+  "pat": "rv.advise-warn",
+  "from": "‘Don't send the draft yet,’ my manager told me.",
+  "key": "ADVISED",
+  "frame": "My manager ___ the draft yet.",
+  "answer": "advised me not to send",
+  "accepted": [
+   "advised me against sending",
+   "advised against sending",
+   "advised that I not send"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: nach advise + Person folgt not to + Verb: advised me not to send.",
+    "en": "Right: advise + person + not to + verb: advised me not to send."
+   },
+   "wrong": [
+    {
+     "not": [
+      "advised"
+     ],
+     "de": "Das Schlüsselwort advised muss unverändert in der Lücke stehen.",
+     "en": "The key word advised must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "advised",
+      "me",
+      "to",
+      "send"
+     ],
+     "not": [
+      "not"
+     ],
+     "de": "Die Verneinung fehlt: advised me not to send.",
+     "en": "The negation is missing: advised me not to send."
+    },
+    {
+     "if": [
+      "advised",
+      "me",
+      "send"
+     ],
+     "not": [
+      "to",
+      "that"
+     ],
+     "de": "Es fehlt das to: advised me not to send.",
+     "en": "The to is missing: advised me not to send."
+    },
+    {
+     "if": [
+      "advised",
+      "sending"
+     ],
+     "not": [
+      "against"
+     ],
+     "de": "Nach advise + Person folgt to + Verb, nicht -ing.",
+     "en": "After advise + person comes to + verb, not -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-aw-k2",
+  "type": "kwt",
+  "pat": "rv.advise-warn",
+  "from": "‘Don't open attachments from unknown senders,’ IT told us.",
+  "key": "WARNED",
+  "frame": "IT ___ attachments from unknown senders.",
+  "answer": "warned us not to open",
+  "accepted": [
+   "warned us never to open",
+   "warned us against opening",
+   "warned us about opening",
+   "warned against opening"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: nach warn + Person folgt not to + Verb: warned us not to open.",
+    "en": "Right: warn + person + not to + verb: warned us not to open."
+   },
+   "wrong": [
+    {
+     "not": [
+      "warned"
+     ],
+     "de": "Das Schlüsselwort warned muss unverändert in der Lücke stehen.",
+     "en": "The key word warned must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "warned",
+      "us",
+      "to",
+      "open"
+     ],
+     "not": [
+      "not",
+      "never"
+     ],
+     "de": "Die Verneinung fehlt: warned us not to open.",
+     "en": "The negation is missing: warned us not to open."
+    },
+    {
+     "if": [
+      "warned",
+      "us",
+      "open"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Es fehlt das to: warned us not to open.",
+     "en": "The to is missing: warned us not to open."
+    },
+    {
+     "if": [
+      "warned",
+      "us",
+      "opening"
+     ],
+     "not": [
+      "against",
+      "about"
+     ],
+     "de": "Nach warn + Person folgt to + Verb, nicht -ing allein.",
+     "en": "After warn + person comes to + verb, not -ing alone."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-aw-f1",
+  "type": "find",
+  "pat": "rv.advise-warn",
+  "prompt": "Our lawyer advised to wait until Monday.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "advised us to",
+  "fixed": "Our lawyer advised us to wait until Monday.",
+  "accepted": [
+   "advised me to",
+   "advised him to",
+   "advised them to",
+   "advised you to",
+   "advised her to"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „advised to“. Es fehlt die Person: advised us to wait.",
+    "en": "The error: “advised to”. The person is missing: advised us to wait."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach advise fehlt die Person.",
+     "en": "There is an error: the person after advise is missing."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „advised to“: Advise braucht die Person davor.",
+     "en": "The error is “advised to”: advise needs the person before to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-aw-f2",
+  "type": "find",
+  "pat": "rv.advise-warn",
+  "prompt": "She warned me not sharing the draft.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "not to share",
+  "fixed": "She warned me not to share the draft.",
+  "accepted": [
+   "against sharing",
+   "about sharing"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „not sharing“. Richtig: warned me not to share.",
+    "en": "The error: “not sharing”. Correct: warned me not to share."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach warn + Person steht not to + Verb.",
+     "en": "There is an error: after warn + person comes not to + verb."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „not sharing“: Es fehlt to, und das Verb braucht die Grundform.",
+     "en": "The error is “not sharing”: to is missing and the verb needs the base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-aw-f3",
+  "type": "find",
+  "pat": "rv.advise-warn",
+  "prompt": "Our trainer advised the team doing a warm-up first.",
+  "err": [
+   5,
+   5
+  ],
+  "answer": "to do",
+  "fixed": "Our trainer advised the team to do a warm-up first.",
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „advised the team doing“. Richtig: advised the team to do.",
+    "en": "The error: “advised the team doing”. Correct: advised the team to do."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach advise + Person steht to + Verb.",
+     "en": "There is an error: after advise + person comes to + verb."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „doing“: Hier braucht es to + Grundform.",
+     "en": "The error is “doing”: here it needs to + base form."
+    }
+   ]
+  },
+  "accepted": [
+   "to perform",
+   "to complete"
+  ]
+ },
+ {
+  "id": "rv-aw-m1",
+  "type": "meaning",
+  "pat": "rv.advise-warn",
+  "a": "She advised us not to wait.",
+  "b": "She advised us to wait.",
+  "q": {
+   "de": "Welcher Satz sagt: Sie riet davon ab zu warten?",
+   "en": "Which sentence says she advised against waiting?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Not vor to dreht den Rat um: sie riet vom Warten ab.",
+    "en": "Right: sentence a. Not before to reverses the advice: she advised against waiting."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b rät sie zum Warten, das ist das Gegenteil von a.",
+     "en": "In b she advises waiting: advised us to wait = we should wait."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: not vor to dreht den Rat um.",
+     "en": "Not the same: not before to reverses the advice."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-of-k1",
+  "type": "kwt",
+  "pat": "rv.offer",
+  "from": "‘I'll cover the next shift,’ Maria told the team.",
+  "key": "OFFERED",
+  "frame": "Maria ___ the next shift.",
+  "answer": "offered to cover",
+  "accepted": [
+   "offered to take",
+   "offered to work",
+   "offered to take over",
+   "offered to take on"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: nach offer folgt to + Verb: offered to cover. Es steht kein -ing da.",
+    "en": "Right: offer + to + verb: offered to cover. No -ing follows."
+   },
+   "wrong": [
+    {
+     "not": [
+      "offered"
+     ],
+     "de": "Das Schlüsselwort offered muss unverändert in der Lücke stehen.",
+     "en": "The key word offered must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "offered"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Offer verlangt direkt to + Verb, nicht -ing: offered to cover.",
+     "en": "Offer takes to + verb directly, not -ing: offered to cover."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-of-k2",
+  "type": "kwt",
+  "pat": "rv.offer",
+  "from": "‘I will send the summary by noon,’ he said.",
+  "key": "PROMISED",
+  "frame": "He ___ the summary by noon.",
+  "answer": "promised to send",
+  "accepted": [
+   "promised to email",
+   "promised to forward",
+   "promised to share",
+   "promised to send over",
+   "promised he would send",
+   "promised that he would send",
+   "promised he'd send",
+   "promised that he'd send",
+   "promised that he will send"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: promise + to + Verb: promised to send. Auch möglich: promised he would send.",
+    "en": "Right: promise + to + verb: promised to send. Also possible: promised he would send."
+   },
+   "wrong": [
+    {
+     "not": [
+      "promised"
+     ],
+     "de": "Das Schlüsselwort promised muss unverändert in der Lücke stehen.",
+     "en": "The key word promised must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "promised",
+      "sending"
+     ],
+     "de": "Nach promise steht to + Verb, nicht -ing: promised to send.",
+     "en": "After promise use to + verb, not -ing: promised to send."
+    },
+    {
+     "if": [
+      "promised",
+      "send"
+     ],
+     "not": [
+      "to",
+      "would",
+      "will",
+      "he",
+      "that",
+      "i",
+      "she"
+     ],
+     "de": "Es fehlt das to: promised to send.",
+     "en": "The to is missing: promised to send."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-of-f1",
+  "type": "find",
+  "pat": "rv.offer",
+  "prompt": "Our agency offered covering the travel costs.",
+  "err": [
+   3,
+   3
+  ],
+  "answer": "to cover",
+  "fixed": "Our agency offered to cover the travel costs.",
+  "accepted": [
+   "to pay for",
+   "to absorb"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „offered covering“. Richtig: offered to cover.",
+    "en": "The error: “offered covering”. Correct: offered to cover."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach offer steht to + Verb.",
+     "en": "There is an error: after offer comes to + verb."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „covering“: Offer nimmt kein -ing.",
+     "en": "The error is “covering”: offer takes no -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-of-f2",
+  "type": "find",
+  "pat": "rv.offer",
+  "prompt": "She promised sending the report by noon.",
+  "err": [
+   2,
+   2
+  ],
+  "answer": "to send",
+  "fixed": "She promised to send the report by noon.",
+  "accepted": [
+   "to email",
+   "to forward",
+   "to deliver",
+   "that she would send",
+   "she would send"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „promised sending“. Richtig: promised to send.",
+    "en": "The error: “promised sending”. Correct: promised to send."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach promise steht to + Verb.",
+     "en": "There is an error: after promise comes to + verb."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „sending“: Promise nimmt kein -ing.",
+     "en": "The error is “sending”: promise takes no -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-of-f3",
+  "type": "find",
+  "pat": "rv.offer",
+  "prompt": "The vendor refused to lower the price.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: refuse + to + Verb („to lower“) ist richtig.",
+    "en": "No error: refuse + to + verb (“to lower”) is correct."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach refuse steht to + Verb, genau wie hier.",
+     "en": "No error: after refuse comes to + verb, exactly as here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rv-of-m1",
+  "type": "meaning",
+  "pat": "rv.offer",
+  "a": "She admitted paying the costs.",
+  "b": "She offered to pay the costs.",
+  "q": {
+   "de": "Bei welchem Satz sind die Kosten noch nicht bezahlt?",
+   "en": "In which sentence have the costs not been paid yet?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. Offered to pay zeigt nach vorn: bezahlt wird erst noch.",
+    "en": "Right: sentence b. Offered to pay points ahead: payment is still to come."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a hat sie schon gezahlt: admitted paying blickt auf das Vergangene zurück.",
+     "en": "In a she has already paid: admitted paying looks back."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: offer zeigt nach vorn, admit zurück.",
+     "en": "Not the same: offer points ahead, admit points back."
+    }
+   ]
+  }
+ }
+]

@@ -1,0 +1,672 @@
+{
+ "The woman ___ lives next door is a doctor.": {
+  "pat": "rc.who-which",
+  "why": {
+   "ok": {
+    "de": "Richtig: woman ist eine Person, also who (oder that).",
+    "en": "Right: woman is a person, so who (or that)."
+   },
+   "wrong": [
+    {
+     "opt": "which",
+     "de": "„Which“ steht für Sachen. Eine Ärztin ist eine Person: who.",
+     "en": "“Which” is for things. A doctor is a person: who."
+    },
+    {
+     "opt": "whose",
+     "pat": "rc.whose",
+     "de": "„Whose“ zeigt Besitz. Hier lebt die Frau selbst nebenan, nichts gehört ihr.",
+     "en": "“Whose” shows possession. Here the woman herself lives next door."
+    },
+    {
+     "opt": "where",
+     "pat": "rc.where-why",
+     "de": "„Where“ steht für Orte. Das Bezugswort woman ist eine Person.",
+     "en": "“Where” is for places. The noun woman is a person."
+    }
+   ]
+  }
+ },
+ "That's the man ___ car was stolen.": {
+  "pat": "rc.whose",
+  "why": {
+   "ok": {
+    "de": "Richtig: Das Auto gehört dem Mann, also whose car („dessen Auto“).",
+    "en": "Right: the car belongs to the man, so whose car."
+   },
+   "wrong": [
+    {
+     "opt": "who",
+     "pat": "rc.who-which",
+     "de": "„Who“ ersetzt die Person selbst. Gemeint ist ihr Besitz: dessen Auto.",
+     "en": "“Who” stands for the person. Here we need what belongs to him: his car."
+    },
+    {
+     "opt": "which",
+     "de": "„Which“ steht für Sachen und zeigt keinen Besitz an.",
+     "en": "“Which” is for things and shows no possession."
+    },
+    {
+     "opt": "that",
+     "de": "„That“ zeigt keinen Besitz. Vor car braucht es whose.",
+     "en": "“That” shows no possession. Before car you need whose."
+    }
+   ]
+  }
+ },
+ "My car, that is ten years old, still runs well.": {
+  "pat": "rc.commas",
+  "why": {
+   "ok": {
+    "de": "Richtig: Eine Zusatzinfo zwischen Kommas braucht which, nie that.",
+    "en": "Right: extra information between commas takes which, never that."
+   },
+   "wrong": [
+    {
+     "if": [
+      "that"
+     ],
+     "de": "Nach dem Komma ist that nicht erlaubt. Hier steht which.",
+     "en": "After a comma, that is not allowed. Use which here."
+    },
+    {
+     "if": [
+      "who"
+     ],
+     "de": "„Who“ steht für Personen. Ein Auto ist eine Sache: which.",
+     "en": "“Who” is for people. A car is a thing: which."
+    },
+    {
+     "not": [
+      "which"
+     ],
+     "de": "Gesucht ist which: Es ist Zusatzinfo, also mit Kommas und which.",
+     "en": "Use which: this is extra information, so commas and which."
+    }
+   ]
+  }
+ },
+ "The customer ___ called this morning wants a demo.": {
+  "pat": "rc.who-which",
+  "why": {
+   "ok": {
+    "de": "Richtig: customer ist eine Person, also who (oder that).",
+    "en": "Right: customer is a person, so who (or that)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "which"
+     ],
+     "de": "„Which“ steht für Sachen. Ein Kunde ist eine Person: who.",
+     "en": "“Which” is for things. A customer is a person: who."
+    },
+    {
+     "pat": "rc.whose",
+     "if": [
+      "whose"
+     ],
+     "de": "„Whose“ zeigt Besitz. Hier ruft der Kunde selbst an: who.",
+     "en": "“Whose” shows possession. Here the customer is the one calling: who."
+    },
+    {
+     "if": [
+      "whom"
+     ],
+     "de": "„Whom“ wäre das Objekt. Hier ist der Kunde das Subjekt: who.",
+     "en": "“Whom” would be the object. Here the customer is the subject: who."
+    },
+    {
+     "not": [
+      "who",
+      "that"
+     ],
+     "de": "Gesucht ist ein Relativwort für eine Person: who oder that.",
+     "en": "A relative word for a person is needed: who or that."
+    }
+   ]
+  }
+ },
+ "The client ___ contract we signed last week has already asked for changes.": {
+  "pat": "rc.whose",
+  "why": {
+   "ok": {
+    "de": "Richtig: „dessen Vertrag“ = whose contract. Nach whose steht direkt das Nomen.",
+    "en": "Right: “whose contract” = his or her contract. The noun follows whose directly."
+   },
+   "wrong": [
+    {
+     "opt": "which",
+     "de": "„Which“ zeigt keinen Besitz. Der Vertrag gehört dem Kunden: whose.",
+     "en": "“Which” shows no possession. The contract belongs to the client: whose."
+    },
+    {
+     "opt": "whom",
+     "de": "„Whom“ ist eine Objektform und steht nie direkt vor einem Nomen wie contract.",
+     "en": "“Whom” is an object form and never sits directly before a noun like contract."
+    },
+    {
+     "opt": "who",
+     "pat": "rc.who-which",
+     "de": "„Who“ steht nie direkt vor einem Nomen. Dafür gibt es whose.",
+     "en": "“Who” never sits directly before a noun. For that there is whose."
+    }
+   ]
+  }
+ },
+ "That is the software ___ we use for all our customer data.": {
+  "pat": "rc.who-which",
+  "why": {
+   "ok": {
+    "de": "Richtig: software ist eine Sache, also which (oder that).",
+    "en": "Right: software is a thing, so which (or that)."
+   },
+   "wrong": [
+    {
+     "opt": "who",
+     "de": "„Who“ steht nur für Personen. Software ist eine Sache: which.",
+     "en": "“Who” is only for people. Software is a thing: which."
+    },
+    {
+     "opt": "where",
+     "pat": "rc.where-why",
+     "de": "„Where“ steht für Orte. Software ist kein Ort.",
+     "en": "“Where” is for places. Software is not a place."
+    },
+    {
+     "opt": "whose",
+     "pat": "rc.whose",
+     "de": "„Whose“ braucht direkt danach ein Nomen. Hier folgt we use: which.",
+     "en": "“Whose” needs a noun right after it. Here we use follows: which."
+    }
+   ]
+  }
+ },
+ "Our new office, ___ opens next month, has a rooftop terrace.": {
+  "pat": "rc.commas",
+  "why": {
+   "ok": {
+    "de": "Richtig: Zusatzinfo zwischen Kommas, für eine Sache: which. Nie that.",
+    "en": "Right: extra information between commas, a thing: which. Never that."
+   },
+   "wrong": [
+    {
+     "opt": "that",
+     "de": "Nach einem Komma steht nie that. Die Zusatzinfo braucht which.",
+     "en": "After a comma, never that. The extra information needs which."
+    },
+    {
+     "opt": "who",
+     "pat": "rc.who-which",
+     "de": "„Who“ steht für Personen. Ein Büro ist eine Sache: which.",
+     "en": "“Who” is for people. An office is a thing: which."
+    },
+    {
+     "opt": "what",
+     "pat": "rc.that-what",
+     "de": "„What“ hat kein Bezugswort vor sich. Hier steht office davor: which.",
+     "en": "“What” has no antecedent before it. Here office comes first: which."
+    }
+   ]
+  }
+ },
+ "I haven't read the report ___ you sent me yesterday.": {
+  "pat": "rc.that-what",
+  "why": {
+   "ok": {
+    "de": "Richtig: report ist das Bezugswort, also that (oder which).",
+    "en": "Right: report is the antecedent, so that (or which)."
+   },
+   "wrong": [
+    {
+     "opt": "who",
+     "pat": "rc.who-which",
+     "de": "„Who“ steht für Personen. Ein Bericht ist eine Sache.",
+     "en": "“Who” is for people. A report is a thing."
+    },
+    {
+     "opt": "what",
+     "de": "Vor der Lücke steht report als Bezugswort. Dann folgt that, nie what.",
+     "en": "The noun report stands before the gap. Then use that, never what."
+    },
+    {
+     "opt": "where",
+     "pat": "rc.where-why",
+     "de": "„Where“ steht für Orte, und ein Bericht ist keiner.",
+     "en": "“Where” is for places, and a report is not one."
+    }
+   ]
+  }
+ },
+ "Berlin is the city ___ our company was founded.": {
+  "pat": "rc.where-why",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach einem Ort + ganzer Satz steht where (= in which).",
+    "en": "Right: place + full clause = where (= in which)."
+   },
+   "wrong": [
+    {
+     "opt": "who",
+     "pat": "rc.who-which",
+     "de": "„Who“ steht für Personen. Berlin ist ein Ort: where.",
+     "en": "“Who” is for people. Berlin is a place: where."
+    },
+    {
+     "opt": "whose",
+     "pat": "rc.whose",
+     "de": "„Whose“ zeigt Besitz. Hier geht es um den Ort der Gründung, nicht um Besitz.",
+     "en": "“Whose” shows possession. This is about the place of founding, not ownership."
+    },
+    {
+     "opt": "which",
+     "de": "„Which“ allein passt nicht: Es bräuchte in dazu (in which).",
+     "en": "“Which” alone does not fit: it would need in (in which)."
+    }
+   ]
+  }
+ },
+ "Everything ___ you told me turned out to be true.": {
+  "pat": "rc.that-what",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach everything, all und nothing steht that.",
+    "en": "Right: after everything, all and nothing, use that."
+   },
+   "wrong": [
+    {
+     "opt": "who",
+     "pat": "rc.who-which",
+     "de": "„Who“ steht für Personen. Everything ist eine Sache.",
+     "en": "“Who” is for people. Everything is a thing."
+    },
+    {
+     "opt": "what",
+     "de": "Deutsch „alles, was“ lockt zu what. Nach everything steht aber that.",
+     "en": "German “alles, was” tempts you into what. After everything use that."
+    },
+    {
+     "opt": "whose",
+     "pat": "rc.whose",
+     "de": "„Whose“ zeigt Besitz. Hier folgt you told me, also ein Satz und kein Nomen.",
+     "en": "“Whose” shows possession. Here you told me follows, not a noun."
+    }
+   ]
+  }
+ },
+ "The sales rep ___ closed the biggest deal last year just got promoted.": {
+  "pat": "rc.who-which",
+  "why": {
+   "ok": {
+    "de": "Richtig: Ein Vertriebler ist eine Person, also who (oder that).",
+    "en": "Right: a sales rep is a person, so who (or that)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "which"
+     ],
+     "de": "„Which“ steht für Sachen. Ein Vertriebler ist eine Person: who.",
+     "en": "“Which” is for things. A sales rep is a person: who."
+    },
+    {
+     "pat": "rc.whose",
+     "if": [
+      "whose"
+     ],
+     "de": "„Whose“ braucht ein Nomen danach. Hier folgt closed: who.",
+     "en": "“Whose” needs a noun after it. Here closed follows: who."
+    },
+    {
+     "not": [
+      "who",
+      "that"
+     ],
+     "de": "Gesucht ist ein Relativwort für eine Person: who oder that.",
+     "en": "A relative word for a person is needed: who or that."
+    }
+   ]
+  }
+ },
+ "My colleague, ___ brother works at Google, introduced me to the recruiter.": {
+  "pat": "rc.whose",
+  "why": {
+   "ok": {
+    "de": "Richtig: „dessen Bruder“ = whose brother. whose zeigt den Besitz.",
+    "en": "Right: “whose brother” = his or her brother. whose shows possession."
+   },
+   "wrong": [
+    {
+     "pat": "rc.who-which",
+     "if": [
+      "who"
+     ],
+     "de": "„Who“ ersetzt die Person selbst. Vor brother braucht es whose.",
+     "en": "“Who” replaces the person. Before brother you need whose."
+    },
+    {
+     "if": [
+      "that"
+     ],
+     "de": "„That“ zeigt keinen Besitz. Vor brother braucht es whose.",
+     "en": "“That” shows no possession. Before brother you need whose."
+    },
+    {
+     "if": [
+      "which"
+     ],
+     "de": "„Which“ steht für Sachen. Der Kollege ist eine Person: whose.",
+     "en": "“Which” is for things. The colleague is a person: whose."
+    },
+    {
+     "if": [
+      "whom"
+     ],
+     "de": "„Whom“ ist eine Objektform und steht nie direkt vor einem Nomen.",
+     "en": "“Whom” is an object form and never sits directly before a noun."
+    }
+   ]
+  }
+ },
+ "The reason ___ we lost the bid was our high price.": {
+  "pat": "rc.where-why",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach reason steht why (oder that, for which).",
+    "en": "Right: after reason use why (or that, for which)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "because"
+     ],
+     "de": "Nach reason steht why, nie because: the reason why …",
+     "en": "After reason use why, never because: the reason why …"
+    },
+    {
+     "if": [
+      "where"
+     ],
+     "de": "„Where“ steht für Orte. Ein Grund ist kein Ort: why.",
+     "en": "“Where” is for places. A reason is not a place: why."
+    },
+    {
+     "if": [
+      "which"
+     ],
+     "not": [
+      "for"
+     ],
+     "de": "„Which“ braucht hier for davor (for which). Einfacher ist why.",
+     "en": "“Which” needs for before it here (for which). Simpler: why."
+    },
+    {
+     "not": [
+      "why",
+      "that",
+      "which"
+     ],
+     "de": "Gesucht ist ein Relativwort für einen Grund: why (oder that).",
+     "en": "A relative word for a reason is needed: why (or that)."
+    }
+   ]
+  }
+ },
+ "The restaurant ___ we had lunch yesterday was amazing.": {
+  "pat": "rc.where-why",
+  "why": {
+   "ok": {
+    "de": "Richtig: Ort + Satz = where. Auch at oder in which ginge.",
+    "en": "Right: place + clause = where. At or in which would also work."
+   },
+   "wrong": [
+    {
+     "if": [
+      "which"
+     ],
+     "not": [
+      "at",
+      "in"
+     ],
+     "de": "„Which“ allein braucht at oder in davor (at which). Einfacher: where.",
+     "en": "“Which” alone needs at or in before it (at which). Simpler: where."
+    },
+    {
+     "if": [
+      "that"
+     ],
+     "de": "„That“ passt hier nicht, denn at fehlt am Satzende. Mit where entfällt es.",
+     "en": "“That” does not fit here because at is missing at the end. With where it is not needed."
+    },
+    {
+     "pat": "rc.who-which",
+     "if": [
+      "who"
+     ],
+     "de": "„Who“ steht für Personen. Ein Restaurant ist ein Ort: where.",
+     "en": "“Who” is for people. A restaurant is a place: where."
+    },
+    {
+     "not": [
+      "where",
+      "at",
+      "in"
+     ],
+     "de": "Gesucht ist ein Relativwort für einen Ort: where (oder at / in which).",
+     "en": "A relative word for a place is needed: where (or at / in which)."
+    }
+   ]
+  }
+ },
+ "She is the colleague with ___ I worked on the Frankfurt project.": {
+  "pat": "rc.prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach einer Präposition steht whom, nicht who.",
+    "en": "Right: after a preposition use whom, not who."
+   },
+   "wrong": [
+    {
+     "if": [
+      "who"
+     ],
+     "de": "Direkt nach with verlangt das förmliche Englisch whom.",
+     "en": "Right after with, formal English requires whom."
+    },
+    {
+     "if": [
+      "that"
+     ],
+     "de": "„That“ steht nie direkt nach einer Präposition. Hier: whom.",
+     "en": "“That” never follows a preposition directly. Here: whom."
+    },
+    {
+     "pat": "rc.who-which",
+     "if": [
+      "which"
+     ],
+     "de": "„Which“ steht für Sachen. Colleague ist eine Person: whom.",
+     "en": "“Which” is for things. Colleague is a person: whom."
+    },
+    {
+     "not": [
+      "whom"
+     ],
+     "de": "Gesucht ist die Objektform für Personen nach der Präposition: whom.",
+     "en": "The object form for people after the preposition is needed: whom."
+    }
+   ]
+  }
+ },
+ "The manager is on leave. I sent my report to her. → The manager I sent my report ___ is on leave.": {
+  "pat": "rc.prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: send … to gehört zusammen; im Relativsatz steht to am Ende.",
+    "en": "Right: send … to belongs together; in the relative clause to comes last."
+   },
+   "wrong": [
+    {
+     "if": [
+      "whom"
+     ],
+     "de": "Hier fehlt kein Relativwort, sondern die Präposition to am Ende.",
+     "en": "No relative word is missing here, but the preposition to at the end."
+    },
+    {
+     "if": [
+      "who"
+     ],
+     "de": "„Who“ ist hier nicht gefragt. Es fehlt die Präposition zu send.",
+     "en": "“Who” is not what is asked for. The preposition for send is missing."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Die Präposition zu send fehlt: Im Relativsatz steht sie am Ende.",
+     "en": "The preposition for send is missing: in the relative clause it stands at the end."
+    }
+   ]
+  }
+ },
+ "Our client is based in Munich. His company bought 500 licenses. → Our client, ___ company bought 500 licenses, is based in Munich.": {
+  "pat": "rc.whose",
+  "why": {
+   "ok": {
+    "de": "Richtig: whose ersetzt das Possessivwort his und zeigt Besitz.",
+    "en": "Right: whose replaces the possessive his and shows possession."
+   },
+   "wrong": [
+    {
+     "if": [
+      "his"
+     ],
+     "de": "„His“ steht im Ausgangssatz. Im Relativsatz ersetzt whose das Wort his.",
+     "en": "“His” is in the source sentence. In the clause, whose replaces his."
+    },
+    {
+     "pat": "rc.who-which",
+     "if": [
+      "who"
+     ],
+     "de": "„Who“ ersetzt die Person selbst. Vor company braucht es whose.",
+     "en": "“Who” replaces the person. Before company you need whose."
+    },
+    {
+     "if": [
+      "that"
+     ],
+     "de": "„That“ steht nach einem Komma nie. Und es zeigt keinen Besitz.",
+     "en": "“That” never follows a comma. And it shows no possession."
+    },
+    {
+     "not": [
+      "whose"
+     ],
+     "de": "Gesucht ist das Wort für „dessen“: whose.",
+     "en": "The word for “dessen” is needed: whose."
+    }
+   ]
+  }
+ },
+ "The colleague which sits next to me is from Spain.": {
+  "pat": "rc.who-which",
+  "why": {
+   "ok": {
+    "de": "Richtig: colleague ist eine Person, also who (oder that), nie which.",
+    "en": "Right: colleague is a person, so who (or that), never which."
+   },
+   "wrong": [
+    {
+     "if": [
+      "which"
+     ],
+     "de": "„Which“ ist für Sachen. Für Personen gilt who (oder that).",
+     "en": "“Which” is for things. For people use who (or that)."
+    },
+    {
+     "pat": "rc.whose",
+     "if": [
+      "whose"
+     ],
+     "de": "„Whose“ zeigt Besitz. Hier sitzt die Person selbst neben mir: who.",
+     "en": "“Whose” shows possession. Here the person herself sits next to me: who."
+    },
+    {
+     "not": [
+      "who",
+      "that"
+     ],
+     "de": "Gesucht ist ein Relativwort für Personen: who oder that.",
+     "en": "A relative word for people is needed: who or that."
+    }
+   ]
+  }
+ },
+ "I know a company that main office is in Dublin.": {
+  "pat": "rc.whose",
+  "why": {
+   "ok": {
+    "de": "Richtig: „deren Hauptsitz“ = whose main office. whose zeigt den Besitz.",
+    "en": "Right: “whose main office” = its main office. whose shows possession."
+   },
+   "wrong": [
+    {
+     "if": [
+      "that"
+     ],
+     "de": "„That“ zeigt keinen Besitz. Vor main office braucht es whose.",
+     "en": "“That” shows no possession. Before main office you need whose."
+    },
+    {
+     "if": [
+      "which"
+     ],
+     "de": "„Which“ zeigt keinen Besitz. Vor main office braucht es whose.",
+     "en": "“Which” shows no possession. Before main office you need whose."
+    },
+    {
+     "not": [
+      "whose"
+     ],
+     "de": "Gesucht ist das Wort für „deren“: whose, direkt vor main office.",
+     "en": "The word for “deren” is needed: whose, right before main office."
+    }
+   ]
+  }
+ },
+ "My car, that is ten years old, still runs.": {
+  "pat": "rc.commas",
+  "why": {
+   "ok": {
+    "de": "Richtig: Eine Zusatzinfo zwischen Kommas braucht which, nie that.",
+    "en": "Right: extra information between commas takes which, never that."
+   },
+   "wrong": [
+    {
+     "if": [
+      "that"
+     ],
+     "de": "Nach dem Komma ist that nicht erlaubt. Hier steht which.",
+     "en": "After a comma, that is not allowed. Use which here."
+    },
+    {
+     "if": [
+      "who"
+     ],
+     "de": "„Who“ steht für Personen. Ein Auto ist eine Sache: which.",
+     "en": "“Who” is for people. A car is a thing: which."
+    },
+    {
+     "not": [
+      "which"
+     ],
+     "de": "Gesucht ist which: Es ist Zusatzinfo, also mit Kommas und which.",
+     "en": "Use which: this is extra information, so commas and which."
+    }
+   ]
+  },
+  "dup": "My car, that is ten years old, still runs well."
+ }
+}

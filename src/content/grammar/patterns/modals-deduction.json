@@ -1,0 +1,507 @@
+{
+ "topic": "modals-deduction",
+ "canDo": {
+  "de": "Ich kann Vermutungen abstufen: fast sicher mit must, ausgeschlossen mit can't, möglich mit might, may oder could – für jetzt mit der Grundform und für früher mit have + Partizip.",
+  "en": "I can grade my guesses: almost sure with must, ruled out with can't, possible with might, may, or could – with the base form for now and have + participle for the past."
+ },
+ "order": [
+  "md.must-now",
+  "md.cant-now",
+  "md.might-now",
+  "md.must-have",
+  "md.cant-have",
+  "md.might-have"
+ ],
+ "introPlan": [
+  [
+   "md.must-now",
+   "md.cant-now"
+  ],
+  [
+   "md.might-now",
+   "md.must-have"
+  ],
+  [
+   "md.cant-have",
+   "md.might-have"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Wie sicher bist du: fast sicher (must), ausgeschlossen (can't) oder nur möglich (might, may, could)?",
+   "Geht es um jetzt (Grundform oder be + -ing) oder um früher (have + Partizip)?",
+   "Hast du einen Hinweis, aus dem du schließt, oder rätst du nur?"
+  ],
+  "en": [
+   "How sure are you: almost sure (must), ruled out (can't), or only possible (might, may, could)?",
+   "Is it about now (base form or be + -ing) or about the past (have + participle)?",
+   "Do you have a clue to conclude from, or are you only guessing?"
+  ]
+ },
+ "patterns": [
+  {
+   "id": "md.must-now",
+   "name": {
+    "de": "must be · fast sicher (jetzt)",
+    "en": "must be · almost sure (now)"
+   },
+   "form": {
+    "de": "must + Grundform / be + -ing",
+    "en": "must + base form / be + -ing"
+   },
+   "use": {
+    "de": "Du schließt aus einem Hinweis, was jetzt sehr wahrscheinlich stimmt. must nennt hier keine Pflicht, sondern einen logischen Schluss.",
+    "en": "You conclude from a clue what is very probably true now. Here must is not an obligation but a logical conclusion."
+   },
+   "signals": [
+    "must be",
+    "has to be"
+   ],
+   "ex": [
+    {
+     "en": "That number must be wrong – the totals don't add up.",
+     "de": "Diese Zahl muss falsch sein – die Summen passen nicht.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Her out-of-office is on, so she must be traveling this week.",
+     "de": "Ihre Abwesenheitsnotiz ist an, also ist sie diese Woche bestimmt unterwegs.",
+     "ctx": "mail"
+    },
+    {
+     "en": "You must be exhausted after that flight.",
+     "de": "Du bist nach dem Flug bestimmt erschöpft.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Her light is on. She must work late right now.",
+    "good": "Her light is on. She must be working late right now.",
+    "cause": {
+     "de": "Das Deutsche hat keine Verlaufsform: „Sie muss gerade noch arbeiten“ klingt mit dem einfachen Verb ganz normal. Im Englischen braucht ein Vorgang, der jetzt läuft, be + -ing.",
+     "en": "German has no progressive form: “Sie muss gerade noch arbeiten” works with a plain verb. In English an action in progress now needs be + -ing."
+    }
+   },
+   "contrast": {
+    "with": "md.cant-now",
+    "a": "She must be in the office – her coat is here.",
+    "b": "She can't be in the office – her coat is gone.",
+    "diff": {
+     "de": "must: Der Hinweis spricht dafür. can't: Der Hinweis spricht dagegen.",
+     "en": "must: the clue points to yes. can't: the clue points to no."
+    }
+   },
+   "ccq": [
+    {
+     "s": "He must be the new director.",
+     "q": {
+      "de": "Ist der Sprecher fast sicher?",
+      "en": "Is the speaker almost sure?"
+     },
+     "a": true
+    },
+    {
+     "s": "The lights are on, so someone must be in the office.",
+     "q": {
+      "de": "Ist es eine Pflicht, im Büro zu sein?",
+      "en": "Is it an obligation to be in the office?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Schließt du aus einem Hinweis auf jetzt, und läuft die Handlung gerade?",
+    "en": "Do you conclude from a clue about now, and is the action happening right now?"
+   }
+  },
+  {
+   "id": "md.cant-now",
+   "name": {
+    "de": "can't be · unmöglich (jetzt)",
+    "en": "can't be · impossible (now)"
+   },
+   "form": {
+    "de": "can't + Grundform / be + -ing",
+    "en": "can't + base form / be + -ing"
+   },
+   "use": {
+    "de": "Du schließt aus einem Hinweis, dass etwas jetzt nicht stimmen kann. Die Verneinung von must in dieser Bedeutung ist can't.",
+    "en": "You conclude from a clue that something cannot be true now. The negative of must in this meaning is can't."
+   },
+   "signals": [
+    "can't be",
+    "cannot be",
+    "couldn't be"
+   ],
+   "ex": [
+    {
+     "en": "That can't be the final figure – it's twice last year's.",
+     "de": "Das kann nicht die endgültige Zahl sein – sie ist doppelt so hoch wie letztes Jahr.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "The sender can't be our supplier – the domain looks wrong.",
+     "de": "Der Absender kann nicht unser Lieferant sein – die Domain sieht falsch aus.",
+     "ctx": "mail"
+    },
+    {
+     "en": "He can't be in Munich – I just saw him in the lobby.",
+     "de": "Er kann nicht in München sein – ich habe ihn gerade in der Lobby gesehen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "He mustn't be the manager – he's only an intern.",
+    "good": "He can't be the manager – he's only an intern.",
+    "cause": {
+     "de": "Man verneint must einfach mit mustn't. Für Schlüsse ist mustn't unüblich, can't ist sicher; mustn't klingt nach „darf nicht“.",
+     "en": "Learners simply negate must with mustn't. For deductions mustn't is uncommon, can't is safe; mustn't sounds like “not allowed”."
+    }
+   },
+   "contrast": {
+    "with": "md.must-now",
+    "a": "She can't be at home – her car is gone.",
+    "b": "She must be at home – her car is here.",
+    "diff": {
+     "de": "can't: Der Hinweis spricht dagegen. must: Der Hinweis spricht dafür.",
+     "en": "can't: the clue points against it. must: the clue points for it."
+    }
+   },
+   "ccq": [
+    {
+     "s": "That can't be Tom's car.",
+     "q": {
+      "de": "Hält der Sprecher es für möglich, dass es Toms Auto ist?",
+      "en": "Does the speaker think it is possible that it is Tom's car?"
+     },
+     "a": false
+    },
+    {
+     "s": "He can't be serious.",
+     "q": {
+      "de": "Glaubt der Sprecher, dass er es ernst meint?",
+      "en": "Does the speaker believe he means it?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Spricht der Hinweis dafür oder dagegen, und wie sicher bist du?",
+    "en": "Does the clue point for or against, and how sure are you?"
+   },
+   "usNote": {
+    "de": "Im amerikanischen Englisch sagt man für „wahrscheinlich nicht“ oft auch must not (be). can't ist stärker: so gut wie ausgeschlossen.",
+    "en": "In American English, must not (be) is also common for “probably not”. can't is stronger: almost ruled out."
+   }
+  },
+  {
+   "id": "md.might-now",
+   "name": {
+    "de": "might / may / could · möglich (jetzt)",
+    "en": "might / may / could · possible (now)"
+   },
+   "form": {
+    "de": "might / may / could + Grundform",
+    "en": "might / may / could + base form"
+   },
+   "use": {
+    "de": "Du hältst etwas jetzt für möglich, bist aber nicht sicher. might, may und could passen hier alle; must und can't wären zu sicher.",
+    "en": "You think something is possible now but are not sure. might, may, and could all fit here; must and can't would be too sure."
+   },
+   "signals": [
+    "might be",
+    "may be",
+    "could be",
+    "might not be"
+   ],
+   "ex": [
+    {
+     "en": "The delay might be a supplier issue, but we don't know yet.",
+     "de": "Die Verzögerung liegt vielleicht am Lieferanten, aber wir wissen es noch nicht.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "She may be in a meeting, so I'll try again later.",
+     "de": "Sie ist vielleicht in einem Meeting, ich versuche es später noch einmal.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Don't call yet – she could be sleeping.",
+     "de": "Ruf noch nicht an – sie schläft vielleicht.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Where is Tom? He can be in the meeting.",
+    "good": "Where is Tom? He might be in the meeting.",
+    "cause": {
+     "de": "Im Deutschen sagt man „Er kann im Meeting sein“. Im Englischen ist can für eine Vermutung über eine bestimmte Situation ungewöhnlich; dafür nimmt man might, may oder could.",
+     "en": "German says “Er kann im Meeting sein”. In English, can is unusual for a guess about one specific situation; use might, may, or could."
+    }
+   },
+   "contrast": {
+    "with": "md.must-now",
+    "a": "She might be at her desk.",
+    "b": "She must be at her desk.",
+    "diff": {
+     "de": "might: nur eine Möglichkeit, ohne starken Hinweis. must: fast sicher, mit klarem Hinweis.",
+     "en": "might: only a possibility, without a strong clue. must: almost sure, with a clear clue."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The error might be in the formula.",
+     "q": {
+      "de": "Ist der Sprecher sicher, dass der Fehler in der Formel liegt?",
+      "en": "Is the speaker sure the error is in the formula?"
+     },
+     "a": false
+    },
+    {
+     "s": "He could be at lunch.",
+     "q": {
+      "de": "Ist es ausgeschlossen, dass er beim Essen ist?",
+      "en": "Is it ruled out that he is at lunch?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Bist du sicher, oder nennst du nur eine Möglichkeit?",
+    "en": "Are you sure, or are you only naming one possibility?"
+   }
+  },
+  {
+   "id": "md.must-have",
+   "name": {
+    "de": "must have · fast sicher (früher)",
+    "en": "must have · almost sure (past)"
+   },
+   "form": {
+    "de": "must have + Partizip",
+    "en": "must have + past participle"
+   },
+   "use": {
+    "de": "Du schließt aus einem Hinweis, was früher sehr wahrscheinlich passiert ist. have steht direkt nach must, danach folgt die 3. Verbform.",
+    "en": "You conclude from a clue what very probably happened earlier. have comes right after must, then the past participle."
+   },
+   "signals": [
+    "must have",
+    "must've"
+   ],
+   "ex": [
+    {
+     "en": "The numbers don't match, so someone must have changed the file.",
+     "de": "Die Zahlen passen nicht, also hat jemand die Datei bestimmt geändert.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "You must have missed my email – I sent it on Monday.",
+     "de": "Du hast meine E-Mail bestimmt übersehen – ich habe sie am Montag geschickt.",
+     "ctx": "mail"
+    },
+    {
+     "en": "He must have been exhausted after that trip.",
+     "de": "Er war nach dieser Reise bestimmt erschöpft.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The server must crashed last night.",
+    "good": "The server must have crashed last night.",
+    "cause": {
+     "de": "Im Deutschen steht das Hilfsverb am Satzende: „muss abgestürzt sein“. Im Englischen muss have direkt hinter must stehen.",
+     "en": "In German the auxiliary sits at the end: “muss abgestürzt sein”. In English have must come right after must."
+    }
+   },
+   "contrast": {
+    "with": "md.cant-have",
+    "a": "He must have seen the sign.",
+    "b": "He can't have seen the sign.",
+    "diff": {
+     "de": "must have: sehr wahrscheinlich passiert. can't have: so gut wie ausgeschlossen.",
+     "en": "must have: very probably happened. can't have: almost certainly did not happen."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Someone must have left the door open.",
+     "q": {
+      "de": "Ist der Sprecher fast sicher, dass jemand die Tür offen ließ?",
+      "en": "Is the speaker almost sure that someone left the door open?"
+     },
+     "a": true
+    },
+    {
+     "s": "They must have been in a hurry.",
+     "q": {
+      "de": "Redet der Sprecher über die Zukunft?",
+      "en": "Is the speaker talking about the future?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Schließt du aus einem Hinweis auf etwas, das schon passiert ist? Was steht direkt nach dem Modalverb?",
+    "en": "Do you conclude from a clue about something that already happened? What comes right after the modal?"
+   }
+  },
+  {
+   "id": "md.cant-have",
+   "name": {
+    "de": "can't have · unmöglich (früher)",
+    "en": "can't have · impossible (past)"
+   },
+   "form": {
+    "de": "can't / couldn't have + Partizip",
+    "en": "can't / couldn't have + past participle"
+   },
+   "use": {
+    "de": "Du schließt aus einem Hinweis, dass etwas früher nicht passiert sein kann. can't have und couldn't have sind hier gleichwertig.",
+    "en": "You conclude from a clue that something cannot have happened earlier. can't have and couldn't have work equally well here."
+   },
+   "signals": [
+    "can't have",
+    "cannot have",
+    "couldn't have"
+   ],
+   "ex": [
+    {
+     "en": "The error can't have come from our side – the logs are clean.",
+     "de": "Der Fehler kann nicht von uns gekommen sein – die Protokolle sind sauber.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "He can't have gotten my message – the email bounced.",
+     "de": "Er kann meine Nachricht nicht bekommen haben – die E-Mail kam zurück.",
+     "ctx": "mail"
+    },
+    {
+     "en": "They can't have left yet – their car is still outside.",
+     "de": "Sie können noch nicht gegangen sein – ihr Auto steht noch draußen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Tom can't be in the office on Friday – he was in Boston all day.",
+    "good": "Tom can't have been in the office on Friday – he was in Boston all day.",
+    "cause": {
+     "de": "Das Deutsche zeigt die Vergangenheit am Satzende: „kann nicht gewesen sein“. Im Englischen muss have been direkt hinter can't stehen. Es ist ein Zeitfehler, kein Wort-für-Wort-Fehler.",
+     "en": "German shows the past at the end: “kann nicht gewesen sein”. In English have been must come right after can't. It is a tense slip, not a word-for-word error."
+    }
+   },
+   "contrast": {
+    "with": "md.might-have",
+    "a": "He can't have read the report.",
+    "b": "He might not have read the report.",
+    "diff": {
+     "de": "can't have: so gut wie ausgeschlossen. might not have: Vielleicht hat er ihn nicht gelesen.",
+     "en": "can't have: almost certainly not true. might not have: maybe he did not read it."
+    }
+   },
+   "ccq": [
+    {
+     "s": "She can't have sent it.",
+     "q": {
+      "de": "Glaubt der Sprecher, dass sie es geschickt hat?",
+      "en": "Does the speaker believe she sent it?"
+     },
+     "a": false
+    },
+    {
+     "s": "The client can't have received it yet.",
+     "q": {
+      "de": "Glaubt der Sprecher, dass der Kunde es schon hat?",
+      "en": "Does the speaker believe the client already has it?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Spricht der Hinweis dagegen, dass es passiert ist? Welche Form steht nach dem Modalverb?",
+    "en": "Does the clue point against it having happened? Which form comes after the modal?"
+   },
+   "usNote": {
+    "de": "Im amerikanischen Englisch sagt man für „wahrscheinlich nicht“ oft auch must not have. can't have ist stärker: so gut wie ausgeschlossen.",
+    "en": "In American English, must not have is also common for “probably not”. can't have is stronger: almost ruled out."
+   }
+  },
+  {
+   "id": "md.might-have",
+   "name": {
+    "de": "might have · vielleicht (früher)",
+    "en": "might have · maybe (past)"
+   },
+   "form": {
+    "de": "might / may / could have + Partizip",
+    "en": "might / may / could have + past participle"
+   },
+   "use": {
+    "de": "Du hältst etwas Früheres für möglich, weißt es aber nicht. might have, may have und could have passen; must have wäre zu sicher.",
+    "en": "You think something earlier is possible but do not know. might have, may have, and could have fit; must have would be too sure."
+   },
+   "signals": [
+    "might have",
+    "may have",
+    "could have",
+    "might not have"
+   ],
+   "ex": [
+    {
+     "en": "The client might have misunderstood the deadline.",
+     "de": "Der Kunde hat die Frist vielleicht missverstanden.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "We may have sent you the wrong version – I'll check.",
+     "de": "Wir haben dir vielleicht die falsche Version geschickt – ich prüfe das.",
+     "ctx": "mail"
+    },
+    {
+     "en": "She could have missed her train, which would explain the delay.",
+     "de": "Sie hat vielleicht ihren Zug verpasst, das würde die Verspätung erklären.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "I'm not sure why it failed. Someone might change the settings last night.",
+    "good": "I'm not sure why it failed. Someone might have changed the settings last night.",
+    "cause": {
+     "de": "Kein klarer Übersetzungsfehler: Die Vergangenheit steckt in „last night“, aber das Verb bleibt in der Grundform. Eine Vermutung über früher braucht have + Partizip.",
+     "en": "Not a clear translation error: the past is in “last night”, but the verb stays in the base form. A guess about the past needs have + participle."
+    }
+   },
+   "contrast": {
+    "with": "md.must-have",
+    "a": "The file might have been deleted.",
+    "b": "The file must have been deleted.",
+    "diff": {
+     "de": "might have: nur eine Möglichkeit. must have: fast sicher, mit klarem Hinweis.",
+     "en": "might have: only a possibility. must have: almost sure, with a clear clue."
+    }
+   },
+   "ccq": [
+    {
+     "s": "She might have forgotten the call.",
+     "q": {
+      "de": "Ist der Sprecher sicher, dass sie den Anruf vergessen hat?",
+      "en": "Is the speaker sure she forgot the call?"
+     },
+     "a": false
+    },
+    {
+     "s": "We may have lost the email.",
+     "q": {
+      "de": "Weiß der Sprecher sicher, dass die E-Mail weg ist?",
+      "en": "Does the speaker know for sure the email is gone?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Nennst du eine Möglichkeit über etwas, das schon passiert ist, ohne sicher zu sein?",
+    "en": "Are you naming a possibility about something that already happened, without being sure?"
+   }
+  }
+ ]
+}

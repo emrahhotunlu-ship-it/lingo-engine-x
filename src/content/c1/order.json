@@ -1516,6 +1516,222 @@
    "topic": "c1-discourse"
   },
   {
+   "pat": "em.what-cleft",
+   "en": "What worried us most was the lack of testing.",
+   "de": "Was uns am meisten beunruhigt hat, war das Fehlen von Tests.",
+   "chunks": [
+    "what",
+    "worried us",
+    "most",
+    "was",
+    "the lack",
+    "of testing"
+   ],
+   "alt": [
+    "The lack of testing was what worried us most.",
+    "What most worried us was the lack of testing."
+   ],
+   "why": [
+    "Der What-Teil ist ein einziges Subjekt, danach folgt das Verb direkt, und das Betonte kommt ans Ende.",
+    "The what-part is one single subject, then the verb follows directly and the focus goes last."
+   ],
+   "bad": "Which worried us most was the lack of testing.",
+   "trap": {
+    "tile": "what",
+    "instead": "which",
+    "why": {
+     "de": "Which braucht ein Nomen, auf das es sich bezieht. Hier steht keines davor, darum beginnt der Spaltsatz mit what.",
+     "en": "Which needs a noun to refer back to. None comes before it here, so the cleft starts with what."
+    }
+   },
+   "topic": "c1-emphasis"
+  },
+  {
+   "pat": "em.what-cleft",
+   "en": "What I'd suggest is a short call on Friday.",
+   "de": "Was ich vorschlagen würde, ist ein kurzer Anruf am Freitag.",
+   "chunks": [
+    "what",
+    "I'd suggest",
+    "is",
+    "a short call",
+    "on Friday"
+   ],
+   "alt": [
+    "A short call on Friday is what I'd suggest.",
+    "On Friday, what I'd suggest is a short call."
+   ],
+   "why": [
+    "Nach dem What-Teil folgt direkt is, ohne Komma und ohne „das“. Der Vorschlag steht am Satzende.",
+    "After the what-part is follows directly, with no comma and no “das”. The suggestion goes last."
+   ],
+   "bad": "What I'd suggest, it is a short call on Friday.",
+   "topic": "c1-emphasis"
+  },
+  {
+   "pat": "em.it-cleft",
+   "en": "It was the legal team that flagged the risk.",
+   "de": "Es war die Rechtsabteilung, die auf das Risiko hingewiesen hat.",
+   "chunks": [
+    "it was",
+    "the legal team",
+    "that",
+    "flagged",
+    "the risk"
+   ],
+   "single": "Der It-Spaltsatz ist ein fester Rahmen: Das Betonte steht zwischen it was und that, nichts davon lässt sich verschieben.",
+   "why": [
+    "Im Deutschen steht vor dem Relativsatz ein Komma, im englischen It-Satz nicht: It was the legal team that flagged …",
+    "German puts a comma before the relative clause; the English it-cleft has none: It was the legal team that flagged …"
+   ],
+   "topic": "c1-emphasis"
+  },
+  {
+   "pat": "em.it-cleft",
+   "en": "It was in the second round that the pricing changed.",
+   "de": "Gerade in der zweiten Runde hat sich die Preisgestaltung geändert.",
+   "chunks": [
+    "it was",
+    "in the second round",
+    "that",
+    "the pricing",
+    "changed"
+   ],
+   "single": "Der It-Spaltsatz hält die Zeitangabe zwischen it was und that fest, und danach folgt der Rest des Satzes in normaler Reihenfolge.",
+   "why": [
+    "Der It-Satz hebt die zweite Runde heraus: Die Zeitangabe steht zwischen it was und that, danach folgt der Rest.",
+    "The it-cleft singles out the second round: the time phrase sits between it was and that, then the rest follows."
+   ],
+   "topic": "c1-emphasis"
+  },
+  {
+   "pat": "em.neg-inversion",
+   "en": "Rarely do we see such a clean audit.",
+   "de": "Selten sehen wir ein so sauberes Audit.",
+   "chunks": [
+    "rarely",
+    "do",
+    "we",
+    "see",
+    "such a clean audit"
+   ],
+   "single": "Nach Rarely vorn steht das Hilfsverb vor dem Subjekt, und das Vollverb bleibt danach in der Grundform.",
+   "why": [
+    "Nach Rarely vorn wird wie in einer Frage umgestellt: do vor we, danach die Grundform see.",
+    "After Rarely first, the order changes as in a question: do before we, then the base form see."
+   ],
+   "bad": "Rarely have we see such a clean audit.",
+   "trap": {
+    "tile": "do",
+    "instead": "have",
+    "why": {
+     "de": "Hilfsverb und Verbform passen nicht zusammen: have verlangt seen, nach do bleibt see in der Grundform.",
+     "en": "Auxiliary and verb form do not match: have needs seen, while do keeps see in the base form."
+    }
+   },
+   "topic": "c1-emphasis"
+  },
+  {
+   "pat": "em.neg-inversion",
+   "en": "At no point did the client ask for changes.",
+   "de": "Zu keinem Zeitpunkt hat der Kunde um Änderungen gebeten.",
+   "chunks": [
+    "at no point",
+    "did",
+    "the client",
+    "ask",
+    "for changes"
+   ],
+   "single": "Nach At no point folgt die Frageform mit did vor dem Subjekt, dahinter steht das Verb in der Grundform.",
+   "why": [
+    "Nach At no point steht did vor dem Subjekt, und danach bleibt das Vollverb in der Grundform: ask.",
+    "After At no point comes did before the subject, and the full verb stays in the base form: ask."
+   ],
+   "bad": "At no point did the client asked for changes.",
+   "trap": {
+    "tile": "ask",
+    "instead": "asked",
+    "why": {
+     "de": "Die Vergangenheit steckt schon in did. Danach steht das Verb in der Grundform, also ask und nicht asked.",
+     "en": "The past tense is already in did. After it the verb stays in the base form, so ask and not asked."
+    }
+   },
+   "topic": "c1-emphasis"
+  },
+  {
+   "pat": "em.not-only",
+   "en": "Not only was the demo late, but it also crashed.",
+   "de": "Die Demo kam nicht nur zu spät, sie ist auch abgestürzt.",
+   "chunks": [
+    "not only",
+    "was",
+    "the demo",
+    "late",
+    "but",
+    "it also",
+    "crashed"
+   ],
+   "alt": [
+    "The demo was not only late, but it also crashed."
+   ],
+   "why": [
+    "Nach Not only vorn steht das Verb vor dem Subjekt: was the demo. Der zweite Teil bleibt normal: it also crashed.",
+    "After Not only first, the verb comes before the subject: was the demo. The second part stays normal: it also crashed."
+   ],
+   "bad": "Not only the demo was late, but it also crashed.",
+   "topic": "c1-emphasis"
+  },
+  {
+   "pat": "em.only-inversion",
+   "en": "Only when you confirm can we book the room.",
+   "de": "Nur wenn du bestätigst, können wir den Raum buchen.",
+   "chunks": [
+    "only when",
+    "you confirm",
+    "can",
+    "we",
+    "book",
+    "the room"
+   ],
+   "alt": [
+    "We can book the room only when you confirm."
+   ],
+   "why": [
+    "Der Nebensatz nach Only when bleibt normal (you confirm). Erst im Hauptsatz kommt die Umstellung: can we book.",
+    "The clause after Only when stays normal (you confirm). Only the main clause inverts: can we book."
+   ],
+   "bad": "Only when you confirm we can book the room.",
+   "topic": "c1-emphasis"
+  },
+  {
+   "pat": "em.only-inversion",
+   "en": "Not until Friday did I get an answer.",
+   "de": "Erst am Freitag habe ich eine Antwort bekommen.",
+   "chunks": [
+    "not until",
+    "Friday",
+    "did",
+    "I",
+    "get",
+    "an answer"
+   ],
+   "single": "Nach Not until Friday folgt die Frageform mit did vor dem Subjekt, dahinter steht get in der Grundform.",
+   "why": [
+    "Nach Not until steht did vor dem Subjekt, und danach folgt die Grundform: did I get.",
+    "After Not until comes did before the subject, and then the base form follows: did I get."
+   ],
+   "bad": "Not until Friday did I got an answer.",
+   "trap": {
+    "tile": "get",
+    "instead": "got",
+    "why": {
+     "de": "Did trägt schon die Vergangenheit. Das Vollverb bleibt in der Grundform, also get und nicht got.",
+     "en": "Did already carries the past tense. The full verb stays in the base form, so get and not got."
+    }
+   },
+   "topic": "c1-emphasis"
+  },
+  {
    "pat": "hg.modal",
    "en": "The migration might take a few days longer than planned.",
    "de": "Die Migration könnte ein paar Tage länger dauern als geplant. (vorsichtig, als Prognose)",
@@ -2675,6 +2891,181 @@
    "topic": "mixed-cond"
   },
   {
+   "pat": "md.must-now",
+   "en": "They must be working late – the lights are still on.",
+   "de": "Sie arbeiten bestimmt noch – das Licht brennt noch.",
+   "chunks": [
+    "they",
+    "must be",
+    "working late",
+    "the lights",
+    "are still on"
+   ],
+   "alt": [
+    "The lights are still on – they must be working late."
+   ],
+   "why": [
+    "Aus einem Hinweis (das Licht) schließt du auf jetzt: must be + working. Ein Vorgang, der jetzt läuft, braucht be + -ing.",
+    "You conclude from a clue (the lights) about now: must be + working. An action in progress now needs be + -ing."
+   ],
+   "bad": "They must working late – the lights are still on.",
+   "trap": {
+    "tile": "must be",
+    "instead": "must",
+    "why": {
+     "de": "Das Deutsche hat keine Verlaufsform, deshalb fällt be leicht weg. Für jetzt braucht der Schluss must be + -ing.",
+     "en": "German has no progressive form, so be easily drops out. A conclusion about now needs must be + -ing."
+    }
+   },
+   "topic": "modals-deduction"
+  },
+  {
+   "pat": "md.cant-now",
+   "en": "That can't be the final version – the date is wrong.",
+   "de": "Das kann nicht die endgültige Fassung sein – das Datum ist falsch.",
+   "chunks": [
+    "that",
+    "can't be",
+    "the final version",
+    "the date",
+    "is wrong"
+   ],
+   "alt": [
+    "The date is wrong – that can't be the final version."
+   ],
+   "why": [
+    "Der Hinweis (falsches Datum) spricht dagegen: can't be + Grundform. Nach can't folgt be, nicht nur can't.",
+    "The clue (wrong date) points against it: can't be + base form. After can't comes be, not just can't."
+   ],
+   "bad": "That can't the final version – the date is wrong.",
+   "trap": {
+    "tile": "can't be",
+    "instead": "can't",
+    "why": {
+     "de": "Im Deutschen steht „sein“ am Satzende („kann nicht … sein“) und geht im Kopf leicht verloren. Im Englischen folgt be direkt auf can't.",
+     "en": "In German “sein” sits at the end (“kann nicht … sein”) and is easily lost. In English be follows can't directly."
+    }
+   },
+   "topic": "modals-deduction"
+  },
+  {
+   "pat": "md.might-now",
+   "en": "Right now, we think the delay might be a customs problem.",
+   "de": "Im Moment glauben wir, die Verzögerung könnte ein Zollproblem sein.",
+   "chunks": [
+    "right now",
+    "we think",
+    "the delay",
+    "might be",
+    "a customs problem"
+   ],
+   "alt": [
+    "We think the delay might be a customs problem right now."
+   ],
+   "why": [
+    "might be nennt nur eine Möglichkeit, ohne Gewissheit. Es sind zwei Wörter: might + be.",
+    "might be only names a possibility, with no certainty. It is two words: might + be."
+   ],
+   "bad": "Right now, we think the delay maybe a customs problem.",
+   "trap": {
+    "tile": "might be",
+    "instead": "maybe",
+    "why": {
+     "de": "Das deutsche „vielleicht“ ist ein Wort. Im Englischen ist maybe ein Adverb ohne Verb; hier braucht der Satz das Verb: may be oder might be.",
+     "en": "German “vielleicht” is one word. In English maybe is an adverb with no verb; here the sentence needs the verb: may be or might be."
+    }
+   },
+   "topic": "modals-deduction"
+  },
+  {
+   "pat": "md.must-have",
+   "en": "Judging by the logs, the server must have crashed during the update.",
+   "de": "Nach den Protokollen ist der Server beim Update bestimmt abgestürzt.",
+   "chunks": [
+    "judging by the logs",
+    "the server",
+    "must have",
+    "crashed",
+    "during the update"
+   ],
+   "alt": [
+    "The server must have crashed during the update, judging by the logs."
+   ],
+   "why": [
+    "Aus einem Hinweis (die Protokolle) schließt du auf früher: must have + crashed. have steht direkt nach must.",
+    "You conclude from a clue (the logs) about the past: must have + crashed. have comes right after must."
+   ],
+   "bad": "Judging by the logs, the server must crashed during the update.",
+   "trap": {
+    "tile": "must have",
+    "instead": "must",
+    "why": {
+     "de": "Im Deutschen steht das Hilfsverb am Ende („muss abgestürzt sein“). Im Englischen gehört have direkt hinter must.",
+     "en": "In German the auxiliary sits at the end (“muss abgestürzt sein”). In English have belongs right after must."
+    }
+   },
+   "topic": "modals-deduction"
+  },
+  {
+   "pat": "md.cant-have",
+   "en": "She can't have seen the email – she was on a flight.",
+   "de": "Sie kann die E-Mail nicht gesehen haben – sie war im Flugzeug.",
+   "chunks": [
+    "she",
+    "can't have",
+    "seen",
+    "the email",
+    "she was",
+    "on a flight"
+   ],
+   "alt": [
+    "She was on a flight – she can't have seen the email."
+   ],
+   "why": [
+    "Der Hinweis (sie war im Flugzeug) macht es so gut wie unmöglich: can't have + seen. Nach have folgt die 3. Verbform.",
+    "The clue (she was on a flight) makes it almost impossible: can't have + seen. The third form follows have."
+   ],
+   "bad": "She can't seen the email – she was on a flight.",
+   "trap": {
+    "tile": "can't have",
+    "instead": "can't",
+    "why": {
+     "de": "Im Deutschen zeigt „gesehen haben“ am Satzende die Vergangenheit. Im Englischen braucht can't für früher das have direkt dahinter.",
+     "en": "In German “gesehen haben” at the end shows the past. In English, can't needs have right after it for the past."
+    }
+   },
+   "topic": "modals-deduction"
+  },
+  {
+   "pat": "md.might-have",
+   "en": "Someone might have changed the settings last night.",
+   "de": "Jemand hat gestern Nacht vielleicht die Einstellungen geändert.",
+   "chunks": [
+    "someone",
+    "might have",
+    "changed",
+    "the settings",
+    "last night"
+   ],
+   "alt": [
+    "Last night, someone might have changed the settings."
+   ],
+   "why": [
+    "might have + Partizip nennt eine Möglichkeit über früher, ohne Gewissheit. Nach have folgt die 3. Verbform: changed.",
+    "might have + participle names a possibility about the past, with no certainty. The third form follows have: changed."
+   ],
+   "bad": "Someone might changed the settings last night.",
+   "trap": {
+    "tile": "might have",
+    "instead": "might",
+    "why": {
+     "de": "Durch „last night“ wirkt die Vergangenheit klar, und have wird weggelassen. Nach might braucht eine Vermutung über früher have + Partizip.",
+     "en": "Because of “last night” the past seems clear, and have gets dropped. After might a guess about the earlier time needs have + participle."
+    }
+   },
+   "topic": "modals-deduction"
+  },
+  {
    "pat": "pv.simple",
    "en": "The new software was installed by IT last Friday.",
    "de": "Die neue Software wurde letzten Freitag von der IT installiert.",
@@ -3806,6 +4197,853 @@
     }
    },
    "topic": "pres-simple-cont"
+  },
+  {
+   "pat": "qu.indirect",
+   "en": "Could you tell me what time the vendor demo starts on Friday?",
+   "de": "Können Sie mir sagen, wann die Anbieter-Demo am Freitag beginnt?",
+   "chunks": [
+    "could you",
+    "tell me",
+    "what time",
+    "the vendor demo starts",
+    "on Friday"
+   ],
+   "single": "Nach what time folgt zuerst das Subjekt the vendor demo, dann das Verb starts; on Friday bleibt am Ende.",
+   "why": [
+    "Nach dem Fragewort steht das Subjekt vor dem Verb: what time the vendor demo starts. Ein does gibt es in der eingebetteten Frage nicht.",
+    "After the wh-word the subject comes before the verb: what time the vendor demo starts. There is no does in an embedded question."
+   ],
+   "bad": "Could you tell me what time does the vendor demo start on Friday?",
+   "trap": {
+    "tile": "the vendor demo starts",
+    "instead": "does the vendor demo start",
+    "why": {
+     "de": "Wer die Form der direkten Frage behält, schreibt what time does … start. In der eingebetteten Frage bleibt es bei Subjekt + Verb ohne does.",
+     "en": "Keeping the direct-question form gives what time does … start. In an embedded question it stays subject + verb without does."
+    }
+   },
+   "topic": "questions"
+  },
+  {
+   "pat": "qu.indirect",
+   "en": "I have no idea why the dashboard stopped updating this morning.",
+   "de": "Ich habe keine Ahnung, warum das Dashboard heute früh nicht mehr aktualisiert wurde.",
+   "chunks": [
+    "I have",
+    "no idea",
+    "why",
+    "the dashboard",
+    "stopped updating",
+    "this morning"
+   ],
+   "single": "Nach why steht erst das Subjekt the dashboard, dann das Verb stopped updating; this morning schließt den Satz.",
+   "why": [
+    "Nach why folgt das Subjekt the dashboard und dann das Verb stopped updating. Kein did, keine Umstellung wie in der direkten Frage.",
+    "After why the subject the dashboard comes first, then the verb stopped updating. No did, no inversion as in a direct question."
+   ],
+   "bad": "I have no idea why did the dashboard stop updating this morning.",
+   "topic": "questions"
+  },
+  {
+   "pat": "qu.if-whether",
+   "en": "She asked whether I had already booked the flights.",
+   "de": "Sie fragte, ob ich die Flüge schon gebucht hätte.",
+   "chunks": [
+    "she",
+    "asked",
+    "whether",
+    "I had already booked",
+    "the flights"
+   ],
+   "single": "Whether leitet die Ja/Nein-Frage ein und steht direkt vor I had already booked; the flights schließt den Satz.",
+   "why": [
+    "Eine Ja/Nein-Frage im Bericht wird mit whether oder if eingeleitet. Danach folgt die Aussagestellung: whether I had already booked.",
+    "A yes/no question in reported speech is introduced by whether or if. Statement order follows: whether I had already booked."
+   ],
+   "bad": "She asked that I had already booked the flights.",
+   "trap": {
+    "tile": "whether",
+    "instead": "that",
+    "why": {
+     "de": "Das Kleinwort that leitet Aussagen ein. Eine Ja/Nein-Frage im Satz braucht if oder whether (deutsch: ob).",
+     "en": "The small word that opens statements. A yes/no question inside a clause needs if or whether (German: ob)."
+    }
+   },
+   "topic": "questions"
+  },
+  {
+   "pat": "qu.if-whether",
+   "en": "Please let me know if the new date works for you.",
+   "de": "Bitte gib mir Bescheid, ob der neue Termin für dich passt.",
+   "chunks": [
+    "please",
+    "let me know",
+    "if",
+    "the new date",
+    "works for you"
+   ],
+   "alt": [
+    "If the new date works for you, please let me know.",
+    "Let me know if the new date works for you, please."
+   ],
+   "why": [
+    "If leitet die Ja/Nein-Frage ein, danach folgt das Subjekt the new date vor dem Verb works. Der Satz funktioniert auch mit if-Teil vorn.",
+    "If opens the yes/no question, and the subject the new date comes before the verb works. The sentence also works with the if-part first."
+   ],
+   "bad": "Please let me know does the new date work for you.",
+   "topic": "questions"
+  },
+  {
+   "pat": "qu.subject",
+   "en": "Who actually approved the new vendor contract on Monday?",
+   "de": "Wer hat den neuen Anbietervertrag am Montag tatsächlich genehmigt?",
+   "chunks": [
+    "who",
+    "actually",
+    "approved",
+    "the new vendor contract",
+    "on Monday"
+   ],
+   "why": [
+    "Who fragt nach dem Handelnden und ist selbst das Subjekt: Das Verb approved folgt ohne did direkt nach actually.",
+    "Who asks for the doer and is itself the subject: the verb approved follows directly after actually, without did."
+   ],
+   "bad": "Whom actually approved the new vendor contract on Monday?",
+   "trap": {
+    "tile": "who",
+    "instead": "whom",
+    "why": {
+     "de": "Whom ist nur als Objekt möglich. Hier fragt who selbst nach dem Handelnden und steht als Subjekt vor dem Verb.",
+     "en": "Whom only works as an object. Here who itself asks for the doer and is the subject before the verb."
+    }
+   },
+   "alt": [
+    "On Monday, who actually approved the new vendor contract?"
+   ],
+   "topic": "questions"
+  },
+  {
+   "pat": "qu.direct",
+   "en": "What time does the vendor demo start on Friday?",
+   "de": "Um wie viel Uhr beginnt die Anbieter-Demo am Freitag?",
+   "chunks": [
+    "what time",
+    "does",
+    "the vendor demo",
+    "start",
+    "on Friday"
+   ],
+   "why": [
+    "In der direkten Frage steht does vor dem Subjekt, und das Verb folgt in der Grundform: does the vendor demo start.",
+    "In a direct question does comes before the subject, and the verb follows in the base form: does the vendor demo start."
+   ],
+   "bad": "What time does the vendor demo starts on Friday?",
+   "trap": {
+    "tile": "start",
+    "instead": "starts",
+    "why": {
+     "de": "Does trägt schon das -s der dritten Person. Danach steht das Verb in der Grundform, also start ohne -s.",
+     "en": "Does already carries the third-person -s. The verb then stays in the base form, so start without -s."
+    }
+   },
+   "alt": [
+    "On Friday, what time does the vendor demo start?"
+   ],
+   "topic": "questions"
+  },
+  {
+   "pat": "qu.tags",
+   "en": "You'll send the minutes after the call, won't you?",
+   "de": "Du schickst das Protokoll nach dem Call, oder?",
+   "chunks": [
+    "you'll",
+    "send",
+    "the minutes",
+    "after the call",
+    "won't",
+    "you"
+   ],
+   "alt": [
+    "After the call, you'll send the minutes, won't you?"
+   ],
+   "why": [
+    "Das Tag wiederholt das Hilfsverb des Satzes mit umgekehrter Polarität: you'll → won't you. Ein festes „isn't it“ passt nicht.",
+    "The tag repeats the auxiliary of the sentence with reversed polarity: you'll → won't you. A fixed “isn't it” does not fit."
+   ],
+   "bad": "You'll send the minutes after the call, don't you?",
+   "trap": {
+    "tile": "won't",
+    "instead": "don't",
+    "why": {
+     "de": "Im Satz steht das Hilfsverb will. Das Tag nimmt dieses Hilfsverb auf, deshalb won't you und nicht don't you.",
+     "en": "The sentence has the auxiliary will. The tag picks it up, so won't you and not don't you."
+    }
+   },
+   "topic": "questions"
+  },
+  {
+   "pat": "qu.tags",
+   "en": "The new hires hardly ever complain, do they?",
+   "de": "Die neuen Kollegen beschweren sich kaum, oder?",
+   "chunks": [
+    "the new hires",
+    "hardly ever",
+    "complain",
+    "do",
+    "they"
+   ],
+   "single": "Hardly ever steht vor complain, und das bejahte Tag do they bildet den Schluss.",
+   "why": [
+    "Hardly ever wirkt verneinend, deshalb folgt ein bejahtes Tag: do they. Das Tag greift the new hires mit they auf.",
+    "Hardly ever acts as a negative, so a positive tag follows: do they. The tag picks up the new hires with they."
+   ],
+   "bad": "The new hires hardly ever complain, don't they?",
+   "topic": "questions"
+  },
+  {
+   "pat": "rc.who-which",
+   "en": "The colleague who leads the pilot is based in Austin.",
+   "de": "Der Kollege, der den Pilot leitet, sitzt in Austin.",
+   "chunks": [
+    "the colleague",
+    "who",
+    "leads the pilot",
+    "is based",
+    "in Austin"
+   ],
+   "single": "Der Relativsatz who leads the pilot steht direkt hinter colleague; is based in Austin folgt erst danach.",
+   "why": [
+    "Who passt zu Personen und steht direkt hinter dem Bezugswort colleague. Danach folgt das Verb leads, ohne ein weiteres Pronomen.",
+    "Who fits people and stands right after the antecedent colleague. The verb leads follows, with no extra pronoun."
+   ],
+   "bad": "The colleague which leads the pilot is based in Austin.",
+   "trap": {
+    "tile": "who",
+    "instead": "which",
+    "why": {
+     "de": "Which bleibt hängen, weil „der/die/das“ im Deutschen für alles passt. Bei Personen heißt es aber who.",
+     "en": "Which sticks because German “der/die/das” fits everything. For people it is who."
+    }
+   },
+   "topic": "relative"
+  },
+  {
+   "pat": "rc.whose",
+   "en": "We need a vendor whose prices stay stable.",
+   "de": "Wir brauchen einen Anbieter, dessen Preise stabil bleiben.",
+   "chunks": [
+    "we need",
+    "a vendor",
+    "whose",
+    "prices",
+    "stay stable"
+   ],
+   "single": "Whose prices bleibt als Block zusammen; stay stable folgt direkt danach, weil das Verb zu prices gehört.",
+   "why": [
+    "Whose zeigt Besitz und steht direkt vor dem Nomen prices. Danach folgt das Verb stay, ohne Artikel zwischen whose und prices.",
+    "Whose shows possession and stands directly before the noun prices. The verb stay follows, with no article between whose and prices."
+   ],
+   "bad": "We need a vendor who prices stay stable.",
+   "trap": {
+    "tile": "whose",
+    "instead": "who",
+    "why": {
+     "de": "Wer „dessen“ nicht abruft, greift zu who. Doch who steht für die Person selbst, whose für das, was ihr gehört.",
+     "en": "If “dessen” does not come to mind, you reach for who. But who stands for the person, whose for what belongs to her."
+    }
+   },
+   "topic": "relative"
+  },
+  {
+   "pat": "rc.commas",
+   "en": "Our Berlin office, which opened in May, is already profitable.",
+   "de": "Unser Berliner Büro, das im Mai eröffnet wurde, ist schon profitabel.",
+   "chunks": [
+    "our Berlin office",
+    "which",
+    "opened in May",
+    "is already",
+    "profitable"
+   ],
+   "single": "Die Zusatzinfo which opened in May steht direkt hinter office; is already profitable folgt erst danach.",
+   "why": [
+    "Die Zusatzinfo which opened in May steht zwischen Kommas. Dann gilt which, nie that.",
+    "The extra information which opened in May sits between commas. Then use which, never that."
+   ],
+   "bad": "Our Berlin office, that opened in May, is already profitable.",
+   "trap": {
+    "tile": "which",
+    "instead": "that",
+    "why": {
+     "de": "Im Deutschen steht immer Komma plus das/der, egal ob Zusatzinfo oder Eingrenzung. Englisch trennt: Zusatzinfo mit Komma braucht which, nie that.",
+     "en": "German always uses comma plus das/der, whether extra information or restriction. English separates: extra information with a comma needs which, never that."
+    }
+   },
+   "topic": "relative"
+  },
+  {
+   "pat": "rc.commas",
+   "en": "The vendor missed the deadline, which delayed the launch.",
+   "de": "Der Anbieter verpasste die Frist, was den Start verzögerte.",
+   "chunks": [
+    "the vendor",
+    "missed",
+    "the deadline",
+    "which",
+    "delayed",
+    "the launch"
+   ],
+   "single": "Which delayed the launch steht am Ende, denn es kommentiert den ganzen Satz davor.",
+   "why": [
+    "Which bezieht sich hier auf den ganzen Satz davor: Die verpasste Frist hat den Start verzögert. Nach dem Komma steht nie what.",
+    "Here which refers to the whole clause before it: the missed deadline delayed the launch. After the comma never use what."
+   ],
+   "bad": "The vendor missed the deadline, what delayed the launch.",
+   "trap": {
+    "tile": "which",
+    "instead": "what",
+    "why": {
+     "de": "Deutsch „was“ bezieht sich auf den ganzen Satz („…, was den Start verzögerte“). Im Englischen heißt das which.",
+     "en": "German “was” refers to the whole clause (“…, was den Start verzögerte”). English uses which."
+    }
+   },
+   "topic": "relative"
+  },
+  {
+   "pat": "rc.where-why",
+   "en": "We moved to the office where the whole team now works.",
+   "de": "Wir sind in das Büro gezogen, in dem jetzt das ganze Team arbeitet.",
+   "chunks": [
+    "we moved",
+    "to the office",
+    "where",
+    "the whole team",
+    "now works"
+   ],
+   "why": [
+    "Where passt nach einem Ort und leitet den ganzen Satz ein. Das Wort now steht hier direkt vor dem Verb works.",
+    "Where follows a place and opens a full clause. The word now stands right before the verb works here."
+   ],
+   "bad": "We moved to the office which the whole team now works.",
+   "trap": {
+    "tile": "where",
+    "instead": "which",
+    "why": {
+     "de": "Kein Übersetzungsfehler: which wirkt wie das Standardwort für Sachen. Nach einem Ort mit ganzem Satz braucht es where oder in which.",
+     "en": "Not a translation error: which feels like the standard word for things. After a place with a full clause you need where or in which."
+    }
+   },
+   "single": "Now works bleibt als Block zusammen und steht am Ende, nachdem der Relativsatz mit where begonnen hat.",
+   "topic": "relative"
+  },
+  {
+   "pat": "rc.where-why",
+   "en": "I still don't know the reason why they declined our proposal.",
+   "de": "Ich weiß immer noch nicht, warum sie unseren Vorschlag abgelehnt haben.",
+   "chunks": [
+    "I still",
+    "don't know",
+    "the reason",
+    "why",
+    "they declined",
+    "our proposal"
+   ],
+   "single": "Die Folge the reason why bleibt fest; they declined our proposal folgt als eigener Satz.",
+   "why": [
+    "Nach the reason steht why, nicht because. Das Relativwort why leitet den Satz ein, in dem der Grund genannt wird.",
+    "After the reason use why, not because. The relative word why opens the clause that names the reason."
+   ],
+   "bad": "I still don't know the reason because they declined our proposal.",
+   "trap": {
+    "tile": "why",
+    "instead": "because",
+    "why": {
+     "de": "Im Deutschen heißt es „der Grund, warum“, nicht „weil“. Wer an weil denkt, greift zu because; nach reason steht aber why.",
+     "en": "German says “der Grund, warum”, not “weil”. If you think of weil, you reach for because; after reason use why."
+    }
+   },
+   "topic": "relative"
+  },
+  {
+   "pat": "rc.prep",
+   "en": "The tool we rely on is no longer supported.",
+   "de": "Das Tool, auf das wir uns verlassen, wird nicht mehr unterstützt.",
+   "chunks": [
+    "the tool",
+    "we",
+    "rely on",
+    "is no longer",
+    "supported"
+   ],
+   "single": "Rely on bleibt als feste Verbindung zusammen; danach folgt is no longer supported.",
+   "why": [
+    "Die Präposition on gehört zum Verb rely und steht im Relativsatz am Ende. Ein Relativwort ist hier nicht nötig.",
+    "The preposition on belongs to the verb rely and stands at the end of the relative clause. No relative word is needed here."
+   ],
+   "bad": "The tool we rely is no longer supported.",
+   "trap": {
+    "tile": "rely on",
+    "instead": "rely",
+    "why": {
+     "de": "Im Deutschen steht die Präposition vorn („auf das“). Im Englischen rutscht sie ans Ende und fällt leicht weg.",
+     "en": "In German the preposition comes first (“auf das”). In English it moves to the end and is easily dropped."
+    }
+   },
+   "topic": "relative"
+  },
+  {
+   "pat": "rc.that-what",
+   "en": "Everything that we discussed is in the notes.",
+   "de": "Alles, was wir besprochen haben, steht in den Notizen.",
+   "chunks": [
+    "everything",
+    "that",
+    "we discussed",
+    "is",
+    "in the notes"
+   ],
+   "single": "Der Relativsatz that we discussed folgt direkt auf everything; is in the notes steht erst danach.",
+   "why": [
+    "Nach everything steht that, nie what. Everything ist das Bezugswort, und der Relativsatz that we discussed folgt direkt danach.",
+    "After everything use that, never what. Everything is the antecedent, and the relative clause that we discussed follows right after it."
+   ],
+   "bad": "Everything what we discussed is in the notes.",
+   "trap": {
+    "tile": "that",
+    "instead": "what",
+    "why": {
+     "de": "Im Deutschen heißt es „alles, was“. Dieses was wird zu what, doch nach everything steht that.",
+     "en": "German says “alles, was”. That was turns into what, but after everything use that."
+    }
+   },
+   "topic": "relative"
+  },
+  {
+   "pat": "rc.that-what",
+   "en": "What we need now is a clear decision.",
+   "de": "Was wir jetzt brauchen, ist eine klare Entscheidung.",
+   "chunks": [
+    "what",
+    "we need",
+    "now",
+    "is",
+    "a clear decision"
+   ],
+   "alt": [
+    "What we need is a clear decision now."
+   ],
+   "why": [
+    "What steht hier ohne Bezugswort und bedeutet das, was. Das Wort now darf nach need stehen oder ans Ende rücken.",
+    "What stands here without an antecedent and means the thing that. The word now can sit after need or move to the end."
+   ],
+   "bad": "That we need now is a clear decision.",
+   "trap": {
+    "tile": "what",
+    "instead": "that",
+    "why": {
+     "de": "Wer „das, was“ wörtlich nimmt, setzt that davor. Im Englischen steht what allein für beides.",
+     "en": "If you take “das, was” literally, you put that first. In English what alone stands for both."
+    }
+   },
+   "topic": "relative"
+  },
+  {
+   "pat": "rv.admit-deny",
+   "en": "Our supplier admitted shipping the wrong parts to the client.",
+   "de": "Unser Lieferant gab zu, dem Kunden die falschen Teile geschickt zu haben.",
+   "chunks": [
+    "our supplier",
+    "admitted",
+    "shipping",
+    "the wrong parts",
+    "to the client"
+   ],
+   "single": "Nach admitted folgt direkt die -ing-Form; danach kommen die Teile und der Kunde. Eine andere Reihenfolge klingt falsch.",
+   "why": [
+    "Nach admit steht die -ing-Form: admitted shipping. Das Objekt und das Ziel folgen danach.",
+    "After admit the -ing form follows: admitted shipping. The object and the destination come after it."
+   ],
+   "bad": "Our supplier admitted to ship the wrong parts to the client.",
+   "trap": {
+    "tile": "shipping",
+    "instead": "to ship",
+    "why": {
+     "de": "Aus „zugeben, zu verschicken“ wird leicht admitted to ship. Nach admit steht aber -ing.",
+     "en": "From “zugeben, zu verschicken” it is easy to get admitted to ship. After admit use -ing."
+    }
+   },
+   "topic": "report-verbs"
+  },
+  {
+   "pat": "rv.admit-deny",
+   "en": "The manager denied having seen the draft before the call.",
+   "de": "Der Manager bestritt, den Entwurf vor dem Call gesehen zu haben.",
+   "chunks": [
+    "the manager",
+    "denied",
+    "having seen",
+    "the draft",
+    "before the call"
+   ],
+   "single": "Nach denied steht having seen als fester Block; der Entwurf und die Zeitangabe schließen sich an.",
+   "why": [
+    "Deny verlangt die -ing-Form, und für etwas Früheres steht having + Partizip: denied having seen.",
+    "Deny takes -ing, and having + participle for something earlier: denied having seen."
+   ],
+   "bad": "The manager denied to have seen the draft before the call.",
+   "trap": {
+    "tile": "having seen",
+    "instead": "to have seen",
+    "why": {
+     "de": "Das Deutsche „bestritt, gesehen zu haben“ verleitet zu to have seen. Nach deny steht -ing.",
+     "en": "German “bestritt, gesehen zu haben” tempts you into to have seen. After deny use -ing."
+    }
+   },
+   "topic": "report-verbs"
+  },
+  {
+   "pat": "rv.suggest-rec",
+   "en": "Our consultant recommended that we renew the license early.",
+   "de": "Unser Berater empfahl, die Lizenz früh zu verlängern.",
+   "chunks": [
+    "our consultant",
+    "recommended",
+    "that we renew",
+    "the license",
+    "early"
+   ],
+   "single": "Der that-Satz mit we renew bleibt zusammen; the license und early folgen, denn early bezieht sich auf das Verlängern.",
+   "why": [
+    "Nach recommend steht -ing oder ein that-Satz mit Subjekt: that we renew. Person + to ist im US-Englisch unüblich.",
+    "After recommend comes -ing or a that-clause with a subject: that we renew. Person + to is uncommon in US English."
+   ],
+   "bad": "Our consultant recommended us to renew the license early.",
+   "trap": {
+    "tile": "that we renew",
+    "instead": "us to renew",
+    "why": {
+     "de": "Deutsch sagt „empfahl uns, zu verlängern“ mit Person + zu. Wörtlich entsteht recommended us to. Englisch braucht den that-Satz.",
+     "en": "German says “empfahl uns, zu verlängern” with person + zu. Word for word that becomes recommended us to. English needs the that-clause."
+    }
+   },
+   "topic": "report-verbs"
+  },
+  {
+   "pat": "rv.suggest-rec",
+   "en": "She suggested moving the workshop to Thursday afternoon.",
+   "de": "Sie schlug vor, den Workshop auf Donnerstagnachmittag zu verschieben.",
+   "chunks": [
+    "she",
+    "suggested",
+    "moving",
+    "the workshop",
+    "to Thursday afternoon"
+   ],
+   "single": "Nach suggested steht moving; das Objekt the workshop und das Ziel folgen in dieser Reihenfolge.",
+   "why": [
+    "Nach suggest steht -ing: suggested moving. Danach folgen das Objekt und das neue Ziel.",
+    "After suggest comes -ing: suggested moving. The object and the new target follow."
+   ],
+   "bad": "She suggested to move the workshop to Thursday afternoon.",
+   "trap": {
+    "tile": "moving",
+    "instead": "to move",
+    "why": {
+     "de": "Das deutsche „vorschlagen, zu verschieben“ führt zu suggested to move. Nach suggest steht -ing.",
+     "en": "German “vorschlagen, zu verschieben” leads to suggested to move. After suggest use -ing."
+    }
+   },
+   "topic": "report-verbs"
+  },
+  {
+   "pat": "rv.insist",
+   "en": "The auditor insisted on checking every invoice before the audit.",
+   "de": "Der Prüfer bestand darauf, jede Rechnung vor der Prüfung zu kontrollieren.",
+   "chunks": [
+    "the auditor",
+    "insisted",
+    "on checking",
+    "every invoice",
+    "before the audit"
+   ],
+   "alt": [
+    "Before the audit, the auditor insisted on checking every invoice."
+   ],
+   "why": [
+    "Insist braucht on, danach folgt -ing: insisted on checking. Die Zeitangabe kann auch am Anfang stehen.",
+    "Insist needs on, followed by -ing: insisted on checking. The time phrase can also come first."
+   ],
+   "bad": "The auditor insisted to check every invoice before the audit.",
+   "trap": {
+    "tile": "on checking",
+    "instead": "to check",
+    "why": {
+     "de": "Im Deutschen steht darauf vor dem Komma und der zu-Infinitiv danach („bestand darauf, jede Rechnung zu prüfen“); so wirkt das zu-Verb wie ein eigener Anschluss und on geht verloren.",
+     "en": "In German darauf comes before the comma and the zu-infinitive after it (“bestand darauf, jede Rechnung zu prüfen”); so the zu-verb feels like its own clause and on gets lost."
+    }
+   },
+   "topic": "report-verbs"
+  },
+  {
+   "pat": "rv.advise-warn",
+   "en": "Our CFO advised the team not to approve the budget yet.",
+   "de": "Unser Finanzchef riet dem Team, das Budget noch nicht zu genehmigen.",
+   "chunks": [
+    "our CFO",
+    "advised the team",
+    "not to approve",
+    "the budget",
+    "yet"
+   ],
+   "single": "Die Person the team steht direkt nach advised; not to approve bleibt zusammen, und yet steht am Ende.",
+   "why": [
+    "Nach advise + Person folgt (not) to + Grundform: advised the team not to approve. Not steht vor to.",
+    "After advise + person comes (not) to + base form: advised the team not to approve. Not goes before to."
+   ],
+   "bad": "Our CFO advised the team don't approve the budget yet.",
+   "trap": {
+    "tile": "not to approve",
+    "instead": "don't approve",
+    "why": {
+     "de": "Aus dem Rat „Genehmigt es nicht“ wird in der Rede don't approve. Berichtet wird mit not to + Verb.",
+     "en": "The advice “don't approve” survives from direct speech. Reported advice uses not to + verb."
+    }
+   },
+   "topic": "report-verbs"
+  },
+  {
+   "pat": "rv.advise-warn",
+   "en": "IT warned all users not to open unknown attachments.",
+   "de": "Die IT warnte alle Nutzer davor, unbekannte Anhänge zu öffnen.",
+   "chunks": [
+    "IT",
+    "warned",
+    "all users",
+    "not to open",
+    "unknown attachments"
+   ],
+   "single": "Die Person all users steht direkt nach warned; not to open bleibt zusammen und das Objekt folgt.",
+   "why": [
+    "Nach warn folgt die Person, dann not to + Grundform: warned all users not to open.",
+    "After warn comes the person, then not to + base form: warned all users not to open."
+   ],
+   "topic": "report-verbs"
+  },
+  {
+   "pat": "rv.offer",
+   "en": "The vendor offered to extend the warranty by a year.",
+   "de": "Der Anbieter bot an, die Garantie um ein Jahr zu verlängern.",
+   "chunks": [
+    "the vendor",
+    "offered",
+    "to extend",
+    "the warranty",
+    "by a year"
+   ],
+   "single": "Nach offered folgt to extend als Block; die Garantie und die Dauer by a year schließen sich an.",
+   "why": [
+    "Nach offer folgt direkt to + Grundform: offered to extend. Es steht kein -ing und keine Person dazwischen.",
+    "After offer comes to + base form directly: offered to extend. No -ing and no person stands between them."
+   ],
+   "bad": "The vendor offered extending the warranty by a year.",
+   "trap": {
+    "tile": "to extend",
+    "instead": "extending",
+    "why": {
+     "de": "Nach suggest und admit steht -ing, und dieser Reflex wird auf offer übertragen. Offer verlangt to + Verb.",
+     "en": "After suggest and admit comes -ing, and that reflex spreads to offer. Offer needs to + verb."
+    }
+   },
+   "topic": "report-verbs"
+  },
+  {
+   "pat": "rs.backshift",
+   "en": "Our supplier promised that the parts would arrive the following Monday.",
+   "de": "Unser Lieferant versprach, dass die Teile am darauffolgenden Montag eintreffen würden.",
+   "chunks": [
+    "our supplier",
+    "promised",
+    "that",
+    "the parts",
+    "would arrive",
+    "the following Monday"
+   ],
+   "single": "Would arrive folgt direkt auf the parts; die Zeitangabe the following Monday steht am Ende.",
+   "why": [
+    "Nach promised liegt das Versprechen zurück: will wird would. Dazu passt the following Monday, vom Versprechen aus gezählt.",
+    "After promised the promise lies in the past: will becomes would. The following Monday fits, counted from the promise."
+   ],
+   "bad": "Our supplier promised that the parts will arrive the following Monday.",
+   "trap": {
+    "tile": "would arrive",
+    "instead": "will arrive",
+    "why": {
+     "de": "Im Deutschen steht die indirekte Rede im Konjunktiv I („er versprach, er werde liefern“), also in der Präsensform. Im Englischen rückt will zu would.",
+     "en": "German reported speech uses the subjunctive (“er versprach, er werde liefern”), a present form. In English will moves to would."
+    }
+   },
+   "topic": "reported"
+  },
+  {
+   "pat": "rs.backshift",
+   "en": "Ravi said he had already sent the invoice by then.",
+   "de": "Ravi sagte, er habe die Rechnung bis dahin schon geschickt.",
+   "chunks": [
+    "Ravi",
+    "said",
+    "he had",
+    "already sent",
+    "the invoice",
+    "by then"
+   ],
+   "why": [
+    "Nach said rückt das Present Perfect zum Past Perfect: had already sent. By then zeigt, dass der Versand vor dem Sagen lag.",
+    "After said the present perfect moves to the past perfect: had already sent. By then shows the sending came before the speaking."
+   ],
+   "bad": "Ravi said he has already sent the invoice by then.",
+   "trap": {
+    "tile": "he had",
+    "instead": "he has",
+    "why": {
+     "de": "Im Deutschen bleibt „er habe geschickt“ in der Präsensform. Im Englischen braucht der Rückblick he had plus Partizip.",
+     "en": "In German “er habe geschickt” keeps a present form. In English the look back needs he had plus participle."
+    }
+   },
+   "alt": [
+    "Ravi said by then he had already sent the invoice."
+   ],
+   "topic": "reported"
+  },
+  {
+   "pat": "rs.time-shift",
+   "en": "Last year the CEO said they would launch the next day.",
+   "de": "Letztes Jahr sagte der Geschäftsführer, sie würden am nächsten Tag starten.",
+   "chunks": [
+    "last year",
+    "the CEO",
+    "said",
+    "they would launch",
+    "the next day"
+   ],
+   "alt": [
+    "The CEO said last year they would launch the next day."
+   ],
+   "why": [
+    "The next day zählt vom Sagen aus, nicht von heute. Zu would launch passt der Tag nach der Aussage.",
+    "The next day counts from the speaking, not from today. It goes with would launch: the day after the statement."
+   ],
+   "bad": "Last year the CEO said they would launch tomorrow.",
+   "trap": {
+    "tile": "the next day",
+    "instead": "tomorrow",
+    "why": {
+     "de": "Deutsch lässt „morgen“ in der indirekten Rede oft stehen. Das Englische rechnet vom Zeitpunkt des Sagens aus.",
+     "en": "German often keeps “morgen” in reported speech. English counts from the moment of speaking."
+    }
+   },
+   "topic": "reported"
+  },
+  {
+   "pat": "rs.question",
+   "en": "He asked me what I needed from the vendor.",
+   "de": "Er fragte mich, was ich vom Anbieter bräuchte.",
+   "chunks": [
+    "he",
+    "asked me",
+    "what",
+    "I needed",
+    "from the vendor"
+   ],
+   "single": "Das Fragewort what steht vor dem Subjekt; I needed bleibt ein Block, und from the vendor kommt am Ende.",
+   "why": [
+    "Nach what steht das Subjekt vor dem Verb: what I needed, ohne did. Dazu kommt der Rückschritt need → needed.",
+    "After what the subject comes before the verb: what I needed, with no did. Backshift adds need → needed."
+   ],
+   "bad": "He asked me what did I need from the vendor.",
+   "trap": {
+    "tile": "I needed",
+    "instead": "did I need",
+    "why": {
+     "de": "Das Deutsche kennt kein did. Der Fehler entsteht, weil die englische Direktfrage („What did I need?“) in den Nebensatz rutscht.",
+     "en": "German has no did. The slip happens because the English direct question (“What did I need?”) is carried into the clause."
+    }
+   },
+   "topic": "reported"
+  },
+  {
+   "pat": "rs.question",
+   "en": "She wanted to know whether the figures had been checked.",
+   "de": "Sie wollte wissen, ob die Zahlen geprüft worden waren.",
+   "chunks": [
+    "she",
+    "wanted to know",
+    "whether",
+    "the figures",
+    "had been checked"
+   ],
+   "single": "Whether steht direkt vor dem Subjekt the figures; had been checked bildet danach den festen Schluss.",
+   "why": [
+    "Ja/Nein-Fragen brauchen if oder whether, dann Subjekt und Verb in normaler Reihenfolge. Dazu der Rückschritt: had been checked.",
+    "Yes/no questions need if or whether, then subject and verb in normal order. Backshift adds had been checked."
+   ],
+   "bad": "She wanted to know whether had the figures been checked.",
+   "topic": "reported"
+  },
+  {
+   "pat": "rs.tell-say",
+   "en": "She told the whole team that the launch was delayed.",
+   "de": "Sie sagte dem ganzen Team, dass der Start verschoben wurde.",
+   "chunks": [
+    "she",
+    "told",
+    "the whole team",
+    "that",
+    "the launch",
+    "was delayed"
+   ],
+   "single": "Nach told folgt sofort die Person the whole team; that leitet danach den Inhalt the launch was delayed ein.",
+   "why": [
+    "Nach told steht gleich die Person: told the whole team. Erst danach folgt that mit dem Inhalt.",
+    "After told the person comes right away: told the whole team. Only then does that follow with the content."
+   ],
+   "bad": "She said the whole team that the launch was delayed.",
+   "trap": {
+    "tile": "told",
+    "instead": "said",
+    "why": {
+     "de": "Im Deutschen deckt „sagen“ beides ab: „sie sagte dem Team“ und „sie sagte, dass“. Das Englische trennt: tell mit Person, say ohne.",
+     "en": "German “sagen” covers both: “sie sagte dem Team” and “sie sagte, dass”. English splits them: tell with a person, say without."
+    }
+   },
+   "topic": "reported"
+  },
+  {
+   "pat": "rs.request",
+   "en": "The client asked us not to share the draft with anyone.",
+   "de": "Der Kunde bat uns, den Entwurf mit niemandem zu teilen.",
+   "chunks": [
+    "the client",
+    "asked us",
+    "not to share",
+    "the draft",
+    "with anyone"
+   ],
+   "single": "Not to share bleibt ein Block direkt nach asked us; the draft und with anyone folgen in dieser Reihenfolge.",
+   "why": [
+    "Eine verneinte Bitte wird zu asked us not to + Grundform. Das Objekt the draft folgt direkt auf share.",
+    "A negative request becomes asked us not to + base form. The object the draft follows share directly."
+   ],
+   "bad": "The client asked us don't share the draft with anyone.",
+   "trap": {
+    "tile": "not to share",
+    "instead": "don't share",
+    "why": {
+     "de": "Kein Übersetzungsfehler, sondern ein Reflex: Der Befehl der direkten Rede („Don’t share it!“) wird unverändert übernommen.",
+     "en": "Not a translation error but a reflex: the command of direct speech (“Don’t share it!”) is carried over unchanged."
+    }
+   },
+   "topic": "reported"
   },
   {
    "pat": "tc.present-for-future",

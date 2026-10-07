@@ -780,6 +780,467 @@
   },
   "dup": "c1-discourse|comingbackyourquestionaboutpricingthelicensesareperuser"
  },
+ "c1-emphasis|whatwereallyneedacleartimeline": {
+  "pat": "em.what-cleft",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der What-Satz ist ein einziges Subjekt, danach folgt is direkt.",
+    "en": "Right: the what-clause is one single subject, so is follows directly."
+   },
+   "wrong": [
+    {
+     "if": [
+      "are"
+     ],
+     "de": "Are gehört zu mehreren Dingen. A clear timeline ist eine Sache: is.",
+     "en": "Are fits several things. A clear timeline is one thing: is."
+    },
+    {
+     "if": [
+      "was"
+     ],
+     "de": "Was passt nicht zu need im Präsens: What we need is …",
+     "en": "Was does not match the present need: What we need is …"
+    },
+    {
+     "if": [
+      "that"
+     ],
+     "de": "Kein that: Der What-Satz geht direkt in is über.",
+     "en": "No that: the what-clause leads straight into is."
+    },
+    {
+     "not": [
+      "is"
+     ],
+     "de": "Zwischen What-Teil und Betontem muss is stehen.",
+     "en": "Between the what-part and the focus you need is."
+    }
+   ]
+  }
+ },
+ "c1-emphasis|notonlywereducestoragecostsbutwealsoimprovedcompliance": {
+  "pat": "em.not-only",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach Not only vor dem Subjekt steht did + Grundform: did we reduce.",
+    "en": "Right: Not only first needs did + subject + base verb: did we reduce."
+   },
+   "wrong": [
+    {
+     "if": [
+      "do"
+     ],
+     "de": "Die Vergangenheit steckt in did, nicht in do: Not only did we reduce.",
+     "en": "The past tense sits in did, not in do: Not only did we reduce."
+    },
+    {
+     "if": [
+      "does"
+     ],
+     "de": "Does gehört zu he/she/it. Hier steht we: did.",
+     "en": "Does goes with he/she/it. Here the subject is we: did."
+    },
+    {
+     "if": [
+      "we"
+     ],
+     "de": "Das Hilfsverb steht vor we: Not only did we reduce.",
+     "en": "The auxiliary comes before we: Not only did we reduce."
+    },
+    {
+     "not": [
+      "did"
+     ],
+     "de": "Not only vorn braucht ein Hilfsverb in der Vergangenheit: did.",
+     "en": "Not only first needs a past-tense auxiliary: did."
+    }
+   ]
+  }
+ },
+ "c1-emphasis|itwasthecfoapprovedthebudgetintheend": {
+  "pat": "em.it-cleft",
+  "why": {
+   "ok": {
+    "de": "Richtig: Bei einer Person steht im It-Satz who (oder that).",
+    "en": "Right: with a person the it-cleft uses who (or that)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "which"
+     ],
+     "de": "Which steht bei Sachen. Für den CFO nimmst du who oder that.",
+     "en": "Which is for things. For the CFO use who or that."
+    },
+    {
+     "if": [
+      "whom"
+     ],
+     "de": "Whom ist Objektform. Der CFO ist hier Subjekt: who.",
+     "en": "Whom is the object form. The CFO is the subject here: who."
+    },
+    {
+     "if": [
+      "what"
+     ],
+     "de": "What gehört nicht in den It-Satz: Du brauchst who oder that.",
+     "en": "What does not belong in an it-cleft: you need who or that."
+    }
+   ]
+  }
+ },
+ "c1-emphasis|rarelyweseensuchafastrollout": {
+  "pat": "em.neg-inversion",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach Rarely vorn steht das Hilfsverb vor dem Subjekt: have we seen.",
+    "en": "Right: after Rarely first, the auxiliary comes before the subject: have we seen."
+   },
+   "wrong": [
+    {
+     "if": [
+      "did"
+     ],
+     "de": "Nach did steht die Grundform (see), hier steht seen: have.",
+     "en": "After did comes the base form (see); here seen needs have."
+    },
+    {
+     "if": [
+      "do"
+     ],
+     "de": "Do passt nicht zu seen. Mit seen steht have.",
+     "en": "Do does not fit seen. With seen use have."
+    },
+    {
+     "if": [
+      "has"
+     ],
+     "de": "Has gehört zu he/she/it. Hier steht we: have.",
+     "en": "Has goes with he/she/it. Here the subject is we: have."
+    },
+    {
+     "if": [
+      "we"
+     ],
+     "de": "Das Hilfsverb steht vor we: Rarely have we seen.",
+     "en": "The auxiliary comes before we: Rarely have we seen."
+    }
+   ]
+  }
+ },
+ "c1-emphasis|convincedthemwastheaudittrail": {
+  "pat": "em.what-cleft",
+  "why": {
+   "ok": {
+    "de": "Richtig: What convinced them was … Der What-Satz ist das Subjekt, dann was.",
+    "en": "Right: What convinced them was … The what-clause is the subject, then was."
+   },
+   "wrong": [
+    {
+     "opt": "That",
+     "de": "„That“ leitet einen Nebensatz ein („dass“). Hier steht das Subjekt: What.",
+     "en": "“That” opens a subordinate clause. Here the subject is needed: What."
+    },
+    {
+     "opt": "Which",
+     "de": "„Which“ braucht ein Bezugswort davor. Hier steht keines.",
+     "en": "“Which” needs a noun to refer back to. There is none here."
+    },
+    {
+     "opt": "It",
+     "pat": "em.it-cleft",
+     "de": "„It convinced them was“ ergibt keinen Satz. Der It-Satz braucht that.",
+     "en": "“It convinced them was” is no sentence. An it-cleft needs that."
+    }
+   ]
+  }
+ },
+ "c1-emphasis|neveracustomermigratemilliondocumentsinoneweekend": {
+  "pat": "em.neg-inversion",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach Never vorn kommt das Hilfsverb vor das Subjekt: have I seen.",
+    "en": "Right: after Never first, the auxiliary comes before the subject: have I seen."
+   },
+   "wrong": [
+    {
+     "opt": "I have seen",
+     "de": "Nach Never vorn muss das Hilfsverb vor das Subjekt: Never have I.",
+     "en": "After Never first, the auxiliary must precede the subject: Never have I."
+    },
+    {
+     "opt": "I saw",
+     "de": "Ohne Umstellung geht es nicht: Nach Never vorn gilt die Frageform.",
+     "en": "It does not work without inversion: after Never first, use question order."
+    },
+    {
+     "opt": "did I saw",
+     "de": "Nach did steht die Grundform (see), nicht saw. Hier passt have I seen.",
+     "en": "After did comes the base form (see), not saw. Here have I seen fits."
+    }
+   ]
+  }
+ },
+ "c1-emphasis|onlyafterthepilotthefullrollout": {
+  "pat": "em.only-inversion",
+  "why": {
+   "ok": {
+    "de": "Richtig: Only after … vorn löst die Frageform aus: did they approve.",
+    "en": "Right: Only after … first triggers question order: did they approve."
+   },
+   "wrong": [
+    {
+     "opt": "they approved",
+     "de": "Nach Only after vorn kommt die Frageform: did they approve.",
+     "en": "After Only after first, use question order: did they approve."
+    },
+    {
+     "opt": "they did approve",
+     "de": "Did steht vor dem Subjekt. They did approve ist nur normale Betonung.",
+     "en": "Did goes before the subject. They did approve is just normal stress."
+    },
+    {
+     "opt": "approved they",
+     "de": "Mit einem Vollverb gibt es keine Umstellung: nur did they approve.",
+     "en": "A full verb cannot be moved in front: only did they approve works."
+    }
+   ]
+  }
+ },
+ "c1-emphasis|wereallyneedbettersearchwhatwereallyneedbettersearch": {
+  "pat": "em.what-cleft",
+  "why": {
+   "ok": {
+    "de": "Richtig: What we really need is better search. Der What-Satz endet auf is.",
+    "en": "Right: What we really need is better search. The what-clause ends with is."
+   },
+   "wrong": [
+    {
+     "if": [
+      "are"
+     ],
+     "de": "Search ist hier eine Sache, nicht mehrere: is, nicht are.",
+     "en": "Search is one thing here, not several: is, not are."
+    },
+    {
+     "if": [
+      "was"
+     ],
+     "de": "Was passt nicht zu need im Präsens: is.",
+     "en": "Was does not match the present need: is."
+    },
+    {
+     "if": [
+      "that"
+     ],
+     "de": "Kein that: is folgt direkt auf den What-Satz.",
+     "en": "No that: is follows the what-clause directly."
+    },
+    {
+     "not": [
+      "is"
+     ],
+     "de": "Der What-Satz braucht is vor dem Betonten.",
+     "en": "The what-clause needs is before the focus."
+    }
+   ]
+  }
+ },
+ "c1-emphasis|theaudittrailconvincedthemitwastheaudittrailconvincedthem": {
+  "pat": "em.it-cleft",
+  "why": {
+   "ok": {
+    "de": "Richtig: Bei einer Sache steht im It-Satz that (oder which).",
+    "en": "Right: with a thing the it-cleft uses that (or which)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "who"
+     ],
+     "de": "Who gilt für Personen. The audit trail ist eine Sache.",
+     "en": "Who is for people. The audit trail is a thing."
+    },
+    {
+     "if": [
+      "what"
+     ],
+     "de": "What gehört nicht in den It-Satz: Du brauchst that oder which.",
+     "en": "What does not belong in an it-cleft: you need that or which."
+    },
+    {
+     "not": [
+      "that",
+      "which"
+     ],
+     "de": "Nach dem Betonten verbindet that (oder which) zum Rest des Satzes.",
+     "en": "After the focus, that (or which) links to the rest of the sentence."
+    }
+   ]
+  }
+ },
+ "c1-emphasis|wecutcostsandwealsoimprovedcompliancenotonlycostsbutwealsoimprovedcompliance": {
+  "pat": "em.not-only",
+  "why": {
+   "ok": {
+    "de": "Richtig: Not only vorn braucht did vor dem Subjekt, dann die Grundform: did we cut.",
+    "en": "Right: Not only first needs did before the subject, then the base form: did we cut."
+   },
+   "wrong": [
+    {
+     "not": [
+      "did"
+     ],
+     "de": "Not only vorn braucht did vor dem Subjekt: Not only did we cut.",
+     "en": "Not only first needs did before the subject: Not only did we cut."
+    },
+    {
+     "if": [
+      "do"
+     ],
+     "de": "Do passt zur Gegenwart. Hier steht Vergangenheit: did.",
+     "en": "Do is present tense. Here the past is needed: did."
+    },
+    {
+     "if": [
+      "cuts"
+     ],
+     "de": "Nach did steht die Grundform: cut, nicht cuts.",
+     "en": "After did comes the base form: cut, not cuts."
+    },
+    {
+     "if": [
+      "cutted"
+     ],
+     "de": "Nach did steht die Grundform: cut, nicht cutted.",
+     "en": "After did comes the base form: cut, not cutted."
+    }
+   ]
+  }
+ },
+ "c1-emphasis|whatweneedareapartnerwhounderstandscompliance": {
+  "pat": "em.what-cleft",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der What-Satz ist ein einziges Subjekt, darum is: What we need is a partner.",
+    "en": "Right: the what-clause is one single subject, so is: What we need is a partner."
+   },
+   "wrong": [
+    {
+     "if": [
+      "are"
+     ],
+     "de": "Der Fehler steckt in are: A partner ist ein Einzelner, also is.",
+     "en": "The error is in are: a partner is one person, so is."
+    },
+    {
+     "not": [
+      "is"
+     ],
+     "de": "Das Verb nach dem What-Satz muss is heißen.",
+     "en": "The verb after the what-clause must be is."
+    }
+   ]
+  }
+ },
+ "c1-emphasis|rarelywehaveseensuchafastapproval": {
+  "pat": "em.neg-inversion",
+  "why": {
+   "ok": {
+    "de": "Richtig: Rarely vorn verlangt die Umstellung: have we seen.",
+    "en": "Right: Rarely first requires inversion: have we seen."
+   },
+   "wrong": [
+    {
+     "if": [
+      "we",
+      "have"
+     ],
+     "de": "Das Hilfsverb steht vor dem Subjekt: Rarely have we seen.",
+     "en": "The auxiliary comes before the subject: Rarely have we seen."
+    },
+    {
+     "if": [
+      "did"
+     ],
+     "de": "Mit seen bleibt es bei have, nicht did: Rarely have we seen.",
+     "en": "With seen keep have, not did: Rarely have we seen."
+    },
+    {
+     "if": [
+      "do"
+     ],
+     "de": "Mit seen bleibt es bei have, nicht do: Rarely have we seen.",
+     "en": "With seen keep have, not do: Rarely have we seen."
+    }
+   ]
+  }
+ },
+ "c1-emphasis|notonlyitsavestimebutitalsoreduceserrors": {
+  "pat": "em.not-only",
+  "why": {
+   "ok": {
+    "de": "Richtig: Not only vorn braucht does vor it, danach die Grundform: does it save.",
+    "en": "Right: Not only first needs does before it, then the base form: does it save."
+   },
+   "wrong": [
+    {
+     "not": [
+      "does"
+     ],
+     "de": "Vor das Subjekt it gehört does: Not only does it save time.",
+     "en": "Before the subject it you need does: Not only does it save time."
+    },
+    {
+     "if": [
+      "saves"
+     ],
+     "de": "Nach does steht die Grundform: save, nicht saves.",
+     "en": "After does comes the base form: save, not saves."
+    },
+    {
+     "if": [
+      "do"
+     ],
+     "de": "Do passt zu we/they. Zu it gehört does.",
+     "en": "Do goes with we/they. With it use does."
+    }
+   ]
+  }
+ },
+ "c1-emphasis|notonlywereducedthecostsbutwealsospedupapprovals": {
+  "pat": "em.not-only",
+  "why": {
+   "ok": {
+    "de": "Richtig: Not only vorn braucht did vor we, danach die Grundform: did we reduce.",
+    "en": "Right: Not only first needs did before we, then the base form: did we reduce."
+   },
+   "wrong": [
+    {
+     "not": [
+      "did"
+     ],
+     "de": "Not only vorn braucht did vor dem Subjekt: Not only did we reduce.",
+     "en": "Not only first needs did before the subject: Not only did we reduce."
+    },
+    {
+     "if": [
+      "reduced"
+     ],
+     "de": "Nach did steht die Grundform: reduce, nicht reduced.",
+     "en": "After did comes the base form: reduce, not reduced."
+    },
+    {
+     "if": [
+      "do"
+     ],
+     "de": "Do passt zur Gegenwart. Hier steht Vergangenheit: did.",
+     "en": "Do is present tense. Here the past is needed: did."
+    }
+   ]
+  }
+ },
  "c1-hedging|softenthisforaclientyourpriceabitaboveourbudget": {
   "pat": "hg.modal",
   "why": {
@@ -4284,6 +4745,781 @@
      ],
      "de": "have ist Präsens; nach wish rückt die Form eine Stufe zurück: had.",
      "en": "have is present; after wish the verb moves one step back: had."
+    }
+   ]
+  }
+ },
+ "modals-deduction|sheisnotansweringherphoneshebeasleep": {
+  "pat": "md.must-now",
+  "why": {
+   "ok": {
+    "de": "Richtig: Ihr Schweigen ist der Hinweis. must = fast sicher (Schluss), keine Pflicht.",
+    "en": "Right: her silence is the clue. must = almost sure (a conclusion), not an obligation."
+   },
+   "wrong": [
+    {
+     "opt": "can't",
+     "pat": "md.cant-now",
+     "de": "can't wäre „ausgeschlossen“. Ihr Schweigen spricht aber für Schlaf, nicht dagegen.",
+     "en": "can't would mean “impossible”, but her silence points toward sleep, not against it."
+    },
+    {
+     "opt": "wants to",
+     "de": "wants to nennt einen Wunsch und keinen Schluss. Hier ziehst du den Schluss aus einem Hinweis.",
+     "en": "wants to names a wish; here you draw a conclusion from a clue."
+    },
+    {
+     "opt": "needs to",
+     "de": "needs to nennt eine Pflicht, keinen Schluss. Für den Schluss aus einem Hinweis passt must.",
+     "en": "needs to names an obligation, not a conclusion; for a conclusion from a clue use must."
+    }
+   ]
+  }
+ },
+ "modals-deduction|heusitwasfartoodark": {
+  "pat": "md.cant-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: Es war viel zu dunkel, also so gut wie ausgeschlossen: can't have + seen.",
+    "en": "Right: it was far too dark, so it is almost impossible: can't have + seen."
+   },
+   "wrong": [
+    {
+     "if": [
+      "must"
+     ],
+     "pat": "md.must-have",
+     "de": "must have wäre das Gegenteil: sicher gesehen. „Zu dunkel“ spricht dagegen.",
+     "en": "must have would be the opposite: sure he saw us. “Too dark” points against it."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "pat": "md.might-have",
+     "de": "might have heißt nur „vielleicht“. Bei „viel zu dunkel“ ist es fast ausgeschlossen.",
+     "en": "might have only means “maybe”. With “far too dark” it is almost ruled out."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Gesucht ist ein Modalverb mit have + Partizip: can't have seen.",
+     "en": "A modal with have + participle is needed: can't have seen."
+    },
+    {
+     "not": [
+      "cannot",
+      "could not"
+     ],
+     "de": "Gesucht ist ein Modalverb für „ausgeschlossen“: can't oder couldn't have seen.",
+     "en": "A modal for “ruled out” is needed: can't or couldn't have seen."
+    }
+   ]
+  }
+ },
+ "modals-deduction|iamnotsurewheremykeysareileftthematwork": {
+  "pat": "md.might-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: „not sure“ = nur eine Möglichkeit: might have + Partizip (left).",
+    "en": "Right: “not sure” = only a possibility: might have + participle (left)."
+   },
+   "wrong": [
+    {
+     "opt": "must have",
+     "pat": "md.must-have",
+     "de": "must have wäre fast sicher. Du weißt aber nicht, wo die Schlüssel sind.",
+     "en": "must have would be almost sure, but you do not know where the keys are."
+    },
+    {
+     "opt": "should have",
+     "de": "should have ist ein Vorwurf („hätte … sollen“), keine Vermutung.",
+     "en": "should have is criticism (“ought to have”), not a guess."
+    },
+    {
+     "opt": "can have",
+     "de": "can have gibt es für eine Vermutung über früher nicht. Nimm might, may oder could have.",
+     "en": "can have is not used to guess about the past; use might, may, or could have."
+    }
+   ]
+  }
+ },
+ "modals-deduction|thelightsareoffsotheybeintheofficeanymore": {
+  "pat": "md.cant-now",
+  "why": {
+   "ok": {
+    "de": "Richtig: Licht aus, also sind sie so gut wie sicher weg: can't be + Grundform.",
+    "en": "Right: lights off, so they are almost surely gone: can't be + base form."
+   },
+   "wrong": [
+    {
+     "if": [
+      "must"
+     ],
+     "not": [
+      "not"
+     ],
+     "pat": "md.must-now",
+     "de": "must be sagt das Gegenteil: sicher noch im Büro. Das Licht ist aber aus.",
+     "en": "must be says the opposite: surely still in the office. But the lights are off."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "pat": "md.might-now",
+     "de": "might be nennt nur eine Möglichkeit. Mit dem Hinweis „Licht aus“ ist can't be stärker.",
+     "en": "might be only names a possibility. With the clue “lights off”, can't be is stronger."
+    },
+    {
+     "not": [
+      "be"
+     ],
+     "de": "Nach can't folgt die Grundform: can't be, nicht nur can't.",
+     "en": "The base form follows can't: can't be, not just can't."
+    },
+    {
+     "not": [
+      "cannot",
+      "could not",
+      "must not"
+     ],
+     "de": "Gesucht ist ein Modalverb für „so gut wie ausgeschlossen“: can't be.",
+     "en": "A modal for “almost ruled out” is needed: can't be."
+    }
+   ]
+  }
+ },
+ "modals-deduction|iamsureheforgotthemeetinghethemeeting": {
+  "pat": "md.must-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: „I'm sure“ = fast sicher, früher: must have + forgotten.",
+    "en": "Right: “I'm sure” = almost certain, in the past: must have + forgotten."
+   },
+   "wrong": [
+    {
+     "if": [
+      "cannot"
+     ],
+     "pat": "md.cant-have",
+     "de": "can't have = ausgeschlossen. „I'm sure … forgot“ sagt aber das Gegenteil.",
+     "en": "can't have = ruled out. But “I'm sure … forgot” says the opposite."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "pat": "md.might-have",
+     "de": "might have = nur vielleicht. „I'm sure“ verlangt die stärkere Form must have.",
+     "en": "might have = only maybe. “I'm sure” calls for the stronger must have."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Für früher braucht es have + Partizip: must have forgotten.",
+     "en": "The past needs have + participle: must have forgotten."
+    },
+    {
+     "if": [
+      "have",
+      "forgot"
+     ],
+     "de": "Nach have steht die 3. Verbform: forgotten, nicht forgot.",
+     "en": "After have use the third form: forgotten, not forgot."
+    }
+   ]
+  }
+ },
+ "modals-deduction|welostthedealandnobodyknowswhythepricehavebeentoohighormaybethetimingwaswrong": {
+  "pat": "md.might-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: „or maybe“ = nur Möglichkeiten. might have been = vielleicht.",
+    "en": "Right: “or maybe” = only possibilities. might have been = maybe."
+   },
+   "wrong": [
+    {
+     "opt": "should",
+     "de": "should have been = „hätte sein sollen“, das ist ein Vorwurf und keine Vermutung.",
+     "en": "should have been = “ought to have been” (criticism), not a guess."
+    },
+    {
+     "opt": "can't",
+     "pat": "md.cant-have",
+     "de": "can't have been = ausgeschlossen. Der Satz nennt aber zwei mögliche Gründe.",
+     "en": "can't have been = ruled out. But the sentence names two possible reasons."
+    },
+    {
+     "opt": "must",
+     "pat": "md.must-have",
+     "de": "must have been wäre fast sicher. Mit „or maybe …“ ist keiner sicher.",
+     "en": "must have been would be almost sure. With “or maybe …” nobody is sure."
+    }
+   ]
+  }
+ },
+ "modals-deduction|annawaswithmeallmorningsoshehavesentthatemailatam": {
+  "pat": "md.cant-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: Anna war bei mir, also ausgeschlossen: can't have + sent.",
+    "en": "Right: Anna was with me, so it is ruled out: can't have + sent."
+   },
+   "wrong": [
+    {
+     "opt": "might",
+     "pat": "md.might-have",
+     "de": "might have = vielleicht. Anna war aber den ganzen Morgen bei mir: ausgeschlossen.",
+     "en": "might have = maybe. But Anna was with me all morning: ruled out."
+    },
+    {
+     "opt": "must",
+     "pat": "md.must-have",
+     "de": "must have wäre das Gegenteil: sicher, dass sie die E-Mail schickte.",
+     "en": "must have would be the opposite: sure she sent the email."
+    },
+    {
+     "opt": "should",
+     "de": "should have ist ein Vorwurf („hätte … sollen“), keine Vermutung.",
+     "en": "should have is criticism (“ought to have”), not a deduction."
+    }
+   ]
+  }
+ },
+ "modals-deduction|thefilesaregonesomeonedeletedthembymistake": {
+  "pat": "md.must-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: Beweis (Dateien weg), fast sicher, früher: must have + deleted.",
+    "en": "Right: evidence (files gone), almost sure, in the past: must have + deleted."
+   },
+   "wrong": [
+    {
+     "opt": "should have",
+     "de": "should have ist ein Vorwurf („hätte … sollen“), keine Vermutung.",
+     "en": "should have is criticism (“ought to have”), not a deduction."
+    },
+    {
+     "opt": "can have",
+     "de": "can have gibt es für Vermutungen nicht. Nimm must have, might have oder can't have.",
+     "en": "can have is not used for deductions; use must have, might have, or can't have."
+    },
+    {
+     "opt": "must",
+     "de": "must allein meint jetzt. Für früher braucht es have + Partizip.",
+     "en": "must alone means now. The past needs have + participle."
+    }
+   ]
+  }
+ },
+ "modals-deduction|iamnotsurewhytheemailbouncedtheaddressbewrong": {
+  "pat": "md.might-now",
+  "why": {
+   "ok": {
+    "de": "Richtig: „I'm not sure“ = nur möglich. could (oder might) be wrong.",
+    "en": "Right: “I'm not sure” = only possible. could (or might) be wrong."
+   },
+   "wrong": [
+    {
+     "opt": "mustn't",
+     "de": "Bei „I'm not sure“ passt nur eine Möglichkeit (could, might), nicht mustn't.",
+     "en": "After “I'm not sure” only a possibility fits (could, might), not mustn't."
+    },
+    {
+     "opt": "can't",
+     "pat": "md.cant-now",
+     "de": "can't be wrong hieße: ausgeschlossen. Du hast aber keine Gewissheit.",
+     "en": "can't be wrong would mean ruled out; but you have no certainty."
+    },
+    {
+     "opt": "must",
+     "pat": "md.must-now",
+     "de": "must be wrong wäre fast sicher. „I'm not sure“ spricht aber dagegen.",
+     "en": "must be wrong would be almost sure; “I'm not sure” speaks against it."
+    }
+   ]
+  }
+ },
+ "modals-deduction|lookthelightinherofficeisonsheworkinglate": {
+  "pat": "md.must-now",
+  "why": {
+   "ok": {
+    "de": "Richtig: Das Licht ist an, also jetzt: must be + working.",
+    "en": "Right: the light is on, so it is about now: must be + working."
+   },
+   "wrong": [
+    {
+     "opt": "can't be",
+     "pat": "md.cant-now",
+     "de": "can't be working = ausgeschlossen. Das Licht spricht aber dafür, dass sie arbeitet.",
+     "en": "can't be working = ruled out. But the light suggests she is working."
+    },
+    {
+     "opt": "should have",
+     "de": "should have ist ein Vorwurf („hätte … sollen“) und passt nicht zu working.",
+     "en": "should have is criticism (“ought to have”) and does not fit working."
+    },
+    {
+     "opt": "must have",
+     "pat": "md.must-have",
+     "de": "must have + working geht nicht. Es läuft gerade jetzt: must be + -ing.",
+     "en": "must have + working is not possible. It is happening now: must be + -ing."
+    }
+   ]
+  }
+ },
+ "modals-deduction|thestreetsarewetithaverainedlastnight": {
+  "pat": "md.must-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: nasse Straßen = Beweis, fast sicher, früher: must have rained.",
+    "en": "Right: wet streets = evidence, almost sure, in the past: must have rained."
+   },
+   "wrong": [
+    {
+     "opt": "needs to",
+     "de": "needs to heißt „muss (tun)“ als Notwendigkeit, nicht als Vermutung.",
+     "en": "needs to means “has to” as a need, not as a deduction."
+    },
+    {
+     "opt": "should",
+     "de": "should have rained = „hätte regnen sollen“, das ist keine Vermutung.",
+     "en": "should have rained = “ought to have rained”, not a deduction."
+    },
+    {
+     "opt": "can't",
+     "pat": "md.cant-have",
+     "de": "can't have rained wäre das Gegenteil: ausgeschlossen. Die Straßen sind aber nass.",
+     "en": "can't have rained would be the opposite: ruled out. But the streets are wet."
+    }
+   ]
+  }
+ },
+ "modals-deduction|thewindowisbrokenandtheresabaseballonthefloorsomeoneitthroughthewindow": {
+  "pat": "md.must-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: Ball und kaputtes Fenster sind der Beweis: must have + thrown.",
+    "en": "Right: ball and broken window are the proof: must have + thrown."
+   },
+   "wrong": [
+    {
+     "if": [
+      "might"
+     ],
+     "pat": "md.might-have",
+     "de": "might have = nur vielleicht. Ball und Fenster sind aber ein starker Beweis: must have.",
+     "en": "might have = only maybe. But ball and window are strong proof: must have."
+    },
+    {
+     "if": [
+      "cannot"
+     ],
+     "pat": "md.cant-have",
+     "de": "can't have = ausgeschlossen. Der Ball am Boden zeigt aber: Es ist passiert.",
+     "en": "can't have = ruled out. But the ball on the floor shows it happened."
+    },
+    {
+     "if": [
+      "have",
+      "threw"
+     ],
+     "de": "Nach have steht die 3. Verbform: thrown, nicht threw.",
+     "en": "After have use the third form: thrown, not threw."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Für früher braucht es Modalverb + have + Partizip: must have thrown.",
+     "en": "The past needs modal + have + participle: must have thrown."
+    }
+   ]
+  }
+ },
+ "modals-deduction|hethecallhisphonewasswitchedoffallday": {
+  "pat": "md.cant-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: Handy den ganzen Tag aus, also ausgeschlossen: can't have + received.",
+    "en": "Right: phone off all day, so it is ruled out: can't have + received."
+   },
+   "wrong": [
+    {
+     "if": [
+      "must"
+     ],
+     "not": [
+      "not"
+     ],
+     "pat": "md.must-have",
+     "de": "must have = sicher erhalten. Das Handy war aber den ganzen Tag aus.",
+     "en": "must have = surely received. But the phone was off all day."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "pat": "md.might-have",
+     "de": "might have = nur vielleicht. Mit ausgeschaltetem Handy ist es fast ausgeschlossen.",
+     "en": "might have = only maybe. With the phone off it is almost ruled out."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Gesucht ist ein Modalverb mit have + Partizip: can't have received.",
+     "en": "A modal with have + participle is needed: can't have received."
+    },
+    {
+     "not": [
+      "cannot",
+      "could not",
+      "must not"
+     ],
+     "de": "Gesucht ist ein Modalverb für „ausgeschlossen“: can't oder couldn't have received.",
+     "en": "A modal for “ruled out” is needed: can't or couldn't have received."
+    }
+   ]
+  }
+ },
+ "modals-deduction|iamnotsurewhytheclientisupsetwetheinvoicetwice": {
+  "pat": "md.might-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: „not sure“ = nur möglich: might (may, could) have + sent.",
+    "en": "Right: “not sure” = only possible: might (may, could) have + sent."
+   },
+   "wrong": [
+    {
+     "if": [
+      "must"
+     ],
+     "not": [
+      "not"
+     ],
+     "pat": "md.must-have",
+     "de": "must have = fast sicher. „I'm not sure“ verlangt eine schwächere Form.",
+     "en": "must have = almost sure. “I'm not sure” calls for a weaker form."
+    },
+    {
+     "if": [
+      "cannot"
+     ],
+     "pat": "md.cant-have",
+     "de": "can't have = ausgeschlossen. Es ist aber nur unklar, ob ihr doppelt geschickt habt.",
+     "en": "can't have = ruled out. But it is just unclear whether you sent it twice."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Für früher: might have + Partizip, also have nicht weglassen.",
+     "en": "For the past: might have + participle, so do not drop have."
+    },
+    {
+     "if": [
+      "have",
+      "send"
+     ],
+     "de": "Nach have steht die 3. Verbform: sent, nicht send.",
+     "en": "After have use the third form: sent, not send."
+    }
+   ]
+  }
+ },
+ "modals-deduction|sheatherdeskrightnowhercoatisstillhere": {
+  "pat": "md.must-now",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Mantel ist der Hinweis, und es geht um jetzt: must be.",
+    "en": "Right: the coat is the clue, and it is about now: must be."
+   },
+   "wrong": [
+    {
+     "if": [
+      "cannot"
+     ],
+     "pat": "md.cant-now",
+     "de": "can't be = ausgeschlossen. Der Mantel spricht aber dafür, dass sie da ist.",
+     "en": "can't be = ruled out. But the coat suggests she is there."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "pat": "md.might-now",
+     "de": "might be = nur möglich. Mit dem Mantel als Hinweis ist must be passender.",
+     "en": "might be = only possible. With the coat as a clue, must be fits better."
+    },
+    {
+     "if": [
+      "must",
+      "have"
+     ],
+     "pat": "md.must-have",
+     "de": "must have been meint früher. Mit „right now“ gilt must be.",
+     "en": "must have been refers to the past. With “right now” use must be."
+    },
+    {
+     "not": [
+      "must",
+      "has"
+     ],
+     "de": "Gesucht ist ein Modalverb für „fast sicher“: must be.",
+     "en": "A modal for “almost sure” is needed: must be."
+    }
+   ]
+  }
+ },
+ "modals-deduction|thatlenasbrotherhelooksnothinglikeherandsheonlyhasasister": {
+  "pat": "md.cant-now",
+  "why": {
+   "ok": {
+    "de": "Richtig: Sie hat nur eine Schwester, also ausgeschlossen: can't be.",
+    "en": "Right: she only has a sister, so it is ruled out: can't be."
+   },
+   "wrong": [
+    {
+     "if": [
+      "must"
+     ],
+     "not": [
+      "not"
+     ],
+     "pat": "md.must-now",
+     "de": "must be = sicher ihr Bruder. Sie hat aber nur eine Schwester.",
+     "en": "must be = surely her brother. But she only has a sister."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "pat": "md.might-now",
+     "de": "might be = nur vielleicht. Sie hat nur eine Schwester, also ausgeschlossen.",
+     "en": "might be = only maybe. She only has a sister, so it is ruled out."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "de": "have been meint früher. Hier geht es um jetzt: can't be.",
+     "en": "have been refers to the past. This is about now: can't be."
+    },
+    {
+     "not": [
+      "cannot",
+      "could not",
+      "must not"
+     ],
+     "de": "Gesucht ist ein Modalverb für „ausgeschlossen“: can't be.",
+     "en": "A modal for “ruled out” is needed: can't be."
+    }
+   ]
+  }
+ },
+ "modals-deduction|iamsuretheteamforgottoupdatethedatabasetheteamtoupdatethedatabase": {
+  "pat": "md.must-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: „I'm sure“ = fast sicher, früher: must have + forgotten (to update).",
+    "en": "Right: “I'm sure” = almost certain, in the past: must have + forgotten (to update)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "cannot"
+     ],
+     "pat": "md.cant-have",
+     "de": "can't have = ausgeschlossen. „I'm sure … forgot“ sagt aber das Gegenteil.",
+     "en": "can't have = ruled out. But “I'm sure … forgot” says the opposite."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "pat": "md.might-have",
+     "de": "might have = nur vielleicht. „I'm sure“ verlangt die stärkere Form must have.",
+     "en": "might have = only maybe. “I'm sure” calls for the stronger must have."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Für früher braucht es have + Partizip: must have forgotten.",
+     "en": "The past needs have + participle: must have forgotten."
+    },
+    {
+     "if": [
+      "have",
+      "forgot"
+     ],
+     "de": "Nach have steht die 3. Verbform: forgotten, nicht forgot.",
+     "en": "After have use the third form: forgotten, not forgot."
+    }
+   ]
+  }
+ },
+ "modals-deduction|itsimpossiblethathewrotethisemailhedoesnotspeakgermanhethisemailhedoesnotspeakge": {
+  "pat": "md.cant-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: „impossible“ = ausgeschlossen, früher: can't have + written.",
+    "en": "Right: “impossible” = ruled out, in the past: can't have + written."
+   },
+   "wrong": [
+    {
+     "if": [
+      "must"
+     ],
+     "not": [
+      "not"
+     ],
+     "pat": "md.must-have",
+     "de": "must have = sicher geschrieben. Er spricht aber kein Deutsch: unmöglich.",
+     "en": "must have = surely he wrote it. But he does not speak German."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "pat": "md.might-have",
+     "de": "might have = nur vielleicht. Gemeint ist: unmöglich.",
+     "en": "might have = only maybe. The point is: impossible."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Für früher: can't have + Partizip (can't have written).",
+     "en": "For the past: can't have + participle (can't have written)."
+    },
+    {
+     "if": [
+      "have",
+      "wrote"
+     ],
+     "de": "Nach have steht die 3. Verbform: written, nicht wrote.",
+     "en": "After have use the third form: written, not wrote."
+    }
+   ]
+  }
+ },
+ "modals-deduction|hemustleftearlyhisdeskisempty": {
+  "pat": "md.must-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der leere Schreibtisch ist der Hinweis: must have left, mit have.",
+    "en": "Right: the empty desk is the clue: must have left, with have in place."
+   },
+   "wrong": [
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Es fehlt have: Für früher heißt es must have + Partizip.",
+     "en": "have is missing: for the past it is must have + participle."
+    },
+    {
+     "if": [
+      "cannot"
+     ],
+     "pat": "md.cant-have",
+     "de": "can't have = ausgeschlossen. Der leere Schreibtisch spricht aber für „weg“.",
+     "en": "can't have = ruled out. But the empty desk suggests he is gone."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "pat": "md.might-have",
+     "de": "might have = nur möglich. Der leere Schreibtisch ist ein Beweis: must have.",
+     "en": "might have = only possible. The empty desk is proof: must have."
+    }
+   ]
+  }
+ },
+ "modals-deduction|shecannotbeatthemeetingyesterdaybecauseshewasonvacation": {
+  "pat": "md.cant-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: „yesterday“ = früher: can't have been, nicht can't be.",
+    "en": "Right: “yesterday” = earlier: can't have been, not can't be."
+   },
+   "wrong": [
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Mit „yesterday“ braucht es have been: Die Zeit ist früher, nicht jetzt.",
+     "en": "“yesterday” needs have been: the time is earlier, not now."
+    },
+    {
+     "if": [
+      "must"
+     ],
+     "not": [
+      "not"
+     ],
+     "pat": "md.must-have",
+     "de": "must have been = sicher dort. Sie war aber im Urlaub: ausgeschlossen.",
+     "en": "must have been = surely there. But she was on vacation: ruled out."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "pat": "md.might-have",
+     "de": "might have been = nur vielleicht. Im Urlaub ist es so gut wie ausgeschlossen.",
+     "en": "might have been = only maybe. On vacation it is almost ruled out."
+    }
+   ]
+  }
+ },
+ "modals-deduction|hemustnothaveseenus": {
+  "pat": "md.cant-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: Für „so gut wie ausgeschlossen“ nimmt man can't have seen, nicht mustn't.",
+    "en": "Right: for “almost ruled out” use can't have seen, not mustn't."
+   },
+   "wrong": [
+    {
+     "if": [
+      "must",
+      "not"
+     ],
+     "de": "mustn't wirkt wie „darf nicht“. Für „so gut wie ausgeschlossen“ ist can't have gebräuchlicher.",
+     "en": "mustn't sounds like “not allowed”. For “almost ruled out”, can't have is more usual."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "pat": "md.might-have",
+     "de": "might not have = vielleicht sah er uns nicht. Gemeint ist: so gut wie ausgeschlossen.",
+     "en": "might not have = maybe he did not see us. The point is: almost ruled out."
+    },
+    {
+     "if": [
+      "must"
+     ],
+     "not": [
+      "not"
+     ],
+     "pat": "md.must-have",
+     "de": "must have seen = sicher gesehen. Gemeint ist das Gegenteil.",
+     "en": "must have seen = surely saw us. The point is the opposite."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Es braucht auch weiter have + Partizip: can't have seen.",
+     "en": "have + participle is still needed: can't have seen."
     }
    ]
   }
@@ -8214,6 +9450,1953 @@
      ],
      "de": "Gesucht ist is + -ing: Es schneit gerade.",
      "en": "Is + -ing is needed: it is snowing right now."
+    }
+   ]
+  }
+ },
+ "questions|couldyoutellmewhere": {
+  "pat": "qu.indirect",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach where steht erst das Subjekt, dann das Verb: where the meeting room is.",
+    "en": "Right: after where the subject comes first, then the verb: where the meeting room is."
+   },
+   "wrong": [
+    {
+     "opt": "the meeting room",
+     "pat": "qu.indirect",
+     "de": "Das Verb fehlt: Die eingebettete Frage braucht Subjekt und Verb (… room is).",
+     "en": "The verb is missing: the embedded question needs a subject and a verb (… room is)."
+    },
+    {
+     "opt": "does the meeting room is",
+     "pat": "qu.indirect",
+     "de": "Does gehört nur in direkte Fragen, und is steht schon da: the meeting room is.",
+     "en": "Does belongs only in direct questions, and is is already there: the meeting room is."
+    },
+    {
+     "opt": "is the meeting room",
+     "pat": "qu.direct",
+     "de": "So steht es in der direkten Frage (Where is …?). Nach „Could you tell me“ kommt das Subjekt zuerst.",
+     "en": "That is the direct-question order (Where is …?). After “Could you tell me” the subject comes first."
+    }
+   ]
+  }
+ },
+ "questions|youhavenotseenmynotes": {
+  "pat": "qu.tags",
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Aussage ist verneint (haven't), also folgt ein bejahtes Tag: have you?",
+    "en": "Right: the statement is negative (haven't), so a positive tag follows: have you?"
+   },
+   "wrong": [
+    {
+     "opt": "did you",
+     "de": "Das Tag nimmt das Hilfsverb des Satzes auf: haven't seen → have you, nicht did you.",
+     "en": "The tag repeats the auxiliary of the sentence: haven't seen → have you, not did you."
+    },
+    {
+     "opt": "haven't you",
+     "de": "Die Aussage ist schon verneint. Das Tag muss bejaht sein: have you?",
+     "en": "The statement is already negative. The tag must be positive: have you?"
+    },
+    {
+     "opt": "do you",
+     "de": "Ohne Hilfsverb im Satz nimmt man do. Hier steht aber haven't, also have you.",
+     "en": "Do is used when the sentence has no auxiliary. Here haven't is there, so have you."
+    }
+   ]
+  }
+ },
+ "questions|whotheproposallastweek": {
+  "pat": "qu.subject",
+  "why": {
+   "ok": {
+    "de": "Richtig: Who ist das Subjekt, also folgt das Verb direkt: Who approved … last week?",
+    "en": "Right: Who is the subject, so the verb follows directly: Who approved … last week?"
+   },
+   "wrong": [
+    {
+     "opt": "did approve",
+     "de": "Bei who als Subjekt gibt es kein did: Who approved …?",
+     "en": "With who as the subject there is no did: Who approved …?"
+    },
+    {
+     "opt": "does approve",
+     "de": "Does passt nicht zu last week (Vergangenheit) und gehört nicht in eine Subjektfrage.",
+     "en": "Does does not fit last week (past) and has no place in a subject question."
+    },
+    {
+     "opt": "has approved",
+     "pat": "qu.subject",
+     "de": "Mit last week steht das Simple Past, nicht das Present Perfect: Who approved?",
+     "en": "With last week use the simple past, not the present perfect: Who approved?"
+    }
+   ]
+  }
+ },
+ "questions|iwondertheclienthasalreadyreplied": {
+  "pat": "qu.if-whether",
+  "why": {
+   "ok": {
+    "de": "Richtig: whether leitet eine Ja/Nein-Frage im Satz ein. Danach: Subjekt + Verb.",
+    "en": "Right: whether opens a yes/no question inside a clause. Then: subject + verb."
+   },
+   "wrong": [
+    {
+     "opt": "that",
+     "de": "That leitet eine Aussage ein. Hier wird ja oder nein gefragt, deshalb if oder whether.",
+     "en": "That opens a statement. Here yes or no is asked, so use if or whether."
+    },
+    {
+     "opt": "what",
+     "de": "What fragt nach einer Sache. Hier fehlt kein Satzteil, es geht um ja oder nein.",
+     "en": "What asks for a thing. No part of the clause is missing here; it is about yes or no."
+    },
+    {
+     "opt": "does",
+     "de": "Ein Hilfsverb leitet den Nebensatz nicht ein, und has steht schon im Satz.",
+     "en": "An auxiliary does not open the clause, and has is already in the sentence."
+    }
+   ]
+  }
+ },
+ "questions|doyouknowwhattimethecall": {
+  "pat": "qu.indirect",
+  "why": {
+   "ok": {
+    "de": "Richtig: In der eingebetteten Frage steht die Aussageform: what time the call starts.",
+    "en": "Right: the embedded question uses statement form: what time the call starts."
+   },
+   "wrong": [
+    {
+     "if": [
+      "does"
+     ],
+     "de": "Kein does in der eingebetteten Frage: what time the call starts.",
+     "en": "No does in the embedded question: what time the call starts."
+    },
+    {
+     "if": [
+      "did"
+     ],
+     "de": "Kein did in der eingebetteten Frage: what time the call starts.",
+     "en": "No did in the embedded question: what time the call starts."
+    },
+    {
+     "if": [
+      "start"
+     ],
+     "de": "Die dritte Person braucht das -s: the call starts.",
+     "en": "The third person needs the -s: the call starts."
+    },
+    {
+     "pat": "qu.indirect",
+     "de": "Gesucht ist ein Verb in Aussageform nach dem Subjekt: the call starts.",
+     "en": "A verb in statement form after the subject is needed: the call starts."
+    }
+   ]
+  }
+ },
+ "questions|letsgrabacoffeeafterthemeetingwe": {
+  "pat": "qu.tags",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach Let's lautet das Tag immer shall we?",
+    "en": "Right: after Let's the tag is always shall we?"
+   },
+   "wrong": [
+    {
+     "if": [
+      "do"
+     ],
+     "de": "Nach Let's steht kein do-Tag. Das Tag ist shall we?",
+     "en": "After Let's there is no do tag. The tag is shall we?"
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Will you? gehört zu Aufforderungen. Nach Let's heißt es shall we?",
+     "en": "Will you? goes with commands. After Let's it is shall we?"
+    },
+    {
+     "pat": "qu.tags",
+     "de": "Gesucht ist ein Modalverb für das feste Tag nach Let's: shall we?",
+     "en": "A modal verb for the fixed tag after Let's is needed: shall we?"
+    }
+   ]
+  }
+ },
+ "questions|whothelastemailtotheclient": {
+  "pat": "qu.subject",
+  "why": {
+   "ok": {
+    "de": "Richtig: Who ist das Subjekt, also steht das Verb direkt dahinter im Simple Past: sent.",
+    "en": "Right: Who is the subject, so the verb follows directly in the simple past: sent."
+   },
+   "wrong": [
+    {
+     "if": [
+      "did"
+     ],
+     "de": "Kein did: Who fragt nach dem Absender und steht als Subjekt vor dem Verb.",
+     "en": "No did: Who asks for the sender and is the subject before the verb."
+    },
+    {
+     "if": [
+      "send"
+     ],
+     "de": "Past Simple verlangt die Form sent, nicht die Grundform send.",
+     "en": "The simple past needs the form sent, not the base form send."
+    },
+    {
+     "pat": "qu.subject",
+     "de": "Gesucht ist die Past-Simple-Form von send direkt nach Who: Who sent …?",
+     "en": "The simple past of send directly after Who is needed: Who sent …?"
+    }
+   ]
+  }
+ },
+ "questions|whereisthenearestprinterdoyouknowwherethenearestprinter": {
+  "pat": "qu.indirect",
+  "why": {
+   "ok": {
+    "de": "Richtig: In der eingebetteten Frage steht das Verb nach dem Subjekt: the nearest printer is.",
+    "en": "Right: in the embedded question the verb follows the subject: the nearest printer is."
+   },
+   "wrong": [
+    {
+     "if": [
+      "does"
+     ],
+     "de": "Kein does in der eingebetteten Frage: where the nearest printer is.",
+     "en": "No does in the embedded question: where the nearest printer is."
+    },
+    {
+     "if": [
+      "are"
+     ],
+     "de": "Printer ist Singular, also is und nicht are.",
+     "en": "Printer is singular, so is and not are."
+    },
+    {
+     "pat": "qu.indirect",
+     "de": "Das Verb is steht nach dem Subjekt: where the nearest printer is.",
+     "en": "The verb is comes after the subject: where the nearest printer is."
+    }
+   ]
+  }
+ },
+ "questions|didtheclientsignthecontractsheaskedmesheaskedmetheclienthadsignedthecontract": {
+  "pat": "qu.if-whether",
+  "why": {
+   "ok": {
+    "de": "Richtig: Eine Ja/Nein-Frage im Bericht wird mit if oder whether eingeleitet.",
+    "en": "Right: a yes/no question in reported speech is introduced by if or whether."
+   },
+   "wrong": [
+    {
+     "if": [
+      "that"
+     ],
+     "de": "That leitet eine Aussage ein. Die Frage war ja/nein, also if oder whether.",
+     "en": "That opens a statement. The question was yes/no, so if or whether."
+    },
+    {
+     "if": [
+      "did"
+     ],
+     "de": "Im Bericht steht kein did mehr, und had signed steht schon im Satz.",
+     "en": "Reported speech has no did, and had signed is already in the sentence."
+    },
+    {
+     "pat": "qu.if-whether",
+     "de": "Gesucht ist das Wort, das eine Ja/Nein-Frage im Satz einleitet: if oder whether.",
+     "en": "The word that opens a yes/no question in a clause is needed: if or whether."
+    }
+   ]
+  }
+ },
+ "questions|canyoutellmewhereisthefinancedepartment": {
+  "pat": "qu.indirect",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach where steht erst das Subjekt: where the finance department is.",
+    "en": "Right: after where the subject comes first: where the finance department is."
+   },
+   "wrong": [
+    {
+     "if": [
+      "does"
+     ],
+     "de": "Kein does in der eingebetteten Frage: where the finance department is.",
+     "en": "No does in the embedded question: where the finance department is."
+    },
+    {
+     "if": [
+      "where",
+      "is",
+      "the"
+     ],
+     "de": "Noch die Form der direkten Frage (where is …). Das Subjekt muss vor is stehen.",
+     "en": "Still the direct-question order (where is …). The subject must come before is."
+    },
+    {
+     "pat": "qu.indirect",
+     "de": "Nach dem Fragewort folgt das Subjekt, dann das Verb: where the finance department is.",
+     "en": "After the wh-word comes the subject, then the verb: where the finance department is."
+    }
+   ]
+  }
+ },
+ "questions|whodidcallmewhileiwasinthemeeting": {
+  "pat": "qu.subject",
+  "why": {
+   "ok": {
+    "de": "Richtig: Who ist das Subjekt, also Who called … ohne did.",
+    "en": "Right: Who is the subject, so Who called … without did."
+   },
+   "wrong": [
+    {
+     "if": [
+      "did"
+     ],
+     "de": "Das did bleibt hier stehen. Bei who als Subjekt folgt direkt das Verb: Who called …?",
+     "en": "The did is still there. With who as the subject the verb follows directly: Who called …?"
+    },
+    {
+     "pat": "qu.subject",
+     "de": "Fragt who nach dem Handelnden, folgt das Verb direkt in der Past-Simple-Form.",
+     "en": "When who asks for the doer, the verb follows directly in the simple past."
+    }
+   ]
+  }
+ },
+ "questions|letsstartthemeetingnowdonotwe": {
+  "pat": "qu.tags",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach Let's lautet das Tag shall we?",
+    "en": "Right: after Let's the tag is shall we?"
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Will you? gehört zu Aufforderungen. Nach Let's heißt es shall we?",
+     "en": "Will you? goes with commands. After Let's it is shall we?"
+    },
+    {
+     "pat": "qu.tags",
+     "de": "Don't we? passt hier nicht. Nach Let's steht das feste Tag shall we?",
+     "en": "Don't we? does not fit here. After Let's the fixed tag is shall we?"
+    }
+   ]
+  }
+ },
+ "relative|thewomanlivesnextdoorisadoctor": {
+  "pat": "rc.who-which",
+  "why": {
+   "ok": {
+    "de": "Richtig: woman ist eine Person, also who (oder that).",
+    "en": "Right: woman is a person, so who (or that)."
+   },
+   "wrong": [
+    {
+     "opt": "which",
+     "de": "„Which“ steht für Sachen. Eine Ärztin ist eine Person: who.",
+     "en": "“Which” is for things. A doctor is a person: who."
+    },
+    {
+     "opt": "whose",
+     "pat": "rc.whose",
+     "de": "„Whose“ zeigt Besitz. Hier lebt die Frau selbst nebenan, nichts gehört ihr.",
+     "en": "“Whose” shows possession. Here the woman herself lives next door."
+    },
+    {
+     "opt": "where",
+     "pat": "rc.where-why",
+     "de": "„Where“ steht für Orte. Das Bezugswort woman ist eine Person.",
+     "en": "“Where” is for places. The noun woman is a person."
+    }
+   ]
+  }
+ },
+ "relative|thatsthemancarwasstolen": {
+  "pat": "rc.whose",
+  "why": {
+   "ok": {
+    "de": "Richtig: Das Auto gehört dem Mann, also whose car („dessen Auto“).",
+    "en": "Right: the car belongs to the man, so whose car."
+   },
+   "wrong": [
+    {
+     "opt": "who",
+     "pat": "rc.who-which",
+     "de": "„Who“ ersetzt die Person selbst. Gemeint ist ihr Besitz: dessen Auto.",
+     "en": "“Who” stands for the person. Here we need what belongs to him: his car."
+    },
+    {
+     "opt": "which",
+     "de": "„Which“ steht für Sachen und zeigt keinen Besitz an.",
+     "en": "“Which” is for things and shows no possession."
+    },
+    {
+     "opt": "that",
+     "de": "„That“ zeigt keinen Besitz. Vor car braucht es whose.",
+     "en": "“That” shows no possession. Before car you need whose."
+    }
+   ]
+  }
+ },
+ "relative|mycarthatistenyearsoldstillrunswell": {
+  "pat": "rc.commas",
+  "why": {
+   "ok": {
+    "de": "Richtig: Eine Zusatzinfo zwischen Kommas braucht which, nie that.",
+    "en": "Right: extra information between commas takes which, never that."
+   },
+   "wrong": [
+    {
+     "if": [
+      "that"
+     ],
+     "de": "Nach dem Komma ist that nicht erlaubt. Hier steht which.",
+     "en": "After a comma, that is not allowed. Use which here."
+    },
+    {
+     "if": [
+      "who"
+     ],
+     "de": "„Who“ steht für Personen. Ein Auto ist eine Sache: which.",
+     "en": "“Who” is for people. A car is a thing: which."
+    },
+    {
+     "not": [
+      "which"
+     ],
+     "de": "Gesucht ist which: Es ist Zusatzinfo, also mit Kommas und which.",
+     "en": "Use which: this is extra information, so commas and which."
+    }
+   ]
+  }
+ },
+ "relative|thecustomercalledthismorningwantsademo": {
+  "pat": "rc.who-which",
+  "why": {
+   "ok": {
+    "de": "Richtig: customer ist eine Person, also who (oder that).",
+    "en": "Right: customer is a person, so who (or that)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "which"
+     ],
+     "de": "„Which“ steht für Sachen. Ein Kunde ist eine Person: who.",
+     "en": "“Which” is for things. A customer is a person: who."
+    },
+    {
+     "pat": "rc.whose",
+     "if": [
+      "whose"
+     ],
+     "de": "„Whose“ zeigt Besitz. Hier ruft der Kunde selbst an: who.",
+     "en": "“Whose” shows possession. Here the customer is the one calling: who."
+    },
+    {
+     "if": [
+      "whom"
+     ],
+     "de": "„Whom“ wäre das Objekt. Hier ist der Kunde das Subjekt: who.",
+     "en": "“Whom” would be the object. Here the customer is the subject: who."
+    },
+    {
+     "not": [
+      "who",
+      "that"
+     ],
+     "de": "Gesucht ist ein Relativwort für eine Person: who oder that.",
+     "en": "A relative word for a person is needed: who or that."
+    }
+   ]
+  }
+ },
+ "relative|theclientcontractwesignedlastweekhasalreadyaskedforchanges": {
+  "pat": "rc.whose",
+  "why": {
+   "ok": {
+    "de": "Richtig: „dessen Vertrag“ = whose contract. Nach whose steht direkt das Nomen.",
+    "en": "Right: “whose contract” = his or her contract. The noun follows whose directly."
+   },
+   "wrong": [
+    {
+     "opt": "which",
+     "de": "„Which“ zeigt keinen Besitz. Der Vertrag gehört dem Kunden: whose.",
+     "en": "“Which” shows no possession. The contract belongs to the client: whose."
+    },
+    {
+     "opt": "whom",
+     "de": "„Whom“ ist eine Objektform und steht nie direkt vor einem Nomen wie contract.",
+     "en": "“Whom” is an object form and never sits directly before a noun like contract."
+    },
+    {
+     "opt": "who",
+     "pat": "rc.who-which",
+     "de": "„Who“ steht nie direkt vor einem Nomen. Dafür gibt es whose.",
+     "en": "“Who” never sits directly before a noun. For that there is whose."
+    }
+   ]
+  }
+ },
+ "relative|thatisthesoftwareweuseforallourcustomerdata": {
+  "pat": "rc.who-which",
+  "why": {
+   "ok": {
+    "de": "Richtig: software ist eine Sache, also which (oder that).",
+    "en": "Right: software is a thing, so which (or that)."
+   },
+   "wrong": [
+    {
+     "opt": "who",
+     "de": "„Who“ steht nur für Personen. Software ist eine Sache: which.",
+     "en": "“Who” is only for people. Software is a thing: which."
+    },
+    {
+     "opt": "where",
+     "pat": "rc.where-why",
+     "de": "„Where“ steht für Orte. Software ist kein Ort.",
+     "en": "“Where” is for places. Software is not a place."
+    },
+    {
+     "opt": "whose",
+     "pat": "rc.whose",
+     "de": "„Whose“ braucht direkt danach ein Nomen. Hier folgt we use: which.",
+     "en": "“Whose” needs a noun right after it. Here we use follows: which."
+    }
+   ]
+  }
+ },
+ "relative|ournewofficeopensnextmonthhasarooftopterrace": {
+  "pat": "rc.commas",
+  "why": {
+   "ok": {
+    "de": "Richtig: Zusatzinfo zwischen Kommas, für eine Sache: which. Nie that.",
+    "en": "Right: extra information between commas, a thing: which. Never that."
+   },
+   "wrong": [
+    {
+     "opt": "that",
+     "de": "Nach einem Komma steht nie that. Die Zusatzinfo braucht which.",
+     "en": "After a comma, never that. The extra information needs which."
+    },
+    {
+     "opt": "who",
+     "pat": "rc.who-which",
+     "de": "„Who“ steht für Personen. Ein Büro ist eine Sache: which.",
+     "en": "“Who” is for people. An office is a thing: which."
+    },
+    {
+     "opt": "what",
+     "pat": "rc.that-what",
+     "de": "„What“ hat kein Bezugswort vor sich. Hier steht office davor: which.",
+     "en": "“What” has no antecedent before it. Here office comes first: which."
+    }
+   ]
+  }
+ },
+ "relative|ihavenotreadthereportyousentmeyesterday": {
+  "pat": "rc.that-what",
+  "why": {
+   "ok": {
+    "de": "Richtig: report ist das Bezugswort, also that (oder which).",
+    "en": "Right: report is the antecedent, so that (or which)."
+   },
+   "wrong": [
+    {
+     "opt": "who",
+     "pat": "rc.who-which",
+     "de": "„Who“ steht für Personen. Ein Bericht ist eine Sache.",
+     "en": "“Who” is for people. A report is a thing."
+    },
+    {
+     "opt": "what",
+     "de": "Vor der Lücke steht report als Bezugswort. Dann folgt that, nie what.",
+     "en": "The noun report stands before the gap. Then use that, never what."
+    },
+    {
+     "opt": "where",
+     "pat": "rc.where-why",
+     "de": "„Where“ steht für Orte, und ein Bericht ist keiner.",
+     "en": "“Where” is for places, and a report is not one."
+    }
+   ]
+  }
+ },
+ "relative|berlinisthecityourcompanywasfounded": {
+  "pat": "rc.where-why",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach einem Ort + ganzer Satz steht where (= in which).",
+    "en": "Right: place + full clause = where (= in which)."
+   },
+   "wrong": [
+    {
+     "opt": "who",
+     "pat": "rc.who-which",
+     "de": "„Who“ steht für Personen. Berlin ist ein Ort: where.",
+     "en": "“Who” is for people. Berlin is a place: where."
+    },
+    {
+     "opt": "whose",
+     "pat": "rc.whose",
+     "de": "„Whose“ zeigt Besitz. Hier geht es um den Ort der Gründung, nicht um Besitz.",
+     "en": "“Whose” shows possession. This is about the place of founding, not ownership."
+    },
+    {
+     "opt": "which",
+     "de": "„Which“ allein passt nicht: Es bräuchte in dazu (in which).",
+     "en": "“Which” alone does not fit: it would need in (in which)."
+    }
+   ]
+  }
+ },
+ "relative|everythingyoutoldmeturnedouttobetrue": {
+  "pat": "rc.that-what",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach everything, all und nothing steht that.",
+    "en": "Right: after everything, all and nothing, use that."
+   },
+   "wrong": [
+    {
+     "opt": "who",
+     "pat": "rc.who-which",
+     "de": "„Who“ steht für Personen. Everything ist eine Sache.",
+     "en": "“Who” is for people. Everything is a thing."
+    },
+    {
+     "opt": "what",
+     "de": "Deutsch „alles, was“ lockt zu what. Nach everything steht aber that.",
+     "en": "German “alles, was” tempts you into what. After everything use that."
+    },
+    {
+     "opt": "whose",
+     "pat": "rc.whose",
+     "de": "„Whose“ zeigt Besitz. Hier folgt you told me, also ein Satz und kein Nomen.",
+     "en": "“Whose” shows possession. Here you told me follows, not a noun."
+    }
+   ]
+  }
+ },
+ "relative|thesalesrepclosedthebiggestdeallastyearjustgotpromoted": {
+  "pat": "rc.who-which",
+  "why": {
+   "ok": {
+    "de": "Richtig: Ein Vertriebler ist eine Person, also who (oder that).",
+    "en": "Right: a sales rep is a person, so who (or that)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "which"
+     ],
+     "de": "„Which“ steht für Sachen. Ein Vertriebler ist eine Person: who.",
+     "en": "“Which” is for things. A sales rep is a person: who."
+    },
+    {
+     "pat": "rc.whose",
+     "if": [
+      "whose"
+     ],
+     "de": "„Whose“ braucht ein Nomen danach. Hier folgt closed: who.",
+     "en": "“Whose” needs a noun after it. Here closed follows: who."
+    },
+    {
+     "not": [
+      "who",
+      "that"
+     ],
+     "de": "Gesucht ist ein Relativwort für eine Person: who oder that.",
+     "en": "A relative word for a person is needed: who or that."
+    }
+   ]
+  }
+ },
+ "relative|mycolleaguebrotherworksatgoogleintroducedmetotherecruiter": {
+  "pat": "rc.whose",
+  "why": {
+   "ok": {
+    "de": "Richtig: „dessen Bruder“ = whose brother. whose zeigt den Besitz.",
+    "en": "Right: “whose brother” = his or her brother. whose shows possession."
+   },
+   "wrong": [
+    {
+     "pat": "rc.who-which",
+     "if": [
+      "who"
+     ],
+     "de": "„Who“ ersetzt die Person selbst. Vor brother braucht es whose.",
+     "en": "“Who” replaces the person. Before brother you need whose."
+    },
+    {
+     "if": [
+      "that"
+     ],
+     "de": "„That“ zeigt keinen Besitz. Vor brother braucht es whose.",
+     "en": "“That” shows no possession. Before brother you need whose."
+    },
+    {
+     "if": [
+      "which"
+     ],
+     "de": "„Which“ steht für Sachen. Der Kollege ist eine Person: whose.",
+     "en": "“Which” is for things. The colleague is a person: whose."
+    },
+    {
+     "if": [
+      "whom"
+     ],
+     "de": "„Whom“ ist eine Objektform und steht nie direkt vor einem Nomen.",
+     "en": "“Whom” is an object form and never sits directly before a noun."
+    }
+   ]
+  }
+ },
+ "relative|thereasonwelostthebidwasourhighprice": {
+  "pat": "rc.where-why",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach reason steht why (oder that, for which).",
+    "en": "Right: after reason use why (or that, for which)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "because"
+     ],
+     "de": "Nach reason steht why, nie because: the reason why …",
+     "en": "After reason use why, never because: the reason why …"
+    },
+    {
+     "if": [
+      "where"
+     ],
+     "de": "„Where“ steht für Orte. Ein Grund ist kein Ort: why.",
+     "en": "“Where” is for places. A reason is not a place: why."
+    },
+    {
+     "if": [
+      "which"
+     ],
+     "not": [
+      "for"
+     ],
+     "de": "„Which“ braucht hier for davor (for which). Einfacher ist why.",
+     "en": "“Which” needs for before it here (for which). Simpler: why."
+    },
+    {
+     "not": [
+      "why",
+      "that",
+      "which"
+     ],
+     "de": "Gesucht ist ein Relativwort für einen Grund: why (oder that).",
+     "en": "A relative word for a reason is needed: why (or that)."
+    }
+   ]
+  }
+ },
+ "relative|therestaurantwehadlunchyesterdaywasamazing": {
+  "pat": "rc.where-why",
+  "why": {
+   "ok": {
+    "de": "Richtig: Ort + Satz = where. Auch at oder in which ginge.",
+    "en": "Right: place + clause = where. At or in which would also work."
+   },
+   "wrong": [
+    {
+     "if": [
+      "which"
+     ],
+     "not": [
+      "at",
+      "in"
+     ],
+     "de": "„Which“ allein braucht at oder in davor (at which). Einfacher: where.",
+     "en": "“Which” alone needs at or in before it (at which). Simpler: where."
+    },
+    {
+     "if": [
+      "that"
+     ],
+     "de": "„That“ passt hier nicht, denn at fehlt am Satzende. Mit where entfällt es.",
+     "en": "“That” does not fit here because at is missing at the end. With where it is not needed."
+    },
+    {
+     "pat": "rc.who-which",
+     "if": [
+      "who"
+     ],
+     "de": "„Who“ steht für Personen. Ein Restaurant ist ein Ort: where.",
+     "en": "“Who” is for people. A restaurant is a place: where."
+    },
+    {
+     "not": [
+      "where",
+      "at",
+      "in"
+     ],
+     "de": "Gesucht ist ein Relativwort für einen Ort: where (oder at / in which).",
+     "en": "A relative word for a place is needed: where (or at / in which)."
+    }
+   ]
+  }
+ },
+ "relative|sheisthecolleaguewithiworkedonthefrankfurtproject": {
+  "pat": "rc.prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach einer Präposition steht whom, nicht who.",
+    "en": "Right: after a preposition use whom, not who."
+   },
+   "wrong": [
+    {
+     "if": [
+      "who"
+     ],
+     "de": "Direkt nach with verlangt das förmliche Englisch whom.",
+     "en": "Right after with, formal English requires whom."
+    },
+    {
+     "if": [
+      "that"
+     ],
+     "de": "„That“ steht nie direkt nach einer Präposition. Hier: whom.",
+     "en": "“That” never follows a preposition directly. Here: whom."
+    },
+    {
+     "pat": "rc.who-which",
+     "if": [
+      "which"
+     ],
+     "de": "„Which“ steht für Sachen. Colleague ist eine Person: whom.",
+     "en": "“Which” is for things. Colleague is a person: whom."
+    },
+    {
+     "not": [
+      "whom"
+     ],
+     "de": "Gesucht ist die Objektform für Personen nach der Präposition: whom.",
+     "en": "The object form for people after the preposition is needed: whom."
+    }
+   ]
+  }
+ },
+ "relative|themanagerisonleaveisentmyreporttoherthemanagerisentmyreportisonleave": {
+  "pat": "rc.prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: send … to gehört zusammen; im Relativsatz steht to am Ende.",
+    "en": "Right: send … to belongs together; in the relative clause to comes last."
+   },
+   "wrong": [
+    {
+     "if": [
+      "whom"
+     ],
+     "de": "Hier fehlt kein Relativwort, sondern die Präposition to am Ende.",
+     "en": "No relative word is missing here, but the preposition to at the end."
+    },
+    {
+     "if": [
+      "who"
+     ],
+     "de": "„Who“ ist hier nicht gefragt. Es fehlt die Präposition zu send.",
+     "en": "“Who” is not what is asked for. The preposition for send is missing."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Die Präposition zu send fehlt: Im Relativsatz steht sie am Ende.",
+     "en": "The preposition for send is missing: in the relative clause it stands at the end."
+    }
+   ]
+  }
+ },
+ "relative|ourclientisbasedinmunichhiscompanyboughtlicensesourclientcompanyboughtlicensesis": {
+  "pat": "rc.whose",
+  "why": {
+   "ok": {
+    "de": "Richtig: whose ersetzt das Possessivwort his und zeigt Besitz.",
+    "en": "Right: whose replaces the possessive his and shows possession."
+   },
+   "wrong": [
+    {
+     "if": [
+      "his"
+     ],
+     "de": "„His“ steht im Ausgangssatz. Im Relativsatz ersetzt whose das Wort his.",
+     "en": "“His” is in the source sentence. In the clause, whose replaces his."
+    },
+    {
+     "pat": "rc.who-which",
+     "if": [
+      "who"
+     ],
+     "de": "„Who“ ersetzt die Person selbst. Vor company braucht es whose.",
+     "en": "“Who” replaces the person. Before company you need whose."
+    },
+    {
+     "if": [
+      "that"
+     ],
+     "de": "„That“ steht nach einem Komma nie. Und es zeigt keinen Besitz.",
+     "en": "“That” never follows a comma. And it shows no possession."
+    },
+    {
+     "not": [
+      "whose"
+     ],
+     "de": "Gesucht ist das Wort für „dessen“: whose.",
+     "en": "The word for “dessen” is needed: whose."
+    }
+   ]
+  }
+ },
+ "relative|thecolleaguewhichsitsnexttomeisfromspain": {
+  "pat": "rc.who-which",
+  "why": {
+   "ok": {
+    "de": "Richtig: colleague ist eine Person, also who (oder that), nie which.",
+    "en": "Right: colleague is a person, so who (or that), never which."
+   },
+   "wrong": [
+    {
+     "if": [
+      "which"
+     ],
+     "de": "„Which“ ist für Sachen. Für Personen gilt who (oder that).",
+     "en": "“Which” is for things. For people use who (or that)."
+    },
+    {
+     "pat": "rc.whose",
+     "if": [
+      "whose"
+     ],
+     "de": "„Whose“ zeigt Besitz. Hier sitzt die Person selbst neben mir: who.",
+     "en": "“Whose” shows possession. Here the person herself sits next to me: who."
+    },
+    {
+     "not": [
+      "who",
+      "that"
+     ],
+     "de": "Gesucht ist ein Relativwort für Personen: who oder that.",
+     "en": "A relative word for people is needed: who or that."
+    }
+   ]
+  }
+ },
+ "relative|iknowacompanythatmainofficeisindublin": {
+  "pat": "rc.whose",
+  "why": {
+   "ok": {
+    "de": "Richtig: „deren Hauptsitz“ = whose main office. whose zeigt den Besitz.",
+    "en": "Right: “whose main office” = its main office. whose shows possession."
+   },
+   "wrong": [
+    {
+     "if": [
+      "that"
+     ],
+     "de": "„That“ zeigt keinen Besitz. Vor main office braucht es whose.",
+     "en": "“That” shows no possession. Before main office you need whose."
+    },
+    {
+     "if": [
+      "which"
+     ],
+     "de": "„Which“ zeigt keinen Besitz. Vor main office braucht es whose.",
+     "en": "“Which” shows no possession. Before main office you need whose."
+    },
+    {
+     "not": [
+      "whose"
+     ],
+     "de": "Gesucht ist das Wort für „deren“: whose, direkt vor main office.",
+     "en": "The word for “deren” is needed: whose, right before main office."
+    }
+   ]
+  }
+ },
+ "relative|mycarthatistenyearsoldstillruns": {
+  "pat": "rc.commas",
+  "why": {
+   "ok": {
+    "de": "Richtig: Eine Zusatzinfo zwischen Kommas braucht which, nie that.",
+    "en": "Right: extra information between commas takes which, never that."
+   },
+   "wrong": [
+    {
+     "if": [
+      "that"
+     ],
+     "de": "Nach dem Komma ist that nicht erlaubt. Hier steht which.",
+     "en": "After a comma, that is not allowed. Use which here."
+    },
+    {
+     "if": [
+      "who"
+     ],
+     "de": "„Who“ steht für Personen. Ein Auto ist eine Sache: which.",
+     "en": "“Who” is for people. A car is a thing: which."
+    },
+    {
+     "not": [
+      "which"
+     ],
+     "de": "Gesucht ist which: Es ist Zusatzinfo, also mit Kommas und which.",
+     "en": "Use which: this is extra information, so commas and which."
+    }
+   ]
+  },
+  "dup": "relative|mycarthatistenyearsoldstillrunswell"
+ },
+ "report-verbs|sheadmittedthewrongfigurestotheboard": {
+  "pat": "rv.admit-deny",
+  "why": {
+   "ok": {
+    "de": "Richtig: admit + -ing, also admitted sending. Sie hat die Zahlen geschickt.",
+    "en": "Right: admit + -ing, so admitted sending. She did send the wrong figures."
+   },
+   "wrong": [
+    {
+     "opt": "send",
+     "de": "Nach admit steht nie die Grundform, immer -ing: admitted sending.",
+     "en": "After admit the base form never stands; use -ing: admitted sending."
+    },
+    {
+     "opt": "to send",
+     "pat": "rv.offer",
+     "de": "Admit nimmt kein to + Verb. Das deutsche „zu schicken“ führt hierher.",
+     "en": "Admit takes no to + verb. German “zu schicken” leads here."
+    },
+    {
+     "opt": "that sending",
+     "de": "Ein that-Satz braucht Subjekt und Verb: that she sent, nicht that sending.",
+     "en": "A that-clause needs a subject and verb: that she sent, not that sending."
+    }
+   ]
+  }
+ },
+ "report-verbs|mylawyeradvisedmethedocumentyet": {
+  "pat": "rv.advise-warn",
+  "why": {
+   "ok": {
+    "de": "Richtig: advise + Person + not to + Verb. Die Verneinung steht vor to.",
+    "en": "Right: advise + person + not to + verb. The negation goes before to."
+   },
+   "wrong": [
+    {
+     "opt": "don't sign",
+     "de": "„Don't“ stammt aus der direkten Rede. Berichtet wird mit not to + Verb.",
+     "en": "“Don't” comes from direct speech. Reported advice uses not to + verb."
+    },
+    {
+     "opt": "not signing",
+     "de": "Nach advise + Person folgt to + Verb, nicht -ing: advised me not to sign.",
+     "en": "After advise + person comes to + verb, not -ing: advised me not to sign."
+    },
+    {
+     "opt": "to not signing",
+     "de": "Hier sind zwei Muster vermischt: to + Verb und -ing. Es gilt not to sign.",
+     "en": "Two patterns are mixed here: to + verb and -ing. The form is not to sign."
+    }
+   ]
+  }
+ },
+ "report-verbs|heinsistedforthedinner": {
+  "pat": "rv.insist",
+  "why": {
+   "ok": {
+    "de": "Richtig: insist braucht on, und danach folgt -ing: insisted on paying.",
+    "en": "Right: insist needs on, then -ing: insisted on paying."
+   },
+   "wrong": [
+    {
+     "opt": "on to pay",
+     "de": "Nach on steht -ing, kein to + Verb: on paying.",
+     "en": "After on comes -ing, not to + verb: on paying."
+    },
+    {
+     "opt": "to pay",
+     "de": "Insist verlangt die Präposition on. To pay allein reicht nicht.",
+     "en": "Insist needs the preposition on. To pay alone is not enough."
+    },
+    {
+     "opt": "paying",
+     "de": "Ohne on geht es nicht: Insist braucht die Präposition vor -ing.",
+     "en": "It does not work without on: insist needs the preposition before -ing."
+    }
+   ]
+  }
+ },
+ "report-verbs|theconsultantrecommendedthepilotinmarch": {
+  "pat": "rv.suggest-rec",
+  "why": {
+   "ok": {
+    "de": "Richtig: recommend + -ing: recommended starting. Auch möglich: that we start.",
+    "en": "Right: recommend + -ing: recommended starting. Also possible: that we start."
+   },
+   "wrong": [
+    {
+     "opt": "us to start",
+     "pat": "rv.advise-warn",
+     "de": "Recommend + Person + to ist im US-Englisch unüblich: nimm -ing oder einen that-Satz.",
+     "en": "Recommend + person + to is uncommon in US English: use -ing or a that-clause."
+    },
+    {
+     "opt": "to start us",
+     "de": "Das ist keine mögliche Wortstellung: us kann nicht hinter to start stehen.",
+     "en": "That is not a possible word order: us cannot follow to start."
+    },
+    {
+     "opt": "that us start",
+     "de": "Im that-Satz steht das Subjekt als we, nicht als us: that we start.",
+     "en": "In a that-clause the subject is we, not us: that we start."
+    }
+   ]
+  }
+ },
+ "report-verbs|shesuggestedthedeadlinetothursday": {
+  "pat": "rv.suggest-rec",
+  "why": {
+   "ok": {
+    "de": "Richtig: suggest + -ing: suggested moving. Auch richtig: that we move.",
+    "en": "Right: suggest + -ing: suggested moving. Also right: that we move."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Suggest nimmt kein to + Verb. Nach suggest steht -ing: moving.",
+     "en": "Suggest takes no to + verb. After suggest use -ing: moving."
+    },
+    {
+     "if": [
+      "move"
+     ],
+     "not": [
+      "that",
+      "we",
+      "i",
+      "they",
+      "he",
+      "she"
+     ],
+     "de": "Die Grundform passt nicht: Nach suggest steht -ing (moving).",
+     "en": "The bare form does not fit: after suggest use -ing (moving)."
+    },
+    {
+     "if": [
+      "moved"
+     ],
+     "de": "Die Vergangenheitsform passt nicht: Nach suggest steht -ing.",
+     "en": "The past form does not fit: after suggest use -ing."
+    }
+   ]
+  }
+ },
+ "report-verbs|thedoctoradvisedhimmorerest": {
+  "pat": "rv.advise-warn",
+  "why": {
+   "ok": {
+    "de": "Richtig: nach advise + Person folgt to + Verb: advised him to get.",
+    "en": "Right: advise + person + to + verb: advised him to get."
+   },
+   "wrong": [
+    {
+     "if": [
+      "getting"
+     ],
+     "de": "Nach advise + Person steht to + Verb, nicht -ing.",
+     "en": "After advise + person use to + verb, not -ing."
+    },
+    {
+     "if": [
+      "get"
+     ],
+     "not": [
+      "to",
+      "that",
+      "he"
+     ],
+     "de": "Es fehlt to: nach advise + Person folgt to + Verb.",
+     "en": "The to is missing: advise + person + to + verb."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach advise + Person folgt kein will: advised him to get.",
+     "en": "No will follows advise + person: advised him to get."
+    }
+   ]
+  }
+ },
+ "report-verbs|themanagerdeniedtheerror": {
+  "pat": "rv.admit-deny",
+  "why": {
+   "ok": {
+    "de": "Richtig: deny + -ing: denied making. Für Früheres auch: having made.",
+    "en": "Right: deny + -ing: denied making. For something earlier also: having made."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Deny nimmt kein to + Verb. Nach deny steht -ing: denied making.",
+     "en": "Deny takes no to + verb. After deny use -ing: denied making."
+    },
+    {
+     "if": [
+      "make"
+     ],
+     "not": [
+      "that",
+      "he",
+      "she",
+      "they",
+      "we",
+      "i"
+     ],
+     "de": "Die Grundform passt nicht: Nach deny steht -ing (making).",
+     "en": "The bare form does not fit: after deny use -ing (making)."
+    },
+    {
+     "if": [
+      "made"
+     ],
+     "not": [
+      "having",
+      "that",
+      "he",
+      "she",
+      "they",
+      "we",
+      "i"
+     ],
+     "de": "Made allein passt nicht: Nach deny steht -ing oder having made.",
+     "en": "Made alone does not fit: after deny use -ing or having made."
+    }
+   ]
+  }
+ },
+ "report-verbs|iwillcoverthecostshesaidheofferedthecosts": {
+  "pat": "rv.offer",
+  "why": {
+   "ok": {
+    "de": "Richtig: nach offer folgt to + Verb: offered to cover. Es steht kein -ing da.",
+    "en": "Right: offer + to + verb: offered to cover. No -ing follows."
+   },
+   "wrong": [
+    {
+     "if": [
+      "covering"
+     ],
+     "de": "Nach offer steht to + Verb, nicht -ing: offered to cover.",
+     "en": "After offer use to + verb, not -ing: offered to cover."
+    },
+    {
+     "if": [
+      "paying"
+     ],
+     "de": "Nach offer steht to + Verb, nicht -ing: offered to pay.",
+     "en": "After offer use to + verb, not -ing: offered to pay."
+    },
+    {
+     "if": [
+      "cover"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Es fehlt to: nach offer folgt to + Verb.",
+     "en": "The to is missing: offer + to + verb."
+    }
+   ]
+  }
+ },
+ "report-verbs|donotdiscussthedealwithanyoneshetoldmeshewarnedmethedealwithanyone": {
+  "pat": "rv.advise-warn",
+  "why": {
+   "ok": {
+    "de": "Richtig: warn + Person + not to + Verb. Not steht vor to.",
+    "en": "Right: warn + person + not to + verb. Not goes before to."
+   },
+   "wrong": [
+    {
+     "if": [
+      "not",
+      "discussing"
+     ],
+     "de": "Nach warn + Person folgt to + Verb, nicht -ing: not to discuss.",
+     "en": "After warn + person use to + verb, not -ing: not to discuss."
+    },
+    {
+     "if": [
+      "not"
+     ],
+     "not": [
+      "to",
+      "against"
+     ],
+     "de": "Es fehlt to: nach warn + Person folgt not to + Verb.",
+     "en": "The to is missing: warn + person + not to + verb."
+    },
+    {
+     "if": [
+      "to"
+     ],
+     "not": [
+      "not",
+      "never"
+     ],
+     "de": "Die Verneinung fehlt: Gemeint ist, dass er es nicht tun soll: not to discuss.",
+     "en": "The negation is missing: the point is that he should not do it: not to discuss."
+    }
+   ]
+  }
+ },
+ "report-verbs|hesuggestedmetotakeadifferentroute": {
+  "pat": "rv.suggest-rec",
+  "why": {
+   "ok": {
+    "de": "Richtig: that I take oder taking. Suggest nimmt nie Person + to.",
+    "en": "Right: that I take or taking. Suggest never takes person + to."
+   },
+   "wrong": [
+    {
+     "if": [
+      "me",
+      "to"
+     ],
+     "de": "Person + to geht bei suggest nicht: nur that-Satz oder -ing.",
+     "en": "Person + to does not work with suggest: only a that-clause or -ing."
+    },
+    {
+     "if": [
+      "to"
+     ],
+     "not": [
+      "me"
+     ],
+     "de": "Suggest nimmt kein to + Verb: nur that-Satz oder -ing.",
+     "en": "Suggest takes no to + verb: only a that-clause or -ing."
+    }
+   ]
+  }
+ },
+ "report-verbs|sheadmittedtobelateforthemeeting": {
+  "pat": "rv.admit-deny",
+  "why": {
+   "ok": {
+    "de": "Richtig: admit + -ing: admitted being late. Auch: admitted to being late.",
+    "en": "Right: admit + -ing: admitted being late. Also: admitted to being late."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to",
+      "be"
+     ],
+     "de": "Admit nimmt kein to + Verb. Es heißt being, oder to being.",
+     "en": "Admit takes no to + verb. Use being, or to being."
+    },
+    {
+     "if": [
+      "be"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach admit steht -ing: being late, nicht die Grundform.",
+     "en": "After admit use -ing: being late, not the base form."
+    }
+   ]
+  }
+ },
+ "report-verbs|theyinsistedtoseethecontractbeforesigning": {
+  "pat": "rv.insist",
+  "why": {
+   "ok": {
+    "de": "Richtig: insist braucht on und danach -ing: insisted on seeing.",
+    "en": "Right: insist needs on + -ing: insisted on seeing."
+   },
+   "wrong": [
+    {
+     "if": [
+      "insisted",
+      "to"
+     ],
+     "not": [
+      "on"
+     ],
+     "de": "Insist braucht die Präposition on, danach folgt -ing: on seeing.",
+     "en": "Insist needs the preposition on, then -ing: on seeing."
+    },
+    {
+     "if": [
+      "on",
+      "see"
+     ],
+     "de": "Nach on steht -ing, nicht die Grundform: on seeing.",
+     "en": "After on comes -ing, not the base form: on seeing."
+    },
+    {
+     "if": [
+      "seeing"
+     ],
+     "not": [
+      "on"
+     ],
+     "de": "Es fehlt on: nach insist folgt on + -ing.",
+     "en": "The on is missing: insisted on seeing."
+    }
+   ]
+  }
+ },
+ "reported|shesaidiamtiredshesaidthatshe": {
+  "pat": "rs.backshift",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach said rückt die Zeit zurück: am → was, denn das Sagen liegt zurück.",
+    "en": "Right: after said the tense moves back: am → was, because the speaking is in the past."
+   },
+   "wrong": [
+    {
+     "if": [
+      "is"
+     ],
+     "de": "„is“ geht nur, wenn es noch gilt. Hier ist der Rückschritt gefragt: was tired.",
+     "en": "“is” works only if it is still true. Here the backshift is asked for: was tired."
+    },
+    {
+     "if": [
+      "am"
+     ],
+     "de": "„am“ ist die Form der direkten Rede. Indirekt wird aus I am: she was.",
+     "en": "“am” is the form of direct speech. Reported, I am becomes she was."
+    },
+    {
+     "if": [
+      "were"
+     ],
+     "de": "„were“ gehört zu you, we, they. Zu she passt was.",
+     "en": "“were” goes with you, we, they. With she, use was."
+    }
+   ]
+  }
+ },
+ "reported|heaskedmewherei": {
+  "pat": "rs.question",
+  "why": {
+   "ok": {
+    "de": "Richtig: where I lived. Nach asked steht normale Wortstellung mit Rückschritt.",
+    "en": "Right: where I lived. After asked, normal word order with backshift."
+   },
+   "wrong": [
+    {
+     "opt": "live",
+     "pat": "rs.backshift",
+     "de": "„live“ passt nur, wenn es noch gilt. Hier üben wir den Rückschritt: lived.",
+     "en": "“live” fits only if it still holds. Here we practice the backshift: lived."
+    },
+    {
+     "opt": "do I live",
+     "de": "„do I live“ ist die Wortstellung der direkten Frage. Im Nebensatz: I lived.",
+     "en": "“do I live” is the word order of a direct question. In the clause: I lived."
+    },
+    {
+     "opt": "did I live",
+     "de": "„did I live“ ist die direkte Frage. Indirekt: kein did, nur where I lived.",
+     "en": "“did I live” is the direct question. Reported: no did, just where I lived."
+    }
+   ]
+  }
+ },
+ "reported|iwillcallyouhesaidhesaidheme": {
+  "pat": "rs.backshift",
+  "why": {
+   "ok": {
+    "de": "Richtig: will → would, weil das Sagen zurückliegt: he would call me.",
+    "en": "Right: will → would, because the speaking is in the past: he would call me."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "„will“ passt nur, wenn es noch gilt. Hier üben wir den Rückschritt: would.",
+     "en": "“will” fits only if it still holds. Here we practice the backshift: would."
+    },
+    {
+     "if": [
+      "called"
+     ],
+     "de": "Nach would steht die Grundform: would call, nicht called.",
+     "en": "After would comes the base form: would call, not called."
+    }
+   ]
+  }
+ },
+ "reported|hemethatthedeadlinehadchanged": {
+  "pat": "rs.tell-say",
+  "why": {
+   "ok": {
+    "de": "Richtig: told me. tell braucht die Person gleich danach (me).",
+    "en": "Right: told me. tell needs the person right after it (me)."
+   },
+   "wrong": [
+    {
+     "opt": "said",
+     "pat": "rs.tell-say",
+     "de": "„said“ steht ohne Person. Mit Person heißt es said to me.",
+     "en": "“said” has no person after it. With a person it is said to me."
+    },
+    {
+     "opt": "explained",
+     "de": "„explained“ braucht to me: explained to me. Direkt vor me steht told.",
+     "en": "“explained” needs to me: explained to me. Directly before me, use told."
+    },
+    {
+     "opt": "spoke",
+     "de": "„spoke me that“ gibt es nicht. spoke steht mit to oder about.",
+     "en": "“spoke me that” does not exist. spoke goes with to or about."
+    }
+   ]
+  }
+ },
+ "reported|sheaskedme": {
+  "pat": "rs.question",
+  "why": {
+   "ok": {
+    "de": "Richtig: when the meeting started: erst das Fragewort, dann Subjekt und Verb, ohne did.",
+    "en": "Right: when the meeting started: question word, subject, verb, no did."
+   },
+   "wrong": [
+    {
+     "opt": "that when the meeting started",
+     "de": "Eine Frage wird nicht mit that eingeleitet. Das Fragewort when genügt.",
+     "en": "A question is not introduced with that. The question word when is enough."
+    },
+    {
+     "opt": "when started the meeting",
+     "de": "Das Subjekt steht vor dem Verb: when the meeting started.",
+     "en": "The subject comes before the verb: when the meeting started."
+    },
+    {
+     "opt": "when did the meeting start",
+     "de": "„did“ gehört zur direkten Frage. Im Nebensatz steht: when the meeting started.",
+     "en": "“did” belongs to the direct question. Reported: when the meeting started."
+    }
+   ]
+  }
+ },
+ "reported|lastweektheceoannouncedwewilllaunchtomorrowshesaidthattheywouldlaunch": {
+  "pat": "rs.time-shift",
+  "why": {
+   "ok": {
+    "de": "Richtig: tomorrow → the following day. Gezählt wird vom Sagen aus.",
+    "en": "Right: tomorrow → the following day. Counting starts from the speaking."
+   },
+   "wrong": [
+    {
+     "opt": "yesterday",
+     "de": "„yesterday“ zeigt zurück. Gemeint ist der Tag nach dem Sagen.",
+     "en": "“yesterday” points back. What is meant is the day after the speaking."
+    },
+    {
+     "opt": "tomorrow",
+     "de": "„tomorrow“ zählt von heute. Die Aussage fiel aber letzte Woche.",
+     "en": "“tomorrow” counts from today. But the statement was made last week."
+    },
+    {
+     "opt": "the day before",
+     "de": "„the day before“ ist der Tag davor. would launch zielt auf den Tag danach.",
+     "en": "“the day before” is the earlier day. would launch points to the day after."
+    }
+   ]
+  }
+ },
+ "reported|hewantedtoknowwehadreceivedtheinvoice": {
+  "pat": "rs.question",
+  "why": {
+   "ok": {
+    "de": "Richtig: if. Eine Ja/Nein-Frage wird mit if oder whether weitergegeben.",
+    "en": "Right: if. A yes/no question is passed on with if or whether."
+   },
+   "wrong": [
+    {
+     "opt": "that",
+     "de": "„that“ leitet eine Aussage ein. Hier wird eine Ja/Nein-Frage weitergegeben.",
+     "en": "“that” introduces a statement. Here a yes/no question is passed on."
+    },
+    {
+     "opt": "what",
+     "de": "Nach „what“ fehlt das Objekt. Mit the invoice ist es eine Ja/Nein-Frage.",
+     "en": "After “what” the object is missing. With the invoice it is a yes/no question."
+    },
+    {
+     "opt": "did",
+     "de": "„did“ gehört zur direkten Frage und steht nicht vor we had received.",
+     "en": "“did” belongs to the direct question and does not go before we had received."
+    }
+   ]
+  }
+ },
+ "reported|mybossaskedmehimthefiguresbynoon": {
+  "pat": "rs.request",
+  "why": {
+   "ok": {
+    "de": "Richtig: asked me to send. Eine Bitte ist ask + Person + to + Grundform.",
+    "en": "Right: asked me to send. Request = ask + person + to + base form."
+   },
+   "wrong": [
+    {
+     "opt": "sending",
+     "de": "Nach asked me steht to + Grundform, kein -ing.",
+     "en": "After asked me use to + base form, not -ing."
+    },
+    {
+     "opt": "that I send",
+     "pat": "rs.question",
+     "de": "Bitten gibt man mit to + Grundform weiter, nicht mit einem that-Satz.",
+     "en": "Requests are passed on with to + base form, not with a that-clause."
+    },
+    {
+     "opt": "send",
+     "de": "Ohne to geht es nicht: asked me to send.",
+     "en": "It does not work without to: asked me to send."
+    }
+   ]
+  }
+ },
+ "reported|lastfridaymymanagertoldmethattheclientthecontractthefollowingmonday": {
+  "pat": "rs.backshift",
+  "why": {
+   "ok": {
+    "de": "Richtig: told me … would sign. Aus will wird would (Zukunft in der Vergangenheit).",
+    "en": "Right: told me … would sign. will becomes would (future in the past)."
+   },
+   "wrong": [
+    {
+     "opt": "signs",
+     "de": "„signs“ bleibt in der Gegenwart. told liegt zurück, daher would sign.",
+     "en": "“signs” stays in the present. told is in the past, so would sign."
+    },
+    {
+     "opt": "has signed",
+     "de": "„has signed“ sagt, dass der Vertrag schon unterschrieben ist. Gemeint ist die Zukunft.",
+     "en": "“has signed” says the contract is already signed. The future is meant."
+    },
+    {
+     "opt": "is signing",
+     "de": "„is signing“ bleibt in der Gegenwart, doch told und the following Monday liegen zurück.",
+     "en": "“is signing” stays in the present, but told and the following Monday are past."
+    }
+   ]
+  }
+ },
+ "reported|onmondayshesaidshemyemailbutihadsentitonfriday": {
+  "pat": "rs.backshift",
+  "why": {
+   "ok": {
+    "de": "Richtig: haven't received → hadn't received. Der Versand lag vor dem Sagen.",
+    "en": "Right: haven't received → hadn't received. The sending came before the speaking."
+   },
+   "wrong": [
+    {
+     "if": [
+      "haven't"
+     ],
+     "de": "„haven't received“ ist die Form der direkten Rede. Nach said wird daraus hadn't received.",
+     "en": "“haven't received” is the direct-speech form. After said it becomes hadn't received."
+    },
+    {
+     "if": [
+      "didn't"
+     ],
+     "de": "„didn't receive“ ist möglich, aber hier üben wir den Rückschritt: hadn't received.",
+     "en": "“didn't receive” is possible, but here we practice the backshift: hadn't received."
+    },
+    {
+     "not": [
+      "hadn't",
+      "had"
+     ],
+     "de": "Gesucht ist der Rückschritt aus haven't: hadn't + 3. Form.",
+     "en": "What is needed is the backshift of haven't: hadn't + participle."
+    }
+   ]
+  }
+ },
+ "reported|thevisitoraskedmewherethemeetingroom": {
+  "pat": "rs.question",
+  "why": {
+   "ok": {
+    "de": "Richtig: where the meeting room was: normale Wortstellung und Rückschritt is → was.",
+    "en": "Right: where the meeting room was: normal word order, backshift is → was."
+   },
+   "wrong": [
+    {
+     "if": [
+      "were"
+     ],
+     "de": "„were“ passt nicht zu room. Der Singular braucht was.",
+     "en": "“were” does not fit room. The singular needs was."
+    },
+    {
+     "if": [
+      "are"
+     ],
+     "de": "„are“ ist Plural, room ist Singular: was (oder is, wenn es noch gilt).",
+     "en": "“are” is plural, room is singular: was (or is, if it is still true)."
+    },
+    {
+     "not": [
+      "was",
+      "is"
+     ],
+     "de": "Gesucht ist die Singularform von be: was, oder is, wenn es noch gilt.",
+     "en": "What is needed is the singular form of be: was, or is if it is still true."
+    }
+   ]
+  }
+ },
+ "reported|mybosstoldmelatefortheclientmeeting": {
+  "pat": "rs.request",
+  "why": {
+   "ok": {
+    "de": "Richtig: told me not to be: verneinte Anweisung mit not to + Grundform.",
+    "en": "Right: told me not to be: negative instruction with not to + base form."
+   },
+   "wrong": [
+    {
+     "if": [
+      "don't"
+     ],
+     "de": "„don't be“ ist der Befehl der direkten Rede. Indirekt: not to be.",
+     "en": "“don't be” is the command of direct speech. Reported: not to be."
+    },
+    {
+     "if": [
+      "not",
+      "be"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Es fehlt das to: not to be.",
+     "en": "to is missing: not to be."
+    },
+    {
+     "if": [
+      "that"
+     ],
+     "de": "Nach told me folgt not to + Grundform, nicht ein Satz mit that.",
+     "en": "After told me comes not to + base form, not a that-clause."
+    }
+   ]
+  }
+ },
+ "reported|ontuesdayheaskedhaveyouseenthenewpricelistheaskedwhetherwethenewpricelist": {
+  "pat": "rs.backshift",
+  "why": {
+   "ok": {
+    "de": "Richtig: Aus dem Present Perfect (have you seen) wird das Past Perfect: had seen.",
+    "en": "Right: present perfect (have you seen) → past perfect: had seen."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„have seen“ bleibt in der Gegenwart. Nach asked rückt es zu had seen.",
+     "en": "“have seen” stays in the present. After asked it moves to had seen."
+    },
+    {
+     "if": [
+      "saw"
+     ],
+     "de": "„saw“ ist möglich. Üblich ist had seen: Es behält den Perfekt-Sinn.",
+     "en": "“saw” is possible. The usual form is had seen: it keeps the perfect meaning."
+    }
+   ]
+  }
+ },
+ "reported|shesaidshecometothepartybecauseshewasill": {
+  "pat": "rs.backshift",
+  "why": {
+   "ok": {
+    "de": "Richtig: can't → couldn't, denn das Sagen liegt zurück.",
+    "en": "Right: can't → couldn't, because the speaking is in the past."
+   },
+   "wrong": [
+    {
+     "if": [
+      "can't"
+     ],
+     "de": "„can't“ bleibt in der Gegenwart. Nach said rückt es zu couldn't.",
+     "en": "“can't” stays in the present. After said it moves to couldn't."
+    },
+    {
+     "if": [
+      "didn't"
+     ],
+     "de": "„didn't come“ stimmt grammatisch, sagt aber etwas anderes; der Hinweis (can't) verlangt couldn't.",
+     "en": "“didn't come” is grammatical but says something else; the hint (can't) calls for couldn't."
+    }
+   ]
+  }
+ },
+ "reported|iwillsendthecontracttomorrowannasaidlastmondayannasaidshethecontractthenextday": {
+  "pat": "rs.backshift",
+  "why": {
+   "ok": {
+    "de": "Richtig: will → would. Auch the next day gehört dazu (tomorrow wurde verschoben).",
+    "en": "Right: will → would. the next day goes with it (tomorrow shifted)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "„will send“ bleibt in der Gegenwart. Anna sagte es letzten Montag: would.",
+     "en": "“will send” stays in the present. Anna said it last Monday: would."
+    },
+    {
+     "if": [
+      "sent"
+     ],
+     "de": "Nach would steht die Grundform: would send, nicht sent.",
+     "en": "After would comes the base form: would send, not sent."
+    }
+   ]
+  }
+ },
+ "reported|didyoucheckthefiguresthecfoaskedmethecfoaskedmethefigures": {
+  "pat": "rs.question",
+  "why": {
+   "ok": {
+    "de": "Richtig: if I had checked. Ja/Nein-Frage mit if, ohne did, mit Rückschritt.",
+    "en": "Right: if I had checked. Yes/no question with if, no did, with backshift."
+   },
+   "wrong": [
+    {
+     "if": [
+      "did"
+     ],
+     "de": "„did I check“ ist die direkte Frage. Indirekt: if I had checked.",
+     "en": "“did I check” is the direct question. Reported: if I had checked."
+    },
+    {
+     "not": [
+      "if",
+      "whether"
+     ],
+     "de": "Eine Ja/Nein-Frage braucht if oder whether.",
+     "en": "A yes/no question needs if or whether."
+    },
+    {
+     "if": [
+      "check"
+     ],
+     "de": "„check“ bleibt in der Gegenwart. Nach asked rückt es zu had checked.",
+     "en": "“check” stays in the present. After asked it moves to had checked."
+    }
+   ]
+  }
+ },
+ "reported|hesaidmethatthedeadlinehadbeenmoved": {
+  "pat": "rs.tell-say",
+  "why": {
+   "ok": {
+    "de": "Richtig: told me, mit Person. Oder said ohne me: He said that …",
+    "en": "Right: told me, with a person. Or said without me: He said that …"
+   },
+   "wrong": [
+    {
+     "if": [
+      "said",
+      "me"
+     ],
+     "de": "„said me“ gibt es nicht: say steht ohne Person, tell mit Person.",
+     "en": "“said me” does not exist: say has no person, tell does."
+    },
+    {
+     "if": [
+      "tell"
+     ],
+     "de": "Das Gesagte liegt zurück: told, nicht tell.",
+     "en": "It was said earlier: told, not tell."
+    }
+   ]
+  }
+ },
+ "reported|sheaskedmewheredidiwork": {
+  "pat": "rs.question",
+  "why": {
+   "ok": {
+    "de": "Richtig: where I worked: Subjekt vor Verb, kein did.",
+    "en": "Right: where I worked: subject before verb, no did."
+   },
+   "wrong": [
+    {
+     "if": [
+      "did"
+     ],
+     "de": "Mit did bleibt es die Wortstellung der direkten Frage: where I worked.",
+     "en": "With did it stays the word order of the direct question: where I worked."
+    },
+    {
+     "if": [
+      "work"
+     ],
+     "de": "„I work“ bleibt in der Gegenwart. Nach asked rückt es zu worked.",
+     "en": "“I work” stays in the present. After asked it moves to worked."
+    }
+   ]
+  }
+ },
+ "reported|shesaidshewouldfinishedthereport": {
+  "pat": "rs.backshift",
+  "why": {
+   "ok": {
+    "de": "Richtig: would + Grundform: would finish, ohne -ed.",
+    "en": "Right: would + base form: would finish, with no -ed."
+   },
+   "wrong": [
+    {
+     "if": [
+      "finished"
+     ],
+     "de": "Nach would steht die Grundform: finish, nicht finished.",
+     "en": "After would comes the base form: finish, not finished."
+    },
+    {
+     "not": [
+      "would"
+     ],
+     "de": "Gesucht ist would + Grundform: would finish.",
+     "en": "What is needed is would + base form: would finish."
     }
    ]
   }

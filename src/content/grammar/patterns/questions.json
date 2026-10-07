@@ -1,0 +1,437 @@
+{
+  "topic": "questions",
+  "canDo": {
+    "de": "Ich kann Fragen genau stellen: direkt mit do/does/did, nach dem Subjekt ohne did, höflich eingebettet in Aussagestellung, mit if oder whether bei Ja/Nein und mit passendem Tag.",
+    "en": "I can ask questions precisely: directly with do/does/did, about the subject without did, politely embedded in statement order, with if or whether for yes/no, and with a matching tag."
+  },
+  "order": [
+    "qu.indirect",
+    "qu.if-whether",
+    "qu.subject",
+    "qu.direct",
+    "qu.tags"
+  ],
+  "introPlan": [
+    [
+      "qu.indirect",
+      "qu.if-whether"
+    ],
+    [
+      "qu.subject",
+      "qu.direct"
+    ],
+    [
+      "qu.tags"
+    ]
+  ],
+  "decide": {
+    "de": [
+      "Ist es eine höfliche oder eingebettete Frage („Could you tell me …“)? Dann steht das Subjekt vor dem Verb, ohne do.",
+      "Ist das Fragewort selbst das Subjekt (Who, What, Which + Verb)? Dann gibt es kein do/did.",
+      "Gibt es kein Fragewort, nur ja oder nein? Im Satz braucht es dann if oder whether."
+    ],
+    "en": [
+      "Is it a polite or embedded question (“Could you tell me …”)? Then the subject comes before the verb, with no do.",
+      "Is the wh-word itself the subject (Who, What, Which + verb)? Then there is no do/did.",
+      "Is there no wh-word, only yes or no? Inside a clause it then needs if or whether."
+    ]
+  },
+  "patterns": [
+    {
+      "id": "qu.indirect",
+      "name": {
+        "de": "Indirekte Frage · Aussagestellung",
+        "en": "Indirect question · statement order"
+      },
+      "form": {
+        "de": "Einleitung + Fragewort + Subjekt + Verb (ohne do)",
+        "en": "opener + wh-word + subject + verb (no do)"
+      },
+      "use": {
+        "de": "In höflichen und eingebetteten Fragen steht nach dem Fragewort erst das Subjekt, dann das Verb. Ein do/does/did gibt es dort nicht.",
+        "en": "In polite and embedded questions the subject comes first after the wh-word, then the verb. There is no do/does/did there."
+      },
+      "signals": [
+        "Could you tell me",
+        "Do you know",
+        "I wonder",
+        "I'd like to know",
+        "Can you explain",
+        "I have no idea",
+        "Do you happen to know"
+      ],
+      "ex": [
+        {
+          "en": "Could you tell me what the budget covers?",
+          "de": "Könnten Sie mir sagen, was das Budget abdeckt?",
+          "ctx": "meeting"
+        },
+        {
+          "en": "I'd like to know how long the approval usually takes.",
+          "de": "Ich würde gern wissen, wie lange die Freigabe normalerweise dauert.",
+          "ctx": "mail"
+        },
+        {
+          "en": "Do you happen to know where Sara parked?",
+          "de": "Weißt du zufällig, wo Sara geparkt hat?",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "Could you tell me when does the workshop start?",
+        "good": "Could you tell me when the workshop starts?",
+        "cause": {
+          "de": "Eher ein Reflex als eine Übersetzung: Man behält die Form der direkten Frage („when does …“). Im Deutschen rutscht das Verb ans Ende, im Englischen folgt es dem Subjekt.",
+          "en": "More a reflex than a translation: keeping the direct-question form (“when does …”). German moves the verb to the end; English keeps it right after the subject."
+        }
+      },
+      "contrast": {
+        "with": "qu.direct",
+        "a": "Where is the printer?",
+        "b": "Do you know where the printer is?",
+        "diff": {
+          "de": "Direkte Frage: Verb vor Subjekt (is the printer). Eingebettete Frage: Subjekt vor Verb (the printer is).",
+          "en": "Direct question: verb before subject (is the printer). Embedded question: subject before verb (the printer is)."
+        }
+      },
+      "ccq": [
+        {
+          "s": "Do you know when the call ends?",
+          "q": {
+            "de": "Steht vor dem Subjekt ein does?",
+            "en": "Is there a does before the subject?"
+          },
+          "a": false
+        },
+        {
+          "s": "Where is the exit?",
+          "q": {
+            "de": "Steht das Verb vor dem Subjekt, weil es eine direkte Frage ist?",
+            "en": "Does the verb stand before the subject because this is a direct question?"
+          },
+          "a": true
+        }
+      ],
+      "nudge": {
+        "de": "Beginnst du mit einer Einleitung wie „Could you tell me“, und in welcher Reihenfolge stehen dann Subjekt und Verb?",
+        "en": "If you start with an opener like “Could you tell me”, in which order do subject and verb follow?"
+      }
+    },
+    {
+      "id": "qu.if-whether",
+      "name": {
+        "de": "if / whether · Ja/Nein-Frage im Satz",
+        "en": "if / whether · yes/no question in a clause"
+      },
+      "form": {
+        "de": "if / whether + Subjekt + Verb",
+        "en": "if / whether + subject + verb"
+      },
+      "use": {
+        "de": "Eine Ja/Nein-Frage im Nebensatz wird mit if oder whether eingeleitet, nie mit that. Vor to + Verb und nach einer Präposition steht whether.",
+        "en": "A yes/no question inside a clause is introduced by if or whether, never by that. Before to + verb and after a preposition use whether."
+      },
+      "signals": [
+        "if",
+        "whether",
+        "I wonder",
+        "asked me",
+        "let me know",
+        "not sure",
+        "or not"
+      ],
+      "ex": [
+        {
+          "en": "I'm not sure whether the client has seen the draft.",
+          "de": "Ich bin nicht sicher, ob der Kunde den Entwurf gesehen hat.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "Please let me know if the new date works for you.",
+          "de": "Bitte gib mir Bescheid, ob der neue Termin für dich passt.",
+          "ctx": "mail"
+        },
+        {
+          "en": "She asked whether I had already booked the flights.",
+          "de": "Sie fragte, ob ich die Flüge schon gebucht hätte.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "She asked me that I had booked the flights.",
+        "good": "She asked me if I had booked the flights.",
+        "cause": {
+          "de": "Kein Übersetzungsfehler, sondern ein Reflex: that leitet fast jeden Nebensatz ein. Eine Ja/Nein-Frage braucht aber if oder whether (deutsch: ob).",
+          "en": "Not a translation error but a reflex: that opens almost every clause. A yes/no question needs if or whether (German: ob)."
+        }
+      },
+      "contrast": {
+        "with": "qu.indirect",
+        "a": "Do you know where the vendor is based?",
+        "b": "Do you know if the vendor is based in Ohio?",
+        "diff": {
+          "de": "Mit Fragewort (where) beginnt die eingebettete Frage gleich damit. Bei Ja/Nein braucht sie if oder whether.",
+          "en": "With a wh-word (where) the embedded question starts with it. For yes/no it needs if or whether."
+        }
+      },
+      "ccq": [
+        {
+          "s": "She asked if I had finished.",
+          "q": {
+            "de": "Fragte sie mich, ob ich fertig war?",
+            "en": "Did she ask me whether I was done?"
+          },
+          "a": true
+        },
+        {
+          "s": "I wonder whether he called.",
+          "q": {
+            "de": "Weiß ich sicher, dass er angerufen hat?",
+            "en": "Do I know for sure that he called?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Fragst du nur nach ja oder nein, und welches kleine Wort leitet die Frage im Satz ein?",
+        "en": "Do you ask only for yes or no, and which small word opens the question inside the clause?"
+      }
+    },
+    {
+      "id": "qu.subject",
+      "name": {
+        "de": "Subjektfrage · ohne did",
+        "en": "Subject question · no did"
+      },
+      "form": {
+        "de": "Who / What / Which (+ Nomen) + Verb",
+        "en": "Who / What / Which (+ noun) + verb"
+      },
+      "use": {
+        "de": "Fragt das Fragewort selbst nach dem Handelnden, steht es als Subjekt vorn, und das Verb folgt direkt. Kein do/did. Nur bei Fragen nach dem Objekt braucht man do/did.",
+        "en": "When the wh-word itself asks for the doer, it is the subject and the verb follows directly. No do/did. Only questions about the object need do/did."
+      },
+      "signals": [
+        "Who",
+        "What",
+        "Which",
+        "Whose",
+        "How many"
+      ],
+      "ex": [
+        {
+          "en": "Who owns the rollout plan?",
+          "de": "Wer ist für den Rollout-Plan zuständig?",
+          "ctx": "meeting"
+        },
+        {
+          "en": "Which team handled the last audit?",
+          "de": "Welches Team hat das letzte Audit betreut?",
+          "ctx": "mail"
+        },
+        {
+          "en": "What happened after I left?",
+          "de": "Was ist passiert, nachdem ich gegangen bin?",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "Whom approved the new template last month?",
+        "good": "Who approved the new template last month?",
+        "cause": {
+          "de": "Kein Übersetzungsfehler. Wer an „wen“ denkt, greift zu whom. Doch whom ist nur Objekt; für den Handelnden steht who.",
+          "en": "Not a translation error. Thinking of the object form, learners reach for whom. But whom is only an object; the doer is who."
+        }
+      },
+      "contrast": {
+        "with": "qu.direct",
+        "a": "Who called the client?",
+        "b": "Who did the client call?",
+        "diff": {
+          "de": "a fragt nach dem Anrufer (Subjekt, kein did). b fragt nach dem Angerufenen (Objekt, mit did).",
+          "en": "a asks for the caller (subject, no did). b asks for the person called (object, with did)."
+        }
+      },
+      "ccq": [
+        {
+          "s": "Who called the client?",
+          "q": {
+            "de": "Hat der Kunde angerufen?",
+            "en": "Did the client make the call?"
+          },
+          "a": false
+        },
+        {
+          "s": "Who did the client call?",
+          "q": {
+            "de": "Hat der Kunde angerufen?",
+            "en": "Did the client make the call?"
+          },
+          "a": true
+        }
+      ],
+      "nudge": {
+        "de": "Fragst du nach dem, der etwas tut, oder nach dem, was jemand tut?",
+        "en": "Are you asking for the one who does something or for what someone does?"
+      }
+    },
+    {
+      "id": "qu.direct",
+      "name": {
+        "de": "Direkte Frage · Hilfsverb vor Subjekt",
+        "en": "Direct question · auxiliary before subject"
+      },
+      "form": {
+        "de": "Fragewort + do/does/did + Subjekt + Grundform",
+        "en": "wh-word + do/does/did + subject + base verb"
+      },
+      "use": {
+        "de": "In der direkten Frage steht ein Hilfsverb vor dem Subjekt, im Präsens und Past Simple do, does oder did. Das Verb folgt in der Grundform. Eine Präposition steht oft am Ende.",
+        "en": "In a direct question an auxiliary comes before the subject, in the present and simple past do, does or did. The verb follows in the base form. A preposition often ends the question."
+      },
+      "signals": [
+        "Where do",
+        "When did",
+        "How long does",
+        "Why does",
+        "What time does",
+        "How often do"
+      ],
+      "ex": [
+        {
+          "en": "How long does the approval usually take?",
+          "de": "Wie lange dauert die Freigabe normalerweise?",
+          "ctx": "meeting"
+        },
+        {
+          "en": "Which date did you have in mind?",
+          "de": "Welchen Termin hattest du im Sinn?",
+          "ctx": "mail"
+        },
+        {
+          "en": "Who are you meeting with tonight?",
+          "de": "Mit wem triffst du dich heute Abend?",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "How long takes the approval?",
+        "good": "How long does the approval take?",
+        "cause": {
+          "de": "Im Deutschen folgt das Verb direkt auf das Fragewort („Wie lange dauert die Freigabe?“). Daraus wird „How long takes …“, doch das Englische braucht does.",
+          "en": "German puts the verb right after the question word (“Wie lange dauert die Freigabe?”). That becomes “How long takes …”, but English needs does."
+        }
+      },
+      "contrast": {
+        "with": "qu.indirect",
+        "a": "What time does the call start?",
+        "b": "Do you know what time the call starts?",
+        "diff": {
+          "de": "Direkte Frage: does vor dem Subjekt. In der eingebetteten Frage entfällt does.",
+          "en": "Direct question: does before the subject. In the embedded question does disappears."
+        }
+      },
+      "ccq": [
+        {
+          "s": "What time did the call end?",
+          "q": {
+            "de": "Steht end nach did in der Grundform?",
+            "en": "Is end in the base form after did?"
+          },
+          "a": true
+        },
+        {
+          "s": "Why does the build fail so often?",
+          "q": {
+            "de": "Braucht fail hier ein -s, weil es um eine dritte Person geht?",
+            "en": "Does fail need an -s here because it is about a third person?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Welches Hilfsverb gehört vor das Subjekt, und in welcher Form steht das Verb danach?",
+        "en": "Which auxiliary belongs before the subject, and in which form does the verb follow?"
+      }
+    },
+    {
+      "id": "qu.tags",
+      "name": {
+        "de": "Frage-Anhängsel · Tag",
+        "en": "Question tag"
+      },
+      "form": {
+        "de": "Aussage + Hilfsverb + Pronomen, Polarität umgekehrt",
+        "en": "statement + auxiliary + pronoun, reversed polarity"
+      },
+      "use": {
+        "de": "Ein Tag bittet um Bestätigung. Nach bejahter Aussage folgt ein verneintes Tag, nach verneinter ein bejahtes, mit dem Hilfsverb des Satzes (sonst do/does/did). Sonderfälle: Let's → shall we, I am → aren't I, nobody → they. Auch rarely und hardly ever wirken verneinend: Danach folgt ein bejahtes Tag.",
+        "en": "A tag asks for confirmation. After a positive statement comes a negative tag, after a negative one a positive tag, with the auxiliary of the sentence (otherwise do/does/did). Special cases: Let's → shall we, I am → aren't I, nobody → they. Rarely and hardly ever also count as negative: a positive tag follows."
+      },
+      "signals": [
+        "isn't it",
+        "don't you",
+        "shall we",
+        "aren't I",
+        "have you",
+        "did they"
+      ],
+      "ex": [
+        {
+          "en": "The numbers look solid, don't they?",
+          "de": "Die Zahlen sehen solide aus, oder?",
+          "ctx": "meeting"
+        },
+        {
+          "en": "You'll send the minutes, won't you?",
+          "de": "Du schickst das Protokoll, oder?",
+          "ctx": "mail"
+        },
+        {
+          "en": "I'm running late, aren't I?",
+          "de": "Ich bin spät dran, oder?",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "You booked the room, isn't it?",
+        "good": "You booked the room, didn't you?",
+        "cause": {
+          "de": "Im Deutschen gibt es ein festes Tag („…, oder?“, „…, nicht wahr?“). Im Englischen muss es zu Hilfsverb und Subjekt des Satzes passen.",
+          "en": "German has one fixed tag (“…, oder?”, “…, nicht wahr?”). English needs a tag that matches the auxiliary and the subject of the sentence."
+        }
+      },
+      "contrast": {
+        "with": "qu.direct",
+        "a": "Did you send the file?",
+        "b": "You sent the file, didn't you?",
+        "diff": {
+          "de": "Direkte Frage: offen, ohne Erwartung. Tag: Du erwartest ein Ja und bittest um Bestätigung.",
+          "en": "Direct question: open, no expectation. Tag: you expect a yes and ask for confirmation."
+        }
+      },
+      "ccq": [
+        {
+          "s": "You haven't called the client, have you?",
+          "q": {
+            "de": "Erwartet der Sprecher ein Nein?",
+            "en": "Does the speaker expect a no?"
+          },
+          "a": true
+        },
+        {
+          "s": "She's finished the report, hasn't she?",
+          "q": {
+            "de": "Erwartet der Sprecher ein Nein?",
+            "en": "Does the speaker expect a no?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Ist die Aussage bejaht oder verneint, und welches Hilfsverb mit Pronomen passt dann ans Ende?",
+        "en": "Is the statement positive or negative, and which auxiliary with pronoun fits at the end?"
+      }
+    }
+  ]
+}

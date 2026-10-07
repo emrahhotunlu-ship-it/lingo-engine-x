@@ -1,0 +1,499 @@
+{
+ "topic": "relative",
+ "canDo": {
+  "de": "Ich kann Relativsätze genau bilden: who und which für Person und Sache, whose für Besitz, Kommas für Zusatzinfo, where und why für Ort und Grund, die Präposition mit whom oder am Ende und that nach everything.",
+  "en": "I can build relative clauses precisely: who and which for people and things, whose for possession, commas for extra information, where and why for place and reason, the preposition with whom or at the end, and that after everything."
+ },
+ "order": [
+  "rc.who-which",
+  "rc.whose",
+  "rc.commas",
+  "rc.where-why",
+  "rc.prep",
+  "rc.that-what"
+ ],
+ "introPlan": [
+  [
+   "rc.who-which",
+   "rc.whose"
+  ],
+  [
+   "rc.commas",
+   "rc.that-what"
+  ],
+  [
+   "rc.where-why",
+   "rc.prep"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Meinst du eine Person (who), eine Sache (which) oder beides (that)?",
+   "Gehört etwas zur Person oder zur Firma (whose), oder ist es nur Zusatzinfo zwischen Kommas (which / who)?",
+   "Geht es um Ort, Grund oder Zeit (where / why / when), oder gehört eine Präposition zum Verb?"
+  ],
+  "en": [
+   "Do you mean a person (who), a thing (which) or either (that)?",
+   "Does something belong to the person or firm (whose), or is it only extra information between commas (which / who)?",
+   "Is it about a place, reason or time (where / why / when), or does a preposition belong to the verb?"
+  ]
+ },
+ "patterns": [
+  {
+   "id": "rc.who-which",
+   "name": {
+    "de": "who / which / that · Person oder Sache",
+    "en": "who / which / that · person or thing"
+   },
+   "form": {
+    "de": "Person: who (that) · Sache: which (that)",
+    "en": "person: who (that) · thing: which (that)"
+   },
+   "use": {
+    "de": "Das Relativwort richtet sich nach dem Wort davor: who für Personen, which für Sachen, that für beides. Im Deutschen passt „der/die/das“ für alles.",
+    "en": "The relative word depends on the noun before it: who for people, which for things, that for either. German “der/die/das” fits everything."
+   },
+   "signals": [
+    "who",
+    "which"
+   ],
+   "ex": [
+    {
+     "en": "The colleague who leads the pilot is based in Austin.",
+     "de": "Der Kollege, der den Pilot leitet, sitzt in Austin.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Please send me the file that you shared on Friday.",
+     "de": "Bitte schick mir die Datei, die du am Freitag geteilt hast.",
+     "ctx": "mail"
+    },
+    {
+     "en": "I'm looking for someone who can review the contract.",
+     "de": "Ich suche jemanden, der den Vertrag prüfen kann.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The analyst which wrote the report is on leave.",
+    "good": "The analyst who wrote the report is on leave.",
+    "cause": {
+     "de": "Das Deutsche macht hier keinen Unterschied: „der/die/das“ passt für Personen und Sachen. Im Englischen trennen who und which.",
+     "en": "German makes no split here: “der/die/das” fits people and things. English separates who and which."
+    }
+   },
+   "contrast": {
+    "with": "rc.whose",
+    "a": "The client who called is my contact.",
+    "b": "The client whose team called is my contact.",
+    "diff": {
+     "de": "who steht für die Person selbst, whose für etwas, das zu ihr gehört.",
+     "en": "who stands for the person herself, whose for something that belongs to her."
+    }
+   },
+   "ccq": [
+    {
+     "s": "She is the manager who approved the budget.",
+     "q": {
+      "de": "Steht who hier für die Managerin?",
+      "en": "Does who stand for the manager here?"
+     },
+     "a": true
+    },
+    {
+     "s": "We chose the tool that costs less.",
+     "q": {
+      "de": "Könnte hier auch who stehen?",
+      "en": "Could who be used here instead?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Meint das Wort vor der Lücke eine Person oder eine Sache?",
+    "en": "Does the noun before the gap name a person or a thing?"
+   }
+  },
+  {
+   "id": "rc.whose",
+   "name": {
+    "de": "whose · Besitz",
+    "en": "whose · possession"
+   },
+   "form": {
+    "de": "whose + Nomen (ohne Artikel)",
+    "en": "whose + noun (no article)"
+   },
+   "use": {
+    "de": "whose zeigt Besitz oder Zugehörigkeit („dessen/deren“). Es steht direkt vor dem Nomen, und dahinter folgt kein Artikel.",
+    "en": "whose shows possession or belonging (“dessen/deren”). It sits directly before the noun, and no article follows it."
+   },
+   "signals": [
+    "whose"
+   ],
+   "ex": [
+    {
+     "en": "We hired a developer whose portfolio stood out.",
+     "de": "Wir haben einen Entwickler eingestellt, dessen Portfolio herausstach.",
+     "ctx": "mail"
+    },
+    {
+     "en": "The client whose budget was cut wants to renegotiate.",
+     "de": "Der Kunde, dessen Budget gekürzt wurde, will neu verhandeln.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "She's the manager whose team won the award.",
+     "de": "Sie ist die Managerin, deren Team den Preis gewann.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "We hired a designer that portfolio impressed everyone.",
+    "good": "We hired a designer whose portfolio impressed everyone.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler: that wirkt wie das Allzweckwort. Nur whose zeigt Besitz („dessen/deren“) und steht direkt vor dem Nomen.",
+     "en": "Not a translation error: that feels like the all-purpose word. Only whose shows possession (“dessen/deren”) and sits right before the noun."
+    }
+   },
+   "contrast": {
+    "with": "rc.who-which",
+    "a": "The client who signed the deal is happy.",
+    "b": "The client whose deal we signed is happy.",
+    "diff": {
+     "de": "who ist die Person als Handelnde, whose nennt etwas, das ihr gehört.",
+     "en": "who is the person acting, whose names something that belongs to her."
+    }
+   },
+   "ccq": [
+    {
+     "s": "We met a founder whose startup raised ten million.",
+     "q": {
+      "de": "Gehört das Startup dem Gründer?",
+      "en": "Does the startup belong to the founder?"
+     },
+     "a": true
+    },
+    {
+     "s": "The woman who manages the café lives upstairs.",
+     "q": {
+      "de": "Zeigt who hier einen Besitz im Sinn von „deren“?",
+      "en": "Does who show possession here, in the sense of “deren”?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Geht es um die Person selbst oder um etwas, das ihr gehört?",
+    "en": "Is it about the person herself or about something that belongs to her?"
+   }
+  },
+  {
+   "id": "rc.commas",
+   "name": {
+    "de": "Kommas · Zusatzinfo ohne that",
+    "en": "commas · extra information, no that"
+   },
+   "form": {
+    "de": "Nomen, which / who … , Rest (nie that)",
+    "en": "noun, which / who … , rest (never that)"
+   },
+   "use": {
+    "de": "Zusatzinformation steht zwischen Kommas. Dann gilt which oder who, nie that. Ohne Kommas grenzt der Relativsatz dagegen ein, welches Nomen gemeint ist.",
+    "en": "Extra information sits between commas. Then use which or who, never that. Without commas the clause narrows down which noun is meant."
+   },
+   "signals": [
+    ", which",
+    ", who"
+   ],
+   "ex": [
+    {
+     "en": "Our Berlin office, which opened in May, already has forty staff.",
+     "de": "Unser Berliner Büro, das im Mai eröffnet wurde, hat schon vierzig Leute.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I spoke to Dana, who runs the Chicago team.",
+     "de": "Ich habe mit Dana gesprochen, die das Chicagoer Team leitet.",
+     "ctx": "mail"
+    },
+    {
+     "en": "He missed the call, which put the schedule at risk.",
+     "de": "Er verpasste den Anruf, was den Zeitplan gefährdete.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Our main supplier, that is based in Ohio, raised prices.",
+    "good": "Our main supplier, which is based in Ohio, raised prices.",
+    "cause": {
+     "de": "Im Deutschen steht immer Komma plus das/der, egal ob Zusatzinfo oder Eingrenzung. Englisch trennt: Zusatzinfo mit Komma braucht which, nie that.",
+     "en": "German always uses comma plus das/der, whether extra information or restriction. English separates: extra information with a comma needs which, never that."
+    }
+   },
+   "contrast": {
+    "with": "rc.who-which",
+    "a": "The report that she wrote is excellent.",
+    "b": "The report, which she wrote, is excellent.",
+    "diff": {
+     "de": "Ohne Kommas wählt that ein bestimmtes Nomen aus. Mit Kommas kommt nur eine Zusatzinfo, und dann gilt nur which.",
+     "en": "Without commas that picks out one specific noun. With commas it only adds a detail, so only which works."
+    }
+   },
+   "ccq": [
+    {
+     "s": "My brother, who lives in Oslo, works in finance.",
+     "q": {
+      "de": "Habe ich vermutlich mehrere Brüder?",
+      "en": "Do I probably have several brothers?"
+     },
+     "a": false
+    },
+    {
+     "s": "My brother who lives in Oslo works in finance.",
+     "q": {
+      "de": "Habe ich vermutlich mehrere Brüder?",
+      "en": "Do I probably have several brothers?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Ist der Relativsatz nur Zusatzinfo, oder grenzt er das Nomen ein?",
+    "en": "Is the clause only an extra detail, or does it narrow down the noun?"
+   }
+  },
+  {
+   "id": "rc.where-why",
+   "name": {
+    "de": "where / why / when · Ort, Grund, Zeit",
+    "en": "where / why / when · place, reason, time"
+   },
+   "form": {
+    "de": "Ort + where · Grund + why · Zeit + when",
+    "en": "place + where · reason + why · time + when"
+   },
+   "use": {
+    "de": "Nach Ort, Grund oder Zeit stehen where, why oder when (oder that, oder Präposition + which). Für den Grund sagt man the reason why, nie „the reason because“.",
+    "en": "After a place, reason or time use where, why or when (or that, or preposition + which). For a reason say the reason why, never “the reason because”."
+   },
+   "signals": [
+    "where",
+    "why",
+    "the reason",
+    "the day when"
+   ],
+   "ex": [
+    {
+     "en": "That's the office where we signed the deal.",
+     "de": "Das ist das Büro, in dem wir den Deal unterschrieben haben.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Please explain the reason why the launch slipped.",
+     "de": "Bitte erkläre den Grund, warum sich der Start verschoben hat.",
+     "ctx": "mail"
+    },
+    {
+     "en": "I remember the day when we won our first client.",
+     "de": "Ich erinnere mich an den Tag, an dem wir unseren ersten Kunden gewannen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The reason because the project failed was poor planning.",
+    "good": "The reason why the project failed was poor planning.",
+    "cause": {
+     "de": "Der Reflex „weil = because“ greift, obwohl nach reason ein Relativwort folgt („der Grund, warum“).",
+     "en": "The “weil = because” reflex kicks in, although a relative word follows reason (“der Grund, warum”)."
+    }
+   },
+   "contrast": {
+    "with": "rc.prep",
+    "a": "That's the hotel where we met the client.",
+    "b": "That's the hotel in which we met the client.",
+    "diff": {
+     "de": "where und in which meinen dasselbe. Bei which muss die Präposition mit.",
+     "en": "where and in which mean the same. With which the preposition must come along."
+    }
+   },
+   "ccq": [
+    {
+     "s": "That's the café where we first met.",
+     "q": {
+      "de": "Passt hier auch in which?",
+      "en": "Would in which also fit here?"
+     },
+     "a": true
+    },
+    {
+     "s": "She explained the reason why the audit failed.",
+     "q": {
+      "de": "Fragt why hier nach dem Grund wie in einer Frage?",
+      "en": "Does why ask a question here?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Was steht vor der Lücke: ein Ort, ein Grund oder ein Zeitpunkt?",
+    "en": "What comes before the gap: a place, a reason or a point in time?"
+   }
+  },
+  {
+   "id": "rc.prep",
+   "name": {
+    "de": "Präposition im Relativsatz · whom",
+    "en": "preposition in relative clauses · whom"
+   },
+   "form": {
+    "de": "Präp. + whom / which · oder Präp. am Ende",
+    "en": "preposition + whom / which · or preposition at the end"
+   },
+   "use": {
+    "de": "Gehört eine Präposition zum Verb, steht sie vor whom oder which (förmlich) oder am Ende des Relativsatzes. Direkt vor who oder that steht sie nie.",
+    "en": "A preposition that belongs to the verb comes before whom or which (formal) or at the end of the clause. It never comes directly before who or that."
+   },
+   "signals": [
+    "with whom",
+    "to whom",
+    "on which",
+    "for which"
+   ],
+   "ex": [
+    {
+     "en": "The colleague with whom I wrote the proposal has left.",
+     "de": "Der Kollege, mit dem ich den Vorschlag schrieb, ist gegangen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Here is the agenda you asked about.",
+     "de": "Hier ist die Agenda, nach der du gefragt hast.",
+     "ctx": "mail"
+    },
+    {
+     "en": "The partner we're negotiating with is based in Lyon.",
+     "de": "Der Partner, mit dem wir verhandeln, sitzt in Lyon.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The colleague with who I wrote the proposal has left.",
+    "good": "The colleague with whom I wrote the proposal has left.",
+    "cause": {
+     "de": "Deutsch stellt die Präposition immer vor das Relativwort (mit dem), Englisch verlangt dann whom.",
+     "en": "German always puts the preposition before the relative word (mit dem); English then requires whom."
+    }
+   },
+   "contrast": {
+    "with": "rc.who-which",
+    "a": "The woman who I spoke to was kind.",
+    "b": "The woman to whom I spoke was kind.",
+    "diff": {
+     "de": "who mit der Präposition am Ende ist locker und üblich. Steht die Präposition vorn, muss whom folgen.",
+     "en": "who with the preposition at the end is relaxed and common. If the preposition comes first, whom must follow."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The woman to whom I spoke was kind.",
+     "q": {
+      "de": "Klingt das förmlicher als The woman I spoke to?",
+      "en": "Is this more formal than The woman I spoke to?"
+     },
+     "a": true
+    },
+    {
+     "s": "That's the team I work with.",
+     "q": {
+      "de": "Fehlt hier eine Präposition?",
+      "en": "Is a preposition missing here?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Welche Präposition gehört zum Verb im Relativsatz, und wo steht sie?",
+    "en": "Which preposition belongs to the verb in the clause, and where does it sit?"
+   }
+  },
+  {
+   "id": "rc.that-what",
+   "name": {
+    "de": "that statt what · nach Bezugswort",
+    "en": "that, not what · after an antecedent"
+   },
+   "form": {
+    "de": "everything / all / nothing / Nomen + that (nie what)",
+    "en": "everything / all / nothing / noun + that (never what)"
+   },
+   "use": {
+    "de": "Steht ein Bezugswort davor (everything, all, nothing oder ein Nomen), folgt that. what ersetzt das Bezugswort selbst: What I need is time. Das deutsche „was“ deckt beides ab.",
+    "en": "When a word comes before it (everything, all, nothing or a noun), use that. What replaces the antecedent itself: What I need is time. German “was” covers both."
+   },
+   "signals": [
+    "everything",
+    "nothing",
+    "something",
+    "all",
+    "the only"
+   ],
+   "ex": [
+    {
+     "en": "Everything that we discussed is in the notes.",
+     "de": "Alles, was wir besprochen haben, steht in den Notizen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "All that matters is the deadline.",
+     "de": "Alles, was zählt, ist die Frist.",
+     "ctx": "mail"
+    },
+    {
+     "en": "What I need now is a clear timeline.",
+     "de": "Was ich jetzt brauche, ist ein klarer Zeitplan.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Everything what we discussed is in the notes.",
+    "good": "Everything that we discussed is in the notes.",
+    "cause": {
+     "de": "Im Deutschen heißt es „alles, was“. Dieses was wird dann zu what, doch nach everything steht im Englischen that.",
+     "en": "German says “alles, was”. That was turns into what, but after everything English uses that."
+    }
+   },
+   "contrast": {
+    "with": "rc.who-which",
+    "a": "Everything that she said was true.",
+    "b": "What she said was true.",
+    "diff": {
+     "de": "Mit everything steht that. Ohne Bezugswort beginnt what den Satz und steht für „das, was“.",
+     "en": "With everything use that. Without an antecedent, what starts the clause and means “the thing that”."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Nothing that he promised was delivered.",
+     "q": {
+      "de": "Steht vor that ein Bezugswort?",
+      "en": "Is there an antecedent before that?"
+     },
+     "a": true
+    },
+    {
+     "s": "What she said surprised the board.",
+     "q": {
+      "de": "Steht vor what ein Bezugswort wie everything?",
+      "en": "Is there an antecedent such as everything before what?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Steht vor der Lücke schon ein Wort, auf das sie sich bezieht?",
+    "en": "Is there already a word before the gap that it refers back to?"
+   }
+  }
+ ]
+}

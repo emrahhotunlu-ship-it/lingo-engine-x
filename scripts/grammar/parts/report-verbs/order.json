@@ -1,0 +1,203 @@
+[
+ {
+  "pat": "rv.admit-deny",
+  "en": "Our supplier admitted shipping the wrong parts to the client.",
+  "de": "Unser Lieferant gab zu, dem Kunden die falschen Teile geschickt zu haben.",
+  "chunks": [
+   "our supplier",
+   "admitted",
+   "shipping",
+   "the wrong parts",
+   "to the client"
+  ],
+  "single": "Nach admitted folgt direkt die -ing-Form; danach kommen die Teile und der Kunde. Eine andere Reihenfolge klingt falsch.",
+  "why": [
+   "Nach admit steht die -ing-Form: admitted shipping. Das Objekt und das Ziel folgen danach.",
+   "After admit the -ing form follows: admitted shipping. The object and the destination come after it."
+  ],
+  "bad": "Our supplier admitted to ship the wrong parts to the client.",
+  "trap": {
+   "tile": "shipping",
+   "instead": "to ship",
+   "why": {
+    "de": "Aus „zugeben, zu verschicken“ wird leicht admitted to ship. Nach admit steht aber -ing.",
+    "en": "From “zugeben, zu verschicken” it is easy to get admitted to ship. After admit use -ing."
+   }
+  }
+ },
+ {
+  "pat": "rv.admit-deny",
+  "en": "The manager denied having seen the draft before the call.",
+  "de": "Der Manager bestritt, den Entwurf vor dem Call gesehen zu haben.",
+  "chunks": [
+   "the manager",
+   "denied",
+   "having seen",
+   "the draft",
+   "before the call"
+  ],
+  "single": "Nach denied steht having seen als fester Block; der Entwurf und die Zeitangabe schließen sich an.",
+  "why": [
+   "Deny verlangt die -ing-Form, und für etwas Früheres steht having + Partizip: denied having seen.",
+   "Deny takes -ing, and having + participle for something earlier: denied having seen."
+  ],
+  "bad": "The manager denied to have seen the draft before the call.",
+  "trap": {
+   "tile": "having seen",
+   "instead": "to have seen",
+   "why": {
+    "de": "Das Deutsche „bestritt, gesehen zu haben“ verleitet zu to have seen. Nach deny steht -ing.",
+    "en": "German “bestritt, gesehen zu haben” tempts you into to have seen. After deny use -ing."
+   }
+  }
+ },
+ {
+  "pat": "rv.suggest-rec",
+  "en": "Our consultant recommended that we renew the license early.",
+  "de": "Unser Berater empfahl, die Lizenz früh zu verlängern.",
+  "chunks": [
+   "our consultant",
+   "recommended",
+   "that we renew",
+   "the license",
+   "early"
+  ],
+  "single": "Der that-Satz mit we renew bleibt zusammen; the license und early folgen, denn early bezieht sich auf das Verlängern.",
+  "why": [
+   "Nach recommend steht -ing oder ein that-Satz mit Subjekt: that we renew. Person + to ist im US-Englisch unüblich.",
+   "After recommend comes -ing or a that-clause with a subject: that we renew. Person + to is uncommon in US English."
+  ],
+  "bad": "Our consultant recommended us to renew the license early.",
+  "trap": {
+   "tile": "that we renew",
+   "instead": "us to renew",
+   "why": {
+    "de": "Deutsch sagt „empfahl uns, zu verlängern“ mit Person + zu. Wörtlich entsteht recommended us to. Englisch braucht den that-Satz.",
+    "en": "German says “empfahl uns, zu verlängern” with person + zu. Word for word that becomes recommended us to. English needs the that-clause."
+   }
+  }
+ },
+ {
+  "pat": "rv.suggest-rec",
+  "en": "She suggested moving the workshop to Thursday afternoon.",
+  "de": "Sie schlug vor, den Workshop auf Donnerstagnachmittag zu verschieben.",
+  "chunks": [
+   "she",
+   "suggested",
+   "moving",
+   "the workshop",
+   "to Thursday afternoon"
+  ],
+  "single": "Nach suggested steht moving; das Objekt the workshop und das Ziel folgen in dieser Reihenfolge.",
+  "why": [
+   "Nach suggest steht -ing: suggested moving. Danach folgen das Objekt und das neue Ziel.",
+   "After suggest comes -ing: suggested moving. The object and the new target follow."
+  ],
+  "bad": "She suggested to move the workshop to Thursday afternoon.",
+  "trap": {
+   "tile": "moving",
+   "instead": "to move",
+   "why": {
+    "de": "Das deutsche „vorschlagen, zu verschieben“ führt zu suggested to move. Nach suggest steht -ing.",
+    "en": "German “vorschlagen, zu verschieben” leads to suggested to move. After suggest use -ing."
+   }
+  }
+ },
+ {
+  "pat": "rv.insist",
+  "en": "The auditor insisted on checking every invoice before the audit.",
+  "de": "Der Prüfer bestand darauf, jede Rechnung vor der Prüfung zu kontrollieren.",
+  "chunks": [
+   "the auditor",
+   "insisted",
+   "on checking",
+   "every invoice",
+   "before the audit"
+  ],
+  "alt": [
+   "Before the audit, the auditor insisted on checking every invoice."
+  ],
+  "why": [
+   "Insist braucht on, danach folgt -ing: insisted on checking. Die Zeitangabe kann auch am Anfang stehen.",
+   "Insist needs on, followed by -ing: insisted on checking. The time phrase can also come first."
+  ],
+  "bad": "The auditor insisted to check every invoice before the audit.",
+  "trap": {
+   "tile": "on checking",
+   "instead": "to check",
+   "why": {
+    "de": "Im Deutschen steht darauf vor dem Komma und der zu-Infinitiv danach („bestand darauf, jede Rechnung zu prüfen“); so wirkt das zu-Verb wie ein eigener Anschluss und on geht verloren.",
+    "en": "In German darauf comes before the comma and the zu-infinitive after it (“bestand darauf, jede Rechnung zu prüfen”); so the zu-verb feels like its own clause and on gets lost."
+   }
+  }
+ },
+ {
+  "pat": "rv.advise-warn",
+  "en": "Our CFO advised the team not to approve the budget yet.",
+  "de": "Unser Finanzchef riet dem Team, das Budget noch nicht zu genehmigen.",
+  "chunks": [
+   "our CFO",
+   "advised the team",
+   "not to approve",
+   "the budget",
+   "yet"
+  ],
+  "single": "Die Person the team steht direkt nach advised; not to approve bleibt zusammen, und yet steht am Ende.",
+  "why": [
+   "Nach advise + Person folgt (not) to + Grundform: advised the team not to approve. Not steht vor to.",
+   "After advise + person comes (not) to + base form: advised the team not to approve. Not goes before to."
+  ],
+  "bad": "Our CFO advised the team don't approve the budget yet.",
+  "trap": {
+   "tile": "not to approve",
+   "instead": "don't approve",
+   "why": {
+    "de": "Aus dem Rat „Genehmigt es nicht“ wird in der Rede don't approve. Berichtet wird mit not to + Verb.",
+    "en": "The advice “don't approve” survives from direct speech. Reported advice uses not to + verb."
+   }
+  }
+ },
+ {
+  "pat": "rv.advise-warn",
+  "en": "IT warned all users not to open unknown attachments.",
+  "de": "Die IT warnte alle Nutzer davor, unbekannte Anhänge zu öffnen.",
+  "chunks": [
+   "IT",
+   "warned",
+   "all users",
+   "not to open",
+   "unknown attachments"
+  ],
+  "single": "Die Person all users steht direkt nach warned; not to open bleibt zusammen und das Objekt folgt.",
+  "why": [
+   "Nach warn folgt die Person, dann not to + Grundform: warned all users not to open.",
+   "After warn comes the person, then not to + base form: warned all users not to open."
+  ]
+ },
+ {
+  "pat": "rv.offer",
+  "en": "The vendor offered to extend the warranty by a year.",
+  "de": "Der Anbieter bot an, die Garantie um ein Jahr zu verlängern.",
+  "chunks": [
+   "the vendor",
+   "offered",
+   "to extend",
+   "the warranty",
+   "by a year"
+  ],
+  "single": "Nach offered folgt to extend als Block; die Garantie und die Dauer by a year schließen sich an.",
+  "why": [
+   "Nach offer folgt direkt to + Grundform: offered to extend. Es steht kein -ing und keine Person dazwischen.",
+   "After offer comes to + base form directly: offered to extend. No -ing and no person stands between them."
+  ],
+  "bad": "The vendor offered extending the warranty by a year.",
+  "trap": {
+   "tile": "to extend",
+   "instead": "extending",
+   "why": {
+    "de": "Nach suggest und admit steht -ing, und dieser Reflex wird auf offer übertragen. Offer verlangt to + Verb.",
+    "en": "After suggest and admit comes -ing, and that reflex spreads to offer. Offer needs to + verb."
+   }
+  }
+ }
+]

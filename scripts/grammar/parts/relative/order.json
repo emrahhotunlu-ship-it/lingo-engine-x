@@ -1,0 +1,240 @@
+[
+ {
+  "pat": "rc.who-which",
+  "en": "The colleague who leads the pilot is based in Austin.",
+  "de": "Der Kollege, der den Pilot leitet, sitzt in Austin.",
+  "chunks": [
+   "the colleague",
+   "who",
+   "leads the pilot",
+   "is based",
+   "in Austin"
+  ],
+  "single": "Der Relativsatz who leads the pilot steht direkt hinter colleague; is based in Austin folgt erst danach.",
+  "why": [
+   "Who passt zu Personen und steht direkt hinter dem Bezugswort colleague. Danach folgt das Verb leads, ohne ein weiteres Pronomen.",
+   "Who fits people and stands right after the antecedent colleague. The verb leads follows, with no extra pronoun."
+  ],
+  "bad": "The colleague which leads the pilot is based in Austin.",
+  "trap": {
+   "tile": "who",
+   "instead": "which",
+   "why": {
+    "de": "Which bleibt hängen, weil „der/die/das“ im Deutschen für alles passt. Bei Personen heißt es aber who.",
+    "en": "Which sticks because German “der/die/das” fits everything. For people it is who."
+   }
+  }
+ },
+ {
+  "pat": "rc.whose",
+  "en": "We need a vendor whose prices stay stable.",
+  "de": "Wir brauchen einen Anbieter, dessen Preise stabil bleiben.",
+  "chunks": [
+   "we need",
+   "a vendor",
+   "whose",
+   "prices",
+   "stay stable"
+  ],
+  "single": "Whose prices bleibt als Block zusammen; stay stable folgt direkt danach, weil das Verb zu prices gehört.",
+  "why": [
+   "Whose zeigt Besitz und steht direkt vor dem Nomen prices. Danach folgt das Verb stay, ohne Artikel zwischen whose und prices.",
+   "Whose shows possession and stands directly before the noun prices. The verb stay follows, with no article between whose and prices."
+  ],
+  "bad": "We need a vendor who prices stay stable.",
+  "trap": {
+   "tile": "whose",
+   "instead": "who",
+   "why": {
+    "de": "Wer „dessen“ nicht abruft, greift zu who. Doch who steht für die Person selbst, whose für das, was ihr gehört.",
+    "en": "If “dessen” does not come to mind, you reach for who. But who stands for the person, whose for what belongs to her."
+   }
+  }
+ },
+ {
+  "pat": "rc.commas",
+  "en": "Our Berlin office, which opened in May, is already profitable.",
+  "de": "Unser Berliner Büro, das im Mai eröffnet wurde, ist schon profitabel.",
+  "chunks": [
+   "our Berlin office",
+   "which",
+   "opened in May",
+   "is already",
+   "profitable"
+  ],
+  "single": "Die Zusatzinfo which opened in May steht direkt hinter office; is already profitable folgt erst danach.",
+  "why": [
+   "Die Zusatzinfo which opened in May steht zwischen Kommas. Dann gilt which, nie that.",
+   "The extra information which opened in May sits between commas. Then use which, never that."
+  ],
+  "bad": "Our Berlin office, that opened in May, is already profitable.",
+  "trap": {
+   "tile": "which",
+   "instead": "that",
+   "why": {
+    "de": "Im Deutschen steht immer Komma plus das/der, egal ob Zusatzinfo oder Eingrenzung. Englisch trennt: Zusatzinfo mit Komma braucht which, nie that.",
+    "en": "German always uses comma plus das/der, whether extra information or restriction. English separates: extra information with a comma needs which, never that."
+   }
+  }
+ },
+ {
+  "pat": "rc.commas",
+  "en": "The vendor missed the deadline, which delayed the launch.",
+  "de": "Der Anbieter verpasste die Frist, was den Start verzögerte.",
+  "chunks": [
+   "the vendor",
+   "missed",
+   "the deadline",
+   "which",
+   "delayed",
+   "the launch"
+  ],
+  "single": "Which delayed the launch steht am Ende, denn es kommentiert den ganzen Satz davor.",
+  "why": [
+   "Which bezieht sich hier auf den ganzen Satz davor: Die verpasste Frist hat den Start verzögert. Nach dem Komma steht nie what.",
+   "Here which refers to the whole clause before it: the missed deadline delayed the launch. After the comma never use what."
+  ],
+  "bad": "The vendor missed the deadline, what delayed the launch.",
+  "trap": {
+   "tile": "which",
+   "instead": "what",
+   "why": {
+    "de": "Deutsch „was“ bezieht sich auf den ganzen Satz („…, was den Start verzögerte“). Im Englischen heißt das which.",
+    "en": "German “was” refers to the whole clause (“…, was den Start verzögerte”). English uses which."
+   }
+  }
+ },
+ {
+  "pat": "rc.where-why",
+  "en": "We moved to the office where the whole team now works.",
+  "de": "Wir sind in das Büro gezogen, in dem jetzt das ganze Team arbeitet.",
+  "chunks": [
+   "we moved",
+   "to the office",
+   "where",
+   "the whole team",
+   "now works"
+  ],
+  "why": [
+   "Where passt nach einem Ort und leitet den ganzen Satz ein. Das Wort now steht hier direkt vor dem Verb works.",
+   "Where follows a place and opens a full clause. The word now stands right before the verb works here."
+  ],
+  "bad": "We moved to the office which the whole team now works.",
+  "trap": {
+   "tile": "where",
+   "instead": "which",
+   "why": {
+    "de": "Kein Übersetzungsfehler: which wirkt wie das Standardwort für Sachen. Nach einem Ort mit ganzem Satz braucht es where oder in which.",
+    "en": "Not a translation error: which feels like the standard word for things. After a place with a full clause you need where or in which."
+   }
+  },
+  "single": "Now works bleibt als Block zusammen und steht am Ende, nachdem der Relativsatz mit where begonnen hat."
+ },
+ {
+  "pat": "rc.where-why",
+  "en": "I still don't know the reason why they declined our proposal.",
+  "de": "Ich weiß immer noch nicht, warum sie unseren Vorschlag abgelehnt haben.",
+  "chunks": [
+   "I still",
+   "don't know",
+   "the reason",
+   "why",
+   "they declined",
+   "our proposal"
+  ],
+  "single": "Die Folge the reason why bleibt fest; they declined our proposal folgt als eigener Satz.",
+  "why": [
+   "Nach the reason steht why, nicht because. Das Relativwort why leitet den Satz ein, in dem der Grund genannt wird.",
+   "After the reason use why, not because. The relative word why opens the clause that names the reason."
+  ],
+  "bad": "I still don't know the reason because they declined our proposal.",
+  "trap": {
+   "tile": "why",
+   "instead": "because",
+   "why": {
+    "de": "Im Deutschen heißt es „der Grund, warum“, nicht „weil“. Wer an weil denkt, greift zu because; nach reason steht aber why.",
+    "en": "German says “der Grund, warum”, not “weil”. If you think of weil, you reach for because; after reason use why."
+   }
+  }
+ },
+ {
+  "pat": "rc.prep",
+  "en": "The tool we rely on is no longer supported.",
+  "de": "Das Tool, auf das wir uns verlassen, wird nicht mehr unterstützt.",
+  "chunks": [
+   "the tool",
+   "we",
+   "rely on",
+   "is no longer",
+   "supported"
+  ],
+  "single": "Rely on bleibt als feste Verbindung zusammen; danach folgt is no longer supported.",
+  "why": [
+   "Die Präposition on gehört zum Verb rely und steht im Relativsatz am Ende. Ein Relativwort ist hier nicht nötig.",
+   "The preposition on belongs to the verb rely and stands at the end of the relative clause. No relative word is needed here."
+  ],
+  "bad": "The tool we rely is no longer supported.",
+  "trap": {
+   "tile": "rely on",
+   "instead": "rely",
+   "why": {
+    "de": "Im Deutschen steht die Präposition vorn („auf das“). Im Englischen rutscht sie ans Ende und fällt leicht weg.",
+    "en": "In German the preposition comes first (“auf das”). In English it moves to the end and is easily dropped."
+   }
+  }
+ },
+ {
+  "pat": "rc.that-what",
+  "en": "Everything that we discussed is in the notes.",
+  "de": "Alles, was wir besprochen haben, steht in den Notizen.",
+  "chunks": [
+   "everything",
+   "that",
+   "we discussed",
+   "is",
+   "in the notes"
+  ],
+  "single": "Der Relativsatz that we discussed folgt direkt auf everything; is in the notes steht erst danach.",
+  "why": [
+   "Nach everything steht that, nie what. Everything ist das Bezugswort, und der Relativsatz that we discussed folgt direkt danach.",
+   "After everything use that, never what. Everything is the antecedent, and the relative clause that we discussed follows right after it."
+  ],
+  "bad": "Everything what we discussed is in the notes.",
+  "trap": {
+   "tile": "that",
+   "instead": "what",
+   "why": {
+    "de": "Im Deutschen heißt es „alles, was“. Dieses was wird zu what, doch nach everything steht that.",
+    "en": "German says “alles, was”. That was turns into what, but after everything use that."
+   }
+  }
+ },
+ {
+  "pat": "rc.that-what",
+  "en": "What we need now is a clear decision.",
+  "de": "Was wir jetzt brauchen, ist eine klare Entscheidung.",
+  "chunks": [
+   "what",
+   "we need",
+   "now",
+   "is",
+   "a clear decision"
+  ],
+  "alt": [
+   "What we need is a clear decision now."
+  ],
+  "why": [
+   "What steht hier ohne Bezugswort und bedeutet das, was. Das Wort now darf nach need stehen oder ans Ende rücken.",
+   "What stands here without an antecedent and means the thing that. The word now can sit after need or move to the end."
+  ],
+  "bad": "That we need now is a clear decision.",
+  "trap": {
+   "tile": "what",
+   "instead": "that",
+   "why": {
+    "de": "Wer „das, was“ wörtlich nimmt, setzt that davor. Im Englischen steht what allein für beides.",
+    "en": "If you take “das, was” literally, you put that first. In English what alone stands for both."
+   }
+  }
+ }
+]

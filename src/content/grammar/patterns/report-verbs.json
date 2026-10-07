@@ -1,0 +1,440 @@
+{
+ "topic": "report-verbs",
+ "canDo": {
+  "de": "Ich kann Berichtsverben mit dem richtigen Anschluss nutzen: admit und deny + -ing, suggest und recommend + -ing oder that-Satz, insist on + -ing, advise und warn + Person + to und offer + to.",
+  "en": "I can use reporting verbs with the right pattern: admit and deny + -ing, suggest and recommend + -ing or a that-clause, insist on + -ing, advise and warn + person + to, and offer + to."
+ },
+ "order": [
+  "rv.admit-deny",
+  "rv.suggest-rec",
+  "rv.insist",
+  "rv.advise-warn",
+  "rv.offer"
+ ],
+ "introPlan": [
+  [
+   "rv.admit-deny",
+   "rv.suggest-rec"
+  ],
+  [
+   "rv.insist",
+   "rv.advise-warn"
+  ],
+  [
+   "rv.offer"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Berichtest du, was jemand zugibt oder bestreitet (admit, deny), oder was jemand vorschlägt (suggest, recommend)?",
+   "Steht vor der Handlung eine Person (advised us to), eine Präposition (insisted on) oder gar nichts (offered to)?",
+   "Schaut das Verb zurück auf etwas Geschehenes (-ing) oder nach vorn auf etwas Geplantes (to + Verb)?"
+  ],
+  "en": [
+   "Are you reporting what someone admits or denies (admit, deny), or what someone proposes (suggest, recommend)?",
+   "Does a person (advised us to), a preposition (insisted on) or nothing (offered to) stand before the action?",
+   "Does the verb look back at something that happened (-ing) or ahead at something planned (to + verb)?"
+  ]
+ },
+ "patterns": [
+  {
+   "id": "rv.admit-deny",
+   "name": {
+    "de": "admit / deny · + -ing",
+    "en": "admit / deny · + -ing"
+   },
+   "form": {
+    "de": "admit / deny + -ing",
+    "en": "admit / deny + -ing"
+   },
+   "use": {
+    "de": "Zugeben und Leugnen: Nach admit und deny steht die -ing-Form, für etwas Früheres auch having + Partizip.",
+    "en": "Admitting and denying: admit and deny take the -ing form, and having + participle for something earlier."
+   },
+   "signals": [
+    "admit",
+    "admitted",
+    "deny",
+    "denied",
+    "admitting",
+    "denying"
+   ],
+   "ex": [
+    {
+     "en": "She admitted missing the deadline.",
+     "de": "Sie gab zu, die Frist verpasst zu haben.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "The vendor denied sending the wrong invoice.",
+     "de": "Der Lieferant bestritt, die falsche Rechnung geschickt zu haben.",
+     "ctx": "mail"
+    },
+    {
+     "en": "I admit being nervous before big presentations.",
+     "de": "Ich gebe zu, vor großen Präsentationen nervös zu sein.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "She admitted to be late for the client call.",
+    "good": "She admitted being late for the client call.",
+    "cause": {
+     "de": "Deutsch sagt „zugeben, zu spät zu sein“ mit zu + Infinitiv. Wort für Wort entsteht admitted to be. Englisch verlangt -ing.",
+     "en": "German says “zugeben, zu spät zu sein” with zu + infinitive. Word for word that becomes admitted to be. English needs -ing."
+    }
+   },
+   "contrast": {
+    "with": "rv.offer",
+    "a": "She offered to pay.",
+    "b": "She admitted paying.",
+    "diff": {
+     "de": "offer schaut nach vorn (to + Verb). admit schaut zurück (-ing).",
+     "en": "offer looks ahead (to + verb). admit looks back (-ing)."
+    }
+   },
+   "ccq": [
+    {
+     "s": "He denied taking the files.",
+     "q": {
+      "de": "Hat er gesagt, dass er die Dateien genommen hat?",
+      "en": "Did he say that he took the files?"
+     },
+     "a": false
+    },
+    {
+     "s": "She admitted making the mistake.",
+     "q": {
+      "de": "Hat sie den Fehler gemacht?",
+      "en": "Did she make the mistake?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Welche Form folgt auf ein Verb, das eine Tatsache zugibt oder bestreitet?",
+    "en": "Which form follows a verb that admits or denies a fact?"
+   }
+  },
+  {
+   "id": "rv.suggest-rec",
+   "name": {
+    "de": "suggest / recommend · -ing oder that",
+    "en": "suggest / recommend · -ing or that"
+   },
+   "form": {
+    "de": "suggest / recommend + -ing / that-Satz",
+    "en": "suggest / recommend + -ing / that-clause"
+   },
+   "use": {
+    "de": "Vorschlagen und Empfehlen: Es folgt -ing oder ein that-Satz. Bei suggest nie Person + to, also kein suggested me to go; bei recommend ist es im US-Englisch unüblich.",
+    "en": "Suggesting and recommending: -ing or a that-clause follows. With suggest never person + to, so not suggested me to go; with recommend it is uncommon in US English."
+   },
+   "signals": [
+    "suggest",
+    "suggested",
+    "recommend",
+    "recommended",
+    "suggesting",
+    "recommending"
+   ],
+   "ex": [
+    {
+     "en": "I suggest moving the call to Thursday.",
+     "de": "Ich schlage vor, den Call auf Donnerstag zu verschieben.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "We recommend that you renew the license early.",
+     "de": "Wir empfehlen, dass Sie die Lizenz früh verlängern.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Anna suggested trying the new place near the office.",
+     "de": "Anna schlug vor, das neue Lokal beim Büro auszuprobieren.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "She suggested us to postpone the launch.",
+    "good": "She suggested that we postpone the launch.",
+    "cause": {
+     "de": "Deutsch sagt „Sie schlug uns vor, den Start zu verschieben“ mit Person + zu. Wort für Wort entsteht suggested us to. Englisch braucht einen that-Satz oder -ing.",
+     "en": "German says “Sie schlug uns vor, den Start zu verschieben” with person + zu. Word for word that becomes suggested us to. English needs a that-clause or -ing."
+    }
+   },
+   "contrast": {
+    "with": "rv.advise-warn",
+    "a": "She suggested moving the meeting.",
+    "b": "She advised us to move the meeting.",
+    "diff": {
+     "de": "suggest nimmt -ing oder einen that-Satz. advise braucht eine Person und to.",
+     "en": "suggest takes -ing or a that-clause. advise needs a person and to."
+    }
+   },
+   "ccq": [
+    {
+     "s": "She recommended starting in March.",
+     "q": {
+      "de": "Hat sie empfohlen, im März zu beginnen?",
+      "en": "Did she recommend starting in March?"
+     },
+     "a": true
+    },
+    {
+     "s": "He suggested that I take the earlier flight.",
+     "q": {
+      "de": "Hat er mir befohlen, den früheren Flug zu nehmen?",
+      "en": "Did he order me to take the earlier flight?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Kann nach diesem Verb eine Person direkt vor to stehen? Welche zwei Anschlüsse bleiben dann?",
+    "en": "Can a person stand directly before to after this verb? Which two patterns are left?"
+   },
+   "usNote": {
+    "de": "Im US-Englisch steht im that-Satz die Grundform: suggested that she join. Mit should ist es auch richtig.",
+    "en": "US English uses the base form in the that-clause: suggested that she join. With should it is also correct."
+   }
+  },
+  {
+   "id": "rv.insist",
+   "name": {
+    "de": "insist · on + -ing",
+    "en": "insist · on + -ing"
+   },
+   "form": {
+    "de": "insist on + -ing",
+    "en": "insist on + -ing"
+   },
+   "use": {
+    "de": "Auf etwas bestehen: insist braucht die Präposition on, danach folgt -ing oder ein Nomen.",
+    "en": "Insisting on something: insist needs the preposition on, followed by -ing or a noun."
+   },
+   "signals": [
+    "insist",
+    "insisted",
+    "insists",
+    "insisting"
+   ],
+   "ex": [
+    {
+     "en": "The client insisted on reviewing every clause.",
+     "de": "Der Kunde bestand darauf, jede Klausel zu prüfen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "We insist on receiving written confirmation.",
+     "de": "Wir bestehen auf einer schriftlichen Bestätigung.",
+     "ctx": "mail"
+    },
+    {
+     "en": "She insisted on driving me to the station.",
+     "de": "Sie bestand darauf, mich zum Bahnhof zu fahren.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The auditor insisted to check every invoice.",
+    "good": "The auditor insisted on checking every invoice.",
+    "cause": {
+     "de": "Im Deutschen steht darauf vor dem Komma und der zu-Infinitiv danach („bestand darauf, jede Rechnung zu prüfen“); so wirkt das zu-Verb wie ein eigener Anschluss und on geht verloren.",
+     "en": "In German darauf comes before the comma and the zu-infinitive after it (“bestand darauf, jede Rechnung zu prüfen”); so the zu-verb feels like its own clause and on gets lost."
+    }
+   },
+   "contrast": {
+    "with": "rv.admit-deny",
+    "a": "He insisted on paying.",
+    "b": "He admitted paying.",
+    "diff": {
+     "de": "insist braucht on vor -ing. admit steht direkt vor -ing.",
+     "en": "insist needs on before -ing. admit takes -ing directly."
+    }
+   },
+   "ccq": [
+    {
+     "s": "She insisted on paying.",
+     "q": {
+      "de": "Hat sie darauf bestanden, selbst zu zahlen?",
+      "en": "Did she insist on paying herself?"
+     },
+     "a": true
+    },
+    {
+     "s": "She offered to pay.",
+     "q": {
+      "de": "Hat sie darauf bestanden zu zahlen?",
+      "en": "Did she insist on paying?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Braucht dieses Verb eine Präposition, bevor die Handlung folgt?",
+    "en": "Does this verb need a preposition before the action follows?"
+   }
+  },
+  {
+   "id": "rv.advise-warn",
+   "name": {
+    "de": "advise / warn · Person + to",
+    "en": "advise / warn · person + to"
+   },
+   "form": {
+    "de": "advise / warn + Person + (not) to + Verb",
+    "en": "advise / warn + person + (not) to + verb"
+   },
+   "use": {
+    "de": "Raten und Warnen: Mit Person folgt to + Grundform; alternativ advise oder warn against + -ing. Die Verneinung steht vor to: not to sign.",
+    "en": "Advising and warning: with a person, to + base form follows; alternatively advise or warn against + -ing. The negation goes before to: not to sign."
+   },
+   "signals": [
+    "advise",
+    "advised",
+    "warn",
+    "warned",
+    "urge",
+    "urged"
+   ],
+   "ex": [
+    {
+     "en": "Legal advised us to wait for the audit.",
+     "de": "Die Rechtsabteilung riet uns, das Audit abzuwarten.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "We warn all users not to share their passwords.",
+     "de": "Wir warnen alle Nutzer davor, ihre Passwörter zu teilen.",
+     "ctx": "mail"
+    },
+    {
+     "en": "My coach warned me not to overtrain.",
+     "de": "Mein Trainer warnte mich davor, zu viel zu trainieren.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "She advised to wait until Monday.",
+    "good": "She advised us to wait until Monday.",
+    "cause": {
+     "de": "Deutsch kann „sie riet, bis Montag zu warten“ ohne Person sagen. Englisch advise braucht die Person direkt danach: advised us to wait.",
+     "en": "German can say “sie riet, bis Montag zu warten” without a person. English advise needs the person right after it: advised us to wait."
+    }
+   },
+   "contrast": {
+    "with": "rv.offer",
+    "a": "She warned us not to wait.",
+    "b": "She offered to wait.",
+    "diff": {
+     "de": "advise und warn nehmen Person + to, mit not vor to. offer nimmt to direkt, ohne Person.",
+     "en": "advise and warn take a person + to, with not before to. offer takes to directly, with no person."
+    }
+   },
+   "ccq": [
+    {
+     "s": "My lawyer advised me not to sign.",
+     "q": {
+      "de": "Hat der Anwalt vom Unterschreiben abgeraten?",
+      "en": "Did the lawyer advise against signing?"
+     },
+     "a": true
+    },
+    {
+     "s": "She warned him to leave.",
+     "q": {
+      "de": "Hat sie ihm gesagt, er solle bleiben?",
+      "en": "Did she tell him to stay?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Wer wird beraten oder gewarnt, und wo steht die Verneinung?",
+    "en": "Who is being advised or warned, and where does the negation go?"
+   }
+  },
+  {
+   "id": "rv.offer",
+   "name": {
+    "de": "offer / promise · to + Verb",
+    "en": "offer / promise · to + verb"
+   },
+   "form": {
+    "de": "offer / agree / promise + to + Verb",
+    "en": "offer / agree / promise + to + verb"
+   },
+   "use": {
+    "de": "Anbieten, Zusagen, Versprechen: Es folgt direkt to + Grundform, ohne -ing und ohne Person.",
+    "en": "Offering, agreeing, promising: to + base form follows directly, with no -ing and no person."
+   },
+   "signals": [
+    "offer",
+    "offered",
+    "agree",
+    "agreed",
+    "promise",
+    "promised",
+    "refuse",
+    "refused"
+   ],
+   "ex": [
+    {
+     "en": "The vendor offered to extend the warranty.",
+     "de": "Der Anbieter bot an, die Garantie zu verlängern.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I promise to send the summary by noon.",
+     "de": "Ich verspreche, die Zusammenfassung bis mittags zu schicken.",
+     "ctx": "mail"
+    },
+    {
+     "en": "He agreed to cover my shift.",
+     "de": "Er stimmte zu, meine Schicht zu übernehmen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "He offered paying for the taxi.",
+    "good": "He offered to pay for the taxi.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler: Deutsch nutzt auch zu + Infinitiv. Nach suggest und admit gilt -ing, und dieser Reflex wird auf offer übertragen.",
+     "en": "Not a translation error: German also uses zu + infinitive. After suggest and admit -ing is used, and that reflex spreads to offer."
+    }
+   },
+   "contrast": {
+    "with": "rv.admit-deny",
+    "a": "She offered to pay.",
+    "b": "She admitted paying.",
+    "diff": {
+     "de": "offer zeigt nach vorn (to + Verb). admit zeigt zurück (-ing).",
+     "en": "offer points ahead (to + verb). admit points back (-ing)."
+    }
+   },
+   "ccq": [
+    {
+     "s": "He offered to cover the costs.",
+     "q": {
+      "de": "Hat er die Kosten schon bezahlt?",
+      "en": "Has he already paid the costs?"
+     },
+     "a": false
+    },
+    {
+     "s": "She admitted paying the costs.",
+     "q": {
+      "de": "Hat sie die Kosten schon bezahlt?",
+      "en": "Has she already paid the costs?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Zeigt dieses Verb auf eine künftige Handlung oder auf eine frühere?",
+    "en": "Does this verb point to a future action or to an earlier one?"
+   }
+  }
+ ]
+}

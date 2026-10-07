@@ -1,0 +1,777 @@
+{
+ "She isn't answering her phone. She ___ be asleep.": {
+  "pat": "md.must-now",
+  "why": {
+   "ok": {
+    "de": "Richtig: Ihr Schweigen ist der Hinweis. must = fast sicher (Schluss), keine Pflicht.",
+    "en": "Right: her silence is the clue. must = almost sure (a conclusion), not an obligation."
+   },
+   "wrong": [
+    {
+     "opt": "can't",
+     "pat": "md.cant-now",
+     "de": "can't wäre „ausgeschlossen“. Ihr Schweigen spricht aber für Schlaf, nicht dagegen.",
+     "en": "can't would mean “impossible”, but her silence points toward sleep, not against it."
+    },
+    {
+     "opt": "wants to",
+     "de": "wants to nennt einen Wunsch und keinen Schluss. Hier ziehst du den Schluss aus einem Hinweis.",
+     "en": "wants to names a wish; here you draw a conclusion from a clue."
+    },
+    {
+     "opt": "needs to",
+     "de": "needs to nennt eine Pflicht, keinen Schluss. Für den Schluss aus einem Hinweis passt must.",
+     "en": "needs to names an obligation, not a conclusion; for a conclusion from a clue use must."
+    }
+   ]
+  }
+ },
+ "He ___ us – it was far too dark.": {
+  "pat": "md.cant-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: Es war viel zu dunkel, also so gut wie ausgeschlossen: can't have + seen.",
+    "en": "Right: it was far too dark, so it is almost impossible: can't have + seen."
+   },
+   "wrong": [
+    {
+     "if": [
+      "must"
+     ],
+     "pat": "md.must-have",
+     "de": "must have wäre das Gegenteil: sicher gesehen. „Zu dunkel“ spricht dagegen.",
+     "en": "must have would be the opposite: sure he saw us. “Too dark” points against it."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "pat": "md.might-have",
+     "de": "might have heißt nur „vielleicht“. Bei „viel zu dunkel“ ist es fast ausgeschlossen.",
+     "en": "might have only means “maybe”. With “far too dark” it is almost ruled out."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Gesucht ist ein Modalverb mit have + Partizip: can't have seen.",
+     "en": "A modal with have + participle is needed: can't have seen."
+    },
+    {
+     "not": [
+      "cannot",
+      "could not"
+     ],
+     "de": "Gesucht ist ein Modalverb für „ausgeschlossen“: can't oder couldn't have seen.",
+     "en": "A modal for “ruled out” is needed: can't or couldn't have seen."
+    }
+   ]
+  }
+ },
+ "I'm not sure where my keys are. I ___ left them at work.": {
+  "pat": "md.might-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: „not sure“ = nur eine Möglichkeit: might have + Partizip (left).",
+    "en": "Right: “not sure” = only a possibility: might have + participle (left)."
+   },
+   "wrong": [
+    {
+     "opt": "must have",
+     "pat": "md.must-have",
+     "de": "must have wäre fast sicher. Du weißt aber nicht, wo die Schlüssel sind.",
+     "en": "must have would be almost sure, but you do not know where the keys are."
+    },
+    {
+     "opt": "should have",
+     "de": "should have ist ein Vorwurf („hätte … sollen“), keine Vermutung.",
+     "en": "should have is criticism (“ought to have”), not a guess."
+    },
+    {
+     "opt": "can have",
+     "de": "can have gibt es für eine Vermutung über früher nicht. Nimm might, may oder could have.",
+     "en": "can have is not used to guess about the past; use might, may, or could have."
+    }
+   ]
+  }
+ },
+ "The lights are off, so they ___ (be) in the office any more.": {
+  "pat": "md.cant-now",
+  "why": {
+   "ok": {
+    "de": "Richtig: Licht aus, also sind sie so gut wie sicher weg: can't be + Grundform.",
+    "en": "Right: lights off, so they are almost surely gone: can't be + base form."
+   },
+   "wrong": [
+    {
+     "if": [
+      "must"
+     ],
+     "not": [
+      "not"
+     ],
+     "pat": "md.must-now",
+     "de": "must be sagt das Gegenteil: sicher noch im Büro. Das Licht ist aber aus.",
+     "en": "must be says the opposite: surely still in the office. But the lights are off."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "pat": "md.might-now",
+     "de": "might be nennt nur eine Möglichkeit. Mit dem Hinweis „Licht aus“ ist can't be stärker.",
+     "en": "might be only names a possibility. With the clue “lights off”, can't be is stronger."
+    },
+    {
+     "not": [
+      "be"
+     ],
+     "de": "Nach can't folgt die Grundform: can't be, nicht nur can't.",
+     "en": "The base form follows can't: can't be, not just can't."
+    },
+    {
+     "not": [
+      "cannot",
+      "could not",
+      "must not"
+     ],
+     "de": "Gesucht ist ein Modalverb für „so gut wie ausgeschlossen“: can't be.",
+     "en": "A modal for “almost ruled out” is needed: can't be."
+    }
+   ]
+  }
+ },
+ "I'm sure he forgot the meeting. → He ___ the meeting.": {
+  "pat": "md.must-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: „I'm sure“ = fast sicher, früher: must have + forgotten.",
+    "en": "Right: “I'm sure” = almost certain, in the past: must have + forgotten."
+   },
+   "wrong": [
+    {
+     "if": [
+      "cannot"
+     ],
+     "pat": "md.cant-have",
+     "de": "can't have = ausgeschlossen. „I'm sure … forgot“ sagt aber das Gegenteil.",
+     "en": "can't have = ruled out. But “I'm sure … forgot” says the opposite."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "pat": "md.might-have",
+     "de": "might have = nur vielleicht. „I'm sure“ verlangt die stärkere Form must have.",
+     "en": "might have = only maybe. “I'm sure” calls for the stronger must have."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Für früher braucht es have + Partizip: must have forgotten.",
+     "en": "The past needs have + participle: must have forgotten."
+    },
+    {
+     "if": [
+      "have",
+      "forgot"
+     ],
+     "de": "Nach have steht die 3. Verbform: forgotten, nicht forgot.",
+     "en": "After have use the third form: forgotten, not forgot."
+    }
+   ]
+  }
+ },
+ "We lost the deal and nobody knows why. The price ___ have been too high, or maybe the timing was wrong.": {
+  "pat": "md.might-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: „or maybe“ = nur Möglichkeiten. might have been = vielleicht.",
+    "en": "Right: “or maybe” = only possibilities. might have been = maybe."
+   },
+   "wrong": [
+    {
+     "opt": "should",
+     "de": "should have been = „hätte sein sollen“, das ist ein Vorwurf und keine Vermutung.",
+     "en": "should have been = “ought to have been” (criticism), not a guess."
+    },
+    {
+     "opt": "can't",
+     "pat": "md.cant-have",
+     "de": "can't have been = ausgeschlossen. Der Satz nennt aber zwei mögliche Gründe.",
+     "en": "can't have been = ruled out. But the sentence names two possible reasons."
+    },
+    {
+     "opt": "must",
+     "pat": "md.must-have",
+     "de": "must have been wäre fast sicher. Mit „or maybe …“ ist keiner sicher.",
+     "en": "must have been would be almost sure. With “or maybe …” nobody is sure."
+    }
+   ]
+  }
+ },
+ "Anna was with me all morning, so she ___ have sent that email at 10 a.m.": {
+  "pat": "md.cant-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: Anna war bei mir, also ausgeschlossen: can't have + sent.",
+    "en": "Right: Anna was with me, so it is ruled out: can't have + sent."
+   },
+   "wrong": [
+    {
+     "opt": "might",
+     "pat": "md.might-have",
+     "de": "might have = vielleicht. Anna war aber den ganzen Morgen bei mir: ausgeschlossen.",
+     "en": "might have = maybe. But Anna was with me all morning: ruled out."
+    },
+    {
+     "opt": "must",
+     "pat": "md.must-have",
+     "de": "must have wäre das Gegenteil: sicher, dass sie die E-Mail schickte.",
+     "en": "must have would be the opposite: sure she sent the email."
+    },
+    {
+     "opt": "should",
+     "de": "should have ist ein Vorwurf („hätte … sollen“), keine Vermutung.",
+     "en": "should have is criticism (“ought to have”), not a deduction."
+    }
+   ]
+  }
+ },
+ "The files are gone. Someone ___ deleted them by mistake.": {
+  "pat": "md.must-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: Beweis (Dateien weg), fast sicher, früher: must have + deleted.",
+    "en": "Right: evidence (files gone), almost sure, in the past: must have + deleted."
+   },
+   "wrong": [
+    {
+     "opt": "should have",
+     "de": "should have ist ein Vorwurf („hätte … sollen“), keine Vermutung.",
+     "en": "should have is criticism (“ought to have”), not a deduction."
+    },
+    {
+     "opt": "can have",
+     "de": "can have gibt es für Vermutungen nicht. Nimm must have, might have oder can't have.",
+     "en": "can have is not used for deductions; use must have, might have, or can't have."
+    },
+    {
+     "opt": "must",
+     "de": "must allein meint jetzt. Für früher braucht es have + Partizip.",
+     "en": "must alone means now. The past needs have + participle."
+    }
+   ]
+  }
+ },
+ "I'm not sure why the email bounced. The address ___ be wrong.": {
+  "pat": "md.might-now",
+  "why": {
+   "ok": {
+    "de": "Richtig: „I'm not sure“ = nur möglich. could (oder might) be wrong.",
+    "en": "Right: “I'm not sure” = only possible. could (or might) be wrong."
+   },
+   "wrong": [
+    {
+     "opt": "mustn't",
+     "de": "Bei „I'm not sure“ passt nur eine Möglichkeit (could, might), nicht mustn't.",
+     "en": "After “I'm not sure” only a possibility fits (could, might), not mustn't."
+    },
+    {
+     "opt": "can't",
+     "pat": "md.cant-now",
+     "de": "can't be wrong hieße: ausgeschlossen. Du hast aber keine Gewissheit.",
+     "en": "can't be wrong would mean ruled out; but you have no certainty."
+    },
+    {
+     "opt": "must",
+     "pat": "md.must-now",
+     "de": "must be wrong wäre fast sicher. „I'm not sure“ spricht aber dagegen.",
+     "en": "must be wrong would be almost sure; “I'm not sure” speaks against it."
+    }
+   ]
+  }
+ },
+ "Look – the light in her office is on. She ___ working late.": {
+  "pat": "md.must-now",
+  "why": {
+   "ok": {
+    "de": "Richtig: Das Licht ist an, also jetzt: must be + working.",
+    "en": "Right: the light is on, so it is about now: must be + working."
+   },
+   "wrong": [
+    {
+     "opt": "can't be",
+     "pat": "md.cant-now",
+     "de": "can't be working = ausgeschlossen. Das Licht spricht aber dafür, dass sie arbeitet.",
+     "en": "can't be working = ruled out. But the light suggests she is working."
+    },
+    {
+     "opt": "should have",
+     "de": "should have ist ein Vorwurf („hätte … sollen“) und passt nicht zu working.",
+     "en": "should have is criticism (“ought to have”) and does not fit working."
+    },
+    {
+     "opt": "must have",
+     "pat": "md.must-have",
+     "de": "must have + working geht nicht. Es läuft gerade jetzt: must be + -ing.",
+     "en": "must have + working is not possible. It is happening now: must be + -ing."
+    }
+   ]
+  }
+ },
+ "The streets are wet. It ___ have rained last night.": {
+  "pat": "md.must-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: nasse Straßen = Beweis, fast sicher, früher: must have rained.",
+    "en": "Right: wet streets = evidence, almost sure, in the past: must have rained."
+   },
+   "wrong": [
+    {
+     "opt": "needs to",
+     "de": "needs to heißt „muss (tun)“ als Notwendigkeit, nicht als Vermutung.",
+     "en": "needs to means “has to” as a need, not as a deduction."
+    },
+    {
+     "opt": "should",
+     "de": "should have rained = „hätte regnen sollen“, das ist keine Vermutung.",
+     "en": "should have rained = “ought to have rained”, not a deduction."
+    },
+    {
+     "opt": "can't",
+     "pat": "md.cant-have",
+     "de": "can't have rained wäre das Gegenteil: ausgeschlossen. Die Straßen sind aber nass.",
+     "en": "can't have rained would be the opposite: ruled out. But the streets are wet."
+    }
+   ]
+  }
+ },
+ "The window is broken and there's a baseball on the floor. Someone ___ it through the window.": {
+  "pat": "md.must-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: Ball und kaputtes Fenster sind der Beweis: must have + thrown.",
+    "en": "Right: ball and broken window are the proof: must have + thrown."
+   },
+   "wrong": [
+    {
+     "if": [
+      "might"
+     ],
+     "pat": "md.might-have",
+     "de": "might have = nur vielleicht. Ball und Fenster sind aber ein starker Beweis: must have.",
+     "en": "might have = only maybe. But ball and window are strong proof: must have."
+    },
+    {
+     "if": [
+      "cannot"
+     ],
+     "pat": "md.cant-have",
+     "de": "can't have = ausgeschlossen. Der Ball am Boden zeigt aber: Es ist passiert.",
+     "en": "can't have = ruled out. But the ball on the floor shows it happened."
+    },
+    {
+     "if": [
+      "have",
+      "threw"
+     ],
+     "de": "Nach have steht die 3. Verbform: thrown, nicht threw.",
+     "en": "After have use the third form: thrown, not threw."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Für früher braucht es Modalverb + have + Partizip: must have thrown.",
+     "en": "The past needs modal + have + participle: must have thrown."
+    }
+   ]
+  }
+ },
+ "He ___ the call – his phone was switched off all day.": {
+  "pat": "md.cant-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: Handy den ganzen Tag aus, also ausgeschlossen: can't have + received.",
+    "en": "Right: phone off all day, so it is ruled out: can't have + received."
+   },
+   "wrong": [
+    {
+     "if": [
+      "must"
+     ],
+     "not": [
+      "not"
+     ],
+     "pat": "md.must-have",
+     "de": "must have = sicher erhalten. Das Handy war aber den ganzen Tag aus.",
+     "en": "must have = surely received. But the phone was off all day."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "pat": "md.might-have",
+     "de": "might have = nur vielleicht. Mit ausgeschaltetem Handy ist es fast ausgeschlossen.",
+     "en": "might have = only maybe. With the phone off it is almost ruled out."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Gesucht ist ein Modalverb mit have + Partizip: can't have received.",
+     "en": "A modal with have + participle is needed: can't have received."
+    },
+    {
+     "not": [
+      "cannot",
+      "could not",
+      "must not"
+     ],
+     "de": "Gesucht ist ein Modalverb für „ausgeschlossen“: can't oder couldn't have received.",
+     "en": "A modal for “ruled out” is needed: can't or couldn't have received."
+    }
+   ]
+  }
+ },
+ "I'm not sure why the client is upset. We ___ the invoice twice.": {
+  "pat": "md.might-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: „not sure“ = nur möglich: might (may, could) have + sent.",
+    "en": "Right: “not sure” = only possible: might (may, could) have + sent."
+   },
+   "wrong": [
+    {
+     "if": [
+      "must"
+     ],
+     "not": [
+      "not"
+     ],
+     "pat": "md.must-have",
+     "de": "must have = fast sicher. „I'm not sure“ verlangt eine schwächere Form.",
+     "en": "must have = almost sure. “I'm not sure” calls for a weaker form."
+    },
+    {
+     "if": [
+      "cannot"
+     ],
+     "pat": "md.cant-have",
+     "de": "can't have = ausgeschlossen. Es ist aber nur unklar, ob ihr doppelt geschickt habt.",
+     "en": "can't have = ruled out. But it is just unclear whether you sent it twice."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Für früher: might have + Partizip, also have nicht weglassen.",
+     "en": "For the past: might have + participle, so do not drop have."
+    },
+    {
+     "if": [
+      "have",
+      "send"
+     ],
+     "de": "Nach have steht die 3. Verbform: sent, nicht send.",
+     "en": "After have use the third form: sent, not send."
+    }
+   ]
+  }
+ },
+ "She ___ at her desk right now – her coat is still here.": {
+  "pat": "md.must-now",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Mantel ist der Hinweis, und es geht um jetzt: must be.",
+    "en": "Right: the coat is the clue, and it is about now: must be."
+   },
+   "wrong": [
+    {
+     "if": [
+      "cannot"
+     ],
+     "pat": "md.cant-now",
+     "de": "can't be = ausgeschlossen. Der Mantel spricht aber dafür, dass sie da ist.",
+     "en": "can't be = ruled out. But the coat suggests she is there."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "pat": "md.might-now",
+     "de": "might be = nur möglich. Mit dem Mantel als Hinweis ist must be passender.",
+     "en": "might be = only possible. With the coat as a clue, must be fits better."
+    },
+    {
+     "if": [
+      "must",
+      "have"
+     ],
+     "pat": "md.must-have",
+     "de": "must have been meint früher. Mit „right now“ gilt must be.",
+     "en": "must have been refers to the past. With “right now” use must be."
+    },
+    {
+     "not": [
+      "must",
+      "has"
+     ],
+     "de": "Gesucht ist ein Modalverb für „fast sicher“: must be.",
+     "en": "A modal for “almost sure” is needed: must be."
+    }
+   ]
+  }
+ },
+ "That ___ Lena's brother – he looks nothing like her, and she only has a sister.": {
+  "pat": "md.cant-now",
+  "why": {
+   "ok": {
+    "de": "Richtig: Sie hat nur eine Schwester, also ausgeschlossen: can't be.",
+    "en": "Right: she only has a sister, so it is ruled out: can't be."
+   },
+   "wrong": [
+    {
+     "if": [
+      "must"
+     ],
+     "not": [
+      "not"
+     ],
+     "pat": "md.must-now",
+     "de": "must be = sicher ihr Bruder. Sie hat aber nur eine Schwester.",
+     "en": "must be = surely her brother. But she only has a sister."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "pat": "md.might-now",
+     "de": "might be = nur vielleicht. Sie hat nur eine Schwester, also ausgeschlossen.",
+     "en": "might be = only maybe. She only has a sister, so it is ruled out."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "de": "have been meint früher. Hier geht es um jetzt: can't be.",
+     "en": "have been refers to the past. This is about now: can't be."
+    },
+    {
+     "not": [
+      "cannot",
+      "could not",
+      "must not"
+     ],
+     "de": "Gesucht ist ein Modalverb für „ausgeschlossen“: can't be.",
+     "en": "A modal for “ruled out” is needed: can't be."
+    }
+   ]
+  }
+ },
+ "I'm sure the team forgot to update the database. → The team ___ to update the database.": {
+  "pat": "md.must-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: „I'm sure“ = fast sicher, früher: must have + forgotten (to update).",
+    "en": "Right: “I'm sure” = almost certain, in the past: must have + forgotten (to update)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "cannot"
+     ],
+     "pat": "md.cant-have",
+     "de": "can't have = ausgeschlossen. „I'm sure … forgot“ sagt aber das Gegenteil.",
+     "en": "can't have = ruled out. But “I'm sure … forgot” says the opposite."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "pat": "md.might-have",
+     "de": "might have = nur vielleicht. „I'm sure“ verlangt die stärkere Form must have.",
+     "en": "might have = only maybe. “I'm sure” calls for the stronger must have."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Für früher braucht es have + Partizip: must have forgotten.",
+     "en": "The past needs have + participle: must have forgotten."
+    },
+    {
+     "if": [
+      "have",
+      "forgot"
+     ],
+     "de": "Nach have steht die 3. Verbform: forgotten, nicht forgot.",
+     "en": "After have use the third form: forgotten, not forgot."
+    }
+   ]
+  }
+ },
+ "It's impossible that he wrote this email – he doesn't speak German. → He ___ this email – he doesn't speak German.": {
+  "pat": "md.cant-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: „impossible“ = ausgeschlossen, früher: can't have + written.",
+    "en": "Right: “impossible” = ruled out, in the past: can't have + written."
+   },
+   "wrong": [
+    {
+     "if": [
+      "must"
+     ],
+     "not": [
+      "not"
+     ],
+     "pat": "md.must-have",
+     "de": "must have = sicher geschrieben. Er spricht aber kein Deutsch: unmöglich.",
+     "en": "must have = surely he wrote it. But he does not speak German."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "pat": "md.might-have",
+     "de": "might have = nur vielleicht. Gemeint ist: unmöglich.",
+     "en": "might have = only maybe. The point is: impossible."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Für früher: can't have + Partizip (can't have written).",
+     "en": "For the past: can't have + participle (can't have written)."
+    },
+    {
+     "if": [
+      "have",
+      "wrote"
+     ],
+     "de": "Nach have steht die 3. Verbform: written, nicht wrote.",
+     "en": "After have use the third form: written, not wrote."
+    }
+   ]
+  }
+ },
+ "He must left early – his desk is empty.": {
+  "pat": "md.must-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der leere Schreibtisch ist der Hinweis: must have left, mit have.",
+    "en": "Right: the empty desk is the clue: must have left, with have in place."
+   },
+   "wrong": [
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Es fehlt have: Für früher heißt es must have + Partizip.",
+     "en": "have is missing: for the past it is must have + participle."
+    },
+    {
+     "if": [
+      "cannot"
+     ],
+     "pat": "md.cant-have",
+     "de": "can't have = ausgeschlossen. Der leere Schreibtisch spricht aber für „weg“.",
+     "en": "can't have = ruled out. But the empty desk suggests he is gone."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "pat": "md.might-have",
+     "de": "might have = nur möglich. Der leere Schreibtisch ist ein Beweis: must have.",
+     "en": "might have = only possible. The empty desk is proof: must have."
+    }
+   ]
+  }
+ },
+ "She can't be at the meeting yesterday because she was on vacation.": {
+  "pat": "md.cant-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: „yesterday“ = früher: can't have been, nicht can't be.",
+    "en": "Right: “yesterday” = earlier: can't have been, not can't be."
+   },
+   "wrong": [
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Mit „yesterday“ braucht es have been: Die Zeit ist früher, nicht jetzt.",
+     "en": "“yesterday” needs have been: the time is earlier, not now."
+    },
+    {
+     "if": [
+      "must"
+     ],
+     "not": [
+      "not"
+     ],
+     "pat": "md.must-have",
+     "de": "must have been = sicher dort. Sie war aber im Urlaub: ausgeschlossen.",
+     "en": "must have been = surely there. But she was on vacation: ruled out."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "pat": "md.might-have",
+     "de": "might have been = nur vielleicht. Im Urlaub ist es so gut wie ausgeschlossen.",
+     "en": "might have been = only maybe. On vacation it is almost ruled out."
+    }
+   ]
+  }
+ },
+ "He mustn't have seen us.": {
+  "pat": "md.cant-have",
+  "why": {
+   "ok": {
+    "de": "Richtig: Für „so gut wie ausgeschlossen“ nimmt man can't have seen, nicht mustn't.",
+    "en": "Right: for “almost ruled out” use can't have seen, not mustn't."
+   },
+   "wrong": [
+    {
+     "if": [
+      "must",
+      "not"
+     ],
+     "de": "mustn't wirkt wie „darf nicht“. Für „so gut wie ausgeschlossen“ ist can't have gebräuchlicher.",
+     "en": "mustn't sounds like “not allowed”. For “almost ruled out”, can't have is more usual."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "pat": "md.might-have",
+     "de": "might not have = vielleicht sah er uns nicht. Gemeint ist: so gut wie ausgeschlossen.",
+     "en": "might not have = maybe he did not see us. The point is: almost ruled out."
+    },
+    {
+     "if": [
+      "must"
+     ],
+     "not": [
+      "not"
+     ],
+     "pat": "md.must-have",
+     "de": "must have seen = sicher gesehen. Gemeint ist das Gegenteil.",
+     "en": "must have seen = surely saw us. The point is the opposite."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Es braucht auch weiter have + Partizip: can't have seen.",
+     "en": "have + participle is still needed: can't have seen."
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,463 @@
+{
+ "What we really need ___ a clear timeline.": {
+  "pat": "em.what-cleft",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der What-Satz ist ein einziges Subjekt, danach folgt is direkt.",
+    "en": "Right: the what-clause is one single subject, so is follows directly."
+   },
+   "wrong": [
+    {
+     "if": [
+      "are"
+     ],
+     "de": "Are gehört zu mehreren Dingen. A clear timeline ist eine Sache: is.",
+     "en": "Are fits several things. A clear timeline is one thing: is."
+    },
+    {
+     "if": [
+      "was"
+     ],
+     "de": "Was passt nicht zu need im Präsens: What we need is …",
+     "en": "Was does not match the present need: What we need is …"
+    },
+    {
+     "if": [
+      "that"
+     ],
+     "de": "Kein that: Der What-Satz geht direkt in is über.",
+     "en": "No that: the what-clause leads straight into is."
+    },
+    {
+     "not": [
+      "is"
+     ],
+     "de": "Zwischen What-Teil und Betontem muss is stehen.",
+     "en": "Between the what-part and the focus you need is."
+    }
+   ]
+  }
+ },
+ "Not only ___ we reduce storage costs, but we also improved compliance.": {
+  "pat": "em.not-only",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach Not only vor dem Subjekt steht did + Grundform: did we reduce.",
+    "en": "Right: Not only first needs did + subject + base verb: did we reduce."
+   },
+   "wrong": [
+    {
+     "if": [
+      "do"
+     ],
+     "de": "Die Vergangenheit steckt in did, nicht in do: Not only did we reduce.",
+     "en": "The past tense sits in did, not in do: Not only did we reduce."
+    },
+    {
+     "if": [
+      "does"
+     ],
+     "de": "Does gehört zu he/she/it. Hier steht we: did.",
+     "en": "Does goes with he/she/it. Here the subject is we: did."
+    },
+    {
+     "if": [
+      "we"
+     ],
+     "de": "Das Hilfsverb steht vor we: Not only did we reduce.",
+     "en": "The auxiliary comes before we: Not only did we reduce."
+    },
+    {
+     "not": [
+      "did"
+     ],
+     "de": "Not only vorn braucht ein Hilfsverb in der Vergangenheit: did.",
+     "en": "Not only first needs a past-tense auxiliary: did."
+    }
+   ]
+  }
+ },
+ "It was the CFO ___ approved the budget in the end.": {
+  "pat": "em.it-cleft",
+  "why": {
+   "ok": {
+    "de": "Richtig: Bei einer Person steht im It-Satz who (oder that).",
+    "en": "Right: with a person the it-cleft uses who (or that)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "which"
+     ],
+     "de": "Which steht bei Sachen. Für den CFO nimmst du who oder that.",
+     "en": "Which is for things. For the CFO use who or that."
+    },
+    {
+     "if": [
+      "whom"
+     ],
+     "de": "Whom ist Objektform. Der CFO ist hier Subjekt: who.",
+     "en": "Whom is the object form. The CFO is the subject here: who."
+    },
+    {
+     "if": [
+      "what"
+     ],
+     "de": "What gehört nicht in den It-Satz: Du brauchst who oder that.",
+     "en": "What does not belong in an it-cleft: you need who or that."
+    }
+   ]
+  }
+ },
+ "Rarely ___ we seen such a fast rollout.": {
+  "pat": "em.neg-inversion",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach Rarely vorn steht das Hilfsverb vor dem Subjekt: have we seen.",
+    "en": "Right: after Rarely first, the auxiliary comes before the subject: have we seen."
+   },
+   "wrong": [
+    {
+     "if": [
+      "did"
+     ],
+     "de": "Nach did steht die Grundform (see), hier steht seen: have.",
+     "en": "After did comes the base form (see); here seen needs have."
+    },
+    {
+     "if": [
+      "do"
+     ],
+     "de": "Do passt nicht zu seen. Mit seen steht have.",
+     "en": "Do does not fit seen. With seen use have."
+    },
+    {
+     "if": [
+      "has"
+     ],
+     "de": "Has gehört zu he/she/it. Hier steht we: have.",
+     "en": "Has goes with he/she/it. Here the subject is we: have."
+    },
+    {
+     "if": [
+      "we"
+     ],
+     "de": "Das Hilfsverb steht vor we: Rarely have we seen.",
+     "en": "The auxiliary comes before we: Rarely have we seen."
+    }
+   ]
+  }
+ },
+ "___ convinced them was the audit trail.": {
+  "pat": "em.what-cleft",
+  "why": {
+   "ok": {
+    "de": "Richtig: What convinced them was … Der What-Satz ist das Subjekt, dann was.",
+    "en": "Right: What convinced them was … The what-clause is the subject, then was."
+   },
+   "wrong": [
+    {
+     "opt": "That",
+     "de": "„That“ leitet einen Nebensatz ein („dass“). Hier steht das Subjekt: What.",
+     "en": "“That” opens a subordinate clause. Here the subject is needed: What."
+    },
+    {
+     "opt": "Which",
+     "de": "„Which“ braucht ein Bezugswort davor. Hier steht keines.",
+     "en": "“Which” needs a noun to refer back to. There is none here."
+    },
+    {
+     "opt": "It",
+     "pat": "em.it-cleft",
+     "de": "„It convinced them was“ ergibt keinen Satz. Der It-Satz braucht that.",
+     "en": "“It convinced them was” is no sentence. An it-cleft needs that."
+    }
+   ]
+  }
+ },
+ "Never ___ a customer migrate 20 million documents in one weekend.": {
+  "pat": "em.neg-inversion",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach Never vorn kommt das Hilfsverb vor das Subjekt: have I seen.",
+    "en": "Right: after Never first, the auxiliary comes before the subject: have I seen."
+   },
+   "wrong": [
+    {
+     "opt": "I have seen",
+     "de": "Nach Never vorn muss das Hilfsverb vor das Subjekt: Never have I.",
+     "en": "After Never first, the auxiliary must precede the subject: Never have I."
+    },
+    {
+     "opt": "I saw",
+     "de": "Ohne Umstellung geht es nicht: Nach Never vorn gilt die Frageform.",
+     "en": "It does not work without inversion: after Never first, use question order."
+    },
+    {
+     "opt": "did I saw",
+     "de": "Nach did steht die Grundform (see), nicht saw. Hier passt have I seen.",
+     "en": "After did comes the base form (see), not saw. Here have I seen fits."
+    }
+   ]
+  }
+ },
+ "Only after the pilot ___ the full rollout.": {
+  "pat": "em.only-inversion",
+  "why": {
+   "ok": {
+    "de": "Richtig: Only after … vorn löst die Frageform aus: did they approve.",
+    "en": "Right: Only after … first triggers question order: did they approve."
+   },
+   "wrong": [
+    {
+     "opt": "they approved",
+     "de": "Nach Only after vorn kommt die Frageform: did they approve.",
+     "en": "After Only after first, use question order: did they approve."
+    },
+    {
+     "opt": "they did approve",
+     "de": "Did steht vor dem Subjekt. They did approve ist nur normale Betonung.",
+     "en": "Did goes before the subject. They did approve is just normal stress."
+    },
+    {
+     "opt": "approved they",
+     "de": "Mit einem Vollverb gibt es keine Umstellung: nur did they approve.",
+     "en": "A full verb cannot be moved in front: only did they approve works."
+    }
+   ]
+  }
+ },
+ "We really need better search. → What we really need ___ better search.": {
+  "pat": "em.what-cleft",
+  "why": {
+   "ok": {
+    "de": "Richtig: What we really need is better search. Der What-Satz endet auf is.",
+    "en": "Right: What we really need is better search. The what-clause ends with is."
+   },
+   "wrong": [
+    {
+     "if": [
+      "are"
+     ],
+     "de": "Search ist hier eine Sache, nicht mehrere: is, nicht are.",
+     "en": "Search is one thing here, not several: is, not are."
+    },
+    {
+     "if": [
+      "was"
+     ],
+     "de": "Was passt nicht zu need im Präsens: is.",
+     "en": "Was does not match the present need: is."
+    },
+    {
+     "if": [
+      "that"
+     ],
+     "de": "Kein that: is folgt direkt auf den What-Satz.",
+     "en": "No that: is follows the what-clause directly."
+    },
+    {
+     "not": [
+      "is"
+     ],
+     "de": "Der What-Satz braucht is vor dem Betonten.",
+     "en": "The what-clause needs is before the focus."
+    }
+   ]
+  }
+ },
+ "The audit trail convinced them. → It was the audit trail ___ convinced them.": {
+  "pat": "em.it-cleft",
+  "why": {
+   "ok": {
+    "de": "Richtig: Bei einer Sache steht im It-Satz that (oder which).",
+    "en": "Right: with a thing the it-cleft uses that (or which)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "who"
+     ],
+     "de": "Who gilt für Personen. The audit trail ist eine Sache.",
+     "en": "Who is for people. The audit trail is a thing."
+    },
+    {
+     "if": [
+      "what"
+     ],
+     "de": "What gehört nicht in den It-Satz: Du brauchst that oder which.",
+     "en": "What does not belong in an it-cleft: you need that or which."
+    },
+    {
+     "not": [
+      "that",
+      "which"
+     ],
+     "de": "Nach dem Betonten verbindet that (oder which) zum Rest des Satzes.",
+     "en": "After the focus, that (or which) links to the rest of the sentence."
+    }
+   ]
+  }
+ },
+ "We cut costs and we also improved compliance. → Not only ___ costs, but we also improved compliance.": {
+  "pat": "em.not-only",
+  "why": {
+   "ok": {
+    "de": "Richtig: Not only vorn braucht did vor dem Subjekt, dann die Grundform: did we cut.",
+    "en": "Right: Not only first needs did before the subject, then the base form: did we cut."
+   },
+   "wrong": [
+    {
+     "not": [
+      "did"
+     ],
+     "de": "Not only vorn braucht did vor dem Subjekt: Not only did we cut.",
+     "en": "Not only first needs did before the subject: Not only did we cut."
+    },
+    {
+     "if": [
+      "do"
+     ],
+     "de": "Do passt zur Gegenwart. Hier steht Vergangenheit: did.",
+     "en": "Do is present tense. Here the past is needed: did."
+    },
+    {
+     "if": [
+      "cuts"
+     ],
+     "de": "Nach did steht die Grundform: cut, nicht cuts.",
+     "en": "After did comes the base form: cut, not cuts."
+    },
+    {
+     "if": [
+      "cutted"
+     ],
+     "de": "Nach did steht die Grundform: cut, nicht cutted.",
+     "en": "After did comes the base form: cut, not cutted."
+    }
+   ]
+  }
+ },
+ "What we need are a partner who understands compliance.": {
+  "pat": "em.what-cleft",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der What-Satz ist ein einziges Subjekt, darum is: What we need is a partner.",
+    "en": "Right: the what-clause is one single subject, so is: What we need is a partner."
+   },
+   "wrong": [
+    {
+     "if": [
+      "are"
+     ],
+     "de": "Der Fehler steckt in are: A partner ist ein Einzelner, also is.",
+     "en": "The error is in are: a partner is one person, so is."
+    },
+    {
+     "not": [
+      "is"
+     ],
+     "de": "Das Verb nach dem What-Satz muss is heißen.",
+     "en": "The verb after the what-clause must be is."
+    }
+   ]
+  }
+ },
+ "Rarely we have seen such a fast approval.": {
+  "pat": "em.neg-inversion",
+  "why": {
+   "ok": {
+    "de": "Richtig: Rarely vorn verlangt die Umstellung: have we seen.",
+    "en": "Right: Rarely first requires inversion: have we seen."
+   },
+   "wrong": [
+    {
+     "if": [
+      "we",
+      "have"
+     ],
+     "de": "Das Hilfsverb steht vor dem Subjekt: Rarely have we seen.",
+     "en": "The auxiliary comes before the subject: Rarely have we seen."
+    },
+    {
+     "if": [
+      "did"
+     ],
+     "de": "Mit seen bleibt es bei have, nicht did: Rarely have we seen.",
+     "en": "With seen keep have, not did: Rarely have we seen."
+    },
+    {
+     "if": [
+      "do"
+     ],
+     "de": "Mit seen bleibt es bei have, nicht do: Rarely have we seen.",
+     "en": "With seen keep have, not do: Rarely have we seen."
+    }
+   ]
+  }
+ },
+ "Not only it saves time, but it also reduces errors.": {
+  "pat": "em.not-only",
+  "why": {
+   "ok": {
+    "de": "Richtig: Not only vorn braucht does vor it, danach die Grundform: does it save.",
+    "en": "Right: Not only first needs does before it, then the base form: does it save."
+   },
+   "wrong": [
+    {
+     "not": [
+      "does"
+     ],
+     "de": "Vor das Subjekt it gehört does: Not only does it save time.",
+     "en": "Before the subject it you need does: Not only does it save time."
+    },
+    {
+     "if": [
+      "saves"
+     ],
+     "de": "Nach does steht die Grundform: save, nicht saves.",
+     "en": "After does comes the base form: save, not saves."
+    },
+    {
+     "if": [
+      "do"
+     ],
+     "de": "Do passt zu we/they. Zu it gehört does.",
+     "en": "Do goes with we/they. With it use does."
+    }
+   ]
+  }
+ },
+ "Not only we reduced the costs, but we also sped up approvals.": {
+  "pat": "em.not-only",
+  "why": {
+   "ok": {
+    "de": "Richtig: Not only vorn braucht did vor we, danach die Grundform: did we reduce.",
+    "en": "Right: Not only first needs did before we, then the base form: did we reduce."
+   },
+   "wrong": [
+    {
+     "not": [
+      "did"
+     ],
+     "de": "Not only vorn braucht did vor dem Subjekt: Not only did we reduce.",
+     "en": "Not only first needs did before the subject: Not only did we reduce."
+    },
+    {
+     "if": [
+      "reduced"
+     ],
+     "de": "Nach did steht die Grundform: reduce, nicht reduced.",
+     "en": "After did comes the base form: reduce, not reduced."
+    },
+    {
+     "if": [
+      "do"
+     ],
+     "de": "Do passt zur Gegenwart. Hier steht Vergangenheit: did.",
+     "en": "Do is present tense. Here the past is needed: did."
+    }
+   ]
+  }
+ }
+}

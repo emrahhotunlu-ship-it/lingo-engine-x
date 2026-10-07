@@ -1,0 +1,432 @@
+{
+ "topic": "reported",
+ "canDo": {
+  "de": "Ich kann wiedergeben, was andere gesagt, gefragt oder verlangt haben: mit Zeitenrückschritt, verschobenen Zeitangaben, indirekten Fragen, say und tell sowie Bitten mit to.",
+  "en": "I can report what others said, asked or requested: with backshift, shifted time words, reported questions, say versus tell, and requests with to."
+ },
+ "order": [
+  "rs.backshift",
+  "rs.time-shift",
+  "rs.question",
+  "rs.tell-say",
+  "rs.request"
+ ],
+ "introPlan": [
+  [
+   "rs.backshift",
+   "rs.time-shift"
+  ],
+  [
+   "rs.question",
+   "rs.tell-say"
+  ],
+  [
+   "rs.request"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Gibst du eine Aussage (that), eine Frage (if / whether / Fragewort) oder eine Bitte (to + Grundform) weiter?",
+   "Liegt das Sagen vor dem Moment des Berichts, sodass Zeitform und Zeitangabe eine Stufe zurückrücken?",
+   "Steht nach dem Verb eine Person (tell) oder direkt der Inhalt (say)?"
+  ],
+  "en": [
+   "Are you passing on a statement (that), a question (if / whether / question word) or a request (to + base form)?",
+   "Did the speaking happen before the moment of reporting, so that tense and time word move back one step?",
+   "Does a person follow the verb (tell) or the content directly (say)?"
+  ]
+ },
+ "patterns": [
+  {
+   "id": "rs.backshift",
+   "name": {
+    "de": "Zeitenrückschritt · eine Stufe zurück",
+    "en": "backshift · one step back"
+   },
+   "form": {
+    "de": "said + (that) + eine Stufe zurück: Präsens → Past, Past → Past Perfect, will → would, can → could",
+    "en": "said + (that) + one step back: present → past, past → past perfect, will → would, can → could"
+   },
+   "use": {
+    "de": "Gibst du früher Gesagtes wieder, rückt die Zeit meist eine Stufe zurück. Gilt die Aussage noch heute, bleibt auch die Gegenwart möglich.",
+    "en": "When you report something said earlier, the tense usually moves one step back. If it is still true today, the present is also possible."
+   },
+   "signals": [
+    "said",
+    "mentioned",
+    "explained",
+    "wrote"
+   ],
+   "ex": [
+    {
+     "en": "She said the vendor was still waiting for our feedback.",
+     "de": "Sie sagte, der Anbieter warte noch auf unser Feedback.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "He wrote that he had not received the signed contract.",
+     "de": "Er schrieb, er habe den unterschriebenen Vertrag nicht erhalten.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Mark said he couldn't join because his flight was delayed.",
+     "de": "Mark sagte, er könne nicht kommen, weil sein Flug Verspätung habe.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "He said he will call me the next day.",
+    "good": "He said he would call me the next day.",
+    "cause": {
+     "de": "Im Deutschen steht die indirekte Rede im Konjunktiv I („er werde anrufen“) und bleibt in der Präsensform. Das Englische rückt die Zeit zurück: will wird would.",
+     "en": "German reported speech uses the subjunctive (“er werde anrufen”), which keeps a present form. English moves the tense back: will becomes would."
+    }
+   },
+   "contrast": {
+    "with": "rs.time-shift",
+    "a": "She said she was leaving the next day.",
+    "b": "She says she is leaving tomorrow.",
+    "diff": {
+     "de": "said: Das Sagen liegt zurück, also rückt alles zurück (was, the next day). says: Das Sagen gilt jetzt, nichts rückt.",
+     "en": "said: the speaking is in the past, so everything moves back (was, the next day). says: the speaking is now, so nothing moves."
+    }
+   },
+   "ccq": [
+    {
+     "s": "He said he had finished the slides.",
+     "q": {
+      "de": "Waren die Folien fertig, bevor er es sagte?",
+      "en": "Were the slides finished before he said it?"
+     },
+     "a": true
+    },
+    {
+     "s": "She said they would sign the contract.",
+     "q": {
+      "de": "Lag die Unterschrift zum Zeitpunkt ihrer Aussage noch in der Zukunft?",
+      "en": "Was the signing still in the future when she spoke?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Wie weit liegt das Gesagte zurück, und welche Zeitform gehört eine Stufe dahinter?",
+    "en": "How far back was it said, and which tense sits one step behind the original?"
+   }
+  },
+  {
+   "id": "rs.time-shift",
+   "name": {
+    "de": "Zeitangaben · rücken mit",
+    "en": "time words · they shift too"
+   },
+   "form": {
+    "de": "tomorrow → the next day, yesterday → the day before, now → then, last week → the week before",
+    "en": "tomorrow → the next day, yesterday → the day before, now → then, last week → the week before"
+   },
+   "use": {
+    "de": "Zeitwörter zählen in der indirekten Rede vom Moment des Sagens aus, nicht von heute. Fiel die Aussage erst kurz zuvor, dürfen sie stehen bleiben.",
+    "en": "In reported speech, time words count from the moment of speaking, not from today. If the statement was made only a moment ago, they can stay."
+   },
+   "signals": [
+    "the next day",
+    "the following day",
+    "the day before",
+    "the previous day",
+    "that day",
+    "the week before",
+    "the following week"
+   ],
+   "ex": [
+    {
+     "en": "She said the budget review would take place the following week.",
+     "de": "Sie sagte, die Budgetrunde finde in der Woche darauf statt.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "He wrote that the delivery had arrived the day before.",
+     "de": "Er schrieb, die Lieferung sei am Vortag angekommen.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Jana told me she was starting her new job that day.",
+     "de": "Jana sagte mir, sie fange an diesem Tag ihren neuen Job an.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Last year he said they would launch the product tomorrow.",
+    "good": "Last year he said they would launch the product the next day.",
+    "cause": {
+     "de": "Deutsch lässt „morgen“ in der indirekten Rede oft stehen („er sagte, sie starten morgen“). Englisch rechnet vom Zeitpunkt des Sagens aus.",
+     "en": "German often keeps “morgen” in reported speech (“er sagte, sie starten morgen”). English counts from the moment of speaking."
+    }
+   },
+   "contrast": {
+    "with": "rs.backshift",
+    "a": "He said the deal had closed the day before.",
+    "b": "He said the deal had closed.",
+    "diff": {
+     "de": "the day before verschiebt nur die Zeitangabe (yesterday). had closed ist der Rückschritt der Zeitform. Beides kommt oft zusammen, ist aber zweierlei.",
+     "en": "the day before shifts only the time word (yesterday). had closed is the backshift of the tense. They often come together but are two things."
+    }
+   },
+   "ccq": [
+    {
+     "s": "She said the report would be ready the following day.",
+     "q": {
+      "de": "Sollte der Bericht am Tag nach ihrer Aussage fertig sein?",
+      "en": "Was the report due the day after she spoke?"
+     },
+     "a": true
+    },
+    {
+     "s": "He said he had sent it the day before.",
+     "q": {
+      "de": "Schickte er es am Tag vor seiner Aussage?",
+      "en": "Did he send it the day before he spoke?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Von welchem Moment aus zählt die Zeitangabe, vom Sagen oder von heute?",
+    "en": "From which moment does the time word count, the moment of speaking or today?"
+   }
+  },
+  {
+   "id": "rs.question",
+   "name": {
+    "de": "indirekte Fragen · Satzstellung",
+    "en": "reported questions · word order"
+   },
+   "form": {
+    "de": "asked + if / whether / Fragewort + Subjekt + Verb, ohne do/did",
+    "en": "asked + if / whether / question word + subject + verb, no do/did"
+   },
+   "use": {
+    "de": "Aus der Frage wird ein Nebensatz: normale Wortstellung, kein do/did, kein Fragezeichen. Ja/Nein-Fragen brauchen if oder whether.",
+    "en": "The question becomes a subordinate clause: normal word order, no do/did, no question mark. Yes/no questions need if or whether."
+   },
+   "signals": [
+    "wanted to know",
+    "wondered",
+    "asked if",
+    "asked whether",
+    "whether"
+   ],
+   "ex": [
+    {
+     "en": "She asked whether the numbers had been checked.",
+     "de": "Sie fragte, ob die Zahlen geprüft worden seien.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "He wanted to know when the invoice would be paid.",
+     "de": "Er wollte wissen, wann die Rechnung bezahlt würde.",
+     "ctx": "mail"
+    },
+    {
+     "en": "My colleague asked where I had parked.",
+     "de": "Meine Kollegin fragte, wo ich geparkt hätte.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "They asked us what did we need.",
+    "good": "They asked us what we needed.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler: Das Deutsche kennt kein do/did. Der Fehler entsteht, weil die englische Direktfrage („What did we need?“) mit in den Nebensatz rutscht.",
+     "en": "Not a translation error: German has no do/did. The slip happens because the English direct question (“What did we need?”) is carried into the clause."
+    }
+   },
+   "contrast": {
+    "with": "rs.request",
+    "a": "He asked me if I could help.",
+    "b": "He asked me to help.",
+    "diff": {
+     "de": "asked me if + Satz gibt eine Ja/Nein-Frage weiter. asked me to + Grundform gibt eine Bitte weiter.",
+     "en": "asked me if + clause passes on a yes/no question. asked me to + base form passes on a request."
+    }
+   },
+   "ccq": [
+    {
+     "s": "She asked where the meeting room was.",
+     "q": {
+      "de": "Steht im Satz ein did, weil es um eine Frage geht?",
+      "en": "Does the sentence contain did because it is about a question?"
+     },
+     "a": false
+    },
+    {
+     "s": "He wondered whether we had received the invoice.",
+     "q": {
+      "de": "Ging es um eine Ja/Nein-Frage?",
+      "en": "Was it a yes/no question?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Ist das noch eine Frage oder schon ein Nebensatz, und wo stehen dann Subjekt und Verb?",
+    "en": "Is this still a question or already a clause, and where do subject and verb stand then?"
+   }
+  },
+  {
+   "id": "rs.tell-say",
+   "name": {
+    "de": "say und tell · mit oder ohne Person",
+    "en": "say and tell · with or without a person"
+   },
+   "form": {
+    "de": "tell + Person (+ that) · say (+ that) oder say to + Person",
+    "en": "tell + person (+ that) · say (+ that) or say to + person"
+   },
+   "use": {
+    "de": "tell braucht gleich danach die Person (told me). say steht ohne Person; mit Person heißt es say to me.",
+    "en": "tell needs the person right after it (told me). say has no person; with one it is say to me."
+   },
+   "signals": [
+    "said me",
+    "said to me",
+    "said to us",
+    "tell"
+   ],
+   "ex": [
+    {
+     "en": "The CFO told the team that costs had risen.",
+     "de": "Der Finanzchef sagte dem Team, die Kosten seien gestiegen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "He said that the files were attached.",
+     "de": "Er sagte, die Dateien seien angehängt.",
+     "ctx": "mail"
+    },
+    {
+     "en": "She told me she would be late.",
+     "de": "Sie sagte mir, sie komme später.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "He said us that the meeting was canceled.",
+    "good": "He told us that the meeting was canceled.",
+    "cause": {
+     "de": "Im Deutschen deckt „sagen“ beides ab: „er sagte uns“ und „er sagte, dass …“. Das Englische trennt: tell mit Person, say ohne.",
+     "en": "German “sagen” covers both: “er sagte uns” and “er sagte, dass …”. English splits them: tell with a person, say without."
+    }
+   },
+   "contrast": {
+    "with": "rs.request",
+    "a": "He told me that he would wait.",
+    "b": "He told me to wait.",
+    "diff": {
+     "de": "tell + Person + that gibt eine Aussage weiter. tell + Person + to + Grundform gibt eine Anweisung weiter.",
+     "en": "tell + person + that passes on a statement. tell + person + to + base form passes on an instruction."
+    }
+   },
+   "ccq": [
+    {
+     "s": "He told the team that the deadline had moved.",
+     "q": {
+      "de": "Hat das Team die Neuigkeit bekommen?",
+      "en": "Did the team receive the news?"
+     },
+     "a": true
+    },
+    {
+     "s": "He said that the deadline had moved.",
+     "q": {
+      "de": "Steht im Satz, wem er es gesagt hat?",
+      "en": "Does the sentence say who he told?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Steht gleich nach dem Verb eine Person, oder folgt direkt der Inhalt?",
+    "en": "Does a person follow the verb right away, or does the content follow directly?"
+   }
+  },
+  {
+   "id": "rs.request",
+   "name": {
+    "de": "Bitten und Anweisungen · to + Grundform",
+    "en": "requests and orders · to + base form"
+   },
+   "form": {
+    "de": "asked / told + Person + (not) to + Grundform",
+    "en": "asked / told + person + (not) to + base form"
+   },
+   "use": {
+    "de": "Eine Bitte oder Anweisung wird zu ask/tell + Person + to + Grundform. Verneint steht not vor to: told me not to be late.",
+    "en": "A request or order becomes ask/tell + person + to + base form. In the negative, not comes before to: told me not to be late."
+   },
+   "signals": [
+    "asked me to",
+    "told me to",
+    "told me not to",
+    "asked us to",
+    "told us to",
+    "asked him to"
+   ],
+   "ex": [
+    {
+     "en": "Our manager asked us to send the figures by noon.",
+     "de": "Unsere Chefin bat uns, die Zahlen bis mittags zu schicken.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "She asked me not to forward the draft.",
+     "de": "Sie bat mich, den Entwurf nicht weiterzuleiten.",
+     "ctx": "mail"
+    },
+    {
+     "en": "My boss told me to take Friday off.",
+     "de": "Mein Chef sagte mir, ich solle Freitag freinehmen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "He told me don't be late.",
+    "good": "He told me not to be late.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler, sondern ein Reflex: Der Befehl der direkten Rede („Don’t be late!“) wird unverändert übernommen. Indirekt braucht er not to + Grundform.",
+     "en": "Not a translation error but a reflex: the command of direct speech (“Don’t be late!”) is carried over unchanged. Reported, it needs not to + base form."
+    }
+   },
+   "contrast": {
+    "with": "rs.question",
+    "a": "She asked me to send the file.",
+    "b": "She asked me if I had sent the file.",
+    "diff": {
+     "de": "to + Grundform gibt eine Bitte weiter. if + Satz gibt eine Frage weiter, mit Rückschritt der Zeit.",
+     "en": "to + base form passes on a request. if + clause passes on a question, with backshift of the tense."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The manager told us not to sign.",
+     "q": {
+      "de": "Dürfen wir unterschreiben?",
+      "en": "Are we allowed to sign?"
+     },
+     "a": false
+    },
+    {
+     "s": "She asked me to send the file.",
+     "q": {
+      "de": "Hat sie gefragt, ob ich die Datei schon geschickt habe?",
+      "en": "Did she ask whether I had already sent the file?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Wird hier eine Bitte weitergegeben, und was steht dann direkt nach der Person?",
+    "en": "Is a request being passed on, and what comes right after the person?"
+   }
+  }
+ ]
+}

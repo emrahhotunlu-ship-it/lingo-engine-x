@@ -1,0 +1,171 @@
+[
+ {
+  "pat": "md.must-now",
+  "en": "They must be working late – the lights are still on.",
+  "de": "Sie arbeiten bestimmt noch – das Licht brennt noch.",
+  "chunks": [
+   "they",
+   "must be",
+   "working late",
+   "the lights",
+   "are still on"
+  ],
+  "alt": [
+   "The lights are still on – they must be working late."
+  ],
+  "why": [
+   "Aus einem Hinweis (das Licht) schließt du auf jetzt: must be + working. Ein Vorgang, der jetzt läuft, braucht be + -ing.",
+   "You conclude from a clue (the lights) about now: must be + working. An action in progress now needs be + -ing."
+  ],
+  "bad": "They must working late – the lights are still on.",
+  "trap": {
+   "tile": "must be",
+   "instead": "must",
+   "why": {
+    "de": "Das Deutsche hat keine Verlaufsform, deshalb fällt be leicht weg. Für jetzt braucht der Schluss must be + -ing.",
+    "en": "German has no progressive form, so be easily drops out. A conclusion about now needs must be + -ing."
+   }
+  }
+ },
+ {
+  "pat": "md.cant-now",
+  "en": "That can't be the final version – the date is wrong.",
+  "de": "Das kann nicht die endgültige Fassung sein – das Datum ist falsch.",
+  "chunks": [
+   "that",
+   "can't be",
+   "the final version",
+   "the date",
+   "is wrong"
+  ],
+  "alt": [
+   "The date is wrong – that can't be the final version."
+  ],
+  "why": [
+   "Der Hinweis (falsches Datum) spricht dagegen: can't be + Grundform. Nach can't folgt be, nicht nur can't.",
+   "The clue (wrong date) points against it: can't be + base form. After can't comes be, not just can't."
+  ],
+  "bad": "That can't the final version – the date is wrong.",
+  "trap": {
+   "tile": "can't be",
+   "instead": "can't",
+   "why": {
+    "de": "Im Deutschen steht „sein“ am Satzende („kann nicht … sein“) und geht im Kopf leicht verloren. Im Englischen folgt be direkt auf can't.",
+    "en": "In German “sein” sits at the end (“kann nicht … sein”) and is easily lost. In English be follows can't directly."
+   }
+  }
+ },
+ {
+  "pat": "md.might-now",
+  "en": "Right now, we think the delay might be a customs problem.",
+  "de": "Im Moment glauben wir, die Verzögerung könnte ein Zollproblem sein.",
+  "chunks": [
+   "right now",
+   "we think",
+   "the delay",
+   "might be",
+   "a customs problem"
+  ],
+  "alt": [
+   "We think the delay might be a customs problem right now."
+  ],
+  "why": [
+   "might be nennt nur eine Möglichkeit, ohne Gewissheit. Es sind zwei Wörter: might + be.",
+   "might be only names a possibility, with no certainty. It is two words: might + be."
+  ],
+  "bad": "Right now, we think the delay maybe a customs problem.",
+  "trap": {
+   "tile": "might be",
+   "instead": "maybe",
+   "why": {
+    "de": "Das deutsche „vielleicht“ ist ein Wort. Im Englischen ist maybe ein Adverb ohne Verb; hier braucht der Satz das Verb: may be oder might be.",
+    "en": "German “vielleicht” is one word. In English maybe is an adverb with no verb; here the sentence needs the verb: may be or might be."
+   }
+  }
+ },
+ {
+  "pat": "md.must-have",
+  "en": "Judging by the logs, the server must have crashed during the update.",
+  "de": "Nach den Protokollen ist der Server beim Update bestimmt abgestürzt.",
+  "chunks": [
+   "judging by the logs",
+   "the server",
+   "must have",
+   "crashed",
+   "during the update"
+  ],
+  "alt": [
+   "The server must have crashed during the update, judging by the logs."
+  ],
+  "why": [
+   "Aus einem Hinweis (die Protokolle) schließt du auf früher: must have + crashed. have steht direkt nach must.",
+   "You conclude from a clue (the logs) about the past: must have + crashed. have comes right after must."
+  ],
+  "bad": "Judging by the logs, the server must crashed during the update.",
+  "trap": {
+   "tile": "must have",
+   "instead": "must",
+   "why": {
+    "de": "Im Deutschen steht das Hilfsverb am Ende („muss abgestürzt sein“). Im Englischen gehört have direkt hinter must.",
+    "en": "In German the auxiliary sits at the end (“muss abgestürzt sein”). In English have belongs right after must."
+   }
+  }
+ },
+ {
+  "pat": "md.cant-have",
+  "en": "She can't have seen the email – she was on a flight.",
+  "de": "Sie kann die E-Mail nicht gesehen haben – sie war im Flugzeug.",
+  "chunks": [
+   "she",
+   "can't have",
+   "seen",
+   "the email",
+   "she was",
+   "on a flight"
+  ],
+  "alt": [
+   "She was on a flight – she can't have seen the email."
+  ],
+  "why": [
+   "Der Hinweis (sie war im Flugzeug) macht es so gut wie unmöglich: can't have + seen. Nach have folgt die 3. Verbform.",
+   "The clue (she was on a flight) makes it almost impossible: can't have + seen. The third form follows have."
+  ],
+  "bad": "She can't seen the email – she was on a flight.",
+  "trap": {
+   "tile": "can't have",
+   "instead": "can't",
+   "why": {
+    "de": "Im Deutschen zeigt „gesehen haben“ am Satzende die Vergangenheit. Im Englischen braucht can't für früher das have direkt dahinter.",
+    "en": "In German “gesehen haben” at the end shows the past. In English, can't needs have right after it for the past."
+   }
+  }
+ },
+ {
+  "pat": "md.might-have",
+  "en": "Someone might have changed the settings last night.",
+  "de": "Jemand hat gestern Nacht vielleicht die Einstellungen geändert.",
+  "chunks": [
+   "someone",
+   "might have",
+   "changed",
+   "the settings",
+   "last night"
+  ],
+  "alt": [
+   "Last night, someone might have changed the settings."
+  ],
+  "why": [
+   "might have + Partizip nennt eine Möglichkeit über früher, ohne Gewissheit. Nach have folgt die 3. Verbform: changed.",
+   "might have + participle names a possibility about the past, with no certainty. The third form follows have: changed."
+  ],
+  "bad": "Someone might changed the settings last night.",
+  "trap": {
+   "tile": "might have",
+   "instead": "might",
+   "why": {
+    "de": "Durch „last night“ wirkt die Vergangenheit klar, und have wird weggelassen. Nach might braucht eine Vermutung über früher have + Partizip.",
+    "en": "Because of “last night” the past seems clear, and have gets dropped. After might a guess about the earlier time needs have + participle."
+   }
+  }
+ }
+]

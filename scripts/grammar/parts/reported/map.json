@@ -1,0 +1,530 @@
+{
+ "She said: \"I am tired.\" → She said that she ___.": {
+  "pat": "rs.backshift",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach said rückt die Zeit zurück: am → was, denn das Sagen liegt zurück.",
+    "en": "Right: after said the tense moves back: am → was, because the speaking is in the past."
+   },
+   "wrong": [
+    {
+     "if": [
+      "is"
+     ],
+     "de": "„is“ geht nur, wenn es noch gilt. Hier ist der Rückschritt gefragt: was tired.",
+     "en": "“is” works only if it is still true. Here the backshift is asked for: was tired."
+    },
+    {
+     "if": [
+      "am"
+     ],
+     "de": "„am“ ist die Form der direkten Rede. Indirekt wird aus I am: she was.",
+     "en": "“am” is the form of direct speech. Reported, I am becomes she was."
+    },
+    {
+     "if": [
+      "were"
+     ],
+     "de": "„were“ gehört zu you, we, they. Zu she passt was.",
+     "en": "“were” goes with you, we, they. With she, use was."
+    }
+   ]
+  }
+ },
+ "He asked me where I ___.": {
+  "pat": "rs.question",
+  "why": {
+   "ok": {
+    "de": "Richtig: where I lived. Nach asked steht normale Wortstellung mit Rückschritt.",
+    "en": "Right: where I lived. After asked, normal word order with backshift."
+   },
+   "wrong": [
+    {
+     "opt": "live",
+     "pat": "rs.backshift",
+     "de": "„live“ passt nur, wenn es noch gilt. Hier üben wir den Rückschritt: lived.",
+     "en": "“live” fits only if it still holds. Here we practice the backshift: lived."
+    },
+    {
+     "opt": "do I live",
+     "de": "„do I live“ ist die Wortstellung der direkten Frage. Im Nebensatz: I lived.",
+     "en": "“do I live” is the word order of a direct question. In the clause: I lived."
+    },
+    {
+     "opt": "did I live",
+     "de": "„did I live“ ist die direkte Frage. Indirekt: kein did, nur where I lived.",
+     "en": "“did I live” is the direct question. Reported: no did, just where I lived."
+    }
+   ]
+  }
+ },
+ "\"I will call you,\" he said. → He said he ___ me.": {
+  "pat": "rs.backshift",
+  "why": {
+   "ok": {
+    "de": "Richtig: will → would, weil das Sagen zurückliegt: he would call me.",
+    "en": "Right: will → would, because the speaking is in the past: he would call me."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "„will“ passt nur, wenn es noch gilt. Hier üben wir den Rückschritt: would.",
+     "en": "“will” fits only if it still holds. Here we practice the backshift: would."
+    },
+    {
+     "if": [
+      "called"
+     ],
+     "de": "Nach would steht die Grundform: would call, nicht called.",
+     "en": "After would comes the base form: would call, not called."
+    }
+   ]
+  }
+ },
+ "He ___ me that the deadline had changed.": {
+  "pat": "rs.tell-say",
+  "why": {
+   "ok": {
+    "de": "Richtig: told me. tell braucht die Person gleich danach (me).",
+    "en": "Right: told me. tell needs the person right after it (me)."
+   },
+   "wrong": [
+    {
+     "opt": "said",
+     "pat": "rs.tell-say",
+     "de": "„said“ steht ohne Person. Mit Person heißt es said to me.",
+     "en": "“said” has no person after it. With a person it is said to me."
+    },
+    {
+     "opt": "explained",
+     "de": "„explained“ braucht to me: explained to me. Direkt vor me steht told.",
+     "en": "“explained” needs to me: explained to me. Directly before me, use told."
+    },
+    {
+     "opt": "spoke",
+     "de": "„spoke me that“ gibt es nicht. spoke steht mit to oder about.",
+     "en": "“spoke me that” does not exist. spoke goes with to or about."
+    }
+   ]
+  }
+ },
+ "She asked me ___.": {
+  "pat": "rs.question",
+  "why": {
+   "ok": {
+    "de": "Richtig: when the meeting started: erst das Fragewort, dann Subjekt und Verb, ohne did.",
+    "en": "Right: when the meeting started: question word, subject, verb, no did."
+   },
+   "wrong": [
+    {
+     "opt": "that when the meeting started",
+     "de": "Eine Frage wird nicht mit that eingeleitet. Das Fragewort when genügt.",
+     "en": "A question is not introduced with that. The question word when is enough."
+    },
+    {
+     "opt": "when started the meeting",
+     "de": "Das Subjekt steht vor dem Verb: when the meeting started.",
+     "en": "The subject comes before the verb: when the meeting started."
+    },
+    {
+     "opt": "when did the meeting start",
+     "de": "„did“ gehört zur direkten Frage. Im Nebensatz steht: when the meeting started.",
+     "en": "“did” belongs to the direct question. Reported: when the meeting started."
+    }
+   ]
+  }
+ },
+ "Last week the CEO announced: \"We will launch tomorrow.\" → She said that they would launch ___.": {
+  "pat": "rs.time-shift",
+  "why": {
+   "ok": {
+    "de": "Richtig: tomorrow → the following day. Gezählt wird vom Sagen aus.",
+    "en": "Right: tomorrow → the following day. Counting starts from the speaking."
+   },
+   "wrong": [
+    {
+     "opt": "yesterday",
+     "de": "„yesterday“ zeigt zurück. Gemeint ist der Tag nach dem Sagen.",
+     "en": "“yesterday” points back. What is meant is the day after the speaking."
+    },
+    {
+     "opt": "tomorrow",
+     "de": "„tomorrow“ zählt von heute. Die Aussage fiel aber letzte Woche.",
+     "en": "“tomorrow” counts from today. But the statement was made last week."
+    },
+    {
+     "opt": "the day before",
+     "de": "„the day before“ ist der Tag davor. would launch zielt auf den Tag danach.",
+     "en": "“the day before” is the earlier day. would launch points to the day after."
+    }
+   ]
+  }
+ },
+ "He wanted to know ___ we had received the invoice.": {
+  "pat": "rs.question",
+  "why": {
+   "ok": {
+    "de": "Richtig: if. Eine Ja/Nein-Frage wird mit if oder whether weitergegeben.",
+    "en": "Right: if. A yes/no question is passed on with if or whether."
+   },
+   "wrong": [
+    {
+     "opt": "that",
+     "de": "„that“ leitet eine Aussage ein. Hier wird eine Ja/Nein-Frage weitergegeben.",
+     "en": "“that” introduces a statement. Here a yes/no question is passed on."
+    },
+    {
+     "opt": "what",
+     "de": "Nach „what“ fehlt das Objekt. Mit the invoice ist es eine Ja/Nein-Frage.",
+     "en": "After “what” the object is missing. With the invoice it is a yes/no question."
+    },
+    {
+     "opt": "did",
+     "de": "„did“ gehört zur direkten Frage und steht nicht vor we had received.",
+     "en": "“did” belongs to the direct question and does not go before we had received."
+    }
+   ]
+  }
+ },
+ "My boss asked me ___ him the figures by noon.": {
+  "pat": "rs.request",
+  "why": {
+   "ok": {
+    "de": "Richtig: asked me to send. Eine Bitte ist ask + Person + to + Grundform.",
+    "en": "Right: asked me to send. Request = ask + person + to + base form."
+   },
+   "wrong": [
+    {
+     "opt": "sending",
+     "de": "Nach asked me steht to + Grundform, kein -ing.",
+     "en": "After asked me use to + base form, not -ing."
+    },
+    {
+     "opt": "that I send",
+     "pat": "rs.question",
+     "de": "Bitten gibt man mit to + Grundform weiter, nicht mit einem that-Satz.",
+     "en": "Requests are passed on with to + base form, not with a that-clause."
+    },
+    {
+     "opt": "send",
+     "de": "Ohne to geht es nicht: asked me to send.",
+     "en": "It does not work without to: asked me to send."
+    }
+   ]
+  }
+ },
+ "Last Friday, my manager told me that the client ___ the contract the following Monday.": {
+  "pat": "rs.backshift",
+  "why": {
+   "ok": {
+    "de": "Richtig: told me … would sign. Aus will wird would (Zukunft in der Vergangenheit).",
+    "en": "Right: told me … would sign. will becomes would (future in the past)."
+   },
+   "wrong": [
+    {
+     "opt": "signs",
+     "de": "„signs“ bleibt in der Gegenwart. told liegt zurück, daher would sign.",
+     "en": "“signs” stays in the present. told is in the past, so would sign."
+    },
+    {
+     "opt": "has signed",
+     "de": "„has signed“ sagt, dass der Vertrag schon unterschrieben ist. Gemeint ist die Zukunft.",
+     "en": "“has signed” says the contract is already signed. The future is meant."
+    },
+    {
+     "opt": "is signing",
+     "de": "„is signing“ bleibt in der Gegenwart, doch told und the following Monday liegen zurück.",
+     "en": "“is signing” stays in the present, but told and the following Monday are past."
+    }
+   ]
+  }
+ },
+ "On Monday she said she ___ my email, but I had sent it on Friday.": {
+  "pat": "rs.backshift",
+  "why": {
+   "ok": {
+    "de": "Richtig: haven't received → hadn't received. Der Versand lag vor dem Sagen.",
+    "en": "Right: haven't received → hadn't received. The sending came before the speaking."
+   },
+   "wrong": [
+    {
+     "if": [
+      "haven't"
+     ],
+     "de": "„haven't received“ ist die Form der direkten Rede. Nach said wird daraus hadn't received.",
+     "en": "“haven't received” is the direct-speech form. After said it becomes hadn't received."
+    },
+    {
+     "if": [
+      "didn't"
+     ],
+     "de": "„didn't receive“ ist möglich, aber hier üben wir den Rückschritt: hadn't received.",
+     "en": "“didn't receive” is possible, but here we practice the backshift: hadn't received."
+    },
+    {
+     "not": [
+      "hadn't",
+      "had"
+     ],
+     "de": "Gesucht ist der Rückschritt aus haven't: hadn't + 3. Form.",
+     "en": "What is needed is the backshift of haven't: hadn't + participle."
+    }
+   ]
+  }
+ },
+ "The visitor asked me where the meeting room ___.": {
+  "pat": "rs.question",
+  "why": {
+   "ok": {
+    "de": "Richtig: where the meeting room was: normale Wortstellung und Rückschritt is → was.",
+    "en": "Right: where the meeting room was: normal word order, backshift is → was."
+   },
+   "wrong": [
+    {
+     "if": [
+      "were"
+     ],
+     "de": "„were“ passt nicht zu room. Der Singular braucht was.",
+     "en": "“were” does not fit room. The singular needs was."
+    },
+    {
+     "if": [
+      "are"
+     ],
+     "de": "„are“ ist Plural, room ist Singular: was (oder is, wenn es noch gilt).",
+     "en": "“are” is plural, room is singular: was (or is, if it is still true)."
+    },
+    {
+     "not": [
+      "was",
+      "is"
+     ],
+     "de": "Gesucht ist die Singularform von be: was, oder is, wenn es noch gilt.",
+     "en": "What is needed is the singular form of be: was, or is if it is still true."
+    }
+   ]
+  }
+ },
+ "My boss told me ___ late for the client meeting.": {
+  "pat": "rs.request",
+  "why": {
+   "ok": {
+    "de": "Richtig: told me not to be: verneinte Anweisung mit not to + Grundform.",
+    "en": "Right: told me not to be: negative instruction with not to + base form."
+   },
+   "wrong": [
+    {
+     "if": [
+      "don't"
+     ],
+     "de": "„don't be“ ist der Befehl der direkten Rede. Indirekt: not to be.",
+     "en": "“don't be” is the command of direct speech. Reported: not to be."
+    },
+    {
+     "if": [
+      "not",
+      "be"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Es fehlt das to: not to be.",
+     "en": "to is missing: not to be."
+    },
+    {
+     "if": [
+      "that"
+     ],
+     "de": "Nach told me folgt not to + Grundform, nicht ein Satz mit that.",
+     "en": "After told me comes not to + base form, not a that-clause."
+    }
+   ]
+  }
+ },
+ "On Tuesday, he asked, \"Have you seen the new price list?\" → He asked whether we ___ the new price list.": {
+  "pat": "rs.backshift",
+  "why": {
+   "ok": {
+    "de": "Richtig: Aus dem Present Perfect (have you seen) wird das Past Perfect: had seen.",
+    "en": "Right: present perfect (have you seen) → past perfect: had seen."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„have seen“ bleibt in der Gegenwart. Nach asked rückt es zu had seen.",
+     "en": "“have seen” stays in the present. After asked it moves to had seen."
+    },
+    {
+     "if": [
+      "saw"
+     ],
+     "de": "„saw“ ist möglich. Üblich ist had seen: Es behält den Perfekt-Sinn.",
+     "en": "“saw” is possible. The usual form is had seen: it keeps the perfect meaning."
+    }
+   ]
+  }
+ },
+ "She said she ___ come to the party because she was ill.": {
+  "pat": "rs.backshift",
+  "why": {
+   "ok": {
+    "de": "Richtig: can't → couldn't, denn das Sagen liegt zurück.",
+    "en": "Right: can't → couldn't, because the speaking is in the past."
+   },
+   "wrong": [
+    {
+     "if": [
+      "can't"
+     ],
+     "de": "„can't“ bleibt in der Gegenwart. Nach said rückt es zu couldn't.",
+     "en": "“can't” stays in the present. After said it moves to couldn't."
+    },
+    {
+     "if": [
+      "didn't"
+     ],
+     "de": "„didn't come“ stimmt grammatisch, sagt aber etwas anderes; der Hinweis (can't) verlangt couldn't.",
+     "en": "“didn't come” is grammatical but says something else; the hint (can't) calls for couldn't."
+    }
+   ]
+  }
+ },
+ "\"I'll send the contract tomorrow,\" Anna said last Monday. → Anna said she ___ the contract the next day.": {
+  "pat": "rs.backshift",
+  "why": {
+   "ok": {
+    "de": "Richtig: will → would. Auch the next day gehört dazu (tomorrow wurde verschoben).",
+    "en": "Right: will → would. the next day goes with it (tomorrow shifted)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "„will send“ bleibt in der Gegenwart. Anna sagte es letzten Montag: would.",
+     "en": "“will send” stays in the present. Anna said it last Monday: would."
+    },
+    {
+     "if": [
+      "sent"
+     ],
+     "de": "Nach would steht die Grundform: would send, nicht sent.",
+     "en": "After would comes the base form: would send, not sent."
+    }
+   ]
+  }
+ },
+ "\"Did you check the figures?\" the CFO asked me. → The CFO asked me ___ the figures.": {
+  "pat": "rs.question",
+  "why": {
+   "ok": {
+    "de": "Richtig: if I had checked. Ja/Nein-Frage mit if, ohne did, mit Rückschritt.",
+    "en": "Right: if I had checked. Yes/no question with if, no did, with backshift."
+   },
+   "wrong": [
+    {
+     "if": [
+      "did"
+     ],
+     "de": "„did I check“ ist die direkte Frage. Indirekt: if I had checked.",
+     "en": "“did I check” is the direct question. Reported: if I had checked."
+    },
+    {
+     "not": [
+      "if",
+      "whether"
+     ],
+     "de": "Eine Ja/Nein-Frage braucht if oder whether.",
+     "en": "A yes/no question needs if or whether."
+    },
+    {
+     "if": [
+      "check"
+     ],
+     "de": "„check“ bleibt in der Gegenwart. Nach asked rückt es zu had checked.",
+     "en": "“check” stays in the present. After asked it moves to had checked."
+    }
+   ]
+  }
+ },
+ "He said me that the deadline had been moved.": {
+  "pat": "rs.tell-say",
+  "why": {
+   "ok": {
+    "de": "Richtig: told me, mit Person. Oder said ohne me: He said that …",
+    "en": "Right: told me, with a person. Or said without me: He said that …"
+   },
+   "wrong": [
+    {
+     "if": [
+      "said",
+      "me"
+     ],
+     "de": "„said me“ gibt es nicht: say steht ohne Person, tell mit Person.",
+     "en": "“said me” does not exist: say has no person, tell does."
+    },
+    {
+     "if": [
+      "tell"
+     ],
+     "de": "Das Gesagte liegt zurück: told, nicht tell.",
+     "en": "It was said earlier: told, not tell."
+    }
+   ]
+  }
+ },
+ "She asked me where did I work.": {
+  "pat": "rs.question",
+  "why": {
+   "ok": {
+    "de": "Richtig: where I worked: Subjekt vor Verb, kein did.",
+    "en": "Right: where I worked: subject before verb, no did."
+   },
+   "wrong": [
+    {
+     "if": [
+      "did"
+     ],
+     "de": "Mit did bleibt es die Wortstellung der direkten Frage: where I worked.",
+     "en": "With did it stays the word order of the direct question: where I worked."
+    },
+    {
+     "if": [
+      "work"
+     ],
+     "de": "„I work“ bleibt in der Gegenwart. Nach asked rückt es zu worked.",
+     "en": "“I work” stays in the present. After asked it moves to worked."
+    }
+   ]
+  }
+ },
+ "She said she would finished the report.": {
+  "pat": "rs.backshift",
+  "why": {
+   "ok": {
+    "de": "Richtig: would + Grundform: would finish, ohne -ed.",
+    "en": "Right: would + base form: would finish, with no -ed."
+   },
+   "wrong": [
+    {
+     "if": [
+      "finished"
+     ],
+     "de": "Nach would steht die Grundform: finish, nicht finished.",
+     "en": "After would comes the base form: finish, not finished."
+    },
+    {
+     "not": [
+      "would"
+     ],
+     "de": "Gesucht ist would + Grundform: would finish.",
+     "en": "What is needed is would + base form: would finish."
+    }
+   ]
+  }
+ }
+}

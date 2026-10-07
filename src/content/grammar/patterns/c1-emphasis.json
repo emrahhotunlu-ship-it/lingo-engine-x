@@ -1,0 +1,432 @@
+{
+  "topic": "c1-emphasis",
+  "canDo": {
+    "de": "Ich kann Wichtiges gezielt betonen: mit What-Sätzen, It-Sätzen und der Umstellung nach Never, Rarely, Not only, Only after und Not until.",
+    "en": "I can stress what matters: with what-clefts, it-clefts and inversion after Never, Rarely, Not only, Only after and Not until."
+  },
+  "order": [
+    "em.what-cleft",
+    "em.it-cleft",
+    "em.neg-inversion",
+    "em.not-only",
+    "em.only-inversion"
+  ],
+  "introPlan": [
+    [
+      "em.what-cleft",
+      "em.it-cleft"
+    ],
+    [
+      "em.neg-inversion",
+      "em.not-only"
+    ],
+    [
+      "em.only-inversion"
+    ]
+  ],
+  "decide": {
+    "de": [
+      "Willst du eine Sache oder Handlung betonen (What we need is …) oder eine Person, Zeit oder einen Ort (It was … who / that)?",
+      "Beginnt der Satz mit einem verneinenden Wort (Never, Rarely, At no point): Dann kommt das Hilfsverb vor das Subjekt.",
+      "Steht Not only, No sooner oder Only after vorn, folgt ebenfalls die Frageform."
+    ],
+    "en": [
+      "Do you stress a thing or action (What we need is …) or a person, time or place (It was … who / that)?",
+      "Does the sentence open with a negative word (Never, Rarely, At no point)? Then the auxiliary comes before the subject.",
+      "With Not only, No sooner or Only after in front, the question order follows too."
+    ]
+  },
+  "patterns": [
+    {
+      "id": "em.what-cleft",
+      "name": {
+        "de": "What-Satz · das Wichtige nach hinten",
+        "en": "what-cleft · the key point last"
+      },
+      "form": {
+        "de": "What + Subjekt + Verb + is / was + Betontes",
+        "en": "What + subject + verb + is / was + focus"
+      },
+      "use": {
+        "de": "Stellt das Wichtige ans Satzende und macht es zur Hauptsache. Der What-Teil ist ein einziges Subjekt, deshalb folgt meist is oder was ohne Komma.",
+        "en": "Puts the key point at the end and makes it the main message. The what-part is one single subject, so is or was usually follows with no comma."
+      },
+      "signals": [
+        "what",
+        "what matters",
+        "what we need",
+        "all we need"
+      ],
+      "ex": [
+        {
+          "en": "What we need is a clear owner for each task.",
+          "de": "Was wir brauchen, ist ein klarer Verantwortlicher für jede Aufgabe.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "What I'd like to know is whether the budget is approved.",
+          "de": "Was ich gern wissen würde, ist, ob das Budget genehmigt ist.",
+          "ctx": "mail"
+        },
+        {
+          "en": "What surprised me was how fast they replied.",
+          "de": "Was mich überrascht hat, war, wie schnell sie geantwortet haben.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "What we need, that is a clear plan.",
+        "good": "What we need is a clear plan.",
+        "cause": {
+          "de": "Im Deutschen folgt nach dem Komma oft „das ist“: „Was wir brauchen, das ist …“. Im Englischen geht der What-Satz direkt in is über.",
+          "en": "German often adds “das ist” after the comma: “Was wir brauchen, das ist …”. In English the what-clause leads straight into is."
+        }
+      },
+      "contrast": {
+        "with": "em.it-cleft",
+        "a": "What we need is a quick decision.",
+        "b": "It is a quick decision that we need.",
+        "diff": {
+          "de": "Der What-Satz stellt eine Sache oder Handlung ans Ende. Der It-Satz kann auch Personen, Zeit oder Ort herausheben.",
+          "en": "The what-cleft puts a thing or action last. The it-cleft can also single out a person, a time or a place."
+        }
+      },
+      "ccq": [
+        {
+          "s": "What really slowed us down was the approval process.",
+          "q": {
+            "de": "Hat der Genehmigungsprozess uns am meisten ausgebremst?",
+            "en": "Was the approval process what slowed us down most?"
+          },
+          "a": true
+        },
+        {
+          "s": "What worried me was the timeline, not the budget.",
+          "q": {
+            "de": "Hat mir vor allem das Budget Sorgen gemacht?",
+            "en": "Did the budget worry me most?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Welcher Teil soll am Satzende stehen, und welches Verb verbindet ihn mit dem What-Teil?",
+        "en": "Which part should come last, and which verb links it to the what-part?"
+      }
+    },
+    {
+      "id": "em.it-cleft",
+      "name": {
+        "de": "It-Satz · ein Satzglied herausheben",
+        "en": "it-cleft · singling out one part"
+      },
+      "form": {
+        "de": "It is / was + Betontes + who / that + Rest",
+        "en": "It is / was + focus + who / that + rest"
+      },
+      "use": {
+        "de": "Hebt genau ein Satzglied hervor, etwa Person, Zeit oder Ort, und rückt oft eine Annahme zurecht. Bei Personen steht who oder that, bei Sachen that.",
+        "en": "Singles out exactly one part, such as a person, a time or a place, and often corrects an assumption. Use who or that for people, that for things."
+      },
+      "signals": [
+        "it was",
+        "it is",
+        "who",
+        "that"
+      ],
+      "ex": [
+        {
+          "en": "It was the vendor who missed the deadline, not us.",
+          "de": "Der Anbieter hat die Frist verpasst, nicht wir.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "It is the second invoice that needs correcting.",
+          "de": "Es ist die zweite Rechnung, die korrigiert werden muss.",
+          "ctx": "mail"
+        },
+        {
+          "en": "It was in March that we launched the pilot.",
+          "de": "Im März haben wir den Pilot gestartet.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "It was our lawyer which found the error.",
+        "good": "It was our lawyer who found the error.",
+        "cause": {
+          "de": "Deutsch nutzt für Personen und Sachen dasselbe „der/die/das“. Englisch trennt: Person = who (oder that), Sache = that oder which.",
+          "en": "German uses the same “der/die/das” for people and things. English splits them: person = who (or that), thing = that or which."
+        }
+      },
+      "contrast": {
+        "with": "em.what-cleft",
+        "a": "It was the price that put them off.",
+        "b": "What put them off was the price.",
+        "diff": {
+          "de": "Beide heben den Preis hervor. Der It-Satz setzt ihn in die Mitte und passt auch auf Personen, Zeit und Ort.",
+          "en": "Both stress the price. The it-cleft puts it in the middle and also fits people, times and places."
+        }
+      },
+      "ccq": [
+        {
+          "s": "It was Maria who wrote the report.",
+          "q": {
+            "de": "Hat Maria den Bericht geschrieben?",
+            "en": "Did Maria write the report?"
+          },
+          "a": true
+        },
+        {
+          "s": "It was in March that we signed the contract.",
+          "q": {
+            "de": "Haben wir den Vertrag im April unterschrieben?",
+            "en": "Did we sign the contract in April?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Was willst du hervorheben, und ist es eine Person oder eine Sache?",
+        "en": "What do you want to stress, and is it a person or a thing?"
+      }
+    },
+    {
+      "id": "em.neg-inversion",
+      "name": {
+        "de": "Never / Rarely vorn · Umstellung",
+        "en": "Never / Rarely first · inversion"
+      },
+      "form": {
+        "de": "Never / Rarely / Seldom + Hilfsverb + Subjekt + Verb",
+        "en": "Never / Rarely / Seldom + auxiliary + subject + verb"
+      },
+      "use": {
+        "de": "Steht ein verneinendes oder einschränkendes Wort vorn, wird wie in einer Frage umgestellt. Fehlt ein Hilfsverb, kommt do, does oder did dazu. Klingt formell.",
+        "en": "When a negative or limiting word comes first, the order changes as in a question. With no auxiliary, add do, does or did. Sounds formal."
+      },
+      "signals": [
+        "never",
+        "rarely",
+        "seldom",
+        "hardly ever",
+        "little",
+        "at no point",
+        "under no circumstances"
+      ],
+      "ex": [
+        {
+          "en": "Rarely do we get feedback this positive.",
+          "de": "Selten bekommen wir so positives Feedback.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "At no point did we receive the signed form.",
+          "de": "Zu keinem Zeitpunkt haben wir das unterschriebene Formular erhalten.",
+          "ctx": "mail"
+        },
+        {
+          "en": "Never have I worked with such a fast team.",
+          "de": "Nie habe ich mit einem so schnellen Team gearbeitet.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "Never I have worked with such a fast team.",
+        "good": "Never have I worked with such a fast team.",
+        "cause": {
+          "de": "Kein Übersetzungsfehler: Deutsch stellt nach „Nie“ ebenfalls um („Nie habe ich …“). Der Fehler kommt aus dem englischen Normalsatz (I have never …), den man nach vorn zieht.",
+          "en": "Not a translation error: German also inverts after “nie” (“Nie habe ich …”). The error comes from the normal English order (I have never …), simply moved to the front."
+        }
+      },
+      "contrast": {
+        "with": "em.only-inversion",
+        "a": "Rarely do they approve late requests.",
+        "b": "Only after a review do they approve late requests.",
+        "diff": {
+          "de": "Rarely macht den Satz selten wahr. Only after nennt die einzige Bedingung, unter der es doch passiert.",
+          "en": "Rarely makes the statement seldom true. Only after names the one condition under which it does happen."
+        }
+      },
+      "ccq": [
+        {
+          "s": "Rarely do we miss a deadline.",
+          "q": {
+            "de": "Halten wir Fristen meistens ein?",
+            "en": "Do we usually meet deadlines?"
+          },
+          "a": true
+        },
+        {
+          "s": "Little did we know about the risk.",
+          "q": {
+            "de": "Wussten wir viel über das Risiko?",
+            "en": "Did we know a lot about the risk?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Steht ein verneinendes Wort am Anfang, und welches Wort muss dann vor das Subjekt?",
+        "en": "Does a negative word open the sentence, and which word must then come before the subject?"
+      }
+    },
+    {
+      "id": "em.not-only",
+      "name": {
+        "de": "Not only · No sooner · doppelte Betonung",
+        "en": "Not only · No sooner · paired stress"
+      },
+      "form": {
+        "de": "Not only + Hilfsverb + Subjekt + Verb, but … also",
+        "en": "Not only + auxiliary + subject + verb, but … also"
+      },
+      "use": {
+        "de": "Verbindet zwei Pluspunkte oder zwei Ereignisse mit Nachdruck. Nach Not only und No sooner steht das Hilfsverb vor dem Subjekt, der zweite Teil bleibt normal.",
+        "en": "Joins two gains or two events with emphasis. After Not only and No sooner the auxiliary comes before the subject, and the second part stays normal."
+      },
+      "signals": [
+        "not only",
+        "but also",
+        "no sooner",
+        "than",
+        "hardly",
+        "scarcely"
+      ],
+      "ex": [
+        {
+          "en": "Not only did the pilot succeed, but it also saved money.",
+          "de": "Der Pilot war nicht nur erfolgreich, er hat auch Geld gespart.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "No sooner had we sent the file than the client called.",
+          "de": "Kaum hatten wir die Datei geschickt, rief der Kunde an.",
+          "ctx": "mail"
+        },
+        {
+          "en": "Not only is she fluent, but she also knows our market.",
+          "de": "Sie ist nicht nur fließend, sie kennt auch unseren Markt.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "Not only the pilot succeeded, but it also saved money.",
+        "good": "Not only did the pilot succeed, but it also saved money.",
+        "cause": {
+          "de": "Deutsch stellt „nicht nur“ meist in den Satz hinein, ohne Umstellung („Er hat nicht nur …“). Am englischen Satzanfang braucht Not only die Frageform.",
+          "en": "German usually puts “nicht nur” inside the sentence, with no change of order (“Er hat nicht nur …”). At the start of an English sentence, Not only needs the question form."
+        }
+      },
+      "contrast": {
+        "with": "em.neg-inversion",
+        "a": "We not only cut costs but also sped up approvals.",
+        "b": "Not only did we cut costs, but we also sped up approvals.",
+        "diff": {
+          "de": "Gleiche Aussage. Mitten im Satz bleibt die normale Reihenfolge, am Anfang folgt die Umstellung und der Ton wird nachdrücklicher.",
+          "en": "Same message. In the middle of a sentence the normal order stays; at the start the inversion follows and the tone gets stronger."
+        }
+      },
+      "ccq": [
+        {
+          "s": "Not only did the update fix the bug, but it also sped up the app.",
+          "q": {
+            "de": "Hat das Update nur den Fehler behoben?",
+            "en": "Did the update only fix the bug?"
+          },
+          "a": false
+        },
+        {
+          "s": "No sooner had we left than it started raining.",
+          "q": {
+            "de": "Hat es kurz nach unserem Aufbruch angefangen zu regnen?",
+            "en": "Did it start raining shortly after we left?"
+          },
+          "a": true
+        }
+      ],
+      "nudge": {
+        "de": "Beginnst du mit dem Doppelausdruck, und in welcher Reihenfolge stehen dann Hilfsverb und Subjekt?",
+        "en": "Do you open with the paired phrase, and in which order do auxiliary and subject then stand?"
+      }
+    },
+    {
+      "id": "em.only-inversion",
+      "name": {
+        "de": "Only after · Not until · Umstellung",
+        "en": "Only after · Not until · inversion"
+      },
+      "form": {
+        "de": "Only / Not until + Zeit- oder Bedingungsangabe + Hilfsverb + Subjekt",
+        "en": "Only / Not until + time or condition + auxiliary + subject"
+      },
+      "use": {
+        "de": "Eine „erst“- oder „nur“-Angabe vorn löst ebenfalls die Umstellung aus: Hilfsverb vor das Subjekt. Ein Nebensatz im vorangestellten Teil (Only when you confirm …) bleibt normal.",
+        "en": "An “only” or “not until” phrase in front also triggers inversion: auxiliary before the subject. A clause inside the fronted part (Only when you confirm …) keeps its normal order."
+      },
+      "signals": [
+        "only after",
+        "only when",
+        "only if",
+        "only then",
+        "not until"
+      ],
+      "ex": [
+        {
+          "en": "Only after the audit did we see the gap.",
+          "de": "Erst nach dem Audit haben wir die Lücke gesehen.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "Only when you confirm can we book the venue.",
+          "de": "Nur wenn Sie bestätigen, können wir den Raum buchen.",
+          "ctx": "mail"
+        },
+        {
+          "en": "Not until Friday did I get a reply.",
+          "de": "Erst am Freitag habe ich eine Antwort bekommen.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "Only after the audit we saw the gap.",
+        "good": "Only after the audit did we see the gap.",
+        "cause": {
+          "de": "Kein Übersetzungsfehler: Deutsch stellt nach „Erst nach dem Audit“ auch um („haben wir“). Im Englischen gilt sonst Subjekt vor Verb, deshalb vergisst man die Umstellung.",
+          "en": "Not a translation error: German also inverts after “Erst nach dem Audit” (“haben wir”). English otherwise keeps subject before verb, so the inversion is easy to forget."
+        }
+      },
+      "contrast": {
+        "with": "em.neg-inversion",
+        "a": "Only after a review do they approve late requests.",
+        "b": "Rarely do they approve late requests.",
+        "diff": {
+          "de": "Only after nennt die einzige Bedingung, Rarely macht es selten. Beide stellen um, aber nur Only … after bleibt positiv.",
+          "en": "Only after names the one condition, Rarely makes it seldom. Both invert, but only Only … after stays positive."
+        }
+      },
+      "ccq": [
+        {
+          "s": "Only after the pilot did they approve the rollout.",
+          "q": {
+            "de": "Haben sie den Rollout vor dem Pilot genehmigt?",
+            "en": "Did they approve the rollout before the pilot?"
+          },
+          "a": false
+        },
+        {
+          "s": "Only when the client signs can we start.",
+          "q": {
+            "de": "Können wir anfangen, bevor der Kunde unterschreibt?",
+            "en": "Can we start before the client signs?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Steht ein „erst“- oder „nur“-Ausdruck vorn, und in welcher Reihenfolge stehen dann Hilfsverb und Subjekt?",
+        "en": "Does an “only” or “not until” phrase open the sentence, and in which order do auxiliary and subject follow?"
+      }
+    }
+  ]
+}

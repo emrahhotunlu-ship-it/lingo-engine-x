@@ -2012,7 +2012,11 @@
    "prompt": "On Monday she said she ___ my email, but I had sent it on Friday.",
    "answer": "hadn't received",
    "accepted": [
-    "had not received"
+    "had not received",
+    "didn't receive",
+    "did not receive",
+    "hadn't gotten",
+    "had not gotten"
    ],
    "hint": "(not / receive)",
    "expl": "Backshift: „I haven't received“ wird zu „she hadn't received“ (Present Perfect → Past Perfect).",
@@ -2035,6 +2039,9 @@
    "type": "gap",
    "prompt": "My boss told me ___ late for the client meeting.",
    "answer": "not to be",
+   "accepted": [
+    "to not be"
+   ],
    "hint": "(not / be)",
    "expl": "Verneinte Aufforderung: tell + Person + not to + Infinitiv.",
    "expl_en": "Negative request: tell + person + not to + infinitive."
@@ -2058,7 +2065,9 @@
    "prompt": "She said she ___ come to the party because she was ill.",
    "answer": "couldn't",
    "accepted": [
-    "could not"
+    "could not",
+    "wasn't able to",
+    "was not able to"
    ],
    "hint": "(can't)",
    "expl": "In der indirekten Rede geht die Zeit eine Stufe zurück: aus „can’t“ wird „couldn’t“.",
@@ -2070,7 +2079,8 @@
    "prompt": "\"I'll send the contract tomorrow,\" Anna said last Monday. → Anna said she ___ the contract the next day.",
    "answer": "would send",
    "accepted": [
-    "'d send"
+    "'d send",
+    "was going to send"
    ],
    "expl": "In der indirekten Rede wird aus „will“ ein „would“, weil die Zeit eine Stufe zurückgeht: „I will call you“ wird zu „He said he would call me.“",
    "expl_en": "In reported speech “will” becomes “would”, because the tense moves one step back: “I will call you” becomes “He said he would call me.”"
@@ -2373,9 +2383,13 @@
    "type": "gap",
    "prompt": "The window is broken and there's a baseball on the floor. Someone ___ it through the window.",
    "answer": "must have thrown",
-   "hint": "(throw)",
+   "hint": "(almost sure: throw)",
    "expl": "Logische Schlussfolgerung über die Vergangenheit → must have + Partizip (throw – threw – thrown).",
-   "expl_en": "A logical conclusion about the past → must have + past participle (throw – threw – thrown)."
+   "expl_en": "A logical conclusion about the past → must have + past participle (throw – threw – thrown).",
+   "accepted": [
+    "must've thrown",
+    "had to have thrown"
+   ]
   },
   {
    "topic": "modals-deduction",
@@ -2385,7 +2399,13 @@
    "accepted": [
     "cannot have received",
     "couldn't have received",
-    "could not have received"
+    "could not have received",
+    "can't have gotten",
+    "cannot have gotten",
+    "couldn't have gotten",
+    "could not have gotten",
+    "must not have received",
+    "must not have gotten"
    ],
    "hint": "(receive)",
    "expl": "Unmöglich in der Vergangenheit → can't have + Partizip.",
@@ -2409,7 +2429,12 @@
    "type": "gap",
    "prompt": "She ___ at her desk right now – her coat is still here.",
    "answer": "must be",
-   "hint": "(be)",
+   "accepted": [
+    "has to be",
+    "has got to be",
+    "must still be"
+   ],
+   "hint": "(almost sure: be)",
    "expl": "Gerade jetzt, mit Beweis (der Mantel) → must be.",
    "expl_en": "Right now, with evidence (the coat) → must be."
   },
@@ -2421,7 +2446,8 @@
    "accepted": [
     "cannot be",
     "couldn't be",
-    "could not be"
+    "could not be",
+    "must not be"
    ],
    "hint": "(be)",
    "expl": "Unmöglich (sie hat nur eine Schwester) → can't be.",
@@ -2433,7 +2459,10 @@
    "prompt": "I'm sure the team forgot to update the database. → The team ___ to update the database.",
    "answer": "must have forgotten",
    "expl": "Fast sicher in der Vergangenheit → must have + Partizip (forget – forgot – forgotten).",
-   "expl_en": "Almost certain about the past → must have + past participle (forget – forgot – forgotten)."
+   "expl_en": "Almost certain about the past → must have + past participle (forget – forgot – forgotten).",
+   "accepted": [
+    "must've forgotten"
+   ]
   },
   {
    "topic": "modals-deduction",

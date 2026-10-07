@@ -2814,6 +2814,9 @@
    "type": "gap",
    "prompt": "Rarely ___ we seen such a fast rollout.",
    "answer": "have",
+   "accepted": [
+    "had"
+   ],
    "expl": "Nach „Rarely“ am Satzanfang: Hilfsverb vor das Subjekt – have we seen.",
    "expl_en": "After “Rarely” at the start: auxiliary before the subject – have we seen."
   },
@@ -2872,17 +2875,18 @@
    "type": "transform",
    "prompt": "The audit trail convinced them. → It was the audit trail ___ convinced them.",
    "answer": "that",
-   "accepted": [
-    "which"
-   ],
-   "expl": "It-Cleft mit einer Sache: that (oder which).",
-   "expl_en": "It-cleft with a thing: that (or which)."
+   "expl": "It-Cleft mit einer Sache: that.",
+   "expl_en": "It-cleft with a thing: that."
   },
   {
    "topic": "c1-emphasis",
    "type": "transform",
    "prompt": "We cut costs and we also improved compliance. → Not only ___ costs, but we also improved compliance.",
    "answer": "did we cut",
+   "accepted": [
+    "did we reduce",
+    "did we lower"
+   ],
    "expl": "Nach „Not only“ am Satzanfang steht „did“ + Subjekt + Grundform: Not only did we cut costs, …",
    "expl_en": "After “Not only” at the start use “did” + subject + base verb: Not only did we cut costs, …"
   },
@@ -3950,8 +3954,8 @@
     "starting"
    ],
    "answer": "starting",
-   "expl": "„Recommend“ steht mit -ing oder that-Satz, nicht mit Person + to.",
-   "expl_en": "“Recommend” takes -ing or a that-clause, not person + to."
+   "expl": "„Recommend“ steht mit -ing oder that-Satz; Person + to ist im US-Englisch unüblich.",
+   "expl_en": "“Recommend” takes -ing or a that-clause; person + to is uncommon in US English."
   },
   {
    "topic": "report-verbs",
@@ -3960,7 +3964,18 @@
    "answer": "moving",
    "accepted": [
     "pushing",
-    "shifting"
+    "shifting",
+    "extending",
+    "postponing",
+    "delaying",
+    "pushing back",
+    "that we move",
+    "that we push",
+    "that we shift",
+    "that we extend",
+    "we move",
+    "we push",
+    "that we should move"
    ],
    "hint": "(move)",
    "expl": "Nach „suggest“ steht -ing.",
@@ -3972,7 +3987,10 @@
    "prompt": "The doctor advised him ___ more rest.",
    "answer": "to get",
    "accepted": [
-    "to have"
+    "to have",
+    "that he get",
+    "that he should get",
+    "that he should have"
    ],
    "hint": "(get)",
    "expl": "„Advise“ + Person + to-Infinitiv.",
@@ -3986,7 +4004,14 @@
    "accepted": [
     "having made",
     "causing",
-    "having caused"
+    "having caused",
+    "committing",
+    "having committed",
+    "being responsible for",
+    "responsibility for",
+    "knowing about",
+    "that he made",
+    "that he caused"
    ],
    "hint": "(make)",
    "expl": "Nach „deny“ steht -ing.",
@@ -4001,7 +4026,10 @@
    "expl_en": "“Offer” + to-infinitive.",
    "accepted": [
     "to pay",
-    "to take care of"
+    "to take care of",
+    "to pay for",
+    "to bear",
+    "to absorb"
    ]
   },
   {
@@ -4009,6 +4037,12 @@
    "type": "transform",
    "prompt": "'Don't discuss the deal with anyone,' she told me. → She warned me ___ the deal with anyone.",
    "answer": "not to discuss",
+   "accepted": [
+    "not to talk about",
+    "to not discuss",
+    "never to discuss",
+    "against discussing"
+   ],
    "expl": "„Warn“ + Person + not to + Verb.",
    "expl_en": "“Warn” + person + not to + verb."
   },
@@ -4019,7 +4053,10 @@
    "answer": "He suggested that I take a different route.",
    "accepted": [
     "He suggested that I should take a different route.",
-    "He suggested I take a different route."
+    "He suggested I take a different route.",
+    "He suggested I should take a different route.",
+    "He suggested taking a different route.",
+    "He suggested to me that I take a different route."
    ],
    "expl": "Nach „suggest“ folgt ein that-Satz, nicht „Person + to“.",
    "expl_en": "After “suggest” a that-clause is used, not “person + to”."
@@ -4030,7 +4067,11 @@
    "prompt": "She admitted to be late for the meeting.",
    "answer": "She admitted being late for the meeting.",
    "accepted": [
-    "She admitted to being late for the meeting."
+    "She admitted to being late for the meeting.",
+    "She admitted having been late for the meeting.",
+    "She admitted to having been late for the meeting.",
+    "She admitted that she was late for the meeting.",
+    "She admitted she was late for the meeting."
    ],
    "expl": "„Admit“ verlangt -ing.",
    "expl_en": "“Admit” requires -ing."
@@ -4040,6 +4081,10 @@
    "type": "correct",
    "prompt": "They insisted to see the contract before signing.",
    "answer": "They insisted on seeing the contract before signing.",
+   "accepted": [
+    "They insisted that they see the contract before signing.",
+    "They insisted they see the contract before signing."
+   ],
    "expl": "„Insist“ braucht „on“ + -ing.",
    "expl_en": "“Insist” needs “on” + -ing."
   },
@@ -4110,7 +4155,13 @@
     "will start",
     "will begin",
     "is going to start",
-    "is starting"
+    "is starting",
+    "is going to begin",
+    "is scheduled to start",
+    "is due to start",
+    "is set to start",
+    "kicks off",
+    "will kick off"
    ],
    "hint": "(start)",
    "expl": "Indirekte Frage: Aussageform, Verb in der dritten Person.",
@@ -4139,6 +4190,10 @@
    "type": "transform",
    "prompt": "Where is the nearest printer? → Do you know where the nearest printer ___?",
    "answer": "is",
+   "accepted": [
+    "is located",
+    "can be found"
+   ],
    "expl": "Indirekte Frage: Subjekt vor Verb.",
    "expl_en": "Indirect question: subject before verb."
   },
@@ -4159,7 +4214,10 @@
    "prompt": "Can you tell me where is the finance department?",
    "answer": "Can you tell me where the finance department is?",
    "accepted": [
-    "Could you tell me where the finance department is?"
+    "Could you tell me where the finance department is?",
+    "Can you tell me where the finance department is located?",
+    "Could you tell me where the finance department is located?",
+    "Do you know where the finance department is?"
    ],
    "expl": "In der indirekten Frage folgt das Subjekt auf das Fragewort.",
    "expl_en": "In an indirect question the subject follows the wh-word."
@@ -4169,6 +4227,11 @@
    "type": "correct",
    "prompt": "Who did call me while I was in the meeting?",
    "answer": "Who called me while I was in the meeting?",
+   "accepted": [
+    "Who called me during the meeting?",
+    "Who phoned me while I was in the meeting?",
+    "Who phoned me during the meeting?"
+   ],
    "expl": "Fragen nach dem Subjekt brauchen kein „did“.",
    "expl_en": "Questions about the subject need no “did”."
   },
@@ -4177,6 +4240,9 @@
    "type": "correct",
    "prompt": "Let's start the meeting now, don't we?",
    "answer": "Let's start the meeting now, shall we?",
+   "accepted": [
+    "Let us start the meeting now, shall we?"
+   ],
    "expl": "Nach „Let's“ steht „shall we?“.",
    "expl_en": "After “Let's” comes “shall we?”."
   },

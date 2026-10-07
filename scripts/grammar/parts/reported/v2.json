@@ -1,0 +1,938 @@
+[
+ {
+  "id": "rs-bs-k1",
+  "type": "kwt",
+  "pat": "rs.backshift",
+  "from": "“We are still reviewing the draft,” the lawyer said.",
+  "key": "WERE",
+  "frame": "The lawyer said ___ the draft.",
+  "answer": "they were still reviewing",
+  "accepted": [
+   "that they were still reviewing"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: are → were: they were still reviewing, denn das Sagen liegt zurück.",
+    "en": "Right: are → were: they were still reviewing, because the speaking is in the past."
+   },
+   "wrong": [
+    {
+     "if": [
+      "are"
+     ],
+     "de": "„are“ bleibt in der Gegenwart. Nach said rückt es zu were.",
+     "en": "“are” stays in the present. After said it moves to were."
+    },
+    {
+     "not": [
+      "were"
+     ],
+     "de": "Das Schlüsselwort were muss unverändert in der Lücke stehen.",
+     "en": "The key word were must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rs-bs-k2",
+  "type": "kwt",
+  "pat": "rs.backshift",
+  "from": "“I haven't seen the final numbers yet,” Tom told me.",
+  "key": "SEEN",
+  "frame": "Tom told me ___ the final numbers yet.",
+  "answer": "he hadn't seen",
+  "accepted": [
+   "he had not seen",
+   "that he hadn't seen",
+   "that he had not seen",
+   "he'd not seen"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: haven't seen → hadn't seen: Present Perfect rückt zu Past Perfect.",
+    "en": "Right: haven't seen → hadn't seen: present perfect moves to past perfect."
+   },
+   "wrong": [
+    {
+     "if": [
+      "hasn't"
+     ],
+     "de": "„hasn't seen“ bleibt in der Gegenwart. Nach told me rückt es zu hadn't seen.",
+     "en": "“hasn't seen” stays in the present. After told me it moves to hadn't seen."
+    },
+    {
+     "if": [
+      "haven't"
+     ],
+     "de": "„haven't“ gehört zu I. Mit he wird daraus hadn't seen.",
+     "en": "“haven't” goes with I. With he it becomes hadn't seen."
+    },
+    {
+     "not": [
+      "seen"
+     ],
+     "de": "Das Schlüsselwort seen muss unverändert in der Lücke stehen.",
+     "en": "The key word seen must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rs-bs-f1",
+  "type": "find",
+  "pat": "rs.backshift",
+  "prompt": "He said he has been in Munich the week before.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "had been",
+  "fixed": "He said he had been in Munich the week before.",
+  "accepted": [
+   "was"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: has been passt nicht zu the week before. Richtig: had been.",
+    "en": "The error: has been does not fit the week before. Correct: had been."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: has been passt nicht zu the week before.",
+     "en": "There is an error: has been does not fit the week before."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „has been“: Nach said rückt die Zeit zurück.",
+     "en": "The error is in “has been”: after said the tense moves back."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rs-bs-f2",
+  "type": "find",
+  "pat": "rs.backshift",
+  "prompt": "The supplier promised last year that he will deliver the parts the following week.",
+  "err": [
+   7,
+   8
+  ],
+  "answer": "would deliver",
+  "fixed": "The supplier promised last year that he would deliver the parts the following week.",
+  "accepted": [
+   "was going to deliver"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: will passt nicht zu promised. Richtig: would deliver.",
+    "en": "The error: will does not fit promised. Correct: would deliver."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: will bleibt nicht stehen, wenn das Versprechen zurückliegt.",
+     "en": "There is an error: will cannot stay when the promise lies in the past."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „will deliver“: Das Versprechen liegt zurück, also would.",
+     "en": "The error is in “will deliver”: the promise is in the past, so would."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rs-bs-f3",
+  "type": "find",
+  "pat": "rs.backshift",
+  "prompt": "Priya said the client had not replied, so we decided to wait.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: had not replied ist der richtige Rückschritt aus haven't replied.",
+    "en": "No error: had not replied is the right backshift of haven't replied."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach said steht hier korrekt das Past Perfect.",
+     "en": "No error: after said the past perfect is correct here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rs-bs-m1",
+  "type": "meaning",
+  "pat": "rs.backshift",
+  "a": "She says she is leaving.",
+  "b": "She said she was leaving.",
+  "q": {
+   "de": "Welcher Satz berichtet, was sie schon früher gesagt hat?",
+   "en": "Which sentence reports what she said some time ago?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. said + was zeigt, dass das Sagen zurückliegt.",
+    "en": "Right: sentence b. said + was shows that the speaking lies in the past."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a stehen says und is: Sie sagt es jetzt, nichts rückt zurück.",
+     "en": "In a, says and is: she says it now, so nothing moves back."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Nur b gibt eine frühere Aussage wieder.",
+     "en": "Not the same: only b reports an earlier statement."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rs-ts-k1",
+  "type": "kwt",
+  "pat": "rs.time-shift",
+  "from": "“The workshop starts tomorrow,” she told us.",
+  "key": "DAY",
+  "frame": "She told us the workshop would start ___.",
+  "answer": "the next day",
+  "accepted": [
+   "the following day",
+   "the day after",
+   "on the next day",
+   "on the following day"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: tomorrow → the next day. Gezählt wird vom Sagen aus.",
+    "en": "Right: tomorrow → the next day. Counting starts from the speaking."
+   },
+   "wrong": [
+    {
+     "if": [
+      "tomorrow"
+     ],
+     "de": "„tomorrow“ zählt von heute. Nach told us zählt der Tag nach dem Sagen.",
+     "en": "“tomorrow” counts from today. After told us the day after the speaking counts."
+    },
+    {
+     "if": [
+      "before"
+     ],
+     "de": "„the day before“ zeigt zurück. would start zielt auf den Tag danach.",
+     "en": "“the day before” points back. would start points to the day after."
+    },
+    {
+     "not": [
+      "day"
+     ],
+     "de": "Das Schlüsselwort day muss unverändert in der Lücke stehen.",
+     "en": "The key word day must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rs-ts-k2",
+  "type": "kwt",
+  "pat": "rs.time-shift",
+  "from": "“We shipped the order yesterday,” Priya wrote.",
+  "key": "DAY",
+  "frame": "Priya wrote that they had shipped the order ___.",
+  "answer": "the day before",
+  "accepted": [
+   "the previous day",
+   "the day prior",
+   "on the previous day",
+   "on the day before"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: yesterday → the day before. Gezählt wird vom Schreiben aus.",
+    "en": "Right: yesterday → the day before. Counting starts from the writing."
+   },
+   "wrong": [
+    {
+     "if": [
+      "yesterday"
+     ],
+     "de": "„yesterday“ zählt von heute. Vom Schreiben aus heißt es the day before.",
+     "en": "“yesterday” counts from today. From the writing it is the day before."
+    },
+    {
+     "if": [
+      "after"
+     ],
+     "de": "„the day after“ ist der Tag danach. Der Versand lag vor dem Schreiben.",
+     "en": "“the day after” is the later day. The shipping came before the writing."
+    },
+    {
+     "not": [
+      "day"
+     ],
+     "de": "Das Schlüsselwort day muss unverändert in der Lücke stehen.",
+     "en": "The key word day must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rs-ts-f1",
+  "type": "find",
+  "pat": "rs.time-shift",
+  "prompt": "Last year our CFO said that the new system would go live tomorrow at the Berlin site.",
+  "err": [
+   12,
+   12
+  ],
+  "answer": "the next day",
+  "fixed": "Last year our CFO said that the new system would go live the next day at the Berlin site.",
+  "accepted": [
+   "the following day"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: tomorrow zählt von heute. Vom Sagen aus: the next day.",
+    "en": "The error: tomorrow counts from today. From the speaking: the next day."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Die Aussage fiel letztes Jahr, tomorrow passt nicht.",
+     "en": "There is an error: the statement was made last year, tomorrow does not fit."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „tomorrow“: Die Zeitangabe rückt vom Sagen aus mit.",
+     "en": "The error is in “tomorrow”: the time word shifts from the speaking."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rs-ts-f2",
+  "type": "find",
+  "pat": "rs.time-shift",
+  "prompt": "Last month Dana wrote that the audit had started yesterday and was still running.",
+  "err": [
+   9,
+   9
+  ],
+  "answer": "the day before",
+  "fixed": "Last month Dana wrote that the audit had started the day before and was still running.",
+  "accepted": [
+   "the previous day"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: yesterday zählt von heute. Vom Schreiben aus: the day before.",
+    "en": "The error: yesterday counts from today. From the writing: the day before."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Dana schrieb letzten Monat, yesterday passt nicht.",
+     "en": "There is an error: Dana wrote last month, yesterday does not fit."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „yesterday“: Die Zeitangabe rückt vom Schreiben aus mit.",
+     "en": "The error is in “yesterday”: the time word shifts from the writing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rs-ts-m1",
+  "type": "meaning",
+  "pat": "rs.time-shift",
+  "a": "She said she had called the day before.",
+  "b": "She said she would call the following day.",
+  "q": {
+   "de": "Welcher Satz sagt, dass der Anruf schon vor ihrer Aussage stattfand?",
+   "en": "Which sentence says the call happened before she spoke?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. the day before zeigt zurück, vor das Sagen.",
+    "en": "Right: sentence a. the day before points back, to before the speaking."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b zeigt the following day nach vorn: Der Anruf kommt erst noch.",
+     "en": "In b, the following day points ahead: the call is still to come."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Die beiden Sätze zeigen in entgegengesetzte Richtungen.",
+     "en": "Not the same: the two sentences point in opposite directions."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rs-q-k1",
+  "type": "kwt",
+  "pat": "rs.question",
+  "from": "“Where is the conference room?” the guest asked.",
+  "key": "WHERE",
+  "frame": "The guest asked me ___.",
+  "answer": "where the conference room was",
+  "accepted": [
+   "where the conference room is"
+  ],
+  "words": [
+   5,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: where the conference room was: erst das Fragewort, dann Subjekt und Verb, ohne did.",
+    "en": "Right: where the conference room was: question word, subject, verb, no did."
+   },
+   "wrong": [
+    {
+     "if": [
+      "where",
+      "was"
+     ],
+     "de": "Das Subjekt steht vor dem Verb: where the conference room was.",
+     "en": "The subject comes before the verb: where the conference room was."
+    },
+    {
+     "if": [
+      "where",
+      "is"
+     ],
+     "de": "Das Subjekt steht vor dem Verb: where the conference room is.",
+     "en": "The subject comes before the verb: where the conference room is."
+    },
+    {
+     "not": [
+      "where"
+     ],
+     "de": "Das Schlüsselwort where muss unverändert in der Lücke stehen.",
+     "en": "The key word where must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rs-q-k2",
+  "type": "kwt",
+  "pat": "rs.question",
+  "from": "“Did you receive my email?” Leon asked.",
+  "key": "WHETHER",
+  "frame": "Leon asked me ___ his email.",
+  "answer": "whether I had received",
+  "accepted": [
+   "whether I received",
+   "whether I'd received"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: whether I had received: Ja/Nein-Frage, kein did, mit Rückschritt.",
+    "en": "Right: whether I had received: yes/no question, no did, with backshift."
+   },
+   "wrong": [
+    {
+     "if": [
+      "did"
+     ],
+     "de": "„did I receive“ ist die direkte Frage. Indirekt: whether I had received.",
+     "en": "“did I receive” is the direct question. Reported: whether I had received."
+    },
+    {
+     "if": [
+      "receive"
+     ],
+     "de": "„receive“ bleibt in der Gegenwart. Nach asked rückt es zu had received.",
+     "en": "“receive” stays in the present. After asked it moves to had received."
+    },
+    {
+     "not": [
+      "whether"
+     ],
+     "de": "Das Schlüsselwort whether muss unverändert in der Lücke stehen.",
+     "en": "The key word whether must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rs-q-f1",
+  "type": "find",
+  "pat": "rs.question",
+  "prompt": "She asked me did I attend the kickoff.",
+  "err": [
+   3,
+   5
+  ],
+  "answer": "if I attended",
+  "fixed": "She asked me if I attended the kickoff.",
+  "accepted": [
+   "whether I attended",
+   "if I had attended",
+   "whether I had attended"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Eine Ja/Nein-Frage braucht if oder whether, kein did.",
+    "en": "The error: a yes/no question needs if or whether, not did."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: did I attend ist noch die direkte Frage.",
+     "en": "There is an error: did I attend is still the direct question."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „did I attend“: Indirekt steht if I attended.",
+     "en": "The error is in “did I attend”: reported, it is if I attended."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rs-q-f2",
+  "type": "find",
+  "pat": "rs.question",
+  "prompt": "I asked the vendor when will it ship.",
+  "err": [
+   4,
+   6
+  ],
+  "answer": "when it would",
+  "fixed": "I asked the vendor when it would ship.",
+  "accepted": [
+   "when it will",
+   "when it was going to"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Das Subjekt steht vor dem Verb. Richtig: when it would ship.",
+    "en": "The error: the subject comes before the verb. Correct: when it would ship."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: when will it ist die Wortstellung der direkten Frage.",
+     "en": "There is an error: when will it is the word order of a direct question."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „when will it“: Indirekt: when it would.",
+     "en": "The error is in “when will it”: reported, it is when it would."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rs-q-m1",
+  "type": "meaning",
+  "pat": "rs.question",
+  "a": "She asked whether we had finished the report.",
+  "b": "She asked if we had finished the report.",
+  "q": {
+   "de": "Welche Sätze sagen dasselbe?",
+   "en": "Which sentences say the same thing?"
+  },
+  "answer": "both",
+  "why": {
+   "ok": {
+    "de": "Richtig: beide. whether und if leiten hier dieselbe Ja/Nein-Frage ein.",
+    "en": "Right: both. whether and if introduce the same yes/no question here."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "Nicht nur a: if und whether sagen hier dasselbe.",
+     "en": "Not only a: if and whether say the same here."
+    },
+    {
+     "opt": "b",
+     "de": "Nicht nur b: whether und if sagen hier dasselbe.",
+     "en": "Not only b: whether and if say the same here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rs-tl-k1",
+  "type": "kwt",
+  "pat": "rs.tell-say",
+  "from": "“The invoice is overdue,” Maria told the client.",
+  "key": "TOLD",
+  "frame": "Maria ___ the invoice was overdue.",
+  "answer": "told the client that",
+  "accepted": [
+   "told the client",
+   "told our client that",
+   "told our client",
+   "told them that",
+   "told him that",
+   "told her that"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: told the client: tell braucht die Person gleich danach.",
+    "en": "Right: told the client: tell needs the person right after it."
+   },
+   "wrong": [
+    {
+     "if": [
+      "told"
+     ],
+     "not": [
+      "client"
+     ],
+     "de": "Nach told steht die Person: told the client.",
+     "en": "After told comes the person: told the client."
+    },
+    {
+     "not": [
+      "told"
+     ],
+     "de": "Das Schlüsselwort told muss unverändert in der Lücke stehen.",
+     "en": "The key word told must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rs-tl-k2",
+  "type": "kwt",
+  "pat": "rs.tell-say",
+  "from": "“I'll be late,” Sam said to me.",
+  "key": "SAID",
+  "frame": "Sam ___ would be late.",
+  "answer": "said he",
+  "accepted": [
+   "said that he",
+   "said to me he",
+   "said to me that he"
+  ],
+  "words": [
+   2,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: said he. say steht ohne Person, mit Person heißt es said to me.",
+    "en": "Right: said he. say has no person; with one it is said to me."
+   },
+   "wrong": [
+    {
+     "if": [
+      "said",
+      "me"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "„said me“ gibt es nicht: Mit Person heißt es said to me.",
+     "en": "“said me” does not exist: with a person it is said to me."
+    },
+    {
+     "not": [
+      "said"
+     ],
+     "de": "Das Schlüsselwort said muss unverändert in der Lücke stehen.",
+     "en": "The key word said must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rs-tl-f1",
+  "type": "find",
+  "pat": "rs.tell-say",
+  "prompt": "The CFO said the whole team that the budget had been cut.",
+  "err": [
+   2,
+   5
+  ],
+  "answer": "told the whole team",
+  "fixed": "The CFO told the whole team that the budget had been cut.",
+  "accepted": [
+   "said to the whole team"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: said steht ohne Person. Richtig: told the whole team.",
+    "en": "The error: said has no person. Correct: told the whole team."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: said verträgt keine Person direkt danach.",
+     "en": "There is an error: said cannot take a person right after it."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „said the whole team“: Mit Person heißt es told.",
+     "en": "The error is in “said the whole team”: with a person it is told."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rs-tl-f2",
+  "type": "find",
+  "pat": "rs.tell-say",
+  "prompt": "Our lawyer told us that the contract needed a second signature.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: told us nennt die Person, und needed ist der richtige Rückschritt.",
+    "en": "No error: told us names the person, and needed is the right backshift."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: told + Person + that ist hier richtig.",
+     "en": "No error: told + person + that is correct here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rs-tl-m1",
+  "type": "meaning",
+  "pat": "rs.tell-say",
+  "a": "He told us that the system was down.",
+  "b": "He said that the system was down.",
+  "q": {
+   "de": "Welcher Satz sagt, wem er es gesagt hat?",
+   "en": "Which sentence says who he told?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. told us nennt den Empfänger der Nachricht.",
+    "en": "Right: sentence a. told us names who received the message."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b fehlt die Person: said that nennt keinen Empfänger.",
+     "en": "In b, the person is missing: said that names no recipient."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Nur told us nennt den Empfänger.",
+     "en": "Not the same: only told us names the recipient."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rs-rq-k1",
+  "type": "kwt",
+  "pat": "rs.request",
+  "from": "“Please send the draft by Friday,” Elena said to us.",
+  "key": "ASKED",
+  "frame": "Elena ___ the draft by Friday.",
+  "answer": "asked us to send",
+  "accepted": [
+   "asked us all to send",
+   "asked that we send"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: asked us to send: Eine Bitte ist ask + Person + to + Grundform.",
+    "en": "Right: asked us to send: request = ask + person + to + base form."
+   },
+   "wrong": [
+    {
+     "if": [
+      "asked",
+      "sending"
+     ],
+     "de": "Nach asked us steht to + Grundform, kein -ing.",
+     "en": "After asked us use to + base form, not -ing."
+    },
+    {
+     "if": [
+      "asked",
+      "that"
+     ],
+     "de": "Bitten gibt man mit to + Grundform weiter, nicht mit that.",
+     "en": "Requests are passed on with to + base form, not with that."
+    },
+    {
+     "if": [
+      "asked"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Es fehlt das to: asked us to send.",
+     "en": "to is missing: asked us to send."
+    },
+    {
+     "not": [
+      "asked"
+     ],
+     "de": "Das Schlüsselwort asked muss unverändert in der Lücke stehen.",
+     "en": "The key word asked must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rs-rq-k2",
+  "type": "kwt",
+  "pat": "rs.request",
+  "from": "“Don't share the file with anyone,” Mr. Park told me.",
+  "key": "NOT",
+  "frame": "Mr. Park told me ___ the file with anyone.",
+  "answer": "not to share",
+  "accepted": [
+   "to not share"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: not to share: Die verneinte Anweisung braucht not to + Grundform.",
+    "en": "Right: not to share: a negative instruction needs not to + base form."
+   },
+   "wrong": [
+    {
+     "if": [
+      "don't"
+     ],
+     "de": "„don't share“ ist der Befehl der direkten Rede. Indirekt: not to share.",
+     "en": "“don't share” is the command of direct speech. Reported: not to share."
+    },
+    {
+     "not": [
+      "not"
+     ],
+     "de": "Das Schlüsselwort not muss unverändert in der Lücke stehen.",
+     "en": "The key word not must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rs-rq-f1",
+  "type": "find",
+  "pat": "rs.request",
+  "prompt": "My manager asked me sending the slides before the call.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "to send",
+  "fixed": "My manager asked me to send the slides before the call.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach asked me steht to + Grundform, kein -ing.",
+    "en": "The error: after asked me use to + base form, not -ing."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach asked me steht kein -ing.",
+     "en": "There is an error: no -ing follows asked me."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „sending“: Eine Bitte braucht to + Grundform.",
+     "en": "The error is in “sending”: a request needs to + base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rs-rq-f2",
+  "type": "find",
+  "pat": "rs.request",
+  "prompt": "The client told us not to share the prototype with anyone.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: told us not to share ist die richtige verneinte Anweisung.",
+    "en": "No error: told us not to share is the correct negative instruction."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: not to + Grundform ist hier richtig.",
+     "en": "No error: not to + base form is correct here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rs-rq-m1",
+  "type": "meaning",
+  "pat": "rs.request",
+  "a": "She told me to call him.",
+  "b": "She told me not to call him.",
+  "q": {
+   "de": "Welcher Satz verbietet den Anruf?",
+   "en": "Which sentence forbids the call?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. not to dreht die Anweisung um: Ich soll nicht anrufen.",
+    "en": "Right: sentence b. not to reverses the instruction: I should not call."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a steht to call: Ich soll anrufen.",
+     "en": "In a, to call: I should call him."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: not to dreht die Anweisung um.",
+     "en": "Not the same: not to reverses the instruction."
+    }
+   ]
+  }
+ }
+]

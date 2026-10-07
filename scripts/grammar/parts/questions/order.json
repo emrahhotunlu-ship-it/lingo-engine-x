@@ -1,0 +1,197 @@
+[
+  {
+    "pat": "qu.indirect",
+    "en": "Could you tell me what time the vendor demo starts on Friday?",
+    "de": "Können Sie mir sagen, wann die Anbieter-Demo am Freitag beginnt?",
+    "chunks": [
+      "could you",
+      "tell me",
+      "what time",
+      "the vendor demo starts",
+      "on Friday"
+    ],
+    "single": "Nach what time folgt zuerst das Subjekt the vendor demo, dann das Verb starts; on Friday bleibt am Ende.",
+    "why": [
+      "Nach dem Fragewort steht das Subjekt vor dem Verb: what time the vendor demo starts. Ein does gibt es in der eingebetteten Frage nicht.",
+      "After the wh-word the subject comes before the verb: what time the vendor demo starts. There is no does in an embedded question."
+    ],
+    "bad": "Could you tell me what time does the vendor demo start on Friday?",
+    "trap": {
+      "tile": "the vendor demo starts",
+      "instead": "does the vendor demo start",
+      "why": {
+        "de": "Wer die Form der direkten Frage behält, schreibt what time does … start. In der eingebetteten Frage bleibt es bei Subjekt + Verb ohne does.",
+        "en": "Keeping the direct-question form gives what time does … start. In an embedded question it stays subject + verb without does."
+      }
+    }
+  },
+  {
+    "pat": "qu.indirect",
+    "en": "I have no idea why the dashboard stopped updating this morning.",
+    "de": "Ich habe keine Ahnung, warum das Dashboard heute früh nicht mehr aktualisiert wurde.",
+    "chunks": [
+      "I have",
+      "no idea",
+      "why",
+      "the dashboard",
+      "stopped updating",
+      "this morning"
+    ],
+    "single": "Nach why steht erst das Subjekt the dashboard, dann das Verb stopped updating; this morning schließt den Satz.",
+    "why": [
+      "Nach why folgt das Subjekt the dashboard und dann das Verb stopped updating. Kein did, keine Umstellung wie in der direkten Frage.",
+      "After why the subject the dashboard comes first, then the verb stopped updating. No did, no inversion as in a direct question."
+    ],
+    "bad": "I have no idea why did the dashboard stop updating this morning."
+  },
+  {
+    "pat": "qu.if-whether",
+    "en": "She asked whether I had already booked the flights.",
+    "de": "Sie fragte, ob ich die Flüge schon gebucht hätte.",
+    "chunks": [
+      "she",
+      "asked",
+      "whether",
+      "I had already booked",
+      "the flights"
+    ],
+    "single": "Whether leitet die Ja/Nein-Frage ein und steht direkt vor I had already booked; the flights schließt den Satz.",
+    "why": [
+      "Eine Ja/Nein-Frage im Bericht wird mit whether oder if eingeleitet. Danach folgt die Aussagestellung: whether I had already booked.",
+      "A yes/no question in reported speech is introduced by whether or if. Statement order follows: whether I had already booked."
+    ],
+    "bad": "She asked that I had already booked the flights.",
+    "trap": {
+      "tile": "whether",
+      "instead": "that",
+      "why": {
+        "de": "Das Kleinwort that leitet Aussagen ein. Eine Ja/Nein-Frage im Satz braucht if oder whether (deutsch: ob).",
+        "en": "The small word that opens statements. A yes/no question inside a clause needs if or whether (German: ob)."
+      }
+    }
+  },
+  {
+    "pat": "qu.if-whether",
+    "en": "Please let me know if the new date works for you.",
+    "de": "Bitte gib mir Bescheid, ob der neue Termin für dich passt.",
+    "chunks": [
+      "please",
+      "let me know",
+      "if",
+      "the new date",
+      "works for you"
+    ],
+    "alt": [
+      "If the new date works for you, please let me know.",
+      "Let me know if the new date works for you, please."
+    ],
+    "why": [
+      "If leitet die Ja/Nein-Frage ein, danach folgt das Subjekt the new date vor dem Verb works. Der Satz funktioniert auch mit if-Teil vorn.",
+      "If opens the yes/no question, and the subject the new date comes before the verb works. The sentence also works with the if-part first."
+    ],
+    "bad": "Please let me know does the new date work for you."
+  },
+  {
+    "pat": "qu.subject",
+    "en": "Who actually approved the new vendor contract on Monday?",
+    "de": "Wer hat den neuen Anbietervertrag am Montag tatsächlich genehmigt?",
+    "chunks": [
+      "who",
+      "actually",
+      "approved",
+      "the new vendor contract",
+      "on Monday"
+    ],
+    "why": [
+      "Who fragt nach dem Handelnden und ist selbst das Subjekt: Das Verb approved folgt ohne did direkt nach actually.",
+      "Who asks for the doer and is itself the subject: the verb approved follows directly after actually, without did."
+    ],
+    "bad": "Whom actually approved the new vendor contract on Monday?",
+    "trap": {
+      "tile": "who",
+      "instead": "whom",
+      "why": {
+        "de": "Whom ist nur als Objekt möglich. Hier fragt who selbst nach dem Handelnden und steht als Subjekt vor dem Verb.",
+        "en": "Whom only works as an object. Here who itself asks for the doer and is the subject before the verb."
+      }
+    },
+    "alt": [
+      "On Monday, who actually approved the new vendor contract?"
+    ]
+  },
+  {
+    "pat": "qu.direct",
+    "en": "What time does the vendor demo start on Friday?",
+    "de": "Um wie viel Uhr beginnt die Anbieter-Demo am Freitag?",
+    "chunks": [
+      "what time",
+      "does",
+      "the vendor demo",
+      "start",
+      "on Friday"
+    ],
+    "why": [
+      "In der direkten Frage steht does vor dem Subjekt, und das Verb folgt in der Grundform: does the vendor demo start.",
+      "In a direct question does comes before the subject, and the verb follows in the base form: does the vendor demo start."
+    ],
+    "bad": "What time does the vendor demo starts on Friday?",
+    "trap": {
+      "tile": "start",
+      "instead": "starts",
+      "why": {
+        "de": "Does trägt schon das -s der dritten Person. Danach steht das Verb in der Grundform, also start ohne -s.",
+        "en": "Does already carries the third-person -s. The verb then stays in the base form, so start without -s."
+      }
+    },
+    "alt": [
+      "On Friday, what time does the vendor demo start?"
+    ]
+  },
+  {
+    "pat": "qu.tags",
+    "en": "You'll send the minutes after the call, won't you?",
+    "de": "Du schickst das Protokoll nach dem Call, oder?",
+    "chunks": [
+      "you'll",
+      "send",
+      "the minutes",
+      "after the call",
+      "won't",
+      "you"
+    ],
+    "alt": [
+      "After the call, you'll send the minutes, won't you?"
+    ],
+    "why": [
+      "Das Tag wiederholt das Hilfsverb des Satzes mit umgekehrter Polarität: you'll → won't you. Ein festes „isn't it“ passt nicht.",
+      "The tag repeats the auxiliary of the sentence with reversed polarity: you'll → won't you. A fixed “isn't it” does not fit."
+    ],
+    "bad": "You'll send the minutes after the call, don't you?",
+    "trap": {
+      "tile": "won't",
+      "instead": "don't",
+      "why": {
+        "de": "Im Satz steht das Hilfsverb will. Das Tag nimmt dieses Hilfsverb auf, deshalb won't you und nicht don't you.",
+        "en": "The sentence has the auxiliary will. The tag picks it up, so won't you and not don't you."
+      }
+    }
+  },
+  {
+    "pat": "qu.tags",
+    "en": "The new hires hardly ever complain, do they?",
+    "de": "Die neuen Kollegen beschweren sich kaum, oder?",
+    "chunks": [
+      "the new hires",
+      "hardly ever",
+      "complain",
+      "do",
+      "they"
+    ],
+    "single": "Hardly ever steht vor complain, und das bejahte Tag do they bildet den Schluss.",
+    "why": [
+      "Hardly ever wirkt verneinend, deshalb folgt ein bejahtes Tag: do they. Das Tag greift the new hires mit they auf.",
+      "Hardly ever acts as a negative, so a positive tag follows: do they. The tag picks up the new hires with they."
+    ],
+    "bad": "The new hires hardly ever complain, don't they?"
+  }
+]

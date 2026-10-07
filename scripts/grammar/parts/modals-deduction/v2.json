@@ -1,0 +1,1152 @@
+[
+ {
+  "id": "md-mn-k1",
+  "type": "kwt",
+  "pat": "md.must-now",
+  "from": "I'm sure the client is waiting in reception.",
+  "key": "MUST",
+  "frame": "The client ___ in reception.",
+  "answer": "must be waiting",
+  "accepted": [
+   "must still be waiting",
+   "must already be waiting"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: must be waiting = fast sicher, gerade jetzt, mit be + -ing.",
+    "en": "Right: must be waiting = almost sure, right now, with be + -ing."
+   },
+   "wrong": [
+    {
+     "not": [
+      "must"
+     ],
+     "de": "Das Schlüsselwort must muss unverändert in der Lücke stehen.",
+     "en": "The key word must must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "must",
+      "have"
+     ],
+     "pat": "md.must-have",
+     "de": "must have meint früher. Hier läuft es jetzt: must be waiting.",
+     "en": "must have refers to the past. This is happening now: must be waiting."
+    },
+    {
+     "if": [
+      "must",
+      "wait"
+     ],
+     "de": "Ein Vorgang, der jetzt läuft, braucht be + -ing: must be waiting.",
+     "en": "An action in progress now needs be + -ing: must be waiting."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-mn-k2",
+  "type": "kwt",
+  "pat": "md.must-now",
+  "from": "It seems certain that he is the new regional manager.",
+  "key": "MUST",
+  "frame": "He ___ the new regional manager.",
+  "answer": "must be",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: must be = Schluss über jetzt, kein Zwang.",
+    "en": "Right: must be = a conclusion about now, not an obligation."
+   },
+   "wrong": [
+    {
+     "not": [
+      "must"
+     ],
+     "de": "Das Schlüsselwort must muss unverändert in der Lücke stehen.",
+     "en": "The key word must must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "must",
+      "have"
+     ],
+     "pat": "md.must-have",
+     "de": "must have been meint früher. Hier geht es um jetzt: must be.",
+     "en": "must have been refers to the past. This is about now: must be."
+    },
+    {
+     "not": [
+      "be"
+     ],
+     "de": "Nach must folgt be: must be the new regional manager.",
+     "en": "be follows must: must be the new regional manager."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-mn-f1",
+  "type": "find",
+  "pat": "md.must-now",
+  "prompt": "Her coat is still here, so she must have been in the building right now.",
+  "err": [
+   8,
+   9
+  ],
+  "answer": "be",
+  "fixed": "Her coat is still here, so she must be in the building right now.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „right now“ meint jetzt, also must be, nicht must have been.",
+    "en": "The error: “right now” means now, so must be, not must have been."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Zeit und Form passen nicht zusammen.",
+     "en": "There is an error: tense and form do not match."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „have been“: Es geht um jetzt, nicht um früher.",
+     "en": "The error is “have been”: this is about now, not the past."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-mn-f2",
+  "type": "find",
+  "pat": "md.must-now",
+  "prompt": "That phone is still ringing, so someone must be looking for it.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: must be looking = Schluss über jetzt, mit be + -ing.",
+    "en": "No error: must be looking = a conclusion about now, with be + -ing."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Hier passt must be + -ing, es läuft gerade jetzt.",
+     "en": "No error: must be + -ing fits here, it is happening right now."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-mn-m1",
+  "type": "meaning",
+  "pat": "md.must-now",
+  "a": "He must be in the meeting.",
+  "b": "He must have been in the meeting.",
+  "q": {
+   "de": "Welcher Satz sagt: Ich schließe, dass er gerade jetzt im Meeting ist?",
+   "en": "Which sentence concludes that he is in the meeting right now?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. must be = Schluss über jetzt.",
+    "en": "Right: sentence a. must be = a conclusion about now."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b zeigt have been auf früher: Er war im Meeting.",
+     "en": "In b, have been points to the past: he was in the meeting."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: must be meint jetzt, must have been meint früher.",
+     "en": "Not the same: must be means now, must have been means earlier."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-cn-k1",
+  "type": "kwt",
+  "pat": "md.cant-now",
+  "from": "It is impossible that this is the final price.",
+  "key": "POSSIBLY",
+  "frame": "This ___ the final price.",
+  "answer": "can't possibly be",
+  "accepted": [
+   "cannot possibly be",
+   "couldn't possibly be",
+   "could not possibly be"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: can't possibly be = so gut wie ausgeschlossen, mit der Grundform be.",
+    "en": "Right: can't possibly be = almost ruled out, with the base form be."
+   },
+   "wrong": [
+    {
+     "not": [
+      "possibly"
+     ],
+     "de": "Das Schlüsselwort possibly muss unverändert in der Lücke stehen.",
+     "en": "The key word possibly must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "must"
+     ],
+     "not": [
+      "not"
+     ],
+     "pat": "md.must-now",
+     "de": "must be sagt das Gegenteil: sicher der Endpreis. Gemeint ist: ausgeschlossen.",
+     "en": "must be says the opposite: surely the final price. The point is: ruled out."
+    },
+    {
+     "not": [
+      "be"
+     ],
+     "de": "Nach can't possibly folgt die Grundform: can't possibly be.",
+     "en": "The base form follows can't possibly: can't possibly be."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-cn-k2",
+  "type": "kwt",
+  "pat": "md.cant-now",
+  "from": "I'm sure that isn't Maria on the phone – she's on vacation.",
+  "key": "BE",
+  "frame": "That ___ Maria on the phone – she's on vacation.",
+  "answer": "can't be",
+  "accepted": [
+   "cannot be",
+   "can not be",
+   "couldn't be",
+   "could not be",
+   "must not be"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Im Urlaub, also ausgeschlossen: can't be + Grundform.",
+    "en": "Right: on vacation, so it is ruled out: can't be + base form."
+   },
+   "wrong": [
+    {
+     "not": [
+      "be"
+     ],
+     "de": "Das Schlüsselwort be muss unverändert in der Lücke stehen.",
+     "en": "The key word be must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "must"
+     ],
+     "not": [
+      "not"
+     ],
+     "pat": "md.must-now",
+     "de": "must be = sicher Maria. Gemeint ist: sicher nicht Maria.",
+     "en": "must be = surely Maria. The point is: surely not Maria."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "pat": "md.might-now",
+     "de": "might be = vielleicht Maria. Im Urlaub ist es so gut wie ausgeschlossen.",
+     "en": "might be = maybe Maria. On vacation it is almost ruled out."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-cn-f1",
+  "type": "find",
+  "pat": "md.cant-now",
+  "prompt": "That can't to be right – the totals don't add up.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "be",
+  "fixed": "That can't be right – the totals don't add up.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach can't steht die Grundform ohne to: can't be.",
+    "en": "The error: the base form follows can't, with no to: can't be."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Hinter can't steht kein to.",
+     "en": "There is an error: no to follows can't."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „to be“: Nach Modalverben steht kein to.",
+     "en": "The error is “to be”: no to follows a modal verb."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-cn-f2",
+  "type": "find",
+  "pat": "md.cant-now",
+  "prompt": "That can't been the right file – it's from last year.",
+  "err": [
+   2,
+   2
+  ],
+  "answer": "be",
+  "fixed": "That can't be the right file – it's from last year.",
+  "accepted": [
+   "have been"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach can't steht be (jetzt) oder have been (früher), nie been allein.",
+    "en": "The error: after can't use be (now) or have been (earlier), never been alone."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Die Form nach can't stimmt nicht.",
+     "en": "There is an error: the form after can't is wrong."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „been“: Es fehlt have, oder es heißt be.",
+     "en": "The error is “been”: either add have, or use the base form be."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-cn-m1",
+  "type": "meaning",
+  "pat": "md.cant-now",
+  "a": "He can't be in the office.",
+  "b": "He might not be in the office.",
+  "q": {
+   "de": "Welcher Satz sagt: Ich bin mir fast sicher, dass er nicht im Büro ist?",
+   "en": "Which sentence says the speaker is almost sure he is not in the office?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. can't be = so gut wie ausgeschlossen.",
+    "en": "Right: sentence a. can't be = almost ruled out."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "might not be nennt nur eine Möglichkeit: Vielleicht ist er nicht da.",
+     "en": "might not be only names a possibility: maybe he is not there."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: can't be = sicher nicht, might not be = vielleicht nicht.",
+     "en": "Not the same: can't be = surely not, might not be = maybe not."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-mi-k1",
+  "type": "kwt",
+  "pat": "md.might-now",
+  "from": "Perhaps she is still waiting outside right now.",
+  "key": "MIGHT",
+  "frame": "She ___ outside right now.",
+  "answer": "might be waiting",
+  "accepted": [
+   "might still be waiting",
+   "might well be waiting"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: might be waiting = nur möglich, gerade jetzt, mit be + -ing.",
+    "en": "Right: might be waiting = only possible, right now, with be + -ing."
+   },
+   "wrong": [
+    {
+     "not": [
+      "might"
+     ],
+     "de": "Das Schlüsselwort might muss unverändert in der Lücke stehen.",
+     "en": "The key word might must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "might",
+      "have"
+     ],
+     "pat": "md.might-have",
+     "de": "might have waited meint früher. Mit „right now“ gilt might be waiting.",
+     "en": "might have waited refers to the past. With “right now” use might be waiting."
+    },
+    {
+     "if": [
+      "might",
+      "wait"
+     ],
+     "de": "Ein Vorgang, der jetzt läuft, braucht be + -ing: might be waiting.",
+     "en": "An action in progress now needs be + -ing: might be waiting."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-mi-k2",
+  "type": "kwt",
+  "pat": "md.might-now",
+  "from": "It's possible that he is stuck in traffic right now.",
+  "key": "MIGHT",
+  "frame": "He ___ stuck in traffic right now.",
+  "answer": "might be",
+  "accepted": [
+   "might still be",
+   "might just be",
+   "might well be"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: might be = nur eine Möglichkeit, kein sicherer Schluss.",
+    "en": "Right: might be = only a possibility, not a firm conclusion."
+   },
+   "wrong": [
+    {
+     "not": [
+      "might"
+     ],
+     "de": "Das Schlüsselwort might muss unverändert in der Lücke stehen.",
+     "en": "The key word might must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "might",
+      "have"
+     ],
+     "pat": "md.might-have",
+     "de": "might have been meint früher. „right now“ verlangt might be.",
+     "en": "might have been refers to the past. “right now” calls for might be."
+    },
+    {
+     "not": [
+      "be"
+     ],
+     "de": "Nach might folgt be: might be stuck in traffic.",
+     "en": "be follows might: might be stuck in traffic."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-mi-f1",
+  "type": "find",
+  "pat": "md.might-now",
+  "prompt": "He maybe in a meeting right now, so let's try him later.",
+  "err": [
+   1,
+   1
+  ],
+  "answer": "may be",
+  "fixed": "He may be in a meeting right now, so let's try him later.",
+  "accepted": [
+   "might be",
+   "could be"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: maybe ist ein Adverb. Hier braucht es das Verb may be (zwei Wörter).",
+    "en": "The error: maybe is an adverb. Here the verb may be (two words) is needed."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Dem Satz fehlt ein Verb.",
+     "en": "There is an error: the sentence is missing a verb."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „maybe“: Hier fehlt das Verb be.",
+     "en": "The error is “maybe”: the verb be is missing here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-mi-f2",
+  "type": "find",
+  "pat": "md.might-now",
+  "prompt": "The mistake could be in the formula, but I can't tell yet.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: could be nennt eine Möglichkeit, nicht mehr.",
+    "en": "No error: could be names a possibility, nothing more."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: could be passt zu „I can't tell yet“.",
+     "en": "No error: could be fits “I can't tell yet”."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-mi-m1",
+  "type": "meaning",
+  "pat": "md.might-now",
+  "a": "She might be at home.",
+  "b": "She must be at home.",
+  "q": {
+   "de": "Welcher Satz sagt: Ich habe keinen klaren Hinweis, es ist nur möglich?",
+   "en": "Which sentence says there is no clear clue, it is just possible?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. might be = nur eine Möglichkeit.",
+    "en": "Right: sentence a. might be = only a possibility."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "pat": "md.must-now",
+     "de": "must be = fast sicher, mit klarem Hinweis.",
+     "en": "must be = almost sure, with a clear clue."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: might = möglich, must = fast sicher.",
+     "en": "Not the same: might = possible, must = almost sure."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-mh-k1",
+  "type": "kwt",
+  "pat": "md.must-have",
+  "from": "I'm sure someone left the window open.",
+  "key": "MUST",
+  "frame": "Someone ___ the window open.",
+  "answer": "must have left",
+  "accepted": [],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: must have left = fast sicher über früher: have + Partizip.",
+    "en": "Right: must have left = almost sure about the past: have + participle."
+   },
+   "wrong": [
+    {
+     "not": [
+      "must"
+     ],
+     "de": "Das Schlüsselwort must muss unverändert in der Lücke stehen.",
+     "en": "The key word must must stay unchanged in the gap."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Für früher braucht es have: must have left.",
+     "en": "The past needs have: must have left."
+    },
+    {
+     "if": [
+      "have",
+      "leave"
+     ],
+     "de": "Nach have steht die 3. Verbform: left, nicht leave.",
+     "en": "After have use the third form: left, not leave."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-mh-k2",
+  "type": "kwt",
+  "pat": "md.must-have",
+  "from": "It's obvious the client misunderstood our proposal.",
+  "key": "MUST",
+  "frame": "The client ___ our proposal.",
+  "answer": "must have misunderstood",
+  "accepted": [
+   "must have completely misunderstood",
+   "must have totally misunderstood",
+   "must have clearly misunderstood"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: must have + misunderstood = klarer Schluss über früher.",
+    "en": "Right: must have + misunderstood = a clear conclusion about the past."
+   },
+   "wrong": [
+    {
+     "not": [
+      "must"
+     ],
+     "de": "Das Schlüsselwort must muss unverändert in der Lücke stehen.",
+     "en": "The key word must must stay unchanged in the gap."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Für früher braucht es have + Partizip: must have misunderstood.",
+     "en": "The past needs have + participle: must have misunderstood."
+    },
+    {
+     "if": [
+      "have",
+      "misunderstand"
+     ],
+     "de": "Nach have steht die 3. Verbform: misunderstood, nicht misunderstand.",
+     "en": "After have use the third form: misunderstood, not misunderstand."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-mh-f1",
+  "type": "find",
+  "pat": "md.must-have",
+  "prompt": "The database must crashed during the update – nothing was saved.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "must have crashed",
+  "fixed": "The database must have crashed during the update – nothing was saved.",
+  "accepted": [
+   "must've crashed"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Zwischen must und crashed fehlt have: must have crashed.",
+    "en": "The error: have is missing between must and crashed: must have crashed."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach must fehlt für früher das have.",
+     "en": "There is an error: for the past, have is missing after must."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „must crashed“: Es braucht must have + Partizip.",
+     "en": "The error is “must crashed”: it needs must have + participle."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-mh-f2",
+  "type": "find",
+  "pat": "md.must-have",
+  "prompt": "Somebody must have took my laptop – the desk is empty.",
+  "err": [
+   3,
+   3
+  ],
+  "answer": "taken",
+  "fixed": "Somebody must have taken my laptop – the desk is empty.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach must have steht die 3. Verbform: taken, nicht took.",
+    "en": "The error: the third form follows must have: taken, not took."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Die Verbform nach have stimmt nicht.",
+     "en": "There is an error: the verb form after have is wrong."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „took“: Nach have steht taken.",
+     "en": "The error is “took”: after have comes taken."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-mh-m1",
+  "type": "meaning",
+  "pat": "md.must-have",
+  "a": "He must have signed the contract.",
+  "b": "He had to sign the contract.",
+  "q": {
+   "de": "Welcher Satz sagt: Ich schließe daraus, dass er unterschrieben hat?",
+   "en": "Which sentence concludes that he signed the contract?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. must have signed = Schluss über früher.",
+    "en": "Right: sentence a. must have signed = a conclusion about the past."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "had to = „musste“: eine Pflicht in der Vergangenheit, kein Schluss.",
+     "en": "had to = “was required to”: a past obligation, not a conclusion."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: must have = Schluss, had to = Pflicht.",
+     "en": "Not the same: must have = conclusion, had to = obligation."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-ch-k1",
+  "type": "kwt",
+  "pat": "md.cant-have",
+  "from": "It is impossible that she saw the email before the meeting.",
+  "key": "POSSIBLY",
+  "frame": "She ___ the email before the meeting.",
+  "answer": "can't possibly have seen",
+  "accepted": [
+   "cannot possibly have seen",
+   "couldn't possibly have seen",
+   "could not possibly have seen"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: can't possibly have seen = so gut wie ausgeschlossen, früher.",
+    "en": "Right: can't possibly have seen = almost ruled out, in the past."
+   },
+   "wrong": [
+    {
+     "not": [
+      "possibly"
+     ],
+     "de": "Das Schlüsselwort possibly muss unverändert in der Lücke stehen.",
+     "en": "The key word possibly must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "must"
+     ],
+     "not": [
+      "not"
+     ],
+     "pat": "md.must-have",
+     "de": "must have seen = sicher gesehen. Gemeint ist: ausgeschlossen.",
+     "en": "must have seen = surely saw it. The point is: ruled out."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Für früher braucht es have + Partizip: can't possibly have seen.",
+     "en": "The past needs have + participle: can't possibly have seen."
+    },
+    {
+     "if": [
+      "have",
+      "saw"
+     ],
+     "de": "Nach have steht die 3. Verbform: seen, nicht saw.",
+     "en": "After have use the third form: seen, not saw."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-ch-k2",
+  "type": "kwt",
+  "pat": "md.cant-have",
+  "from": "It is impossible that he got our message – the email bounced.",
+  "key": "HAVE",
+  "frame": "He ___ our message – the email bounced.",
+  "answer": "can't have received",
+  "accepted": [
+   "can't have gotten",
+   "cannot have received",
+   "cannot have gotten",
+   "couldn't have received",
+   "couldn't have gotten",
+   "could not have received",
+   "could not have gotten"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: can't have + received = ausgeschlossen, früher gedacht.",
+    "en": "Right: can't have + received = ruled out, thinking about the past."
+   },
+   "wrong": [
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Das Schlüsselwort have muss unverändert in der Lücke stehen.",
+     "en": "The key word have must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "must"
+     ],
+     "not": [
+      "not"
+     ],
+     "pat": "md.must-have",
+     "de": "must have = sicher erhalten. Die E-Mail kam aber zurück: ausgeschlossen.",
+     "en": "must have = surely received. But the email bounced: ruled out."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "pat": "md.might-have",
+     "de": "might have = nur vielleicht. Bei einer zurückgekommenen E-Mail ist es fast ausgeschlossen.",
+     "en": "might have = only maybe. With a bounced email it is almost ruled out."
+    },
+    {
+     "if": [
+      "have",
+      "receive"
+     ],
+     "de": "Nach have steht die 3. Verbform: received, nicht receive.",
+     "en": "After have use the third form: received, not receive."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-ch-f1",
+  "type": "find",
+  "pat": "md.cant-have",
+  "prompt": "The invoice can't be sent last week – our system was down.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "can't have been",
+  "fixed": "The invoice can't have been sent last week – our system was down.",
+  "accepted": [
+   "cannot have been",
+   "couldn't have been",
+   "could not have been"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „last week“ meint früher, also can't have been sent, nicht can't be.",
+    "en": "The error: “last week” is earlier, so can't have been sent, not can't be."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Zeitangabe und Form passen nicht zusammen.",
+     "en": "There is an error: the time phrase and the form do not match."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „can't be“: Mit „last week“ braucht es have been.",
+     "en": "The error is “can't be”: with “last week” you need have been."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-ch-f2",
+  "type": "find",
+  "pat": "md.cant-have",
+  "prompt": "The error can't have come from our side – the logs are clean.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: can't have + come = ausgeschlossen, früher gedacht.",
+    "en": "No error: can't have + come = ruled out, thinking about the past."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach can't have steht die 3. Verbform, hier come.",
+     "en": "No error: the third form follows can't have, here come."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-ch-m1",
+  "type": "meaning",
+  "pat": "md.cant-have",
+  "a": "She can't have signed it.",
+  "b": "She couldn't sign it.",
+  "q": {
+   "de": "Welcher Satz sagt: Ich glaube nicht, dass sie es unterschrieben hat?",
+   "en": "Which sentence says the speaker does not believe she signed it?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. can't have + Partizip = Schluss über früher.",
+    "en": "Right: sentence a. can't have + participle = a conclusion about the past."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "couldn't sign = sie konnte nicht unterschreiben (Fähigkeit), kein Schluss.",
+     "en": "couldn't sign = she was unable to sign (ability), not a conclusion."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: can't have signed = Schluss, couldn't sign = Unfähigkeit.",
+     "en": "Not the same: can't have signed = conclusion, couldn't sign = inability."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-ih-k1",
+  "type": "kwt",
+  "pat": "md.might-have",
+  "from": "Perhaps the client didn't get our email.",
+  "key": "MIGHT",
+  "frame": "The client ___ our email.",
+  "answer": "might not have gotten",
+  "accepted": [
+   "might not have received",
+   "might have not gotten",
+   "might have not received"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: might not have + gotten = vielleicht nicht angekommen.",
+    "en": "Right: might not have + gotten = maybe it did not arrive."
+   },
+   "wrong": [
+    {
+     "not": [
+      "might"
+     ],
+     "de": "Das Schlüsselwort might muss unverändert in der Lücke stehen.",
+     "en": "The key word might must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "not": [
+      "not"
+     ],
+     "de": "Das sagt das Gegenteil: vielleicht doch angekommen. Gemeint ist: vielleicht nicht.",
+     "en": "That says the opposite: maybe it did arrive. The point is: maybe not."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Für früher braucht es have + Partizip: might not have gotten.",
+     "en": "The past needs have + participle: might not have gotten."
+    },
+    {
+     "if": [
+      "have",
+      "get"
+     ],
+     "de": "Nach have steht die 3. Verbform: gotten, nicht get.",
+     "en": "After have use the third form: gotten, not get."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-ih-k2",
+  "type": "kwt",
+  "pat": "md.might-have",
+  "from": "It's possible that someone moved the files.",
+  "key": "MIGHT",
+  "frame": "Someone ___ the files.",
+  "answer": "might have moved",
+  "accepted": [
+   "might well have moved"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: might have moved = nur eine Möglichkeit über früher.",
+    "en": "Right: might have moved = only a possibility about the past."
+   },
+   "wrong": [
+    {
+     "not": [
+      "might"
+     ],
+     "de": "Das Schlüsselwort might muss unverändert in der Lücke stehen.",
+     "en": "The key word might must stay unchanged in the gap."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Für früher braucht es have + Partizip: might have moved.",
+     "en": "The past needs have + participle: might have moved."
+    },
+    {
+     "if": [
+      "have",
+      "move"
+     ],
+     "de": "Nach have steht die 3. Verbform: moved, nicht move.",
+     "en": "After have use the third form: moved, not move."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-ih-f1",
+  "type": "find",
+  "pat": "md.might-have",
+  "prompt": "The courier might lost the package, which would explain the delay.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "might have lost",
+  "fixed": "The courier might have lost the package, which would explain the delay.",
+  "accepted": [
+   "may have lost",
+   "could have lost"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach might fehlt have: might have lost.",
+    "en": "The error: have is missing after might: might have lost."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach might fehlt für früher das have.",
+     "en": "There is an error: for the past, have is missing after might."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „might lost“: Es braucht might have + Partizip.",
+     "en": "The error is “might lost”: it needs might have + participle."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-ih-f2",
+  "type": "find",
+  "pat": "md.might-have",
+  "prompt": "The client may have misunderstand the deadline.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "misunderstood",
+  "fixed": "The client may have misunderstood the deadline.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach may have steht die 3. Verbform: misunderstood.",
+    "en": "The error: the third form follows may have: misunderstood."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Die Verbform nach have stimmt nicht.",
+     "en": "There is an error: the verb form after have is wrong."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „misunderstand“: Nach have steht misunderstood.",
+     "en": "The error is “misunderstand”: after have comes misunderstood."
+    }
+   ]
+  }
+ },
+ {
+  "id": "md-ih-m1",
+  "type": "meaning",
+  "pat": "md.might-have",
+  "a": "He might have left.",
+  "b": "He might leave.",
+  "q": {
+   "de": "Welcher Satz sagt: Vielleicht ist er schon gegangen?",
+   "en": "Which sentence says maybe he has already left?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. might have + Partizip = Möglichkeit über früher.",
+    "en": "Right: sentence a. might have + participle = a possibility about the past."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "might leave meint die Zukunft: Vielleicht geht er erst später.",
+     "en": "might leave = maybe he will leave later (future)."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: might have left = früher, might leave = später.",
+     "en": "Not the same: might have left = earlier, might leave = later."
+    }
+   ]
+  }
+ }
+]

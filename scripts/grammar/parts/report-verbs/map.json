@@ -1,0 +1,408 @@
+{
+ "She admitted ___ the wrong figures to the board.": {
+  "pat": "rv.admit-deny",
+  "why": {
+   "ok": {
+    "de": "Richtig: admit + -ing, also admitted sending. Sie hat die Zahlen geschickt.",
+    "en": "Right: admit + -ing, so admitted sending. She did send the wrong figures."
+   },
+   "wrong": [
+    {
+     "opt": "send",
+     "de": "Nach admit steht nie die Grundform, immer -ing: admitted sending.",
+     "en": "After admit the base form never stands; use -ing: admitted sending."
+    },
+    {
+     "opt": "to send",
+     "pat": "rv.offer",
+     "de": "Admit nimmt kein to + Verb. Das deutsche „zu schicken“ führt hierher.",
+     "en": "Admit takes no to + verb. German “zu schicken” leads here."
+    },
+    {
+     "opt": "that sending",
+     "de": "Ein that-Satz braucht Subjekt und Verb: that she sent, nicht that sending.",
+     "en": "A that-clause needs a subject and verb: that she sent, not that sending."
+    }
+   ]
+  }
+ },
+ "My lawyer advised me ___ the document yet.": {
+  "pat": "rv.advise-warn",
+  "why": {
+   "ok": {
+    "de": "Richtig: advise + Person + not to + Verb. Die Verneinung steht vor to.",
+    "en": "Right: advise + person + not to + verb. The negation goes before to."
+   },
+   "wrong": [
+    {
+     "opt": "don't sign",
+     "de": "„Don't“ stammt aus der direkten Rede. Berichtet wird mit not to + Verb.",
+     "en": "“Don't” comes from direct speech. Reported advice uses not to + verb."
+    },
+    {
+     "opt": "not signing",
+     "de": "Nach advise + Person folgt to + Verb, nicht -ing: advised me not to sign.",
+     "en": "After advise + person comes to + verb, not -ing: advised me not to sign."
+    },
+    {
+     "opt": "to not signing",
+     "de": "Hier sind zwei Muster vermischt: to + Verb und -ing. Es gilt not to sign.",
+     "en": "Two patterns are mixed here: to + verb and -ing. The form is not to sign."
+    }
+   ]
+  }
+ },
+ "He insisted ___ for the dinner.": {
+  "pat": "rv.insist",
+  "why": {
+   "ok": {
+    "de": "Richtig: insist braucht on, und danach folgt -ing: insisted on paying.",
+    "en": "Right: insist needs on, then -ing: insisted on paying."
+   },
+   "wrong": [
+    {
+     "opt": "on to pay",
+     "de": "Nach on steht -ing, kein to + Verb: on paying.",
+     "en": "After on comes -ing, not to + verb: on paying."
+    },
+    {
+     "opt": "to pay",
+     "de": "Insist verlangt die Präposition on. To pay allein reicht nicht.",
+     "en": "Insist needs the preposition on. To pay alone is not enough."
+    },
+    {
+     "opt": "paying",
+     "de": "Ohne on geht es nicht: Insist braucht die Präposition vor -ing.",
+     "en": "It does not work without on: insist needs the preposition before -ing."
+    }
+   ]
+  }
+ },
+ "The consultant recommended ___ the pilot in March.": {
+  "pat": "rv.suggest-rec",
+  "why": {
+   "ok": {
+    "de": "Richtig: recommend + -ing: recommended starting. Auch möglich: that we start.",
+    "en": "Right: recommend + -ing: recommended starting. Also possible: that we start."
+   },
+   "wrong": [
+    {
+     "opt": "us to start",
+     "pat": "rv.advise-warn",
+     "de": "Recommend + Person + to ist im US-Englisch unüblich: nimm -ing oder einen that-Satz.",
+     "en": "Recommend + person + to is uncommon in US English: use -ing or a that-clause."
+    },
+    {
+     "opt": "to start us",
+     "de": "Das ist keine mögliche Wortstellung: us kann nicht hinter to start stehen.",
+     "en": "That is not a possible word order: us cannot follow to start."
+    },
+    {
+     "opt": "that us start",
+     "de": "Im that-Satz steht das Subjekt als we, nicht als us: that we start.",
+     "en": "In a that-clause the subject is we, not us: that we start."
+    }
+   ]
+  }
+ },
+ "She suggested ___ the deadline to Thursday.": {
+  "pat": "rv.suggest-rec",
+  "why": {
+   "ok": {
+    "de": "Richtig: suggest + -ing: suggested moving. Auch richtig: that we move.",
+    "en": "Right: suggest + -ing: suggested moving. Also right: that we move."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Suggest nimmt kein to + Verb. Nach suggest steht -ing: moving.",
+     "en": "Suggest takes no to + verb. After suggest use -ing: moving."
+    },
+    {
+     "if": [
+      "move"
+     ],
+     "not": [
+      "that",
+      "we",
+      "i",
+      "they",
+      "he",
+      "she"
+     ],
+     "de": "Die Grundform passt nicht: Nach suggest steht -ing (moving).",
+     "en": "The bare form does not fit: after suggest use -ing (moving)."
+    },
+    {
+     "if": [
+      "moved"
+     ],
+     "de": "Die Vergangenheitsform passt nicht: Nach suggest steht -ing.",
+     "en": "The past form does not fit: after suggest use -ing."
+    }
+   ]
+  }
+ },
+ "The doctor advised him ___ more rest.": {
+  "pat": "rv.advise-warn",
+  "why": {
+   "ok": {
+    "de": "Richtig: nach advise + Person folgt to + Verb: advised him to get.",
+    "en": "Right: advise + person + to + verb: advised him to get."
+   },
+   "wrong": [
+    {
+     "if": [
+      "getting"
+     ],
+     "de": "Nach advise + Person steht to + Verb, nicht -ing.",
+     "en": "After advise + person use to + verb, not -ing."
+    },
+    {
+     "if": [
+      "get"
+     ],
+     "not": [
+      "to",
+      "that",
+      "he"
+     ],
+     "de": "Es fehlt to: nach advise + Person folgt to + Verb.",
+     "en": "The to is missing: advise + person + to + verb."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach advise + Person folgt kein will: advised him to get.",
+     "en": "No will follows advise + person: advised him to get."
+    }
+   ]
+  }
+ },
+ "The manager denied ___ the error.": {
+  "pat": "rv.admit-deny",
+  "why": {
+   "ok": {
+    "de": "Richtig: deny + -ing: denied making. Für Früheres auch: having made.",
+    "en": "Right: deny + -ing: denied making. For something earlier also: having made."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Deny nimmt kein to + Verb. Nach deny steht -ing: denied making.",
+     "en": "Deny takes no to + verb. After deny use -ing: denied making."
+    },
+    {
+     "if": [
+      "make"
+     ],
+     "not": [
+      "that",
+      "he",
+      "she",
+      "they",
+      "we",
+      "i"
+     ],
+     "de": "Die Grundform passt nicht: Nach deny steht -ing (making).",
+     "en": "The bare form does not fit: after deny use -ing (making)."
+    },
+    {
+     "if": [
+      "made"
+     ],
+     "not": [
+      "having",
+      "that",
+      "he",
+      "she",
+      "they",
+      "we",
+      "i"
+     ],
+     "de": "Made allein passt nicht: Nach deny steht -ing oder having made.",
+     "en": "Made alone does not fit: after deny use -ing or having made."
+    }
+   ]
+  }
+ },
+ "'I'll cover the costs,' he said. → He offered ___ the costs.": {
+  "pat": "rv.offer",
+  "why": {
+   "ok": {
+    "de": "Richtig: nach offer folgt to + Verb: offered to cover. Es steht kein -ing da.",
+    "en": "Right: offer + to + verb: offered to cover. No -ing follows."
+   },
+   "wrong": [
+    {
+     "if": [
+      "covering"
+     ],
+     "de": "Nach offer steht to + Verb, nicht -ing: offered to cover.",
+     "en": "After offer use to + verb, not -ing: offered to cover."
+    },
+    {
+     "if": [
+      "paying"
+     ],
+     "de": "Nach offer steht to + Verb, nicht -ing: offered to pay.",
+     "en": "After offer use to + verb, not -ing: offered to pay."
+    },
+    {
+     "if": [
+      "cover"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Es fehlt to: nach offer folgt to + Verb.",
+     "en": "The to is missing: offer + to + verb."
+    }
+   ]
+  }
+ },
+ "'Don't discuss the deal with anyone,' she told me. → She warned me ___ the deal with anyone.": {
+  "pat": "rv.advise-warn",
+  "why": {
+   "ok": {
+    "de": "Richtig: warn + Person + not to + Verb. Not steht vor to.",
+    "en": "Right: warn + person + not to + verb. Not goes before to."
+   },
+   "wrong": [
+    {
+     "if": [
+      "not",
+      "discussing"
+     ],
+     "de": "Nach warn + Person folgt to + Verb, nicht -ing: not to discuss.",
+     "en": "After warn + person use to + verb, not -ing: not to discuss."
+    },
+    {
+     "if": [
+      "not"
+     ],
+     "not": [
+      "to",
+      "against"
+     ],
+     "de": "Es fehlt to: nach warn + Person folgt not to + Verb.",
+     "en": "The to is missing: warn + person + not to + verb."
+    },
+    {
+     "if": [
+      "to"
+     ],
+     "not": [
+      "not",
+      "never"
+     ],
+     "de": "Die Verneinung fehlt: Gemeint ist, dass er es nicht tun soll: not to discuss.",
+     "en": "The negation is missing: the point is that he should not do it: not to discuss."
+    }
+   ]
+  }
+ },
+ "He suggested me to take a different route.": {
+  "pat": "rv.suggest-rec",
+  "why": {
+   "ok": {
+    "de": "Richtig: that I take oder taking. Suggest nimmt nie Person + to.",
+    "en": "Right: that I take or taking. Suggest never takes person + to."
+   },
+   "wrong": [
+    {
+     "if": [
+      "me",
+      "to"
+     ],
+     "de": "Person + to geht bei suggest nicht: nur that-Satz oder -ing.",
+     "en": "Person + to does not work with suggest: only a that-clause or -ing."
+    },
+    {
+     "if": [
+      "to"
+     ],
+     "not": [
+      "me"
+     ],
+     "de": "Suggest nimmt kein to + Verb: nur that-Satz oder -ing.",
+     "en": "Suggest takes no to + verb: only a that-clause or -ing."
+    }
+   ]
+  }
+ },
+ "She admitted to be late for the meeting.": {
+  "pat": "rv.admit-deny",
+  "why": {
+   "ok": {
+    "de": "Richtig: admit + -ing: admitted being late. Auch: admitted to being late.",
+    "en": "Right: admit + -ing: admitted being late. Also: admitted to being late."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to",
+      "be"
+     ],
+     "de": "Admit nimmt kein to + Verb. Es heißt being, oder to being.",
+     "en": "Admit takes no to + verb. Use being, or to being."
+    },
+    {
+     "if": [
+      "be"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach admit steht -ing: being late, nicht die Grundform.",
+     "en": "After admit use -ing: being late, not the base form."
+    }
+   ]
+  }
+ },
+ "They insisted to see the contract before signing.": {
+  "pat": "rv.insist",
+  "why": {
+   "ok": {
+    "de": "Richtig: insist braucht on und danach -ing: insisted on seeing.",
+    "en": "Right: insist needs on + -ing: insisted on seeing."
+   },
+   "wrong": [
+    {
+     "if": [
+      "insisted",
+      "to"
+     ],
+     "not": [
+      "on"
+     ],
+     "de": "Insist braucht die Präposition on, danach folgt -ing: on seeing.",
+     "en": "Insist needs the preposition on, then -ing: on seeing."
+    },
+    {
+     "if": [
+      "on",
+      "see"
+     ],
+     "de": "Nach on steht -ing, nicht die Grundform: on seeing.",
+     "en": "After on comes -ing, not the base form: on seeing."
+    },
+    {
+     "if": [
+      "seeing"
+     ],
+     "not": [
+      "on"
+     ],
+     "de": "Es fehlt on: nach insist folgt on + -ing.",
+     "en": "The on is missing: insisted on seeing."
+    }
+   ]
+  }
+ }
+}

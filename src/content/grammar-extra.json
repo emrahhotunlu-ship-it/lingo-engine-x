@@ -8,7 +8,7 @@
       "hint": "(have)",
       "answer": "used to have",
       "expl": "Früher war es so, heute nicht mehr: „used to“ + Grundform (We used to have a paper archive).",
-      "expl_en": "It was like that before, but not any more: “used to” + base verb (We used to have a paper archive)."
+      "expl_en": "It was like that before, but not anymore: “used to” + base verb (We used to have a paper archive)."
     },
     {
       "topic": "used-to",
@@ -44,7 +44,7 @@
       "prompt": "The lights are off, so they ___ (be) in the office any more.",
       "hint": "(be)",
       "answer": "can't be",
-      "accepted": ["cannot be", "can not be"],
+      "accepted": ["cannot be", "couldn't be", "could not be", "must not be"],
       "expl": "Du bist sicher, dass etwas NICHT stimmt: „can’t“ + Grundform.",
       "expl_en": "You are sure something is NOT true → can't + base form."
     },
@@ -53,6 +53,7 @@
       "type": "transform",
       "prompt": "I'm sure he forgot the meeting. → He ___ the meeting.",
       "answer": "must have forgotten",
+      "accepted": ["must've forgotten"],
       "expl": "Du bist fast sicher, was früher war: „must have“ + 3. Verbform (z. B. must have forgotten).",
       "expl_en": "A confident guess about the past → must have + past participle."
     },

@@ -1,0 +1,209 @@
+[
+ {
+  "pat": "em.what-cleft",
+  "en": "What worried us most was the lack of testing.",
+  "de": "Was uns am meisten beunruhigt hat, war das Fehlen von Tests.",
+  "chunks": [
+   "what",
+   "worried us",
+   "most",
+   "was",
+   "the lack",
+   "of testing"
+  ],
+  "alt": [
+   "The lack of testing was what worried us most.",
+   "What most worried us was the lack of testing."
+  ],
+  "why": [
+   "Der What-Teil ist ein einziges Subjekt, danach folgt das Verb direkt, und das Betonte kommt ans Ende.",
+   "The what-part is one single subject, then the verb follows directly and the focus goes last."
+  ],
+  "bad": "Which worried us most was the lack of testing.",
+  "trap": {
+   "tile": "what",
+   "instead": "which",
+   "why": {
+    "de": "Which braucht ein Nomen, auf das es sich bezieht. Hier steht keines davor, darum beginnt der Spaltsatz mit what.",
+    "en": "Which needs a noun to refer back to. None comes before it here, so the cleft starts with what."
+   }
+  }
+ },
+ {
+  "pat": "em.what-cleft",
+  "en": "What I'd suggest is a short call on Friday.",
+  "de": "Was ich vorschlagen würde, ist ein kurzer Anruf am Freitag.",
+  "chunks": [
+   "what",
+   "I'd suggest",
+   "is",
+   "a short call",
+   "on Friday"
+  ],
+  "alt": [
+   "A short call on Friday is what I'd suggest.",
+   "On Friday, what I'd suggest is a short call."
+  ],
+  "why": [
+   "Nach dem What-Teil folgt direkt is, ohne Komma und ohne „das“. Der Vorschlag steht am Satzende.",
+   "After the what-part is follows directly, with no comma and no “das”. The suggestion goes last."
+  ],
+  "bad": "What I'd suggest, it is a short call on Friday."
+ },
+ {
+  "pat": "em.it-cleft",
+  "en": "It was the legal team that flagged the risk.",
+  "de": "Es war die Rechtsabteilung, die auf das Risiko hingewiesen hat.",
+  "chunks": [
+   "it was",
+   "the legal team",
+   "that",
+   "flagged",
+   "the risk"
+  ],
+  "single": "Der It-Spaltsatz ist ein fester Rahmen: Das Betonte steht zwischen it was und that, nichts davon lässt sich verschieben.",
+  "why": [
+   "Im Deutschen steht vor dem Relativsatz ein Komma, im englischen It-Satz nicht: It was the legal team that flagged …",
+   "German puts a comma before the relative clause; the English it-cleft has none: It was the legal team that flagged …"
+  ]
+ },
+ {
+  "pat": "em.it-cleft",
+  "en": "It was in the second round that the pricing changed.",
+  "de": "Gerade in der zweiten Runde hat sich die Preisgestaltung geändert.",
+  "chunks": [
+   "it was",
+   "in the second round",
+   "that",
+   "the pricing",
+   "changed"
+  ],
+  "single": "Der It-Spaltsatz hält die Zeitangabe zwischen it was und that fest, und danach folgt der Rest des Satzes in normaler Reihenfolge.",
+  "why": [
+   "Der It-Satz hebt die zweite Runde heraus: Die Zeitangabe steht zwischen it was und that, danach folgt der Rest.",
+   "The it-cleft singles out the second round: the time phrase sits between it was and that, then the rest follows."
+  ]
+ },
+ {
+  "pat": "em.neg-inversion",
+  "en": "Rarely do we see such a clean audit.",
+  "de": "Selten sehen wir ein so sauberes Audit.",
+  "chunks": [
+   "rarely",
+   "do",
+   "we",
+   "see",
+   "such a clean audit"
+  ],
+  "single": "Nach Rarely vorn steht das Hilfsverb vor dem Subjekt, und das Vollverb bleibt danach in der Grundform.",
+  "why": [
+   "Nach Rarely vorn wird wie in einer Frage umgestellt: do vor we, danach die Grundform see.",
+   "After Rarely first, the order changes as in a question: do before we, then the base form see."
+  ],
+  "bad": "Rarely have we see such a clean audit.",
+  "trap": {
+   "tile": "do",
+   "instead": "have",
+   "why": {
+    "de": "Hilfsverb und Verbform passen nicht zusammen: have verlangt seen, nach do bleibt see in der Grundform.",
+    "en": "Auxiliary and verb form do not match: have needs seen, while do keeps see in the base form."
+   }
+  }
+ },
+ {
+  "pat": "em.neg-inversion",
+  "en": "At no point did the client ask for changes.",
+  "de": "Zu keinem Zeitpunkt hat der Kunde um Änderungen gebeten.",
+  "chunks": [
+   "at no point",
+   "did",
+   "the client",
+   "ask",
+   "for changes"
+  ],
+  "single": "Nach At no point folgt die Frageform mit did vor dem Subjekt, dahinter steht das Verb in der Grundform.",
+  "why": [
+   "Nach At no point steht did vor dem Subjekt, und danach bleibt das Vollverb in der Grundform: ask.",
+   "After At no point comes did before the subject, and the full verb stays in the base form: ask."
+  ],
+  "bad": "At no point did the client asked for changes.",
+  "trap": {
+   "tile": "ask",
+   "instead": "asked",
+   "why": {
+    "de": "Die Vergangenheit steckt schon in did. Danach steht das Verb in der Grundform, also ask und nicht asked.",
+    "en": "The past tense is already in did. After it the verb stays in the base form, so ask and not asked."
+   }
+  }
+ },
+ {
+  "pat": "em.not-only",
+  "en": "Not only was the demo late, but it also crashed.",
+  "de": "Die Demo kam nicht nur zu spät, sie ist auch abgestürzt.",
+  "chunks": [
+   "not only",
+   "was",
+   "the demo",
+   "late",
+   "but",
+   "it also",
+   "crashed"
+  ],
+  "alt": [
+   "The demo was not only late, but it also crashed."
+  ],
+  "why": [
+   "Nach Not only vorn steht das Verb vor dem Subjekt: was the demo. Der zweite Teil bleibt normal: it also crashed.",
+   "After Not only first, the verb comes before the subject: was the demo. The second part stays normal: it also crashed."
+  ],
+  "bad": "Not only the demo was late, but it also crashed."
+ },
+ {
+  "pat": "em.only-inversion",
+  "en": "Only when you confirm can we book the room.",
+  "de": "Nur wenn du bestätigst, können wir den Raum buchen.",
+  "chunks": [
+   "only when",
+   "you confirm",
+   "can",
+   "we",
+   "book",
+   "the room"
+  ],
+  "alt": [
+   "We can book the room only when you confirm."
+  ],
+  "why": [
+   "Der Nebensatz nach Only when bleibt normal (you confirm). Erst im Hauptsatz kommt die Umstellung: can we book.",
+   "The clause after Only when stays normal (you confirm). Only the main clause inverts: can we book."
+  ],
+  "bad": "Only when you confirm we can book the room."
+ },
+ {
+  "pat": "em.only-inversion",
+  "en": "Not until Friday did I get an answer.",
+  "de": "Erst am Freitag habe ich eine Antwort bekommen.",
+  "chunks": [
+   "not until",
+   "Friday",
+   "did",
+   "I",
+   "get",
+   "an answer"
+  ],
+  "single": "Nach Not until Friday folgt die Frageform mit did vor dem Subjekt, dahinter steht get in der Grundform.",
+  "why": [
+   "Nach Not until steht did vor dem Subjekt, und danach folgt die Grundform: did I get.",
+   "After Not until comes did before the subject, and then the base form follows: did I get."
+  ],
+  "bad": "Not until Friday did I got an answer.",
+  "trap": {
+   "tile": "get",
+   "instead": "got",
+   "why": {
+    "de": "Did trägt schon die Vergangenheit. Das Vollverb bleibt in der Grundform, also get und nicht got.",
+    "en": "Did already carries the past tense. The full verb stays in the base form, so get and not got."
+   }
+  }
+ }
+]

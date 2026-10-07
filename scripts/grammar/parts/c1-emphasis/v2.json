@@ -1,0 +1,959 @@
+[
+ {
+  "id": "em-wc-k1",
+  "type": "kwt",
+  "pat": "em.what-cleft",
+  "from": "The delay worried the client most.",
+  "key": "WHAT",
+  "frame": "___ the client most was the delay.",
+  "answer": "What worried",
+  "accepted": [
+   "What concerned",
+   "What bothered",
+   "What troubled"
+  ],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: What worried the client most was the delay. Das Betonte steht am Ende.",
+    "en": "Right: What worried the client most was the delay. The focus comes last."
+   },
+   "wrong": [
+    {
+     "not": [
+      "what"
+     ],
+     "de": "Das Schlüsselwort what muss unverändert in der Lücke stehen.",
+     "en": "The key word what must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "was"
+     ],
+     "de": "Was steht schon im Rahmen. In die Lücke gehört What + Verb.",
+     "en": "The was is already in the frame. The gap needs What + verb."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-wc-k2",
+  "type": "kwt",
+  "pat": "em.what-cleft",
+  "from": "I'd like to know whether the deal is still open.",
+  "key": "WHAT",
+  "frame": "___ is whether the deal is still open.",
+  "answer": "What I'd like to know",
+  "accepted": [
+   "What I want to know"
+  ],
+  "words": [
+   5,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: What I'd like to know is … Der What-Satz bleibt ein einziges Subjekt.",
+    "en": "Right: What I'd like to know is … The what-clause stays one single subject."
+   },
+   "wrong": [
+    {
+     "not": [
+      "what"
+     ],
+     "de": "Das Schlüsselwort what muss unverändert in der Lücke stehen.",
+     "en": "The key word what must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "is"
+     ],
+     "de": "Das is steht schon im Rahmen. Die Lücke endet mit know.",
+     "en": "The is is already in the frame. The gap ends with know."
+    },
+    {
+     "if": [
+      "that"
+     ],
+     "de": "Kein that: Der What-Satz geht direkt in is über.",
+     "en": "No that: the what-clause leads straight into is."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-wc-f1",
+  "type": "find",
+  "pat": "em.what-cleft",
+  "prompt": "What we need it is a faster approval process.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "is",
+  "fixed": "What we need is a faster approval process.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: das zusätzliche „it“. Der What-Satz ist schon das Subjekt. Richtig: What we need is …",
+    "en": "The error: the extra “it”. The what-clause is already the subject. Correct: What we need is …"
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Der What-Satz ist schon das Subjekt, ein „it“ ist zu viel.",
+     "en": "There is an error: the what-clause is already the subject, so “it” is too much."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „it is“: Der What-Satz geht direkt in is über.",
+     "en": "The error is in “it is”: the what-clause leads straight into is."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-wc-f2",
+  "type": "find",
+  "pat": "em.what-cleft",
+  "prompt": "Which we need most is a clear owner for each task.",
+  "err": [
+   0,
+   0
+  ],
+  "answer": "What",
+  "fixed": "What we need most is a clear owner for each task.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „Which“ am Anfang. Richtig: What we need most is …",
+    "en": "The error: “Which” at the start. Correct: What we need most is …"
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Der Anfang ist falsch: Which braucht ein Bezugswort, hier steht what.",
+     "en": "There is an error: The start is wrong: Which needs a noun to refer to; here what is needed."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt am ersten Wort: Which statt What.",
+     "en": "The error is the first word: Which instead of What."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-wc-f3",
+  "type": "find",
+  "pat": "em.what-cleft",
+  "prompt": "What made the difference was the support from our sales team.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: What made the difference + was + Betontes ist richtig.",
+    "en": "No error: What made the difference + was + focus is correct."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Der What-Satz geht direkt in was über.",
+     "en": "No error: the what-clause leads straight into was."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-wc-m1",
+  "type": "meaning",
+  "pat": "em.what-cleft",
+  "a": "What the client wants is a lower price.",
+  "b": "The client wants a lower price.",
+  "q": {
+   "de": "Welcher Satz stellt den Preis als Hauptsache heraus?",
+   "en": "Which sentence stresses the price as the main point?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Der What-Satz rückt das Ende, den Preis, in den Fokus.",
+    "en": "Right: sentence a. The what-cleft puts the end, the price, in focus."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b steht dasselbe ohne Betonung. Der Preis ist hier keine Hauptsache.",
+     "en": "In b the same thing is said with no stress. The price is not the focus here."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Nur a hebt den Preis als Hauptpunkt hervor.",
+     "en": "Not the same: only a stresses the price as the main point."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-ic-k1",
+  "type": "kwt",
+  "pat": "em.it-cleft",
+  "from": "Maria wrote the report, not Tom.",
+  "key": "WAS",
+  "frame": "It ___ the report, not Tom.",
+  "answer": "was Maria who wrote",
+  "accepted": [
+   "was Maria that wrote"
+  ],
+  "words": [
+   4,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: It was Maria who wrote … Bei einer Person steht who oder that.",
+    "en": "Right: It was Maria who wrote … With a person use who or that."
+   },
+   "wrong": [
+    {
+     "not": [
+      "was"
+     ],
+     "de": "Das Schlüsselwort was muss unverändert in der Lücke stehen.",
+     "en": "The key word was must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "which"
+     ],
+     "de": "Which ist für Sachen. Für Maria nimmst du who oder that.",
+     "en": "Which is for things. For Maria use who or that."
+    },
+    {
+     "if": [
+      "is"
+     ],
+     "de": "Hier steht die Vergangenheit: It was Maria who wrote.",
+     "en": "This is the past: It was Maria who wrote."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-ic-k2",
+  "type": "kwt",
+  "pat": "em.it-cleft",
+  "from": "We signed the contract in March, not in April.",
+  "key": "THAT",
+  "frame": "It was in March ___ the contract, not in April.",
+  "answer": "that we signed",
+  "accepted": [],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: It was in March that we signed … That verbindet das Betonte mit dem Rest.",
+    "en": "Right: It was in March that we signed … That links the focus to the rest."
+   },
+   "wrong": [
+    {
+     "not": [
+      "that"
+     ],
+     "de": "Das Schlüsselwort that muss unverändert in der Lücke stehen.",
+     "en": "The key word that must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "sign"
+     ],
+     "de": "Der Vertrag ist schon unterschrieben: Vergangenheit, also signed.",
+     "en": "The contract is already signed: past tense, so signed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-ic-f1",
+  "type": "find",
+  "pat": "em.it-cleft",
+  "prompt": "It was the new intern which spotted the mistake in the invoice.",
+  "err": [
+   5,
+   5
+  ],
+  "answer": "who",
+  "fixed": "It was the new intern who spotted the mistake in the invoice.",
+  "accepted": [
+   "that"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „which“ für eine Person. Richtig: who (oder that).",
+    "en": "The error: “which” for a person. Correct: who (or that)."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Which gilt für Sachen, der Praktikant ist eine Person.",
+     "en": "There is an error: Which is for things, and the intern is a person."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „which“: Für eine Person nimmst du who oder that.",
+     "en": "The error is “which”: for a person use who or that."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-ic-f2",
+  "type": "find",
+  "pat": "em.it-cleft",
+  "prompt": "It were the new rules that caused the delay in the rollout.",
+  "err": [
+   1,
+   1
+  ],
+  "answer": "was",
+  "fixed": "It was the new rules that caused the delay in the rollout.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „were“. Im It-Satz steht it was, auch bei Mehrzahl.",
+    "en": "The error: “were”. An it-cleft uses it was, even with a plural."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Deutsch sagt „Es waren die Regeln“. Englisch bleibt bei it was.",
+     "en": "There is an error: German says “Es waren die Regeln”. English keeps it was."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „were“: It bleibt singular, also it was.",
+     "en": "The error is “were”: it stays singular, so it was."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-ic-m1",
+  "type": "meaning",
+  "pat": "em.it-cleft",
+  "a": "It was Anna who closed the deal.",
+  "b": "Anna closed the deal.",
+  "q": {
+   "de": "Welcher Satz sagt eher: Nicht jemand anderes, sondern Anna?",
+   "en": "Which sentence suggests: not someone else, but Anna?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Der It-Satz hebt Anna heraus und rückt eine Annahme zurecht.",
+    "en": "Right: sentence a. The it-cleft singles out Anna and corrects an assumption."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b wird nur berichtet, wer es war. Es gibt keine Gegenüberstellung.",
+     "en": "In b we are only told who it was. There is no contrast."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Nur a stellt Anna gegen andere heraus.",
+     "en": "Not the same: only a sets Anna apart from others."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-ni-k1",
+  "type": "kwt",
+  "pat": "em.neg-inversion",
+  "from": "We have never seen such a quick turnaround.",
+  "key": "NEVER",
+  "frame": "___ seen such a quick turnaround.",
+  "answer": "Never have we",
+  "accepted": [
+   "Never before have we"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Never have we seen … Das Hilfsverb steht vor dem Subjekt.",
+    "en": "Right: Never have we seen … The auxiliary comes before the subject."
+   },
+   "wrong": [
+    {
+     "not": [
+      "never"
+     ],
+     "de": "Das Schlüsselwort never muss unverändert in der Lücke stehen.",
+     "en": "The key word never must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "we",
+      "have"
+     ],
+     "de": "Das Hilfsverb steht vor dem Subjekt: Never have we, nicht Never we have.",
+     "en": "The auxiliary comes before the subject: Never have we, not Never we have."
+    },
+    {
+     "if": [
+      "did"
+     ],
+     "de": "Mit seen passt have, nicht did: Never have we seen.",
+     "en": "With seen use have, not did: Never have we seen."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-ni-k2",
+  "type": "kwt",
+  "pat": "em.neg-inversion",
+  "from": "They rarely change the schedule at short notice.",
+  "key": "RARELY",
+  "frame": "___ the schedule at short notice.",
+  "answer": "Rarely do they change",
+  "accepted": [],
+  "words": [
+   4,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Rarely do they change … Ohne Hilfsverb kommt do dazu.",
+    "en": "Right: Rarely do they change … With no auxiliary, do is added."
+   },
+   "wrong": [
+    {
+     "not": [
+      "rarely"
+     ],
+     "de": "Das Schlüsselwort rarely muss unverändert in der Lücke stehen.",
+     "en": "The key word rarely must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "they",
+      "do"
+     ],
+     "de": "Das Hilfsverb steht vor dem Subjekt: Rarely do they change.",
+     "en": "The auxiliary comes before the subject: Rarely do they change."
+    },
+    {
+     "if": [
+      "did"
+     ],
+     "de": "Did wäre Vergangenheit. Der Satz beschreibt eine Gewohnheit: do.",
+     "en": "Did would be past. The sentence describes a habit: do."
+    },
+    {
+     "if": [
+      "changes"
+     ],
+     "de": "Nach do steht die Grundform: change, nicht changes.",
+     "en": "After do comes the base form: change, not changes."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-ni-f1",
+  "type": "find",
+  "pat": "em.neg-inversion",
+  "prompt": "Rarely we have received such detailed feedback from a client.",
+  "err": [
+   1,
+   2
+  ],
+  "answer": "have we",
+  "fixed": "Rarely have we received such detailed feedback from a client.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „we have“. Nach Rarely vorn steht have we.",
+    "en": "The error: “we have”. After Rarely first comes have we."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach Rarely vorn steht das Hilfsverb vor dem Subjekt.",
+     "en": "There is an error: After Rarely first, the auxiliary comes before the subject."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „we have“: Die Reihenfolge muss have we sein.",
+     "en": "The error is “we have”: the order must be have we."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-ni-f2",
+  "type": "find",
+  "pat": "em.neg-inversion",
+  "prompt": "At no point did we received a signed copy of the contract.",
+  "err": [
+   5,
+   5
+  ],
+  "answer": "receive",
+  "fixed": "At no point did we receive a signed copy of the contract.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „received“. Nach did steht die Grundform: receive.",
+    "en": "The error: “received”. After did comes the base form: receive."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Did trägt die Vergangenheit schon: Grundform receive.",
+     "en": "There is an error: Did already carries the past: base form receive."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „received“: Nach did folgt receive.",
+     "en": "The error is “received”: after did comes receive."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-ni-f3",
+  "type": "find",
+  "pat": "em.neg-inversion",
+  "prompt": "Seldom does a project run this smoothly from day one.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: Seldom does a project run … hat die richtige Umstellung.",
+    "en": "No error: Seldom does a project run … has the right inversion."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach Seldom steht does vor dem Subjekt und run in der Grundform.",
+     "en": "No error: after Seldom, does comes before the subject and run is the base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-ni-m1",
+  "type": "meaning",
+  "pat": "em.neg-inversion",
+  "a": "Rarely do we miss a deadline.",
+  "b": "We rarely miss a deadline.",
+  "q": {
+   "de": "Welcher Satz klingt nachdrücklicher und formeller?",
+   "en": "Which sentence sounds more emphatic and formal?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Die Umstellung nach Rarely betont und klingt formell.",
+    "en": "Right: sentence a. The inversion after Rarely stresses and sounds formal."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "b sagt dasselbe im neutralen Ton, ohne Umstellung.",
+     "en": "b says the same in a neutral tone, with no inversion."
+    },
+    {
+     "opt": "both",
+     "de": "Gleiche Aussage, aber nicht gleiche Wirkung: a klingt betonter.",
+     "en": "Same message, but not the same effect: a sounds stronger."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-no-k1",
+  "type": "kwt",
+  "pat": "em.not-only",
+  "from": "The tool saves time. It also reduces errors.",
+  "key": "ONLY",
+  "frame": "Not ___ time, but it also reduces errors.",
+  "answer": "only does it save",
+  "accepted": [
+   "only does the tool save"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Not only does it save time … Not only vorn braucht does vor dem Subjekt.",
+    "en": "Right: Not only does it save time … Not only first needs does before the subject."
+   },
+   "wrong": [
+    {
+     "not": [
+      "only"
+     ],
+     "de": "Das Schlüsselwort only muss unverändert in der Lücke stehen.",
+     "en": "The key word only must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "does",
+      "saves"
+     ],
+     "de": "Nach does steht die Grundform: save, nicht saves.",
+     "en": "After does comes the base form: save, not saves."
+    },
+    {
+     "if": [
+      "do"
+     ],
+     "de": "Do passt zu we/they. Zu it oder the tool gehört does.",
+     "en": "Do goes with we/they. With it or the tool use does."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-no-k2",
+  "type": "kwt",
+  "pat": "em.not-only",
+  "from": "We had barely left the office when the call came.",
+  "key": "SOONER",
+  "frame": "No ___ the office than the call came.",
+  "answer": "sooner had we left",
+  "accepted": [],
+  "words": [
+   4,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: No sooner had we left … than. Nach No sooner steht had vor dem Subjekt.",
+    "en": "Right: No sooner had we left … than. After No sooner, had comes before the subject."
+   },
+   "wrong": [
+    {
+     "not": [
+      "sooner"
+     ],
+     "de": "Das Schlüsselwort sooner muss unverändert in der Lücke stehen.",
+     "en": "The key word sooner must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "we",
+      "had"
+     ],
+     "de": "Das Hilfsverb steht vor dem Subjekt: sooner had we, nicht sooner we had.",
+     "en": "The auxiliary comes before the subject: sooner had we, not sooner we had."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "de": "No sooner braucht had (Vorvergangenheit), nicht have.",
+     "en": "No sooner needs had (past perfect), not have."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-no-f1",
+  "type": "find",
+  "pat": "em.not-only",
+  "prompt": "Not only the update fixed the bug, but it also sped up the app.",
+  "err": [
+   2,
+   4
+  ],
+  "answer": "did the update fix",
+  "fixed": "Not only did the update fix the bug, but it also sped up the app.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „the update fixed“. Not only vorn braucht did the update fix.",
+    "en": "The error: “the update fixed”. Not only first needs did the update fix."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Not only vorn verlangt die Frageform mit did und der Grundform.",
+     "en": "There is an error: Not only first requires question order with did and the base form."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „the update fixed“: Es fehlt did vor dem Subjekt.",
+     "en": "The error is “the update fixed”: did is missing before the subject."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-no-f2",
+  "type": "find",
+  "pat": "em.not-only",
+  "prompt": "No sooner we had sent the file than the client called.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "had we",
+  "fixed": "No sooner had we sent the file than the client called.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „we had“. Nach No sooner steht had we.",
+    "en": "The error: “we had”. After No sooner comes had we."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach No sooner steht das Hilfsverb vor dem Subjekt.",
+     "en": "There is an error: After No sooner, the auxiliary comes before the subject."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „we had“: Die Reihenfolge muss had we sein.",
+     "en": "The error is “we had”: the order must be had we."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-no-m1",
+  "type": "meaning",
+  "pat": "em.not-only",
+  "a": "Not only did the update fix the bug, but it also sped up the app.",
+  "b": "The update fixed the bug.",
+  "q": {
+   "de": "Welcher Satz nennt zwei Vorteile des Updates?",
+   "en": "Which sentence names two benefits of the update?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Not only … but also nennt den Fehler und das Tempo.",
+    "en": "Right: sentence a. Not only … but also names the bug and the speed."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "b nennt nur einen Vorteil: das Beheben des Fehlers.",
+     "en": "b names only one benefit: fixing the bug."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: b erwähnt die schnellere App nicht.",
+     "en": "Not the same: b does not mention the faster app."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-oi-k1",
+  "type": "kwt",
+  "pat": "em.only-inversion",
+  "from": "We approved the budget only after the audit.",
+  "key": "ONLY",
+  "frame": "___ the audit did we approve the budget.",
+  "answer": "Only after",
+  "accepted": [
+   "Only following"
+  ],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Only after the audit did we approve … Danach folgt did vor dem Subjekt.",
+    "en": "Right: Only after the audit did we approve … Then did comes before the subject."
+   },
+   "wrong": [
+    {
+     "not": [
+      "only"
+     ],
+     "de": "Das Schlüsselwort only muss unverändert in der Lücke stehen.",
+     "en": "The key word only must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "before"
+     ],
+     "de": "Before ändert den Sinn: Gemeint ist erst nach dem Audit.",
+     "en": "Before changes the meaning: the point is only after the audit."
+    },
+    {
+     "not": [
+      "after",
+      "following"
+     ],
+     "de": "Der Sinn ist „erst nach“: Only after.",
+     "en": "The meaning is “not before”: Only after."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-oi-k2",
+  "type": "kwt",
+  "pat": "em.only-inversion",
+  "from": "I didn't get a reply until Friday.",
+  "key": "UNTIL",
+  "frame": "Not ___ did I get a reply.",
+  "answer": "until Friday",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Not until Friday did I get … Danach folgt did vor dem Subjekt.",
+    "en": "Right: Not until Friday did I get … Then did comes before the subject."
+   },
+   "wrong": [
+    {
+     "not": [
+      "until"
+     ],
+     "de": "Das Schlüsselwort until muss unverändert in der Lücke stehen.",
+     "en": "The key word until must stay unchanged in the gap."
+    },
+    {
+     "not": [
+      "friday"
+     ],
+     "de": "Die Zeitangabe aus dem Ausgangssatz fehlt: until Friday.",
+     "en": "The time phrase from the original sentence is missing: until Friday."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-oi-f1",
+  "type": "find",
+  "pat": "em.only-inversion",
+  "prompt": "Only after the audit we noticed the gap in the budget.",
+  "err": [
+   4,
+   5
+  ],
+  "answer": "did we notice",
+  "fixed": "Only after the audit did we notice the gap in the budget.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „we noticed“. Nach Only after steht did we notice.",
+    "en": "The error: “we noticed”. After Only after comes did we notice."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Only after vorn verlangt die Frageform mit did und der Grundform.",
+     "en": "There is an error: Only after first requires question order with did and the base form."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „we noticed“: Es fehlt did vor dem Subjekt.",
+     "en": "The error is “we noticed”: did is missing before the subject."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-oi-f2",
+  "type": "find",
+  "pat": "em.only-inversion",
+  "prompt": "Only when the client signs we can start the project.",
+  "err": [
+   5,
+   6
+  ],
+  "answer": "can we",
+  "fixed": "Only when the client signs can we start the project.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „we can“. Im Hauptsatz steht nach Only when can we.",
+    "en": "The error: “we can”. In the main clause after Only when comes can we."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Der Hauptsatz nach Only when braucht die Umstellung.",
+     "en": "There is an error: The main clause after Only when needs inversion."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „we can“: Die Reihenfolge muss can we sein.",
+     "en": "The error is “we can”: the order must be can we."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-oi-f3",
+  "type": "find",
+  "pat": "em.only-inversion",
+  "prompt": "Not until the second round did the team get a clear answer.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: Not until … did the team get hat die richtige Umstellung.",
+    "en": "No error: Not until … did the team get has the right inversion."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach Not until steht did vor dem Subjekt, dann get.",
+     "en": "No error: after Not until, did comes before the subject, then get."
+    }
+   ]
+  }
+ },
+ {
+  "id": "em-oi-m1",
+  "type": "meaning",
+  "pat": "em.only-inversion",
+  "a": "Only after the review did we sign the contract.",
+  "b": "After the review, we signed the contract.",
+  "q": {
+   "de": "In welchem Satz heißt es: Vorher haben wir nicht unterschrieben?",
+   "en": "In which sentence do we learn that we did not sign before?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Only after betont, dass es vorher nicht geschah.",
+    "en": "Right: sentence a. Only after stresses that it did not happen earlier."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "b nennt nur die Reihenfolge. Ob es früher möglich war, bleibt offen.",
+     "en": "b gives only the order. Whether it was possible earlier stays open."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Nur a sagt, dass es vorher nicht passiert ist.",
+     "en": "Not the same: only a says it had not happened before."
+    }
+   ]
+  }
+ }
+]

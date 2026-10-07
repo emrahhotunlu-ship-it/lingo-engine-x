@@ -1,0 +1,183 @@
+[
+ {
+  "pat": "rs.backshift",
+  "en": "Our supplier promised that the parts would arrive the following Monday.",
+  "de": "Unser Lieferant versprach, dass die Teile am darauffolgenden Montag eintreffen würden.",
+  "chunks": [
+   "our supplier",
+   "promised",
+   "that",
+   "the parts",
+   "would arrive",
+   "the following Monday"
+  ],
+  "single": "Would arrive folgt direkt auf the parts; die Zeitangabe the following Monday steht am Ende.",
+  "why": [
+   "Nach promised liegt das Versprechen zurück: will wird would. Dazu passt the following Monday, vom Versprechen aus gezählt.",
+   "After promised the promise lies in the past: will becomes would. The following Monday fits, counted from the promise."
+  ],
+  "bad": "Our supplier promised that the parts will arrive the following Monday.",
+  "trap": {
+   "tile": "would arrive",
+   "instead": "will arrive",
+   "why": {
+    "de": "Im Deutschen steht die indirekte Rede im Konjunktiv I („er versprach, er werde liefern“), also in der Präsensform. Im Englischen rückt will zu would.",
+    "en": "German reported speech uses the subjunctive (“er versprach, er werde liefern”), a present form. In English will moves to would."
+   }
+  }
+ },
+ {
+  "pat": "rs.backshift",
+  "en": "Ravi said he had already sent the invoice by then.",
+  "de": "Ravi sagte, er habe die Rechnung bis dahin schon geschickt.",
+  "chunks": [
+   "Ravi",
+   "said",
+   "he had",
+   "already sent",
+   "the invoice",
+   "by then"
+  ],
+  "why": [
+   "Nach said rückt das Present Perfect zum Past Perfect: had already sent. By then zeigt, dass der Versand vor dem Sagen lag.",
+   "After said the present perfect moves to the past perfect: had already sent. By then shows the sending came before the speaking."
+  ],
+  "bad": "Ravi said he has already sent the invoice by then.",
+  "trap": {
+   "tile": "he had",
+   "instead": "he has",
+   "why": {
+    "de": "Im Deutschen bleibt „er habe geschickt“ in der Präsensform. Im Englischen braucht der Rückblick he had plus Partizip.",
+    "en": "In German “er habe geschickt” keeps a present form. In English the look back needs he had plus participle."
+   }
+  },
+  "alt": [
+   "Ravi said by then he had already sent the invoice."
+  ]
+ },
+ {
+  "pat": "rs.time-shift",
+  "en": "Last year the CEO said they would launch the next day.",
+  "de": "Letztes Jahr sagte der Geschäftsführer, sie würden am nächsten Tag starten.",
+  "chunks": [
+   "last year",
+   "the CEO",
+   "said",
+   "they would launch",
+   "the next day"
+  ],
+  "alt": [
+   "The CEO said last year they would launch the next day."
+  ],
+  "why": [
+   "The next day zählt vom Sagen aus, nicht von heute. Zu would launch passt der Tag nach der Aussage.",
+   "The next day counts from the speaking, not from today. It goes with would launch: the day after the statement."
+  ],
+  "bad": "Last year the CEO said they would launch tomorrow.",
+  "trap": {
+   "tile": "the next day",
+   "instead": "tomorrow",
+   "why": {
+    "de": "Deutsch lässt „morgen“ in der indirekten Rede oft stehen. Das Englische rechnet vom Zeitpunkt des Sagens aus.",
+    "en": "German often keeps “morgen” in reported speech. English counts from the moment of speaking."
+   }
+  }
+ },
+ {
+  "pat": "rs.question",
+  "en": "He asked me what I needed from the vendor.",
+  "de": "Er fragte mich, was ich vom Anbieter bräuchte.",
+  "chunks": [
+   "he",
+   "asked me",
+   "what",
+   "I needed",
+   "from the vendor"
+  ],
+  "single": "Das Fragewort what steht vor dem Subjekt; I needed bleibt ein Block, und from the vendor kommt am Ende.",
+  "why": [
+   "Nach what steht das Subjekt vor dem Verb: what I needed, ohne did. Dazu kommt der Rückschritt need → needed.",
+   "After what the subject comes before the verb: what I needed, with no did. Backshift adds need → needed."
+  ],
+  "bad": "He asked me what did I need from the vendor.",
+  "trap": {
+   "tile": "I needed",
+   "instead": "did I need",
+   "why": {
+    "de": "Das Deutsche kennt kein did. Der Fehler entsteht, weil die englische Direktfrage („What did I need?“) in den Nebensatz rutscht.",
+    "en": "German has no did. The slip happens because the English direct question (“What did I need?”) is carried into the clause."
+   }
+  }
+ },
+ {
+  "pat": "rs.question",
+  "en": "She wanted to know whether the figures had been checked.",
+  "de": "Sie wollte wissen, ob die Zahlen geprüft worden waren.",
+  "chunks": [
+   "she",
+   "wanted to know",
+   "whether",
+   "the figures",
+   "had been checked"
+  ],
+  "single": "Whether steht direkt vor dem Subjekt the figures; had been checked bildet danach den festen Schluss.",
+  "why": [
+   "Ja/Nein-Fragen brauchen if oder whether, dann Subjekt und Verb in normaler Reihenfolge. Dazu der Rückschritt: had been checked.",
+   "Yes/no questions need if or whether, then subject and verb in normal order. Backshift adds had been checked."
+  ],
+  "bad": "She wanted to know whether had the figures been checked."
+ },
+ {
+  "pat": "rs.tell-say",
+  "en": "She told the whole team that the launch was delayed.",
+  "de": "Sie sagte dem ganzen Team, dass der Start verschoben wurde.",
+  "chunks": [
+   "she",
+   "told",
+   "the whole team",
+   "that",
+   "the launch",
+   "was delayed"
+  ],
+  "single": "Nach told folgt sofort die Person the whole team; that leitet danach den Inhalt the launch was delayed ein.",
+  "why": [
+   "Nach told steht gleich die Person: told the whole team. Erst danach folgt that mit dem Inhalt.",
+   "After told the person comes right away: told the whole team. Only then does that follow with the content."
+  ],
+  "bad": "She said the whole team that the launch was delayed.",
+  "trap": {
+   "tile": "told",
+   "instead": "said",
+   "why": {
+    "de": "Im Deutschen deckt „sagen“ beides ab: „sie sagte dem Team“ und „sie sagte, dass“. Das Englische trennt: tell mit Person, say ohne.",
+    "en": "German “sagen” covers both: “sie sagte dem Team” and “sie sagte, dass”. English splits them: tell with a person, say without."
+   }
+  }
+ },
+ {
+  "pat": "rs.request",
+  "en": "The client asked us not to share the draft with anyone.",
+  "de": "Der Kunde bat uns, den Entwurf mit niemandem zu teilen.",
+  "chunks": [
+   "the client",
+   "asked us",
+   "not to share",
+   "the draft",
+   "with anyone"
+  ],
+  "single": "Not to share bleibt ein Block direkt nach asked us; the draft und with anyone folgen in dieser Reihenfolge.",
+  "why": [
+   "Eine verneinte Bitte wird zu asked us not to + Grundform. Das Objekt the draft folgt direkt auf share.",
+   "A negative request becomes asked us not to + base form. The object the draft follows share directly."
+  ],
+  "bad": "The client asked us don't share the draft with anyone.",
+  "trap": {
+   "tile": "not to share",
+   "instead": "don't share",
+   "why": {
+    "de": "Kein Übersetzungsfehler, sondern ein Reflex: Der Befehl der direkten Rede („Don’t share it!“) wird unverändert übernommen.",
+    "en": "Not a translation error but a reflex: the command of direct speech (“Don’t share it!”) is carried over unchanged."
+   }
+  }
+ }
+]

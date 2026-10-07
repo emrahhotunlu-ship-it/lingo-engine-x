@@ -1,0 +1,1069 @@
+[
+ {
+  "id": "rc-ww-k1",
+  "type": "kwt",
+  "pat": "rc.who-which",
+  "from": "Dana Cole is our new CFO. She leads a team of twelve analysts.",
+  "key": "WHO",
+  "frame": "Dana Cole, ___ a team of twelve analysts, is our new CFO.",
+  "answer": "who leads",
+  "accepted": [
+   "who is leading",
+   "who has led",
+   "who now leads"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Dana ist eine Person, also who. Nach dem Komma ist that tabu.",
+    "en": "Right: Dana is a person, so who. After the comma, that is off limits."
+   },
+   "wrong": [
+    {
+     "if": [
+      "that"
+     ],
+     "de": "Nach einem Komma steht nie that. Für eine Person gilt who.",
+     "en": "After a comma that is never allowed. For a person use who."
+    },
+    {
+     "if": [
+      "which"
+     ],
+     "de": "„Which“ steht für Sachen. Dana ist eine Person: who.",
+     "en": "“Which” is for things. Dana is a person: who."
+    },
+    {
+     "not": [
+      "who"
+     ],
+     "de": "Das Schlüsselwort WHO muss unverändert in der Lücke stehen.",
+     "en": "The key word WHO must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-ww-k2",
+  "type": "kwt",
+  "pat": "rc.who-which",
+  "from": "We migrated to a new platform. It cut our reporting time in half.",
+  "key": "WHICH",
+  "frame": "We migrated to a new platform, ___ our reporting time in half.",
+  "answer": "which cut",
+  "accepted": [
+   "which has cut",
+   "which then cut",
+   "which also cut"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: platform ist eine Sache, also which. Nach dem Komma ist that tabu.",
+    "en": "Right: platform is a thing, so which. After the comma, that is off limits."
+   },
+   "wrong": [
+    {
+     "if": [
+      "that"
+     ],
+     "de": "Nach einem Komma steht nie that. Für eine Sache gilt which.",
+     "en": "After a comma that is never allowed. For a thing use which."
+    },
+    {
+     "if": [
+      "who"
+     ],
+     "de": "„Who“ steht für Personen. Eine Plattform ist eine Sache: which.",
+     "en": "“Who” is for people. A platform is a thing: which."
+    },
+    {
+     "not": [
+      "which"
+     ],
+     "de": "Das Schlüsselwort WHICH muss unverändert in der Lücke stehen.",
+     "en": "The key word WHICH must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-ww-f1",
+  "type": "find",
+  "pat": "rc.who-which",
+  "prompt": "The consultants which reviewed our process recommended three changes.",
+  "err": [
+   2,
+   2
+  ],
+  "answer": "who",
+  "fixed": "The consultants who reviewed our process recommended three changes.",
+  "accepted": [
+   "that"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: consultants sind Personen, also who (oder that), nicht which.",
+    "en": "The error: consultants are people, so who (or that), not which."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Für Personen steht nicht which.",
+     "en": "There is an error: which is not used for people."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „which“: Für Personen steht who oder that.",
+     "en": "The error is in “which”: for people use who or that."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-ww-f2",
+  "type": "find",
+  "pat": "rc.who-which",
+  "prompt": "The tool that powers our dashboard was built in-house.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: tool ist eine Sache, und that passt.",
+    "en": "No error: tool is a thing, and that fits."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Für Sachen passt that (oder which).",
+     "en": "No error: for things, that (or which) fits."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-ww-m1",
+  "type": "meaning",
+  "pat": "rc.who-which",
+  "a": "We spoke to the analyst who wrote the report.",
+  "b": "We spoke to the analyst whose report we read.",
+  "q": {
+   "de": "In welchem Satz haben wir den Bericht gelesen?",
+   "en": "In which sentence did we read the report?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. whose report we read nennt den Bericht des Analysten.",
+    "en": "Right: sentence b. “whose report we read” names the analyst's report."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a steht who wrote: Der Analyst hat ihn geschrieben, mehr sagt a nicht.",
+     "en": "In a, who wrote says the analyst wrote it; a says nothing more."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: who wrote nennt den Autor, whose report we read den Leser.",
+     "en": "Not the same: who wrote names the author, whose report we read the reader."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-wh-k1",
+  "type": "kwt",
+  "pat": "rc.whose",
+  "from": "We hired a designer. Her portfolio impressed everyone.",
+  "key": "WHOSE",
+  "frame": "We hired a designer ___ impressed everyone.",
+  "answer": "whose portfolio",
+  "accepted": [
+   "whose work",
+   "whose designs",
+   "whose previous work"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: „ihr Portfolio“ = whose portfolio. whose steht direkt vor dem Nomen.",
+    "en": "Right: “her portfolio” = whose portfolio. whose sits right before the noun."
+   },
+   "wrong": [
+    {
+     "pat": "rc.who-which",
+     "if": [
+      "who"
+     ],
+     "de": "„Who“ ersetzt die Person selbst. Vor portfolio braucht es whose.",
+     "en": "“Who” replaces the person. Before portfolio you need whose."
+    },
+    {
+     "if": [
+      "that"
+     ],
+     "de": "„That“ zeigt keinen Besitz. Vor portfolio braucht es whose.",
+     "en": "“That” shows no possession. Before portfolio you need whose."
+    },
+    {
+     "not": [
+      "whose"
+     ],
+     "de": "Das Schlüsselwort WHOSE muss unverändert in der Lücke stehen.",
+     "en": "The key word WHOSE must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-wh-k2",
+  "type": "kwt",
+  "pat": "rc.whose",
+  "from": "The vendor is a small firm. Its prices are 20 percent lower.",
+  "key": "WHOSE",
+  "frame": "The vendor is a small firm ___ 20 percent lower.",
+  "answer": "whose prices are",
+  "accepted": [
+   "whose prices run",
+   "whose prices come in",
+   "whose prices have been",
+   "whose prices were",
+   "whose prices will be"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: „dessen Preise“ = whose prices. Danach folgt direkt das Verb.",
+    "en": "Right: “whose prices” = its prices. The verb follows directly."
+   },
+   "wrong": [
+    {
+     "if": [
+      "which"
+     ],
+     "de": "„Which“ zeigt keinen Besitz. Vor prices braucht es whose.",
+     "en": "“Which” shows no possession. Before prices you need whose."
+    },
+    {
+     "if": [
+      "that"
+     ],
+     "de": "„That“ zeigt keinen Besitz. Vor prices braucht es whose.",
+     "en": "“That” shows no possession. Before prices you need whose."
+    },
+    {
+     "not": [
+      "whose"
+     ],
+     "de": "Das Schlüsselwort WHOSE muss unverändert in der Lücke stehen.",
+     "en": "The key word WHOSE must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-wh-f1",
+  "type": "find",
+  "pat": "rc.whose",
+  "prompt": "The manager who team won the award is presenting today.",
+  "err": [
+   2,
+   2
+  ],
+  "answer": "whose",
+  "fixed": "The manager whose team won the award is presenting today.",
+  "why": {
+   "ok": {
+    "de": "Der Fehler: who team zeigt keinen Besitz. Für „dessen Team“ steht whose.",
+    "en": "The error: who team shows no possession. For “whose team” use whose."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: who passt nicht direkt vor team.",
+     "en": "There is an error: who does not fit directly before team."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „who team“: Besitz braucht whose.",
+     "en": "The error is in “who team”: possession needs whose."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-wh-f2",
+  "type": "find",
+  "pat": "rc.whose",
+  "prompt": "She is the manager whose team shipped the release two weeks early.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: whose team = ihr Team, direkt vor dem Nomen.",
+    "en": "No error: whose team = her team, directly before the noun."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: whose steht richtig direkt vor team.",
+     "en": "No error: whose correctly sits right before team."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-wh-m1",
+  "type": "meaning",
+  "pat": "rc.whose",
+  "a": "We're working with a client whose lawyer we trust.",
+  "b": "We're working with a client who trusts our lawyer.",
+  "q": {
+   "de": "Welcher Satz sagt, dass wir dem Anwalt des Kunden vertrauen?",
+   "en": "Which sentence says that we trust the client's lawyer?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. whose lawyer = der Anwalt des Kunden.",
+    "en": "Right: sentence a. whose lawyer = the client's lawyer."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b vertraut der Kunde unserem Anwalt. who ist hier der Handelnde.",
+     "en": "In b the client trusts our lawyer. who is the one acting here."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: whose lawyer nennt den Anwalt des Kunden, who trusts den Kunden.",
+     "en": "Not the same: whose lawyer names the client's lawyer, who trusts the client."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-cm-k1",
+  "type": "kwt",
+  "pat": "rc.commas",
+  "from": "He rescheduled the call. This surprised everyone.",
+  "key": "WHICH",
+  "frame": "He rescheduled the call, ___ everyone.",
+  "answer": "which surprised",
+  "accepted": [
+   "which really surprised",
+   "which then surprised",
+   "which has surprised"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: which bezieht sich auf den ganzen Satz davor. Nie what.",
+    "en": "Right: which refers to the whole clause before it. Never what."
+   },
+   "wrong": [
+    {
+     "if": [
+      "what"
+     ],
+     "de": "Deutsch „was“ lockt zu what. Nach dem Komma bezieht sich which auf den Satz.",
+     "en": "German “was” tempts you into what. After the comma which refers to the clause."
+    },
+    {
+     "if": [
+      "that"
+     ],
+     "de": "Nach einem Komma steht nie that. Hier gilt which.",
+     "en": "After a comma never that. Here which applies."
+    },
+    {
+     "not": [
+      "which"
+     ],
+     "de": "Das Schlüsselwort WHICH muss unverändert in der Lücke stehen.",
+     "en": "The key word WHICH must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-cm-k2",
+  "type": "kwt",
+  "pat": "rc.commas",
+  "from": "Our Denver office opened in May. It already has forty employees.",
+  "key": "WHICH",
+  "frame": "Our Denver office, ___ in May, already has forty employees.",
+  "answer": "which opened",
+  "accepted": [
+   "which opened up",
+   "which was opened",
+   "which first opened"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Zusatzinfo zwischen Kommas, für eine Sache: which. Nie that.",
+    "en": "Right: extra information between commas, a thing: which. Never that."
+   },
+   "wrong": [
+    {
+     "if": [
+      "that"
+     ],
+     "de": "Nach einem Komma steht nie that. Die Zusatzinfo braucht which.",
+     "en": "After a comma never that. The extra information needs which."
+    },
+    {
+     "if": [
+      "who"
+     ],
+     "de": "„Who“ steht für Personen. Ein Büro ist eine Sache: which.",
+     "en": "“Who” is for people. An office is a thing: which."
+    },
+    {
+     "not": [
+      "which"
+     ],
+     "de": "Das Schlüsselwort WHICH muss unverändert in der Lücke stehen.",
+     "en": "The key word WHICH must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-cm-f1",
+  "type": "find",
+  "pat": "rc.commas",
+  "prompt": "My manager, that works from Denver, joined the call late.",
+  "err": [
+   2,
+   2
+  ],
+  "answer": "who",
+  "fixed": "My manager, who works from Denver, joined the call late.",
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach dem Komma ist that nicht erlaubt. Für eine Person gilt who.",
+    "en": "The error: after the comma that is not allowed. For a person use who."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach dem Komma steht nie that.",
+     "en": "There is an error: after the comma never that."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „that“ nach dem Komma: Gesucht ist who.",
+     "en": "The error is in “that” after the comma: who is needed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-cm-f2",
+  "type": "find",
+  "pat": "rc.commas",
+  "prompt": "Her proposal, which the board approved in June, covers all regions.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: Zusatzinfo zwischen Kommas mit which ist richtig.",
+    "en": "No error: extra information between commas with which is correct."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Mit Kommas steht which, und das ist hier der Fall.",
+     "en": "No error: with commas use which, and that is what happens here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-cm-m1",
+  "type": "meaning",
+  "pat": "rc.commas",
+  "a": "My brother, who lives in Oslo, works in finance.",
+  "b": "My brother who lives in Oslo works in finance.",
+  "q": {
+   "de": "Welcher Satz legt nahe, dass ich nur einen Bruder habe?",
+   "en": "Which sentence implies that I have only one brother?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Die Kommas machen den Relativsatz zur Zusatzinfo.",
+    "en": "Right: sentence a. The commas make the clause extra information."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b grenzt who lives in Oslo ein: Es gibt wohl noch andere Brüder.",
+     "en": "In b, who lives in Oslo narrows it down: there are probably other brothers."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Mit Kommas Zusatzinfo, ohne Kommas eine Eingrenzung.",
+     "en": "Not the same: with commas extra information, without commas a restriction."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-wy-k1",
+  "type": "kwt",
+  "pat": "rc.where-why",
+  "from": "That is the office. We signed the deal in it.",
+  "key": "WHERE",
+  "frame": "That is the office ___ the deal.",
+  "answer": "where we signed",
+  "accepted": [
+   "where we have signed",
+   "where we had signed",
+   "where we've signed"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach einem Ort + Satz steht where (= in which).",
+    "en": "Right: place + clause = where (= in which)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "which"
+     ],
+     "de": "Mit which müsstest du in davor setzen. Hier ist where gefragt.",
+     "en": "With which you would need in before it. Here where is asked for."
+    },
+    {
+     "not": [
+      "where"
+     ],
+     "de": "Das Schlüsselwort WHERE muss unverändert in der Lücke stehen.",
+     "en": "The key word WHERE must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-wy-k2",
+  "type": "kwt",
+  "pat": "rc.where-why",
+  "from": "We don't know the reason. The launch was delayed for it.",
+  "key": "WHY",
+  "frame": "We don't know the reason ___ delayed.",
+  "answer": "why the launch was",
+  "accepted": [
+   "why the launch got",
+   "why the launch has been",
+   "why the launch is",
+   "why the launch had been"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach reason steht why: the reason why the launch was delayed.",
+    "en": "Right: after reason use why: the reason why the launch was delayed."
+   },
+   "wrong": [
+    {
+     "if": [
+      "because"
+     ],
+     "de": "Nach reason steht why, nie because.",
+     "en": "After reason use why, never because."
+    },
+    {
+     "not": [
+      "why"
+     ],
+     "de": "Das Schlüsselwort WHY muss unverändert in der Lücke stehen.",
+     "en": "The key word WHY must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-wy-f1",
+  "type": "find",
+  "pat": "rc.where-why",
+  "prompt": "The reason because the project failed was poor planning.",
+  "err": [
+   2,
+   2
+  ],
+  "answer": "why",
+  "fixed": "The reason why the project failed was poor planning.",
+  "accepted": [
+   "that"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach reason steht why (oder that), nie because.",
+    "en": "The error: after reason use why (or that), never because."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: because passt nicht nach reason.",
+     "en": "There is an error: because does not fit after reason."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „because“: Nach reason steht why.",
+     "en": "The error is in “because”: after reason use why."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-wy-f2",
+  "type": "find",
+  "pat": "rc.where-why",
+  "prompt": "The hotel in where we stayed was close to the airport.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "where",
+  "fixed": "The hotel where we stayed was close to the airport.",
+  "accepted": [
+   "in which"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: in where ist doppelt. Es heißt where oder in which.",
+    "en": "The error: in where doubles the place. Use where or in which."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: in where nennt den Ort doppelt.",
+     "en": "There is an error: in where names the place twice."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „in where“: Es heißt where oder in which.",
+     "en": "The error is in “in where”: use where or in which."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-wy-m1",
+  "type": "meaning",
+  "pat": "rc.where-why",
+  "a": "I remember the day when we won our first client.",
+  "b": "I remember the day we won our first client.",
+  "q": {
+   "de": "Sagen beide Sätze dasselbe?",
+   "en": "Do both sentences say the same?"
+  },
+  "answer": "both",
+  "why": {
+   "ok": {
+    "de": "Richtig: beide. Nach the day darf when wegfallen, der Sinn bleibt.",
+    "en": "Right: both. After the day, when can be dropped; the meaning stays."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "Nicht nur a: Auch b ist richtig, denn when darf wegfallen.",
+     "en": "Not only a: b is correct too, because when can be dropped."
+    },
+    {
+     "opt": "b",
+     "de": "Nicht nur b: Auch a ist richtig, denn when darf stehen.",
+     "en": "Not only b: a is correct too, because when may stay."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-pp-k1",
+  "type": "kwt",
+  "pat": "rc.prep",
+  "from": "She is the lawyer. I spoke to her yesterday.",
+  "key": "WHOM",
+  "frame": "She is the lawyer ___ yesterday.",
+  "answer": "to whom I spoke",
+  "accepted": [
+   "whom I spoke to",
+   "with whom I spoke",
+   "whom I spoke with",
+   "to whom I had spoken",
+   "whom I had spoken to",
+   "with whom I had spoken",
+   "whom I had spoken with",
+   "to whom I talked",
+   "whom I talked to"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: to whom I spoke, oder whom I spoke to. Nach einer Präposition steht whom.",
+    "en": "Right: to whom I spoke, or whom I spoke to. After a preposition use whom."
+   },
+   "wrong": [
+    {
+     "if": [
+      "who"
+     ],
+     "de": "„Who I spoke to“ ist locker möglich, hier üben wir whom. „To who“ ist falsch.",
+     "en": "“Who I spoke to” works casually, but here we practice whom. “To who” is wrong."
+    },
+    {
+     "not": [
+      "whom"
+     ],
+     "de": "Das Schlüsselwort WHOM muss unverändert in der Lücke stehen.",
+     "en": "The key word WHOM must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-pp-k2",
+  "type": "kwt",
+  "pat": "rc.prep",
+  "from": "This is the budget. We based our forecast on it.",
+  "key": "WHICH",
+  "frame": "This is the budget ___ our forecast.",
+  "answer": "on which we based",
+  "accepted": [
+   "upon which we based",
+   "on which we've based",
+   "on which we had based",
+   "on which we have based",
+   "on which we base",
+   "upon which we base",
+   "on which we're basing"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach der Präposition steht which: on which we based our forecast.",
+    "en": "Right: preposition + which: on which we based our forecast."
+   },
+   "wrong": [
+    {
+     "if": [
+      "that"
+     ],
+     "de": "„That“ steht nie direkt nach einer Präposition. Hier: on which.",
+     "en": "“That” never follows a preposition directly. Here: on which."
+    },
+    {
+     "if": [
+      "whom"
+     ],
+     "de": "„Whom“ steht für Personen. Ein Budget ist eine Sache: which.",
+     "en": "“Whom” is for people. A budget is a thing: which."
+    },
+    {
+     "not": [
+      "which"
+     ],
+     "de": "Das Schlüsselwort WHICH muss unverändert in der Lücke stehen.",
+     "en": "The key word WHICH must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-pp-f1",
+  "type": "find",
+  "pat": "rc.prep",
+  "prompt": "The partner to who we sent the contract hasn't replied yet.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "to whom",
+  "fixed": "The partner to whom we sent the contract hasn't replied yet.",
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach to steht whom, nicht who.",
+    "en": "The error: after to use whom, not who."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach to verlangt das Englisch whom.",
+     "en": "There is an error: after to English requires whom."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „to who“: Nach der Präposition steht whom.",
+     "en": "The error is in “to who”: after the preposition use whom."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-pp-f2",
+  "type": "find",
+  "pat": "rc.prep",
+  "prompt": "The manager I reported the issue to him has already replied.",
+  "err": [
+   6,
+   7
+  ],
+  "answer": "to",
+  "fixed": "The manager I reported the issue to has already replied.",
+  "why": {
+   "ok": {
+    "de": "Der Fehler: him ist doppelt. Das Relativwort steht schon für die Person.",
+    "en": "The error: him is doubled. The relative word already stands for the person."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach to folgt kein him mehr.",
+     "en": "There is an error: no him follows after to."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „to him“: Es bleibt nur to am Ende.",
+     "en": "The error is in “to him”: only to stays at the end."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-pp-m1",
+  "type": "meaning",
+  "pat": "rc.prep",
+  "a": "The firm I work for is growing.",
+  "b": "The firm for which I work is growing.",
+  "q": {
+   "de": "Sagen beide Sätze dasselbe?",
+   "en": "Do both sentences say the same?"
+  },
+  "answer": "both",
+  "why": {
+   "ok": {
+    "de": "Richtig: beide. Satz b klingt förmlicher, a ist alltäglicher.",
+    "en": "Right: both. b sounds more formal, a more everyday."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "Nicht nur a: Auch b ist richtig, nur förmlicher.",
+     "en": "Not only a: b is correct too, only more formal."
+    },
+    {
+     "opt": "b",
+     "de": "Nicht nur b: Auch a ist richtig und alltäglicher.",
+     "en": "Not only b: a is correct too and more everyday."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-tw-k1",
+  "type": "kwt",
+  "pat": "rc.that-what",
+  "from": "We discussed everything. It is in the notes.",
+  "key": "THAT",
+  "frame": "Everything ___ in the notes.",
+  "answer": "that we discussed is",
+  "accepted": [
+   "that we have discussed is",
+   "that we've discussed is",
+   "that we covered is",
+   "that was discussed is",
+   "that we talked about is"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach everything steht that, nie what.",
+    "en": "Right: after everything use that, never what."
+   },
+   "wrong": [
+    {
+     "if": [
+      "what"
+     ],
+     "de": "Deutsch „alles, was“ lockt zu what. Nach everything steht aber that.",
+     "en": "German “alles, was” tempts you into what. After everything use that."
+    },
+    {
+     "not": [
+      "that"
+     ],
+     "de": "Das Schlüsselwort THAT muss unverändert in der Lücke stehen.",
+     "en": "The key word THAT must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-tw-k2",
+  "type": "kwt",
+  "pat": "rc.that-what",
+  "from": "The thing I need most is a clear deadline.",
+  "key": "WHAT",
+  "frame": "___ is a clear deadline.",
+  "answer": "what I need most",
+  "accepted": [
+   "what I need the most",
+   "what I most need",
+   "what we need most"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Ohne Bezugswort davor steht what: What I need most is …",
+    "en": "Right: with no antecedent before it, use what: What I need most is …"
+   },
+   "wrong": [
+    {
+     "if": [
+      "that"
+     ],
+     "de": "Ohne Bezugswort davor steht what, nicht that.",
+     "en": "With no antecedent before it, use what, not that."
+    },
+    {
+     "not": [
+      "what"
+     ],
+     "de": "Das Schlüsselwort WHAT muss unverändert in der Lücke stehen.",
+     "en": "The key word WHAT must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-tw-f1",
+  "type": "find",
+  "pat": "rc.that-what",
+  "prompt": "Everything what happens in the pilot is logged.",
+  "err": [
+   1,
+   1
+  ],
+  "answer": "that",
+  "fixed": "Everything that happens in the pilot is logged.",
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach everything steht that, nie what.",
+    "en": "The error: after everything use that, never what."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: what passt nicht nach everything.",
+     "en": "There is an error: what does not fit after everything."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „what“: Nach everything steht that.",
+     "en": "The error is in “what”: after everything use that."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-tw-f2",
+  "type": "find",
+  "pat": "rc.that-what",
+  "prompt": "The first report what I read was missing the figures.",
+  "err": [
+   3,
+   3
+  ],
+  "answer": "that",
+  "fixed": "The first report that I read was missing the figures.",
+  "accepted": [
+   "which"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach dem Nomen report steht that (oder which), nie what.",
+    "en": "The error: after the noun report use that (or which), never what."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: what passt nicht nach report.",
+     "en": "There is an error: what does not fit after report."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „what“: Nach einem Nomen steht that.",
+     "en": "The error is in “what”: after a noun use that."
+    }
+   ]
+  }
+ },
+ {
+  "id": "rc-tw-m1",
+  "type": "meaning",
+  "pat": "rc.that-what",
+  "a": "All that matters is the deadline.",
+  "b": "What matters is the deadline.",
+  "q": {
+   "de": "Sagen beide Sätze im Kern dasselbe?",
+   "en": "Do both sentences say essentially the same?"
+  },
+  "answer": "both",
+  "why": {
+   "ok": {
+    "de": "Richtig: beide. All that und What nennen das, was zählt.",
+    "en": "Right: both. All that and What name the thing that counts."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "Nicht nur a: Auch b ist richtig, denn What kann ohne Bezugswort stehen.",
+     "en": "Not only a: b is correct too, since What needs no antecedent."
+    },
+    {
+     "opt": "b",
+     "de": "Nicht nur b: Auch a ist richtig, denn nach All steht that.",
+     "en": "Not only b: a is correct too, since that follows All."
+    }
+   ]
+  }
+ }
+]

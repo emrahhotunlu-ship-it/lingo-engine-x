@@ -709,6 +709,10 @@
    "type": "transform",
    "prompt": "\"I will call you,\" he said. → He said he ___ me.",
    "answer": "would call",
+   "accepted": [
+    "'d call",
+    "was going to call"
+   ],
    "expl": "In der indirekten Rede wird aus „will“ ein „would“, weil die Zeit eine Stufe zurückgeht: „I will call you“ wird zu „He said he would call me.“",
    "expl_en": "In reported speech “will” becomes “would”, because the tense moves one step back: “I will call you” becomes “He said he would call me.”"
   },
@@ -755,8 +759,8 @@
    "options": [
     "must",
     "can't",
-    "should",
-    "has to"
+    "wants to",
+    "needs to"
    ],
    "answer": "must",
    "expl": "must = ich bin mir fast sicher (logische Schlussfolgerung).",
