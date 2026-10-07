@@ -1,9 +1,7 @@
 import { useMemo, useState } from 'react';
 import { splitWords } from '../../domain/answer/align';
 import { kwtWords } from '../../domain/c1x/kwtNorm';
-import { mccOrder } from '../../domain/c1x/kinds/mcc';
 import { isFull, scoreC1 } from '../../domain/c1x/score';
-import { dayKey } from '../../domain/date';
 import type { C1Item, C1Response, Err, Kwt, Mcc, Ocl } from '../../domain/c1x/types';
 import { Tiles } from '../../engine/Tiles';
 import { kwtTiles } from '../c1x/kinds/Kwt';
@@ -31,13 +29,11 @@ function Sentence({ text }: { text: string }) {
 
 function McBody({ item, set }: { item: Mcc; set: (r: C1Response | null) => void }) {
   const [pick, setPick] = useState<number | null>(null);
-  const [day] = useState(() => dayKey(Date.now()));
-  const order = useMemo(() => mccOrder(item, day), [item, day]);
   return (
     <div className="flex flex-col gap-3">
       <Sentence text={item.text} />
       <div className="flex flex-col gap-2" role="group" aria-label={item.text}>
-        {order.map((i) => [item.options[i] ?? '', i] as const).map(([o, i]) => (
+        {item.options.map((o, i) => (
           <button
             key={o}
             type="button"

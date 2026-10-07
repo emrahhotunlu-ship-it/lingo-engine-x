@@ -1,14 +1,13 @@
 import { useMemo, useState } from 'react';
 import { EnglishText } from '../../../engine/EnglishText';
 import { Choices } from '../../../engine/Choices';
-import { dayKey } from '../../../domain/date';
-import { mccMuted, mccOrder } from '../../../domain/c1x/kinds/mcc';
+import { mccMuted } from '../../../domain/c1x/kinds/mcc';
 import type { Mcc } from '../../../domain/c1x/types';
 import { useT } from '../../../i18n';
 import type { C1Ctrl, C1Ui } from '../types';
 
 // `mcc` (Passendes Wort, Cambridge Teil 1), P20: vier Karten A–D (am Laptop auch die Tasten 1–4), danach „Prüfen“. Auswahl ist nie freier Abruf.
-// Die Optionen werden beim Anzeigen fest gemischt (je Aufgabe und Tag, `mccOrder`); Tasten 1–4 und Begründungen folgen der Anzeige. Hinweisleiter (§2.6): Stufe 1 die Formel des
+// Die Lösungsposition ist im Inhalt schon gemischt (Anteil je Platz 20–30 %) und bleibt je Aufgabe fest. Hinweisleiter (§2.6): Stufe 1 die Formel des
 // Musters (bei Wortschatz-Aufgaben: der Hinweis auf die ganze Wendung), Stufe 2 eine falsche Antwort wird ausgegraut. Die Begründung je Option
 // (mit Kategorie, z. B. „Deutsch gedacht“) kommt aus dem Rahmen („Warum nicht …?“).
 
@@ -17,23 +16,16 @@ const GAP = /_{3,}/;
 export function useMccUi(ctrl: C1Ctrl): C1Ui {
   const item = ctrl.item as Mcc;
   const { t } = useT();
-  // `chosen` ist der Platz in der Anzeige (A–D); `order[Platz]` ist der Index im Inhalt. Der Tag wird einmal je Aufgabe festgehalten.
   const [chosen, setChosen] = useState<number | null>(null);
-  const [day] = useState(() => dayKey(Date.now()));
-  const order = useMemo(() => mccOrder(item, day), [item, day]);
-  const shownOptions = useMemo(() => order.map((o) => item.options[o] ?? ''), [order, item]);
-  const chosenOrig = chosen === null ? null : (order[chosen] ?? null);
   const src = { area: ctrl.area, source: `grammar/${ctrl.task.topic}` };
   const verdict = ctrl.score?.verdict;
-  const muted = useMemo(() => (!ctrl.locked && ctrl.tip >= 2 ? [order.indexOf(mccMuted(item, chosenOrig))] : []), [ctrl.locked, ctrl.tip, item, order, chosenOrig]);
+  const muted = useMemo(() => (!ctrl.locked && ctrl.tip >= 2 ? [mccMuted(item, chosen)] : []), [ctrl.locked, ctrl.tip, item, chosen]);
   const pick = (i: number): void => {
     if (ctrl.locked) return;
-    const orig = order[i];
-    if (orig === undefined) return;
     setChosen(i);
-    ctrl.setResponse({ kind: 'mcc', pick: orig }, { form: 'default', picked: item.options[orig] });
+    ctrl.setResponse({ kind: 'mcc', pick: i }, { form: 'default', picked: item.options[i] });
   };
-  const shown = ctrl.locked ? item.options[item.answer] : chosenOrig !== null ? item.options[chosenOrig] : '';
+  const shown = ctrl.locked ? item.options[item.answer] : chosen !== null ? item.options[chosen] : '';
   const gap = (
     <span className="lx-gap" data-testid="gap" data-state={!ctrl.locked ? 'input' : verdict === 'correct' ? 'correct' : 'reveal'} style={{ width: 'auto' }}>
       {shown || '   '}
@@ -57,9 +49,9 @@ export function useMccUi(ctrl: C1Ctrl): C1Ui {
     ),
     answer: (
       <Choices
-        options={shownOptions}
+        options={item.options}
         chosen={chosen}
-        correct={ctrl.locked ? order.indexOf(item.answer) : null}
+        correct={ctrl.locked ? item.answer : null}
         revealed={ctrl.locked}
         onPick={pick}
         lang="en"

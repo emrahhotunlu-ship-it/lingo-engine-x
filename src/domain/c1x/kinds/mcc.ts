@@ -1,4 +1,4 @@
-import { hash32, mulberry32, shuffle } from '../../random';
+import { hash32 } from '../../random';
 import type { C1Response, C1Score, Mcc } from '../types';
 import { BRITISH, wordCount, type Problems } from './common';
 
@@ -29,15 +29,4 @@ export function checkMcc(item: Mcc): Problems {
 export function mccMuted(item: Mcc, avoid: number | null = null): number {
   const wrong = [0, 1, 2, 3].filter((i) => i !== item.answer && i !== avoid);
   return wrong[hash32(`mcc-muted|${item.id}`) % wrong.length] ?? 0;
-}
-
-/**
- * Anzeigereihenfolge der Optionen: fest gemischt je Aufgabe und Tag (stabiler Startwert), damit die richtige Antwort nicht im festen Kreis
- * A, B, C, D steht. `order[anzeige] = Index in item.options`. Auswertung, Begründungen und Radar arbeiten weiter mit dem Index im Inhalt.
- */
-export function mccOrder(item: Mcc, day: string): number[] {
-  return shuffle(
-    item.options.map((_, i) => i),
-    mulberry32(hash32(`mcc-order|${item.id}|${day}`)),
-  );
 }
