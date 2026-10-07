@@ -1,0 +1,1203 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "err-0028",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ff.will-now",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The printer is out of paper, so I order some more right away.",
+   "bad": {
+    "span": "I order",
+    "fix": [
+     "I will order",
+     "I’ll order",
+     "I am going to order",
+     "I’m going to order"
+    ],
+    "choices": [
+     "I will order",
+     "I am order",
+     "I will ordered"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Ein spontaner Entschluss im Moment des Sprechens braucht will: I’ll order. Deutsch „ich bestelle“ nutzt das Präsens.",
+     "en": "A spontaneous decision made while speaking needs will: I’ll order. German “ich bestelle” uses the present."
+    },
+    "wrong": [
+     {
+      "opt": "I am order",
+      "de": "Nach am steht -ing, nicht die Grundform: „am order“ ist falsch.",
+      "en": "After am comes -ing, not the base form: “am order” is wrong."
+     },
+     {
+      "opt": "I will ordered",
+      "de": "Nach will steht die Grundform: will order, nicht ordered.",
+      "en": "After will comes the base form: will order, not ordered."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „I order“, nicht hier.",
+      "en": "The mistake is at “I order”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „I order“ ist falsch.",
+      "en": "There is a mistake: “I order” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0029",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ff.going-to",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We’re going to launching the new app in May, so please hold the date.",
+   "bad": {
+    "span": "launching",
+    "fix": [
+     "launch"
+    ],
+    "choices": [
+     "launched",
+     "launch",
+     "to launch"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach going to steht die Grundform: going to launch. Das -ing von „going“ rutscht oft ins nächste Verb.",
+     "en": "After going to comes the base form: going to launch. The -ing of “going” often slips into the next verb."
+    },
+    "wrong": [
+     {
+      "opt": "launched",
+      "de": "Nach going to steht keine Vergangenheitsform: launch.",
+      "en": "No past form follows going to: launch."
+     },
+     {
+      "opt": "to launch",
+      "de": "„to launch“ wäre doppelt: Das to steht schon in going to.",
+      "en": "“to launch” would double the to that is already in going to."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „launching“, nicht hier.",
+      "en": "The mistake is at “launching”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „launching“ ist falsch.",
+      "en": "There is a mistake: “launching” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0030",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ff.was-going-to",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I am going to call the supplier yesterday, but I got pulled into a meeting.",
+   "bad": {
+    "span": "am",
+    "fix": [
+     "was"
+    ],
+    "choices": [
+     "were",
+     "be",
+     "was"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Ein Plan, der in der Vergangenheit nicht zustande kam, braucht was going to. „Yesterday“ und „but“ zeigen es. Deutsch sagt „wollte anrufen“.",
+     "en": "A plan that did not happen in the past needs was going to. “Yesterday” and “but” show it. German says “wollte anrufen”."
+    },
+    "wrong": [
+     {
+      "opt": "were",
+      "de": "Zu I passt was, nicht were.",
+      "en": "With I the form is was, not were."
+     },
+     {
+      "opt": "be",
+      "de": "„I be going to“ ist keine gültige Zeitform.",
+      "en": "“I be going to” is not a valid tense."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „am“, nicht hier.",
+      "en": "The mistake is at “am”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „am“ ist falsch.",
+      "en": "There is a mistake: “am” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0031",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ff.no-will-after",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I will send you the draft as soon as I will finish the summary.",
+   "bad": {
+    "span": "will finish",
+    "fix": [
+     "finish",
+     "have finished"
+    ],
+    "choices": [
+     "finish",
+     "am finishing",
+     "would finish"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach as soon as steht das Present, nie will, auch wenn es um die Zukunft geht. Das will gehört in den Hauptsatz.",
+     "en": "After as soon as comes the present, never will, even for the future. The will belongs in the main clause."
+    },
+    "wrong": [
+     {
+      "opt": "am finishing",
+      "de": "„am finishing“ beschreibt etwas, das gerade läuft, nicht den Zeitpunkt danach.",
+      "en": "“am finishing” describes something in progress, not the moment afterwards."
+     },
+     {
+      "opt": "would finish",
+      "de": "„would finish“ verschiebt den Satz in eine Vergangenheit.",
+      "en": "“would finish” moves the sentence into a past frame."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „will finish“, nicht hier.",
+      "en": "The mistake is at “will finish”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „will finish“ ist falsch.",
+      "en": "There is a mistake: “will finish” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0032",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ff.about-to",
+   "topic": "future-forms",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Please take your seats, the keynote is about starting now.",
+   "bad": {
+    "span": "about starting",
+    "fix": [
+     "about to start",
+     "about to begin"
+    ],
+    "choices": [
+     "about start",
+     "about to start",
+     "about starts"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Be about verlangt to + Grundform: is about to start. Deutsch „im Begriff sein, anzufangen“ wird mit about + Nomen verwechselt, deshalb folgt -ing.",
+     "en": "Be about needs to + base form: is about to start. Learners confuse it with about + noun, so -ing follows."
+    },
+    "wrong": [
+     {
+      "opt": "about start",
+      "de": "Hinter about fehlt to.",
+      "en": "to is missing after about."
+     },
+     {
+      "opt": "about starts",
+      "de": "Nach „is about“ steht to + Grundform, kein -s.",
+      "en": "After “is about” comes to + base form, no -s."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „about starting“, nicht hier.",
+      "en": "The mistake is at “about starting”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „about starting“ ist falsch.",
+      "en": "There is a mistake: “about starting” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0033",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ff.no-will-after",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Please don’t deploy before QA will give the green light.",
+   "bad": {
+    "span": "will give",
+    "fix": [
+     "gives",
+     "has given",
+     "’s given"
+    ],
+    "choices": [
+     "will have given",
+     "giving",
+     "gives"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach before steht das Present (oder Present Perfect), nie will. Der Zeitsatz nennt nur den Moment, nicht die Zukunft.",
+     "en": "After before comes the present (or present perfect), never will. The time clause only names the moment."
+    },
+    "wrong": [
+     {
+      "opt": "will have given",
+      "de": "„will have given“ ist Futur II und passt nicht nach before.",
+      "en": "“will have given” is future perfect and does not fit after before."
+     },
+     {
+      "opt": "giving",
+      "de": "„giving“ allein ist kein Prädikat.",
+      "en": "“giving” alone is no predicate."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „will give“, nicht hier.",
+      "en": "The mistake is at “will give”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „will give“ ist falsch.",
+      "en": "There is a mistake: “will give” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0034",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ff.will-now",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I’ll call the client right now and confirm the new date.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Ein spontaner Entschluss im Moment des Sprechens steht mit will: I’ll call.",
+     "en": "No mistake: a spontaneous decision made while speaking uses will: I’ll call."
+    },
+    "wrong": [
+     {
+      "tap": "I’ll",
+      "de": "Hier ist will richtig, denn der Entschluss fällt jetzt. „I am going to call“ wäre ein schon geplanter Anruf.",
+      "en": "Will is right here because the decision is made now. “I am going to call” would be a call already planned."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0035",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ff.fixed-times",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We’re meeting the board in Lisbon on Tuesday, and the flights are already booked.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Ein fest vereinbarter Termin mit schon gebuchten Flügen steht im Present Continuous: We’re meeting.",
+     "en": "No mistake: a firmly arranged event with flights already booked takes the present continuous: We’re meeting."
+    },
+    "wrong": [
+     {
+      "tap": "meeting",
+      "de": "Der Termin ist abgemacht, deshalb ist -ing richtig. „We will meet“ wäre auch möglich, aber weniger fest.",
+      "en": "The event is arranged, so -ing is right. “We will meet” would be possible but less firm."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0036",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ff.fixed-times",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The train leaves at 6:15 tomorrow morning, so we should meet at the station by six.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Ein Fahrplan steht im Present Simple: The train leaves. Für Fahrpläne ist -ing nicht nötig.",
+     "en": "No mistake: a timetable takes the present simple: The train leaves. No -ing is needed for timetables."
+    },
+    "wrong": [
+     {
+      "tap": "leaves",
+      "de": "Fahrpläne und feste Programme nutzen das Present Simple. „is leaving“ wäre hier eher eine persönliche Absprache.",
+      "en": "Timetables and fixed schedules use the present simple. “is leaving” would be more of a personal arrangement."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0037",
+   "kind": "err",
+   "area": "gram",
+   "pat": "tc.present-for-future",
+   "topic": "time-clauses",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I will call you when I will arrive at the airport tomorrow.",
+   "bad": {
+    "span": "will arrive",
+    "fix": [
+     "arrive"
+    ],
+    "choices": [
+     "arrive",
+     "arrived",
+     "arrives"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach when steht das Present, auch für die Zukunft. Das will gehört nur in den Hauptsatz (I will call).",
+     "en": "After when comes the present, even for the future. The will belongs only in the main clause (I will call)."
+    },
+    "wrong": [
+     {
+      "opt": "arrived",
+      "de": "„arrived“ ist Vergangenheit, aber der Satz spricht von morgen.",
+      "en": "“arrived” is past, but the sentence talks about tomorrow."
+     },
+     {
+      "opt": "arrives",
+      "de": "Zu I passt arrive, nicht arrives.",
+      "en": "With I the form is arrive, not arrives."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „will arrive“, nicht hier.",
+      "en": "The mistake is at “will arrive”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „will arrive“ ist falsch.",
+      "en": "There is a mistake: “will arrive” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0038",
+   "kind": "err",
+   "area": "gram",
+   "pat": "tc.present-for-future",
+   "topic": "time-clauses",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We will start the demo as soon as the meeting will be over.",
+   "bad": {
+    "span": "will be",
+    "fix": [
+     "is",
+     "’s"
+    ],
+    "choices": [
+     "be",
+     "is",
+     "would be"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach as soon as steht das Present: as soon as the meeting is over. Deutsch „sobald es vorbei sein wird“ zieht das Futur in den Nebensatz.",
+     "en": "After as soon as comes the present: as soon as the meeting is over. German pulls the future into the clause."
+    },
+    "wrong": [
+     {
+      "opt": "be",
+      "de": "„be over“ ist keine finite Form: es fehlt is.",
+      "en": "“be over” is not a finite form: is is missing."
+     },
+     {
+      "opt": "would be",
+      "de": "„would be“ verschiebt den Satz in die Vergangenheit.",
+      "en": "“would be” moves the sentence to the past."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „will be“, nicht hier.",
+      "en": "The mistake is at “will be”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „will be“ ist falsch.",
+      "en": "There is a mistake: “will be” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0039",
+   "kind": "err",
+   "area": "gram",
+   "pat": "tc.present-perfect",
+   "topic": "time-clauses",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Please don’t deploy until QA signed off on the release candidate.",
+   "bad": {
+    "span": "signed off",
+    "fix": [
+     "has signed off",
+     "’s signed off",
+     "signs off"
+    ],
+    "choices": [
+     "will sign off",
+     "signing off",
+     "has signed off"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach until steht für etwas, das vorher fertig sein muss, das Present Perfect: has signed off. Auch das Present Simple (signs off) geht. Past Simple („signed off“) blickt auf einen Zeitpunkt in der Vergangenheit.",
+     "en": "After until, something that must be finished first takes the present perfect: has signed off. The present simple (signs off) also works. The past simple points to a past moment."
+    },
+    "wrong": [
+     {
+      "opt": "will sign off",
+      "de": "Nach until steht nie will.",
+      "en": "Never will after until."
+     },
+     {
+      "opt": "signing off",
+      "de": "„signing off“ allein ist kein Prädikat.",
+      "en": "“signing off” alone is no predicate."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „signed off“, nicht hier.",
+      "en": "The mistake is at “signed off”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „signed off“ ist falsch.",
+      "en": "There is a mistake: “signed off” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0040",
+   "kind": "err",
+   "area": "gram",
+   "pat": "tc.by-the-time",
+   "topic": "time-clauses",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Until our CFO joins the call, we will have finished the first agenda items.",
+   "bad": {
+    "span": "Until",
+    "fix": [
+     "By the time",
+     "Before"
+    ],
+    "choices": [
+     "By the time",
+     "Since",
+     "Before then"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Bei einer Frist („bis dahin fertig“) steht by the time, nicht until. Until bedeutet „die ganze Zeit bis dahin“.",
+     "en": "For a deadline (“done by then”) it is by the time, not until. Until means “all the time up to then”."
+    },
+    "wrong": [
+     {
+      "opt": "Since",
+      "de": "Since nennt einen Startpunkt, nicht eine Frist.",
+      "en": "Since names a starting point, not a deadline."
+     },
+     {
+      "opt": "Before then",
+      "de": "„Before then“ lässt keinen Zeitsatz mit joins folgen.",
+      "en": "“Before then” cannot introduce a clause with joins."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „Until“, nicht hier.",
+      "en": "The mistake is at “Until”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „Until“ ist falsch.",
+      "en": "There is a mistake: “Until” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0041",
+   "kind": "err",
+   "area": "gram",
+   "pat": "tc.noun-clause",
+   "topic": "time-clauses",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I wonder when will the audit start next week.",
+   "bad": {
+    "span": "will the audit",
+    "fix": [
+     "the audit will"
+    ],
+    "choices": [
+     "does the audit",
+     "the audit will",
+     "the audit is"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "In der indirekten Frage steht normale Satzstellung: when the audit will start. Die Frage-Umstellung gilt nur in der direkten Frage. Deutsch hat im Nebensatz das Verb am Ende, das verwirrt die Stellung.",
+     "en": "In an indirect question the word order is normal: when the audit will start. Question order is only for direct questions."
+    },
+    "wrong": [
+     {
+      "opt": "does the audit",
+      "de": "„does the audit start“ bleibt in der Frage-Umstellung, die hier nicht gilt.",
+      "en": "“does the audit start” keeps the question order, which does not apply here."
+     },
+     {
+      "opt": "the audit is",
+      "de": "„the audit is start“ mischt Hilfsverb und Grundform.",
+      "en": "“the audit is start” mixes auxiliary and base form."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „will the audit“, nicht hier.",
+      "en": "The mistake is at “will the audit”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „will the audit“ ist falsch.",
+      "en": "There is a mistake: “will the audit” is wrong."
+     }
+    ]
+   },
+   "trap": "f20"
+  },
+  {
+   "id": "err-0042",
+   "kind": "err",
+   "area": "gram",
+   "pat": "tc.present-for-future",
+   "topic": "time-clauses",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "When the audit will start next week, we will have everything ready.",
+   "bad": {
+    "span": "will start",
+    "fix": [
+     "starts"
+    ],
+    "choices": [
+     "start",
+     "starting",
+     "starts"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach when steht das Present: When the audit starts. Das zweite will gehört nur in den Hauptsatz.",
+     "en": "After when comes the present: When the audit starts. The second will belongs only in the main clause."
+    },
+    "wrong": [
+     {
+      "opt": "start",
+      "de": "Zu „the audit“ passt starts mit -s.",
+      "en": "With “the audit” the form needs -s: starts."
+     },
+     {
+      "opt": "starting",
+      "de": "„starting“ allein ist kein Prädikat.",
+      "en": "“starting” alone is no predicate."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „will start“, nicht hier.",
+      "en": "The mistake is at “will start”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „will start“ ist falsch.",
+      "en": "There is a mistake: “will start” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0043",
+   "kind": "err",
+   "area": "gram",
+   "pat": "tc.present-for-future",
+   "topic": "time-clauses",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I will forward the file as soon as I get the final numbers from finance.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Nach as soon as steht das Present: as soon as I get. will gehört nur in den Hauptsatz.",
+     "en": "No mistake: after as soon as comes the present: as soon as I get. will belongs only in the main clause."
+    },
+    "wrong": [
+     {
+      "tap": "get",
+      "de": "Hier ist das Present richtig. „as soon as I will get“ wäre der Fehler.",
+      "en": "The present is right here. “as soon as I will get” would be the mistake."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0044",
+   "kind": "err",
+   "area": "gram",
+   "pat": "tc.present-perfect",
+   "topic": "time-clauses",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We will start the migration once the legal team has approved the contract.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Nach once steht das Present Perfect für das, was vorher erledigt sein muss.",
+     "en": "No mistake: after once the present perfect marks what must be done first."
+    },
+    "wrong": [
+     {
+      "tap": "has",
+      "de": "Present Perfect ist hier richtig: die Freigabe muss vor dem Start fertig sein. „will have approved“ wäre falsch.",
+      "en": "The present perfect is right here: the approval must be done before the start. “will have approved” would be wrong."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0045",
+   "kind": "err",
+   "area": "gram",
+   "pat": "tc.noun-clause",
+   "topic": "time-clauses",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I wonder whether the client will accept our revised offer.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: In einer indirekten ob-Frage bleibt will stehen: wonder whether … will accept.",
+     "en": "No mistake: in an indirect whether-question will stays: wonder whether … will accept."
+    },
+    "wrong": [
+     {
+      "tap": "will",
+      "de": "Hier gehört will hin, denn es ist eine Frage, keine Bedingung. Nach if als Bedingung wäre es falsch.",
+      "en": "Will belongs here because this is a question, not a condition. After a conditional if it would be wrong."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0046",
+   "kind": "err",
+   "area": "gram",
+   "pat": "hg.modal",
+   "topic": "c1-hedging",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The new release will maybe be late because of the holiday freeze.",
+   "bad": {
+    "span": "will maybe be",
+    "fix": [
+     "might be",
+     "may be",
+     "could be",
+     "will probably be",
+     "will possibly be",
+     "may well be",
+     "might well be"
+    ],
+    "choices": [
+     "might be",
+     "maybe be",
+     "will might be"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "„will maybe be“ klingt unidiomatisch. Zum Abschwächen nimmt man ein Modalverb: might be. Deutsch „wird vielleicht sein“ legt will + maybe nahe.",
+     "en": "“will maybe be” sounds unidiomatic. To soften, use a modal verb: might be. German “wird vielleicht sein” suggests will + maybe."
+    },
+    "wrong": [
+     {
+      "opt": "maybe be",
+      "de": "„maybe be“ ohne Modalverb ist ungrammatisch.",
+      "en": "“maybe be” without a modal is ungrammatical."
+     },
+     {
+      "opt": "will might be",
+      "de": "Zwei Modalverben (will might) gehen nicht zusammen.",
+      "en": "Two modals (will might) cannot go together."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „will maybe be“, nicht hier.",
+      "en": "The mistake is at “will maybe be”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „will maybe be“ ist falsch.",
+      "en": "There is a mistake: “will maybe be” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0047",
+   "kind": "err",
+   "area": "gram",
+   "pat": "hg.worth",
+   "topic": "c1-hedging",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "It might be worth to wait until Q3 before we sign the new contract.",
+   "bad": {
+    "span": "to wait",
+    "fix": [
+     "waiting",
+     "it to wait"
+    ],
+    "choices": [
+     "wait",
+     "waiting",
+     "waited"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Direkt nach worth steht die -ing-Form: worth waiting (mit it: worth it to wait). Deutsch „es lohnt sich zu warten“ nutzt zu + Infinitiv.",
+     "en": "Directly after worth comes the -ing form: worth waiting (with it: worth it to wait). German “es lohnt sich zu warten” uses zu + infinitive."
+    },
+    "wrong": [
+     {
+      "opt": "wait",
+      "de": "Nach worth steht nicht die Grundform.",
+      "en": "The base form does not follow worth."
+     },
+     {
+      "opt": "waited",
+      "de": "„waited“ ist Vergangenheit und passt nicht zu worth.",
+      "en": "“waited” is past and does not fit worth."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „to wait“, nicht hier.",
+      "en": "The mistake is at “to wait”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „to wait“ ist falsch.",
+      "en": "There is a mistake: “to wait” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0048",
+   "kind": "err",
+   "area": "gram",
+   "pat": "hg.inclined",
+   "topic": "c1-hedging",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I would be inclined choosing the cheaper vendor for the pilot.",
+   "bad": {
+    "span": "choosing",
+    "fix": [
+     "to choose",
+     "to go with"
+    ],
+    "choices": [
+     "choose",
+     "to choosing",
+     "to choose"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach be inclined steht to + Grundform: inclined to choose. Das -ing wird nach Wendungen mit Adjektiv + Präposition oft übergeneralisiert.",
+     "en": "After be inclined comes to + base form: inclined to choose. The -ing is often overgeneralized from adjective + preposition phrases."
+    },
+    "wrong": [
+     {
+      "opt": "choose",
+      "de": "Hinter inclined fehlt to.",
+      "en": "to is missing after inclined."
+     },
+     {
+      "opt": "to choosing",
+      "de": "Nach to steht die Grundform, nicht -ing.",
+      "en": "After to comes the base form here, not -ing."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „choosing“, nicht hier.",
+      "en": "The mistake is at “choosing”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „choosing“ ist falsch.",
+      "en": "There is a mistake: “choosing” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0049",
+   "kind": "err",
+   "area": "gram",
+   "pat": "hg.seems",
+   "topic": "c1-hedging",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "It seems me that the timeline is too aggressive for a pilot.",
+   "bad": {
+    "span": "seems me",
+    "fix": [
+     "seems to me",
+     "appears to me"
+    ],
+    "choices": [
+     "seems to me",
+     "seems of me",
+     "seem me"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Die Person braucht im Englischen to: seems to me. Deutsch „es scheint mir“ nutzt den Dativ ohne Präposition.",
+     "en": "The person needs to in English: seems to me. German “es scheint mir” uses the dative without a preposition."
+    },
+    "wrong": [
+     {
+      "opt": "seems of me",
+      "de": "„seems of me“ gibt es nicht.",
+      "en": "“seems of me” does not exist."
+     },
+     {
+      "opt": "seem me",
+      "de": "It braucht seems mit -s, nicht seem.",
+      "en": "It needs seems with -s, not seem."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „seems me“, nicht hier.",
+      "en": "The mistake is at “seems me”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „seems me“ ist falsch.",
+      "en": "There is a mistake: “seems me” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0050",
+   "kind": "err",
+   "area": "gram",
+   "pat": "hg.downtoner",
+   "topic": "c1-hedging",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Your quote is a bit of high for our current budget, I am afraid.",
+   "bad": {
+    "span": "a bit of high",
+    "fix": [
+     "a bit high",
+     "a bit too high",
+     "a little high",
+     "a little too high",
+     "a touch too high",
+     "a bit on the high side"
+    ],
+    "choices": [
+     "bit too high",
+     "a bit high",
+     "a bit of too high"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "a bit of gilt nur vor einem Nomen (a bit of a problem). Vor einem Adjektiv steht a bit direkt: a bit high.",
+     "en": "A bit of only works before a noun (a bit of a problem). Before an adjective a bit stands directly: a bit high."
+    },
+    "wrong": [
+     {
+      "opt": "bit too high",
+      "de": "Ohne a fehlt der Artikel der Wendung.",
+      "en": "Without a the phrase lacks its article."
+     },
+     {
+      "opt": "a bit of too high",
+      "de": "„a bit of too high“ ist falsch, of bleibt weg.",
+      "en": "“a bit of too high” is wrong, of must go."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „a bit of high“, nicht hier.",
+      "en": "The mistake is at “a bit of high”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „a bit of high“ ist falsch.",
+      "en": "There is a mistake: “a bit of high” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0051",
+   "kind": "err",
+   "area": "gram",
+   "pat": "hg.modal",
+   "topic": "c1-hedging",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Our competitor could to lower its prices next quarter.",
+   "bad": {
+    "span": "could to lower",
+    "fix": [
+     "could lower",
+     "might lower",
+     "may lower"
+    ],
+    "choices": [
+     "could lowering",
+     "could lowered",
+     "could lower"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach einem Modalverb steht die Grundform ohne to: could lower. Deutsch nutzt oft „zu“ nach Verben (versuchen zu, hoffen zu). Das wird auf Modalverben übertragen.",
+     "en": "After a modal verb comes the base form without to: could lower. German often uses zu after verbs (versuchen zu, hoffen zu), and this is carried over to modals."
+    },
+    "wrong": [
+     {
+      "opt": "could lowering",
+      "de": "Nach could steht keine -ing-Form.",
+      "en": "After could no -ing form follows."
+     },
+     {
+      "opt": "could lowered",
+      "de": "Nach could steht keine Vergangenheitsform.",
+      "en": "After could no past form follows."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „could to lower“, nicht hier.",
+      "en": "The mistake is at “could to lower”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „could to lower“ ist falsch.",
+      "en": "There is a mistake: “could to lower” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0052",
+   "kind": "err",
+   "area": "gram",
+   "pat": "hg.worth",
+   "topic": "c1-hedging",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "It might be worth involving legal before we sign the contract.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Nach worth steht -ing, also worth involving. Mit might wird die Empfehlung höflicher.",
+     "en": "No mistake: worth is followed by -ing, so worth involving. With might the suggestion sounds more polite."
+    },
+    "wrong": [
+     {
+      "tap": "involving",
+      "de": "Hier ist -ing richtig. „worth to involve“ wäre der Fehler.",
+      "en": "-ing is right here. “worth to involve” would be the mistake."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0053",
+   "kind": "err",
+   "area": "gram",
+   "pat": "hg.inclined",
+   "topic": "c1-hedging",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I would be inclined to wait until the audit is finished.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: be inclined + to + Grundform: would be inclined to wait. Eine höfliche Abschwächung der eigenen Meinung.",
+     "en": "No mistake: be inclined + to + base form: would be inclined to wait. A polite softening of your own view."
+    },
+    "wrong": [
+     {
+      "tap": "wait",
+      "de": "Nach to steht hier die Grundform. „to waiting“ wäre der Fehler.",
+      "en": "The base form follows to here. “to waiting” would be the mistake."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0054",
+   "kind": "err",
+   "area": "gram",
+   "pat": "hg.seems",
+   "topic": "c1-hedging",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "It seems that the budget is a little tight this year.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: It seems that + Satz ist eine vorsichtige Einschätzung, und a little schwächt tight ab.",
+     "en": "No mistake: It seems that + clause is a cautious assessment, and a little softens tight."
+    },
+    "wrong": [
+     {
+      "tap": "seems",
+      "de": "Auch ohne to me ist seems that richtig: to steht nur, wenn eine Person genannt wird (seems to me / to John).",
+      "en": "Seems that is also right without to me: to appears only when a person is named (seems to me / to John)."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  }
+ ]
+}

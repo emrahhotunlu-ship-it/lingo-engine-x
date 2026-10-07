@@ -122,6 +122,11 @@
       "tap": "runs",
       "de": "Gewohnheiten und feste Abläufe brauchen kein -ing. „is running“ wäre hier der Fehler.",
       "en": "Habits and fixed processes need no -ing. “is running” would be the mistake here."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
      }
     ]
    }
@@ -197,6 +202,11 @@
       "tap": "are",
       "de": "Vorübergehende Lage = be + -ing. „We test“ würde eine feste Gewohnheit behaupten.",
       "en": "A temporary situation = be + -ing. “We test” would claim a fixed habit."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
      }
     ]
    }
@@ -372,6 +382,11 @@
       "tap": "having",
       "de": "Als Handlung („lunch haben = essen“) steht have im Continuous. Nur als Besitz („have a car“) nicht.",
       "en": "As an action (“have lunch = eat”) have takes the continuous. Only as possession (“have a car”) it does not."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
      }
     ]
    }
@@ -703,6 +718,11 @@
       "tap": "have",
       "de": "have + worked: Mit since 2018 braucht der Satz das Present Perfect. „I worked … since 2018“ wäre falsch.",
       "en": "have + worked: with since 2018 the sentence needs the present perfect. “I worked … since 2018” would be wrong."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
      }
     ]
    }
@@ -728,6 +748,11 @@
       "tap": "signed",
       "de": "Mit einer festen Zeitangabe steht das Past Simple. „have signed“ wäre hier der Fehler.",
       "en": "With a fixed time expression the past simple is right. “have signed” would be the mistake."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
      }
     ]
    },
@@ -754,6 +779,11 @@
       "tap": "Have",
       "de": "Present Perfect betont die Erfahrung bis jetzt. „Did you ever …“ geht im US-Alltag auch, aber nicht mit fester Zeitangabe.",
       "en": "The present perfect stresses experience up to now. “Did you ever …” also works in casual US English, but not with a fixed time."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
      }
     ]
    }
@@ -1085,6 +1115,11 @@
       "tap": "migrating",
       "de": "Hier ist -ing richtig, weil die Migration noch läuft und die Dauer zählt.",
       "en": "-ing is right here because the migration is still running and the duration counts."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
      }
     ]
    }
@@ -1110,6 +1145,11 @@
       "tap": "written",
       "de": "„have been writing three reports“ wäre hier unpassend: Mit Zahl zählt das Ergebnis.",
       "en": "“have been writing three reports” would be unsuitable here: with a number the result counts."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
      }
     ]
    }
@@ -1135,6 +1175,11 @@
       "tap": "have",
       "de": "Dauer bis jetzt = Present Perfect. „How long are you working“ wäre das Präsens-Deutsch.",
       "en": "Duration up to now = present perfect. “How long are you working” would be the German-style present."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
      }
     ]
    }

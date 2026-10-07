@@ -1,0 +1,1181 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "err-0055",
+   "kind": "err",
+   "area": "gram",
+   "pat": "fut.continuous",
+   "topic": "future-perf-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "This time tomorrow, I will be sit in the board meeting in Hamburg.",
+   "bad": {
+    "span": "will be sit",
+    "fix": [
+     "will be sitting"
+    ],
+    "choices": [
+     "will be sitting",
+     "will sitting",
+     "be sitting"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Etwas, das zu einem künftigen Zeitpunkt gerade läuft, braucht will be + -ing: will be sitting. Deutsch „ich sitze dann“ hat keine Verlaufsform.",
+     "en": "Something in progress at a future moment needs will be + -ing: will be sitting. German “ich sitze dann” has no continuous form."
+    },
+    "wrong": [
+     {
+      "opt": "will sitting",
+      "de": "Nach will fehlt be: will be sitting.",
+      "en": "After will the be is missing: will be sitting."
+     },
+     {
+      "opt": "be sitting",
+      "de": "„be sitting“ allein hat kein will, also keine Zukunft.",
+      "en": "“be sitting” alone has no will, so no future."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „will be sit“, nicht hier.",
+      "en": "The mistake is at “will be sit”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „will be sit“ ist falsch.",
+      "en": "There is a mistake: “will be sit” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0056",
+   "kind": "err",
+   "area": "gram",
+   "pat": "fut.perfect",
+   "topic": "future-perf-cont",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "By Friday, we will already completed the migration to the new DMS.",
+   "bad": {
+    "span": "will already completed",
+    "fix": [
+     "will already have completed",
+     "will have already completed"
+    ],
+    "choices": [
+     "will already completing",
+     "will already have completed",
+     "will already be completed"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Fertig bis zu einem künftigen Zeitpunkt: will have + 3. Form. Es fehlt have: will already have completed. Ein Futur II gibt es im Deutschen kaum („bis Freitag sind wir fertig“), deshalb fehlt das have.",
+     "en": "Done by a future point: will have + participle. The have is missing: will already have completed. German hardly uses a future perfect, so the have is forgotten."
+    },
+    "wrong": [
+     {
+      "opt": "will already completing",
+      "de": "Nach will steht die Grundform (have), nicht -ing.",
+      "en": "After will comes the base form (have), not -ing."
+     },
+     {
+      "opt": "will already be completed",
+      "de": "„will be completed“ wäre Passiv und passt nicht zu we.",
+      "en": "“will be completed” would be passive and does not fit we."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „will already completed“, nicht hier.",
+      "en": "The mistake is at “will already completed”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „will already completed“ ist falsch.",
+      "en": "There is a mistake: “will already completed” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0057",
+   "kind": "err",
+   "area": "gram",
+   "pat": "fut.perfect",
+   "topic": "future-perf-cont",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "By the end of the quarter, the team will had closed forty new deals.",
+   "bad": {
+    "span": "will had closed",
+    "fix": [
+     "will have closed"
+    ],
+    "choices": [
+     "will has closed",
+     "would had closed",
+     "will have closed"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach will steht have, nicht had: will have closed. Das had rutscht aus der Vergangenheitsform hinein.",
+     "en": "After will comes have, not had: will have closed. The had slips in from the past form."
+    },
+    "wrong": [
+     {
+      "opt": "will has closed",
+      "de": "Nach will steht have, nie has.",
+      "en": "After will comes have, never has."
+     },
+     {
+      "opt": "would had closed",
+      "de": "„would had“ mischt zwei Hilfsverben.",
+      "en": "“would had” mixes two auxiliaries."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „will had closed“, nicht hier.",
+      "en": "The mistake is at “will had closed”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „will had closed“ ist falsch.",
+      "en": "There is a mistake: “will had closed” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0058",
+   "kind": "err",
+   "area": "gram",
+   "pat": "fut.perf-cont",
+   "topic": "future-perf-cont",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "By June, our team uses the new CRM for two years without any major outage.",
+   "bad": {
+    "span": "uses",
+    "fix": [
+     "will have been using"
+    ],
+    "choices": [
+     "will have been using",
+     "will been using",
+     "will have being using"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Dauer bis zu einem künftigen Zeitpunkt: will have been + -ing. Deutsch „im Juni nutzt unser Team es seit zwei Jahren“ nutzt dafür das Präsens.",
+     "en": "Duration up to a future point: will have been + -ing. German “im Juni nutzt unser Team es seit zwei Jahren” uses the present."
+    },
+    "wrong": [
+     {
+      "opt": "will been using",
+      "de": "„will been“ lässt have aus: will have been using.",
+      "en": "“will been” drops have: will have been using."
+     },
+     {
+      "opt": "will have being using",
+      "de": "„having being“ ist keine gültige Form: nach have steht been.",
+      "en": "“have being” is not a valid form: have takes been."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „uses“, nicht hier.",
+      "en": "The mistake is at “uses”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „uses“ ist falsch.",
+      "en": "There is a mistake: “uses” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0059",
+   "kind": "err",
+   "area": "gram",
+   "pat": "fut.perf-cont",
+   "topic": "future-perf-cont",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "By next April, I will have work at this company for ten years.",
+   "bad": {
+    "span": "have work",
+    "fix": [
+     "have worked",
+     "have been working"
+    ],
+    "choices": [
+     "has worked",
+     "have worked",
+     "having work"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach will have steht die 3. Form (worked) oder been + -ing. Die Grundform work gehört nicht dahin.",
+     "en": "After will have comes the participle (worked) or been + -ing. The base form work does not belong there."
+    },
+    "wrong": [
+     {
+      "opt": "has worked",
+      "de": "Nach will steht have, nie has.",
+      "en": "After will comes have, never has."
+     },
+     {
+      "opt": "having work",
+      "de": "„will having“ gibt es nicht.",
+      "en": "“will having” does not exist."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „have work“, nicht hier.",
+      "en": "The mistake is at “have work”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „have work“ ist falsch.",
+      "en": "There is a mistake: “have work” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0060",
+   "kind": "err",
+   "area": "gram",
+   "pat": "fut.continuous",
+   "topic": "future-perf-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "At 3 p.m., I’ll be present the roadmap to the board in the main conference room.",
+   "bad": {
+    "span": "be present",
+    "fix": [
+     "be presenting"
+    ],
+    "choices": [
+     "be presented",
+     "presenting",
+     "be presenting"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Die Handlung läuft um 3 Uhr: will be + -ing, also be presenting. „Präsentieren“ sieht wie „present“ aus, aber „be present“ heißt „anwesend sein“, und danach folgt kein Objekt.",
+     "en": "The action is in progress at 3 p.m.: will be + -ing, so be presenting. “Be present” means “be there”, and no object follows."
+    },
+    "wrong": [
+     {
+      "opt": "be presented",
+      "de": "„be presented“ wäre Passiv („wird präsentiert“), aber das Subjekt I präsentiert selbst.",
+      "en": "“be presented” would be passive, but the subject I presents itself."
+     },
+     {
+      "opt": "presenting",
+      "de": "„I’ll presenting“ lässt be aus.",
+      "en": "“I’ll presenting” drops be."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „be present“, nicht hier.",
+      "en": "The mistake is at “be present”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „be present“ ist falsch.",
+      "en": "There is a mistake: “be present” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0061",
+   "kind": "err",
+   "area": "gram",
+   "pat": "fut.continuous",
+   "topic": "future-perf-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "This time next week, I will be sitting on a plane to Singapore.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Eine Handlung, die zu einem künftigen Zeitpunkt gerade läuft, steht mit will be + -ing.",
+     "en": "No mistake: an action in progress at a future moment takes will be + -ing."
+    },
+    "wrong": [
+     {
+      "tap": "sitting",
+      "de": "Hier ist -ing gewollt: zu diesem Zeitpunkt läuft der Flug. „will sit“ wäre eine einfache Zukunft ohne den Moment.",
+      "en": "-ing is intended here: the flight is in progress then. “will sit” would be a plain future without that moment."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0062",
+   "kind": "err",
+   "area": "gram",
+   "pat": "fut.perfect",
+   "topic": "future-perf-cont",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "By the time you land, I will have set up the demo environment.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Fertig bis zu einem Zeitpunkt (by the time you land) braucht will have + 3. Form.",
+     "en": "No mistake: done by a point in time (by the time you land) takes will have + participle."
+    },
+    "wrong": [
+     {
+      "tap": "have",
+      "de": "Hier gehört have hin: will have set up. „will set up“ würde keine Frist ausdrücken.",
+      "en": "Have belongs here: will have set up. “will set up” would not express a deadline."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0063",
+   "kind": "err",
+   "area": "gram",
+   "pat": "fut.cont-plan",
+   "topic": "future-perf-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Will you be attending the kickoff in Vienna next Wednesday?",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Will you be + -ing ist die höfliche Frage nach Plänen.",
+     "en": "No mistake: Will you be + -ing is the polite question about plans."
+    },
+    "wrong": [
+     {
+      "tap": "attending",
+      "de": "Die -ing-Form macht die Frage freundlich. „Will you attend“ klingt direkter.",
+      "en": "The -ing form makes the question friendly. “Will you attend” sounds more direct."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0064",
+   "kind": "err",
+   "area": "gram",
+   "pat": "pp.duration",
+   "topic": "past-perfect",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "When the inspector arrived, we have been waiting for two hours already.",
+   "bad": {
+    "span": "have been waiting",
+    "fix": [
+     "had been waiting"
+    ],
+    "choices": [
+     "had been waiting",
+     "has been waiting",
+     "are waiting"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Die Erzählzeit ist Vergangenheit, also had been waiting. Have wäre die Gegenwart. Deutsch erzählt oft im Perfekt („wir haben schon zwei Stunden gewartet“), das lockt zu have.",
+     "en": "The narrative is past, so had been waiting. Have would be the present. German often narrates in the perfect, which lures to have."
+    },
+    "wrong": [
+     {
+      "opt": "has been waiting",
+      "de": "Zu we passt have/had, nicht has.",
+      "en": "With we the auxiliary is have/had, not has."
+     },
+     {
+      "opt": "are waiting",
+      "de": "„are waiting“ ist Gegenwart und passt nicht zu „arrived“.",
+      "en": "“are waiting” is present and does not fit “arrived”."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „have been waiting“, nicht hier.",
+      "en": "The mistake is at “have been waiting”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „have been waiting“ ist falsch.",
+      "en": "There is a mistake: “have been waiting” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0065",
+   "kind": "err",
+   "area": "gram",
+   "pat": "pp.reported",
+   "topic": "past-perfect",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The client said that he would to confirm the order the following Monday.",
+   "bad": {
+    "span": "would to confirm",
+    "fix": [
+     "would confirm"
+    ],
+    "choices": [
+     "would confirming",
+     "would confirm",
+     "would confirmed"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach would steht die Grundform ohne to: would confirm. Das to kommt von Verben wie want oder need.",
+     "en": "After would comes the base form without to: would confirm. The to comes from verbs like want or need."
+    },
+    "wrong": [
+     {
+      "opt": "would confirming",
+      "de": "Nach would steht keine -ing-Form.",
+      "en": "After would no -ing form follows."
+     },
+     {
+      "opt": "would confirmed",
+      "de": "Nach would steht keine Vergangenheitsform.",
+      "en": "After would no past form follows."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „would to confirm“, nicht hier.",
+      "en": "The mistake is at “would to confirm”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „would to confirm“ ist falsch.",
+      "en": "There is a mistake: “would to confirm” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0066",
+   "kind": "err",
+   "area": "gram",
+   "pat": "pp.first-time",
+   "topic": "past-perfect",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "That was the first time our CEO has presented in Spanish to a client.",
+   "bad": {
+    "span": "has presented",
+    "fix": [
+     "had presented",
+     "presented"
+    ],
+    "choices": [
+     "have presented",
+     "has present",
+     "had presented"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach „That was the first time“ in der Vergangenheit steht das Past Perfect: had presented (Past Simple geht im Alltag auch). Has wäre die Gegenwart.",
+     "en": "After “That was the first time” in the past comes the past perfect: had presented (the past simple also works in everyday use). Has would be the present."
+    },
+    "wrong": [
+     {
+      "opt": "have presented",
+      "de": "Zu our CEO passt has/had, nicht have.",
+      "en": "With our CEO the auxiliary is has/had, not have."
+     },
+     {
+      "opt": "has present",
+      "de": "Nach has steht die 3. Form (presented), nicht present.",
+      "en": "After has comes the participle (presented), not present."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „has presented“, nicht hier.",
+      "en": "The mistake is at “has presented”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „has presented“ ist falsch.",
+      "en": "There is a mistake: “has presented” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0067",
+   "kind": "err",
+   "area": "gram",
+   "pat": "pp.inversion",
+   "topic": "past-perfect",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "No sooner the CFO had left than the fire alarm went off.",
+   "bad": {
+    "span": "the CFO had",
+    "fix": [
+     "had the CFO"
+    ],
+    "choices": [
+     "had the CFO",
+     "did the CFO",
+     "has the CFO"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach No sooner steht die Inversion: had vor dem Subjekt, also had the CFO left. Deutsch („Kaum war der CFO gegangen“) stellt ebenfalls um, im Englischen vergisst man es leicht.",
+     "en": "After No sooner comes inversion: had before the subject, so had the CFO left. German also inverts (“Kaum war der CFO gegangen”), but it is easy to forget in English."
+    },
+    "wrong": [
+     {
+      "opt": "did the CFO",
+      "de": "„did the CFO left“ mischt did mit der 3. Form.",
+      "en": "“did the CFO left” mixes did with the participle."
+     },
+     {
+      "opt": "has the CFO",
+      "de": "„has the CFO left“ ist Present Perfect, der Satz erzählt aber in der Vergangenheit.",
+      "en": "“has the CFO left” is present perfect, but the sentence narrates in the past."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „the CFO had“, nicht hier.",
+      "en": "The mistake is at “the CFO had”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „the CFO had“ ist falsch.",
+      "en": "There is a mistake: “the CFO had” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0068",
+   "kind": "err",
+   "area": "gram",
+   "pat": "pp.duration",
+   "topic": "past-perfect",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We were waiting since eight when the inspector finally arrived.",
+   "bad": {
+    "span": "were waiting",
+    "fix": [
+     "had been waiting"
+    ],
+    "choices": [
+     "have been waiting",
+     "had been waiting",
+     "had waiting"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Dauer vor einem Zeitpunkt in der Vergangenheit (since eight … arrived): had been waiting. Deutsch „wir warteten seit acht“ nutzt das Präteritum.",
+     "en": "Duration before a past moment (since eight … arrived): had been waiting. German “wir warteten seit acht” uses the simple past."
+    },
+    "wrong": [
+     {
+      "opt": "have been waiting",
+      "de": "„have been“ ist Gegenwartsbezug und passt nicht zu „arrived“.",
+      "en": "“have been” refers to the present and does not fit “arrived”."
+     },
+     {
+      "opt": "had waiting",
+      "de": "„had waiting“ lässt been aus.",
+      "en": "“had waiting” drops been."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „were waiting“, nicht hier.",
+      "en": "The mistake is at “were waiting”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „were waiting“ ist falsch.",
+      "en": "There is a mistake: “were waiting” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0069",
+   "kind": "err",
+   "area": "gram",
+   "pat": "pp.earlier",
+   "topic": "past-perfect",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "By the time we noticed the error, the invoice has already been sent.",
+   "bad": {
+    "span": "has already been sent",
+    "fix": [
+     "had already been sent",
+     "was already sent"
+    ],
+    "choices": [
+     "was already been sent",
+     "have already been sent",
+     "had already been sent"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Was vor einem Moment in der Vergangenheit schon geschehen war, steht im Past Perfect: had already been sent. Has würde die Gegenwart betreffen.",
+     "en": "What had already happened before a past moment takes the past perfect: had already been sent. Has would refer to the present."
+    },
+    "wrong": [
+     {
+      "opt": "was already been sent",
+      "de": "„was … been“ mischt zwei Hilfsverben: entweder was sent oder had been sent.",
+      "en": "“was … been” mixes two auxiliaries: either was sent or had been sent."
+     },
+     {
+      "opt": "have already been sent",
+      "de": "Zu the invoice passt has/had, nicht have.",
+      "en": "With the invoice the auxiliary is has/had, not have."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „has already been sent“, nicht hier.",
+      "en": "The mistake is at “has already been sent”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „has already been sent“ ist falsch.",
+      "en": "There is a mistake: “has already been sent” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0070",
+   "kind": "err",
+   "area": "gram",
+   "pat": "pp.earlier",
+   "topic": "past-perfect",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We had never worked with a German bank before that project started.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: „Before that project started“ ist ein vergangener Zeitpunkt, davor steht had never worked im Past Perfect.",
+     "en": "No mistake: “before that project started” is a past moment, and before it had never worked takes the past perfect."
+    },
+    "wrong": [
+     {
+      "tap": "had",
+      "de": "Past Perfect ist hier richtig. „We never worked“ wäre auch möglich, hebt aber das „davor“ nicht hervor.",
+      "en": "The past perfect is right here. “We never worked” would also be possible but does not stress the “before”."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0071",
+   "kind": "err",
+   "area": "gram",
+   "pat": "pp.reported",
+   "topic": "past-perfect",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I told her that I had already sent the invoice on Monday.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: In der indirekten Rede rückt „I sent“ eine Stufe zurück zu had sent.",
+     "en": "No mistake: in reported speech “I sent” moves one step back to had sent."
+    },
+    "wrong": [
+     {
+      "tap": "had",
+      "de": "Hier gehört had hin, weil die Rede über etwas Vorvergangenes berichtet.",
+      "en": "Had belongs here because the report is about something earlier than the telling."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0072",
+   "kind": "err",
+   "area": "gram",
+   "pat": "pp.inversion",
+   "topic": "past-perfect",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Hardly had we signed the contract when the client asked for changes.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Hardly had we signed … when ist die förmliche Inversion, genau wie No sooner … than.",
+     "en": "No mistake: Hardly had we signed … when is the formal inversion, just like No sooner … than."
+    },
+    "wrong": [
+     {
+      "tap": "had",
+      "de": "Nach Hardly steht die Inversion (had we). „Hardly we had“ wäre falsch.",
+      "en": "After Hardly comes inversion (had we). “Hardly we had” would be wrong."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0073",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ut.used-to",
+   "topic": "used-to",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We used to holding weekly all-hands meetings in the Cologne office.",
+   "bad": {
+    "span": "used to holding",
+    "fix": [
+     "used to hold"
+    ],
+    "choices": [
+     "used to hold",
+     "use to holding",
+     "used to held"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach used to steht die Grundform: used to hold. -ing gehört zu be used to. Das -ing kommt von be used to („ich bin es gewohnt, … zu halten“), das man mit used to verwechselt.",
+     "en": "After used to comes the base form: used to hold. -ing belongs to be used to, which is easily confused."
+    },
+    "wrong": [
+     {
+      "opt": "use to holding",
+      "de": "„use to holding“ ist doppelt falsch: In der Bejahung heißt es used to, und danach steht die Grundform.",
+      "en": "“use to holding” is wrong twice: affirmative needs used to, then the base form."
+     },
+     {
+      "opt": "used to held",
+      "de": "Nach to steht die Grundform, keine Vergangenheit.",
+      "en": "After to comes the base form, no past form."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „used to holding“, nicht hier.",
+      "en": "The mistake is at “used to holding”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „used to holding“ ist falsch.",
+      "en": "There is a mistake: “used to holding” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0074",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ut.would",
+   "topic": "used-to",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Back then, we would own a small office in Chicago and rent desks by the hour.",
+   "bad": {
+    "span": "would own",
+    "fix": [
+     "used to own"
+    ],
+    "choices": [
+     "would owning",
+     "used to own",
+     "was own"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "would geht nur mit Handlungen, die sich wiederholen. own als Besitz ist ein Zustand, dafür used to.",
+     "en": "Would only works with repeated actions. Own is a state, so used to."
+    },
+    "wrong": [
+     {
+      "opt": "would owning",
+      "de": "Nach would steht die Grundform, nicht -ing.",
+      "en": "After would comes the base form, not -ing."
+     },
+     {
+      "opt": "was own",
+      "de": "„was own“ ist keine Zeitform.",
+      "en": "“was own” is not a tense."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „would own“, nicht hier.",
+      "en": "The mistake is at “would own”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „would own“ ist falsch.",
+      "en": "There is a mistake: “would own” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0075",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ut.did-use-to",
+   "topic": "used-to",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Our CEO didn’t used to attend the weekly pipeline call before the merger.",
+   "bad": {
+    "span": "didn’t used",
+    "fix": [
+     "didn’t use",
+     "did not use"
+    ],
+    "choices": [
+     "didn’t using",
+     "doesn’t use",
+     "didn’t use"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach didn’t steckt die Vergangenheit schon im Hilfsverb: didn’t use to, ohne -d. Die Vergangenheit wird doppelt markiert (didn’t + used).",
+     "en": "After didn’t the past is already in the auxiliary: didn’t use to, without -d. The past is marked twice."
+    },
+    "wrong": [
+     {
+      "opt": "didn’t using",
+      "de": "Nach didn’t steht die Grundform, nicht -ing.",
+      "en": "After didn’t comes the base form, not -ing."
+     },
+     {
+      "opt": "doesn’t use",
+      "de": "„doesn’t use“ ist Gegenwart und passt nicht zu „before the merger“.",
+      "en": "“doesn’t use” is present and does not fit “before the merger”."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „didn’t used“, nicht hier.",
+      "en": "The mistake is at “didn’t used”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „didn’t used“ ist falsch.",
+      "en": "There is a mistake: “didn’t used” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0076",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ut.be-used-to",
+   "topic": "used-to",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I am used to work across several time zones at the same time.",
+   "bad": {
+    "span": "to work",
+    "fix": [
+     "to working"
+    ],
+    "choices": [
+     "to working",
+     "to worked",
+     "working"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach be used to steht -ing, weil to hier eine Präposition ist: used to working. Deutsch „gewohnt zu arbeiten“ nutzt zu + Infinitiv.",
+     "en": "After be used to comes -ing because to is a preposition here: used to working. German “gewohnt zu arbeiten” uses zu + infinitive."
+    },
+    "wrong": [
+     {
+      "opt": "to worked",
+      "de": "Nach to steht hier keine Vergangenheit.",
+      "en": "No past form after to here."
+     },
+     {
+      "opt": "working",
+      "de": "Ohne to fehlt die Wendung: be used to working.",
+      "en": "Without to the phrase is incomplete: be used to working."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „to work“, nicht hier.",
+      "en": "The mistake is at “to work”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „to work“ ist falsch.",
+      "en": "There is a mistake: “to work” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0077",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ut.get-used-to",
+   "topic": "used-to",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "It took the whole team months to be used to the new CRM.",
+   "bad": {
+    "span": "to be used to",
+    "fix": [
+     "to get used to",
+     "to become used to"
+    ],
+    "choices": [
+     "to get use to",
+     "to get used to",
+     "to be use to"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Der Vorgang des Gewöhnens heißt get used to, der Zustand be used to. „It took months“ zeigt den Vorgang. Deutsch „sich gewöhnen“ und „gewohnt sein“ sind verschiedene Wörter.",
+     "en": "The process of getting accustomed is get used to, the state is be used to. “It took months” shows the process."
+    },
+    "wrong": [
+     {
+      "opt": "to get use to",
+      "de": "„use to“ ohne -d gibt es nur nach did(n’t).",
+      "en": "“use to” without -d exists only after did(n’t)."
+     },
+     {
+      "opt": "to be use to",
+      "de": "„use to“ ohne -d gibt es nur nach did(n’t).",
+      "en": "“use to” without -d exists only after did(n’t)."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „to be used to“, nicht hier.",
+      "en": "The mistake is at “to be used to”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „to be used to“ ist falsch.",
+      "en": "There is a mistake: “to be used to” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0078",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ut.get-used-to",
+   "topic": "used-to",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "After a few weeks I got used to use the new ticket system.",
+   "bad": {
+    "span": "to use",
+    "fix": [
+     "to using"
+    ],
+    "choices": [
+     "to used",
+     "using",
+     "to using"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach get used to steht -ing, weil to eine Präposition ist: got used to using.",
+     "en": "After get used to comes -ing because to is a preposition: got used to using."
+    },
+    "wrong": [
+     {
+      "opt": "to used",
+      "de": "Nach to steht keine Vergangenheitsform.",
+      "en": "No past form after to."
+     },
+     {
+      "opt": "using",
+      "de": "Ohne to fehlt die Wendung: got used to using.",
+      "en": "Without to the phrase is incomplete: got used to using."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „to use“, nicht hier.",
+      "en": "The mistake is at “to use”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „to use“ ist falsch.",
+      "en": "There is a mistake: “to use” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0079",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ut.used-to",
+   "topic": "used-to",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We used to hold weekly all-hands meetings, but now we meet once a month.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: used to + Grundform beschreibt eine frühere Gewohnheit, die heute nicht mehr gilt.",
+     "en": "No mistake: used to + base form describes a past habit that no longer applies."
+    },
+    "wrong": [
+     {
+      "tap": "hold",
+      "de": "Nach used to steht die Grundform. „used to holding“ wäre der Fehler.",
+      "en": "The base form follows used to. “used to holding” would be the mistake."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0080",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ut.be-used-to",
+   "topic": "used-to",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I’m used to working under pressure, so tight deadlines don’t bother me.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: be used to + -ing heißt „gewohnt sein“. -ing ist richtig, weil to hier eine Präposition ist.",
+     "en": "No mistake: be used to + -ing means “be accustomed”. -ing is right because to is a preposition here."
+    },
+    "wrong": [
+     {
+      "tap": "working",
+      "de": "Hier ist -ing richtig. „used to work“ wäre die Vergangenheitsgewohnheit mit anderer Bedeutung.",
+      "en": "-ing is right here. “used to work” would be the past habit with a different meaning."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0081",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ut.did-use-to",
+   "topic": "used-to",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Did you use to work at a bank before you joined us?",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: In Fragen steht use ohne -d, weil did die Vergangenheit trägt: Did you use to work.",
+     "en": "No mistake: in questions use has no -d because did carries the past: Did you use to work."
+    },
+    "wrong": [
+     {
+      "tap": "use",
+      "de": "Nach Did steht use, nicht used. „Did you used to“ wäre der Fehler.",
+      "en": "After Did comes use, not used. “Did you used to” would be the mistake."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  }
+ ]
+}

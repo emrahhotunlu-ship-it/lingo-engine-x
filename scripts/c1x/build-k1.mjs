@@ -165,7 +165,7 @@ function buildErr(src, id) {
   } else {
     it.why = {
       ok: { de: src.ok[0], en: src.ok[1] },
-      wrong: (src.fa ?? []).map((f) => ({ tap: f[0], de: f[1], en: f[2] })),
+      wrong: [...(src.fa ?? []).map((f) => ({ tap: f[0], de: f[1], en: f[2] })), { tap: '*', de: 'Der Satz ist richtig: An dieser Stelle steckt kein Fehler.', en: 'The sentence is correct: there is no mistake at this spot.' }],
     };
   }
   if (src.trapId) it.trap = src.trapId;
