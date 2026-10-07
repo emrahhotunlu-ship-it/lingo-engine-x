@@ -187,8 +187,8 @@
   "pat": "md.might-have",
   "why": {
    "ok": {
-    "de": "„or maybe“ zeigt: Es sind nur Möglichkeiten, kein Beweis. Deshalb might have been, nicht must have been.",
-    "en": "“Or maybe” shows these are only possibilities, no proof. So might have been, not must have been."
+    "de": "„or maybe“ zeigt: Es sind nur Möglichkeiten, kein Beweis. Deshalb might (could, may) have been, nicht must have been.",
+    "en": "“Or maybe” shows these are only possibilities, no proof. So might (could, may) have been, not must have been."
    },
    "wrong": [
     {

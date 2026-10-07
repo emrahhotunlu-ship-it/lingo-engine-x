@@ -148,8 +148,8 @@
   "pat": "qu.tags",
   "why": {
    "ok": {
-    "de": "„Let's …“ ist ein Vorschlag, das Anhängsel ist immer shall we? Nicht will we und nicht do we.",
-    "en": "“Let's …” is a suggestion and the tag is always shall we? Not will we and not do we."
+    "de": "„Let's …“ ist ein Vorschlag, das Anhängsel ist standardmäßig shall we? Nicht will we und nicht do we.",
+    "en": "“Let's …” is a suggestion and the standard tag is shall we? Not will we and not do we."
    },
    "wrong": [
     {
@@ -323,8 +323,8 @@
   "pat": "qu.tags",
   "why": {
    "ok": {
-    "de": "Nach „Let's“ steht als Frageanhängsel immer shall we? (Vorschlag). „don't we“ passt nur zu normalen Aussagen mit we.",
-    "en": "After “Let's” the question tag is always shall we? (suggestion). “Don't we” only fits ordinary statements with we."
+    "de": "Nach „Let's“ steht als Anhängsel standardmäßig shall we? „don't we“ passt nur zu normalen Aussagen mit we.",
+    "en": "After “Let's” the standard tag is shall we? “Don't we” only fits ordinary statements with we."
    },
    "wrong": [
     {

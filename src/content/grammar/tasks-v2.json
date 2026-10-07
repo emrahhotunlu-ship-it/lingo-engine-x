@@ -20033,8 +20033,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: ought to read. Anders als should steht ought mit to: ought to + Grundform. Der Rat ist stark.",
-     "en": "Right: ought to read. Unlike should, ought takes to: ought to + base form. The advice is strong."
+     "de": "Richtig: ought to read. Anders als should steht ought mit to: ought to + Grundform. Die Stärke ist ähnlich wie bei should.",
+     "en": "Right: ought to read. Unlike should, ought takes to: ought to + base form. The strength is similar to should."
     },
     "wrong": [
      {
@@ -21458,8 +21458,8 @@
    "answer": "a",
    "why": {
     "ok": {
-     "de": "Satz a: might be ist nur eine Möglichkeit. Satz b (must be) ist ein starker Schluss: Sie ist mit Sicherheit dort.",
-     "en": "Sentence a: might be is only a possibility. Sentence b (must be) is a strong conclusion: she is surely there."
+     "de": "Satz a: might be ist nur eine Möglichkeit. Satz b (must be) ist ein starker Schluss: Sie ist sehr wahrscheinlich dort.",
+     "en": "Sentence a: might be is only a possibility. Sentence b (must be) is a strong conclusion: she is very likely there."
     },
     "wrong": [
      {
@@ -21541,8 +21541,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: must have misunderstood. Wir schließen aus dem Verhalten: Der Kunde hat es sicher falsch verstanden (früher).",
-     "en": "Right: must have misunderstood. We conclude from the behavior: the client surely misunderstood (earlier)."
+     "de": "Richtig: must have misunderstood. Aus dem Verhalten folgern wir: Der Kunde hat es bestimmt falsch verstanden (früher).",
+     "en": "Right: must have misunderstood. From the behavior we conclude the client most likely misunderstood (earlier)."
     },
     "wrong": [
      {
@@ -35701,8 +35701,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Der Fehler: „insisted to review“. insist braucht on + -ing: insisted on reviewing. Ein Infinitiv mit to geht nach insist nicht.",
-     "en": "The error: “insisted to review”. Insist needs on + -ing: insisted on reviewing. A to-infinitive does not follow insist."
+     "de": "Der Fehler: „insisted to review“. Nach insist steht on + -ing: insisted on reviewing. to + Grundform geht nicht.",
+     "en": "The error: “insisted to review”. After insist comes on + -ing: insisted on reviewing. To + base form does not work."
     },
     "wrong": [
      {

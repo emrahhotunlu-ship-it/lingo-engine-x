@@ -636,8 +636,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Der Fehler: „insisted to review“. insist braucht on + -ing: insisted on reviewing. Ein Infinitiv mit to geht nach insist nicht.",
-    "en": "The error: “insisted to review”. Insist needs on + -ing: insisted on reviewing. A to-infinitive does not follow insist."
+    "de": "Der Fehler: „insisted to review“. Nach insist steht on + -ing: insisted on reviewing. to + Grundform geht nicht.",
+    "en": "The error: “insisted to review”. After insist comes on + -ing: insisted on reviewing. To + base form does not work."
    },
    "wrong": [
     {
