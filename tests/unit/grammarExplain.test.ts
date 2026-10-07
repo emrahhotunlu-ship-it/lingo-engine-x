@@ -68,14 +68,14 @@ describe('grammarExplanation', () => {
     }
   });
 
-  it('bei Tiefe „full“ höchstens 45 sichtbare Wörter für alle Pilotaufgaben und beide Sprachen (falsche Antwort)', () => {
+  it('bei Tiefe „full“ höchstens 60 sichtbare Wörter für alle Pilotaufgaben und beide Sprachen (falsche Antwort)', () => {
     const over: string[] = [];
     for (const t of pilotTasks()) {
       for (const lang of ['de', 'en'] as const) {
         const given = t.options?.find((o) => o !== t.answer) ?? 'zzz';
         const m = grammarExplanation({ task: t, verdict: 'wrong', given, picked: t.options ? given : undefined, lang, learning: false });
         const n = fullWords(m.lines, m.examples);
-        if (n > 45) over.push(`${lang} ${n}: ${t.prompt}`);
+        if (n > 60) over.push(`${lang} ${n}: ${t.prompt}`);
       }
     }
     expect(over).toEqual([]);

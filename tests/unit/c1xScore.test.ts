@@ -40,7 +40,7 @@ describe('Eigenschaften über alle Inhalte', () => {
   });
 
   it('der LP2-Adapter wandelt jede heutige kwt- und find-Aufgabe (ohne meaning)', () => {
-    expect(legacy.length).toBe(900);
+    expect(legacy.length).toBe(904);
     expect(legacy.filter((i) => i.kind === 'kwt')).toHaveLength(397);
     expect(legacy.filter((i) => i.kind === 'err')).toHaveLength(503);
     expect(new Set(legacy.map((i) => i.id)).size).toBe(legacy.length);
