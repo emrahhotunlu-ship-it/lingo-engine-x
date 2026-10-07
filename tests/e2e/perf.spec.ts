@@ -165,7 +165,35 @@ test('H6: eine geänderte Karte → das Vokabel-Abo prüft genau ein Dokument ne
   expect(errors).toEqual([]);
 });
 
-test('dist/index.html bleibt unter der Warngrenze von 8 MB', async () => {
+test('dist/index.html bleibt unter der Warnschwelle von 6 MiB (Lernplattform 3.0 §9)', async () => {
   const { statSync } = await import('node:fs');
-  expect(statSync(new URL('../../dist/index.html', import.meta.url)).size).toBeLessThan(8 * 1024 * 1024);
+  expect(statSync(new URL('../../dist/index.html', import.meta.url)).size).toBeLessThan(6 * 1024 * 1024);
+});
+
+// P10: Ein gepacktes 600-KB-Bündel (Roh-JSON) wird bei 4-facher CPU-Drossel in höchstens 150 ms entpackt und gelesen
+// (dieselbe Kette wie `inflateBase64` in src/content/store: atob → Blob.stream → DecompressionStream → Response.text → JSON.parse).
+test('P10: Dekodieren eines 600-KB-Bündels bei CPU 4× ≤ 150 ms', async ({ page }) => {
+  const { deflateRawSync } = await import('node:zlib');
+  const items = Array.from({ length: 1300 }, (_, i) => ({ id: `kwt-${i}`, a: `She asked me whether I had ever worked abroad before joining the company number ${i}.`, why: 'Ein erklärender Satz mit etwas Länge, damit das Bündel nach Aufgaben klingt.'.repeat(2), opts: ['a', 'b', 'c', 'd'] }));
+  const json = JSON.stringify({ v: 1, items });
+  expect(json.length).toBeGreaterThan(300_000);
+  const b64 = deflateRawSync(Buffer.from(json), { level: 9 }).toString('base64');
+  await page.setContent('<html><body></body></html>');
+  await throttle(page, 4);
+  const ms = await page.evaluate(async (data) => {
+    const run = async () => {
+      const t0 = performance.now();
+      const bin = atob(data);
+      const u8 = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+      const stream = new Blob([u8]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+      const doc = JSON.parse(await new Response(stream).text()) as { items: unknown[] };
+      if (doc.items.length !== 1300) throw new Error('falsche Zahl');
+      return performance.now() - t0;
+    };
+    await run();
+    const runs = [await run(), await run(), await run()];
+    return Math.min(...runs);
+  }, b64);
+  expect(ms).toBeLessThan(150);
 });

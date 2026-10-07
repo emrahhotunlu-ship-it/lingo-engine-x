@@ -1,0 +1,14 @@
+{
+  "_doc": "Gepackte Inhalts-Bündel (Lernplattform 3.0 §3.7, P10). Je Eintrag ein Bündel `virtual:content/<name>`: `dirs` = Quellordner (relativ zum Repository, alle *.json je Ordner, Reihenfolge nach Dateipfad), `kind` = optionaler Filter auf das Feld `kind` der Aufgaben. Jede Datei ist `{ \"v\": 1, \"items\": [...] }`; doppelte `id` brechen den Build.",
+  "bundles": {
+    "c1x-kwt": { "dirs": ["src/content/c1x/src/kwt", "src/content/c1x/src/pilot"], "kind": "kwt" },
+    "c1x-err": { "dirs": ["src/content/c1x/src/err", "src/content/c1x/src/pilot"], "kind": "err" },
+    "c1x-ocl": { "dirs": ["src/content/c1x/src/ocl"] },
+    "c1x-mcc": { "dirs": ["src/content/c1x/src/mcc"] },
+    "c1x-wf": { "dirs": ["src/content/c1x/src/wf"] },
+    "c1x-pair": { "dirs": ["src/content/c1x/src/pair"] },
+    "c1x-cnet": { "dirs": ["src/content/c1x/src/cnet"] },
+    "c1x-reg": { "dirs": ["src/content/c1x/src/reg"] },
+    "c1x-para": { "dirs": ["src/content/c1x/src/para"] }
+  }
+}
