@@ -3,7 +3,7 @@ import extraJson from '../../content/grammar-extra.json';
 import { TOPICS, topicById } from '../content';
 import { splitWords } from '../answer/align';
 import type { GrammarTask, GrammarTaskType, TaskSrc } from '../learn/types';
-import { patsOf } from '../metrics/pattern';
+import { formsOfPat, patsOf } from '../metrics/pattern';
 import { dayKey } from '../date';
 import { kindsFor, pickUnseen } from '../c1x/select';
 import { toTask } from '../c1x/runtime';
@@ -514,6 +514,7 @@ export function selectRound(i: RoundInput): GrammarTask[] {
       errorsByPat: errorsByPat(i.grammarDocs),
       seed: i.seed,
     });
+    const roundForms = new Map<string, string[]>();
     for (const sl of plan) {
       const meta = sl.pat ? patternById(sl.pat) : null;
       if (!sl.pat || !meta) continue;
@@ -522,10 +523,12 @@ export function selectRound(i: RoundInput): GrammarTask[] {
       const inp = profile === 'touch' ? 'touch' : 'desk';
       let pick: GrammarTask | null = null;
       const seen = seenOf(i.grammarDocs.get(topic));
-      for (const kind of kindsFor(p, inp, sl.pat)) {
+      const before = [...formsOfPat(patsOf(i.grammarDocs.get(topic))[sl.pat]), ...(roundForms.get(sl.pat) ?? [])];
+      for (const kind of kindsFor(p, inp, sl.pat, undefined, before)) {
         const item = pickUnseen({ pat: sl.pat, kind, seen, used, seed: i.seed, ...(i.wordsToday ? { wordsToday: i.wordsToday } : {}) });
         if (item) {
           pick = take(toTask(item, { ref: `grammar/${topic}` }));
+          roundForms.set(sl.pat, [...(roundForms.get(sl.pat) ?? []), kind]);
           break;
         }
       }

@@ -1,13 +1,17 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { toTrainCard } from '../../src/domain/srs/cards';
 import { toChunkCard } from '../../src/domain/srs/chunkCards';
 import { buildExercise } from '../../src/domain/srs/exercise';
 import { contextsOf, rotatedContext, ROTATE_FROM_STAGE } from '../../src/domain/srs/rotate';
 import type { ExerciseId, TrainCard } from '../../src/domain/srs/types';
+import { sentKey } from '../../src/domain/srs/variety';
 import { berlin } from './helpers';
 
+// Diese Tests prüfen den Satzwechsel mit den Sätzen der Karte selbst; die festen Zusatz-Sätze (V1, crossLink) prüfen variety.test und varietySim.test.
+vi.mock('../../src/domain/srs/crossLink', () => ({ crossSentences: () => [] }));
+
 // Kontext-Wechsel (Emrah 02.10.2026): ab Stufe 3 wechseln sich Ursprungssatz und gespeicherte Claude-Sätze (xEx) bei den
-// Satzübungen ab, fest je Wiederholung (reps % n). Aufdecken/Erkennen, Prüfabfrage und Kontrolle bleiben beim Ursprungssatz.
+// Satzübungen ab, seit V1 nach Verlauf (`hist[].s`: der am längsten nicht gezeigte Satz, der letzte nie, ohne Verlauf der Ursprungssatz). Aufdecken/Erkennen, Prüfabfrage und Kontrolle bleiben beim Ursprungssatz.
 
 const NOW = berlin('2026-10-02', 9);
 type Doc = Record<string, unknown>;
@@ -22,9 +26,9 @@ const pool = (c: TrainCard): TrainCard[] => [c, ...['a', 'b', 'c', 'd'].map((id)
 
 describe('Kontext-Wechsel bei Wendungen (Lernplattform 2.0 §4.8)', () => {
   it('ab Stufe 3 wechselt auch die Wendung den Satz: die Stelle der Wendung im gespeicherten Satz über locateChunk', () => {
-    const chunk = (reps: number): TrainCard =>
-      toChunkCard('c-meet-halfway', { id: 'c-meet-halfway', en: 'meet sb halfway', de: 'jdm. entgegenkommen', def: 'to compromise', kind: 'phrase', register: 'neutral', src: { upgraded: 'We are happy to meet you halfway on the timeline.' }, state: 'review', S: 10, D: 5, last: NOW - 10 * 86_400_000, due: NOW - 1000, reps, lapses: 0, stage: 4, hist: [], xEx: [{ en: 'Both sides had to meet each other halfway on price.', t: 1 }] }, NOW) as TrainCard;
-    const seq = [0, 1].map((reps) => rotatedContext(chunk(reps), 'cloze'));
+    const chunk = (reps: number, hist: unknown[] = []): TrainCard =>
+      toChunkCard('c-meet-halfway', { id: 'c-meet-halfway', en: 'meet sb halfway', de: 'jdm. entgegenkommen', def: 'to compromise', kind: 'phrase', register: 'neutral', src: { upgraded: 'We are happy to meet you halfway on the timeline.' }, state: 'review', S: 10, D: 5, last: NOW - 10 * 86_400_000, due: NOW - 1000, reps, lapses: 0, stage: 4, hist, xEx: [{ en: 'Both sides had to meet each other halfway on price.', t: 1 }] }, NOW) as TrainCard;
+    const seq = [[], [{ t: 1, m: 'type', g: 3, x: 'cloze', s: sentKey('We are happy to meet you halfway on the timeline.') }]].map((hist, reps) => rotatedContext(chunk(reps, hist), 'cloze'));
     expect(seq[0]?.sentence).toBe('We are happy to meet you halfway on the timeline.');
     expect(seq[1]?.sentence).toBe('Both sides had to meet each other halfway on price.');
     expect(seq[1]?.gap).toBe('meet each other halfway');
@@ -40,8 +44,14 @@ describe('Kontext-Wechsel', () => {
     expect(all[2]!.gap).toBe('leveraged');
   });
 
-  it('ab Stufe 3 wechselt der Satz mit jeder Wiederholung reihum: reps 0, 1, 2, 3 …', () => {
-    const seq = [0, 1, 2, 3, 4, 5].map((reps) => rotatedContext(card({ reps }), 'cloze')?.sentence);
+  it('ab Stufe 3 wechselt der Satz mit jeder Antwort reihum: Ursprungssatz, dann die gespeicherten, der letzte nie', () => {
+    const hist: unknown[] = [];
+    const seq: (string | undefined)[] = [];
+    for (let i = 0; i < 6; i++) {
+      const s = rotatedContext(card({ reps: i, hist: [...hist] }), 'cloze')?.sentence;
+      seq.push(s);
+      hist.push({ t: i + 1, m: 'type', g: 3, x: 'cloze', s: sentKey(s ?? '') });
+    }
     expect(seq).toEqual(['We use leverage in every price talk.', XEX[0]!.en, XEX[1]!.en, 'We use leverage in every price talk.', XEX[0]!.en, XEX[1]!.en]);
   });
 
@@ -61,7 +71,8 @@ describe('Kontext-Wechsel', () => {
   });
 
   it('die Übungen bauen mit dem gewechselten Satz: Lücke, Lösung und Sprachausgabe passen zusammen', () => {
-    const c = card({ reps: 1 });
+    const shownOrigin = [{ t: 1, m: 'type', g: 3, x: 'cloze', s: sentKey('We use leverage in every price talk.') }];
+    const c = card({ reps: 1, hist: shownOrigin });
     for (const ex of ['cloze', 'cloze_hint', 'tiles', 'speed', 'dictation'] as ExerciseId[]) {
       const e = buildExercise(c, ex, 'de', pool(c), 'seed');
       expect(e.sentence?.sentence, ex).toBe(XEX[0]!.en);
@@ -69,7 +80,7 @@ describe('Kontext-Wechsel', () => {
       if (ex === 'dictation') expect(e.speak).toBe(XEX[0]!.en);
       if (ex === 'cloze_hint') expect(e.firstLetter).toBe('l');
     }
-    const past = buildExercise(card({ reps: 2 }), 'cloze', 'de', pool(c), 'seed');
+    const past = buildExercise(card({ reps: 2, hist: [...shownOrigin, { t: 2, m: 'type', g: 3, x: 'cloze', s: sentKey(XEX[0]!.en) }] }), 'cloze', 'de', pool(c), 'seed');
     expect(past.sentence?.sentence).toBe(XEX[1]!.en);
     expect(past.accepted).toEqual(['leveraged']);
   });

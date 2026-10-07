@@ -1,6 +1,7 @@
 import { packExtraOf } from '../c1pack/packFields';
 import { meaningForTask } from './cards';
 import { familyFrom, hasPartner, trapTask } from './partner';
+import { distinctForms, familyOf, FEST_MIN_FORMS, varietyBias, varietyOf } from './variety';
 import type { Counts, ExerciseId, InputKind, Lang, LegacyMode, Stage, TrainCard } from './types';
 
 // Katalog der Abfragearten (phase1-plan §4.2, Lernplattform 2.0 §4.8). Jede Art gehört fest zu einer Stufe (`also`: auch zu
@@ -135,10 +136,20 @@ function countsFor(card: TrainCard, ex: ExerciseId): Counts {
  * vorigen Arten der Runde, dann die Katalogreihenfolge.
  */
 export function chooseExercise(card: TrainCard, lang: Lang, poolSize: number, recent: readonly ExerciseId[] = [], env: ExerciseEnv = NO_ENV): ExerciseId | null {
-  const avail = availableExercises(card, lang, poolSize, env);
-  if (!avail.length) return null;
+  const v = varietyOf(card.doc);
+  const all = availableExercises(card, lang, poolSize, env);
+  if (!all.length) return null;
+  // Vorbereitung auf „Fest“ (V1): Eine Karte ab Stufe 4 mit weniger als drei verschiedenen Formenfamilien im Verlauf bekommt, wenn ihre Stufe nicht genug
+  // Familien anbietet, Arten der Nachbarstufe dazu (erst die höhere, bei Stufe 5 die darunter). Nur die Auswahl; die Fest-Definition bleibt unberührt.
+  if (card.stage >= 4 && distinctForms(v) < FEST_MIN_FORMS && new Set(all.map(familyOf)).size < FEST_MIN_FORMS) {
+    const near = availableExercises({ ...card, stage: card.stage >= 5 ? 4 : ((card.stage + 1) as 5) }, lang, poolSize, env);
+    for (const ex of near) if (!all.includes(ex)) all.push(ex);
+  }
+  // Varianz (V1): dieselbe Art wie bei der letzten Antwort dieser Karte kommt nie zweimal in Folge, solange es eine andere gibt.
+  const others = card.lastEx ? all.filter((ex) => ex !== card.lastEx) : all;
+  const avail = others.length ? others : all;
   const ranked = avail
-    .map((ex, i) => ({ ex, i, s: score(countsFor(card, ex)) }))
+    .map((ex, i) => ({ ex, i, s: score(countsFor(card, ex)) + varietyBias(ex, v, card.stage) }))
     .sort((a, b) => a.s - b.s || a.i - b.i);
   const best = ranked[0];
   if (!best) return null;
