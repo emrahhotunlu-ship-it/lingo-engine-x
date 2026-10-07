@@ -218,6 +218,7 @@ test('Grammatik-Runde in der Lernphase: kompakte Musterkarte steht offen, kein g
   const { errors } = await boot(page, { migrated: true });
   await screen(page, 'today');
   await openTab(page, 'learn');
+  await openAllChapters(page);
   await page.locator('[data-testid="topic"][data-topic="time-clauses"]').click();
   await page.getByTestId('topic-start').click();
   await skipMiniLesson(page);
@@ -340,6 +341,7 @@ test('Neues Thema: drei Karten vor der ersten Aufgabe (Alltag mit Verständnisfr
   const { errors } = await boot(page, { migrated: true });
   await screen(page, 'today');
   await openTab(page, 'learn');
+  await openAllChapters(page);
   const row = page.locator('[data-testid="topic"][data-topic="time-clauses"]');
   await expect(row).toHaveAttribute('data-state', 'new');
   await row.click();

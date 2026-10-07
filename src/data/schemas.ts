@@ -909,3 +909,16 @@ export const outSchema = z.looseObject({
     )
     .nullish(),
 });
+
+/**
+ * C1-Programm (Lernplattform 3.0 §4.8, P31): `{v: 1, place?, checks[], gates[], prod[], bad[]}`. Höchstwerte stehen in `domain/c1/c1doc.ts`
+ * (checks ≤ 24, gates ≤ 35, prod ≤ 150, bad ≤ 300; Dokument < 30 KB). Der Kapitelstand steht hier NIE, er wird abgeleitet. Tolerant gelesen.
+ */
+export const c1Schema = z.looseObject({
+  v: num,
+  place: z.looseObject({ d: str, se: num, n: num, skip: strArr, it: z.array(z.unknown()).nullish() }).nullish(),
+  checks: z.array(z.looseObject({ d: str, f: str, inp: str, p: z.array(z.unknown()).nullish(), pts: num, max: num })).nullish(),
+  gates: z.array(z.looseObject({ d: str, ch: num, g: z.array(z.unknown()).nullish(), w: z.array(z.unknown()).nullish(), ok: bool })).nullish(),
+  prod: z.array(z.looseObject({ d: str, s: str, w: num, e: num })).nullish(),
+  bad: strArr,
+});

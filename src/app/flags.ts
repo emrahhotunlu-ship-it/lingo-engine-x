@@ -10,6 +10,8 @@ export type Flags = {
   slotPlan: boolean;
   tempo: boolean;
   c1check: boolean;
+  /** Programmkarte „Dein Weg zu C1“ im Grammatik-Reiter (P32). */
+  program: boolean;
   tutor: { explain: boolean; gen: boolean; diagnose: boolean; clinic: boolean };
   fx: { moments: boolean; rings: boolean; sparks: boolean; field: boolean; sky: boolean; film: boolean };
 };
@@ -19,6 +21,7 @@ export const flags: Flags = {
   slotPlan: false,
   tempo: true,
   c1check: false,
+  program: false,
   tutor: { explain: false, gen: false, diagnose: false, clinic: false },
   fx: { moments: false, rings: false, sparks: false, field: false, sky: false, film: false },
 };
@@ -39,14 +42,16 @@ export function applyFlagOverrides(raw: string | null): void {
       for (const k of t.split(',').map((x) => x.trim())) {
         if ((kinds as string[]).includes(k)) flags.c1xKinds[k as C1Kind] = true;
         if (k === 'slots') flags.slotPlan = true;
+        if (k === 'program') flags.program = true;
       }
       return;
     }
-    const o = JSON.parse(t) as { c1xKinds?: Record<string, unknown>; tempo?: unknown; slotPlan?: unknown; c1check?: unknown };
+    const o = JSON.parse(t) as { c1xKinds?: Record<string, unknown>; tempo?: unknown; slotPlan?: unknown; c1check?: unknown; program?: unknown };
     for (const k of kinds) if (typeof o.c1xKinds?.[k] === 'boolean') flags.c1xKinds[k] = o.c1xKinds[k];
     if (typeof o.slotPlan === 'boolean') flags.slotPlan = o.slotPlan;
     if (typeof o.tempo === 'boolean') flags.tempo = o.tempo;
     if (typeof o.c1check === 'boolean') flags.c1check = o.c1check;
+    if (typeof o.program === 'boolean') flags.program = o.program;
   } catch {
     // Ungültige Übersteuerung: die eingebauten Schalter gelten.
   }
