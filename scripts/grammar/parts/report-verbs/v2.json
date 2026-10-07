@@ -191,8 +191,8 @@
   "err": null,
   "why": {
    "ok": {
-    "de": "Kein Fehler: admit + -ing („making“) ist richtig.",
-    "en": "No error: admit + -ing (“making”) is correct."
+    "de": "Kein Fehler: Nach admit steht -ing: admitted making the mistake. admitted to make wäre falsch.",
+    "en": "No error: after admit comes -ing: admitted making the mistake. Admitted to make would be wrong."
    },
    "wrong": [
     {
@@ -406,8 +406,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Der Fehler: „recommend to postpone“. Richtig: recommend postponing.",
-    "en": "The error: “recommend to postpone”. Correct: recommend postponing."
+    "de": "Der Fehler: „recommend to postpone“. Nach recommend steht -ing: recommend postponing, auch wenn Deutsch „empfehlen zu“ sagt.",
+    "en": "The error: “recommend to postpone”. After recommend comes -ing: recommend postponing, even though German says “empfehlen zu”."
    },
    "wrong": [
     {

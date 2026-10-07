@@ -56,8 +56,8 @@
   ],
   "why": {
    "ok": {
-    "de": "hadn't left (früher) + now: die Folge jetzt → would + Grundform.",
-    "en": "hadn't left (earlier) + now: result now → would + base form."
+    "de": "Richtig: would have. „hadn't left in June“ (früher) und „now“: Die Folge gilt jetzt, also would + Grundform.",
+    "en": "Right: would have. “Hadn't left in June” (earlier) and “now”: the result applies now, so would + base form."
    },
    "wrong": [
     {
@@ -198,8 +198,8 @@
   ],
   "why": {
    "ok": {
-    "de": "wish + can → could: ein Wunsch über jetzt, eine Fähigkeit.",
-    "en": "wish + can → could: a wish about now, an ability."
+    "de": "Richtig: I could. Wunsch über eine Fähigkeit jetzt: wish + could. „can“ ändert sich nach wish zu could.",
+    "en": "Right: I could. A wish about an ability now: wish + could. “Can” changes to could after wish."
    },
    "wrong": [
     {
@@ -242,8 +242,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Wunsch über jetzt: wish + Past, bei be meist were.",
-    "en": "wish about now: wish + past, usually were for be."
+    "de": "Richtig: were more flexible. Ein Wunsch für jetzt: wish + Past, bei be steht were (auch bei „the client“).",
+    "en": "Right: were more flexible. A wish about now: wish + Past, and be becomes were (even with “the client”)."
    },
    "wrong": [
     {
@@ -281,8 +281,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Bedauern für früher: wish + hadn't + 3. Form (sent).",
-    "en": "regret about earlier: wish + hadn't + participle (sent)."
+    "de": "Richtig: hadn't sent. Das Bedauern gilt etwas Vergangenem („without legal review“): wish + hadn't + 3. Form.",
+    "en": "Right: hadn't sent. The regret is about something in the past (“without legal review”): wish + hadn't + participle."
    },
    "wrong": [
     {
@@ -323,8 +323,8 @@
   ],
   "why": {
    "ok": {
-    "de": "If only + before (früher): das Bedauern → had + 3. Form.",
-    "en": "if only + before (earlier): regret → had + participle."
+    "de": "Richtig: had asked. „If only … before the migration“ ist ein Bedauern über Vergangenes: had + 3. Form.",
+    "en": "Right: had asked. “If only … before the migration” is regret about the past: had + participle."
    },
    "wrong": [
     {
@@ -365,8 +365,8 @@
   ],
   "why": {
    "ok": {
-    "de": "never confirm: Ärger über Verhalten, das sich ändern soll → would.",
-    "en": "never confirm: annoyance at behavior that should change → would."
+    "de": "Richtig: would confirm. Der Ärger über wiederholtes Verhalten („never confirm“) braucht wish + would.",
+    "en": "Right: would confirm. Annoyance at repeated behavior (“never confirm”) takes wish + would."
    },
    "wrong": [
     {
@@ -407,8 +407,8 @@
   ],
   "why": {
    "ok": {
-    "de": "keeps changing: wiederholtes Verhalten, das enden soll → would stop.",
-    "en": "keeps changing: repeated behavior that should end → would stop."
+    "de": "Richtig: would stop changing. „keeps changing“ ist wiederholtes Verhalten, das enden soll: wish + would.",
+    "en": "Right: would stop changing. “Keeps changing” is repeated behavior that should end: wish + would."
    },
    "wrong": [
     {
@@ -596,8 +596,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Der if-Teil nimmt die Past-Form (were), nie would be.",
-    "en": "the if-clause takes the past form (were), never would be."
+    "de": "Nach if steht nie would: If I were more patient. Die Folge im Hauptsatz ist would have waited.",
+    "en": "After if comes never would: If I were more patient. The result in the main clause is would have waited."
    },
    "wrong": [
     {
@@ -681,8 +681,8 @@
   "accepted": [],
   "why": {
    "ok": {
-    "de": "wish + Fähigkeit jetzt: can wird zu could.",
-    "en": "wish + ability now: can becomes could."
+    "de": "„wish“ braucht die Rückstufung: can wird could. „I wish our system could handle more requests.“",
+    "en": "“Wish” needs the step back: can becomes could. “I wish our system could handle more requests.”"
    },
    "wrong": [
     {
@@ -745,8 +745,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Bedauern für früher: If only + hadn't + 3. Form.",
-    "en": "regret about earlier: if only + hadn't + participle."
+    "de": "„last week“ ist vorbei: If only + hadn't waited. Das Past didn't wait würde sich auf jetzt beziehen.",
+    "en": "“Last week” is over: If only + hadn't waited. The Past didn't wait would refer to now."
    },
    "wrong": [
     {
@@ -778,8 +778,8 @@
   ],
   "why": {
    "ok": {
-    "de": "every week: Ärger über Verhalten → wouldn't change (didn't change auch möglich).",
-    "en": "every week: annoyance at behavior → wouldn't change (didn't change also works)."
+    "de": "„every week“ ist wiederholtes Verhalten, das stören soll: wish + wouldn't change. didn't change ginge auch, doch would ist natürlicher.",
+    "en": "“Every week” is repeated behavior that should stop: wish + wouldn't change. Didn't change would also work, but would is more natural."
    },
    "wrong": [
     {

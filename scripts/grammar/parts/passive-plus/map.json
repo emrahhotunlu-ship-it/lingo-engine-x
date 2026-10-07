@@ -107,8 +107,8 @@
   "pat": "pp.modal",
   "why": {
    "ok": {
-    "de": "Richtig: has to + be + Partizip. Der Vertrag wird unterschrieben.",
-    "en": "Right: has to + be + participle. The contract gets signed."
+    "de": "Nach has to im Passiv steht be + 3. Form: has to be signed. Der Vertrag wird unterschrieben, er unterschreibt nicht.",
+    "en": "After has to in the passive comes be + participle: has to be signed. The contract gets signed, it does not sign."
    },
    "wrong": [
     {
@@ -197,8 +197,8 @@
   "pat": "pp.being",
   "why": {
    "ok": {
-    "de": "Richtig: hate + being + Partizip. Der Sprecher wird unterbrochen.",
-    "en": "Right: hate + being + participle. The speaker is the one being interrupted."
+    "de": "„hate being interrupted“: Nach hate steht -ing, im Passiv being + 3. Form. Ich werde unterbrochen, ich unterbreche nicht.",
+    "en": "“Hate being interrupted”: after hate comes -ing, and in the passive being + participle. I am the one interrupted."
    },
    "wrong": [
     {
@@ -311,8 +311,8 @@
   "pat": "pp.modal",
   "why": {
    "ok": {
-    "de": "Richtig: be + Partizip. Das Partizip von send heißt sent.",
-    "en": "Right: be + participle. The participle of send is sent."
+    "de": "Nach be steht das Partizip: sent, nicht send. Das Partizip von send ist unregelmäßig (send – sent – sent).",
+    "en": "After be comes the participle: sent, not send. The participle of send is irregular (send – sent – sent)."
    },
    "wrong": [
     {

@@ -16,8 +16,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: are → were: they were still reviewing, denn das Sagen liegt zurück.",
-    "en": "Right: are → were: they were still reviewing, because the speaking is in the past."
+    "de": "Richtig: they were still reviewing. Aus „are reviewing“ wird nach „said“ were reviewing (eine Zeit zurück).",
+    "en": "Right: they were still reviewing. After “said”, “are reviewing” becomes were reviewing (one tense back)."
    },
    "wrong": [
     {
@@ -57,8 +57,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: haven't seen → hadn't seen: Present Perfect rückt zu Past Perfect.",
-    "en": "Right: haven't seen → hadn't seen: present perfect moves to past perfect."
+    "de": "Richtig: he hadn't seen. Aus „I haven't seen“ wird nach „told“ hadn't seen (Present Perfect → Past Perfect).",
+    "en": "Right: he hadn't seen. After “told”, “I haven't seen” becomes hadn't seen (Present Perfect → Past Perfect)."
    },
    "wrong": [
     {
@@ -221,8 +221,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: tomorrow → the next day. Gezählt wird vom Sagen aus.",
-    "en": "Right: tomorrow → the next day. Counting starts from the speaking."
+    "de": "Richtig: the next day. Nach „told“ (Vergangenheit) wird „tomorrow“ zu the next day, vom Sagen aus gezählt.",
+    "en": "Right: the next day. After “told” (past) “tomorrow” becomes the next day, counted from the moment of speaking."
    },
    "wrong": [
     {
@@ -269,8 +269,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: yesterday → the day before. Gezählt wird vom Schreiben aus.",
-    "en": "Right: yesterday → the day before. Counting starts from the writing."
+    "de": "Richtig: the day before. Nach „wrote“ (Vergangenheit) wird „yesterday“ zu the day before.",
+    "en": "Right: the day before. After “wrote” (past) “yesterday” becomes the day before."
    },
    "wrong": [
     {

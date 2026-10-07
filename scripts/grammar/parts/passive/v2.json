@@ -235,8 +235,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: at the moment heißt: Das läuft gerade → is being tested by.",
-    "en": "Right: at the moment = in progress → is being tested by."
+    "de": "Richtig: is being tested by. „at the moment“ heißt: Es läuft gerade, die Handelnden nennt by.",
+    "en": "Right: is being tested by. “At the moment” means it is in progress, and by names the doers."
    },
    "wrong": [
     {
@@ -290,8 +290,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Die Bewerbungen werden gerade geprüft → are being reviewed.",
-    "en": "Right: the applications are being checked right now → are being reviewed."
+    "de": "Richtig: are being reviewed. „at the moment“ heißt: Die Prüfung ist im Gang, also Passiv Continuous (are being + 3. Form).",
+    "en": "Right: are being reviewed. “At the moment” means the review is in progress, so Passive Continuous (are being + participle)."
    },
    "wrong": [
     {
@@ -343,8 +343,8 @@
   "accepted": [],
   "why": {
    "ok": {
-    "de": "Der Fehler: Nach being steht die 3. Form: printed.",
-    "en": "The error: after being use the past participle: printed."
+    "de": "Der Fehler: print nach being. Das Passiv braucht das Partizip: are being printed („right now“ = läuft gerade).",
+    "en": "The error: print after being. The passive needs the participle: are being printed (“right now” = in progress)."
    },
    "wrong": [
     {
@@ -402,8 +402,8 @@
   "err": null,
   "why": {
    "ok": {
-    "de": "Kein Fehler: are being trained ist richtiges Passiv Continuous.",
-    "en": "No error: are being trained is a correct continuous passive."
+    "de": "Kein Fehler: „this week“ + are being trained ist Passiv Continuous für etwas, das gerade läuft.",
+    "en": "No error: “this week” + are being trained is Passive Continuous for something currently in progress."
    },
    "wrong": [
     {
@@ -461,8 +461,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Der Raum ist schon gebucht → Passiv Present Perfect: has been booked.",
-    "en": "Right: the room is already taken → present perfect passive: has been booked."
+    "de": "Richtig: has been booked. „already“ zeigt: Der Raum ist jetzt gebucht, Passiv Present Perfect (has been + 3. Form).",
+    "en": "Right: has been booked. “Already” shows the room is booked now, Passive Present Perfect (has been + participle)."
    },
    "wrong": [
     {
@@ -670,8 +670,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Die Rechnung wird noch verschickt → Passiv Zukunft: will be sent.",
-    "en": "Right: the invoice is yet to be sent → future passive: will be sent."
+    "de": "Richtig: will be sent. „by Friday“ liegt in der Zukunft, die Rechnung wird verschickt: will + be + 3. Form.",
+    "en": "Right: will be sent. “By Friday” lies in the future and the invoice gets sent: will + be + participle."
    },
    "wrong": [
     {
@@ -734,8 +734,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Die Räume können gebucht werden → can be booked.",
-    "en": "Right: rooms can be booked → can be booked."
+    "de": "Richtig: can be booked. Nach einem Modalverb steht be + 3. Form, die Handelnden sind „by employees“.",
+    "en": "Right: can be booked. After a modal comes be + participle, the doers are “by employees”."
    },
    "wrong": [
     {
@@ -793,8 +793,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Der Fehler: Nach will fehlt be: will be sent.",
-    "en": "The error: after will the be is missing: will be sent."
+    "de": "Der Fehler: „will sent“. Nach will im Passiv fehlt be: will be sent („tomorrow morning“ = Zukunft).",
+    "en": "The error: “will sent”. After will in the passive be is missing: will be sent (“tomorrow morning” = future)."
    },
    "wrong": [
     {
@@ -826,8 +826,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Der Fehler: Nach can't fehlt be: can't be approved.",
-    "en": "The error: after can't the be is missing: can't be approved."
+    "de": "Der Fehler: „can't approved“. Nach einem Modalverb im Passiv fehlt be: can't be approved.",
+    "en": "The error: “can't approved”. After a modal in the passive be is missing: can't be approved."
    },
    "wrong": [
     {
@@ -1100,8 +1100,8 @@
   "answer": "a",
   "why": {
    "ok": {
-    "de": "Richtig: Satz a. Mit by wird der Handelnde genannt.",
-    "en": "Right: sentence a. With by the agent is named."
+    "de": "Satz a nennt mit „by the board“ den Handelnden. Satz b lässt offen, wer genehmigt hat.",
+    "en": "Sentence a names the doer with “by the board”. Sentence b leaves open who approved."
    },
    "wrong": [
     {

@@ -147,8 +147,8 @@
   "accepted": [],
   "why": {
    "ok": {
-    "de": "Der Fehler: „must been“. Nach einem Modalverb steht be.",
-    "en": "The error: “must been”. After a modal verb use be."
+    "de": "Der Fehler: „must been“. Nach einem Modalverb steht die Grundform be: must be notified („before the workshop“).",
+    "en": "The error: “must been”. After a modal comes the base form be: must be notified (“before the workshop”)."
    },
    "wrong": [
     {
@@ -200,8 +200,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Der Fehler: Nach be steht das Partizip: deleted.",
-    "en": "The error: after be the participle is needed: deleted."
+    "de": "Der Fehler: delete nach be. Im Passiv steht das Partizip: should be deleted, nicht die Grundform.",
+    "en": "The error: delete after be. The passive takes the participle: should be deleted, not the base form."
    },
    "wrong": [
     {
@@ -230,8 +230,8 @@
   "answer": "b",
   "why": {
    "ok": {
-    "de": "Richtig: Satz b. must verlangt, should empfiehlt nur.",
-    "en": "Right: sentence b. must demands, should only recommends."
+    "de": "Satz b: must ist eine Pflicht. Satz a mit should ist nur eine Empfehlung, die Dateien müssten nicht gesendet werden.",
+    "en": "Sentence b: must is an obligation. Sentence a with should is only a recommendation, the files would not have to be sent."
    },
    "wrong": [
     {
@@ -915,8 +915,8 @@
   "accepted": [],
   "why": {
    "ok": {
-    "de": "Der Fehler: Nach appreciate steht -ing: being kept informed.",
-    "en": "The error: after appreciate comes -ing: being kept informed."
+    "de": "Der Fehler: „appreciate to be“. Nach appreciate steht -ing: appreciate being kept informed. Deutsch „zu“ verleitet zu to.",
+    "en": "The error: “appreciate to be”. After appreciate comes -ing: appreciate being kept informed. German “zu” tempts you into to."
    },
    "wrong": [
     {
@@ -946,8 +946,8 @@
   "accepted": [],
   "why": {
    "ok": {
-    "de": "Der Fehler: Nach being steht das Partizip: interrupted.",
-    "en": "The error: after being the participle is needed: interrupted."
+    "de": "Der Fehler: interrupt nach being. Im Passiv steht das Partizip: being interrupted („she hates being …“).",
+    "en": "The error: interrupt after being. The passive takes the participle: being interrupted (“she hates being …”)."
    },
    "wrong": [
     {
@@ -979,8 +979,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Der Fehler: Nach not steht being: not being invited.",
-    "en": "The error: after not use being: not being invited."
+    "de": "Der Fehler: „not been invited“. Nach about steht -ing, verneint not being invited. been ist eine andere Form.",
+    "en": "The error: “not been invited”. After about comes -ing, negated not being invited. Been is a different form."
    },
    "wrong": [
     {
@@ -1004,8 +1004,8 @@
   "err": null,
   "why": {
    "ok": {
-    "de": "Kein Fehler: about + being + Partizip ist die richtige -ing-Form.",
-    "en": "No error: about + being + participle is the correct -ing form."
+    "de": "Kein Fehler: Nach about steht -ing, im Passiv being + 3. Form: about being left out.",
+    "en": "No error: after about comes -ing, and in the passive being + participle: about being left out."
    },
    "wrong": [
     {

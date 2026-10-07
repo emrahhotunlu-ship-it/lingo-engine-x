@@ -227,8 +227,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: eine wiederholte Handlung früher: would + Grundform.",
-    "en": "Right: a repeated action in the past: would + base verb."
+    "de": "Richtig: would review. „Every Monday“ + früher: wiederholte Handlung, would + Grundform (ähnliche Verben gehen auch).",
+    "en": "Right: would review. “Every Monday” + earlier: a repeated action, would + base form (similar verbs work too)."
    },
    "wrong": [
     {
@@ -280,8 +280,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Spielen ist eine wiederholte Handlung früher: would + Grundform.",
-    "en": "Right: playing is a repeated action in the past: would + base verb."
+    "de": "Richtig: would play outside. „As kids … until dinner“ beschreibt eine wiederholte Handlung früher: would + Grundform.",
+    "en": "Right: would play outside. “As kids … until dinner” describes a repeated past action: would + base form."
    },
    "wrong": [
     {
@@ -570,8 +570,8 @@
   "err": null,
   "why": {
    "ok": {
-    "de": "Kein Fehler: didn't + use to ohne d ist richtig.",
-    "en": "No error: didn't + use to without d is correct."
+    "de": "Kein Fehler: Nach didn't steht use to ohne d („didn't use to track“). used to gilt nur in bejahten Sätzen.",
+    "en": "No error: after didn't comes use to without d (“didn't use to track”). Used to only appears in affirmative sentences."
    },
    "wrong": [
     {
@@ -777,8 +777,8 @@
   "err": null,
   "why": {
    "ok": {
-    "de": "Kein Fehler: be used to + -ing (getting) ist richtig.",
-    "en": "No error: be used to + -ing (getting) is correct."
+    "de": "Kein Fehler: be used to heißt „gewöhnt sein“ und verlangt -ing: used to getting emails.",
+    "en": "No error: be used to means “be accustomed to” and takes -ing: used to getting emails."
    },
    "wrong": [
     {
@@ -841,8 +841,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: der Vorgang des Gewöhnens: got used to + -ing.",
-    "en": "Right: the process of becoming accustomed: got used to + -ing."
+    "de": "Richtig: got used to working. „After a few weeks“ beschreibt den Vorgang des Gewöhnens: get used to + -ing.",
+    "en": "Right: got used to working. “After a few weeks” describes the process of getting accustomed: get used to + -ing."
    },
    "wrong": [
     {
@@ -892,8 +892,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: der Vorgang des Gewöhnens: get used to + Nomen.",
-    "en": "Right: the process of becoming accustomed: get used to + noun."
+    "de": "Richtig: get used to. „It takes time“ meint den Vorgang des Gewöhnens, danach kommt ein Nomen oder -ing.",
+    "en": "Right: get used to. “It takes time” refers to the process of getting accustomed, followed by a noun or -ing."
    },
    "wrong": [
     {

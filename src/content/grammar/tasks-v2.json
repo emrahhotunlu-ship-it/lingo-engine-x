@@ -1521,8 +1521,8 @@
    "err": null,
    "why": {
     "ok": {
-     "de": "Kein Fehler: were hoping to + Grundform ist richtig.",
-     "en": "No error: were hoping to + base verb is correct."
+     "de": "Kein Fehler: were hoping to hear ist eine höfliche Form für einen Wunsch. Nach hope folgt to + Grundform.",
+     "en": "No error: were hoping to hear is a polite way to express a wish. After hope comes to + base form."
     },
     "wrong": [
      {
@@ -2975,8 +2975,8 @@
    "answer": "a",
    "why": {
     "ok": {
-     "de": "Richtig: Satz a. In short leitet das Fazit ein.",
-     "en": "Right: sentence a. In short introduces the conclusion."
+     "de": "Satz a: „In short“ fasst zusammen, es leitet das Fazit ein. „For example“ in b würde ein Beispiel einleiten.",
+     "en": "Sentence a: “In short” summarizes and introduces the conclusion. “For example” in b would introduce an example."
     },
     "wrong": [
      {
@@ -10290,8 +10290,8 @@
    "err": null,
    "why": {
     "ok": {
-     "de": "Kein Fehler: provided that + Präsens („you return“) ist richtig.",
-     "en": "No error: provided that + present (“you return”) is correct."
+     "de": "Kein Fehler: „provided that“ (= falls, vorausgesetzt) steht wie if mit dem Present: you return it.",
+     "en": "No error: “provided that” (= on condition that) takes the Present like if: you return it."
     },
     "wrong": [
      {
@@ -11162,8 +11162,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Das ist eine feste Regel → whenever + Präsens: whenever a customer cancels.",
-     "en": "Right: fixed rule → whenever + present: whenever a customer cancels."
+     "de": "Richtig: whenever a customer cancels. „We refund“ ist eine feste Regel: whenever + Present, ohne will.",
+     "en": "Right: whenever a customer cancels. “We refund” is a fixed rule: whenever + Present, without will."
     },
     "wrong": [
      {
@@ -11212,8 +11212,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Das ist eine feste Regel → when + Präsens: when the build fails.",
-     "en": "Right: fixed rule → when + present: when the build fails."
+     "de": "Richtig: when the build fails. „stops automatically“ ist eine feste Regel: when + Present.",
+     "en": "Right: when the build fails. “Stops automatically” is a fixed rule: when + Present."
     },
     "wrong": [
      {
@@ -11287,8 +11287,8 @@
    "err": null,
    "why": {
     "ok": {
-     "de": "Kein Fehler: Present + Present beschreibt hier eine feste Regel.",
-     "en": "No error: present + present describes a fixed rule here."
+     "de": "Kein Fehler: Present + Present beschreibt eine feste Regel des Systems („sends a reminder“).",
+     "en": "No error: Present + Present describes a fixed rule of the system (“sends a reminder”)."
     },
     "wrong": [
      {
@@ -11352,8 +11352,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Das ist eine mögliche Zukunft → if + Präsens: if the supplier delivers.",
-     "en": "Right: possible future → if + present: if the supplier delivers."
+     "de": "Richtig: if the supplier delivers. „will finish“ zeigt eine mögliche Zukunft: if + Present, kein will.",
+     "en": "Right: if the supplier delivers. “Will finish” shows a possible future: if + Present, no will."
     },
     "wrong": [
      {
@@ -11403,8 +11403,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Das ist eine mögliche Zukunft → if + Präsens: If the client approves.",
-     "en": "Right: possible future → if + present: If the client approves."
+     "de": "Richtig: If the client approves. „we'll start“ zeigt eine mögliche Zukunft: if + Present im Nebensatz.",
+     "en": "Right: If the client approves. “We'll start” shows a possible future: if + Present in the clause."
     },
     "wrong": [
      {
@@ -11475,8 +11475,8 @@
    "err": null,
    "why": {
     "ok": {
-     "de": "Kein Fehler: if + Präsens (passes), will im Hauptsatz.",
-     "en": "No error: if + present (passes), will in the main clause."
+     "de": "Kein Fehler: Reale Möglichkeit, deshalb if + Present (passes) und will im Hauptsatz (we'll release).",
+     "en": "No error: a real possibility, so if + Present (passes) and will in the main clause (we'll release)."
     },
     "wrong": [
      {
@@ -11541,8 +11541,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Annahme (had more staff) → Hauptsatz mit would + Grundform: would accept.",
-     "en": "Right: assumption (had more staff) → main clause with would + base form: would accept."
+     "de": "Richtig: would accept. „had more staff“ ist eine Annahme, deshalb Hauptsatz mit would + Grundform.",
+     "en": "Right: would accept. “Had more staff” is an assumption, so the main clause takes would + base form."
     },
     "wrong": [
      {
@@ -11594,8 +11594,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Annahme → if + Past: If the client moved. would steht im Hauptsatz.",
-     "en": "Right: assumption → if + past: If the client moved. would goes in the main clause."
+     "de": "Richtig: If the client moved. „would finish“ zeigt eine Annahme: if + Past, would steht im Hauptsatz.",
+     "en": "Right: If the client moved. “Would finish” shows an assumption: if + Past, would stays in the main clause."
     },
     "wrong": [
      {
@@ -11730,8 +11730,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Rat = Annahme → If I were you. Die Folge steht mit would.",
-     "en": "Right: advice = assumption → If I were you. The result takes would."
+     "de": "Richtig: If I were you. Die feste Form für Ratschläge, auch bei „I“ steht were. Die Folge: I'd renegotiate.",
+     "en": "Right: If I were you. The fixed form for advice, were even with “I”. The result: I'd renegotiate."
     },
     "wrong": [
      {
@@ -11781,8 +11781,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Das ist eine Annahme → if + were: If the deadline were flexible.",
-     "en": "Right: assumption → if + were: If the deadline were flexible."
+     "de": "Richtig: were flexible. Annahme: if + Past. „was“ ist im Alltag auch üblich und gilt hier, „were“ klingt formeller.",
+     "en": "Right: were flexible. Assumption: if + Past. “Was” is also common in everyday speech and accepted; “were” sounds more formal."
     },
     "wrong": [
      {
@@ -11929,8 +11929,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Es ist vorbei → if + Past Perfect: had tested. Folge: would have caught.",
-     "en": "Right: over → if + Past Perfect: had tested. Result: would have caught."
+     "de": "Richtig: had tested. „would have caught“ zeigt Vergangenes, das nicht war: if + Past Perfect.",
+     "en": "Right: had tested. “Would have caught” shows something in the past that did not happen: if + Past Perfect."
     },
     "wrong": [
      {
@@ -11985,8 +11985,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Folge in der Vergangenheit → would have + 3. Form: would have adjusted.",
-     "en": "Right: result in the past → would have + participle: would have adjusted."
+     "de": "Richtig: would have adjusted. „had told“ ist vorbei, die Folge auch: would have + 3. Form.",
+     "en": "Right: would have adjusted. “Had told” is past and so is the result: would have + participle."
     },
     "wrong": [
      {
@@ -12174,8 +12174,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: unless = „wenn nicht“ → Präsens ohne not: unless the deposit arrives.",
-     "en": "Right: unless = “if not” → present with no not: unless the deposit arrives."
+     "de": "Richtig: unless the deposit arrives. unless = „wenn nicht“, Present ohne not: Ohne Anzahlung wird nicht versandt.",
+     "en": "Right: unless the deposit arrives. Unless = “if not”, Present without not: no shipping without the deposit."
     },
     "wrong": [
      {
@@ -14809,8 +14809,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: um 15 Uhr bist du mitten im Training → will be attending.",
-     "en": "Right: at 3 you will be in the middle of it → will be attending."
+     "de": "Richtig: will be attending. Um 15 Uhr läuft das Training gerade, deshalb kann ich nicht teilnehmen: will be + -ing.",
+     "en": "Right: will be attending. At 3 the training is in progress, so I can't join: will be + -ing."
     },
     "wrong": [
      {
@@ -14863,8 +14863,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: um 1 Uhr läuft die Migration gerade → will be running.",
-     "en": "Right: at 1 a.m. the migration is in progress → will be running."
+     "de": "Richtig: will be running. Um 1 Uhr läuft die Migration gerade, deshalb kann niemand einloggen: will be + -ing.",
+     "en": "Right: will be running. At 1 a.m. the migration is in progress, so nobody can log in: will be + -ing."
     },
     "wrong": [
      {
@@ -15211,8 +15211,8 @@
    "answer": "a",
    "why": {
     "ok": {
-     "de": "Richtig: Satz a fragt nach dem Plan für morgen.",
-     "en": "Right: sentence a asks about the plan for tomorrow."
+     "de": "Satz a fragt nach dem Plan („Wirst du morgen senden?“). Satz b fragt nach dem Ergebnis: schon bis morgen erledigt?",
+     "en": "Sentence a asks about the plan (“Will you be sending it tomorrow?”). Sentence b asks about the result: done by tomorrow?"
     },
     "wrong": [
      {
@@ -15322,8 +15322,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: bis zum Audit ist es schon abgeschlossen → will already have finished.",
-     "en": "Right: already completed by the audit → will already have finished."
+     "de": "Richtig: will already have finished. „By Monday's audit“ ist die Frist, already betont: dann schon abgeschlossen.",
+     "en": "Right: will already have finished. “By Monday's audit” is the deadline, and already stresses: finished by then."
     },
     "wrong": [
      {
@@ -15532,8 +15532,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Dauer bis zu einem Zeitpunkt → will have been working.",
-     "en": "Right: duration up to a point in time → will have been working."
+     "de": "Richtig: will have been working. „for three years“ nennt die Dauer bis Januar 2027: will have been + -ing.",
+     "en": "Right: will have been working. “For three years” gives the duration up to January 2027: will have been + -ing."
     },
     "wrong": [
      {
@@ -18974,8 +18974,8 @@
    ],
    "why": {
     "ok": {
-     "de": "hadn't left (früher) + now: die Folge jetzt → would + Grundform.",
-     "en": "hadn't left (earlier) + now: result now → would + base form."
+     "de": "Richtig: would have. „hadn't left in June“ (früher) und „now“: Die Folge gilt jetzt, also would + Grundform.",
+     "en": "Right: would have. “Hadn't left in June” (earlier) and “now”: the result applies now, so would + base form."
     },
     "wrong": [
      {
@@ -19119,8 +19119,8 @@
    ],
    "why": {
     "ok": {
-     "de": "wish + can → could: ein Wunsch über jetzt, eine Fähigkeit.",
-     "en": "wish + can → could: a wish about now, an ability."
+     "de": "Richtig: I could. Wunsch über eine Fähigkeit jetzt: wish + could. „can“ ändert sich nach wish zu could.",
+     "en": "Right: I could. A wish about an ability now: wish + could. “Can” changes to could after wish."
     },
     "wrong": [
      {
@@ -19164,8 +19164,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Wunsch über jetzt: wish + Past, bei be meist were.",
-     "en": "wish about now: wish + past, usually were for be."
+     "de": "Richtig: were more flexible. Ein Wunsch für jetzt: wish + Past, bei be steht were (auch bei „the client“).",
+     "en": "Right: were more flexible. A wish about now: wish + Past, and be becomes were (even with “the client”)."
     },
     "wrong": [
      {
@@ -19204,8 +19204,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Bedauern für früher: wish + hadn't + 3. Form (sent).",
-     "en": "regret about earlier: wish + hadn't + participle (sent)."
+     "de": "Richtig: hadn't sent. Das Bedauern gilt etwas Vergangenem („without legal review“): wish + hadn't + 3. Form.",
+     "en": "Right: hadn't sent. The regret is about something in the past (“without legal review”): wish + hadn't + participle."
     },
     "wrong": [
      {
@@ -19247,8 +19247,8 @@
    ],
    "why": {
     "ok": {
-     "de": "If only + before (früher): das Bedauern → had + 3. Form.",
-     "en": "if only + before (earlier): regret → had + participle."
+     "de": "Richtig: had asked. „If only … before the migration“ ist ein Bedauern über Vergangenes: had + 3. Form.",
+     "en": "Right: had asked. “If only … before the migration” is regret about the past: had + participle."
     },
     "wrong": [
      {
@@ -19290,8 +19290,8 @@
    ],
    "why": {
     "ok": {
-     "de": "never confirm: Ärger über Verhalten, das sich ändern soll → would.",
-     "en": "never confirm: annoyance at behavior that should change → would."
+     "de": "Richtig: would confirm. Der Ärger über wiederholtes Verhalten („never confirm“) braucht wish + would.",
+     "en": "Right: would confirm. Annoyance at repeated behavior (“never confirm”) takes wish + would."
     },
     "wrong": [
      {
@@ -19333,8 +19333,8 @@
    ],
    "why": {
     "ok": {
-     "de": "keeps changing: wiederholtes Verhalten, das enden soll → would stop.",
-     "en": "keeps changing: repeated behavior that should end → would stop."
+     "de": "Richtig: would stop changing. „keeps changing“ ist wiederholtes Verhalten, das enden soll: wish + would.",
+     "en": "Right: would stop changing. “Keeps changing” is repeated behavior that should end: wish + would."
     },
     "wrong": [
      {
@@ -19527,8 +19527,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Der if-Teil nimmt die Past-Form (were), nie would be.",
-     "en": "the if-clause takes the past form (were), never would be."
+     "de": "Nach if steht nie would: If I were more patient. Die Folge im Hauptsatz ist would have waited.",
+     "en": "After if comes never would: If I were more patient. The result in the main clause is would have waited."
     },
     "wrong": [
      {
@@ -19615,8 +19615,8 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "wish + Fähigkeit jetzt: can wird zu could.",
-     "en": "wish + ability now: can becomes could."
+     "de": "„wish“ braucht die Rückstufung: can wird could. „I wish our system could handle more requests.“",
+     "en": "“Wish” needs the step back: can becomes could. “I wish our system could handle more requests.”"
     },
     "wrong": [
      {
@@ -19681,8 +19681,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Bedauern für früher: If only + hadn't + 3. Form.",
-     "en": "regret about earlier: if only + hadn't + participle."
+     "de": "„last week“ ist vorbei: If only + hadn't waited. Das Past didn't wait würde sich auf jetzt beziehen.",
+     "en": "“Last week” is over: If only + hadn't waited. The Past didn't wait would refer to now."
     },
     "wrong": [
      {
@@ -19715,8 +19715,8 @@
    ],
    "why": {
     "ok": {
-     "de": "every week: Ärger über Verhalten → wouldn't change (didn't change auch möglich).",
-     "en": "every week: annoyance at behavior → wouldn't change (didn't change also works)."
+     "de": "„every week“ ist wiederholtes Verhalten, das stören soll: wish + wouldn't change. didn't change ginge auch, doch would ist natürlicher.",
+     "en": "“Every week” is repeated behavior that should stop: wish + wouldn't change. Didn't change would also work, but would is more natural."
     },
     "wrong": [
      {
@@ -22327,8 +22327,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: at the moment heißt: Das läuft gerade → is being tested by.",
-     "en": "Right: at the moment = in progress → is being tested by."
+     "de": "Richtig: is being tested by. „at the moment“ heißt: Es läuft gerade, die Handelnden nennt by.",
+     "en": "Right: is being tested by. “At the moment” means it is in progress, and by names the doers."
     },
     "wrong": [
      {
@@ -22383,8 +22383,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Die Bewerbungen werden gerade geprüft → are being reviewed.",
-     "en": "Right: the applications are being checked right now → are being reviewed."
+     "de": "Richtig: are being reviewed. „at the moment“ heißt: Die Prüfung ist im Gang, also Passiv Continuous (are being + 3. Form).",
+     "en": "Right: are being reviewed. “At the moment” means the review is in progress, so Passive Continuous (are being + participle)."
     },
     "wrong": [
      {
@@ -22437,8 +22437,8 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "Der Fehler: Nach being steht die 3. Form: printed.",
-     "en": "The error: after being use the past participle: printed."
+     "de": "Der Fehler: print nach being. Das Passiv braucht das Partizip: are being printed („right now“ = läuft gerade).",
+     "en": "The error: print after being. The passive needs the participle: are being printed (“right now” = in progress)."
     },
     "wrong": [
      {
@@ -22498,8 +22498,8 @@
    "err": null,
    "why": {
     "ok": {
-     "de": "Kein Fehler: are being trained ist richtiges Passiv Continuous.",
-     "en": "No error: are being trained is a correct continuous passive."
+     "de": "Kein Fehler: „this week“ + are being trained ist Passiv Continuous für etwas, das gerade läuft.",
+     "en": "No error: “this week” + are being trained is Passive Continuous for something currently in progress."
     },
     "wrong": [
      {
@@ -22559,8 +22559,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Der Raum ist schon gebucht → Passiv Present Perfect: has been booked.",
-     "en": "Right: the room is already taken → present perfect passive: has been booked."
+     "de": "Richtig: has been booked. „already“ zeigt: Der Raum ist jetzt gebucht, Passiv Present Perfect (has been + 3. Form).",
+     "en": "Right: has been booked. “Already” shows the room is booked now, Passive Present Perfect (has been + participle)."
     },
     "wrong": [
      {
@@ -22773,8 +22773,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Die Rechnung wird noch verschickt → Passiv Zukunft: will be sent.",
-     "en": "Right: the invoice is yet to be sent → future passive: will be sent."
+     "de": "Richtig: will be sent. „by Friday“ liegt in der Zukunft, die Rechnung wird verschickt: will + be + 3. Form.",
+     "en": "Right: will be sent. “By Friday” lies in the future and the invoice gets sent: will + be + participle."
     },
     "wrong": [
      {
@@ -22838,8 +22838,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Die Räume können gebucht werden → can be booked.",
-     "en": "Right: rooms can be booked → can be booked."
+     "de": "Richtig: can be booked. Nach einem Modalverb steht be + 3. Form, die Handelnden sind „by employees“.",
+     "en": "Right: can be booked. After a modal comes be + participle, the doers are “by employees”."
     },
     "wrong": [
      {
@@ -22898,8 +22898,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Der Fehler: Nach will fehlt be: will be sent.",
-     "en": "The error: after will the be is missing: will be sent."
+     "de": "Der Fehler: „will sent“. Nach will im Passiv fehlt be: will be sent („tomorrow morning“ = Zukunft).",
+     "en": "The error: “will sent”. After will in the passive be is missing: will be sent (“tomorrow morning” = future)."
     },
     "wrong": [
      {
@@ -22932,8 +22932,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Der Fehler: Nach can't fehlt be: can't be approved.",
-     "en": "The error: after can't the be is missing: can't be approved."
+     "de": "Der Fehler: „can't approved“. Nach einem Modalverb im Passiv fehlt be: can't be approved.",
+     "en": "The error: “can't approved”. After a modal in the passive be is missing: can't be approved."
     },
     "wrong": [
      {
@@ -23214,8 +23214,8 @@
    "answer": "a",
    "why": {
     "ok": {
-     "de": "Richtig: Satz a. Mit by wird der Handelnde genannt.",
-     "en": "Right: sentence a. With by the agent is named."
+     "de": "Satz a nennt mit „by the board“ den Handelnden. Satz b lässt offen, wer genehmigt hat.",
+     "en": "Sentence a names the doer with “by the board”. Sentence b leaves open who approved."
     },
     "wrong": [
      {
@@ -23383,8 +23383,8 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "Der Fehler: „must been“. Nach einem Modalverb steht be.",
-     "en": "The error: “must been”. After a modal verb use be."
+     "de": "Der Fehler: „must been“. Nach einem Modalverb steht die Grundform be: must be notified („before the workshop“).",
+     "en": "The error: “must been”. After a modal comes the base form be: must be notified (“before the workshop”)."
     },
     "wrong": [
      {
@@ -23438,8 +23438,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Der Fehler: Nach be steht das Partizip: deleted.",
-     "en": "The error: after be the participle is needed: deleted."
+     "de": "Der Fehler: delete nach be. Im Passiv steht das Partizip: should be deleted, nicht die Grundform.",
+     "en": "The error: delete after be. The passive takes the participle: should be deleted, not the base form."
     },
     "wrong": [
      {
@@ -23469,8 +23469,8 @@
    "answer": "b",
    "why": {
     "ok": {
-     "de": "Richtig: Satz b. must verlangt, should empfiehlt nur.",
-     "en": "Right: sentence b. must demands, should only recommends."
+     "de": "Satz b: must ist eine Pflicht. Satz a mit should ist nur eine Empfehlung, die Dateien müssten nicht gesendet werden.",
+     "en": "Sentence b: must is an obligation. Sentence a with should is only a recommendation, the files would not have to be sent."
     },
     "wrong": [
      {
@@ -24172,8 +24172,8 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "Der Fehler: Nach appreciate steht -ing: being kept informed.",
-     "en": "The error: after appreciate comes -ing: being kept informed."
+     "de": "Der Fehler: „appreciate to be“. Nach appreciate steht -ing: appreciate being kept informed. Deutsch „zu“ verleitet zu to.",
+     "en": "The error: “appreciate to be”. After appreciate comes -ing: appreciate being kept informed. German “zu” tempts you into to."
     },
     "wrong": [
      {
@@ -24204,8 +24204,8 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "Der Fehler: Nach being steht das Partizip: interrupted.",
-     "en": "The error: after being the participle is needed: interrupted."
+     "de": "Der Fehler: interrupt nach being. Im Passiv steht das Partizip: being interrupted („she hates being …“).",
+     "en": "The error: interrupt after being. The passive takes the participle: being interrupted (“she hates being …”)."
     },
     "wrong": [
      {
@@ -24238,8 +24238,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Der Fehler: Nach not steht being: not being invited.",
-     "en": "The error: after not use being: not being invited."
+     "de": "Der Fehler: „not been invited“. Nach about steht -ing, verneint not being invited. been ist eine andere Form.",
+     "en": "The error: “not been invited”. After about comes -ing, negated not being invited. Been is a different form."
     },
     "wrong": [
      {
@@ -24264,8 +24264,8 @@
    "err": null,
    "why": {
     "ok": {
-     "de": "Kein Fehler: about + being + Partizip ist die richtige -ing-Form.",
-     "en": "No error: about + being + participle is the correct -ing form."
+     "de": "Kein Fehler: Nach about steht -ing, im Passiv being + 3. Form: about being left out.",
+     "en": "No error: after about comes -ing, and in the passive being + participle: about being left out."
     },
     "wrong": [
      {
@@ -24335,8 +24335,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Es geschah vor meiner Ankunft → had already cleared (had + Partizip).",
-     "en": "Right: it happened before I arrived → had already cleared (had + participle)."
+     "de": "Richtig: had already cleared. Der Kollege war schon durch die Kontrolle, bevor ich ankam: had + 3. Form.",
+     "en": "Right: had already cleared. My colleague was through security before I arrived: had + past participle."
     },
     "wrong": [
      {
@@ -24391,8 +24391,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Das Unterschreiben lag vor dem Erhalt der Mail → had signed.",
-     "en": "Right: the signing came before I got the email → had signed."
+     "de": "Richtig: The client had signed. Das Unterschreiben lag vor dem Erhalt der Mail, „by the time“ + Vergangenheit.",
+     "en": "Right: The client had signed. The signing happened before I got the email, “by the time” + past."
     },
     "wrong": [
      {
@@ -24467,8 +24467,8 @@
    "err": null,
    "why": {
     "ok": {
-     "de": "Kein Fehler: Das Archivieren lag vor der Ankunft → had already archived.",
-     "en": "No error: the archiving came before the arrival → had already archived."
+     "de": "Kein Fehler: Die Archivierung lag vor der Ankunft der Prüfer, deshalb had already archived.",
+     "en": "No error: the archiving happened before the auditors arrived, hence had already archived."
     },
     "wrong": [
      {
@@ -24562,8 +24562,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Dauer vor den Entlassungen in der Vergangenheit → had the team been working.",
-     "en": "Right: duration before the layoffs in the past → had the team been working."
+     "de": "Richtig: had the team been working. Die Dauer lag vor den Entlassungen (Vergangenheit): Frage mit had + Subjekt + been.",
+     "en": "Right: had the team been working. The duration lay before the layoffs (past): question with had + subject + been."
     },
     "wrong": [
      {
@@ -24615,8 +24615,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: „since Monday“ nennt die Dauer bis zum Anruf → had been preparing.",
-     "en": "Right: “since Monday” gives the duration up to the call → had been preparing."
+     "de": "Richtig: had been preparing. „since Monday“ nennt die Dauer bis zum Anruf am Mittwoch: had been + -ing.",
+     "en": "Right: had been preparing. “Since Monday” gives the duration up to Wednesday's call: had been + -ing."
     },
     "wrong": [
      {
@@ -24753,8 +24753,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Nach „the first time“ steht had + Partizip → had missed.",
-     "en": "Right: after “the first time” comes had + participle → had missed."
+     "de": "Richtig: time the vendor had missed. Die Erfahrung „erstes Mal“ liegt vor „was“, also had missed.",
+     "en": "Right: time the vendor had missed. The experience of “first time” lies before “was”, so had missed."
     },
     "wrong": [
      {
@@ -24813,8 +24813,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Nach „before that trip“ steht die Erfahrung davor → had never flown.",
-     "en": "Right: “before that trip” + experience before it → had never flown."
+     "de": "Richtig: had never flown. „before that trip“ zeigt: Die Erfahrung lag vor der Reise, also Past Perfect.",
+     "en": "Right: had never flown. “Before that trip” shows the experience lay before the journey, so Past Perfect."
     },
     "wrong": [
      {
@@ -24958,8 +24958,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Aus „I’ll send“ wird nach „told“ would send.",
-     "en": "Right: after “told”, “I’ll send” becomes would send."
+     "de": "Richtig: would send. Nach „told“ (Vergangenheit) rutscht „I'll send“ zu would send zurück.",
+     "en": "Right: would send. After “told” (past) “I'll send” shifts back to would send."
     },
     "wrong": [
      {
@@ -25004,8 +25004,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Aus „We’ve sent“ wird nach „told“ had sent.",
-     "en": "Right: after “told”, “We’ve sent” becomes had sent."
+     "de": "Richtig: had already sent. Aus „We've sent“ wird nach „told“ die Stufe zurück: had sent.",
+     "en": "Right: had already sent. After “told”, “We've sent” shifts back a step: had sent."
     },
     "wrong": [
      {
@@ -25277,8 +25277,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: „Hardly had“ + Subjekt + Partizip, und danach folgt „when“.",
-     "en": "Right: “Hardly had” + subject + participle, then “when” follows."
+     "de": "Richtig: Hardly had our meeting. Nach „Hardly“ am Satzanfang kommt had vor dem Subjekt, danach „when“.",
+     "en": "Right: Hardly had our meeting. After “Hardly” at the start of a sentence had comes before the subject, then “when”."
     },
     "wrong": [
      {
@@ -35245,8 +35245,8 @@
    "err": null,
    "why": {
     "ok": {
-     "de": "Kein Fehler: admit + -ing („making“) ist richtig.",
-     "en": "No error: admit + -ing (“making”) is correct."
+     "de": "Kein Fehler: Nach admit steht -ing: admitted making the mistake. admitted to make wäre falsch.",
+     "en": "No error: after admit comes -ing: admitted making the mistake. Admitted to make would be wrong."
     },
     "wrong": [
      {
@@ -35465,8 +35465,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Der Fehler: „recommend to postpone“. Richtig: recommend postponing.",
-     "en": "The error: “recommend to postpone”. Correct: recommend postponing."
+     "de": "Der Fehler: „recommend to postpone“. Nach recommend steht -ing: recommend postponing, auch wenn Deutsch „empfehlen zu“ sagt.",
+     "en": "The error: “recommend to postpone”. After recommend comes -ing: recommend postponing, even though German says “empfehlen zu”."
     },
     "wrong": [
      {
@@ -36341,8 +36341,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: are → were: they were still reviewing, denn das Sagen liegt zurück.",
-     "en": "Right: are → were: they were still reviewing, because the speaking is in the past."
+     "de": "Richtig: they were still reviewing. Aus „are reviewing“ wird nach „said“ were reviewing (eine Zeit zurück).",
+     "en": "Right: they were still reviewing. After “said”, “are reviewing” becomes were reviewing (one tense back)."
     },
     "wrong": [
      {
@@ -36383,8 +36383,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: haven't seen → hadn't seen: Present Perfect rückt zu Past Perfect.",
-     "en": "Right: haven't seen → hadn't seen: present perfect moves to past perfect."
+     "de": "Richtig: he hadn't seen. Aus „I haven't seen“ wird nach „told“ hadn't seen (Present Perfect → Past Perfect).",
+     "en": "Right: he hadn't seen. After “told”, “I haven't seen” becomes hadn't seen (Present Perfect → Past Perfect)."
     },
     "wrong": [
      {
@@ -36552,8 +36552,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: tomorrow → the next day. Gezählt wird vom Sagen aus.",
-     "en": "Right: tomorrow → the next day. Counting starts from the speaking."
+     "de": "Richtig: the next day. Nach „told“ (Vergangenheit) wird „tomorrow“ zu the next day, vom Sagen aus gezählt.",
+     "en": "Right: the next day. After “told” (past) “tomorrow” becomes the next day, counted from the moment of speaking."
     },
     "wrong": [
      {
@@ -36601,8 +36601,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: yesterday → the day before. Gezählt wird vom Schreiben aus.",
-     "en": "Right: yesterday → the day before. Counting starts from the writing."
+     "de": "Richtig: the day before. Nach „wrote“ (Vergangenheit) wird „yesterday“ zu the day before.",
+     "en": "Right: the day before. After “wrote” (past) “yesterday” becomes the day before."
     },
     "wrong": [
      {
@@ -38424,8 +38424,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: eine wiederholte Handlung früher: would + Grundform.",
-     "en": "Right: a repeated action in the past: would + base verb."
+     "de": "Richtig: would review. „Every Monday“ + früher: wiederholte Handlung, would + Grundform (ähnliche Verben gehen auch).",
+     "en": "Right: would review. “Every Monday” + earlier: a repeated action, would + base form (similar verbs work too)."
     },
     "wrong": [
      {
@@ -38478,8 +38478,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Spielen ist eine wiederholte Handlung früher: would + Grundform.",
-     "en": "Right: playing is a repeated action in the past: would + base verb."
+     "de": "Richtig: would play outside. „As kids … until dinner“ beschreibt eine wiederholte Handlung früher: would + Grundform.",
+     "en": "Right: would play outside. “As kids … until dinner” describes a repeated past action: would + base form."
     },
     "wrong": [
      {
@@ -38776,8 +38776,8 @@
    "err": null,
    "why": {
     "ok": {
-     "de": "Kein Fehler: didn't + use to ohne d ist richtig.",
-     "en": "No error: didn't + use to without d is correct."
+     "de": "Kein Fehler: Nach didn't steht use to ohne d („didn't use to track“). used to gilt nur in bejahten Sätzen.",
+     "en": "No error: after didn't comes use to without d (“didn't use to track”). Used to only appears in affirmative sentences."
     },
     "wrong": [
      {
@@ -38989,8 +38989,8 @@
    "err": null,
    "why": {
     "ok": {
-     "de": "Kein Fehler: be used to + -ing (getting) ist richtig.",
-     "en": "No error: be used to + -ing (getting) is correct."
+     "de": "Kein Fehler: be used to heißt „gewöhnt sein“ und verlangt -ing: used to getting emails.",
+     "en": "No error: be used to means “be accustomed to” and takes -ing: used to getting emails."
     },
     "wrong": [
      {
@@ -39055,8 +39055,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: der Vorgang des Gewöhnens: got used to + -ing.",
-     "en": "Right: the process of becoming accustomed: got used to + -ing."
+     "de": "Richtig: got used to working. „After a few weeks“ beschreibt den Vorgang des Gewöhnens: get used to + -ing.",
+     "en": "Right: got used to working. “After a few weeks” describes the process of getting accustomed: get used to + -ing."
     },
     "wrong": [
      {
@@ -39107,8 +39107,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: der Vorgang des Gewöhnens: get used to + Nomen.",
-     "en": "Right: the process of becoming accustomed: get used to + noun."
+     "de": "Richtig: get used to. „It takes time“ meint den Vorgang des Gewöhnens, danach kommt ein Nomen oder -ing.",
+     "en": "Right: get used to. “It takes time” refers to the process of getting accustomed, followed by a noun or -ing."
     },
     "wrong": [
      {

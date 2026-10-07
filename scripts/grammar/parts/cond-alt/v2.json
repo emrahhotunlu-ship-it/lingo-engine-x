@@ -355,8 +355,8 @@
   "err": null,
   "why": {
    "ok": {
-    "de": "Kein Fehler: provided that + Präsens („you return“) ist richtig.",
-    "en": "No error: provided that + present (“you return”) is correct."
+    "de": "Kein Fehler: „provided that“ (= falls, vorausgesetzt) steht wie if mit dem Present: you return it.",
+    "en": "No error: “provided that” (= on condition that) takes the Present like if: you return it."
    },
    "wrong": [
     {

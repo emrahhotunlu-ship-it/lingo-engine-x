@@ -351,8 +351,8 @@
   "err": null,
   "why": {
    "ok": {
-    "de": "Kein Fehler: were hoping to + Grundform ist richtig.",
-    "en": "No error: were hoping to + base verb is correct."
+    "de": "Kein Fehler: were hoping to hear ist eine höfliche Form für einen Wunsch. Nach hope folgt to + Grundform.",
+    "en": "No error: were hoping to hear is a polite way to express a wish. After hope comes to + base form."
    },
    "wrong": [
     {

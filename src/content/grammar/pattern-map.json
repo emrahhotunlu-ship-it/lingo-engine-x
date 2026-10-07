@@ -757,8 +757,8 @@
   "pat": "dip.understate",
   "why": {
    "ok": {
-    "de": "Richtig: tricky untertreibt. Gemeint ist „kaum machbar“, aber höflich.",
-    "en": "Right: tricky understates. It means “hardly doable”, but politely."
+    "de": "Richtig: tricky. „a bit tricky“ untertreibt höflich und meint „kaum machbar“. impossible, stupid, wrong wären zu direkt.",
+    "en": "Right: tricky. “A bit tricky” politely understates and means “hardly doable”. Impossible, stupid, wrong would be too blunt."
    },
    "wrong": [
     {
@@ -1346,8 +1346,8 @@
   "pat": "dm.return",
   "why": {
    "ok": {
-    "de": "Richtig: Es heißt coming back to, nicht on.",
-    "en": "Right: It is coming back to, not on."
+    "de": "Die feste Wendung heißt coming back to your question. „on“ gibt es hier nicht, auch wenn Deutsch „auf Ihre Frage zurückkommen“ sagt.",
+    "en": "The fixed phrase is coming back to your question. “On” is not used here, even though German says “auf Ihre Frage zurückkommen”."
    },
    "wrong": [
     {
@@ -4644,8 +4644,8 @@
   "pat": "cn.first",
   "why": {
    "ok": {
-    "de": "Richtig: tomorrow = mögliche Zukunft → if + Präsens (rains). will steht nur im Hauptsatz.",
-    "en": "Right: tomorrow = possible future → if + present (rains). will appears only in the main clause."
+    "de": "„tomorrow“ ist Zukunft, aber nach if steht das Present: If it rains. will nur im Hauptsatz (we will stay).",
+    "en": "“Tomorrow” is the future, but after if the Present is used: If it rains. Will only in the main clause (we will stay)."
    },
    "wrong": [
     {
@@ -4685,8 +4685,8 @@
   "pat": "cn.second",
   "why": {
    "ok": {
-    "de": "Richtig: would travel = Annahme → im if-Teil das Past: had.",
-    "en": "Right: would travel = assumption → the if-clause takes the past: had."
+    "de": "„I would travel“ zeigt eine Annahme, keine Tatsache: Im if-Teil steht das Past, also had. would gehört nur in den Hauptsatz.",
+    "en": "“I would travel” shows an assumption, not a fact: the if-clause takes the Past, so had. Would belongs only in the main clause."
    },
    "wrong": [
     {
@@ -4713,8 +4713,8 @@
   "pat": "cn.third",
   "why": {
    "ok": {
-    "de": "Richtig: had left ist vorbei → would not have + 3. Form: wouldn't have missed.",
-    "en": "Right: had left (over) → would not have + participle: wouldn't have missed."
+    "de": "„had left“ ist vorbei, die Folge auch: would not have missed. Der Zug ist schon weg.",
+    "en": "“Had left” is past and so is the result: would not have missed. The train is already gone."
    },
    "wrong": [
     {
@@ -4754,8 +4754,8 @@
   "pat": "cn.first",
   "why": {
    "ok": {
-    "de": "Richtig: reale Bedingung → if + Präsens (accepts). Im Hauptsatz steht will.",
-    "en": "Right: real condition → if + present (accepts). The main clause takes will."
+    "de": "Der Hauptsatz hat will, also eine reale Möglichkeit: Im if-Teil steht das Present, accepts. Nie will im if-Teil.",
+    "en": "The main clause has will, so a real possibility: the if-clause takes the Present, accepts. Never will in the if-clause."
    },
    "wrong": [
     {
@@ -4782,8 +4782,8 @@
   "pat": "cn.were",
   "why": {
    "ok": {
-    "de": "Richtig: If I were you gibt einen Rat → Hauptsatz mit would + Grundform: would check.",
-    "en": "Right: If I were you gives advice → main clause with would + base form: would check."
+    "de": "„If I were you“ leitet einen Rat ein, deshalb would + Grundform: I would check. Kein will, kein Past.",
+    "en": "“If I were you” introduces advice, so would + base form: I would check. No will, no Past."
    },
    "wrong": [
     {
@@ -4810,8 +4810,8 @@
   "pat": "cn.third",
   "why": {
    "ok": {
-    "de": "Richtig: had known ist vorbei → would have + 3. Form: would have delayed.",
-    "en": "Right: had known (over) → would have + participle: would have delayed."
+    "de": "„had known“ ist vorbei, die Folge auch: would have + 3. Form, also would have delayed. Es ist nicht mehr zu ändern.",
+    "en": "“Had known” is past and so is the result: would have + participle, so would have delayed. It can no longer be changed."
    },
    "wrong": [
     {
@@ -4837,8 +4837,8 @@
   "pat": "cn.if-words",
   "why": {
    "ok": {
-    "de": "Richtig: unless = „wenn nicht“ → Präsens ohne not: send.",
-    "en": "Right: unless = “if not” → present with no not: send."
+    "de": "„Unless“ heißt „wenn nicht“ und braucht das Present: send. Kein will, kein don't, die Verneinung steckt schon in unless.",
+    "en": "“Unless” means “if not” and takes the Present: send. No will, no don't, the negation is already in unless."
    },
    "wrong": [
     {
@@ -4891,8 +4891,8 @@
   "pat": "cn.third",
   "why": {
    "ok": {
-    "de": "Richtig: would have baked (vorbei) → im if-Teil Past Perfect: had known.",
-    "en": "Right: would have baked (over) → the if-clause takes the Past Perfect: had known."
+    "de": "„would have baked“ meint Vergangenes, das nicht geschah. Im if-Teil steht dann das Past Perfect: had known.",
+    "en": "“Would have baked” refers to something in the past that did not happen. The if-clause then takes the Past Perfect: had known."
    },
    "wrong": [
     {
@@ -4919,8 +4919,8 @@
   "pat": "cn.first",
   "why": {
    "ok": {
-    "de": "Richtig: reale Bedingung (today) → if + Präsens: sign. will steht im Hauptsatz.",
-    "en": "Right: real condition (today) → if + present: sign. will goes in the main clause."
+    "de": "„today“ und „we'll guarantee“: reale Bedingung. Im if-Teil steht das Present: If you sign. will nur im Hauptsatz.",
+    "en": "“Today” and “we'll guarantee”: a real condition. The if-clause takes the Present: If you sign. Will only in the main clause."
    },
    "wrong": [
     {
@@ -4959,8 +4959,8 @@
   "pat": "cn.second",
   "why": {
    "ok": {
-    "de": "Richtig: lowered = Annahme → Hauptsatz mit would + Grundform: would lose.",
-    "en": "Right: lowered = assumption → main clause with would + base form: would lose."
+    "de": "„lowered“ im if-Teil ist eine Annahme, also folgt would + Grundform: we would lose market share.",
+    "en": "“Lowered” in the if-clause is an assumption, so would + base form follows: we would lose market share."
    },
    "wrong": [
     {
@@ -4997,8 +4997,8 @@
   "pat": "cn.third",
   "why": {
    "ok": {
-    "de": "Richtig: at the time und last year → Past Perfect von have: had had.",
-    "en": "Right: at the time and last year → Past Perfect of have: had had."
+    "de": "„at the time“ und „last year“: vorbei. Im if-Teil Past Perfect von have, also had had (zweimal had).",
+    "en": "“At the time” and “last year”: over. The if-clause takes the Past Perfect of have, so had had (had twice)."
    },
    "wrong": [
     {
@@ -5037,8 +5037,8 @@
   "pat": "cn.zero",
   "why": {
    "ok": {
-    "de": "Richtig: Das ist eine feste Regel (automatically) → Präsens in beiden Teilen: registers.",
-    "en": "Right: fixed rule (automatically) → present in both parts: registers."
+    "de": "„automatically“ zeigt eine feste Regel: Present in beiden Teilen, if a customer registers → the system sends.",
+    "en": "“Automatically” shows a fixed rule: Present in both parts, if a customer registers → the system sends."
    },
    "wrong": [
     {
@@ -5077,8 +5077,8 @@
   "pat": "cn.second",
   "why": {
    "ok": {
-    "de": "Richtig: I'd be ist eine Annahme → if + Past, verneint didn't + Grundform: didn't spend.",
-    "en": "Right: I'd be = assumption → if + past, negative didn't + base form: didn't spend."
+    "de": "„I'd be“ ist eine Annahme: if + Past. Verneint heißt es didn't spend, nicht „wouldn't spend“.",
+    "en": "“I'd be” is an assumption: if + Past. Negated it is didn't spend, not “wouldn't spend”."
    },
    "wrong": [
     {
@@ -5159,8 +5159,8 @@
   "pat": "cn.if-words",
   "why": {
    "ok": {
-    "de": "Richtig: unless = „wenn nicht“ → Präsens ohne not: send.",
-    "en": "Right: unless = “if not” → present with no not: send."
+    "de": "„unless“ = „wenn nicht“ und steht mit dem Present: unless you send. Ein zusätzliches not wäre doppelt verneint.",
+    "en": "“Unless” = “if not” and goes with the Present: unless you send. An extra not would double the negation."
    },
    "wrong": [
     {
@@ -5191,8 +5191,8 @@
   "pat": "cn.second",
   "why": {
    "ok": {
-    "de": "Richtig: Annahme → if + Past (had). would steht nur im Hauptsatz.",
-    "en": "Right: assumption → if + past (had). would appears only in the main clause."
+    "de": "„would have“ steht hier im if-Teil: falsch. Eine Annahme braucht dort das Past: If we had more budget. would nur im Hauptsatz.",
+    "en": "“Would have” in the if-clause is wrong. An assumption needs the Past there: If we had more budget. Would only in the main clause."
    },
    "wrong": [
     {
@@ -5216,8 +5216,8 @@
   "pat": "cn.first",
   "why": {
    "ok": {
-    "de": "Richtig: mögliche Zukunft → if + Präsens (agrees). will steht nur im Hauptsatz.",
-    "en": "Right: possible future → if + present (agrees). will appears only in the main clause."
+    "de": "Mögliche Zukunft: if + Present (agrees), will nur im Hauptsatz. Deutsch „wenn er zustimmen wird“ verleitet zu will.",
+    "en": "Possible future: if + Present (agrees), will only in the main clause. German “wenn er zustimmen wird” tempts you into will."
    },
    "wrong": [
     {
@@ -5241,8 +5241,8 @@
   "pat": "cn.second",
   "why": {
    "ok": {
-    "de": "Richtig: Annahme → if + Past (had). would steht nur im Hauptsatz.",
-    "en": "Right: assumption → if + past (had). would appears only in the main clause."
+    "de": "Deutsch sagt „wenn ich mehr Geld haben würde“, Englisch nicht: If I had more money. would steht nur im Hauptsatz (I would buy).",
+    "en": "German says “wenn ich mehr Geld haben würde”, English does not: If I had more money. Would is only in the main clause (I would buy)."
    },
    "wrong": [
     {
@@ -5266,8 +5266,8 @@
   "pat": "cn.first",
   "why": {
    "ok": {
-    "de": "Richtig: mögliche Zukunft → if + Präsens (calls). will steht nur im Hauptsatz.",
-    "en": "Right: possible future → if + present (calls). will appears only in the main clause."
+    "de": "Trotz „tomorrow“ steht im if-Teil das Present: If she calls. will gehört in den Hauptsatz (I'll tell her).",
+    "en": "Despite “tomorrow” the if-clause takes the Present: If she calls. Will belongs in the main clause (I'll tell her)."
    },
    "wrong": [
     {
@@ -5291,8 +5291,8 @@
   "pat": "cn.third",
   "why": {
    "ok": {
-    "de": "Richtig: had left ist vorbei → would have + 3. Form: wouldn't have missed.",
-    "en": "Right: had left (over) → would have + participle: wouldn't have missed."
+    "de": "Nach would steht have + 3. Form: wouldn't have missed. „wouldn't missed“ lässt have weg, die Folge ist vorbei.",
+    "en": "After would comes have + participle: wouldn't have missed. “Wouldn't missed” leaves out have, the result is in the past."
    },
    "wrong": [
     {
@@ -6425,8 +6425,8 @@
   "pat": "fut.perfect",
   "why": {
    "ok": {
-    "de": "Richtig: by + Zeitpunkt = bis dahin ist es abgeschlossen → will have finished.",
-    "en": "Right: by + a point in time = completed by then → will have finished."
+    "de": "„By next June“ setzt eine Frist: Bis dahin ist der Kurs abgeschlossen, also will have finished.",
+    "en": "“By next June” sets a deadline: the course is completed by then, so will have finished."
    },
    "wrong": [
     {
@@ -6478,8 +6478,8 @@
   "pat": "fut.continuous",
   "why": {
    "ok": {
-    "de": "Richtig: „this time tomorrow“ = ich liege dann gerade dort → will be lying.",
-    "en": "Right: “this time tomorrow” = I'll be lying there at that moment → will be lying."
+    "de": "„This time tomorrow“ meint genau diesen Moment morgen: Ich liege dann gerade dort, also will be lying.",
+    "en": "“This time tomorrow” means exactly this moment tomorrow: I will be in the middle of lying there, so will be lying."
    },
    "wrong": [
     {
@@ -6506,8 +6506,8 @@
   "pat": "fut.continuous",
   "why": {
    "ok": {
-    "de": "Richtig: um 8 sind wir mitten im Essen → will be having.",
-    "en": "Right: at 8 we are in the middle of dinner → will be having."
+    "de": "Um 8 sind wir mittendrin im Essen („then“): will be having. will have nennt nur den Plan, nicht das Mittendrin-Sein.",
+    "en": "At 8 we are in the middle of dinner (“then”): will be having. Will have only states the plan, not being in the middle of it."
    },
    "wrong": [
     {
@@ -6532,8 +6532,8 @@
   "pat": "fut.perfect",
   "why": {
    "ok": {
-    "de": "Richtig: „by the end of …“ = bis dahin ist es geschafft → will have won.",
-    "en": "Right: “by the end of …” = achieved by then → will have won."
+    "de": "„By the end of this quarter“ ist eine Frist, „200 new customers“ ein Ergebnis: will have won.",
+    "en": "“By the end of this quarter” is a deadline and “200 new customers” a result: will have won."
    },
    "wrong": [
     {
@@ -6559,8 +6559,8 @@
   "pat": "fut.continuous",
   "why": {
    "ok": {
-    "de": "Richtig: um 15 Uhr bin ich mitten in der Präsentation → will be presenting.",
-    "en": "Right: at 3 p.m. I will be in the middle of it → will be presenting."
+    "de": "Um 15 Uhr morgen bin ich mitten in der Präsentation („don't call me“): will be presenting. will have presented wäre schon fertig.",
+    "en": "At 3 p.m. tomorrow I am in the middle of the presentation (“don't call me”): will be presenting. Will have presented would mean finished."
    },
    "wrong": [
     {
@@ -6586,8 +6586,8 @@
   "pat": "fut.perf-cont",
   "why": {
    "ok": {
-    "de": "Richtig: „for ten years“ = die Dauer bis dahin → will have been working.",
-    "en": "Right: “for ten years” = duration up to then → will have been working."
+    "de": "„for ten years“ nennt die Dauer bis zum Zeitpunkt in der Zukunft: will have been working.",
+    "en": "“For ten years” gives the duration up to a point in the future: will have been working."
    },
    "wrong": [
     {
@@ -6613,8 +6613,8 @@
   "pat": "fut.perfect",
   "why": {
    "ok": {
-    "de": "Richtig: „by the time you arrive“ → dann sind sie fertig → will have cleaned.",
-    "en": "Right: “by the time you arrive” → they will be done by then → will have cleaned."
+    "de": "„By the time you arrive“ ist die Frist: Dann sind sie fertig mit dem Putzen, also will have cleaned.",
+    "en": "“By the time you arrive” is the deadline: they will be done cleaning by then, so will have cleaned."
    },
    "wrong": [
     {
@@ -6666,8 +6666,8 @@
   "pat": "fut.perfect",
   "why": {
    "ok": {
-    "de": "Richtig: by next weekend + „all three seasons“ = es ist abgeschlossen → will have watched.",
-    "en": "Right: by next weekend + “all three seasons” = completed → will have watched."
+    "de": "„By next weekend“ ist eine Frist, „all three seasons“ ein Ergebnis: will have watched. Aktiv, kein Passiv.",
+    "en": "“By next weekend” is a deadline and “all three seasons” a result: will have watched. Active, not passive."
    },
    "wrong": [
     {
@@ -6692,8 +6692,8 @@
   "pat": "fut.perfect",
   "why": {
    "ok": {
-    "de": "Richtig: „By Friday“ = bis dahin ist es erledigt → will have fixed.",
-    "en": "Right: “By Friday” = done by then → will have fixed."
+    "de": "„By Friday“ ist eine Frist: Bis dahin ist der Fehler behoben, also will have fixed (will + have + 3. Form).",
+    "en": "“By Friday” is a deadline: the bug is fixed by then, so will have fixed (will + have + past participle)."
    },
    "wrong": [
     {
@@ -6736,8 +6736,8 @@
   "pat": "fut.continuous",
   "why": {
    "ok": {
-    "de": "Richtig: um 10 Uhr bin ich mittendrin im Flug → will be sitting.",
-    "en": "Right: at 10 a.m. I will be in the middle of the flight → will be sitting."
+    "de": "Um 10 Uhr bin ich mitten im Flug und kann nicht telefonieren: will be sitting. Es läuft dann gerade.",
+    "en": "At 10 I will be in the middle of the flight and cannot take calls: will be sitting. It is in progress then."
    },
    "wrong": [
     {
@@ -6777,8 +6777,8 @@
   "pat": "fut.perf-cont",
   "why": {
    "ok": {
-    "de": "Richtig: Dauer bis zu einem Zeitpunkt (12 years) → will have been working.",
-    "en": "Right: duration up to a point in time (12 years) → will have been working."
+    "de": "„for exactly 12 years“ nennt die Dauer bis Jahresende: will have been working (will have worked geht auch).",
+    "en": "“For exactly 12 years” gives the duration up to year-end: will have been working (will have worked is also possible)."
    },
    "wrong": [
     {
@@ -6829,8 +6829,8 @@
   "pat": "fut.perfect",
   "why": {
    "ok": {
-    "de": "Richtig: bis dahin ist es abgeschlossen → will have gone (go – went – gone).",
-    "en": "Right: completed by then → will have gone (go – went – gone)."
+    "de": "„By the time you read this“ ist die Frist: Bis dahin ist das Update live, also will have gone (go – went – gone).",
+    "en": "“By the time you read this” is the deadline: the update is live by then, so will have gone (go – went – gone)."
    },
    "wrong": [
     {
@@ -6909,8 +6909,8 @@
   "pat": "fut.perfect",
   "why": {
    "ok": {
-    "de": "Richtig: „By 4 o'clock“ = bis dahin ist es fertig → will have finished.",
-    "en": "Right: “By 4 o'clock” = done by then → will have finished."
+    "de": "„By 4 o'clock“ ist eine Frist: Bis dahin ist der Bericht fertig, also will have finished.",
+    "en": "“By 4 o'clock” is a deadline: the report is finished by then, so will have finished."
    },
    "wrong": [
     {
@@ -6953,8 +6953,8 @@
   "pat": "fut.continuous",
   "why": {
    "ok": {
-    "de": "Richtig: um 15 Uhr bin ich mitten in der Reise → will be flying.",
-    "en": "Right: at 3 p.m. I will be on my way → will be flying."
+    "de": "Um 15 Uhr sitze ich mitten im Flug: will be flying. Es läuft dann gerade, daher keine Vollendung (will have flown).",
+    "en": "At 3 p.m. I am in the middle of the flight: will be flying. It is in progress then, so no completion (will have flown)."
    },
    "wrong": [
     {
@@ -6993,8 +6993,8 @@
   "pat": "fut.perf-cont",
   "why": {
    "ok": {
-    "de": "Richtig: „By next year“ + eine Zeitspanne → will have worked / will have been working.",
-    "en": "Right: “By next year” + a span of time → will have worked / will have been working."
+    "de": "„By next year“ + „for ten years“: Dauer bis dahin, also will have worked oder will have been working, nicht will work.",
+    "en": "“By next year” + “for ten years”: duration up to then, so will have worked or will have been working, not will work."
    },
    "wrong": [
     {
@@ -8527,8 +8527,8 @@
   "pat": "mc.wish-now",
   "why": {
    "ok": {
-    "de": "wish + Fähigkeit jetzt: can wird zu could.",
-    "en": "wish + ability now: can becomes could."
+    "de": "Ein Wunsch über eine Fähigkeit jetzt: wish + could. „wish I can“ gibt es nicht, will und would passen nicht zu Fähigkeit.",
+    "en": "A wish about an ability now: wish + could. “Wish I can” does not exist, will and would do not fit an ability."
    },
    "wrong": [
     {
@@ -8554,8 +8554,8 @@
   "pat": "mc.wish-past",
   "why": {
    "ok": {
-    "de": "yesterday ist vorbei: Bedauern → wish + had + 3. Form.",
-    "en": "yesterday is over: regret → wish + had + participle."
+    "de": "„yesterday“ ist vorbei, ich bedauere es: wish + had + 3. Form, also had not said. Das Past würde jetzt meinen.",
+    "en": "“Yesterday” is over and I regret it: wish + had + participle, so had not said. The Past would mean now."
    },
    "wrong": [
     {
@@ -8591,8 +8591,8 @@
   "pat": "mc.past-cond",
   "why": {
    "ok": {
-    "de": "had taken (früher) + now: Folge jetzt → would + Grundform.",
-    "en": "had taken (earlier) + now → would + base form."
+    "de": "„had taken“ (früher) und „now“: Die Folge gilt jetzt, also would + Grundform: would live. Gemischter Konditionalsatz.",
+    "en": "“Had taken” (earlier) and “now”: the result applies now, so would + base form: would live. A mixed conditional."
    },
    "wrong": [
     {
@@ -8643,8 +8643,8 @@
   "pat": "mc.wish-past",
   "why": {
    "ok": {
-    "de": "last week + Bedauern → für früher: wish + had + 3. Form (had sent).",
-    "en": "last week + regret → wish + had + participle: had sent."
+    "de": "„last week“ ist vorbei, ich bedauere es: wish + had + 3. Form, also had sent. sent allein wäre ein Wunsch für jetzt.",
+    "en": "“Last week” is over and I regret it: wish + had + participle, so had sent. Sent alone would be a wish about now."
    },
    "wrong": [
     {
@@ -8671,8 +8671,8 @@
   "pat": "mc.wish-would",
   "why": {
    "ok": {
-    "de": "You keep interrupting: Ärger über Verhalten, das enden soll → would stop.",
-    "en": "You keep interrupting: annoyance at behavior that should end → would stop."
+    "de": "„You keep interrupting“ ist wiederholtes Verhalten, das enden soll: wish + would stop. had stopped bedauert nur Vergangenes.",
+    "en": "“You keep interrupting” is repeated behavior that should end: wish + would stop. Had stopped only regrets the past."
    },
    "wrong": [
     {
@@ -8724,8 +8724,8 @@
   "pat": "mc.past-cond",
   "why": {
    "ok": {
-    "de": "hadn't accepted (früher) + today: die Folge gilt jetzt → would + Grundform.",
-    "en": "hadn't accepted (earlier) + today: result now → would + base form."
+    "de": "„hadn't accepted“ (früher) und „today“: Die Folge gilt heute, also would + Grundform: would work.",
+    "en": "“Hadn't accepted” (earlier) and “today”: the result applies today, so would + base form: would work."
    },
    "wrong": [
     {
@@ -8778,8 +8778,8 @@
   "pat": "mc.wish-past",
   "why": {
    "ok": {
-    "de": "If only + earlier: Bedauern für früher → had + 3. Form.",
-    "en": "If only + earlier: regret about the past → had + participle."
+    "de": "„If only“ + „earlier“: Bedauern über früher, also had read (Past Perfect). Ein Past wäre ein Wunsch für jetzt.",
+    "en": "“If only” + “earlier”: regret about the past, so had read (Past Perfect). A Past would be a wish about now."
    },
    "wrong": [
     {
@@ -8805,8 +8805,8 @@
   "pat": "mc.wish-now",
   "why": {
    "ok": {
-    "de": "wish + can → could: ein Wunsch über jetzt, eine Fähigkeit.",
-    "en": "wish + can → could: a wish about now, an ability."
+    "de": "Ein Wunsch für jetzt über eine Fähigkeit: wish + could, nicht can. „would love it“ zeigt, dass es nicht so ist.",
+    "en": "A wish about now concerning an ability: wish + could, not can. “Would love it” shows it is not the case."
    },
    "wrong": [
     {
@@ -8873,8 +8873,8 @@
   "pat": "mc.past-cond",
   "why": {
    "ok": {
-    "de": "hadn't left (früher) + by now: die Folge jetzt → would be.",
-    "en": "hadn't left (earlier) + by now: result now → would be."
+    "de": "„hadn't left last month“ (früher) und „by now“: Die Folge gilt jetzt, also would be. would have been wäre die Vergangenheit.",
+    "en": "“Hadn't left last month” (earlier) and “by now”: the result applies now, so would be. Would have been would be the past."
    },
    "wrong": [
     {
@@ -8908,8 +8908,8 @@
   "pat": "mc.wish-now",
   "why": {
    "ok": {
-    "de": "today + I hate winter: ein Wunsch für jetzt → wish + Past (weren't).",
-    "en": "today + I hate winter: wish about now → wish + past (weren't)."
+    "de": "„today“ und „I hate winter“: Wunsch über jetzt, also wish + Past: weren't. Nach wish steht were auch bei „it“.",
+    "en": "“Today” and “I hate winter”: a wish about now, so wish + Past: weren't. After wish were is used even with “it”."
    },
    "wrong": [
     {
@@ -8942,8 +8942,8 @@
   "pat": "mc.wish-past",
   "why": {
    "ok": {
-    "de": "regret + didn't ask (früher) → für früher: wish + had + 3. Form (had asked).",
-    "en": "regret + didn't ask (earlier) → wish + had + participle: had asked."
+    "de": "„regret“ + „didn't ask“ (früher): Bedauern über Vergangenes, also wish + had asked. Das Past asked wäre ein Wunsch für jetzt.",
+    "en": "“Regret” + “didn't ask” (earlier): regret about the past, so wish + had asked. The Past asked would be a wish about now."
    },
    "wrong": [
     {
@@ -9018,8 +9018,8 @@
   "pat": "mc.wish-now",
   "why": {
    "ok": {
-    "de": "Wunsch über jetzt: wish + Past (had), nicht would have.",
-    "en": "wish about now: wish + past (had), not would have."
+    "de": "Ein Wunsch für jetzt braucht wish + Past: I wish I had more time. „would have“ gibt es nach wish nicht (anders als im Deutschen).",
+    "en": "A wish about now takes wish + Past: I wish I had more time. “Would have” is not used after wish (unlike German “würde haben”)."
    },
    "wrong": [
     {
@@ -9047,8 +9047,8 @@
   "pat": "mc.past-cond",
   "why": {
    "ok": {
-    "de": "had studied (früher), would have (jetzt): Folge gilt jetzt.",
-    "en": "had studied (earlier), would have (now): result now."
+    "de": "Früher: If I had studied harder. Jetzt: would have a better job (would + Grundform). would have studied im if-Teil ist falsch.",
+    "en": "Earlier: If I had studied harder. Now: would have a better job. “Would have studied” in the if-clause is wrong."
    },
    "wrong": [
     {
@@ -9076,8 +9076,8 @@
   "dup": "mixed-cond|ifiwouldhavestudiedharderatuniversityiwouldhaveabetterjobnow",
   "why": {
    "ok": {
-    "de": "had studied (früher), would have (jetzt): Folge gilt jetzt.",
-    "en": "had studied (earlier), would have (now): result now."
+    "de": "„now“ zeigt die Folge für heute: would have a better job. Der Grund liegt früher, im if-Teil also had studied, nicht would have studied.",
+    "en": "“Now” shows the result today: would have a better job. The cause lies earlier, so the if-clause is had studied, not would have studied."
    },
    "wrong": [
     {
@@ -9104,8 +9104,8 @@
   "pat": "mc.wish-now",
   "why": {
    "ok": {
-    "de": "Wunsch über jetzt: wish + Past (had), nicht das Präsens.",
-    "en": "wish about now: wish + past (had), not the present."
+    "de": "Ein Wunsch über jetzt braucht wish + Past: I wish I had more free time. Deutsch „ich wünschte, ich habe“ verleitet zum Präsens.",
+    "en": "A wish about now takes wish + Past: I wish I had more free time. German “ich wünschte, ich habe” tempts you into the Present."
    },
    "wrong": [
     {
@@ -10330,8 +10330,8 @@
   "pat": "pv.simple",
   "why": {
    "ok": {
-    "de": "Richtig: „in 1890“ ist abgeschlossen → Passiv Past Simple: was built.",
-    "en": "Right: “in 1890” is finished → past simple passive: was built."
+    "de": "„in 1890“ ist ein genanntes Jahr, die Brücke wurde gebaut: Passiv Past Simple, was built. Die Brücke baut nicht selbst.",
+    "en": "“In 1890” is a stated year and the bridge was built: Passive Past Simple, was built. The bridge did not build itself."
    },
    "wrong": [
     {
@@ -10373,8 +10373,8 @@
   "pat": "pv.progressive",
   "why": {
    "ok": {
-    "de": "Richtig: they are repairing, das läuft gerade → the road is being repaired.",
-    "en": "Right: they are repairing (in progress) → the road is being repaired."
+    "de": "„they are repairing“ läuft gerade: Im Passiv wird daraus the road is being repaired (are repairing → is being repaired).",
+    "en": "“They are repairing” is in progress: in the passive it becomes the road is being repaired (are repairing → is being repaired)."
    },
    "wrong": [
     {
@@ -10471,8 +10471,8 @@
   "pat": "pv.simple",
   "why": {
    "ok": {
-    "de": "Richtig: „every Friday“ ist eine Gewohnheit → Passiv Present Simple: are processed.",
-    "en": "Right: “every Friday” = habit → present simple passive: are processed."
+    "de": "„every Friday“ nennt eine Gewohnheit, die Rechnungen werden bearbeitet: Passiv Present Simple, are processed.",
+    "en": "“Every Friday” names a habit and the invoices are processed: Passive Present Simple, are processed."
    },
    "wrong": [
     {
@@ -10497,8 +10497,8 @@
   "pat": "pv.simple",
   "why": {
    "ok": {
-    "de": "Richtig: Mit mir wurde etwas getan, niemand hat mich informiert → wasn't informed.",
-    "en": "Right: something was done to me, nobody informed me → wasn't informed."
+    "de": "Mit mir wurde etwas getan: Niemand hat mich informiert. Past Simple Passiv: wasn't informed, kein aktives informing.",
+    "en": "Something was done to me: nobody informed me. Past Simple passive: wasn't informed, not an active informing."
    },
    "wrong": [
     {
@@ -10523,8 +10523,8 @@
   "pat": "pv.progressive",
   "why": {
    "ok": {
-    "de": "Richtig: „at the moment“ heißt: Das läuft gerade → is being maintained.",
-    "en": "Right: “at the moment” = in progress → is being maintained."
+    "de": "„at the moment“ heißt: Die Wartung läuft gerade, also Passiv Continuous: is being maintained. is maintained wäre allgemein.",
+    "en": "“At the moment” means the maintenance is in progress, so Passive Continuous: is being maintained. Is maintained would be general."
    },
    "wrong": [
     {
@@ -10550,8 +10550,8 @@
   "pat": "pv.simple",
   "why": {
    "ok": {
-    "de": "Richtig: Sie bekommt die Beförderung, „by the board“ ist der Handelnde → was offered.",
-    "en": "Right: she receives the promotion, “by the board” is the agent → was offered."
+    "de": "Sie bekam die Beförderung, „by the board“ nennt den Handelnden, „last month“ ist vorbei: was offered (Passiv Past Simple).",
+    "en": "She received the promotion, “by the board” names the doer, “last month” is over: was offered (Passive Past Simple)."
    },
    "wrong": [
     {
@@ -10576,8 +10576,8 @@
   "pat": "pv.perfect",
   "why": {
    "ok": {
-    "de": "Richtig: „since 1985“ reicht bis in die Gegenwart → Passiv Present Perfect: has been owned.",
-    "en": "Right: “since 1985” reaches until today → present perfect passive: has been owned."
+    "de": "„since 1985“ reicht bis heute: Passiv Present Perfect, has been owned. Present Simple allein passt nicht zu since.",
+    "en": "“Since 1985” runs up to today: Passive Present Perfect, has been owned. Present Simple alone does not fit since."
    },
    "wrong": [
     {
@@ -10603,8 +10603,8 @@
   "pat": "pv.simple",
   "why": {
    "ok": {
-    "de": "Richtig: „yesterday“ ist abgeschlossen → Passiv Past Simple: was sent (send – sent – sent).",
-    "en": "Right: “yesterday” is finished → past simple passive: was sent (send – sent – sent)."
+    "de": "„yesterday“ ist vorbei, der Bericht wurde gesendet: Passiv Past Simple, was sent (send – sent – sent).",
+    "en": "“Yesterday” is over and the report was sent: Passive Past Simple, was sent (send – sent – sent)."
    },
    "wrong": [
     {
@@ -10646,8 +10646,8 @@
   "pat": "pv.simple",
   "why": {
    "ok": {
-    "de": "Richtig: Plural und „last month“ → Passiv Past Simple: were affected.",
-    "en": "Right: plural and “last month” → past simple passive: were affected."
+    "de": "„Over 200 customers“ ist Plural, „last month“ vorbei: Passiv Past Simple, were affected (nicht was).",
+    "en": "“Over 200 customers” is plural and “last month” is over: Passive Past Simple, were affected (not was)."
    },
    "wrong": [
     {
@@ -10731,8 +10731,8 @@
   "pat": "pv.perfect",
   "why": {
    "ok": {
-    "de": "Richtig: Die Änderungen müssen bis dahin fertig sein → have been made.",
-    "en": "Right: the changes must be finished by then → have been made."
+    "de": "Nach „until“ steht das Present, und die Änderungen müssen vorher fertig sein: have been made (Passiv Present Perfect).",
+    "en": "After “until” the Present is used, and the changes must be done before: have been made (Passive Present Perfect)."
    },
    "wrong": [
     {
@@ -10774,8 +10774,8 @@
   "pat": "pv.progressive",
   "why": {
    "ok": {
-    "de": "Richtig: „right now“ = das läuft gerade → are being cleaned.",
-    "en": "Right: “right now” = in progress → are being cleaned."
+    "de": "„Look!“ und „right now“: Der Vorgang läuft gerade, also Passiv Continuous: are being cleaned. Fenster putzen sich nicht selbst.",
+    "en": "“Look!” and “right now”: the process is happening now, so Passive Continuous: are being cleaned. Windows do not clean themselves."
    },
    "wrong": [
     {
@@ -10861,8 +10861,8 @@
   "pat": "pv.modal-future",
   "why": {
    "ok": {
-    "de": "Richtig: Der Vertrag soll noch aktualisiert werden → must be updated.",
-    "en": "Right: the contract still has to be updated → must be updated."
+    "de": "Der Handelnde (someone) entfällt, der Vertrag rückt nach vorn: must + be + 3. Form, also must be updated.",
+    "en": "The doer (someone) drops out and the contract moves to the front: must + be + participle, so must be updated."
    },
    "wrong": [
     {
@@ -10903,8 +10903,8 @@
   "pat": "pv.progressive",
   "why": {
    "ok": {
-    "de": "Richtig: Der Bericht schreibt nicht selbst, er wird geschrieben → is being written.",
-    "en": "Right: the report does not write, it gets written → is being written."
+    "de": "Der Bericht schreibt nicht selbst, er wird geschrieben („by our analyst“, „right now“): is being written.",
+    "en": "The report does not write itself, it is being written (“by our analyst”, “right now”): is being written."
    },
    "wrong": [
     {
@@ -11142,8 +11142,8 @@
   "pat": "pp.modal",
   "why": {
    "ok": {
-    "de": "Richtig: has to + be + Partizip. Der Vertrag wird unterschrieben.",
-    "en": "Right: has to + be + participle. The contract gets signed."
+    "de": "Nach has to im Passiv steht be + 3. Form: has to be signed. Der Vertrag wird unterschrieben, er unterschreibt nicht.",
+    "en": "After has to in the passive comes be + participle: has to be signed. The contract gets signed, it does not sign."
    },
    "wrong": [
     {
@@ -11232,8 +11232,8 @@
   "pat": "pp.being",
   "why": {
    "ok": {
-    "de": "Richtig: hate + being + Partizip. Der Sprecher wird unterbrochen.",
-    "en": "Right: hate + being + participle. The speaker is the one being interrupted."
+    "de": "„hate being interrupted“: Nach hate steht -ing, im Passiv being + 3. Form. Ich werde unterbrochen, ich unterbreche nicht.",
+    "en": "“Hate being interrupted”: after hate comes -ing, and in the passive being + participle. I am the one interrupted."
    },
    "wrong": [
     {
@@ -11346,8 +11346,8 @@
   "pat": "pp.modal",
   "why": {
    "ok": {
-    "de": "Richtig: be + Partizip. Das Partizip von send heißt sent.",
-    "en": "Right: be + participle. The participle of send is sent."
+    "de": "Nach be steht das Partizip: sent, nicht send. Das Partizip von send ist unregelmäßig (send – sent – sent).",
+    "en": "After be comes the participle: sent, not send. The participle of send is irregular (send – sent – sent)."
    },
    "wrong": [
     {
@@ -11457,8 +11457,8 @@
   "pat": "pp.earlier",
   "why": {
    "ok": {
-    "de": "Richtig: Der Beginn lag vor unserer Ankunft → had already started.",
-    "en": "Right: the start came before we arrived → had already started."
+    "de": "Der Film begann vor unserer Ankunft, also das Frühere von zwei Ereignissen: had already started.",
+    "en": "The film began before we arrived, so it is the earlier of two events: had already started."
    },
    "wrong": [
     {
@@ -11498,8 +11498,8 @@
   "pat": "pp.duration",
   "why": {
    "ok": {
-    "de": "Richtig: Dauer bis zum Zeitpunkt „erschöpft“ in der Vergangenheit → had been working.",
-    "en": "Right: duration up to the past moment “exhausted” → had been working."
+    "de": "„for hours“ nennt die Dauer vor „was exhausted“: had been working. Die Ursache liegt vor dem Zustand.",
+    "en": "“For hours” gives the duration before “was exhausted”: had been working. The cause lies before the state."
    },
    "wrong": [
     {
@@ -11547,8 +11547,8 @@
   "pat": "pp.earlier",
   "why": {
    "ok": {
-    "de": "Richtig: Der Kunde war schon gegangen, bevor ich einstieg → had already left.",
-    "en": "Right: the client had gone before I joined → had already left."
+    "de": "„By the time I joined“ + Vergangenheit: Der Kunde war vorher gegangen, also had already left.",
+    "en": "“By the time I joined” + past: the client had left before that, so had already left."
    },
    "wrong": [
     {
@@ -11573,8 +11573,8 @@
   "pat": "pp.duration",
   "why": {
    "ok": {
-    "de": "Richtig: Die Verhandlung dauerte Monate bis zur Unterschrift → had been negotiating.",
-    "en": "Right: the negotiation lasted months up to the signing → had been negotiating."
+    "de": "„for months“ nennt die Dauer vor der Unterschrift in der Vergangenheit: had been negotiating, nicht have been.",
+    "en": "“For months” gives the duration before the signing in the past: had been negotiating, not have been."
    },
    "wrong": [
     {
@@ -11599,8 +11599,8 @@
   "pat": "pp.first-time",
   "why": {
    "ok": {
-    "de": "Richtig: Die Erfahrung liegt vor dem Zeitpunkt in der Vergangenheit → had handled.",
-    "en": "Right: the experience lies before the past moment → had handled."
+    "de": "„It was the first time“ steht in der Vergangenheit, die Erfahrung liegt davor: had handled (im Präsens wäre has handled).",
+    "en": "“It was the first time” is in the past and the experience lies before it: had handled (in the present it would be has handled)."
    },
    "wrong": [
     {
@@ -11651,8 +11651,8 @@
   "pat": "pp.duration",
   "why": {
    "ok": {
-    "de": "Richtig: Dauer „since 5 a.m.“ bis zum Anruf in der Vergangenheit → had been working.",
-    "en": "Right: duration “since 5 a.m.” up to the past call → had been working."
+    "de": "„since 5 a.m.“ bis zum Anruf um Mittag: Dauer vor einem Zeitpunkt in der Vergangenheit, had been working.",
+    "en": "“Since 5 a.m.” up to the noon call: duration before a point in the past, had been working."
    },
    "wrong": [
     {
@@ -11677,8 +11677,8 @@
   "pat": "pp.earlier",
   "why": {
    "ok": {
-    "de": "Richtig: „the month before“ zeigt: Der Umzug lag vor dem Gefühl → had moved.",
-    "en": "Right: “the month before” shows the move came before the feeling → had moved."
+    "de": "„the month before“ legt den Umzug vor das Gefühl: Das Frühere steht im Past Perfect, had moved.",
+    "en": "“The month before” places the move before the feeling: the earlier event takes the Past Perfect, had moved."
    },
    "wrong": [
     {
@@ -11703,8 +11703,8 @@
   "pat": "pp.earlier",
   "why": {
    "ok": {
-    "de": "Richtig: Das Beheben kam vor dem Rückruf → had fixed (by the time + Vergangenheit).",
-    "en": "Right: the fixing came before the callback → had fixed (by the time + past)."
+    "de": "„By the time“ + Vergangenheit: Ich hatte das Problem schon vor dem Rückruf behoben: had fixed.",
+    "en": "“By the time” + past: I had already fixed the problem before the callback: had fixed."
    },
    "wrong": [
     {
@@ -11743,8 +11743,8 @@
   "pat": "pp.duration",
   "why": {
    "ok": {
-    "de": "Richtig: „for an hour“ nennt die Dauer vor der Ankunft → had been discussing.",
-    "en": "Right: “for an hour” gives the duration before the arrival → had been discussing."
+    "de": "„for an hour“ nennt die Dauer vor der Ankunft: had been discussing (had discussed geht auch, betont das Ergebnis).",
+    "en": "“For an hour” gives the duration before the arrival: had been discussing (had discussed also works but stresses the result)."
    },
    "wrong": [
     {
@@ -11825,8 +11825,8 @@
   "pat": "pp.earlier",
   "why": {
    "ok": {
-    "de": "Richtig: Das Kochen war vor meiner Heimkehr fertig → had cooked.",
-    "en": "Right: the cooking was done before I got home → had cooked."
+    "de": "„already“ zeigt: Das Kochen war vor meiner Heimkehr fertig. Das Frühere braucht had cooked.",
+    "en": "“Already” shows the cooking was done before I got home. The earlier event needs had cooked."
    },
    "wrong": [
     {
@@ -11866,8 +11866,8 @@
   "pat": "pp.earlier",
   "why": {
    "ok": {
-    "de": "Richtig: Sie waren schon weg, bevor das Update fertig war → had gone.",
-    "en": "Right: they had left before the update finished → had gone."
+    "de": "„By the time“ + Vergangenheit: Sie waren schon weg, bevor das Update fertig war, also had gone.",
+    "en": "“By the time” + past: they had already left before the update finished, so had gone."
    },
    "wrong": [
     {
@@ -11908,8 +11908,8 @@
   "pat": "pp.earlier",
   "why": {
    "ok": {
-    "de": "Richtig: Das Senden lag vor dem Anruf → had already sent.",
-    "en": "Right: the sending came before the call → had already sent."
+    "de": "Montag lag vor dem Anruf am Dienstag: Das Frühere der beiden Ereignisse steht im Past Perfect, had already sent.",
+    "en": "Monday came before Tuesday's call: the earlier of the two events takes the Past Perfect, had already sent."
    },
    "wrong": [
     {
@@ -11950,8 +11950,8 @@
   "pat": "pp.duration",
   "why": {
    "ok": {
-    "de": "Richtig: „for two hours“ nennt die Dauer bis zum Anruf → had been working.",
-    "en": "Right: “for two hours” gives the duration up to the call → had been working."
+    "de": "„for two hours“ nennt die Dauer bis zum Anruf (Vergangenheit): had been working, nicht was working.",
+    "en": "“For two hours” gives the duration up to the call (past): had been working, not was working."
    },
    "wrong": [
     {
@@ -11994,8 +11994,8 @@
   "pat": "pp.earlier",
   "why": {
    "ok": {
-    "de": "Richtig: Der Beginn lag vor meiner Ankunft → had already started.",
-    "en": "Right: their start came before my arrival → had already started."
+    "de": "Sie hatten schon begonnen, bevor ich ankam. Das Frühere braucht had started, nicht started.",
+    "en": "They had already begun before I arrived. The earlier event needs had started, not started."
    },
    "wrong": [
     {
@@ -12036,8 +12036,8 @@
   "pat": "pp.reported",
   "why": {
    "ok": {
-    "de": "Richtig: Nach „told“ rutscht will eine Stufe zurück → would call.",
-    "en": "Right: after “told”, will moves one step back → would call."
+    "de": "Nach „told“ (Vergangenheit) rutscht will zu would zurück: he would call. „the next day“ bestätigt die indirekte Rede.",
+    "en": "After “told” (past) will shifts back to would: he would call. “The next day” confirms reported speech."
    },
    "wrong": [
     {
@@ -12066,8 +12066,8 @@
   "pat": "pp.earlier",
   "why": {
    "ok": {
-    "de": "Richtig: In der Vergangenheit heißt es had, nie have → had already started.",
-    "en": "Right: in a past story it is had, never have → had already started."
+    "de": "In der Vergangenheit heißt das Hilfsverb had, nicht have: the film had already started.",
+    "en": "In the past the auxiliary is had, not have: the film had already started."
    },
    "wrong": [
     {
@@ -17383,8 +17383,8 @@
   "pat": "rs.backshift",
   "why": {
    "ok": {
-    "de": "Richtig: Nach said rückt die Zeit zurück: am → was, denn das Sagen liegt zurück.",
-    "en": "Right: after said the tense moves back: am → was, because the speaking is in the past."
+    "de": "Nach „said“ (Vergangenheit) rückt am zu was zurück, und „I“ wird zu she: She said that she was tired.",
+    "en": "After “said” (past) am moves back to was, and “I” becomes she: She said that she was tired."
    },
    "wrong": [
     {
@@ -17442,8 +17442,8 @@
   "pat": "rs.backshift",
   "why": {
    "ok": {
-    "de": "Richtig: will → would, weil das Sagen zurückliegt: he would call me.",
-    "en": "Right: will → would, because the speaking is in the past: he would call me."
+    "de": "„will call“ rückt nach „said“ eine Stufe zurück: He said he would call me. Aus „you“ wird me (Person wechselt).",
+    "en": "“Will call” shifts back a step after “said”: He said he would call me. “You” becomes me (the person changes)."
    },
    "wrong": [
     {
@@ -17520,8 +17520,8 @@
   "pat": "rs.time-shift",
   "why": {
    "ok": {
-    "de": "Richtig: tomorrow → the following day. Gezählt wird vom Sagen aus.",
-    "en": "Right: tomorrow → the following day. Counting starts from the speaking."
+    "de": "Der Bezugspunkt ist das Sagen in der Vergangenheit: Aus „tomorrow“ wird the following day. tomorrow bliebe in der Rede hängen.",
+    "en": "The reference point is the saying in the past: “tomorrow” becomes the following day. Tomorrow would stay stuck in the speech."
    },
    "wrong": [
     {
@@ -17625,8 +17625,8 @@
   "pat": "rs.backshift",
   "why": {
    "ok": {
-    "de": "Richtig: haven't received → hadn't received. Der Versand lag vor dem Sagen.",
-    "en": "Right: haven't received → hadn't received. The sending came before the speaking."
+    "de": "„haven't received“ wird nach „said“ zu hadn't received. Der Versand lag vor dem Sagen, deshalb Past Perfect.",
+    "en": "“Haven't received” becomes hadn't received after “said”. The sending happened before the saying, hence Past Perfect."
    },
    "wrong": [
     {
@@ -17658,8 +17658,8 @@
   "pat": "rs.question",
   "why": {
    "ok": {
-    "de": "Richtig: where the meeting room was: normale Wortstellung und Rückschritt is → was.",
-    "en": "Right: where the meeting room was: normal word order, backshift is → was."
+    "de": "In der indirekten Frage steht normale Satzstellung und eine Zeit zurück: where the meeting room was (nicht is, nicht was it).",
+    "en": "In an indirect question normal word order and one tense back are used: where the meeting room was (not is, not was it)."
    },
    "wrong": [
     {
@@ -17752,8 +17752,8 @@
   "pat": "rs.backshift",
   "why": {
    "ok": {
-    "de": "Richtig: can't → couldn't, denn das Sagen liegt zurück.",
-    "en": "Right: can't → couldn't, because the speaking is in the past."
+    "de": "„can't“ rückt in indirekter Rede nach der Vergangenheit („said“) zu couldn't zurück: She said she couldn't come.",
+    "en": "In reported speech after a past verb (“said”) “can't” moves back to couldn't: She said she couldn't come."
    },
    "wrong": [
     {
@@ -17777,8 +17777,8 @@
   "pat": "rs.backshift",
   "why": {
    "ok": {
-    "de": "Richtig: will → would. Auch the next day gehört dazu (tomorrow wurde verschoben).",
-    "en": "Right: will → would. the next day goes with it (tomorrow shifted)."
+    "de": "„I'll send“ wird zu would send. „tomorrow“ rückt zu the next day, weil das Sagen vergangen ist.",
+    "en": "“I'll send” becomes would send. “Tomorrow” shifts to the next day because the saying is in the past."
    },
    "wrong": [
     {
@@ -17861,8 +17861,8 @@
   "pat": "rs.question",
   "why": {
    "ok": {
-    "de": "Richtig: where I worked: Subjekt vor Verb, kein did.",
-    "en": "Right: where I worked: subject before verb, no did."
+    "de": "Indirekte Frage: normale Satzstellung, kein did: where I worked. Deutsch „wo ich arbeitete“ hat auch keine Umstellung.",
+    "en": "Indirect question: normal word order, no did: where I worked. German “wo ich arbeitete” also has no inversion."
    },
    "wrong": [
     {
@@ -17886,8 +17886,8 @@
   "pat": "rs.backshift",
   "why": {
    "ok": {
-    "de": "Richtig: would + Grundform: would finish, ohne -ed.",
-    "en": "Right: would + base form: would finish, with no -ed."
+    "de": "Nach would steht die Grundform: would finish, nie finished. Das -ed gehört nur zur Past-Form, nicht nach would.",
+    "en": "After would comes the base form: would finish, never finished. The -ed belongs only to the past form, not after would."
    },
    "wrong": [
     {
@@ -18850,8 +18850,8 @@
   "pat": "ut.used-to",
   "why": {
    "ok": {
-    "de": "Richtig: früherer Zustand (be) → used to. Heute sind es 25, also vorbei.",
-    "en": "Right: a past state (be) → used to. Today it is 25, so that is over."
+    "de": "Richtig: used to be. „be“ ist ein Zustand, früher so, heute nicht mehr (25 Personen). would geht hier nicht.",
+    "en": "Right: used to be. “Be” is a state, true earlier but no longer (25 people). Would does not work here."
    },
    "wrong": [
     {
@@ -18916,8 +18916,8 @@
   "pat": "ut.used-to",
   "why": {
    "ok": {
-    "de": "Richtig: früher regelmäßig, heute nicht mehr: used to + travel.",
-    "en": "Right: regular before, not now: used to + travel."
+    "de": "„In the past … but I don't anymore“ = früher regelmäßig, heute nicht mehr: used to travel. Danach Grundform.",
+    "en": "“In the past … but I don't anymore” = regular earlier, not now: used to travel. Base form follows."
    },
    "wrong": [
     {

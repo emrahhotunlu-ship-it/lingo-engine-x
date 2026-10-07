@@ -3,8 +3,8 @@
   "pat": "rs.backshift",
   "why": {
    "ok": {
-    "de": "Richtig: Nach said rückt die Zeit zurück: am → was, denn das Sagen liegt zurück.",
-    "en": "Right: after said the tense moves back: am → was, because the speaking is in the past."
+    "de": "Nach „said“ (Vergangenheit) rückt am zu was zurück, und „I“ wird zu she: She said that she was tired.",
+    "en": "After “said” (past) am moves back to was, and “I” becomes she: She said that she was tired."
    },
    "wrong": [
     {
@@ -62,8 +62,8 @@
   "pat": "rs.backshift",
   "why": {
    "ok": {
-    "de": "Richtig: will → would, weil das Sagen zurückliegt: he would call me.",
-    "en": "Right: will → would, because the speaking is in the past: he would call me."
+    "de": "„will call“ rückt nach „said“ eine Stufe zurück: He said he would call me. Aus „you“ wird me (Person wechselt).",
+    "en": "“Will call” shifts back a step after “said”: He said he would call me. “You” becomes me (the person changes)."
    },
    "wrong": [
     {
@@ -140,8 +140,8 @@
   "pat": "rs.time-shift",
   "why": {
    "ok": {
-    "de": "Richtig: tomorrow → the following day. Gezählt wird vom Sagen aus.",
-    "en": "Right: tomorrow → the following day. Counting starts from the speaking."
+    "de": "Der Bezugspunkt ist das Sagen in der Vergangenheit: Aus „tomorrow“ wird the following day. tomorrow bliebe in der Rede hängen.",
+    "en": "The reference point is the saying in the past: “tomorrow” becomes the following day. Tomorrow would stay stuck in the speech."
    },
    "wrong": [
     {
@@ -245,8 +245,8 @@
   "pat": "rs.backshift",
   "why": {
    "ok": {
-    "de": "Richtig: haven't received → hadn't received. Der Versand lag vor dem Sagen.",
-    "en": "Right: haven't received → hadn't received. The sending came before the speaking."
+    "de": "„haven't received“ wird nach „said“ zu hadn't received. Der Versand lag vor dem Sagen, deshalb Past Perfect.",
+    "en": "“Haven't received” becomes hadn't received after “said”. The sending happened before the saying, hence Past Perfect."
    },
    "wrong": [
     {
@@ -278,8 +278,8 @@
   "pat": "rs.question",
   "why": {
    "ok": {
-    "de": "Richtig: where the meeting room was: normale Wortstellung und Rückschritt is → was.",
-    "en": "Right: where the meeting room was: normal word order, backshift is → was."
+    "de": "In der indirekten Frage steht normale Satzstellung und eine Zeit zurück: where the meeting room was (nicht is, nicht was it).",
+    "en": "In an indirect question normal word order and one tense back are used: where the meeting room was (not is, not was it)."
    },
    "wrong": [
     {
@@ -372,8 +372,8 @@
   "pat": "rs.backshift",
   "why": {
    "ok": {
-    "de": "Richtig: can't → couldn't, denn das Sagen liegt zurück.",
-    "en": "Right: can't → couldn't, because the speaking is in the past."
+    "de": "„can't“ rückt in indirekter Rede nach der Vergangenheit („said“) zu couldn't zurück: She said she couldn't come.",
+    "en": "In reported speech after a past verb (“said”) “can't” moves back to couldn't: She said she couldn't come."
    },
    "wrong": [
     {
@@ -397,8 +397,8 @@
   "pat": "rs.backshift",
   "why": {
    "ok": {
-    "de": "Richtig: will → would. Auch the next day gehört dazu (tomorrow wurde verschoben).",
-    "en": "Right: will → would. the next day goes with it (tomorrow shifted)."
+    "de": "„I'll send“ wird zu would send. „tomorrow“ rückt zu the next day, weil das Sagen vergangen ist.",
+    "en": "“I'll send” becomes would send. “Tomorrow” shifts to the next day because the saying is in the past."
    },
    "wrong": [
     {
@@ -481,8 +481,8 @@
   "pat": "rs.question",
   "why": {
    "ok": {
-    "de": "Richtig: where I worked: Subjekt vor Verb, kein did.",
-    "en": "Right: where I worked: subject before verb, no did."
+    "de": "Indirekte Frage: normale Satzstellung, kein did: where I worked. Deutsch „wo ich arbeitete“ hat auch keine Umstellung.",
+    "en": "Indirect question: normal word order, no did: where I worked. German “wo ich arbeitete” also has no inversion."
    },
    "wrong": [
     {
@@ -506,8 +506,8 @@
   "pat": "rs.backshift",
   "why": {
    "ok": {
-    "de": "Richtig: would + Grundform: would finish, ohne -ed.",
-    "en": "Right: would + base form: would finish, with no -ed."
+    "de": "Nach would steht die Grundform: would finish, nie finished. Das -ed gehört nur zur Past-Form, nicht nach would.",
+    "en": "After would comes the base form: would finish, never finished. The -ed belongs only to the past form, not after would."
    },
    "wrong": [
     {

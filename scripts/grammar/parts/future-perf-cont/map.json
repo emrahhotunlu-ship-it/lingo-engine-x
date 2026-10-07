@@ -3,8 +3,8 @@
   "pat": "fut.perfect",
   "why": {
    "ok": {
-    "de": "Richtig: by + Zeitpunkt = bis dahin ist es abgeschlossen → will have finished.",
-    "en": "Right: by + a point in time = completed by then → will have finished."
+    "de": "„By next June“ setzt eine Frist: Bis dahin ist der Kurs abgeschlossen, also will have finished.",
+    "en": "“By next June” sets a deadline: the course is completed by then, so will have finished."
    },
    "wrong": [
     {
@@ -56,8 +56,8 @@
   "pat": "fut.continuous",
   "why": {
    "ok": {
-    "de": "Richtig: „this time tomorrow“ = ich liege dann gerade dort → will be lying.",
-    "en": "Right: “this time tomorrow” = I'll be lying there at that moment → will be lying."
+    "de": "„This time tomorrow“ meint genau diesen Moment morgen: Ich liege dann gerade dort, also will be lying.",
+    "en": "“This time tomorrow” means exactly this moment tomorrow: I will be in the middle of lying there, so will be lying."
    },
    "wrong": [
     {
@@ -84,8 +84,8 @@
   "pat": "fut.continuous",
   "why": {
    "ok": {
-    "de": "Richtig: um 8 sind wir mitten im Essen → will be having.",
-    "en": "Right: at 8 we are in the middle of dinner → will be having."
+    "de": "Um 8 sind wir mittendrin im Essen („then“): will be having. will have nennt nur den Plan, nicht das Mittendrin-Sein.",
+    "en": "At 8 we are in the middle of dinner (“then”): will be having. Will have only states the plan, not being in the middle of it."
    },
    "wrong": [
     {
@@ -110,8 +110,8 @@
   "pat": "fut.perfect",
   "why": {
    "ok": {
-    "de": "Richtig: „by the end of …“ = bis dahin ist es geschafft → will have won.",
-    "en": "Right: “by the end of …” = achieved by then → will have won."
+    "de": "„By the end of this quarter“ ist eine Frist, „200 new customers“ ein Ergebnis: will have won.",
+    "en": "“By the end of this quarter” is a deadline and “200 new customers” a result: will have won."
    },
    "wrong": [
     {
@@ -137,8 +137,8 @@
   "pat": "fut.continuous",
   "why": {
    "ok": {
-    "de": "Richtig: um 15 Uhr bin ich mitten in der Präsentation → will be presenting.",
-    "en": "Right: at 3 p.m. I will be in the middle of it → will be presenting."
+    "de": "Um 15 Uhr morgen bin ich mitten in der Präsentation („don't call me“): will be presenting. will have presented wäre schon fertig.",
+    "en": "At 3 p.m. tomorrow I am in the middle of the presentation (“don't call me”): will be presenting. Will have presented would mean finished."
    },
    "wrong": [
     {
@@ -164,8 +164,8 @@
   "pat": "fut.perf-cont",
   "why": {
    "ok": {
-    "de": "Richtig: „for ten years“ = die Dauer bis dahin → will have been working.",
-    "en": "Right: “for ten years” = duration up to then → will have been working."
+    "de": "„for ten years“ nennt die Dauer bis zum Zeitpunkt in der Zukunft: will have been working.",
+    "en": "“For ten years” gives the duration up to a point in the future: will have been working."
    },
    "wrong": [
     {
@@ -191,8 +191,8 @@
   "pat": "fut.perfect",
   "why": {
    "ok": {
-    "de": "Richtig: „by the time you arrive“ → dann sind sie fertig → will have cleaned.",
-    "en": "Right: “by the time you arrive” → they will be done by then → will have cleaned."
+    "de": "„By the time you arrive“ ist die Frist: Dann sind sie fertig mit dem Putzen, also will have cleaned.",
+    "en": "“By the time you arrive” is the deadline: they will be done cleaning by then, so will have cleaned."
    },
    "wrong": [
     {
@@ -244,8 +244,8 @@
   "pat": "fut.perfect",
   "why": {
    "ok": {
-    "de": "Richtig: by next weekend + „all three seasons“ = es ist abgeschlossen → will have watched.",
-    "en": "Right: by next weekend + “all three seasons” = completed → will have watched."
+    "de": "„By next weekend“ ist eine Frist, „all three seasons“ ein Ergebnis: will have watched. Aktiv, kein Passiv.",
+    "en": "“By next weekend” is a deadline and “all three seasons” a result: will have watched. Active, not passive."
    },
    "wrong": [
     {
@@ -270,8 +270,8 @@
   "pat": "fut.perfect",
   "why": {
    "ok": {
-    "de": "Richtig: „By Friday“ = bis dahin ist es erledigt → will have fixed.",
-    "en": "Right: “By Friday” = done by then → will have fixed."
+    "de": "„By Friday“ ist eine Frist: Bis dahin ist der Fehler behoben, also will have fixed (will + have + 3. Form).",
+    "en": "“By Friday” is a deadline: the bug is fixed by then, so will have fixed (will + have + past participle)."
    },
    "wrong": [
     {
@@ -314,8 +314,8 @@
   "pat": "fut.continuous",
   "why": {
    "ok": {
-    "de": "Richtig: um 10 Uhr bin ich mittendrin im Flug → will be sitting.",
-    "en": "Right: at 10 a.m. I will be in the middle of the flight → will be sitting."
+    "de": "Um 10 Uhr bin ich mitten im Flug und kann nicht telefonieren: will be sitting. Es läuft dann gerade.",
+    "en": "At 10 I will be in the middle of the flight and cannot take calls: will be sitting. It is in progress then."
    },
    "wrong": [
     {
@@ -355,8 +355,8 @@
   "pat": "fut.perf-cont",
   "why": {
    "ok": {
-    "de": "Richtig: Dauer bis zu einem Zeitpunkt (12 years) → will have been working.",
-    "en": "Right: duration up to a point in time (12 years) → will have been working."
+    "de": "„for exactly 12 years“ nennt die Dauer bis Jahresende: will have been working (will have worked geht auch).",
+    "en": "“For exactly 12 years” gives the duration up to year-end: will have been working (will have worked is also possible)."
    },
    "wrong": [
     {
@@ -407,8 +407,8 @@
   "pat": "fut.perfect",
   "why": {
    "ok": {
-    "de": "Richtig: bis dahin ist es abgeschlossen → will have gone (go – went – gone).",
-    "en": "Right: completed by then → will have gone (go – went – gone)."
+    "de": "„By the time you read this“ ist die Frist: Bis dahin ist das Update live, also will have gone (go – went – gone).",
+    "en": "“By the time you read this” is the deadline: the update is live by then, so will have gone (go – went – gone)."
    },
    "wrong": [
     {
@@ -487,8 +487,8 @@
   "pat": "fut.perfect",
   "why": {
    "ok": {
-    "de": "Richtig: „By 4 o'clock“ = bis dahin ist es fertig → will have finished.",
-    "en": "Right: “By 4 o'clock” = done by then → will have finished."
+    "de": "„By 4 o'clock“ ist eine Frist: Bis dahin ist der Bericht fertig, also will have finished.",
+    "en": "“By 4 o'clock” is a deadline: the report is finished by then, so will have finished."
    },
    "wrong": [
     {
@@ -531,8 +531,8 @@
   "pat": "fut.continuous",
   "why": {
    "ok": {
-    "de": "Richtig: um 15 Uhr bin ich mitten in der Reise → will be flying.",
-    "en": "Right: at 3 p.m. I will be on my way → will be flying."
+    "de": "Um 15 Uhr sitze ich mitten im Flug: will be flying. Es läuft dann gerade, daher keine Vollendung (will have flown).",
+    "en": "At 3 p.m. I am in the middle of the flight: will be flying. It is in progress then, so no completion (will have flown)."
    },
    "wrong": [
     {
@@ -571,8 +571,8 @@
   "pat": "fut.perf-cont",
   "why": {
    "ok": {
-    "de": "Richtig: „By next year“ + eine Zeitspanne → will have worked / will have been working.",
-    "en": "Right: “By next year” + a span of time → will have worked / will have been working."
+    "de": "„By next year“ + „for ten years“: Dauer bis dahin, also will have worked oder will have been working, nicht will work.",
+    "en": "“By next year” + “for ten years”: duration up to then, so will have worked or will have been working, not will work."
    },
    "wrong": [
     {

@@ -3,8 +3,8 @@
   "pat": "pv.simple",
   "why": {
    "ok": {
-    "de": "Richtig: „in 1890“ ist abgeschlossen → Passiv Past Simple: was built.",
-    "en": "Right: “in 1890” is finished → past simple passive: was built."
+    "de": "„in 1890“ ist ein genanntes Jahr, die Brücke wurde gebaut: Passiv Past Simple, was built. Die Brücke baut nicht selbst.",
+    "en": "“In 1890” is a stated year and the bridge was built: Passive Past Simple, was built. The bridge did not build itself."
    },
    "wrong": [
     {
@@ -46,8 +46,8 @@
   "pat": "pv.progressive",
   "why": {
    "ok": {
-    "de": "Richtig: they are repairing, das läuft gerade → the road is being repaired.",
-    "en": "Right: they are repairing (in progress) → the road is being repaired."
+    "de": "„they are repairing“ läuft gerade: Im Passiv wird daraus the road is being repaired (are repairing → is being repaired).",
+    "en": "“They are repairing” is in progress: in the passive it becomes the road is being repaired (are repairing → is being repaired)."
    },
    "wrong": [
     {
@@ -144,8 +144,8 @@
   "pat": "pv.simple",
   "why": {
    "ok": {
-    "de": "Richtig: „every Friday“ ist eine Gewohnheit → Passiv Present Simple: are processed.",
-    "en": "Right: “every Friday” = habit → present simple passive: are processed."
+    "de": "„every Friday“ nennt eine Gewohnheit, die Rechnungen werden bearbeitet: Passiv Present Simple, are processed.",
+    "en": "“Every Friday” names a habit and the invoices are processed: Passive Present Simple, are processed."
    },
    "wrong": [
     {
@@ -170,8 +170,8 @@
   "pat": "pv.simple",
   "why": {
    "ok": {
-    "de": "Richtig: Mit mir wurde etwas getan, niemand hat mich informiert → wasn't informed.",
-    "en": "Right: something was done to me, nobody informed me → wasn't informed."
+    "de": "Mit mir wurde etwas getan: Niemand hat mich informiert. Past Simple Passiv: wasn't informed, kein aktives informing.",
+    "en": "Something was done to me: nobody informed me. Past Simple passive: wasn't informed, not an active informing."
    },
    "wrong": [
     {
@@ -196,8 +196,8 @@
   "pat": "pv.progressive",
   "why": {
    "ok": {
-    "de": "Richtig: „at the moment“ heißt: Das läuft gerade → is being maintained.",
-    "en": "Right: “at the moment” = in progress → is being maintained."
+    "de": "„at the moment“ heißt: Die Wartung läuft gerade, also Passiv Continuous: is being maintained. is maintained wäre allgemein.",
+    "en": "“At the moment” means the maintenance is in progress, so Passive Continuous: is being maintained. Is maintained would be general."
    },
    "wrong": [
     {
@@ -223,8 +223,8 @@
   "pat": "pv.simple",
   "why": {
    "ok": {
-    "de": "Richtig: Sie bekommt die Beförderung, „by the board“ ist der Handelnde → was offered.",
-    "en": "Right: she receives the promotion, “by the board” is the agent → was offered."
+    "de": "Sie bekam die Beförderung, „by the board“ nennt den Handelnden, „last month“ ist vorbei: was offered (Passiv Past Simple).",
+    "en": "She received the promotion, “by the board” names the doer, “last month” is over: was offered (Passive Past Simple)."
    },
    "wrong": [
     {
@@ -249,8 +249,8 @@
   "pat": "pv.perfect",
   "why": {
    "ok": {
-    "de": "Richtig: „since 1985“ reicht bis in die Gegenwart → Passiv Present Perfect: has been owned.",
-    "en": "Right: “since 1985” reaches until today → present perfect passive: has been owned."
+    "de": "„since 1985“ reicht bis heute: Passiv Present Perfect, has been owned. Present Simple allein passt nicht zu since.",
+    "en": "“Since 1985” runs up to today: Passive Present Perfect, has been owned. Present Simple alone does not fit since."
    },
    "wrong": [
     {
@@ -276,8 +276,8 @@
   "pat": "pv.simple",
   "why": {
    "ok": {
-    "de": "Richtig: „yesterday“ ist abgeschlossen → Passiv Past Simple: was sent (send – sent – sent).",
-    "en": "Right: “yesterday” is finished → past simple passive: was sent (send – sent – sent)."
+    "de": "„yesterday“ ist vorbei, der Bericht wurde gesendet: Passiv Past Simple, was sent (send – sent – sent).",
+    "en": "“Yesterday” is over and the report was sent: Passive Past Simple, was sent (send – sent – sent)."
    },
    "wrong": [
     {
@@ -319,8 +319,8 @@
   "pat": "pv.simple",
   "why": {
    "ok": {
-    "de": "Richtig: Plural und „last month“ → Passiv Past Simple: were affected.",
-    "en": "Right: plural and “last month” → past simple passive: were affected."
+    "de": "„Over 200 customers“ ist Plural, „last month“ vorbei: Passiv Past Simple, were affected (nicht was).",
+    "en": "“Over 200 customers” is plural and “last month” is over: Passive Past Simple, were affected (not was)."
    },
    "wrong": [
     {
@@ -404,8 +404,8 @@
   "pat": "pv.perfect",
   "why": {
    "ok": {
-    "de": "Richtig: Die Änderungen müssen bis dahin fertig sein → have been made.",
-    "en": "Right: the changes must be finished by then → have been made."
+    "de": "Nach „until“ steht das Present, und die Änderungen müssen vorher fertig sein: have been made (Passiv Present Perfect).",
+    "en": "After “until” the Present is used, and the changes must be done before: have been made (Passive Present Perfect)."
    },
    "wrong": [
     {
@@ -447,8 +447,8 @@
   "pat": "pv.progressive",
   "why": {
    "ok": {
-    "de": "Richtig: „right now“ = das läuft gerade → are being cleaned.",
-    "en": "Right: “right now” = in progress → are being cleaned."
+    "de": "„Look!“ und „right now“: Der Vorgang läuft gerade, also Passiv Continuous: are being cleaned. Fenster putzen sich nicht selbst.",
+    "en": "“Look!” and “right now”: the process is happening now, so Passive Continuous: are being cleaned. Windows do not clean themselves."
    },
    "wrong": [
     {
@@ -534,8 +534,8 @@
   "pat": "pv.modal-future",
   "why": {
    "ok": {
-    "de": "Richtig: Der Vertrag soll noch aktualisiert werden → must be updated.",
-    "en": "Right: the contract still has to be updated → must be updated."
+    "de": "Der Handelnde (someone) entfällt, der Vertrag rückt nach vorn: must + be + 3. Form, also must be updated.",
+    "en": "The doer (someone) drops out and the contract moves to the front: must + be + participle, so must be updated."
    },
    "wrong": [
     {
@@ -576,8 +576,8 @@
   "pat": "pv.progressive",
   "why": {
    "ok": {
-    "de": "Richtig: Der Bericht schreibt nicht selbst, er wird geschrieben → is being written.",
-    "en": "Right: the report does not write, it gets written → is being written."
+    "de": "Der Bericht schreibt nicht selbst, er wird geschrieben („by our analyst“, „right now“): is being written.",
+    "en": "The report does not write itself, it is being written (“by our analyst”, “right now”): is being written."
    },
    "wrong": [
     {

@@ -964,8 +964,8 @@
   "answer": "a",
   "why": {
    "ok": {
-    "de": "Richtig: Satz a. In short leitet das Fazit ein.",
-    "en": "Right: sentence a. In short introduces the conclusion."
+    "de": "Satz a: „In short“ fasst zusammen, es leitet das Fazit ein. „For example“ in b würde ein Beispiel einleiten.",
+    "en": "Sentence a: “In short” summarizes and introduces the conclusion. “For example” in b would introduce an example."
    },
    "wrong": [
     {

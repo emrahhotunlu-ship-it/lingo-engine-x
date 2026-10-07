@@ -3,8 +3,8 @@
   "pat": "pp.earlier",
   "why": {
    "ok": {
-    "de": "Richtig: Der Beginn lag vor unserer Ankunft → had already started.",
-    "en": "Right: the start came before we arrived → had already started."
+    "de": "Der Film begann vor unserer Ankunft, also das Frühere von zwei Ereignissen: had already started.",
+    "en": "The film began before we arrived, so it is the earlier of two events: had already started."
    },
    "wrong": [
     {
@@ -44,8 +44,8 @@
   "pat": "pp.duration",
   "why": {
    "ok": {
-    "de": "Richtig: Dauer bis zum Zeitpunkt „erschöpft“ in der Vergangenheit → had been working.",
-    "en": "Right: duration up to the past moment “exhausted” → had been working."
+    "de": "„for hours“ nennt die Dauer vor „was exhausted“: had been working. Die Ursache liegt vor dem Zustand.",
+    "en": "“For hours” gives the duration before “was exhausted”: had been working. The cause lies before the state."
    },
    "wrong": [
     {
@@ -93,8 +93,8 @@
   "pat": "pp.earlier",
   "why": {
    "ok": {
-    "de": "Richtig: Der Kunde war schon gegangen, bevor ich einstieg → had already left.",
-    "en": "Right: the client had gone before I joined → had already left."
+    "de": "„By the time I joined“ + Vergangenheit: Der Kunde war vorher gegangen, also had already left.",
+    "en": "“By the time I joined” + past: the client had left before that, so had already left."
    },
    "wrong": [
     {
@@ -119,8 +119,8 @@
   "pat": "pp.duration",
   "why": {
    "ok": {
-    "de": "Richtig: Die Verhandlung dauerte Monate bis zur Unterschrift → had been negotiating.",
-    "en": "Right: the negotiation lasted months up to the signing → had been negotiating."
+    "de": "„for months“ nennt die Dauer vor der Unterschrift in der Vergangenheit: had been negotiating, nicht have been.",
+    "en": "“For months” gives the duration before the signing in the past: had been negotiating, not have been."
    },
    "wrong": [
     {
@@ -145,8 +145,8 @@
   "pat": "pp.first-time",
   "why": {
    "ok": {
-    "de": "Richtig: Die Erfahrung liegt vor dem Zeitpunkt in der Vergangenheit → had handled.",
-    "en": "Right: the experience lies before the past moment → had handled."
+    "de": "„It was the first time“ steht in der Vergangenheit, die Erfahrung liegt davor: had handled (im Präsens wäre has handled).",
+    "en": "“It was the first time” is in the past and the experience lies before it: had handled (in the present it would be has handled)."
    },
    "wrong": [
     {
@@ -197,8 +197,8 @@
   "pat": "pp.duration",
   "why": {
    "ok": {
-    "de": "Richtig: Dauer „since 5 a.m.“ bis zum Anruf in der Vergangenheit → had been working.",
-    "en": "Right: duration “since 5 a.m.” up to the past call → had been working."
+    "de": "„since 5 a.m.“ bis zum Anruf um Mittag: Dauer vor einem Zeitpunkt in der Vergangenheit, had been working.",
+    "en": "“Since 5 a.m.” up to the noon call: duration before a point in the past, had been working."
    },
    "wrong": [
     {
@@ -223,8 +223,8 @@
   "pat": "pp.earlier",
   "why": {
    "ok": {
-    "de": "Richtig: „the month before“ zeigt: Der Umzug lag vor dem Gefühl → had moved.",
-    "en": "Right: “the month before” shows the move came before the feeling → had moved."
+    "de": "„the month before“ legt den Umzug vor das Gefühl: Das Frühere steht im Past Perfect, had moved.",
+    "en": "“The month before” places the move before the feeling: the earlier event takes the Past Perfect, had moved."
    },
    "wrong": [
     {
@@ -249,8 +249,8 @@
   "pat": "pp.earlier",
   "why": {
    "ok": {
-    "de": "Richtig: Das Beheben kam vor dem Rückruf → had fixed (by the time + Vergangenheit).",
-    "en": "Right: the fixing came before the callback → had fixed (by the time + past)."
+    "de": "„By the time“ + Vergangenheit: Ich hatte das Problem schon vor dem Rückruf behoben: had fixed.",
+    "en": "“By the time” + past: I had already fixed the problem before the callback: had fixed."
    },
    "wrong": [
     {
@@ -289,8 +289,8 @@
   "pat": "pp.duration",
   "why": {
    "ok": {
-    "de": "Richtig: „for an hour“ nennt die Dauer vor der Ankunft → had been discussing.",
-    "en": "Right: “for an hour” gives the duration before the arrival → had been discussing."
+    "de": "„for an hour“ nennt die Dauer vor der Ankunft: had been discussing (had discussed geht auch, betont das Ergebnis).",
+    "en": "“For an hour” gives the duration before the arrival: had been discussing (had discussed also works but stresses the result)."
    },
    "wrong": [
     {
@@ -371,8 +371,8 @@
   "pat": "pp.earlier",
   "why": {
    "ok": {
-    "de": "Richtig: Das Kochen war vor meiner Heimkehr fertig → had cooked.",
-    "en": "Right: the cooking was done before I got home → had cooked."
+    "de": "„already“ zeigt: Das Kochen war vor meiner Heimkehr fertig. Das Frühere braucht had cooked.",
+    "en": "“Already” shows the cooking was done before I got home. The earlier event needs had cooked."
    },
    "wrong": [
     {
@@ -412,8 +412,8 @@
   "pat": "pp.earlier",
   "why": {
    "ok": {
-    "de": "Richtig: Sie waren schon weg, bevor das Update fertig war → had gone.",
-    "en": "Right: they had left before the update finished → had gone."
+    "de": "„By the time“ + Vergangenheit: Sie waren schon weg, bevor das Update fertig war, also had gone.",
+    "en": "“By the time” + past: they had already left before the update finished, so had gone."
    },
    "wrong": [
     {
@@ -454,8 +454,8 @@
   "pat": "pp.earlier",
   "why": {
    "ok": {
-    "de": "Richtig: Das Senden lag vor dem Anruf → had already sent.",
-    "en": "Right: the sending came before the call → had already sent."
+    "de": "Montag lag vor dem Anruf am Dienstag: Das Frühere der beiden Ereignisse steht im Past Perfect, had already sent.",
+    "en": "Monday came before Tuesday's call: the earlier of the two events takes the Past Perfect, had already sent."
    },
    "wrong": [
     {
@@ -496,8 +496,8 @@
   "pat": "pp.duration",
   "why": {
    "ok": {
-    "de": "Richtig: „for two hours“ nennt die Dauer bis zum Anruf → had been working.",
-    "en": "Right: “for two hours” gives the duration up to the call → had been working."
+    "de": "„for two hours“ nennt die Dauer bis zum Anruf (Vergangenheit): had been working, nicht was working.",
+    "en": "“For two hours” gives the duration up to the call (past): had been working, not was working."
    },
    "wrong": [
     {
@@ -540,8 +540,8 @@
   "pat": "pp.earlier",
   "why": {
    "ok": {
-    "de": "Richtig: Der Beginn lag vor meiner Ankunft → had already started.",
-    "en": "Right: their start came before my arrival → had already started."
+    "de": "Sie hatten schon begonnen, bevor ich ankam. Das Frühere braucht had started, nicht started.",
+    "en": "They had already begun before I arrived. The earlier event needs had started, not started."
    },
    "wrong": [
     {
@@ -582,8 +582,8 @@
   "pat": "pp.reported",
   "why": {
    "ok": {
-    "de": "Richtig: Nach „told“ rutscht will eine Stufe zurück → would call.",
-    "en": "Right: after “told”, will moves one step back → would call."
+    "de": "Nach „told“ (Vergangenheit) rutscht will zu would zurück: he would call. „the next day“ bestätigt die indirekte Rede.",
+    "en": "After “told” (past) will shifts back to would: he would call. “The next day” confirms reported speech."
    },
    "wrong": [
     {
@@ -612,8 +612,8 @@
   "pat": "pp.earlier",
   "why": {
    "ok": {
-    "de": "Richtig: In der Vergangenheit heißt es had, nie have → had already started.",
-    "en": "Right: in a past story it is had, never have → had already started."
+    "de": "In der Vergangenheit heißt das Hilfsverb had, nicht have: the film had already started.",
+    "en": "In the past the auxiliary is had, not have: the film had already started."
    },
    "wrong": [
     {

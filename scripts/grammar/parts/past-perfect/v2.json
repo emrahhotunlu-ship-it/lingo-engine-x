@@ -26,8 +26,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Es geschah vor meiner Ankunft → had already cleared (had + Partizip).",
-    "en": "Right: it happened before I arrived → had already cleared (had + participle)."
+    "de": "Richtig: had already cleared. Der Kollege war schon durch die Kontrolle, bevor ich ankam: had + 3. Form.",
+    "en": "Right: had already cleared. My colleague was through security before I arrived: had + past participle."
    },
    "wrong": [
     {
@@ -81,8 +81,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Das Unterschreiben lag vor dem Erhalt der Mail → had signed.",
-    "en": "Right: the signing came before I got the email → had signed."
+    "de": "Richtig: The client had signed. Das Unterschreiben lag vor dem Erhalt der Mail, „by the time“ + Vergangenheit.",
+    "en": "Right: The client had signed. The signing happened before I got the email, “by the time” + past."
    },
    "wrong": [
     {
@@ -155,8 +155,8 @@
   "err": null,
   "why": {
    "ok": {
-    "de": "Kein Fehler: Das Archivieren lag vor der Ankunft → had already archived.",
-    "en": "No error: the archiving came before the arrival → had already archived."
+    "de": "Kein Fehler: Die Archivierung lag vor der Ankunft der Prüfer, deshalb had already archived.",
+    "en": "No error: the archiving happened before the auditors arrived, hence had already archived."
    },
    "wrong": [
     {
@@ -247,8 +247,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Dauer vor den Entlassungen in der Vergangenheit → had the team been working.",
-    "en": "Right: duration before the layoffs in the past → had the team been working."
+    "de": "Richtig: had the team been working. Die Dauer lag vor den Entlassungen (Vergangenheit): Frage mit had + Subjekt + been.",
+    "en": "Right: had the team been working. The duration lay before the layoffs (past): question with had + subject + been."
    },
    "wrong": [
     {
@@ -299,8 +299,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: „since Monday“ nennt die Dauer bis zum Anruf → had been preparing.",
-    "en": "Right: “since Monday” gives the duration up to the call → had been preparing."
+    "de": "Richtig: had been preparing. „since Monday“ nennt die Dauer bis zum Anruf am Mittwoch: had been + -ing.",
+    "en": "Right: had been preparing. “Since Monday” gives the duration up to Wednesday's call: had been + -ing."
    },
    "wrong": [
     {
@@ -433,8 +433,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Nach „the first time“ steht had + Partizip → had missed.",
-    "en": "Right: after “the first time” comes had + participle → had missed."
+    "de": "Richtig: time the vendor had missed. Die Erfahrung „erstes Mal“ liegt vor „was“, also had missed.",
+    "en": "Right: time the vendor had missed. The experience of “first time” lies before “was”, so had missed."
    },
    "wrong": [
     {
@@ -492,8 +492,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Nach „before that trip“ steht die Erfahrung davor → had never flown.",
-    "en": "Right: “before that trip” + experience before it → had never flown."
+    "de": "Richtig: had never flown. „before that trip“ zeigt: Die Erfahrung lag vor der Reise, also Past Perfect.",
+    "en": "Right: had never flown. “Before that trip” shows the experience lay before the journey, so Past Perfect."
    },
    "wrong": [
     {
@@ -633,8 +633,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Aus „I’ll send“ wird nach „told“ would send.",
-    "en": "Right: after “told”, “I’ll send” becomes would send."
+    "de": "Richtig: would send. Nach „told“ (Vergangenheit) rutscht „I'll send“ zu would send zurück.",
+    "en": "Right: would send. After “told” (past) “I'll send” shifts back to would send."
    },
    "wrong": [
     {
@@ -678,8 +678,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Aus „We’ve sent“ wird nach „told“ had sent.",
-    "en": "Right: after “told”, “We’ve sent” becomes had sent."
+    "de": "Richtig: had already sent. Aus „We've sent“ wird nach „told“ die Stufe zurück: had sent.",
+    "en": "Right: had already sent. After “told”, “We've sent” shifts back a step: had sent."
    },
    "wrong": [
     {
@@ -944,8 +944,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: „Hardly had“ + Subjekt + Partizip, und danach folgt „when“.",
-    "en": "Right: “Hardly had” + subject + participle, then “when” follows."
+    "de": "Richtig: Hardly had our meeting. Nach „Hardly“ am Satzanfang kommt had vor dem Subjekt, danach „when“.",
+    "en": "Right: Hardly had our meeting. After “Hardly” at the start of a sentence had comes before the subject, then “when”."
    },
    "wrong": [
     {

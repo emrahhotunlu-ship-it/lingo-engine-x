@@ -319,8 +319,8 @@
   "pat": "dm.return",
   "why": {
    "ok": {
-    "de": "Richtig: Es heißt coming back to, nicht on.",
-    "en": "Right: It is coming back to, not on."
+    "de": "Die feste Wendung heißt coming back to your question. „on“ gibt es hier nicht, auch wenn Deutsch „auf Ihre Frage zurückkommen“ sagt.",
+    "en": "The fixed phrase is coming back to your question. “On” is not used here, even though German says “auf Ihre Frage zurückkommen”."
    },
    "wrong": [
     {

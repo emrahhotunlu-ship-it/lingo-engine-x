@@ -27,8 +27,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: um 15 Uhr bist du mitten im Training → will be attending.",
-    "en": "Right: at 3 you will be in the middle of it → will be attending."
+    "de": "Richtig: will be attending. Um 15 Uhr läuft das Training gerade, deshalb kann ich nicht teilnehmen: will be + -ing.",
+    "en": "Right: will be attending. At 3 the training is in progress, so I can't join: will be + -ing."
    },
    "wrong": [
     {
@@ -80,8 +80,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: um 1 Uhr läuft die Migration gerade → will be running.",
-    "en": "Right: at 1 a.m. the migration is in progress → will be running."
+    "de": "Richtig: will be running. Um 1 Uhr läuft die Migration gerade, deshalb kann niemand einloggen: will be + -ing.",
+    "en": "Right: will be running. At 1 a.m. the migration is in progress, so nobody can log in: will be + -ing."
    },
    "wrong": [
     {
@@ -419,8 +419,8 @@
   "answer": "a",
   "why": {
    "ok": {
-    "de": "Richtig: Satz a fragt nach dem Plan für morgen.",
-    "en": "Right: sentence a asks about the plan for tomorrow."
+    "de": "Satz a fragt nach dem Plan („Wirst du morgen senden?“). Satz b fragt nach dem Ergebnis: schon bis morgen erledigt?",
+    "en": "Sentence a asks about the plan (“Will you be sending it tomorrow?”). Sentence b asks about the result: done by tomorrow?"
    },
    "wrong": [
     {
@@ -528,8 +528,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: bis zum Audit ist es schon abgeschlossen → will already have finished.",
-    "en": "Right: already completed by the audit → will already have finished."
+    "de": "Richtig: will already have finished. „By Monday's audit“ ist die Frist, already betont: dann schon abgeschlossen.",
+    "en": "Right: will already have finished. “By Monday's audit” is the deadline, and already stresses: finished by then."
    },
    "wrong": [
     {
@@ -732,8 +732,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Dauer bis zu einem Zeitpunkt → will have been working.",
-    "en": "Right: duration up to a point in time → will have been working."
+    "de": "Richtig: will have been working. „for three years“ nennt die Dauer bis Januar 2027: will have been + -ing.",
+    "en": "Right: will have been working. “For three years” gives the duration up to January 2027: will have been + -ing."
    },
    "wrong": [
     {

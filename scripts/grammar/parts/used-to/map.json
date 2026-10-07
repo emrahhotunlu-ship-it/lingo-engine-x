@@ -511,8 +511,8 @@
   "pat": "ut.used-to",
   "why": {
    "ok": {
-    "de": "Richtig: früherer Zustand (be) → used to. Heute sind es 25, also vorbei.",
-    "en": "Right: a past state (be) → used to. Today it is 25, so that is over."
+    "de": "Richtig: used to be. „be“ ist ein Zustand, früher so, heute nicht mehr (25 Personen). would geht hier nicht.",
+    "en": "Right: used to be. “Be” is a state, true earlier but no longer (25 people). Would does not work here."
    },
    "wrong": [
     {
@@ -577,8 +577,8 @@
   "pat": "ut.used-to",
   "why": {
    "ok": {
-    "de": "Richtig: früher regelmäßig, heute nicht mehr: used to + travel.",
-    "en": "Right: regular before, not now: used to + travel."
+    "de": "„In the past … but I don't anymore“ = früher regelmäßig, heute nicht mehr: used to travel. Danach Grundform.",
+    "en": "“In the past … but I don't anymore” = regular earlier, not now: used to travel. Base form follows."
    },
    "wrong": [
     {

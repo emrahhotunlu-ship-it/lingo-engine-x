@@ -19,8 +19,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Das ist eine feste Regel → whenever + Präsens: whenever a customer cancels.",
-    "en": "Right: fixed rule → whenever + present: whenever a customer cancels."
+    "de": "Richtig: whenever a customer cancels. „We refund“ ist eine feste Regel: whenever + Present, ohne will.",
+    "en": "Right: whenever a customer cancels. “We refund” is a fixed rule: whenever + Present, without will."
    },
    "wrong": [
     {
@@ -68,8 +68,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Das ist eine feste Regel → when + Präsens: when the build fails.",
-    "en": "Right: fixed rule → when + present: when the build fails."
+    "de": "Richtig: when the build fails. „stops automatically“ ist eine feste Regel: when + Present.",
+    "en": "Right: when the build fails. “Stops automatically” is a fixed rule: when + Present."
    },
    "wrong": [
     {
@@ -141,8 +141,8 @@
   "err": null,
   "why": {
    "ok": {
-    "de": "Kein Fehler: Present + Present beschreibt hier eine feste Regel.",
-    "en": "No error: present + present describes a fixed rule here."
+    "de": "Kein Fehler: Present + Present beschreibt eine feste Regel des Systems („sends a reminder“).",
+    "en": "No error: Present + Present describes a fixed rule of the system (“sends a reminder”)."
    },
    "wrong": [
     {
@@ -204,8 +204,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Das ist eine mögliche Zukunft → if + Präsens: if the supplier delivers.",
-    "en": "Right: possible future → if + present: if the supplier delivers."
+    "de": "Richtig: if the supplier delivers. „will finish“ zeigt eine mögliche Zukunft: if + Present, kein will.",
+    "en": "Right: if the supplier delivers. “Will finish” shows a possible future: if + Present, no will."
    },
    "wrong": [
     {
@@ -254,8 +254,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Das ist eine mögliche Zukunft → if + Präsens: If the client approves.",
-    "en": "Right: possible future → if + present: If the client approves."
+    "de": "Richtig: If the client approves. „we'll start“ zeigt eine mögliche Zukunft: if + Present im Nebensatz.",
+    "en": "Right: If the client approves. “We'll start” shows a possible future: if + Present in the clause."
    },
    "wrong": [
     {
@@ -324,8 +324,8 @@
   "err": null,
   "why": {
    "ok": {
-    "de": "Kein Fehler: if + Präsens (passes), will im Hauptsatz.",
-    "en": "No error: if + present (passes), will in the main clause."
+    "de": "Kein Fehler: Reale Möglichkeit, deshalb if + Present (passes) und will im Hauptsatz (we'll release).",
+    "en": "No error: a real possibility, so if + Present (passes) and will in the main clause (we'll release)."
    },
    "wrong": [
     {
@@ -388,8 +388,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Annahme (had more staff) → Hauptsatz mit would + Grundform: would accept.",
-    "en": "Right: assumption (had more staff) → main clause with would + base form: would accept."
+    "de": "Richtig: would accept. „had more staff“ ist eine Annahme, deshalb Hauptsatz mit would + Grundform.",
+    "en": "Right: would accept. “Had more staff” is an assumption, so the main clause takes would + base form."
    },
    "wrong": [
     {
@@ -440,8 +440,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Annahme → if + Past: If the client moved. would steht im Hauptsatz.",
-    "en": "Right: assumption → if + past: If the client moved. would goes in the main clause."
+    "de": "Richtig: If the client moved. „would finish“ zeigt eine Annahme: if + Past, would steht im Hauptsatz.",
+    "en": "Right: If the client moved. “Would finish” shows an assumption: if + Past, would stays in the main clause."
    },
    "wrong": [
     {
@@ -572,8 +572,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Rat = Annahme → If I were you. Die Folge steht mit would.",
-    "en": "Right: advice = assumption → If I were you. The result takes would."
+    "de": "Richtig: If I were you. Die feste Form für Ratschläge, auch bei „I“ steht were. Die Folge: I'd renegotiate.",
+    "en": "Right: If I were you. The fixed form for advice, were even with “I”. The result: I'd renegotiate."
    },
    "wrong": [
     {
@@ -622,8 +622,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Das ist eine Annahme → if + were: If the deadline were flexible.",
-    "en": "Right: assumption → if + were: If the deadline were flexible."
+    "de": "Richtig: were flexible. Annahme: if + Past. „was“ ist im Alltag auch üblich und gilt hier, „were“ klingt formeller.",
+    "en": "Right: were flexible. Assumption: if + Past. “Was” is also common in everyday speech and accepted; “were” sounds more formal."
    },
    "wrong": [
     {
@@ -766,8 +766,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Es ist vorbei → if + Past Perfect: had tested. Folge: would have caught.",
-    "en": "Right: over → if + Past Perfect: had tested. Result: would have caught."
+    "de": "Richtig: had tested. „would have caught“ zeigt Vergangenes, das nicht war: if + Past Perfect.",
+    "en": "Right: had tested. “Would have caught” shows something in the past that did not happen: if + Past Perfect."
    },
    "wrong": [
     {
@@ -821,8 +821,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: Folge in der Vergangenheit → would have + 3. Form: would have adjusted.",
-    "en": "Right: result in the past → would have + participle: would have adjusted."
+    "de": "Richtig: would have adjusted. „had told“ ist vorbei, die Folge auch: would have + 3. Form.",
+    "en": "Right: would have adjusted. “Had told” is past and so is the result: would have + participle."
    },
    "wrong": [
     {
@@ -1005,8 +1005,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: unless = „wenn nicht“ → Präsens ohne not: unless the deposit arrives.",
-    "en": "Right: unless = “if not” → present with no not: unless the deposit arrives."
+    "de": "Richtig: unless the deposit arrives. unless = „wenn nicht“, Present ohne not: Ohne Anzahlung wird nicht versandt.",
+    "en": "Right: unless the deposit arrives. Unless = “if not”, Present without not: no shipping without the deposit."
    },
    "wrong": [
     {

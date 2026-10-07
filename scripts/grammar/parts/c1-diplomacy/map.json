@@ -169,8 +169,8 @@
   "pat": "dip.understate",
   "why": {
    "ok": {
-    "de": "Richtig: tricky untertreibt. Gemeint ist „kaum machbar“, aber höflich.",
-    "en": "Right: tricky understates. It means “hardly doable”, but politely."
+    "de": "Richtig: tricky. „a bit tricky“ untertreibt höflich und meint „kaum machbar“. impossible, stupid, wrong wären zu direkt.",
+    "en": "Right: tricky. “A bit tricky” politely understates and means “hardly doable”. Impossible, stupid, wrong would be too blunt."
    },
    "wrong": [
     {

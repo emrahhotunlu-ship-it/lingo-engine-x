@@ -3,8 +3,8 @@
   "pat": "mc.wish-now",
   "why": {
    "ok": {
-    "de": "wish + Fähigkeit jetzt: can wird zu could.",
-    "en": "wish + ability now: can becomes could."
+    "de": "Ein Wunsch über eine Fähigkeit jetzt: wish + could. „wish I can“ gibt es nicht, will und would passen nicht zu Fähigkeit.",
+    "en": "A wish about an ability now: wish + could. “Wish I can” does not exist, will and would do not fit an ability."
    },
    "wrong": [
     {
@@ -30,8 +30,8 @@
   "pat": "mc.wish-past",
   "why": {
    "ok": {
-    "de": "yesterday ist vorbei: Bedauern → wish + had + 3. Form.",
-    "en": "yesterday is over: regret → wish + had + participle."
+    "de": "„yesterday“ ist vorbei, ich bedauere es: wish + had + 3. Form, also had not said. Das Past würde jetzt meinen.",
+    "en": "“Yesterday” is over and I regret it: wish + had + participle, so had not said. The Past would mean now."
    },
    "wrong": [
     {
@@ -67,8 +67,8 @@
   "pat": "mc.past-cond",
   "why": {
    "ok": {
-    "de": "had taken (früher) + now: Folge jetzt → would + Grundform.",
-    "en": "had taken (earlier) + now → would + base form."
+    "de": "„had taken“ (früher) und „now“: Die Folge gilt jetzt, also would + Grundform: would live. Gemischter Konditionalsatz.",
+    "en": "“Had taken” (earlier) and “now”: the result applies now, so would + base form: would live. A mixed conditional."
    },
    "wrong": [
     {
@@ -119,8 +119,8 @@
   "pat": "mc.wish-past",
   "why": {
    "ok": {
-    "de": "last week + Bedauern → für früher: wish + had + 3. Form (had sent).",
-    "en": "last week + regret → wish + had + participle: had sent."
+    "de": "„last week“ ist vorbei, ich bedauere es: wish + had + 3. Form, also had sent. sent allein wäre ein Wunsch für jetzt.",
+    "en": "“Last week” is over and I regret it: wish + had + participle, so had sent. Sent alone would be a wish about now."
    },
    "wrong": [
     {
@@ -147,8 +147,8 @@
   "pat": "mc.wish-would",
   "why": {
    "ok": {
-    "de": "You keep interrupting: Ärger über Verhalten, das enden soll → would stop.",
-    "en": "You keep interrupting: annoyance at behavior that should end → would stop."
+    "de": "„You keep interrupting“ ist wiederholtes Verhalten, das enden soll: wish + would stop. had stopped bedauert nur Vergangenes.",
+    "en": "“You keep interrupting” is repeated behavior that should end: wish + would stop. Had stopped only regrets the past."
    },
    "wrong": [
     {
@@ -200,8 +200,8 @@
   "pat": "mc.past-cond",
   "why": {
    "ok": {
-    "de": "hadn't accepted (früher) + today: die Folge gilt jetzt → would + Grundform.",
-    "en": "hadn't accepted (earlier) + today: result now → would + base form."
+    "de": "„hadn't accepted“ (früher) und „today“: Die Folge gilt heute, also would + Grundform: would work.",
+    "en": "“Hadn't accepted” (earlier) and “today”: the result applies today, so would + base form: would work."
    },
    "wrong": [
     {
@@ -254,8 +254,8 @@
   "pat": "mc.wish-past",
   "why": {
    "ok": {
-    "de": "If only + earlier: Bedauern für früher → had + 3. Form.",
-    "en": "If only + earlier: regret about the past → had + participle."
+    "de": "„If only“ + „earlier“: Bedauern über früher, also had read (Past Perfect). Ein Past wäre ein Wunsch für jetzt.",
+    "en": "“If only” + “earlier”: regret about the past, so had read (Past Perfect). A Past would be a wish about now."
    },
    "wrong": [
     {
@@ -281,8 +281,8 @@
   "pat": "mc.wish-now",
   "why": {
    "ok": {
-    "de": "wish + can → could: ein Wunsch über jetzt, eine Fähigkeit.",
-    "en": "wish + can → could: a wish about now, an ability."
+    "de": "Ein Wunsch für jetzt über eine Fähigkeit: wish + could, nicht can. „would love it“ zeigt, dass es nicht so ist.",
+    "en": "A wish about now concerning an ability: wish + could, not can. “Would love it” shows it is not the case."
    },
    "wrong": [
     {
@@ -349,8 +349,8 @@
   "pat": "mc.past-cond",
   "why": {
    "ok": {
-    "de": "hadn't left (früher) + by now: die Folge jetzt → would be.",
-    "en": "hadn't left (earlier) + by now: result now → would be."
+    "de": "„hadn't left last month“ (früher) und „by now“: Die Folge gilt jetzt, also would be. would have been wäre die Vergangenheit.",
+    "en": "“Hadn't left last month” (earlier) and “by now”: the result applies now, so would be. Would have been would be the past."
    },
    "wrong": [
     {
@@ -384,8 +384,8 @@
   "pat": "mc.wish-now",
   "why": {
    "ok": {
-    "de": "today + I hate winter: ein Wunsch für jetzt → wish + Past (weren't).",
-    "en": "today + I hate winter: wish about now → wish + past (weren't)."
+    "de": "„today“ und „I hate winter“: Wunsch über jetzt, also wish + Past: weren't. Nach wish steht were auch bei „it“.",
+    "en": "“Today” and “I hate winter”: a wish about now, so wish + Past: weren't. After wish were is used even with “it”."
    },
    "wrong": [
     {
@@ -418,8 +418,8 @@
   "pat": "mc.wish-past",
   "why": {
    "ok": {
-    "de": "regret + didn't ask (früher) → für früher: wish + had + 3. Form (had asked).",
-    "en": "regret + didn't ask (earlier) → wish + had + participle: had asked."
+    "de": "„regret“ + „didn't ask“ (früher): Bedauern über Vergangenes, also wish + had asked. Das Past asked wäre ein Wunsch für jetzt.",
+    "en": "“Regret” + “didn't ask” (earlier): regret about the past, so wish + had asked. The Past asked would be a wish about now."
    },
    "wrong": [
     {
@@ -494,8 +494,8 @@
   "pat": "mc.wish-now",
   "why": {
    "ok": {
-    "de": "Wunsch über jetzt: wish + Past (had), nicht would have.",
-    "en": "wish about now: wish + past (had), not would have."
+    "de": "Ein Wunsch für jetzt braucht wish + Past: I wish I had more time. „would have“ gibt es nach wish nicht (anders als im Deutschen).",
+    "en": "A wish about now takes wish + Past: I wish I had more time. “Would have” is not used after wish (unlike German “würde haben”)."
    },
    "wrong": [
     {
@@ -523,8 +523,8 @@
   "pat": "mc.past-cond",
   "why": {
    "ok": {
-    "de": "had studied (früher), would have (jetzt): Folge gilt jetzt.",
-    "en": "had studied (earlier), would have (now): result now."
+    "de": "Früher: If I had studied harder. Jetzt: would have a better job (would + Grundform). would have studied im if-Teil ist falsch.",
+    "en": "Earlier: If I had studied harder. Now: would have a better job. “Would have studied” in the if-clause is wrong."
    },
    "wrong": [
     {
@@ -552,8 +552,8 @@
   "dup": "If I would have studied harder at university, I would have a better job now.",
   "why": {
    "ok": {
-    "de": "had studied (früher), would have (jetzt): Folge gilt jetzt.",
-    "en": "had studied (earlier), would have (now): result now."
+    "de": "„now“ zeigt die Folge für heute: would have a better job. Der Grund liegt früher, im if-Teil also had studied, nicht would have studied.",
+    "en": "“Now” shows the result today: would have a better job. The cause lies earlier, so the if-clause is had studied, not would have studied."
    },
    "wrong": [
     {
@@ -580,8 +580,8 @@
   "pat": "mc.wish-now",
   "why": {
    "ok": {
-    "de": "Wunsch über jetzt: wish + Past (had), nicht das Präsens.",
-    "en": "wish about now: wish + past (had), not the present."
+    "de": "Ein Wunsch über jetzt braucht wish + Past: I wish I had more free time. Deutsch „ich wünschte, ich habe“ verleitet zum Präsens.",
+    "en": "A wish about now takes wish + Past: I wish I had more free time. German “ich wünschte, ich habe” tempts you into the Present."
    },
    "wrong": [
     {
