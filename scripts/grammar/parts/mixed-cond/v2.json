@@ -1018,5 +1018,172 @@
     }
    ]
   }
+ },
+ {
+  "id": "mc.kwt31",
+  "type": "kwt",
+  "pat": "mc.inversion",
+  "from": "We didn't test the patch, so we suffered outages.",
+  "key": "HAD",
+  "frame": "___ the patch, we would not have suffered outages.",
+  "answer": "Had we tested",
+  "accepted": [
+   "Had we only tested",
+   "Had we properly tested"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Had we tested. Ohne if steht had vor dem Subjekt, danach das Partizip.",
+    "en": "Right: Had we tested. Without if, had comes before the subject, then the participle."
+   },
+   "wrong": [
+    {
+     "if": [
+      "if"
+     ],
+     "de": "Mit if wäre es If we had tested. Das Schlüsselwort had soll aber am Satzanfang stehen, ohne if.",
+     "en": "With if it would be If we had tested. The key word had must open the sentence, without if."
+    },
+    {
+     "if": [
+      "would"
+     ],
+     "de": "Hinter Had we steht kein would: nur das Partizip (Had we tested).",
+     "en": "No would after Had we: only the participle (Had we tested)."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.kwt32",
+  "type": "kwt",
+  "pat": "mc.inversion",
+  "from": "The vendor didn't answer in May, so we launched late.",
+  "key": "HAD",
+  "frame": "___ in May, we would have launched on time.",
+  "answer": "Had the vendor answered",
+  "accepted": [
+   "Had the vendor replied",
+   "Had the vendor responded"
+  ],
+  "words": [
+   4,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Had the vendor answered. Das Hilfsverb had steht vor dem Subjekt (the vendor), if entfällt.",
+    "en": "Right: Had the vendor answered. The auxiliary had comes before the subject (the vendor), if drops."
+   },
+   "wrong": [
+    {
+     "not": [
+      "had"
+     ],
+     "de": "Das Schlüsselwort had fehlt: Die förmliche Form beginnt mit Had + Subjekt.",
+     "en": "The key word had is missing: the formal form starts with Had + subject."
+    },
+    {
+     "if": [
+      "the",
+      "vendor",
+      "had"
+     ],
+     "de": "Die Reihenfolge ist falsch: Bei der Inversion kommt had vor the vendor.",
+     "en": "The order is wrong: in the inversion had comes before the vendor."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.find31",
+  "type": "find",
+  "pat": "mc.inversion",
+  "prompt": "Had we would have hired a second developer, the migration would not have taken so long.",
+  "err": [
+   2,
+   4
+  ],
+  "answer": "hired",
+  "fixed": "Had we hired a second developer, the migration would not have taken so long.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Nach Had we steht nur das Partizip (hired), kein would have.",
+    "en": "After Had we only the participle (hired) follows, no would have."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Hinter Had we darf kein would have stehen.",
+     "en": "There is an error: no would have after Had we."
+    },
+    {
+     "tap": "*",
+     "de": "Dieses Wort passt; der Fehler ist would have hinter Had we.",
+     "en": "This word fits; the error is would have after Had we."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.find32",
+  "type": "find",
+  "pat": "mc.inversion",
+  "prompt": "If had the client signed the contract in May, we would be live by now.",
+  "err": [
+   0,
+   1
+  ],
+  "answer": "Had",
+  "fixed": "Had the client signed the contract in May, we would be live by now.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Entweder If the client had signed oder Had the client signed: nie beides zugleich.",
+    "en": "Either If the client had signed or Had the client signed: never both."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, ein Fehler: If und vorangestelltes had zugleich geht nicht.",
+     "en": "There is an error: if and a fronted had cannot appear together."
+    },
+    {
+     "tap": "*",
+     "de": "Dieses Wort passt; der Fehler ist If had am Anfang.",
+     "en": "This word fits; the error is If had at the start."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.mean11",
+  "type": "meaning",
+  "pat": "mc.inversion",
+  "a": "Had we hired a second developer, the migration would not have taken so long.",
+  "b": "We hired a second developer, so the migration was quick.",
+  "q": {
+   "de": "Welcher Satz sagt, dass der zweite Entwickler nicht eingestellt wurde?",
+   "en": "Which sentence says the second developer was not hired?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Had we hired … ist die förmliche Form von If we had hired …: Es wurde nicht eingestellt. b berichtet eine Tatsache.",
+    "en": "Had we hired … is the formal form of If we had hired …: it did not happen. b reports a fact."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "b ist eine Tatsache (hired). Die Inversion in a sagt, dass es nicht geschah.",
+     "en": "b is a fact (hired). The inversion in a says it did not happen."
+    }
+   ]
+  }
  }
 ]

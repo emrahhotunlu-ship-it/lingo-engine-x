@@ -101,15 +101,43 @@ export function hasSignal(text: string, signal: string): boolean {
   return new RegExp(`(^|[^A-Za-z'])${escapeRe(s).replace(/\s+/g, '\\s+')}($|[^A-Za-z'])`, 'i').test(text);
 }
 
+// ------------------------------------------------------------------ Passung Muster ↔ Aufgabe
+
+/** Konstruktionen, die man im ausgefüllten Satz erkennt und die ein Muster ausdrücklich tragen muss (`inPattern`). */
+const CONSTRUCTS: Array<{ inText: RegExp; inPattern: RegExp }> = [
+  { inText: /(^|[.!;]\s*)(had|were|should)\s+(we|i|you|they|he|she|it|the|there|anything)\b[^?]*,/i, inPattern: /\bhad we\b|\bwere i\b|\bshould you\b|ohne if|without if/i },
+  { inText: /\b(wish(es|ed)?|if only)\b/i, inPattern: /\bwish|if only/i },
+  { inText: /\bwould rather\b/i, inPattern: /would rather/i },
+  { inText: /\b(high|about) time\b/i, inPattern: /high time|about time/i },
+];
+const biText = (b: Bi): string => `${b.de} ${b.en}`;
+
+/**
+ * Passt das Muster zur Konstruktion des Satzes? Enthält der Satz eine Inversion (Had we …), wish/if only, would rather oder
+ * high time, muss das Muster sie tragen (Name, Formel, Verwendung, Signalwörter). Umgekehrt darf ein Muster, dessen Formel auf so eine Konstruktion lautet (z. B. „wish + had + Partizip“), nicht an einem Satz ohne sie hängen. Das schützt vor
+ * Verwechslung über bloße Zeitwörter wie „earlier“ (Fall „Had we hired …“ → wish-Muster).
+ */
+export function patternFits(p: Pattern, text: string): boolean {
+  const all = `${p.id} ${biText(p.name)} ${biText(p.form)} ${biText(p.use)} ${p.signals.join(' ')}`;
+  const head = biText(p.form);
+  for (const c of CONSTRUCTS) {
+    const inSentence = c.inText.test(text);
+    if (inSentence && !c.inPattern.test(all)) return false;
+    if (!inSentence && c.inPattern.test(head)) return false;
+  }
+  return true;
+}
+
 /**
  * Muster einer Aufgabe: erst `task.pat`, dann die Zuordnungstabelle, bei Aufgaben außerhalb der Tabelle (Pool, Tagesauftrag)
- * über die Signalwörter in Satz und Lösung, aber nur bei eindeutigem Treffer (genau ein Muster mit den meisten Treffern,
- * mindestens einer). Sonst `null`.
+ * über die Signalwörter in Satz und Lösung, aber nur bei eindeutigem Treffer (genau ein Muster mit der höchsten Wertung,
+ * mindestens ein Treffer). Muster aus `pat` und Signalen müssen `patternFits` bestehen, sonst `null` (lieber kein Muster als
+ * ein falsches, Leitsatz 5).
  */
 export function patternOf(task: TaskRef): Pattern | null {
   if (task.pat) {
     const p = patternById(task.pat.includes(':') ? task.pat : `${task.topic}:${task.pat}`);
-    if (p) return p;
+    if (p && (!task.answer || patternFits(p, sentenceOf(task)))) return p;
   }
   const tp = patternsOf(task.topic);
   if (!tp) return null;
@@ -118,9 +146,12 @@ export function patternOf(task: TaskRef): Pattern | null {
   return patternBySignals(tp, sentenceOf(task));
 }
 
-/** Eindeutiger Treffer über Signalwörter (siehe `patternOf`). */
+/** Eindeutiger Treffer über Signalwörter (siehe `patternOf`). Eine Wortfolge zählt nach Wortzahl, ein einzelnes Zeitwort schlägt sie nie. */
 export function patternBySignals(tp: TopicPatterns, text: string): Pattern | null {
-  const scored = tp.patterns.map((p) => ({ p, n: p.signals.filter((s) => hasSignal(text, s)).length }));
+  const weight = (sig: string): number => sig.trim().split(/\s+/).length;
+  const scored = tp.patterns
+    .filter((p) => patternFits(p, text))
+    .map((p) => ({ p, n: p.signals.filter((s) => hasSignal(text, s)).reduce((sum, s) => sum + weight(s), 0) }));
   const best = Math.max(0, ...scored.map((x) => x.n));
   if (best <= 0) return null;
   const top = scored.filter((x) => x.n === best);

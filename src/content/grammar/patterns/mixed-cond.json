@@ -10,7 +10,8 @@
   "mc.wish-past",
   "mc.wish-would",
   "mc.present-cond",
-  "mc.high-time"
+  "mc.high-time",
+  "mc.inversion"
  ],
  "introPlan": [
   [
@@ -24,6 +25,9 @@
   [
    "mc.wish-would",
    "mc.high-time"
+  ],
+  [
+   "mc.inversion"
   ]
  ],
  "decide": {
@@ -508,6 +512,87 @@
    "nudge": {
     "de": "Es geht um jetzt, trotzdem verlangt die Wendung eine bestimmte Zeitform. Welche?",
     "en": "It is about now, yet the phrase demands a particular tense. Which one?"
+   }
+  },
+  {
+   "id": "mc.inversion",
+   "name": {
+    "de": "Had we … statt If we had … · if weglassen (förmlich)",
+    "en": "Had we … instead of If we had … · dropping if (formal)"
+   },
+   "form": {
+    "de": "Had we … / Were I … / Should you … + would (have) …",
+    "en": "Had we … / Were I … / Should you … + would (have) …"
+   },
+   "use": {
+    "de": "Förmliche Schriftsprache lässt if weg und stellt das Hilfsverb vor das Subjekt: Had we hired a developer earlier, … statt If we had hired … . Die Bedeutung bleibt gleich.",
+    "en": "Formal writing drops if and puts the auxiliary before the subject: Had we hired a developer earlier, … instead of If we had hired … . The meaning stays the same."
+   },
+   "signals": [
+    "Had we",
+    "Had I",
+    "Had you",
+    "Had they",
+    "Had the",
+    "Were I",
+    "Were we",
+    "Should you"
+   ],
+   "ex": [
+    {
+     "en": "Had we hired a designer earlier, onboarding would be smoother today.",
+     "de": "Hätten wir früher eine Designerin eingestellt, wäre das Onboarding heute reibungsloser.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Had the vendor answered in May, we would have launched in June.",
+     "de": "Hätte der Anbieter im Mai geantwortet, wären wir im Juni gestartet.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Were I in your position, I would escalate this today.",
+     "de": "Wäre ich an Ihrer Stelle, würde ich das heute eskalieren.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Had we would hire a second developer, the migration would be done.",
+    "good": "Had we hired a second developer, the migration would be done.",
+    "cause": {
+     "de": "Im Deutschen steht in „Hätten wir … eingestellt“ nur ein Verb. Auf Englisch folgt auf Had we direkt das Partizip, ohne would und ohne if.",
+     "en": "German „Hätten wir … eingestellt“ has just one verb. English needs Had we plus the participle, with no would and no if."
+    }
+   },
+   "contrast": {
+    "with": "mc.past-cond",
+    "a": "If we had hired a developer, we would be done.",
+    "b": "Had we hired a developer, we would be done.",
+    "diff": {
+     "de": "Gleiche Bedeutung. a: normal mit if. b: förmlich, if fällt weg und had steht vor we.",
+     "en": "Same meaning. a: normal, with if. b: formal, if drops and had comes before we."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Had we hired a second developer, the migration would not have taken so long.",
+     "q": {
+      "de": "Haben wir den Entwickler eingestellt?",
+      "en": "Did we hire the developer?"
+     },
+     "a": false
+    },
+    {
+     "s": "Had we hired a second developer, the migration would not have taken so long.",
+     "q": {
+      "de": "Steht hier das Wort if?",
+      "en": "Is the word if in this sentence?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Fehlt im Satz ein if? Dann steht das Hilfsverb am Anfang, vor dem Subjekt.",
+    "en": "Is there no if? Then the auxiliary comes first, before the subject."
    }
   }
  ]

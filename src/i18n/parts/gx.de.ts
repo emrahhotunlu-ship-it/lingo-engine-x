@@ -9,7 +9,7 @@ export const gxDe = {
   gxTask_find2: 'Ersetze nur die markierte Stelle.',
   gxTask_kwt: 'Schreibe den Satz mit dem Schlüsselwort um. Ergänze die Lücke.',
   gxTask_meaning: 'Welcher Satz sagt, was die Frage meint?',
-  gxTaskFor: '({pattern})',
+  gxTaskFor: 'Geübt wird: {pattern}.',
   gxPurpose_find: 'Fehler im eigenen Satz zu erkennen ist die Voraussetzung, sie zu vermeiden. So übst du genau das.',
   gxPurpose_kwt: 'Im Zertifikat und im Arbeitsalltag musst du dieselbe Aussage mit anderen Strukturen sagen können.',
   gxPurpose_meaning: 'So prüfst du, ob du den Unterschied zwischen zwei ähnlichen Formen wirklich verstehst, nicht nur die Form.',
@@ -19,6 +19,7 @@ export const gxDe = {
   gxKwtKeyMissing: 'Das Schlüsselwort muss unverändert dastehen',
   gxKwtWordCount: 'Falsche Wortzahl in der Lücke',
   gxHintFormula: 'Formel',
+  gxHintPattern: 'Tipp zum Muster',
   gxBadgeVortest: 'Neues Thema · Kurztest {n}/2',
   // Einführung neuer Muster
   gxIntroEyebrowNew: 'Neues Thema · Schritt {n} von {total}',

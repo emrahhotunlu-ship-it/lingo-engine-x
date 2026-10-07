@@ -338,7 +338,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   // ------------------------------------------------------------------ Hinweise (Tipp-Leiter und Zweitversuch)
 
   const tipText = (): string => {
-    if (tip === 1) return pattern ? (lang === 'de' ? pattern.nudge.de : pattern.nudge.en) : formHint(task, lang);
+    if (tip === 1) return pattern ? `${t('gxHintPattern')}: ${lang === 'de' ? pattern.nudge.de : pattern.nudge.en}` : formHint(task, lang);
     if (tip >= 2) return pattern ? `${t('gxHintFormula')}: ${lang === 'de' ? pattern.form.de : pattern.form.en}` : (task.hint ?? formHint(task, lang));
     return '';
   };
@@ -532,6 +532,14 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       if (type === 'correct' || (type === 'transform' && whole)) comparison = { given: fb.given, ops: c?.ops ?? alignWords(fb.given, task.answer) };
       else if (type === 'kwt' && (c?.ops ?? []).filter((o) => o.op !== 'eq').length > 1) comparison = { given: fb.given, ops: c?.ops ?? [] };
       else if (findTask && task.x?.kind === 'find' && task.x.fixed) comparison = { given: task.prompt, ops: alignWords(task.prompt, task.x.fixed) };
+      else if ((type === 'gap' || type === 'transform') && !choiceType && nonEmpty(fb.given)) {
+        // Die Lücke zeigt nur ein Wort: Der Vergleich nennt den ganzen Satz („Du: … → Richtig: …“) mit der markierten Stelle.
+        const base = type === 'transform' ? (task.prompt.split('→').pop() ?? '').trim() : task.prompt;
+        if (GAP.test(base)) {
+          const full = (fill: string): string => base.replace(GAP, fill.trim());
+          comparison = { given: full(fb.given), ops: alignWords(full(fb.given), full(task.answer)) };
+        }
+      }
     }
     const wrongTyped = fb.verdict === 'wrong' && !choiceType && !fb.dontKnow && !fb.override;
     const menu: Partial<Record<ShellMenuId, () => void>> = {};
