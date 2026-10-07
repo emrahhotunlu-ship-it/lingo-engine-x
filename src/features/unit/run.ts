@@ -17,6 +17,7 @@ import { selectAiAvailable } from '../../ai/scope';
 import { useCapabilities } from '../../platform/capabilities';
 import { logError, logWarn } from '../../platform/diagnostics';
 import { unlockSpeech, useSpeech } from '../../platform/speech';
+import { startFormatRound } from '../c1x/FormatRound';
 import { startCheck } from '../check/session';
 import { startGrammar } from '../grammar/session';
 import { startAgain } from '../repair/again/session';
@@ -170,6 +171,16 @@ export function startRow(u: UnitNow, row: UnitRow, api: FocusApi): void {
   const rb = resolveBlock(block, env);
   const ctx = ctxFor(u, block);
   const base: Partial<UnitRun> = { day: u.day, block: block.block, duty: row.id, kind: rb.kind, offline: rb.offline, at: Date.now(), phrases: ctx.phrases ?? [] };
+  // Plan 3.0 (P23): Schritt 3 an einem Format-Tag. Nicht machbar (zu wenig Aufgaben, Art aus) → weiter mit dem Satzbau. Die Tempo-Runde (`mode: 'tempo'`) folgt mit P24.
+  const fmt = block.block === 3 && rb.kind === 'task.order' && block.args?.mode === 'format' ? block.args.fmt : undefined;
+  const fr = fmt ? startFormatRound({ fmt, day: u.day, block: block.block }) : null;
+  if (fr) {
+    setRun({ ...base, via: 'provider', watch: null, routeName: fr.route.name, route: fr.route });
+    if (fr.first === 'typed') api.focusNow();
+    else api.blur();
+    useNav.getState().go(fr.route);
+    return;
+  }
   const route = tryProvider(block, ctx, env, rb.kind);
   if (route) {
     setRun({ ...base, via: 'provider', watch: null, routeName: route.name, route });

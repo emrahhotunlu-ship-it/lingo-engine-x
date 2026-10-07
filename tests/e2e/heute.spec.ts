@@ -26,7 +26,8 @@ test('Morgen-Journey: Tageskarte mit 4 Blöcken (Wortschatz · Grammatik · Satz
   await expect(page.getByTestId('duty')).toHaveCount(4);
   expect(await page.getByTestId('duty').evaluateAll((els) => els.map((e) => e.getAttribute('data-duty')))).toEqual(VG_DUTY);
   await expect(page.locator('[data-testid="duty"][data-duty="ch:u-focus"]')).toContainText('Grammatik');
-  await expect(page.locator('[data-testid="duty"][data-duty="ch:u-task"]')).toContainText('Satzbau');
+  // Dienstag ist Format-Tag (Plan 3.0, P23): Schritt 3 heißt dort wie die Aufgabenart, die Blockart bleibt task.order.
+  await expect(page.locator('[data-testid="duty"][data-duty="ch:u-task"]')).toContainText('Kleines Wort');
   await expect(page.locator('[data-testid="duty"][data-duty="ch:u-again"]')).toContainText('Fehler korrigieren');
   await expect(page.getByTestId('duty').first()).toHaveAttribute('data-now', 'true');
   await expect(page.getByTestId('today-theme')).toHaveCount(0);

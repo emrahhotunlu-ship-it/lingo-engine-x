@@ -14,7 +14,9 @@ import { type FeasibleData } from '../../domain/plan/channels';
 import { pflichtFor, pflichtMarked, type PflichtInput } from '../../domain/plan/pflicht';
 import type { StoredPlan } from '../../domain/plan/types';
 import { repairsDoneToday, repairsDutyToday, pickDailyRepairs } from '../../domain/repair/daily';
-import { buildTrainCards, fehlersaetzeDue, festUnits } from '../../domain/metrics';
+import { buildTrainCards, fehlersaetzeDue, festUnits, nextGoal } from '../../domain/metrics';
+import { checkPlanned, step3Format } from '../../domain/c1/checkSchedule';
+import { flags, kindEnabled } from '../../app/flags';
 import { docTotal } from '../../domain/capacity/docGuard';
 import { freezeGrammarDay } from '../../domain/grammar/path';
 import { patternsOf } from '../../domain/grammar/patterns';
@@ -181,6 +183,17 @@ function afterPaint(fn: () => void): void {
   else window.setTimeout(fn, 60);
 }
 
+/** Tag des letzten C1-Checks aus `app/c1.checks` (tolerant gelesen: Einträge mit `d` als Lerntag); `null`, wenn es keinen gibt. */
+function lastCheckDay(doc: Readonly<Record<string, unknown>> | null | undefined): string | null {
+  const list = Array.isArray(doc?.checks) ? (doc.checks as unknown[]) : [];
+  let last: string | null = null;
+  for (const c of list) {
+    const d = c && typeof c === 'object' ? (c as { d?: unknown }).d : null;
+    if (typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d) && (last === null || d > last)) last = d;
+  }
+  return last;
+}
+
 /** Neuer Tagesplan der Einheit aus den Live-Daten (rein rechnend, schreibt nichts). */
 export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
   const live = useLive.getState();
@@ -192,6 +205,7 @@ export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
   const draft = unitDraft({ day: today, week: null, goalMin, ...(restart ? { comeback: 'restart' as const } : {}) });
   let review: ReviewGoal = { goal: 0, due: 0, fresh: 0, repairs: 0 };
   let facts: { ov: number; sure: number } | null = null;
+  let fest: { units: number; vocab: number } | null = null;
   if (draft.duty.includes('review')) {
     const cards = buildTrainCards(live.collections.vocab ?? new Map(), nowMs, invalidIdsOf(live.invalid, 'vocab'));
     // Wendungen (`chunk/*`) gehören zur täglichen Wiederholung (Kap. 5, M15): gleiche Planung.
@@ -211,6 +225,7 @@ export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
     });
     const st = cardStats(all, lang, nowMs);
     facts = { ov: st.overdue, sure: st.sure };
+    fest = { units: festUnits(all), vocab: festUnits(cards) };
   }
   // Die Neustart-Woche endet nach 7 Lerntagen oder sobald weniger als 40 Karten überfällig sind; danach Kurz-Plan, solange es ≥ 40 sind (Prüfbefund S9).
   const mode = comebackMode(profile, today, facts?.ov ?? null);
@@ -219,7 +234,27 @@ export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
   const fixDue = fehlersaetzeDue({ grammarDocs, repairDoc: live.docs['app/repair'], nowMs, today });
   // Das Grammatikthema des Tages und die Musterzustände vom Morgen werden mit dem Plan eingefroren (Lernplattform 2.0 §2.3, für jeden neuen Plan).
   const { gt, ps } = freezeGrammarDay({ docs: grammarDocs, today, nowMs, introPlanOf: INTRO_PLAN_OF, seed: today });
-  return buildUnitStored({ day: today, nowMs, week: null, goalMin, review, fixDue, gt, ps, ...(mode ? { comeback: mode } : {}), ...(facts ? { ov: facts.ov, sure: facts.sure } : {}) });
+  // Plan 3.0 (P23): Format von Schritt 3 nach Wochentag, Check-Tag und nächstes Ziel werden jetzt festgelegt und mit dem Plan eingefroren.
+  const step3 = step3Format(today, { kindOn: kindEnabled, tempoOn: flags.tempo });
+  // `app/c1` wird erst mit dem Programm (P31) abonniert; bis dahin fehlt das Dokument und der Check-Tag bleibt aus.
+  const c1doc = (live.docs as Record<string, Readonly<Record<string, unknown>> | null | undefined>)['app/c1'] ?? null;
+  const c1 = checkPlanned(today, draft.shape, { programStarted: !!c1doc, lastCheck: lastCheckDay(c1doc), formAvailable: flags.c1check }) ? ('check' as const) : undefined;
+  const goal = fest ? nextGoal({ festUnits: fest.units, vocabFest: fest.vocab, history: profile?.history, today }) : null;
+  return buildUnitStored({
+    day: today,
+    nowMs,
+    week: null,
+    goalMin,
+    review,
+    fixDue,
+    gt,
+    ps,
+    ...(mode ? { comeback: mode } : {}),
+    ...(facts ? { ov: facts.ov, sure: facts.sure } : {}),
+    ...(step3 && !mode ? { step3 } : {}),
+    ...(c1 && !mode ? { c1 } : {}),
+    ...(goal ? { nx: goal.id } : {}),
+  });
 }
 
 /** Plan in `app/profile.plan` speichern – außer ein anderes Gerät hat für heute schon einen (der gilt). */

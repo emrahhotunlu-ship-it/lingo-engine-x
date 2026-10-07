@@ -1,4 +1,4 @@
-import type { DutyId, DutyState, StoredPlan } from '../plan/types';
+import type { DutyId, DutyState, Step3Fmt, StoredPlan } from '../plan/types';
 import type { UnitBlockKind } from './types';
 
 // Blockliste der Tageskarte (plan.md §1.3): EINE Ableitung aus Plan und Tagesstand (`deriveToday`).
@@ -14,6 +14,8 @@ export type UnitRow = {
   min: number;
   state: BlockState;
   progress: DutyState['progress'];
+  /** Format-Tag (P23): die Aufgabenart von Schritt 3; sonst fehlt das Feld. */
+  fmt?: Step3Fmt;
 };
 
 /** Zeilen der Einheit; `now` = erster offener Block. Ohne `u` (Plan von Phase 1/2): `null`. */
@@ -27,7 +29,8 @@ export function unitRows(plan: StoredPlan | null, items: readonly DutyState[]): 
     const done = it?.state === 'done';
     const state: BlockState = done ? 'done' : nowSet ? 'open' : 'now';
     if (!done) nowSet = true;
-    return { id, block: meta?.[0] ?? 1, kind: (meta?.[1] ?? 'review') as UnitBlockKind, min: meta?.[2] ?? 0, state, progress: it?.progress ?? null };
+    const fmt = meta?.[0] === 3 && meta[3]?.mode === 'format' ? meta[3].fmt : undefined;
+    return { id, block: meta?.[0] ?? 1, kind: (meta?.[1] ?? 'review') as UnitBlockKind, min: meta?.[2] ?? 0, state, progress: it?.progress ?? null, ...(fmt ? { fmt } : {}) };
   });
 }
 

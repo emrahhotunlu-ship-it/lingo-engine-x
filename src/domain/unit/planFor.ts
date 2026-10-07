@@ -134,7 +134,9 @@ export function unitPlanFor(day: string, _week: unknown, prefs: UnitPrefs = {}):
       blocks.push(block(2, step('grammar', { n: GRAMMAR_N.tiny }), VG_MIN.tiny.grammar, 'ch:u-focus', rv2));
     } else {
       blocks.push(block(2, step('grammar', { n: GRAMMAR_N.full }), VG_MIN.full.grammar, 'ch:u-focus', rv2));
-      blocks.push(block(3, step('task.order'), VG_MIN.full.order));
+      // Plan 3.0 (P23, §2.1): an Format-Tagen trägt Schritt 3 im 4. Tupel-Element die Art des Tages; die Blockart bleibt Satzbau (Rückweg: alte Leser starten Satzbau).
+      const s3 = v2 && prefs.step3 ? { mode: prefs.step3.mode, ...(prefs.step3.fmt ? { fmt: prefs.step3.fmt } : {}) } : undefined;
+      blocks.push(block(3, step('task.order'), VG_MIN.full.order, CHANNEL[3], s3));
     }
     blocks.push(fixBlock(VG_MIN.full.again, fixLimitFor(reduced ? 'short' : 'full', prefs.fixDue, reduced)));
   }

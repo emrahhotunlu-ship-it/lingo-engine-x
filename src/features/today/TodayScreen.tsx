@@ -418,7 +418,7 @@ export function TodayScreen() {
       const b: UnitBlock | undefined = up.blocks.find((x) => x.channel === r.id);
       return {
         id: r.id,
-        name: blockName(r.kind, r.block, t),
+        name: blockName(r.kind, r.block, t, r.fmt),
         why: b ? blockWhy(b, t, plan.goal.review, b.kind === 'review' && b.min * 60 > up.reviewSec) : '',
         whyKey: b?.kind ?? r.kind,
         min: r.min,

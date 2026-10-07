@@ -29,7 +29,12 @@ export type StoredPlan = {
  * Schritt-Argumente der Regelversion 2 (Lernplattform 2.0 §2.3): `errs` = Fehlersätze in der Grammatikrunde, `repairs` = Reparatur-Sätze in
  * Schritt 1, `limit` = Sätze in Schritt 4. Ältere Leser lesen nur die ersten drei Tupel-Elemente.
  */
-export type StepArgs = { errs?: number; repairs?: number; limit?: number };
+export type StepArgs = { errs?: number; repairs?: number; limit?: number; mode?: Step3Mode; fmt?: Step3Fmt };
+
+/** Schritt 3 an Format-Tagen (Lernplattform 3.0 §2.1, P23): `format` = eine Art des Tages, `tempo` = Tempo-Runde (Samstag). Fehlt `mode`, ist es Satzbau. */
+export type Step3Mode = 'tempo' | 'format';
+/** Die Aufgabenart des Format-Tags (`ocl` Kleines Wort · `wf` Wort umbauen · `kwt` Umformen · `mcc` Passendes Wort). */
+export type Step3Fmt = 'ocl' | 'wf' | 'kwt' | 'mcc';
 
 /** Block der Tageseinheit im gespeicherten Plan: [Block-Nr., Art, Minuten, Schritt-Argumente (nur ab Regelversion 2)]. */
 export type UnitMetaBlock = [block: 1 | 2 | 3 | 4 | 5, kind: string, min: number, args?: StepArgs];
@@ -63,6 +68,10 @@ export type UnitMeta = {
   gt?: GrammarDay;
   /** Eingefroren: Musterzustände vom Morgen für die Muster der `gt`-Themen (≤ 24). */
   ps?: Record<string, PatState>;
+  /** Plan 3.0 (Lernplattform 3.0 §2.4, P23), additiv: `'check'` = heute ersetzt der C1-Check Schritt 2 und 3; die normalen Schritte stehen im selben Plan als Alternative. */
+  c1?: 'check';
+  /** Plan 3.0, additiv: Kennung des nächsten Ziels (`nextGoal`), beim Anlegen eingefroren (höchstens 24 Zeichen). */
+  nx?: string;
 };
 
 export type DutyState = { id: DutyId; state: 'done' | 'open'; progress: { done: number; total: number } | null };

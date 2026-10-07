@@ -3,7 +3,7 @@ import { fixLimitFor, GRAMMAR_N, unitPlanFor } from './planFor';
 import type { ComebackMode, UnitBlock, UnitBlockKind, UnitChannel, UnitPlan, UnitPrefs } from './types';
 import { ERRORS_PER_ROUND } from '../grammar/tasks';
 import { AGAIN_OLD } from '../repair/unit';
-import type { DutyId, GrammarDay, PatState, StoredPlan, UnitMeta } from '../plan/types';
+import type { DutyId, GrammarDay, PatState, Step3Fmt, Step3Mode, StoredPlan, UnitMeta } from '../plan/types';
 
 /**
  * Regelversion für NEUE Pläne (Lernplattform 2.0 §2.3). Seit dem Abschluss von Welle 2 `2` (§10.2).
@@ -40,6 +40,10 @@ export type UnitBuildInput = {
   /** Eingefroren beim Anlegen (§2.3), unabhängig von `rv`: Grammatikthema des Tages und Musterzustände vom Morgen. */
   gt?: GrammarDay;
   ps?: Record<string, PatState>;
+  /** Plan 3.0 (P23, §2.1/§2.4), beim Anlegen eingefroren: Format von Schritt 3, Check-Tag, nächstes Ziel. Alles rein ergänzend. */
+  step3?: { mode: Step3Mode; fmt?: Step3Fmt } | null;
+  c1?: 'check';
+  nx?: string;
 };
 
 /** Plan-Vorstufe ohne Block-1-Umfang: liefert das Budget für die Berechnung von `goal.review`. */
@@ -47,17 +51,18 @@ export function unitDraft(i: Omit<UnitBuildInput, 'nowMs' | 'review'>): UnitPlan
   return unitPlanFor(i.day, i.week, prefsOf(i));
 }
 
-function prefsOf(i: { goalMin: number; fixDue?: number; comeback?: ComebackMode; rv?: 1 | 2 }, reviewCount?: number, reviewMin?: number): UnitPrefs {
+function prefsOf(i: { goalMin: number; fixDue?: number; comeback?: ComebackMode; rv?: 1 | 2; step3?: UnitPrefs['step3'] }, reviewCount?: number, reviewMin?: number): UnitPrefs {
   const p: UnitPrefs = { goalMin: i.goalMin };
   if (i.rv === 2) p.rv = 2;
   if (i.fixDue !== undefined) p.fixDue = i.fixDue;
   if (i.comeback) p.comeback = i.comeback;
+  if (i.step3) p.step3 = i.step3;
   if (reviewCount !== undefined) p.reviewCount = reviewCount;
   if (reviewMin !== undefined && reviewMin > 0) p.reviewMin = reviewMin;
   return p;
 }
 
-function metaOf(up: UnitPlan, facts: { ov?: number; sure?: number; gt?: GrammarDay; ps?: Record<string, PatState> } = {}): UnitMeta {
+function metaOf(up: UnitPlan, facts: { ov?: number; sure?: number; gt?: GrammarDay; ps?: Record<string, PatState>; c1?: 'check'; nx?: string } = {}): UnitMeta {
   const m: UnitMeta = { v: 1, shape: up.shape, goalMin: up.goalMin, theme: '', min: up.minutes, b: up.blocks.map((b) => (b.args ? [b.block, b.kind, b.min, b.args] : [b.block, b.kind, b.min])) };
   if (up.comeback) m.cb = up.comeback;
   if (facts.ov !== undefined) m.ov = facts.ov;
@@ -65,6 +70,8 @@ function metaOf(up: UnitPlan, facts: { ov?: number; sure?: number; gt?: GrammarD
   if (up.rv === 2) m.rv = 2;
   if (facts.gt) m.gt = facts.gt;
   if (facts.ps && Object.keys(facts.ps).length) m.ps = facts.ps;
+  if (facts.c1) m.c1 = facts.c1;
+  if (facts.nx) m.nx = facts.nx;
   return m;
 }
 
@@ -81,7 +88,7 @@ export function buildUnitStored(i: UnitBuildInput): StoredPlan {
     goal: hasReview ? { review: i.review.goal, due: i.review.due, new: i.review.fresh, ahead: 0 } : { review: 0, due: 0, new: 0, ahead: 0 },
     lesson: null,
     at: i.nowMs,
-    u: metaOf(up, { ov: i.ov, sure: i.sure, ...(i.gt ? { gt: i.gt } : {}), ...(i.ps ? { ps: i.ps } : {}) }),
+    u: metaOf(up, { ov: i.ov, sure: i.sure, ...(i.gt ? { gt: i.gt } : {}), ...(i.ps ? { ps: i.ps } : {}), ...(i.c1 && up.shape === 'sat' && up.rv === 2 ? { c1: i.c1 } : {}), ...(i.nx && up.rv === 2 ? { nx: i.nx } : {}) }),
   };
 }
 
@@ -155,6 +162,13 @@ export function unitStepArgs(plan: StoredPlan | null | undefined, block: 1 | 2 |
   if (block === 1) return { repairs: REPAIR_MAX };
   if (block === 2) return { errs: ERRORS_PER_ROUND };
   return { limit: AGAIN_OLD };
+}
+
+/** Format von Schritt 3 laut gespeichertem Plan (4. Tupel-Element von Block 3); `null` = Satzbau (Montag, ältere Pläne, Format nicht angeboten). */
+export function unitStep3(plan: StoredPlan | null | undefined): { mode: Step3Mode; fmt?: Step3Fmt } | null {
+  const a = plan?.u?.b.find(([block]) => block === 3)?.[3];
+  if (!a?.mode) return null;
+  return a.mode === 'format' && !a.fmt ? null : { mode: a.mode, ...(a.fmt ? { fmt: a.fmt } : {}) };
 }
 
 /** Grenze von Schritt 4 für einen neuen Plan der Regelversion 2 (Formel §2.3), für Tests und Anzeige. */
