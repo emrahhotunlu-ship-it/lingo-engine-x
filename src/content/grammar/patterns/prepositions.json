@@ -40,8 +40,8 @@
   {
    "id": "prp.verb-prep",
    "name": {
-    "de": "Verb + feste Präposition",
-    "en": "verb + fixed preposition"
+    "de": "Verb oder Wendung + feste Präposition",
+    "en": "verb or phrase + fixed preposition"
    },
    "form": {
     "de": "Verb + Präposition als Paket: depend on, insist on, wait for",
@@ -59,7 +59,7 @@
     "congratulate",
     "rely on",
     "apply for",
-    "look for"
+    "have an impact on"
    ],
    "ex": [
     {
@@ -289,8 +289,8 @@
     "en": "explain / describe / suggest + thing + to + person"
    },
    "use": {
-    "de": "Bei explain, describe, say und suggest steht die Person nach to. Direkt hinter dem Verb steht die Sache.",
-    "en": "With explain, describe, say and suggest the person follows to. The thing comes right after the verb."
+    "de": "Bei explain, describe, say und suggest steht die Person nach to. Direkt hinter dem Verb steht die Sache. (Bei say oft: say to + Person + that-Satz.)",
+    "en": "With explain, describe, say and suggest the person follows to. The thing comes right after the verb. (With say often: say to + person + that clause.)"
    },
    "signals": [
     "explain to",

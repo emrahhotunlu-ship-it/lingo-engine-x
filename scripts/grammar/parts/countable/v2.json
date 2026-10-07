@@ -75,14 +75,10 @@
   "frame": "We don't have ___ about the new supplier yet.",
   "answer": "much information",
   "accepted": [
-   "any information",
-   "enough information",
    "a lot of information",
    "that much information",
    "very much information",
-   "a great deal of information",
-   "detailed information",
-   "sufficient information"
+   "a great deal of information"
   ],
   "words": [
    2,
@@ -455,9 +451,11 @@
   "key": "MANY",
   "frame": "I don't know ___ will join us.",
   "answer": "how many people",
-  "accepted": [],
+  "accepted": [
+   "how many"
+  ],
   "words": [
-   3,
+   2,
    3
   ],
   "why": {
@@ -554,8 +552,6 @@
   "accepted": [
    "some feedback",
    "a bit of feedback",
-   "very little feedback",
-   "little feedback",
    "a few comments",
    "a few responses",
    "a few pieces of feedback"

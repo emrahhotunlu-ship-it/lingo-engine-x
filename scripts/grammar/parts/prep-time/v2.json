@@ -4,7 +4,7 @@
   "type": "kwt",
   "pat": "pt.at-on-in",
   "from": "Our review is scheduled for Tuesday afternoon.",
-  "key": "ON",
+  "key": "TUESDAY",
   "frame": "Our review is ___ afternoon.",
   "answer": "on Tuesday",
   "accepted": [],
@@ -18,6 +18,13 @@
     "en": "Right: a day of the week takes on: on Tuesday afternoon."
    },
    "wrong": [
+    {
+     "not": [
+      "tuesday"
+     ],
+     "de": "Das Schlüsselwort Tuesday muss unverändert in der Lücke stehen.",
+     "en": "The key word Tuesday must stay unchanged in the gap."
+    },
     {
      "if": [
       "at"
@@ -36,8 +43,8 @@
      "not": [
       "on"
      ],
-     "de": "Das Schlüsselwort on muss unverändert in der Lücke stehen.",
-     "en": "The key word on must stay unchanged in the gap."
+     "de": "Gesucht ist die Präposition vor einem Wochentag: on Tuesday.",
+     "en": "The preposition before a day of the week is needed: on Tuesday."
     }
    ]
   }
@@ -47,7 +54,7 @@
   "type": "kwt",
   "pat": "pt.at-on-in",
   "from": "The new office opens at the start of June.",
-  "key": "IN",
+  "key": "EARLY",
   "frame": "The new office opens ___ June.",
   "answer": "in early",
   "accepted": [
@@ -63,6 +70,13 @@
     "en": "Right: a month takes in: in early June."
    },
    "wrong": [
+    {
+     "not": [
+      "early"
+     ],
+     "de": "Das Schlüsselwort early muss unverändert in der Lücke stehen.",
+     "en": "The key word early must stay unchanged in the gap."
+    },
     {
      "if": [
       "on"
@@ -81,8 +95,8 @@
      "not": [
       "in"
      ],
-     "de": "Das Schlüsselwort in muss unverändert in der Lücke stehen.",
-     "en": "The key word in must stay unchanged in the gap."
+     "de": "Gesucht ist die Präposition vor einem Monat: in early June.",
+     "en": "The preposition before a month is needed: in early June."
     }
    ]
   }
@@ -204,15 +218,13 @@
   "type": "kwt",
   "pat": "pt.for-since",
   "from": "I joined the team in 2021 and I'm still here.",
-  "key": "SINCE",
+  "key": "WORKED",
   "frame": "I ___ 2021.",
   "answer": "have worked here since",
   "accepted": [
-   "have been here since",
-   "have been working here since",
    "'ve worked here since",
-   "'ve been here since",
-   "'ve been working here since"
+   "have worked there since",
+   "'ve worked there since"
   ],
   "words": [
    3,
@@ -225,6 +237,13 @@
    },
    "wrong": [
     {
+     "not": [
+      "worked"
+     ],
+     "de": "Das Schlüsselwort worked muss unverändert in der Lücke stehen.",
+     "en": "The key word worked must stay unchanged in the gap."
+    },
+    {
      "if": [
       "for"
      ],
@@ -235,8 +254,8 @@
      "not": [
       "since"
      ],
-     "de": "Das Schlüsselwort since muss unverändert in der Lücke stehen.",
-     "en": "The key word since must stay unchanged in the gap."
+     "de": "Gesucht ist since + Startpunkt: since 2021.",
+     "en": "Since + starting point is needed: since 2021."
     }
    ]
   }
@@ -246,7 +265,7 @@
   "type": "kwt",
   "pat": "pt.for-since",
   "from": "We started testing two hours ago and are still testing.",
-  "key": "FOR",
+  "key": "TESTING",
   "frame": "We ___ two hours.",
   "answer": "have been testing for",
   "accepted": [
@@ -263,6 +282,13 @@
    },
    "wrong": [
     {
+     "not": [
+      "testing"
+     ],
+     "de": "Das Schlüsselwort testing muss unverändert in der Lücke stehen.",
+     "en": "The key word testing must stay unchanged in the gap."
+    },
+    {
      "if": [
       "since"
      ],
@@ -273,8 +299,8 @@
      "not": [
       "for"
      ],
-     "de": "Das Schlüsselwort for muss unverändert in der Lücke stehen.",
-     "en": "The key word for must stay unchanged in the gap."
+     "de": "Gesucht ist for + Dauer: for two hours.",
+     "en": "For + duration is needed: for two hours."
     }
    ]
   }
@@ -378,7 +404,7 @@
   "type": "kwt",
   "pat": "pt.by-until",
   "from": "Please send me the final numbers no later than Wednesday.",
-  "key": "BY",
+  "key": "WEDNESDAY",
   "frame": "Please send me the final numbers ___.",
   "answer": "by Wednesday",
   "accepted": [
@@ -395,6 +421,13 @@
    },
    "wrong": [
     {
+     "not": [
+      "wednesday"
+     ],
+     "de": "Das Schlüsselwort Wednesday muss unverändert in der Lücke stehen.",
+     "en": "The key word Wednesday must stay unchanged in the gap."
+    },
+    {
      "if": [
       "until"
      ],
@@ -405,8 +438,8 @@
      "not": [
       "by"
      ],
-     "de": "Das Schlüsselwort by muss unverändert in der Lücke stehen.",
-     "en": "The key word by must stay unchanged in the gap."
+     "de": "Gesucht ist die Präposition für die Frist: by Wednesday.",
+     "en": "The preposition for the deadline is needed: by Wednesday."
     }
    ]
   }
@@ -416,10 +449,12 @@
   "type": "kwt",
   "pat": "pt.by-until",
   "from": "I won't be reachable before Monday.",
-  "key": "UNTIL",
+  "key": "MONDAY",
   "frame": "I won't be reachable ___.",
   "answer": "until Monday",
-  "accepted": [],
+  "accepted": [
+   "till Monday"
+  ],
   "words": [
    2,
    2
@@ -431,6 +466,13 @@
    },
    "wrong": [
     {
+     "not": [
+      "monday"
+     ],
+     "de": "Das Schlüsselwort Monday muss unverändert in der Lücke stehen.",
+     "en": "The key word Monday must stay unchanged in the gap."
+    },
+    {
      "if": [
       "by"
      ],
@@ -439,10 +481,11 @@
     },
     {
      "not": [
-      "until"
+      "until",
+      "till"
      ],
-     "de": "Das Schlüsselwort until muss unverändert in der Lücke stehen.",
-     "en": "The key word until must stay unchanged in the gap."
+     "de": "Gesucht ist die Präposition für das Andauern: until Monday.",
+     "en": "The preposition for a lasting state is needed: until Monday."
     }
    ]
   }
@@ -566,12 +609,11 @@
   "type": "kwt",
   "pat": "pt.during-within",
   "from": "We'll send you a quote; you'll have it in no more than two business days.",
-  "key": "WITHIN",
+  "key": "TWO",
   "frame": "We'll send you a quote ___ business days.",
   "answer": "within two",
   "accepted": [
-   "within the next two",
-   "within 2"
+   "within the next two"
   ],
   "words": [
    2,
@@ -584,6 +626,13 @@
    },
    "wrong": [
     {
+     "not": [
+      "two"
+     ],
+     "de": "Das Schlüsselwort two muss unverändert in der Lücke stehen.",
+     "en": "The key word two must stay unchanged in the gap."
+    },
+    {
      "if": [
       "during"
      ],
@@ -594,8 +643,8 @@
      "not": [
       "within"
      ],
-     "de": "Das Schlüsselwort within muss unverändert in der Lücke stehen.",
-     "en": "The key word within must stay unchanged in the gap."
+     "de": "Gesucht ist within + Zeitrahmen: within two business days.",
+     "en": "Within + time frame is needed: within two business days."
     }
    ]
   }
@@ -605,11 +654,12 @@
   "type": "kwt",
   "pat": "pt.during-within",
   "from": "Please don't use your phone while the presentation is running.",
-  "key": "DURING",
+  "key": "PRESENTATION",
   "frame": "Please don't use your phone ___.",
   "answer": "during the presentation",
   "accepted": [
-   "during this presentation"
+   "during this presentation",
+   "throughout the presentation"
   ],
   "words": [
    3,
@@ -622,6 +672,13 @@
    },
    "wrong": [
     {
+     "not": [
+      "presentation"
+     ],
+     "de": "Das Schlüsselwort presentation muss unverändert in der Lücke stehen.",
+     "en": "The key word presentation must stay unchanged in the gap."
+    },
+    {
      "if": [
       "within"
      ],
@@ -630,10 +687,11 @@
     },
     {
      "not": [
-      "during"
+      "during",
+      "throughout"
      ],
-     "de": "Das Schlüsselwort during muss unverändert in der Lücke stehen.",
-     "en": "The key word during must stay unchanged in the gap."
+     "de": "Gesucht ist die Präposition vor einem Ereignis: during the presentation.",
+     "en": "The preposition before an event is needed: during the presentation."
     }
    ]
   }
@@ -682,7 +740,9 @@
   ],
   "answer": "during",
   "fixed": "Please stay seated during the Q&A session.",
-  "accepted": [],
+  "accepted": [
+   "throughout"
+  ],
   "why": {
    "ok": {
     "de": "Der Fehler: Vor einem Nomen steht during. while braucht einen ganzen Satz.",

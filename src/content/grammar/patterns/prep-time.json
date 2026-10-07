@@ -44,8 +44,8 @@
     "en": "at + clock time · on + day · in + month"
    },
    "use": {
-    "de": "Nennt, wann etwas stattfindet: at vor der Uhrzeit, on vor Tag und Datum, in vor Monat, Jahr und Tageszeit (in the morning).",
-    "en": "Says when something happens: at before a clock time, on before a day or date, in before a month, year or part of the day (in the morning)."
+    "de": "Nennt, wann etwas stattfindet: at vor der Uhrzeit, on vor Tag und Datum, in vor Monat, Jahr und Tageszeit (in the morning). Ausnahme: at night.",
+    "en": "Says when something happens: at before a clock time, on before a day or date, in before a month, year or part of the day (in the morning). Exception: at night."
    },
    "signals": [
     "at 9:30",
@@ -129,8 +129,8 @@
     "en": "for + duration · since + starting point"
    },
    "use": {
-    "de": "for nennt, wie lange etwas dauert (for two weeks). since nennt, wann es begann (since Monday). Dazu passt das Present Perfect, nicht das Präsens.",
-    "en": "for says how long something lasts (for two weeks). since says when it began (since Monday). The present perfect fits, not the simple present."
+    "de": "for nennt, wie lange etwas dauert (for two weeks). since nennt, wann es begann (since Monday). Bei andauernden Zuständen passt das Present Perfect, nicht das Präsens.",
+    "en": "for says how long something lasts (for two weeks). since says when it began (since Monday). For ongoing states the present perfect fits, not the simple present."
    },
    "signals": [
     "for two weeks",

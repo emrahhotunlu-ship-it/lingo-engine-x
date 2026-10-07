@@ -28,12 +28,12 @@
   "de": [
    "Steht die Maßangabe vor einem Nomen (Bindestrich, Singular) oder hinter dem Verb (kein Bindestrich, Plural)?",
    "Mehrere Adjektive: Was beschreibt jedes? Größe und Alter kommen vor Farbe, Herkunft und Material.",
-   "Ist das zweite Wort im Baustein ein Nomen (bleibt unverändert) oder ein Partizip (-ing oder -ed)?"
+   "Ist der Baustein ein fester Block (user-friendly, cost-effective: bleibt unverändert) oder aus Nomen oder Adverb + Partizip (-ing oder -ed) gebaut?"
   ],
   "en": [
    "Does the measure come before a noun (hyphen, singular) or after the verb (no hyphen, plural)?",
    "Several adjectives: what does each describe? Size and age come before color, origin, and material.",
-   "Is the second word of the block a noun (stays unchanged) or a participle (-ing or -ed)?"
+   "Is the block fixed (user-friendly, cost-effective: stays unchanged) or built from a noun or adverb + participle (-ing or -ed)?"
   ]
  },
  "patterns": [

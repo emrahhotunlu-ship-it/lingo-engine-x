@@ -4820,8 +4820,7 @@
    "accepted": [
     "a lot of",
     "that many",
-    "very many",
-    "too many"
+    "very many"
    ],
    "expl": "„few“ entspricht in der Verneinung „not many“ (zählbar).",
    "expl_en": "“Few” corresponds to “not many” in the negative (countable)."
@@ -4832,8 +4831,7 @@
    "prompt": "There isn't much furniture in the new office. → The new office has only ___ furniture.",
    "answer": "a little",
    "accepted": [
-    "a bit of",
-    "very little"
+    "a bit of"
    ],
    "expl": "„furniture“ ist unzählbar, deshalb „a little“.",
    "expl_en": "“Furniture” is uncountable, so “a little”."
@@ -5094,7 +5092,9 @@
    "type": "gap",
    "prompt": "I was on a call with a client ___ the lunch break.",
    "answer": "during",
-   "accepted": [],
+   "accepted": [
+    "over"
+   ],
    "hint": "(Präposition)",
    "expl": "„during“ steht vor einem Ereignis oder einer Phase.",
    "expl_en": "“During” goes before an event or a phase."

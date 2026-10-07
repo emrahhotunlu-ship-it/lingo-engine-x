@@ -67,7 +67,8 @@
 "this quarter"
 ],
 "alt": [
-"This quarter, everyone in the sales department is very proud of the results."
+"This quarter, everyone in the sales department is very proud of the results.",
+"In the sales department, everyone is very proud of the results this quarter."
 ],
 "why": [
 "Proud verlangt of vor dem Grund des Stolzes: of the results bleibt als Block, die Zeitangabe kann vorn stehen.",
@@ -85,23 +86,23 @@
 },
 {
 "pat": "pn.to",
-"en": "Since March, only senior staff have access to the finance folder.",
+"en": "Since March, only senior staff have had access to the finance folder.",
 "de": "Seit März haben nur leitende Mitarbeiter Zugang zum Finanzordner.",
 "chunks": [
 "since March",
 "only",
 "senior staff",
-"have access",
+"have had access",
 "to the finance folder"
 ],
 "alt": [
-"Only senior staff have access to the finance folder since March."
+"Only senior staff have had access to the finance folder since March."
 ],
 "why": [
 "Access verlangt to vor dem Ziel: to the finance folder bleibt als Block, die Zeitangabe kann vorn oder hinten stehen.",
 "Access takes to before the target: to the finance folder stays together, and the time phrase can come first or last."
 ],
-"bad": "Since March, only senior staff have access for the finance folder.",
+"bad": "Since March, only senior staff have had access for the finance folder.",
 "trap": {
 "tile": "to the finance folder",
 "instead": "for the finance folder",
@@ -144,10 +145,10 @@
 "en": "Before we sign, I have a few questions about the contract.",
 "de": "Bevor wir unterschreiben, habe ich ein paar Fragen zum Vertrag.",
 "chunks": [
-"before",
-"we sign",
+"before we sign",
 "I have",
-"a few questions",
+"a few",
+"questions",
 "about the contract"
 ],
 "alt": [

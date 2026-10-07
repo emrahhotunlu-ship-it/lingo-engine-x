@@ -2291,7 +2291,8 @@
    ],
    "alt": [
     "Last week, the decision to move the launch was made.",
-    "The decision was made last week to move the launch."
+    "The decision was made last week to move the launch.",
+    "Last week, the decision was made to move the launch."
    ],
    "why": [
     "Nach decision folgt to + Grundform: the decision to move. Das deutsche „Entscheidung für“ passt hier nicht, und eine Entscheidung wird im US-Englisch made.",
@@ -2572,7 +2573,9 @@
     "long"
    ],
    "alt": [
-    "The session was three hours long, unfortunately."
+    "The session was three hours long, unfortunately.",
+    "The session unfortunately was three hours long.",
+    "The session was unfortunately three hours long."
    ],
    "why": [
     "Hinter dem Verb steht die Maßangabe als normaler Plural ohne Bindestrich: three hours long. Nur unfortunately kann wandern.",
@@ -2597,7 +2600,8 @@
     "last month",
     "we",
     "moved into",
-    "a small modern",
+    "a small",
+    "modern",
     "office"
    ],
    "alt": [
@@ -2609,8 +2613,8 @@
    ],
    "bad": "Last month, we moved into a modern small office.",
    "trap": {
-    "tile": "a small modern",
-    "instead": "a modern small",
+    "tile": "a small",
+    "instead": "a modern",
     "why": {
      "de": "Im Deutschen ist die Reihenfolge freier. Im Englischen steht die Größe vor Alter und Stil.",
      "en": "German is freer with the order. In English size comes before age and style."
@@ -2625,8 +2629,9 @@
    "chunks": [
     "she",
     "bought",
-    "a lovely old wooden",
-    "desk",
+    "a lovely",
+    "old",
+    "wooden desk",
     "at the market"
    ],
    "alt": [
@@ -2637,6 +2642,14 @@
     "The order is opinion, age, material: lovely old wooden. The place at the market can come first or last."
    ],
    "bad": "She bought a wooden old lovely desk at the market.",
+   "trap": {
+    "tile": "a lovely",
+    "instead": "a wooden",
+    "why": {
+     "de": "Im Deutschen ist die Reihenfolge freier. Im Englischen steht die Meinung vor Alter und Material.",
+     "en": "German is freer with the order. In English opinion comes before age and material."
+    }
+   },
    "topic": "compound-mod"
   },
   {
@@ -5606,7 +5619,8 @@
     "this quarter"
    ],
    "alt": [
-    "This quarter, everyone in the sales department is very proud of the results."
+    "This quarter, everyone in the sales department is very proud of the results.",
+    "In the sales department, everyone is very proud of the results this quarter."
    ],
    "why": [
     "Proud verlangt of vor dem Grund des Stolzes: of the results bleibt als Block, die Zeitangabe kann vorn stehen.",
@@ -5625,23 +5639,23 @@
   },
   {
    "pat": "pn.to",
-   "en": "Since March, only senior staff have access to the finance folder.",
+   "en": "Since March, only senior staff have had access to the finance folder.",
    "de": "Seit März haben nur leitende Mitarbeiter Zugang zum Finanzordner.",
    "chunks": [
     "since March",
     "only",
     "senior staff",
-    "have access",
+    "have had access",
     "to the finance folder"
    ],
    "alt": [
-    "Only senior staff have access to the finance folder since March."
+    "Only senior staff have had access to the finance folder since March."
    ],
    "why": [
     "Access verlangt to vor dem Ziel: to the finance folder bleibt als Block, die Zeitangabe kann vorn oder hinten stehen.",
     "Access takes to before the target: to the finance folder stays together, and the time phrase can come first or last."
    ],
-   "bad": "Since March, only senior staff have access for the finance folder.",
+   "bad": "Since March, only senior staff have had access for the finance folder.",
    "trap": {
     "tile": "to the finance folder",
     "instead": "for the finance folder",
@@ -5686,10 +5700,10 @@
    "en": "Before we sign, I have a few questions about the contract.",
    "de": "Bevor wir unterschreiben, habe ich ein paar Fragen zum Vertrag.",
    "chunks": [
-    "before",
-    "we sign",
+    "before we sign",
     "I have",
-    "a few questions",
+    "a few",
+    "questions",
     "about the contract"
    ],
    "alt": [
@@ -5921,7 +5935,8 @@
    ],
    "alt": [
     "Within 24 hours, our support team usually replies to every ticket.",
-    "Our support team usually replies within 24 hours to every ticket."
+    "Our support team usually replies within 24 hours to every ticket.",
+    "Usually, our support team replies to every ticket within 24 hours."
    ],
    "why": [
     "within nennt den Zeitrahmen mit Zahl: 24 hours. Die Zeitangabe darf auch vor oder hinter dem Objekt stehen.",
@@ -5945,12 +5960,13 @@
    "chunks": [
     "please",
     "keep",
-    "your phones",
-    "off",
+    "your",
+    "phones off",
     "during the entire presentation"
    ],
    "alt": [
-    "During the entire presentation, please keep your phones off."
+    "During the entire presentation, please keep your phones off.",
+    "Please, during the entire presentation, keep your phones off."
    ],
    "why": [
     "during steht vor dem Ereignis the presentation. Die Zeitangabe darf auch am Satzanfang stehen.",
@@ -6150,7 +6166,9 @@
     "before the kickoff"
    ],
    "alt": [
-    "The vendor insisted firmly on a signed contract before the kickoff."
+    "The vendor insisted firmly on a signed contract before the kickoff.",
+    "Before the kickoff, the vendor firmly insisted on a signed contract.",
+    "Before the kickoff, the vendor insisted firmly on a signed contract."
    ],
    "why": [
     "Insist braucht on: on a signed contract nennt, worauf der Anbieter besteht, und bleibt als Block zusammen.",

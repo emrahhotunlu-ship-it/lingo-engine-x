@@ -252,7 +252,7 @@
 "id": "pn-in-k2",
 "type": "kwt",
 "pat": "pn.in",
-"from": "Our clients really want the new dashboard.",
+"from": "Our clients keep asking for demos of the new dashboard.",
 "key": "INTERESTED",
 "frame": "Our clients are very ___ the new dashboard.",
 "answer": "interested in",
@@ -591,7 +591,7 @@
 "id": "pn-ab-k1",
 "type": "kwt",
 "pat": "pn.about",
-"from": "The board talked at length about the budget and then agreed on the cuts.",
+"from": "The board debated the budget for hours before agreeing on the cuts.",
 "key": "DISCUSSION",
 "frame": "After a long ___ the budget, we agreed on the cuts.",
 "answer": "discussion about",
@@ -808,7 +808,7 @@
 "id": "pn-to-k1",
 "type": "kwt",
 "pat": "pn.to",
-"from": "Thank you for replying to my question.",
+"from": "I appreciate that you answered my question so quickly.",
 "key": "ANSWER",
 "frame": "Thank you for your ___ my question.",
 "answer": "answer to",
@@ -1101,8 +1101,8 @@
 },
 {
 "tap": "*",
-"de": "Der Fehler liegt bei der Präposition. Nach at folgt -ing, kein to.",
-"en": "The error is the preposition. After at comes -ing, not to."
+"de": "Der Fehler liegt bei „to negotiate“: Nach at steht die -ing-Form.",
+"en": "The error is “to negotiate”: after at comes the -ing form."
 }
 ]
 }
@@ -1132,8 +1132,8 @@
 },
 {
 "tap": "*",
-"de": "Der Fehler liegt bei der Präposition. Nach at folgt -ing.",
-"en": "The error is the preposition. After at comes -ing."
+"de": "Der Fehler liegt bei „analyze“: Nach at steht die -ing-Form.",
+"en": "The error is “analyze”: after at comes the -ing form."
 }
 ]
 }
@@ -1142,23 +1142,23 @@
 "id": "pn-at-m1",
 "type": "meaning",
 "pat": "pn.at",
-"a": "Our new tool is good for finding duplicates.",
-"b": "Our new tool is good at finding duplicates.",
+"a": "She is good at negotiating.",
+"b": "Exercise is good for your health.",
 "q": {
-"de": "Welcher Satz beschreibt das Können des Werkzeugs, nicht seinen Zweck?",
-"en": "Which sentence describes the tool's skill, not its purpose?"
+"de": "Welcher Satz beschreibt ein Können, nicht einen Nutzen?",
+"en": "Which sentence describes a skill, not a benefit?"
 },
-"answer": "b",
+"answer": "a",
 "why": {
 "ok": {
-"de": "Richtig: Satz b. Good at beschreibt, wie gut das Werkzeug etwas kann.",
-"en": "Right: sentence b. Good at describes how well the tool does something."
+"de": "Richtig: Satz a. Good at beschreibt, wie gut jemand etwas kann.",
+"en": "Right: sentence a. Good at describes how well someone does something."
 },
 "wrong": [
 {
-"opt": "a",
-"de": "In a nennt good for den Zweck: Das Werkzeug eignet sich zum Finden von Dubletten.",
-"en": "In a, good for names the purpose: the tool suits finding duplicates."
+"opt": "b",
+"de": "In b nennt good for den Nutzen: Bewegung tut der Gesundheit gut.",
+"en": "In b, good for names the benefit: exercise helps your health."
 },
 {
 "opt": "both",

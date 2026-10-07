@@ -4,7 +4,7 @@
     "type": "kwt",
     "pat": "nm.noun-form",
     "from": "We will implement the new tool in autumn.",
-    "key": "IMPLEMENTATION",
+    "key": "OF",
     "frame": "The ___ the new tool is scheduled for autumn.",
     "answer": "implementation of",
     "accepted": [
@@ -23,20 +23,17 @@
       "wrong": [
         {
           "not": [
-            "implementation"
-          ],
-          "de": "Das Schlüsselwort implementation muss unverändert in der Lücke stehen.",
-          "en": "The key word implementation must stay unchanged in the gap."
-        },
-        {
-          "if": [
-            "implementation"
-          ],
-          "not": [
             "of"
           ],
-          "de": "Nach dem Nomen fehlt of: Das Objekt hängt mit of am Nomen.",
-          "en": "Of is missing: the object attaches to the noun with of."
+          "de": "Das Schlüsselwort of muss unverändert in der Lücke stehen.",
+          "en": "The key word of must stay unchanged in the gap."
+        },
+        {
+          "not": [
+            "implementation"
+          ],
+          "de": "Gesucht ist das Nomen zu implement: implementation of.",
+          "en": "The noun for implement is needed: implementation of."
         }
       ]
     }
@@ -46,7 +43,7 @@
     "type": "kwt",
     "pat": "nm.noun-form",
     "from": "Please confirm that you received the contract.",
-    "key": "RECEIPT",
+    "key": "OF",
     "frame": "Please confirm ___ the contract.",
     "answer": "receipt of",
     "accepted": [
@@ -65,20 +62,17 @@
       "wrong": [
         {
           "not": [
-            "receipt"
-          ],
-          "de": "Das Schlüsselwort receipt muss unverändert in der Lücke stehen.",
-          "en": "The key word receipt must stay unchanged in the gap."
-        },
-        {
-          "if": [
-            "receipt"
-          ],
-          "not": [
             "of"
           ],
-          "de": "Nach dem Nomen fehlt of: receipt of the contract.",
-          "en": "Of is missing after the noun: receipt of the contract."
+          "de": "Das Schlüsselwort of muss unverändert in der Lücke stehen.",
+          "en": "The key word of must stay unchanged in the gap."
+        },
+        {
+          "not": [
+            "receipt"
+          ],
+          "de": "Gesucht ist das Nomen receipt: receipt of the contract.",
+          "en": "The noun receipt is needed: receipt of the contract."
         }
       ]
     }
@@ -247,7 +241,11 @@
     "frame": "After ___ the budget, we can order the licenses.",
     "answer": "the board's approval of",
     "accepted": [
-      "board approval of"
+      "board approval of",
+      "the approval of",
+      "final approval of",
+      "the final approval of",
+      "our board's approval of"
     ],
     "words": [
       3,
@@ -450,9 +448,7 @@
     "key": "UPON",
     "frame": "___ of your payment, we will ship the order.",
     "answer": "upon receipt",
-    "accepted": [
-      "upon the receipt"
-    ],
+    "accepted": [],
     "words": [
       2,
       3

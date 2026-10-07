@@ -148,7 +148,10 @@
      "en": "The error is “six-months”: the plural -s does not belong in a modifier."
     }
    ]
-  }
+  },
+  "accepted": [
+   "6-month"
+  ]
  },
  {
   "id": "cm-mea-f3",
@@ -208,10 +211,12 @@
   "key": "PAGES",
   "frame": "The agenda ___ long.",
   "answer": "is three pages",
-  "accepted": [],
+  "accepted": [
+   "is only three pages"
+  ],
   "words": [
    3,
-   3
+   4
   ],
   "why": {
    "ok": {
@@ -250,10 +255,12 @@
   "key": "YEARS",
   "frame": "The laptop ___ now.",
   "answer": "is two years old",
-  "accepted": [],
+  "accepted": [
+   "is about two years old"
+  ],
   "words": [
    4,
-   4
+   5
   ],
   "why": {
    "ok": {
@@ -700,28 +707,28 @@
   "id": "cm-fix-m1",
   "type": "meaning",
   "pat": "cm.fixed",
-  "a": "He is a small business owner.",
-  "b": "He is a small-business owner.",
+  "a": "The film shows a man eating shark.",
+  "b": "The film shows a man-eating shark.",
   "q": {
-   "de": "Welcher Satz sagt eindeutig: Er besitzt ein kleines Unternehmen?",
-   "en": "Which sentence clearly says he owns a small company?"
+   "de": "In welchem Satz frisst der Hai Menschen?",
+   "en": "In which sentence does the shark eat people?"
   },
   "answer": "b",
   "why": {
    "ok": {
-    "de": "Richtig: Satz b. Der Bindestrich verbindet small mit business: kleines Unternehmen.",
-    "en": "Right: sentence b. The hyphen joins small to business: a small company."
+    "de": "Richtig: Satz b. Der Bindestrich verbindet man mit eating: ein Hai, der Menschen frisst.",
+    "en": "Right: sentence b. The hyphen joins man to eating: a shark that eats people."
    },
    "wrong": [
     {
      "opt": "a",
-     "de": "In a kann small auch zum Inhaber gehören. Eindeutig ist das nicht.",
-     "en": "In a small could also describe the owner. That is not clear."
+     "de": "In a isst ein Mann Hai. Ohne Bindestrich sind es zwei getrennte Wörter.",
+     "en": "In a a man is eating shark. Without a hyphen these are two separate words."
     },
     {
      "opt": "both",
-     "de": "Nicht gleich: Nur der Bindestrich macht klar, was klein ist.",
-     "en": "Not the same: only the hyphen makes clear what is small."
+     "de": "Nicht gleich: Nur der Bindestrich macht man-eating zu einem Wort.",
+     "en": "Not the same: only the hyphen makes man-eating one word."
     }
    ]
   }

@@ -59,7 +59,9 @@
    "long"
   ],
   "alt": [
-   "The session was three hours long, unfortunately."
+   "The session was three hours long, unfortunately.",
+   "The session unfortunately was three hours long.",
+   "The session was unfortunately three hours long."
   ],
   "why": [
    "Hinter dem Verb steht die Maßangabe als normaler Plural ohne Bindestrich: three hours long. Nur unfortunately kann wandern.",
@@ -83,7 +85,8 @@
    "last month",
    "we",
    "moved into",
-   "a small modern",
+   "a small",
+   "modern",
    "office"
   ],
   "alt": [
@@ -95,8 +98,8 @@
   ],
   "bad": "Last month, we moved into a modern small office.",
   "trap": {
-   "tile": "a small modern",
-   "instead": "a modern small",
+   "tile": "a small",
+   "instead": "a modern",
    "why": {
     "de": "Im Deutschen ist die Reihenfolge freier. Im Englischen steht die Größe vor Alter und Stil.",
     "en": "German is freer with the order. In English size comes before age and style."
@@ -110,8 +113,9 @@
   "chunks": [
    "she",
    "bought",
-   "a lovely old wooden",
-   "desk",
+   "a lovely",
+   "old",
+   "wooden desk",
    "at the market"
   ],
   "alt": [
@@ -121,7 +125,15 @@
    "Die Reihenfolge ist Meinung, Alter, Material: lovely old wooden. Der Ort at the market kann vorne oder hinten stehen.",
    "The order is opinion, age, material: lovely old wooden. The place at the market can come first or last."
   ],
-  "bad": "She bought a wooden old lovely desk at the market."
+  "bad": "She bought a wooden old lovely desk at the market.",
+  "trap": {
+   "tile": "a lovely",
+   "instead": "a wooden",
+   "why": {
+    "de": "Im Deutschen ist die Reihenfolge freier. Im Englischen steht die Meinung vor Alter und Material.",
+    "en": "German is freer with the order. In English opinion comes before age and material."
+   }
+  }
  },
  {
   "pat": "cm.fixed",

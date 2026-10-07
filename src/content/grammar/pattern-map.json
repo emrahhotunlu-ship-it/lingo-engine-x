@@ -12284,8 +12284,8 @@
   "pat": "prp.verb-prep",
   "why": {
    "ok": {
-    "de": "Richtig: depend on. Das Verb verlangt on, was „von“ im Deutschen auch nahelegt.",
-    "en": "Right: depend on. The verb takes on, whatever German “von” suggests."
+    "de": "Richtig: depend on. Das Verb verlangt on, nicht das „von“-Gefühl aus dem Deutschen.",
+    "en": "Right: depend on. The verb takes on, not the “von” feeling from German."
    },
    "wrong": [
     {
@@ -12383,8 +12383,8 @@
      "if": [
       "on"
      ],
-     "de": "„Warten auf“ lockt zu on. Standard ist wait for (wait on = bedienen).",
-     "en": "German “warten auf” lures you into on. Standard is wait for (wait on = serve)."
+     "de": "Standard und sicher ist wait for. Wait on hört man im US-Alltag, ist aber nicht Standard.",
+     "en": "Standard and safe is wait for. Wait on is heard in US speech but is not standard."
     },
     {
      "if": [
@@ -12470,8 +12470,8 @@
     },
     {
      "opt": "of",
-     "de": "Of nach responsible ist unüblich. Die feste Verbindung lautet responsible for.",
-     "en": "Of after responsible is not used. The fixed pair is responsible for."
+     "de": "Of nach responsible ist hier unüblich. Die feste Verbindung lautet responsible for.",
+     "en": "Of after responsible is unusual here. The fixed pair is responsible for."
     },
     {
      "opt": "to",

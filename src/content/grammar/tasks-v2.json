@@ -5146,7 +5146,7 @@
    "type": "kwt",
    "pat": "nm.noun-form",
    "from": "We will implement the new tool in autumn.",
-   "key": "IMPLEMENTATION",
+   "key": "OF",
    "frame": "The ___ the new tool is scheduled for autumn.",
    "answer": "implementation of",
    "accepted": [
@@ -5165,20 +5165,17 @@
     "wrong": [
      {
       "not": [
-       "implementation"
-      ],
-      "de": "Das Schlüsselwort implementation muss unverändert in der Lücke stehen.",
-      "en": "The key word implementation must stay unchanged in the gap."
-     },
-     {
-      "if": [
-       "implementation"
-      ],
-      "not": [
        "of"
       ],
-      "de": "Nach dem Nomen fehlt of: Das Objekt hängt mit of am Nomen.",
-      "en": "Of is missing: the object attaches to the noun with of."
+      "de": "Das Schlüsselwort of muss unverändert in der Lücke stehen.",
+      "en": "The key word of must stay unchanged in the gap."
+     },
+     {
+      "not": [
+       "implementation"
+      ],
+      "de": "Gesucht ist das Nomen zu implement: implementation of.",
+      "en": "The noun for implement is needed: implementation of."
      }
     ]
    },
@@ -5189,7 +5186,7 @@
    "type": "kwt",
    "pat": "nm.noun-form",
    "from": "Please confirm that you received the contract.",
-   "key": "RECEIPT",
+   "key": "OF",
    "frame": "Please confirm ___ the contract.",
    "answer": "receipt of",
    "accepted": [
@@ -5208,20 +5205,17 @@
     "wrong": [
      {
       "not": [
-       "receipt"
-      ],
-      "de": "Das Schlüsselwort receipt muss unverändert in der Lücke stehen.",
-      "en": "The key word receipt must stay unchanged in the gap."
-     },
-     {
-      "if": [
-       "receipt"
-      ],
-      "not": [
        "of"
       ],
-      "de": "Nach dem Nomen fehlt of: receipt of the contract.",
-      "en": "Of is missing after the noun: receipt of the contract."
+      "de": "Das Schlüsselwort of muss unverändert in der Lücke stehen.",
+      "en": "The key word of must stay unchanged in the gap."
+     },
+     {
+      "not": [
+       "receipt"
+      ],
+      "de": "Gesucht ist das Nomen receipt: receipt of the contract.",
+      "en": "The noun receipt is needed: receipt of the contract."
      }
     ]
    },
@@ -5396,7 +5390,11 @@
    "frame": "After ___ the budget, we can order the licenses.",
    "answer": "the board's approval of",
    "accepted": [
-    "board approval of"
+    "board approval of",
+    "the approval of",
+    "final approval of",
+    "the final approval of",
+    "our board's approval of"
    ],
    "words": [
     3,
@@ -5605,9 +5603,7 @@
    "key": "UPON",
    "frame": "___ of your payment, we will ship the order.",
    "answer": "upon receipt",
-   "accepted": [
-    "upon the receipt"
-   ],
+   "accepted": [],
    "words": [
     2,
     3
@@ -6982,6 +6978,9 @@
      }
     ]
    },
+   "accepted": [
+    "6-month"
+   ],
    "topic": "compound-mod"
   },
   {
@@ -7044,10 +7043,12 @@
    "key": "PAGES",
    "frame": "The agenda ___ long.",
    "answer": "is three pages",
-   "accepted": [],
+   "accepted": [
+    "is only three pages"
+   ],
    "words": [
     3,
-    3
+    4
    ],
    "why": {
     "ok": {
@@ -7087,10 +7088,12 @@
    "key": "YEARS",
    "frame": "The laptop ___ now.",
    "answer": "is two years old",
-   "accepted": [],
+   "accepted": [
+    "is about two years old"
+   ],
    "words": [
     4,
-    4
+    5
    ],
    "why": {
     "ok": {
@@ -7551,28 +7554,28 @@
    "id": "cm-fix-m1",
    "type": "meaning",
    "pat": "cm.fixed",
-   "a": "He is a small business owner.",
-   "b": "He is a small-business owner.",
+   "a": "The film shows a man eating shark.",
+   "b": "The film shows a man-eating shark.",
    "q": {
-    "de": "Welcher Satz sagt eindeutig: Er besitzt ein kleines Unternehmen?",
-    "en": "Which sentence clearly says he owns a small company?"
+    "de": "In welchem Satz frisst der Hai Menschen?",
+    "en": "In which sentence does the shark eat people?"
    },
    "answer": "b",
    "why": {
     "ok": {
-     "de": "Richtig: Satz b. Der Bindestrich verbindet small mit business: kleines Unternehmen.",
-     "en": "Right: sentence b. The hyphen joins small to business: a small company."
+     "de": "Richtig: Satz b. Der Bindestrich verbindet man mit eating: ein Hai, der Menschen frisst.",
+     "en": "Right: sentence b. The hyphen joins man to eating: a shark that eats people."
     },
     "wrong": [
      {
       "opt": "a",
-      "de": "In a kann small auch zum Inhaber gehören. Eindeutig ist das nicht.",
-      "en": "In a small could also describe the owner. That is not clear."
+      "de": "In a isst ein Mann Hai. Ohne Bindestrich sind es zwei getrennte Wörter.",
+      "en": "In a a man is eating shark. Without a hyphen these are two separate words."
      },
      {
       "opt": "both",
-      "de": "Nicht gleich: Nur der Bindestrich macht klar, was klein ist.",
-      "en": "Not the same: only the hyphen makes clear what is small."
+      "de": "Nicht gleich: Nur der Bindestrich macht man-eating zu einem Wort.",
+      "en": "Not the same: only the hyphen makes man-eating one word."
      }
     ]
    },
@@ -10242,14 +10245,10 @@
    "frame": "We don't have ___ about the new supplier yet.",
    "answer": "much information",
    "accepted": [
-    "any information",
-    "enough information",
     "a lot of information",
     "that much information",
     "very much information",
-    "a great deal of information",
-    "detailed information",
-    "sufficient information"
+    "a great deal of information"
    ],
    "words": [
     2,
@@ -10633,9 +10632,11 @@
    "key": "MANY",
    "frame": "I don't know ___ will join us.",
    "answer": "how many people",
-   "accepted": [],
+   "accepted": [
+    "how many"
+   ],
    "words": [
-    3,
+    2,
     3
    ],
    "why": {
@@ -10734,8 +10735,6 @@
    "accepted": [
     "some feedback",
     "a bit of feedback",
-    "very little feedback",
-    "little feedback",
     "a few comments",
     "a few responses",
     "a few pieces of feedback"
@@ -23267,7 +23266,7 @@
    "id": "pn-in-k2",
    "type": "kwt",
    "pat": "pn.in",
-   "from": "Our clients really want the new dashboard.",
+   "from": "Our clients keep asking for demos of the new dashboard.",
    "key": "INTERESTED",
    "frame": "Our clients are very ___ the new dashboard.",
    "answer": "interested in",
@@ -23616,7 +23615,7 @@
    "id": "pn-ab-k1",
    "type": "kwt",
    "pat": "pn.about",
-   "from": "The board talked at length about the budget and then agreed on the cuts.",
+   "from": "The board debated the budget for hours before agreeing on the cuts.",
    "key": "DISCUSSION",
    "frame": "After a long ___ the budget, we agreed on the cuts.",
    "answer": "discussion about",
@@ -23839,7 +23838,7 @@
    "id": "pn-to-k1",
    "type": "kwt",
    "pat": "pn.to",
-   "from": "Thank you for replying to my question.",
+   "from": "I appreciate that you answered my question so quickly.",
    "key": "ANSWER",
    "frame": "Thank you for your ___ my question.",
    "answer": "answer to",
@@ -24139,8 +24138,8 @@
      },
      {
       "tap": "*",
-      "de": "Der Fehler liegt bei der Präposition. Nach at folgt -ing, kein to.",
-      "en": "The error is the preposition. After at comes -ing, not to."
+      "de": "Der Fehler liegt bei „to negotiate“: Nach at steht die -ing-Form.",
+      "en": "The error is “to negotiate”: after at comes the -ing form."
      }
     ]
    },
@@ -24171,8 +24170,8 @@
      },
      {
       "tap": "*",
-      "de": "Der Fehler liegt bei der Präposition. Nach at folgt -ing.",
-      "en": "The error is the preposition. After at comes -ing."
+      "de": "Der Fehler liegt bei „analyze“: Nach at steht die -ing-Form.",
+      "en": "The error is “analyze”: after at comes the -ing form."
      }
     ]
    },
@@ -24182,23 +24181,23 @@
    "id": "pn-at-m1",
    "type": "meaning",
    "pat": "pn.at",
-   "a": "Our new tool is good for finding duplicates.",
-   "b": "Our new tool is good at finding duplicates.",
+   "a": "She is good at negotiating.",
+   "b": "Exercise is good for your health.",
    "q": {
-    "de": "Welcher Satz beschreibt das Können des Werkzeugs, nicht seinen Zweck?",
-    "en": "Which sentence describes the tool's skill, not its purpose?"
+    "de": "Welcher Satz beschreibt ein Können, nicht einen Nutzen?",
+    "en": "Which sentence describes a skill, not a benefit?"
    },
-   "answer": "b",
+   "answer": "a",
    "why": {
     "ok": {
-     "de": "Richtig: Satz b. Good at beschreibt, wie gut das Werkzeug etwas kann.",
-     "en": "Right: sentence b. Good at describes how well the tool does something."
+     "de": "Richtig: Satz a. Good at beschreibt, wie gut jemand etwas kann.",
+     "en": "Right: sentence a. Good at describes how well someone does something."
     },
     "wrong": [
      {
-      "opt": "a",
-      "de": "In a nennt good for den Zweck: Das Werkzeug eignet sich zum Finden von Dubletten.",
-      "en": "In a, good for names the purpose: the tool suits finding duplicates."
+      "opt": "b",
+      "de": "In b nennt good for den Nutzen: Bewegung tut der Gesundheit gut.",
+      "en": "In b, good for names the benefit: exercise helps your health."
      },
      {
       "opt": "both",
@@ -24214,7 +24213,7 @@
    "type": "kwt",
    "pat": "pt.at-on-in",
    "from": "Our review is scheduled for Tuesday afternoon.",
-   "key": "ON",
+   "key": "TUESDAY",
    "frame": "Our review is ___ afternoon.",
    "answer": "on Tuesday",
    "accepted": [],
@@ -24228,6 +24227,13 @@
      "en": "Right: a day of the week takes on: on Tuesday afternoon."
     },
     "wrong": [
+     {
+      "not": [
+       "tuesday"
+      ],
+      "de": "Das Schlüsselwort Tuesday muss unverändert in der Lücke stehen.",
+      "en": "The key word Tuesday must stay unchanged in the gap."
+     },
      {
       "if": [
        "at"
@@ -24246,8 +24252,8 @@
       "not": [
        "on"
       ],
-      "de": "Das Schlüsselwort on muss unverändert in der Lücke stehen.",
-      "en": "The key word on must stay unchanged in the gap."
+      "de": "Gesucht ist die Präposition vor einem Wochentag: on Tuesday.",
+      "en": "The preposition before a day of the week is needed: on Tuesday."
      }
     ]
    },
@@ -24258,7 +24264,7 @@
    "type": "kwt",
    "pat": "pt.at-on-in",
    "from": "The new office opens at the start of June.",
-   "key": "IN",
+   "key": "EARLY",
    "frame": "The new office opens ___ June.",
    "answer": "in early",
    "accepted": [
@@ -24274,6 +24280,13 @@
      "en": "Right: a month takes in: in early June."
     },
     "wrong": [
+     {
+      "not": [
+       "early"
+      ],
+      "de": "Das Schlüsselwort early muss unverändert in der Lücke stehen.",
+      "en": "The key word early must stay unchanged in the gap."
+     },
      {
       "if": [
        "on"
@@ -24292,8 +24305,8 @@
       "not": [
        "in"
       ],
-      "de": "Das Schlüsselwort in muss unverändert in der Lücke stehen.",
-      "en": "The key word in must stay unchanged in the gap."
+      "de": "Gesucht ist die Präposition vor einem Monat: in early June.",
+      "en": "The preposition before a month is needed: in early June."
      }
     ]
    },
@@ -24420,15 +24433,13 @@
    "type": "kwt",
    "pat": "pt.for-since",
    "from": "I joined the team in 2021 and I'm still here.",
-   "key": "SINCE",
+   "key": "WORKED",
    "frame": "I ___ 2021.",
    "answer": "have worked here since",
    "accepted": [
-    "have been here since",
-    "have been working here since",
     "'ve worked here since",
-    "'ve been here since",
-    "'ve been working here since"
+    "have worked there since",
+    "'ve worked there since"
    ],
    "words": [
     3,
@@ -24441,6 +24452,13 @@
     },
     "wrong": [
      {
+      "not": [
+       "worked"
+      ],
+      "de": "Das Schlüsselwort worked muss unverändert in der Lücke stehen.",
+      "en": "The key word worked must stay unchanged in the gap."
+     },
+     {
       "if": [
        "for"
       ],
@@ -24451,8 +24469,8 @@
       "not": [
        "since"
       ],
-      "de": "Das Schlüsselwort since muss unverändert in der Lücke stehen.",
-      "en": "The key word since must stay unchanged in the gap."
+      "de": "Gesucht ist since + Startpunkt: since 2021.",
+      "en": "Since + starting point is needed: since 2021."
      }
     ]
    },
@@ -24463,7 +24481,7 @@
    "type": "kwt",
    "pat": "pt.for-since",
    "from": "We started testing two hours ago and are still testing.",
-   "key": "FOR",
+   "key": "TESTING",
    "frame": "We ___ two hours.",
    "answer": "have been testing for",
    "accepted": [
@@ -24480,6 +24498,13 @@
     },
     "wrong": [
      {
+      "not": [
+       "testing"
+      ],
+      "de": "Das Schlüsselwort testing muss unverändert in der Lücke stehen.",
+      "en": "The key word testing must stay unchanged in the gap."
+     },
+     {
       "if": [
        "since"
       ],
@@ -24490,8 +24515,8 @@
       "not": [
        "for"
       ],
-      "de": "Das Schlüsselwort for muss unverändert in der Lücke stehen.",
-      "en": "The key word for must stay unchanged in the gap."
+      "de": "Gesucht ist for + Dauer: for two hours.",
+      "en": "For + duration is needed: for two hours."
      }
     ]
    },
@@ -24599,7 +24624,7 @@
    "type": "kwt",
    "pat": "pt.by-until",
    "from": "Please send me the final numbers no later than Wednesday.",
-   "key": "BY",
+   "key": "WEDNESDAY",
    "frame": "Please send me the final numbers ___.",
    "answer": "by Wednesday",
    "accepted": [
@@ -24616,6 +24641,13 @@
     },
     "wrong": [
      {
+      "not": [
+       "wednesday"
+      ],
+      "de": "Das Schlüsselwort Wednesday muss unverändert in der Lücke stehen.",
+      "en": "The key word Wednesday must stay unchanged in the gap."
+     },
+     {
       "if": [
        "until"
       ],
@@ -24626,8 +24658,8 @@
       "not": [
        "by"
       ],
-      "de": "Das Schlüsselwort by muss unverändert in der Lücke stehen.",
-      "en": "The key word by must stay unchanged in the gap."
+      "de": "Gesucht ist die Präposition für die Frist: by Wednesday.",
+      "en": "The preposition for the deadline is needed: by Wednesday."
      }
     ]
    },
@@ -24638,10 +24670,12 @@
    "type": "kwt",
    "pat": "pt.by-until",
    "from": "I won't be reachable before Monday.",
-   "key": "UNTIL",
+   "key": "MONDAY",
    "frame": "I won't be reachable ___.",
    "answer": "until Monday",
-   "accepted": [],
+   "accepted": [
+    "till Monday"
+   ],
    "words": [
     2,
     2
@@ -24653,6 +24687,13 @@
     },
     "wrong": [
      {
+      "not": [
+       "monday"
+      ],
+      "de": "Das Schlüsselwort Monday muss unverändert in der Lücke stehen.",
+      "en": "The key word Monday must stay unchanged in the gap."
+     },
+     {
       "if": [
        "by"
       ],
@@ -24661,10 +24702,11 @@
      },
      {
       "not": [
-       "until"
+       "until",
+       "till"
       ],
-      "de": "Das Schlüsselwort until muss unverändert in der Lücke stehen.",
-      "en": "The key word until must stay unchanged in the gap."
+      "de": "Gesucht ist die Präposition für das Andauern: until Monday.",
+      "en": "The preposition for a lasting state is needed: until Monday."
      }
     ]
    },
@@ -24793,12 +24835,11 @@
    "type": "kwt",
    "pat": "pt.during-within",
    "from": "We'll send you a quote; you'll have it in no more than two business days.",
-   "key": "WITHIN",
+   "key": "TWO",
    "frame": "We'll send you a quote ___ business days.",
    "answer": "within two",
    "accepted": [
-    "within the next two",
-    "within 2"
+    "within the next two"
    ],
    "words": [
     2,
@@ -24811,6 +24852,13 @@
     },
     "wrong": [
      {
+      "not": [
+       "two"
+      ],
+      "de": "Das Schlüsselwort two muss unverändert in der Lücke stehen.",
+      "en": "The key word two must stay unchanged in the gap."
+     },
+     {
       "if": [
        "during"
       ],
@@ -24821,8 +24869,8 @@
       "not": [
        "within"
       ],
-      "de": "Das Schlüsselwort within muss unverändert in der Lücke stehen.",
-      "en": "The key word within must stay unchanged in the gap."
+      "de": "Gesucht ist within + Zeitrahmen: within two business days.",
+      "en": "Within + time frame is needed: within two business days."
      }
     ]
    },
@@ -24833,11 +24881,12 @@
    "type": "kwt",
    "pat": "pt.during-within",
    "from": "Please don't use your phone while the presentation is running.",
-   "key": "DURING",
+   "key": "PRESENTATION",
    "frame": "Please don't use your phone ___.",
    "answer": "during the presentation",
    "accepted": [
-    "during this presentation"
+    "during this presentation",
+    "throughout the presentation"
    ],
    "words": [
     3,
@@ -24850,6 +24899,13 @@
     },
     "wrong": [
      {
+      "not": [
+       "presentation"
+      ],
+      "de": "Das Schlüsselwort presentation muss unverändert in der Lücke stehen.",
+      "en": "The key word presentation must stay unchanged in the gap."
+     },
+     {
       "if": [
        "within"
       ],
@@ -24858,10 +24914,11 @@
      },
      {
       "not": [
-       "during"
+       "during",
+       "throughout"
       ],
-      "de": "Das Schlüsselwort during muss unverändert in der Lücke stehen.",
-      "en": "The key word during must stay unchanged in the gap."
+      "de": "Gesucht ist die Präposition vor einem Ereignis: during the presentation.",
+      "en": "The preposition before an event is needed: during the presentation."
      }
     ]
    },
@@ -24912,7 +24969,9 @@
    ],
    "answer": "during",
    "fixed": "Please stay seated during the Q&A session.",
-   "accepted": [],
+   "accepted": [
+    "throughout"
+   ],
    "why": {
     "ok": {
      "de": "Der Fehler: Vor einem Nomen steht during. while braucht einen ganzen Satz.",
@@ -25035,7 +25094,11 @@
     "insisted upon",
     "insisted on getting",
     "insisted on having",
-    "insisted on receiving"
+    "insisted on receiving",
+    "firmly insisted on",
+    "strongly insisted on",
+    "firmly insisted upon",
+    "strongly insisted upon"
    ],
    "words": [
     2,
@@ -25192,8 +25255,8 @@
     "wrong": [
      {
       "tap": "*",
-      "de": "Kein Fehler: depend on + whether-Satz ist richtig, auch mit dem Präsens.",
-      "en": "No error: depend on + whether clause is correct, in the present too."
+      "de": "Kein Fehler: depend on + whether-Satz ist richtig.",
+      "en": "No error: depend on + whether clause is correct."
      }
     ]
    },
@@ -25264,8 +25327,8 @@
       "if": [
        "to"
       ],
-      "de": "To passt zur Sache, die jemand kennt (familiar to me). Hier fragt man nach der Person: with.",
-      "en": "To fits the thing someone knows (familiar to me). Here you ask about the person: with."
+      "de": "To passt zur Sache (familiar to me). Hier ist die Person das Subjekt: familiar with.",
+      "en": "To fits the thing (familiar to me). Here the person is the subject: familiar with."
      },
      {
       "if": [
@@ -25495,12 +25558,7 @@
    "frame": "I ___ the workshop last week.",
    "answer": "didn't attend",
    "accepted": [
-    "did not attend",
-    "couldn't attend",
-    "could not attend",
-    "wasn't able to attend",
-    "was not able to attend",
-    "was unable to attend"
+    "did not attend"
    ],
    "words": [
     2,
@@ -25535,9 +25593,10 @@
      },
      {
       "not": [
-       "attend"
+       "didn't",
+       "did not"
       ],
-      "de": "Gesucht ist ein Verneinung plus attend: didn’t attend.",
+      "de": "Gesucht ist eine Verneinung plus attend: didn’t attend.",
       "en": "A negative plus attend is needed: didn’t attend."
      }
     ]
@@ -25584,7 +25643,9 @@
      },
      {
       "not": [
-       "mention"
+       "didn't",
+       "did not",
+       "failed to"
       ],
       "de": "Gesucht ist die Verneinung plus mention: didn’t mention.",
       "en": "A negative plus mention is needed: didn’t mention."
@@ -25664,8 +25725,8 @@
      },
      {
       "tap": "*",
-      "de": "Der Fehler liegt bei to: Reach an agreement hat keine Präposition.",
-      "en": "The error is to: reach an agreement has no preposition."
+      "de": "Der Fehler liegt bei to: Reach an agreement hat kein to.",
+      "en": "The error is to: reach an agreement has no to."
      },
      {
       "if": [
@@ -25710,28 +25771,28 @@
    "id": "prp-nop-m1",
    "type": "meaning",
    "pat": "prp.no-prep",
-   "a": "Mia answers the manager's emails.",
-   "b": "Mia answers to the manager.",
+   "a": "Mia attended the client meeting.",
+   "b": "Mia attended to the client.",
    "q": {
-    "de": "In welchem Satz ist der Manager Mias Vorgesetzter?",
-    "en": "In which sentence is the manager Mia’s boss?"
+    "de": "In welchem Satz war Mia bei einem Termin?",
+    "en": "In which sentence was Mia at an appointment?"
    },
-   "answer": "b",
+   "answer": "a",
    "why": {
     "ok": {
-     "de": "Richtig: Satz b. Answer to heißt: dem Chef Rechenschaft schuldig. Answer + Objekt = beantworten.",
-     "en": "Right: sentence b. Answer to = be accountable to. Answer + object = reply to."
+     "de": "Richtig: Satz a. Attend + Objekt = teilnehmen, attend to = sich kümmern um (nicht dabei).",
+     "en": "Right: sentence a. Attend + object = be present at. Attend to = take care of."
     },
     "wrong": [
      {
-      "opt": "a",
-      "de": "In a beantwortet Mia nur die E-Mails. Von einem Vorgesetzten ist keine Rede.",
-      "en": "In a Mia just replies to the emails. No boss is mentioned."
+      "opt": "b",
+      "de": "In b kümmert sich Mia um den Kunden. Von einem Termin ist keine Rede.",
+      "en": "In b Mia takes care of the client. No appointment is mentioned."
      },
      {
       "opt": "both",
-      "de": "Nicht gleich: answer + Objekt = beantworten, answer to = Rechenschaft schuldig.",
-      "en": "Not the same: answer + object = reply, answer to = be accountable to."
+      "de": "Nicht gleich: attend + Objekt = teilnehmen, attend to = sich kümmern um.",
+      "en": "Not the same: attend + object = be present, attend to = take care of."
      }
     ]
    },
@@ -25800,14 +25861,14 @@
    "id": "prp-per-k2",
    "type": "kwt",
    "pat": "prp.person-to",
-   "from": "The CEO told the team that we're hiring in Q3.",
-   "key": "SAID",
+   "from": "The CEO told the whole team the news: we're hiring in Q3.",
+   "key": "ANNOUNCED",
    "frame": "The CEO ___ the team that we're hiring in Q3.",
-   "answer": "said to",
+   "answer": "announced to",
    "accepted": [
-    "also said to",
-    "just said to",
-    "already said to"
+    "also announced to",
+    "just announced to",
+    "recently announced to"
    ],
    "words": [
     2,
@@ -25815,23 +25876,23 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: said to + Person. Nach say kommt die Person mit to, nach tell ohne.",
-     "en": "Right: said to + person. After say the person takes to, after tell it does not."
+     "de": "Richtig: announced to + Person. Wie bei say steht die Person mit to, nach tell ohne.",
+     "en": "Right: announced to + person. As with say, the person takes to, after tell it does not."
     },
     "wrong": [
      {
       "not": [
-       "said"
+       "announced"
       ],
-      "de": "Das Schlüsselwort said muss unverändert in der Lücke stehen.",
-      "en": "The key word said must stay unchanged in the gap."
+      "de": "Das Schlüsselwort announced muss unverändert in der Lücke stehen.",
+      "en": "The key word announced must stay unchanged in the gap."
      },
      {
       "not": [
        "to"
       ],
-      "de": "Bei say braucht die Person ein to: said to the team. Ohne to wäre es told.",
-      "en": "With say the person needs to: said to the team. Without to it would be told."
+      "de": "Bei announce braucht die Person ein to: announced to the team.",
+      "en": "With announce the person needs to: announced to the team."
      }
     ]
    },
@@ -25887,18 +25948,18 @@
    "id": "prp-per-f2",
    "type": "find",
    "pat": "prp.person-to",
-   "prompt": "He suggested me a different supplier last week.",
+   "prompt": "He suggested me that we switch suppliers.",
    "err": [
     2,
-    5
+    2
    ],
-   "answer": "a different supplier to me",
-   "fixed": "He suggested a different supplier to me last week.",
+   "answer": "to me",
+   "fixed": "He suggested to me that we switch suppliers.",
    "accepted": [],
    "why": {
     "ok": {
-     "de": "Der Fehler: „suggested me a …“. Erst die Sache, dann to + Person.",
-     "en": "The error: “suggested me a …”. First the thing, then to + person."
+     "de": "Der Fehler: „suggested me“. Die Person braucht hier ein to: suggested to me.",
+     "en": "The error: “suggested me”. The person needs to here: suggested to me."
     },
     "wrong": [
      {
@@ -25908,15 +25969,15 @@
      },
      {
       "tap": "*",
-      "de": "Der Fehler liegt bei „me a different supplier“: erst die Sache, dann to me.",
-      "en": "The error is “me a different supplier”: the thing first, then to me."
+      "de": "Der Fehler liegt bei me: Bei suggested steht die Person mit to.",
+      "en": "The error is me: with suggested the person takes to."
      },
      {
       "not": [
        "to"
       ],
-      "de": "Gesucht ist die Sache, dann to + Person: a different supplier to me.",
-      "en": "The thing, then to + person is needed: a different supplier to me."
+      "de": "Gesucht ist to + Person: suggested to me.",
+      "en": "To + person is needed: suggested to me."
      }
     ]
    },
@@ -25929,8 +25990,8 @@
    "a": "We talked to the CFO.",
    "b": "We talked about the CFO.",
    "q": {
-    "de": "In welchem Satz war der CFO im Gespräch dabei?",
-    "en": "In which sentence was the CFO part of the conversation?"
+    "de": "In welchem Satz hat das Team direkt mit dem CFO gesprochen?",
+    "en": "In which sentence did the team speak directly with the CFO?"
    },
    "answer": "a",
    "why": {
@@ -25957,16 +26018,18 @@
    "id": "prp-ing-k1",
    "type": "kwt",
    "pat": "prp.prep-ing",
-   "from": "I'm excited to meet you in person next week.",
+   "from": "I can't wait to see you in person next week.",
    "key": "LOOKING",
    "frame": "I'm ___ you in person next week.",
-   "answer": "looking forward to meeting",
+   "answer": "looking forward to seeing",
    "accepted": [
-    "looking forward to seeing",
-    "really looking forward to meeting",
+    "looking forward to meeting",
     "really looking forward to seeing",
-    "so looking forward to meeting",
-    "so looking forward to seeing"
+    "really looking forward to meeting",
+    "truly looking forward to seeing",
+    "truly looking forward to meeting",
+    "so looking forward to seeing",
+    "so looking forward to meeting"
    ],
    "words": [
     4,
@@ -25974,8 +26037,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: looking forward to meeting. Das to ist eine Präposition, danach folgt -ing.",
-     "en": "Right: looking forward to meeting. The to is a preposition, so -ing follows."
+     "de": "Richtig: looking forward to seeing. Das to ist eine Präposition, danach folgt -ing.",
+     "en": "Right: looking forward to seeing. The to is a preposition, so -ing follows."
     },
     "wrong": [
      {
@@ -26023,7 +26086,6 @@
    "accepted": [
     "without even reading",
     "without first reading",
-    "without really reading",
     "without having read",
     "without even having read"
    ],
@@ -26082,9 +26144,7 @@
    ],
    "answer": "seeing",
    "fixed": "I'm looking forward to seeing you at the kickoff next week.",
-   "accepted": [
-    "meeting"
-   ],
+   "accepted": [],
    "why": {
     "ok": {
      "de": "Der Fehler: „to see“. Das to ist eine Präposition, danach folgt -ing.",
@@ -26110,8 +26170,7 @@
      },
      {
       "not": [
-       "seeing",
-       "meeting"
+       "seeing"
       ],
       "de": "Gesucht ist die -ing-Form: seeing.",
       "en": "The -ing form is needed: seeing."
