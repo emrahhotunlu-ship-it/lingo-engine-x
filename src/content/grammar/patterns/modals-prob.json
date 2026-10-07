@@ -1,0 +1,314 @@
+{
+ "topic": "modals-prob",
+ "canDo": {
+  "de": "Ich kann Wahrscheinlichkeit in Stufen ausdrücken: durchaus möglich (may well), wahrscheinlich (likely), so gut wie sicher (bound to) und mit chance und probable.",
+  "en": "I can express probability in steps: quite possible (may well), probable (likely), almost certain (bound to), and with chance and probable."
+ },
+ "order": [
+  "mp.may-well",
+  "mp.bound",
+  "mp.likely",
+  "mp.chance"
+ ],
+ "introPlan": [
+  [
+   "mp.may-well",
+   "mp.bound"
+  ],
+  [
+   "mp.likely",
+   "mp.chance"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Ist es durchaus möglich, aber nicht sicher? Nimm may, might oder could mit well.",
+   "Ist es wahrscheinlich? Nimm be likely to, bei Verneinung be unlikely to.",
+   "Ist es fast sicher? Nimm be bound to oder be sure to. Willst du es sachlich schreiben, nimm it is highly probable that oder it is almost certain that."
+  ],
+  "en": [
+   "Is it quite possible but not certain? Use may, might or could with well.",
+   "Is it probable? Use be likely to, for the negative be unlikely to.",
+   "Is it almost certain? Use be bound to or be sure to. For a factual tone use it is highly probable that or it is almost certain that."
+  ]
+ },
+ "patterns": [
+  {
+   "id": "mp.may-well",
+   "name": {
+    "de": "may well, might well · durchaus möglich",
+    "en": "may well, might well · quite possible"
+   },
+   "form": {
+    "de": "may / might / could + well + Grundform",
+    "en": "may / might / could + well + base form"
+   },
+   "use": {
+    "de": "Mit well wird die Möglichkeit stärker: „may well“ heißt „durchaus möglich“, fast „wahrscheinlich“. Es klingt vorsichtig und doch deutlich.",
+    "en": "Well makes the possibility stronger: “may well” means “quite possibly”, almost “probably”. It sounds careful yet clear."
+   },
+   "signals": [
+    "may well",
+    "might well",
+    "could well"
+   ],
+   "ex": [
+    {
+     "en": "The client may well reject the first offer.",
+     "de": "Es ist gut möglich, dass der Kunde das erste Angebot ablehnt.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "This could well be our best quarter so far.",
+     "de": "Das könnte durchaus unser bestes Quartal bisher werden.",
+     "ctx": "talk"
+    },
+    {
+     "en": "You might well need a second server by fall.",
+     "de": "Es kann gut sein, dass Sie bis zum Herbst einen zweiten Server brauchen.",
+     "ctx": "mail"
+    }
+   ],
+   "trap": {
+    "bad": "The client may be well reject the first offer.",
+    "good": "The client may well reject the first offer.",
+    "cause": {
+     "de": "Das deutsche „durchaus“ steht frei im Satz. Im Englischen steht well fest direkt hinter may, might oder could, ohne be dazwischen.",
+     "en": "The German “durchaus” can stand almost anywhere. In English well stands right after may, might or could, with no be between them."
+    }
+   },
+   "contrast": {
+    "with": "md.might-now",
+    "a": "The client may well reject it.",
+    "b": "The client may reject it.",
+    "diff": {
+     "de": "May well macht die Möglichkeit stärker. Ohne well bleibt sie offen.",
+     "en": "May well makes the possibility stronger. Without well it stays open."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The new tool might well be cheaper.",
+     "q": {
+      "de": "Ist es durchaus möglich, dass das Tool billiger ist?",
+      "en": "Is it quite possible that the tool is cheaper?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Wie stark ist die Möglichkeit? Soll sie fast wahrscheinlich klingen, dann gehört well hinter das Modalverb.",
+    "en": "How strong is the possibility? If it should sound almost probable, well belongs right after the modal."
+   }
+  },
+  {
+   "id": "mp.bound",
+   "name": {
+    "de": "be bound to, be sure to · fast sicher",
+    "en": "be bound to, be sure to · almost certain"
+   },
+   "form": {
+    "de": "be bound / sure / certain + to + Grundform",
+    "en": "be bound / sure / certain + to + base form"
+   },
+   "use": {
+    "de": "Etwas wird fast sicher passieren, weil die Lage es verlangt: „is bound to rise“. Es ist stärker als may und klingt wie ein Urteil.",
+    "en": "Something will almost certainly happen because the situation requires it: “is bound to rise”. It is stronger than may and sounds like a judgment."
+   },
+   "signals": [
+    "is bound to",
+    "are bound to",
+    "is sure to",
+    "is certain to"
+   ],
+   "ex": [
+    {
+     "en": "Prices are bound to rise after the merger.",
+     "de": "Die Preise werden nach der Fusion mit Sicherheit steigen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "The client is sure to ask about the deadline.",
+     "de": "Der Kunde wird ganz sicher nach der Frist fragen.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Someone is bound to notice the error.",
+     "de": "Irgendjemand wird den Fehler ganz sicher bemerken.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Prices are bound rising after the merger.",
+    "good": "Prices are bound to rise after the merger.",
+    "cause": {
+     "de": "Nach bound steht to und die Grundform. Das -ing kommt von Wendungen wie „look forward to“ und passt hier nicht.",
+     "en": "After bound comes to and the base form. The -ing comes from phrases like “look forward to” and does not fit here."
+    }
+   },
+   "contrast": {
+    "with": "mp.may-well",
+    "a": "Prices are bound to rise.",
+    "b": "Prices may well rise.",
+    "diff": {
+     "de": "Bound to ist fast sicher. May well ist durchaus möglich, aber nicht sicher.",
+     "en": "Bound to is almost certain. May well is quite possible, but not certain."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Someone is bound to notice the error.",
+     "q": {
+      "de": "Ist es fast sicher, dass es jemand bemerkt?",
+      "en": "Is it almost certain that someone notices?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Ist es fast sicher? Dann passt be bound to oder be sure to, gefolgt von der Grundform.",
+    "en": "Is it almost certain? Then be bound to or be sure to fits, followed by the base form."
+   }
+  },
+  {
+   "id": "mp.likely",
+   "name": {
+    "de": "be likely to, be unlikely to · wahrscheinlich",
+    "en": "be likely to, be unlikely to · probable"
+   },
+   "form": {
+    "de": "be (un)likely + to + Grundform · It is likely that …",
+    "en": "be (un)likely + to + base form · It is likely that …"
+   },
+   "use": {
+    "de": "Die Wahrscheinlichkeit wird mit likely oder unlikely ausgedrückt, auch gesteigert: „highly likely“, „most likely“. Das Subjekt der Aussage steht vorn.",
+    "en": "Probability is expressed with likely or unlikely, also strengthened: “highly likely”, “most likely”. The subject of the statement comes first."
+   },
+   "signals": [
+    "is likely to",
+    "is unlikely to",
+    "highly likely",
+    "most likely",
+    "not likely to"
+   ],
+   "ex": [
+    {
+     "en": "The update is likely to be ready on Friday.",
+     "de": "Das Update wird voraussichtlich am Freitag fertig.",
+     "ctx": "mail"
+    },
+    {
+     "en": "A price cut is highly unlikely this year.",
+     "de": "Eine Preissenkung ist dieses Jahr sehr unwahrscheinlich.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "The delay is unlikely to affect the launch.",
+     "de": "Die Verzögerung wird den Start wahrscheinlich nicht beeinträchtigen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The update is likely that it is ready on Friday.",
+    "good": "The update is likely to be ready on Friday.",
+    "cause": {
+     "de": "Nach dem Subjekt steht likely + to + Grundform. „It is likely that …“ geht auch, aber dann beginnt der Satz mit it.",
+     "en": "After the subject comes likely + to + base form. “It is likely that …” works too, but then the sentence starts with it."
+    }
+   },
+   "contrast": {
+    "with": "mp.chance",
+    "a": "The update is likely to be ready.",
+    "b": "It is likely that the update will be ready.",
+    "diff": {
+     "de": "Gleiche Bedeutung. Mit it folgt ein that-Satz, mit dem Subjekt vorn ein to-Infinitiv.",
+     "en": "Same meaning. With it a that-clause follows, with the subject first a to-infinitive."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The delay is unlikely to affect the launch.",
+     "q": {
+      "de": "Wird die Verzögerung den Start wahrscheinlich beeinträchtigen?",
+      "en": "Will the delay probably affect the launch?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Soll es wahrscheinlich oder unwahrscheinlich klingen? Dann passt likely oder unlikely mit to und der Grundform.",
+    "en": "Should it sound probable or improbable? Then likely or unlikely with to and the base form fits."
+   }
+  },
+  {
+   "id": "mp.chance",
+   "name": {
+    "de": "a good chance, highly probable · Nominalstil",
+    "en": "a good chance, highly probable · noun style"
+   },
+   "form": {
+    "de": "There is a (good) chance that … · It is (highly) probable that …",
+    "en": "There is a (good) chance that … · It is (highly) probable that …"
+   },
+   "use": {
+    "de": "Mit Nomen und Adjektiv wie chance, possibility, probable drückt man Wahrscheinlichkeit aus, oft in Berichten. Danach steht ein that-Satz.",
+    "en": "With nouns and adjectives like chance, possibility, probable you express probability, often in reports. A that-clause follows."
+   },
+   "signals": [
+    "a good chance",
+    "a slim chance",
+    "there is a possibility",
+    "highly probable",
+    "it is possible that"
+   ],
+   "ex": [
+    {
+     "en": "There is a good chance that the supplier will agree.",
+     "de": "Es besteht eine gute Chance, dass der Lieferant zustimmt.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "It is highly probable that costs will rise.",
+     "de": "Es ist sehr wahrscheinlich, dass die Kosten steigen.",
+     "ctx": "mail"
+    },
+    {
+     "en": "There is only a slim chance of a refund.",
+     "de": "Es besteht nur eine kleine Chance auf eine Rückerstattung.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "It exists a good chance that the supplier will agree.",
+    "good": "There is a good chance that the supplier will agree.",
+    "cause": {
+     "de": "Das deutsche „es besteht“ führt zu „it exists“. Englisch sagt there is.",
+     "en": "German “es besteht” leads to “it exists”. English says there is."
+    }
+   },
+   "contrast": {
+    "with": "mp.bound",
+    "a": "There is a good chance that prices will rise.",
+    "b": "Prices are bound to rise.",
+    "diff": {
+     "de": "Chance nennt eine Möglichkeit. Bound to nennt etwas fast Sicheres.",
+     "en": "Chance names a possibility. Bound to names something almost certain."
+    }
+   },
+   "ccq": [
+    {
+     "s": "There is only a slim chance of a refund.",
+     "q": {
+      "de": "Ist eine Rückerstattung sehr wahrscheinlich?",
+      "en": "Is a refund very likely?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Willst du eine Möglichkeit nennen? Dann passt there is a chance oder it is probable mit einem that-Satz.",
+    "en": "Do you want to name a possibility? Then there is a chance or it is probable with a that-clause fits."
+   }
+  }
+ ]
+}

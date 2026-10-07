@@ -1,0 +1,103 @@
+{
+ "Rarely we have seen such a clear proposal.": {
+  "pat": "inv.negative",
+  "why": {
+   "ok": {
+    "de": "„Rarely“ am Satzanfang verlangt die Umstellung wie in einer Frage: Rarely have we seen.",
+    "en": "“Rarely” at the start requires inversion as in a question: Rarely have we seen."
+   },
+   "wrong": [
+    {
+     "if": [
+      "we",
+      "have"
+     ],
+     "de": "Das Hilfsverb steht vor dem Subjekt: Rarely have we seen.",
+     "en": "The auxiliary comes before the subject: Rarely have we seen."
+    },
+    {
+     "if": [
+      "did"
+     ],
+     "de": "Mit seen bleibt es bei have, nicht did: Rarely have we seen.",
+     "en": "With seen keep have, not did: Rarely have we seen."
+    }
+   ]
+  }
+ },
+ "Only after the pilot we approved the full rollout.": {
+  "pat": "inv.only",
+  "why": {
+   "ok": {
+    "de": "Nach „Only after“ steht did vor dem Subjekt, das Verb in der Grundform: did we approve.",
+    "en": "After “Only after”, did stands before the subject and the verb takes the base form: did we approve."
+   },
+   "wrong": [
+    {
+     "not": [
+      "did"
+     ],
+     "de": "Vor das Subjekt we gehört did: Only after the pilot did we approve.",
+     "en": "Before the subject we you need did: Only after the pilot did we approve."
+    },
+    {
+     "if": [
+      "approved"
+     ],
+     "de": "Nach did steht die Grundform: approve, nicht approved.",
+     "en": "After did comes the base form: approve, not approved."
+    }
+   ]
+  }
+ },
+ "No sooner had we signed when the prices rose.": {
+  "pat": "inv.sooner",
+  "why": {
+   "ok": {
+    "de": "Zu „no sooner“ gehört than: No sooner had we signed than the prices rose.",
+    "en": "“No sooner” goes with than: No sooner had we signed than the prices rose."
+   },
+   "wrong": [
+    {
+     "if": [
+      "when"
+     ],
+     "de": "When gehört zu hardly. Zu no sooner gehört than.",
+     "en": "When goes with hardly. No sooner goes with than."
+    },
+    {
+     "not": [
+      "than"
+     ],
+     "de": "Zu no sooner gehört than.",
+     "en": "No sooner goes with than."
+    }
+   ]
+  }
+ },
+ "Should you will need help, please call us.": {
+  "pat": "inv.cond",
+  "why": {
+   "ok": {
+    "de": "Nach Should you steht die Grundform ohne will: Should you need help.",
+    "en": "After Should you the base form follows without will: Should you need help."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach Should you steht kein will, nur die Grundform.",
+     "en": "After Should you there is no will, only the base form."
+    },
+    {
+     "not": [
+      "should"
+     ],
+     "de": "Die förmliche Bedingung beginnt mit Should you.",
+     "en": "The formal condition starts with Should you."
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,1887 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "ocl-0501",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "inv.negative",
+   "why": {
+    "ok": {
+     "de": "Nach Never am Satzanfang steht das Hilfsverb vor dem Subjekt: Never has/had the team faced.",
+     "en": "After Never at the start the auxiliary comes before the subject: Never has/had the team faced."
+    },
+    "wrong": [
+     {
+      "if": [
+       "did"
+      ],
+      "de": "did braucht die Grundform, hier steht aber faced (3. Form wäre nötig).",
+      "en": "did needs the base form, but faced is already a past form here."
+     },
+     {
+      "if": [
+       "was"
+      ],
+      "de": "was passt nicht zu faced, es fehlt das Hilfsverb für die Vorzeitigkeit.",
+      "en": "was does not fit faced, the auxiliary for the earlier action is missing."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "would braucht die Grundform, hier folgt aber faced.",
+      "en": "would needs the base form, but faced follows."
+     }
+    ]
+   },
+   "text": "Never ___ the team faced such a complex migration in so short a time.",
+   "accept": [
+    "has",
+    "had"
+   ],
+   "cls": "aux",
+   "chips": [
+    "did",
+    "was",
+    "would"
+   ]
+  },
+  {
+   "id": "ocl-0502",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "inv.only",
+   "why": {
+    "ok": {
+     "de": "Nach Only then steht das Hilfsverb vor dem Subjekt: Only then did we understand.",
+     "en": "After Only then the auxiliary comes before the subject: Only then did we understand."
+    },
+    "wrong": [
+     {
+      "if": [
+       "do"
+      ],
+      "de": "do ist Präsens, der Satz erzählt aber von früher (was).",
+      "en": "do is present, but the sentence tells about the past (was)."
+     },
+     {
+      "if": [
+       "are"
+      ],
+      "de": "are passt nicht zu understand, es fehlt die Vergangenheit.",
+      "en": "are does not fit understand, the past tense is missing."
+     },
+     {
+      "if": [
+       "have"
+      ],
+      "de": "have verlangt die 3. Form, hier folgt aber die Grundform understand.",
+      "en": "have needs the participle, but the base form understand follows."
+     }
+    ]
+   },
+   "text": "Only then ___ we understand how serious the problem really was.",
+   "accept": [
+    "did",
+    "could",
+    "would"
+   ],
+   "cls": "aux",
+   "chips": [
+    "do",
+    "are",
+    "have"
+   ]
+  },
+  {
+   "id": "ocl-0503",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "inv.sooner",
+   "why": {
+    "ok": {
+     "de": "Zu no sooner gehört than: No sooner had … than …",
+     "en": "No sooner goes with than: No sooner had … than …"
+    },
+    "wrong": [
+     {
+      "if": [
+       "when"
+      ],
+      "de": "when gehört zu hardly, nicht zu no sooner.",
+      "en": "when goes with hardly, not with no sooner."
+     },
+     {
+      "if": [
+       "that"
+      ],
+      "de": "that leitet hier keinen Vergleich ein, zu no sooner gehört than.",
+      "en": "that does not introduce a comparison here, no sooner goes with than."
+     },
+     {
+      "if": [
+       "then"
+      ],
+      "de": "then ist ein Zeitwort („dann“), kein Bindewort für no sooner.",
+      "en": "then is a time word (“then”), not the connector for no sooner."
+     }
+    ]
+   },
+   "text": "No sooner had the meeting ended ___ the next call started.",
+   "accept": [
+    "than"
+   ],
+   "cls": "conj",
+   "chips": [
+    "when",
+    "that",
+    "then"
+   ]
+  },
+  {
+   "id": "ocl-0504",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "inv.sooner",
+   "why": {
+    "ok": {
+     "de": "Zu hardly gehört when (oder before): Hardly had … when …",
+     "en": "Hardly goes with when (or before): Hardly had … when …"
+    },
+    "wrong": [
+     {
+      "if": [
+       "than"
+      ],
+      "de": "than gehört zu no sooner, nicht zu hardly.",
+      "en": "than goes with no sooner, not with hardly."
+     },
+     {
+      "if": [
+       "that"
+      ],
+      "de": "that verbindet hier nichts, zu hardly gehört when.",
+      "en": "that connects nothing here, hardly goes with when."
+     },
+     {
+      "if": [
+       "then"
+      ],
+      "de": "then ist ein Zeitwort, es verbindet die beiden Sätze nicht.",
+      "en": "then is a time word, it does not join the two clauses."
+     }
+    ]
+   },
+   "text": "Hardly had we opened the file ___ the program crashed.",
+   "accept": [
+    "when",
+    "before"
+   ],
+   "cls": "conj",
+   "chips": [
+    "than",
+    "that",
+    "then"
+   ]
+  },
+  {
+   "id": "ocl-0505",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "inv.cond",
+   "why": {
+    "ok": {
+     "de": "Should you need … ist die förmliche Fassung ohne if. If you need … ist ebenfalls richtig, klingt aber weniger förmlich.",
+     "en": "Should you need … is the formal version without if. If you need … is also correct but sounds less formal."
+    },
+    "wrong": [
+     {
+      "if": [
+       "Would"
+      ],
+      "de": "Would you need … ist keine Bedingung, hier braucht es Should oder If.",
+      "en": "Would you need … is not a condition, Should or If is needed here."
+     },
+     {
+      "if": [
+       "Could"
+      ],
+      "de": "Could you need … fragt nach Möglichkeit und leitet keine Bedingung ein.",
+      "en": "Could you need … asks about possibility and does not open a condition."
+     },
+     {
+      "if": [
+       "Might"
+      ],
+      "de": "Might you need … klingt altmodisch und ist keine übliche Bedingung.",
+      "en": "Might you need … sounds old-fashioned and is not a usual condition."
+     }
+    ]
+   },
+   "text": "___ you need further information, our team will be happy to help.",
+   "accept": [
+    "Should",
+    "If"
+   ],
+   "cls": "aux",
+   "chips": [
+    "Would",
+    "Could",
+    "Might"
+   ]
+  },
+  {
+   "id": "ocl-0506",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "inv.cond",
+   "why": {
+    "ok": {
+     "de": "Had it not been for + Nomen heißt „wenn nicht … gewesen wäre“ und ersetzt but for.",
+     "en": "Had it not been for + noun means “if it had not been for” and replaces but for."
+    },
+    "wrong": [
+     {
+      "if": [
+       "of"
+      ],
+      "de": "of passt nicht zu been, die feste Wendung ist had it not been for.",
+      "en": "of does not fit been, the fixed phrase is had it not been for."
+     },
+     {
+      "if": [
+       "to"
+      ],
+      "de": "to nennt eine Richtung, die Wendung braucht for.",
+      "en": "to names a direction, the phrase needs for."
+     },
+     {
+      "if": [
+       "by"
+      ],
+      "de": "by nennt den Urheber, die Wendung braucht for.",
+      "en": "by names the agent, the phrase needs for."
+     }
+    ]
+   },
+   "text": "Had it not been ___ the support of our partners, we could not have finished on time.",
+   "accept": [
+    "for"
+   ],
+   "cls": "prep",
+   "chips": [
+    "of",
+    "to",
+    "by"
+   ]
+  },
+  {
+   "id": "ocl-0507",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "inv.sooner",
+   "why": {
+    "ok": {
+     "de": "Zu no sooner gehört than: No sooner had … than …",
+     "en": "No sooner goes with than: No sooner had … than …"
+    },
+    "wrong": [
+     {
+      "if": [
+       "when"
+      ],
+      "de": "when gehört zu hardly, zu no sooner gehört than.",
+      "en": "when goes with hardly, no sooner goes with than."
+     },
+     {
+      "if": [
+       "that"
+      ],
+      "de": "that leitet hier keinen Vergleich ein, es braucht than.",
+      "en": "that does not introduce a comparison here, it needs than."
+     },
+     {
+      "if": [
+       "then"
+      ],
+      "de": "then ist ein Zeitwort („dann“), kein Bindewort.",
+      "en": "then is a time word (“then”), not a connector."
+     }
+    ]
+   },
+   "text": "No sooner had we sat down at the café ___ it started to rain.",
+   "accept": [
+    "than"
+   ],
+   "cls": "conj",
+   "chips": [
+    "when",
+    "that",
+    "then"
+   ]
+  },
+  {
+   "id": "ocl-0508",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "inv.negative",
+   "why": {
+    "ok": {
+     "de": "Nach Seldom am Satzanfang steht does vor dem Subjekt: Seldom does my neighbor leave.",
+     "en": "After Seldom at the start, does stands before the subject: Seldom does my neighbor leave."
+    },
+    "wrong": [
+     {
+      "if": [
+       "do"
+      ],
+      "de": "do passt zu Mehrzahl, my neighbor ist Einzahl.",
+      "en": "do goes with plural, my neighbor is singular."
+     },
+     {
+      "if": [
+       "is"
+      ],
+      "de": "is braucht ein -ing oder eine 3. Form, hier steht die Grundform leave.",
+      "en": "is needs an -ing or a participle, but the base form leave stands here."
+     },
+     {
+      "if": [
+       "has"
+      ],
+      "de": "has verlangt die 3. Form (left), hier steht die Grundform leave.",
+      "en": "has needs the participle (left), but the base form leave stands here."
+     }
+    ]
+   },
+   "text": "Seldom ___ my neighbor leave the house before noon.",
+   "accept": [
+    "does"
+   ],
+   "cls": "aux",
+   "chips": [
+    "do",
+    "is",
+    "has"
+   ]
+  },
+  {
+   "id": "ocl-0509",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "inv.only",
+   "why": {
+    "ok": {
+     "de": "Nach Only when und dem Nebensatz steht das Hilfsverb vor dem Subjekt: Only when … could we eat.",
+     "en": "After Only when and the clause, the auxiliary comes before the subject: Only when … could we eat."
+    },
+    "wrong": [
+     {
+      "if": [
+       "do"
+      ],
+      "de": "do ist Präsens, der Nebensatz steht aber in der Vergangenheit.",
+      "en": "do is present, but the clause before it is in the past."
+     },
+     {
+      "if": [
+       "can"
+      ],
+      "de": "can ist Präsens und passt nicht zu fell asleep.",
+      "en": "can is present and does not fit fell asleep."
+     },
+     {
+      "if": [
+       "are"
+      ],
+      "de": "are braucht ein -ing, hier steht die Grundform eat.",
+      "en": "are needs an -ing form, but the base form eat stands here."
+     }
+    ]
+   },
+   "text": "Only when the baby fell asleep ___ we finally eat dinner.",
+   "accept": [
+    "could",
+    "did"
+   ],
+   "cls": "aux",
+   "chips": [
+    "do",
+    "can",
+    "are"
+   ]
+  },
+  {
+   "id": "ocl-0510",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "ep.do-emph",
+   "why": {
+    "ok": {
+     "de": "Das betonte did widerspricht dem Vorwurf: we did reply (Grundform reply).",
+     "en": "The stressed did rebuts the accusation: we did reply (base form reply)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "do"
+      ],
+      "de": "do ist Präsens, die Antwort liegt aber in der Vergangenheit (on Tuesday).",
+      "en": "do is present, but the reply lies in the past (on Tuesday)."
+     },
+     {
+      "if": [
+       "does"
+      ],
+      "de": "does gehört zu he, she, it, nicht zu we.",
+      "en": "does goes with he, she, it, not with we."
+     },
+     {
+      "if": [
+       "had"
+      ],
+      "de": "had verlangt die 3. Form, hier folgt die Grundform reply.",
+      "en": "had needs the participle, but the base form reply follows."
+     }
+    ]
+   },
+   "text": "She said we never answered, but we ___ reply to her email on Tuesday.",
+   "accept": [
+    "did"
+   ],
+   "cls": "aux",
+   "chips": [
+    "do",
+    "does",
+    "had"
+   ]
+  },
+  {
+   "id": "ocl-0511",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "ep.do-emph",
+   "why": {
+    "ok": {
+     "de": "Zu he gehört does vor der Grundform speak. Das widerspricht dem Einwand und betont, dass es wirklich stimmt.",
+     "en": "With he the form is does before the base form speak. It rebuts the objection and stresses that it is really true."
+    },
+    "wrong": [
+     {
+      "if": [
+       "do"
+      ],
+      "de": "do gehört zu I, you, we, they, nicht zu he.",
+      "en": "do goes with I, you, we, they, not with he."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "did ist Vergangenheit, der Satz spricht aber von seinem Können jetzt.",
+      "en": "did is past, but the sentence is about his ability now."
+     },
+     {
+      "if": [
+       "is"
+      ],
+      "de": "is braucht ein -ing oder eine 3. Form, hier folgt die Grundform speak.",
+      "en": "is needs an -ing or a participle, but the base form speak follows."
+     }
+    ]
+   },
+   "text": "You say he does not speak French, but he really ___ speak it fluently.",
+   "accept": [
+    "does",
+    "can"
+   ],
+   "cls": "aux",
+   "chips": [
+    "do",
+    "did",
+    "is"
+   ]
+  },
+  {
+   "id": "ocl-0512",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "ep.concession",
+   "why": {
+    "ok": {
+     "de": "Much as I would like to … räumt etwas ein: „so gern ich möchte“.",
+     "en": "Much as I would like to … concedes a point: “as much as I would like to”."
+    },
+    "wrong": [
+     {
+      "if": [
+       "that"
+      ],
+      "de": "Much that ist keine gültige Verbindung für einen Einwand.",
+      "en": "Much that is not a valid combination for a concession."
+     },
+     {
+      "if": [
+       "so"
+      ],
+      "de": "Much so bedeutet „sehr“ und leitet keinen Einwand ein.",
+      "en": "Much so means “very” and does not start a concession."
+     },
+     {
+      "if": [
+       "if"
+      ],
+      "de": "if nennt eine Bedingung, hier soll aber ein Einwand stehen.",
+      "en": "if names a condition, but a concession is needed here."
+     }
+    ]
+   },
+   "text": "Much ___ I would like to attend, I have another meeting at that time.",
+   "accept": [
+    "as",
+    "though"
+   ],
+   "cls": "conj",
+   "chips": [
+    "that",
+    "so",
+    "if"
+   ]
+  },
+  {
+   "id": "ocl-0513",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "ep.concession",
+   "why": {
+    "ok": {
+     "de": "Hard as we tried … räumt etwas ein: „so sehr wir uns bemühten“. Danach folgt ein normaler Hauptsatz.",
+     "en": "Hard as we tried … concedes a point: “however hard we tried”. A normal main clause follows."
+    },
+    "wrong": [
+     {
+      "if": [
+       "that"
+      ],
+      "de": "Hard that we tried ist keine gültige Verbindung für einen Einwand.",
+      "en": "Hard that we tried is not a valid combination for a concession."
+     },
+     {
+      "if": [
+       "so"
+      ],
+      "de": "Hard so we tried drückt keinen Einwand aus.",
+      "en": "Hard so we tried does not express a concession."
+     },
+     {
+      "if": [
+       "if"
+      ],
+      "de": "if nennt eine Bedingung, hier soll aber ein Einwand stehen.",
+      "en": "if names a condition, but a concession is needed here."
+     }
+    ]
+   },
+   "text": "Hard ___ we tried, the migration was not finished before the deadline.",
+   "accept": [
+    "as",
+    "though"
+   ],
+   "cls": "conj",
+   "chips": [
+    "that",
+    "so",
+    "if"
+   ]
+  },
+  {
+   "id": "ocl-0514",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "ep.so-such",
+   "why": {
+    "ok": {
+     "de": "So … was … that nennt die Folge: that leitet sie ein.",
+     "en": "So … was … that names the result: that introduces it."
+    },
+    "wrong": [
+     {
+      "if": [
+       "which"
+      ],
+      "de": "which bezieht sich auf ein Nomen, hier folgt aber die Folge des ganzen Satzes.",
+      "en": "which refers to a noun, but here the result of the whole clause follows."
+     },
+     {
+      "if": [
+       "what"
+      ],
+      "de": "what leitet keinen Folgesatz ein, nach so … that braucht es that.",
+      "en": "what does not start a result clause, so … that needs that."
+     },
+     {
+      "if": [
+       "as"
+      ],
+      "de": "as vergleicht, die Folge wird aber mit that angeschlossen.",
+      "en": "as compares, but the result is joined with that."
+     }
+    ]
+   },
+   "text": "So strong was the wind ___ the organizers canceled the outdoor concert.",
+   "accept": [
+    "that"
+   ],
+   "cls": "conj",
+   "chips": [
+    "which",
+    "what",
+    "as"
+   ]
+  },
+  {
+   "id": "ocl-0515",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "ep.so-such",
+   "why": {
+    "ok": {
+     "de": "Vor a + Adjektiv + Nomen steht such: such a good offer. So braucht kein a danach.",
+     "en": "Before a + adjective + noun you use such: such a good offer. So takes no a after it."
+    },
+    "wrong": [
+     {
+      "if": [
+       "so"
+      ],
+      "de": "so steht vor einem Adjektiv allein, vor a + Nomen braucht es such.",
+      "en": "so goes before an adjective alone, before a + noun it needs such."
+     },
+     {
+      "if": [
+       "very"
+      ],
+      "de": "very verstärkt nur ein Adjektiv und nennt keine Folge mit that.",
+      "en": "very only strengthens an adjective and names no result with that."
+     },
+     {
+      "if": [
+       "too"
+      ],
+      "de": "too heißt „zu“ und passt nicht zu einer Folge mit that.",
+      "en": "too means “too” and does not fit a result with that."
+     }
+    ]
+   },
+   "text": "It was ___ a good offer that we accepted it at once.",
+   "accept": [
+    "such"
+   ],
+   "cls": "det",
+   "chips": [
+    "so",
+    "very",
+    "too"
+   ]
+  },
+  {
+   "id": "ocl-0516",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "ep.so-such",
+   "why": {
+    "ok": {
+     "de": "Nach Such am Anfang steht das Verb vor dem Subjekt: Such was his excitement.",
+     "en": "After Such at the start, the verb comes before the subject: Such was his excitement."
+    },
+    "wrong": [
+     {
+      "if": [
+       "is"
+      ],
+      "de": "is ist Präsens, die Geschichte liegt aber in der Vergangenheit (could not).",
+      "en": "is is present, but the story lies in the past (could not)."
+     },
+     {
+      "if": [
+       "has"
+      ],
+      "de": "has verlangt eine 3. Form und passt nicht zu Such … that.",
+      "en": "has needs a participle and does not fit Such … that."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "did braucht die Grundform, hier steht aber ein Nomen.",
+      "en": "did needs the base form, but a noun follows here."
+     }
+    ]
+   },
+   "text": "Such ___ his excitement that he could not sleep the night before the trip.",
+   "accept": [
+    "was"
+   ],
+   "cls": "aux",
+   "chips": [
+    "is",
+    "has",
+    "did"
+   ]
+  },
+  {
+   "id": "ocl-0517",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "ep.concession",
+   "why": {
+    "ok": {
+     "de": "Much as I love … räumt etwas ein und heißt „so sehr ich … mag“.",
+     "en": "Much as I love … concedes a point and means “as much as I love …”."
+    },
+    "wrong": [
+     {
+      "if": [
+       "that"
+      ],
+      "de": "Much that ist keine gültige Verbindung für einen Einwand.",
+      "en": "Much that is not a valid combination for a concession."
+     },
+     {
+      "if": [
+       "so"
+      ],
+      "de": "Much so bedeutet „sehr“ und leitet keinen Einwand ein.",
+      "en": "Much so means “very” and does not start a concession."
+     },
+     {
+      "if": [
+       "how"
+      ],
+      "de": "how fragt nach der Art, hier soll aber ein Einwand stehen.",
+      "en": "how asks about manner, but a concession is needed here."
+     }
+    ]
+   },
+   "text": "Much ___ I love chocolate, I try to eat it only on weekends.",
+   "accept": [
+    "as",
+    "though"
+   ],
+   "cls": "conj",
+   "chips": [
+    "that",
+    "so",
+    "how"
+   ]
+  },
+  {
+   "id": "ocl-0518",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "ep.do-emph",
+   "why": {
+    "ok": {
+     "de": "Das betonte did steht vor der Grundform: I did tell you.",
+     "en": "The stressed did stands before the base form: I did tell you."
+    },
+    "wrong": [
+     {
+      "if": [
+       "told"
+      ],
+      "de": "Nach did steht die Grundform, nicht die 2. Form told.",
+      "en": "After did the base form follows, not the past form told."
+     },
+     {
+      "if": [
+       "telling"
+      ],
+      "de": "Nach did steht die Grundform, nicht -ing.",
+      "en": "After did the base form follows, not -ing."
+     },
+     {
+      "if": [
+       "tells"
+      ],
+      "de": "Nach did steht die Grundform, kein -s.",
+      "en": "After did the base form follows, no -s."
+     }
+    ]
+   },
+   "text": "I did ___ you about the leak, but you were not listening.",
+   "accept": [
+    "tell",
+    "warn",
+    "remind"
+   ],
+   "cls": "part",
+   "chips": [
+    "told",
+    "telling",
+    "tells"
+   ]
+  },
+  {
+   "id": "ocl-0519",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "el.so-not",
+   "why": {
+    "ok": {
+     "de": "Nach expect ersetzt so den ganzen Gedanken: I expect so.",
+     "en": "After expect, so replaces the whole thought: I expect so."
+    },
+    "wrong": [
+     {
+      "if": [
+       "too"
+      ],
+      "de": "too heißt „auch“ und ersetzt keinen Gedanken nach expect.",
+      "en": "too means “also” and does not replace a thought after expect."
+     },
+     {
+      "if": [
+       "also"
+      ],
+      "de": "also heißt „auch“ und ersetzt keinen Gedanken nach expect.",
+      "en": "also means “also” and does not replace a thought after expect."
+     },
+     {
+      "if": [
+       "yet"
+      ],
+      "de": "yet nennt „bisher“ und ersetzt den Gedanken nicht, nach expect steht so.",
+      "en": "yet means “so far” and does not replace the thought, expect takes so."
+     }
+    ]
+   },
+   "text": "Will the new tool be cheaper? I expect ___, but I have not seen the quote yet.",
+   "accept": [
+    "so"
+   ],
+   "cls": "adv",
+   "chips": [
+    "too",
+    "also",
+    "yet"
+   ]
+  },
+  {
+   "id": "ocl-0520",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "el.so-not",
+   "why": {
+    "ok": {
+     "de": "Nach be afraid steht not für den verneinten Gedanken: I am afraid not.",
+     "en": "After be afraid, not stands for the negative thought: I am afraid not."
+    },
+    "wrong": [
+     {
+      "if": [
+       "no"
+      ],
+      "de": "no steht nicht für einen ganzen Gedanken nach be afraid, dort steht not.",
+      "en": "no does not stand for a whole thought after be afraid, not does."
+     },
+     {
+      "if": [
+       "nor"
+      ],
+      "de": "nor verbindet zwei Verneinungen und ersetzt hier keinen Gedanken.",
+      "en": "nor joins two negatives and does not replace a thought here."
+     },
+     {
+      "if": [
+       "never"
+      ],
+      "de": "never heißt „nie“ und die Antwort wäre viel zu stark.",
+      "en": "never means “never” and the answer would be far too strong."
+     }
+    ]
+   },
+   "text": "Is the report finished? I am afraid ___; we are still checking the figures.",
+   "accept": [
+    "not"
+   ],
+   "cls": "adv",
+   "chips": [
+    "no",
+    "nor",
+    "never"
+   ]
+  },
+  {
+   "id": "ocl-0521",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "el.do-so",
+   "why": {
+    "ok": {
+     "de": "Did the same ersetzt die Handlung moved to a new platform.",
+     "en": "Did the same replaces the action moved to a new platform."
+    },
+    "wrong": [
+     {
+      "if": [
+       "do"
+      ],
+      "de": "do ist Präsens, der Satz erzählt aber von Mai und Juni (Vergangenheit).",
+      "en": "do is present, but the sentence is about May and June (past)."
+     },
+     {
+      "if": [
+       "had"
+      ],
+      "de": "had verlangt eine 3. Form, hier steht the same für die Handlung.",
+      "en": "had needs a participle, but the same stands for the action here."
+     },
+     {
+      "if": [
+       "were"
+      ],
+      "de": "were braucht ein -ing oder eine 3. Form und ersetzt die Handlung nicht.",
+      "en": "were needs an -ing or a participle and does not replace the action."
+     }
+    ]
+   },
+   "text": "Our competitors moved to a new platform in May, and we ___ the same in June.",
+   "accept": [
+    "did"
+   ],
+   "cls": "aux",
+   "chips": [
+    "do",
+    "had",
+    "were"
+   ]
+  },
+  {
+   "id": "ocl-0522",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "el.do-so",
+   "why": {
+    "ok": {
+     "de": "Do so ersetzt die Handlung withdraw from the course.",
+     "en": "Do so replaces the action withdraw from the course."
+    },
+    "wrong": [
+     {
+      "if": [
+       "such"
+      ],
+      "de": "do such ist keine feste Wendung, es heißt do so.",
+      "en": "do such is not a fixed phrase, it is do so."
+     },
+     {
+      "if": [
+       "thus"
+      ],
+      "de": "thus heißt „deshalb“ und ersetzt nicht die Handlung.",
+      "en": "thus means “therefore” and does not replace the action."
+     },
+     {
+      "if": [
+       "either"
+      ],
+      "de": "either heißt „auch nicht“ und ersetzt die Handlung nicht.",
+      "en": "either means “not either” and does not replace the action."
+     }
+    ]
+   },
+   "text": "Anyone who wants to withdraw from the course may do ___ until the end of the month.",
+   "accept": [
+    "so",
+    "it",
+    "that"
+   ],
+   "cls": "adv",
+   "chips": [
+    "such",
+    "thus",
+    "either"
+   ]
+  },
+  {
+   "id": "ocl-0523",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "el.one-ones",
+   "why": {
+    "ok": {
+     "de": "One ersetzt das Nomen design. Hinter new darf es nicht fehlen.",
+     "en": "One replaces the noun design. After new it must not be missing."
+    },
+    "wrong": [
+     {
+      "if": [
+       "ones"
+      ],
+      "de": "ones ist Mehrzahl, design und looks stehen aber in der Einzahl.",
+      "en": "ones is plural, but design and looks are singular."
+     },
+     {
+      "if": [
+       "that"
+      ],
+      "de": "that ersetzt kein Nomen hinter einem Adjektiv, es braucht one.",
+      "en": "that does not replace a noun after an adjective, it needs one."
+     },
+     {
+      "if": [
+       "it"
+      ],
+      "de": "it kann nach einem Adjektiv nicht stehen, es braucht one.",
+      "en": "it cannot follow an adjective, it needs one."
+     }
+    ]
+   },
+   "text": "I do not like the old design, but the new ___ looks much better.",
+   "accept": [
+    "one"
+   ],
+   "cls": "pron",
+   "chips": [
+    "ones",
+    "that",
+    "it"
+   ]
+  },
+  {
+   "id": "ocl-0524",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "el.to-aux",
+   "why": {
+    "ok": {
+     "de": "Das Verb call entfällt, aber to bleibt: although I was asked to.",
+     "en": "The verb call is dropped, but to stays: although I was asked to."
+    },
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "for gehört nicht zu dem weggelassenen Infinitiv, es braucht to.",
+      "en": "for does not belong to the dropped infinitive, it needs to."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "at gehört nicht zu dem weggelassenen Infinitiv, es braucht to.",
+      "en": "at does not belong to the dropped infinitive, it needs to."
+     },
+     {
+      "if": [
+       "on"
+      ],
+      "de": "on gehört nicht zu dem weggelassenen Infinitiv, es braucht to.",
+      "en": "on does not belong to the dropped infinitive, it needs to."
+     }
+    ]
+   },
+   "text": "I did not call the client, although I was asked ___.",
+   "accept": [
+    "to"
+   ],
+   "cls": "part",
+   "chips": [
+    "for",
+    "at",
+    "on"
+   ]
+  },
+  {
+   "id": "ocl-0525",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "el.to-aux",
+   "why": {
+    "ok": {
+     "de": "Das Verb come entfällt, aber to bleibt: I would like to.",
+     "en": "The verb come is dropped, but to stays: I would like to."
+    },
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "for steht nicht für den weggelassenen Infinitiv, es braucht to.",
+      "en": "for does not stand for the dropped infinitive, it needs to."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "at steht nicht für den weggelassenen Infinitiv, es braucht to.",
+      "en": "at does not stand for the dropped infinitive, it needs to."
+     },
+     {
+      "if": [
+       "on"
+      ],
+      "de": "on steht nicht für den weggelassenen Infinitiv, es braucht to.",
+      "en": "on does not stand for the dropped infinitive, it needs to."
+     }
+    ]
+   },
+   "text": "\"Are you coming to the party?\" \"I would like ___, but I have to work.\"",
+   "accept": [
+    "to"
+   ],
+   "cls": "part",
+   "chips": [
+    "for",
+    "at",
+    "on"
+   ]
+  },
+  {
+   "id": "ocl-0526",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "el.so-not",
+   "why": {
+    "ok": {
+     "de": "Nach think ersetzt so den ganzen Gedanken: I think so.",
+     "en": "After think, so replaces the whole thought: I think so."
+    },
+    "wrong": [
+     {
+      "if": [
+       "it"
+      ],
+      "de": "it ersetzt den Gedanken nicht, nach think steht so.",
+      "en": "it does not replace the thought, think takes so."
+     },
+     {
+      "if": [
+       "yes"
+      ],
+      "de": "yes ist eine Antwort für sich und steht nicht hinter think.",
+      "en": "yes is an answer on its own and does not follow think."
+     },
+     {
+      "if": [
+       "that"
+      ],
+      "de": "that braucht danach einen Satz, allein ersetzt es nichts.",
+      "en": "that needs a clause after it, alone it replaces nothing."
+     }
+    ]
+   },
+   "text": "\"Is the store open on Sundays?\" \"I think ___.\"",
+   "accept": [
+    "so",
+    "not"
+   ],
+   "cls": "adv",
+   "chips": [
+    "it",
+    "yes",
+    "that"
+   ]
+  },
+  {
+   "id": "ocl-0527",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "el.one-ones",
+   "why": {
+    "ok": {
+     "de": "One ersetzt das Nomen jacket. Hinter red darf es nicht fehlen.",
+     "en": "One replaces the noun jacket. After red it must not be missing."
+    },
+    "wrong": [
+     {
+      "if": [
+       "ones"
+      ],
+      "de": "ones ist Mehrzahl, jacket und suits stehen aber in der Einzahl.",
+      "en": "ones is plural, but jacket and suits are singular."
+     },
+     {
+      "if": [
+       "that"
+      ],
+      "de": "that ersetzt kein Nomen hinter einem Adjektiv, es braucht one.",
+      "en": "that does not replace a noun after an adjective, it needs one."
+     },
+     {
+      "if": [
+       "it"
+      ],
+      "de": "it kann nach einem Adjektiv nicht stehen, es braucht one.",
+      "en": "it cannot follow an adjective, it needs one."
+     }
+    ]
+   },
+   "text": "I like both jackets, but the red ___ suits you better.",
+   "accept": [
+    "one"
+   ],
+   "cls": "pron",
+   "chips": [
+    "ones",
+    "that",
+    "it"
+   ]
+  },
+  {
+   "id": "ocl-0528",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "np.contact",
+   "why": {
+    "ok": {
+     "de": "Nach dem Superlativ best solution darf that fehlen: the best solution we have found.",
+     "en": "After the superlative best solution that may be dropped: the best solution we have found."
+    },
+    "wrong": [
+     {
+      "if": [
+       "what"
+      ],
+      "de": "what ist nach einem Nomen kein Relativpronomen.",
+      "en": "what is not a relative pronoun after a noun."
+     },
+     {
+      "if": [
+       "who"
+      ],
+      "de": "who passt nur zu Personen, solution ist eine Sache.",
+      "en": "who only fits people, solution is a thing."
+     },
+     {
+      "if": [
+       "it"
+      ],
+      "de": "it ist kein Subjekt zu have found und ersetzt that nicht.",
+      "en": "it is not the subject of have found and does not replace that."
+     }
+    ]
+   },
+   "text": "This is the best solution ___ have found so far.",
+   "accept": [
+    "we",
+    "I",
+    "they",
+    "you"
+   ],
+   "cls": "pron",
+   "chips": [
+    "what",
+    "who",
+    "it"
+   ]
+  },
+  {
+   "id": "ocl-0529",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "np.contact",
+   "why": {
+    "ok": {
+     "de": "Eine Person als Objekt: that, who oder whom (oder gar nichts).",
+     "en": "A person as the object: that, who or whom (or nothing at all)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "what"
+      ],
+      "de": "what ist nach einem Nomen kein Relativpronomen.",
+      "en": "what is not a relative pronoun after a noun."
+     },
+     {
+      "if": [
+       "which"
+      ],
+      "de": "which gilt für Sachen, colleague ist eine Person.",
+      "en": "which is for things, colleague is a person."
+     },
+     {
+      "if": [
+       "whose"
+      ],
+      "de": "whose zeigt Besitz an, hier wird die Person nur genannt.",
+      "en": "whose shows possession, but here the person is only named."
+     }
+    ]
+   },
+   "text": "The colleague ___ I spoke to yesterday has already left the company.",
+   "accept": [
+    "that",
+    "who",
+    "whom"
+   ],
+   "cls": "rel",
+   "chips": [
+    "what",
+    "which",
+    "whose"
+   ]
+  },
+  {
+   "id": "ocl-0530",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "np.participle",
+   "why": {
+    "ok": {
+     "de": "Das passive Partizip proposed wird mit by verbunden: proposed by the committee.",
+     "en": "The passive participle proposed goes with by: proposed by the committee."
+    },
+    "wrong": [
+     {
+      "if": [
+       "from"
+      ],
+      "de": "from nennt die Herkunft, der Urheber wird mit by angeschlossen.",
+      "en": "from names the origin, the agent is joined with by."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "at nennt einen Ort oder Punkt, nicht den Urheber.",
+      "en": "at names a place or point, not the agent."
+     },
+     {
+      "if": [
+       "of"
+      ],
+      "de": "of nennt keinen Urheber nach einem passiven Partizip.",
+      "en": "of names no agent after a passive participle."
+     }
+    ]
+   },
+   "text": "The measures proposed ___ the committee were approved yesterday.",
+   "accept": [
+    "by"
+   ],
+   "cls": "prep",
+   "chips": [
+    "from",
+    "at",
+    "of"
+   ]
+  },
+  {
+   "id": "ocl-0531",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "np.participle",
+   "why": {
+    "ok": {
+     "de": "Related wird mit to verbunden: related to the update.",
+     "en": "Related goes with to: related to the update."
+    },
+    "wrong": [
+     {
+      "if": [
+       "with"
+      ],
+      "de": "related with ist unüblich, die feste Verbindung heißt related to.",
+      "en": "related with is unusual, the fixed combination is related to."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "related for gibt es nicht, es heißt related to.",
+      "en": "related for does not exist, it is related to."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "related at gibt es nicht, es heißt related to.",
+      "en": "related at does not exist, it is related to."
+     }
+    ]
+   },
+   "text": "Any issues related ___ the update should be reported today.",
+   "accept": [
+    "to"
+   ],
+   "cls": "prep",
+   "chips": [
+    "with",
+    "for",
+    "at"
+   ]
+  },
+  {
+   "id": "ocl-0532",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "np.of-s",
+   "why": {
+    "ok": {
+     "de": "Bei einer Zeitangabe als Ding steht of: the end of the quarter.",
+     "en": "With a time period as a thing, of is used: the end of the quarter."
+    },
+    "wrong": [
+     {
+      "if": [
+       "from"
+      ],
+      "de": "from nennt den Anfangspunkt, the end of verlangt of.",
+      "en": "from names a starting point, the end of needs of."
+     },
+     {
+      "if": [
+       "in"
+      ],
+      "de": "in nennt einen Zeitraum, nach the end steht of.",
+      "en": "in names a period, after the end comes of."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "at nennt einen Punkt, nach the end steht of.",
+      "en": "at names a point, after the end comes of."
+     }
+    ]
+   },
+   "text": "We have reached the end ___ the quarter.",
+   "accept": [
+    "of"
+   ],
+   "cls": "prep",
+   "chips": [
+    "from",
+    "in",
+    "at"
+   ]
+  },
+  {
+   "id": "ocl-0533",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "np.to-inf",
+   "why": {
+    "ok": {
+     "de": "Nach the last colleague folgt to + Grundform: to leave.",
+     "en": "After the last colleague comes to + base form: to leave."
+    },
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "for gibt es nach the last colleague nicht, es folgt to + Grundform.",
+      "en": "for does not follow the last colleague, to + base form does."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "at passt nicht vor einer Grundform, es braucht to.",
+      "en": "at does not fit before a base form, it needs to."
+     },
+     {
+      "if": [
+       "of"
+      ],
+      "de": "of passt nicht vor einer Grundform, es braucht to.",
+      "en": "of does not fit before a base form, it needs to."
+     }
+    ]
+   },
+   "text": "He was the last colleague ___ leave the office on Friday.",
+   "accept": [
+    "to"
+   ],
+   "cls": "part",
+   "chips": [
+    "for",
+    "at",
+    "of"
+   ]
+  },
+  {
+   "id": "ocl-0534",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "np.post",
+   "why": {
+    "ok": {
+     "de": "Nach extent steht to which: the extent to which.",
+     "en": "After extent comes to which: the extent to which."
+    },
+    "wrong": [
+     {
+      "if": [
+       "of"
+      ],
+      "de": "the extent of which klingt falsch, hier gehört to which.",
+      "en": "the extent of which sounds wrong, to which belongs here."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "at passt nicht zu extent, die feste Wendung ist to which.",
+      "en": "at does not fit extent, the fixed phrase is to which."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "for passt nicht zu extent, die feste Wendung ist to which.",
+      "en": "for does not fit extent, the fixed phrase is to which."
+     }
+    ]
+   },
+   "text": "The report shows the extent ___ which costs have risen since January.",
+   "accept": [
+    "to"
+   ],
+   "cls": "prep",
+   "chips": [
+    "of",
+    "at",
+    "for"
+   ]
+  },
+  {
+   "id": "ocl-0535",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "np.post",
+   "why": {
+    "ok": {
+     "de": "Für Personen allgemein steht those who: Those who live near the station.",
+     "en": "For people in general those who is used: Those who live near the station."
+    },
+    "wrong": [
+     {
+      "if": [
+       "whom"
+      ],
+      "de": "whom ist ein Objekt, hier ist die Gruppe Subjekt von live.",
+      "en": "whom is an object, here the group is the subject of live."
+     },
+     {
+      "if": [
+       "which"
+      ],
+      "de": "which gilt für Sachen, hier geht es um Menschen.",
+      "en": "which is for things, here it is about people."
+     },
+     {
+      "if": [
+       "what"
+      ],
+      "de": "what leitet keinen Relativsatz nach those ein.",
+      "en": "what does not start a relative clause after those."
+     }
+    ]
+   },
+   "text": "Those ___ live near the station can walk to work.",
+   "accept": [
+    "who"
+   ],
+   "cls": "rel",
+   "chips": [
+    "whom",
+    "which",
+    "what"
+   ]
+  },
+  {
+   "id": "ocl-0536",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "np.to-inf",
+   "why": {
+    "ok": {
+     "de": "Nach the last steht to + Grundform: the last guest to leave.",
+     "en": "After the last comes to + base form: the last guest to leave."
+    },
+    "wrong": [
+     {
+      "if": [
+       "who"
+      ],
+      "de": "who bräuchte ein gebeugtes Verb (who left), hier folgt die Grundform.",
+      "en": "who would need an inflected verb (who left), but the base form follows."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "for gibt es nach the last guest nicht, es folgt to + Grundform.",
+      "en": "for does not follow the last guest, to + base form does."
+     },
+     {
+      "if": [
+       "that"
+      ],
+      "de": "that bräuchte ein gebeugtes Verb (that left), hier folgt die Grundform.",
+      "en": "that would need an inflected verb (that left), but the base form follows."
+     }
+    ]
+   },
+   "text": "She was the last guest ___ leave the party.",
+   "accept": [
+    "to"
+   ],
+   "cls": "part",
+   "chips": [
+    "who",
+    "for",
+    "that"
+   ]
+  },
+  {
+   "id": "ocl-0537",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "np.contact",
+   "why": {
+    "ok": {
+     "de": "Nach der Steigerung the best darf that stehen oder fehlen. What, who und where passen nicht.",
+     "en": "After the superlative the best, that may stay or be dropped. What, who and where do not fit."
+    },
+    "wrong": [
+     {
+      "if": [
+       "what"
+      ],
+      "de": "what ist nach einem Nomen kein Relativpronomen.",
+      "en": "what is not a relative pronoun after a noun."
+     },
+     {
+      "if": [
+       "who"
+      ],
+      "de": "who passt nur zu Personen, present ist eine Sache.",
+      "en": "who only fits people, present is a thing."
+     },
+     {
+      "if": [
+       "where"
+      ],
+      "de": "where fragt nach einem Ort, hier ist present das Objekt.",
+      "en": "where asks about a place, but present is the object here."
+     }
+    ]
+   },
+   "text": "This is the best present ___ I have ever received.",
+   "accept": [
+    "that"
+   ],
+   "cls": "rel",
+   "chips": [
+    "what",
+    "who",
+    "where"
+   ]
+  },
+  {
+   "id": "ocl-0538",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "np.of-s",
+   "why": {
+    "ok": {
+     "de": "Bei Sachen steht of: the name of the street.",
+     "en": "With things of is used: the name of the street."
+    },
+    "wrong": [
+     {
+      "if": [
+       "from"
+      ],
+      "de": "from nennt die Herkunft, bei einem Namen steht of.",
+      "en": "from names the origin, with a name of is used."
+     },
+     {
+      "if": [
+       "to"
+      ],
+      "de": "to nennt eine Richtung, nach the name steht of.",
+      "en": "to names a direction, after the name comes of."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "for nennt einen Zweck, nach the name steht of.",
+      "en": "for names a purpose, after the name comes of."
+     }
+    ]
+   },
+   "text": "The name ___ the street is difficult to pronounce.",
+   "accept": [
+    "of"
+   ],
+   "cls": "prep",
+   "chips": [
+    "from",
+    "to",
+    "for"
+   ]
+  }
+ ]
+}

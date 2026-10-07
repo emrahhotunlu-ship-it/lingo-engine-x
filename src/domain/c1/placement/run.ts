@@ -1,5 +1,5 @@
 import { addDays, daysBetween } from '../../date';
-import { C1_LIMITS, patchC1, type C1Doc, type C1Place, type PatchResult } from '../c1doc';
+import { C1_LIMITS, patchC1, readC1, type C1Doc, type C1Place, type PatchResult } from '../c1doc';
 import { bandOf, difficulty, estimate, prior, reliabilityOf, update, type PlaceBand, type PlaceItem, type Reliability } from './model';
 import { pickNext, type AskedItem } from './select';
 
@@ -99,9 +99,9 @@ export function placementResult(s: RunState): PlaceResult {
 export const canRetake = (place: Pick<C1Place, 'd'> | undefined | null, today: string): boolean => !place || daysBetween(place.d, today) >= RETAKE_DAYS;
 
 /** Der Eintrag für `app/c1.place` (≤ 2 KB; die Aufgabenliste wird auf den Höchstwert gekappt). */
-export function placeEntry(r: PlaceResult, today: string): C1Place {
+export function placeEntry(r: PlaceResult, today: string, vw?: readonly [number, number] | null): C1Place {
   const round2 = (x: number): number => Math.round(x * 100) / 100;
-  return { d: today, se: round2(r.se), n: r.n, th: round2(r.theta), skip: [...r.skip], it: r.it.slice(0, C1_LIMITS.placeIt) };
+  return { d: today, se: round2(r.se), n: r.n, th: round2(r.theta), skip: [...r.skip], it: r.it.slice(0, C1_LIMITS.placeIt), ...(vw ? { vw: [vw[0], vw[1]] as [number, number] } : {}) };
 }
 
 /** Reine Änderung am Dokument: setzt `place` (das neue Ergebnis ersetzt das alte; alles andere bleibt unberührt). */
@@ -110,9 +110,16 @@ export function withPlacement(doc: C1Doc, entry: C1Place): C1Doc {
 }
 
 /** Ergebnis speichern (Lesen, Rechnen, Schreiben in einem Schritt). Wird nur am Ende aufgerufen; Abbrechen ruft es nie auf. */
-export function savePlacement(r: PlaceResult, today: string): Promise<PatchResult> {
-  return patchC1((doc) => withPlacement(doc, placeEntry(r, today)));
+export function savePlacement(r: PlaceResult, today: string, vw?: readonly [number, number] | null): Promise<PatchResult> {
+  return patchC1((doc) => withPlacement(doc, placeEntry(r, today, vw)));
 }
 
 /** Frühester Tag für eine neue Einstufung (zur Anzeige „ab 14. Januar“). */
 export const retakeFrom = (place: Pick<C1Place, 'd'>): string => addDays(place.d, RETAKE_DAYS);
+
+/** Kurzweg-Vortest (P34): so viele Aufgaben über alle Muster des Themas; bestanden bei mindestens `SKIP_TEST_PASS` richtigen, je ohne Hilfe und unter 20 s. */
+export const SKIP_TEST_N = 4;
+export const SKIP_TEST_PASS = 3;
+
+/** Themen mit Kurzweg aus dem Dokument `app/c1` (leer ohne Einstufung oder bei unlesbarem Dokument). */
+export const skipTopicsOf = (rawC1: unknown): ReadonlySet<string> => new Set(readC1(rawC1).place?.skip ?? []);

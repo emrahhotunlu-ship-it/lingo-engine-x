@@ -1,0 +1,319 @@
+{
+ "topic": "stative-adv",
+ "canDo": {
+  "de": "Ich kann die Verlaufsform gezielt nutzen: für Entwicklungen (are seeing), für höfliche Bitten (was hoping) und für Verhalten (is being). Bei Zuständen wie know oder need bleibe ich einfach.",
+  "en": "I can use the continuous on purpose: for changes (are seeing), for polite requests (was hoping) and for behavior (is being). With states like know or need I stay simple."
+ },
+ "order": [
+  "sa.trend",
+  "sa.soft",
+  "sa.being",
+  "sa.no-ing"
+ ],
+ "introPlan": [
+  [
+   "sa.no-ing",
+   "sa.trend"
+  ],
+  [
+   "sa.soft",
+   "sa.being"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Ist es ein Zustand, eine Meinung oder Besitz? Dann nimm die einfache Form: know, need, belong.",
+   "Läuft eine Entwicklung gerade? Dann nimm die Verlaufsform: are seeing, is getting.",
+   "Willst du freundlich fragen oder ein Verhalten beschreiben? Nimm was hoping, was wondering oder is being."
+  ],
+  "en": [
+   "Is it a state, an opinion or possession? Use the simple form: know, need, belong.",
+   "Is a change under way? Use the continuous: are seeing, is getting.",
+   "Do you want to ask politely or describe behavior? Use was hoping, was wondering or is being."
+  ]
+ },
+ "patterns": [
+  {
+   "id": "sa.trend",
+   "name": {
+    "de": "are seeing, are getting · Entwicklung",
+    "en": "are seeing, are getting · change"
+   },
+   "form": {
+    "de": "be + -ing mit seeing, finding, getting, becoming, growing",
+    "en": "be + -ing with seeing, finding, getting, becoming, growing"
+   },
+   "use": {
+    "de": "Mit der Verlaufsform beschreibst du eine Entwicklung, die gerade läuft. Auch see und find stehen so, wenn sie „erleben“ heißen: „We are seeing growth.“",
+    "en": "The continuous describes a change that is under way. See and find also take it when they mean “experience”: “We are seeing growth.”"
+   },
+   "signals": [
+    "are seeing",
+    "are finding",
+    "is getting",
+    "is becoming",
+    "is growing",
+    "increasingly"
+   ],
+   "ex": [
+    {
+     "en": "We are seeing a clear rise in demand.",
+     "de": "Wir erleben einen deutlichen Anstieg der Nachfrage.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Customers are increasingly asking for shorter contracts.",
+     "de": "Kunden fragen immer häufiger nach kürzeren Verträgen.",
+     "ctx": "mail"
+    },
+    {
+     "en": "It is getting harder to find good staff.",
+     "de": "Es wird immer schwerer, gute Leute zu finden.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Prices rise at the moment because of the new tax.",
+    "good": "Prices are rising at the moment because of the new tax.",
+    "cause": {
+     "de": "Mit „at the moment“ oder „currently“ läuft der Vorgang gerade. Dafür braucht das Englische die Verlaufsform, die einfache Form passt nicht.",
+     "en": "With “at the moment” or “currently” the process is under way right now. English needs the continuous for that, the simple form does not fit."
+    }
+   },
+   "contrast": {
+    "with": "sa.no-ing",
+    "a": "We are seeing growth.",
+    "b": "We see the problem.",
+    "diff": {
+     "de": "See als „erleben“ geht in der Verlaufsform. See als „verstehen“ bleibt einfach.",
+     "en": "See as “experience” takes the continuous. See as “understand” stays simple."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Prices are rising at the moment.",
+     "q": {
+      "de": "Läuft die Veränderung gerade?",
+      "en": "Is the change happening now?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Läuft die Veränderung gerade? Dann nimm die Verlaufsform.",
+    "en": "Is the change under way right now? Then use the continuous."
+   }
+  },
+  {
+   "id": "sa.soft",
+   "name": {
+    "de": "was hoping, was wondering · höflich",
+    "en": "was hoping, was wondering · polite"
+   },
+   "form": {
+    "de": "I was hoping / wondering / thinking + (that / if) + you could …",
+    "en": "I was hoping / wondering / thinking + (that / if) + you could …"
+   },
+   "use": {
+    "de": "Die Verlaufsform macht eine Bitte weicher: „I was wondering if you could …“ klingt höflicher als „Can you …?“. Danach folgt ein Nebensatz in normaler Satzstellung.",
+    "en": "The continuous softens a request: “I was wondering if you could …” sounds more polite than “Can you …?”. A clause in normal word order follows."
+   },
+   "signals": [
+    "i was hoping",
+    "i am hoping",
+    "i was wondering",
+    "we were hoping",
+    "i was thinking"
+   ],
+   "ex": [
+    {
+     "en": "I was hoping you could review the draft.",
+     "de": "Ich hatte gehofft, Sie könnten den Entwurf prüfen.",
+     "ctx": "mail"
+    },
+    {
+     "en": "I was wondering if we could move the call to Thursday.",
+     "de": "Ich habe mich gefragt, ob wir den Anruf auf Donnerstag verschieben könnten.",
+     "ctx": "mail"
+    },
+    {
+     "en": "We are hoping to hear from you by Friday.",
+     "de": "Wir hoffen, bis Freitag von Ihnen zu hören.",
+     "ctx": "meeting"
+    }
+   ],
+   "trap": {
+    "bad": "I was wondering could you send me the file.",
+    "good": "I was wondering if you could send me the file.",
+    "cause": {
+     "de": "Nach wondering folgt ein Nebensatz mit if und normaler Satzstellung. Eine Frage mit vorgezogenem could passt hier nicht.",
+     "en": "After wondering a clause with if and normal word order follows. A question with could in front does not fit here."
+    }
+   },
+   "contrast": {
+    "with": "sa.no-ing",
+    "a": "I am hoping you could help.",
+    "b": "I hope you can help.",
+    "diff": {
+     "de": "Mit der Verlaufsform und could wird die Bitte weicher. Die einfache Form klingt direkter.",
+     "en": "With the continuous and could the request gets softer. The simple form sounds more direct."
+    }
+   },
+   "ccq": [
+    {
+     "s": "I was wondering if you could help.",
+     "q": {
+      "de": "Klingt die Bitte weich und höflich?",
+      "en": "Does the request sound soft and polite?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Willst du eine Bitte weich machen? Dann nimm was hoping oder was wondering mit if you could.",
+    "en": "Do you want to soften a request? Then use was hoping or was wondering with if you could."
+   }
+  },
+  {
+   "id": "sa.being",
+   "name": {
+    "de": "is being, is always -ing · Verhalten",
+    "en": "is being, is always -ing · behavior"
+   },
+   "form": {
+    "de": "be being + Adjektiv für Verhalten · always + -ing für Ärger",
+    "en": "be being + behavior adjective · always + -ing for annoyance"
+   },
+   "use": {
+    "de": "Mit „is being“ beschreibst du Verhalten für begrenzte Zeit: „You are being difficult.“ Mit always + -ing zeigst du Ärger über eine Gewohnheit: „He is always complaining.“ Zustände wie tired oder ill nehmen kein being.",
+    "en": "With “is being” you describe behavior for a limited time: “You are being difficult.” With always + -ing you show annoyance at a habit: “He is always complaining.” States like tired or ill take no being."
+   },
+   "signals": [
+    "is being",
+    "are being",
+    "am being",
+    "is always",
+    "are always"
+   ],
+   "ex": [
+    {
+     "en": "You are being unreasonable about the deadline.",
+     "de": "Sie sind, was die Frist betrifft, gerade unvernünftig.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "He is always complaining about the coffee.",
+     "de": "Er beschwert sich ständig über den Kaffee.",
+     "ctx": "talk"
+    },
+    {
+     "en": "The client is being very helpful this week.",
+     "de": "Der Kunde ist diese Woche sehr hilfsbereit.",
+     "ctx": "mail"
+    }
+   ],
+   "trap": {
+    "bad": "She is being tired after the long flight.",
+    "good": "She is tired after the long flight.",
+    "cause": {
+     "de": "Being steht nur bei Verhalten, das man steuern kann. Müdigkeit ist ein Zustand, deshalb heißt es einfach is tired.",
+     "en": "Being is used only for behavior you can control. Tiredness is a state, so it is simply is tired."
+    }
+   },
+   "contrast": {
+    "with": "sa.no-ing",
+    "a": "He is being rude.",
+    "b": "He is rude.",
+    "diff": {
+     "de": "Mit being ist es nur gerade so. Ohne being ist es sein Wesen.",
+     "en": "With being it is only so right now. Without being it is his nature."
+    }
+   },
+   "ccq": [
+    {
+     "s": "He is being rude.",
+     "q": {
+      "de": "Ist er nur gerade unhöflich?",
+      "en": "Is he rude only right now?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Geht es um Verhalten für kurze Zeit? Dann passt is being. Geht es um Ärger über eine Gewohnheit? Dann passt always + -ing.",
+    "en": "Is it behavior for a short time? Then is being fits. Is it annoyance at a habit? Then always + -ing fits."
+   }
+  },
+  {
+   "id": "sa.no-ing",
+   "name": {
+    "de": "know, need, belong · keine Verlaufsform",
+    "en": "know, need, belong · no continuous"
+   },
+   "form": {
+    "de": "Zustandsverb in einfacher Form: know, believe, understand, need, want, belong, own",
+    "en": "Stative verb in the simple form: know, believe, understand, need, want, belong, own"
+   },
+   "use": {
+    "de": "Verben für Zustände, Meinungen und Besitz stehen meist in der einfachen Form: „I understand your concern.“ Bei think (nachdenken) und have (essen) geht die Verlaufsform: „I am thinking about it.“",
+    "en": "Verbs for states, opinions and possession usually stay in the simple form: “I understand your concern.” With think (consider) and have (eat) the continuous works: “I am thinking about it.”"
+   },
+   "signals": [
+    "we need",
+    "i understand",
+    "i know",
+    "belongs to",
+    "we believe",
+    "it seems"
+   ],
+   "ex": [
+    {
+     "en": "We need a decision by Friday.",
+     "de": "Wir brauchen bis Freitag eine Entscheidung.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "The warehouse belongs to our parent company.",
+     "de": "Das Lager gehört unserer Muttergesellschaft.",
+     "ctx": "talk"
+    },
+    {
+     "en": "I understand your concern.",
+     "de": "Ich verstehe Ihr Anliegen.",
+     "ctx": "mail"
+    }
+   ],
+   "trap": {
+    "bad": "I am knowing the answer to your question.",
+    "good": "I know the answer to your question.",
+    "cause": {
+     "de": "Know beschreibt einen Zustand. Zustände stehen in der einfachen Form, nicht mit be + -ing.",
+     "en": "Know describes a state. States stay in the simple form, not with be + -ing."
+    }
+   },
+   "contrast": {
+    "with": "sa.trend",
+    "a": "We see the problem.",
+    "b": "We are seeing growth.",
+    "diff": {
+     "de": "See als „verstehen“ bleibt einfach. See als „erleben“ geht mit -ing.",
+     "en": "See as “understand” stays simple. See as “experience” takes -ing."
+    }
+   },
+   "ccq": [
+    {
+     "s": "We need a decision by Friday.",
+     "q": {
+      "de": "Ist need hier ein Zustand?",
+      "en": "Is need a state here?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Beschreibt das Verb einen Zustand, eine Meinung oder Besitz? Dann bleibt es einfach: know, need, belong.",
+    "en": "Does the verb describe a state, an opinion or possession? Then it stays simple: know, need, belong."
+   }
+  }
+ ]
+}

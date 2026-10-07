@@ -1,0 +1,385 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "mcc-0451",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.6,
+   "pat": "inv.only",
+   "why": {
+    "ok": {
+     "de": "Nach Not until am Anfang steht did vor dem Subjekt, danach die Grundform begin.",
+     "en": "After Not until at the start, did stands before the subject, then the base form begin."
+    },
+    "wrong": [
+     {
+      "opt": "had",
+      "cat": "grammar",
+      "de": "had würde die 3. Form verlangen, hier folgt aber begin.",
+      "en": "had would need the participle, but begin follows here."
+     },
+     {
+      "opt": "was",
+      "cat": "grammar",
+      "de": "was passt nicht zu begin.",
+      "en": "was does not fit begin."
+     },
+     {
+      "opt": "does",
+      "cat": "grammar",
+      "de": "Das Präsens does passt nicht zu was signed in der Vergangenheit.",
+      "en": "The present does does not fit was signed in the past."
+     }
+    ]
+   },
+   "text": "Not until the contract was signed ___ the technical team begin its preparation.",
+   "options": [
+    "did",
+    "had",
+    "was",
+    "does"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "mcc-0452",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.6,
+   "pat": "ep.so-such",
+   "why": {
+    "ok": {
+     "de": "Nach So complex steht das Verb vor dem Subjekt: So complex was the contract that …",
+     "en": "After So complex the verb stands before the subject: So complex was the contract that …"
+    },
+    "wrong": [
+     {
+      "opt": "is",
+      "cat": "grammar",
+      "de": "Is passt nicht zu needed in der Vergangenheit.",
+      "en": "Is does not fit needed in the past."
+     },
+     {
+      "opt": "had",
+      "cat": "grammar",
+      "de": "Had ist hier kein Vollverb. Es fehlt die 3. Form.",
+      "en": "Had is not a main verb here. The participle is missing."
+     },
+     {
+      "opt": "did",
+      "cat": "grammar",
+      "de": "Did braucht eine Grundform danach, hier fehlt sie.",
+      "en": "Did needs a base form after it, which is missing here."
+     }
+    ]
+   },
+   "text": "So complex ___ the contract that even the lawyers needed two weeks to read it.",
+   "options": [
+    "is",
+    "was",
+    "had",
+    "did"
+   ],
+   "answer": 1
+  },
+  {
+   "id": "mcc-0453",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.0,
+   "pat": "el.one-ones",
+   "why": {
+    "ok": {
+     "de": "One ersetzt das Nomen report, damit es nicht wiederholt wird.",
+     "en": "One replaces the noun report so that it is not repeated."
+    },
+    "wrong": [
+     {
+      "opt": "it",
+      "cat": "grammar",
+      "de": "It ersetzt keinen Teil einer Nominalgruppe nach einem Adjektiv.",
+      "en": "It does not replace part of a noun phrase after an adjective."
+     },
+     {
+      "opt": "ones",
+      "cat": "grammar",
+      "de": "Ones ist Plural, aber a shorter steht im Singular.",
+      "en": "Ones is plural, but a shorter is singular."
+     },
+     {
+      "opt": "that",
+      "cat": "grammar",
+      "de": "That passt nicht hinter a shorter.",
+      "en": "That does not fit after a shorter."
+     }
+    ]
+   },
+   "text": "The previous report was too long, so please write a shorter ___.",
+   "options": [
+    "it",
+    "ones",
+    "one",
+    "that"
+   ],
+   "answer": 2
+  },
+  {
+   "id": "mcc-0454",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.1,
+   "pat": "np.participle",
+   "why": {
+    "ok": {
+     "de": "Die Kollegen sind beteiligt: Passiv braucht die 3. Form involved direkt hinter dem Nomen.",
+     "en": "The colleagues are involved: the passive needs the past participle involved right after the noun."
+    },
+    "wrong": [
+     {
+      "opt": "involve",
+      "cat": "grammar",
+      "de": "Hinter dem Nomen steht ein Partizip, keine Grundform.",
+      "en": "A participle follows the noun, not a base form."
+     },
+     {
+      "opt": "involving",
+      "cat": "grammar",
+      "de": "Involving wäre aktiv: die Kollegen würden etwas beteiligen.",
+      "en": "Involving would be active: the colleagues would involve something."
+     },
+     {
+      "opt": "to involved",
+      "cat": "grammar",
+      "de": "To involved ist keine gültige Form.",
+      "en": "To involved is not a valid form."
+     }
+    ]
+   },
+   "text": "Please contact all colleagues ___ in the data migration before Friday.",
+   "options": [
+    "involve",
+    "involving",
+    "to involved",
+    "involved"
+   ],
+   "answer": 3
+  },
+  {
+   "id": "ocl-0451",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.5,
+   "pat": "el.so-not",
+   "why": {
+    "ok": {
+     "de": "Nach hope steht not für den verneinten Gedanken: I hope not.",
+     "en": "After hope, not stands for the negative thought: I hope not."
+    },
+    "wrong": [
+     {
+      "if": [
+       "no"
+      ],
+      "de": "no ersetzt keinen Gedanken nach hope, dort steht not.",
+      "en": "no does not replace a thought after hope, not does."
+     },
+     {
+      "if": [
+       "nor"
+      ],
+      "de": "nor verbindet zwei Verneinungen und ersetzt hier keinen Gedanken.",
+      "en": "nor joins two negatives and does not replace a thought here."
+     },
+     {
+      "if": [
+       "never"
+      ],
+      "de": "never heißt „nie“ und ersetzt keinen Gedanken nach hope.",
+      "en": "never means “never” and does not replace a thought after hope."
+     }
+    ]
+   },
+   "text": "Is the café already closed? I hope ___, because I really need a coffee.",
+   "accept": [
+    "not"
+   ],
+   "cls": "adv",
+   "chips": [
+    "no",
+    "nor",
+    "never"
+   ]
+  },
+  {
+   "id": "err-0451",
+   "kind": "err",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 1.3,
+   "pat": "ep.concession",
+   "why": {
+    "ok": {
+     "de": "Nach as bleibt die normale Stellung: Surprising as it is.",
+     "en": "After as the normal order stays: Surprising as it is."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "is it",
+    "fix": [
+     "it is"
+    ],
+    "choices": [
+     "it is",
+     "is it",
+     "it has"
+    ]
+   },
+   "text": "Surprising as is it, the cheaper tool is also the more reliable one."
+  },
+  {
+   "id": "kwt-0451",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 1.6,
+   "pat": "inv.negative",
+   "why": {
+    "ok": {
+     "de": "Nach Little am Satzanfang steht did vor dem Subjekt: Little did the board realize.",
+     "en": "After Little at the start, did stands before the subject: Little did the board realize."
+    },
+    "wrong": [
+     {
+      "if": [
+       "little",
+       "board",
+       "did"
+      ],
+      "de": "Nach Little kommt did vor the board.",
+      "en": "After Little, did comes before the board."
+     }
+    ]
+   },
+   "lead": "The board did not realize how serious the problem was.",
+   "key": "LITTLE",
+   "before": "",
+   "after": "realize how serious the problem was.",
+   "keys": [
+    {
+     "a": [
+      "Little did"
+     ],
+     "b": [
+      "the board"
+     ]
+    }
+   ],
+   "tiles": [
+    "did",
+    "the",
+    "board"
+   ],
+   "extra": [
+    "does",
+    "would",
+    "not"
+   ],
+   "traps": [
+    "Little the board did"
+   ]
+  },
+  {
+   "id": "kwt-0452",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 1.6,
+   "pat": "np.to-inf",
+   "why": {
+    "ok": {
+     "de": "the first person to complete. Nach first steht to + Grundform.",
+     "en": "the first person to complete. After first comes to + base form."
+    },
+    "wrong": [
+     {
+      "if": [
+       "first",
+       "person",
+       "who"
+      ],
+      "de": "Nach first person steht to + Grundform, kein who.",
+      "en": "After first person comes to + base form, no who."
+     }
+    ]
+   },
+   "lead": "Nobody in our department completed the certification before Dana did.",
+   "key": "FIRST",
+   "before": "Dana was",
+   "after": "complete the certification in our department.",
+   "keys": [
+    {
+     "a": [
+      "the first"
+     ],
+     "b": [
+      "person to",
+      "one to",
+      "to"
+     ]
+    }
+   ],
+   "tiles": [
+    "the",
+    "person",
+    "to"
+   ],
+   "extra": [
+    "who",
+    "that",
+    "one"
+   ],
+   "traps": [
+    "the first person who"
+   ]
+  }
+ ]
+}

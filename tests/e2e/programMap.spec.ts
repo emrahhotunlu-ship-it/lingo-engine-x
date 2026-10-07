@@ -50,13 +50,12 @@ test.describe('Handy 360', () => {
     expect(errors).toEqual([]);
   });
 
-  test('Kapitel 7 hat neue Themen ohne Inhalte: „Kommt bald“ statt leer; Zahlen gleich dem Lernpfad', async ({ page }) => {
+  test('Kapitel 5 hat alle Themen mit Inhalten (kein „Kommt bald“ mehr); Zahlen gleich dem Lernpfad', async ({ page }) => {
     const { errors } = await start(page);
-    await page.locator('[data-testid="program-chapter"][data-chapter="k7"] [data-testid="program-chapter-open"]').click();
+    await page.locator('[data-testid="program-chapter"][data-chapter="k5"] [data-testid="program-chapter-open"]').click();
     const sheet = page.getByTestId('chapter-sheet');
-    await expect(sheet).toHaveAttribute('data-chapter', 'k7');
-    await expect(sheet.locator('[data-testid="chapter-topic"][data-exists="false"]')).toHaveCount(4);
-    await expect(sheet.locator('[data-testid="chapter-topic"][data-exists="false"]').first()).toContainText('Kommt bald');
+    await expect(sheet).toHaveAttribute('data-chapter', 'k5');
+    await expect(sheet.locator('[data-testid="chapter-topic"][data-exists="false"]')).toHaveCount(0);
     await page.keyboard.press('Escape');
 
     // Invariante: Muster sicher je Kapitel = Summe der Themenzeilen des Lernpfads.
@@ -87,10 +86,10 @@ test.describe('Laptop 1280', () => {
     await expect(map.getByTestId('program-chapter')).toHaveCount(7);
     await expect(map.getByTestId('program-detail')).toHaveAttribute('data-chapter', 'k1');
     expect(await map.getByTestId('program-topic').count()).toBeGreaterThanOrEqual(5);
-    await map.locator('[data-testid="program-chapter"][data-chapter="k7"] [data-testid="program-chapter-open"]').click();
+    await map.locator('[data-testid="program-chapter"][data-chapter="k5"] [data-testid="program-chapter-open"]').click();
     const detail = map.getByTestId('program-detail');
-    await expect(detail).toHaveAttribute('data-chapter', 'k7');
-    await expect(detail.locator('[data-testid="program-topic"][data-exists="false"]')).toHaveCount(4);
+    await expect(detail).toHaveAttribute('data-chapter', 'k5');
+    await expect(detail.locator('[data-testid="program-topic"][data-exists="false"]')).toHaveCount(0);
     expect(await layoutProblems(page)).toEqual([]);
     const res = await new AxeBuilder({ page }).include('[data-testid="program-map"]').withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
     expect(res.violations.map((v) => v.id)).toEqual([]);

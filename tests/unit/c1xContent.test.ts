@@ -29,14 +29,14 @@ for (const f of loaded) {
 const ctx = defaultCheckCtx();
 
 describe('c1x-Inhalte', () => {
-  it('es gibt Inhaltsdateien, alle sind schemagültig und stehen im Ordner ihrer Art (oder pilot/)', () => {
+  it('es gibt Inhaltsdateien, alle sind schemagültig und stehen im Ordner ihrer Art (oder pilot/, place/)', () => {
     expect(paths.length).toBeGreaterThan(0);
     for (const f of loaded) {
       const r = c1File.safeParse(JSON.parse(f.text));
       expect(r.success, `${f.path}: ${JSON.stringify(r.error?.issues.slice(0, 2))}`).toBe(true);
       if (r.success) for (const it of r.data.items) {
         const dir = f.path.split('/')[0];
-        expect(dir === 'pilot' || dir === it.kind, `${f.path}: ${it.id} liegt im falschen Ordner`).toBe(true);
+        expect(dir === 'pilot' || dir === 'place' || dir === it.kind, `${f.path}: ${it.id} liegt im falschen Ordner`).toBe(true);
       }
     }
   });

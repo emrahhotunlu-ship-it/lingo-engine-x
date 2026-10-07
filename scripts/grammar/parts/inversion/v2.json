@@ -1,0 +1,664 @@
+[
+ {
+  "id": "inv-k1",
+  "type": "kwt",
+  "pat": "inv.negative",
+  "from": "We rarely see such a fast approval.",
+  "key": "RARELY",
+  "frame": "___ such a fast approval.",
+  "answer": "Rarely do we see",
+  "accepted": [],
+  "words": [
+   4,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Rarely do we see such a fast approval. Am Satzanfang steht das Hilfsverb vor dem Subjekt.",
+    "en": "Right: Rarely do we see such a fast approval. At the start the auxiliary comes before the subject."
+   },
+   "wrong": [
+    {
+     "not": [
+      "rarely"
+     ],
+     "de": "Das Schlüsselwort rarely muss unverändert in der Lücke stehen.",
+     "en": "The key word rarely must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "rarely",
+      "we"
+     ],
+     "not": [
+      "do"
+     ],
+     "de": "Nach rarely am Satzanfang kommt do vor das Subjekt: Rarely do we …",
+     "en": "After rarely at the start, do goes before the subject: Rarely do we …"
+    }
+   ]
+  }
+ },
+ {
+  "id": "inv-k2",
+  "type": "kwt",
+  "pat": "inv.negative",
+  "from": "He had never seen such a mess before.",
+  "key": "NEVER",
+  "frame": "___ such a mess before.",
+  "answer": "Never had he seen",
+  "accepted": [],
+  "words": [
+   4,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Never had he seen such a mess before. Das Hilfsverb had steht vor dem Subjekt.",
+    "en": "Right: Never had he seen such a mess before. The auxiliary had goes before the subject."
+   },
+   "wrong": [
+    {
+     "not": [
+      "never"
+     ],
+     "de": "Das Schlüsselwort never muss unverändert in der Lücke stehen.",
+     "en": "The key word never must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "never",
+      "he"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "Nach never am Satzanfang kommt had vor das Subjekt: Never had he seen …",
+     "en": "After never at the start, had goes before the subject: Never had he seen …"
+    }
+   ]
+  }
+ },
+ {
+  "id": "inv-k3",
+  "type": "kwt",
+  "pat": "inv.only",
+  "from": "We will start only when the client signs.",
+  "key": "ONLY",
+  "frame": "___ the client signs will we start.",
+  "answer": "Only when",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Only when the client signs will we start. Im Hauptsatz steht will vor we.",
+    "en": "Right: Only when the client signs will we start. In the main clause will goes before we."
+   },
+   "wrong": [
+    {
+     "not": [
+      "only"
+     ],
+     "de": "Das Schlüsselwort only muss unverändert in der Lücke stehen.",
+     "en": "The key word only must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "when",
+      "the"
+     ],
+     "not": [
+      "only"
+     ],
+     "de": "Ohne only fehlt die Betonung. Die Lücke braucht Only when.",
+     "en": "Without only the stress is missing. The gap needs Only when."
+    }
+   ]
+  }
+ },
+ {
+  "id": "inv-k4",
+  "type": "kwt",
+  "pat": "inv.only",
+  "from": "The full rollout was approved only after the pilot.",
+  "key": "ONLY",
+  "frame": "___ the pilot was the full rollout approved.",
+  "answer": "Only after",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Only after the pilot was the full rollout approved. Hinter Only after steht die Umstellung.",
+    "en": "Right: Only after the pilot was the full rollout approved. The inversion follows Only after."
+   },
+   "wrong": [
+    {
+     "not": [
+      "only"
+     ],
+     "de": "Das Schlüsselwort only muss unverändert in der Lücke stehen.",
+     "en": "The key word only must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "after"
+     ],
+     "not": [
+      "only"
+     ],
+     "de": "Das Schlüsselwort only gehört an den Anfang.",
+     "en": "The key word only belongs at the start."
+    }
+   ]
+  }
+ },
+ {
+  "id": "inv-k5",
+  "type": "kwt",
+  "pat": "inv.sooner",
+  "from": "As soon as we signed the contract, the prices rose.",
+  "key": "SOONER",
+  "frame": "___ had we signed the contract than the prices rose.",
+  "answer": "No sooner",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: No sooner had we signed the contract than the prices rose. Auf no sooner folgt than.",
+    "en": "Right: No sooner had we signed the contract than the prices rose. No sooner is followed by than."
+   },
+   "wrong": [
+    {
+     "not": [
+      "sooner"
+     ],
+     "de": "Das Schlüsselwort sooner muss unverändert in der Lücke stehen.",
+     "en": "The key word sooner must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "sooner"
+     ],
+     "not": [
+      "no"
+     ],
+     "de": "Es heißt no sooner, mit no.",
+     "en": "It is no sooner, with no."
+    }
+   ]
+  }
+ },
+ {
+  "id": "inv-k6",
+  "type": "kwt",
+  "pat": "inv.sooner",
+  "from": "We had barely finished the call when the client rang again.",
+  "key": "HARDLY",
+  "frame": "___ we finished the call when the client rang again.",
+  "answer": "Hardly had",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Hardly had we finished the call when the client rang again. Zu hardly passt when.",
+    "en": "Right: Hardly had we finished the call when the client rang again. Hardly goes with when."
+   },
+   "wrong": [
+    {
+     "not": [
+      "hardly"
+     ],
+     "de": "Das Schlüsselwort hardly muss unverändert in der Lücke stehen.",
+     "en": "The key word hardly must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "not": [
+      "hardly"
+     ],
+     "de": "Das Schlüsselwort hardly muss vorn stehen.",
+     "en": "The key word hardly must come first."
+    }
+   ]
+  }
+ },
+ {
+  "id": "inv-k7",
+  "type": "kwt",
+  "pat": "inv.cond",
+  "from": "If you require assistance, please write to us.",
+  "key": "SHOULD",
+  "frame": "___ require assistance, please write to us.",
+  "answer": "Should you",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Should you require assistance, … Should ersetzt das if, danach steht die Grundform.",
+    "en": "Right: Should you require assistance, … Should replaces the if, and the base form follows."
+   },
+   "wrong": [
+    {
+     "not": [
+      "should"
+     ],
+     "de": "Das Schlüsselwort should muss unverändert in der Lücke stehen.",
+     "en": "The key word should must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "should",
+      "will"
+     ],
+     "de": "Nach Should you steht kein will, nur die Grundform.",
+     "en": "After Should you there is no will, only the base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "inv-k8",
+  "type": "kwt",
+  "pat": "inv.cond",
+  "from": "If we had known about the outage, we would have warned you.",
+  "key": "HAD",
+  "frame": "___ about the outage, we would have warned you.",
+  "answer": "Had we known",
+  "accepted": [],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Had we known about the outage, … Had ersetzt das if, das Subjekt folgt direkt.",
+    "en": "Right: Had we known about the outage, … Had replaces the if, and the subject follows directly."
+   },
+   "wrong": [
+    {
+     "not": [
+      "had"
+     ],
+     "de": "Das Schlüsselwort had muss unverändert in der Lücke stehen.",
+     "en": "The key word had must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "had",
+      "known"
+     ],
+     "not": [
+      "we"
+     ],
+     "de": "Nach Had folgt das Subjekt we: Had we known.",
+     "en": "After Had comes the subject we: Had we known."
+    }
+   ]
+  }
+ },
+ {
+  "id": "inv-f1",
+  "type": "find",
+  "pat": "inv.negative",
+  "prompt": "Seldom we receive feedback this quickly.",
+  "err": [
+   1,
+   2
+  ],
+  "answer": "do we receive",
+  "fixed": "Seldom do we receive feedback this quickly.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: nach Seldom am Anfang fehlt do vor dem Subjekt. Richtig: Seldom do we receive …",
+    "en": "The error: after Seldom at the start, do is missing before the subject. Correct: Seldom do we receive …"
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach Seldom kommt das Hilfsverb vor das Subjekt.",
+     "en": "There is an error: After Seldom the auxiliary comes before the subject."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Nach Seldom kommt das Hilfsverb vor das Subjekt.",
+     "en": "The error is elsewhere: After Seldom the auxiliary comes before the subject."
+    }
+   ]
+  }
+ },
+ {
+  "id": "inv-f2",
+  "type": "find",
+  "pat": "inv.negative",
+  "prompt": "Little did the board know about the real costs.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Richtig: Little did the board know … Nach Little am Anfang steht did vor dem Subjekt.",
+    "en": "Right: Little did the board know … After Little at the start, did stands before the subject."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist alles richtig: Little did the board know ist richtig umgestellt.",
+     "en": "Everything is right here: Little did the board know is correctly inverted."
+    }
+   ]
+  }
+ },
+ {
+  "id": "inv-f3",
+  "type": "find",
+  "pat": "inv.only",
+  "prompt": "Only after the test phase we released the update.",
+  "err": [
+   5,
+   6
+  ],
+  "answer": "did we release",
+  "fixed": "Only after the test phase did we release the update.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: nach Only after fehlt die Umstellung. Richtig: Only after the test phase did we release …",
+    "en": "The error: after Only after the inversion is missing. Correct: Only after the test phase did we release …"
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach Only after steht das Hilfsverb vor dem Subjekt.",
+     "en": "There is an error: After Only after the auxiliary comes before the subject."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Nach Only after steht das Hilfsverb vor dem Subjekt.",
+     "en": "The error is elsewhere: After Only after the auxiliary comes before the subject."
+    }
+   ]
+  }
+ },
+ {
+  "id": "inv-f4",
+  "type": "find",
+  "pat": "inv.only",
+  "prompt": "Only when the client signs we will start the work.",
+  "err": [
+   5,
+   6
+  ],
+  "answer": "will we",
+  "fixed": "Only when the client signs will we start the work.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: im Hauptsatz steht will vor dem Subjekt. Richtig: Only when the client signs will we start …",
+    "en": "The error: in the main clause will goes before the subject. Correct: Only when the client signs will we start …"
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Im Hauptsatz nach Only when kommt das Hilfsverb zuerst.",
+     "en": "There is an error: In the main clause after Only when the auxiliary comes first."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Im Hauptsatz nach Only when kommt das Hilfsverb zuerst.",
+     "en": "The error is elsewhere: In the main clause after Only when the auxiliary comes first."
+    }
+   ]
+  }
+ },
+ {
+  "id": "inv-f5",
+  "type": "find",
+  "pat": "inv.sooner",
+  "prompt": "No sooner had we left the office when the storm began.",
+  "err": [
+   7,
+   7
+  ],
+  "answer": "than",
+  "fixed": "No sooner had we left the office than the storm began.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: zu no sooner gehört than, nicht when. Richtig: No sooner had we left the office than …",
+    "en": "The error: no sooner goes with than, not when. Correct: No sooner had we left the office than …"
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Zu no sooner gehört than.",
+     "en": "There is an error: No sooner goes with than."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Zu no sooner gehört than.",
+     "en": "The error is elsewhere: No sooner goes with than."
+    }
+   ]
+  }
+ },
+ {
+  "id": "inv-f6",
+  "type": "find",
+  "pat": "inv.sooner",
+  "prompt": "Hardly we had started the call when the line dropped.",
+  "err": [
+   1,
+   2
+  ],
+  "answer": "had we",
+  "fixed": "Hardly had we started the call when the line dropped.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: nach Hardly steht had vor dem Subjekt. Richtig: Hardly had we started the call …",
+    "en": "The error: after Hardly, had goes before the subject. Correct: Hardly had we started the call …"
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach Hardly kommt das Hilfsverb vor das Subjekt.",
+     "en": "There is an error: After Hardly the auxiliary comes before the subject."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Nach Hardly kommt das Hilfsverb vor das Subjekt.",
+     "en": "The error is elsewhere: After Hardly the auxiliary comes before the subject."
+    }
+   ]
+  }
+ },
+ {
+  "id": "inv-f7",
+  "type": "find",
+  "pat": "inv.cond",
+  "prompt": "Should you will need support, please contact the help desk.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "need",
+  "fixed": "Should you need support, please contact the help desk.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: nach Should you steht die Grundform ohne will. Richtig: Should you need support, …",
+    "en": "The error: after Should you the base form follows without will. Correct: Should you need support, …"
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach Should you steht die Grundform.",
+     "en": "There is an error: After Should you comes the base form."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Nach Should you steht die Grundform.",
+     "en": "The error is elsewhere: After Should you comes the base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "inv-f8",
+  "type": "find",
+  "pat": "inv.cond",
+  "prompt": "Had the team known about the delay, they would have called us.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Richtig: Had the team known … ersetzt das If the team had known.",
+    "en": "Right: Had the team known … replaces If the team had known."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist alles richtig: Had the team known ist richtig gebildet.",
+     "en": "Everything is right here: Had the team known is correctly formed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "inv-m1",
+  "type": "meaning",
+  "pat": "inv.negative",
+  "a": "Never have I seen such a clear plan.",
+  "b": "I have never seen such a clear plan.",
+  "q": {
+   "de": "Welcher Satz betont stärker, dass es so etwas noch nie gab?",
+   "en": "Which sentence stresses more that this has never happened before?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Die Umstellung nach Never hebt die Aussage stärker hervor.",
+    "en": "Right: sentence a. The inversion after Never makes the statement stronger."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b steht dasselbe ohne Umstellung. Es ist sachlich, nicht betont.",
+     "en": "Sentence b says the same without inversion. It is neutral, not stressed."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich stark: Nur a ist betont.",
+     "en": "Not equally strong: only a is stressed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "inv-m2",
+  "type": "meaning",
+  "pat": "inv.only",
+  "a": "Only after the audit did we change the process.",
+  "b": "We changed the process before the audit.",
+  "q": {
+   "de": "Welcher Satz sagt, dass der Prozess erst nach der Prüfung geändert wurde?",
+   "en": "Which sentence says the process was changed only after the audit?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Only after heißt „erst nach“.",
+    "en": "Right: sentence a. Only after means “not until after”."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b geschieht die Änderung vor der Prüfung, das ist das Gegenteil.",
+     "en": "In b the change happens before the audit, which is the opposite."
+    },
+    {
+     "opt": "both",
+     "de": "Die beiden Sätze sagen Gegenteiliges.",
+     "en": "The two sentences say opposite things."
+    }
+   ]
+  }
+ },
+ {
+  "id": "inv-m3",
+  "type": "meaning",
+  "pat": "inv.sooner",
+  "a": "No sooner had she left than the phone rang.",
+  "b": "She left a long time after the phone rang.",
+  "q": {
+   "de": "Welcher Satz sagt, dass das Telefon gleich nach ihrem Weggang klingelte?",
+   "en": "Which sentence says the phone rang right after she left?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. No sooner … than heißt „kaum … da“, es ist fast gleichzeitig.",
+    "en": "Right: sentence a. No sooner … than means “hardly … when”: almost at once."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b klingelt das Telefon lange vor ihrem Weggang. Das ist die falsche Reihenfolge.",
+     "en": "In b the phone rings long before she leaves. That is the wrong order."
+    },
+    {
+     "opt": "both",
+     "de": "Die Reihenfolge der beiden Sätze ist verschieden.",
+     "en": "The order of events differs between the two sentences."
+    }
+   ]
+  }
+ },
+ {
+  "id": "inv-m4",
+  "type": "meaning",
+  "pat": "inv.cond",
+  "a": "Had we known, we would have acted.",
+  "b": "If we had known, we would have acted.",
+  "q": {
+   "de": "Bedeuten beide Sätze dasselbe?",
+   "en": "Do both sentences mean the same?"
+  },
+  "answer": "both",
+  "why": {
+   "ok": {
+    "de": "Richtig: beide. Had we known ersetzt If we had known, nur förmlicher.",
+    "en": "Right: both. Had we known replaces If we had known, just more formally."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "Nicht nur a: b sagt mit if dasselbe.",
+     "en": "Not only a: b says the same with if."
+    },
+    {
+     "opt": "b",
+     "de": "Nicht nur b: a sagt ohne if dasselbe.",
+     "en": "Not only b: a says the same without if."
+    }
+   ]
+  }
+ }
+]

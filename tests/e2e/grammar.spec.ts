@@ -226,13 +226,13 @@ test('Regelblatt: Wörter antippbar (Bedeutung, Lautschrift)', async ({ page }) 
   expect(errors).toEqual([]);
 });
 
-test('Pfad: 39 Themen in Lehrreihenfolge mit Zustand; Englisch: Formmuster ohne deutsche Fachwörter', async ({ page }) => {
+test('Pfad: 47 Themen in Lehrreihenfolge mit Zustand; Englisch: Formmuster ohne deutsche Fachwörter', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true, lang: 'en' });
   await openGrammar(page);
   const ids = await page.getByTestId('topic').evaluateAll((els) => els.map((e) => e.getAttribute('data-topic') ?? ''));
-  // 16 alte + 16 neue Themen des Grammatik-Pfads + 7 des C1-Werkzeugkastens, alle in einer Liste (Lehrplan Kap. 4).
-  expect(ids).toHaveLength(39);
-  expect(new Set(ids).size).toBe(39);
+  // 16 alte + 16 neue Themen des Grammatik-Pfads + 7 des C1-Werkzeugkastens + 4 neue Themen (P36), alle in einer Liste (Lehrplan Kap. 4).
+  expect(ids).toHaveLength(47);
+  expect(new Set(ids).size).toBe(47);
   expect(ids[0]).toBe('pres-simple-cont');
   expect(ids.at(-1)).toBe('comparison');
   expect(ids.indexOf('past-simple-perfect')).toBeLessThan(ids.indexOf('time-clauses'));

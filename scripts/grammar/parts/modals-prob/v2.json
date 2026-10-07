@@ -1,0 +1,670 @@
+[
+ {
+  "id": "mp-k1",
+  "type": "kwt",
+  "pat": "mp.may-well",
+  "from": "It is quite possible that the client will reject the offer.",
+  "key": "WELL",
+  "frame": "The client ___ reject the offer.",
+  "answer": "may well",
+  "accepted": [
+   "might well",
+   "could well"
+  ],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: The client may well reject the offer. Well steht direkt hinter may.",
+    "en": "Right: The client may well reject the offer. Well stands right after may."
+   },
+   "wrong": [
+    {
+     "not": [
+      "well"
+     ],
+     "de": "Das Schlüsselwort well muss unverändert in der Lücke stehen.",
+     "en": "The key word well must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "may"
+     ],
+     "not": [
+      "well"
+     ],
+     "de": "Ohne well fehlt die Verstärkung: may well.",
+     "en": "Without well the strengthening is missing: may well."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mp-k2",
+  "type": "kwt",
+  "pat": "mp.may-well",
+  "from": "It is quite possible that this will be our best quarter.",
+  "key": "WELL",
+  "frame": "This ___ be our best quarter.",
+  "answer": "could well",
+  "accepted": [
+   "may well",
+   "might well"
+  ],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: This could well be our best quarter. Well steht direkt hinter could.",
+    "en": "Right: This could well be our best quarter. Well stands right after could."
+   },
+   "wrong": [
+    {
+     "not": [
+      "well"
+     ],
+     "de": "Das Schlüsselwort well muss unverändert in der Lücke stehen.",
+     "en": "The key word well must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "could"
+     ],
+     "not": [
+      "well"
+     ],
+     "de": "Ohne well fehlt die Verstärkung: could well.",
+     "en": "Without well the strengthening is missing: could well."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mp-k3",
+  "type": "kwt",
+  "pat": "mp.bound",
+  "from": "It is almost certain that prices will rise after the merger.",
+  "key": "BOUND",
+  "frame": "Prices are ___ rise after the merger.",
+  "answer": "bound to",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Prices are bound to rise. Nach bound steht to und die Grundform.",
+    "en": "Right: Prices are bound to rise. After bound comes to and the base form."
+   },
+   "wrong": [
+    {
+     "not": [
+      "bound"
+     ],
+     "de": "Das Schlüsselwort bound muss unverändert in der Lücke stehen.",
+     "en": "The key word bound must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "bound"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach bound braucht es to: bound to rise.",
+     "en": "After bound you need to: bound to rise."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mp-k4",
+  "type": "kwt",
+  "pat": "mp.bound",
+  "from": "I am sure that someone will notice the error.",
+  "key": "SURE",
+  "frame": "Someone is ___ notice the error.",
+  "answer": "sure to",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Someone is sure to notice the error. Nach sure steht to und die Grundform.",
+    "en": "Right: Someone is sure to notice the error. After sure comes to and the base form."
+   },
+   "wrong": [
+    {
+     "not": [
+      "sure"
+     ],
+     "de": "Das Schlüsselwort sure muss unverändert in der Lücke stehen.",
+     "en": "The key word sure must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "sure"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach sure braucht es to: sure to notice.",
+     "en": "After sure you need to: sure to notice."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mp-k5",
+  "type": "kwt",
+  "pat": "mp.likely",
+  "from": "I expect the update to be ready on Friday.",
+  "key": "LIKELY",
+  "frame": "The update is ___ ready on Friday.",
+  "answer": "likely to be",
+  "accepted": [],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: The update is likely to be ready. Nach likely steht to und die Grundform.",
+    "en": "Right: The update is likely to be ready. After likely comes to and the base form."
+   },
+   "wrong": [
+    {
+     "not": [
+      "likely"
+     ],
+     "de": "Das Schlüsselwort likely muss unverändert in der Lücke stehen.",
+     "en": "The key word likely must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "likely",
+      "be"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach likely braucht es to: likely to be.",
+     "en": "After likely you need to: likely to be."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mp-k6",
+  "type": "kwt",
+  "pat": "mp.likely",
+  "from": "It is improbable that the delay will affect the launch.",
+  "key": "UNLIKELY",
+  "frame": "The delay is ___ the launch.",
+  "answer": "unlikely to affect",
+  "accepted": [],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: The delay is unlikely to affect the launch. Unlikely ist schon verneint.",
+    "en": "Right: The delay is unlikely to affect the launch. Unlikely is already negative."
+   },
+   "wrong": [
+    {
+     "not": [
+      "unlikely"
+     ],
+     "de": "Das Schlüsselwort unlikely muss unverändert in der Lücke stehen.",
+     "en": "The key word unlikely must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "unlikely",
+      "affect"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach unlikely braucht es to: unlikely to affect.",
+     "en": "After unlikely you need to: unlikely to affect."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mp-k7",
+  "type": "kwt",
+  "pat": "mp.chance",
+  "from": "Probably the supplier will agree.",
+  "key": "CHANCE",
+  "frame": "There is a good ___ the supplier will agree.",
+  "answer": "chance that",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: There is a good chance that the supplier will agree. Danach folgt ein that-Satz.",
+    "en": "Right: There is a good chance that the supplier will agree. A that-clause follows."
+   },
+   "wrong": [
+    {
+     "not": [
+      "chance"
+     ],
+     "de": "Das Schlüsselwort chance muss unverändert in der Lücke stehen.",
+     "en": "The key word chance must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "chance"
+     ],
+     "not": [
+      "that"
+     ],
+     "de": "Nach chance folgt that und der Satz.",
+     "en": "After chance comes that and the clause."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mp-k8",
+  "type": "kwt",
+  "pat": "mp.chance",
+  "from": "It is very probable that costs will rise.",
+  "key": "HIGHLY",
+  "frame": "It is ___ that costs will rise.",
+  "answer": "highly probable",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: It is highly probable that costs will rise. Das Adverb highly verstärkt probable.",
+    "en": "Right: It is highly probable that costs will rise. The adverb highly strengthens probable."
+   },
+   "wrong": [
+    {
+     "not": [
+      "highly"
+     ],
+     "de": "Das Schlüsselwort highly muss unverändert in der Lücke stehen.",
+     "en": "The key word highly must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "highly"
+     ],
+     "not": [
+      "probable"
+     ],
+     "de": "Hinter highly steht das Wort probable.",
+     "en": "After highly you need probable."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mp-f1",
+  "type": "find",
+  "pat": "mp.may-well",
+  "prompt": "You might to well need a second server by fall.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "well",
+  "fixed": "You might well need a second server by fall.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: nach might steht kein to. Richtig: You might well need …",
+    "en": "The error: there is no to after might. Correct: You might well need …"
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach might steht well direkt, ohne to.",
+     "en": "There is an error: After might, well follows directly, with no to."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Nach might steht well direkt, ohne to.",
+     "en": "The error is elsewhere: After might, well follows directly, with no to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mp-f2",
+  "type": "find",
+  "pat": "mp.may-well",
+  "prompt": "This could well be our best quarter so far.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Richtig: could well be. Well steht direkt hinter could.",
+    "en": "Right: could well be. Well stands right after could."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist alles richtig: could well be ist richtig gebildet.",
+     "en": "Everything is right here: could well be is correctly formed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mp-f3",
+  "type": "find",
+  "pat": "mp.bound",
+  "prompt": "Sales are bound falling after the price increase.",
+  "err": [
+   3,
+   3
+  ],
+  "answer": "to fall",
+  "fixed": "Sales are bound to fall after the price increase.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: nach bound steht to + Grundform. Richtig: bound to fall.",
+    "en": "The error: after bound comes to + base form. Correct: bound to fall."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach bound steht to und die Grundform.",
+     "en": "There is an error: After bound comes to and the base form."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Nach bound steht to und die Grundform.",
+     "en": "The error is elsewhere: After bound comes to and the base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mp-f4",
+  "type": "find",
+  "pat": "mp.bound",
+  "prompt": "The customer is certain ask about the deadline.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "to ask",
+  "fixed": "The customer is certain to ask about the deadline.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: nach certain steht to + Grundform. Richtig: certain to ask.",
+    "en": "The error: after certain comes to + base form. Correct: certain to ask."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach certain steht to und die Grundform.",
+     "en": "There is an error: After certain comes to and the base form."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Nach certain steht to und die Grundform.",
+     "en": "The error is elsewhere: After certain comes to and the base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mp-f5",
+  "type": "find",
+  "pat": "mp.likely",
+  "prompt": "The update is likely finish on Friday.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "likely to finish",
+  "fixed": "The update is likely to finish on Friday.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: nach likely fehlt to. Richtig: likely to finish.",
+    "en": "The error: to is missing after likely. Correct: likely to finish."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach likely steht to und die Grundform.",
+     "en": "There is an error: After likely comes to and the base form."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Nach likely steht to und die Grundform.",
+     "en": "The error is elsewhere: After likely comes to and the base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mp-f6",
+  "type": "find",
+  "pat": "mp.likely",
+  "prompt": "A price cut is highly unlikely this year.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Richtig: highly unlikely. Highly verstärkt das Wort unlikely.",
+    "en": "Right: highly unlikely. Highly strengthens unlikely."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist alles richtig: highly unlikely ist richtig gebildet.",
+     "en": "Everything is right here: highly unlikely is correctly formed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mp-f7",
+  "type": "find",
+  "pat": "mp.chance",
+  "prompt": "It exists only a slim chance of a refund.",
+  "err": [
+   0,
+   1
+  ],
+  "answer": "There is",
+  "fixed": "There is only a slim chance of a refund.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „es besteht“ heißt there is, nicht it exists. Richtig: There is only a slim chance …",
+    "en": "The error: “es besteht” is there is, not it exists. Correct: There is only a slim chance …"
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Englisch sagt there is, nicht it exists.",
+     "en": "There is an error: English says there is, not it exists."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Englisch sagt there is, nicht it exists.",
+     "en": "The error is elsewhere: English says there is, not it exists."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mp-f8",
+  "type": "find",
+  "pat": "mp.chance",
+  "prompt": "There is slim chances of a refund this year.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "a slim chance",
+  "fixed": "There is a slim chance of a refund this year.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: chance steht im Singular mit a. Richtig: a slim chance.",
+    "en": "The error: chance is singular with a. Correct: a slim chance."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Hier braucht chance den Artikel a und den Singular.",
+     "en": "There is an error: Here chance needs the article a and the singular."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Hier braucht chance den Artikel a und den Singular.",
+     "en": "The error is elsewhere: Here chance needs the article a and the singular."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mp-m1",
+  "type": "meaning",
+  "pat": "mp.may-well",
+  "a": "The client may well reject it.",
+  "b": "The client may reject it.",
+  "q": {
+   "de": "Welcher Satz macht die Ablehnung wahrscheinlicher?",
+   "en": "Which sentence makes the rejection more likely?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. May well macht die Möglichkeit stärker.",
+    "en": "Right: sentence a. May well makes the possibility stronger."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b bleibt die Möglichkeit offen, ohne Verstärkung.",
+     "en": "In b the possibility stays open, without strengthening."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich stark: Nur a verstärkt die Möglichkeit.",
+     "en": "Not equally strong: only a strengthens the possibility."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mp-m2",
+  "type": "meaning",
+  "pat": "mp.bound",
+  "a": "Prices are bound to rise.",
+  "b": "Prices may well rise.",
+  "q": {
+   "de": "Welcher Satz sagt, dass der Anstieg fast sicher ist?",
+   "en": "Which sentence says the rise is almost certain?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Be bound to nennt etwas, das fast sicher ist.",
+    "en": "Right: sentence a. Be bound to names something almost certain."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b ist der Anstieg nur durchaus möglich, nicht fast sicher.",
+     "en": "In b the rise is only quite possible, not almost certain."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich sicher: Nur a ist fast sicher.",
+     "en": "Not equally sure: only a is almost certain."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mp-m3",
+  "type": "meaning",
+  "pat": "mp.likely",
+  "a": "The delay is unlikely to affect the launch.",
+  "b": "The delay is likely to affect the launch.",
+  "q": {
+   "de": "Welcher Satz sagt, dass der Start wahrscheinlich nicht betroffen ist?",
+   "en": "Which sentence says the launch is probably not affected?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Unlikely ist das Wort für „unwahrscheinlich“.",
+    "en": "Right: sentence a. Unlikely means “improbable”."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b ist die Auswirkung wahrscheinlich. Das ist das Gegenteil.",
+     "en": "In b the effect is probable. That is the opposite."
+    },
+    {
+     "opt": "both",
+     "de": "Die beiden Sätze sagen Gegensätzliches.",
+     "en": "The two sentences say opposite things."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mp-m4",
+  "type": "meaning",
+  "pat": "mp.chance",
+  "a": "There is a good chance that the supplier will agree.",
+  "b": "The supplier will agree for certain.",
+  "q": {
+   "de": "Welcher Satz sagt, dass die Zustimmung möglich, aber nicht sicher ist?",
+   "en": "Which sentence says the agreement is possible but not certain?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. A good chance nennt eine Möglichkeit, keine Sicherheit.",
+    "en": "Right: sentence a. A good chance names a possibility, not certainty."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b ist die Zustimmung sicher. Das ist stärker als eine Chance.",
+     "en": "In b the agreement is certain. That is stronger than a chance."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich sicher: Nur b ist sicher.",
+     "en": "Not equally sure: only b is certain."
+    }
+   ]
+  }
+ }
+]

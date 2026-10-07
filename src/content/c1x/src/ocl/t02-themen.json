@@ -1,0 +1,1204 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "ocl-0601",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "mp.may-well",
+   "why": {
+    "ok": {
+     "de": "May, might oder could steht direkt vor well und macht die Möglichkeit stärker: may well refuse.",
+     "en": "May, might or could stands right before well and makes the possibility stronger: may well refuse."
+    },
+    "wrong": [
+     {
+      "if": [
+       "must"
+      ],
+      "de": "must well gibt es nicht, die feste Verstärkung ist may well, might well oder could well.",
+      "en": "must well does not exist, the fixed strengthening is may well, might well or could well."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "would well ist keine feste Wendung für eine Möglichkeit.",
+      "en": "would well is not a fixed phrase for a possibility."
+     },
+     {
+      "if": [
+       "shall"
+      ],
+      "de": "shall well gibt es nicht, es braucht may, might oder could.",
+      "en": "shall well does not exist, it needs may, might or could."
+     }
+    ]
+   },
+   "text": "The supplier ___ well refuse to change the delivery date at this stage.",
+   "accept": [
+    "may",
+    "might",
+    "could"
+   ],
+   "cls": "aux",
+   "chips": [
+    "must",
+    "would",
+    "shall"
+   ]
+  },
+  {
+   "id": "ocl-0602",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "mp.may-well",
+   "why": {
+    "ok": {
+     "de": "Could, may oder might steht direkt vor well: could well be.",
+     "en": "Could, may or might stands right before well: could well be."
+    },
+    "wrong": [
+     {
+      "if": [
+       "must"
+      ],
+      "de": "must well ist keine feste Verbindung, es braucht could, may oder might.",
+      "en": "must well is not a fixed combination, it needs could, may or might."
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "will well drückt keine Möglichkeit aus, es braucht could, may oder might.",
+      "en": "will well expresses no possibility, it needs could, may or might."
+     },
+     {
+      "if": [
+       "shall"
+      ],
+      "de": "shall well gibt es nicht, es braucht could, may oder might.",
+      "en": "shall well does not exist, it needs could, may or might."
+     }
+    ]
+   },
+   "text": "This ___ well be the warmest fall we have had in years.",
+   "accept": [
+    "could",
+    "may",
+    "might"
+   ],
+   "cls": "aux",
+   "chips": [
+    "must",
+    "will",
+    "shall"
+   ]
+  },
+  {
+   "id": "ocl-0603",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "mp.bound",
+   "why": {
+    "ok": {
+     "de": "Nach bound steht to und die Grundform: bound to ask.",
+     "en": "After bound comes to and the base form: bound to ask."
+    },
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "bound for heißt „unterwegs nach“, hier folgt aber eine Grundform.",
+      "en": "bound for means “heading to”, but a base form follows here."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "at passt nicht vor eine Grundform, es braucht to.",
+      "en": "at does not fit before a base form, it needs to."
+     },
+     {
+      "if": [
+       "on"
+      ],
+      "de": "on passt nicht vor eine Grundform, es braucht to.",
+      "en": "on does not fit before a base form, it needs to."
+     }
+    ]
+   },
+   "text": "Someone is bound ___ ask about the price sooner or later.",
+   "accept": [
+    "to"
+   ],
+   "cls": "prep",
+   "chips": [
+    "for",
+    "at",
+    "on"
+   ]
+  },
+  {
+   "id": "ocl-0604",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "mp.likely",
+   "why": {
+    "ok": {
+     "de": "Nach unlikely steht to und die Grundform: unlikely to affect.",
+     "en": "After unlikely comes to and the base form: unlikely to affect."
+    },
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "for gibt es nach unlikely nicht, es folgt to + Grundform.",
+      "en": "for does not follow unlikely, to + base form does."
+     },
+     {
+      "if": [
+       "of"
+      ],
+      "de": "of gibt es nach unlikely nicht, es folgt to + Grundform.",
+      "en": "of does not follow unlikely, to + base form does."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "at passt nicht vor eine Grundform, es braucht to.",
+      "en": "at does not fit before a base form, it needs to."
+     }
+    ]
+   },
+   "text": "The delay is unlikely ___ affect the launch date.",
+   "accept": [
+    "to"
+   ],
+   "cls": "prep",
+   "chips": [
+    "for",
+    "of",
+    "at"
+   ]
+  },
+  {
+   "id": "ocl-0605",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "mp.likely",
+   "why": {
+    "ok": {
+     "de": "Mit it folgt ein that-Satz: It is highly likely that the board will approve.",
+     "en": "With it a that-clause follows: It is highly likely that the board will approve."
+    },
+    "wrong": [
+     {
+      "if": [
+       "to"
+      ],
+      "de": "Mit it am Anfang folgt ein that-Satz, kein to-Infinitiv.",
+      "en": "With it at the start a that-clause follows, not a to-infinitive."
+     },
+     {
+      "if": [
+       "if"
+      ],
+      "de": "if heißt „ob“ oder „falls“ und nennt hier keine Wahrscheinlichkeit.",
+      "en": "if means “whether” or “in case” and names no probability here."
+     },
+     {
+      "if": [
+       "which"
+      ],
+      "de": "which bezieht sich auf ein Nomen, hier folgt aber ein ganzer Satz.",
+      "en": "which refers to a noun, but a whole clause follows here."
+     }
+    ]
+   },
+   "text": "It is highly likely ___ the board will approve the plan next week.",
+   "accept": [
+    "that"
+   ],
+   "cls": "conj",
+   "chips": [
+    "to",
+    "if",
+    "which"
+   ]
+  },
+  {
+   "id": "ocl-0606",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "mp.chance",
+   "why": {
+    "ok": {
+     "de": "Nach chance steht of und das Nomen: a chance of a refund.",
+     "en": "After chance comes of and the noun: a chance of a refund."
+    },
+    "wrong": [
+     {
+      "if": [
+       "on"
+      ],
+      "de": "on passt nicht zu chance, die feste Verbindung ist chance of.",
+      "en": "on does not fit chance, the fixed combination is chance of."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "at passt nicht zu chance, die feste Verbindung ist chance of.",
+      "en": "at does not fit chance, the fixed combination is chance of."
+     },
+     {
+      "if": [
+       "by"
+      ],
+      "de": "by nennt einen Urheber, nach chance steht of.",
+      "en": "by names an agent, after chance comes of."
+     }
+    ]
+   },
+   "text": "There is only a slim chance ___ finding a table without a booking.",
+   "accept": [
+    "of"
+   ],
+   "cls": "prep",
+   "chips": [
+    "on",
+    "at",
+    "by"
+   ]
+  },
+  {
+   "id": "ocl-0607",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "sa.trend",
+   "why": {
+    "ok": {
+     "de": "Ein Adverb steht zwischen are und requesting: are increasingly requesting.",
+     "en": "An adverb stands between are and requesting: are increasingly requesting."
+    },
+    "wrong": [
+     {
+      "if": [
+       "increase"
+      ],
+      "de": "increase ist ein Verb oder Nomen, hier steht ein Adverb vor requesting.",
+      "en": "increase is a verb or noun, but an adverb stands before requesting here."
+     },
+     {
+      "if": [
+       "increased"
+      ],
+      "de": "increased ist eine Verbform und kein Adverb.",
+      "en": "increased is a verb form and not an adverb."
+     },
+     {
+      "if": [
+       "increasing"
+      ],
+      "de": "increasing ist ein Adjektiv, vor requesting braucht es ein Adverb.",
+      "en": "increasing is an adjective, before requesting an adverb is needed."
+     }
+    ]
+   },
+   "text": "Our clients are ___ requesting flexible payment terms, and we have to react.",
+   "accept": [
+    "increasingly",
+    "now",
+    "constantly",
+    "repeatedly"
+   ],
+   "cls": "adv",
+   "chips": [
+    "increase",
+    "increased",
+    "increasing"
+   ]
+  },
+  {
+   "id": "ocl-0608",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "sa.soft",
+   "why": {
+    "ok": {
+     "de": "Are hoping macht den Wunsch weicher als hope.",
+     "en": "Are hoping makes the wish softer than hope."
+    },
+    "wrong": [
+     {
+      "if": [
+       "hope"
+      ],
+      "de": "hope ist die Grundform, nach are braucht es hoping.",
+      "en": "hope is the base form, after are hoping is needed."
+     },
+     {
+      "if": [
+       "hoped"
+      ],
+      "de": "hoped ist die 2. Form, nach are braucht es hoping.",
+      "en": "hoped is the past form, after are hoping is needed."
+     },
+     {
+      "if": [
+       "hopeful"
+      ],
+      "de": "hopeful ist ein Adjektiv und verlangt hopeful of hearing.",
+      "en": "hopeful is an adjective and would need hopeful of hearing."
+     }
+    ]
+   },
+   "text": "We are ___ to hear from you by the end of the week.",
+   "accept": [
+    "hoping"
+   ],
+   "cls": "part",
+   "chips": [
+    "hope",
+    "hoped",
+    "hopeful"
+   ]
+  },
+  {
+   "id": "ocl-0609",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "sa.being",
+   "why": {
+    "ok": {
+     "de": "Always + -ing zeigt Ärger über eine Gewohnheit: is always complaining.",
+     "en": "Always + -ing shows annoyance at a habit: is always complaining."
+    },
+    "wrong": [
+     {
+      "if": [
+       "complain"
+      ],
+      "de": "Nach is always braucht es die -ing-Form, nicht die Grundform.",
+      "en": "After is always the -ing form is needed, not the base form."
+     },
+     {
+      "if": [
+       "complained"
+      ],
+      "de": "Nach is always braucht es die -ing-Form, nicht die 2. Form.",
+      "en": "After is always the -ing form is needed, not the past form."
+     },
+     {
+      "if": [
+       "complains"
+      ],
+      "de": "Nach is steht kein Verb mit -s, es braucht die -ing-Form.",
+      "en": "After is no verb with -s follows, the -ing form is needed."
+     }
+    ]
+   },
+   "text": "He is always ___ about the coffee in the office, and everyone is tired of it.",
+   "accept": [
+    "complaining"
+   ],
+   "cls": "part",
+   "chips": [
+    "complain",
+    "complained",
+    "complains"
+   ]
+  },
+  {
+   "id": "ocl-0610",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "sa.no-ing",
+   "why": {
+    "ok": {
+     "de": "Belong ist ein Zustandsverb und bleibt einfach: belongs to.",
+     "en": "Belong is a stative verb and stays simple: belongs to."
+    },
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "belong for gibt es nicht, es heißt belong to.",
+      "en": "belong for does not exist, it is belong to."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "belong at gibt es nicht, es heißt belong to.",
+      "en": "belong at does not exist, it is belong to."
+     },
+     {
+      "if": [
+       "of"
+      ],
+      "de": "belong of gibt es nicht, es heißt belong to.",
+      "en": "belong of does not exist, it is belong to."
+     }
+    ]
+   },
+   "text": "The data center belongs ___ our parent company, so we need their approval.",
+   "accept": [
+    "to"
+   ],
+   "cls": "prep",
+   "chips": [
+    "for",
+    "at",
+    "of"
+   ]
+  },
+  {
+   "id": "ocl-0611",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "sa.trend",
+   "why": {
+    "ok": {
+     "de": "Is getting + Komparativ beschreibt eine Entwicklung. Vor harder verstärken much, even oder far.",
+     "en": "Is getting + comparative describes a change. Before harder, much, even or far strengthens it."
+    },
+    "wrong": [
+     {
+      "if": [
+       "more"
+      ],
+      "de": "more harder ist doppelt gesteigert, harder steht schon im Komparativ.",
+      "en": "more harder is doubly comparative, harder is already a comparative."
+     },
+     {
+      "if": [
+       "very"
+      ],
+      "de": "very steht nicht vor einem Komparativ, dort braucht es much, even oder far.",
+      "en": "very does not stand before a comparative, much, even or far is needed there."
+     },
+     {
+      "if": [
+       "most"
+      ],
+      "de": "most gehört zum Superlativ, nicht vor harder.",
+      "en": "most belongs to the superlative, not before harder."
+     }
+    ]
+   },
+   "text": "It is getting ___ harder to find an apartment in this city, even for a small family.",
+   "accept": [
+    "much",
+    "even",
+    "far"
+   ],
+   "cls": "adv",
+   "chips": [
+    "more",
+    "very",
+    "most"
+   ]
+  },
+  {
+   "id": "ocl-0612",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "sa.being",
+   "why": {
+    "ok": {
+     "de": "Always + -ing zeigt Ärger über eine Gewohnheit: is always borrowing.",
+     "en": "Always + -ing shows annoyance at a habit: is always borrowing."
+    },
+    "wrong": [
+     {
+      "if": [
+       "borrow"
+      ],
+      "de": "Nach is always braucht es die -ing-Form, nicht die Grundform.",
+      "en": "After is always the -ing form is needed, not the base form."
+     },
+     {
+      "if": [
+       "taken"
+      ],
+      "de": "taken ist ein Partizip und würde ein Passiv bilden, das ist nicht gemeint.",
+      "en": "taken is a participle and would form a passive, which is not meant."
+     },
+     {
+      "if": [
+       "used"
+      ],
+      "de": "used ist ein Partizip und würde ein Passiv bilden, das ist nicht gemeint.",
+      "en": "used is a participle and would form a passive, which is not meant."
+     }
+    ]
+   },
+   "text": "My little sister is always ___ my things without asking.",
+   "accept": [
+    "borrowing",
+    "taking",
+    "using"
+   ],
+   "cls": "part",
+   "chips": [
+    "borrow",
+    "taken",
+    "used"
+   ]
+  },
+  {
+   "id": "ocl-0613",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "fp.was-going",
+   "why": {
+    "ok": {
+     "de": "Was going to nennt den Plan von damals.",
+     "en": "Was going to names the plan from back then."
+    },
+    "wrong": [
+     {
+      "if": [
+       "go"
+      ],
+      "de": "Nach was steht going, nicht go.",
+      "en": "After was comes going, not go."
+     },
+     {
+      "if": [
+       "went"
+      ],
+      "de": "went ist die 2. Form und passt nicht hinter was.",
+      "en": "went is the past form and does not fit after was."
+     },
+     {
+      "if": [
+       "gone"
+      ],
+      "de": "gone ist eine 3. Form und passt nicht zum Plan von damals.",
+      "en": "gone is a participle and does not fit the plan from back then."
+     }
+    ]
+   },
+   "text": "The team was ___ to present the results on Monday, but the data was incomplete.",
+   "accept": [
+    "going",
+    "supposed",
+    "due",
+    "meant"
+   ],
+   "cls": "part",
+   "chips": [
+    "go",
+    "went",
+    "gone"
+   ]
+  },
+  {
+   "id": "ocl-0614",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "fp.about-to",
+   "why": {
+    "ok": {
+     "de": "Nach about steht to und die Grundform: about to sign.",
+     "en": "After about comes to and the base form: about to sign."
+    },
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "for gehört nicht zu about, hier folgt to + Grundform.",
+      "en": "for does not go with about, to + base form follows here."
+     },
+     {
+      "if": [
+       "of"
+      ],
+      "de": "about of gibt es nicht, es heißt about to.",
+      "en": "about of does not exist, it is about to."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "about at gibt es nicht, es heißt about to.",
+      "en": "about at does not exist, it is about to."
+     }
+    ]
+   },
+   "text": "The auditors were about ___ present their findings when the fire alarm went off.",
+   "accept": [
+    "to"
+   ],
+   "cls": "part",
+   "chips": [
+    "for",
+    "of",
+    "at"
+   ]
+  },
+  {
+   "id": "ocl-0615",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "fp.would-narr",
+   "why": {
+    "ok": {
+     "de": "Aus der Vergangenheit auf Späteres: would later become.",
+     "en": "From the past at something later: would later become."
+    },
+    "wrong": [
+     {
+      "if": [
+       "will"
+      ],
+      "de": "will gehört in die Gegenwart, die Geschichte liegt aber in der Vergangenheit.",
+      "en": "will belongs to the present, but the story lies in the past."
+     },
+     {
+      "if": [
+       "shall"
+      ],
+      "de": "shall wirkt hier altmodisch und passt nicht zur Erzählung.",
+      "en": "shall sounds old-fashioned here and does not fit the narrative."
+     },
+     {
+      "if": [
+       "is"
+      ],
+      "de": "is braucht ein -ing oder eine 3. Form, hier folgt die Grundform become.",
+      "en": "is needs an -ing or a participle, but the base form become follows."
+     }
+    ]
+   },
+   "text": "She started as an intern in 2014 and ___ later become our head of design.",
+   "accept": [
+    "would"
+   ],
+   "cls": "aux",
+   "chips": [
+    "will",
+    "shall",
+    "is"
+   ]
+  },
+  {
+   "id": "ocl-0616",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "fp.was-to",
+   "why": {
+    "ok": {
+     "de": "Was to nennt den Plan: was to go live.",
+     "en": "Was to names the plan: was to go live."
+    },
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "was for gibt es hier nicht, es heißt was to.",
+      "en": "was for does not exist here, it is was to."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "was at gibt es hier nicht, es heißt was to.",
+      "en": "was at does not exist here, it is was to."
+     },
+     {
+      "if": [
+       "on"
+      ],
+      "de": "was on gibt es hier nicht, es heißt was to.",
+      "en": "was on does not exist here, it is was to."
+     }
+    ]
+   },
+   "text": "The new system was ___ go live in October, but testing took longer.",
+   "accept": [
+    "to"
+   ],
+   "cls": "part",
+   "chips": [
+    "for",
+    "at",
+    "on"
+   ]
+  },
+  {
+   "id": "ocl-0617",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "fp.would-narr",
+   "why": {
+    "ok": {
+     "de": "Aus der Vergangenheit auf Späteres: would later open.",
+     "en": "From the past at something later: would later open."
+    },
+    "wrong": [
+     {
+      "if": [
+       "will"
+      ],
+      "de": "will gehört in die Gegenwart, die Geschichte liegt aber in der Vergangenheit.",
+      "en": "will belongs to the present, but the story lies in the past."
+     },
+     {
+      "if": [
+       "shall"
+      ],
+      "de": "shall wirkt hier altmodisch und passt nicht zur Erzählung.",
+      "en": "shall sounds old-fashioned here and does not fit the narrative."
+     },
+     {
+      "if": [
+       "are"
+      ],
+      "de": "are braucht ein -ing oder eine 3. Form, hier folgt die Grundform open.",
+      "en": "are needs an -ing or a participle, but the base form open follows."
+     }
+    ]
+   },
+   "text": "My grandparents moved to Hamburg in 1960, where they ___ later open a small bakery.",
+   "accept": [
+    "would"
+   ],
+   "cls": "aux",
+   "chips": [
+    "will",
+    "shall",
+    "are"
+   ]
+  },
+  {
+   "id": "ocl-0618",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "fp.was-to",
+   "why": {
+    "ok": {
+     "de": "Was to nennt den Plan: The trip was to start on Friday.",
+     "en": "Was to names the plan: The trip was to start on Friday."
+    },
+    "wrong": [
+     {
+      "if": [
+       "is"
+      ],
+      "de": "is gehört in die Gegenwart, der Plan lag aber in der Vergangenheit.",
+      "en": "is belongs to the present, but the plan lay in the past."
+     },
+     {
+      "if": [
+       "has"
+      ],
+      "de": "has verlangt eine 3. Form, hier folgt to start.",
+      "en": "has needs a participle, but to start follows."
+     },
+     {
+      "if": [
+       "be"
+      ],
+      "de": "be allein bildet hier keine Vergangenheit, es braucht was.",
+      "en": "be alone forms no past here, was is needed."
+     }
+    ]
+   },
+   "text": "The trip ___ to start on Friday, but the storm changed our plans.",
+   "accept": [
+    "was",
+    "had"
+   ],
+   "cls": "aux",
+   "chips": [
+    "is",
+    "has",
+    "be"
+   ]
+  },
+  {
+   "id": "ocl-0619",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "qn.none",
+   "why": {
+    "ok": {
+     "de": "Nach neither steht of und das bestimmte Nomen: neither of the proposals.",
+     "en": "After neither comes of and the specific noun: neither of the proposals."
+    },
+    "wrong": [
+     {
+      "if": [
+       "from"
+      ],
+      "de": "neither from gibt es nicht, es heißt neither of.",
+      "en": "neither from does not exist, it is neither of."
+     },
+     {
+      "if": [
+       "to"
+      ],
+      "de": "neither to gibt es nicht, es heißt neither of.",
+      "en": "neither to does not exist, it is neither of."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "neither for gibt es nicht, es heißt neither of.",
+      "en": "neither for does not exist, it is neither of."
+     }
+    ]
+   },
+   "text": "Neither ___ the two proposals fits our timeline, so we need a third option.",
+   "accept": [
+    "of"
+   ],
+   "cls": "prep",
+   "chips": [
+    "from",
+    "to",
+    "for"
+   ]
+  },
+  {
+   "id": "ocl-0620",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "qn.hardly",
+   "why": {
+    "ok": {
+     "de": "Hardly ever heißt „fast nie“. Hardly ist schon verneint.",
+     "en": "Hardly ever means “almost never”. Hardly is already negative."
+    },
+    "wrong": [
+     {
+      "if": [
+       "nearly"
+      ],
+      "de": "nearly ever gibt es nicht, es heißt hardly ever.",
+      "en": "nearly ever does not exist, it is hardly ever."
+     },
+     {
+      "if": [
+       "almost"
+      ],
+      "de": "almost ever gibt es nicht, es heißt almost never oder hardly ever.",
+      "en": "almost ever does not exist, it is almost never or hardly ever."
+     },
+     {
+      "if": [
+       "none"
+      ],
+      "de": "none ist ein Pronomen und steht nicht vor ever.",
+      "en": "none is a pronoun and does not stand before ever."
+     }
+    ]
+   },
+   "text": "We have ___ ever had a complaint about this product line.",
+   "accept": [
+    "hardly",
+    "scarcely",
+    "barely"
+   ],
+   "cls": "adv",
+   "chips": [
+    "nearly",
+    "almost",
+    "none"
+   ]
+  },
+  {
+   "id": "ocl-0621",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "qn.no-longer",
+   "why": {
+    "ok": {
+     "de": "No longer heißt „nicht mehr“.",
+     "en": "No longer means “not anymore”."
+    },
+    "wrong": [
+     {
+      "if": [
+       "later"
+      ],
+      "de": "no later heißt „nicht später“ und passt nicht zu valid.",
+      "en": "no later means “not later” and does not fit valid."
+     },
+     {
+      "if": [
+       "farther"
+      ],
+      "de": "farther meint Entfernung, hier geht es um Zeit.",
+      "en": "farther is about distance, but here it is about time."
+     },
+     {
+      "if": [
+       "shorter"
+      ],
+      "de": "no shorter vergleicht die Länge und nennt keinen Zeitpunkt.",
+      "en": "no shorter compares length and names no point in time."
+     }
+    ]
+   },
+   "text": "The old contract is no ___ valid because it expired in June.",
+   "accept": [
+    "longer"
+   ],
+   "cls": "adv",
+   "chips": [
+    "later",
+    "farther",
+    "shorter"
+   ]
+  },
+  {
+   "id": "ocl-0622",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "qn.number",
+   "why": {
+    "ok": {
+     "de": "A large number of steht vor zählbaren Nomen im Plural.",
+     "en": "A large number of is used before countable plural nouns."
+    },
+    "wrong": [
+     {
+      "if": [
+       "amount"
+      ],
+      "de": "amount steht nur vor nicht zählbaren Nomen, customers ist zählbar.",
+      "en": "amount stands only before uncountable nouns, customers is countable."
+     },
+     {
+      "if": [
+       "deal"
+      ],
+      "de": "a great deal of steht vor nicht zählbaren Nomen, nicht mit large.",
+      "en": "a great deal of stands before uncountable nouns, not with large."
+     },
+     {
+      "if": [
+       "quantity"
+      ],
+      "de": "quantity passt zu Waren, nicht zu Kunden.",
+      "en": "quantity fits goods, not customers."
+     }
+    ]
+   },
+   "text": "A large ___ of our customers have switched to the annual plan.",
+   "accept": [
+    "number",
+    "majority",
+    "proportion",
+    "share"
+   ],
+   "cls": "det",
+   "chips": [
+    "amount",
+    "deal",
+    "quantity"
+   ]
+  },
+  {
+   "id": "ocl-0623",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "qn.hardly",
+   "why": {
+    "ok": {
+     "de": "Hardly any heißt „kaum etwas“. Hardly ist schon verneint.",
+     "en": "Hardly any means “almost none”. Hardly is already negative."
+    },
+    "wrong": [
+     {
+      "if": [
+       "nearly"
+      ],
+      "de": "nearly any gibt es nicht, es heißt hardly any.",
+      "en": "nearly any does not exist, it is hardly any."
+     },
+     {
+      "if": [
+       "almost"
+      ],
+      "de": "almost any heißt „fast jede“ und passt hier nicht zu „kaum Milch“.",
+      "en": "almost any means “nearly every” and does not fit “hardly any milk”."
+     },
+     {
+      "if": [
+       "none"
+      ],
+      "de": "none steht nicht vor any, es heißt hardly any.",
+      "en": "none does not stand before any, it is hardly any."
+     }
+    ]
+   },
+   "text": "There is ___ any milk left, so I will go to the store.",
+   "accept": [
+    "hardly",
+    "barely",
+    "scarcely"
+   ],
+   "cls": "adv",
+   "chips": [
+    "nearly",
+    "almost",
+    "none"
+   ]
+  },
+  {
+   "id": "ocl-0624",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "qn.none",
+   "why": {
+    "ok": {
+     "de": "None of them heißt „keiner von ihnen“.",
+     "en": "None of them means “not one of them”."
+    },
+    "wrong": [
+     {
+      "if": [
+       "no"
+      ],
+      "de": "no of them gibt es nicht, es heißt none of them.",
+      "en": "no of them does not exist, it is none of them."
+     },
+     {
+      "if": [
+       "nobody"
+      ],
+      "de": "nobody of them gibt es nicht, es heißt none of them.",
+      "en": "nobody of them does not exist, it is none of them."
+     },
+     {
+      "if": [
+       "not"
+      ],
+      "de": "not of them gibt es nicht, es heißt none of them.",
+      "en": "not of them does not exist, it is none of them."
+     }
+    ]
+   },
+   "text": "I invited ten colleagues, but ___ of them could come on Saturday.",
+   "accept": [
+    "none",
+    "few"
+   ],
+   "cls": "pron",
+   "chips": [
+    "no",
+    "nobody",
+    "not"
+   ]
+  }
+ ]
+}

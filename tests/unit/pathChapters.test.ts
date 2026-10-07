@@ -9,10 +9,10 @@ const TODAY = '2026-10-07';
 const none = new Map<string, number>();
 
 describe('chapterNodes', () => {
-  it('liefert sieben Kapitel mit allen 39 Themen; ohne Daten ist Kapitel 1 aktuell', () => {
+  it('liefert sieben Kapitel mit allen 47 Themen; ohne Daten ist Kapitel 1 aktuell', () => {
     const r = chapterNodes({ docs: new Map(), nowMs: NOW, today: TODAY, dueByTopic: none });
     expect(r.chapters).toHaveLength(7);
-    expect(r.chapters.reduce((s, c) => s + c.topics.length, 0)).toBe(39);
+    expect(r.chapters.reduce((s, c) => s + c.topics.length, 0)).toBe(47);
     expect(r.current).toBe(0);
     expect(r.chapters.every((c) => c.safe === 0)).toBe(true);
   });

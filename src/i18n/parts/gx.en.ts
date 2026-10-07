@@ -19,7 +19,7 @@ export const gxEn = {
   gxKwtWordCount: 'Wrong number of words in the gap',
   gxHintFormula: 'Formula',
   gxHintPattern: 'Pattern tip',
-  gxBadgeVortest: 'New topic · quick test {n}/2',
+  gxBadgeVortest: 'New topic · quick test {n}/{total}',
   gxIntroEyebrowNew: 'New topic · step {n} of {total}',
   gxIntroEyebrowNext: 'Next in this topic · step {n} of {total}',
   gxIntroTask: 'Read the cards quickly, then you practice right away.',

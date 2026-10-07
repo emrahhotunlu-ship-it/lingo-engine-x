@@ -28,7 +28,7 @@ function cardsFor(tp: TopicPatterns, ids: readonly string[], split: boolean): Ca
   return out;
 }
 
-export function IntroFlow({ topic, pats, fresh, onGo }: { topic: string; pats: readonly string[]; fresh: boolean; onGo: () => void }) {
+export function IntroFlow({ topic, pats, fresh, onGo, kurzMiss = false }: { topic: string; pats: readonly string[]; fresh: boolean; onGo: () => void; kurzMiss?: boolean }) {
   const { t, lang } = useT();
   const split = useSplitLayout();
   const tp = patternsOf(topic);
@@ -53,6 +53,11 @@ export function IntroFlow({ topic, pats, fresh, onGo }: { topic: string; pats: r
           {topicName(topic, lang)}
         </h2>
         <p className="lx-t-support text-muted">{t('gxIntroTask')}</p>
+        {kurzMiss && (
+          <p className="lx-t-support" data-testid="intro-kurz-miss">
+            {t('pxPlSkipMiss')}
+          </p>
+        )}
       </header>
       {split ? <SplitCard pat={card.pat} tp={tp} first={card.first} pick={pick} /> : <OneCard card={card} tp={tp} pick={pick} />}
       <div className="flex items-center justify-between gap-3">

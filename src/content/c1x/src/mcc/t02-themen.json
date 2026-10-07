@@ -1,0 +1,1149 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "mcc-0601",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "mp.may-well",
+   "why": {
+    "ok": {
+     "de": "Well steht direkt hinter may und macht die Ablehnung durchaus möglich: may well reject.",
+     "en": "Well stands right after may and makes the rejection quite possible: may well reject."
+    },
+    "wrong": [
+     {
+      "opt": "may be well",
+      "cat": "grammar",
+      "de": "Zwischen may und well steht kein be.",
+      "en": "There is no be between may and well."
+     },
+     {
+      "opt": "may to well",
+      "cat": "grammar",
+      "de": "Nach may steht kein to.",
+      "en": "After may there is no to."
+     },
+     {
+      "opt": "may very",
+      "cat": "grammar",
+      "de": "Very verstärkt hier nicht die Möglichkeit. Es braucht well.",
+      "en": "Very does not strengthen the possibility here. It needs well."
+     }
+    ]
+   },
+   "text": "The regulator ___ reject our proposal, so we should prepare an alternative.",
+   "options": [
+    "may well",
+    "may be well",
+    "may to well",
+    "may very"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "mcc-0602",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "mp.may-well",
+   "why": {
+    "ok": {
+     "de": "Well steht direkt hinter could: could well rain heißt „es kann durchaus regnen“.",
+     "en": "Well stands right after could: could well rain means “it may quite possibly rain”."
+    },
+    "wrong": [
+     {
+      "opt": "could be well",
+      "cat": "grammar",
+      "de": "Zwischen could und well steht kein be.",
+      "en": "There is no be between could and well."
+     },
+     {
+      "opt": "could to well",
+      "cat": "grammar",
+      "de": "Nach could steht kein to.",
+      "en": "After could there is no to."
+     },
+     {
+      "opt": "could good",
+      "cat": "grammar",
+      "de": "Good ist ein Adjektiv und verstärkt hier nichts.",
+      "en": "Good is an adjective and strengthens nothing here."
+     }
+    ]
+   },
+   "text": "With the clouds getting darker, it ___ rain before we reach the lake.",
+   "options": [
+    "could be well",
+    "could well",
+    "could to well",
+    "could good"
+   ],
+   "answer": 1
+  },
+  {
+   "id": "mcc-0603",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "mp.bound",
+   "why": {
+    "ok": {
+     "de": "Is bound to nennt etwas fast Sicheres. Danach folgt die Grundform notice.",
+     "en": "Is bound to names something almost certain. The base form notice follows."
+    },
+    "wrong": [
+     {
+      "opt": "is bound",
+      "cat": "grammar",
+      "de": "Nach bound braucht es to.",
+      "en": "After bound you need to."
+     },
+     {
+      "opt": "is bound for",
+      "cat": "grammar",
+      "de": "Nach bound steht to, nicht for.",
+      "en": "After bound comes to, not for."
+     },
+     {
+      "opt": "is binding to",
+      "cat": "meaning",
+      "de": "Binding heißt „verbindlich“ und ist hier nicht gemeint.",
+      "en": "Binding means “obligatory” and is not meant here."
+     }
+    ]
+   },
+   "text": "Anyone who reads the contract carefully ___ notice the missing clause.",
+   "options": [
+    "is bound",
+    "is bound for",
+    "is bound to",
+    "is binding to"
+   ],
+   "answer": 2
+  },
+  {
+   "id": "mcc-0604",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "mp.bound",
+   "why": {
+    "ok": {
+     "de": "Be sure to nennt etwas fast Sicheres. Danach folgt die Grundform pass.",
+     "en": "Be sure to names something almost certain. The base form pass follows."
+    },
+    "wrong": [
+     {
+      "opt": "are sure",
+      "cat": "grammar",
+      "de": "Nach sure braucht es to.",
+      "en": "After sure you need to."
+     },
+     {
+      "opt": "are surely to",
+      "cat": "grammar",
+      "de": "Das Adverb surely passt nicht in diese feste Wendung.",
+      "en": "The adverb surely does not fit this fixed phrase."
+     },
+     {
+      "opt": "are sure for",
+      "cat": "grammar",
+      "de": "Nach sure steht to, nicht for.",
+      "en": "After sure comes to, not for."
+     }
+    ]
+   },
+   "text": "Don't worry about the exam. You ___ pass; you've studied so hard.",
+   "options": [
+    "are sure",
+    "are surely to",
+    "are sure for",
+    "are sure to"
+   ],
+   "answer": 3
+  },
+  {
+   "id": "mcc-0605",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "mp.likely",
+   "why": {
+    "ok": {
+     "de": "Mit dem Subjekt vorn folgt likely to und die Grundform confuse.",
+     "en": "With the subject first, likely to follows with the base form confuse."
+    },
+    "wrong": [
+     {
+      "opt": "is likely that",
+      "cat": "grammar",
+      "de": "Nach dem Subjekt steht kein that-Satz, sondern to + Grundform.",
+      "en": "After the subject there is no that-clause but to + base form."
+     },
+     {
+      "opt": "is likelihood to",
+      "cat": "grammar",
+      "de": "Likelihood ist ein Nomen und kein Adjektiv.",
+      "en": "Likelihood is a noun, not an adjective."
+     },
+     {
+      "opt": "is like to",
+      "cat": "grammar",
+      "de": "Like to heißt „mögen“, nicht „wahrscheinlich“.",
+      "en": "Like to means “enjoy”, not “probable”."
+     }
+    ]
+   },
+   "text": "The new interface ___ confuse existing customers, so we've prepared a short guide.",
+   "options": [
+    "is likely to",
+    "is likely that",
+    "is likelihood to",
+    "is like to"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "mcc-0606",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "mp.chance",
+   "why": {
+    "ok": {
+     "de": "There is a good chance that … nennt eine Möglichkeit. A steht vor good chance.",
+     "en": "There is a good chance that … names a possibility. A stands before good chance."
+    },
+    "wrong": [
+     {
+      "opt": "is good chance",
+      "cat": "grammar",
+      "de": "Chance ist zählbar im Singular und braucht den Artikel a.",
+      "en": "Chance is countable in the singular and needs the article a."
+     },
+     {
+      "opt": "are a good chance",
+      "cat": "grammar",
+      "de": "Chance steht im Singular, deshalb is, nicht are.",
+      "en": "Chance is singular, so is, not are."
+     },
+     {
+      "opt": "has a good chance",
+      "cat": "grammar",
+      "de": "There has passt nicht zu einer Möglichkeit.",
+      "en": "There has does not fit a possibility."
+     }
+    ]
+   },
+   "text": "There ___ that the contract will be signed before the end of the month.",
+   "options": [
+    "is good chance",
+    "is a good chance",
+    "are a good chance",
+    "has a good chance"
+   ],
+   "answer": 1
+  },
+  {
+   "id": "mcc-0607",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "sa.trend",
+   "why": {
+    "ok": {
+     "de": "Mit at the moment läuft der Vorgang: is seeing. Hier heißt see „erleben“ und nimmt die Verlaufsform.",
+     "en": "With at the moment the process is under way: is seeing. Here see means “experience” and takes the continuous."
+    },
+    "wrong": [
+     {
+      "opt": "sees",
+      "cat": "grammar",
+      "de": "Die einfache Form passt nicht zu at the moment.",
+      "en": "The simple form does not fit at the moment."
+     },
+     {
+      "opt": "is seen",
+      "cat": "grammar",
+      "de": "Is seen ist Passiv. Der Service Desk erlebt aktiv.",
+      "en": "Is seen is passive. The service desk experiences actively."
+     },
+     {
+      "opt": "does see",
+      "cat": "grammar",
+      "de": "Does see ist hier nur eine Betonung und passt nicht zum laufenden Vorgang.",
+      "en": "Does see is only an emphasis here and does not fit the process under way."
+     }
+    ]
+   },
+   "text": "At the moment, our service desk ___ a sharp increase in requests.",
+   "options": [
+    "sees",
+    "is seen",
+    "is seeing",
+    "does see"
+   ],
+   "answer": 2
+  },
+  {
+   "id": "mcc-0608",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "sa.soft",
+   "why": {
+    "ok": {
+     "de": "Was hoping macht die Bitte weich: I was hoping you could send me …",
+     "en": "Was hoping softens the request: I was hoping you could send me …"
+    },
+    "wrong": [
+     {
+      "opt": "hope",
+      "cat": "grammar",
+      "de": "Nach was steht die -ing-Form, nicht hope.",
+      "en": "After was comes the -ing form, not hope."
+     },
+     {
+      "opt": "hoped",
+      "cat": "grammar",
+      "de": "Nach was steht kein Partizip hoped.",
+      "en": "After was there is no participle hoped."
+     },
+     {
+      "opt": "to hope",
+      "cat": "grammar",
+      "de": "Was to hope hat eine andere Bedeutung („sollte hoffen“).",
+      "en": "Was to hope has a different meaning (“was supposed to hope”)."
+     }
+    ]
+   },
+   "text": "I was ___ you could send me the updated figures before the call.",
+   "options": [
+    "hope",
+    "hoped",
+    "to hope",
+    "hoping"
+   ],
+   "answer": 3
+  },
+  {
+   "id": "mcc-0609",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "sa.being",
+   "why": {
+    "ok": {
+     "de": "Is being zeigt Verhalten für begrenzte Zeit: today deutet auf den Moment hin.",
+     "en": "Is being shows behavior for a limited time: today points to the moment."
+    },
+    "wrong": [
+     {
+      "opt": "being",
+      "cat": "grammar",
+      "de": "Ohne is fehlt das Hilfsverb.",
+      "en": "Without is the auxiliary is missing."
+     },
+     {
+      "opt": "is be",
+      "cat": "grammar",
+      "de": "Nach is steht being, nicht be.",
+      "en": "After is comes being, not be."
+     },
+     {
+      "opt": "has being",
+      "cat": "grammar",
+      "de": "Has being ist keine Verbform des Englischen.",
+      "en": "Has being is not an English verb form."
+     }
+    ]
+   },
+   "text": "The client ___ unreasonable today because the deadline is so close.",
+   "options": [
+    "is being",
+    "being",
+    "is be",
+    "has being"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "mcc-0610",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "sa.no-ing",
+   "why": {
+    "ok": {
+     "de": "Need ist ein Zustandsverb und bleibt einfach: We need a clear decision.",
+     "en": "Need is a stative verb and stays simple: We need a clear decision."
+    },
+    "wrong": [
+     {
+      "opt": "are needing",
+      "cat": "grammar",
+      "de": "Need nimmt keine Verlaufsform.",
+      "en": "Need takes no continuous."
+     },
+     {
+      "opt": "needing",
+      "cat": "grammar",
+      "de": "Ohne Hilfsverb ist needing kein Prädikat.",
+      "en": "Without an auxiliary needing is not a predicate."
+     },
+     {
+      "opt": "do needing",
+      "cat": "grammar",
+      "de": "Do needing mischt zwei Formen.",
+      "en": "Do needing mixes two forms."
+     }
+    ]
+   },
+   "text": "We ___ a clear decision from the board before we can start the project.",
+   "options": [
+    "are needing",
+    "need",
+    "needing",
+    "do needing"
+   ],
+   "answer": 1
+  },
+  {
+   "id": "mcc-0611",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "sa.soft",
+   "why": {
+    "ok": {
+     "de": "Was wondering macht die Bitte freundlich und weich: I was wondering if you could …",
+     "en": "Was wondering makes the request friendly and soft: I was wondering if you could …"
+    },
+    "wrong": [
+     {
+      "opt": "wonder to",
+      "cat": "grammar",
+      "de": "Nach wonder steht nicht to, sondern if.",
+      "en": "After wonder comes if, not to."
+     },
+     {
+      "opt": "was wonder",
+      "cat": "grammar",
+      "de": "Nach was steht die -ing-Form wondering.",
+      "en": "After was comes the -ing form wondering."
+     },
+     {
+      "opt": "am wonder",
+      "cat": "grammar",
+      "de": "Nach am steht ebenfalls die -ing-Form.",
+      "en": "After am the -ing form follows as well."
+     }
+    ]
+   },
+   "text": "I ___ if you could help me move the sofa on Saturday.",
+   "options": [
+    "wonder to",
+    "was wonder",
+    "was wondering",
+    "am wonder"
+   ],
+   "answer": 2
+  },
+  {
+   "id": "mcc-0612",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "sa.no-ing",
+   "why": {
+    "ok": {
+     "de": "Belong ist ein Zustandsverb und bleibt einfach: belongs to.",
+     "en": "Belong is a stative verb and stays simple: belongs to."
+    },
+    "wrong": [
+     {
+      "opt": "is belonging",
+      "cat": "grammar",
+      "de": "Belong nimmt keine Verlaufsform.",
+      "en": "Belong takes no continuous."
+     },
+     {
+      "opt": "belonging",
+      "cat": "grammar",
+      "de": "Ohne Hilfsverb ist belonging kein Prädikat.",
+      "en": "Without an auxiliary belonging is not a predicate."
+     },
+     {
+      "opt": "does belonging",
+      "cat": "grammar",
+      "de": "Does belonging mischt zwei Formen.",
+      "en": "Does belonging mixes two forms."
+     }
+    ]
+   },
+   "text": "This old watch ___ to my grandfather, so I am careful with it.",
+   "options": [
+    "is belonging",
+    "belonging",
+    "does belonging",
+    "belongs"
+   ],
+   "answer": 3
+  },
+  {
+   "id": "mcc-0613",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "sa.being",
+   "why": {
+    "ok": {
+     "de": "Are being zeigt Verhalten für begrenzte Zeit: You are being unreasonable.",
+     "en": "Are being shows behavior for a limited time: You are being unreasonable."
+    },
+    "wrong": [
+     {
+      "opt": "be",
+      "cat": "grammar",
+      "de": "Nach are steht being, nicht be.",
+      "en": "After are comes being, not be."
+     },
+     {
+      "opt": "been",
+      "cat": "grammar",
+      "de": "Been braucht have, nicht are.",
+      "en": "Been needs have, not are."
+     },
+     {
+      "opt": "are",
+      "cat": "grammar",
+      "de": "Are allein sagt, wie er ist, nicht, wie er sich gerade verhält.",
+      "en": "Are alone says what he is like, not how he is behaving right now."
+     }
+    ]
+   },
+   "text": "You are ___ unreasonable about the schedule, and the whole team has noticed.",
+   "options": [
+    "being",
+    "be",
+    "been",
+    "are"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "mcc-0614",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "sa.being",
+   "why": {
+    "ok": {
+     "de": "Is being zeigt Verhalten für begrenzte Zeit: is being silly.",
+     "en": "Is being shows behavior for a limited time: is being silly."
+    },
+    "wrong": [
+     {
+      "opt": "be",
+      "cat": "grammar",
+      "de": "Nach is steht being, nicht be.",
+      "en": "After is comes being, not be."
+     },
+     {
+      "opt": "been",
+      "cat": "grammar",
+      "de": "Been braucht have, nicht is.",
+      "en": "Been needs have, not is."
+     },
+     {
+      "opt": "having",
+      "cat": "grammar",
+      "de": "Having silly gibt es nicht, hier braucht es being.",
+      "en": "Having silly does not exist, being is needed here."
+     }
+    ]
+   },
+   "text": "My brother is ___ silly today because he wants to cheer us up.",
+   "options": [
+    "be",
+    "being",
+    "been",
+    "having"
+   ],
+   "answer": 1
+  },
+  {
+   "id": "mcc-0615",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "fp.was-going",
+   "why": {
+    "ok": {
+     "de": "Ein Plan von damals braucht were going to. Der Satz mit but zeigt, dass es nicht klappte.",
+     "en": "A plan from back then needs were going to. The sentence with but shows it did not work."
+    },
+    "wrong": [
+     {
+      "opt": "are going to",
+      "cat": "grammar",
+      "de": "Are gehört in die Gegenwart. Hier liegt der Plan in der Vergangenheit.",
+      "en": "Are belongs to the present. Here the plan lies in the past."
+     },
+     {
+      "opt": "went to",
+      "cat": "grammar",
+      "de": "Went to bedeutet „ging zu“, nicht „wollte“.",
+      "en": "Went to means “walked to”, not “planned to”."
+     },
+     {
+      "opt": "would to",
+      "cat": "grammar",
+      "de": "Would to ist keine feste Form.",
+      "en": "Would to is not a fixed form."
+     }
+    ]
+   },
+   "text": "We ___ launch the new tool in May, but the vendor delayed the delivery.",
+   "options": [
+    "are going to",
+    "went to",
+    "were going to",
+    "would to"
+   ],
+   "answer": 2
+  },
+  {
+   "id": "mcc-0616",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "fp.about-to",
+   "why": {
+    "ok": {
+     "de": "Was about to heißt: kurz davor. When zeigt, was dazwischenkam.",
+     "en": "Was about to means: just before. When shows what intervened."
+    },
+    "wrong": [
+     {
+      "opt": "was about",
+      "cat": "grammar",
+      "de": "Nach about braucht es to und die Grundform.",
+      "en": "After about you need to and the base form."
+     },
+     {
+      "opt": "am about to",
+      "cat": "grammar",
+      "de": "Am about to gehört in die Gegenwart.",
+      "en": "Am about to belongs to the present."
+     },
+     {
+      "opt": "was to about",
+      "cat": "grammar",
+      "de": "To about stellt die Wörter um. Die feste Form heißt about to.",
+      "en": "To about swaps the words. The fixed form is about to."
+     }
+    ]
+   },
+   "text": "I ___ close the file when the client called with a new request.",
+   "options": [
+    "was about",
+    "am about to",
+    "was to about",
+    "was about to"
+   ],
+   "answer": 3
+  },
+  {
+   "id": "mcc-0617",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "fp.would-narr",
+   "why": {
+    "ok": {
+     "de": "Aus der Vergangenheit auf Späteres blickst du mit would: he would later run the region.",
+     "en": "To look from the past at something later you use would: he would later run the region."
+    },
+    "wrong": [
+     {
+      "opt": "will",
+      "cat": "grammar",
+      "de": "Will gehört in die Gegenwart.",
+      "en": "Will belongs to the present."
+     },
+     {
+      "opt": "is going to",
+      "cat": "grammar",
+      "de": "Is going to gehört in die Gegenwart.",
+      "en": "Is going to belongs to the present."
+     },
+     {
+      "opt": "shall",
+      "cat": "register",
+      "de": "Shall wirkt hier altmodisch und passt nicht zur Erzählung.",
+      "en": "Shall sounds old-fashioned here and does not fit the narrative."
+     }
+    ]
+   },
+   "text": "In 2016 he joined our Munich office and ___ later run the whole region.",
+   "options": [
+    "would",
+    "will",
+    "is going to",
+    "shall"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "mcc-0618",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "fp.was-to",
+   "why": {
+    "ok": {
+     "de": "Was to nennt, was vorgesehen war: The merger was to be completed.",
+     "en": "Was to names what was meant to be: The merger was to be completed."
+    },
+    "wrong": [
+     {
+      "opt": "is to",
+      "cat": "grammar",
+      "de": "Is to gehört in die Gegenwart.",
+      "en": "Is to belongs to the present."
+     },
+     {
+      "opt": "was being to",
+      "cat": "grammar",
+      "de": "Was being to ist keine gültige Form.",
+      "en": "Was being to is not a valid form."
+     },
+     {
+      "opt": "were to",
+      "cat": "grammar",
+      "de": "Merger ist Singular, deshalb was, nicht were.",
+      "en": "Merger is singular, so was, not were."
+     }
+    ]
+   },
+   "text": "The merger ___ be completed by June, but the regulator asked for more time.",
+   "options": [
+    "is to",
+    "was to",
+    "was being to",
+    "were to"
+   ],
+   "answer": 1
+  },
+  {
+   "id": "mcc-0619",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "fp.about-to",
+   "why": {
+    "ok": {
+     "de": "Were about to heißt: kurz davor. When zeigt, was dazwischenkam.",
+     "en": "Were about to means: just before. When shows what intervened."
+    },
+    "wrong": [
+     {
+      "opt": "were about",
+      "cat": "grammar",
+      "de": "Nach about braucht es to und die Grundform.",
+      "en": "After about you need to and the base form."
+     },
+     {
+      "opt": "are about to",
+      "cat": "grammar",
+      "de": "Are about to gehört in die Gegenwart.",
+      "en": "Are about to belongs to the present."
+     },
+     {
+      "opt": "were to about",
+      "cat": "grammar",
+      "de": "To about stellt die Wörter um. Die feste Form heißt about to.",
+      "en": "To about swaps the words. The fixed form is about to."
+     }
+    ]
+   },
+   "text": "We ___ sit down for dinner when the neighbors rang the bell.",
+   "options": [
+    "were about",
+    "are about to",
+    "were about to",
+    "were to about"
+   ],
+   "answer": 2
+  },
+  {
+   "id": "mcc-0620",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "fp.was-going",
+   "why": {
+    "ok": {
+     "de": "Was going to nennt den Plan von damals; but zeigt, dass es anders kam.",
+     "en": "Was going to names the plan from back then; but shows it turned out differently."
+    },
+    "wrong": [
+     {
+      "opt": "am going to",
+      "cat": "grammar",
+      "de": "Am gehört in die Gegenwart.",
+      "en": "Am belongs to the present."
+     },
+     {
+      "opt": "was go to",
+      "cat": "grammar",
+      "de": "Nach was steht going, nicht go.",
+      "en": "After was comes going, not go."
+     },
+     {
+      "opt": "would to",
+      "cat": "grammar",
+      "de": "Would to ist keine feste Form.",
+      "en": "Would to is not a fixed form."
+     }
+    ]
+   },
+   "text": "I ___ tell you about the surprise, but my sister already did.",
+   "options": [
+    "am going to",
+    "was go to",
+    "would to",
+    "was going to"
+   ],
+   "answer": 3
+  },
+  {
+   "id": "mcc-0621",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "qn.none",
+   "why": {
+    "ok": {
+     "de": "None of heißt „keiner von“. Danach folgt das bestimmte Nomen the candidates.",
+     "en": "None of means “not one of”. The specific noun the candidates follows."
+    },
+    "wrong": [
+     {
+      "opt": "No one of",
+      "cat": "calque",
+      "de": "No one of ist deutsch gedacht. Es braucht none of.",
+      "en": "No one of is German thinking. It needs none of."
+     },
+     {
+      "opt": "Not of",
+      "cat": "grammar",
+      "de": "Not of ist keine feste Form für „keiner von“.",
+      "en": "Not of is not a fixed form for “not one of”."
+     },
+     {
+      "opt": "Nobody of",
+      "cat": "grammar",
+      "de": "Nobody of gibt es nicht. Es heißt none of.",
+      "en": "Nobody of does not exist. It is none of."
+     }
+    ]
+   },
+   "text": "___ the candidates we interviewed meets all of the requirements.",
+   "options": [
+    "None of",
+    "No one of",
+    "Not of",
+    "Nobody of"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "mcc-0622",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "qn.hardly",
+   "why": {
+    "ok": {
+     "de": "Hardly ist schon verneint und steht vor dem Verb: hardly found.",
+     "en": "Hardly is already negative and stands before the verb: hardly found."
+    },
+    "wrong": [
+     {
+      "opt": "did not hardly find",
+      "cat": "grammar",
+      "de": "Hardly braucht kein zweites not.",
+      "en": "Hardly needs no second not."
+     },
+     {
+      "opt": "found hardly not",
+      "cat": "grammar",
+      "de": "Hardly steht vor dem Verb, und not ist überflüssig.",
+      "en": "Hardly stands before the verb, and not is superfluous."
+     },
+     {
+      "opt": "hardly not found",
+      "cat": "grammar",
+      "de": "Zwei Verneinungen heben sich nicht auf, sie passen hier nicht.",
+      "en": "Two negatives do not fit here."
+     }
+    ]
+   },
+   "text": "The audit team ___ any errors in the final accounts.",
+   "options": [
+    "did not hardly find",
+    "hardly found",
+    "found hardly not",
+    "hardly not found"
+   ],
+   "answer": 1
+  },
+  {
+   "id": "mcc-0623",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "qn.no-longer",
+   "why": {
+    "ok": {
+     "de": "No longer steht vor dem Verb und heißt „nicht mehr“.",
+     "en": "No longer stands before the verb and means “not anymore”."
+    },
+    "wrong": [
+     {
+      "opt": "no more produces",
+      "cat": "grammar",
+      "de": "No more steht bei Mengen. Für die Zeit gilt no longer.",
+      "en": "No more is used with amounts. For time no longer applies."
+     },
+     {
+      "opt": "is not longer producing",
+      "cat": "grammar",
+      "de": "Es heißt no longer, nicht not longer.",
+      "en": "It is no longer, not not longer."
+     },
+     {
+      "opt": "does not produce longer",
+      "cat": "grammar",
+      "de": "Longer steht nicht am Ende dieser Form.",
+      "en": "Longer does not stand at the end of this form."
+     }
+    ]
+   },
+   "text": "Our supplier ___ the old model, so we have to switch to the new one.",
+   "options": [
+    "no more produces",
+    "is not longer producing",
+    "no longer produces",
+    "does not produce longer"
+   ],
+   "answer": 2
+  },
+  {
+   "id": "mcc-0624",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "qn.number",
+   "why": {
+    "ok": {
+     "de": "Bei the number of steht das Verb im Singular: has dropped.",
+     "en": "With the number of the verb is singular: has dropped."
+    },
+    "wrong": [
+     {
+      "opt": "have dropped",
+      "cat": "grammar",
+      "de": "Kern ist number, deshalb has statt have.",
+      "en": "The core is number, so has instead of have."
+     },
+     {
+      "opt": "are dropping",
+      "cat": "grammar",
+      "de": "Are dropping passt nicht zu since.",
+      "en": "Are dropping does not fit since."
+     },
+     {
+      "opt": "were dropped",
+      "cat": "grammar",
+      "de": "Were dropped ist Passiv, und die Zeitform stimmt nicht.",
+      "en": "Were dropped is passive, and the tense is wrong."
+     }
+    ]
+   },
+   "text": "The number of open tickets ___ since we hired two more engineers.",
+   "options": [
+    "have dropped",
+    "are dropping",
+    "were dropped",
+    "has dropped"
+   ],
+   "answer": 3
+  },
+  {
+   "id": "mcc-0625",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "qn.none",
+   "why": {
+    "ok": {
+     "de": "None of heißt „keine von“. Danach folgt das Pronomen them.",
+     "en": "None of means “not one of”. The pronoun them follows."
+    },
+    "wrong": [
+     {
+      "opt": "no one of",
+      "cat": "calque",
+      "de": "No one of ist deutsch gedacht. Es braucht none of.",
+      "en": "No one of is German thinking. It needs none of."
+     },
+     {
+      "opt": "not of",
+      "cat": "grammar",
+      "de": "Not of ist keine feste Form.",
+      "en": "Not of is not a fixed form."
+     },
+     {
+      "opt": "nothing of",
+      "cat": "grammar",
+      "de": "Nothing steht für Sachen ohne Zahl, hier geht es um vier Wohnungen.",
+      "en": "Nothing stands for things without number, here it is four apartments."
+     }
+    ]
+   },
+   "text": "I looked at four apartments, but ___ them had a balcony.",
+   "options": [
+    "none of",
+    "no one of",
+    "not of",
+    "nothing of"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "mcc-0626",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "qn.number",
+   "why": {
+    "ok": {
+     "de": "A number of heißt „einige“ und nimmt das Verb im Plural: have moved.",
+     "en": "A number of means “several” and takes a plural verb: have moved."
+    },
+    "wrong": [
+     {
+      "opt": "has",
+      "cat": "grammar",
+      "de": "Bei a number of steht das Verb im Plural.",
+      "en": "With a number of the verb is plural."
+     },
+     {
+      "opt": "is",
+      "cat": "grammar",
+      "de": "Is passt nicht zu moved.",
+      "en": "Is does not fit moved."
+     },
+     {
+      "opt": "was",
+      "cat": "grammar",
+      "de": "Was passt nicht zu in the last few years.",
+      "en": "Was does not fit in the last few years."
+     }
+    ]
+   },
+   "text": "A number of my friends ___ moved abroad in the last few years.",
+   "options": [
+    "has",
+    "have",
+    "is",
+    "was"
+   ],
+   "answer": 1
+  }
+ ]
+}

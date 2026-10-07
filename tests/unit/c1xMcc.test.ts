@@ -11,15 +11,18 @@ import type { C1Item, Mcc } from '../../src/domain/c1x/types';
 
 const ROOT = join(process.cwd(), 'src/content/c1x/src/mcc');
 const items: Mcc[] = [];
+// Der K2-Bestand (P21) liegt in den Dateien k2-*; weitere Chargen (t01-* neue Themen) kommen dazu und müssen dieselben Qualitätsregeln erfüllen.
+const k2: Mcc[] = [];
 for (const f of readdirSync(ROOT).filter((n) => n.endsWith('.json'))) {
   const r = c1File.safeParse(JSON.parse(readFileSync(join(ROOT, f), 'utf8')));
-  if (r.success) for (const it of r.data.items as C1Item[]) if (it.kind === 'mcc') items.push(it);
+  if (r.success) for (const it of r.data.items as C1Item[]) if (it.kind === 'mcc') (f.startsWith('k2-') ? k2 : items).push(it);
 }
+items.unshift(...k2);
 
 describe('mcc: Bestand', () => {
   it('120 Aufgaben (K2): je 60 Grammatik und Wortschatz; Wortschatz mit lx.-Muster und lex[]', () => {
-    expect(items.length).toBe(120);
-    expect(items.filter((i) => i.area === 'gram').length).toBe(60);
+    expect(k2.length).toBe(120);
+    expect(k2.filter((i) => i.area === 'gram').length).toBe(60);
     const lex = items.filter((i) => i.area === 'lex');
     expect(lex.length).toBe(60);
     for (const it of lex) {
@@ -62,8 +65,8 @@ describe('mcc: Bestand', () => {
   });
 
   it('ein calque-Ablenker (Deutsch gedacht) steht nur, wo ein Deutscher es wirklich sagt: bei mindestens 80 % der Aufgaben', () => {
-    const withCalque = items.filter((it) => it.why.wrong.some((r) => r.cat === 'calque')).length;
-    expect(withCalque / items.length).toBeGreaterThanOrEqual(0.8);
+    const withCalque = k2.filter((it) => it.why.wrong.some((r) => r.cat === 'calque')).length;
+    expect(withCalque / k2.length).toBeGreaterThanOrEqual(0.8);
   });
 
   it('die Inhaltsprüfung findet keine Befunde; die Lösung steht nie im Satz', () => {

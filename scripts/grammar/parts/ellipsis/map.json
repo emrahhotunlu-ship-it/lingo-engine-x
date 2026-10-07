@@ -1,0 +1,104 @@
+{
+ "Is it ready? I hope that not.": {
+  "pat": "el.so-not",
+  "why": {
+   "ok": {
+    "de": "Nach hope folgt not direkt: I hope not.",
+    "en": "After hope, not follows directly: I hope not."
+   },
+   "wrong": [
+    {
+     "if": [
+      "that"
+     ],
+     "de": "Vor not steht kein that.",
+     "en": "There is no that before not."
+    },
+    {
+     "not": [
+      "not"
+     ],
+     "de": "Die Verneinung heißt hier not: I hope not.",
+     "en": "The negative here is not: I hope not."
+    }
+   ]
+  }
+ },
+ "She signed the contract, and I did same.": {
+  "pat": "el.do-so",
+  "why": {
+   "ok": {
+    "de": "Es heißt did the same: Vor same steht the.",
+    "en": "It is did the same: before same you need the."
+   },
+   "wrong": [
+    {
+     "not": [
+      "the"
+     ],
+     "de": "Vor same steht the: the same.",
+     "en": "Before same you need the: the same."
+    },
+    {
+     "if": [
+      "it"
+     ],
+     "de": "Es heißt did the same, nicht did it.",
+     "en": "It is did the same, not did it."
+    }
+   ]
+  }
+ },
+ "The costs of the new plan are lower than the old plan.": {
+  "pat": "el.one-ones",
+  "why": {
+   "ok": {
+    "de": "Kosten werden mit Kosten verglichen: those of the old plan.",
+    "en": "Costs are compared with costs: those of the old plan."
+   },
+   "wrong": [
+    {
+     "not": [
+      "those"
+     ],
+     "de": "Im Vergleich steht those of statt des Nomens costs.",
+     "en": "In the comparison those of stands instead of the noun costs."
+    },
+    {
+     "if": [
+      "that",
+      "of"
+     ],
+     "de": "Costs ist Plural, deshalb those of, nicht that of.",
+     "en": "Costs is plural, so those of, not that of."
+    }
+   ]
+  }
+ },
+ "Can you join us? Yes, I would like.": {
+  "pat": "el.to-aux",
+  "why": {
+   "ok": {
+    "de": "Am Ende muss to nicht fehlen: Yes, I would like to.",
+    "en": "At the end to has to stay: Yes, I would like to."
+   },
+   "wrong": [
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Nach would like muss to stehen bleiben.",
+     "en": "After would like, to has to stay."
+    },
+    {
+     "if": [
+      "to",
+      "join"
+     ],
+     "de": "Das Verb join entfällt, nur to bleibt.",
+     "en": "The verb join is dropped, only to stays."
+    }
+   ]
+  }
+ }
+}

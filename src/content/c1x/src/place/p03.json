@@ -1,0 +1,374 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "mcc-0471",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.0,
+   "pat": "mp.may-well",
+   "why": {
+    "ok": {
+     "de": "Well steht direkt hinter may und macht den Wechsel durchaus möglich: may well switch.",
+     "en": "Well stands right after may and makes the switch quite possible: may well switch."
+    },
+    "wrong": [
+     {
+      "opt": "may be well",
+      "cat": "grammar",
+      "de": "Zwischen may und well steht kein be.",
+      "en": "There is no be between may and well."
+     },
+     {
+      "opt": "may good",
+      "cat": "grammar",
+      "de": "Good verstärkt hier nichts, es braucht well.",
+      "en": "Good strengthens nothing here, it needs well."
+     },
+     {
+      "opt": "might to",
+      "cat": "grammar",
+      "de": "Nach might steht kein to.",
+      "en": "After might there is no to."
+     }
+    ]
+   },
+   "text": "The new competitor is cheaper, so our customers ___ switch within a few months.",
+   "options": [
+    "may well",
+    "may be well",
+    "may good",
+    "might to"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "mcc-0472",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.0,
+   "pat": "sa.trend",
+   "why": {
+    "ok": {
+     "de": "Mit at the moment braucht es die Verlaufsform: are rising.",
+     "en": "With at the moment you need the continuous: are rising."
+    },
+    "wrong": [
+     {
+      "opt": "rise",
+      "cat": "grammar",
+      "de": "Die einfache Form passt nicht zu at the moment.",
+      "en": "The simple form does not fit at the moment."
+     },
+     {
+      "opt": "rises",
+      "cat": "grammar",
+      "de": "Prices ist Plural, deshalb nicht rises.",
+      "en": "Prices is plural, so not rises."
+     },
+     {
+      "opt": "are rise",
+      "cat": "grammar",
+      "de": "Nach are steht die -ing-Form.",
+      "en": "After are comes the -ing form."
+     }
+    ]
+   },
+   "text": "Prices in this sector ___ at the moment, so customers are asking questions.",
+   "options": [
+    "rise",
+    "are rising",
+    "rises",
+    "are rise"
+   ],
+   "answer": 1
+  },
+  {
+   "id": "mcc-0473",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.0,
+   "pat": "fp.was-going",
+   "why": {
+    "ok": {
+     "de": "Ein Plan von damals braucht were going to.",
+     "en": "A plan from back then needs were going to."
+    },
+    "wrong": [
+     {
+      "opt": "are going to",
+      "cat": "grammar",
+      "de": "Are gehört in die Gegenwart.",
+      "en": "Are belongs to the present."
+     },
+     {
+      "opt": "went to",
+      "cat": "grammar",
+      "de": "Went to bedeutet „ging zu“, nicht „wollte“.",
+      "en": "Went to means “walked to”, not “planned to”."
+     },
+     {
+      "opt": "would to",
+      "cat": "grammar",
+      "de": "Would to ist keine feste Form.",
+      "en": "Would to is not a fixed form."
+     }
+    ]
+   },
+   "text": "Last year we ___ expand into Spain, but the funding fell through.",
+   "options": [
+    "are going to",
+    "went to",
+    "were going to",
+    "would to"
+   ],
+   "answer": 2
+  },
+  {
+   "id": "mcc-0474",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.0,
+   "pat": "qn.number",
+   "why": {
+    "ok": {
+     "de": "Bei the number of steht das Verb im Singular: has risen.",
+     "en": "With the number of the verb is singular: has risen."
+    },
+    "wrong": [
+     {
+      "opt": "have",
+      "cat": "grammar",
+      "de": "Kern ist number, deshalb has statt have.",
+      "en": "The core is number, so has instead of have."
+     },
+     {
+      "opt": "are",
+      "cat": "grammar",
+      "de": "Are passt nicht zu risen.",
+      "en": "Are does not fit risen."
+     },
+     {
+      "opt": "were",
+      "cat": "grammar",
+      "de": "Were passt nicht zu risen.",
+      "en": "Were does not fit risen."
+     }
+    ]
+   },
+   "text": "The number of applications ___ risen sharply this year.",
+   "options": [
+    "have",
+    "are",
+    "were",
+    "has"
+   ],
+   "answer": 3
+  },
+  {
+   "id": "ocl-0471",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "modals-prob",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 1.0,
+   "pat": "mp.bound",
+   "why": {
+    "ok": {
+     "de": "Nach bound steht to und die Grundform: bound to be.",
+     "en": "After bound comes to and the base form: bound to be."
+    },
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "bound for heißt „unterwegs nach“, hier folgt aber eine Grundform.",
+      "en": "bound for means “heading to”, but a base form follows here."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "at passt nicht vor eine Grundform, es braucht to.",
+      "en": "at does not fit before a base form, it needs to."
+     },
+     {
+      "if": [
+       "on"
+      ],
+      "de": "on passt nicht vor eine Grundform, es braucht to.",
+      "en": "on does not fit before a base form, it needs to."
+     }
+    ]
+   },
+   "text": "Given the current figures, this is bound ___ be our best year so far.",
+   "accept": [
+    "to"
+   ],
+   "cls": "prep",
+   "chips": [
+    "for",
+    "at",
+    "on"
+   ]
+  },
+  {
+   "id": "ocl-0472",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "future-past",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pool": "place",
+   "b": 1.0,
+   "pat": "fp.about-to",
+   "why": {
+    "ok": {
+     "de": "Nach about steht to und die Grundform: about to leave.",
+     "en": "After about comes to and the base form: about to leave."
+    },
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "for gehört nicht zu about, hier folgt to + Grundform.",
+      "en": "for does not go with about, to + base form follows here."
+     },
+     {
+      "if": [
+       "of"
+      ],
+      "de": "about of gibt es nicht, es heißt about to.",
+      "en": "about of does not exist, it is about to."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "about at gibt es nicht, es heißt about to.",
+      "en": "about at does not exist, it is about to."
+     }
+    ]
+   },
+   "text": "My bus was just about ___ leave when I reached the stop.",
+   "accept": [
+    "to"
+   ],
+   "cls": "part",
+   "chips": [
+    "for",
+    "of",
+    "at"
+   ]
+  },
+  {
+   "id": "err-0471",
+   "kind": "err",
+   "area": "gram",
+   "topic": "stative-adv",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pool": "place",
+   "b": 1.3,
+   "pat": "sa.no-ing",
+   "why": {
+    "ok": {
+     "de": "Know ist ein Zustandsverb und bleibt einfach: We know.",
+     "en": "Know is a stative verb and stays simple: We know."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "are knowing",
+    "fix": [
+     "know"
+    ],
+    "choices": [
+     "know",
+     "knowing",
+     "do knowing"
+    ]
+   },
+   "text": "We are knowing the answer already, so there is no need for another meeting."
+  },
+  {
+   "id": "kwt-0471",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "quant-neg",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pool": "place",
+   "b": 1.6,
+   "pat": "qn.hardly",
+   "why": {
+    "ok": {
+     "de": "hardly had any energy. Hardly ist schon verneint.",
+     "en": "hardly had any energy. Hardly is already negative."
+    },
+    "wrong": []
+   },
+   "lead": "I had almost no energy left after the long hike.",
+   "key": "HARDLY",
+   "before": "I",
+   "after": "left after the long hike.",
+   "keys": [
+    {
+     "a": [
+      "hardly"
+     ],
+     "b": [
+      "had any energy"
+     ]
+    },
+    {
+     "a": [
+      "had hardly"
+     ],
+     "b": [
+      "any energy"
+     ]
+    }
+   ],
+   "tiles": [
+    "had",
+    "any",
+    "energy"
+   ],
+   "extra": [
+    "not",
+    "no",
+    "did"
+   ],
+   "traps": []
+  }
+ ]
+}

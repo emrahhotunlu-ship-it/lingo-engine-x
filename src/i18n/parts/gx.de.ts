@@ -20,7 +20,7 @@ export const gxDe = {
   gxKwtWordCount: 'Falsche Wortzahl in der Lücke',
   gxHintFormula: 'Formel',
   gxHintPattern: 'Tipp zum Muster',
-  gxBadgeVortest: 'Neues Thema · Kurztest {n}/2',
+  gxBadgeVortest: 'Neues Thema · Kurztest {n}/{total}',
   // Einführung neuer Muster
   gxIntroEyebrowNew: 'Neues Thema · Schritt {n} von {total}',
   gxIntroEyebrowNext: 'Weiter im Thema · Schritt {n} von {total}',

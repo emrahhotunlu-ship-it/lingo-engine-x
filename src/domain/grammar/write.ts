@@ -85,7 +85,7 @@ function patchFor(cur: Doc, a: GrammarAnswer): { patch: Doc; overflow?: NewRepai
   patch.seen = [...arr(cur.seen), a.task.key].slice(-SEEN_MAX);
   // Ein früher bestandener Vortest bleibt bestanden (path.ts liest `vt.ok`); ein späterer Versuch überschreibt ihn nie.
   const oldVt = cur.vt && typeof cur.vt === 'object' && !Array.isArray(cur.vt) ? (cur.vt as Doc) : null;
-  if (!claude && a.vt && oldVt?.ok !== true) patch.vt = { d: a.day, ok: a.vt.ok, pats: a.vt.pats.slice(0, 2) };
+  if (!claude && a.vt && oldVt?.ok !== true) patch.vt = { d: a.day, ok: a.vt.ok, pats: a.vt.pats.slice(0, 6) };
   if (!claude && a.vt?.ok && a.vt.pats.length) {
     // Bestandener Vortest (§4.7): p = max(p, 0,6), aber nur, wenn damit alle Muster des Themas getestet sind.
     const all = patternsOf(topic)?.patterns.map((p) => p.id) ?? [];

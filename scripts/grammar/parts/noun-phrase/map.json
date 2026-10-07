@@ -1,0 +1,104 @@
+{
+ "This is the most reliable system what we have tested.": {
+  "pat": "np.contact",
+  "why": {
+   "ok": {
+    "de": "Nach dem Nomen steht that oder nichts: the system we have tested.",
+    "en": "After the noun comes that or nothing: the system we have tested."
+   },
+   "wrong": [
+    {
+     "if": [
+      "what"
+     ],
+     "de": "What ist kein Relativpronomen nach einem Nomen.",
+     "en": "What is not a relative pronoun after a noun."
+    },
+    {
+     "if": [
+      "which",
+      "who"
+     ],
+     "de": "Hier genügt nichts oder that.",
+     "en": "Here nothing or that is enough."
+    }
+   ]
+  }
+ },
+ "The people involving in the project agreed.": {
+  "pat": "np.participle",
+  "why": {
+   "ok": {
+    "de": "Die Beteiligten sind beteiligt: Passiv braucht die 3. Form involved.",
+    "en": "The people are involved: the passive needs the past participle involved."
+   },
+   "wrong": [
+    {
+     "if": [
+      "involving"
+     ],
+     "de": "Involving ist aktiv. Hier ist die 3. Form involved nötig.",
+     "en": "Involving is active. Here the past participle involved is needed."
+    },
+    {
+     "not": [
+      "involved"
+     ],
+     "de": "Es heißt hier: the people involved in the project, mit der 3. Form.",
+     "en": "It is the people involved in the project."
+    }
+   ]
+  }
+ },
+ "The meeting from yesterday was canceled.": {
+  "pat": "np.of-s",
+  "why": {
+   "ok": {
+    "de": "Bei Zeitangaben steht ’s: Yesterday's meeting was canceled.",
+    "en": "With time words ’s is used: Yesterday's meeting was canceled."
+   },
+   "wrong": [
+    {
+     "if": [
+      "from",
+      "yesterday"
+     ],
+     "de": "Das deutsche „von gestern“ wird hier zu yesterday’s.",
+     "en": "The German “von gestern” becomes yesterday’s here."
+    },
+    {
+     "not": [
+      "yesterday's"
+     ],
+     "de": "Es fehlt yesterday’s vor meeting.",
+     "en": "Yesterday’s before meeting is missing."
+    }
+   ]
+  }
+ },
+ "This is the best way for reduce costs.": {
+  "pat": "np.to-inf",
+  "why": {
+   "ok": {
+    "de": "Nach way folgt to + Grundform: the best way to reduce costs.",
+    "en": "After way comes to + base form: the best way to reduce costs."
+   },
+   "wrong": [
+    {
+     "if": [
+      "for"
+     ],
+     "de": "Nach way steht to, nicht for.",
+     "en": "After way comes to, not for."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Vor der Grundform reduce braucht es to.",
+     "en": "Before the base form reduce you need to."
+    }
+   ]
+  }
+ }
+}

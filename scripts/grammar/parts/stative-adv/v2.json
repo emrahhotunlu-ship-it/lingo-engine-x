@@ -1,0 +1,665 @@
+[
+ {
+  "id": "sa-k1",
+  "type": "kwt",
+  "pat": "sa.trend",
+  "from": "Prices are going up at the moment because of the new tax.",
+  "key": "RISING",
+  "frame": "Prices ___ at the moment because of the new tax.",
+  "answer": "are rising",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Prices are rising at the moment. Mit at the moment braucht es die Verlaufsform.",
+    "en": "Right: Prices are rising at the moment. With at the moment you need the continuous."
+   },
+   "wrong": [
+    {
+     "not": [
+      "rising"
+     ],
+     "de": "Das Schlüsselwort rising muss unverändert in der Lücke stehen.",
+     "en": "The key word rising must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "rising"
+     ],
+     "not": [
+      "are"
+     ],
+     "de": "Ohne are fehlt das Hilfsverb der Verlaufsform: are rising.",
+     "en": "Without are the auxiliary of the continuous is missing: are rising."
+    }
+   ]
+  }
+ },
+ {
+  "id": "sa-k2",
+  "type": "kwt",
+  "pat": "sa.trend",
+  "from": "More and more customers ask for shorter contracts.",
+  "key": "INCREASINGLY",
+  "frame": "Customers ___ asking for shorter contracts.",
+  "answer": "are increasingly",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Customers are increasingly asking. Das Adverb steht zwischen are und asking.",
+    "en": "Right: Customers are increasingly asking. The adverb stands between are and asking."
+   },
+   "wrong": [
+    {
+     "not": [
+      "increasingly"
+     ],
+     "de": "Das Schlüsselwort increasingly muss unverändert in der Lücke stehen.",
+     "en": "The key word increasingly must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "increasingly"
+     ],
+     "not": [
+      "are"
+     ],
+     "de": "Vor increasingly braucht es are: are increasingly asking.",
+     "en": "Before increasingly you need are: are increasingly asking."
+    }
+   ]
+  }
+ },
+ {
+  "id": "sa-k3",
+  "type": "kwt",
+  "pat": "sa.soft",
+  "from": "Could you send me the file by noon?",
+  "key": "WONDERING",
+  "frame": "I was ___ you could send me the file by noon.",
+  "answer": "wondering if",
+  "accepted": [
+   "wondering whether"
+  ],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: I was wondering if you could send me the file. Nach wondering folgt if und normale Satzstellung.",
+    "en": "Right: I was wondering if you could send me the file. After wondering comes if and normal word order."
+   },
+   "wrong": [
+    {
+     "not": [
+      "wondering"
+     ],
+     "de": "Das Schlüsselwort wondering muss unverändert in der Lücke stehen.",
+     "en": "The key word wondering must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "wondering"
+     ],
+     "not": [
+      "if",
+      "whether"
+     ],
+     "de": "Nach wondering folgt if oder whether.",
+     "en": "After wondering comes if or whether."
+    }
+   ]
+  }
+ },
+ {
+  "id": "sa-k4",
+  "type": "kwt",
+  "pat": "sa.soft",
+  "from": "We hope to hear from you by Friday.",
+  "key": "HOPING",
+  "frame": "We ___ to hear from you by Friday.",
+  "answer": "are hoping",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: We are hoping to hear from you. Die Verlaufsform macht den Wunsch weicher.",
+    "en": "Right: We are hoping to hear from you. The continuous makes the wish softer."
+   },
+   "wrong": [
+    {
+     "not": [
+      "hoping"
+     ],
+     "de": "Das Schlüsselwort hoping muss unverändert in der Lücke stehen.",
+     "en": "The key word hoping must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "hoping"
+     ],
+     "not": [
+      "are"
+     ],
+     "de": "Ohne are fehlt das Hilfsverb: are hoping.",
+     "en": "Without are the auxiliary is missing: are hoping."
+    }
+   ]
+  }
+ },
+ {
+  "id": "sa-k5",
+  "type": "kwt",
+  "pat": "sa.being",
+  "from": "He is rude to everyone at the moment.",
+  "key": "BEING",
+  "frame": "He ___ rude to everyone at the moment.",
+  "answer": "is being",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: He is being rude. Being zeigt Verhalten für begrenzte Zeit.",
+    "en": "Right: He is being rude. Being shows behavior for a limited time."
+   },
+   "wrong": [
+    {
+     "not": [
+      "being"
+     ],
+     "de": "Das Schlüsselwort being muss unverändert in der Lücke stehen.",
+     "en": "The key word being must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "being"
+     ],
+     "not": [
+      "is"
+     ],
+     "de": "Ohne is fehlt das Hilfsverb: is being.",
+     "en": "Without is the auxiliary is missing: is being."
+    }
+   ]
+  }
+ },
+ {
+  "id": "sa-k6",
+  "type": "kwt",
+  "pat": "sa.being",
+  "from": "She complains about the coffee all the time, which is annoying.",
+  "key": "ALWAYS",
+  "frame": "She ___ complaining about the coffee.",
+  "answer": "is always",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: She is always complaining. Always + -ing zeigt Ärger über eine Gewohnheit.",
+    "en": "Right: She is always complaining. Always + -ing shows annoyance at a habit."
+   },
+   "wrong": [
+    {
+     "not": [
+      "always"
+     ],
+     "de": "Das Schlüsselwort always muss unverändert in der Lücke stehen.",
+     "en": "The key word always must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "always"
+     ],
+     "not": [
+      "is"
+     ],
+     "de": "Vor always braucht es is: is always complaining.",
+     "en": "Before always you need is: is always complaining."
+    }
+   ]
+  }
+ },
+ {
+  "id": "sa-k7",
+  "type": "kwt",
+  "pat": "sa.no-ing",
+  "from": "We cannot continue without a decision by Friday.",
+  "key": "NEED",
+  "frame": "We ___ a decision by Friday.",
+  "answer": "urgently need",
+  "accepted": [
+   "really need",
+   "simply need"
+  ],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: We urgently need a decision. Need ist ein Zustandsverb und bleibt einfach.",
+    "en": "Right: We urgently need a decision. Need is a stative verb and stays simple."
+   },
+   "wrong": [
+    {
+     "not": [
+      "need"
+     ],
+     "de": "Das Schlüsselwort need muss unverändert in der Lücke stehen.",
+     "en": "The key word need must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "needing"
+     ],
+     "de": "Need ist ein Zustandsverb und steht nicht in der Verlaufsform.",
+     "en": "Need is a stative verb and does not take the continuous."
+    }
+   ]
+  }
+ },
+ {
+  "id": "sa-k8",
+  "type": "kwt",
+  "pat": "sa.no-ing",
+  "from": "Your concern is clear to me.",
+  "key": "UNDERSTAND",
+  "frame": "I ___ your concern.",
+  "answer": "fully understand",
+  "accepted": [
+   "completely understand",
+   "totally understand"
+  ],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: I fully understand your concern. Understand ist ein Zustandsverb und bleibt einfach.",
+    "en": "Right: I fully understand your concern. Understand is a stative verb and stays simple."
+   },
+   "wrong": [
+    {
+     "not": [
+      "understand"
+     ],
+     "de": "Das Schlüsselwort understand muss unverändert in der Lücke stehen.",
+     "en": "The key word understand must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "understanding"
+     ],
+     "de": "Understand steht nicht in der Verlaufsform.",
+     "en": "Understand does not take the continuous."
+    }
+   ]
+  }
+ },
+ {
+  "id": "sa-f1",
+  "type": "find",
+  "pat": "sa.trend",
+  "prompt": "Our costs rise at the moment because of the new supplier.",
+  "err": [
+   2,
+   2
+  ],
+  "answer": "are rising",
+  "fixed": "Our costs are rising at the moment because of the new supplier.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Mit at the moment braucht es die Verlaufsform. Richtig: are rising.",
+    "en": "The error: with at the moment you need the continuous. Correct: are rising."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Ein Vorgang, der gerade läuft, steht in der Verlaufsform.",
+     "en": "There is an error: A process that is under way takes the continuous."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Ein Vorgang, der gerade läuft, steht in der Verlaufsform.",
+     "en": "The error is elsewhere: A process that is under way takes the continuous."
+    }
+   ]
+  }
+ },
+ {
+  "id": "sa-f2",
+  "type": "find",
+  "pat": "sa.trend",
+  "prompt": "We are seeing a steady rise in orders, and the market is becoming more competitive.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Richtig: are seeing und is becoming beschreiben laufende Entwicklungen.",
+    "en": "Right: are seeing and is becoming describe changes under way."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist alles richtig: Beide Verlaufsformen sind richtig gebildet.",
+     "en": "Everything is right here: Both continuous forms are correctly formed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "sa-f3",
+  "type": "find",
+  "pat": "sa.soft",
+  "prompt": "I was wondering could we move the call to Thursday.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "if we could",
+  "fixed": "I was wondering if we could move the call to Thursday.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach wondering folgt if und normale Satzstellung. Richtig: if we could move.",
+    "en": "The error: after wondering comes if and normal word order. Correct: if we could move."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach wondering steht ein Nebensatz mit if.",
+     "en": "There is an error: After wondering a clause with if follows."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Nach wondering steht ein Nebensatz mit if.",
+     "en": "The error is elsewhere: After wondering a clause with if follows."
+    }
+   ]
+  }
+ },
+ {
+  "id": "sa-f4",
+  "type": "find",
+  "pat": "sa.soft",
+  "prompt": "I am hoping that you could review the draft before the meeting.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Richtig: I am hoping that you could … ist eine weiche Bitte.",
+    "en": "Right: I am hoping that you could … is a soft request."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist alles richtig: am hoping that you could ist richtig gebildet.",
+     "en": "Everything is right here: am hoping that you could is correctly formed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "sa-f5",
+  "type": "find",
+  "pat": "sa.being",
+  "prompt": "The whole team is being exhausted after the product launch, so we will close early.",
+  "err": [
+   4,
+   5
+  ],
+  "answer": "exhausted",
+  "fixed": "The whole team is exhausted after the product launch, so we will close early.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Erschöpfung ist ein Zustand, deshalb ohne being. Richtig: is exhausted.",
+    "en": "The error: exhaustion is a state, so no being. Correct: is exhausted."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Being steht nur bei Verhalten, nicht bei Zuständen.",
+     "en": "There is an error: Being is used for behavior, not for states."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Being steht nur bei Verhalten, nicht bei Zuständen.",
+     "en": "The error is elsewhere: Being is used for behavior, not for states."
+    }
+   ]
+  }
+ },
+ {
+  "id": "sa-f6",
+  "type": "find",
+  "pat": "sa.being",
+  "prompt": "He always is complaining about the coffee in the office.",
+  "err": [
+   1,
+   3
+  ],
+  "answer": "is always complaining",
+  "fixed": "He is always complaining about the coffee in the office.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Always steht hinter is. Richtig: is always complaining.",
+    "en": "The error: always stands after is. Correct: is always complaining."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Das Adverb always steht zwischen is und -ing.",
+     "en": "There is an error: The adverb always stands between is and -ing."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Das Adverb always steht zwischen is und -ing.",
+     "en": "The error is elsewhere: The adverb always stands between is and -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "sa-f7",
+  "type": "find",
+  "pat": "sa.no-ing",
+  "prompt": "We are needing a decision from the board by Friday.",
+  "err": [
+   1,
+   2
+  ],
+  "answer": "need",
+  "fixed": "We need a decision from the board by Friday.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Need ist ein Zustandsverb. Richtig: We need a decision.",
+    "en": "The error: need is a stative verb. Correct: We need a decision."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Zustandsverben stehen nicht in der Verlaufsform.",
+     "en": "There is an error: Stative verbs do not take the continuous."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Zustandsverben stehen nicht in der Verlaufsform.",
+     "en": "The error is elsewhere: Stative verbs do not take the continuous."
+    }
+   ]
+  }
+ },
+ {
+  "id": "sa-f8",
+  "type": "find",
+  "pat": "sa.no-ing",
+  "prompt": "The warehouse is belonging to our parent company.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "belongs",
+  "fixed": "The warehouse belongs to our parent company.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Belong ist ein Zustandsverb. Richtig: belongs to.",
+    "en": "The error: belong is a stative verb. Correct: belongs to."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Besitz wird einfach ausgedrückt.",
+     "en": "There is an error: Possession is expressed simply."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Besitz wird einfach ausgedrückt.",
+     "en": "The error is elsewhere: Possession is expressed simply."
+    }
+   ]
+  }
+ },
+ {
+  "id": "sa-m1",
+  "type": "meaning",
+  "pat": "sa.trend",
+  "a": "Prices are rising.",
+  "b": "Prices rise.",
+  "q": {
+   "de": "Welcher Satz beschreibt einen Anstieg, der gerade läuft?",
+   "en": "Which sentence describes a rise that is happening now?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Die Verlaufsform zeigt den laufenden Vorgang.",
+    "en": "Right: sentence a. The continuous shows the process under way."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b ist es eine allgemeine Aussage, kein Vorgang jetzt.",
+     "en": "In b it is a general statement, not a process now."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Nur a beschreibt den Vorgang jetzt.",
+     "en": "Not the same: only a describes the process now."
+    }
+   ]
+  }
+ },
+ {
+  "id": "sa-m2",
+  "type": "meaning",
+  "pat": "sa.soft",
+  "a": "I was wondering if you could help.",
+  "b": "Can you help?",
+  "q": {
+   "de": "Welcher Satz klingt weicher und höflicher?",
+   "en": "Which sentence sounds softer and more polite?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Was wondering macht die Bitte weicher.",
+    "en": "Right: sentence a. Was wondering softens the request."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "Satz b ist eine direkte Frage und klingt härter.",
+     "en": "Sentence b is a direct question and sounds harder."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich höflich: Nur a ist weich.",
+     "en": "Not equally polite: only a is soft."
+    }
+   ]
+  }
+ },
+ {
+  "id": "sa-m3",
+  "type": "meaning",
+  "pat": "sa.being",
+  "a": "He is being rude.",
+  "b": "He is rude.",
+  "q": {
+   "de": "Welcher Satz sagt, dass er sich nur im Moment so verhält?",
+   "en": "Which sentence says he behaves like this only right now?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Is being zeigt Verhalten für begrenzte Zeit.",
+    "en": "Right: sentence a. Is being shows behavior for a limited time."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "Satz b beschreibt sein Wesen, nicht nur den Moment.",
+     "en": "Sentence b describes his nature, not just the moment."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Nur a meint den Moment.",
+     "en": "Not the same: only a means the moment."
+    }
+   ]
+  }
+ },
+ {
+  "id": "sa-m4",
+  "type": "meaning",
+  "pat": "sa.no-ing",
+  "a": "I think it is a good plan.",
+  "b": "I am thinking about the plan.",
+  "q": {
+   "de": "Welcher Satz sagt, dass ich gerade darüber nachdenke?",
+   "en": "Which sentence says I am considering it right now?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. Think als „nachdenken“ geht in der Verlaufsform.",
+    "en": "Right: sentence b. Think as “consider” takes the continuous."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a heißt think „meinen“ und bleibt einfach. Das ist eine Meinung.",
+     "en": "In a think means “believe” and stays simple. That is an opinion."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Nur b meint das Nachdenken.",
+     "en": "Not the same: only b means the considering."
+    }
+   ]
+  }
+ }
+]

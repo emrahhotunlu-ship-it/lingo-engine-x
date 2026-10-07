@@ -5714,6 +5714,217 @@
    ]
   }
  },
+ "ellipsis|isitreadyihopethatnot": {
+  "pat": "el.so-not",
+  "why": {
+   "ok": {
+    "de": "Nach hope folgt not direkt: I hope not.",
+    "en": "After hope, not follows directly: I hope not."
+   },
+   "wrong": [
+    {
+     "if": [
+      "that"
+     ],
+     "de": "Vor not steht kein that.",
+     "en": "There is no that before not."
+    },
+    {
+     "not": [
+      "not"
+     ],
+     "de": "Die Verneinung heißt hier not: I hope not.",
+     "en": "The negative here is not: I hope not."
+    }
+   ]
+  }
+ },
+ "ellipsis|shesignedthecontractandididsame": {
+  "pat": "el.do-so",
+  "why": {
+   "ok": {
+    "de": "Es heißt did the same: Vor same steht the.",
+    "en": "It is did the same: before same you need the."
+   },
+   "wrong": [
+    {
+     "not": [
+      "the"
+     ],
+     "de": "Vor same steht the: the same.",
+     "en": "Before same you need the: the same."
+    },
+    {
+     "if": [
+      "it"
+     ],
+     "de": "Es heißt did the same, nicht did it.",
+     "en": "It is did the same, not did it."
+    }
+   ]
+  }
+ },
+ "ellipsis|thecostsofthenewplanarelowerthantheoldplan": {
+  "pat": "el.one-ones",
+  "why": {
+   "ok": {
+    "de": "Kosten werden mit Kosten verglichen: those of the old plan.",
+    "en": "Costs are compared with costs: those of the old plan."
+   },
+   "wrong": [
+    {
+     "not": [
+      "those"
+     ],
+     "de": "Im Vergleich steht those of statt des Nomens costs.",
+     "en": "In the comparison those of stands instead of the noun costs."
+    },
+    {
+     "if": [
+      "that",
+      "of"
+     ],
+     "de": "Costs ist Plural, deshalb those of, nicht that of.",
+     "en": "Costs is plural, so those of, not that of."
+    }
+   ]
+  }
+ },
+ "ellipsis|canyoujoinusyesiwouldlike": {
+  "pat": "el.to-aux",
+  "why": {
+   "ok": {
+    "de": "Am Ende muss to nicht fehlen: Yes, I would like to.",
+    "en": "At the end to has to stay: Yes, I would like to."
+   },
+   "wrong": [
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Nach would like muss to stehen bleiben.",
+     "en": "After would like, to has to stay."
+    },
+    {
+     "if": [
+      "to",
+      "join"
+     ],
+     "de": "Das Verb join entfällt, nur to bleibt.",
+     "en": "The verb join is dropped, only to stays."
+    }
+   ]
+  }
+ },
+ "emph-plus|wedidsenttheinvoicelastweek": {
+  "pat": "ep.do-emph",
+  "why": {
+   "ok": {
+    "de": "Nach did steht die Grundform: We did send the invoice.",
+    "en": "After did the base form follows: We did send the invoice."
+   },
+   "wrong": [
+    {
+     "if": [
+      "sent"
+     ],
+     "de": "Nach did steht send, nicht sent.",
+     "en": "After did use send, not sent."
+    },
+    {
+     "if": [
+      "sends"
+     ],
+     "de": "Nach did steht send, nicht sends.",
+     "en": "After did use send, not sends."
+    }
+   ]
+  }
+ },
+ "emph-plus|temptingasisitweshouldwait": {
+  "pat": "ep.concession",
+  "why": {
+   "ok": {
+    "de": "Nach as bleibt die normale Stellung: Tempting as it is.",
+    "en": "After as the normal order stays: Tempting as it is."
+   },
+   "wrong": [
+    {
+     "if": [
+      "is",
+      "it"
+     ],
+     "not": [
+      "as"
+     ],
+     "de": "Das Adjektiv Tempting steht vor as.",
+     "en": "The adjective Tempting stands before as."
+    },
+    {
+     "not": [
+      "it"
+     ],
+     "de": "Es heißt as it is, mit dem Subjekt it.",
+     "en": "It is as it is, with the subject it."
+    }
+   ]
+  }
+ },
+ "emph-plus|sofasttherolloutwasthatnobodynoticedthechange": {
+  "pat": "ep.so-such",
+  "why": {
+   "ok": {
+    "de": "Nach So fast steht das Verb vor dem Subjekt: So fast was the rollout.",
+    "en": "After So fast the verb stands before the subject: So fast was the rollout."
+   },
+   "wrong": [
+    {
+     "if": [
+      "rollout",
+      "was"
+     ],
+     "not": [
+      "fast"
+     ],
+     "de": "Das Adjektiv fast gehört direkt hinter So.",
+     "en": "The adjective fast belongs right after So."
+    },
+    {
+     "not": [
+      "was"
+     ],
+     "de": "Zwischen So fast und the rollout muss was stehen.",
+     "en": "Between So fast and the rollout you need was."
+    }
+   ]
+  }
+ },
+ "emph-plus|thismustweavoidatallcosts": {
+  "pat": "ep.object-front",
+  "why": {
+   "ok": {
+    "de": "Nach dem vorgezogenen Objekt bleibt die Reihenfolge: This we must avoid.",
+    "en": "After the fronted object the order stays: This we must avoid."
+   },
+   "wrong": [
+    {
+     "if": [
+      "must",
+      "we"
+     ],
+     "de": "Subjekt vor Verb: we must, nicht must we.",
+     "en": "Subject before verb: we must, not must we."
+    },
+    {
+     "not": [
+      "we"
+     ],
+     "de": "Das Subjekt we fehlt vor must.",
+     "en": "The subject we is missing before must."
+    }
+   ]
+  }
+ },
  "future-forms|lookatthosedarkcloudsitrain": {
   "pat": "ff.going-to",
   "why": {
@@ -6417,6 +6628,109 @@
      ],
      "de": "Das Present Simple klingt nach Gewohnheit. Für den Termin nimmst du I'm meeting.",
      "en": "The Present Simple sounds like a habit. For the appointment use I'm meeting."
+    }
+   ]
+  }
+ },
+ "future-past|wearegoingtolaunchinmaybutthesupplierwaslate": {
+  "pat": "fp.was-going",
+  "why": {
+   "ok": {
+    "de": "Ein Plan von damals braucht were going to: We were going to launch in May.",
+    "en": "A plan from back then needs were going to: We were going to launch in May."
+   },
+   "wrong": [
+    {
+     "if": [
+      "are",
+      "going"
+     ],
+     "de": "Are gehört in die Gegenwart. Hier passt were.",
+     "en": "Are belongs to the present. Here were fits."
+    },
+    {
+     "not": [
+      "were"
+     ],
+     "de": "Es braucht hier were going to, nicht are.",
+     "en": "It needs were going to."
+    }
+   ]
+  }
+ },
+ "future-past|iwasaboutleavingwhentheclientcalled": {
+  "pat": "fp.about-to",
+  "why": {
+   "ok": {
+    "de": "Nach about steht to und die Grundform: I was about to leave.",
+    "en": "After about comes to and the base form: I was about to leave."
+   },
+   "wrong": [
+    {
+     "if": [
+      "about",
+      "leaving"
+     ],
+     "de": "About leaving ist deutsch gedacht. Es braucht about to leave.",
+     "en": "About leaving is German thinking. It needs about to leave."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Nach about braucht es to.",
+     "en": "After about you need to."
+    }
+   ]
+  }
+ },
+ "future-past|inshejoinedthefirmandwilllaterleadtheberlinoffice": {
+  "pat": "fp.would-narr",
+  "why": {
+   "ok": {
+    "de": "Aus der Vergangenheit auf Späteres: she would later lead the office.",
+    "en": "From the past at something later: she would later lead the office."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Will gehört in die Gegenwart. Hier braucht es would.",
+     "en": "Will belongs to the present. Here it needs would."
+    },
+    {
+     "not": [
+      "would"
+     ],
+     "de": "Hier ist would later nötig, nicht will.",
+     "en": "It needs would later."
+    }
+   ]
+  }
+ },
+ "future-past|thenewofficeshouldopeninjunebutthepermitwasdelayed": {
+  "pat": "fp.was-to",
+  "why": {
+   "ok": {
+    "de": "Für einen Plan in der Vergangenheit gilt was to: The new office was to open in June.",
+    "en": "For a plan in the past was to is used: The new office was to open in June."
+   },
+   "wrong": [
+    {
+     "if": [
+      "should"
+     ],
+     "de": "Das deutsche „sollte“ wird hier nicht zu should. Es braucht was to.",
+     "en": "The German “sollte” does not become should here. It needs was to."
+    },
+    {
+     "not": [
+      "was",
+      "to"
+     ],
+     "de": "Es braucht was to und die Grundform.",
+     "en": "It needs was to and the base form."
     }
    ]
   }
@@ -7763,6 +8077,107 @@
      "pat": "gi.ing-verbs",
      "de": "Nach enjoy folgt die -ing-Form.",
      "en": "After enjoy the -ing form follows."
+    }
+   ]
+  }
+ },
+ "inversion|rarelywehaveseensuchaclearproposal": {
+  "pat": "inv.negative",
+  "why": {
+   "ok": {
+    "de": "„Rarely“ am Satzanfang verlangt die Umstellung wie in einer Frage: Rarely have we seen.",
+    "en": "“Rarely” at the start requires inversion as in a question: Rarely have we seen."
+   },
+   "wrong": [
+    {
+     "if": [
+      "we",
+      "have"
+     ],
+     "de": "Das Hilfsverb steht vor dem Subjekt: Rarely have we seen.",
+     "en": "The auxiliary comes before the subject: Rarely have we seen."
+    },
+    {
+     "if": [
+      "did"
+     ],
+     "de": "Mit seen bleibt es bei have, nicht did: Rarely have we seen.",
+     "en": "With seen keep have, not did: Rarely have we seen."
+    }
+   ]
+  }
+ },
+ "inversion|onlyafterthepilotweapprovedthefullrollout": {
+  "pat": "inv.only",
+  "why": {
+   "ok": {
+    "de": "Nach „Only after“ steht did vor dem Subjekt, das Verb in der Grundform: did we approve.",
+    "en": "After “Only after”, did stands before the subject and the verb takes the base form: did we approve."
+   },
+   "wrong": [
+    {
+     "not": [
+      "did"
+     ],
+     "de": "Vor das Subjekt we gehört did: Only after the pilot did we approve.",
+     "en": "Before the subject we you need did: Only after the pilot did we approve."
+    },
+    {
+     "if": [
+      "approved"
+     ],
+     "de": "Nach did steht die Grundform: approve, nicht approved.",
+     "en": "After did comes the base form: approve, not approved."
+    }
+   ]
+  }
+ },
+ "inversion|nosoonerhadwesignedwhenthepricesrose": {
+  "pat": "inv.sooner",
+  "why": {
+   "ok": {
+    "de": "Zu „no sooner“ gehört than: No sooner had we signed than the prices rose.",
+    "en": "“No sooner” goes with than: No sooner had we signed than the prices rose."
+   },
+   "wrong": [
+    {
+     "if": [
+      "when"
+     ],
+     "de": "When gehört zu hardly. Zu no sooner gehört than.",
+     "en": "When goes with hardly. No sooner goes with than."
+    },
+    {
+     "not": [
+      "than"
+     ],
+     "de": "Zu no sooner gehört than.",
+     "en": "No sooner goes with than."
+    }
+   ]
+  }
+ },
+ "inversion|shouldyouwillneedhelppleasecallus": {
+  "pat": "inv.cond",
+  "why": {
+   "ok": {
+    "de": "Nach Should you steht die Grundform ohne will: Should you need help.",
+    "en": "After Should you the base form follows without will: Should you need help."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach Should you steht kein will, nur die Grundform.",
+     "en": "After Should you there is no will, only the base form."
+    },
+    {
+     "not": [
+      "should"
+     ],
+     "de": "Die förmliche Bedingung beginnt mit Should you.",
+     "en": "The formal condition starts with Should you."
     }
    ]
   }
@@ -10322,6 +10737,210 @@
      ],
      "de": "Es braucht auch weiter have + Partizip: can't have seen.",
      "en": "have + participle is still needed: can't have seen."
+    }
+   ]
+  }
+ },
+ "modals-prob|theclientmaybewellrejectthefirstoffer": {
+  "pat": "mp.may-well",
+  "why": {
+   "ok": {
+    "de": "Well steht direkt hinter may: The client may well reject the first offer.",
+    "en": "Well stands right after may: The client may well reject the first offer."
+   },
+   "wrong": [
+    {
+     "if": [
+      "be",
+      "well"
+     ],
+     "de": "Zwischen may und well steht kein be.",
+     "en": "There is no be between may and well."
+    },
+    {
+     "not": [
+      "well"
+     ],
+     "de": "Die Verstärkung heißt may well.",
+     "en": "The strengthening is may well."
+    }
+   ]
+  }
+ },
+ "modals-prob|pricesareboundrisingafterthemerger": {
+  "pat": "mp.bound",
+  "why": {
+   "ok": {
+    "de": "Nach bound steht to und die Grundform: Prices are bound to rise.",
+    "en": "After bound comes to and the base form: Prices are bound to rise."
+   },
+   "wrong": [
+    {
+     "if": [
+      "rising"
+     ],
+     "de": "Nach bound steht kein -ing, sondern to rise.",
+     "en": "After bound there is no -ing but to rise."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Nach bound braucht es to.",
+     "en": "After bound you need to."
+    }
+   ]
+  }
+ },
+ "modals-prob|theupdateislikelythatitisreadyonfriday": {
+  "pat": "mp.likely",
+  "why": {
+   "ok": {
+    "de": "Mit dem Subjekt vorn folgt likely to: The update is likely to be ready.",
+    "en": "With the subject first, likely to follows: The update is likely to be ready."
+   },
+   "wrong": [
+    {
+     "if": [
+      "that"
+     ],
+     "de": "Nach dem Subjekt steht kein that-Satz, sondern to be.",
+     "en": "After the subject there is no that-clause but to be."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Nach likely braucht es to + Grundform.",
+     "en": "After likely you need to + base form."
+    }
+   ]
+  }
+ },
+ "modals-prob|itexistsagoodchancethatthesupplierwillagree": {
+  "pat": "mp.chance",
+  "why": {
+   "ok": {
+    "de": "Englisch sagt nicht it exists, sondern there is: There is a good chance that the supplier will agree.",
+    "en": "English says there is: There is a good chance that the supplier will agree."
+   },
+   "wrong": [
+    {
+     "if": [
+      "it",
+      "exists"
+     ],
+     "de": "Das deutsche „es besteht“ heißt there is, nicht it exists.",
+     "en": "The German “es besteht” is there is, not it exists."
+    },
+    {
+     "not": [
+      "there"
+     ],
+     "de": "Der Satz beginnt mit there is.",
+     "en": "The sentence starts with there is."
+    }
+   ]
+  }
+ },
+ "noun-phrase|thisisthemostreliablesystemwhatwehavetested": {
+  "pat": "np.contact",
+  "why": {
+   "ok": {
+    "de": "Nach dem Nomen steht that oder nichts: the system we have tested.",
+    "en": "After the noun comes that or nothing: the system we have tested."
+   },
+   "wrong": [
+    {
+     "if": [
+      "what"
+     ],
+     "de": "What ist kein Relativpronomen nach einem Nomen.",
+     "en": "What is not a relative pronoun after a noun."
+    },
+    {
+     "if": [
+      "which",
+      "who"
+     ],
+     "de": "Hier genügt nichts oder that.",
+     "en": "Here nothing or that is enough."
+    }
+   ]
+  }
+ },
+ "noun-phrase|thepeopleinvolvingintheprojectagreed": {
+  "pat": "np.participle",
+  "why": {
+   "ok": {
+    "de": "Die Beteiligten sind beteiligt: Passiv braucht die 3. Form involved.",
+    "en": "The people are involved: the passive needs the past participle involved."
+   },
+   "wrong": [
+    {
+     "if": [
+      "involving"
+     ],
+     "de": "Involving ist aktiv. Hier ist die 3. Form involved nötig.",
+     "en": "Involving is active. Here the past participle involved is needed."
+    },
+    {
+     "not": [
+      "involved"
+     ],
+     "de": "Es heißt hier: the people involved in the project, mit der 3. Form.",
+     "en": "It is the people involved in the project."
+    }
+   ]
+  }
+ },
+ "noun-phrase|themeetingfromyesterdaywascanceled": {
+  "pat": "np.of-s",
+  "why": {
+   "ok": {
+    "de": "Bei Zeitangaben steht ’s: Yesterday's meeting was canceled.",
+    "en": "With time words ’s is used: Yesterday's meeting was canceled."
+   },
+   "wrong": [
+    {
+     "if": [
+      "from",
+      "yesterday"
+     ],
+     "de": "Das deutsche „von gestern“ wird hier zu yesterday’s.",
+     "en": "The German “von gestern” becomes yesterday’s here."
+    },
+    {
+     "not": [
+      "yesterday's"
+     ],
+     "de": "Es fehlt yesterday’s vor meeting.",
+     "en": "Yesterday’s before meeting is missing."
+    }
+   ]
+  }
+ },
+ "noun-phrase|thisisthebestwayforreducecosts": {
+  "pat": "np.to-inf",
+  "why": {
+   "ok": {
+    "de": "Nach way folgt to + Grundform: the best way to reduce costs.",
+    "en": "After way comes to + base form: the best way to reduce costs."
+   },
+   "wrong": [
+    {
+     "if": [
+      "for"
+     ],
+     "de": "Nach way steht to, nicht for.",
+     "en": "After way comes to, not for."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Vor der Grundform reduce braucht es to.",
+     "en": "Before the base form reduce you need to."
     }
    ]
   }
@@ -15960,6 +16579,110 @@
    ]
   }
  },
+ "quant-neg|nooneofthesuppliershasrepliedyet": {
+  "pat": "qn.none",
+  "why": {
+   "ok": {
+    "de": "Für „keiner von“ steht none of: None of the suppliers has replied.",
+    "en": "For “not one of” none of is used: None of the suppliers has replied."
+   },
+   "wrong": [
+    {
+     "if": [
+      "no",
+      "one",
+      "of"
+     ],
+     "de": "No one of ist deutsch gedacht. Es braucht none of.",
+     "en": "No one of is German thinking. It needs none of."
+    },
+    {
+     "not": [
+      "none"
+     ],
+     "de": "Hier steht none of.",
+     "en": "Here none of is used."
+    }
+   ]
+  }
+ },
+ "quant-neg|wedidnothardlyhaveanytimetoprepare": {
+  "pat": "qn.hardly",
+  "why": {
+   "ok": {
+    "de": "Hardly ist schon verneint: We hardly had any time.",
+    "en": "Hardly is already negative: We hardly had any time."
+   },
+   "wrong": [
+    {
+     "if": [
+      "not",
+      "hardly"
+     ],
+     "de": "Hardly ist schon verneint, ein zweites not ist zu viel.",
+     "en": "Hardly needs no second not."
+    },
+    {
+     "not": [
+      "hardly"
+     ],
+     "de": "Das Wort für „kaum“ fehlt: hardly.",
+     "en": "The word for “barely” is missing: hardly."
+    }
+   ]
+  }
+ },
+ "quant-neg|wenomoreofferthisservice": {
+  "pat": "qn.no-longer",
+  "why": {
+   "ok": {
+    "de": "Für „nicht mehr“ bei der Zeit steht no longer: We no longer offer this service.",
+    "en": "For “not anymore” in time no longer is used: We no longer offer this service."
+   },
+   "wrong": [
+    {
+     "if": [
+      "no",
+      "more"
+     ],
+     "de": "No more steht bei Mengen. Hier gilt no longer.",
+     "en": "No more is used with amounts. Here no longer applies."
+    },
+    {
+     "not": [
+      "longer"
+     ],
+     "de": "Hier ist no longer nötig, nicht no more.",
+     "en": "It needs no longer."
+    }
+   ]
+  }
+ },
+ "quant-neg|thenumberofcustomershaverisensharplythisyear": {
+  "pat": "qn.number",
+  "why": {
+   "ok": {
+    "de": "Bei the number of steht das Verb im Singular: The number of customers has risen.",
+    "en": "With the number of the verb is singular: The number of customers has risen."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "de": "Kern ist number, deshalb has statt have.",
+     "en": "The core is number, so has instead of have."
+    },
+    {
+     "not": [
+      "has"
+     ],
+     "de": "Das Verb heißt has.",
+     "en": "The verb is has."
+    }
+   ]
+  }
+ },
  "questions|couldyoutellmewhere": {
   "pat": "qu.indirect",
   "why": {
@@ -17903,6 +18626,107 @@
      ],
      "de": "Gesucht ist would + Grundform: would finish.",
      "en": "What is needed is would + base form: would finish."
+    }
+   ]
+  }
+ },
+ "stative-adv|pricesriseatthemomentbecauseofthenewtax": {
+  "pat": "sa.trend",
+  "why": {
+   "ok": {
+    "de": "Mit at the moment läuft der Vorgang gerade: Prices are rising at the moment.",
+    "en": "With at the moment the process is under way: Prices are rising at the moment."
+   },
+   "wrong": [
+    {
+     "if": [
+      "rise"
+     ],
+     "de": "Die einfache Form passt nicht zu at the moment. Es braucht are rising.",
+     "en": "The simple form does not fit at the moment. It needs are rising."
+    },
+    {
+     "not": [
+      "rising"
+     ],
+     "de": "Der laufende Anstieg steht in der Verlaufsform.",
+     "en": "The rise under way takes the continuous."
+    }
+   ]
+  }
+ },
+ "stative-adv|iwaswonderingcouldyousendmethefile": {
+  "pat": "sa.soft",
+  "why": {
+   "ok": {
+    "de": "Nach wondering folgt if und normale Satzstellung: if you could send me.",
+    "en": "After wondering comes if and normal word order: if you could send me."
+   },
+   "wrong": [
+    {
+     "not": [
+      "if"
+     ],
+     "de": "Nach wondering braucht es if.",
+     "en": "After wondering you need if."
+    },
+    {
+     "if": [
+      "could",
+      "you"
+     ],
+     "de": "Das Subjekt you steht vor could, nicht dahinter.",
+     "en": "The subject you stands before could, not after it."
+    }
+   ]
+  }
+ },
+ "stative-adv|sheisbeingtiredafterthelongflight": {
+  "pat": "sa.being",
+  "why": {
+   "ok": {
+    "de": "Müdigkeit ist ein Zustand, deshalb ohne being: She is tired.",
+    "en": "Tiredness is a state, so no being: She is tired."
+   },
+   "wrong": [
+    {
+     "if": [
+      "being"
+     ],
+     "de": "Being steht nur bei Verhalten, nicht bei Zuständen.",
+     "en": "Being is used for behavior, not for states."
+    },
+    {
+     "not": [
+      "tired"
+     ],
+     "de": "Der Zustand lautet is tired.",
+     "en": "The state is is tired."
+    }
+   ]
+  }
+ },
+ "stative-adv|iamknowingtheanswertoyourquestion": {
+  "pat": "sa.no-ing",
+  "why": {
+   "ok": {
+    "de": "Know ist ein Zustandsverb und bleibt einfach: I know the answer.",
+    "en": "Know is a stative verb and stays simple: I know the answer."
+   },
+   "wrong": [
+    {
+     "if": [
+      "knowing"
+     ],
+     "de": "Know steht nicht in der Verlaufsform.",
+     "en": "Know does not take the continuous."
+    },
+    {
+     "not": [
+      "know"
+     ],
+     "de": "Die einfache Form heißt know.",
+     "en": "The simple form is know."
     }
    ]
   }

@@ -1,0 +1,103 @@
+{
+ "Prices rise at the moment because of the new tax.": {
+  "pat": "sa.trend",
+  "why": {
+   "ok": {
+    "de": "Mit at the moment läuft der Vorgang gerade: Prices are rising at the moment.",
+    "en": "With at the moment the process is under way: Prices are rising at the moment."
+   },
+   "wrong": [
+    {
+     "if": [
+      "rise"
+     ],
+     "de": "Die einfache Form passt nicht zu at the moment. Es braucht are rising.",
+     "en": "The simple form does not fit at the moment. It needs are rising."
+    },
+    {
+     "not": [
+      "rising"
+     ],
+     "de": "Der laufende Anstieg steht in der Verlaufsform.",
+     "en": "The rise under way takes the continuous."
+    }
+   ]
+  }
+ },
+ "I was wondering could you send me the file.": {
+  "pat": "sa.soft",
+  "why": {
+   "ok": {
+    "de": "Nach wondering folgt if und normale Satzstellung: if you could send me.",
+    "en": "After wondering comes if and normal word order: if you could send me."
+   },
+   "wrong": [
+    {
+     "not": [
+      "if"
+     ],
+     "de": "Nach wondering braucht es if.",
+     "en": "After wondering you need if."
+    },
+    {
+     "if": [
+      "could",
+      "you"
+     ],
+     "de": "Das Subjekt you steht vor could, nicht dahinter.",
+     "en": "The subject you stands before could, not after it."
+    }
+   ]
+  }
+ },
+ "She is being tired after the long flight.": {
+  "pat": "sa.being",
+  "why": {
+   "ok": {
+    "de": "Müdigkeit ist ein Zustand, deshalb ohne being: She is tired.",
+    "en": "Tiredness is a state, so no being: She is tired."
+   },
+   "wrong": [
+    {
+     "if": [
+      "being"
+     ],
+     "de": "Being steht nur bei Verhalten, nicht bei Zuständen.",
+     "en": "Being is used for behavior, not for states."
+    },
+    {
+     "not": [
+      "tired"
+     ],
+     "de": "Der Zustand lautet is tired.",
+     "en": "The state is is tired."
+    }
+   ]
+  }
+ },
+ "I am knowing the answer to your question.": {
+  "pat": "sa.no-ing",
+  "why": {
+   "ok": {
+    "de": "Know ist ein Zustandsverb und bleibt einfach: I know the answer.",
+    "en": "Know is a stative verb and stays simple: I know the answer."
+   },
+   "wrong": [
+    {
+     "if": [
+      "knowing"
+     ],
+     "de": "Know steht nicht in der Verlaufsform.",
+     "en": "Know does not take the continuous."
+    },
+    {
+     "not": [
+      "know"
+     ],
+     "de": "Die einfache Form heißt know.",
+     "en": "The simple form is know."
+    }
+   ]
+  }
+ }
+}

@@ -3732,6 +3732,453 @@
    "topic": "countable"
   },
   {
+   "pat": "el.so-not",
+   "en": "If so, please send me the new date.",
+   "de": "Falls ja, schicken Sie mir bitte das neue Datum.",
+   "chunks": [
+    "if",
+    "so",
+    "please",
+    "send me",
+    "the new date"
+   ],
+   "single": "If so bildet den Anfang; please send me the new date folgt danach.",
+   "why": [
+    "If so ersetzt einen ganzen Gedanken: Falls das zutrifft. Danach folgt die Bitte.",
+    "If so replaces a whole thought: if that is the case. The request follows."
+   ],
+   "bad": "If it so, please send me the new date.",
+   "trap": {
+    "tile": "so",
+    "instead": "it so",
+    "why": {
+     "de": "Nach if steht so allein, ohne it.",
+     "en": "After if, so stands alone without it."
+    }
+   },
+   "topic": "ellipsis"
+  },
+  {
+   "pat": "el.so-not",
+   "en": "I am afraid not, but we can try again next week.",
+   "de": "Leider nicht, aber wir können es nächste Woche noch einmal versuchen.",
+   "chunks": [
+    "I am afraid",
+    "not",
+    "but",
+    "we can try",
+    "again",
+    "next week"
+   ],
+   "single": "I am afraid not bildet den ersten Teil; but we can try again next week folgt danach.",
+   "why": [
+    "Not steht direkt hinter dem Verb und ersetzt den verneinten Gedanken. Danach folgt der zweite Teil mit but.",
+    "Not follows the verb directly and replaces the negative thought. The second part with but follows."
+   ],
+   "bad": "I am afraid that not, but we can try again next week.",
+   "trap": {
+    "tile": "not",
+    "instead": "that not",
+    "why": {
+     "de": "Vor not steht kein that.",
+     "en": "There is no that before not."
+    }
+   },
+   "topic": "ellipsis"
+  },
+  {
+   "pat": "el.do-so",
+   "en": "She signed the contract, and I did the same.",
+   "de": "Sie unterschrieb den Vertrag, und ich tat dasselbe.",
+   "chunks": [
+    "she signed",
+    "the contract",
+    "and",
+    "I",
+    "did",
+    "the same"
+   ],
+   "single": "She signed the contract ist der erste Teil; and I did the same folgt danach.",
+   "why": [
+    "Did the same ersetzt die ganze Handlung signed the contract. Das Verb wird nicht wiederholt.",
+    "Did the same replaces the whole action signed the contract. The verb is not repeated."
+   ],
+   "bad": "She signed the contract, and I did same.",
+   "trap": {
+    "tile": "the same",
+    "instead": "same",
+    "why": {
+     "de": "Vor same steht the.",
+     "en": "Before same you need the."
+    }
+   },
+   "topic": "ellipsis"
+  },
+  {
+   "pat": "el.do-so",
+   "en": "Anyone who wants to cancel may do so before Friday.",
+   "de": "Wer stornieren möchte, kann das vor Freitag tun.",
+   "chunks": [
+    "anyone",
+    "who wants to",
+    "cancel",
+    "may do so",
+    "before Friday"
+   ],
+   "single": "Anyone who wants to cancel ist das Subjekt; may do so before Friday folgt danach.",
+   "why": [
+    "Do so ersetzt die Handlung cancel und klingt förmlich. Es steht direkt hinter dem Modalverb may.",
+    "Do so replaces the action cancel and sounds formal. It stands directly after the modal may."
+   ],
+   "bad": "Anyone who wants to cancel may do it so before Friday.",
+   "trap": {
+    "tile": "may do so",
+    "instead": "may do it so",
+    "why": {
+     "de": "Es heißt do so, nicht do it so.",
+     "en": "It is do so, not do it so."
+    }
+   },
+   "topic": "ellipsis"
+  },
+  {
+   "pat": "el.one-ones",
+   "en": "Our old system is slow, but the new one is fast.",
+   "de": "Unser altes System ist langsam, aber das neue ist schnell.",
+   "chunks": [
+    "our old system",
+    "is slow",
+    "but",
+    "the new one",
+    "is fast"
+   ],
+   "single": "Der erste Teil our old system is slow steht vorn; but the new one is fast folgt danach.",
+   "why": [
+    "One ersetzt das Nomen system. Hinter dem Adjektiv new darf one nicht fehlen.",
+    "One replaces the noun system. After the adjective new, one must not be missing."
+   ],
+   "bad": "Our old system is slow, but the new is fast.",
+   "trap": {
+    "tile": "the new one",
+    "instead": "the new",
+    "why": {
+     "de": "Nach new braucht es one.",
+     "en": "After new you need one."
+    }
+   },
+   "topic": "ellipsis"
+  },
+  {
+   "pat": "el.one-ones",
+   "en": "The costs of the new plan are lower than those of the old plan.",
+   "de": "Die Kosten des neuen Plans sind niedriger als die des alten Plans.",
+   "chunks": [
+    "the costs",
+    "of the new plan",
+    "are lower",
+    "than",
+    "those of",
+    "the old plan"
+   ],
+   "single": "The costs of the new plan steht vorn; are lower than those of the old plan folgt danach.",
+   "why": [
+    "Those of ersetzt das Pluralnomen costs im Vergleich: Kosten werden mit Kosten verglichen.",
+    "Those of replaces the plural noun costs in the comparison: costs are compared with costs."
+   ],
+   "bad": "The costs of the new plan are lower than the old plan.",
+   "trap": {
+    "tile": "those of",
+    "instead": "the costs of",
+    "why": {
+     "de": "Ohne those of würden Kosten mit einem Plan verglichen.",
+     "en": "Without those of costs would be compared with a plan."
+    }
+   },
+   "topic": "ellipsis"
+  },
+  {
+   "pat": "el.to-aux",
+   "en": "Can you join us? I'd love to, but I have another meeting.",
+   "de": "Kannst du uns begleiten? Sehr gern, aber ich habe ein anderes Meeting.",
+   "chunks": [
+    "can you",
+    "join us",
+    "I'd love to",
+    "but",
+    "I have",
+    "another meeting"
+   ],
+   "single": "Die Frage can you join us kommt zuerst, dann I’d love to und der Einwand mit but.",
+   "why": [
+    "Bei I’d love to entfällt das Verb join, aber to bleibt stehen. Danach folgt der Einwand mit but.",
+    "With I’d love to, the verb join is dropped but to stays. The objection with but follows."
+   ],
+   "bad": "Can you join us? I'd love, but I have another meeting.",
+   "trap": {
+    "tile": "I'd love to",
+    "instead": "I'd love",
+    "why": {
+     "de": "Am Ende muss to stehen bleiben.",
+     "en": "At the end to has to stay."
+    }
+   },
+   "topic": "ellipsis"
+  },
+  {
+   "pat": "el.to-aux",
+   "en": "She can attend the workshop, but he cannot.",
+   "de": "Sie kann am Workshop teilnehmen, er nicht.",
+   "chunks": [
+    "she",
+    "can attend",
+    "the workshop",
+    "but",
+    "he",
+    "cannot"
+   ],
+   "single": "She can attend the workshop steht vorn; but he cannot beendet den Satz.",
+   "why": [
+    "Nach cannot entfällt das Verb attend, das Hilfsverb steht allein. Kein to danach.",
+    "After cannot the verb attend is dropped, the auxiliary stands alone. No to after it."
+   ],
+   "bad": "She can attend the workshop, but he cannot to.",
+   "trap": {
+    "tile": "cannot",
+    "instead": "cannot to",
+    "why": {
+     "de": "Nach cannot steht kein to.",
+     "en": "After cannot there is no to."
+    }
+   },
+   "topic": "ellipsis"
+  },
+  {
+   "pat": "ep.do-emph",
+   "en": "We did send the invoice last week.",
+   "de": "Wir haben die Rechnung letzte Woche wirklich geschickt.",
+   "chunks": [
+    "we",
+    "did",
+    "send",
+    "the invoice",
+    "last week"
+   ],
+   "single": "Das Subjekt we kommt zuerst, dann did, die Grundform send und danach the invoice und last week.",
+   "why": [
+    "Das betonte did steht vor der Grundform send. Nach did wird das Verb nicht mehr gebeugt.",
+    "The stressed did stands before the base form send. After did the verb is no longer inflected."
+   ],
+   "bad": "We did sent the invoice last week.",
+   "trap": {
+    "tile": "send",
+    "instead": "sent",
+    "why": {
+     "de": "Nach did steht die Grundform, auch in der Vergangenheit.",
+     "en": "After did the base form follows, even in the past."
+    }
+   },
+   "topic": "emph-plus"
+  },
+  {
+   "pat": "ep.do-emph",
+   "en": "I do understand your concern, but the deadline stays.",
+   "de": "Ich verstehe Ihre Sorge durchaus, aber die Frist bleibt.",
+   "chunks": [
+    "I",
+    "do",
+    "understand",
+    "your concern",
+    "but",
+    "the deadline",
+    "stays"
+   ],
+   "single": "I do understand your concern ist der erste Teil; but the deadline stays kommt danach.",
+   "why": [
+    "Zu I gehört do vor der Grundform understand. Das betont das Verstehen vor dem Gegensatz mit but.",
+    "With I the form is do before the base form understand. This stresses understanding before the contrast with but."
+   ],
+   "bad": "I understand do your concern, but the deadline stays.",
+   "trap": {
+    "tile": "do",
+    "instead": "does",
+    "why": {
+     "de": "Zu I und we gehört do, zu he und she gehört does.",
+     "en": "With I and we use do, with he and she use does."
+    }
+   },
+   "topic": "emph-plus"
+  },
+  {
+   "pat": "ep.concession",
+   "en": "Tempting as it is, we should not cut the testing phase.",
+   "de": "So verlockend es ist, sollten wir die Testphase nicht streichen.",
+   "chunks": [
+    "tempting",
+    "as",
+    "it is",
+    "we",
+    "should not",
+    "cut",
+    "the testing phase"
+   ],
+   "single": "Tempting as it is bildet den ersten Teil; we should not cut the testing phase ist der Hauptsatz.",
+   "why": [
+    "Das Adjektiv steht vor as, danach folgt die normale Stellung it is. Der Hauptsatz beginnt nach dem Komma.",
+    "The adjective comes before as, and the normal order it is follows. The main clause begins after the comma."
+   ],
+   "bad": "Tempting as is it, we should not cut the testing phase.",
+   "trap": {
+    "tile": "it is",
+    "instead": "is it",
+    "why": {
+     "de": "Nach as bleibt die normale Stellung it is.",
+     "en": "After as the normal order it is stays."
+    }
+   },
+   "topic": "emph-plus"
+  },
+  {
+   "pat": "ep.concession",
+   "en": "Much as I would like to help, I cannot approve this.",
+   "de": "So gern ich helfen würde, ich kann das nicht genehmigen.",
+   "chunks": [
+    "much as",
+    "I",
+    "would like",
+    "to help",
+    "I",
+    "cannot approve",
+    "this"
+   ],
+   "single": "Much as I would like to help bildet den ersten Teil, danach folgt I cannot approve this.",
+   "why": [
+    "Much as leitet den Einwand ein und braucht normale Satzstellung. Danach folgt der Hauptsatz.",
+    "Much as introduces the concession and takes normal word order. The main clause follows."
+   ],
+   "bad": "Much I would like to help as, I cannot approve this.",
+   "trap": {
+    "tile": "much as",
+    "instead": "much",
+    "why": {
+     "de": "Much gehört mit as zusammen, sie bilden einen Baustein.",
+     "en": "Much belongs with as, they form one block."
+    }
+   },
+   "topic": "emph-plus"
+  },
+  {
+   "pat": "ep.so-such",
+   "en": "So fast was the rollout that nobody noticed the change.",
+   "de": "Der Rollout lief so schnell, dass niemand die Änderung bemerkte.",
+   "chunks": [
+    "so fast",
+    "was",
+    "the rollout",
+    "that",
+    "nobody",
+    "noticed",
+    "the change"
+   ],
+   "single": "So fast was the rollout bildet den ersten Teil; that nobody noticed the change nennt die Folge.",
+   "why": [
+    "So fast steht vorn, danach das Verb was vor dem Subjekt the rollout. Der that-Satz nennt die Folge.",
+    "So fast comes first, then the verb was before the subject the rollout. The that-clause names the result."
+   ],
+   "bad": "So fast the rollout was that nobody noticed the change.",
+   "trap": {
+    "tile": "was",
+    "instead": "the rollout was",
+    "why": {
+     "de": "Nach So + Adjektiv am Anfang steht das Verb vor dem Subjekt.",
+     "en": "After So + adjective at the start the verb stands before the subject."
+    }
+   },
+   "topic": "emph-plus"
+  },
+  {
+   "pat": "ep.so-such",
+   "en": "Such was the demand that we ran out of stock.",
+   "de": "Die Nachfrage war so groß, dass wir ausverkauft waren.",
+   "chunks": [
+    "such",
+    "was",
+    "the demand",
+    "that",
+    "we",
+    "ran out",
+    "of stock"
+   ],
+   "single": "Such was the demand bildet den ersten Teil; that we ran out of stock ist die Folge.",
+   "why": [
+    "Such steht vorn, danach das Verb was vor dem Subjekt the demand. Der that-Satz nennt die Folge.",
+    "Such comes first, then the verb was before the subject the demand. The that-clause names the result."
+   ],
+   "bad": "Such the demand was that we ran out of stock.",
+   "trap": {
+    "tile": "was",
+    "instead": "the demand was",
+    "why": {
+     "de": "Nach Such am Anfang steht das Verb vor dem Subjekt.",
+     "en": "After Such at the start the verb stands before the subject."
+    }
+   },
+   "topic": "emph-plus"
+  },
+  {
+   "pat": "ep.object-front",
+   "en": "That proposal I cannot accept under any terms.",
+   "de": "Diesen Vorschlag kann ich unter keinen Umständen akzeptieren.",
+   "chunks": [
+    "that proposal",
+    "I",
+    "cannot accept",
+    "under",
+    "any terms"
+   ],
+   "single": "That proposal steht vorn, danach I cannot accept, am Ende under any terms.",
+   "why": [
+    "Das Objekt that proposal steht vorn. Danach bleibt die normale Reihenfolge: Subjekt I, dann Verb cannot accept.",
+    "The object that proposal comes first. The normal order then stays: subject I, then verb cannot accept."
+   ],
+   "bad": "That proposal cannot I accept under any terms.",
+   "trap": {
+    "tile": "I",
+    "instead": "cannot I",
+    "why": {
+     "de": "Nach dem vorgezogenen Objekt steht das Subjekt vor dem Verb.",
+     "en": "After the fronted object the subject comes before the verb."
+    }
+   },
+   "topic": "emph-plus"
+  },
+  {
+   "pat": "ep.object-front",
+   "en": "This risk we must avoid at all costs.",
+   "de": "Dieses Risiko müssen wir um jeden Preis vermeiden.",
+   "chunks": [
+    "this risk",
+    "we",
+    "must",
+    "avoid",
+    "at all costs"
+   ],
+   "single": "This risk steht vorn, danach we must avoid, am Ende at all costs.",
+   "why": [
+    "Das Objekt this risk steht vorn, danach wie gewohnt Subjekt we, Modalverb must und Grundform avoid.",
+    "The object this risk comes first, then as usual the subject we, the modal must and the base form avoid."
+   ],
+   "bad": "This risk must we avoid at all costs.",
+   "trap": {
+    "tile": "we",
+    "instead": "must we",
+    "why": {
+     "de": "Nach dem vorgezogenen Objekt bleibt die Reihenfolge we must.",
+     "en": "After the fronted object the order we must stays."
+    }
+   },
+   "topic": "emph-plus"
+  },
+  {
    "pat": "ff.going-to",
    "en": "We're going to move the launch to May.",
    "de": "Wir verschieben den Launch auf Mai.",
@@ -3924,6 +4371,230 @@
     }
    },
    "topic": "future-forms"
+  },
+  {
+   "pat": "fp.was-going",
+   "en": "We were going to launch the product in May.",
+   "de": "Wir wollten das Produkt im Mai auf den Markt bringen.",
+   "chunks": [
+    "we",
+    "were going to",
+    "launch",
+    "the product",
+    "in May"
+   ],
+   "single": "We were going to bildet den Anfang; launch the product in May folgt danach.",
+   "why": [
+    "Were going to nennt den Plan von damals. Danach folgt die Grundform launch.",
+    "Were going to names the plan from back then. The base form launch follows."
+   ],
+   "bad": "We are going to launch the product in May.",
+   "trap": {
+    "tile": "were going to",
+    "instead": "are going to",
+    "why": {
+     "de": "Ein Plan von damals braucht were, nicht are.",
+     "en": "A plan from back then needs were, not are."
+    }
+   },
+   "topic": "future-past"
+  },
+  {
+   "pat": "fp.was-going",
+   "en": "I was going to call you earlier this morning.",
+   "de": "Ich wollte dich heute früh anrufen.",
+   "chunks": [
+    "I",
+    "was going to",
+    "call you",
+    "earlier",
+    "this morning"
+   ],
+   "single": "I was going to bildet den Anfang; call you earlier this morning folgt danach.",
+   "why": [
+    "Was going to nennt den Plan. Danach folgt die Grundform call.",
+    "Was going to names the plan. The base form call follows."
+   ],
+   "bad": "I was going call you earlier this morning.",
+   "trap": {
+    "tile": "was going to",
+    "instead": "was going",
+    "why": {
+     "de": "Nach going braucht es to.",
+     "en": "After going you need to."
+    }
+   },
+   "topic": "future-past"
+  },
+  {
+   "pat": "fp.about-to",
+   "en": "We were about to sign when the lawyer found an error.",
+   "de": "Wir wollten gerade unterschreiben, als der Anwalt einen Fehler fand.",
+   "chunks": [
+    "we were",
+    "about to",
+    "sign",
+    "when",
+    "the lawyer",
+    "found",
+    "an error"
+   ],
+   "single": "We were about to bildet den Anfang; sign when the lawyer found an error folgt danach.",
+   "why": [
+    "Were about to heißt: kurz davor. Der Satz mit when zeigt, was dazwischen kam; das ist die Pointe.",
+    "Were about to means: just before. The when-clause shows what intervened."
+   ],
+   "bad": "We were about signing when the lawyer found an error.",
+   "trap": {
+    "tile": "about to",
+    "instead": "about",
+    "why": {
+     "de": "Nach about steht to und die Grundform.",
+     "en": "After about comes to and the base form."
+    }
+   },
+   "topic": "future-past"
+  },
+  {
+   "pat": "fp.about-to",
+   "en": "The meeting was about to start when the power failed.",
+   "de": "Die Besprechung sollte gerade beginnen, als der Strom ausfiel.",
+   "chunks": [
+    "the meeting",
+    "was",
+    "about to",
+    "start",
+    "when",
+    "the power",
+    "failed"
+   ],
+   "single": "The meeting was bildet den Anfang; about to start when the power failed folgt danach.",
+   "why": [
+    "Was about to heißt: kurz davor. Der Satz mit when zeigt, was dazwischen kam; das ist die Pointe.",
+    "Was about to means: just before. When shows what intervened."
+   ],
+   "bad": "The meeting was about starting when the power failed.",
+   "trap": {
+    "tile": "start",
+    "instead": "starting",
+    "why": {
+     "de": "Nach about to steht die Grundform.",
+     "en": "After about to comes the base form."
+    }
+   },
+   "topic": "future-past"
+  },
+  {
+   "pat": "fp.would-narr",
+   "en": "She joined the firm in 2015 and would later lead the Berlin office.",
+   "de": "Sie kam 2015 zur Firma und leitete später das Berliner Büro.",
+   "chunks": [
+    "she",
+    "joined",
+    "the firm",
+    "in 2015",
+    "and",
+    "would later",
+    "lead",
+    "the Berlin office"
+   ],
+   "single": "She joined the firm in 2015 bildet den Anfang; and would later lead the Berlin office folgt danach.",
+   "why": [
+    "Would later blickt aus der Vergangenheit auf Späteres. Danach folgt die Grundform lead.",
+    "Would later looks from the past at something later. The base form lead follows."
+   ],
+   "bad": "She joined the firm in 2015 and will later lead the Berlin office.",
+   "trap": {
+    "tile": "would later",
+    "instead": "will later",
+    "why": {
+     "de": "Aus der Vergangenheit heraus steht would, nicht will.",
+     "en": "Seen from the past, would is used, not will."
+    }
+   },
+   "topic": "future-past"
+  },
+  {
+   "pat": "fp.would-narr",
+   "en": "He promised that he would send the report by Monday.",
+   "de": "Er versprach, den Bericht bis Montag zu schicken.",
+   "chunks": [
+    "he promised",
+    "that",
+    "he",
+    "would send",
+    "the report",
+    "by Monday"
+   ],
+   "single": "He promised that he bildet den Anfang; would send the report by Monday folgt danach.",
+   "why": [
+    "Nach promised steht would statt will. Danach folgt die Grundform send.",
+    "After promised, would replaces will. The base form send follows."
+   ],
+   "bad": "He promised that he will send the report by Monday.",
+   "trap": {
+    "tile": "would send",
+    "instead": "will send",
+    "why": {
+     "de": "Nach einem Verb der Vergangenheit steht would.",
+     "en": "After a verb in the past, would is used."
+    }
+   },
+   "topic": "future-past"
+  },
+  {
+   "pat": "fp.was-to",
+   "en": "The new office was to open in June.",
+   "de": "Das neue Büro sollte im Juni eröffnen.",
+   "chunks": [
+    "the new office",
+    "was to",
+    "open",
+    "in",
+    "June"
+   ],
+   "single": "The new office was to bildet den Anfang; open in June folgt danach.",
+   "why": [
+    "Was to nennt, was vorgesehen war. Danach folgt die Grundform open.",
+    "Was to names what was meant to be. The base form open follows."
+   ],
+   "bad": "The new office should open in June.",
+   "trap": {
+    "tile": "was to",
+    "instead": "should",
+    "why": {
+     "de": "Für einen Plan in der Vergangenheit steht was to.",
+     "en": "For a plan in the past was to is used."
+    }
+   },
+   "topic": "future-past"
+  },
+  {
+   "pat": "fp.was-to",
+   "en": "She was to become the youngest director in the firm.",
+   "de": "Sie sollte die jüngste Direktorin der Firma werden.",
+   "chunks": [
+    "she",
+    "was to",
+    "become",
+    "the youngest director",
+    "in the firm"
+   ],
+   "single": "She was to bildet den Anfang; become the youngest director in the firm folgt danach.",
+   "why": [
+    "Was to nennt, was vorgesehen schien. Danach folgt die Grundform become.",
+    "Was to names what seemed meant to be. The base form become follows."
+   ],
+   "bad": "She was to became the youngest director in the firm.",
+   "trap": {
+    "tile": "become",
+    "instead": "became",
+    "why": {
+     "de": "Nach was to steht die Grundform.",
+     "en": "After was to comes the base form."
+    }
+   },
+   "topic": "future-past"
   },
   {
    "pat": "fut.continuous",
@@ -4362,6 +5033,234 @@
     "After make + person the base form follows without to: made the team revise. The object comes last."
    ],
    "topic": "gerund-inf"
+  },
+  {
+   "pat": "inv.negative",
+   "en": "Never before had the team met a deadline so early.",
+   "de": "Noch nie zuvor hatte das Team eine Frist so früh eingehalten.",
+   "chunks": [
+    "never before",
+    "had",
+    "the team",
+    "met",
+    "a deadline",
+    "so early"
+   ],
+   "single": "Nach Never before kommt had vor the team; met, a deadline und so early bleiben danach in dieser Reihenfolge.",
+   "why": [
+    "Nach Never before steht das Hilfsverb had vor dem Subjekt the team. Danach folgt die 3. Form met.",
+    "After Never before, the auxiliary had comes before the subject the team. The participle met follows."
+   ],
+   "bad": "Never before the team had met a deadline so early.",
+   "trap": {
+    "tile": "had",
+    "instead": "the team had",
+    "why": {
+     "de": "Im Deutschen stünde das Verb von selbst vorn. Im Englischen muss man had bewusst vor das Subjekt setzen.",
+     "en": "German would put the verb first on its own. In English you have to put had before the subject on purpose."
+    }
+   },
+   "topic": "inversion"
+  },
+  {
+   "pat": "inv.negative",
+   "en": "At no point did the client mention the budget.",
+   "de": "Zu keinem Zeitpunkt erwähnte der Kunde das Budget.",
+   "chunks": [
+    "at no point",
+    "did",
+    "the client",
+    "mention",
+    "the budget"
+   ],
+   "single": "At no point verlangt did vor the client; mention steht in der Grundform direkt vor the budget.",
+   "why": [
+    "Nach At no point steht did vor dem Subjekt, das Verb danach in der Grundform: did the client mention.",
+    "After At no point, did stands before the subject, and the verb follows in the base form: did the client mention."
+   ],
+   "bad": "At no point the client mentioned the budget.",
+   "trap": {
+    "tile": "did",
+    "instead": "mentioned",
+    "why": {
+     "de": "Nach did steht die Grundform mention, nicht mentioned.",
+     "en": "After did the base form mention is used, not mentioned."
+    }
+   },
+   "topic": "inversion"
+  },
+  {
+   "pat": "inv.only",
+   "en": "Only after the pilot did we approve the full rollout.",
+   "de": "Erst nach der Pilotphase gaben wir den ganzen Rollout frei.",
+   "chunks": [
+    "only after",
+    "the pilot",
+    "did",
+    "we",
+    "approve",
+    "the full rollout"
+   ],
+   "single": "Only after the pilot bleibt zusammen vorn; danach kommen did, we und approve in dieser Reihenfolge.",
+   "why": [
+    "Nach Only after und der Zeitangabe steht did vor dem Subjekt we. Das Verb bleibt in der Grundform.",
+    "After Only after and the time phrase, did stands before the subject we. The verb stays in the base form."
+   ],
+   "bad": "Only after the pilot we approved the full rollout.",
+   "trap": {
+    "tile": "did",
+    "instead": "approved",
+    "why": {
+     "de": "Ohne did bleibt die normale Stellung stehen, und das Verb wird zu approved. Hier muss did vor we.",
+     "en": "Without did the normal order stays and the verb becomes approved. Here did must go before we."
+    }
+   },
+   "topic": "inversion"
+  },
+  {
+   "pat": "inv.only",
+   "en": "Only when the client signs will we start the work.",
+   "de": "Erst wenn der Kunde unterschreibt, fangen wir mit der Arbeit an.",
+   "chunks": [
+    "only when",
+    "the client",
+    "signs",
+    "will",
+    "we",
+    "start",
+    "the work"
+   ],
+   "single": "Der Nebensatz only when the client signs steht vorn; im Hauptsatz folgen will, we und start the work.",
+   "why": [
+    "Im Nebensatz mit Only when steht das Präsens (signs), im Hauptsatz kommt will vor das Subjekt we.",
+    "In the clause with Only when the present is used (signs), and in the main clause will goes before the subject we."
+   ],
+   "bad": "Only when the client signs we will start the work.",
+   "trap": {
+    "tile": "will",
+    "instead": "we will",
+    "why": {
+     "de": "Nach Only when mit Nebensatz kehrt der Hauptsatz um: will we, nicht we will.",
+     "en": "After Only when plus a clause, the main clause flips: will we, not we will."
+    }
+   },
+   "topic": "inversion"
+  },
+  {
+   "pat": "inv.sooner",
+   "en": "No sooner had we signed the contract than the prices rose.",
+   "de": "Kaum hatten wir den Vertrag unterschrieben, stiegen die Preise.",
+   "chunks": [
+    "no sooner",
+    "had",
+    "we",
+    "signed",
+    "the contract",
+    "than",
+    "the prices",
+    "rose"
+   ],
+   "single": "No sooner had we signed bildet den ersten Teil; than leitet das zweite Ereignis ein.",
+   "why": [
+    "No sooner verlangt had vor dem Subjekt und später than. Das zweite Ereignis steht im Past Simple.",
+    "No sooner requires had before the subject and than later. The second event is in the past simple."
+   ],
+   "bad": "No sooner had we signed the contract when the prices rose.",
+   "trap": {
+    "tile": "than",
+    "instead": "when",
+    "why": {
+     "de": "Zu no sooner gehört than. When gehört zu hardly und scarcely.",
+     "en": "No sooner goes with than. When goes with hardly and scarcely."
+    }
+   },
+   "topic": "inversion"
+  },
+  {
+   "pat": "inv.sooner",
+   "en": "Hardly had the meeting started when the alarm went off.",
+   "de": "Das Meeting hatte kaum begonnen, da ging der Alarm los.",
+   "chunks": [
+    "hardly",
+    "had",
+    "the meeting",
+    "started",
+    "when",
+    "the alarm",
+    "went off"
+   ],
+   "single": "Hardly had the meeting started ist der erste Teil; when verbindet ihn mit the alarm went off.",
+   "why": [
+    "Hardly verlangt had vor dem Subjekt und später when. Das zweite Ereignis steht im Past Simple.",
+    "Hardly requires had before the subject and when later. The second event is in the past simple."
+   ],
+   "bad": "Hardly the meeting had started when the alarm went off.",
+   "trap": {
+    "tile": "had",
+    "instead": "the meeting had",
+    "why": {
+     "de": "Nach Hardly kommt had zuerst, dann erst das Subjekt.",
+     "en": "After Hardly, had comes first and the subject after it."
+    }
+   },
+   "topic": "inversion"
+  },
+  {
+   "pat": "inv.cond",
+   "en": "Should you need any help, please let us know.",
+   "de": "Falls Sie Hilfe brauchen, sagen Sie uns bitte Bescheid.",
+   "chunks": [
+    "should",
+    "you",
+    "need",
+    "any help",
+    "please",
+    "let us know"
+   ],
+   "single": "Should you need any help bildet den Bedingungsteil; please let us know ist der Hauptsatz danach.",
+   "why": [
+    "Should steht vor dem Subjekt you und ersetzt das if. Danach folgt die Grundform need.",
+    "Should stands before the subject you and replaces the if. The base form need follows."
+   ],
+   "bad": "Should you will need any help, please let us know.",
+   "trap": {
+    "tile": "need",
+    "instead": "will need",
+    "why": {
+     "de": "Nach Should you steht die Grundform, kein will.",
+     "en": "After Should you the base form follows, no will."
+    }
+   },
+   "topic": "inversion"
+  },
+  {
+   "pat": "inv.cond",
+   "en": "Had we known about the outage, we would have warned you.",
+   "de": "Hätten wir von dem Ausfall gewusst, hätten wir Sie gewarnt.",
+   "chunks": [
+    "had",
+    "we",
+    "known",
+    "about the outage",
+    "we",
+    "would have warned",
+    "you"
+   ],
+   "single": "Der Bedingungsteil had we known about the outage steht zuerst; im Hauptsatz folgen we, would have warned und you.",
+   "why": [
+    "Had steht vor dem Subjekt we und ersetzt das if. Im Hauptsatz folgt would have + 3. Form.",
+    "Had stands before the subject we and replaces the if. The main clause takes would have + participle."
+   ],
+   "bad": "Had we known about the outage, we would warn you.",
+   "trap": {
+    "tile": "known",
+    "instead": "knew",
+    "why": {
+     "de": "Nach Had steht die 3. Form known, nicht knew.",
+     "en": "After Had the participle known follows, not knew."
+    }
+   },
+   "topic": "inversion"
   },
   {
    "pat": "lk.although",
@@ -5413,6 +6312,495 @@
     }
    },
    "topic": "modals-deduction"
+  },
+  {
+   "pat": "mp.may-well",
+   "en": "The client may well reject the first offer.",
+   "de": "Der Kunde lehnt das erste Angebot gut möglich ab.",
+   "chunks": [
+    "the client",
+    "may",
+    "well",
+    "reject",
+    "the first",
+    "offer"
+   ],
+   "single": "The client may well bildet den Anfang; reject the first offer folgt danach.",
+   "why": [
+    "Well steht direkt hinter dem Modalverb may und macht die Möglichkeit stärker. Danach folgt die Grundform reject.",
+    "Well stands right after the modal may and makes the possibility stronger. The base form reject follows."
+   ],
+   "bad": "The client may be well reject the first offer.",
+   "trap": {
+    "tile": "well",
+    "instead": "be well",
+    "why": {
+     "de": "Zwischen may und well steht kein be.",
+     "en": "There is no be between may and well."
+    }
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "pat": "mp.may-well",
+   "en": "You might well need a second server by fall.",
+   "de": "Es kann gut sein, dass Sie bis zum Herbst einen zweiten Server brauchen.",
+   "chunks": [
+    "you",
+    "might well",
+    "need",
+    "a second server",
+    "by fall"
+   ],
+   "single": "You might well need bildet den ersten Teil; a second server by fall folgt danach.",
+   "why": [
+    "Might well heißt „durchaus möglich“. Danach folgt die Grundform need ohne to.",
+    "Might well means “quite possibly”. The base form need follows, without to."
+   ],
+   "bad": "You might to well need a second server by fall.",
+   "trap": {
+    "tile": "might well",
+    "instead": "might to well",
+    "why": {
+     "de": "Nach might steht kein to.",
+     "en": "After might there is no to."
+    }
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "pat": "mp.bound",
+   "en": "Prices are bound to rise after the merger.",
+   "de": "Die Preise werden nach der Fusion mit Sicherheit steigen.",
+   "chunks": [
+    "prices",
+    "are bound",
+    "to rise",
+    "after",
+    "the merger"
+   ],
+   "single": "Prices are bound bildet den Anfang; to rise after the merger folgt danach.",
+   "why": [
+    "Be bound to nennt etwas fast Sicheres. Nach bound steht to und die Grundform rise.",
+    "Be bound to names something almost certain. After bound comes to and the base form rise."
+   ],
+   "bad": "Prices are bound rising after the merger.",
+   "trap": {
+    "tile": "to rise",
+    "instead": "rising",
+    "why": {
+     "de": "Nach bound steht to + Grundform, kein -ing.",
+     "en": "After bound comes to + base form, no -ing."
+    }
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "pat": "mp.bound",
+   "en": "Someone is bound to notice the error.",
+   "de": "Irgendjemand wird den Fehler ganz sicher bemerken.",
+   "chunks": [
+    "someone",
+    "is",
+    "bound",
+    "to notice",
+    "the error"
+   ],
+   "single": "Someone is bound bildet den Anfang; to notice the error folgt danach.",
+   "why": [
+    "Is bound to ist fast sicher. Nach bound steht to und die Grundform notice.",
+    "Is bound to is almost certain. After bound comes to and the base form notice."
+   ],
+   "bad": "Someone is bound notice the error.",
+   "trap": {
+    "tile": "to notice",
+    "instead": "notice",
+    "why": {
+     "de": "Nach bound braucht es to.",
+     "en": "After bound you need to."
+    }
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "pat": "mp.likely",
+   "en": "The update is likely to be ready on Friday.",
+   "de": "Das Update wird voraussichtlich am Freitag fertig.",
+   "chunks": [
+    "the update",
+    "is likely",
+    "to be",
+    "ready",
+    "on Friday"
+   ],
+   "single": "The update is likely bildet den Anfang; to be ready on Friday folgt danach.",
+   "why": [
+    "Nach is likely steht to und die Grundform be. Das Subjekt the update steht vorn.",
+    "After is likely comes to and the base form be. The subject the update comes first."
+   ],
+   "bad": "The update is likely that it is ready on Friday.",
+   "trap": {
+    "tile": "to be",
+    "instead": "that it is",
+    "why": {
+     "de": "Mit dem Subjekt vorn folgt likely to, kein that-Satz.",
+     "en": "With the subject first, likely to follows, not a that-clause."
+    }
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "pat": "mp.likely",
+   "en": "The delay is unlikely to affect the launch.",
+   "de": "Die Verzögerung wird den Start wahrscheinlich nicht beeinträchtigen.",
+   "chunks": [
+    "the delay",
+    "is",
+    "unlikely",
+    "to affect",
+    "the launch"
+   ],
+   "single": "The delay is unlikely bildet den Anfang; to affect the launch folgt danach.",
+   "why": [
+    "Unlikely ist schon verneint. Nach unlikely steht to und die Grundform affect.",
+    "Unlikely is already negative. After unlikely comes to and the base form affect."
+   ],
+   "bad": "The delay is not likely affect the launch.",
+   "trap": {
+    "tile": "to affect",
+    "instead": "affect",
+    "why": {
+     "de": "Nach unlikely braucht es to.",
+     "en": "After unlikely you need to."
+    }
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "pat": "mp.chance",
+   "en": "There is a good chance that the supplier will agree.",
+   "de": "Es besteht eine gute Chance, dass der Lieferant zustimmt.",
+   "chunks": [
+    "there is",
+    "a good chance",
+    "that",
+    "the supplier",
+    "will agree"
+   ],
+   "single": "There is a good chance bildet den Anfang; that the supplier will agree folgt danach.",
+   "why": [
+    "There is a good chance nennt eine Möglichkeit. Danach folgt ein that-Satz mit dem Subjekt the supplier.",
+    "There is a good chance names a possibility. A that-clause with the subject the supplier follows."
+   ],
+   "bad": "It exists a good chance that the supplier will agree.",
+   "trap": {
+    "tile": "there is",
+    "instead": "it exists",
+    "why": {
+     "de": "Englisch sagt there is, nicht it exists.",
+     "en": "English says there is, not it exists."
+    }
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "pat": "mp.chance",
+   "en": "It is highly probable that costs will rise.",
+   "de": "Es ist sehr wahrscheinlich, dass die Kosten steigen.",
+   "chunks": [
+    "it is",
+    "highly",
+    "probable",
+    "that",
+    "costs",
+    "will rise"
+   ],
+   "single": "It is highly probable bildet den Anfang; that costs will rise folgt danach.",
+   "why": [
+    "Highly verstärkt probable. Danach folgt ein that-Satz mit der Prognose.",
+    "Highly strengthens probable. A that-clause with the forecast follows."
+   ],
+   "bad": "It is high probable that costs will rise.",
+   "trap": {
+    "tile": "highly",
+    "instead": "high",
+    "why": {
+     "de": "Vor einem Adjektiv steht das Adverb highly, nicht high.",
+     "en": "Before an adjective the adverb highly is used, not high."
+    }
+   },
+   "topic": "modals-prob"
+  },
+  {
+   "pat": "np.contact",
+   "en": "This is the most reliable system we have tested.",
+   "de": "Das ist das zuverlässigste System, das wir getestet haben.",
+   "chunks": [
+    "this",
+    "is",
+    "the most reliable",
+    "system",
+    "we",
+    "have tested"
+   ],
+   "single": "This is steht vorn; the most reliable system we have tested folgt danach in dieser Reihenfolge.",
+   "why": [
+    "Nach dem Superlativ system folgt der Satz ohne that: we have tested. Das Pronomen ist Objekt und darf fehlen.",
+    "After the superlative system the clause follows without that: we have tested. The pronoun is the object and may be dropped."
+   ],
+   "bad": "This is the most reliable system what we have tested.",
+   "trap": {
+    "tile": "system",
+    "instead": "system what",
+    "why": {
+     "de": "Nach dem Nomen steht nie what, nur that oder nichts.",
+     "en": "After the noun comes never what, only that or nothing."
+    }
+   },
+   "topic": "noun-phrase"
+  },
+  {
+   "pat": "np.contact",
+   "en": "The report you sent was very helpful.",
+   "de": "Der Bericht, den Sie geschickt haben, war sehr hilfreich.",
+   "chunks": [
+    "the report",
+    "you sent",
+    "was",
+    "very",
+    "helpful"
+   ],
+   "single": "The report you sent bildet das Subjekt; was very helpful folgt danach.",
+   "why": [
+    "You sent ist ein Satz ohne that und gehört direkt hinter das Nomen the report.",
+    "You sent is a clause without that and belongs directly after the noun the report."
+   ],
+   "bad": "The report you sent it was very helpful.",
+   "trap": {
+    "tile": "you sent",
+    "instead": "you sent it",
+    "why": {
+     "de": "Das Objekt steht nur einmal: that ist es schon.",
+     "en": "The object appears only once: that is the object already."
+    }
+   },
+   "topic": "noun-phrase"
+  },
+  {
+   "pat": "np.participle",
+   "en": "All files stored in the cloud are encrypted.",
+   "de": "Alle in der Cloud gespeicherten Dateien sind verschlüsselt.",
+   "chunks": [
+    "all files",
+    "stored",
+    "in the cloud",
+    "are",
+    "encrypted"
+   ],
+   "single": "All files stored in the cloud bildet das Subjekt; are encrypted folgt danach.",
+   "why": [
+    "Das Partizip stored steht direkt hinter dem Nomen files und hat passive Bedeutung.",
+    "The participle stored stands directly after the noun files and has passive meaning."
+   ],
+   "bad": "All files storing in the cloud are encrypted.",
+   "trap": {
+    "tile": "stored",
+    "instead": "storing",
+    "why": {
+     "de": "Die Dateien werden gespeichert: 3. Form, nicht -ing.",
+     "en": "The files are stored: past participle, not -ing."
+    }
+   },
+   "topic": "noun-phrase"
+  },
+  {
+   "pat": "np.participle",
+   "en": "The team working on the migration meets every Monday.",
+   "de": "Das Team, das an der Migration arbeitet, trifft sich jeden Montag.",
+   "chunks": [
+    "the team",
+    "working",
+    "on the migration",
+    "meets",
+    "every Monday"
+   ],
+   "single": "The team working on the migration ist das Subjekt; meets every Monday folgt danach.",
+   "why": [
+    "Das Partizip working ersetzt that is working und steht direkt hinter dem Nomen the team.",
+    "The participle working replaces that is working and stands directly after the noun the team."
+   ],
+   "bad": "The team works on the migration meets every Monday.",
+   "trap": {
+    "tile": "working",
+    "instead": "works",
+    "why": {
+     "de": "Hier steht das aktive Partizip -ing, kein zweites Verb.",
+     "en": "The active participle -ing stands here, not a second verb."
+    }
+   },
+   "topic": "noun-phrase"
+  },
+  {
+   "pat": "np.of-s",
+   "en": "The company's new CEO starts on Monday.",
+   "de": "Der neue Chef der Firma fängt am Montag an.",
+   "chunks": [
+    "the",
+    "company's",
+    "new CEO",
+    "starts",
+    "on Monday"
+   ],
+   "single": "The company's new CEO bildet das Subjekt; starts on Monday folgt danach.",
+   "why": [
+    "Der Besitzer company steht mit ’s vor dem Nomen: the company’s new CEO.",
+    "The owner company stands with ’s before the noun: the company’s new CEO."
+   ],
+   "bad": "The company new CEO starts on Monday.",
+   "trap": {
+    "tile": "company's",
+    "instead": "company",
+    "why": {
+     "de": "Der Besitz braucht ’s.",
+     "en": "Possession needs ’s."
+    }
+   },
+   "topic": "noun-phrase"
+  },
+  {
+   "pat": "np.of-s",
+   "en": "The roof of the building was damaged by the storm.",
+   "de": "Das Dach des Gebäudes wurde durch den Sturm beschädigt.",
+   "chunks": [
+    "the roof",
+    "of the building",
+    "was",
+    "damaged",
+    "by the storm"
+   ],
+   "single": "The roof of the building bildet das Subjekt; was damaged by the storm folgt danach.",
+   "why": [
+    "Bei einem Ding steht of: the roof of the building. Das Passiv folgt mit was damaged.",
+    "With a thing, of is used: the roof of the building. The passive follows with was damaged."
+   ],
+   "bad": "The building roof of was damaged by the storm.",
+   "trap": {
+    "tile": "of the building",
+    "instead": "the building",
+    "why": {
+     "de": "Bei Dingen nimmt man of, nicht ’s.",
+     "en": "With things you use of, not ’s."
+    }
+   },
+   "topic": "noun-phrase"
+  },
+  {
+   "pat": "np.to-inf",
+   "en": "She was the first customer to sign the new contract.",
+   "de": "Sie war die erste Kundin, die den neuen Vertrag unterschrieb.",
+   "chunks": [
+    "she was",
+    "the first",
+    "customer",
+    "to sign",
+    "the new contract"
+   ],
+   "single": "She was the first customer steht vorn; to sign the new contract folgt danach.",
+   "why": [
+    "Nach the first customer folgt to + Grundform: to sign. Das ersetzt den Relativsatz who signed.",
+    "After the first customer comes to + base form: to sign. It replaces who signed."
+   ],
+   "bad": "She was the first customer who to sign the new contract.",
+   "trap": {
+    "tile": "to sign",
+    "instead": "who to sign",
+    "why": {
+     "de": "Entweder who signed oder to sign, nicht beides.",
+     "en": "Either who signed or to sign, not both."
+    }
+   },
+   "topic": "noun-phrase"
+  },
+  {
+   "pat": "np.to-inf",
+   "en": "This is the best way to reduce costs.",
+   "de": "Das ist der beste Weg, die Kosten zu senken.",
+   "chunks": [
+    "this is",
+    "the best way",
+    "to",
+    "reduce",
+    "costs"
+   ],
+   "single": "This is the best way bildet den Anfang; to reduce costs folgt danach.",
+   "why": [
+    "Nach way folgt to + Grundform: to reduce. Das Deutsche sagt „um … zu“, das Englische nur to.",
+    "After way comes to + base form: to reduce. German says “um … zu”, English only to."
+   ],
+   "bad": "This is the best way for reduce costs.",
+   "trap": {
+    "tile": "to",
+    "instead": "for",
+    "why": {
+     "de": "Nach way steht to, nicht for.",
+     "en": "After way comes to, not for."
+    }
+   },
+   "topic": "noun-phrase"
+  },
+  {
+   "pat": "np.post",
+   "en": "We offer a solution tailored to your needs.",
+   "de": "Wir bieten eine auf Ihre Bedürfnisse zugeschnittene Lösung an.",
+   "chunks": [
+    "we",
+    "offer",
+    "a solution",
+    "tailored",
+    "to your needs"
+   ],
+   "single": "We offer a solution bildet den Anfang; tailored to your needs folgt danach.",
+   "why": [
+    "Das Partizip tailored steht mit seiner Ergänzung hinter dem Nomen solution.",
+    "The participle tailored stands with its phrase after the noun solution."
+   ],
+   "bad": "We offer a tailored to your needs solution.",
+   "trap": {
+    "tile": "tailored",
+    "instead": "a tailored",
+    "why": {
+     "de": "Das Partizip mit Ergänzung steht hinter dem Nomen.",
+     "en": "The participle with its phrase stands after the noun."
+    }
+   },
+   "topic": "noun-phrase"
+  },
+  {
+   "pat": "np.post",
+   "en": "The report shows the extent to which costs have risen.",
+   "de": "Der Bericht zeigt, in welchem Maß die Kosten gestiegen sind.",
+   "chunks": [
+    "the report",
+    "shows",
+    "the extent",
+    "to which",
+    "costs have risen"
+   ],
+   "single": "The report shows the extent bildet den Anfang; to which costs have risen folgt danach.",
+   "why": [
+    "Nach the extent folgt die Präposition mit which: to which. Danach steht der Satz.",
+    "After the extent comes the preposition with which: to which. The clause follows."
+   ],
+   "bad": "The report shows the extent to that costs have risen.",
+   "trap": {
+    "tile": "to which",
+    "instead": "to that",
+    "why": {
+     "de": "Nach einer Präposition steht which, nicht that.",
+     "en": "After a preposition which is used, not that."
+    }
+   },
+   "topic": "noun-phrase"
   },
   {
    "pat": "pv.simple",
@@ -7375,6 +8763,223 @@
    "topic": "pres-simple-cont"
   },
   {
+   "pat": "qn.none",
+   "en": "None of the offers meets our budget.",
+   "de": "Keines der Angebote passt in unser Budget.",
+   "chunks": [
+    "none of",
+    "the offers",
+    "meets",
+    "our",
+    "budget"
+   ],
+   "single": "None of bildet den Anfang; the offers meets our budget folgt danach.",
+   "why": [
+    "None of heißt „keiner von“. Danach folgt das bestimmte Nomen the offers.",
+    "None of means “not one of”. The specific noun the offers follows."
+   ],
+   "bad": "No one of the offers meets our budget.",
+   "trap": {
+    "tile": "none of",
+    "instead": "no one of",
+    "why": {
+     "de": "Für „keiner von“ steht none of.",
+     "en": "For “not one of” none of is used."
+    }
+   },
+   "topic": "quant-neg"
+  },
+  {
+   "pat": "qn.none",
+   "en": "Neither of the managers attended the workshop.",
+   "de": "Keiner der beiden Manager nahm am Workshop teil.",
+   "chunks": [
+    "neither of",
+    "the managers",
+    "attended",
+    "the",
+    "workshop"
+   ],
+   "single": "Neither of bildet den Anfang; the managers attended the workshop folgt danach.",
+   "why": [
+    "Neither of steht bei genau zwei Personen. Danach folgt das Nomen the managers.",
+    "Neither of is used with exactly two people. The noun the managers follows."
+   ],
+   "bad": "Not of the managers attended the workshop.",
+   "trap": {
+    "tile": "neither of",
+    "instead": "not of",
+    "why": {
+     "de": "Für „keiner von beiden“ steht neither of.",
+     "en": "For “neither of the two” neither of is used."
+    }
+   },
+   "topic": "quant-neg"
+  },
+  {
+   "pat": "qn.hardly",
+   "en": "We hardly had any time to prepare for the call.",
+   "de": "Wir hatten kaum Zeit, uns auf das Gespräch vorzubereiten.",
+   "chunks": [
+    "we",
+    "hardly",
+    "had",
+    "any time",
+    "to prepare",
+    "for the call"
+   ],
+   "single": "We hardly had bildet den Anfang; any time to prepare for the call folgt danach.",
+   "why": [
+    "Hardly steht vor dem Verb und ist schon verneint. Danach folgt any time.",
+    "Hardly stands before the verb and is already negative. Any time follows."
+   ],
+   "bad": "We did not hardly have any time to prepare for the call.",
+   "trap": {
+    "tile": "hardly",
+    "instead": "did not hardly",
+    "why": {
+     "de": "Hardly braucht kein zweites not.",
+     "en": "Hardly needs no second not."
+    }
+   },
+   "topic": "quant-neg"
+  },
+  {
+   "pat": "qn.hardly",
+   "en": "The team scarcely ever misses a deadline.",
+   "de": "Das Team verpasst fast nie eine Frist.",
+   "chunks": [
+    "the team",
+    "scarcely ever",
+    "misses",
+    "a",
+    "deadline"
+   ],
+   "single": "The team scarcely ever bildet den Anfang; misses a deadline folgt danach.",
+   "why": [
+    "Scarcely ever heißt „fast nie“ und ist schon verneint.",
+    "Scarcely ever means “almost never” and is already negative."
+   ],
+   "bad": "The team does not scarcely ever miss a deadline.",
+   "trap": {
+    "tile": "scarcely ever",
+    "instead": "does not scarcely ever",
+    "why": {
+     "de": "Scarcely braucht kein not.",
+     "en": "Scarcely needs no not."
+    }
+   },
+   "topic": "quant-neg"
+  },
+  {
+   "pat": "qn.no-longer",
+   "en": "We no longer offer this service to private customers.",
+   "de": "Wir bieten diesen Service privaten Kunden nicht mehr an.",
+   "chunks": [
+    "we",
+    "no longer",
+    "offer",
+    "this service",
+    "to private customers"
+   ],
+   "single": "We no longer bildet den Anfang; offer this service to private customers folgt danach.",
+   "why": [
+    "No longer steht vor dem Verb und heißt „nicht mehr“.",
+    "No longer stands before the verb and means “not anymore”."
+   ],
+   "bad": "We no more offer this service to private customers.",
+   "trap": {
+    "tile": "no longer",
+    "instead": "no more",
+    "why": {
+     "de": "Für „nicht mehr“ bei der Zeit steht no longer.",
+     "en": "For “not anymore” in time no longer is used."
+    }
+   },
+   "topic": "quant-neg"
+  },
+  {
+   "pat": "qn.no-longer",
+   "en": "He does not work here anymore.",
+   "de": "Er arbeitet nicht mehr hier.",
+   "chunks": [
+    "he",
+    "does not",
+    "work",
+    "here",
+    "anymore"
+   ],
+   "single": "He does not work bildet den Anfang; here anymore folgt danach.",
+   "why": [
+    "Nach does not steht am Ende anymore und bedeutet „nicht mehr“.",
+    "After does not, anymore at the end means “not anymore”."
+   ],
+   "bad": "He does not work here no more.",
+   "trap": {
+    "tile": "anymore",
+    "instead": "no more",
+    "why": {
+     "de": "Nach not steht kein zweites no.",
+     "en": "After not no second no follows."
+    }
+   },
+   "topic": "quant-neg"
+  },
+  {
+   "pat": "qn.number",
+   "en": "A number of customers have complained about the delay.",
+   "de": "Einige Kunden haben sich über die Verzögerung beschwert.",
+   "chunks": [
+    "a number of",
+    "customers",
+    "have",
+    "complained",
+    "about the delay"
+   ],
+   "single": "A number of customers bildet den Anfang; have complained about the delay folgt danach.",
+   "why": [
+    "A number of heißt „einige“ und nimmt das Verb im Plural: have.",
+    "A number of means “several” and takes a plural verb: have."
+   ],
+   "bad": "A number of customers has complained about the delay.",
+   "trap": {
+    "tile": "have",
+    "instead": "has",
+    "why": {
+     "de": "Bei a number of steht das Verb im Plural.",
+     "en": "With a number of the verb is plural."
+    }
+   },
+   "topic": "quant-neg"
+  },
+  {
+   "pat": "qn.number",
+   "en": "The number of complaints has fallen since March.",
+   "de": "Die Zahl der Beschwerden ist seit März gesunken.",
+   "chunks": [
+    "the number of",
+    "complaints",
+    "has",
+    "fallen",
+    "since March"
+   ],
+   "single": "The number of complaints bildet den Anfang; has fallen since March folgt danach.",
+   "why": [
+    "The number of meint die Zahl selbst und nimmt das Verb im Singular: has.",
+    "The number of means the figure itself and takes a singular verb: has."
+   ],
+   "bad": "The number of complaints have fallen since March.",
+   "trap": {
+    "tile": "has",
+    "instead": "have",
+    "why": {
+     "de": "Bei the number of steht das Verb im Singular.",
+     "en": "With the number of the verb is singular."
+    }
+   },
+   "topic": "quant-neg"
+  },
+  {
    "pat": "qu.indirect",
    "en": "Could you tell me what time the vendor demo starts on Friday?",
    "de": "Können Sie mir sagen, wann die Anbieter-Demo am Freitag beginnt?",
@@ -8220,6 +9825,222 @@
     }
    },
    "topic": "reported"
+  },
+  {
+   "pat": "sa.trend",
+   "en": "We are seeing a clear rise in demand this quarter.",
+   "de": "Wir erleben in diesem Quartal einen deutlichen Anstieg der Nachfrage.",
+   "chunks": [
+    "we",
+    "are seeing",
+    "a clear rise",
+    "in demand",
+    "this quarter"
+   ],
+   "single": "We are seeing bildet den Anfang; a clear rise in demand this quarter folgt danach.",
+   "why": [
+    "Are seeing ist die Verlaufsform für eine Entwicklung, die gerade läuft. Danach folgt das Objekt a clear rise.",
+    "Are seeing is the continuous for a change under way. The object a clear rise follows."
+   ],
+   "bad": "We see a clear rise in demand this quarter.",
+   "trap": {
+    "tile": "are seeing",
+    "instead": "see",
+    "why": {
+     "de": "Für einen laufenden Trend steht die Verlaufsform.",
+     "en": "For a trend under way the continuous is used."
+    }
+   },
+   "topic": "stative-adv"
+  },
+  {
+   "pat": "sa.trend",
+   "en": "Customers are increasingly asking for shorter contracts.",
+   "de": "Kunden fragen immer häufiger nach kürzeren Verträgen.",
+   "chunks": [
+    "customers",
+    "are",
+    "increasingly",
+    "asking",
+    "for shorter contracts"
+   ],
+   "single": "Customers are increasingly bildet den Anfang; asking for shorter contracts folgt danach.",
+   "why": [
+    "Increasingly steht zwischen are und asking. Die Verlaufsform zeigt den Trend.",
+    "Increasingly stands between are and asking. The continuous shows the trend."
+   ],
+   "bad": "Customers are increasingly ask for shorter contracts.",
+   "trap": {
+    "tile": "asking",
+    "instead": "ask",
+    "why": {
+     "de": "Nach are steht die -ing-Form.",
+     "en": "After are comes the -ing form."
+    }
+   },
+   "topic": "stative-adv"
+  },
+  {
+   "pat": "sa.soft",
+   "en": "I was wondering if you could send me the file.",
+   "de": "Ich habe mich gefragt, ob Sie mir die Datei schicken könnten.",
+   "chunks": [
+    "I was wondering",
+    "if",
+    "you could",
+    "send me",
+    "the file"
+   ],
+   "single": "I was wondering bildet den Anfang; if you could send me the file folgt danach.",
+   "why": [
+    "Nach was wondering folgt if und normale Satzstellung: if you could send me.",
+    "After was wondering comes if and normal word order: if you could send me."
+   ],
+   "bad": "I was wondering could you send me the file.",
+   "trap": {
+    "tile": "if",
+    "instead": "could you",
+    "why": {
+     "de": "Nach wondering steht if und das Subjekt vor could.",
+     "en": "After wondering comes if and the subject before could."
+    }
+   },
+   "topic": "stative-adv"
+  },
+  {
+   "pat": "sa.soft",
+   "en": "We are hoping to hear from you by Friday.",
+   "de": "Wir hoffen, bis Freitag von Ihnen zu hören.",
+   "chunks": [
+    "we",
+    "are hoping",
+    "to hear",
+    "from you",
+    "by Friday"
+   ],
+   "single": "We are hoping bildet den Anfang; to hear from you by Friday folgt danach.",
+   "why": [
+    "Are hoping macht den Wunsch weicher als hope. Danach folgt to hear.",
+    "Are hoping makes the wish softer than hope. To hear follows."
+   ],
+   "bad": "We hoping to hear from you by Friday.",
+   "trap": {
+    "tile": "are hoping",
+    "instead": "hoping",
+    "why": {
+     "de": "Ohne are fehlt das Hilfsverb der Verlaufsform.",
+     "en": "Without are the auxiliary of the continuous is missing."
+    }
+   },
+   "topic": "stative-adv"
+  },
+  {
+   "pat": "sa.being",
+   "en": "You are being unreasonable about the deadline.",
+   "de": "Sie sind, was die Frist betrifft, gerade unvernünftig.",
+   "chunks": [
+    "you",
+    "are being",
+    "unreasonable",
+    "about",
+    "the deadline"
+   ],
+   "single": "You are being bildet den Anfang; unreasonable about the deadline folgt danach.",
+   "why": [
+    "Are being zeigt Verhalten für begrenzte Zeit. Danach folgt das Adjektiv unreasonable.",
+    "Are being shows behavior for a limited time. The adjective unreasonable follows."
+   ],
+   "bad": "You are being unreasonably about the deadline.",
+   "trap": {
+    "tile": "unreasonable",
+    "instead": "unreasonably",
+    "why": {
+     "de": "Nach being steht ein Adjektiv, kein Adverb.",
+     "en": "After being comes an adjective, not an adverb."
+    }
+   },
+   "topic": "stative-adv"
+  },
+  {
+   "pat": "sa.being",
+   "en": "He is always complaining about the coffee.",
+   "de": "Er beschwert sich ständig über den Kaffee.",
+   "chunks": [
+    "he",
+    "is always",
+    "complaining",
+    "about",
+    "the coffee"
+   ],
+   "single": "He is always bildet den Anfang; complaining about the coffee folgt danach.",
+   "why": [
+    "Always steht zwischen is und -ing und zeigt den Ärger über die Gewohnheit.",
+    "Always stands between is and -ing and shows the annoyance at the habit."
+   ],
+   "bad": "He always is complaining about the coffee.",
+   "trap": {
+    "tile": "is always",
+    "instead": "always is",
+    "why": {
+     "de": "Always steht hinter is, nicht davor.",
+     "en": "Always stands after is, not before it."
+    }
+   },
+   "topic": "stative-adv"
+  },
+  {
+   "pat": "sa.no-ing",
+   "en": "I understand your concern about the delivery date.",
+   "de": "Ich verstehe Ihr Anliegen zum Liefertermin.",
+   "chunks": [
+    "I",
+    "understand",
+    "your concern",
+    "about",
+    "the delivery date"
+   ],
+   "single": "I understand bildet den Anfang; your concern about the delivery date folgt danach.",
+   "why": [
+    "Understand ist ein Zustandsverb und bleibt in der einfachen Form.",
+    "Understand is a stative verb and stays in the simple form."
+   ],
+   "bad": "I am understanding your concern about the delivery date.",
+   "trap": {
+    "tile": "understand",
+    "instead": "am understanding",
+    "why": {
+     "de": "Zustandsverben nehmen keine Verlaufsform.",
+     "en": "Stative verbs take no continuous."
+    }
+   },
+   "topic": "stative-adv"
+  },
+  {
+   "pat": "sa.no-ing",
+   "en": "This folder belongs to the finance team.",
+   "de": "Dieser Ordner gehört dem Finanzteam.",
+   "chunks": [
+    "this folder",
+    "belongs",
+    "to",
+    "the",
+    "finance team"
+   ],
+   "single": "This folder belongs bildet den Anfang; to the finance team folgt danach.",
+   "why": [
+    "Belong ist ein Zustandsverb und bleibt einfach: belongs to.",
+    "Belong is a stative verb and stays simple: belongs to."
+   ],
+   "bad": "This folder is belonging to the finance team.",
+   "trap": {
+    "tile": "belongs",
+    "instead": "is belonging",
+    "why": {
+     "de": "Besitz steht in der einfachen Form.",
+     "en": "Possession is expressed in the simple form."
+    }
+   },
+   "topic": "stative-adv"
   },
   {
    "pat": "tc.present-for-future",

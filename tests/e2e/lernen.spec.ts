@@ -26,12 +26,12 @@ test('Grammatik-Reiter: Weiter-Karte, Pfad mit allen Themen, Fehler korrigieren,
   await expect(hub.getByRole('heading', { name: 'Grammatik', level: 1 })).toBeVisible();
   await expect(page.getByTestId('hub-next-topic')).toBeVisible();
   await expect(page.getByTestId('hub-next-start')).toBeVisible();
-  // Der Pfad: alle 39 Themen in Lehrreihenfolge, je Thema ein Zustand.
+  // Der Pfad: alle 47 Themen in Lehrreihenfolge, je Thema ein Zustand.
   // Handy: nur das aktuelle Kapitel ist offen („Du bist hier“); alle sieben aufklappen.
   await expect(page.getByTestId('chapter')).toHaveCount(7);
   await expect(page.getByTestId('chapter-here')).toHaveCount(1);
   await openAllChapters(page);
-  await expect(page.locator('[data-testid="topic"]')).toHaveCount(39);
+  await expect(page.locator('[data-testid="topic"]')).toHaveCount(47);
   const states = await page.getByTestId('topic').evaluateAll((els) => els.map((e) => e.getAttribute('data-state')));
   expect(new Set(states)).toEqual(new Set(['new', 'learning', 'safe', 'firm'].filter((x) => states.includes(x))));
   expect(states.every((x) => ['new', 'learning', 'safe', 'firm'].includes(x ?? ''))).toBe(true);
@@ -192,7 +192,7 @@ test('Werkzeug der Woche: grammar?topic=c1-hedging öffnet das Themenblatt, daru
   const { errors } = await bootAt(page, { name: 'grammar', topic: 'c1-hedging' });
   await expect(page.getByTestId('rule-sheet')).toHaveAttribute('data-topic', 'c1-hedging');
   await page.keyboard.press('Escape');
-  await expect(page.locator('[data-testid="topic"]')).toHaveCount(39);
+  await expect(page.locator('[data-testid="topic"]')).toHaveCount(47);
   expect(errors).toEqual([]);
 });
 

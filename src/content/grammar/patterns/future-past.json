@@ -1,0 +1,312 @@
+{
+ "topic": "future-past",
+ "canDo": {
+  "de": "Ich kann aus der Vergangenheit auf Späteres blicken: Pläne (was going to), unmittelbar Bevorstehendes (was about to), spätere Folgen (would) und Vorgesehenes (was to).",
+  "en": "I can look from the past at what came later: plans (was going to), what was imminent (was about to), later results (would) and what was meant to be (was to)."
+ },
+ "order": [
+  "fp.was-going",
+  "fp.about-to",
+  "fp.would-narr",
+  "fp.was-to"
+ ],
+ "introPlan": [
+  [
+   "fp.was-going",
+   "fp.about-to"
+  ],
+  [
+   "fp.would-narr",
+   "fp.was-to"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Ging es um einen Plan von damals? Nimm was going to.",
+   "Stand es kurz bevor, dann kam etwas dazwischen? Nimm was about to + when.",
+   "Blickst du erzählend auf Späteres? Nimm would. War es vorgesehen? Nimm was to."
+  ],
+  "en": [
+   "Was it a plan from back then? Use was going to.",
+   "Was it just about to happen, then something intervened? Use was about to + when.",
+   "Do you look ahead while telling a story? Use would. Was it meant to be? Use was to."
+  ]
+ },
+ "patterns": [
+  {
+   "id": "fp.was-going",
+   "name": {
+    "de": "was going to · der Plan von damals",
+    "en": "was going to · the plan back then"
+   },
+   "form": {
+    "de": "was / were going to + Grundform",
+    "en": "was / were going to + base form"
+   },
+   "use": {
+    "de": "Mit was going to nennst du einen Plan aus der Vergangenheit. Oft kam es anders: „We were going to launch in May, but the supplier was late.“",
+    "en": "With was going to you name a plan from the past. Often it turned out differently: “We were going to launch in May, but the supplier was late.”"
+   },
+   "signals": [
+    "was going to",
+    "were going to",
+    "had been going to"
+   ],
+   "ex": [
+    {
+     "en": "We were going to launch in May, but the supplier was late.",
+     "de": "Wir wollten im Mai starten, aber der Lieferant war spät dran.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I was going to call you, but the line was busy.",
+     "de": "Ich wollte dich anrufen, aber die Leitung war besetzt.",
+     "ctx": "talk"
+    },
+    {
+     "en": "She said she was going to resign.",
+     "de": "Sie sagte, sie wolle kündigen.",
+     "ctx": "mail"
+    }
+   ],
+   "trap": {
+    "bad": "We are going to launch in May, but the supplier was late.",
+    "good": "We were going to launch in May, but the supplier was late.",
+    "cause": {
+     "de": "Ein Plan aus der Vergangenheit braucht was oder were going to. Das Hilfsverb are gehört in die Gegenwart.",
+     "en": "A plan from the past needs was or were going to. The auxiliary are belongs to the present."
+    }
+   },
+   "contrast": {
+    "with": "fp.about-to",
+    "a": "I was going to leave.",
+    "b": "I was about to leave.",
+    "diff": {
+     "de": "Was going to nennt einen Plan. Was about to heißt: kurz davor, es jetzt zu tun.",
+     "en": "Was going to names a plan. Was about to means: on the point of doing it now."
+    }
+   },
+   "ccq": [
+    {
+     "s": "We were going to launch in May.",
+     "q": {
+      "de": "Hat der Start vielleicht nicht geklappt?",
+      "en": "Did the launch perhaps not work out?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Geht es um einen Plan von damals? Dann passt was going to.",
+    "en": "Is it about a plan from back then? Then was going to fits."
+   }
+  },
+  {
+   "id": "fp.about-to",
+   "name": {
+    "de": "was about to · gerade im Begriff",
+    "en": "was about to · on the point of"
+   },
+   "form": {
+    "de": "was / were about to + Grundform (… when …)",
+    "en": "was / were about to + base form (… when …)"
+   },
+   "use": {
+    "de": "Was about to heißt: Die Handlung stand unmittelbar bevor, dann kam etwas dazwischen. Oft folgt ein when-Satz: „I was about to leave when the client called.“",
+    "en": "Was about to means: the action was just about to happen, then something intervened. A when-clause often follows: “I was about to leave when the client called.”"
+   },
+   "signals": [
+    "was about to",
+    "were about to",
+    "about to"
+   ],
+   "ex": [
+    {
+     "en": "I was about to leave when the client called.",
+     "de": "Ich wollte gerade gehen, als der Kunde anrief.",
+     "ctx": "talk"
+    },
+    {
+     "en": "We were about to sign when the lawyer found an error.",
+     "de": "Wir wollten gerade unterschreiben, als der Anwalt einen Fehler fand.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "The meeting was about to start when the power failed.",
+     "de": "Die Besprechung sollte gerade beginnen, als der Strom ausfiel.",
+     "ctx": "mail"
+    }
+   ],
+   "trap": {
+    "bad": "I was about leaving when the client called.",
+    "good": "I was about to leave when the client called.",
+    "cause": {
+     "de": "Das deutsche „gerade am Gehen“ führt zu „about leaving“. Englisch sagt about to und die Grundform.",
+     "en": "The German “gerade am Gehen” leads to “about leaving”. English says about to and the base form."
+    }
+   },
+   "contrast": {
+    "with": "fp.was-going",
+    "a": "I was about to leave.",
+    "b": "I was going to leave.",
+    "diff": {
+     "de": "Was about to heißt: kurz davor. Was going to nennt einen Plan.",
+     "en": "Was about to means: just before. Was going to names a plan."
+    }
+   },
+   "ccq": [
+    {
+     "s": "I was about to leave when she called.",
+     "q": {
+      "de": "War ich noch da, als sie anrief?",
+      "en": "Was I still there when she called?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Stand die Handlung kurz bevor? Dann passt was about to, oft mit when.",
+    "en": "Was the action just about to happen? Then was about to fits, often with when."
+   }
+  },
+  {
+   "id": "fp.would-narr",
+   "name": {
+    "de": "would · später geschah es",
+    "en": "would · later it happened"
+   },
+   "form": {
+    "de": "would (later / soon / eventually) + Grundform",
+    "en": "would (later / soon / eventually) + base form"
+   },
+   "use": {
+    "de": "Beim Erzählen blickst du von einem Punkt der Vergangenheit auf Späteres: „She joined in 2015 and would later lead the office.“ Auch nach Verben wie promised steht would statt will.",
+    "en": "When telling a story you look from a point in the past at something later: “She joined in 2015 and would later lead the office.” After verbs like promised too, would replaces will."
+   },
+   "signals": [
+    "would later",
+    "would soon",
+    "would eventually",
+    "would go on to",
+    "promised that he would"
+   ],
+   "ex": [
+    {
+     "en": "She joined the firm in 2015 and would later lead the Berlin office.",
+     "de": "Sie kam 2015 zur Firma und leitete später das Berliner Büro.",
+     "ctx": "talk"
+    },
+    {
+     "en": "He promised that he would send the report by Monday.",
+     "de": "Er versprach, den Bericht bis Montag zu schicken.",
+     "ctx": "mail"
+    },
+    {
+     "en": "The product would go on to win several awards.",
+     "de": "Das Produkt gewann später mehrere Preise.",
+     "ctx": "meeting"
+    }
+   ],
+   "trap": {
+    "bad": "In 2015 she joined the firm and will later lead the Berlin office.",
+    "good": "In 2015 she joined the firm and would later lead the Berlin office.",
+    "cause": {
+     "de": "Wer aus der Vergangenheit auf Späteres blickt, braucht would. Will gehört in die Gegenwart.",
+     "en": "If you look from the past at something later, you need would. Will belongs to the present."
+    }
+   },
+   "contrast": {
+    "with": "fp.was-to",
+    "a": "She would later lead the office.",
+    "b": "She was to lead the office.",
+    "diff": {
+     "de": "Would zeigt nur, dass es später geschah. Was to sagt, dass es so vorgesehen war.",
+     "en": "Would shows only that it happened later. Was to says it was meant to be."
+    }
+   },
+   "ccq": [
+    {
+     "s": "She would later lead the office.",
+     "q": {
+      "de": "Geschah es später?",
+      "en": "Did it happen later?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Blickst du aus der Vergangenheit auf Späteres? Dann passt would, nicht will.",
+    "en": "Do you look from the past at something later? Then would fits, not will."
+   }
+  },
+  {
+   "id": "fp.was-to",
+   "name": {
+    "de": "was to · vorgesehen",
+    "en": "was to · meant to"
+   },
+   "form": {
+    "de": "was / were to + Grundform · was / were to have + 3. Form",
+    "en": "was / were to + base form · was / were to have + participle"
+   },
+   "use": {
+    "de": "Was to nennt, was vorgesehen war oder bestimmt schien: „The new office was to open in June.“ Mit was to have + 3. Form sagst du, dass es nicht geschah. Im Alltag sagt man meist was supposed to, was to klingt förmlich.",
+    "en": "Was to names what was planned or seemed destined: “The new office was to open in June.” With was to have + participle you say it did not happen. In everyday speech people mostly say was supposed to, was to sounds formal."
+   },
+   "signals": [
+    "was to",
+    "were to",
+    "was to have",
+    "was never to"
+   ],
+   "ex": [
+    {
+     "en": "The new office was to open in June, but the permit was delayed.",
+     "de": "Das neue Büro sollte im Juni eröffnen, aber die Genehmigung verzögerte sich.",
+     "ctx": "mail"
+    },
+    {
+     "en": "She was to become the youngest director in the firm.",
+     "de": "Sie sollte die jüngste Direktorin der Firma werden.",
+     "ctx": "talk"
+    },
+    {
+     "en": "The talks were to have ended on Friday.",
+     "de": "Die Gespräche hätten am Freitag enden sollen.",
+     "ctx": "meeting"
+    }
+   ],
+   "trap": {
+    "bad": "The new office should open in June, but the permit was delayed.",
+    "good": "The new office was to open in June, but the permit was delayed.",
+    "cause": {
+     "de": "Das deutsche „sollte“ wird hier nicht zu should. Für einen Plan in der Vergangenheit gilt was to.",
+     "en": "The German “sollte” does not become should here. For a plan in the past was to is used."
+    }
+   },
+   "contrast": {
+    "with": "fp.would-narr",
+    "a": "She was to lead the office.",
+    "b": "She would later lead the office.",
+    "diff": {
+     "de": "Was to sagt, dass es vorgesehen war. Would zeigt nur, dass es später geschah.",
+     "en": "Was to says it was meant to be. Would shows only that it happened later."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The talks were to end on Friday.",
+     "q": {
+      "de": "Nennt der Satz, was geplant war?",
+      "en": "Does the sentence name what was planned?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Geht es um etwas Vorgesehenes? Dann passt was to, bei einem nicht erfüllten Plan was to have + 3. Form.",
+    "en": "Is it about something meant to happen? Then was to fits, for an unfulfilled plan was to have + participle."
+   }
+  }
+ ]
+}

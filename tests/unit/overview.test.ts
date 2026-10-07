@@ -29,8 +29,8 @@ describe('Übersicht „Dein Stand"', () => {
     expect(ov.vocab.byStage.reduce((a, b) => a + b, 0)).toBe(ov.vocab.total);
     expect(ov.vocab.byStage.every((n) => n > 0)).toBe(true);
     expect(ov.vocab.due).toBeGreaterThan(0);
-    // 16 Themen der alten App + 7 des C1-Werkzeugkastens.
-    expect(ov.grammar.topics).toHaveLength(39);
+    // 16 Themen der alten App + 7 des C1-Werkzeugkastens + 16 des Grammatik-Pfads + 4 neue Themen (P36).
+    expect(ov.grammar.topics).toHaveLength(47);
     expect(ov.grammar.weakest).toHaveLength(3);
     expect(ov.assess).toMatchObject({ cefr: 'B2', lang: 'de' });
   });

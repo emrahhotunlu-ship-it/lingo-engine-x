@@ -1,0 +1,1822 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "kwt-0501",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "inv.negative",
+   "why": {
+    "ok": {
+     "de": "Nach Never am Anfang steht das Hilfsverb vor dem Subjekt: Never have we seen. In normaler Stellung geht auch We have never seen.",
+     "en": "After Never at the start, the auxiliary comes before the subject: Never have we seen. In normal order We have never seen works too."
+    },
+    "wrong": [
+     {
+      "if": [
+       "never",
+       "we",
+       "have",
+       "seen"
+      ],
+      "de": "Nach Never am Anfang kommt have vor we: Never have we seen.",
+      "en": "After Never at the start, have comes before we: Never have we seen."
+     }
+    ]
+   },
+   "lead": "We saw such high demand for the first time.",
+   "key": "NEVER",
+   "before": "",
+   "after": "such high demand.",
+   "keys": [
+    {
+     "a": [
+      "Never have",
+      "Never had",
+      "Never before have",
+      "Never before had"
+     ],
+     "b": [
+      "we seen"
+     ]
+    },
+    {
+     "a": [
+      "We have never",
+      "We had never"
+     ],
+     "b": [
+      "seen"
+     ]
+    }
+   ],
+   "tiles": [
+    "have",
+    "we",
+    "seen"
+   ],
+   "extra": [
+    "has",
+    "been",
+    "saw"
+   ],
+   "traps": [
+    "Never we have seen"
+   ]
+  },
+  {
+   "id": "kwt-0502",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "inv.sooner",
+   "why": {
+    "ok": {
+     "de": "No sooner had we begun the work than … Zu no sooner gehört than.",
+     "en": "No sooner had we begun the work than … No sooner goes with than."
+    },
+    "wrong": [
+     {
+      "if": [
+       "we",
+       "had",
+       "begun"
+      ],
+      "de": "Nach No sooner kommt had vor we: had we begun.",
+      "en": "After No sooner, had comes before we: had we begun."
+     }
+    ]
+   },
+   "lead": "The client changed the requirements right after we began the work.",
+   "key": "HAD",
+   "before": "No sooner",
+   "after": "the work than the client changed the requirements.",
+   "keys": [
+    {
+     "a": [
+      "had"
+     ],
+     "b": [
+      "we begun",
+      "we started"
+     ]
+    }
+   ],
+   "tiles": [
+    "we",
+    "begun"
+   ],
+   "extra": [
+    "when",
+    "did",
+    "have"
+   ],
+   "traps": [
+    "we had begun"
+   ]
+  },
+  {
+   "id": "kwt-0503",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "inv.only",
+   "why": {
+    "ok": {
+     "de": "Only when the data check ends can the system open … Nach Only when kommt can vor das Subjekt.",
+     "en": "Only when the data check ends can the system open … After Only when, can comes before the subject."
+    },
+    "wrong": [
+     {
+      "if": [
+       "the",
+       "system",
+       "can"
+      ],
+      "de": "Nach Only when … kommt can vor das Subjekt: can the system.",
+      "en": "After Only when …, can comes before the subject: can the system."
+     }
+    ]
+   },
+   "lead": "The system will not open to all users until the data check ends.",
+   "key": "CAN",
+   "before": "Only when the data check ends",
+   "after": "open to all users.",
+   "keys": [
+    {
+     "a": [
+      "can"
+     ],
+     "b": [
+      "the system"
+     ]
+    }
+   ],
+   "tiles": [
+    "the",
+    "system"
+   ],
+   "extra": [
+    "did",
+    "if",
+    "will"
+   ],
+   "traps": [
+    "the system can"
+   ]
+  },
+  {
+   "id": "kwt-0504",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "inv.cond",
+   "why": {
+    "ok": {
+     "de": "Should you need … ist eine förmliche Bedingung ohne if und ohne will.",
+     "en": "Should you need … is a formal condition without if and without will."
+    },
+    "wrong": [
+     {
+      "if": [
+       "should",
+       "will"
+      ],
+      "de": "Nach Should you steht die Grundform, kein will.",
+      "en": "After Should you the base form follows, no will."
+     }
+    ]
+   },
+   "lead": "If you need further details, simply reply to this email.",
+   "key": "SHOULD",
+   "before": "",
+   "after": "further details, simply reply to this email.",
+   "keys": [
+    {
+     "a": [
+      "Should"
+     ],
+     "b": [
+      "you need"
+     ]
+    }
+   ],
+   "tiles": [
+    "you",
+    "need"
+   ],
+   "extra": [
+    "will",
+    "would",
+    "if"
+   ],
+   "traps": [
+    "Should you will need"
+   ]
+  },
+  {
+   "id": "kwt-0505",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "inv.cond",
+   "why": {
+    "ok": {
+     "de": "Had it not been for + Nomen heißt „wenn nicht … gewesen wäre“ und bezieht sich auf die Vergangenheit.",
+     "en": "Had it not been for + noun means “if it had not been for” and refers to the past."
+    },
+    "wrong": []
+   },
+   "lead": "Without the support of our partners, we could not have finished on time.",
+   "key": "HAD",
+   "before": "",
+   "after": "the support of our partners, we could not have finished on time.",
+   "keys": [
+    {
+     "a": [
+      "Had it"
+     ],
+     "b": [
+      "not been for"
+     ]
+    }
+   ],
+   "tiles": [
+    "it",
+    "not",
+    "been",
+    "for"
+   ],
+   "extra": [
+    "was",
+    "were",
+    "without"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0506",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "inv.sooner",
+   "why": {
+    "ok": {
+     "de": "Hardly had we opened … when … Nach Hardly steht had vor dem Subjekt.",
+     "en": "Hardly had we opened … when … After Hardly, had stands before the subject."
+    },
+    "wrong": [
+     {
+      "if": [
+       "we",
+       "had",
+       "opened"
+      ],
+      "de": "Nach Hardly kommt had vor we: had we opened.",
+      "en": "After Hardly, had comes before we: had we opened."
+     }
+    ]
+   },
+   "lead": "The phone rang right after we opened the report.",
+   "key": "HAD",
+   "before": "Hardly",
+   "after": "the report when the phone rang.",
+   "keys": [
+    {
+     "a": [
+      "had"
+     ],
+     "b": [
+      "we opened"
+     ]
+    }
+   ],
+   "tiles": [
+    "we",
+    "opened"
+   ],
+   "extra": [
+    "has",
+    "did",
+    "than"
+   ],
+   "traps": [
+    "we had opened"
+   ]
+  },
+  {
+   "id": "kwt-0507",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "inv.negative",
+   "why": {
+    "ok": {
+     "de": "Nach Never am Anfang steht das Hilfsverb vor dem Subjekt: Never have I felt. In normaler Stellung geht auch I have never felt.",
+     "en": "After Never at the start, the auxiliary comes before the subject: Never have I felt. In normal order I have never felt works too."
+    },
+    "wrong": [
+     {
+      "if": [
+       "never",
+       "i",
+       "have",
+       "felt"
+      ],
+      "de": "Nach Never am Anfang kommt have vor I: Never have I felt.",
+      "en": "After Never at the start, have comes before I: Never have I felt."
+     }
+    ]
+   },
+   "lead": "This was the first time I felt so tired after such a short hike.",
+   "key": "NEVER",
+   "before": "",
+   "after": "so tired after such a short hike.",
+   "keys": [
+    {
+     "a": [
+      "Never have",
+      "Never had",
+      "Never before have",
+      "Never before had"
+     ],
+     "b": [
+      "I felt"
+     ]
+    },
+    {
+     "a": [
+      "I have never",
+      "I had never"
+     ],
+     "b": [
+      "felt"
+     ]
+    }
+   ],
+   "tiles": [
+    "have",
+    "I",
+    "felt"
+   ],
+   "extra": [
+    "has",
+    "did",
+    "been"
+   ],
+   "traps": [
+    "Never I have felt"
+   ]
+  },
+  {
+   "id": "kwt-0508",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "inv.only",
+   "why": {
+    "ok": {
+     "de": "Only after you have rung the bell can you enter … Nach dem Nebensatz steht can vor dem Subjekt.",
+     "en": "Only after you have rung the bell can you enter … After the clause, can comes before the subject."
+    },
+    "wrong": [
+     {
+      "if": [
+       "you",
+       "can",
+       "enter"
+      ],
+      "de": "Nach dem Nebensatz kommt can vor das Subjekt: can you enter.",
+      "en": "After the clause, can comes before the subject: can you enter."
+     }
+    ]
+   },
+   "lead": "You are not allowed into the garden before you have rung the bell.",
+   "key": "CAN",
+   "before": "Only after you have rung the bell",
+   "after": "the garden.",
+   "keys": [
+    {
+     "a": [
+      "can"
+     ],
+     "b": [
+      "you enter"
+     ]
+    }
+   ],
+   "tiles": [
+    "you",
+    "enter"
+   ],
+   "extra": [
+    "did",
+    "will",
+    "had"
+   ],
+   "traps": [
+    "you can enter"
+   ]
+  },
+  {
+   "id": "kwt-0509",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "inv.cond",
+   "why": {
+    "ok": {
+     "de": "Should you be … ist eine förmliche Bedingung ohne if und ohne will.",
+     "en": "Should you be … is a formal condition without if and without will."
+    },
+    "wrong": [
+     {
+      "if": [
+       "should",
+       "will"
+      ],
+      "de": "Nach Should you steht die Grundform, kein will.",
+      "en": "After Should you the base form follows, no will."
+     }
+    ]
+   },
+   "lead": "If you cannot attend the workshop, please let us know in advance.",
+   "key": "SHOULD",
+   "before": "",
+   "after": "unable to attend the workshop, please let us know in advance.",
+   "keys": [
+    {
+     "a": [
+      "Should"
+     ],
+     "b": [
+      "you be"
+     ]
+    }
+   ],
+   "tiles": [
+    "you",
+    "be"
+   ],
+   "extra": [
+    "will",
+    "would",
+    "if"
+   ],
+   "traps": [
+    "Should you will be"
+   ]
+  },
+  {
+   "id": "kwt-0510",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "ep.do-emph",
+   "why": {
+    "ok": {
+     "de": "Das betonte does steht vor der Grundform know.",
+     "en": "The stressed does stands before the base form know."
+    },
+    "wrong": [
+     {
+      "if": [
+       "does",
+       "knows"
+      ],
+      "de": "Nach does steht die Grundform know.",
+      "en": "After does the base form know follows."
+     }
+    ]
+   },
+   "lead": "She truly knows the market better than anyone.",
+   "key": "DOES",
+   "before": "She",
+   "after": "the market better than anyone.",
+   "keys": [
+    {
+     "a": [
+      "truly"
+     ],
+     "b": [
+      "does know"
+     ]
+    },
+    {
+     "a": [
+      "does truly"
+     ],
+     "b": [
+      "know"
+     ]
+    }
+   ],
+   "tiles": [
+    "truly",
+    "know"
+   ],
+   "extra": [
+    "do",
+    "knows",
+    "did"
+   ],
+   "traps": [
+    "truly does knows"
+   ]
+  },
+  {
+   "id": "kwt-0511",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "ep.do-emph",
+   "why": {
+    "ok": {
+     "de": "Das betonte did steht vor der Grundform send.",
+     "en": "The stressed did stands before the base form send."
+    },
+    "wrong": [
+     {
+      "if": [
+       "did",
+       "sent"
+      ],
+      "de": "Nach did steht die Grundform send.",
+      "en": "After did the base form send follows."
+     }
+    ]
+   },
+   "lead": "We definitely sent the invoice on the first of March.",
+   "key": "DID",
+   "before": "We",
+   "after": "the invoice on the first of March.",
+   "keys": [
+    {
+     "a": [
+      "definitely"
+     ],
+     "b": [
+      "did send"
+     ]
+    },
+    {
+     "a": [
+      "did definitely"
+     ],
+     "b": [
+      "send"
+     ]
+    }
+   ],
+   "tiles": [
+    "definitely",
+    "send"
+   ],
+   "extra": [
+    "sent",
+    "do",
+    "had"
+   ],
+   "traps": [
+    "definitely did sent"
+   ]
+  },
+  {
+   "id": "kwt-0512",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "ep.concession",
+   "why": {
+    "ok": {
+     "de": "Much as I would like to help … räumt etwas ein.",
+     "en": "Much as I would like to help … concedes a point."
+    },
+    "wrong": []
+   },
+   "lead": "Although I would like to help, I cannot approve this request.",
+   "key": "MUCH",
+   "before": "",
+   "after": "would like to help, I cannot approve this request.",
+   "keys": [
+    {
+     "a": [
+      "Much as",
+      "As much as"
+     ],
+     "b": [
+      "I"
+     ]
+    }
+   ],
+   "tiles": [
+    "as",
+    "I"
+   ],
+   "extra": [
+    "that",
+    "so",
+    "of"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0513",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "ep.concession",
+   "why": {
+    "ok": {
+     "de": "Surprising as it sounds, … Das Adjektiv steht vor as, dann die normale Stellung.",
+     "en": "Surprising as it sounds, … The adjective stands before as, then the normal order."
+    },
+    "wrong": []
+   },
+   "lead": "Even though it sounds unexpected, the old tool is faster.",
+   "key": "SURPRISING",
+   "before": "",
+   "after": "sounds, the old tool is faster.",
+   "keys": [
+    {
+     "a": [
+      "Surprising as",
+      "As surprising as"
+     ],
+     "b": [
+      "it"
+     ]
+    }
+   ],
+   "tiles": [
+    "as",
+    "it"
+   ],
+   "extra": [
+    "is",
+    "that",
+    "so"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0514",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "ep.so-such",
+   "why": {
+    "ok": {
+     "de": "Such was the demand that … Das Verb steht vor dem Subjekt.",
+     "en": "Such was the demand that … The verb stands before the subject."
+    },
+    "wrong": []
+   },
+   "lead": "The demand was so high that we ran out of stock.",
+   "key": "SUCH",
+   "before": "",
+   "after": "that we ran out of stock.",
+   "keys": [
+    {
+     "a": [
+      "Such was"
+     ],
+     "b": [
+      "the demand"
+     ]
+    }
+   ],
+   "tiles": [
+    "was",
+    "the",
+    "demand"
+   ],
+   "extra": [
+    "so",
+    "a",
+    "very"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0515",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "ep.do-emph",
+   "why": {
+    "ok": {
+     "de": "Das betonte did widerspricht dem Vorwurf und steht vor der Grundform pay.",
+     "en": "The stressed did rebuts the accusation and stands before the base form pay."
+    },
+    "wrong": [
+     {
+      "if": [
+       "did",
+       "paid"
+      ],
+      "de": "Nach did steht die Grundform pay.",
+      "en": "After did the base form pay follows."
+     }
+    ]
+   },
+   "lead": "They claim we never paid, but we settled the invoice in full.",
+   "key": "DID",
+   "before": "They claim we never paid, but we",
+   "after": "the invoice in full.",
+   "keys": [
+    {
+     "a": [
+      "really did"
+     ],
+     "b": [
+      "pay"
+     ]
+    },
+    {
+     "a": [
+      "did actually",
+      "did really"
+     ],
+     "b": [
+      "pay"
+     ]
+    }
+   ],
+   "tiles": [
+    "really",
+    "pay"
+   ],
+   "extra": [
+    "paid",
+    "do",
+    "had"
+   ],
+   "traps": [
+    "really did paid"
+   ]
+  },
+  {
+   "id": "kwt-0516",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "ep.concession",
+   "why": {
+    "ok": {
+     "de": "Tempting as the offer is, … Das Adjektiv steht vor as, dann die normale Stellung.",
+     "en": "Tempting as the offer is, … The adjective stands before as, then the normal order."
+    },
+    "wrong": []
+   },
+   "lead": "Although the offer sounds attractive, I will stay home tonight.",
+   "key": "TEMPTING",
+   "before": "",
+   "after": "is, I will stay home tonight.",
+   "keys": [
+    {
+     "a": [
+      "Tempting as"
+     ],
+     "b": [
+      "the offer"
+     ]
+    }
+   ],
+   "tiles": [
+    "as",
+    "the",
+    "offer"
+   ],
+   "extra": [
+    "that",
+    "so",
+    "it"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0517",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "ep.do-emph",
+   "why": {
+    "ok": {
+     "de": "Das betonte did steht vor der Grundform enjoy.",
+     "en": "The stressed did stands before the base form enjoy."
+    },
+    "wrong": [
+     {
+      "if": [
+       "did",
+       "enjoyed"
+      ],
+      "de": "Nach did steht die Grundform enjoy.",
+      "en": "After did the base form enjoy follows."
+     }
+    ]
+   },
+   "lead": "I really enjoyed the concert last night.",
+   "key": "DID",
+   "before": "I",
+   "after": "the concert last night.",
+   "keys": [
+    {
+     "a": [
+      "really did"
+     ],
+     "b": [
+      "enjoy"
+     ]
+    }
+   ],
+   "tiles": [
+    "really",
+    "enjoy"
+   ],
+   "extra": [
+    "enjoyed",
+    "do",
+    "was"
+   ],
+   "traps": [
+    "really did enjoyed"
+   ]
+  },
+  {
+   "id": "kwt-0518",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "ep.so-such",
+   "why": {
+    "ok": {
+     "de": "Such was the noise that … Das Verb steht vor dem Subjekt.",
+     "en": "Such was the noise that … The verb stands before the subject."
+    },
+    "wrong": [
+     {
+      "if": [
+       "such",
+       "the",
+       "noise",
+       "was"
+      ],
+      "de": "Nach Such am Anfang kommt was vor das Subjekt: Such was the noise.",
+      "en": "After Such at the start, was comes before the subject: Such was the noise."
+     }
+    ]
+   },
+   "lead": "The noise was so loud that the neighbors complained.",
+   "key": "SUCH",
+   "before": "",
+   "after": "that the neighbors complained.",
+   "keys": [
+    {
+     "a": [
+      "Such was"
+     ],
+     "b": [
+      "the noise"
+     ]
+    }
+   ],
+   "tiles": [
+    "was",
+    "the",
+    "noise"
+   ],
+   "extra": [
+    "so",
+    "is",
+    "it"
+   ],
+   "traps": [
+    "Such the noise was"
+   ]
+  },
+  {
+   "id": "kwt-0519",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "el.so-not",
+   "why": {
+    "ok": {
+     "de": "I hope not. Not steht direkt hinter dem Verb und ersetzt den Gedanken.",
+     "en": "I hope not. Not follows the verb directly and replaces the thought."
+    },
+    "wrong": []
+   },
+   "lead": "I hope they will never renew the contract.",
+   "key": "NOT",
+   "before": "Will they renew the contract?",
+   "after": ".",
+   "keys": [
+    {
+     "a": [
+      "I hope"
+     ],
+     "b": [
+      "not"
+     ]
+    }
+   ],
+   "tiles": [
+    "I",
+    "hope"
+   ],
+   "extra": [
+    "so",
+    "that",
+    "no"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0520",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "el.do-so",
+   "why": {
+    "ok": {
+     "de": "Do so ersetzt die Handlung cancel.",
+     "en": "Do so replaces the action cancel."
+    },
+    "wrong": [
+     {
+      "if": [
+       "do",
+       "it",
+       "so"
+      ],
+      "de": "Es heißt do so, nicht do it so.",
+      "en": "It is do so, not do it so."
+     }
+    ]
+   },
+   "lead": "Anyone can cancel before Friday, but cancellations must be made in writing.",
+   "key": "SO",
+   "before": "Anyone can cancel before Friday, but",
+   "after": "in writing.",
+   "keys": [
+    {
+     "a": [
+      "they must",
+      "they have to",
+      "they need to"
+     ],
+     "b": [
+      "do so"
+     ]
+    }
+   ],
+   "tiles": [
+    "they",
+    "must",
+    "do"
+   ],
+   "extra": [
+    "it",
+    "such",
+    "does"
+   ],
+   "traps": [
+    "they must do it so"
+   ]
+  },
+  {
+   "id": "kwt-0521",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "el.do-so",
+   "why": {
+    "ok": {
+     "de": "Did the same ersetzt die Handlung upgraded our servers.",
+     "en": "Did the same replaces the action upgraded our servers."
+    },
+    "wrong": [
+     {
+      "if": [
+       "did",
+       "same"
+      ],
+      "not": [
+       "the"
+      ],
+      "de": "Vor same steht the: the same.",
+      "en": "Before same you need the: the same."
+     }
+    ]
+   },
+   "lead": "Our competitors upgraded their servers in May, and we upgraded ours in June, too.",
+   "key": "SAME",
+   "before": "Our competitors upgraded their servers in May, and we",
+   "after": "in June.",
+   "keys": [
+    {
+     "a": [
+      "did the"
+     ],
+     "b": [
+      "same"
+     ]
+    }
+   ],
+   "tiles": [
+    "did",
+    "the"
+   ],
+   "extra": [
+    "do",
+    "so",
+    "it"
+   ],
+   "traps": [
+    "did same"
+   ]
+  },
+  {
+   "id": "kwt-0522",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "el.one-ones",
+   "why": {
+    "ok": {
+     "de": "One ersetzt das Nomen printer.",
+     "en": "One replaces the noun printer."
+    },
+    "wrong": [
+     {
+      "if": [
+       "ones"
+      ],
+      "de": "Printer ist Singular, deshalb one, nicht ones.",
+      "en": "Printer is singular, so one, not ones."
+     }
+    ]
+   },
+   "lead": "The old printer is broken, so we bought a new printer.",
+   "key": "ONE",
+   "before": "The old printer is broken, so we bought",
+   "after": ".",
+   "keys": [
+    {
+     "a": [
+      "a new"
+     ],
+     "b": [
+      "one"
+     ]
+    }
+   ],
+   "tiles": [
+    "a",
+    "new"
+   ],
+   "extra": [
+    "it",
+    "ones",
+    "other"
+   ],
+   "traps": [
+    "a new ones"
+   ]
+  },
+  {
+   "id": "kwt-0523",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "el.one-ones",
+   "why": {
+    "ok": {
+     "de": "Those of ersetzt das Pluralnomen fees im Vergleich.",
+     "en": "Those of replaces the plural noun fees in the comparison."
+    },
+    "wrong": []
+   },
+   "lead": "The fees of the new provider are lower than the fees of the old provider.",
+   "key": "THOSE",
+   "before": "The fees of the new provider are",
+   "after": "the old provider.",
+   "keys": [
+    {
+     "a": [
+      "lower than",
+      "cheaper than"
+     ],
+     "b": [
+      "those of"
+     ]
+    }
+   ],
+   "tiles": [
+    "lower",
+    "than",
+    "of"
+   ],
+   "extra": [
+    "that",
+    "the",
+    "ones"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0524",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "el.to-aux",
+   "why": {
+    "ok": {
+     "de": "I'd love to. Das Verb join entfällt, to bleibt.",
+     "en": "I'd love to. The verb join is dropped, to stays."
+    },
+    "wrong": []
+   },
+   "lead": "Yes, I would like to join you for lunch, but I have another meeting.",
+   "key": "LOVE",
+   "before": "Would you join us for lunch?",
+   "after": "but I have another meeting.",
+   "keys": [
+    {
+     "a": [
+      "I'd",
+      "I would"
+     ],
+     "b": [
+      "love to"
+     ]
+    }
+   ],
+   "tiles": [
+    "I'd",
+    "to"
+   ],
+   "extra": [
+    "it",
+    "so",
+    "of"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0525",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "el.so-not",
+   "why": {
+    "ok": {
+     "de": "I suppose so. So steht direkt hinter dem Verb und ersetzt den Gedanken.",
+     "en": "I suppose so. So follows the verb directly and replaces the thought."
+    },
+    "wrong": [
+     {
+      "if": [
+       "suppose",
+       "it"
+      ],
+      "de": "Nach suppose steht so, nicht it.",
+      "en": "After suppose comes so, not it."
+     }
+    ]
+   },
+   "lead": "Is Tom coming to the party? I suppose he is coming.",
+   "key": "SO",
+   "before": "Is Tom coming to the party?",
+   "after": ".",
+   "keys": [
+    {
+     "a": [
+      "I suppose"
+     ],
+     "b": [
+      "so"
+     ]
+    }
+   ],
+   "tiles": [
+    "I",
+    "suppose"
+   ],
+   "extra": [
+    "it",
+    "that",
+    "yes"
+   ],
+   "traps": [
+    "I suppose it"
+   ]
+  },
+  {
+   "id": "kwt-0526",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "el.do-so",
+   "why": {
+    "ok": {
+     "de": "Does the same ersetzt die Handlung takes the bus.",
+     "en": "Does the same replaces the action takes the bus."
+    },
+    "wrong": [
+     {
+      "if": [
+       "does",
+       "same"
+      ],
+      "not": [
+       "the"
+      ],
+      "de": "Vor same steht the: the same.",
+      "en": "Before same you need the: the same."
+     }
+    ]
+   },
+   "lead": "My brother always takes the bus, and my sister takes the bus too.",
+   "key": "DOES",
+   "before": "My brother always takes the bus, and my sister",
+   "after": ".",
+   "keys": [
+    {
+     "a": [
+      "does the"
+     ],
+     "b": [
+      "same"
+     ]
+    }
+   ],
+   "tiles": [
+    "the",
+    "same"
+   ],
+   "extra": [
+    "do",
+    "so",
+    "it"
+   ],
+   "traps": [
+    "does same"
+   ]
+  },
+  {
+   "id": "kwt-0527",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "el.one-ones",
+   "why": {
+    "ok": {
+     "de": "The ones ersetzt das Pluralnomen apples.",
+     "en": "The ones replaces the plural noun apples."
+    },
+    "wrong": []
+   },
+   "lead": "These apples are sweeter than the apples that we bought last week.",
+   "key": "ONES",
+   "before": "These apples are sweeter than",
+   "after": "we bought last week.",
+   "keys": [
+    {
+     "a": [
+      "the ones"
+     ],
+     "b": [
+      "that",
+      "which"
+     ]
+    }
+   ],
+   "tiles": [
+    "the",
+    "that"
+   ],
+   "extra": [
+    "those",
+    "it",
+    "what"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0528",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "np.contact",
+   "why": {
+    "ok": {
+     "de": "the most useful training I have attended. Das Pronomen that darf fehlen.",
+     "en": "the most useful training I have attended. The pronoun that may be dropped."
+    },
+    "wrong": []
+   },
+   "lead": "That was the most useful training that I have ever joined.",
+   "key": "ATTENDED",
+   "before": "That was the most useful training",
+   "after": ".",
+   "keys": [
+    {
+     "a": [
+      "I have",
+      "that I have",
+      "I have ever",
+      "I've ever",
+      "that I have ever",
+      "that I've ever"
+     ],
+     "b": [
+      "attended"
+     ]
+    }
+   ],
+   "tiles": [
+    "I",
+    "have"
+   ],
+   "extra": [
+    "that",
+    "what",
+    "which"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0529",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "np.contact",
+   "why": {
+    "ok": {
+     "de": "the proposal they sent us. Das Pronomen that darf fehlen.",
+     "en": "the proposal they sent us. The pronoun that may be dropped."
+    },
+    "wrong": []
+   },
+   "lead": "The proposal which they handed to us last week was far too expensive.",
+   "key": "SENT",
+   "before": "The proposal",
+   "after": "last week was far too expensive.",
+   "keys": [
+    {
+     "a": [
+      "they",
+      "that they",
+      "which they"
+     ],
+     "b": [
+      "sent us",
+      "sent to us"
+     ]
+    }
+   ],
+   "tiles": [
+    "they",
+    "us"
+   ],
+   "extra": [
+    "what",
+    "who",
+    "it"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0530",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "np.participle",
+   "why": {
+    "ok": {
+     "de": "the employees working on the pilot. Das aktive Partizip ersetzt who work.",
+     "en": "the employees working on the pilot. The active participle replaces who work."
+    },
+    "wrong": []
+   },
+   "lead": "The employees who work on the pilot received a bonus.",
+   "key": "WORKING",
+   "before": "The",
+   "after": "the pilot received a bonus.",
+   "keys": [
+    {
+     "a": [
+      "employees"
+     ],
+     "b": [
+      "working on"
+     ]
+    }
+   ],
+   "tiles": [
+    "employees",
+    "on"
+   ],
+   "extra": [
+    "work",
+    "who",
+    "are"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0531",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "np.participle",
+   "why": {
+    "ok": {
+     "de": "the documents sent to the client. Das passive Partizip ersetzt that were sent.",
+     "en": "the documents sent to the client. The passive participle replaces that were sent."
+    },
+    "wrong": []
+   },
+   "lead": "All the documents that we mailed to the client are listed below.",
+   "key": "SENT",
+   "before": "All the",
+   "after": "the client are listed below.",
+   "keys": [
+    {
+     "a": [
+      "documents"
+     ],
+     "b": [
+      "sent to"
+     ]
+    },
+    {
+     "a": [
+      "documents we"
+     ],
+     "b": [
+      "sent to"
+     ]
+    }
+   ],
+   "tiles": [
+    "documents",
+    "to"
+   ],
+   "extra": [
+    "mailing",
+    "that",
+    "are"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0532",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "np.of-s",
+   "why": {
+    "ok": {
+     "de": "Bei Zeitangaben steht ’s: today’s meeting. Danach folgt has been canceled.",
+     "en": "With time words ’s is used: today’s meeting. Has been canceled follows."
+    },
+    "wrong": []
+   },
+   "lead": "We need to know whether the meeting that was planned for today has been canceled.",
+   "key": "TODAY'S",
+   "before": "We need to know whether",
+   "after": "canceled.",
+   "keys": [
+    {
+     "a": [
+      "today's"
+     ],
+     "b": [
+      "meeting has been"
+     ]
+    }
+   ],
+   "tiles": [
+    "meeting",
+    "has",
+    "been"
+   ],
+   "extra": [
+    "of",
+    "the",
+    "from"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0533",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "np.to-inf",
+   "why": {
+    "ok": {
+     "de": "the only applicant to pass. Nach only steht to + Grundform.",
+     "en": "the only applicant to pass. After only comes to + base form."
+    },
+    "wrong": []
+   },
+   "lead": "Ms. Lee was the only applicant who passed all three tests.",
+   "key": "TO",
+   "before": "Ms. Lee was the",
+   "after": "all three tests.",
+   "keys": [
+    {
+     "a": [
+      "only applicant"
+     ],
+     "b": [
+      "to pass"
+     ]
+    }
+   ],
+   "tiles": [
+    "only",
+    "applicant",
+    "pass"
+   ],
+   "extra": [
+    "who",
+    "passed",
+    "for"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0534",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "np.post",
+   "why": {
+    "ok": {
+     "de": "the extent to which. Nach extent steht to which.",
+     "en": "the extent to which. After extent comes to which."
+    },
+    "wrong": []
+   },
+   "lead": "The study measures how strongly customers trust our brand.",
+   "key": "EXTENT",
+   "before": "The study measures the",
+   "after": "customers trust our brand.",
+   "keys": [
+    {
+     "a": [
+      "extent"
+     ],
+     "b": [
+      "to which"
+     ]
+    }
+   ],
+   "tiles": [
+    "to",
+    "which"
+   ],
+   "extra": [
+    "of",
+    "that",
+    "how"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0535",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "np.contact",
+   "why": {
+    "ok": {
+     "de": "the best flight I could find. Das Pronomen that darf fehlen.",
+     "en": "the best flight I could find. The pronoun that may be dropped."
+    },
+    "wrong": []
+   },
+   "lead": "This is the best flight that my search turned up.",
+   "key": "FIND",
+   "before": "This is the best flight",
+   "after": ".",
+   "keys": [
+    {
+     "a": [
+      "I could"
+     ],
+     "b": [
+      "find"
+     ]
+    }
+   ],
+   "tiles": [
+    "I",
+    "could"
+   ],
+   "extra": [
+    "what",
+    "who",
+    "it"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0536",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "np.participle",
+   "why": {
+    "ok": {
+     "de": "everyone invited to the wedding. Das passive Partizip ersetzt who is invited.",
+     "en": "everyone invited to the wedding. The passive participle replaces who is invited."
+    },
+    "wrong": []
+   },
+   "lead": "Everyone who received an invitation to the wedding must reply by Friday.",
+   "key": "INVITED",
+   "before": "Everyone",
+   "after": "must reply by Friday.",
+   "keys": [
+    {
+     "a": [
+      "invited"
+     ],
+     "b": [
+      "to the wedding"
+     ]
+    }
+   ],
+   "tiles": [
+    "to",
+    "the",
+    "wedding"
+   ],
+   "extra": [
+    "who",
+    "is",
+    "inviting"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0537",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "pat": "np.to-inf",
+   "why": {
+    "ok": {
+     "de": "the only person to answer. Nach only steht to + Grundform.",
+     "en": "the only person to answer. After only comes to + base form."
+    },
+    "wrong": []
+   },
+   "lead": "Anna was the only person who answered the question.",
+   "key": "TO",
+   "before": "Anna was the",
+   "after": "the question.",
+   "keys": [
+    {
+     "a": [
+      "only person"
+     ],
+     "b": [
+      "to answer"
+     ]
+    }
+   ],
+   "tiles": [
+    "only",
+    "person",
+    "answer"
+   ],
+   "extra": [
+    "who",
+    "answered",
+    "for"
+   ],
+   "traps": []
+  }
+ ]
+}

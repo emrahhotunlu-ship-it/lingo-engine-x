@@ -1,0 +1,105 @@
+{
+ "We are going to launch in May, but the supplier was late.": {
+  "pat": "fp.was-going",
+  "why": {
+   "ok": {
+    "de": "Ein Plan von damals braucht were going to: We were going to launch in May.",
+    "en": "A plan from back then needs were going to: We were going to launch in May."
+   },
+   "wrong": [
+    {
+     "if": [
+      "are",
+      "going"
+     ],
+     "de": "Are gehört in die Gegenwart. Hier passt were.",
+     "en": "Are belongs to the present. Here were fits."
+    },
+    {
+     "not": [
+      "were"
+     ],
+     "de": "Es braucht hier were going to, nicht are.",
+     "en": "It needs were going to."
+    }
+   ]
+  }
+ },
+ "I was about leaving when the client called.": {
+  "pat": "fp.about-to",
+  "why": {
+   "ok": {
+    "de": "Nach about steht to und die Grundform: I was about to leave.",
+    "en": "After about comes to and the base form: I was about to leave."
+   },
+   "wrong": [
+    {
+     "if": [
+      "about",
+      "leaving"
+     ],
+     "de": "About leaving ist deutsch gedacht. Es braucht about to leave.",
+     "en": "About leaving is German thinking. It needs about to leave."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Nach about braucht es to.",
+     "en": "After about you need to."
+    }
+   ]
+  }
+ },
+ "In 2015 she joined the firm and will later lead the Berlin office.": {
+  "pat": "fp.would-narr",
+  "why": {
+   "ok": {
+    "de": "Aus der Vergangenheit auf Späteres: she would later lead the office.",
+    "en": "From the past at something later: she would later lead the office."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Will gehört in die Gegenwart. Hier braucht es would.",
+     "en": "Will belongs to the present. Here it needs would."
+    },
+    {
+     "not": [
+      "would"
+     ],
+     "de": "Hier ist would later nötig, nicht will.",
+     "en": "It needs would later."
+    }
+   ]
+  }
+ },
+ "The new office should open in June, but the permit was delayed.": {
+  "pat": "fp.was-to",
+  "why": {
+   "ok": {
+    "de": "Für einen Plan in der Vergangenheit gilt was to: The new office was to open in June.",
+    "en": "For a plan in the past was to is used: The new office was to open in June."
+   },
+   "wrong": [
+    {
+     "if": [
+      "should"
+     ],
+     "de": "Das deutsche „sollte“ wird hier nicht zu should. Es braucht was to.",
+     "en": "The German “sollte” does not become should here. It needs was to."
+    },
+    {
+     "not": [
+      "was",
+      "to"
+     ],
+     "de": "Es braucht was to und die Grundform.",
+     "en": "It needs was to and the base form."
+    }
+   ]
+  }
+ }
+}

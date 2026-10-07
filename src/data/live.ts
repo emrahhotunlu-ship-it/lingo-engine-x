@@ -20,7 +20,7 @@ type Doc = Record<string, unknown>;
 
 // `app/repair` (Lernberatung V2): fällige Reparatur-Sätze baut die Wiederholung synchron im Klick ein.
 // `app/memory` (Backlog B5): „Claude merkt sich“ – die Vorlagen lesen die Fakten synchron im Klick.
-export const LIVE_DOCS = ['app/profile', 'app/course', 'app/assess', 'app/schema', 'app/repair', 'app/memory', 'app/levels'] as const;
+export const LIVE_DOCS = ['app/profile', 'app/course', 'app/assess', 'app/schema', 'app/repair', 'app/memory', 'app/levels', 'app/c1'] as const;
 // `archive`: ausgelagerte Profiljahre (Phase 7, Plan §12.3) – Serie und Verlauf lesen sie mit.
 // `chunk`: Wendungen gehören zur täglichen Wiederholung (Plan und Trainer brauchen sie sofort).
 export const LIVE_COLLECTIONS = ['vocab', 'grammar', 'archive', 'chunk'] as const;

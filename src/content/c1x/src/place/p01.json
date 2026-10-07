@@ -1,0 +1,3610 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "mcc-0401",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "pres-simple-cont",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.6,
+   "pat": "psc.now",
+   "why": {
+    "ok": {
+     "de": "„At the moment“ beschreibt etwas, das gerade läuft: Present Continuous (are checking).",
+     "en": "“At the moment” describes something in progress: present continuous (are checking)."
+    },
+    "wrong": [
+     {
+      "opt": "check",
+      "cat": "grammar",
+      "de": "Present Simple nennt Gewohnheiten. Für „gerade jetzt“ braucht es die Verlaufsform.",
+      "en": "The present simple names habits. For “right now” you need the continuous."
+     },
+     {
+      "opt": "checks",
+      "cat": "grammar",
+      "de": "Nach „they“ steht kein -s, und die Verlaufsform fehlt.",
+      "en": "No -s after “they”, and the continuous is missing."
+     },
+     {
+      "opt": "have checked",
+      "cat": "grammar",
+      "de": "Present Perfect nennt ein Ergebnis. Hier läuft die Handlung noch.",
+      "en": "The present perfect names a result. Here the action is still going on."
+     }
+    ]
+   },
+   "text": "Please be quiet: my parents ___ the weather forecast at the moment.",
+   "options": [
+    "are checking",
+    "check",
+    "checks",
+    "have checked"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "mcc-0402",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.6,
+   "pat": "psp.finished-time",
+   "why": {
+    "ok": {
+     "de": "Mit einer abgeschlossenen Zeitangabe („last Tuesday“) steht Past Simple.",
+     "en": "With a finished time (“last Tuesday”) you use the past simple."
+    },
+    "wrong": [
+     {
+      "opt": "has approved",
+      "cat": "grammar",
+      "de": "Present Perfect verträgt keine abgeschlossene Zeitangabe wie „last Tuesday“.",
+      "en": "The present perfect does not go with a finished time like “last Tuesday”."
+     },
+     {
+      "opt": "approves",
+      "cat": "grammar",
+      "de": "Present Simple passt nicht zu „last Tuesday“, das ist vorbei.",
+      "en": "The present simple does not fit “last Tuesday”: that is over."
+     },
+     {
+      "opt": "has been approving",
+      "cat": "grammar",
+      "de": "Eine einzelne Handlung zu einem genannten Zeitpunkt braucht keine Dauerform.",
+      "en": "A single action at a stated time needs no duration form."
+     }
+    ]
+   },
+   "text": "My landlord ___ the repair last Tuesday, and since then the workers have been busy.",
+   "options": [
+    "has approved",
+    "approved",
+    "approves",
+    "has been approving"
+   ],
+   "answer": 1
+  },
+  {
+   "id": "mcc-0403",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "pres-perf-cont",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.4,
+   "pat": "pc.duration",
+   "why": {
+    "ok": {
+     "de": "„since eight o’clock“ misst die Dauer bis jetzt, und die Arbeit läuft noch: have been working.",
+     "en": "“since eight o’clock” measures the time up to now, and the work goes on: have been working."
+    },
+    "wrong": [
+     {
+      "opt": "work",
+      "cat": "grammar",
+      "de": "Present Simple nennt eine Gewohnheit, nicht die Dauer seit acht Uhr.",
+      "en": "The present simple names a habit, not the time since eight."
+     },
+     {
+      "opt": "am working",
+      "cat": "grammar",
+      "de": "Mit „since“ braucht es have been -ing; die einfache Verlaufsform sagt nichts über die Dauer.",
+      "en": "With “since” you need have been -ing. The plain continuous lacks the duration."
+     },
+     {
+      "opt": "worked",
+      "cat": "grammar",
+      "de": "Past Simple wäre abgeschlossen. Hier läuft die Arbeit noch.",
+      "en": "The past simple would be finished. Here the work is still going on."
+     }
+    ]
+   },
+   "text": "I ___ on this puzzle since eight o'clock, and I still haven't finished the last corner.",
+   "options": [
+    "work",
+    "am working",
+    "have been working",
+    "worked"
+   ],
+   "answer": 2
+  },
+  {
+   "id": "mcc-0404",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "past-perfect",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.1,
+   "pat": "pp.duration",
+   "why": {
+    "ok": {
+     "de": "Dauer bis zu einem Zeitpunkt in der Vergangenheit: Past Perfect Continuous (had been making).",
+     "en": "Duration up to a point in the past: past perfect continuous (had been making)."
+    },
+    "wrong": [
+     {
+      "opt": "has been making",
+      "cat": "grammar",
+      "de": "Present Perfect Continuous reicht bis jetzt, nicht bis zu einem früheren Zeitpunkt.",
+      "en": "The present perfect continuous reaches up to now, not up to an earlier point."
+     },
+     {
+      "opt": "made",
+      "cat": "grammar",
+      "de": "Past Simple nennt keine Dauer „bis zu“ einem späteren Ereignis.",
+      "en": "The past simple does not give a duration up to a later event."
+     },
+     {
+      "opt": "was making",
+      "cat": "grammar",
+      "de": "Past Continuous beschreibt etwas, das zu einem Zeitpunkt lief, nicht dessen Dauer davor.",
+      "en": "The past continuous describes something in progress at a time, not its duration before it."
+     }
+    ]
+   },
+   "text": "By the time the new CEO took over, the company ___ losses for three years.",
+   "options": [
+    "has been making",
+    "made",
+    "was making",
+    "had been making"
+   ],
+   "answer": 3
+  },
+  {
+   "id": "mcc-0405",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "used-to",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.7,
+   "pat": "ut.used-to",
+   "why": {
+    "ok": {
+     "de": "„used to + Grundform“ nennt eine frühere Gewohnheit, die heute nicht mehr gilt.",
+     "en": "“used to + base form” names a past habit that no longer holds."
+    },
+    "wrong": [
+     {
+      "opt": "am used to taking",
+      "cat": "meaning",
+      "de": "„be used to -ing“ heißt „gewöhnt sein“, nicht „früher tun“.",
+      "en": "“be used to -ing” means “be accustomed”, not “did in the past”."
+     },
+     {
+      "opt": "would used to take",
+      "cat": "grammar",
+      "de": "„would used to“ gibt es nicht: entweder would oder used to.",
+      "en": "“would used to” does not exist: either would or used to."
+     },
+     {
+      "opt": "was used to take",
+      "cat": "grammar",
+      "de": "„be used to“ verlangt -ing, nicht die Grundform.",
+      "en": "“be used to” takes -ing, not the base form."
+     }
+    ]
+   },
+   "text": "When I was a student, I ___ the bus to the campus every morning, but now I cycle.",
+   "options": [
+    "used to take",
+    "am used to taking",
+    "would used to take",
+    "was used to take"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "mcc-0406",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "prep-time",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.7,
+   "pat": "pt.at-on-in",
+   "why": {
+    "ok": {
+     "de": "Vor einer Woche, einem Monat oder Jahr steht „in“.",
+     "en": "Before a week, a month or a year you use “in”."
+    },
+    "wrong": [
+     {
+      "opt": "on",
+      "cat": "grammar",
+      "de": "„on“ steht vor einem bestimmten Tag.",
+      "en": "“on” goes with a particular day."
+     },
+     {
+      "opt": "at",
+      "cat": "grammar",
+      "de": "„at“ steht vor einer Uhrzeit oder einem Punkt, nicht vor einer Woche.",
+      "en": "“at” goes with a clock time or a point, not a week."
+     },
+     {
+      "opt": "since",
+      "cat": "meaning",
+      "de": "„since“ nennt den Beginn eines Zeitraums bis jetzt.",
+      "en": "“since” gives the start of a period up to now."
+     }
+    ]
+   },
+   "text": "Our family reunion is always planned ___ the first week of April.",
+   "options": [
+    "on",
+    "in",
+    "at",
+    "since"
+   ],
+   "answer": 1
+  },
+  {
+   "id": "mcc-0407",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.4,
+   "pat": "ff.was-going-to",
+   "why": {
+    "ok": {
+     "de": "Ein Plan, der nicht klappte, steht in „was going to“.",
+     "en": "A plan that fell through is expressed with “was going to”."
+    },
+    "wrong": [
+     {
+      "opt": "am going",
+      "cat": "grammar",
+      "de": "„yesterday“ verlangt die Vergangenheit, nicht „am going“.",
+      "en": "“yesterday” needs the past, not “am going”."
+     },
+     {
+      "opt": "would go",
+      "cat": "grammar",
+      "de": "Nach „would“ steht die Grundform, und „to call“ passt dann nicht.",
+      "en": "After “would” comes the base form, and “to call” no longer fits."
+     },
+     {
+      "opt": "had going",
+      "cat": "grammar",
+      "de": "„had going to“ gibt es nicht.",
+      "en": "“had going to” does not exist."
+     }
+    ]
+   },
+   "text": "I ___ to call you yesterday, but then a neighbor rang the bell and I completely forgot.",
+   "options": [
+    "am going",
+    "would go",
+    "was going",
+    "had going"
+   ],
+   "answer": 2
+  },
+  {
+   "id": "mcc-0408",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "future-perf-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.1,
+   "pat": "fut.perfect",
+   "why": {
+    "ok": {
+     "de": "„By the end of …“ nennt einen künftigen Zeitpunkt, bis zu dem etwas fertig ist: Future Perfect.",
+     "en": "“By the end of …” names a future point by which something is done: future perfect."
+    },
+    "wrong": [
+     {
+      "opt": "are opening",
+      "cat": "grammar",
+      "de": "Present Continuous beschreibt hier keinen abgeschlossenen Stand zu einem künftigen Zeitpunkt.",
+      "en": "The present continuous does not describe a completed state at a future point here."
+     },
+     {
+      "opt": "opened",
+      "cat": "grammar",
+      "de": "Past Simple passt nicht zu einem künftigen Zeitpunkt.",
+      "en": "The past simple does not fit a future point."
+     },
+     {
+      "opt": "would have opened",
+      "cat": "grammar",
+      "de": "„would have opened“ blickt auf etwas Unwirkliches in der Vergangenheit.",
+      "en": "“would have opened” looks back at something unreal in the past."
+     }
+    ]
+   },
+   "text": "By the end of the quarter, we ___ over 500 new accounts, which will be a company record.",
+   "options": [
+    "are opening",
+    "opened",
+    "would have opened",
+    "will have opened"
+   ],
+   "answer": 3
+  },
+  {
+   "id": "mcc-0409",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "time-clauses",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.5,
+   "pat": "tc.present-for-future",
+   "why": {
+    "ok": {
+     "de": "Nach „as soon as“ steht die Gegenwart (confirms), obwohl es um die Zukunft geht.",
+     "en": "After “as soon as” the present (confirms) is used, although the future is meant."
+    },
+    "wrong": [
+     {
+      "opt": "will confirm",
+      "cat": "calque",
+      "de": "Im Deutschen steht oft das Futur. Im englischen Zeitsatz steht kein will.",
+      "en": "German often uses the future here. An English time clause takes no will."
+     },
+     {
+      "opt": "is going to confirm",
+      "cat": "grammar",
+      "de": "Auch „going to“ steht nicht im Zeitsatz nach „as soon as“.",
+      "en": "“going to” does not stand in the time clause after “as soon as” either."
+     },
+     {
+      "opt": "would confirm",
+      "cat": "grammar",
+      "de": "„would“ passt nicht zu einer echten künftigen Bedingung.",
+      "en": "“would” does not fit a real future condition."
+     }
+    ]
+   },
+   "text": "We will order the pizza as soon as everyone ___ their choice.",
+   "options": [
+    "confirms",
+    "will confirm",
+    "is going to confirm",
+    "would confirm"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "mcc-0410",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "c1-precision",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.0,
+   "pat": "cp.within",
+   "why": {
+    "ok": {
+     "de": "„within“ nennt die Frist: innerhalb von zwei Arbeitstagen.",
+     "en": "“within” gives the time limit: inside two working days."
+    },
+    "wrong": [
+     {
+      "opt": "during",
+      "cat": "meaning",
+      "de": "„during“ steht vor einem Ereignis (during the meeting), nicht vor einer Frist.",
+      "en": "“during” goes with an event (during the meeting), not with a time limit."
+     },
+     {
+      "opt": "until",
+      "cat": "meaning",
+      "de": "„until“ nennt einen Endpunkt, bis zu dem etwas andauert.",
+      "en": "“until” gives an end point up to which something lasts."
+     },
+     {
+      "opt": "since",
+      "cat": "grammar",
+      "de": "„since“ nennt den Beginn eines Zeitraums bis jetzt.",
+      "en": "“since” names the start of a period up to now."
+     }
+    ]
+   },
+   "text": "Please confirm your attendance ___ two working days, as the catering company needs the final numbers.",
+   "options": [
+    "during",
+    "within",
+    "until",
+    "since"
+   ],
+   "answer": 1
+  },
+  {
+   "id": "mcc-0411",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "conditionals",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.4,
+   "pat": "cn.third",
+   "why": {
+    "ok": {
+     "de": "Third Conditional: if + Past Perfect (had spotted), im Hauptsatz would have + 3. Form.",
+     "en": "Third conditional: if + past perfect (had spotted), main clause would have + participle."
+    },
+    "wrong": [
+     {
+      "opt": "would have spotted",
+      "cat": "calque",
+      "de": "Im Deutschen steht „hätten“ in beiden Teilen. Im englischen if-Satz steht kein would.",
+      "en": "German uses “hätten” in both parts. The English if-clause takes no would."
+     },
+     {
+      "opt": "spotted",
+      "cat": "grammar",
+      "de": "Past Simple im if-Satz gehört zum Second Conditional, nicht zur verpassten Chance.",
+      "en": "The past simple in the if-clause belongs to the second conditional, not to a missed chance."
+     },
+     {
+      "opt": "have spotted",
+      "cat": "grammar",
+      "de": "Present Perfect passt nicht in den if-Satz einer verpassten Vergangenheit.",
+      "en": "The present perfect does not fit the if-clause of a missed past."
+     }
+    ]
+   },
+   "text": "If we ___ the problem earlier, we would have avoided the delay.",
+   "options": [
+    "would have spotted",
+    "spotted",
+    "had spotted",
+    "have spotted"
+   ],
+   "answer": 2
+  },
+  {
+   "id": "mcc-0412",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "cond-alt",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.1,
+   "pat": "ca.unless",
+   "why": {
+    "ok": {
+     "de": "„unless“ heißt „es sei denn“: ohne die Unterschrift beginnt die Migration nicht.",
+     "en": "“unless” means “except if”: without the signature the migration does not start."
+    },
+    "wrong": [
+     {
+      "opt": "if",
+      "cat": "meaning",
+      "de": "Mit „if“ hieße es: Wir beginnen nicht, falls der Kunde unterschreibt. Das wäre das Gegenteil.",
+      "en": "With “if” it would mean: we do not start if the client signs. That is the opposite."
+     },
+     {
+      "opt": "otherwise",
+      "cat": "grammar",
+      "de": "„otherwise“ steht im Hauptsatz und leitet keinen Nebensatz ein.",
+      "en": "“otherwise” stands in a main clause and does not introduce a subordinate clause."
+     },
+     {
+      "opt": "in case",
+      "cat": "meaning",
+      "de": "„in case“ meint Vorsorge für den Fall, nicht eine Bedingung für den Start.",
+      "en": "“in case” means precaution for a possibility, not a condition for the start."
+     }
+    ]
+   },
+   "text": "We will not start the migration ___ the client signs the revised contract.",
+   "options": [
+    "if",
+    "otherwise",
+    "in case",
+    "unless"
+   ],
+   "answer": 3
+  },
+  {
+   "id": "mcc-0413",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "mixed-cond",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.1,
+   "pat": "mc.wish-past",
+   "why": {
+    "ok": {
+     "de": "Bedauern über die Vergangenheit: wish + Past Perfect (had read).",
+     "en": "Regret about the past: wish + past perfect (had read)."
+    },
+    "wrong": [
+     {
+      "opt": "would read",
+      "cat": "calque",
+      "de": "Das deutsche „hätten gelesen“ verleitet zu would. Nach wish steht kein would für die Vergangenheit.",
+      "en": "German “hätten gelesen” suggests would. After wish, the past takes no would."
+     },
+     {
+      "opt": "read",
+      "cat": "grammar",
+      "de": "Past Simple nach wish bezieht sich auf die Gegenwart, nicht auf letztes Jahr.",
+      "en": "The past simple after wish refers to the present, not to last year."
+     },
+     {
+      "opt": "would have read",
+      "cat": "grammar",
+      "de": "„would have read“ steht nach wish nicht. Es braucht had read.",
+      "en": "“would have read” does not follow wish. You need had read."
+     }
+    ]
+   },
+   "text": "I wish we ___ the contract more carefully before we signed it last year.",
+   "options": [
+    "had read",
+    "would read",
+    "read",
+    "would have read"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "mcc-0414",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "c1-diplomacy",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.4,
+   "pat": "dip.possible",
+   "why": {
+    "ok": {
+     "de": "Nach „Would it be possible“ steht to + Grundform: eine höfliche Bitte mit Abstand.",
+     "en": "After “Would it be possible” comes to + base form: a polite request with distance."
+    },
+    "wrong": [
+     {
+      "opt": "extending",
+      "cat": "grammar",
+      "de": "Nach „possible“ folgt keine -ing-Form.",
+      "en": "A -ing form does not follow “possible”."
+     },
+     {
+      "opt": "extend",
+      "cat": "grammar",
+      "de": "Die Grundform allein braucht hier „to“.",
+      "en": "The base form alone needs “to” here."
+     },
+     {
+      "opt": "that extend",
+      "cat": "grammar",
+      "de": "„that extend“ ist kein gültiger Nebensatz.",
+      "en": "“that extend” is not a valid clause."
+     }
+    ]
+   },
+   "text": "Would it be possible ___ the deadline by two days, given the client's late feedback?",
+   "options": [
+    "extending",
+    "to extend",
+    "extend",
+    "that extend"
+   ],
+   "answer": 1
+  },
+  {
+   "id": "mcc-0415",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "passive",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.5,
+   "pat": "pv.perfect",
+   "why": {
+    "ok": {
+     "de": "Das Ergebnis zählt jetzt, und die Richtlinie wird genehmigt: Passiv im Present Perfect (has been approved).",
+     "en": "The result counts now, and the policy is approved by someone: present perfect passive (has been approved)."
+    },
+    "wrong": [
+     {
+      "opt": "has approved",
+      "cat": "grammar",
+      "de": "Aktiv „has approved“ braucht ein Objekt. Die Richtlinie wird genehmigt, sie genehmigt nicht.",
+      "en": "The active “has approved” needs an object. The policy is approved, it does not approve."
+     },
+     {
+      "opt": "is approving",
+      "cat": "grammar",
+      "de": "„is approving“ ist aktiv. Hier braucht es das Passiv.",
+      "en": "“is approving” is active. Here you need the passive."
+     },
+     {
+      "opt": "was approving",
+      "cat": "grammar",
+      "de": "„was approving“ ist aktiv und beschreibt keinen Stand von heute.",
+      "en": "“was approving” is active and does not describe today’s state."
+     }
+    ]
+   },
+   "text": "The new parking policy ___ by the city council, so we can finally park near our apartment next week.",
+   "options": [
+    "has approved",
+    "is approving",
+    "has been approved",
+    "was approving"
+   ],
+   "answer": 2
+  },
+  {
+   "id": "mcc-0416",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "passive-plus",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.1,
+   "pat": "pp.modal",
+   "why": {
+    "ok": {
+     "de": "Modalverb im Passiv: must + be + 3. Form. Der Bericht wird gesendet.",
+     "en": "Modal in the passive: must + be + participle. The report is sent."
+    },
+    "wrong": [
+     {
+      "opt": "must send",
+      "cat": "grammar",
+      "de": "Aktiv „must send“ passt nicht: der Bericht sendet nichts.",
+      "en": "The active “must send” does not fit: the report sends nothing."
+     },
+     {
+      "opt": "must sent",
+      "cat": "grammar",
+      "de": "Nach „must“ steht die Grundform, nicht die 3. Form.",
+      "en": "After “must” comes the base form, not the participle."
+     },
+     {
+      "opt": "must be sending",
+      "cat": "grammar",
+      "de": "„be sending“ ist aktiv. Hier braucht es „be sent“.",
+      "en": "“be sending” is active. Here you need “be sent”."
+     }
+    ]
+   },
+   "text": "The final report ___ to the board by Friday, otherwise we will lose the funding.",
+   "options": [
+    "must send",
+    "must sent",
+    "must be sending",
+    "must be sent"
+   ],
+   "answer": 3
+  },
+  {
+   "id": "mcc-0417",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "reported",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.6,
+   "pat": "rs.tell-say",
+   "why": {
+    "ok": {
+     "de": "„tell“ braucht eine Person direkt danach (told me).",
+     "en": "“tell” needs a person right after it (told me)."
+    },
+    "wrong": [
+     {
+      "opt": "said",
+      "cat": "calque",
+      "de": "„said“ steht ohne Person: said that … Mit „me“ braucht es „told“.",
+      "en": "“said” comes without a person: said that … With “me” you need “told”."
+     },
+     {
+      "opt": "spoke",
+      "cat": "grammar",
+      "de": "„spoke“ passt nicht zu einer Mitteilung mit that-Satz.",
+      "en": "“spoke” does not fit a statement with a that-clause."
+     },
+     {
+      "opt": "talked",
+      "cat": "grammar",
+      "de": "„talked“ passt nicht zu einer Mitteilung mit that-Satz.",
+      "en": "“talked” does not fit a statement with a that-clause."
+     }
+    ]
+   },
+   "text": "She ___ me that the parcel would arrive on Monday, but nothing has come yet.",
+   "options": [
+    "told",
+    "said",
+    "spoke",
+    "talked"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "mcc-0418",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "report-verbs",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.4,
+   "pat": "rv.suggest-rec",
+   "why": {
+    "ok": {
+     "de": "„recommend“ wird mit -ing verbunden (recommended signing) oder mit einem that-Satz.",
+     "en": "“recommend” takes -ing (recommended signing) or a that-clause."
+    },
+    "wrong": [
+     {
+      "opt": "to sign",
+      "cat": "calque",
+      "de": "Im Deutschen folgt „zu unterschreiben“. Nach recommend steht aber -ing.",
+      "en": "German says “zu unterschreiben”. After recommend you use -ing."
+     },
+     {
+      "opt": "sign",
+      "cat": "grammar",
+      "de": "Die bloße Grundform steht nach recommend nicht, ohne that.",
+      "en": "The bare base form does not follow recommend unless it comes after that."
+     },
+     {
+      "opt": "to signing",
+      "cat": "grammar",
+      "de": "„to signing“ mischt zwei Muster.",
+      "en": "“to signing” mixes two patterns."
+     }
+    ]
+   },
+   "text": "Our lawyer strongly recommended ___ the contract before the end of the month.",
+   "options": [
+    "to sign",
+    "signing",
+    "sign",
+    "to signing"
+   ],
+   "answer": 1
+  },
+  {
+   "id": "mcc-0419",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "questions",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.4,
+   "pat": "qu.if-whether",
+   "why": {
+    "ok": {
+     "de": "Eine Ja/Nein-Frage im Nebensatz wird mit „whether“ (oder „if“) eingeleitet.",
+     "en": "A yes/no question inside a clause is introduced by “whether” (or “if”)."
+    },
+    "wrong": [
+     {
+      "opt": "do",
+      "cat": "grammar",
+      "de": "In der indirekten Frage steht kein „do“.",
+      "en": "An indirect question has no “do”."
+     },
+     {
+      "opt": "what",
+      "cat": "meaning",
+      "de": "„what“ fragt nach einer Sache, nicht nach Ja oder Nein.",
+      "en": "“what” asks for a thing, not for yes or no."
+     },
+     {
+      "opt": "which",
+      "cat": "meaning",
+      "de": "„which“ fragt nach einer Auswahl, nicht nach Ja oder Nein.",
+      "en": "“which” asks for a choice, not for yes or no."
+     }
+    ]
+   },
+   "text": "My mother wants to know ___ we can come for lunch on Sunday.",
+   "options": [
+    "do",
+    "what",
+    "whether",
+    "which"
+   ],
+   "answer": 2
+  },
+  {
+   "id": "mcc-0420",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "mandative",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.4,
+   "pat": "mnd.adjectives",
+   "why": {
+    "ok": {
+     "de": "Nach „It is essential that“ steht die Grundform ohne -s (US): complete.",
+     "en": "After “It is essential that” the base form without -s (US) is used: complete."
+    },
+    "wrong": [
+     {
+      "opt": "to complete",
+      "cat": "grammar",
+      "de": "„to complete“ ist kein Satz mit eigenem Subjekt.",
+      "en": "“to complete” does not make a clause with its own subject."
+     },
+     {
+      "opt": "completing",
+      "cat": "grammar",
+      "de": "-ing passt nicht in den that-Satz.",
+      "en": "A -ing form does not fit the that-clause."
+     },
+     {
+      "opt": "will have completed",
+      "cat": "grammar",
+      "de": "Das Futur gehört nicht in einen that-Satz nach „essential“.",
+      "en": "The future does not belong in a that-clause after “essential”."
+     }
+    ]
+   },
+   "text": "It is essential that every employee ___ the data protection training before the audit.",
+   "options": [
+    "to complete",
+    "completing",
+    "will have completed",
+    "complete"
+   ],
+   "answer": 3
+  },
+  {
+   "id": "mcc-0421",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "c1-nominal",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.6,
+   "pat": "nm.following",
+   "why": {
+    "ok": {
+     "de": "„Following“ steht vor einem Nomen (Following the approval, …) und nennt, was vorausging.",
+     "en": "“Following” goes before a noun (Following the approval, …) and names what came first."
+    },
+    "wrong": [
+     {
+      "opt": "Although",
+      "cat": "grammar",
+      "de": "„Although“ braucht einen Satz mit Verb, kein Nomen.",
+      "en": "“Although” needs a clause with a verb, not a noun."
+     },
+     {
+      "opt": "Whereas",
+      "cat": "grammar",
+      "de": "„Whereas“ braucht einen Satz mit Verb, kein Nomen.",
+      "en": "“Whereas” needs a clause with a verb, not a noun."
+     },
+     {
+      "opt": "Unless",
+      "cat": "grammar",
+      "de": "„Unless“ braucht einen Satz mit Verb, kein Nomen.",
+      "en": "“Unless” needs a clause with a verb, not a noun."
+     }
+    ]
+   },
+   "text": "___ the approval of the budget, the project manager sent the final schedule to all teams.",
+   "options": [
+    "Following",
+    "Although",
+    "Whereas",
+    "Unless"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "mcc-0422",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "modals-deduction",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.5,
+   "pat": "md.might-have",
+   "why": {
+    "ok": {
+     "de": "„might have“ nennt eine Möglichkeit in der Vergangenheit, ohne Sicherheit.",
+     "en": "“might have” names a possibility in the past without certainty."
+    },
+    "wrong": [
+     {
+      "opt": "must have",
+      "cat": "meaning",
+      "de": "„must have“ drückt fast sichere Schlussfolgerung aus, aber hier ist es unsicher.",
+      "en": "“must have” expresses an almost certain conclusion, but here it is uncertain."
+     },
+     {
+      "opt": "can't have",
+      "cat": "meaning",
+      "de": "„can’t have“ heißt: unmöglich. Das passt nicht zu „Somebody moved it“.",
+      "en": "“can’t have” means impossible. That does not fit “Somebody moved it”."
+     },
+     {
+      "opt": "should have",
+      "cat": "meaning",
+      "de": "„should have“ meint Kritik oder Erwartung, keine Vermutung.",
+      "en": "“should have” means criticism or expectation, not a guess."
+     }
+    ]
+   },
+   "text": "I can't find the report. Somebody ___ moved it to another folder, but I'm not sure.",
+   "options": [
+    "must have",
+    "might have",
+    "can't have",
+    "should have"
+   ],
+   "answer": 1
+  },
+  {
+   "id": "mcc-0423",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "modals-advice",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.4,
+   "pat": "ma.should-have",
+   "why": {
+    "ok": {
+     "de": "Rückblickende Kritik oder Bedauern: should have + 3. Form.",
+     "en": "Hindsight criticism or regret: should have + participle."
+    },
+    "wrong": [
+     {
+      "opt": "should tell",
+      "cat": "grammar",
+      "de": "„should tell“ blickt nach vorn, nicht zurück.",
+      "en": "“should tell” looks forward, not back."
+     },
+     {
+      "opt": "must have told",
+      "cat": "meaning",
+      "de": "„must have told“ ist eine Vermutung, kein Vorwurf.",
+      "en": "“must have told” is a deduction, not criticism."
+     },
+     {
+      "opt": "could tell",
+      "cat": "grammar",
+      "de": "„could tell“ passt nicht zu dem, was schon vorbei ist.",
+      "en": "“could tell” does not fit what is already over."
+     }
+    ]
+   },
+   "text": "The deadline has passed. We ___ the client earlier about the delay, but nobody wanted to call.",
+   "options": [
+    "should tell",
+    "must have told",
+    "should have told",
+    "could tell"
+   ],
+   "answer": 2
+  },
+  {
+   "id": "mcc-0424",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "c1-hedging",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.1,
+   "pat": "hg.seems",
+   "why": {
+    "ok": {
+     "de": "„It appears that …“ gibt einen vorsichtigen Eindruck wieder.",
+     "en": "“It appears that …” gives a careful impression."
+    },
+    "wrong": [
+     {
+      "opt": "looks",
+      "cat": "grammar",
+      "de": "„It looks that“ gibt es nicht: es heißt „looks like“ oder „looks as if“.",
+      "en": "“It looks that” does not exist: it is “looks like” or “looks as if”."
+     },
+     {
+      "opt": "resembles",
+      "cat": "meaning",
+      "de": "„resembles“ heißt „ähnelt“ und passt nicht zu einem that-Satz.",
+      "en": "“resembles” means “is similar to” and does not take a that-clause."
+     },
+     {
+      "opt": "thinks",
+      "cat": "grammar",
+      "de": "„It thinks“ ergibt keinen Sinn: Es denkt nicht.",
+      "en": "“It thinks” makes no sense: it does not think."
+     }
+    ]
+   },
+   "text": "It ___ that the supplier has misunderstood our requirements, but we should clarify before blaming anyone.",
+   "options": [
+    "looks",
+    "resembles",
+    "thinks",
+    "appears"
+   ],
+   "answer": 3
+  },
+  {
+   "id": "mcc-0425",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "gerund-inf",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.5,
+   "pat": "gi.meaning",
+   "why": {
+    "ok": {
+     "de": "„remember + -ing“ erinnert an etwas, das schon geschehen ist (ich weiß noch, dass ich sie schickte).",
+     "en": "“remember + -ing” recalls something that already happened (I remember sending it)."
+    },
+    "wrong": [
+     {
+      "opt": "to send",
+      "cat": "meaning",
+      "de": "„remember to send“ heißt: daran denken, es zu tun. Hier ist es schon geschehen.",
+      "en": "“remember to send” means: not forget to do it. Here it already happened."
+     },
+     {
+      "opt": "send",
+      "cat": "grammar",
+      "de": "Nach „remember“ steht die Grundform nicht allein.",
+      "en": "The bare base form does not follow “remember”."
+     },
+     {
+      "opt": "sent",
+      "cat": "grammar",
+      "de": "Die 3. Form passt hier nicht nach „remember“.",
+      "en": "The past participle does not fit after “remember” here."
+     }
+    ]
+   },
+   "text": "I remember ___ the email, but I can't find it in my sent folder.",
+   "options": [
+    "sending",
+    "to send",
+    "send",
+    "sent"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "mcc-0426",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "verb-patterns",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.4,
+   "pat": "vp.ing-verbs",
+   "why": {
+    "ok": {
+     "de": "„avoid“ wird mit -ing verbunden (avoid making).",
+     "en": "“avoid” takes -ing (avoid making)."
+    },
+    "wrong": [
+     {
+      "opt": "to make",
+      "cat": "calque",
+      "de": "Im Deutschen heißt es „zu machen“. Nach avoid steht aber -ing.",
+      "en": "German says “zu machen”. After avoid you use -ing."
+     },
+     {
+      "opt": "make",
+      "cat": "grammar",
+      "de": "Nach avoid steht nicht die bloße Grundform.",
+      "en": "The bare base form does not follow avoid."
+     },
+     {
+      "opt": "made",
+      "cat": "grammar",
+      "de": "Die 3. Form passt nicht nach avoid.",
+      "en": "The past form does not fit after avoid."
+     }
+    ]
+   },
+   "text": "Our legal team advised us to avoid ___ any verbal promises before the contract was signed.",
+   "options": [
+    "to make",
+    "making",
+    "make",
+    "made"
+   ],
+   "answer": 1
+  },
+  {
+   "id": "mcc-0427",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "prepositions",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.5,
+   "pat": "prp.adj-prep",
+   "why": {
+    "ok": {
+     "de": "„good at“ nennt eine Fähigkeit: good at explaining.",
+     "en": "“good at” names a skill: good at explaining."
+    },
+    "wrong": [
+     {
+      "opt": "in",
+      "cat": "calque",
+      "de": "Das deutsche „gut in“ verleitet zu „in“. Englisch sagt „good at“.",
+      "en": "German “gut in” suggests “in”. English says “good at”."
+     },
+     {
+      "opt": "on",
+      "cat": "grammar",
+      "de": "„good on“ ist keine feste Verbindung für eine Fähigkeit.",
+      "en": "“good on” is not a fixed phrase for a skill."
+     },
+     {
+      "opt": "for",
+      "cat": "meaning",
+      "de": "„good for“ heißt „nützlich für“, nicht „geschickt in“.",
+      "en": "“good for” means “useful for”, not “skilled at”."
+     }
+    ]
+   },
+   "text": "My little sister is very good ___ explaining the rules of difficult board games in simple words.",
+   "options": [
+    "in",
+    "on",
+    "at",
+    "for"
+   ],
+   "answer": 2
+  },
+  {
+   "id": "mcc-0428",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "prep-noun",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.1,
+   "pat": "pn.for",
+   "why": {
+    "ok": {
+     "de": "„demand for“ nennt, wonach gefragt wird.",
+     "en": "“demand for” names what is in demand."
+    },
+    "wrong": [
+     {
+      "opt": "of",
+      "cat": "calque",
+      "de": "Nach demand steht hier nicht of. Das deutsche „Nachfrage nach“ heißt im Englischen „demand for“.",
+      "en": "Demand is not followed by of here. The German “Nachfrage nach” is “demand for” in English."
+     },
+     {
+      "opt": "on",
+      "cat": "grammar",
+      "de": "„demand on“ meint eine Belastung (demands on staff), nicht Nachfrage.",
+      "en": "“demand on” means a burden (demands on staff), not market demand."
+     },
+     {
+      "opt": "to",
+      "cat": "grammar",
+      "de": "„demand to“ gibt es in dieser Bedeutung nicht.",
+      "en": "“demand to” does not exist in this meaning."
+     }
+    ]
+   },
+   "text": "There is a growing demand ___ sustainable packaging among our corporate customers.",
+   "options": [
+    "of",
+    "on",
+    "to",
+    "for"
+   ],
+   "answer": 3
+  },
+  {
+   "id": "mcc-0429",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "phrasal-syntax",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.4,
+   "pat": "ph.separable",
+   "why": {
+    "ok": {
+     "de": "Bei trennbaren Phrasal Verbs steht das Pronomen in der Mitte: look it over.",
+     "en": "With separable phrasal verbs the pronoun goes in the middle: look it over."
+    },
+    "wrong": [
+     {
+      "opt": "look over it",
+      "cat": "grammar",
+      "de": "Ein Pronomen darf nicht hinter die Partikel: nicht „look over it“.",
+      "en": "A pronoun may not come after the particle: not “look over it”."
+     },
+     {
+      "opt": "over look it",
+      "cat": "grammar",
+      "de": "„over look“ ist falsch getrennt.",
+      "en": "“over look” is split wrongly."
+     },
+     {
+      "opt": "look at over it",
+      "cat": "grammar",
+      "de": "„look at over“ mischt zwei Verben.",
+      "en": "“look at over” mixes two verbs."
+     }
+    ]
+   },
+   "text": "I have prepared the draft contract. Could you ___ before I send it to the client?",
+   "options": [
+    "look it over",
+    "look over it",
+    "over look it",
+    "look at over it"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "mcc-0430",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "articles",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.1,
+   "pat": "art.zero",
+   "why": {
+    "ok": {
+     "de": "Allgemeine, nicht zählbare Begriffe stehen ohne Artikel: happiness is …",
+     "en": "General, uncountable ideas take no article: happiness is …"
+    },
+    "wrong": [
+     {
+      "opt": "the happiness",
+      "cat": "grammar",
+      "de": "Mit „the“ wäre eine bestimmte Zufriedenheit gemeint, hier geht es um Zufriedenheit allgemein.",
+      "en": "With “the” a particular happiness would be meant; here happiness in general is meant."
+     },
+     {
+      "opt": "a happiness",
+      "cat": "grammar",
+      "de": "„a happiness“ meint eine einzelne Zufriedenheit, nicht Zufriedenheit im Allgemeinen.",
+      "en": "“a happiness” means one particular happiness, not happiness in general."
+     },
+     {
+      "opt": "happinesses",
+      "cat": "grammar",
+      "de": "„happiness“ ist hier nicht zählbar und hat kein Plural-s.",
+      "en": "“happiness” is uncountable here and has no plural -s."
+     }
+    ]
+   },
+   "text": "Many employees say that ___ is more important to them than a high salary, so we offer flexible hours.",
+   "options": [
+    "the happiness",
+    "happiness",
+    "a happiness",
+    "happinesses"
+   ],
+   "answer": 1
+  },
+  {
+   "id": "mcc-0431",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "countable",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.4,
+   "pat": "cnt.verb",
+   "why": {
+    "ok": {
+     "de": "„news“ ist nicht zählbar und steht im Singular: the news was.",
+     "en": "“news” is uncountable and takes a singular verb: the news was."
+    },
+    "wrong": [
+     {
+      "opt": "were",
+      "cat": "calque",
+      "de": "Das deutsche „die Nachrichten“ ist Plural. Englisch „news“ nimmt ein Singularverb.",
+      "en": "German “die Nachrichten” is plural. English “news” takes a singular verb."
+     },
+     {
+      "opt": "are",
+      "cat": "grammar",
+      "de": "„are“ ist Plural und steht in der falschen Zeit.",
+      "en": "“are” is plural and in the wrong tense."
+     },
+     {
+      "opt": "have been",
+      "cat": "grammar",
+      "de": "„have been“ ist Plural.",
+      "en": "“have been” is plural."
+     }
+    ]
+   },
+   "text": "The latest news about the storm ___ very worrying, so many people stayed home.",
+   "options": [
+    "were",
+    "are",
+    "was",
+    "have been"
+   ],
+   "answer": 2
+  },
+  {
+   "id": "mcc-0432",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "relative",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.4,
+   "pat": "rc.commas",
+   "why": {
+    "ok": {
+     "de": "„whose“ zeigt Besitz: whose house.",
+     "en": "“whose” shows possession: whose house."
+    },
+    "wrong": [
+     {
+      "opt": "which",
+      "cat": "grammar",
+      "de": "„which“ kann den Besitz nicht ausdrücken und steht hier vor „house“ falsch.",
+      "en": "“which” cannot express possession and does not fit before “house”."
+     },
+     {
+      "opt": "who",
+      "cat": "grammar",
+      "de": "„who“ ist Subjekt oder Objekt, nicht Besitz.",
+      "en": "“who” is subject or object, not possession."
+     },
+     {
+      "opt": "that",
+      "cat": "grammar",
+      "de": "Nach einem Komma steht nie „that“.",
+      "en": "After a comma you never use “that”."
+     }
+    ]
+   },
+   "text": "My oldest friend, ___ house is in Lisbon, has just invited us for the summer.",
+   "options": [
+    "which",
+    "who",
+    "that",
+    "whose"
+   ],
+   "answer": 3
+  },
+  {
+   "id": "mcc-0433",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "linkers",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.1,
+   "pat": "lk.although",
+   "why": {
+    "ok": {
+     "de": "„Although“ leitet einen ganzen Satz mit Verb ein.",
+     "en": "“Although” introduces a whole clause with a verb."
+    },
+    "wrong": [
+     {
+      "opt": "Despite",
+      "cat": "grammar",
+      "de": "Nach „despite“ steht ein Nomen oder -ing, kein ganzer Satz.",
+      "en": "After “despite” comes a noun or -ing, not a whole clause."
+     },
+     {
+      "opt": "In spite of",
+      "cat": "grammar",
+      "de": "Nach „in spite of“ steht ein Nomen oder -ing, kein ganzer Satz.",
+      "en": "After “in spite of” comes a noun or -ing, not a whole clause."
+     },
+     {
+      "opt": "Because of",
+      "cat": "meaning",
+      "de": "„Because of“ nennt einen Grund und braucht ein Nomen.",
+      "en": "“Because of” gives a reason and needs a noun."
+     }
+    ]
+   },
+   "text": "___ the price was higher than expected, the board approved the project without any discussion.",
+   "options": [
+    "Although",
+    "Despite",
+    "In spite of",
+    "Because of"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "mcc-0434",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "c1-participle",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.6,
+   "pat": "cp.subject",
+   "why": {
+    "ok": {
+     "de": "Das Subjekt des Hauptsatzes ist auch der, der gelesen hat: the lawyer.",
+     "en": "The subject of the main clause is also the one who read: the lawyer."
+    },
+    "wrong": [
+     {
+      "opt": "two unclear clauses were found by the lawyer",
+      "cat": "grammar",
+      "de": "Der Vertrag hat nichts gelesen. Das Subjekt des Partizips muss die lesende Person sein.",
+      "en": "The contract did not read anything. The participle’s subject must be the person who read."
+     },
+     {
+      "opt": "the contract still contained two unclear clauses",
+      "cat": "grammar",
+      "de": "Auch hier liest der Vertrag nichts: das Subjekt passt nicht zum Partizip.",
+      "en": "Here too the contract reads nothing: the subject does not fit the participle."
+     },
+     {
+      "opt": "there were two unclear clauses left",
+      "cat": "grammar",
+      "de": "„there were“ nennt keine Person, die gelesen hat.",
+      "en": "“there were” names no person who read."
+     }
+    ]
+   },
+   "text": "Having read the contract twice, ___ before the signing meeting on Friday.",
+   "options": [
+    "two unclear clauses were found by the lawyer",
+    "the lawyer found two unclear clauses",
+    "the contract still contained two unclear clauses",
+    "there were two unclear clauses left"
+   ],
+   "answer": 1
+  },
+  {
+   "id": "mcc-0435",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "c1-discourse",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.6,
+   "pat": "dm.concede",
+   "why": {
+    "ok": {
+     "de": "„That said“ lässt etwas gelten und setzt dann dagegen.",
+     "en": "“That said” concedes a point and then sets something against it."
+    },
+    "wrong": [
+     {
+      "opt": "Therefore",
+      "cat": "meaning",
+      "de": "„Therefore“ nennt eine Folge, hier wird aber ein Gegengewicht genannt.",
+      "en": "“Therefore” names a result, but here a counterweight is named."
+     },
+     {
+      "opt": "Likewise",
+      "cat": "meaning",
+      "de": "„Likewise“ heißt „ebenso“ und würde den Gegensatz verwischen.",
+      "en": "“Likewise” means “in the same way” and would blur the contrast."
+     },
+     {
+      "opt": "For instance",
+      "cat": "meaning",
+      "de": "„For instance“ führt ein Beispiel ein, keinen Gegensatz.",
+      "en": "“For instance” introduces an example, not a contrast."
+     }
+    ]
+   },
+   "text": "The new tool is certainly expensive. ___, it will save us at least 200 working hours per year.",
+   "options": [
+    "Therefore",
+    "Likewise",
+    "That said",
+    "For instance"
+   ],
+   "answer": 2
+  },
+  {
+   "id": "mcc-0436",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "c1-emphasis",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.6,
+   "pat": "em.what-cleft",
+   "why": {
+    "ok": {
+     "de": "Der What-Satz betont: What matters most … is … Danach steht is.",
+     "en": "The what-cleft stresses: What matters most … is … Then is follows."
+    },
+    "wrong": [
+     {
+      "opt": "That",
+      "cat": "grammar",
+      "de": "That leitet hier keinen Spaltsatz ein, der What-Satz braucht what.",
+      "en": "That does not start a cleft sentence here, the what-cleft needs what."
+     },
+     {
+      "opt": "Which",
+      "cat": "grammar",
+      "de": "Which passt nicht an den Satzanfang eines Spaltsatzes.",
+      "en": "Which does not fit the start of a cleft sentence."
+     },
+     {
+      "opt": "It",
+      "cat": "grammar",
+      "de": "It matters most … is ist kein vollständiger Satz.",
+      "en": "It matters most … is is not a complete sentence."
+     }
+    ]
+   },
+   "text": "___ matters most to our customers is a fast and honest answer.",
+   "options": [
+    "What",
+    "That",
+    "Which",
+    "It"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "mcc-0437",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "compound-mod",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.1,
+   "pat": "cm.measure",
+   "why": {
+    "ok": {
+     "de": "Eine Maßangabe vor dem Nomen bleibt im Singular und wird mit Bindestrich verbunden: a three-year contract.",
+     "en": "A measure before a noun stays singular and is hyphenated: a three-year contract."
+    },
+    "wrong": [
+     {
+      "opt": "three-years",
+      "cat": "calque",
+      "de": "Im Deutschen steht „drei Jahre“ im Plural. Als Zusatz vor dem Nomen bleibt das englische Wort im Singular.",
+      "en": "German says “drei Jahre” in the plural. As a modifier before a noun the English word stays singular."
+     },
+     {
+      "opt": "three years",
+      "cat": "grammar",
+      "de": "Ohne Bindestrich wird der Plural zur Mengenangabe, nicht zum Zusatz vor dem Nomen.",
+      "en": "Without the hyphen the plural is a quantity, not a modifier before the noun."
+     },
+     {
+      "opt": "three years'",
+      "cat": "grammar",
+      "de": "Der Apostroph zeigt Besitz, hier ist aber eine Dauer gemeint.",
+      "en": "The apostrophe shows possession, but here a duration is meant."
+     }
+    ]
+   },
+   "text": "We have signed a ___ contract with our biggest customer in the retail sector.",
+   "options": [
+    "three-year",
+    "three-years",
+    "three years",
+    "three years'"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "mcc-0438",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "word-order",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.4,
+   "pat": "wo.verb-object",
+   "why": {
+    "ok": {
+     "de": "Zwischen Verb und Objekt steht kein Adverb: finish the report quickly.",
+     "en": "No adverb stands between verb and object: finish the report quickly."
+    },
+    "wrong": [
+     {
+      "opt": "finish quickly the report",
+      "cat": "grammar",
+      "de": "Zwischen Verb und Objekt steht kein Adverb.",
+      "en": "No adverb stands between verb and object."
+     },
+     {
+      "opt": "the report finish quickly",
+      "cat": "grammar",
+      "de": "Das Objekt steht nach dem Verb, nicht davor.",
+      "en": "The object stands after the verb, not before it."
+     },
+     {
+      "opt": "finish the quickly report",
+      "cat": "grammar",
+      "de": "Das Adverb steht nicht mitten in der Objektgruppe.",
+      "en": "The adverb does not stand inside the object phrase."
+     }
+    ]
+   },
+   "text": "We need to ___ before the end of the week.",
+   "options": [
+    "finish the report quickly",
+    "finish quickly the report",
+    "the report finish quickly",
+    "finish the quickly report"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "mcc-0439",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "comparison",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "pool": "place",
+   "b": -0.6,
+   "pat": "cmp.degree",
+   "why": {
+    "ok": {
+     "de": "Vor einem Komparativ verstärkt man mit „much“ oder „far“: much faster.",
+     "en": "Before a comparative you strengthen with “much” or “far”: much faster."
+    },
+    "wrong": [
+     {
+      "opt": "very",
+      "cat": "grammar",
+      "de": "„very“ steht nicht vor dem Komparativ.",
+      "en": "“very” does not stand before the comparative."
+     },
+     {
+      "opt": "more",
+      "cat": "grammar",
+      "de": "„more faster“ ist doppelt gesteigert.",
+      "en": "“more faster” is a double comparative."
+     },
+     {
+      "opt": "most",
+      "cat": "grammar",
+      "de": "„most faster“ gibt es nicht.",
+      "en": "“most faster” does not exist."
+     }
+    ]
+   },
+   "text": "The new bike is ___ faster than the old one, so the whole family is very happy.",
+   "options": [
+    "very",
+    "more",
+    "much",
+    "most"
+   ],
+   "answer": 2
+  },
+  {
+   "id": "ocl-0401",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "pres-simple-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.5,
+   "pat": "psc.always",
+   "why": {
+    "ok": {
+     "de": "„always“ mit Verlaufsform drückt Ärger über Wiederholtes aus: is always forgetting.",
+     "en": "“always” with the continuous expresses annoyance at repetition: is always forgetting."
+    },
+    "wrong": [
+     {
+      "if": [
+       "has"
+      ],
+      "de": "has verlangt eine 3. Form, nach always steht aber -ing: is always forgetting.",
+      "en": "has needs a participle, but always is followed by -ing: is always forgetting."
+     },
+     {
+      "if": [
+       "does"
+      ],
+      "de": "does braucht die Grundform, hier steht aber forgetting.",
+      "en": "does needs the base form, but forgetting stands here."
+     },
+     {
+      "if": [
+       "was"
+      ],
+      "de": "was liegt in der Vergangenheit, der Satz beschreibt aber jetzt.",
+      "en": "was lies in the past, but the sentence describes now."
+     }
+    ]
+   },
+   "text": "Our new intern ___ always forgetting to save his files, which drives the whole team crazy.",
+   "accept": [
+    "is",
+    "'s"
+   ],
+   "cls": "aux",
+   "chips": [
+    "has",
+    "does",
+    "was"
+   ]
+  },
+  {
+   "id": "ocl-0402",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "past-perfect",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.0,
+   "pat": "pp.earlier",
+   "why": {
+    "ok": {
+     "de": "Das Frühere vor einem Zeitpunkt in der Vergangenheit steht im Past Perfect: had left.",
+     "en": "What happened earlier than a past point takes the past perfect: had left."
+    },
+    "wrong": [
+     {
+      "if": [
+       "has"
+      ],
+      "de": "has ist Präsens, der Satz erzählt aber von früher.",
+      "en": "has is present, but the sentence tells about the past."
+     },
+     {
+      "if": [
+       "was"
+      ],
+      "de": "was verlangt hier ein -ing oder Passiv, left ist aber aktiv.",
+      "en": "was would need an -ing or passive here, but left is active."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "did braucht die Grundform, hier steht aber left.",
+      "en": "did needs the base form, but left stands here."
+     }
+    ]
+   },
+   "text": "She told me that the shipment ___ already left the warehouse before the customer called.",
+   "accept": [
+    "had"
+   ],
+   "cls": "aux",
+   "chips": [
+    "has",
+    "was",
+    "did"
+   ]
+  },
+  {
+   "id": "ocl-0403",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.0,
+   "pat": "ff.no-will-after",
+   "why": {
+    "ok": {
+     "de": "Nach „as soon as“ steht die Gegenwart, auch wenn die Zukunft gemeint ist: are available.",
+     "en": "After “as soon as” the present is used even when the future is meant: are available."
+    },
+    "wrong": [
+     {
+      "if": [
+       "will"
+      ],
+      "de": "Nach as soon as steht kein will, sondern die Gegenwart.",
+      "en": "After as soon as there is no will, the present tense is used."
+     },
+     {
+      "if": [
+       "have"
+      ],
+      "de": "have passt nicht zu results ohne eine 3. Form danach.",
+      "en": "have does not fit results without a participle after it."
+     },
+     {
+      "if": [
+       "were"
+      ],
+      "de": "were liegt in der Vergangenheit, gemeint ist aber die Zukunft.",
+      "en": "were lies in the past, but the future is meant."
+     }
+    ]
+   },
+   "text": "The manager will call you back as soon as the test results ___ available.",
+   "accept": [
+    "are",
+    "become"
+   ],
+   "cls": "aux",
+   "chips": [
+    "will",
+    "have",
+    "were"
+   ]
+  },
+  {
+   "id": "ocl-0404",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "c1-precision",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.5,
+   "pat": "cp.by-until",
+   "why": {
+    "ok": {
+     "de": "„by“ nennt die Frist (spätestens bis). „before“ ist ebenfalls möglich. „until“ meint, dass etwas bis dahin andauert.",
+     "en": "“by” names the deadline (no later than). “before” is also possible. “until” means that something continues up to then."
+    },
+    "wrong": [
+     {
+      "if": [
+       "until"
+      ],
+      "de": "until meint „bis dahin andauernd“, hier geht es um eine Frist.",
+      "en": "until means “continuing up to then”, but here it is a deadline."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "for nennt eine Dauer, keine Frist.",
+      "en": "for names a duration, not a deadline."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "at nennt einen Punkt, hier aber keine Frist.",
+      "en": "at names a point, but here it is not a deadline."
+     }
+    ]
+   },
+   "text": "The new interface must be live ___ the end of the third quarter at the very latest.",
+   "accept": [
+    "by",
+    "before"
+   ],
+   "cls": "prep",
+   "chips": [
+    "until",
+    "for",
+    "at"
+   ]
+  },
+  {
+   "id": "ocl-0405",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "mixed-cond",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.5,
+   "pat": "mc.past-cond",
+   "why": {
+    "ok": {
+     "de": "Mixed Conditional: if + Past Perfect (Ursache früher), would + Grundform (Folge jetzt).",
+     "en": "Mixed conditional: if + past perfect (earlier cause), would + base form (result now)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "would"
+      ],
+      "de": "would steht nicht im if-Satz, dort braucht es had.",
+      "en": "would does not stand in the if-clause, had is needed there."
+     },
+     {
+      "if": [
+       "has"
+      ],
+      "de": "has ist Präsens, last year verlangt die Vergangenheit.",
+      "en": "has is present, last year needs the past."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "did braucht die Grundform, hier steht aber chosen.",
+      "en": "did needs the base form, but chosen stands here."
+     }
+    ]
+   },
+   "text": "If we ___ chosen the cheaper supplier last year, we would not be facing these delays now.",
+   "accept": [
+    "had"
+   ],
+   "cls": "aux",
+   "chips": [
+    "would",
+    "has",
+    "did"
+   ]
+  },
+  {
+   "id": "ocl-0406",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "passive-plus",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.5,
+   "pat": "pp.personal",
+   "why": {
+    "ok": {
+     "de": "Berichtspassiv: Subjekt + is said + to + Grundform (is said to be planning).",
+     "en": "Reporting passive: subject + is said + to + base form (is said to be planning)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "is said for gibt es nicht, es heißt is said to.",
+      "en": "is said for does not exist, it is is said to."
+     },
+     {
+      "if": [
+       "of"
+      ],
+      "de": "is said of gibt es nicht, es heißt is said to.",
+      "en": "is said of does not exist, it is is said to."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "is said at gibt es nicht, es heißt is said to.",
+      "en": "is said at does not exist, it is is said to."
+     }
+    ]
+   },
+   "text": "The company is said ___ be planning to relocate its headquarters to Austin next year.",
+   "accept": [
+    "to"
+   ],
+   "cls": "prep",
+   "chips": [
+    "for",
+    "of",
+    "at"
+   ]
+  },
+  {
+   "id": "ocl-0407",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "questions",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.0,
+   "pat": "qu.indirect",
+   "why": {
+    "ok": {
+     "de": "Indirekte Frage: Aussagesatz-Stellung, also „where the printer is“, nicht „where is the printer“.",
+     "en": "Indirect question: statement order, so “where the printer is”, not “where is the printer”."
+    },
+    "wrong": [
+     {
+      "if": [
+       "does"
+      ],
+      "de": "In der indirekten Frage steht kein does, die Satzstellung ist normal.",
+      "en": "In an indirect question there is no does, the word order is normal."
+     },
+     {
+      "if": [
+       "are"
+      ],
+      "de": "are passt nicht zu printer, das ist Einzahl.",
+      "en": "are does not fit printer, which is singular."
+     },
+     {
+      "if": [
+       "has"
+      ],
+      "de": "has verlangt eine 3. Form und passt nicht zu where.",
+      "en": "has needs a participle and does not fit where."
+     }
+    ]
+   },
+   "text": "Excuse me, could you tell me where the nearest printer ___, please?",
+   "accept": [
+    "is"
+   ],
+   "cls": "aux",
+   "chips": [
+    "does",
+    "are",
+    "has"
+   ]
+  },
+  {
+   "id": "ocl-0408",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "modals-deduction",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.0,
+   "pat": "md.cant-have",
+   "why": {
+    "ok": {
+     "de": "Nach „she was on vacation“ ist es unmöglich: can’t have come.",
+     "en": "Since “she was on vacation” it is impossible: can’t have come."
+    },
+    "wrong": [
+     {
+      "if": [
+       "must"
+      ],
+      "de": "must have come hieße „bestimmt gekommen“, der Urlaub schließt das aber aus.",
+      "en": "must have come would mean “certainly came”, but the vacation rules that out."
+     },
+     {
+      "if": [
+       "might"
+      ],
+      "de": "might have come hieße „vielleicht“, die Aussage ist aber ein sicherer Ausschluss.",
+      "en": "might have come would mean “perhaps”, but the statement is a firm exclusion."
+     },
+     {
+      "if": [
+       "should"
+      ],
+      "de": "should have come hieße „hätte kommen sollen“, das ist ein anderer Sinn.",
+      "en": "should have come would mean “ought to have come”, which is a different meaning."
+     }
+    ]
+   },
+   "text": "The invoice ___ have come from Hanna: she was on vacation in Spain all of last week.",
+   "accept": [
+    "can't",
+    "cannot",
+    "couldn't"
+   ],
+   "cls": "aux",
+   "chips": [
+    "must",
+    "might",
+    "should"
+   ]
+  },
+  {
+   "id": "ocl-0409",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "gerund-inf",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.0,
+   "pat": "gi.prep-ing",
+   "why": {
+    "ok": {
+     "de": "„look forward to“ endet auf eine Präposition: danach steht -ing.",
+     "en": "“look forward to” ends in a preposition: -ing follows."
+    },
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "look forward for gibt es nicht, es heißt look forward to.",
+      "en": "look forward for does not exist, it is look forward to."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "look forward at gibt es nicht, es heißt look forward to.",
+      "en": "look forward at does not exist, it is look forward to."
+     },
+     {
+      "if": [
+       "on"
+      ],
+      "de": "look forward on gibt es nicht, es heißt look forward to.",
+      "en": "look forward on does not exist, it is look forward to."
+     }
+    ]
+   },
+   "text": "We are looking forward ___ working with your new team next month.",
+   "accept": [
+    "to"
+   ],
+   "cls": "prep",
+   "chips": [
+    "for",
+    "at",
+    "on"
+   ]
+  },
+  {
+   "id": "ocl-0410",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "prep-noun",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.5,
+   "pat": "pn.in",
+   "why": {
+    "ok": {
+     "de": "Nach „increase“ (Veränderung in einem Bereich) steht „in“: an increase in demand.",
+     "en": "After “increase” (change within an area) comes “in”: an increase in demand."
+    },
+    "wrong": [
+     {
+      "if": [
+       "of"
+      ],
+      "de": "increase of braucht danach eine Zahl, vor demand steht in.",
+      "en": "increase of needs a figure after it, before demand in is used."
+     },
+     {
+      "if": [
+       "on"
+      ],
+      "de": "increase on gibt es in dieser Bedeutung nicht, es heißt increase in.",
+      "en": "increase on does not exist in this meaning, it is increase in."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "increase for nennt den Nutznießer, nicht den Bereich.",
+      "en": "increase for names a beneficiary, not the area."
+     }
+    ]
+   },
+   "text": "There has been a sharp increase ___ demand for our cloud services since the new campaign started.",
+   "accept": [
+    "in"
+   ],
+   "cls": "prep",
+   "chips": [
+    "of",
+    "on",
+    "for"
+   ]
+  },
+  {
+   "id": "ocl-0411",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "countable",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.0,
+   "pat": "cnt.quant",
+   "why": {
+    "ok": {
+     "de": "Zählbares im Plural (complaints): too many.",
+     "en": "Countable plural (complaints): too many."
+    },
+    "wrong": [
+     {
+      "if": [
+       "much"
+      ],
+      "de": "much steht vor nicht zählbaren Nomen, complaints ist zählbar.",
+      "en": "much stands before uncountable nouns, complaints is countable."
+     },
+     {
+      "if": [
+       "few"
+      ],
+      "de": "too few heißt „zu wenige“, das passt nicht zu einer Sorge über viele Beschwerden.",
+      "en": "too few means “not enough”, which does not fit worry about many complaints."
+     },
+     {
+      "if": [
+       "little"
+      ],
+      "de": "little steht vor nicht zählbaren Nomen, complaints ist zählbar.",
+      "en": "little stands before uncountable nouns, complaints is countable."
+     }
+    ]
+   },
+   "text": "We received too ___ complaints about the new app this month, so we must react quickly.",
+   "accept": [
+    "many"
+   ],
+   "cls": "det",
+   "chips": [
+    "much",
+    "few",
+    "little"
+   ]
+  },
+  {
+   "id": "ocl-0412",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "c1-participle",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 1.0,
+   "pat": "cp.having",
+   "why": {
+    "ok": {
+     "de": "Vorzeitigkeit in einer Partizipialkonstruktion: Having + 3. Form (Having completed).",
+     "en": "Earlier action in a participle phrase: Having + past participle (Having completed)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "Had"
+      ],
+      "de": "Had completed ohne Subjekt ergibt keinen Nebensatz.",
+      "en": "Had completed without a subject forms no clause."
+     },
+     {
+      "if": [
+       "Being"
+      ],
+      "de": "Being completed wäre Passiv und passt nicht zur Handlung des Teams.",
+      "en": "Being completed would be passive and does not fit the team’s action."
+     },
+     {
+      "if": [
+       "Been"
+      ],
+      "de": "Been allein steht nicht am Satzanfang, es braucht having.",
+      "en": "Been alone does not start a sentence, having is needed."
+     }
+    ]
+   },
+   "text": "___ completed the first phase, the team moved on to the integration tests.",
+   "accept": [
+    "Having"
+   ],
+   "cls": "aux",
+   "chips": [
+    "Had",
+    "Being",
+    "Been"
+   ]
+  },
+  {
+   "id": "ocl-0413",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "compound-mod",
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.5,
+   "pat": "cm.measure",
+   "why": {
+    "ok": {
+     "de": "Vor einem Nomen steht die Maßangabe im Singular mit Bindestrich: a ten-day trip.",
+     "en": "Before a noun the measure stays singular with a hyphen: a ten-day trip."
+    },
+    "wrong": [
+     {
+      "if": [
+       "days"
+      ],
+      "de": "Vor einem Nomen bleibt die Maßangabe im Singular: ten-day.",
+      "en": "Before a noun the measure stays singular: ten-day."
+     },
+     {
+      "if": [
+       "daily"
+      ],
+      "de": "daily heißt „täglich“ und nennt keine Dauer.",
+      "en": "daily means “every day” and names no duration."
+     },
+     {
+      "if": [
+       "date"
+      ],
+      "de": "date heißt „Datum“ und nennt keine Dauer.",
+      "en": "date means a calendar date and names no duration."
+     }
+    ]
+   },
+   "text": "We booked a ten-___ trip to Portugal for the summer vacation.",
+   "accept": [
+    "day"
+   ],
+   "cls": "part",
+   "chips": [
+    "days",
+    "daily",
+    "date"
+   ]
+  },
+  {
+   "id": "err-0401",
+   "kind": "err",
+   "area": "gram",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.3,
+   "pat": "psp.finished-time",
+   "why": {
+    "ok": {
+     "de": "„in April“ nennt einen abgeschlossenen Zeitpunkt: Past Simple (launched).",
+     "en": "“in April” is a finished time: past simple (launched)."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "have launched",
+    "fix": [
+     "launched"
+    ],
+    "choices": [
+     "launched",
+     "launch",
+     "have been launching"
+    ]
+   },
+   "text": "We have launched the beta version in April, and the first customers signed up within a week."
+  },
+  {
+   "id": "err-0402",
+   "kind": "err",
+   "area": "gram",
+   "topic": "used-to",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.3,
+   "pat": "ut.be-used-to",
+   "why": {
+    "ok": {
+     "de": "„be used to“ ist hier „gewöhnt sein“, und „to“ ist eine Präposition: danach steht -ing.",
+     "en": "“be used to” means “be accustomed” here, and “to” is a preposition: -ing follows."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "work",
+    "fix": [
+     "working"
+    ],
+    "choices": [
+     "working",
+     "worked",
+     "to work"
+    ]
+   },
+   "text": "I'm not used to work late, so this deadline is really stressful for me."
+  },
+  {
+   "id": "err-0403",
+   "kind": "err",
+   "area": "gram",
+   "topic": "future-perf-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.8,
+   "pat": "fut.perf-cont",
+   "why": {
+    "ok": {
+     "de": "Dauer bis zu einem künftigen Zeitpunkt: Future Perfect (Continuous), will have been working.",
+     "en": "Duration up to a future point: future perfect (continuous), will have been working."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "will work",
+    "fix": [
+     "will have been working",
+     "will have worked"
+    ],
+    "choices": [
+     "will have been working",
+     "will be worked",
+     "would work"
+    ]
+   },
+   "text": "By next March, our team will work on this migration for two full years."
+  },
+  {
+   "id": "err-0404",
+   "kind": "err",
+   "area": "gram",
+   "topic": "conditionals",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.3,
+   "pat": "cn.second",
+   "why": {
+    "ok": {
+     "de": "Second Conditional: if + Past Simple (had), kein would im if-Satz.",
+     "en": "Second conditional: if + past simple (had), no would in the if-clause."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "would have",
+    "fix": [
+     "had"
+    ],
+    "choices": [
+     "had",
+     "have had",
+     "would had"
+    ]
+   },
+   "text": "If I would have more time, I would take the advanced course on data protection."
+  },
+  {
+   "id": "err-0405",
+   "kind": "err",
+   "area": "gram",
+   "topic": "c1-diplomacy",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.8,
+   "pat": "dip.wondering",
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: „I was wondering whether …“ ist eine höfliche, indirekte Bitte.",
+     "en": "No mistake: “I was wondering whether …” is a polite, indirect request."
+    },
+    "wrong": []
+   },
+   "bad": null,
+   "text": "I was wondering whether it might be possible to move our call to Thursday afternoon."
+  },
+  {
+   "id": "err-0406",
+   "kind": "err",
+   "area": "gram",
+   "topic": "reported",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.3,
+   "pat": "rs.question",
+   "why": {
+    "ok": {
+     "de": "Indirekte Frage: Wortstellung wie im Aussagesatz, kein did.",
+     "en": "Reported question: statement word order, no did."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "did we store",
+    "fix": [
+     "we stored",
+     "we had stored"
+    ],
+    "choices": [
+     "we stored",
+     "did we store",
+     "do we store"
+    ]
+   },
+   "text": "The auditor asked me where did we store the old invoices."
+  },
+  {
+   "id": "err-0407",
+   "kind": "err",
+   "area": "gram",
+   "topic": "mandative",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 1.3,
+   "pat": "mnd.verbs",
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Nach „recommend that“ steht die Grundform (approve), auch bei „the manager“.",
+     "en": "No mistake: after “recommend that” the base form (approve) is used, even with “the manager”."
+    },
+    "wrong": []
+   },
+   "bad": null,
+   "text": "The committee recommended that the manager approve the budget before the end of the month."
+  },
+  {
+   "id": "err-0408",
+   "kind": "err",
+   "area": "gram",
+   "topic": "modals-advice",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.3,
+   "pat": "ma.dont-have-to",
+   "why": {
+    "ok": {
+     "de": "„mustn’t“ heißt „darf nicht“. Hier ist gemeint „muss nicht“: don’t have to.",
+     "en": "“mustn’t” means “is forbidden”. Here “not necessary” is meant: don’t have to."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "mustn't attend",
+    "fix": [
+     "don't have to attend",
+     "needn't attend"
+    ],
+    "choices": [
+     "don't have to attend",
+     "mustn't to attend",
+     "must not attending"
+    ]
+   },
+   "text": "You mustn't attend the workshop if you are not interested; it is optional."
+  },
+  {
+   "id": "err-0409",
+   "kind": "err",
+   "area": "gram",
+   "topic": "verb-patterns",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.3,
+   "pat": "vp.remember-forget",
+   "why": {
+    "ok": {
+     "de": "„forget to do“ heißt: nicht daran denken, etwas Künftiges zu tun. Hier ist „to call“ gemeint.",
+     "en": "“forget to do” means: not remembering to do something. Here “to call” is meant."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "calling",
+    "fix": [
+     "to call"
+    ],
+    "choices": [
+     "to call",
+     "call",
+     "to calling"
+    ]
+   },
+   "text": "Don't forget calling the client before the meeting, because he wants the figures in advance."
+  },
+  {
+   "id": "err-0410",
+   "kind": "err",
+   "area": "gram",
+   "topic": "phrasal-syntax",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.3,
+   "pat": "ph.together",
+   "why": {
+    "ok": {
+     "de": "„look into“ lässt sich nicht trennen: Das Objekt steht dahinter.",
+     "en": "“look into” cannot be split: the object comes after it."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "look the problem into",
+    "fix": [
+     "look into the problem"
+    ],
+    "choices": [
+     "look into the problem",
+     "look into it problem",
+     "look the problem at"
+    ]
+   },
+   "text": "We need to look the problem into before the next meeting, otherwise the client will escalate."
+  },
+  {
+   "id": "err-0411",
+   "kind": "err",
+   "area": "gram",
+   "topic": "relative",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.3,
+   "pat": "rc.whose",
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: „whose“ zeigt Besitz (seine Empfehlungen).",
+     "en": "No mistake: “whose” shows possession (his recommendations)."
+    },
+    "wrong": []
+   },
+   "bad": null,
+   "text": "The consultant whose recommendations we followed has now joined our competitor."
+  },
+  {
+   "id": "err-0412",
+   "kind": "err",
+   "area": "gram",
+   "topic": "c1-discourse",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.8,
+   "pat": "dm.contrast",
+   "why": {
+    "ok": {
+     "de": "Die feste Wendung heißt „on the other hand“.",
+     "en": "The fixed phrase is “on the other hand”."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "in the other hand",
+    "fix": [
+     "on the other hand"
+    ],
+    "choices": [
+     "on the other hand",
+     "at the other hand",
+     "by the other hand"
+    ]
+   },
+   "text": "Sales grew by 12 percent last year; in the other hand, our margins fell considerably."
+  },
+  {
+   "id": "err-0413",
+   "kind": "err",
+   "area": "gram",
+   "topic": "word-order",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.6,
+   "pat": "wo.place-time",
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Ort vor Zeit ist die übliche Reihenfolge.",
+     "en": "No mistake: place before time is the usual order."
+    },
+    "wrong": []
+   },
+   "bad": null,
+   "text": "The team will present the results at the head office on Friday morning."
+  },
+  {
+   "id": "kwt-0401",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "pres-perf-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.6,
+   "pat": "pc.since-for",
+   "why": {
+    "ok": {
+     "de": "Seit 2019 bis heute: Present Perfect (has worked) mit „since“ und dem Anfangspunkt.",
+     "en": "From 2019 until today: present perfect (has worked) with “since” and the starting point."
+    },
+    "wrong": [
+     {
+      "if": [
+       "worked",
+       "since"
+      ],
+      "not": [
+       "has",
+       "have"
+      ],
+      "de": "Mit „since“ steht has/have: die Zeit läuft bis jetzt.",
+      "en": "With “since” you need has/have: the time runs up to now."
+     }
+    ]
+   },
+   "lead": "Anna joined the company in 2019 and she still works here.",
+   "key": "SINCE",
+   "before": "Anna",
+   "after": "2019.",
+   "keys": [
+    {
+     "a": [
+      "has worked"
+     ],
+     "b": [
+      "here since"
+     ]
+    },
+    {
+     "a": [
+      "has been working"
+     ],
+     "b": [
+      "here since"
+     ]
+    },
+    {
+     "a": [
+      "has been"
+     ],
+     "b": [
+      "here since"
+     ]
+    }
+   ],
+   "tiles": [
+    "has",
+    "worked",
+    "here"
+   ],
+   "extra": [
+    "for",
+    "have",
+    "ago"
+   ],
+   "traps": [
+    "worked here since"
+   ]
+  },
+  {
+   "id": "kwt-0402",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "prep-time",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.6,
+   "pat": "pt.by-until",
+   "why": {
+    "ok": {
+     "de": "„by“ nennt die Frist (spätestens bis). „until“ meint, dass etwas bis dahin andauert.",
+     "en": "“by” gives the deadline (no later than). “until” means something lasts up to that point."
+    },
+    "wrong": [
+     {
+      "if": [
+       "until"
+      ],
+      "not": [
+       "by"
+      ],
+      "de": "„until“ heißt „bis“ im Sinne von andauern. Für eine Frist braucht es „by“.",
+      "en": "“until” means “up to” as in lasting. A deadline needs “by”."
+     }
+    ]
+   },
+   "lead": "You must hand in the final report on Friday at the latest.",
+   "key": "BY",
+   "before": "The final report",
+   "after": "Friday.",
+   "keys": [
+    {
+     "a": [
+      "must be in",
+      "should be in",
+      "must be handed in",
+      "must be submitted"
+     ],
+     "b": [
+      "by"
+     ]
+    }
+   ],
+   "tiles": [
+    "must",
+    "be",
+    "in"
+   ],
+   "extra": [
+    "until",
+    "on",
+    "for"
+   ],
+   "traps": [
+    "must be in until"
+   ]
+  },
+  {
+   "id": "kwt-0403",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "time-clauses",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.6,
+   "pat": "tc.present-perfect",
+   "why": {
+    "ok": {
+     "de": "Nach „once“ steht kein will: entweder die Gegenwart (deliver) oder das Present Perfect (have delivered).",
+     "en": "After “once” there is no will: either the present (deliver) or the present perfect (have delivered)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "will"
+      ],
+      "de": "Nach „once“ steht kein will: Zeitsatz mit Gegenwart.",
+      "en": "After “once” there is no will: a time clause takes the present."
+     }
+    ]
+   },
+   "lead": "The team will begin testing immediately after the developers deliver the code.",
+   "key": "ONCE",
+   "before": "The team will begin testing",
+   "after": "the code.",
+   "keys": [
+    {
+     "a": [
+      "once the developers"
+     ],
+     "b": [
+      "have delivered",
+      "deliver"
+     ]
+    }
+   ],
+   "tiles": [
+    "the",
+    "developers",
+    "have",
+    "delivered"
+   ],
+   "extra": [
+    "will",
+    "are",
+    "delivering"
+   ],
+   "traps": [
+    "once the developers will deliver"
+   ]
+  },
+  {
+   "id": "kwt-0404",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "cond-alt",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 1.1,
+   "pat": "ca.as-long-as",
+   "why": {
+    "ok": {
+     "de": "„as long as“ heißt „solange, vorausgesetzt“: eine Bedingung, die erfüllt bleiben muss.",
+     "en": "“as long as” means “provided that”: a condition that has to stay fulfilled."
+    },
+    "wrong": [
+     {
+      "if": [
+       "long",
+       "if"
+      ],
+      "de": "Nach „as long“ steht „as“, nicht „if“.",
+      "en": "After “as long” comes “as”, not “if”."
+     }
+    ]
+   },
+   "lead": "You can use the license only if you keep the data in Europe.",
+   "key": "LONG",
+   "before": "You can use the license",
+   "after": "you keep the data in Europe.",
+   "keys": [
+    {
+     "a": [
+      "as long",
+      "so long"
+     ],
+     "b": [
+      "as"
+     ]
+    }
+   ],
+   "tiles": [
+    "as",
+    "as"
+   ],
+   "extra": [
+    "so",
+    "much",
+    "well"
+   ],
+   "traps": [
+    "as long if"
+   ]
+  },
+  {
+   "id": "kwt-0405",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "passive",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.6,
+   "pat": "pv.progressive",
+   "why": {
+    "ok": {
+     "de": "Eine laufende Handlung im Passiv: is being + 3. Form (is being repaired).",
+     "en": "An action in progress in the passive: is being + participle (is being repaired)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "repaired"
+      ],
+      "not": [
+       "being"
+      ],
+      "de": "Für „gerade jetzt“ braucht das Passiv „being“: is being repaired.",
+      "en": "For “right now” the passive needs “being”: is being repaired."
+     }
+    ]
+   },
+   "lead": "Someone is repairing the printer on the third floor at the moment.",
+   "key": "BEING",
+   "before": "The printer on the third floor",
+   "after": "at the moment.",
+   "keys": [
+    {
+     "a": [
+      "is"
+     ],
+     "b": [
+      "being repaired"
+     ]
+    }
+   ],
+   "tiles": [
+    "is",
+    "repaired"
+   ],
+   "extra": [
+    "been",
+    "was",
+    "repairing"
+   ],
+   "traps": [
+    "is repaired"
+   ]
+  },
+  {
+   "id": "kwt-0406",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "report-verbs",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 1.1,
+   "pat": "rv.admit-deny",
+   "why": {
+    "ok": {
+     "de": "„deny“ wird mit -ing verbunden: denied having deleted (oder denied deleting).",
+     "en": "“deny” takes -ing: denied having deleted (or denied deleting)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "denied",
+       "to"
+      ],
+      "de": "Nach „deny“ steht -ing, nicht to + Grundform.",
+      "en": "After “deny” comes -ing, not to + base form."
+     }
+    ]
+   },
+   "lead": "He said that he had not deleted the file.",
+   "key": "DENIED",
+   "before": "",
+   "after": "the file.",
+   "keys": [
+    {
+     "a": [
+      "He denied"
+     ],
+     "b": [
+      "having deleted",
+      "deleting"
+     ]
+    },
+    {
+     "a": [
+      "He denied that"
+     ],
+     "b": [
+      "he had deleted"
+     ]
+    }
+   ],
+   "tiles": [
+    "He",
+    "having",
+    "deleted"
+   ],
+   "extra": [
+    "that",
+    "to",
+    "delete"
+   ],
+   "traps": [
+    "denied to delete"
+   ]
+  },
+  {
+   "id": "kwt-0407",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "c1-nominal",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 1.6,
+   "pat": "nm.noun-form",
+   "why": {
+    "ok": {
+     "de": "Nominalstil: rose sharply → the sharp rise; nach „rise“ steht „in“ (a rise in prices).",
+     "en": "Nominal style: rose sharply → the sharp rise; “rise” takes “in” (a rise in prices)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "rise",
+       "of"
+      ],
+      "not": [
+       "in"
+      ],
+      "de": "Nach „rise“ steht „in“: a rise in prices.",
+      "en": "After “rise” comes “in”: a rise in prices."
+     }
+    ]
+   },
+   "lead": "Prices rose sharply last quarter, which surprised our investors.",
+   "key": "RISE",
+   "before": "Our investors were surprised by",
+   "after": "last quarter.",
+   "keys": [
+    {
+     "a": [
+      "the sharp"
+     ],
+     "b": [
+      "rise in prices",
+      "price rise"
+     ]
+    }
+   ],
+   "tiles": [
+    "the",
+    "sharp",
+    "in",
+    "prices"
+   ],
+   "extra": [
+    "rose",
+    "of",
+    "sharply"
+   ],
+   "traps": [
+    "the sharp rise of prices"
+   ]
+  },
+  {
+   "id": "kwt-0408",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "c1-hedging",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 1.6,
+   "pat": "hg.worth",
+   "why": {
+    "ok": {
+     "de": "Vorsichtiger Vorschlag: It might be worth + -ing.",
+     "en": "A cautious suggestion: It might be worth + -ing."
+    },
+    "wrong": [
+     {
+      "if": [
+       "worth",
+       "to"
+      ],
+      "de": "Nach „worth“ steht -ing, nicht to + Grundform.",
+      "en": "After “worth” comes -ing, not to + base form."
+     }
+    ]
+   },
+   "lead": "Perhaps we should wait for the second quarter's results before deciding.",
+   "key": "WORTH",
+   "before": "",
+   "after": "for the second quarter's results before deciding.",
+   "keys": [
+    {
+     "a": [
+      "It might be",
+      "It may be",
+      "It could be"
+     ],
+     "b": [
+      "worth waiting"
+     ]
+    }
+   ],
+   "tiles": [
+    "It",
+    "might",
+    "be",
+    "waiting"
+   ],
+   "extra": [
+    "to",
+    "should",
+    "worthy"
+   ],
+   "traps": [
+    "It might be worth to wait"
+   ]
+  },
+  {
+   "id": "kwt-0409",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "prepositions",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.6,
+   "pat": "prp.verb-prep",
+   "why": {
+    "ok": {
+     "de": "„depend“ wird mit „on“ verbunden (depends on).",
+     "en": "“depend” takes “on” (depends on)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "depends",
+       "of"
+      ],
+      "de": "Das deutsche „abhängen von“ verleitet zu „of“. Englisch sagt „depend on“.",
+      "en": "German “abhängen von” suggests “of”. English says “depend on”."
+     }
+    ]
+   },
+   "lead": "The success of the rollout is mainly determined by the support of IT.",
+   "key": "DEPENDS",
+   "before": "The success of the rollout",
+   "after": "the support of IT.",
+   "keys": [
+    {
+     "a": [
+      "mainly"
+     ],
+     "b": [
+      "depends on",
+      "depends upon"
+     ]
+    },
+    {
+     "a": [
+      "depends mainly"
+     ],
+     "b": [
+      "on",
+      "upon"
+     ]
+    }
+   ],
+   "tiles": [
+    "mainly",
+    "on"
+   ],
+   "extra": [
+    "of",
+    "from",
+    "at"
+   ],
+   "traps": [
+    "mainly depends of"
+   ]
+  },
+  {
+   "id": "kwt-0410",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "articles",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.3,
+   "pat": "art.the-unique",
+   "why": {
+    "ok": {
+     "de": "Vor dem Superlativ steht „the“: the fastest product.",
+     "en": "Before a superlative you use “the”: the fastest product."
+    },
+    "wrong": [
+     {
+      "if": [
+       "fastest",
+       "a"
+      ],
+      "not": [
+       "the"
+      ],
+      "de": "Vor dem Superlativ steht „the“, nicht „a“.",
+      "en": "Before a superlative “the” is used, not “a”."
+     }
+    ]
+   },
+   "lead": "No other product on the market is as fast as ours.",
+   "key": "FASTEST",
+   "before": "Ours is",
+   "after": "on the market.",
+   "keys": [
+    {
+     "a": [
+      "the"
+     ],
+     "b": [
+      "fastest product",
+      "fastest one"
+     ]
+    }
+   ],
+   "tiles": [
+    "the",
+    "product"
+   ],
+   "extra": [
+    "a",
+    "most",
+    "faster"
+   ],
+   "traps": [
+    "a fastest product"
+   ]
+  },
+  {
+   "id": "kwt-0411",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "linkers",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 1.1,
+   "pat": "lk.despite",
+   "why": {
+    "ok": {
+     "de": "Nach „despite“ steht ein Nomen: despite the attractive offer.",
+     "en": "After “despite” comes a noun: despite the attractive offer."
+    },
+    "wrong": [
+     {
+      "if": [
+       "despite",
+       "of"
+      ],
+      "de": "Es heißt „despite“ ohne „of“ (oder „in spite of“).",
+      "en": "It is “despite” without “of” (or “in spite of”)."
+     }
+    ]
+   },
+   "lead": "The offer was very attractive, but we still turned it down.",
+   "key": "DESPITE",
+   "before": "We turned it down",
+   "after": "offer.",
+   "keys": [
+    {
+     "a": [
+      "despite the"
+     ],
+     "b": [
+      "attractive",
+      "very attractive"
+     ]
+    }
+   ],
+   "tiles": [
+    "the",
+    "attractive"
+   ],
+   "extra": [
+    "although",
+    "very",
+    "of"
+   ],
+   "traps": [
+    "despite of the attractive"
+   ]
+  },
+  {
+   "id": "kwt-0412",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "c1-emphasis",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 1.6,
+   "pat": "em.what-cleft",
+   "why": {
+    "ok": {
+     "de": "What-Satz: What + Subjekt + Verb + is. Das Wichtige steht am Ende.",
+     "en": "What-cleft: What + subject + verb + is. The key point comes last."
+    },
+    "wrong": []
+   },
+   "lead": "We urgently need a clear owner for each task.",
+   "key": "WHAT",
+   "before": "",
+   "after": "is a clear owner for each task.",
+   "keys": [
+    {
+     "a": [
+      "What we"
+     ],
+     "b": [
+      "urgently need",
+      "need urgently"
+     ]
+    }
+   ],
+   "tiles": [
+    "we",
+    "urgently",
+    "need"
+   ],
+   "extra": [
+    "is",
+    "that",
+    "of"
+   ],
+   "traps": []
+  },
+  {
+   "id": "kwt-0413",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "comparison",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "place",
+   "b": 0.6,
+   "pat": "cmp.as-as",
+   "why": {
+    "ok": {
+     "de": "Gleichheit: as … as (costs as much as).",
+     "en": "Equality: as … as (costs as much as)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "much",
+       "than"
+      ],
+      "de": "Bei Gleichheit steht „as … as“, nicht „than“.",
+      "en": "Equality takes “as … as”, not “than”."
+     }
+    ]
+   },
+   "lead": "Our competitor's product and ours have exactly the same price.",
+   "key": "AS",
+   "before": "Our competitor's product",
+   "after": "ours.",
+   "keys": [
+    {
+     "a": [
+      "costs as much"
+     ],
+     "b": [
+      "as"
+     ]
+    },
+    {
+     "a": [
+      "is as expensive"
+     ],
+     "b": [
+      "as"
+     ]
+    },
+    {
+     "a": [
+      "costs the same"
+     ],
+     "b": [
+      "as"
+     ]
+    }
+   ],
+   "tiles": [
+    "costs",
+    "much",
+    "as"
+   ],
+   "extra": [
+    "than",
+    "so",
+    "more"
+   ],
+   "traps": [
+    "costs as much than"
+   ]
+  }
+ ]
+}

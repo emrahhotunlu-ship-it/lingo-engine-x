@@ -404,14 +404,17 @@ type Pick2 = Pick<RoundInput, 'mode' | 'introduce' | 'grammarDocs' | 'dailyOpen'
 /** Vorrang der Formen im Einführungsblock: erkennen (meaning, mc), ergänzen (gap), dann das Gegenstück (§5.3). */
 const INTRO_FORMS: readonly (readonly GrammarTaskType[])[] = [['meaning', 'mc'], ['mc', 'meaning'], ['gap', 'kwt', 'find'], ['mc', 'meaning', 'find', 'kwt', 'gap']];
 
-/** Vortest eines neuen Themas (§5.3): zwei getippte Aufgaben (Lücke oder Schlüsselwort) zu den heutigen Mustern, ohne Hilfe. */
-export function selectVortest(i: Pick2 & { topic: string; pats: readonly string[] }): GrammarTask[] {
+/**
+ * Vortest eines neuen Themas (§5.3): zwei getippte Aufgaben (Lücke oder Schlüsselwort) zu den heutigen Mustern, ohne Hilfe.
+ * Kurzweg der Einstufung (Lernplattform 3.0 P34): `n = 4`, die Aufgaben laufen reihum über die übergebenen Muster (alle Muster des Themas).
+ */
+export function selectVortest(i: Pick2 & { topic: string; pats: readonly string[]; n?: 2 | 4 }): GrammarTask[] {
   const pk = picker({ ...i, mode: 'duty', introBlock: { topic: i.topic, pats: [...i.pats] } });
   const out: GrammarTask[] = [];
   const pats = i.pats.length ? i.pats : [null];
-  for (let k = 0; k < 2; k++) {
+  for (let k = 0; k < (i.n ?? 2); k++) {
     const pat = pats[k % pats.length] ?? null;
-    const t = pk.take(pk.fresh({ topic: i.topic, prefer: k === 0 ? ['gap', 'kwt'] : ['kwt', 'gap'], strict: true, pats: pat ? [pat] : null, allowSeen: true })) ?? pk.take(pk.fresh({ topic: i.topic, prefer: ['gap', 'kwt'], strict: true, pats: i.pats.length ? i.pats : null, allowSeen: true }));
+    const t = pk.take(pk.fresh({ topic: i.topic, prefer: k % 2 === 0 ? ['gap', 'kwt'] : ['kwt', 'gap'], strict: true, pats: pat ? [pat] : null, allowSeen: true })) ?? pk.take(pk.fresh({ topic: i.topic, prefer: ['gap', 'kwt'], strict: true, pats: i.pats.length ? i.pats : null, allowSeen: true }));
     if (t) out.push(t);
   }
   return out;
