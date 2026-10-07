@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { emit } from '../../engine/fx';
 import { useClock } from '../../app/clock';
 import { useT } from '../../i18n';
 import { useLive } from '../../data/live';
@@ -77,12 +78,16 @@ const SPARKS: ReadonlyArray<readonly [number, number, number]> = [
  * Der Tagesmoment spielt einmal je Lerntag und Browser (EE M7: „beim späteren Öffnen steht der fertige Ring still“).
  * Gemerkt nur im Browser (Bequemlichkeit, kein Lernstand).
  */
-function usePlayOnce(today: string): boolean {
+function usePlayOnce(today: string, ring: React.RefObject<HTMLElement | null>): boolean {
   const key = `${KEY_PREFIX}daymoment:${today}`;
   const [play] = useState(() => local.get(key) !== '1');
   useEffect(() => {
-    if (play) local.set(key, '1');
-  }, [play, key]);
+    if (!play) return;
+    local.set(key, '1');
+    // Funken, wenn sich der Ring geschlossen hat (EE M7 ≈ 640 ms); nur Stufe „Voll“ (Dirigent).
+    const id = setTimeout(() => emit({ k: 'moment', m: 'day', el: ring.current }), 640);
+    return () => clearTimeout(id);
+  }, [play, key, ring]);
   return play;
 }
 
@@ -113,7 +118,8 @@ export function DoneCard3({ view, tomorrow, today }: { view: TodayView; tomorrow
   const ms = facts.milestone;
   const msText = ms ? (ms.id.startsWith('fest') ? t('nbHeuteMsFest', { n: ms.n ?? 0 }) : ms.id === 'topic1' ? t('nbHeuteMsTopic') : ms.id === 'fix10' ? t('nbHeuteMsFix', { n: ms.n ?? 0 }) : t('nbHeuteMsOver')) : null;
   const goalText = !msText && facts.goal ? t(facts.goal.key, facts.goal.params) : null;
-  const play = usePlayOnce(today);
+  const ringRef = useRef<HTMLSpanElement>(null);
+  const play = usePlayOnce(today, ringRef);
   const heroText = big ? t(big.kind === 'words' ? 'hxDoneBigWords' : 'hxDoneBigPatterns', { n: big.n }) : t('nbHeuteDoneSteps', { blocks });
   const hero = splitHero(heroText);
   return (
@@ -125,7 +131,7 @@ export function DoneCard3({ view, tomorrow, today }: { view: TodayView; tomorrow
             {back ? t('moBackTitle') : t('nbHeuteDoneTitle')}
           </span>
         </p>
-        <span className="dz-done-ring" data-play={play ? '' : undefined}>
+        <span className="dz-done-ring" data-play={play ? '' : undefined} ref={ringRef}>
           <SegmentRing segments={Math.max(1, blocks)} done={blocks} size={168} stroke={12} label={t('nbHeuteRingLabel', { done: blocks, total: blocks })}>
             <span className="dz-done-check inline-flex text-ok-text">
               <Icon name="check" size={72} strokeWidth={2.4} />

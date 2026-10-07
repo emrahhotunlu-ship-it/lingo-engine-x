@@ -2,6 +2,7 @@ import { verdictHaptic } from '../../platform/haptics';
 import { playCue } from '../../platform/sound';
 import { subscribe, type LearnEvent } from './events';
 import { FRAME_SAMPLES, setFrameMeasure } from './level';
+import { playMoment } from './moments';
 
 // Der Dirigent (Lernplattform 3.0 P30, Erlebnis-Engine §2.2): nimmt Lernereignisse an und spielt dazu Ton und Vibration, an EINER Stelle.
 // Regeln: höchstens ein Urteil je 300 ms (zwei Meldungen desselben Prüfens, z. B. Lücke und Ergebniszeile, ergeben einen Ton);
@@ -17,7 +18,7 @@ const CUE = { ok: 'correct', near: 'near', wrong: 'wrong' } as const;
 
 /** Ein Urteil verarbeiten (Ton und Vibration; Zeitgeber statt Uhrzeit, weil eine feste Testuhr die Zeit anhält). */
 export function playVerdict(e: LearnEvent): void {
-  if (e.v === 'dontKnow' || blocked) return;
+  if (e.k !== 'verdict' || e.v === 'dontKnow' || blocked) return;
   blocked = true;
   if (timer) clearTimeout(timer);
   timer = setTimeout(() => {
@@ -62,6 +63,7 @@ export function installDirector(): void {
   if (installed) return;
   installed = true;
   subscribe(playVerdict);
+  subscribe(playMoment);
   if (typeof window === 'undefined') return;
   const onFirst = (): void => {
     window.removeEventListener('pointerdown', onFirst);
