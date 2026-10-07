@@ -26,7 +26,7 @@ function pron(): Map<string, string> {
 
 /**
  * Leistung (plan.md N29, leistung.md §3.2 Nr. 3): Die ersten Nachschlagungen suchen direkt im Text
- * (`\n"wort":"…"`, je ≈ 0,3 ms) statt die ganze Tabelle (348 KB, ≈ 50 ms bei 4× Drossel) zu parsen.
+ * (`"wort":"…"`, je ≈ 0,3 ms; ohne Zeilenumbruch im Muster, weil der Build das JSON minimiert) statt die ganze Tabelle (348 KB, ≈ 50 ms bei 4× Drossel) zu parsen.
  * Erst bei vielen Nachschlagungen (Lesen, Wortprüfung) lohnt die Tabelle.
  */
 const RAW_LOOKUPS = 64;
@@ -34,7 +34,7 @@ let rawLookups = 0;
 
 function rawGet(word: string): string | null {
   if (!word || word.includes('"') || word.includes('\\')) return null;
-  const key = `\n"${word}":"`;
+  const key = `"${word}":"`;
   const i = pronRaw.indexOf(key);
   if (i < 0) return null;
   const start = i + key.length;
