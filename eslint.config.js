@@ -8,6 +8,9 @@ const PLATFORM_SYNTAX = [
   { selector: "MemberExpression[property.name='claude']", message: 'claude.use nur in src/platform (Kap. 3.3).' },
   { selector: "Identifier[name='localStorage']", message: 'localStorage nur über src/platform/storage.ts.' },
   { selector: "Identifier[name='sessionStorage']", message: 'sessionStorage nur über src/platform/storage.ts.' },
+  { selector: "CallExpression[callee.property.name='matchMedia'][arguments.0.value=/^\\(\\s*(any-)?pointer/]", message: 'Eingabeprofil nur über src/platform/input.ts (Lernplattform 2.0 §4.1).' },
+  { selector: "Literal[value=/(^|[\\s\"'`])text-\\[/]", message: 'Keine freien Schriftgrößen (text-[…]); Schriftstufen aus den Tokens (Lernplattform 2.0 §7).' },
+  { selector: 'TemplateElement[value.raw=/(^|[\\s])text-\\[/]', message: 'Keine freien Schriftgrößen (text-[…]); Schriftstufen aus den Tokens (Lernplattform 2.0 §7).' },
 ];
 const LAYOUT_SYNTAX = [
   { selector: 'JSXAttribute[name.name=/^(layout|layoutId)$/]', message: 'Keine Layout-Animationen (layout/layoutId) – nur Deckkraft/Verschieben (leistung.md §4 Nr. 8).' },
