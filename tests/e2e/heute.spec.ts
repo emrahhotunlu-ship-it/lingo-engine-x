@@ -115,11 +115,12 @@ test('Neuladen in Block 3 (Satzbau): Heute führt direkt zurück in Block 3', as
   expect(errors).toEqual([]);
 });
 
-test('Sonntag: 2 Blöcke (Wiederholen + Wochen-Check); Kurz-Einheit bei Tagesziel 15: 3 Blöcke', async ({ page }) => {
+test('Sonntag: 3 Blöcke (Wiederholen + Wochen-Check + Fehler korrigieren, Seed hat fällige Fehlersätze); Kurz-Einheit bei Tagesziel 15: 3 Blöcke', async ({ page }) => {
   await boot(page, { migrated: true, now: SUN_9, fake: { patch: { 'app/week': { v: 1, cur: { wk: '2026-W39', theme: 't01', by: 'auto', at: 1 } } } } });
   await screen(page, 'today');
-  await expect(page.getByTestId('duty')).toHaveCount(2);
+  await expect(page.getByTestId('duty')).toHaveCount(3);
   await expect(page.locator('[data-testid="duty"]').nth(1)).toHaveAttribute('data-duty', 'ch:u-check');
+  await expect(page.locator('[data-testid="duty"]').nth(2)).toHaveAttribute('data-duty', 'ch:u-again');
   await page.close();
 });
 

@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { boot, layoutProblems, openOverview, openSpeak, openTab, screen } from './fixtures';
-import { NO_GRAMMAR_ERRORS } from './heuteHelpers';
+import { NO_GRAMMAR_ERRORS, profileWith, vgPlan } from './heuteHelpers';
 import { DAY, answerCurrent, dump, forcedPatch, planPatch } from './trainerHelpers';
 
 // Reparatur-Sätze (Lernberatung 27.09., V2 „Nochmal, aber besser"): Wiederholung in der
@@ -174,7 +174,9 @@ test('Rollenspiel: „Nochmal, aber besser“ nach dem Bericht, Satz wird Repara
 
 test('Anwenden › Fehler korrigieren: freiwillige Runde über die fälligen Sätze, ctx xtra, Box wächst, Pflicht unberührt', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  const { errors } = await boot(page, { migrated: true, fake: { patch: { ...NO_GRAMMAR_ERRORS, 'app/repair': { items: [A, B] } } } });
+  // Plan v2: Schritt 4 (Sonntag) nimmt die fälligen Sätze selbst; die freiwillige Runde gibt es erst, wenn er erledigt ist.
+  const sunPlan = { ...vgPlan(DAY), duty: ['review', 'ch:u-check', 'ch:u-again'] };
+  const { errors } = await boot(page, { migrated: true, fake: { patch: { ...NO_GRAMMAR_ERRORS, ...profileWith(DAY, sunPlan, ['u-again']), 'app/repair': { items: [A, B] } } } });
   await screen(page, 'today');
   const planBefore = (await dump(page))['app/profile']?.plan;
   await openTab(page, 'apply');

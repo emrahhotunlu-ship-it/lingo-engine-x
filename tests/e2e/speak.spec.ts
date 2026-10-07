@@ -115,9 +115,9 @@ test('Gespräch: 4 Züge, Analysen der Reihe nach, drei Schichten, Wort-Antippen
   // Heute: Das Gespräch zählt nicht als „Wiederholen“; Angebote erst nach der Pflicht (Kap. 2.1).
   await page.getByTestId('report-home').click();
   await screen(page, 'today');
-  // Neubau: Sonntag = Tageseinheit mit 2 Blöcken (Wiederholen + Wochen-Check); das Gespräch zählt in keinen.
-  // Wiederholen darf bei Rückstand länger dauern (Seed: viele überfällige Karten; Sonntag 5 Min. + höchstens 50 %), der Wochen-Check bleibt bei 5.
-  await expect(page.getByTestId('today-status')).toHaveText(/^0 von 2 · noch ca\. (10|11|12|13) Min\.$/);
+  // Plan v2: Sonntag = Wiederholen + Wochen-Check + Fehler korrigieren (Seed hat fällige Fehlersätze, Grenze 3); das Gespräch zählt in keinen.
+  // Wiederholen darf bei Rückstand länger dauern (Seed: viele überfällige Karten; Sonntag 5 Min. + höchstens 50 %), Wochen-Check 5, Fehler korrigieren 2.
+  await expect(page.getByTestId('today-status')).toHaveText(/^0 von 3 · noch ca\. (13|14|15|16) Min\.$/);
   await expect(page.locator('[data-testid="duty"][data-duty="review"]')).toHaveAttribute('data-state', 'open');
   await expect(page.getByTestId('extra')).toHaveCount(0);
   // Sprechen (Seite über Heute): erledigt ist Zustand, kein Knopf (Kap. 2.2).

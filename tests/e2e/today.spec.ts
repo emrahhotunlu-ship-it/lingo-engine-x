@@ -46,20 +46,20 @@ test('Plan wird einmal je Lerntag gespeichert und nach dem Neuladen nicht neu ge
   const { errors } = await boot(page, { migrated: true, fake: { persist: true } });
   await screen(page, 'today');
   const status = page.getByTestId('today-status');
-  // Tageseinheit (plan.md §1.5): Stichtag ist ein Sonntag → Wiederholen + Wochen-Check.
-  await expect(status).toHaveAttribute('data-total', '2');
+  // Tageseinheit (plan.md §1.5): Stichtag ist ein Sonntag → Wiederholen + Wochen-Check + (Plan v2, Seed hat fällige Fehlersätze) Fehler korrigieren.
+  await expect(status).toHaveAttribute('data-total', '3');
   await expect.poll(async () => ((await dump(page))['app/profile']?.plan as { v?: number } | undefined)?.v).toBe(1);
   type Plan = { d: string; v: number; ids: string[]; duty: string[]; goal: { review: number; due: number; new: number; ahead: number }; lesson: string | null; at: number; u: { shape: string; b: unknown[] } };
   const plan = (await dump(page))['app/profile']?.plan as Plan;
   expect(plan.d).toBe(DAY);
-  expect(plan.duty).toEqual(['review', 'ch:u-check']);
+  expect(plan.duty).toEqual(['review', 'ch:u-check', 'ch:u-again']);
   expect(plan.u.shape).toBe('sun');
   expect(plan.lesson).toBeNull();
   expect(plan.goal.review).toBeGreaterThan(0);
   expect(plan.goal.due + plan.goal.new + plan.goal.ahead).toBeLessThanOrEqual(plan.goal.review);
   expect(plan.at).toBe(Date.parse(SEED_EVENING));
   const text = await status.innerText();
-  await expect(page.getByTestId('duty')).toHaveCount(2);
+  await expect(page.getByTestId('duty')).toHaveCount(3);
   expect((await writes(page)).filter((w) => w.path === 'app/profile').length).toBeGreaterThanOrEqual(1);
   await page.reload();
   await screen(page, 'today');

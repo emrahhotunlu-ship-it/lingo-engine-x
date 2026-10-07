@@ -385,6 +385,7 @@ test('P7 Grammatik-Reiter: bei aktiver Bremse startet der Hauptknopf die Fehlers
   await expect(page.getByTestId('hub-errors')).toContainText(`Fehlersätze · ${dueN} fällig · heute ${n}`);
   await expect(page.getByTestId('hub-errors')).toHaveAttribute('data-today', String(n));
   await main.click();
-  await screen(page, 'repairRound');
+  // Plan v2: Schritt 4 von heute ist noch offen, der Knopf startet ihn (Pflicht, §2.4), nicht die freiwillige Runde.
+  await screen(page, 'unitAgain');
   expect(errs).toEqual([]);
 });
