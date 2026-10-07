@@ -62,3 +62,8 @@ export function roundGrowth(before: readonly TrainCard[], after: readonly TrainC
   const memory = n >= MEMORY_MIN_CARDS && ma > mb ? { n, before: round1(mb), after: round1(ma) } : null;
   return { up, memory, down };
 }
+
+/** Schwerer Block: unter 60 Prozent richtig bei mindestens 8 Antworten (Motivation §4.7, 03-lernmodell §6). */
+export const HARD_ROUND_RATE = 0.6;
+export const HARD_ROUND_MIN = 8;
+export const hardRound = (right: number, total: number): boolean => total >= HARD_ROUND_MIN && right / total < HARD_ROUND_RATE;

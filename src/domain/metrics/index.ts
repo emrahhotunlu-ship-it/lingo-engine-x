@@ -15,4 +15,4 @@ export { PATTERN_STATES, patPush, patternState, patternStateNo, patsOf, readPatE
 export { EFFECT_RULES, learningEffect, motivationSignals, type LearningEffect, type MotivationSignals, type Rate } from './effect';
 export { nextGoal, type GoalId, type NextGoal } from './goals';
 export { groupMastery, type GroupMastery } from './groups';
-export { roundGrowth, type RoundGrowth } from './round';
+export { GROWTH_NAMES_MAX, HARD_ROUND_MIN, HARD_ROUND_RATE, MEMORY_MIN_CARDS, hardRound, roundGrowth, type RoundGrowth, type RoundUp } from './round';

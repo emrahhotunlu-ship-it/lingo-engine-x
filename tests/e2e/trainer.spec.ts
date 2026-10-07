@@ -44,7 +44,9 @@ test('komplette Pflichtrunde per Tastatur: jede Abfrageart, Schreibwege, danach 
   for (const ex of seen) expect(CATALOG_IDS).toContain(ex);
   // Das Rundenende zeigt Zuwachs statt Kacheln; Fehlwörter-Chips gibt es nur, wenn ein Wort falsch war (hier alle richtig), je Wort höchstens einen.
   await expect(page.getByTestId('session-end')).toHaveAttribute('data-mode', 'growth');
-  await expect(page.getByTestId('session-end-facts')).toBeVisible();
+  // Wachstum (LP3 P28): Namen der Aufgestiegenen bzw. Gedächtnis-Zeit, sonst der ruhige Satz „Diesmal kein Wort fester geworden“.
+  await expect(page.getByTestId('session-end-growth').or(page.getByTestId('session-end-facts')).first()).toBeVisible();
+  await expect(page.getByTestId('session-end-newcount')).toHaveCount(0);
   const chipWords = await page.getByTestId('summary-chip').allInnerTexts();
   expect(new Set(chipWords).size).toBe(chipWords.length);
 
