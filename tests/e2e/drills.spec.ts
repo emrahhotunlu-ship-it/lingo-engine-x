@@ -346,6 +346,21 @@ test('Satzbau am Handy (390 × 844): Bedeutung, Bausteine und Prüfen ohne Seitw
 });
 
 const ORDER_GEN_KEY = 'lx:orderGen:v1';
+
+/**
+ * LP3 P25 (§5.2): Hintergrundaufrufe werden erst gesendet, wenn in dieser Ansicht ein vom Nutzer ausgelöster Aufruf beantwortet wurde
+ * (kein Zustimmungsdialog mitten im Satzbau). Ein echter Nutzeraufruf: eine Nachricht an Claude.
+ */
+async function confirmSample(page: Page): Promise<void> {
+  await screen(page, 'today');
+  await page.getByTestId('open-companion').click();
+  await expect(page.getByTestId('companion')).toBeVisible();
+  await page.getByTestId('chat-input').fill('Hallo');
+  await page.getByTestId('chat-send').click();
+  await expect(page.locator('[data-testid="chat-msg"][data-role="assistant"]').last()).toHaveAttribute('data-state', 'done');
+  await page.keyboard.press('Escape');
+  await expect(page.getByTestId('companion')).toHaveCount(0);
+}
 const sampleIds = (page: Page): Promise<Array<string | null>> =>
   page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { sampleCalls: Array<{ id: string | null }> } }).__LINGO_FAKE__.sampleCalls.map((c) => c.id));
 
@@ -376,6 +391,7 @@ async function aiSentencesInRound(page: Page): Promise<{ ai: number; quokka: num
 
 test('Satzbau: nach der ersten Runde kommen neue, geprüfte Sätze von Claude dazu (markiert, höchstens die Hälfte), eine Anfrage', async ({ page }) => {
   const { errors, external } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': { plan: ORDER_PLAN } } } });
+  await confirmSample(page);
   await openDrill(page, 'order');
   // Erste Runde: der Vorrat ist leer, alle Sätze kommen aus dem festen Pool; im Hintergrund läuft genau eine Anfrage.
   await expect(page.getByTestId('drill-item').getByTestId('order-ai')).toHaveCount(0);
@@ -395,6 +411,7 @@ test('Satzbau: nach der ersten Runde kommen neue, geprüfte Sätze von Claude da
 
 test('Satzbau: Claude antwortet ungültig oder nicht → fester Pool, kein Fehlerbanner, kein zweiter Versuch', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': { plan: ORDER_PLAN } }, sampleFail: { 'order-gen': 'rate_limited' } } });
+  await confirmSample(page);
   await openDrill(page, 'order');
   await expect.poll(async () => (await sampleIds(page)).filter((id) => id === 'order-gen').length).toBeGreaterThanOrEqual(1);
   await page.getByTestId('round-close').click();

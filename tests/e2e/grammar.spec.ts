@@ -293,9 +293,13 @@ test('KI-Tutor: „Erklär mir meine Antwort“ nur auf Tipp, gekennzeichnet, ge
   await expect(page.getByTestId('tutor-text')).toHaveCount(0);
   expect((await calls()).filter((c) => c.startsWith('explain-answer'))).toEqual([]);
   await page.getByTestId('tutor-ask').click();
+  // Erst die eigene Vermutung (kein Aufruf), dann der eine Aufruf von explain-answer@2.
+  await expect(page.getByTestId('tutor-guessbox')).toBeVisible();
+  expect((await calls()).filter((c) => c.startsWith('explain-answer'))).toEqual([]);
+  await page.getByTestId('tutor-go').click();
   await expect(page.getByTestId('tutor-text')).toBeVisible();
   await expect(page.getByTestId('tutor-mark')).toContainText('Claude');
-  expect((await calls()).filter((c) => c.startsWith('explain-answer'))).toEqual(['explain-answer:default']);
+  expect((await calls()).filter((c) => c.startsWith('explain-answer'))).toEqual(['explain-answer:quick']);
   await expect(page.getByTestId('tutor-ask')).toHaveCount(0);
   await page.getByTestId('tutor-more').click();
   await expect(page.getByTestId('companion')).toBeVisible();

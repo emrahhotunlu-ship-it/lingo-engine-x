@@ -4,12 +4,15 @@
 export { buildTrainCards } from '../srs/cards';
 export { computeStreak } from '../streak';
 export { FEST_DAYS, FEST_STAGE, SAFE_STAGE, UNIT_STATES, counts, dueCount, isDue, isOverdue, overdueCount, unitState, type CardCounts, type UnitState } from './definitions';
-export { streak, streakInputOf, streakWeek, type StreakDocs } from './streak';
+export { WEEK_GOAL, restInfo, streak, streakInputOf, streakWeek, weekGoal, type RestInfo, type StreakDocs, type WeekGoal } from './streak';
 // Fortschritt (Gesamtkonzept 3.5): reine Zahlen für die Seite „Fortschritt“.
-export { FEST_GOAL, expectedKnown, festCount, festForecast, festGrowth28, isFest, retention28, type FestForecast, type FestGrowth, type Retention28 } from './vocab';
+export { FEST_GOAL, expectedKnown, festCount, festForecast, festGrowth28, festGrowthUnits, festUnits, isFest, retention28, type FestForecast, type FestGrowth, type Retention28 } from './vocab';
 export { errorSentenceStats, grammarDistribution, topicStage, type ErrorSentenceStats, type GrammarDistribution, type TopicStage } from './grammar';
 export { checkMean, vtestView, type CheckMean, type VtestView } from './tests';
 // Lernplattform 2.0 (§4.9): Zahlen von Heute, Wörtern und Grammatik, Musterzustand, Messwerte.
 export { EXTRA_ROUND_MAX, atlasSize, dayLeft, fehlersaetzeDue, festNow, fixAll, fixLimitOfPlan, fixToday, grammarErrorsDue, laptopDeepen, newToday, reviewAll, reviewToday, vocabEstimate, wordsToday } from './today';
 export { PATTERN_STATES, patPush, patternState, patternStateNo, patsOf, readPatEntry, topicStateFromPatterns, type PatEntry, type PatternState } from './pattern';
-export { EFFECT_RULES, learningEffect, type LearningEffect, type Rate } from './effect';
+export { EFFECT_RULES, learningEffect, motivationSignals, type LearningEffect, type MotivationSignals, type Rate } from './effect';
+export { nextGoal, type GoalId, type NextGoal } from './goals';
+export { groupMastery, type GroupMastery } from './groups';
+export { GROWTH_NAMES_MAX, HARD_ROUND_MIN, HARD_ROUND_RATE, MEMORY_MIN_CARDS, hardRound, roundGrowth, type RoundGrowth, type RoundUp } from './round';

@@ -51,10 +51,28 @@ export type SessionEndProps = SessionEndPropsAlt & {
     rule: string;
     when: string;
   }>;
+  /**
+   * Lernplattform 3.0 P28 (Motivation §4.7): Wachstum statt Antwortzahl. Alle Zahlen kommen aus dem Selektor `roundGrowth`
+   * (`domain/metrics/round.ts`): Namen der Aufgestiegenen (höchstens 6 genannt), sonst die Gedächtnis-Zeit, Rückfälle, schwerer Block.
+   */
+  growth?: GrowthView | null;
   warning?: { text: string; retry: () => void } | null;
   /** „Noch 12 fällig · Noch eine Runde“. */
   more?: { label: string; run: () => void } | null;
 };
+
+export type GrowthView = {
+  up: ReadonlyArray<{ id: string; word: string; to: UnitState }>;
+  memory: { n: number; before: number; after: number } | null;
+  down: number;
+  /** Schwerer Block (unter 60 % bei mindestens 8 Antworten): ein ruhiger Satz. */
+  hard: boolean;
+  /** Antippen eines Namens (z. B. Wortblatt); ohne sind die Namen nur Text. */
+  onOpen?: ((id: string) => void) | undefined;
+};
+
+/** So viele Namen werden genannt, der Rest als „und n weitere“. */
+const GROWTH_NAMES = 6;
 
 const STATE_KEY: Record<UnitState, MessageKey> = {
   new: "exStateNew",
@@ -117,8 +135,64 @@ function Tile({
   );
 }
 
+function GrowthBlock({ growth }: { growth: GrowthView }) {
+  const { t, num } = useT();
+  const names = growth.up.slice(0, GROWTH_NAMES);
+  const more = growth.up.length - names.length;
+  const showMemory = growth.up.length === 0 && growth.memory !== null;
+  if (growth.up.length === 0 && !showMemory && growth.down === 0 && !growth.hard) return null;
+  return (
+    <div className="lx-card flex flex-col gap-3 p-4" data-testid="session-end-growth">
+      {names.length > 0 && (
+        <div className="flex flex-col gap-2" data-testid="growth-up">
+          <Eyebrow>{t("moGrowthUpTitle")}</Eyebrow>
+          <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
+            {names.map((u) => (
+              <li key={u.id}>
+                {growth.onOpen ? (
+                  <button
+                    type="button"
+                    className="lx-t-support inline-flex min-h-11 items-center gap-1.5 rounded-full border border-line px-3 hover:bg-surface"
+                    onClick={() => growth.onOpen?.(u.id)}
+                    data-testid="growth-chip"
+                  >
+                    <span lang="en">{u.word}</span>
+                    <span className="lx-t-meta text-muted">{t(STATE_KEY[u.to])}</span>
+                  </button>
+                ) : (
+                  <span className="lx-t-support inline-flex min-h-9 items-center gap-1.5 rounded-full bg-surface-strong px-3" data-testid="growth-chip">
+                    <span lang="en">{u.word}</span>
+                    <span className="lx-t-meta text-muted">{t(STATE_KEY[u.to])}</span>
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+          {more > 0 && <p className="lx-t-meta m-0 text-muted" data-testid="growth-more">{t(more === 1 ? "moGrowthMore_one" : "moGrowthMore_other", { n: num(more) })}</p>}
+        </div>
+      )}
+      {showMemory && growth.memory && (
+        <p className="lx-t-body m-0" data-testid="growth-memory">
+          {t("moGrowthMemory", { n: num(growth.memory.n), before: num(growth.memory.before), after: num(growth.memory.after) })}
+        </p>
+      )}
+      {growth.down > 0 && (
+        <p className="lx-t-support m-0 text-muted" data-testid="growth-down">
+          {t(growth.down === 1 ? "moGrowthDown_one" : "moGrowthDown_other", { n: num(growth.down) })}
+        </p>
+      )}
+      {growth.hard && (
+        <p className="lx-t-support m-0 text-muted" data-testid="growth-hard">
+          {t("moGrowthHard")}
+        </p>
+      )}
+    </div>
+  );
+}
+
 function GrowthEnd({
   title,
+  growth = null,
   items = [],
   facts = [],
   mistakes = [],
@@ -150,6 +224,7 @@ function GrowthEnd({
           </p>
         )}
       </div>
+      {growth && <GrowthBlock growth={growth} />}
       {items.length > 0 && (
         <div className="lx-card flex flex-col gap-1 p-4">
           <Eyebrow>{t("hxEndMoved")}</Eyebrow>

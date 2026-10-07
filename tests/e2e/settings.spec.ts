@@ -58,7 +58,8 @@ test('Diagnose zeigt Fähigkeiten, Dokumentzahl und Datenversion', async ({ page
   await expect(dialog.getByText('Datenbank', { exact: true })).toHaveCount(0);
   await dialog.getByTestId('diag-toggle').click();
   await expect(dialog.getByText('Datenbank', { exact: true })).toBeVisible();
-  await expect(dialog.getByText('214 von 5.000')).toBeVisible();
+  // Die Zahl steht in der Diagnose-Zeile und (LP3 P29) in der Kapazitätsanzeige.
+  await expect(dialog.getByText('214 von 5.000').first()).toBeVisible();
   await expect(dialog.getByText(/^1 · 20\. September 2026$/)).toBeVisible();
   await expect(dialog.getByText('Keine Fehler protokolliert.')).toBeVisible();
 });

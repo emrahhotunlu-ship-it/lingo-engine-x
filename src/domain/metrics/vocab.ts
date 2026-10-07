@@ -119,3 +119,37 @@ export function festForecast(festNow: number, growth: FestGrowth | null, target:
   const hi = Math.max(lo, Math.round(left / (perWeek * 0.7)));
   return { weeksLo: lo, weeksHi: hi };
 }
+
+/**
+ * Wörter UND Wendungen fest (Motivation §4.6, I7): `cards` = Vokabel- und Wendungskarten zusammen. Kopf des Fortschritts, Marken,
+ * Ziel und Wochenrückblick lesen nur diese Funktion. `festNow` (nur `vocab/*`, Tagesbild `va`) bleibt unverändert.
+ */
+export function festUnits(cards: readonly Pick<TrainCard, 'hidden' | 'isNew' | 'stage' | 'fsrs'>[]): number {
+  return festCount(cards);
+}
+
+/** Tagesbild-Feld, aus dem der Zuwachs gerechnet wird: `va` (nur Vokabeln, alt) oder `vu` (Wörter und Wendungen, neu). */
+type GrowthKey = 'va' | 'vu';
+
+function growthOf(key: GrowthKey, now: number, history: unknown, today: string, minDays: number): FestGrowth | null {
+  const rows = (Array.isArray(history) ? history : [])
+    .filter((h): h is Doc => !!h && typeof h === 'object')
+    .filter((h) => isDayKey(h.d) && typeof h[key] === 'number' && Number.isFinite(h[key]))
+    .map((h) => ({ d: h.d as string, v: h[key] as number }))
+    .filter((h) => daysBetween(h.d, today) >= 0 && daysBetween(h.d, today) <= GROWTH_WINDOW_DAYS)
+    .sort((a, b) => (a.d < b.d ? -1 : 1));
+  const first = rows[0];
+  if (!first) return null;
+  const days = daysBetween(first.d, today);
+  if (days < minDays) return null;
+  const delta = now - first.v;
+  return { delta, days, per28: (delta * GROWTH_WINDOW_DAYS) / days };
+}
+
+/**
+ * „+n in 28 Tagen“ für Wörter und Wendungen: wechselt erst auf `vu`, wenn 28 Tage davon vorliegen; bis dahin gilt `va` mit der
+ * Vokabel-Fest-Zahl (kein Sprung am Umstellungstag, weil beide Reihen nie vermischt werden).
+ */
+export function festGrowthUnits(i: { vocabFest: number; unitsFest: number; history: unknown; today: string }): FestGrowth | null {
+  return growthOf('vu', i.unitsFest, i.history, i.today, GROWTH_WINDOW_DAYS) ?? growthOf('va', i.vocabFest, i.history, i.today, GROWTH_MIN_DAYS);
+}

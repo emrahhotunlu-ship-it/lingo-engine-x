@@ -43,3 +43,48 @@ export function streakWeek(i: StreakDocs): { streak: Streak; week: WeekDay[]; me
   const { input, merged } = streakInputOf(i);
   return { streak: computeStreak(input), week: weekStrip(input), merged };
 }
+
+// ------------------------------------------------------------------ Wochenziel und Ruhetag (Motivation §4.4, §4.5)
+
+/** Wochenziel: so viele Pflichttage je ISO-Woche (MO1). */
+export const WEEK_GOAL = 6;
+
+export type WeekGoal = {
+  /** Pflichttage dieser Woche (nur Zustand `done`; Extra zählt nie). */
+  done: number;
+  goal: 6;
+  /** Mindestens 6 Pflichttage: die Serie reißt an dieser Woche nicht. */
+  reached: boolean;
+  /** Sind 6 noch erreichbar (heute und die kommenden Tage eingerechnet)? */
+  possible: boolean;
+  /** Der Tag, den der Ruhetag der Woche überbrückt (`rest`), sonst `null`. */
+  rest: string | null;
+};
+
+/** Wochenziel „6 von 7“ aus dem Wochenstreifen (`weekStrip`); keine andere Quelle. */
+export function weekGoal(week: readonly WeekDay[]): WeekGoal {
+  let done = 0;
+  let ahead = 0;
+  let rest: string | null = null;
+  for (const d of week) {
+    if (d.state === 'done') done++;
+    else if (d.state === 'future' || (d.state === 'open' && d.today)) ahead++;
+    else if (d.state === 'rest') rest = d.day;
+  }
+  return { done, goal: WEEK_GOAL, reached: done >= WEEK_GOAL, possible: done + ahead >= WEEK_GOAL, rest };
+}
+
+export type RestInfo = {
+  /** `free` = noch kein vergangener Tag ohne Pflicht in dieser Woche, `used` = ein Ruhetag wurde genutzt, `none` = Serie ohne Ruhetag (keine Aussage). */
+  state: 'free' | 'used' | 'none';
+  /** Der genutzte Ruhetag (Datum) bei `used`. */
+  day: string | null;
+};
+
+/** Ruhetag der laufenden Woche („Ruhetag frei“ / „Ruhetag genutzt“). */
+export function restInfo(week: readonly WeekDay[]): RestInfo {
+  const used = week.find((d) => d.state === 'rest');
+  if (used) return { state: 'used', day: used.day };
+  const pastOpen = week.some((d) => d.state === 'open' && !d.today);
+  return { state: pastOpen ? 'none' : 'free', day: null };
+}

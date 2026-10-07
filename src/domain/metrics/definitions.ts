@@ -23,8 +23,11 @@ export const isDue = (c: DueLike, nowMs: number): boolean => !c.hidden && !c.isN
 /** Überfällig: schon vor dem heutigen Lerntag fällig. */
 export const isOverdue = (c: DueLike, nowMs: number): boolean => !c.hidden && !c.isNew && c.fsrs.due < learningDayStart(nowMs);
 
+/** „Fest“ nach Stufe und Stabilität allein (für den Schreibweg: `ff`, erster Fest-Tag). */
+export const isFestValues = (stage: number, stability: number): boolean => stage >= FEST_STAGE && stability >= FEST_DAYS;
+
 /** Sitzt die Karte fest? Neue und ausgeblendete Karten nie. */
-export const isFest = (c: Pick<TrainCard, 'hidden' | 'isNew' | 'stage' | 'fsrs'>): boolean => !c.hidden && !c.isNew && c.stage >= FEST_STAGE && c.fsrs.stability >= FEST_DAYS;
+export const isFest = (c: Pick<TrainCard, 'hidden' | 'isNew' | 'stage' | 'fsrs'>): boolean => !c.hidden && !c.isNew && isFestValues(c.stage, c.fsrs.stability);
 
 export type UnitState = 'new' | 'learning' | 'safe' | 'firm';
 export const UNIT_STATES: readonly UnitState[] = ['new', 'learning', 'safe', 'firm'];

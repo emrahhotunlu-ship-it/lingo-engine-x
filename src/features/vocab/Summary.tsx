@@ -1,14 +1,13 @@
 import { useMemo, useState } from 'react';
 import { useClock } from '../../app/clock';
 import { leaveBack, useNav } from '../../app/nav';
-import { isDue, unitState } from '../../domain/metrics';
+import { hardRound, isDue, roundGrowth } from '../../domain/metrics';
 import { calibration, CONTROL } from '../../domain/srs/flip';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { useT } from '../../i18n';
 import { local } from '../../platform/storage';
 import { Button } from '../../ui/Button';
-import { STATE_DOTS } from '../../ui/exercise';
 import { SessionEnd } from '../../ui/SessionEnd';
 import { dutyLabel } from '../learn/ui';
 import { startDuty } from '../learn/flow';
@@ -52,7 +51,6 @@ function CalibHint() {
 
 /** Eine weitere freie Runde über alle Fälligen (wie „Wiederholen“ im Wortschatz, nach der Pflicht). */
 const MORE_ROUND = 20;
-const STATE_MAX = 4;
 
 export function Summary({ onBack }: { onBack: () => void }) {
   const { t, tn } = useT();
@@ -85,18 +83,10 @@ export function Summary({ onBack }: { onBack: () => void }) {
   // Je Wort einmal, falsch, sobald ein Versuch falsch war.
   const byKey = results.reduce((m, r) => m.set(r.key, { key: r.key, word: r.word, ok: (m.get(r.key)?.ok ?? true) && r.ok }), new Map<string, { key: string; word: string; ok: boolean }>());
   const wrong = [...byKey.values()].filter((r) => !r.ok);
-  // Zuwachs: Zustand zu Beginn der Runde (`pool`) gegen jetzt (`cards`), nur Wörter, die sich verändert haben.
-  const before = new Map(pool.map((c) => [c.key, unitState(c)]));
-  const growth = [...byKey.keys()].flatMap((key) => {
-    const card = cards.get(key);
-    const from = before.get(key);
-    if (!card || !from) return [];
-    const to = unitState(card);
-    return STATE_DOTS[to] > STATE_DOTS[from] ? [{ card, from, to }] : [];
-  });
-  const safeNow = growth.filter((g) => (g.from === 'new' || g.from === 'learning') && (g.to === 'safe' || g.to === 'firm')).length;
-  const items = growth.slice(0, 5).map((g) => ({ label: g.card.word, from: STATE_DOTS[g.from], to: STATE_DOTS[g.to], max: STATE_MAX, state: g.to }));
-  const facts = n > 0 ? [safeNow > 0 ? tn('wxEndSafe', safeNow) : t('wxEndNone')] : [];
+  // Wachstum (LP3 P28): Zustand zu Beginn der Runde (`pool`) gegen jetzt (`cards`); alle Zahlen kommen aus dem Selektor `roundGrowth`.
+  const rg = roundGrowth(pool, [...cards.values()]);
+  const growthView = n > 0 ? { up: rg.up, memory: rg.memory, down: rg.down, hard: hardRound(right, n), onOpen: (id: string) => setSheet(cards.get(id) ?? null) } : null;
+  const facts = n > 0 && rg.up.length === 0 && !rg.memory ? [t('wxEndNone')] : [];
   const seeds = new Map<string, Record<string, unknown>>();
   for (const c of cards.values()) if (!c.inDb) seeds.set(c.id, { ...c.doc });
 
@@ -155,7 +145,7 @@ export function Summary({ onBack }: { onBack: () => void }) {
         right={right}
         total={n}
         ms={activeMs}
-        items={items}
+        growth={growthView}
         facts={facts}
         takeaways={takeaways}
         warning={failedCards.length > 0 || failed ? { text: failedCards.length ? tn('sumNotSaved', failedCards.length) : t('tdNotSaved'), retry: () => void retryFailed(seeds) } : null}

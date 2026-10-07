@@ -14,7 +14,8 @@ import { type FeasibleData } from '../../domain/plan/channels';
 import { pflichtFor, pflichtMarked, type PflichtInput } from '../../domain/plan/pflicht';
 import type { StoredPlan } from '../../domain/plan/types';
 import { repairsDoneToday, repairsDutyToday, pickDailyRepairs } from '../../domain/repair/daily';
-import { buildTrainCards, fehlersaetzeDue } from '../../domain/metrics';
+import { buildTrainCards, fehlersaetzeDue, festUnits } from '../../domain/metrics';
+import { docTotal } from '../../domain/capacity/docGuard';
 import { freezeGrammarDay } from '../../domain/grammar/path';
 import { patternsOf } from '../../domain/grammar/patterns';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
@@ -343,7 +344,7 @@ function ensureHistory(today: string, nowMs: number): void {
   historyDay = today;
   const cards = buildTrainCards(live.collections.vocab ?? new Map(), nowMs, invalidIdsOf(live.invalid, 'vocab'));
   const goal = vocabGoal({ profile, cards, today });
-  void recordProfileFields('today:history', (cur) => historyPatch(cur, historySnapshot({ day: today, nowMs, profile: cur, grammar: live.collections.grammar ?? new Map(), vocabNow: goal.now, festNow: goal.fest }))).then((ok) => {
+  void recordProfileFields('today:history', (cur) => historyPatch(cur, historySnapshot({ day: today, nowMs, profile: cur, grammar: live.collections.grammar ?? new Map(), vocabNow: goal.now, festNow: goal.fest, unitsFest: festUnits([...cards, ...buildChunkCards(live.collections.chunk ?? new Map(), nowMs, invalidIdsOf(live.invalid, 'chunk'))]), docCount: docTotal() }))).then((ok) => {
     if (!ok) historyDay = null;
   });
 }

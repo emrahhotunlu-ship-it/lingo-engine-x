@@ -1,7 +1,8 @@
 import type { z } from 'zod';
-import { getSample } from '../platform/capabilities';
+import { getSample, markSampleConfirmed, resetSampleConsent } from '../platform/capabilities';
 import { logError, logWarn } from '../platform/diagnostics';
 import { linkAbort } from './abort';
+import { bgTake, bgVerdict, resetAiBudget } from './budget';
 import { cancelledFailure, failure, failureFromSample } from './errors';
 import { aiQueue } from './queue';
 import { recordCall, resetAiStatus, throttleReason } from './status';
@@ -290,9 +291,21 @@ async function run<V, O>(req: AiRequest<V, O>, scope: string, phase: Phase): Pro
   }
   budget(prompt, PROMPT_BUDGET_BYTES, scope);
   guardThrottle(scope);
+  // Hintergrund (P25): nur Vorlagen mit `budget` gehen durch die Schranke – Tagesdeckel, Summe, Zustimmung (still, nie ein Dialog ungefragt).
+  const bgBudget = req.priority === 'background' ? template.budget : undefined;
+  if (bgBudget) {
+    const verdict = bgVerdict(template.id, bgBudget.bgPerDay);
+    if (verdict) throw failure('busy', verdict);
+  }
 
   const release = await aiQueue.acquire(signal, req.priority ?? 'user', () => phase('queued'));
   try {
+    if (bgBudget) {
+      // Nach dem Warten erneut prüfen (zwischenzeitlich kann ein anderer Aufruf das Budget verbraucht haben), dann zählen.
+      const verdict = bgVerdict(template.id, bgBudget.bgPerDay);
+      if (verdict) throw failure('busy', verdict);
+      bgTake(template.id);
+    }
     const t = template as PromptTemplate<unknown, unknown>;
     const key = promptKey(template.tier, prompt);
     const cache = cacheFor(template.cache, req.refresh === true || staleKeys.has(key));
@@ -304,6 +317,8 @@ async function run<V, O>(req: AiRequest<V, O>, scope: string, phase: Phase): Pro
       if (err instanceof AiFailure && err.kind === 'invalid') markStale(key);
       throw err;
     }
+    // Claude hat auf einen Nutzer-Aufruf geantwortet: die Zustimmung ist bekannt (Hintergrundaufrufe erlaubt).
+    if ((req.priority ?? 'user') === 'user') markSampleConfirmed();
     const r1 = schema.safeParse(first.value);
     if (r1.success) {
       staleKeys.delete(key);
@@ -353,6 +368,8 @@ export async function askJson<V, O>(req: AiRequest<V, O>): Promise<AiResult<O>> 
 
 /** Nur für Tests: Warteschlange und Drosselung zurücksetzen. */
 export function resetAiGate(): void {
+  resetAiBudget();
+  resetSampleConsent();
   aiQueue.reset();
   staleKeys.clear();
   resetAiStatus();

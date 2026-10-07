@@ -3,6 +3,7 @@ import { fsrsSchema } from '../../data/schemas';
 import { validateDoc } from '../../data/validate';
 import { dayKey } from '../date';
 import { flipStage } from './flip';
+import { isFestValues } from '../metrics/definitions';
 import { stageOf, nextStage } from './ladder';
 import { exerciseDef } from './modes';
 import { readFsrs, reviewFsrs, isFutureFsrs } from './scheduler';
@@ -38,6 +39,7 @@ export const cardPatchSchema = z
     xs: z.record(z.string().max(24), countsSchema),
     hist: z.array(z.looseObject({ t: z.number(), g: z.number().optional() })).max(HIST_MAX),
     intro: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    ff: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
     pa: z.number().min(0).max(1).optional(),
     ac: z.number().min(0).max(1).optional(),
     co: z.number().min(0).max(1).optional(),
@@ -65,6 +67,7 @@ export const chunkPatchSchema = z
     xs: z.record(z.string().max(24), countsSchema),
     hist: z.array(z.looseObject({ t: z.number(), g: z.number().optional() })).max(HIST_MAX),
     intro: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    ff: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
     fsrs: fsrsSchema.extend({ v: z.literal(1), src: z.literal('lx'), last: z.number().int() }),
   })
   .strict()
@@ -149,6 +152,13 @@ export function levelFor(ex: ExerciseId, stage: number): number {
   return ex === 'dictation' ? Math.min(level, Math.max(1, stage) + 1) : level;
 }
 
+/** Erster Fest-Tag (`ff`, P22): einmal gesetzt, sobald die Karte nach dieser Antwort fest sitzt (Stufe ≥ 4, Stabilität ≥ 21 Tage); nie überschrieben. */
+function festPatch(cur: Doc, patch: Doc, day: string): void {
+  if (typeof cur.ff === 'string' && cur.ff) return;
+  const f = patch.fsrs as { stability: number } | undefined;
+  if (typeof patch.stage === 'number' && f && isFestValues(patch.stage, f.stability)) patch.ff = day;
+}
+
 /** Patch für eine Karte, deren Dokument vorliegt (bzw. aus der Voreinstellung angelegt wird). */
 export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
   if (a.kind === 'chunk') return chunkPatch(cur, a);
@@ -179,6 +189,7 @@ export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
   };
   // Nur ergänzen: ein vorhandenes Einführungsdatum der alten App bleibt stehen (Kap. 9, Regel 2).
   if (wasNew && (typeof cur.intro !== 'string' || !cur.intro)) patch.intro = a.day;
+  festPatch(cur, patch, a.day);
   return patch;
 }
 
@@ -211,6 +222,7 @@ export function chunkPatch(cur: Doc, a: AnswerEvent): Doc {
     patch.modes = { [mode]: { c: Math.round(num(prev.c)) + ok, w: Math.round(num(prev.w)) + (1 - ok) } };
   }
   if (wasNew && (typeof cur.intro !== 'string' || !cur.intro)) patch.intro = a.day;
+  festPatch(cur, patch, a.day);
   return patch;
 }
 
