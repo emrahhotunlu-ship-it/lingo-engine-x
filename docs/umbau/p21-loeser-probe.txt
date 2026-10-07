@@ -1,0 +1,240 @@
+ocl-0001 | Why ___ our customers usually pay at the end of the quarter rather than at the start?  (offene Lücke, ein Wort)
+ocl-0002 | My brother ___ not drink coffee after lunch because it keeps him awake all night.  (offene Lücke, ein Wort)
+ocl-0003 | Sorry, I cannot talk right now because we ___ running a live demo for a prospect.  (offene Lücke, ein Wort)
+ocl-0004 | At the moment I ___ not understand why the report shows two different totals for May.  (offene Lücke, ein Wort)
+ocl-0005 | Our director ___ having dinner with the client tonight, so she will not be in the office.  (offene Lücke, ein Wort)
+ocl-0006 | Look at this e-mail: the vendor ___ always changing the delivery dates again, and it really annoys me.  (offene Lücke, ein Wort)
+ocl-0007 | When ___ the client finally sign the contract, and who was in the room at that point?  (offene Lücke, ein Wort)
+ocl-0008 | We moved to Frankfurt ___ 2019, and my daughter was born there two years later.  (offene Lücke, ein Wort)
+ocl-0009 | Our company has used the same document management system ___ 2018, and nobody wants to change it.  (offene Lücke, ein Wort)
+ocl-0010 | I have known my business partner ___ almost fifteen years, and we have never had a serious argument.  (offene Lücke, ein Wort)
+ocl-0011 | Have you ___ worked with a customer who changed the scope after the contract was signed?  (offene Lücke, ein Wort)
+ocl-0012 | I have ___ been to Japan, so I have no idea what to expect from the trip next month.  (offene Lücke, ein Wort)
+ocl-0013 | Could you check the figures again? The finance team has ___ sent me a corrected version.  (offene Lücke, ein Wort)
+ocl-0014 | I have not decided ___ whether I will accept the new offer, so please give me until Friday.  (offene Lücke, ein Wort)
+ocl-0015 | We ___ been working on the migration to the cloud since January, and we are still not finished.  (offene Lücke, ein Wort)
+ocl-0016 | My neighbor has been playing the drums ___ three hours, and I really need some quiet to work.  (offene Lücke, ein Wort)
+ocl-0017 | Our sales figures have been going up ___, and the board is finally starting to take notice.  (offene Lücke, ein Wort)
+ocl-0018 | Your sister looks exhausted. How long ___ she been waiting at the airport for her connecting flight?  (offene Lücke, ein Wort)
+ocl-0019 | So ___, we have signed twelve new customers this quarter, but I have been talking to many more.  (offene Lücke, ein Wort)
+ocl-0020 | You are right, the invoice contains a mistake. Thank you for telling me; I ___ send you a corrected one this afternoon, I promise.  (offene Lücke, ein Wort)
+ocl-0021 | We ___ going to renovate the kitchen next spring because the old one is falling apart.  (offene Lücke, ein Wort)
+ocl-0022 | I ___ going to call the customer this morning, but then the system crashed and I forgot.  (offene Lücke, ein Wort)
+ocl-0023 | Our train to the trade fair in Hanover leaves ___ 7:45 tomorrow morning, so please be at the station by 7:15.  (offene Lücke, ein Wort)
+ocl-0024 | Hurry up, the doors of the train are about ___ close, and the next one leaves in an hour.  (offene Lücke, ein Wort)
+ocl-0025 | We will not be able to deliver the update on Friday ___ the client sends us the missing data today.  (offene Lücke, ein Wort)
+ocl-0026 | I will send you the proposal as ___ as I have finished the calculation for the second option.  (offene Lücke, ein Wort)
+ocl-0027 | When my parents arrive on Saturday, we ___ going to take them to the old town for dinner.  (offene Lücke, ein Wort)
+ocl-0028 | Once we ___ received the signed order form, our team will start setting up your account.  (offene Lücke, ein Wort)
+ocl-0029 | ___ the time the auditors arrive next Monday, we will already have archived all of the old contracts.  (offene Lücke, ein Wort)
+ocl-0030 | I do not know ___ the new software will be ready, but I will ask our IT department tomorrow.  (offene Lücke, ein Wort)
+ocl-0031 | I am not sure ___ my flight will be on time, because there is a strike at the airport.  (offene Lücke, ein Wort)
+ocl-0032 | Our support team will keep answering calls ___ the last customer on the line has been helped.  (offene Lücke, ein Wort)
+ocl-0033 | The delay ___ be caused by the new firewall, but we have not checked the logs yet.  (offene Lücke, ein Wort)
+ocl-0034 | The new vendor ___ be cheaper than our current one, but we need to compare both offers first.  (offene Lücke, ein Wort)
+ocl-0035 | It might ___ worth checking the contract once more before we sign anything on Friday.  (offene Lücke, ein Wort)
+ocl-0036 | Personally, I would be inclined ___ wait for the second quote before we make a final decision.  (offene Lücke, ein Wort)
+ocl-0037 | It seems as ___ the client has changed his mind about the budget, because nobody has replied to our offer.  (offene Lücke, ein Wort)
+ocl-0038 | To be honest, the new interface is ___ quite as intuitive as the old one, at least for our sales team.  (offene Lücke, ein Wort)
+ocl-0039 | This time next week, we will ___ sitting on a beach in Portugal, far away from our inboxes.  (offene Lücke, ein Wort)
+ocl-0040 | At ___ time tomorrow, I will be meeting the new CFO in Zurich, so I will not read any e-mails.  (offene Lücke, ein Wort)
+ocl-0041 | ___ you be using the projector at two, or can I borrow it for a short customer call?  (offene Lücke, ein Wort)
+ocl-0042 | By the end of this quarter, we will ___ signed fifty new customers in the Nordic region.  (offene Lücke, ein Wort)
+ocl-0043 | By the time you read this message, I will already ___ boarded the plane to Singapore.  (offene Lücke, ein Wort)
+ocl-0044 | Next June, I will have ___ working for this company for exactly ten years.  (offene Lücke, ein Wort)
+ocl-0045 | By December, she will have been managing the sales team ___ nearly eight years.  (offene Lücke, ein Wort)
+ocl-0046 | By the time the CEO arrived at the venue, the presentation ___ already started without her.  (offene Lücke, ein Wort)
+ocl-0047 | I could not open the door of my flat because I ___ left my keys at the office again.  (offene Lücke, ein Wort)
+ocl-0048 | We had ___ waiting for the client for two hours when he finally called to cancel the meeting.  (offene Lücke, ein Wort)
+ocl-0049 | She looked exhausted because she had been working ___ six o'clock that morning without a single break.  (offene Lücke, ein Wort)
+ocl-0050 | It was the first time I ___ ever spoken to a customer in Japanese, and I was very nervous.  (offene Lücke, ein Wort)
+ocl-0051 | It was the first time he had ___ been to a trade fair, so everything felt new and exciting.  (offene Lücke, ein Wort)
+ocl-0052 | She told me that the board ___ already approved the budget the day before the announcement.  (offene Lücke, ein Wort)
+ocl-0053 | He said that he ___ call me the next day, but I never heard from him again.  (offene Lücke, ein Wort)
+ocl-0054 | No sooner had we signed the contract ___ the client asked for several changes to the terms.  (offene Lücke, ein Wort)
+ocl-0055 | Hardly had we arrived at the hotel ___ it started to rain heavily, so we stayed in for the evening.  (offene Lücke, ein Wort)
+ocl-0056 | We ___ to work in a small office near the station before the company grew to two hundred people.  (offene Lücke, ein Wort)
+ocl-0057 | Every Friday afternoon, our old boss ___ invite the whole team for coffee and talk about the week.  (offene Lücke, ein Wort)
+ocl-0058 | Did you ___ to work from home before the pandemic, or was it always an office job?  (offene Lücke, ein Wort)
+ocl-0059 | I did not ___ to like jazz, but now I listen to it almost every evening after work.  (offene Lücke, ein Wort)
+ocl-0060 | After ten years in Spain, she is completely ___ to eating dinner at ten o'clock at night.  (offene Lücke, ein Wort)
+ocl-0061 | It took me a few weeks to get used ___ the new software, but now I could not work without it.  (offene Lücke, ein Wort)
+ocl-0062 | The report ___ I sent you yesterday contains the figures for all regions, so please read the first page carefully.  (offene Lücke, ein Wort)
+ocl-0063 | I was wondering ___ you could send me the updated price list by tomorrow afternoon.  (offene Lücke, ein Wort)
+ocl-0064 | We were hoping ___ extend the deadline by two days, if that would be possible for your team.  (offene Lücke, ein Wort)
+ocl-0065 | Would it be possible ___ move the meeting to Thursday morning, because several people are travelling on Wednesday?  (offene Lücke, ein Wort)
+ocl-0066 | Would it be possible ___ us to join the call about ten minutes late, because of a customer meeting?  (offene Lücke, ein Wort)
+ocl-0067 | Honestly, that deadline could be a bit of ___ stretch for our team, given the holidays in December.  (offene Lücke, ein Wort)
+ocl-0068 | ___ a customer pays by credit card, our system automatically sends a receipt to the registered address.  (offene Lücke, ein Wort)
+ocl-0069 | If the sun ___ shining all day, the plants on my balcony grow much faster than in cloudy weeks.  (offene Lücke, ein Wort)
+ocl-0070 | If you do not hurry with the proposal, you ___ miss the deadline, and the client will go to a competitor.  (offene Lücke, ein Wort)
+ocl-0071 | If I ___ you, I would ask for a written confirmation before sending any money to that supplier.  (offene Lücke, ein Wort)
+ocl-0072 | Could you tell me ___ is responsible for the archive migration, because I need to send them the contract?  (offene Lücke, ein Wort)
+ocl-0073 | If our company ___ more money to spend, we would hire another developer for the cloud team immediately.  (offene Lücke, ein Wort)
+ocl-0074 | If I won the lottery next week, I ___ quit my job and travel around the world for a year.  (offene Lücke, ein Wort)
+ocl-0075 | If we had checked the figures twice, we ___ have noticed the mistake long before the audit.  (offene Lücke, ein Wort)
+ocl-0076 | If the client had signed on time, we would ___ delivered the whole project by the end of March.  (offene Lücke, ein Wort)
+ocl-0077 | You may use the company car this weekend ___ that you promise to bring it back with a full tank by Monday.  (offene Lücke, ein Wort)
+ocl-0078 | We will not start the implementation ___ the client has paid the first invoice in full.  (offene Lücke, ein Wort)
+ocl-0079 | We will cancel the order ___ the supplier confirms the delivery date by Monday at the latest.  (offene Lücke, ein Wort)
+ocl-0080 | Please do not call me before noon ___ it is really urgent, because I am working night shifts this week.  (offene Lücke, ein Wort)
+ocl-0081 | You can use my laptop for the demo ___ long as you save all the files on the shared company drive.  (offene Lücke, ein Wort)
+ocl-0082 | We will keep the old archive system running as long ___ the migration to the new platform is not finished.  (offene Lücke, ein Wort)
+ocl-0083 | Please send the signed copy by this afternoon. ___, we cannot start the project on Monday as planned.  (offene Lücke, ein Wort)
+ocl-0084 | You should back up your files every week; ___, you may lose important data when the laptop fails.  (offene Lücke, ein Wort)
+ocl-0085 | ___ for the quick help of our IT team, the whole customer database would have been lost last night.  (offene Lücke, ein Wort)
+ocl-0086 | If it ___ not been for your advice, I would have accepted the first offer without any negotiation.  (offene Lücke, ein Wort)
+ocl-0087 | ___ we known about the supplier's financial problems earlier, we would have changed the order immediately.  (offene Lücke, ein Wort)
+ocl-0088 | ___ the client decide to cancel the contract, we will need to find a new buyer for the machines quickly.  (offene Lücke, ein Wort)
+ocl-0089 | Were we ___ extend the offer by another month, the price would have to go up by about five percent.  (offene Lücke, ein Wort)
+ocl-0090 | Take an umbrella ___ case it rains later this afternoon, because the forecast is not very reliable.  (offene Lücke, ein Wort)
+ocl-0091 | Let me give you my mobile number just ___ case you cannot reach me at the office during the trade fair.  (offene Lücke, ein Wort)
+ocl-0092 | If we do ___ leave before six, we will miss the beginning of the concert and the best seats.  (offene Lücke, ein Wort)
+ocl-0093 | I will join you for dinner tonight ___ my flight from Hamburg is delayed by more than an hour.  (offene Lücke, ein Wort)
+ocl-0094 | The new archive will go live on Monday ___ the final security test shows any serious problems this weekend.  (offene Lücke, ein Wort)
+ocl-0095 | If we had invested in cloud storage two years ago, we ___ not have this capacity problem now.  (offene Lücke, ein Wort)
+ocl-0096 | If I were better at math, I ___ have chosen a different career years ago, and I would earn more now.  (offene Lücke, ein Wort)
+ocl-0097 | I wish we ___ more storage space; the current server is full again, and it is only the middle of the month.  (offene Lücke, ein Wort)
+ocl-0098 | I wish it ___ already Friday; this week has been exhausting, and I have another long meeting tomorrow.  (offene Lücke, ein Wort)
+ocl-0099 | I wish I ___ asked for a written confirmation before sending the goods, because now the customer denies everything.  (offene Lücke, ein Wort)
+ocl-0100 | She wishes she ___ not signed the contract without reading the small print, but now it is too late.  (offene Lücke, ein Wort)
+ocl-0101 | I wish the client ___ stop changing the requirements every other day; we can never finish anything.  (offene Lücke, ein Wort)
+ocl-0102 | I wish you ___ not leave your coffee cups all over the meeting room; it looks terrible every afternoon.  (offene Lücke, ein Wort)
+ocl-0103 | ___ I known about the delay, I would have informed the client immediately instead of letting him find out.  (offene Lücke, ein Wort)
+ocl-0104 | ___ I in your position, I would not accept the offer without negotiating the payment terms first.  (offene Lücke, ein Wort)
+ocl-0105 | How long ___ you known the client, and did you ever work with his predecessor?  (offene Lücke, ein Wort)
+ocl-0106 | I ___ known my neighbor since university, so I trust his judgment about anything related to property.  (offene Lücke, ein Wort)
+ocl-0107 | How ___ emails have you written since this morning, and have you replied to the customers?  (offene Lücke, ein Wort)
+ocl-0108 | How ___ have you been waiting for the technician, and did anyone give you an estimated time?  (offene Lücke, ein Wort)
+ocl-0109 | She ___ not belong to the sales team anymore; she moved to the finance department last month.  (offene Lücke, ein Wort)
+ocl-0110 | We ___ thinking about moving the whole archive to a new data center next year, but nothing is decided yet.  (offene Lücke, ein Wort)
+ocl-0111 | The conference starts ___ Tuesday at nine and ends on Friday afternoon, so we should book the hotel soon.  (offene Lücke, ein Wort)
+ocl-0112 | I will call you as soon ___ I land in Frankfurt, so please keep your phone nearby this evening.  (offene Lücke, ein Wort)
+ocl-0113 | ___ I send you the updated figures right now, or would you prefer to have them tomorrow morning?  (offene Lücke, ein Wort)
+ocl-0114 | Look at the sky: it ___ going to rain, so let us take the car instead of walking to the station.  (offene Lücke, ein Wort)
+ocl-0115 | We ___ going to launch the new product in May, but the supplier delayed everything by six weeks.  (offene Lücke, ein Wort)
+ocl-0116 | When I was a student, I ___ spend hours in the library every evening and read until it closed.  (offene Lücke, ein Wort)
+ocl-0117 | There ___ to be a small café on this corner, but it closed last year and now it is a phone shop.  (offene Lücke, ein Wort)
+ocl-0118 | I was wondering ___ it would be possible to reschedule our call to Thursday, because of a customer visit.  (offene Lücke, ein Wort)
+ocl-0119 | If it ___ up to me, I would choose the cheaper option, but the board makes the final decision.  (offene Lücke, ein Wort)
+ocl-0120 | I would have called you earlier if I ___ known that the meeting had been cancelled.  (offene Lücke, ein Wort)
+mcc-0001 | Our sales director ___ the pipeline report every Monday morning before the team call.  A) reviews / B) controls / C) is reviewing / D) has reviewed
+mcc-0002 | Sorry, I cannot talk right now because we ___ a live demo for a prospect in the next room.  A) run / B) are running / C) will run / D) have run
+mcc-0003 | We ___ a faster way to share large files with our customers, because e-mail attachments keep bouncing back.  A) are needing / B) have need / C) need / D) are in need
+mcc-0004 | I ___ that the client will accept our revised offer, but I cannot be sure before Friday.  A) mean / B) am believing / C) will believe / D) believe
+mcc-0005 | Please call back in an hour; we ___ lunch with the client right now and cannot answer the phone.  A) have / B) will have / C) are having / D) had
+mcc-0006 | Our vendor ___ the delivery dates again, and it is driving our logistics team crazy.  A) is always changing / B) changes always / C) always is changing / D) has always changing
+mcc-0007 | My neighbor ___ his car in front of my garage, and it makes me furious every single time.  A) parks always / B) always is parking / C) has always parking / D) is always parking
+mcc-0008 | My colleague ___ a short walk every afternoon at three, and he never skips it, not even on busy days.  A) makes / B) takes / C) does / D) is taking
+mcc-0009 | We ___ the contract with Rhein Logistics in March last year, after three rounds of difficult negotiations.  A) signed / B) have signed / C) were signing / D) are signing
+mcc-0010 | ___ you meet our new CEO at the conference last week, or was it somebody from the Berlin office?  A) Have / B) Did / C) Do / D) Were
+mcc-0011 | We ___ with the same logistics partner since 2018, and we have never had a serious problem.  A) work / B) worked / C) have worked / D) were working
+mcc-0012 | I ___ in this city for almost ten years now, and I still love the old town on a sunny evening.  A) live / B) lived / C) have been live / D) have lived
+mcc-0013 | I ___ to Singapore twice, but I have never been to Japan, and I would love to go.  A) have gone / B) was / C) have been / D) had been
+mcc-0014 | We ___ on the migration to the cloud since January, and we are still not finished with the archive.  A) have been working / B) are working / C) worked / D) had been working
+mcc-0015 | My neighbor ___ the drums for three hours now, and I really need some quiet to finish my report.  A) is playing / B) plays / C) played / D) has been playing
+mcc-0016 | Your sister looks exhausted. How long ___ she waiting at the airport for her connecting flight?  A) is / B) has been / C) does / D) will
+mcc-0017 | Our sales figures ___ going up since last spring, and the board is finally starting to take notice.  A) have been / B) are / C) were / D) had been
+mcc-0018 | I ___ my business partner for almost fifteen years, and we have never had a serious argument.  A) have been knowing / B) have known / C) know / D) knew
+mcc-0019 | I ___ twelve e-mails since this morning, but I still have not heard anything from the customer.  A) have been writing / B) write / C) have written / D) wrote
+mcc-0020 | You are right, there is a mistake in the invoice. Thank you for telling me; I ___ it today.  A) correct / B) would correct / C) have corrected / D) will correct
+mcc-0021 | We ___ the kitchen next spring; we have already chosen the new cabinets and booked the carpenter.  A) renovate / B) would renovate / C) are going to renovate / D) are renovated
+mcc-0022 | I ___ call the customer this morning, but then the system crashed, and I completely forgot about it.  A) was going to / B) should / C) will / D) am going to
+mcc-0023 | Hurry up, the train ___ to leave, and the next one does not go for another hour!  A) is close / B) is nearly / C) is on the point / D) is about
+mcc-0024 | We cannot start the implementation before the client ___ the first invoice, so please remind him today.  A) will pay / B) has paid / C) would pay / D) is paying
+mcc-0025 | I will send you the proposal as soon as I ___ the calculation for the second option.  A) have finished / B) will finish / C) would finish / D) am finishing
+mcc-0026 | Please do not forward the offer to the customer before the legal team ___ the final wording.  A) will approve / B) has approved / C) would approve / D) is approving
+mcc-0027 | Once we ___ the signed order form, our team will start setting up your account and send the login details.  A) will receive / B) would receive / C) have received / D) are receiving
+mcc-0028 | By the time the auditors ___ next Monday, we will have archived all of the old contracts and invoices.  A) will arrive / B) would arrive / C) are arriving / D) arrive
+mcc-0029 | I ___ English for about two years now, and my pronunciation is slowly getting better.  A) am learning / B) learned / C) have been learning / D) learn
+mcc-0030 | She has worked for this company ___ she graduated in 2010, and she has been promoted twice.  A) since / B) from / C) for / D) after
+mcc-0031 | The delay ___ be caused by the new firewall, but we have not checked the server logs yet.  A) must / B) can / C) would / D) might
+mcc-0032 | It might be ___ checking the contract once more before we sign anything on Friday afternoon.  A) worthy / B) worth / C) valuable / D) value
+mcc-0033 | It ___ that the client has changed his mind about the budget, because nobody has replied to our offer.  A) seems / B) shines / C) looks like / D) seem
+mcc-0034 | This time next week, we ___ on a beach in Portugal, far away from our inboxes and from every meeting.  A) sit / B) will be sitting / C) will have sat / D) would be sitting
+mcc-0035 | ___ you be using the meeting room at four, or may I book it for a quick team workshop?  A) Are / B) Do / C) Will / D) Have
+mcc-0036 | By the end of this quarter, we ___ fifty new customers in the Nordic region, as our plan says.  A) have signed / B) will be signed / C) would have signed / D) will have signed
+mcc-0037 | Next June, I ___ for this company for exactly ten years, and I still enjoy my job every day.  A) will work / B) am working / C) will have been working / D) have been working
+mcc-0038 | By the time the technician arrived at the office, the main server ___ already crashed twice.  A) had / B) has / C) was / D) did
+mcc-0039 | He looked exhausted because he had been driving ___ five o'clock that morning without a proper break.  A) for / B) during / C) by / D) since
+mcc-0040 | It was the first time she ___ ever presented to a board in English, and her hands were shaking.  A) have / B) had / C) was / D) did
+mcc-0041 | She told me that the board ___ already approved the budget the day before the public announcement.  A) had / B) has / C) have / D) would
+mcc-0042 | No sooner had we signed the contract ___ the client asked for several changes to the payment terms.  A) when / B) than / C) then / D) as
+mcc-0043 | Our team ___ to work in a tiny office near the river before the company moved into the new tower.  A) use / B) would / C) used / D) were
+mcc-0044 | On Friday evenings, our previous manager ___ order pizza for the whole team and stay until the last ticket was closed.  A) used / B) does / C) was / D) would
+mcc-0045 | After a decade in Madrid, my sister is completely ___ to having dinner at ten o'clock in the evening.  A) use / B) usual / C) used / D) usually
+mcc-0046 | It took me a few weeks before I got used ___ the new ticket system, but now I could not work without it.  A) to / B) on / C) with / D) for
+mcc-0047 | Would it be possible ___ our team to start the workshop half an hour later, because of a delayed flight?  A) to / B) by / C) with / D) for
+mcc-0048 | Whenever our system ___ a payment error, it automatically sends an alert to the finance team.  A) will detect / B) detects / C) would detect / D) is detecting
+mcc-0049 | If I ___ you, I would double-check the bank details before transferring any money to that new supplier.  A) were / B) am / C) would be / D) be
+mcc-0050 | If our department ___ a bigger budget, we would buy a second server for the archive right away.  A) would have / B) had / C) has / D) have
+mcc-0051 | If we ___ the figures twice, we would have noticed the mistake long before the audit.  A) would have checked / B) checked / C) had checked / D) have checked
+mcc-0052 | You may borrow the company laptop over the holidays ___ you promise to keep it locked away at night.  A) unless / B) supposed / C) until / D) provided
+mcc-0053 | We will terminate the contract ___ the vendor fixes the security problem within the next two weeks.  A) if / B) except / C) unless / D) without
+mcc-0054 | Please confirm the booking by noon tomorrow. ___, we cannot hold the conference room for your team.  A) Otherwise / B) Else / C) Therefore / D) Moreover
+mcc-0055 | ___ the board known about the security gap earlier, it would have approved the new budget months ago.  A) If / B) Have / C) Did / D) Had
+mcc-0056 | Take an umbrella ___ it rains later this afternoon, because the weather forecast is not very reliable.  A) in the case / B) in case / C) in any case / D) for case
+mcc-0057 | I wish our office ___ a bigger kitchen; twenty people share one tiny coffee machine every single morning.  A) had / B) have / C) would have / D) has
+mcc-0058 | I wish I ___ for a written confirmation before sending the goods, because now the customer denies everything.  A) would ask / B) had asked / C) asked / D) have asked
+mcc-0059 | I wish the client ___ changing the requirements every other day; we can never finish anything.  A) will stop / B) stops / C) would stop / D) is stopping
+mcc-0060 | ___ I known about the strike, I would have booked a different flight instead of waiting at the airport.  A) If / B) Have / C) Would / D) Had
+mcc-0061 | The delay was largely ___ to a shortage of qualified staff in our warehouse during the holiday season.  A) blamed / B) caused / C) attributed / D) resulted
+mcc-0062 | After weeks of discussion, the board finally ___ a decision about the location of the new data center.  A) made / B) met / C) did / D) set
+mcc-0063 | Our sales team managed to ___ the deal with the Swiss distributor just before the end of the quarter.  A) shut / B) lock / C) fasten / D) close
+mcc-0064 | We worked all weekend to ___ the deadline for the tender submission, and we made it with minutes to spare.  A) keep / B) meet / C) hold / D) catch
+mcc-0065 | Several customers have ___ concerns about the security of the new cloud platform during the pilot phase.  A) raised / B) lifted / C) risen / D) arisen
+mcc-0066 | Based on the data from the last six months, we can ___ a clear conclusion about the success of the campaign.  A) pull / B) draw / C) take / D) make
+mcc-0067 | The audit team will ___ a full review of the document archive next month, so please keep everything in order.  A) lead through / B) make out / C) carry out / D) bring out
+mcc-0068 | In the third quarter, the company ___ a profit of two million euros for the first time in four years.  A) did / B) won / C) gained / D) made
+mcc-0069 | Customers can ___ a complaint through the online portal at any time of day, and they get a reference number.  A) put / B) give / C) file / D) do
+mcc-0070 | Our new manager wants to ___ ambitious targets for the next quarter, but the team thinks they are unrealistic.  A) set / B) put / C) lay / D) place
+mcc-0071 | Please ___ attention to the small print before you sign the contract, especially the clauses about termination.  A) present / B) do / C) take / D) pay
+mcc-0072 | The annual trade fair will ___ place in Hanover from the third to the sixth of March, and we have a booth.  A) have / B) take / C) make / D) hold
+mcc-0073 | Your proposal does not really ___ sense to me, because the numbers in the second table do not add up.  A) make / B) have / C) give / D) do
+mcc-0074 | We always ___ our promises, so you can rely on our delivery dates even in the busiest weeks of the year.  A) hold / B) keep / C) stay / D) maintain
+mcc-0075 | Nobody on the board wanted to ___ a risk with such an important client, so they chose the safe option.  A) make / B) do / C) take / D) go
+mcc-0076 | We are facing ___ competition from two new providers in the Nordic market, and our margins are shrinking.  A) hard / B) rough / C) thick / D) fierce
+mcc-0077 | We have ___ every effort to deliver the system on time, but the supplier delayed all the hardware.  A) done / B) taken / C) made / D) put
+mcc-0078 | After three days of difficult talks, both parties finally ___ an agreement on the delivery terms.  A) reached / B) met / C) found / D) took
+mcc-0079 | She will ___ a presentation on the new archiving strategy at the conference in Frankfurt next Thursday.  A) hold / B) keep / C) do / D) give
+mcc-0080 | He ___ a small consulting business from his home office in Cologne and has three regular clients.  A) leads / B) runs / C) drives / D) guides
+mcc-0081 | We are looking forward ___ meeting you at the trade fair in September and showing you the new platform.  A) to / B) for / C) at / D) on
+mcc-0082 | Our delivery date ___ on the approval of the final design by the client, so please remind them today.  A) hangs / B) depends / C) stands / D) bases
+mcc-0083 | Our customers are increasingly interested ___ sustainable and energy-efficient data centers across Europe.  A) for / B) at / C) in / D) on
+mcc-0084 | I am not very good ___ negotiating prices in a foreign language, so I always prepare my main arguments in advance.  A) in / B) for / C) with / D) at
+mcc-0085 | Are you ___ of the new data protection rules that come into force in January and apply to all our customers?  A) known / B) familiar / C) aware / D) knowing
+mcc-0086 | We will ___ at the hotel around six o'clock, so please keep a table in the restaurant for us.  A) arrive / B) come / C) reach / D) get
+mcc-0087 | We need to ___ the new pricing model with the legal department before we can send it to the customers.  A) talk / B) speak / C) argue / D) discuss
+mcc-0088 | Could you please ___ me how the new approval process works in practice? I have never used it.  A) explain / B) show / C) say / D) speak
+mcc-0089 | Please ___ me to send the invoice before the end of the week; otherwise I will probably forget it again.  A) remind / B) remember / C) recall / D) memorize
+mcc-0090 | Could you ___ the signed contract with you when you come to our office tomorrow for the final meeting?  A) take / B) bring / C) carry / D) fetch
+mcc-0091 | We could ___ move the meeting to Friday if the client agrees, but I need to check with the team first.  A) eventually / B) finally / C) possibly / D) lastly
+mcc-0092 | Our customer data is highly ___ and must be encrypted at all times, both in transit and in storage.  A) sensible / B) sensual / C) senseless / D) sensitive
+mcc-0093 | The ___ version of the software has several security problems that we need to fix before the audit.  A) actual / B) topical / C) current / D) modern
+mcc-0094 | Please ___ the figures again before you send the report to the board; last time there were two mistakes.  A) check / B) control / C) steer / D) command
+mcc-0095 | Please make sure that all important files are ___ every night, because the old server has failed twice this month.  A) backed / B) saved up / C) backup / D) backed up
+mcc-0096 | We lost the tender, but nobody is ready to ___ up hope just yet, because the client may still reopen it.  A) let / B) give / C) take / D) throw
+mcc-0097 | Our sales figures for the third quarter are ___ better than we expected, thanks to the new product line.  A) considerably / B) highly / C) strongly / D) heavily
+mcc-0098 | The new interface is ___ intuitive, and our employees learned it within an hour without any training.  A) strongly / B) highly / C) heavily / D) deeply
+mcc-0099 | I can ___ recommend the new archiving solution to anyone who still struggles with paper files and shared folders.  A) heavily / B) hardly / C) highly / D) firmly
+mcc-0100 | We ___ regret that we are unable to deliver your order on the agreed date because of the strike at the port.  A) highly / B) heavily / C) strongly / D) deeply
+mcc-0101 | Our business depends ___ on a handful of key accounts in the automotive sector, which is a real risk.  A) highly / B) hardly / C) heavily / D) fiercely
+mcc-0102 | The new account manager made a very good ___ on our largest customer at the first meeting last week.  A) impression / B) print / C) impress / D) effect
+mcc-0103 | Who is in ___ of the migration project while the director is on vacation for the next two weeks?  A) lead / B) head / C) guidance / D) charge
+mcc-0104 | I am writing ___ behalf of the sales department to thank you for your cooperation during the last quarter.  A) at / B) on / C) for / D) by
+mcc-0105 | ___ addition to the license fee, there will be a one-time setup cost for each regional office.  A) In / B) At / C) On / D) By
+mcc-0106 | The server crashed twice last week. ___ a result, we lost almost two hours of work on the quarterly report.  A) In / B) As / C) At / D) With
+mcc-0107 | I sent the offer to the wrong customer ___ mistake and had to apologize immediately to both parties.  A) with / B) in / C) by / D) on
+mcc-0108 | Everyone expected a delay, but ___ fact the project was finished two days early and under budget.  A) by / B) at / C) on / D) in
+mcc-0109 | We have ___ out of printer paper again; could you please order some more before the audit on Monday?  A) gone / B) got / C) run / D) come
+mcc-0110 | Could you please ___ out when the next shuttle bus to the airport leaves and send me the time?  A) find / B) look / C) search / D) seek
+mcc-0111 | The customer decided to ___ down our offer because the delivery time was too long for their project.  A) put / B) take / C) lay / D) turn
+mcc-0112 | We need to ___ on with the project even though the budget has been cut by a third.  A) take / B) carry / C) follow / D) hold
+mcc-0113 | The negotiations ___ to nothing because neither side was willing to compromise on the price.  A) came / B) ended / C) went / D) ran
+mcc-0114 | We are working to a very ___ schedule this month because of the product launch and two customer events.  A) narrow / B) tight / C) close / D) thin
+mcc-0115 | Our support team has a very ___ workload before the holidays, so replies may take a little longer.  A) strong / B) hard / C) heavy / D) thick
+mcc-0116 | I fully agree ___ you that we should postpone the release until the security tests are finished.  A) to / B) on / C) in / D) with
+mcc-0117 | The company plans to ___ its prices by three percent from January because of higher energy costs.  A) rise / B) lift / C) raise / D) grow
+mcc-0118 | She ___ about eighty thousand euros a year as a senior account manager in the cloud division.  A) earns / B) deserves / C) wins / D) gains
+mcc-0119 | Could I ___ your laptop for the demo this afternoon? Mine is being repaired and I need it back tomorrow.  A) lend / B) rent / C) lease / D) borrow
+mcc-0120 | I would like to ___ an appointment with your sales manager for next Tuesday afternoon, if she is available.  A) agree / B) make / C) take / D) hold

@@ -24,7 +24,7 @@ Summe: ocl 120, mcc 120 (60 Grammatik, 60 Wortschatz). Alle `src: 'seed'`, eigen
 - Keine doppelten Sätze untereinander und gegen LP2-Aufgaben/Umformungen.
 
 ## Offene Punkte (ehrlich)
-1. **Löser-Probe** (zweiter Agent löst blind) und **Gegenlesung `english-teacher`** (20 %, mindestens 10 je Charge) sind **nicht** gelaufen: Die Sitzung durfte keinen weiteren Agenten starten. Die Aufgaben ohne Lösung liegen als Prüfbogen bereit (`loeser-probe-ohne-loesung.txt`, Schlüssel getrennt); die Befunde (zweite mögliche Lösung → `accept` ergänzen bzw. Ablenker tauschen) sind danach in die Quellen einzuarbeiten.
+1. **Löser-Probe** (zweiter Agent löst blind) und **Gegenlesung `english-teacher`** (20 %, mindestens 10 je Charge) sind **nicht** gelaufen: Die Sitzung durfte keinen weiteren Agenten starten. Die Aufgaben ohne Lösung liegen als Prüfbogen bereit (`docs/umbau/p21-loeser-probe.txt`, 240 Zeilen ohne Lösung; der Schlüssel steht in den Inhaltsdateien); die Befunde (zweite mögliche Lösung → `accept` ergänzen bzw. Ablenker tauschen) sind danach in die Quellen einzuarbeiten.
 2. Bei der Selbstkontrolle wurden mehrdeutige Lücken aufgespürt und behoben (z. B. `if` neben `when` bei indirekten Fragen, `if` neben `provided that`). Restrisiko bleibt bei Lücken mit Modalverben (`might/may/could`): dort sind alle gültigen Wörter in `accept` aufgenommen.
 3. Niveau: Funktionswort-Lücken sind meist B2/B2+ (ocl 13 von 120 C1, mcc 9 von 120 C1). Das C1-Gewicht steckt in den Mustern (Inversion, Diplomatie, mixed conditionals) und in den Wortschatz-Aufgaben.
 4. Beruf/Alltag: ocl 83 : 37, mcc 99 : 21 (Ziel ⅔ : ⅓), also etwas berufslastig.
