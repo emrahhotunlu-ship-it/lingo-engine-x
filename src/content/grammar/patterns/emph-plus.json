@@ -1,0 +1,316 @@
+{
+  "topic": "emph-plus",
+  "canDo": {
+    "de": "Ich kann Wichtiges hervorheben: mit do, mit vorangestelltem Adjektiv (Tempting as it is), mit So … that, Such … that und mit vorgezogenem Objekt.",
+    "en": "I can stress what matters: with do, with a fronted adjective (Tempting as it is), with So … that, Such … that and with a fronted object."
+  },
+  "order": [
+    "ep.do-emph",
+    "ep.concession",
+    "ep.so-such",
+    "ep.object-front"
+  ],
+  "introPlan": [
+    [
+      "ep.do-emph",
+      "ep.concession"
+    ],
+    [
+      "ep.so-such",
+      "ep.object-front"
+    ]
+  ],
+  "decide": {
+    "de": [
+      "Willst du bestätigen oder einen Zweifel ausräumen? Setze do, does oder did vor die Grundform.",
+      "Willst du etwas einräumen und dann widersprechen? Stelle das Adjektiv vor as und lasse die normale Stellung folgen.",
+      "Soll die Folge betont werden? Beginne mit So oder Such, dann steht das Verb vor dem Subjekt."
+    ],
+    "en": [
+      "Do you want to confirm or remove a doubt? Put do, does or did before the base form.",
+      "Do you want to concede a point and then object? Put the adjective before as and keep the normal order.",
+      "Should the result be stressed? Start with So or Such, and the verb stands before the subject."
+    ]
+  },
+  "patterns": [
+    {
+      "id": "ep.do-emph",
+      "name": {
+        "de": "Emphatisches do · I do think, we did tell",
+        "en": "Emphatic do · I do think, we did tell"
+      },
+      "form": {
+        "de": "Subjekt + do / does / did (betont) + Grundform",
+        "en": "Subject + do / does / did (stressed) + base form"
+      },
+      "use": {
+        "de": "Das Hilfsverb do betont eine Aussage: Man widerspricht, bestätigt nachdrücklich oder räumt einen Zweifel aus. Es wird beim Sprechen betont.",
+        "en": "The auxiliary do stresses a statement: you contradict, confirm firmly or remove a doubt. It is spoken with stress."
+      },
+      "signals": [
+        "i do",
+        "we do",
+        "he does",
+        "she does",
+        "we did",
+        "they did"
+      ],
+      "ex": [
+        {
+          "en": "We did send the invoice last week; please check your spam folder.",
+          "de": "Wir haben die Rechnung letzte Woche wirklich geschickt; bitte prüfen Sie den Spam-Ordner.",
+          "ctx": "mail"
+        },
+        {
+          "en": "I do understand your concern, but the deadline stays.",
+          "de": "Ich verstehe Ihre Sorge durchaus, aber die Frist bleibt.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "He does know the product, believe me.",
+          "de": "Er kennt das Produkt wirklich, glauben Sie mir.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "We did sent the invoice last week.",
+        "good": "We did send the invoice last week.",
+        "cause": {
+          "de": "Nach did steht die Grundform, auch wenn die Aussage in der Vergangenheit liegt. Das Deutsche hat keine solche Form, deshalb rutscht die Vergangenheitsform nach.",
+          "en": "After did the base form follows, even when the statement is in the past. German has no such form, so the past form slips in."
+        }
+      },
+      "contrast": {
+        "with": "em.what-cleft",
+        "a": "I do like the design.",
+        "b": "What I like is the design.",
+        "diff": {
+          "de": "Do betont, dass etwas wahr ist. Der What-Satz betont, was wichtig ist.",
+          "en": "Do stresses that something is true. The what-cleft stresses what matters."
+        }
+      },
+      "ccq": [
+        {
+          "s": "I do understand the problem.",
+          "q": {
+            "de": "Betone ich, dass ich das Problem verstehe?",
+            "en": "Do I stress that I understand the problem?"
+          },
+          "a": true
+        }
+      ],
+      "nudge": {
+        "de": "Welches Wort trägt die Betonung, und welche Form steht nach do, does oder did?",
+        "en": "Which word carries the stress, and which form follows do, does or did?"
+      }
+    },
+    {
+      "id": "ep.concession",
+      "name": {
+        "de": "Tempting as it is · Voranstellung mit as",
+        "en": "Tempting as it is · fronting with as"
+      },
+      "form": {
+        "de": "Adjektiv / Adverb + as / though + Subjekt + Verb, Hauptsatz",
+        "en": "Adjective / adverb + as / though + subject + verb, main clause"
+      },
+      "use": {
+        "de": "Man stellt ein Adjektiv oder Adverb voran und räumt etwas ein: „Tempting as it is“ heißt „so verlockend es ist“. Danach folgt der Gegensatz.",
+        "en": "You front an adjective or adverb to concede a point: “Tempting as it is” means “although it is tempting”. The contrast follows."
+      },
+      "signals": [
+        "as it is",
+        "as it seems",
+        "though it seems",
+        "much as",
+        "hard as"
+      ],
+      "ex": [
+        {
+          "en": "Tempting as it is, we should not cut the testing phase.",
+          "de": "So verlockend es ist, wir sollten die Testphase nicht streichen.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "Much as I would like to help, I cannot approve this.",
+          "de": "So gern ich helfen würde, ich kann das nicht genehmigen.",
+          "ctx": "talk"
+        },
+        {
+          "en": "Surprising though it seems, the old tool is faster.",
+          "de": "So überraschend es scheint, das alte Tool ist schneller.",
+          "ctx": "mail"
+        }
+      ],
+      "trap": {
+        "bad": "Tempting as is it, we should wait.",
+        "good": "Tempting as it is, we should wait.",
+        "cause": {
+          "de": "Nach as steht die normale Stellung (it is), nicht die Frageform. Man verwechselt es mit der Umstellung nach Never.",
+          "en": "After as the normal order (it is) follows, not the question order. It is mixed up with the inversion after Never."
+        }
+      },
+      "contrast": {
+        "with": "lk.although",
+        "a": "Tempting as it is, we should wait.",
+        "b": "Although it is tempting, we should wait.",
+        "diff": {
+          "de": "Gleiche Bedeutung. Die Voranstellung klingt rhetorischer und kürzer.",
+          "en": "Same meaning. The fronted version sounds more rhetorical and shorter."
+        }
+      },
+      "ccq": [
+        {
+          "s": "Much as I like the plan, I cannot support it.",
+          "q": {
+            "de": "Unterstütze ich den Plan?",
+            "en": "Do I support the plan?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Welches Adjektiv oder Adverb gehört vor as, und bleibt danach die normale Stellung?",
+        "en": "Which adjective or adverb goes before as, and does the normal order follow?"
+      }
+    },
+    {
+      "id": "ep.so-such",
+      "name": {
+        "de": "So … that, Such … that · Folge betonen",
+        "en": "So … that, Such … that · stressing the result"
+      },
+      "form": {
+        "de": "So + Adjektiv + Verb + Subjekt + that … / Such + Verb + Subjekt + that …",
+        "en": "So + adjective + verb + subject + that … / Such + verb + subject + that …"
+      },
+      "use": {
+        "de": "Mit vorangestelltem So oder Such betont man, wie stark etwas war, und nennt die Folge im that-Satz. Danach steht das Verb vor dem Subjekt.",
+        "en": "With So or Such at the start you stress how strong something was and name the result in the that-clause. The verb then comes before the subject."
+      },
+      "signals": [
+        "such was",
+        "so great was",
+        "so fast was",
+        "so strong was"
+      ],
+      "ex": [
+        {
+          "en": "So fast was the rollout that nobody noticed the change.",
+          "de": "Der Rollout lief so schnell, dass niemand die Änderung bemerkte.",
+          "ctx": "talk"
+        },
+        {
+          "en": "Such was the demand that we ran out of stock.",
+          "de": "Die Nachfrage war so groß, dass wir ausverkauft waren.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "So great was the interest that we added a second session.",
+          "de": "Das Interesse war so groß, dass wir eine zweite Sitzung ansetzten.",
+          "ctx": "mail"
+        }
+      ],
+      "trap": {
+        "bad": "So fast the rollout was that nobody noticed the change.",
+        "good": "So fast was the rollout that nobody noticed the change.",
+        "cause": {
+          "de": "Im Deutschen heißt es „so schnell war der Rollout“, also Verb vor Subjekt. Im Englischen bleibt man leicht bei der normalen Stellung und vergisst die Umstellung.",
+          "en": "In German the verb comes before the subject (“so schnell war der Rollout”). In English it is easy to keep the normal order and forget the inversion."
+        }
+      },
+      "contrast": {
+        "with": "inv.negative",
+        "a": "So strong was the signal that we checked twice.",
+        "b": "The signal was so strong that we checked twice.",
+        "diff": {
+          "de": "Gleiche Aussage. Vorn mit Umstellung klingt es betonter und förmlicher.",
+          "en": "Same statement. At the front with inversion it sounds more stressed and more formal."
+        }
+      },
+      "ccq": [
+        {
+          "s": "Such was the demand that we ran out of stock.",
+          "q": {
+            "de": "Waren wir ausverkauft?",
+            "en": "Did we run out of stock?"
+          },
+          "a": true
+        }
+      ],
+      "nudge": {
+        "de": "Welches Wort steht vorn (So oder Such), und steht das Verb vor dem Subjekt?",
+        "en": "Which word comes first (So or Such), and does the verb stand before the subject?"
+      }
+    },
+    {
+      "id": "ep.object-front",
+      "name": {
+        "de": "Objekt voranstellen · This we must avoid",
+        "en": "Fronting the object · This we must avoid"
+      },
+      "form": {
+        "de": "Objekt + Subjekt + Verb (normale Reihenfolge)",
+        "en": "Object + subject + verb (normal order)"
+      },
+      "use": {
+        "de": "Das Objekt steht vorn, um es hervorzuheben oder an den vorigen Satz anzuschließen. Subjekt und Verb behalten ihre normale Reihenfolge.",
+        "en": "The object comes first to stress it or to link to the previous sentence. Subject and verb keep their normal order."
+      },
+      "signals": [
+        "this we",
+        "that i",
+        "some risks",
+        "one thing we"
+      ],
+      "ex": [
+        {
+          "en": "This we must avoid at all costs.",
+          "de": "Das müssen wir um jeden Preis vermeiden.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "Some risks you can plan for; others you cannot.",
+          "de": "Auf manche Risiken kann man sich vorbereiten, auf andere nicht.",
+          "ctx": "talk"
+        },
+        {
+          "en": "That proposal I cannot accept.",
+          "de": "Diesen Vorschlag kann ich nicht akzeptieren.",
+          "ctx": "mail"
+        }
+      ],
+      "trap": {
+        "bad": "This must we avoid at all costs.",
+        "good": "This we must avoid at all costs.",
+        "cause": {
+          "de": "Im Deutschen steht nach dem vorgezogenen Objekt das Verb: „Das müssen wir vermeiden“. Im Englischen bleibt die Reihenfolge Subjekt vor Verb.",
+          "en": "In German the verb follows the fronted object (“Das müssen wir vermeiden”). In English the order subject before verb stays."
+        }
+      },
+      "contrast": {
+        "with": "inv.negative",
+        "a": "This we must avoid.",
+        "b": "Never must we do this.",
+        "diff": {
+          "de": "Ein vorgezogenes Objekt ändert die Reihenfolge nicht. Nach Never kehrt sie sich um.",
+          "en": "A fronted object does not change the order. After Never it flips."
+        }
+      },
+      "ccq": [
+        {
+          "s": "That proposal I cannot accept.",
+          "q": {
+            "de": "Akzeptiere ich den Vorschlag?",
+            "en": "Do I accept the proposal?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Was steht vorn, und bleiben Subjekt und Verb in der normalen Reihenfolge?",
+        "en": "What comes first, and do subject and verb keep their normal order?"
+      }
+    }
+  ]
+}

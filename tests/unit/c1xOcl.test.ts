@@ -13,15 +13,18 @@ import { slotCount } from '../../src/domain/answer/mask';
 
 const ROOT = join(process.cwd(), 'src/content/c1x/src/ocl');
 const items: Ocl[] = [];
+// Der K2-Bestand (P21) liegt in den Dateien k2-*; weitere Chargen (t01-* neue Themen) kommen dazu und müssen dieselben Qualitätsregeln erfüllen.
+const k2: Ocl[] = [];
 for (const f of readdirSync(ROOT).filter((n) => n.endsWith('.json'))) {
   const r = c1File.safeParse(JSON.parse(readFileSync(join(ROOT, f), 'utf8')));
-  if (r.success) for (const it of r.data.items as C1Item[]) if (it.kind === 'ocl') items.push(it);
+  if (r.success) for (const it of r.data.items as C1Item[]) if (it.kind === 'ocl') (f.startsWith('k2-') ? k2 : items).push(it);
 }
+items.unshift(...k2);
 const resp = (text: string) => ({ kind: 'ocl' as const, text });
 
 describe('ocl: Bestand', () => {
   it('es gibt 120 Aufgaben (K2), alle im Bereich Grammatik mit Thema und Muster', () => {
-    expect(items.length).toBe(120);
+    expect(k2.length).toBe(120);
     for (const it of items) {
       expect(it.area).toBe('gram');
       expect(it.topic).toBeTruthy();

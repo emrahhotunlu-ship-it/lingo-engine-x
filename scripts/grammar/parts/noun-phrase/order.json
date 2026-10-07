@@ -1,0 +1,211 @@
+[
+ {
+  "pat": "np.contact",
+  "en": "This is the most reliable system we have tested.",
+  "de": "Das ist das zuverlässigste System, das wir getestet haben.",
+  "chunks": [
+   "this",
+   "is",
+   "the most reliable",
+   "system",
+   "we",
+   "have tested"
+  ],
+  "single": "This is steht vorn; the most reliable system we have tested folgt danach in dieser Reihenfolge.",
+  "why": [
+   "Nach dem Superlativ system folgt der Satz ohne that: we have tested. Das Pronomen ist Objekt und darf fehlen.",
+   "After the superlative system the clause follows without that: we have tested. The pronoun is the object and may be dropped."
+  ],
+  "bad": "This is the most reliable system what we have tested.",
+  "trap": {
+   "tile": "system",
+   "instead": "system what",
+   "why": {
+    "de": "Nach dem Nomen steht nie what, nur that oder nichts.",
+    "en": "After the noun comes never what, only that or nothing."
+   }
+  }
+ },
+ {
+  "pat": "np.contact",
+  "en": "The report you sent was very helpful.",
+  "de": "Der Bericht, den Sie geschickt haben, war sehr hilfreich.",
+  "chunks": [
+   "the report",
+   "you sent",
+   "was",
+   "very",
+   "helpful"
+  ],
+  "single": "The report you sent bildet das Subjekt; was very helpful folgt danach.",
+  "why": [
+   "You sent ist ein Satz ohne that und gehört direkt hinter das Nomen the report.",
+   "You sent is a clause without that and belongs directly after the noun the report."
+  ],
+  "bad": "The report you sent it was very helpful.",
+  "trap": {
+   "tile": "you sent",
+   "instead": "you sent it",
+   "why": {
+    "de": "Das Objekt steht nur einmal: that ist es schon.",
+    "en": "The object appears only once: that is the object already."
+   }
+  }
+ },
+ {
+  "pat": "np.participle",
+  "en": "All files stored in the cloud are encrypted.",
+  "de": "Alle in der Cloud gespeicherten Dateien sind verschlüsselt.",
+  "chunks": [
+   "all files",
+   "stored",
+   "in the cloud",
+   "are",
+   "encrypted"
+  ],
+  "single": "All files stored in the cloud bildet das Subjekt; are encrypted folgt danach.",
+  "why": [
+   "Das Partizip stored steht direkt hinter dem Nomen files und hat passive Bedeutung.",
+   "The participle stored stands directly after the noun files and has passive meaning."
+  ],
+  "bad": "All files storing in the cloud are encrypted.",
+  "trap": {
+   "tile": "stored",
+   "instead": "storing",
+   "why": {
+    "de": "Die Dateien werden gespeichert: 3. Form, nicht -ing.",
+    "en": "The files are stored: past participle, not -ing."
+   }
+  }
+ },
+ {
+  "pat": "np.participle",
+  "en": "The team working on the migration meets every Monday.",
+  "de": "Das Team, das an der Migration arbeitet, trifft sich jeden Montag.",
+  "chunks": [
+   "the team",
+   "working",
+   "on the migration",
+   "meets",
+   "every Monday"
+  ],
+  "single": "The team working on the migration ist das Subjekt; meets every Monday folgt danach.",
+  "why": [
+   "Das Partizip working ersetzt that is working und steht direkt hinter dem Nomen the team.",
+   "The participle working replaces that is working and stands directly after the noun the team."
+  ],
+  "bad": "The team works on the migration meets every Monday.",
+  "trap": {
+   "tile": "working",
+   "instead": "works",
+   "why": {
+    "de": "Hier steht das aktive Partizip -ing, kein zweites Verb.",
+    "en": "The active participle -ing stands here, not a second verb."
+   }
+  }
+ },
+ {
+  "pat": "np.of-s",
+  "en": "The company's new CEO starts on Monday.",
+  "de": "Der neue Chef der Firma fängt am Montag an.",
+  "chunks": [
+   "the",
+   "company's",
+   "new CEO",
+   "starts",
+   "on Monday"
+  ],
+  "single": "The company's new CEO bildet das Subjekt; starts on Monday folgt danach.",
+  "why": [
+   "Der Besitzer company steht mit ’s vor dem Nomen: the company’s new CEO.",
+   "The owner company stands with ’s before the noun: the company’s new CEO."
+  ],
+  "bad": "The company new CEO starts on Monday.",
+  "trap": {
+   "tile": "company's",
+   "instead": "company",
+   "why": {
+    "de": "Der Besitz braucht ’s.",
+    "en": "Possession needs ’s."
+   }
+  }
+ },
+ {
+  "pat": "np.of-s",
+  "en": "The roof of the building was damaged by the storm.",
+  "de": "Das Dach des Gebäudes wurde durch den Sturm beschädigt.",
+  "chunks": [
+   "the roof",
+   "of the building",
+   "was",
+   "damaged",
+   "by the storm"
+  ],
+  "single": "The roof of the building bildet das Subjekt; was damaged by the storm folgt danach.",
+  "why": [
+   "Bei einem Ding steht of: the roof of the building. Das Passiv folgt mit was damaged.",
+   "With a thing, of is used: the roof of the building. The passive follows with was damaged."
+  ],
+  "bad": "The building roof of was damaged by the storm.",
+  "trap": {
+   "tile": "of the building",
+   "instead": "the building",
+   "why": {
+    "de": "Bei Dingen nimmt man of, nicht ’s.",
+    "en": "With things you use of, not ’s."
+   }
+  }
+ },
+ {
+  "pat": "np.to-inf",
+  "en": "She was the first customer to sign the new contract.",
+  "de": "Sie war die erste Kundin, die den neuen Vertrag unterschrieb.",
+  "chunks": [
+   "she was",
+   "the first",
+   "customer",
+   "to sign",
+   "the new contract"
+  ],
+  "single": "She was the first customer steht vorn; to sign the new contract folgt danach.",
+  "why": [
+   "Nach the first customer folgt to + Grundform: to sign. Das ersetzt den Relativsatz who signed.",
+   "After the first customer comes to + base form: to sign. It replaces who signed."
+  ],
+  "bad": "She was the first customer who to sign the new contract.",
+  "trap": {
+   "tile": "to sign",
+   "instead": "who to sign",
+   "why": {
+    "de": "Entweder who signed oder to sign, nicht beides.",
+    "en": "Either who signed or to sign, not both."
+   }
+  }
+ },
+ {
+  "pat": "np.to-inf",
+  "en": "This is the best way to reduce costs.",
+  "de": "Das ist der beste Weg, die Kosten zu senken.",
+  "chunks": [
+   "this is",
+   "the best way",
+   "to",
+   "reduce",
+   "costs"
+  ],
+  "single": "This is the best way bildet den Anfang; to reduce costs folgt danach.",
+  "why": [
+   "Nach way folgt to + Grundform: to reduce. Das Deutsche sagt „um … zu“, das Englische nur to.",
+   "After way comes to + base form: to reduce. German says “um … zu”, English only to."
+  ],
+  "bad": "This is the best way for reduce costs.",
+  "trap": {
+   "tile": "to",
+   "instead": "for",
+   "why": {
+    "de": "Nach way steht to, nicht for.",
+    "en": "After way comes to, not for."
+   }
+  }
+ }
+]

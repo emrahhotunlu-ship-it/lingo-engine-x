@@ -1,0 +1,111 @@
+{
+ "We did sent the invoice last week.": {
+  "pat": "ep.do-emph",
+  "why": {
+   "ok": {
+    "de": "Nach did steht die Grundform: We did send the invoice.",
+    "en": "After did the base form follows: We did send the invoice."
+   },
+   "wrong": [
+    {
+     "if": [
+      "sent"
+     ],
+     "de": "Nach did steht send, nicht sent.",
+     "en": "After did use send, not sent."
+    },
+    {
+     "if": [
+      "sends"
+     ],
+     "de": "Nach did steht send, nicht sends.",
+     "en": "After did use send, not sends."
+    }
+   ]
+  }
+ },
+ "Tempting as is it, we should wait.": {
+  "pat": "ep.concession",
+  "why": {
+   "ok": {
+    "de": "Nach as bleibt die normale Stellung: Tempting as it is.",
+    "en": "After as the normal order stays: Tempting as it is."
+   },
+   "wrong": [
+    {
+     "if": [
+      "is",
+      "it"
+     ],
+     "not": [
+      "as"
+     ],
+     "de": "Das Adjektiv Tempting steht vor as.",
+     "en": "The adjective Tempting stands before as."
+    },
+    {
+     "not": [
+      "it"
+     ],
+     "de": "Es heißt as it is, mit dem Subjekt it.",
+     "en": "It is as it is, with the subject it."
+    }
+   ]
+  }
+ },
+ "So fast the rollout was that nobody noticed the change.": {
+  "pat": "ep.so-such",
+  "why": {
+   "ok": {
+    "de": "Nach So fast steht das Verb vor dem Subjekt: So fast was the rollout.",
+    "en": "After So fast the verb stands before the subject: So fast was the rollout."
+   },
+   "wrong": [
+    {
+     "if": [
+      "rollout",
+      "was"
+     ],
+     "not": [
+      "fast"
+     ],
+     "de": "Das Adjektiv fast gehört direkt hinter So.",
+     "en": "The adjective fast belongs right after So."
+    },
+    {
+     "not": [
+      "was"
+     ],
+     "de": "Zwischen So fast und the rollout muss was stehen.",
+     "en": "Between So fast and the rollout you need was."
+    }
+   ]
+  }
+ },
+ "This must we avoid at all costs.": {
+  "pat": "ep.object-front",
+  "why": {
+   "ok": {
+    "de": "Nach dem vorgezogenen Objekt bleibt die Reihenfolge: This we must avoid.",
+    "en": "After the fronted object the order stays: This we must avoid."
+   },
+   "wrong": [
+    {
+     "if": [
+      "must",
+      "we"
+     ],
+     "de": "Subjekt vor Verb: we must, nicht must we.",
+     "en": "Subject before verb: we must, not must we."
+    },
+    {
+     "not": [
+      "we"
+     ],
+     "de": "Das Subjekt we fehlt vor must.",
+     "en": "The subject we is missing before must."
+    }
+   ]
+  }
+ }
+}

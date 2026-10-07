@@ -1,0 +1,220 @@
+[
+ {
+  "pat": "ep.do-emph",
+  "en": "We did send the invoice last week.",
+  "de": "Wir haben die Rechnung letzte Woche wirklich geschickt.",
+  "chunks": [
+   "we",
+   "did",
+   "send",
+   "the invoice",
+   "last week"
+  ],
+  "single": "Das Subjekt we kommt zuerst, dann did, die Grundform send und danach the invoice und last week.",
+  "why": [
+   "Das betonte did steht vor der Grundform send. Nach did wird das Verb nicht mehr gebeugt.",
+   "The stressed did stands before the base form send. After did the verb is no longer inflected."
+  ],
+  "bad": "We did sent the invoice last week.",
+  "trap": {
+   "tile": "send",
+   "instead": "sent",
+   "why": {
+    "de": "Nach did steht die Grundform, auch in der Vergangenheit.",
+    "en": "After did the base form follows, even in the past."
+   }
+  }
+ },
+ {
+  "pat": "ep.do-emph",
+  "en": "I do understand your concern, but the deadline stays.",
+  "de": "Ich verstehe Ihre Sorge durchaus, aber die Frist bleibt.",
+  "chunks": [
+   "I",
+   "do",
+   "understand",
+   "your concern",
+   "but",
+   "the deadline",
+   "stays"
+  ],
+  "single": "I do understand your concern ist der erste Teil; but the deadline stays kommt danach.",
+  "why": [
+   "Zu I gehört do vor der Grundform understand. Das betont das Verstehen vor dem Gegensatz mit but.",
+   "With I the form is do before the base form understand. This stresses understanding before the contrast with but."
+  ],
+  "bad": "I understand do your concern, but the deadline stays.",
+  "trap": {
+   "tile": "do",
+   "instead": "does",
+   "why": {
+    "de": "Zu I und we gehört do, zu he und she gehört does.",
+    "en": "With I and we use do, with he and she use does."
+   }
+  }
+ },
+ {
+  "pat": "ep.concession",
+  "en": "Tempting as it is, we should not cut the testing phase.",
+  "de": "So verlockend es ist, sollten wir die Testphase nicht streichen.",
+  "chunks": [
+   "tempting",
+   "as",
+   "it is",
+   "we",
+   "should not",
+   "cut",
+   "the testing phase"
+  ],
+  "single": "Tempting as it is bildet den ersten Teil; we should not cut the testing phase ist der Hauptsatz.",
+  "why": [
+   "Das Adjektiv steht vor as, danach folgt die normale Stellung it is. Der Hauptsatz beginnt nach dem Komma.",
+   "The adjective comes before as, and the normal order it is follows. The main clause begins after the comma."
+  ],
+  "bad": "Tempting as is it, we should not cut the testing phase.",
+  "trap": {
+   "tile": "it is",
+   "instead": "is it",
+   "why": {
+    "de": "Nach as bleibt die normale Stellung it is.",
+    "en": "After as the normal order it is stays."
+   }
+  }
+ },
+ {
+  "pat": "ep.concession",
+  "en": "Much as I would like to help, I cannot approve this.",
+  "de": "So gern ich helfen würde, ich kann das nicht genehmigen.",
+  "chunks": [
+   "much as",
+   "I",
+   "would like",
+   "to help",
+   "I",
+   "cannot approve",
+   "this"
+  ],
+  "single": "Much as I would like to help bildet den ersten Teil, danach folgt I cannot approve this.",
+  "why": [
+   "Much as leitet den Einwand ein und braucht normale Satzstellung. Danach folgt der Hauptsatz.",
+   "Much as introduces the concession and takes normal word order. The main clause follows."
+  ],
+  "bad": "Much I would like to help as, I cannot approve this.",
+  "trap": {
+   "tile": "much as",
+   "instead": "much",
+   "why": {
+    "de": "Much gehört mit as zusammen, sie bilden einen Baustein.",
+    "en": "Much belongs with as, they form one block."
+   }
+  }
+ },
+ {
+  "pat": "ep.so-such",
+  "en": "So fast was the rollout that nobody noticed the change.",
+  "de": "Der Rollout lief so schnell, dass niemand die Änderung bemerkte.",
+  "chunks": [
+   "so fast",
+   "was",
+   "the rollout",
+   "that",
+   "nobody",
+   "noticed",
+   "the change"
+  ],
+  "single": "So fast was the rollout bildet den ersten Teil; that nobody noticed the change nennt die Folge.",
+  "why": [
+   "So fast steht vorn, danach das Verb was vor dem Subjekt the rollout. Der that-Satz nennt die Folge.",
+   "So fast comes first, then the verb was before the subject the rollout. The that-clause names the result."
+  ],
+  "bad": "So fast the rollout was that nobody noticed the change.",
+  "trap": {
+   "tile": "was",
+   "instead": "the rollout was",
+   "why": {
+    "de": "Nach So + Adjektiv am Anfang steht das Verb vor dem Subjekt.",
+    "en": "After So + adjective at the start the verb stands before the subject."
+   }
+  }
+ },
+ {
+  "pat": "ep.so-such",
+  "en": "Such was the demand that we ran out of stock.",
+  "de": "Die Nachfrage war so groß, dass wir ausverkauft waren.",
+  "chunks": [
+   "such",
+   "was",
+   "the demand",
+   "that",
+   "we",
+   "ran out",
+   "of stock"
+  ],
+  "single": "Such was the demand bildet den ersten Teil; that we ran out of stock ist die Folge.",
+  "why": [
+   "Such steht vorn, danach das Verb was vor dem Subjekt the demand. Der that-Satz nennt die Folge.",
+   "Such comes first, then the verb was before the subject the demand. The that-clause names the result."
+  ],
+  "bad": "Such the demand was that we ran out of stock.",
+  "trap": {
+   "tile": "was",
+   "instead": "the demand was",
+   "why": {
+    "de": "Nach Such am Anfang steht das Verb vor dem Subjekt.",
+    "en": "After Such at the start the verb stands before the subject."
+   }
+  }
+ },
+ {
+  "pat": "ep.object-front",
+  "en": "That proposal I cannot accept under any terms.",
+  "de": "Diesen Vorschlag kann ich unter keinen Umständen akzeptieren.",
+  "chunks": [
+   "that proposal",
+   "I",
+   "cannot accept",
+   "under",
+   "any terms"
+  ],
+  "single": "That proposal steht vorn, danach I cannot accept, am Ende under any terms.",
+  "why": [
+   "Das Objekt that proposal steht vorn. Danach bleibt die normale Reihenfolge: Subjekt I, dann Verb cannot accept.",
+   "The object that proposal comes first. The normal order then stays: subject I, then verb cannot accept."
+  ],
+  "bad": "That proposal cannot I accept under any terms.",
+  "trap": {
+   "tile": "I",
+   "instead": "cannot I",
+   "why": {
+    "de": "Nach dem vorgezogenen Objekt steht das Subjekt vor dem Verb.",
+    "en": "After the fronted object the subject comes before the verb."
+   }
+  }
+ },
+ {
+  "pat": "ep.object-front",
+  "en": "This risk we must avoid at all costs.",
+  "de": "Dieses Risiko müssen wir um jeden Preis vermeiden.",
+  "chunks": [
+   "this risk",
+   "we",
+   "must",
+   "avoid",
+   "at all costs"
+  ],
+  "single": "This risk steht vorn, danach we must avoid, am Ende at all costs.",
+  "why": [
+   "Das Objekt this risk steht vorn, danach wie gewohnt Subjekt we, Modalverb must und Grundform avoid.",
+   "The object this risk comes first, then as usual the subject we, the modal must and the base form avoid."
+  ],
+  "bad": "This risk must we avoid at all costs.",
+  "trap": {
+   "tile": "we",
+   "instead": "must we",
+   "why": {
+    "de": "Nach dem vorgezogenen Objekt bleibt die Reihenfolge we must.",
+    "en": "After the fronted object the order we must stays."
+   }
+  }
+ }
+]

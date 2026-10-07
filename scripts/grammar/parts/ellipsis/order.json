@@ -1,0 +1,215 @@
+[
+ {
+  "pat": "el.so-not",
+  "en": "If so, please send me the new date.",
+  "de": "Falls ja, schicken Sie mir bitte das neue Datum.",
+  "chunks": [
+   "if",
+   "so",
+   "please",
+   "send me",
+   "the new date"
+  ],
+  "single": "If so bildet den Anfang; please send me the new date folgt danach.",
+  "why": [
+   "If so ersetzt einen ganzen Gedanken: Falls das zutrifft. Danach folgt die Bitte.",
+   "If so replaces a whole thought: if that is the case. The request follows."
+  ],
+  "bad": "If it so, please send me the new date.",
+  "trap": {
+   "tile": "so",
+   "instead": "it so",
+   "why": {
+    "de": "Nach if steht so allein, ohne it.",
+    "en": "After if, so stands alone without it."
+   }
+  }
+ },
+ {
+  "pat": "el.so-not",
+  "en": "I am afraid not, but we can try again next week.",
+  "de": "Leider nicht, aber wir können es nächste Woche noch einmal versuchen.",
+  "chunks": [
+   "I am afraid",
+   "not",
+   "but",
+   "we can try",
+   "again",
+   "next week"
+  ],
+  "single": "I am afraid not bildet den ersten Teil; but we can try again next week folgt danach.",
+  "why": [
+   "Not steht direkt hinter dem Verb und ersetzt den verneinten Gedanken. Danach folgt der zweite Teil mit but.",
+   "Not follows the verb directly and replaces the negative thought. The second part with but follows."
+  ],
+  "bad": "I am afraid that not, but we can try again next week.",
+  "trap": {
+   "tile": "not",
+   "instead": "that not",
+   "why": {
+    "de": "Vor not steht kein that.",
+    "en": "There is no that before not."
+   }
+  }
+ },
+ {
+  "pat": "el.do-so",
+  "en": "She signed the contract, and I did the same.",
+  "de": "Sie unterschrieb den Vertrag, und ich tat dasselbe.",
+  "chunks": [
+   "she signed",
+   "the contract",
+   "and",
+   "I",
+   "did",
+   "the same"
+  ],
+  "single": "She signed the contract ist der erste Teil; and I did the same folgt danach.",
+  "why": [
+   "Did the same ersetzt die ganze Handlung signed the contract. Das Verb wird nicht wiederholt.",
+   "Did the same replaces the whole action signed the contract. The verb is not repeated."
+  ],
+  "bad": "She signed the contract, and I did same.",
+  "trap": {
+   "tile": "the same",
+   "instead": "same",
+   "why": {
+    "de": "Vor same steht the.",
+    "en": "Before same you need the."
+   }
+  }
+ },
+ {
+  "pat": "el.do-so",
+  "en": "Anyone who wants to cancel may do so before Friday.",
+  "de": "Wer stornieren möchte, kann das vor Freitag tun.",
+  "chunks": [
+   "anyone",
+   "who wants to",
+   "cancel",
+   "may do so",
+   "before Friday"
+  ],
+  "single": "Anyone who wants to cancel ist das Subjekt; may do so before Friday folgt danach.",
+  "why": [
+   "Do so ersetzt die Handlung cancel und klingt förmlich. Es steht direkt hinter dem Modalverb may.",
+   "Do so replaces the action cancel and sounds formal. It stands directly after the modal may."
+  ],
+  "bad": "Anyone who wants to cancel may do it so before Friday.",
+  "trap": {
+   "tile": "may do so",
+   "instead": "may do it so",
+   "why": {
+    "de": "Es heißt do so, nicht do it so.",
+    "en": "It is do so, not do it so."
+   }
+  }
+ },
+ {
+  "pat": "el.one-ones",
+  "en": "Our old system is slow, but the new one is fast.",
+  "de": "Unser altes System ist langsam, aber das neue ist schnell.",
+  "chunks": [
+   "our old system",
+   "is slow",
+   "but",
+   "the new one",
+   "is fast"
+  ],
+  "single": "Der erste Teil our old system is slow steht vorn; but the new one is fast folgt danach.",
+  "why": [
+   "One ersetzt das Nomen system. Hinter dem Adjektiv new darf one nicht fehlen.",
+   "One replaces the noun system. After the adjective new, one must not be missing."
+  ],
+  "bad": "Our old system is slow, but the new is fast.",
+  "trap": {
+   "tile": "the new one",
+   "instead": "the new",
+   "why": {
+    "de": "Nach new braucht es one.",
+    "en": "After new you need one."
+   }
+  }
+ },
+ {
+  "pat": "el.one-ones",
+  "en": "The costs of the new plan are lower than those of the old plan.",
+  "de": "Die Kosten des neuen Plans sind niedriger als die des alten Plans.",
+  "chunks": [
+   "the costs",
+   "of the new plan",
+   "are lower",
+   "than",
+   "those of",
+   "the old plan"
+  ],
+  "single": "The costs of the new plan steht vorn; are lower than those of the old plan folgt danach.",
+  "why": [
+   "Those of ersetzt das Pluralnomen costs im Vergleich: Kosten werden mit Kosten verglichen.",
+   "Those of replaces the plural noun costs in the comparison: costs are compared with costs."
+  ],
+  "bad": "The costs of the new plan are lower than the old plan.",
+  "trap": {
+   "tile": "those of",
+   "instead": "the costs of",
+   "why": {
+    "de": "Ohne those of würden Kosten mit einem Plan verglichen.",
+    "en": "Without those of costs would be compared with a plan."
+   }
+  }
+ },
+ {
+  "pat": "el.to-aux",
+  "en": "Can you join us? I'd love to, but I have another meeting.",
+  "de": "Kannst du uns begleiten? Sehr gern, aber ich habe ein anderes Meeting.",
+  "chunks": [
+   "can you",
+   "join us",
+   "I'd love to",
+   "but",
+   "I have",
+   "another meeting"
+  ],
+  "single": "Die Frage can you join us kommt zuerst, dann I’d love to und der Einwand mit but.",
+  "why": [
+   "Bei I’d love to entfällt das Verb join, aber to bleibt stehen. Danach folgt der Einwand mit but.",
+   "With I’d love to, the verb join is dropped but to stays. The objection with but follows."
+  ],
+  "bad": "Can you join us? I'd love, but I have another meeting.",
+  "trap": {
+   "tile": "I'd love to",
+   "instead": "I'd love",
+   "why": {
+    "de": "Am Ende muss to stehen bleiben.",
+    "en": "At the end to has to stay."
+   }
+  }
+ },
+ {
+  "pat": "el.to-aux",
+  "en": "She can attend the workshop, but he cannot.",
+  "de": "Sie kann am Workshop teilnehmen, er nicht.",
+  "chunks": [
+   "she",
+   "can attend",
+   "the workshop",
+   "but",
+   "he",
+   "cannot"
+  ],
+  "single": "She can attend the workshop steht vorn; but he cannot beendet den Satz.",
+  "why": [
+   "Nach cannot entfällt das Verb attend, das Hilfsverb steht allein. Kein to danach.",
+   "After cannot the verb attend is dropped, the auxiliary stands alone. No to after it."
+  ],
+  "bad": "She can attend the workshop, but he cannot to.",
+  "trap": {
+   "tile": "cannot",
+   "instead": "cannot to",
+   "why": {
+    "de": "Nach cannot steht kein to.",
+    "en": "After cannot there is no to."
+   }
+  }
+ }
+]

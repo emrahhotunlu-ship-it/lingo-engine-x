@@ -8,7 +8,7 @@ import { commitGrammar, startGrammar, useGrammarSession } from '../../src/featur
 import { useTodayPlan } from '../../src/features/today/store';
 import { berlin } from './helpers';
 
-vi.mock('../../src/domain/unit/plan', async (importOriginal) => ({ ...(await importOriginal<typeof import('../../src/domain/unit/plan')>()), unitGrammarArgs: () => ({ n: 6, errs: 0 }), planRvOf: () => 2 }));
+vi.mock('../../src/domain/unit/plan', async (importOriginal) => ({ ...(await importOriginal<Record<string, unknown>>()), unitGrammarArgs: () => ({ n: 6, errs: 0 }), planRvOf: () => 2 }));
 
 // Kurzweg der Einstufung (Lernplattform 3.0 P34): Ein Thema in `app/c1.place.skip` bekommt als Vortest 4 Aufgaben über alle Muster des Themas
 // (bestanden bei mindestens 3 sauberen: richtig, ohne Hilfe, unter 20 s). Themen ohne Kurzweg behalten den Vortest mit 2 Aufgaben.
@@ -23,7 +23,7 @@ const STEP = patternsOf(TOPIC)!.introPlan[0]!;
 const place = (skip: string[]) => ({ v: 1, checks: [], gates: [], prod: [], bad: [], place: { d: '2026-10-01', se: 0.4, n: 16, th: 0.8, skip } });
 
 function start(skip: string[] | null) {
-  useLive.setState({ status: 'ready', docs: { 'app/c1': skip ? place(skip) : null } as never, collections: { grammar: new Map(), vocab: new Map(), chunk: new Map(), archive: new Map() } as never });
+  useLive.setState({ status: 'ready', docs: { 'app/c1': skip ? place(skip) : null }, collections: { grammar: new Map(), vocab: new Map(), chunk: new Map(), archive: new Map() } });
   useTodayPlan.setState({ plan: { v: 1, u: { gt: { intro: TOPIC, pats: STEP, topics: [TOPIC] } } } as never });
   startGrammar({ mode: 'duty', day: DAY, block: 2 });
   return useGrammarSession.getState();

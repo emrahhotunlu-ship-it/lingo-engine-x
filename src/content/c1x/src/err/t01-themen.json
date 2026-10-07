@@ -1,0 +1,622 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "err-0501",
+   "kind": "err",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "inv.sooner",
+   "why": {
+    "ok": {
+     "de": "Nach Hardly steht had vor dem Subjekt: Hardly had the update finished when …",
+     "en": "After Hardly, had stands before the subject: Hardly had the update finished when …"
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "the update had finished",
+    "fix": [
+     "had the update finished"
+    ],
+    "choices": [
+     "had the update finished",
+     "the update has finished",
+     "has the update finished"
+    ]
+   },
+   "text": "Hardly the update had finished when the first complaints arrived."
+  },
+  {
+   "id": "err-0502",
+   "kind": "err",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "inv.only",
+   "why": {
+    "ok": {
+     "de": "Nach Only after steht das Hilfsverb vor dem Subjekt: could we begin.",
+     "en": "After Only after the auxiliary comes before the subject: could we begin."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "we could begin",
+    "fix": [
+     "could we begin"
+    ],
+    "choices": [
+     "could we begin",
+     "could begin we",
+     "began we"
+    ]
+   },
+   "text": "Only after the contract was signed we could begin the migration."
+  },
+  {
+   "id": "err-0503",
+   "kind": "err",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "inv.negative",
+   "why": {
+    "ok": {
+     "de": "Nach Under no circumstances steht should vor dem Subjekt: should you share.",
+     "en": "After Under no circumstances, should stands before the subject: should you share."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "you should share",
+    "fix": [
+     "should you share"
+    ],
+    "choices": [
+     "should you share",
+     "you must share",
+     "should share you"
+    ]
+   },
+   "text": "Under no circumstances you should share your login details with colleagues."
+  },
+  {
+   "id": "err-0504",
+   "kind": "err",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "inv.cond",
+   "why": {
+    "ok": {
+     "de": "Nach Should you steht die Grundform ohne will: Should you have …",
+     "en": "After Should you the base form follows without will: Should you have …"
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "will have",
+    "fix": [
+     "have"
+    ],
+    "choices": [
+     "have",
+     "had",
+     "having"
+    ]
+   },
+   "text": "Should you will have any questions, please contact the service team."
+  },
+  {
+   "id": "err-0505",
+   "kind": "err",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "inv.only",
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Nach Not until am Anfang steht did vor dem Subjekt, wie hier.",
+     "en": "No mistake: after Not until at the start, did stands before the subject, as here."
+    },
+    "wrong": []
+   },
+   "bad": null,
+   "text": "Not until the audit began did the team realize how many files were missing."
+  },
+  {
+   "id": "err-0506",
+   "kind": "err",
+   "area": "gram",
+   "topic": "inversion",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "inv.cond",
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Had we invested ersetzt If we had invested.",
+     "en": "No mistake: Had we invested replaces If we had invested."
+    },
+    "wrong": []
+   },
+   "bad": null,
+   "text": "Had we invested in monitoring earlier, the outage would have been much shorter."
+  },
+  {
+   "id": "err-0507",
+   "kind": "err",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "ep.do-emph",
+   "why": {
+    "ok": {
+     "de": "Nach does steht die Grundform: does send.",
+     "en": "After does the base form follows: does send."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "sends",
+    "fix": [
+     "send"
+    ],
+    "choices": [
+     "send",
+     "sent",
+     "sending"
+    ]
+   },
+   "text": "He does sends the weekly report on time, so please stop worrying."
+  },
+  {
+   "id": "err-0508",
+   "kind": "err",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "ep.concession",
+   "why": {
+    "ok": {
+     "de": "Nach der Voranstellung ist der Hauptsatz normal: we could not reach.",
+     "en": "After the fronting the main clause is normal: we could not reach."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "we not could",
+    "fix": [
+     "we could not"
+    ],
+    "choices": [
+     "we could not",
+     "we did not could",
+     "we not can"
+    ]
+   },
+   "text": "Hard as we tried, we not could reach the client by phone."
+  },
+  {
+   "id": "err-0509",
+   "kind": "err",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "ep.so-such",
+   "why": {
+    "ok": {
+     "de": "Der that-Satz nennt die Folge: Such was the demand that …",
+     "en": "The that-clause names the result: Such was the demand that …"
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "what",
+    "fix": [
+     "that"
+    ],
+    "choices": [
+     "that",
+     "which",
+     "as"
+    ]
+   },
+   "text": "Such was the demand what the shop ran out of stock within an hour."
+  },
+  {
+   "id": "err-0510",
+   "kind": "err",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "ep.object-front",
+   "why": {
+    "ok": {
+     "de": "Nach einem vorgezogenen Objekt bleibt die normale Reihenfolge: we must reverse.",
+     "en": "After a fronted object the normal order stays: we must reverse."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "must we reverse",
+    "fix": [
+     "we must reverse"
+    ],
+    "choices": [
+     "we must reverse",
+     "must reverse we",
+     "we reverse must"
+    ]
+   },
+   "text": "This decision must we reverse before the end of the quarter."
+  },
+  {
+   "id": "err-0511",
+   "kind": "err",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "ep.concession",
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Nach as bleibt die normale Stellung (it is).",
+     "en": "No mistake: after as the normal order (it is) stays."
+    },
+    "wrong": []
+   },
+   "bad": null,
+   "text": "Tempting as it is, we should not skip the final review."
+  },
+  {
+   "id": "err-0512",
+   "kind": "err",
+   "area": "gram",
+   "topic": "emph-plus",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "ep.so-such",
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Nach So great steht das Verb was vor dem Subjekt.",
+     "en": "No mistake: after So great the verb was stands before the subject."
+    },
+    "wrong": []
+   },
+   "bad": null,
+   "text": "So great was the interest that we added a second session on Friday."
+  },
+  {
+   "id": "err-0513",
+   "kind": "err",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "el.so-not",
+   "why": {
+    "ok": {
+     "de": "Nach hope folgt not direkt, ohne that.",
+     "en": "After hope, not follows directly, without that."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "hope that not",
+    "fix": [
+     "hope not"
+    ],
+    "choices": [
+     "hope not",
+     "hope it not",
+     "hope no"
+    ]
+   },
+   "text": "Will the update be ready by Monday? I hope that not, because the testers are away."
+  },
+  {
+   "id": "err-0514",
+   "kind": "err",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "el.do-so",
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Did the same ersetzt lowered our prices.",
+     "en": "No mistake: Did the same replaces lowered our prices."
+    },
+    "wrong": []
+   },
+   "bad": null,
+   "text": "Our rivals lowered their prices, and we did the same last month."
+  },
+  {
+   "id": "err-0515",
+   "kind": "err",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "el.one-ones",
+   "why": {
+    "ok": {
+     "de": "Hinter dem Adjektiv cheaper braucht es one.",
+     "en": "After the adjective cheaper you need one."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "a cheaper",
+    "fix": [
+     "a cheaper one"
+    ],
+    "choices": [
+     "a cheaper one",
+     "a cheaper it",
+     "cheaper one a"
+    ]
+   },
+   "text": "Our current provider is expensive, so we are looking for a cheaper."
+  },
+  {
+   "id": "err-0516",
+   "kind": "err",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "el.to-aux",
+   "why": {
+    "ok": {
+     "de": "Am Ende muss to stehen bleiben: I would like to.",
+     "en": "At the end to has to stay: I would like to."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "would like",
+    "fix": [
+     "would like to"
+    ],
+    "choices": [
+     "would like to",
+     "would like for",
+     "would like of"
+    ]
+   },
+   "text": "Can you attend the workshop on Friday? Yes, I would like."
+  },
+  {
+   "id": "err-0517",
+   "kind": "err",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "el.one-ones",
+   "why": {
+    "ok": {
+     "de": "Gebühren werden mit Gebühren verglichen: those of the new provider.",
+     "en": "Fees are compared with fees: those of the new provider."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "than the new provider",
+    "fix": [
+     "than those of the new provider"
+    ],
+    "choices": [
+     "than those of the new provider",
+     "than that of the new provider",
+     "than the ones the new provider"
+    ]
+   },
+   "text": "The fees of our provider are higher than the new provider."
+  },
+  {
+   "id": "err-0518",
+   "kind": "err",
+   "area": "gram",
+   "topic": "ellipsis",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "el.one-ones",
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: One ersetzt das Nomen tool.",
+     "en": "No mistake: One replaces the noun tool."
+    },
+    "wrong": []
+   },
+   "bad": null,
+   "text": "The new tool is faster than the old one, but the old one is cheaper to run."
+  },
+  {
+   "id": "err-0519",
+   "kind": "err",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "np.contact",
+   "why": {
+    "ok": {
+     "de": "Nach dem Nomen offer steht that, which oder nichts, nie what.",
+     "en": "After the noun offer comes that, which or nothing, never what."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "what",
+    "fix": [
+     "that",
+     "which"
+    ],
+    "choices": [
+     "that",
+     "who",
+     "whom"
+    ]
+   },
+   "text": "Is this the only offer what we have received so far?"
+  },
+  {
+   "id": "err-0520",
+   "kind": "err",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "np.participle",
+   "why": {
+    "ok": {
+     "de": "Die Mitarbeiter sind beteiligt: Passiv braucht die 3. Form involved.",
+     "en": "The employees are involved: the passive needs the past participle involved."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "involving",
+    "fix": [
+     "involved"
+    ],
+    "choices": [
+     "involved",
+     "involve",
+     "involves"
+    ]
+   },
+   "text": "The employees involving in the pilot project received a bonus."
+  },
+  {
+   "id": "err-0521",
+   "kind": "err",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "np.of-s",
+   "why": {
+    "ok": {
+     "de": "Der Besitz steht mit ’s: the manager’s decision.",
+     "en": "Possession takes ’s: the manager’s decision."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "manager decision",
+    "fix": [
+     "manager's decision"
+    ],
+    "choices": [
+     "manager's decision",
+     "managers decision",
+     "manager decisions"
+    ]
+   },
+   "text": "The manager decision surprised the whole team on Monday."
+  },
+  {
+   "id": "err-0522",
+   "kind": "err",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "np.to-inf",
+   "why": {
+    "ok": {
+     "de": "Nach way steht to + Grundform: to increase.",
+     "en": "After way comes to + base form: to increase."
+    },
+    "wrong": []
+   },
+   "bad": {
+    "span": "for increase",
+    "fix": [
+     "to increase"
+    ],
+    "choices": [
+     "to increase",
+     "for increase",
+     "to increasing"
+    ]
+   },
+   "text": "This is the best way for increase our sales in Asia."
+  },
+  {
+   "id": "err-0523",
+   "kind": "err",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "np.participle",
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Working ersetzt who is working.",
+     "en": "No mistake: Working replaces who is working."
+    },
+    "wrong": []
+   },
+   "bad": null,
+   "text": "Everyone working on the migration received the new access rules."
+  },
+  {
+   "id": "err-0524",
+   "kind": "err",
+   "area": "gram",
+   "topic": "noun-phrase",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "pat": "np.to-inf",
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Nach the last customer folgt to + Grundform.",
+     "en": "No mistake: after the last customer comes to + base form."
+    },
+    "wrong": []
+   },
+   "bad": null,
+   "text": "She was the last customer to sign the contract before the deadline."
+  }
+ ]
+}

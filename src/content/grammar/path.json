@@ -97,6 +97,10 @@
     "c1-participle",
     "c1-discourse",
     "c1-emphasis",
+    "inversion",
+    "emph-plus",
+    "ellipsis",
+    "noun-phrase",
     "compound-mod",
     "word-order",
     "comparison"

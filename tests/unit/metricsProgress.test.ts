@@ -113,12 +113,13 @@ describe('festGrowth28 und festForecast', () => {
 
 describe('grammarDistribution', () => {
   const ids = TOPICS.map((t) => t.id);
-  it('alle 39 Themen ohne Dokumente: Verteilung nach Startwert, Neu = nie geübt', () => {
+  it('alle Themen ohne Dokumente: Verteilung nach Startwert, Neu = nie geübt', () => {
     const d = grammarDistribution(ids, new Map(), NOW);
-    expect(d.total).toBe(39);
-    expect(d.counts.new).toBe(39);
+    expect(d.total).toBe(ids.length);
+    expect(ids.length).toBe(43);
+    expect(d.counts.new).toBe(ids.length);
     expect(d.safe).toBe(0);
-    expect(d.perTopic).toHaveLength(39);
+    expect(d.perTopic).toHaveLength(ids.length);
   });
   it('Zustände: Lernt, Sicher, Fest nach p, n und Belegtagen', () => {
     const hist3 = [{ d: '2026-09-01', p: 0.7 }, { d: '2026-09-10', p: 0.8 }, { d: '2026-09-20', p: 0.85 }];

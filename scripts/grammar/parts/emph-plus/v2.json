@@ -1,0 +1,648 @@
+[
+ {
+  "id": "ep-k1",
+  "type": "kwt",
+  "pat": "ep.do-emph",
+  "from": "He knows the product very well, believe me.",
+  "key": "DOES",
+  "frame": "He ___ the product very well, believe me.",
+  "answer": "does know",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: He does know the product very well. Nach does steht die Grundform know.",
+    "en": "Right: He does know the product very well. After does the base form know follows."
+   },
+   "wrong": [
+    {
+     "not": [
+      "does"
+     ],
+     "de": "Das Schlüsselwort does muss unverändert in der Lücke stehen.",
+     "en": "The key word does must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "does",
+      "knows"
+     ],
+     "de": "Nach does steht die Grundform: know, nicht knows.",
+     "en": "After does the base form follows: know, not knows."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ep-k2",
+  "type": "kwt",
+  "pat": "ep.do-emph",
+  "from": "We sent the invoice last week, I promise.",
+  "key": "DID",
+  "frame": "We ___ the invoice last week, I promise.",
+  "answer": "did send",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: We did send the invoice. Nach did steht die Grundform send.",
+    "en": "Right: We did send the invoice. After did the base form send follows."
+   },
+   "wrong": [
+    {
+     "not": [
+      "did"
+     ],
+     "de": "Das Schlüsselwort did muss unverändert in der Lücke stehen.",
+     "en": "The key word did must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "did",
+      "sent"
+     ],
+     "de": "Nach did steht die Grundform: send, nicht sent.",
+     "en": "After did the base form follows: send, not sent."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ep-k3",
+  "type": "kwt",
+  "pat": "ep.concession",
+  "from": "Although I would like to help, I cannot approve this.",
+  "key": "MUCH",
+  "frame": "___ I would like to help, I cannot approve this.",
+  "answer": "Much as",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Much as I would like to help, … Das Wort Much steht mit as am Anfang.",
+    "en": "Right: Much as I would like to help, … Much as I would like to."
+   },
+   "wrong": [
+    {
+     "not": [
+      "much"
+     ],
+     "de": "Das Schlüsselwort much muss unverändert in der Lücke stehen.",
+     "en": "The key word much must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "much"
+     ],
+     "not": [
+      "as"
+     ],
+     "de": "Zu Much gehört as: Much as I would like to help.",
+     "en": "Much goes with as: Much as I would like to help."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ep-k4",
+  "type": "kwt",
+  "pat": "ep.concession",
+  "from": "Even though it seems surprising, the old tool is faster.",
+  "key": "SURPRISING",
+  "frame": "___ it seems, the old tool is faster.",
+  "answer": "Surprising though",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Surprising though it seems, … Das Adjektiv steht vor though.",
+    "en": "Right: Surprising though it seems, … The adjective stands before though."
+   },
+   "wrong": [
+    {
+     "not": [
+      "surprising"
+     ],
+     "de": "Das Schlüsselwort surprising muss unverändert in der Lücke stehen.",
+     "en": "The key word surprising must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "surprising"
+     ],
+     "not": [
+      "though"
+     ],
+     "de": "Nach dem Adjektiv braucht es though (oder as): Surprising though it seems.",
+     "en": "After the adjective you need though (or as): Surprising though it seems."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ep-k5",
+  "type": "kwt",
+  "pat": "ep.so-such",
+  "from": "The demand was so strong that we ran out of stock.",
+  "key": "SUCH",
+  "frame": "___ the demand that we ran out of stock.",
+  "answer": "Such was",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Such was the demand that … Nach Such steht das Verb vor dem Subjekt.",
+    "en": "Right: Such was the demand that … After Such the verb stands before the subject."
+   },
+   "wrong": [
+    {
+     "not": [
+      "such"
+     ],
+     "de": "Das Schlüsselwort such muss unverändert in der Lücke stehen.",
+     "en": "The key word such must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "such"
+     ],
+     "not": [
+      "was"
+     ],
+     "de": "Nach Such am Satzanfang folgt was: Such was the demand.",
+     "en": "After Such at the start was follows: Such was the demand."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ep-k6",
+  "type": "kwt",
+  "pat": "ep.so-such",
+  "from": "The delay was so serious that the client cancelled the order.",
+  "key": "SO",
+  "frame": "___ was the delay that the client cancelled the order.",
+  "answer": "So serious",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: So serious was the delay that … Das Adjektiv steht direkt hinter So.",
+    "en": "Right: So serious was the delay that … The adjective follows So directly."
+   },
+   "wrong": [
+    {
+     "not": [
+      "so"
+     ],
+     "de": "Das Schlüsselwort so muss unverändert in der Lücke stehen.",
+     "en": "The key word so must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "so"
+     ],
+     "not": [
+      "serious"
+     ],
+     "de": "Hinter So braucht es ein Adjektiv: So serious was …",
+     "en": "After So you need an adjective: So serious was …"
+    }
+   ]
+  }
+ },
+ {
+  "id": "ep-k7",
+  "type": "kwt",
+  "pat": "ep.object-front",
+  "from": "I cannot accept that proposal.",
+  "key": "THAT",
+  "frame": "___ I cannot accept.",
+  "answer": "That proposal",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: That proposal I cannot accept. Das Objekt steht vorn.",
+    "en": "Right: That proposal I cannot accept. The object comes first."
+   },
+   "wrong": [
+    {
+     "not": [
+      "that"
+     ],
+     "de": "Das Schlüsselwort that muss unverändert in der Lücke stehen.",
+     "en": "The key word that must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "that"
+     ],
+     "not": [
+      "proposal"
+     ],
+     "de": "Das vorgezogene Objekt ist that proposal, nicht nur that.",
+     "en": "The fronted object is that proposal, not only that."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ep-k8",
+  "type": "kwt",
+  "pat": "ep.object-front",
+  "from": "We cannot agree to this condition.",
+  "key": "CONDITION",
+  "frame": "___ we cannot agree to.",
+  "answer": "This condition",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: This condition we cannot agree to. Das Objekt steht vorn, die Reihenfolge danach bleibt normal.",
+    "en": "Right: This condition we cannot agree to. The object comes first, the order after it stays normal."
+   },
+   "wrong": [
+    {
+     "not": [
+      "condition"
+     ],
+     "de": "Das Schlüsselwort condition muss unverändert in der Lücke stehen.",
+     "en": "The key word condition must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ep-f1",
+  "type": "find",
+  "pat": "ep.do-emph",
+  "prompt": "She does knows the market better than anyone.",
+  "err": [
+   2,
+   2
+  ],
+  "answer": "know",
+  "fixed": "She does know the market better than anyone.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: nach does steht die Grundform know, nicht knows.",
+    "en": "The error: after does comes the base form know, not knows."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach does steht die Grundform.",
+     "en": "There is an error: After does the base form follows."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Nach does steht die Grundform.",
+     "en": "The error is elsewhere: After does the base form follows."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ep-f2",
+  "type": "find",
+  "pat": "ep.do-emph",
+  "prompt": "We did warn them about the risk in March.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach did steht die Grundform warn. So betont man, dass die Warnung erfolgte.",
+    "en": "Right: after did the base form warn follows. This stresses that the warning happened."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist alles richtig: We did warn them ist richtig gebildet.",
+     "en": "Everything is right here: We did warn them is correctly formed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ep-f3",
+  "type": "find",
+  "pat": "ep.concession",
+  "prompt": "Tempting as is it, we should wait for the results.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "it is,",
+  "fixed": "Tempting as it is, we should wait for the results.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: nach as steht die normale Stellung it is. Richtig: Tempting as it is, …",
+    "en": "The error: after as the normal order it is follows. Correct: Tempting as it is, …"
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach as bleibt die normale Stellung.",
+     "en": "There is an error: After as the normal order stays."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Nach as bleibt die normale Stellung.",
+     "en": "The error is elsewhere: After as the normal order stays."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ep-f4",
+  "type": "find",
+  "pat": "ep.concession",
+  "prompt": "Hard as we tried, the migration not finished in time.",
+  "err": [
+   6,
+   6
+  ],
+  "answer": "was not",
+  "fixed": "Hard as we tried, the migration was not finished in time.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: im Hauptsatz fehlt das Hilfsverb was. Richtig: the migration was not finished.",
+    "en": "The error: the main clause lacks the auxiliary was. Correct: the migration was not finished."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Der Hauptsatz nach der Voranstellung ist ein ganz normaler Satz.",
+     "en": "There is an error: The main clause after the fronting is a perfectly normal sentence."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Der Hauptsatz nach der Voranstellung ist ein ganz normaler Satz.",
+     "en": "The error is elsewhere: The main clause after the fronting is a perfectly normal sentence."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ep-f5",
+  "type": "find",
+  "pat": "ep.so-such",
+  "prompt": "So strong the signal was that the team checked the antenna.",
+  "err": [
+   2,
+   4
+  ],
+  "answer": "was the signal",
+  "fixed": "So strong was the signal that the team checked the antenna.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: nach So strong kommt das Verb vor das Subjekt. Richtig: So strong was the signal that …",
+    "en": "The error: after So strong the verb comes before the subject. Correct: So strong was the signal that …"
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach So + Adjektiv am Anfang steht das Verb vor dem Subjekt.",
+     "en": "There is an error: After So + adjective at the start the verb stands before the subject."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Nach So + Adjektiv am Anfang steht das Verb vor dem Subjekt.",
+     "en": "The error is elsewhere: After So + adjective at the start the verb stands before the subject."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ep-f6",
+  "type": "find",
+  "pat": "ep.so-such",
+  "prompt": "So great was the interest that we added a second session.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Richtig: So great was the interest that … Verb vor Subjekt, dann der that-Satz.",
+    "en": "Right: So great was the interest that … verb before subject, then the that-clause."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist alles richtig: So great was the interest that … ist richtig gebildet.",
+     "en": "Everything is right here: So great was the interest that … is correctly formed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ep-f7",
+  "type": "find",
+  "pat": "ep.object-front",
+  "prompt": "That proposal cannot I accept under any terms.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "I cannot",
+  "fixed": "That proposal I cannot accept under any terms.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: nach dem vorgezogenen Objekt bleibt die normale Reihenfolge: I cannot accept.",
+    "en": "The error: after the fronted object the normal order stays: I cannot accept."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach dem vorgezogenen Objekt steht das Subjekt vor dem Verb.",
+     "en": "There is an error: After the fronted object the subject comes before the verb."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Nach dem vorgezogenen Objekt steht das Subjekt vor dem Verb.",
+     "en": "The error is elsewhere: After the fronted object the subject comes before the verb."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ep-f8",
+  "type": "find",
+  "pat": "ep.object-front",
+  "prompt": "This risk we must avoiding at all costs.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "avoid",
+  "fixed": "This risk we must avoid at all costs.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: nach must steht die Grundform avoid.",
+    "en": "The error: after must the base form avoid follows."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach must steht die Grundform.",
+     "en": "There is an error: After must the base form follows."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Nach must steht die Grundform.",
+     "en": "The error is elsewhere: After must the base form follows."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ep-m1",
+  "type": "meaning",
+  "pat": "ep.do-emph",
+  "a": "I do like the design.",
+  "b": "I like the design.",
+  "q": {
+   "de": "Welcher Satz betont, dass ich das Design wirklich mag?",
+   "en": "Which sentence stresses that I really like the design?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Das betonte do hebt die Aussage hervor.",
+    "en": "Right: sentence a. The stressed do emphasizes the statement."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b steht dasselbe ohne Betonung. Es ist neutral.",
+     "en": "Sentence b says the same without stress. It is neutral."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich stark: Nur a ist betont.",
+     "en": "Not equally strong: only a is stressed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ep-m2",
+  "type": "meaning",
+  "pat": "ep.concession",
+  "a": "Much as I like the plan, I cannot support it.",
+  "b": "I like the plan, so I support it.",
+  "q": {
+   "de": "Welcher Satz sagt, dass ich den Plan nicht unterstütze?",
+   "en": "Which sentence says that I do not support the plan?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Much as räumt etwas ein und setzt dann den Gegensatz.",
+    "en": "Right: sentence a. Much as concedes a point and then sets the contrast."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b unterstütze ich den Plan. Das ist das Gegenteil.",
+     "en": "In b I support the plan. That is the opposite."
+    },
+    {
+     "opt": "both",
+     "de": "Die beiden Sätze sagen Gegensätzliches.",
+     "en": "The two sentences say opposite things."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ep-m3",
+  "type": "meaning",
+  "pat": "ep.so-such",
+  "a": "Such was the demand that we ran out of stock.",
+  "b": "The demand was low, so we kept the stock.",
+  "q": {
+   "de": "Welcher Satz sagt, dass die Nachfrage sehr groß war?",
+   "en": "Which sentence says that the demand was very high?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Such was the demand that … zeigt eine sehr große Nachfrage mit Folge.",
+    "en": "Right: sentence a. Such was the demand that … shows very high demand with a result."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b war die Nachfrage niedrig. Das ist das Gegenteil.",
+     "en": "In b the demand was low. That is the opposite."
+    },
+    {
+     "opt": "both",
+     "de": "Die beiden Sätze sagen Gegensätzliches.",
+     "en": "The two sentences say opposite things."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ep-m4",
+  "type": "meaning",
+  "pat": "ep.object-front",
+  "a": "That proposal I cannot accept.",
+  "b": "I cannot accept that proposal.",
+  "q": {
+   "de": "Bedeuten beide Sätze dasselbe?",
+   "en": "Do both sentences mean the same?"
+  },
+  "answer": "both",
+  "why": {
+   "ok": {
+    "de": "Richtig: beide. Das vorgezogene Objekt ändert die Bedeutung nicht, nur die Betonung.",
+    "en": "Right: both. The fronted object does not change the meaning, only the emphasis."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "Nicht nur a: b sagt inhaltlich dasselbe.",
+     "en": "Not only a: b says the same in content."
+    },
+    {
+     "opt": "b",
+     "de": "Nicht nur b: a sagt inhaltlich dasselbe.",
+     "en": "Not only b: a says the same in content."
+    }
+   ]
+  }
+ }
+]

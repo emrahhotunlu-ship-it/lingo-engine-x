@@ -1,0 +1,665 @@
+[
+ {
+  "id": "np-k1",
+  "type": "kwt",
+  "pat": "np.contact",
+  "from": "I liked the report that you sent last week.",
+  "key": "SENT",
+  "frame": "I liked the report ___ last week.",
+  "answer": "you sent",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: the report you sent last week. Das Pronomen that ist Objekt und darf fehlen.",
+    "en": "Right: the report you sent last week. The pronoun that is the object and may be dropped."
+   },
+   "wrong": [
+    {
+     "not": [
+      "sent"
+     ],
+     "de": "Das Schlüsselwort sent muss unverändert in der Lücke stehen.",
+     "en": "The key word sent must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "you",
+      "sent"
+     ],
+     "not": [
+      "sent"
+     ],
+     "de": "Das Schlüsselwort sent muss in der Lücke stehen.",
+     "en": "The key word sent must be in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "np-k2",
+  "type": "kwt",
+  "pat": "np.contact",
+  "from": "This is the best offer which we have received so far.",
+  "key": "BEST",
+  "frame": "This is the ___ we have received so far.",
+  "answer": "best offer",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: the best offer we have received so far. Nach dem Superlativ darf das Pronomen fehlen.",
+    "en": "Right: the best offer we have received so far. After the superlative the pronoun may be dropped."
+   },
+   "wrong": [
+    {
+     "not": [
+      "best"
+     ],
+     "de": "Das Schlüsselwort best muss unverändert in der Lücke stehen.",
+     "en": "The key word best must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "offer"
+     ],
+     "not": [
+      "best"
+     ],
+     "de": "Das Schlüsselwort best gehört vor offer.",
+     "en": "The key word best belongs before offer."
+    }
+   ]
+  }
+ },
+ {
+  "id": "np-k3",
+  "type": "kwt",
+  "pat": "np.participle",
+  "from": "The staff who are working on the audit meet every Friday.",
+  "key": "WORKING",
+  "frame": "The ___ the audit meet every Friday.",
+  "answer": "staff working on",
+  "accepted": [],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: The staff working on the audit. Das aktive Partizip ersetzt who are working.",
+    "en": "Right: The staff working on the audit. The active participle replaces who are working."
+   },
+   "wrong": [
+    {
+     "not": [
+      "working"
+     ],
+     "de": "Das Schlüsselwort working muss unverändert in der Lücke stehen.",
+     "en": "The key word working must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "staff",
+      "working"
+     ],
+     "not": [
+      "on"
+     ],
+     "de": "Nach working braucht es on: working on the audit.",
+     "en": "After working you need on: working on the audit."
+    }
+   ]
+  }
+ },
+ {
+  "id": "np-k4",
+  "type": "kwt",
+  "pat": "np.participle",
+  "from": "All questions that were raised in the meeting are listed below.",
+  "key": "RAISED",
+  "frame": "All ___ in the meeting are listed below.",
+  "answer": "questions raised",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: All questions raised in the meeting. Das passive Partizip ersetzt that were raised.",
+    "en": "Right: All questions raised in the meeting. The passive participle replaces that were raised."
+   },
+   "wrong": [
+    {
+     "not": [
+      "raised"
+     ],
+     "de": "Das Schlüsselwort raised muss unverändert in der Lücke stehen.",
+     "en": "The key word raised must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "raised"
+     ],
+     "not": [
+      "questions"
+     ],
+     "de": "Das Nomen questions steht vor dem Partizip.",
+     "en": "The noun questions stands before the participle."
+    }
+   ]
+  }
+ },
+ {
+  "id": "np-k5",
+  "type": "kwt",
+  "pat": "np.of-s",
+  "from": "The manager's decision surprised everyone.",
+  "key": "OF",
+  "frame": "The decision ___ surprised everyone.",
+  "answer": "of the manager",
+  "accepted": [],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: The decision of the manager surprised everyone. Of ersetzt das ’s.",
+    "en": "Right: The decision of the manager surprised everyone. Of replaces the ’s."
+   },
+   "wrong": [
+    {
+     "not": [
+      "of"
+     ],
+     "de": "Das Schlüsselwort of muss unverändert in der Lücke stehen.",
+     "en": "The key word of must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "manager"
+     ],
+     "not": [
+      "of"
+     ],
+     "de": "Das Schlüsselwort of muss vor the manager stehen.",
+     "en": "The key word of must come before the manager."
+    }
+   ]
+  }
+ },
+ {
+  "id": "np-k6",
+  "type": "kwt",
+  "pat": "np.of-s",
+  "from": "The company's CEO resigned yesterday.",
+  "key": "OF",
+  "frame": "The CEO ___ resigned yesterday.",
+  "answer": "of the company",
+  "accepted": [],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: The CEO of the company resigned yesterday. Of ersetzt das ’s.",
+    "en": "Right: The CEO of the company resigned yesterday. Of replaces the ’s."
+   },
+   "wrong": [
+    {
+     "not": [
+      "of"
+     ],
+     "de": "Das Schlüsselwort of muss unverändert in der Lücke stehen.",
+     "en": "The key word of must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "company"
+     ],
+     "not": [
+      "of"
+     ],
+     "de": "Das Schlüsselwort of muss vor the company stehen.",
+     "en": "The key word of must come before the company."
+    }
+   ]
+  }
+ },
+ {
+  "id": "np-k7",
+  "type": "kwt",
+  "pat": "np.to-inf",
+  "from": "Our CFO was the first person who read the report.",
+  "key": "FIRST",
+  "frame": "Our CFO was the ___ the report.",
+  "answer": "first person to read",
+  "accepted": [],
+  "words": [
+   4,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: the first person to read the report. Nach first steht der to-Infinitiv.",
+    "en": "Right: the first person to read the report. After first the to-infinitive follows."
+   },
+   "wrong": [
+    {
+     "not": [
+      "first"
+     ],
+     "de": "Das Schlüsselwort first muss unverändert in der Lücke stehen.",
+     "en": "The key word first must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "first",
+      "person"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach first person steht to + Grundform: to read.",
+     "en": "After first person comes to + base form: to read."
+    }
+   ]
+  }
+ },
+ {
+  "id": "np-k8",
+  "type": "kwt",
+  "pat": "np.to-inf",
+  "from": "This is the best way of reducing costs.",
+  "key": "WAY",
+  "frame": "This is the best ___ costs.",
+  "answer": "way to reduce",
+  "accepted": [],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: the best way to reduce costs. Nach way steht to + Grundform.",
+    "en": "Right: the best way to reduce costs. After way comes to + base form."
+   },
+   "wrong": [
+    {
+     "not": [
+      "way"
+     ],
+     "de": "Das Schlüsselwort way muss unverändert in der Lücke stehen.",
+     "en": "The key word way must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "way"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach way steht to + Grundform: to reduce.",
+     "en": "After way comes to + base form: to reduce."
+    }
+   ]
+  }
+ },
+ {
+  "id": "np-f1",
+  "type": "find",
+  "pat": "np.contact",
+  "prompt": "That was the best presentation what I have seen.",
+  "err": [
+   5,
+   5
+  ],
+  "answer": "",
+  "fixed": "That was the best presentation I have seen.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: what ist kein Relativpronomen nach einem Nomen. Richtig: the best presentation I have seen.",
+    "en": "The error: what is not a relative pronoun after a noun. Correct: the best presentation I have seen."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach dem Nomen steht that oder nichts, nie what.",
+     "en": "There is an error: After the noun comes that or nothing, never what."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Nach dem Nomen steht that oder nichts, nie what.",
+     "en": "The error is elsewhere: After the noun comes that or nothing, never what."
+    }
+   ]
+  }
+ },
+ {
+  "id": "np-f2",
+  "type": "find",
+  "pat": "np.contact",
+  "prompt": "The report that you sent it was very helpful.",
+  "err": [
+   5,
+   5
+  ],
+  "answer": "",
+  "fixed": "The report that you sent was very helpful.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: das it ist doppelt, denn that ist schon das Objekt. Richtig: the report that you sent.",
+    "en": "The error: it is doubled, because that is already the object. Correct: the report that you sent."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Das Objekt steht nur einmal, entweder als that oder gar nicht.",
+     "en": "There is an error: The object appears only once, either as that or not at all."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Das Objekt steht nur einmal, entweder als that oder gar nicht.",
+     "en": "The error is elsewhere: The object appears only once, either as that or not at all."
+    }
+   ]
+  }
+ },
+ {
+  "id": "np-f3",
+  "type": "find",
+  "pat": "np.participle",
+  "prompt": "All the files storing in the cloud are encrypted.",
+  "err": [
+   3,
+   3
+  ],
+  "answer": "stored",
+  "fixed": "All the files stored in the cloud are encrypted.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: die Dateien werden gespeichert, also die 3. Form stored.",
+    "en": "The error: the files are stored, so the past participle stored."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Passive Bedeutung braucht die 3. Form.",
+     "en": "There is an error: Passive meaning needs the past participle."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Passive Bedeutung braucht die 3. Form.",
+     "en": "The error is elsewhere: Passive meaning needs the past participle."
+    }
+   ]
+  }
+ },
+ {
+  "id": "np-f4",
+  "type": "find",
+  "pat": "np.participle",
+  "prompt": "All requests related to the new tool must go through the help desk.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Richtig: All requests related to the new tool. Das Partizip related ersetzt that are related.",
+    "en": "Right: All requests related to the new tool. The participle related replaces that are related."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist alles richtig: All requests related to ist richtig gebildet.",
+     "en": "Everything is right here: All requests related to is correctly formed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "np-f5",
+  "type": "find",
+  "pat": "np.of-s",
+  "prompt": "The managers decision surprised the whole team.",
+  "err": [
+   1,
+   1
+  ],
+  "answer": "manager's",
+  "fixed": "The manager's decision surprised the whole team.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: der Besitz braucht den Apostroph. Richtig: the manager’s decision.",
+    "en": "The error: possession needs the apostrophe. Correct: the manager’s decision."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Der Besitz steht mit Apostroph und s.",
+     "en": "There is an error: Possession takes an apostrophe and s."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Der Besitz steht mit Apostroph und s.",
+     "en": "The error is elsewhere: Possession takes an apostrophe and s."
+    }
+   ]
+  }
+ },
+ {
+  "id": "np-f6",
+  "type": "find",
+  "pat": "np.of-s",
+  "prompt": "The company CEO resigned yesterday.",
+  "err": [
+   1,
+   2
+  ],
+  "answer": "company's CEO",
+  "fixed": "The company's CEO resigned yesterday.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: zwischen Firma und CEO fehlt das ’s. Richtig: the company’s CEO.",
+    "en": "The error: the ’s is missing between company and CEO. Correct: the company’s CEO."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Der Besitzer braucht ’s.",
+     "en": "There is an error: The owner needs ’s."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Der Besitzer braucht ’s.",
+     "en": "The error is elsewhere: The owner needs ’s."
+    }
+   ]
+  }
+ },
+ {
+  "id": "np-f7",
+  "type": "find",
+  "pat": "np.to-inf",
+  "prompt": "We need someone lead the migration.",
+  "err": [
+   3,
+   3
+  ],
+  "answer": "to lead",
+  "fixed": "We need someone to lead the migration.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: nach someone steht to + Grundform. Richtig: someone to lead.",
+    "en": "The error: after someone comes to + base form. Correct: someone to lead."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach someone braucht es to + Grundform.",
+     "en": "There is an error: After someone you need to + base form."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Nach someone braucht es to + Grundform.",
+     "en": "The error is elsewhere: After someone you need to + base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "np-f8",
+  "type": "find",
+  "pat": "np.to-inf",
+  "prompt": "She was the last person to leave the office on Friday.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Richtig: the last person to leave. Nach last steht to + Grundform.",
+    "en": "Right: the last person to leave. After last comes to + base form."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist alles richtig: the last person to leave ist richtig gebildet.",
+     "en": "Everything is right here: the last person to leave is correctly formed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "np-m1",
+  "type": "meaning",
+  "pat": "np.contact",
+  "a": "This is the best offer we have received.",
+  "b": "This is the best offer that we have received.",
+  "q": {
+   "de": "Bedeuten beide Sätze dasselbe?",
+   "en": "Do both sentences mean the same?"
+  },
+  "answer": "both",
+  "why": {
+   "ok": {
+    "de": "Richtig: beide. Das that darf nach dem Superlativ fehlen.",
+    "en": "Right: both. The that may be dropped after the superlative."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "Nicht nur a: b sagt mit that dasselbe.",
+     "en": "Not only a: b says the same with that."
+    },
+    {
+     "opt": "b",
+     "de": "Nicht nur b: a sagt ohne that dasselbe.",
+     "en": "Not only b: a says the same without that."
+    }
+   ]
+  }
+ },
+ {
+  "id": "np-m2",
+  "type": "meaning",
+  "pat": "np.participle",
+  "a": "The manager criticizing the plan left.",
+  "b": "The manager criticized by the board left.",
+  "q": {
+   "de": "Welcher Satz sagt, dass der Manager kritisiert wurde?",
+   "en": "Which sentence says that the manager was criticized?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. Die 3. Form criticized hat passive Bedeutung.",
+    "en": "Right: sentence b. The past participle criticized has passive meaning."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a kritisiert der Manager den Plan. Das ist aktiv.",
+     "en": "In a the manager criticizes the plan. That is active."
+    },
+    {
+     "opt": "both",
+     "de": "Aktiv und passiv sind verschieden.",
+     "en": "Active and passive are different."
+    }
+   ]
+  }
+ },
+ {
+  "id": "np-m3",
+  "type": "meaning",
+  "pat": "np.of-s",
+  "a": "the manager's decision",
+  "b": "the decision of the managers",
+  "q": {
+   "de": "Welcher Ausdruck meint die Entscheidung mehrerer Manager?",
+   "en": "Which expression means the decision of several managers?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: b. Managers im Plural mit of meint mehrere Personen.",
+    "en": "Right: b. Managers in the plural with of means several people."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a steht manager im Singular: eine Person.",
+     "en": "In a manager is singular: one person."
+    },
+    {
+     "opt": "both",
+     "de": "Singular und Plural sind verschieden.",
+     "en": "Singular and plural are different."
+    }
+   ]
+  }
+ },
+ {
+  "id": "np-m4",
+  "type": "meaning",
+  "pat": "np.to-inf",
+  "a": "She was the first customer to sign.",
+  "b": "She was the first customer who signed.",
+  "q": {
+   "de": "Bedeuten beide Sätze dasselbe?",
+   "en": "Do both sentences mean the same?"
+  },
+  "answer": "both",
+  "why": {
+   "ok": {
+    "de": "Richtig: beide. To sign ersetzt who signed, nur knapper.",
+    "en": "Right: both. To sign replaces who signed, just shorter."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "Nicht nur a: b sagt dasselbe mit einem Relativsatz.",
+     "en": "Not only a: b says the same with a relative clause."
+    },
+    {
+     "opt": "b",
+     "de": "Nicht nur b: a sagt dasselbe kürzer.",
+     "en": "Not only b: a says the same more briefly."
+    }
+   ]
+  }
+ }
+]

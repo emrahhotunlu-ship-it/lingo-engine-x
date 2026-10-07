@@ -1,0 +1,655 @@
+[
+ {
+  "id": "el-k1",
+  "type": "kwt",
+  "pat": "el.so-not",
+  "from": "Will they sign today? I hope that they will not.",
+  "key": "NOT",
+  "frame": "Will they sign today? I ___.",
+  "answer": "hope not",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: I hope not. Not steht direkt hinter dem Verb.",
+    "en": "Right: I hope not. Not follows the verb directly."
+   },
+   "wrong": [
+    {
+     "not": [
+      "not"
+     ],
+     "de": "Das Schlüsselwort not muss unverändert in der Lücke stehen.",
+     "en": "The key word not must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "hope",
+      "that"
+     ],
+     "de": "Vor not steht kein that: I hope not.",
+     "en": "There is no that before not: I hope not."
+    }
+   ]
+  }
+ },
+ {
+  "id": "el-k2",
+  "type": "kwt",
+  "pat": "el.so-not",
+  "from": "Is the report ready? I believe that it is.",
+  "key": "SO",
+  "frame": "Is the report ready? I ___.",
+  "answer": "believe so",
+  "accepted": [
+   "think so",
+   "hope so",
+   "expect so"
+  ],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: I believe so. So ersetzt den ganzen Gedanken.",
+    "en": "Right: I believe so. So replaces the whole thought."
+   },
+   "wrong": [
+    {
+     "not": [
+      "so"
+     ],
+     "de": "Das Schlüsselwort so muss unverändert in der Lücke stehen.",
+     "en": "The key word so must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "so"
+     ],
+     "not": [
+      "believe",
+      "think",
+      "hope",
+      "expect"
+     ],
+     "de": "So steht hinter einem Verb wie think, hope, believe.",
+     "en": "So follows a verb like think, hope, believe."
+    }
+   ]
+  }
+ },
+ {
+  "id": "el-k3",
+  "type": "kwt",
+  "pat": "el.do-so",
+  "from": "The client asked us to review the draft, and we reviewed it on Monday.",
+  "key": "DID",
+  "frame": "The client asked us to review the draft, and we ___ on Monday.",
+  "answer": "did so",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: we did so. Do so ersetzt die ganze Handlung.",
+    "en": "Right: we did so. Do so replaces the whole action."
+   },
+   "wrong": [
+    {
+     "not": [
+      "did"
+     ],
+     "de": "Das Schlüsselwort did muss unverändert in der Lücke stehen.",
+     "en": "The key word did must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "did",
+      "it"
+     ],
+     "de": "Nach did steht so oder the same, nicht it so.",
+     "en": "After did comes so or the same, not it so."
+    }
+   ]
+  }
+ },
+ {
+  "id": "el-k4",
+  "type": "kwt",
+  "pat": "el.do-so",
+  "from": "She signed the contract, and I signed it too.",
+  "key": "SAME",
+  "frame": "She signed the contract, and I ___ too.",
+  "answer": "did the same",
+  "accepted": [],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: I did the same. The same ersetzt die Handlung.",
+    "en": "Right: I did the same. The same replaces the action."
+   },
+   "wrong": [
+    {
+     "not": [
+      "same"
+     ],
+     "de": "Das Schlüsselwort same muss unverändert in der Lücke stehen.",
+     "en": "The key word same must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "same"
+     ],
+     "not": [
+      "the"
+     ],
+     "de": "Vor same steht the: the same.",
+     "en": "Before same you need the: the same."
+    }
+   ]
+  }
+ },
+ {
+  "id": "el-k5",
+  "type": "kwt",
+  "pat": "el.one-ones",
+  "from": "Our old laptops are heavy, but our new laptops are light.",
+  "key": "ONES",
+  "frame": "Our old laptops are heavy, but ___ are light.",
+  "answer": "the new ones",
+  "accepted": [],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: the new ones. Ones ersetzt das Pluralnomen laptops.",
+    "en": "Right: the new ones. Ones replaces the plural noun laptops."
+   },
+   "wrong": [
+    {
+     "not": [
+      "ones"
+     ],
+     "de": "Das Schlüsselwort ones muss unverändert in der Lücke stehen.",
+     "en": "The key word ones must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "new"
+     ],
+     "not": [
+      "ones"
+     ],
+     "de": "Hinter dem Adjektiv new braucht es ones.",
+     "en": "After the adjective new you need ones."
+    }
+   ]
+  }
+ },
+ {
+  "id": "el-k6",
+  "type": "kwt",
+  "pat": "el.one-ones",
+  "from": "The prices in our shop are lower than the prices in their shop.",
+  "key": "THOSE",
+  "frame": "The prices in our shop are lower than ___ their shop.",
+  "answer": "those in",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: those in their shop. Those ersetzt das Pluralnomen prices.",
+    "en": "Right: those in their shop. Those replaces the plural noun prices."
+   },
+   "wrong": [
+    {
+     "not": [
+      "those"
+     ],
+     "de": "Das Schlüsselwort those muss unverändert in der Lücke stehen.",
+     "en": "The key word those must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "those"
+     ],
+     "not": [
+      "in"
+     ],
+     "de": "Nach those folgt in und der Ort des Vergleichs: those in their shop.",
+     "en": "After those comes in and the place compared: those in their shop."
+    }
+   ]
+  }
+ },
+ {
+  "id": "el-k7",
+  "type": "kwt",
+  "pat": "el.to-aux",
+  "from": "Would you like to join the call? Yes, I would like to join it.",
+  "key": "LOVE",
+  "frame": "Would you like to join the call? Yes, I would ___.",
+  "answer": "love to",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: I would love to. Das Verb join entfällt, to bleibt.",
+    "en": "Right: I would love to. The verb join is dropped, to stays."
+   },
+   "wrong": [
+    {
+     "not": [
+      "love"
+     ],
+     "de": "Das Schlüsselwort love muss unverändert in der Lücke stehen.",
+     "en": "The key word love must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "love"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Am Ende muss to nicht fehlen: love to.",
+     "en": "At the end to has to stay: love to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "el-k8",
+  "type": "kwt",
+  "pat": "el.to-aux",
+  "from": "Anna can present the results, but Tom probably cannot present them.",
+  "key": "CANNOT",
+  "frame": "Anna can present the results, but Tom ___.",
+  "answer": "probably cannot",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: but Tom probably cannot. Das Verb present entfällt, das Hilfsverb bleibt.",
+    "en": "Right: but Tom probably cannot. The verb present is dropped, the auxiliary stays."
+   },
+   "wrong": [
+    {
+     "not": [
+      "cannot"
+     ],
+     "de": "Das Schlüsselwort cannot muss unverändert in der Lücke stehen.",
+     "en": "The key word cannot must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "el-f1",
+  "type": "find",
+  "pat": "el.so-not",
+  "prompt": "Will they sign today? I hope that not.",
+  "err": [
+   6,
+   6
+  ],
+  "answer": "",
+  "fixed": "Will they sign today? I hope not.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: vor not steht kein that. Richtig: I hope not.",
+    "en": "The error: there is no that before not. Correct: I hope not."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach hope folgt not direkt.",
+     "en": "There is an error: After hope, not follows directly."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Nach hope folgt not direkt.",
+     "en": "The error is elsewhere: After hope, not follows directly."
+    }
+   ]
+  }
+ },
+ {
+  "id": "el-f2",
+  "type": "find",
+  "pat": "el.so-not",
+  "prompt": "Is the budget approved? I am afraid not.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Richtig: I am afraid not. Not steht für den ganzen verneinten Gedanken.",
+    "en": "Right: I am afraid not. Not stands for the whole negative thought."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist alles richtig: I am afraid not ist richtig gebildet.",
+     "en": "Everything is right here: I am afraid not is correctly formed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "el-f3",
+  "type": "find",
+  "pat": "el.do-so",
+  "prompt": "Our rivals lowered their prices, and we did same.",
+  "err": [
+   8,
+   8
+  ],
+  "answer": "the same.",
+  "fixed": "Our rivals lowered their prices, and we did the same.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: vor same steht the. Richtig: I did the same.",
+    "en": "The error: before same you need the. Correct: I did the same."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Vor same steht the.",
+     "en": "There is an error: Before same you need the."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Vor same steht the.",
+     "en": "The error is elsewhere: Before same you need the."
+    }
+   ]
+  }
+ },
+ {
+  "id": "el-f4",
+  "type": "find",
+  "pat": "el.do-so",
+  "prompt": "Anyone who wants to cancel may do so before Friday.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Richtig: may do so ersetzt die Handlung cancel.",
+    "en": "Right: may do so replaces the action cancel."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist alles richtig: may do so ist richtig gebildet.",
+     "en": "Everything is right here: may do so is correctly formed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "el-f5",
+  "type": "find",
+  "pat": "el.one-ones",
+  "prompt": "The old printer is broken, so we bought a new.",
+  "err": [
+   9,
+   9
+  ],
+  "answer": "new one.",
+  "fixed": "The old printer is broken, so we bought a new one.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: nach a new fehlt das Wort one. Richtig: a new one.",
+    "en": "The error: the word one is missing after a new. Correct: a new one."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Hinter a new braucht es one.",
+     "en": "There is an error: After a new you need one."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Hinter a new braucht es one.",
+     "en": "The error is elsewhere: After a new you need one."
+    }
+   ]
+  }
+ },
+ {
+  "id": "el-f6",
+  "type": "find",
+  "pat": "el.one-ones",
+  "prompt": "The fees of the new provider are lower than the old provider.",
+  "err": [
+   9,
+   11
+  ],
+  "answer": "those of the old provider.",
+  "fixed": "The fees of the new provider are lower than those of the old provider.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Gebühren werden mit Gebühren verglichen. Richtig: lower than those of the old provider.",
+    "en": "The error: fees are compared with fees. Correct: lower than those of the old provider."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Im Vergleich steht those of statt des Nomens.",
+     "en": "There is an error: In a comparison those of stands instead of the noun."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Im Vergleich steht those of statt des Nomens.",
+     "en": "The error is elsewhere: In a comparison those of stands instead of the noun."
+    }
+   ]
+  }
+ },
+ {
+  "id": "el-f7",
+  "type": "find",
+  "pat": "el.to-aux",
+  "prompt": "Can you join the call? Yes, I would like.",
+  "err": [
+   8,
+   8
+  ],
+  "answer": "like to.",
+  "fixed": "Can you join the call? Yes, I would like to.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: am Ende fehlt to. Richtig: I would like to.",
+    "en": "The error: to is missing at the end. Correct: I would like to."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Am Ende muss to stehen bleiben.",
+     "en": "There is an error: To has to stay at the end."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Am Ende muss to stehen bleiben.",
+     "en": "The error is elsewhere: To has to stay at the end."
+    }
+   ]
+  }
+ },
+ {
+  "id": "el-f8",
+  "type": "find",
+  "pat": "el.to-aux",
+  "prompt": "She can attend the workshop, but he cannot to.",
+  "err": [
+   7,
+   8
+  ],
+  "answer": "cannot.",
+  "fixed": "She can attend the workshop, but he cannot.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: nach cannot steht kein to. Richtig: but he cannot.",
+    "en": "The error: there is no to after cannot. Correct: but he cannot."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach einem Modalverb steht kein to.",
+     "en": "There is an error: After a modal verb there is no to."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Nach einem Modalverb steht kein to.",
+     "en": "The error is elsewhere: After a modal verb there is no to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "el-m1",
+  "type": "meaning",
+  "pat": "el.so-not",
+  "a": "Will they sign? I hope so.",
+  "b": "Will they sign? I hope not.",
+  "q": {
+   "de": "Welcher Satz sagt, dass ich die Unterschrift wünsche?",
+   "en": "Which sentence says that I want them to sign?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. I hope so heißt, dass ich es mir wünsche, und das ist hier gemeint.",
+    "en": "Right: sentence a. I hope so means that I hope they will."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b hoffe ich, dass sie nicht unterschreiben. Das ist das Gegenteil.",
+     "en": "In b I hope they do not sign. That is the opposite."
+    },
+    {
+     "opt": "both",
+     "de": "Die beiden Sätze sagen Gegensätzliches.",
+     "en": "The two sentences say opposite things."
+    }
+   ]
+  }
+ },
+ {
+  "id": "el-m2",
+  "type": "meaning",
+  "pat": "el.do-so",
+  "a": "He reviewed the report and I did the same.",
+  "b": "He reviewed the report and I reviewed nothing.",
+  "q": {
+   "de": "Welcher Satz sagt, dass ich den Bericht auch geprüft habe?",
+   "en": "Which sentence says that I also reviewed the report?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Did the same steht für reviewed the report.",
+    "en": "Right: sentence a. Did the same stands for reviewed the report."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b habe ich nichts geprüft. Das ist das Gegenteil.",
+     "en": "In b I reviewed nothing. That is the opposite."
+    },
+    {
+     "opt": "both",
+     "de": "Die beiden Sätze sagen Gegensätzliches.",
+     "en": "The two sentences say opposite things."
+    }
+   ]
+  }
+ },
+ {
+  "id": "el-m3",
+  "type": "meaning",
+  "pat": "el.one-ones",
+  "a": "Our laptops are older than those of the sales team.",
+  "b": "Our laptops are older than the sales team.",
+  "q": {
+   "de": "Welcher Satz vergleicht unsere Laptops mit den Laptops des Vertriebs?",
+   "en": "Which sentence compares our laptops with the sales team’s laptops?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Those of ersetzt das Nomen laptops im Vergleich.",
+    "en": "Right: sentence a. Those of replaces the noun laptops in the comparison."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b werden Laptops mit einem Team verglichen. Das ergibt keinen Sinn.",
+     "en": "In b laptops are compared with a team. That makes no sense."
+    },
+    {
+     "opt": "both",
+     "de": "Die beiden Sätze sagen nicht dasselbe.",
+     "en": "The two sentences do not say the same."
+    }
+   ]
+  }
+ },
+ {
+  "id": "el-m4",
+  "type": "meaning",
+  "pat": "el.to-aux",
+  "a": "I'd love to.",
+  "b": "I'd love to do so.",
+  "q": {
+   "de": "Bedeuten beide Sätze dasselbe?",
+   "en": "Do both sentences mean the same?"
+  },
+  "answer": "both",
+  "why": {
+   "ok": {
+    "de": "Richtig: beide. Das kurze to und do so ersetzen dieselbe bekannte Handlung.",
+    "en": "Right: both. The short to and do so replace the same known action."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "Nicht nur a: b sagt dasselbe förmlicher.",
+     "en": "Not only a: b says the same more formally."
+    },
+    {
+     "opt": "b",
+     "de": "Nicht nur b: a sagt dasselbe kürzer.",
+     "en": "Not only b: a says the same more briefly."
+    }
+   ]
+  }
+ }
+]

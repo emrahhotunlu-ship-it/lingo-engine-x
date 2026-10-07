@@ -32,10 +32,11 @@ describe('program.json', () => {
     expect(new Set(all).size).toBe(47);
     expect(file.chapters.map((c) => c.pack.ch)).toEqual([1, 2, 3, 4, 5, 6, 7]);
   });
-  it('die acht neuen Themen sind Platzhalter, alle anderen gibt es', () => {
+  it('die acht neuen Themen: vier gibt es seit P36, vier sind noch Platzhalter (P37), alle anderen gibt es', () => {
     const missing = programTopics().filter((t) => !topicExists(t));
-    expect([...missing].sort()).toEqual([...NEW_TOPICS].sort());
-    expect(programTopics().filter(topicExists)).toHaveLength(39);
+    expect([...missing].sort()).toEqual(['future-past', 'modals-prob', 'quant-neg', 'stative-adv']);
+    expect(NEW_TOPICS.filter((t) => topicExists(t)).sort()).toEqual(['ellipsis', 'emph-plus', 'inversion', 'noun-phrase']);
+    expect(programTopics().filter(topicExists)).toHaveLength(43);
   });
   it('Texte: „Abgeschlossen heißt“ DE und EN, Lehrer-Notiz englisch ohne Umlaute', () => {
     for (const c of file.chapters) {
@@ -66,7 +67,8 @@ describe('chapterState', () => {
     expect(r.current).toBe(0);
     expect(r.chapters.map((c) => c.status)).toEqual(['current', 'open', 'open', 'open', 'open', 'open', 'open']);
     expect(r.chapters.every((c) => c.patSafe === 0 && c.patTotal > 0 && c.ready)).toBe(true);
-    expect(r.chapters[6]?.topics.filter((t) => !t.exists).map((t) => t.id)).toEqual(['inversion', 'emph-plus', 'ellipsis', 'noun-phrase']);
+    expect(r.chapters[6]?.topics.filter((t) => !t.exists).map((t) => t.id)).toEqual([]);
+    expect(r.chapters[4]?.topics.filter((t) => !t.exists).map((t) => t.id)).toEqual(['modals-prob']);
   });
   it('Kapitel mit lauter sicheren Mustern ist geschafft; das nächste mit eingeführten Themen ist aktuell', () => {
     const docs = new Map<string, Record<string, unknown>>();

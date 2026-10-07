@@ -1,0 +1,222 @@
+[
+ {
+  "pat": "inv.negative",
+  "en": "Never before had the team met a deadline so early.",
+  "de": "Noch nie zuvor hatte das Team eine Frist so früh eingehalten.",
+  "chunks": [
+   "never before",
+   "had",
+   "the team",
+   "met",
+   "a deadline",
+   "so early"
+  ],
+  "single": "Nach Never before kommt had vor the team; met, a deadline und so early bleiben danach in dieser Reihenfolge.",
+  "why": [
+   "Nach Never before steht das Hilfsverb had vor dem Subjekt the team. Danach folgt die 3. Form met.",
+   "After Never before, the auxiliary had comes before the subject the team. The participle met follows."
+  ],
+  "bad": "Never before the team had met a deadline so early.",
+  "trap": {
+   "tile": "had",
+   "instead": "the team had",
+   "why": {
+    "de": "Im Deutschen stünde das Verb von selbst vorn. Im Englischen muss man had bewusst vor das Subjekt setzen.",
+    "en": "German would put the verb first on its own. In English you have to put had before the subject on purpose."
+   }
+  }
+ },
+ {
+  "pat": "inv.negative",
+  "en": "At no point did the client mention the budget.",
+  "de": "Zu keinem Zeitpunkt erwähnte der Kunde das Budget.",
+  "chunks": [
+   "at no point",
+   "did",
+   "the client",
+   "mention",
+   "the budget"
+  ],
+  "single": "At no point verlangt did vor the client; mention steht in der Grundform direkt vor the budget.",
+  "why": [
+   "Nach At no point steht did vor dem Subjekt, das Verb danach in der Grundform: did the client mention.",
+   "After At no point, did stands before the subject, and the verb follows in the base form: did the client mention."
+  ],
+  "bad": "At no point the client mentioned the budget.",
+  "trap": {
+   "tile": "did",
+   "instead": "mentioned",
+   "why": {
+    "de": "Nach did steht die Grundform mention, nicht mentioned.",
+    "en": "After did the base form mention is used, not mentioned."
+   }
+  }
+ },
+ {
+  "pat": "inv.only",
+  "en": "Only after the pilot did we approve the full rollout.",
+  "de": "Erst nach dem Pilotbetrieb gaben wir den ganzen Rollout frei.",
+  "chunks": [
+   "only after",
+   "the pilot",
+   "did",
+   "we",
+   "approve",
+   "the full rollout"
+  ],
+  "single": "Only after the pilot bleibt zusammen vorn; danach kommen did, we und approve in dieser Reihenfolge.",
+  "why": [
+   "Nach Only after und der Zeitangabe steht did vor dem Subjekt we. Das Verb bleibt in der Grundform.",
+   "After Only after and the time phrase, did stands before the subject we. The verb stays in the base form."
+  ],
+  "bad": "Only after the pilot we approved the full rollout.",
+  "trap": {
+   "tile": "did",
+   "instead": "approved",
+   "why": {
+    "de": "Ohne did bleibt die normale Stellung stehen, und das Verb wird zu approved. Hier muss did vor we.",
+    "en": "Without did the normal order stays and the verb becomes approved. Here did must go before we."
+   }
+  }
+ },
+ {
+  "pat": "inv.only",
+  "en": "Only when the client signs will we start the work.",
+  "de": "Erst wenn der Kunde unterschreibt, fangen wir mit der Arbeit an.",
+  "chunks": [
+   "only when",
+   "the client",
+   "signs",
+   "will",
+   "we",
+   "start",
+   "the work"
+  ],
+  "single": "Der Nebensatz only when the client signs steht vorn; im Hauptsatz folgen will, we und start the work.",
+  "why": [
+   "Im Nebensatz mit Only when steht das Präsens (signs), im Hauptsatz kommt will vor das Subjekt we.",
+   "In the clause with Only when the present is used (signs), and in the main clause will goes before the subject we."
+  ],
+  "bad": "Only when the client signs we will start the work.",
+  "trap": {
+   "tile": "will",
+   "instead": "we will",
+   "why": {
+    "de": "Nach Only when mit Nebensatz kehrt der Hauptsatz um: will we, nicht we will.",
+    "en": "After Only when plus a clause, the main clause flips: will we, not we will."
+   }
+  }
+ },
+ {
+  "pat": "inv.sooner",
+  "en": "No sooner had we signed the contract than the prices rose.",
+  "de": "Kaum hatten wir den Vertrag unterschrieben, stiegen die Preise.",
+  "chunks": [
+   "no sooner",
+   "had",
+   "we",
+   "signed",
+   "the contract",
+   "than",
+   "the prices",
+   "rose"
+  ],
+  "single": "No sooner had we signed bildet den ersten Teil; than leitet das zweite Ereignis ein.",
+  "why": [
+   "No sooner verlangt had vor dem Subjekt und später than. Das zweite Ereignis steht im Past Simple.",
+   "No sooner requires had before the subject and than later. The second event is in the past simple."
+  ],
+  "bad": "No sooner had we signed the contract when the prices rose.",
+  "trap": {
+   "tile": "than",
+   "instead": "when",
+   "why": {
+    "de": "Zu no sooner gehört than. When gehört zu hardly und scarcely.",
+    "en": "No sooner goes with than. When goes with hardly and scarcely."
+   }
+  }
+ },
+ {
+  "pat": "inv.sooner",
+  "en": "Hardly had the meeting started when the alarm went off.",
+  "de": "Das Meeting hatte kaum begonnen, da ging der Alarm los.",
+  "chunks": [
+   "hardly",
+   "had",
+   "the meeting",
+   "started",
+   "when",
+   "the alarm",
+   "went off"
+  ],
+  "single": "Hardly had the meeting started ist der erste Teil; when verbindet ihn mit the alarm went off.",
+  "why": [
+   "Hardly verlangt had vor dem Subjekt und später when. Das zweite Ereignis steht im Past Simple.",
+   "Hardly requires had before the subject and when later. The second event is in the past simple."
+  ],
+  "bad": "Hardly the meeting had started when the alarm went off.",
+  "trap": {
+   "tile": "had",
+   "instead": "the meeting had",
+   "why": {
+    "de": "Nach Hardly kommt had zuerst, dann erst das Subjekt.",
+    "en": "After Hardly, had comes first and the subject after it."
+   }
+  }
+ },
+ {
+  "pat": "inv.cond",
+  "en": "Should you need any help, please let us know.",
+  "de": "Falls Sie Hilfe brauchen, sagen Sie uns bitte Bescheid.",
+  "chunks": [
+   "should",
+   "you",
+   "need",
+   "any help",
+   "please",
+   "let us know"
+  ],
+  "single": "Should you need any help bildet den Bedingungsteil; please let us know ist der Hauptsatz danach.",
+  "why": [
+   "Should steht vor dem Subjekt you und ersetzt das if. Danach folgt die Grundform need.",
+   "Should stands before the subject you and replaces the if. The base form need follows."
+  ],
+  "bad": "Should you will need any help, please let us know.",
+  "trap": {
+   "tile": "need",
+   "instead": "will need",
+   "why": {
+    "de": "Nach Should you steht die Grundform, kein will.",
+    "en": "After Should you the base form follows, no will."
+   }
+  }
+ },
+ {
+  "pat": "inv.cond",
+  "en": "Had we known about the outage, we would have warned you.",
+  "de": "Hätten wir von dem Ausfall gewusst, hätten wir Sie gewarnt.",
+  "chunks": [
+   "had",
+   "we",
+   "known",
+   "about the outage",
+   "we",
+   "would have warned",
+   "you"
+  ],
+  "single": "Der Bedingungsteil had we known about the outage steht zuerst; im Hauptsatz folgen we, would have warned und you.",
+  "why": [
+   "Had steht vor dem Subjekt we und ersetzt das if. Im Hauptsatz folgt would have + 3. Form.",
+   "Had stands before the subject we and replaces the if. The main clause takes would have + participle."
+  ],
+  "bad": "Had we known about the outage, we would warn you.",
+  "trap": {
+   "tile": "known",
+   "instead": "knew",
+   "why": {
+    "de": "Nach Had steht die 3. Form known, nicht knew.",
+    "en": "After Had the participle known follows, not knew."
+   }
+  }
+ }
+]
