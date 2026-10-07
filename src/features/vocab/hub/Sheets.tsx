@@ -376,7 +376,7 @@ export function AllDecksSheet({ onClose }: SheetProps) {
                   {d.n}
                 </span>
                 <span className="block w-full rounded-md bg-accent/70" style={{ height: `${Math.max(3, Math.round((d.n / fcMax) * 44))}px` }} aria-hidden="true" />
-                <span className="max-w-full truncate text-[0.7rem] text-subtle" aria-hidden="true">
+                <span className="max-w-full truncate text-2xs text-subtle" aria-hidden="true">
                   {dayLabel(d.day, i)}
                 </span>
               </li>

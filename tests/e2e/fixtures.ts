@@ -114,6 +114,15 @@ export async function openTab(page: Page, id: TabId): Promise<void> {
   await screen(page, root);
 }
 
+/** Klappt auf „Anwenden“ die Zeilen „… Übungen für den Laptop ›“ und „Mehr Übungen ›“ auf (Lernplattform 2.0 §2.6), sofern vorhanden. */
+export async function openApplyFolds(page: Page): Promise<void> {
+  await page.getByTestId('apply-hub').waitFor();
+  for (const id of ['apply-laptop-fold', 'apply-more']) {
+    const b = page.getByTestId(id);
+    if ((await b.count()) > 0 && (await b.getAttribute('aria-expanded')) === 'false') await b.click();
+  }
+}
+
 /**
  * Einstieg per Test-ID öffnen (`hub-course`, `hub-grammar`, `hub-drill-*` …): probiert die Reiter
  * aus der Reiterleiste der Reihe nach, bis der Einstieg sichtbar ist – unabhängig von der Zahl der
@@ -123,6 +132,7 @@ export async function openEntry(page: Page, testId: string): Promise<void> {
   await page.getByTestId('tabbar').waitFor();
   for (const t of TABS) {
     await openTab(page, t.id);
+    if (t.id === 'apply') await openApplyFolds(page);
     const el = page.getByTestId(testId).first();
     if (await el.isVisible()) {
       await el.click();

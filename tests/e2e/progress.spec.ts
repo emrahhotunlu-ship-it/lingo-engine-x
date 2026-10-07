@@ -40,6 +40,7 @@ for (const lang of ['de', 'en'] as Lang[]) {
 test('Öffnen löst genau eine Einschätzung aus (complex, ohne Zwischenspeicher); Hülle mit Verlauf gespeichert', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true });
   await openOverview(page);
+  await tab(page, 'judge');
   await expect.poll(async () => (await dump(page))['app/assess']?.d).toBe('2026-09-20');
   const doc = (await dump(page))['app/assess']!;
   expect(doc).toMatchObject({ v: 2, pv: 'assess@3', tier: 'complex', lang: 'de' });
@@ -51,14 +52,15 @@ test('Öffnen löst genau eine Einschätzung aus (complex, ohne Zwischenspeicher
   // Seit assess@3 nur noch Grammatik und Wortschatz (der Verlaufseintrag der alten App behält seine sechs Fertigkeiten).
   expect(((doc.data as Record<string, unknown>).dims as unknown[]).length).toBe(2);
   expect(await calls(page, 'assess')).toEqual([{ id: 'assess', tier: 'complex', cache: false }]);
-  await expect(page.getByTestId('assess-cefr')).toHaveAttribute('data-cefr', 'B2');
+  await expect(page.getByTestId('stand-levels')).toHaveAttribute('data-cefr', 'B2');
   await expect(page.getByTestId('assess-stamp')).toContainText('20. September 2026');
   await expect(page.getByTestId('dim')).toHaveCount(2);
-  expect(await page.getByTestId('dim').evaluateAll((els) => els.map((e) => e.getAttribute('data-id')))).toEqual(['grammar', 'vocabulary']);
+  expect(await page.getByTestId('dim').evaluateAll((els) => els.map((e) => e.getAttribute('data-id')))).toEqual(['vocabulary', 'grammar']);
   // Tagessperre: Reiterwechsel und Rückkehr lösen keinen zweiten Lauf aus.
   await page.getByTestId('tab-today').click();
   await screen(page, 'today');
   await openOverview(page);
+  await tab(page, 'judge');
   await screen(page, 'overview');
   await page.waitForTimeout(500);
   expect(await calls(page, 'assess')).toHaveLength(1);
@@ -68,32 +70,35 @@ test('Öffnen löst genau eine Einschätzung aus (complex, ohne Zwischenspeicher
 test('„Neu einschätzen" fragt ausdrücklich neu, „Denkt nach …" mit Stopp; der alte Stand bleibt sichtbar', async ({ page }) => {
   await boot(page, { migrated: true, fake: { sampleDelayMs: 1500 } });
   await openOverview(page);
+  await tab(page, 'judge');
   await expect(page.getByTestId('assess-phase')).toBeVisible();
-  await expect(page.getByTestId('assess-cefr')).toHaveAttribute('data-cefr', 'B2');
+  await expect(page.getByTestId('stand-levels')).toHaveAttribute('data-cefr', 'B2');
   await expect(page.getByTestId('assess-stop')).toBeVisible();
   await expect(page.getByTestId('assess-renew')).toBeVisible({ timeout: 15_000 });
   await page.getByTestId('assess-renew').click();
   await expect(page.getByTestId('assess-phase')).toBeVisible();
   await page.getByTestId('assess-stop').click();
   await expect(page.getByTestId('assess-renew')).toBeVisible();
-  await expect(page.getByTestId('assess-cefr')).toHaveAttribute('data-cefr', 'B2');
+  await expect(page.getByTestId('stand-levels')).toHaveAttribute('data-cefr', 'B2');
   expect(await calls(page, 'assess')).toHaveLength(2);
 });
 
 test('rate_limited: Hinweis, kein zweiter Aufruf, alter Stand bleibt', async ({ page }) => {
   await boot(page, { migrated: true, fake: { sampleFail: { assess: 'rate_limited' } } });
   await openOverview(page);
+  await tab(page, 'judge');
   await expect(page.getByTestId('assess-error')).toBeVisible();
   await page.waitForTimeout(1000);
   expect(await calls(page, 'assess')).toHaveLength(1);
-  await expect(page.getByTestId('assess-cefr')).toHaveAttribute('data-cefr', 'B2');
+  await expect(page.getByTestId('stand-levels')).toHaveAttribute('data-cefr', 'B2');
   expect((await dump(page))['app/assess']?.d).toBe('2026-09-18');
 });
 
 test('ohne sample: Einschätzung wird angezeigt, ohne Knopf und ohne Aufruf', async ({ page }) => {
   await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
   await openOverview(page);
-  await expect(page.getByTestId('assess-cefr')).toHaveAttribute('data-cefr', 'B2');
+  await tab(page, 'judge');
+  await expect(page.getByTestId('stand-levels')).toHaveAttribute('data-cefr', 'B2');
   await expect(page.getByTestId('assess-renew')).toHaveCount(0);
   await expect(page.locator('[data-ai]')).toHaveCount(0);
 });
@@ -101,7 +106,8 @@ test('ohne sample: Einschätzung wird angezeigt, ohne Knopf und ohne Aufruf', as
 test('not_granted: Knopf verschwindet, Stand bleibt', async ({ page }) => {
   await boot(page, { migrated: true, fake: { sampleFail: { assess: 'not_granted' } } });
   await openOverview(page);
-  await expect(page.getByTestId('assess-cefr')).toHaveAttribute('data-cefr', 'B2');
+  await tab(page, 'judge');
+  await expect(page.getByTestId('stand-levels')).toHaveAttribute('data-cefr', 'B2');
   await expect(page.getByTestId('assess-renew')).toHaveCount(0);
   expect(await calls(page, 'assess')).toHaveLength(1);
 });
@@ -116,6 +122,7 @@ test('schemawidrige erste Antwort: genau ein Neuversuch, dann gespeichert (A6.3)
 test('einfacheres Modell: die antwortende Stufe wird gespeichert und genannt', async ({ page }) => {
   await boot(page, { migrated: true, fake: { tierApplied: 'default' } });
   await openOverview(page);
+  await tab(page, 'judge');
   await expect.poll(async () => (await dump(page))['app/assess']?.tier).toBe('default');
   await expect(page.getByTestId('assess-stamp')).toContainText('einfacheren Modell');
 });
@@ -124,6 +131,7 @@ test('Oberfläche EN, gespeicherte Einschätzung DE: Stufen sichtbar, Texte erst
   // Einschätzung von heute: nur der Sprachwechsel ist ein Grund.
   await boot(page, { migrated: true, lang: 'en', fake: { patch: { 'app/assess': { d: '2026-09-20' } } } });
   await openOverview(page);
+  await tab(page, 'judge');
   await expect.poll(async () => (await dump(page))['app/assess']?.lang).toBe('en');
   expect(await calls(page, 'assess')).toHaveLength(1);
   await expect(page.getByTestId('strength').first()).toBeVisible();
@@ -134,6 +142,7 @@ test('Oberfläche EN, gespeicherte Einschätzung DE: Stufen sichtbar, Texte erst
 test('„Üben" beim Blocker öffnet die Übung; ohne Ziel fehlt der Knopf', async ({ page }) => {
   await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
   await openOverview(page);
+  await tab(page, 'judge');
   await expect(page.getByTestId('blocker')).toHaveCount(2);
   await expect(page.getByTestId('blocker-practice')).toHaveCount(2);
   await page.getByTestId('blocker-practice').first().click();
@@ -149,6 +158,7 @@ test('Blocker mit unbekannter Aktion: kein „Üben"-Knopf', async ({ page }) =>
   };
   await boot(page, { migrated: true, fake: { capabilities: { sample: false }, patch: { 'app/assess': { data } } } });
   await openOverview(page);
+  await tab(page, 'judge');
   await expect(page.getByTestId('blocker')).toHaveCount(1);
   await expect(page.getByTestId('blocker-practice')).toHaveCount(0);
 });
@@ -296,5 +306,30 @@ test('Fortschritt Grammatik: „sicher z von 39“ mit Verteilung, Fehlersätze,
   await expect(seg.getByTestId('radar')).toBeVisible();
   // Keine Zahl zu entfallenen Fertigkeiten.
   await expect(seg).not.toContainText(/XP|Kurs \d|Minuten/);
+  expect(errors).toEqual([]);
+});
+
+// Lernplattform 2.0 P7 (§2.7): Wörter ist das Standardsegment, „B2“ steht höchstens zweimal, keine Gesamtstufe, Messwerte unter dem Verlauf.
+test('P7 Fortschritt: Standardsegment Wörter, Stufe je Bereich mit C1-Marke, B2 höchstens zweimal, keine Gesamtstufe', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true });
+  await openOverview(page);
+  await expect(page.getByTestId('tab-words')).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByTestId('stand-line')).toHaveText(/^Wörter .+ · Grammatik .+$/);
+  await expect(page.getByTestId('c1-mark')).toHaveCount(2);
+  await expect(page.getByTestId('assess-cefr')).toHaveCount(0);
+  await expect(page.getByText('Gesamtstufe')).toHaveCount(0);
+  const b2 = await page.locator('main').evaluate((m) => ((m as HTMLElement).innerText.match(/\bB2\b/g) ?? []).length);
+  expect(b2).toBeLessThanOrEqual(2);
+  expect(errors).toEqual([]);
+});
+
+test('P7 Fortschritt: unter Verlauf stehen „Messwerte dahinter“ mit fünf Größen, ohne Daten „noch keine Daten“', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true });
+  await openOverview(page);
+  await tab(page, 'history');
+  await page.getByTestId('measures-toggle').click();
+  const rows = page.getByTestId('effect-row');
+  await expect(rows).toHaveCount(5);
+  await expect(page.getByTestId('effect-pretest')).toBeVisible();
   expect(errors).toEqual([]);
 });

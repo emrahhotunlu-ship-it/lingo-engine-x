@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { dayKeyNoon } from '../../domain/date';
 import { levelBar, SCALE } from '../../domain/assessment/levelBar';
-import type { AssessData } from '../../domain/assessment/types';
+import { levelRank, type AssessData, type AssessDim, type Level } from '../../domain/assessment/types';
 import type { WeekDay, WeekDayState } from '../../domain/streak';
 import { useT, type MessageKey } from '../../i18n';
 import { Icon } from '../../ui/Icon';
@@ -78,6 +78,51 @@ export function LevelScale({ data }: { data: Pick<AssessData, 'cefr' | 'dims'> }
           </li>
         ))}
       </ol>
+    </div>
+  );
+}
+
+/** Position einer Stufe auf der kleinen Skala B1 … C1+ (0–1); die C1-Marke steht fest bei `C1_POS`. */
+const scalePos = (level: Level): number => Math.min(1, Math.max(0, (levelRank(level) - 1) / (SCALE.length - 1)));
+const C1_POS = SCALE.indexOf('C1') / (SCALE.length - 1);
+
+/**
+ * Kopfzeile von „Fortschritt“ (Lernplattform 2.0 §2.7): „Wörter B2+ · Grammatik B2“, je Bereich mit kleiner Skala und der Marke C1,
+ * darunter die Begründung in Worten. Es gibt keine Gesamtstufe; `data-cefr` trägt die Gesamtstufe der Einschätzung nur als Datum für Tests.
+ */
+export function StandLevels({ dims, cefr, sameLang }: { dims: readonly AssessDim[]; cefr: Level | null; sameLang: boolean }) {
+  const { t } = useT();
+  const get = (id: 'vocabulary' | 'grammar'): AssessDim => dims.find((d) => d.id === id) ?? { id, level: null, confidence: 'thin', why: null };
+  const rows = [get('vocabulary'), get('grammar')];
+  const label = (d: AssessDim) => t(d.id === 'vocabulary' ? 'hxStandWords' : 'hxStandGrammar');
+  return (
+    <div className="flex flex-col gap-4" data-testid="stand-levels" data-cefr={cefr ?? ''}>
+      <p className="lx-tnum text-lg font-semibold tracking-tight" data-testid="stand-line">
+        {rows.map((d) => `${label(d)} ${d.level ?? '–'}`).join(' · ')}
+      </p>
+      <ul className="grid gap-4 sm:grid-cols-2 sm:gap-6">
+        {rows.map((d) => (
+          <li key={d.id} className="flex flex-col gap-1.5" data-testid="dim" data-id={d.id} data-level={d.level ?? ''} data-confidence={d.confidence}>
+            <span className="text-sm font-medium">{label(d)}</span>
+            {d.level ? (
+              <>
+                <div className="relative h-2 rounded-full bg-track" role="img" aria-label={t('hxStandScale', { dim: label(d), level: d.level })}>
+                  <span className="absolute inset-y-0 left-0 rounded-full bg-accent" style={{ width: `${Math.max(4, scalePos(d.level) * 100)}%` }} />
+                  <span className="absolute -top-1 h-4 w-0.5 bg-fg" style={{ left: `${C1_POS * 100}%` }} aria-hidden="true" data-testid="c1-mark" />
+                </div>
+                <span className="text-xs text-subtle">{t('hxStandC1')}</span>
+                {sameLang && d.why && (
+                  <span className="text-sm text-muted" data-testid="dim-why">
+                    {d.why}
+                  </span>
+                )}
+              </>
+            ) : (
+              <span className="text-xs text-muted">{t('dimNoEvidence')}</span>
+            )}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

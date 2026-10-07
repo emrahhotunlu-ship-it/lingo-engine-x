@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
-import { boot, bootAt, crashOnce, layoutProblems, openEntry, openSpeak, openTab, screen } from './fixtures';
+import { boot, bootAt, crashOnce, layoutProblems, openApplyFolds, openEntry, openSpeak, openTab, screen } from './fixtures';
 import { nbLog, outItems, typeGap } from './trainingHelpers';
 import { dump } from './trainerHelpers';
 import { setInputProfile } from './input';
@@ -13,6 +13,7 @@ test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
 test('Einstiege: jede Übung 1 Tipp ab ihrem Reiter „Anwenden“ (Sprechen: ab Heute)', async ({ page }) => {
   await boot(page, { migrated: true });
   await openTab(page, 'apply');
+  await openApplyFolds(page);
   await expect(page.getByTestId('training-colloc')).toBeVisible();
   await expect(page.getByTestId('training-transform')).toBeVisible();
   // Sprechen ist seit 04.10.2026 kein Reiter mehr: Heute › „Sprechen (freiwillig)“.

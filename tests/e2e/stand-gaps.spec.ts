@@ -154,13 +154,11 @@ test('M7: Wochenstreifen (7 Tagesringe, dieselbe Regel wie die Serie) und Niveau
   await page.getByTestId('profile-sheet').waitFor({ state: 'detached' });
   await screen(page, 'overview');
 
-  const scale = page.getByTestId('level-scale');
-  await expect(scale).toBeVisible();
-  const cefr = await page.getByTestId('assess-cefr').getAttribute('data-cefr');
-  await expect(page.getByTestId('level-caption')).toContainText(`Claudes Stufe ${cefr}`);
-  const dot = await page.getByTestId('level-dot').boundingBox();
-  const band = await page.getByTestId('level-band').boundingBox();
-  expect(dot && band && dot.x + dot.width / 2 >= band.x - 1 && dot.x + dot.width / 2 <= band.x + band.width + 1).toBe(true);
+  // Lernplattform 2.0 §2.7: Kopfzeile „Wörter B2+ · Grammatik B2“ mit Skala und C1-Marke je Bereich, keine Gesamtstufe.
+  await expect(page.getByTestId('stand-line')).toContainText('Wörter');
+  await expect(page.getByTestId('stand-line')).toContainText('Grammatik');
+  await expect(page.getByTestId('c1-mark')).toHaveCount(2);
+  await expect(page.getByTestId('level-scale')).toHaveCount(0);
   expect(await layoutProblems(page)).toEqual([]);
   expect(errors).toEqual([]);
 });

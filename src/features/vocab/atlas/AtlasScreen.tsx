@@ -152,6 +152,9 @@ export function AtlasScreen() {
                   <span className="text-base font-semibold">{t(`atFband_${b}`)}</span>
                   <span className="lx-tnum text-xs text-muted">{t('atBandCount', { have: num(have), total: num(list.length) })}</span>
                 </span>
+                <span className="h-1.5 w-16 flex-none rounded-full bg-surface" aria-hidden="true" data-testid="atlas-fband-bar" data-pct={Math.round((have / list.length) * 100)}>
+                  <span className="block h-1.5 rounded-full bg-accent" style={{ width: `${Math.round((have / list.length) * 100)}%` }} />
+                </span>
               </button>
               {isOpen && (
                 <>

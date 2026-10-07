@@ -59,7 +59,7 @@ export function PathList({ onOpen, highlight = null }: { onOpen: (topic: string)
                 </span>
               </span>
               {c.due > 0 && (
-                <span className="flex-none rounded-full bg-gold-soft px-2.5 py-0.5 text-xs font-medium text-gold-text" data-testid="chapter-due" data-n={c.due}>
+                <span className="flex-none rounded-full bg-surface-strong px-2.5 py-0.5 text-xs font-medium text-fg" data-testid="chapter-due" data-n={c.due}>
                   {tn('grDueBadge', c.due)}
                 </span>
               )}

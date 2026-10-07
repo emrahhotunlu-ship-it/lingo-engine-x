@@ -4,12 +4,14 @@ import { useLive } from '../../data/live';
 import { readAssess } from '../../domain/assessment/envelope';
 import { addDays } from '../../domain/date';
 import { historySeries, type SeriesKey } from '../../domain/progress/history';
+import { learningEffect, type Rate } from '../../domain/metrics';
 import { bktMeasures } from '../../domain/progress/measures';
 import { lastWeekOf } from '../../domain/progress/weekly';
 import { useT, type MessageKey } from '../../i18n';
 import { Fold, FoldGroup } from '../../ui/Fold';
 import { LineChart } from '../../ui/charts/LineChart';
 import { PatternsWeekly } from '../patterns/WeeklyTrend';
+import { useDocsOnce } from './useOnce';
 
 // Reiter „Verlauf" (plan.md §1.3, O14/O16/O17/O19): Fallen-Wochenzeile, Verlauf der letzten 120 Tage,
 // Einschätzungen und die Grammatik-Messwerte (BKT) als zugeklappte Zeilen (Fokus-Umbau: nur Wörter und Grammatik). Tests und Wochenbericht liegen im Profil-Blatt, die Aktivitäts-Heatmap und
@@ -61,6 +63,44 @@ function BktMeasures() {
         ))}
       </tbody>
     </table>
+  );
+}
+
+/** „Messwerte dahinter“ (§4.9): die fünf Größen, an denen sich zeigt, ob die neue Methode wirkt. Fehlen Daten, steht „noch keine Daten“. */
+function EffectMeasures() {
+  const { t, num } = useT();
+  const today = useClock((s) => s.today);
+  const grammar = useLive((s) => s.collections.grammar) ?? EMPTY;
+  const repairDoc = useLive((s) => s.docs['app/repair']);
+  const paths = useMemo(() => Array.from({ length: 14 }, (_, k) => `log/${addDays(today, -k)}`), [today]);
+  const logs = useDocsOnce(paths);
+  const eff = useMemo(() => learningEffect({ grammarDocs: grammar, repairDoc, logs: logs.status === 'ready' ? [...logs.value.values()] : [], today }), [grammar, repairDoc, logs, today]);
+  const none = t('hxEffectNone');
+  const rate = (r: Rate | undefined) => (r && r.n > 0 ? t('hxEffectRate', { pct: num(Math.round((r.hit / r.n) * 100)), hit: num(r.hit), n: num(r.n) }) : none);
+  const min = (v: number | null | undefined) => (typeof v === 'number' ? num(Math.round(v * 10) / 10) : '–');
+  const steps = ([1, 2, 3, 5] as const).map((k) => eff?.minutesPerStep[k]);
+  const hasMinutes = steps.some((x) => x && (x.t !== null || x.k !== null));
+  const rows: Array<[string, string, string]> = [
+    ['first', t('hxEffectFirst'), eff ? [eff.firstTry.box1, eff.firstTry.box3, eff.firstTry.box9].map(rate).join(' · ') : none],
+    ['relapse', t('hxEffectRelapse'), eff ? rate(eff.relapse14) : none],
+    ['pretest', t('hxEffectPretest'), eff ? rate(eff.pretest) : none],
+    ['minutes', t('hxEffectMinutes'), eff && hasMinutes ? steps.map((x) => `${min(x?.t)} · ${min(x?.k)}`).join(' / ') : none],
+    ['queue', t('hxEffectQueue'), eff ? `${num(eff.queue.today)} · ${num(eff.queue.max7)}` : none],
+  ];
+  return (
+    <div className="flex flex-col gap-2" data-testid="effect-measures">
+      <h3 className="text-sm font-semibold">{t('hxEffectTitle')}</h3>
+      <dl className="grid gap-x-4 gap-y-2 text-sm sm:grid-cols-[1fr_auto]">
+        {rows.map(([id, label, value]) => (
+          <div key={id} className="contents" data-testid="effect-row" data-id={id}>
+            <dt className="text-muted">{label}</dt>
+            <dd className="lx-tnum m-0 sm:text-right" data-testid={`effect-${id}`}>
+              {value}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </div>
   );
 }
 
@@ -118,6 +158,7 @@ export function HistoryTab() {
         )}
 
         <Fold title={t('measuresToggle')} testId="measures" toggleTestId="measures-toggle">
+          <EffectMeasures />
           <BktMeasures />
         </Fold>
       </FoldGroup>

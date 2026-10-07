@@ -16,7 +16,7 @@ import { maybeAutoAssess } from './assessRun';
 import { GrammarSegment } from './GrammarSegment';
 import { HistoryTab } from './HistoryTab';
 import { JudgeTab } from './JudgeTab';
-import { LevelScale } from './StandHeader';
+import { StandLevels } from './StandHeader';
 import { WordsSegment, useVocabMetrics } from './WordsSegment';
 
 // „Fortschritt" (Kap. 6.13, Neubau plan.md §1.3; Fokus-Umbau 3.5: ohne Kurs, ohne „Wörter gesamt“): Kopf Fest · Niveau-Skala, darunter drei
@@ -62,7 +62,7 @@ function Stat({ label, value, unit, testId }: { label: string; value: string; un
 }
 
 export function ProgressScreen() {
-  const { t, num, date } = useT();
+  const { t, num, date, lang } = useT();
   const route = useNav((s) => s.route);
   const now = useClock((s) => s.now);
   const docs = useLive((s) => s.docs);
@@ -75,7 +75,7 @@ export function ProgressScreen() {
     const fromRoute = route.name === 'overview' ? route.tab : undefined;
     if (fromRoute) return segmentOf(fromRoute);
     const saved = local.get(TAB_KEY);
-    return isTab(saved) ? segmentOf(saved) : 'review';
+    return isTab(saved) ? segmentOf(saved) : 'words';
   });
   const choose = (id: Segment) => {
     setTab(id);
@@ -110,22 +110,17 @@ export function ProgressScreen() {
   });
 
   return (
-    <motion.div className="flex flex-col gap-6 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }}>
+    <motion.div className="mx-auto flex w-full max-w-[70rem] flex-col gap-6 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }}>
       <motion.header variants={item}>
         <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{t('ovTitle')}</h1>
       </motion.header>
 
       {/* plan.md §1.3: EINE Kopfkarte – Wörter · Niveau, darunter die Niveau-Skala. */}
       <motion.section variants={item} aria-label={t('ovTitle')} aria-busy={status === 'waiting'} className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-4 sm:p-6" data-testid="stand-head">
-        <div className="grid grid-cols-2 gap-3 sm:gap-6">
-          <Stat label={t('nbProfilFestLabel')} value={num(fest)} unit={t(fest === 1 ? 'nbProfilFestUnit_one' : 'nbProfilFestUnit_other')} testId="stand-fest" />
-          <Stat label={t('nbProfilLevel')} value={assess?.data.cefr ?? '–'} unit={assess?.data.cefr ? t('nbProfilLevelUnit') : t('nbProfilLevelNone')} testId="stand-level" />
+        <Stat label={t('nbProfilFestLabel')} value={num(fest)} unit={t(fest === 1 ? 'nbProfilFestUnit_one' : 'nbProfilFestUnit_other')} testId="stand-fest" />
+        <div className="border-t border-line pt-4">
+          <StandLevels dims={(assess?.data.dims ?? []).filter((d) => (FOCUS_DIMS as readonly string[]).includes(d.id))} cefr={assess?.data.cefr ?? null} sameLang={!assess || assess.lang === lang} />
         </div>
-        {assess?.data.cefr && (
-          <div className="border-t border-line pt-4">
-            <LevelScale data={{ cefr: assess.data.cefr, dims: assess.data.dims.filter((d) => (FOCUS_DIMS as readonly string[]).includes(d.id)) }} />
-          </div>
-        )}
       </motion.section>
 
       <LateRescueCard />

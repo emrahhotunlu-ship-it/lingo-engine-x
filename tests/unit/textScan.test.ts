@@ -19,7 +19,7 @@ const ALLOWED: ReadonlyArray<RegExp> = [
   /^(col[A-Z]|mig[A-Z])/,
   // Emrahs Entscheidung „Go Anwenden“ (04.10.2026): Diktat, Hörschleife und Hör-Modus der Karten bleiben im Reiter „Anwenden“
   // (sie ersetzen den Standardwert „Hören entfällt“ des Gesamtkonzepts). Der Reiter und seine Texte (`ap*`) dürfen Hören nennen.
-  /^(ap[A-Z]|lrBackToApply|nbShTabApply)/,
+  /^(ap[A-Z]|hxApply|lrBackToApply|nbShTabApply)/,
   /^(nbWsModeListen|nbWsListenHint|nbWsListenNoTts|nbWsLoop|exName_listen_mc|exMode_listen|purposeListen|purposeDictate|lhDictateSub|drDictate)/,
   // Fehlerprotokoll (Diagnose) zeigt Schreibzugriffe der Datenbank, keine Fertigkeit.
   /^diagMsg_/,

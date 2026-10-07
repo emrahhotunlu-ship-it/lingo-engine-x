@@ -2,10 +2,9 @@ import { useMemo, useState } from 'react';
 import { useAiAvailable } from '../../ai/scope';
 import { useLive } from '../../data/live';
 import { readAssess } from '../../domain/assessment/envelope';
-import { FOCUS_DIMS, type Confidence } from '../../domain/assessment/types';
 import { EnglishText } from '../../engine/EnglishText';
 import { useHiddenInput } from '../../engine/HiddenInput';
-import { useT, type MessageKey } from '../../i18n';
+import { useT } from '../../i18n';
 import { Button, IconButton } from '../../ui/Button';
 import { Card } from '../../ui/Card';
 import { Skeleton } from '../../ui/Skeleton';
@@ -16,8 +15,6 @@ import { runAssess, stopAssess, useAssessRun } from './assessRun';
 // Belastbarkeit, Stärken, Blocker mit „Üben", Fokus. Eine große Zahl (die Stufe), Belastbarkeit als
 // Punkte MIT Text (nie nur Farbe). Gespeicherte Texte nur in ihrer eigenen Sprache (Kap. 10).
 
-const CONF_KEY: Record<Confidence, MessageKey> = { thin: 'confThin', fair: 'confFair', good: 'confGood' };
-const CONF_DOTS: Record<Confidence, number> = { thin: 1, fair: 2, good: 3 };
 const TREND_KEY = { up: 'trendUp', flat: 'trendFlat', down: 'trendDown' } as const;
 
 export function Dots({ n, label }: { n: number; label: string }) {
@@ -120,18 +117,13 @@ export function JudgeTab() {
         <div className="flex items-start justify-between gap-4">
           <div className="flex min-w-0 flex-col gap-2">
             <p id="judge-level" className="lx-eyebrow">
-              {t('assessOverall')}
+              {t('hxJudgeTitle')}
             </p>
-            <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <span className="text-5xl font-semibold tracking-tight" data-testid="assess-cefr" data-cefr={d.cefr ?? ''}>
-                {d.cefr ?? '–'}
+            {d.trend && (
+              <span className="text-sm text-muted" data-testid="assess-trend" data-trend={d.trend}>
+                {t(TREND_KEY[d.trend])}
               </span>
-              {d.trend && (
-                <span className="text-sm text-muted" data-testid="assess-trend" data-trend={d.trend}>
-                  {t(TREND_KEY[d.trend])}
-                </span>
-              )}
-            </p>
+            )}
           </div>
           <InfoToggle label={t('assessInfoLabel')} text={t('assessInfo')} />
         </div>
@@ -168,27 +160,6 @@ export function JudgeTab() {
           )}
         </Card>
       )}
-
-      <Card aria-labelledby="judge-dims">
-        <h2 id="judge-dims" className="lx-eyebrow">
-          {t('assessDims')}
-        </h2>
-        <ul className="mt-2 grid sm:grid-cols-2 sm:gap-x-6">
-          {FOCUS_DIMS.map((id) => {
-            const x = d.dims.find((y) => y.id === id) ?? { id, level: null, confidence: 'thin' as Confidence, why: null };
-            return (
-              <li key={id} className="flex flex-col gap-1 border-t border-line py-3" data-testid="dim" data-id={id} data-level={x.level ?? ''} data-confidence={x.confidence}>
-                <span className="flex items-baseline justify-between gap-3">
-                  <span className="text-sm font-medium">{t(`dim_${id}` as MessageKey)}</span>
-                  <span className={`text-lg font-semibold ${x.level ? '' : 'text-muted'}`}>{x.level ?? '–'}</span>
-                </span>
-                {x.level ? <Dots n={CONF_DOTS[x.confidence]} label={t(CONF_KEY[x.confidence])} /> : <span className="text-xs text-muted">{t('dimNoEvidence')}</span>}
-                {same && x.level && x.why && <span className="text-xs text-subtle">{x.why}</span>}
-              </li>
-            );
-          })}
-        </ul>
-      </Card>
 
       {same && d.focus && focusAt < 0 && (
         <Card channel="grammar" aria-labelledby="judge-focus" data-testid="focus">

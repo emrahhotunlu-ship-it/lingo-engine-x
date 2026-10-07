@@ -1,4 +1,4 @@
-import { openLearnPage, openTab } from './fixtures';
+import { openApplyFolds, openLearnPage, openTab } from './fixtures';
 import { readFileSync } from 'node:fs';
 import { expect, type Page } from '@playwright/test';
 import { splitWords } from '../../src/domain/answer/align';
@@ -311,6 +311,12 @@ export async function skipMiniLesson(page: Page): Promise<void> {
   await expect(item.first()).toBeVisible();
 }
 
+/** Klappt alle Kapitel des Grammatik-Lernwegs auf (am Handy ist nur das aktuelle offen, Lernplattform 2.0 §2.4). */
+export async function openAllChapters(page: Page): Promise<void> {
+  const closed = page.locator('[data-testid="chapter"][data-open="false"] [data-testid="chapter-head"]');
+  while ((await closed.count()) > 0) await closed.first().click();
+}
+
 /** Alle Phase-2-Bildschirme nacheinander öffnen; `visit` prüft jeden (Seite ist ruhig). */
 export async function learnTour(page: Page, visit: (name: LearnScreen) => Promise<void>): Promise<void> {
   const settle = () => page.waitForTimeout(450);
@@ -321,6 +327,7 @@ export async function learnTour(page: Page, visit: (name: LearnScreen) => Promis
   };
   await hub();
   await visit('lernen');
+  await openAllChapters(page);
   await page.locator('[data-testid="topic"][data-topic="passive"]').click();
   await expect(page.getByTestId('rule-sheet')).toBeVisible();
   await settle();
@@ -349,6 +356,7 @@ export async function learnTour(page: Page, visit: (name: LearnScreen) => Promis
   await visit('wortschatz');
   for (const [kind, name] of [['cloze', 'lueckenjagd'], ['order', 'satzbau']] as const) {
     await openTab(page, 'apply');
+    await openApplyFolds(page);
     await settle();
     await page.getByTestId(`hub-drill-${kind}`).click();
     await expect(page.getByTestId('drill-item')).toBeVisible();

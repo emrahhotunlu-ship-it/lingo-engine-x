@@ -1,9 +1,9 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, bootAt, layoutProblems, openTab, screen } from './fixtures';
+import { boot, bootAt, layoutProblems, openApplyFolds, openTab, screen } from './fixtures';
 import { setInputProfile } from './input';
 import { NO_GRAMMAR_ERRORS } from './heuteHelpers';
 import { writes } from './trainerHelpers';
-import { skipMiniLesson } from './learnHelpers';
+import { openAllChapters, skipMiniLesson } from './learnHelpers';
 
 // Paket P2 (docs/neubau/plan.md §4.3), umgebaut zum Grammatik-Pfad (W5): Hub mit Weiter-Karte, Pfad, Fehler und Extra, jede Übung ≤ 2 Tipps ab
 // Grammatik, Tageseinheit Block 4 (Fokus, Mini-Drill bei Fallen-Korrektur) und Block 5 (beide
@@ -13,12 +13,6 @@ type Doc = Record<string, unknown>;
 const TODAY_T = Date.parse('2026-09-20T18:00:00+02:00');
 // Eine Korrektur aus Block 3 von heute (Reparatur-Satz) mit der Falle f01 „actual ≠ aktuell“.
 const TRAP_REPAIR = { id: 'rf01', wrong: 'Please send me the actual version of the contract.', right: 'Please send me the current version of the contract.', why: '„actual“ heißt „tatsächlich“.', src: 'say', t: TODAY_T, box: 0, due: TODAY_T + 86_400_000 };
-
-/** Klappt alle Kapitel des Lernwegs auf (am Handy ist nur das aktuelle offen). */
-async function openAllChapters(page: Page): Promise<void> {
-  const closed = page.locator('[data-testid="chapter"][data-open="false"] [data-testid="chapter-head"]');
-  while ((await closed.count()) > 0) await closed.first().click();
-}
 
 const dump = (page: Page): Promise<Record<string, Doc>> =>
   page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { db: { dump(): Record<string, Doc> } } }).__LINGO_FAKE__.db.dump());
@@ -49,6 +43,7 @@ test('Grammatik-Reiter: Weiter-Karte, Pfad mit allen Themen, Fehler korrigieren,
   expect(await layoutProblems(page)).toEqual([]);
   // Kurzübungen stehen seit „Go Anwenden“ im Reiter „Anwenden“.
   await openTab(page, 'apply');
+  await openApplyFolds(page);
   await page.getByTestId('hub-drill-cloze').click();
   await expect(page.getByTestId('drill-item')).toBeVisible();
   await page.getByTestId('round-close').click();
@@ -261,6 +256,7 @@ test('Reiter „Anwenden“: Diktat, Lücke, Satzbau und Rollenspiel stehen dort
   await screen(page, 'today');
   await openTab(page, 'apply');
   await expect(page.getByTestId('apply-hub')).toBeVisible();
+  await openApplyFolds(page);
   await expect(page.getByTestId('hub-drill-cloze')).toBeVisible();
   await expect(page.getByTestId('hub-drill-order')).toBeVisible();
   await expect(page.getByTestId('hub-speak')).toBeVisible();

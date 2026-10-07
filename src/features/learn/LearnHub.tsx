@@ -125,7 +125,7 @@ export function LearnHub() {
   };
 
   return (
-    <motion.div className="flex flex-col gap-6 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }} data-testid="learn-hub">
+    <motion.div className="mx-auto flex w-full max-w-[70rem] flex-col gap-6 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }} data-testid="learn-hub">
       <motion.div variants={item}>
         <TabTitle title={t('lhTitle')} />
       </motion.div>
