@@ -5,6 +5,7 @@ import { WHATS_NEW_KEY, WHATS_NEW_VERSION } from '../../src/features/system/what
 import { routeToString } from '../../src/app/router/deeplink';
 import type { Route } from '../../src/app/router/types';
 import { TABS, type TabId } from '../../src/app/shell/tabs';
+import { serveDist } from './dist';
 
 // Lädt den Produktions-Build dist/index.html unter einer https-Adresse und spielt den
 // Entwicklungs-Adapter von außen ein (CLAUDE.md A7). Jede andere Anfrage wird
@@ -12,7 +13,6 @@ import { TABS, type TabId } from '../../src/app/shell/tabs';
 // die App nichts von fremden Hosts lädt (Kap. 12, Plattform-Test).
 
 export const ORIGIN = 'https://lingo.artifact.test';
-const HTML = readFileSync(new URL('../../dist/index.html', import.meta.url), 'utf8');
 const RUNTIME = readFileSync(new URL('../.runtime/fake-claude.js', import.meta.url), 'utf8');
 
 /** Stichtag der Testdaten: Sonntag, 20.09.2026, 21:00 Uhr in Berlin. */
@@ -48,10 +48,7 @@ export async function boot(page: Page, opts: BootOptions = {}): Promise<Booted> 
   });
   await page.route('**/*', async (route) => {
     const url = route.request().url();
-    if (url === `${ORIGIN}/`) {
-      await route.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body: HTML });
-      return;
-    }
+    if (await serveDist(route, ORIGIN)) return;
     external.push(url);
     await route.abort();
   });

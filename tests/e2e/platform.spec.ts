@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
 import { boot, openSettings, openOverview, expectStreak, screen } from './fixtures';
 
@@ -6,7 +6,9 @@ import { boot, openSettings, openOverview, expectStreak, screen } from './fixtur
 // kein Entwicklungs-Adapter im Produktions-Build.
 
 test('der Produktions-Build enthält keinen Entwicklungs-Adapter und keine Testdaten', () => {
-  const html = readFileSync(new URL('../../dist/index.html', import.meta.url), 'utf8');
+  // Einzeldatei: nur index.html; Mehr-Datei (LX_BUILD=multi): alle Textdateien in dist/.
+  const dist = new URL('../../dist/', import.meta.url);
+  const html = readdirSync(dist).filter((f) => /\.(html|js|css|json)$/.test(f)).map((f) => readFileSync(new URL(f, dist), 'utf8')).join('\n');
   const markers = [
     '__LINGO_FAKE__',
     'lx:fake-db',

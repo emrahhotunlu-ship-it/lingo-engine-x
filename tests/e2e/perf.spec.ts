@@ -2,6 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { boot, MIGRATED, ORIGIN, screen } from './fixtures';
 import { planPatch } from './trainerHelpers';
+import { serveDist } from './dist';
 
 type Validated = { misses: number; hits: number; ms: number };
 const validated = (page: Page): Promise<Validated> =>
@@ -15,7 +16,6 @@ const validated = (page: Page): Promise<Validated> =>
 
 test.use({ viewport: { width: 390, height: 844 } });
 
-const HTML = readFileSync(new URL('../../dist/index.html', import.meta.url), 'utf8');
 const RUNTIME = readFileSync(new URL('../.runtime/fake-claude.js', import.meta.url), 'utf8');
 
 /**
@@ -55,7 +55,7 @@ async function throttle(page: Page, rate: number): Promise<void> {
 async function bootReal(page: Page, patch: Record<string, unknown> = {}): Promise<string[]> {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
-  await page.route('**/*', (r) => (r.request().url() === `${ORIGIN}/` ? r.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body: HTML }) : r.abort()));
+  await page.route('**/*', async (r) => ((await serveDist(r, ORIGIN)) ? undefined : r.abort()));
   await page.addInitScript((o) => {
     (window as unknown as { __LINGO_FAKE_OPTIONS__: unknown }).__LINGO_FAKE_OPTIONS__ = o;
   }, { seed: LARGE, useDelayMs: 30, patch: { ...MIGRATED, ...patch } });
