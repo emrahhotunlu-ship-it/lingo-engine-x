@@ -9,7 +9,7 @@ import type { DutyId, GrammarDay, PatState, StoredPlan, UnitMeta } from '../plan
  * Regelversion für NEUE Pläne (Lernplattform 2.0 §2.3). Bleibt `1`, bis P5, P6 und P8 zusammengeführt sind; nur die Koordination stellt
  * auf `2` (§10.2). Bis dahin übergeben alle rv-2-Tests `rv: 2` ausdrücklich. Gespeicherte Pläne ohne `u.rv = 2` laufen nach der alten Regel zu Ende.
  */
-export const PLAN_RV = 1 as 1 | 2;
+export const PLAN_RV = 2 as 1 | 2;
 
 // Tageseinheit als gespeicherter Tagesplan (plan.md §1.5, N10/N12; Prüfung M2, M5). Rein.
 // - Der Plan entsteht EINMAL je Lerntag aus Wochentag und Tagesziel (nie aus `env`)
