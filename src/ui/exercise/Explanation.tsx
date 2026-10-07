@@ -21,7 +21,11 @@ type Props = {
   /** Wort-Rückmeldung: der Kopf darüber zeigt das Wort schon (Anki-Rückseite) – hier nur für Vorleseprogramme. */
   hideWord?: boolean;
   /** 'open': nur die offenen Zeilen (das Gerüst sammelt „Mehr“ unten in EINER Fußzeile); 'folded': nur die eingeklappten Zeilen; Standard: beides. */
-  only?: 'open' | 'folded';
+  only?: 'open' | 'folded' | 'yours';
+  /** UX-Prüfung W2: diese Zeilenarten stehen immer unter „Mehr“ (Typischer Fehler, Nicht verwechseln, Hinweise). */
+  fold?: ReadonlyArray<ExplainLine['k']>;
+  /** UX-Prüfung W2: „Deine Antwort“ steht oben in der Karte (eigener Aufruf mit `only="yours"`), hier nicht noch einmal. */
+  skipYours?: boolean;
 };
 
 const LABEL: Record<ExplainLine['k'], MessageKey> = {
@@ -34,31 +38,44 @@ const LABEL: Record<ExplainLine['k'], MessageKey> = {
 };
 const SYMBOL: Record<ExplainLine['k'], string> = { pattern: '◇', yours: '›', why: '✓', mistake: '✕', contrast: '⇄', note: 'i' };
 
-export function Explanation({ model, depth, learning = true, area = 'trainer', onFoldChange, hideWord = false, only }: Props) {
+export function Explanation({ model, depth, learning = true, area = 'trainer', onFoldChange, hideWord = false, only, fold, skipYours = false }: Props) {
   const { t, lang } = useT();
-  const v = visibleLines(model, depth, { learning });
+  const v0 = visibleLines(model, depth, { learning });
+  const moved = fold ? v0.open.filter((l) => fold.includes(l.k)) : [];
+  const keep = (l: ExplainLine): boolean => !moved.includes(l) && !(skipYours && l.k === 'yours');
+  const v = { ...v0, open: v0.open.filter(keep), folded: [...moved, ...v0.folded] };
   const en = (text: string): ReactNode => <EnglishText as="span" text={text} area={area} />;
 
   const body = (l: ExplainLine): ReactNode => {
     switch (l.k) {
       case 'pattern':
         return (
-          <>
+          <span className="flex flex-col items-start gap-1.5">
             <span className="font-semibold">{l.name}</span>
             {l.formula && (
-              <span className="ml-1 inline-block rounded-full bg-hint-soft px-3 py-1 text-hint-text" lang="en">
+              <span className="inline-block rounded-full bg-hint-soft px-3 py-1 text-hint-text" lang="en">
                 {l.formula}
               </span>
             )}
-          </>
+          </span>
         );
-      case 'yours':
+      case 'yours': {
+        // UX-Prüfung B1: die eigene Wahl steht genau einmal („am“), die Begründung beginnt oft schon mit ihr („am passt nicht …“) – dann nicht doppelt.
+        const g = l.given.trim();
+        // UX-Prüfung W2/R7: ein ganzer Satz steht schon im Antwortfeld darüber – dann nennt die Zeile nur die Begründung (kein doppelter Text).
+        const short = !!g && g.split(/\s+/).length <= 3;
+        const dup = !!g && l.text.trim().toLowerCase().startsWith(g.toLowerCase());
         return (
           <>
-            {l.given && <span className="mr-1">{en(l.given)}</span>}
-            <span lang={lang}>{l.text}</span>
+            {g && short && (
+              <span className="mr-1.5 font-semibold text-wrong-text line-through decoration-1" lang="en">
+                {g}
+              </span>
+            )}
+            <span lang={lang}>{dup && short ? l.text.trim().slice(g.length).trimStart() : l.text}</span>
           </>
         );
+      }
       case 'why':
       case 'note':
         return <span lang={lang}>{l.text}</span>;
@@ -189,6 +206,11 @@ export function Explanation({ model, depth, learning = true, area = 'trainer', o
     main = v.open.length ? <ul className="m-0 flex list-none flex-col p-0">{v.open.map(row)}</ul> : null;
   }
 
+  if (only === 'yours') {
+    const ys = v0.open.filter((l) => l.k === 'yours');
+    if (!ys.length) return null;
+    return <ul className="-mx-4 m-0 flex list-none flex-col p-0" data-testid="explanation-yours">{ys.map(card ? cardRow : row)}</ul>;
+  }
   if (only === 'folded') {
     if (!v.folded.length) return null;
     return (

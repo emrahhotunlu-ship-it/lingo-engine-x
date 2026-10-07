@@ -118,7 +118,7 @@ export const nbProfilEn: Record<keyof typeof nbProfilDe, string> = {
   nbProfilExpected: 'Expected to know',
   nbProfilExpectedSub: 'of {n} learned words, estimated for today. Drops after breaks.',
   nbProfilRetention: 'Kept after a break',
-  nbProfilRetentionSub: 'last 28 days, only answers after a break of at least 7 days',
+  nbProfilRetentionSub: 'Last 28 days, only answers after a break of at least 7 days.',
   nbProfilRetentionNone: 'Not enough data: from 30 answers ({n} so far).',
   nbProfilRetentionLow: 'Below the target range of 85 to 93%.',
   nbProfilRetentionIn: 'Within the target range of 85 to 93%.',

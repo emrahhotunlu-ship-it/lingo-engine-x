@@ -157,6 +157,8 @@ function Practice() {
   if (db !== 'ready') return null;
   return (
     <Section title={t('settingsPractice')}>
+      {/* UX-Prüfung W11: der Schalter trägt einen Titel (was ist an oder aus?). */}
+      <p className="m-0 text-sm font-medium">{t('settingsAutoNext')}</p>
       <Segmented
         label={t('settingsAutoNext')}
         value={auto ? 'on' : 'off'}

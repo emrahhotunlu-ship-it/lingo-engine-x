@@ -55,7 +55,7 @@ export const cxP14De = {
   cxTask_mcc: 'Welches Wort passt genau? Achte auf das Wort nach der Lücke.',
   cxTask_ocl: 'Ein Wort fehlt. Schreib es in die Lücke.',
   cxTask_wf: 'Bilde aus dem Stamm das passende Wort.',
-  cxTask_kwt: 'Gleiche Bedeutung, 3–6 Wörter, mit dem Schlüsselwort. Schreib den Satz mit dem Schlüsselwort um.',
+  cxTask_kwt: 'Schreib um, mit {key}, {lo}–{hi} Wörter.',
   cxTask_err: 'Steckt ein Fehler im Satz? Tippe auf das falsche Wort oder auf „Kein Fehler“.',
   cxTask_pair: 'Zwei ähnliche Sätze: Was bedeutet welcher? Verbinde jeden Satz mit seiner Bedeutung.',
   cxTask_cnet: 'Welche Verben passen zu diesem Wort? Tippe alle passenden an.',

@@ -4,7 +4,7 @@ export const cxP24De = {
   cxTempoTitle: 'Tempo',
   cxTempoTileSub: 'Zwölf kurze Aufgaben zu Mustern, die du schon sicher kannst. Es geht darum, wie schnell sie sitzen.',
   cxTempoTileMeta: 'ca. 5 Min.',
-  cxTempoKwtEnd: 'Der Anfang steht schon da. Tippe nur das Ende (höchstens {max} Wörter).',
+  cxTempoKwtEnd: 'Ergänze das Ende mit {key}, höchstens {max} Wörter.',
   cxTempoBarLabel: 'Zielzeit',
   cxTempoEndTitle: 'Tempo-Runde geschafft',
   cxTempoResult: '{right} von {total} richtig · {inTarget} davon in der Zielzeit',

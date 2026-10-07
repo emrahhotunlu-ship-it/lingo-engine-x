@@ -147,7 +147,8 @@ test('Eigener Satz: falsche Verwendung → „Noch nicht" mit Begründung; bei K
   await second.page.getByTestId('produce-input').fill('The meeting starts at nine.');
   await second.page.getByTestId('check').click();
   await expect(second.page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'wrong');
-  await expect(second.page.getByTestId('explanation')).toContainText('Zielwort');
+  // UX-Prüfung W2: „Deine Antwort“ ist ein eigener Block derselben Rückmeldekarte (`explanation-yours`), direkt unter dem Urteil.
+  await expect(second.page.getByTestId('explanation-yours')).toContainText('Zielwort');
   // Ein falscher Satz wird zum Fehlersatz (Box 1) – nur mit Claudes Korrektur.
   await expect.poll(async () => ((await dump(second.page))['app/repair']?.items as Doc[] | undefined)?.some((i) => i.src === 'write') ?? false).toBe(true);
   await second.close();

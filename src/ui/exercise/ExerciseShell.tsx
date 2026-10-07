@@ -55,6 +55,8 @@ export type ShellFeedback = {
   parts?: ReactNode;
   /** Zusatz unter der Erklär-Karte (c1x: „Warum nicht …?“ je Option): steht im Platz `explanation`. */
   after?: ReactNode;
+  /** „Richtig: …“ als erste Inhaltszeile der Karte (c1x: kwt-Lösung, err-Korrektur), UX-Prüfung W2. */
+  right?: ReactNode;
   /** Kopf der Rückmeldung (Wörter: Wort, Vorlesen, Lautschrift, „Zum Wort“): steht direkt unter dem Urteil, vor der Erklärung (Design-Lead). */
   head?: ReactNode;
   /** Fuß der Rückmeldung (Wörter: „Zum Wort“), ganz unten in der Ergebnis-Karte. */
@@ -81,6 +83,8 @@ export type ExerciseShellProps = {
   feedback?: ShellFeedback | null;
   side?: ReactNode | null;
   layout?: 'auto' | 'stack' | 'split';
+  /** Tastaturhinweis am Laptop je Übungsart (UX-Prüfung W5/W9): eigener Text, `null` = keiner; sonst nach Art (Auswahl oder Tippen). */
+  keysHint?: string | null;
   /** Skelett in Kartengröße statt Inhalt (nie ein Leerbild). */
   loading?: boolean;
   /** Optional: `retry` (Hinweis mit Leitfrage, Eingabe bleibt) und `aiError`; sonst aus `feedback`/`primary.busy` abgeleitet. */
@@ -96,12 +100,13 @@ export function deriveShellState(p: Pick<ExerciseShellProps, 'loading' | 'state'
 }
 
 export function ExerciseShell(props: ExerciseShellProps) {
-  const { meta, status, task, aid = null, prompt, answer, hint = null, secondary = [], primary, barOverride, feedback = null, side = null, layout = 'auto' } = props;
+  const { meta, status, task, aid = null, prompt, answer, hint = null, secondary = [], primary, barOverride, feedback = null, side = null, layout = 'auto', keysHint } = props;
   const { t } = useT();
   const state = deriveShellState(props);
   const profileSplit = useSplitLayout();
   const split = layout === 'split' || (layout === 'auto' && profileSplit);
   const tablet = useMediaQuery('(min-width: 768px)');
+  const fine = useMediaQuery('(pointer: fine)');
   const [info, setInfo] = useState(false);
   const infoId = useId();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -160,7 +165,20 @@ export function ExerciseShell(props: ExerciseShellProps) {
   const asideSecondary = tablet && secondaryNode;
 
   const depthLines = feedback?.explanation ? visibleLines(feedback.explanation, feedback.depth, { learning }) : null;
-  const moreLines = depthLines?.folded.length ?? 0;
+  // UX-Prüfung W2 (07.10.2026): EINE Rückmeldekarte für alle Arten – Urteil (+ „Wieder in“) → Du → Richtig → Muster → Richtig, weil → Beispiel → „Mehr“.
+  // Unter „Mehr“: Typischer Fehler, Nicht verwechseln, Hinweise, „Warum nicht …?“ und die Zählweise (`after`), weitere Beispiele.
+  const FOLD = ['mistake', 'contrast', 'note'] as const;
+  const moreLines = depthLines ? depthLines.folded.length + depthLines.open.filter((l) => (FOLD as readonly string[]).includes(l.k)).length : 0;
+  const explainProps = feedback?.explanation ? { model: feedback.explanation, depth: feedback.depth, learning, hideWord: status.area === 'words', fold: FOLD } : null;
+  const moreExtra =
+    explainProps && (moreLines > 0 || feedback?.after) ? (
+      <>
+        {moreLines > 0 && <Explanation {...explainProps} only="folded" />}
+        {feedback?.after && <div data-slot="after">{feedback.after}</div>}
+      </>
+    ) : feedback?.after ? (
+      <div data-slot="after">{feedback.after}</div>
+    ) : undefined;
   const result =
     feedback !== null ? (
       <motion.section
@@ -182,18 +200,22 @@ export function ExerciseShell(props: ExerciseShellProps) {
           )}
         </div>
         {feedback.head && <div data-slot="head">{feedback.head}</div>}
+        {explainProps && (
+          <div data-slot="yours">
+            <Explanation {...explainProps} only="yours" />
+          </div>
+        )}
+        {feedback.right && <div data-slot="right">{feedback.right}</div>}
         {feedback.comparison && (
           <div data-slot="comparison">
             <Comparison given={feedback.comparison.given} ops={feedback.comparison.ops} compact={!!feedback.comparison.compact} />
           </div>
         )}
-        {(feedback.explanation || feedback.after) && (
+        {explainProps && (
           <div data-slot="explanation">
-            {feedback.explanation && <Explanation model={feedback.explanation} depth={feedback.depth} learning={learning} onFoldChange={onFold} hideWord={status.area === 'words'} only="open" />}
-            {feedback.after}
+            <Explanation {...explainProps} onFoldChange={onFold} only="open" skipYours />
           </div>
         )}
-        {/* Design-Lead: Beispiel → Tutor-Knopf → EINE Fußzeile „Mehr“ (eingeklappte Zeilen und weitere Beispiele zusammen). */}
         {feedback.explanation && feedback.explanation.examples.length > 0 ? (
           <div data-slot="examples">
             <Examples
@@ -203,17 +225,17 @@ export function ExerciseShell(props: ExerciseShellProps) {
               more={{
                 label: t('exMore'),
                 before: feedback.tutor ? <div data-slot="tutor">{feedback.tutor}</div> : undefined,
-                extra: moreLines > 0 ? <Explanation model={feedback.explanation} depth={feedback.depth} learning={learning} hideWord={status.area === 'words'} only="folded" /> : undefined,
+                extra: moreExtra,
               }}
             />
           </div>
         ) : (
           <>
             {feedback.tutor && <div data-slot="tutor">{feedback.tutor}</div>}
-            {feedback.explanation && moreLines > 0 && (
+            {moreExtra && (
               <div data-slot="more" className="-mx-4 border-t border-line px-4 pt-1">
                 <FoldToggle label={t('exMore')} onOpenChange={onFold} testId="explanation-more">
-                  <Explanation model={feedback.explanation} depth={feedback.depth} learning={learning} hideWord={status.area === 'words'} only="folded" />
+                  {moreExtra}
                 </FoldToggle>
               </div>
             )}
@@ -237,31 +259,33 @@ export function ExerciseShell(props: ExerciseShellProps) {
 
   const main = (
     <>
-      <div data-slot="status">
+      {/* UX-Prüfung W1: Kopf in EINER Zeile („●●○○ Lernt · Lücke“) mit ⓘ rechts; dahinter Zweck und Thema. */}
+      <div data-slot="status" className="flex items-center justify-between gap-3">
         <ExerciseStatus {...status} />
+        <button
+          type="button"
+          className="-my-2 -mr-2 inline-flex size-11 flex-none items-center justify-center rounded-full text-subtle transition-colors hover:text-fg"
+          aria-label={t('exInfo')}
+          aria-expanded={info}
+          aria-controls={infoId}
+          onClick={() => setInfo((v) => !v)}
+          data-testid="purpose-info"
+        >
+          <Icon name="info" size={18} />
+        </button>
       </div>
       <div data-slot="task" className="flex flex-col gap-1">
-        <div className="flex items-start justify-between gap-3">
-          <h2 className="lx-t-task" data-testid="task">
-            {task.text}
-          </h2>
-          <button
-            type="button"
-            className="-m-2 inline-flex size-11 flex-none items-center justify-center rounded-full text-subtle transition-colors hover:text-fg"
-            aria-label={t('exInfo')}
-            aria-expanded={info}
-            aria-controls={infoId}
-            onClick={() => setInfo((v) => !v)}
-            data-testid="purpose-info"
-          >
-            <Icon name="info" size={18} />
-          </button>
-        </div>
         {info && (
-          <p id={infoId} className="lx-t-support text-muted" data-testid="purpose">
+          <p id={infoId} className="lx-t-support m-0 text-muted" data-testid="purpose">
+            {[status.topic, status.pattern].filter(Boolean).length > 0 && (
+              <span className="block text-fg">{[status.topic, status.pattern].filter(Boolean).join(' · ')}</span>
+            )}
             {task.purpose}
           </p>
         )}
+        <h2 className="lx-t-task" data-testid="task">
+          {task.text}
+        </h2>
       </div>
       {aid && <div data-slot="aid">{aid}</div>}
       <div data-slot="prompt" className="lx-t-prompt">
@@ -324,9 +348,15 @@ export function ExerciseShell(props: ExerciseShellProps) {
           </aside>
         )}
       </div>
-      {split && (
+      {fine && keysHint !== null && (split || keysHint) && (
         <p className="lx-t-meta text-subtle" data-testid="keys-hint">
-          {t('exKeysHint')}
+          {/* Hinweis je Art: nur wo Optionen stehen, nennt er „A–D oder 1–4 wählen“ (Auswahl per CSS `:has`, dz2.css). */}
+          {keysHint ?? (
+            <>
+              <span className="dz-kh-choice">{t('exKeysHint')}</span>
+              <span className="dz-kh-typed">{t('exKeysHintTyped')}</span>
+            </>
+          )}
         </p>
       )}
       {!split && bar}

@@ -158,7 +158,8 @@
   --lx-accent-soft: rgba(4, 120, 87, 0.1);
   --lx-cyan: #0891b2;
   --lx-cyan-text: #0e7490;
-  --lx-gold-text: #b45309;
+  /* Hell: etwas dunkler, damit die Plakette „fast richtig“ auf ihrer eigenen Tönung sicher über 4,5:1 bleibt (axe). */
+  --lx-gold-text: #96450a;
   --lx-danger-text: #b91c1c;
   --lx-danger-soft: rgba(185, 28, 28, 0.08);
   --lx-gold-soft: rgba(180, 83, 9, 0.1);
@@ -1373,14 +1374,7 @@ html[data-actionbar] #main {
   --lx-btn-words: #5b3fd6;
   --lx-btn-grammar: #2553c9;
 }
-html[data-lx-area='words'] {
-  --lx-btn-bg: var(--lx-btn-words);
-  --lx-btn-fg: #ffffff;
-}
-html[data-lx-area='grammar'] {
-  --lx-btn-bg: var(--lx-btn-grammar);
-  --lx-btn-fg: #ffffff;
-}
+/* UX-Prüfung W8 (07.10.2026): EIN Hauptknopf-Stil überall (wie Heute); die Bereichsfarbe trägt nur Symbol, Balken und Kante. */
 button.lx-btn-primary {
   background: var(--lx-btn-bg, var(--lx-btn-n));
   color: var(--lx-btn-fg, var(--lx-btn-nf));

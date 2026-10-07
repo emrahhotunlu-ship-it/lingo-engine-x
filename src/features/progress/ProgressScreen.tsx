@@ -51,7 +51,7 @@ const item = {
 function Stat({ label, value, unit, testId }: { label: string; value: string; unit: string; testId: string }) {
   return (
     <div className="flex min-w-0 flex-col gap-0.5">
-      <span className="truncate text-xs text-muted">{label}</span>
+      {label && <span className="truncate text-xs text-muted">{label}</span>}
       {/* Nie mitten im Wort umbrechen (Befund H8): Zahl und Einheit dürfen untereinander stehen. */}
       <span className="flex flex-wrap items-baseline gap-x-1.5">
         <span className="lx-tnum text-2xl font-semibold tracking-tight" data-testid={testId}>
@@ -112,14 +112,15 @@ export function ProgressScreen() {
   });
 
   return (
-    <motion.div className="mx-auto flex w-full max-w-[70rem] flex-col gap-6 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }}>
+    <motion.div className="mx-auto flex w-full max-w-[47.5rem] flex-col gap-6 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }}>
       <motion.header variants={item}>
         <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{t('ovTitle')}</h1>
       </motion.header>
 
       {/* plan.md §1.3: EINE Kopfkarte – Wörter · Niveau, darunter die Niveau-Skala. */}
       <motion.section variants={item} aria-label={t('ovTitle')} aria-busy={status === 'waiting'} className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-4 sm:p-6" data-testid="stand-head">
-        <Stat label={t('nbProfilFestLabel')} value={num(fest)} unit={t(fest === 1 ? 'nbProfilFestUnit_one' : 'nbProfilFestUnit_other')} testId="stand-fest" />
+        {/* UX-Prüfung W7: „Fest · 12 Wörter fest“ sagte „fest“ zweimal – die Einheit trägt es allein. */}
+        <Stat label="" value={num(fest)} unit={t(fest === 1 ? 'nbProfilFestUnit_one' : 'nbProfilFestUnit_other')} testId="stand-fest" />
         <div className="border-t border-line pt-4">
           <StandLevels dims={(assess?.data.dims ?? []).filter((d) => (FOCUS_DIMS as readonly string[]).includes(d.id))} cefr={assess?.data.cefr ?? null} sameLang={!assess || assess.lang === lang} />
         </div>

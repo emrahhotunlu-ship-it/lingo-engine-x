@@ -216,7 +216,7 @@ function GrowthEnd({
       data-total={total}
     >
       <div className="flex flex-col gap-1">
-        <Eyebrow tone="accent">{t("hxEndRoundDone")}</Eyebrow>
+        {/* UX-Prüfung W6: keine Überzeile über dem Titel (sie sagte dasselbe). */}
         <h1 className="m-0 text-2xl leading-8 font-semibold tracking-tight text-balance">
           {title ?? t("nbShEndTitle")}
         </h1>

@@ -71,8 +71,10 @@ test.describe('Handy', () => {
     await page.getByTestId('check').click();
     await expect(item.getByTestId('verdict')).toHaveAttribute('data-verdict', 'wrong');
     await expect(item.getByTestId('gap')).toHaveAttribute('data-state', 'reveal');
+    // UX-Prüfung B1 (07.10.2026): „Warum nicht …?“ steht unter „Mehr“ und nennt nur die ANDEREN Optionen (die eigene Wahl erklärt „Deine Antwort“).
+    await item.locator('[data-testid="examples-more"], [data-testid="explanation-more"]').first().click();
     const why = item.getByTestId('why-list');
-    await expect(why.locator('li')).toHaveCount(3);
+    await expect(why.locator('li')).toHaveCount(2);
     await expect(why).toContainText('Deutsch gedacht');
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
     expect(overflow).toBe(false);
@@ -162,8 +164,11 @@ test.describe('Laptop', () => {
     await expect(item.getByTestId('gap')).toContainText(MCC.options[MCC.answer] ?? '');
     await page.keyboard.press('Enter');
     await expect(item.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
-    // Richtig: trotzdem „Warum nicht …?“ der anderen Optionen (Kap. 2 Nr. 4).
+    // Richtig: trotzdem „Warum nicht …?“ der anderen Optionen (Kap. 2 Nr. 4), seit der UX-Prüfung W2 unter „Mehr“.
+    await item.locator('[data-testid="examples-more"], [data-testid="explanation-more"]').first().click();
     await expect(item.getByTestId('why-list').locator('li')).toHaveCount(3);
+    // Der Tipp auf „Mehr“ hat den Fokus genommen; Enter soll wieder „Weiter“ bedeuten.
+    await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
     await page.keyboard.press('Enter');
     const e = await entryOf(page, MCC.id);
     expect(e).toMatchObject({ ok: true, pts: [1, 1], c1k: 'mcc', dev: 'k' });

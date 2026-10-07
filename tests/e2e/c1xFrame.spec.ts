@@ -63,6 +63,8 @@ test.describe('Laptop', () => {
     await expect(item.getByTestId('part-bar').locator('li')).toHaveCount(2);
     await expect(item.getByTestId('part-bar').locator('[data-ok="true"]')).toHaveCount(2);
     await expect(item.getByTestId('explanation')).toBeVisible();
+    // UX-Prüfung W2: die Zählweise steht unter „Mehr“.
+    await item.locator('[data-testid="examples-more"], [data-testid="explanation-more"]').first().click();
     await expect(item.getByTestId('cambridge-note')).toBeVisible();
     // Bei richtiger Antwort ohne Auswahlmöglichkeiten gibt es keine „Warum nicht …?“-Liste (die Falle wird nur gezeigt, wenn sie getroffen wurde).
     await expect(item.getByTestId('why-list')).toHaveCount(0);
@@ -89,6 +91,7 @@ test.describe('Laptop', () => {
     await expect(bar.locator('[data-part="b"]')).toHaveAttribute('data-ok', 'false');
     await expect(bar.locator('[data-part="a"]')).toContainText('✓');
     await expect(bar.locator('[data-part="b"]')).toContainText('✕');
+    await item.locator('[data-testid="examples-more"], [data-testid="explanation-more"]').first().click();
     await expect(item.getByTestId('why-list')).toContainText('It');
     await nextItem(page);
     const d = await dump(page);

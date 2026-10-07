@@ -85,10 +85,22 @@ export function useErrUi(ctrl: C1Ctrl): C1Ui {
   }, [mode, ctrl, form]);
 
   const verdict = ctrl.score?.verdict;
-  const marks = ctrl.locked && range ? [{ span: range, tone: verdict === 'correct' ? ('ok' as const) : ('wrong' as const) }] : [];
+  // UX-Prüfung B2: die Korrektur steht im Satz („~~hear~~ → hearing“), wie bei der Lücke; das falsche Wort wird nie grün.
+  const fixText = item.bad?.fix[0] ?? null;
+  const marks = ctrl.locked && range ? [{ span: range, tone: verdict === 'correct' ? ('ok' as const) : ('wrong' as const), ...(fixText ? { fix: fixText } : {}) }] : [];
+  const fixedSentence = range && fixText ? [...words.slice(0, range[0]), fixText, ...words.slice(range[1] + 1)].join(' ') : null;
   const correctChip = choices && item.bad ? choices.findIndex((c) => item.bad?.fix.some((f) => f.trim().toLowerCase() === c.trim().toLowerCase())) : -1;
 
   return {
+    right:
+      ctrl.locked && fixedSentence ? (
+        <p className="lx-t-support m-0" data-testid="err-correction">
+          <span className="text-muted">{t('cxKwtSolution')} </span>
+          <span lang="en" className="font-semibold text-ok-text">
+            {fixedSentence}
+          </span>
+        </p>
+      ) : null,
     prompt: (
       <div className="flex flex-col gap-2" data-testid="c1x-err" data-err-mode={mode}>
         <TapSentence
@@ -112,12 +124,6 @@ export function useErrUi(ctrl: C1Ctrl): C1Ui {
     ),
     answer: (
       <div className="flex flex-col gap-3">
-        {ctrl.locked && item.bad && (
-          <p className="lx-t-support" data-testid="err-correction">
-            <span className="text-muted">{t('cxKwtSolution')} </span>
-            <span lang="en" className="font-semibold">{item.bad.fix[0]}</span>
-          </p>
-        )}
         {!ctrl.locked && sel === null && (
           <p className="lx-t-support text-muted" data-testid="err-hint">
             {t('cxErrTapHint')}
@@ -165,16 +171,17 @@ export function useErrUi(ctrl: C1Ctrl): C1Ui {
           </label>
         )}
         {!ctrl.locked && (
-          <div className="flex flex-wrap gap-2">
+          // UX-Prüfung KLEIN: „Kein Fehler“ ist eine echte Antwort (Form wie die Bausteine), „Doch nicht“ steht in derselben Reihe.
+          <div className="flex flex-wrap items-center gap-2">
+            <button type="button" className="cx-chip" onClick={noError} data-testid="no-error">
+              {t('cxNoError')}
+              {mode === 'desk' && <span className="lx-t-meta ml-2 text-subtle">N</span>}
+            </button>
             {sel !== null && (
               <Button variant="ghost" onClick={undo} data-testid="err-undo">
                 {t('cxErrUndo')}
               </Button>
             )}
-            <Button variant="ghost" onClick={noError} data-testid="no-error">
-              {t('cxNoError')}
-              {mode === 'desk' && <span className="lx-t-meta ml-2 text-subtle">N</span>}
-            </Button>
           </div>
         )}
         {ctrl.locked && correctChip >= 0 && mode === 'tap' && choices && (

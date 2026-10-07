@@ -475,7 +475,8 @@ test('Satzbau als Pflicht: Sätze zum Tagesthema (u.gt), Muster vorn, Status mit
     // Status: Punkte aus dem Wert des Themas (nie ohne), die Übungsart und das Thema des Satzes.
     await expect(status).toHaveAttribute('data-state', /^(new|learning|safe|firm)$/);
     await expect(status).toContainText('Satzbau');
-    await expect(status.getByTestId('status-where')).toBeVisible();
+    // UX-Prüfung W1 (07.10.2026): der Kopf ist eine Zeile, das Thema steht hinter ⓘ (für Vorleseprogramme weiter im Status).
+    await expect(status.getByTestId('status-where')).toHaveCount(1);
     // Die Aufgabe nennt die deutsche Bedeutung.
     await expect(item.getByTestId('task')).toContainText('Du willst sagen');
     const texts = await item.getByTestId('tile-pool').getByTestId('tile').evaluateAll((els) => els.map((e) => e.getAttribute('data-tile') ?? ''));

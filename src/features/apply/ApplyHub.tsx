@@ -10,7 +10,7 @@ import { useHiddenInput } from '../../engine/HiddenInput';
 import { useT, type MessageKey } from '../../i18n';
 import { feasible } from '../../domain/plan/channels';
 import { unlockSpeech, useSpeech } from '../../platform/speech';
-import { ChannelIcon, type Channel } from '../../ui/Card';
+import type { Channel } from '../../ui/Card';
 import { Icon, type IconName } from '../../ui/Icon';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { drillCards, startDrill, type DrillKind } from '../drills/session';
@@ -56,26 +56,31 @@ function Tile({ icon, channel, title, sub, meta, onClick, testId, featured }: { 
       onClick={onClick}
       data-testid={testId}
       data-featured={featured ? 'true' : undefined}
-      className="lx-glass flex h-full min-h-36 w-full flex-col items-start gap-1.5 rounded-[var(--radius-card)] p-4 text-left transition-colors hover:bg-surface-strong"
+      data-channel={channel}
+      className="dz-row flex min-h-16 w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-surface-strong"
     >
-      <ChannelIcon channel={channel}>
-        <Icon name={icon} />
-      </ChannelIcon>
-      <span className="font-medium">{title}</span>
-      <span className="text-xs text-muted">{sub}</span>
-      <span className="lx-tnum mt-auto flex items-center gap-1 text-xs font-medium text-subtle" data-testid="tile-meta" data-meta={meta}>
-        {meta.split(' · ').map((part, i) => (
-          <span key={i} className="flex items-center gap-1">
-            {i > 0 && <span aria-hidden="true">·</span>}
-            <span>{part}</span>
-          </span>
-        ))}
+      <span className="flex size-9 flex-none items-center justify-center rounded-full bg-surface-strong text-muted" aria-hidden="true">
+        <Icon name={icon} size={18} />
       </span>
+      <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+        <span className="font-medium">{title}</span>
+        <span className="text-sm text-muted">{sub}</span>
+        <span className="lx-tnum flex items-center gap-1 text-xs text-subtle empty:hidden" data-testid="tile-meta" data-meta={meta}>
+          {meta.split(' · ').filter(Boolean).map((part, i) => (
+            <span key={i} className="flex items-center gap-1">
+              {i > 0 && <span aria-hidden="true">·</span>}
+              <span>{part}</span>
+            </span>
+          ))}
+        </span>
+      </span>
+      <Icon name="chevronRight" size={18} className="flex-none text-subtle" />
     </button>
   );
 }
 
-const GRID = 'grid auto-rows-fr grid-cols-2 gap-3 lg:grid-cols-3';
+// UX-Prüfung KLEIN: eine ruhige Liste je Abschnitt (eine Fläche, Trennlinien, neutrale Symbole) statt 13 bunter Kacheln.
+const GRID = 'lx-glass dz-list flex flex-col overflow-hidden rounded-[var(--radius-card)]';
 
 export function ApplyHub() {
   const { t, lang } = useT();
@@ -139,7 +144,7 @@ export function ApplyHub() {
   const wordPartner = withMeta(entry('training-colloc'), touch, t('hxApplyWordPartner'));
   const ruleTiles = [withMeta(entry('training-wordform'), touch), withMeta(entry('training-register'), touch), withMeta(entry('training-phrasal'), touch), withMeta(entry('training-transition'), touch)];
   const oldTransform = entry('training-transform');
-  // Ist `kwt` angeboten, führt die Kachel „Satz-Umformung“ auf die Aufgabenart `kwt` (am Handy mit Bausteinen); gibt es dort nichts zu üben, gilt die alte Übung.
+  // Ist `kwt` angeboten, führt die Zeile „Umformen“ auf die Aufgabenart `kwt` (am Handy mit Bausteinen); gibt es dort nichts zu üben, gilt die alte Übung.
   const startKind = (kind: 'kwt' | 'err', fallback?: () => void): void => {
     const first = startGrammar({ mode: 'xtra', kind });
     if (!useGrammarSession.getState().tasks.length) {
@@ -168,7 +173,7 @@ export function ApplyHub() {
   const more = list([cloze]);
 
   return (
-    <motion.div className="mx-auto flex w-full max-w-[70rem] flex-col gap-8 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }} data-testid="apply-hub" data-profile={profile}>
+    <motion.div className="mx-auto flex w-full max-w-[47.5rem] flex-col gap-8 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }} data-testid="apply-hub" data-profile={profile}>
       <motion.div variants={item}>
         <TabTitle title={t('apTitle')} sub={t('apLead')} />
       </motion.div>

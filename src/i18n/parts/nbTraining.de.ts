@@ -5,7 +5,7 @@ export const nbTrainingDe = {
   // Hub-Abschnitte und Einstiege
   nbTrainingColloc: 'Kollokationen',
   nbTrainingCollocSub: 'Welche Verben passen zum Nomen?',
-  nbTrainingTransform: 'Satz-Umformung',
+  nbTrainingTransform: 'Umformen',
   nbTrainingTransformSub: 'Gleiche Aussage mit einem Schlüsselwort',
   nbTrainingObjection: 'Einwand-Training',
   nbTrainingObjectionSub: '5 Einwände · Schritt für Schritt in 5 Stufen',
@@ -25,7 +25,7 @@ export const nbTrainingDe = {
   nbTrainingGoal_phrase: 'Wendungen der Woche',
   nbTrainingGoals: 'Ziel der Woche',
   nbTrainingResumeColloc: 'Kollokationen · Aufgabe {n} von {total}',
-  nbTrainingResumeTransform: 'Satz-Umformung · Aufgabe {n} von {total}',
+  nbTrainingResumeTransform: 'Umformen · Aufgabe {n} von {total}',
   nbTrainingResumeObjection: 'Einwand-Training · Einwand {n} von {total}',
   // Kollokationen
   nbTrainingCollocTask: 'Welche Verben passen zu diesem Nomen? Tippe eines nach dem anderen.',

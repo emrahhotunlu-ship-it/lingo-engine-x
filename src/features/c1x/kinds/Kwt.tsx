@@ -49,6 +49,8 @@ export function useKwtUi(ctrl: C1Ctrl): C1Ui {
   const mode = kwtMode(ctrl.inp, ctrl.p);
   const [value, setValue] = useState('');
   const [placed, setPlaced] = useState<number[]>([]);
+  // UX-Prüfung W3: am Handy (Bausteine) liegt der Vorrat in einer festen Leiste über „Prüfen“; die Antwortzeile steht in der Lücke im Satz.
+  const [poolEl, setPoolEl] = useState<HTMLDivElement | null>(null);
   const [lo, hi] = item.words ?? [3, 6];
   const verdict = ctrl.score?.verdict;
   const state: GapState = !ctrl.locked ? 'input' : verdict === 'correct' ? 'correct' : verdict === 'near' ? 'near' : 'wrong';
@@ -89,7 +91,7 @@ export function useKwtUi(ctrl: C1Ctrl): C1Ui {
 
   const frame = `${item.before} ___ ${item.after}`.trim();
   const at = frame.indexOf('___');
-  const sentence: ReactNode =
+  const sentenceText: ReactNode =
     mode === 'desk' ? <EnglishText as="p" testId="sentence" text={frame} {...src} slot={{ start: at, end: at + 3, node: gapInput }} /> : <EnglishText as="p" testId="sentence" text={frame} {...src} />;
 
   const typedWords = mode === 'desk' ? kwtWords(value, atom) : [];
@@ -108,6 +110,7 @@ export function useKwtUi(ctrl: C1Ctrl): C1Ui {
       labels={{ line: t('drTileLine'), pool: t('drTilePool') }}
       markLabels={{ ok: t('drMarkOk'), near: t('drMarkNear'), off: t('drMarkOff') }}
       slots={placed.length + 1}
+      {...(mode === 'tiles' ? { poolTarget: poolEl, inline: true } : {})}
     />
   );
 
@@ -116,15 +119,9 @@ export function useKwtUi(ctrl: C1Ctrl): C1Ui {
     mode === 'desk' ? (
       <WordCounter n={counterN} min={lo} max={hi} />
     ) : mode === 'tiles' ? (
-      <div className="flex flex-col gap-2" data-testid="kwt-tiles">
-        {tilesNode}
-        <WordCounter n={counterN} min={lo} max={hi} />
-        {ctrl.locked && verdict !== 'correct' && (
-          <p className="lx-t-support" data-testid="kwt-solution">
-            <span className="text-muted">{t('cxKwtSolution')} </span>
-            <span lang="en" className="font-semibold">{solution}</span>
-          </p>
-        )}
+      <div className="dz-kwt-dock flex flex-col gap-2" data-testid="kwt-tiles" data-locked={ctrl.locked || undefined}>
+        <div ref={setPoolEl} />
+        {!ctrl.locked && <WordCounter n={counterN} min={lo} max={hi} />}
       </div>
     ) : (
       <div className="flex flex-col gap-3" data-testid="kwt-part">
@@ -140,6 +137,17 @@ export function useKwtUi(ctrl: C1Ctrl): C1Ui {
   return {
     aid: null,
     maxTip: 3,
+    task: t('cxTask_kwt', { key: item.key, lo, hi }),
+    // UX-Prüfung W2: „Richtig: …“ steht in der Rückmeldekarte, nicht mehr unter den Bausteinen.
+    right:
+      ctrl.locked && verdict !== 'correct' ? (
+        <p className="lx-t-support m-0" data-testid="kwt-solution">
+          <span className="text-muted">{t('cxKwtSolution')} </span>
+          <span lang="en" className="font-semibold text-ok-text">
+            {`${item.before} ${solution} ${item.after}`.replace(/\s+/g, ' ').trim()}
+          </span>
+        </p>
+      ) : null,
     tipText: (n) => {
       // Stufe 1 und 2: Leitfrage und Formel des Musters (Rahmen); Stufe 3: der erste Teil-A-Baustein (zählt als Hilfe).
       if (n < 3) return null;
@@ -162,7 +170,15 @@ export function useKwtUi(ctrl: C1Ctrl): C1Ui {
             {keyTyped && <span aria-hidden="true"> ✓</span>}
           </span>
         </p>
-        {sentence}
+        {mode === 'tiles' ? (
+          <div className="dz-kwt-sentence" lang="en" data-testid="sentence">
+            {item.before && <span>{item.before} </span>}
+            {tilesNode}
+            {item.after && <span> {item.after}</span>}
+          </div>
+        ) : (
+          sentenceText
+        )}
       </div>
     ),
     answer,

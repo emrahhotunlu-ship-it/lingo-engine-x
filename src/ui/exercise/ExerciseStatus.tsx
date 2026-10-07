@@ -31,14 +31,15 @@ export function ExerciseStatus({ area, state, kindLabel, topic, pattern, badge }
         </span>
       )}
       <span data-testid="ex-kind">{kindLabel}</span>
-      {badge && (
+      {/* UX-Prüfung W1: „dein Fehler“ nie zusammen mit „Neu“ (ein neues Thema hat keinen alten Fehler). */}
+      {badge && state !== 'new' && (
         <span className="rounded-full bg-near-soft px-2 py-0.5 text-near-text" data-testid="again-badge">
           {badge}
         </span>
       )}
-      {/* Design-Lead: Thema und Muster in eigener, leiser Zeile (Vorschau: Thema nur als Nebeninfo), kein verwaister Trennpunkt am Zeilenanfang. */}
+      {/* UX-Prüfung W1: der Kopf ist EINE Zeile; Thema und Muster stehen hinter ⓘ (nur für Vorleseprogramme hier). */}
       {where && (
-        <span className="basis-full text-subtle" data-testid="status-where">
+        <span className="sr-only" data-testid="status-where">
           {where}
         </span>
       )}

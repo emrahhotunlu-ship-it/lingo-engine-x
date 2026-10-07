@@ -5,7 +5,7 @@ import type { nbTrainingDe } from './nbTraining.de';
 export const nbTrainingEn: Record<keyof typeof nbTrainingDe, string> = {
   nbTrainingColloc: 'Collocations',
   nbTrainingCollocSub: 'Which verbs go with the noun?',
-  nbTrainingTransform: 'Sentence transformation',
+  nbTrainingTransform: 'Rewrite',
   nbTrainingTransformSub: 'Same meaning with a key word',
   nbTrainingObjection: 'Objection training',
   nbTrainingObjectionSub: '5 objections · step by step in 5 levels',
@@ -24,7 +24,7 @@ export const nbTrainingEn: Record<keyof typeof nbTrainingDe, string> = {
   nbTrainingGoal_phrase: 'Phrases of the week',
   nbTrainingGoals: 'Goal of the week',
   nbTrainingResumeColloc: 'Collocations · task {n} of {total}',
-  nbTrainingResumeTransform: 'Sentence transformation · task {n} of {total}',
+  nbTrainingResumeTransform: 'Rewrite · task {n} of {total}',
   nbTrainingResumeObjection: 'Objection training · objection {n} of {total}',
   nbTrainingCollocTask: 'Which verbs go with this noun? Type them one at a time.',
   nbTrainingCollocPurpose: 'Fixed word combinations sound natural. A word-for-word translation from German stands out at once.',

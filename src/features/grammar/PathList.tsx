@@ -71,12 +71,13 @@ export function PathList({ onOpen, highlight = null }: { onOpen: (topic: string)
                   )}
                 </span>
                 <span className="lx-tnum text-sm text-muted">{t('hxPathSafe', { a: c.safe, b: c.topics.length })}</span>
+                {/* UX-Prüfung W10: die Fällig-Pille steht unter dem Titel, nicht daneben (kein Umbruch des Titels am Handy). */}
+                {c.due > 0 && (
+                  <span className="mt-1 self-start rounded-full bg-surface-strong px-2.5 py-0.5 text-xs font-medium text-fg" data-testid="chapter-due" data-n={c.due}>
+                    {tn('grDueBadge', c.due)}
+                  </span>
+                )}
               </span>
-              {c.due > 0 && (
-                <span className="flex-none rounded-full bg-surface-strong px-2.5 py-0.5 text-xs font-medium text-fg" data-testid="chapter-due" data-n={c.due}>
-                  {tn('grDueBadge', c.due)}
-                </span>
-              )}
               <Icon name="arrowRight" size={16} className={`mt-1.5 flex-none text-subtle transition-transform ${open ? 'rotate-90' : ''}`} />
             </button>
             {open && (
@@ -95,19 +96,21 @@ export function PathList({ onOpen, highlight = null }: { onOpen: (topic: string)
                       style={highlight === r.id ? { borderColor: 'var(--lx-ch-grammar)' } : undefined}
                     >
                       <span className="sr-only">{first + k}</span>
-                      <span className="flex min-w-0 flex-1 flex-col gap-1">
-                        <span className="font-semibold">{topicName(r.id, lang)}</span>
-                        <span className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm text-muted">
-                          <Dots n={lernwegOf(r.id)} />
-                          {r.patTotal > 0 && (
-                            <span className="lx-tnum whitespace-nowrap" data-testid="topic-pats" data-safe={r.patSafe} data-total={r.patTotal}>
-                              {t('hxPathPats', { a: r.patSafe, b: r.patTotal })}
-                            </span>
-                          )}
-                          {highlight === r.id && <span className="whitespace-nowrap text-accent-text">· {t('nbLernenPathNext')}</span>}
-                        </span>
+                      {/* UX-Prüfung W10: je Thema EINE Zeile – Titel und Punkte; Zustand, Muster-Zähler und „als Nächstes“ nur für Vorleseprogramme
+                          (der nächste Schritt ist am Rand erkennbar und steht schon oben in „Als Nächstes“). */}
+                      <span className="min-w-0 flex-1 font-semibold">{topicName(r.id, lang)}</span>
+                      <span className="flex flex-none items-center text-sm text-muted">
+                        <Dots n={lernwegOf(r.id)} />
                       </span>
-                      <span className={`inline-flex h-6 flex-none items-center rounded-full px-2.5 text-xs font-bold ${STATE_TONE[r.state]}`}>{t(STATE_KEYS[r.state])}</span>
+                      <span className="sr-only">
+                        {r.patTotal > 0 && (
+                          <span className="lx-tnum" data-testid="topic-pats" data-safe={r.patSafe} data-total={r.patTotal}>
+                            {t('hxPathPats', { a: r.patSafe, b: r.patTotal })}
+                          </span>
+                        )}
+                        {highlight === r.id && <span> · {t('nbLernenPathNext')}</span>}
+                        <span className={STATE_TONE[r.state]}> · {t(STATE_KEYS[r.state])}</span>
+                      </span>
                     </button>
                   </li>
                 ))}

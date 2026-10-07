@@ -33,7 +33,7 @@ export const wxEn = {
   wxEndSafe_other: '+{n} words secure',
   wxEndWrongTitle: 'To review',
   wxEndRedo: 'Missed words again · 2 min.',
-  wxEndMore: '{n} more due · Another round',
+  wxEndMore: 'Another round · {n} due',
   wxEndNone: 'No word became firmer this time – that is normal, it comes back tomorrow.',
   wxExFromAtlas: 'Example sentence from the dictionary',
   wxSubTypo: 'Typo',

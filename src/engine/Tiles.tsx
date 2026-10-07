@@ -1,5 +1,6 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { useLayoutEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
+import { createPortal } from 'react-dom';
 import type { Tile } from '../domain/drills/order';
 import { decideDrag } from './tileDrag';
 
@@ -23,6 +24,10 @@ type Props = {
   markLabels?: Readonly<Record<Mark, string>>;
   /** Anzahl der Plätze in der Antwortzeile (Standard: Bausteine ohne Ablenker). Leere Plätze zeigen gestrichelte Umrisse. */
   slots?: number;
+  /** UX-Prüfung W3: der Vorrat steht an anderer Stelle (feste Leiste unten), die Antwortzeile bleibt in der Lücke des Satzes. */
+  poolTarget?: HTMLElement | null;
+  /** Antwortzeile als Teil des Satzes (inline in der Lücke). */
+  inline?: boolean;
 };
 
 /** Zeichen je Markierung: Farbe allein reicht nicht (WCAG 1.4.1). */
@@ -30,7 +35,7 @@ const MARK_GLYPH: Readonly<Record<Mark, string>> = { ok: '✓', near: '↔', off
 
 type Drag = { id: number; from: 'pool' | 'line'; x0: number; y0: number; dx: number; dy: number; moved: boolean; pointer: number; t0: number; kind: 'touch' | 'mouse' };
 
-export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabels, slots }: Props) {
+export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabels, slots, poolTarget = null, inline = false }: Props) {
   const reduce = useReducedMotion();
   const line = useRef<HTMLDivElement>(null);
   const refs = useRef(new Map<number, HTMLButtonElement>());
@@ -210,8 +215,24 @@ export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabe
     );
   };
 
+  const poolNode =
+    !locked || tiles.some((x) => !placed.includes(x.id)) ? (
+      <div ref={pool} className="flex flex-wrap gap-2" role="group" aria-label={labels.pool} data-testid="tile-pool" style={locked ? undefined : { touchAction: 'pan-y' }}>
+        {tiles.map((t) =>
+          placed.includes(t.id) ? (
+            locked ? null : (
+              <span key={t.id} className="lx-tile lx-tile-ghost" aria-hidden="true" data-testid="tile-ghost">
+                {t.text}
+              </span>
+            )
+          ) : (
+            tileButton(t.id, 'pool')
+          ),
+        )}
+      </div>
+    ) : null;
   return (
-    <div className="flex flex-col gap-4">
+    <div className={inline ? 'dz-tiles-inline' : 'flex flex-col gap-4'}>
       <div ref={line} className="lx-tile-line" role="group" aria-label={labels.line} data-testid="tile-line" data-over={over || undefined} style={lineMin ? { minHeight: lineMin } : undefined}>
         {placed.map((id) => tileButton(id, 'line'))}
         {/* Feste Plätze: so viele Umrisse, wie noch Bausteine fehlen – die Zeile bleibt gleich hoch (R9). */}
@@ -219,21 +240,7 @@ export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabe
           <span key={`slot-${k}`} className="lx-tile-slot" aria-hidden="true" data-testid="tile-slot" />
         ))}
       </div>
-      {(!locked || tiles.some((x) => !placed.includes(x.id))) && (
-        <div ref={pool} className="flex flex-wrap gap-2" role="group" aria-label={labels.pool} data-testid="tile-pool" style={locked ? undefined : { touchAction: 'pan-y' }}>
-          {tiles.map((t) =>
-            placed.includes(t.id) ? (
-              locked ? null : (
-                <span key={t.id} className="lx-tile lx-tile-ghost" aria-hidden="true" data-testid="tile-ghost">
-                  {t.text}
-                </span>
-              )
-            ) : (
-              tileButton(t.id, 'pool')
-            ),
-          )}
-        </div>
-      )}
+      {poolTarget ? (poolNode ? createPortal(poolNode, poolTarget) : null) : poolNode}
     </div>
   );
 }

@@ -65,6 +65,10 @@ export type C1Ui = {
   maxTip?: 1 | 2 | 3;
   /** Text der Stufe, wenn die Art eine eigene hat (sonst Leitfrage und Formel des Musters). */
   tipText?: (tip: 1 | 2 | 3) => string | null;
+  /** Aufgabenzeile aus der Eingabeform (eine Regel-Quelle, UX-Prüfung B3); sonst `cxTask_<art>`. */
+  task?: string;
+  /** „Richtig: …“ als erste Inhaltszeile der Rückmeldekarte (UX-Prüfung W2), nur nach dem Prüfen. */
+  right?: ReactNode;
 };
 
 export type C1KindEntry = {

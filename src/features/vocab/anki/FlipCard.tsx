@@ -230,6 +230,10 @@ export function FlipCard({ exercise, again = false, onDone }: { exercise: Exerci
           </span>
         )}
       </div>
+      {/* UX-Prüfung W5 (Kap. 15 „Karten ohne Ursprungssatz“): der Ursprungssatz mit gefüllter Lücke steht unter dem Wort. */}
+      {ctx && (
+        <EnglishText as="p" className="lx-t-support m-0 text-muted" text={ctx.sentence} {...src} highlight={[ctx.start, ctx.end]} testId="flip-origin" />
+      )}
       {/* Die deutsche Bedeutung steht genau einmal: bei Deutsch → Englisch zeigt sie schon die Vorderseite. */}
       {dir === 'en-de' && meaning && (
         <p className="lx-t-body m-0" lang={lang}>
@@ -263,6 +267,10 @@ export function FlipCard({ exercise, again = false, onDone }: { exercise: Exerci
     >
       <ExerciseShell
         meta={{ ex: 'flip', id: card.id, stage: card.stage, kind: card.kind }}
+        // UX-Prüfung W5: keine Seitenkarte rechts bei Anki; Tastaturhinweis passend zur Seite (Rückseite: Enter = Vorschlag, 1–4 = selbst).
+        // eslint-disable-next-line no-restricted-syntax -- Gerüst-Eigenschaft „gestapelt“ (keine Layout-Animation)
+        layout="stack"
+        keysHint={shown ? t('trEnterHint') : null}
         status={{ area: 'words', state: state0, kindLabel: t('nbWsFlipKind'), badge: again ? t('trAgainBadge') : null }}
         task={{ text: t(dir === 'de-en' ? 'nbWsFlipTaskDeEn' : 'nbWsFlipTaskEnDe'), purpose: `${t('nbWsFlipInfo')} ${t('nbWsGradeInfo')}` }}
         prompt={prompt}

@@ -61,6 +61,8 @@ export function useKwtTempoUi(ctrl: C1Ctrl): C1Ui {
   return {
     aid: null,
     maxTip: 1,
+    // Eine Regel-Quelle (UX-Prüfung B3): die Aufgabenzeile nennt die Grenze der Eingabeform, der Zähler zählt gegen dieselbe Grenze.
+    task: t('cxTempoKwtEnd', { key: item.key, max: TEMPO_PART_B_MAX }),
     prompt: (
       <div className="flex flex-col gap-2" data-testid="c1x-kwt" data-kwt-mode="partB">
         <EnglishText as="p" className="text-muted" text={item.lead} {...src} testId="transform-from" />
@@ -75,7 +77,6 @@ export function useKwtTempoUi(ctrl: C1Ctrl): C1Ui {
     ),
     answer: (
       <div className="flex flex-col gap-2" data-testid="kwt-part-b-only">
-        <p className="lx-t-meta text-muted">{t('cxTempoKwtEnd', { max: TEMPO_PART_B_MAX })}</p>
         <WordCounter n={kwtCount(value)} min={1} max={TEMPO_PART_B_MAX} testId="word-counter-b" />
       </div>
     ),

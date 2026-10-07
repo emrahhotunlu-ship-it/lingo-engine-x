@@ -21,9 +21,9 @@ import { useHotkeys } from '../../engine/useHotkeys';
 import { lookupOpenMs, useLookup, type WordTapArea } from '../../engine/wordTap';
 import { useT, type MessageKey } from '../../i18n';
 import { logWarn } from '../../platform/diagnostics';
-import { inputProfile, useSplitLayout } from '../../platform/input';
+import { inputProfile } from '../../platform/input';
 import { toast } from '../../ui/Toast';
-import { explainDepth, PatternCard, type ShellFeedback, type ShellMenuId, type ShellSecondary, type ExerciseShellProps } from '../../ui/exercise';
+import { explainDepth, type ShellFeedback, type ShellMenuId, type ShellSecondary, type ExerciseShellProps } from '../../ui/exercise';
 import { TutorButton } from '../../ui/exercise/TutorButton';
 import { useCompanionSee } from '../companion/seeing';
 import { nextT } from '../progress/persist';
@@ -72,7 +72,6 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
   const { t, lang } = useT();
   const api = useHiddenInput();
   const now = useClock((s) => s.now);
-  const split = useSplitLayout();
   const [profile] = useState<InputProfile>(() => profileProp ?? inputProfile());
   const inp = profile === 'touch' ? 'touch' : 'desk';
   const doc = useLive((s) => s.collections.grammar?.get(task.topic));
@@ -285,13 +284,13 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
       menu,
       tutor,
       parts: createElement(ResultParts, { score: fb.score }),
+      right: ui.right ?? null,
       after: createElement(ResultAfter, { item, matched, day }),
       auto: !noAuto && fb.help === 0 && !fb.override && fb.score.free,
     };
   }
 
   const primary = fb ? { label: t('exNext'), onClick: next, testId: 'next' } : { label: t('exCheck'), onClick: submit, testId: 'check', disabled: !has };
-  const card: ReactNode = pattern ? createElement(PatternCard, { name: lang === 'de' ? pattern.name.de : pattern.name.en, formula: lang === 'de' ? pattern.form.de : pattern.form.en, example: pattern.ex[0]?.en ?? null, signals: pattern.signals, compact: !split, area }) : null;
   const aiMark: ReactNode = item.src === 'ai' ? createElement('p', { className: 'lx-t-meta text-muted', 'data-testid': 'ai-mark' }, t('cxAiMark')) : null;
   // Die Muster-Karte vor dem Prüfen entfällt am Handy: sie verdrängte die Bausteine unter den Bildschirmrand und verriet die Formel (UX-Prüfung R1).
   const aid: ReactNode = [ui.aid, aiMark].some(Boolean) ? createElement('div', { className: 'flex flex-col gap-2' }, ui.aid, aiMark) : null;
@@ -302,7 +301,7 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
   const shell: ExerciseShellProps = {
     meta: { ex: `c1_${item.kind}`, id: `${task.topic}|${task.key}`, kind: item.kind },
     status: { area: 'grammar', state, kindLabel: t(`cxKindName_${item.kind}` as MessageKey), topic: learnLine.topic, pattern: learnLine.pattern, badge },
-    task: { text: t(`cxTask_${item.kind}` as MessageKey), purpose: t('cxPurpose') },
+    task: { text: ui.task ?? t(`cxTask_${item.kind}` as MessageKey), purpose: t('cxPurpose') },
     aid,
     prompt: ui.prompt,
     answer: ui.answer,
@@ -310,7 +309,8 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
     secondary,
     primary,
     feedback,
-    side: split && learning && !fb ? card : null,
+    // UX-Prüfung W4: rechts vor dem Prüfen nur „Erst selbst entscheiden …“ (Platzhalter des Gerüsts), die Regel nur als Tipp.
+    side: null,
   };
   return shell;
 }

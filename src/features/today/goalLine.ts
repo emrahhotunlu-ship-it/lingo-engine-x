@@ -28,7 +28,7 @@ export type WeekText = { key: 'moWeekProgress' | 'moWeekReached' | 'moWeekReache
 
 /**
  * Wochenzeile „Woche 4 von 6“ aus dem Wochenziel. Ohne Pflichttag in der Woche kommt `null` (nie „Woche 0 von 6“); 6 oder 7 Tage heißen
- * „Woche geschafft“; ist 6 nicht mehr erreichbar, steht die Zahl der Lerntage und „Montag beginnt neu“, nie ein Wort wie „verfehlt“.
+ * „Woche 6 von 6 ✓“; ist 6 nicht mehr erreichbar, steht die Zahl der Lerntage und „Montag beginnt neu“, nie ein Wort wie „verfehlt“.
  */
 export function weekText(g: Pick<WeekGoal, 'done' | 'reached' | 'possible'>): WeekText | null {
   if (g.done < 1) return null;

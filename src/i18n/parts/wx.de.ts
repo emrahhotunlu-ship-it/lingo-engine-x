@@ -33,7 +33,7 @@ export const wxDe = {
   wxEndSafe_other: '+{n} Wörter sicher',
   wxEndWrongTitle: 'Zum Wiederholen',
   wxEndRedo: 'Fehlwörter nochmal · 2 Min.',
-  wxEndMore: 'Noch {n} fällig · Noch eine Runde',
+  wxEndMore: 'Weitere Runde · {n} fällig',
   wxEndNone: 'Diesmal kein Wort fester geworden – das ist normal, es kommt morgen wieder.',
   wxExFromAtlas: 'Beispielsatz aus dem Wörterbuch',
   wxSubTypo: 'Tippfehler',
