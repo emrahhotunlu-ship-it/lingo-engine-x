@@ -752,6 +752,9 @@ export function ExerciseView({
       depth,
       menu,
       nextIn: t('trAgainIn', { when: when(fb.dueInMs) }),
+      // Design-Lead: Wort, Vorlesen, Lautschrift und „Zum Wort“ stehen in der Ergebnis-Karte, genau einmal, direkt unter dem Urteil.
+      head: <WordExtras card={card} open={moreOpen} lang={lang} extras={extras} part="head" />,
+      foot: <WordExtras card={card} open={moreOpen} lang={lang} extras={extras} part="more" />,
       auto: fb.hint === 0 && !fb.override && !fb.sentence && !fb.dontKnow,
     };
   }
@@ -772,7 +775,6 @@ export function ExerciseView({
         )}
         {copyOpen && fb.result.verdict === 'wrong' && isTyped && <CopyOnceField solution={solution} />}
         {!fb.override && fb.result.verdict === 'wrong' && isTyped && ai && e.ex !== 'situation' && <SynonymAsk card={card} given={fb.given} onOk={override} />}
-        <WordExtras card={card} open={moreOpen} lang={lang} extras={extras} />
       </>
     );
   }

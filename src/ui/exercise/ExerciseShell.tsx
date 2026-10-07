@@ -54,6 +54,10 @@ export type ShellFeedback = {
   parts?: ReactNode;
   /** Zusatz unter der Erklär-Karte (c1x: „Warum nicht …?“ je Option): steht im Platz `explanation`. */
   after?: ReactNode;
+  /** Kopf der Rückmeldung (Wörter: Wort, Vorlesen, Lautschrift, „Zum Wort“): steht direkt unter dem Urteil, vor der Erklärung (Design-Lead). */
+  head?: ReactNode;
+  /** Fuß der Rückmeldung (Wörter: „Zum Wort“), ganz unten in der Ergebnis-Karte. */
+  foot?: ReactNode;
   nextIn?: string | null;
   /**
    * Die Übung meldet: keine Hilfe genutzt. Zusammen mit Urteil `ok`, Tiefe `min` und `app/profile.autoNext`
@@ -175,6 +179,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
             </p>
           )}
         </div>
+        {feedback.head && <div data-slot="head">{feedback.head}</div>}
         {feedback.comparison && (
           <div data-slot="comparison">
             <Comparison given={feedback.comparison.given} ops={feedback.comparison.ops} />
@@ -182,7 +187,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
         )}
         {(feedback.explanation || feedback.after) && (
           <div data-slot="explanation">
-            {feedback.explanation && <Explanation model={feedback.explanation} depth={feedback.depth} learning={learning} onFoldChange={onFold} />}
+            {feedback.explanation && <Explanation model={feedback.explanation} depth={feedback.depth} learning={learning} onFoldChange={onFold} hideWord={status.area === 'words'} />}
             {feedback.after}
           </div>
         )}
@@ -192,6 +197,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
             <Examples items={feedback.explanation.examples} open={depthLines?.examplesOpen ?? 0} onFoldChange={onFold} />
           </div>
         )}
+        {feedback.foot && <div data-slot="foot">{feedback.foot}</div>}
         {feedback.menu && Object.keys(feedback.menu).length > 0 && (
           <div className="absolute right-1 top-2">
             <ExerciseMenu items={feedback.menu} onOpenChange={setMenuOpen} />

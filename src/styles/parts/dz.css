@@ -11,7 +11,7 @@
   --lx-glow-ok: rgba(16, 185, 129, 0.45);
   --lx-spark-1: #34d399;
   --lx-spark-2: #ecfdf5;
-  --lx-field-strength: 22%;
+  --lx-field-strength: 16%;
 }
 :root[data-theme='dim'] {
   --lx-elev-2: 0 1px 0 0 var(--lx-edge) inset, 0 18px 44px -18px rgba(0, 0, 0, 0.6);
@@ -19,7 +19,7 @@
   --lx-glow-ok: rgba(16, 185, 129, 0.35);
   --lx-spark-1: #4ade9f;
   --lx-spark-2: #ecfdf5;
-  --lx-field-strength: 16%;
+  --lx-field-strength: 12%;
 }
 :root[data-theme='light'] {
   --lx-elev-2: 0 1px 0 0 var(--lx-edge) inset, 0 18px 40px -20px rgba(15, 23, 42, 0.3);
@@ -27,7 +27,7 @@
   --lx-glow-ok: rgba(4, 120, 87, 0.22);
   --lx-spark-1: #047857;
   --lx-spark-2: #10b981;
-  --lx-field-strength: 13%;
+  --lx-field-strength: 10%;
 }
 
 /* Bereichsfarbe je Reiter (Vorschau: Wörter violett, Grammatik blau, Anwenden türkis). Der aktive Reiter und das Lichtfeld lesen sie. */
@@ -53,12 +53,10 @@
   --lx-field: var(--lx-ch-grammar);
 }
 
-/* Lichtfeld (EE §5.1, als CSS statt Canvas: ein fester Verlauf, kein Neuzeichnen beim Scrollen). Oben mittig in der Bereichsfarbe. */
+/* Lichtfeld (EE §5.1, als CSS statt Canvas: ein fester Verlauf, kein Neuzeichnen beim Scrollen). EINE ruhige Lichtquelle oben mittig in der Bereichsfarbe (ersetzt die zwei Flecken). */
 html body::before {
   background:
-    radial-gradient(110% 420px at 50% -120px, color-mix(in srgb, var(--lx-field) var(--lx-field-strength), transparent), transparent 72%),
-    radial-gradient(1200px 520px at 12% -10%, var(--lx-bg-glow-1), transparent 60%),
-    radial-gradient(900px 460px at 100% 0%, var(--lx-bg-glow-2), transparent 55%);
+    radial-gradient(120% 440px at 50% -140px, color-mix(in srgb, var(--lx-field) var(--lx-field-strength), transparent), transparent 74%);
 }
 
 /* ------------------------------------------------------------------ Flächen (EE §8.3: Ebene 1 mit Lichtkante oben) */
@@ -535,7 +533,7 @@ html[data-lx-tab='learn']:not([data-lx-area]) {
   animation: dz-rise 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* Fortschrittsbalken der Übung: kleiner Lichtpunkt am Ende (Vorschau-Gefühl „Spiel“), statisch, kein Dauerflimmern. */
-[data-testid='exercise-bar'] [role='progressbar'] > div {
-  box-shadow: 0 0 10px -1px color-mix(in srgb, var(--lx-field) 70%, transparent);
+/* Ergebnis-Karte: die Erklärung schließt ohne Lücke an das farbige Urteilsband an (eine Fläche, klare Gruppen). */
+[data-slot='verdict'] + [data-slot='explanation'] {
+  margin-top: -0.75rem;
 }
