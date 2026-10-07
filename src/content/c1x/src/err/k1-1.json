@@ -1,0 +1,1143 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "err-0001",
+   "kind": "err",
+   "area": "gram",
+   "pat": "psc.habit",
+   "topic": "pres-simple-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Every Monday, our sales team is reviewing the pipeline together.",
+   "bad": {
+    "span": "is reviewing",
+    "fix": [
+     "reviews"
+    ],
+    "choices": [
+     "reviews",
+     "does reviews",
+     "reviewing"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "„Every Monday“ nennt eine Gewohnheit, also Present Simple: reviews. -ing zeigt nur einen Moment, den Deutsch („prüft“) nicht trennt.",
+     "en": "“Every Monday” names a habit, so the present simple: reviews. -ing would show a single moment, which German “prüft” does not distinguish."
+    },
+    "wrong": [
+     {
+      "opt": "does reviews",
+      "de": "Nach does steht die Grundform ohne -s: does review. „does reviews“ ist doppelt markiert.",
+      "en": "After does comes the base form without -s: does review."
+     },
+     {
+      "opt": "reviewing",
+      "de": "„reviewing“ allein ist kein vollständiges Verb. Es fehlt das Hilfsverb.",
+      "en": "“reviewing” alone is not a complete verb. The auxiliary is missing."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „is reviewing“, nicht hier.",
+      "en": "The mistake is at “is reviewing”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „is reviewing“ ist falsch.",
+      "en": "There is a mistake: “is reviewing” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0002",
+   "kind": "err",
+   "area": "gram",
+   "pat": "psc.habit",
+   "topic": "pres-simple-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Our CEO never take notes during board meetings, she just listens.",
+   "bad": {
+    "span": "take",
+    "fix": [
+     "takes"
+    ],
+    "choices": [
+     "taking",
+     "takes",
+     "have take"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Bei he/she/it (our CEO = she) braucht das Present Simple ein -s: takes. Deutsch hat „nimmt“ mit -t, im Englischen fällt das -s leicht weg.",
+     "en": "With he/she/it (our CEO = she) the present simple needs -s: takes. German speakers often drop the -s."
+    },
+    "wrong": [
+     {
+      "opt": "taking",
+      "de": "„never taking“ ohne Hilfsverb ist kein vollständiges Prädikat.",
+      "en": "“never taking” without an auxiliary is no complete predicate."
+     },
+     {
+      "opt": "have take",
+      "de": "„have take“ ist keine gültige Zeitform.",
+      "en": "“have take” is not a valid tense."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „take“, nicht hier.",
+      "en": "The mistake is at “take”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „take“ ist falsch.",
+      "en": "There is a mistake: “take” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0003",
+   "kind": "err",
+   "area": "gram",
+   "pat": "psc.habit",
+   "topic": "pres-simple-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Our deployment pipeline runs automatically every night at two a.m.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Ein fester, wiederkehrender Ablauf („every night“) steht im Present Simple: runs.",
+     "en": "No mistake: a fixed recurring process (“every night”) takes the present simple: runs."
+    },
+    "wrong": [
+     {
+      "tap": "runs",
+      "de": "Gewohnheiten und feste Abläufe brauchen kein -ing. „is running“ wäre hier der Fehler.",
+      "en": "Habits and fixed processes need no -ing. “is running” would be the mistake here."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0004",
+   "kind": "err",
+   "area": "gram",
+   "pat": "psc.now",
+   "topic": "pres-simple-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Please be quiet, the CEO talks to a major customer on the phone right now.",
+   "bad": {
+    "span": "talks",
+    "fix": [
+     "is talking"
+    ],
+    "choices": [
+     "talk",
+     "talked",
+     "is talking"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "„Right now“ meint den Moment: Present Continuous, is talking. Deutsch sagt auch hier nur „spricht“.",
+     "en": "“Right now” means this moment: present continuous, is talking. German also says only “spricht”."
+    },
+    "wrong": [
+     {
+      "opt": "talk",
+      "de": "„talk“ ohne -s passt nicht zu he/she/it und wäre trotzdem ein Gewohnheits-Präsens.",
+      "en": "“talk” without -s does not fit he/she/it and would still be a habit form."
+     },
+     {
+      "opt": "talked",
+      "de": "„talked“ ist Vergangenheit, aber „right now“ verlangt die Gegenwart.",
+      "en": "“talked” is past, but “right now” needs the present."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „talks“, nicht hier.",
+      "en": "The mistake is at “talks”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „talks“ ist falsch.",
+      "en": "There is a mistake: “talks” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0005",
+   "kind": "err",
+   "area": "gram",
+   "pat": "psc.now",
+   "topic": "pres-simple-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We are testing the new login flow with three pilot customers this month.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Ein zeitlich begrenztes Projekt („this month“) steht im Present Continuous: are testing.",
+     "en": "No mistake: a temporary project (“this month”) takes the present continuous: are testing."
+    },
+    "wrong": [
+     {
+      "tap": "are",
+      "de": "Vorübergehende Lage = be + -ing. „We test“ würde eine feste Gewohnheit behaupten.",
+      "en": "A temporary situation = be + -ing. “We test” would claim a fixed habit."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0006",
+   "kind": "err",
+   "area": "gram",
+   "pat": "psc.state",
+   "topic": "pres-simple-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I am knowing the answer to your question about the invoice.",
+   "bad": {
+    "span": "am knowing",
+    "fix": [
+     "know"
+    ],
+    "choices": [
+     "know",
+     "knowing",
+     "do knowing"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "know ist ein Zustandsverb und steht nicht in der Verlaufsform (be + -ing). Deutsch kennt den Unterschied nicht, daher passiert der Fehler leicht.",
+     "en": "Know is a state verb and does not take the continuous (be + -ing). German does not make the distinction, so the mistake is easy to make."
+    },
+    "wrong": [
+     {
+      "opt": "knowing",
+      "de": "„knowing“ allein ist kein Prädikat.",
+      "en": "“knowing” alone is no predicate."
+     },
+     {
+      "opt": "do knowing",
+      "de": "Nach do steht die Grundform: do know. „do knowing“ gibt es nicht.",
+      "en": "After do comes the base form: do know. “do knowing” does not exist."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „am knowing“, nicht hier.",
+      "en": "The mistake is at “am knowing”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „am knowing“ ist falsch.",
+      "en": "There is a mistake: “am knowing” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0007",
+   "kind": "err",
+   "area": "gram",
+   "pat": "psc.always",
+   "topic": "pres-simple-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Our vendor is changing always the delivery dates without any warning.",
+   "bad": {
+    "span": "changing always",
+    "fix": [
+     "always changing"
+    ],
+    "choices": [
+     "always changes",
+     "always changing",
+     "always changed"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Bei Ärger über Wiederholung steht always zwischen is und -ing: is always changing. Deutsch „ändert immer“ stellt „immer“ gern ans Ende.",
+     "en": "To show annoyance at repetition always goes between is and -ing: is always changing. German often puts “immer” last."
+    },
+    "wrong": [
+     {
+      "opt": "always changes",
+      "de": "Nach „is“ steht kein Verb mit -s: „is always changes“ ist ungrammatisch.",
+      "en": "After “is” a verb with -s is impossible: “is always changes”."
+     },
+     {
+      "opt": "always changed",
+      "de": "„is always changed“ wäre Passiv und passt nicht zum Objekt „the delivery dates“.",
+      "en": "“is always changed” would be passive and does not fit the object."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „changing always“, nicht hier.",
+      "en": "The mistake is at “changing always”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „changing always“ ist falsch.",
+      "en": "There is a mistake: “changing always” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0008",
+   "kind": "err",
+   "area": "gram",
+   "pat": "psc.state",
+   "topic": "pres-simple-cont",
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "text": "I am believing this price is too high for our budget, to be honest.",
+   "bad": {
+    "span": "am believing",
+    "fix": [
+     "believe"
+    ],
+    "choices": [
+     "believing",
+     "do believing",
+     "believe"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "believe ist ein Zustandsverb (Meinung) und hat keine -ing-Form: I believe. Deutsch „ich glaube“ kennt nur eine Präsensform.",
+     "en": "Believe is a state verb (opinion) and has no -ing form: I believe. German “ich glaube” has only one present form."
+    },
+    "wrong": [
+     {
+      "opt": "believing",
+      "de": "„believing“ allein ist kein Prädikat.",
+      "en": "“believing” alone is no predicate."
+     },
+     {
+      "opt": "do believing",
+      "de": "Nach do steht die Grundform: do believe. „do believing“ gibt es nicht.",
+      "en": "After do comes the base form: do believe. “do believing” does not exist."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „am believing“, nicht hier.",
+      "en": "The mistake is at “am believing”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „am believing“ ist falsch.",
+      "en": "There is a mistake: “am believing” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0009",
+   "kind": "err",
+   "area": "gram",
+   "pat": "psc.dual",
+   "topic": "pres-simple-cont",
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "text": "I am having lunch with a client at one, so I cannot join the call.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: have meint hier „essen“, eine Handlung. Dann ist -ing richtig: am having lunch.",
+     "en": "No mistake: have means “eat” here, an action. Then -ing is right: am having lunch."
+    },
+    "wrong": [
+     {
+      "tap": "having",
+      "de": "Als Handlung („lunch haben = essen“) steht have im Continuous. Nur als Besitz („have a car“) nicht.",
+      "en": "As an action (“have lunch = eat”) have takes the continuous. Only as possession (“have a car”) it does not."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0010",
+   "kind": "err",
+   "area": "gram",
+   "pat": "psp.finished-time",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We have signed the framework agreement in March last year.",
+   "bad": {
+    "span": "have signed",
+    "fix": [
+     "signed",
+     "did sign"
+    ],
+    "choices": [
+     "signed",
+     "are signing",
+     "have been signing"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "„In March last year“ ist abgeschlossene Zeit: Past Simple, signed. Das deutsche Perfekt („haben unterschrieben“) verleitet zum Present Perfect.",
+     "en": "“In March last year” is finished time: past simple, signed. The German perfect (“haben unterschrieben”) invites the present perfect."
+    },
+    "wrong": [
+     {
+      "opt": "are signing",
+      "de": "„are signing“ beschreibt etwas, das gerade läuft, nicht etwas vom letzten Jahr.",
+      "en": "“are signing” describes something happening now, not last year."
+     },
+     {
+      "opt": "have been signing",
+      "de": "„have been signing“ betont eine andauernde Handlung bis jetzt und passt nicht zu einem Zeitpunkt.",
+      "en": "“have been signing” stresses an action lasting until now and does not fit a point in time."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „have signed“, nicht hier.",
+      "en": "The mistake is at “have signed”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „have signed“ ist falsch.",
+      "en": "There is a mistake: “have signed” is wrong."
+     }
+    ]
+   },
+   "trap": "f22"
+  },
+  {
+   "id": "err-0011",
+   "kind": "err",
+   "area": "gram",
+   "pat": "psp.finished-time",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "When have you received the corrected invoice from the supplier?",
+   "bad": {
+    "span": "have you received",
+    "fix": [
+     "did you receive"
+    ],
+    "choices": [
+     "have you receive",
+     "did you receive",
+     "did you received"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "„When“ fragt nach einem Zeitpunkt: Past Simple, did you receive. Deutsch „Wann hast du bekommen?“ nutzt das Perfekt.",
+     "en": "“When” asks for a point in time: past simple, did you receive. German “Wann hast du bekommen?” uses the perfect."
+    },
+    "wrong": [
+     {
+      "opt": "have you receive",
+      "de": "Nach have steht die 3. Form: have you received. „have you receive“ mischt zwei Formen.",
+      "en": "After have comes the participle: have you received. “have you receive” mixes forms."
+     },
+     {
+      "opt": "did you received",
+      "de": "Nach did steht die Grundform: did you receive, nicht received.",
+      "en": "After did comes the base form: did you receive, not received."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „have you received“, nicht hier.",
+      "en": "The mistake is at “have you received”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „have you received“ ist falsch.",
+      "en": "There is a mistake: “have you received” is wrong."
+     }
+    ]
+   },
+   "trap": "f22"
+  },
+  {
+   "id": "err-0012",
+   "kind": "err",
+   "area": "gram",
+   "pat": "psp.since-for",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We are partners with Rhein Logistics since 2019 and plan to extend it.",
+   "bad": {
+    "span": "are",
+    "fix": [
+     "have been"
+    ],
+    "choices": [
+     "were",
+     "have",
+     "have been"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Bei „since 2019“ gilt der Zustand bis heute: have been. Deutsch nutzt dafür das Präsens („wir sind Partner seit 2019“).",
+     "en": "With “since 2019” the state lasts until now: have been. German uses the present for it (“wir sind Partner seit 2019”)."
+    },
+    "wrong": [
+     {
+      "opt": "were",
+      "de": "„were“ wäre abgeschlossen und passt nicht zu since und „plan to extend“.",
+      "en": "“were” would be finished and does not fit since and “plan to extend”."
+     },
+     {
+      "opt": "have",
+      "de": "Mit have allein entstünde „We have partners …“ mit anderer Bedeutung. Gemeint ist der Zustand: have been.",
+      "en": "With have alone it would read “We have partners …” with another meaning. The state is meant: have been."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „are“, nicht hier.",
+      "en": "The mistake is at “are”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „are“ ist falsch.",
+      "en": "There is a mistake: “are” is wrong."
+     }
+    ]
+   },
+   "trap": "f12"
+  },
+  {
+   "id": "err-0013",
+   "kind": "err",
+   "area": "gram",
+   "pat": "psp.since-for",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The client has been silent since three weeks, so we should call.",
+   "bad": {
+    "span": "since",
+    "fix": [
+     "for"
+    ],
+    "choices": [
+     "for",
+     "from",
+     "during"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Since nennt einen Startpunkt („since March“), for eine Zeitspanne („for three weeks“). Deutsch „seit“ deckt beides ab.",
+     "en": "Since names a starting point (“since March”), for a length of time (“for three weeks”). German “seit” covers both."
+    },
+    "wrong": [
+     {
+      "opt": "from",
+      "de": "„from three weeks“ gibt es für diese Bedeutung nicht.",
+      "en": "“from three weeks” does not exist in this meaning."
+     },
+     {
+      "opt": "during",
+      "de": "„during“ nennt einen Zeitraum, in dem etwas geschieht, nicht die Dauer bis jetzt.",
+      "en": "“during” names a period in which something happens, not the duration until now."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „since“, nicht hier.",
+      "en": "The mistake is at “since”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „since“ ist falsch.",
+      "en": "There is a mistake: “since” is wrong."
+     }
+    ]
+   },
+   "trap": "f12"
+  },
+  {
+   "id": "err-0014",
+   "kind": "err",
+   "area": "gram",
+   "pat": "psp.result-now",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I have yet not sent the invoice, but I will do it today.",
+   "bad": {
+    "span": "yet not",
+    "fix": [
+     "not yet"
+    ],
+    "choices": [
+     "yet no",
+     "not yet",
+     "no yet"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Im Deutschen steht „noch“ vor „nicht“, im Englischen kommt not vor yet: have not yet sent.",
+     "en": "German puts “noch” before “nicht”; English puts not before yet: have not yet sent."
+    },
+    "wrong": [
+     {
+      "opt": "yet no",
+      "de": "„yet no“ verneint das Verb nicht: Mit have steht not, danach yet.",
+      "en": "“yet no” does not negate the verb: with have it is not, then yet."
+     },
+     {
+      "opt": "no yet",
+      "de": "„no yet“ gibt es nicht: Zur Verneinung mit have steht not.",
+      "en": "“no yet” does not exist: negation with have uses not."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „yet not“, nicht hier.",
+      "en": "The mistake is at “yet not”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „yet not“ ist falsch.",
+      "en": "There is a mistake: “yet not” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0015",
+   "kind": "err",
+   "area": "gram",
+   "pat": "psp.experience",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Have you ever went to a customer workshop in Munich?",
+   "bad": {
+    "span": "went",
+    "fix": [
+     "gone",
+     "been"
+    ],
+    "choices": [
+     "go",
+     "going",
+     "gone"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach have steht die 3. Form (gone/been), nicht das Past Simple went. Deutsch „bist du je gefahren“ hat nur ein Partizip, die Formen sind ähnlich.",
+     "en": "After have comes the participle (gone/been), not the past simple went. The two forms look similar to German learners."
+    },
+    "wrong": [
+     {
+      "opt": "go",
+      "de": "Nach have steht keine Grundform: have gone.",
+      "en": "No base form after have: have gone."
+     },
+     {
+      "opt": "going",
+      "de": "„going“ ist keine 3. Form; have going ist ungrammatisch.",
+      "en": "“going” is not a participle; “have going” is ungrammatical."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „went“, nicht hier.",
+      "en": "The mistake is at “went”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „went“ ist falsch.",
+      "en": "There is a mistake: “went” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0016",
+   "kind": "err",
+   "area": "gram",
+   "pat": "psp.since-for",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I have worked with this vendor since 2018, and they have never missed a deadline.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Zustand bis heute (since 2018) und Erfahrung (never): beides Present Perfect.",
+     "en": "No mistake: a state until now (since 2018) and experience (never): both present perfect."
+    },
+    "wrong": [
+     {
+      "tap": "have",
+      "de": "have + worked: Mit since 2018 braucht der Satz das Present Perfect. „I worked … since 2018“ wäre falsch.",
+      "en": "have + worked: with since 2018 the sentence needs the present perfect. “I worked … since 2018” would be wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0017",
+   "kind": "err",
+   "area": "gram",
+   "pat": "psp.finished-time",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We signed the contract last Tuesday, and the client paid the deposit yesterday.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: „last Tuesday“ und „yesterday“ sind abgeschlossene Zeitpunkte, deshalb Past Simple.",
+     "en": "No mistake: “last Tuesday” and “yesterday” are finished points in time, so the past simple."
+    },
+    "wrong": [
+     {
+      "tap": "signed",
+      "de": "Mit einer festen Zeitangabe steht das Past Simple. „have signed“ wäre hier der Fehler.",
+      "en": "With a fixed time expression the past simple is right. “have signed” would be the mistake."
+     }
+    ]
+   },
+   "trap": "f22"
+  },
+  {
+   "id": "err-0018",
+   "kind": "err",
+   "area": "gram",
+   "pat": "psp.experience",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "Have you ever presented to a board of directors in German?",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Erfahrung bis jetzt, ohne Zeitpunkt, braucht das Present Perfect: Have you ever presented.",
+     "en": "No mistake: experience up to now, with no point in time, takes the present perfect: Have you ever presented."
+    },
+    "wrong": [
+     {
+      "tap": "Have",
+      "de": "Present Perfect betont die Erfahrung bis jetzt. „Did you ever …“ geht im US-Alltag auch, aber nicht mit fester Zeitangabe.",
+      "en": "The present perfect stresses experience up to now. “Did you ever …” also works in casual US English, but not with a fixed time."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0019",
+   "kind": "err",
+   "area": "gram",
+   "pat": "pc.duration",
+   "topic": "pres-perf-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Our sales team is using the new CRM since January and likes it.",
+   "bad": {
+    "span": "is using",
+    "fix": [
+     "has been using",
+     "has used"
+    ],
+    "choices": [
+     "has been using",
+     "uses",
+     "used"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Mit „since January“ gilt die Tätigkeit bis jetzt: has been using. Deutsch nutzt dafür das Präsens („nutzt seit Januar“).",
+     "en": "With “since January” the activity lasts until now: has been using. German uses the present for it (“nutzt seit Januar”)."
+    },
+    "wrong": [
+     {
+      "opt": "uses",
+      "de": "„uses“ ist Gewohnheits-Präsens und trägt die Dauer seit Januar nicht.",
+      "en": "“uses” is a habit present and does not carry the duration since January."
+     },
+     {
+      "opt": "used",
+      "de": "„used“ wäre abgeschlossen, aber das Team nutzt es noch.",
+      "en": "“used” would be finished, but the team still uses it."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „is using“, nicht hier.",
+      "en": "The mistake is at “is using”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „is using“ ist falsch.",
+      "en": "There is a mistake: “is using” is wrong."
+     }
+    ]
+   },
+   "trap": "f12"
+  },
+  {
+   "id": "err-0020",
+   "kind": "err",
+   "area": "gram",
+   "pat": "pc.since-for",
+   "topic": "pres-perf-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I have been waiting since twenty minutes for the client’s reply.",
+   "bad": {
+    "span": "since",
+    "fix": [
+     "for"
+    ],
+    "choices": [
+     "from",
+     "for",
+     "during"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "„Twenty minutes“ ist eine Zeitspanne, also for. Since braucht einen Startpunkt wie „since nine o’clock“.",
+     "en": "“Twenty minutes” is a length of time, so for. Since needs a starting point such as “since nine o’clock”."
+    },
+    "wrong": [
+     {
+      "opt": "from",
+      "de": "„from twenty minutes“ gibt es in dieser Bedeutung nicht.",
+      "en": "“from twenty minutes” does not exist in this meaning."
+     },
+     {
+      "opt": "during",
+      "de": "„during“ passt nicht zu einer Dauer bis jetzt.",
+      "en": "“during” does not fit a duration up to now."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „since“, nicht hier.",
+      "en": "The mistake is at “since”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „since“ ist falsch.",
+      "en": "There is a mistake: “since” is wrong."
+     }
+    ]
+   },
+   "trap": "f12"
+  },
+  {
+   "id": "err-0021",
+   "kind": "err",
+   "area": "gram",
+   "pat": "pc.form",
+   "topic": "pres-perf-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "She have been reviewing the contract since nine o’clock this morning.",
+   "bad": {
+    "span": "have",
+    "fix": [
+     "has"
+    ],
+    "choices": [
+     "is",
+     "having",
+     "has"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Das Hilfsverb richtet sich nach she: has been reviewing. Bei he/she/it heißt es has, nie have.",
+     "en": "The auxiliary agrees with she: has been reviewing. With he/she/it it is has, never have."
+    },
+    "wrong": [
+     {
+      "opt": "is",
+      "de": "„is been“ gibt es nicht: has/have + been, nie is + been.",
+      "en": "“is been” does not exist: has/have + been, never is + been."
+     },
+     {
+      "opt": "having",
+      "de": "„having been“ ist keine vollständige Verbform im Satz.",
+      "en": "“having been” is no complete verb form in the sentence."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „have“, nicht hier.",
+      "en": "The mistake is at “have”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „have“ ist falsch.",
+      "en": "There is a mistake: “have” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0022",
+   "kind": "err",
+   "area": "gram",
+   "pat": "pc.recent",
+   "topic": "pres-perf-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We don’t hear from the client lately, which worries me a little.",
+   "bad": {
+    "span": "don’t hear",
+    "fix": [
+     "haven’t heard",
+     "have not heard",
+     "haven’t been hearing",
+     "have not been hearing"
+    ],
+    "choices": [
+     "haven’t heard",
+     "haven’t hear",
+     "don’t heard"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "„Lately“ blickt vom Heute aus zurück: Present Perfect, haven’t heard. Deutsch „in letzter Zeit hören wir nichts“ nutzt das Präsens.",
+     "en": "“Lately” looks back from today: present perfect, haven’t heard. German “in letzter Zeit hören wir nichts” uses the present."
+    },
+    "wrong": [
+     {
+      "opt": "haven’t hear",
+      "de": "„haven’t hear“ mischt Hilfsverb und Grundform: have braucht die 3. Form (heard).",
+      "en": "“haven’t hear” mixes auxiliary and base form: have needs the participle (heard)."
+     },
+     {
+      "opt": "don’t heard",
+      "de": "Nach don’t steht die Grundform, nicht heard.",
+      "en": "After don’t comes the base form, not heard."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „don’t hear“, nicht hier.",
+      "en": "The mistake is at “don’t hear”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „don’t hear“ ist falsch.",
+      "en": "There is a mistake: “don’t hear” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0023",
+   "kind": "err",
+   "area": "gram",
+   "pat": "pc.state-verbs",
+   "topic": "pres-perf-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We have been knowing this supplier since 2017 and trust them.",
+   "bad": {
+    "span": "have been knowing",
+    "fix": [
+     "have known"
+    ],
+    "choices": [
+     "have knowing",
+     "have known",
+     "are knowing"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "know ist ein Zustandsverb und steht nicht in der Verlaufsform (be/been + -ing), auch nicht im Present Perfect: have known.",
+     "en": "Know is a state verb and does not take the continuous (be/been + -ing), not even in the present perfect: have known."
+    },
+    "wrong": [
+     {
+      "opt": "have knowing",
+      "de": "Nach have steht die 3. Form (known), nicht -ing.",
+      "en": "After have comes the participle (known), not -ing."
+     },
+     {
+      "opt": "are knowing",
+      "de": "„are knowing“ ist Continuous, hier fehlt dazu die Dauer seit 2017.",
+      "en": "“are knowing” is continuous and ignores the duration since 2017."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „have been knowing“, nicht hier.",
+      "en": "The mistake is at “have been knowing”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „have been knowing“ ist falsch.",
+      "en": "There is a mistake: “have been knowing” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0024",
+   "kind": "err",
+   "area": "gram",
+   "pat": "pc.cont-simple",
+   "topic": "pres-perf-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "She has been sending twelve proposals, and all twelve are already signed.",
+   "bad": {
+    "span": "has been sending",
+    "fix": [
+     "has sent"
+    ],
+    "choices": [
+     "has send",
+     "have sent",
+     "has sent"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Bei einer Zahl rückt das Ergebnis in den Vordergrund: has sent. -ing betont die Tätigkeit, nicht die Menge.",
+     "en": "With a number the result moves to the front: has sent. -ing stresses the activity, not the amount."
+    },
+    "wrong": [
+     {
+      "opt": "has send",
+      "de": "„has send“ mischt Hilfsverb und Grundform: has braucht die 3. Form (sent).",
+      "en": "“has send” mixes auxiliary and base form: has needs the participle (sent)."
+     },
+     {
+      "opt": "have sent",
+      "de": "Zu she passt has, nicht have.",
+      "en": "With she the form is has, not have."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „has been sending“, nicht hier.",
+      "en": "The mistake is at “has been sending”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „has been sending“ ist falsch.",
+      "en": "There is a mistake: “has been sending” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0025",
+   "kind": "err",
+   "area": "gram",
+   "pat": "pc.duration",
+   "topic": "pres-perf-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We have been migrating the archive to the cloud for six weeks now.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Eine laufende Tätigkeit mit Dauer (for six weeks) steht im Present Perfect Continuous.",
+     "en": "No mistake: an ongoing activity with a duration (for six weeks) takes the present perfect continuous."
+    },
+    "wrong": [
+     {
+      "tap": "migrating",
+      "de": "Hier ist -ing richtig, weil die Migration noch läuft und die Dauer zählt.",
+      "en": "-ing is right here because the migration is still running and the duration counts."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0026",
+   "kind": "err",
+   "area": "gram",
+   "pat": "pc.cont-simple",
+   "topic": "pres-perf-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I have written three reports since Monday, and the fourth is nearly ready.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Bei einer Zahl (three reports) steht das Ergebnis im Present Perfect: have written.",
+     "en": "No mistake: with a number (three reports) the result takes the present perfect: have written."
+    },
+    "wrong": [
+     {
+      "tap": "written",
+      "de": "„have been writing three reports“ wäre hier unpassend: Mit Zahl zählt das Ergebnis.",
+      "en": "“have been writing three reports” would be unsuitable here: with a number the result counts."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0027",
+   "kind": "err",
+   "area": "gram",
+   "pat": "pc.duration",
+   "topic": "pres-perf-cont",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "How long have you been working with the finance team in Cologne?",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: „How long“ fragt nach der Dauer bis jetzt: have you been working.",
+     "en": "No mistake: “How long” asks for the duration up to now: have you been working."
+    },
+    "wrong": [
+     {
+      "tap": "have",
+      "de": "Dauer bis jetzt = Present Perfect. „How long are you working“ wäre das Präsens-Deutsch.",
+      "en": "Duration up to now = present perfect. “How long are you working” would be the German-style present."
+     }
+    ]
+   }
+  }
+ ]
+}
