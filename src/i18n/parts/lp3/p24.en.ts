@@ -4,7 +4,7 @@ export const cxP24En = {
   cxTempoTitle: 'Tempo',
   cxTempoTileSub: 'Twelve short tasks on patterns you already know well. It is about how fast they come.',
   cxTempoTileMeta: 'about 5 min.',
-  cxTempoKwtEnd: 'The start is already there. Type only the ending (up to {max} words).',
+  cxTempoKwtEnd: 'Finish it with {key}, up to {max} words.',
   cxTempoBarLabel: 'Target time',
   cxTempoEndTitle: 'Tempo round done',
   cxTempoResult: '{right} of {total} correct · {inTarget} of them within the target time',

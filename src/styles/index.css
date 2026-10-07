@@ -1373,14 +1373,7 @@ html[data-actionbar] #main {
   --lx-btn-words: #5b3fd6;
   --lx-btn-grammar: #2553c9;
 }
-html[data-lx-area='words'] {
-  --lx-btn-bg: var(--lx-btn-words);
-  --lx-btn-fg: #ffffff;
-}
-html[data-lx-area='grammar'] {
-  --lx-btn-bg: var(--lx-btn-grammar);
-  --lx-btn-fg: #ffffff;
-}
+/* UX-Prüfung W8 (07.10.2026): EIN Hauptknopf-Stil überall (wie Heute); die Bereichsfarbe trägt nur Symbol, Balken und Kante. */
 button.lx-btn-primary {
   background: var(--lx-btn-bg, var(--lx-btn-n));
   color: var(--lx-btn-fg, var(--lx-btn-nf));

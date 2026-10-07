@@ -9,7 +9,8 @@ import type { WordTapArea } from './wordTap';
 // kommen nur über `marks` und tragen zusätzlich ✓/✕ und einen Text für Screenreader.
 
 export type Span = readonly [number, number];
-export type SpotMark = { span: Span; tone: 'ok' | 'wrong' };
+/** `fix`: Korrektur der Stelle; dann steht das Original durchgestrichen und die Korrektur daneben („~~hear~~ → hearing“), UX-Prüfung B2. */
+export type SpotMark = { span: Span; tone: 'ok' | 'wrong'; fix?: string };
 
 export type SpotSentenceProps = {
   words: string[];
@@ -98,11 +99,21 @@ export function SpotSentence({ words, pick, selected, onSelect, locked = false, 
         plain(pos, m.span[0] - 1);
         if (parts.length) parts.push(' ');
         parts.push(
-          <span key={`m${m.span[0]}`} className="lx-spot" data-state={m.tone === 'ok' ? 'correct' : 'wrong'} data-testid="spot-mark">
-            {srMark(m)}
-            <EnglishText as="span" text={words.slice(m.span[0], m.span[1] + 1).join(' ')} area={area} source={source} />
-            {glyph(m)}
-          </span>,
+          m.fix ? (
+            <span key={`m${m.span[0]}`} className="lx-spot-fix" data-state={m.tone === 'ok' ? 'correct' : 'wrong'} data-testid="spot-mark">
+              {srMark(m)}
+              <span className="lx-diff-off">{words.slice(m.span[0], m.span[1] + 1).join(' ')}</span>
+              <span aria-hidden="true"> → </span>
+              <span className="lx-diff-sub">{m.fix}</span>
+              {glyph(m)}
+            </span>
+          ) : (
+            <span key={`m${m.span[0]}`} className="lx-spot" data-state={m.tone === 'ok' ? 'correct' : 'wrong'} data-testid="spot-mark">
+              {srMark(m)}
+              <EnglishText as="span" text={words.slice(m.span[0], m.span[1] + 1).join(' ')} area={area} source={source} />
+              {glyph(m)}
+            </span>
+          ),
         );
         pos = m.span[1] + 1;
       }

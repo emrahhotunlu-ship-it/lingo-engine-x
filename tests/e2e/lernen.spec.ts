@@ -213,7 +213,8 @@ test('Deutsch-Fallen ohne KI: Startsatz-Falle in 2 Tipps ab Üben, 3 Sätze mit 
   expect(errors).toEqual([]);
 });
 
-test('Grammatik-Runde in der Lernphase: kompakte Musterkarte steht offen, kein ganzer Absatz „Kurz erklärt“ (Lernplattform 2.0 §5.1)', async ({ page }) => {
+// Angepasst 07.10.2026 (UX-Prüfung W1/W4): vor dem Prüfen keine Musterkarte mehr (sie verriet die Lösung); die Regel gibt es als Tipp, das Muster steht danach in der Rückmeldekarte.
+test('Grammatik-Runde in der Lernphase: vor dem Prüfen keine Musterkarte, kein ganzer Absatz „Kurz erklärt“', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   const { errors } = await boot(page, { migrated: true });
   await screen(page, 'today');
@@ -224,8 +225,7 @@ test('Grammatik-Runde in der Lernphase: kompakte Musterkarte steht offen, kein g
   await skipMiniLesson(page);
   await expect(page.getByTestId('gr-item')).toBeVisible();
   await expect(page.getByTestId('gr-brief')).toHaveCount(0);
-  await expect(page.getByTestId('pattern-card')).toBeVisible();
-  await expect(page.getByTestId('pattern-card')).toHaveAttribute('data-compact', 'true');
+  await expect(page.getByTestId('pattern-card')).toHaveCount(0);
   expect(errors).toEqual([]);
 });
 

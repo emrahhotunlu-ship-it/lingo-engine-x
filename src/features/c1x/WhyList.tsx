@@ -18,12 +18,13 @@ export function WhyList({ item, matched }: { item: C1Item; matched: WhyRule | nu
   const { t, lang } = useT();
   // Auswahlarten: alle falschen Optionen (Regeln mit `opt`); sonst nur die getroffene Regel (Falle bzw. falsch angetippter Satzteil).
   const own = item.why.wrong.filter((r) => r.opt !== undefined);
-  const rows: WhyRule[] = own.length ? own : matched ? [matched] : [];
+  // UX-Prüfung B1: die Begründung der eigenen Wahl steht schon unter „Deine Antwort“ – hier nur die ANDEREN Optionen.
+  const rows: WhyRule[] = own.length ? own.filter((r) => r !== matched) : matched ? [matched] : [];
   if (!rows.length) return null;
   const text = (r: WhyRule): string => (lang === 'de' ? r.de : r.en);
   return (
     <section className="mt-3 flex flex-col gap-2" aria-label={t('cxWhyTitle')} data-testid="why-list">
-      <h3 className="lx-t-meta font-medium text-muted">{t('cxWhyTitle')}</h3>
+      <h3 className="lx-eyebrow m-0 text-subtle">{t('cxWhyTitle')}</h3>
       <ul className="cx-why">
         {rows.map((r, i) => (
           <li key={`${r.opt ?? r.de}:${i}`} className="cx-why-row lx-t-support" data-mine={matched === r ? 'true' : undefined}>

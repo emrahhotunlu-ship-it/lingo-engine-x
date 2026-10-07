@@ -168,7 +168,7 @@ export function ApplyHub() {
   const more = list([cloze]);
 
   return (
-    <motion.div className="mx-auto flex w-full max-w-[70rem] flex-col gap-8 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }} data-testid="apply-hub" data-profile={profile}>
+    <motion.div className="mx-auto flex w-full max-w-[47.5rem] flex-col gap-8 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }} data-testid="apply-hub" data-profile={profile}>
       <motion.div variants={item}>
         <TabTitle title={t('apTitle')} sub={t('apLead')} />
       </motion.div>

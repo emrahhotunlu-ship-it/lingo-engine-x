@@ -26,9 +26,9 @@ import { SpotSentence } from '../../engine/SpotSentence';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { lookupOpenMs, useLookup, type WordTapArea } from '../../engine/wordTap';
 import { useT, type MessageKey } from '../../i18n';
-import { inputProfile, useSplitLayout } from '../../platform/input';
+import { inputProfile } from '../../platform/input';
 import { TutorButton } from '../../ui/exercise/TutorButton';
-import { ExerciseShell, PatternCard, SentenceInput, explainDepth, markSpans, type ShellFeedback, type ShellMenuId, type ShellSecondary } from '../../ui/exercise';
+import { ExerciseShell, SentenceInput, explainDepth, markSpans, type ShellFeedback, type ShellMenuId, type ShellSecondary } from '../../ui/exercise';
 import { useCompanionSee } from '../companion/seeing';
 import { nextT } from '../progress/persist';
 import { isC1Task } from '../../domain/c1x/runtime';
@@ -77,8 +77,6 @@ type Fb = {
   override: boolean;
 };
 
-/** Musternamen heißen „Form · Zweck“: Die Aufgabenzeile nennt nur den Zweck („Bedauern über früher“), nie die Form, denn die wäre die Lösung. */
-const functionOf = (name: string): string => (name.includes(' · ') ? name.split(' · ').slice(1).join(' · ') : name);
 
 /** Uhr (eigene Funktion, damit die Zeitnahme nie als Teil des Zeichnens gilt). */
 const tick = (): number => performance.now();
@@ -100,7 +98,6 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   const { t, lang } = useT();
   const api = useHiddenInput();
   const now = useClock((s) => s.now);
-  const split = useSplitLayout();
   const [profile] = useState<InputProfile>(() => profileProp ?? inputProfile());
   const doc = useLive((s) => s.collections.grammar?.get(task.topic));
   const [pStart] = useState(() => topicP(task.topic, doc, now));
@@ -574,16 +571,13 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   const taskKey: MessageKey = findTask ? (stage === 'locate' ? 'gxTask_find1' : 'gxTask_find2') : type === 'kwt' ? 'gxTask_kwt' : type === 'meaning' ? 'gxTask_meaning' : type === 'transform' && whole ? 'grTask_transformWhole' : (`grTask_${type}` as MessageKey);
   const purposeKey: MessageKey = findTask ? 'gxPurpose_find' : type === 'kwt' ? 'gxPurpose_kwt' : type === 'meaning' ? 'gxPurpose_meaning' : 'purposeGrammar';
   const learnLine = learning && pattern ? { topic: topicLabel, pattern: lang === 'de' ? pattern.name.de : pattern.name.en } : { topic: null, pattern: null };
-  // Aufgabenzeile in der Lernphase mit Musternamen (§5.2); in gemischten Runden bleibt sie allgemein.
-  const taskText = learning && pattern && !findTask && type !== 'meaning' && type !== 'mc' ? `${t(taskKey)} ${t('gxTaskFor', { pattern: functionOf(learnLine.pattern ?? '') })}` : t(taskKey);
+  // UX-Prüfung W1 (07.10.2026): vor dem Prüfen kein „Geübt wird: …“ – das Muster steht danach in der Rückmeldekarte.
+  const taskText = t(taskKey);
 
   const primary = fb
     ? { label: t('exNext'), onClick: () => next(), testId: 'next' }
     : { label: t('exCheck'), onClick: () => submit(), testId: 'check', disabled: choiceType ? chosen === null : findTask && stage === 'locate' ? !tapped : false };
 
-  const card = pattern ? (
-    <PatternCard name={lang === 'de' ? pattern.name.de : pattern.name.en} formula={lang === 'de' ? pattern.form.de : pattern.form.en} example={pattern.ex[0]?.en ?? null} signals={pattern.signals} compact={!split} area={area} />
-  ) : null;
 
   return (
     <div
@@ -606,14 +600,15 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
         meta={{ ex: `gr_${type}`, id: `${task.topic}|${task.key}`, kind: type }}
         status={{ area: 'grammar', state, kindLabel, topic: learnLine.topic, pattern: learnLine.pattern, badge }}
         task={{ text: taskText, purpose: t(purposeKey) }}
-        aid={!split && learning && !fb ? card : null}
+        // UX-Prüfung W1/W4: keine Regelkarte vor dem Prüfen (verrät die Lösung) – weder am Handy noch rechts am Laptop; die Regel gibt es als Tipp.
+        aid={null}
         prompt={prompt}
         answer={answer}
         hint={hint}
         secondary={secondary}
         primary={primary}
         feedback={feedback}
-        side={split && learning && !fb ? card : null}
+        side={null}
       />
       {sheet && <TopicSheet topic={task.topic} onClose={() => setSheet(false)} inRound />}
     </div>

@@ -112,7 +112,7 @@ export function ProgressScreen() {
   });
 
   return (
-    <motion.div className="mx-auto flex w-full max-w-[70rem] flex-col gap-6 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }}>
+    <motion.div className="mx-auto flex w-full max-w-[47.5rem] flex-col gap-6 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }}>
       <motion.header variants={item}>
         <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{t('ovTitle')}</h1>
       </motion.header>

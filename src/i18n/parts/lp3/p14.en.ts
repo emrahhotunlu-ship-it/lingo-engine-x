@@ -55,7 +55,7 @@ export const cxP14En = {
   cxTask_mcc: 'Which word fits exactly? Look at the word after the gap.',
   cxTask_ocl: 'One word is missing. Write it in the gap.',
   cxTask_wf: 'Build the right word from the stem.',
-  cxTask_kwt: 'Same meaning, 3–6 words, using the key word. Rewrite the sentence with the key word.',
+  cxTask_kwt: 'Rewrite it with {key}, {lo}–{hi} words.',
   cxTask_err: 'Is there a mistake in the sentence? Tap the wrong word, or tap “No mistake”.',
   cxTask_pair: 'Two similar sentences: which means what? Link each sentence to its meaning.',
   cxTask_cnet: 'Which verbs go with this word? Tap all that fit.',

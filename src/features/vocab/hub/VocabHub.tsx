@@ -115,7 +115,7 @@ export function VocabHub() {
   }, [q, visible]);
 
   return (
-    <div className="mx-auto flex w-full max-w-[70rem] flex-col gap-6 py-6 sm:py-10" data-testid="vocab">
+    <div className="mx-auto flex w-full max-w-[47.5rem] flex-col gap-6 py-6 sm:py-10" data-testid="vocab">
       <TabTitle
         title={t('nbWsTitle')}
         actions={

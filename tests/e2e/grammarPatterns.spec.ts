@@ -92,7 +92,8 @@ test('falsche Auswahl: „Deine Antwort …“ kommt aus der Begründung der Auf
     await page.getByTestId('check').click();
     await expect(item.getByTestId('verdict')).toHaveAttribute('data-verdict', 'wrong');
     await expect(item.getByTestId('choice-why')).toContainText(rule.de.slice(0, 30));
-    await expect(item.getByTestId('explanation')).toContainText(rule.opt);
+    // UX-Prüfung W2 (07.10.2026): „Deine Antwort“ steht als erste Zeile der Rückmeldekarte, vor der Erklärung.
+    await expect(item.getByTestId('result')).toContainText(rule.opt);
     seen++;
   }
   expect(seen).toBeGreaterThanOrEqual(1);
