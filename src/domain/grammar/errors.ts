@@ -87,11 +87,15 @@ export function capErrors(list: readonly ErrorEntry[], max = ERRORS_MAX): ErrorE
   return out;
 }
 
-/** Aus einem Fehler (Lücke oder Satzkorrektur) die beiden Sätze „falsch → richtig“ bilden. */
+/**
+ * Aus einem Fehler (Lücke oder Satzkorrektur) die beiden Sätze „falsch → richtig“ bilden. Der Wort-Hinweis der Lückenaufgabe direkt nach
+ * der Lücke („___ (already / send)“) fällt weg: Im fertigen Satz ist er nur Lärm und wiederholt oft das gesuchte Wort.
+ */
 export function errorSentences(q: string, given: string, fill: string): { wrong: string; right: string } {
   if (!q.includes('___')) return { wrong: q, right: fill };
+  const base = q.replace(/_{3,}(\s*\([^()]*\))?/, '___');
   const g = given.trim();
-  return { wrong: q.replace('___', g || '…'), right: q.replace('___', fill) };
+  return { wrong: base.replace('___', g || '…'), right: base.replace('___', fill) };
 }
 
 /** Ist dieselbe Frage schon als offener Fehler da? (Dann ist „nichts anlegen“ richtig und kein Überlauf.) */

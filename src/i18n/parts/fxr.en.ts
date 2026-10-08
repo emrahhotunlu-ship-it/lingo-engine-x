@@ -3,7 +3,7 @@
 export const fxrEn = {
   fxRTaskField: 'Find the mistake and correct it.',
   fxRTaskSpot: 'Tap the spot with the mistake.',
-  fxRTaskReplace: 'Type only the correct form for this spot.',
+  fxRTaskReplace: 'Type only the correct form for this spot. The rest of the sentence stays as it is.',
   fxRTaskTiles: 'Put the sentence together correctly.',
   fxRPurpose: 'You got this sentence wrong once before. Correcting it yourself makes the right form stick.',
   fxRSpotLabel: 'Sentence with a mistake: tap the wrong spot',

@@ -40,7 +40,7 @@ describe('S1 Überlauf', () => {
     expect(w.kind).toBe('update');
     if (w.kind !== 'update') return;
     expect(w.patch.errors).toBeUndefined();
-    expect(w.overflow).toMatchObject({ wrong: 'By next June, I finish (finish) my course.', src: 'lesson' });
+    expect(w.overflow).toMatchObject({ wrong: 'By next June, I finish my course.', src: 'lesson' });
     expect(w.overflow?.right).toContain('will have finished');
     // Dieselbe Frage schon offen: kein Überlauf.
     const dup = grammarWrite({ p: 0.5, last: 1, errors: [{ q: Q, given: 'x', ans: 'y', t: t0 - 5 }, ...errors.slice(1)] }, answer({ t: t0, verdict: 'wrong', given: 'finish' }));
