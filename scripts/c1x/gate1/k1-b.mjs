@@ -22,7 +22,7 @@ export const items = [
     k: 'err', p: 'pp.duration', lv: 'B2+', dom: 'biz',
     text: 'When the inspector arrived at nine, we were waiting for him since seven-thirty.',
     bad: { span: 'were waiting', fix: ['had been waiting', 'had waited'], ch: ['have been waiting', 'waited'] },
-    ok: ['Eine Dauer bis zu einem Zeitpunkt in der Vergangenheit braucht had been + -ing: had been waiting since seven-thirty.', 'A length of time up to a point in the past needs had been + -ing: had been waiting since half past seven.'],
+    ok: ['Eine Dauer bis zu einem Zeitpunkt in der Vergangenheit braucht had been + -ing: had been waiting since seven-thirty.', 'A length of time up to a point in the past needs had been + -ing: had been waiting since seven-thirty.'],
     c1: ['have been waiting gehört in die Gegenwart; die Erzählung steht aber in der Vergangenheit.', 'have been waiting belongs to the present, but the story is told in the past.'],
     c2: ['waited zeigt nicht, dass das Warten bis neun andauerte; mit since braucht es had (been).', 'waited does not show that the waiting lasted until nine; with since it needs had (been).'],
   },
@@ -200,10 +200,10 @@ export const items = [
   },
   {
     k: 'kwt', p: 'pt.for-since', lv: 'B2', dom: 'biz',
-    lead: 'We started working with this supplier eight years ago and still do.', key: 'FOR',
-    before: 'We', after: 'eight years.', a: ['have worked', 'have been working'], b: ['together for'], x: ['since', 'are', 'during'],
-    traps: [['worked together for', 'Das Past Simple endet in der Vergangenheit; die Dauer bis heute braucht have worked.', 'The past simple ends in the past; a duration up to now needs have worked.']],
-    ok: ['Teil 1: have worked, weil die Zusammenarbeit bis heute dauert. Teil 2: together for + Dauer (eight years).', 'Part 1: have worked, because the cooperation lasts until today. Part 2: together for + length of time (eight years).'],
+    lead: 'Our supplier started working with us eight years ago and still does.', key: 'FOR',
+    before: 'This supplier', after: 'eight years.', a: ['has worked', 'has been working'], b: ['with us for'], v: [{ a: ['has been'], b: ['with us for', 'our supplier for', 'our partner for'] }, { a: ['has supplied', 'has been supplying'], b: ['us for'] }], x: ['since', 'are', 'during'], tiles: ['has', 'worked', 'with', 'us'],
+    traps: [['worked with us for', 'Das Past Simple endet in der Vergangenheit; die Dauer bis heute braucht has worked.', 'The past simple ends in the past; a duration up to now needs has worked.']],
+    ok: ['Teil 1: has worked, weil die Zusammenarbeit bis heute dauert. Teil 2: with us for + Dauer (eight years).', 'Part 1: has worked, because the cooperation lasts until today. Part 2: with us for + length of time (eight years).'],
   },
 
   // ================= stative-adv =================
@@ -220,7 +220,7 @@ export const items = [
   {
     k: 'kwt', p: 'sa.soft', lv: 'B2', dom: 'biz',
     lead: 'Please send me the updated figures before the call.', key: 'HOPING',
-    before: 'I', after: 'send me the updated figures before the call.', a: ['was hoping'], b: ['you could', 'that you could', 'you would', 'that you would'], x: ['asked', 'will', 'wish'],
+    before: 'I', after: 'send me the updated figures before the call.', a: ['was hoping'], b: ['you could', 'that you could', 'you would', 'that you would'], v: [{ a: ['am hoping', "'m hoping"], b: ['you can', 'that you can', 'you could', 'that you could'] }], x: ['asked', 'will', 'wish'],
     traps: [['was hoping could you', 'Nach I was hoping folgt ein Nebensatz mit normaler Wortstellung: you could.', 'A clause with normal word order follows I was hoping: you could.']],
     ok: ['Teil 1: was hoping macht die Bitte weich und höflich. Teil 2: you could, danach folgt ein Nebensatz mit normaler Wortstellung.', 'Part 1: was hoping makes the request soft and polite. Part 2: you could, a clause with normal word order follows.'],
   },

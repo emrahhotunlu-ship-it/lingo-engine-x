@@ -24,8 +24,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Gewohnheit in der Frage: does + Grundform. Zu neighbor (Singular) passt does.",
-     "en": "A habit in a question takes does + base form. The singular neighbor goes with does."
+     "de": "Gewohnheit in der Frage: does + Grundform (did ist auch richtig: Gewohnheit in der Vergangenheit). Zu neighbor (Singular) passt does.",
+     "en": "A habit in a question takes does + base form (did is also correct: a habit in the past). The singular neighbor goes with does."
     },
     "wrong": [
      {
@@ -955,11 +955,11 @@
     },
     {
      "a": [
-      "have been on the"
+      "have been on"
      ],
      "b": [
-      "phone for",
-      "call for"
+      "the phone for",
+      "the call for"
      ]
     }
    ],
@@ -1446,7 +1446,7 @@
    "why": {
     "ok": {
      "de": "Eine Dauer bis zu einem Zeitpunkt in der Vergangenheit braucht had been + -ing: had been waiting since seven-thirty.",
-     "en": "A length of time up to a point in the past needs had been + -ing: had been waiting since half past seven."
+     "en": "A length of time up to a point in the past needs had been + -ing: had been waiting since seven-thirty."
     },
     "wrong": [
      {
@@ -2546,25 +2546,45 @@
    "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "lead": "We started working with this supplier eight years ago and still do.",
+   "lead": "Our supplier started working with us eight years ago and still does.",
    "key": "FOR",
-   "before": "We",
+   "before": "This supplier",
    "after": "eight years.",
    "keys": [
     {
      "a": [
-      "have worked",
-      "have been working"
+      "has worked",
+      "has been working"
      ],
      "b": [
-      "together for"
+      "with us for"
+     ]
+    },
+    {
+     "a": [
+      "has been"
+     ],
+     "b": [
+      "with us for",
+      "our supplier for",
+      "our partner for"
+     ]
+    },
+    {
+     "a": [
+      "has supplied",
+      "has been supplying"
+     ],
+     "b": [
+      "us for"
      ]
     }
    ],
    "tiles": [
-    "have",
+    "has",
     "worked",
-    "together"
+    "with",
+    "us"
    ],
    "extra": [
     "since",
@@ -2572,22 +2592,23 @@
     "during"
    ],
    "traps": [
-    "worked together for"
+    "worked with us for"
    ],
    "why": {
     "ok": {
-     "de": "Teil 1: have worked, weil die Zusammenarbeit bis heute dauert. Teil 2: together for + Dauer (eight years).",
-     "en": "Part 1: have worked, because the cooperation lasts until today. Part 2: together for + length of time (eight years)."
+     "de": "Teil 1: has worked, weil die Zusammenarbeit bis heute dauert. Teil 2: with us for + Dauer (eight years).",
+     "en": "Part 1: has worked, because the cooperation lasts until today. Part 2: with us for + length of time (eight years)."
     },
     "wrong": [
      {
       "if": [
        "worked",
-       "together",
+       "with",
+       "us",
        "for"
       ],
-      "de": "Das Past Simple endet in der Vergangenheit; die Dauer bis heute braucht have worked.",
-      "en": "The past simple ends in the past; a duration up to now needs have worked."
+      "de": "Das Past Simple endet in der Vergangenheit; die Dauer bis heute braucht has worked.",
+      "en": "The past simple ends in the past; a duration up to now needs has worked."
      }
     ]
    }
@@ -2668,6 +2689,18 @@
       "you'd",
       "that you would",
       "that you'd"
+     ]
+    },
+    {
+     "a": [
+      "am hoping",
+      "'m hoping"
+     ],
+     "b": [
+      "you can",
+      "that you can",
+      "you could",
+      "that you could"
      ]
     }
    ],
@@ -3022,7 +3055,7 @@
    "why": {
     "ok": {
      "de": "Eine spontane Entscheidung oder ein Angebot im Moment des Sprechens: will oder can + Grundform (I will send, I can send).",
-     "en": "A spontaneous decision or offer at the moment of speaking: will + base form (I will send)."
+     "en": "A spontaneous decision or offer at the moment of speaking: will or can + base form (I will send, I can send)."
     },
     "wrong": [
      {
@@ -3531,7 +3564,7 @@
    "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "text": "By this time tomorrow, our engineers will be fix the server, so the service should be back by noon.",
+   "text": "This time tomorrow, our engineers will be fix the server, so the portal will be offline until noon.",
    "bad": {
     "span": "will be fix",
     "fix": [
@@ -3909,7 +3942,9 @@
      ],
      "b": [
       "QA has finished",
-      "QA finishes"
+      "QA finishes",
+      "QA has completed",
+      "QA completes"
      ]
     }
    ],
@@ -4020,7 +4055,7 @@
    "why": {
     "ok": {
      "de": "Nach whether und if als Frage in einem Nebensatz bleibt will: whether the landlord will accept.",
-     "en": "After whether and if as a question in a subordinate clause will stays: whether the client will accept."
+     "en": "After whether and if as a question in a subordinate clause will stays: whether the landlord will accept. would ist auch richtig (whether the landlord would accept)."
     },
     "wrong": [
      {
@@ -4508,8 +4543,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Teil 1: were going zeigt den früheren Plan. Teil 2: to publish, nach going to steht die Grundform.",
-     "en": "Part 1: were going shows the earlier plan. Part 2: to publish, the base form follows going to."
+     "de": "Teil 1: were going zeigt den früheren Plan. Teil 2: to launch, nach going to steht die Grundform.",
+     "en": "Part 1: were going shows the earlier plan. Part 2: to launch, the base form follows going to."
     },
     "wrong": [
      {
@@ -6467,10 +6502,18 @@
      "b": [
       "possible to"
      ]
+    },
+    {
+     "a": [
+      "is it"
+     ],
+     "b": [
+      "possible for you to"
+     ]
     }
    ],
    "tiles": [
-    "would",
+    "Would",
     "it",
     "be",
     "to"
@@ -6576,16 +6619,16 @@
    ],
    "why": {
     "ok": {
-     "de": "a bit of a challenge ist eine höfliche Untertreibung für einen echten Einwand.",
-     "en": "a bit of a challenge is a polite understatement for a real objection."
+     "de": "a bit of a stretch ist eine höfliche Untertreibung für einen echten Einwand.",
+     "en": "a bit of a stretch is a polite understatement for a real objection."
     },
     "wrong": [
      {
       "if": [
        "from"
       ],
-      "de": "a bit from a challenge gibt es nicht; die Wendung ist a bit of a.",
-      "en": "a bit from a challenge does not exist; the phrase is a bit of a."
+      "de": "a bit from a stretch gibt es nicht; die Wendung ist a bit of a.",
+      "en": "a bit from a stretch does not exist; the phrase is a bit of a."
      },
      {
       "if": [
@@ -6598,8 +6641,8 @@
       "if": [
        "for"
       ],
-      "de": "a bit for a challenge ist keine feste Wendung.",
-      "en": "a bit for a challenge is not a fixed phrase."
+      "de": "a bit for a stretch ist keine feste Wendung.",
+      "en": "a bit for a stretch is not a fixed phrase."
      }
     ]
    }
@@ -6722,8 +6765,8 @@
    ],
    "why": {
     "ok": {
-     "de": "We were hoping you would … drückt einen höflichen Wunsch aus; would rückt die Bitte in die Ferne.",
-     "en": "We were hoping you would … expresses a polite wish; would puts distance on the request."
+     "de": "We were hoping you would … drückt einen höflichen Wunsch aus; would rückt die Bitte in die Ferne (might ist auch möglich).",
+     "en": "We were hoping you would … expresses a polite wish; would puts distance on the request (might is also possible)."
     },
     "wrong": [
      {
@@ -6818,24 +6861,26 @@
    "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "lead": "The module is scheduled to launch in Q3.",
+   "lead": "The new release is scheduled to go live at the end of May.",
    "key": "DUE",
-   "before": "The module",
-   "after": "in Q3.",
+   "before": "The new release",
+   "after": "at the end of May.",
    "keys": [
     {
      "a": [
       "is due"
      ],
      "b": [
-      "to launch"
+      "to go live",
+      "to be released"
      ]
     }
    ],
    "tiles": [
     "is",
     "to",
-    "launch"
+    "go",
+    "live"
    ],
    "extra": [
     "set",
@@ -6843,22 +6888,23 @@
     "going"
    ],
    "traps": [
-    "is due launch"
+    "is due go live"
    ],
    "why": {
     "ok": {
-     "de": "Teil 1: is due, so sagst du „ist für … vorgesehen“. Teil 2: to launch, danach steht to und die Grundform.",
-     "en": "Part 1: is due, that is how you say “is scheduled for”. Part 2: to launch, to and the base form follow."
+     "de": "Teil 1: is due, so sagst du „ist für … vorgesehen“. Teil 2: to go live, danach steht to und die Grundform.",
+     "en": "Part 1: is due, that is how you say “is scheduled for”. Part 2: to go live, to and the base form follow."
     },
     "wrong": [
      {
       "if": [
        "is",
        "due",
-       "launch"
+       "go",
+       "live"
       ],
-      "de": "Nach due steht to + Grundform: due to launch.",
-      "en": "To + base form follows due: due to launch."
+      "de": "Nach due steht to + Grundform: due to go live.",
+      "en": "To + base form follows due: due to go live."
      }
     ]
    }
@@ -6883,7 +6929,8 @@
       "is set"
      ],
      "b": [
-      "to start"
+      "to start",
+      "to begin"
      ]
     }
    ],
@@ -6935,10 +6982,10 @@
    "keys": [
     {
      "a": [
-      "by the"
+      "by the time"
      ],
      "b": [
-      "time the auditors arrive"
+      "the auditors arrive"
      ]
     }
    ],
@@ -6959,8 +7006,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Teil 1: by the, damit beginnt by the time („spätestens bis“). Teil 2: time the auditors arrive, danach steht die Gegenwart.",
-     "en": "Part 1: by the, that starts by the time (“no later than”). Part 2: time the auditors arrive, the present follows."
+     "de": "Teil 1: by the time heißt „spätestens bis“. Teil 2: the auditors arrive, danach steht die Gegenwart.",
+     "en": "Part 1: by the time means “no later than”. Part 2: the auditors arrive, the present follows."
     },
     "wrong": [
      {
@@ -6988,24 +7035,33 @@
    "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "lead": "According to the vendor, the migration will be complete when March ends.",
+   "lead": "The vendor's team will complete the migration no later than March 31.",
    "key": "BY",
-   "before": "According to the vendor, the migration will",
-   "after": ".",
+   "before": "The vendor's team",
+   "after": "March 31.",
    "keys": [
     {
      "a": [
-      "have finished"
+      "will have completed",
+      "will have finished",
+      "'ll have completed",
+      "'ll have finished",
+      "will complete",
+      "will finish",
+      "'ll complete",
+      "'ll finish"
      ],
      "b": [
-      "by March"
+      "the migration by"
      ]
     }
    ],
    "tiles": [
+    "will",
     "have",
-    "finished",
-    "march"
+    "completed",
+    "the",
+    "migration"
    ],
    "extra": [
     "until",
@@ -7013,23 +7069,25 @@
     "been"
    ],
    "traps": [
-    "have finish by March"
+    "will have complete the migration by"
    ],
    "why": {
     "ok": {
-     "de": "Teil 1: have finished, das Future Perfect zeigt etwas, das bis dahin fertig ist. Teil 2: by March, by nennt die Frist.",
-     "en": "Part 1: have finished, the future perfect shows something finished by then. Part 2: by March, by names the deadline."
+     "de": "Das Future Perfect (will have completed) betont „bis dahin fertig“; will complete ist auch richtig. by nennt die Frist.",
+     "en": "The future perfect (will have completed) stresses “finished by then”; will complete is also correct. by names the deadline."
     },
     "wrong": [
      {
       "if": [
+       "will",
        "have",
-       "finish",
-       "by",
-       "march"
+       "complete",
+       "the",
+       "migration",
+       "by"
       ],
-      "de": "Nach will have steht das Partizip: finished.",
-      "en": "The participle follows will have: finished."
+      "de": "Nach will have steht das Partizip: completed.",
+      "en": "The participle follows will have: completed."
      }
     ]
    }
@@ -7127,8 +7185,8 @@
     }
    ],
    "tiles": [
-    "if",
-    "i",
+    "If",
+    "I",
     "had",
     "listened"
    ],

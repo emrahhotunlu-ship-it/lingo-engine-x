@@ -222,7 +222,7 @@ export const items = [
   {
     k: 'kwt', p: 'dip.possible', lv: 'B2+', dom: 'biz',
     lead: 'Please resend the invoice with the correct VAT number.', key: 'POSSIBLE',
-    before: '', after: 'resend the invoice with the correct VAT number?', a: ['would it be', 'is it'], b: ['possible to'], x: ['could', 'if', 'wonder'],
+    before: '', after: 'resend the invoice with the correct VAT number?', a: ['would it be', 'is it'], b: ['possible to'], v: [{ a: ['is it'], b: ['possible for you to'] }], tiles: ['Would', 'it', 'be', 'to'], x: ['could', 'if', 'wonder'],
     traps: [['would it be possible that', 'Nach possible steht to + Grundform, kein that-Satz.', 'To + base form follows possible, not a that clause.']],
     ok: ['Teil 1: would it be, die Frageform macht die Bitte höflich. Teil 2: possible to, danach steht die Grundform.', 'Part 1: would it be, the question form makes the request polite. Part 2: possible to, the base form follows.'],
   },
@@ -238,11 +238,11 @@ export const items = [
     k: 'ocl', p: 'dip.understate', lv: 'B2+', dom: 'biz', cls: 'prep', a: ['of'],
     t: 'Delivering by Friday would be a bit ___ a stretch for our team, to be honest.',
     c: {
-      from: 'a bit from a challenge gibt es nicht; die Wendung ist a bit of a. || a bit from a challenge does not exist; the phrase is a bit of a.',
+      from: 'a bit from a stretch gibt es nicht; die Wendung ist a bit of a. || a bit from a stretch does not exist; the phrase is a bit of a.',
       than: 'than steht nach einem Komparativ, nicht nach a bit. || than follows a comparative, not a bit.',
-      for: 'a bit for a challenge ist keine feste Wendung. || a bit for a challenge is not a fixed phrase.',
+      for: 'a bit for a stretch ist keine feste Wendung. || a bit for a stretch is not a fixed phrase.',
     },
-    ok: 'a bit of a challenge ist eine höfliche Untertreibung für einen echten Einwand. || a bit of a challenge is a polite understatement for a real objection.',
+    ok: 'a bit of a stretch ist eine höfliche Untertreibung für einen echten Einwand. || a bit of a stretch is a polite understatement for a real objection.',
   },
   {
     k: 'kwt', p: 'dip.wondering', lv: 'B2+', dom: 'biz',
@@ -266,7 +266,7 @@ export const items = [
       can: 'can be able ist doppelt; außerdem fehlt die Zeitenfolge nach were hoping. || can be able is doubled; also the tense sequence after were hoping is missing.',
       do: 'do be able gibt es nicht; nach were hoping steht would. || do be able does not exist; would follows were hoping.',
     },
-    ok: 'We were hoping you would … drückt einen höflichen Wunsch aus; would rückt die Bitte in die Ferne. || We were hoping you would … expresses a polite wish; would puts distance on the request.',
+    ok: 'We were hoping you would … drückt einen höflichen Wunsch aus; would rückt die Bitte in die Ferne (might ist auch möglich). || We were hoping you would … expresses a polite wish; would puts distance on the request (might is also possible).',
   },
   {
     k: 'kwt', p: 'dip.understate', lv: 'B2+', dom: 'biz',

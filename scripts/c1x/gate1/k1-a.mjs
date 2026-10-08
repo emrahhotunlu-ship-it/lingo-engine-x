@@ -10,7 +10,7 @@ export const items = [
       do: 'do passt zu I, you, we, they, nicht zu neighbor (Singular). || do goes with I, you, we, they, not with the singular neighbor.',
       will: 'will meint die Zukunft, usually beschreibt aber eine Gewohnheit. || will means the future, but usually describes a habit.',
     },
-    ok: 'Gewohnheit in der Frage: does + Grundform. Zu neighbor (Singular) passt does. || A habit in a question takes does + base form. The singular neighbor goes with does.',
+    ok: 'Gewohnheit in der Frage: does + Grundform (did ist auch richtig: Gewohnheit in der Vergangenheit). Zu neighbor (Singular) passt does. || A habit in a question takes does + base form (did is also correct: a habit in the past). The singular neighbor goes with does.',
   },
   {
     k: 'kwt', p: 'psc.now', lv: 'B2', dom: 'life',
@@ -152,7 +152,7 @@ export const items = [
   {
     k: 'kwt', p: 'pc.since-for', lv: 'B2', dom: 'biz',
     lead: 'Our call with the client started twenty minutes ago and is still going.', key: 'FOR',
-    before: 'We', after: 'twenty minutes now.', a: ['have been talking', 'have been speaking'], b: ['for'], v: [{ a: ['have been on the'], b: ['phone for', 'call for'] }], x: ['since', 'talked', 'are'],
+    before: 'We', after: 'twenty minutes now.', a: ['have been talking', 'have been speaking'], b: ['for'], v: [{ a: ['have been on'], b: ['the phone for', 'the call for'] }], x: ['since', 'talked', 'are'],
     traps: [['are talking for', 'Deutsch sagt „wir sprechen seit 20 Minuten“ im Präsens. Englisch braucht have been talking.', 'German says “wir sprechen seit 20 Minuten” in the present. English needs have been talking.']],
     ok: ['Teil 1: have been talking, die Tätigkeit läuft noch. Teil 2: for + Dauer (twenty minutes).', 'Part 1: have been talking, the activity is still going on. Part 2: for + length of time (twenty minutes).'],
   },

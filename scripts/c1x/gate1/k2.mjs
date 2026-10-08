@@ -10,7 +10,7 @@ export const items = [
       have: 'have braucht ein Partizip (sent), nicht die Grundform. || have needs a participle (sent), not the base form.',
       was: 'was send gibt es nicht; der Satz meint die Zukunft. || was send does not exist; the sentence is about the future.',
     },
-    ok: 'Eine spontane Entscheidung oder ein Angebot im Moment des Sprechens: will oder can + Grundform (I will send, I can send). || A spontaneous decision or offer at the moment of speaking: will + base form (I will send).',
+    ok: 'Eine spontane Entscheidung oder ein Angebot im Moment des Sprechens: will oder can + Grundform (I will send, I can send). || A spontaneous decision or offer at the moment of speaking: will or can + base form (I will send, I can send).',
   },
   {
     k: 'kwt', p: 'ff.going-to', lv: 'B2', dom: 'life',
@@ -89,7 +89,7 @@ export const items = [
   },
   {
     k: 'err', p: 'fut.continuous', lv: 'B2', dom: 'biz',
-    text: 'By this time tomorrow, our engineers will be fix the server, so the service should be back by noon.',
+    text: 'This time tomorrow, our engineers will be fix the server, so the portal will be offline until noon.',
     bad: { span: 'will be fix', fix: ['will be fixing'], ch: ['will fixing', 'be fixing'] },
     ok: ['Future Continuous: will be + -ing. Etwas läuft zu einem Zeitpunkt in der Zukunft gerade: will be fixing.', 'Future continuous: will be + -ing. Something is in progress at a point in the future: will be fixing.'],
     c1: ['Zwischen will und -ing steht be: will be fixing.', 'Between will and -ing comes be: will be fixing.'],
@@ -152,7 +152,7 @@ export const items = [
   {
     k: 'kwt', p: 'tc.present-perfect', lv: 'B2+', dom: 'biz',
     lead: 'We will not deploy anything before QA has finished its final regression tests.', key: 'UNTIL',
-    before: 'We will not deploy anything', after: 'its final regression tests.', a: ['until'], b: ['QA has finished', 'QA finishes'], x: ['when', 'will', 'after'], tiles: ['QA', 'has', 'finished'],
+    before: 'We will not deploy anything', after: 'its final regression tests.', a: ['until'], b: ['QA has finished', 'QA finishes', 'QA has completed', 'QA completes'], x: ['when', 'will', 'after'], tiles: ['QA', 'has', 'finished'],
     traps: [['until QA will finish', 'Nach until steht kein will; es gilt das Present Perfect (has finished) oder die Gegenwart.', 'No will follows until; the present perfect (has finished) or the present is used.']],
     ok: ['Teil 1: until nennt die Bedingung. Teil 2: QA has finished, nach until steht kein will, sondern das Present Perfect.', 'Part 1: until names the condition. Part 2: QA has finished, no will follows until, but the present perfect.'],
   },
@@ -172,7 +172,7 @@ export const items = [
       has: 'has accept gibt es nicht; has braucht das Partizip accepted. || has accept does not exist; has needs the participle accepted.',
       was: 'was accept gibt es nicht; der Satz ist auf die Zukunft gerichtet. || was accept does not exist; the sentence points to the future.',
     },
-    ok: 'Nach whether und if als Frage in einem Nebensatz bleibt will: whether the landlord will accept. || After whether and if as a question in a subordinate clause will stays: whether the client will accept.',
+    ok: 'Nach whether und if als Frage in einem Nebensatz bleibt will: whether the landlord will accept. || After whether and if as a question in a subordinate clause will stays: whether the landlord will accept. would ist auch richtig (whether the landlord would accept).',
   },
   {
     k: 'kwt', p: 'tc.present-for-future', lv: 'B2', dom: 'biz',
@@ -247,7 +247,7 @@ export const items = [
     lead: 'We had planned to launch the new pricing page in April, but the legal review took too long.', key: 'GOING',
     before: 'We', after: 'the new pricing page in April, but the legal review took too long.', a: ['were going'], b: ['to launch'], x: ['had', 'plan', 'launching'],
     traps: [['are going to launch', 'Der Plan lag in der Vergangenheit: were going to.', 'The plan was in the past: were going to.']],
-    ok: ['Teil 1: were going zeigt den früheren Plan. Teil 2: to publish, nach going to steht die Grundform.', 'Part 1: were going shows the earlier plan. Part 2: to publish, the base form follows going to.'],
+    ok: ['Teil 1: were going zeigt den früheren Plan. Teil 2: to launch, nach going to steht die Grundform.', 'Part 1: were going shows the earlier plan. Part 2: to launch, the base form follows going to.'],
   },
   {
     k: 'err', p: 'fp.about-to', lv: 'B2', dom: 'biz',
