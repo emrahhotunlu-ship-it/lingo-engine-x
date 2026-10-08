@@ -5,13 +5,23 @@ Vollständig und unverändert übernommen. Neue Entscheidungen unter „Einträg
 ## Einträge
 Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktentscheidungen mit Datum eingetragen.
 
+**08.10.2026 – P44/P45 Nachbesserung nach Prüfung (learning-scientist, data-guard), Branch `claude/umbau-r4-weg`**
+- **Status kommt aus der Zählung (P1/P2):** `c1Status` in `prompts/assess4.ts`: „ready“ genau dann, wenn alle sieben erreicht sind (C1-Etappe), sonst höchstens „on_track“; „on_track“ wird zu „not_yet“, wenn weniger als halb so viele Kriterien auf Kurs wie offen sind. Passt ein gespeichertes Urteil nicht zur Zählung, zeigt das Blatt den festen Satz statt Claudes Urteil.
+- **Nur `c1` verwerfen (P8):** Verletzt die Antwort nach dem einen Neuversuch nur den `c1`-Teil, wird die übrige Einschätzung mit `c1` leer übernommen (optionales `lenient` je Vorlage im KI-Tor, kein weiterer Aufruf, Warnung im Protokoll).
+- **K6 ohne Tempo (K-a):** Antworten aus Tempo-Runden tragen im Protokoll zusätzlich `tp: true` (Feld nur hinzugefügt, tolerant gelesen) und zählen nicht für K6. Ältere Einträge sind nicht unterscheidbar; solange solche vor dem 15.10.2026 (`TP_SINCE`) im 28-Tage-Fenster liegen, zeigt das Detail „Enthält noch Tempo-Antworten“.
+- **K-b nicht umgesetzt:** Saubere Sätze („kein Fehler“) werden nie getippt; würde K6 nur getippte zählen, könnte die Quote für saubere Sätze nie erreicht werden. Saubere Sätze zählen weiter in jeder Eingabeform.
+- **K-g Abweichung:** K2 zählt Rückfälle über alle bekannten Deutsch-Fallen, nicht nur die 15 häufigsten (die App kennt noch keine verlässliche Rangfolge); nur dokumentiert.
+- **Einfrieren erst nach dem Laden (K-d):** Die Prognose friert erst ein, wenn Protokolle und Live-Daten (`app/c1`, `app/profile`, vocab, chunk, grammar) geladen sind (`freezePlan`). `withFc` unverändert.
+- **K1-Untergrenze (K-f):** Die Prognose rechnet für K1 mindestens 1 Tag je offenes Muster und 14 Tage je offenes Kapitel; der Satz nennt, welche Kriterien eingerechnet sind und welche nicht (`fc.inc`/`fc.out`, ältere Einträge ohne Listen: allgemeiner Satz). Pause-Satz neutral mit dem Kriterium (`fc: {pause}`), ohne Lernpause zu unterstellen.
+- **Doppelschutz `prod`:** Ein identischer Eintrag (Tag, Quelle, Wörter, Fehler) wird nicht zweimal gebucht; Wochensummen (`wk`) sind ausgenommen.
+
 **08.10.2026 – R4 „Messen“: Kriterien K1–K7, Prognose, „Weg zu C1“ und assess@4 (P44/P45), Branch `claude/umbau-r4-weg`**
 - **Schalter `way`** (`src/app/flags.ts`, jetzt an): Kopfzeile „Weg zu C1“ im Fortschritt (Slot `progress.head`) und die Einschätzung **assess@4** (assess@3 unverändert plus Feld `c1`). `lx:flags` `{"way":false}` schaltet beides je Gerät ab, dann läuft wieder assess@3.
 - **Urteil in Worten:** Claude liefert `status`, 1–2 Sätze und ≤ 3 fehlende Kriterien; Punkt- und Prozentzahlen im Urteil werden vom Schema abgelehnt (dann der eine Neuversuch nach A6.3). „Bereit“ setzt nur der Code (alle sieben erreicht); sagt Claude es vorher, wird daraus „auf Kurs“. Fehlt `c1` oder ist die KI aus, steht der feste Satz „a von 7 Kriterien erreicht · Zählung der App“.
 - **K1 „zu wenig Daten“**, solange nichts geübt ist (kein Muster sicher, keine Kapitelprüfung, keine getippte C1-Aufgabe), statt „0 von N“; so zeigt das Blatt ohne Übungsdaten den Leerzustand.
 - **Prognose einfrieren:** passiert beim Öffnen des Blatts im Check-Fenster (nicht im Check selbst, den baut P40 parallel). Sobald P40 steht, kann der Check `withFc` direkt beim Speichern aufrufen.
 - **„Üben“ je Kriterium:** K1 Lernen, K2 Deutsch-Fallen, K3 Wortschatztest, K4 Wörter, K5 und K6 Anwenden (der C1-Check von P40 hat noch keine eigene Route), K7 ohne Knopf bis P46/P47/P51.
-- **K6** zählt alle getippten `err`-Antworten der letzten 28 Tage; Tempo-Antworten lassen sich im Protokoll nicht unterscheiden und zählen mit.
+- **K6** zählt alle getippten `err`-Antworten der letzten 28 Tage. *(Nachbesserung unten: Tempo-Antworten tragen seit 15.10.2026 `tp` und zählen nicht mehr.)*
 - **Seed:** wie bei P42 bewusst **kein** `app/c1`; die Tests spielen das Dokument per `fake.patch` ein. Ohne `app/c1` zeigt das Blatt Kriterien aus Grammatik und Wörtern, mit leerem Bestand den Leerzustand.
 
 **08.10.2026 – R3 „Dein Weg“ eingeschaltet; Kapitelprüfung und Meilenstein-Katalog (P42), Prüfungsvorrat Kapitel 1–3 (P43)**

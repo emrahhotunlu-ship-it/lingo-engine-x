@@ -34,7 +34,7 @@ export type C1Check = {
   p: [number, number, number, number];
   pts: number;
   max: 36;
-  fc?: { from: string; to: string; late: string } | null;
+  fc?: { from: string; to: string; late: string; inc?: string[]; out?: string[] } | { pause: string } | null;
   m?: Array<[string, number]>;
 };
 export type C1Gate = { d: string; ch: number; g: [number, number]; w: [number, number]; ok: boolean };

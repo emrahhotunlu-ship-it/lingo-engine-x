@@ -31,6 +31,11 @@ export type PromptTemplate<V, O> = {
   build(vars: V): string;
   /** Prüft die Antwort; hängt von den Variablen ab (z. B. Sprache der Erklärung). */
   schema(vars: V): z.ZodType<O>;
+  /**
+   * Optional: nachsichtigeres Schema NUR für die Antwort des einen Neuversuchs (A6.3), wenn auch sie `schema` verletzt. Beispiel `assess@4`:
+   * ein ungültiger Zusatzteil (`c1`) fällt weg, statt die ganze Antwort zu verwerfen. Löst nie einen weiteren Aufruf aus.
+   */
+  lenient?(vars: V): z.ZodType<O>;
 };
 
 /**

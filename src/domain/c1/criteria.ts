@@ -27,6 +27,8 @@ export const C1_GOALS = {
 
 /** Anteil des Wegs, ab dem ein Kriterium mit Trend nach vorn „auf Kurs“ ist. */
 export const ON_COURSE_SHARE = 0.5;
+/** K1-Trend „nach vorn“ erst ab so vielen neu sicheren Mustern in 8 Wochen (ein einzelnes kann Zufall sein). */
+export const K1_TREND_MIN = 2;
 
 export type Criterion = {
   id: CritId;
@@ -37,6 +39,8 @@ export type Criterion = {
   progress: number | null;
   /** Trend der letzten 8 Wochen: nach vorn, gleich/zurück, unbekannt. */
   trend: 'up' | 'flat' | null;
+  /** Nur bei „noch offen“: weniger als die Hälfte des Wegs (`far`) oder mehr als die Hälfte ohne messbaren Fortschritt (`flat`). */
+  why?: 'far' | 'flat';
 };
 
 export type CriteriaInput = {
@@ -69,6 +73,9 @@ function stateOf(met: boolean, progress: number | null, trend: Criterion['trend'
   return progress >= ON_COURSE_SHARE && trend === 'up' ? 'course' : 'open';
 }
 
+/** Grund für „noch offen“ (Detail „Warum“). */
+const whyOpen = (c: Criterion): Criterion => (c.state === 'open' && c.progress !== null ? { ...c, why: c.progress < ON_COURSE_SHARE ? 'far' : 'flat' } : c);
+
 /** „Weniger ist besser“: Weg zur Schwelle; Wert ≤ Schwelle = 1, doppelte Schwelle = 0,5, darüber weniger. */
 const lowerBetter = (value: number, goal: number): number => (value <= goal ? 1 : clamp01(goal / value));
 
@@ -81,7 +88,7 @@ function k1(m: K1Measure): Criterion {
   const parts = [clamp01(m.gates / g.gates), share === null ? 0 : clamp01(share / g.safeShare), freeRate === null ? 0 : clamp01(freeRate / g.freeRate)];
   // Nichts geübt (kein Muster sicher, keine Kapitelprüfung, keine getippte C1-Aufgabe): „zu wenig Daten“ statt „0 von N“.
   const progress = (m.total === 0 || m.safe === 0) && m.gates === 0 && !m.free?.n ? null : parts.reduce((s, x) => s + x, 0) / parts.length;
-  const trend = m.newSafe56 > 0 ? 'up' : 'flat';
+  const trend = m.newSafe56 >= K1_TREND_MIN ? 'up' : 'flat';
   return {
     id: 'k1',
     state: stateOf(met, progress, trend),
@@ -131,13 +138,13 @@ function k4(m: K4Measure): Criterion {
 function k5(desk: readonly DeskCheck[]): Criterion {
   const g = C1_GOALS.k5;
   const last = desk[desk.length - 1];
-  if (!last) return { id: 'k5', state: 'few', ev: { pct: null, minPart: null, checks: 0 }, progress: null, trend: null };
+  if (!last) return { id: 'k5', state: 'few', ev: { pct: null, pts: null, minPart: null, checks: 0 }, progress: null, trend: null };
   const prev = desk[desk.length - 2];
   const passes = (c: DeskCheck): boolean => c.pct >= g.pct && c.parts.every((p) => p >= g.partMin);
   const met = !!prev && passes(prev) && passes(last);
   const trend = prev ? (last.pct > prev.pct ? 'up' : 'flat') : null;
   const progress = clamp01(last.pct / g.pct);
-  return { id: 'k5', state: stateOf(met, progress, trend), ev: { pct: r2(last.pct), minPart: r2(Math.min(...last.parts)), checks: desk.length, d: last.d }, progress, trend };
+  return { id: 'k5', state: stateOf(met, progress, trend), ev: { pct: r2(last.pct), pts: last.pts, minPart: r2(Math.min(...last.parts)), checks: desk.length, d: last.d }, progress, trend };
 }
 
 function k6(m: K6Measure | null): Criterion {
@@ -174,7 +181,7 @@ function k7(c1: C1Doc, today: string, atChecks: ReadonlyArray<{ d: string; r: Pr
 export function c1Criteria(i: CriteriaInput): CriteriaResult {
   const desk = deskChecks(i.c1.checks);
   const k7Days = k7AtChecks(i.c1);
-  const list = [k1(i.k1), k2(i.k2), k3(i.k3), k4(i.k4), k5(desk), k6(i.k6), k7(i.c1, i.today, k7Days)];
+  const list = [k1(i.k1), k2(i.k2), k3(i.k3), k4(i.k4), k5(desk), k6(i.k6), k7(i.c1, i.today, k7Days)].map(whyOpen);
   const met = list.filter((c) => c.state === 'met').length;
   return { list, met, stage: met === CRITERIA.length, desk, k7Days };
 }

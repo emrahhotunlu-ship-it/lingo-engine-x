@@ -2,14 +2,17 @@ import { addDays, daysBetween } from '../date';
 import { programStart, slopePerDay, type K1Measure, type K4Measure } from '../metrics/c1';
 import type { C1Check, C1Doc } from './c1doc';
 import { CHECK_GAP_DAYS, inCheckWindow, isLastSaturday } from './checkSchedule';
-import { C1_GOALS, type CritId, type CriteriaResult } from './criteria';
+import { C1_GOALS, CRITERIA, type CritId, type CriteriaResult } from './criteria';
+import type { ChapterStateResult } from './state';
 
 // Prognose „C1-Etappe“ (Lernplattform 3.0 §4.6, P44). Je Kriterium Rest = Schwelle − Stand, Tempo = Mittel der letzten 8 Wochen
 // (K4 Fest-Zuwachs, K1 neu sichere Muster, K5/K7 Steigung über die Checks). Gesamt = das späteste Kriterium, es wird genannt.
 // Gezeigt wird nur ein Zeitraum in Monaten (mindestens 3 Monate breit), erst bei ≥ 6 Wochen Programm UND ≥ 3 Checks; davor
 // „noch nicht abschätzbar, ab <Datum des 3. Checks>“. Gerechnet wird nur im Check-Fenster und im Check-Eintrag eingefroren (`checks[].fc`),
-// dazwischen steht der eingefrorene Wert: die Anzeige flackert nie. Tempo ≤ 0 → `fc: null` („Nach deiner Pause rechnet die App ab dem
-// nächsten Check neu“). K2, K3 und K6 haben kein Tempo (§4.6) und fließen nicht ein; sie stehen nur als Zeilen da. Rein.
+// dazwischen steht der eingefrorene Wert: die Anzeige flackert nie. Tempo ≤ 0 → `fc: {pause: <Kriterium>}` („Bei <Kriterium> ging es zuletzt
+// nicht voran …“; ältere Einträge `fc: null` lesen sich neutral). K2, K3 und K6 haben kein Tempo (§4.6) und fließen nicht ein; welche
+// Kriterien eingerechnet sind (`inc`) und welche nicht (`out`), wird mit eingefroren und angezeigt. K1 hat eine Untergrenze aus den offenen
+// Kapiteln (je offenes Thema 1 Tag, je Kapitel 14 Tage): schneller als das Programm selbst kann der Grammatik-Weg nicht fertig sein. Rein.
 
 export const FC_MIN_CHECKS = 3;
 export const FC_MIN_DAYS = 42;
@@ -20,7 +23,14 @@ export const FC_SLOW = 0.75;
 /** Weiter als 10 Jahre wird nicht gerechnet (eine solche Zahl sagt nichts). */
 const FC_MAX_DAYS = 3650;
 
-export type FcValue = { from: string; to: string; late: string };
+/** Eingefrorene Prognose: Zeitraum mit eingerechneten (`inc`) und nicht eingerechneten (`out`) Kriterien, oder Pause mit dem Kriterium ohne Fortschritt. */
+export type FcRange = { from: string; to: string; late: string; inc?: string[]; out?: string[] };
+export type FcPause = { pause: string };
+export type FcValue = FcRange | FcPause;
+
+/** Mindestdauer des Grammatik-Wegs je offenes Thema und je offenes Kapitel (Tage). */
+export const K1_DAYS_PER_TOPIC = 1;
+export const K1_DAYS_PER_CHAPTER = 14;
 
 export type CritEta = { id: CritId; rest: number; perDay: number; lo: number; hi: number; mid: number };
 
@@ -28,7 +38,7 @@ export type ForecastCalc =
   | { kind: 'reached' }
   | { kind: 'none'; missing: CritId[] }
   | { kind: 'pause'; ids: CritId[] }
-  | { kind: 'range'; from: string; to: string; late: CritId; etas: CritEta[]; missing: CritId[] };
+  | { kind: 'range'; from: string; to: string; late: CritId; etas: CritEta[]; missing: CritId[]; out: CritId[] };
 
 const monthOf = (day: string): string => day.slice(0, 7);
 function addMonths(month: string, n: number): string {
@@ -42,37 +52,51 @@ const monthsBetween = (a: string, b: string): number => {
   return ((yb ?? 0) - (ya ?? 0)) * 12 + ((mb ?? 0) - (ma ?? 0));
 };
 
+/** Untergrenze des Grammatik-Wegs in Tagen aus dem Kapitelstand: offene Themen × 1 Tag + offene Kapitel × 14 Tage. Rein. */
+export function k1FloorDays(chapters: ChapterStateResult | undefined): number {
+  if (!chapters) return 0;
+  let topics = 0;
+  let open = 0;
+  for (const ch of chapters.chapters) {
+    if (ch.status === 'done') continue;
+    open++;
+    topics += ch.topics.filter((t) => !t.safe).length;
+  }
+  return topics * K1_DAYS_PER_TOPIC + open * K1_DAYS_PER_CHAPTER;
+}
+
 /**
  * Rechnung zum Tag `today` aus den Kriterien und ihren Messwerten. Rein. Nur Kriterien mit Tempo (§4.6): K1 (Muster, 80 % sicher),
  * K4 (750 fest), K5 (60 % im Laptop-Check), K7 (≤ 3,0 Fehler je 100 Wörter). Erfüllte Kriterien haben Rest 0; fehlt einem offenen Kriterium
- * die Datenbasis, steht es unter `missing` und zählt nicht.
+ * die Datenbasis, steht es unter `missing` und zählt nicht. `out` = alle offenen Kriterien, die nicht eingerechnet sind (ohne Tempo oder ohne Daten).
  */
-export function forecastCalc(i: { today: string; crit: CriteriaResult; k1: K1Measure; k4: K4Measure }): ForecastCalc {
+export function forecastCalc(i: { today: string; crit: CriteriaResult; k1: K1Measure; k4: K4Measure; chapters?: ChapterStateResult }): ForecastCalc {
   if (i.crit.stage) return { kind: 'reached' };
   const state = new Map(i.crit.list.map((c) => [c.id, c.state]));
   const missing: CritId[] = [];
   const pause: CritId[] = [];
   const etas: CritEta[] = [];
-  const add = (id: CritId, rest: number | null, perDay: number | null): void => {
+  const cap = (d: number): number => Math.min(FC_MAX_DAYS, Math.ceil(d));
+  const add = (id: CritId, rest: number | null, perDay: number | null, floor = 0): void => {
     if (state.get(id) === 'met') return;
     if (rest === null || perDay === null) {
       missing.push(id);
       return;
     }
+    const f = cap(floor);
     if (rest <= 0) {
-      etas.push({ id, rest: 0, perDay, lo: 0, hi: 0, mid: 0 });
+      etas.push({ id, rest: 0, perDay, lo: f, hi: f, mid: f });
       return;
     }
     if (perDay <= 0) {
       pause.push(id);
       return;
     }
-    const cap = (d: number): number => Math.min(FC_MAX_DAYS, Math.ceil(d));
-    etas.push({ id, rest, perDay, lo: cap(rest / (perDay * FC_FAST)), hi: cap(rest / (perDay * FC_SLOW)), mid: cap(rest / perDay) });
+    etas.push({ id, rest, perDay, lo: Math.max(f, cap(rest / (perDay * FC_FAST))), hi: Math.max(f, cap(rest / (perDay * FC_SLOW))), mid: Math.max(f, cap(rest / perDay)) });
   };
 
   const k1 = i.k1;
-  add('k1', k1.total > 0 ? Math.max(0, Math.ceil(C1_GOALS.k1.safeShare * k1.total) - k1.safe) : null, k1.total > 0 ? k1.newSafe56 / 56 : null);
+  add('k1', k1.total > 0 ? Math.max(0, Math.ceil(C1_GOALS.k1.safeShare * k1.total) - k1.safe) : null, k1.total > 0 ? k1.newSafe56 / 56 : null, k1FloorDays(i.chapters));
   const g = i.k4.growth;
   add('k4', i.k4.learned > 0 || i.k4.fest > 0 ? Math.max(0, C1_GOALS.k4.fest - i.k4.fest) : null, g && g.days > 0 ? g.delta / g.days : null);
   const desk = i.crit.desk;
@@ -97,13 +121,15 @@ export function forecastCalc(i: { today: string; crit: CriteriaResult; k1: K1Mea
     from = addMonths(from, -before);
     to = addMonths(to, need - before);
   }
-  return { kind: 'range', from, to, late: late.id, etas, missing };
+  const inc = new Set(etas.map((e) => e.id));
+  const out = CRITERIA.filter((id) => state.get(id) !== 'met' && !inc.has(id));
+  return { kind: 'range', from, to, late: late.id, etas, missing, out };
 }
 
 /** Der eingefrorene Wert eines Check-Eintrags aus einer Rechnung; `undefined` = nichts einfrieren (keine Datenbasis). */
-export function fcOf(calc: ForecastCalc): FcValue | null | undefined {
-  if (calc.kind === 'range') return { from: calc.from, to: calc.to, late: calc.late };
-  if (calc.kind === 'pause') return null;
+export function fcOf(calc: ForecastCalc): FcValue | undefined {
+  if (calc.kind === 'range') return { from: calc.from, to: calc.to, late: calc.late, inc: calc.etas.map((e) => e.id), out: [...calc.out] };
+  if (calc.kind === 'pause') return { pause: calc.ids[0] ?? 'k1' };
   return undefined;
 }
 
@@ -144,8 +170,10 @@ export type ForecastView =
   | { kind: 'wait'; from: string | null }
   /** Erlaubt, aber noch kein eingefrorener Wert: entsteht am nächsten Check-Tag. */
   | { kind: 'pending'; next: string }
-  | { kind: 'pause' }
-  | { kind: 'range'; from: string; to: string; late: CritId }
+  /** Kein Fortschritt bei `id` (`null` = älterer Eintrag ohne Kriterium): neutral, nie „Pause“ unterstellt. */
+  | { kind: 'pause'; id: CritId | null }
+  /** `inc`/`out`: eingerechnete und nicht eingerechnete Kriterien (`null` = älterer Eintrag ohne Listen). */
+  | { kind: 'range'; from: string; to: string; late: CritId; inc: CritId[] | null; out: CritId[] | null }
   | { kind: 'reached' };
 
 const isCrit = (v: string): v is CritId => /^k[1-7]$/.test(v);
@@ -159,10 +187,14 @@ export function forecastView(c1: C1Doc, today: string, stage: boolean): Forecast
     const last = c1.checks.map((c) => c.d).sort().pop() ?? null;
     return { kind: 'pending', next: nextCheckDay(today, last) };
   }
-  if (!frozen.fc) return { kind: 'pause' };
-  const { from, to, late } = frozen.fc;
-  if (!/^\d{4}-\d{2}$/.test(from) || !/^\d{4}-\d{2}$/.test(to) || !isCrit(late)) return { kind: 'pause' };
-  return { kind: 'range', from, to, late };
+  const fc: unknown = frozen.fc;
+  if (!fc || typeof fc !== 'object') return { kind: 'pause', id: null };
+  const o = fc as Record<string, unknown>;
+  if ('pause' in o) return { kind: 'pause', id: typeof o.pause === 'string' && isCrit(o.pause) ? o.pause : null };
+  const { from, to, late } = o;
+  if (typeof from !== 'string' || typeof to !== 'string' || typeof late !== 'string' || !/^\d{4}-\d{2}$/.test(from) || !/^\d{4}-\d{2}$/.test(to) || !isCrit(late)) return { kind: 'pause', id: null };
+  const ids = (v: unknown): CritId[] | null => (Array.isArray(v) ? v.filter((x): x is CritId => typeof x === 'string' && isCrit(x)) : null);
+  return { kind: 'range', from, to, late, inc: ids(o.inc), out: ids(o.out) };
 }
 
 /**

@@ -60,7 +60,7 @@ describe('Kappung und Verdichtung (`prod` ≤ 150)', () => {
   it('über 150 Einträge in 8 Wochen: die ältesten fallen weg, nie mehr als 150', () => {
     let cur: Record<string, unknown> | undefined = undefined;
     for (let k = 0; k < 160; k++) {
-      const op = c1Update(cur, (doc) => addProdTo(doc, { d: addDays(TODAY, -(k % 50)), s: 'clinic', w: 40, e: 1 }), TODAY);
+      const op = c1Update(cur, (doc) => addProdTo(doc, { d: addDays(TODAY, -(k % 50)), s: 'clinic', w: 40 + Math.floor(k / 50), e: 1 }), TODAY);
       expect(op).not.toBeNull();
       cur = op && 'set' in op ? op.set : { ...(cur ?? {}), ...(op as { update: Record<string, unknown> }).update };
     }

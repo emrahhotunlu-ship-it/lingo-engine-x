@@ -259,3 +259,4 @@ Tests: 1953 Unit; E2E der berührten Bildschirme grün (a11y: Kontrast der „Ne
 - **Schalter `way` an** (letzter Schritt); `{"way":false}` je Gerät führt zurück auf assess@3.
 - Bilder: `docs/umbau/design-vergleich/r4-weg-01…05-*.png` (390, dunkel; Spec `r4WegShots.spec.ts`, nur mit `LX_SHOTS=1`).
 - Abweichungen: `docs/entscheidungen.md` (08.10.2026, R4 „Messen“).
+- 08.10.2026 · P44/P45 Nachbesserung (Prüfbefunde learning-scientist/data-guard) auf `claude/umbau-r4-weg`: Status aus der Zählung, nur `c1` verwerfen, K6 ohne Tempo (`tp`), Einfrieren erst nach dem Laden, K1-Untergrenze in der Prognose, Detail mit Grund und „So kommst du weiter“, Doppelschutz `prod`. Details: `docs/entscheidungen.md` (08.10.2026, Nachbesserung).

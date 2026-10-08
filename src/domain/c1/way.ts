@@ -3,7 +3,7 @@ import { readPatterns } from '../patterns/patterns';
 import { k1Measure, k2Measure, k3Measure, k4Measure, k6Measure, logEntriesOf, CHECK_PART_MAX, type K1Measure, type K2Measure, type K3Measure, type K4Measure, type K6Measure } from '../metrics/c1';
 import { readC1, type C1Doc } from './c1doc';
 import { c1Criteria, type CritId, type CritState, type Criterion, type CriteriaResult } from './criteria';
-import { forecastCalc, forecastView, type ForecastCalc, type ForecastView } from './forecast';
+import { fcOf, forecastCalc, forecastView, freezeIndex, type FcValue, type ForecastCalc, type ForecastView } from './forecast';
 import { chapterState, type ChapterStateResult } from './state';
 
 // „Weg zu C1“ (Lernplattform 3.0 §4.4–§4.6, P45): alle Messwerte, Kriterien und die Prognose in EINEM reinen Aufruf, dazu die englischen
@@ -67,10 +67,21 @@ export function c1Way(i: WayInput): Way {
   const k4 = k4Measure(i.cards, i.profile?.history, i.nowMs, i.today);
   const k6 = entries ? k6Measure(entries, i.itemOf, i.nowMs) : null;
   const crit = c1Criteria({ today: i.today, c1, k1, k2, k3, k4, k6 });
-  const calc = forecastCalc({ today: i.today, crit, k1, k4 });
+  const calc = forecastCalc({ today: i.today, crit, k1, k4, chapters });
   const view = forecastView(c1, i.today, crit.stage);
   const empty = crit.list.every((c) => c.state === 'few') && !c1.checks.length && !c1.gates.length && !c1.place;
   return { c1, chapters, k1, k2, k3, k4, k6, crit, calc, view, empty };
+}
+
+/**
+ * Was jetzt eingefroren werden soll (K-d): nur wenn ALLES geladen ist (`loaded`: Protokolle, app/c1, app/profile, vocab, chunk, grammar),
+ * nur im Check-Fenster für den Check dieses Monats ohne Wert. `null` = nichts tun. Rein.
+ */
+export function freezePlan(w: Way, today: string, loaded: boolean): { d: string; fc: FcValue } | null {
+  if (!loaded) return null;
+  const check = w.c1.checks[freezeIndex(w.c1, today)];
+  const fc = fcOf(w.calc);
+  return check && fc !== undefined ? { d: check.d, fc } : null;
 }
 
 /** Kriterien, die noch fehlen (nicht erreicht), in fester Reihenfolge. */
@@ -105,7 +116,10 @@ function critText(c: Criterion): string {
     case 'k6':
       return `K6 error correction (${s}): typed corrections right ${val(e.ok)}/${val(e.n)} (goal 80%, at least 20); clean sentences left as they were ${pct(e.clean)} (goal 75%).`;
     case 'k7':
-      return `K7 accuracy in own writing (${s}; counted by Claude, guide value only): ${val(e.rate)} errors per 100 words over ${val(e.words)} words, ${val(e.entries)} texts, ${val(e.weeks)} weeks (goal at most 3.0 at two checks in a row).`;
+      // Unter der Mindestmenge keine Rate: eine Zahl aus zwei Texten ist kein Beleg (P5).
+      return c.state === 'few'
+        ? `K7 accuracy in own writing (${s}): ${val(e.words)} of 600 words, ${val(e.entries)} of 6 texts, ${val(e.weeks)} of 3 weeks; no rate below the minimum.`
+        : `K7 accuracy in own writing (${s}; counted by Claude, guide value only): ${val(e.rate)} errors per 100 words over ${val(e.words)} words, ${val(e.entries)} texts, ${val(e.weeks)} weeks (goal at most 3.0 at two checks in a row).`;
   }
 }
 

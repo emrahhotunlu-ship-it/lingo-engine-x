@@ -8,8 +8,8 @@ import type { AssessC1 } from '../../domain/assessment/types';
 import { patchC1 } from '../../domain/c1/c1doc';
 import { programChapters } from '../../domain/c1/chapters';
 import { CRITERIA, type CritId, type Criterion } from '../../domain/c1/criteria';
-import { fcOf, freezeIndex, withFc, type ForecastView } from '../../domain/c1/forecast';
-import { openCrit, type Way } from '../../domain/c1/way';
+import { withFc, type ForecastView } from '../../domain/c1/forecast';
+import { freezePlan, openCrit, type Way } from '../../domain/c1/way';
 import { preloadC1x } from '../../domain/c1x/preload';
 import { CHECK_PART_MAX } from '../../domain/metrics/c1';
 import { useT } from '../../i18n';
@@ -23,7 +23,7 @@ import { topicName } from '../grammar/topicUi';
 import { runAssess, stopAssess, useAssessRun } from '../progress/assessRun';
 import { useDocsOnce } from '../progress/useOnce';
 import { useChapterState } from './ProgramMap';
-import { PATTERNS_DOC, wayFromLive, wayLogPaths } from './wayData';
+import { PATTERNS_DOC, wayFromLive, wayLiveLoaded, wayLogPaths } from './wayData';
 
 // „Weg zu C1“ (Lernplattform 3.0 §4.4, P45): Kopfzeile im Fortschritt (Slot `progress.head`) und das Blatt.
 // Handy, von oben nach unten: Urteil (1–2 Sätze, „von Claude · Stand <Datum>“), „Was dir noch fehlt“ (≤ 3 Zeilen mit „Üben“), K1–K7 (Zustandswort
@@ -35,7 +35,7 @@ import { PATTERNS_DOC, wayFromLive, wayLogPaths } from './wayData';
 
 type Doc = Record<string, unknown>;
 
-/** Wohin „Üben“ je Kriterium führt; `null` = (noch) kein Übungsort (K7: Schreibklinik kommt mit P46/P47/P51). */
+/** Wohin „Üben“ je Kriterium führt; `null` = (noch) kein Übungsort (K7: statt Knopf der Satz „Kommt mit der Satz-Klinik“, P46/P47/P51). */
 const PRACTICE: Record<CritId, Route | null> = {
   k1: { name: 'learn' },
   k2: { name: 'patterns' },
@@ -81,6 +81,8 @@ export function useWay(open: boolean): { way: Way; loading: boolean } {
       alive = false;
     };
   }, [open]);
+  // Einfrieren und Anzeige erst, wenn auch die Live-Daten nachweislich da sind (K-d): sonst rechnete die Prognose mit leeren Sammlungen.
+  const liveReady = wayLiveLoaded({ docs, collections });
   const ready = once.status !== 'loading';
   const way = useMemo(() => {
     const logs: Doc[] | null = ready ? paths.slice(0, -1).flatMap((p) => (once.value.get(p) ? [once.value.get(p) as Doc] : [])) : null;
@@ -88,7 +90,7 @@ export function useWay(open: boolean): { way: Way; loading: boolean } {
     // `items`: nach dem Laden der Fehler-Aufgaben neu rechnen (K6 braucht sie).
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docs, collections, invalid, today, nowMs, ready, once.value, paths, items]);
-  return { way, loading: !ready };
+  return { way, loading: !ready || !liveReady };
 }
 
 // ------------------------------------------------------------------ Kopfzeile im Fortschritt
@@ -172,7 +174,7 @@ function WayBody({ wide, onClose }: { wide: boolean; onClose: () => void }) {
       <p className="text-sm text-muted">{t('pxWayIntro')}</p>
       <Verdict way={way} />
       <Missing way={way} onClose={onClose} />
-      <CritList way={way} />
+      <CritList way={way} onClose={onClose} />
     </>
   );
   const right = (
@@ -209,19 +211,18 @@ function go(route: Route, close: () => void): void {
 }
 
 /**
- * Prognose einfrieren (§4.6): nur im Check-Fenster, nur für den Check dieses Monats, nur einmal und erst mit gelesenen Protokollen.
- * Danach zeigt die Anzeige nur den eingefrorenen Wert.
+ * Prognose einfrieren (§4.6): nur im Check-Fenster, nur für den Check dieses Monats, nur einmal und erst, wenn Protokolle UND Live-Daten
+ * (app/c1, app/profile, vocab, chunk, grammar) geladen sind. Rückfall: normalerweise friert der Check selbst beim Speichern ein (P40, `withFc`);
+ * hier nur, wenn sein Eintrag noch keinen Wert hat (`withFc` schreibt nie über einen vorhandenen). Danach zeigt die Anzeige nur den eingefrorenen Wert.
  */
 function useFreeze(way: Way, today: string, loading: boolean): void {
   const done = useRef(false);
   useEffect(() => {
-    if (loading || done.current) return;
-    const idx = freezeIndex(way.c1, today);
-    const check = way.c1.checks[idx];
-    const fc = fcOf(way.calc);
-    if (idx < 0 || !check || fc === undefined) return;
+    if (done.current) return;
+    const plan = freezePlan(way, today, !loading);
+    if (!plan) return;
     done.current = true;
-    void patchC1((doc) => withFc(doc, check.d, fc));
+    void patchC1((doc) => withFc(doc, plan.d, plan.fc));
   }, [way, today, loading]);
 }
 
@@ -242,7 +243,10 @@ function Verdict({ way }: { way: Way }) {
   const { t, date } = useT();
   const ai = useAiAvailable();
   const run = useAssessRun();
-  const { c1, d } = useVerdict();
+  const v = useVerdict();
+  // Der Code entscheidet über die Etappe (B2): passt Claudes Status nicht zur Zählung (z. B. ein älteres „ready“), gilt der feste Satz.
+  const c1 = v.c1 && (v.c1.status === 'ready') === way.crit.stage ? v.c1 : null;
+  const d = c1 ? v.d : null;
   const running = run.phase === 'locking' || run.phase === 'gathering' || run.phase === 'asking' || run.phase === 'saving';
   return (
     <section className="flex flex-col gap-2" aria-labelledby="way-verdict" data-testid="way-verdict" data-source={c1 ? 'claude' : 'app'} data-status={c1?.status}>
@@ -259,6 +263,9 @@ function Verdict({ way }: { way: Way }) {
           </p>
           <p className="text-xs text-subtle" data-testid="way-by">
             {t('pxWayBy', { date: d ? date(dayMs(d)) : '' })}
+          </p>
+          <p className="text-xs text-subtle" data-testid="way-count">
+            {t('pxWayCount', { a: way.crit.met })}
           </p>
         </>
       ) : (
@@ -335,10 +342,14 @@ function Missing({ way, onClose }: { way: Way; onClose: () => void }) {
                   <span className="text-xs text-subtle">{t(`pxK_${r.id}`)}</span>
                   <span className="text-sm text-fg">{r.title}</span>
                 </span>
-                {route && (
+                {route ? (
                   <Button size="md" variant="secondary" onClick={() => go(route, onClose)} aria-label={t('pxWayPracticeAria', { name: t(`pxK_${r.id}`) })} data-testid="way-practice">
                     {t('pxWayPractice')}
                   </Button>
+                ) : (
+                  <span className="shrink-0 text-xs text-subtle" data-testid="way-practice-later">
+                    {t('pxWayPracticeLater')}
+                  </span>
                 )}
               </li>
             );
@@ -366,16 +377,42 @@ export function evText(c: Criterion, t: (k: string, v?: Record<string, string | 
     case 'k4':
       return c.state === 'few' ? t('pxKEvFew_k4') : t('pxKEv_k4', { n: n(e.fest) });
     case 'k5':
-      return c.state === 'few' ? t('pxKEvFew_k5') : t('pxKEv_k5', { pts: n(typeof e.pct === 'number' ? Math.round(e.pct * 36) : null) });
+      return c.state === 'few' ? t('pxKEvFew_k5') : t('pxKEv_k5', { pts: n(e.pts) });
     case 'k6':
       return c.state === 'few' ? t('pxKEvFew_k6', { n: n(e.n ?? 0) }) : t('pxKEv_k6', { ok: n(e.ok), n: n(e.n) });
     case 'k7':
-      return c.state === 'few' ? t('pxKEvFew_k7', { words: n(e.words) }) : t('pxKEv_k7', { rate: typeof e.rate === 'number' ? e.rate.toFixed(1) : '–' });
+      return c.state === 'few' ? t('pxKEvFew_k7', { words: n(e.words ?? 0), entries: n(e.entries ?? 0), weeks: n(e.weeks ?? 0) }) : t('pxKEv_k7', { rate: typeof e.rate === 'number' ? e.rate.toFixed(1) : '–' });
   }
 }
 
-function CritList({ way }: { way: Way }) {
+/** Detail „Warum“: bei „noch offen“ der Grund (weit weg / ohne Fortschritt), bei „zu wenig Daten“ die fehlende Menge (B1). */
+export function reasonText(c: Criterion, t: (k: string, v?: Record<string, string | number>) => string, num: (n: number) => string, list: (xs: string[]) => string): string {
+  if (c.state === 'open') return t(c.why === 'flat' ? 'pxKReason_openFlat' : 'pxKReason_openFar');
+  if (c.state !== 'few') return t(`pxKReason_${c.state}`);
+  const e = c.ev;
+  const v = (x: unknown): number => (typeof x === 'number' && Number.isFinite(x) ? x : 0);
+  switch (c.id) {
+    case 'k3':
+      return e.old ? t('pxKReasonFew_k3old') : t('pxKReasonFew_k3');
+    case 'k6':
+      return t('pxKReasonFew_k6', { n: num(Math.max(0, v(e.need) - v(e.n))) });
+    case 'k7': {
+      const parts = [
+        [Math.max(0, 600 - v(e.words)), 'pxKFewWords'],
+        [Math.max(0, 6 - v(e.entries)), 'pxKFewTexts'],
+        [Math.max(0, 3 - v(e.weeks)), 'pxKFewWeeks'],
+      ] as const;
+      const xs = parts.filter(([k]) => k > 0).map(([k, key]) => t(key, { n: num(k) }));
+      return xs.length ? t('pxKReasonFew_k7', { list: list(xs) }) : t('pxKReason_few');
+    }
+    default:
+      return t(`pxKReasonFew_${c.id}`);
+  }
+}
+
+function CritList({ way, onClose }: { way: Way; onClose: () => void }) {
   const { t, lang } = useT();
+  const listFmt = useMemo(() => new Intl.ListFormat(lang === 'de' ? 'de-DE' : 'en-US', { style: 'long', type: 'conjunction' }), [lang]);
   const [openId, setOpenId] = useState<CritId | null>(null);
   const fmt = useMemo(() => new Intl.NumberFormat(lang === 'de' ? 'de-DE' : 'en-US'), [lang]);
   const tt = t as (k: string, v?: Record<string, string | number>) => string;
@@ -390,6 +427,7 @@ function CritList({ way }: { way: Way }) {
           if (!c) return null;
           const state = t(`pxKState_${c.state}`);
           const expanded = openId === id;
+          const route = PRACTICE[id];
           return (
             <li key={id} data-testid="way-crit-row" data-crit={id} data-state={c.state}>
               <button
@@ -422,11 +460,35 @@ function CritList({ way }: { way: Way }) {
                   </div>
                   <div>
                     <dt className="text-xs text-subtle">{t('pxKNowLabel')}</dt>
-                    <dd className="text-muted">{evText(c, tt, (x) => fmt.format(x))}</dd>
+                    <dd className="text-muted">
+                      {evText(c, tt, (x) => fmt.format(x))}
+                      {id === 'k6' && (way.k6?.unmarked ?? 0) > 0 && (
+                        <span className="block text-xs text-subtle" data-testid="way-k6-tempo">
+                          {t('pxKTempoMixed')}
+                        </span>
+                      )}
+                    </dd>
                   </div>
                   <div>
                     <dt className="text-xs text-subtle">{t('pxKReasonLabel', { state })}</dt>
-                    <dd className="text-muted">{t(`pxKReason_${c.state}`)}</dd>
+                    <dd className="text-muted" data-testid="way-crit-reason">
+                      {reasonText(c, tt, (x) => fmt.format(x), (xs) => listFmt.format(xs))}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-xs text-subtle">{t('pxKDoLabel')}</dt>
+                    <dd className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="text-muted">{t(`pxKDo_${id}`)}</span>
+                      {route ? (
+                        <Button size="md" variant="secondary" onClick={() => go(route, onClose)} aria-label={t('pxWayPracticeAria', { name: t(`pxK_${id}`) })} data-testid="way-crit-practice">
+                          {t('pxWayPractice')}
+                        </Button>
+                      ) : (
+                        <span className="text-xs text-subtle" data-testid="way-practice-later">
+                          {t('pxWayPracticeLater')}
+                        </span>
+                      )}
+                    </dd>
                   </div>
                 </dl>
               )}
@@ -479,6 +541,7 @@ function Band({ way }: { way: Way }) {
 
 function Forecast({ view, stage }: { view: ForecastView; stage: boolean }) {
   const { t, lang, date } = useT();
+  const listFmt = useMemo(() => new Intl.ListFormat(lang === 'de' ? 'de-DE' : 'en-US', { style: 'long', type: 'conjunction' }), [lang]);
   let text: string;
   switch (view.kind) {
     case 'wait':
@@ -488,11 +551,19 @@ function Forecast({ view, stage }: { view: ForecastView; stage: boolean }) {
       text = t('pxWayFcPending', { date: date(dayMs(view.next)) });
       break;
     case 'pause':
-      text = t('pxWayFcPause');
+      // Neutral (K-e): nie eine Lernpause unterstellen, nur sagen, wo es zuletzt nicht voranging.
+      text = view.id ? t('pxWayFcPauseCrit', { name: t(`pxK_${view.id}`) }) : t('pxWayFcPause');
       break;
-    case 'range':
-      text = `${t('pxWayFcRange', { from: monthLabel(view.from, lang), to: monthLabel(view.to, lang) })} ${t('pxWayFcLate', { name: t(`pxK_${view.late}`) })}`;
+    case 'range': {
+      // Welche Kriterien eingerechnet sind und welche nicht (K-f), wie eingefroren; ältere Einträge ohne Listen: der allgemeine Satz.
+      const names = (ids: readonly CritId[]): string => listFmt.format(ids.map((id) => t(`pxK_${id}`)));
+      const from = monthLabel(view.from, lang);
+      const to = monthLabel(view.to, lang);
+      const head = view.inc && view.inc.length ? t('pxWayFcRangeInc', { list: names(view.inc), from, to }) : t('pxWayFcRange', { from, to });
+      const out = view.out && view.out.length ? ` ${t('pxWayFcOut', { list: names(view.out) })}` : '';
+      text = `${head} ${t('pxWayFcLate', { name: t(`pxK_${view.late}`) })}${out}`;
       break;
+    }
     case 'reached':
       text = '';
       break;
@@ -507,7 +578,11 @@ function Forecast({ view, stage }: { view: ForecastView; stage: boolean }) {
           {t('pxWayStage')}
         </p>
       )}
-      {text && <p className="text-sm text-fg">{text}</p>}
+      {text && (
+        <p className="text-sm text-fg" data-testid="way-fc-text">
+          {text}
+        </p>
+      )}
       {view.kind === 'range' && <p className="text-xs text-subtle">{t('pxWayFcNote')}</p>}
       <p className="text-sm text-muted" data-testid="way-not-measured">
         {t('pxWayNotMeasured')}

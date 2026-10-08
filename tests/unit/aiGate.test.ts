@@ -249,6 +249,34 @@ describe('Fehlercodes', () => {
     expect(calls).toHaveLength(2);
   });
 
+  it('P8: `lenient` greift erst nach dem einen Neuversuch, ohne weiteren Aufruf', async () => {
+    type O2 = { ok: boolean; extra?: number };
+    const strict = z.object({ ok: z.boolean(), extra: z.number().int().optional() });
+    const tpl2: PromptTemplate<V, O2> = {
+      ...tpl,
+      id: 'unit-lenient',
+      schema: () => strict,
+      lenient: () => z.object({ ok: z.boolean(), extra: z.unknown().optional().transform((): undefined => undefined) }),
+    };
+    const p = askJson({ template: tpl2, vars: { word: 'l' }, signal: new AbortController().signal });
+    await flush();
+    calls[0]!.resolve({ ok: true, extra: 'x' });
+    await flush();
+    // Erste Antwort: trotz `lenient` ein Neuversuch (Claude soll den Zusatzteil richtig liefern).
+    expect(calls).toHaveLength(2);
+    calls[1]!.resolve({ ok: true, extra: 'still bad' });
+    await expect(p).resolves.toEqual({ data: { ok: true }, tierApplied: 'quick', retried: true });
+    await flush();
+    expect(calls).toHaveLength(2);
+    // Ist auch der Pflichtteil kaputt, hilft `lenient` nicht: invalid.
+    const q = askJson({ template: tpl2, vars: { word: 'm' }, signal: new AbortController().signal });
+    await flush();
+    calls[2]!.resolve({ ok: 'no' });
+    await flush();
+    calls[3]!.resolve({ ok: 'no' });
+    expect(((await q.catch((e: unknown) => e)) as AiFailure).kind).toBe('invalid');
+  });
+
   it('B2: Neuversuch fragt frisch; nach Schemafehler holt „Erneut versuchen" mit refresh, danach wieder normal', async () => {
     const s = new AbortController().signal;
     const p = askJson({ template: tpl, vars: { word: 'b2' }, signal: s });

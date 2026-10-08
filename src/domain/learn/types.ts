@@ -89,6 +89,8 @@ export type GrammarAnswer = {
   c1k?: C1Kind;
   /** Der urteilstragende Anteil wurde getippt (freier Abruf). Auswahl und Bausteine allein nie: sie setzen das Hilfe-Bit der Muster. */
   free?: boolean;
+  /** Antwort aus einer Tempo-Runde: im Protokoll `tp: true`, zählt nicht für K6 (P44-Nachbesserung). */
+  tempo?: boolean;
   /** Zweite Sicht einer schon gesehenen Aufgabe: hebt BKT nie, setzt das Bit „ohne Hilfe“ nicht. */
   again?: boolean;
   /** Zahl der Wahlmöglichkeiten für die Ratekorrektur im BKT (z. B. `pair` = 6, `err` Fundort = Wortzahl); sonst aus der Aufgabenart. */

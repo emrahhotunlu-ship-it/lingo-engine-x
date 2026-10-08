@@ -19,6 +19,12 @@ export const wayLogPaths = (today: string): string[] => Array.from({ length: C1_
 
 export const PATTERNS_DOC = 'app/patterns';
 
+/** Sind alle Live-Daten da, aus denen „Weg zu C1“ rechnet? (`undefined` = noch nicht geladen; `null` = Dokument fehlt, das ist geladen.) */
+export function wayLiveLoaded(live: Pick<LiveState, 'docs' | 'collections'>): boolean {
+  const { docs, collections } = live;
+  return docs['app/c1'] !== undefined && docs['app/profile'] !== undefined && collections.vocab !== undefined && collections.chunk !== undefined && collections.grammar !== undefined;
+}
+
 export function wayFromLive(live: Pick<LiveState, 'docs' | 'collections' | 'invalid'>, i: { today: string; nowMs: number; logs: readonly Doc[] | null; patterns: unknown }): Way {
   const cards = [
     ...buildTrainCards(live.collections.vocab ?? EMPTY, i.nowMs, invalidIdsOf(live.invalid, 'vocab')),

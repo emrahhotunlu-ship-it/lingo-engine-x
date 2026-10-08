@@ -45,10 +45,14 @@ export function prodEntry(i: ProdInput): C1Prod | null {
   return { d: i.d, s: i.s, w, e };
 }
 
-/** Änderung für `patchC1`: Eintrag anhängen (sortiert nach Tag). `null`, wenn er nicht zählt. Rein. */
+/**
+ * Änderung für `patchC1`: Eintrag anhängen (sortiert nach Tag). `null`, wenn er nicht zählt oder schon genau so dasteht (gleicher Tag, Quelle,
+ * Wörter und Fehler, keine Wochensumme): Doppelschutz gegen zweimal gebuchte Texte (zweiter Klick, zweites Gerät, Neuversuch). Rein.
+ */
 export function addProdTo(doc: C1Doc, i: ProdInput): C1Doc | null {
   const entry = prodEntry(i);
   if (!entry) return null;
+  if (doc.prod.some((p) => p.wk !== true && p.d === entry.d && p.s === entry.s && p.w === entry.w && p.e === entry.e)) return null;
   const prod = [...doc.prod, entry].sort((a, b) => a.d.localeCompare(b.d));
   return { ...doc, prod };
 }

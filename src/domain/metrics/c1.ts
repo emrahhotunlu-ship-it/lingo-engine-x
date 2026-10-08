@@ -152,7 +152,8 @@ export function k4Measure(cards: readonly Card[], history: unknown, nowMs: numbe
 
 // ------------------------------------------------------------------ K5 Prüfungsformate
 
-export type DeskCheck = { d: string; pct: number; parts: [number, number, number, number] };
+/** `pts` = Punkte des Checks (0–36), genau wie gespeichert (Anzeige „x von 36“ ohne Umrechnung). */
+export type DeskCheck = { d: string; pct: number; pts: number; parts: [number, number, number, number] };
 
 /** Anteil einer Check-Punktzahl und je Teil (0–1). Nur Laptop-Checks (`inp: 'desk'`) zählen für K5. */
 export function deskChecks(checks: readonly C1Check[]): DeskCheck[] {
@@ -161,7 +162,7 @@ export function deskChecks(checks: readonly C1Check[]): DeskCheck[] {
     if (c.inp !== 'desk' || !Array.isArray(c.p) || c.p.length !== 4) continue;
     const pts = num(c.pts) ?? c.p.reduce((s, x) => s + (num(x) ?? 0), 0);
     const parts = c.p.map((x, k) => Math.max(0, Math.min(1, (num(x) ?? 0) / (CHECK_PART_MAX[k] ?? 1)))) as [number, number, number, number];
-    out.push({ d: c.d, pct: Math.max(0, Math.min(1, pts / CHECK_MAX)), parts });
+    out.push({ d: c.d, pct: Math.max(0, Math.min(1, pts / CHECK_MAX)), pts: Math.max(0, Math.min(CHECK_MAX, pts)), parts });
   }
   return out.sort((a, b) => a.d.localeCompare(b.d));
 }
@@ -172,16 +173,24 @@ export type K6Measure = {
   /** Sätze MIT Fehler, Korrektur getippt: Antworten und davon voll richtig (Fundort + Korrektur). */
   n: number;
   ok: number;
-  /** Fehlerfreie Sätze (jede Eingabeform): Antworten und davon richtig als fehlerfrei erkannt. */
+  /** Fehlerfreie Sätze (jede Eingabeform; „Kein Fehler“ ist nie getippt): Antworten und davon richtig als fehlerfrei erkannt. */
   clean: number;
   cleanOk: number;
+  /** Gezählte Antworten aus der Zeit vor der Tempo-Kennung (`tp`, ab `TP_SINCE`): darunter können noch Tempo-Antworten sein. */
+  unmarked: number;
   /** Trefferquote der ersten und der zweiten Hälfte des Fensters (Trend), `null` ohne Antworten. */
   older: number | null;
   recent: number | null;
 };
 
-/** Ein Eintrag aus `log/<tag>.entries` (nur gelesene Felder). */
-export type LogEntry = { t?: number; ok?: boolean; c1k?: string; cid?: string; free?: boolean; pts?: number[] };
+/** Ein Eintrag aus `log/<tag>.entries` (nur gelesene Felder). `tp` = Antwort aus einer Tempo-Runde (seit P44-Nachbesserung). */
+export type LogEntry = { t?: number; ok?: boolean; c1k?: string; cid?: string; free?: boolean; pts?: number[]; tp?: boolean };
+
+/**
+ * Ab diesem Tag tragen Tempo-Antworten im Protokoll `tp: true` (P44-Nachbesserung, K-a). Ältere Antworten lassen sich nicht trennen; bis das
+ * 28-Tage-Fenster sauber ist, sagt das K6-Detail „Enthält noch Tempo-Antworten“. Bewusst etwas nach dem Bau gewählt (vorsichtig).
+ */
+export const TP_SINCE = '2026-10-15';
 
 /** Einträge aus den Tagesprotokollen (tolerant): nur Objekte mit bekannten Feldtypen. */
 export function logEntriesOf(logs: Iterable<Doc>): LogEntry[] {
@@ -197,6 +206,7 @@ export function logEntriesOf(logs: Iterable<Doc>): LogEntry[] {
         ...(typeof e.cid === 'string' ? { cid: e.cid } : {}),
         ...(e.free === true ? { free: true } : {}),
         ...(pts ? { pts } : {}),
+        ...(e.tp === true ? { tp: true } : {}),
       });
     }
   }
@@ -205,27 +215,30 @@ export function logEntriesOf(logs: Iterable<Doc>): LogEntry[] {
 
 /**
  * K6 aus „Fehler finden“ (§4.5): Trefferquote nur für Sätze mit Fehler und getippter Korrektur (`free`), Fehlalarm-Untergrenze getrennt aus
- * den fehlerfreien Sätzen. Antworten im Chip-Modus haben kein `free` und zählen nicht. Grenze: Tempo-Antworten tragen im Protokoll keine
- * Kennung und lassen sich (noch) nicht ausschließen (docs/datenmodell.md, P44).
+ * den fehlerfreien Sätzen (jede Eingabeform, denn „Kein Fehler“ wird nie getippt). Antworten im Chip-Modus haben kein `free` und zählen nicht. Tempo-Antworten (`tp`) zählen
+ * nie (Zeitdruck ist keine Messung der Selbstkorrektur); ältere Einträge ohne Kennung werden unter `unmarked` gezählt.
  */
 export function k6Measure(entries: readonly LogEntry[], itemOf: (id: string) => C1Item | null, nowMs: number): K6Measure {
   const mid = nowMs - (C1_LOG_DAYS / 2) * DAY_MS;
+  const tpSince = Date.parse(`${TP_SINCE}T00:00:00`);
   let n = 0;
   let ok = 0;
   let clean = 0;
   let cleanOk = 0;
+  let unmarked = 0;
   const half = { older: [0, 0], recent: [0, 0] };
   for (const e of entries) {
-    if (e.c1k !== 'err' || !e.cid || !e.pts) continue;
+    if (e.c1k !== 'err' || !e.cid || !e.pts || e.tp === true) continue;
     const item = itemOf(e.cid);
     if (!item || item.kind !== 'err') continue;
+    if (item.bad && e.free !== true) continue;
+    if (typeof e.t !== 'number' || e.t < tpSince) unmarked++;
     const full = (e.pts[0] ?? 0) >= (e.pts[1] ?? 2);
     if (!item.bad) {
       clean++;
       if (full) cleanOk++;
       continue;
     }
-    if (e.free !== true) continue;
     n++;
     if (full) ok++;
     const h = typeof e.t === 'number' && e.t >= mid ? half.recent : half.older;
@@ -233,7 +246,7 @@ export function k6Measure(entries: readonly LogEntry[], itemOf: (id: string) => 
     if (full) h[0]!++;
   }
   const rate = (h: number[]): number | null => (h[1] ? h[0]! / h[1] : null);
-  return { n, ok, clean, cleanOk, older: rate(half.older), recent: rate(half.recent) };
+  return { n, ok, clean, cleanOk, unmarked, older: rate(half.older), recent: rate(half.recent) };
 }
 
 // ------------------------------------------------------------------ Programmstart
