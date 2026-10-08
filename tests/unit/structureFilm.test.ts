@@ -194,3 +194,95 @@ describe('Struktur-Filme: Charge 1 und Vorhersage', () => {
     }
   });
 });
+
+// Charge 2 (P63): Kapitel 5–7 (Modalität, Verbmuster, Satzbau und Betonung), Quelle a2.json.
+const CH5_7 = [
+  'modals-deduction', 'modals-prob', 'modals-advice', 'c1-hedging',
+  'gerund-inf', 'verb-patterns', 'prepositions', 'prep-noun', 'phrasal-syntax', 'articles', 'countable', 'quant-neg', 'relative', 'linkers',
+  'c1-participle', 'c1-discourse', 'c1-emphasis', 'inversion', 'emph-plus', 'ellipsis', 'noun-phrase', 'compound-mod', 'word-order', 'comparison',
+];
+
+describe('Struktur-Filme: Charge 2 (Kapitel 5–7)', () => {
+  const films = animFilms();
+  const mine = films.filter((f) => CH5_7.includes(f.topic));
+
+  it('mindestens 65 Filme für Kapitel 5–7, alle vier Modalitätsthemen und mindestens 20 Themen', () => {
+    expect(mine.length).toBeGreaterThanOrEqual(65);
+    const topics = new Set(mine.map((f) => f.topic));
+    for (const t of ['modals-deduction', 'modals-prob', 'modals-advice', 'c1-hedging']) expect(topics.has(t), t).toBe(true);
+    expect(topics.size).toBeGreaterThanOrEqual(20);
+  });
+
+  it('Kennung beginnt mit f.<Muster>', () => {
+    for (const f of mine) expect(f.id.startsWith(`f.${f.pat}`), f.id).toBe(true);
+  });
+
+  it('kein Ausgangs- oder Zielsatz kommt in zwei Filmen vor', () => {
+    const seen = new Map<string, string>();
+    for (const f of films) {
+      for (const s of [f.steps[0]!, f.steps[f.steps.length - 1]!]) {
+        const k = s.en.toLowerCase();
+        expect(seen.has(k) ? `${f.id} doppelt mit ${seen.get(k)}: ${s.en}` : '').toBe('');
+        seen.set(k, f.id);
+      }
+    }
+  });
+
+  it('Notizen in beiden Sprachen gesetzt; keine deutschen Zeichen in englischen Texten', () => {
+    for (const f of mine) {
+      expect(f.de.length).toBeGreaterThan(8);
+      for (const s of f.steps) {
+        expect(s.note.de.trim().length, f.id).toBeGreaterThan(10);
+        expect(s.note.en.trim().length, f.id).toBeGreaterThan(10);
+        expect(/[äöüß]/i.test(s.note.en), `${f.id}: deutsche Zeichen in EN-Notiz`).toBe(false);
+        expect(/[äöüß]/i.test(s.en), `${f.id}: deutsche Zeichen im Satz`).toBe(false);
+      }
+      if (f.predict.kind === 'pick') expect(f.predict.opts[0]).not.toBe(f.predict.opts[1]);
+    }
+  });
+});
+
+// Systemisch (a1 und a2): Fragt eine Tipp-Vorhersage nach wegfallenden Wörtern („fallen/fällt gleich weg“, auch „wandern oder fallen“),
+// muss `ans` JEDES Wort aus Schritt 0 enthalten, das im Zielschritt (Schritt 1) wegfällt. Als übernommen gelten Wörter, die planMorph/move
+// zuordnet, Teile eines Bindestrich-Worts (long → long-term), Kontraktionen (I → I'd) und Formwandel desselben Stamms (added → adding).
+// Fragen mit Zahlwort („Zwei Wörter …“) oder bestimmter Rolle („das den Handelnden nennt“) benennen eine Auswahl und sind ausgenommen;
+// Fragen nach dem Satzanfang („rückt/springt/wandert an den Satzanfang“) fragen nicht nach Wegfall. Wer wandert, ordnet planMorph nicht
+// eindeutig zu (Tausch zweier Wörter), deshalb prüft der Test bei „wandern oder fallen“ nur den Wegfall.
+describe('Struktur-Filme: Tipp-Vorhersage nennt alle wegfallenden Wörter', () => {
+  const droppedIn = (w0: string[], w1: string[], move: [number, number][]): number[] => {
+    const map = planMorph(w0, w1, move);
+    const kept = new Set(map.filter((x): x is number => x !== null));
+    const parts = new Set(w1.flatMap((w) => w.split('-').map(norm)));
+    const sameStem = (i: number): boolean => {
+      const n = norm(w0[i] ?? '');
+      return w1.some((w) => {
+        const m = norm(w);
+        return m.startsWith(`${n}'`) || (n.length >= 4 && m.length >= 4 && n.slice(0, 3) === m.slice(0, 3));
+      });
+    };
+    return w0.map((_, i) => i).filter((i) => !kept.has(i) && !parts.has(norm(w0[i] ?? '')) && !sameStem(i));
+  };
+  const asksDrop = (q: string): boolean => /^Welche[sn]? Wört?e?r? (wandern? oder )?(fall|fäll)|^Welche[sn]? Wort (wandert oder )?(fällt)/.test(q) && /weg/.test(q);
+
+  it('ans enthält alle wegfallenden Wörter (Fragen „Welche/Welches Wort … fällt/fallen gleich weg“)', () => {
+    let checked = 0;
+    for (const f of animFilms()) {
+      if (f.predict.kind !== 'tap' || !asksDrop(f.predict.q.de)) continue;
+      checked++;
+      const w0 = words(f.steps[0]!.en);
+      const w1 = words(f.steps[1]!.en);
+      const ans = f.predict.ans;
+      const missing = droppedIn(w0, w1, f.steps[1]?.move ?? []).filter((i) => !ans.includes(i));
+      expect(missing.map((i) => w0[i]), `${f.id}: wegfallende Wörter fehlen in ans (${f.steps[0]!.en} → ${f.steps[1]!.en})`).toEqual([]);
+    }
+    expect(checked).toBeGreaterThan(30);
+  });
+
+  it('Mehrzahl-Frage genau dann, wenn mehrere Lösungen gelten', () => {
+    for (const f of animFilms()) {
+      if (f.predict.kind !== 'tap' || !asksDrop(f.predict.q.de)) continue;
+      const plural = /^Welche Wörter/.test(f.predict.q.de);
+      expect(plural, `${f.id}: Frageform passt nicht zur Zahl der Lösungen`).toBe(f.predict.ans.length > 1);
+    }
+  });
+});
