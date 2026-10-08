@@ -18,6 +18,7 @@ import { saveRepairs } from '../../repair/store';
 import { markBlockDone } from '../../unit/run';
 import { CheckItem } from './CheckItem';
 import { CheckResult, type CheckResultData } from './CheckResult';
+import { checkFcFor } from './forecast';
 import { requestCloseCheck, useC1CheckSheet, type CheckCtx } from './store';
 
 // C1-Check (Lernplattform 3.0 §4.3, P40): ein Blatt, 30 Aufgaben Satz für Satz (8 mcc · 8 ocl · 8 wf · 6 kwt), ohne Hilfe, ohne Zeitanzeige, Rückmeldung
@@ -97,7 +98,13 @@ function Flow({ ctx, onClose }: { ctx: CheckCtx | null; onClose: () => void }) {
 
   const persist = async (entry: C1Check, add: ReturnType<typeof checkRepairs>): Promise<void> => {
     setSaveState('saving');
-    const r = await saveCheck(entry);
+    // Prognose (P44) im selben Schreibschritt einfrieren, falls jetzt fällig; Lesefehler heißen nur: keine Prognose jetzt.
+    const fcFor = await checkFcFor(entry.d, Date.now()).catch((err: unknown) => {
+      logWarn('check:fc', err);
+      return null;
+    });
+    if (!alive.current) return;
+    const r = await saveCheck(entry, Date.now(), fcFor);
     if (!alive.current) return;
     if (r === 'failed' || r === 'unavailable') {
       saved.current = false;

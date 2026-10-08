@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import roots from '../../scripts/content/roots.json';
 import { emptyC1, type C1Check } from '../../src/domain/c1/c1doc';
 import { checkDayDuties, checkOffered } from '../../src/domain/c1/check/day';
-import { appendCheck, saveCheck } from '../../src/domain/c1/check/save';
+import { appendCheck, appendCheckFc, saveCheck } from '../../src/domain/c1/check/save';
 import { checkEntry, checkRepairs, CHECK_REPAIRS, checkLine, scoreCheck, weakest, type CheckAnswer } from '../../src/domain/c1/check/score';
 import { CHECK_ANCHORS, CHECK_FORMS, CHECK_ITEMS, CHECK_MAX, CHECK_PARTS, checkSet, formFor, isAnchor, nextDeskForm } from '../../src/domain/c1/check/select';
 import { c1File } from '../../src/domain/c1x/schema';
@@ -145,6 +145,36 @@ describe('Formwahl und Speichern', () => {
   });
   it('ohne Datenbank: unavailable, nichts geworfen', async () => {
     expect(await saveCheck(entry({}))).toBe('unavailable');
+  });
+  it('Prognose im selben Schritt: nur ab dem dritten Check und 6 Wochen Programm, sonst ohne fc', () => {
+    const fc = { from: '2027-03', to: '2027-06', late: '2027-09' };
+    const calls: number[] = [];
+    const fcFor = (doc: { checks: unknown[] }) => (calls.push(doc.checks.length), fc);
+    // erster Check: zu wenige Checks, die Rechnung wird nicht einmal aufgerufen
+    const one = appendCheckFc(emptyC1(), entry({ d: '2026-08-29' }), fcFor);
+    expect(one?.checks[0]?.fc).toBeUndefined();
+    expect(calls).toEqual([]);
+    if (!one) return;
+    const two = appendCheckFc(one, entry({ d: '2026-09-26', f: 'B' }), fcFor);
+    expect(two?.checks[1]?.fc).toBeUndefined();
+    if (!two) return;
+    // dritter Check, Programm seit 63 Tagen: fc wird eingefroren, genau einmal gerechnet
+    const three = appendCheckFc(two, entry({ d: '2026-10-31', f: 'C' }), fcFor);
+    expect(three?.checks[2]?.fc).toEqual(fc);
+    expect(calls).toEqual([3]);
+    // Rechnung ohne Ergebnis (undefined): Check ohne fc; null wird als „keine Prognose“ eingefroren
+    expect(appendCheckFc(two, entry({ d: '2026-10-31', f: 'C' }), () => undefined)?.checks[2]?.fc).toBeUndefined();
+    expect(appendCheckFc(two, entry({ d: '2026-10-31', f: 'C' }), () => null)?.checks[2]?.fc).toBeNull();
+    // ohne Rechnung wie appendCheck; doppelter Eintrag bleibt null
+    expect(appendCheckFc(two, entry({ d: '2026-10-31', f: 'C' }))).toEqual(appendCheck(two, entry({ d: '2026-10-31', f: 'C' })));
+    if (three) expect(appendCheckFc(three, entry({ d: '2026-10-31', f: 'C' }), fcFor)).toBeNull();
+  });
+  it('Prognose: Programm jünger als 6 Wochen friert nichts ein', () => {
+    const c1 = { ...emptyC1(), checks: [entry({ d: '2026-10-01', f: 'A' }), entry({ d: '2026-10-08', f: 'B' })] };
+    let called = false;
+    const next = appendCheckFc(c1, entry({ d: '2026-10-31', f: 'C' }), () => ((called = true), null));
+    expect(next?.checks[2]?.fc).toBeUndefined();
+    expect(called).toBe(false);
   });
 });
 
