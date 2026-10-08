@@ -26,7 +26,7 @@ export const flags: Flags = {
   c1check: true,
   program: true,
   way: true,
-  tutor: { explain: false, gen: false, diagnose: false, clinic: true, write: false },
+  tutor: { explain: false, gen: false, diagnose: false, clinic: true, write: true },
   fx: { moments: false, rings: false, sparks: false, field: false, sky: true, film: true },
 };
 

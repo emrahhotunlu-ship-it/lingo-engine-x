@@ -4,7 +4,7 @@ import { useAiAvailable } from '../../ai/scope';
 import { takeTutorCall } from '../../ai/tutorBudget';
 import { useAsk } from '../../ai/useAsk';
 import { useLive } from '../../data/live';
-import { clinicVars, cleanSentence, CLINIC_MIN_WORDS, type ClinicRun } from '../../domain/tutor/clinic';
+import { clinicVars, cleanSentence, type ClinicRun } from '../../domain/tutor/clinic';
 import { tutorCtx } from '../../domain/tutor/ctx';
 import { readCtx2, SIT_CHIPS } from '../../domain/tutor/ctx2';
 import { normWs, ownWords } from '../../domain/tutor/edits';
@@ -276,4 +276,3 @@ export function ClinicFlow({ onClose }: { onClose: () => void }) {
   );
 }
 
-export { CLINIC_MIN_WORDS };

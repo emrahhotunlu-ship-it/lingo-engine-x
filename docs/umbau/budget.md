@@ -22,6 +22,7 @@ Messung nach **jedem** Paket (Byte der `dist/index.html`, Differenz zum Vorgäng
 | 07.10.2026 | P30 | 4.597.416 | +6.068 | 4,38 | Effekte-Fundament: `engine/fx` (Ereignisse, Dirigent, Stufe), Feder-Tokens, Stufe 1 als CSS, Einstellungen › Effekte |
 | 07.10.2026 | Design-Lead (Branch `claude/umbau-design`) | 4.632.093 | +34.677 ggü. eingechecktem Test-Link-6-`dist` | 4,42 | `styles/parts/dz.css` + `dz2.css` (Bereichslicht, Tiefe, Momente), Wort-Rückmeldung in Blöcken (`ui/exercise/wordParts.ts`), Canvas-2D-Teilchen (`engine/fx/particles.ts`, `moments.ts`). Eine Datei, keine Zusatzdateien; Warnschwelle 6 MiB unverändert |
 | 07.10.2026 | UX-Prüfung (Branch `claude/umbau-design`) | 4.661.088 | +28.995 ggü. Design-Lead | 4,45 | Eine Rückmeldekarte je Übung, Aufgabenzeile aus der Form, Bausteine in der Lücke, Anwenden als Liste, Grammatik-Pfad einzeilig, Einstellungen; überwiegend Umbau statt Zuwachs |
+| 08.10.2026 | P46 + P47 (Branch `claude/umbau-r5-a`, zusammen gemessen) | 5.378.677 | +69.339 ggü. eingechecktem `dist` von 307547f (5.309.338) | 5,13 | Satz-Klinik und Berufsprofil (`sentence-clinic@1`, `c1-mail@1`), Schreibwerkstatt mit 12 Situationen (`content/c1/mail-situations.json`, 17 KB roh), Texte DE/EN, `domain/tutor` (edits, ctx2, clinic, mail), Slots. Eine Datei; Warnschwelle 6 MiB unverändert |
 
 ## Planrechnung (LP3 §9, Modell)
 

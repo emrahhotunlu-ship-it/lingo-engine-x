@@ -67,6 +67,7 @@ test.describe('Handy 390 px', () => {
     await expect(page.getByTestId('cl-repairs')).toContainText('Ein Fehlersatz kommt morgen');
     await expect(page.getByTestId('cl-counted')).toBeVisible();
     expect(await layoutProblems(page)).toEqual([]);
+    await page.waitForTimeout(500);
     expect((await new AxeBuilder({ page }).withTags(AXE).analyze()).violations.map((v) => v.id)).toEqual([]);
     expect(errors).toEqual([]);
   });
@@ -240,6 +241,7 @@ test.describe('Laptop 1440 px', () => {
     await check(page, SENTENCE);
     await expect(page.getByTestId('cl-result')).toBeVisible();
     expect(await layoutProblems(page)).toEqual([]);
+    await page.waitForTimeout(500);
     expect((await new AxeBuilder({ page }).withTags(AXE).analyze()).violations.map((v) => v.id)).toEqual([]);
     expect(external).toEqual([]);
     expect(errors).toEqual([]);

@@ -16,6 +16,7 @@ import { registerLp2P5Replies } from './canned/lp2/p5';
 import { registerLp2P6Replies } from './canned/lp2/p6';
 import { registerLp3P26Replies } from './canned/lp3/p26';
 import { registerLp3P46Replies } from './canned/lp3/p46';
+import { registerLp3P47Replies } from './canned/lp3/p47';
 import { registerTeacherFeedbackReply } from './canned/teacherFeedback';
 
 // Feste, realistische Antworten des Entwicklungs-Adapters für die Vorlagen word-lookup@2,
@@ -286,6 +287,7 @@ export function registerCannedReplies(): void {
   // Lernplattform 3.0: nach P2, denn `explain-answer@2` ersetzt die Antwort von @1 unter derselben Kennung
   registerLp3P26Replies();
   registerLp3P46Replies();
+  registerLp3P47Replies();
   // Neubau: goal-check, claude-drill, text-cards
   registerNbReplies();
 }

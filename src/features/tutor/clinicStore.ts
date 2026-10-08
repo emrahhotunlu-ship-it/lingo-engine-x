@@ -18,27 +18,35 @@ type State = {
   open: boolean;
   seed: ClinicSeed;
   profileOpen: boolean;
+  /** Schreibwerkstatt (P47) offen? Das Blatt gehört zu `ClinicHost`, der Zustand liegt hier, damit es nur einen Ort für Blätter dieser Familie gibt. */
+  writeOpen: boolean;
   show: (seed?: ClinicSeed) => void;
   close: () => void;
   showProfile: () => void;
   closeProfile: () => void;
+  showWrite: () => void;
+  closeWrite: () => void;
 };
 
 export const useClinicSheet = create<State>((set) => ({
   open: false,
   seed: {},
   profileOpen: false,
+  writeOpen: false,
   show: (seed = {}) => set({ open: true, seed }),
   close: () => set({ open: false }),
   showProfile: () => set({ profileOpen: true }),
   closeProfile: () => set({ profileOpen: false }),
+  showWrite: () => set({ writeOpen: true }),
+  closeWrite: () => set({ writeOpen: false }),
 }));
 
 const WEEK_KEY = 'lx:clinic-week';
+const MAIL_KEY = 'lx:mail-week';
 const CARD_KEY = 'lx:ctx2-card';
 
-type Marker = { week: string | null; ctx2Card: boolean };
-const read = (): Marker => ({ week: local.get(WEEK_KEY), ctx2Card: local.get(CARD_KEY) === '1' });
+type Marker = { week: string | null; mailWeek: string | null; ctx2Card: boolean };
+const read = (): Marker => ({ week: local.get(WEEK_KEY), mailWeek: local.get(MAIL_KEY), ctx2Card: local.get(CARD_KEY) === '1' });
 
 export const useClinicMarkers = create<Marker>(() => read());
 
@@ -47,6 +55,13 @@ export function markClinicWeek(day: string): void {
   const week = isoWeek(day);
   local.set(WEEK_KEY, week);
   useClinicMarkers.setState({ week });
+}
+
+/** Den Wochenvorschlag der Schreibwerkstatt (Laptop) für diese Woche abhaken. */
+export function markMailWeek(day: string): void {
+  const mailWeek = isoWeek(day);
+  local.set(MAIL_KEY, mailWeek);
+  useClinicMarkers.setState({ mailWeek });
 }
 
 /** Die Karte „Mein Arbeitsalltag“ nicht mehr zeigen. */
