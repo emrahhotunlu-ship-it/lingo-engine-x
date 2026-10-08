@@ -46,8 +46,8 @@
       "if": [
        "implemented"
       ],
-      "de": "„implemented“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „The“ und vor „of“).",
-      "en": "“implemented” is an adjective; the sentence needs a noun here (after “The” and before “of”)."
+      "de": "„implemented“ ist das Partizip Perfekt von „implement“ (eine Verbform, auch als Adjektiv genutzt); hier braucht der Satz ein Nomen.",
+      "en": "“implemented” is the past participle of “implement” (a verb form, also used as an adjective); the sentence needs a noun."
      }
     ]
    }
@@ -71,7 +71,10 @@
    "pos": "noun",
    "parts": {
     "base": "satisfy",
-    "change": "y → i"
+    "change": "y entfällt",
+    "suf": [
+     "action"
+    ]
    },
    "family": [
     "satisfy",
@@ -97,8 +100,8 @@
       "if": [
        "satisfied"
       ],
-      "de": "„satisfied“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „Customer“, vor „has increased“).",
-      "en": "“satisfied” is an adjective; the sentence needs a noun here (after “Customer”, before “has increased”)."
+      "de": "„satisfied“ ist das Partizip Perfekt von „satisfy“ (eine Verbform, auch als Adjektiv genutzt); hier braucht der Satz ein Nomen.",
+      "en": "“satisfied” is the past participle of “satisfy” (a verb form, also used as an adjective); the sentence needs a noun."
      },
      {
       "if": [
@@ -123,55 +126,48 @@
    "area": "lex",
    "pat": "lx.wf-noun",
    "lex": [
-    "development"
+    "scalability"
    ],
-   "level": "B2",
+   "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "text": "The ___ of the mobile app took longer than we had planned.",
-   "stem": "DEVELOP",
+   "text": "Cloud customers value the ___ of our platform when their document volume doubles overnight.",
+   "stem": "SCALABLE",
    "accept": [
-    "development"
+    "scalability"
    ],
    "pos": "noun",
    "parts": {
-    "base": "develop",
+    "base": "scalable",
     "suf": [
-     "ment"
-    ]
+     "ity"
+    ],
+    "change": "ble → bil"
    },
    "family": [
-    "develop",
-    "developed",
-    "developer",
-    "development"
+    "scale",
+    "scalable",
+    "scalability"
    ],
    "why": {
     "ok": {
-     "de": "Nach „The“ und vor „of“ steht ein Nomen: develop + -ment = die Entwicklung.",
-     "en": "A noun follows “The” and comes before “of”: develop + -ment = the process of building."
+     "de": "Nach „the“ steht ein Nomen: scalable → scalability (-ble wird -bility). Scalability = die Fähigkeit mitzuwachsen.",
+     "en": "A noun follows “the”: scalable → scalability (-ble becomes -bility). Scalability = the ability to grow with demand."
     },
     "wrong": [
      {
       "if": [
-       "develop"
+       "scale"
       ],
-      "de": "„develop“ ist ein Verb; hier braucht der Satz ein Nomen (nach „The“ und vor „of“).",
-      "en": "“develop” is a verb; the sentence needs a noun here (after “The” and before “of”)."
+      "de": "„scale“ ist ein Verb; hier braucht der Satz ein Nomen (nach „the“, vor „of“).",
+      "en": "“scale” is a verb; the sentence needs a noun here (after “the”, before “of”)."
      },
      {
       "if": [
-       "developed"
+       "scalable"
       ],
-      "de": "„developed“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „The“ und vor „of“).",
-      "en": "“developed” is an adjective; the sentence needs a noun here (after “The” and before “of”)."
-     },
-     {
-      "if": [
-       "developer"
-      ],
-      "de": "developer ist die Person, die entwickelt; gemeint ist hier der Vorgang.",
-      "en": "a developer is the person who builds it; the sentence needs the process."
+      "de": "„scalable“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „the“, vor „of“).",
+      "en": "“scalable” is an adjective; the sentence needs a noun here (after “the”, before “of”)."
      }
     ]
    }
@@ -198,7 +194,7 @@
     "suf": [
      "ion"
     ],
-    "change": "te → tion"
+    "change": "e entfällt"
    },
    "family": [
     "complete",
@@ -216,8 +212,8 @@
       "if": [
        "complete"
       ],
-      "de": "„complete“ ist ein Verb; hier braucht der Satz ein Nomen (nach „the“ und vor „of“).",
-      "en": "“complete” is a verb; the sentence needs a noun here (after “the” and before “of”)."
+      "de": "„complete“ ist ein Verb oder Adjektiv; hier braucht der Satz ein Nomen (nach „the“ und vor „of“).",
+      "en": "“complete” is a verb or adjective; the sentence needs a noun here (after “the” and before “of”)."
      },
      {
       "if": [
@@ -267,7 +263,7 @@
    ],
    "why": {
     "ok": {
-     "de": "Nach „steady“ steht ein Nomen: grow → growth (-th). Das Verb grow hat kein -th.",
+     "de": "Nach „steady“ steht ein Nomen: grow → growth (-th). Steady growth = stetiges Wachstum.",
      "en": "A noun follows “steady”: grow → growth (-th)."
     },
     "wrong": [
@@ -282,15 +278,15 @@
       "if": [
        "grown"
       ],
-      "de": "„grown“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „steady“, Objekt von „seen“).",
-      "en": "“grown” is an adjective; the sentence needs a noun here (after “steady”, object of “seen”)."
+      "de": "„grown“ ist das Partizip Perfekt von „grow“ (eine Verbform, auch als Adjektiv genutzt); hier braucht der Satz ein Nomen.",
+      "en": "“grown” is the past participle of “grow” (a verb form, also used as an adjective); the sentence needs a noun."
      },
      {
       "if": [
        "growing"
       ],
-      "de": "„growing“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „steady“, Objekt von „seen“).",
-      "en": "“growing” is an adjective; the sentence needs a noun here (after “steady”, object of “seen”)."
+      "de": "„growing“ ist das Partizip Präsens von „grow“ (eine Verbform, auch als Adjektiv genutzt); hier braucht der Satz ein Nomen.",
+      "en": "“growing” is the present participle of “grow” (a verb form, also used as an adjective); the sentence needs a noun."
      }
     ]
    }
@@ -306,7 +302,7 @@
    "level": "B2",
    "dom": "life",
    "src": "seed",
-   "text": "I ___ lived in Munich before I moved to Hamburg for my current job.",
+   "text": "I ___ lived in Munich, but I moved to Hamburg for my current job.",
    "stem": "PREVIOUS",
    "accept": [
     "previously"
@@ -411,7 +407,7 @@
    ],
    "why": {
     "ok": {
-     "de": "Vor einem Nomen steht ein Adjektiv: experience + -d = erfahren. Mit un-/in- hieße es das Gegenteil.",
+     "de": "Vor einem Nomen steht ein Adjektiv: experience + -d = erfahren. Mit in- (inexperienced) hieße es das Gegenteil.",
      "en": "An adjective goes before a noun: experience + -d = skilled through practice."
     },
     "wrong": [
@@ -519,9 +515,9 @@
    "parts": {
     "base": "expect",
     "suf": [
-     "ations"
-    ],
-    "change": "expect → expectation"
+     "ation",
+     "s"
+    ]
    },
    "family": [
     "expect",
@@ -547,8 +543,8 @@
       "if": [
        "expected"
       ],
-      "de": "„expected“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „customers’“).",
-      "en": "“expected” is an adjective; the sentence needs a noun here (after “customers’”)."
+      "de": "„expected“ ist das Partizip Perfekt von „expect“ (eine Verbform, auch als Adjektiv genutzt); hier braucht der Satz ein Nomen.",
+      "en": "“expected” is the past participle of “expect” (a verb form, also used as an adjective); the sentence needs a noun."
      },
      {
       "if": [
@@ -578,7 +574,7 @@
    "level": "B2",
    "dom": "life",
    "src": "seed",
-   "text": "It will ___ rain on the day of the barbecue, so let us book the indoor room.",
+   "text": "It will ___ rain on the day of the barbecue, so let’s book the indoor room.",
    "stem": "PROBABLE",
    "accept": [
     "probably"
@@ -721,8 +717,8 @@
       "if": [
        "renewed"
       ],
-      "de": "„renewed“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „due for“).",
-      "en": "“renewed” is an adjective; the sentence needs a noun here (after “due for”)."
+      "de": "„renewed“ ist das Partizip Perfekt von „renew“ (eine Verbform, auch als Adjektiv genutzt); hier braucht der Satz ein Nomen (nach „due for“).",
+      "en": "“renewed” is the past participle of “renew” (a verb form, also used as an adjective); the sentence needs a noun (after “due for”)."
      },
      {
       "if": [
@@ -745,7 +741,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "text": "Last year’s sales forecast was far too ___ to plan our hiring.",
+   "text": "Last year’s sales forecast was far too ___ to base our hiring plans on.",
    "stem": "ACCURATE",
    "accept": [
     "inaccurate"
@@ -763,8 +759,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Nach „far too“ steht ein Adjektiv; „zu genau, um zu planen“ ergibt keinen Sinn. in- + accurate = ungenau.",
-     "en": "An adjective follows “far too”; “too exact to plan” makes no sense. in- + accurate = not exact."
+     "de": "Nach „far too“ steht ein Adjektiv; „zu genau, um Pläne darauf zu stützen“ ergibt keinen Sinn. in- + accurate = ungenau.",
+     "en": "An adjective follows “far too”; “too exact to base plans on” makes no sense. in- + accurate = not exact."
     },
     "wrong": [
      {
@@ -1265,7 +1261,7 @@
        "agree"
       ],
       "de": "agree heißt zustimmen; wer zustimmt, braucht keine Schlichtung („the case goes to arbitration“).",
-      "en": "agree means to settle; if they agreed, the case would not need arbitration."
+      "en": "agree means to have the same view; if the parties agreed, the case would not go to arbitration."
      },
      {
       "if": [
@@ -1353,53 +1349,56 @@
    "area": "lex",
    "pat": "lx.wf-noun",
    "lex": [
-    "decision"
+    "feasibility"
    ],
-   "level": "B2",
+   "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "text": "We are still waiting for a ___ from the board.",
-   "stem": "DECIDE",
+   "text": "Before we promise a launch date, we need a study on the ___ of the project.",
+   "stem": "FEASIBLE",
    "accept": [
-    "decision"
+    "feasibility"
    ],
    "pos": "noun",
    "parts": {
-    "base": "decide",
-    "change": "de → sion"
+    "base": "feasible",
+    "suf": [
+     "ity"
+    ],
+    "change": "ble → bil"
    },
    "family": [
-    "decide",
-    "decision",
-    "decisive",
-    "undecided"
+    "feasible",
+    "feasibly",
+    "feasibility",
+    "unfeasible"
    ],
    "why": {
     "ok": {
-     "de": "Nach „a“ steht ein Nomen: decide → decision (-de wird -sion).",
-     "en": "A noun follows “a”: decide → decision (-de becomes -sion)."
+     "de": "Nach „the“ steht ein Nomen: feasible → feasibility (-ble wird -bility). A study on the feasibility = eine Machbarkeitsstudie.",
+     "en": "A noun follows “the”: feasible → feasibility (-ble becomes -bility). A feasibility study checks whether something can be done."
     },
     "wrong": [
      {
       "if": [
-       "decide"
+       "feasible"
       ],
-      "de": "„decide“ ist ein Verb; hier braucht der Satz ein Nomen (nach „a“, vor „from“).",
-      "en": "“decide” is a verb; the sentence needs a noun here (after “a”, before “from”)."
+      "de": "„feasible“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „the“, vor „of“).",
+      "en": "“feasible” is an adjective; the sentence needs a noun here (after “the”, before “of”)."
      },
      {
       "if": [
-       "decisive"
+       "feasibly"
       ],
-      "de": "„decisive“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „a“, vor „from“).",
-      "en": "“decisive” is an adjective; the sentence needs a noun here (after “a”, before “from”)."
+      "de": "„feasibly“ ist ein Adverb; hier braucht der Satz ein Nomen (nach „the“, vor „of“).",
+      "en": "“feasibly” is an adverb; the sentence needs a noun here (after “the”, before “of”)."
      },
      {
       "if": [
-       "undecided"
+       "unfeasible"
       ],
-      "de": "„undecided“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „a“, vor „from“).",
-      "en": "“undecided” is an adjective; the sentence needs a noun here (after “a”, before “from”)."
+      "de": "„unfeasible“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „the“, vor „of“).",
+      "en": "“unfeasible” is an adjective; the sentence needs a noun here (after “the”, before “of”)."
      }
     ]
    }
@@ -1540,7 +1539,10 @@
    "pos": "adj",
    "parts": {
     "base": "comply",
-    "change": "comply → compli-"
+    "change": "y → i",
+    "suf": [
+     "ant"
+    ]
    },
    "family": [
     "comply",
@@ -1589,7 +1591,7 @@
    "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "text": "Full ___ with the new rules is mandatory from 2027.",
+   "text": "Full ___ with the new rules will be mandatory starting in 2027.",
    "stem": "COMPLY",
    "accept": [
     "compliance"
@@ -1597,7 +1599,10 @@
    "pos": "noun",
    "parts": {
     "base": "comply",
-    "change": "comply → compli-"
+    "change": "y → i",
+    "suf": [
+     "ance"
+    ]
    },
    "family": [
     "comply",
@@ -1705,7 +1710,7 @@
    "level": "B2",
    "dom": "biz",
    "src": "seed",
-   "text": "Please send us your technical ___ by Friday.",
+   "text": "Please send us a list of your technical ___ by Friday.",
    "stem": "REQUIRE",
    "accept": [
     "requirements"
@@ -1740,15 +1745,15 @@
       "if": [
        "required"
       ],
-      "de": "„required“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „your technical“).",
-      "en": "“required” is an adjective; the sentence needs a noun here (after “your technical”)."
+      "de": "„required“ ist das Partizip Perfekt von „require“ (eine Verbform, auch als Adjektiv genutzt); hier braucht der Satz ein Nomen.",
+      "en": "“required” is the past participle of “require” (a verb form, also used as an adjective); the sentence needs a noun."
      },
      {
       "if": [
        "requirement"
       ],
-      "de": "Nach „your technical“ ohne Artikel steht der Plural: requirements.",
-      "en": "Without an article after “your technical” the plural is needed: requirements."
+      "de": "Eine Liste enthält mehrere Anforderungen: Plural requirements.",
+      "en": "A list contains several items, so the plural is needed: requirements."
      }
     ]
    }
@@ -1764,7 +1769,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "text": "Who takes ___ for the migration once the project goes live?",
+   "text": "Who will take ___ for the migration once the project goes live?",
    "stem": "RESPONSIBLE",
    "accept": [
     "responsibility"
@@ -1857,8 +1862,8 @@
       "if": [
        "approved"
       ],
-      "de": "„approved“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „the“, vor „from“).",
-      "en": "“approved” is an adjective; the sentence needs a noun here (after “the”, before “from”)."
+      "de": "„approved“ ist das Partizip Perfekt von „approve“ (eine Verbform, auch als Adjektiv genutzt); hier braucht der Satz ein Nomen.",
+      "en": "“approved” is the past participle of “approve” (a verb form, also used as an adjective); the sentence needs a noun."
      },
      {
       "if": [
@@ -1975,8 +1980,8 @@
       "if": [
        "reported"
       ],
-      "de": "„reported“ ist ein Adjektiv; hier braucht der Satz ein Adverb (zwischen „has“ und „lost“).",
-      "en": "“reported” is an adjective; the sentence needs an adverb here (between “has” and “lost”)."
+      "de": "„reported“ ist das Partizip Perfekt von „report“ (eine Verbform, auch als Adjektiv genutzt); hier braucht der Satz ein Adverb.",
+      "en": "“reported” is the past participle of “report” (a verb form, also used as an adjective); the sentence needs an adverb."
      }
     ]
    }
@@ -2001,9 +2006,9 @@
    "parts": {
     "base": "suppose",
     "suf": [
-     "edly"
-    ],
-    "change": "e → ed"
+     "d",
+     "ly"
+    ]
    },
    "family": [
     "suppose",
@@ -2028,8 +2033,8 @@
       "if": [
        "supposed"
       ],
-      "de": "„supposed“ ist ein Adjektiv; hier braucht der Satz ein Adverb (vor „able“).",
-      "en": "“supposed” is an adjective; the sentence needs an adverb here (before “able”)."
+      "de": "„supposed“ ist das Partizip Perfekt von „suppose“ (eine Verbform, auch als Adjektiv genutzt); hier braucht der Satz ein Adverb (vor „able“).",
+      "en": "“supposed” is the past participle of “suppose” (a verb form, also used as an adjective); the sentence needs an adverb (before “able”)."
      },
      {
       "if": [
@@ -2072,7 +2077,7 @@
    ],
    "why": {
     "ok": {
-     "de": "Nach „a“ steht ein Nomen: confirm + -ation = die Bestätigung. Das Passiv „has been processed“ nennt den Grund.",
+     "de": "Nach „a“ steht ein Nomen: confirm + -ation = die Bestätigung.",
      "en": "A noun follows “a”: confirm + -ation = proof that something is settled."
     },
     "wrong": [
@@ -2087,8 +2092,8 @@
       "if": [
        "confirmed"
       ],
-      "de": "„confirmed“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „a“).",
-      "en": "“confirmed” is an adjective; the sentence needs a noun here (after “a”)."
+      "de": "„confirmed“ ist das Partizip Perfekt von „confirm“ (eine Verbform, auch als Adjektiv genutzt); hier braucht der Satz ein Nomen (nach „a“).",
+      "en": "“confirmed” is the past participle of “confirm” (a verb form, also used as an adjective); the sentence needs a noun (after “a”)."
      },
      {
       "if": [
@@ -2111,7 +2116,7 @@
    "level": "B2+",
    "dom": "life",
    "src": "seed",
-   "text": "I get a ___ on my phone whenever a parcel has been delivered.",
+   "text": "I get a ___ on my phone whenever a package has been delivered.",
    "stem": "NOTIFY",
    "accept": [
     "notification"
@@ -2219,7 +2224,7 @@
    "lex": [
     "unauthorized"
    ],
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "text": "Any ___ access to customer data must be reported within 72 hours.",
@@ -2282,7 +2287,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "text": "Companies in Germany are ___ required to keep invoices for ten years.",
+   "text": "Companies in Germany are ___ required to keep invoices for eight years.",
    "stem": "LEGAL",
    "accept": [
     "legally"
@@ -2333,7 +2338,7 @@
        "illegally"
       ],
       "de": "illegally heißt rechtswidrig; eine Aufbewahrungspflicht wird nicht „illegal“ verlangt.",
-      "en": "illegally means against the law; a duty to keep records is not required illegally."
+      "en": "illegally means against the law; a duty set by law is not required illegally."
      }
     ]
    }
@@ -2349,7 +2354,7 @@
    "level": "B2+",
    "dom": "life",
    "src": "seed",
-   "text": "Based on your taste, I would make a clear ___ for the restaurant by the harbor.",
+   "text": "If you want my ___, go for the restaurant by the harbor.",
    "stem": "RECOMMEND",
    "accept": [
     "recommendation"
@@ -2368,23 +2373,23 @@
    ],
    "why": {
     "ok": {
-     "de": "Nach „a clear“ steht ein Nomen: recommend + -ation = die Empfehlung.",
-     "en": "A noun follows “a clear”: recommend + -ation = advice about what to choose."
+     "de": "Nach „my“ steht ein Nomen: recommend + -ation = die Empfehlung.",
+     "en": "A noun follows “my”: recommend + -ation = advice about what to choose."
     },
     "wrong": [
      {
       "if": [
        "recommend"
       ],
-      "de": "„recommend“ ist ein Verb; hier braucht der Satz ein Nomen (nach „a clear“).",
-      "en": "“recommend” is a verb; the sentence needs a noun here (after “a clear”)."
+      "de": "„recommend“ ist ein Verb; hier braucht der Satz ein Nomen (nach „my“).",
+      "en": "“recommend” is a verb; the sentence needs a noun here (after “my”)."
      },
      {
       "if": [
        "recommended"
       ],
-      "de": "„recommended“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „a clear“).",
-      "en": "“recommended” is an adjective; the sentence needs a noun here (after “a clear”)."
+      "de": "„recommended“ ist das Partizip Perfekt von „recommend“ (eine Verbform, auch als Adjektiv genutzt); hier braucht der Satz ein Nomen.",
+      "en": "“recommended” is the past participle of “recommend” (a verb form, also used as an adjective); the sentence needs a noun."
      }
     ]
    }
@@ -2397,7 +2402,7 @@
    "lex": [
     "obligation"
    ],
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "text": "Under the new law, companies have an ___ to report data breaches.",
@@ -2408,7 +2413,10 @@
    "pos": "noun",
    "parts": {
     "base": "oblige",
-    "change": "ge → gation"
+    "change": "e entfällt",
+    "suf": [
+     "ation"
+    ]
    },
    "family": [
     "oblige",
@@ -2433,8 +2441,8 @@
       "if": [
        "obliged"
       ],
-      "de": "„obliged“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „an“, vor „to report“).",
-      "en": "“obliged” is an adjective; the sentence needs a noun here (after “an”, before “to report”)."
+      "de": "„obliged“ ist das Partizip Perfekt von „oblige“ (eine Verbform, auch als Adjektiv genutzt); hier braucht der Satz ein Nomen.",
+      "en": "“obliged” is the past participle of “oblige” (a verb form, also used as an adjective); the sentence needs a noun."
      },
      {
       "if": [
@@ -2534,8 +2542,8 @@
       "if": [
        "account"
       ],
-      "de": "„account“ ist ein Nomen; hier braucht der Satz ein Adjektiv (nach „are“, vor „for“).",
-      "en": "“account” is a noun; the sentence needs an adjective here (after “are”, before “for”)."
+      "de": "„account“ ist ein Nomen (oder Verb in „account for“); hier braucht der Satz ein Adjektiv (nach „are“, vor „for“).",
+      "en": "“account” is a noun (or a verb in “account for”); the sentence needs an adjective here (after “are”, before “for”)."
      },
      {
       "if": [
@@ -2673,7 +2681,7 @@
    "level": "B2+",
    "dom": "life",
    "src": "seed",
-   "text": "Given the weather forecast, the outcome of Saturday’s match is still ___.",
+   "text": "Given the weather forecast, it is still ___ whether Saturday’s match will go ahead.",
    "stem": "CERTAIN",
    "accept": [
     "uncertain"
@@ -2700,8 +2708,8 @@
       "if": [
        "certain"
       ],
-      "de": "certain heißt sicher; „Given the market situation … still“ spricht für Unsicherheit.",
-      "en": "certain means sure; “Given the market situation … still” points to doubt."
+      "de": "certain heißt sicher; „still … whether“ zeigt, dass es offen ist.",
+      "en": "certain means sure; “still … whether” shows the question is open."
      },
      {
       "if": [
@@ -2738,7 +2746,7 @@
    "level": "B2",
    "dom": "life",
    "src": "seed",
-   "text": "Unfortunately, our driver was ___ to deliver the parcel before the office closed.",
+   "text": "Unfortunately, our driver was ___ to deliver the package before the office closed.",
    "stem": "ABLE",
    "accept": [
     "unable"
@@ -2799,7 +2807,7 @@
    "lex": [
     "advisable"
    ],
-   "level": "C1",
+   "level": "B2+",
    "dom": "life",
    "src": "seed",
    "text": "In this weather, it is ___ to carry a rain jacket.",
@@ -2843,15 +2851,15 @@
       "if": [
        "advisory"
       ],
-      "de": "advisory heißt beratend und steht meist vor einem Nomen (advisory board); „it is … to ask“ braucht advisable.",
-      "en": "advisory means giving advice and usually goes before a noun (advisory board); “it is … to ask” needs advisable."
+      "de": "advisory heißt beratend und steht meist vor einem Nomen (advisory board); „it is … to carry“ braucht advisable.",
+      "en": "advisory means giving advice and usually goes before a noun (advisory board); “it is … to carry” needs advisable."
      },
      {
       "if": [
        "inadvisable"
       ],
-      "de": "inadvisable heißt nicht ratsam; das widerspricht dem Sinn „a rain jacket mitnehmen“.",
-      "en": "inadvisable means not sensible; that contradicts the idea of carrying a rain jacket."
+      "de": "inadvisable heißt nicht ratsam; „In this weather“ spricht aber dafür, eine Regenjacke mitzunehmen.",
+      "en": "inadvisable means not sensible; but “In this weather” is a reason to carry a rain jacket."
      }
     ]
    }
@@ -2862,55 +2870,48 @@
    "area": "lex",
    "pat": "lx.wf-noun",
    "lex": [
-    "suggestion"
+    "interoperability"
    ],
-   "level": "B2",
+   "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "text": "I would like to make a ___ about the agenda for tomorrow’s meeting.",
-   "stem": "SUGGEST",
+   "text": "Our API guarantees ___ with all major ECM and CRM systems.",
+   "stem": "INTEROPERABLE",
    "accept": [
-    "suggestion"
+    "interoperability"
    ],
    "pos": "noun",
    "parts": {
-    "base": "suggest",
+    "base": "interoperable",
     "suf": [
-     "ion"
-    ]
+     "ity"
+    ],
+    "change": "ble → bil"
    },
    "family": [
-    "suggest",
-    "suggested",
-    "suggestion",
-    "suggestive"
+    "interoperable",
+    "operate",
+    "interoperability"
    ],
    "why": {
     "ok": {
-     "de": "Nach „a“ steht ein Nomen: suggest + -ion = der Vorschlag. Make a suggestion ist eine feste Verbindung.",
-     "en": "A noun follows “a”: suggest + -ion = an idea offered. “Make a suggestion” is a fixed combination."
+     "de": "Nach „guarantees“ steht ein Nomen: interoperable → interoperability (-ble wird -bility). Interoperability with = Zusammenspiel mit anderen Systemen.",
+     "en": "A noun follows “guarantees”: interoperable → interoperability (-ble becomes -bility). It means working together with other systems."
     },
     "wrong": [
      {
       "if": [
-       "suggest"
+       "interoperable"
       ],
-      "de": "„suggest“ ist ein Verb; hier braucht der Satz ein Nomen (nach „a“, vor „about“).",
-      "en": "“suggest” is a verb; the sentence needs a noun here (after “a”, before “about”)."
+      "de": "„interoperable“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „guarantees“, vor „with“).",
+      "en": "“interoperable” is an adjective; the sentence needs a noun here (after “guarantees”, before “with”)."
      },
      {
       "if": [
-       "suggested"
+       "operate"
       ],
-      "de": "„suggested“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „a“, vor „about“).",
-      "en": "“suggested” is an adjective; the sentence needs a noun here (after “a”, before “about”)."
-     },
-     {
-      "if": [
-       "suggestive"
-      ],
-      "de": "„suggestive“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „a“, vor „about“).",
-      "en": "“suggestive” is an adjective; the sentence needs a noun here (after “a”, before “about”)."
+      "de": "„operate“ ist ein Verb; hier braucht der Satz ein Nomen (nach „guarantees“, vor „with“).",
+      "en": "“operate” is a verb; the sentence needs a noun here (after “guarantees”, before “with”)."
      }
     ]
    }

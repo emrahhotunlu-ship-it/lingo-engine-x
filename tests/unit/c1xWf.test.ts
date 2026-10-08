@@ -9,6 +9,8 @@ import { ruleMatches } from '../../src/domain/c1x/kinds/common';
 import { c1File } from '../../src/domain/c1x/schema';
 import { scoreC1 } from '../../src/domain/c1x/score';
 import type { C1Item, Wf } from '../../src/domain/c1x/types';
+import { kindRound } from '../../src/domain/grammar/kindRound';
+import { registerC1Items, resetC1Store } from '../../src/domain/c1x/preload';
 import { slotCount } from '../../src/domain/answer/mask';
 
 const ROOT = join(process.cwd(), 'src/content/c1x/src/wf');
@@ -139,6 +141,75 @@ describe('wf: Wertung im Einzelnen', () => {
     const texts = (w: string): string[] => morphPieces(find(w)).map((p) => p.text);
     expect(texts('unauthorized')).toEqual(['un', 'authorize', 'd']);
     expect(texts('surprisingly')).toEqual(['surpris', 'ing', 'ly']);
-    expect(texts('flexibility')).toEqual(['flexib', 'ility']);
+    expect(texts('flexibility')).toEqual(['flexibil', 'ity']);
+  });
+});
+
+describe('wf: Runde und Lehrer-Befunde', () => {
+  it('nie derselbe Stamm direkt hintereinander, auch bei vielen Startwerten', () => {
+    resetC1Store();
+    registerC1Items(items);
+    for (let i = 0; i < 60; i++) {
+      const round = kindRound({ kind: 'wf', size: 12, grammarDocs: new Map(), seed: `s${i}` });
+      expect(round.length).toBe(12);
+      const stems = round.map((t) => (t.c1 as Wf).stem);
+      for (let k = 1; k < stems.length; k++) expect(stems[k], `Startwert s${i}`).not.toBe(stems[k - 1]);
+    }
+  });
+
+  it('Gesehenes kommt erst nach Neuem', () => {
+    resetC1Store();
+    registerC1Items(items);
+    const done = new Set(items.slice(0, 90).map((i) => i.id));
+    const round = kindRound({ kind: 'wf', size: 10, grammarDocs: new Map(), seed: 'x', lexDone: done });
+    expect(round.filter((t) => !done.has((t.c1 as Wf).id)).length).toBe(10);
+  });
+
+  it('britische Formen gelten als richtig (US-Hinweis)', () => {
+    for (const [us, gb] of [
+      ['unauthorized', 'unauthorised'],
+      ['emphasize', 'emphasise'],
+      ['organization', 'organisation'],
+      ['prioritize', 'prioritise'],
+      ['summarize', 'summarise'],
+    ] as const) {
+      const it = items.find((i) => i.accept[0] === us);
+      expect(it, us).toBeTruthy();
+      const s = scoreC1(it as Wf, resp(gb));
+      expect(s.got, gb).toBe(1);
+      expect(s.us, gb).toBe(us);
+    }
+  });
+
+  it('Partizipien werden in der Begründung als Partizip benannt, nicht als Adjektiv', () => {
+    const list: Array<[string, string]> = [
+      ['implemented', 'implement'],
+      ['grown', 'grow'],
+      ['growing', 'grow'],
+      ['expected', 'expect'],
+      ['renewed', 'renew'],
+      ['required', 'require'],
+      ['approved', 'approve'],
+      ['reported', 'report'],
+      ['supposed', 'suppose'],
+      ['confirmed', 'confirm'],
+      ['recommended', 'recommend'],
+      ['obliged', 'oblige'],
+      ['intended', 'intend'],
+      ['preferred', 'prefer'],
+      ['related', 'relate'],
+      ['organized', 'organize'],
+      ['satisfied', 'satisfy'],
+      ['surprised', 'surprise'],
+      ['admitted', 'admit'],
+      ['summarized', 'summarize'],
+    ];
+    const bad: string[] = [];
+    for (const [w, y] of list) {
+      const rules = items.flatMap((it) => it.why.wrong.filter((r) => r.if?.[0] === w).map((r) => ({ it, r })));
+      if (!rules.length) bad.push(`${w}: keine Regel`);
+      for (const { it, r } of rules) if (!r.de.includes('Partizip') || !r.en.includes('participle') || (w !== 'summarized' && !r.de.includes(`„${y}“`)) || /ist ein Adjektiv/.test(r.de)) bad.push(`${it.id} ${w}: ${r.de}`);
+    }
+    expect(bad).toEqual([]);
   });
 });

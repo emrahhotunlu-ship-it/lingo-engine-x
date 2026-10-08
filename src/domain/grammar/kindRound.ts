@@ -27,8 +27,10 @@ const seenOf = (doc: Doc | undefined): Set<string> => new Set(Array.isArray(doc?
 
 /**
  * Runde der Wortschatz-Art `wf` (Wort umbauen): die Aufgaben gehören zu keinem Grammatikthema, deshalb wird nicht über Muster, sondern über
- * die Lexik-Muster `lx.wf-*` gemischt. Neues zuerst, Wörter von heute bevorzugt, höchstens zwei gleiche Muster hintereinander, stabiler Startwert.
+ * die Lexik-Muster `lx.wf-*` gemischt. Neues zuerst, Wörter von heute bevorzugt, höchstens zwei gleiche Muster hintereinander, nie derselbe Stamm direkt hintereinander, stabiler Startwert.
  */
+const stemOf = (it: C1Item | undefined): string | null => (it && it.kind === 'wf' ? it.stem : null);
+
 function lexRound(i: KindRoundInput): GrammarTask[] {
   const words = (i.wordsToday ?? []).map((w) => w.toLowerCase());
   const hit = (it: C1Item): number => (words.length && words.some((w) => (it.lex ?? []).some((l) => l.toLowerCase().includes(w))) ? 0 : 1);
@@ -43,7 +45,9 @@ function lexRound(i: KindRoundInput): GrammarTask[] {
   const rest = pool.map((x) => x.it);
   while (out.length < i.size && rest.length) {
     const last2 = out.slice(-2).map((x) => x.pat);
-    const at = rest.findIndex((x) => !(last2.length === 2 && last2[0] === last2[1] && last2[1] === x.pat));
+    const lastStem = stemOf(out[out.length - 1]);
+    // Nie dasselbe Stammwort direkt hintereinander (zwei Aufgaben zur selben Wortfamilie), höchstens zwei gleiche Muster in Folge.
+    const at = rest.findIndex((x) => !(last2.length === 2 && last2[0] === last2[1] && last2[1] === x.pat) && !(lastStem && stemOf(x) === lastStem));
     out.push(...rest.splice(at < 0 ? 0 : at, 1));
   }
   return out.map((it) => toTask(it, { ref: 'content/c1x' }));

@@ -12,7 +12,7 @@
    "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "text": "Moving your archive to the cloud would be highly ___ for a company of your size.",
+   "text": "Moving your archive to the cloud would be highly ___ for a company of your size: lower costs and no servers to maintain.",
    "stem": "ADVANTAGE",
    "accept": [
     "advantageous"
@@ -22,8 +22,7 @@
     "base": "advantage",
     "suf": [
      "ous"
-    ],
-    "change": "e → eous"
+    ]
    },
    "family": [
     "advantage",
@@ -55,8 +54,8 @@
       "if": [
        "disadvantageous"
       ],
-      "de": "disadvantageous heißt nachteilig; ein Verkäufer meint hier das Gegenteil.",
-      "en": "disadvantageous means harmful; the speaker means the opposite."
+      "de": "disadvantageous heißt nachteilig; „lower costs and no servers to maintain“ nennt nur Vorteile.",
+      "en": "disadvantageous means harmful; “lower costs and no servers to maintain” lists only benefits."
      }
     ]
    }
@@ -69,7 +68,7 @@
    "lex": [
     "unwilling"
    ],
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "text": "After weeks of talks, the client is still ___ to accept any price increase.",
@@ -244,39 +243,41 @@
    "area": "lex",
    "pat": "lx.wf-adv",
    "lex": [
-    "obviously"
+    "inevitably"
    ],
-   "level": "B2",
-   "dom": "life",
+   "level": "C1",
+   "dom": "biz",
    "src": "seed",
-   "text": "The figures are ___ wrong, because the total is smaller than one of the items.",
-   "stem": "OBVIOUS",
+   "text": "Without regular checks, data loss will ___ occur sooner or later.",
+   "stem": "INEVITABLE",
    "accept": [
-    "obviously"
+    "inevitably"
    ],
    "pos": "adv",
    "parts": {
-    "base": "obvious",
+    "pre": "in",
+    "base": "evitable",
     "suf": [
      "ly"
-    ]
+    ],
+    "change": "ble → bly"
    },
    "family": [
-    "obvious",
-    "obviously"
+    "inevitable",
+    "inevitably"
    ],
    "why": {
     "ok": {
-     "de": "Vor einem Adjektiv steht ein Adverb: obvious + -ly = offensichtlich. Das Argument nach „because“ begründet die Schlussfolgerung.",
-     "en": "An adverb goes before an adjective: obvious + -ly = clearly. The clause after “because” gives the evidence."
+     "de": "Zwischen „will“ und dem Verb steht ein Adverb: inevitable → inevitably (-ble wird -bly). Inevitably = unausweichlich.",
+     "en": "An adverb goes between “will” and the verb: inevitable → inevitably (-ble becomes -bly). Inevitably = unavoidably."
     },
     "wrong": [
      {
       "if": [
-       "obvious"
+       "inevitable"
       ],
-      "de": "„obvious“ ist ein Adjektiv; hier braucht der Satz ein Adverb (vor „wrong“).",
-      "en": "“obvious” is an adjective; the sentence needs an adverb here (before “wrong”)."
+      "de": "„inevitable“ ist ein Adjektiv; hier braucht der Satz ein Adverb (zwischen „will“ und „occur“).",
+      "en": "“inevitable” is an adjective; the sentence needs an adverb here (between “will” and “occur”)."
      }
     ]
    }
@@ -367,7 +368,9 @@
    "pos": "adv",
    "parts": {
     "base": "precise",
-    "change": "e → ely"
+    "suf": [
+     "ly"
+    ]
    },
    "family": [
     "precise",
@@ -493,7 +496,10 @@
    "parts": {
     "pre": "un",
     "base": "rely",
-    "change": "rely → reliab-"
+    "change": "y → i",
+    "suf": [
+     "able"
+    ]
    },
    "family": [
     "rely",
@@ -602,7 +608,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "text": "A quick ___ of your invoices shows that they wait nine days on average.",
+   "text": "A quick ___ of your invoice workflow shows that each invoice waits nine days for approval on average.",
    "stem": "ANALYZE",
    "accept": [
     "analysis"
@@ -791,7 +797,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "text": "Most of our ___ are based in Germany, so we focus on the DACH region.",
+   "text": "Three of our main ___ are based in Germany, so we focus on the DACH region.",
    "stem": "COMPETE",
    "accept": [
     "competitors"
@@ -810,37 +816,37 @@
    ],
    "why": {
     "ok": {
-     "de": "Nach „Most of our“ steht ein Nomen im Plural: compete → competitor + -s. Das Verb „are“ bestätigt den Plural.",
-     "en": "A plural noun follows “Most of our”: compete → competitor + -s. The verb “are” confirms the plural."
+     "de": "Nach „Three of our main“ steht ein Nomen im Plural: compete → competitor + -s. Das Verb „are“ bestätigt den Plural.",
+     "en": "A plural noun follows “Three of our main”: compete → competitor + -s. The verb “are” confirms the plural."
     },
     "wrong": [
      {
       "if": [
        "compete"
       ],
-      "de": "„compete“ ist ein Verb; hier braucht der Satz ein Nomen (nach „Most of our“, vor „are“).",
-      "en": "“compete” is a verb; the sentence needs a noun here (after “Most of our”, before “are”)."
+      "de": "„compete“ ist ein Verb; hier braucht der Satz ein Nomen (nach „Three of our main“, vor „are“).",
+      "en": "“compete” is a verb; the sentence needs a noun here (after “Three of our main”, before “are”)."
      },
      {
       "if": [
        "competition"
       ],
-      "de": "competition ist nicht zählbar und passt zu „is“, nicht zu „are based“.",
-      "en": "competition is uncountable and takes “is”, not “are based”."
+      "de": "competition ist hier ein Sammelbegriff und lässt sich nicht zählen; nach „Three of our main“ braucht es ein zählbares Nomen im Plural.",
+      "en": "competition is a collective noun here and cannot be counted; “Three of our main” needs a countable plural noun."
      },
      {
       "if": [
        "competitor"
       ],
-      "de": "Nach „Most of our“ braucht das Nomen den Plural: competitors (Verb „are“).",
-      "en": "After “Most of our” the noun needs the plural: competitors (verb “are”)."
+      "de": "Nach „Three of our main“ braucht das Nomen den Plural: competitors (Verb „are“).",
+      "en": "After “Three of our main” the noun needs the plural: competitors (verb “are”)."
      },
      {
       "if": [
        "competitive"
       ],
-      "de": "„competitive“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „Most of our“, vor „are“).",
-      "en": "“competitive” is an adjective; the sentence needs a noun here (after “Most of our”, before “are”)."
+      "de": "„competitive“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „Three of our main“, vor „are“).",
+      "en": "“competitive” is an adjective; the sentence needs a noun here (after “Three of our main”, before “are”)."
      }
     ]
    }
@@ -959,8 +965,8 @@
       "if": [
        "intended"
       ],
-      "de": "„intended“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „any“, vor „of expanding“).",
-      "en": "“intended” is an adjective; the sentence needs a noun here (after “any”, before “of expanding”)."
+      "de": "„intended“ ist das Partizip Perfekt von „intend“ (eine Verbform, auch als Adjektiv genutzt); hier braucht der Satz ein Nomen.",
+      "en": "“intended” is the past participle of “intend” (a verb form, also used as an adjective); the sentence needs a noun."
      },
      {
       "if": [
@@ -1040,8 +1046,8 @@
       "if": [
        "preferred"
       ],
-      "de": "„preferred“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „a clear“, vor „for“).",
-      "en": "“preferred” is an adjective; the sentence needs a noun here (after “a clear”, before “for”)."
+      "de": "„preferred“ ist das Partizip Perfekt von „prefer“ (eine Verbform, auch als Adjektiv genutzt); hier braucht der Satz ein Nomen.",
+      "en": "“preferred” is the past participle of “prefer” (a verb form, also used as an adjective); the sentence needs a noun."
      }
     ]
    }
@@ -1132,7 +1138,7 @@
    "why": {
     "ok": {
      "de": "Nach „your valuable“ steht ein Nomen: contribute → contribution (-te wird -tion). Contribution to = Beitrag zu.",
-     "en": "A noun follows “your valuable”: contribute → contribution. “Contribution to” means part of the success."
+     "en": "A noun follows “your valuable”: contribute → contribution. “Contribution to” means your part in something."
     },
     "wrong": [
      {
@@ -1207,47 +1213,48 @@
    "area": "lex",
    "pat": "lx.wf-noun",
    "lex": [
-    "reference"
+    "liability"
    ],
-   "level": "B2",
-   "dom": "life",
+   "level": "C1",
+   "dom": "biz",
    "src": "seed",
-   "text": "Please include your order number as a ___ when you contact support.",
-   "stem": "REFER",
+   "text": "Under the contract, the provider’s ___ is limited to the annual fee.",
+   "stem": "LIABLE",
    "accept": [
-    "reference"
+    "liability"
    ],
    "pos": "noun",
    "parts": {
-    "base": "refer",
+    "base": "liable",
     "suf": [
-     "ence"
-    ]
+     "ity"
+    ],
+    "change": "ble → bil"
    },
    "family": [
-    "refer",
-    "referral",
-    "reference"
+    "liable",
+    "liability",
+    "liabilities"
    ],
    "why": {
     "ok": {
-     "de": "Nach „as a“ steht ein Nomen: refer → reference (-ence). Eine Referenznummer hilft dem Support, den Fall zu finden.",
-     "en": "A noun follows “as a”: refer → reference (-ence). A reference number helps support find your case."
+     "de": "Nach „the provider’s“ steht ein Nomen: liable → liability (-ble wird -bility). Liability = Haftung.",
+     "en": "A noun follows “the provider’s”: liable → liability (-ble becomes -bility). Liability = legal responsibility."
     },
     "wrong": [
      {
       "if": [
-       "refer"
+       "liable"
       ],
-      "de": "„refer“ ist ein Verb; hier braucht der Satz ein Nomen (nach „as a“).",
-      "en": "“refer” is a verb; the sentence needs a noun here (after “as a”)."
+      "de": "„liable“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „provider’s“, vor „is“).",
+      "en": "“liable” is an adjective; the sentence needs a noun here (after “provider’s”, before “is”)."
      },
      {
       "if": [
-       "referral"
+       "liabilities"
       ],
-      "de": "referral heißt Weiterempfehlung oder Überweisung; eine Kennung heißt reference.",
-      "en": "referral means a recommendation or transfer; an identifier is called a reference."
+      "de": "Nach „the provider’s“ mit dem Verb „is“ steht der Singular: liability.",
+      "en": "After “the provider’s” with the verb “is” the singular is needed: liability."
      }
     ]
    }
@@ -1434,9 +1441,9 @@
     "encouraging"
    ],
    "level": "B2+",
-   "dom": "life",
+   "dom": "biz",
    "src": "seed",
-   "text": "The first feedback from our customers is very ___.",
+   "text": "The initial feedback from our customers is very ___.",
    "stem": "ENCOURAGE",
    "accept": [
     "encouraging"
@@ -1513,7 +1520,7 @@
      "ing",
      "ly"
     ],
-    "change": "e → ingly"
+    "change": "e entfällt"
    },
    "family": [
     "surprise",
@@ -1538,8 +1545,8 @@
       "if": [
        "surprised"
       ],
-      "de": "„surprised“ ist ein Adjektiv; hier braucht der Satz ein Adverb (am Satzanfang, vor dem Komma).",
-      "en": "“surprised” is an adjective; the sentence needs an adverb here (at the start of the sentence, before the comma)."
+      "de": "„surprised“ ist das Partizip Perfekt von „surprise“ (eine Verbform, auch als Adjektiv genutzt); hier braucht der Satz ein Adverb.",
+      "en": "“surprised” is the past participle of “surprise” (a verb form, also used as an adjective); the sentence needs an adverb."
      },
      {
       "if": [
@@ -1560,7 +1567,7 @@
     "assistance"
    ],
    "level": "B2",
-   "dom": "life",
+   "dom": "biz",
    "src": "seed",
    "text": "If you need any ___ with the setup, our team is happy to help.",
    "stem": "ASSIST",
@@ -1613,7 +1620,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "text": "___ at the weekly sales meeting is compulsory for all account managers.",
+   "text": "___ at the weekly sales meeting is mandatory for all account managers.",
    "stem": "ATTEND",
    "accept": [
     "attendance"
@@ -1684,7 +1691,7 @@
    ],
    "why": {
     "ok": {
-     "de": "Nach dem Verb „work“ steht ein Adverb: efficient + -ly = wirksam. Ein Adjektiv wäre hier falsch.",
+     "de": "Nach dem Verb „work“ steht ein Adverb: efficient + -ly = effizient, mit wenig Aufwand (nicht „wirksam“, das wäre effectively).",
      "en": "After the verb “work” an adverb is needed: efficient + -ly. An adjective would be wrong here."
     },
     "wrong": [
@@ -1782,7 +1789,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "text": "The new tariff is ___ cheaper than the old one.",
+   "text": "The new pricing plan is ___ cheaper than the old one.",
    "stem": "CONSIDER",
    "accept": [
     "considerably"
@@ -1956,7 +1963,8 @@
    "parts": {
     "base": "drama",
     "suf": [
-     "tically"
+     "tic",
+     "ally"
     ]
    },
    "family": [
@@ -1993,39 +2001,57 @@
    "area": "lex",
    "pat": "lx.wf-adv",
    "lex": [
-    "slightly"
+    "admittedly"
    ],
-   "level": "B2",
-   "dom": "life",
+   "level": "C1",
+   "dom": "biz",
    "src": "seed",
-   "text": "The new version is only ___ faster than the old one, so the upgrade is optional.",
-   "stem": "SLIGHT",
+   "text": "___, our first release had bugs, but the second one fixed all of them.",
+   "stem": "ADMIT",
    "accept": [
-    "slightly"
+    "admittedly"
    ],
    "pos": "adv",
    "parts": {
-    "base": "slight",
+    "base": "admit",
     "suf": [
+     "ed",
      "ly"
-    ]
+    ],
+    "change": "admit + t"
    },
    "family": [
-    "slight",
-    "slightly"
+    "admit",
+    "admitted",
+    "admittance",
+    "admittedly"
    ],
    "why": {
     "ok": {
-     "de": "Vor einem Komparativ steht ein Adverb: slight + -ly = ein wenig.",
-     "en": "An adverb goes before a comparative: slight + -ly = a little."
+     "de": "Am Satzanfang kommentiert ein Adverb den ganzen Satz: admit → admitted → admittedly = zugegebenermaßen.",
+     "en": "At the start, an adverb comments on the whole sentence: admit → admitted → admittedly = it must be said."
     },
     "wrong": [
      {
       "if": [
-       "slight"
+       "admit"
       ],
-      "de": "„slight“ ist ein Adjektiv; hier braucht der Satz ein Adverb (vor „faster“).",
-      "en": "“slight” is an adjective; the sentence needs an adverb here (before “faster”)."
+      "de": "„admit“ ist ein Verb; hier braucht der Satz ein Adverb (am Satzanfang, vor dem Komma).",
+      "en": "“admit” is a verb; the sentence needs an adverb here (at the start, before the comma)."
+     },
+     {
+      "if": [
+       "admitted"
+      ],
+      "de": "„admitted“ ist das Partizip Perfekt von „admit“ (eine Verbform, auch als Adjektiv genutzt); hier braucht der Satz ein Adverb.",
+      "en": "“admitted” is the past participle of “admit” (a verb form, also used as an adjective); the sentence needs an adverb."
+     },
+     {
+      "if": [
+       "admittance"
+      ],
+      "de": "„admittance“ ist ein Nomen; hier braucht der Satz ein Adverb (am Satzanfang, vor dem Komma).",
+      "en": "“admittance” is a noun; the sentence needs an adverb here (at the start, before the comma)."
      }
     ]
    }
@@ -2223,7 +2249,7 @@
     "length"
    ],
    "level": "B2",
-   "dom": "life",
+   "dom": "biz",
    "src": "seed",
    "text": "The ___ of the contract is three years, with an option to extend.",
    "stem": "LONG",
@@ -2275,55 +2301,65 @@
    "id": "wf-0090",
    "kind": "wf",
    "area": "lex",
-   "pat": "lx.wf-adv",
+   "pat": "lx.wf-neg",
    "lex": [
-    "easily"
+    "invaluable"
    ],
-   "level": "B2",
+   "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "text": "Customers can ___ import their data from Excel in just a few clicks.",
-   "stem": "EASY",
+   "text": "A well-kept archive is ___ when an auditor asks for a contract from 2019.",
+   "stem": "VALUE",
    "accept": [
-    "easily"
+    "invaluable"
    ],
-   "pos": "adv",
+   "pos": "adj",
    "parts": {
-    "base": "easy",
-    "change": "y → ily"
+    "pre": "in",
+    "base": "value",
+    "suf": [
+     "able"
+    ]
    },
    "family": [
-    "easy",
-    "easily",
-    "ease",
-    "easier"
+    "value",
+    "valuable",
+    "valueless",
+    "invaluable"
    ],
    "why": {
     "ok": {
-     "de": "Vor dem Verb steht ein Adverb: easy → easily (-y wird -ily).",
-     "en": "An adverb goes before the verb: easy → easily (-y becomes -ily)."
+     "de": "Nach „is“ steht ein Adjektiv: in- + value + -able = unschätzbar wertvoll. Das Präfix in- verneint hier nicht: invaluable ist NICHT „wertlos“.",
+     "en": "An adjective follows “is”: in- + value + -able = extremely useful. The prefix does not negate here: invaluable is NOT “worthless”."
     },
     "wrong": [
      {
       "if": [
-       "easy"
+       "value"
       ],
-      "de": "„easy“ ist ein Adjektiv; hier braucht der Satz ein Adverb (vor „import“).",
-      "en": "“easy” is an adjective; the sentence needs an adverb here (before “import”)."
+      "de": "„value“ ist ein Nomen; hier braucht der Satz ein Adjektiv (nach „is“, vor „when“).",
+      "en": "“value” is a noun; the sentence needs an adjective here (after “is”, before “when”)."
      },
      {
       "if": [
-       "ease"
+       "valuable"
       ],
-      "de": "„ease“ ist ein Nomen; hier braucht der Satz ein Adverb (vor „import“).",
-      "en": "“ease” is a noun; the sentence needs an adverb here (before “import”)."
+      "de": "valuable heißt wertvoll; invaluable ist stärker: unschätzbar wertvoll.",
+      "en": "valuable means worth a lot; invaluable is stronger: extremely useful."
      },
      {
       "if": [
-       "easier"
+       "valueless"
       ],
-      "de": "„easier“ ist ein Adjektiv; hier braucht der Satz ein Adverb (vor „import“).",
-      "en": "“easier” is an adjective; the sentence needs an adverb here (before “import”)."
+      "de": "valueless heißt wertlos; invaluable heißt aber gerade nicht wertlos.",
+      "en": "valueless means worth nothing; invaluable does not mean that."
+     },
+     {
+      "if": [
+       "unvaluable"
+      ],
+      "de": "Das Wort heißt invaluable (in-), nicht unvaluable.",
+      "en": "The word is invaluable (in-), not unvaluable."
      }
     ]
    }
@@ -2404,7 +2440,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "text": "We plan to ___ our product range with two new modules next spring.",
+   "text": "We plan to ___ our product line with two new modules next spring.",
    "stem": "BROAD",
    "accept": [
     "broaden"
@@ -2564,8 +2600,8 @@
       "if": [
        "related"
       ],
-      "de": "„related“ ist ein Adjektiv; hier braucht der Satz ein Adverb (vor „low“).",
-      "en": "“related” is an adjective; the sentence needs an adverb here (before “low”)."
+      "de": "„related“ ist das Partizip Perfekt von „relate“ (eine Verbform, auch als Adjektiv genutzt); hier braucht der Satz ein Adverb (vor „low“).",
+      "en": "“related” is the past participle of “relate” (a verb form, also used as an adjective); the sentence needs an adverb (before “low”)."
      },
      {
       "if": [
@@ -2751,8 +2787,8 @@
       "if": [
        "organized"
       ],
-      "de": "„organized“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „The“, vor „of“).",
-      "en": "“organized” is an adjective; the sentence needs a noun here (after “The”, before “of”)."
+      "de": "„organized“ ist das Partizip Perfekt von „organize“ (eine Verbform, auch als Adjektiv genutzt); hier braucht der Satz ein Nomen.",
+      "en": "“organized” is the past participle of “organize” (a verb form, also used as an adjective); the sentence needs a noun."
      },
      {
       "if": [
@@ -2928,8 +2964,8 @@
       "if": [
        "summarized"
       ],
-      "de": "„summarized“ ist ein Adjektiv; hier braucht der Satz ein Verb (nach „Could you briefly“).",
-      "en": "“summarized” is an adjective; the sentence needs a verb here (after “Could you briefly”)."
+      "de": "„summarized“ ist das Partizip Perfekt bzw. die Vergangenheitsform; nach „Could you briefly“ steht die Grundform des Verbs.",
+      "en": "“summarized” is the past participle or past tense; “Could you briefly” needs the base form of the verb."
      }
     ]
    }

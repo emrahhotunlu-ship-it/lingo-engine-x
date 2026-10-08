@@ -92,11 +92,15 @@ export function morphPieces(item: Wf): MorphPiece[] {
   let n = 0;
   while (n < base.length && n < rest.length && rest[n]?.toLowerCase() === base[n]) n++;
   if (n === 0) return [{ text: word, role: 'core' }];
-  out.push({ text: rest.slice(0, n), role: 'core' });
-  const tail = rest.slice(n);
+  const suf = item.parts.suf ?? [];
+  const joined = suf.join('');
+  // Sind die Nachsilben der Aufgabe das Ende des Worts (und bleibt der gemeinsame Anfang im Kern), gilt die sprachliche Teilung: suppose · d · ly.
+  const bySuffix = joined !== '' && rest.length - joined.length >= n && rest.toLowerCase().endsWith(joined.toLowerCase());
+  const coreLen = bySuffix ? rest.length - joined.length : n;
+  out.push({ text: rest.slice(0, coreLen), role: 'core' });
+  const tail = rest.slice(coreLen);
   if (tail) {
-    const suf = item.parts.suf ?? [];
-    if (suf.length > 1 && suf.join('').toLowerCase() === tail.toLowerCase()) {
+    if (bySuffix) {
       let at = 0;
       for (const sx of suf) {
         out.push({ text: tail.slice(at, at + sx.length), role: 'suf' });
