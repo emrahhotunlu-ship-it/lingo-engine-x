@@ -52,7 +52,8 @@ type Props = {
 export function Odometer({ text, id, play = true, delay = 150, className, from }: Props) {
   const [initial] = useState(() => {
     const last = from ?? (id ? session.get(odoKey(id)) : null);
-    const roll = play && effectiveLevel() !== 'off' && numberRolls(last, text) && /\d/.test(text);
+    // Ohne Dokument (Vorab-Rendern) steht der Endwert da.
+    const roll = typeof document !== 'undefined' && play && effectiveLevel() !== 'off' && numberRolls(last, text) && /\d/.test(text);
     return { roll, from: roll ? (last ?? null) : text };
   });
   const [cols] = useState<OdoCol[]>(() => odometerCols(initial.from, text));

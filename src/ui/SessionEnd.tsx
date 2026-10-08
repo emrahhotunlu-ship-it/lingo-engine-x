@@ -228,7 +228,7 @@ function GrowthEnd({
         </h1>
         {total > 0 && (
           <p className="lx-tnum lx-t-support m-0 text-muted">
-            <Odometer text={t("nbShEndScore", { right, total })} id="end:score" delay={150} />
+            {t("nbShEndScore", { right, total })}
           </p>
         )}
       </div>

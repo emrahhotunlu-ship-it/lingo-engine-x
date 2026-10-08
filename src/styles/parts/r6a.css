@@ -99,6 +99,11 @@ html[data-ambient] body::before {
 .lx-stack-card {
   position: relative;
 }
+/* Im Stapel übernimmt der Stapel den Auftritt (eine Bewegung statt drei übereinander: dz-next, dz-rise und Stapel). */
+:root[data-fx] .lx-stack > .lx-stack-card[data-step],
+:root[data-fx] .lx-stack .dz-flip {
+  animation: none;
+}
 .dz-flip {
   position: relative;
   isolation: isolate;
@@ -291,7 +296,7 @@ html[data-ambient] body::before {
 }
 :root[data-fx='full'] .lx-levelup[data-play] .lx-emblem [data-fill],
 :root[data-fx='calm'] .lx-levelup[data-play] .lx-emblem [data-fill] {
-  animation: r6a-fade 300ms ease-out 700ms both;
+  animation: r6a-fill 300ms ease-out 700ms both;
 }
 @keyframes r6a-draw {
   from {
@@ -299,6 +304,15 @@ html[data-ambient] body::before {
   }
   to {
     stroke-dashoffset: 0;
+  }
+}
+/* Die Füllung bleibt ein Hauch (0,12), sonst verschluckt sie das Zeichen. */
+@keyframes r6a-fill {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.12;
   }
 }
 @keyframes r6a-fade {
@@ -310,13 +324,12 @@ html[data-ambient] body::before {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .lx-levelup[data-play],
+  .lx-levelup[data-play] {
+    animation: r6a-fade 150ms ease-out both !important;
+  }
   .lx-levelup[data-play]::after,
   .lx-levelup[data-play] .lx-emblem [data-draw],
   .lx-levelup[data-play] .lx-emblem [data-fill] {
-    animation: r6a-fade 150ms ease-out both !important;
-  }
-  .lx-levelup[data-play]::after {
     animation: none !important;
   }
 }

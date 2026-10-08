@@ -39,15 +39,22 @@ export function LevelUp({ show, onClose }: Props) {
     btn.current?.focus();
     const stop = play ? startMoment('level') : null;
     const timer = play ? window.setTimeout(() => emit({ k: 'moment', m: 'level', el: card.current }), 120) : 0;
+    // Abfangphase am Fenster: die Karte liegt über einem offenen Blatt, dessen Esc/Tab sonst zuerst greifen würden.
     const onKey = (e: KeyboardEvent): void => {
       if (e.key === 'Escape') {
         e.preventDefault();
+        e.stopPropagation();
         onClose();
+      } else if (e.key === 'Tab') {
+        // Ein einziges Bedienelement: der Fokus bleibt auf „Weiter“.
+        e.preventDefault();
+        e.stopPropagation();
+        btn.current?.focus();
       }
     };
-    window.addEventListener('keydown', onKey);
+    window.addEventListener('keydown', onKey, true);
     return () => {
-      window.removeEventListener('keydown', onKey);
+      window.removeEventListener('keydown', onKey, true);
       window.clearTimeout(timer);
       stop?.();
       if (before?.isConnected) before.focus();
