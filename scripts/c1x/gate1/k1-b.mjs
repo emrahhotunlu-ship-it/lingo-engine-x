@@ -89,7 +89,7 @@ export const items = [
   {
     k: 'err', p: 'ut.did-use-to', lv: 'B2', dom: 'life',
     text: "We didn't used to have a dishwasher, so we washed everything by hand after dinner.",
-    bad: { span: "didn't used", fix: ["didn't use"], ch: ["don't use", "weren't use"] },
+    bad: { span: "didn't used", fix: ["didn't use", 'did not use'], ch: ["don't use", "weren't use"] },
     ok: ['Nach didn’t steht die Grundform: didn’t use to. Das -d von used verschwindet, weil didn’t schon die Vergangenheit trägt.', 'After didn’t the base form follows: didn’t use to. The -d of used disappears, because didn’t already carries the past.'],
     c1: ['don’t use ist Gegenwart; der Satz erzählt aber von früher (washed).', 'don’t use is present tense, but the sentence tells about the past (washed).'],
     c2: ['weren’t braucht ein Partizip oder -ing, nicht use.', 'weren’t needs a participle or -ing, not use.'],
@@ -182,11 +182,11 @@ export const items = [
   },
   {
     k: 'err', p: 'pt.at-on-in', lv: 'B2', dom: 'biz',
-    text: 'The new regulation will come into force at 1 January, so we must update our contracts.',
-    bad: { span: 'at 1 January', fix: ['on 1 January'], ch: ['in 1 January', 'at the 1 January'] },
-    ok: ['Mit einem bestimmten Datum steht on: on 1 January. at gehört zu Uhrzeiten.', 'With a specific date on is used: on 1 January. at belongs to clock times.'],
+    text: 'The new regulation will come into force at January 1, so we must update our contracts.',
+    bad: { span: 'at January 1', fix: ['on January 1'], ch: ['in January 1', 'at the January 1'] },
+    ok: ['Mit einem bestimmten Datum steht on: on January 1. at gehört zu Uhrzeiten.', 'With a specific date on is used: on January 1. at belongs to clock times.'],
     c1: ['in steht bei Monaten (in January), nicht bei einem einzelnen Datum.', 'in is used with months (in January), not with a single date.'],
-    c2: ['at the 1 January ist keine übliche Form; at gehört zu Uhrzeiten.', 'at the 1 January is not a normal form; at belongs to clock times.'],
+    c2: ['at the January 1 ist keine übliche Form; at gehört zu Uhrzeiten.', 'at the January 1 is not a normal form; at belongs to clock times.'],
   },
   {
     k: 'ocl', p: 'pt.by-until', lv: 'B2', dom: 'life', cls: 'prep', a: ['until', 'till'],

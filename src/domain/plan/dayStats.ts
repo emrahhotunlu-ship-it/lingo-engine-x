@@ -191,7 +191,9 @@ export function milestonePatch(cur: Doc, ids: readonly MilestoneId[], day: strin
  */
 export function claimMilestones(cur: Doc, pick: MilestonePick, day: string): { patch: Doc | null; show: Milestone | null } {
   const ms = cur.ms && typeof cur.ms === 'object' && !Array.isArray(cur.ms) ? (cur.ms as Doc) : {};
-  const show = pick.show && !ms[pick.show.id] ? pick.show : null;
+  // Das Wochenbudget gilt auch auf dem frischen Stand: hat ein anderes Gerät inzwischen die zweite Karte der Woche gezeigt, wartet diese.
+  const budgetGone = !!pick.show && isMilestoneCard(pick.show.id) && cardsThisWeek(ms, day) >= MS_WEEK_MAX;
+  const show = pick.show && !ms[pick.show.id] && !budgetGone ? pick.show : null;
   const quiet = pick.quiet.filter((id) => !ms[id]);
   return { patch: milestonePatch(cur, show ? [show.id] : [], day, quiet, pick.migrate), show };
 }

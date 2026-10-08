@@ -90,7 +90,7 @@ export const items = [
   {
     k: 'err', p: 'psp.experience', lv: 'B2+', dom: 'biz',
     text: 'This is the best onboarding workshop that I never attended in my five years at this company.',
-    bad: { span: 'never attended', fix: ['have ever attended'], ch: ['have never attended', 'did ever attended'] },
+    bad: { span: 'never attended', fix: ['have ever attended', 'ever attended'], ch: ['have never attended', 'did ever attended'] },
     ok: ['Nach einem Superlativ steht ever: „der Beste, den ich je besucht habe“ = have ever attended (Present Perfect, Erfahrung bis heute).', 'After a superlative comes ever: “the best I have ever attended” = have ever attended (present perfect, experience up to now).'],
     c1: ['Nach einem Superlativ steht ever, nicht never: „der Beste, den ich nie besuchte“ ergibt keinen Sinn.', 'After a superlative comes ever, not never: “the best I have never attended” makes no sense.'],
     c2: ['Nach did steht die Grundform: did … attend, nicht attended.', 'After did comes the base form: did … attend, not attended.'],
@@ -108,7 +108,7 @@ export const items = [
   {
     k: 'kwt', p: 'psp.finished-time', lv: 'B2', dom: 'biz',
     lead: 'At what exact time did the failure of the system happen?', key: 'WHEN',
-    before: '', after: 'exactly?', a: ['when did'], b: ['the system fail'], x: ['has', 'failed', 'does'],
+    before: '', after: 'exactly?', a: ['when did'], b: ['the system fail', 'the system failure happen'], x: ['has', 'failed', 'does'],
     traps: [['when has the system failed', 'Mit when fragst du nach einem Zeitpunkt, deshalb steht das Past Simple: did … fail.', 'With when you ask for a point in time, so the past simple is used: did … fail.']],
     ok: ['Teil 1: when did, denn when nennt einen abgeschlossenen Zeitpunkt. Teil 2: the system fail, nach did steht die Grundform.', 'Part 1: when did, because when names a finished point in time. Part 2: the system fail, the base form follows did.'],
   },
@@ -151,8 +151,8 @@ export const items = [
   },
   {
     k: 'kwt', p: 'pc.since-for', lv: 'B2', dom: 'biz',
-    lead: 'The client contacted us twenty minutes ago, and we are still on the line.', key: 'FOR',
-    before: 'We', after: 'twenty minutes with the client.', a: ['have been talking'], b: ['for'], x: ['since', 'talked', 'are'],
+    lead: 'Our call with the client started twenty minutes ago and is still going.', key: 'FOR',
+    before: 'We', after: 'twenty minutes now.', a: ['have been talking'], b: ['for'], x: ['since', 'talked', 'are'],
     traps: [['are talking for', 'Deutsch sagt „wir sprechen seit 20 Minuten“ im Präsens. Englisch braucht have been talking.', 'German says “wir sprechen seit 20 Minuten” in the present. English needs have been talking.']],
     ok: ['Teil 1: have been talking, die Tätigkeit läuft noch. Teil 2: for + Dauer (twenty minutes).', 'Part 1: have been talking, the activity is still going on. Part 2: for + length of time (twenty minutes).'],
   },

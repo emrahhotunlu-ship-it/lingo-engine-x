@@ -172,7 +172,7 @@ export const profileSchema = z.looseObject({
   checks: loose,
   /** Neu ab Phase 1: Lerntag → Pflicht erledigt (wahr/1). */
   pflicht: z.record(z.string(), z.unknown()).nullish(),
-  /** Neu (Umbau, Abschluss auf Heute): gezeigte Meilensteine `{fest100: Lerntag, topic1: …}`, nur ergänzend, nie geändert (`domain/plan/dayStats`). */
+  /** Neu (Umbau, Abschluss auf Heute): Meilensteine `{fest100: Lerntag, ch2: Lerntag, place: 'Lerntag~' (still gemerkt), fu: …}`, ≤ 30 Schlüssel, nur ergänzend, nie geändert (`domain/plan/dayStats`, P42). */
   ms: z.record(z.string(), z.unknown()).nullish(),
 });
 

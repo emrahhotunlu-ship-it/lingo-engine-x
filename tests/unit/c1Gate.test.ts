@@ -4,7 +4,7 @@ import { chapterById, liveTopics, programChapters } from '../../src/domain/c1/ch
 import { appendGate, saveGate } from '../../src/domain/c1/gate/save';
 import { gateEntry, gateOutcome, nextTryAfter } from '../../src/domain/c1/gate/score';
 import { correctSentence, gatePair, gatePoolOf, gateRound, isGateItem } from '../../src/domain/c1/gate/select';
-import { GATE, attemptsOf, firstReadyGate, gateStatus, grammarThreshold, retryFrom, type GateStatus } from '../../src/domain/c1/gate/trigger';
+import { attemptsOf, firstReadyGate, gateStatus, grammarThreshold, retryFrom, type GateStatus } from '../../src/domain/c1/gate/trigger';
 import { chapterState } from '../../src/domain/c1/state';
 import { emptyC1, type C1Gate } from '../../src/domain/c1/c1doc';
 import { c1File } from '../../src/domain/c1x/schema';
@@ -197,7 +197,7 @@ describe('Prüfungsvorrat Kapitel 1–3 (P43)', () => {
     }
   });
   it('Gegenprobe Beleg: ocl, kwt und err', () => {
-    const find = (kind: string): C1Item => POOL.find((i) => i.kind === kind && (kind !== 'err' || i.bad)) as C1Item;
+    const find = (kind: string): C1Item => POOL.find((i) => i.kind === kind && (kind !== 'err' || (i as { bad?: unknown }).bad)) as C1Item;
     expect(correctSentence(find('ocl'))).toMatch(/^[A-Z].*[.?]$/);
     expect(correctSentence(find('kwt'))).toMatch(/^[A-Z].*[.?]$/);
     const e = find('err');
@@ -239,7 +239,7 @@ const card = (id: string, o: Partial<TrainCard> = {}): TrainCard =>
     context: { sentence: `We need to ${id} the report before Friday.`, start: 11, end: 11 + id.length, gap: id },
     col: [], src: null, fsrs: {} as TrainCard['fsrs'], stage: 2, isNew: false, hidden: false, xs: {}, modes: {}, lastMode: null, lastEx: null,
     chunk: null, intro: null, order: 0, added: '2026-09-01', doc: {}, ...o,
-  }) as TrainCard;
+  });
 
 describe('Kapitelwörter', () => {
   const many = Array.from({ length: 20 }, (_, i) => card(`word${String(i).padStart(2, '0')}`, { added: i < 6 ? '2026-08-01' : '2026-09-15' }));

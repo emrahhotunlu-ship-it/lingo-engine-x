@@ -327,7 +327,7 @@ export const items = [
   },
   {
     k: 'ocl', p: 'cp.as-of', lv: 'B2+', dom: 'biz', cls: 'adv', a: ['As', 'as'],
-    t: '___ of 1 March, all customers will receive their invoices as electronic documents only.',
+    t: '___ of March 1, all customers will receive their invoices as electronic documents only.',
     c: {
       Since: 'Since of gibt es nicht; Since blickt zurück und braucht kein of. || Since of does not exist; Since looks back and needs no of.',
       From: 'From of gibt es nicht; die Wendung ist As of. || From of does not exist; the phrase is As of.',

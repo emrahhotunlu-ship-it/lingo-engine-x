@@ -555,7 +555,8 @@
    "bad": {
     "span": "never attended",
     "fix": [
-     "have ever attended"
+     "have ever attended",
+     "ever attended"
     ],
     "choices": [
      "have never attended",
@@ -662,7 +663,8 @@
       "when did"
      ],
      "b": [
-      "the system fail"
+      "the system fail",
+      "the system failure happen"
      ]
     }
    ],
@@ -921,10 +923,10 @@
    "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "lead": "The client contacted us twenty minutes ago, and we are still on the line.",
+   "lead": "Our call with the client started twenty minutes ago and is still going.",
    "key": "FOR",
    "before": "We",
-   "after": "twenty minutes with the client.",
+   "after": "twenty minutes now.",
    "keys": [
     {
      "a": [
@@ -1814,7 +1816,8 @@
    "bad": {
     "span": "didn't used",
     "fix": [
-     "didn't use"
+     "didn't use",
+     "did not use"
     ],
     "choices": [
      "don't use",
@@ -2397,43 +2400,43 @@
    "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "text": "The new regulation will come into force at 1 January, so we must update our contracts.",
+   "text": "The new regulation will come into force at January 1, so we must update our contracts.",
    "bad": {
-    "span": "at 1 January",
+    "span": "at January 1",
     "fix": [
-     "on 1 January"
+     "on January 1"
     ],
     "choices": [
-     "in 1 January",
-     "at the 1 January",
-     "on 1 January"
+     "in January 1",
+     "at the January 1",
+     "on January 1"
     ]
    },
    "why": {
     "ok": {
-     "de": "Mit einem bestimmten Datum steht on: on 1 January. at gehört zu Uhrzeiten.",
-     "en": "With a specific date on is used: on 1 January. at belongs to clock times."
+     "de": "Mit einem bestimmten Datum steht on: on January 1. at gehört zu Uhrzeiten.",
+     "en": "With a specific date on is used: on January 1. at belongs to clock times."
     },
     "wrong": [
      {
-      "opt": "in 1 January",
+      "opt": "in January 1",
       "de": "in steht bei Monaten (in January), nicht bei einem einzelnen Datum.",
       "en": "in is used with months (in January), not with a single date."
      },
      {
-      "opt": "at the 1 January",
-      "de": "at the 1 January ist keine übliche Form; at gehört zu Uhrzeiten.",
-      "en": "at the 1 January is not a normal form; at belongs to clock times."
+      "opt": "at the January 1",
+      "de": "at the January 1 ist keine übliche Form; at gehört zu Uhrzeiten.",
+      "en": "at the January 1 is not a normal form; at belongs to clock times."
      },
      {
       "tap": "*",
-      "de": "Der Fehler steckt bei „at 1 January“, nicht hier.",
-      "en": "The mistake is at “at 1 January”, not here."
+      "de": "Der Fehler steckt bei „at January 1“, nicht hier.",
+      "en": "The mistake is at “at January 1”, not here."
      },
      {
       "tap": "none",
-      "de": "Doch, hier steckt ein Fehler: „at 1 January“ ist falsch.",
-      "en": "There is a mistake: “at 1 January” is wrong."
+      "de": "Doch, hier steckt ein Fehler: „at January 1“ ist falsch.",
+      "en": "There is a mistake: “at January 1” is wrong."
      }
     ]
    }
@@ -4924,7 +4927,7 @@
    "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "text": "___ of 1 March, all customers will receive their invoices as electronic documents only.",
+   "text": "___ of March 1, all customers will receive their invoices as electronic documents only.",
    "accept": [
     "As",
     "as"
