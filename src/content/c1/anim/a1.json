@@ -297,14 +297,14 @@
           "en": "You describe what is going on right now (“at the moment”). How does the sentence start?"
         },
         "opts": [
-          "We migrate the archive …",
+          "We migrate the archive at the moment …",
           "We are migrating the archive …"
         ],
         "ans": 1
       },
       "steps": [
         {
-          "en": "We migrate archives to the cloud.",
+          "en": "We migrate the archive to the cloud.",
           "note": {
             "de": "Allgemeine Tätigkeit ohne Zeitbezug: Present Simple.",
             "en": "A general activity with no time reference: Present Simple."
@@ -465,8 +465,8 @@
         {
           "en": "We received many inquiries about archiving this month.",
           "note": {
-            "de": "Mit this month blickst du auf einen abgeschlossenen Zeitraum zurück.",
-            "en": "With this month you look back at a finished period."
+            "de": "Past Simple zählt die Anfragen wie abgeschlossene Einzelfälle; dass es weitergeht, sagt der Satz nicht.",
+            "en": "Past Simple counts the inquiries as finished events; it does not say the trend is continuing."
           }
         },
         {
@@ -493,7 +493,7 @@
         "kind": "pick",
         "q": {
           "de": "Wie sagst du „wir kennen sie seit Jahren“?",
-          "en": "How do you say “we have known them for years”?"
+          "en": "How do you say „Wir kennen die Firma seit Jahren“?"
         },
         "opts": [
           "We have known the company",
@@ -514,8 +514,8 @@
           "hi": [1, 2, 5, 6],
           "move": [[3, 2]],
           "note": {
-            "de": "Zustandsverben wie know, have, own, belong stehen auch mit for und since nie in der -ing-Form. Souverän in Referenzen: “We have known Acme for years.”",
-            "en": "State verbs such as know, have, own and belong never take the -ing form, even with for and since. Confident in references: “We have known Acme for years.”"
+            "de": "Zustandsverben wie know, own, belong und have (= besitzen) stehen auch mit for und since nie in der -ing-Form. Souverän in Referenzen: “We have known Acme for years.”",
+            "en": "State verbs such as know, own, belong and have (= possess) never take the -ing form, even with for and since. Confident in references: “We have known Acme for years.”"
           }
         }
       ]
@@ -723,7 +723,7 @@
         "kind": "pick",
         "q": {
           "de": "Was stimmt: „Wir sind es gewohnt, unter Druck zu arbeiten“?",
-          "en": "What is correct: “We are used to working under pressure”?"
+          "en": "What is correct for „Wir sind es gewohnt, unter Druck zu arbeiten“?"
         },
         "opts": [
           "We are used to work under pressure",
@@ -844,7 +844,7 @@
           "en": "You describe a change under way. Which version is correct?"
         },
         "opts": [
-          "Storage prices are being higher and higher",
+          "Storage prices become always higher.",
           "Storage prices are getting higher and higher"
         ],
         "ans": 1
@@ -862,8 +862,8 @@
           "hi": [2, 3, 4, 5, 6],
           "move": [[2, 3]],
           "note": {
-            "de": "get + Komparativ im Verlauf beschreibt eine Veränderung, die gerade läuft; is/are being + Adjektiv meint dagegen Verhalten (“He is being difficult”). Lebendig in Gesprächen mit Kunden.",
-            "en": "get + comparative in the continuous describes a change that is under way; is/are being + adjective means behavior (“He is being difficult”). Lively in conversations with clients."
+            "de": "get + Komparativ im Verlauf beschreibt eine Veränderung, die gerade läuft; „werden immer höher“ heißt getting higher and higher, nie become always higher. Lebendig in Gesprächen mit Kunden.",
+            "en": "get + comparative in the continuous describes a change under way; „werden immer höher“ is getting higher and higher, never become always higher. Lively in conversations with clients."
           }
         }
       ]
@@ -1195,8 +1195,8 @@
           "en": "We will file all contracts in the DMS before Friday.",
           "hi": [9],
           "note": {
-            "de": "Eine Zusage mit before: sie sagt nicht, dass bis dahin alles fertig ist.",
-            "en": "A promise with before: it does not say everything is done by then."
+            "de": "Neutral: eine Ankündigung, was ihr tun werdet.",
+            "en": "Neutral: an announcement of what you will do."
           }
         },
         {
@@ -1385,7 +1385,7 @@
           "en": "The number is 490. Which version is correct?"
         },
         "opts": [
-          "We sold nearly under 500 licenses.",
+          "We sold tightly under 500 licenses.",
           "We sold just under 500 licenses."
         ],
         "ans": 1
@@ -1555,8 +1555,8 @@
           "en": "We will deliver provided that the deposit has arrived.",
           "hi": [3, 4],
           "note": {
-            "de": "provided (that) oder as long as ersetzt if und macht die Bedingung zur Vorgabe; im Bedingungsteil kein will. Vertragsnah in Angeboten und AGB; im Gespräch genügt if.",
-            "en": "provided (that) or as long as replaces if and makes the condition a requirement; no will in the condition part. Close to contract language in proposals and terms; in conversation, if is enough."
+            "de": "provided (that) ersetzt if und macht die Bedingung zur Vorgabe; im Bedingungsteil kein will. Vertragsnah in Angeboten und AGB; im Gespräch genügt if oder as long as.",
+            "en": "provided (that) replaces if and turns the condition into a requirement; no will in the condition part. Close to contract language in proposals and terms; in conversation, if or as long as is enough."
           }
         }
       ]
@@ -1586,8 +1586,8 @@
         {
           "en": "We can’t hold the price if you don’t sign by Monday.",
           "note": {
-            "de": "Mit if … don’t ist die Bedingung doppelt verneint.",
-            "en": "With if … don’t, the condition is doubly negative."
+            "de": "Zwei Verneinungen im Satz: can’t und don’t. Richtig, aber umständlich.",
+            "en": "Two negatives in one sentence: can’t and don’t. Correct, but clumsy."
           }
         },
         {
@@ -1605,10 +1605,10 @@
       "topic": "cond-alt",
       "pat": "ca.as-long-as",
       "title": {
-        "de": "as long as: nur solange",
-        "en": "as long as: only as long as"
+        "de": "as long as: vorausgesetzt",
+        "en": "as long as: on condition that"
       },
-      "de": "Sie können jederzeit kündigen, solange Sie 30 Tage Frist einhalten.",
+      "de": "Sie können jederzeit kündigen, sofern Sie eine Frist von 30 Tagen einhalten.",
       "predict": {
         "kind": "pick",
         "q": {
@@ -1625,16 +1625,16 @@
         {
           "en": "You can cancel at any time if you give 30 days’ notice.",
           "note": {
-            "de": "if gilt überall, sagt aber nichts über die Dauer.",
-            "en": "if applies everywhere, but says nothing about duration."
+            "de": "if ist neutral; die Bedingung klingt beiläufig.",
+            "en": "if is neutral; the condition sounds incidental."
           }
         },
         {
           "en": "You can cancel at any time as long as you give 30 days’ notice.",
           "hi": [6, 7, 8],
           "note": {
-            "de": "as long as heißt “nur wenn, und solange”; danach steht Präsens, kein will. Betont, dass die Bedingung während der ganzen Zeit gilt; im Vertrag eher “provided that.”",
-            "en": "as long as means “only if, and for as long as”; the present follows, no will. It stresses that the condition holds the whole time; in a contract, “provided that” is more usual."
+            "de": "as long as heißt hier „vorausgesetzt, dass“; danach Präsens, kein will. Freundlich und klar im Kundengespräch; im Vertragstext steht „provided that“.",
+            "en": "as long as means “provided that” here; the present follows, no will. Friendly and clear when talking to a client; contract wording uses “provided that.”"
           }
         }
       ]
@@ -1687,15 +1687,15 @@
       "predict": {
         "kind": "tap",
         "q": {
-          "de": "Drei Wörter fallen gleich ganz weg. Tippe eins davon an.",
-          "en": "Three words are about to drop out completely. Tap one of them."
+          "de": "Vier Wörter fallen gleich ganz weg. Tippe eins davon an.",
+          "en": "Four words are about to drop out completely. Tap one of them."
         },
-        "ans": [1, 2, 3]
+        "ans": [0, 1, 2, 3]
       },
       "steps": [
         {
           "en": "If it hadn’t been for IT’s support, we would have missed the deadline.",
-          "hi": [1, 2, 3],
+          "hi": [0, 1, 2, 3],
           "note": {
             "de": "Vollständig, aber mit vielen kleinen Wörtern.",
             "en": "Complete, but with many small words."
@@ -1705,8 +1705,8 @@
           "en": "But for IT’s support, we would have missed the deadline.",
           "hi": [0, 1],
           "note": {
-            "de": "But for + Nomen heißt “ohne” im Rückblick: kürzer und förmlicher als if it hadn’t been for. Ideal für Dankesworte in Berichten und Reden; im Gespräch: “without IT’s support.”",
-            "en": "But for + noun means “without” in hindsight: shorter and more formal than if it hadn’t been for. Ideal for words of thanks in reports and speeches; in conversation: “without IT’s support.”"
+            "de": "But for + Nomen heißt „ohne“ im Rückblick: sehr förmlich und selten. Kennen solltest du es; im Bericht und im Gespräch ist „Without IT’s support, …“ natürlicher.",
+            "en": "But for + noun means “without” in hindsight: very formal and rare. Recognize it; in reports and conversation, “Without IT’s support, …” is more natural."
           }
         }
       ]
@@ -2153,8 +2153,8 @@
         {
           "en": "Clients must sign the contracts by Friday.",
           "note": {
-            "de": "Aktiv: die Kunden werden direkt angesprochen.",
-            "en": "Active: the clients are addressed directly."
+            "de": "Aktiv: die Kunden stehen als Handelnde vorn.",
+            "en": "Active: the clients come first as the doers."
           }
         },
         {
@@ -2201,7 +2201,7 @@
           "hi": [0, 1, 2, 3, 4, 5],
           "note": {
             "de": "Der Handelnde im Passiv heißt by, nicht from. Nenne ihn nur, wenn er wichtig ist (hier: die Zusage an den Kunden); sonst lässt du ihn weg.",
-            "en": "The doer in the passive is by, not from. Name him only if he matters (here: the promise to the client); otherwise leave him out."
+            "en": "The doer in the passive takes by, not from. Name the doer only if it matters (here: the promise to the client); otherwise leave it out."
           }
         }
       ]
@@ -2218,27 +2218,27 @@
       "predict": {
         "kind": "tap",
         "q": {
-          "de": "Zwei Wörter fallen gleich ganz weg. Tippe eins davon an.",
-          "en": "Two words are about to drop out completely. Tap one of them."
+          "de": "Ein Wort fällt gleich ganz weg. Tippe es an.",
+          "en": "One word is about to drop out completely. Tap it."
         },
-        "ans": [0, 1]
+        "ans": [0]
       },
       "steps": [
         {
           "en": "Nobody can restore deleted files.",
-          "hi": [0, 1],
+          "hi": [0],
           "note": {
             "de": "Aktiv und absolut: “niemand”.",
             "en": "Active and absolute: “nobody.”"
           }
         },
         {
-          "en": "Deleted files cannot be restored",
+          "en": "Deleted files cannot be restored.",
           "hi": [2, 3, 4],
           "move": [[2, 4]],
           "note": {
-            "de": "Modalverb + be + 3. Form macht die Aussage zur Eigenschaft der Sache. Klar in Richtlinien und Support-Texten; “Nobody can …” klingt nach Drohung.",
-            "en": "Modal verb + be + past participle makes the statement a property of the thing. Clear in policies and support texts; “Nobody can …” sounds like a threat."
+            "de": "Modalverb + be + 3. Form macht die Aussage zur Eigenschaft der Sache. Klar in Richtlinien und Support-Texten; „Nobody can …“ klingt absolut und persönlich.",
+            "en": "Modal verb + be + past participle makes the statement a property of the thing. Clear in policies and support texts; “Nobody can …” sounds absolute and personal."
           }
         }
       ]
@@ -2287,36 +2287,36 @@
       "topic": "passive-plus",
       "pat": "pp.being",
       "title": {
-        "de": "being asked: Passiv mit -ing",
-        "en": "being asked: the passive with -ing"
+        "de": "look forward to being …: Passiv mit -ing",
+        "en": "look forward to being …: the passive with -ing"
       },
-      "de": "Wir mögen es nicht, zweimal dasselbe gefragt zu werden.",
+      "de": "Wir freuen uns darauf, in die Endrunde eingeladen zu werden.",
       "predict": {
         "kind": "pick",
         "q": {
-          "de": "Nach „like“ folgt das Passiv. Welche Version stimmt?",
-          "en": "The passive follows “like.” Which version is correct?"
+          "de": "Du schließt die Mail an den Interessenten. Welche Version stimmt?",
+          "en": "You close the email to the prospect. Which version is correct?"
         },
         "opts": [
-          "We don’t like be asked the same question twice.",
-          "We don’t like being asked the same question twice."
+          "We look forward to be invited to the final round.",
+          "We look forward to being invited to the final round."
         ],
         "ans": 1
       },
       "steps": [
         {
-          "en": "We don’t like it when people ask us the same question twice.",
+          "en": "We hope that you will invite us to the final round.",
           "note": {
-            "de": "Mit it when wird der Satz länger.",
-            "en": "With it when, the sentence gets longer."
+            "de": "Aktiv und etwas bittend: Wir hoffen, dass ihr uns einladet.",
+            "en": "Active and slightly pleading: we hope you invite us."
           }
         },
         {
-          "en": "We don’t like being asked the same question twice.",
-          "hi": [3, 4],
+          "en": "We look forward to being invited to the final round.",
+          "hi": [3, 4, 5],
           "note": {
-            "de": "being + 3. Form: Passiv nach Verben und Präpositionen, die -ing verlangen. Kompakt und unpersönlich: passend im Feedbackgespräch und in Beschwerden.",
-            "en": "being + past participle: the passive after verbs and prepositions that take -ing. Compact and impersonal: suitable in a feedback conversation and in complaints."
+            "de": "to ist hier eine Präposition, deshalb being + 3. Form: Passiv nach Präpositionen und -ing-Verben (look forward to, avoid, appreciate). Ein selbstbewusster Mailschluss in einer Ausschreibung.",
+            "en": "to is a preposition here, so being + past participle: the passive after prepositions and -ing verbs (look forward to, avoid, appreciate). A confident close in a tender process."
           }
         }
       ]
@@ -2510,8 +2510,8 @@
           "en": "The vendor admitted missing the deadline.",
           "hi": [2, 3],
           "note": {
-            "de": "admit und deny + -ing (oder that-Satz), nie to + Grundform. Das Verb legt das Gewicht fest: admitted statt said. Stark in Gesprächsprotokollen.",
-            "en": "admit and deny + -ing (or a that-clause), never to + base form. The verb sets the weight: admitted instead of said. Strong in meeting minutes."
+            "de": "admit (to) und deny + -ing (oder that-Satz), nie to + Grundform. Das Verb legt das Gewicht fest: admitted statt said. Stark in Gesprächsprotokollen.",
+            "en": "admit (to) and deny + -ing (or a that-clause), never to + base form. The verb sets the weight: admitted instead of said. Strong in meeting minutes."
           }
         }
       ]
@@ -2783,7 +2783,7 @@
           "en": "We recommend that he check the contract.",
           "hi": [1, 2, 4],
           "note": {
-            "de": "recommend, suggest oder insist + that + Subjekt + Grundform (US, ohne -s und ohne will); nicht mit will. Förmlich: Beschlussvorlage und Mail an die Geschäftsleitung.",
+            "de": "recommend, suggest oder insist + that + Subjekt + Grundform (US: ohne -s, ohne will). Förmlich: Beschlussvorlage und Mail an die Geschäftsleitung.",
             "en": "recommend, suggest or insist + that + subject + base form (US, no -s and no will); not with will. Formal: a decision paper and an email to management."
           }
         }
@@ -2894,7 +2894,7 @@
           }
         },
         {
-          "en": "Following approval of the draft, we start.",
+          "en": "Following approval of the draft, work will begin.",
           "hi": [0, 1],
           "note": {
             "de": "Following, Upon oder Prior to + Nomen verdichtet einen Nebensatz; der Handelnde entfällt. Förmlich: Mail, Protokoll und Vertrag; im Gespräch: “After the client approves …”",
@@ -2919,7 +2919,7 @@
           "en": "The noun has its fixed preposition. Which version is correct?"
         },
         "opts": [
-          "There is a growing demand of cloud archives.",
+          "There is a growing demand after cloud archives.",
           "There is a growing demand for cloud archives."
         ],
         "ans": 1
