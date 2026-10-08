@@ -20,7 +20,7 @@ Gezielt nicht doppelt: die Pilotfilme `f.inv.negative`, `f.em.it-cleft`, `f.cp.h
 - `f.md.must-have` (md.must-have): **I am sure that the quote ended up in the spam folder.** → **The quote must have ended up in the spam folder.**  
   Vorhersage: Tippen: I, am, sure, that  
   Notiz: must have + 3. Form: Du schließt aus Indizien, dass etwas fast sicher passiert ist. Im Gespräch üblich; in einer Mail an den Kunden bleibt es bei “It looks like …”.
-- `f.md.cant-have` (md.cant-have): **It is impossible that our team sent it, because it had no access.** → **Our team can't have sent it, because it had no access.**  
+- `f.md.cant-have` (md.cant-have): **It is impossible that our team sent it, because they had no access.** → **Our team can't have sent it, because they had no access.**  
   Vorhersage: Tippen: It, is, impossible, that  
   Notiz: can't have + 3. Form: Du hältst etwas Vergangenes für ausgeschlossen. couldn't have geht genauso. Im Gespräch ein klarer Einwand; schriftlich eher “It is unlikely that …”.
 - `f.md.might-have` (md.might-have): **Maybe the competitor has already seen the offer.** → **The competitor might have already seen the offer.**  
@@ -30,10 +30,10 @@ Gezielt nicht doppelt: die Pilotfilme `f.inv.negative`, `f.em.it-cleft`, `f.cp.h
 ### modals-prob (4)
 
 - `f.mp.may-well` (mp.may-well): **It is quite possible that the client will accept our offer.** → **The client may well accept our offer.**  
-  Vorhersage: Tippen: It, is, quite, possible, that  
+  Vorhersage: Tippen: It, is, quite, possible, that, will  
   Notiz: may / might well + Grundform: durchaus möglich, eher mehr als nur möglich. Gut in Prognosen im Meeting; schriftlich an den Kunden eher “is quite likely to”.
 - `f.mp.bound` (mp.bound): **I am certain that price will come up again.** → **Price is bound to come up again.**  
-  Vorhersage: Tippen: I, am, certain, that  
+  Vorhersage: Tippen: I, am, certain, that, will  
   Notiz: be bound to + Grundform: fast sicher, weil die Lage es so mit sich bringt. Stärker als is likely to; nur für Dinge, die du wirklich erwartest, nicht für Wünsche. Im Vorbereitungsgespräch sehr natürlich.
 - `f.mp.likely` (mp.likely): **It is probable that the rollout will not be finished before March.** → **The rollout is unlikely to be finished before March.**  
   Vorhersage: Wahl: richtig „The rollout is unlikely to be finished before March.“ / Ablenker „The rollout is improbable to be finished before March.“  
@@ -45,16 +45,16 @@ Gezielt nicht doppelt: die Pilotfilme `f.inv.negative`, `f.em.it-cleft`, `f.cp.h
 ### modals-advice (5)
 
 - `f.ma.should` (ma.should): **Send the agenda to the client before the call.** → **I think you should send the agenda to the client before the call.**  
-  Vorhersage: Wahl: richtig „I think you should send the agenda to the client before the call.“ / Ablenker „I think you should to send the agenda to the client before the call.“  
-  Notiz: should / ought to + Grundform (ohne to nach should). Als Rat klingt es freundlicher als der Befehl, “I think” mildert weiter. Unter Kollegen üblich; dem Chef gegenüber eher “You might want to …”.
+  Vorhersage: Wahl: richtig „I think you should send the agenda to the client before the call.“ / Ablenker „I think you shall send the agenda to the client before the call.“  
+  Notiz: should / ought to + Grundform (ohne to nach should). Als Rat klingt es freundlicher als der Befehl, “I think” mildert weiter. Unter Kollegen üblich; dem Chef gegenüber eher “You might want to …”. Nicht shall: „du sollst“ heißt should; shall klingt nach Vorschrift oder Vertrag.
 - `f.ma.had-better` (ma.had-better): **We should send the quote before Friday, or we will miss the deadline.** → **We had better send the quote before Friday, or we will miss the deadline.**  
   Vorhersage: Wahl: richtig „We had better send the quote before Friday, or we will miss the deadline.“ / Ablenker „We had better to send the quote before Friday, or we will miss the deadline.“  
   Notiz: had better + Grundform (ohne to). Es meint: sonst gibt es eine Folge. Das setzt Druck, deshalb eher unter Kollegen; dem Kunden gegenüber besser “It would be best to …”.
 - `f.ma.polite` (ma.polite): **You have to move the rollout to May.** → **You could move the rollout to May.**  
-  Vorhersage: Tippen: have  
-  Notiz: could + Grundform: ein Vorschlag, der Ihnen die Wahl lässt. Im Verkaufsgespräch zeigst du so Optionen, ohne zu drängen: “You could also …”.
+  Vorhersage: Tippen: have, to  
+  Notiz: could + Grundform: ein Vorschlag, der dem Kunden die Wahl lässt. Im Verkaufsgespräch zeigst du so Optionen, ohne zu drängen: “You could also …”.
 - `f.ma.dont-have-to` (ma.dont-have-to): **It is not necessary for you to send us the data in advance.** → **You don't have to send us the data in advance.**  
-  Vorhersage: Wahl: richtig „You don't have to send us the data in advance.“ / Ablenker „You needn't to send us the data in advance.“  
+  Vorhersage: Wahl: richtig „You don't have to send us the data in advance.“ / Ablenker „You must not send us the data in advance.“  
   Notiz: don't have to / don't need to: nicht nötig. needn't (ohne to) ist förmlich und britisch. Nicht mit mustn't verwechseln, das verbietet. Beruhigt in Angebotsmails: “You don't have to …”.
 - `f.ma.should-have` (ma.should-have): **We did not involve legal early enough.** → **We should have involved legal earlier.**  
   Vorhersage: Wahl: richtig „We should have involved legal earlier.“ / Ablenker „We should have involve legal earlier.“  
@@ -69,11 +69,11 @@ Gezielt nicht doppelt: die Pilotfilme `f.inv.negative`, `f.em.it-cleft`, `f.cp.h
   Vorhersage: Wahl: richtig „It might be worth checking the objections first.“ / Ablenker „It might be worth to check the objections first.“  
   Notiz: worth + -ing (nie worth to). might lässt Spielraum, der Vorschlag wirkt nicht wie eine Anweisung. Typisch in Meetings und Mails; unter Kollegen reicht “You should …”.
 - `f.hg.inclined` (hg.inclined): **I think we should wait until after quarter end.** → **I'd be inclined to wait until after quarter end.**  
-  Vorhersage: Tippen: think  
+  Vorhersage: Tippen: think, we, should  
   Notiz: I'd be inclined to + Grundform: Du sagst deine Tendenz und bleibst offen für Gegenargumente. Höflich gegenüber Chef und Kunde; sehr natürlich in Besprechungen.
 - `f.hg.seems` (hg.seems): **The approval process is slow.** → **It would seem that the approval process is slow.**  
-  Vorhersage: Wahl: richtig „It would seem that the approval process is slow.“ / Ablenker „It would seem, that the approval process is slow.“  
-  Notiz: It seems / appears / would seem that + Satz, ohne Komma vor that. would schwächt zusätzlich ab. Berichte und Analysen; im Gespräch: “It looks like the approval process is slow.”
+  Vorhersage: Wahl: richtig „It would seem that the approval process is slow.“ / Ablenker „Apparently is the approval process slow.“  
+  Notiz: It seems / appears / would seem that + Satz, ohne Komma vor that. would schwächt zusätzlich ab. Berichte und Analysen; im Gespräch: “It looks like the approval process is slow.” Nicht: „Apparently is the process slow“ – nach einem Adverb vorn bleibt im Englischen das Subjekt vor dem Verb.
 - `f.hg.downtoner` (hg.downtoner): **The solution does not fit our process.** → **The solution does not quite fit our process.**  
   Vorhersage: Wahl: richtig „The solution does not quite fit our process.“ / Ablenker „The solution does not fit quite our process.“  
   Notiz: not quite / slightly / somewhat steht vor dem Wort, das es abschwächt, nicht hinter dem Verb. Die Kritik wird kleiner, bleibt aber klar. Im Kundengespräch statt des harten “does not fit”.
@@ -95,7 +95,7 @@ Gezielt nicht doppelt: die Pilotfilme `f.inv.negative`, `f.em.it-cleft`, `f.cp.h
 ### verb-patterns (2)
 
 - `f.vp.regret` (vp.regret): **We are sorry to tell you that the date has changed.** → **We regret to inform you that the date has changed.**  
-  Vorhersage: Tippen: sorry, tell  
+  Vorhersage: Tippen: are, sorry, tell  
   Notiz: regret to + inform / say / tell: Du überbringst jetzt eine schlechte Nachricht. regret + -ing blickt dagegen zurück. Förmliche Mail oder Brief; im Gespräch genügt “Unfortunately, …”.
 - `f.vp.remember-forget` (vp.remember-forget): **Please do not forget to send the approval.** → **Please remember to send the approval.**  
   Vorhersage: Tippen: do, not, forget  
@@ -110,16 +110,16 @@ Gezielt nicht doppelt: die Pilotfilme `f.inv.negative`, `f.em.it-cleft`, `f.cp.h
   Vorhersage: Wahl: richtig „We will discuss the rollout on Monday.“ / Ablenker „We will discuss about the rollout on Monday.“  
   Notiz: discuss, mention, address, attend, reach, enter: ohne Präposition. discuss ist sachlicher als talk about. Passt in Einladungen und Agenden; im Gespräch ist talk about völlig in Ordnung.
 - `f.prp.verb-prep` (prp.verb-prep): **The number of seats determines the final fee.** → **The final fee depends on the number of seats.**  
-  Vorhersage: Wahl: richtig „The final fee depends on the number of seats.“ / Ablenker „The final fee depends of the number of seats.“  
+  Vorhersage: Wahl: richtig „The final fee depends on the number of seats.“ / Ablenker „The final fee depends from the number of seats.“  
   Notiz: depend on, consist of, comply with, result in: lerne Verb und Präposition als Paar. depends on stellt die Gebühr in den Vordergrund und beantwortet die Kundenfrage direkt: “It depends on the number of seats.”
-- `f.prp.adj-prep` (prp.adj-prep): **We like the result a lot.** → **We are very satisfied with the result.**  
-  Vorhersage: Wahl: richtig „We are very satisfied with the result.“ / Ablenker „We are very satisfied of the result.“  
-  Notiz: satisfied / pleased with, responsible for, aware of: das Adjektiv bringt seine Präposition mit. Wirkt in Feedback-Mails und Rückmeldungen professioneller als like; im Gespräch ist “We like it” völlig üblich.
+- `f.prp.adj-prep` (prp.adj-prep): **We know about the risk.** → **We are fully aware of the risk.**  
+  Vorhersage: Wahl: richtig „We are fully aware of the risk.“ / Ablenker „We are fully aware about the risk.“  
+  Notiz: aware of, responsible for, satisfied with: das Adjektiv bringt seine Präposition mit. Stark im Einwand-Gespräch: “We are fully aware of …”.
 
 ### prep-noun (2)
 
 - `f.pn.in` (pn.in): **Costs rose by 12 percent.** → **There was a 12 percent increase in costs.**  
-  Vorhersage: Tippen: Costs  
+  Vorhersage: Tippen: Costs, rose, by  
   Notiz: increase / decrease / rise / change in + Bereich (increase of nennt nur die Größe). Nominalstil für Berichte und Folien; im Gespräch: “Costs went up 12 percent.”
 - `f.pn.about` (pn.about): **The client is worried about data security.** → **The client has concerns about data security.**  
   Vorhersage: Tippen: is, worried  
@@ -136,14 +136,14 @@ Gezielt nicht doppelt: die Pilotfilme `f.inv.negative`, `f.em.it-cleft`, `f.cp.h
 
 ### articles (1)
 
-- `f.art.the-unique` (art.the-unique): **This solution is very fast.** → **This is the fastest solution we know.**  
-  Vorhersage: Wahl: richtig „This is the fastest solution we know.“ / Ablenker „This is fastest solution we know.“  
-  Notiz: Der Superlativ bekommt immer the, denn es gibt nur eine schnellste Lösung. Das schließt den Vergleich ab und überzeugt in Präsentationen mehr als very fast.
+- `f.art.the-unique` (art.the-unique): **The majority of our clients use the cloud version.** → **Most of our clients use the cloud version.**  
+  Vorhersage: Wahl: richtig „Most of our clients use the cloud version.“ / Ablenker „The most of our clients use the cloud version.“  
+  Notiz: most = die meisten, ohne the; the most nur beim Superlativ von Adjektiven: the most reliable option. Natürlicher als the majority of.
 
 ### countable (1)
 
-- `f.cnt.verb` (cnt.verb): **The client liked the demo a lot.** → **The feedback is very positive.**  
-  Vorhersage: Wahl: richtig „The feedback is very positive.“ / Ablenker „The feedbacks are very positive.“  
+- `f.cnt.verb` (cnt.verb): **The comments from the client are very positive.** → **The client's feedback is very positive.**  
+  Vorhersage: Wahl: richtig „The client's feedback is very positive.“ / Ablenker „The client's feedbacks are very positive.“  
   Notiz: feedback, information, advice, news sind unzählbar: kein -s, Verb im Singular, kein a/an. Zählen geht mit a piece of. Berichte und Mails.
 
 ### quant-neg (3)
@@ -160,8 +160,8 @@ Gezielt nicht doppelt: die Pilotfilme `f.inv.negative`, `f.em.it-cleft`, `f.cp.h
 
 ### relative (4)
 
-- `f.rc.prep` (rc.prep): **The client we spoke to has approved the budget.** → **The client to whom we spoke has approved the budget.**  
-  Vorhersage: Wahl: richtig „The client to whom we spoke has approved the budget.“ / Ablenker „The client to who we spoke has approved the budget.“  
+- `f.rc.prep` (rc.prep): **The client we spoke with has approved the budget.** → **The client with whom we spoke has approved the budget.**  
+  Vorhersage: Wahl: richtig „The client with whom we spoke has approved the budget.“ / Ablenker „The client with who we spoke has approved the budget.“  
   Notiz: Steht die Präposition vorn, folgt whom (nie who). Förmlich: Berichte, Verträge, Mails an die Geschäftsführung. Im Gespräch bleibst du bei “the client we spoke to”.
 - `f.rc.commas` (rc.commas): **Our sales team is based in Chicago and will lead the rollout.** → **Our sales team, which is based in Chicago, will lead the rollout.**  
   Vorhersage: Wahl: richtig „Our sales team, which is based in Chicago, will lead the rollout.“ / Ablenker „Our sales team, that is based in Chicago, will lead the rollout.“  
@@ -226,7 +226,7 @@ Gezielt nicht doppelt: die Pilotfilme `f.inv.negative`, `f.em.it-cleft`, `f.cp.h
   Vorhersage: Wahl: richtig „Not only does the system lower costs, but it also improves security.“ / Ablenker „Not only the system lowers costs, but it also improves security.“  
   Notiz: Not only vorn: Hilfsverb vor Subjekt, Verb in der Grundform; der zweite Teil folgt mit but … also. Betont zwei Vorteile in einem Zug, für Pitch und Folien; im Gespräch: “It lowers costs and improves security.”
 - `f.em.only-inversion` (em.only-inversion): **We can start only after we receive your approval.** → **Only after we receive your approval can we start.**  
-  Vorhersage: Tippen: can  
+  Vorhersage: Wahl: richtig „Only after we receive your approval can we start.“ / Ablenker „Only after we receive your approval we can start.“  
   Notiz: Only after + Nebensatz vorn: Im Hauptsatz steht das Hilfsverb vor dem Subjekt. Setzt die Bedingung ans Ende der Aufmerksamkeit und klingt förmlich; gut in Verhandlungen, im Alltag reicht die einfache Form.
 
 ### inversion (2)
@@ -244,7 +244,7 @@ Gezielt nicht doppelt: die Pilotfilme `f.inv.negative`, `f.em.it-cleft`, `f.cp.h
   Vorhersage: Tippen: really  
   Notiz: do + Grundform betont die Aussage, besonders gegen einen Zweifel; die Betonung liegt auf do. Im Gespräch sehr natürlich, besonders bei Einwänden: “We did tell you …”. Schriftlich selten.
 - `f.ep.concession` (ep.concession): **Although the offer is tempting, we cannot accept it.** → **Tempting as the offer is, we cannot accept it.**  
-  Vorhersage: Tippen: tempting  
+  Vorhersage: Tippen: Although, tempting  
   Notiz: Adjektiv + as + Subjekt + be ersetzt although und stellt das Adjektiv nach vorn. Förmlich und gewichtig: Verhandlungen, Reden. Im Gespräch bleibst du bei Although.
 - `f.ep.so-such` (ep.so-such): **Demand was very high, so we had to add capacity.** → **Demand was so high that we had to add capacity.**  
   Vorhersage: Wahl: richtig „Demand was so high that we had to add capacity.“ / Ablenker „Demand was such high that we had to add capacity.“  
@@ -268,7 +268,7 @@ Gezielt nicht doppelt: die Pilotfilme `f.inv.negative`, `f.em.it-cleft`, `f.cp.h
   Vorhersage: Tippen: that  
   Notiz: Ist das Bezugswort Objekt im Relativsatz, darf that wegfallen. Bei Subjekt (the system that failed) bleibt es. Kürzer und flüssiger in Mails und im Gespräch.
 - `f.np.of-s` (np.of-s): **The CEO of the company approved the budget.** → **The company's CEO approved the budget.**  
-  Vorhersage: Tippen: of  
+  Vorhersage: Tippen: of, the  
   Notiz: 's steht bei Personen und Organisationen, of bei Sachen (the end of the contract). Kürzer und lebendiger in Mails und Folien; der förmliche Stil bleibt bei of.
 - `f.np.to-inf` (np.to-inf): **The first client who signs will get a discount.** → **The first client to sign will get a discount.**  
   Vorhersage: Tippen: who  
@@ -283,19 +283,19 @@ Gezielt nicht doppelt: die Pilotfilme `f.inv.negative`, `f.em.it-cleft`, `f.cp.h
   Vorhersage: Wahl: richtig „It is a three-day workshop.“ / Ablenker „It is a three-days workshop.“  
   Notiz: Vor dem Nomen steht das Maß im Singular mit Bindestrich: a three-day workshop, a 30-minute demo. Das gilt für alle Maße. Kompakt in Einladungen und Agenden.
 - `f.cm.fixed` (cm.fixed): **We want a contract that runs for a long time.** → **We want a long-term contract.**  
-  Vorhersage: Tippen: that, runs  
+  Vorhersage: Tippen: that, runs, for, a, time  
   Notiz: Feste Modifikatoren vor dem Nomen werden mit Bindestrich geschrieben: long-term, high-level, state-of-the-art. Das ist kürzer und klingt professioneller in Angeboten und Verträgen.
 - `f.cm.participle` (cm.participle): **We have a network that is well established.** → **We have a well-established network.**  
   Vorhersage: Tippen: that, is  
   Notiz: Adverb + 3. Form vor dem Nomen wird mit Bindestrich verbunden: well-known, newly built. Das macht die Beschreibung kompakt für Referenzen; nach dem Verb schreibst du ohne Bindestrich: “The network is well established.”
-- `f.cm.order` (cm.order): **We bought an archive. It is fast, new and cloud-based.** → **We bought a fast new cloud archive.**  
-  Vorhersage: Wahl: richtig „We bought a fast new cloud archive.“ / Ablenker „We bought a cloud new fast archive.“  
-  Notiz: Reihenfolge vor dem Nomen: Meinung, Größe, Alter, Herkunft, Material, Zweck; Kernbegriffe stehen direkt am Nomen. Das gilt immer, am häufigsten in Angeboten und Beschreibungen.
+- `f.cm.order` (cm.order): **We need a system for the management of documents.** → **We need a document management system.**  
+  Vorhersage: Wahl: richtig „We need a document management system.“ / Ablenker „We need a documents management system.“  
+  Notiz: Ein Nomen vor einem Nomen steht im Singular: document management, contract renewal, invoice processing. So bildest du kompakte Fachbegriffe für Angebote und Folien.
 
 ### word-order (2)
 
 - `f.wo.verb-object` (wo.verb-object): **Tomorrow we will send the quote to you.** → **We will send you the quote tomorrow.**  
-  Vorhersage: Wahl: richtig „We will send you the quote tomorrow.“ / Ablenker „We will send tomorrow you the quote.“  
+  Vorhersage: Wahl: richtig „We will send you the quote tomorrow.“ / Ablenker „We will send you tomorrow the quote.“  
   Notiz: Zwischen Verb und Objekt steht nichts: send + wem + was, dann Ort und Zeit. Das ist die neutrale Reihenfolge in Mails; die Zeit vorn betont den Termin.
 - `f.wo.hardly-sooner` (wo.hardly-sooner): **We had hardly started the demo when the connection dropped.** → **Hardly had we started the demo when the connection dropped.**  
   Vorhersage: Tippen: hardly  
@@ -304,11 +304,11 @@ Gezielt nicht doppelt: die Pilotfilme `f.inv.negative`, `f.em.it-cleft`, `f.cp.h
 ### comparison (3)
 
 - `f.cmp.the-the` (cmp.the-the): **If you sign earlier, the price will be lower.** → **The earlier you sign, the lower the price will be.**  
-  Vorhersage: Tippen: If, earlier  
+  Vorhersage: Tippen: If, earlier, lower  
   Notiz: the + Komparativ …, the + Komparativ …: Beides geht gemeinsam. Das gibt dem Vorteil Zug und eignet sich für Verhandlungen und Preisangebote; im Gespräch sagst du “If you sign earlier, …”.
 - `f.cmp.degree` (cmp.degree): **Our price is a lot lower than last year.** → **Our price is considerably lower than last year.**  
   Vorhersage: Tippen: a, lot  
   Notiz: far, much, considerably, slightly + Komparativ: Das Maß steht davor (nicht very lower). Genauer in Angeboten und Berichten; im Gespräch ist a lot lower völlig üblich.
 - `f.cmp.as-as` (cmp.as-as): **Our system is much faster than the competitor's.** → **Our system is twice as fast as the competitor's.**  
-  Vorhersage: Wahl: richtig „Our system is twice as fast as the competitor's.“ / Ablenker „Our system is twice as fast than the competitor's.“  
+  Vorhersage: Wahl: richtig „Our system is twice as fast as the competitor's.“ / Ablenker „Our system is twice as fast like the competitor's.“  
   Notiz: as + Adjektiv + as, vorn mit twice, three times, half: nach as … as nie than. Das Vielfache macht den Vorteil messbar; gut in Pitch und Angebot.

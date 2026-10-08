@@ -131,7 +131,6 @@
      "en": "The contract might still be with the legal department.",
      "hi": [
       2,
-      3,
       4
      ],
      "move": [
@@ -214,14 +213,14 @@
    },
    "steps": [
     {
-     "en": "It is impossible that our team sent it, because it had no access.",
+     "en": "It is impossible that our team sent it, because they had no access.",
      "note": {
       "de": "Der Ausschluss steht als eigener Satz davor.",
       "en": "The ruling-out sits in its own clause up front."
      }
     },
     {
-     "en": "Our team can't have sent it, because it had no access.",
+     "en": "Our team can't have sent it, because they had no access.",
      "hi": [
       2,
       3
@@ -299,7 +298,8 @@
      1,
      2,
      3,
-     4
+     4,
+     7
     ]
    },
    "steps": [
@@ -342,7 +342,8 @@
      0,
      1,
      2,
-     3
+     3,
+     5
     ]
    },
    "steps": [
@@ -472,7 +473,7 @@
     },
     "opts": [
      "I think you should send the agenda to the client before the call.",
-     "I think you should to send the agenda to the client before the call."
+     "I think you shall send the agenda to the client before the call."
     ],
     "ans": 0
    },
@@ -490,8 +491,8 @@
       3
      ],
      "note": {
-      "de": "should / ought to + Grundform (ohne to nach should). Als Rat klingt es freundlicher als der Befehl, “I think” mildert weiter. Unter Kollegen üblich; dem Chef gegenüber eher “You might want to …”.",
-      "en": "should / ought to + base form (no to after should). As advice it sounds friendlier than the command, and “I think” softens it further. Usual among colleagues; to a boss, “You might want to …” fits better."
+      "de": "should / ought to + Grundform (ohne to nach should). Als Rat klingt es freundlicher als der Befehl, “I think” mildert weiter. Unter Kollegen üblich; dem Chef gegenüber eher “You might want to …”. Nicht shall: „du sollst“ heißt should; shall klingt nach Vorschrift oder Vertrag.",
+      "en": "should / ought to + base form (no to after should). As advice it sounds friendlier than the command, and “I think” softens it further. Usual among colleagues; to a boss, “You might want to …” fits better. Not shall: German „sollst“ is should; shall sounds like a rule or a contract clause."
      }
     }
    ]
@@ -550,11 +551,12 @@
    "predict": {
     "kind": "tap",
     "q": {
-     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
-     "en": "Which word moves or drops out? Tap it."
+     "de": "Welche Wörter wandern oder fallen gleich weg? Tippe eins davon an.",
+     "en": "Which words move or drop out? Tap one of them."
     },
     "ans": [
-     1
+     1,
+     2
     ]
    },
    "steps": [
@@ -571,7 +573,7 @@
       1
      ],
      "note": {
-      "de": "could + Grundform: ein Vorschlag, der Ihnen die Wahl lässt. Im Verkaufsgespräch zeigst du so Optionen, ohne zu drängen: “You could also …”.",
+      "de": "could + Grundform: ein Vorschlag, der dem Kunden die Wahl lässt. Im Verkaufsgespräch zeigst du so Optionen, ohne zu drängen: “You could also …”.",
       "en": "could + base form: a suggestion that leaves the choice to them. In a sales call this shows options without pushing: “You could also …”."
      }
     }
@@ -589,11 +591,11 @@
    "predict": {
     "kind": "pick",
     "q": {
-     "de": "Welche Version stimmt?",
-     "en": "Which version is correct?"
+     "de": "Welche Version heißt „nicht nötig“?",
+     "en": "Which version means “not necessary”?"
     },
     "opts": [
-     "You needn't to send us the data in advance.",
+     "You must not send us the data in advance.",
      "You don't have to send us the data in advance."
     ],
     "ans": 1
@@ -735,7 +737,8 @@
      "hi": [
       1,
       2,
-      3
+      3,
+      4
      ],
      "note": {
       "de": "worth + -ing (nie worth to). might lässt Spielraum, der Vorschlag wirkt nicht wie eine Anweisung. Typisch in Meetings und Mails; unter Kollegen reicht “You should …”.",
@@ -756,11 +759,13 @@
    "predict": {
     "kind": "tap",
     "q": {
-     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
-     "en": "Which word moves or drops out? Tap it."
+     "de": "Welche Wörter wandern oder fallen gleich weg? Tippe eins davon an.",
+     "en": "Which words move or drop out? Tap one of them."
     },
     "ans": [
-     1
+     1,
+     2,
+     3
     ]
    },
    "steps": [
@@ -802,7 +807,7 @@
     },
     "opts": [
      "It would seem that the approval process is slow.",
-     "It would seem, that the approval process is slow."
+     "Apparently is the approval process slow."
     ],
     "ans": 0
    },
@@ -821,8 +826,8 @@
       2
      ],
      "note": {
-      "de": "It seems / appears / would seem that + Satz, ohne Komma vor that. would schwächt zusätzlich ab. Berichte und Analysen; im Gespräch: “It looks like the approval process is slow.”",
-      "en": "It seems / appears / would seem that + clause, with no comma before that. would softens further. Reports and analyses; in conversation: “It looks like the approval process is slow.”"
+      "de": "It seems / appears / would seem that + Satz, ohne Komma vor that. would schwächt zusätzlich ab. Berichte und Analysen; im Gespräch: “It looks like the approval process is slow.” Nicht: „Apparently is the process slow“ – nach einem Adverb vorn bleibt im Englischen das Subjekt vor dem Verb.",
+      "en": "It seems / appears / would seem that + clause, with no comma before that. would softens further. Reports and analyses; in conversation: “It looks like the approval process is slow.” Not “Apparently is the process slow”: after a fronted adverb, English keeps the subject before the verb."
      }
     }
    ]
@@ -970,6 +975,7 @@
      "en": "Which words move or drop out? Tap one of them."
     },
     "ans": [
+     1,
      2,
      4
     ]
@@ -1182,7 +1188,7 @@
      "en": "Which version is correct?"
     },
     "opts": [
-     "The final fee depends of the number of seats.",
+     "The final fee depends from the number of seats.",
      "The final fee depends on the number of seats."
     ],
     "ans": 1
@@ -1216,7 +1222,7 @@
     "de": "satisfied with: feste Präposition",
     "en": "satisfied with: fixed preposition"
    },
-   "de": "Wir sind mit dem Ergebnis sehr zufrieden.",
+   "de": "Wir sind uns des Risikos voll bewusst.",
    "predict": {
     "kind": "pick",
     "q": {
@@ -1224,28 +1230,28 @@
      "en": "Which version is correct?"
     },
     "opts": [
-     "We are very satisfied with the result.",
-     "We are very satisfied of the result."
+     "We are fully aware of the risk.",
+     "We are fully aware about the risk."
     ],
     "ans": 0
    },
    "steps": [
     {
-     "en": "We like the result a lot.",
+     "en": "We know about the risk.",
      "note": {
       "de": "Ein Alltagsurteil.",
       "en": "An everyday judgment."
      }
     },
     {
-     "en": "We are very satisfied with the result.",
+     "en": "We are fully aware of the risk.",
      "hi": [
       3,
       4
      ],
      "note": {
-      "de": "satisfied / pleased with, responsible for, aware of: das Adjektiv bringt seine Präposition mit. Wirkt in Feedback-Mails und Rückmeldungen professioneller als like; im Gespräch ist “We like it” völlig üblich.",
-      "en": "satisfied / pleased with, responsible for, aware of: the adjective brings its own preposition. Sounds more professional than like in feedback emails; in conversation “We like it” is perfectly usual."
+      "de": "aware of, responsible for, satisfied with: das Adjektiv bringt seine Präposition mit. Stark im Einwand-Gespräch: “We are fully aware of …”.",
+      "en": "aware of, responsible for, satisfied with: the adjective brings its own preposition. Strong when handling objections: “We are fully aware of …”."
      }
     }
    ]
@@ -1262,11 +1268,13 @@
    "predict": {
     "kind": "tap",
     "q": {
-     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
-     "en": "Which word moves or drops out? Tap it."
+     "de": "Welche Wörter wandern oder fallen gleich weg? Tippe eins davon an.",
+     "en": "Which words move or drop out? Tap one of them."
     },
     "ans": [
-     0
+     0,
+     1,
+     2
     ]
    },
    "steps": [
@@ -1436,7 +1444,7 @@
     "de": "the fastest: Superlativ mit the",
     "en": "the fastest: superlative with the"
    },
-   "de": "Das ist die schnellste Lösung, die wir kennen.",
+   "de": "Die meisten unserer Kunden nutzen die Cloud-Version.",
    "predict": {
     "kind": "pick",
     "q": {
@@ -1444,28 +1452,28 @@
      "en": "Which version is correct?"
     },
     "opts": [
-     "This is the fastest solution we know.",
-     "This is fastest solution we know."
+     "Most of our clients use the cloud version.",
+     "The most of our clients use the cloud version."
     ],
     "ans": 0
    },
    "steps": [
     {
-     "en": "This solution is very fast.",
+     "en": "The majority of our clients use the cloud version.",
      "note": {
       "de": "Nur ein Eindruck.",
       "en": "Just an impression."
      }
     },
     {
-     "en": "This is the fastest solution we know.",
+     "en": "Most of our clients use the cloud version.",
      "hi": [
-      2,
-      3
+      0,
+      1
      ],
      "note": {
-      "de": "Der Superlativ bekommt immer the, denn es gibt nur eine schnellste Lösung. Das schließt den Vergleich ab und überzeugt in Präsentationen mehr als very fast.",
-      "en": "The superlative always takes the, because there is only one fastest solution. It closes the comparison and convinces in presentations more than very fast."
+      "de": "most = die meisten, ohne the; the most nur beim Superlativ von Adjektiven: the most reliable option. Natürlicher als the majority of.",
+      "en": "most = the majority, without the; the most only for superlative adjectives: the most reliable option. More natural than the majority of."
      }
     }
    ]
@@ -1486,24 +1494,24 @@
      "en": "Which version is correct?"
     },
     "opts": [
-     "The feedbacks are very positive.",
-     "The feedback is very positive."
+     "The client's feedbacks are very positive.",
+     "The client's feedback is very positive."
     ],
     "ans": 1
    },
    "steps": [
     {
-     "en": "The client liked the demo a lot.",
+     "en": "The comments from the client are very positive.",
      "note": {
       "de": "Eine Beobachtung.",
       "en": "An observation."
      }
     },
     {
-     "en": "The feedback is very positive.",
+     "en": "The client's feedback is very positive.",
      "hi": [
-      1,
-      2
+      2,
+      3
      ],
      "note": {
       "de": "feedback, information, advice, news sind unzählbar: kein -s, Verb im Singular, kein a/an. Zählen geht mit a piece of. Berichte und Mails.",
@@ -1549,7 +1557,7 @@
      ],
      "note": {
       "de": "hardly, scarcely, barely sind schon verneinend: danach kein weiteres nobody oder not, sondern anybody, any, ever. Präziser in Berichten; im Gespräch ist almost nobody völlig üblich.",
-      "en": "hardly, scarcely, barely are already negative: after them comes anybody, any, ever, never nobody or not. More precise in reports; in conversation almost nobody is perfectly usual."
+      "en": "hardly, scarcely, barely are already negative: after them use anybody, any or ever, never nobody or not. More precise in reports; in conversation almost nobody is perfectly usual."
      }
     }
    ]
@@ -1655,21 +1663,21 @@
      "en": "Which version is correct?"
     },
     "opts": [
-     "The client to who we spoke has approved the budget.",
-     "The client to whom we spoke has approved the budget."
+     "The client with who we spoke has approved the budget.",
+     "The client with whom we spoke has approved the budget."
     ],
     "ans": 1
    },
    "steps": [
     {
-     "en": "The client we spoke to has approved the budget.",
+     "en": "The client we spoke with has approved the budget.",
      "note": {
       "de": "Alltagsform: Präposition am Ende.",
       "en": "Everyday form: preposition at the end."
      }
     },
     {
-     "en": "The client to whom we spoke has approved the budget.",
+     "en": "The client with whom we spoke has approved the budget.",
      "hi": [
       2,
       3
@@ -2219,8 +2227,8 @@
    "predict": {
     "kind": "tap",
     "q": {
-     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
-     "en": "Which word moves or drops out? Tap it."
+     "de": "Welche Wörter wandern oder fallen gleich weg? Tippe eins davon an.",
+     "en": "Which words move or drop out? Tap one of them."
     },
     "ans": [
      0,
@@ -2260,8 +2268,8 @@
    "predict": {
     "kind": "tap",
     "q": {
-     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
-     "en": "Which word moves or drops out? Tap it."
+     "de": "Welches Wort rückt gleich an den Satzanfang? Tippe es an.",
+     "en": "Which word moves to the front? Tap it."
     },
     "ans": [
      1
@@ -2342,14 +2350,16 @@
    },
    "de": "Erst nach Ihrer Freigabe können wir starten.",
    "predict": {
-    "kind": "tap",
+    "kind": "pick",
     "q": {
-     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
-     "en": "Which word moves or drops out? Tap it."
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
     },
-    "ans": [
-     1
-    ]
+    "opts": [
+     "Only after we receive your approval can we start.",
+     "Only after we receive your approval we can start."
+    ],
+    "ans": 0
    },
    "steps": [
     {
@@ -2424,8 +2434,8 @@
    "predict": {
     "kind": "tap",
     "q": {
-     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
-     "en": "Which word moves or drops out? Tap it."
+     "de": "Welches Wort fällt gleich weg? Tippe es an.",
+     "en": "Which word drops out? Tap it."
     },
     "ans": [
      0
@@ -2502,10 +2512,11 @@
    "predict": {
     "kind": "tap",
     "q": {
-     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
-     "en": "Which word moves or drops out? Tap it."
+     "de": "Welche Wörter wandern oder fallen gleich weg? Tippe eins davon an.",
+     "en": "Which words move or drop out? Tap one of them."
     },
     "ans": [
+     0,
      4
     ]
    },
@@ -2744,11 +2755,12 @@
    "predict": {
     "kind": "tap",
     "q": {
-     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
-     "en": "Which word moves or drops out? Tap it."
+     "de": "Welche Wörter wandern oder fallen gleich weg? Tippe eins davon an.",
+     "en": "Which words move or drop out? Tap one of them."
     },
     "ans": [
-     2
+     2,
+     3
     ]
    },
    "steps": [
@@ -2770,7 +2782,10 @@
      "note": {
       "de": "'s steht bei Personen und Organisationen, of bei Sachen (the end of the contract). Kürzer und lebendiger in Mails und Folien; der förmliche Stil bleibt bei of.",
       "en": "'s goes with people and organizations, of with things (the end of the contract). Shorter and livelier in emails and slides; a formal style stays with of."
-     }
+     },
+     "hi": [
+      1
+     ]
     }
    ]
   },
@@ -2911,12 +2926,15 @@
    "predict": {
     "kind": "tap",
     "q": {
-     "de": "Welche Wörter wandern oder fallen gleich weg? Tippe eins davon an.",
-     "en": "Which words move or drop out? Tap one of them."
+     "de": "Welche Wörter fallen gleich weg? Tippe eins davon an.",
+     "en": "Which words drop out? Tap one of them."
     },
     "ans": [
      4,
-     5
+     5,
+     6,
+     7,
+     9
     ]
    },
    "steps": [
@@ -2951,8 +2969,8 @@
    "predict": {
     "kind": "tap",
     "q": {
-     "de": "Welche Wörter wandern oder fallen gleich weg? Tippe eins davon an.",
-     "en": "Which words move or drop out? Tap one of them."
+     "de": "Welche Wörter fallen gleich weg? Tippe eins davon an.",
+     "en": "Which words drop out? Tap one of them."
     },
     "ans": [
      4,
@@ -2984,10 +3002,10 @@
    "topic": "compound-mod",
    "pat": "cm.order",
    "title": {
-    "de": "Reihenfolge der Adjektive",
-    "en": "adjective order"
+    "de": "document management: Nomen vor Nomen im Singular",
+    "en": "document management: noun modifiers stay singular"
    },
-   "de": "Wir haben ein schnelles, neues Cloud-Archiv gekauft.",
+   "de": "Wir brauchen ein Dokumentenmanagementsystem.",
    "predict": {
     "kind": "pick",
     "q": {
@@ -2995,29 +3013,29 @@
      "en": "Which version is correct?"
     },
     "opts": [
-     "We bought a fast new cloud archive.",
-     "We bought a cloud new fast archive."
+     "We need a document management system.",
+     "We need a documents management system."
     ],
     "ans": 0
    },
    "steps": [
     {
-     "en": "We bought an archive. It is fast, new and cloud-based.",
+     "en": "We need a system for the management of documents.",
      "note": {
-      "de": "Drei Eigenschaften in einem zweiten Satz.",
-      "en": "Three qualities in a second sentence."
+      "de": "Umschreibung mit for und of.",
+      "en": "Paraphrase with for and of."
      }
     },
     {
-     "en": "We bought a fast new cloud archive.",
+     "en": "We need a document management system.",
      "hi": [
       3,
       4,
       5
      ],
      "note": {
-      "de": "Reihenfolge vor dem Nomen: Meinung, Größe, Alter, Herkunft, Material, Zweck; Kernbegriffe stehen direkt am Nomen. Das gilt immer, am häufigsten in Angeboten und Beschreibungen.",
-      "en": "Order before a noun: opinion, size, age, origin, material, purpose; core terms sit right at the noun. This always applies, most often in proposals and descriptions."
+      "de": "Ein Nomen vor einem Nomen steht im Singular: document management, contract renewal, invoice processing. So bildest du kompakte Fachbegriffe für Angebote und Folien.",
+      "en": "A noun before another noun stays singular: document management, contract renewal, invoice processing. This builds the compact terms used in proposals and on slides."
      }
     }
    ]
@@ -3038,7 +3056,7 @@
      "en": "Which version is correct?"
     },
     "opts": [
-     "We will send tomorrow you the quote.",
+     "We will send you tomorrow the quote.",
      "We will send you the quote tomorrow."
     ],
     "ans": 1
@@ -3078,8 +3096,8 @@
    "predict": {
     "kind": "tap",
     "q": {
-     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
-     "en": "Which word moves or drops out? Tap it."
+     "de": "Welches Wort rückt gleich an den Satzanfang? Tippe es an.",
+     "en": "Which word moves to the front? Tap it."
     },
     "ans": [
      2
@@ -3118,12 +3136,13 @@
    "predict": {
     "kind": "tap",
     "q": {
-     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
-     "en": "Which word moves or drops out? Tap it."
+     "de": "Welche Wörter wandern oder fallen gleich weg? Tippe eins davon an.",
+     "en": "Which words move or drop out? Tap one of them."
     },
     "ans": [
      0,
-     3
+     3,
+     8
     ]
    },
    "steps": [
@@ -3206,7 +3225,7 @@
     },
     "opts": [
      "Our system is twice as fast as the competitor's.",
-     "Our system is twice as fast than the competitor's."
+     "Our system is twice as fast like the competitor's."
     ],
     "ans": 0
    },
