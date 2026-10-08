@@ -60,6 +60,7 @@ export function SettingsSheet({ open, onClose }: { open: boolean; onClose: () =>
           <LearningSection />
           <Practice />
           <Registered groups={['learn']} />
+          <Slot name="settings.learn" />
         </Group>
         {hasVocab && (
           <Group title={t('nbProfilSetVocab')} testId="set-group-vocab">

@@ -118,6 +118,8 @@ export const profileSchema = z.looseObject({
   ctx: str,
   /** Neu ab Lernplattform 3.0 (P46, KT T4): Berufsprofil `{v: 1, role, field, who[], sit[], terms[], t}` (≤ 1 KB). `ctx` bleibt unverändert. */
   ctx2: z.looseObject({ v: num, role: str, field: str, who: loose, sit: loose, terms: loose, t: num }).nullish(),
+  /** Neu ab Lernplattform 3.0 (P53): Lernzeit `{t: 'HH:MM', cue}` (< 100 Bytes), nur ein Vorschlag (Plan und Serie lesen sie nie); tolerant gelesen. */
+  ii: loose,
   ctxChecked: bool,
   lang: str,
   voice: str,
