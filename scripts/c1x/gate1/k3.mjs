@@ -3,7 +3,7 @@
 export const items = [
   // ================= conditionals =================
   {
-    k: 'ocl', p: 'cn.zero', lv: 'B2', dom: 'life', cls: 'conj', a: ['If', 'When', 'if', 'when'],
+    k: 'ocl', p: 'cn.zero', lv: 'B2', dom: 'life', cls: 'conj', a: ['If', 'When', 'Whenever', 'if', 'when', 'whenever'],
     t: '___ you press and hold the power button for ten seconds, the device always restarts.',
     c: {
       Would: 'Would eröffnet eine Frage, hier steht aber eine Aussage. || Would opens a question, but this is a statement.',
@@ -15,7 +15,7 @@ export const items = [
   {
     k: 'kwt', p: 'cn.first', lv: 'B2', dom: 'biz',
     lead: 'Whether we ship tomorrow depends on the supplier confirming by noon.', key: 'IF',
-    before: 'We', after: 'the supplier confirms by noon.', a: ['will ship'], b: ['tomorrow if'], x: ['would', 'shipped', 'when'],
+    before: 'We', after: 'the supplier confirms by noon.', a: ['will ship'], b: ['tomorrow if', 'tomorrow only if'], v: [{ a: ['will only ship'], b: ['tomorrow if'] }], x: ['would', 'shipped', 'when'],
     traps: [['ship tomorrow if', 'Im Hauptsatz des First Conditional steht will: will ship.', 'The main clause of the first conditional takes will: will ship.']],
     ok: ['Teil 1: will ship, im Hauptsatz steht will. Teil 2: tomorrow if, danach folgt der if-Satz mit dem Present Simple.', 'Part 1: will ship, the main clause takes will. Part 2: tomorrow if, the if clause with the present simple follows.'],
   },
@@ -53,14 +53,14 @@ export const items = [
     c2: ['ordered verschiebt es in die Vergangenheit; der Satz meint aber die Zukunft.', 'ordered moves it to the past, but the sentence means the future.'],
   },
   {
-    k: 'ocl', p: 'cn.first', lv: 'B2', dom: 'life', cls: 'aux', a: ['is'],
-    t: 'If the weather ___ nice tomorrow, we will have the barbecue in the garden with the neighbors.',
+    k: 'ocl', p: 'cn.first', lv: 'B2', dom: 'life', cls: 'aux', a: ['does'],
+    t: 'If the weather ___ not improve by tomorrow, we will move the barbecue indoors.',
     c: {
       will: 'Nach if steht kein will; im if-Satz gilt die Gegenwart. || No will follows if; the present is used in the if clause.',
-      would: 'would gehört in den Hauptsatz einer unwirklichen Bedingung, nicht hierher. || would belongs in the main clause of an unreal condition, not here.',
-      was: 'was ist Vergangenheit; der Satz handelt von morgen. || was is past, but the sentence is about tomorrow.',
+      did: 'did würde die Vergangenheit meinen; der Satz handelt von morgen. || did would mean the past, but the sentence is about tomorrow.',
+      is: 'is not improve gibt es nicht; vor der Grundform steht does. || is not improve does not exist; the base form needs does.',
     },
-    ok: 'First Conditional: if + Present Simple, will + Grundform. Im if-Satz steht kein will. || First conditional: if + present simple, will + base form. No will in the if clause.',
+    ok: 'First Conditional: if + Present Simple, will + Grundform. Im if-Satz steht kein will: If the weather does not improve … || First conditional: if + present simple, will + base form. No will in the if clause: If the weather does not improve …',
   },
   {
     k: 'kwt', p: 'cn.if-words', lv: 'B2+', dom: 'biz',
@@ -85,21 +85,21 @@ export const items = [
   {
     k: 'kwt', p: 'ca.as-long-as', lv: 'B2', dom: 'biz',
     lead: 'We will go ahead with the launch only if the client approves the draft.', key: 'LONG',
-    before: 'We will go ahead with the launch', after: 'the draft.', a: ['as long'], b: ['as the client approves'], x: ['unless', 'if', 'so'],
+    before: 'We will go ahead with the launch', after: 'the draft.', a: ['as long'], b: ['as the client approves'], v: [{ a: ['so long'], b: ['as the client approves'] }], x: ['unless', 'if', 'when'],
     traps: [['as long as the client approved', 'Nach as long as steht die Gegenwart (approves), nicht die Vergangenheit.', 'The present (approves) follows as long as, not the past.']],
     ok: ['Teil 1: as long, damit beginnt as long as („solange“, „sofern“). Teil 2: as the client approves, danach steht die Gegenwart, kein will.', 'Part 1: as long, that starts as long as (“provided that”). Part 2: as the client approves, the present follows, no will.'],
   },
   {
     k: 'err', p: 'ca.otherwise', lv: 'B2', dom: 'biz',
-    text: 'Please sign the contract today, otherwise we can start not the project before the end of the month.',
-    bad: { span: 'can start not', fix: ['cannot start'], ch: ['can not starting', 'do not can start'] },
-    ok: ['Die Verneinung steht bei can direkt dahinter: cannot start. Deutsch stellt „nicht“ gern ans Ende, Englisch nicht.', 'The negation comes right after can: cannot start. German likes to put “nicht” last, English does not.'],
-    c1: ['Nach can steht die Grundform ohne -ing: cannot start.', 'The base form without -ing follows can: cannot start.'],
-    c2: ['can braucht kein do: Die Verneinung ist cannot oder can’t.', 'can needs no do: the negative is cannot or can’t.'],
+    text: 'Please sign the contract today, else we cannot start the project before the end of the month.',
+    bad: { span: 'else', fix: ['otherwise', 'or else', 'or'], ch: ['besides', 'instead'] },
+    ok: ['Deutsch „sonst“ heißt otherwise (oder or else). else allein ist nach einem Komma kein Bindewort.', 'German “sonst” is otherwise (or or else). else alone is not a conjunction after a comma.'],
+    c1: ['besides heißt „außerdem“, nicht „sonst“.', 'besides means “in addition”, not “or else”.'],
+    c2: ['instead heißt „stattdessen“ und passt nicht in diesen Satz.', 'instead means “in place of” and does not fit this sentence.'],
   },
   {
-    k: 'ocl', p: 'ca.in-case', lv: 'B2', dom: 'life', cls: 'prep', a: ['in'],
-    t: 'Take an umbrella ___ case it rains this afternoon, because the weather forecast is not very reliable.',
+    k: 'ocl', p: 'ca.in-case', lv: 'B2', dom: 'biz', cls: 'prep', a: ['in'],
+    t: 'Bring a printed copy of the slides ___ case the projector does not work.',
     c: {
       on: 'on case gibt es nicht in dieser Bedeutung; die feste Wendung ist in case. || on case does not exist in this meaning; the fixed phrase is in case.',
       at: 'at case ist keine feste Wendung; es heißt in case. || at case is not a fixed phrase; it is in case.',
@@ -110,21 +110,21 @@ export const items = [
   {
     k: 'kwt', p: 'ca.but-for', lv: 'C1', dom: 'biz',
     lead: 'Without your help, the launch would have failed.', key: 'BUT',
-    before: 'The launch would have failed', after: '.', a: ['but for'], b: ['your help'], x: ['without', 'if', 'unless'],
+    before: 'The launch would have failed', after: '.', a: ['but for'], b: ['your help', 'you'], x: ['without', 'if', 'unless'],
     traps: [['but for you helped', 'Nach but for steht ein Nomen (your help), kein ganzer Satz.', 'A noun (your help) follows but for, not a whole clause.']],
     ok: ['Teil 1: but for, damit sagst du „ohne“ in der Rückschau. Teil 2: your help, nach but for folgt ein Nomen.', 'Part 1: but for, that is how you say “without” looking back. Part 2: your help, a noun follows but for.'],
   },
   {
     k: 'err', p: 'ca.inversion', lv: 'C1', dom: 'biz',
     text: 'Had we known about the delay, we had rescheduled the launch and informed the client in time.',
-    bad: { span: 'we had rescheduled', fix: ['we would have rescheduled'], ch: ['we would reschedule', 'would we have rescheduled'] },
+    bad: { span: 'we had rescheduled', fix: ['we would have rescheduled', "we'd have rescheduled"], ch: ['we would reschedule', 'would we have rescheduled'] },
     ok: ['Der Hauptsatz einer unwirklichen Bedingung in der Vergangenheit: would have + Partizip. had steht nur im Had-we-known-Teil.', 'The main clause of an unreal past condition: would have + participle. had only stands in the Had-we-known part.'],
     c1: ['would reschedule wäre Gegenwart oder Zukunft; hier geht es um etwas Vergangenes.', 'would reschedule would be present or future; this is about the past.'],
     c2: ['would we have rescheduled stellt die Wörter um; die Umstellung gehört nur in den ersten Teil.', 'would we have rescheduled inverts the words; the inversion belongs only in the first part.'],
   },
   {
     k: 'ocl', p: 'ca.as-long-as', lv: 'B2', dom: 'biz', cls: 'conj', a: ['as'],
-    t: 'We will ship on Monday as long ___ the client approves the revised delivery terms by Friday.',
+    t: 'You can work from home on Fridays as long ___ your calendar stays up to date.',
     c: {
       if: 'as long if gibt es nicht; die Wendung ist as long as. || as long if does not exist; the phrase is as long as.',
       than: 'as long than gibt es nicht; die Wendung ist as long as. || as long than does not exist; the phrase is as long as.',
@@ -154,7 +154,7 @@ export const items = [
   {
     k: 'kwt', p: 'mc.wish-past', lv: 'B2+', dom: 'life',
     lead: 'I did not call my grandmother last week, and now I regret it.', key: 'WISH',
-    before: 'I', after: 'my grandmother last week.', a: ['wish I', 'wish that I'], b: ['had called'], x: ['would', 'have', 'regret'],
+    before: 'I', after: 'my grandmother last week.', a: ['wish I', 'wish that I'], b: ['had called'], x: ['would', 'have', 'regret'], tiles: ['I', 'had', 'called'],
     traps: [['wish I would have called', 'Nach wish steht für Vergangenes had + Partizip, nicht would have.', 'After wish for the past had + participle is used, not would have.']],
     ok: ['Teil 1: wish I, so beginnt der Wunsch oder das Bedauern. Teil 2: had called, nach wish steht für Vergangenes had + Partizip.', 'Part 1: wish I, that is how the wish or regret begins. Part 2: had called, after wish the past takes had + participle.'],
   },
@@ -191,7 +191,7 @@ export const items = [
     fa: [['had', 'had listened ist hier richtig, denn es geht um Vergangenes, das nicht mehr zu ändern ist.', 'had listened is right here, because it is about the past, which cannot be changed.']],
   },
   {
-    k: 'ocl', p: 'mc.present-cond', lv: 'B2+', dom: 'biz', cls: 'aux', a: ['were'],
+    k: 'ocl', p: 'mc.present-cond', lv: 'B2+', dom: 'biz', cls: 'aux', a: ['were', 'was'],
     t: 'If our team ___ bigger, we would have won the bid last month instead of losing it to a competitor.',
     c: {
       is: 'is bigger passt nicht zu would have won; die Bedingung gilt für heute und ist unwirklich. || is bigger does not fit would have won; the condition applies to today and is unreal.',
@@ -222,7 +222,7 @@ export const items = [
   {
     k: 'kwt', p: 'dip.possible', lv: 'B2+', dom: 'biz',
     lead: 'Please resend the invoice with the correct VAT number.', key: 'POSSIBLE',
-    before: '', after: 'resend the invoice with the correct VAT number?', a: ['would it be'], b: ['possible to'], x: ['could', 'if', 'wonder'],
+    before: '', after: 'resend the invoice with the correct VAT number?', a: ['would it be', 'is it'], b: ['possible to'], x: ['could', 'if', 'wonder'],
     traps: [['would it be possible that', 'Nach possible steht to + Grundform, kein that-Satz.', 'To + base form follows possible, not a that clause.']],
     ok: ['Teil 1: would it be, die Frageform macht die Bitte höflich. Teil 2: possible to, danach steht die Grundform.', 'Part 1: would it be, the question form makes the request polite. Part 2: possible to, the base form follows.'],
   },
@@ -236,7 +236,7 @@ export const items = [
   },
   {
     k: 'ocl', p: 'dip.understate', lv: 'B2+', dom: 'biz', cls: 'prep', a: ['of'],
-    t: 'That would be a bit ___ a challenge for our team, to be honest, given the tight schedule.',
+    t: 'Delivering by Friday would be a bit ___ a stretch for our team, to be honest.',
     c: {
       from: 'a bit from a challenge gibt es nicht; die Wendung ist a bit of a. || a bit from a challenge does not exist; the phrase is a bit of a.',
       than: 'than steht nach einem Komparativ, nicht nach a bit. || than follows a comparative, not a bit.',
@@ -259,7 +259,7 @@ export const items = [
     fa: [['possible', 'possible to move ist hier richtig; nach possible folgt to + Grundform.', 'possible to move is right here; to + base form follows possible.']],
   },
   {
-    k: 'ocl', p: 'dip.hoping', lv: 'B2+', dom: 'biz', cls: 'aux', a: ['would'],
+    k: 'ocl', p: 'dip.hoping', lv: 'B2+', dom: 'biz', cls: 'aux', a: ['would', 'might'],
     t: 'We were hoping you ___ be able to share the draft with us before the end of the week.',
     c: {
       is: 'is be able gibt es nicht; nach were hoping steht would. || is be able does not exist; would follows were hoping.',
@@ -271,7 +271,7 @@ export const items = [
   {
     k: 'kwt', p: 'dip.understate', lv: 'B2+', dom: 'biz',
     lead: 'The new deadline is a serious problem for our team.', key: 'BIT',
-    before: 'The new deadline is', after: 'for our team.', a: ['a bit'], b: ['of a challenge'], x: ['little', 'very', 'much'],
+    before: 'The new deadline is', after: 'for our team.', a: ['a bit'], b: ['of a challenge', 'of a problem', 'of an issue'], x: ['little', 'very', 'much'],
     traps: [['a bit a challenge', 'Nach a bit steht of: a bit of a challenge.', 'Of follows a bit: a bit of a challenge.']],
     ok: ['Teil 1: a bit macht die Aussage milder. Teil 2: of a challenge, die feste Wendung heißt a bit of a …', 'Part 1: a bit makes the statement milder. Part 2: of a challenge, the fixed phrase is a bit of a …'],
   },

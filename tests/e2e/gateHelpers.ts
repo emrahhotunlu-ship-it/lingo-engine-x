@@ -79,7 +79,8 @@ export async function answerItem(page: Page, wrong: boolean): Promise<string> {
     const k = it.keys?.[0];
     const solution = `${k?.a[0] ?? ''} ${k?.b[0] ?? ''}`.toLowerCase().replace(/[^a-z' ]/g, '').split(/\s+/).filter(Boolean);
     for (const w of solution) {
-      const text = w === (it.key ?? '').toLowerCase() ? (it.key as string) : w;
+      // Die Bausteine tragen die Schreibweise des Vorrats (Dana, Thursday, I, QA …); das Schlüsselwort steht in Großbuchstaben.
+      const text = w === (it.key ?? '').toLowerCase() ? (it.key as string) : ((it.tiles ?? []).find((t) => t.toLowerCase() === w) ?? w);
       await page.locator(`[data-testid="tile-pool"] [data-testid="tile"][data-tile="${text}"]`).first().click();
     }
     await page.getByTestId('place-next').click();

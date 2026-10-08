@@ -13,12 +13,13 @@
    "pool": "gate",
    "text": "Why ___ your neighbor usually leave for work before six, even on cold winter mornings?",
    "accept": [
-    "does"
+    "does",
+    "did"
    ],
    "cls": "aux",
    "chips": [
     "is",
-    "did",
+    "do",
     "will"
    ],
    "why": {
@@ -36,10 +37,10 @@
      },
      {
       "if": [
-       "did"
+       "do"
       ],
-      "de": "did meint die Vergangenheit, usually zeigt aber eine Gewohnheit.",
-      "en": "did means the past, but usually points to a habit."
+      "de": "do passt zu I, you, we, they, nicht zu neighbor (Singular).",
+      "en": "do goes with I, you, we, they, not with the singular neighbor."
      },
      {
       "if": [
@@ -317,45 +318,45 @@
    "pat": "psc.state",
    "topic": "pres-simple-cont",
    "level": "B2",
-   "dom": "life",
+   "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "text": "I ___ not recognize this number; could you tell me who is calling, please?",
+   "text": "My manager ___ not believe in long meetings, so ours never last more than thirty minutes.",
    "accept": [
-    "do"
+    "does"
    ],
    "cls": "aux",
    "chips": [
-    "am",
-    "have",
-    "is"
+    "is",
+    "has",
+    "do"
    ],
    "why": {
     "ok": {
-     "de": "recognize ist ein Zustandsverb: Present Simple mit do not, nie am recognizing.",
-     "en": "recognize is a state verb: present simple with do not, never am recognizing."
+     "de": "believe ist ein Zustandsverb: Present Simple mit does not, nie is believing.",
+     "en": "believe is a state verb: present simple with does not, never is believing."
     },
     "wrong": [
      {
       "if": [
-       "am"
-      ],
-      "de": "am not recognize gibt es nicht; recognize hat kein -ing.",
-      "en": "am not recognize does not exist; recognize takes no -ing form."
-     },
-     {
-      "if": [
-       "have"
-      ],
-      "de": "have braucht ein Partizip (recognized), nicht die Grundform.",
-      "en": "have needs a participle (recognized), not the base form."
-     },
-     {
-      "if": [
        "is"
       ],
-      "de": "is passt zu he/she/it, nicht zu I.",
-      "en": "is goes with he/she/it, not with I."
+      "de": "is not believe gibt es nicht; believe hat kein -ing.",
+      "en": "is not believe does not exist; believe takes no -ing form."
+     },
+     {
+      "if": [
+       "has"
+      ],
+      "de": "has braucht ein Partizip (believed), nicht die Grundform.",
+      "en": "has needs a participle (believed), not the base form."
+     },
+     {
+      "if": [
+       "do"
+      ],
+      "de": "manager ist Singular: do passt zu I, you, we, they.",
+      "en": "manager is singular: do goes with I, you, we, they."
      }
     ]
    }
@@ -381,7 +382,9 @@
      ],
      "b": [
       "rather bitter",
-      "quite bitter"
+      "quite bitter",
+      "pretty bitter",
+      "fairly bitter"
      ]
     }
    ],
@@ -425,7 +428,7 @@
    "dom": "life",
    "src": "seed",
    "pool": "gate",
-   "text": "My cousin ___ not attend the wedding in Munich last Saturday because her train was canceled.",
+   "text": "My cousin ___ not know about the wedding until last Saturday, so she could not book a train in time.",
    "accept": [
     "did"
    ],
@@ -445,8 +448,8 @@
       "if": [
        "has"
       ],
-      "de": "has braucht das Partizip (attended); last Saturday ist ein abgeschlossener Zeitpunkt.",
-      "en": "has needs the participle (attended); last Saturday is a finished point in time."
+      "de": "has braucht das Partizip (known); last Saturday ist ein abgeschlossener Zeitpunkt.",
+      "en": "has needs the participle (known); last Saturday is a finished point in time."
      },
      {
       "if": [
@@ -459,8 +462,8 @@
       "if": [
        "is"
       ],
-      "de": "is not attend gibt es nicht; vor der Grundform steht did.",
-      "en": "is not attend does not exist; the base form needs did."
+      "de": "is not know gibt es nicht; vor der Grundform steht did.",
+      "en": "is not know does not exist; the base form needs did."
      }
     ]
    }
@@ -485,7 +488,9 @@
       "has been"
      ],
      "b": [
-      "based here since"
+      "based here since",
+      "here since",
+      "in this building since"
      ]
     },
     {
@@ -664,7 +669,10 @@
      ],
      "b": [
       "the system fail",
-      "the system failure happen"
+      "the system failure happen",
+      "the failure happen",
+      "the failure occur",
+      "the system failure occur"
      ]
     }
    ],
@@ -763,7 +771,7 @@
    "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "text": "We have been using this document management system ___ more than six years without any major problem.",
+   "text": "We have been using this document management system ___ more than six years without any major problems.",
    "accept": [
     "for"
    ],
@@ -825,6 +833,14 @@
      "b": [
       "no complaints so far",
       "no complaints thus far"
+     ]
+    },
+    {
+     "a": [
+      "have so far"
+     ],
+     "b": [
+      "been no complaints"
      ]
     }
    ],
@@ -930,10 +946,20 @@
    "keys": [
     {
      "a": [
-      "have been talking"
+      "have been talking",
+      "have been speaking"
      ],
      "b": [
       "for"
+     ]
+    },
+    {
+     "a": [
+      "have been on the"
+     ],
+     "b": [
+      "phone for",
+      "call for"
      ]
     }
    ],
@@ -1059,7 +1085,7 @@
    "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "lead": "I met Dana in 2018, and I still know her.",
+   "lead": "I first met Dana in 2018.",
    "key": "SINCE",
    "before": "I",
    "after": "2018.",
@@ -1076,7 +1102,7 @@
    "tiles": [
     "have",
     "known",
-    "dana"
+    "Dana"
    ],
    "extra": [
     "been",
@@ -1341,7 +1367,9 @@
       "said she would",
       "said she'd",
       "said he would",
-      "said he'd"
+      "said he'd",
+      "said they would",
+      "said they'd"
      ],
      "b": [
       "send me"
@@ -1402,11 +1430,12 @@
    "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "text": "When the inspector arrived at nine, we were waiting for him since half past seven.",
+   "text": "When the inspector arrived at nine, we were waiting for him since seven-thirty.",
    "bad": {
     "span": "were waiting",
     "fix": [
-     "had been waiting"
+     "had been waiting",
+     "had waited"
     ],
     "choices": [
      "have been waiting",
@@ -1416,7 +1445,7 @@
    },
    "why": {
     "ok": {
-     "de": "Eine Dauer bis zu einem Zeitpunkt in der Vergangenheit braucht had been + -ing: had been waiting since half past seven.",
+     "de": "Eine Dauer bis zu einem Zeitpunkt in der Vergangenheit braucht had been + -ing: had been waiting since seven-thirty.",
      "en": "A length of time up to a point in the past needs had been + -ing: had been waiting since half past seven."
     },
     "wrong": [
@@ -1427,8 +1456,8 @@
      },
      {
       "opt": "waited",
-      "de": "Mit since und einer Dauer braucht es die Verlaufsform mit had been, nicht das einfache Past Simple.",
-      "en": "With since and a length of time the continuous form with had been is needed, not the simple past."
+      "de": "waited zeigt nicht, dass das Warten bis neun andauerte; mit since braucht es had (been).",
+      "en": "waited does not show that the waiting lasted until nine; with since it needs had (been)."
      },
      {
       "tap": "*",
@@ -1624,8 +1653,8 @@
       "if": [
        "were"
       ],
-      "de": "were already finished passt nicht zu we als Täter; es wäre ein Zustand statt einer Handlung.",
-      "en": "were already finished does not fit we as the doers; it would be a state instead of an action."
+      "de": "were finished + Objekt geht nicht; die Handlung braucht had finished.",
+      "en": "were finished plus an object does not work; the action needs had finished."
      }
     ]
    }
@@ -1695,7 +1724,7 @@
    "dom": "life",
    "src": "seed",
    "pool": "gate",
-   "text": "When I was a student, I ___ to cycle to the university every day, but now I take the bus.",
+   "text": "There ___ to be a small bakery on our street, but it closed years ago.",
    "accept": [
     "used"
    ],
@@ -1707,8 +1736,8 @@
    ],
    "why": {
     "ok": {
-     "de": "used to + Grundform beschreibt eine frühere Gewohnheit, die heute nicht mehr gilt.",
-     "en": "used to + base form describes an earlier habit that no longer applies today."
+     "de": "used to + Grundform beschreibt einen früheren Zustand, den es heute nicht mehr gibt.",
+     "en": "used to + base form describes an earlier state that no longer exists today."
     },
     "wrong": [
      {
@@ -1722,15 +1751,15 @@
       "if": [
        "would"
       ],
-      "de": "would to gibt es nicht; would steht ohne to direkt vor der Grundform.",
-      "en": "would to does not exist; would comes directly before the base form without to."
+      "de": "would to gibt es nicht; und would passt nicht zu There ... to be.",
+      "en": "would to does not exist; and would does not fit There ... to be."
      },
      {
       "if": [
        "am"
       ],
-      "de": "am to cycle passt nicht zur Vergangenheit (When I was a student).",
-      "en": "am to cycle does not fit the past (When I was a student)."
+      "de": "am to be passt nicht zu There und nicht zur Vergangenheit.",
+      "en": "am to be fits neither There nor the past."
      }
     ]
    }
@@ -1757,6 +1786,19 @@
      ],
      "b": [
       "working"
+     ]
+    },
+    {
+     "a": [
+      "have gotten",
+      "'ve gotten",
+      "have got",
+      "'ve got",
+      "have become",
+      "'ve become"
+     ],
+     "b": [
+      "used to working"
      ]
     }
    ],
@@ -1914,10 +1956,10 @@
    "dom": "life",
    "src": "seed",
    "pool": "gate",
-   "lead": "Every summer in my childhood, we frequently drove to the lake at weekends.",
+   "lead": "Every summer in my childhood, we frequently drove to the lake on weekends.",
    "key": "WOULD",
    "before": "Every summer in my childhood, we",
-   "after": "to the lake at weekends.",
+   "after": "to the lake on weekends.",
    "keys": [
     {
      "a": [
@@ -2071,23 +2113,23 @@
    "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "lead": "Years ago our company produced paper files, but now everything is digital.",
+   "lead": "Years ago our company kept all its records in paper files, but now everything is digital.",
    "key": "USED",
    "before": "Our company",
-   "after": "paper files, but now everything is digital.",
+   "after": "all its records in paper files, but now everything is digital.",
    "keys": [
     {
      "a": [
       "used to"
      ],
      "b": [
-      "produce"
+      "keep"
      ]
     }
    ],
    "tiles": [
     "to",
-    "produce"
+    "keep"
    ],
    "extra": [
     "would",
@@ -2095,30 +2137,30 @@
     "use"
    ],
    "traps": [
-    "used to producing",
-    "was used to produce"
+    "used to keeping",
+    "was used to keep"
    ],
    "why": {
     "ok": {
-     "de": "Teil 1: used to, für eine frühere Gewohnheit oder einen früheren Zustand. Teil 2: produce, die Grundform.",
-     "en": "Part 1: used to, for an earlier habit or state. Part 2: produce, the base form."
+     "de": "Teil 1: used to, für eine frühere Gewohnheit oder einen früheren Zustand. Teil 2: keep, die Grundform.",
+     "en": "Part 1: used to, for an earlier habit or state. Part 2: keep, the base form."
     },
     "wrong": [
      {
       "if": [
        "used",
        "to",
-       "producing"
+       "keeping"
       ],
-      "de": "Nach used to steht die Grundform: produce.",
-      "en": "After used to the base form follows: produce."
+      "de": "Nach used to steht die Grundform: keep.",
+      "en": "After used to the base form follows: keep."
      },
      {
       "if": [
        "was",
        "used",
        "to",
-       "produce"
+       "keep"
       ],
       "de": "was used to + -ing meint gewohnt sein; früher heißt used to + Grundform.",
       "en": "was used to + -ing means being accustomed; formerly is used to + base form."
@@ -2136,9 +2178,10 @@
    "dom": "life",
    "src": "seed",
    "pool": "gate",
-   "text": "Our family reunion is scheduled ___ the last Saturday of August, right after the school holidays end.",
+   "text": "Our family reunion is scheduled ___ the last Saturday of August, right after the summer break ends.",
    "accept": [
-    "on"
+    "on",
+    "for"
    ],
    "cls": "prep",
    "chips": [
@@ -2186,7 +2229,7 @@
    "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "lead": "Please do not send the signed contract after Thursday.",
+   "lead": "Please send the signed contract no later than Thursday.",
    "key": "BY",
    "before": "Please send the signed contract",
    "after": ".",
@@ -2201,7 +2244,7 @@
     }
    ],
    "tiles": [
-    "thursday",
+    "Thursday",
     "at",
     "the",
     "latest"
@@ -2400,7 +2443,7 @@
    "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "text": "The new regulation will come into force at January 1, so we must update our contracts.",
+   "text": "The new regulation will take effect at January 1, so we must update our contracts.",
    "bad": {
     "span": "at January 1",
     "fix": [
@@ -2451,10 +2494,11 @@
    "dom": "life",
    "src": "seed",
    "pool": "gate",
-   "text": "I will be away on holiday ___ the end of August, so please do not schedule anything before then.",
+   "text": "I will be away on vacation ___ the end of August, so please do not schedule anything before then.",
    "accept": [
     "until",
-    "till"
+    "till",
+    "through"
    ],
    "cls": "prep",
    "chips": [
@@ -2509,19 +2553,18 @@
    "keys": [
     {
      "a": [
-      "have worked"
+      "have worked",
+      "have been working"
      ],
      "b": [
-      "with this supplier for"
+      "together for"
      ]
     }
    ],
    "tiles": [
     "have",
     "worked",
-    "with",
-    "this",
-    "supplier"
+    "together"
    ],
    "extra": [
     "since",
@@ -2529,20 +2572,18 @@
     "during"
    ],
    "traps": [
-    "worked with this supplier for"
+    "worked together for"
    ],
    "why": {
     "ok": {
-     "de": "Teil 1: have worked, weil die Zusammenarbeit bis heute dauert. Teil 2: for + Dauer (eight years).",
-     "en": "Part 1: have worked, because the cooperation lasts until today. Part 2: for + length of time (eight years)."
+     "de": "Teil 1: have worked, weil die Zusammenarbeit bis heute dauert. Teil 2: together for + Dauer (eight years).",
+     "en": "Part 1: have worked, because the cooperation lasts until today. Part 2: together for + length of time (eight years)."
     },
     "wrong": [
      {
       "if": [
        "worked",
-       "with",
-       "this",
-       "supplier",
+       "together",
        "for"
       ],
       "de": "Das Past Simple endet in der Vergangenheit; die Dauer bis heute braucht have worked.",
@@ -2612,48 +2653,52 @@
    "src": "seed",
    "pool": "gate",
    "lead": "Please send me the updated figures before the call.",
-   "key": "WONDERING",
+   "key": "HOPING",
    "before": "I",
    "after": "send me the updated figures before the call.",
    "keys": [
     {
      "a": [
-      "was wondering"
+      "was hoping"
      ],
      "b": [
-      "if you could"
+      "you could",
+      "that you could",
+      "you would",
+      "you'd",
+      "that you would",
+      "that you'd"
      ]
     }
    ],
    "tiles": [
     "was",
-    "if",
     "you",
     "could"
    ],
    "extra": [
     "asked",
     "will",
-    "would"
+    "wish"
    ],
    "traps": [
-    "was wondering could you"
+    "was hoping could you"
    ],
    "why": {
     "ok": {
-     "de": "Teil 1: was wondering macht die Bitte weich und höflich. Teil 2: if you could, danach folgt ein Nebensatz mit normaler Wortstellung.",
-     "en": "Part 1: was wondering makes the request soft and polite. Part 2: if you could, a clause with normal word order follows."
+     "de": "Teil 1: was hoping macht die Bitte weich und höflich. Teil 2: you could, danach folgt ein Nebensatz mit normaler Wortstellung.",
+     "en": "Part 1: was hoping makes the request soft and polite. Part 2: you could, a clause with normal word order follows."
     },
     "wrong": [
      {
       "if": [
        "was",
-       "wondering",
+       "hoping",
        "could",
        "you"
       ],
-      "de": "Nach I was wondering folgt if oder whether, keine Frageform.",
-      "en": "After I was wondering comes if or whether, not a question form."
+      "de": "Nach I was hoping folgt ein Nebensatz mit normaler Wortstellung: you could.",
+      "en": "A clause with normal word order follows I was hoping: you could."
      }
     ]
    }
@@ -2719,7 +2764,7 @@
    "dom": "life",
    "src": "seed",
    "pool": "gate",
-   "text": "Please ignore Tom today; he ___ being unusually rude because of the pressure at work.",
+   "text": "Please be patient with Tom today; he ___ being unusually rude because of the pressure at work.",
    "accept": [
     "is"
    ],
@@ -2769,7 +2814,7 @@
    "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "lead": "These days our competitors become more aggressive with their pricing.",
+   "lead": "Our competitors' pricing is becoming increasingly aggressive these days.",
    "key": "GETTING",
    "before": "Our competitors",
    "after": "with their pricing.",
@@ -2779,7 +2824,9 @@
       "are getting"
      ],
      "b": [
-      "more aggressive"
+      "more aggressive",
+      "increasingly aggressive",
+      "more and more aggressive"
      ]
     }
    ],
@@ -2856,7 +2903,7 @@
    "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "text": "The client ___ not want a printed version of the final report; a PDF by e-mail is enough.",
+   "text": "The client ___ not want a printed version of the final report; a PDF by email is enough.",
    "accept": [
     "does"
    ],
@@ -2906,7 +2953,7 @@
    "dom": "life",
    "src": "seed",
    "pool": "gate",
-   "lead": "My brother behaves in a very selfish way at the moment.",
+   "lead": "My brother is behaving very selfishly at the moment.",
    "key": "BEING",
    "before": "My brother",
    "after": "at the moment.",
@@ -2963,7 +3010,8 @@
    "pool": "gate",
    "text": "Hold on, I ___ send you the photos from the party right now; you will have them in a minute.",
    "accept": [
-    "will"
+    "will",
+    "can"
    ],
    "cls": "aux",
    "chips": [
@@ -2973,7 +3021,7 @@
    ],
    "why": {
     "ok": {
-     "de": "Eine spontane Entscheidung oder ein Angebot im Moment des Sprechens: will + Grundform (I will send).",
+     "de": "Eine spontane Entscheidung oder ein Angebot im Moment des Sprechens: will oder can + Grundform (I will send, I can send).",
      "en": "A spontaneous decision or offer at the moment of speaking: will + base form (I will send)."
     },
     "wrong": [
@@ -3066,7 +3114,7 @@
    "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "text": "We are going to publish the report on Friday, but the legal review took longer than planned.",
+   "text": "We are going to publish the report last Friday, but the legal review took longer than planned.",
    "bad": {
     "span": "are going to",
     "fix": [
@@ -3177,7 +3225,8 @@
       "is about"
      ],
      "b": [
-      "to start"
+      "to start",
+      "to begin"
      ]
     }
    ],
@@ -3313,14 +3362,17 @@
       "as soon as"
      ],
      "b": [
-      "I get"
+      "I get",
+      "I receive",
+      "I have",
+      "I've"
      ]
     }
    ],
    "tiles": [
     "as",
     "as",
-    "i",
+    "I",
     "get"
    ],
    "extra": [
@@ -3422,12 +3474,13 @@
       "I'll have"
      ],
      "b": [
-      "finished"
+      "finished",
+      "completed"
      ]
     }
    ],
    "tiles": [
-    "i",
+    "I",
     "will",
     "finished"
    ],
@@ -3472,49 +3525,49 @@
    "id": "err-0767",
    "kind": "err",
    "area": "gram",
-   "pat": "fut.cont-plan",
+   "pat": "fut.continuous",
    "topic": "future-perf-cont",
    "level": "B2",
-   "dom": "life",
+   "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "text": "Will you attending the family dinner next Saturday, or do you have other plans already?",
+   "text": "By this time tomorrow, our engineers will be fix the server, so the service should be back by noon.",
    "bad": {
-    "span": "Will you attending",
+    "span": "will be fix",
     "fix": [
-     "Will you be attending"
+     "will be fixing"
     ],
     "choices": [
-     "Do you attending",
-     "Are you attend",
-     "Will you be attending"
+     "will fixing",
+     "be fixing",
+     "will be fixing"
     ]
    },
    "why": {
     "ok": {
-     "de": "Die höfliche Frage nach einem Plan: Will you be attending … ? Zwischen will und -ing steht be.",
-     "en": "The polite question about a plan: Will you be attending … ? Between will and -ing comes be."
+     "de": "Future Continuous: will be + -ing. Etwas läuft zu einem Zeitpunkt in der Zukunft gerade: will be fixing.",
+     "en": "Future continuous: will be + -ing. Something is in progress at a point in the future: will be fixing."
     },
     "wrong": [
      {
-      "opt": "Do you attending",
-      "de": "do braucht die Grundform (attend), nicht -ing.",
-      "en": "do needs the base form (attend), not -ing."
+      "opt": "will fixing",
+      "de": "Zwischen will und -ing steht be: will be fixing.",
+      "en": "Between will and -ing comes be: will be fixing."
      },
      {
-      "opt": "Are you attend",
-      "de": "are braucht -ing: Are you attending; attend allein passt nicht.",
-      "en": "are needs -ing: Are you attending; attend alone does not fit."
+      "opt": "be fixing",
+      "de": "be fixing ohne will ist keine Zukunftsform.",
+      "en": "be fixing without will is not a future form."
      },
      {
       "tap": "*",
-      "de": "Der Fehler steckt bei „Will you attending“, nicht hier.",
-      "en": "The mistake is at “Will you attending”, not here."
+      "de": "Der Fehler steckt bei „will be fix“, nicht hier.",
+      "en": "The mistake is at “will be fix”, not here."
      },
      {
       "tap": "none",
-      "de": "Doch, hier steckt ein Fehler: „Will you attending“ ist falsch.",
-      "en": "There is a mistake: “Will you attending” is wrong."
+      "de": "Doch, hier steckt ein Fehler: „will be fix“ ist falsch.",
+      "en": "There is a mistake: “will be fix” is wrong."
      }
     ]
    }
@@ -3638,7 +3691,8 @@
    "bad": {
     "span": "will already finish",
     "fix": [
-     "will already have finished"
+     "will already have finished",
+     "will have already finished"
     ],
     "choices": [
      "will already have finished",
@@ -3688,7 +3742,9 @@
    "text": "___ you be attending the offsite in Vienna next month, or will you join the sessions remotely?",
    "accept": [
     "Will",
-    "will"
+    "will",
+    "Would",
+    "would"
    ],
    "cls": "aux",
    "chips": [
@@ -3736,10 +3792,10 @@
    "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "lead": "In March it will be exactly three years since I started working with this client.",
+   "lead": "In June it will be exactly two years since we started migrating our archive to the cloud.",
    "key": "BEEN",
-   "before": "By March I",
-   "after": "with this client for three years.",
+   "before": "By June we",
+   "after": "our archive to the cloud for two years.",
    "keys": [
     {
      "a": [
@@ -3747,37 +3803,37 @@
       "'ll have been"
      ],
      "b": [
-      "working"
+      "migrating"
      ]
     }
    ],
    "tiles": [
     "will",
     "have",
-    "working"
+    "migrating"
    ],
    "extra": [
     "had",
     "being",
-    "am"
+    "are"
    ],
    "traps": [
-    "will been working"
+    "will been migrating"
    ],
    "why": {
     "ok": {
-     "de": "Teil 1: will have been, für die Dauer bis zu einem künftigen Zeitpunkt. Teil 2: working, die -ing-Form betont die laufende Tätigkeit.",
-     "en": "Part 1: will have been, for the duration up to a future point. Part 2: working, the -ing form stresses the ongoing activity."
+     "de": "Teil 1: will have been, für die Dauer bis zu einem künftigen Zeitpunkt. Teil 2: migrating, die -ing-Form betont die laufende Tätigkeit.",
+     "en": "Part 1: will have been, for the duration up to a future point. Part 2: migrating, the -ing form stresses the ongoing activity."
     },
     "wrong": [
      {
       "if": [
        "will",
        "been",
-       "working"
+       "migrating"
       ],
-      "de": "Nach will steht have: will have been working.",
-      "en": "Have follows will: will have been working."
+      "de": "Nach will steht have: will have been migrating.",
+      "en": "Have follows will: will have been migrating."
      }
     ]
    }
@@ -3792,42 +3848,42 @@
    "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "text": "We will deploy the new release as soon as the test environment ___ stable again.",
+   "text": "We will deploy the new release as soon as the test environment ___ been fixed.",
    "accept": [
-    "is"
+    "has"
    ],
    "cls": "aux",
    "chips": [
     "will",
     "was",
-    "would"
+    "had"
    ],
    "why": {
     "ok": {
-     "de": "Nach as soon as steht das Present Simple für die Zukunft: as soon as the environment is stable.",
-     "en": "After as soon as the present simple stands for the future: as soon as the environment is stable."
+     "de": "Nach as soon as steht kein will: Present Perfect (has been fixed) für etwas, das bis dahin fertig sein muss.",
+     "en": "No will follows as soon as: present perfect (has been fixed) for something that must be finished by then."
     },
     "wrong": [
      {
       "if": [
        "will"
       ],
-      "de": "Nach as soon as steht kein will; es gilt die Gegenwart.",
-      "en": "No will follows as soon as; the present is used."
+      "de": "Nach as soon as steht kein will; hier gilt das Present Perfect.",
+      "en": "No will follows as soon as; the present perfect is used here."
      },
      {
       "if": [
        "was"
       ],
-      "de": "was meint die Vergangenheit; der Satz spricht über die Zukunft.",
-      "en": "was means the past, but the sentence is about the future."
+      "de": "was been gibt es nicht; vor been steht has, have oder had.",
+      "en": "was been does not exist; been needs has, have or had."
      },
      {
       "if": [
-       "would"
+       "had"
       ],
-      "de": "would steht nicht nach as soon as, wenn es um die Zukunft geht.",
-      "en": "would does not follow as soon as when the future is meant."
+      "de": "had been fixed meint die Vergangenheit; der Satz spricht über die Zukunft.",
+      "en": "had been fixed means the past, but the sentence is about the future."
      }
     ]
    }
@@ -3844,31 +3900,23 @@
    "pool": "gate",
    "lead": "We will not deploy anything before QA has finished its final regression tests.",
    "key": "UNTIL",
-   "before": "We will not deploy",
-   "after": ".",
+   "before": "We will not deploy anything",
+   "after": "its final regression tests.",
    "keys": [
     {
      "a": [
       "until"
      ],
      "b": [
-      "QA has signed off"
-     ]
-    },
-    {
-     "a": [
-      "until"
-     ],
-     "b": [
-      "QA signs off"
+      "QA has finished",
+      "QA finishes"
      ]
     }
    ],
    "tiles": [
-    "qa",
+    "QA",
     "has",
-    "signed",
-    "off"
+    "finished"
    ],
    "extra": [
     "when",
@@ -3876,23 +3924,23 @@
     "after"
    ],
    "traps": [
-    "until QA signed off"
+    "until QA will finish"
    ],
    "why": {
     "ok": {
-     "de": "Teil 1: until nennt die Bedingung. Teil 2: QA has signed off, nach until steht kein will, sondern das Present Perfect.",
-     "en": "Part 1: until names the condition. Part 2: QA has signed off, no will follows until, but the present perfect."
+     "de": "Teil 1: until nennt die Bedingung. Teil 2: QA has finished, nach until steht kein will, sondern das Present Perfect.",
+     "en": "Part 1: until names the condition. Part 2: QA has finished, no will follows until, but the present perfect."
     },
     "wrong": [
      {
       "if": [
        "until",
        "qa",
-       "signed",
-       "off"
+       "will",
+       "finish"
       ],
-      "de": "until verlangt hier has signed off (oder signs off), nicht das Past Simple.",
-      "en": "until calls for has signed off (or signs off) here, not the past simple."
+      "de": "Nach until steht kein will; es gilt das Present Perfect (has finished) oder die Gegenwart.",
+      "en": "No will follows until; the present perfect (has finished) or the present is used."
      }
     ]
    }
@@ -3960,7 +4008,8 @@
    "pool": "gate",
    "text": "I do not know yet whether my landlord ___ accept a second tenant, but I will find out on Friday.",
    "accept": [
-    "will"
+    "will",
+    "would"
    ],
    "cls": "aux",
    "chips": [
@@ -3970,7 +4019,7 @@
    ],
    "why": {
     "ok": {
-     "de": "Nach whether und if als Frage in einem Nebensatz bleibt will: whether the client will accept.",
+     "de": "Nach whether und if als Frage in einem Nebensatz bleibt will: whether the landlord will accept.",
      "en": "After whether and if as a question in a subordinate clause will stays: whether the client will accept."
     },
     "wrong": [
@@ -4018,7 +4067,12 @@
       "when"
      ],
      "b": [
-      "the update finishes"
+      "the update finishes",
+      "the update ends",
+      "the update is finished",
+      "the update is complete",
+      "the update has finished",
+      "the update is over"
      ]
     }
    ],
@@ -4029,8 +4083,8 @@
    ],
    "extra": [
     "finish",
-    "ends",
-    "finished"
+    "will",
+    "begins"
    ],
    "traps": [
     "when the update will finish"
@@ -4157,7 +4211,10 @@
       "once"
      ],
      "b": [
-      "the last meeting has ended"
+      "the last meeting has ended",
+      "the last meeting is over",
+      "the last meeting has finished",
+      "the last meeting finishes"
      ]
     },
     {
@@ -4271,7 +4328,8 @@
    "keys": [
     {
      "a": [
-      "was about"
+      "was about",
+      "was just about"
      ],
      "b": [
       "to leave"
@@ -4319,11 +4377,12 @@
    "dom": "life",
    "src": "seed",
    "pool": "gate",
-   "text": "In 2015 she joined a small start-up in Berlin and will later become its chief designer.",
+   "text": "In 2015 she joined a small startup in Berlin and will later become its chief designer.",
    "bad": {
     "span": "will later become",
     "fix": [
-     "would later become"
+     "would later become",
+     "later became"
     ],
     "choices": [
      "was later become",
@@ -4370,42 +4429,42 @@
    "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "text": "The new office ___ to open in June, but the building permit was delayed by two months.",
+   "text": "The two CEOs ___ to have signed the merger agreement on Friday, but the talks collapsed at the last minute.",
    "accept": [
-    "was"
+    "were"
    ],
    "cls": "aux",
    "chips": [
-    "is",
-    "did",
-    "will"
+    "had",
+    "have",
+    "did"
    ],
    "why": {
     "ok": {
-     "de": "was to + Grundform nennt einen Plan aus der Vergangenheit, der nicht klappte.",
-     "en": "was to + base form names a plan from the past that did not work out."
+     "de": "were to have + Partizip nennt einen Plan aus der Vergangenheit, der nicht klappte.",
+     "en": "were to have + participle names a plan from the past that did not work out."
     },
     "wrong": [
      {
       "if": [
-       "is"
+       "had"
       ],
-      "de": "is to open passt nicht zu was delayed; der Plan lag in der Vergangenheit.",
-      "en": "is to open does not fit was delayed; the plan was in the past."
+      "de": "had to have signed meint eine Schlussfolgerung und passt nicht zu but the talks collapsed.",
+      "en": "had to have signed expresses a deduction and does not fit but the talks collapsed."
+     },
+     {
+      "if": [
+       "have"
+      ],
+      "de": "have to have signed meint eine Pflicht oder Folgerung, nicht den früheren Plan.",
+      "en": "have to have signed expresses an obligation or deduction, not the earlier plan."
      },
      {
       "if": [
        "did"
       ],
-      "de": "did to open gibt es nicht.",
-      "en": "did to open does not exist."
-     },
-     {
-      "if": [
-       "will"
-      ],
-      "de": "will to open gibt es nicht; will braucht die Grundform ohne to.",
-      "en": "will to open does not exist; will needs the base form without to."
+      "de": "did to have gibt es nicht.",
+      "en": "did to have does not exist."
      }
     ]
    }
@@ -4420,32 +4479,32 @@
    "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "lead": "We had planned to publish the whitepaper in April, but the legal review took too long.",
+   "lead": "We had planned to launch the new pricing page in April, but the legal review took too long.",
    "key": "GOING",
    "before": "We",
-   "after": "the whitepaper in April, but the legal review took too long.",
+   "after": "the new pricing page in April, but the legal review took too long.",
    "keys": [
     {
      "a": [
       "were going"
      ],
      "b": [
-      "to publish"
+      "to launch"
      ]
     }
    ],
    "tiles": [
     "were",
     "to",
-    "publish"
+    "launch"
    ],
    "extra": [
     "had",
     "plan",
-    "publishing"
+    "launching"
    ],
    "traps": [
-    "are going to publish"
+    "are going to launch"
    ],
    "why": {
     "ok": {
@@ -4458,7 +4517,7 @@
        "are",
        "going",
        "to",
-       "publish"
+       "launch"
       ],
       "de": "Der Plan lag in der Vergangenheit: were going to.",
       "en": "The plan was in the past: were going to."
@@ -4507,7 +4566,7 @@
    "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "text": "In 2018 Dana joined our Zurich team, and she ___ later become the head of customer success.",
+   "text": "When we signed our first bank client in 2019, nobody knew it ___ become our biggest account.",
    "accept": [
     "would"
    ],
@@ -4519,8 +4578,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Beim Erzählen aus der Vergangenheit steht would für „später geschah“: she would later become.",
-     "en": "When telling a story from the past, would stands for “later it happened”: she would later become."
+     "de": "Beim Erzählen aus der Vergangenheit steht would für „später geschah“: it would become.",
+     "en": "When telling a story from the past, would stands for “later it happened”: it would become."
     },
     "wrong": [
      {
@@ -4534,8 +4593,8 @@
       "if": [
        "has"
       ],
-      "de": "has braucht ein Partizip (become) und passt nicht zu later in der Erzählung.",
-      "en": "has needs a participle (become) and does not fit later in the story."
+      "de": "has braucht ein Partizip (become) und passt nicht zu knew in der Erzählung.",
+      "en": "has needs a participle (become) and does not fit knew in the story."
      },
      {
       "if": [
@@ -4564,10 +4623,16 @@
    "keys": [
     {
      "a": [
-      "was to"
+      "was to",
+      "was going to",
+      "was supposed to",
+      "was due to",
+      "was meant to",
+      "was scheduled to"
      ],
      "b": [
-      "open"
+      "open",
+      "be opened"
      ]
     }
    ],
@@ -4632,7 +4697,7 @@
        "by"
       ],
       "de": "by seven days klingt nach „um sieben Tage“; die Frist braucht within.",
-      "en": "by seven days sounds like “by seven days”; a time limit needs within."
+      "en": "by seven days means a difference of seven days, not a time limit; a time limit needs within."
      },
      {
       "if": [
@@ -4668,7 +4733,8 @@
    "keys": [
     {
      "a": [
-      "as of"
+      "as of",
+      "as from"
      ],
      "b": [
       "next Monday"
@@ -4678,12 +4744,12 @@
    "tiles": [
     "of",
     "next",
-    "monday"
+    "Monday"
    ],
    "extra": [
     "since",
-    "from",
-    "by"
+    "by",
+    "until"
    ],
    "traps": [
     "as of the next Monday"
@@ -4829,7 +4895,12 @@
       "until"
      ],
      "b": [
-      "the end of June"
+      "the end of June",
+      "the last day of June",
+      "June 30",
+      "June 30th",
+      "30 June",
+      "the 30th of June"
      ]
     }
    ],
@@ -4837,7 +4908,7 @@
     "the",
     "end",
     "of",
-    "june"
+    "June"
    ],
    "extra": [
     "by",
@@ -4932,7 +5003,7 @@
     "As",
     "as"
    ],
-   "cls": "adv",
+   "cls": "prep",
    "chips": [
     "Since",
     "From",
@@ -4985,10 +5056,13 @@
    "keys": [
     {
      "a": [
-      "is twice"
+      "is twice",
+      "works twice",
+      "runs twice"
      ],
      "b": [
-      "as fast as"
+      "as fast as",
+      "as quick as"
      ]
     }
    ],
@@ -5039,8 +5113,10 @@
    "accept": [
     "If",
     "When",
+    "Whenever",
     "if",
-    "when"
+    "when",
+    "whenever"
    ],
    "cls": "conj",
    "chips": [
@@ -5096,6 +5172,15 @@
     {
      "a": [
       "will ship"
+     ],
+     "b": [
+      "tomorrow if",
+      "tomorrow only if"
+     ]
+    },
+    {
+     "a": [
+      "will only ship"
      ],
      "b": [
       "tomorrow if"
@@ -5351,20 +5436,20 @@
    "dom": "life",
    "src": "seed",
    "pool": "gate",
-   "text": "If the weather ___ nice tomorrow, we will have the barbecue in the garden with the neighbors.",
+   "text": "If the weather ___ not improve by tomorrow, we will move the barbecue indoors.",
    "accept": [
-    "is"
+    "does"
    ],
    "cls": "aux",
    "chips": [
     "will",
-    "would",
-    "was"
+    "did",
+    "is"
    ],
    "why": {
     "ok": {
-     "de": "First Conditional: if + Present Simple, will + Grundform. Im if-Satz steht kein will.",
-     "en": "First conditional: if + present simple, will + base form. No will in the if clause."
+     "de": "First Conditional: if + Present Simple, will + Grundform. Im if-Satz steht kein will: If the weather does not improve …",
+     "en": "First conditional: if + present simple, will + base form. No will in the if clause: If the weather does not improve …"
     },
     "wrong": [
      {
@@ -5376,17 +5461,17 @@
      },
      {
       "if": [
-       "would"
+       "did"
       ],
-      "de": "would gehört in den Hauptsatz einer unwirklichen Bedingung, nicht hierher.",
-      "en": "would belongs in the main clause of an unreal condition, not here."
+      "de": "did würde die Vergangenheit meinen; der Satz handelt von morgen.",
+      "en": "did would mean the past, but the sentence is about tomorrow."
      },
      {
       "if": [
-       "was"
+       "is"
       ],
-      "de": "was ist Vergangenheit; der Satz handelt von morgen.",
-      "en": "was is past, but the sentence is about tomorrow."
+      "de": "is not improve gibt es nicht; vor der Grundform steht does.",
+      "en": "is not improve does not exist; the base form needs does."
      }
     ]
    }
@@ -5528,6 +5613,14 @@
      "b": [
       "as the client approves"
      ]
+    },
+    {
+     "a": [
+      "so long"
+     ],
+     "b": [
+      "as the client approves"
+     ]
     }
    ],
    "tiles": [
@@ -5540,7 +5633,7 @@
    "extra": [
     "unless",
     "if",
-    "so"
+    "when"
    ],
    "traps": [
     "as long as the client approved"
@@ -5575,43 +5668,45 @@
    "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "text": "Please sign the contract today, otherwise we can start not the project before the end of the month.",
+   "text": "Please sign the contract today, else we cannot start the project before the end of the month.",
    "bad": {
-    "span": "can start not",
+    "span": "else",
     "fix": [
-     "cannot start"
+     "otherwise",
+     "or else",
+     "or"
     ],
     "choices": [
-     "can not starting",
-     "cannot start",
-     "do not can start"
+     "besides",
+     "otherwise",
+     "instead"
     ]
    },
    "why": {
     "ok": {
-     "de": "Die Verneinung steht bei can direkt dahinter: cannot start. Deutsch stellt „nicht“ gern ans Ende, Englisch nicht.",
-     "en": "The negation comes right after can: cannot start. German likes to put “nicht” last, English does not."
+     "de": "Deutsch „sonst“ heißt otherwise (oder or else). else allein ist nach einem Komma kein Bindewort.",
+     "en": "German “sonst” is otherwise (or or else). else alone is not a conjunction after a comma."
     },
     "wrong": [
      {
-      "opt": "can not starting",
-      "de": "Nach can steht die Grundform ohne -ing: cannot start.",
-      "en": "The base form without -ing follows can: cannot start."
+      "opt": "besides",
+      "de": "besides heißt „außerdem“, nicht „sonst“.",
+      "en": "besides means “in addition”, not “or else”."
      },
      {
-      "opt": "do not can start",
-      "de": "can braucht kein do: Die Verneinung ist cannot oder can’t.",
-      "en": "can needs no do: the negative is cannot or can’t."
+      "opt": "instead",
+      "de": "instead heißt „stattdessen“ und passt nicht in diesen Satz.",
+      "en": "instead means “in place of” and does not fit this sentence."
      },
      {
       "tap": "*",
-      "de": "Der Fehler steckt bei „can start not“, nicht hier.",
-      "en": "The mistake is at “can start not”, not here."
+      "de": "Der Fehler steckt bei „else“, nicht hier.",
+      "en": "The mistake is at “else”, not here."
      },
      {
       "tap": "none",
-      "de": "Doch, hier steckt ein Fehler: „can start not“ ist falsch.",
-      "en": "There is a mistake: “can start not” is wrong."
+      "de": "Doch, hier steckt ein Fehler: „else“ ist falsch.",
+      "en": "There is a mistake: “else” is wrong."
      }
     ]
    }
@@ -5623,10 +5718,10 @@
    "pat": "ca.in-case",
    "topic": "cond-alt",
    "level": "B2",
-   "dom": "life",
+   "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "text": "Take an umbrella ___ case it rains this afternoon, because the weather forecast is not very reliable.",
+   "text": "Bring a printed copy of the slides ___ case the projector does not work.",
    "accept": [
     "in"
    ],
@@ -5686,7 +5781,8 @@
       "but for"
      ],
      "b": [
-      "your help"
+      "your help",
+      "you"
      ]
     }
    ],
@@ -5736,7 +5832,8 @@
    "bad": {
     "span": "we had rescheduled",
     "fix": [
-     "we would have rescheduled"
+     "we would have rescheduled",
+     "we'd have rescheduled"
     ],
     "choices": [
      "we would reschedule",
@@ -5783,7 +5880,7 @@
    "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "text": "We will ship on Monday as long ___ the client approves the revised delivery terms by Friday.",
+   "text": "You can work from home on Fridays as long ___ your calendar stays up to date.",
    "accept": [
     "as"
    ],
@@ -5959,7 +6056,7 @@
     }
    ],
    "tiles": [
-    "i",
+    "I",
     "had",
     "called"
    ],
@@ -6191,7 +6288,8 @@
    "pool": "gate",
    "text": "If our team ___ bigger, we would have won the bid last month instead of losing it to a competitor.",
    "accept": [
-    "were"
+    "were",
+    "was"
    ],
    "cls": "aux",
    "chips": [
@@ -6363,7 +6461,8 @@
    "keys": [
     {
      "a": [
-      "would it be"
+      "would it be",
+      "is it"
      ],
      "b": [
       "possible to"
@@ -6465,7 +6564,7 @@
    "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "text": "That would be a bit ___ a challenge for our team, to be honest, given the tight schedule.",
+   "text": "Delivering by Friday would be a bit ___ a stretch for our team, to be honest.",
    "accept": [
     "of"
    ],
@@ -6612,7 +6711,8 @@
    "pool": "gate",
    "text": "We were hoping you ___ be able to share the draft with us before the end of the week.",
    "accept": [
-    "would"
+    "would",
+    "might"
    ],
    "cls": "aux",
    "chips": [
@@ -6670,7 +6770,9 @@
       "a bit"
      ],
      "b": [
-      "of a challenge"
+      "of a challenge",
+      "of a problem",
+      "of an issue"
      ]
     }
    ],
@@ -6702,6 +6804,416 @@
       ],
       "de": "Nach a bit steht of: a bit of a challenge.",
       "en": "Of follows a bit: a bit of a challenge."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0829",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "ff.fixed-times",
+   "topic": "future-forms",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "gate",
+   "lead": "The module is scheduled to launch in Q3.",
+   "key": "DUE",
+   "before": "The module",
+   "after": "in Q3.",
+   "keys": [
+    {
+     "a": [
+      "is due"
+     ],
+     "b": [
+      "to launch"
+     ]
+    }
+   ],
+   "tiles": [
+    "is",
+    "to",
+    "launch"
+   ],
+   "extra": [
+    "set",
+    "about",
+    "going"
+   ],
+   "traps": [
+    "is due launch"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: is due, so sagst du „ist für … vorgesehen“. Teil 2: to launch, danach steht to und die Grundform.",
+     "en": "Part 1: is due, that is how you say “is scheduled for”. Part 2: to launch, to and the base form follow."
+    },
+    "wrong": [
+     {
+      "if": [
+       "is",
+       "due",
+       "launch"
+      ],
+      "de": "Nach due steht to + Grundform: due to launch.",
+      "en": "To + base form follows due: due to launch."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0830",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "ff.fixed-times",
+   "topic": "future-forms",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "gate",
+   "lead": "The conference is planned to start on Monday morning.",
+   "key": "SET",
+   "before": "The conference",
+   "after": "on Monday morning.",
+   "keys": [
+    {
+     "a": [
+      "is set"
+     ],
+     "b": [
+      "to start"
+     ]
+    }
+   ],
+   "tiles": [
+    "is",
+    "to",
+    "start"
+   ],
+   "extra": [
+    "due",
+    "about",
+    "will"
+   ],
+   "traps": [
+    "is set start"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: is set, so sagst du „ist angesetzt“. Teil 2: to start, danach steht to und die Grundform.",
+     "en": "Part 1: is set, that is how you say “is scheduled”. Part 2: to start, to and the base form follow."
+    },
+    "wrong": [
+     {
+      "if": [
+       "is",
+       "set",
+       "start"
+      ],
+      "de": "Nach set steht to + Grundform: set to start.",
+      "en": "To + base form follows set: set to start."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0831",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "tc.by-the-time",
+   "topic": "time-clauses",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "gate",
+   "lead": "We will finish the documents before the auditors arrive on Monday.",
+   "key": "TIME",
+   "before": "We will have finished the documents",
+   "after": "on Monday.",
+   "keys": [
+    {
+     "a": [
+      "by the"
+     ],
+     "b": [
+      "time the auditors arrive"
+     ]
+    }
+   ],
+   "tiles": [
+    "by",
+    "the",
+    "the",
+    "auditors",
+    "arrive"
+   ],
+   "extra": [
+    "until",
+    "when",
+    "before"
+   ],
+   "traps": [
+    "by the time auditors will arrive"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: by the, damit beginnt by the time („spätestens bis“). Teil 2: time the auditors arrive, danach steht die Gegenwart.",
+     "en": "Part 1: by the, that starts by the time (“no later than”). Part 2: time the auditors arrive, the present follows."
+    },
+    "wrong": [
+     {
+      "if": [
+       "by",
+       "the",
+       "time",
+       "auditors",
+       "will",
+       "arrive"
+      ],
+      "de": "Nach by the time steht die Gegenwart, kein will: arrive.",
+      "en": "The present follows by the time, no will: arrive."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0832",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "fut.perfect",
+   "topic": "future-perf-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "gate",
+   "lead": "According to the vendor, the migration will be complete when March ends.",
+   "key": "BY",
+   "before": "According to the vendor, the migration will",
+   "after": ".",
+   "keys": [
+    {
+     "a": [
+      "have finished"
+     ],
+     "b": [
+      "by March"
+     ]
+    }
+   ],
+   "tiles": [
+    "have",
+    "finished",
+    "march"
+   ],
+   "extra": [
+    "until",
+    "within",
+    "been"
+   ],
+   "traps": [
+    "have finish by March"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: have finished, das Future Perfect zeigt etwas, das bis dahin fertig ist. Teil 2: by March, by nennt die Frist.",
+     "en": "Part 1: have finished, the future perfect shows something finished by then. Part 2: by March, by names the deadline."
+    },
+    "wrong": [
+     {
+      "if": [
+       "have",
+       "finish",
+       "by",
+       "march"
+      ],
+      "de": "Nach will have steht das Partizip: finished.",
+      "en": "The participle follows will have: finished."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0833",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "cn.if-words",
+   "topic": "conditionals",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "gate",
+   "lead": "We will accept the terms only if the client signs by Friday.",
+   "key": "PROVIDED",
+   "before": "We will accept the terms",
+   "after": "by Friday.",
+   "keys": [
+    {
+     "a": [
+      "provided that"
+     ],
+     "b": [
+      "the client signs"
+     ]
+    },
+    {
+     "a": [
+      "provided"
+     ],
+     "b": [
+      "the client signs"
+     ]
+    }
+   ],
+   "tiles": [
+    "that",
+    "the",
+    "client",
+    "signs"
+   ],
+   "extra": [
+    "unless",
+    "if",
+    "when"
+   ],
+   "traps": [
+    "provided that the client will sign"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: provided that, so sagst du „unter der Bedingung, dass“. Teil 2: the client signs, danach steht die Gegenwart, kein will.",
+     "en": "Part 1: provided that, that is how you say “on condition that”. Part 2: the client signs, the present follows, no will."
+    },
+    "wrong": [
+     {
+      "if": [
+       "provided",
+       "that",
+       "the",
+       "client",
+       "will",
+       "sign"
+      ],
+      "de": "Nach provided that steht wie nach if das Present Simple, kein will.",
+      "en": "After provided that the present simple is used, as after if, no will."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0834",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "mc.wish-past",
+   "topic": "mixed-cond",
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "pool": "gate",
+   "lead": "I am sorry that I did not listen to your advice.",
+   "key": "ONLY",
+   "before": "",
+   "after": "to your advice.",
+   "keys": [
+    {
+     "a": [
+      "if only"
+     ],
+     "b": [
+      "I had listened",
+      "I'd listened"
+     ]
+    }
+   ],
+   "tiles": [
+    "if",
+    "i",
+    "had",
+    "listened"
+   ],
+   "extra": [
+    "wish",
+    "would",
+    "have"
+   ],
+   "traps": [
+    "if only I would listen"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: if only, so beginnt ein starker Wunsch. Teil 2: I had listened, für Vergangenes steht had + Partizip.",
+     "en": "Part 1: if only, that is how a strong wish begins. Part 2: I had listened, the past takes had + participle."
+    },
+    "wrong": [
+     {
+      "if": [
+       "if",
+       "only",
+       "i",
+       "would",
+       "listen"
+      ],
+      "de": "If only + had + Partizip drückt Bedauern über Vergangenes aus, nicht would.",
+      "en": "If only + had + participle expresses regret about the past, not would."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0835",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "mc.wish-now",
+   "topic": "mixed-cond",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "pool": "gate",
+   "lead": "I prefer not to discuss the budget on the phone.",
+   "key": "RATHER",
+   "before": "I",
+   "after": "the budget on the phone.",
+   "keys": [
+    {
+     "a": [
+      "would rather",
+      "'d rather"
+     ],
+     "b": [
+      "not discuss"
+     ]
+    }
+   ],
+   "tiles": [
+    "would",
+    "not",
+    "discuss"
+   ],
+   "extra": [
+    "prefer",
+    "than",
+    "better"
+   ],
+   "traps": [
+    "would rather not to discuss"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: would rather, so sagst du „ich möchte lieber“. Teil 2: not discuss, danach steht die Grundform ohne to.",
+     "en": "Part 1: would rather, that is how you say “I would prefer to”. Part 2: not discuss, the base form without to follows."
+    },
+    "wrong": [
+     {
+      "if": [
+       "would",
+       "rather",
+       "not",
+       "to",
+       "discuss"
+      ],
+      "de": "Nach would rather steht die Grundform ohne to.",
+      "en": "The base form without to follows would rather."
      }
     ]
    }

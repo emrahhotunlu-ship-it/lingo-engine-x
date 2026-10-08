@@ -3,14 +3,14 @@
 export const items = [
   // ================= future-forms =================
   {
-    k: 'ocl', p: 'ff.will-now', lv: 'B2', dom: 'life', cls: 'aux', a: ['will'],
+    k: 'ocl', p: 'ff.will-now', lv: 'B2', dom: 'life', cls: 'aux', a: ['will', 'can'],
     t: 'Hold on, I ___ send you the photos from the party right now; you will have them in a minute.',
     c: {
       am: 'am send gibt es nicht; vor der Grundform steht kein am. || am send does not exist; no am goes before the base form.',
       have: 'have braucht ein Partizip (sent), nicht die Grundform. || have needs a participle (sent), not the base form.',
       was: 'was send gibt es nicht; der Satz meint die Zukunft. || was send does not exist; the sentence is about the future.',
     },
-    ok: 'Eine spontane Entscheidung oder ein Angebot im Moment des Sprechens: will + Grundform (I will send). || A spontaneous decision or offer at the moment of speaking: will + base form (I will send).',
+    ok: 'Eine spontane Entscheidung oder ein Angebot im Moment des Sprechens: will oder can + Grundform (I will send, I can send). || A spontaneous decision or offer at the moment of speaking: will + base form (I will send).',
   },
   {
     k: 'kwt', p: 'ff.going-to', lv: 'B2', dom: 'life',
@@ -21,7 +21,7 @@ export const items = [
   },
   {
     k: 'err', p: 'ff.was-going-to', lv: 'B2', dom: 'biz',
-    text: 'We are going to publish the report on Friday, but the legal review took longer than planned.',
+    text: 'We are going to publish the report last Friday, but the legal review took longer than planned.',
     bad: { span: 'are going to', fix: ['were going to'], ch: ['will', 'are about to'] },
     ok: ['Ein früherer Plan, der nicht geklappt hat, steht mit was/were going to. took zeigt, dass es um die Vergangenheit geht.', 'An earlier plan that did not work out uses was/were going to. took shows that it is about the past.'],
     c1: ['will passt nicht zu took; der Plan galt früher, nicht in der Zukunft.', 'will does not fit took; the plan was from earlier, not about the future.'],
@@ -40,7 +40,7 @@ export const items = [
   {
     k: 'kwt', p: 'ff.about-to', lv: 'B2', dom: 'biz',
     lead: 'Please sit down, because the presentation will begin in a few seconds.', key: 'ABOUT',
-    before: 'Please sit down, because the presentation', after: '.', a: ['is about'], b: ['to start'], x: ['going', 'will', 'soon'],
+    before: 'Please sit down, because the presentation', after: '.', a: ['is about'], b: ['to start', 'to begin'], x: ['going', 'will', 'soon'],
     traps: [['is about starting', 'about braucht to + Grundform: about to start.', 'about needs to + base form: about to start.']],
     ok: ['Teil 1: is about, so sagst du „gleich“. Teil 2: to start, nach about steht to und die Grundform.', 'Part 1: is about, that is how you say “any moment now”. Part 2: to start, about is followed by to and the base form.'],
   },
@@ -64,7 +64,7 @@ export const items = [
   {
     k: 'kwt', p: 'ff.no-will-after', lv: 'B2', dom: 'biz',
     lead: 'I will send you the file immediately after I get the final numbers.', key: 'SOON',
-    before: 'I will send you the file', after: 'the final numbers.', a: ['as soon as'], b: ['I get'], x: ['when', 'after', 'getting'],
+    before: 'I will send you the file', after: 'the final numbers.', a: ['as soon as'], b: ['I get', 'I receive', 'I have'], x: ['when', 'after', 'getting'], tiles: ['as', 'as', 'I', 'get'],
     traps: [['as soon as I will get', 'Nach as soon as steht das Present Simple, kein will: I get.', 'After as soon as the present simple is used, no will: I get.']],
     ok: ['Teil 1: as soon as, so sagst du „sobald“. Teil 2: I get, nach as soon as steht die Gegenwart, auch wenn es um die Zukunft geht.', 'Part 1: as soon as, that is how you say “the moment that”. Part 2: I get, the present follows as soon as, even when it is about the future.'],
   },
@@ -83,17 +83,17 @@ export const items = [
   {
     k: 'kwt', p: 'fut.perfect', lv: 'B2+', dom: 'biz',
     lead: 'The final slides will be ready before you land, because I am working on them now.', key: 'HAVE',
-    before: 'By the time you land,', after: 'the final slides.', a: ['I will have'], b: ['finished'], x: ['had', 'been', 'would'],
+    before: 'By the time you land,', after: 'the final slides.', a: ['I will have'], b: ['finished', 'completed'], x: ['had', 'been', 'would'], tiles: ['I', 'will', 'finished'],
     traps: [['I will have finish', 'Nach will have steht das Partizip: finished.', 'The participle follows will have: finished.'], ['I have finished', 'Für die Zukunft braucht es will have finished, nicht nur have finished.', 'For the future it needs will have finished, not just have finished.']],
     ok: ['Teil 1: I will have, das Future Perfect zeigt etwas, das bis dahin fertig ist. Teil 2: finished, danach folgt die 3. Form.', 'Part 1: I will have, the future perfect shows something finished by then. Part 2: finished, the past participle follows.'],
   },
   {
-    k: 'err', p: 'fut.cont-plan', lv: 'B2', dom: 'life',
-    text: 'Will you attending the family dinner next Saturday, or do you have other plans already?',
-    bad: { span: 'Will you attending', fix: ['Will you be attending'], ch: ['Do you attending', 'Are you attend'] },
-    ok: ['Die höfliche Frage nach einem Plan: Will you be attending … ? Zwischen will und -ing steht be.', 'The polite question about a plan: Will you be attending … ? Between will and -ing comes be.'],
-    c1: ['do braucht die Grundform (attend), nicht -ing.', 'do needs the base form (attend), not -ing.'],
-    c2: ['are braucht -ing: Are you attending; attend allein passt nicht.', 'are needs -ing: Are you attending; attend alone does not fit.'],
+    k: 'err', p: 'fut.continuous', lv: 'B2', dom: 'biz',
+    text: 'By this time tomorrow, our engineers will be fix the server, so the service should be back by noon.',
+    bad: { span: 'will be fix', fix: ['will be fixing'], ch: ['will fixing', 'be fixing'] },
+    ok: ['Future Continuous: will be + -ing. Etwas läuft zu einem Zeitpunkt in der Zukunft gerade: will be fixing.', 'Future continuous: will be + -ing. Something is in progress at a point in the future: will be fixing.'],
+    c1: ['Zwischen will und -ing steht be: will be fixing.', 'Between will and -ing comes be: will be fixing.'],
+    c2: ['be fixing ohne will ist keine Zukunftsform.', 'be fixing without will is not a future form.'],
   },
   {
     k: 'ocl', p: 'fut.perf-cont', lv: 'C1', dom: 'biz', cls: 'aux', a: ['have'],
@@ -115,13 +115,13 @@ export const items = [
   {
     k: 'err', p: 'fut.perfect', lv: 'B2+', dom: 'biz',
     text: 'By the time you land in Chicago, I will already finish the slides and send them to you.',
-    bad: { span: 'will already finish', fix: ['will already have finished'], ch: ['will already finished', 'would already finish'] },
+    bad: { span: 'will already finish', fix: ['will already have finished', 'will have already finished'], ch: ['will already finished', 'would already finish'] },
     ok: ['Etwas, das bis zu einem Zeitpunkt in der Zukunft fertig ist: will have + 3. Form (will already have finished).', 'Something finished by a point in the future: will have + participle (will already have finished).'],
     c1: ['will braucht die Grundform (have) vor dem Partizip: will already have finished.', 'will needs the base form (have) before the participle: will already have finished.'],
     c2: ['would verschiebt es in die Vergangenheit oder in einen Wunsch; hier geht es um die Zukunft.', 'would moves it to the past or a wish; this is about the future.'],
   },
   {
-    k: 'ocl', p: 'fut.cont-plan', lv: 'B2+', dom: 'biz', cls: 'aux', a: ['Will', 'will'],
+    k: 'ocl', p: 'fut.cont-plan', lv: 'B2+', dom: 'biz', cls: 'aux', a: ['Will', 'will', 'Would', 'would'],
     t: '___ you be attending the offsite in Vienna next month, or will you join the sessions remotely?',
     c: {
       Do: 'Do you be attending gibt es nicht; do braucht die Grundform. || Do you be attending does not exist; do needs the base form.',
@@ -132,29 +132,29 @@ export const items = [
   },
   {
     k: 'kwt', p: 'fut.perf-cont', lv: 'C1', dom: 'biz',
-    lead: 'In March it will be exactly three years since I started working with this client.', key: 'BEEN',
-    before: 'By March I', after: 'with this client for three years.', a: ['will have been'], b: ['working'], x: ['had', 'being', 'am'],
-    traps: [['will been working', 'Nach will steht have: will have been working.', 'Have follows will: will have been working.']],
-    ok: ['Teil 1: will have been, für die Dauer bis zu einem künftigen Zeitpunkt. Teil 2: working, die -ing-Form betont die laufende Tätigkeit.', 'Part 1: will have been, for the duration up to a future point. Part 2: working, the -ing form stresses the ongoing activity.'],
+    lead: 'In June it will be exactly two years since we started migrating our archive to the cloud.', key: 'BEEN',
+    before: 'By June we', after: 'our archive to the cloud for two years.', a: ['will have been'], b: ['migrating'], x: ['had', 'being', 'are'],
+    traps: [['will been migrating', 'Nach will steht have: will have been migrating.', 'Have follows will: will have been migrating.']],
+    ok: ['Teil 1: will have been, für die Dauer bis zu einem künftigen Zeitpunkt. Teil 2: migrating, die -ing-Form betont die laufende Tätigkeit.', 'Part 1: will have been, for the duration up to a future point. Part 2: migrating, the -ing form stresses the ongoing activity.'],
   },
 
   // ================= time-clauses =================
   {
-    k: 'ocl', p: 'tc.present-for-future', lv: 'B2', dom: 'biz', cls: 'aux', a: ['is'],
-    t: 'We will deploy the new release as soon as the test environment ___ stable again.',
+    k: 'ocl', p: 'tc.present-for-future', lv: 'B2', dom: 'biz', cls: 'aux', a: ['has'],
+    t: 'We will deploy the new release as soon as the test environment ___ been fixed.',
     c: {
-      will: 'Nach as soon as steht kein will; es gilt die Gegenwart. || No will follows as soon as; the present is used.',
-      was: 'was meint die Vergangenheit; der Satz spricht über die Zukunft. || was means the past, but the sentence is about the future.',
-      would: 'would steht nicht nach as soon as, wenn es um die Zukunft geht. || would does not follow as soon as when the future is meant.',
+      will: 'Nach as soon as steht kein will; hier gilt das Present Perfect. || No will follows as soon as; the present perfect is used here.',
+      was: 'was been gibt es nicht; vor been steht has, have oder had. || was been does not exist; been needs has, have or had.',
+      had: 'had been fixed meint die Vergangenheit; der Satz spricht über die Zukunft. || had been fixed means the past, but the sentence is about the future.',
     },
-    ok: 'Nach as soon as steht das Present Simple für die Zukunft: as soon as the environment is stable. || After as soon as the present simple stands for the future: as soon as the environment is stable.',
+    ok: 'Nach as soon as steht kein will: Present Perfect (has been fixed) für etwas, das bis dahin fertig sein muss. || No will follows as soon as: present perfect (has been fixed) for something that must be finished by then.',
   },
   {
     k: 'kwt', p: 'tc.present-perfect', lv: 'B2+', dom: 'biz',
     lead: 'We will not deploy anything before QA has finished its final regression tests.', key: 'UNTIL',
-    before: 'We will not deploy', after: '.', a: ['until'], b: ['QA has signed off'], v: [{ a: ['until'], b: ['QA signs off'] }], x: ['when', 'will', 'after'],
-    traps: [['until QA signed off', 'until verlangt hier has signed off (oder signs off), nicht das Past Simple.', 'until calls for has signed off (or signs off) here, not the past simple.']],
-    ok: ['Teil 1: until nennt die Bedingung. Teil 2: QA has signed off, nach until steht kein will, sondern das Present Perfect.', 'Part 1: until names the condition. Part 2: QA has signed off, no will follows until, but the present perfect.'],
+    before: 'We will not deploy anything', after: 'its final regression tests.', a: ['until'], b: ['QA has finished', 'QA finishes'], x: ['when', 'will', 'after'], tiles: ['QA', 'has', 'finished'],
+    traps: [['until QA will finish', 'Nach until steht kein will; es gilt das Present Perfect (has finished) oder die Gegenwart.', 'No will follows until; the present perfect (has finished) or the present is used.']],
+    ok: ['Teil 1: until nennt die Bedingung. Teil 2: QA has finished, nach until steht kein will, sondern das Present Perfect.', 'Part 1: until names the condition. Part 2: QA has finished, no will follows until, but the present perfect.'],
   },
   {
     k: 'err', p: 'tc.by-the-time', lv: 'B2', dom: 'life',
@@ -165,19 +165,19 @@ export const items = [
     c2: ['At the time meint den Zeitpunkt selbst, nicht „schon bis dahin fertig“.', 'At the time means the moment itself, not “already finished by then”.'],
   },
   {
-    k: 'ocl', p: 'tc.noun-clause', lv: 'B2+', dom: 'life', cls: 'aux', a: ['will'],
+    k: 'ocl', p: 'tc.noun-clause', lv: 'B2+', dom: 'life', cls: 'aux', a: ['will', 'would'],
     t: 'I do not know yet whether my landlord ___ accept a second tenant, but I will find out on Friday.',
     c: {
       is: 'is accept gibt es nicht; accept braucht -ing oder ein Hilfsverb wie will. || is accept does not exist; accept needs -ing or an auxiliary like will.',
       has: 'has accept gibt es nicht; has braucht das Partizip accepted. || has accept does not exist; has needs the participle accepted.',
       was: 'was accept gibt es nicht; der Satz ist auf die Zukunft gerichtet. || was accept does not exist; the sentence points to the future.',
     },
-    ok: 'Nach whether und if als Frage in einem Nebensatz bleibt will: whether the client will accept. || After whether and if as a question in a subordinate clause will stays: whether the client will accept.',
+    ok: 'Nach whether und if als Frage in einem Nebensatz bleibt will: whether the landlord will accept. || After whether and if as a question in a subordinate clause will stays: whether the client will accept.',
   },
   {
     k: 'kwt', p: 'tc.present-for-future', lv: 'B2', dom: 'biz',
     lead: 'The server will restart automatically at the end of the update.', key: 'WHEN',
-    before: 'The server will restart automatically', after: '.', a: ['when'], b: ['the update finishes'], x: ['finish', 'ends', 'finished'],
+    before: 'The server will restart automatically', after: '.', a: ['when'], b: ['the update finishes', 'the update ends', 'the update is finished', 'the update is complete', 'the update has finished', 'the update is over'], x: ['finish', 'will', 'begins'],
     traps: [['when the update will finish', 'Nach when steht kein will; die Gegenwart genügt: finishes.', 'No will follows when; the present is enough: finishes.']],
     ok: ['Teil 1: when leitet den Zeitsatz ein. Teil 2: the update finishes, nach when steht das Present Simple, auch für die Zukunft.', 'Part 1: when introduces the time clause. Part 2: the update finishes, the present simple follows when, even for the future.'],
   },
@@ -201,7 +201,7 @@ export const items = [
   {
     k: 'kwt', p: 'tc.present-perfect', lv: 'B2', dom: 'life',
     lead: 'I will leave the office at the end of the last meeting.', key: 'ONCE',
-    before: 'I will leave the office', after: '.', a: ['once'], b: ['the last meeting has ended'], v: [{ a: ['once'], b: ['the last meeting ends'] }], x: ['when', 'after', 'will'],
+    before: 'I will leave the office', after: '.', a: ['once'], b: ['the last meeting has ended', 'the last meeting is over', 'the last meeting has finished', 'the last meeting finishes'], v: [{ a: ['once'], b: ['the last meeting ends'] }], x: ['when', 'after', 'will'],
     traps: [['once the last meeting ended', 'once verlangt hier die Gegenwart (ends) oder has ended, nicht das Past Simple.', 'once calls for the present (ends) or has ended here, not the past simple.']],
     ok: ['Teil 1: once, so sagst du „sobald“. Teil 2: the last meeting has ended, nach once steht das Present Perfect (oder Present Simple), nie will.', 'Part 1: once, that is how you say “as soon as”. Part 2: the last meeting has ended, the present perfect (or present simple) follows once, never will.'],
   },
@@ -220,33 +220,33 @@ export const items = [
   {
     k: 'kwt', p: 'fp.about-to', lv: 'B2', dom: 'life',
     lead: 'I was on the point of leaving the house when the phone rang.', key: 'ABOUT',
-    before: 'I', after: 'the house when the phone rang.', a: ['was about'], b: ['to leave'], x: ['going', 'almost', 'leaving'],
+    before: 'I', after: 'the house when the phone rang.', a: ['was about', 'was just about'], b: ['to leave'], x: ['going', 'almost', 'leaving'],
     traps: [['was about leaving', 'about braucht to + Grundform: was about to leave.', 'about needs to + base form: was about to leave.']],
     ok: ['Teil 1: was about, so sagst du „war kurz davor“. Teil 2: to leave, nach about steht to und die Grundform.', 'Part 1: was about, that is how you say “was on the point of”. Part 2: to leave, about is followed by to and the base form.'],
   },
   {
     k: 'err', p: 'fp.would-narr', lv: 'B2+', dom: 'life',
-    text: 'In 2015 she joined a small start-up in Berlin and will later become its chief designer.',
-    bad: { span: 'will later become', fix: ['would later become'], ch: ['was later become', 'later will become'] },
+    text: 'In 2015 she joined a small startup in Berlin and will later become its chief designer.',
+    bad: { span: 'will later become', fix: ['would later become', 'later became'], ch: ['was later become', 'later will become'] },
     ok: ['Beim Erzählen aus der Vergangenheit heißt „später wurde“ would later become. will gehört zur Zukunft von heute aus.', 'When telling a story from the past, “later became” is would later become. will belongs to the future seen from today.'],
     c1: ['Nach was folgt ein Partizip oder -ing, nicht become.', 'A participle or -ing follows was, not become.'],
     c2: ['will bleibt hier in der falschen Zeit: Die Erzählung steht in der Vergangenheit.', 'will stays in the wrong tense here: the story is told in the past.'],
   },
   {
-    k: 'ocl', p: 'fp.was-to', lv: 'C1', dom: 'biz', cls: 'aux', a: ['was'],
-    t: 'The new office ___ to open in June, but the building permit was delayed by two months.',
+    k: 'ocl', p: 'fp.was-to', lv: 'C1', dom: 'biz', cls: 'aux', a: ['were'],
+    t: 'The two CEOs ___ to have signed the merger agreement on Friday, but the talks collapsed at the last minute.',
     c: {
-      is: 'is to open passt nicht zu was delayed; der Plan lag in der Vergangenheit. || is to open does not fit was delayed; the plan was in the past.',
-      did: 'did to open gibt es nicht. || did to open does not exist.',
-      will: 'will to open gibt es nicht; will braucht die Grundform ohne to. || will to open does not exist; will needs the base form without to.',
+      had: 'had to have signed meint eine Schlussfolgerung und passt nicht zu but the talks collapsed. || had to have signed expresses a deduction and does not fit but the talks collapsed.',
+      have: 'have to have signed meint eine Pflicht oder Folgerung, nicht den früheren Plan. || have to have signed expresses an obligation or deduction, not the earlier plan.',
+      did: 'did to have gibt es nicht. || did to have does not exist.',
     },
-    ok: 'was to + Grundform nennt einen Plan aus der Vergangenheit, der nicht klappte. || was to + base form names a plan from the past that did not work out.',
+    ok: 'were to have + Partizip nennt einen Plan aus der Vergangenheit, der nicht klappte. || were to have + participle names a plan from the past that did not work out.',
   },
   {
     k: 'kwt', p: 'fp.was-going', lv: 'B2', dom: 'biz',
-    lead: 'We had planned to publish the whitepaper in April, but the legal review took too long.', key: 'GOING',
-    before: 'We', after: 'the whitepaper in April, but the legal review took too long.', a: ['were going'], b: ['to publish'], x: ['had', 'plan', 'publishing'],
-    traps: [['are going to publish', 'Der Plan lag in der Vergangenheit: were going to.', 'The plan was in the past: were going to.']],
+    lead: 'We had planned to launch the new pricing page in April, but the legal review took too long.', key: 'GOING',
+    before: 'We', after: 'the new pricing page in April, but the legal review took too long.', a: ['were going'], b: ['to launch'], x: ['had', 'plan', 'launching'],
+    traps: [['are going to launch', 'Der Plan lag in der Vergangenheit: were going to.', 'The plan was in the past: were going to.']],
     ok: ['Teil 1: were going zeigt den früheren Plan. Teil 2: to publish, nach going to steht die Grundform.', 'Part 1: were going shows the earlier plan. Part 2: to publish, the base form follows going to.'],
   },
   {
@@ -258,18 +258,18 @@ export const items = [
   },
   {
     k: 'ocl', p: 'fp.would-narr', lv: 'B2+', dom: 'biz', cls: 'aux', a: ['would'],
-    t: 'In 2018 Dana joined our Zurich team, and she ___ later become the head of customer success.',
+    t: 'When we signed our first bank client in 2019, nobody knew it ___ become our biggest account.',
     c: {
       will: 'will gehört zur Zukunft von heute aus; die Erzählung steht in der Vergangenheit. || will belongs to the future seen from today; the story is told in the past.',
-      has: 'has braucht ein Partizip (become) und passt nicht zu later in der Erzählung. || has needs a participle (become) and does not fit later in the story.',
+      has: 'has braucht ein Partizip (become) und passt nicht zu knew in der Erzählung. || has needs a participle (become) and does not fit knew in the story.',
       is: 'is passt nicht zur Grundform become. || is does not fit the base form become.',
     },
-    ok: 'Beim Erzählen aus der Vergangenheit steht would für „später geschah“: she would later become. || When telling a story from the past, would stands for “later it happened”: she would later become.',
+    ok: 'Beim Erzählen aus der Vergangenheit steht would für „später geschah“: it would become. || When telling a story from the past, would stands for “later it happened”: it would become.',
   },
   {
     k: 'kwt', p: 'fp.was-to', lv: 'C1', dom: 'biz',
     lead: 'They planned to open the new data center in June, but a permit problem stopped it.', key: 'WAS',
-    before: 'The new data center', after: 'in June, but a permit problem stopped it.', a: ['was to'], b: ['open'], x: ['is', 'planned', 'would'],
+    before: 'The new data center', after: 'in June, but a permit problem stopped it.', a: ['was to', 'was going to', 'was supposed to', 'was due to', 'was meant to', 'was scheduled to'], b: ['open', 'be opened'], x: ['is', 'planned', 'would'],
     traps: [['was to opening', 'Nach was to steht die Grundform: open.', 'The base form follows was to: open.']],
     ok: ['Teil 1: was to, das nennt einen Plan aus der Vergangenheit. Teil 2: open, nach to steht die Grundform.', 'Part 1: was to, that names a plan from the past. Part 2: open, the base form follows to.'],
   },
@@ -279,7 +279,7 @@ export const items = [
     k: 'ocl', p: 'cp.within', lv: 'B2+', dom: 'life', cls: 'prep', a: ['within'],
     t: 'The airline promises to refund every canceled flight ___ seven days, even during the holiday season.',
     c: {
-      by: 'by seven days klingt nach „um sieben Tage“; die Frist braucht within. || by seven days sounds like “by seven days”; a time limit needs within.',
+      by: 'by seven days klingt nach „um sieben Tage“; die Frist braucht within. || by seven days means a difference of seven days, not a time limit; a time limit needs within.',
       during: 'during steht vor einer Phase (during the holidays), nicht vor einer Frist. || during goes before a phase (during the holidays), not before a limit.',
       until: 'until nennt ein Ende („bis“), keine Frist ab Eingang. || until names an end (“up to”), not a limit from receipt.',
     },
@@ -288,7 +288,7 @@ export const items = [
   {
     k: 'kwt', p: 'cp.as-of', lv: 'C1', dom: 'biz',
     lead: 'The new approval workflow will apply to all invoices from next Monday onward.', key: 'AS',
-    before: 'The new approval workflow applies to all invoices', after: '.', a: ['as of'], b: ['next Monday'], x: ['since', 'from', 'by'],
+    before: 'The new approval workflow applies to all invoices', after: '.', a: ['as of', 'as from'], b: ['next Monday'], x: ['since', 'by', 'until'], tiles: ['of', 'next', 'Monday'],
     traps: [['as of the next Monday', 'Vor einem Datum mit next steht kein the: as of next Monday.', 'No the stands before a date with next: as of next Monday.']],
     ok: ['Teil 1: as of nennt den Stichtag, ab dem etwas gilt. Teil 2: next Monday, ohne Artikel.', 'Part 1: as of names the key date from which something applies. Part 2: next Monday, without an article.'],
   },
@@ -313,7 +313,7 @@ export const items = [
   {
     k: 'kwt', p: 'cp.by-until', lv: 'B2+', dom: 'biz',
     lead: 'The offer is valid up to and including the last day of June.', key: 'UNTIL',
-    before: 'The offer is valid', after: '.', a: ['until'], b: ['the end of June'], x: ['by', 'within', 'during'],
+    before: 'The offer is valid', after: '.', a: ['until'], b: ['the end of June', 'the last day of June', 'June 30', 'June 30th', '30 June', 'the 30th of June'], x: ['by', 'within', 'during'], tiles: ['the', 'end', 'of', 'June'],
     traps: [['until end of June', 'Der Artikel fehlt: until the end of June.', 'The article is missing: until the end of June.']],
     ok: ['Teil 1: until nennt das Ende einer Zeit, in der das Angebot gilt. Teil 2: the end of June, mit Artikel.', 'Part 1: until names the end of a period in which the offer applies. Part 2: the end of June, with the article.'],
   },
@@ -326,7 +326,7 @@ export const items = [
     c2: ['percent to what gibt es nicht; ein Anteil braucht of.', 'percent to what does not exist; a share needs of.'],
   },
   {
-    k: 'ocl', p: 'cp.as-of', lv: 'B2+', dom: 'biz', cls: 'adv', a: ['As', 'as'],
+    k: 'ocl', p: 'cp.as-of', lv: 'B2+', dom: 'biz', cls: 'prep', a: ['As', 'as'],
     t: '___ of March 1, all customers will receive their invoices as electronic documents only.',
     c: {
       Since: 'Since of gibt es nicht; Since blickt zurück und braucht kein of. || Since of does not exist; Since looks back and needs no of.',
@@ -338,7 +338,7 @@ export const items = [
   {
     k: 'kwt', p: 'cp.multiples', lv: 'C1', dom: 'biz',
     lead: 'The new engine needs only half the time the old one needed for each invoice.', key: 'TWICE',
-    before: 'The new engine', after: 'the old one for each invoice.', a: ['is twice'], b: ['as fast as'], x: ['two', 'than', 'quicker'],
+    before: 'The new engine', after: 'the old one for each invoice.', a: ['is twice', 'works twice', 'runs twice'], b: ['as fast as', 'as quick as'], x: ['two', 'than', 'quicker'],
     traps: [['is twice faster than', 'Vielfache brauchen as … as: twice as fast as, nicht faster than.', 'Multiples need as … as: twice as fast as, not faster than.']],
     ok: ['Teil 1: is twice, so beginnst du ein Vielfaches. Teil 2: as fast as, as … as umschließt das Adjektiv.', 'Part 1: is twice, that is how you start a multiple. Part 2: as fast as, as … as surrounds the adjective.'],
   },

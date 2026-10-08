@@ -41,7 +41,8 @@
     "de": "Projektstatus im Lenkungskreis",
     "en": "Project status in the steering committee",
     "ex": [
-     "Since we went live in March, we've processed more than 1.2 million invoices, and we had already migrated the legacy archive before the audit started."
+     "Since we went live in March, we've processed more than 1.2 million invoices.",
+    "We had already migrated the legacy archive before the audit started."
     ]
    }
   },
@@ -79,7 +80,7 @@
    "weeks": 2.5,
    "use": {
     "de": "Roadmap-Termin beim Kunden",
-    "en": "Roadmap date with a customer",
+    "en": "Roadmap meeting with a customer",
     "ex": [
      "The e-invoicing module is due to launch in Q3, and by the end of the year we will have moved all customers to the new platform."
     ]
@@ -252,7 +253,7 @@
     "en": "Email to a prospect",
     "ex": [
      "Our solution prevents duplicate invoices from entering the approval workflow.",
-     "We look forward to hearing from you."
+     "We look forward to discussing how this fits your approval process."
     ]
    }
   },

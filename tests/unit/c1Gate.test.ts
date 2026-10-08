@@ -151,11 +151,11 @@ const POOL = gateFile.items as C1Item[];
 const KAP13 = programChapters().slice(0, 3);
 
 describe('Prüfungsvorrat Kapitel 1–3 (P43)', () => {
-  it('8 Aufgaben je Thema für alle 16 Themen der Kapitel 1–3, alle mit pool „gate“, nur freie Arten', () => {
+  it('mindestens 8 Aufgaben je Thema (Grundstock 8, dazu Ergänzungen ab 0829) für alle 16 Themen der Kapitel 1–3, alle mit pool „gate“, nur freie Arten', () => {
     const topics = KAP13.flatMap((c) => c.topics);
     expect(topics).toHaveLength(16);
-    expect(POOL).toHaveLength(128);
-    for (const t of topics) expect(gatePoolOf(POOL, t), t).toHaveLength(8);
+    expect(POOL).toHaveLength(135);
+    for (const t of topics) expect(gatePoolOf(POOL, t).length, t).toBeGreaterThanOrEqual(8);
     expect(POOL.every((i) => i.pool === 'gate' && isGateItem(i))).toBe(true);
     expect(new Set(POOL.map((i) => i.kind))).toEqual(new Set(['ocl', 'kwt', 'err']));
   });

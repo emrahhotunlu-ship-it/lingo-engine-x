@@ -3,11 +3,11 @@
 export const items = [
   // ================= pres-simple-cont =================
   {
-    k: 'ocl', p: 'psc.habit', lv: 'B2', dom: 'life', cls: 'aux', a: ['does'],
+    k: 'ocl', p: 'psc.habit', lv: 'B2', dom: 'life', cls: 'aux', a: ['does', 'did'],
     t: 'Why ___ your neighbor usually leave for work before six, even on cold winter mornings?',
     c: {
       is: 'is braucht -ing (leaving), hier steht aber die Grundform leave. || is needs -ing (leaving), but the sentence has the base form leave.',
-      did: 'did meint die Vergangenheit, usually zeigt aber eine Gewohnheit. || did means the past, but usually points to a habit.',
+      do: 'do passt zu I, you, we, they, nicht zu neighbor (Singular). || do goes with I, you, we, they, not with the singular neighbor.',
       will: 'will meint die Zukunft, usually beschreibt aber eine Gewohnheit. || will means the future, but usually describes a habit.',
     },
     ok: 'Gewohnheit in der Frage: does + Grundform. Zu neighbor (Singular) passt does. || A habit in a question takes does + base form. The singular neighbor goes with does.',
@@ -52,19 +52,19 @@ export const items = [
     c2: ['needs passt zu he/she/it, nicht zu we.', 'needs goes with he/she/it, not with we.'],
   },
   {
-    k: 'ocl', p: 'psc.state', lv: 'B2', dom: 'life', cls: 'aux', a: ['do'],
-    t: 'I ___ not recognize this number; could you tell me who is calling, please?',
+    k: 'ocl', p: 'psc.state', lv: 'B2', dom: 'biz', cls: 'aux', a: ['does'],
+    t: 'My manager ___ not believe in long meetings, so ours never last more than thirty minutes.',
     c: {
-      am: 'am not recognize gibt es nicht; recognize hat kein -ing. || am not recognize does not exist; recognize takes no -ing form.',
-      have: 'have braucht ein Partizip (recognized), nicht die Grundform. || have needs a participle (recognized), not the base form.',
-      is: 'is passt zu he/she/it, nicht zu I. || is goes with he/she/it, not with I.',
+      is: 'is not believe gibt es nicht; believe hat kein -ing. || is not believe does not exist; believe takes no -ing form.',
+      has: 'has braucht ein Partizip (believed), nicht die Grundform. || has needs a participle (believed), not the base form.',
+      do: 'manager ist Singular: do passt zu I, you, we, they. || manager is singular: do goes with I, you, we, they.',
     },
-    ok: 'recognize ist ein Zustandsverb: Present Simple mit do not, nie am recognizing. || recognize is a state verb: present simple with do not, never am recognizing.',
+    ok: 'believe ist ein Zustandsverb: Present Simple mit does not, nie is believing. || believe is a state verb: present simple with does not, never is believing.',
   },
   {
     k: 'kwt', p: 'psc.dual', lv: 'B2+', dom: 'life',
     lead: 'Few colleagues drink the new coffee in our kitchen because its flavor is rather bitter.', key: 'TASTES',
-    before: 'Few colleagues drink the new coffee in our kitchen because it', after: '.', a: ['tastes'], b: ['rather bitter', 'quite bitter'], x: ['tasting', 'is', 'flavors'],
+    before: 'Few colleagues drink the new coffee in our kitchen because it', after: '.', a: ['tastes'], b: ['rather bitter', 'quite bitter', 'pretty bitter', 'fairly bitter'], x: ['tasting', 'is', 'flavors'],
     traps: [['tastes rather bitterly', 'Nach tastes steht ein Adjektiv, kein Adverb: bitter, nicht bitterly.', 'After tastes comes an adjective, not an adverb: bitter, not bitterly.']],
     ok: ['Teil 1: tastes, denn „schmecken“ ist hier ein Zustandsverb ohne -ing. Teil 2: ein Adjektiv (rather bitter) beschreibt den Geschmack.', 'Part 1: tastes, because “to taste” is a state verb here, without -ing. Part 2: an adjective (rather bitter) describes the flavor.'],
   },
@@ -72,18 +72,18 @@ export const items = [
   // ================= past-simple-perfect =================
   {
     k: 'ocl', p: 'psp.finished-time', lv: 'B2', dom: 'life', cls: 'aux', a: ['did'],
-    t: 'My cousin ___ not attend the wedding in Munich last Saturday because her train was canceled.',
+    t: 'My cousin ___ not know about the wedding until last Saturday, so she could not book a train in time.',
     c: {
-      has: 'has braucht das Partizip (attended); last Saturday ist ein abgeschlossener Zeitpunkt. || has needs the participle (attended); last Saturday is a finished point in time.',
+      has: 'has braucht das Partizip (known); last Saturday ist ein abgeschlossener Zeitpunkt. || has needs the participle (known); last Saturday is a finished point in time.',
       does: 'does steht in der Gegenwart; last Saturday liegt in der Vergangenheit. || does is present tense; last Saturday is in the past.',
-      is: 'is not attend gibt es nicht; vor der Grundform steht did. || is not attend does not exist; the base form needs did.',
+      is: 'is not know gibt es nicht; vor der Grundform steht did. || is not know does not exist; the base form needs did.',
     },
     ok: 'Mit last Saturday steht das Past Simple: did not + Grundform. || With last Saturday the past simple is used: did not + base form.',
   },
   {
     k: 'kwt', p: 'psp.since-for', lv: 'B2', dom: 'biz',
     lead: 'Our company moved into this building at the start of 2020 and is still based here.', key: 'SINCE',
-    before: 'Our company', after: 'the start of 2020.', a: ['has been'], b: ['based here since'], v: [{ a: ['has been'], b: ['located here since'] }], x: ['for', 'was', 'lives'],
+    before: 'Our company', after: 'the start of 2020.', a: ['has been'], b: ['based here since', 'here since', 'in this building since'], v: [{ a: ['has been'], b: ['located here since'] }], x: ['for', 'was', 'lives'],
     traps: [['was based here since', 'Das Past Simple endet in der Vergangenheit; „seit“ bis heute braucht has been.', 'The past simple ends in the past; “since” up to now needs has been.'], ['is based here since', 'Deutsch sagt „ist seit … hier“ im Präsens. Englisch braucht has been.', 'German uses the present for “ist seit … hier”. English needs has been.']],
     ok: ['Teil 1: has been, weil die Lage bis heute dauert. Teil 2: since nennt den Startpunkt (Beginn von 2020).', 'Part 1: has been, because the situation lasts until today. Part 2: since names the starting point (the start of 2020).'],
   },
@@ -108,7 +108,7 @@ export const items = [
   {
     k: 'kwt', p: 'psp.finished-time', lv: 'B2', dom: 'biz',
     lead: 'At what exact time did the failure of the system happen?', key: 'WHEN',
-    before: '', after: 'exactly?', a: ['when did'], b: ['the system fail', 'the system failure happen'], x: ['has', 'failed', 'does'],
+    before: '', after: 'exactly?', a: ['when did'], b: ['the system fail', 'the system failure happen', 'the failure happen', 'the failure occur', 'the system failure occur'], x: ['has', 'failed', 'does'],
     traps: [['when has the system failed', 'Mit when fragst du nach einem Zeitpunkt, deshalb steht das Past Simple: did … fail.', 'With when you ask for a point in time, so the past simple is used: did … fail.']],
     ok: ['Teil 1: when did, denn when nennt einen abgeschlossenen Zeitpunkt. Teil 2: the system fail, nach did steht die Grundform.', 'Part 1: when did, because when names a finished point in time. Part 2: the system fail, the base form follows did.'],
   },
@@ -122,7 +122,7 @@ export const items = [
   },
   {
     k: 'ocl', p: 'psp.since-for', lv: 'B2', dom: 'biz', cls: 'prep', a: ['for'],
-    t: 'We have been using this document management system ___ more than six years without any major problem.',
+    t: 'We have been using this document management system ___ more than six years without any major problems.',
     c: {
       since: 'since nennt einen Startpunkt (since 2019), nicht eine Dauer wie six years. || since names a starting point (since 2019), not a length like six years.',
       during: 'during steht vor einer Phase (during the project), nicht vor einer Dauer. || during goes before a phase (during the project), not before a length of time.',
@@ -133,7 +133,7 @@ export const items = [
   {
     k: 'kwt', p: 'psp.since-for', lv: 'B2', dom: 'biz',
     lead: 'Nobody has complained about the new release up to now.', key: 'FAR',
-    before: 'There', after: 'about the new release.', a: ['have been'], b: ['no complaints so far', 'no complaints thus far'], x: ['had', 'any', 'yet'],
+    before: 'There', after: 'about the new release.', a: ['have been'], b: ['no complaints so far', 'no complaints thus far'], v: [{ a: ['have so far'], b: ['been no complaints'] }], x: ['had', 'any', 'yet'],
     traps: [['were no complaints so far', 'so far verlangt das Present Perfect: have been, nicht were.', 'so far calls for the present perfect: have been, not were.']],
     ok: ['Teil 1: have been, denn so far blickt bis jetzt. Teil 2: no complaints so far, so far = bis jetzt.', 'Part 1: have been, because so far looks up to now. Part 2: no complaints so far, so far = up to now.'],
   },
@@ -152,7 +152,7 @@ export const items = [
   {
     k: 'kwt', p: 'pc.since-for', lv: 'B2', dom: 'biz',
     lead: 'Our call with the client started twenty minutes ago and is still going.', key: 'FOR',
-    before: 'We', after: 'twenty minutes now.', a: ['have been talking'], b: ['for'], x: ['since', 'talked', 'are'],
+    before: 'We', after: 'twenty minutes now.', a: ['have been talking', 'have been speaking'], b: ['for'], v: [{ a: ['have been on the'], b: ['phone for', 'call for'] }], x: ['since', 'talked', 'are'],
     traps: [['are talking for', 'Deutsch sagt „wir sprechen seit 20 Minuten“ im Präsens. Englisch braucht have been talking.', 'German says “wir sprechen seit 20 Minuten” in the present. English needs have been talking.']],
     ok: ['Teil 1: have been talking, die Tätigkeit läuft noch. Teil 2: for + Dauer (twenty minutes).', 'Part 1: have been talking, the activity is still going on. Part 2: for + length of time (twenty minutes).'],
   },
@@ -175,8 +175,8 @@ export const items = [
   },
   {
     k: 'kwt', p: 'pc.state-verbs', lv: 'B2+', dom: 'biz',
-    lead: 'I met Dana in 2018, and I still know her.', key: 'SINCE',
-    before: 'I', after: '2018.', a: ['have known'], b: ['Dana since'], x: ['been', 'knowing', 'for'],
+    lead: 'I first met Dana in 2018.', key: 'SINCE',
+    before: 'I', after: '2018.', a: ['have known'], b: ['Dana since'], x: ['been', 'knowing', 'for'], tiles: ['have', 'known', 'Dana'],
     traps: [['know Dana since', 'Deutsch sagt „ich kenne sie seit …“ im Präsens. Englisch braucht have known.', 'German says “ich kenne sie seit …” in the present. English needs have known.'], ['have been knowing Dana since', 'know ist ein Zustandsverb und hat keine -ing-Form: have known.', 'know is a state verb and has no -ing form: have known.']],
     ok: ['Teil 1: have known, ein Zustandsverb steht im einfachen Present Perfect. Teil 2: Dana since, since nennt den Startpunkt.', 'Part 1: have known, a state verb uses the simple present perfect. Part 2: Dana since, since names the starting point.'],
   },

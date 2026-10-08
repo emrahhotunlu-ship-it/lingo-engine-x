@@ -14,17 +14,17 @@ export const items = [
   {
     k: 'kwt', p: 'pp.reported', lv: 'B2+', dom: 'biz',
     lead: 'On Monday my manager promised to send me the report the next day.', key: 'SAID',
-    before: 'My manager', after: 'the report the next day.', a: ['said she would', 'said he would'], b: ['send me'], v: [{ a: ['said that she', 'said that he'], b: ['would send me'] }], x: ['told', 'has', 'sends'],
+    before: 'My manager', after: 'the report the next day.', a: ['said she would', 'said he would', 'said they would'], b: ['send me'], v: [{ a: ['said that she', 'said that he'], b: ['would send me'] }], x: ['told', 'has', 'sends'],
     traps: [['said she will send me', 'In der berichteten Rede rückt will eine Stufe zurück: would.', 'In reported speech will moves one step back: would.']],
     ok: ['Teil 1: said she would, denn die Aussage lag in der Vergangenheit, deshalb rückt will zu would. Teil 2: send me, nach would folgt die Grundform.', 'Part 1: said she would, because the statement was in the past, so will moves back to would. Part 2: send me, the base form follows would.'],
   },
   {
     k: 'err', p: 'pp.duration', lv: 'B2+', dom: 'biz',
-    text: 'When the inspector arrived at nine, we were waiting for him since half past seven.',
-    bad: { span: 'were waiting', fix: ['had been waiting'], ch: ['have been waiting', 'waited'] },
-    ok: ['Eine Dauer bis zu einem Zeitpunkt in der Vergangenheit braucht had been + -ing: had been waiting since half past seven.', 'A length of time up to a point in the past needs had been + -ing: had been waiting since half past seven.'],
+    text: 'When the inspector arrived at nine, we were waiting for him since seven-thirty.',
+    bad: { span: 'were waiting', fix: ['had been waiting', 'had waited'], ch: ['have been waiting', 'waited'] },
+    ok: ['Eine Dauer bis zu einem Zeitpunkt in der Vergangenheit braucht had been + -ing: had been waiting since seven-thirty.', 'A length of time up to a point in the past needs had been + -ing: had been waiting since half past seven.'],
     c1: ['have been waiting gehört in die Gegenwart; die Erzählung steht aber in der Vergangenheit.', 'have been waiting belongs to the present, but the story is told in the past.'],
-    c2: ['Mit since und einer Dauer braucht es die Verlaufsform mit had been, nicht das einfache Past Simple.', 'With since and a length of time the continuous form with had been is needed, not the simple past.'],
+    c2: ['waited zeigt nicht, dass das Warten bis neun andauerte; mit since braucht es had (been).', 'waited does not show that the waiting lasted until nine; with since it needs had (been).'],
   },
   {
     k: 'ocl', p: 'pp.first-time', lv: 'B2', dom: 'life', cls: 'aux', a: ['had'],
@@ -56,7 +56,7 @@ export const items = [
     c: {
       did: 'did braucht die Grundform (finish), nicht finished. || did needs the base form (finish), not finished.',
       would: 'would braucht die Grundform (finish), nicht finished. || would needs the base form (finish), not finished.',
-      were: 'were already finished passt nicht zu we als Täter; es wäre ein Zustand statt einer Handlung. || were already finished does not fit we as the doers; it would be a state instead of an action.',
+      were: 'were finished + Objekt geht nicht; die Handlung braucht had finished. || were finished plus an object does not work; the action needs had finished.',
     },
     ok: 'Berichtete Frage in der Vergangenheit: had + Partizip (had already finished) für das Frühere. || A reported question in the past: had + participle (had already finished) for the earlier action.',
   },
@@ -71,18 +71,18 @@ export const items = [
   // ================= used-to =================
   {
     k: 'ocl', p: 'ut.used-to', lv: 'B2', dom: 'life', cls: 'aux', a: ['used'],
-    t: 'When I was a student, I ___ to cycle to the university every day, but now I take the bus.',
+    t: 'There ___ to be a small bakery on our street, but it closed years ago.',
     c: {
       use: 'In der bejahten Aussage heißt es used to, mit -d. || In a positive statement it is used to, with a -d.',
-      would: 'would to gibt es nicht; would steht ohne to direkt vor der Grundform. || would to does not exist; would comes directly before the base form without to.',
-      am: 'am to cycle passt nicht zur Vergangenheit (When I was a student). || am to cycle does not fit the past (When I was a student).',
+      would: 'would to gibt es nicht; und would passt nicht zu There ... to be. || would to does not exist; and would does not fit There ... to be.',
+      am: 'am to be passt nicht zu There und nicht zur Vergangenheit. || am to be fits neither There nor the past.',
     },
-    ok: 'used to + Grundform beschreibt eine frühere Gewohnheit, die heute nicht mehr gilt. || used to + base form describes an earlier habit that no longer applies today.',
+    ok: 'used to + Grundform beschreibt einen früheren Zustand, den es heute nicht mehr gibt. || used to + base form describes an earlier state that no longer exists today.',
   },
   {
     k: 'kwt', p: 'ut.be-used-to', lv: 'B2+', dom: 'biz',
     lead: 'Working under constant time pressure no longer feels strange to me.', key: 'USED',
-    before: 'I', after: 'under constant time pressure.', a: ['am used to'], b: ['working'], x: ['get', 'would', 'did'],
+    before: 'I', after: 'under constant time pressure.', a: ['am used to'], b: ['working'], v: [{ a: ['have gotten', "'ve gotten", 'have got', "'ve got", 'have become', "'ve become"], b: ['used to working'] }], x: ['get', 'would', 'did'],
     traps: [['am used to work', 'Nach be used to folgt die -ing-Form: working.', 'After be used to the -ing form follows: working.'], ['used to work', 'used to + Grundform meint früher; be used to + -ing meint gewohnt sein.', 'used to + base form means formerly; be used to + -ing means being accustomed.']],
     ok: ['Teil 1: am used to, so sagst du „ich bin es gewohnt“. Teil 2: working, nach used to steht hier die -ing-Form, weil to eine Präposition ist.', 'Part 1: am used to, that is how you say “I am accustomed to it”. Part 2: working, the -ing form follows because to is a preposition here.'],
   },
@@ -106,8 +106,8 @@ export const items = [
   },
   {
     k: 'kwt', p: 'ut.would', lv: 'B2+', dom: 'life',
-    lead: 'Every summer in my childhood, we frequently drove to the lake at weekends.', key: 'WOULD',
-    before: 'Every summer in my childhood, we', after: 'to the lake at weekends.', a: ['would often', 'would regularly', 'would frequently'], b: ['drive'], x: ['used', 'driving', 'were'],
+    lead: 'Every summer in my childhood, we frequently drove to the lake on weekends.', key: 'WOULD',
+    before: 'Every summer in my childhood, we', after: 'to the lake on weekends.', a: ['would often', 'would regularly', 'would frequently'], b: ['drive'], x: ['used', 'driving', 'were'],
     traps: [['often would drive', 'Bei would steht das Häufigkeitswort danach: would often drive.', 'With would the frequency word comes after it: would often drive.']],
     ok: ['Teil 1: would often, so erzählst du wiederholte Handlungen in der Vergangenheit. Teil 2: drive, nach would steht die Grundform.', 'Part 1: would often, that is how you tell repeated actions in the past. Part 2: drive, the base form follows would.'],
   },
@@ -131,16 +131,16 @@ export const items = [
   },
   {
     k: 'kwt', p: 'ut.used-to', lv: 'B2', dom: 'biz',
-    lead: 'Years ago our company produced paper files, but now everything is digital.', key: 'USED',
-    before: 'Our company', after: 'paper files, but now everything is digital.', a: ['used to'], b: ['produce'], x: ['would', 'did', 'use'],
-    traps: [['used to producing', 'Nach used to steht die Grundform: produce.', 'After used to the base form follows: produce.'], ['was used to produce', 'was used to + -ing meint gewohnt sein; früher heißt used to + Grundform.', 'was used to + -ing means being accustomed; formerly is used to + base form.']],
-    ok: ['Teil 1: used to, für eine frühere Gewohnheit oder einen früheren Zustand. Teil 2: produce, die Grundform.', 'Part 1: used to, for an earlier habit or state. Part 2: produce, the base form.'],
+    lead: 'Years ago our company kept all its records in paper files, but now everything is digital.', key: 'USED',
+    before: 'Our company', after: 'all its records in paper files, but now everything is digital.', a: ['used to'], b: ['keep'], x: ['would', 'did', 'use'],
+    traps: [['used to keeping', 'Nach used to steht die Grundform: keep.', 'After used to the base form follows: keep.'], ['was used to keep', 'was used to + -ing meint gewohnt sein; früher heißt used to + Grundform.', 'was used to + -ing means being accustomed; formerly is used to + base form.']],
+    ok: ['Teil 1: used to, für eine frühere Gewohnheit oder einen früheren Zustand. Teil 2: keep, die Grundform.', 'Part 1: used to, for an earlier habit or state. Part 2: keep, the base form.'],
   },
 
   // ================= prep-time =================
   {
-    k: 'ocl', p: 'pt.at-on-in', lv: 'B2', dom: 'life', cls: 'prep', a: ['on'],
-    t: 'Our family reunion is scheduled ___ the last Saturday of August, right after the school holidays end.',
+    k: 'ocl', p: 'pt.at-on-in', lv: 'B2', dom: 'life', cls: 'prep', a: ['on', 'for'],
+    t: 'Our family reunion is scheduled ___ the last Saturday of August, right after the summer break ends.',
     c: {
       at: 'at steht bei Uhrzeiten (at 3 p.m.), nicht bei Tagen. || at is used with clock times (at 3 p.m.), not with days.',
       in: 'in steht bei Monaten und Jahren (in August), nicht bei einem bestimmten Tag. || in is used with months and years (in August), not with a specific day.',
@@ -150,8 +150,8 @@ export const items = [
   },
   {
     k: 'kwt', p: 'pt.by-until', lv: 'B2', dom: 'biz',
-    lead: 'Please do not send the signed contract after Thursday.', key: 'BY',
-    before: 'Please send the signed contract', after: '.', a: ['by'], b: ['Thursday at the latest'], x: ['until', 'within', 'on'],
+    lead: 'Please send the signed contract no later than Thursday.', key: 'BY',
+    before: 'Please send the signed contract', after: '.', a: ['by'], b: ['Thursday at the latest'], x: ['until', 'within', 'on'], tiles: ['Thursday', 'at', 'the', 'latest'],
     traps: [['by Thursday latest', 'Die feste Wendung heißt at the latest: by Thursday at the latest.', 'The fixed phrase is at the latest: by Thursday at the latest.']],
     ok: ['Teil 1: by nennt die Frist („bis spätestens“). Teil 2: Thursday at the latest, „spätestens“ heißt at the latest.', 'Part 1: by names the deadline (“no later than”). Part 2: Thursday at the latest, “spätestens” is at the latest.'],
   },
@@ -182,15 +182,15 @@ export const items = [
   },
   {
     k: 'err', p: 'pt.at-on-in', lv: 'B2', dom: 'biz',
-    text: 'The new regulation will come into force at January 1, so we must update our contracts.',
+    text: 'The new regulation will take effect at January 1, so we must update our contracts.',
     bad: { span: 'at January 1', fix: ['on January 1'], ch: ['in January 1', 'at the January 1'] },
     ok: ['Mit einem bestimmten Datum steht on: on January 1. at gehört zu Uhrzeiten.', 'With a specific date on is used: on January 1. at belongs to clock times.'],
     c1: ['in steht bei Monaten (in January), nicht bei einem einzelnen Datum.', 'in is used with months (in January), not with a single date.'],
     c2: ['at the January 1 ist keine übliche Form; at gehört zu Uhrzeiten.', 'at the January 1 is not a normal form; at belongs to clock times.'],
   },
   {
-    k: 'ocl', p: 'pt.by-until', lv: 'B2', dom: 'life', cls: 'prep', a: ['until', 'till'],
-    t: 'I will be away on holiday ___ the end of August, so please do not schedule anything before then.',
+    k: 'ocl', p: 'pt.by-until', lv: 'B2', dom: 'life', cls: 'prep', a: ['until', 'till', 'through'],
+    t: 'I will be away on vacation ___ the end of August, so please do not schedule anything before then.',
     c: {
       by: 'by nennt eine Frist („spätestens bis“), until die Dauer („die ganze Zeit bis“). || by names a deadline (“no later than”), until a duration (“the whole time up to”).',
       within: 'within braucht eine Zeitspanne (within two weeks), keinen Zeitpunkt. || within needs a span (within two weeks), not a point in time.',
@@ -201,9 +201,9 @@ export const items = [
   {
     k: 'kwt', p: 'pt.for-since', lv: 'B2', dom: 'biz',
     lead: 'We started working with this supplier eight years ago and still do.', key: 'FOR',
-    before: 'We', after: 'eight years.', a: ['have worked'], b: ['with this supplier for'], x: ['since', 'are', 'during'],
-    traps: [['worked with this supplier for', 'Das Past Simple endet in der Vergangenheit; die Dauer bis heute braucht have worked.', 'The past simple ends in the past; a duration up to now needs have worked.']],
-    ok: ['Teil 1: have worked, weil die Zusammenarbeit bis heute dauert. Teil 2: for + Dauer (eight years).', 'Part 1: have worked, because the cooperation lasts until today. Part 2: for + length of time (eight years).'],
+    before: 'We', after: 'eight years.', a: ['have worked', 'have been working'], b: ['together for'], x: ['since', 'are', 'during'],
+    traps: [['worked together for', 'Das Past Simple endet in der Vergangenheit; die Dauer bis heute braucht have worked.', 'The past simple ends in the past; a duration up to now needs have worked.']],
+    ok: ['Teil 1: have worked, weil die Zusammenarbeit bis heute dauert. Teil 2: together for + Dauer (eight years).', 'Part 1: have worked, because the cooperation lasts until today. Part 2: together for + length of time (eight years).'],
   },
 
   // ================= stative-adv =================
@@ -219,10 +219,10 @@ export const items = [
   },
   {
     k: 'kwt', p: 'sa.soft', lv: 'B2', dom: 'biz',
-    lead: 'Please send me the updated figures before the call.', key: 'WONDERING',
-    before: 'I', after: 'send me the updated figures before the call.', a: ['was wondering'], b: ['if you could'], x: ['asked', 'will', 'would'],
-    traps: [['was wondering could you', 'Nach I was wondering folgt if oder whether, keine Frageform.', 'After I was wondering comes if or whether, not a question form.']],
-    ok: ['Teil 1: was wondering macht die Bitte weich und höflich. Teil 2: if you could, danach folgt ein Nebensatz mit normaler Wortstellung.', 'Part 1: was wondering makes the request soft and polite. Part 2: if you could, a clause with normal word order follows.'],
+    lead: 'Please send me the updated figures before the call.', key: 'HOPING',
+    before: 'I', after: 'send me the updated figures before the call.', a: ['was hoping'], b: ['you could', 'that you could', 'you would', 'that you would'], x: ['asked', 'will', 'wish'],
+    traps: [['was hoping could you', 'Nach I was hoping folgt ein Nebensatz mit normaler Wortstellung: you could.', 'A clause with normal word order follows I was hoping: you could.']],
+    ok: ['Teil 1: was hoping macht die Bitte weich und höflich. Teil 2: you could, danach folgt ein Nebensatz mit normaler Wortstellung.', 'Part 1: was hoping makes the request soft and polite. Part 2: you could, a clause with normal word order follows.'],
   },
   {
     k: 'err', p: 'sa.no-ing', lv: 'B2', dom: 'biz',
@@ -234,7 +234,7 @@ export const items = [
   },
   {
     k: 'ocl', p: 'sa.being', lv: 'B2+', dom: 'life', cls: 'aux', a: ['is'],
-    t: 'Please ignore Tom today; he ___ being unusually rude because of the pressure at work.',
+    t: 'Please be patient with Tom today; he ___ being unusually rude because of the pressure at work.',
     c: {
       has: 'has being gibt es nicht; has braucht ein Partizip (been). || has being does not exist; has needs a participle (been).',
       does: 'does braucht die Grundform (be), nicht being. || does needs the base form (be), not being.',
@@ -244,8 +244,8 @@ export const items = [
   },
   {
     k: 'kwt', p: 'sa.trend', lv: 'B2', dom: 'biz',
-    lead: 'These days our competitors become more aggressive with their pricing.', key: 'GETTING',
-    before: 'Our competitors', after: 'with their pricing.', a: ['are getting'], b: ['more aggressive'], x: ['become', 'were', 'gets'],
+    lead: "Our competitors' pricing is becoming increasingly aggressive these days.", key: 'GETTING',
+    before: 'Our competitors', after: 'with their pricing.', a: ['are getting'], b: ['more aggressive', 'increasingly aggressive', 'more and more aggressive'], x: ['become', 'were', 'gets'],
     traps: [['is getting more aggressive', 'competitors ist Plural: are getting, nicht is getting.', 'competitors is plural: are getting, not is getting.']],
     ok: ['Teil 1: are getting beschreibt eine Veränderung, die gerade läuft. Teil 2: more aggressive, danach steht der Komparativ.', 'Part 1: are getting describes a change that is going on right now. Part 2: more aggressive, the comparative follows.'],
   },
@@ -258,7 +258,7 @@ export const items = [
   },
   {
     k: 'ocl', p: 'sa.no-ing', lv: 'B2', dom: 'biz', cls: 'aux', a: ['does'],
-    t: 'The client ___ not want a printed version of the final report; a PDF by e-mail is enough.',
+    t: 'The client ___ not want a printed version of the final report; a PDF by email is enough.',
     c: {
       is: 'is not want gibt es nicht; want hat keine -ing-Form. || is not want does not exist; want takes no -ing form.',
       do: 'client ist Singular: do passt zu I, you, we, they. || client is singular: do goes with I, you, we, they.',
@@ -268,7 +268,7 @@ export const items = [
   },
   {
     k: 'kwt', p: 'sa.being', lv: 'B2+', dom: 'life',
-    lead: 'My brother behaves in a very selfish way at the moment.', key: 'BEING',
+    lead: 'My brother is behaving very selfishly at the moment.', key: 'BEING',
     before: 'My brother', after: 'at the moment.', a: ['is being'], b: ['very selfish'], x: ['has', 'selfishly', 'been'],
     traps: [['being very selfish', 'Ohne is fehlt das Hilfsverb: is being very selfish.', 'Without is the auxiliary is missing: is being very selfish.']],
     ok: ['Teil 1: is being drückt aus, dass er sich gerade so verhält. Teil 2: very selfish, danach steht ein Adjektiv.', 'Part 1: is being expresses that he is behaving that way right now. Part 2: very selfish, an adjective follows.'],

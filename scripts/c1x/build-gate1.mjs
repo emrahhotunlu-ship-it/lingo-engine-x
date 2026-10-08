@@ -270,8 +270,10 @@ for (const f of files) {
   for (const s of m.items) sources.push({ ...s, _file: f });
 }
 const built = [];
-sources.forEach((s, i) => {
-  const id = `${s.k}-${String(START + i).padStart(4, '0')}`;
+// Ergänzungen tragen eine feste Nummer (`n`, ab 0829) und stehen hinter den 8 Grundaufgaben je Thema; die Grundaufgaben zählen fortlaufend ab 0701.
+let baseN = 0;
+sources.forEach((s) => {
+  const id = `${s.k}-${String(s.n ?? START + baseN++).padStart(4, '0')}`;
   try {
     built.push(s.k === 'ocl' ? buildOcl(s, id) : s.k === 'kwt' ? buildKwt(s, id) : buildErr(s, id));
   } catch (e) {
@@ -281,7 +283,8 @@ sources.forEach((s, i) => {
 
 // Aufbau: 8 je Thema in KIND_ORDER, jedes Thema der Liste, in der Reihenfolge der Liste.
 const byTopic = new Map();
-for (const it of built) byTopic.set(it.topic, [...(byTopic.get(it.topic) ?? []), it]);
+const extraIds = new Set(sources.filter((x) => x.n !== undefined).map((x, i) => `${x.k}-${String(x.n).padStart(4, '0')}`));
+for (const it of built) if (!extraIds.has(it.id)) byTopic.set(it.topic, [...(byTopic.get(it.topic) ?? []), it]);
 for (const t of TOPICS) {
   const list = byTopic.get(t) ?? [];
   if (list.length !== 8) fail(t, `${list.length} statt 8 Aufgaben`);
@@ -292,11 +295,13 @@ for (const t of TOPICS) {
   }
 }
 for (const t of byTopic.keys()) if (!TOPICS.includes(t)) fail(t, 'Thema nicht in der Liste');
-const order = built.map((x) => x.topic);
+const order = built.filter((x) => !extraIds.has(x.id)).map((x) => x.topic);
 const topicOrder = TOPICS.flatMap((t) => order.filter((x) => x === t));
 if (JSON.stringify(order) !== JSON.stringify(topicOrder)) fail('Reihenfolge', 'Aufgaben müssen nach der Themenliste geordnet stehen');
 
 const errs = built.filter((x) => x.kind === 'err');
+const ids = built.map((x) => x.id);
+if (new Set(ids).size !== ids.length) fail('ids', 'doppelte Kennung');
 const free = errs.filter((x) => !x.bad).length;
 if (free < FREE_ERR_TARGET[0] || free > FREE_ERR_TARGET[1]) fail('err', `${free} fehlerfreie von ${errs.length} (Ziel ${FREE_ERR_TARGET[0]}–${FREE_ERR_TARGET[1]})`);
 const posCount = [0, 0, 0];
