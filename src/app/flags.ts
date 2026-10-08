@@ -15,7 +15,7 @@ export type Flags = {
   program: boolean;
   /** „Weg zu C1“ im Fortschritt (Slot `progress.head`) und die Einschätzung assess@4 (P44/P45). */
   way: boolean;
-  tutor: { explain: boolean; gen: boolean; diagnose: boolean; clinic: boolean };
+  tutor: { explain: boolean; gen: boolean; diagnose: boolean; clinic: boolean; write: boolean };
   fx: { moments: boolean; rings: boolean; sparks: boolean; field: boolean; sky: boolean; film: boolean };
 };
 
@@ -26,7 +26,7 @@ export const flags: Flags = {
   c1check: true,
   program: true,
   way: true,
-  tutor: { explain: false, gen: false, diagnose: false, clinic: false },
+  tutor: { explain: false, gen: false, diagnose: false, clinic: true, write: false },
   fx: { moments: false, rings: false, sparks: false, field: false, sky: true, film: true },
 };
 
@@ -49,10 +49,11 @@ export function applyFlagOverrides(raw: string | null): void {
         if (k === 'program') flags.program = true;
         if (k === 'way') flags.way = true;
         if (k === 'sky' || k === 'film') flags.fx[k] = true;
+        if (k === 'clinic' || k === 'write') flags.tutor[k] = true;
       }
       return;
     }
-    const o = JSON.parse(t) as { c1xKinds?: Record<string, unknown>; tempo?: unknown; slotPlan?: unknown; c1check?: unknown; program?: unknown; way?: unknown; fx?: Record<string, unknown> };
+    const o = JSON.parse(t) as { c1xKinds?: Record<string, unknown>; tempo?: unknown; slotPlan?: unknown; c1check?: unknown; program?: unknown; way?: unknown; fx?: Record<string, unknown>; tutor?: Record<string, unknown> };
     for (const k of kinds) if (typeof o.c1xKinds?.[k] === 'boolean') flags.c1xKinds[k] = o.c1xKinds[k];
     if (typeof o.slotPlan === 'boolean') flags.slotPlan = o.slotPlan;
     if (typeof o.tempo === 'boolean') flags.tempo = o.tempo;
@@ -60,6 +61,7 @@ export function applyFlagOverrides(raw: string | null): void {
     if (typeof o.program === 'boolean') flags.program = o.program;
     if (typeof o.way === 'boolean') flags.way = o.way;
     for (const k of Object.keys(flags.fx) as (keyof Flags['fx'])[]) if (typeof o.fx?.[k] === 'boolean') flags.fx[k] = o.fx[k];
+    for (const k of Object.keys(flags.tutor) as (keyof Flags['tutor'])[]) if (typeof o.tutor?.[k] === 'boolean') flags.tutor[k] = o.tutor[k];
   } catch {
     // Ungültige Übersteuerung: die eingebauten Schalter gelten.
   }

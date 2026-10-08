@@ -3,6 +3,7 @@ import { comboCheck } from './comboCheck';
 import { listenQ } from './listenQ';
 import { orderGen } from './orderGen';
 import { explainAnswerV2 } from './explainAnswerV2';
+import { sentenceClinic } from './sentenceClinic';
 import { grammarItems } from './grammarItems';
 import { grammarJudge } from './grammarJudge';
 import { mnemonic } from './mnemonic';
@@ -65,6 +66,8 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   memoryExtract,
   // Lernplattform 2.0 P6: „War das auch richtig?“
   synonymCheck,
+  // Lernplattform 3.0 P46: Satz-Klinik
+  sentenceClinic,
 ];
 
 /** Gesprächsvorlagen (Freitext, gestreamt über src/ai/stream.ts; Phase 3 und 5). */

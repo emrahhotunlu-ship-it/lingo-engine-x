@@ -15,8 +15,8 @@ export const REPAIR_MAX = 150;
 export const REPAIR_TEXT_MAX = 300;
 export const REPAIR_WHY_MAX = 200;
 
-/** `fluency` = Flüssigkeit 90 – 60 – 45 (V6), `pattern` = Deutsch-Fallen (V3), `tone` = drei Tonlagen (Vorschlag 8), `check` = C1-Check (LP3 P40). */
-export type RepairSrc = 'say' | 'talk' | 'write' | 'preply' | 'teacher' | 'lesson' | 'fluency' | 'pattern' | 'tone' | 'check';
+/** `fluency` = Flüssigkeit 90 – 60 – 45 (V6), `pattern` = Deutsch-Fallen (V3), `tone` = drei Tonlagen (Vorschlag 8), `check` = C1-Check (LP3 P40), `clinic` = Satz-Klinik (LP3 P46). */
+export type RepairSrc = 'say' | 'talk' | 'write' | 'preply' | 'teacher' | 'lesson' | 'fluency' | 'pattern' | 'tone' | 'check' | 'clinic';
 
 export type RepairItem = {
   id: string;
@@ -38,9 +38,11 @@ export type RepairItem = {
   last?: number;
   /** Die korrigierten Stellen (Teilstücke von `right`), für die lokale Prüfung. */
   fix?: string[];
+  /** Muster (Kennung aus der Grammatik, LP3 P46/P47), falls Claude eines genannt hat und es existiert. */
+  pat?: string;
 };
 
-export type NewRepair = { wrong: string; right: string; why?: string | null; src: RepairSrc; ctx?: string | null; fix?: readonly string[] | null };
+export type NewRepair = { wrong: string; right: string; why?: string | null; src: RepairSrc; ctx?: string | null; fix?: readonly string[] | null; pat?: string | null };
 
 const str = (v: unknown): string => (typeof v === 'string' ? v : '');
 const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
@@ -135,6 +137,7 @@ export function addRepairs(list: readonly RepairItem[], add: readonly NewRepair[
       src: a.src,
       ...(a.ctx?.trim() ? { ctx: clip(a.ctx.trim(), 120) } : {}),
       ...(fix ? { fix } : {}),
+      ...(a.pat?.trim() ? { pat: clip(a.pat.trim(), 40) } : {}),
       t: nowMs,
       box: 0,
       due: addLocalDays(nowMs, 1),

@@ -1,7 +1,7 @@
 import { getWriter } from '../../data';
 import { validateDoc } from '../../data/validate';
 import { reviewError } from '../../domain/grammar/errors';
-import { addRepairs, readRepairs, reviewRepair, type NewRepair, type RepairItem } from '../../domain/repair/repair';
+import { addRepairs, readRepairs, repairId, reviewRepair, type NewRepair, type RepairItem } from '../../domain/repair/repair';
 import { logError } from '../../platform/diagnostics';
 
 // Schreibwege für `app/repair` (Lernberatung 27.09., V2): immer ein `transform` auf dem frischen
@@ -87,6 +87,33 @@ export async function recordGrammarError(topic: string, errorT: number, ok: bool
     return true;
   } catch (err) {
     logError('repair:grammar', err, path);
+    return false;
+  }
+}
+
+/**
+ * Gemeldete Claude-Fehlersätze (Lernplattform 3.0 P46/P47) aus der Wiederholung nehmen: Der Eintrag wird `done` (erledigt), nie gelöscht.
+ * `wrongs` sind die falschen Sätze, aus denen die Einträge entstanden sind (die Kennung ist daraus abgeleitet); nur Einträge der genannten
+ * Herkunft (`src`). `true` = geschrieben oder nichts zu tun.
+ */
+export async function retireRepairs(wrongs: readonly string[], src: string): Promise<boolean> {
+  const writer = getWriter();
+  if (!writer || !wrongs.length) return false;
+  const ids = new Set(wrongs.map((w) => repairId(w.trim())));
+  try {
+    await writer.transform(REPAIR_PATH, (cur) => {
+      if (!cur || !writable(cur)) return null;
+      let changed = false;
+      const next = readRepairs(cur).map((e) => {
+        if (!ids.has(e.id) || e.src !== src || e.done === true) return e;
+        changed = true;
+        return { ...e, done: true };
+      });
+      return changed ? opFor(cur, next) : null;
+    });
+    return true;
+  } catch (err) {
+    logError('repair:retire', err);
     return false;
   }
 }

@@ -19,7 +19,9 @@ export const OUT_FIELD_MAX_BYTES = 2048;
 
 export type OutKind = 'colloc' | 'transform' | 'wordform' | 'register' | 'phrasal' | 'transition' | 'objection' | 'hotseat' | 'buytime' | 'inbox' | 'shadow' | 'stress' | 'numbers'
   // Lernplattform 3.0 (§3.4): Verlauf der Lexik-Arten des Aufgabensystems c1x.
-  | 'mcc' | 'wf' | 'cnet';
+  | 'mcc' | 'wf' | 'cnet'
+  // Lernplattform 3.0 (KI-Tutor): Satz-Klinik (P46) und Wochen-Mail (P47).
+  | 'clinic' | 'c1mail';
 
 export type OutItem = {
   id: string;

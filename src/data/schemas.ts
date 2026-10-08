@@ -65,7 +65,7 @@ export const levelsSchema = z.looseObject({ v: num, k: z.record(z.string(), z.un
 
 export const repairSchema = z.looseObject({
   items: z
-    .array(z.looseObject({ id: str, wrong: str, right: str, why: str, src: str, ctx: str, t: num, box: num, due: num, done: bool, last: num, fix: strArr }))
+    .array(z.looseObject({ id: str, wrong: str, right: str, why: str, src: str, ctx: str, t: num, box: num, due: num, done: bool, last: num, fix: strArr, pat: str }))
     .nullish(),
 });
 
@@ -116,6 +116,8 @@ export const profileSchema = z.looseObject({
   name: str,
   created: str,
   ctx: str,
+  /** Neu ab Lernplattform 3.0 (P46, KT T4): Berufsprofil `{v: 1, role, field, who[], sit[], terms[], t}` (≤ 1 KB). `ctx` bleibt unverändert. */
+  ctx2: z.looseObject({ v: num, role: str, field: str, who: loose, sit: loose, terms: loose, t: num }).nullish(),
   ctxChecked: bool,
   lang: str,
   voice: str,
