@@ -41,7 +41,7 @@ export function PlacementCard() {
           </h2>
           <p className="text-sm text-muted">{t('pxPlCardText')}</p>
           <div className="flex flex-wrap gap-2">
-            <Button variant="primary" onClick={() => setOpen(true)} data-testid="place-start">
+            <Button variant="secondary" onClick={() => setOpen(true)} data-testid="place-start">
               {t('pxPlCardStart')}
             </Button>
             <Button

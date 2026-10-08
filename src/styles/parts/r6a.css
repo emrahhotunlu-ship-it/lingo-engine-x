@@ -74,8 +74,21 @@ html[data-ambient] body::before {
 .lx-dayring svg {
   overflow: visible;
 }
-.lx-dayring[data-closed='true'] .lx-dayring-fill {
+.lx-dayring-whole {
   filter: drop-shadow(0 0 6px color-mix(in srgb, var(--lx-ok) 35%, transparent));
+}
+/* Tagesmoment: die Lücken schließen sich – der ganze Ring blendet aus den Bogen herein. */
+.lx-dayring[data-play] .lx-dayring-whole {
+  animation: lx-dayring-close 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes lx-dayring-close {
+  from {
+    opacity: 0.55;
+    stroke-width: 4px;
+  }
+}
+:root[data-fx='off'] .lx-dayring-whole {
+  animation: none;
 }
 :root[data-fx='off'] .lx-dayring-fill {
   transition: none;
@@ -83,6 +96,9 @@ html[data-ambient] body::before {
 @media (prefers-reduced-motion: reduce) {
   .lx-dayring-fill {
     transition: opacity 150ms ease-out;
+  }
+  .lx-dayring-whole {
+    animation: none;
   }
 }
 /* Die Funken des Tagesmoments kommen jetzt aus der Effekt-Ebene (16 Funken, P56); die CSS-Funken würden sie verdoppeln. */

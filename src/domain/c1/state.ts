@@ -1,3 +1,4 @@
+import { topicState } from '../grammar/path';
 import { patternsOf } from '../grammar/patterns';
 import { currentChapter, type PatInfo } from '../grammar/slotPlan';
 import { patternState, patternStateNo, patsOf, type PatEntry } from '../metrics/pattern';
@@ -19,6 +20,8 @@ export type TopicProgress = {
   patTotal: number;
   /** Mindestens ein Muster ist eingeführt oder geübt. */
   introduced: boolean;
+  /** Thema „sicher“ (Sicher oder Fest) – dieselbe Regel wie der Lernpfad (`features/grammar/chapters.ts`), Heute und Fortschritt. */
+  safe: boolean;
 };
 
 export type ChapterProgress = {
@@ -31,6 +34,8 @@ export type ChapterProgress = {
   /** Muster mit Zustand Sicher oder Fest / alle Muster der vorhandenen Themen. */
   patSafe: number;
   patTotal: number;
+  /** Sichere Themen (UX-Prüfung B2: EINE Maßeinheit im Reiter, wie Heute und Fortschritt: „a von b Themen sicher“). */
+  topicSafe: number;
   /** Eingeführte / vorhandene Themen. */
   introduced: number;
   liveTopics: number;
@@ -46,10 +51,20 @@ export type ChapterStateResult = {
   current: number;
 };
 
+/** Wie `chapterNodes`: Zustand Sicher/Fest, aber ohne ein einziges sicheres Muster gilt ein Thema mit Mustern nie als sicher. */
+function topicSafe(id: string, doc: Doc | undefined, patTotal: number, patSafe: number, nowMs: number | undefined): boolean {
+  if (nowMs === undefined) return patTotal > 0 && patSafe >= patTotal;
+  const s = topicState(id, doc, nowMs);
+  return (s === 'safe' || s === 'firm') && !(patTotal > 0 && patSafe === 0);
+}
+
 const isIntroduced = (e: PatEntry | undefined): boolean => !!e && (e.i !== undefined || (e.n ?? 0) > 0);
 
-/** Kapitelstand aus den Grammatik-Dokumenten (`grammar/<thema>`, nach Thema). Rein, ohne Uhr: `today` kommt vom Aufrufer. */
-export function chapterState(i: { docs: ReadonlyMap<string, Doc>; today: string }): ChapterStateResult {
+/**
+ * Kapitelstand aus den Grammatik-Dokumenten (`grammar/<thema>`, nach Thema). Rein, ohne Uhr: `today` und `nowMs` kommen vom Aufrufer.
+ * Ohne `nowMs` gilt ein Thema als sicher, wenn alle seine Muster sicher sind.
+ */
+export function chapterState(i: { docs: ReadonlyMap<string, Doc>; today: string; nowMs?: number }): ChapterStateResult {
   const program = programChapters();
   const infos: PatInfo[] = [];
   const chapters = program.map((ch, idx): ChapterProgress => {
@@ -61,13 +76,14 @@ export function chapterState(i: { docs: ReadonlyMap<string, Doc>; today: string 
       const patSafe = ids.filter((p) => patternStateNo(patternState(entries[p], i.today)) >= 2).length;
       const introducedPats = ids.some((p) => isIntroduced(entries[p]));
       const n = i.docs.get(id)?.n;
-      return { id, exists, patSafe, patTotal: ids.length, introduced: introducedPats || (ids.length === 0 && typeof n === 'number' && n > 0) };
+      return { id, exists, patSafe, patTotal: ids.length, introduced: introducedPats || (ids.length === 0 && typeof n === 'number' && n > 0), safe: exists && topicSafe(id, i.docs.get(id), ids.length, patSafe, i.nowMs) };
     });
     const live = topics.filter((t) => t.exists);
     const patSafe = live.reduce((s, t) => s + t.patSafe, 0);
     const patTotal = live.reduce((s, t) => s + t.patTotal, 0);
     const introduced = live.filter((t) => t.introduced).length;
     return {
+      topicSafe: live.filter((t) => t.safe).length,
       id: ch.id,
       n: ch.n,
       status: 'open',

@@ -99,6 +99,16 @@ describe('chapterState', () => {
       }
     }
   });
+  it('UX-Prüfung B2: „Themen sicher“ je Kapitel = Lernpfad (Heute, Fortschritt) – eine Maßeinheit', () => {
+    const docs = new Map<string, Record<string, unknown>>();
+    for (const t of liveTopics(programChapters()[0]!)) docs.set(t, { ...docFor(t, 'safe'), p: 0.97, anchor: 0.97, anchorD: '2026-10-06', n: 20, c: 19, recent: [1, 1, 1, 1, 1, 1, 1, 1] });
+    docs.set('future-forms', docFor('future-forms', 'intro'));
+    const prog = chapterState({ docs, today: TODAY, nowMs: NOW });
+    const path = chapterNodes({ docs, nowMs: NOW, today: TODAY, dueByTopic: new Map() });
+    expect(prog.chapters.map((c) => c.topicSafe)).toEqual(path.chapters.map((c) => c.safe));
+    expect(prog.chapters.map((c) => c.liveTopics)).toEqual(path.chapters.map((c) => c.topics.length));
+    expect(prog.chapters[0]!.topicSafe).toBeGreaterThan(0);
+  });
   it('wird nie gespeichert: reine Funktion, zweimal gleiches Ergebnis, Eingabe unverändert', () => {
     const docs = new Map([['passive', docFor('passive', 'intro')]]);
     const before = JSON.stringify([...docs]);

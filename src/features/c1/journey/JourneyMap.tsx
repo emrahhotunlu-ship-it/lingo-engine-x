@@ -77,7 +77,8 @@ function Station({ n, status, frac }: { n: number; status: ChapterProgress['stat
   );
 }
 
-const frac = (p: ChapterProgress): number => (p.patTotal > 0 ? Math.min(1, p.patSafe / p.patTotal) : 0);
+// UX-Prüfung B2: eine Maßeinheit im ganzen Reiter (wie Heute und Fortschritt): „a von b Themen sicher“.
+const frac = (p: ChapterProgress): number => (p.liveTopics > 0 ? Math.min(1, p.topicSafe / p.liveTopics) : 0);
 
 export function StatusChip({ status }: { status: ChapterProgress['status'] }) {
   const { t } = useT();
@@ -98,16 +99,16 @@ export function PatsLine({ p, compact = false }: { p: ChapterProgress; compact?:
   // Waagerecht ist die Spalte schmal: kurzer Balken mit „a/b“ (die ganze Zeile steht im Namen des Knopfs).
   if (compact && p.ready)
     return (
-      <span className="lx-jr-pats lx-tnum text-sm text-muted" data-testid="program-pats" data-safe={p.patSafe} data-total={p.patTotal} title={t('pxMapPats', { a: p.patSafe, b: p.patTotal })}>
+      <span className="lx-jr-pats lx-tnum text-sm text-muted" data-testid="program-pats" data-safe={p.topicSafe} data-total={p.liveTopics} title={t('hxPathSafe', { a: p.topicSafe, b: p.liveTopics })}>
         <span className="lx-jr-pats-bar" aria-hidden="true">
           <span style={{ width: `${Math.round(frac(p) * 100)}%` }} />
         </span>
-        {p.patSafe}/{p.patTotal}
+        {p.topicSafe}/{p.liveTopics}
       </span>
     );
   return p.ready ? (
-    <span className="lx-tnum text-sm text-muted" data-testid="program-pats" data-safe={p.patSafe} data-total={p.patTotal}>
-      {t('pxMapPats', { a: p.patSafe, b: p.patTotal })}
+    <span className="lx-tnum text-sm text-muted" data-testid="program-pats" data-safe={p.topicSafe} data-total={p.liveTopics}>
+      {t('hxPathSafe', { a: p.topicSafe, b: p.liveTopics })}
     </span>
   ) : (
     <span className="text-sm text-muted" data-testid="program-soon">
@@ -250,6 +251,7 @@ export function JourneyMap({ chapters, progress, orientation, picked, onSelect, 
   const stage = useRef<HTMLDivElement>(null);
   const vertical = orientation === 'vertical';
   const geo = useRoute(stage, `${orientation}|${lang}|${progress.map((p) => p.status).join(',')}|${chapters.length}`);
+  const hereIdx = progress.findIndex((p) => p.status === 'current');
   const stateName = (p: ChapterProgress): string => (p.status === 'done' ? t('pxMapDone') : p.status === 'current' ? t('pxMapHere') : t('pxMapOpenState'));
 
   // „Du bist hier“ einmal je Tag in die Mitte rollen (nur senkrecht, nur wenn die Station nicht ohnehin ganz zu sehen ist).
@@ -287,6 +289,8 @@ export function JourneyMap({ chapters, progress, orientation, picked, onSelect, 
           {chapters.map((c, i) => {
             const p = progress[i]!;
             const here = p.status === 'current';
+            // UX-Prüfung B2: senkrecht stehen Kapitel weit voraus kompakt (ohne Zahlenzeile), damit „Du bist hier“ beim Öffnen am Handy zu sehen ist.
+            const far = vertical && p.status === 'open' && i > hereIdx + 1;
             const name = c.name[lang];
             return (
               <li
@@ -305,6 +309,7 @@ export function JourneyMap({ chapters, progress, orientation, picked, onSelect, 
                 data-chapter={c.id}
                 data-status={p.status}
                 data-here={here ? 'true' : undefined}
+                data-compact={far ? 'true' : undefined}
               >
                 <button
                   type="button"
@@ -332,7 +337,7 @@ export function JourneyMap({ chapters, progress, orientation, picked, onSelect, 
                         {name}
                       </span>
                     )}
-                    <PatsLine p={p} compact={!vertical} />
+                    {!far && <PatsLine p={p} compact={!vertical} />}
                   </span>
                 </button>
               </li>

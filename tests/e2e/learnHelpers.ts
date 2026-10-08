@@ -313,6 +313,9 @@ export async function skipMiniLesson(page: Page): Promise<void> {
 
 /** Klappt alle Kapitel des Grammatik-Lernwegs auf (am Handy ist nur das aktuelle offen, Lernplattform 2.0 §2.4). */
 export async function openAllChapters(page: Page): Promise<void> {
+  // Mit Schalter `program` steht die Themenliste eingeklappt unter „Alle … Themen“.
+  const all = page.locator('[data-testid="hub-all-topics"][aria-expanded="false"]');
+  if ((await all.count()) > 0) await all.first().click();
   const closed = page.locator('[data-testid="chapter"][data-open="false"] [data-testid="chapter-head"]');
   while ((await closed.count()) > 0) await closed.first().click();
 }

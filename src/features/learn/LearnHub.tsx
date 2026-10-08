@@ -23,6 +23,8 @@ import { PathList } from '../grammar/PathList';
 import { startGrammar } from '../grammar/session';
 import { topicName } from '../grammar/topicUi';
 import { Slot } from '../../app/slots';
+import { flags } from '../../app/flags';
+import { Disclosure } from '../../ui/Disclosure';
 
 // Reiter „Grammatik“ (Gesamtkonzept 3.4, UX-Ziel Kap. 3.3): Weiter-Karte („Als Nächstes: Thema · n Min.“, ein Knopf),
 // der Pfad aller Themen in Lehrreihenfolge B2 → C1 mit Zustand je Thema, die Zeile „Fehler korrigieren · n fällig“
@@ -87,6 +89,7 @@ export function LearnHub() {
   const docs = useLive((s) => s.collections.grammar) ?? EMPTY;
   const repairDoc = useLive((s) => s.docs['app/repair']);
   const [open, setOpen] = useState<string | null>(null);
+  const program = flags.program;
   useCompanionSee({ area: 'grammar', label: t('grTitle'), phase: 'idle' });
 
   // „Als Nächstes“: das eine neue Thema des Tages (Pfadreihenfolge, wenn die Bremse es erlaubt), sonst das schwächste begonnene Thema.
@@ -125,46 +128,49 @@ export function LearnHub() {
     go({ name: 'repairRound' });
   };
 
+  const nextCard = next ? (
+    <motion.section variants={item} className={program ? 'flex flex-col gap-3 rounded-[0.875rem] border border-line bg-surface-solid p-3.5' : 'lx-glass flex flex-col gap-3 rounded-[var(--radius-card)] p-5'} aria-labelledby="lh-next" data-testid="hub-next-topic" data-topic={next.id}>
+        <p id="lh-next" className="lx-eyebrow">
+          {t('nbLernenNextEyebrow')}
+        </p>
+        <p className="text-lg font-semibold tracking-tight">{topicName(next.id, lang)}</p>
+        <p className="text-sm text-muted">{next.fresh ? t('nbLernenNextNew', { n: TOPIC_ROUND_MIN + 1 }) : t('nbLernenNextMin', { n: TOPIC_ROUND_MIN })}</p>
+        {brakeActive ? (
+          <>
+            <div>
+              <Button variant="primary" iconAfter="arrowRight" onClick={startErrors} data-testid="hub-next-start" data-action="fix" data-n={nToday}>
+                {t('hxLearnFixBtn', { n: nToday })}
+              </Button>
+            </div>
+            <p className="text-sm text-muted" data-testid="hub-intro-brake">
+              {t('hxLearnBrake', { limit: INTRO_BLOCK_ERRORS, n: nBrake })}
+            </p>
+            <div>
+              <button type="button" onClick={startNext} className="inline-flex min-h-11 items-center text-sm font-medium text-accent-text hover:underline" data-testid="hub-next-anyway">
+                {t('hxLearnAnyway', { topic: topicName(next.id, lang) })}
+              </button>
+            </div>
+          </>
+        ) : (
+          <div>
+            <Button variant="primary" iconAfter="arrowRight" onClick={startNext} data-testid="hub-next-start" data-action="topic">
+              {next.fresh ? t('hxLearnStartNew') : t('nbLernenNextStart')}
+            </Button>
+          </div>
+        )}
+      </motion.section>
+  ) : null;
+
   return (
     <motion.div className="mx-auto flex w-full max-w-[47.5rem] flex-col gap-6 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }} data-testid="learn-hub">
       <motion.div variants={item}>
         <TabTitle title={t('lhTitle')} />
       </motion.div>
 
-      <Slot name="grammar.head" />
+      {/* Mit Programm steht die Weiter-Karte in der C1-Reise unter „Du bist hier“ (UX-Prüfung B2: eine rote Linie, ein Hauptknopf). */}
+      <Slot name="grammar.head" props={{ next: nextCard }} />
 
-      {next && (
-        <motion.section variants={item} className="lx-glass flex flex-col gap-3 rounded-[var(--radius-card)] p-5" aria-labelledby="lh-next" data-testid="hub-next-topic" data-topic={next.id}>
-          <p id="lh-next" className="lx-eyebrow">
-            {t('nbLernenNextEyebrow')}
-          </p>
-          <p className="text-lg font-semibold tracking-tight">{topicName(next.id, lang)}</p>
-          <p className="text-sm text-muted">{next.fresh ? t('nbLernenNextNew', { n: TOPIC_ROUND_MIN + 1 }) : t('nbLernenNextMin', { n: TOPIC_ROUND_MIN })}</p>
-          {brakeActive ? (
-            <>
-              <div>
-                <Button variant="primary" iconAfter="arrowRight" onClick={startErrors} data-testid="hub-next-start" data-action="fix" data-n={nToday}>
-                  {t('hxLearnFixBtn', { n: nToday })}
-                </Button>
-              </div>
-              <p className="text-sm text-muted" data-testid="hub-intro-brake">
-                {t('hxLearnBrake', { limit: INTRO_BLOCK_ERRORS, n: nBrake })}
-              </p>
-              <div>
-                <button type="button" onClick={startNext} className="inline-flex min-h-11 items-center text-sm font-medium text-accent-text hover:underline" data-testid="hub-next-anyway">
-                  {t('hxLearnAnyway', { topic: topicName(next.id, lang) })}
-                </button>
-              </div>
-            </>
-          ) : (
-            <div>
-              <Button variant="primary" iconAfter="arrowRight" onClick={startNext} data-testid="hub-next-start" data-action="topic">
-                {next.fresh ? t('hxLearnStartNew') : t('nbLernenNextStart')}
-              </Button>
-            </div>
-          )}
-        </motion.section>
-      )}
+      {!program && nextCard}
 
       <motion.div variants={item}>
         {nDue > 0 ? (
@@ -184,12 +190,25 @@ export function LearnHub() {
         )}
       </motion.div>
 
-      <motion.section variants={item} className="flex flex-col gap-3" aria-labelledby="lh-path">
-        <h2 id="lh-path" className="lx-eyebrow">
-          {t('nbLernenPathTitle', { n: pathTopics().length })}
-        </h2>
-        <PathList onOpen={setOpen} highlight={next?.id ?? null} />
-      </motion.section>
+      <Slot name="grammar.foot" />
+
+      {program ? (
+        // Mit Programm zeigt die Reise die Kapitel; die vollständige Themenliste steht eingeklappt (keine doppelten Kapitelköpfe, UX-Prüfung B2).
+        <motion.section variants={item} className="flex flex-col gap-3" aria-label={t('nbLernenPathAll', { n: pathTopics().length })}>
+          <Disclosure label={t('nbLernenPathAll', { n: pathTopics().length })} testId="hub-all-topics">
+            <div className="pt-3">
+              <PathList onOpen={setOpen} highlight={next?.id ?? null} program />
+            </div>
+          </Disclosure>
+        </motion.section>
+      ) : (
+        <motion.section variants={item} className="flex flex-col gap-3" aria-labelledby="lh-path">
+          <h2 id="lh-path" className="lx-eyebrow">
+            {t('nbLernenPathTitle', { n: pathTopics().length })}
+          </h2>
+          <PathList onOpen={setOpen} highlight={next?.id ?? null} />
+        </motion.section>
+      )}
 
       <motion.div variants={item} className="flex flex-col gap-3">
         <div className="lx-glass flex min-h-14 flex-wrap items-center gap-x-1 gap-y-0 rounded-[var(--radius-card)] px-4 py-1" role="group" aria-label={t('hxLearnLookup')} data-testid="hub-lookup-row">

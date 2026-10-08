@@ -16,11 +16,11 @@ type TopicTone = 'new' | 'learning' | 'safe';
 
 /** Zustand eines Themas für die Anzeige, nur aus dem Fortschritt abgeleitet. */
 export function topicTone(t: TopicProgress): TopicTone {
-  if (!t.introduced) return 'new';
-  return t.patTotal > 0 && t.patSafe >= t.patTotal ? 'safe' : 'learning';
+  if (t.safe) return 'safe';
+  return t.introduced ? 'learning' : 'new';
 }
 
-const TONE_KEY: Record<TopicTone, MessageKey> = { new: 'nbLernenStateNew', learning: 'nbLernenStateLearning', safe: 'nbLernenStateSafe' };
+export const TONE_KEY: Record<TopicTone, MessageKey> = { new: 'nbLernenStateNew', learning: 'nbLernenStateLearning', safe: 'nbLernenStateSafe' };
 const TONE_CLASS: Record<TopicTone, string> = { new: 'bg-surface-strong text-fg', learning: 'bg-hint-soft text-hint-text', safe: 'bg-ok-soft text-ok-text' };
 
 export function ChapterSheet({ open, chapter, progress, onClose }: { open: boolean; chapter: ProgramChapter | null; progress: ChapterProgress | null; onClose: () => void }) {
@@ -44,8 +44,8 @@ export function ChapterSheet({ open, chapter, progress, onClose }: { open: boole
               {chapter.done[lang]}
             </p>
             {progress.ready ? (
-              <p className="lx-tnum text-sm text-muted" data-testid="chapter-sheet-pats" data-safe={progress.patSafe} data-total={progress.patTotal}>
-                {t('pxChProgress', { a: progress.patSafe, b: progress.patTotal })}
+              <p className="lx-tnum text-sm text-muted" data-testid="chapter-sheet-pats" data-safe={progress.topicSafe} data-total={progress.liveTopics}>
+                {t('hxPathSafe', { a: progress.topicSafe, b: progress.liveTopics })}
               </p>
             ) : (
               <p className="text-sm text-muted" data-testid="chapter-sheet-soon">
@@ -82,9 +82,10 @@ export function ChapterSheet({ open, chapter, progress, onClose }: { open: boole
                     <span className="flex-none">
                       <ProgressRing value={r.patTotal > 0 ? r.patSafe / r.patTotal : 0} size={32} stroke={4} label={t('pxChTopicAria', { name, a: r.patSafe, b: r.patTotal })} />
                     </span>
+                    {/* UX-Prüfung B2: eine Maßeinheit – je Thema nur der Zustand (Neu · Lernt · Sicher); die Muster stehen im Themenblatt. */}
                     <span className="flex min-w-0 flex-1 flex-col">
                       <span className="font-medium">{name}</span>
-                      <span className="lx-tnum text-sm text-muted">{r.exists && r.patTotal > 0 ? t('pxChTopicPats', { a: r.patSafe, b: r.patTotal }) : t('pxChTopicSoon')}</span>
+                      {!r.exists && <span className="text-sm text-muted">{t('pxChTopicSoon')}</span>}
                     </span>
                     {r.exists && <span className={`inline-flex h-6 flex-none items-center rounded-full px-2.5 text-xs font-bold ${TONE_CLASS[tone]}`}>{t(TONE_KEY[tone])}</span>}
                   </li>

@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useId, useRef, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { IconButton } from './Button';
 import { DURATION, EASE_OUT } from './motion';
 import { SheetGrip, useSheetDrag } from './sheetDrag';
@@ -13,13 +14,15 @@ type Props = {
   children: ReactNode;
   /** Kap. 4.4: gemeinsames Element – der Titel gleitet vom auslösenden Element (z. B. Wortzeile) herein. */
   titleLayoutId?: string;
+  /** UX-Prüfung W5: Blatt bemisst sich am Inhalt (kurze Menüs): unten angedockt, höchstens bis unter den oberen Rand. */
+  fit?: boolean;
 };
 
 /**
  * Blatt über dem Inhalt: am Handy von unten als Vollbild-Blatt, ab Tablet als Paneel rechts.
  * Esc schließt, der Fokus kehrt zum auslösenden Element zurück (Kap. 4.5).
  */
-export function Sheet({ open, onClose, title, closeLabel, children, titleLayoutId }: Props) {
+export function Sheet({ open, onClose, title, closeLabel, children, titleLayoutId, fit = false }: Props) {
   const titleId = useId();
   const panel = useRef<HTMLDivElement>(null);
   const opener = useRef<Element | null>(null);
@@ -63,7 +66,10 @@ export function Sheet({ open, onClose, title, closeLabel, children, titleLayoutI
     };
   }, [open, onClose]);
 
-  return (
+  // UX-Prüfung B1: das Blatt hängt direkt an <body>. Ein Vorfahr mit `backdrop-filter`/`transform` (z. B. `.lx-glass`) würde sonst zum
+  // Bezugsrahmen für `position: fixed`, und das Blatt säße in der Karte fest. Theme-Variablen hängen an <html> und gelten weiter.
+  if (typeof document === 'undefined') return null;
+  return createPortal(
     <AnimatePresence>
       {open && (
         <div className="fixed inset-0 z-40">
@@ -89,7 +95,10 @@ export function Sheet({ open, onClose, title, closeLabel, children, titleLayoutI
             exit={{ opacity: 0, y: drag.mobile ? '60%' : 20 }}
             transition={{ duration: DURATION.slow, ease: EASE_OUT }}
             {...drag.panel}
-            className="absolute inset-x-0 bottom-0 top-[max(env(safe-area-inset-top),1.5rem)] flex flex-col rounded-t-[1.5rem] border border-line bg-surface-solid shadow-2xl outline-none md:inset-y-3 md:right-3 md:left-auto md:top-3 md:w-[26rem] md:rounded-[1.5rem]"
+            data-fit={fit || undefined}
+            className={`absolute inset-x-0 bottom-0 flex flex-col rounded-t-[1.5rem] border border-line bg-surface-solid shadow-2xl outline-none md:right-3 md:left-auto md:w-[26rem] md:rounded-[1.5rem] ${
+              fit ? 'max-h-[calc(100%-max(env(safe-area-inset-top),1.5rem))] md:bottom-3 md:max-h-[calc(100%-1.5rem)]' : 'top-[max(env(safe-area-inset-top),1.5rem)] md:inset-y-3 md:top-3'
+            }`}
           >
             <div {...drag.handle} className="flex flex-none flex-col">
               <SheetGrip />
@@ -100,10 +109,11 @@ export function Sheet({ open, onClose, title, closeLabel, children, titleLayoutI
                 <IconButton icon="close" label={closeLabel} onClick={onClose} />
               </header>
             </div>
-            <div className="flex-1 overflow-y-auto overscroll-contain px-5 pb-[max(env(safe-area-inset-bottom),1.5rem)] sm:px-6">{children}</div>
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 pb-[max(env(safe-area-inset-bottom),1.5rem)] sm:px-6">{children}</div>
           </motion.div>
         </div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }

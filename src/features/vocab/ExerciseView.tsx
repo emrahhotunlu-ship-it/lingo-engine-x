@@ -11,6 +11,7 @@ import { useSwipeLeft } from '../../engine/swipe';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { lookupOpenMs, useLookup } from '../../engine/wordTap';
 import { alignWords } from '../../domain/answer/align';
+import { formKind } from '../../domain/answer/form';
 import { checkTyped, checkWithHint } from '../../domain/answer/check';
 import { maskOf } from '../../domain/answer/mask';
 import { normalize } from '../../domain/answer/normalize';
@@ -727,6 +728,21 @@ export function ExerciseView({
     const fixed = fb.sentence?.out?.fixed;
     if (fixed && fb.result.verdict !== 'correct' && normalize(fixed) !== normalize(fb.given)) comparison = { given: fb.given, ops: alignWords(fb.given, fixed) };
     const wrongTyped = fb.result.verdict === 'wrong' && !fb.dontKnow && !fb.override && (isTyped || e.ex === 'colloc_gap');
+    // UX-Prüfung W8: Falsch heißt dieselbe Karte wie in der Grammatik – „Du: …“, „Richtig: …“ und das Warum zur Form („overcame = Vergangenheit“).
+    const wrongWord = fb.result.verdict === 'wrong' && !fb.override && (isTyped || isChoice);
+    if (!comparison && wrongWord && solution && normalize(solution) !== normalize(fb.given)) comparison = { given: fb.dontKnow ? '' : fb.given, ops: alignWords(fb.dontKnow ? '' : fb.given, solution) };
+    const fk = solution && !fb.override && fb.result.verdict !== 'correct' ? formKind(solution, card.word, card.pos ?? null) : null;
+    const formWhy =
+      fk && fk !== 'misc' ? (
+        <p className="lx-t-support m-0" data-testid="word-form-why" data-form={fk}>
+          <span className="text-muted">{t('wxFormWhy')}: </span>
+          <span lang="en" className="font-semibold">
+            {solution}
+          </span>{' '}
+          {' = '}
+          {t(`form_${fk}` as MessageKey)} {t('wxFormOf', { lemma: card.word })}
+        </p>
+      ) : null;
     const menu: Partial<Record<ShellMenuId, () => void>> = {};
     if (wrongTyped && (isTyped || card.col.some((x) => x.ai))) menu.override = override;
     if (wrongTyped && isTyped) menu.copyOnce = () => setCopyOpen(true);
@@ -747,6 +763,7 @@ export function ExerciseView({
       verdict: rv,
       sub,
       comparison,
+      why: formWhy ?? undefined,
       tutor,
       explanation: whyUnderRemoved(model, isChoice && fb.result.verdict === 'wrong' && chosen !== null),
       depth,
