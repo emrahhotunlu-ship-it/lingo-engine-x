@@ -192,6 +192,14 @@ export type LogEntry = { t?: number; ok?: boolean; c1k?: string; cid?: string; f
  */
 export const TP_SINCE = '2026-10-15';
 
+/** Ab wann Antworten sicher gekennzeichnet sind (ms): später von `TP_SINCE` und der frühesten `tp`-Antwort im Protokoll. Rein. */
+export function tpBoundary(entries: readonly LogEntry[]): number {
+  let first = Infinity;
+  for (const e of entries) if (e.tp === true && typeof e.t === 'number' && e.t < first) first = e.t;
+  const floor = Date.parse(`${TP_SINCE}T00:00:00`);
+  return Number.isFinite(first) ? Math.max(floor, first) : floor;
+}
+
 /** Einträge aus den Tagesprotokollen (tolerant): nur Objekte mit bekannten Feldtypen. */
 export function logEntriesOf(logs: Iterable<Doc>): LogEntry[] {
   const out: LogEntry[] = [];
@@ -220,7 +228,9 @@ export function logEntriesOf(logs: Iterable<Doc>): LogEntry[] {
  */
 export function k6Measure(entries: readonly LogEntry[], itemOf: (id: string) => C1Item | null, nowMs: number): K6Measure {
   const mid = nowMs - (C1_LOG_DAYS / 2) * DAY_MS;
-  const tpSince = Date.parse(`${TP_SINCE}T00:00:00`);
+  // Grenze für „ohne Kennung“: TP_SINCE als Untergrenze; gibt es schon gekennzeichnete Tempo-Antworten und liegt die früheste später, gilt
+  // diese (dann war die Kennung erst später live). Vorsichtig: im Zweifel bleibt der Hinweis etwas länger stehen.
+  const tpSince = tpBoundary(entries);
   let n = 0;
   let ok = 0;
   let clean = 0;

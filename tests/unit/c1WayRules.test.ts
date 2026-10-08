@@ -2,10 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { emptyC1, type C1Doc } from '../../src/domain/c1/c1doc';
 import { c1Criteria, K1_TREND_MIN, type CriteriaInput } from '../../src/domain/c1/criteria';
 import { addProdTo } from '../../src/domain/c1/prod';
-import { c1Way, freezePlan, type WayInput } from '../../src/domain/c1/way';
+import { c1EvidenceLines, c1Way, freezePlan, type Way, type WayInput } from '../../src/domain/c1/way';
+import { k6Measure, TP_SINCE, type LogEntry } from '../../src/domain/metrics/c1';
+import type { C1Item } from '../../src/domain/c1x/types';
 import { grammarLogEntry } from '../../src/domain/progress/logPatch';
 import type { GrammarAnswer } from '../../src/domain/learn/types';
-import { wayLiveLoaded } from '../../src/features/c1/wayData';
+import { wayLiveLoaded, wayLoadState } from '../../src/features/c1/wayData';
+import { tpBoundary } from '../../src/domain/metrics/c1';
 import { reasonText } from '../../src/features/c1/WayToC1';
 
 // Nachbesserung P44/P45 (Prüfung learning-scientist und data-guard): je Regel ein Test.
@@ -34,6 +37,11 @@ describe('Kriterien', () => {
     expect(flat).toMatchObject({ state: 'open', why: 'flat' });
     expect(c1Criteria(input()).list[3]?.why).toBeUndefined(); // auf Kurs
   });
+  it('N2: mehr als die Hälfte, aber noch kein Trend (eine Messung) → `notrend`', () => {
+    const k6 = { n: 25, ok: 15, clean: 8, cleanOk: 7, older: null, recent: 0.6, unmarked: 0 };
+    const c = c1Criteria(input({ k6 })).list[5]!;
+    expect(c).toMatchObject({ state: 'open', trend: null, why: 'notrend' });
+  });
   it('B7: K5 zeigt die Punkte des letzten Laptop-Checks direkt (keine Umrechnung)', () => {
     const c1: C1Doc = { ...emptyC1(), checks: [{ d: '2026-12-26', f: 'A', inp: 'desk', p: [6, 5, 5, 7], pts: 23, max: 36 }] };
     expect(c1Criteria(input({ c1 })).list[4]?.ev.pts).toBe(23);
@@ -48,6 +56,7 @@ describe('Detail „Warum“ (B1)', () => {
   it('offen: weit weg / ohne Fortschritt', () => {
     expect(reasonText({ ...crit[3]!, state: 'open', why: 'far' }, t, num, list)).toBe('pxKReason_openFar');
     expect(reasonText({ ...crit[3]!, state: 'open', why: 'flat' }, t, num, list)).toBe('pxKReason_openFlat');
+    expect(reasonText({ ...crit[5]!, state: 'open', why: 'notrend' }, t, num, list)).toBe('pxKReason_openNoTrend');
   });
   it('zu wenig Daten: die fehlende Menge wird genannt (K6, K7)', () => {
     expect(reasonText({ ...crit[5]!, state: 'few', ev: { ok: 3, n: 12, need: 20, clean: null } }, t, num, list)).toBe('pxKReasonFew_k6{"n":"8"}');
@@ -142,5 +151,50 @@ describe('Tempo-Kennung im Protokoll (K-a)', () => {
     } as unknown as GrammarAnswer;
     expect(grammarLogEntry(a).tp).toBeUndefined();
     expect(grammarLogEntry({ ...a, tempo: true }).tp).toBe(true);
+  });
+});
+
+describe('K6-Belegzeile mit älteren Antworten ohne Kennung (N4)', () => {
+  const lineOf = (unmarked: number): string => {
+    const crit = c1Criteria(input({ k6: { n: 25, ok: 18, clean: 8, cleanOk: 7, older: 0.6, recent: 0.8, unmarked } }));
+    const w = { crit, c1: emptyC1() } as unknown as Way;
+    return c1EvidenceLines(w).find((l) => l.id === 'c1:k6')!.text;
+  };
+  it('mit `unmarked > 0` steht der Hinweis in der Zeile, sonst nicht', () => {
+    expect(lineOf(3)).toContain('; 3 answers from before timed answers were marked may include timed ones.');
+    expect(lineOf(0)).not.toContain('timed');
+  });
+});
+
+describe('Grenze für die Tempo-Kennung (N1)', () => {
+  const floor = Date.parse(`${TP_SINCE}T00:00:00`);
+  const day = 86_400_000;
+  it('TP_SINCE ist die Untergrenze; eine spätere erste `tp`-Antwort verschiebt die Grenze nach hinten, eine frühere nicht', () => {
+    expect(tpBoundary([])).toBe(floor);
+    expect(tpBoundary([{ t: floor + 5 * day, tp: true }, { t: floor + 9 * day, tp: true }, { t: floor + 2 * day }])).toBe(floor + 5 * day);
+    expect(tpBoundary([{ t: floor - 3 * day, tp: true }])).toBe(floor);
+  });
+  it('K6 zählt Antworten vor der Grenze als „ohne Kennung“', () => {
+    const item = { id: 'e1', kind: 'err', bad: true } as unknown as C1Item;
+    const e = (t: number, x: Partial<LogEntry> = {}): LogEntry => ({ t, c1k: 'err', cid: 'e1', pts: [2, 2], free: true, ...x });
+    const now = floor + 20 * day;
+    const entries = [e(floor + 1 * day), e(floor + 3 * day), e(floor + 6 * day, { tp: true }), e(floor + 8 * day)];
+    const m = k6Measure(entries, () => item, now);
+    expect(m.n).toBe(3);
+    expect(m.unmarked).toBe(2);
+  });
+});
+
+describe('Laden ohne Datenbank oder mit gescheitertem Abo', () => {
+  const base = { db: 'ready', liveStatus: 'ready', onceStatus: 'ready', liveLoaded: true } as const;
+  it('fehlt db oder scheitert das Live-Abo, zeigt das Blatt den Fehlerzustand statt ewig das Skelett', () => {
+    expect(wayLoadState({ ...base, db: 'absent', onceStatus: 'loading', liveLoaded: false })).toBe('error');
+    expect(wayLoadState({ ...base, liveStatus: 'error', liveLoaded: false })).toBe('error');
+  });
+  it('sonst: laden, bis Protokolle und Live-Daten da sind', () => {
+    expect(wayLoadState({ ...base, db: 'pending', liveStatus: 'waiting', onceStatus: 'loading', liveLoaded: false })).toBe('loading');
+    expect(wayLoadState({ ...base, liveLoaded: false })).toBe('loading');
+    expect(wayLoadState({ ...base, onceStatus: 'error' })).toBe('ready');
+    expect(wayLoadState(base)).toBe('ready');
   });
 });

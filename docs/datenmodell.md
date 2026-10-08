@@ -182,7 +182,7 @@ Deklariert in WP0a (`src/data/{paths,schemas}.ts`, tolerant/`looseObject`); gesc
 
 **Lokal** (`platform/storage`, nur Bequemlichkeit): `lx:plan:<tag>` (P1), `lx:resume` und `lx:resume:<id>` (Hülle `{v, id, day, savedAt, tabId, route, data}`, ≤ 50 KB; `src/app/resume.ts`).
 
-**LP3 P44-Nachbesserung (K-a):** Grammatik-Einträge in `log/<tag>` aus einer Tempo-Runde bekommen das ergänzende Feld `tp: true` (`grammarLogEntry`, nur gesetzt, nie entfernt). Gelesen tolerant (`logEntriesOf`: nur `true` zählt); K6 „Fehler finden“ lässt diese Antworten aus. Ältere Einträge ohne Kennung (vor `TP_SINCE` = 2026-10-15) lassen sich nicht trennen: bis das 28-Tage-Fenster sauber ist, sagt das K6-Detail „Enthält noch Tempo-Antworten“.
+**LP3 P44-Nachbesserung (K-a):** Grammatik-Einträge in `log/<tag>` aus einer Tempo-Runde bekommen das ergänzende Feld `tp: true` (`grammarLogEntry`, nur gesetzt, nie entfernt). Gelesen tolerant (`logEntriesOf`: nur `true` zählt); K6 „Fehler finden“ lässt diese Antworten aus. Ältere Einträge ohne Kennung lassen sich nicht trennen; als Grenze gilt `TP_SINCE` (2026-10-15) oder, falls später, die früheste `tp`-Antwort im 28-Tage-Fenster (`tpBoundary`, rein aus den gelesenen Protokollen, kein eigener Schreibpfad): bis das 28-Tage-Fenster sauber ist, sagt das K6-Detail „Enthält noch Tempo-Antworten“.
 
 **LP3 P44-Nachbesserung (data-guard):** `addProd` bucht einen Eintrag nicht zweimal (gleicher Tag, Quelle, Wörter und Fehler; Wochensummen ausgenommen).
 

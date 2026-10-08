@@ -60,6 +60,7 @@ export const pxP45En = {
   pxWayTopics: 'Grammar by topic (p)',
   pxWayTopicRow: '{name}: {p}',
   pxWayEmptyTitle: 'Your way to C1 starts with practice',
+  pxWayUnavailable: 'Your data cannot be reached right now. The count appears as soon as the connection is back.',
   pxWayEmpty: 'Once you practice grammar and words, seven criteria with your progress show up here. Until then, there is nothing to judge.',
   pxWayEmptyCta: 'Go to Learn',
 };

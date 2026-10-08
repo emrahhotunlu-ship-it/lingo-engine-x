@@ -45,6 +45,7 @@ export const pxP44De = {
   pxKReason_course: 'Mehr als die Hälfte des Wegs ist geschafft, und der Trend der letzten 8 Wochen zeigt nach vorn.',
   pxKReason_openFar: 'Weniger als die Hälfte des Wegs geschafft.',
   pxKReason_openFlat: 'Mehr als die Hälfte geschafft, aber in den letzten 8 Wochen kein Fortschritt messbar.',
+  pxKReason_openNoTrend: 'Mehr als die Hälfte geschafft; für einen Trend fehlt noch eine zweite Messung.',
   pxKReasonFew_k1: 'Es fehlt noch ein erstes sicheres Muster oder eine Kapitelprüfung.',
   pxKReasonFew_k2: 'Es fehlen noch erkannte Deutsch-Fallen. Sie entstehen aus deinen Fehlern beim Üben.',
   pxKReasonFew_k3: 'Es fehlt ein Wortschatztest.',

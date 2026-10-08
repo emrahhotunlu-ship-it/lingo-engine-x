@@ -60,6 +60,7 @@ export const pxP45De = {
   pxWayTopics: 'Grammatik je Thema (p)',
   pxWayTopicRow: '{name}: {p}',
   pxWayEmptyTitle: 'Dein Weg zu C1 beginnt mit dem Üben',
+  pxWayUnavailable: 'Deine Daten sind gerade nicht erreichbar. Die Zählung erscheint, sobald die Verbindung wieder steht.',
   pxWayEmpty: 'Sobald du Grammatik und Wörter übst, stehen hier sieben Kriterien mit deinem Stand. Bis dahin gibt es nichts zu beurteilen.',
   pxWayEmptyCta: 'Zum Lernen',
 };

@@ -25,6 +25,15 @@ export function wayLiveLoaded(live: Pick<LiveState, 'docs' | 'collections'>): bo
   return docs['app/c1'] !== undefined && docs['app/profile'] !== undefined && collections.vocab !== undefined && collections.chunk !== undefined && collections.grammar !== undefined;
 }
 
+/**
+ * Ladezustand des Blatts (rein): `error`, wenn die Datenbank fehlt oder das Live-Abo gescheitert ist (sonst hinge das Skelett für immer),
+ * `loading` bis Protokolle und Live-Daten da sind, sonst `ready`.
+ */
+export function wayLoadState(i: { db: 'pending' | 'ready' | 'absent'; liveStatus: 'waiting' | 'ready' | 'error'; onceStatus: 'loading' | 'ready' | 'error'; liveLoaded: boolean }): 'loading' | 'error' | 'ready' {
+  if (i.db === 'absent' || i.liveStatus === 'error') return 'error';
+  return i.onceStatus === 'loading' || !i.liveLoaded ? 'loading' : 'ready';
+}
+
 export function wayFromLive(live: Pick<LiveState, 'docs' | 'collections' | 'invalid'>, i: { today: string; nowMs: number; logs: readonly Doc[] | null; patterns: unknown }): Way {
   const cards = [
     ...buildTrainCards(live.collections.vocab ?? EMPTY, i.nowMs, invalidIdsOf(live.invalid, 'vocab')),

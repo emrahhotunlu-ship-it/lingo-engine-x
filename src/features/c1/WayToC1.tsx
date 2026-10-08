@@ -13,6 +13,7 @@ import { freezePlan, openCrit, type Way } from '../../domain/c1/way';
 import { preloadC1x } from '../../domain/c1x/preload';
 import { CHECK_PART_MAX } from '../../domain/metrics/c1';
 import { useT } from '../../i18n';
+import { useCapabilities } from '../../platform/capabilities';
 import { useWide } from '../../platform/input';
 import { Button } from '../../ui/Button';
 import { Disclosure } from '../../ui/Disclosure';
@@ -23,7 +24,7 @@ import { topicName } from '../grammar/topicUi';
 import { runAssess, stopAssess, useAssessRun } from '../progress/assessRun';
 import { useDocsOnce } from '../progress/useOnce';
 import { useChapterState } from './ProgramMap';
-import { PATTERNS_DOC, wayFromLive, wayLiveLoaded, wayLogPaths } from './wayData';
+import { PATTERNS_DOC, wayFromLive, wayLiveLoaded, wayLoadState, wayLogPaths } from './wayData';
 
 // „Weg zu C1“ (Lernplattform 3.0 §4.4, P45): Kopfzeile im Fortschritt (Slot `progress.head`) und das Blatt.
 // Handy, von oben nach unten: Urteil (1–2 Sätze, „von Claude · Stand <Datum>“), „Was dir noch fehlt“ (≤ 3 Zeilen mit „Üben“), K1–K7 (Zustandswort
@@ -62,12 +63,14 @@ const monthLabel = (m: string, lang: 'de' | 'en'): string => {
 // ------------------------------------------------------------------ Daten
 
 /** Messwerte, Kriterien und Prognose. Protokolle und `app/patterns` werden nur gelesen, solange das Blatt offen ist. */
-export function useWay(open: boolean): { way: Way; loading: boolean } {
+export function useWay(open: boolean): { way: Way; loading: boolean; failed: boolean } {
   const today = useClock((s) => s.today);
   const nowMs = useClock((s) => s.now);
   const docs = useLive((s) => s.docs);
   const collections = useLive((s) => s.collections);
   const invalid = useLive((s) => s.invalid);
+  const liveStatus = useLive((s) => s.status);
+  const dbCap = useCapabilities((s) => s.db);
   const paths = useMemo(() => [...wayLogPaths(today), PATTERNS_DOC], [today]);
   const once = useDocsOnce(paths, open);
   const [items, setItems] = useState(0);
@@ -90,7 +93,8 @@ export function useWay(open: boolean): { way: Way; loading: boolean } {
     // `items`: nach dem Laden der Fehler-Aufgaben neu rechnen (K6 braucht sie).
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docs, collections, invalid, today, nowMs, ready, once.value, paths, items]);
-  return { way, loading: !ready || !liveReady };
+  const state = wayLoadState({ db: dbCap, liveStatus, onceStatus: once.status, liveLoaded: liveReady });
+  return { way, loading: state === 'loading', failed: state === 'error' };
 }
 
 // ------------------------------------------------------------------ Kopfzeile im Fortschritt
@@ -139,8 +143,16 @@ export function WayToC1({ open, onClose }: { open: boolean; onClose: () => void 
 function WayBody({ wide, onClose }: { wide: boolean; onClose: () => void }) {
   const { t } = useT();
   const today = useClock((s) => s.today);
-  const { way, loading } = useWay(true);
-  useFreeze(way, today, loading);
+  const { way, loading, failed } = useWay(true);
+  useFreeze(way, today, loading || failed);
+
+  if (failed) {
+    return (
+      <div className="flex flex-col gap-4 py-2" data-testid="way-sheet" data-state="error" role="status">
+        <p className="text-sm text-muted">{t('pxWayUnavailable')}</p>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -387,7 +399,7 @@ export function evText(c: Criterion, t: (k: string, v?: Record<string, string | 
 
 /** Detail „Warum“: bei „noch offen“ der Grund (weit weg / ohne Fortschritt), bei „zu wenig Daten“ die fehlende Menge (B1). */
 export function reasonText(c: Criterion, t: (k: string, v?: Record<string, string | number>) => string, num: (n: number) => string, list: (xs: string[]) => string): string {
-  if (c.state === 'open') return t(c.why === 'flat' ? 'pxKReason_openFlat' : 'pxKReason_openFar');
+  if (c.state === 'open') return t(c.why === 'flat' ? 'pxKReason_openFlat' : c.why === 'notrend' ? 'pxKReason_openNoTrend' : 'pxKReason_openFar');
   if (c.state !== 'few') return t(`pxKReason_${c.state}`);
   const e = c.ev;
   const v = (x: unknown): number => (typeof x === 'number' && Number.isFinite(x) ? x : 0);

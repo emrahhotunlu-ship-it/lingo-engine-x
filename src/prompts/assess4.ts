@@ -91,6 +91,8 @@ export function c1VerdictSchema(v: Pick<Assess4Vars, 'lang' | 'c1'>): z.ZodType<
     .superRefine((o, ctx) => {
       // Keine Punktzahl und keine Prozentzahl im Urteil (Plan §4.4).
       if (/\d+\s*%|\d+\s*(?:von|of|\/)\s*\d+\s*(?:points|punkte|pts)/i.test(o.why)) ctx.addIssue({ code: 'custom', path: ['why'], message: 'judge in words; no percentages or scores' });
+      // Kein kopierter Platzhalter aus dem Beispiel („<1–2 Sätze …>“).
+      if (/^\s*</.test(o.why)) ctx.addIssue({ code: 'custom', path: ['why'], message: 'write the sentence itself, not the <placeholder>' });
       if (!stage && o.missing.length === 0) ctx.addIssue({ code: 'custom', path: ['missing'], message: 'name 1–3 open criteria from the list' });
     });
 }
@@ -128,7 +130,9 @@ export function assess4Example(v: Pick<Assess4Vars, 'lang' | 'ids' | 'allowed' |
     c1: stage
       ? {
           status: 'ready',
-          why: de ? 'Alle sieben Kriterien sind erreicht: Grammatik, Wörter und die Genauigkeit im eigenen Text stehen auf C1-Niveau.' : 'All seven criteria are met: grammar, vocabulary and accuracy in writing are at C1 level.',
+          why: de
+            ? 'Alle sieben Kriterien sind erreicht: Grammatik, Wörter und die Genauigkeit im eigenen Text erfüllen die C1-Etappe der App.'
+            : "All seven criteria are met: grammar, vocabulary and accuracy in writing meet the app's C1 milestone.",
           missing: [],
           ev,
         }

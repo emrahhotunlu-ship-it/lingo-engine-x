@@ -45,6 +45,7 @@ export const pxP44En = {
   pxKReason_course: 'You are more than halfway there, and the trend of the last 8 weeks points forward.',
   pxKReason_openFar: 'Less than halfway there.',
   pxKReason_openFlat: 'More than halfway there, but no measurable progress in the last 8 weeks.',
+  pxKReason_openNoTrend: 'More than halfway there; a second measurement is needed to see a trend.',
   pxKReasonFew_k1: 'A first safe pattern or a chapter gate is still missing.',
   pxKReasonFew_k2: 'No German traps recognized yet. They come from your mistakes while practicing.',
   pxKReasonFew_k3: 'A vocabulary test is missing.',

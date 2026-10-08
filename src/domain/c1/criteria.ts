@@ -39,8 +39,11 @@ export type Criterion = {
   progress: number | null;
   /** Trend der letzten 8 Wochen: nach vorn, gleich/zurück, unbekannt. */
   trend: 'up' | 'flat' | null;
-  /** Nur bei „noch offen“: weniger als die Hälfte des Wegs (`far`) oder mehr als die Hälfte ohne messbaren Fortschritt (`flat`). */
-  why?: 'far' | 'flat';
+  /**
+   * Nur bei „noch offen“: weniger als die Hälfte des Wegs (`far`), mehr als die Hälfte ohne messbaren Fortschritt (`flat`) oder mehr als die
+   * Hälfte, aber für einen Trend fehlt noch eine zweite Messung (`notrend`).
+   */
+  why?: 'far' | 'flat' | 'notrend';
 };
 
 export type CriteriaInput = {
@@ -74,7 +77,7 @@ function stateOf(met: boolean, progress: number | null, trend: Criterion['trend'
 }
 
 /** Grund für „noch offen“ (Detail „Warum“). */
-const whyOpen = (c: Criterion): Criterion => (c.state === 'open' && c.progress !== null ? { ...c, why: c.progress < ON_COURSE_SHARE ? 'far' : 'flat' } : c);
+const whyOpen = (c: Criterion): Criterion => (c.state === 'open' && c.progress !== null ? { ...c, why: c.progress < ON_COURSE_SHARE ? 'far' : c.trend === null ? 'notrend' : 'flat' } : c);
 
 /** „Weniger ist besser“: Weg zur Schwelle; Wert ≤ Schwelle = 1, doppelte Schwelle = 0,5, darüber weniger. */
 const lowerBetter = (value: number, goal: number): number => (value <= goal ? 1 : clamp01(goal / value));
@@ -149,13 +152,13 @@ function k5(desk: readonly DeskCheck[]): Criterion {
 
 function k6(m: K6Measure | null): Criterion {
   const g = C1_GOALS.k6;
-  if (!m || m.n < g.min) return { id: 'k6', state: 'few', ev: { ok: m?.ok ?? null, n: m?.n ?? null, need: g.min, clean: m ? (m.clean ? r2(m.cleanOk / m.clean) : null) : null }, progress: null, trend: null };
+  if (!m || m.n < g.min) return { id: 'k6', state: 'few', ev: { ok: m?.ok ?? null, n: m?.n ?? null, need: g.min, clean: m ? (m.clean ? r2(m.cleanOk / m.clean) : null) : null, unmarked: m?.unmarked ?? 0 }, progress: null, trend: null };
   const rate = m.ok / m.n;
   const cleanRate = m.clean >= g.cleanMin ? m.cleanOk / m.clean : null;
   const met = rate >= g.rate && cleanRate !== null && cleanRate >= g.cleanRate;
   const trend = m.older !== null && m.recent !== null ? (m.recent > m.older ? 'up' : 'flat') : null;
   const progress = clamp01(rate / g.rate);
-  return { id: 'k6', state: stateOf(met, progress, trend), ev: { ok: m.ok, n: m.n, rate: r2(rate), clean: cleanRate === null ? null : r2(cleanRate), cleanN: m.clean }, progress, trend };
+  return { id: 'k6', state: stateOf(met, progress, trend), ev: { ok: m.ok, n: m.n, rate: r2(rate), clean: cleanRate === null ? null : r2(cleanRate), cleanN: m.clean, unmarked: m.unmarked }, progress, trend };
 }
 
 /** K7 an den Check-Tagen (alle Checks, auch Handy: K7 misst Schreiben, nicht den Check), ältester zuerst. */

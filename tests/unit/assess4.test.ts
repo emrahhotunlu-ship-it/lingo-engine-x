@@ -124,12 +124,26 @@ describe('assess@4: Vorlage und Schema', () => {
     expect(promptBytes(p)).toBeLessThanOrEqual(PROMPT_MAX_BYTES);
   });
 
-  it('das Beispiel besteht sein eigenes Schema (DE und EN)', () => {
+  it('das Beispiel besteht sein eigenes Schema, sobald der Platzhalter durch einen Satz ersetzt ist (DE und EN); bei Etappe direkt', () => {
     for (const lang of ['de', 'en'] as const) {
       const v = vars(lang);
-      const r = assess4Schema(v).safeParse(structuredClone(assess4Example(v)));
+      const ex = structuredClone(assess4Example(v));
+      // N3: ein kopierter Platzhalter „<…>“ wird abgelehnt.
+      expect(assess4Schema(v).safeParse(ex).success).toBe(false);
+      const why = lang === 'de' ? 'Die Grammatik ist fast so weit, bei den Wörtern fehlt noch ein gutes Stück.' : 'Grammar is nearly there; vocabulary still needs a good stretch.';
+      const r = assess4Schema(v).safeParse({ ...ex, c1: { ...ex.c1!, why } });
       expect(r.success, JSON.stringify(r.error?.issues)).toBe(true);
+      const stage = { ...v, c1: { ...v.c1, open: [], course: 0 } };
+      const s = assess4Schema(stage).safeParse(structuredClone(assess4Example(stage)));
+      expect(s.success, JSON.stringify(s.error?.issues)).toBe(true);
     }
+  });
+
+  it('N3: Beispielsatz für „ready“ ohne „auf C1-Niveau“, sondern „C1-Etappe der App“', () => {
+    const v = vars('de');
+    expect(assess4Example({ ...v, c1: { ...v.c1, open: [], course: 0 } }).c1?.why).toContain('erfüllen die C1-Etappe der App');
+    const e = vars('en');
+    expect(assess4Example({ ...e, c1: { ...e.c1, open: [], course: 0 } }).c1?.why).toContain("meet the app's C1 milestone");
   });
 
   it('c1 darf fehlen oder null sein (dann gilt der feste Satz)', () => {
@@ -143,7 +157,7 @@ describe('assess@4: Vorlage und Schema', () => {
   it('P1: Status in beide Richtungen vom Code – „ready“ nur bei Etappe, bei Etappe immer „ready“', () => {
     const v = vars();
     const many = { ...v, c1: { ...v.c1, course: v.c1.open.length } };
-    const c1 = { ...assess4Example(v).c1!, status: 'ready' };
+    const c1 = { ...assess4Example(v).c1!, status: 'ready', why: 'Die Grammatik ist fast so weit, bei den Wörtern fehlt noch ein gutes Stück.' };
     expect(c1VerdictSchema(many).parse(c1).status).toBe('on_track');
     const stage = { ...v, c1: { ...v.c1, open: [], course: 0 } };
     expect(c1VerdictSchema(stage).parse({ ...c1, missing: [] }).status).toBe('ready');
@@ -206,20 +220,22 @@ describe('assess@4: Vorlage und Schema', () => {
       { crit: 'k6', title: 'e' },
     ]);
     const v = vars();
-    const c1 = assess4Example(v).c1!;
+    const c1 = { ...assess4Example(v).c1!, why: 'Die Grammatik ist fast so weit, bei den Wörtern fehlt noch ein gutes Stück.' };
+    expect(c1VerdictSchema(v).safeParse(c1).success).toBe(true);
     expect(c1VerdictSchema(v).safeParse({ ...c1, missing: [] }).success).toBe(false);
   });
 
   it('Belege: unbekannte Kennungen fallen weg, mindestens eine bekannte nötig', () => {
     const v = vars();
-    const c1 = assess4Example(v).c1!;
+    const c1 = { ...assess4Example(v).c1!, why: 'Die Grammatik ist fast so weit, bei den Wörtern fehlt noch ein gutes Stück.' };
     expect(c1VerdictSchema(v).parse({ ...c1, ev: ['c1:k9', 'chk:2026-09'] }).ev).toEqual(['chk:2026-09']);
     expect(c1VerdictSchema(v).safeParse({ ...c1, ev: ['erfunden'] }).success).toBe(false);
   });
 
   it('Sprachtreue: englisches Urteil bei deutscher Oberfläche wird abgelehnt', () => {
     const de = vars('de');
-    const en = assess4Example(vars('en')).c1!;
+    const en = { ...assess4Example(vars('en')).c1!, why: 'Grammar is nearly there; vocabulary still needs a good stretch.' };
+    expect(c1VerdictSchema(de).safeParse({ ...en, why: 'Die Grammatik ist fast so weit, bei den Wörtern fehlt noch ein gutes Stück.', ev: assess4Example(de).c1!.ev }).success).toBe(true);
     expect(c1VerdictSchema(de).safeParse({ ...en, ev: assess4Example(de).c1!.ev }).success).toBe(false);
   });
 

@@ -114,7 +114,7 @@ function critText(c: Criterion): string {
         ? `K5 exam formats (${s}): no C1 check on a laptop yet (phone checks do not count).`
         : `K5 exam formats (${s}): last laptop C1 check ${pct(e.pct)}, weakest part ${pct(e.minPart)}, ${val(e.checks)} laptop checks; goal at least 60% with every part at least 40%, in 2 checks in a row.`;
     case 'k6':
-      return `K6 error correction (${s}): typed corrections right ${val(e.ok)}/${val(e.n)} (goal 80%, at least 20); clean sentences left as they were ${pct(e.clean)} (goal 75%).`;
+      return `K6 error correction (${s}): typed corrections right ${val(e.ok)}/${val(e.n)} (goal 80%, at least 20); clean sentences left as they were ${pct(e.clean)} (goal 75%)${Number(e.unmarked) > 0 ? `; ${val(e.unmarked)} answers from before timed answers were marked may include timed ones` : ''}.`;
     case 'k7':
       // Unter der Mindestmenge keine Rate: eine Zahl aus zwei Texten ist kein Beleg (P5).
       return c.state === 'few'
