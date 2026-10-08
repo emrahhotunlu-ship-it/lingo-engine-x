@@ -86,6 +86,8 @@ export function locateChunk(sentence: string, phrase: string): { start: number; 
 
 export function chunkContext(sentence: string | null, en: string): ContextSpan | null {
   if (!sentence) return null;
+  // Klammern der alten App gehören nie in den angezeigten Satz.
+  sentence = sentence.replace(/[[\]]/g, '');
   const hit = locateChunk(sentence, en);
   if (!hit) return null;
   return { sentence, start: hit.start, end: hit.end, gap: sentence.slice(hit.start, hit.end) };

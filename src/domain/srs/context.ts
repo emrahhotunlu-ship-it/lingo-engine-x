@@ -162,22 +162,90 @@ export function findContext(ex: unknown, word: string): ContextSpan | null {
   return out ? { ...out } : null;
 }
 
-function findContextUncached(ex: string, word: string): ContextSpan | null {
-  const bracket = /\[([^\]]*\S[^\]]*)\]/.exec(ex);
-  if (bracket) {
-    const before = stripBrackets(ex.slice(0, bracket.index));
-    const gap = (bracket[1] ?? '').trim();
-    const lead = (bracket[1] ?? '').indexOf(gap);
-    const sentence = stripBrackets(ex);
-    const start = before.length + Math.max(0, lead);
-    return { sentence, start, end: start + gap.length, gap };
+const PH_WORD = /^(?:something|someone|somebody|sth|sb|s\.?o\.?|one's|someone's|somebody's|sb's)$/i;
+const isPlaceholder = (token: string): boolean => token.split('/').every((t) => PH_WORD.test(t.replace(/[()]/g, '')));
+/** Ein Objekt: optional mit Artikel/Possessiv, ein Wort (kein Satzzeichen dazwischen). */
+const OBJ = `(?:(?:the|a|an|his|her|their|our|my|your|its|this|that|these|those|any|some|all)\\s+)?[^\\s.,;:!?]+`;
+/** Ein Platzhalter mitten in der Wendung darf ein bis fünf Wörter lang sein (Satzzeichen beenden ihn). */
+const OBJ_MID = `[^\\s.,;:!?]+(?:\\s+[^\\s.,;:!?]+){0,4}?`;
+
+/**
+ * Wendung mit Platzhaltern („put something in writing“, „take sb's word for it“): der Platzhalter passt auf beliebige
+ * Objektwörter im Satz („put the new price agreement in writing“). Ohne Platzhalter wie `locate`.
+ */
+function locateFlex(sentence: string, target: string): { start: number; end: number } | null {
+  const words = target.split(/\s+/).filter(Boolean);
+  if (!words.some(isPlaceholder)) return locate(sentence, target);
+  if (isPlaceholder(words[0] ?? '') || words.every(isPlaceholder)) return null;
+  const key = `ph:${words.join(' ')}`;
+  let re = RE_CACHE.get(key);
+  if (!re) {
+    let src = '';
+    words.forEach((w, i) => {
+      const flex = i === 0 || i === words.length - 1;
+      const optional = /^\(.*\)$/.test(w);
+      const isLast = i === words.length - 1;
+      const part = isPlaceholder(w) ? (isLast ? OBJ : OBJ_MID) : flex ? `(?:${formsOf(w).map(escape).join('|')})` : escape(w);
+      src += i === 0 ? part : optional ? `(?:\\s+${part})?` : `\\s+${part}`;
+    });
+    re = new RegExp(`(^|[^A-Za-z'])(${src})(?![A-Za-z'])`, 'i');
+    if (RE_CACHE.size >= RE_CACHE_MAX) RE_CACHE.clear();
+    RE_CACHE.set(key, re);
   }
-  const sentence = ex.trim();
+  const m = re.exec(sentence);
+  if (!m) return null;
+  const start = m.index + (m[1]?.length ?? 0);
+  return { start, end: start + (m[2]?.length ?? 0) };
+}
+
+type Span = { start: number; end: number };
+
+/**
+ * Klammern der alten App (`[…]`) lesen und entfernen: der Satz enthält danach nie ein Klammerzeichen, die Spannen zeigen
+ * auf den bereinigten Satz. Leere Paare und einzelne Klammern fallen ohne Spanne weg.
+ */
+function readMarks(ex: string): { text: string; spans: Span[] } {
+  const spans: Span[] = [];
+  let text = '';
+  let from = 0;
+  const plain = (s: string) => s.replace(/[[\]]/g, '');
+  for (const m of ex.matchAll(/\[([^[\]]*)\]/g)) {
+    text += plain(ex.slice(from, m.index));
+    const inner = m[1] ?? '';
+    const gap = inner.trim();
+    const start = text.length + Math.max(0, inner.indexOf(gap));
+    if (gap) spans.push({ start, end: start + gap.length });
+    text += inner;
+    from = m.index + m[0].length;
+  }
+  text += plain(ex.slice(from));
+  return { text, spans };
+}
+
+const wordCount = (s: string): number => s.split(/\s+/).filter(Boolean).length;
+
+function findContextUncached(ex: string, word: string): ContextSpan | null {
+  const marks = readMarks(ex);
+  const lead = marks.text.length - marks.text.trimStart().length;
+  const sentence = marks.text.trim();
+  const spans = marks.spans.map((s) => ({ start: s.start - lead, end: s.end - lead })).filter((s) => s.start >= 0 && s.end <= sentence.length);
   const lemma = lemmaOf(word);
+  const make = (s: Span): ContextSpan => ({ sentence, start: s.start, end: s.end, gap: sentence.slice(s.start, s.end) });
+  const first = spans[0];
+  const last = spans[spans.length - 1];
+  // Wendung mit Platzhalter: komplett maskieren, auch wenn die Klammer nur das Objekt (oder nur Teile) markiert.
+  const phrase = lemma && wordCount(lemma) > 1 && lemma.split(/\s+/).some(isPlaceholder) ? locateFlex(sentence, lemma) : null;
+  if (phrase && (!first || spans.some((s) => s.start < phrase.end && s.end > phrase.start))) return make(phrase);
+  if (first && last) {
+    if (first === last) return make(first);
+    // Mehrere Klammern: zusammenhängende Wendung („[put] the agreement [in writing]“), aber nie ein langer Satzrest.
+    const hull = { start: first.start, end: last.end };
+    const close = spans.every((s, i) => i === 0 || wordCount(sentence.slice(spans[i - 1]?.end ?? 0, s.start)) <= 3);
+    return make(close && wordCount(sentence.slice(hull.start, hull.end)) <= wordCount(lemma) + 4 ? hull : first);
+  }
   if (!lemma) return null;
   const hit = locate(sentence, lemma);
-  if (!hit) return null;
-  return { sentence, start: hit.start, end: hit.end, gap: sentence.slice(hit.start, hit.end) };
+  return hit ? make(hit) : null;
 }
 
 const str = (v: unknown): string => (typeof v === 'string' ? v : '');
@@ -193,7 +261,7 @@ export function parseCollocs(col: unknown): Colloc[] {
     const opts = Array.isArray(c.opts) ? c.opts.filter((o): o is string => typeof o === 'string' && !!o.trim()) : [];
     let ctx: ContextSpan | null = null;
     const ex = str(c.ex);
-    const bracket = /\[([^\]]+)\]/.exec(ex);
+    const bracket = /\[([^[\]]+)\]/.exec(ex);
     if (gap && bracket) {
       const sentence = stripBrackets(ex);
       const inner = bracket[1] ?? '';
