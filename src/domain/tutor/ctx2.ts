@@ -93,10 +93,12 @@ export async function saveCtx2(next: Ctx2): Promise<SaveCtx2Result> {
         result = 'blocked';
         return null;
       }
-      const old = readCtx2(cur);
-      if (old && sameCtx2(old, next)) return null;
+      // Unbekannte Unterfelder (z. B. einer neueren App-Version) bleiben erhalten: nur die bekannten Felder werden überschrieben.
+      const raw: Doc = cur.ctx2 && typeof cur.ctx2 === 'object' && !Array.isArray(cur.ctx2) ? (cur.ctx2 as Doc) : {};
+      const merged = { ...raw, ...next };
+      if (jsonEqual({ ...merged, t: 0 }, { ...raw, t: 0 })) return null;
       result = 'saved';
-      return { update: { ctx2: next } };
+      return { update: { ctx2: merged } };
     });
     return result;
   } catch (err) {

@@ -324,12 +324,31 @@ describe('Doppelschutz und Wochendeckel beim Schreiben (N1)', () => {
     const c = addProdTo(emptyC1(), { d: '2026-10-08', s: 'mail', w: 150, e: 3 });
     expect(c && addProdTo(c, { d: '2026-10-08', s: 'mail', w: 150, e: 3 })).toBeNull();
   });
-  it('compactProd nimmt gemeldete alte Einträge nicht in die Wochensumme', () => {
+  it('compactProd: gemeldete alte Einträge gehen in die Wochensumme ein, die Summe wird unsicher (u); nichts wird verworfen', () => {
     const old = [
       { d: '2026-07-06', s: 'mail' as const, w: 100, e: 2, id: 'x' },
       { d: '2026-07-07', s: 'mail' as const, w: 120, e: 1, id: 'y' },
     ];
     const out = compactProd(old, '2026-10-08', ['x']);
-    expect(out).toEqual([{ d: '2026-07-06', s: 'mail', w: 120, e: 1, wk: true }]);
+    expect(out).toEqual([{ d: '2026-07-06', s: 'mail', w: 220, e: 3, wk: true, u: true }]);
+    expect(prodRate(out, '2026-07-12', 8, ['x']).unsure).toBe(1);
+  });
+});
+
+describe('Größe und Erhalt (data-guard)', () => {
+  it('150 prod-Einträge mit Kennung und 300 bad-Kennungen bleiben unter 30 KB', async () => {
+    const { C1_LIMITS, c1Update } = await import('../../src/domain/c1/c1doc');
+    const prod = Array.from({ length: 150 }, (_, k) => ({ d: `2026-09-${String((k % 28) + 1).padStart(2, '0')}`, s: 'mail' as const, w: 150 + k, e: 3, id: `c1mail-${(1_790_000_000_000 + k * 977).toString(36)}`, u: true as const }));
+    const bad = Array.from({ length: 300 }, (_, k) => `c1mail-${(1_790_000_000_000 + k * 977).toString(36)}:1:${k % 12}`);
+    const op = c1Update({ v: 1, checks: [], gates: [], prod, bad }, (d) => ({ ...d, bad: [...d.bad] }), '2026-10-08');
+    const bytes = new TextEncoder().encode(JSON.stringify({ v: 1, prod, bad })).length;
+    expect(bytes).toBeLessThan(C1_LIMITS.maxBytes);
+    expect(op === null || typeof op === 'object').toBe(true);
+  });
+  it('ctx2: unbekannte Unterfelder bleiben beim Speichern erhalten', async () => {
+    const { cleanCtx2 } = await import('../../src/domain/tutor/ctx2');
+    const raw = { v: 1, role: 'CTO', extra: { x: 1 }, t: 1 };
+    const merged = { ...raw, ...cleanCtx2({ role: 'CFO' }, 2) };
+    expect(merged).toMatchObject({ role: 'CFO', extra: { x: 1 } });
   });
 });

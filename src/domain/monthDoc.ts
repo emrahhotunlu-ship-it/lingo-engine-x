@@ -22,7 +22,9 @@ const tOf = (v: unknown): number => {
 /** Liste mit `item` (gleiche `id` wird ersetzt), nach Zeit sortiert. */
 export function upsertById(list: readonly unknown[], item: { id: string; t: number }): unknown[] {
   const rest = list.filter((x) => obj(x).id !== item.id);
-  return [...rest, item].sort((a, b) => tOf(a) - tOf(b));
+  // Überschreiben mit gleicher Kennung ergänzt den alten Eintrag (unbekannte Felder bleiben), statt ihn ganz zu ersetzen.
+  const old = list.find((x) => obj(x).id === item.id);
+  return [...rest, old ? { ...obj(old), ...item } : item].sort((a, b) => tOf(a) - tOf(b));
 }
 
 /**

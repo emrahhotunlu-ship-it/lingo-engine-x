@@ -90,10 +90,6 @@ export function compactProd(prod: readonly C1Prod[], today: string, bad: readonl
   const sums = new Map<string, C1Prod>();
   const gone = new Set(bad);
   for (const e of prod) {
-    if (e.id && gone.has(e.id)) {
-      // Gemeldete Texte zählen in K7 nicht (`prodRate`): beim Verdichten nicht in die Wochensumme aufnehmen (alte), junge bleiben stehen.
-      if (e.d < cutoff) continue;
-    }
     if (e.d >= cutoff) {
       keep.push(e);
       continue;
@@ -101,14 +97,16 @@ export function compactProd(prod: readonly C1Prod[], today: string, bad: readonl
     const wk = weekStart(e.d);
     const key = `${wk}|${e.s}`;
     const cur = sums.get(key);
+    // Gemeldete Texte (Kennung in `bad`) gehen in die Wochensumme ein, die Summe wird unsicher (`u`): sie zählt nie für „erfüllt“. Nichts wird verworfen.
+    const unsure = e.u === true || (!!e.id && gone.has(e.id));
     if (cur) {
       cur.w += e.w;
       cur.e += e.e;
-      if (e.u) cur.u = true;
-    } else sums.set(key, { d: wk, s: e.s, w: e.w, e: e.e, wk: true, ...(e.u ? { u: true as const } : {}) });
+      if (unsure) cur.u = true;
+    } else sums.set(key, { d: wk, s: e.s, w: e.w, e: e.e, wk: true, ...(unsure ? { u: true as const } : {}) });
   }
   // Nichts Altes zu verdichten und nichts zu gewinnen: Liste unverändert zurück (keine unnötige Umformung).
-  if (!sums.size && keep.length === prod.length) return [...prod];
+  if (!sums.size) return [...prod];
   return [...sums.values(), ...keep].sort((a, b) => a.d.localeCompare(b.d));
 }
 
