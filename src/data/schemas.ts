@@ -125,6 +125,8 @@ export const profileSchema = z.looseObject({
   ctx: str,
   /** Neu ab Lernplattform 3.0 (P46, KT T4): Berufsprofil `{v: 1, role, field, who[], sit[], terms[], t}` (≤ 1 KB). `ctx` bleibt unverändert. */
   ctx2: z.looseObject({ v: num, role: str, field: str, who: loose, sit: loose, terms: loose, t: num }).nullish(),
+  /** Neu ab Lernplattform 3.0 (P53): Lernzeit `{t: 'HH:MM', cue}` (< 100 Bytes), nur ein Vorschlag (Plan und Serie lesen sie nie); tolerant gelesen. */
+  ii: loose,
   ctxChecked: bool,
   lang: str,
   voice: str,
@@ -318,6 +320,10 @@ export const vocabSchema = z.looseObject({
   mnemo: z.looseObject({ text: str, lang: str, t: num }).nullish(),
   /** Neu (Lernplattform 3.0 P26, nur ergänzend): Erklärungen von Claude zu falschen Antworten `[{g, y, w, ex, sig, cf, alt, pv, t, bad}]` (≤ 3), tolerant gelesen. */
   axs: z.array(z.unknown()).nullish(),
+  /** Neu (Lernplattform 3.0 P52, nur ergänzend): neue Claude-Sätze für schwache Wörter `[{en, de, sit, t, pv, bad?}]` (≤ 4), tolerant gelesen. */
+  wx: z.array(z.unknown()).nullish(),
+  /** Neu (Lernplattform 3.0 P52, nur ergänzend): Kontrast-Sätze zu einem verwechselten Wort `[{w, en, why: {de, en}, t, pv, bad?}]` (≤ 2), tolerant gelesen. */
+  cfx: z.array(z.unknown()).nullish(),
   ...schedulingFields,
 });
 

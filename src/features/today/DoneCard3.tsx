@@ -20,6 +20,8 @@ import { useDoneFacts } from './doneFacts';
 import { takeDayMoment } from './dayMoment';
 import { footParts, footText } from './goalLine';
 import type { TodayView } from './state';
+import { readIi } from '../../domain/studytime';
+import { studyTimeLine } from '../settings/studyTimeText';
 
 // Abschlusskarte Heute 3.0 (Lernplattform 3.0 P27, Motivation §4.8, §4.10): Ring, EINE große Zahl tatsächlich Gefestigten und höchstens vier Zeilen
 // in fester Reihenfolge: 1 Wahrheitszeile · 2 Meilenstein ODER nächstes Ziel · 3 „Morgen …“ · 4 Wochenstreifen mit „Serie 12 · Woche 4 von 6“.
@@ -131,6 +133,8 @@ export function DoneCard3({ view, tomorrow, today }: { view: TodayView; tomorrow
   const big = bigGain({ wordsSure: facts.sure, patterns: gains.count });
   const gap = useMemo(() => comebackGap(profile ?? null, today), [profile, today]);
   const back = gap !== null && gap >= BACK_GAP;
+  // P53: die Lernzeit als Vorschlag für morgen (nur hier, nie während der Pflicht); ohne Lernzeit keine Zeile.
+  const study = studyTimeLine(readIi(profile), lang, t);
   // Zeile 1: Wahrheitszeile, nur echte Zustandswechsel.
   const truth = [
     gains.names.length > 0 ? t('hxDoneNewSafe', { names: gains.names.join(' + ') }) : null,
@@ -210,6 +214,11 @@ export function DoneCard3({ view, tomorrow, today }: { view: TodayView; tomorrow
       {tomorrow && (
         <p className="text-sm text-muted" data-testid="today-tomorrow">
           {tomorrow}
+        </p>
+      )}
+      {study && (
+        <p className="lx-tnum text-sm text-muted" data-testid="today-studytime">
+          {study}
         </p>
       )}
       {week.length > 0 ? <WeekStrip week={week} {...(foot ? { summary: { text: foot, testId: 'today-streak' } } : { summary: { text: '' } })} /> : foot && (

@@ -16,7 +16,8 @@ export type Flags = {
   program: boolean;
   /** „Weg zu C1“ im Fortschritt (Slot `progress.head`) und die Einschätzung assess@4 (P44/P45). */
   way: boolean;
-  tutor: { explain: boolean; gen: boolean; diagnose: boolean; clinic: boolean; write: boolean; talk: boolean };
+  /** `words`: Wörter-Tutor (P52, `word-ctx@1`): neue Sätze und Kontrast für schwache Wörter. */
+  tutor: { explain: boolean; gen: boolean; diagnose: boolean; clinic: boolean; write: boolean; talk: boolean; words: boolean };
   /** Wochenrückblick 3.0 (P50): große Zahl, Namen, Fokuswahl, Karte „Für deinen Lehrer“. */
   weekly3: boolean;
   fx: { moments: boolean; rings: boolean; sparks: boolean; field: boolean; sky: boolean; film: boolean };
@@ -29,7 +30,7 @@ export const flags: Flags = {
   c1check: true,
   program: true,
   way: true,
-  tutor: { explain: false, gen: false, diagnose: true, clinic: true, write: true, talk: true },
+  tutor: { explain: false, gen: false, diagnose: true, clinic: true, write: true, talk: true, words: true },
   weekly3: true,
   fx: { moments: false, rings: false, sparks: false, field: false, sky: true, film: true },
 };
@@ -55,7 +56,7 @@ export function applyFlagOverrides(raw: string | null): void {
         if (k === 'diagnose') flags.tutor.diagnose = true;
         if (k === 'weekly3') flags.weekly3 = true;
         if (k === 'sky' || k === 'film') flags.fx[k] = true;
-        if (k === 'clinic' || k === 'write' || k === 'talk') flags.tutor[k] = true;
+        if (k === 'clinic' || k === 'write' || k === 'talk' || k === 'words') flags.tutor[k] = true;
       }
       return;
     }

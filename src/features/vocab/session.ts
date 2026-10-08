@@ -4,7 +4,7 @@ import { useSettings } from '../../app/settings';
 import { invalidIdsOf, useLive } from '../../data/live';
 import { dayKey } from '../../domain/date';
 import { mergeEntries, type DayEntry } from '../../domain/plan/buildPlan';
-import { applyUpdate, cardPatch } from '../../domain/srs/applyReview';
+import { applyUpdate, cardPatch, contrastMissOp } from '../../domain/srs/applyReview';
 import { buildTrainCards } from '../../domain/metrics';
 import { toTrainCard } from '../../domain/srs/cards';
 import { buildChunkCards, toChunkCard } from '../../domain/srs/chunkCards';
@@ -34,11 +34,12 @@ import { buildQueue, mixIntroducedToday, newQuotaLeft as newQuotaLeftFor } from 
 import { isLearningState } from '../../domain/srs/scheduler';
 import type { AnswerEvent, Exercise, ExerciseId, Grade, Lang, QueueItem, TrainCard } from '../../domain/srs/types';
 import { markExhausted, useTodayPlan } from '../today/store';
-import { nextT, recordAnswer, recordRoundEnd, saveCard, saveKnown, usePending } from './persist';
+import { nextT, recordAnswer, recordRoundEnd, saveCard, saveContrastMiss, saveKnown, usePending } from './persist';
 import { flushOnHide } from '../progress/persist';
 import { pickDailyRepairs, repairsDoneToday, repairsDutyToday } from '../../domain/repair/daily';
 import type { RepairItem } from '../../domain/repair/repair';
 import { commitRepairAnswer } from '../repair/review';
+import { contrastReady, noteConfusion, requestWordCtx } from './wordCtx';
 
 // Eine Runde im Vokabeltrainer. Die Warteschlange wird synchron im Klick-Handler von „Starten"
 // gebaut – so kann derselbe Handler die Tastatur öffnen (iPhone). Die Karten sind für die Runde
@@ -94,6 +95,8 @@ type SessionState = {
   catchUp: boolean;
   /** Eigene Sätze (`produce`) in dieser Runde (Deckel `PRODUCE_MAX`). */
   produced: number;
+  /** P52: „Welches Wort passt?“ (Kontrast) kam in dieser Runde schon (höchstens 1 je Runde). */
+  contrasted: boolean;
 };
 
 const EXTRA_TARGET = 10;
@@ -142,6 +145,7 @@ export const useSession = create<SessionState>(() => ({
   only: null,
   catchUp: false,
   produced: 0,
+  contrasted: false,
 }));
 
 /** Heutige Einträge: Datenbank und noch nicht gespeicherter Puffer. */
@@ -171,7 +175,7 @@ function sceneLookup(lang: Lang): SceneLookup {
   };
 }
 
-type ExCtx = Pick<SessionState, 'cards' | 'pool' | 'lang' | 'day' | 'shown' | 'recentEx' | 'env' | 'mode' | 'dir' | 'controls' | 'ctlWeek' | 'ctlDay' | 'catchUp' | 'produced'>;
+type ExCtx = Pick<SessionState, 'cards' | 'pool' | 'lang' | 'day' | 'shown' | 'recentEx' | 'env' | 'mode' | 'dir' | 'controls' | 'ctlWeek' | 'ctlDay' | 'catchUp' | 'produced' | 'contrasted'>;
 
 /** Modus je Karte nach anki-regeln §1 (`pickMode`, die Regel steht nur in domain/srs/flip.ts). */
 export function modeFor(s: ExCtx, card: TrainCard, item: QueueItem): PickedMode {
@@ -195,6 +199,8 @@ function build(s: ExCtx, card: TrainCard, ex: ExerciseId, origin = false): Exerc
 function exerciseFor(s: ExCtx, item: QueueItem): Exercise | null {
   const card = s.cards.get(item.key);
   if (!card || item.phase !== 'quiz') return null;
+  // P52: „Welches Wort passt?“ steht als eigener Schritt direkt nach der regulären Abfrage (nur, solange der Kontrast noch möglich ist).
+  if (item.reason === 'contrast') return contrastReady(card, s.pool) ? build(s, card, 'contrast') : null;
   const hit = takePrebuilt(s, item);
   if (hit) return hit;
   // N35 Hör-Modus: die Sprachausgabe spricht, getippt wird in die Lücke (sonst die Leiter).
@@ -254,7 +260,7 @@ function lighterExercise(s: ExCtx, card: TrainCard): ExerciseId | null {
 
 // n+1 vorberechnen (leistung.md §4 Nr. 4): nach dem Prüfen im Leerlauf, beim „Weiter“ nur noch tauschen.
 let prebuilt: { sig: string; ex: Exercise } | null = null;
-const sigOf = (s: ExCtx, item: QueueItem, recent: readonly ExerciseId[]) => `${item.key}|${s.shown[item.key] ?? 0}|${recent.join(',')}|${s.controls}|${s.mode}|${s.dir}|${s.day}`;
+const sigOf = (s: ExCtx, item: QueueItem, recent: readonly ExerciseId[]) => `${item.key}|${s.shown[item.key] ?? 0}|${recent.join(',')}|${s.controls}|${s.mode}|${s.dir}|${s.day}|${s.contrasted ? 1 : 0}`;
 
 function takePrebuilt(s: ExCtx, item: QueueItem): Exercise | null {
   const p = prebuilt;
@@ -270,7 +276,7 @@ export function prepareNext(): void {
   const item = s.queue[s.pos + 1];
   if (!item || item.phase !== 'quiz' || item.key === s.exercise.card.key) return;
   const recent = [...s.recentEx, s.exercise.ex].slice(-2);
-  const ctx: ExCtx = { ...s, recentEx: recent, produced: s.produced + (s.exercise.ex === 'produce' ? 1 : 0) };
+  const ctx: ExCtx = { ...s, recentEx: recent, produced: s.produced + (s.exercise.ex === 'produce' ? 1 : 0), contrasted: s.contrasted || s.exercise.ex === 'contrast' };
   prebuilt = null;
   const ex = exerciseFor(ctx, item);
   if (ex) prebuilt = { sig: sigOf(ctx, item, recent), ex };
@@ -421,6 +427,7 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
     only: opts.only ? [...opts.only] : null,
     catchUp: mode === 'auto' && catchUpOn(overdueCount(pool, now)),
     produced: 0,
+    contrasted: false,
   };
   prebuilt = null;
   const next = { ...base, ...settle(base, 0) };
@@ -444,14 +451,16 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
 export function roundProgress(s: Pick<SessionState, 'status' | 'round' | 'queue' | 'pos' | 'target' | 'doneBefore' | 'answered' | 'repairs' | 'repairPos'>): { n: number; total: number; extra: number } | null {
   if (s.status !== 'running') return null;
   const base = s.round === 'pflicht' ? s.doneBefore : 0;
-  const left = Math.max(0, s.queue.length - s.pos) + Math.max(0, s.repairs.length - s.repairPos);
+  // Der Kontrast-Schritt (P52) ist ein Zusatz zur schon beantworteten Karte: er zählt weder vorwärts noch als „+1“.
+  const left = s.queue.slice(Math.max(0, s.pos)).filter((q) => q.reason !== 'contrast').length + Math.max(0, s.repairs.length - s.repairPos);
+  const onContrast = s.queue[s.pos]?.reason === 'contrast';
   const done = base + s.answered.length;
   const planned = base + s.target;
   const total = Math.max(planned, 1);
   if (planned <= 0 && done + left <= 0) return null;
   const extra = Math.max(0, done + left - planned);
   const distinct = base + new Set(s.answered).size;
-  return { n: Math.min(total, Math.max(1, distinct + 1)), total: Math.max(total, 1), extra };
+  return { n: Math.min(total, Math.max(1, distinct + (onContrast ? 0 : 1))), total: Math.max(total, 1), extra };
 }
 
 export const currentRepair = (s: Pick<SessionState, 'status' | 'repairs' | 'repairPos'>): RepairItem | null => (s.status === 'running' ? (s.repairs[s.repairPos] ?? null) : null);
@@ -526,6 +535,8 @@ function finish(s: SessionState, aborted: boolean): void {
     activeMs: s.activeMs,
   });
   if (!aborted && s.unit) unitDone(1);
+  // P52: Wörter-Tutor im Hintergrund (höchstens 1 Aufruf je Tag, nie im Aufholmodus; still bei Fehlern).
+  if (n > 0) requestWordCtx({ answered: s.answered, cards: s.cards, pool: s.pool, catchUp: s.catchUp });
 }
 
 /** Einführung einer neuen Karte gesehen: die erste Abfrage folgt zwei Karten später. */
@@ -629,6 +640,34 @@ export function commitAnswer(ans: Answer): FirstKind {
   // „Kenne ich“: richtig ohne Hilfe → die Karte bekommt Stufe 3 und 10 Tage statt der gewöhnlichen Planung.
   const knownPass = e.check === 'known' && ans.ok && !ans.hint && !ans.override && card.kind === 'vocab';
   if (e.ex === 'flip' && s.catchUp && card.stage >= 3) a.catchUp = true;
+  // P52: getippte falsche Antwort = Wort einer anderen eigenen Karte → Verwechslung für den Wörter-Tutor merken.
+  if (!ans.ok && e.input === 'typed' && ans.given.trim()) noteConfusion(card, ans.given, s.pool);
+
+  // P52 „Welches Wort passt?“: ein zusätzlicher Schritt, der NUR protokolliert. Die Planung (FSRS, S, D, due, lapses, stage) bleibt, wie die reguläre
+  // Abfrage sie gesetzt hat; die Karte wird nie als „Nochmal“ eingereiht. Kartenwort gewählt → zusätzlich ein reiner Verlaufseintrag
+  // `{x: 'contrast', g: 1}`, der für „schwach“ (Fehler der letzten 14 Tage) zählt.
+  if (e.ex === 'contrast') {
+    if (!ans.ok) a.grade = 1;
+    recordAnswer(a, s.results.length === 0);
+    const missOp = ans.ok ? null : contrastMissOp(card.path, card.doc, a);
+    let cards = s.cards;
+    if (missOp) {
+      const missDoc = applyUpdate({ ...card.doc }, missOp.update);
+      const upd = (card.kind === 'chunk' ? toChunkCard(card.id, missDoc, a.t) : toTrainCard(card.id, missDoc, card.inDb, a.t)) ?? card;
+      cards = new Map(s.cards);
+      cards.set(card.key, upd);
+    }
+    if (!ans.ok) void saveContrastMiss(card.path, a);
+    return applyAdvance(
+      advanceState({
+        ...s,
+        cards,
+        recentEx: [...s.recentEx, e.ex].slice(-2),
+        contrasted: true,
+        results: [...s.results, { key: card.key, word: card.word, grade: a.grade, ok: ans.ok }],
+      }),
+    );
+  }
 
   // Lokal sofort weiterrechnen (optimistisch); gespeichert wird auf dem frischen Stand.
   const knownDoc = knownPass ? knownOp({ ...card.doc }, card.path, null, a.t, s.day) : null;
@@ -644,6 +683,10 @@ export function commitAnswer(ans: Answer): FirstKind {
   const again = isLearningState(updated.fsrs) && updated.fsrs.due - a.t <= AGAIN_WINDOW_MS && (shown[card.key] ?? 0) < MAX_SHOWN;
   // anki-regeln §2: Aufdecken nach 5 anderen Karten (pos + 6), Tippen nach 3 (pos + 4).
   if (again) queue.splice(againPos(s.pos, queue.length, e.ex === 'flip', ans.grade >= 3), 0, { key: card.key, reason: 'again', phase: 'quiz' });
+  // P52: Kontrast ZUSÄTZLICH direkt nach der regulären Abfrage (die reguläre Abfrage benotet die Karte wie immer), nur wenn sie richtig war,
+  // höchstens 1 je Runde, nie bei neuen Karten, im Anki- oder Hör-Modus und nicht nach Kontrolle/Prüfabfrage; beide Karten mindestens Stufe 2.
+  const addContrast = ans.ok && !s.contrasted && e.ex !== 'flip' && !e.check && item.reason !== 'new' && s.mode !== 'listen' && contrastReady(updated, s.pool);
+  if (addContrast) queue.splice(s.pos + 1, 0, { key: card.key, reason: 'contrast', phase: 'quiz' });
   const control = e.check === 'control' ? 1 : 0;
   const answered = s.answered.includes(card.key) ? s.answered : [...s.answered, card.key];
   const next = advanceState({
@@ -657,6 +700,7 @@ export function commitAnswer(ans: Answer): FirstKind {
     ctlWeek: s.ctlWeek + control,
     recentEx: [...s.recentEx, e.ex].slice(-2),
     produced: s.produced + (e.ex === 'produce' ? 1 : 0),
+    contrasted: s.contrasted || addContrast,
     results: [...s.results, { key: card.key, word: card.word, grade: ans.grade, ok: ans.ok }],
   });
   // B4: Aufdecken-Bewertungen 5 s zurückhalten (Karte, Protokoll, Zähler), solange die Runde
@@ -895,6 +939,7 @@ export function restoreTrainer(snap: TrainerSnapshot): boolean {
     only: null,
     catchUp: false,
     produced: 0,
+    contrasted: queue.some((q) => q.reason === 'contrast'),
   };
   prebuilt = null;
   const next = { ...base, ...settle(base, pos) };

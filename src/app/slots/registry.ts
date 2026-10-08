@@ -17,6 +17,7 @@ export const SLOT_NAMES = [
   'grammar.foot', // features/learn/LearnHub: unter der Fehlersätze-Zeile
   'apply.tiles', // features/apply/ApplyHub: Kacheln
   'vocab.hub', // features/vocab/hub/VocabHub: unter dem Wortziel
+  'settings.learn', // features/settings/SettingsSheet: Gruppe „Lernen“ (am Ende)
   'settings.sections', // features/settings/SettingsSheet: weitere Abschnitte
   'exercise.menu', // ui/exercise/ExerciseMenu: Menüeinträge (je `<li>`)
   'explain.after', // ui/exercise/Explanation: unter der Erklär-Karte

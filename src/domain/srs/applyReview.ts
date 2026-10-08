@@ -232,6 +232,21 @@ export function chunkPatch(cur: Doc, a: AnswerEvent): Doc {
 }
 
 /**
+ * P52 „Welches Wort passt?“ falsch (Kartenwort gewählt): NUR ein Verlaufseintrag `{x: 'contrast', g: 1}`. Er zählt für „schwach“ (Fehler der
+ * letzten 14 Tage); Planung und Zähler (`fsrs`, `S`, `D`, `due`, `last`, `lapses`, `stage`, `reps`, `modes`, `xs`) bleiben unberührt.
+ * `null` = nichts zu schreiben (kein/ungültiges/ausgeblendetes Dokument, Eintrag mit diesem Zeitstempel schon da, Ergebnis zu groß).
+ */
+export function contrastMissOp(path: string, cur: Doc | undefined, a: AnswerEvent): { update: Doc } | null {
+  if (!cur || cur.hidden === true || !validateDoc(path, cur).ok) return null;
+  const hist: unknown[] = Array.isArray(cur.hist) ? (cur.hist as unknown[]) : [];
+  if (hist.some((h) => typeof h === 'object' && h !== null && (h as Doc).t === a.t)) return null;
+  const patch: Doc = { hist: [...hist, histEntry({ ...a, grade: 1 }, exerciseDef(a.ex).mode)].slice(-HIST_MAX) };
+  const merged = applyUpdate(cur, patch);
+  if (!validateDoc(path, merged).ok || new TextEncoder().encode(JSON.stringify(merged)).length >= MAX_CARD_BYTES) return null;
+  return { update: patch };
+}
+
+/**
  * Was mit der Karte geschieht: ergänzen, anlegen (nur Startvokabel ohne Dokument) oder überspringen.
  * Nie wird ein ungültiges, ausgeblendetes oder inzwischen neuer bewertetes Dokument überschrieben.
  */

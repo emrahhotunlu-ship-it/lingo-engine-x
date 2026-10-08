@@ -76,9 +76,13 @@ export type ExplainWordInput = {
   alt?: boolean;
   /** Die Frage (oder die Rückseite) zeigt die deutsche Bedeutung schon: „Merke“ nennt sie nicht noch einmal (Kap. 15). */
   meaningShown?: boolean;
+  /** `contrast` (P52): die Begründung von Claude in der Oberflächensprache; sie ist die Warum-Zeile, auch bei richtiger Antwort. */
+  contrastWhy?: string | null;
+  /** `contrast` (P52): das richtige (andere) Wort mit Kurzbedeutung. Die Kopfzeile nennt es, die Kontrastzeile steht immer (auch bei richtiger Antwort). */
+  contrastOther?: { word: string; meaning: string | null } | null;
 };
 
-const CHOICE_EX: ReadonlySet<ExerciseId> = new Set(['mc_en', 'mc_de', 'ctx_mc', 'listen_mc', 'match', 'colloc_gap']);
+const CHOICE_EX: ReadonlySet<ExerciseId> = new Set(['mc_en', 'mc_de', 'ctx_mc', 'listen_mc', 'match', 'colloc_gap', 'contrast']);
 
 export function explainWord(i: ExplainWordInput): ExplanationModel {
   const { card, lang } = i;
@@ -92,7 +96,8 @@ export function explainWord(i: ExplainWordInput): ExplanationModel {
   const formula = extra?.col?.[0]?.en ?? null;
 
   // 1. Wort · Wortart · Register, Formel = Hauptverbindung
-  const head = [card.word, posLabel(card, lang), reg ? pick(REGISTER[reg] as Bi, lang) : null].filter(Boolean).join(' · ');
+  const cOther = i.ex === 'contrast' ? (i.contrastOther ?? null) : null;
+  const head = cOther ? cOther.word : [card.word, posLabel(card, lang), reg ? pick(REGISTER[reg] as Bi, lang) : null].filter(Boolean).join(' · ');
   lines.push({ k: 'pattern', name: head, formula });
 
   // 2. Deine Antwort: der echte Grund, je Fehlerart
@@ -133,13 +138,17 @@ export function explainWord(i: ExplainWordInput): ExplanationModel {
     : meaning && !i.meaningShown
       ? pick({ de: `Merke: ${card.word} = ${shortMeaning(meaning, lang)}`, en: `Remember: ${card.word} = ${shortMeaning(meaning, lang)}` }, lang)
       : card.word;
-  lines.push({ k: 'why', text: why ? `${merke}. ${why}` : merke });
+  lines.push({ k: 'why', text: i.ex === 'contrast' && i.contrastWhy ? i.contrastWhy : why ? `${merke}. ${why}` : merke });
 
   // 4. Typischer Fehler: die Deutsch-Falle der Karte
   if (trap) lines.push({ k: 'mistake', bad: trap.wrong, good: trap.right, cause: pick(trap.why, lang) });
 
-  // 5. Kontrast: das verwechselte Wort
-  if (i.check.kind === 'confusable' && i.check.otherWord && wrong) {
+  // 5. Kontrast: das verwechselte Wort. Bei „Welches Wort passt?“ (P52) immer: a = richtiges Wort, b = Kartenwort, beide mit Kurzbedeutung.
+  if (cOther) {
+    const am = cOther.meaning ? shortMeaning(cOther.meaning, lang) : '';
+    const bm = meaning ? shortMeaning(meaning, lang) : '';
+    lines.push({ k: 'contrast', a: cOther.word, b: card.word, diff: am && bm ? `${am} ≠ ${bm}` : '' });
+  } else if (i.check.kind === 'confusable' && i.check.otherWord && wrong) {
     lines.push({ k: 'contrast', a: card.word, b: i.check.otherWord, diff: i.otherMeaning ? `${shortMeaning(meaning ?? '', lang)} ≠ ${shortMeaning(i.otherMeaning, lang)}` : '' });
   } else if (i.picked?.fromWord && wrong) {
     lines.push({ k: 'contrast', a: card.word, b: i.picked.fromWord, diff: i.picked.fromMeaning ? `${shortMeaning(meaning ?? '', lang)} ≠ ${shortMeaning(i.picked.fromMeaning, lang)}` : '' });

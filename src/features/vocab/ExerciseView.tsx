@@ -45,6 +45,8 @@ import { saveRepairs } from '../repair/store';
 import { requestExamples, useExamples } from './examples';
 import { commitAnswer, prepareNext, useSession, type Answer, type FirstKind } from './session';
 import { WordExtras } from './WordExtras';
+import { reportWordCtx } from './wordCtx';
+import { AiMark } from '../../ui/AiMark';
 
 // Eine Wörter-Übung im Übungsgerüst (Lernplattform 2.0 §4.8, §5.6). Das Gerüst (`ExerciseShell`) zeichnet Status, Aufgabenzeile, Satz, Eingabe,
 // Urteil, Vergleich und die Erklär-Karte; diese Datei sammelt nur Eingabe und Prüfung je Abfrageart:
@@ -91,6 +93,11 @@ const RETRY_EX: ReadonlySet<ExerciseId> = new Set(['cloze_hint', 'cloze', 'type'
 const SENTENCE_EX: ReadonlySet<ExerciseId> = new Set(['complete', 'produce']);
 // Feste leere Referenz statt `?? []` im Selektor (sonst rendert die Karte endlos neu, React-Fehler #185).
 const NO_EXAMPLES: readonly { en: string; t: number }[] = [];
+/** „Welches Wort passt?“ (P52): das richtige (andere) Wort mit Kurzbedeutung aus der richtigen Option. */
+const contrastOtherOf = (e: Exercise): { word: string; meaning: string | null } | null => {
+  const ok = e.options.find((o) => o.correct);
+  return ok ? { word: ok.fromWord ?? ok.label, meaning: ok.fromMeaning ?? null } : null;
+};
 const escapeRe = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const CHOICE_LANGS = { de: 'de', en: 'en' } as const;
 
@@ -447,6 +454,8 @@ export function ExerciseView({
       ...(MEANING_SHOWN.has(e.ex) && (e.ex !== 'match' || !e.sentence) ? { meaningShown: true } : {}),
       ...(other ? { otherMeaning: lang === 'de' ? (other.de ?? other.def) : (other.def ?? other.de) } : {}),
       ...(isAlt ? { alt: true } : {}),
+      ...(e.ex === 'contrast' && e.contrastWhy ? { contrastWhy: e.contrastWhy[lang] } : {}),
+      ...(e.ex === 'contrast' ? { contrastOther: contrastOtherOf(e) } : {}),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps -- nur bei einem neuen Ergebnis
   }, [fb, exampleItems]);
@@ -655,7 +664,7 @@ export function ExerciseView({
               <mark className="lx-mark text-fg">{card.word}</mark>
             </p>
           ))}
-        {(e.ex === 'colloc_gap' || e.ex === 'match') && e.sentence && sentence(e.sentence, gapSlot)}
+        {(e.ex === 'colloc_gap' || e.ex === 'match' || e.ex === 'contrast') && e.sentence && sentence(e.sentence, gapSlot)}
         {e.ex === 'match' && e.sentence && cue(e.meaning)}
       </div>
     );
@@ -679,6 +688,17 @@ export function ExerciseView({
         label={t('trChoicesLabel')}
         testId="choices"
       />
+    );
+  }
+
+  // P52: Satz von Claude (Wörter-Tutor `wx` oder Kontrast `cfx`) – Kennzeichnung direkt unter der Aufgabe; „Melden“ markiert genau diesen Satz.
+  const aiSrc = e.ai;
+  if (aiSrc) {
+    prompt = (
+      <div className="flex flex-col gap-2">
+        {prompt}
+        <AiMark variant="task" tpl={aiSrc.tpl} id={`${card.path}:${aiSrc.kind}:${aiSrc.en}`} onReport={() => void reportWordCtx(card.path, aiSrc.kind, aiSrc.en)} data-testid="word-ctx-mark" />
+      </div>
     );
   }
 
@@ -768,7 +788,8 @@ export function ExerciseView({
       explanation: whyUnderRemoved(model, isChoice && fb.result.verdict === 'wrong' && chosen !== null),
       depth,
       menu,
-      nextIn: t('trAgainIn', { when: when(fb.dueInMs) }),
+      // P52: der Kontrast-Schritt ändert die Planung nicht, also keine „Wieder in …“-Zeile.
+      nextIn: e.ex === 'contrast' ? null : t('trAgainIn', { when: when(fb.dueInMs) }),
       // Design-Lead: Wort, Vorlesen, Lautschrift und „Zum Wort“ stehen in der Ergebnis-Karte, genau einmal, direkt unter dem Urteil.
       head: <WordExtras card={card} open={moreOpen} lang={lang} extras={extras} part="head" />,
       // „War das auch richtig?“ als ruhige Zeile im Ergebnis-Block (Design-Lead), nicht mehr lose über der Karte.
@@ -803,15 +824,17 @@ export function ExerciseView({
   const purposeKey: MessageKey =
     e.ex === 'colloc' || e.ex === 'colloc_gap'
       ? 'purposeColloc'
-      : e.ex === 'situation'
-        ? 'purposeSituation'
-        : e.ex === 'find_trap'
-          ? 'wxPurposeTrap'
-          : e.ex === 'wordfam'
-            ? 'wxPurposeFam'
-            : LISTEN.has(e.ex) && def.stage < 5
-              ? 'purposeListen'
-              : (PURPOSE[def.stage] ?? 'purpose1');
+      : e.ex === 'contrast'
+        ? 'ttWcPurposeContrast'
+        : e.ex === 'situation'
+          ? 'purposeSituation'
+          : e.ex === 'find_trap'
+            ? 'wxPurposeTrap'
+            : e.ex === 'wordfam'
+              ? 'wxPurposeFam'
+              : LISTEN.has(e.ex) && def.stage < 5
+                ? 'purposeListen'
+                : (PURPOSE[def.stage] ?? 'purpose1');
 
   const canCheck = isChoice ? chosen !== null : isSpot ? spot !== null : isSentence ? !!sentenceText.trim() && !sentenceBusy : true;
   const primary = fb

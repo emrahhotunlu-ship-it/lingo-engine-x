@@ -300,3 +300,9 @@ Tests: 1953 Unit; E2E der berührten Bildschirme grün (a11y: Kontrast der „Ne
 - Prüfungen Runde 2: learning-scientist JA, english-teacher JA, data-guard JA. Kann-Punkt K-neu-1 (Sprachregel-Zeilen in turn-analysis@3 zusammengelegt) beim Merge umgesetzt.
 - Offen (kann, nicht blockierend): Schema-Prüfung, dass die repair-check-Notiz im Modus `retry` keine Lösungswörter enthält (LS K-neu-2).
 - typecheck 0, eslint src tests 0, Unit 271 Dateien / 5111 Tests grün. Volle E2E-Suite steht vor dem Test-Link aus.
+
+### 08.10.2026 – R5 P52 (Wörter-Tutor, ohne Wortgruppen) + P53 Lernzeit zusammengeführt
+- Branch `claude/umbau-r5-e` (bd5fd5b) gemergt; Konflikte `flags.ts` (tutor.talk + tutor.words, weekly3), `cannedReplies.ts` (p49, p51, p52), `entscheidungen.md` beidseitig gelöst.
+- Prüfungen: Runde 1 + 2, danach Emrahs Freigabe „ja korrigieren“ für die Restpunkte (Kontrast-Fehler nur Verlauf, kein FSRS; Kontrast nur nach richtiger Abfrage; Zähler ohne Kontrast; iPhone „Teilen › Kopieren“; „Bevor ich Feierabend mache …“). Schlussblick: learning-scientist JA, english-teacher JA, data-guard OK.
+- Hinweis (kein Befund): Kontrast mit ok:false erscheint in der Rundenübersicht unter „Zum Wiederholen“; eine spätere FSRS-Neuberechnung aus `hist` muss `x:'contrast'` auslassen.
+- typecheck 0, eslint src tests 0, Unit 274 Dateien / 5153 Tests grün. Als Nächstes: volle E2E, ux-reviewer, platform-guard, Test-Link 8.
