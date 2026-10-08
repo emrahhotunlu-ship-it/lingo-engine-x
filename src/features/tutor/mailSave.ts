@@ -1,5 +1,5 @@
-import { markBad, patchC1, type PatchResult } from '../../domain/c1/c1doc';
-import { addProd } from '../../domain/c1/prod';
+import { markBad, patchC1, type C1Doc, type PatchResult } from '../../domain/c1/c1doc';
+import { addProd, markProdUnsure } from '../../domain/c1/prod';
 import { normWs, type Edit } from '../../domain/tutor/edits';
 import { mailOutItem, mailProd, mailRepairs, type MailRun } from '../../domain/tutor/mail';
 import { retireRepairs, saveRepairs } from '../repair/store';
@@ -10,6 +10,13 @@ import { markMailWeek } from './clinicStore';
 // Änderung, nie in ein ungültiges Dokument): `out/<Monat>` (`k: 'c1mail'`, der Text und das Ergebnis; eine Überarbeitung ersetzt denselben Eintrag),
 // `app/repair` (höchstens 5 Fehlersätze, `src: 'write'`) und `app/c1.prod[]` (K7). Fehlersätze und K7-Eintrag gibt es nur bei der ERSTEN Prüfung eines Textes:
 // Überarbeiten soll helfen, aber nicht die Genauigkeitszahl schönen.
+
+/** Mehrere Kennungen in `bad` eintragen (Ring); `null`, wenn nichts neu ist. */
+const addBad = (doc: C1Doc, ids: readonly string[]): C1Doc | null => {
+  let cur = doc;
+  for (const id of ids) cur = markBad(cur, id) ?? cur;
+  return cur === doc ? null : cur;
+};
 
 export type MailSaveResult = {
   out: boolean;
@@ -31,14 +38,20 @@ export async function saveMail(run: MailRun): Promise<MailSaveResult> {
 
 /** „Melden“ des ganzen Ergebnisses: gemeldet (`app/c1.bad`), die Fehlersätze daraus werden erledigt (nie gelöscht). */
 export async function reportMail(run: MailRun, id: string): Promise<void> {
-  await patchC1((doc) => markBad(doc, id), run.now);
+  // Die Kennung des Textes in `bad` nimmt den K7-Eintrag aus der Zählung (`prodRate`); `id` (je Prüfung) bleibt als Meldung stehen.
+  await patchC1((doc) => addBad(doc, [run.id, id]), run.now);
   const wrongs = mailRepairs(run).map((r) => r.wrong);
   if (wrongs.length) await retireRepairs(wrongs, 'write');
 }
 
 /** „Stelle melden“: nur diese Stelle; der Fehlersatz, in dem sie steht, wird erledigt. */
 export async function reportMailEdit(run: MailRun, edit: Edit, id: string): Promise<void> {
-  await patchC1((doc) => markBad(doc, id), run.now);
+  // Eine gemeldete Stelle macht die Fehlerzahl dieses Textes unsicher: der K7-Eintrag trägt `u: true` (nur additiv) und zählt nie für „erfüllt“.
+  await patchC1((doc) => {
+    const withBad = addBad(doc, [id]) ?? doc;
+    const next = markProdUnsure(withBad, run.id) ?? withBad;
+    return next === doc ? null : next;
+  }, run.now);
   const from = normWs(edit.from);
   const wrongs = mailRepairs(run)
     .filter((r) => normWs(r.wrong).includes(from))

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { clinicErrors, clinicOffered, clinicOutItem, clinicProd, clinicRepairs, clinicVars, cleanSentence, type ClinicRun } from '../../src/domain/tutor/clinic';
+import { clinicErrors, clinicOffered, clinicOutItem, clinicProd, clinicRepairs, clinicVars, cleanSentence, isRevision, type ClinicRun } from '../../src/domain/tutor/clinic';
 import { cleanCtx2, prefillFromCtx, readCtx2, sameCtx2, startCtx2 } from '../../src/domain/tutor/ctx2';
 import { patIdsOf, patListText, PAT_LIST_MAX } from '../../src/domain/tutor/patList';
 import { prodEntry } from '../../src/domain/c1/prod';
@@ -20,6 +20,7 @@ const good = {
   better: 'We went over the budget yesterday.',
   register: 'neutral',
   note: '',
+  good: 'Die Wortwahl und der Satzbau passen zum Anlass.',
 };
 
 describe('Vorlage sentence-clinic@1', () => {
@@ -59,6 +60,34 @@ describe('Vorlage sentence-clinic@1', () => {
     const schema = clinicSchema(vars());
     expect(schema.safeParse({ ...good, verdict: 'correct', fixed: '' }).success).toBe(false);
     expect(schema.safeParse({ ...good, verdict: 'correct', fixed: '', edits: [{ from: 'no such span', to: 'x', why: 'Erfunden hier.' }] }).success).toBe(true);
+    // Eine reine Verbesserung (upgrade) ist bei „richtig“ erlaubt, ein Fehler nicht.
+    const up = { from: 'budget', to: 'financial plan', kind: 'word', sev: 'upgrade', why: 'Ein präziseres Wort hier.' };
+    expect(schema.safeParse({ ...good, verdict: 'correct', fixed: '', edits: [up] }).success).toBe(true);
+  });
+
+  it('Schema: „nicht richtig“ braucht mindestens eine belegte Fehlerstelle; Stil allein macht einen Satz nie „fast richtig“ (M2)', () => {
+    const schema = clinicSchema(vars());
+    const up = { from: 'budget', to: 'financial plan', kind: 'word', sev: 'upgrade', why: 'Ein präziseres Wort hier.' };
+    expect(schema.safeParse({ ...good, edits: [up] }).success).toBe(false);
+    expect(schema.safeParse({ ...good, edits: [{ from: 'no such span', to: 'x', why: 'Erfunden hier.' }] }).success).toBe(false);
+    expect(schema.safeParse({ ...good, edits: [...good.edits, up] }).success).toBe(true);
+    // Ton und Register sind nie ein Fehler (werden zu upgrade) und tragen kein „minor“.
+    expect(schema.safeParse({ ...good, edits: [{ ...up, kind: 'register', sev: 'error' }] }).success).toBe(false);
+    expect(sentenceClinic.build(vars())).toContain('Style ideas never change the verdict');
+    expect(sentenceClinic.build(vars())).toContain('Tone and register are never errors');
+    expect(sentenceClinic.build(vars())).toContain('American and British grammar both count as correct');
+    expect(sentenceClinic.build(vars())).toContain('Do not add facts, names, numbers');
+  });
+
+  it('Schema: „good“ ist Pflicht und in der Oberflächensprache; Englisch in fixed, better und to (S2, S4)', () => {
+    const schema = clinicSchema(vars());
+    expect(schema.safeParse({ ...good, good: '' }).success).toBe(false);
+    expect(schema.safeParse({ ...good, good: undefined }).success).toBe(false);
+    expect(schema.safeParse({ ...good, good: 'The word choice and the sentence structure fit the occasion well.' }).success).toBe(false);
+    const de = 'Wir haben gestern mit dem Team über den Plan gesprochen und alles besprochen.';
+    expect(schema.safeParse({ ...good, fixed: de }).success).toBe(false);
+    expect(schema.safeParse({ ...good, better: de }).success).toBe(false);
+    expect(schema.safeParse({ ...good, edits: [{ ...good.edits[0], to: de }] }).success).toBe(false);
   });
 
   it('Schema: fehlendes oder unverändertes fixed bei minor/wrong → Fehler; falsche Sprache der Begründung → Fehler', () => {
@@ -94,7 +123,7 @@ describe('Vorlage sentence-clinic@1', () => {
 
 const run = (over: Partial<ClinicRun> = {}, out: Partial<ClinicOut> = {}): ClinicRun => {
   const parsed = clinicSchema(vars()).parse(good);
-  return { sentence: SENTENCE, purpose: 'status update', out: { ...parsed, ...out }, now: Date.parse('2026-10-08T10:00:00+02:00'), day: '2026-10-08', pasted: false, translated: false, ...over };
+  return { sentence: SENTENCE, purpose: 'status update', out: { ...parsed, ...out }, now: Date.parse('2026-10-08T10:00:00+02:00'), day: '2026-10-08', pasted: false, translated: false, revised: false, ...over };
 };
 
 describe('Speicherformen', () => {
@@ -119,12 +148,14 @@ describe('Speicherformen', () => {
   });
 
   it('K7: Wörter des eigenen Satzes, Fehler = belegte Fehlerstellen (mindestens 1 bei „nicht richtig“); Einfügen und Übersetzer zählen nie', () => {
-    expect(clinicProd(run())).toMatchObject({ d: '2026-10-08', s: 'clinic', w: 6, e: 1, pasted: false, translated: false });
+    expect(clinicProd(run())).toMatchObject({ d: '2026-10-08', s: 'clinic', w: 6, e: 1, pasted: false, translated: false, id: 'clinic-' + Date.parse('2026-10-08T10:00:00+02:00').toString(36) });
     expect(clinicErrors(run({}, { edits: [] }).out)).toBe(1);
     expect(clinicErrors(run({}, { verdict: 'correct', edits: [], fixed: '' }).out)).toBe(0);
-    expect(prodEntry(clinicProd(run()))).not.toBeNull();
-    expect(prodEntry(clinicProd(run({ pasted: true })))).toBeNull();
-    expect(prodEntry(clinicProd(run({ translated: true })))).toBeNull();
+    expect(prodEntry(clinicProd(run()) ?? { d: 'x', s: 'clinic', w: 1, e: 0 })).not.toBeNull();
+    expect(prodEntry(clinicProd(run({ pasted: true })) ?? { d: 'x', s: 'clinic', w: 1, e: 0 })).toBeNull();
+    expect(prodEntry(clinicProd(run({ translated: true })) ?? { d: 'x', s: 'clinic', w: 1, e: 0 })).toBeNull();
+    // Überarbeitung: kein K7-Eintrag (M3).
+    expect(clinicProd(run({ revised: true }))).toBeNull();
   });
 
   it('Wochenvorschlag: einmal je ISO-Woche, nicht nach einer Klinik dieser Woche, nicht nach „diese Woche nicht“', () => {
@@ -135,6 +166,20 @@ describe('Speicherformen', () => {
     expect(clinicOffered({ ...base, prod: [{ d: '2026-10-06', s: 'clinic', w: 8, e: 1 }] })).toBe(false);
     expect(clinicOffered({ ...base, prod: [{ d: '2026-10-02', s: 'clinic', w: 8, e: 1 }] })).toBe(true);
     expect(clinicOffered({ ...base, prod: [{ d: '2026-10-06', s: 'mail', w: 150, e: 3 }] })).toBe(true);
+  });
+});
+
+describe('Überarbeitung (M3)', () => {
+  const recent = [{ sentence: SENTENCE, fixed: 'We discussed the budget yesterday.', better: 'We went over the budget yesterday.' }];
+  it('≥ 70 % gleiche Wörter wie Satz, korrigierte oder C1-Fassung gelten als Überarbeitung', () => {
+    expect(isRevision('We discussed the budget yesterday afternoon.', recent)).toBe(true);
+    expect(isRevision('We discussed the budget yesterday.', recent)).toBe(true);
+    expect(isRevision('We went over the budget yesterday evening.', recent)).toBe(true);
+  });
+  it('ein anderer Satz ist keine Überarbeitung; ohne frühere Sätze nie', () => {
+    expect(isRevision('Please send the access list before Friday.', recent)).toBe(false);
+    expect(isRevision(SENTENCE, [])).toBe(false);
+    expect(isRevision('Hi there', recent)).toBe(false);
   });
 });
 

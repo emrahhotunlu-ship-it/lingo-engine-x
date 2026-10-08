@@ -177,6 +177,9 @@ test.describe('Laptop 1440 px', () => {
     await expect.poll(async () => ((await dump(page))['app/c1'] as { bad?: string[] } | undefined)?.bad?.length ?? 0).toBe(1);
     await expect.poll(async () => (await writeRepairs(page)).filter((r) => r.done === true).length).toBe(1);
     expect(await writeRepairs(page)).toHaveLength(2);
+    // K7: der Eintrag trägt die Kennung des Textes und ist als unsicher gekennzeichnet (nur additiv, nichts gelöscht).
+    await expect.poll(async () => (await prod(page))[0]?.u).toBe(true);
+    expect((await prod(page))[0]?.id).toMatch(/^c1mail-/);
   });
 
   test('Fehlerfälle: kein JSON (1 Aufruf, Erneut versuchen fragt frisch), Schemafehler (2 Aufrufe), unplausible Nachzählung zählt nur die Liste', async ({ page }) => {
@@ -192,8 +195,8 @@ test.describe('Laptop 1440 px', () => {
     await page.getByTestId('ai-retry').click();
     await expect(page.getByTestId('ws-result')).toBeVisible();
     expect(await calls(page)).toHaveLength(3);
-    // zzcount: Nachzählung 17, die Liste hat 2 belegte Fehler → nur die Liste zählt.
-    expect((await prod(page))[0]).toMatchObject({ e: 2 });
+    // zzcount: Nachzählung 17, die Liste hat 2 belegte Fehler: die Nachzählung zieht höchstens um 2 nach oben (e = 4), der Eintrag ist unsicher (u).
+    expect((await prod(page))[0]).toMatchObject({ e: 4, u: true });
   });
 
   test('Erfundene Stellen und Zitate fallen still weg (kein Neuversuch); Tageslimit: Hinweis, kein Aufruf', async ({ page }) => {

@@ -124,14 +124,21 @@ export function mailVars(i: { situation: MailSituation; text: string; ctx: strin
 }
 
 /**
- * Fehler dieses Textes für K7: Claude zählt zweimal (die belegte Fehlerliste und eine unabhängige Nachzählung `errorCount` in derselben Antwort), der
- * Mittelwert gilt (halbe Werte möglich). Fehlt die Nachzählung oder ist sie unplausibel (mehr als doppelt so hoch + 3), zählt allein die Liste.
+ * Fehler dieses Textes für K7. Die belegte Fehlerliste ist die UNTERGRENZE. Claudes Nachzählung (`errorCount`, in derselben Antwort, nicht unabhängig)
+ * darf nur nach oben ziehen und wird gedeckelt: fehlt sie oder ist sie nicht größer als die Liste, gilt die Liste; sonst gilt der Mittelwert, höchstens
+ * Liste + 2 (halbe Werte möglich). Ist sie unplausibel hoch (> 2 × Liste + 3), zählt der Eintrag als unsicher (`mailUnsure`).
  */
 export function mailErrors(out: C1Mail): number {
   const listed = errorCount(out.edits);
   const second = out.errorCount;
-  if (second === null || second > listed * 2 + 3) return listed;
-  return Math.round(((listed + second) / 2) * 2) / 2;
+  if (second === null || second <= listed) return listed;
+  return Math.min(listed + 2, Math.round(((listed + second) / 2) * 2) / 2);
+}
+
+/** Die Nachzählung weicht unplausibel stark von der belegten Liste ab: der K7-Eintrag trägt `u: true` und zählt nie für „erfüllt“. */
+export function mailUnsure(out: C1Mail): boolean {
+  const listed = errorCount(out.edits);
+  return out.errorCount !== null && out.errorCount > listed * 2 + 3;
 }
 
 export type MailRun = {
@@ -161,7 +168,7 @@ export function mailOutItem(r: MailRun): OutItem {
     theme: r.situation.id,
     ok: mailErrors(o) === 0,
     text: r.text.trim(),
-    fb: { tone: o.tone.fit, gist: o.summary, score: mailErrors(o), e: o.edits.map((e) => [e.from, e.to, e.kind, e.sev]) },
+    fb: { tone: o.tone.fit, gist: o.summary, err: mailErrors(o), e: o.edits.map((e) => [e.from, e.to, e.kind, e.sev]) },
   };
 }
 
@@ -174,7 +181,7 @@ export function mailRepairs(r: MailRun): NewRepair[] {
 /** K7-Eintrag (`addProd`), nur bei der ersten Prüfung (ein Text zählt einmal, sonst würde Überarbeiten die Zahl schönen). Einfügen zählt nie. */
 export function mailProd(r: MailRun): ProdInput | null {
   if (r.check !== 1) return null;
-  return { d: r.day, s: 'mail', w: wordCount(r.text), e: mailErrors(r.out), pasted: r.pasted };
+  return { d: r.day, s: 'mail', w: wordCount(r.text), e: mailErrors(r.out), pasted: r.pasted, id: r.id, ...(mailUnsure(r.out) ? { u: true } : {}) };
 }
 
 /** Wochenvorschlag am Laptop: einmal je ISO-Woche, solange diese Woche noch keine Wochen-Mail in `app/c1.prod` steht und der Vorschlag nicht erledigt wurde. */

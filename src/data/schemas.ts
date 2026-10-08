@@ -923,6 +923,6 @@ export const c1Schema = z.looseObject({
   place: z.looseObject({ d: str, se: num, n: num, skip: strArr, it: z.array(z.unknown()).nullish() }).nullish(),
   checks: z.array(z.looseObject({ d: str, f: str, inp: str, p: z.array(z.unknown()).nullish(), pts: num, max: num })).nullish(),
   gates: z.array(z.looseObject({ d: str, ch: num, g: z.array(z.unknown()).nullish(), w: z.array(z.unknown()).nullish(), ok: bool })).nullish(),
-  prod: z.array(z.looseObject({ d: str, s: str, w: num, e: num })).nullish(),
+  prod: z.array(z.looseObject({ d: str, s: str, w: num, e: num, id: str, u: bool })).nullish(),
   bad: strArr,
 });

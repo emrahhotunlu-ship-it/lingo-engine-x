@@ -20,7 +20,7 @@ export type ClinicSaveResult = {
   repairs: number;
   /** `false`, wenn der Fehlersatz-Teil scheiterte (nicht geschrieben). */
   repairsOk: boolean;
-  prod: PatchResult | 'ignored';
+  prod: PatchResult | 'ignored' | 'skipped';
 };
 
 /** Eintrag in `out/<Monat>`; `true`, wenn geschrieben oder schon so vorhanden. */
@@ -40,8 +40,8 @@ export async function saveClinic(run: ClinicRun): Promise<ClinicSaveResult> {
   const out = await saveOutItem(clinicOutItem(run));
   const repairs = clinicRepairs(run);
   const repairsOk = repairs.length ? await saveRepairs(repairs) : true;
-  const input: ProdInput = clinicProd(run);
-  const prod = await addProd(input, run.now);
+  const input: ProdInput | null = clinicProd(run);
+  const prod = input ? await addProd(input, run.now) : 'skipped';
   if (out) markClinicWeek(run.day);
   return { out, repairs: repairsOk ? repairs.length : 0, repairsOk, prod };
 }

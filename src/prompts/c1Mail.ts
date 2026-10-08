@@ -44,6 +44,7 @@ export const MAIL_TEXT_MAX = 1_800;
 export const MAIL_SITUATION_MAX = 400;
 export const MAIL_PATTERNS_MAX = 3;
 export const MAIL_PHRASES_MAX = 4;
+/** Mehr belegte Stellen werden abgeschnitten (Fehler vor Verbesserungen, danach in Textreihenfolge). */
 export const MAIL_MAX_EDITS = 12;
 
 const ID = 'c1-mail';
@@ -83,8 +84,10 @@ export function mailSchema(v: MailVars): z.ZodType<C1Mail> {
     .superRefine((o, ctx) => {
       o.edits.forEach((e, i) => {
         if (isWrongLang(e.why, v.uiLang)) ctx.addIssue({ code: 'custom', path: ['edits', i, 'why'], message: `must be written in ${langName(v.uiLang)}` });
+        if (isWrongLang(e.to, 'en')) ctx.addIssue({ code: 'custom', path: ['edits', i, 'to'], message: 'must be written in English' });
       });
       if (o.tone.why && isWrongLang(o.tone.why, v.uiLang)) ctx.addIssue({ code: 'custom', path: ['tone', 'why'], message: `must be written in ${langName(v.uiLang)}` });
+      if (isWrongLang(o.upgraded, 'en')) ctx.addIssue({ code: 'custom', path: ['upgraded'], message: 'must be written in English' });
       if (normWs(o.upgraded) === normWs(given)) ctx.addIssue({ code: 'custom', path: ['upgraded'], message: 'upgraded must be a rewritten version' });
     })
     .superRefine(langOf(['summary'], v.uiLang));
@@ -102,6 +105,8 @@ export const c1Mail: PromptTemplate<MailVars, C1Mail> = {
       'You check a short work email written by a German-speaking learner (B2, aiming for C1, business English) for a writing task.',
       'First list every error as an atomic edit: copy the exact wrong span from the text into "from", write the minimal replacement into "to". Only then explain each edit.',
       'Keep the learner words wherever they are correct. Style improvements are sev "upgrade", never "error". American English is the standard; British spelling and British words are correct (mention the US form only as an upgrade).',
+      'American and British grammar both count as correct (e.g. past simple with already/just/yet, have got, collective nouns with plural verbs).',
+      'List all errors first, then upgrades; never drop an error to make room for an upgrade. Do not add facts, names, numbers or product details that are not in the learner text.',
       `Task: ${clip(v.situation, MAIL_SITUATION_MAX)}`,
       v.ctx ? `Learner work context: ${clip(v.ctx, 200)}` : '',
       `Target patterns (id: name (form)):\n${pats.join('\n')}`,
@@ -117,8 +122,8 @@ export const c1Mail: PromptTemplate<MailVars, C1Mail> = {
       '- edits: at most 12, each with "from" copied EXACTLY from the learner text (no paraphrase), "to", kind (grammar, word, collocation, spelling, punctuation or register), sev ("error" or "upgrade"), pat (id or null) and "why" (one short sentence in the explanation language: the rule or the reason). Tone and register are never errors.',
       '- used: for each target pattern id that the learner tried to use, one entry with ok (true if used correctly) and a "quote" copied exactly from the text. Skip patterns the learner did not try.',
       '- tone: fit is "fits", "too-direct", "too-informal" or "too-stiff" for this reader and purpose; why is one short sentence in the explanation language.',
-      '- upgraded: the whole email rewritten at C1 level in American English, keeping the learner ideas and structure; it must differ from the learner text.',
-      '- summary: one short sentence in the explanation language: what works and what to work on next.',
+      '- upgraded: the whole email rewritten at C1 level in American English, keeping the learner ideas and structure and roughly the same length; it must differ from the learner text.',
+      '- summary: one short sentence in the explanation language: what works, whether every point of the task is covered, and what to work on next.',
       '- errorCount: after writing everything, count the mistakes (sev "error") in the learner text once more, independently of the list, and give the number.',
       '- Never invent grammar rules. Never use the straight double quote character inside text values.',
     ]

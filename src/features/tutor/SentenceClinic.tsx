@@ -4,7 +4,7 @@ import { useAiAvailable } from '../../ai/scope';
 import { takeTutorCall } from '../../ai/tutorBudget';
 import { useAsk } from '../../ai/useAsk';
 import { useLive } from '../../data/live';
-import { clinicVars, cleanSentence, type ClinicRun } from '../../domain/tutor/clinic';
+import { clinicId, clinicVars, cleanSentence, isRevision, type ClinicRun, type RecentClinic } from '../../domain/tutor/clinic';
 import { tutorCtx } from '../../domain/tutor/ctx';
 import { readCtx2, SIT_CHIPS } from '../../domain/tutor/ctx2';
 import { normWs, ownWords } from '../../domain/tutor/edits';
@@ -34,8 +34,12 @@ const TONE_KEY: Record<ClinicOut['register'], MessageKey> = { formal: 'ttClToneF
 
 type Shown = { run: ClinicRun; save: ClinicSaveResult | null; id: string };
 
+/** Die letzten Sätze dieser Sitzung (bis zum Neuladen): Überarbeitungen zählen nicht noch einmal für K7. */
+const recent: RecentClinic[] = [];
+const RECENT_MAX = 6;
+
 function Result({ shown, onAgain, onDone }: { shown: Shown; onAgain: () => void; onDone: () => void }) {
-  const { t } = useT();
+  const { t, lang } = useT();
   const { run, save } = shown;
   const o = run.out;
   const [active, setActive] = useState(0);
@@ -72,6 +76,12 @@ function Result({ shown, onAgain, onDone }: { shown: Shown; onAgain: () => void;
           {t('ttClNothing')}
         </p>
       )}
+      <div className="flex flex-col gap-1" data-testid="cl-good">
+        <p className="lx-t-label m-0 text-subtle">{t('ttClGood')}</p>
+        <p className="lx-t-body m-0" lang={lang}>
+          {o.good}
+        </p>
+      </div>
       {o.verdict !== 'correct' && o.fixed && (
         <div className="flex flex-col gap-1" data-testid="cl-fixed">
           <p className="lx-t-label m-0 text-subtle">{t('ttClFixed')}</p>
@@ -109,9 +119,14 @@ function Result({ shown, onAgain, onDone }: { shown: Shown; onAgain: () => void;
             {save.repairs === 1 ? t('ttClRepairs1') : t('ttClRepairsN', { n: save.repairs })}
           </p>
         )}
-        {save && counted && !run.pasted && !run.translated && (
+        {save && counted && !run.pasted && !run.translated && !run.revised && (
           <p className="lx-t-meta m-0 text-subtle" data-testid="cl-counted">
             {t('ttClCounted')}
+          </p>
+        )}
+        {run.revised && !run.pasted && !run.translated && (
+          <p className="lx-t-meta m-0 text-subtle" data-testid="cl-revision">
+            {t('ttClRevision')}
           </p>
         )}
         {(run.pasted || run.translated) && (
@@ -174,8 +189,11 @@ export function ClinicFlow({ onClose }: { onClose: () => void }) {
     runOnce.current = true;
     noteQuality(TPL, 'acc');
     const now = Date.now();
-    const run: ClinicRun = { sentence, purpose, out, now, day: useClock.getState().today, pasted, translated: seed.translated === true };
-    const entry: Shown = { run, save: null, id: `clinic-${now.toString(36)}` };
+    const revised = isRevision(sentence, recent);
+    recent.unshift({ sentence, fixed: out.fixed, better: out.better });
+    recent.length = Math.min(recent.length, RECENT_MAX);
+    const run: ClinicRun = { sentence, purpose, out, now, day: useClock.getState().today, pasted, translated: seed.translated === true, revised };
+    const entry: Shown = { run, save: null, id: clinicId(now) };
     setShown(entry);
     const save = await saveClinic(run);
     setShown((cur) => (cur && cur.id === entry.id ? { ...cur, save } : cur));

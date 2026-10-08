@@ -61,7 +61,7 @@ export function clipFb(fb: unknown): unknown {
   if (jsonBytes(fb) <= OUT_FIELD_MAX_BYTES) return fb;
   const o = fb && typeof fb === 'object' && !Array.isArray(fb) ? (fb as Doc) : {};
   const small: Doc = {};
-  for (const k of ['verdict', 'ok', 'score', 'moves', 'tone', 'gist']) if (k in o) small[k] = o[k];
+  for (const k of ['verdict', 'ok', 'score', 'err', 'moves', 'tone', 'gist']) if (k in o) small[k] = o[k];
   if (typeof o.effect === 'string') small.effect = clipBytes(o.effect, 400);
   return jsonBytes(small) <= OUT_FIELD_MAX_BYTES ? small : undefined;
 }

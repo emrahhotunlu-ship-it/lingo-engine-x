@@ -164,17 +164,17 @@ function k6(m: K6Measure | null): Criterion {
 /** K7 an den Check-Tagen (alle Checks, auch Handy: K7 misst Schreiben, nicht den Check), ältester zuerst. */
 export function k7AtChecks(c1: C1Doc): Array<{ d: string; r: ProdRate }> {
   const days = [...new Set(c1.checks.map((c) => c.d))].sort();
-  return days.map((d) => ({ d, r: prodRate(c1.prod, d) }));
+  return days.map((d) => ({ d, r: prodRate(c1.prod, d, undefined, c1.bad) }));
 }
 
 function k7(c1: C1Doc, today: string, atChecks: ReadonlyArray<{ d: string; r: ProdRate }>): Criterion {
   const g = C1_GOALS.k7;
-  const now = prodRate(c1.prod, today);
+  const now = prodRate(c1.prod, today, undefined, c1.bad);
   const ev = { rate: now.rate, words: now.words, entries: now.entries, weeks: now.weeks };
   if (now.state === 'few' || now.rate === null) return { id: 'k7', state: 'few', ev, progress: null, trend: null };
   const lastTwo = atChecks.slice(-g.checkDays);
-  const met = lastTwo.length === g.checkDays && lastTwo.every((x) => x.r.state === 'ok' && x.r.rate !== null && x.r.rate <= g.rate);
-  const before = prodRate(c1.prod, addDays(today, -28));
+  const met = lastTwo.length === g.checkDays && lastTwo.every((x) => x.r.state === 'ok' && x.r.rate !== null && x.r.rate <= g.rate && x.r.unsure === 0);
+  const before = prodRate(c1.prod, addDays(today, -28), undefined, c1.bad);
   const trend = before.state === 'ok' && before.rate !== null ? (now.rate < before.rate ? 'up' : 'flat') : null;
   const progress = lowerBetter(now.rate, g.rate);
   return { id: 'k7', state: stateOf(met, progress, trend), ev, progress, trend };

@@ -45,7 +45,9 @@ export function MailResult({ shown, onRevise, onNew, onDone }: { shown: MailShow
   const used = run.situation.patterns.map((p) => {
     const hit = run.out.used.find((u) => u.pat === p.id);
     const name = patternById(p.id)?.name[lang] ?? p.id;
-    return { id: p.id, name, state: hit ? (hit.ok ? 'ok' : 'bad') : 'none', quote: hit?.quote ?? '' } as const;
+    // Bei „versucht, noch nicht ganz richtig“ den Grund zeigen: die Fehlerstelle, die im Zitat steht.
+    const why = hit && !hit.ok ? (all.find((e) => e.sev === 'error' && hit.quote.includes(e.from))?.why ?? '') : '';
+    return { id: p.id, name, state: hit ? (hit.ok ? 'ok' : 'bad') : 'none', quote: hit?.quote ?? '', why } as const;
   });
   const errors = mailErrors(run.out);
   return (
@@ -97,6 +99,11 @@ export function MailResult({ shown, onRevise, onNew, onDone }: { shown: MailShow
           {used.map((u) => (
             <li key={u.id} className="lx-t-body" data-testid={`ws-used-${u.id}`} data-state={u.state}>
               <span className="font-semibold">{u.name}</span> <span className="text-muted">· {t(u.state === 'ok' ? 'ttWsPatOk' : u.state === 'bad' ? 'ttWsPatBad' : 'ttWsPatNone')}</span>
+              {u.why && (
+                <span className="lx-t-meta block text-muted" lang={lang} data-testid={`ws-used-why-${u.id}`}>
+                  {u.why}
+                </span>
+              )}
             </li>
           ))}
         </ul>

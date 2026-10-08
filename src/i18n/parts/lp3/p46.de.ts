@@ -44,6 +44,8 @@ export const ttP46De = {
   ttClAgain: 'Noch ein Satz',
   ttClDone: 'Fertig',
   ttClProfileOpen: 'Mein Arbeitsalltag anpassen',
+  ttClGood: 'Das war gut',
+  ttClRevision: 'Überarbeitungen zählen nicht noch einmal für den Genauigkeitswert.',
   ttClReportEdit: 'Stelle melden',
   ttClCardEyebrow: 'Diese Woche',
   ttClCardTitle: 'Ein Satz aus deinem Arbeitsalltag?',

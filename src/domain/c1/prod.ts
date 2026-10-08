@@ -29,6 +29,10 @@ export type ProdInput = {
   pasted?: boolean;
   /** Übersetzer genutzt: zählt nie. */
   translated?: boolean;
+  /** Kennung des Textes (`out`-Eintrag). Steht sie in `app/c1.bad`, zählt der Eintrag in K7 nicht mehr. */
+  id?: string;
+  /** Unsicher (z. B. unplausible Nachzählung): zählt für K7-Mengen, nie für „erfüllt“. */
+  u?: boolean;
 };
 
 /** Halbe Fehler sind erlaubt (Mittelwert zweier Zählungen); alles andere wird auf 0,5 gerundet. */
@@ -42,7 +46,7 @@ export function prodEntry(i: ProdInput): C1Prod | null {
   const w = Math.round(i.w);
   const e = halves(i.e);
   if (w < 1 || w > PROD_MAX_WORDS || e < 0 || e > w) return null;
-  return { d: i.d, s: i.s, w, e };
+  return { d: i.d, s: i.s, w, e, ...(i.id ? { id: i.id.slice(0, 60) } : {}), ...(i.u === true ? { u: true as const } : {}) };
 }
 
 /**
@@ -55,6 +59,17 @@ export function addProdTo(doc: C1Doc, i: ProdInput): C1Doc | null {
   if (doc.prod.some((p) => p.wk !== true && p.d === entry.d && p.s === entry.s && p.w === entry.w && p.e === entry.e)) return null;
   const prod = [...doc.prod, entry].sort((a, b) => a.d.localeCompare(b.d));
   return { ...doc, prod };
+}
+
+/** „Stelle melden“: den Eintrag dieses Textes als unsicher kennzeichnen (nur das additive Feld `u`, nichts wird gelöscht). `null`, wenn es ihn nicht gibt oder er schon unsicher ist. Rein. */
+export function markProdUnsure(doc: C1Doc, id: string): C1Doc | null {
+  let changed = false;
+  const prod = doc.prod.map((p) => {
+    if (p.id !== id || p.u === true) return p;
+    changed = true;
+    return { ...p, u: true as const };
+  });
+  return changed ? { ...doc, prod } : null;
 }
 
 /** Eintrag speichern (über `patchC1` → `writer.transform`). Nie geworfen. */
@@ -72,27 +87,40 @@ export type ProdRate = {
   weeks: number;
   /** Fehler je 100 Wörter (eine Nachkommastelle); auch bei `few` gerechnet, aber nie als Urteil gezeigt. */
   rate: number | null;
+  /** Zahl der unsicheren Einträge im Fenster (`u`); K7 gilt mit ihnen nie als erfüllt. */
+  unsure: number;
 };
 
 /**
  * Fehler je 100 Wörter der letzten `weeks` Wochen bis einschließlich `day`. Eine verdichtete Wochensumme zählt als EIN Eintrag (vorsichtig:
  * die Mindestzahl an Einträgen wird dadurch eher später erreicht). Rein; mit einem Check-Tag als `day` ergibt sich der Wert dieses Tages.
  */
-export function prodRate(prod: readonly C1Prod[], day: string, weeks: number = PROD_WINDOW_WEEKS): ProdRate {
+export function prodRate(prod: readonly C1Prod[], day: string, weeks: number = PROD_WINDOW_WEEKS, bad: readonly string[] = []): ProdRate {
   const from = addDays(day, -weeks * 7 + 1);
+  const gone = new Set(bad);
   let words = 0;
   let errors = 0;
   let entries = 0;
+  let unsure = 0;
   const wk = new Set<string>();
-  for (const p of prod) {
+  // Satz-Klinik zählt höchstens einmal je Woche (der erste Eintrag der Woche): viele Einzelsätze würden K7 sonst steuern (KT K3).
+  const clinicWeeks = new Set<string>();
+  for (const p of [...prod].sort((a, b) => a.d.localeCompare(b.d))) {
     if (!isDayKey(p.d) || p.d < from || p.d > day) continue;
     if (!Number.isFinite(p.w) || !Number.isFinite(p.e) || p.w <= 0 || p.e < 0) continue;
+    if (p.id && gone.has(p.id)) continue;
+    if (p.s === 'clinic' && p.wk !== true) {
+      const key = weekStart(p.d);
+      if (clinicWeeks.has(key)) continue;
+      clinicWeeks.add(key);
+    }
     words += p.w;
     errors += p.e;
     entries++;
+    if (p.u === true) unsure++;
     wk.add(weekStart(p.d));
   }
   const rate = words > 0 ? Math.round((errors / words) * 1000) / 10 : null;
   const few = words < PROD_MIN.words || entries < PROD_MIN.entries || wk.size < PROD_MIN.weeks;
-  return { state: few ? 'few' : 'ok', words, errors: halves(errors), entries, weeks: wk.size, rate };
+  return { state: few ? 'few' : 'ok', words, errors: halves(errors), entries, weeks: wk.size, rate, unsure };
 }

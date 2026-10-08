@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { addProdTo, markProdUnsure, prodRate } from '../../src/domain/c1/prod';
+import { emptyC1 } from '../../src/domain/c1/c1doc';
 import { programChapters } from '../../src/domain/c1/chapters';
 import { prodEntry } from '../../src/domain/c1/prod';
 import { patternById } from '../../src/domain/grammar/patterns';
@@ -6,6 +8,7 @@ import { locateRaw } from '../../src/domain/tutor/edits';
 import {
   MAIL_MAX_CHECKS,
   mailErrors,
+  mailUnsure,
   mailGuard,
   mailOffered,
   mailOutItem,
@@ -32,6 +35,23 @@ const SITS = mailSituations();
 const TEXT = 'Dear Ms Weber,\n\nWe discussed about the budget yesterday. I will tell you more about informations next week.\n\nBest regards\nEmrah';
 const E = (from: string, to: string, extra: Record<string, unknown> = {}) => ({ from, to, kind: 'grammar', sev: 'error', pat: null, why: 'Weil es so ist.', ...extra });
 const first = SITS[0] as MailSituation;
+
+// Zusatzfälle der Erkennungsmuster (Lehrer-Runde 1): (Situation, Muster, Satz, Treffer?)
+const CASES: Array<[string, string, string, boolean]> = [
+  ['ms01', 'pp.earlier', 'We had heard about the problem before the audit.', true],
+  ['ms01', 'pp.earlier', 'We had found the cause and had told the client.', true],
+  ['ms02', 'pp.earlier', 'We had sold the licenses before he wrote.', true],
+  ['ms03', 'fut.perfect', 'We will have to move the date.', false],
+  ['ms03', 'fut.perfect', 'We will have migrated the archive by then.', true],
+  ['ms04', 'tc.present-for-future', 'Once the access list is ready, we can start.', true],
+  ['ms04', 'tc.present-for-future', 'Once you send the access list, we can start.', true],
+  ['ms05', 'cn.second', 'If you would like to discuss the terms, call me.', false],
+  ['ms05', 'cn.second', 'If we extended the term, we would lower the price.', true],
+  ['ms07', 'pv.perfect', 'Payments have been made and the invoices have been paid.', true],
+  ['ms08', 'rs.backshift', 'He said it would be ready on Friday.', true],
+  ['ms08', 'rs.backshift', 'The CFO approved the budget.', false],
+  ['ms12', 'cp.having', 'Having heard about the delay, I called the carrier.', true],
+];
 const vars = (over: Partial<MailVars> = {}): MailVars => ({ ...mailVars({ situation: first, text: TEXT, ctx: 'Sales Director in document management', uiLang: 'de' }), ...over });
 const good = {
   edits: [E('discussed about', 'discussed', { pat: 'prp.no-prep' }), E('informations', 'information', { pat: 'cnt.uncount' }), E('tell you', 'let you know', { sev: 'upgrade', kind: 'word' })],
@@ -62,6 +82,14 @@ describe('Inhalt: 12 Situationen', () => {
         expect(re.test(p.ex), `${s.id} ${p.id} erkennt das Beispiel`).toBe(true);
         expect(re.test(p.no), `${s.id} ${p.id} lässt das Gegenbeispiel aus`).toBe(false);
       }
+    }
+  });
+
+  it('Zusatzfälle der Erkennungsmuster (had heard, Having heard, will have to, if you would like …)', () => {
+    for (const [sid, pid, text, hit] of CASES) {
+      const pat = SITS.find((x) => x.id === sid)?.patterns.find((p) => p.id === pid);
+      expect(pat, `${sid} ${pid}`).toBeTruthy();
+      expect(new RegExp(pat?.re ?? '', 'i').test(text), `${sid} ${pid}: ${text}`).toBe(hit);
     }
   });
 
@@ -186,17 +214,27 @@ const parsed = (over: Record<string, unknown> = {}): C1Mail => mailSchema(vars()
 const run = (over: Partial<MailRun> = {}, out: C1Mail = parsed()): MailRun => ({ situation: first, text: TEXT, out, now: Date.parse('2026-10-08T10:00:00+02:00'), day: '2026-10-08', pasted: false, id: 'c1mail-abc', check: 1, ...over });
 
 describe('K7-Zählung und Speicherformen', () => {
-  it('Fehler = Mittelwert aus belegter Liste und Nachzählung; fehlt oder unplausibel → nur die Liste; Verbesserungen zählen nie', () => {
+  it('Fehler: die belegte Liste ist die Untergrenze; die Nachzählung zieht nur nach oben, höchstens um 2 (M1); Verbesserungen zählen nie', () => {
     expect(mailErrors(parsed())).toBe(2);
     expect(mailErrors(parsed({ errorCount: 3 }))).toBe(2.5);
-    expect(mailErrors(parsed({ errorCount: 1 }))).toBe(1.5);
+    expect(mailErrors(parsed({ errorCount: 6 }))).toBe(4);
+    expect(mailErrors(parsed({ errorCount: 1 }))).toBe(2);
     expect(mailErrors(parsed({ errorCount: undefined }))).toBe(2);
-    expect(mailErrors(parsed({ errorCount: 40 }))).toBe(2);
+    expect(mailErrors(parsed({ errorCount: 40 }))).toBe(4);
     expect(mailErrors(parsed({ edits: [E('tell you', 'let you know', { sev: 'upgrade' })], errorCount: 0 }))).toBe(0);
   });
 
+  it('unplausible Nachzählung (> 2 × Liste + 3) macht den K7-Eintrag unsicher (u), sonst nicht', () => {
+    expect(mailUnsure(parsed({ errorCount: 40 }))).toBe(true);
+    expect(mailUnsure(parsed({ errorCount: 7 }))).toBe(false);
+    expect(mailUnsure(parsed({ errorCount: 8 }))).toBe(true);
+    expect(mailUnsure(parsed({ errorCount: undefined }))).toBe(false);
+    expect(mailProd(run({}, parsed({ errorCount: 40 })))).toMatchObject({ u: true, id: 'c1mail-abc' });
+    expect(mailProd(run())).not.toHaveProperty('u');
+  });
+
   it('K7-Eintrag nur bei der ersten Prüfung; eingefügt zählt nie', () => {
-    expect(mailProd(run())).toMatchObject({ d: '2026-10-08', s: 'mail', w: 21, e: 2, pasted: false });
+    expect(mailProd(run())).toMatchObject({ d: '2026-10-08', s: 'mail', w: 21, e: 2, pasted: false, id: 'c1mail-abc' });
     expect(mailProd(run({ check: 2 }))).toBeNull();
     const pasted = mailProd(run({ pasted: true }));
     expect(pasted && prodEntry(pasted)).toBeNull();
@@ -235,5 +273,33 @@ describe('Unterstreichung im rohen Text', () => {
     const edits = mailSchema(vars({ text })).parse({ ...good, edits: [E('don\'t know', 'do not know'), E('informations', 'information'), E('discussed about', 'discussed'), E('form', 'x')], used: [], upgraded: 'Something else entirely, rewritten at length.' }).edits;
     const spots = locateRaw(text, edits);
     expect(spots.map((s) => text.slice(s.start, s.end))).toEqual(['don’t\nknow', 'informations', 'discussed about']);
+  });
+});
+
+describe('K7: Kennung, unsicher, gemeldet, Satz-Klinik höchstens einmal je Woche (S1, K3)', () => {
+  const day = '2026-10-08';
+  const mk = (over: Record<string, unknown>) => ({ d: '2026-10-05', s: 'mail' as const, w: 150, e: 3, ...over });
+  const many = [mk({ id: 'a' }), mk({ id: 'b', d: '2026-09-28' }), mk({ id: 'c', d: '2026-09-21' }), mk({ id: 'd', d: '2026-09-14' }), mk({ id: 'e', d: '2026-09-07', u: true }), mk({ id: 'f', d: '2026-09-10' })];
+  it('Einträge, deren Kennung in bad steht, zählen nicht; unsichere werden gezählt, aber ausgewiesen', () => {
+    const all = prodRate(many, day);
+    expect(all).toMatchObject({ entries: 6, words: 900, unsure: 1 });
+    const gone = prodRate(many, day, undefined, ['a']);
+    expect(gone).toMatchObject({ entries: 5, words: 750 });
+  });
+  it('Kennung und u werden gespeichert; markProdUnsure setzt u nur additiv', () => {
+    const doc = addProdTo(emptyC1(), { d: day, s: 'mail', w: 100, e: 2, id: 'c1mail-x' });
+    expect(doc?.prod[0]).toMatchObject({ id: 'c1mail-x' });
+    const marked = doc ? markProdUnsure(doc, 'c1mail-x') : null;
+    expect(marked?.prod[0]).toMatchObject({ id: 'c1mail-x', u: true, w: 100, e: 2 });
+    expect(marked ? markProdUnsure(marked, 'c1mail-x') : 0).toBeNull();
+    expect(doc ? markProdUnsure(doc, 'other') : 0).toBeNull();
+  });
+  it('Satz-Klinik zählt je Woche nur den ersten Eintrag', () => {
+    const list = [
+      { d: '2026-10-05', s: 'clinic' as const, w: 8, e: 1 },
+      { d: '2026-10-06', s: 'clinic' as const, w: 9, e: 0 },
+      { d: '2026-09-29', s: 'clinic' as const, w: 7, e: 2 },
+    ];
+    expect(prodRate(list, day)).toMatchObject({ entries: 2, words: 15 });
   });
 });

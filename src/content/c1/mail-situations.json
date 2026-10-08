@@ -14,9 +14,9 @@
       "patterns": [
         { "id": "psp.since-for", "re": "(?:\\b(?:have|has)|\\w['’]ve)\\s[^!?\\n]{0,40}\\b(?:since|for|so far)\\b", "ex": "We have processed 1.2 million invoices since March.", "no": "We processed 1.2 million invoices last March." },
         { "id": "psc.now", "re": "\\b(?:am|is|are)\\s+(?:\\w+ly\\s+)?\\w+ing\\b|\\w['’](?:m|re)\\s+(?:\\w+ly\\s+)?\\w+ing\\b", "ex": "Right now we are testing the new workflow.", "no": "We tested the new workflow in May." },
-        { "id": "pp.earlier", "re": "\\bhad\\s+(?:already\\s+|just\\s+|not\\s+|never\\s+)?(?:been|[a-z]+(?:ed|en|ne|wn|ght|de|id|pt|nt|ng|un|et))\\b", "ex": "We had already migrated the legacy data before the audit started.", "no": "We had a long meeting about the data." }
+        { "id": "pp.earlier", "re": "\\bhad\\s+(?:already\\s+|just\\s+|not\\s+|never\\s+)?(?:been|[a-z]+(?:ed|en|ne|wn|ght|de|id|pt|nt|ng|un|et|rd|ld|nd|lt|ut|ade|aid))\\b", "ex": "We had already migrated the legacy data before the audit started.", "no": "We had a long meeting about the data." }
       ],
-      "phrases": ["so far", "on track", "ahead of the audit", "next steps"]
+      "phrases": ["so far", "on track", "ahead of schedule", "next steps"]
     },
     {
       "id": "ms02",
@@ -29,7 +29,7 @@
       },
       "patterns": [
         { "id": "pc.duration", "re": "(?:\\b(?:have|has)|\\w['’]ve)\\s+been\\s+\\w+ing\\b", "ex": "My team has been working on the access issue since Monday.", "no": "My team worked on the access issue on Monday." },
-        { "id": "pp.earlier", "re": "\\bhad\\s+(?:already\\s+|just\\s+|not\\s+|never\\s+)?(?:been|[a-z]+(?:ed|en|ne|wn|ght|de|id|pt|nt|ng|un|et))\\b", "ex": "We had already fixed the login error when your message arrived.", "no": "We had a call with your team." },
+        { "id": "pp.earlier", "re": "\\bhad\\s+(?:already\\s+|just\\s+|not\\s+|never\\s+)?(?:been|[a-z]+(?:ed|en|ne|wn|ght|de|id|pt|nt|ng|un|et|rd|ld|nd|lt|ut|ade|aid))\\b", "ex": "We had already fixed the login error when your message arrived.", "no": "We had a call with your team." },
         { "id": "psp.since-for", "re": "(?:\\b(?:have|has)|\\w['’]ve)\\s[^!?\\n]{0,40}\\b(?:since|for|so far)\\b", "ex": "We have resolved nine of twelve tickets so far.", "no": "We resolved nine tickets yesterday." }
       ],
       "phrases": ["since we went live", "in the meantime", "bring you up to speed", "rest assured"]
@@ -45,8 +45,8 @@
       },
       "patterns": [
         { "id": "tc.by-the-time", "re": "\\bby the time\\b", "ex": "By the time the audit starts, we will have tested every interface.", "no": "The audit starts in March." },
-        { "id": "fut.perfect", "re": "\\bwill\\s+have\\s+(?:been\\s+)?\\w+|\\w['’]ll\\s+have\\s+(?:been\\s+)?\\w+", "ex": "The archive will have been migrated by then.", "no": "We will start the migration next week." },
-        { "id": "cp.by-until", "re": "\\b(?:by|until)\\s+(?:the end of|end of|next|this|monday|tuesday|wednesday|thursday|friday|q[1-4]|\\d)|\\bno later than\\b", "ex": "We commit to going live no later than 30 November.", "no": "We commit to going live in November." }
+        { "id": "fut.perfect", "re": "\\bwill\\s+have\\s+(?!to\\b)(?:been\\s+)?\\w+|\\w['’]ll\\s+have\\s+(?!to\\b)(?:been\\s+)?\\w+", "ex": "We will have migrated the archive by then.", "no": "We will start the migration next week." },
+        { "id": "cp.by-until", "re": "\\b(?:by|until)\\s+(?:the end of|end of|next|this|monday|tuesday|wednesday|thursday|friday|q[1-4]|\\d)|\\bno later than\\b", "ex": "We commit to going live no later than November 30.", "no": "We commit to going live in November." }
       ],
       "phrases": ["no later than", "as of", "on track to", "contingent on"]
     },
@@ -56,13 +56,13 @@
       "to": "client IT lead",
       "sit": "client email",
       "brief": {
-        "en": "Invite the IT lead of a client to a workshop next week. Say what you will be doing during the session, what you were going to cover originally, and what you need from them once the access list is ready.",
-        "de": "Lade die IT-Leitung eines Kunden zu einem Workshop nächste Woche ein. Sag, was du während der Sitzung machen wirst, was du ursprünglich behandeln wolltest und was du von ihnen brauchst, sobald die Zugriffsliste fertig ist."
+        "en": "Invite the IT lead of a client to a workshop next week. Say what you will be doing during the session, what you were originally going to cover and why the plan changed, and what you need from them once the access list is ready.",
+        "de": "Lade die IT-Leitung eines Kunden zu einem Workshop nächste Woche ein. Sag, was du während der Sitzung machen wirst, was du ursprünglich behandeln wolltest und warum sich der Plan geändert hat, und was du von ihnen brauchst, sobald die Zugriffsliste fertig ist."
       },
       "patterns": [
         { "id": "fut.continuous", "re": "\\bwill\\s+be\\s+\\w+ing\\b|\\w['’]ll\\s+be\\s+\\w+ing\\b", "ex": "I will be presenting the new interface at ten.", "no": "I will present the new interface at ten." },
         { "id": "ff.was-going-to", "re": "\\b(?:was|were)\\s+going\\s+to\\b", "ex": "We were going to cover reporting first, but the plan changed.", "no": "We are going to cover reporting first." },
-        { "id": "tc.present-for-future", "re": "\\b(?:once|as soon as|when|before|after)\\s+(?:you|we|they|I)\\s+(?:have|has|get|receive|confirm|send|are|finish|approve|sign)\\b", "ex": "Once you send the access list, we can start the setup.", "no": "Please send the access list." }
+        { "id": "tc.present-for-future", "re": "\\b(?:once|as soon as|when|before|after)\\s+[^,.!?]{1,40}?\\s(?:have|has|get|receive|confirm|send|are|is|finish|approve|sign)\\b", "ex": "Once you send the access list, we can start the setup.", "no": "Please send the access list." }
       ],
       "phrases": ["at your earliest convenience", "walk you through", "to be on the safe side", "looking ahead"]
     },
@@ -72,12 +72,12 @@
       "to": "client",
       "sit": "negotiation",
       "brief": {
-        "en": "A client asks for a 20 percent discount on the contract renewal. Write a reply that offers what you can and under which conditions, politely declines the rest, and keeps the door open.",
-        "de": "Ein Kunde verlangt 20 Prozent Rabatt auf die Vertragsverlängerung. Schreib eine Antwort: was du anbieten kannst und unter welchen Bedingungen, höfliche Absage für den Rest und die Tür bleibt offen."
+        "en": "A client asks for a 20 percent discount on the contract renewal. Write a reply that offers what you can and under which conditions, politely declines the rest, keeps the door open, and says what would be possible if they committed to a longer term.",
+        "de": "Ein Kunde bittet um 20 Prozent Rabatt auf die Vertragsverlängerung. Schreib eine Antwort: was du anbieten kannst und unter welchen Bedingungen, höfliche Absage für den Rest, die Tür bleibt offen und was möglich wäre, wenn er sich länger bindet."
       },
       "patterns": [
         { "id": "ca.as-long-as", "re": "\\b(?:as|so) long as\\b|\\bprovided\\b|\\bproviding\\b|\\bon condition that\\b", "ex": "We can offer ten percent as long as you renew for three years.", "no": "We can offer ten percent for a three-year renewal." },
-        { "id": "cn.second", "re": "\\bif\\b[^.!?]{0,80}(?:\\bwould\\b|\\w['’]d\\b)", "ex": "If we extended the term, we would be able to lower the price.", "no": "If you renew, we will lower the price." },
+        { "id": "cn.second", "re": "(?!if you would like)\\bif\\b[^.!?]{0,80}(?:\\bwould\\b|\\w['’]d\\b)", "ex": "If we extended the term, we would be able to lower the price.", "no": "If you renew, we will lower the price." },
         { "id": "dip.possible", "re": "\\bwould it be possible\\b|\\bis it possible\\b", "ex": "Would it be possible to move the signing date to June?", "no": "Please move the signing date to June." }
       ],
       "phrases": ["in return", "meet you halfway", "we would be happy to", "subject to"]
@@ -88,8 +88,8 @@
       "to": "manager",
       "sit": "status update",
       "brief": {
-        "en": "Your pilot project missed its goals. Write a short lessons-learned email to your manager: what you wish had been done differently, what would have happened with another month of testing, and what would be different today if the team had started earlier.",
-        "de": "Dein Pilotprojekt hat die Ziele verfehlt. Schreib deiner Chefin oder deinem Chef eine kurze Lessons-learned-Mail: was du dir anders gewünscht hättest, was mit einem weiteren Testmonat passiert wäre und was heute anders wäre, wenn das Team früher begonnen hätte."
+        "en": "Your pilot project missed its goals. Write a short lessons-learned email to your manager: what you wish the team had done differently, what would have happened with another month of testing, and what would be different today if the team had started earlier.",
+        "de": "Dein Pilotprojekt hat die Ziele verfehlt. Schreib deiner Chefin oder deinem Chef eine kurze Lessons-Learned-Mail: was du dir anders gewünscht hättest, was mit einem weiteren Testmonat passiert wäre und was heute anders wäre, wenn das Team früher begonnen hätte."
       },
       "patterns": [
         { "id": "mc.wish-past", "re": "\\bwish(?:ed)?\\b[^.!?]{0,60}\\bhad\\s+\\w+", "ex": "I wish we had involved the IT team earlier.", "no": "I wish you a good week." },
@@ -108,7 +108,7 @@
         "de": "Gestern hat ein kurzer Ausfall mehrere Kunden betroffen. Schreib eine Störungszusammenfassung für die Geschäftsleitung: was bisher getan wurde, was vermutlich die Ursache ist und was du empfiehlst."
       },
       "patterns": [
-        { "id": "pv.perfect", "re": "\\b(?:has|have)\\s+been\\s+\\w+(?:ed|en|t|wn|ne)\\b", "ex": "The affected servers have been restarted.", "no": "We restarted the affected servers." },
+        { "id": "pv.perfect", "re": "\\b(?:has|have)\\s+been\\s+\\w+(?:ed|en|t|wn|ne|de|id|ld|nd)\\b", "ex": "The affected servers have been restarted.", "no": "We restarted the affected servers." },
         { "id": "pp.personal", "re": "\\b(?:is|are|was|were)\\s+(?:said|believed|thought|reported|expected|known|considered|understood)\\s+to\\b", "ex": "The outage is believed to have been caused by a faulty update.", "no": "A faulty update caused the outage." },
         { "id": "rv.suggest-rec", "re": "\\b(?:suggest|suggests|suggested|recommend|recommends|recommended)\\b", "ex": "I recommend testing every update first.", "no": "We test every update first." }
       ],
@@ -120,11 +120,11 @@
       "to": "absent colleague",
       "sit": "status update",
       "brief": {
-        "en": "A colleague missed the budget meeting. Summarize it for them: what people said, what they wanted to know, and what was demanded or recommended for the next quarter.",
-        "de": "Ein Kollege hat das Budgetmeeting verpasst. Fass es für ihn zusammen: was gesagt wurde, was die Leute wissen wollten und was für das nächste Quartal gefordert oder empfohlen wurde."
+        "en": "A colleague missed the budget meeting. Summarize it for them: what people said, what they wanted to know, and what someone insisted on or recommended for the next quarter.",
+        "de": "Ein Kollege hat das Budgetmeeting verpasst. Fass es für ihn zusammen: was gesagt wurde, was die Leute wissen wollten und was jemand für das nächste Quartal verlangt oder empfohlen hat."
       },
       "patterns": [
-        { "id": "rs.backshift", "re": "\\b(?:said|mentioned|explained|stated|told us)\\b[^.!?]{0,25}\\b(?:they|he|she|we|the \\w+)\\s+(?:had|would|could|was|were)\\b", "ex": "The CFO said that the budget had already been approved.", "no": "The CFO said: the budget is approved." },
+        { "id": "rs.backshift", "re": "\\b(?:said|mentioned|explained|stated|told us)\\b[^.!?]{0,25}\\b(?:it|they|he|she|we|the(?:\\s+\\w+){1,2})\\s+(?:had|would|could|was|were)\\b", "ex": "The CFO said that the budget had already been approved.", "no": "The CFO approved the budget." },
         { "id": "qu.indirect", "re": "\\b(?:asked|wondered|wanted to know|could you tell me|do you know|I wonder)\\s+(?:if|whether|what|when|where|why|how|who|which)\\b", "ex": "Marketing asked when the new tool would be available.", "no": "Marketing asked for the new tool." },
         { "id": "mnd.verbs", "re": "\\b(?:insist|insisted|demand|demanded|recommend|recommended|suggest|suggested|propose|proposed|require|required)\\s+that\\b", "ex": "Finance insisted that every request be approved in writing.", "no": "Finance insisted on written approval." }
       ],
@@ -136,7 +136,7 @@
       "to": "CFO",
       "sit": "status update",
       "brief": {
-        "en": "Your vendor may miss the delivery date. Write a careful risk assessment for your CFO: how likely a delay is, what it might be worth doing now, and what you would lean towards.",
+        "en": "Your vendor may miss the delivery date. Write a careful risk assessment for your CFO: how likely a delay is, what it might be worth doing now, and what you would lean toward.",
         "de": "Dein Lieferant verpasst vielleicht den Liefertermin. Schreib deinem Finanzchef eine vorsichtige Risikoeinschätzung: wie wahrscheinlich eine Verzögerung ist, was sich jetzt lohnen könnte und wozu du neigst."
       },
       "patterns": [
@@ -160,7 +160,7 @@
         { "id": "lk.despite", "re": "\\bdespite\\b|\\bin spite of\\b", "ex": "Despite the higher price, I recommend supplier B.", "no": "Although the price is higher, I recommend supplier B." },
         { "id": "vp.look-forward", "re": "\\blook(?:s|ing|ed)?\\s+forward\\s+to\\s+\\w+ing\\b", "ex": "I look forward to working with the new team.", "no": "I look forward to your answer." }
       ],
-      "phrases": ["on balance", "taking into account", "with this in mind", "on the one hand"]
+      "phrases": ["on balance", "taking into account", "with this in mind", "outweigh"]
     },
     {
       "id": "ms11",
@@ -168,7 +168,7 @@
       "to": "investor",
       "sit": "status update",
       "brief": {
-        "en": "Write a crisp quarterly update to an investor. Stress the single most important result, concede one weakness without sounding defensive, and say what happens next.",
+        "en": "Write a crisp quarterly update to an investor. Stress the single most important result, acknowledge one weakness without sounding defensive, and say what happens next.",
         "de": "Schreib einem Investor ein knappes Quartals-Update. Betone das eine wichtigste Ergebnis, räum eine Schwäche ein, ohne defensiv zu klingen, und sag, was als Nächstes passiert."
       },
       "patterns": [
@@ -176,7 +176,7 @@
         { "id": "em.it-cleft", "re": "\\bit\\s+(?:is|was)\\s+[^.!?]{2,50}\\s(?:that|who)\\b", "ex": "It was the new pricing model that drove the growth.", "no": "The new pricing model drove the growth." },
         { "id": "dm.concede", "re": "\\b(?:that said|having said that|that being said)\\b", "ex": "That said, our costs rose faster than planned.", "no": "But our costs rose faster than planned." }
       ],
-      "phrases": ["to sum up", "year over year", "on track", "headwinds"]
+      "phrases": ["the bottom line is", "year over year", "on track", "headwinds"]
     },
     {
       "id": "ms12",
@@ -184,11 +184,11 @@
       "to": "client and director",
       "sit": "escalation",
       "brief": {
-        "en": "A client has escalated a delayed delivery to your director. Write the reply: show what you did after hearing about it, say that you really do understand the frustration, and come back to the original commitment.",
-        "de": "Ein Kunde hat eine verspätete Lieferung an deine Direktorin eskaliert. Schreib die Antwort: zeig, was du nach der Nachricht getan hast, sag, dass du den Ärger wirklich verstehst, und komm auf die ursprüngliche Zusage zurück."
+        "en": "A client has escalated a delayed delivery to your director. Write the reply: apologize briefly, show what you did after hearing about it, show that you genuinely understand the frustration, and come back to the original commitment.",
+        "de": "Ein Kunde hat eine verspätete Lieferung an deine Direktorin eskaliert. Schreib die Antwort: entschuldige dich kurz, zeig, was du nach der Nachricht getan hast, zeig, dass du den Ärger wirklich nachvollziehen kannst, und komm auf die ursprüngliche Zusage zurück."
       },
       "patterns": [
-        { "id": "cp.having", "re": "\\b(?:having|after having)\\s+(?:\\w+\\s+)?\\w+(?:ed|en|ne|wn|ght|de|id|pt|nt|ng|un|et)\\b", "ex": "Having reviewed the shipment log, I found the delay.", "no": "I reviewed the shipment log and found the delay." },
+        { "id": "cp.having", "re": "\\b(?:having|after having)\\s+(?:\\w+\\s+)?\\w+(?:ed|en|ne|wn|ght|de|id|pt|nt|ng|un|et|rd|ld|nd|lt|ut|ade|aid)\\b", "ex": "Having reviewed the shipment log, I found the delay.", "no": "I reviewed the shipment log and found the delay." },
         { "id": "ep.do-emph", "re": "\\b(?:I|we|they)\\s+(?:do|did)\\s+(?:appreciate|understand|apologize|apologise|believe|think|want|regret|take)\\b", "ex": "I do understand how frustrating this is.", "no": "I understand how frustrating this is." },
         { "id": "dm.return", "re": "\\b(?:coming|going|getting|circling) back to\\b|\\breturning to\\b", "ex": "Coming back to our original commitment, we will deliver by Friday.", "no": "We will deliver by Friday." }
       ],

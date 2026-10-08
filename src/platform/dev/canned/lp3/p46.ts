@@ -46,7 +46,7 @@ export function sentenceClinicReply(input: string): string {
   const wrongFirst = /zzcorrect/i.test(sentence) && !retry;
   const verdict = hits.length > 0 ? 'minor' : 'correct';
   if (wrongFirst) {
-    return JSON.stringify({ verdict: 'correct', fixed: '', edits: [{ from: clean.split(' ')[0] ?? 'We', to: 'They', kind: 'word', sev: 'error', pat: null, why: de ? 'Ein anderes Wort passt besser.' : 'A different word fits better.' }], better: '', register: 'neutral', note: '' });
+    return JSON.stringify({ verdict: 'correct', fixed: '', edits: [{ from: clean.split(' ')[0] ?? 'We', to: 'They', kind: 'word', sev: 'error', pat: null, why: de ? 'Ein anderes Wort passt besser.' : 'A different word fits better.' }], better: '', register: 'neutral', note: '', good: de ? 'Die Wortwahl passt gut zum Anlass.' : 'The word choice suits the occasion well.' });
   }
   return JSON.stringify({
     verdict,
@@ -54,6 +54,7 @@ export function sentenceClinicReply(input: string): string {
     edits: verdict === 'correct' ? [] : edits,
     better: verdict === 'correct' ? 'We should align on the revised timeline before the audit starts.' : fixed.replace(/\bdiscussed\b/i, 'went over'),
     register: style ? 'informal' : 'neutral',
+    good: de ? 'Der Satz ist klar gebaut und passt zum Anlass.' : 'The sentence is clearly built and suits the occasion.',
     note: style ? (de ? 'Für eine Mail an den CFO klingt das zu locker.' : 'This sounds too casual for an email to the CFO.') : '',
   });
 }

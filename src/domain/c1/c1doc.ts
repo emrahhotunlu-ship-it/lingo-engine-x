@@ -39,7 +39,8 @@ export type C1Check = {
 };
 export type C1Gate = { d: string; ch: number; g: [number, number]; w: [number, number]; ok: boolean };
 /** `wk: true` = Wochensumme (Tag `d` ist der Montag). */
-export type C1Prod = { d: string; s: 'mail' | 'clinic' | 'talk'; w: number; e: number; wk?: true };
+/** `id` = Kennung des Textes (`out/<Monat>`-Eintrag; steht sie in `bad`, zählt der Eintrag nicht); `u: true` = unsicher (Nachzählung weicht stark ab oder Stelle gemeldet): zählt nie für „erfüllt“. Beide additiv. */
+export type C1Prod = { d: string; s: 'mail' | 'clinic' | 'talk'; w: number; e: number; wk?: true; id?: string; u?: true };
 
 export type C1Doc = {
   v: 1;
@@ -98,7 +99,8 @@ export function compactProd(prod: readonly C1Prod[], today: string): C1Prod[] {
     if (cur) {
       cur.w += e.w;
       cur.e += e.e;
-    } else sums.set(key, { d: wk, s: e.s, w: e.w, e: e.e, wk: true });
+      if (e.u) cur.u = true;
+    } else sums.set(key, { d: wk, s: e.s, w: e.w, e: e.e, wk: true, ...(e.u ? { u: true as const } : {}) });
   }
   // Nichts Altes zu verdichten und nichts zu gewinnen: Liste unverändert zurück (keine unnötige Umformung).
   if (!sums.size) return [...prod];

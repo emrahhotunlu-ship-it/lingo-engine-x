@@ -6,7 +6,7 @@ import type { ProdInput } from '../c1/prod';
 import { isoWeek } from '../date';
 import { outId, type OutItem } from '../nbdrill/outDoc';
 import type { NewRepair } from '../repair/repair';
-import { CLINIC_REPAIR_CAP, errorCount, ownWords, repairsFromEdits } from './edits';
+import { CLINIC_REPAIR_CAP, errorCount, normWs, ownWords, repairsFromEdits } from './edits';
 import { patListText } from './patList';
 
 // Satz-Klinik, die reinen Teile (Lernplattform 3.0 P46, KT T4): Eingabe, Ergebnis → Speicherformen (`out/<Monat>`, Fehlersätze, K7-Eintrag) und
@@ -46,13 +46,15 @@ export type ClinicRun = {
   day: string;
   pasted: boolean;
   translated: boolean;
+  /** Überarbeitung eines Satzes dieser Sitzung (≥ 70 % gleiche Wörter): Ergebnis und Fehlersätze ja, K7-Eintrag nein. */
+  revised: boolean;
 };
 
 /** Eintrag für `out/<Monat>` (`k: 'clinic'`): Satz, Urteil, Fassungen; kompakt, damit er unter 2 KB bleibt. */
 export function clinicOutItem(r: ClinicRun): OutItem {
   const o = r.out;
   return {
-    id: outId('clinic', r.now),
+    id: clinicId(r.now),
     k: 'clinic',
     d: r.day,
     t: r.now,
@@ -70,8 +72,35 @@ export function clinicRepairs(r: ClinicRun): NewRepair[] {
 }
 
 /** K7-Eintrag (`addProd`); Einfügen und Übersetzer-Nutzung zählen nie (`prodEntry` lehnt sie ab). */
-export function clinicProd(r: ClinicRun): ProdInput {
-  return { d: r.day, s: 'clinic', w: ownWords(r.sentence), e: clinicErrors(r.out), pasted: r.pasted, translated: r.translated };
+export function clinicProd(r: ClinicRun): ProdInput | null {
+  if (r.revised) return null;
+  return { d: r.day, s: 'clinic', w: ownWords(r.sentence), e: clinicErrors(r.out), pasted: r.pasted, translated: r.translated, id: clinicId(r.now) };
+}
+
+/** Kennung des Satzes (gleich dem `out`-Eintrag und dem K7-Eintrag). */
+export const clinicId = (now: number): string => outId('clinic', now);
+
+export type RecentClinic = { sentence: string; fixed: string; better: string };
+export const REVISION_OVERLAP = 0.7;
+
+const tokens = (s: string): Set<string> => new Set(normWs(s).toLowerCase().match(/[\p{L}\p{N}]+(?:'[\p{L}]+)?/gu) ?? []);
+
+/**
+ * Ist der Satz eine Überarbeitung eines Satzes (oder seiner korrigierten/C1-Fassung) dieser Sitzung? Ja, wenn mindestens 70 % seiner (verschiedenen) Wörter
+ * dort vorkommen. Rein. Überarbeitungen zählen nicht noch einmal für K7 (sonst würde Umformulieren die Genauigkeitszahl schönen).
+ */
+export function isRevision(sentence: string, recent: readonly RecentClinic[]): boolean {
+  const mine = tokens(sentence);
+  if (mine.size < 3) return false;
+  return recent.some((r) =>
+    [r.sentence, r.fixed, r.better].some((t) => {
+      if (!t.trim()) return false;
+      const other = tokens(t);
+      let same = 0;
+      for (const w of mine) if (other.has(w)) same++;
+      return same / mine.size >= REVISION_OVERLAP;
+    }),
+  );
 }
 
 /**

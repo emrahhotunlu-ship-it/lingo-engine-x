@@ -83,12 +83,31 @@ test.describe('Handy 390 px', () => {
     expect(r[0]).toMatchObject({ wrong: SENTENCE, right: 'We discussed the budget yesterday.', pat: 'prp.no-prep' });
     // Fällig erst nach dem Ende des heutigen Lerntags (Stichtag 20.09., 21:00 → ab 21.09., 04:00).
     expect(r[0]?.due as number).toBeGreaterThan(Date.parse('2026-09-21T04:00:00+02:00') - 1);
-    expect(await prod(page)).toEqual([{ d: '2026-09-20', s: 'clinic', w: 6, e: 1 }]);
+    expect(await prod(page)).toMatchObject([{ d: '2026-09-20', s: 'clinic', w: 6, e: 1 }]);
+    expect((await prod(page))[0]?.id).toMatch(/^clinic-/);
     const out = (await dump(page))['out/2026-09'] as { items?: Doc[] } | undefined;
     const item = out?.items?.find((i) => i.k === 'clinic');
     expect(item).toMatchObject({ d: '2026-09-20', ok: false, text: SENTENCE });
     expect((await dump(page))['app/profile']?.ctx).toBe(before);
     expect((await dump(page))['app/profile']).not.toHaveProperty('ctx2');
+  });
+
+  test('Überarbeitung: ein ähnlicher Satz in derselben Sitzung liefert Ergebnis und Fehlersatz, aber keinen zweiten K7-Eintrag (M3)', async ({ page }) => {
+    await start(page, { touch: true });
+    await openClinic(page);
+    await check(page, SENTENCE);
+    await expect(page.getByTestId('cl-counted')).toBeVisible();
+    await page.getByTestId('cl-again').click();
+    await check(page, 'We discussed about the budget yesterday afternoon.');
+    await expect(page.getByTestId('cl-result')).toBeVisible();
+    await expect(page.getByTestId('cl-revision')).toBeVisible();
+    await expect(page.getByTestId('cl-counted')).toHaveCount(0);
+    expect(await prod(page)).toHaveLength(1);
+    await page.getByTestId('cl-again').click();
+    await check(page, 'We should align on the revised timeline before Friday.');
+    await expect(page.getByTestId('cl-nothing')).toBeVisible();
+    await expect(page.getByTestId('cl-revision')).toHaveCount(0);
+    expect(await prod(page)).toHaveLength(2);
   });
 
   test('Einfügen: das Ergebnis erscheint, zählt aber nicht für K7 (kein Eintrag in prod)', async ({ page }) => {
@@ -112,7 +131,8 @@ test.describe('Handy 390 px', () => {
     await expect(page.getByTestId('cl-verdict')).toHaveText('Richtig');
     await expect(page.getByTestId('cl-repairs')).toHaveCount(0);
     expect(await repairs(page)).toEqual([]);
-    expect(await prod(page)).toEqual([{ d: '2026-09-20', s: 'clinic', w: 9, e: 0 }]);
+    expect(await prod(page)).toMatchObject([{ d: '2026-09-20', s: 'clinic', w: 9, e: 0 }]);
+    await expect(page.getByTestId('cl-good')).toBeVisible();
   });
 
   test('kein JSON: genau ein Aufruf, „Erneut versuchen“ fragt einmal frisch; kein Neuversuch von allein', async ({ page }) => {
