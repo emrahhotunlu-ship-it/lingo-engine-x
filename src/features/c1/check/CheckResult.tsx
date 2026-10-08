@@ -18,6 +18,7 @@ import { useC1CheckSheet } from './store';
 
 export type CheckResultData = { tally: CheckTally; inp: C1Input; form: string; repairs: number };
 type SaveState = 'saving' | 'saved' | 'failed';
+type SaveWhy = 'rejected' | 'blocked';
 
 const PART_KEY: Record<string, MessageKey> = { mcc: 'pxCkPart_mcc', ocl: 'pxCkPart_ocl', wf: 'pxCkPart_wf', kwt: 'pxCkPart_kwt' };
 const LEX_KEY: Record<string, MessageKey> = {
@@ -67,7 +68,7 @@ function Review({ line, n }: { line: CheckLine; n: number }) {
   );
 }
 
-export function CheckResult({ data, history, saveState, onRetrySave, onClose }: { data: CheckResultData; history: readonly C1Check[]; saveState: SaveState; onRetrySave: () => void; onClose: () => void }) {
+export function CheckResult({ data, history, saveState, saveWhy = null, onRetrySave, onClose }: { data: CheckResultData; history: readonly C1Check[]; saveState: SaveState; saveWhy?: SaveWhy | null; onRetrySave: () => void; onClose: () => void }) {
   const { t, lang } = useT();
   const api = useHiddenInput();
   const go = useNav((s) => s.go);
@@ -156,10 +157,18 @@ export function CheckResult({ data, history, saveState, onRetrySave, onClose }: 
         </p>
       )}
 
-      <p className="text-sm text-muted" role="status" data-testid="ck-save" data-state={saveState}>
-        {saveState === 'saving' ? t('pxCkSaving') : saveState === 'saved' ? t('pxCkSaved') : t('pxCkSaveFailed')}
+      <p className="text-sm text-muted" role="status" data-testid="ck-save" data-state={saveState} data-why={saveWhy ?? undefined}>
+        {saveState === 'saving'
+          ? t('pxCkSaving')
+          : saveState === 'saved'
+            ? t('pxCkSaved')
+            : saveWhy === 'rejected'
+              ? t('pxCkSaveRejected')
+              : saveWhy === 'blocked'
+                ? t('pxCkSaveBlocked')
+                : t('pxCkSaveFailed')}
       </p>
-      {saveState === 'failed' && (
+      {saveState === 'failed' && saveWhy !== 'rejected' && (
         <div>
           <Button variant="secondary" onClick={onRetrySave} data-testid="ck-save-retry">
             {t('pxCkSaveRetry')}

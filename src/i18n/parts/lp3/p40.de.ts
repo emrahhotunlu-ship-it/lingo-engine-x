@@ -79,6 +79,8 @@ export const pxP40De = {
   pxCkSaving: 'Wird gespeichert …',
   pxCkSaved: 'Gespeichert.',
   pxCkSaveFailed: 'Das Ergebnis konnte nicht gespeichert werden.',
+  pxCkSaveRejected: 'Nicht gespeichert: Diese Form hast du am Laptop schon gemacht.',
+  pxCkSaveBlocked: 'Nicht gespeichert: Deine C1-Daten ließen sich nicht ergänzen. Gib bitte in claude.ai Bescheid.',
   pxCkSaveRetry: 'Erneut speichern',
   pxCkDone: 'Fertig',
 

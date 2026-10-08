@@ -193,6 +193,32 @@ test.describe('Laptop', () => {
     expect(errors).toEqual([]);
   });
 
+  test('Check-Tag: Ist die Form inzwischen am Laptop benutzt (anderer Tab), heißt es „nicht gespeichert“; Schritt 2 und 3 bleiben offen', async ({ page }) => {
+    const { errors } = await bootCheck(page, { now: SAT_9, patch: checkDayPatch() });
+    await page.getByTestId('start').click();
+    await page.getByTestId('unit-c1check-start').click();
+    await page.getByTestId('ck-go').click();
+    for (let i = 0; i < 29; i++) await answerCheckItem(page, 'skip');
+    // Ein anderer Tab hat Form A am Laptop schon an einem früheren Tag gespeichert: dieser Check darf nicht dazukommen.
+    const other = { d: '2026-10-27', f: 'A', inp: 'desk', p: [8, 8, 8, 12], pts: 36, max: 36 };
+    await page.evaluate(
+      (o) =>
+        (window as unknown as { __LINGO_FAKE__: { db: { db: { doc(p: string): { set(d: unknown): Promise<void> } } } } }).__LINGO_FAKE__.db.db
+          .doc('app/c1')
+          .set({ v: 1, checks: [o], gates: [], prod: [], bad: [] }),
+      other,
+    );
+    await answerCheckItem(page, 'skip');
+    await expect(page.getByTestId('ck-save')).toHaveAttribute('data-state', 'failed');
+    await expect(page.getByTestId('ck-save')).toHaveAttribute('data-why', 'rejected');
+    await expect(page.getByTestId('ck-save-retry')).toHaveCount(0);
+    await page.waitForTimeout(300);
+    expect(await checksOf(page)).toEqual([other]);
+    const act = ((await dump(page))['app/profile'] as { act?: Record<string, Record<string, number>> }).act?.[SAT] ?? {};
+    expect([act.focus ?? act['u-focus'] ?? 0, act.task ?? act['u-task'] ?? 0]).toEqual([0, 0]);
+    expect(errors.filter((e) => !/check:save|rejected/.test(e))).toEqual([]);
+  });
+
   test('Check-Tag: „Heute nicht“ führt in den normalen Schritt 2, nichts wird gespeichert', async ({ page }) => {
     const { errors } = await bootCheck(page, { now: SAT_9, patch: checkDayPatch() });
     await page.getByTestId('start').click();

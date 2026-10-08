@@ -28,6 +28,7 @@ import { requestCloseCheck, useC1CheckSheet, type CheckCtx } from './store';
 
 type Phase = 'intro' | 'loading' | 'run' | 'result' | 'empty' | 'noform';
 type SaveState = 'saving' | 'saved' | 'failed';
+type SaveWhy = 'rejected' | 'blocked';
 
 function Bar({ value, label }: { value: number; label: string }) {
   return (
@@ -59,6 +60,7 @@ function Flow({ ctx, onClose }: { ctx: CheckCtx | null; onClose: () => void }) {
   const [answers, setAnswers] = useState<CheckAnswer[]>([]);
   const [result, setResult] = useState<(CheckResultData & { entry: C1Check }) | null>(null);
   const [saveState, setSaveState] = useState<SaveState>('saving');
+  const [saveWhy, setSaveWhy] = useState<SaveWhy | null>(null);
   const alive = useRef(true);
   const saved = useRef(false);
   const repairsDone = useRef(false);
@@ -98,6 +100,7 @@ function Flow({ ctx, onClose }: { ctx: CheckCtx | null; onClose: () => void }) {
 
   const persist = async (entry: C1Check, add: ReturnType<typeof checkRepairs>): Promise<void> => {
     setSaveState('saving');
+    setSaveWhy(null);
     // Prognose (P44) im selben Schreibschritt einfrieren, falls jetzt fällig; Lesefehler heißen nur: keine Prognose jetzt.
     const fcFor = await checkFcFor(entry.d, Date.now()).catch((err: unknown) => {
       logWarn('check:fc', err);
@@ -106,15 +109,18 @@ function Flow({ ctx, onClose }: { ctx: CheckCtx | null; onClose: () => void }) {
     if (!alive.current) return;
     const r = await saveCheck(entry, Date.now(), fcFor);
     if (!alive.current) return;
-    if (r === 'failed' || r === 'unavailable') {
+    if (!r.ok) {
+      // Nicht gespeichert, auch bei `unchanged` (Form schon benutzt, Dokument unlesbar oder zu groß): Ergebnis bleibt sichtbar, nichts wird abgehakt.
+      logWarn('check:save', { code: r.why, message: `C1-Check nicht gespeichert (${r.r})` }, 'app/c1');
       saved.current = false;
+      setSaveWhy(r.why === 'rejected' || r.why === 'blocked' ? r.why : null);
       setSaveState('failed');
       return;
     }
     setSaveState('saved');
     useC1CheckSheet.setState({ saved: true });
     // Fehlersätze nur mit dem ersten Speichern (ein zweiter Tab mit demselben Check hat sie schon geschrieben: `unchanged`).
-    if (r !== 'unchanged' && add.length && !repairsDone.current) {
+    if (!('present' in r) && add.length && !repairsDone.current) {
       repairsDone.current = true;
       void saveRepairs(add).then((ok) => {
         if (!ok) logWarn('check:repairs', { code: 'not_saved', message: `${add.length} Fehlersätze nicht gespeichert` }, 'app/repair');
@@ -231,7 +237,7 @@ function Flow({ ctx, onClose }: { ctx: CheckCtx | null; onClose: () => void }) {
       {phase === 'run' && item && <CheckItem key={item.id} item={item} inp={inp} last={idx + 1 === items.length} onAnswer={answer} />}
 
       {phase === 'result' && result && (
-        <CheckResult data={result} history={historyOf(checks, result.entry)} saveState={saveState} onRetrySave={retrySave} onClose={onClose} />
+        <CheckResult data={result} history={historyOf(checks, result.entry)} saveState={saveState} saveWhy={saveWhy} onRetrySave={retrySave} onClose={onClose} />
       )}
 
       {phase !== 'result' && (

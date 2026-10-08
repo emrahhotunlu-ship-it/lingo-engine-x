@@ -144,7 +144,7 @@ describe('Formwahl und Speichern', () => {
     expect(appendCheck(two, { ...t, pts: 20 })).toBeNull();
   });
   it('ohne Datenbank: unavailable, nichts geworfen', async () => {
-    expect(await saveCheck(entry({}))).toBe('unavailable');
+    expect(await saveCheck(entry({}))).toEqual({ ok: false, r: 'unavailable', why: 'unavailable' });
   });
   it('Prognose im selben Schritt: nur ab dem dritten Check und 6 Wochen Programm, sonst ohne fc', () => {
     const fc = { from: '2027-03', to: '2027-06', late: '2027-09' };

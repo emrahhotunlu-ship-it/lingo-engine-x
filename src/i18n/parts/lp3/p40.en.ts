@@ -75,6 +75,8 @@ export const pxP40En = {
   pxCkSaving: 'Saving …',
   pxCkSaved: 'Saved.',
   pxCkSaveFailed: 'The result could not be saved.',
+  pxCkSaveRejected: 'Not saved: you already took this form on your laptop.',
+  pxCkSaveBlocked: 'Not saved: your C1 data could not be updated. Please mention it in claude.ai.',
   pxCkSaveRetry: 'Save again',
   pxCkDone: 'Done',
 
