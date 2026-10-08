@@ -2,6 +2,7 @@
 
 export const fxrEn = {
   fxRTaskField: 'Find the mistake and correct it.',
+  fxRCmpWrong: 'Sentence with the mistake',
   fxRTaskSpot: 'Tap the spot with the mistake.',
   fxRTaskReplace: 'Type only the correct form for this spot. The rest of the sentence stays as it is.',
   fxRTaskTiles: 'Put the sentence together correctly.',

@@ -200,7 +200,13 @@ export function RepairItem({ item, mode, area, source, status = null, profile: p
     prompt = <SentenceInput mode="free" value={text} onChange={setText} onSubmit={submit} disabled={busy} testId="repair-input" />;
   }
 
-  const comparison = res && res.verdict !== 'exact' && res.given ? { given: res.given, ops: alignWords(res.given, item.right) } : null;
+  // Ohne eigene Antwort („Weiß ich nicht“, zweiter Fehlgriff) zeigt der Vergleich den Fehlersatz selbst: was war falsch, was ist richtig.
+  const comparison =
+    res && res.verdict !== 'exact'
+      ? res.given
+        ? { given: res.given, ops: alignWords(res.given, item.right) }
+        : { given: item.wrong, ops: alignWords(item.wrong, item.right), label: t('fxRCmpWrong') }
+      : null;
   const secondary: ShellSecondary[] = res
     ? []
     : [

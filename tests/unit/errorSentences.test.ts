@@ -18,3 +18,11 @@ describe('errorSentences', () => {
     expect(errorSentences('Korrigiere: He go.', 'He go.', 'He goes.')).toEqual({ wrong: 'Korrigiere: He go.', right: 'He goes.' });
   });
 });
+
+describe('spanFixes bei „Weiß ich nicht“', () => {
+  it('„…“ ist keine Fehlerstelle zum Antippen (Bausteine statt Antippen)', () => {
+    const s = errorSentences('"I will finish the report tomorrow," Anna said. → Anna said ___.', '', 'she would finish the report the next day');
+    expect(s.wrong).toContain('…');
+    expect(spanFixes(s.wrong, s.right)).toBeNull();
+  });
+});

@@ -8,7 +8,7 @@ import { useT } from '../../i18n';
 // `typo`: gold unterstrichen. Nie Farbe allein: durch-/unterstrichen bzw. gestrichelter Rahmen.
 
 /** `compact`: die Lücke im Satz zeigt deine Antwort schon (durchgestrichen, Lösung darin) – hier steht nur noch „Richtig: …“ (Design-Lead, Vorschau ref-s5). */
-export function Comparison({ given, ops, compact = false }: { given: string; ops: readonly WordOp[]; compact?: boolean }) {
+export function Comparison({ given, ops, compact = false, label }: { given: string; ops: readonly WordOp[]; compact?: boolean; label?: string }) {
   const { t } = useT();
   const empty = !given.trim();
   const correct = ops
@@ -66,7 +66,7 @@ export function Comparison({ given, ops, compact = false }: { given: string; ops
   return (
     <div className="lx-t-support flex flex-col gap-1.5" data-testid="sentence-diff" data-slot-inner="comparison">
       <p className={compact ? 'sr-only' : undefined}>
-        <span className="text-muted">{t('exCmpYours')}: </span>
+        <span className="text-muted">{label ?? t('exCmpYours')}: </span>
         <span lang="en" data-testid="diff-given">
           {empty ? <span className="text-muted">–</span> : ops.length ? parts : given}
         </span>

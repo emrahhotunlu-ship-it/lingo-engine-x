@@ -45,7 +45,7 @@ export type ShellMenuId = 'override' | 'copyOnce' | 'showMe' | 'translate' | 'mo
 export type ShellFeedback = {
   verdict: ResultVerdict;
   sub?: string | null;
-  comparison?: { given: string; ops: WordOp[]; compact?: boolean } | null;
+  comparison?: { given: string; ops: WordOp[]; compact?: boolean; label?: string } | null;
   explanation?: ExplanationModel | null;
   depth: ExplainDepth;
   menu?: Partial<Record<ShellMenuId, () => void>>;
@@ -220,7 +220,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
         {feedback.right && <div data-slot="right">{feedback.right}</div>}
         {feedback.comparison && (
           <div data-slot="comparison">
-            <Comparison given={feedback.comparison.given} ops={feedback.comparison.ops} compact={!!feedback.comparison.compact} />
+            <Comparison given={feedback.comparison.given} ops={feedback.comparison.ops} compact={!!feedback.comparison.compact} {...(feedback.comparison.label ? { label: feedback.comparison.label } : {})} />
           </div>
         )}
         {feedback.why && <div data-slot="why">{feedback.why}</div>}

@@ -54,6 +54,8 @@ const norm = (s: string): string => splitWords(s).join(' ').toLowerCase();
  * 3 Stellen oder eine Stelle über 4 Wörter gibt oder an einer Stelle nur gestrichen wird (nichts zu tippen).
  */
 export function spanFixes(wrong: string, right: string): SpanFix[] | null {
+  // „Weiß ich nicht“ hinterlässt „…“ statt einer eigenen Antwort: Da gibt es keine Fehlerstelle zu finden, also Bausteine statt Antippen.
+  if (splitWords(wrong).some((w) => w.replace(/[.,!?;:"“”]+$/, '') === '…')) return null;
   const spans = errorSpans(wrong, right);
   if (!spans || spans.length > SPANS_MAX) return null;
   const nWrong = splitWords(wrong).length;
