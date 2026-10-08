@@ -102,7 +102,7 @@ export const c1Mail: PromptTemplate<MailVars, C1Mail> = {
     const pats = v.patterns.slice(0, MAIL_PATTERNS_MAX).map((p) => `${p.id}: ${clip(p.name, 80)} (${clip(p.form, 100)})`);
     return [
       header({ id: ID, version: VERSION }),
-      'You check a short work email written by a German-speaking learner (B2, aiming for C1, business English) for a writing task.',
+      'You check a work email by a German-speaking learner (B2 to C1, business English).',
       'First list every error as an atomic edit: copy the exact wrong span from the text into "from", write the minimal replacement into "to". Only then explain each edit.',
       'Keep the learner words wherever they are correct. Style improvements are sev "upgrade", never "error". American English is the standard; British spelling and British words are correct (mention the US form only as an upgrade).',
       'American and British grammar both count as correct (e.g. past simple with already/just/yet, have got, collective nouns with plural verbs).',
@@ -119,7 +119,7 @@ export const c1Mail: PromptTemplate<MailVars, C1Mail> = {
       'Reply with only one JSON object in exactly this shape:',
       MAIL_EXAMPLE,
       'Rules:',
-      '- edits: at most 12, each with "from" copied EXACTLY from the learner text (no paraphrase), "to", kind (grammar, word, collocation, spelling, punctuation or register), sev ("error" or "upgrade"), pat (id or null) and "why" (one short sentence in the explanation language: the rule or the reason). Tone and register are never errors.',
+      '- edits: at most 12, each with "from" copied EXACTLY from the learner text (no paraphrase), "to", kind (grammar, word, collocation, spelling, punctuation or register), sev ("error" or "upgrade"), pat (id or null) and "why" (one short sentence in the explanation language: the rule or the reason). Tone and register are never errors (kind register is always sev upgrade).',
       '- used: for each target pattern id that the learner tried to use, one entry with ok (true if used correctly) and a "quote" copied exactly from the text. Skip patterns the learner did not try.',
       '- tone: fit is "fits", "too-direct", "too-informal" or "too-stiff" for this reader and purpose; why is one short sentence in the explanation language.',
       '- upgraded: the whole email rewritten at C1 level in American English, keeping the learner ideas and structure and roughly the same length; it must differ from the learner text.',

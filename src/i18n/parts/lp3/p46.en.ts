@@ -44,6 +44,7 @@ export const ttP46En = {
   ttClAgain: 'Another sentence',
   ttClDone: 'Done',
   ttClProfileOpen: 'Edit my work day',
+  ttClWeekCounted: 'One sentence already counts toward your accuracy value this week; this one is for practice.',
   ttClGood: 'What went well',
   ttClRevision: 'Revisions are not counted again toward the accuracy value.',
   ttClReportEdit: 'Report this spot',

@@ -20,7 +20,7 @@ export type ClinicSaveResult = {
   repairs: number;
   /** `false`, wenn der Fehlersatz-Teil scheiterte (nicht geschrieben). */
   repairsOk: boolean;
-  prod: PatchResult | 'ignored' | 'skipped';
+  prod: PatchResult | 'ignored' | 'skipped' | 'weekDone';
 };
 
 /** Eintrag in `out/<Monat>`; `true`, wenn geschrieben oder schon so vorhanden. */

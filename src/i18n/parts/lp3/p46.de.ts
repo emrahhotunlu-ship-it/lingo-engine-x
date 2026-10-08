@@ -44,6 +44,7 @@ export const ttP46De = {
   ttClAgain: 'Noch ein Satz',
   ttClDone: 'Fertig',
   ttClProfileOpen: 'Mein Arbeitsalltag anpassen',
+  ttClWeekCounted: 'Diese Woche zählt schon ein Satz für den Genauigkeitswert; dieser hilft beim Üben.',
   ttClGood: 'Das war gut',
   ttClRevision: 'Überarbeitungen zählen nicht noch einmal für den Genauigkeitswert.',
   ttClReportEdit: 'Stelle melden',

@@ -120,14 +120,14 @@ describe('Einfrieren erst nach dem Laden (K-d)', () => {
 
 describe('Doppelschutz für prod (data-guard)', () => {
   it('derselbe Eintrag (Tag, Quelle, Wörter, Fehler) wird kein zweites Mal gebucht; ein anderer schon', () => {
-    const one = addProdTo(emptyC1(), { d: '2026-10-08', s: 'clinic', w: 120, e: 3 })!;
+    const one = addProdTo(emptyC1(), { d: '2026-10-08', s: 'talk', w: 120, e: 3 })!;
     expect(one.prod).toHaveLength(1);
-    expect(addProdTo(one, { d: '2026-10-08', s: 'clinic', w: 120, e: 3 })).toBeNull();
+    expect(addProdTo(one, { d: '2026-10-08', s: 'talk', w: 120, e: 3 })).toBeNull();
     expect(addProdTo(one, { d: '2026-10-08', s: 'mail', w: 120, e: 3 })?.prod).toHaveLength(2);
-    expect(addProdTo(one, { d: '2026-10-08', s: 'clinic', w: 121, e: 3 })?.prod).toHaveLength(2);
+    expect(addProdTo(one, { d: '2026-10-08', s: 'talk', w: 121, e: 3 })?.prod).toHaveLength(2);
     // Eine Wochensumme ist kein Doppel.
-    const wk: C1Doc = { ...emptyC1(), prod: [{ d: '2026-10-05', s: 'clinic', w: 120, e: 3, wk: true }] };
-    expect(addProdTo(wk, { d: '2026-10-05', s: 'clinic', w: 120, e: 3 })?.prod).toHaveLength(2);
+    const wk: C1Doc = { ...emptyC1(), prod: [{ d: '2026-10-05', s: 'talk', w: 120, e: 3, wk: true }] };
+    expect(addProdTo(wk, { d: '2026-10-05', s: 'talk', w: 120, e: 3 })?.prod).toHaveLength(2);
   });
 });
 

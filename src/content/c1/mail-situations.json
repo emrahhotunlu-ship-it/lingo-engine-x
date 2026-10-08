@@ -73,11 +73,11 @@
       "sit": "negotiation",
       "brief": {
         "en": "A client asks for a 20 percent discount on the contract renewal. Write a reply that offers what you can and under which conditions, politely declines the rest, keeps the door open, and says what would be possible if they committed to a longer term.",
-        "de": "Ein Kunde bittet um 20 Prozent Rabatt auf die Vertragsverlängerung. Schreib eine Antwort: was du anbieten kannst und unter welchen Bedingungen, höfliche Absage für den Rest, die Tür bleibt offen und was möglich wäre, wenn er sich länger bindet."
+        "de": "Ein Kunde bittet um 20 Prozent Rabatt auf die Vertragsverlängerung. Schreib eine Antwort: was du anbieten kannst und unter welchen Bedingungen; lehn den Rest höflich ab, halte die Tür offen und sag, was möglich wäre, wenn er sich länger bindet."
       },
       "patterns": [
         { "id": "ca.as-long-as", "re": "\\b(?:as|so) long as\\b|\\bprovided\\b|\\bproviding\\b|\\bon condition that\\b", "ex": "We can offer ten percent as long as you renew for three years.", "no": "We can offer ten percent for a three-year renewal." },
-        { "id": "cn.second", "re": "(?!if you would like)\\bif\\b[^.!?]{0,80}(?:\\bwould\\b|\\w['’]d\\b)", "ex": "If we extended the term, we would be able to lower the price.", "no": "If you renew, we will lower the price." },
+        { "id": "cn.second", "re": "(?!if you(?: would|['’]d) like)\\bif\\b[^.!?]{0,80}(?:\\bwould\\b|\\w['’]d\\b)", "ex": "If we extended the term, we would be able to lower the price.", "no": "If you renew, we will lower the price." },
         { "id": "dip.possible", "re": "\\bwould it be possible\\b|\\bis it possible\\b", "ex": "Would it be possible to move the signing date to June?", "no": "Please move the signing date to June." }
       ],
       "phrases": ["in return", "meet you halfway", "we would be happy to", "subject to"]
@@ -190,7 +190,7 @@
       "patterns": [
         { "id": "cp.having", "re": "\\b(?:having|after having)\\s+(?:\\w+\\s+)?\\w+(?:ed|en|ne|wn|ght|de|id|pt|nt|ng|un|et|rd|ld|nd|lt|ut|ade|aid)\\b", "ex": "Having reviewed the shipment log, I found the delay.", "no": "I reviewed the shipment log and found the delay." },
         { "id": "ep.do-emph", "re": "\\b(?:I|we|they)\\s+(?:do|did)\\s+(?:appreciate|understand|apologize|apologise|believe|think|want|regret|take)\\b", "ex": "I do understand how frustrating this is.", "no": "I understand how frustrating this is." },
-        { "id": "dm.return", "re": "\\b(?:coming|going|getting|circling) back to\\b|\\breturning to\\b", "ex": "Coming back to our original commitment, we will deliver by Friday.", "no": "We will deliver by Friday." }
+        { "id": "dm.return", "re": "\\b(?:coming|going|getting|circling) back to\\b|\\breturning to\\b", "ex": "Coming back to our original commitment: we will deliver by Friday.", "no": "We will deliver by Friday." }
       ],
       "phrases": ["rest assured", "I sincerely apologize", "make it right", "at the latest"]
     }

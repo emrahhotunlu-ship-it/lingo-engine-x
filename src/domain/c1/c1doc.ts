@@ -84,11 +84,16 @@ export function weekStart(day: string): string {
 }
 
 /** Einträge von `prod`, die älter als `prodWeeks` Wochen sind, zu Wochensummen (je Woche und Art) verdichten. Rein. */
-export function compactProd(prod: readonly C1Prod[], today: string): C1Prod[] {
+export function compactProd(prod: readonly C1Prod[], today: string, bad: readonly string[] = []): C1Prod[] {
   const cutoff = addDays(today, -C1_LIMITS.prodWeeks * 7);
   const keep: C1Prod[] = [];
   const sums = new Map<string, C1Prod>();
+  const gone = new Set(bad);
   for (const e of prod) {
+    if (e.id && gone.has(e.id)) {
+      // Gemeldete Texte zählen in K7 nicht (`prodRate`): beim Verdichten nicht in die Wochensumme aufnehmen (alte), junge bleiben stehen.
+      if (e.d < cutoff) continue;
+    }
     if (e.d >= cutoff) {
       keep.push(e);
       continue;
@@ -103,7 +108,7 @@ export function compactProd(prod: readonly C1Prod[], today: string): C1Prod[] {
     } else sums.set(key, { d: wk, s: e.s, w: e.w, e: e.e, wk: true, ...(e.u ? { u: true as const } : {}) });
   }
   // Nichts Altes zu verdichten und nichts zu gewinnen: Liste unverändert zurück (keine unnötige Umformung).
-  if (!sums.size) return [...prod];
+  if (!sums.size && keep.length === prod.length) return [...prod];
   return [...sums.values(), ...keep].sort((a, b) => a.d.localeCompare(b.d));
 }
 
@@ -115,7 +120,7 @@ export function compactC1(doc: C1Doc, today: string): C1Doc {
     logWarn('c1:compact', new Error(`${list.length - max} oldest ${name} entries removed (max ${max})`), C1_PATH);
     return list.slice(list.length - max);
   };
-  out.prod = cap('prod', compactProd(doc.prod, today), C1_LIMITS.prod);
+  out.prod = cap('prod', compactProd(doc.prod, today, doc.bad), C1_LIMITS.prod);
   out.checks = cap('checks', doc.checks, C1_LIMITS.checks);
   out.gates = cap('gates', doc.gates, C1_LIMITS.gates);
   out.bad = cap('bad', doc.bad, C1_LIMITS.bad);

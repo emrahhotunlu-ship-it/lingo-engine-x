@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { addProdTo, markProdUnsure, prodRate } from '../../src/domain/c1/prod';
-import { emptyC1 } from '../../src/domain/c1/c1doc';
+import { addProdTo, markProdUnsure, prodRate, prodSkip } from '../../src/domain/c1/prod';
+import { compactProd, emptyC1 } from '../../src/domain/c1/c1doc';
 import { programChapters } from '../../src/domain/c1/chapters';
 import { prodEntry } from '../../src/domain/c1/prod';
 import { patternById } from '../../src/domain/grammar/patterns';
@@ -46,6 +46,8 @@ const CASES: Array<[string, string, string, boolean]> = [
   ['ms04', 'tc.present-for-future', 'Once the access list is ready, we can start.', true],
   ['ms04', 'tc.present-for-future', 'Once you send the access list, we can start.', true],
   ['ms05', 'cn.second', 'If you would like to discuss the terms, call me.', false],
+  ['ms05', 'cn.second', "If you'd like to discuss the terms, call me.", false],
+  ['ms12', 'dm.return', 'Coming back to our original commitment: we will deliver by Friday.', true],
   ['ms05', 'cn.second', 'If we extended the term, we would lower the price.', true],
   ['ms07', 'pv.perfect', 'Payments have been made and the invoices have been paid.', true],
   ['ms08', 'rs.backshift', 'He said it would be ready on Friday.', true],
@@ -301,5 +303,33 @@ describe('K7: Kennung, unsicher, gemeldet, Satz-Klinik höchstens einmal je Woch
       { d: '2026-09-29', s: 'clinic' as const, w: 7, e: 2 },
     ];
     expect(prodRate(list, day)).toMatchObject({ entries: 2, words: 15 });
+  });
+});
+
+describe('Doppelschutz und Wochendeckel beim Schreiben (N1)', () => {
+  it('zweiter Klinik-Satz derselben Woche: weekDone, kein neuer Eintrag; andere Woche geht', () => {
+    const one = addProdTo(emptyC1(), { d: '2026-10-05', s: 'clinic', w: 8, e: 1, id: 'clinic-a' });
+    expect(one?.prod).toHaveLength(1);
+    const second = { d: '2026-10-07', s: 'clinic' as const, w: 9, e: 0, id: 'clinic-b' };
+    expect(one && prodSkip(one, { ...second })).toBe('weekDone');
+    expect(one && addProdTo(one, second)).toBeNull();
+    expect(one && addProdTo(one, { ...second, d: '2026-10-13' })?.prod).toHaveLength(2);
+  });
+  it('mit Kennung wird nur nach der Kennung verglichen: zwei gleich lange Mails am selben Tag bleiben beide', () => {
+    const a = addProdTo(emptyC1(), { d: '2026-10-08', s: 'mail', w: 150, e: 3, id: 'c1mail-a' });
+    const b = a && addProdTo(a, { d: '2026-10-08', s: 'mail', w: 150, e: 3, id: 'c1mail-b' });
+    expect(b?.prod).toHaveLength(2);
+    expect(b && addProdTo(b, { d: '2026-10-08', s: 'mail', w: 150, e: 3, id: 'c1mail-b' })).toBeNull();
+    // ohne Kennung bleibt der alte Schutz (gleicher Tag, Quelle, Wörter, Fehler)
+    const c = addProdTo(emptyC1(), { d: '2026-10-08', s: 'mail', w: 150, e: 3 });
+    expect(c && addProdTo(c, { d: '2026-10-08', s: 'mail', w: 150, e: 3 })).toBeNull();
+  });
+  it('compactProd nimmt gemeldete alte Einträge nicht in die Wochensumme', () => {
+    const old = [
+      { d: '2026-07-06', s: 'mail' as const, w: 100, e: 2, id: 'x' },
+      { d: '2026-07-07', s: 'mail' as const, w: 120, e: 1, id: 'y' },
+    ];
+    const out = compactProd(old, '2026-10-08', ['x']);
+    expect(out).toEqual([{ d: '2026-07-06', s: 'mail', w: 120, e: 1, wk: true }]);
   });
 });

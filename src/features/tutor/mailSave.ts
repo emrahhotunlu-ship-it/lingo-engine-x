@@ -23,7 +23,7 @@ export type MailSaveResult = {
   /** Anzahl der angelegten Fehlersätze (0, wenn keine entstanden sind). */
   repairs: number;
   repairsOk: boolean;
-  prod: PatchResult | 'ignored' | 'skipped';
+  prod: PatchResult | 'ignored' | 'skipped' | 'weekDone';
 };
 
 export async function saveMail(run: MailRun): Promise<MailSaveResult> {

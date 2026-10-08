@@ -56,7 +56,8 @@ function Result({ shown, onAgain, onDone }: { shown: Shown; onAgain: () => void;
   }
   const edit = o.edits[active] ?? o.edits[0];
   const differs = o.better && normWs(o.better) !== normWs(o.fixed) && normWs(o.better) !== normWs(run.sentence);
-  const counted = save && save.prod !== 'ignored' && save.prod !== 'failed' && save.prod !== 'unavailable';
+  const counted = save && (save.prod === 'created' || save.prod === 'updated');
+  const weekDone = save?.prod === 'weekDone';
   return (
     <div className="flex flex-col gap-4" data-testid="cl-result" data-verdict={o.verdict}>
       <div className="flex flex-col gap-1.5">
@@ -127,6 +128,11 @@ function Result({ shown, onAgain, onDone }: { shown: Shown; onAgain: () => void;
         {run.revised && !run.pasted && !run.translated && (
           <p className="lx-t-meta m-0 text-subtle" data-testid="cl-revision">
             {t('ttClRevision')}
+          </p>
+        )}
+        {weekDone && !run.pasted && !run.translated && !run.revised && (
+          <p className="lx-t-meta m-0 text-subtle" data-testid="cl-weekdone">
+            {t('ttClWeekCounted')}
           </p>
         )}
         {(run.pasted || run.translated) && (

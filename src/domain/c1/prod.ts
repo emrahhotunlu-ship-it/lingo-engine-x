@@ -53,10 +53,20 @@ export function prodEntry(i: ProdInput): C1Prod | null {
  * Änderung für `patchC1`: Eintrag anhängen (sortiert nach Tag). `null`, wenn er nicht zählt oder schon genau so dasteht (gleicher Tag, Quelle,
  * Wörter und Fehler, keine Wochensumme): Doppelschutz gegen zweimal gebuchte Texte (zweiter Klick, zweites Gerät, Neuversuch). Rein.
  */
+/**
+ * Warum wird ein Eintrag nicht angehängt? `'weekDone'`: Satz-Klinik zählt je Woche nur einmal (K7), es gibt schon einen; `'same'`: derselbe Text steht schon da
+ * (Doppelschutz: mit Kennung nur nach der Kennung, sonst gleicher Tag, Quelle, Wörter und Fehler); sonst `null`. Rein.
+ */
+export function prodSkip(doc: C1Doc, entry: C1Prod): 'weekDone' | 'same' | null {
+  if (entry.s === 'clinic' && doc.prod.some((p) => p.s === 'clinic' && p.wk !== true && weekStart(p.d) === weekStart(entry.d))) return 'weekDone';
+  if (entry.id) return doc.prod.some((p) => p.id === entry.id) ? 'same' : null;
+  return doc.prod.some((p) => p.wk !== true && p.d === entry.d && p.s === entry.s && p.w === entry.w && p.e === entry.e) ? 'same' : null;
+}
+
 export function addProdTo(doc: C1Doc, i: ProdInput): C1Doc | null {
   const entry = prodEntry(i);
   if (!entry) return null;
-  if (doc.prod.some((p) => p.wk !== true && p.d === entry.d && p.s === entry.s && p.w === entry.w && p.e === entry.e)) return null;
+  if (prodSkip(doc, entry)) return null;
   const prod = [...doc.prod, entry].sort((a, b) => a.d.localeCompare(b.d));
   return { ...doc, prod };
 }
@@ -73,9 +83,15 @@ export function markProdUnsure(doc: C1Doc, id: string): C1Doc | null {
 }
 
 /** Eintrag speichern (über `patchC1` → `writer.transform`). Nie geworfen. */
-export async function addProd(i: ProdInput, now: number = Date.now()): Promise<PatchResult | 'ignored'> {
-  if (!prodEntry(i)) return 'ignored';
-  return patchC1((doc) => addProdTo(doc, i), now);
+export async function addProd(i: ProdInput, now: number = Date.now()): Promise<PatchResult | 'ignored' | 'weekDone'> {
+  const entry = prodEntry(i);
+  if (!entry) return 'ignored';
+  let weekDone = false;
+  const r = await patchC1((doc) => {
+    if (prodSkip(doc, entry) === 'weekDone') weekDone = true;
+    return addProdTo(doc, i);
+  }, now);
+  return weekDone ? 'weekDone' : r;
 }
 
 export type ProdRate = {

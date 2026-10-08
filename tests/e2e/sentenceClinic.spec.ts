@@ -107,7 +107,10 @@ test.describe('Handy 390 px', () => {
     await check(page, 'We should align on the revised timeline before Friday.');
     await expect(page.getByTestId('cl-nothing')).toBeVisible();
     await expect(page.getByTestId('cl-revision')).toHaveCount(0);
-    expect(await prod(page)).toHaveLength(2);
+    // Dritter, anderer Satz in derselben Woche: Wochendeckel, kein zweiter Eintrag, ehrlicher Hinweis statt „gezählt“.
+    await expect(page.getByTestId('cl-weekdone')).toBeVisible();
+    await expect(page.getByTestId('cl-counted')).toHaveCount(0);
+    expect(await prod(page)).toHaveLength(1);
   });
 
   test('Einfügen: das Ergebnis erscheint, zählt aber nicht für K7 (kein Eintrag in prod)', async ({ page }) => {
