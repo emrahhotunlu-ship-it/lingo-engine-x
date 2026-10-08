@@ -339,3 +339,6 @@ Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktent
 - **Tageswechsel um 04:00 Uhr Ortszeit** des Geräts. Eine Einheit nach Mitternacht zählt noch zum Vortag. Der Datumsschlüssel `JJJJ-MM-TT` wird überall mit derselben Funktion berechnet.
 - **E2E-Tests laufen gegen den echten Produktions-Build** `dist/index.html`. Der Entwicklungs-Adapter wird dabei **von außen** als nachgebildete `window.claude`-Laufzeit eingespielt (Playwright `addInitScript`). So wird der Produktionspfad mitgetestet, und der Adapter ist nie Teil des Builds.
 
+
+## 08.10.2026 – Preply-Mitschrift (Vibe-Transkript) vorerst verworfen
+Emrah: „ne wir verwerfen mal die idee vorerst“. Geprüft am Beispiel-Transkript: eigene Fehler bleiben erhalten (nützlich), aber Sprecherzuordnung unzuverlässig und Wiederholungsschleifen der Erkennung. Kein Import-Knopf, keine Planänderung. Wieder aufnehmen nur auf Emrahs Zuruf (dann als Ausbau des Lehrer-Feedbacks in R5).
