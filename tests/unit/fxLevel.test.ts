@@ -115,6 +115,15 @@ describe('Dirigent: ein Urteil je 300 ms, „Weiß ich nicht“ bleibt still', (
     expect(playCue).toHaveBeenCalledTimes(2);
   });
 
+  it('ein ANDERES Urteil innerhalb der Sperrzeit ist ein neues Prüfen und wird gespielt (schnelle Folge richtig → falsch)', () => {
+    playVerdict({ k: 'verdict', v: 'ok' });
+    vi.advanceTimersByTime(VERDICT_GAP_MS - 100);
+    playVerdict({ k: 'verdict', v: 'wrong' });
+    expect(playCue).toHaveBeenLastCalledWith('wrong');
+    expect(verdictHaptic).toHaveBeenLastCalledWith('wrong');
+    expect(verdictHaptic).toHaveBeenCalledTimes(2);
+  });
+
   it('„Weiß ich nicht“ spielt nichts und sperrt nichts', () => {
     playVerdict({ k: 'verdict', v: 'dontKnow' });
     expect(playCue).not.toHaveBeenCalled();
