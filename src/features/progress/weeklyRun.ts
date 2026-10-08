@@ -1,6 +1,7 @@
 import { askJson } from '../../ai/gate';
 import { isAiFailure } from '../../ai/types';
 import { getWriter } from '../../data';
+import { patternById } from '../../domain/grammar/patterns';
 import { citableFacts, topicName, type WeekFact } from '../../domain/progress/weekly';
 import { weeklyReport, type WeeklyOut } from '../../prompts/weeklyReport';
 import { logError, logWarn } from '../../platform/diagnostics';
@@ -42,7 +43,9 @@ export function weeklyOp(cur: Doc | undefined, item: WeeklyItem): { set: Doc } |
 export function factLine(f: WeekFact): string {
   switch (f.kind) {
     case 'word':
-      return `new word "${f.word}" still recalled after at least one day${f.stable ? ' (now stable)' : ''}`;
+      return `word or phrase "${f.word}" reached the firm stage this week (new)`;
+    case 'pattern':
+      return `grammar pattern "${patternById(f.pat)?.name.en ?? f.pat}" reached the safe stage this week (new)`;
     case 'topic':
       return `grammar topic "${topicName(f.topic, 'en')}": mastery ${Math.round(f.from * 100)}% → ${Math.round(f.to * 100)}%`;
     case 'fixed':

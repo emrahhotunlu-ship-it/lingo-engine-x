@@ -21,6 +21,7 @@ import { preloadC1x } from '../../domain/c1x/preload';
 import { c1EvidenceLines, c1EvidenceText, openCrit } from '../../domain/c1/way';
 import { C1_LOG_DAYS } from '../../domain/metrics/c1';
 import { PATTERNS_DOC, wayFromLive } from '../c1/wayData';
+import { dxLines } from '../../domain/tutor/confusion';
 import { getDb, getSample, useCapabilities } from '../../platform/capabilities';
 import { logError, logWarn } from '../../platform/diagnostics';
 import type { Db } from '../../platform/types';
@@ -192,10 +193,12 @@ export async function runAssess(trigger: 'auto' | 'manual', nowMs: number = Date
     const answers = typeof profile.answers === 'number' ? profile.answers : 0;
     useAssessRun.setState({ phase: 'asking', answers: pack.counts.answers14 || answers });
 
+    // Wochen-Diagnose (P49): die Befunde der jüngsten Diagnose als Belegzeilen `[dx:<a>|<b>]` (nur mit „Weg zu C1“, ohne Diagnose leer).
+    const dx = way ? dxLines(Array.isArray(patternsDoc?.diag) ? (patternsDoc.diag as Doc[]) : [], today) : [];
     const vars = {
       lang,
-      evidence: evidenceText(pack),
-      ids: pack.ids,
+      evidence: dx.length ? `${evidenceText(pack)}\n${dx.map((l) => `[${l.id}] ${l.text}`).join('\n')}` : evidenceText(pack),
+      ids: dx.length ? [...pack.ids, ...dx.map((l) => l.id)] : pack.ids,
       allowed,
       prev: prev ? { cefr: prev.data.cefr, dims: Object.fromEntries(prev.data.dims.map((d) => [d.id, d.level])) } : null,
       today,

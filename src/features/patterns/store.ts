@@ -8,7 +8,7 @@ import { readCollection, readDoc } from '../../data/reads';
 import { validateDoc } from '../../data/validate';
 import { dayKey } from '../../domain/date';
 import { collectMistakes, uniqueMistakes, type Mistake } from '../../domain/patterns/mistakes';
-import { capPatterns, countWeeks, mergeHistory, patternHintsOf, patternsDue, readPatterns, recentWeeks, type Pattern, type PatternsDoc } from '../../domain/patterns/patterns';
+import { capPatterns, countWeeks, mergeHistory, patternHintsOf, readPatterns, recentWeeks, type Pattern, type PatternsDoc } from '../../domain/patterns/patterns';
 import { jsonEqual } from '../../domain/equal';
 import { patterns as patternsTemplate } from '../../prompts/patterns';
 import { getDb } from '../../platform/capabilities';
@@ -17,8 +17,8 @@ import type { Db } from '../../platform/types';
 import { aiUsable } from '../progress/assessRun';
 
 // Persönliche „Deutsch-Fallen“ (Lernberatung 27.09., V3): Quellen lesen, Muster erkennen lassen
-// (patterns@1, nur auf Knopfdruck oder höchstens einmal je ISO-Woche beim Öffnen von „Dein
-// Stand“ – nie in einer Schleife, nie automatisch wiederholt), `app/patterns` schreiben (immer
+// (patterns@1, nur auf Knopfdruck – seit Lernplattform 3.0 P49 gibt es keine automatische Woche mehr –
+// nie in einer Schleife, nie automatisch wiederholt), `app/patterns` schreiben (immer
 // `writer.transform` auf dem frischen Stand) und den Verlauf lokal nachzählen (ohne KI).
 
 type Doc = Record<string, unknown>;
@@ -88,7 +88,6 @@ export async function patternHints(nowMs = Date.now()): Promise<string[]> {
 /** Nur für Tests. */
 export function resetPatternCache(): void {
   cached = undefined;
-  autoTried = null;
 }
 
 // ------------------------------------------------------------------ Schreiben
@@ -151,7 +150,6 @@ type RunState = {
 export const usePatternsRun = create<RunState>(() => ({ phase: 'idle', error: null, last: null }));
 
 let ctl: AbortController | null = null;
-let autoTried: string | null = null;
 
 export const isRunning = (p: RecognizePhase): boolean => p !== 'idle' && p !== 'done' && p !== 'error';
 
@@ -200,14 +198,4 @@ export async function recognizePatterns(o: { refresh?: boolean } = {}): Promise<
 
 export function stopPatterns(): void {
   ctl?.abort();
-}
-
-/**
- * Beim Öffnen von „Dein Stand“: höchstens einmal je ISO-Woche neu erkennen – nur wenn es schon
- * Muster gibt (das erste Erkennen startet immer der Knopf) und nur einmal je Tab und Woche.
- */
-export function maybeAutoPatterns(doc: PatternsDoc | null, today: string): void {
-  if (!patternsDue(doc, today) || autoTried === today || !aiUsable()) return;
-  autoTried = today;
-  void recognizePatterns();
 }

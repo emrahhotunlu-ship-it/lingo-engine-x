@@ -122,14 +122,19 @@ describe('Wochenbericht (Plan §7.3)', () => {
     expect(facts.some((f) => f.kind === 'time')).toBe(true);
     for (const f of facts) expect(factLine(f)).not.toMatch(/undefined|NaN/);
   });
-  it('Wörter: eingeführt in der Woche und nach ≥ 1 Tag richtig wiederholt', () => {
+  it('Wörter: neu Fest in der Woche (`ff`), nicht mehr „Stabilität ≥ 3“; Wendungen und neu sichere Muster (P50)', () => {
     const vocab = new Map<string, Doc>([
-      ['a', { word: 'leverage', intro: '2026-09-15', hist: [{ t: now - 5 * DAY, g: 3 }, { t: now - 3 * DAY, g: 3 }] }],
-      ['b', { word: 'upsell', intro: '2026-09-15', hist: [{ t: now - 5 * DAY, g: 3 }] }],
-      ['c', { word: 'churn', intro: '2026-09-01', fsrs: { stability: 10 } }],
+      ['a', { word: 'leverage', intro: '2026-09-15', ff: '2026-09-18' }],
+      ['b', { word: 'upsell', intro: '2026-09-15', fsrs: { stability: 10 } }],
+      ['c', { word: 'churn', intro: '2026-09-01', ff: '2026-09-01' }],
+      ['d', { word: 'hidden', ff: '2026-09-16', hidden: true }],
     ]);
-    const facts = weekFacts({ days: weekDays('2026-09-20').days, vocab, grammar: new Map(), writing: new Map(), talk: new Map(), profile: {} });
-    expect(facts.map((f) => f.id)).toEqual(['vw:a']);
+    const chunk = new Map<string, Doc>([['x', { en: 'on the same page', ff: '2026-09-14' }]]);
+    const grammar = new Map<string, Doc>([['articles', { pats: { 'art.definite': { n: 5, s: '2026-09-17' }, 'art.zero': { n: 2, s: '2026-09-01' }, 'fake.id': { n: 2, s: '2026-09-17' } } }]]);
+    const facts = weekFacts({ days: weekDays('2026-09-20').days, vocab, chunk, grammar, writing: new Map(), talk: new Map(), profile: {} });
+    // Stabilität allein macht kein „neu Fest“; ältere ff, ausgeblendete Karten und unbekannte Muster zählen nicht.
+    expect(facts.map((f) => f.id)).toEqual(['cw:x', 'vw:a', 'gp:art.definite']);
+    for (const f of facts) expect(factLine(f)).not.toMatch(/undefined|NaN/);
   });
   it('Befunde H1/W4/H2: kein Anstieg ohne Vorwert, Pflicht erst ab pflichtSince, Titel beider Sprachen', () => {
     const days = weekDays('2026-09-20').days; // 14.–20.09.

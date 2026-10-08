@@ -468,9 +468,16 @@ export function selectRound(i: RoundInput): GrammarTask[] {
   let topics: string[];
   const intro = gt && i.mode === 'duty' ? gt.intro : i.introduce && topicById(i.introduce) ? i.introduce : null;
   // Mit Bremse ist ein neues Fokus-Thema nur erlaubt, wenn es das eine neue Thema des Tages ist.
-  const focus = !gt && i.mode === 'duty' && i.focusTopic && topicById(i.focusTopic) && (i.introduce === undefined || !isNewTopic(i.grammarDocs.get(i.focusTopic)) || i.focusTopic === intro) ? i.focusTopic : null;
+  // Mit eingefrorenem Plan (`gt`) kann nur ein schon begonnenes Fokus-Thema (Wochenfokus, P50) nach vorn rücken; das Thema des Tages bleibt dabei.
+  const focus =
+    i.mode === 'duty' && i.focusTopic && topicById(i.focusTopic) && (gt ? !isNewTopic(i.grammarDocs.get(i.focusTopic)) : i.introduce === undefined || !isNewTopic(i.grammarDocs.get(i.focusTopic)) || i.focusTopic === intro)
+      ? i.focusTopic
+      : null;
   if (i.mode === 'topic' && i.topic && topicById(i.topic)) topics = [i.topic];
-  else if (gt && i.mode === 'duty' && gt.topics.some((t) => topicById(t))) topics = gt.topics.filter((t) => topicById(t)).slice(0, 3);
+  else if (gt && i.mode === 'duty' && gt.topics.some((t) => topicById(t))) {
+    const base = gt.topics.filter((t) => topicById(t));
+    topics = (focus ? [focus, ...base.filter((t) => t !== focus)] : base).slice(0, 3);
+  }
   else if (focus) {
     const order = ranked.map((r) => r.topic).filter((t) => t !== focus);
     topics = [focus, ...order.slice(0, 2)];

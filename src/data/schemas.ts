@@ -93,6 +93,13 @@ export const patternsSchema = z.looseObject({
     )
     .nullish(),
   history: z.array(z.looseObject({ w: str, counts: numMap })).nullish(),
+  /**
+   * Neu (Lernplattform 3.0 P49, nur ergänzend): Protokoll der Wochen-Diagnose, höchstens 12 Einträge
+   * `{w, t, st: 'pending' | 'done', dev, pv, lang, rep, out, bad?}` (Beanspruchung und Ergebnis, `domain/tutor/diag.ts`).
+   */
+  diag: z
+    .array(z.looseObject({ w: str, t: num, st: str, dev: str, pv: str, lang: str, rep: num, out: loose, bad: loose }))
+    .nullish(),
 });
 
 export const weeklySchema = z.looseObject({
@@ -178,6 +185,8 @@ export const profileSchema = z.looseObject({
   pflicht: z.record(z.string(), z.unknown()).nullish(),
   /** Neu (Umbau, Abschluss auf Heute): Meilensteine `{fest100: Lerntag, ch2: Lerntag, place: 'Lerntag~' (still gemerkt), fu: …}`, ≤ 30 Schlüssel, nur ergänzend, nie geändert (`domain/plan/dayStats`, P42). */
   ms: z.record(z.string(), z.unknown()).nullish(),
+  /** Neu (Lernplattform 3.0 P50, nur ergänzend): Wochenfokus `[{w: 'JJJJ-Www', a: Musterkennung oder '' (die App entscheidet), t}]`, höchstens 12, nie gelöscht. */
+  wf: z.array(z.looseObject({ w: str, a: str, t: num })).nullish(),
 });
 
 export const courseSchema = z.looseObject({

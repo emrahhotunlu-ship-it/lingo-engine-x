@@ -2,6 +2,7 @@ import { cardExamples } from './cardExamples';
 import { comboCheck } from './comboCheck';
 import { listenQ } from './listenQ';
 import { orderGen } from './orderGen';
+import { diagnose } from './diagnose';
 import { explainAnswerV2 } from './explainAnswerV2';
 import { sentenceClinic } from './sentenceClinic';
 import { c1Mail } from './c1Mail';
@@ -40,6 +41,8 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   // Lernplattform 2.0 P2: „Erklär mir meine Antwort“
   // `explain-answer@1` (LP2 P2, `explainAnswer.ts`) bleibt als Datei erhalten, wird nicht mehr aufgerufen; die Kennung ist je Vorlage einmalig.
   explainAnswerV2,
+  // Lernplattform 3.0 P49: Wochen-Diagnose „Was du verwechselst“
+  diagnose,
   // Phase 2 (docs/phase2-plan.md §7)
   grammarItems,
   grammarJudge,

@@ -1,3 +1,4 @@
+import { flags } from '../../app/flags';
 import { useNav } from '../../app/nav';
 import { useClock } from '../../app/clock';
 import { dayKeyNoon } from '../../domain/date';
@@ -8,6 +9,7 @@ import { useCompanionSee } from '../companion/seeing';
 import { LateRescueHint } from '../migration/LateRescueCard';
 import { ChecksRow } from './ChecksCard';
 import { WeeklyCard } from './WeeklyCard';
+import { WeeklyReview3 } from './WeeklyReview3';
 
 // Seiten aus dem Profil-Blatt (plan.md §1.2): „Wochen-Check“ (O11/O12: Start und bisherige Checks)
 // und „Wochenbericht“ (O13). Dazu die zwei ruhigen Zeilen auf Heute (plan.md §1.3 Nr. 4):
@@ -33,7 +35,7 @@ export function WeeklyPage() {
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-6 sm:py-10" data-testid="weekly-page">
       <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{t('nbProfilWeekly')}</h1>
-      <WeeklyCard />
+      {flags.weekly3 ? <WeeklyReview3 /> : <WeeklyCard />}
     </div>
   );
 }

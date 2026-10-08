@@ -6,6 +6,7 @@ import { useSettings } from '../../app/settings';
 import { answerRight } from '../../domain/learn/right';
 import { flags } from '../../app/flags';
 import { kindRound } from '../../domain/grammar/kindRound';
+import { focusFor, focusTopicOf } from '../../domain/progress/weekly3';
 import { lexDoneSet } from '../c1x/lexDone';
 import type { C1Kind } from '../../domain/c1x/types';
 import { c1ErrorResolver, ensureC1xLoaded } from '../c1x/resolve';
@@ -155,7 +156,7 @@ export function setExtraTasks(tasks: readonly GrammarTask[]): void {
 let ctxInput: Pick<RoundInput, 'grammarDocs' | 'dailyOpen' | 'pool' | 'seed' | 'gt' | 'profile' | 'wordsToday'> | null = null;
 
 /** `block`/`size`: als Block der Tageseinheit (immer Pflicht, Rundengröße aus dem Plan). `pat`: nur dieses Muster üben (Themenblatt, 4 Aufgaben). */
-export type StartOpts = { /** Nur Anwenden: eine Runde nur dieser c1x-Art (freiwillig, nie Pflicht). */ kind?: C1Kind; mode: RoundMode; topic?: string | null; day?: string; block?: UnitBlockNo | null; size?: number; pat?: string | null };
+export type StartOpts = { /** Nur Anwenden: eine Runde nur dieser c1x-Art (freiwillig, nie Pflicht). */ kind?: C1Kind; /** Fertig gebaute Aufgaben (Kontrast-Runde, P49): freiwillig, nie Pflicht, nie Einführung. */ tasks?: readonly GrammarTask[]; mode: RoundMode; topic?: string | null; day?: string; block?: UnitBlockNo | null; size?: number; pat?: string | null };
 
 /** Lemmata der Karten von heute (Gleichstand-Brecher der Rundenwahl); ohne Karten leer. */
 function safeWords(nowMs: number, plan: ReturnType<typeof useTodayPlan.getState>['plan']): string[] {
@@ -183,7 +184,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
   const lang = useSettings.getState().lang;
   const inputs = useLearnInputs.getState();
   // D9: Eine Grammatikrunde, solange „Grammatik" heute Pflicht und offen ist, zählt als Pflicht.
-  const ctx: Ctx = o.block ? 'duty' : o.kind ? 'xtra' : roundCtx('gram', day);
+  const ctx: Ctx = o.block ? 'duty' : o.kind || o.tasks?.length ? 'xtra' : roundCtx('gram', day);
   let mode: RoundMode = o.mode;
   if (mode === 'xtra' && ctx === 'duty') mode = 'duty';
   if (mode === 'duty' && ctx !== 'duty') mode = 'xtra';
@@ -195,6 +196,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
   const rv = planRvOf(plan);
   const errorsMax = mode === 'duty' ? unitGrammarArgs(plan).errs : undefined;
   const words = safeWords(nowMs, plan);
+  const wfFocus = focusFor(live.docs['app/profile']?.wf, { planAt: plan?.at ?? null, day });
   roundNo++;
   const seed = `${day}|${mode}|${o.topic ?? ''}|${roundNo}`;
   const base = {
@@ -215,7 +217,10 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
   const size = o.size ?? ROUND_SIZE[mode];
   const introTopicId = gt ? gt.intro : null;
 
-  if (o.kind) {
+  if (o.tasks?.length) {
+    // Kontrast-Runde (P49): die Aufgaben stehen fest (A und B im Wechsel); Kontext `xtra`.
+    tasks = [...o.tasks];
+  } else if (o.kind) {
     // Anwenden: eine Runde nur einer c1x-Art, über die eingeführten Muster.
     tasks = kindRound({ kind: o.kind, size: o.size ?? 6, grammarDocs: docs, seed, wordsToday: words, lexDone: lexDoneSet() });
   } else if (o.pat && o.topic) {
@@ -252,8 +257,9 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
       size,
       // Einführungsbremse (höchstens 1 neues Thema je 3 Lerntage, nie bei ≥ 10 offenen Fehlersätzen): nur die Pflichtrunde führt ein Thema ein.
       introduce: mode === 'duty' && !gt ? introTopic(docs, day, nowMs) : null,
-      focusTopic: mode === 'duty' && !gt ? planFocusTopic(plan) : null,
-      ...(flags.slotPlan && (mode === 'duty' || mode === 'xtra') ? { slotPlan: { focus: null } } : {}),
+      // Wochenfokus (P50): erst für Pläne, die nach der Wahl angelegt wurden; der gespeicherte Plan von heute bleibt eingefroren.
+      focusTopic: mode === 'duty' ? (focusTopicOf(wfFocus) ?? (!gt ? planFocusTopic(plan) : null)) : null,
+      ...(flags.slotPlan && (mode === 'duty' || mode === 'xtra') ? { slotPlan: { focus: wfFocus } } : {}),
     });
     // Regelkarte vor der ersten Runde eines neuen Themas (Lernweg ①): das erste Thema der Runde, das noch nie geübt wurde.
     const t0 = tasks.find((t) => t.errorT === null && isNewTopic(docs.get(t.topic)))?.topic ?? null;

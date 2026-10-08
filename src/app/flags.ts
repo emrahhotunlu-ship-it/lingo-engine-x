@@ -16,6 +16,8 @@ export type Flags = {
   /** „Weg zu C1“ im Fortschritt (Slot `progress.head`) und die Einschätzung assess@4 (P44/P45). */
   way: boolean;
   tutor: { explain: boolean; gen: boolean; diagnose: boolean; clinic: boolean; write: boolean };
+  /** Wochenrückblick 3.0 (P50): große Zahl, Namen, Fokuswahl, Karte „Für deinen Lehrer“. */
+  weekly3: boolean;
   fx: { moments: boolean; rings: boolean; sparks: boolean; field: boolean; sky: boolean; film: boolean };
 };
 
@@ -26,7 +28,8 @@ export const flags: Flags = {
   c1check: true,
   program: true,
   way: true,
-  tutor: { explain: false, gen: false, diagnose: false, clinic: true, write: true },
+  tutor: { explain: false, gen: false, diagnose: true, clinic: true, write: true },
+  weekly3: true,
   fx: { moments: false, rings: false, sparks: false, field: false, sky: true, film: true },
 };
 
@@ -48,20 +51,23 @@ export function applyFlagOverrides(raw: string | null): void {
         if (k === 'slots') flags.slotPlan = true;
         if (k === 'program') flags.program = true;
         if (k === 'way') flags.way = true;
+        if (k === 'diagnose') flags.tutor.diagnose = true;
+        if (k === 'weekly3') flags.weekly3 = true;
         if (k === 'sky' || k === 'film') flags.fx[k] = true;
         if (k === 'clinic' || k === 'write') flags.tutor[k] = true;
       }
       return;
     }
-    const o = JSON.parse(t) as { c1xKinds?: Record<string, unknown>; tempo?: unknown; slotPlan?: unknown; c1check?: unknown; program?: unknown; way?: unknown; fx?: Record<string, unknown>; tutor?: Record<string, unknown> };
+    const o = JSON.parse(t) as { c1xKinds?: Record<string, unknown>; tempo?: unknown; slotPlan?: unknown; c1check?: unknown; program?: unknown; way?: unknown; weekly3?: unknown; tutor?: Record<string, unknown>; fx?: Record<string, unknown> };
     for (const k of kinds) if (typeof o.c1xKinds?.[k] === 'boolean') flags.c1xKinds[k] = o.c1xKinds[k];
     if (typeof o.slotPlan === 'boolean') flags.slotPlan = o.slotPlan;
     if (typeof o.tempo === 'boolean') flags.tempo = o.tempo;
     if (typeof o.c1check === 'boolean') flags.c1check = o.c1check;
     if (typeof o.program === 'boolean') flags.program = o.program;
     if (typeof o.way === 'boolean') flags.way = o.way;
-    for (const k of Object.keys(flags.fx) as (keyof Flags['fx'])[]) if (typeof o.fx?.[k] === 'boolean') flags.fx[k] = o.fx[k];
+    if (typeof o.weekly3 === 'boolean') flags.weekly3 = o.weekly3;
     for (const k of Object.keys(flags.tutor) as (keyof Flags['tutor'])[]) if (typeof o.tutor?.[k] === 'boolean') flags.tutor[k] = o.tutor[k];
+    for (const k of Object.keys(flags.fx) as (keyof Flags['fx'])[]) if (typeof o.fx?.[k] === 'boolean') flags.fx[k] = o.fx[k];
   } catch {
     // Ungültige Übersteuerung: die eingebauten Schalter gelten.
   }

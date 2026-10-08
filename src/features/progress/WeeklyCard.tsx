@@ -4,6 +4,7 @@ import { useClock } from '../../app/clock';
 import { useLive } from '../../data/live';
 import { useDocWatch } from '../../data/watch';
 import { LESSONS } from '../../domain/content';
+import { patternById } from '../../domain/grammar/patterns';
 import { citableFacts, lastWeekOf, topicName, weekFacts, type WeekFact } from '../../domain/progress/weekly';
 import { detectLang } from '../../domain/lang/detect';
 import { useT, type MessageKey } from '../../i18n';
@@ -27,6 +28,8 @@ function factText(f: WeekFact, t: (k: MessageKey, v?: Record<string, string | nu
   switch (f.kind) {
     case 'word':
       return t('wf_word', { word: f.word });
+    case 'pattern':
+      return t('moWkFactPattern', { name: patternById(f.pat)?.name[lang] ?? f.pat });
     case 'topic':
       return t('wf_topic', { topic: topicName(f.topic, lang), from: Math.round(f.from * 100), to: Math.round(f.to * 100) });
     case 'fixed':
@@ -55,6 +58,7 @@ export function WeeklyCard() {
   const today = useClock((s) => s.today);
   const profile = useLive((s) => s.docs['app/profile']);
   const vocab = useLive((s) => s.collections.vocab) ?? EMPTY;
+  const chunk = useLive((s) => s.collections.chunk) ?? EMPTY;
   const grammar = useLive((s) => s.collections.grammar) ?? EMPTY;
   const schema = useLive((s) => s.docs['app/schema']);
   const weekly = useDocWatch('app/weekly');
@@ -62,8 +66,8 @@ export function WeeklyCard() {
   const scope = useAiScope();
   const week = useMemo(() => lastWeekOf(today), [today]);
   const facts = useMemo(
-    () => weekFacts({ days: week.days, vocab, grammar, writing: EMPTY, talk: EMPTY, profile: obj(profile), pflichtSince: typeof obj(schema).pflichtSince === 'string' ? (obj(schema).pflichtSince as string) : null }).filter((f) => f.kind !== 'time'),
-    [week, vocab, grammar, profile, schema],
+    () => weekFacts({ days: week.days, vocab, chunk, grammar, writing: EMPTY, talk: EMPTY, profile: obj(profile), pflichtSince: typeof obj(schema).pflichtSince === 'string' ? (obj(schema).pflichtSince as string) : null }).filter((f) => f.kind !== 'time'),
+    [week, vocab, chunk, grammar, profile, schema],
   );
   const stored = weekly.status === 'ready' ? storedWeekly(weekly.data, week.w, lang) : null;
   const wants = ai && weekly.status === 'ready' && !stored && citableFacts(facts).length >= WEEKLY_MIN_FACTS;

@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
 import { topPatterns } from '../../domain/patterns/patterns';
@@ -6,12 +5,13 @@ import { useT } from '../../i18n';
 import { Button } from '../../ui/Button';
 import { Card } from '../../ui/Card';
 import { TrendLine } from './parts';
-import { isRunning, maybeAutoPatterns, PATTERNS_MIN_MISTAKES, usePatternsRun } from './store';
+import { isRunning, PATTERNS_MIN_MISTAKES, usePatternsRun } from './store';
 import { usePatternData } from './usePatternData';
 
 // „Dein Stand“ (Lernberatung 27.09., V3 + V8): eine Karte „Deine Deutsch-Fallen“ mit den drei
-// wichtigsten Mustern und ihrem Verlauf, darunter der Wochenfokus in einer Zeile. Höchstens einmal
-// je ISO-Woche werden die Muster hier automatisch neu erkannt (nur wenn es schon welche gibt).
+// wichtigsten Mustern und ihrem Verlauf, darunter der Wochenfokus in einer Zeile. Neu erkannt wird nur
+// noch auf den Knopf (Lernplattform 3.0 P49, K-10: die automatische Woche von `patterns@1` entfällt, damit
+// es bei EINEM `complex`-Aufruf je Woche bleibt, der Wochen-Diagnose).
 // Ohne Muster und mit zu wenigen eigenen Fehlern: nichts.
 
 export function PatternsStandCard() {
@@ -21,10 +21,6 @@ export function PatternsStandCard() {
   const data = usePatternData();
   const phase = usePatternsRun((s) => s.phase);
   const doc = data.doc;
-
-  useEffect(() => {
-    if (data.status === 'ready') maybeAutoPatterns(doc, today);
-  }, [data.status, doc, today]);
 
   const top = topPatterns(doc, today, 3);
   if (data.status !== 'ready' || (!top.length && data.mistakes.length < PATTERNS_MIN_MISTAKES)) return null;
