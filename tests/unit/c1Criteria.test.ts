@@ -4,7 +4,7 @@ import { C1_GOALS, CRITERIA, c1Criteria, type CriteriaInput } from '../../src/do
 import type { ChapterStateResult } from '../../src/domain/c1/state';
 import type { C1Item } from '../../src/domain/c1x/types';
 import { addDays } from '../../src/domain/date';
-import { deskChecks, k1Measure, k2Measure, k3Measure, k6Measure, logEntriesOf, programStart, slopePerDay, type K6Measure } from '../../src/domain/metrics/c1';
+import { deskChecks, k1Measure, k2Measure, k3Measure, k6Measure, logEntriesOf, programStart, slopePerDay, TP_SINCE, type K6Measure } from '../../src/domain/metrics/c1';
 import type { PatternsDoc } from '../../src/domain/patterns/patterns';
 import { recentWeeks } from '../../src/domain/patterns/patterns';
 
@@ -29,7 +29,7 @@ const allMet = (): CriteriaInput => {
     k2: { relapses: 1, prev: 4, traps: 6 },
     k3: { view: { state: 'valid', t: 1, passive: 4200, lo: 3800, hi: 4600 }, series: [] },
     k4: { fest: 800, learned: 1200, retention: { rate: 0.9, n: 80, enough: true, band: 'in' }, growth: { delta: 40, days: 56 } },
-    k6: { n: 30, ok: 26, clean: 10, cleanOk: 9, older: 0.8, recent: 0.9 },
+    k6: { n: 30, ok: 26, clean: 10, cleanOk: 9, older: 0.8, recent: 0.9, unmarked: 0 },
   };
 };
 
@@ -157,13 +157,31 @@ describe('K6 Selbstkorrektur', () => {
       },
     ]);
     const m = k6Measure(entries, itemOf, now);
-    expect(m).toEqual({ n: 2, ok: 1, clean: 2, cleanOk: 1, older: 0, recent: 1 });
+    expect(m).toEqual({ n: 2, ok: 1, clean: 2, cleanOk: 1, unmarked: 4, older: 0, recent: 1 });
+  });
+  it('K-a: Tempo-Antworten (`tp`) zählen nie; Antworten vor der Kennung heißen „enthält noch Tempo-Antworten“', () => {
+    const later = Date.parse(`${TP_SINCE}T12:00:00+02:00`) + 86_400_000;
+    const entries = logEntriesOf([
+      {
+        entries: [
+          { c1k: 'err', cid: 'e1', free: true, pts: [2, 2], t: later },
+          { c1k: 'err', cid: 'e1', free: true, pts: [2, 2], t: later, tp: true },
+          { c1k: 'err', cid: 'c1', pts: [2, 2], t: later, tp: true },
+          { c1k: 'err', cid: 'c1', pts: [2, 2], t: later, tp: 'ja' }, // kein Wahrheitswert: kein Tempo
+        ],
+      },
+    ]);
+    expect(entries.filter((e) => e.tp)).toHaveLength(2);
+    const m = k6Measure(entries, itemOf, later);
+    expect(m).toMatchObject({ n: 1, ok: 1, clean: 1, cleanOk: 1, unmarked: 0 });
+    const old = k6Measure(logEntriesOf([{ entries: [{ c1k: 'err', cid: 'e1', free: true, pts: [2, 2], t: now }] }]), itemOf, now);
+    expect(old.unmarked).toBe(1);
   });
   it('unter 20 Antworten → zu wenig Daten; Fehlalarm-Untergrenze verfehlt → nicht erreicht', () => {
     const i = allMet();
-    i.k6 = { n: 19, ok: 19, clean: 10, cleanOk: 10, older: 1, recent: 1 };
+    i.k6 = { n: 19, ok: 19, clean: 10, cleanOk: 10, older: 1, recent: 1, unmarked: 0 };
     expect(c1Criteria(i).list[5]?.state).toBe('few');
-    i.k6 = { n: 30, ok: 28, clean: 10, cleanOk: 7, older: 1, recent: 1 } satisfies K6Measure;
+    i.k6 = { n: 30, ok: 28, clean: 10, cleanOk: 7, older: 1, recent: 1, unmarked: 0 } satisfies K6Measure;
     expect(c1Criteria(i).list[5]?.state).not.toBe('met');
     i.k6 = null;
     expect(c1Criteria(i).list[5]?.state).toBe('few');

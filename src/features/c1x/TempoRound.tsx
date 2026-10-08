@@ -169,8 +169,8 @@ export function TempoRound({ items, day, ctx, recent, onClose, onFinish }: Tempo
   useHotkeys({ escape: leave }, api.isInput);
 
   const onDone = (a: GrammarAnswer): 'typed' | 'choice' | null => {
-    // Gebucht wird wie bei den Arten selbst (BKT, Muster, Fehlersatz, Protokoll mit `tm`).
-    void learnRecorder.grammar(a);
+    // Gebucht wird wie bei den Arten selbst (BKT, Muster, Fehlersatz, Protokoll mit `tm`), dazu `tp` (zählt nicht für K6).
+    void learnRecorder.grammar({ ...a, tempo: true });
     const kind = a.task.c1?.kind;
     const row: TempoRow | null = kind && isTempoKind(kind) ? { kind, ok: answerRight(a) && a.firstWrong === undefined, ms: a.ms, target: targetMs(kind, inp) } : null;
     const list = row ? [...rows, row] : rows;

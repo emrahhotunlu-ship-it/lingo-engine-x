@@ -93,6 +93,8 @@ export type GrammarLogEntry = {
   free?: true;
   /** Millisekunden bis zur Abgabe einer getippten c1x-Antwort (Lernplattform 3.0 P24, Tempo-Messung). */
   tm?: number;
+  /** Antwort aus einer Tempo-Runde (P44-Nachbesserung): zählt nie für K6 „Fehler finden“. Nur ergänzend. */
+  tp?: true;
 };
 
 /** Übungs-Eintrag (Diktat, Lückenjagd, Satzbau, Lektionsfrage) in der Form der alten App. */
@@ -165,6 +167,7 @@ export function grammarLogEntry(a: GrammarAnswer): GrammarLogEntry {
     ...(a.task.c1 ? { cid: a.task.c1.id, pat: a.task.c1.pat } : {}),
     ...(a.task.c1?.src === 'ai' ? { ai: true as const } : {}),
     ...(a.pts && a.free ? { free: true as const, tm: Math.max(1, Math.round(a.ms)) } : {}),
+    ...(a.tempo ? { tp: true as const } : {}),
   };
 }
 

@@ -31,10 +31,18 @@ export function assessReply(input: string): string {
   // assess@4 (P45): dazu das Urteil „Weg zu C1“ aus den C1-Belegzeilen und der Liste der offenen Kriterien.
   if (input.startsWith('[assess@4]')) {
     const c1Ids = [...input.matchAll(/^\[(c1:k[1-7]|chk:[^\]]+|gate:\d+|place)\] /gm)].map((m) => m[1] ?? '').filter(Boolean);
-    const openRaw = /^- status: .*Open criteria now: ([^.]*)\.$/m.exec(input)?.[1] ?? 'none';
+    const openRaw = /^- status: .*Open criteria now: ([^.]*)\./m.exec(input)?.[1] ?? 'none';
     const open = openRaw === 'none' ? [] : openRaw.split(', ').filter(Boolean);
-    const c1 = assess4Example({ lang, ids, allowed, c1: { evidence: '', ids: c1Ids, open } }).c1;
+    const course = Number(/Criteria on track now: (\d+) of/.exec(input)?.[1] ?? 0);
+    const c1 = assess4Example({ lang, ids, allowed, c1: { evidence: '', ids: c1Ids, open, course } }).c1;
     if (c1) c1.ev = [c1Ids.find((i) => open.some((o) => i === `c1:${o}`)) ?? c1Ids[0] ?? 'c1:k1'];
+    // Das Beispiel der Vorlage ist inhaltsneutral (Platzhalter); die feste Antwort braucht einen echten Satz.
+    if (c1 && open.length) {
+      c1.why =
+        lang === 'de'
+          ? 'Grammatik und Wörter wachsen stetig, im Laptop-Check fehlt noch Sicherheit. Am meisten bringt dir jetzt der nächste Check.'
+          : 'Grammar and vocabulary are growing steadily; the laptop check still lacks consistency. The next check will help you most now.';
+    }
     const v4 = { ...out, c1 };
     if (bad && !retry) return JSON.stringify({ ...v4, cefr: 'Z9' });
     return JSON.stringify(v4);

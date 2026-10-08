@@ -282,9 +282,11 @@ async function run<V, O>(req: AiRequest<V, O>, scope: string, phase: Phase): Pro
 
   let prompt: string;
   let schema: z.ZodType<O>;
+  let lenient: z.ZodType<O> | undefined;
   try {
     prompt = template.build(vars) + QUOTE_RULE;
     schema = template.schema(vars);
+    lenient = template.lenient?.(vars);
   } catch (err) {
     logError(scope, err, 'build');
     throw failure('bug', 'build');
@@ -335,6 +337,12 @@ async function run<V, O>(req: AiRequest<V, O>, scope: string, phase: Phase): Pro
     if (r2.success) return { data: r2.data, tierApplied: second.tier, retried: true };
 
     logWarn(scope, { code: 'schema', message: describeIssues(r2.error.issues) }, 'retry');
+    // Nachsichtig nur für diese zweite Antwort (z. B. Zusatzteil verwerfen); kein weiterer Aufruf.
+    const r3 = lenient?.safeParse(second.value);
+    if (r3?.success) {
+      logWarn(scope, { code: 'schema', message: 'lenient: optional part dropped' }, 'retry');
+      return { data: r3.data, tierApplied: second.tier, retried: true };
+    }
     throw failure('invalid', 'schema');
   } finally {
     release();

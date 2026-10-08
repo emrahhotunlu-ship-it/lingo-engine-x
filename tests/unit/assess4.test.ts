@@ -5,7 +5,7 @@ import { allowedActions } from '../../src/domain/assessment/actions';
 import { fullData, readAssessData } from '../../src/domain/assessment/envelope';
 import { buildEvidence, evidenceText } from '../../src/domain/assessment/evidence';
 import { readAssess } from '../../src/domain/assessment/envelope';
-import { assess4, assess4Example, assess4Schema, c1VerdictSchema, cleanMissing, type Assess4Vars } from '../../src/prompts/assess4';
+import { assess4, assess4Example, assess4Schema, c1Status, c1VerdictSchema, cleanMissing, type Assess4Vars } from '../../src/prompts/assess4';
 import { PROMPT_MAX_BYTES, promptBytes } from '../../src/prompts/common';
 import { assessReply, setAssessBad } from '../../src/platform/dev/canned/assess';
 import { assessDataSchema } from '../../src/data/schemas';
@@ -63,7 +63,7 @@ function vars(lang: 'de' | 'en' = 'de', c1Raw: unknown = C1_RAW): Assess4Vars {
     allowed: allowedActions({ errorTopics: ['passive'], nextLesson: 'l07' }),
     prev: null,
     today,
-    c1: { evidence: c1EvidenceText(lines), ids: lines.map((l) => l.id), open: openCrit(w.crit) },
+    c1: { evidence: c1EvidenceText(lines), ids: lines.map((l) => l.id), open: openCrit(w.crit), course: w.crit.list.filter((c) => c.state === 'course').length },
   };
 }
 
@@ -97,6 +97,12 @@ describe('Weg zu C1: reine Zusammenfassung (way.ts)', () => {
     expect(text).not.toMatch(/% C1/);
   });
 
+  it('P5: K7 mit zu wenig Daten nennt keine Rate, nur die Mengen zur Mindestmenge', () => {
+    const line = c1EvidenceLines(c1Way(wayIn({ c1: C1_RAW }))).find((l) => l.id === 'c1:k7')!;
+    expect(line.text).toBe('K7 accuracy in own writing (state: too little data): 120 of 600 words, 1 of 6 texts, 1 of 3 weeks; no rate below the minimum.');
+    expect(line.text).not.toMatch(/errors per 100/);
+  });
+
   it('höchstens sechs Check-Monate', () => {
     const checks = Array.from({ length: 9 }, (_, k) => ({ d: `2026-0${k + 1}-10`, f: 'A', inp: 'desk', p: [4, 4, 4, 6], pts: 18, max: 36 }));
     const ids = c1EvidenceLines(c1Way(wayIn({ c1: { ...C1_RAW, checks } }))).filter((l) => l.id.startsWith('chk:'));
@@ -118,12 +124,26 @@ describe('assess@4: Vorlage und Schema', () => {
     expect(promptBytes(p)).toBeLessThanOrEqual(PROMPT_MAX_BYTES);
   });
 
-  it('das Beispiel besteht sein eigenes Schema (DE und EN)', () => {
+  it('das Beispiel besteht sein eigenes Schema, sobald der Platzhalter durch einen Satz ersetzt ist (DE und EN); bei Etappe direkt', () => {
     for (const lang of ['de', 'en'] as const) {
       const v = vars(lang);
-      const r = assess4Schema(v).safeParse(structuredClone(assess4Example(v)));
+      const ex = structuredClone(assess4Example(v));
+      // N3: ein kopierter Platzhalter „<…>“ wird abgelehnt.
+      expect(assess4Schema(v).safeParse(ex).success).toBe(false);
+      const why = lang === 'de' ? 'Die Grammatik ist fast so weit, bei den Wörtern fehlt noch ein gutes Stück.' : 'Grammar is nearly there; vocabulary still needs a good stretch.';
+      const r = assess4Schema(v).safeParse({ ...ex, c1: { ...ex.c1!, why } });
       expect(r.success, JSON.stringify(r.error?.issues)).toBe(true);
+      const stage = { ...v, c1: { ...v.c1, open: [], course: 0 } };
+      const s = assess4Schema(stage).safeParse(structuredClone(assess4Example(stage)));
+      expect(s.success, JSON.stringify(s.error?.issues)).toBe(true);
     }
+  });
+
+  it('N3: Beispielsatz für „ready“ ohne „auf C1-Niveau“, sondern „C1-Etappe der App“', () => {
+    const v = vars('de');
+    expect(assess4Example({ ...v, c1: { ...v.c1, open: [], course: 0 } }).c1?.why).toContain('erfüllen die C1-Etappe der App');
+    const e = vars('en');
+    expect(assess4Example({ ...e, c1: { ...e.c1, open: [], course: 0 } }).c1?.why).toContain("meet the app's C1 milestone");
   });
 
   it('c1 darf fehlen oder null sein (dann gilt der feste Satz)', () => {
@@ -134,14 +154,55 @@ describe('assess@4: Vorlage und Schema', () => {
     expect(assess4Schema(v).safeParse({ ...rest, c1: null }).success).toBe(true);
   });
 
-  it('„ready“ nur bei Etappe; sonst wird es zu „on_track“', () => {
+  it('P1: Status in beide Richtungen vom Code – „ready“ nur bei Etappe, bei Etappe immer „ready“', () => {
     const v = vars();
-    const c1 = { ...assess4Example(v).c1!, status: 'ready' };
-    const r = c1VerdictSchema(v).parse(c1);
-    expect(r.status).toBe('on_track');
-    const stage = { ...v, c1: { ...v.c1, open: [] } };
+    const many = { ...v, c1: { ...v.c1, course: v.c1.open.length } };
+    const c1 = { ...assess4Example(v).c1!, status: 'ready', why: 'Die Grammatik ist fast so weit, bei den Wörtern fehlt noch ein gutes Stück.' };
+    expect(c1VerdictSchema(many).parse(c1).status).toBe('on_track');
+    const stage = { ...v, c1: { ...v.c1, open: [], course: 0 } };
     expect(c1VerdictSchema(stage).parse({ ...c1, missing: [] }).status).toBe('ready');
-    expect(c1VerdictSchema(v).parse({ ...c1, status: 'On Track' }).status).toBe('on_track');
+    expect(c1VerdictSchema(stage).parse({ ...c1, status: 'not_yet', missing: [] }).status).toBe('ready');
+    expect(c1VerdictSchema(stage).parse({ ...c1, status: 'on track', missing: [] }).status).toBe('ready');
+    expect(c1VerdictSchema(many).parse({ ...c1, status: 'On Track' }).status).toBe('on_track');
+  });
+
+  it('P2: „on_track“ nur, wenn mindestens die Hälfte der offenen Kriterien auf Kurs ist', () => {
+    const open = ['k1', 'k2', 'k3', 'k4'];
+    expect(c1Status('on_track', { open, course: 1 })).toBe('not_yet');
+    expect(c1Status('ready', { open, course: 1 })).toBe('not_yet');
+    expect(c1Status('on_track', { open, course: 2 })).toBe('on_track');
+    expect(c1Status('not_yet', { open, course: 4 })).toBe('not_yet');
+    expect(c1Status('erfunden', { open, course: 4 })).toBe('erfunden');
+    const v = vars();
+    expect(assess4.build({ ...v, c1: { ...v.c1, course: 1 } })).toContain(`Criteria on track now: 1 of ${v.c1.open.length} open.`);
+  });
+
+  it('P3/P4/P7/P8: Regeln für wenig Daten, Ton, keine Daten/Dauer, K7 ohne Übungsort, keine Prozentzahlen', () => {
+    const p = assess4.build(vars());
+    expect(p).toContain('are not weaknesses: say that evidence is missing');
+    expect(p).toContain('Tone: factual and calm.');
+    expect(p).toContain('Never predict a date or a duration');
+    expect(p).toContain('Criteria without a practice place in the app yet: k7.');
+    expect(p).toContain('Exception for "c1" only: K7');
+    expect(p).toContain('Do not copy any percentage from the evidence');
+  });
+
+  it('P6: das Beispiel ist inhaltsneutral (Platzhalter statt Urteil)', () => {
+    expect(assess4Example(vars('de')).c1?.why).toMatch(/^<1–2 Sätze/);
+    expect(assess4Example(vars('en')).c1?.why).toMatch(/^<1–2 sentences/);
+  });
+
+  it('P8: nach dem Neuversuch fällt nur ein ungültiges `c1` weg, die übrige Einschätzung bleibt', () => {
+    const v = vars();
+    const ex = structuredClone(assess4Example(v)) as Record<string, unknown>;
+    const broken = { ...ex, c1: { status: 'on_track', why: 'Du stehst bei 72 % C1.', missing: [], ev: ['erfunden'] } };
+    expect(assess4Schema(v).safeParse(broken).success).toBe(false);
+    const r = assess4.lenient!(v).safeParse(broken);
+    expect(r.success).toBe(true);
+    expect(r.data?.c1).toBeUndefined();
+    expect(r.data?.cefr).toBe(ex.cefr);
+    // Der Pflichtteil bleibt streng.
+    expect(assess4.lenient!(v).safeParse({ ...broken, cefr: 'Z9' }).success).toBe(false);
   });
 
   it('keine Punktzahl oder Prozentzahl im Urteil', () => {
@@ -159,20 +220,22 @@ describe('assess@4: Vorlage und Schema', () => {
       { crit: 'k6', title: 'e' },
     ]);
     const v = vars();
-    const c1 = assess4Example(v).c1!;
+    const c1 = { ...assess4Example(v).c1!, why: 'Die Grammatik ist fast so weit, bei den Wörtern fehlt noch ein gutes Stück.' };
+    expect(c1VerdictSchema(v).safeParse(c1).success).toBe(true);
     expect(c1VerdictSchema(v).safeParse({ ...c1, missing: [] }).success).toBe(false);
   });
 
   it('Belege: unbekannte Kennungen fallen weg, mindestens eine bekannte nötig', () => {
     const v = vars();
-    const c1 = assess4Example(v).c1!;
+    const c1 = { ...assess4Example(v).c1!, why: 'Die Grammatik ist fast so weit, bei den Wörtern fehlt noch ein gutes Stück.' };
     expect(c1VerdictSchema(v).parse({ ...c1, ev: ['c1:k9', 'chk:2026-09'] }).ev).toEqual(['chk:2026-09']);
     expect(c1VerdictSchema(v).safeParse({ ...c1, ev: ['erfunden'] }).success).toBe(false);
   });
 
   it('Sprachtreue: englisches Urteil bei deutscher Oberfläche wird abgelehnt', () => {
     const de = vars('de');
-    const en = assess4Example(vars('en')).c1!;
+    const en = { ...assess4Example(vars('en')).c1!, why: 'Grammar is nearly there; vocabulary still needs a good stretch.' };
+    expect(c1VerdictSchema(de).safeParse({ ...en, why: 'Die Grammatik ist fast so weit, bei den Wörtern fehlt noch ein gutes Stück.', ev: assess4Example(de).c1!.ev }).success).toBe(true);
     expect(c1VerdictSchema(de).safeParse({ ...en, ev: assess4Example(de).c1!.ev }).success).toBe(false);
   });
 

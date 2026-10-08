@@ -9,7 +9,7 @@ import { preloadC1x } from '../../../domain/c1x/preload';
 import { getDb } from '../../../platform/capabilities';
 import { logWarn } from '../../../platform/diagnostics';
 import type { Db } from '../../../platform/types';
-import { PATTERNS_DOC, wayFromLive, wayLogPaths } from '../wayData';
+import { PATTERNS_DOC, wayFromLive, wayLiveLoaded, wayLogPaths } from '../wayData';
 
 // Prognose beim Speichern des C1-Checks (P40 mit P44): Die Rechnung von „Weg zu C1“ (`wayFromLive`) braucht 28 Protokolltage und `app/patterns`. Sie werden
 // nur gelesen, wenn jetzt überhaupt eingefroren werden kann (Schalter `way`, Check-Fenster, mit diesem Check ≥ 3 Checks). Die Rechnung selbst läuft im
@@ -35,6 +35,8 @@ async function safeDoc(db: Db, path: string): Promise<Doc | null | 'error'> {
 export async function checkFcFor(today: string, nowMs: number): Promise<FcFor | null> {
   if (!flags.way || !inCheckWindow(today)) return null;
   if (readC1(useLive.getState().docs['app/c1']).checks.length + 1 < FC_MIN_CHECKS) return null;
+  // Wie im Blatt (P44 K-d): nur mit vollständig geladenen Live-Daten rechnen, sonst friert eine Prognose aus halben Daten ein.
+  if (!wayLiveLoaded(useLive.getState())) return null;
   const db = getDb();
   if (!db) return null;
   const paths = wayLogPaths(today);
@@ -50,6 +52,7 @@ export async function checkFcFor(today: string, nowMs: number): Promise<FcFor | 
   const got = logs.filter((d): d is Doc => !!d && d !== 'error');
   return (doc: C1Doc) => {
     const live = useLive.getState();
+    if (!wayLiveLoaded(live)) return undefined;
     return fcOf(wayFromLive({ ...live, docs: { ...live.docs, 'app/c1': doc } }, { today, nowMs, logs: got, patterns: patterns ?? undefined }).calc);
   };
 }

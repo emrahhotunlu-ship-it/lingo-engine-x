@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import type { C1Check, C1Doc } from '../../src/domain/c1/c1doc';
 import { c1Criteria, type CriteriaInput } from '../../src/domain/c1/criteria';
-import { FC_MIN_MONTHS, fcOf, forecastAllowed, forecastCalc, forecastFrom, forecastView, freezeIndex, nextCheckDay, withFc } from '../../src/domain/c1/forecast';
+import { FC_MIN_MONTHS, fcOf, k1FloorDays, forecastAllowed, forecastCalc, forecastFrom, forecastView, freezeIndex, nextCheckDay, withFc } from '../../src/domain/c1/forecast';
 import type { K1Measure, K4Measure } from '../../src/domain/metrics/c1';
+import type { ChapterStateResult } from '../../src/domain/c1/state';
 
 // Prognose (Lernplattform 3.0 §4.6, P44): nur Zeitraum, erst ab 3 Checks und 6 Wochen, nur im Check-Fenster gerechnet und eingefroren.
 
@@ -21,7 +22,7 @@ const input = (c1: C1Doc, today: string, o: Partial<CriteriaInput> = {}): Criter
   k2: { relapses: 3, prev: 5, traps: 6 },
   k3: { view: { state: 'valid', t: 0, passive: 3500, lo: 3200, hi: 3800 }, series: [] },
   k4,
-  k6: { n: 25, ok: 18, clean: 8, cleanOk: 7, older: 0.6, recent: 0.8 },
+  k6: { n: 25, ok: 18, clean: 8, cleanOk: 7, older: 0.6, recent: 0.8, unmarked: 0 },
   ...o,
 });
 
@@ -57,11 +58,22 @@ describe('Anzeige nur aus eingefrorenen Werten', () => {
   const frozen = { from: '2027-09', to: '2027-12', late: 'k4' };
   it('zeigt den neuesten eingefrorenen Wert, auch wenn der neueste Check noch keinen hat', () => {
     const c1 = base({ checks: [check('2026-10-31', 15), check('2026-11-28', 18), check('2026-12-26', 20, 'desk', frozen), check('2027-01-30', 22)] });
-    expect(forecastView(c1, '2027-02-10', false)).toEqual({ kind: 'range', ...frozen });
+    expect(forecastView(c1, '2027-02-10', false)).toEqual({ kind: 'range', ...frozen, inc: null, out: null });
+  });
+  it('K-f: eingerechnete und nicht eingerechnete Kriterien werden mit eingefroren und gelesen (unbekannte fallen weg)', () => {
+    const fc = { ...frozen, inc: ['k1', 'k4', 'k5'], out: ['k2', 'k6', 'k7', 'k9'] };
+    const c1 = base({ checks: [check('2026-10-31', 15), check('2026-11-28', 18), check('2026-12-26', 20, 'desk', fc)] });
+    expect(forecastView(c1, '2027-01-02', false)).toEqual({ kind: 'range', ...frozen, inc: ['k1', 'k4', 'k5'], out: ['k2', 'k6', 'k7'] });
+  });
+  it('K-e: Pause nennt das Kriterium; älteres `fc: null` bleibt neutral lesbar', () => {
+    const c1 = base({ checks: [check('2026-10-31', 15), check('2026-11-28', 18), check('2026-12-26', 20, 'desk', { pause: 'k4' })] });
+    expect(forecastView(c1, '2027-01-02', false)).toEqual({ kind: 'pause', id: 'k4' });
+    const odd = base({ checks: [check('2026-10-31', 15), check('2026-11-28', 18), check('2026-12-26', 20, 'desk', { pause: 'x' })] });
+    expect(forecastView(odd, '2027-01-02', false)).toEqual({ kind: 'pause', id: null });
   });
   it('`fc: null` = Pause-Satz; erreichte Etappe = keine Prognose mehr', () => {
     const c1 = base({ checks: [check('2026-10-31', 15), check('2026-11-28', 18), check('2026-12-26', 20, 'desk', null)] });
-    expect(forecastView(c1, '2027-01-02', false)).toEqual({ kind: 'pause' });
+    expect(forecastView(c1, '2027-01-02', false)).toEqual({ kind: 'pause', id: null });
     expect(forecastView(c1, '2027-01-02', true)).toEqual({ kind: 'reached' });
   });
   it('ändert sich nur an Check-Tagen: einfrieren nur im Check-Fenster, nur für den Check dieses Monats, nur einmal', () => {
@@ -90,18 +102,32 @@ describe('Rechnung', () => {
     // K4: 300 fest fehlen bei 1 je Tag = 300 Tage; K1: 40 Muster bei 16/56 je Tag = 140 Tage; K5: 0,1 bei (4/36)/56 je Tag ≈ 50 Tage.
     expect(calc.late).toBe('k4');
     expect(calc.missing).toEqual(['k7']);
-    expect(fcOf(calc)).toEqual({ from: calc.from, to: calc.to, late: 'k4' });
+    // K-f: eingerechnet K1, K4, K5; nicht eingerechnet die offenen ohne Tempo (K2, K3, K6) und ohne Daten (K7).
+    expect(fcOf(calc)).toEqual({ from: calc.from, to: calc.to, late: 'k4', inc: ['k1', 'k4', 'k5'], out: ['k2', 'k3', 'k6', 'k7'] });
   });
   it('gleiche Daten → gleiche Prognose (rein)', () => {
     const a = forecastCalc({ today: '2026-12-26', crit: c1Criteria(input(c1, '2026-12-26')), k1, k4 });
     const b = forecastCalc({ today: '2026-12-26', crit: c1Criteria(input(structuredClone(c1), '2026-12-26')), k1: { ...k1 }, k4: { ...k4 } });
     expect(a).toEqual(b);
   });
-  it('Tempo ≤ 0 (Pause): kein Zeitraum, `fc: null`', () => {
+  it('Tempo ≤ 0: kein Zeitraum; eingefroren wird die Pause MIT dem Kriterium (K-e)', () => {
     const still = { ...k4, growth: { delta: 0, days: 56 } };
     const calc = forecastCalc({ today: '2026-12-26', crit: c1Criteria(input(c1, '2026-12-26', { k4: still })), k1, k4: still });
     expect(calc).toEqual({ kind: 'pause', ids: ['k4'] });
-    expect(fcOf(calc)).toBeNull();
+    expect(fcOf(calc)).toEqual({ pause: 'k4' });
+  });
+  it('K-f (1): K1-Untergrenze aus offenen Kapiteln (1 Tag je offenes Thema, 14 Tage je Kapitel)', () => {
+    const topic = (safe: boolean) => ({ id: 't', exists: true, patSafe: 0, patTotal: 1, introduced: true, safe });
+    const ch = (status: 'done' | 'current' | 'open', topics: boolean[]) => ({ id: 'c', n: 1, status, ready: true, topics: topics.map(topic), patSafe: 0, patTotal: 0, topicSafe: 0, introduced: 0, liveTopics: 0, allIntroduced: false, allSafe: false });
+    const chapters: ChapterStateResult = { current: 1, chapters: [ch('done', [true, true]), ch('current', [true, false, false]), ...Array.from({ length: 5 }, () => ch('open', [false, false, false, false]))] };
+    expect(k1FloorDays(chapters)).toBe(2 + 5 * 4 + 6 * 14);
+    expect(k1FloorDays(undefined)).toBe(0);
+    // Schnelles Muster-Tempo, aber 6 offene Kapitel: K1 wird nicht früher fertig als die Untergrenze.
+    const fast = { ...k1, newSafe56: 400 };
+    const calc = forecastCalc({ today: '2026-12-26', crit: c1Criteria(input(c1, '2026-12-26', { k1: fast })), k1: fast, k4, chapters });
+    expect(calc.kind === 'range' && calc.etas.find((e) => e.id === 'k1')?.lo).toBe(106);
+    const free = forecastCalc({ today: '2026-12-26', crit: c1Criteria(input(c1, '2026-12-26', { k1: fast })), k1: fast, k4 });
+    expect(free.kind === 'range' && (free.etas.find((e) => e.id === 'k1')?.lo ?? 0) < 106).toBe(true);
   });
   it('ohne jede Datenbasis: nichts einfrieren', () => {
     const none = { ...k4, growth: null };

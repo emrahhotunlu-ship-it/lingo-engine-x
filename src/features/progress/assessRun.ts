@@ -204,12 +204,12 @@ export async function runAssess(trigger: 'auto' | 'manual', nowMs: number = Date
       if (ctl !== c) return;
       if (p === 'thinking' || p === 'streaming' || p === 'slow' || p === 'queued') useAssessRun.setState({ aiPhase: p });
     };
-    let c1Vars: { evidence: string; ids: string[]; open: string[] } | null = null;
+    let c1Vars: { evidence: string; ids: string[]; open: string[]; course: number } | null = null;
     if (way) {
       await preloadC1x(['err']);
       const w = wayFromLive(useLive.getState(), { today, nowMs, logs: logDocs.filter((d): d is Doc => !!d), patterns: patternsDoc ?? undefined });
       const lines = c1EvidenceLines(w);
-      c1Vars = { evidence: c1EvidenceText(lines), ids: lines.map((l) => l.id), open: openCrit(w.crit) };
+      c1Vars = { evidence: c1EvidenceText(lines), ids: lines.map((l) => l.id), open: openCrit(w.crit), course: w.crit.list.filter((c) => c.state === 'course').length };
     }
     const res = c1Vars
       ? await askJson({ template: assess4, vars: { ...vars, c1: c1Vars }, signal: c.signal, priority: 'background', onPhase })
