@@ -251,3 +251,4 @@ Tests: 1953 Unit; E2E der berührten Bildschirme grün (a11y: Kontrast der „Ne
 - english-teacher unabhängig: Runde 1 25 Blocker → eingearbeitet; Runde 2 3 Blocker mit wörtlicher Korrektur → eingearbeitet, mechanische Kontrolle `scripts/c1x/check-gate1-kwt.mjs` ohne Befund (keine dritte Runde laut Ruleset). Vorrat jetzt 135 (neu 0829–0835).
 - Tests: Unit 4837 grün (Wettlauf in shared.test behoben), E2E 643+ grün, N107 auf Rückfall bei `wf` aus umgestellt; rot nur perf.spec CPU 4× (4,5–5,7 s, Umgebung, bekannt). check:platform FREIGABE 4,95 MiB.
 - Test-Link `AXHkh6…` Version 52 `1791461301-13f2` (Rückweg Version 51 `1791450884-39b4`). Live `JLL8…` unverändert v69 `1791450962-60da`.
+- **LIVE 08.10.2026** nach Emrahs „Live schalten“: `JLL8…` Version 70 `1791461796-73f8` (Stand Test-Link 8). Rückweg: Version 69 `1791450962-60da`.
