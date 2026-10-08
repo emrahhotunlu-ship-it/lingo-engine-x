@@ -10,11 +10,14 @@ export type Turn = {
   t: number;
   usedChip?: boolean;
   truncated?: boolean;
+  /** LP3 P51: Text ganz oder teilweise eingefügt (Paste/Drop); das Gespräch zählt dann nie für K7. */
+  pasted?: boolean;
 };
 
 export type Verdict = 'clean' | 'minor' | 'errors';
 
-export type AnalysisError = { wrong: string; right: string; cat: string; why: string };
+/** `pat` (turn-analysis@3, LP3 P51): Kennung aus der Musterliste des Kapitels, sonst fehlt das Feld. */
+export type AnalysisError = { wrong: string; right: string; cat: string; why: string; pat?: string };
 export type AnalysisChange = { from: string; to: string; why: string };
 
 /** Wendungsvorschlag aus einer Analyse (höchstens 3 je Zug). */
@@ -37,6 +40,10 @@ export type AnalysisView = {
   lands: string;
   chunks: ChunkSuggestion[];
   targets: string[];
+  /** turn-analysis@3 (LP3 P51): Muster der Kapitelliste, die im Satz richtig benutzt wurden (Kapitelziel). */
+  used?: string[];
+  /** turn-analysis@3: Claudes zweite, unabhängige Fehlerzählung (K7, Mittelwert mit der Liste); `null` = keine. */
+  count?: number | null;
 };
 
 export type AnalysisState = 'pending' | 'done' | 'failed' | 'skipped';

@@ -12,6 +12,8 @@ import { clearResume, readResume } from './resume';
 import { queueOpening, speakRepliesOn } from '../../app/voice/autoplay';
 import { sceneGoals } from '../../domain/speak/bizScenes';
 import { GoalChecklist } from './GoalChecklist';
+import { ChapterGoal } from './ChapterGoal';
+import { useChapterTalk } from './useRoleplay';
 
 // Einweisung (Plan §5.2): Lage, Ziel, Gegenüber, hilfreiche Wendungen (antippbar, 🔊), großer
 // Knopf „Gespräch starten“ – er schaltet die Sprachausgabe synchron in der Geste frei (iPhone)
@@ -23,6 +25,7 @@ export function SceneBriefing({ scene, onClose }: { scene: SceneView | null; onC
   const ai = useAiAvailable();
   const today = useClock((s) => s.today);
   const copy = scene ? readResume(scene.id, today) : null;
+  const talk = useChapterTalk(scene?.id ?? null);
 
   const start = (resume: boolean) => {
     if (!scene) return;
@@ -53,6 +56,8 @@ export function SceneBriefing({ scene, onClose }: { scene: SceneView | null; onC
             <p className="lx-eyebrow">{t('spGoal')}</p>
             <GoalChecklist goals={sceneGoals(scene)} marks={null} testId="briefing-goals" />
           </section>
+          {/* LP3 P51: Kapitelziel aus dem aktuellen Kapitel (freiwillig, gleiches Ziel wie im Gespräch). */}
+          {talk && talk.goal.length > 0 && <ChapterGoal talk={talk} testId="briefing-chapter-goal" />}
           {scene.persona?.traits && (
             <section className="flex flex-col gap-1">
               <p className="lx-eyebrow">{t('spCounterpart')}</p>

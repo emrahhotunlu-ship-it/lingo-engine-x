@@ -19,7 +19,8 @@ type Props = {
   busy: boolean;
   /** Text, der nach einem Fehler oder Stopp zurück ins Feld kommt. */
   restore: { text: string; chip: boolean; n: number } | null;
-  onSend: (text: string, usedChip: boolean) => void;
+  /** `pasted` (LP3 P51): Text eingefügt (Paste/Drop) – das Gespräch zählt dann nicht für K7. */
+  onSend: (text: string, usedChip: boolean, pasted: boolean) => void;
 };
 
 export function Composer({ sceneId, useful, busy, restore, onSend }: Props) {
@@ -27,6 +28,7 @@ export function Composer({ sceneId, useful, busy, restore, onSend }: Props) {
   const key = `${KEY_PREFIX}draft:speak:${sceneId}`;
   const [text, setText] = useState(() => local.get(key) ?? '');
   const [chip, setChip] = useState(false);
+  const [pasted, setPasted] = useState(false);
   const ref = useRef<HTMLTextAreaElement>(null);
   const inset = useKeyboardInset();
 
@@ -38,6 +40,19 @@ export function Composer({ sceneId, useful, busy, restore, onSend }: Props) {
     }, DRAFT_DELAY_MS);
     return () => window.clearTimeout(id);
   }, [text, key]);
+
+  // LP3 P51: Einfügen (Paste/Drop) merken – eingefügte Sätze zählen nie für K7. Die gemeinsame Eingabezeile kennt kein onPaste, deshalb am Element.
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const mark = () => setPasted(true);
+    el.addEventListener('paste', mark);
+    el.addEventListener('drop', mark);
+    return () => {
+      el.removeEventListener('paste', mark);
+      el.removeEventListener('drop', mark);
+    };
+  }, []);
 
   // Nach Fehler oder Stopp: eigener Satz zurück ins Feld.
   const lastRestore = useRef(0);
@@ -51,9 +66,10 @@ export function Composer({ sceneId, useful, busy, restore, onSend }: Props) {
   const submit = () => {
     const v = text.trim();
     if (!v || busy) return;
-    onSend(v, chip);
+    onSend(v, chip, pasted);
     setText('');
     setChip(false);
+    setPasted(false);
     local.remove(key);
   };
 

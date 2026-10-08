@@ -1,0 +1,26 @@
+// Learning platform 3.0 · P51 (Role-play+, turn-analysis@3, "Say it again"): texts with prefix `tt`, English (US).
+
+export const ttP51En = {
+  ttTkGoalLabel: 'Chapter goal',
+  ttTkGoalLine: 'In this conversation: {list}',
+  ttTkGoalItem: '{n} × {name}',
+  ttTkGoalWhy: 'You are practicing these patterns in chapter {n} ({chapter}). The conversation shows whether you can use them freely.',
+  ttTkGoalHave: '{name}: {have} of {need}',
+  ttTkGoalReached: 'Chapter goal reached',
+  ttTkSayBtn: 'Say it again',
+  ttTkSayTask: 'Say or type the sentence again, correctly this time. The correction stays hidden until then.',
+  ttTkSayWhy: 'Fixing the spot yourself makes it stick better than just reading the answer.',
+  ttTkSayBefore: 'Your sentence (marked: this is where it slips)',
+  ttTkSayLabel: 'Your new sentence',
+  ttTkSayPlaceholder: 'Say the sentence again …',
+  ttTkSayCheck: 'Check',
+  ttTkSayCancel: 'Cancel',
+  ttTkSaySame: 'That is still the same sentence. Change the marked spot.',
+  ttTkSayYou: 'You said',
+  ttTkSayOk: 'Fixed. This spot is closed.',
+  ttTkSayNo: 'Not quite yet.',
+  ttTkSayAgain: 'One more try',
+  ttTkSayReveal: 'Show the correction',
+  ttTkSayNoScore: 'Only the text is checked. The app does not score your pronunciation.',
+  ttTkSayIphone: 'Voice input on the iPhone is unreliable here. Typing always works; speaking works best on a laptop.',
+} as const;

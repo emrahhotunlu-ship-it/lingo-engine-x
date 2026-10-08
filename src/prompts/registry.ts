@@ -17,7 +17,7 @@ import { translate } from './translate';
 import { teacherFeedback } from './teacherFeedback';
 import type { ChatTemplate, PromptTemplate } from './types';
 import { wordLookup } from './wordLookup';
-import { turnAnalysis } from './turnAnalysis';
+import { turnAnalysisV3 } from './turnAnalysisV3';
 import { roleplayReport } from './roleplayReport';
 import { roleplayTurn } from './roleplayTurn';
 import { assess4 } from './assess4';
@@ -46,8 +46,8 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   // Phase 2, Funktionsabgleich M2/M3
   wordGen,
   mnemonic,
-  // Phase 3 – Rollenspiel (freiwilliges Extra)
-  turnAnalysis,
+  // Phase 3 – Rollenspiel (freiwilliges Extra); seit LP3 P51 turn-analysis@3 (`turnAnalysis.ts` @2 bleibt als Datei, läuft bei ausgeschaltetem Schalter `tutor.talk`)
+  turnAnalysisV3,
   roleplayReport,
   // Phase 5 – Übersetzer
   translate,

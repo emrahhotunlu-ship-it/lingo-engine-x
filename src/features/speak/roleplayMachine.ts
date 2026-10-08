@@ -36,7 +36,7 @@ export type RoleplayContext = {
 };
 
 export type RoleplayEvent =
-  | { type: 'SEND'; text: string; usedChip: boolean; t: number }
+  | { type: 'SEND'; text: string; usedChip: boolean; t: number; pasted?: boolean }
   | { type: 'TEXT'; text: string }
   | { type: 'SLOW' }
   | { type: 'REPLY'; text: string; truncated: boolean; t: number }
@@ -117,7 +117,7 @@ export const roleplayMachine = setup({
           target: 'sending',
           actions: assign({
             turns: ({ context, event }) =>
-              event.type === 'SEND' ? [...context.turns, { role: 'me' as const, text: event.text.trim(), t: event.t, ...(event.usedChip ? { usedChip: true } : {}) }] : context.turns,
+              event.type === 'SEND' ? [...context.turns, { role: 'me' as const, text: event.text.trim(), t: event.t, ...(event.usedChip ? { usedChip: true } : {}), ...(event.pasted ? { pasted: true } : {}) }] : context.turns,
             draft: '',
             draftChip: false,
             restoreN: ({ context }) => context.restoreN + 1,

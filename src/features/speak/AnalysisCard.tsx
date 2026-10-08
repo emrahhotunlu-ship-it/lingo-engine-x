@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import { useT, type MessageKey } from '../../i18n';
 import { answerDiff } from '../../domain/answer/diff';
 import { TOPICS } from '../../domain/content';
@@ -67,9 +67,13 @@ type Props = {
   takeInput: (c: ChunkSuggestion, upgraded: string) => TakeInput;
   onTaken?: (en: string) => void;
   testId?: string;
+  /** „Sag’s nochmal“ (LP3 P51): steht unter dem Urteil. */
+  retry?: ReactNode;
+  /** Verdeckt die Korrektur (Fehler, C1-Fassung, Begründung), solange „Sag’s nochmal“ offen ist. */
+  hideFix?: boolean;
 };
 
-export function AnalysisCard({ idx, slot, sentence, area, source = null, title = null, onRetry, takeInput, onTaken, testId = 'analysis' }: Props) {
+export function AnalysisCard({ idx, slot, sentence, area, source = null, title = null, onRetry, takeInput, onTaken, testId = 'analysis', retry = null, hideFix = false }: Props) {
   const { t } = useT();
   const cat = useCatLabel();
   const hints = useMemo(() => usHints(sentence), [sentence]);
@@ -103,6 +107,16 @@ export function AnalysisCard({ idx, slot, sentence, area, source = null, title =
     );
   }
   const a = slot.data;
+  if (hideFix) {
+    return (
+      <div data-testid={testId} data-idx={idx} data-state={a.verdict} data-hidden="" className="flex flex-col gap-3">
+        <p className="flex flex-wrap items-center gap-2">
+          <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${VERDICT_TONE[a.verdict]}`}>{t(VERDICT_KEY[a.verdict])}</span>
+        </p>
+        {retry}
+      </div>
+    );
+  }
   return (
     <div data-testid={testId} data-idx={idx} data-state={a.verdict} className="flex flex-col gap-4">
       {/* 1. Korrektheit */}
@@ -138,6 +152,7 @@ export function AnalysisCard({ idx, slot, sentence, area, source = null, title =
             {t('anUsHint', { us: h.us })}
           </p>
         ))}
+        {retry}
       </section>
 
       {/* 2. C1-Fassung */}

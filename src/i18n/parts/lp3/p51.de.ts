@@ -1,0 +1,26 @@
+// Lernplattform 3.0 · P51 (Rollenspiel+, turn-analysis@3, „Sag’s nochmal“): Texte mit Präfix `tt`, Deutsch.
+
+export const ttP51De = {
+  ttTkGoalLabel: 'Kapitelziel',
+  ttTkGoalLine: 'In diesem Gespräch: {list}',
+  ttTkGoalItem: '{n} × {name}',
+  ttTkGoalWhy: 'Diese Muster übst du gerade in Kapitel {n} ({chapter}). Im Gespräch zeigt sich, ob sie frei sitzen.',
+  ttTkGoalHave: '{name}: {have} von {need}',
+  ttTkGoalReached: 'Kapitelziel erreicht',
+  ttTkSayBtn: 'Sag’s nochmal',
+  ttTkSayTask: 'Sag oder tipp den Satz noch einmal, diesmal richtig. Die Korrektur bleibt so lange verdeckt.',
+  ttTkSayWhy: 'Wer die Stelle selbst repariert, behält sie besser als jemand, der nur die Lösung liest.',
+  ttTkSayBefore: 'Dein Satz (markiert: hier hakt es)',
+  ttTkSayLabel: 'Dein neuer Satz',
+  ttTkSayPlaceholder: 'Sag den Satz neu …',
+  ttTkSayCheck: 'Prüfen',
+  ttTkSayCancel: 'Abbrechen',
+  ttTkSaySame: 'Das ist noch derselbe Satz. Ändere die markierte Stelle.',
+  ttTkSayYou: 'Du hast gesagt',
+  ttTkSayOk: 'Repariert. Die Stelle ist geschlossen.',
+  ttTkSayNo: 'Noch nicht ganz.',
+  ttTkSayAgain: 'Noch ein Versuch',
+  ttTkSayReveal: 'Korrektur zeigen',
+  ttTkSayNoScore: 'Geprüft wird nur der Text. Die Aussprache bewertet die App nicht.',
+  ttTkSayIphone: 'Spracheingabe am iPhone ist hier unsicher. Tippen geht immer; Sprechen klappt am Laptop am besten.',
+} as const;
