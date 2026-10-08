@@ -2,7 +2,7 @@
 
 export const ttP49En = {
   ttDxTitle: 'Most common mix-ups · 28 days',
-  ttDxLead: 'What you mixed up most often in the last 28 days. Counted from your answers, without Claude.',
+  ttDxLead: 'Where your mistakes pile up over the last 28 days, as pattern pairs. Counted from your answers, without Claude.',
   ttDxLoading: 'Counting mix-ups',
   ttDxError: 'The count could not be loaded right now.',
   ttDxEmpty: 'There is no mix-up in the last 28 days that can be matched to a pattern yet. As soon as mistakes belong to a pattern, they show up here.',
@@ -14,7 +14,7 @@ export const ttP49En = {
   ttDxDeclared: 'Set by the course as a contrast pair · {n} wrong answers in the first pattern',
   ttDxContrast: 'Contrast round',
   ttDxContrastAria: 'Contrast round: {a} versus {b}',
-  ttDxContrastSub: '8 tasks, alternating',
+  ttDxContrastSub: 'Eight tasks mixing both patterns, so you learn to tell them apart.',
   ttDxContrastFew: 'There are not enough fixed tasks for this pair yet. The round needs at least three for each of the two patterns.',
   ttDxContrastBusy: 'The tasks are loading. Tap again in a moment.',
   ttDxClaudeTitle: 'Diagnosis from Claude',
@@ -27,7 +27,8 @@ export const ttP49En = {
   ttDxAsk: 'Get the diagnosis from Claude',
   ttDxAskSub: 'Claude reads your mistakes from the last 28 days and tells you what you systematically mix up. At most once a week.',
   ttDxFew: 'Claude looks at your mistakes as soon as {need} new ones are matched to a pattern. So far: {have}.',
-  ttDxPending: 'Another device is getting the diagnosis right now. It will appear here when it is ready.',
+  ttDxPending: 'The diagnosis is being fetched right now, on this or another device. It will appear here when it is ready.',
   ttDxDoneNote: 'This week’s diagnosis is above. The next one is possible in the new calendar week.',
   ttDxGone: 'You reported this week’s diagnosis. The count above stays.',
+  ttDxNone: 'Nothing systematic yet: the evidence from the last 28 days is not enough for a finding.',
 } as const;

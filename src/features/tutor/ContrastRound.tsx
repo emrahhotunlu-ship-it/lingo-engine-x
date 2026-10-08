@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { kindEnabled } from '../../app/flags';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
 import { useLive } from '../../data/live';
 import { C1_KINDS } from '../../domain/c1x/types';
 import { preloadC1x } from '../../domain/c1x/preload';
-import { contrastTasks } from '../../domain/tutor/contrast';
+import { contrastSideCounts, contrastTasks, MIN_SIDE } from '../../domain/tutor/contrast';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useT } from '../../i18n';
 import { logWarn } from '../../platform/diagnostics';
@@ -24,6 +24,21 @@ export function ContrastButton({ a, b, nameA, nameB, testId = 'dx-contrast' }: P
   const go = useNav((s) => s.go);
   const api = useHiddenInput();
   const [busy, setBusy] = useState(false);
+  // Die Bündel laden, damit die Zahl der Aufgaben je Seite schon beim Zeichnen stimmt; unter `MIN_SIDE` gibt es statt des Knopfs den ehrlichen Hinweis.
+  const [ready, setReady] = useState(false);
+  const grammar = useLive((s) => s.collections.grammar);
+  useEffect(() => {
+    let alive = true;
+    preloadC1x(C1_KINDS.filter((k) => kindEnabled(k))).then(
+      () => alive && setReady(true),
+      (err: unknown) => logWarn('diagnose:contrast', err),
+    );
+    return () => {
+      alive = false;
+    };
+  }, []);
+  const counts = useMemo(() => (ready ? contrastSideCounts(a, b, grammar ?? new Map<string, Record<string, unknown>>()) : null), [ready, a, b, grammar]);
+  const few = counts !== null && Math.min(...counts) < MIN_SIDE;
   const start = async (): Promise<void> => {
     if (busy) return;
     setBusy(true);
@@ -48,10 +63,20 @@ export function ContrastButton({ a, b, nameA, nameB, testId = 'dx-contrast' }: P
       setBusy(false);
     }
   };
+  if (few) {
+    return (
+      <p className="m-0 text-sm text-muted" data-testid={`${testId}-few`} data-pair={`${a}|${b}`}>
+        {t('ttDxContrastFew')}
+      </p>
+    );
+  }
   return (
-    <Button variant="secondary" icon="sort" onClick={() => void start()} disabled={busy} aria-label={t('ttDxContrastAria', { a: nameA, b: nameB })} data-testid={testId} data-pair={`${a}|${b}`}>
-      {t('ttDxContrast')}
-    </Button>
+    <div className="flex flex-col items-start gap-1">
+      <Button variant="secondary" icon="sort" onClick={() => void start()} disabled={busy || !ready} aria-label={t('ttDxContrastAria', { a: nameA, b: nameB })} data-testid={testId} data-pair={`${a}|${b}`}>
+        {t('ttDxContrast')}
+      </Button>
+      <span className="text-xs text-muted">{t('ttDxContrastSub')}</span>
+    </div>
   );
 }
 

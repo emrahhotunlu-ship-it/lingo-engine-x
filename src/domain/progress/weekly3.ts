@@ -25,8 +25,8 @@ const num = (v: unknown): number => (typeof v === 'number' && Number.isFinite(v)
 
 // ------------------------------------------------------------------ große Zahl
 
-/** Wie weit der Wert vor der Woche höchstens zurückliegen darf (Tage), damit er als Vergleichswert gilt. */
-const START_MAX_AGE = 14;
+/** Wie weit der Wert vor der Woche höchstens zurückliegen darf (Tage), damit er als Vergleichswert gilt (sonst „+n“ aus ff statt eines Vergleichs über Wochen). */
+const START_MAX_AGE = 3;
 
 export type Big = { n: number; src: 'vu' | 'ff' };
 
@@ -59,7 +59,7 @@ export type TeacherInput = {
   /** Neu feste Wörter und Wendungen (Englisch), alle; gezeigt werden höchstens 5. */
   fest: readonly string[];
   /** Was noch schwerfällt: englische Namen und optional ein Beispiel aus den eigenen Antworten. */
-  tricky: { names: readonly string[]; example: { q: string; given: string; ans: string } | null } | null;
+  tricky: { names: readonly string[]; example: { q: string; given: string; ans: string } | null; /** Aus eigenen Fehlern belegt (`cf`)? Sonst ist das zweite Muster nur das Kontrastpaar des Kurses. */ confirmed?: boolean } | null;
 };
 
 const list = (xs: readonly string[]): string => (xs.length <= 1 ? (xs[0] ?? '') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);
@@ -96,7 +96,10 @@ export function teacherText(i: TeacherInput): string {
   }
   if (i.tricky && i.tricky.names.length) {
     const ex = i.tricky.example ? exampleLine(i.tricky.example) : null;
-    body.push(`Still tricky: ${i.tricky.names.length > 1 ? `${i.tricky.names[0]} versus ${i.tricky.names[1]}` : i.tricky.names[0]}${ex ? ` (${ex})` : ''}.`);
+    const [a, b] = i.tricky.names;
+    // „versus“ behauptet eine Verwechslung: nur, wenn sie belegt ist; sonst geht es um das eine Muster und den Unterschied zum Kontrastpaar.
+    const what = b ? (i.tricky.confirmed === false ? `${a} (and how it differs from ${b})` : `${a} versus ${b}`) : a;
+    body.push(`Still tricky: ${what}${ex ? ` (${ex})` : ''}.`);
     body.push('Could we practice this in our next lesson?');
   }
   if (body.length) lines.push(body.join(' '));
@@ -106,10 +109,9 @@ export function teacherText(i: TeacherInput): string {
 // ------------------------------------------------------------------ Fokus
 
 export type WfEntry = { w: string; a: string; t: number };
-export const WF_MAX = 12;
 const WEEK_RE = /^\d{4}-W\d{2}$/;
 
-/** `app/profile.wf` tolerant lesen (neueste zuletzt, je Woche höchstens ein Eintrag). */
+/** `app/profile.wf` tolerant lesen (neueste zuletzt, je Woche höchstens ein Eintrag, ohne Obergrenze). */
 export function readWf(raw: unknown): WfEntry[] {
   const byWeek = new Map<string, WfEntry>();
   for (const e of arr(raw)) {
@@ -119,7 +121,7 @@ export function readWf(raw: unknown): WfEntry[] {
     const prev = byWeek.get(w);
     if (!prev || t >= prev.t) byWeek.set(w, { w, a: str(e.a).slice(0, 40), t });
   }
-  return [...byWeek.values()].sort((a, b) => a.t - b.t).slice(-WF_MAX);
+  return [...byWeek.values()].sort((a, b) => a.t - b.t);
 }
 
 /** Die Woche, für die eine Wahl zählt: ab Sonntag die kommende (der Sonntag trägt nichts mehr). */
@@ -130,15 +132,22 @@ export function focusWeekOf(day: string): string {
 
 /**
  * Wahl eintragen: `a` = Musterkennung, `''` = „Die App entscheidet“. Rein, für `recordProfileFields`: liefert den Patch `{wf}` oder `null`, wenn sich nichts
- * ändert. Nie gelöscht: eine neue Wahl in derselben Woche ersetzt nur den Eintrag dieser Woche; höchstens 12 Einträge (die ältesten Wochen fallen weg).
+ * ändert. Die Roh-Liste bleibt unverändert (auch unbekannte Felder und unlesbare Einträge); nur der Eintrag DIESER Woche wird ersetzt (Spread) oder angehängt.
+ * Es gibt keine Obergrenze: höchstens ein Eintrag je Woche, ≈ 50 Byte, also unter 3 KB im Jahr (Ausnahme von „höchstens 12“, docs/datenmodell.md).
  */
-export function wfOp(cur: Doc | undefined, i: { w: string; a: string; t: number }): { wf: WfEntry[] } | null {
-  const entries = readWf(obj(cur).wf);
-  const now = entries.find((e) => e.w === i.w);
-  if (now && now.a === i.a) return null;
+export function wfOp(cur: Doc | undefined, i: { w: string; a: string; t: number }): { wf: unknown[] } | null {
+  const raw = Array.isArray(obj(cur).wf) ? [...(obj(cur).wf as unknown[])] : [];
+  let at = -1;
+  raw.forEach((r, k) => {
+    const e = obj(r);
+    if (str(e.w) === i.w && num(e.t) > 0 && (at < 0 || num(e.t) >= num(obj(raw[at]).t))) at = k;
+  });
+  const now = at >= 0 ? obj(raw[at]) : null;
+  if (now && str(now.a) === i.a) return null;
   if (!now && i.a === '') return null;
-  const next = [...entries.filter((e) => e.w !== i.w), { w: i.w, a: i.a, t: i.t }].sort((a, b) => a.t - b.t).slice(-WF_MAX);
-  return { wf: next };
+  if (at >= 0) raw[at] = { ...obj(raw[at]), w: i.w, a: i.a, t: i.t };
+  else raw.push({ w: i.w, a: i.a, t: i.t });
+  return { wf: raw };
 }
 
 /**
@@ -155,7 +164,7 @@ export function focusFor(wfRaw: unknown, o: { planAt: number | null | undefined;
 /** Thema des Fokus-Musters (für den Weg ohne `slotPlan`: `focusTopic`). */
 export const focusTopicOf = (pat: string | null): string | null => (pat ? (patternById(pat)?.topic ?? null) : null);
 
-export type FocusOption = { id: 'confusion' | 'weak'; pat: string; /** Gegenmuster (nur `confusion`). */ other: string | null; /** Kapitel (1–7, nur `weak`). */ chapter: number | null };
+export type FocusOption = { id: 'confusion' | 'weak'; pat: string; /** Das Paar ist aus eigenen Fehlern belegt (`cf`), nicht nur ein Kontrastpaar des Kurses. */ confirmed: boolean; /** Gegenmuster (nur `confusion`). */ other: string | null; /** Kapitel (1–7, nur `weak`). */ chapter: number | null };
 
 /**
  * Bis zu zwei Vorschläge: A = das häufigste Verwechslungspaar (sein erstes Muster), sonst das schwächste Muster des aktuellen Kapitels;
@@ -176,11 +185,11 @@ export function focusOptions(i: { grammar: ReadonlyMap<string, Doc>; today: stri
   const known = new Set(infos.map((p) => p.id));
   const out: FocusOption[] = [];
   const pair = i.confusion?.pairs[0];
-  if (pair && known.has(pair.a)) out.push({ id: 'confusion', pat: pair.a, other: pair.b, chapter: null });
+  if (pair && known.has(pair.a)) out.push({ id: 'confusion', pat: pair.a, confirmed: pair.confirmed, other: pair.b, chapter: null });
   for (const p of weak) {
     if (out.length >= 2) break;
     if (out.some((o) => o.pat === p.id)) continue;
-    out.push({ id: 'weak', pat: p.id, other: null, chapter: p.chapter + 1 });
+    out.push({ id: 'weak', pat: p.id, confirmed: false, other: null, chapter: p.chapter + 1 });
   }
   return out.slice(0, 2);
 }
@@ -254,7 +263,7 @@ export function weekly3(i: {
   const pair = i.confusion?.pairs[0] ?? null;
   const worst = i.confusion?.pats.find((p) => p.w >= 3) ?? null;
   const tricky = pair
-    ? { names: [teacherName(pair.a), teacherName(pair.b)], example: pair.ex[0] ?? null }
+    ? { names: [teacherName(pair.a), teacherName(pair.b)], example: pair.ex[0] ?? null, confirmed: pair.confirmed }
     : worst
       ? { names: [teacherName(worst.pat)], example: null }
       : null;

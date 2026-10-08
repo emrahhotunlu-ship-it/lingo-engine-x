@@ -9,7 +9,7 @@ const NOT_JSON = 'Hier ist meine Einschätzung, aber leider ohne das verlangte F
  * Feste Antwort für `diagnose@1`: liest die erlaubten Aktionen und die Belegzeilen aus dem Prompt und zitiert nur sie.
  * `__LINGO_FAKE__.diagnoseMode` steuert Fehlerfälle: `zzjson` → kein JSON, `zzschema` → beim ersten Aufruf ungültige Form (der Neuversuch
  * mit angehängtem Mangel ist gültig), `zzinvent` → der erste Befund zitiert zusätzlich eine erfundene Kennung (sie fällt weg, der Befund bleibt),
- * `zzonlyinvent` → alle Befunde zitieren nur Erfundenes (Schemaverletzung, auch der Neuversuch).
+ * `zzonlyinvent` → alle Befunde zitieren nur Erfundenes (Schemaverletzung, auch der Neuversuch), `zzempty` → keine Befunde (Evidenz dünn).
  */
 export function diagnoseReply(input: string): string {
   const mode = (globalThis as { __LINGO_FAKE__?: { diagnoseMode?: string } }).__LINGO_FAKE__?.diagnoseMode ?? '';
@@ -21,21 +21,26 @@ export function diagnoseReply(input: string): string {
   const contrast = allowed.filter((a) => a.startsWith('contrast:'));
   const pattern = allowed.filter((a) => a.startsWith('pattern:'));
   const act = (k: number): string => contrast[k] ?? pattern[k] ?? allowed[k] ?? allowed[0] ?? 'pattern:x';
-  const evOf = (k: number): string => ids[k] ?? ids[0] ?? 'p:x';
+  // Der Beleg gehört zur Aktion: eine Kennung, die eines ihrer Muster nennt (sonst die erste).
+  const evFor = (action: string, k: number): string => {
+    const pats = action.replace(/^(contrast|pattern):/, '').split('|');
+    return ids.find((id) => pats.some((p) => p && id.includes(p))) ?? ids[k] ?? ids[0] ?? 'p:x';
+  };
+  if (/zzempty/i.test(mode)) return JSON.stringify({ headline: de ? 'Noch zu wenig Belege für einen sicheren Befund.' : 'The evidence is still thin for a firm finding.', findings: [], better: null, next: de ? 'Übe weiter, dann schaue ich nächste Woche noch einmal.' : 'Keep practicing and I will look again next week.' });
   const invent = /zzinvent/i.test(mode);
   const onlyInvent = /zzonlyinvent/i.test(mode);
   const first = {
     title: de ? 'Zwei Formen vertauscht' : 'Two forms mixed up',
     why: de ? 'Du nimmst oft die Form, die zur Gegenwart passt, wo der Satz etwas Früheres meint. Achte auf das Signalwort.' : 'You often use the form for the present where the sentence refers to something earlier. Look at the signal word.',
     rule: de ? 'Frage dich: Geht es um jetzt oder um früher?' : 'Ask yourself: is it about now or about earlier?',
-    ev: onlyInvent ? ['p:invented.one'] : invent ? [evOf(0), 'p:invented.one'] : [evOf(0)],
+    ev: onlyInvent ? ['p:invented.one'] : invent ? [evFor(act(0), 0), 'p:invented.one'] : [evFor(act(0), 0)],
     action: act(0),
   };
   const second = {
     title: de ? 'Verwandtes Muster' : 'Related pattern',
     why: de ? 'Auch hier hilft die Frage nach dem Zeitbezug, bevor du die Form wählst.' : 'Here, too, asking about the time reference helps before you choose the form.',
     rule: de ? 'Erst den Zeitbezug klären, dann die Form.' : 'Clarify the time reference first, then the form.',
-    ev: onlyInvent ? ['p:invented.two'] : [evOf(1)],
+    ev: onlyInvent ? ['p:invented.two'] : [evFor(act(1), 1)],
     action: act(1),
   };
   return JSON.stringify({

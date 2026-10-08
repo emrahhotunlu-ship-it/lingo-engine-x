@@ -6,7 +6,7 @@ import { registerC1Items, resetC1Store } from '../../src/domain/c1x/preload';
 import { c1Key } from '../../src/domain/c1x/runtime';
 import { c1Item } from '../../src/domain/c1x/schema';
 import type { C1Item } from '../../src/domain/c1x/types';
-import { contrastSideCounts, contrastTasks, CONTRAST_SIDE, MIN_SIDE } from '../../src/domain/tutor/contrast';
+import { contrastSideCounts, contrastTasks, CONTRAST_SIDE, mixOrder, MIN_SIDE } from '../../src/domain/tutor/contrast';
 
 const fx = (id: string): Record<string, unknown> => JSON.parse(JSON.stringify((examples.items as Array<Record<string, unknown>>).find((i) => i.id === id))) as Record<string, unknown>;
 const make = (id: string, pat: string, text: string, accept: string[]): C1Item => c1Item.parse({ ...fx('ocl-0001'), id, pat, topic: 'articles', text, accept, chips: ['the', 'a', 'an'] });
@@ -26,13 +26,15 @@ afterEach(() => {
 });
 
 describe('contrastTasks', () => {
-  it('A, B, A, B … mit gleich vielen Aufgaben je Seite, höchstens 8; nie drei gleiche hintereinander', () => {
+  it('A und B gemischt mit gleich vielen Aufgaben je Seite, höchstens 8; nie mehr als zwei gleiche hintereinander', () => {
     registerC1Items([...itemsA, ...itemsB]);
     const tasks = contrastTasks({ a: A, b: B }, { grammarDocs: docs, seed: 's1' });
     expect(tasks.length).toBeGreaterThanOrEqual(2 * MIN_SIDE);
     expect(tasks.length).toBeLessThanOrEqual(2 * CONTRAST_SIDE);
     expect(tasks.length % 2).toBe(0);
-    tasks.forEach((t, k) => expect(t.pat).toBe(k % 2 === 0 ? A : B));
+    expect(tasks.filter((t) => t.pat === A)).toHaveLength(tasks.length / 2);
+    expect(tasks.filter((t) => t.pat === B)).toHaveLength(tasks.length / 2);
+    for (let k = 2; k < tasks.length; k++) expect(!(tasks[k]?.pat === tasks[k - 1]?.pat && tasks[k]?.pat === tasks[k - 2]?.pat), `Lauf bei ${k}`).toBe(true);
     expect(new Set(tasks.map((t) => t.key)).size).toBe(tasks.length);
   });
 
@@ -69,5 +71,16 @@ describe('contrastTasks', () => {
     const [a] = contrastSideCounts(A, B, docs, bad);
     const [all] = contrastSideCounts(A, B, docs);
     expect(a).toBeLessThan(all);
+  });
+
+  it('mixOrder: ausgewogen, höchstens zwei gleiche in Folge, für jeden Startwert; nicht immer dieselbe Reihenfolge', () => {
+    const seen = new Set<string>();
+    for (let k = 0; k < 60; k++) {
+      const o = mixOrder(4, `s${k}`);
+      expect(o.filter((x) => x === 'A')).toHaveLength(4);
+      for (let j = 2; j < o.length; j++) expect(o[j] === o[j - 1] && o[j] === o[j - 2]).toBe(false);
+      seen.add(o.join(''));
+    }
+    expect(seen.size).toBeGreaterThan(3);
   });
 });

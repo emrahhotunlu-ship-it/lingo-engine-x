@@ -24,7 +24,7 @@ export const PAIRS_MAX = 3;
 /** Ein Paar braucht mindestens so viele Belege. */
 export const PAIR_MIN = 2;
 /** Belegzeilen höchstens so viele UTF-8-Bytes (Prompt bleibt weit unter 8 KB). */
-export const EVIDENCE_MAX_BYTES = 6000;
+export const EVIDENCE_MAX_BYTES = 5600;
 
 export type ConfusionSources = {
   /** `grammar/<thema>` nach Thema. */
@@ -65,7 +65,7 @@ export function attemptsOf(logs: ReadonlyMap<string, Doc> | null | undefined): A
   return out;
 }
 
-export type PatStat = { pat: string; n: number; w: number; prevN: number; prevW: number };
+export type PatStat = { pat: string; n: number; w: number; prevN: number; prevW: number; /** Falsche Antworten je Woche im Fenster, älteste zuerst. */ weeks: [number, number, number, number] };
 
 export type Pair = {
   a: string;
@@ -111,7 +111,7 @@ export function patStats(attempts: readonly Attempt[], w: Window): PatStat[] {
   const map = new Map<string, PatStat>();
   const get = (pat: string): PatStat => {
     let s = map.get(pat);
-    if (!s) map.set(pat, (s = { pat, n: 0, w: 0, prevN: 0, prevW: 0 }));
+    if (!s) map.set(pat, (s = { pat, n: 0, w: 0, prevN: 0, prevW: 0, weeks: [0, 0, 0, 0] }));
     return s;
   };
   for (const a of attempts) {
@@ -119,7 +119,11 @@ export function patStats(attempts: readonly Attempt[], w: Window): PatStat[] {
     if (inRange(a.day, w.from, w.to)) {
       const s = get(a.pat);
       s.n++;
-      if (!a.ok) s.w++;
+      if (!a.ok) {
+        s.w++;
+        const k = weekIndex(a.day, w);
+        if (k >= 0 && k <= 3) s.weeks[k as 0 | 1 | 2 | 3]++;
+      }
     } else if (inRange(a.day, w.prevFrom, w.prevTo)) {
       const s = get(a.pat);
       s.prevN++;
@@ -211,19 +215,27 @@ export function confusionOf(src: ConfusionSources, today: string): Confusion {
   const repair = repairBits(src.repair).filter((r) => inRange(r.day, w.from, w.to));
   const lines: EvLine[] = [];
   const allowed: string[] = [];
+  const perWeek = (ws: readonly number[]): string => `; wrong per week (oldest first): ${ws.join(', ')}`;
   for (const p of pats.filter((s) => s.w > 0).slice(0, 8)) {
     const before = p.prevN > 0 ? ` (before: ${p.prevW} of ${p.prevN})` : '';
-    lines.push({ id: `p:${p.pat}`, text: `${nameEn(p.pat)}: ${p.n} attempts, ${p.w} wrong${before}` });
+    lines.push({ id: `p:${p.pat}`, text: `${nameEn(p.pat)}: ${p.n} attempts, ${p.w} wrong${before}${perWeek(p.weeks)}` });
     allowed.push(`pattern:${p.pat}`);
   }
+  const pairIds = new Map<string, string>();
   for (const pr of pairs) {
     const ex = pr.ex[0] ? `, e.g. "${pr.ex[0].given}" instead of "${pr.ex[0].ans}"` : '';
+    const A = nameEn(pr.a);
+    const B = nameEn(pr.b);
+    const id = pr.confirmed ? `cf:${pr.a}>${pr.b}` : `pc:${pr.a}|${pr.b}`;
     lines.push(
       pr.confirmed
-        ? { id: `cf:${pr.a}>${pr.b}`, text: `${nameEn(pr.a)} mixed up with ${nameEn(pr.b)}: ${pr.n}×${ex}` }
-        : { id: `pc:${pr.a}|${pr.b}`, text: `${nameEn(pr.a)} and ${nameEn(pr.b)} are a contrast pair of the course; ${pr.n} wrong answers in the first, weekly wrong answers in both: ${pr.weeks.join(', ')}` },
+        ? { id, text: `${A} mixed up with ${B}: ${pr.n}×${ex}${perWeek(pr.weeks)}` }
+        : {
+            id,
+            text: `${A}: ${pr.n} wrong answers. The course teaches ${A} together with ${B} as a contrast pair; it is NOT recorded that the learner chose ${B} instead. Wrong answers per week in ${A} and ${B} combined (oldest first): ${pr.weeks.join(', ')}`,
+          },
     );
-    allowed.push(`contrast:${pr.a}|${pr.b}`);
+    pairIds.set(`contrast:${pr.a}|${pr.b}`, id);
   }
   const bySrc = new Map<string, number>();
   for (const r of repair) bySrc.set(`${r.src}|${r.pat}`, (bySrc.get(`${r.src}|${r.pat}`) ?? 0) + 1);
@@ -244,7 +256,8 @@ export function confusionOf(src: ConfusionSources, today: string): Confusion {
     pats,
     lines,
     ids: [...kept],
-    allowed: allowed.filter((a) => a.startsWith('contrast:') || kept.has(`p:${a.slice(8)}`)),
+    // Nur Aktionen, deren Belegzeile nicht der Kürzung zum Opfer fiel.
+    allowed: [...allowed.filter((a) => a.startsWith('pattern:') && kept.has(`p:${a.slice(8)}`)), ...[...pairIds].filter(([, id]) => kept.has(id)).map(([a]) => a)],
     mapped,
   };
 }
@@ -280,7 +293,10 @@ export function dxLines(diag: readonly Doc[] | null | undefined, today: string):
   arr(obj(latest.out).findings).forEach((f, i) => {
     const c = parseContrast(str(f.action));
     if (!c || bad.has(i) || !known(c.a) || !known(c.b)) return;
-    out.push({ id: `dx:${c.a}|${c.b}`, text: `weekly diagnosis (${dayOfMs(num(latest.t))}): ${nameEn(c.a)} is confused with ${nameEn(c.b)}${str(f.title) ? ` ("${clean(str(f.title))}")` : ''}` });
+    // „verwechselt“ nur, wenn der Befund eine bestätigte Verwechslung (`cf:`) zitiert; sonst bleibt es ein vorgeschlagener Kontrast.
+    const proven = (Array.isArray(f.ev) ? f.ev : []).some((e) => typeof e === 'string' && e.startsWith('cf:'));
+    const what = proven ? `${nameEn(c.a)} is confused with ${nameEn(c.b)}` : `contrasting ${nameEn(c.a)} with ${nameEn(c.b)} was suggested (no mix-up recorded)`;
+    out.push({ id: `dx:${c.a}|${c.b}`, text: `weekly diagnosis (${dayOfMs(num(latest.t))}): ${what}${str(f.title) ? ` ("${clean(str(f.title))}")` : ''}` });
   });
   return out;
 }

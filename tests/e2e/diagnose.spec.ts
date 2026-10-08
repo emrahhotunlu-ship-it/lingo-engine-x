@@ -195,6 +195,19 @@ test.describe('Handy 390: Verhalten', () => {
     expect(await diagCalls(page)).toEqual([]);
   });
 
+  test('Keine Befunde: ehrlicher Zustand „noch nichts Systematisches“, kein Befund, Woche belegt', async ({ page }) => {
+    await openDiagnose(page);
+    await setDiagMode(page, 'zzempty');
+    await page.getByTestId('dx-ask').click();
+    await expect(page.getByTestId('dx-none')).toBeVisible();
+    await expect(page.getByTestId('dx-finding')).toHaveCount(0);
+    await expect(page.getByTestId('dx-ask')).toHaveCount(0);
+    const diag = ((await dumpDb(page))['app/patterns']?.diag ?? []) as Array<{ st?: string; out?: { findings: unknown[] } }>;
+    expect(diag[0]?.st).toBe('done');
+    expect(diag[0]?.out?.findings).toEqual([]);
+    expect(await diagCalls(page)).toHaveLength(1);
+  });
+
   test('Ein Muster-Dokument mit unerwartetem Aufbau wird nie angefasst: kein Aufruf, kein Schreiben, ein ruhiger Fehler', async ({ page }) => {
     await openDiagnose(page, { patch: { 'app/patterns': { items: 'kaputt' } } });
     const before = (await dumpDb(page))['app/patterns'];

@@ -63,6 +63,25 @@ function ClaudeResult({ entry, nameOf }: { entry: DiagEntry; nameOf: (id: string
   const { t } = useT();
   const out = entry.out;
   if (!out) return null;
+  // Keine Befunde: ehrlich sagen, dass die Evidenz noch dünn ist (die Schwelle wird nie gesenkt).
+  if (out.findings.length === 0) {
+    return (
+      <div className="flex flex-col gap-2" data-testid="dx-none" data-week={entry.w}>
+        <Eyebrow as="h3">{t('ttDxClaudeTitle')}</Eyebrow>
+        <p className="m-0 text-base font-medium" data-testid="dx-headline">
+          {out.headline}
+        </p>
+        <p className="m-0 text-sm text-muted">{t('ttDxNone')}</p>
+        {out.next && (
+          <p className="m-0 text-sm" data-testid="dx-next">
+            <span className="text-muted">{t('ttDxNext')}: </span>
+            {out.next}
+          </p>
+        )}
+        <AiMark variant="diag" tpl="diagnose@1" />
+      </div>
+    );
+  }
   const shown = out.findings.map((f, i) => ({ f, i })).filter(({ i }) => !entry.bad.includes(i));
   if (!shown.length) {
     return (

@@ -6,7 +6,7 @@ import { patternById } from '../grammar/patterns';
 import { allSeedTasks } from '../grammar/tasks';
 import { hash32 } from '../random';
 
-// Kontrast-Runde (Lernplattform 3.0 P49, KI-Tutor T5): 8 Aufgaben zu zwei verwechselten Mustern A und B im Wechsel, nie drei gleiche hintereinander.
+// Kontrast-Runde (Lernplattform 3.0 P49, KI-Tutor T5): 8 Aufgaben zu zwei verwechselten Mustern A und B gemischt (aus dem Startwert, ausgewogen), nie mehr als zwei gleiche hintereinander.
 // Begründung: Abwechselndes Üben hilft bei ähnlichen Kategorien (Brunmair & Richter 2019). Zuerst feste, ungesehene Aufgaben mit Muster-Kennung
 // (c1x, dann die Aufgaben des Lehrplans), erst danach auch schon gesehene; Claude erzeugt hier nichts (kein Hintergrundaufruf). Kontext `xtra`, nie Pflicht.
 // Gibt es auf einer Seite weniger als `MIN_SIDE` Aufgaben, wird keine Runde angeboten (der Aufrufer sagt das ehrlich).
@@ -33,7 +33,8 @@ function sideTasks(pat: string, docs: ReadonlyMap<string, Doc>, seed: string, ba
     keys.add(t.key);
     all.push(t);
   }
-  const rank = (t: GrammarTask): number => hash32(`${seed}|${pat}|${t.key}`);
+  // Auswahlaufgaben zeigen beide Formen nebeneinander und passen deshalb am besten zum Kontrast: sie kommen innerhalb ihrer Gruppe zuerst.
+  const rank = (t: GrammarTask): number => (t.type === 'mc' ? 0 : 1) * 1e10 + hash32(`${seed}|${pat}|${t.key}`);
   const unseen = all.filter((t) => !seen.has(t.key)).sort((x, y) => rank(x) - rank(y));
   const old = all.filter((t) => seen.has(t.key)).sort((x, y) => rank(x) - rank(y));
   return [...unseen, ...old];
@@ -44,8 +45,27 @@ export function contrastSideCounts(a: string, b: string, docs: ReadonlyMap<strin
   return [sideTasks(a, docs, 'count', bad).length, sideTasks(b, docs, 'count', bad).length];
 }
 
+/** Reihenfolge der Seiten: `n` × A und `n` × B, aus dem Startwert gemischt, nie mehr als zwei gleiche hintereinander. */
+export function mixOrder(n: number, seed: string): Array<'A' | 'B'> {
+  const out: Array<'A' | 'B'> = [];
+  let a = n;
+  let b = n;
+  for (let k = 0; k < 2 * n; k++) {
+    const last = out.slice(-2);
+    const run = (s: 'A' | 'B'): boolean => last.length === 2 && last[0] === s && last[1] === s;
+    const canA = a > 0 && !run('A');
+    const canB = b > 0 && !run('B');
+    if (!canA && !canB) return Array.from({ length: 2 * n }, (_, j) => (j % 2 === 0 ? 'A' : 'B'));
+    const pick: 'A' | 'B' = canA && canB ? (a - b >= 2 ? 'A' : b - a >= 2 ? 'B' : ((hash32(`${seed}|mix|${k}`) >>> 9) & 1) === 0 ? 'A' : 'B') : canA ? 'A' : 'B';
+    out.push(pick);
+    if (pick === 'A') a--;
+    else b--;
+  }
+  return out;
+}
+
 /**
- * Die Runde: A, B, A, B … bis zu 8 Aufgaben (je Seite höchstens 4, auf beiden Seiten gleich viele). Weniger als `MIN_SIDE` auf einer Seite → leer.
+ * Die Runde: A und B gemischt, bis zu 8 Aufgaben (je Seite höchstens 4, auf beiden Seiten gleich viele). Weniger als `MIN_SIDE` auf einer Seite → leer.
  * Stabil für denselben Startwert.
  */
 export function contrastTasks(pair: { a: string; b: string }, i: { grammarDocs: ReadonlyMap<string, Doc>; seed: string; bad?: ReadonlySet<string> }): GrammarTask[] {
@@ -55,6 +75,8 @@ export function contrastTasks(pair: { a: string; b: string }, i: { grammarDocs: 
   const n = Math.min(CONTRAST_SIDE, A.length, B.length);
   if (n < MIN_SIDE) return [];
   const out: GrammarTask[] = [];
-  for (let k = 0; k < n; k++) out.push(A[k] as GrammarTask, B[k] as GrammarTask);
+  let ia = 0;
+  let ib = 0;
+  for (const side of mixOrder(n, i.seed)) out.push(side === 'A' ? (A[ia++] as GrammarTask) : (B[ib++] as GrammarTask));
   return out;
 }

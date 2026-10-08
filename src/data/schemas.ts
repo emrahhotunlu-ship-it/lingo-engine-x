@@ -98,7 +98,7 @@ export const patternsSchema = z.looseObject({
    * `{w, t, st: 'pending' | 'done', dev, pv, lang, rep, out, bad?}` (Beanspruchung und Ergebnis, `domain/tutor/diag.ts`).
    */
   diag: z
-    .array(z.looseObject({ w: str, t: num, st: str, dev: str, pv: str, lang: str, rep: num, out: loose, bad: z.array(z.number()).nullish() }))
+    .array(z.looseObject({ w: str, t: num, st: str, dev: str, pv: str, lang: str, rep: num, out: loose, bad: loose }))
     .nullish(),
 });
 

@@ -2,7 +2,7 @@
 
 export const ttP49De = {
   ttDxTitle: 'Häufigste Verwechslungen · 28 Tage',
-  ttDxLead: 'Was du in den letzten 28 Tagen am häufigsten vertauscht hast. Gezählt aus deinen Antworten, ohne Claude.',
+  ttDxLead: 'Wo sich deine Fehler in den letzten 28 Tagen häufen, als Musterpaare. Gezählt aus deinen Antworten, ohne Claude.',
   ttDxLoading: 'Verwechslungen werden gezählt',
   ttDxError: 'Die Zählung konnte gerade nicht geladen werden.',
   ttDxEmpty: 'In den letzten 28 Tagen gibt es noch keine Verwechslung, die sich einem Muster zuordnen lässt. Sobald Fehler zu einem Muster gehören, erscheinen sie hier.',
@@ -14,7 +14,7 @@ export const ttP49De = {
   ttDxDeclared: 'Vom Kurs als Kontrastpaar vorgegeben · {n} falsche Antworten im ersten Muster',
   ttDxContrast: 'Kontrast-Runde',
   ttDxContrastAria: 'Kontrast-Runde: {a} gegen {b}',
-  ttDxContrastSub: '8 Aufgaben im Wechsel',
+  ttDxContrastSub: 'Acht Aufgaben, beide Muster gemischt: So lernst du, sie auseinanderzuhalten.',
   ttDxContrastFew: 'Zu diesem Paar gibt es noch nicht genug feste Aufgaben. Bei jedem der zwei Muster braucht die Runde mindestens drei.',
   ttDxContrastBusy: 'Die Aufgaben werden geladen. Tippe gleich noch einmal.',
   ttDxClaudeTitle: 'Diagnose von Claude',
@@ -27,7 +27,8 @@ export const ttP49De = {
   ttDxAsk: 'Diagnose von Claude holen',
   ttDxAskSub: 'Claude liest deine Fehler der letzten 28 Tage und sagt, was du systematisch verwechselst. Höchstens einmal pro Woche.',
   ttDxFew: 'Claude schaut sich deine Fehler an, sobald {need} neue einem Muster zugeordnet sind. Bisher: {have}.',
-  ttDxPending: 'Ein anderes Gerät holt gerade die Diagnose. Sie erscheint hier, sobald sie da ist.',
+  ttDxPending: 'Die Diagnose wird gerade geholt, auf diesem oder einem anderen Gerät. Sie erscheint hier, sobald sie da ist.',
   ttDxDoneNote: 'Die Diagnose dieser Woche steht oben. Die nächste ist in der neuen Kalenderwoche möglich.',
   ttDxGone: 'Du hast die Diagnose dieser Woche gemeldet. Die Zählung oben bleibt.',
+  ttDxNone: 'Noch nichts Systematisches: Die Belege der letzten 28 Tage reichen noch nicht für einen Befund.',
 } as const;

@@ -12,7 +12,7 @@ import type { PromptTemplate, UiLang } from './types';
 
 export type DiagnoseVars = {
   lang: UiLang;
-  /** Belegzeilen `[kennung] Text` (≤ 6 KB). */
+  /** Belegzeilen `[kennung] Text` (≤ 5,6 KB). */
   evidence: string;
   /** Kennungen der Belegzeilen ohne Klammern. */
   ids: readonly string[];
@@ -39,6 +39,12 @@ export const DIAGNOSE_FINDINGS_MAX = 3;
 export const DIAGNOSE_EXAMPLE =
   '{"headline":"…","findings":[{"title":"…","why":"…","rule":"…","ev":["p:…"],"action":"contrast:a|b"}],"better":{"text":"…","ev":["p:…"]},"next":"…"}';
 
+/** Passt die Aktion (`contrast:a|b`, `pattern:id`) zu den zitierten Belegen? Mindestens eine Kennung nennt eines der Muster. */
+export function actionFits(action: string, ev: readonly string[]): boolean {
+  const pats = action.replace(/^(contrast|pattern):/, '').split('|');
+  return ev.some((id) => pats.some((p) => p && id.includes(p)));
+}
+
 export function diagnoseSchema(v: Pick<DiagnoseVars, 'lang' | 'ids' | 'allowed'>): z.ZodType<DiagnoseOut> {
   const ids = new Set(v.ids);
   const allowed = v.allowed;
@@ -46,11 +52,16 @@ export function diagnoseSchema(v: Pick<DiagnoseVars, 'lang' | 'ids' | 'allowed'>
   const action = z.preprocess((a) => cleanAction(a, allowed), z.string().refine((a) => allowed.includes(a), { message: 'action must be one of the allowed actions' }));
   const finding = z
     .object({ title: clipped(3, 60), why: clipped(10, 240), rule: clipped(5, 160), ev: ev(1), action })
-    .superRefine(langOf(['title', 'why', 'rule'], v.lang));
+    .superRefine(langOf(['title', 'why', 'rule'], v.lang))
+    // Die Aktion muss zur Evidenz passen: ein zitierter Beleg nennt eines der Muster der Aktion.
+    .superRefine((f, ctx) => {
+      if (!actionFits(f.action, f.ev)) ctx.addIssue({ code: 'custom', path: ['action'], message: 'the action must concern a pattern named in the cited evidence ids' });
+    });
   return z
     .object({
       headline: clipped(10, 120),
-      findings: sliced(finding, 1, DIAGNOSE_FINDINGS_MAX),
+      // Eine leere Liste ist erlaubt: reicht die Evidenz nicht, gibt es keinen Befund (die Schwelle wird nie gesenkt).
+      findings: sliced(finding, 0, DIAGNOSE_FINDINGS_MAX),
       // Ein ungültiges „Besser geworden“ fällt weg, statt die ganze Antwort zu verwerfen.
       better: z.object({ text: clipped(5, 160), ev: ev(1) }).nullable().catch(null),
       next: clipped(5, 160),
@@ -73,7 +84,11 @@ export const diagnose: PromptTemplate<DiagnoseVars, DiagnoseOut> = {
       `Today is ${v.today}.`,
       'Task: say what this learner SYSTEMATICALLY confuses, judging ONLY from the numbered evidence below. Never invent counts, examples or evidence.',
       'Rules:',
-      '- A finding needs at least 3 occurrences, or 2 in different weeks, in the evidence. Prefer fewer, solid findings to many weak ones.',
+      '- A finding needs at least 3 WRONG answers/mistakes, or 2 wrong answers in different weeks (see "wrong per week"). Attempts that were correct do not count. Prefer fewer, solid findings to many weak ones.',
+      '- If no pattern meets the threshold, return "findings": [] and say in the headline that the evidence is still thin. Never lower the threshold to fill the list.',
+      '- For [pc:…] lines: report errors in the first pattern and suggest contrasting it with the second; do not claim the learner mixed them up. Only [cf:…] lines prove a mix-up.',
+      '- The action must concern a pattern named in the evidence ids you cite.',
+      '- No CEFR level, score or percentage. Calm and factual: no praise, no blame.',
       `- Each finding cites 1–${DIAGNOSE_EV_MAX} evidence ids in "ev", copied exactly from the brackets (without the brackets).`,
       '- title: the two things mixed up (or the one pattern). why: what is mixed up and how to tell them apart. rule: a decision question or rule of thumb.',
       '- action: exactly one allowed action for the finding.',
@@ -85,7 +100,7 @@ export const diagnose: PromptTemplate<DiagnoseVars, DiagnoseOut> = {
       'Evidence:',
       v.evidence,
       `Allowed actions: ${v.allowed.join(', ') || '-'}`,
-      'Length limits: headline 10–120 characters, 1–3 findings, titles ≤ 60, why ≤ 240, rule ≤ 160, better.text ≤ 160, next ≤ 160.',
+      'Length limits: headline 10–120 characters, 0–3 findings, titles ≤ 60, why ≤ 240, rule ≤ 160, better.text ≤ 160, next ≤ 160.',
       'Reply with only one JSON object, no other text, exactly this shape:',
       DIAGNOSE_EXAMPLE,
     ].join('\n');

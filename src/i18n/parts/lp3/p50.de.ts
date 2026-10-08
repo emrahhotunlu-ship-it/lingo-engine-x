@@ -11,7 +11,7 @@ export const moP50De = {
   moWkBigLabel: 'Wörter und Wendungen fest',
   moWkBigAria: '{n} Wörter und Wendungen mehr fest als vor einer Woche',
   moWkBigAriaNeg: '{n} Wörter und Wendungen weniger fest als vor einer Woche',
-  moWkBigNegNote: 'Nach einer Pause ist das normal. Wiederholen holt es zurück.',
+  moWkBigNegNote: 'Es sind weniger als vor einer Woche. Wiederholen holt Wörter zurück.',
   moWkBigFfNote: 'Zahl der Wörter und Wendungen, die diese Woche zum ersten Mal fest sind.',
   moWkNamesTitle: 'Neu fest',
   moWkNamesMore: 'und {n} weitere',
@@ -35,4 +35,6 @@ export const moP50De = {
   moWkFocusFail: 'Die Wahl konnte nicht gespeichert werden. Versuche es noch einmal.',
   moWkUseTitle: 'Einsatz der Woche',
   moWkUseWhere: 'Wo du es brauchst: {situation}',
+  moWkFocusConfUn: 'Häufig falsch · Kontrastpaar mit {other}',
+  moWkFocusTitleNext: 'Fokus für nächste Woche',
 } as const;

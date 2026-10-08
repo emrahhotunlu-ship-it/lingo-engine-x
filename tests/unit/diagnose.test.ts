@@ -4,7 +4,7 @@ import { askJson, resetAiGate } from '../../src/ai/gate';
 import { resetAiBudget } from '../../src/ai/budget';
 import { AiFailure } from '../../src/ai/types';
 import { createWriter } from '../../src/data/writer';
-import { claimOp, CLAIM_TTL_MS, DIAG_MAX, diagState, doneOf, finishOp, readDiag, releaseOp, reportOp, type DiagEntry } from '../../src/domain/tutor/diag';
+import { claimOp, CLAIM_TTL_MS, DIAG_FULL, FUTURE_SLACK_MS, diagState, doneOf, finishOp, readDiag, releaseOp, reportOp, type DiagEntry } from '../../src/domain/tutor/diag';
 import { claimWeek, PATTERNS_PATH } from '../../src/features/tutor/diagnoseStore';
 import { diagnoseReply } from '../../src/platform/dev/canned/lp3/p49';
 import { initCapabilities, markSampleConfirmed, useCapabilities } from '../../src/platform/capabilities';
@@ -44,7 +44,7 @@ describe('diagnose@1: Prompt', () => {
     expect(diagnose.budget).toEqual({ bgPerDay: 1 });
     expect(diagnose.verb).toBe('text-json');
     // Höchstwert: 6 KB Belege (Obergrenze der App) plus Rahmen bleibt unter 8 KB.
-    const big = diagnose.build({ ...vars, evidence: `[p:x] ${'a'.repeat(5990)}`, prev: { headline: 'h'.repeat(300), titles: ['t'.repeat(200), 'u', 'v', 'w'] } });
+    const big = diagnose.build({ ...vars, evidence: `[p:x] ${'a'.repeat(5590)}`, prev: { headline: 'h'.repeat(300), titles: ['t'.repeat(200), 'u', 'v', 'w'] } });
     expect(new TextEncoder().encode(big).length).toBeLessThan(8000);
     expect(new TextEncoder().encode(big).length).toBeLessThan(PROMPT_MAX_BYTES);
   });
@@ -78,7 +78,8 @@ describe('diagnose@1: Schema', () => {
   it('höchstens drei Befunde (mehr werden gekappt), mindestens einer; falsche Sprache ist ein Mangel', () => {
     const f = good.findings[0];
     expect(parse({ ...good, findings: [f, f, f, f, f] }).data?.findings).toHaveLength(3);
-    expect(parse({ ...good, findings: [] }).success).toBe(false);
+    // Eine leere Liste ist erlaubt (Evidenz zu dünn), mehr als drei werden gekappt.
+    expect(parse({ ...good, findings: [] }).data?.findings).toEqual([]);
     const english = { ...good, headline: 'You mostly confuse the indefinite article with the definite article here.' };
     expect(parse(english).success).toBe(false);
     expect(parse(english, { lang: 'en' }).success).toBe(true);
@@ -218,13 +219,69 @@ describe('app/patterns.diag: Beanspruchung, Ergebnis, Melden', () => {
     expect(releaseOp(undefined, { dev: 'dev-a', t: NOW })).toBeNull();
   });
 
-  it('höchstens 12 Einträge; die ältesten Ergebnisse fallen zuerst weg', () => {
-    const doc = { diag: Array.from({ length: DIAG_MAX }, (_, k) => ({ w: `2026-W${String(10 + k).padStart(2, '0')}`, t: NOW - (DIAG_MAX - k) * 7 * 86_400_000, st: 'done', dev: 'x', out })) };
+  it('nur die jüngsten 12 Ergebnisse behalten `out`; ältere werden auf die Kurzform gekürzt, nie entfernt', () => {
+    const doc = { diag: Array.from({ length: DIAG_FULL + 3 }, (_, k) => ({ w: `2026-W${String(10 + k).padStart(2, '0')}`, t: NOW - (DIAG_FULL + 3 - k) * 7 * 86_400_000, st: 'done', dev: 'x', pv: 'diagnose@1', unbekannt: k, out })) };
     const r = claimOp(doc, { w: W, dev: 'dev-a', now: NOW, lang: 'de' });
-    const diag = (r.op as { update: { diag: Array<{ w: string }> } }).update.diag;
-    expect(diag).toHaveLength(DIAG_MAX);
-    expect(diag[0]?.w).toBe('2026-W11');
+    const diag = (r.op as { update: { diag: Array<{ w: string; out?: unknown; unbekannt?: number }> } }).update.diag;
+    expect(diag).toHaveLength(DIAG_FULL + 3 + 1);
+    expect(diag.slice(0, 3).every((e) => e.out === undefined)).toBe(true);
+    expect(diag.slice(3, -1).every((e) => !!e.out)).toBe(true);
+    expect(diag.map((e) => e.unbekannt).slice(0, 15)).toEqual(Array.from({ length: 15 }, (_, k) => k));
     expect(diag.at(-1)?.w).toBe(W);
+  });
+
+  it('unbekannte Felder und unlesbare Einträge überleben claim, finish, release und report', () => {
+    const odd = { x: 1, nested: { a: [1, 2] } };
+    const junk = [null, 'text', { w: 'kaputt' }];
+    const old = { w: '2026-W30', t: NOW - 30 * 86_400_000, st: 'done', dev: 'z', out, extra: { k: 'v' }, bad: [0], zukunft: true };
+    const doc = { items: [], ...odd, diag: [...junk, old] };
+    const claim = claimOp(doc, { w: W, dev: 'dev-a', now: NOW, lang: 'de' }).op as { update: { diag: Array<Record<string, unknown>> } };
+    expect(claim.update.diag.slice(0, 3)).toEqual(junk);
+    expect(claim.update.diag[3]).toEqual(old);
+    const doc2 = { ...doc, diag: claim.update.diag };
+    const fin = finishOp(doc2, { dev: 'dev-a', t: NOW, w: W, now: NOW + 1000, out, pv: 'diagnose@1', lang: 'de', rep: 14 }) as { update: { diag: Array<Record<string, unknown>> } };
+    expect(fin.update.diag.slice(0, 3)).toEqual(junk);
+    expect(fin.update.diag[3]).toEqual(old);
+    // Das fertige Ergebnis behält Felder, die ein anderer Schreiber am pending-Eintrag ergänzt hat.
+    const withExtra = { diag: [{ w: W, t: NOW, st: 'pending', dev: 'dev-a', fremd: 'bleibt' }, ...junk] };
+    const done = finishOp(withExtra, { dev: 'dev-a', t: NOW, w: W, now: NOW + 1000, out, pv: 'diagnose@1', lang: 'de', rep: 1 }) as { update: { diag: Array<Record<string, unknown>> } };
+    expect(done.update.diag[0]).toMatchObject({ w: W, st: 'done', fremd: 'bleibt' });
+    expect(done.update.diag.slice(1)).toEqual(junk);
+    const rel = releaseOp(withExtra, { dev: 'dev-a', t: NOW }) as { update: { diag: unknown[] } };
+    expect(rel.update.diag).toEqual(junk);
+    const rep = reportOp({ diag: [...junk, { ...old, w: W, t: NOW }] }, { w: W, index: 1 }) as { update: { diag: Array<Record<string, unknown>> } };
+    expect(rep.update.diag.slice(0, 3)).toEqual(junk);
+    expect(rep.update.diag[3]).toMatchObject({ extra: { k: 'v' }, zukunft: true, bad: [0, 1], out });
+  });
+
+  it('ein done ohne gültiges out belegt seine Woche trotzdem', () => {
+    const doc = { diag: [{ w: W, t: NOW, st: 'done', dev: 'x', out: 'kaputt' }] };
+    expect(doneOf(readDiag(doc), W)).not.toBeNull();
+    expect(claimOp(doc, { w: W, dev: 'dev-b', now: NOW + 5000, lang: 'de' }).claimed).toBe(false);
+    expect(diagState(readDiag(doc), '2026-10-30', NOW, 40).kind).toBe('done');
+  });
+
+  it('eine zukunftsdatierte Beanspruchung gilt bis 60 s Vorlauf, danach nicht mehr', () => {
+    const e = (t: number) => readDiag({ diag: [{ w: W, t, st: 'pending', dev: 'x' }] });
+    expect(diagState(e(NOW + FUTURE_SLACK_MS), '2026-10-30', NOW, 40).kind).toBe('pending');
+    expect(diagState(e(NOW + FUTURE_SLACK_MS + 1), '2026-10-30', NOW, 40).kind).toBe('due');
+  });
+
+  it('Prompt: Schwelle nur mit falschen Antworten, leere Liste erlaubt, pc-Regel, keine Stufe', () => {
+    const p = diagnose.build(vars);
+    expect(p).toContain('at least 3 WRONG answers/mistakes');
+    expect(p).toContain('"findings": []');
+    expect(p).toContain('Never lower the threshold');
+    expect(p).toContain('Only [cf:…] lines prove a mix-up.');
+    expect(p).toContain('No CEFR level, score or percentage.');
+  });
+
+  it('die Aktion muss zur Evidenz passen', () => {
+    const f = good.findings[0];
+    const ok = diagnoseSchema(vars).safeParse({ ...good, findings: [f] });
+    expect(ok.success).toBe(true);
+    const bad = diagnoseSchema({ ...vars, ids: ['p:dip.hoping', ...vars.ids] }).safeParse({ ...good, findings: [{ ...f, ev: ['p:dip.hoping'] }] });
+    expect(bad.success).toBe(false);
   });
 
   it('Melden markiert den Befund und löscht nie', () => {

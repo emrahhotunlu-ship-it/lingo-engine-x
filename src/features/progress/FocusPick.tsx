@@ -15,6 +15,8 @@ type Props = { options: readonly FocusOption[]; today: string; profileWf: unknow
 export function FocusPick({ options, today, profileWf }: Props) {
   const { t, lang } = useT();
   const week = focusWeekOf(today);
+  // Sonntags gilt die Wahl für die kommende Woche: der Titel sagt es.
+  const next = new Date(`${today}T12:00:00Z`).getUTCDay() === 0;
   const chosen = readWf(profileWf).find((e) => e.w === week)?.a ?? '';
   const [state, setState] = useState<'idle' | 'saving' | 'saved' | 'failed'>('idle');
   const nameOf = (id: string): string => patternById(id)?.name[lang] ?? id;
@@ -37,7 +39,7 @@ export function FocusPick({ options, today, profileWf }: Props) {
       key: `${o.id}-${o.pat}`,
       value: o.pat,
       title: nameOf(o.pat),
-      sub: o.id === 'confusion' && o.other ? t('moWkFocusConf', { other: nameOf(o.other) }) : t('moWkFocusWeak', { n: o.chapter ?? 1 }),
+      sub: o.id === 'confusion' && o.other ? t(o.confirmed ? 'moWkFocusConf' : 'moWkFocusConfUn', { other: nameOf(o.other) }) : t('moWkFocusWeak', { n: o.chapter ?? 1 }),
     })),
     { key: 'auto', value: '', title: t('moWkFocusAuto'), sub: t('moWkFocusAutoSub') },
   ];
@@ -45,7 +47,7 @@ export function FocusPick({ options, today, profileWf }: Props) {
     <Card channel="grammar" className="flex flex-col gap-3" aria-labelledby="wk-focus-title" data-testid="wk-focus">
       <div className="flex flex-col gap-1">
         <h2 id="wk-focus-title" className="m-0 text-lg font-semibold">
-          {t('moWkFocusTitle')}
+          {t(next ? 'moWkFocusTitleNext' : 'moWkFocusTitle')}
         </h2>
         <p className="m-0 text-sm text-muted">{t('moWkFocusLead')}</p>
       </div>

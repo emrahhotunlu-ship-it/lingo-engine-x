@@ -85,6 +85,15 @@ test.describe('Handy 390: Verhalten', () => {
     expect(((await profileOf(page)).wf as unknown[]).length).toBe(1);
   });
 
+  test('Sonntag: der Fokus gilt für die kommende Woche, der Titel sagt es; montags der normale Titel', async ({ page }) => {
+    await openReview(page, { now: '2026-09-20T21:00:00+02:00' });
+    await expect(page.getByTestId('wk-focus')).toContainText('Fokus für nächste Woche');
+    const monday = await page.context().newPage();
+    await monday.setViewportSize({ width: 390, height: 844 });
+    await openReview(monday);
+    await expect(monday.getByTestId('wk-focus')).toContainText('Fokus für diese Woche');
+  });
+
   test('Ohne sample: alles außer Claudes Text ist da, keine KI-Anfrage', async ({ page }) => {
     await openReview(page, { fake: { capabilities: { sample: false } } });
     await expect(page.getByTestId('wk-big')).toBeVisible();
@@ -119,7 +128,7 @@ test.describe('Handy 390: Verhalten', () => {
   test('negative Zahl nach einer Pause: „−4“ mit ruhigem Satz; ohne Verlauf die Zahl der neu Festen; ohne alles ein ruhiger Leersatz', async ({ page }) => {
     await openReview(page, { patch: { 'app/profile': { history: [{ d: '2026-09-12', vu: 100 }, { d: '2026-09-19', vu: 96 }] } } });
     await expect(page.getByTestId('wk-big')).toHaveAttribute('data-n', '-4');
-    await expect(page.getByTestId('wk3')).toContainText('Nach einer Pause');
+    await expect(page.getByTestId('wk3')).toContainText('weniger als vor einer Woche');
     const second = await page.context().newPage();
     await second.setViewportSize({ width: 390, height: 844 });
     await openReview(second, { patch: { 'app/profile': { history: [] } } });

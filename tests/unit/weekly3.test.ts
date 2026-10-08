@@ -5,7 +5,7 @@ import { dayKey } from '../../src/domain/date';
 import { slotPlan, type PatInfo } from '../../src/domain/grammar/slotPlan';
 import { isWrongLang } from '../../src/domain/lang/detect';
 import { lastWeekOf, newFestWords, weekFacts } from '../../src/domain/progress/weekly';
-import { bigNumber, focusFor, focusOptions, focusTopicOf, focusWeekOf, readWf, teacherText, weeklyUse, weekly3, wfOp, WF_MAX } from '../../src/domain/progress/weekly3';
+import { bigNumber, focusFor, focusOptions, focusTopicOf, focusWeekOf, readWf, teacherText, weeklyUse, weekly3, wfOp } from '../../src/domain/progress/weekly3';
 import type { Confusion } from '../../src/domain/tutor/confusion';
 
 // P50 (Lernplattform 3.0, Wochenrückblick 3.0): große Zahl, neu Feste, Text für den Lehrer (reines Englisch), Fokuswahl (wirkt erst ab dem nächsten Plan).
@@ -44,6 +44,8 @@ describe('große Zahl „+n fest“', () => {
   });
   it('nimmt den letzten Wert der Woche und den letzten davor, nicht den ersten', () => {
     expect(bigNumber(hist([['2026-10-10', 80], ['2026-10-17', 100], ['2026-10-20', 110], ['2026-10-24', 120]]), days, 0)).toEqual({ n: 20, src: 'vu' });
+    // Ein Vergleichswert, der mehr als 3 Tage vor der Woche liegt, ist kein Wochenvergleich.
+    expect(bigNumber(hist([['2026-10-14', 100], ['2026-10-24', 120]]), days, 5)).toEqual({ n: 5, src: 'ff' });
   });
   it('ohne Vergleichswert gilt die Zahl der neu Festen (ff), sonst nichts', () => {
     expect(bigNumber(hist([['2026-10-25', 131]]), days, 4)).toEqual({ n: 4, src: 'ff' });
@@ -89,6 +91,13 @@ describe('Text für den Lehrer (feste Vorlage, reines Englisch)', () => {
     expect(quoted).not.toContain('for example');
   });
 
+  it('ein nicht belegtes Paar behauptet keine Verwechslung', () => {
+    const t = teacherText({ note: null, practiced: [], fest: [], tricky: { names: ['the definite article', 'the indefinite article'], example: null, confirmed: false } });
+    expect(t).toContain('Still tricky: the definite article (and how it differs from the indefinite article).');
+    expect(t).not.toContain('versus');
+    expect(teacherText({ note: null, practiced: [], fest: [], tricky: { names: ['a', 'b'], example: null, confirmed: true } })).toContain('Still tricky: a versus b.');
+  });
+
   it('Sprachtest: reines Englisch, kein Deutsch, kein „verfehlt“, kein Ausrufezeichen, nie Selbstkritik', () => {
     const t = teacherText({
       note,
@@ -104,7 +113,7 @@ describe('Text für den Lehrer (feste Vorlage, reines Englisch)', () => {
 });
 
 describe('Fokus: Wahl, Woche, Wirkung erst ab dem nächsten Plan', () => {
-  it('wfOp: ersetzt nur den Eintrag derselben Woche, löscht nie, höchstens 12, keine Änderung → null', () => {
+  it('wfOp: ersetzt nur den Eintrag derselben Woche, löscht nie, keine Obergrenze, keine Änderung → null', () => {
     const t0 = at('2026-10-26T09:00:00+01:00');
     const a = wfOp({}, { w: '2026-W44', a: 'art.definite', t: t0 });
     expect(a).toEqual({ wf: [{ w: '2026-W44', a: 'art.definite', t: t0 }] });
@@ -117,10 +126,23 @@ describe('Fokus: Wahl, Woche, Wirkung erst ab dem nächsten Plan', () => {
     expect(wfOp(cur, { w: '2026-W44', a: '', t: t0 + 3000 })?.wf).toEqual([{ w: '2026-W44', a: '', t: t0 + 3000 }]);
     // Nur `wf` wird geschrieben: der gespeicherte Plan (`plan`) bleibt unberührt.
     expect(Object.keys(b ?? {})).toEqual(['wf']);
+    // Nichts gelöscht: 20 Wochen bleiben alle stehen.
     let doc: Doc = {};
     for (let k = 0; k < 20; k++) doc = { ...doc, ...(wfOp(doc, { w: `2026-W${String(10 + k).padStart(2, '0')}`, a: 'art.zero', t: t0 + k * 1000 }) ?? {}) };
-    expect(readWf(doc.wf)).toHaveLength(WF_MAX);
-    expect(readWf(doc.wf).at(-1)?.w).toBe('2026-W29');
+    expect(readWf(doc.wf)).toHaveLength(20);
+    expect((doc.wf as unknown[]).length).toBe(20);
+  });
+
+  it('wfOp: unbekannte Felder und unlesbare Einträge bleiben, nur der Eintrag der Woche wird per Spread geändert', () => {
+    const t0 = at('2026-10-26T09:00:00+01:00');
+    const junk = [null, 'x', { w: 'kaputt', t: 1 }];
+    const old = { w: '2026-W43', a: 'art.zero', t: t0 - 7 * 86_400_000, fremd: { k: 1 } };
+    const mine = { w: '2026-W44', a: 'art.definite', t: t0, notiz: 'bleibt' };
+    const doc = { wf: [...junk, old, mine] };
+    const r = wfOp(doc, { w: '2026-W44', a: 'art.zero', t: t0 + 5000 });
+    expect(r?.wf).toEqual([...junk, old, { ...mine, a: 'art.zero', t: t0 + 5000 }]);
+    const add = wfOp(doc, { w: '2026-W45', a: 'art.zero', t: t0 + 9000 });
+    expect(add?.wf).toEqual([...junk, old, mine, { w: '2026-W45', a: 'art.zero', t: t0 + 9000 }]);
   });
 
   it('readWf liest tolerant (kaputte Einträge fallen weg)', () => {
@@ -181,7 +203,9 @@ describe('Vorschläge für den Fokus', () => {
   it('A = Verwechslungspaar, B = schwächstes Muster des Kapitels (nicht dasselbe); sonst zwei schwache Muster; nur eingeführte', () => {
     const o = focusOptions({ grammar, today: '2026-10-27', confusion: { pairs: [pair] } });
     expect(o).toHaveLength(2);
-    expect(o[0]).toMatchObject({ id: 'confusion', pat: 'art.indefinite', other: 'art.definite' });
+    expect(o[0]).toMatchObject({ id: 'confusion', pat: 'art.indefinite', other: 'art.definite', confirmed: true });
+    const un = focusOptions({ grammar, today: '2026-10-27', confusion: { pairs: [{ ...pair, confirmed: false }] } });
+    expect(un[0]).toMatchObject({ id: 'confusion', confirmed: false });
     expect(o[1]).toMatchObject({ id: 'weak', pat: 'art.definite' });
     expect(typeof o[1]?.chapter).toBe('number');
     const w = focusOptions({ grammar, today: '2026-10-27', confusion: null });
@@ -208,7 +232,7 @@ describe('Einsatz-Satz und Gesamtbild', () => {
     const vocab = new Map<string, Doc>([['a', { word: 'leverage', ff: '2026-10-22' }]]);
     const chunk = new Map<string, Doc>([['x', { en: 'on the same page', ff: '2026-10-20' }]]);
     const grammar = new Map<string, Doc>([['articles', { pats: { 'art.definite': { n: 10, c: 9, last: at('2026-10-21T10:00:00+02:00'), i: '2026-10-01', s: '2026-10-21', r: 31, k: 5, dd: ['2026-10-20', '2026-10-21'] } } }]]);
-    const conf: Confusion = { window: { from: '', to: '', prevFrom: '', prevTo: '' }, pairs: [], pats: [{ pat: 'art.definite', n: 10, w: 4, prevN: 0, prevW: 0 }], lines: [], ids: [], allowed: [], mapped: 4 };
+    const conf: Confusion = { window: { from: '', to: '', prevFrom: '', prevTo: '' }, pairs: [], pats: [{ pat: 'art.definite', n: 10, w: 4, prevN: 0, prevW: 0, weeks: [0, 1, 1, 2] }], lines: [], ids: [], allowed: [], mapped: 4 };
     const w = weekly3({ today, nowMs: at('2026-10-26T10:00:00+01:00'), vocab, chunk, grammar, profile: { history: hist([['2026-10-18', 200], ['2026-10-25', 203]]) }, confusion: conf, fixed: 2 });
     expect(w.w).toBe('2026-W43');
     expect(w.big).toEqual({ n: 3, src: 'vu' });

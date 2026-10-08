@@ -11,7 +11,7 @@ export const moP50En = {
   moWkBigLabel: 'words and phrases firm',
   moWkBigAria: '{n} more words and phrases firm than a week ago',
   moWkBigAriaNeg: '{n} fewer words and phrases firm than a week ago',
-  moWkBigNegNote: 'After a break that is normal. Reviewing brings them back.',
+  moWkBigNegNote: 'There are fewer than a week ago. Reviewing brings words back.',
   moWkBigFfNote: 'Number of words and phrases that became firm for the first time this week.',
   moWkNamesTitle: 'New firm',
   moWkNamesMore: 'and {n} more',
@@ -35,4 +35,6 @@ export const moP50En = {
   moWkFocusFail: 'Your choice could not be saved. Please try again.',
   moWkUseTitle: 'Use it this week',
   moWkUseWhere: 'Where you need it: {situation}',
+  moWkFocusConfUn: 'Often wrong · contrast pair with {other}',
+  moWkFocusTitleNext: 'Focus for next week',
 } as const;

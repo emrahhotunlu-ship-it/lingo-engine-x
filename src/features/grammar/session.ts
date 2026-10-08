@@ -258,7 +258,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
       // Einführungsbremse (höchstens 1 neues Thema je 3 Lerntage, nie bei ≥ 10 offenen Fehlersätzen): nur die Pflichtrunde führt ein Thema ein.
       introduce: mode === 'duty' && !gt ? introTopic(docs, day, nowMs) : null,
       // Wochenfokus (P50): erst für Pläne, die nach der Wahl angelegt wurden; der gespeicherte Plan von heute bleibt eingefroren.
-      focusTopic: mode === 'duty' && !gt ? (focusTopicOf(wfFocus) ?? planFocusTopic(plan)) : null,
+      focusTopic: mode === 'duty' ? (focusTopicOf(wfFocus) ?? (!gt ? planFocusTopic(plan) : null)) : null,
       ...(flags.slotPlan && (mode === 'duty' || mode === 'xtra') ? { slotPlan: { focus: wfFocus } } : {}),
     });
     // Regelkarte vor der ersten Runde eines neuen Themas (Lernweg ①): das erste Thema der Runde, das noch nie geübt wurde.

@@ -24,8 +24,8 @@ describe('Fenster: 28 Lerntage, Wechsel um 04:00', () => {
     expect(dayOfMs(at('2026-10-05T04:00:00+02:00'))).toBe('2026-10-05');
     const logs = logsOf([['2026-10-05', [entry('art.definite', false, at('2026-10-05T03:59:00+02:00')), entry('art.definite', false, at('2026-10-05T04:00:00+02:00'))]]]);
     const s = patStats(attemptsOf(logs), windowOf(TODAY));
-    // Der erste Eintrag (Vortag, 04.10.) liegt im Vorfenster, der zweite im Fenster.
-    expect(s).toEqual([{ pat: 'art.definite', n: 1, w: 1, prevN: 1, prevW: 1 }]);
+    // Der erste Eintrag (Vortag, 04.10.) liegt im Vorfenster, der zweite im Fenster (erster Tag, älteste Woche).
+    expect(s).toEqual([{ pat: 'art.definite', n: 1, w: 1, prevN: 1, prevW: 1, weeks: [1, 0, 0, 0] }]);
   });
 
   it('am Tag der Zeitumstellung (25.10.): Winterzeit 02:30 und 03:59 zählen noch zum 24., 04:00 zum 25.', () => {
@@ -40,7 +40,7 @@ describe('Fenster: 28 Lerntage, Wechsel um 04:00', () => {
       ['2026-10-25', [entry('art.definite', false, at('2026-10-26T02:00:00Z')), entry('art.definite', false, at('2026-10-26T03:00:00Z'))]],
     ]);
     const s = patStats(attemptsOf(logs), windowOf('2026-10-25'));
-    expect(s).toEqual([{ pat: 'art.definite', n: 1, w: 1, prevN: 0, prevW: 0 }]);
+    expect(s).toEqual([{ pat: 'art.definite', n: 1, w: 1, prevN: 0, prevW: 0, weeks: [0, 0, 0, 1] }]);
   });
 });
 
@@ -50,7 +50,7 @@ describe('Zahlen je Muster und Paare', () => {
       ['2026-10-30', [entry('art.definite', false, at('2026-10-30T10:00:00+01:00')), entry('art.definite', true, at('2026-10-30T10:01:00+01:00')), entry('erfunden.xyz', false, at('2026-10-30T10:02:00+01:00')), { k: 'g', ok: false, t: at('2026-10-30T10:03:00+01:00') }, { k: 'v', pat: 'art.definite', ok: false, t: at('2026-10-30T10:04:00+01:00') }]],
       ['2026-09-20', [entry('art.definite', false, at('2026-09-20T10:00:00+02:00'))]],
     ]);
-    expect(patStats(attemptsOf(logs), windowOf(TODAY))).toEqual([{ pat: 'art.definite', n: 2, w: 1, prevN: 1, prevW: 1 }]);
+    expect(patStats(attemptsOf(logs), windowOf(TODAY))).toEqual([{ pat: 'art.definite', n: 2, w: 1, prevN: 1, prevW: 1, weeks: [0, 0, 0, 1] }]);
   });
 
   it('bestätigte Paare aus `cf` (mindestens 2 Belege), mit Beispiel; Wochenbalken stimmen mit den Protokollen überein', () => {
@@ -112,6 +112,9 @@ describe('Belegzeilen für diagnose@1', () => {
     for (const id of c.ids) expect(text).toContain(`[${id}]`);
     for (const a of c.allowed.filter((x) => x.startsWith('pattern:'))) expect(c.ids).toContain(`p:${a.slice(8)}`);
     expect(text).toContain('2 attempts, 1 wrong');
+    // Jede p:- und cf:-Zeile nennt die falschen Antworten je Woche (älteste zuerst).
+    expect(text).toMatch(/\[p:art\.indefinite\][^\n]*; wrong per week \(oldest first\): 0, 0, 0, 1/);
+    expect(text).toMatch(/\[cf:art\.indefinite>art\.definite\][^\n]*; wrong per week \(oldest first\): \d, \d, \d, \d/);
     expect(text).toContain('2 mistakes in own writing');
   });
 
@@ -154,6 +157,31 @@ describe('Aktionen und [dx:…]-Zeilen für assess@4', () => {
     expect(dxLines([diag(t, { bad: [0] })], TODAY)).toEqual([]);
     expect(dxLines([diag(t)], '2027-01-15')).toEqual([]);
     expect(dxLines([], TODAY)).toEqual([]);
+    // „verwechselt“ steht nur, wenn der Befund eine bestätigte Verwechslung (cf:) zitiert.
+    expect(lines[0]?.text).not.toContain('is confused with');
+    const proven = dxLines([diag(t, { out: { headline: 'x', findings: [{ title: 'Artikel', ev: ['cf:art.definite>art.indefinite'], action: 'contrast:art.definite|art.indefinite' }] } })], TODAY);
+    expect(proven[0]?.text).toContain('is confused with');
     expect(dxLines([diag(t, { st: 'pending' })], TODAY)).toEqual([]);
+  });
+});
+
+describe('Pc-Zeile und gekürzte Belege', () => {
+  const lines = (n: number): Doc[] => Array.from({ length: n }, (_, k) => entry('art.definite', false, at('2026-10-30T10:00:00+01:00') + k * 1000));
+  it('ein vom Kurs vorgegebenes Paar sagt ausdrücklich, dass keine Verwechslung belegt ist', () => {
+    const c = confusionOf({ logs: logsOf([['2026-10-30', lines(4)]]) }, TODAY);
+    const pc = c.lines.find((l) => l.id.startsWith('pc:'));
+    expect(pc?.text).toContain('it is NOT recorded that the learner chose');
+    expect(pc?.text).toContain('Wrong answers per week in');
+    expect(c.allowed).toContain('contrast:art.definite|art.indefinite');
+  });
+  it('wird die Zeile eines Paars gekürzt, entfällt auch seine Aktion (nie eine Aktion ohne Beleg)', () => {
+    const many = ['art.definite', 'art.indefinite', 'art.zero', 'art.fixed', 'art.sound', 'art.the-unique', 'dip.hoping', 'dip.wondering'].flatMap((p, k) =>
+      Array.from({ length: 6 }, (_, j) => entry(p, false, at('2026-10-30T10:00:00+01:00') + (k * 10 + j) * 1000)),
+    );
+    const c = confusionOf({ logs: logsOf([['2026-10-30', many]]) }, TODAY);
+    for (const a of c.allowed.filter((x) => x.startsWith('contrast:'))) {
+      const { a: pa, b: pb } = parseContrast(a) ?? { a: '', b: '' };
+      expect(c.ids.some((id) => id === `pc:${pa}|${pb}` || id === `cf:${pa}>${pb}`)).toBe(true);
+    }
   });
 });
