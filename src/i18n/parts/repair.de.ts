@@ -34,5 +34,6 @@ export const repairDe = {
   rxSrc_preply: 'aus einer früheren Stunde',
   rxSrc_say: 'aus einer früheren Übung',
   rxSrc_lesson: 'aus der Lektion',
+  rxSrc_check: 'aus dem C1-Check',
   rxStand: 'Fehlersätze: {open} offen, {safe} sicher',
 } as const;

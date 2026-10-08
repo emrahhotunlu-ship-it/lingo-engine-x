@@ -16,13 +16,15 @@ type Props = {
   titleLayoutId?: string;
   /** UX-Prüfung W5: Blatt bemisst sich am Inhalt (kurze Menüs): unten angedockt, höchstens bis unter den oberen Rand. */
   fit?: boolean;
+  /** Laptop: breites Paneel für zwei Spalten (z. B. „Weg zu C1“, Lernplattform 3.0 P45). Handy unverändert. */
+  wide?: boolean;
 };
 
 /**
  * Blatt über dem Inhalt: am Handy von unten als Vollbild-Blatt, ab Tablet als Paneel rechts.
  * Esc schließt, der Fokus kehrt zum auslösenden Element zurück (Kap. 4.5).
  */
-export function Sheet({ open, onClose, title, closeLabel, children, titleLayoutId, fit = false }: Props) {
+export function Sheet({ open, onClose, title, closeLabel, children, titleLayoutId, fit = false, wide = false }: Props) {
   const titleId = useId();
   const panel = useRef<HTMLDivElement>(null);
   const opener = useRef<Element | null>(null);
@@ -100,7 +102,7 @@ export function Sheet({ open, onClose, title, closeLabel, children, titleLayoutI
             transition={{ duration: DURATION.slow, ease: EASE_OUT }}
             {...drag.panel}
             data-fit={fit || undefined}
-            className={`absolute inset-x-0 bottom-0 flex flex-col rounded-t-[1.5rem] border border-line bg-surface-solid shadow-2xl outline-none md:right-3 md:left-auto md:w-[26rem] md:rounded-[1.5rem] ${
+            className={`absolute inset-x-0 bottom-0 flex flex-col rounded-t-[1.5rem] border border-line bg-surface-solid shadow-2xl outline-none md:right-3 md:left-auto md:w-[26rem] md:rounded-[1.5rem] ${wide ? 'lg:w-[min(56rem,calc(100%-1.5rem))] ' : ''}${
               fit ? 'max-h-[calc(100%-max(env(safe-area-inset-top),1.5rem))] md:bottom-3 md:max-h-[calc(100%-1.5rem)]' : 'top-[max(env(safe-area-inset-top),1.5rem)] md:inset-y-3 md:top-3'
             }`}
           >

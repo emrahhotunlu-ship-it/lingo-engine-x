@@ -23,20 +23,23 @@ function writable(cur: Readonly<Doc> | undefined): boolean {
   return readRepairs(cur).length === cur.items.length;
 }
 
-/** Reparatur-Sätze anlegen (z. B. aus Sag es, Gespräch, Schreiben). true = gespeichert oder nichts zu tun. */
+/** Reparatur-Sätze anlegen (z. B. aus Sag es, Gespräch, Schreiben). true = gespeichert oder nichts zu tun (alle schon da); false = nicht geschrieben (keine Datenbank, Fehler, unerwarteter Aufbau). */
 export async function saveRepairs(add: readonly NewRepair[]): Promise<boolean> {
   const writer = getWriter();
   if (!writer || !add.length) return false;
+  // Unerwarteter Aufbau: nichts geschrieben, also auch nicht „gespeichert“ melden (data-guard P40, Sollte 4).
+  let blocked = false;
   try {
     await writer.transform(REPAIR_PATH, (cur) => {
-      if (!writable(cur)) {
+      blocked = !writable(cur);
+      if (blocked) {
         logError('repair:save', new Error('app/repair unerwarteter Aufbau – nicht geschrieben'));
         return null;
       }
       const next = addRepairs(readRepairs(cur), add, Date.now());
       return next ? opFor(cur, next) : null;
     });
-    return true;
+    return !blocked;
   } catch (err) {
     logError('repair:save', err);
     return false;

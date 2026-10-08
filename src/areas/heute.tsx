@@ -25,7 +25,7 @@ declare module '../app/router/types' {
     today: NoParams;
     check: NoParams;
     unitCard: { step: 'next' };
-    unitStep: { step: 'again' | 'check'; block: number };
+    unitStep: { step: 'again' | 'check' | 'c1check'; block: number };
   }
 }
 
@@ -98,7 +98,7 @@ export const heute = defineArea({
     today: { kind: 'tab', component: TodayRoot, title: 'navToday' },
     check: { kind: 'exercise', component: CheckScreen, title: 'ckTitle', ensure: ensureCheck },
     unitCard: { kind: 'exercise', component: UnitCardScreen, title: 'nbHeuteUnit', params: z.object({ step: z.enum(['next']) }) },
-    unitStep: { kind: 'exercise', component: UnitStepScreen, title: 'nbHeuteUnit', params: z.object({ step: z.enum(['again', 'check']), block: z.coerce.number().int().min(1).max(5) }) },
+    unitStep: { kind: 'exercise', component: UnitStepScreen, title: 'nbHeuteUnit', params: z.object({ step: z.enum(['again', 'check', 'c1check']), block: z.coerce.number().int().min(1).max(5) }) },
   },
   badge: { id: 'openDuties', use: useOpenDuties },
   playerNote: { use: useUnitNote },

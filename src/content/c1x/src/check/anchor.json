@@ -1,0 +1,222 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "mcc-2001",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "mc.wish-past",
+   "topic": "mixed-cond",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "probe": true,
+   "text": "Looking back, I wish we ___ the contract terms more carefully before signing.",
+   "options": [
+    "had checked",
+    "checked",
+    "would check",
+    "have checked"
+   ],
+   "answer": 0,
+   "why": {
+    "ok": {
+     "de": "Bedauern über etwas Vergangenes: wish + had + Partizip (I wish we had checked). Looking back und before signing zeigen die Vergangenheit.",
+     "en": "Regret about the past: wish + had + participle (I wish we had checked). Looking back and before signing point to the past."
+    },
+    "wrong": [
+     {
+      "opt": "checked",
+      "cat": "grammar",
+      "de": "wish + Past Simple meint die Gegenwart; Bedauern über Vergangenes braucht had checked.",
+      "en": "wish + past simple is about the present; regret about the past needs had checked."
+     },
+     {
+      "opt": "would check",
+      "cat": "calque",
+      "de": "Deutsch „ich wünschte, wir würden“; für Vergangenes steht wish + had + Partizip.",
+      "en": "German “ich wünschte, wir würden”; for the past English uses wish + had + participle."
+     },
+     {
+      "opt": "have checked",
+      "cat": "grammar",
+      "de": "Nach wish steht kein Present Perfect; Vergangenes braucht had checked.",
+      "en": "No present perfect after wish; the past needs had checked."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-2002",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "rc.whose",
+   "topic": "relative",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "probe": true,
+   "text": "We are looking for a partner ___ software can handle documents in more than twenty languages.",
+   "accept": [
+    "whose"
+   ],
+   "cls": "rel",
+   "chips": [
+    "which",
+    "who's",
+    "that"
+   ],
+   "why": {
+    "ok": {
+     "de": "Besitz im Relativsatz: whose + Nomen (a partner whose software = ein Partner, dessen Software).",
+     "en": "Possession in a relative clause: whose + noun (a partner whose software)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "which"
+      ],
+      "de": "which braucht direkt ein Verb (which can …); hier fehlt das „dessen“.",
+      "en": "which needs a verb right after it (which can …); the sentence needs “whose”."
+     },
+     {
+      "if": [
+       "who's"
+      ],
+      "de": "who's heißt who is; „who is software“ ergibt keinen Sinn.",
+      "en": "who's means who is; “who is software” makes no sense."
+     },
+     {
+      "if": [
+       "that"
+      ],
+      "de": "that kann kein „dessen“ ausdrücken; vor einem Nomen steht whose.",
+      "en": "that cannot mean “whose”; whose goes before a noun."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-2003",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-noun",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "probe": true,
+   "lex": [
+    "complexity"
+   ],
+   "text": "Several customers have complained about the ___ of the new login process.",
+   "stem": "COMPLEX",
+   "accept": [
+    "complexity",
+    "complexities"
+   ],
+   "pos": "noun",
+   "parts": {
+    "base": "complex",
+    "suf": [
+     "ity"
+    ]
+   },
+   "family": [
+    "complex",
+    "complexity",
+    "complexities",
+    "complexly"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „the“ und vor „of“ steht ein Nomen: complex + -ity = die Komplexität. Auch der Plural complexities passt.",
+     "en": "A noun goes after “the” and before “of”: complex + -ity = complexity. The plural complexities also fits."
+    },
+    "wrong": [
+     {
+      "if": [
+       "complex"
+      ],
+      "de": "„complex“ ist ein Adjektiv; nach „the“ und vor „of“ braucht der Satz ein Nomen.",
+      "en": "“complex” is an adjective; after “the” and before “of” the sentence needs a noun."
+     },
+     {
+      "if": [
+       "complexly"
+      ],
+      "de": "„complexly“ ist ein Adverb; hier braucht der Satz ein Nomen.",
+      "en": "“complexly” is an adverb; the sentence needs a noun here."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-2004",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "pp.personal",
+   "topic": "passive-plus",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "probe": true,
+   "lead": "People say that the new CEO is planning a major restructuring.",
+   "key": "SAID",
+   "before": "The new CEO",
+   "after": "a major restructuring.",
+   "keys": [
+    {
+     "a": [
+      "is said"
+     ],
+     "b": [
+      "to be planning"
+     ]
+    }
+   ],
+   "tiles": [
+    "is",
+    "to",
+    "be",
+    "planning"
+   ],
+   "extra": [
+    "plan",
+    "that",
+    "been"
+   ],
+   "traps": [
+    "is said to plan",
+    "said to be planning"
+   ],
+   "why": {
+    "ok": {
+     "de": "Teil 1: is said, die Person wird Subjekt (neutral berichten). Teil 2: to be planning, weil das Planen gerade läuft.",
+     "en": "Part 1: is said, the person becomes the subject (neutral reporting). Part 2: to be planning, because the planning is going on now."
+    },
+    "wrong": [
+     {
+      "if": [
+       "is",
+       "said",
+       "to",
+       "plan"
+      ],
+      "de": "Das Planen läuft gerade (is planning): to be planning, nicht to plan.",
+      "en": "The planning is going on now (is planning): to be planning, not to plan."
+     },
+     {
+      "if": [
+       "said",
+       "to",
+       "be",
+       "planning"
+      ],
+      "de": "Es fehlt is: The new CEO is said to be planning.",
+      "en": "is is missing: The new CEO is said to be planning."
+     }
+    ]
+   }
+  }
+ ]
+}

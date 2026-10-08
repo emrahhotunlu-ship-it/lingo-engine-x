@@ -28,6 +28,11 @@ export type AssessItem = { title: string; why: string; ev: string[] };
 export type AssessBlocker = AssessItem & { fix: string; action: string | null };
 export type AssessFocus = { title: string; why: string; action: string | null; days: number; channels: string[] };
 
+/** Urteil „Weg zu C1“ (assess@4, Lernplattform 3.0 P45): nur Worte, keine Punktzahl. `missing` = höchstens 3 offene Kriterien (k1–k7). */
+export const C1_VERDICTS = ['not_yet', 'on_track', 'ready'] as const;
+export type C1Verdict = (typeof C1_VERDICTS)[number];
+export type AssessC1 = { status: C1Verdict; why: string; missing: Array<{ crit: string; title: string }>; ev: string[] };
+
 /** Inhalt `data` in der Hüllenform (Plan E1). Fehlendes ist `null` bzw. leer. */
 export type AssessData = {
   level: string | null;
@@ -41,6 +46,8 @@ export type AssessData = {
   blockers: AssessBlocker[];
   dims: AssessDim[];
   focus: AssessFocus | null;
+  /** Nur assess@4; ältere Einschätzungen haben keins (`undefined`/`null`). */
+  c1?: AssessC1 | null;
 };
 
 export type AssessHist = { d: string; cefr: Level | null; trend: Trend | null; dims: Partial<Record<Dim, Level | null>> };
