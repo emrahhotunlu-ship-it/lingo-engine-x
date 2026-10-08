@@ -85,9 +85,12 @@ describe('Lernzeit: Zeile der Abschlusskarte', () => {
     expect(ifThenLine('coffee', tDe)).toBe('Wenn ich meinen ersten Kaffee getrunken habe, starte ich meine Englisch-Runde.');
     expect(ifThenLine('coffee', tEn)).toBe('When I finish my first coffee, I start my English session.');
     for (const c of CUE_IDS) {
-      expect(ifThenLine(c, tDe)).toMatch(/^Wenn ich .+, starte ich meine Englisch-Runde\.$/);
-      expect(ifThenLine(c, tEn)).toMatch(/^When I .+, I start my English session\.$/);
+      expect(ifThenLine(c, tDe)).toMatch(/^(Wenn|Bevor) ich .+, starte ich meine Englisch-Runde\.$/);
+      expect(ifThenLine(c, tEn)).toMatch(/^(When|Before) I .+, I start my English session\.$/);
     }
+    // „vor Feierabend“ ist ein Vorher-Moment: der Satz beginnt mit „Bevor“, nicht mit „Wenn“.
+    expect(ifThenLine('evening', tDe)).toBe('Bevor ich Feierabend mache, starte ich meine Englisch-Runde.');
+    expect(ifThenLine('evening', tEn)).toBe('Before I log off for the day, I start my English session.');
     expect(ifThenLine('nach dem Team-Call', tDe)).toBe('Mein Moment: nach dem Team-Call. Dann starte ich meine Englisch-Runde.');
     expect(ifThenLine('  ', tDe)).toBeNull();
     expect(de.moStNoCueHint).toBe('Ein fester Moment im Alltag hilft mehr als die Uhrzeit allein.');
@@ -105,7 +108,7 @@ describe('Lernzeit: Zeile der Abschlusskarte', () => {
 describe('Erinnerung im iPhone einrichten', () => {
   it('die genauen Tipps in der richtigen Reihenfolge (zuerst den Link kopieren)', () => {
     const steps = [1, 2, 3, 4, 5, 6, 7, 8].map((n) => de[`moRgStep${n}` as keyof typeof de]);
-    expect(steps[0]).toMatch(/Safari.*Adresszeile.*„Kopieren“/);
+    expect(steps[0]).toMatch(/Safari.*„Teilen“.*„Kopieren“/);
     expect(steps[1]).toContain('„Erinnerungen“');
     expect(steps[2]).toContain('„＋ Neue Erinnerung“');
     expect(steps[3]).toContain('„Englisch 25 Min.“');
@@ -115,7 +118,7 @@ describe('Erinnerung im iPhone einrichten', () => {
     expect(steps[6]).toMatch(/„Wiederholen“.*„Täglich“/);
     expect(steps[7]).toBe('Tippe auf „URL“, füge den Link ein und tippe oben rechts auf „Fertig“.');
     expect(de.moRgLead).toContain('ein Tipp darauf öffnet diese App');
-    expect(en.moRgStep1).toBe('Open this app in Safari, tap the address bar, then tap “Copy”.');
+    expect(en.moRgStep1).toBe('Open this app in Safari, tap “Share”, then tap “Copy”.');
     expect(de.moRgHome).toContain('„Teilen › Zum Home-Bildschirm“');
     expect(de.moRgHome).toContain('keine Installation');
     expect(en.moRgHome).toContain('Add to Home Screen');

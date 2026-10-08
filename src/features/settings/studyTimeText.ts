@@ -19,7 +19,7 @@ export function studyTimeLine(ii: Ii | null, lang: 'de' | 'en', t: Tr): string |
   return ii.cue ? t('moStTomorrowCue', { time, cue: cueLabel(ii.cue, t) }) : t('moStTomorrow', { time });
 }
 
-/** Vorschau „Wenn ich …, starte ich meine Englisch-Runde.“ für den gewählten Moment; ohne Moment `null` (dann der ruhige Hinweis). */
+/** Vorschau „Wenn/Bevor ich …, starte ich meine Englisch-Runde.“ (ganzer Satz je Moment) für den gewählten Moment; ohne Moment `null` (dann der ruhige Hinweis). */
 export function ifThenLine(cue: string, t: Tr): string | null {
   const c = cue.replace(/\s+/g, ' ').trim();
   if (!c) return null;

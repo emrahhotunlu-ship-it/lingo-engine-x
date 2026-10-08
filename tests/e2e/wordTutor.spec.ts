@@ -130,9 +130,14 @@ test('beide Karten ab Stufe 2: erst die reguläre Abfrage, DANACH zusätzlich �
   // Die fällige Abfrage kommt zuerst und benotet die Karte wie immer.
   await expect(exEl).toHaveAttribute('data-card', 'convince');
   await expect(exEl).not.toHaveAttribute('data-ex', 'contrast');
+  // Zähler (N1): der Kontrast-Schritt zählt nicht mit, „n von gesamt“ bleibt wie bei der regulären Abfrage derselben Karte.
+  const progress = page.getByTestId('trainer-progress');
+  const progressBefore = await progress.innerText();
+  expect(progressBefore).toMatch(/\d/);
   const before = await untilContrast(page);
   expect(before).toBeGreaterThanOrEqual(1);
   await expect(exEl).toHaveAttribute('data-ex', 'contrast');
+  await expect.poll(() => progress.innerText()).toBe(progressBefore);
   await expect(exEl).toContainText('Friday afternoons');
   await expect(page.getByTestId('word-ctx-mark')).toBeVisible();
   const graded = (await dump(page))['vocab/convince'] ?? {};

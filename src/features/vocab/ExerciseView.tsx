@@ -788,7 +788,8 @@ export function ExerciseView({
       explanation: whyUnderRemoved(model, isChoice && fb.result.verdict === 'wrong' && chosen !== null),
       depth,
       menu,
-      nextIn: t('trAgainIn', { when: when(fb.dueInMs) }),
+      // P52: der Kontrast-Schritt ändert die Planung nicht, also keine „Wieder in …“-Zeile.
+      nextIn: e.ex === 'contrast' ? null : t('trAgainIn', { when: when(fb.dueInMs) }),
       // Design-Lead: Wort, Vorlesen, Lautschrift und „Zum Wort“ stehen in der Ergebnis-Karte, genau einmal, direkt unter dem Urteil.
       head: <WordExtras card={card} open={moreOpen} lang={lang} extras={extras} part="head" />,
       // „War das auch richtig?“ als ruhige Zeile im Ergebnis-Block (Design-Lead), nicht mehr lose über der Karte.

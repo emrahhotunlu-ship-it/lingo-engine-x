@@ -90,7 +90,7 @@ export const wordCtx: PromptTemplate<WordCtxVars, WordCtxOut> = {
       '- de: a natural German translation of the sentence. sit: the situation in 1 to 3 English words.',
       '- contrast: only for a word with "confused with", otherwise null. One sentence (8 to 18 words) that uses the OTHER word correctly, does NOT contain the word itself, and in which using the word itself instead would be clearly wrong or change the meaning (not just less natural). If no such sentence exists, set contrast to null.',
       '- why: one short sentence each in German (de) and English (en) explaining why the other word fits THIS sentence and the word does not: name both words with their meaning and one typical partner each (e.g. current situation / actual cost).',
-      '- No brackets, no straight double quotes, no British spelling.',
+      '- No brackets in sentences, no straight double quotes, no British spelling.',
     ].join('\n');
   },
   schema: () => schema,

@@ -4,7 +4,7 @@ import { useSettings } from '../../app/settings';
 import { invalidIdsOf, useLive } from '../../data/live';
 import { dayKey } from '../../domain/date';
 import { mergeEntries, type DayEntry } from '../../domain/plan/buildPlan';
-import { applyUpdate, cardPatch } from '../../domain/srs/applyReview';
+import { applyUpdate, cardPatch, contrastMissOp } from '../../domain/srs/applyReview';
 import { buildTrainCards } from '../../domain/metrics';
 import { toTrainCard } from '../../domain/srs/cards';
 import { buildChunkCards, toChunkCard } from '../../domain/srs/chunkCards';
@@ -34,7 +34,7 @@ import { buildQueue, mixIntroducedToday, newQuotaLeft as newQuotaLeftFor } from 
 import { isLearningState } from '../../domain/srs/scheduler';
 import type { AnswerEvent, Exercise, ExerciseId, Grade, Lang, QueueItem, TrainCard } from '../../domain/srs/types';
 import { markExhausted, useTodayPlan } from '../today/store';
-import { nextT, recordAnswer, recordRoundEnd, saveCard, saveKnown, usePending } from './persist';
+import { nextT, recordAnswer, recordRoundEnd, saveCard, saveContrastMiss, saveKnown, usePending } from './persist';
 import { flushOnHide } from '../progress/persist';
 import { pickDailyRepairs, repairsDoneToday, repairsDutyToday } from '../../domain/repair/daily';
 import type { RepairItem } from '../../domain/repair/repair';
@@ -451,14 +451,16 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
 export function roundProgress(s: Pick<SessionState, 'status' | 'round' | 'queue' | 'pos' | 'target' | 'doneBefore' | 'answered' | 'repairs' | 'repairPos'>): { n: number; total: number; extra: number } | null {
   if (s.status !== 'running') return null;
   const base = s.round === 'pflicht' ? s.doneBefore : 0;
-  const left = Math.max(0, s.queue.length - s.pos) + Math.max(0, s.repairs.length - s.repairPos);
+  // Der Kontrast-Schritt (P52) ist ein Zusatz zur schon beantworteten Karte: er zählt weder vorwärts noch als „+1“.
+  const left = s.queue.slice(Math.max(0, s.pos)).filter((q) => q.reason !== 'contrast').length + Math.max(0, s.repairs.length - s.repairPos);
+  const onContrast = s.queue[s.pos]?.reason === 'contrast';
   const done = base + s.answered.length;
   const planned = base + s.target;
   const total = Math.max(planned, 1);
   if (planned <= 0 && done + left <= 0) return null;
   const extra = Math.max(0, done + left - planned);
   const distinct = base + new Set(s.answered).size;
-  return { n: Math.min(total, Math.max(1, distinct + 1)), total: Math.max(total, 1), extra };
+  return { n: Math.min(total, Math.max(1, distinct + (onContrast ? 0 : 1))), total: Math.max(total, 1), extra };
 }
 
 export const currentRepair = (s: Pick<SessionState, 'status' | 'repairs' | 'repairPos'>): RepairItem | null => (s.status === 'running' ? (s.repairs[s.repairPos] ?? null) : null);
@@ -641,16 +643,28 @@ export function commitAnswer(ans: Answer): FirstKind {
   // P52: getippte falsche Antwort = Wort einer anderen eigenen Karte → Verwechslung für den Wörter-Tutor merken.
   if (!ans.ok && e.input === 'typed' && ans.given.trim()) noteConfusion(card, ans.given, s.pool);
 
-  // P52 „Welches Wort passt?“: ein zusätzlicher Schritt. Richtig → die Planung (FSRS) bleibt, wie die reguläre Abfrage sie gesetzt hat; nur Protokoll.
-  // Das Kartenwort gewählt → ein Fehler wie bei jeder Auswahl-Übung (Verlauf `x: 'contrast'`, Gewicht „Auswahl“).
-  if (e.ex === 'contrast' && ans.ok) {
+  // P52 „Welches Wort passt?“: ein zusätzlicher Schritt, der NUR protokolliert. Die Planung (FSRS, S, D, due, lapses, stage) bleibt, wie die reguläre
+  // Abfrage sie gesetzt hat; die Karte wird nie als „Nochmal“ eingereiht. Kartenwort gewählt → zusätzlich ein reiner Verlaufseintrag
+  // `{x: 'contrast', g: 1}`, der für „schwach“ (Fehler der letzten 14 Tage) zählt.
+  if (e.ex === 'contrast') {
+    if (!ans.ok) a.grade = 1;
     recordAnswer(a, s.results.length === 0);
+    const missOp = ans.ok ? null : contrastMissOp(card.path, card.doc, a);
+    let cards = s.cards;
+    if (missOp) {
+      const missDoc = applyUpdate({ ...card.doc }, missOp.update);
+      const upd = (card.kind === 'chunk' ? toChunkCard(card.id, missDoc, a.t) : toTrainCard(card.id, missDoc, card.inDb, a.t)) ?? card;
+      cards = new Map(s.cards);
+      cards.set(card.key, upd);
+    }
+    if (!ans.ok) void saveContrastMiss(card.path, a);
     return applyAdvance(
       advanceState({
         ...s,
+        cards,
         recentEx: [...s.recentEx, e.ex].slice(-2),
         contrasted: true,
-        results: [...s.results, { key: card.key, word: card.word, grade: ans.grade, ok: ans.ok }],
+        results: [...s.results, { key: card.key, word: card.word, grade: a.grade, ok: ans.ok }],
       }),
     );
   }
@@ -669,9 +683,9 @@ export function commitAnswer(ans: Answer): FirstKind {
   const again = isLearningState(updated.fsrs) && updated.fsrs.due - a.t <= AGAIN_WINDOW_MS && (shown[card.key] ?? 0) < MAX_SHOWN;
   // anki-regeln §2: Aufdecken nach 5 anderen Karten (pos + 6), Tippen nach 3 (pos + 4).
   if (again) queue.splice(againPos(s.pos, queue.length, e.ex === 'flip', ans.grade >= 3), 0, { key: card.key, reason: 'again', phase: 'quiz' });
-  // P52: Kontrast ZUSÄTZLICH direkt nach der regulären Abfrage (die reguläre Abfrage benotet die Karte wie immer), höchstens 1 je Runde, nie bei
-  // neuen Karten, im Anki- oder Hör-Modus und nicht nach Kontrolle/Prüfabfrage; beide Karten müssen mindestens Stufe 2 haben.
-  const addContrast = !s.contrasted && e.ex !== 'contrast' && e.ex !== 'flip' && !e.check && item.reason !== 'new' && s.mode !== 'listen' && contrastReady(updated, s.pool);
+  // P52: Kontrast ZUSÄTZLICH direkt nach der regulären Abfrage (die reguläre Abfrage benotet die Karte wie immer), nur wenn sie richtig war,
+  // höchstens 1 je Runde, nie bei neuen Karten, im Anki- oder Hör-Modus und nicht nach Kontrolle/Prüfabfrage; beide Karten mindestens Stufe 2.
+  const addContrast = ans.ok && !s.contrasted && e.ex !== 'flip' && !e.check && item.reason !== 'new' && s.mode !== 'listen' && contrastReady(updated, s.pool);
   if (addContrast) queue.splice(s.pos + 1, 0, { key: card.key, reason: 'contrast', phase: 'quiz' });
   const control = e.check === 'control' ? 1 : 0;
   const answered = s.answered.includes(card.key) ? s.answered : [...s.answered, card.key];
@@ -686,7 +700,7 @@ export function commitAnswer(ans: Answer): FirstKind {
     ctlWeek: s.ctlWeek + control,
     recentEx: [...s.recentEx, e.ex].slice(-2),
     produced: s.produced + (e.ex === 'produce' ? 1 : 0),
-    contrasted: s.contrasted || addContrast || e.ex === 'contrast',
+    contrasted: s.contrasted || addContrast,
     results: [...s.results, { key: card.key, word: card.word, grade: ans.grade, ok: ans.ok }],
   });
   // B4: Aufdecken-Bewertungen 5 s zurückhalten (Karte, Protokoll, Zähler), solange die Runde

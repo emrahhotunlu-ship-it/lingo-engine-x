@@ -1,6 +1,6 @@
 import { getWriter } from '../../data';
 import { knownOp } from '../../domain/srs/vocabList';
-import { reviewWrite, type SkipReason } from '../../domain/srs/applyReview';
+import { contrastMissOp, reviewWrite, type SkipReason } from '../../domain/srs/applyReview';
 import type { AnswerEvent } from '../../domain/srs/types';
 import { logError, logWarn } from '../../platform/diagnostics';
 import { flush, usePending } from '../progress/persist';
@@ -45,6 +45,19 @@ export async function saveCard(a: AnswerEvent, seedDefault: Doc | null): Promise
 export async function retryFailed(seedDefaults: ReadonlyMap<string, Doc>): Promise<void> {
   for (const a of usePending.getState().failedCards) await saveCard(a, a.kind === 'chunk' ? null : (seedDefaults.get(a.id) ?? null));
   await flush();
+}
+
+/** P52 Kontrast falsch: nur der Verlaufseintrag (`contrastMissOp`), ein `transform` auf dem frischen Stand; Planung bleibt. */
+export async function saveContrastMiss(path: string, a: AnswerEvent): Promise<boolean> {
+  const writer = getWriter();
+  if (!writer) return false;
+  try {
+    await writer.transform(path, (cur) => contrastMissOp(path, cur, a));
+    return true;
+  } catch (err) {
+    logError('trainer:contrast', err, path);
+    return false;
+  }
 }
 
 /** „Kenne ich“ nach bestandener Prüffrage: Stufe 3, 10 Tage, `hist m:'known'` (`knownOp`). Ein `transform` auf dem frischen Stand. */
