@@ -306,3 +306,9 @@ Tests: 1953 Unit; E2E der berührten Bildschirme grün (a11y: Kontrast der „Ne
 - Prüfungen: Runde 1 + 2, danach Emrahs Freigabe „ja korrigieren“ für die Restpunkte (Kontrast-Fehler nur Verlauf, kein FSRS; Kontrast nur nach richtiger Abfrage; Zähler ohne Kontrast; iPhone „Teilen › Kopieren“; „Bevor ich Feierabend mache …“). Schlussblick: learning-scientist JA, english-teacher JA, data-guard OK.
 - Hinweis (kein Befund): Kontrast mit ok:false erscheint in der Rundenübersicht unter „Zum Wiederholen“; eine spätere FSRS-Neuberechnung aus `hist` muss `x:'contrast'` auslassen.
 - typecheck 0, eslint src tests 0, Unit 274 Dateien / 5153 Tests grün. Als Nächstes: volle E2E, ux-reviewer, platform-guard, Test-Link 8.
+
+## 08.10.2026 – Test-Link 8: R5 „Dein Lehrer“ (P49–P53, Lernzeit)
+- UX Runde 2: JA. N1 behoben (Kontrastkopf: jedes Wort mit Lautsprecher und Lautschrift als nicht umbrechende Gruppe, „≠“ vorn in der zweiten Gruppe; Zeile „Nicht verwechseln“ im Kontrast-Schritt nur noch mit den Bedeutungen, `meaningOnly`), N2 behoben (EN-Hinweis „By Claude · may contain mistakes“).
+- Prüfung: typecheck und eslint sauber, Unit gezielt 83/83, E2E gezielt (wordTutor, retrySay, sentenceClinic, studyTime, tutorExplain, wortschatz, a11y) 92/93; voller E2E-Lauf nach dem UX-Merge auf Emrahs Wunsch („zum Abschluss“) nach ~300/808 abgebrochen, bis dahin nur der bekannte Wackler a11y „Umstellung“ (Kontrast mitten im Einblenden, Bildschirm seit langem unverändert). check:platform FREIGABE, 5,23 MiB.
+- Test-Link `AXHkh6…` Version 54 `1791498822-49bc` (Rückweg v53 `1791473854-a326`). Live unverändert v71 `1791474840-7485`. Stand `775c0c9`.
+- Offen („kann“): K2 gemischte Sprache beim Szenenstart, K4 Diagnose-Beispieltext; platform-guard-Hinweise (repair-check-Neuversuch 24 h zwischengespeichert, Hintergrundbudget zählt den Schema-Neuversuch einfach). Vor „Ja live nehmen“ einmal den vollen E2E-Lauf nachholen.

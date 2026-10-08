@@ -67,7 +67,7 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
   - [x] R1 C1-Aufgaben (kwt, err) · [x] R2 Dein Tag (ocl, mcc, Plan 3.0, Tempo, Erklär 2.0, Abschlusskarte, Effekte Stufe 1) · [x] V1 Varianz beim Befestigen · [x] Mehr-Datei-Build — alles auf Test-Link `AXHkh6…` Version `1791393276-ae06` (Test 6), **noch nicht live**
   - [ ] Design-Angleichung an die Vorschau inkl. Effekt-Engine (Branch `claude/umbau-design`) → Test-Link 7, dann live nach „Ja live nehmen“ (Emrah: Design zuerst live)
   - [ ] R3 Dein Weg: P31–P33 zusammengeführt (Schalter `program` aus), P34–P37 + Lehrer-Korrekturen auf `claude/umbau-r3-b` in Arbeit
-  - [ ] R4 Messen · [ ] R5 Dein Lehrer · [ ] R6 Premium · [ ] R7 Fülle (nur auf Zuruf)
+  - [ ] R4 Messen · [ ] R5 Dein Lehrer (Test-Link 8 `AXHkh6…` v54, noch nicht live) · [ ] R6 Premium · [ ] R7 Fülle (nur auf Zuruf)
 - [ ] Phase 2 – Lernen: Kurs, Grammatik, Diktat, Lückenjagd, Satzbau, Sprint
 - [ ] Phase 3 – Sprechen: Rollenspiel mit Analysepanel, Sprachausgabe, Chunks mitnehmen, Business-Suite
 - [ ] Phase 4 – Input und Output: Lesen, Hören, Schreiben, Entdecken
