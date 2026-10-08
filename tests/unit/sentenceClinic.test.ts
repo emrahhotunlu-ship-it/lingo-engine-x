@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { clinicErrors, clinicOffered, clinicOutItem, clinicProd, clinicRepairs, clinicVars, cleanSentence, isRevision, type ClinicRun } from '../../src/domain/tutor/clinic';
+import { clinicErrors, clinicOffered, clinicTone, clinicOutItem, clinicProd, clinicRepairs, clinicVars, cleanSentence, isRevision, type ClinicRun } from '../../src/domain/tutor/clinic';
 import { cleanCtx2, prefillFromCtx, readCtx2, sameCtx2, startCtx2 } from '../../src/domain/tutor/ctx2';
 import { patIdsOf, patListText, PAT_LIST_MAX } from '../../src/domain/tutor/patList';
 import { prodEntry } from '../../src/domain/c1/prod';
@@ -212,5 +212,19 @@ describe('Berufsprofil ctx2', () => {
     const line = tutorCtx({ ctx2: { v: 1, role: 'CTO', field: 'SaaS', who: ['CFO'], sit: ['objection'], terms: ['SLA'], t: 3 }, ctx: 'ignored' });
     expect(line).toContain('CTO in SaaS');
     expect(line.length).toBeLessThanOrEqual(300);
+  });
+});
+
+describe('Farbe des Urteils (R5 K5)', () => {
+  const e = (kind: string, sev = 'error') => ({ from: 'a', to: 'b', kind, sev, pat: null, why: 'x' }) as ClinicOut['edits'][number];
+  it('Gold nur bei Tipp- oder Zeichensetzungsfehlern, echter Grammatikfehler → Fehlerfarbe', () => {
+    expect(clinicTone({ verdict: 'correct', edits: [] })).toBe('ok');
+    expect(clinicTone({ verdict: 'wrong', edits: [e('spelling')] })).toBe('wrong');
+    expect(clinicTone({ verdict: 'minor', edits: [e('spelling')] })).toBe('near');
+    expect(clinicTone({ verdict: 'minor', edits: [e('punctuation'), e('spelling'), e('word', 'upgrade')] })).toBe('near');
+    expect(clinicTone({ verdict: 'minor', edits: [e('grammar')] })).toBe('wrong');
+    expect(clinicTone({ verdict: 'minor', edits: [e('spelling'), e('collocation')] })).toBe('wrong');
+    expect(clinicTone({ verdict: 'minor', edits: [e('register')] })).toBe('wrong');
+    expect(clinicTone(good as ClinicOut)).toBe('wrong');
   });
 });

@@ -2,6 +2,7 @@
 
 export const ttP25En = {
   ttMarkTask: 'Task from Claude · checked for format',
+  ttMarkSentence: 'Sentence by Claude · format checked, content may contain mistakes',
   ttMarkExplain: 'From Claude · may contain mistakes',
   ttMarkDiag: 'Analysis from Claude · may contain mistakes',
   ttMarkEdit: 'Edit from Claude · may contain mistakes',

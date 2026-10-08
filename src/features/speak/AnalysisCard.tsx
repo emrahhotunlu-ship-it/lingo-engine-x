@@ -71,10 +71,12 @@ type Props = {
   retry?: ReactNode;
   /** Verdeckt die Korrektur (Fehler, C1-Fassung, Begründung), solange „Sag’s nochmal“ offen ist. */
   hideFix?: boolean;
+  /** R5 (K1): Das Urteil steht schon als Punkt unter dem Satz (Handy, Karte inline) – dann kein zweites Abzeichen in der Karte. */
+  verdictShown?: boolean;
 };
 
-export function AnalysisCard({ idx, slot, sentence, area, source = null, title = null, onRetry, takeInput, onTaken, testId = 'analysis', retry = null, hideFix = false }: Props) {
-  const { t } = useT();
+export function AnalysisCard({ idx, slot, sentence, area, source = null, title = null, onRetry, takeInput, onTaken, testId = 'analysis', retry = null, hideFix = false, verdictShown = false }: Props) {
+  const { t, tn } = useT();
   const cat = useCatLabel();
   const hints = useMemo(() => usHints(sentence), [sentence]);
 
@@ -107,12 +109,17 @@ export function AnalysisCard({ idx, slot, sentence, area, source = null, title =
     );
   }
   const a = slot.data;
+  // Abzeichen mit Anzahl („1 Fehler“ / „2 Fehler“), sonst das Urteil; entfällt, wenn der Punkt unter dem Satz es schon sagt.
+  const verdictText = a.verdict === 'errors' && a.errors.length > 0 ? tn('anErrorsN', a.errors.length) : t(VERDICT_KEY[a.verdict]);
+  const badge = verdictShown ? null : (
+    <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${VERDICT_TONE[a.verdict]}`} data-testid="an-verdict">
+      {verdictText}
+    </span>
+  );
   if (hideFix) {
     return (
       <div data-testid={testId} data-idx={idx} data-state={a.verdict} data-hidden="" className="flex flex-col gap-3">
-        <p className="flex flex-wrap items-center gap-2">
-          <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${VERDICT_TONE[a.verdict]}`}>{t(VERDICT_KEY[a.verdict])}</span>
-        </p>
+        {badge && <p className="flex flex-wrap items-center gap-2">{badge}</p>}
         {retry}
       </div>
     );
@@ -121,13 +128,15 @@ export function AnalysisCard({ idx, slot, sentence, area, source = null, title =
     <div data-testid={testId} data-idx={idx} data-state={a.verdict} className="flex flex-col gap-4">
       {/* 1. Korrektheit */}
       <section className="flex flex-col gap-2">
-        <p className="flex flex-wrap items-center gap-2">
-          {a.english ? (
-            <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${VERDICT_TONE[a.verdict]}`}>{t(VERDICT_KEY[a.verdict])}</span>
-          ) : (
-            <span className="rounded-full bg-danger-soft px-2.5 py-1 text-xs font-semibold text-danger-text">{t('anNotEnglish')}</span>
-          )}
-        </p>
+        {(!a.english || badge) && (
+          <p className="flex flex-wrap items-center gap-2">
+            {a.english ? (
+              badge
+            ) : (
+              <span className="rounded-full bg-danger-soft px-2.5 py-1 text-xs font-semibold text-danger-text">{t('anNotEnglish')}</span>
+            )}
+          </p>
+        )}
         {a.errors.map((e, k) => (
           <div key={k} data-testid="an-error" className="flex flex-col gap-1 text-sm">
             <p className="flex flex-wrap items-baseline gap-x-2 gap-y-1">

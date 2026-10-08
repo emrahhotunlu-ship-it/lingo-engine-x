@@ -16,10 +16,26 @@ import { MoreInfo } from './MoreInfo';
 // zur Erklär-Karte: Die Bedeutung steht schon in „Merke“, die Beispiele hier sind die weiteren.
 
 /** `part`: 'all' (Kopf + „Zum Wort“), 'head' (nur Wort, Vorlesen, Lautschrift), 'more' (nur „Zum Wort“) – so steht der Kopf oben und „Zum Wort“ unten in der Ergebnis-Karte (Design-Lead). */
-export function WordExtras({ card, open: forced, lang, extras, part = 'all' }: { card: TrainCard; open: boolean; lang: 'de' | 'en'; extras: readonly StoredExample[]; part?: 'all' | 'head' | 'more' }) {
+/** `other` (R5, Kontrast-Schritt): das richtige andere Wort – der Kopf heißt dann „avoid ≠ convince“, beide mit Vorlesen und Lautschrift. */
+export function WordExtras({
+  card,
+  open: forced,
+  lang,
+  extras,
+  part = 'all',
+  other = null,
+}: {
+  card: TrainCard;
+  open: boolean;
+  lang: 'de' | 'en';
+  extras: readonly StoredExample[];
+  part?: 'all' | 'head' | 'more';
+  other?: string | null;
+}) {
   const { t } = useT();
   const [open, setOpen] = useState(false);
   const ipa = ipaOf(card.word);
+  const otherIpa = other ? ipaOf(other) : null;
   // Die Beispiele selbst stehen in der Erklär-Karte; hier nur ihre deutsche Übersetzung (auf Antippen, einmal von Claude).
   const more = cardExamples(card, null, extras);
   const fresh = useExamples((s) => s.byCard[card.id]?.col);
@@ -30,7 +46,24 @@ export function WordExtras({ card, open: forced, lang, extras, part = 'all' }: {
   return (
     <div className="flex flex-col gap-2" data-testid="word-extras" data-open={shown ? '' : undefined}>
       {part !== 'more' && (
-      <div className="flex flex-wrap items-center gap-2" data-testid="word-head">
+      <div className="flex flex-wrap items-center gap-2" data-testid="word-head" data-contrast={other ? '' : undefined}>
+        {other && (
+          <>
+            <span className="lx-t-answer" lang="en" data-testid="contrast-word">
+              {other}
+            </span>
+            <SpeakButton text={other} testId="contrast-listen" />
+            {otherIpa && (
+              <span className="lx-t-meta text-muted" lang="en" data-testid="contrast-ipa">
+                {otherIpa}
+              </span>
+            )}
+            <span className="lx-t-answer px-1 text-subtle" data-testid="contrast-ne">
+              <span aria-hidden="true">≠</span>
+              <span className="sr-only">{t('wxNotSame')}</span>
+            </span>
+          </>
+        )}
         <span className="lx-t-answer" lang="en" data-testid="word-text">
           {card.word}
         </span>

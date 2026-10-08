@@ -2,6 +2,7 @@
 
 export const ttP25De = {
   ttMarkTask: 'Aufgabe von Claude · formal geprüft',
+  ttMarkSentence: 'Satz von Claude · Form geprüft, Inhalt kann Fehler haben',
   ttMarkExplain: 'von Claude · kann Fehler enthalten',
   ttMarkDiag: 'Auswertung von Claude · kann Fehler enthalten',
   ttMarkEdit: 'Überarbeitung von Claude · kann Fehler enthalten',

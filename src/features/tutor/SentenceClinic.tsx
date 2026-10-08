@@ -4,7 +4,7 @@ import { useAiAvailable } from '../../ai/scope';
 import { takeTutorCall } from '../../ai/tutorBudget';
 import { useAsk } from '../../ai/useAsk';
 import { useLive } from '../../data/live';
-import { clinicId, clinicVars, cleanSentence, isRevision, type ClinicRun, type RecentClinic } from '../../domain/tutor/clinic';
+import { clinicId, clinicTone, clinicVars, cleanSentence, isRevision, type ClinicRun, type RecentClinic } from '../../domain/tutor/clinic';
 import { tutorCtx } from '../../domain/tutor/ctx';
 import { readCtx2, SIT_CHIPS } from '../../domain/tutor/ctx2';
 import { normWs, ownWords } from '../../domain/tutor/edits';
@@ -29,7 +29,7 @@ import { useClinicSheet } from './clinicStore';
 const TPL = `${sentenceClinic.id}@${sentenceClinic.version}`;
 
 const VERDICT_KEY: Record<ClinicOut['verdict'], MessageKey> = { correct: 'ttClVerdictCorrect', minor: 'ttClVerdictMinor', wrong: 'ttClVerdictWrong' };
-const VERDICT_TONE: Record<ClinicOut['verdict'], string> = { correct: 'bg-ok-soft text-ok-text', minor: 'bg-near-soft text-near-text', wrong: 'bg-wrong-soft text-wrong-text' };
+const TONE_CLASS: Record<ReturnType<typeof clinicTone>, string> = { ok: 'bg-ok-soft text-ok-text', near: 'bg-near-soft text-near-text', wrong: 'bg-wrong-soft text-wrong-text' };
 const TONE_KEY: Record<ClinicOut['register'], MessageKey> = { formal: 'ttClToneFormal', neutral: 'ttClToneNeutral', informal: 'ttClToneInformal' };
 
 type Shown = { run: ClinicRun; save: ClinicSaveResult | null; id: string };
@@ -62,7 +62,7 @@ function Result({ shown, onAgain, onDone }: { shown: Shown; onAgain: () => void;
     <div className="flex flex-col gap-4" data-testid="cl-result" data-verdict={o.verdict}>
       <div className="flex flex-col gap-1.5">
         <p className="lx-t-label m-0 text-subtle">{t('ttClVerdictLabel')}</p>
-        <p className={`m-0 w-fit rounded-full px-3 py-1 text-sm font-semibold ${VERDICT_TONE[o.verdict]}`} data-testid="cl-verdict">
+        <p className={`m-0 w-fit rounded-full px-3 py-1 text-sm font-semibold ${TONE_CLASS[clinicTone(o)]}`} data-tone={clinicTone(o)} data-testid="cl-verdict">
           {t(VERDICT_KEY[o.verdict])}
         </p>
       </div>

@@ -6,10 +6,12 @@ import { ReportSheet, type ReportInfo } from './ReportSheet';
 // Kennzeichnung an jedem Inhalt von Claude (Lernplattform 3.0 P25, T-R5): eine Zeile mit „von Claude · kann Fehler enthalten“ und dem Textknopf
 // „Melden“ (Tippfläche ≥ 44 px). Feste Inhalte der App tragen keine Marke. Beim ersten Zeigen zählt der Qualitätszähler `shown`.
 
-export type AiMarkVariant = 'task' | 'explain' | 'diag' | 'edit';
+/** `sentence` (R5): Satz von Claude im Wörter-Tutor (wx/cfx) – sagt, dass nur die Form geprüft ist und der Inhalt Fehler haben kann. */
+export type AiMarkVariant = 'task' | 'sentence' | 'explain' | 'diag' | 'edit';
 
 const TEXT: Record<AiMarkVariant, MessageKey> = {
   task: 'ttMarkTask',
+  sentence: 'ttMarkSentence',
   explain: 'ttMarkExplain',
   diag: 'ttMarkDiag',
   edit: 'ttMarkEdit',

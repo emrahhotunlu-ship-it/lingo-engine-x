@@ -19,3 +19,11 @@ export function keyToIndex(key: string, n: number): number | null {
   }
   return i >= 0 && i < limit ? i : null;
 }
+
+/** Tastenbereich für den Hinweis („A–B“ und „1–2“ bei zwei Optionen), aus der Zahl der per Taste erreichbaren Optionen. `null` ohne Optionen. */
+export function choiceKeyRange(n: number): { letters: string; nums: string } | null {
+  const limit = Math.min(Math.max(0, Math.floor(n)), MAX_KEYED_OPTIONS);
+  if (limit < 1) return null;
+  if (limit === 1) return { letters: 'A', nums: '1' };
+  return { letters: `A–${CHOICE_LETTERS[limit - 1]}`, nums: `1–${limit}` };
+}

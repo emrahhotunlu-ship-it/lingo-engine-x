@@ -71,6 +71,7 @@ test('schwaches Wort: der Claude-Satz kommt in der nächsten Runde mit Kennzeich
   await expect(exEl).toHaveAttribute('data-card', 'convince');
   await expect(exEl).toContainText('Lena');
   await expect(page.getByTestId('word-ctx-mark')).toContainText('von Claude');
+  await expect(page.getByTestId('word-ctx-mark')).toContainText('Satz von Claude · Form geprüft, Inhalt kann Fehler haben');
   // Die vier Pflichtfragen bleiben an ihrer Stelle (Aufgabe, Wozu, danach Ergebnis und Warum).
   await expect(page.getByTestId('task')).toBeVisible();
   expect(await calls(page)).toEqual([]);

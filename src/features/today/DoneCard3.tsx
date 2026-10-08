@@ -122,7 +122,7 @@ export function splitHero(text: string): [string, string] | null {
   return m && m[1] && m[2] ? [m[1], m[2]] : null;
 }
 
-export function DoneCard3({ view, tomorrow, today }: { view: TodayView; tomorrow: string; today: string }) {
+export function DoneCard3({ view, tomorrow, tomorrowTopic = '', today }: { view: TodayView; tomorrow: string; tomorrowTopic?: string; today: string }) {
   const { t, lang } = useT();
   const facts = useDoneFacts(view, true);
   const grammar = useLive((s) => s.collections.grammar);
@@ -134,7 +134,9 @@ export function DoneCard3({ view, tomorrow, today }: { view: TodayView; tomorrow
   const gap = useMemo(() => comebackGap(profile ?? null, today), [profile, today]);
   const back = gap !== null && gap >= BACK_GAP;
   // P53: die Lernzeit als Vorschlag für morgen (nur hier, nie während der Pflicht); ohne Lernzeit keine Zeile.
-  const study = studyTimeLine(readIi(profile), lang, t);
+  // R5 (S7): Mit Lernzeit EINE Zeile „Morgen um 7:30 Uhr nach dem ersten Kaffee: {Thema}“ statt zwei „Morgen“-Zeilen; ohne Lernzeit bleibt „Morgen: …“.
+  const study = studyTimeLine(readIi(profile), lang, t, tomorrow ? tomorrowTopic : null);
+  const merged = !!study && !!tomorrow && !!tomorrowTopic.trim();
   // Zeile 1: Wahrheitszeile, nur echte Zustandswechsel.
   const truth = [
     gains.names.length > 0 ? t('hxDoneNewSafe', { names: gains.names.join(' + ') }) : null,
@@ -211,13 +213,13 @@ export function DoneCard3({ view, tomorrow, today }: { view: TodayView; tomorrow
           {goalText}
         </p>
       )}
-      {tomorrow && (
+      {tomorrow && !merged && (
         <p className="text-sm text-muted" data-testid="today-tomorrow">
           {tomorrow}
         </p>
       )}
       {study && (
-        <p className="lx-tnum text-sm text-muted" data-testid="today-studytime">
+        <p className="lx-tnum text-sm text-muted" data-testid="today-studytime" data-merged={merged ? '' : undefined}>
           {study}
         </p>
       )}

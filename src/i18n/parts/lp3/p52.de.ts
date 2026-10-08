@@ -2,4 +2,5 @@
 
 export const ttP52De = {
   ttWcPurposeContrast: 'Zwei Wörter, die du verwechselt hast, sicher auseinanderhalten.',
+  ttWcPurposeContrastPair: 'Extra-Frage: {a} und {b} verwechselt man leicht. Zählt nicht zur Runde.',
 } as const;

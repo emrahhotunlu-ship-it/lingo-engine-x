@@ -357,13 +357,18 @@ export function TodayScreen() {
     return rows.filter((r) => r.state !== 'done').reduce((s, r) => s + r.min, 0) || dutyMinutes(plan);
   }, [plan, unit, rows, view.duties.items]);
 
-  // „Morgen: …“ aus dem Wochenplan von morgen (rein, ohne `env`).
-  const tomorrow = useMemo(() => {
+  // „Morgen: …“ aus dem Wochenplan von morgen (rein, ohne `env`). `topic` allein (R5): für die eine Zeile mit der Lernzeit.
+  const tomorrow = useMemo((): { line: string; topic: string } => {
     const next = addDays(today, 1);
     const p = unitPlanFor(next, null, { goalMin: unit?.u.goalMin });
     const task = p.blocks.find((b) => b.block === 3);
-    if (!task || p.shape === 'sun') return p.shape === 'sun' ? `${t('nbHeuteBlock_check')} · ${t('nbHeuteWhy_check')}` : '';
-    return t('nbHeuteTomorrow', { what: blockWhy(task, t) });
+    if (p.shape === 'sun') {
+      const sun = `${t('nbHeuteBlock_check')} · ${t('nbHeuteWhy_check')}`;
+      return { line: sun, topic: sun };
+    }
+    if (!task) return { line: '', topic: '' };
+    const what = blockWhy(task, t);
+    return { line: t('nbHeuteTomorrow', { what }), topic: what };
   }, [today, unit, t]);
 
   const ok = ready && dayLoaded;
@@ -445,7 +450,7 @@ export function TodayScreen() {
 
       {ok && done && (
         <motion.div variants={item} className="flex flex-col gap-5">
-          <DoneCard3 view={view} tomorrow={tomorrow} today={today} />
+          <DoneCard3 view={view} tomorrow={tomorrow.line} tomorrowTopic={tomorrow.topic} today={today} />
           <Slot name="today.done" />
           <ExtraRow today={today} />
           <Slot name="today.extra" />

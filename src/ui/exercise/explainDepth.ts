@@ -42,6 +42,15 @@ export function visibleLines(m: ExplanationModel, d: ExplainDepth, opts: { learn
   return { open, folded, examplesOpen: d === 'full' && m.examples.length > 0 ? 1 : 0, oneLine: d === 'min' };
 }
 
+/** Holt Zeilen der Arten `unfold` aus „Mehr“ nach oben (Reihenfolge wie im Modell); dann nie die Einzeilen-Form. Rein. */
+export function liftLines(v: VisibleLines, m: ExplanationModel, unfold?: ReadonlyArray<ExplainLine['k']>): VisibleLines {
+  if (!unfold?.length) return v;
+  const lifted = v.folded.filter((l) => unfold.includes(l.k));
+  if (!lifted.length) return v;
+  const open = m.lines.filter((l) => v.open.includes(l) || lifted.includes(l));
+  return { ...v, open, folded: v.folded.filter((l) => !lifted.includes(l)), oneLine: false };
+}
+
 const words = (s: string | null | undefined): number => (s ? s.split(/\s+/).filter(Boolean).length : 0);
 
 function lineWords(l: ExplainLine): number {
