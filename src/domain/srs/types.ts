@@ -154,7 +154,8 @@ export type SituationTask = {
   upgraded: string;
 };
 
-export type QueueItem = { key: string; reason: 'due' | 'new' | 'ahead' | 'again'; phase: 'intro' | 'quiz' };
+/** `contrast` (P52): „Welches Wort passt?“ zusätzlich direkt nach der regulären Abfrage derselben Karte (höchstens 1 je Runde). */
+export type QueueItem = { key: string; reason: 'due' | 'new' | 'ahead' | 'again' | 'contrast'; phase: 'intro' | 'quiz' };
 
 export type Verdict = 'correct' | 'near' | 'wrong';
 export type CheckResult = {

@@ -1,11 +1,12 @@
 import { describe, expect, it, vi } from 'vitest';
 import { toTrainCard } from '../../src/domain/srs/cards';
 import { buildExercise, contrastOf } from '../../src/domain/srs/exercise';
-import { rotatedContext, WX_FROM_STAGE } from '../../src/domain/srs/rotate';
+import { rotatedContext, WX_FROM_STAGE, WX_ROTATE_MAX, wxContexts } from '../../src/domain/srs/rotate';
+import { explainWord } from '../../src/domain/srs/explainWord';
 import type { TrainCard } from '../../src/domain/srs/types';
 import { sentKey } from '../../src/domain/srs/variety';
-import { acceptWordCtx, cfxPatch, isWeak, knownKeys, markBad, needsWordCtx, readWx, WX_MAX, wxPatch, type WordCtxWord } from '../../src/domain/tutor/acceptWordCtx';
-import { contrastReady } from '../../src/features/vocab/wordCtx';
+import { acceptWordCtx, CFX_MAX, cfxPatch, isWeak, knownKeys, markBad, needsWordCtx, readWx, wordRepeats, WX_MAX, wxPatch, type WordCtxWord } from '../../src/domain/tutor/acceptWordCtx';
+import { confusionOf, contrastReady, noteConfusion, resetWordCtx } from '../../src/features/vocab/wordCtx';
 import { PROMPT_MAX_BYTES, promptBytes } from '../../src/prompts/common';
 import { WORD_CTX_EXAMPLE, wordCtx, type WordCtxVarsWord } from '../../src/prompts/wordCtx';
 import { TEMPLATES } from '../../src/prompts/registry';
@@ -210,6 +211,16 @@ describe('acceptWordCtx: formale Prüfung', () => {
     expect(r.cfx).toBeNull();
   });
 
+  it('lückentauglich: das Wort (auch gebeugt) zweimal im Satz → abgelehnt (repeat)', () => {
+    const twice = { ...S1, en: 'Our leverage is small, so Tom wants to leverage the new contract next week.' };
+    const r = acceptWordCtx({ id: 'leverage', sents: [twice, S2] }, WORD, new Set(), NOW, PV);
+    expect(r.rejected).toEqual(['repeat']);
+    expect(r.wx.map((x) => x.en)).toEqual([S2.en]);
+    expect(wordRepeats('He convinced me, and later he convinces the whole board as well.', 'convince')).toBe(true);
+    expect(wordRepeats('He convinced the whole board to approve a smaller pilot project.', 'convince')).toBe(false);
+    expect(wordRepeats(S1.en, 'leverage')).toBe(false);
+  });
+
   it('weitere Fehler: falsche id, Länge, deutsche Übersetzung auf Englisch', () => {
     expect(acceptWordCtx({ id: 'other', sents: [S1] }, WORD, new Set(), NOW, PV).rejected).toEqual(['id']);
     expect(acceptWordCtx({ sents: [{ ...S1, en: 'Use leverage now.' }] }, WORD, new Set(), NOW, PV).rejected).toEqual(['length']);
@@ -262,6 +273,11 @@ describe('schwache Wörter und Bedarf', () => {
     expect(isWeak(doc(), NOW)).toBe(false);
   });
 
+  it('ab Stufe 4 nie schwach (alte Rückfälle zählen dann nicht mehr)', () => {
+    expect(isWeak(doc({ lapses: 3, stage: 3 }), NOW)).toBe(true);
+    expect(isWeak(doc({ lapses: 3, stage: 4 }), NOW)).toBe(false);
+  });
+
   it('Bedarf: weniger als 2 frische, nicht gemeldete Sätze', () => {
     expect(needsWordCtx(doc(), NOW)).toBe(true);
     expect(
@@ -301,17 +317,39 @@ describe('schwache Wörter und Bedarf', () => {
 });
 
 describe('ergänzend speichern', () => {
-  it('wxPatch hängt an, höchstens 4, Rohfelder bleiben; nichts Neues → null', () => {
+  it('wxPatch hängt an, höchstens 4; fremde Roh-Einträge bleiben immer stehen, ohne Platz wird nichts ergänzt; nichts Neues → null', () => {
     const cur = [{ en: 'a', zz: 1 }, { en: 'b' }, { en: 'c' }];
     const next = wxPatch(cur, [
       { ...S1, t: NOW, pv: PV },
       { ...S2, t: NOW, pv: PV },
     ]);
     expect(next).toHaveLength(WX_MAX);
-    expect(next?.[0]).toEqual({ en: 'b' });
+    expect(next?.slice(0, 3)).toEqual(cur);
+    expect(next?.[3]).toMatchObject({ en: S1.en });
     expect(cur).toHaveLength(3);
+    expect(wxPatch([...cur, { en: 'd' }], [{ ...S1, t: NOW, pv: PV }])).toBeNull();
     expect(wxPatch(cur, [])).toBeNull();
     expect(cfxPatch(undefined, null)).toBeNull();
+  });
+
+  it('volle Liste: zuerst weichen die ältesten ungemeldeten Claude-Einträge, gemeldete (bad: 1) nie', () => {
+    const old1 = { en: 'old one', de: 'x', sit: 'x', t: NOW - 3 * DAY, pv: PV };
+    const old2 = { en: 'old two', de: 'x', sit: 'x', t: NOW - 2 * DAY, pv: PV };
+    const bad = { en: 'reported', de: 'x', sit: 'x', t: NOW - 9 * DAY, pv: PV, bad: 1 };
+    const raw = { en: 'raw entry' };
+    const next = wxPatch([old2, bad, old1, raw], [
+      { ...S1, t: NOW, pv: PV },
+      { ...S2, t: NOW, pv: PV },
+    ]);
+    expect(next).toEqual([bad, raw, { ...S1, t: NOW, pv: PV }, { ...S2, t: NOW, pv: PV }]);
+    // Nur ein Platz frei zu machen: der älteste ungemeldete (old1) weicht, old2 bleibt.
+    expect(wxPatch([old2, bad, old1, raw], [{ ...S1, t: NOW, pv: PV }])).toEqual([old2, bad, raw, { ...S1, t: NOW, pv: PV }]);
+    // Nur gemeldete und fremde Einträge: kein Platz → nichts ergänzt.
+    expect(wxPatch([bad, raw, { ...bad, en: 'r2' }, { en: 'raw2' }], [{ ...S1, t: NOW, pv: PV }])).toBeNull();
+    const c = { w: 'influence', en: CONTRAST.en, why: CONTRAST.why, t: NOW, pv: PV };
+    expect(cfxPatch([{ ...c, en: 'older', t: 1 }, { ...c, en: 'newer', t: 2 }], c)).toEqual([{ ...c, en: 'newer', t: 2 }, c]);
+    expect(cfxPatch([{ ...c, bad: 1 }, { en: 'raw' }], c)).toBeNull();
+    expect(CFX_MAX).toBe(2);
   });
 
   it('markBad markiert genau einen Eintrag, ein zweites Mal → null', () => {
@@ -367,6 +405,11 @@ describe('Prompt word-ctx@1', () => {
     expect(r.rejected).toEqual([]);
     expect(r.wx).toHaveLength(2);
     expect(r.cfx?.w).toBe('actual');
+    // Zweites Beispiel ohne Verwechslung: contrast null.
+    const second = acceptWordCtx(parsed.items[1], { ...word, id: 'v_reliable', en: 'reliable', de: 'zuverlässig', other: null }, new Set(), NOW, PV);
+    expect(second.rejected).toEqual([]);
+    expect(second.wx).toHaveLength(2);
+    expect(second.cfx).toBeNull();
   });
 
   it('die Testantwort des Entwicklungs-Adapters besteht die Prüfung (Marker zzuk → britischer Satz fällt weg)', () => {
@@ -399,6 +442,19 @@ describe('Satzwechsel ab Stufe 2 und Kennzeichnung', () => {
     const e = buildExercise(c, 'cloze_hint', 'de', [c], 'seed');
     expect(e.sentence?.sentence).toBe(S1.en);
     expect(e.ai).toEqual({ tpl: PV, kind: 'wx', en: S1.en });
+  });
+
+  it('Stufe 2: höchstens 3 Kontexte (Ursprungssatz und die 2 neuesten ungemeldeten wx-Sätze)', () => {
+    expect(WX_ROTATE_MAX).toBe(2);
+    const many = [
+      { en: 'Last year the bank gave us more leverage in the talks with the new owners.', de: 'x', sit: 'a', t: NOW - 5 * DAY, pv: PV },
+      { ...S1, t: NOW - 2 * DAY, pv: PV },
+      { ...S2, t: NOW - DAY, pv: PV },
+      { en: 'Without any leverage, the small shop had to accept the higher rent again.', de: 'x', sit: 'b', t: NOW, pv: PV, bad: 1 },
+    ];
+    const ctx = wxContexts(card({ wx: many }));
+    expect(ctx).toHaveLength(3);
+    expect(ctx.map((c) => c.sentence)).toEqual(['We use leverage in every price talk.', S2.en, S1.en]);
   });
 
   it('gemeldete wx-Sätze kommen nicht mehr; Stufe 1 bleibt beim Ursprungssatz', () => {
@@ -434,7 +490,42 @@ describe('Kontrast-Übung', () => {
     expect(e.contrastWhy).toEqual(CONTRAST.why);
   });
 
+  it('Erklärung: Kopfzeile nennt das richtige Wort, die Kontrastzeile steht auch bei richtiger Antwort (a = richtiges Wort, b = Kartenwort)', () => {
+    const a = card({ cfx: CFX });
+    const e = buildExercise(a, 'contrast', 'de', [a, other(2)], 'seed');
+    const ok = e.options.find((o) => o.correct);
+    expect(ok?.fromWord).toBe('influence');
+    const m = explainWord({
+      card: a,
+      ex: 'contrast',
+      verdict: 'ok',
+      given: 'influence',
+      check: { verdict: 'correct' },
+      lang: 'de',
+      contrastWhy: CONTRAST.why.de,
+      contrastOther: { word: 'influence', meaning: ok?.fromMeaning ?? null },
+    });
+    expect(m.lines[0]).toMatchObject({ k: 'pattern', name: 'influence' });
+    expect(m.lines.find((l) => l.k === 'contrast')).toMatchObject({ k: 'contrast', a: 'influence', b: 'leverage', diff: 'Einfluss ≠ Hebelwirkung' });
+    expect(m.lines.find((l) => l.k === 'why')).toMatchObject({ text: CONTRAST.why.de });
+  });
+
   it('ohne brauchbaren Kontrast-Satz: „Wort zuordnen“', () => {
     expect(buildExercise(card(), 'contrast', 'de', [], 'seed').ex).toBe('match');
+  });
+});
+
+describe('Verwechslung merken (beugungstolerant)', () => {
+  it('gebeugte Form des anderen Worts zählt; gebeugte Form des Kartenworts und ganze Sätze nicht', () => {
+    resetWordCtx();
+    const conv = toTrainCard('convince', { ...doc(), id: 'convince', word: 'to convince', de: 'überzeugen', ex: 'He [convinced] me.' }, true, NOW) as TrainCard;
+    const avoid = toTrainCard('avoid', { ...doc(), id: 'avoid', word: 'to avoid', de: 'vermeiden', ex: 'We [avoid] risks.' }, true, NOW) as TrainCard;
+    noteConfusion(conv, 'convinces', [conv, avoid]);
+    expect(confusionOf(conv.key)).toBeUndefined();
+    noteConfusion(conv, 'we should avoid long meetings today', [conv, avoid]);
+    expect(confusionOf(conv.key)).toBeUndefined();
+    noteConfusion(conv, 'avoided', [conv, avoid]);
+    expect(confusionOf(conv.key)).toBe(avoid.key);
+    resetWordCtx();
   });
 });

@@ -93,6 +93,11 @@ const RETRY_EX: ReadonlySet<ExerciseId> = new Set(['cloze_hint', 'cloze', 'type'
 const SENTENCE_EX: ReadonlySet<ExerciseId> = new Set(['complete', 'produce']);
 // Feste leere Referenz statt `?? []` im Selektor (sonst rendert die Karte endlos neu, React-Fehler #185).
 const NO_EXAMPLES: readonly { en: string; t: number }[] = [];
+/** „Welches Wort passt?“ (P52): das richtige (andere) Wort mit Kurzbedeutung aus der richtigen Option. */
+const contrastOtherOf = (e: Exercise): { word: string; meaning: string | null } | null => {
+  const ok = e.options.find((o) => o.correct);
+  return ok ? { word: ok.fromWord ?? ok.label, meaning: ok.fromMeaning ?? null } : null;
+};
 const escapeRe = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const CHOICE_LANGS = { de: 'de', en: 'en' } as const;
 
@@ -450,6 +455,7 @@ export function ExerciseView({
       ...(other ? { otherMeaning: lang === 'de' ? (other.de ?? other.def) : (other.def ?? other.de) } : {}),
       ...(isAlt ? { alt: true } : {}),
       ...(e.ex === 'contrast' && e.contrastWhy ? { contrastWhy: e.contrastWhy[lang] } : {}),
+      ...(e.ex === 'contrast' ? { contrastOther: contrastOtherOf(e) } : {}),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps -- nur bei einem neuen Ergebnis
   }, [fb, exampleItems]);

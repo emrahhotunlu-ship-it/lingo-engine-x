@@ -99,20 +99,73 @@ test('kein Kontrast, solange eine der beiden Karten unter Stufe 2 ist', async ({
   await expect(page.getByTestId('exercise')).not.toContainText('Friday afternoons');
 });
 
-test('beide Karten ab Stufe 2: „Welches Wort passt?“ mit Kontrast-Satz, Kennzeichnung und Begründung von Claude', async ({ page }) => {
+/** Bis zur Übung `contrast` antworten (reguläre Abfrage zuerst); gibt die Zahl der regulären Antworten davor zurück. */
+async function untilContrast(page: Page): Promise<number> {
+  const exEl = page.getByTestId('exercise');
+  let n = 0;
+  for (let i = 0; i < 4; i++) {
+    await expect(page.locator('[data-step]')).toHaveCount(1);
+    if ((await exEl.getAttribute('data-ex')) === 'contrast') return n;
+    await answerCurrent(page);
+    n++;
+  }
+  return n;
+}
+
+async function pickContrast(page: Page, word: string): Promise<void> {
+  const labels = (await page.getByTestId('choice').locator('[lang]').allInnerTexts()).map((l) => l.trim());
+  expect([...labels].sort()).toEqual(['avoid', 'convince']);
+  await page.getByTestId('choice').nth(labels.indexOf(word)).click();
+  await page.getByTestId('check').click();
+  await expect(page.getByTestId('verdict')).toBeVisible();
+}
+
+test('beide Karten ab Stufe 2: erst die reguläre Abfrage, DANACH zusätzlich „Welches Wort passt?“; richtig gewählt → Planung unverändert', async ({ page }) => {
   const conv = withCfx();
   await boot(page, { migrated: true, fake: { patch: patch(conv, 2) } });
   await screen(page, 'today');
   await page.getByTestId('start').click();
   await screen(page, 'trainer');
   const exEl = page.getByTestId('exercise');
+  // Die fällige Abfrage kommt zuerst und benotet die Karte wie immer.
+  await expect(exEl).toHaveAttribute('data-card', 'convince');
+  await expect(exEl).not.toHaveAttribute('data-ex', 'contrast');
+  const before = await untilContrast(page);
+  expect(before).toBeGreaterThanOrEqual(1);
   await expect(exEl).toHaveAttribute('data-ex', 'contrast');
   await expect(exEl).toContainText('Friday afternoons');
   await expect(page.getByTestId('word-ctx-mark')).toBeVisible();
-  const labels = (await page.getByTestId('choice').locator('[lang]').allInnerTexts()).map((l) => l.trim());
-  expect([...labels].sort()).toEqual(['avoid', 'convince']);
-  await page.getByTestId('choice').nth(labels.indexOf('avoid')).click();
-  await page.getByTestId('check').click();
-  await expect(page.getByTestId('verdict')).toBeVisible();
+  const graded = (await dump(page))['vocab/convince'] ?? {};
+  expect((graded.hist as unknown[]).length).toBe(before);
+  await pickContrast(page, 'avoid');
   await expect(exEl).toContainText(WHY.de);
+  await page.getByTestId('next').click();
+  await page.waitForTimeout(300);
+  const after = (await dump(page))['vocab/convince'] ?? {};
+  expect(after.due).toBe(graded.due);
+  expect(after.fsrs).toEqual(graded.fsrs);
+  expect((after.hist as unknown[]).length).toBe(before);
+});
+
+test('Kontrast: Kartenwort gewählt → Fehler im Verlauf (x: contrast), höchstens 1 Kontrast je Runde', async ({ page }) => {
+  const conv = withCfx();
+  await boot(page, { migrated: true, fake: { patch: patch(conv, 2) } });
+  await screen(page, 'today');
+  await page.getByTestId('start').click();
+  await screen(page, 'trainer');
+  await untilContrast(page);
+  await expect(page.getByTestId('exercise')).toHaveAttribute('data-ex', 'contrast');
+  await pickContrast(page, 'convince');
+  await page.getByTestId('next').click();
+  // Weiter bis zum Rundenende: kein zweiter Kontrast.
+  for (let i = 0; i < 6; i++) {
+    if (await page.getByTestId('summary').isVisible()) break;
+    await expect(page.getByTestId('exercise')).not.toHaveAttribute('data-ex', 'contrast');
+    await answerCurrent(page);
+  }
+  await expect(page.getByTestId('summary')).toBeVisible();
+  // Der falsche Kontrast steht genau einmal als Fehler im Verlauf (Gewicht „Auswahl“).
+  const contrastHist = async () => (((await dump(page))['vocab/convince']?.hist as Array<{ x: string; g: number }> | undefined) ?? []).filter((h) => h.x === 'contrast');
+  await expect.poll(async () => (await contrastHist()).length).toBe(1);
+  expect((await contrastHist())[0]).toMatchObject({ x: 'contrast', g: 1 });
 });

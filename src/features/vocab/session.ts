@@ -199,6 +199,8 @@ function build(s: ExCtx, card: TrainCard, ex: ExerciseId, origin = false): Exerc
 function exerciseFor(s: ExCtx, item: QueueItem): Exercise | null {
   const card = s.cards.get(item.key);
   if (!card || item.phase !== 'quiz') return null;
+  // P52: „Welches Wort passt?“ steht als eigener Schritt direkt nach der regulären Abfrage (nur, solange der Kontrast noch möglich ist).
+  if (item.reason === 'contrast') return contrastReady(card, s.pool) ? build(s, card, 'contrast') : null;
   const hit = takePrebuilt(s, item);
   if (hit) return hit;
   // N35 Hör-Modus: die Sprachausgabe spricht, getippt wird in die Lücke (sonst die Leiter).
@@ -219,8 +221,6 @@ function exerciseFor(s: ExCtx, item: QueueItem): Exercise | null {
     const ex = chooseExercise({ ...card, stage: 3 }, s.lang, s.pool.length - 1, s.recentEx, s.env);
     if (ex) return { ...build(s, card, ex, true), check: 'probe' };
   }
-  // P52: höchstens einmal je Runde „Welches Wort passt?“ mit dem Kontrast-Satz von Claude – nur, wenn beide Karten schon sitzen (Stufe ≥ 2), nie bei neuen Karten.
-  if (!s.contrasted && picked === 'type' && item.reason !== 'new' && s.mode !== 'listen' && contrastReady(card, s.pool)) return build(s, card, 'contrast');
   const lighter = item.reason === 'due' ? lighterExercise(s, card) : null;
   if (lighter) return build(s, card, lighter);
   const ex = chooseExercise(card, s.lang, s.pool.length - 1, s.recentEx, s.env);
@@ -641,6 +641,20 @@ export function commitAnswer(ans: Answer): FirstKind {
   // P52: getippte falsche Antwort = Wort einer anderen eigenen Karte → Verwechslung für den Wörter-Tutor merken.
   if (!ans.ok && e.input === 'typed' && ans.given.trim()) noteConfusion(card, ans.given, s.pool);
 
+  // P52 „Welches Wort passt?“: ein zusätzlicher Schritt. Richtig → die Planung (FSRS) bleibt, wie die reguläre Abfrage sie gesetzt hat; nur Protokoll.
+  // Das Kartenwort gewählt → ein Fehler wie bei jeder Auswahl-Übung (Verlauf `x: 'contrast'`, Gewicht „Auswahl“).
+  if (e.ex === 'contrast' && ans.ok) {
+    recordAnswer(a, s.results.length === 0);
+    return applyAdvance(
+      advanceState({
+        ...s,
+        recentEx: [...s.recentEx, e.ex].slice(-2),
+        contrasted: true,
+        results: [...s.results, { key: card.key, word: card.word, grade: ans.grade, ok: ans.ok }],
+      }),
+    );
+  }
+
   // Lokal sofort weiterrechnen (optimistisch); gespeichert wird auf dem frischen Stand.
   const knownDoc = knownPass ? knownOp({ ...card.doc }, card.path, null, a.t, s.day) : null;
   const nextDoc = knownDoc && 'update' in knownDoc ? applyUpdate({ ...card.doc }, knownDoc.update) : applyUpdate({ ...card.doc }, cardPatch({ ...card.doc }, a));
@@ -655,6 +669,10 @@ export function commitAnswer(ans: Answer): FirstKind {
   const again = isLearningState(updated.fsrs) && updated.fsrs.due - a.t <= AGAIN_WINDOW_MS && (shown[card.key] ?? 0) < MAX_SHOWN;
   // anki-regeln §2: Aufdecken nach 5 anderen Karten (pos + 6), Tippen nach 3 (pos + 4).
   if (again) queue.splice(againPos(s.pos, queue.length, e.ex === 'flip', ans.grade >= 3), 0, { key: card.key, reason: 'again', phase: 'quiz' });
+  // P52: Kontrast ZUSÄTZLICH direkt nach der regulären Abfrage (die reguläre Abfrage benotet die Karte wie immer), höchstens 1 je Runde, nie bei
+  // neuen Karten, im Anki- oder Hör-Modus und nicht nach Kontrolle/Prüfabfrage; beide Karten müssen mindestens Stufe 2 haben.
+  const addContrast = !s.contrasted && e.ex !== 'contrast' && e.ex !== 'flip' && !e.check && item.reason !== 'new' && s.mode !== 'listen' && contrastReady(updated, s.pool);
+  if (addContrast) queue.splice(s.pos + 1, 0, { key: card.key, reason: 'contrast', phase: 'quiz' });
   const control = e.check === 'control' ? 1 : 0;
   const answered = s.answered.includes(card.key) ? s.answered : [...s.answered, card.key];
   const next = advanceState({
@@ -668,7 +686,7 @@ export function commitAnswer(ans: Answer): FirstKind {
     ctlWeek: s.ctlWeek + control,
     recentEx: [...s.recentEx, e.ex].slice(-2),
     produced: s.produced + (e.ex === 'produce' ? 1 : 0),
-    contrasted: s.contrasted || e.ex === 'contrast',
+    contrasted: s.contrasted || addContrast || e.ex === 'contrast',
     results: [...s.results, { key: card.key, word: card.word, grade: ans.grade, ok: ans.ok }],
   });
   // B4: Aufdecken-Bewertungen 5 s zurückhalten (Karte, Protokoll, Zähler), solange die Runde
@@ -907,7 +925,7 @@ export function restoreTrainer(snap: TrainerSnapshot): boolean {
     only: null,
     catchUp: false,
     produced: 0,
-    contrasted: false,
+    contrasted: queue.some((q) => q.reason === 'contrast'),
   };
   prebuilt = null;
   const next = { ...base, ...settle(base, pos) };

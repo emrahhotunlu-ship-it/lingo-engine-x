@@ -1,11 +1,11 @@
 import { useT, type MessageKey } from '../../i18n';
 import { Sheet } from '../../ui/Sheet';
 
-// „Erinnerung im iPhone einrichten“ (Lernplattform 3.0 P53): die genauen Tipps in der App „Erinnerungen“, damit die tägliche Erinnerung direkt diese
+// „Erinnerung im iPhone einrichten“ (Lernplattform 3.0 P53): zuerst den Link in Safari kopieren, dann die genauen Tipps in der App „Erinnerungen“, damit die tägliche Erinnerung direkt diese
 // App öffnet. Nur eine Anleitung: die App stellt selbst keine Erinnerung und legt keinen Claude-Auftrag an. Dazu der Hinweis, dass „Zum Home-Bildschirm“
 // ein Lesezeichen ist, keine Installation.
 
-const STEPS: readonly MessageKey[] = ['moRgStep1', 'moRgStep2', 'moRgStep3', 'moRgStep4', 'moRgStep5', 'moRgStep6', 'moRgStep7'];
+const STEPS: readonly MessageKey[] = ['moRgStep1', 'moRgStep2', 'moRgStep3', 'moRgStep4', 'moRgStep5', 'moRgStep6', 'moRgStep7', 'moRgStep8'];
 
 export function ReminderGuide({ open, onClose, time }: { open: boolean; onClose: () => void; time: string | null }) {
   const { t } = useT();
@@ -19,7 +19,7 @@ export function ReminderGuide({ open, onClose, time }: { open: boolean; onClose:
               <span className="lx-tnum flex size-7 flex-none items-center justify-center rounded-full bg-surface-strong text-sm font-semibold text-fg" aria-hidden="true">
                 {i + 1}
               </span>
-              <span className="pt-0.5 text-base">{key === 'moRgStep5' && time ? t('moRgStep5Time', { time }) : t(key)}</span>
+              <span className="pt-0.5 text-base">{key === 'moRgStep6' && time ? t('moRgStep6Time', { time }) : t(key)}</span>
             </li>
           ))}
         </ol>

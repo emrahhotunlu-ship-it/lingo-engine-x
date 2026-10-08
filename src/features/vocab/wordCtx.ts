@@ -15,14 +15,15 @@ import { acceptWordCtx, CONTRAST_MIN_STAGE, cfxPatch, isWeak, knownKeys, markBad
 import { tutorCtx } from '../../domain/tutor/ctx';
 import { useCapabilities } from '../../platform/capabilities';
 import { logError, logWarn } from '../../platform/diagnostics';
+import { phraseIn } from '../../prompts/tolerant';
 import { WORD_CTX_MAX_AVOID, WORD_CTX_MAX_WORDS, wordCtx } from '../../prompts/wordCtx';
 
 // Wörter-Tutor (Lernplattform 3.0 P52, KI-Tutor T3): am Ende einer Wörter-Runde fragt die App im Hintergrund EINMAL `word-ctx@1` für die schwachen
 // Wörter der Runde (≤ 6), die noch keine 2 frischen Claude-Sätze haben. Nur mit bestätigter KI-Zustimmung und im gemeinsamen Hintergrund-Budget
 // (`budget: { bgPerDay: 1 }`, KI-Tor); ohne `sample` kein Aufruf; nie im Aufholmodus. Jeder Satz wird mit `acceptWordCtx` geprüft und nur ergänzend in
 // `vocab/<id>.wx[]` / `.cfx[]` gespeichert (`writer.transform`, nur bei Änderung, Rohdokument bleibt, `S`/`D`/`due`/`stage` unberührt).
-// Verwechslungen merkt sich die Runde im Speicher: getippte Antwort = (normalisiert) das Wort einer anderen eigenen Karte. Falsche Freunde aus dem
-// Fallen-Index zählen hier (noch) nicht als Verwechslung.
+// Verwechslungen merkt sich die Runde im Speicher: getippte Antwort = (beugungstolerant) das Wort einer anderen eigenen Karte. Falsche Freunde aus dem
+// Fallen-Index zählen hier bewusst (noch) nicht als Verwechslung (docs/entscheidungen.md, 08.10.2026).
 
 const PV = `${wordCtx.id}@${wordCtx.version}`;
 
@@ -30,12 +31,17 @@ const PV = `${wordCtx.id}@${wordCtx.version}`;
 const confusions = new Map<string, string>();
 let inflight = false;
 
-/** Getippte falsche Antwort: ist sie das Wort einer anderen eigenen Vokabel? Dann merken. */
+/**
+ * Getippte falsche Antwort: ist sie (beugungstolerant, `phraseIn`) das Wort einer anderen eigenen Vokabel? Dann merken. Eine gebeugte Form des
+ * Kartenworts selbst ist keine Verwechslung; die Antwort darf höchstens ein Wort länger sein als das andere Wort (kein ganzer Satz).
+ */
 export function noteConfusion(card: TrainCard, given: string, pool: readonly TrainCard[]): void {
   if (card.kind !== 'vocab') return;
   const g = normalize(given);
-  if (!g || g === normalize(card.word) || g === normalize(card.lemma)) return;
-  const other = pool.find((c) => c.kind === 'vocab' && c.key !== card.key && (normalize(c.word) === g || normalize(c.lemma) === g));
+  if (!g || g === normalize(card.word) || g === normalize(card.lemma) || phraseIn(g, card.word) || phraseIn(g, card.lemma)) return;
+  const n = g.split(/\s+/).length;
+  const fits = (w: string): boolean => !!w && (normalize(w) === g || (n <= normalize(w).replace(/^to\s+/, '').split(/\s+/).length + 1 && phraseIn(g, w)));
+  const other = pool.find((c) => c.kind === 'vocab' && c.key !== card.key && (fits(c.word) || fits(c.lemma)));
   if (other) confusions.set(card.key, other.key);
 }
 

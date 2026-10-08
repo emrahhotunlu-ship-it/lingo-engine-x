@@ -1,15 +1,15 @@
 import { getWriter } from '../../data';
 import { validateDoc } from '../../data/validate';
-import { jsonEqual } from '../../domain/equal';
-import type { Ii } from '../../domain/studytime';
+import { cleanIi, iiOp, type Ii } from '../../domain/studytime';
 import { logWarn } from '../../platform/diagnostics';
 
-// Lernzeit speichern (Lernplattform 3.0 P53): genau das Feld `app/profile.ii`, über `writer.transform` auf dem frischen Stand, nur bei Änderung,
+// Lernzeit speichern (Lernplattform 3.0 P53): genau das Feld `app/profile.ii` (nur als `cleanIi`-Ergebnis, `iiOp`), über `writer.transform` auf dem frischen Stand, nur bei Änderung,
 // nie in ein ungültiges Profil und nie ein neues Profil. `null` entfernt die Lernzeit (das Feld wird `null`, alle anderen Felder bleiben).
 
 export type SaveIiResult = 'saved' | 'unchanged' | 'unavailable' | 'blocked' | 'failed';
 
 export async function saveIi(next: Ii | null): Promise<SaveIiResult> {
+  if (next && !cleanIi(next.t, next.cue)) return 'blocked';
   const writer = getWriter();
   if (!writer) return 'unavailable';
   let result: SaveIiResult = 'unchanged';
@@ -24,9 +24,10 @@ export async function saveIi(next: Ii | null): Promise<SaveIiResult> {
         result = 'blocked';
         return null;
       }
-      if (jsonEqual(cur.ii ?? null, next)) return null;
+      const op = iiOp(cur, next);
+      if (!op) return null;
       result = 'saved';
-      return { update: { ii: next } };
+      return op;
     });
     return result;
   } catch (err) {

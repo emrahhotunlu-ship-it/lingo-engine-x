@@ -277,7 +277,8 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
       const answer = c.span.gap;
       const other = pool.find((p) => norm(p.word) === norm(c.cfx.w) || norm(p.lemma) === norm(c.cfx.w));
       const wrong: Option = { id: 'd0', label: inflectLike(answer, c.cfx.w, card.word), lang: 'en', correct: false, fromWord: card.word, ...(meaning ? { fromMeaning: meaning } : {}) };
-      const right: Option = { id: 'ok', label: answer, lang: 'en', correct: true, ...(other ? { fromWord: other.word } : {}) };
+      const otherMeaning = other ? meaningForTask(other, lang) : null;
+      const right: Option = { id: 'ok', label: answer, lang: 'en', correct: true, fromWord: other?.word ?? c.cfx.w, ...(otherMeaning ? { fromMeaning: otherMeaning } : {}) };
       return {
         ...base,
         meaning: null,

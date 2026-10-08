@@ -60,3 +60,14 @@ export function formatTime(t: string, lang: 'de' | 'en'): string {
   const h12 = h % 12 === 0 ? 12 : h % 12;
   return `${h12}:${min} ${h < 12 ? 'AM' : 'PM'}`;
 }
+
+/**
+ * Schreib-Operation für `app/profile.ii`: geschrieben wird ausschließlich das Ergebnis von `cleanIi` (gültige Uhrzeit, Moment ≤ 40 Zeichen, < 100 Bytes)
+ * oder `null` (Lernzeit entfernt). Ungültige Eingabe oder keine Änderung → `null` (kein Schreibvorgang).
+ */
+export function iiOp(cur: Readonly<Record<string, unknown>>, next: Ii | null): { update: { ii: Ii | null } } | null {
+  const clean = next ? cleanIi(next.t, next.cue) : null;
+  if (next && !clean) return null;
+  if (JSON.stringify(cur.ii ?? null) === JSON.stringify(clean)) return null;
+  return { update: { ii: clean } };
+}

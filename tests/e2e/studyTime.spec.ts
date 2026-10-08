@@ -3,8 +3,8 @@ import { boot, openSettings, screen } from './fixtures';
 import { MON, MON_9, VG_BLOCKS, profileWith, reviewedLog, vgPlan } from './heuteHelpers';
 import { dump } from './trainerHelpers';
 
-// Lernplattform 3.0 P53: Lernzeit in Einstellungen › Lernen (`app/profile.ii`, < 100 Bytes), die Anleitung „Erinnerung im iPhone einrichten“ und
-// die Zeile „Morgen um 7:30 · …“ nur auf der Abschlusskarte (nie während der Pflicht, ohne Lernzeit keine Zeile).
+// Lernplattform 3.0 P53: Lernzeit in Einstellungen › Lernen (`app/profile.ii`, < 100 Bytes) mit Wenn-Dann-Vorschau, die Anleitung „Erinnerung im
+// iPhone einrichten“ und die Zeile „Morgen um 7:30 Uhr · …“ nur auf der Abschlusskarte (nie während der Pflicht, ohne Lernzeit keine Zeile).
 
 type Doc = Record<string, unknown>;
 const DONE = ['u-focus', 'u-task', 'u-again'];
@@ -22,9 +22,14 @@ test('Einstellungen › Lernen: Uhrzeit und Anker speichern (ein Feld, < 100 Byt
   const sec = page.getByTestId('set-group-learn').getByTestId('study-time');
   await expect(sec).toBeVisible();
   await expect(sec).toContainText('keine Bedingung');
+  // Ohne Moment: nur ein ruhiger Hinweis, keine Pflicht.
+  await expect(sec.getByTestId('study-cue-hint')).toHaveText('Ein fester Moment im Alltag hilft mehr als die Uhrzeit allein.');
+  await expect(sec).not.toContainText('Anker');
   await sec.getByTestId('study-time-input').fill('07:30');
   await sec.locator('[data-value="coffee"]').click();
   await expect(sec.locator('[data-value="coffee"]')).toHaveAttribute('aria-pressed', 'true');
+  await expect(sec.getByTestId('study-ifthen')).toHaveText('Wenn ich meinen ersten Kaffee getrunken habe, starte ich meine Englisch-Runde.');
+  await expect(sec.getByTestId('study-cue-hint')).toHaveCount(0);
   await sec.getByTestId('study-time-save').click();
   await expect.poll(async () => (await dump(page))['app/profile']?.ii).toEqual({ t: '07:30', cue: 'coffee' });
   const ii = (await dump(page))['app/profile']?.ii;
@@ -33,6 +38,7 @@ test('Einstellungen › Lernen: Uhrzeit und Anker speichern (ein Feld, < 100 Byt
   // Eigener Anker statt Chip (höchstens 40 Zeichen).
   await sec.getByTestId('study-cue-own').fill('nach dem Sport im Studio an der Ecke und noch mehr Text');
   await expect(sec.locator('[data-value="coffee"]')).toHaveAttribute('aria-pressed', 'false');
+  await expect(sec.getByTestId('study-ifthen')).toContainText('Mein Moment: nach dem Sport');
   await sec.getByTestId('study-time-save').click();
   await expect.poll(async () => ((await dump(page))['app/profile']?.ii as Doc | undefined)?.cue).toBe('nach dem Sport im Studio an der Ecke und');
 
@@ -40,14 +46,16 @@ test('Einstellungen › Lernen: Uhrzeit und Anker speichern (ein Feld, < 100 Byt
   const guide = page.getByTestId('reminder-guide');
   await expect(guide).toBeVisible();
   const steps = await guide.getByTestId('reminder-step').allInnerTexts();
-  expect(steps).toHaveLength(7);
-  expect(steps[0]).toContain('Erinnerungen');
-  expect(steps[1]).toContain('＋ Neue Erinnerung');
-  expect(steps[2]).toContain('Englisch 25 Min.');
-  expect(steps[3]).toContain('ⓘ');
-  expect(steps[4]).toContain('7:30');
-  expect(steps[5]).toContain('Täglich');
-  expect(steps[6]).toContain('URL');
+  expect(steps).toHaveLength(8);
+  expect(steps[0]).toContain('Kopieren');
+  expect(steps[1]).toContain('Erinnerungen');
+  expect(steps[2]).toContain('＋ Neue Erinnerung');
+  expect(steps[3]).toContain('Englisch 25 Min.');
+  expect(steps[4]).toContain('ⓘ');
+  expect(steps[5]).toContain('7:30 Uhr');
+  expect(steps[6]).toContain('Täglich');
+  expect(steps[7]).toContain('URL');
+  expect(steps[7]).toContain('Fertig');
   await expect(guide.getByTestId('reminder-home')).toContainText('Zum Home-Bildschirm');
   await expect(guide.getByTestId('reminder-home')).toContainText('keine Installation');
   await expect(guide).not.toContainText(BAD);
@@ -58,11 +66,11 @@ test('Einstellungen › Lernen: Uhrzeit und Anker speichern (ein Feld, < 100 Byt
 test.describe('Abschlusskarte', () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
 
-  test('mit Lernzeit: „Morgen um 7:30 · nach dem ersten Kaffee“', async ({ page }) => {
+  test('mit Lernzeit: „Morgen um 7:30 Uhr · nach dem ersten Kaffee“', async ({ page }) => {
     const { errors } = await boot(page, { migrated: true, now: MON_9, fake: { patch: { ...profileWith(MON, donePlan(MON), DONE, { ii: { t: '07:30', cue: 'coffee' } }), ...reviewedLog(MON) } } });
     await screen(page, 'today');
     await expect(page.getByTestId('today-card')).toHaveAttribute('data-done', 'true');
-    await expect(page.getByTestId('today-studytime')).toHaveText('Morgen um 7:30 · nach dem ersten Kaffee');
+    await expect(page.getByTestId('today-studytime')).toHaveText('Morgen um 7:30 Uhr · nach dem ersten Kaffee');
     await expect(page.getByTestId('today-card')).not.toContainText(BAD);
     expect(errors).toEqual([]);
   });
@@ -85,6 +93,6 @@ test.describe('Abschlusskarte', () => {
     await screen(page, 'today');
     await expect(page.getByTestId('today-card')).not.toHaveAttribute('data-done', 'true');
     await expect(page.getByTestId('today-studytime')).toHaveCount(0);
-    await expect(page.locator('body')).not.toContainText('Morgen um 7:30');
+    await expect(page.locator('body')).not.toContainText('Morgen um 7:30 Uhr');
   });
 });

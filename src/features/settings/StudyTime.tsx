@@ -7,9 +7,10 @@ import { Button } from '../../ui/Button';
 import { toast } from '../../ui/Toast';
 import { ReminderGuide } from './ReminderGuide';
 import { saveIi } from './studyTimeSave';
-import { CUE_LABEL } from './studyTimeText';
+import { CUE_LABEL, ifThenLine } from './studyTimeText';
 
-// Einstellungen › Lernen › „Deine Lernzeit“ (Lernplattform 3.0 P53): Uhrzeit und ein Anker im Alltag (Chip oder eigener Text ≤ 40 Zeichen), gespeichert in
+// Einstellungen › Lernen › „Deine Lernzeit“ (Lernplattform 3.0 P53): Uhrzeit und ein fester Moment im Alltag (Chip oder eigener Text ≤ 40 Zeichen) mit
+// Wenn-Dann-Vorschau („Wenn ich …, starte ich meine Englisch-Runde.“), gespeichert in
 // `app/profile.ii`. Ein Vorschlag, keine Bedingung: Plan und Serie bleiben unberührt. Sie erscheint nur auf der Abschlusskarte („Morgen um 7:30 · …“).
 // Dazu die Anleitung „Erinnerung im iPhone einrichten“. Gespeichert wird erst auf „Lernzeit speichern“ (ein Schreibvorgang, nur bei Änderung).
 
@@ -29,6 +30,7 @@ export function StudyTime() {
   const timeId = useId();
   const ownId = useId();
   if (db !== 'ready' || !profile) return null;
+  const ifThen = ifThenLine(preset ?? own, t);
 
   const save = async (): Promise<void> => {
     const next = cleanIi(time, preset ?? own);
@@ -103,6 +105,15 @@ export function StudyTime() {
           data-testid="study-cue-own"
         />
       </fieldset>
+      {ifThen ? (
+        <p className="m-0 text-sm text-fg" data-testid="study-ifthen">
+          {ifThen}
+        </p>
+      ) : (
+        <p className="lx-t-meta m-0 text-muted" data-testid="study-cue-hint">
+          {t('moStNoCueHint')}
+        </p>
+      )}
       <div className="flex flex-wrap gap-2">
         <Button variant="primary" onClick={() => void save()} busy={busy} data-testid="study-time-save">
           {t('moStSave')}

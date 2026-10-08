@@ -4,10 +4,11 @@ import { isWrongLang } from '../lang/detect';
 import { histOf } from '../srs/flip';
 import { storedExamples } from '../srs/examples';
 import { phraseIn } from '../../prompts/tolerant';
+import { findContext } from '../srs/context';
 
 // Wörter-Tutor (Lernplattform 3.0 P52, KI-Tutor T3): rein und deterministisch. Welche Karte ist schwach, braucht sie neue Sätze, und was von der
 // Antwort `word-ctx@1` besteht die formale Prüfung. Gespeichert wird nur ergänzend in `vocab/<id>.wx[]` (≤ 4) und `vocab/<id>.cfx[]` (≤ 2);
-// `xEx`, `S`/`D`/`due`/`stage` und alle anderen Felder bleiben unberührt (das Speichern selbst: `features/vocab/wordCtx.ts`).
+// bei voller Liste weichen nur alte, ungemeldete Claude-Einträge; `xEx`, `S`/`D`/`due`/`stage` und alle anderen Felder bleiben unberührt (das Speichern selbst: `features/vocab/wordCtx.ts`).
 
 type Doc = Readonly<Record<string, unknown>>;
 export type Bi = { de: string; en: string };
@@ -58,8 +59,12 @@ export function lapsesOf(doc: Doc): number {
   return Math.max(num(f.lapses), num(doc.lapses));
 }
 
-/** Schwach = `lapses ≥ 2` oder mindestens 2 Fehler (`g === 1`) in den letzten 14 Tagen. */
+/** Schwach nur bis zu dieser Stufe: eine Karte ab Stufe 4 sitzt, alte Rückfälle machen sie nicht wieder schwach. */
+export const WEAK_MAX_STAGE = 3;
+
+/** Schwach = Stufe ≤ 3 und (`lapses ≥ 2` oder mindestens 2 Fehler (`g === 1`) in den letzten 14 Tagen). */
 export function isWeak(doc: Doc, nowMs: number): boolean {
+  if (num(doc.stage) > WEAK_MAX_STAGE) return false;
   if (lapsesOf(doc) >= WEAK_LAPSES) return true;
   const from = nowMs - WEAK_WINDOW_DAYS * DAY_MS;
   return histOf(doc).filter((h) => h.t >= from && h.g === 1).length >= WEAK_ERRORS;
@@ -125,7 +130,7 @@ export type WordCtxWord = {
   other: { en: string; de: string } | null;
 };
 
-export type RejectReason = 'shape' | 'id' | 'missing_word' | 'length' | 'punct' | 'british' | 'quote' | 'de_lang' | 'duplicate' | 'contrast_target' | 'contrast_other' | 'contrast_why';
+export type RejectReason = 'shape' | 'id' | 'missing_word' | 'repeat' | 'length' | 'punct' | 'british' | 'quote' | 'de_lang' | 'duplicate' | 'contrast_target' | 'contrast_other' | 'contrast_why';
 
 export type AcceptedWordCtx = {
   id: string;
@@ -142,6 +147,17 @@ function sentenceFault(en: string): RejectReason | null {
   if (BRITISH.test(en)) return 'british';
   if (en.includes('"')) return 'quote';
   return null;
+}
+
+/**
+ * Kommt das Wort (beugungstolerant) mehr als einmal im Satz vor? Der Satz wird später mit einer Lücke an der ersten Stelle gezeigt; ein zweites
+ * Vorkommen würde die Lösung verraten.
+ */
+export function wordRepeats(en: string, word: string): boolean {
+  const span = findContext(en, word);
+  if (!span) return false;
+  const rest = `${en.slice(0, span.start)} ___ ${en.slice(span.end)}`;
+  return !!findContext(rest, word) || phraseIn(rest, word);
 }
 
 /** Normalformen, die ein neuer Satz nicht wiederholen darf: Ursprungssatz, `xEx`, gespeicherte `wx`/`cfx` (auch gemeldete). */
@@ -193,6 +209,10 @@ export function acceptWordCtx(raw: unknown, word: WordCtxWord, known: ReadonlySe
       out.rejected.push('missing_word');
       continue;
     }
+    if (wordRepeats(en, word.en)) {
+      out.rejected.push('repeat');
+      continue;
+    }
     const fault = sentenceFault(en);
     if (fault) {
       out.rejected.push(fault);
@@ -226,19 +246,40 @@ export function acceptWordCtx(raw: unknown, word: WordCtxWord, known: ReadonlySe
   return out;
 }
 
-/** Neue Liste `wx`: Rohdaten bleiben unverändert, neue Sätze hinten an; über 4 fällt der älteste weg. `null` = nichts Neues. */
-export function wxPatch(cur: unknown, add: readonly Wx[]): unknown[] | null {
+/** Darf ein Eintrag bei voller Liste weichen? Nur eigene, nicht gemeldete Claude-Einträge (`pv` = `word-ctx@…`); gemeldete und fremde nie. */
+const evictable = (x: unknown): boolean => isObj(x) && x.bad !== 1 && typeof x.pv === 'string' && x.pv.startsWith('word-ctx@');
+
+/**
+ * Ergänzen mit Obergrenze: neue Einträge hinten an. Ist die Liste voll, weichen zuerst die ältesten ungemeldeten Claude-Einträge; gemeldete (`bad: 1`)
+ * und fremde Roh-Einträge bleiben immer stehen. Reicht der Platz dann nicht, wird nur so viel ergänzt, wie passt (gar kein Platz → `null`).
+ */
+function boundedPatch(cur: unknown, add: readonly unknown[], max: number): unknown[] | null {
   if (!add.length) return null;
-  const list = Array.isArray(cur) ? [...(cur as unknown[])] : [];
-  return [...list, ...add].slice(-WX_MAX);
+  const out = Array.isArray(cur) ? [...(cur as unknown[])] : [];
+  while (out.length + add.length > max) {
+    let idx = -1;
+    let oldest = Infinity;
+    out.forEach((x, i) => {
+      if (!evictable(x)) return;
+      const t = num((x as Record<string, unknown>).t);
+      if (t < oldest) {
+        oldest = t;
+        idx = i;
+      }
+    });
+    if (idx < 0) break;
+    out.splice(idx, 1);
+  }
+  const room = max - out.length;
+  if (room <= 0) return null;
+  return [...out, ...add.slice(0, room)];
 }
 
-/** Neue Liste `cfx` (wie `wxPatch`, höchstens 2). */
-export function cfxPatch(cur: unknown, add: Cfx | null): unknown[] | null {
-  if (!add) return null;
-  const list = Array.isArray(cur) ? [...(cur as unknown[])] : [];
-  return [...list, add].slice(-CFX_MAX);
-}
+/** Neue Liste `wx` (höchstens 4, Verdrängung wie `boundedPatch`). `null` = nichts Neues oder kein Platz. */
+export const wxPatch = (cur: unknown, add: readonly Wx[]): unknown[] | null => boundedPatch(cur, add, WX_MAX);
+
+/** Neue Liste `cfx` (höchstens 2, Verdrängung wie `boundedPatch`). */
+export const cfxPatch = (cur: unknown, add: Cfx | null): unknown[] | null => (add ? boundedPatch(cur, [add], CFX_MAX) : null);
 
 /** „Melden“: den Eintrag mit diesem Satz als `bad: 1` markieren (nichts gelöscht). `null` = nicht gefunden oder schon gemeldet. */
 export function markBad(cur: unknown, en: string): unknown[] | null {

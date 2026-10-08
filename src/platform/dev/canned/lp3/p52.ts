@@ -3,14 +3,15 @@
 
 import { registerCannedReply } from '../../fakeSample';
 
-type Line = { id: string; word: string; other: string | null };
+type Line = { id: string; word: string; meaning: string; other: string | null; otherMeaning: string };
 
-/** Die Wortzeilen der Vorlage: `- id=… | word=… | … | confused with=X (…)`. */
+/** Die Wortzeilen der Vorlage: `- id=… | word=… | … | meaning=… | … | confused with=X (…)`. */
 export function wordCtxLines(input: string): Line[] {
   const out: Line[] = [];
   for (const m of input.matchAll(/^- id=([^|]+?) \| word=([^|]+?) \|.*$/gm)) {
-    const other = /\| confused with=(.+?) \(/.exec(m[0])?.[1]?.trim() ?? null;
-    out.push({ id: (m[1] ?? '').trim(), word: (m[2] ?? '').trim(), other });
+    const conf = /\| confused with=(.+?) \((.*)\)$/.exec(m[0]);
+    const meaning = /\| meaning=([^|]+?) \|/.exec(m[0])?.[1]?.trim() ?? '';
+    out.push({ id: (m[1] ?? '').trim(), word: (m[2] ?? '').trim(), meaning: meaning === '-' ? '' : meaning, other: conf?.[1]?.trim() ?? null, otherMeaning: (conf?.[2] ?? '').trim() });
   }
   return out;
 }
@@ -18,35 +19,37 @@ export function wordCtxLines(input: string): Line[] {
 const bare = (w: string): string => w.replace(/^to\s+/i, '');
 
 /**
- * Feste, realistische Antwort für `word-ctx@1`: je Wort zwei Sätze, bei „confused with“ ein Kontrast-Satz mit dem anderen Wort.
+ * Feste, realistische Antwort für `word-ctx@1`: je Wort zwei Sätze in einem neutralen Rahmen, der für jede Wortart passt (das Wort genau einmal),
+ * bei „confused with“ ein Kontrast-Satz mit dem anderen Wort und einer Begründung wie im Beispiel der Vorlage (beide Wörter mit Bedeutung).
  * Marker im Wort: `zzuk` → der erste Satz ist britisch geschrieben (fällt bei der Prüfung weg).
  */
 export function wordCtxReply(input: string): string {
   const items = wordCtxLines(input).map((l) => {
     const w = bare(l.word);
     const first = /zzuk/i.test(l.word)
-      ? `During the client call, Maria explained why the ${w} matters for our colour scheme.`
-      : `During the client call, Maria explained why the ${w} matters for our project plan.`;
+      ? `In the client call, Maria used the word ${w} to describe our new colour scheme.`
+      : `In the client call, Maria used the word ${w} to describe our new project plan.`;
+    const o = l.other ? bare(l.other) : '';
     return {
       id: l.id,
       sents: [
         {
           en: first,
-          de: 'Im Kundentermin hat Maria erklärt, warum das für unseren Projektplan wichtig ist.',
+          de: 'Im Kundentermin hat Maria dieses Wort benutzt, um unseren neuen Projektplan zu beschreiben.',
           sit: 'client call',
         },
         {
-          en: `Before Friday, please check the ${w} again and send a short update to the team.`,
-          de: 'Bitte prüfe das bis Freitag noch einmal und schick dem Team ein kurzes Update.',
-          sit: 'status update',
+          en: `At dinner last night, my sister said ${w} twice while telling us about her trip.`,
+          de: 'Beim Abendessen gestern hat meine Schwester das Wort zweimal gesagt, als sie von ihrer Reise erzählt hat.',
+          sit: 'family dinner',
         },
       ],
       contrast: l.other
         ? {
-            en: `We reviewed the ${bare(l.other)} numbers together before the board meeting on Monday morning.`,
+            en: `In the meeting on Monday morning, the team chose the word ${o} for the final slide.`,
             why: {
-              de: `${bare(l.other)} und ${w} bedeuten nicht dasselbe, achte auf die Bedeutung im Satz.`,
-              en: `${bare(l.other)} and ${w} do not mean the same thing, so check the meaning in context.`,
+              de: `${o} heißt ${l.otherMeaning || 'etwas anderes'}, ${w} heißt ${l.meaning || 'etwas anderes'}: hier ist die Bedeutung von ${o} gemeint, deshalb passt nur dieses Wort.`,
+              en: `${o} and ${w} have different meanings, and this sentence needs the meaning of ${o}, so ${w} would change what it says.`,
             },
           }
         : null,
