@@ -5,17 +5,20 @@ import { GATE } from './trigger';
 
 // Kapitelprüfung, Auswahl der Grammatikaufgaben (Lernplattform 3.0 §4.4, P42/P43). Der Vorrat (`pool: 'gate'`, 8 Aufgaben je Thema) liegt im eigenen
 // Bündel `c1x-gate` und erscheint in keiner Übungsrunde. Jeder Versuch zieht 2 Aufgaben je Thema; die nächste Zuordnung ist von der Zahl der bisherigen
-// Versuche abhängig (nicht von gespeicherten Kennungen, das Dokument bleibt klein): Versuch 1 nimmt die Plätze 0 und 1 der nach Kennung geordneten Aufgaben
-// des Themas, Versuch 2 die Plätze 2 und 3, usw.; nach vier Versuchen beginnt es von vorn. Der Vorrat ist so geordnet, dass jedes Paar zwei Arten mischt.
+// Versuche abhängig (nicht von gespeicherten Kennungen, das Dokument bleibt klein): Versuch 1 nimmt die Plätze 0 und 1 der geordneten Aufgaben
+// des Themas (Plätze nach der Nummer der Kennung), Versuch 2 die Plätze 2 und 3, usw.; nach vier Versuchen beginnt es von vorn. Der Vorrat ist so geordnet, dass jedes Paar zwei Arten mischt.
 
 /** Arten, die in der Kapitelprüfung vorkommen: nur freie Aufgaben (Lücke tippen, Umformen, Fehler finden). */
 export const GATE_KINDS: readonly C1Kind[] = ['ocl', 'kwt', 'err'];
 
 export const isGateItem = (it: C1Item): boolean => it.pool === 'gate' && GATE_KINDS.includes(it.kind) && it.area === 'gram' && !!it.topic;
 
-/** Aufgaben eines Themas im Vorrat, nach Kennung geordnet. */
+/** Die Nummer einer Kennung (`kwt-0702` → 702); die Nummern laufen im Prüfungsvorrat quer über alle Arten (Reihenfolge ocl · kwt · err …). */
+const numberOf = (id: string): number => Number(id.slice(id.lastIndexOf('-') + 1));
+
+/** Aufgaben eines Themas im Vorrat, nach Nummer der Kennung geordnet (der Vorrat steht so, dass jedes Paar zwei Arten mischt). */
 export function gatePoolOf(items: readonly C1Item[], topic: string): C1Item[] {
-  return items.filter((it) => isGateItem(it) && it.topic === topic).sort((a, b) => a.id.localeCompare(b.id));
+  return items.filter((it) => isGateItem(it) && it.topic === topic).sort((a, b) => numberOf(a.id) - numberOf(b.id) || a.id.localeCompare(b.id));
 }
 
 /** Die zwei Aufgaben eines Themas für den Versuch `attempt` (0-basiert). Weniger als zwei im Vorrat: so viele wie da sind. */

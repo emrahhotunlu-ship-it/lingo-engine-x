@@ -55,5 +55,5 @@ export const pxP42De = {
   moMsPlace: 'Dein Startpunkt steht: Die Einstufung ist gespeichert.',
   moMsChapter: 'Kapitel {n} abgeschlossen: {name}.',
   moMsCheck: 'Dein erster C1-Check ist gespeichert.',
-  moMsC1: 'Alle Kriterien der C1-Etappe sind erfüllt. Sprechen und Schreiben misst die App nicht.',
+  moMsC1: 'Alle Kriterien der C1-Etappe sind erfüllt. Wie gut du sprichst, misst die App nicht.',
 } as const;

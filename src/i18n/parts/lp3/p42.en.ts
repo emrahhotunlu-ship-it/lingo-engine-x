@@ -51,5 +51,5 @@ export const pxP42En = {
   moMsPlace: 'Your starting point is set: the placement is saved.',
   moMsChapter: 'Chapter {n} complete: {name}.',
   moMsCheck: 'Your first C1 check is saved.',
-  moMsC1: 'All criteria of the C1 stage are met. The app does not measure speaking and writing.',
+  moMsC1: 'All criteria of the C1 stage are met. The app does not measure how well you speak.',
 } as const;

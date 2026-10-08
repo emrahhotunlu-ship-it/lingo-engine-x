@@ -3,19 +3,19 @@
 export const items = [
   // ================= pres-simple-cont =================
   {
-    k: 'ocl', p: 'psc.habit', lv: 'B2', dom: 'biz', cls: 'aux', a: ['does'],
-    t: 'Why ___ our support team usually answer tickets faster on Tuesdays than on Fridays?',
+    k: 'ocl', p: 'psc.habit', lv: 'B2', dom: 'life', cls: 'aux', a: ['does'],
+    t: 'Why ___ your neighbor usually leave for work before six, even on cold winter mornings?',
     c: {
-      is: 'is braucht -ing (answering), hier steht aber die Grundform answer. || is needs -ing (answering), but the sentence has the base form answer.',
+      is: 'is braucht -ing (leaving), hier steht aber die Grundform leave. || is needs -ing (leaving), but the sentence has the base form leave.',
       did: 'did meint die Vergangenheit, usually zeigt aber eine Gewohnheit. || did means the past, but usually points to a habit.',
       will: 'will meint die Zukunft, usually beschreibt aber eine Gewohnheit. || will means the future, but usually describes a habit.',
     },
-    ok: 'Gewohnheit in der Frage: does + Grundform. Zu team (Singular) passt does. || A habit in a question takes does + base form. The singular team goes with does.',
+    ok: 'Gewohnheit in der Frage: does + Grundform. Zu neighbor (Singular) passt does. || A habit in a question takes does + base form. The singular neighbor goes with does.',
   },
   {
-    k: 'kwt', p: 'psc.now', lv: 'B2', dom: 'biz',
-    lead: 'At the moment our IT department is replacing all the old laptops.', key: 'CURRENTLY',
-    before: 'Our IT department', after: 'all the old laptops.', a: ['is currently'], b: ['replacing'], v: [{ a: ['is'], b: ['currently replacing'] }], x: ['replaced', 'does', 'has'],
+    k: 'kwt', p: 'psc.now', lv: 'B2', dom: 'life',
+    lead: 'At the moment our landlord is replacing all the old windows in the building.', key: 'CURRENTLY',
+    before: 'Our landlord', after: 'all the old windows in the building.', a: ['is currently'], b: ['replacing'], v: [{ a: ['is'], b: ['currently replacing'] }], x: ['replaced', 'does', 'has'],
     traps: [['is currently replace', 'Nach is steht die -ing-Form: replacing. Die Grundform replace passt nicht.', 'After is comes the -ing form: replacing. The base form replace does not fit.']],
     ok: ['Teil 1: is currently, denn die Lage gilt gerade jetzt. Teil 2: replacing, die -ing-Form zeigt, dass es im Moment läuft.', 'Part 1: is currently, because the situation applies right now. Part 2: replacing, the -ing form shows it is in progress at the moment.'],
   },
@@ -71,14 +71,14 @@ export const items = [
 
   // ================= past-simple-perfect =================
   {
-    k: 'ocl', p: 'psp.finished-time', lv: 'B2', dom: 'biz', cls: 'aux', a: ['did'],
-    t: 'Our CFO ___ not attend the meeting in Munich last Thursday because her flight was canceled.',
+    k: 'ocl', p: 'psp.finished-time', lv: 'B2', dom: 'life', cls: 'aux', a: ['did'],
+    t: 'My cousin ___ not attend the wedding in Munich last Saturday because her train was canceled.',
     c: {
-      has: 'has braucht das Partizip (attended); last Thursday ist ein abgeschlossener Zeitpunkt. || has needs the participle (attended); last Thursday is a finished point in time.',
-      does: 'does steht in der Gegenwart; last Thursday liegt in der Vergangenheit. || does is present tense; last Thursday is in the past.',
+      has: 'has braucht das Partizip (attended); last Saturday ist ein abgeschlossener Zeitpunkt. || has needs the participle (attended); last Saturday is a finished point in time.',
+      does: 'does steht in der Gegenwart; last Saturday liegt in der Vergangenheit. || does is present tense; last Saturday is in the past.',
       is: 'is not attend gibt es nicht; vor der Grundform steht did. || is not attend does not exist; the base form needs did.',
     },
-    ok: 'Mit last Thursday steht das Past Simple: did not + Grundform. || With last Thursday the past simple is used: did not + base form.',
+    ok: 'Mit last Saturday steht das Past Simple: did not + Grundform. || With last Saturday the past simple is used: did not + base form.',
   },
   {
     k: 'kwt', p: 'psp.since-for', lv: 'B2', dom: 'biz',
@@ -96,8 +96,8 @@ export const items = [
     c2: ['Nach did steht die Grundform: did … attend, nicht attended.', 'After did comes the base form: did … attend, not attended.'],
   },
   {
-    k: 'ocl', p: 'psp.result-now', lv: 'B2', dom: 'biz', cls: 'aux', a: ['have'],
-    t: 'I ___ not received the signed contract yet, so I cannot start the project plan.',
+    k: 'ocl', p: 'psp.result-now', lv: 'B2', dom: 'life', cls: 'aux', a: ['have'],
+    t: 'I ___ not received the parcel with the shelf yet, so I cannot start building the bedroom furniture.',
     c: {
       am: 'am not received gibt es nicht; vor dem Partizip received steht have. || am not received does not exist; the participle received needs have.',
       was: 'was not received wäre Passiv („wurde nicht empfangen“) und passt nicht zu I. || was not received would be passive and does not fit I.',
@@ -140,14 +140,14 @@ export const items = [
 
   // ================= pres-perf-cont =================
   {
-    k: 'ocl', p: 'pc.duration', lv: 'B2', dom: 'biz', cls: 'aux', a: ['have'],
-    t: 'Our engineers ___ been working on the migration script since early April, and it is still not stable.',
+    k: 'ocl', p: 'pc.duration', lv: 'B2', dom: 'life', cls: 'aux', a: ['have'],
+    t: 'Our neighbors ___ been renovating their kitchen since early April, and the noise is still not over.',
     c: {
       are: 'are been gibt es nicht; vor been steht have. || are been does not exist; been needs have.',
-      did: 'did braucht die Grundform (work), nicht been working. || did needs the base form (work), not been working.',
+      did: 'did braucht die Grundform (renovate), nicht been renovating. || did needs the base form (renovate), not been renovating.',
       were: 'were been ist falsch; die Dauer bis jetzt braucht have been. || were been is wrong; duration up to now needs have been.',
     },
-    ok: 'Eine Tätigkeit seit April bis heute: have been working (Present Perfect Continuous). || An activity from April up to today: have been working (present perfect continuous).',
+    ok: 'Eine Tätigkeit seit April bis heute: have been renovating (Present Perfect Continuous). || An activity from April up to today: have been renovating (present perfect continuous).',
   },
   {
     k: 'kwt', p: 'pc.since-for', lv: 'B2', dom: 'biz',

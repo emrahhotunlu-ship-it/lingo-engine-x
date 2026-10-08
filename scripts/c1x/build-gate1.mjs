@@ -12,7 +12,7 @@
 import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { ROOT, applyFix, contractedForms, findSpan, hasBritish, joinAB, kwtNorm, legacyCorpus, norm, patternIndex, scoreErr, scoreKwt, words } from './lib.mjs';
+import { ROOT, applyFix, contractedForms, findSpan, hasBritish, joinAB, kwtNorm, legacyCorpus, norm, patternIndex, scoreErr, words } from './lib.mjs';
 
 const CHECK_ONLY = process.argv.includes('--check');
 const START = 701;
@@ -96,6 +96,28 @@ function buildOcl(src, id) {
 }
 
 // ---------- kwt ----------
+// Wertung wie src/domain/c1x/kinds/kwt.ts: 2 Punkte nur für die GANZE Lösung (Teil A + Teil B), 1 Punkt, wenn nur A am Anfang oder B am Ende sitzt.
+function scoreKwt(item, input) {
+  const key = item.key.toLowerCase();
+  const toks = kwtNorm(input);
+  if (!toks.includes(key)) return { got: 0, reason: 'key' };
+  if (toks.length < 3 || toks.length > 6) return { got: 0, reason: 'length' };
+  const starts = (arr, pre) => pre.length > 0 && pre.length <= arr.length && pre.every((w, i) => arr[i] === w);
+  const ends = (arr, suf) => suf.length > 0 && suf.length <= arr.length && suf.every((w, i) => arr[arr.length - suf.length + i] === w);
+  let best = 0;
+  for (const k of item.keys) {
+    for (const a of k.a.map(kwtNorm)) {
+      for (const b of k.b.map(kwtNorm)) {
+        const whole = [...a, ...b];
+        const full = whole.length === toks.length && whole.every((w, i) => w === toks[i]);
+        const got = full ? 2 : starts(toks, a) || ends(toks, b) ? 1 : 0;
+        if (got > best) best = got;
+      }
+    }
+  }
+  return { got: best, reason: best < 2 ? 'part' : undefined };
+}
+
 function buildKwt(src, id) {
   const item0 = base(src, id, 'kwt');
   const variants = [{ a: src.a, b: src.b }, ...(src.v ?? [])].map((v) => {

@@ -51,14 +51,14 @@ export const items = [
     fa: [['had', 'had + Partizip ist hier richtig: Es war schon vor der Ankunft passiert.', 'had + participle is right here: it had already happened before the arrival.']],
   },
   {
-    k: 'ocl', p: 'pp.reported', lv: 'B2+', dom: 'biz', cls: 'aux', a: ['had'],
-    t: 'The customer asked whether we ___ already sent the revised offer to their legal department.',
+    k: 'ocl', p: 'pp.reported', lv: 'B2+', dom: 'life', cls: 'aux', a: ['had'],
+    t: 'My teacher asked whether we ___ already finished the homework for the weekend before the lesson began.',
     c: {
-      did: 'did braucht die Grundform (send), nicht sent. || did needs the base form (send), not sent.',
-      would: 'would braucht die Grundform (send), nicht sent. || would needs the base form (send), not sent.',
-      were: 'were already sent wäre Passiv; hier sendet das Team selbst. || were already sent would be passive; here the team does the sending.',
+      did: 'did braucht die Grundform (finish), nicht finished. || did needs the base form (finish), not finished.',
+      would: 'would braucht die Grundform (finish), nicht finished. || would needs the base form (finish), not finished.',
+      were: 'were already finished passt nicht zu we als Täter; es wäre ein Zustand statt einer Handlung. || were already finished does not fit we as the doers; it would be a state instead of an action.',
     },
-    ok: 'Berichtete Frage in der Vergangenheit: had + Partizip (had already sent) für das Frühere. || A reported question in the past: had + participle (had already sent) for the earlier action.',
+    ok: 'Berichtete Frage in der Vergangenheit: had + Partizip (had already finished) für das Frühere. || A reported question in the past: had + participle (had already finished) for the earlier action.',
   },
   {
     k: 'kwt', p: 'pp.duration', lv: 'B2+', dom: 'biz',
@@ -120,10 +120,10 @@ export const items = [
     c2: ['used dealing lässt to weg: be used to + -ing.', 'used dealing leaves out to: be used to + -ing.'],
   },
   {
-    k: 'ocl', p: 'ut.did-use-to', lv: 'B2', dom: 'biz', cls: 'aux', a: ['did'],
-    t: 'Before the new hybrid policy started, ___ you use to work from home at least once a week?',
+    k: 'ocl', p: 'ut.did-use-to', lv: 'B2', dom: 'life', cls: 'aux', a: ['did'],
+    t: 'Before the pandemic started, ___ you use to go to the gym at least three times a week?',
     c: {
-      do: 'do you use to passt nicht zu Before the new hybrid policy started (Vergangenheit). || do you use to does not fit Before the new hybrid policy started (past).',
+      do: 'do you use to passt nicht zu Before the pandemic started (Vergangenheit). || do you use to does not fit Before the pandemic started (past).',
       were: 'were you use to gibt es nicht; die Frage braucht did. || were you use to does not exist; the question needs did.',
       have: 'have you use to gibt es nicht; die Frage braucht did. || have you use to does not exist; the question needs did.',
     },
@@ -139,14 +139,14 @@ export const items = [
 
   // ================= prep-time =================
   {
-    k: 'ocl', p: 'pt.at-on-in', lv: 'B2', dom: 'biz', cls: 'prep', a: ['on'],
-    t: 'Our quarterly review is scheduled ___ the last Friday of March, right after the board meeting.',
+    k: 'ocl', p: 'pt.at-on-in', lv: 'B2', dom: 'life', cls: 'prep', a: ['on'],
+    t: 'Our family reunion is scheduled ___ the last Saturday of August, right after the school holidays end.',
     c: {
       at: 'at steht bei Uhrzeiten (at 3 p.m.), nicht bei Tagen. || at is used with clock times (at 3 p.m.), not with days.',
-      in: 'in steht bei Monaten und Jahren (in March), nicht bei einem bestimmten Tag. || in is used with months and years (in March), not with a specific day.',
+      in: 'in steht bei Monaten und Jahren (in August), nicht bei einem bestimmten Tag. || in is used with months and years (in August), not with a specific day.',
       by: 'by nennt eine Frist, nicht den Termin selbst. || by names a deadline, not the date itself.',
     },
-    ok: 'Mit einem bestimmten Tag steht on: on the last Friday of March. || With a specific day on is used: on the last Friday of March.',
+    ok: 'Mit einem bestimmten Tag steht on: on the last Saturday of August. || With a specific day on is used: on the last Saturday of August.',
   },
   {
     k: 'kwt', p: 'pt.by-until', lv: 'B2', dom: 'biz',
