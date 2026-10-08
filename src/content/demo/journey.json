@@ -1,0 +1,13 @@
+{
+  "v": 1,
+  "note": "Feste Vorführdaten der C1-Reise (P58): erfunden, nur zum Ansehen. Kein Nutzerdatum, wird nie gespeichert.",
+  "chapters": [
+    { "id": "k1", "status": "done", "patSafe": 18, "patTotal": 18 },
+    { "id": "k2", "status": "done", "patSafe": 12, "patTotal": 12 },
+    { "id": "k3", "status": "current", "patSafe": 9, "patTotal": 21 },
+    { "id": "k4", "status": "open", "patSafe": 2, "patTotal": 16 },
+    { "id": "k5", "status": "open", "patSafe": 0, "patTotal": 15 },
+    { "id": "k6", "status": "open", "patSafe": 0, "patTotal": 14 },
+    { "id": "k7", "status": "open", "patSafe": 0, "patTotal": 17 }
+  ]
+}

@@ -1,0 +1,28 @@
+// Learning platform 3.0 · P61 (structure film with prediction): texts with prefix `ee`, English (US).
+
+export const eeP61En = {
+  eeFmPredictLabel: 'Guess first, then watch',
+  eeFmEyebrow: 'Structure film',
+  eeFmTapWord: 'Choose “{word}”',
+  eeFmRight: 'Good guess. Now watch it happen.',
+  eeFmWrong: 'Not quite. The film shows you why.',
+  eeFmPlay: 'Play film',
+  eeFmSkipPredict: 'Watch without guessing',
+  eeFmStep: 'Step {n} of {total}',
+  eeFmNext: 'Next',
+  eeFmAgain: 'Play again',
+  eeFmResume: 'Resume',
+  eeFmPause: 'Pause',
+  eeFmStepsAria: 'Steps of the film',
+  eeFmStepAria: 'Show step {n}',
+  eeFmSlow: 'Play slower',
+  eeFmVoice: 'Read aloud',
+  eeFmEnd: 'Same meaning, new form. Tap a dot to see any step again.',
+  eeFmDone: 'Done',
+  eeFmOpen: 'Show me as a film',
+  eeFmOpenSub: 'About {s} seconds: guess first, then watch',
+  eeFmClose: 'Close film',
+  eeFmShowMe: 'Show me',
+  eeFmSheetTitle: 'Structure film',
+  eeFmChapterTitle: 'What this chapter looks like',
+} as const;

@@ -23,7 +23,7 @@ export const flags: Flags = {
   c1check: false,
   program: false,
   tutor: { explain: false, gen: false, diagnose: false, clinic: false },
-  fx: { moments: false, rings: false, sparks: false, field: false, sky: false, film: false },
+  fx: { moments: false, rings: false, sparks: false, field: false, sky: true, film: true },
 };
 
 /** Ist die Aufgabenart angeboten? (Rahmen, Auswahl und Registry fragen nur diese Funktion.) */
@@ -43,15 +43,17 @@ export function applyFlagOverrides(raw: string | null): void {
         if ((kinds as string[]).includes(k)) flags.c1xKinds[k as C1Kind] = true;
         if (k === 'slots') flags.slotPlan = true;
         if (k === 'program') flags.program = true;
+        if (k === 'sky' || k === 'film') flags.fx[k] = true;
       }
       return;
     }
-    const o = JSON.parse(t) as { c1xKinds?: Record<string, unknown>; tempo?: unknown; slotPlan?: unknown; c1check?: unknown; program?: unknown };
+    const o = JSON.parse(t) as { c1xKinds?: Record<string, unknown>; tempo?: unknown; slotPlan?: unknown; c1check?: unknown; program?: unknown; fx?: Record<string, unknown> };
     for (const k of kinds) if (typeof o.c1xKinds?.[k] === 'boolean') flags.c1xKinds[k] = o.c1xKinds[k];
     if (typeof o.slotPlan === 'boolean') flags.slotPlan = o.slotPlan;
     if (typeof o.tempo === 'boolean') flags.tempo = o.tempo;
     if (typeof o.c1check === 'boolean') flags.c1check = o.c1check;
     if (typeof o.program === 'boolean') flags.program = o.program;
+    for (const k of Object.keys(flags.fx) as (keyof Flags['fx'])[]) if (typeof o.fx?.[k] === 'boolean') flags.fx[k] = o.fx[k];
   } catch {
     // Ungültige Übersteuerung: die eingebauten Schalter gelten.
   }

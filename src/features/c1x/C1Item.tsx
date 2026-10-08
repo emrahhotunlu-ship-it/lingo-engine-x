@@ -1,4 +1,7 @@
-import { useRef } from 'react';
+import { useMemo, useRef, useState } from 'react';
+import { filmFor } from '../../domain/c1/anim';
+import { patternOf } from '../../domain/grammar/patterns';
+import { FilmSheet, filmEnabled } from '../c1/film/FilmLauncher';
 import { ExerciseShell } from '../../ui/exercise';
 import { useSharedTarget } from '../../engine/shared';
 import { useT } from '../../i18n';
@@ -19,6 +22,10 @@ function C1ItemBody({ entry, ...props }: C1ItemProps & { entry: C1KindEntry }) {
   const shell = useC1Item(props, entry, root);
   const { ref: sharedRef, shared } = useSharedTarget<HTMLDivElement>('lx-hero');
   const { task } = props;
+  // Struktur-Film zum Muster (P61): im Menü ⋯ „Zeig es mir“, sobald es zum Muster einen Film gibt.
+  const [filmOpen, setFilmOpen] = useState(false);
+  const film = useMemo(() => (filmEnabled() ? filmFor(task.topic, task.pat ?? patternOf(task)?.id ?? null) : null), [task]);
+  const shellProps = film && shell.feedback ? { ...shell, feedback: { ...shell.feedback, menu: { ...shell.feedback.menu, showMe: () => setFilmOpen(true) } } } : shell;
   return (
     <div
       ref={(el) => {
@@ -36,7 +43,8 @@ function C1ItemBody({ entry, ...props }: C1ItemProps & { entry: C1KindEntry }) {
       data-shared={shared ? '' : undefined}
       data-review={task.errorT !== null ? '' : undefined}
     >
-      <ExerciseShell {...shell} />
+      <ExerciseShell {...shellProps} />
+      {film && <FilmSheet film={film} open={filmOpen} onClose={() => setFilmOpen(false)} />}
     </div>
   );
 }

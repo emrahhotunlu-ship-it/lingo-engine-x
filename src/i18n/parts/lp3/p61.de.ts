@@ -1,0 +1,28 @@
+// Lernplattform 3.0 · P61 (Struktur-Film mit Vorhersage): Texte mit Präfix `ee`, Deutsch.
+
+export const eeP61De = {
+  eeFmPredictLabel: 'Erst raten, dann zusehen',
+  eeFmEyebrow: 'Struktur-Film',
+  eeFmTapWord: '„{word}“ wählen',
+  eeFmRight: 'Richtig geraten. Sieh zu, wie es passiert.',
+  eeFmWrong: 'Nicht ganz. Der Film zeigt dir, warum.',
+  eeFmPlay: 'Film abspielen',
+  eeFmSkipPredict: 'Ohne Raten ansehen',
+  eeFmStep: 'Schritt {n} von {total}',
+  eeFmNext: 'Weiter',
+  eeFmAgain: 'Noch einmal',
+  eeFmResume: 'Weiter abspielen',
+  eeFmPause: 'Anhalten',
+  eeFmStepsAria: 'Schritte des Films',
+  eeFmStepAria: 'Schritt {n} zeigen',
+  eeFmSlow: 'Langsamer abspielen',
+  eeFmVoice: 'Vorlesen lassen',
+  eeFmEnd: 'Gleicher Sinn, neue Form. Tippe einen Punkt an, um einen Schritt noch einmal zu sehen.',
+  eeFmDone: 'Fertig',
+  eeFmOpen: 'Zeig es mir als Film',
+  eeFmOpenSub: 'Etwa {s} Sekunden: erst raten, dann zusehen',
+  eeFmClose: 'Film schließen',
+  eeFmShowMe: 'Zeig es mir',
+  eeFmSheetTitle: 'Struktur-Film',
+  eeFmChapterTitle: 'So sieht das Kapitel aus',
+} as const;

@@ -1,0 +1,783 @@
+/* Lernplattform 3.0 · Release R6 „Premium“, Spur B (Präfix-Klassen `lx-fm-*` Struktur-Film P61, `lx-jr-*` C1-Reise P58, `lx-sky-*` Wort-Himmel P59).
+   Alle Farben aus den Tokens der drei Modi. Bewegung nur über transform, opacity, stroke-dashoffset und filter (kurz).
+   Alles hängt an `data-fx` des Wurzelelements: `full`/`calm` spielen, `off` (auch bei reduzierter Bewegung) zeigt sofort den Endzustand.
+   Keine Endlosschleifen: jede Animation hat eine feste Zahl von Durchläufen. */
+
+/* ============================================================ Struktur-Film (P61) */
+
+.lx-fm {
+  --lx-fm-hi: var(--lx-ch-grammar);
+  --lx-fm-hi-soft: color-mix(in srgb, var(--lx-ch-grammar) 16%, transparent);
+}
+
+.lx-fm-screen {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  border: 1px solid var(--lx-border);
+  padding: 1.5rem 1.25rem 1.25rem;
+  background:
+    radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--lx-ch-grammar) 10%, transparent), transparent 62%),
+    linear-gradient(180deg, var(--lx-surface-solid), color-mix(in srgb, var(--lx-surface-solid) 86%, var(--lx-bg)));
+  box-shadow: var(--lx-shadow);
+}
+@media (min-width: 768px) {
+  .lx-fm-screen {
+    padding: 2rem 2rem 1.5rem;
+  }
+}
+
+.lx-fm-stage {
+  position: relative;
+}
+.lx-fm-line {
+  margin: 0;
+  font-size: clamp(1.25rem, 1.05rem + 1vw, 1.625rem);
+  line-height: 1.55;
+  font-weight: 560;
+  letter-spacing: -0.012em;
+  color: var(--lx-fg);
+  text-wrap: pretty;
+}
+.lx-fm-w {
+  position: relative;
+  display: inline-block;
+  border-radius: 0.375rem;
+  transition:
+    color 220ms ease,
+    background-color 220ms ease;
+}
+/* Signalwörter leuchten: Kanalfarbe Grammatik, weicher Hof dahinter, feine Linie darunter. */
+.lx-fm-w[data-hi] {
+  color: var(--lx-fm-hi);
+  text-shadow: 0 0 18px color-mix(in srgb, var(--lx-ch-grammar) 45%, transparent);
+}
+.lx-fm-w[data-hi]::after {
+  content: '';
+  position: absolute;
+  left: 0.05em;
+  right: 0.05em;
+  bottom: 0.08em;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.55;
+}
+:root[data-theme='light'] .lx-fm-w[data-hi] {
+  text-shadow: none;
+}
+:root[data-fx='full'] .lx-fm-w[data-hi]::after,
+:root[data-fx='calm'] .lx-fm-w[data-hi]::after {
+  transform-origin: left center;
+  animation: lx-fm-underline var(--lx-fm-dur, 450ms) cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--lx-fm-dur, 450ms) * 0.6);
+}
+@keyframes lx-fm-underline {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Vorhersage: die Wörter sind Knöpfe. */
+.lx-fm-tap {
+  margin: -0.1em -0.15em;
+  padding: 0.1em 0.15em;
+  min-height: 44px;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  text-shadow: none;
+}
+.lx-fm-tap[data-hi]::after {
+  display: none;
+}
+.lx-fm-tap[data-hi] {
+  color: inherit;
+  text-shadow: none;
+}
+.lx-fm-tap:not(:disabled):hover {
+  background: var(--lx-surface-strong);
+}
+.lx-fm-tap:focus-visible {
+  outline: 2px solid var(--lx-focus);
+  outline-offset: 2px;
+}
+.lx-fm-tap[data-state='right'],
+.lx-fm-tap[data-state='answer'] {
+  color: var(--lx-ok-text);
+  background: var(--lx-ok-soft);
+}
+.lx-fm-tap[data-state='wrong'] {
+  color: var(--lx-wrong-text);
+  background: var(--lx-wrong-soft);
+}
+.lx-fm-tap[data-state='dim'] {
+  color: var(--lx-fg-subtle);
+}
+
+/* Wegfallende Wörter bleiben kurz an ihrem alten Platz und blenden aus. */
+.lx-fm-ghost {
+  position: absolute;
+  pointer-events: none;
+  white-space: pre;
+  color: var(--lx-fg-subtle);
+  font-size: clamp(1.25rem, 1.05rem + 1vw, 1.625rem);
+  line-height: 1.55;
+  font-weight: 560;
+  letter-spacing: -0.012em;
+  opacity: 0;
+}
+:root[data-fx='full'] .lx-fm-ghost,
+:root[data-fx='calm'] .lx-fm-ghost {
+  animation: lx-fm-ghost var(--lx-fm-dur, 450ms) cubic-bezier(0.4, 0, 1, 1) both;
+}
+@keyframes lx-fm-ghost {
+  from {
+    opacity: 0.8;
+    transform: none;
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-0.4em) scale(0.92);
+    filter: blur(3px);
+  }
+}
+
+/* Bahnen der wandernden Wörter: ein feiner Bogen, der sich zeichnet und wieder verblasst. */
+.lx-fm-trails {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.lx-fm-trails path {
+  fill: none;
+  stroke: var(--lx-ch-grammar);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  opacity: 0;
+}
+:root[data-fx='full'] .lx-fm-trails path,
+:root[data-fx='calm'] .lx-fm-trails path {
+  animation: lx-fm-trail calc(var(--lx-fm-dur, 450ms) + 400ms) cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes lx-fm-trail {
+  0% {
+    stroke-dashoffset: 1;
+    opacity: 0.7;
+  }
+  55% {
+    stroke-dashoffset: 0;
+    opacity: 0.55;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+.lx-fm-sub {
+  margin: 0.875rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--lx-border);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--lx-fg-muted);
+}
+
+.lx-fm-link {
+  min-height: 44px;
+  padding: 0 0.5rem;
+  border: 0;
+  background: transparent;
+  color: var(--lx-fg-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.lx-fm-link:hover {
+  color: var(--lx-fg);
+}
+
+/* Steuerleiste: ▶/❚❚ rund, Schrittpunkte, Chips. */
+.lx-fm-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+.lx-fm-round {
+  display: inline-grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  flex: none;
+  border-radius: 999px;
+  border: 0;
+  background: var(--lx-btn-grammar, var(--lx-ch-grammar));
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 8px 22px -12px color-mix(in srgb, var(--lx-ch-grammar) 80%, transparent);
+  transition: transform 120ms ease;
+}
+.lx-fm-round:active {
+  transform: scale(0.95);
+}
+.lx-fm-round:focus-visible,
+.lx-fm-dot:focus-visible,
+.lx-fm-chip:focus-visible,
+.lx-fm-launch:focus-visible,
+.lx-fm-link:focus-visible {
+  outline: 2px solid var(--lx-focus);
+  outline-offset: 2px;
+}
+.lx-fm-dots {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lx-fm-dot {
+  position: relative;
+  width: 2rem;
+  height: 2.75rem;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.lx-fm-dot::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--lx-line-strong);
+  transform: translate(-50%, -50%);
+  transition:
+    width 200ms ease,
+    background-color 200ms ease;
+}
+.lx-fm-dot[aria-current='step']::before {
+  width: 1.25rem;
+  background: var(--lx-ch-grammar);
+}
+.lx-fm-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--lx-border);
+  background: var(--lx-surface);
+  color: var(--lx-fg-muted);
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+.lx-fm-chip[aria-pressed='true'] {
+  color: var(--lx-fg);
+  border-color: var(--lx-ch-grammar);
+  background: color-mix(in srgb, var(--lx-ch-grammar) 14%, transparent);
+}
+
+/* Startknopf (Kapitelstart, Einführungskarte): eine ruhige Zeile mit Spielsymbol, kein zweiter Hauptknopf. */
+.lx-fm-launch {
+  display: flex;
+  width: 100%;
+  min-height: 3.5rem;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 0.875rem;
+  border-radius: 0.875rem;
+  border: 1px solid var(--lx-border);
+  background: var(--lx-surface);
+  color: var(--lx-fg);
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 150ms ease;
+}
+.lx-fm-launch:hover {
+  background: var(--lx-surface-strong);
+}
+.lx-fm-launch-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex: none;
+  border-radius: 999px;
+  color: var(--lx-ch-grammar);
+  background: color-mix(in srgb, var(--lx-ch-grammar) 15%, transparent);
+}
+.lx-fm-inline {
+  padding: 0.25rem 0;
+}
+.lx-fm-skeleton {
+  height: 12rem;
+  border-radius: 1.25rem;
+  background: var(--lx-surface);
+}
+
+:root[data-fx='off'] .lx-fm *,
+:root[data-fx='off'] .lx-fm *::after,
+:root[data-fx='off'] .lx-fm *::before {
+  animation: none !important;
+  transition: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lx-fm *,
+  .lx-fm *::after,
+  .lx-fm *::before {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ============================================================ C1-Reise (P58) */
+
+.lx-jr {
+  --lx-jr-node-bg: var(--lx-surface-solid);
+}
+.lx-jr-stage {
+  position: relative;
+  isolation: isolate;
+  border-radius: 1rem;
+  border: 1px solid var(--lx-border);
+  padding: 0.75rem 0.75rem 0.5rem;
+  background:
+    radial-gradient(90% 60% at 80% 0%, color-mix(in srgb, var(--lx-gold-text) 7%, transparent), transparent 70%),
+    radial-gradient(80% 60% at 10% 100%, color-mix(in srgb, var(--lx-ch-grammar) 9%, transparent), transparent 70%),
+    var(--lx-surface-solid);
+}
+.lx-jr[data-orient='horizontal'] .lx-jr-stage {
+  padding: 1rem 0.75rem 0.75rem;
+}
+
+/* Untergrund: Höhenlinien und Sternenstaub, leicht nach hinten gekippt (nur Stufe Voll/Ruhig). */
+.lx-jr-ground-clip {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.lx-jr-ground {
+  position: absolute;
+  inset: -14% -8%;
+  transform-origin: 50% 100%;
+}
+:root[data-fx='full'] .lx-jr-ground,
+:root[data-fx='calm'] .lx-jr-ground {
+  transform: perspective(900px) rotateX(22deg);
+}
+.lx-jr-ground-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.lx-jr-contours path {
+  fill: none;
+  stroke: var(--lx-line-strong);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.6;
+}
+.lx-jr-dust circle {
+  fill: var(--lx-fg);
+}
+:root[data-theme='light'] .lx-jr-dust {
+  opacity: 0.45;
+}
+:root[data-theme='light'] .lx-jr-contours path {
+  opacity: 0.8;
+}
+/* Parallaxe nur, wo der Browser scrollgebundene Animationen kann (keine Zeitschleife, kein Skript). */
+@supports (animation-timeline: view()) {
+  :root[data-fx='full'] .lx-jr-ground {
+    animation: lx-jr-parallax linear both;
+    animation-timeline: view();
+  }
+}
+@keyframes lx-jr-parallax {
+  from {
+    transform: perspective(900px) rotateX(22deg) translateY(-5%);
+  }
+  to {
+    transform: perspective(900px) rotateX(22deg) translateY(5%);
+  }
+}
+
+/* Route: gelaufen = grün durchgezogen, Ankunft beim aktuellen Kapitel = Grammatik-Farbe, voraus = gepunktet. */
+.lx-jr-route {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  overflow: visible;
+  pointer-events: none;
+}
+.lx-jr-route-line,
+.lx-jr-route-glow {
+  fill: none;
+  stroke-linecap: round;
+}
+.lx-jr-route-line {
+  stroke-width: 3;
+}
+.lx-jr-route-glow {
+  stroke-width: 10;
+  opacity: 0.16;
+}
+.lx-jr-route [data-tone='walked'] path {
+  stroke: var(--lx-ok);
+}
+.lx-jr-route [data-tone='arrive'] path {
+  stroke: var(--lx-ch-grammar);
+}
+.lx-jr-route [data-tone='ahead'] .lx-jr-route-line {
+  stroke: var(--lx-line-strong);
+  stroke-width: 2.5;
+  stroke-dasharray: 0.5 8;
+}
+
+.lx-jr-list {
+  position: relative;
+  z-index: 2;
+}
+.lx-jr-btn {
+  display: flex;
+  width: 100%;
+  min-height: 4.75rem;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.375rem 0.5rem 0.375rem var(--jr-x, 0);
+  border-radius: 0.875rem;
+  text-align: left;
+  color: var(--lx-fg);
+  cursor: pointer;
+}
+.lx-jr-btn:focus-visible {
+  outline: 2px solid var(--lx-focus);
+  outline-offset: 2px;
+}
+.lx-jr-text {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+.lx-jr-btn:hover .lx-jr-text > span:first-child {
+  text-decoration: underline;
+  text-decoration-color: var(--lx-line-strong);
+  text-underline-offset: 4px;
+}
+.lx-jr[data-orient='horizontal'] .lx-jr-btn {
+  min-height: 8rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  padding: calc(0.5rem + var(--jr-y, 0rem)) 0.375rem 0.625rem;
+  text-align: center;
+  border: 1px solid transparent;
+}
+.lx-jr[data-orient='horizontal'] .lx-jr-text {
+  align-items: center;
+  flex: none;
+  width: 100%;
+}
+.lx-jr-name {
+  hyphens: auto;
+  overflow-wrap: break-word;
+}
+/* Waagerecht: schmale Spalten. Lieber etwas kleiner als ein Wort mitten im Buchstaben brechen (nicht jeder Browser hat Silbentrennung). */
+.lx-jr[data-orient='horizontal'] .lx-jr-name {
+  font-size: 0.8125rem;
+  letter-spacing: -0.01em;
+  overflow-wrap: normal;
+}
+.lx-jr[data-orient='horizontal'] .lx-jr-btn {
+  padding-inline: 0.125rem;
+}
+.lx-jr-pats {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+.lx-jr-pats-bar {
+  position: relative;
+  display: block;
+  width: 2.75rem;
+  height: 4px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--lx-track);
+}
+.lx-jr-pats-bar > span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+  background: var(--lx-ch-grammar);
+}
+.lx-jr[data-orient='horizontal'] .lx-jr-btn:hover {
+  background: color-mix(in srgb, var(--lx-surface-strong) 70%, transparent);
+}
+.lx-jr[data-orient='horizontal'] .lx-jr-btn[aria-pressed='true'] {
+  background: color-mix(in srgb, var(--lx-surface-strong) 85%, transparent);
+  border-color: var(--lx-line-strong);
+}
+
+/* Station und Lichthof der aktuellen Station (atmet dreimal, dann still). */
+.lx-jr-node {
+  position: relative;
+  display: block;
+  flex: none;
+  border-radius: 999px;
+}
+.lx-jr-node[data-state='current']::before {
+  content: '';
+  position: absolute;
+  inset: -16px;
+  border-radius: 999px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--lx-ch-grammar) 60%, transparent) 0%, transparent 68%);
+  opacity: 0.3;
+}
+.lx-jr-node[data-state='done'] svg {
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--lx-ok) 35%, transparent));
+}
+:root[data-theme='light'] .lx-jr-node[data-state='done'] svg {
+  filter: none;
+}
+:root[data-fx='full'] .lx-jr-node[data-state='current']::before,
+:root[data-fx='calm'] .lx-jr-node[data-state='current']::before {
+  animation: lx-jr-halo 2.4s ease-in-out 3;
+}
+@keyframes lx-jr-halo {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Gipfel „C1“ über Kapitel 7 (nur senkrecht, Schmuck). */
+.lx-jr-summit {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.25rem 0 0.375rem 1.25rem;
+}
+.lx-jr-summit-node {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: 999px;
+  border: 2px dashed color-mix(in srgb, var(--lx-gold-text) 70%, transparent);
+  background: var(--lx-jr-node-bg);
+  color: var(--lx-gold-text);
+}
+.lx-jr-summit-label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--lx-gold-text);
+}
+
+:root[data-fx='off'] .lx-jr *,
+:root[data-fx='off'] .lx-jr *::before {
+  animation: none !important;
+  transition: none !important;
+}
+:root[data-fx='off'] .lx-jr-ground {
+  transform: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lx-jr *,
+  .lx-jr *::before {
+    animation: none !important;
+    transition: none !important;
+  }
+  .lx-jr-ground {
+    transform: none !important;
+  }
+}
+
+/* ───────────── P59 Wort-Himmel (Atlas) ───────────── */
+.lx-atlas-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+@media (min-width: 1024px) {
+  .lx-atlas-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 30rem) minmax(0, 1fr);
+    gap: 2.5rem;
+    align-items: start;
+  }
+  .lx-atlas-sky {
+    position: sticky;
+    top: 5rem;
+  }
+}
+.lx-sky {
+  padding: 1.125rem;
+  border-radius: var(--radius-card);
+  border: 1px solid var(--lx-border);
+  background:
+    radial-gradient(120% 80% at 50% 38%, color-mix(in srgb, var(--lx-ch-cards) 9%, transparent), transparent 70%),
+    var(--lx-surface);
+  box-shadow: var(--lx-shadow);
+}
+:root[data-theme='light'] .lx-sky {
+  background:
+    radial-gradient(120% 80% at 50% 38%, color-mix(in srgb, var(--lx-ch-cards) 6%, transparent), transparent 70%),
+    var(--lx-surface-solid, var(--lx-surface));
+}
+.lx-sky-skeleton {
+  aspect-ratio: 1 / 1;
+  max-width: 30rem;
+  border-radius: var(--radius-card);
+  background: var(--lx-surface);
+  border: 1px solid var(--lx-border);
+}
+.lx-sky-stage {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 480px;
+  margin-inline: auto;
+}
+.lx-sky-canvas {
+  display: block;
+  max-width: 100%;
+  aspect-ratio: 1 / 1;
+  touch-action: manipulation;
+  cursor: crosshair;
+  border-radius: 50%;
+  animation: lx-sky-in 600ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes lx-sky-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+.lx-sky-zoom {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  min-height: 2.75rem;
+  padding: 0 0.875rem;
+  border-radius: 999px;
+  border: 1px solid var(--lx-border);
+  background: var(--lx-surface-solid, var(--lx-bg));
+  color: var(--lx-fg);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.lx-sky-zoom:focus-visible {
+  outline: 2px solid var(--lx-ch-cards);
+  outline-offset: 2px;
+}
+.lx-sky-pick {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0.875rem;
+  border-radius: calc(var(--radius-card) - 4px);
+  border: 1px solid var(--lx-border);
+  background: var(--lx-surface);
+}
+.lx-sky-pick [data-tone='firm'],
+.lx-sky-pick [data-tone='safe'] {
+  color: var(--lx-ok-text, var(--lx-ok));
+}
+.lx-sky-pick [data-tone='learning'],
+.lx-sky-pick [data-tone='new'] {
+  color: var(--lx-ch-cards);
+}
+.lx-sky-pick [data-tone='none'] {
+  color: var(--lx-fg-muted);
+}
+.lx-sky-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.8125rem;
+  color: var(--lx-fg-muted);
+}
+.lx-sky-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.lx-sky-legend b {
+  color: var(--lx-fg);
+  font-weight: 600;
+}
+.lx-sky-legend i {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--lx-ok);
+}
+.lx-sky-legend [data-tone='firm'] i {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--lx-ok) 25%, transparent);
+}
+.lx-sky-legend [data-tone='safe'] i {
+  background: color-mix(in srgb, var(--lx-ok) 75%, transparent);
+}
+.lx-sky-legend [data-tone='learning'] i {
+  background: color-mix(in srgb, var(--lx-ch-cards) 75%, transparent);
+}
+.lx-sky-legend [data-tone='new'] i {
+  background: color-mix(in srgb, var(--lx-ch-cards) 45%, transparent);
+}
+.lx-sky-ringnote {
+  color: var(--lx-gold-text);
+}
+:root[data-fx='off'] .lx-sky-canvas,
+:root[data-fx='calm'] .lx-sky-canvas {
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lx-sky-canvas {
+    animation: none;
+  }
+}

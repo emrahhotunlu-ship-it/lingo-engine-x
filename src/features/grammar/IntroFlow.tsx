@@ -9,6 +9,8 @@ import { ActionBar, PrimaryAction } from '../../ui/ActionBar';
 import { Eyebrow } from '../../ui/Eyebrow';
 import { useSwipeLeft } from '../../engine/swipe';
 import { topicName } from './topicUi';
+import { filmFor } from '../../domain/c1/anim';
+import { FilmLauncher } from '../c1/film/FilmLauncher';
 
 // Einführung eines neuen Musters (Lernplattform 2.0 §5.3, Schritt 2): kurze Karten vor den Aufgaben. Handy: je Muster drei wischbare
 // Karten mit höchstens 35 Wörtern – ① Alltag und Verständnisfrage (CCQ) zum Antippen, ② Formel und „So entscheidest du“, ③ typischer
@@ -135,6 +137,7 @@ function ContextBlock({ pat, tp, pick }: { pat: Pattern; tp: TopicPatterns; pick
       {pat.ccq.slice(0, 2).map((c) => (
         <Ccq key={c.s + c.q.de} q={c.q} s={c.s} a={c.a} topic={tp.topic} />
       ))}
+      <FilmLauncher film={filmFor(tp.topic, pat.id)} />
       <span lang={lang} className="sr-only">
         {pick(pat.use)}
       </span>

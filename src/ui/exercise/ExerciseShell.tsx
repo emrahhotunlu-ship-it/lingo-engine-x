@@ -41,7 +41,7 @@ export type ShellStatus = {
 };
 export type ShellAction = { label: string; onClick: () => void; testId: string; disabled?: boolean; busy?: boolean; busyLabel?: string };
 export type ShellSecondary = { id: 'hint' | 'dontKnow' | 'noError' | 'skip' | 'replay' | 'reset' | 'noSound'; label: string; onClick: () => void; testId: string; disabled?: boolean };
-export type ShellMenuId = 'override' | 'copyOnce' | 'translate' | 'moreInfo' | 'askClaude' | 'wholeTopic' | 'report';
+export type ShellMenuId = 'override' | 'copyOnce' | 'showMe' | 'translate' | 'moreInfo' | 'askClaude' | 'wholeTopic' | 'report';
 export type ShellFeedback = {
   verdict: ResultVerdict;
   sub?: string | null;

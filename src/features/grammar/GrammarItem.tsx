@@ -34,6 +34,8 @@ import { nextT } from '../progress/persist';
 import { isC1Task } from '../../domain/c1x/runtime';
 import { C1Item } from '../c1x/C1Item';
 import { TopicSheet } from './GrammarScreen';
+import { filmFor } from '../../domain/c1/anim';
+import { FilmSheet, filmEnabled } from '../c1/film/FilmLauncher';
 
 // Eine Grammatikaufgabe im Übungsgerüst (Lernplattform 2.0 §5.2). Das Gerüst (`ExerciseShell`) zeichnet Status, Aufgabenzeile, Satz,
 // Eingabe, Urteil, Vergleich und die Erklär-Karte; diese Datei sammelt nur Eingabe und Prüfung je Aufgabenart:
@@ -129,6 +131,9 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   const [locateMisses, setLocateMisses] = useState(0);
   const [copyOpen, setCopyOpen] = useState(false);
   const [sheet, setSheet] = useState(false);
+  // Menü ⋯ „Zeig es mir“ (P61): der Struktur-Film zum Muster der Aufgabe, falls es einen gibt.
+  const [filmOpen, setFilmOpen] = useState(false);
+  const film = filmEnabled() ? filmFor(task.topic, patId) : null;
   const firstWrong = useRef<string | null>(null);
   const typed = useRef('');
   const shownAt = useRef(0);
@@ -544,6 +549,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     if (wrongTyped && !findTask) menu.override = override;
     if (wrongTyped) menu.copyOnce = () => setCopyOpen(true);
     menu.wholeTopic = () => setSheet(true);
+    if (film) menu.showMe = () => setFilmOpen(true);
     // KI-Tutor: Aufgabe, Antwort und Lösung wie bisher in „Erklär mir meine Antwort“ (Bedeutungsaufgabe: Sätze als Text).
     const mx = task.x?.kind === 'meaning' ? task.x : null;
     const meaningText = (k: string | null): string => (mx ? (k === 'a' ? mx.a : k === 'b' ? mx.b : k === 'both' ? 'Both sentences mean the same' : (k ?? '')) : (k ?? ''));
@@ -611,6 +617,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
         side={null}
       />
       {sheet && <TopicSheet topic={task.topic} onClose={() => setSheet(false)} inRound />}
+      {film && <FilmSheet film={film} open={filmOpen} onClose={() => setFilmOpen(false)} />}
     </div>
   );
 }

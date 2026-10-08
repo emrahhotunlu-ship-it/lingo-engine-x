@@ -6,6 +6,8 @@ import { CopyBox } from '../../ui/CopyBox';
 import { ProgressRing } from '../../ui/ProgressRing';
 import { Sheet } from '../../ui/Sheet';
 import { topicName } from '../grammar/topicUi';
+import { filmForTopics } from '../../domain/c1/anim';
+import { FilmLauncher, filmEnabled } from './film/FilmLauncher';
 
 // Kapitelblatt (Lernplattform 3.0 P32): ein Kapitel des C1-Programms mit Ziel („Abgeschlossen heißt …“), den Themen mit Ring „Muster sicher a/b“,
 // der Prüfungsfokus und der Satz für den Lehrer. Alle Zahlen kommen aus `chapterState` (eine Quelle); das Blatt rechnet nichts selbst.
@@ -23,6 +25,8 @@ const TONE_CLASS: Record<TopicTone, string> = { new: 'bg-surface-strong text-fg'
 
 export function ChapterSheet({ open, chapter, progress, onClose }: { open: boolean; chapter: ProgramChapter | null; progress: ChapterProgress | null; onClose: () => void }) {
   const { t, lang } = useT();
+  // Kapitelstart (P61): der Struktur-Film des ersten Themas mit Film, ein Startknopf, der Film klappt hier im Blatt auf.
+  const film = progress && filmEnabled() ? filmForTopics(progress.topics.filter((r) => r.exists).map((r) => r.id)) : null;
   return (
     <Sheet
       open={open}
@@ -49,6 +53,15 @@ export function ChapterSheet({ open, chapter, progress, onClose }: { open: boole
               </p>
             )}
           </section>
+
+          {film && (
+            <section className="flex flex-col gap-2" aria-labelledby="px-ch-film" data-testid="chapter-film">
+              <h3 id="px-ch-film" className="lx-eyebrow">
+                {t('eeFmChapterTitle')}
+              </h3>
+              <FilmLauncher film={film} />
+            </section>
+          )}
 
           <section className="flex flex-col gap-2" aria-labelledby="px-ch-topics">
             <h3 id="px-ch-topics" className="lx-eyebrow">

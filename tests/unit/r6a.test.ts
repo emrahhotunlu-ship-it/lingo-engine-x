@@ -219,7 +219,7 @@ describe('P60 Messung und Embleme', () => {
 
 describe('P64 Dauerwächter', () => {
   /** Dateien, in denen Momente (≤ 1,4 s) leben dürfen. */
-  const MOMENT_FILES = ['src/ui/motion.ts', 'src/ui/Odometer.tsx', 'src/ui/DayRing.tsx', 'src/engine/fx/', 'src/ui/moments/', 'src/features/settings/MomentsDemo.tsx'];
+  const MOMENT_FILES = ['src/ui/motion.ts', 'src/ui/Odometer.tsx', 'src/ui/DayRing.tsx', 'src/engine/fx/', 'src/ui/moments/', 'src/features/settings/MomentsDemo.tsx', 'src/engine/SentenceMorph.tsx', 'src/features/c1/film/'];
   const isMoment = (rel: string): boolean => MOMENT_FILES.some((m) => rel.startsWith(m));
 
   it('keine Dauer über 0,3 s und kein Federn über 0,4 außerhalb von motion.ts und den Momenten', () => {
