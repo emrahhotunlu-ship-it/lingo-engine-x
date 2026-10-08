@@ -275,3 +275,4 @@ Tests: 1953 Unit; E2E der berührten Bildschirme grün (a11y: Kontrast der „Ne
 - Tests: Unit 4950 grün; voller E2E 667 grün / 34 übersprungen / rot nur perf.spec CPU 4× (Umgebung, bekannt); nach den letzten Korrekturen gezielt repair/lernen/phoneProfile/patterns/wortschatz/grammar/today 56 grün. check:platform FREIGABE 5,06 MiB.
 - Test-Link `AXHkh6…` Version 53 `1791473854-a326` (Rückweg v52 `1791461301-13f2`). Live unverändert v70 `1791461796-73f8`.
 - Hinweis: Der C1-Check erscheint nur im Check-Fenster (letzte 7 Tage des Monats, ab 25.10.).
+- **LIVE 08.10.2026** nach Emrahs „ja gefällt mir so live nehmen bitte“: `JLL8…` Version 71 `1791474840-7485` (Stand Test-Link 9, dist 2708c3f). Rückweg: Version 70 `1791461796-73f8`.
