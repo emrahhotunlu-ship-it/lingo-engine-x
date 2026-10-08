@@ -245,3 +245,9 @@ Tests: 1953 Unit; E2E der berührten Bildschirme grün (a11y: Kontrast der „Ne
 - **Meilenstein-Katalog:** `domain/plan/dayStats.ts` (Marken über `festUnits`, `ch1`–`ch7`, `place`, `c1check1`, `c1ready`), Budget ≤ 1 Karte je Sitzung und ≤ 2 je ISO-Woche, still gemerkt = `Tag~`, `fu` = Umstellung auf `festUnits`; Anspruch auf dem frischen Stand (`features/today/milestoneClaim.ts`), der Aufstieg (R6) hängt an Kapitel, C1 bereit und Marken ab 250.
 - **P43:** 128 Aufgaben Kapitel 1–3 (`gate/k1.json`), Quellen `scripts/c1x/gate1/*.mjs`, Bau `scripts/c1x/build-gate1.mjs`; Gegenlesung siehe Abschlussbericht.
 - **Sonst:** `Sheet` reagiert bei übereinanderliegenden Blättern nur im obersten auf Esc und Tab; Bilder `docs/umbau/design-vergleich/r4-kp-*.png`.
+
+## 08.10.2026 – Test-Link 8: Wort umbauen, Dein Weg (an), Kapitelprüfung
+- kp zusammengeführt (05565c0, 9fa68bd, 3a9179e). data-guard: OK, Befund „sollte“ (Umstellung `fu` aus Teilaufruf) und „kann“ (erneuter Versuch nach Schreibfehler) behoben (8e25b88), Halbsatz `compactC1` in datenmodell.md.
+- english-teacher unabhängig: Runde 1 25 Blocker → eingearbeitet; Runde 2 3 Blocker mit wörtlicher Korrektur → eingearbeitet, mechanische Kontrolle `scripts/c1x/check-gate1-kwt.mjs` ohne Befund (keine dritte Runde laut Ruleset). Vorrat jetzt 135 (neu 0829–0835).
+- Tests: Unit 4837 grün (Wettlauf in shared.test behoben), E2E 643+ grün, N107 auf Rückfall bei `wf` aus umgestellt; rot nur perf.spec CPU 4× (4,5–5,7 s, Umgebung, bekannt). check:platform FREIGABE 4,95 MiB.
+- Test-Link `AXHkh6…` Version 52 `1791461301-13f2` (Rückweg Version 51 `1791450884-39b4`). Live `JLL8…` unverändert v69 `1791450962-60da`.
