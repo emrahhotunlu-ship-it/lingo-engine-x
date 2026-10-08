@@ -230,3 +230,4 @@ Tests: 1953 Unit; E2E der berührten Bildschirme grün (a11y: Kontrast der „Ne
 - Volle E2E: 618 grün; rot nur perf.spec CPU 4× (5,0–5,4 s gegen 4 s). Gegenmessung: Stand Test-Link 6 (712d8f9) misst auf derselben Maschine 5,4–5,6 s → Umgebung, keine Regression. Grenze nicht angehoben. Unter 4 s nur mit Architektur-Änderung (Code-Aufteilung / Plan über 1500 Karten nach der Statuszeile) – offen für Entscheidung.
 - Unit 4759/4759 grün, typecheck grün, check:platform FREIGABE 4,85 MiB; lint: 9 bekannte Altfehler in scripts/*.mjs (src/tests sauber).
 - Test-Link `AXHkh6…` Version 50 `1791432328-9ec7` (Rückweg: Version 49 `1791405486-6ab2`). Live `JLL8…` unverändert v68 `1791365099-c789`.
+- Emrah-Befund (Aufdecken: Klammern + Satzrest maskiert bei mehreren `[…]`): Ursache Klammer-Regex in `findContext`; behoben mit Platzhalter-Suche und Korpus-Test (8c4fbff). Test-Link Version 51 `1791450884-39b4` (Rückweg Version 50 `1791432328-9ec7`).
