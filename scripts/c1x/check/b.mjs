@@ -59,25 +59,25 @@ export const items = [
     ok: 'Feste Verbindung: take a look at = sich etwas ansehen (auch have a look at). || Fixed collocation: take a look at = look at something (also have a look at).',
   },
   {
-    k: 'mcc', p: 'lx.make-decision', area: 'lex', lex: ['make a decision'], lv: 'B2', dom: 'biz',
-    t: 'We need to ___ a decision on the new supplier before the end of the week.',
-    o: [['make'],
-      W('meet', 'calque', 'Deutsch „eine Entscheidung treffen“; treffen heißt hier nicht meet. Es heißt make a decision. || German “eine Entscheidung treffen”; treffen is not meet here. English says make a decision.'),
-      W('do', 'partner', 'do a decision sagt man nicht; es heißt make a decision. || People do not say do a decision; it is make a decision.'),
-      W('hit', 'calque', 'Deutsch „treffen“ wie ein Ziel treffen; hit a decision sagt man nicht. || German “treffen” as in hitting a target; people do not say hit a decision.')],
-    ok: 'Feste Verbindung: make a decision = eine Entscheidung treffen (auch reach a decision). || Fixed collocation: make a decision (also reach a decision).',
+    k: 'mcc', p: 'lx.pave-the-way', area: 'lex', lex: ['pave the way'], lv: 'C1', dom: 'biz',
+    t: 'The pilot project with the bank has ___ the way for a long-term partnership.',
+    o: [['paved'],
+      W('built', 'partner', 'built the way sagt man nicht; die Verbindung heißt pave the way for. || People do not say build the way; the collocation is pave the way for.'),
+      W('made', 'calque', 'Deutsch „den Weg bereiten“ führt zu made; es heißt pave the way for. || German “den Weg bereiten” leads to made; English says pave the way for.'),
+      W('laid', 'partner', 'lay passt zu the foundation, nicht zu the way. || lay goes with the foundation, not with the way.')],
+    ok: 'Feste Verbindung: pave the way for = den Weg ebnen für. || Fixed collocation: pave the way for = make something possible later.',
   },
 
   // ================= ocl =================
   {
     k: 'ocl', p: 'ut.would', lv: 'B2+', dom: 'biz', cls: 'aux', a: ['would'],
-    t: 'When I was a trainee, my boss ___ check every e-mail I wrote before I was allowed to send it.',
+    t: 'When I was a trainee, my boss ___ never allow me to send an e-mail before she had read it.',
     c: {
-      was: 'was check gibt es nicht; vor der Grundform steht kein was. || was check does not exist; no was goes before the base form.',
-      has: 'has check gibt es nicht; has braucht ein Partizip, und der Satz spielt in der Vergangenheit. || has check does not exist; has needs a participle, and the sentence is in the past.',
-      had: 'had check gibt es nicht; had braucht ein Partizip (checked). || had check does not exist; had needs a participle (checked).',
+      was: 'was allow gibt es nicht; vor der Grundform steht kein was. || was allow does not exist; no was goes before the base form.',
+      has: 'has allow gibt es nicht; has braucht ein Partizip, und der Satz spielt in der Vergangenheit. || has allow does not exist; has needs a participle, and the sentence is in the past.',
+      had: 'had allow gibt es nicht; had braucht ein Partizip (allowed). || had allow does not exist; had needs a participle (allowed).',
     },
-    ok: 'Wiederholte Handlung in der Vergangenheit: would + Grundform (my boss would check = pflegte zu prüfen). || A repeated action in the past: would + base form (my boss would check every e-mail).',
+    ok: 'Typisches Verhalten in der Vergangenheit: would + Grundform (my boss would never allow = erlaubte es grundsätzlich nie). could hieße „konnte“, nicht „tat es immer so“. || Typical behavior in the past: would + base form (my boss would never allow it). could would mean “was able to”, not a habit.',
   },
   {
     k: 'ocl', p: 'tc.by-the-time', lv: 'B2+', dom: 'biz', cls: 'prep', a: ['By'],
@@ -100,14 +100,14 @@ export const items = [
     ok: 'Rat geben: If I were you, I would … (auch was ist umgangssprachlich üblich). || Giving advice: If I were you, I would … (was is also common in informal English).',
   },
   {
-    k: 'ocl', p: 'pv.progressive', lv: 'B2+', dom: 'life', cls: 'aux', a: ['being'],
+    k: 'ocl', p: 'pv.progressive', lv: 'B2+', dom: 'life', cls: 'aux', a: ['being', 'getting'],
     t: 'Sorry about the noise: the apartment next door is ___ renovated this week.',
     c: {
       been: 'is been gibt es nicht; nach is steht being. || is been does not exist; being follows is.',
       be: 'is be gibt es nicht. || is be does not exist.',
       having: 'is having renovated gibt es nicht; das Passiv braucht being. || is having renovated does not exist; the passive needs being.',
     },
-    ok: 'Passiv, das gerade läuft: is/are being + Partizip (is being renovated = wird gerade renoviert). || A passive in progress: is/are being + participle (is being renovated).',
+    ok: 'Passiv, das gerade läuft: is/are being + Partizip (is being renovated = wird gerade renoviert); umgangssprachlich auch is getting renovated. || A passive in progress: is/are being + participle (is being renovated); informally also is getting renovated.',
   },
   {
     k: 'ocl', p: 'md.might-have', lv: 'B2+', dom: 'life', cls: 'aux', a: ['have'],
@@ -213,16 +213,16 @@ export const items = [
     ok: 'Nach „need to“ steht ein Verb: strong → strength (o wird e) → strengthen (stärken). || A verb follows “need to”: strong → strength (o becomes e) → strengthen.',
   },
   {
-    k: 'wf', p: 'lx.wf-adj', lv: 'B2', dom: 'life',
-    t: 'The hotel staff were extremely ___ when my luggage got lost at the airport.',
-    stem: 'HELP', a: ['helpful'], pos: 'adj', parts: { base: 'help', suf: ['ful'] },
-    fam: ['help', 'helpful', 'helpless', 'helpfully'],
+    k: 'wf', p: 'lx.wf-adv', lv: 'C1', dom: 'life',
+    t: 'The new café around the corner is ___ the best place in town for breakfast.',
+    stem: 'DOUBT', a: ['undoubtedly', 'doubtless', 'doubtlessly'], pos: 'adv', parts: { pre: 'un', base: 'doubt', suf: ['ed', 'ly'] },
+    fam: ['doubt', 'doubtful', 'doubtfully', 'undoubtedly', 'doubtless', 'doubtlessly'],
     w: {
-      helpless: '„helpless“ heißt hilflos; gemeint ist, dass das Personal geholfen hat. || “helpless” means unable to help yourself; the sentence means the staff helped.',
-      help: '„help“ ist ein Nomen oder Verb; nach „were extremely“ steht ein Adjektiv. || “help” is a noun or verb; an adjective follows “were extremely”.',
-      helpfully: '„helpfully“ ist ein Adverb; nach „were extremely“ steht ein Adjektiv. || “helpfully” is an adverb; an adjective follows “were extremely”.',
+      doubt: '„doubt“ ist ein Nomen oder Verb; vor „the best“ steht hier ein Adverb. || “doubt” is a noun or verb; an adverb goes before “the best” here.',
+      doubtful: '„doubtful“ heißt „zweifelhaft“; gemeint ist „ohne Zweifel“. || “doubtful” means “uncertain”; the sentence means “without doubt”.',
+      doubtfully: '„doubtfully“ heißt „zweifelnd“; gemeint ist „ohne Zweifel“. || “doubtfully” means “with doubt”; the sentence means “without doubt”.',
     },
-    ok: 'Nach „were extremely“ steht ein Adjektiv: help + -ful = helpful (hilfsbereit). || An adjective follows “were extremely”: help + -ful = helpful.',
+    ok: 'Vor „the best“ steht ein Adverb mit dem Sinn „ohne Zweifel“: un- + doubt + -ed + -ly = undoubtedly (zweifellos). || An adverb meaning “without doubt” goes before “the best”: un- + doubt + -ed + -ly = undoubtedly.',
   },
 
   // ================= kwt =================
@@ -239,7 +239,7 @@ export const items = [
   {
     k: 'kwt', p: 'fut.perf-cont', lv: 'C1', dom: 'life',
     lead: 'Next March it will be ten years since my parents started living in Spain.', key: 'BEEN',
-    before: 'By next March, my parents', after: 'in Spain for ten years.', a: ['will have'], b: ['been living'], x: ['be', 'lived', 'are'],
+    before: 'By next March, my parents', after: 'in Spain for ten years.', a: ['will have'], b: ['been living', 'been residing'], x: ['be', 'lived', 'are'],
     traps: [
       ['will have been live', 'Nach been steht hier -ing: been living.', 'been is followed by -ing here: been living.'],
       ['have been living', 'Es geht um einen Zeitpunkt in der Zukunft (By next March): will have been living.', 'This is about a point in the future (By next March): will have been living.'],
@@ -258,20 +258,21 @@ export const items = [
   },
   {
     k: 'kwt', p: 'rs.request', lv: 'B2+', dom: 'biz',
-    lead: 'Ms. Lee said to Tom: “Please send me the updated price list.”', key: 'ASKED',
-    before: 'Ms. Lee', after: 'the updated price list.', a: ['asked Tom'], b: ['to send her', 'to send'], x: ['said', 'told', 'for'],
-    tiles: ['Tom', 'to', 'send', 'her'],
+    lead: 'Ms. Lee said to Tom: “Please check the updated price list.”', key: 'ASKED',
+    before: 'Ms. Lee', after: 'the updated price list.', a: ['asked Tom'], b: ['to check'],
+    v: [{ a: ['asked Tom'], b: ['if he could check', 'whether he could check', 'if he would check', 'whether he would check'] }], x: ['said', 'told', 'for'],
+    tiles: ['Tom', 'to', 'check'],
     traps: [
-      ['asked Tom send her', 'Nach asked + Person steht to + Grundform: to send.', 'asked + person is followed by to + base form: to send.'],
-      ['asked Tom sending her', 'Nach asked + Person steht to + Grundform, nicht -ing.', 'asked + person is followed by to + base form, not -ing.'],
+      ['asked Tom check', 'Nach asked + Person steht to + Grundform: to check.', 'asked + person is followed by to + base form: to check.'],
+      ['asked Tom checking', 'Nach asked + Person steht to + Grundform, nicht -ing.', 'asked + person is followed by to + base form, not -ing.'],
     ],
-    ok: ['Bitte in indirekter Rede: asked + Person + to + Grundform. Teil 1: asked Tom. Teil 2: to send her.', 'A request in reported speech: asked + person + to + base form. Part 1: asked Tom. Part 2: to send her.'],
+    ok: ['Bitte in indirekter Rede: asked + Person + to + Grundform. Teil 1: asked Tom. Teil 2: to check.', 'A request in reported speech: asked + person + to + base form. Part 1: asked Tom. Part 2: to check.'],
   },
   {
     k: 'kwt', p: 'vp.stop-try', lv: 'B2+', dom: 'biz',
     lead: 'On the way to the airport, Tom pulled over for a moment so that he could call the client.', key: 'STOPPED',
-    before: 'On the way to the airport, Tom', after: '.', a: ['stopped'], b: ['to call the client', 'to phone the client'],
-    v: [{ a: ['stopped briefly'], b: ['to call the client', 'to phone the client'] }], x: ['calling', 'for', 'had'],
+    before: 'On the way to the airport, Tom', after: '.', a: ['stopped'], b: ['to call the client', 'to phone the client', 'to ring the client'],
+    v: [{ a: ['stopped briefly'], b: ['to call the client', 'to phone the client', 'to ring the client'] }], x: ['calling', 'for', 'had'],
     traps: [
       ['stopped calling the client', 'stopped calling heißt „hörte auf anzurufen“; gemeint ist „hielt an, um anzurufen“: stopped to call.', 'stopped calling means he quit calling; the sentence means he stopped in order to call: stopped to call.'],
       ['stopped for calling the client', 'Deutsch „zum Anrufen“; „um zu“ heißt to + Grundform: stopped to call.', 'German “zum Anrufen”; a purpose is to + base form: stopped to call.'],

@@ -37,7 +37,7 @@ export const items = [
     o: [['the legal department is'],
       W('is the legal department', 'calque', 'Wie im Deutschen eine direkte Frage; nach Could you tell me where steht die Aussage-Wortstellung. || This is direct question order; after Could you tell me where, use statement word order.'),
       W('does the legal department', 'grammar', 'In einer indirekten Frage steht kein does, und es fehlt das Verb. || An indirect question has no does, and the verb is missing.'),
-      W('the legal department are', 'grammar', 'the legal department ist hier Einzahl: is. || the legal department is singular here: is.')],
+      W('the legal department being', 'grammar', 'Ein Nebensatz braucht ein gebeugtes Verb: where the legal department is. || A clause needs a finite verb: where the legal department is.')],
     ok: 'Indirekte Frage: Fragewort + Subjekt + Verb, wie in einer Aussage (where the legal department is). || Indirect question: question word + subject + verb, as in a statement (where the legal department is).',
   },
   {
@@ -50,13 +50,13 @@ export const items = [
     ok: 'discuss steht direkt mit Objekt, ohne Präposition: discuss the new model (aber: talk about). || discuss takes a direct object, no preposition: discuss the new model (but: talk about).',
   },
   {
-    k: 'mcc', p: 'lx.pay-attention', area: 'lex', lex: ['pay attention'], lv: 'B2', dom: 'biz',
-    t: 'Please ___ special attention to the delivery dates in section four of the contract.',
-    o: [['pay'],
-      W('make', 'calque', 'Deutsch „machen“ passt hier nicht; die Verbindung heißt pay attention. || German “machen” does not fit; the collocation is pay attention.'),
-      W('put', 'partner', 'put attention sagt man nicht; es heißt pay attention to. || People do not say put attention; it is pay attention to.'),
-      W('take', 'partner', 'take attention sagt man nicht; es heißt pay attention to. || People do not say take attention; it is pay attention to.')],
-    ok: 'Feste Verbindung: pay attention to = auf etwas achten. || Fixed collocation: pay attention to = focus on something.',
+    k: 'mcc', p: 'lx.draw-conclusion', area: 'lex', lex: ['draw a conclusion'], lv: 'C1', dom: 'biz',
+    t: 'It is too early to ___ any conclusions from the first two weeks of sales figures.',
+    o: [['draw'],
+      W('pull', 'calque', 'Deutsch „Schlüsse ziehen“; ziehen heißt hier nicht pull. Es heißt draw conclusions. || German “Schlüsse ziehen”; English says draw conclusions, not pull.'),
+      W('make', 'partner', 'make conclusions sagt man nicht; es heißt draw (oder reach) a conclusion. || People do not say make conclusions; it is draw (or reach) a conclusion.'),
+      W('take', 'partner', 'take conclusions sagt man nicht; es heißt draw conclusions. || People do not say take conclusions; it is draw conclusions.')],
+    ok: 'Feste Verbindung: draw a conclusion (from) = einen Schluss ziehen (aus); auch reach/come to a conclusion. || Fixed collocation: draw a conclusion (from); also reach/come to a conclusion.',
   },
   {
     k: 'mcc', p: 'lx.make-progress', area: 'lex', lex: ['make progress'], lv: 'B2', dom: 'biz',
@@ -165,16 +165,17 @@ export const items = [
     ok: 'Nach „are“ steht ein Adjektiv: compare + -able (das e fällt weg) = comparable (vergleichbar); comparable to = vergleichbar mit. || An adjective follows “are”: compare + -able (drop the e) = comparable; comparable to = similar to.',
   },
   {
-    k: 'wf', p: 'lx.wf-adv', lv: 'B2', dom: 'life',
-    t: 'Our new apartment is ___ located just five minutes from the main train station.',
-    stem: 'CONVENIENT', a: ['conveniently'], pos: 'adv', parts: { base: 'convenient', suf: ['ly'] },
-    fam: ['convenient', 'convenience', 'conveniently', 'inconvenient'],
+    k: 'wf', p: 'lx.wf-noun', lv: 'C1', dom: 'biz',
+    t: 'Due to a ___ about the delivery address, the parcel was sent to our old office.',
+    stem: 'UNDERSTAND', a: ['misunderstanding'], pos: 'noun', parts: { pre: 'mis', base: 'understand', suf: ['ing'] },
+    fam: ['understand', 'understanding', 'misunderstanding', 'misunderstood', 'understandable'],
     w: {
-      convenient: '„convenient“ ist ein Adjektiv; vor „located“ steht ein Adverb. || “convenient” is an adjective; an adverb goes before “located”.',
-      convenience: '„convenience“ ist ein Nomen; vor „located“ steht ein Adverb. || “convenience” is a noun; an adverb goes before “located”.',
-      inconvenient: '„inconvenient“ ist ein Adjektiv mit dem Gegenteil; vor „located“ steht ein Adverb. || “inconvenient” is an adjective with the opposite meaning; an adverb goes before “located”.',
+      understand: '„understand“ ist ein Verb; nach „a“ steht ein Nomen. || “understand” is a verb; a noun follows “a”.',
+      understanding: '„an understanding“ ist eine Einigung; gemeint ist ein Fehler beim Verstehen. || “an understanding” is an agreement; the sentence means a mistake in understanding.',
+      misunderstood: '„misunderstood“ ist eine Verbform; nach „a“ steht ein Nomen. || “misunderstood” is a verb form; a noun follows “a”.',
+      understandable: '„understandable“ ist ein Adjektiv; nach „a“ steht hier ein Nomen. || “understandable” is an adjective; a noun follows “a” here.',
     },
-    ok: 'Vor einem Partizip (located) steht ein Adverb: convenient + -ly = conveniently (günstig gelegen). || An adverb goes before a participle (located): convenient + -ly = conveniently.',
+    ok: 'Nach „a“ steht ein Nomen, und es ging etwas schief: mis- + understand + -ing = misunderstanding (Missverständnis). || A noun follows “a”, and something went wrong: mis- + understand + -ing = misunderstanding.',
   },
   {
     k: 'wf', p: 'lx.wf-neg', lv: 'B2', dom: 'biz',
@@ -227,8 +228,8 @@ export const items = [
   {
     k: 'kwt', p: 'pp.first-time', lv: 'B2+', dom: 'biz',
     lead: 'Lisa had never given a talk in English before the conference in Boston.', key: 'FIRST',
-    before: 'The conference in Boston was the', after: 'a talk in English.', a: ['first time'], b: ['Lisa had given', 'she had given', 'that Lisa had given', 'that she had given'],
-    x: ['has', 'gave', 'ever'], tiles: ['time', 'Lisa', 'had', 'given'],
+    before: 'The conference in Boston was the', after: 'a talk in English.', a: ['first time'], b: ['Lisa had given', 'she had given', 'that Lisa had given', 'that she had given', 'Lisa had ever given', 'she had ever given'],
+    x: ['has', 'gave', 'never'], tiles: ['time', 'Lisa', 'had', 'given'],
     traps: [
       ['first time Lisa gave', 'Nach the first time steht hier das Plusquamperfekt (was): had given.', 'After the first time, use the past perfect here (was): had given.'],
       ['first time Lisa has given', 'Der Satz spielt in der Vergangenheit (was): had given, nicht has given.', 'The sentence is in the past (was): had given, not has given.'],
@@ -238,7 +239,7 @@ export const items = [
   {
     k: 'kwt', p: 'ca.unless', lv: 'B2+', dom: 'biz',
     lead: 'We will cancel the order if the supplier does not confirm the date this week.', key: 'UNLESS',
-    before: 'We will cancel the order', after: 'the date this week.', a: ['unless'], b: ['the supplier confirms', 'the supplier has confirmed'], x: ['not', 'will', 'if'],
+    before: 'We will cancel the order', after: 'the date this week.', a: ['unless'], b: ['the supplier confirms', 'the supplier has confirmed', 'they confirm', 'it confirms', 'they have confirmed'], x: ['not', 'will', 'if'],
     traps: [
       ['unless the supplier does not confirm', 'unless heißt schon „wenn nicht“: kein zweites not.', 'unless already means “if not”: no second not.'],
       ['unless the supplier will confirm', 'Nach unless steht kein will: the supplier confirms.', 'No will after unless: the supplier confirms.'],
@@ -248,7 +249,7 @@ export const items = [
   {
     k: 'kwt', p: 'md.must-have', lv: 'B2+', dom: 'life',
     lead: 'I am convinced that somebody has taken my bike from the garden; it was here an hour ago.', key: 'MUST',
-    before: 'Somebody', after: 'my bike from the garden.', a: ['must have'], b: ['taken', 'removed', 'borrowed'], x: ['can', 'had', 'took'],
+    before: 'Somebody', after: 'my bike from the garden.', a: ['must have'], b: ['taken', 'stolen', 'removed', 'borrowed'], x: ['can', 'had', 'took'],
     traps: [
       ['must had taken', 'Nach must steht have, nicht had: must have taken.', 'must is followed by have, not had: must have taken.'],
       ['must have took', 'took ist Past Simple; nach have steht das Partizip taken.', 'took is the past simple; have is followed by the participle taken.'],
@@ -258,8 +259,8 @@ export const items = [
   {
     k: 'kwt', p: 'vp.remember-forget', lv: 'B2+', dom: 'life',
     lead: 'I locked the front door this morning, but I have no memory of doing it.', key: 'REMEMBER',
-    before: 'I locked the front door this morning, but I', after: 'it.', a: ['do not'], b: ['remember locking', 'remember doing'],
-    v: [{ a: ['cannot', "can't"], b: ['remember locking', 'remember doing'] }], x: ['to', 'lock', 'forget'],
+    before: 'I locked the front door this morning, but I', after: 'it.', a: ['do not'], b: ['remember locking', 'remember doing', 'remember having locked', 'remember having done'],
+    v: [{ a: ['cannot', "can't"], b: ['remember locking', 'remember doing', 'remember having locked', 'remember having done'] }], x: ['to', 'lock', 'forget'],
     traps: [
       ['do not remember to lock', 'remember to lock heißt „daran denken, es zu tun“; gemeint ist die Erinnerung: remember locking.', 'remember to lock means “not forget to do it”; the sentence means the memory: remember locking.'],
     ],

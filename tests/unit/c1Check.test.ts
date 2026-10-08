@@ -75,6 +75,13 @@ describe('Wertung', () => {
     expect(l.score.max).toBe(2);
     expect(l.score.got).toBe(1);
   });
+  it('wf: britische Schreibung gilt als richtig (wf-2076 modernise = modernize)', () => {
+    const wf = byId.get('wf-2076');
+    expect(wf?.kind).toBe('wf');
+    if (!wf) return;
+    for (const text of ['modernize', 'modernise']) expect(checkLine(wf, { kind: 'wf', text }).score.got).toBe(1);
+    expect(checkLine(wf, { kind: 'wf', text: 'modern' }).score.got).toBe(0);
+  });
   it('„Weiß ich nicht“ gibt 0 und keinen Fehlersatz; Spanne ±3 innerhalb 0–36', () => {
     const t = scoreCheck(set, set.map((it) => ({ id: it.id, r: null })));
     expect(t.pts).toBe(0);

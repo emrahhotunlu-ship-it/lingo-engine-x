@@ -283,46 +283,46 @@
    "id": "mcc-2037",
    "kind": "mcc",
    "area": "lex",
-   "pat": "lx.make-decision",
+   "pat": "lx.pave-the-way",
    "lex": [
-    "make a decision"
+    "pave the way"
    ],
-   "level": "B2",
+   "level": "C1",
    "dom": "biz",
    "src": "seed",
    "probe": true,
    "form": "B",
-   "text": "We need to ___ a decision on the new supplier before the end of the week.",
+   "text": "The pilot project with the bank has ___ the way for a long-term partnership.",
    "options": [
-    "meet",
-    "do",
-    "hit",
-    "make"
+    "built",
+    "made",
+    "laid",
+    "paved"
    ],
    "answer": 3,
    "why": {
     "ok": {
-     "de": "Feste Verbindung: make a decision = eine Entscheidung treffen (auch reach a decision).",
-     "en": "Fixed collocation: make a decision (also reach a decision)."
+     "de": "Feste Verbindung: pave the way for = den Weg ebnen für.",
+     "en": "Fixed collocation: pave the way for = make something possible later."
     },
     "wrong": [
      {
-      "opt": "meet",
-      "cat": "calque",
-      "de": "Deutsch „eine Entscheidung treffen“; treffen heißt hier nicht meet. Es heißt make a decision.",
-      "en": "German “eine Entscheidung treffen”; treffen is not meet here. English says make a decision."
-     },
-     {
-      "opt": "do",
+      "opt": "built",
       "cat": "partner",
-      "de": "do a decision sagt man nicht; es heißt make a decision.",
-      "en": "People do not say do a decision; it is make a decision."
+      "de": "built the way sagt man nicht; die Verbindung heißt pave the way for.",
+      "en": "People do not say build the way; the collocation is pave the way for."
      },
      {
-      "opt": "hit",
+      "opt": "made",
       "cat": "calque",
-      "de": "Deutsch „treffen“ wie ein Ziel treffen; hit a decision sagt man nicht.",
-      "en": "German “treffen” as in hitting a target; people do not say hit a decision."
+      "de": "Deutsch „den Weg bereiten“ führt zu made; es heißt pave the way for.",
+      "en": "German “den Weg bereiten” leads to made; English says pave the way for."
+     },
+     {
+      "opt": "laid",
+      "cat": "partner",
+      "de": "lay passt zu the foundation, nicht zu the way.",
+      "en": "lay goes with the foundation, not with the way."
      }
     ]
    }
@@ -338,7 +338,7 @@
    "src": "seed",
    "probe": true,
    "form": "B",
-   "text": "When I was a trainee, my boss ___ check every e-mail I wrote before I was allowed to send it.",
+   "text": "When I was a trainee, my boss ___ never allow me to send an e-mail before she had read it.",
    "accept": [
     "would"
    ],
@@ -350,30 +350,30 @@
    ],
    "why": {
     "ok": {
-     "de": "Wiederholte Handlung in der Vergangenheit: would + Grundform (my boss would check = pflegte zu prüfen).",
-     "en": "A repeated action in the past: would + base form (my boss would check every e-mail)."
+     "de": "Typisches Verhalten in der Vergangenheit: would + Grundform (my boss would never allow = erlaubte es grundsätzlich nie). could hieße „konnte“, nicht „tat es immer so“.",
+     "en": "Typical behavior in the past: would + base form (my boss would never allow it). could would mean “was able to”, not a habit."
     },
     "wrong": [
      {
       "if": [
        "was"
       ],
-      "de": "was check gibt es nicht; vor der Grundform steht kein was.",
-      "en": "was check does not exist; no was goes before the base form."
+      "de": "was allow gibt es nicht; vor der Grundform steht kein was.",
+      "en": "was allow does not exist; no was goes before the base form."
      },
      {
       "if": [
        "has"
       ],
-      "de": "has check gibt es nicht; has braucht ein Partizip, und der Satz spielt in der Vergangenheit.",
-      "en": "has check does not exist; has needs a participle, and the sentence is in the past."
+      "de": "has allow gibt es nicht; has braucht ein Partizip, und der Satz spielt in der Vergangenheit.",
+      "en": "has allow does not exist; has needs a participle, and the sentence is in the past."
      },
      {
       "if": [
        "had"
       ],
-      "de": "had check gibt es nicht; had braucht ein Partizip (checked).",
-      "en": "had check does not exist; had needs a participle (checked)."
+      "de": "had allow gibt es nicht; had braucht ein Partizip (allowed).",
+      "en": "had allow does not exist; had needs a participle (allowed)."
      }
     ]
    }
@@ -494,7 +494,8 @@
    "form": "B",
    "text": "Sorry about the noise: the apartment next door is ___ renovated this week.",
    "accept": [
-    "being"
+    "being",
+    "getting"
    ],
    "cls": "aux",
    "chips": [
@@ -504,8 +505,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Passiv, das gerade läuft: is/are being + Partizip (is being renovated = wird gerade renoviert).",
-     "en": "A passive in progress: is/are being + participle (is being renovated)."
+     "de": "Passiv, das gerade läuft: is/are being + Partizip (is being renovated = wird gerade renoviert); umgangssprachlich auch is getting renovated.",
+     "en": "A passive in progress: is/are being + participle (is being renovated); informally also is getting renovated."
     },
     "wrong": [
      {
@@ -1052,59 +1053,65 @@
    "id": "wf-2051",
    "kind": "wf",
    "area": "lex",
-   "pat": "lx.wf-adj",
-   "level": "B2",
+   "pat": "lx.wf-adv",
+   "level": "C1",
    "dom": "life",
    "src": "seed",
    "probe": true,
    "form": "B",
    "lex": [
-    "helpful"
+    "undoubtedly"
    ],
-   "text": "The hotel staff were extremely ___ when my luggage got lost at the airport.",
-   "stem": "HELP",
+   "text": "The new café around the corner is ___ the best place in town for breakfast.",
+   "stem": "DOUBT",
    "accept": [
-    "helpful"
+    "undoubtedly",
+    "doubtless",
+    "doubtlessly"
    ],
-   "pos": "adj",
+   "pos": "adv",
    "parts": {
-    "base": "help",
+    "pre": "un",
+    "base": "doubt",
     "suf": [
-     "ful"
+     "ed",
+     "ly"
     ]
    },
    "family": [
-    "help",
-    "helpful",
-    "helpless",
-    "helpfully"
+    "doubt",
+    "doubtful",
+    "doubtfully",
+    "undoubtedly",
+    "doubtless",
+    "doubtlessly"
    ],
    "why": {
     "ok": {
-     "de": "Nach „were extremely“ steht ein Adjektiv: help + -ful = helpful (hilfsbereit).",
-     "en": "An adjective follows “were extremely”: help + -ful = helpful."
+     "de": "Vor „the best“ steht ein Adverb mit dem Sinn „ohne Zweifel“: un- + doubt + -ed + -ly = undoubtedly (zweifellos).",
+     "en": "An adverb meaning “without doubt” goes before “the best”: un- + doubt + -ed + -ly = undoubtedly."
     },
     "wrong": [
      {
       "if": [
-       "help"
+       "doubt"
       ],
-      "de": "„help“ ist ein Nomen oder Verb; nach „were extremely“ steht ein Adjektiv.",
-      "en": "“help” is a noun or verb; an adjective follows “were extremely”."
+      "de": "„doubt“ ist ein Nomen oder Verb; vor „the best“ steht hier ein Adverb.",
+      "en": "“doubt” is a noun or verb; an adverb goes before “the best” here."
      },
      {
       "if": [
-       "helpless"
+       "doubtful"
       ],
-      "de": "„helpless“ heißt hilflos; gemeint ist, dass das Personal geholfen hat.",
-      "en": "“helpless” means unable to help yourself; the sentence means the staff helped."
+      "de": "„doubtful“ heißt „zweifelhaft“; gemeint ist „ohne Zweifel“.",
+      "en": "“doubtful” means “uncertain”; the sentence means “without doubt”."
      },
      {
       "if": [
-       "helpfully"
+       "doubtfully"
       ],
-      "de": "„helpfully“ ist ein Adverb; nach „were extremely“ steht ein Adjektiv.",
-      "en": "“helpfully” is an adverb; an adjective follows “were extremely”."
+      "de": "„doubtfully“ heißt „zweifelnd“; gemeint ist „ohne Zweifel“.",
+      "en": "“doubtfully” means “with doubt”; the sentence means “without doubt”."
      }
     ]
    }
@@ -1199,7 +1206,8 @@
       "will have"
      ],
      "b": [
-      "been living"
+      "been living",
+      "been residing"
      ]
     }
    ],
@@ -1326,7 +1334,7 @@
    "src": "seed",
    "probe": true,
    "form": "B",
-   "lead": "Ms. Lee said to Tom: “Please send me the updated price list.”",
+   "lead": "Ms. Lee said to Tom: “Please check the updated price list.”",
    "key": "ASKED",
    "before": "Ms. Lee",
    "after": "the updated price list.",
@@ -1336,16 +1344,27 @@
       "asked Tom"
      ],
      "b": [
-      "to send her",
-      "to send"
+      "to check"
+     ]
+    },
+    {
+     "a": [
+      "asked Tom"
+     ],
+     "b": [
+      "if he could check",
+      "whether he could check",
+      "if he would check",
+      "if he'd check",
+      "whether he would check",
+      "whether he'd check"
      ]
     }
    ],
    "tiles": [
     "Tom",
     "to",
-    "send",
-    "her"
+    "check"
    ],
    "extra": [
     "said",
@@ -1353,31 +1372,29 @@
     "for"
    ],
    "traps": [
-    "asked Tom send her",
-    "asked Tom sending her"
+    "asked Tom check",
+    "asked Tom checking"
    ],
    "why": {
     "ok": {
-     "de": "Bitte in indirekter Rede: asked + Person + to + Grundform. Teil 1: asked Tom. Teil 2: to send her.",
-     "en": "A request in reported speech: asked + person + to + base form. Part 1: asked Tom. Part 2: to send her."
+     "de": "Bitte in indirekter Rede: asked + Person + to + Grundform. Teil 1: asked Tom. Teil 2: to check.",
+     "en": "A request in reported speech: asked + person + to + base form. Part 1: asked Tom. Part 2: to check."
     },
     "wrong": [
      {
       "if": [
        "asked",
        "tom",
-       "send",
-       "her"
+       "check"
       ],
-      "de": "Nach asked + Person steht to + Grundform: to send.",
-      "en": "asked + person is followed by to + base form: to send."
+      "de": "Nach asked + Person steht to + Grundform: to check.",
+      "en": "asked + person is followed by to + base form: to check."
      },
      {
       "if": [
        "asked",
        "tom",
-       "sending",
-       "her"
+       "checking"
       ],
       "de": "Nach asked + Person steht to + Grundform, nicht -ing.",
       "en": "asked + person is followed by to + base form, not -ing."
@@ -1407,7 +1424,8 @@
      ],
      "b": [
       "to call the client",
-      "to phone the client"
+      "to phone the client",
+      "to ring the client"
      ]
     },
     {
@@ -1416,7 +1434,8 @@
      ],
      "b": [
       "to call the client",
-      "to phone the client"
+      "to phone the client",
+      "to ring the client"
      ]
     }
    ],

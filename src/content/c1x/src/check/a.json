@@ -106,7 +106,7 @@
    "form": "A",
    "text": "Tom ___ the whole contract yet: it only arrived five minutes ago and it is forty pages long.",
    "options": [
-    "mustn't have read",
+    "shouldn't have read",
     "must have read",
     "would have read",
     "cannot have read"
@@ -114,15 +114,15 @@
    "answer": 3,
    "why": {
     "ok": {
-     "de": "Sicher NICHT passiert (Schlussfolgerung über Vergangenes): can’t/cannot have + Partizip. Fünf Minuten für vierzig Seiten reichen nicht.",
-     "en": "Surely did NOT happen (a deduction about the past): can’t/cannot have + participle. Five minutes are not enough for forty pages."
+     "de": "Sicher NICHT passiert (Schlussfolgerung über Vergangenes): can’t/cannot have + Partizip (US-Englisch auch must not have). Fünf Minuten für vierzig Seiten reichen nicht.",
+     "en": "Surely did NOT happen (a deduction about the past): can’t/cannot have + participle (in US English also must not have). Five minutes are not enough for forty pages."
     },
     "wrong": [
      {
-      "opt": "mustn't have read",
-      "cat": "calque",
-      "de": "Deutsch „er muss es nicht gelesen haben“; mustn’t heißt „darf nicht“. Unmöglich (Vergangenheit) ist can’t have.",
-      "en": "mustn’t means “is not allowed to”; impossible in the past is can’t have."
+      "opt": "shouldn't have read",
+      "cat": "meaning",
+      "de": "shouldn’t have read ist Kritik („hätte nicht lesen sollen“); gemeint ist „hat es sicher nicht gelesen“.",
+      "en": "shouldn’t have read is criticism; the sentence means he surely did not read it."
      },
      {
       "opt": "must have read",
@@ -1064,8 +1064,8 @@
       "if": [
        "lead"
       ],
-      "de": "„lead“ als Nomen heißt „Vorsprung“ oder „Hinweis“; gemeint ist die Führung.",
-      "en": "“lead” as a noun means “a head start” or “a clue”; the sentence means guidance."
+      "de": "„lead“ ist nicht aus LEADER gebildet, und „under her lead“ ist unüblich; gemeint ist leadership (die Führung).",
+      "en": "“lead” is not formed from LEADER, and “under her lead” is unusual; the word needed is leadership."
      },
      {
       "if": [
@@ -1111,7 +1111,8 @@
     {
      "a": [
       "has gotten used",
-      "has got used"
+      "has got used",
+      "has become used"
      ],
      "b": [
       "to getting"
@@ -1388,7 +1389,8 @@
      ],
      "b": [
       "had we launched",
-      "had we released"
+      "had we released",
+      "had we rolled out"
      ]
     }
    ],

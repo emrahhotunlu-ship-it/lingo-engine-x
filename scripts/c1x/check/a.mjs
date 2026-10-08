@@ -26,10 +26,10 @@ export const items = [
     k: 'mcc', p: 'md.cant-have', lv: 'B2+', dom: 'biz',
     t: 'Tom ___ the whole contract yet: it only arrived five minutes ago and it is forty pages long.',
     o: [['cannot have read'],
-      W("mustn't have read", 'calque', 'Deutsch „er muss es nicht gelesen haben“; mustn’t heißt „darf nicht“. Unmöglich (Vergangenheit) ist can’t have. || mustn’t means “is not allowed to”; impossible in the past is can’t have.'),
+      W("shouldn't have read", 'meaning', 'shouldn’t have read ist Kritik („hätte nicht lesen sollen“); gemeint ist „hat es sicher nicht gelesen“. || shouldn’t have read is criticism; the sentence means he surely did not read it.'),
       W('must have read', 'meaning', 'must have read heißt „hat es sicher gelesen“; der Satz zeigt das Gegenteil. || must have read means “has surely read it”; the sentence shows the opposite.'),
       W('would have read', 'grammar', 'would have read ist ein Konditional; hier geht es um eine Schlussfolgerung. || would have read is a conditional; this sentence is a deduction.')],
-    ok: 'Sicher NICHT passiert (Schlussfolgerung über Vergangenes): can’t/cannot have + Partizip. Fünf Minuten für vierzig Seiten reichen nicht. || Surely did NOT happen (a deduction about the past): can’t/cannot have + participle. Five minutes are not enough for forty pages.',
+    ok: 'Sicher NICHT passiert (Schlussfolgerung über Vergangenes): can’t/cannot have + Partizip (US-Englisch auch must not have). Fünf Minuten für vierzig Seiten reichen nicht. || Surely did NOT happen (a deduction about the past): can’t/cannot have + participle (in US English also must not have). Five minutes are not enough for forty pages.',
   },
   {
     k: 'mcc', p: 'gi.meaning', lv: 'B2+', dom: 'life',
@@ -217,7 +217,7 @@ export const items = [
     w: {
       leader: '„under her leader“ geht nicht; gemeint ist die Führung, nicht die Person. || “under her leader” does not work; the sentence means the guidance, not the person.',
       leading: '„leading“ ist eine Verbform oder ein Adjektiv; nach „her“ steht hier ein Nomen. || “leading” is a verb form or adjective; a noun follows “her” here.',
-      lead: '„lead“ als Nomen heißt „Vorsprung“ oder „Hinweis“; gemeint ist die Führung. || “lead” as a noun means “a head start” or “a clue”; the sentence means guidance.',
+      lead: '„lead“ ist nicht aus LEADER gebildet, und „under her lead“ ist unüblich; gemeint ist leadership (die Führung). || “lead” is not formed from LEADER, and “under her lead” is unusual; the word needed is leadership.',
     },
     ok: 'Nach „Under her“ steht ein Nomen: leader + -ship = leadership (die Führung). -ship bildet abstrakte Nomen: partner → partnership. || A noun follows “Under her”: leader + -ship = leadership. -ship forms abstract nouns: partner → partnership.',
   },
@@ -227,7 +227,7 @@ export const items = [
     k: 'kwt', p: 'ut.be-used-to', lv: 'B2+', dom: 'life',
     lead: 'My grandmother gets up at five every morning, so it is nothing unusual for her.', key: 'USED',
     before: 'My grandmother', after: 'up at five every morning.', a: ['is used'], b: ['to getting'],
-    v: [{ a: ['has gotten used', 'has got used'], b: ['to getting'] }], x: ['get', 'uses', 'being'],
+    v: [{ a: ['has gotten used', 'has got used', 'has become used'], b: ['to getting'] }], x: ['get', 'uses', 'being'],
     traps: [
       ['is used to get', 'Nach be used to steht -ing: is used to getting.', 'be used to is followed by -ing: is used to getting.'],
       ['used to get', 'used to get heißt „früher“; gemeint ist „gewohnt sein“: is used to getting.', 'used to get means “in the past”; the sentence means “be accustomed to”: is used to getting.'],
@@ -268,7 +268,7 @@ export const items = [
   {
     k: 'kwt', p: 'inv.sooner', lv: 'C1', dom: 'biz',
     lead: 'As soon as we had launched the update, customers started reporting bugs.', key: 'SOONER',
-    before: 'No', after: 'the update than customers started reporting bugs.', a: ['sooner'], b: ['had we launched', 'had we released'], x: ['did', 'have', 'soon'],
+    before: 'No', after: 'the update than customers started reporting bugs.', a: ['sooner'], b: ['had we launched', 'had we released', 'had we rolled out'], x: ['did', 'have', 'soon'],
     traps: [
       ['sooner we had launched', 'Nach No sooner kommt die Frage-Wortstellung: had we launched.', 'No sooner is followed by question word order: had we launched.'],
       ['sooner did we launch', 'Hier steht das Plusquamperfekt: had we launched, nicht did we launch.', 'This needs the past perfect: had we launched, not did we launch.'],

@@ -155,7 +155,7 @@
     "is the legal department",
     "does the legal department",
     "the legal department is",
-    "the legal department are"
+    "the legal department being"
    ],
    "answer": 2,
    "why": {
@@ -177,10 +177,10 @@
       "en": "An indirect question has no does, and the verb is missing."
      },
      {
-      "opt": "the legal department are",
+      "opt": "the legal department being",
       "cat": "grammar",
-      "de": "the legal department ist hier Einzahl: is.",
-      "en": "the legal department is singular here: is."
+      "de": "Ein Nebensatz braucht ein gebeugtes Verb: where the legal department is.",
+      "en": "A clause needs a finite verb: where the legal department is."
      }
     ]
    }
@@ -235,46 +235,46 @@
    "id": "mcc-2062",
    "kind": "mcc",
    "area": "lex",
-   "pat": "lx.pay-attention",
+   "pat": "lx.draw-conclusion",
    "lex": [
-    "pay attention"
+    "draw a conclusion"
    ],
-   "level": "B2",
+   "level": "C1",
    "dom": "biz",
    "src": "seed",
    "probe": true,
    "form": "C",
-   "text": "Please ___ special attention to the delivery dates in section four of the contract.",
+   "text": "It is too early to ___ any conclusions from the first two weeks of sales figures.",
    "options": [
+    "pull",
     "make",
-    "put",
-    "pay",
+    "draw",
     "take"
    ],
    "answer": 2,
    "why": {
     "ok": {
-     "de": "Feste Verbindung: pay attention to = auf etwas achten.",
-     "en": "Fixed collocation: pay attention to = focus on something."
+     "de": "Feste Verbindung: draw a conclusion (from) = einen Schluss ziehen (aus); auch reach/come to a conclusion.",
+     "en": "Fixed collocation: draw a conclusion (from); also reach/come to a conclusion."
     },
     "wrong": [
      {
-      "opt": "make",
+      "opt": "pull",
       "cat": "calque",
-      "de": "Deutsch „machen“ passt hier nicht; die Verbindung heißt pay attention.",
-      "en": "German “machen” does not fit; the collocation is pay attention."
+      "de": "Deutsch „Schlüsse ziehen“; ziehen heißt hier nicht pull. Es heißt draw conclusions.",
+      "en": "German “Schlüsse ziehen”; English says draw conclusions, not pull."
      },
      {
-      "opt": "put",
+      "opt": "make",
       "cat": "partner",
-      "de": "put attention sagt man nicht; es heißt pay attention to.",
-      "en": "People do not say put attention; it is pay attention to."
+      "de": "make conclusions sagt man nicht; es heißt draw (oder reach) a conclusion.",
+      "en": "People do not say make conclusions; it is draw (or reach) a conclusion."
      },
      {
       "opt": "take",
       "cat": "partner",
-      "de": "take attention sagt man nicht; es heißt pay attention to.",
-      "en": "People do not say take attention; it is pay attention to."
+      "de": "take conclusions sagt man nicht; es heißt draw conclusions.",
+      "en": "People do not say take conclusions; it is draw conclusions."
      }
     ]
    }
@@ -807,59 +807,68 @@
    "id": "wf-2073",
    "kind": "wf",
    "area": "lex",
-   "pat": "lx.wf-adv",
-   "level": "B2",
-   "dom": "life",
+   "pat": "lx.wf-noun",
+   "level": "C1",
+   "dom": "biz",
    "src": "seed",
    "probe": true,
    "form": "C",
    "lex": [
-    "conveniently"
+    "misunderstanding"
    ],
-   "text": "Our new apartment is ___ located just five minutes from the main train station.",
-   "stem": "CONVENIENT",
+   "text": "Due to a ___ about the delivery address, the parcel was sent to our old office.",
+   "stem": "UNDERSTAND",
    "accept": [
-    "conveniently"
+    "misunderstanding"
    ],
-   "pos": "adv",
+   "pos": "noun",
    "parts": {
-    "base": "convenient",
+    "pre": "mis",
+    "base": "understand",
     "suf": [
-     "ly"
+     "ing"
     ]
    },
    "family": [
-    "convenient",
-    "convenience",
-    "conveniently",
-    "inconvenient"
+    "understand",
+    "understanding",
+    "misunderstanding",
+    "misunderstood",
+    "understandable"
    ],
    "why": {
     "ok": {
-     "de": "Vor einem Partizip (located) steht ein Adverb: convenient + -ly = conveniently (günstig gelegen).",
-     "en": "An adverb goes before a participle (located): convenient + -ly = conveniently."
+     "de": "Nach „a“ steht ein Nomen, und es ging etwas schief: mis- + understand + -ing = misunderstanding (Missverständnis).",
+     "en": "A noun follows “a”, and something went wrong: mis- + understand + -ing = misunderstanding."
     },
     "wrong": [
      {
       "if": [
-       "convenient"
+       "understand"
       ],
-      "de": "„convenient“ ist ein Adjektiv; vor „located“ steht ein Adverb.",
-      "en": "“convenient” is an adjective; an adverb goes before “located”."
+      "de": "„understand“ ist ein Verb; nach „a“ steht ein Nomen.",
+      "en": "“understand” is a verb; a noun follows “a”."
      },
      {
       "if": [
-       "convenience"
+       "understanding"
       ],
-      "de": "„convenience“ ist ein Nomen; vor „located“ steht ein Adverb.",
-      "en": "“convenience” is a noun; an adverb goes before “located”."
+      "de": "„an understanding“ ist eine Einigung; gemeint ist ein Fehler beim Verstehen.",
+      "en": "“an understanding” is an agreement; the sentence means a mistake in understanding."
      },
      {
       "if": [
-       "inconvenient"
+       "misunderstood"
       ],
-      "de": "„inconvenient“ ist ein Adjektiv mit dem Gegenteil; vor „located“ steht ein Adverb.",
-      "en": "“inconvenient” is an adjective with the opposite meaning; an adverb goes before “located”."
+      "de": "„misunderstood“ ist eine Verbform; nach „a“ steht ein Nomen.",
+      "en": "“misunderstood” is a verb form; a noun follows “a”."
+     },
+     {
+      "if": [
+       "understandable"
+      ],
+      "de": "„understandable“ ist ein Adjektiv; nach „a“ steht hier ein Nomen.",
+      "en": "“understandable” is an adjective; a noun follows “a” here."
      }
     ]
    }
@@ -1118,7 +1127,9 @@
       "she'd given",
       "that Lisa had given",
       "that she had given",
-      "that she'd given"
+      "that she'd given",
+      "Lisa had ever given",
+      "she had ever given"
      ]
     }
    ],
@@ -1131,7 +1142,7 @@
    "extra": [
     "has",
     "gave",
-    "ever"
+    "never"
    ],
    "traps": [
     "first time Lisa gave",
@@ -1189,7 +1200,11 @@
      ],
      "b": [
       "the supplier confirms",
-      "the supplier has confirmed"
+      "the supplier has confirmed",
+      "they confirm",
+      "it confirms",
+      "they have confirmed",
+      "they've confirmed"
      ]
     }
    ],
@@ -1261,6 +1276,7 @@
      ],
      "b": [
       "taken",
+      "stolen",
       "removed",
       "borrowed"
      ]
@@ -1329,7 +1345,9 @@
      ],
      "b": [
       "remember locking",
-      "remember doing"
+      "remember doing",
+      "remember having locked",
+      "remember having done"
      ]
     },
     {
@@ -1339,7 +1357,9 @@
      ],
      "b": [
       "remember locking",
-      "remember doing"
+      "remember doing",
+      "remember having locked",
+      "remember having done"
      ]
     }
    ],
