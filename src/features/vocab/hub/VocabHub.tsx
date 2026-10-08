@@ -5,7 +5,7 @@ import { openSheet } from '../../../app/sheets';
 import { useLive } from '../../../data/live';
 import { addDays } from '../../../domain/date';
 import { meaningOf } from '../../../domain/srs/cards';
-import { EXTRA_ROUND_MAX, atlasSize, newToday, reviewAll, reviewToday } from '../../../domain/metrics';
+import { EXTRA_ROUND_MAX, atlasCounts, newToday, reviewAll, reviewToday } from '../../../domain/metrics';
 import { estimateRoundMinutes } from '../../../domain/srs/cost';
 import { deckCards, deckCounts, visibleDecks, type BuiltinDeck, type DeckCounts } from '../../../domain/srs/decks';
 import { backlogBraked, catchUpOn, overdueCount } from '../../../domain/unit/backlog';
@@ -243,7 +243,7 @@ export function VocabHub() {
       </RowList>
 
       <RowList testId="ws-atlas-list">
-        <Row icon="grid" channel="cards" title={t('nbWsHAtlasRow')} sub={t('hxWsAtlasSub', { n: num(atlasSize()) })} chevron onClick={() => go({ name: 'atlas' })} testId="ws-atlas" />
+        <Row icon="grid" channel="cards" title={t('nbWsHAtlasRow')} sub={t('hxWsAtlasSub', { n: num(atlasCounts().total), words: num(atlasCounts().words), pack: num(atlasCounts().pack) })} chevron onClick={() => go({ name: 'atlas' })} testId="ws-atlas" />
       </RowList>
       <p className="m-0 text-center">
         <button type="button" className="min-h-11 text-sm text-muted underline-offset-4 hover:underline" onClick={() => openSheet('x:extra', { scope: 'words' })} data-testid="ws-more">

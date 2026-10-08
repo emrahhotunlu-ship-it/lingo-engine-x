@@ -319,6 +319,10 @@ export function WordSky({ entries, tones, veil, onAdd }: WordSkyProps) {
       ) : (
         <p className="text-xs text-subtle">{t('eeSkyHint')}</p>
       )}
+      {/* UX-Prüfung W3: jede Zahl mit ihrer Bedeutung – die Legende zählt deine Karten im Himmel, nicht die Atlas-Wörter. */}
+      <p className="lx-tnum m-0 text-xs text-muted" data-testid="word-sky-cards" data-n={counts.stars}>
+        {t('eeSkyCards', { n: num(counts.stars) })}
+      </p>
       <ul className="lx-sky-legend" aria-label={t('eeSkyLegendAria')} data-testid="word-sky-legend">
         <li data-tone="firm">
           <i aria-hidden="true" />

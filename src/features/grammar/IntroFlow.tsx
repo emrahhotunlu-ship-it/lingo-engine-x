@@ -42,10 +42,10 @@ export function IntroFlow({ topic, pats, fresh, onGo, kurzMiss = false }: { topi
   useSwipeLeft(() => (last ? undefined : setIdx((i) => i + 1)), !split && !last && total > 0);
   if (!tp || !cards.length) return <LegacyCard topic={topic} onGo={onGo} />;
   const card = cards[Math.min(idx, total - 1)] as Card;
-  const step = Math.max(1, tp.introPlan.findIndex((s) => s.length === pats.length && s.every((x) => pats.includes(x))) + 1);
   const go = () => (last ? onGo() : setIdx((i) => i + 1));
   const pick = (b: { de: string; en: string }): string => (lang === 'de' ? b.de : b.en);
-  const eyebrow = t(fresh ? 'gxIntroEyebrowNew' : 'gxIntroEyebrowNext', { n: step, total: tp.introPlan.length });
+  // UX-Prüfung W4: EIN sichtbarer Zähler – der Kopf zählt die Runde; die Kartenpunkte stehen ohne Text (Zahl nur für Vorleseprogramme).
+  const eyebrow = t(fresh ? 'gxIntroEyebrowNew' : 'gxIntroEyebrowNext');
 
   return (
     <article className="lx-glass lx-exercise flex flex-col gap-4" data-testid="intro-flow" data-topic={topic} data-card={idx}>
@@ -62,13 +62,12 @@ export function IntroFlow({ topic, pats, fresh, onGo, kurzMiss = false }: { topi
         )}
       </header>
       {split ? <SplitCard pat={card.pat} tp={tp} first={card.first} pick={pick} /> : <OneCard card={card} tp={tp} pick={pick} />}
-      <div className="flex items-center justify-between gap-3">
-        <span className="lx-dots" role="img" aria-label={t('gxIntroCardOf', { n: idx + 1, total })}>
+      <div className="flex items-center justify-center gap-3">
+        <span className="lx-dots" role="img" aria-label={t('gxIntroCardOf', { n: idx + 1, total })} data-testid="intro-dots">
           {cards.map((_, i) => (
             <span key={i} className="lx-dot" data-on={i === idx || undefined} />
           ))}
         </span>
-        <span className="lx-t-meta text-muted">{t('gxIntroCardOf', { n: idx + 1, total })}</span>
       </div>
       <ActionBar stateKey={`intro-${idx}`}>
         <PrimaryAction iconAfter="arrowRight" onClick={go} testId={last ? 'mini-go' : 'intro-next'}>

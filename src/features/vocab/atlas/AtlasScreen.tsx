@@ -122,7 +122,7 @@ export function AtlasScreen() {
         back={back}
         lead={
           <span className="lx-tnum block text-sm" data-testid="atlas-total">
-            {t('atLead', { known: num(known), total: num(total) })}
+            {t('atLead', { known: num(known), total: num(total), words: num(words.length), pack: num(packTotal) })}
           </span>
         }
       />

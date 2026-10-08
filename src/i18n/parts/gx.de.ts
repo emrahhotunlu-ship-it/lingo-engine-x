@@ -22,8 +22,8 @@ export const gxDe = {
   gxHintPattern: 'Tipp zum Muster',
   gxBadgeVortest: 'Neues Thema · Kurztest {n}/{total}',
   // Einführung neuer Muster
-  gxIntroEyebrowNew: 'Neues Thema · Schritt {n} von {total}',
-  gxIntroEyebrowNext: 'Weiter im Thema · Schritt {n} von {total}',
+  gxIntroEyebrowNew: 'Neues Thema',
+  gxIntroEyebrowNext: 'Weiter im Thema',
   gxIntroTask: 'Lies die Karten kurz, dann übst du sofort.',
   gxIntroPurpose: 'Du siehst die Regel einmal, bevor du übst. So weißt du bei der ersten Aufgabe, worauf es ankommt.',
   gxIntroNext: 'Weiter',

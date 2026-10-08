@@ -85,6 +85,8 @@ export type ExerciseShellProps = {
   feedback?: ShellFeedback | null;
   side?: ReactNode | null;
   layout?: 'auto' | 'stack' | 'split';
+  /** Hülle nur um Vorlage und Antwort (Anki: die wischbare Karte, UX-Prüfung W6 – Kopf und Aufgabe bleiben beim Wischen stehen). */
+  wrapCard?: (card: ReactNode) => ReactNode;
   /** Tastaturhinweis am Laptop je Übungsart (UX-Prüfung W5/W9): eigener Text, `null` = keiner; sonst nach Art (Auswahl oder Tippen). */
   keysHint?: string | null;
   /** Skelett in Kartengröße statt Inhalt (nie ein Leerbild). */
@@ -102,7 +104,7 @@ export function deriveShellState(p: Pick<ExerciseShellProps, 'loading' | 'state'
 }
 
 export function ExerciseShell(props: ExerciseShellProps) {
-  const { meta, status, task, aid = null, prompt, answer, hint = null, secondary = [], primary, barOverride, feedback = null, side = null, layout = 'auto', keysHint } = props;
+  const { meta, status, task, aid = null, prompt, answer, hint = null, secondary = [], primary, barOverride, feedback = null, side = null, layout = 'auto', keysHint, wrapCard } = props;
   const { t } = useT();
   const state = deriveShellState(props);
   const profileSplit = useSplitLayout();
@@ -299,10 +301,14 @@ export function ExerciseShell(props: ExerciseShellProps) {
         </h2>
       </div>
       {aid && <div data-slot="aid">{aid}</div>}
-      <div data-slot="prompt" className="lx-t-prompt">
-        {prompt}
-      </div>
-      <div data-slot="answer">{answer}</div>
+      {(wrapCard ?? ((c: ReactNode) => c))(
+        <>
+          <div data-slot="prompt" className="lx-t-prompt">
+            {prompt}
+          </div>
+          <div data-slot="answer">{answer}</div>
+        </>,
+      )}
       {!asideSecondary && secondaryNode}
       {hint && state !== 'aiError' && (
         <div data-slot="hint" data-state={state === 'retry' ? 'retry' : undefined}>
