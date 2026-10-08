@@ -18,9 +18,16 @@ export const milestoneCardShown = (): boolean => cardShown;
 /**
  * Meilenstein anfordern. Liefert den Meilenstein, den dieses Gerät jetzt zeigen darf, sonst `null` (Budget erschöpft, nichts Neues, anderes Gerät war
  * schneller oder Schreiben nicht möglich). Gleichzeitig erreichte weitere Meilensteine werden still gemerkt.
+ * `migrate: false` für Teilaufrufe (nur einzelne Kandidaten): die Umstellung auf `festUnits` bleibt dem vollen Aufruf von Heute vorbehalten.
+ * `onFail` meldet ein gescheitertes Schreiben (der Aufrufer darf es später erneut versuchen).
  */
-export async function claimMilestone(candidates: readonly Milestone[], seen: Readonly<Record<string, unknown>> | null | undefined, today: string): Promise<Milestone | null> {
-  const pick = pickMilestone({ candidates, seen, today, cardShown });
+export async function claimMilestone(
+  candidates: readonly Milestone[],
+  seen: Readonly<Record<string, unknown>> | null | undefined,
+  today: string,
+  opts: { migrate?: boolean; onFail?: () => void } = {},
+): Promise<Milestone | null> {
+  const pick = pickMilestone({ candidates, seen, today, cardShown, migrate: opts.migrate });
   if (!pick.show && pick.quiet.length === 0 && !pick.migrate) return null;
   const got: { show: Milestone | null } = { show: null };
   const ok = await recordProfileFields('today:milestone', (cur) => {
@@ -28,6 +35,7 @@ export async function claimMilestone(candidates: readonly Milestone[], seen: Rea
     got.show = r.show;
     return r.patch;
   });
+  if (!ok) opts.onFail?.();
   if (!ok || !got.show) return null;
   if (isMilestoneCard(got.show.id)) cardShown = true;
   return got.show;

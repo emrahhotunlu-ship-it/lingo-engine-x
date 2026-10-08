@@ -143,7 +143,7 @@ function Flow({ chapter, onClose }: { chapter: ProgramChapter; onClose: () => vo
     setSaveState('saved');
     if (!ok) return;
     // Bestanden: der Meilenstein `ch<n>` (einmal über alle Geräte). Der Aufstieg läuft nur, wenn dieses Gerät ihn anlegt.
-    const got = await claimMilestone([{ id: `ch${chapter.n}` as `ch${1 | 2 | 3 | 4 | 5 | 6 | 7}`, n: chapter.n }], profile?.ms as Record<string, unknown> | undefined, today);
+    const got = await claimMilestone([{ id: `ch${chapter.n}` as `ch${1 | 2 | 3 | 4 | 5 | 6 | 7}`, n: chapter.n }], profile?.ms as Record<string, unknown> | undefined, today, { migrate: false });
     if (got && levelUpFor(got.id)) offerLevelUp([got.id], got.n);
   };
 

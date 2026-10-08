@@ -84,7 +84,8 @@ export function useDoneFacts(view: Pick<TodayView, 'plan' | 'status'>, active: b
     const key = `${today}:${calc.ms.map((m) => m.id).join(',')}`;
     if (marking.has(key)) return;
     marking.add(key);
-    void claimMilestone(calc.ms, profile?.ms as Record<string, unknown> | undefined, today).then((m) => {
+    // Schreiben gescheitert: Merker lösen, damit diese Sitzung es erneut versucht (sonst Eintrag ohne Karte).
+    void claimMilestone(calc.ms, profile?.ms as Record<string, unknown> | undefined, today, { onFail: () => marking.delete(key) }).then((m) => {
       if (m && !shown.get(today)) {
         shown.set(today, m);
         bump((x) => x + 1);

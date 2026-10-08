@@ -154,9 +154,10 @@ export type MilestonePick = {
  * bleibt offen (kommt in einer späteren Sitzung/Woche). Alle anderen gleichzeitig erreichten werden still gemerkt (nie eine Folge von Feiern).
  * Ein Ein-Satz-Meilenstein verbraucht kein Kartenbudget. Die Umstellung auf `festUnits` (`ms.fu` fehlt) merkt die erreichten Wort-Marken still.
  */
-export function pickMilestone(i: { candidates: readonly Milestone[]; seen: Doc | null | undefined; today: string; cardShown: boolean }): MilestonePick {
+export function pickMilestone(i: { candidates: readonly Milestone[]; seen: Doc | null | undefined; today: string; cardShown: boolean; migrate?: boolean }): MilestonePick {
   const seen = i.seen ?? {};
-  const migrate = !seen.fu;
+  // Die Umstellung braucht die VOLLE Kandidatenliste (Heute); ein Teilaufruf (Kapitelprüfung, nur `ch<n>`) darf `fu` nicht setzen.
+  const migrate = (i.migrate ?? true) && !seen.fu;
   const quiet: MilestoneId[] = [];
   let cands = [...i.candidates];
   if (migrate) {

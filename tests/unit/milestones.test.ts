@@ -83,6 +83,14 @@ describe('Budget', () => {
     expect(p.quiet).toEqual(['fest500']);
     expect(p.migrate).toBe(true);
   });
+  it('Teilaufruf (Kapitelprüfung, migrate: false) setzt `fu` nicht; der volle Aufruf von Heute merkt die alten Wort-Marken danach still', () => {
+    const gate = pickMilestone({ candidates: [{ id: 'ch1', n: 1 }], seen: {}, today: '2026-10-08', cardShown: false, migrate: false });
+    expect(gate.migrate).toBe(false);
+    const patch = milestonePatch({}, [gate.show!.id], '2026-10-08', gate.quiet, gate.migrate);
+    expect(patch).toEqual({ ms: { ch1: '2026-10-08' } });
+    const today = pickMilestone({ candidates: [{ id: 'fest250', n: 250 }], seen: patch!.ms as Record<string, unknown>, today: '2026-10-08', cardShown: false });
+    expect(today).toEqual({ show: null, quiet: ['fest250'], migrate: true });
+  });
 });
 
 describe('einmal über alle Geräte (Anspruch auf dem frischen Stand)', () => {
