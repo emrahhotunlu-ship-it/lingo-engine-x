@@ -9,7 +9,8 @@ import { repairNorm, type NewRepair, type RepairSrc } from './repair';
 /** Kategorien, die Stil oder Ton betreffen, nicht Richtigkeit. */
 export const STYLE_CATS: ReadonlySet<string> = new Set(['register', 'coherence', 'punctuation', 'style', 'tone']);
 
-export type Fix = { wrong: string; right: string; why?: string | null; cat?: string | null };
+/** `pat` (LP3 P51): Muster der Korrektur (turn-analysis@3); haben alle Korrekturen eines Satzes dasselbe, trägt der Fehlersatz es. */
+export type Fix = { wrong: string; right: string; why?: string | null; cat?: string | null; pat?: string | null };
 
 /** Sätze eines Texts mit Lage (Ende an . ! ? oder Zeilenumbruch). */
 export function splitSentences(text: string): Array<{ text: string; start: number; end: number }> {
@@ -71,7 +72,9 @@ export function repairsFromText(text: string, fixes: readonly Fix[], src: Repair
     if (/^[a-z]/.test(right) && /^[A-Z]/.test(s.text)) right = right.charAt(0).toUpperCase() + right.slice(1);
     if (repairNorm(right) === repairNorm(s.text)) continue;
     const used = hits.map((h) => h.f);
-    out.push({ wrong: s.text, right, why: joinWhy(used), src, ctx: ctx ?? null, fix: used.map((f) => f.right.trim()) });
+    const pats = new Set(used.map((f) => f.pat?.trim() ?? ''));
+    const pat = pats.size === 1 ? [...pats][0] : '';
+    out.push({ wrong: s.text, right, why: joinWhy(used), src, ctx: ctx ?? null, fix: used.map((f) => f.right.trim()), ...(pat ? { pat } : {}) });
   }
   return out;
 }
@@ -79,7 +82,7 @@ export function repairsFromText(text: string, fixes: readonly Fix[], src: Repair
 /** Rollenspiel: eigene Züge mit fertiger Analyse (Fehlerliste der drei Schichten). */
 export function repairsFromTalk(
   turns: ReadonlyArray<{ role: string; text: string }>,
-  analyses: Readonly<Record<number, { state: string; data?: { english: boolean; errors: ReadonlyArray<{ wrong: string; right: string; cat: string; why: string }> } } | undefined>>,
+  analyses: Readonly<Record<number, { state: string; data?: { english: boolean; errors: ReadonlyArray<{ wrong: string; right: string; cat: string; why: string; pat?: string }> } } | undefined>>,
   ctx: string,
 ): NewRepair[] {
   const out: NewRepair[] = [];

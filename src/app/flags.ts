@@ -2,6 +2,7 @@
 // Die Schalter sind zunächst `false`; die Pakete von Release 1 setzen `c1xKinds.<art>` auf `true`, sobald Rahmen, Wertung, Buchung und Inhalte der Art
 // stehen. `program` (R3 „Dein Weg“) und `way` (R4 „Weg zu C1“, assess@4) stehen seit 08.10.2026 auf `true`; `lx:flags` = `{"program":false}` bzw. `{"way":false}` schaltet sie je Gerät wieder ab.
 // `c1check` (R4 C1-Check, P40) steht seit 08.10.2026 auf `true`; `lx:flags` = `{"c1check":false}` schaltet ihn je Gerät ab.
+// `tutor.talk` (R5 P51 Rollenspiel+: turn-analysis@3, Kapitelziel, „Sag's nochmal“, K7 aus dem Gespräch) steht seit 08.10.2026 auf `true`; `{"tutor":{"talk":false}}` schaltet es je Gerät ab.
 import type { C1Kind } from '../domain/c1x/types';
 import { local } from '../platform/storage';
 
@@ -15,7 +16,7 @@ export type Flags = {
   program: boolean;
   /** „Weg zu C1“ im Fortschritt (Slot `progress.head`) und die Einschätzung assess@4 (P44/P45). */
   way: boolean;
-  tutor: { explain: boolean; gen: boolean; diagnose: boolean; clinic: boolean; write: boolean };
+  tutor: { explain: boolean; gen: boolean; diagnose: boolean; clinic: boolean; write: boolean; talk: boolean };
   /** Wochenrückblick 3.0 (P50): große Zahl, Namen, Fokuswahl, Karte „Für deinen Lehrer“. */
   weekly3: boolean;
   fx: { moments: boolean; rings: boolean; sparks: boolean; field: boolean; sky: boolean; film: boolean };
@@ -28,7 +29,7 @@ export const flags: Flags = {
   c1check: true,
   program: true,
   way: true,
-  tutor: { explain: false, gen: false, diagnose: true, clinic: true, write: true },
+  tutor: { explain: false, gen: false, diagnose: true, clinic: true, write: true, talk: true },
   weekly3: true,
   fx: { moments: false, rings: false, sparks: false, field: false, sky: true, film: true },
 };
@@ -54,7 +55,7 @@ export function applyFlagOverrides(raw: string | null): void {
         if (k === 'diagnose') flags.tutor.diagnose = true;
         if (k === 'weekly3') flags.weekly3 = true;
         if (k === 'sky' || k === 'film') flags.fx[k] = true;
-        if (k === 'clinic' || k === 'write') flags.tutor[k] = true;
+        if (k === 'clinic' || k === 'write' || k === 'talk') flags.tutor[k] = true;
       }
       return;
     }

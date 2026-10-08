@@ -1,5 +1,5 @@
 import { useMachine } from '@xstate/react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useClock } from '../../app/clock';
 import { useSettings } from '../../app/settings';
 import { askJson } from '../../ai/gate';
@@ -14,6 +14,13 @@ import { speakRepliesOn, takeOpening } from '../../app/voice/autoplay';
 import { roleplayReport, type ReportTurnInfo } from '../../prompts/roleplayReport';
 import { FIGURE_TIER, roleplayTurn } from '../../prompts/roleplayTurn';
 import { turnAnalysis } from '../../prompts/turnAnalysis';
+import { turnAnalysisV3 } from '../../prompts/turnAnalysisV3';
+import { repairCheck } from '../../prompts/repairCheck';
+import { flags } from '../../app/flags';
+import { useLive } from '../../data/live';
+import { addProd } from '../../domain/c1/prod';
+import { chapterTalk, retryTarget, talkProd, type ChapterTalk } from '../../domain/speak/chapterTalk';
+import { repairNorm } from '../../domain/repair/repair';
 import { wordCountOf } from '../../domain/chunks/newChunk';
 import { AnalysisLane } from './analysisLane';
 import { saveReport, saveRun } from './persist';
@@ -32,6 +39,28 @@ import { patternHints } from '../patterns/store';
 // „Analyse erneut“, „Erneut versuchen“), nie aus Render oder Timer. Bildschirmwechsel bricht
 // alles ab (useAiScope, Spur schließen, Sprachausgabe stoppen); die Kopie zum Fortsetzen bleibt.
 
+
+const EMPTY_DOCS = new Map<string, Readonly<Record<string, unknown>>>();
+
+/** Kapitel, Musterliste und Kapitelziel (LP3 P51) aus den Live-Daten; `null` bei ausgeschaltetem Schalter oder ohne Kapitel. Szenenstart und Gespräch rechnen gleich. */
+export function readChapterTalk(sceneId: string, docs: ReadonlyMap<string, Readonly<Record<string, unknown>>> | undefined, today: string, nowMs: number): ChapterTalk | null {
+  // Ohne Kapitelprogramm (R3 „Dein Weg“ aus) gibt es kein aktuelles Kapitel, also weder Musterliste noch Ziel.
+  if (!flags.tutor.talk || !flags.program) return null;
+  return chapterTalk({ docs: docs ?? EMPTY_DOCS, today, nowMs, sceneId });
+}
+
+/** Dasselbe als Hook für den Szenenstart (rechnet nur bei geänderten Daten neu). */
+export function useChapterTalk(sceneId: string | null): ChapterTalk | null {
+  const docs = useLive((s) => s.collections.grammar);
+  const today = useClock((s) => s.today);
+  const nowMs = useClock((s) => s.now);
+  return useMemo(() => (sceneId ? readChapterTalk(sceneId, docs, today, nowMs) : null), [sceneId, docs, today, nowMs]);
+}
+
+/** „Sag's nochmal“ (LP3 P51) je Zug: Versuche, Ergebnis von repair-check@1, Notiz. `ok` schließt die Stelle (keine weitere Buchung). */
+export type SayAgainState = { phase: 'busy' | 'ok' | 'no' | 'error'; given: string; tries: number; note: string; error: AiMessageKey | null };
+/** Höchstens so viele Prüfungen je Stelle (je eine `quick`-Anfrage). */
+export const SAY_AGAIN_TRIES = 2;
 
 const errKey = (err: unknown): AiMessageKey => (isAiFailure(err) ? (err.messageKey ?? 'aiFailed') : 'aiFailed');
 
@@ -91,6 +120,11 @@ export function useRoleplay(scene: SceneView, resume: ResumeCopy | null) {
   const [goals, setGoalsState] = useState<GoalMark[]>(() => mergeGoalMarks(resume?.goals ?? [], [], goalsEn.length));
   const goalsRef = useRef(goals);
   const [criteria, setCriteria] = useState<CriteriaState>({ state: 'idle', data: [] });
+  // LP3 P51: Kapitel und Kapitelziel stehen für das ganze Gespräch fest (wie im Szenenstart gerechnet).
+  const [talk] = useState<ChapterTalk | null>(() => readChapterTalk(scene.id, useLive.getState().collections.grammar, useClock.getState().today, useClock.getState().now));
+  const pastedTexts = useRef(new Set<string>());
+  const [said, setSaid] = useState<Record<number, SayAgainState>>({});
+  const saidRef = useRef(said);
 
   useEffect(() => {
     alive.current = true;
@@ -193,6 +227,11 @@ export function useRoleplay(scene: SceneView, resume: ResumeCopy | null) {
     const repairs = repairsFromTalk(c.turns, c.analyses, scene.titleEn);
     const [ok] = await Promise.all([saveRun({ run, lang: useSettings.getState().lang, legacyScene: runMarkerFor(scene.id), errors, nowMs: Date.now() }), repairs.length ? saveRepairs(repairs) : Promise.resolve(true)]);
     if (ok) clearResume(scene.id);
+    // LP3 P51: K7-Eintrag `s: 'talk'` aus den eigenen Zügen (nur bei Änderung, Doppelschutz nach `id`; Einfügen zählt nie). Blockiert nichts.
+    if (ok && flags.tutor.talk) {
+      const prod = talkProd({ turns: c.turns, analyses: c.analyses, day, runId: run.id, pastedTexts: pastedTexts.current });
+      if (prod) void addProd(prod);
+    }
     if (!alive.current) return;
     send({ type: ok ? 'SAVED' : 'SAVE_FAILED' });
     if (run.turns >= 1) {
@@ -223,13 +262,11 @@ export function useRoleplay(scene: SceneView, resume: ResumeCopy | null) {
         try {
           // Lernberatung V3: die Top-3-Deutsch-Fallen als Hinweis („achte besonders auf …“).
           const watch = await patternHints();
-          const r = await askJson({
-            template: turnAnalysis,
-            vars: { goal: scene.goalEn, role: `${scene.persona?.name ?? ''}, ${scene.persona?.role ?? ''} (${scene.persona?.org ?? ''})`, personaLine, history, sentence: t.text, focusWords: scene.words, uiLang, watch },
-            signal: ctl.signal,
-            priority: 'background',
-            refresh,
-          });
+          const vars = { goal: scene.goalEn, role: `${scene.persona?.name ?? ''}, ${scene.persona?.role ?? ''} (${scene.persona?.org ?? ''})`, personaLine, history, sentence: t.text, focusWords: scene.words, uiLang, watch };
+          // LP3 P51: turn-analysis@3 mit der Musterliste des Kapitels (`pat`, `used`, `count`); Schalter aus → @2 wie bisher.
+          const r = flags.tutor.talk
+            ? await askJson({ template: turnAnalysisV3, vars: { ...vars, pats: (talk?.pats ?? []).map((p) => ({ id: p.id, en: p.en })) }, signal: ctl.signal, priority: 'background', refresh })
+            : await askJson({ template: turnAnalysis, vars, signal: ctl.signal, priority: 'background', refresh });
           if (!alive.current) return;
           send({ type: 'ANALYSIS', idx: i, slot: { state: 'done', data: r.data, lang: uiLang } });
           persistCopy();
@@ -249,16 +286,18 @@ export function useRoleplay(scene: SceneView, resume: ResumeCopy | null) {
       });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps -- ctx liest nur den aktuellen Stand der Maschine
-    [scene, scope, send, persistCopy, maybeFinish],
+    [scene, scope, send, persistCopy, maybeFinish, talk],
   );
 
   // ------------------------------------------------------------ Senden
 
   const sendTurn = useCallback(
-    async (text: string, usedChip: boolean) => {
+    async (text: string, usedChip: boolean, pasted = false) => {
       if (stateName(actor.getSnapshot().value) !== 'composing' || !text.trim()) return;
       stopSpeech();
-      send({ type: 'SEND', text, usedChip, t: Date.now() });
+      // Eingefügt bleibt eingefügt, auch wenn der Satz nach einem Fehler zurück ins Feld kommt und erneut gesendet wird.
+      if (pasted) pastedTexts.current.add(text.trim());
+      send({ type: 'SEND', text, usedChip, t: Date.now(), pasted: pasted || pastedTexts.current.has(text.trim()) });
       const ctl = scope.controller();
       figureCtl.current = ctl;
       const turns = ctx().turns;
@@ -309,6 +348,54 @@ export function useRoleplay(scene: SceneView, resume: ResumeCopy | null) {
   }, [send, maybeFinish]);
 
   const retryAnalysis = useCallback((i: number) => analyze(i, true), [analyze]);
+
+  // ------------------------------------------------------------ „Sag's nochmal“ (LP3 P51)
+
+  const putSaid = useCallback((i: number, st: SayAgainState | null) => {
+    const next = { ...saidRef.current };
+    if (st) next[i] = st;
+    else delete next[i];
+    saidRef.current = next;
+    setSaid(next);
+  }, []);
+
+  /**
+   * Emrah sagt bzw. tippt den Satz von Zug `i` neu, ohne die Korrektur zu sehen. Genau EIN Aufruf `repair-check@1` je Prüfung (der eine Neuversuch nach
+   * A6.3 macht das KI-Tor nur bei Schemaverstoß). Ein unveränderter Satz fragt nicht (`'same'`). Ergebnis nur im Gespräch: kein Schreiben, keine Buchung.
+   */
+  const sayAgain = useCallback(
+    async (i: number, given: string): Promise<'same' | 'limit' | 'done'> => {
+      const t = ctx().turns[i];
+      const a = ctx().analyses[i];
+      const cur = saidRef.current[i];
+      if (!t || t.role !== 'me' || a?.state !== 'done' || !a.data?.english) return 'limit';
+      // Nur echte Fehler mit auffindbarer Reparatur (nie Stil/Ton, nie `upgraded` als Lösung).
+      const target = retryTarget(t.text, a.data.errors);
+      if (!target) return 'limit';
+      if (cur?.phase === 'busy' || cur?.phase === 'ok' || (cur?.tries ?? 0) >= SAY_AGAIN_TRIES) return 'limit';
+      const text = given.trim();
+      if (!text || repairNorm(text) === repairNorm(t.text)) return 'same';
+      const { right, why } = target;
+      const tries = (cur?.tries ?? 0) + 1;
+      putSaid(i, { phase: 'busy', given: text, tries, note: '', error: null });
+      try {
+        const r = await askJson({ template: repairCheck, vars: { wrong: t.text, right, why, given: text, uiLang: useSettings.getState().lang, mode: 'retry' }, signal: scope.signal, refresh: cur?.phase === 'error' });
+        if (!alive.current) return 'done';
+        putSaid(i, { phase: r.data.ok ? 'ok' : 'no', given: text, tries, note: r.data.note, error: null });
+      } catch (err) {
+        if (!alive.current) return 'done';
+        if (isAiFailure(err) && err.kind === 'cancelled') putSaid(i, cur ?? null);
+        else {
+          logWarn('speak:say-again', err, String(i));
+          // Ein Fehler kostet keinen Versuch (die Anfrage hat kein Urteil gebracht).
+          putSaid(i, { phase: 'error', given: text, tries: tries - 1, note: '', error: errKey(err) });
+        }
+      }
+      return 'done';
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- ctx liest nur den aktuellen Stand der Maschine
+    [scope, putSaid],
+  );
   const setDraft = useCallback((text: string) => send({ type: 'DRAFT', text }), [send]);
   const markTaken = useCallback(
     (en: string) => {
@@ -336,5 +423,8 @@ export function useRoleplay(scene: SceneView, resume: ResumeCopy | null) {
     goalTexts: goalsEn,
     criteria,
     retryCriteria: () => void checkGoals(true),
+    talk,
+    said,
+    sayAgain,
   };
 }

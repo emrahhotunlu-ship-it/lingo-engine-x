@@ -18,6 +18,7 @@ import { registerLp3P26Replies } from './canned/lp3/p26';
 import { registerLp3P46Replies } from './canned/lp3/p46';
 import { registerLp3P47Replies } from './canned/lp3/p47';
 import { registerLp3P49Replies } from './canned/lp3/p49';
+import { registerLp3P51Replies } from './canned/lp3/p51';
 import { registerTeacherFeedbackReply } from './canned/teacherFeedback';
 
 // Feste, realistische Antworten des Entwicklungs-Adapters für die Vorlagen word-lookup@2,
@@ -290,6 +291,7 @@ export function registerCannedReplies(): void {
   registerLp3P46Replies();
   registerLp3P47Replies();
   registerLp3P49Replies();
+  registerLp3P51Replies();
   // Neubau: goal-check, claude-drill, text-cards
   registerNbReplies();
 }

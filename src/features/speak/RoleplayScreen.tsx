@@ -24,7 +24,11 @@ import { ChatLog } from './ChatLog';
 import { Composer } from './Composer';
 import { ReportScreen } from './ReportScreen';
 import { readResume, type ResumeCopy } from './resume';
-import { useRoleplay } from './useRoleplay';
+import { SAY_AGAIN_TRIES, useRoleplay } from './useRoleplay';
+import { RetrySay } from './RetrySay';
+import { flags } from '../../app/flags';
+import { ChapterGoal } from './ChapterGoal';
+import { goalProgress, retryTarget } from '../../domain/speak/chapterTalk';
 import type { TakeInput } from './TakeChunkButton';
 import { useSceneLibrary } from './useSceneLibrary';
 import { useCompanionSee } from '../companion/seeing';
@@ -83,6 +87,9 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const [allOpen, setAllOpen] = useState(false);
   const [goalOpen, setGoalOpen] = useState(false);
+  // „Sag’s nochmal“ (LP3 P51): Eingabe offen bei höchstens einem Zug; „Korrektur zeigen“ deckt die Karte eines Zugs auf.
+  const [retryIdx, setRetryIdx] = useState<number | null>(null);
+  const [revealed, setRevealed] = useState<Record<number, true>>({});
   const call = useCallMode((s) => s.on);
   const pausedUntil = useAiStatus((s) => s.pausedUntil);
   const now = useClock((s) => s.now);
@@ -90,6 +97,7 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
   const pending = Object.values(c.analyses).filter((a) => a.state === 'pending').length;
   const restore = useMemo(() => ({ text: c.draft, chip: c.draftChip, n: c.restoreN }), [c.draft, c.draftChip, c.restoreN]);
   const goalList = useMemo(() => sceneGoals(scene), [scene]);
+  const talkGoal = useMemo(() => (rp.talk && rp.talk.goal.length ? goalProgress(rp.talk.goal, c.analyses, c.turns) : null), [rp.talk, c.analyses, c.turns]);
   const unit = useNav((s) => (s.route.name === 'roleplay' ? unitBlockOf(s.route.unit) : null));
   const myText = useMemo(() => c.turns.filter((x) => x.role === 'me').map((x) => x.text).join('\n'), [c.turns]);
   // Fortsetzen (G3): Hülle um die vorhandene Kopie `lx:roleplay:<szene>`; der Bericht beendet es.
@@ -116,8 +124,43 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
     [c.analyses, c.turns, lang, scene],
   );
 
+  // „Sag’s nochmal“ (LP3 P51): Ziel nur bei echten, auffindbaren Fehlern (nie Stil/Ton, nie aus `upgraded`).
+  const retryOf = (idx: number) => {
+    const a = c.analyses[idx];
+    if (!flags.tutor.talk || a?.state !== 'done' || !a.data?.english) return null;
+    return retryTarget(c.turns[idx]?.text ?? '', a.data.errors);
+  };
+  /** Korrektur verdeckt: echte Fehler, nicht aufgedeckt, nicht repariert, Versuche nicht aufgebraucht. */
+  const fixHidden = (idx: number): boolean => {
+    const st = rp.said[idx];
+    return !!retryOf(idx) && !revealed[idx] && st?.phase !== 'ok' && (st?.tries ?? 0) < SAY_AGAIN_TRIES;
+  };
+  const retryFor = (idx: number) => {
+    const target = retryOf(idx);
+    if (!target) return null;
+    return (
+      <RetrySay
+        idx={idx}
+        sentence={c.turns[idx]?.text ?? ''}
+        wrongs={target.wrongs}
+        state={rp.said[idx]}
+        hidden={fixHidden(idx)}
+        open={retryIdx === idx}
+        onOpen={() => setRetryIdx(idx)}
+        onClose={() => setRetryIdx((cur) => (cur === idx ? null : cur))}
+        onReveal={() => {
+          setRetryIdx((cur) => (cur === idx ? null : cur));
+          setRevealed((cur) => ({ ...cur, [idx]: true }));
+        }}
+        onCheck={(given) => rp.sayAgain(idx, given)}
+      />
+    );
+  };
+
   const card = (idx: number, testId?: string) => (
     <AnalysisCard
+      retry={retryFor(idx)}
+      hideFix={fixHidden(idx)}
       idx={idx}
       slot={c.analyses[idx]}
       sentence={c.turns[idx]?.text ?? ''}
@@ -163,6 +206,11 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
       {/* N72: die Ziele stehen oben; Haken kommen nach jeder Antwort der Figur (goal-check@1). */}
       <div className="lx-glass rounded-2xl px-4 py-3" data-testid="rp-goals-box">
         <GoalChecklist goals={goalList} marks={rp.goals} testId="rp-goals" />
+        {rp.talk && talkGoal && (
+          <div className="mt-3 border-t border-line pt-3">
+            <ChapterGoal talk={rp.talk} progress={talkGoal} />
+          </div>
+        )}
         <div className="mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
           <button
             type="button"
@@ -262,7 +310,7 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
             </p>
           )}
           {(state === 'composing' || phase !== 'other') && (
-            <Composer sceneId={scene.id} useful={scene.useful} busy={busy} restore={restore} onSend={(text, chip) => void rp.sendTurn(text, chip)} />
+            <Composer sceneId={scene.id} useful={scene.useful} busy={busy} restore={restore} onSend={(text, chip, pasted) => void rp.sendTurn(text, chip, pasted)} />
           )}
 
           {!desktop && mine.length > 0 && (

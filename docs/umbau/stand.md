@@ -294,3 +294,9 @@ Tests: 1953 Unit; E2E der berührten Bildschirme grün (a11y: Kontrast der „Ne
 
 
 **08.10.2026 R5 P49/P50 zusammengeführt** (`95bade7`, Unit 5093 grün). Offene Kann-Punkte für später: Musternamen in `content/grammar/patterns` (`word-order.json` „Hardly … when / No sooner … than · inversion“, `countable.json` „experience, room · countable or not“) als kleine Inhaltscharge; EN-Begriff für „fest“ app-weit vereinheitlichen („solid“ statt „firm“ in p44, nbProfil, hx); `confusion.ts` kürzt bei 4900 B zuerst src-/Paarzeilen, ggf. p-Zeilen zuerst kürzen.
+
+### 08.10.2026 – R5 P51 Rollenspiel+ zusammengeführt
+- Branch `claude/umbau-r5-d` (611e5b8) in `claude/umbau-fokus` gemergt; Konflikte `flags.ts` (tutor.talk + weekly3, diagnose bleibt an) und `cannedReplies.ts` (p49 + p51) beidseitig gelöst.
+- Prüfungen Runde 2: learning-scientist JA, english-teacher JA, data-guard JA. Kann-Punkt K-neu-1 (Sprachregel-Zeilen in turn-analysis@3 zusammengelegt) beim Merge umgesetzt.
+- Offen (kann, nicht blockierend): Schema-Prüfung, dass die repair-check-Notiz im Modus `retry` keine Lösungswörter enthält (LS K-neu-2).
+- typecheck 0, eslint src tests 0, Unit 271 Dateien / 5111 Tests grün. Volle E2E-Suite steht vor dem Test-Link aus.
