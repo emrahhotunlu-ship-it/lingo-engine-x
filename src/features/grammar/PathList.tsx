@@ -71,7 +71,9 @@ export function PathList({ onOpen, highlight = null, program = false }: { onOpen
                     </span>
                   )}
                 </span>
-                <span className="lx-tnum text-sm text-muted">{t('hxPathSafe', { a: c.safe, b: c.topics.length })}</span>
+                <span className="lx-tnum text-sm text-muted" data-testid="chapter-safe" data-safe={c.safe} data-total={c.topics.length}>
+                  {t('hxPathSafe', { a: c.safe, b: c.topics.length })}
+                </span>
                 {/* UX-Prüfung W10: die Fällig-Pille steht unter dem Titel, nicht daneben (kein Umbruch des Titels am Handy). */}
                 {c.due > 0 && (
                   <span className="mt-1 self-start rounded-full bg-surface-strong px-2.5 py-0.5 text-xs font-medium text-fg" data-testid="chapter-due" data-n={c.due}>

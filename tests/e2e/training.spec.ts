@@ -53,7 +53,7 @@ test('Kollokationen: 5 Aufgaben, Lehnübersetzung → Hinweis → Lösung, Ergeb
   await page.getByTestId('next').click();
 
   for (let i = 3; i <= 5; i++) {
-    await expect(page.getByTestId('round-progress')).toHaveText(`${i} / 5`);
+    await expect(page.getByTestId('round-progress')).toHaveText(`${i} von 5`);
     await page.getByTestId('drill-dontknow').click();
     await page.getByTestId('next').click();
   }
@@ -99,7 +99,7 @@ test('Einwand-Training ohne KI, Stufe 2 (gelenkt): je Schritt den passenden Satz
   await expect(page.getByTestId('pressure-think')).toHaveCount(0);
   await expect(page.getByTestId('pressure-answer')).toHaveCount(0);
   for (let i = 1; i <= 5; i++) {
-    await expect(page.getByTestId('round-progress')).toHaveText(`${i} / 5`);
+    await expect(page.getByTestId('round-progress')).toHaveText(`${i} von 5`);
     for (let k = 1; k < 4; k++) await page.getByTestId(`choice-step-${k}`).locator('[data-ok="1"]').check();
     await page.getByTestId('pressure-check').click();
     const review = page.getByTestId('pressure-review');

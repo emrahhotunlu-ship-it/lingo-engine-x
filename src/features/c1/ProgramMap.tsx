@@ -79,8 +79,7 @@ function Goal({ c, onOpen }: { c: ProgramChapter; onOpen: () => void }) {
   return (
     <div className="flex flex-col gap-2 rounded-[0.875rem] border border-line bg-surface-solid p-3.5" data-testid="program-goal" data-chapter={c.id}>
       <p className="lx-eyebrow">{t('pxMapGoalLabel')}</p>
-      {/* Kurz (zwei Zeilen): der ganze Text steht im Kapitelblatt, hier nicht doppelt. */}
-      <p className="line-clamp-2 text-sm leading-relaxed">{c.done[lang]}</p>
+      <p className="text-sm leading-relaxed">{c.done[lang]}</p>
       <MoreLink onOpen={onOpen} />
     </div>
   );
@@ -96,7 +95,7 @@ function Detail({ c, p, onOpen }: { c: ProgramChapter; p: ChapterProgress; onOpe
         <StatusChip status={p.status} />
       </div>
       <p className="lx-eyebrow">{t('pxMapGoalLabel')}</p>
-      <p className="line-clamp-2 text-sm leading-relaxed">{c.done[lang]}</p>
+      <p className="text-sm leading-relaxed">{c.done[lang]}</p>
       <ul className="m-0 flex list-none flex-wrap gap-2 p-0" aria-label={t('pxChTopics')}>
         {p.topics.map((r) => {
           const name = r.exists ? topicName(r.id, lang) : (pendingName(r.id, lang) ?? r.id);

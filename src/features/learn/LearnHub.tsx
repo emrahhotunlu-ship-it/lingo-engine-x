@@ -128,8 +128,9 @@ export function LearnHub() {
     go({ name: 'repairRound' });
   };
 
+  // In der C1-Reise ohne eigenen Auftritt: die Reise steht bei Effekt-Stufe „Aus“ still (keine Animation in `program-map`).
   const nextCard = next ? (
-    <motion.section variants={item} className={program ? 'flex flex-col gap-3 rounded-[0.875rem] border border-line bg-surface-solid p-3.5' : 'lx-glass flex flex-col gap-3 rounded-[var(--radius-card)] p-5'} aria-labelledby="lh-next" data-testid="hub-next-topic" data-topic={next.id}>
+    <motion.section variants={program ? undefined : item} className={program ? 'flex flex-col gap-3 rounded-[0.875rem] border border-line bg-surface-solid p-3.5' : 'lx-glass flex flex-col gap-3 rounded-[var(--radius-card)] p-5'} aria-labelledby="lh-next" data-testid="hub-next-topic" data-topic={next.id}>
         <p id="lh-next" className="lx-eyebrow">
           {t('nbLernenNextEyebrow')}
         </p>
