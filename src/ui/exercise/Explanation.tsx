@@ -93,6 +93,12 @@ export function Explanation({ model, depth, learning = true, area = 'trainer', o
           </>
         );
       case 'contrast':
+        if (l.meaningOnly)
+          return (
+            <span className="text-muted" lang={lang}>
+              {l.diff}
+            </span>
+          );
         return (
           <>
             {en(l.a)} <span aria-hidden="true">≠</span> {en(l.b)}

@@ -48,7 +48,7 @@ export function WordExtras({
       {part !== 'more' && (
       <div className="flex flex-wrap items-center gap-2" data-testid="word-head" data-contrast={other ? '' : undefined}>
         {other && (
-          <>
+          <span className="inline-flex items-center gap-2 whitespace-nowrap" data-testid="contrast-group">
             <span className="lx-t-answer" lang="en" data-testid="contrast-word">
               {other}
             </span>
@@ -58,21 +58,26 @@ export function WordExtras({
                 {otherIpa}
               </span>
             )}
-            <span className="lx-t-answer px-1 text-subtle" data-testid="contrast-ne">
+          </span>
+        )}
+        {/* Das „≠“ gehört zur Gruppe des Kartenworts: Bricht die Zeile um, steht es vorn in der zweiten Zeile, nie allein am Zeilenende. */}
+        <span className="inline-flex items-center gap-2 whitespace-nowrap" data-testid="word-group">
+          {other && (
+            <span className="lx-t-answer pr-1 text-subtle" data-testid="contrast-ne">
               <span aria-hidden="true">≠</span>
               <span className="sr-only">{t('wxNotSame')}</span>
             </span>
-          </>
-        )}
-        <span className="lx-t-answer" lang="en" data-testid="word-text">
-          {card.word}
-        </span>
-        <SpeakButton text={card.word} testId="word-listen" />
-        {ipa && (
-          <span className="lx-t-meta text-muted" lang="en" data-testid="word-ipa">
-            {ipa}
+          )}
+          <span className="lx-t-answer" lang="en" data-testid="word-text">
+            {card.word}
           </span>
-        )}
+          <SpeakButton text={card.word} testId="word-listen" />
+          {ipa && (
+            <span className="lx-t-meta text-muted" lang="en" data-testid="word-ipa">
+              {ipa}
+            </span>
+          )}
+        </span>
       </div>
       )}
       {part !== 'head' && (

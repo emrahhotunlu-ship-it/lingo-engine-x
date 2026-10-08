@@ -147,7 +147,7 @@ export function explainWord(i: ExplainWordInput): ExplanationModel {
   if (cOther) {
     const am = cOther.meaning ? shortMeaning(cOther.meaning, lang) : '';
     const bm = meaning ? shortMeaning(meaning, lang) : '';
-    lines.push({ k: 'contrast', a: cOther.word, b: card.word, diff: am && bm ? `${am} ≠ ${bm}` : '' });
+    lines.push({ k: 'contrast', a: cOther.word, b: card.word, diff: am && bm ? `${am} ≠ ${bm}` : '', ...(i.ex === 'contrast' && am && bm ? { meaningOnly: true } : {}) });
   } else if (i.check.kind === 'confusable' && i.check.otherWord && wrong) {
     lines.push({ k: 'contrast', a: card.word, b: i.check.otherWord, diff: i.otherMeaning ? `${shortMeaning(meaning ?? '', lang)} ≠ ${shortMeaning(i.otherMeaning, lang)}` : '' });
   } else if (i.picked?.fromWord && wrong) {

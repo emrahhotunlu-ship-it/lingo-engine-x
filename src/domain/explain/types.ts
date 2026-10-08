@@ -26,7 +26,7 @@ export type ExplainLine =
   | { k: 'yours'; given: string; text: string }
   | { k: 'why'; text: string }
   | { k: 'mistake'; bad: string; good: string; cause: string | null }
-  | { k: 'contrast'; a: string; b: string; diff: string }
+  | { k: 'contrast'; a: string; b: string; diff: string; /** Nur die Bedeutungen zeigen (Kontrast-Schritt: das Wortpaar steht schon im Kopf). */ meaningOnly?: boolean }
   | { k: 'note'; text: string }; // US-Form, „Auch richtig“, Register
 
 export type ExplainExample = { en: string; de?: string | null; ctx?: 'meeting' | 'mail' | 'talk' | null };
