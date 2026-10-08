@@ -36,12 +36,15 @@ async function say(page: Page, text: string, opts: { paste?: boolean } = {}): Pr
   await expect(page.getByTestId('roleplay')).toHaveAttribute('data-state', 'composing');
 }
 
+// Zwei eingeführte Muster des aktuellen Kapitels (Kapitel 1 im Seed): Nur daraus entsteht das Kapitelziel.
+const INTRO = { 'grammar/pres-simple-cont': { pats: { 'psc.habit': { n: 3, c: 2, i: '2026-09-10' }, 'psc.now': { n: 2, c: 1, i: '2026-09-12' } } } };
+
 const talkProds = async (page: Page): Promise<Doc[]> => (((await dump(page))['app/c1'] as { prod?: Doc[] } | undefined)?.prod ?? []).filter((p) => p.s === 'talk');
 const bookings = async (page: Page): Promise<number> => (await writes(page)).filter((w) => /^(app\/c1|repair|app\/radar)/.test(w.path)).length;
 
 test('Laptop: Analyse rechts, „Sag’s nochmal“ ohne Korrektur, ein repair-check, ✓ geschlossen ohne Buchung, K7-Eintrag beim Beenden', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  const { errors, external } = await boot(page, { migrated: true, localStorage: { 'lx:input': 'keys' } });
+  const { errors, external } = await boot(page, { migrated: true, localStorage: { 'lx:input': 'keys' }, fake: { patch: INTRO } });
   await startScene(page);
   await expect(page.getByTestId('rp-chapter-goal')).toBeVisible();
   await expect(page.getByTestId('rp-chapter-goal-item').first()).toHaveAttribute('data-have', '0');
@@ -55,10 +58,14 @@ test('Laptop: Analyse rechts, „Sag’s nochmal“ ohne Korrektur, ein repair-c
   const chatBox = await page.getByTestId('composer-input').boundingBox();
   const panelBox = await panel.boundingBox();
   expect(chatBox && panelBox && panelBox.x > chatBox.x + chatBox.width - 1).toBe(true);
-  await expect(card.getByTestId('an-error')).toHaveCount(1);
   expect(await calls(page, 'turn-analysis')).toBeGreaterThan(0);
+  // Echte Fehler: Die Karte startet verdeckt (Urteil, „Sag’s nochmal“, „Korrektur zeigen“), keine Lösung im DOM.
+  await expect(card).toHaveAttribute('data-hidden', '');
+  await expect(card.getByTestId('an-error')).toHaveCount(0);
+  await expect(card.getByTestId('rs-reveal')).toBeVisible();
+  await expect(card).not.toContainText('push back');
 
-  // „Sag’s nochmal“: Korrektur verdeckt, eigener Satz mit markierter Stelle, vier Fragen sichtbar, keine Aussprachebewertung, kein iPhone-Hinweis.
+  // „Sag’s nochmal“: weiter verdeckt, eigener Satz mit markierter Stelle, vier Fragen sichtbar, keine Aussprachebewertung, kein iPhone-Hinweis.
   await card.getByTestId('rs-open').click();
   await expect(card).toHaveAttribute('data-hidden', '');
   await expect(card.getByTestId('an-error')).toHaveCount(0);
@@ -66,7 +73,7 @@ test('Laptop: Analyse rechts, „Sag’s nochmal“ ohne Korrektur, ein repair-c
   await expect(card.getByTestId('an-lands')).toHaveCount(0);
   await expect(card).not.toContainText('push back');
   await expect(card.getByTestId('rs-panel')).toContainText('Sag oder tipp den Satz noch einmal');
-  await expect(card.getByTestId('rs-panel')).toContainText('behält sie besser');
+  await expect(card.getByTestId('rs-panel')).toContainText('behältst du besser');
   await expect(card.getByTestId('rs-before').locator('[data-off]')).toHaveCount(1);
   await expect(card.getByTestId('rs-noscore')).toBeVisible();
   await expect(card.getByTestId('rs-iphone')).toHaveCount(0);
@@ -92,9 +99,19 @@ test('Laptop: Analyse rechts, „Sag’s nochmal“ ohne Korrektur, ein repair-c
   await expect(card.getByTestId('an-error')).toHaveCount(1);
   expect(await bookings(page)).toBe(before);
 
+  // „Korrektur zeigen“ ohne Versuch: Karte offen, keine Übung mehr, kein Aufruf.
+  await say(page, 'We must cancel the call today.');
+  const card2 = panel.locator('[data-testid="analysis"][data-idx="3"]');
+  await expect(card2).toHaveAttribute('data-hidden', '', { timeout: 15_000 });
+  await card2.getByTestId('rs-reveal').click();
+  await expect(card2).not.toHaveAttribute('data-hidden', '');
+  await expect(card2.getByTestId('an-error')).toHaveCount(1);
+  await expect(card2.getByTestId('rs-open')).toHaveCount(0);
+  expect(await calls(page, 'repair-check')).toBe(1);
+
   // Ein sauberer Satz: Analyse mit `used` (turn-analysis@3).
   await say(page, 'That depends on your test team and the exposure.');
-  await expect(panel.locator('[data-testid="analysis"][data-idx="3"]')).toHaveAttribute('data-state', 'clean', { timeout: 15_000 });
+  await expect(panel.locator('[data-testid="analysis"][data-idx="5"]')).toHaveAttribute('data-state', 'clean', { timeout: 15_000 });
   // Der Stand je Zielmuster steht im Zielkasten (die Zählung selbst prüft der Unit-Test goalProgress).
   await expect(page.getByTestId('rp-chapter-goal-item').first()).toContainText(' von ');
   expect(await calls(page, 'repair-check')).toBe(1);
@@ -106,7 +123,7 @@ test('Laptop: Analyse rechts, „Sag’s nochmal“ ohne Korrektur, ein repair-c
   await expect(page.getByTestId('report-ai')).toHaveAttribute('data-state', 'done', { timeout: 15_000 });
   await expect.poll(async () => (await talkProds(page)).length).toBe(1);
   const [prod] = await talkProds(page);
-  expect(prod).toMatchObject({ d: DAY, s: 'talk', w: 17, e: 1 });
+  expect(prod).toMatchObject({ d: DAY, s: 'talk', w: 23, e: 2 });
   expect(String(prod?.id)).toMatch(/^talk:/);
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
@@ -114,7 +131,7 @@ test('Laptop: Analyse rechts, „Sag’s nochmal“ ohne Korrektur, ein repair-c
 
 test('Handy (iPhone): Hinweis zur Spracheingabe, zwei Versuche, dann Korrektur zeigen; eingefügter Text → kein K7-Eintrag', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  const { errors } = await boot(page, { migrated: true, localStorage: { 'lx:input': 'touch' } });
+  const { errors } = await boot(page, { migrated: true, localStorage: { 'lx:input': 'touch' }, fake: { patch: INTRO } });
   await startScene(page);
   await say(page, 'Our budget is fixed for this quarter.', { paste: true });
   await say(page, 'We must delay the start by two weeks.');
@@ -135,10 +152,10 @@ test('Handy (iPhone): Hinweis zur Spracheingabe, zwei Versuche, dann Korrektur z
   await card.getByTestId('rs-check').click();
   await expect.poll(() => calls(page, 'repair-check')).toBe(2);
   await expect(card.getByTestId('rs-result')).toHaveAttribute('data-state', 'no');
-  // Zwei Versuche verbraucht: kein Prüfen mehr, nur noch die Korrektur zeigen.
+  // Zwei Versuche verbraucht: Die Karte deckt die Korrektur von selbst auf, das letzte Urteil (Hinweis) bleibt stehen, keine Übung mehr.
   await expect(card.getByTestId('rs-check')).toHaveCount(0);
-  await card.getByTestId('rs-close').click();
   await expect(card.getByTestId('an-error')).toHaveCount(1);
+  await expect(card.getByTestId('rs-result')).toHaveAttribute('data-state', 'no');
   await expect(card.getByTestId('rs-open')).toHaveCount(0);
   expect(await layoutProblems(page)).toEqual([]);
 

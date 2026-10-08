@@ -19,7 +19,7 @@ import { repairCheck } from '../../prompts/repairCheck';
 import { flags } from '../../app/flags';
 import { useLive } from '../../data/live';
 import { addProd } from '../../domain/c1/prod';
-import { chapterTalk, talkProd, type ChapterTalk } from '../../domain/speak/chapterTalk';
+import { chapterTalk, retryTarget, talkProd, type ChapterTalk } from '../../domain/speak/chapterTalk';
 import { repairNorm } from '../../domain/repair/repair';
 import { wordCountOf } from '../../domain/chunks/newChunk';
 import { AnalysisLane } from './analysisLane';
@@ -27,7 +27,7 @@ import { saveReport, saveRun } from './persist';
 import { clearResume, writeResume, type ResumeCopy } from './resume';
 import { roleplayMachine, stateName, type RoleplayContext } from './roleplayMachine';
 import { runMarkerFor, workContext } from './useSceneLibrary';
-import { repairsFromTalk, repairsFromText } from '../../domain/repair/sources';
+import { repairsFromTalk } from '../../domain/repair/sources';
 import { sceneCriteria, sceneGoals } from '../../domain/speak/bizScenes';
 import { mergeGoalMarks, type GoalMark } from '../../domain/speak/goals';
 import { goalCheck, type CriterionMark } from '../../prompts/nb/p5/goalCheck';
@@ -368,17 +368,18 @@ export function useRoleplay(scene: SceneView, resume: ResumeCopy | null) {
       const t = ctx().turns[i];
       const a = ctx().analyses[i];
       const cur = saidRef.current[i];
-      if (!t || t.role !== 'me' || a?.state !== 'done' || !a.data?.english || !a.data.errors.length) return 'limit';
+      if (!t || t.role !== 'me' || a?.state !== 'done' || !a.data?.english) return 'limit';
+      // Nur echte Fehler mit auffindbarer Reparatur (nie Stil/Ton, nie `upgraded` als Lösung).
+      const target = retryTarget(t.text, a.data.errors);
+      if (!target) return 'limit';
       if (cur?.phase === 'busy' || cur?.phase === 'ok' || (cur?.tries ?? 0) >= SAY_AGAIN_TRIES) return 'limit';
       const text = given.trim();
       if (!text || repairNorm(text) === repairNorm(t.text)) return 'same';
-      const fixed = repairsFromText(t.text, a.data.errors, 'talk')[0];
-      const right = fixed?.right ?? a.data.upgraded;
-      const why = a.data.errors.map((e) => e.why).join(' ');
+      const { right, why } = target;
       const tries = (cur?.tries ?? 0) + 1;
       putSaid(i, { phase: 'busy', given: text, tries, note: '', error: null });
       try {
-        const r = await askJson({ template: repairCheck, vars: { wrong: t.text, right, why, given: text, uiLang: useSettings.getState().lang }, signal: scope.signal, refresh: cur?.phase === 'error' });
+        const r = await askJson({ template: repairCheck, vars: { wrong: t.text, right, why, given: text, uiLang: useSettings.getState().lang, mode: 'retry' }, signal: scope.signal, refresh: cur?.phase === 'error' });
         if (!alive.current) return 'done';
         putSaid(i, { phase: r.data.ok ? 'ok' : 'no', given: text, tries, note: r.data.note, error: null });
       } catch (err) {

@@ -60,6 +60,10 @@ test('Gespräch: 4 Züge, Analysen der Reihe nach, drei Schichten, Wort-Antippen
   // Aufklappen (Handy inline): drei Schichten.
   await chips.nth(2).click();
   const card = page.locator('[data-testid="analysis"][data-state="errors"]');
+  // LP3 P51: Echte Fehler → Karte zuerst verdeckt („Sag’s nochmal“), „Korrektur zeigen“ deckt auf.
+  await expect(card).toHaveAttribute('data-hidden', '');
+  await expect(card.getByTestId('an-error')).toHaveCount(0);
+  await card.getByTestId('rs-reveal').click();
   await expect(card.getByTestId('an-error')).toHaveCount(1);
   await expect(card.getByTestId('an-upgraded')).toContainText('push back the go-live');
   await expect(card.getByTestId('an-change')).toHaveCount(1);
@@ -250,7 +254,11 @@ for (const s of LOOKS) {
     await startScene(page);
     await say(page, SENTENCES[2]!);
     await expect(page.getByTestId('an-chip').first()).toHaveAttribute('data-state', 'errors');
-    if (s.width >= 1024) await expect(page.getByTestId('analysis-panel').getByTestId('an-upgraded')).toBeVisible();
+    if (s.width >= 1024) {
+      // LP3 P51: Die Karte startet verdeckt; aufdecken, dann ist die C1-Fassung da.
+      await page.getByTestId('analysis-panel').getByTestId('rs-reveal').click();
+      await expect(page.getByTestId('analysis-panel').getByTestId('an-upgraded')).toBeVisible();
+    }
     else await page.getByTestId('an-chip').first().click();
     expect(await layoutProblems(page)).toEqual([]);
     const rpAxe = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();

@@ -5,7 +5,7 @@ import { wordCountOf } from '../chunks/newChunk';
 import { patternsOf } from '../grammar/patterns';
 import { patsOf } from '../metrics/pattern';
 import { hash32 } from '../random';
-import { STYLE_CATS } from '../repair/sources';
+import { repairsFromText, STYLE_CATS } from '../repair/sources';
 import type { AnalysisSlot, Turn } from './types';
 
 // Rollenspiel+ (Lernplattform 3.0 P51, KI-Tutor T7), die reinen Teile: die Musterliste des aktuellen Kapitels (für `pat` in turn-analysis@3), das
@@ -25,7 +25,7 @@ export type ChapterTalk = {
   name: { de: string; en: string };
   /** Die Muster des Kapitels (Lehrreihenfolge, ≤ 30): nur daraus darf `pat` kommen. */
   pats: TalkPat[];
-  /** Das Kapitelziel: höchstens zwei Muster mit Sollzahl (2 und 1). */
+  /** Das Kapitelziel: nur eingeführte Muster (≥ 2: 2× und 1×; genau 1: 2×; keins: leer, `pats` bleibt für `pat`). */
   goal: Array<{ id: string; need: number }>;
 };
 
@@ -33,8 +33,8 @@ const introduced = (e: { i?: string; n?: number } | undefined): boolean => !!e &
 
 /**
  * Kapitel, Musterliste und Kapitelziel für ein Gespräch. Rein: dieselben Daten und dieselbe Szene ergeben dasselbe Ziel (Szenenstart und Gespräch
- * zeigen deshalb dasselbe). Ohne aktuelles Kapitel oder ohne Muster: `null` (dann gibt es weder `pat` noch ein Ziel). Für das Ziel zählen zuerst
- * eingeführte Muster (sie sind geübt), sonst die ersten des Kapitels.
+ * zeigen deshalb dasselbe). Ohne aktuelles Kapitel oder ohne Muster: `null` (dann gibt es weder `pat` noch ein Ziel). Ins Ziel kommen nur
+ * eingeführte Muster (geübt, nicht neu): mindestens zwei → 2 × A, 1 × B (per Hash je Szene); genau eins → 2 × A; keins → kein Ziel.
  */
 export function chapterTalk(i: { docs: ReadonlyMap<string, Doc>; today: string; nowMs?: number; sceneId: string }): ChapterTalk | null {
   const st = chapterState({ docs: i.docs, today: i.today, ...(i.nowMs !== undefined ? { nowMs: i.nowMs } : {}) });
@@ -54,26 +54,52 @@ export function chapterTalk(i: { docs: ReadonlyMap<string, Doc>; today: string; 
     }
   }
   if (!pats.length) return null;
-  const pool = intro.length >= 2 ? intro : intro.length === 1 ? [intro[0] as string, ...pats.map((p) => p.id).filter((id) => id !== intro[0])] : pats.map((p) => p.id);
-  const start = hash32(`${i.sceneId}|${ch.id}`) % pool.length;
-  const ids = [pool[start] as string, pool[(start + 1) % pool.length] as string].filter((id, k, all) => all.indexOf(id) === k);
-  const goal = ids.map((id, k) => ({ id, need: k === 0 ? 2 : 1 }));
+  let goal: ChapterTalk['goal'] = [];
+  if (intro.length === 1) goal = [{ id: intro[0] as string, need: 2 }];
+  else if (intro.length >= 2) {
+    const start = hash32(`${i.sceneId}|${ch.id}`) % intro.length;
+    goal = [
+      { id: intro[start] as string, need: 2 },
+      { id: intro[(start + 1) % intro.length] as string, need: 1 },
+    ];
+  }
   return { ch: ch.n, name: ch.name, pats, goal };
 }
 
-/** Treffer je Zielmuster aus den fertigen Analysen (`used`), gekappt auf die Sollzahl. Rein. */
-export function goalProgress(goal: ChapterTalk['goal'], analyses: Readonly<Record<number, AnalysisSlot>>): Array<{ id: string; need: number; have: number }> {
+/** Treffer je Zielmuster aus den fertigen Analysen (`used`), gekappt auf die Sollzahl. Züge mit eingefügter Wendung oder eingefügtem Text zählen nicht. Rein. */
+export function goalProgress(goal: ChapterTalk['goal'], analyses: Readonly<Record<number, AnalysisSlot>>, turns: readonly Turn[] = []): Array<{ id: string; need: number; have: number }> {
   const hits = new Map<string, number>();
-  for (const a of Object.values(analyses)) {
+  for (const [k, a] of Object.entries(analyses)) {
+    const t = turns[Number(k)];
+    if (t?.usedChip === true || t?.pasted === true) continue;
     if (a.state !== 'done' || !a.data?.english) continue;
     for (const id of new Set(a.data.used ?? [])) hits.set(id, (hits.get(id) ?? 0) + 1);
   }
   return goal.map((g) => ({ ...g, have: Math.min(g.need, hits.get(g.id) ?? 0) }));
 }
 
+/** Nur echte Fehler (Grammatik, Wort, Bedeutung): Stil, Ton, Register, Zeichensetzung nie. Gilt für K7, „Sag’s nochmal“ und dessen Markierung. Rein. */
+export function realErrors<T extends { cat: string }>(errors: readonly T[]): T[] {
+  return errors.filter((e) => !STYLE_CATS.has(e.cat));
+}
+
+/**
+ * Ziel für „Sag’s nochmal“ (P51): der ganze Zug mit allen echten Korrekturen (auch über mehrere Sätze), der Grund nur aus echten Fehlern und die zu
+ * markierenden Stellen. `null`, wenn es keinen echten, im Satz auffindbaren Fehler gibt (dann gibt es die Übung nicht; nie aus `upgraded`). Rein.
+ */
+export function retryTarget(text: string, errors: ReadonlyArray<{ wrong: string; right: string; cat: string; why: string; pat?: string }>): { right: string; why: string; wrongs: string[] } | null {
+  const real = realErrors(errors);
+  if (!real.length) return null;
+  const reps = repairsFromText(text, real, 'talk');
+  if (!reps.length) return null;
+  const right = reps.reduce((txt, r) => txt.replace(r.wrong, r.right), text);
+  if (right === text) return null;
+  return { right, why: reps.map((r) => r.why).join(' ').trim(), wrongs: real.map((e) => e.wrong) };
+}
+
 /** Fehler eines Zugs für K7: nur echte Fehler (Stil/Ton nie), Mittelwert mit Claudes zweiter Zählung (wie die Wochen-Mail, höchstens Liste + 2). */
 export function turnErrors(errors: ReadonlyArray<{ cat: string }>, count: number | null | undefined): number {
-  const listed = errors.filter((e) => !STYLE_CATS.has(e.cat)).length;
+  const listed = realErrors(errors).length;
   if (count === null || count === undefined || !Number.isFinite(count) || count <= listed) return listed;
   return Math.min(listed + 2, Math.round(((listed + count) / 2) * 2) / 2);
 }

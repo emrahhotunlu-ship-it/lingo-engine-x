@@ -2,15 +2,15 @@ import { useId, useState } from 'react';
 import { useT } from '../../i18n';
 import { MicButton } from '../../engine/MicButton';
 import { useInputProfile } from '../../platform/input';
-import type { AnalysisError } from '../../domain/speak/types';
 import { AiMark } from '../../ui/AiMark';
 import { AiRunPanel } from '../../ui/AiRunPanel';
 import { Button } from '../../ui/Button';
 import { Icon } from '../../ui/Icon';
 import { SAY_AGAIN_TRIES, type SayAgainState } from './useRoleplay';
 
-// „Sag’s nochmal“ (Lernplattform 3.0 P51, KI-Tutor T7): Emrah sagt oder tippt den Satz eines eigenen Zugs neu, OHNE die Korrektur zu sehen (die
-// Analysekarte verdeckt sie, solange das Feld offen ist). repair-check@1 prüft (genau ein Aufruf je Prüfung, useRoleplay.sayAgain). ✓ schließt die
+// „Sag’s nochmal“ (Lernplattform 3.0 P51, KI-Tutor T7): Emrah sagt oder tippt den Satz eines eigenen Zugs neu, OHNE die Korrektur zu sehen. Die
+// Analysekarte eines Zugs mit echten Fehlern startet verdeckt (Urteil, „Sag’s nochmal“, „Korrektur zeigen“) und zeigt die Korrektur erst nach ✓, nach
+// dem letzten Versuch oder auf Wunsch. repair-check@1 (Modus `retry`) prüft, genau ein Aufruf je Prüfung (useRoleplay.sayAgain). ✓ schließt die
 // Stelle im Gespräch, ohne weitere Buchung. Die vier Pflichtfragen: Aufgabe und Zweck oben, „Du hast gesagt“ + Urteil, darunter die Begründung.
 // Keine Aussprachebewertung (es wird nur Text geprüft); am iPhone ein Hinweis, dass Spracheingabe im Rahmen unsicher ist.
 
@@ -44,15 +44,19 @@ export function markSpans(sentence: string, wrongs: readonly string[]): Array<{ 
 type Props = {
   idx: number;
   sentence: string;
-  errors: readonly AnalysisError[];
+  /** Die falschen Stellen der echten Fehler (nur markiert, nie die richtige Form). */
+  wrongs: readonly string[];
   state: SayAgainState | undefined;
+  /** Korrektur der Karte noch verdeckt (vor ✓, vor dem letzten Versuch, vor „Korrektur zeigen“). */
+  hidden: boolean;
   open: boolean;
   onOpen: () => void;
   onClose: () => void;
+  onReveal: () => void;
   onCheck: (given: string) => Promise<'same' | 'limit' | 'done'>;
 };
 
-export function RetrySay({ idx, sentence, errors, state, open, onOpen, onClose, onCheck }: Props) {
+export function RetrySay({ idx, sentence, wrongs, state, hidden, open, onOpen, onClose, onReveal, onCheck }: Props) {
   const { t } = useT();
   const touch = useInputProfile() === 'touch';
   const inputId = useId();
@@ -79,17 +83,24 @@ export function RetrySay({ idx, sentence, errors, state, open, onOpen, onClose, 
     );
   }
 
-  if (!open) {
-    if (!left && phase === 'no') {
-      return (
-        <p data-testid="rs-result" data-idx={idx} data-state="no" className="text-sm text-muted">
-          {t('ttTkSayNo')} {state?.note}
-        </p>
-      );
-    }
+  // Korrektur offen (letzter Versuch vorbei oder selbst aufgedeckt): höchstens das letzte Urteil, keine Übung mehr.
+  if (!hidden) {
+    if (phase !== 'no' || !state) return null;
     return (
-      <div>
+      <div data-testid="rs-result" data-idx={idx} data-state="no" className="flex flex-col gap-1 text-sm">
+        <p className="text-muted">
+          <span className="font-semibold text-gold-text">{t('ttTkSayNo')}</span> {state.note}
+        </p>
+        {state.note && <AiMark variant="explain" tpl="repair-check@1" />}
+      </div>
+    );
+  }
+
+  if (!open) {
+    return (
+      <div className="flex flex-wrap items-center gap-2" data-testid="rs-start" data-idx={idx}>
         <Button
+          variant="primary"
           icon="mic"
           onClick={() => {
             setText('');
@@ -99,6 +110,9 @@ export function RetrySay({ idx, sentence, errors, state, open, onOpen, onClose, 
           data-testid="rs-open"
         >
           {t('ttTkSayBtn')}
+        </Button>
+        <Button variant="ghost" onClick={onReveal} data-testid="rs-reveal">
+          {t('ttTkSayReveal')}
         </Button>
       </div>
     );
@@ -119,10 +133,7 @@ export function RetrySay({ idx, sentence, errors, state, open, onOpen, onClose, 
       <div className="flex flex-col gap-1">
         <p className="lx-t-label">{t('ttTkSayBefore')}</p>
         <p lang="en" className="text-sm" data-testid="rs-before">
-          {markSpans(
-            sentence,
-            errors.map((e) => e.wrong),
-          ).map((p, k) => (
+          {markSpans(sentence, wrongs).map((p, k) => (
             <span key={k} className={p.off ? 'lx-diff-off' : undefined} {...(p.off ? { 'data-off': '' } : {})}>
               {p.text}
             </span>
@@ -188,7 +199,12 @@ export function RetrySay({ idx, sentence, errors, state, open, onOpen, onClose, 
         )}
         {!busy && (
           <Button variant="ghost" onClick={onClose} data-testid="rs-close">
-            {phase === 'no' || !left ? t('ttTkSayReveal') : t('ttTkSayCancel')}
+            {t('ttTkSayCancel')}
+          </Button>
+        )}
+        {!busy && (
+          <Button variant="ghost" onClick={onReveal} data-testid="rs-reveal">
+            {t('ttTkSayReveal')}
           </Button>
         )}
       </div>

@@ -19,6 +19,12 @@ export type RepairCheckVars = {
   /** Der neu formulierte Satz. */
   given: string;
   uiLang: UiLang;
+  /**
+   * `retry` (LP3 P51 „Sag’s nochmal“ im Rollenspiel): Emrah hat die Korrektur NICHT gesehen, der Satz kann gesprochen sein (Spracherkennung).
+   * Dann: gesprochene Formen sind kein Fehler, alle genannten Fehler müssen behoben sein, und die Notiz bei „nein“ gibt nur einen Hinweis, wo es hakt,
+   * nie die richtigen Wörter. Ohne Angabe (Fehlersatz-Wiederholung): unverändert, dort steht die Lösung danach ohnehin da.
+   */
+  mode?: 'retry';
 };
 
 export type RepairCheckOut = { ok: boolean; note: string };
@@ -37,9 +43,12 @@ export const repairCheck: PromptTemplate<RepairCheckVars, RepairCheckOut> = {
   tier: 'quick',
   cache: { gcTime: 86_400_000 },
   build(v) {
+    const retry = v.mode === 'retry';
     return [
       header({ id: ID, version: VERSION }),
-      'A German-speaking learner (B2, aiming for C1) made a mistake in one of his own sentences and now rewrites it from memory.',
+      retry
+        ? 'A German-speaking learner (B2, aiming for C1) made a mistake in his own sentence and now tries to fix it without seeing the correction. The rewrite may be spoken (speech-to-text).'
+        : 'A German-speaking learner (B2, aiming for C1) made a mistake in one of his own sentences and now rewrites it from memory.',
       'Decide whether the rewrite fixes the mistake and is a correct, natural English sentence with the same meaning.',
       'It does not have to match the model answer word for word. American English is the standard; British spelling and British words are correct too.',
       `Original sentence: ${clip(v.wrong, RC_SENTENCE_MAX)}`,
@@ -50,8 +59,15 @@ export const repairCheck: PromptTemplate<RepairCheckVars, RepairCheckOut> = {
       'Reply with only one JSON object:',
       REPAIR_CHECK_EXAMPLE,
       'Rules:',
-      '- ok: true only if the original mistake is fixed AND the rewrite has no new grammar mistake. Small wording differences are fine.',
-      '- note: one short sentence in the explanation language: what is right, or what is still wrong.',
+      ...(retry
+        ? [
+            '- ok: true only if every mistake named in the reason is fixed AND the rewrite has no new grammar mistake. Small wording differences, contractions, spoken fragments, and missing punctuation or capitalization are fine.',
+            '- note: one short sentence in the explanation language. If ok is true, say briefly what is right now. If ok is false, give a hint where the problem is (e.g. "Check the verb tense after “since”."), but never the corrected words. Neutral tone, no praise.',
+          ]
+        : [
+            '- ok: true only if the original mistake is fixed AND the rewrite has no new grammar mistake. Small wording differences are fine.',
+            '- note: one short sentence in the explanation language: what is right, or what is still wrong.',
+          ]),
     ].join('\n');
   },
   schema: (v) =>

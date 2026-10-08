@@ -19,16 +19,17 @@ export type TurnAnalysisV3Vars = TurnAnalysisVars & {
 
 export type TurnAnalysisV3Out = ThreeLayersOut;
 
-// Grenzen so, dass der Prompt bei Höchstwerten unter 8 KB bleibt (Test `turnAnalysisV3.test.ts`): fester Teil ≈ 4,1 KB, 30 Musterzeilen ≤ 2,1 KB.
-export const TA3_HISTORY_MAX = 360;
-export const TA3_LINE_MAX = 240;
-export const TA3_SENTENCE_MAX = 400;
+// Grenzen so, dass der Prompt bei Höchstwerten unter 8 KB bleibt (Test `turnAnalysisV3.test.ts`): fester Teil ≈ 5 KB, 30 Musterzeilen ≤ 1,9 KB.
+export const TA3_HISTORY_MAX = 220;
+export const TA3_LINE_MAX = 180;
+export const TA3_SENTENCE_MAX = 300;
 export const TA3_GOAL_MAX = 160;
 export const TA3_ROLE_MAX = 100;
-export const TA3_FOCUS_MAX = 6;
+export const TA3_FOCUS_MAX = 5;
+export const TA3_WATCH_MAX = 160;
 export const TA3_PATS_MAX = 30;
 export const TA3_PAT_ID_MAX = 32;
-export const TA3_PAT_NAME_MAX = 36;
+export const TA3_PAT_NAME_MAX = 28;
 export const TA3_USED_MAX = 4;
 export const TA3_COUNT_MAX = 20;
 
@@ -106,19 +107,22 @@ export const turnAnalysisV3: PromptTemplate<TurnAnalysisV3Vars, TurnAnalysisV3Ou
       `Earlier exchanges: ${hist || '(none)'}`,
       `Other speaker just said: ${clip(v.personaLine, TA3_LINE_MAX)}`,
       `Learner sentence: ${clip(v.sentence, TA3_SENTENCE_MAX)}`,
-      `Focus words: ${v.focusWords.slice(0, TA3_FOCUS_MAX).map((w) => clip(w, 30)).join(', ') || '(none)'}`,
-      `Known recurring mistakes of this learner (pay special attention to these): ${watchLine(v.watch)}`,
+      `Focus words: ${v.focusWords.slice(0, TA3_FOCUS_MAX).map((w) => clip(w, 24)).join(', ') || '(none)'}`,
+      `Known recurring mistakes of this learner (pay special attention to these): ${clip(watchLine(v.watch), TA3_WATCH_MAX)}`,
       'Grammar patterns of the current chapter (id: name):',
       patLines(v),
       'Reply with only one JSON object, no other text, exactly this shape:',
       example(v),
       'Rules:',
       ...threeLayersRules(v.uiLang),
-      '- Judge the sentence as spoken business English in this situation (register and tone count, but tone is never an error).',
-      '- C1 toolkit: also check whether the learner softened (hedging), structured (discourse markers) or emphasized (cleft sentences, inversion) where it would help; if missing, show it in "upgraded" and "changes".',
-      '- errors[].pat: the id of the pattern from the list above that the mistake belongs to, or null. Never an id that is not in the list.',
-      `- used: ids from the list that the learner sentence itself uses correctly (at most ${TA3_USED_MAX}), else []. Not the upgraded version.`,
-      '- count: count the real mistakes in the learner sentence again, independently of "errors" (style ideas never count). A whole number.',
+      'The sentence may come from speech recognition: missing punctuation, capitalization and obvious recognition slips (e.g. homophones like their/there) are not mistakes; do not list or count them.',
+      '- Judge the sentence as spoken business English in this situation. Register, tone and style are feedback for "upgraded"/"changes", never mistakes in "count".',
+      '- This is speech: contractions, ellipsis, short fragments ("Fair point."), sentences starting with And/But/So, fillers, and missing punctuation or capitalization are never errors and never count.',
+      '- C1 toolkit: where it clearly helps, add ONE device (hedging, a discourse marker, or a cleft sentence; inversion only if it sounds natural in speech). Not every sentence needs one.',
+      '- upgraded must sound like natural speech in a call or meeting: keep the learner\'s words where they already work, about the same length, contractions welcome, no written-only phrasing.',
+      '- errors[].pat: the id from the list above ONLY if the mistake is clearly an instance of that pattern; when in doubt, or for word choice, spelling or style, null. Never an id that is not in the list.',
+      `- used: ids from the list that the learner sentence itself uses correctly as a complete instance (not just a shared word), at most ${TA3_USED_MAX}, else []. Not the upgraded version.`,
+      '- count: count the real grammar, word and meaning mistakes in the learner sentence again, independently of "errors". Register, tone, style, punctuation and C1 upgrades never count. A whole number.',
       '- Never invent facts about the learner\'s company.',
     ].join('\n');
   },

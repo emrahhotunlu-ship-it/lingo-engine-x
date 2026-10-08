@@ -15,6 +15,8 @@ export type ProdSource = (typeof PROD_SOURCES)[number];
 /** Datenmindestmenge für eine K7-Zahl (§4.5) und das Fenster in Wochen. */
 export const PROD_MIN = { words: 600, entries: 6, weeks: 3 } as const;
 export const PROD_WINDOW_WEEKS = 8;
+/** Rollenspiel (P51): höchstens so viele Gespräche je Woche zählen für K7 (die ersten der Woche), damit viele kurze Gespräche K7 nicht steuern. */
+export const TALK_PER_WEEK = 3;
 /** Plausibilitätsgrenze je Eintrag (ein Text mit mehr Wörtern ist kein Schreibanlass dieser App). */
 export const PROD_MAX_WORDS = 3000;
 
@@ -121,6 +123,7 @@ export function prodRate(prod: readonly C1Prod[], day: string, weeks: number = P
   const wk = new Set<string>();
   // Satz-Klinik zählt höchstens einmal je Woche (der erste Eintrag der Woche): viele Einzelsätze würden K7 sonst steuern (KT K3).
   const clinicWeeks = new Set<string>();
+  const talkWeeks = new Map<string, number>();
   for (const p of [...prod].sort((a, b) => a.d.localeCompare(b.d))) {
     if (!isDayKey(p.d) || p.d < from || p.d > day) continue;
     if (!Number.isFinite(p.w) || !Number.isFinite(p.e) || p.w <= 0 || p.e < 0) continue;
@@ -129,6 +132,12 @@ export function prodRate(prod: readonly C1Prod[], day: string, weeks: number = P
       const key = weekStart(p.d);
       if (clinicWeeks.has(key)) continue;
       clinicWeeks.add(key);
+    }
+    if (p.s === 'talk' && p.wk !== true) {
+      const key = weekStart(p.d);
+      const n = talkWeeks.get(key) ?? 0;
+      if (n >= TALK_PER_WEEK) continue;
+      talkWeeks.set(key, n + 1);
     }
     words += p.w;
     errors += p.e;

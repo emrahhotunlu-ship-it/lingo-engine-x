@@ -3,7 +3,10 @@ import { PROMPT_MAX_BYTES, promptBytes } from '../../src/prompts/common';
 import { TEMPLATES } from '../../src/prompts/registry';
 import { turnAnalysisV3, turnAnalysisV3Schema, TA3_PATS_MAX, TA3_USED_MAX, type TurnAnalysisV3Vars } from '../../src/prompts/turnAnalysisV3';
 import { talkPatIds, turnAnalysisV3Reply } from '../../src/platform/dev/canned/lp3/p51';
-import { chapterTalk, goalProgress, talkProd, talkProdId, turnErrors, TALK_PATS_MAX } from '../../src/domain/speak/chapterTalk';
+import { chapterTalk, goalProgress, realErrors, retryTarget, talkProd, talkProdId, turnErrors, TALK_PATS_MAX } from '../../src/domain/speak/chapterTalk';
+import { addProdTo, prodRate, TALK_PER_WEEK } from '../../src/domain/c1/prod';
+import { c1Update, emptyC1, type C1Prod } from '../../src/domain/c1/c1doc';
+import { repairCheck } from '../../src/prompts/repairCheck';
 import { repairsFromText } from '../../src/domain/repair/sources';
 import type { AnalysisSlot, AnalysisView, Turn } from '../../src/domain/speak/types';
 import { markSpans } from '../../src/features/speak/RetrySay';
@@ -99,15 +102,30 @@ describe('Vorlage turn-analysis@3', () => {
 });
 
 describe('Kapitelziel und K7-Eintrag (chapterTalk)', () => {
-  it('aktuelles Kapitel: Muster (≤ 30) und ein festes Ziel 2 × A, 1 × B je Szene', () => {
-    const a = chapterTalk({ docs: new Map(), today: '2026-10-08', sceneId: 'cfo-q2' });
-    expect(a).not.toBeNull();
-    if (!a) return;
-    expect(a.pats.length).toBeGreaterThan(0);
-    expect(a.pats.length).toBeLessThanOrEqual(TALK_PATS_MAX);
-    expect(a.goal.map((g) => g.need)).toEqual(a.pats.length > 1 ? [2, 1] : [2]);
-    expect(a.goal.every((g) => a.pats.some((p) => p.id === g.id))).toBe(true);
-    expect(chapterTalk({ docs: new Map(), today: '2026-10-08', sceneId: 'cfo-q2' })).toEqual(a);
+  it('aktuelles Kapitel: Muster (≤ 30); Ziel nur aus eingeführten Mustern (keins → leer, eins → 2 ×, mehr → 2 × A, 1 × B je Szene fest)', () => {
+    const none = chapterTalk({ docs: new Map(), today: '2026-10-08', sceneId: 'cfo-q2' });
+    expect(none).not.toBeNull();
+    if (!none) return;
+    expect(none.pats.length).toBeGreaterThan(2);
+    expect(none.pats.length).toBeLessThanOrEqual(TALK_PATS_MAX);
+    expect(none.goal).toEqual([]);
+    const [p0, p1, p2] = none.pats;
+    if (!p0 || !p1 || !p2) return;
+    const docsOf = (ids: Array<typeof p0>) => {
+      const m = new Map<string, Record<string, unknown>>();
+      for (const p of ids) {
+        const cur = (m.get(p.topic)?.pats ?? {}) as Record<string, unknown>;
+        m.set(p.topic, { pats: { ...cur, [p.id]: { n: 3, i: '2026-10-01' } } });
+      }
+      return m;
+    };
+    const one = chapterTalk({ docs: docsOf([p1]), today: '2026-10-08', sceneId: 'cfo-q2' });
+    expect(one?.goal).toEqual([{ id: p1.id, need: 2 }]);
+    const many = chapterTalk({ docs: docsOf([p0, p1, p2]), today: '2026-10-08', sceneId: 'cfo-q2' });
+    expect(many?.goal.map((g) => g.need)).toEqual([2, 1]);
+    expect(many?.goal.every((g) => [p0.id, p1.id, p2.id].includes(g.id))).toBe(true);
+    expect(new Set(many?.goal.map((g) => g.id)).size).toBe(2);
+    expect(chapterTalk({ docs: docsOf([p0, p1, p2]), today: '2026-10-08', sceneId: 'cfo-q2' })).toEqual(many);
   });
 
   const done = (data: Partial<AnalysisView>): AnalysisSlot => ({ state: 'done', lang: 'de', data: { verdict: 'clean', english: true, errors: [], upgraded: '', changes: [], lands: '', chunks: [], targets: [], ...data } });
@@ -121,6 +139,20 @@ describe('Kapitelziel und K7-Eintrag (chapterTalk)', () => {
     expect(p).toEqual([
       { id: 'a.x', need: 2, have: 2 },
       { id: 'b.y', need: 1, have: 1 },
+    ]);
+    // Züge mit eingefügter Wendung oder eingefügtem Text zählen nicht.
+    const ts: Turn[] = [
+      { role: 'persona', text: 'Hi.', t: 0 },
+      { role: 'me', text: 'A.', t: 1, usedChip: true },
+      { role: 'persona', text: 'Ok.', t: 2 },
+      { role: 'me', text: 'B.', t: 3, pasted: true },
+      { role: 'persona', text: 'Ok.', t: 4 },
+      { role: 'me', text: 'C.', t: 5 },
+    ];
+    const q = goalProgress(goal, { 1: done({ used: ['a.x', 'b.y'] }), 3: done({ used: ['a.x'] }), 5: done({ used: ['a.x'] }) }, ts);
+    expect(q).toEqual([
+      { id: 'a.x', need: 2, have: 1 },
+      { id: 'b.y', need: 1, have: 0 },
     ]);
   });
 
@@ -168,5 +200,80 @@ describe('Fehlersätze tragen `pat` und „Sag’s nochmal“ markiert ohne Lös
       { text: ' the start.', off: false },
     ]);
     expect(markSpans('Fine.', [])).toEqual([{ text: 'Fine.', off: false }]);
+  });
+});
+
+describe('„Sag’s nochmal“ nur bei echten Fehlern (retryTarget) und repair-check@1 im Modus retry', () => {
+  const style = { wrong: 'We must', right: 'We may have to', cat: 'register', why: 'Zu hart im Ton.' };
+  const real = { wrong: 'must delay', right: 'have to push back', cat: 'vocab', why: 'Hier passt „push back“.' };
+
+  it('Stil/Ton allein: keine Übung; Lösung nie aus `upgraded`', () => {
+    expect(realErrors([style, real])).toEqual([real]);
+    expect(retryTarget('We must delay the start.', [style])).toBeNull();
+    expect(retryTarget('We must delay the start.', [{ ...real, wrong: 'not in the sentence' }])).toBeNull();
+  });
+
+  it('Mehrsatz-Zug: alle Treffer im ganzen Zug, Grund nur aus echten Fehlern', () => {
+    const t = retryTarget('We must delay the start. He go home early.', [real, style, { wrong: 'He go', right: 'He goes', cat: 'tenses', why: 'Dritte Person: -s.' }]);
+    expect(t?.right).toBe('We have to push back the start. He goes home early.');
+    expect(t?.why).toContain('push back');
+    expect(t?.why).toContain('Dritte Person');
+    expect(t?.why).not.toContain('Ton');
+    expect(t?.wrongs).toEqual(['must delay', 'He go']);
+  });
+
+  it('repair-check@1: Modus retry mit Spracherkennung und Hinweis ohne Lösung; ohne Modus unverändert', () => {
+    const base = { wrong: 'We must delay the start.', right: 'We have to push back the start.', why: 'x', given: 'We have to delay it.', uiLang: 'de' as const };
+    const plain = repairCheck.build(base);
+    const retry = repairCheck.build({ ...base, mode: 'retry' });
+    expect(plain.split('\n')[0]).toBe('[repair-check@1]');
+    expect(plain).toContain('now rewrites it from memory');
+    expect(plain).toContain('- note: one short sentence in the explanation language: what is right, or what is still wrong.');
+    expect(plain).not.toContain('speech-to-text');
+    expect(retry).toContain('without seeing the correction');
+    expect(retry).toContain('speech-to-text');
+    expect(retry).toContain('every mistake named in the reason is fixed');
+    expect(retry).toContain('never the corrected words');
+    expect(promptBytes(retry)).toBeLessThan(8 * 1024);
+  });
+});
+
+describe('K7 aus dem Gespräch: Kette talkProd → addProdTo → c1Update, Wochengrenze', () => {
+  const turns: Turn[] = [
+    { role: 'persona', text: 'Convince me.', t: 0 },
+    { role: 'me', text: 'We must delay the start.', t: 1 },
+  ];
+  const slot: AnalysisSlot = { state: 'done', lang: 'de', data: { verdict: 'errors', english: true, errors: [{ wrong: 'must delay', right: 'have to push back', cat: 'vocab', why: 'x' }], upgraded: '', changes: [], lands: '', chunks: [], targets: [], count: 1 } };
+
+  it('derselbe Lauf zweimal → beim zweiten Mal nichts; eingefügt → nichts', () => {
+    const prod = talkProd({ turns, analyses: { 1: slot }, day: '2026-10-08', runId: 'run-1' });
+    expect(prod).not.toBeNull();
+    if (!prod) return;
+    const once = addProdTo(emptyC1(), prod);
+    expect(once?.prod).toEqual([{ d: '2026-10-08', s: 'talk', w: 5, e: 1, id: 'talk:run-1' }]);
+    expect(once && addProdTo(once, prod)).toBeNull();
+    expect(addProdTo(emptyC1(), { ...prod, pasted: true })).toBeNull();
+    const pastedTurns = turns.map((t) => (t.role === 'me' ? { ...t, pasted: true } : t));
+    const p2 = talkProd({ turns: pastedTurns, analyses: { 1: slot }, day: '2026-10-08', runId: 'run-2' });
+    expect(p2 && addProdTo(emptyC1(), p2)).toBeNull();
+  });
+
+  it('c1Update: nur `prod` wird geschrieben, fremde Felder bleiben', () => {
+    const prod = talkProd({ turns, analyses: { 1: slot }, day: '2026-10-08', runId: 'run-1' });
+    if (!prod) throw new Error('kein Eintrag');
+    const cur = { v: 1, checks: [], gates: [], prod: [], bad: [], zzForeign: { keep: true } };
+    const op = c1Update(cur, (d) => addProdTo(d, prod), '2026-10-08');
+    expect(op && 'update' in op).toBe(true);
+    const upd = op && 'update' in op ? op.update : {};
+    expect(Object.keys(upd)).toEqual(['prod']);
+    expect(upd).not.toHaveProperty('zzForeign');
+  });
+
+  it(`prodRate: höchstens ${TALK_PER_WEEK} Gespräche je Woche zählen (die ersten), andere Quellen unberührt`, () => {
+    const talk = (d: string, k: number): C1Prod => ({ d, s: 'talk', w: 100, e: 1, id: `talk:${d}-${k}` });
+    const prod: C1Prod[] = [talk('2026-10-05', 1), talk('2026-10-06', 2), talk('2026-10-07', 3), talk('2026-10-08', 4), talk('2026-10-08', 5), { d: '2026-10-08', s: 'mail', w: 150, e: 3 }, talk('2026-10-12', 6)];
+    const r = prodRate(prod, '2026-10-12');
+    expect(r.entries).toBe(TALK_PER_WEEK + 1 + 1);
+    expect(r.words).toBe(TALK_PER_WEEK * 100 + 150 + 100);
   });
 });
