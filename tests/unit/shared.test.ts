@@ -22,8 +22,9 @@ describe('Flug zwischen Bildschirmen', () => {
 
   it('abgelaufen oder ohne Größe: kein Flug', () => {
     vi.stubGlobal('window', { scrollX: 0, scrollY: 0 });
-    const t0 = Date.now();
     armShared('lx-hero', el({ left: 0, top: 0, width: 300, height: 200 }));
+    // Zeit NACH dem Scharfmachen nehmen: sonst kann ein Millisekunden-Sprung unter Last den Ablauf knapp verfehlen.
+    const t0 = Date.now();
     expect(takeShared('lx-hero', t0 + ARM_MS + 1)).toBeNull();
     armShared('lx-hero', el({ left: 0, top: 0, width: 0, height: 0 }));
     expect(takeShared('lx-hero')).toBeNull();
