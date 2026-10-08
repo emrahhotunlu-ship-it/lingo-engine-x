@@ -1,0 +1,3237 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "f.md.must-now",
+   "topic": "modals-deduction",
+   "pat": "md.must-now",
+   "title": {
+    "de": "must be: fast sicher",
+    "en": "must be: almost sure"
+   },
+   "de": "Der Kunde wartet bestimmt noch auf unsere Antwort.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welche Wörter wandern oder fallen gleich weg? Tippe eins davon an.",
+     "en": "Which words move or drop out? Tap one of them."
+    },
+    "ans": [
+     0,
+     1,
+     2,
+     3
+    ]
+   },
+   "steps": [
+    {
+     "en": "I am sure that the client is still waiting for our reply.",
+     "note": {
+      "de": "Eine Einschätzung mit “I am sure that”: ausdrücklich, aber schwer.",
+      "en": "An assessment with “I am sure that”: explicit, but heavy."
+     }
+    },
+    {
+     "en": "The client must still be waiting for our reply.",
+     "hi": [
+      2,
+      4
+     ],
+     "move": [
+      [
+       6,
+       4
+      ]
+     ],
+     "note": {
+      "de": "must + Grundform: Du schließt aus Indizien, dass etwas fast sicher so ist. Pflicht sagst du meist mit have to. Im Meeting kurz und natürlich; die Mail an den Kunden bleibt bei “I assume …”.",
+      "en": "must + base form: you conclude from clues that something is almost certainly so. Obligation is usually have to. Short and natural in a meeting; an email to the client stays with “I assume …”."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.md.cant-now",
+   "topic": "modals-deduction",
+   "pat": "md.cant-now",
+   "title": {
+    "de": "can't be: unmöglich",
+    "en": "can't be: impossible"
+   },
+   "de": "Das kann nicht unser Server sein, er läuft ja noch.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welche Wörter wandern oder fallen gleich weg? Tippe eins davon an.",
+     "en": "Which words move or drop out? Tap one of them."
+    },
+    "ans": [
+     0,
+     1,
+     2,
+     3,
+     4
+    ]
+   },
+   "steps": [
+    {
+     "en": "It is not possible that this is our server, because it is still running.",
+     "note": {
+      "de": "Die Aussage steht in einem eigenen Satz davor.",
+      "en": "The claim sits in its own clause up front."
+     }
+    },
+    {
+     "en": "This can't be our server, because it is still running.",
+     "hi": [
+      1,
+      2
+     ],
+     "move": [
+      [
+       6,
+       2
+      ]
+     ],
+     "note": {
+      "de": "can't + Grundform: Du hältst etwas für ausgeschlossen, weil die Fakten dagegen sprechen. Schärfer als might not. Im Support-Gespräch hilfreich, gegenüber dem Kunden eher “This doesn't seem to be …”.",
+      "en": "can't + base form: you rule something out because the facts speak against it. Sharper than might not. Handy in a support call; with the client, “This doesn't seem to be …” is gentler."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.md.might-now",
+   "topic": "modals-deduction",
+   "pat": "md.might-now",
+   "title": {
+    "de": "might be: möglich",
+    "en": "might be: possible"
+   },
+   "de": "Der Vertrag liegt vielleicht noch bei der Rechtsabteilung.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
+     "en": "Which word moves or drops out? Tap it."
+    },
+    "ans": [
+     0
+    ]
+   },
+   "steps": [
+    {
+     "en": "Perhaps the contract is still with the legal department.",
+     "note": {
+      "de": "Perhaps steht vorn und sagt: unsicher.",
+      "en": "Perhaps sits up front and says: not sure."
+     }
+    },
+    {
+     "en": "The contract might still be with the legal department.",
+     "hi": [
+      2,
+      3,
+      4
+     ],
+     "move": [
+      [
+       3,
+       4
+      ]
+     ],
+     "note": {
+      "de": "might / may / could + Grundform: Etwas ist möglich, du legst dich nicht fest. Im Gespräch normal; may klingt förmlicher, vor allem in Mails und Berichten.",
+      "en": "might / may / could + base form: something is possible and you do not commit. Normal in conversation; may sounds more formal, especially in emails and reports."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.md.must-have",
+   "topic": "modals-deduction",
+   "pat": "md.must-have",
+   "title": {
+    "de": "must have: fast sicher (früher)",
+    "en": "must have: almost sure (past)"
+   },
+   "de": "Das Angebot ist bestimmt im Spam gelandet.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welche Wörter wandern oder fallen gleich weg? Tippe eins davon an.",
+     "en": "Which words move or drop out? Tap one of them."
+    },
+    "ans": [
+     0,
+     1,
+     2,
+     3
+    ]
+   },
+   "steps": [
+    {
+     "en": "I am sure that the quote ended up in the spam folder.",
+     "note": {
+      "de": "Eine sichere Annahme über die Vergangenheit, ausdrücklich gesagt.",
+      "en": "A confident guess about the past, spelled out."
+     }
+    },
+    {
+     "en": "The quote must have ended up in the spam folder.",
+     "hi": [
+      2,
+      3
+     ],
+     "note": {
+      "de": "must have + 3. Form: Du schließt aus Indizien, dass etwas fast sicher passiert ist. Im Gespräch üblich; in einer Mail an den Kunden bleibt es bei “It looks like …”.",
+      "en": "must have + past participle: you conclude from clues that something almost certainly happened. Common in conversation; an email to the client stays with “It looks like …”."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.md.cant-have",
+   "topic": "modals-deduction",
+   "pat": "md.cant-have",
+   "title": {
+    "de": "can't have: unmöglich (früher)",
+    "en": "can't have: impossible (past)"
+   },
+   "de": "Unser Team kann das nicht verschickt haben, es hatte keinen Zugriff.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welche Wörter wandern oder fallen gleich weg? Tippe eins davon an.",
+     "en": "Which words move or drop out? Tap one of them."
+    },
+    "ans": [
+     0,
+     1,
+     2,
+     3
+    ]
+   },
+   "steps": [
+    {
+     "en": "It is impossible that our team sent it, because it had no access.",
+     "note": {
+      "de": "Der Ausschluss steht als eigener Satz davor.",
+      "en": "The ruling-out sits in its own clause up front."
+     }
+    },
+    {
+     "en": "Our team can't have sent it, because it had no access.",
+     "hi": [
+      2,
+      3
+     ],
+     "note": {
+      "de": "can't have + 3. Form: Du hältst etwas Vergangenes für ausgeschlossen. couldn't have geht genauso. Im Gespräch ein klarer Einwand; schriftlich eher “It is unlikely that …”.",
+      "en": "can't have + past participle: you rule out something in the past. couldn't have works the same way. A clear objection in conversation; in writing, “It is unlikely that …” is more usual."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.md.might-have",
+   "topic": "modals-deduction",
+   "pat": "md.might-have",
+   "title": {
+    "de": "might have: vielleicht (früher)",
+    "en": "might have: maybe (past)"
+   },
+   "de": "Der Wettbewerber hat das Angebot vielleicht schon gesehen.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
+     "en": "Which word moves or drops out? Tap it."
+    },
+    "ans": [
+     0
+    ]
+   },
+   "steps": [
+    {
+     "en": "Maybe the competitor has already seen the offer.",
+     "note": {
+      "de": "Maybe ist die Alltagsform für “vielleicht”.",
+      "en": "Maybe is the everyday word for “perhaps”."
+     }
+    },
+    {
+     "en": "The competitor might have already seen the offer.",
+     "hi": [
+      2,
+      3
+     ],
+     "move": [
+      [
+       3,
+       3
+      ]
+     ],
+     "note": {
+      "de": "might / may / could have + 3. Form: Etwas ist vielleicht schon passiert. Vorsichtiger und genauer als maybe, gut in Analysen und Statusmeldungen; im Gespräch ist maybe völlig in Ordnung.",
+      "en": "might / may / could have + past participle: something may already have happened. More careful and precise than maybe, good in analyses and status updates; in conversation maybe is perfectly fine."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.mp.may-well",
+   "topic": "modals-prob",
+   "pat": "mp.may-well",
+   "title": {
+    "de": "may well: durchaus möglich",
+    "en": "may well: quite possible"
+   },
+   "de": "Der Kunde nimmt unser Angebot durchaus an.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welche Wörter wandern oder fallen gleich weg? Tippe eins davon an.",
+     "en": "Which words move or drop out? Tap one of them."
+    },
+    "ans": [
+     0,
+     1,
+     2,
+     3,
+     4
+    ]
+   },
+   "steps": [
+    {
+     "en": "It is quite possible that the client will accept our offer.",
+     "note": {
+      "de": "Eine lange Umschreibung für “gut möglich”.",
+      "en": "A long way to say “quite possible”."
+     }
+    },
+    {
+     "en": "The client may well accept our offer.",
+     "hi": [
+      2,
+      3
+     ],
+     "note": {
+      "de": "may / might well + Grundform: durchaus möglich, eher mehr als nur möglich. Gut in Prognosen im Meeting; schriftlich an den Kunden eher “is quite likely to”.",
+      "en": "may / might well + base form: quite possible, a bit more than merely possible. Good for forecasts in a meeting; in writing to the client, “is quite likely to” is more usual."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.mp.bound",
+   "topic": "modals-prob",
+   "pat": "mp.bound",
+   "title": {
+    "de": "be bound to: fast sicher",
+    "en": "be bound to: almost certain"
+   },
+   "de": "Der Preis wird sicher noch zum Thema werden.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welche Wörter wandern oder fallen gleich weg? Tippe eins davon an.",
+     "en": "Which words move or drop out? Tap one of them."
+    },
+    "ans": [
+     0,
+     1,
+     2,
+     3
+    ]
+   },
+   "steps": [
+    {
+     "en": "I am certain that price will come up again.",
+     "note": {
+      "de": "Eine Sicherheit, die du ausdrücklich erklärst.",
+      "en": "A certainty you state outright."
+     }
+    },
+    {
+     "en": "Price is bound to come up again.",
+     "hi": [
+      1,
+      2,
+      3
+     ],
+     "note": {
+      "de": "be bound to + Grundform: fast sicher, weil die Lage es so mit sich bringt. Stärker als is likely to; nur für Dinge, die du wirklich erwartest, nicht für Wünsche. Im Vorbereitungsgespräch sehr natürlich.",
+      "en": "be bound to + base form: almost certain because the situation makes it so. Stronger than is likely to; use it only for things you truly expect, not for wishes. Very natural when preparing for a call."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.mp.likely",
+   "topic": "modals-prob",
+   "pat": "mp.likely",
+   "title": {
+    "de": "unlikely to: wahrscheinlich nicht",
+    "en": "unlikely to: probably not"
+   },
+   "de": "Der Rollout wird wohl nicht vor März fertig.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "The rollout is improbable to be finished before March.",
+     "The rollout is unlikely to be finished before March."
+    ],
+    "ans": 1
+   },
+   "steps": [
+    {
+     "en": "It is probable that the rollout will not be finished before March.",
+     "note": {
+      "de": "Probable passt hier nur mit einem that-Satz.",
+      "en": "Probable fits here only with a that-clause."
+     }
+    },
+    {
+     "en": "The rollout is unlikely to be finished before March.",
+     "hi": [
+      2,
+      3,
+      4
+     ],
+     "note": {
+      "de": "be likely / unlikely to + Grundform. Mit probable und improbable geht to nicht, dort folgt that. Sachlich und knapp in Status und Mail.",
+      "en": "be likely / unlikely to + base form. With probable and improbable, to does not work; they take a that-clause. Factual and brief in status updates and emails."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.mp.chance",
+   "topic": "modals-prob",
+   "pat": "mp.chance",
+   "title": {
+    "de": "a good chance of: Nominalstil",
+    "en": "a good chance of: noun style"
+   },
+   "de": "Wir gewinnen den Auftrag mit guter Wahrscheinlichkeit.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "There is a good chance for winning the contract.",
+     "There is a good chance of winning the contract."
+    ],
+    "ans": 1
+   },
+   "steps": [
+    {
+     "en": "We will probably win the contract.",
+     "note": {
+      "de": "Neutral und verbal.",
+      "en": "Neutral and verbal."
+     }
+    },
+    {
+     "en": "There is a good chance of winning the contract.",
+     "hi": [
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     "note": {
+      "de": "a good chance of + -ing (nicht for). Nominalstil gibt der Prognose Gewicht, passend für Folien und Berichte; im Gespräch genügt “We'll probably win it.”",
+      "en": "a good chance of + -ing (not for). Noun style gives a forecast weight and suits slides and reports; in conversation, “We'll probably win it.” is enough."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.ma.should",
+   "topic": "modals-advice",
+   "pat": "ma.should",
+   "title": {
+    "de": "should: freundlicher Rat",
+    "en": "should: friendly advice"
+   },
+   "de": "Ich denke, du solltest die Agenda dem Kunden vor dem Termin schicken.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "I think you should send the agenda to the client before the call.",
+     "I think you should to send the agenda to the client before the call."
+    ],
+    "ans": 0
+   },
+   "steps": [
+    {
+     "en": "Send the agenda to the client before the call.",
+     "note": {
+      "de": "Ein direkter Befehl.",
+      "en": "A direct command."
+     }
+    },
+    {
+     "en": "I think you should send the agenda to the client before the call.",
+     "hi": [
+      3
+     ],
+     "note": {
+      "de": "should / ought to + Grundform (ohne to nach should). Als Rat klingt es freundlicher als der Befehl, “I think” mildert weiter. Unter Kollegen üblich; dem Chef gegenüber eher “You might want to …”.",
+      "en": "should / ought to + base form (no to after should). As advice it sounds friendlier than the command, and “I think” softens it further. Usual among colleagues; to a boss, “You might want to …” fits better."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.ma.had-better",
+   "topic": "modals-advice",
+   "pat": "ma.had-better",
+   "title": {
+    "de": "had better: Rat mit Folge",
+    "en": "had better: advice with a consequence"
+   },
+   "de": "Wir sollten das Angebot besser vor Freitag schicken, sonst ist die Frist weg.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "We had better to send the quote before Friday, or we will miss the deadline.",
+     "We had better send the quote before Friday, or we will miss the deadline."
+    ],
+    "ans": 1
+   },
+   "steps": [
+    {
+     "en": "We should send the quote before Friday, or we will miss the deadline.",
+     "note": {
+      "de": "Should gibt einen Rat.",
+      "en": "Should gives advice."
+     }
+    },
+    {
+     "en": "We had better send the quote before Friday, or we will miss the deadline.",
+     "hi": [
+      1,
+      2
+     ],
+     "note": {
+      "de": "had better + Grundform (ohne to). Es meint: sonst gibt es eine Folge. Das setzt Druck, deshalb eher unter Kollegen; dem Kunden gegenüber besser “It would be best to …”.",
+      "en": "had better + base form (no to). It means: otherwise there is a consequence. That adds pressure, so use it among colleagues; with a client, “It would be best to …” is better."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.ma.polite",
+   "topic": "modals-advice",
+   "pat": "ma.polite",
+   "title": {
+    "de": "could: höflicher Vorschlag",
+    "en": "could: polite suggestion"
+   },
+   "de": "Sie könnten den Rollout auf Mai verschieben.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
+     "en": "Which word moves or drops out? Tap it."
+    },
+    "ans": [
+     1
+    ]
+   },
+   "steps": [
+    {
+     "en": "You have to move the rollout to May.",
+     "note": {
+      "de": "Have to meint: Es gibt keine Wahl.",
+      "en": "Have to means: there is no choice."
+     }
+    },
+    {
+     "en": "You could move the rollout to May.",
+     "hi": [
+      1
+     ],
+     "note": {
+      "de": "could + Grundform: ein Vorschlag, der Ihnen die Wahl lässt. Im Verkaufsgespräch zeigst du so Optionen, ohne zu drängen: “You could also …”.",
+      "en": "could + base form: a suggestion that leaves the choice to them. In a sales call this shows options without pushing: “You could also …”."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.ma.dont-have-to",
+   "topic": "modals-advice",
+   "pat": "ma.dont-have-to",
+   "title": {
+    "de": "don't have to: nicht nötig",
+    "en": "don't have to: not necessary"
+   },
+   "de": "Sie müssen uns die Daten nicht vorher schicken.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "You needn't to send us the data in advance.",
+     "You don't have to send us the data in advance."
+    ],
+    "ans": 1
+   },
+   "steps": [
+    {
+     "en": "It is not necessary for you to send us the data in advance.",
+     "note": {
+      "de": "Förmlich, aber lang.",
+      "en": "Formal, but long."
+     }
+    },
+    {
+     "en": "You don't have to send us the data in advance.",
+     "hi": [
+      1,
+      2,
+      3
+     ],
+     "note": {
+      "de": "don't have to / don't need to: nicht nötig. needn't (ohne to) ist förmlich und britisch. Nicht mit mustn't verwechseln, das verbietet. Beruhigt in Angebotsmails: “You don't have to …”.",
+      "en": "don't have to / don't need to: not necessary. needn't (without to) is formal and British. Do not mix it up with mustn't, which forbids. Reassuring in offer emails: “You don't have to …”."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.ma.should-have",
+   "topic": "modals-advice",
+   "pat": "ma.should-have",
+   "title": {
+    "de": "should have: Rückblick",
+    "en": "should have: hindsight"
+   },
+   "de": "Wir hätten die Rechtsabteilung früher einbinden sollen.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "We should have involve legal earlier.",
+     "We should have involved legal earlier."
+    ],
+    "ans": 1
+   },
+   "steps": [
+    {
+     "en": "We did not involve legal early enough.",
+     "note": {
+      "de": "Eine Feststellung ohne Wertung.",
+      "en": "A statement without judgment."
+     }
+    },
+    {
+     "en": "We should have involved legal earlier.",
+     "hi": [
+      1,
+      2
+     ],
+     "note": {
+      "de": "should have + 3. Form: Rückblick, was besser gewesen wäre. In der Retrospektive nimmst du mit “we” die Schärfe raus; “You should have …” klingt nach Vorwurf.",
+      "en": "should have + past participle: hindsight on what would have been better. In a retrospective, “we” takes out the edge; “You should have …” sounds like blame."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.hg.modal",
+   "topic": "c1-hedging",
+   "pat": "hg.modal",
+   "title": {
+    "de": "might / could: vorsichtige Möglichkeit",
+    "en": "might / could: cautious possibility"
+   },
+   "de": "Das führt eventuell zu Verzögerungen.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
+     "en": "Which word moves or drops out? Tap it."
+    },
+    "ans": [
+     1
+    ]
+   },
+   "steps": [
+    {
+     "en": "This will cause delays.",
+     "note": {
+      "de": "Will legt sich fest.",
+      "en": "Will commits to it."
+     }
+    },
+    {
+     "en": "This might cause delays.",
+     "hi": [
+      1
+     ],
+     "note": {
+      "de": "might / could statt will: Du sagst, was passieren kann, ohne dich festzulegen, und bleibst trotzdem klar. Gut in Prognosen für Kunden; may ist förmlicher.",
+      "en": "might / could instead of will: you say what can happen without committing, and stay clear. Good in forecasts for clients; may is more formal."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.hg.worth",
+   "topic": "c1-hedging",
+   "pat": "hg.worth",
+   "title": {
+    "de": "It might be worth: höflicher Vorschlag",
+    "en": "It might be worth: polite suggestion"
+   },
+   "de": "Es lohnt sich vielleicht, die Einwände zuerst zu prüfen.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "It might be worth to check the objections first.",
+     "It might be worth checking the objections first."
+    ],
+    "ans": 1
+   },
+   "steps": [
+    {
+     "en": "You should check the objections first.",
+     "note": {
+      "de": "Ein direkter Rat.",
+      "en": "Direct advice."
+     }
+    },
+    {
+     "en": "It might be worth checking the objections first.",
+     "hi": [
+      1,
+      2,
+      3
+     ],
+     "note": {
+      "de": "worth + -ing (nie worth to). might lässt Spielraum, der Vorschlag wirkt nicht wie eine Anweisung. Typisch in Meetings und Mails; unter Kollegen reicht “You should …”.",
+      "en": "worth + -ing (never worth to). might leaves room, so the suggestion does not feel like an instruction. Typical in meetings and emails; among colleagues “You should …” is enough."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.hg.inclined",
+   "topic": "c1-hedging",
+   "pat": "hg.inclined",
+   "title": {
+    "de": "I'd be inclined to: eigene Tendenz",
+    "en": "I'd be inclined to: own leaning"
+   },
+   "de": "Ich würde eher bis nach dem Quartalsende warten.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
+     "en": "Which word moves or drops out? Tap it."
+    },
+    "ans": [
+     1
+    ]
+   },
+   "steps": [
+    {
+     "en": "I think we should wait until after quarter end.",
+     "note": {
+      "de": "Eine Meinung als Rat an alle.",
+      "en": "An opinion as advice to everyone."
+     }
+    },
+    {
+     "en": "I'd be inclined to wait until after quarter end.",
+     "hi": [
+      1,
+      2,
+      3
+     ],
+     "note": {
+      "de": "I'd be inclined to + Grundform: Du sagst deine Tendenz und bleibst offen für Gegenargumente. Höflich gegenüber Chef und Kunde; sehr natürlich in Besprechungen.",
+      "en": "I'd be inclined to + base form: you state your leaning and stay open to counterarguments. Polite toward a boss or client; very natural in meetings."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.hg.seems",
+   "topic": "c1-hedging",
+   "pat": "hg.seems",
+   "title": {
+    "de": "It would seem: Eindruck mit Abstand",
+    "en": "It would seem: impression with distance"
+   },
+   "de": "Der Genehmigungsprozess scheint langsam zu sein.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "It would seem that the approval process is slow.",
+     "It would seem, that the approval process is slow."
+    ],
+    "ans": 0
+   },
+   "steps": [
+    {
+     "en": "The approval process is slow.",
+     "note": {
+      "de": "Eine Tatsache, ohne Abstand.",
+      "en": "A fact, without distance."
+     }
+    },
+    {
+     "en": "It would seem that the approval process is slow.",
+     "hi": [
+      1,
+      2
+     ],
+     "note": {
+      "de": "It seems / appears / would seem that + Satz, ohne Komma vor that. would schwächt zusätzlich ab. Berichte und Analysen; im Gespräch: “It looks like the approval process is slow.”",
+      "en": "It seems / appears / would seem that + clause, with no comma before that. would softens further. Reports and analyses; in conversation: “It looks like the approval process is slow.”"
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.hg.downtoner",
+   "topic": "c1-hedging",
+   "pat": "hg.downtoner",
+   "title": {
+    "de": "not quite: Kritik abschwächen",
+    "en": "not quite: softening criticism"
+   },
+   "de": "Die Lösung passt nicht ganz zu unserem Prozess.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "The solution does not fit quite our process.",
+     "The solution does not quite fit our process."
+    ],
+    "ans": 1
+   },
+   "steps": [
+    {
+     "en": "The solution does not fit our process.",
+     "note": {
+      "de": "Klar und hart.",
+      "en": "Clear and blunt."
+     }
+    },
+    {
+     "en": "The solution does not quite fit our process.",
+     "hi": [
+      4
+     ],
+     "note": {
+      "de": "not quite / slightly / somewhat steht vor dem Wort, das es abschwächt, nicht hinter dem Verb. Die Kritik wird kleiner, bleibt aber klar. Im Kundengespräch statt des harten “does not fit”.",
+      "en": "not quite / slightly / somewhat goes before the word it softens, not after the verb. The criticism gets smaller but stays clear. In a client call, use it instead of the blunt “does not fit”."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.gi.ing-verbs",
+   "topic": "gerund-inf",
+   "pat": "gi.ing-verbs",
+   "title": {
+    "de": "avoid + -ing",
+    "en": "avoid + -ing"
+   },
+   "de": "Wir vermeiden es, am Wochenende Erinnerungen zu schicken.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "We avoid sending reminders on weekends.",
+     "We avoid to send reminders on weekends."
+    ],
+    "ans": 0
+   },
+   "steps": [
+    {
+     "en": "We don't send reminders on weekends if we can help it.",
+     "note": {
+      "de": "Umgangssprachlich und länger.",
+      "en": "Colloquial and longer."
+     }
+    },
+    {
+     "en": "We avoid sending reminders on weekends.",
+     "hi": [
+      1,
+      2
+     ],
+     "note": {
+      "de": "avoid, consider, suggest, finish + -ing (nie to). Knapp und präzise in Mails und Richtlinien; im Gespräch sagst du es lockerer.",
+      "en": "avoid, consider, suggest, finish + -ing (never to). Brief and precise in emails and policies; in conversation you say it more loosely."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.gi.prep-ing",
+   "topic": "gerund-inf",
+   "pat": "gi.prep-ing",
+   "title": {
+    "de": "look forward to + -ing",
+    "en": "look forward to + -ing"
+   },
+   "de": "Wir freuen uns darauf, an Ihrem Kickoff-Call teilzunehmen.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "We look forward to join your kickoff call.",
+     "We look forward to joining your kickoff call."
+    ],
+    "ans": 1
+   },
+   "steps": [
+    {
+     "en": "We hope to join your kickoff call.",
+     "note": {
+      "de": "Neutral, aber ohne Vorfreude.",
+      "en": "Neutral, but without anticipation."
+     }
+    },
+    {
+     "en": "We look forward to joining your kickoff call.",
+     "hi": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "note": {
+      "de": "look forward to + -ing, denn to ist hier eine Präposition. Der Standardschluss von Angeboten und Follow-up-Mails; im Gespräch genügt “Looking forward to it.”",
+      "en": "look forward to + -ing, because to is a preposition here. The standard closing of proposals and follow-up emails; in conversation, “Looking forward to it.” is enough."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.vp.regret",
+   "topic": "verb-patterns",
+   "pat": "vp.regret",
+   "title": {
+    "de": "regret to inform: förmliche Nachricht",
+    "en": "regret to inform: formal news"
+   },
+   "de": "Wir müssen Ihnen leider mitteilen, dass sich der Termin geändert hat.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welche Wörter wandern oder fallen gleich weg? Tippe eins davon an.",
+     "en": "Which words move or drop out? Tap one of them."
+    },
+    "ans": [
+     2,
+     4
+    ]
+   },
+   "steps": [
+    {
+     "en": "We are sorry to tell you that the date has changed.",
+     "note": {
+      "de": "Alltagston: sorry und tell.",
+      "en": "Everyday tone: sorry and tell."
+     }
+    },
+    {
+     "en": "We regret to inform you that the date has changed.",
+     "hi": [
+      1,
+      2,
+      3
+     ],
+     "note": {
+      "de": "regret to + inform / say / tell: Du überbringst jetzt eine schlechte Nachricht. regret + -ing blickt dagegen zurück. Förmliche Mail oder Brief; im Gespräch genügt “Unfortunately, …”.",
+      "en": "regret to + inform / say / tell: you deliver bad news right now. regret + -ing, by contrast, looks back. Formal email or letter; in conversation, “Unfortunately, …” is enough."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.vp.remember-forget",
+   "topic": "verb-patterns",
+   "pat": "vp.remember-forget",
+   "title": {
+    "de": "remember to: Erinnerung",
+    "en": "remember to: a reminder"
+   },
+   "de": "Denken Sie bitte daran, die Freigabe zu schicken.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welche Wörter wandern oder fallen gleich weg? Tippe eins davon an.",
+     "en": "Which words move or drop out? Tap one of them."
+    },
+    "ans": [
+     1,
+     2,
+     3
+    ]
+   },
+   "steps": [
+    {
+     "en": "Please do not forget to send the approval.",
+     "note": {
+      "de": "Eine Erinnerung als Verbot des Vergessens.",
+      "en": "A reminder phrased as a ban on forgetting."
+     }
+    },
+    {
+     "en": "Please remember to send the approval.",
+     "hi": [
+      1,
+      2
+     ],
+     "note": {
+      "de": "remember to + Grundform: daran denken, etwas noch zu tun. remember + -ing meint dagegen, sich an etwas Erledigtes zu erinnern. Kurz und höflich in Follow-up-Mails.",
+      "en": "remember to + base form: remembering to do something still ahead. remember + -ing, by contrast, means recalling something already done. Short and polite in follow-up emails."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.gi.bare-inf",
+   "topic": "gerund-inf",
+   "pat": "gi.bare-inf",
+   "title": {
+    "de": "made us redo: ohne to",
+    "en": "made us redo: no to"
+   },
+   "de": "Unser Manager hat uns den Bericht neu machen lassen.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "Our manager made us to redo the report.",
+     "Our manager made us redo the report."
+    ],
+    "ans": 1
+   },
+   "steps": [
+    {
+     "en": "Our manager required us to redo the report.",
+     "note": {
+      "de": "Förmlich: required … to.",
+      "en": "Formal: required … to."
+     }
+    },
+    {
+     "en": "Our manager made us redo the report.",
+     "hi": [
+      2,
+      3,
+      4
+     ],
+     "note": {
+      "de": "make / let + Objekt + Grundform ohne to (im Passiv aber mit to: “We were made to redo it”). made betont den Zwang. Im Gespräch üblich; schriftlich neutraler: “required us to”.",
+      "en": "make / let + object + base form without to (but with to in the passive: “We were made to redo it”). made stresses the pressure. Common in conversation; in writing, “required us to” is more neutral."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.prp.person-to",
+   "topic": "prepositions",
+   "pat": "prp.person-to",
+   "title": {
+    "de": "explain … to: Person mit to",
+    "en": "explain … to: person with to"
+   },
+   "de": "Wir haben dem Kunden die Preisstruktur erklärt.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "We explained the pricing structure to the client.",
+     "We explained the client the pricing structure."
+    ],
+    "ans": 0
+   },
+   "steps": [
+    {
+     "en": "We gave the client an explanation of the pricing structure.",
+     "note": {
+      "de": "Ein Nomen mit of.",
+      "en": "A noun with of."
+     }
+    },
+    {
+     "en": "We explained the pricing structure to the client.",
+     "hi": [
+      1,
+      5,
+      6,
+      7
+     ],
+     "note": {
+      "de": "explain, say, suggest, describe: erst die Sache, dann to + Person. Das Verb erklärt knapper als die Nominalform und klingt direkter. Mail und Gespräch gleich gut.",
+      "en": "explain, say, suggest, describe: first the thing, then to + person. The verb is more compact than the noun form and sounds more direct. Equally good in email and conversation."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.prp.no-prep",
+   "topic": "prepositions",
+   "pat": "prp.no-prep",
+   "title": {
+    "de": "discuss ohne about",
+    "en": "discuss without about"
+   },
+   "de": "Wir besprechen den Rollout am Montag.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "We will discuss the rollout on Monday.",
+     "We will discuss about the rollout on Monday."
+    ],
+    "ans": 0
+   },
+   "steps": [
+    {
+     "en": "We will talk about the rollout on Monday.",
+     "note": {
+      "de": "Talk about ist locker und üblich.",
+      "en": "Talk about is casual and common."
+     }
+    },
+    {
+     "en": "We will discuss the rollout on Monday.",
+     "hi": [
+      2
+     ],
+     "note": {
+      "de": "discuss, mention, address, attend, reach, enter: ohne Präposition. discuss ist sachlicher als talk about. Passt in Einladungen und Agenden; im Gespräch ist talk about völlig in Ordnung.",
+      "en": "discuss, mention, address, attend, reach, enter: no preposition. discuss is more businesslike than talk about. Fits invitations and agendas; in conversation talk about is perfectly fine."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.prp.verb-prep",
+   "topic": "prepositions",
+   "pat": "prp.verb-prep",
+   "title": {
+    "de": "depend on: feste Präposition",
+    "en": "depend on: fixed preposition"
+   },
+   "de": "Die Gebühr hängt von der Anzahl der Lizenzen ab.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "The final fee depends of the number of seats.",
+     "The final fee depends on the number of seats."
+    ],
+    "ans": 1
+   },
+   "steps": [
+    {
+     "en": "The number of seats determines the final fee.",
+     "note": {
+      "de": "Das Verb determines braucht keine Präposition.",
+      "en": "The verb determines needs no preposition."
+     }
+    },
+    {
+     "en": "The final fee depends on the number of seats.",
+     "hi": [
+      3,
+      4
+     ],
+     "note": {
+      "de": "depend on, consist of, comply with, result in: lerne Verb und Präposition als Paar. depends on stellt die Gebühr in den Vordergrund und beantwortet die Kundenfrage direkt: “It depends on the number of seats.”",
+      "en": "depend on, consist of, comply with, result in: learn verb and preposition as a pair. depends on puts the fee first and answers the client question directly: “It depends on the number of seats.”"
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.prp.adj-prep",
+   "topic": "prepositions",
+   "pat": "prp.adj-prep",
+   "title": {
+    "de": "satisfied with: feste Präposition",
+    "en": "satisfied with: fixed preposition"
+   },
+   "de": "Wir sind mit dem Ergebnis sehr zufrieden.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "We are very satisfied with the result.",
+     "We are very satisfied of the result."
+    ],
+    "ans": 0
+   },
+   "steps": [
+    {
+     "en": "We like the result a lot.",
+     "note": {
+      "de": "Ein Alltagsurteil.",
+      "en": "An everyday judgment."
+     }
+    },
+    {
+     "en": "We are very satisfied with the result.",
+     "hi": [
+      3,
+      4
+     ],
+     "note": {
+      "de": "satisfied / pleased with, responsible for, aware of: das Adjektiv bringt seine Präposition mit. Wirkt in Feedback-Mails und Rückmeldungen professioneller als like; im Gespräch ist “We like it” völlig üblich.",
+      "en": "satisfied / pleased with, responsible for, aware of: the adjective brings its own preposition. Sounds more professional than like in feedback emails; in conversation “We like it” is perfectly usual."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.pn.in",
+   "topic": "prep-noun",
+   "pat": "pn.in",
+   "title": {
+    "de": "increase in: Veränderung im Bereich",
+    "en": "increase in: change in a field"
+   },
+   "de": "Die Kosten sind um 12 Prozent gestiegen.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
+     "en": "Which word moves or drops out? Tap it."
+    },
+    "ans": [
+     0
+    ]
+   },
+   "steps": [
+    {
+     "en": "Costs rose by 12 percent.",
+     "note": {
+      "de": "Verbal: Costs rose.",
+      "en": "Verbal: Costs rose."
+     }
+    },
+    {
+     "en": "There was a 12 percent increase in costs.",
+     "hi": [
+      5,
+      6
+     ],
+     "note": {
+      "de": "increase / decrease / rise / change in + Bereich (increase of nennt nur die Größe). Nominalstil für Berichte und Folien; im Gespräch: “Costs went up 12 percent.”",
+      "en": "increase / decrease / rise / change in + area (increase of gives only the size). Noun style for reports and slides; in conversation: “Costs went up 12 percent.”"
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.pn.about",
+   "topic": "prep-noun",
+   "pat": "pn.about",
+   "title": {
+    "de": "concerns about: Sorge um ein Thema",
+    "en": "concerns about: worry about a topic"
+   },
+   "de": "Der Kunde hat Bedenken wegen der Datensicherheit.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welche Wörter wandern oder fallen gleich weg? Tippe eins davon an.",
+     "en": "Which words move or drop out? Tap one of them."
+    },
+    "ans": [
+     2,
+     3
+    ]
+   },
+   "steps": [
+    {
+     "en": "The client is worried about data security.",
+     "note": {
+      "de": "Verbal mit worried.",
+      "en": "Verbal with worried."
+     }
+    },
+    {
+     "en": "The client has concerns about data security.",
+     "hi": [
+      2,
+      3
+     ],
+     "note": {
+      "de": "concerns about + Thema. Das Nomen macht die Sorge zu einer sachlichen Position, die du bearbeiten kannst. Gut in Berichten und im Einwand-Gespräch: “I understand your concerns about …”.",
+      "en": "concerns about + topic. The noun turns the worry into a factual position you can address. Good in reports and in objection handling: “I understand your concerns about …”."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.ph.separable",
+   "topic": "phrasal-syntax",
+   "pat": "ph.separable",
+   "title": {
+    "de": "rule it out: Pronomen in der Mitte",
+    "en": "rule it out: pronoun in the middle"
+   },
+   "de": "Wir haben es ausgeschlossen.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "We ruled out it.",
+     "We ruled it out."
+    ],
+    "ans": 1
+   },
+   "steps": [
+    {
+     "en": "We ruled out the on-premises option.",
+     "note": {
+      "de": "Bei einem Nomen geht beides: ruled out the option / ruled the option out.",
+      "en": "With a noun both work: ruled out the option / ruled the option out."
+     }
+    },
+    {
+     "en": "We ruled it out.",
+     "hi": [
+      1,
+      2,
+      3
+     ],
+     "note": {
+      "de": "Bei trennbaren Phrasal Verbs steht ein Pronomen immer in der Mitte (rule it out). So verweist du knapp auf Bekanntes. Gespräch und Mail gleich.",
+      "en": "With separable phrasal verbs a pronoun always goes in the middle. This points briefly to something known. Same in conversation and email."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.ph.together",
+   "topic": "phrasal-syntax",
+   "pat": "ph.together",
+   "title": {
+    "de": "look into: bleibt zusammen",
+    "en": "look into: stays together"
+   },
+   "de": "Wir prüfen das.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "We will look it into.",
+     "We will look into it."
+    ],
+    "ans": 1
+   },
+   "steps": [
+    {
+     "en": "We will investigate the pricing issue.",
+     "note": {
+      "de": "Förmlich und amtlich: investigate.",
+      "en": "Formal and official: investigate."
+     }
+    },
+    {
+     "en": "We will look into the pricing issue.",
+     "hi": [
+      2,
+      3
+     ],
+     "note": {
+      "de": "look into ist die Alltagsform von investigate. Das Objekt steht dahinter, das Verb bleibt zusammen.",
+      "en": "look into is the everyday form of investigate. The object comes after it; the verb stays together."
+     }
+    },
+    {
+     "en": "We will look into it.",
+     "hi": [
+      2,
+      3,
+      4
+     ],
+     "note": {
+      "de": "Auch mit Pronomen bleibt look into zusammen: look into it. Im Support-Gespräch eine souveräne Antwort; die Mail an den Kunden darf “investigate” sagen.",
+      "en": "With a pronoun look into also stays together: look into it. A confident reply in a support call; an email to the client may say “investigate”."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.art.the-unique",
+   "topic": "articles",
+   "pat": "art.the-unique",
+   "title": {
+    "de": "the fastest: Superlativ mit the",
+    "en": "the fastest: superlative with the"
+   },
+   "de": "Das ist die schnellste Lösung, die wir kennen.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "This is the fastest solution we know.",
+     "This is fastest solution we know."
+    ],
+    "ans": 0
+   },
+   "steps": [
+    {
+     "en": "This solution is very fast.",
+     "note": {
+      "de": "Nur ein Eindruck.",
+      "en": "Just an impression."
+     }
+    },
+    {
+     "en": "This is the fastest solution we know.",
+     "hi": [
+      2,
+      3
+     ],
+     "note": {
+      "de": "Der Superlativ bekommt immer the, denn es gibt nur eine schnellste Lösung. Das schließt den Vergleich ab und überzeugt in Präsentationen mehr als very fast.",
+      "en": "The superlative always takes the, because there is only one fastest solution. It closes the comparison and convinces in presentations more than very fast."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.cnt.verb",
+   "topic": "countable",
+   "pat": "cnt.verb",
+   "title": {
+    "de": "feedback is: unzählbar, Singular",
+    "en": "feedback is: uncountable, singular"
+   },
+   "de": "Das Feedback ist sehr positiv.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "The feedbacks are very positive.",
+     "The feedback is very positive."
+    ],
+    "ans": 1
+   },
+   "steps": [
+    {
+     "en": "The client liked the demo a lot.",
+     "note": {
+      "de": "Eine Beobachtung.",
+      "en": "An observation."
+     }
+    },
+    {
+     "en": "The feedback is very positive.",
+     "hi": [
+      1,
+      2
+     ],
+     "note": {
+      "de": "feedback, information, advice, news sind unzählbar: kein -s, Verb im Singular, kein a/an. Zählen geht mit a piece of. Berichte und Mails.",
+      "en": "feedback, information, advice, news are uncountable: no -s, a singular verb, no a/an. Counting works with a piece of. Reports and emails."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.qn.hardly",
+   "topic": "quant-neg",
+   "pat": "qn.hardly",
+   "title": {
+    "de": "hardly anybody: kein not",
+    "en": "hardly anybody: no not"
+   },
+   "de": "Kaum jemand nutzt das alte Portal.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "Hardly anybody uses the old portal.",
+     "Hardly nobody uses the old portal."
+    ],
+    "ans": 0
+   },
+   "steps": [
+    {
+     "en": "Almost nobody uses the old portal.",
+     "note": {
+      "de": "Almost nobody ist locker.",
+      "en": "Almost nobody is casual."
+     }
+    },
+    {
+     "en": "Hardly anybody uses the old portal.",
+     "hi": [
+      0,
+      1
+     ],
+     "note": {
+      "de": "hardly, scarcely, barely sind schon verneinend: danach kein weiteres nobody oder not, sondern anybody, any, ever. Präziser in Berichten; im Gespräch ist almost nobody völlig üblich.",
+      "en": "hardly, scarcely, barely are already negative: after them comes anybody, any, ever, never nobody or not. More precise in reports; in conversation almost nobody is perfectly usual."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.qn.no-longer",
+   "topic": "quant-neg",
+   "pat": "qn.no-longer",
+   "title": {
+    "de": "no longer: nicht mehr",
+    "en": "no longer: not any more"
+   },
+   "de": "Wir bieten diese Lizenz nicht mehr an.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welche Wörter wandern oder fallen gleich weg? Tippe eins davon an.",
+     "en": "Which words move or drop out? Tap one of them."
+    },
+    "ans": [
+     1,
+     2,
+     6
+    ]
+   },
+   "steps": [
+    {
+     "en": "We do not offer this license anymore.",
+     "note": {
+      "de": "Alltagston: not … anymore.",
+      "en": "Everyday tone: not … anymore."
+     }
+    },
+    {
+     "en": "We no longer offer this license.",
+     "hi": [
+      1,
+      2
+     ],
+     "note": {
+      "de": "no longer steht vor dem Verb und ersetzt not … anymore. Förmlicher und knapper: Angebote, Produktänderungen, Mails an Kunden. Im Gespräch sagst du “We don't offer it anymore”.",
+      "en": "no longer goes before the verb and replaces not … anymore. More formal and brief: offers, product changes, emails to clients. In conversation you say “We don't offer it anymore”."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.qn.number",
+   "topic": "quant-neg",
+   "pat": "qn.number",
+   "title": {
+    "de": "a number of: Menge",
+    "en": "a number of: amount"
+   },
+   "de": "Eine Reihe von Kunden hat nach dem neuen Modul gefragt.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "A number of clients has asked about the new module.",
+     "A number of clients have asked about the new module."
+    ],
+    "ans": 1
+   },
+   "steps": [
+    {
+     "en": "Several clients have asked about the new module.",
+     "note": {
+      "de": "Several sagt es schlicht.",
+      "en": "Several says it plainly."
+     }
+    },
+    {
+     "en": "A number of clients have asked about the new module.",
+     "hi": [
+      0,
+      1,
+      2
+     ],
+     "note": {
+      "de": "a number of + Plural: Das Verb steht im Plural (the number of dagegen im Singular: the number has grown). Formeller als several, passend für Berichte und Präsentationen.",
+      "en": "a number of + plural: the verb is plural (the number of, by contrast, takes the singular: the number has grown). More formal than several, suited to reports and presentations."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.rc.prep",
+   "topic": "relative",
+   "pat": "rc.prep",
+   "title": {
+    "de": "to whom: Präposition vor whom",
+    "en": "to whom: preposition before whom"
+   },
+   "de": "Der Kunde, mit dem wir gesprochen haben, hat das Budget freigegeben.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "The client to who we spoke has approved the budget.",
+     "The client to whom we spoke has approved the budget."
+    ],
+    "ans": 1
+   },
+   "steps": [
+    {
+     "en": "The client we spoke to has approved the budget.",
+     "note": {
+      "de": "Alltagsform: Präposition am Ende.",
+      "en": "Everyday form: preposition at the end."
+     }
+    },
+    {
+     "en": "The client to whom we spoke has approved the budget.",
+     "hi": [
+      2,
+      3
+     ],
+     "note": {
+      "de": "Steht die Präposition vorn, folgt whom (nie who). Förmlich: Berichte, Verträge, Mails an die Geschäftsführung. Im Gespräch bleibst du bei “the client we spoke to”.",
+      "en": "If the preposition comes first, whom follows (never who). Formal: reports, contracts, emails to management. In conversation you stay with “the client we spoke to”."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.rc.commas",
+   "topic": "relative",
+   "pat": "rc.commas",
+   "title": {
+    "de": "which mit Kommas: Zusatzinfo",
+    "en": "which with commas: extra information"
+   },
+   "de": "Unser Vertriebsteam, das in Chicago sitzt, leitet den Rollout.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "Our sales team, that is based in Chicago, will lead the rollout.",
+     "Our sales team, which is based in Chicago, will lead the rollout."
+    ],
+    "ans": 1
+   },
+   "steps": [
+    {
+     "en": "Our sales team is based in Chicago and will lead the rollout.",
+     "note": {
+      "de": "Zwei Aussagen mit and.",
+      "en": "Two statements with and."
+     }
+    },
+    {
+     "en": "Our sales team, which is based in Chicago, will lead the rollout.",
+     "hi": [
+      3
+     ],
+     "note": {
+      "de": "Zusatzinfo steht zwischen Kommas, mit which oder who, nie mit that. Verdichtet zwei Aussagen zu einer; üblich in Angeboten und Berichten, im Gespräch eher zwei kurze Sätze.",
+      "en": "Extra information sits between commas, with which or who, never that. It condenses two statements into one; usual in proposals and reports, in conversation more often two short sentences."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.rc.whose",
+   "topic": "relative",
+   "pat": "rc.whose",
+   "title": {
+    "de": "whose: Besitz",
+    "en": "whose: possession"
+   },
+   "de": "Kunden, deren Daten in der EU liegen, brauchen einen eigenen Vertrag.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "Clients which their data is stored in the EU need a separate contract.",
+     "Clients whose data is stored in the EU need a separate contract."
+    ],
+    "ans": 1
+   },
+   "steps": [
+    {
+     "en": "Clients that have their data in the EU need a separate contract.",
+     "note": {
+      "de": "Mit that und their.",
+      "en": "With that and their."
+     }
+    },
+    {
+     "en": "Clients whose data is stored in the EU need a separate contract.",
+     "hi": [
+      1
+     ],
+     "note": {
+      "de": "whose ersetzt that … their: ein Wort für den Besitz, kein zusätzliches their. Kompakt in Verträgen und Preislisten; im Gespräch sagst du “Clients with data in the EU …”.",
+      "en": "whose replaces that … their: one word for the possession, no extra their. Compact in contracts and price lists; in conversation you say “Clients with data in the EU …”."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.rc.that-what",
+   "topic": "relative",
+   "pat": "rc.that-what",
+   "title": {
+    "de": "everything that: nach Bezugswort",
+    "en": "everything that: after an antecedent"
+   },
+   "de": "Alles, was wir besprochen haben, steht im Angebot.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "Everything that we discussed is in the proposal.",
+     "Everything what we discussed is in the proposal."
+    ],
+    "ans": 0
+   },
+   "steps": [
+    {
+     "en": "We put everything we discussed in the proposal.",
+     "note": {
+      "de": "Ohne that, aber im Aktiv.",
+      "en": "Without that, but in the active."
+     }
+    },
+    {
+     "en": "Everything that we discussed is in the proposal.",
+     "hi": [
+      1
+     ],
+     "note": {
+      "de": "Nach everything, all, nothing und anderen Bezugswörtern steht that (oder nichts), nie what. what gibt es nur ohne Bezugswort: “What we discussed is in the proposal.” Gut als klare Zusage in Follow-ups.",
+      "en": "After everything, all, nothing and other antecedents comes that (or nothing), never what. what exists only without an antecedent: “What we discussed is in the proposal.” A clear commitment in follow-ups."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.lk.despite",
+   "topic": "linkers",
+   "pat": "lk.despite",
+   "title": {
+    "de": "despite: Gegensatz mit Nomen",
+    "en": "despite: contrast with a noun"
+   },
+   "de": "Trotz der Verzögerung bleiben wir im Zeitplan.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "Despite of the delay, we remain on schedule.",
+     "Despite the delay, we remain on schedule."
+    ],
+    "ans": 1
+   },
+   "steps": [
+    {
+     "en": "Although there was a delay, we remain on schedule.",
+     "note": {
+      "de": "Although braucht einen ganzen Satz.",
+      "en": "Although needs a full clause."
+     }
+    },
+    {
+     "en": "Despite the delay, we remain on schedule.",
+     "hi": [
+      0
+     ],
+     "note": {
+      "de": "despite / in spite of + Nomen oder -ing, ohne of bei despite. Kürzer als although. Statusberichte und Folien; im Gespräch: “We had a delay, but we're on schedule.”",
+      "en": "despite / in spite of + noun or -ing, with no of after despite. Shorter than although. Status reports and slides; in conversation: “We had a delay, but we're on schedule.”"
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.lk.although",
+   "topic": "linkers",
+   "pat": "lk.although",
+   "title": {
+    "de": "although: ohne but",
+    "en": "although: no but"
+   },
+   "de": "Obwohl das Budget knapp ist, können wir im Mai starten.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "Although the budget is tight, but we can still start in May.",
+     "Although the budget is tight, we can still start in May."
+    ],
+    "ans": 1
+   },
+   "steps": [
+    {
+     "en": "The budget is tight, but we can still start in May.",
+     "note": {
+      "de": "Zwei Hauptsätze mit but.",
+      "en": "Two main clauses with but."
+     }
+    },
+    {
+     "en": "Although the budget is tight, we can still start in May.",
+     "hi": [
+      0
+     ],
+     "note": {
+      "de": "Mit although steht kein but im Hauptsatz; die Konjunktion steht nur einmal. Der Nebensatz mit although stellt das Hindernis zurück und das Ergebnis voran. Gut in Angebotsmails.",
+      "en": "With although there is no but in the main clause; the conjunction appears only once. The although-clause puts the obstacle in the background and the result up front. Good in proposal emails."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.lk.whereas",
+   "topic": "linkers",
+   "pat": "lk.whereas",
+   "title": {
+    "de": "whereas: Gegenüberstellung",
+    "en": "whereas: contrasting two things"
+   },
+   "de": "Die Cloud-Lösung skaliert leicht, die lokale nicht.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
+     "en": "Which word moves or drops out? Tap it."
+    },
+    "ans": [
+     5
+    ]
+   },
+   "steps": [
+    {
+     "en": "The cloud solution scales easily, but the on-premises one does not.",
+     "note": {
+      "de": "Mit but verbunden.",
+      "en": "Joined with but."
+     }
+    },
+    {
+     "en": "The cloud solution scales easily, whereas the on-premises one does not.",
+     "hi": [
+      5
+     ],
+     "note": {
+      "de": "whereas / while stellt zwei Dinge gegenüber, ohne eines abzuwerten. Gut für Vergleiche in Präsentationen und Angeboten; im Gespräch genügt but.",
+      "en": "whereas / while sets two things side by side without devaluing either. Good for comparisons in presentations and proposals; in conversation but is enough."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.lk.however",
+   "topic": "linkers",
+   "pat": "lk.however",
+   "title": {
+    "de": "However: Satz davor beendet",
+    "en": "However: the sentence before ends"
+   },
+   "de": "Das Angebot ist gut. Allerdings ist der Zeitplan eng.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
+     "en": "Which word moves or drops out? Tap it."
+    },
+    "ans": [
+     4
+    ]
+   },
+   "steps": [
+    {
+     "en": "The offer is good, but the timeline is tight.",
+     "note": {
+      "de": "Mit but verbunden.",
+      "en": "Joined with but."
+     }
+    },
+    {
+     "en": "The offer is good. However, the timeline is tight.",
+     "hi": [
+      4
+     ],
+     "note": {
+      "de": "However steht am Satzanfang nach einem Punkt, danach ein Komma; ein Komma davor reicht nicht. Setzt die Einschränkung ab und gibt ihr Gewicht. Mails und Berichte.",
+      "en": "However stands at the start after a period, followed by a comma; a comma before it is not enough. It sets the qualification apart and gives it weight. Emails and reports."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.lk.therefore",
+   "topic": "linkers",
+   "pat": "lk.therefore",
+   "title": {
+    "de": "Therefore: Folge",
+    "en": "Therefore: result"
+   },
+   "de": "Daher brauchen wir Ihre Freigabe bis Freitag.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
+     "en": "Which word moves or drops out? Tap it."
+    },
+    "ans": [
+     5
+    ]
+   },
+   "steps": [
+    {
+     "en": "The vendor needs two weeks, so we need your approval by Friday.",
+     "note": {
+      "de": "Mit so verbunden.",
+      "en": "Joined with so."
+     }
+    },
+    {
+     "en": "The vendor needs two weeks. Therefore, we need your approval by Friday.",
+     "hi": [
+      5
+     ],
+     "note": {
+      "de": "Therefore / as a result trennt Grund und Folge in zwei Sätze, mit Komma danach. Förmlicher als so, passend für Mails und Berichte; im Gespräch sagst du so.",
+      "en": "Therefore / as a result separates reason and result into two sentences, with a comma after it. More formal than so, suited to emails and reports; in conversation you say so."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.cp.ing",
+   "topic": "c1-participle",
+   "pat": "cp.ing",
+   "title": {
+    "de": "-ing anhängen: gleichzeitig",
+    "en": "-ing clause: same time"
+   },
+   "de": "Wir haben den Zeitplan aktualisiert und dabei zwei Puffer eingebaut.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
+     "en": "Which word moves or drops out? Tap it."
+    },
+    "ans": [
+     4
+    ]
+   },
+   "steps": [
+    {
+     "en": "We updated the schedule and added two buffers.",
+     "note": {
+      "de": "Zwei Handlungen mit and.",
+      "en": "Two actions with and."
+     }
+    },
+    {
+     "en": "We updated the schedule, adding two buffers.",
+     "hi": [
+      4
+     ],
+     "note": {
+      "de": "Ein -ing-Teil hängt eine zweite Handlung an dieselbe Person, mit Komma davor. Das verdichtet den Bericht. Üblich in Statusmails; im Gespräch bleibst du bei and.",
+      "en": "An -ing part attaches a second action to the same person, with a comma before it. This condenses the report. Usual in status emails; in conversation you stay with and."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.cp.pp",
+   "topic": "c1-participle",
+   "pat": "cp.pp",
+   "title": {
+    "de": "3. Form statt Relativsatz",
+    "en": "past participle instead of a clause"
+   },
+   "de": "Die Dateien, die auf dem alten Server liegen, müssen migriert werden.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welche Wörter wandern oder fallen gleich weg? Tippe eins davon an.",
+     "en": "Which words move or drop out? Tap one of them."
+    },
+    "ans": [
+     2,
+     3
+    ]
+   },
+   "steps": [
+    {
+     "en": "The files that are stored on the old server need to be migrated.",
+     "note": {
+      "de": "Relativsatz mit that are.",
+      "en": "Relative clause with that are."
+     }
+    },
+    {
+     "en": "The files stored on the old server need to be migrated.",
+     "hi": [
+      2
+     ],
+     "note": {
+      "de": "Die 3. Form ersetzt that / which + Passiv und steht direkt hinter dem Nomen. Das spart Wörter in Berichten und auf Folien; im Gespräch ist der Relativsatz völlig in Ordnung.",
+      "en": "The past participle replaces that / which + passive and sits right after the noun. This saves words in reports and on slides; in conversation the relative clause is perfectly fine."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.dm.concede",
+   "topic": "c1-discourse",
+   "pat": "dm.concede",
+   "title": {
+    "de": "That said: einschränken",
+    "en": "That said: qualifying"
+   },
+   "de": "Das Produkt ist gut. Allerdings ist es für uns zu teuer.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
+     "en": "Which word moves or drops out? Tap it."
+    },
+    "ans": [
+     4
+    ]
+   },
+   "steps": [
+    {
+     "en": "The product is good, but it is too expensive for us.",
+     "note": {
+      "de": "Mit but im selben Satz.",
+      "en": "With but in the same sentence."
+     }
+    },
+    {
+     "en": "The product is good. That said, it is too expensive for us.",
+     "hi": [
+      4,
+      5
+     ],
+     "note": {
+      "de": "That said / Having said that: Du lobst und schränkst im nächsten Satz ein, mit Komma danach. Im Meeting der freundliche Einwand; schriftlich nur sparsam.",
+      "en": "That said / Having said that: you praise and qualify in the next sentence, with a comma after it. In a meeting the friendly objection; use it sparingly in writing."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.dm.build",
+   "topic": "c1-discourse",
+   "pat": "dm.build",
+   "title": {
+    "de": "To build on that: anknüpfen",
+    "en": "To build on that: extending a point"
+   },
+   "de": "Darauf aufbauend sollten wir über das Training sprechen.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
+     "en": "Which word moves or drops out? Tap it."
+    },
+    "ans": [
+     0
+    ]
+   },
+   "steps": [
+    {
+     "en": "Also, we should talk about training.",
+     "note": {
+      "de": "Also reiht nur an.",
+      "en": "Also merely adds."
+     }
+    },
+    {
+     "en": "To build on that, we should talk about training.",
+     "hi": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "note": {
+      "de": "To build on that knüpft an das eben Gesagte an und führt es weiter. Zeigt, dass du zugehört hast; gut in Workshops und Präsentationen.",
+      "en": "To build on that links to what was just said and takes it further. It shows you listened; good in workshops and presentations."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.dm.return",
+   "topic": "c1-discourse",
+   "pat": "dm.return",
+   "title": {
+    "de": "Coming back to: zurückkommen",
+    "en": "Coming back to: returning to a topic"
+   },
+   "de": "Zurück zum Preis: Wir können 5 Prozent Rabatt anbieten.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welche Wörter wandern oder fallen gleich weg? Tippe eins davon an.",
+     "en": "Which words move or drop out? Tap one of them."
+    },
+    "ans": [
+     0,
+     1,
+     2
+    ]
+   },
+   "steps": [
+    {
+     "en": "Let me return to the price: we can offer a 5 percent discount.",
+     "note": {
+      "de": "Eine Ansage in einem eigenen Satz.",
+      "en": "An announcement in its own sentence."
+     }
+    },
+    {
+     "en": "Coming back to the price, we can offer a 5 percent discount.",
+     "hi": [
+      0,
+      1,
+      2
+     ],
+     "note": {
+      "de": "Coming back to + Thema holt den Faden zurück, mit Komma danach. So lenkst du ein Gespräch vom Nebenpfad zurück. Gut in Verhandlungen und Meetings.",
+      "en": "Coming back to + topic picks the thread up again, with a comma after it. It steers a conversation back from a side path. Good in negotiations and meetings."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.em.what-cleft",
+   "topic": "c1-emphasis",
+   "pat": "em.what-cleft",
+   "title": {
+    "de": "What-Satz: das Wichtige nach hinten",
+    "en": "what-cleft: key point last"
+   },
+   "de": "Was uns am meisten Sorgen macht, ist der Zeitplan.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
+     "en": "Which word moves or drops out? Tap it."
+    },
+    "ans": [
+     0,
+     1
+    ]
+   },
+   "steps": [
+    {
+     "en": "The timeline worries us most.",
+     "note": {
+      "de": "Normale Reihenfolge, das Wichtige steht vorn.",
+      "en": "Normal order, the key point comes first."
+     }
+    },
+    {
+     "en": "What worries us most is the timeline.",
+     "hi": [
+      0,
+      4
+     ],
+     "note": {
+      "de": "What + Satz + is: Das Wichtige steht am Ende und bekommt Gewicht. Stark bei Einwänden und in Präsentationen: “What matters is …”. Im Alltag reicht der einfache Satz.",
+      "en": "What + clause + is: the key point comes last and gets weight. Strong for objections and presentations: “What matters is …”. In everyday talk the simple sentence is enough."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.em.neg-inversion",
+   "topic": "c1-emphasis",
+   "pat": "em.neg-inversion",
+   "title": {
+    "de": "Rarely do we: Umstellung",
+    "en": "Rarely do we: inversion"
+   },
+   "de": "Selten sehen wir so klare Anforderungen.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
+     "en": "Which word moves or drops out? Tap it."
+    },
+    "ans": [
+     1
+    ]
+   },
+   "steps": [
+    {
+     "en": "We rarely see such clear requirements.",
+     "note": {
+      "de": "Normale Wortstellung.",
+      "en": "Normal word order."
+     }
+    },
+    {
+     "en": "Rarely do we see such clear requirements.",
+     "hi": [
+      0,
+      1,
+      2
+     ],
+     "note": {
+      "de": "Rarely / Seldom vorn: Hilfsverb vor Subjekt; ohne Hilfsverb im Satz kommt do / does / did dazu. Formell und betont: Rede oder Präsentation, im Gespräch sparsam.",
+      "en": "Rarely / Seldom up front: auxiliary before subject; if the sentence has no auxiliary, do / does / did is added. Formal and emphatic: speech or presentation, sparing in conversation."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.em.not-only",
+   "topic": "c1-emphasis",
+   "pat": "em.not-only",
+   "title": {
+    "de": "Not only does: doppelte Betonung",
+    "en": "Not only does: paired stress"
+   },
+   "de": "Das System senkt nicht nur Kosten, es verbessert auch die Sicherheit.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "Not only the system lowers costs, but it also improves security.",
+     "Not only does the system lower costs, but it also improves security."
+    ],
+    "ans": 1
+   },
+   "steps": [
+    {
+     "en": "The system lowers costs, and it also improves security.",
+     "note": {
+      "de": "Zwei Vorteile mit and also.",
+      "en": "Two benefits with and also."
+     }
+    },
+    {
+     "en": "Not only does the system lower costs, but it also improves security.",
+     "hi": [
+      0,
+      1,
+      2
+     ],
+     "note": {
+      "de": "Not only vorn: Hilfsverb vor Subjekt, Verb in der Grundform; der zweite Teil folgt mit but … also. Betont zwei Vorteile in einem Zug, für Pitch und Folien; im Gespräch: “It lowers costs and improves security.”",
+      "en": "Not only up front: auxiliary before subject, verb in the base form; the second part follows with but … also. Stresses two benefits in one go, for pitch and slides; in conversation: “It lowers costs and improves security.”"
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.em.only-inversion",
+   "topic": "c1-emphasis",
+   "pat": "em.only-inversion",
+   "title": {
+    "de": "Only after: Umstellung im Hauptsatz",
+    "en": "Only after: inversion in the main clause"
+   },
+   "de": "Erst nach Ihrer Freigabe können wir starten.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
+     "en": "Which word moves or drops out? Tap it."
+    },
+    "ans": [
+     1
+    ]
+   },
+   "steps": [
+    {
+     "en": "We can start only after we receive your approval.",
+     "note": {
+      "de": "Normale Reihenfolge mit only after.",
+      "en": "Normal order with only after."
+     }
+    },
+    {
+     "en": "Only after we receive your approval can we start.",
+     "hi": [
+      0,
+      1,
+      6
+     ],
+     "note": {
+      "de": "Only after + Nebensatz vorn: Im Hauptsatz steht das Hilfsverb vor dem Subjekt. Setzt die Bedingung ans Ende der Aufmerksamkeit und klingt förmlich; gut in Verhandlungen, im Alltag reicht die einfache Form.",
+      "en": "Only after + clause up front: in the main clause the auxiliary goes before the subject. It puts the condition into focus and sounds formal; good in negotiations, in everyday talk the plain form is enough."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.inv.cond",
+   "topic": "inversion",
+   "pat": "inv.cond",
+   "title": {
+    "de": "Should you: Bedingung ohne if",
+    "en": "Should you: condition without if"
+   },
+   "de": "Falls Sie weitere Informationen brauchen, rufen Sie mich bitte an.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
+     "en": "Which word moves or drops out? Tap it."
+    },
+    "ans": [
+     0
+    ]
+   },
+   "steps": [
+    {
+     "en": "If you need further information, please call me.",
+     "note": {
+      "de": "Normaler Bedingungssatz mit if.",
+      "en": "Normal conditional clause with if."
+     }
+    },
+    {
+     "en": "Should you need further information, please call me.",
+     "hi": [
+      0
+     ],
+     "note": {
+      "de": "Should + Subjekt + Grundform ersetzt if. Förmlich und höflich: der klassische Satz am Ende von Angebotsmails. Im Gespräch bleibst du bei If.",
+      "en": "Should + subject + base form replaces if. Formal and polite: the classic sentence at the end of proposal emails. In conversation you stay with If."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.inv.cond-had",
+   "topic": "inversion",
+   "pat": "inv.cond",
+   "title": {
+    "de": "Had we: unerfüllte Bedingung",
+    "en": "Had we: unreal condition"
+   },
+   "de": "Hätten wir das früher gewusst, hätten wir den Termin verschoben.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
+     "en": "Which word moves or drops out? Tap it."
+    },
+    "ans": [
+     0
+    ]
+   },
+   "steps": [
+    {
+     "en": "If we had known earlier, we would have moved the date.",
+     "note": {
+      "de": "Bedingung mit if und had.",
+      "en": "Condition with if and had."
+     }
+    },
+    {
+     "en": "Had we known earlier, we would have moved the date.",
+     "hi": [
+      0
+     ],
+     "note": {
+      "de": "Had + Subjekt + 3. Form ersetzt If … had. Förmlich, meist schriftlich: im Bericht oder in der Rückschau. Im Gespräch sagst du If we had known …",
+      "en": "Had + subject + past participle replaces If … had. Formal, mostly written: in a report or a look back. In conversation you say If we had known …"
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.ep.do-emph",
+   "topic": "emph-plus",
+   "pat": "ep.do-emph",
+   "title": {
+    "de": "do betont: Nachdruck",
+    "en": "emphatic do: stress"
+   },
+   "de": "Ich denke wirklich, dass wir den Termin halten können.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
+     "en": "Which word moves or drops out? Tap it."
+    },
+    "ans": [
+     1
+    ]
+   },
+   "steps": [
+    {
+     "en": "I really think we can meet the deadline.",
+     "note": {
+      "de": "Really verstärkt von außen.",
+      "en": "Really adds stress from outside."
+     }
+    },
+    {
+     "en": "I do think we can meet the deadline.",
+     "hi": [
+      1
+     ],
+     "note": {
+      "de": "do + Grundform betont die Aussage, besonders gegen einen Zweifel; die Betonung liegt auf do. Im Gespräch sehr natürlich, besonders bei Einwänden: “We did tell you …”. Schriftlich selten.",
+      "en": "do + base form stresses the statement, especially against a doubt; the stress falls on do. Very natural in conversation, especially with objections: “We did tell you …”. Rare in writing."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.ep.concession",
+   "topic": "emph-plus",
+   "pat": "ep.concession",
+   "title": {
+    "de": "Tempting as it is: Voranstellung",
+    "en": "Tempting as it is: fronting"
+   },
+   "de": "So verlockend das Angebot auch ist, wir können es nicht annehmen.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
+     "en": "Which word moves or drops out? Tap it."
+    },
+    "ans": [
+     4
+    ]
+   },
+   "steps": [
+    {
+     "en": "Although the offer is tempting, we cannot accept it.",
+     "note": {
+      "de": "Mit although eingeleitet.",
+      "en": "Introduced with although."
+     }
+    },
+    {
+     "en": "Tempting as the offer is, we cannot accept it.",
+     "hi": [
+      0,
+      1
+     ],
+     "move": [
+      [
+       4,
+       0
+      ]
+     ],
+     "note": {
+      "de": "Adjektiv + as + Subjekt + be ersetzt although und stellt das Adjektiv nach vorn. Förmlich und gewichtig: Verhandlungen, Reden. Im Gespräch bleibst du bei Although.",
+      "en": "Adjective + as + subject + be replaces although and puts the adjective first. Formal and weighty: negotiations, speeches. In conversation you stay with Although."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.ep.so-such",
+   "topic": "emph-plus",
+   "pat": "ep.so-such",
+   "title": {
+    "de": "so … that: Folge betonen",
+    "en": "so … that: stressing the result"
+   },
+   "de": "Die Nachfrage war so hoch, dass wir Kapazität aufstocken mussten.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "Demand was so high that we had to add capacity.",
+     "Demand was such high that we had to add capacity."
+    ],
+    "ans": 0
+   },
+   "steps": [
+    {
+     "en": "Demand was very high, so we had to add capacity.",
+     "note": {
+      "de": "Zwei Hauptsätze mit so.",
+      "en": "Two main clauses with so."
+     }
+    },
+    {
+     "en": "Demand was so high that we had to add capacity.",
+     "hi": [
+      2,
+      3,
+      4
+     ],
+     "note": {
+      "de": "so + Adjektiv + that; such steht vor Nomen (such high demand). Das Ergebnis rückt in den Mittelpunkt. Gut in Berichten und Case Studies; im Gespräch genügt “… , so we had to …”.",
+      "en": "so + adjective + that; such goes before a noun (such high demand). The result moves into focus. Good in reports and case studies; in conversation “…, so we had to …” is enough."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.el.so-not",
+   "topic": "ellipsis",
+   "pat": "el.so-not",
+   "title": {
+    "de": "I assume so: kurze Antwort",
+    "en": "I assume so: a short answer"
+   },
+   "de": "Ich rechne damit.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Du wirst gefragt: „Genehmigt Legal den Entwurf bis Freitag?“ Wie antwortest du kurz?",
+     "en": "You are asked: “Will legal approve the draft by Friday?” What is your short answer?"
+    },
+    "opts": [
+     "I assume it.",
+     "I assume so."
+    ],
+    "ans": 1
+   },
+   "steps": [
+    {
+     "en": "I assume that legal will approve the draft.",
+     "note": {
+      "de": "Die Antwort wiederholt die Frage.",
+      "en": "The answer repeats the question."
+     }
+    },
+    {
+     "en": "I assume so.",
+     "note": {
+      "de": "so ersetzt den ganzen that-Satz (hope, think, expect, assume + so); negativ: I hope not, I don't think so. Im Gespräch Standard, in Mails wirkt es kurz und freundlich.",
+      "en": "so replaces the whole that-clause (hope, think, expect, suppose + so); negative: I hope not, I don't think so. Standard in conversation; in emails it reads short and friendly."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.el.do-so",
+   "topic": "ellipsis",
+   "pat": "el.do-so",
+   "title": {
+    "de": "do so: Verb ersetzen",
+    "en": "do so: replacing a verb"
+   },
+   "de": "Kunden, die upgraden möchten, können dies jederzeit tun.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
+     "en": "Which word moves or drops out? Tap it."
+    },
+    "ans": [
+     6
+    ]
+   },
+   "steps": [
+    {
+     "en": "Customers who want to upgrade can upgrade at any time.",
+     "note": {
+      "de": "Das Verb wird wiederholt.",
+      "en": "The verb is repeated."
+     }
+    },
+    {
+     "en": "Customers who want to upgrade can do so at any time.",
+     "hi": [
+      6,
+      7
+     ],
+     "note": {
+      "de": "do so ersetzt ein Verb samt Objekt, um Wiederholung zu vermeiden (do the same, do so). Förmlich: Verträge, Mails, Preislisten. Im Gespräch sagst du “… can do it”.",
+      "en": "do so replaces a verb with its object to avoid repetition (do the same, do so). Formal: contracts, emails, price lists. In conversation you say “… can do it”."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.el.one-ones",
+   "topic": "ellipsis",
+   "pat": "el.one-ones",
+   "title": {
+    "de": "the old one: one ersetzt ein Nomen",
+    "en": "the old one: one replaces a noun"
+   },
+   "de": "Die neue Version ist stabiler als die alte.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
+     "en": "Which word moves or drops out? Tap it."
+    },
+    "ans": [
+     9
+    ]
+   },
+   "steps": [
+    {
+     "en": "The new version is more stable than the old version.",
+     "note": {
+      "de": "Das Nomen wird wiederholt.",
+      "en": "The noun is repeated."
+     }
+    },
+    {
+     "en": "The new version is more stable than the old one.",
+     "hi": [
+      9
+     ],
+     "note": {
+      "de": "one (Plural: ones) ersetzt ein zählbares Nomen, meist nach einem Adjektiv. So vermeidest du Wiederholung. Gespräch und Bericht gleich gut.",
+      "en": "one (plural: ones) replaces a countable noun, usually after an adjective. This avoids repetition. Equally good in conversation and reports."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.np.contact",
+   "topic": "noun-phrase",
+   "pat": "np.contact",
+   "title": {
+    "de": "Relativsatz ohne that",
+    "en": "relative clause without that"
+   },
+   "de": "Das System, das wir letztes Quartal getestet haben, ist das zuverlässigste.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
+     "en": "Which word moves or drops out? Tap it."
+    },
+    "ans": [
+     2
+    ]
+   },
+   "steps": [
+    {
+     "en": "The system that we tested last quarter is the most reliable.",
+     "note": {
+      "de": "Mit that eingeleitet.",
+      "en": "Introduced with that."
+     }
+    },
+    {
+     "en": "The system we tested last quarter is the most reliable.",
+     "note": {
+      "de": "Ist das Bezugswort Objekt im Relativsatz, darf that wegfallen. Bei Subjekt (the system that failed) bleibt es. Kürzer und flüssiger in Mails und im Gespräch.",
+      "en": "If the antecedent is the object of the relative clause, that may be dropped. If it is the subject (the system that failed), it stays. Shorter and smoother in emails and conversation."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.np.of-s",
+   "topic": "noun-phrase",
+   "pat": "np.of-s",
+   "title": {
+    "de": "'s oder of: Person oder Sache",
+    "en": "'s or of: person or thing"
+   },
+   "de": "Der CEO des Unternehmens hat das Budget freigegeben.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
+     "en": "Which word moves or drops out? Tap it."
+    },
+    "ans": [
+     2
+    ]
+   },
+   "steps": [
+    {
+     "en": "The CEO of the company approved the budget.",
+     "note": {
+      "de": "Mit of gebildet.",
+      "en": "Built with of."
+     }
+    },
+    {
+     "en": "The company's CEO approved the budget.",
+     "move": [
+      [
+       4,
+       1
+      ]
+     ],
+     "note": {
+      "de": "'s steht bei Personen und Organisationen, of bei Sachen (the end of the contract). Kürzer und lebendiger in Mails und Folien; der förmliche Stil bleibt bei of.",
+      "en": "'s goes with people and organizations, of with things (the end of the contract). Shorter and livelier in emails and slides; a formal style stays with of."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.np.to-inf",
+   "topic": "noun-phrase",
+   "pat": "np.to-inf",
+   "title": {
+    "de": "the first to sign: to-Infinitiv",
+    "en": "the first to sign: to-infinitive"
+   },
+   "de": "Der erste Kunde, der unterschreibt, bekommt einen Rabatt.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
+     "en": "Which word moves or drops out? Tap it."
+    },
+    "ans": [
+     3
+    ]
+   },
+   "steps": [
+    {
+     "en": "The first client who signs will get a discount.",
+     "note": {
+      "de": "Relativsatz mit who.",
+      "en": "Relative clause with who."
+     }
+    },
+    {
+     "en": "The first client to sign will get a discount.",
+     "hi": [
+      3,
+      4
+     ],
+     "note": {
+      "de": "Nach first, last, only, next steht to + Grundform statt eines Relativsatzes. Kompakt in Aktionen, Angeboten und Folien; im Gespräch sagst du “who signs”.",
+      "en": "After first, last, only, next, to + base form replaces a relative clause. Compact in promotions, offers and slides; in conversation you say “who signs”."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.np.post",
+   "topic": "noun-phrase",
+   "pat": "np.post",
+   "title": {
+    "de": "the extent to which: Nachstellung",
+    "en": "the extent to which: postmodification"
+   },
+   "de": "Wir wissen noch nicht, in welchem Umfang der Rollout das Team betrifft.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "We do not yet know the extent to what the rollout affects the team.",
+     "We do not yet know the extent to which the rollout affects the team."
+    ],
+    "ans": 1
+   },
+   "steps": [
+    {
+     "en": "We do not yet know how far the rollout affects the team.",
+     "note": {
+      "de": "Mit how far gebildet.",
+      "en": "Built with how far."
+     }
+    },
+    {
+     "en": "We do not yet know the extent to which the rollout affects the team.",
+     "hi": [
+      5,
+      6,
+      7,
+      8
+     ],
+     "note": {
+      "de": "the extent to which: Nomen + Präposition + which, nie what. Das Nomen gibt dem Satz Gewicht. Berichte und Risikoanalysen; im Gespräch sagst du how far.",
+      "en": "the extent to which: noun + preposition + which, never what. The noun gives the sentence weight. Reports and risk analyses; in conversation you say how far."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.cm.measure",
+   "topic": "compound-mod",
+   "pat": "cm.measure",
+   "title": {
+    "de": "a three-day workshop: Singular",
+    "en": "a three-day workshop: singular"
+   },
+   "de": "Es ist ein dreitägiger Workshop.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "It is a three-days workshop.",
+     "It is a three-day workshop."
+    ],
+    "ans": 1
+   },
+   "steps": [
+    {
+     "en": "The workshop lasts three days.",
+     "note": {
+      "de": "Hier steht days im Plural, denn die Zahl steht hinter dem Verb.",
+      "en": "Here days is plural, because the number comes after the verb."
+     }
+    },
+    {
+     "en": "It is a three-day workshop.",
+     "hi": [
+      3
+     ],
+     "note": {
+      "de": "Vor dem Nomen steht das Maß im Singular mit Bindestrich: a three-day workshop, a 30-minute demo. Das gilt für alle Maße. Kompakt in Einladungen und Agenden.",
+      "en": "Before the noun, the measure is singular with a hyphen: a three-day workshop, a 30-minute demo. This holds for all measures. Compact in invitations and agendas."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.cm.fixed",
+   "topic": "compound-mod",
+   "pat": "cm.fixed",
+   "title": {
+    "de": "long-term: fester Modifikator",
+    "en": "long-term: fixed modifier"
+   },
+   "de": "Wir wollen einen langfristigen Vertrag.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welche Wörter wandern oder fallen gleich weg? Tippe eins davon an.",
+     "en": "Which words move or drop out? Tap one of them."
+    },
+    "ans": [
+     4,
+     5
+    ]
+   },
+   "steps": [
+    {
+     "en": "We want a contract that runs for a long time.",
+     "note": {
+      "de": "Beschreibung mit Relativsatz.",
+      "en": "Description with a relative clause."
+     }
+    },
+    {
+     "en": "We want a long-term contract.",
+     "hi": [
+      3
+     ],
+     "note": {
+      "de": "Feste Modifikatoren vor dem Nomen werden mit Bindestrich geschrieben: long-term, high-level, state-of-the-art. Das ist kürzer und klingt professioneller in Angeboten und Verträgen.",
+      "en": "Fixed modifiers before a noun are hyphenated: long-term, high-level, state-of-the-art. This is shorter and sounds more professional in proposals and contracts."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.cm.participle",
+   "topic": "compound-mod",
+   "pat": "cm.participle",
+   "title": {
+    "de": "well-established: Adverb + Partizip",
+    "en": "well-established: adverb + participle"
+   },
+   "de": "Wir haben ein gut etabliertes Partnernetz.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welche Wörter wandern oder fallen gleich weg? Tippe eins davon an.",
+     "en": "Which words move or drop out? Tap one of them."
+    },
+    "ans": [
+     4,
+     5
+    ]
+   },
+   "steps": [
+    {
+     "en": "We have a network that is well established.",
+     "note": {
+      "de": "Mit Relativsatz.",
+      "en": "With a relative clause."
+     }
+    },
+    {
+     "en": "We have a well-established network.",
+     "hi": [
+      3
+     ],
+     "note": {
+      "de": "Adverb + 3. Form vor dem Nomen wird mit Bindestrich verbunden: well-known, newly built. Das macht die Beschreibung kompakt für Referenzen; nach dem Verb schreibst du ohne Bindestrich: “The network is well established.”",
+      "en": "Adverb + past participle before a noun is hyphenated: well-known, newly built. This makes the description compact for references; after the verb you write it without a hyphen: “The network is well established.”"
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.cm.order",
+   "topic": "compound-mod",
+   "pat": "cm.order",
+   "title": {
+    "de": "Reihenfolge der Adjektive",
+    "en": "adjective order"
+   },
+   "de": "Wir haben ein schnelles, neues Cloud-Archiv gekauft.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "We bought a fast new cloud archive.",
+     "We bought a cloud new fast archive."
+    ],
+    "ans": 0
+   },
+   "steps": [
+    {
+     "en": "We bought an archive. It is fast, new and cloud-based.",
+     "note": {
+      "de": "Drei Eigenschaften in einem zweiten Satz.",
+      "en": "Three qualities in a second sentence."
+     }
+    },
+    {
+     "en": "We bought a fast new cloud archive.",
+     "hi": [
+      3,
+      4,
+      5
+     ],
+     "note": {
+      "de": "Reihenfolge vor dem Nomen: Meinung, Größe, Alter, Herkunft, Material, Zweck; Kernbegriffe stehen direkt am Nomen. Das gilt immer, am häufigsten in Angeboten und Beschreibungen.",
+      "en": "Order before a noun: opinion, size, age, origin, material, purpose; core terms sit right at the noun. This always applies, most often in proposals and descriptions."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.wo.verb-object",
+   "topic": "word-order",
+   "pat": "wo.verb-object",
+   "title": {
+    "de": "Verb und Objekt zusammen",
+    "en": "verb and object together"
+   },
+   "de": "Wir schicken Ihnen das Angebot morgen.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "We will send tomorrow you the quote.",
+     "We will send you the quote tomorrow."
+    ],
+    "ans": 1
+   },
+   "steps": [
+    {
+     "en": "Tomorrow we will send the quote to you.",
+     "note": {
+      "de": "Die Zeit steht vorn und betont den Termin.",
+      "en": "The time comes first and stresses the date."
+     }
+    },
+    {
+     "en": "We will send you the quote tomorrow.",
+     "hi": [
+      3,
+      4,
+      5,
+      6
+     ],
+     "note": {
+      "de": "Zwischen Verb und Objekt steht nichts: send + wem + was, dann Ort und Zeit. Das ist die neutrale Reihenfolge in Mails; die Zeit vorn betont den Termin.",
+      "en": "Nothing sits between verb and object: send + whom + what, then place and time. This is the neutral order in emails; the time up front stresses the date."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.wo.hardly-sooner",
+   "topic": "word-order",
+   "pat": "wo.hardly-sooner",
+   "title": {
+    "de": "Hardly had we … when",
+    "en": "Hardly had we … when"
+   },
+   "de": "Kaum hatten wir die Demo gestartet, brach die Verbindung ab.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
+     "en": "Which word moves or drops out? Tap it."
+    },
+    "ans": [
+     2
+    ]
+   },
+   "steps": [
+    {
+     "en": "We had hardly started the demo when the connection dropped.",
+     "note": {
+      "de": "Normale Wortstellung.",
+      "en": "Normal word order."
+     }
+    },
+    {
+     "en": "Hardly had we started the demo when the connection dropped.",
+     "hi": [
+      0,
+      1
+     ],
+     "note": {
+      "de": "Hardly + had + Subjekt + 3. Form, dann when (nicht than). Eine dramatische, erzählende Form für Rede oder Case Story; im Alltag reicht “As soon as we started …”.",
+      "en": "Hardly + had + subject + past participle, then when (not than). A dramatic storytelling form for a talk or case story; in everyday speech “As soon as we started …” is enough."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.cmp.the-the",
+   "topic": "comparison",
+   "pat": "cmp.the-the",
+   "title": {
+    "de": "the earlier … the lower",
+    "en": "the earlier … the lower"
+   },
+   "de": "Je früher Sie unterschreiben, desto günstiger wird der Preis.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welches Wort wandert oder fällt gleich weg? Tippe es an.",
+     "en": "Which word moves or drops out? Tap it."
+    },
+    "ans": [
+     0,
+     3
+    ]
+   },
+   "steps": [
+    {
+     "en": "If you sign earlier, the price will be lower.",
+     "note": {
+      "de": "Bedingung und Folge als if-Satz.",
+      "en": "Condition and result as an if-clause."
+     }
+    },
+    {
+     "en": "The earlier you sign, the lower the price will be.",
+     "hi": [
+      0,
+      1,
+      4,
+      5
+     ],
+     "note": {
+      "de": "the + Komparativ …, the + Komparativ …: Beides geht gemeinsam. Das gibt dem Vorteil Zug und eignet sich für Verhandlungen und Preisangebote; im Gespräch sagst du “If you sign earlier, …”.",
+      "en": "the + comparative …, the + comparative …: both move together. This gives the advantage drive and suits negotiations and price offers; in conversation you say “If you sign earlier, …”."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.cmp.degree",
+   "topic": "comparison",
+   "pat": "cmp.degree",
+   "title": {
+    "de": "considerably lower: Stärke",
+    "en": "considerably lower: degree"
+   },
+   "de": "Unser Preis liegt deutlich unter dem des Vorjahres.",
+   "predict": {
+    "kind": "tap",
+    "q": {
+     "de": "Welche Wörter wandern oder fallen gleich weg? Tippe eins davon an.",
+     "en": "Which words move or drop out? Tap one of them."
+    },
+    "ans": [
+     3,
+     4
+    ]
+   },
+   "steps": [
+    {
+     "en": "Our price is a lot lower than last year.",
+     "note": {
+      "de": "A lot ist Alltag.",
+      "en": "A lot is everyday."
+     }
+    },
+    {
+     "en": "Our price is considerably lower than last year.",
+     "hi": [
+      3
+     ],
+     "note": {
+      "de": "far, much, considerably, slightly + Komparativ: Das Maß steht davor (nicht very lower). Genauer in Angeboten und Berichten; im Gespräch ist a lot lower völlig üblich.",
+      "en": "far, much, considerably, slightly + comparative: the degree goes before it (not very lower). More precise in proposals and reports; in conversation a lot lower is perfectly usual."
+     }
+    }
+   ]
+  },
+  {
+   "id": "f.cmp.as-as",
+   "topic": "comparison",
+   "pat": "cmp.as-as",
+   "title": {
+    "de": "twice as fast as: Vielfache",
+    "en": "twice as fast as: multiples"
+   },
+   "de": "Unser System ist doppelt so schnell wie das des Wettbewerbers.",
+   "predict": {
+    "kind": "pick",
+    "q": {
+     "de": "Welche Version stimmt?",
+     "en": "Which version is correct?"
+    },
+    "opts": [
+     "Our system is twice as fast as the competitor's.",
+     "Our system is twice as fast than the competitor's."
+    ],
+    "ans": 0
+   },
+   "steps": [
+    {
+     "en": "Our system is much faster than the competitor's.",
+     "note": {
+      "de": "Komparativ mit than.",
+      "en": "Comparative with than."
+     }
+    },
+    {
+     "en": "Our system is twice as fast as the competitor's.",
+     "hi": [
+      3,
+      4,
+      5,
+      6
+     ],
+     "note": {
+      "de": "as + Adjektiv + as, vorn mit twice, three times, half: nach as … as nie than. Das Vielfache macht den Vorteil messbar; gut in Pitch und Angebot.",
+      "en": "as + adjective + as, with twice, three times, half in front: never than after as … as. The multiple makes the advantage measurable; good in a pitch and in a proposal."
+     }
+    }
+   ]
+  }
+ ]
+}

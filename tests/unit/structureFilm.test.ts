@@ -194,3 +194,50 @@ describe('Struktur-Filme: Charge 1 und Vorhersage', () => {
     }
   });
 });
+
+// Charge 2 (P63): Kapitel 5–7 (Modalität, Verbmuster, Satzbau und Betonung), Quelle a2.json.
+const CH5_7 = [
+  'modals-deduction', 'modals-prob', 'modals-advice', 'c1-hedging',
+  'gerund-inf', 'verb-patterns', 'prepositions', 'prep-noun', 'phrasal-syntax', 'articles', 'countable', 'quant-neg', 'relative', 'linkers',
+  'c1-participle', 'c1-discourse', 'c1-emphasis', 'inversion', 'emph-plus', 'ellipsis', 'noun-phrase', 'compound-mod', 'word-order', 'comparison',
+];
+
+describe('Struktur-Filme: Charge 2 (Kapitel 5–7)', () => {
+  const films = animFilms();
+  const mine = films.filter((f) => CH5_7.includes(f.topic));
+
+  it('mindestens 65 Filme für Kapitel 5–7, alle vier Modalitätsthemen und mindestens 20 Themen', () => {
+    expect(mine.length).toBeGreaterThanOrEqual(65);
+    const topics = new Set(mine.map((f) => f.topic));
+    for (const t of ['modals-deduction', 'modals-prob', 'modals-advice', 'c1-hedging']) expect(topics.has(t), t).toBe(true);
+    expect(topics.size).toBeGreaterThanOrEqual(20);
+  });
+
+  it('Kennung beginnt mit f.<Muster>', () => {
+    for (const f of mine) expect(f.id.startsWith(`f.${f.pat}`), f.id).toBe(true);
+  });
+
+  it('kein Ausgangs- oder Zielsatz kommt in zwei Filmen vor', () => {
+    const seen = new Map<string, string>();
+    for (const f of films) {
+      for (const s of [f.steps[0]!, f.steps[f.steps.length - 1]!]) {
+        const k = s.en.toLowerCase();
+        expect(seen.has(k) ? `${f.id} doppelt mit ${seen.get(k)}: ${s.en}` : '').toBe('');
+        seen.set(k, f.id);
+      }
+    }
+  });
+
+  it('Notizen in beiden Sprachen gesetzt; keine deutschen Zeichen in englischen Texten', () => {
+    for (const f of mine) {
+      expect(f.de.length).toBeGreaterThan(8);
+      for (const s of f.steps) {
+        expect(s.note.de.trim().length, f.id).toBeGreaterThan(10);
+        expect(s.note.en.trim().length, f.id).toBeGreaterThan(10);
+        expect(/[äöüß]/i.test(s.note.en), `${f.id}: deutsche Zeichen in EN-Notiz`).toBe(false);
+        expect(/[äöüß]/i.test(s.en), `${f.id}: deutsche Zeichen im Satz`).toBe(false);
+      }
+      if (f.predict.kind === 'pick') expect(f.predict.opts[0]).not.toBe(f.predict.opts[1]);
+    }
+  });
+});
