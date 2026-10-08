@@ -24,6 +24,7 @@ const FAMILY: Readonly<Partial<Record<ExerciseId, string>>> = {
   listen_mc: 'pick-meaning',
   mc_de: 'pick-word',
   match: 'pick-word',
+  contrast: 'pick-word',
   // Lücke mit Stütze (Anfangsbuchstabe, Bausteine) und freie Lücke sind verschiedene Anforderungen (Stütze gegen freier Abruf).
   cloze_hint: 'gap-hint',
   tiles: 'gap-hint',

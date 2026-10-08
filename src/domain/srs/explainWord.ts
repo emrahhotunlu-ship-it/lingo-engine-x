@@ -76,9 +76,11 @@ export type ExplainWordInput = {
   alt?: boolean;
   /** Die Frage (oder die Rückseite) zeigt die deutsche Bedeutung schon: „Merke“ nennt sie nicht noch einmal (Kap. 15). */
   meaningShown?: boolean;
+  /** `contrast` (P52): die Begründung von Claude in der Oberflächensprache; sie ist die Warum-Zeile, auch bei richtiger Antwort. */
+  contrastWhy?: string | null;
 };
 
-const CHOICE_EX: ReadonlySet<ExerciseId> = new Set(['mc_en', 'mc_de', 'ctx_mc', 'listen_mc', 'match', 'colloc_gap']);
+const CHOICE_EX: ReadonlySet<ExerciseId> = new Set(['mc_en', 'mc_de', 'ctx_mc', 'listen_mc', 'match', 'colloc_gap', 'contrast']);
 
 export function explainWord(i: ExplainWordInput): ExplanationModel {
   const { card, lang } = i;
@@ -133,7 +135,7 @@ export function explainWord(i: ExplainWordInput): ExplanationModel {
     : meaning && !i.meaningShown
       ? pick({ de: `Merke: ${card.word} = ${shortMeaning(meaning, lang)}`, en: `Remember: ${card.word} = ${shortMeaning(meaning, lang)}` }, lang)
       : card.word;
-  lines.push({ k: 'why', text: why ? `${merke}. ${why}` : merke });
+  lines.push({ k: 'why', text: i.ex === 'contrast' && i.contrastWhy ? i.contrastWhy : why ? `${merke}. ${why}` : merke });
 
   // 4. Typischer Fehler: die Deutsch-Falle der Karte
   if (trap) lines.push({ k: 'mistake', bad: trap.wrong, good: trap.right, cause: pick(trap.why, lang) });

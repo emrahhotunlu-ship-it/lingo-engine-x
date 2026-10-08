@@ -26,6 +26,7 @@ import { repairCheck } from './repairCheck';
 import { patterns } from './patterns';
 import { patternCheck } from './patternCheck';
 import { memoryExtract } from './memoryExtract';
+import { wordCtx } from './wordCtx';
 
 // Alle Vorlagen an einem Ort. Ein Test prüft eindeutige Kennungen und die Kopfzeile.
 
@@ -71,6 +72,8 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   sentenceClinic,
   // Lernplattform 3.0 P47: Schreibwerkstatt (Wochen-Mail)
   c1Mail,
+  // Lernplattform 3.0 P52: Wörter-Tutor (neue Sätze und Kontrast für schwache Wörter)
+  wordCtx,
 ];
 
 /** Gesprächsvorlagen (Freitext, gestreamt über src/ai/stream.ts; Phase 3 und 5). */

@@ -32,7 +32,9 @@ export type ExerciseId =
   | 'wordfam'
   | 'find_trap'
   /** Anki „Aufdecken“ (anki-regeln.md): nie automatisch gewählt, nur über `pickMode`. */
-  | 'flip';
+  | 'flip'
+  /** Lernplattform 3.0 P52: „Welches Wort passt?“ mit dem Kontrast-Satz von Claude (`cfx`); nie automatisch gewählt, nur von der Runde eingesetzt. */
+  | 'contrast';
 /** Modus der alten App (Schlüssel in `modes` und `hist[].m`). */
 export type LegacyMode = 'recog' | 'cloze' | 'type' | 'colloc' | 'listen' | 'produce';
 export type InputKind = 'choice' | 'typed' | 'spot' | 'tiles' | 'produce' | 'flip' | 'sentence';
@@ -133,6 +135,10 @@ export type Exercise = {
   famFrom?: { pos: 'noun' | 'verb' | 'adj' | 'adv'; word: string } | null;
   /** `find_trap`: Übungssatz der Falle und die falsch benutzte Stelle darin. */
   trap?: { id: string; sentence: string; start: number; end: number } | null;
+  /** Lernplattform 3.0 P52: der Satz stammt von Claude (`wx` bzw. `cfx`): die Übung zeigt `AiMark`, „Melden“ markiert genau diesen Satz. */
+  ai?: { tpl: string; kind: 'wx' | 'cfx'; en: string } | null;
+  /** `contrast`: Begründung von Claude, zweisprachig (gezeigt in der Oberflächensprache). */
+  contrastWhy?: { de: string; en: string } | null;
 };
 
 /** Baustein (tiles): Text und ob er ein Fremdbaustein ist. */

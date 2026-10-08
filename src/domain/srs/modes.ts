@@ -36,6 +36,8 @@ export const CATALOG: readonly ExerciseDef[] = [
   // Anki „Aufdecken“ (architektur.md §4.2): Stufe 0, damit die Nachbarstufen-Suche es nie findet;
   // `supports` liefert immer `false`. Ohne Eintrag fiele `exerciseDef('flip')` still auf `mc_en` zurück.
   { ex: 'flip', stage: 0, level: 2, mode: 'recog', input: 'flip' },
+  // P52 „Welches Wort passt?“ (Kontrast-Satz von Claude): ebenfalls Stufe 0, nie automatisch gewählt; die Runde setzt sie höchstens 1× ein.
+  { ex: 'contrast', stage: 0, level: 2, mode: 'recog', input: 'choice' },
 ];
 
 /**
@@ -99,6 +101,7 @@ export function supports(card: TrainCard, ex: ExerciseId, lang: Lang, poolSize: 
     case 'produce':
       return env.ai && !env.touch && !!meaning;
     case 'flip':
+    case 'contrast':
       return false;
   }
 }

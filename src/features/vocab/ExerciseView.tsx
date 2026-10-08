@@ -45,6 +45,8 @@ import { saveRepairs } from '../repair/store';
 import { requestExamples, useExamples } from './examples';
 import { commitAnswer, prepareNext, useSession, type Answer, type FirstKind } from './session';
 import { WordExtras } from './WordExtras';
+import { reportWordCtx } from './wordCtx';
+import { AiMark } from '../../ui/AiMark';
 
 // Eine Wörter-Übung im Übungsgerüst (Lernplattform 2.0 §4.8, §5.6). Das Gerüst (`ExerciseShell`) zeichnet Status, Aufgabenzeile, Satz, Eingabe,
 // Urteil, Vergleich und die Erklär-Karte; diese Datei sammelt nur Eingabe und Prüfung je Abfrageart:
@@ -447,6 +449,7 @@ export function ExerciseView({
       ...(MEANING_SHOWN.has(e.ex) && (e.ex !== 'match' || !e.sentence) ? { meaningShown: true } : {}),
       ...(other ? { otherMeaning: lang === 'de' ? (other.de ?? other.def) : (other.def ?? other.de) } : {}),
       ...(isAlt ? { alt: true } : {}),
+      ...(e.ex === 'contrast' && e.contrastWhy ? { contrastWhy: e.contrastWhy[lang] } : {}),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps -- nur bei einem neuen Ergebnis
   }, [fb, exampleItems]);
@@ -655,7 +658,7 @@ export function ExerciseView({
               <mark className="lx-mark text-fg">{card.word}</mark>
             </p>
           ))}
-        {(e.ex === 'colloc_gap' || e.ex === 'match') && e.sentence && sentence(e.sentence, gapSlot)}
+        {(e.ex === 'colloc_gap' || e.ex === 'match' || e.ex === 'contrast') && e.sentence && sentence(e.sentence, gapSlot)}
         {e.ex === 'match' && e.sentence && cue(e.meaning)}
       </div>
     );
@@ -679,6 +682,17 @@ export function ExerciseView({
         label={t('trChoicesLabel')}
         testId="choices"
       />
+    );
+  }
+
+  // P52: Satz von Claude (Wörter-Tutor `wx` oder Kontrast `cfx`) – Kennzeichnung direkt unter der Aufgabe; „Melden“ markiert genau diesen Satz.
+  const aiSrc = e.ai;
+  if (aiSrc) {
+    prompt = (
+      <div className="flex flex-col gap-2">
+        {prompt}
+        <AiMark variant="task" tpl={aiSrc.tpl} id={`${card.path}:${aiSrc.kind}:${aiSrc.en}`} onReport={() => void reportWordCtx(card.path, aiSrc.kind, aiSrc.en)} data-testid="word-ctx-mark" />
+      </div>
     );
   }
 
@@ -803,15 +817,17 @@ export function ExerciseView({
   const purposeKey: MessageKey =
     e.ex === 'colloc' || e.ex === 'colloc_gap'
       ? 'purposeColloc'
-      : e.ex === 'situation'
-        ? 'purposeSituation'
-        : e.ex === 'find_trap'
-          ? 'wxPurposeTrap'
-          : e.ex === 'wordfam'
-            ? 'wxPurposeFam'
-            : LISTEN.has(e.ex) && def.stage < 5
-              ? 'purposeListen'
-              : (PURPOSE[def.stage] ?? 'purpose1');
+      : e.ex === 'contrast'
+        ? 'ttWcPurposeContrast'
+        : e.ex === 'situation'
+          ? 'purposeSituation'
+          : e.ex === 'find_trap'
+            ? 'wxPurposeTrap'
+            : e.ex === 'wordfam'
+              ? 'wxPurposeFam'
+              : LISTEN.has(e.ex) && def.stage < 5
+                ? 'purposeListen'
+                : (PURPOSE[def.stage] ?? 'purpose1');
 
   const canCheck = isChoice ? chosen !== null : isSpot ? spot !== null : isSentence ? !!sentenceText.trim() && !sentenceBusy : true;
   const primary = fb

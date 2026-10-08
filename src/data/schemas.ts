@@ -309,6 +309,10 @@ export const vocabSchema = z.looseObject({
   mnemo: z.looseObject({ text: str, lang: str, t: num }).nullish(),
   /** Neu (Lernplattform 3.0 P26, nur ergänzend): Erklärungen von Claude zu falschen Antworten `[{g, y, w, ex, sig, cf, alt, pv, t, bad}]` (≤ 3), tolerant gelesen. */
   axs: z.array(z.unknown()).nullish(),
+  /** Neu (Lernplattform 3.0 P52, nur ergänzend): neue Claude-Sätze für schwache Wörter `[{en, de, sit, t, pv, bad?}]` (≤ 4), tolerant gelesen. */
+  wx: z.array(z.unknown()).nullish(),
+  /** Neu (Lernplattform 3.0 P52, nur ergänzend): Kontrast-Sätze zu einem verwechselten Wort `[{w, en, why: {de, en}, t, pv, bad?}]` (≤ 2), tolerant gelesen. */
+  cfx: z.array(z.unknown()).nullish(),
   ...schedulingFields,
 });
 

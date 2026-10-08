@@ -41,6 +41,8 @@ export type GradeKey =
   // Lernplattform 2.0 (§4.10): neue Schlüssel, unabhängig von den Typ-Unions der Wörter und der Grammatik.
   | 'ctx_mc'
   | 'colloc_gap'
+  // Lernplattform 3.0 P52: Kontrast „Welches Wort passt?“ (Auswahl aus zwei).
+  | 'contrast'
   | 'complete'
   | 'wordfam'
   | 'find_trap'
@@ -102,6 +104,7 @@ export const GRADE_TABLE: Readonly<Record<GradeKey, Row>> = {
   order: { form: 'tiles', good: 13_000, easy: null, measure: 'submit' },
   // Lernplattform 2.0 (§4.10). `complete` hat keine Zeitgrenzen (frei): lokal höchstens „Schwer“, „Gut“ nur nach der Claude-Kurzprüfung (`aiChecked: true`).
   ctx_mc: choice(9000),
+  contrast: choice(9000),
   colloc_gap: typed(7000, 2500),
   complete: { form: 'free', good: 0, easy: null, measure: 'submit' },
   wordfam: typed(8000, 3000),

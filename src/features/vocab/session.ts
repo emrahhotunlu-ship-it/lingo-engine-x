@@ -39,6 +39,7 @@ import { flushOnHide } from '../progress/persist';
 import { pickDailyRepairs, repairsDoneToday, repairsDutyToday } from '../../domain/repair/daily';
 import type { RepairItem } from '../../domain/repair/repair';
 import { commitRepairAnswer } from '../repair/review';
+import { contrastReady, noteConfusion, requestWordCtx } from './wordCtx';
 
 // Eine Runde im Vokabeltrainer. Die Warteschlange wird synchron im Klick-Handler von „Starten"
 // gebaut – so kann derselbe Handler die Tastatur öffnen (iPhone). Die Karten sind für die Runde
@@ -94,6 +95,8 @@ type SessionState = {
   catchUp: boolean;
   /** Eigene Sätze (`produce`) in dieser Runde (Deckel `PRODUCE_MAX`). */
   produced: number;
+  /** P52: „Welches Wort passt?“ (Kontrast) kam in dieser Runde schon (höchstens 1 je Runde). */
+  contrasted: boolean;
 };
 
 const EXTRA_TARGET = 10;
@@ -142,6 +145,7 @@ export const useSession = create<SessionState>(() => ({
   only: null,
   catchUp: false,
   produced: 0,
+  contrasted: false,
 }));
 
 /** Heutige Einträge: Datenbank und noch nicht gespeicherter Puffer. */
@@ -171,7 +175,7 @@ function sceneLookup(lang: Lang): SceneLookup {
   };
 }
 
-type ExCtx = Pick<SessionState, 'cards' | 'pool' | 'lang' | 'day' | 'shown' | 'recentEx' | 'env' | 'mode' | 'dir' | 'controls' | 'ctlWeek' | 'ctlDay' | 'catchUp' | 'produced'>;
+type ExCtx = Pick<SessionState, 'cards' | 'pool' | 'lang' | 'day' | 'shown' | 'recentEx' | 'env' | 'mode' | 'dir' | 'controls' | 'ctlWeek' | 'ctlDay' | 'catchUp' | 'produced' | 'contrasted'>;
 
 /** Modus je Karte nach anki-regeln §1 (`pickMode`, die Regel steht nur in domain/srs/flip.ts). */
 export function modeFor(s: ExCtx, card: TrainCard, item: QueueItem): PickedMode {
@@ -215,6 +219,8 @@ function exerciseFor(s: ExCtx, item: QueueItem): Exercise | null {
     const ex = chooseExercise({ ...card, stage: 3 }, s.lang, s.pool.length - 1, s.recentEx, s.env);
     if (ex) return { ...build(s, card, ex, true), check: 'probe' };
   }
+  // P52: höchstens einmal je Runde „Welches Wort passt?“ mit dem Kontrast-Satz von Claude – nur, wenn beide Karten schon sitzen (Stufe ≥ 2), nie bei neuen Karten.
+  if (!s.contrasted && picked === 'type' && item.reason !== 'new' && s.mode !== 'listen' && contrastReady(card, s.pool)) return build(s, card, 'contrast');
   const lighter = item.reason === 'due' ? lighterExercise(s, card) : null;
   if (lighter) return build(s, card, lighter);
   const ex = chooseExercise(card, s.lang, s.pool.length - 1, s.recentEx, s.env);
@@ -254,7 +260,7 @@ function lighterExercise(s: ExCtx, card: TrainCard): ExerciseId | null {
 
 // n+1 vorberechnen (leistung.md §4 Nr. 4): nach dem Prüfen im Leerlauf, beim „Weiter“ nur noch tauschen.
 let prebuilt: { sig: string; ex: Exercise } | null = null;
-const sigOf = (s: ExCtx, item: QueueItem, recent: readonly ExerciseId[]) => `${item.key}|${s.shown[item.key] ?? 0}|${recent.join(',')}|${s.controls}|${s.mode}|${s.dir}|${s.day}`;
+const sigOf = (s: ExCtx, item: QueueItem, recent: readonly ExerciseId[]) => `${item.key}|${s.shown[item.key] ?? 0}|${recent.join(',')}|${s.controls}|${s.mode}|${s.dir}|${s.day}|${s.contrasted ? 1 : 0}`;
 
 function takePrebuilt(s: ExCtx, item: QueueItem): Exercise | null {
   const p = prebuilt;
@@ -270,7 +276,7 @@ export function prepareNext(): void {
   const item = s.queue[s.pos + 1];
   if (!item || item.phase !== 'quiz' || item.key === s.exercise.card.key) return;
   const recent = [...s.recentEx, s.exercise.ex].slice(-2);
-  const ctx: ExCtx = { ...s, recentEx: recent, produced: s.produced + (s.exercise.ex === 'produce' ? 1 : 0) };
+  const ctx: ExCtx = { ...s, recentEx: recent, produced: s.produced + (s.exercise.ex === 'produce' ? 1 : 0), contrasted: s.contrasted || s.exercise.ex === 'contrast' };
   prebuilt = null;
   const ex = exerciseFor(ctx, item);
   if (ex) prebuilt = { sig: sigOf(ctx, item, recent), ex };
@@ -421,6 +427,7 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
     only: opts.only ? [...opts.only] : null,
     catchUp: mode === 'auto' && catchUpOn(overdueCount(pool, now)),
     produced: 0,
+    contrasted: false,
   };
   prebuilt = null;
   const next = { ...base, ...settle(base, 0) };
@@ -526,6 +533,8 @@ function finish(s: SessionState, aborted: boolean): void {
     activeMs: s.activeMs,
   });
   if (!aborted && s.unit) unitDone(1);
+  // P52: Wörter-Tutor im Hintergrund (höchstens 1 Aufruf je Tag, nie im Aufholmodus; still bei Fehlern).
+  if (n > 0) requestWordCtx({ answered: s.answered, cards: s.cards, pool: s.pool, catchUp: s.catchUp });
 }
 
 /** Einführung einer neuen Karte gesehen: die erste Abfrage folgt zwei Karten später. */
@@ -629,6 +638,8 @@ export function commitAnswer(ans: Answer): FirstKind {
   // „Kenne ich“: richtig ohne Hilfe → die Karte bekommt Stufe 3 und 10 Tage statt der gewöhnlichen Planung.
   const knownPass = e.check === 'known' && ans.ok && !ans.hint && !ans.override && card.kind === 'vocab';
   if (e.ex === 'flip' && s.catchUp && card.stage >= 3) a.catchUp = true;
+  // P52: getippte falsche Antwort = Wort einer anderen eigenen Karte → Verwechslung für den Wörter-Tutor merken.
+  if (!ans.ok && e.input === 'typed' && ans.given.trim()) noteConfusion(card, ans.given, s.pool);
 
   // Lokal sofort weiterrechnen (optimistisch); gespeichert wird auf dem frischen Stand.
   const knownDoc = knownPass ? knownOp({ ...card.doc }, card.path, null, a.t, s.day) : null;
@@ -657,6 +668,7 @@ export function commitAnswer(ans: Answer): FirstKind {
     ctlWeek: s.ctlWeek + control,
     recentEx: [...s.recentEx, e.ex].slice(-2),
     produced: s.produced + (e.ex === 'produce' ? 1 : 0),
+    contrasted: s.contrasted || e.ex === 'contrast',
     results: [...s.results, { key: card.key, word: card.word, grade: ans.grade, ok: ans.ok }],
   });
   // B4: Aufdecken-Bewertungen 5 s zurückhalten (Karte, Protokoll, Zähler), solange die Runde
@@ -895,6 +907,7 @@ export function restoreTrainer(snap: TrainerSnapshot): boolean {
     only: null,
     catchUp: false,
     produced: 0,
+    contrasted: false,
   };
   prebuilt = null;
   const next = { ...base, ...settle(base, pos) };

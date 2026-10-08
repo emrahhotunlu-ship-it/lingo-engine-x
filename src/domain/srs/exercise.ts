@@ -5,6 +5,9 @@ import { exerciseDef } from './modes';
 import { familyFrom, partnerOf, trapTask } from './partner';
 import { packExtraOf } from '../c1pack/packFields';
 import { rotatedContext } from './rotate';
+import { findContext } from './context';
+import { readCfx, readWx } from '../tutor/acceptWordCtx';
+import { poolNorm } from '../drills/orderPool';
 import type { CheckResult, Colloc, Exercise, ExerciseId, Lang, Option, SituationTask, Stage, Tile, TrainCard } from './types';
 
 // Übung aus Karte und Art bauen (Lern-Entwurf §4.4 Ablenker). Zufall mit Startwert:
@@ -212,8 +215,34 @@ function pickColloc(card: TrainCard, rng: () => number): Colloc | null {
 /** Lösungsform einer freistehenden Abfrage (ohne Satz): Wort bzw. Wendung ohne „…“. */
 const bareAnswer = (card: TrainCard): string => (card.kind === 'chunk' ? typedForm(card.word) : card.word);
 
-/** `origin`: immer der Ursprungssatz (Prüfabfrage und Kontrolle nach dem Aufdecken), sonst wechselt der Satz ab Stufe 3 (`rotate.ts`). */
+/** Kennung der Vorlage, aus der `wx`/`cfx` stammen (P52). */
+export const WORD_CTX_TPL = 'word-ctx@1';
+
+/**
+ * `origin`: immer der Ursprungssatz (Prüfabfrage und Kontrolle nach dem Aufdecken), sonst wechselt der Satz ab Stufe 3 (`rotate.ts`; Claude-Sätze
+ * schwacher Wörter `wx` schon ab Stufe 2). Zeigt die Übung einen Satz von Claude, trägt sie `ai` (Kennzeichnung und „Melden“, P52).
+ */
 export function buildExercise(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly TrainCard[], seed: string, opts: { sceneOf?: SceneLookup; origin?: boolean } = {}): Exercise {
+  const e = buildRaw(card, ex, lang, pool, seed, opts);
+  if (e.ai || !e.sentence) return e;
+  const k = poolNorm(e.sentence.sentence);
+  const wx = readWx(card.doc).find((x) => poolNorm(x.en) === k);
+  return wx ? { ...e, ai: { tpl: WORD_CTX_TPL, kind: 'wx', en: wx.en } } : e;
+}
+
+/**
+ * „Welches Wort passt?“ (P52): der Kontrast-Satz von Claude enthält das verwechselte Wort; die Lücke steht dort, die Optionen sind dieses Wort
+ * (richtig) und das Kartenwort. `null` ohne brauchbaren Kontrast-Satz.
+ */
+export function contrastOf(card: TrainCard): { cfx: ReturnType<typeof readCfx>[number]; span: NonNullable<Exercise['sentence']> } | null {
+  for (const c of readCfx(card.doc)) {
+    const span = findContext(c.en, c.w);
+    if (span && !findContext(c.en, card.word)) return { cfx: c, span };
+  }
+  return null;
+}
+
+function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly TrainCard[], seed: string, opts: { sceneOf?: SceneLookup; origin?: boolean }): Exercise {
   const def = exerciseDef(ex);
   const rng = mulberry32(hash32(`${card.key}|${ex}|${seed}`));
   const meaning = meaningForTask(card, lang);
@@ -235,11 +264,29 @@ export function buildExercise(card: TrainCard, ex: ExerciseId, lang: Lang, pool:
       return { ...base, sentence: card.context, accepted: [gap] };
     }
     case 'match': {
-      const answer = card.context?.gap ?? bareAnswer(card);
+      // P52: ab Stufe 2 darf der Satz ein Claude-Satz des Wörter-Tutors sein (`rotate.ts`), sonst der Ursprungssatz.
+      const answer = ctx?.gap ?? bareAnswer(card);
       const correct: Option = { id: 'ok', label: answer, lang: 'en', correct: true };
-      const ds = wordDistractors(card, pool, lang, rng).map((d) => ({ ...d, label: card.context ? inflectLike(answer, card.lemma, d.label) : d.label }))
+      const ds = wordDistractors(card, pool, lang, rng).map((d) => ({ ...d, label: ctx ? inflectLike(answer, card.lemma, d.label) : d.label }))
         .filter((d) => norm(d.label) !== norm(answer));
-      return { ...base, sentence: card.context, options: shuffle([correct, ...ds], rng), accepted: [answer] };
+      return { ...base, sentence: ctx, options: shuffle([correct, ...ds], rng), accepted: [answer] };
+    }
+    case 'contrast': {
+      const c = contrastOf(card);
+      if (!c) return buildRaw(card, 'match', lang, pool, seed, opts);
+      const answer = c.span.gap;
+      const other = pool.find((p) => norm(p.word) === norm(c.cfx.w) || norm(p.lemma) === norm(c.cfx.w));
+      const wrong: Option = { id: 'd0', label: inflectLike(answer, c.cfx.w, card.word), lang: 'en', correct: false, fromWord: card.word, ...(meaning ? { fromMeaning: meaning } : {}) };
+      const right: Option = { id: 'ok', label: answer, lang: 'en', correct: true, ...(other ? { fromWord: other.word } : {}) };
+      return {
+        ...base,
+        meaning: null,
+        sentence: c.span,
+        options: shuffle([right, wrong], rng),
+        accepted: [answer],
+        ai: { tpl: WORD_CTX_TPL, kind: 'cfx', en: c.cfx.en },
+        contrastWhy: c.cfx.why,
+      };
     }
     case 'tiles': {
       const answer = ctx?.gap ?? (card.kind === 'chunk' ? typedForm(card.word) : card.lemma);
