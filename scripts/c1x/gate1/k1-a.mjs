@@ -47,7 +47,7 @@ export const items = [
     k: 'err', p: 'psc.state', lv: 'B2', dom: 'biz',
     text: 'We are needing the signed contract by Friday, otherwise the project cannot start on time.',
     bad: { span: 'are needing', fix: ['need'], ch: ['are need', 'needs'] },
-    ok: ['need ist ein Zustandsverb und hat keine -ing-Form: We need … Deutsch „brauchen“ kennt keine Verlaufsform, Englisch auch hier nicht.', 'need is a state verb and has no -ing form: We need … Neither German nor English uses a continuous form here.'],
+    ok: ['need ist ein Zustandsverb und hat keine -ing-Form: We need … Auch „gerade jetzt“ ändert daran nichts.', 'need is a state verb and has no -ing form: We need … Even “right now” does not change that.'],
     c1: ['are braucht -ing oder ein Adjektiv; need ist die Grundform.', 'are needs -ing or an adjective; need is the base form.'],
     c2: ['needs passt zu he/she/it, nicht zu we.', 'needs goes with he/she/it, not with we.'],
   },
