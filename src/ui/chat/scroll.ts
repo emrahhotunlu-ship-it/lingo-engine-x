@@ -114,3 +114,36 @@ export function usePageStickToBottom(growKey: unknown) {
 
   return { jump, toBottom };
 }
+
+/** Luft zwischen einem fest unten sitzenden Eingabebereich und dem Element, das per `focus()`/`scrollIntoView()` ins Bild kommt. */
+export const SCROLL_GAP_PX = 16;
+
+/** `scroll-padding-bottom` der Seite: Höhe des Eingabebereichs (sein Innenabstand enthält schon die safe-area) plus Tastatur plus Luft. Rein. */
+export function scrollPaddingFor(boxHeight: number, keyboardInset: number): number {
+  return Math.max(0, Math.round(boxHeight + keyboardInset + SCROLL_GAP_PX));
+}
+
+/**
+ * Fest unten sitzender Eingabebereich über einem Gespräch auf der Seite (Rollenspiel am Handy): setzt `scroll-padding-bottom` der Seite, damit
+ * `focus()` und `scrollIntoView()` (z. B. das Feld „Sag’s nochmal“) über dem Bereich landen statt darunter. Greift nur, solange der Bereich wirklich
+ * `position: fixed` ist (Laptop: statisch, nichts zu tun). Wächst oder schrumpft der Bereich, zieht der Wert mit; `shape` (z. B. eingeklappt) misst
+ * zusätzlich sofort im selben Durchgang neu, damit ein direkt folgendes `scrollIntoView()` schon den neuen Wert sieht.
+ */
+export function usePageScrollPadding(box: { readonly current: HTMLElement | null }, keyboardInset: number, shape?: unknown) {
+  useLayoutEffect(() => {
+    const el = box.current;
+    if (!el) return;
+    const root = document.documentElement;
+    const update = () => {
+      const fixed = getComputedStyle(el).position === 'fixed';
+      root.style.scrollPaddingBottom = fixed ? `${scrollPaddingFor(el.getBoundingClientRect().height, keyboardInset)}px` : '';
+    };
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => {
+      ro.disconnect();
+      root.style.scrollPaddingBottom = '';
+    };
+  }, [box, keyboardInset, shape]);
+}

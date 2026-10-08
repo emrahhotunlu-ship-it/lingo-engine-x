@@ -76,6 +76,28 @@ describe('Lernzeit: Zeile der Abschlusskarte', () => {
     expect(studyTimeLine(null, 'de', tDe)).toBeNull();
   });
 
+  it('mit dem Thema von morgen EINE Zeile (R5); jeder feste Moment passt in den Satz', () => {
+    expect(studyTimeLine({ t: '07:30', cue: 'coffee' }, 'de', tDe, 'Wortstellung üben')).toBe('Morgen um 7:30 Uhr nach dem ersten Kaffee: Wortstellung üben');
+    expect(studyTimeLine({ t: '07:30', cue: 'coffee' }, 'en', tEn, 'Practice word order')).toBe('Tomorrow at 7:30 AM after your first coffee: Practice word order');
+    expect(studyTimeLine({ t: '18:00', cue: '' }, 'de', tDe, 'Wortstellung üben')).toBe('Morgen um 18:00 Uhr: Wortstellung üben');
+    expect(studyTimeLine({ t: '18:00', cue: '' }, 'en', tEn, 'Practice word order')).toBe('Tomorrow at 6:00 PM: Practice word order');
+    expect(studyTimeLine({ t: '18:00', cue: 'nach dem Standup' }, 'de', tDe, 'X')).toBe('Morgen um 18:00 Uhr nach dem Standup: X');
+    expect(CUE_IDS.map((c) => studyTimeLine({ t: '07:30', cue: c }, 'de', tDe, 'X'))).toEqual([
+      'Morgen um 7:30 Uhr nach dem ersten Kaffee: X',
+      'Morgen um 7:30 Uhr in der Bahn: X',
+      'Morgen um 7:30 Uhr nach dem Mittagessen: X',
+      'Morgen um 7:30 Uhr vor Feierabend: X',
+    ]);
+    expect(CUE_IDS.map((c) => studyTimeLine({ t: '07:30', cue: c }, 'en', tEn, 'X'))).toEqual([
+      'Tomorrow at 7:30 AM after your first coffee: X',
+      'Tomorrow at 7:30 AM on the train: X',
+      'Tomorrow at 7:30 AM after lunch: X',
+      'Tomorrow at 7:30 AM before you log off: X',
+    ]);
+    // Leeres Thema: die alte Zeile.
+    expect(studyTimeLine({ t: '07:30', cue: 'coffee' }, 'de', tDe, '  ')).toBe('Morgen um 7:30 Uhr · nach dem ersten Kaffee');
+  });
+
   it('die vier Anker in beiden Sprachen', () => {
     expect(CUE_IDS.map((c) => cueLabel(c, tDe))).toEqual(['nach dem ersten Kaffee', 'in der Bahn', 'nach dem Mittagessen', 'vor Feierabend']);
     expect(CUE_IDS.map((c) => cueLabel(c, tEn))).toEqual(['after your first coffee', 'on the train', 'after lunch', 'before you log off']);

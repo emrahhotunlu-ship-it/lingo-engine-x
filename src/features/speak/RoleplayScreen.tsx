@@ -157,8 +157,9 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
     );
   };
 
-  const card = (idx: number, testId?: string) => (
+  const card = (idx: number, testId?: string, inline = false) => (
     <AnalysisCard
+      verdictShown={inline}
       retry={retryFor(idx)}
       hideFix={fixHidden(idx)}
       idx={idx}
@@ -181,6 +182,8 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
   const mine = c.turns.map((x, i) => (x.role === 'me' ? i : -1)).filter((i) => i >= 0);
   const phase = state === 'thinking' || state === 'streaming' || state === 'slow' ? state : state === 'composing' ? 'composing' : 'other';
   const busy = state !== 'composing';
+  // R5 (M1): Solange ein „Sag’s nochmal“-Feld wirklich offen ist, ruht das Gespräch: Eingabe eingeklappt, keine Pille, Zeitlimit angehalten.
+  const retryOpen = retryIdx !== null && fixHidden(retryIdx);
   const pausedText = c.error === 'aiBusy' && pausedUntil > now ? t('spPaused', { time: new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { timeStyle: 'short' }).format(pausedUntil) }) : null;
 
   return (
@@ -208,7 +211,7 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
         <GoalChecklist goals={goalList} marks={rp.goals} testId="rp-goals" />
         {rp.talk && talkGoal && (
           <div className="mt-3 border-t border-line pt-3">
-            <ChapterGoal talk={rp.talk} progress={talkGoal} />
+            <ChapterGoal talk={rp.talk} progress={talkGoal} compact={!desktop && myTurns > 0} />
           </div>
         )}
         <div className="mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
@@ -259,8 +262,9 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
               if (desktop) document.getElementById(`an-card-${i}`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
               else setOpenIdx((cur) => (cur === i ? null : i));
             }}
-            renderInline={(i) => card(i)}
+            renderInline={(i) => card(i, undefined, true)}
             call={call}
+            pill={!retryOpen}
           />
 
           {(c.error || c.interrupted) && state === 'composing' && (
@@ -298,19 +302,27 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
             </Card>
           )}
 
-          {(state === 'composing' || phase !== 'other') && <TurnTimer key={c.turns.length} active={state === 'composing'} />}
-          {call && state === 'composing' && (
+          {(state === 'composing' || phase !== 'other') && <TurnTimer key={c.turns.length} active={state === 'composing' && !retryOpen} />}
+          {call && state === 'composing' && !retryOpen && (
             <p className="text-xs text-muted" data-testid="rp-call-hint">
               {t('nbSprechenCallHint')}
             </p>
           )}
-          {touch && state === 'composing' && (
+          {touch && state === 'composing' && !retryOpen && (
             <p className="lx-t-meta text-muted" data-testid="rp-dictate-hint">
               {t('fxLSpeakDictate')}
             </p>
           )}
           {(state === 'composing' || phase !== 'other') && (
-            <Composer sceneId={scene.id} useful={scene.useful} busy={busy} restore={restore} onSend={(text, chip, pasted) => void rp.sendTurn(text, chip, pasted)} />
+            <Composer
+              sceneId={scene.id}
+              useful={scene.useful}
+              busy={busy}
+              restore={restore}
+              onSend={(text, chip, pasted) => void rp.sendTurn(text, chip, pasted)}
+              collapsed={retryOpen}
+              onExpand={() => setRetryIdx(null)}
+            />
           )}
 
           {!desktop && mine.length > 0 && (

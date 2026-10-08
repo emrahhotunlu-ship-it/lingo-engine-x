@@ -697,7 +697,7 @@ export function ExerciseView({
     prompt = (
       <div className="flex flex-col gap-2">
         {prompt}
-        <AiMark variant="task" tpl={aiSrc.tpl} id={`${card.path}:${aiSrc.kind}:${aiSrc.en}`} onReport={() => void reportWordCtx(card.path, aiSrc.kind, aiSrc.en)} data-testid="word-ctx-mark" />
+        <AiMark variant="sentence" tpl={aiSrc.tpl} id={`${card.path}:${aiSrc.kind}:${aiSrc.en}`} onReport={() => void reportWordCtx(card.path, aiSrc.kind, aiSrc.en)} data-testid="word-ctx-mark" />
       </div>
     );
   }
@@ -791,7 +791,8 @@ export function ExerciseView({
       // P52: der Kontrast-Schritt ändert die Planung nicht, also keine „Wieder in …“-Zeile.
       nextIn: e.ex === 'contrast' ? null : t('trAgainIn', { when: when(fb.dueInMs) }),
       // Design-Lead: Wort, Vorlesen, Lautschrift und „Zum Wort“ stehen in der Ergebnis-Karte, genau einmal, direkt unter dem Urteil.
-      head: <WordExtras card={card} open={moreOpen} lang={lang} extras={extras} part="head" />,
+      // R5: im Kontrast-Schritt heißt der Kopf „avoid ≠ convince“ (richtiges Wort zuerst, beide mit Aussprache).
+      head: <WordExtras card={card} open={moreOpen} lang={lang} extras={extras} part="head" other={e.ex === 'contrast' ? (contrastOtherOf(e)?.word ?? null) : null} />,
       // „War das auch richtig?“ als ruhige Zeile im Ergebnis-Block (Design-Lead), nicht mehr lose über der Karte.
       parts: !fb.override && fb.result.verdict === 'wrong' && isTyped && ai && e.ex !== 'situation' ? <SynonymAsk card={card} given={fb.given} onOk={override} /> : undefined,
       foot: <WordExtras card={card} open={moreOpen} lang={lang} extras={extras} part="more" />,
@@ -836,6 +837,9 @@ export function ExerciseView({
                 ? 'purposeListen'
                 : (PURPOSE[def.stage] ?? 'purpose1');
 
+  // R5 (S5): Der Kontrast-Schritt ist eine Extra-Frage und sagt das im Wozu – mit beiden Wörtern (alphabetisch, verrät nichts) und „zählt nicht“.
+  const [pairA, pairB] = e.ex === 'contrast' ? [contrastOtherOf(e)?.word, card.word].filter((w): w is string => !!w).sort((x, y) => x.localeCompare(y, 'en')) : [];
+  const contrastPurpose = pairA && pairB ? t('ttWcPurposeContrastPair', { a: pairA, b: pairB }) : null;
   const canCheck = isChoice ? chosen !== null : isSpot ? spot !== null : isSentence ? !!sentenceText.trim() && !sentenceBusy : true;
   const primary = fb
     ? { label: t('exNext'), onClick: next, testId: 'next' }
@@ -846,7 +850,7 @@ export function ExerciseView({
       <ExerciseShell
         meta={{ ex: e.ex, id: card.id, stage: e.stage, kind: card.kind }}
         status={{ area: 'words', state: state0, kindLabel, badge: again ? t('trAgainBadge') : null }}
-        task={{ text: taskText, purpose: t(purposeKey) }}
+        task={{ text: taskText, purpose: contrastPurpose ?? t(purposeKey) }}
         prompt={prompt}
         answer={answer}
         hint={hint}
@@ -854,6 +858,7 @@ export function ExerciseView({
         primary={primary}
         feedback={feedback}
         state={retry && !fb ? 'retry' : undefined}
+        {...(isChoice ? { choiceCount: e.options.length } : {})}
       />
     </div>
   );

@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Locator, type Page } from '@playwright/test';
 import { boot, layoutProblems, openSpeak, screen } from './fixtures';
 import { DAY, dump, writes } from './trainerHelpers';
 
@@ -26,6 +26,33 @@ async function startScene(page: Page, id = 'sc-vida'): Promise<void> {
   await expect(page.locator('[data-testid="rp-turn"][data-role="persona"]').first()).toBeVisible();
 }
 
+/**
+ * R5 (M1, Handy): Ein offenes „Sag’s nochmal“-Feld ist fokussiert und im Bild; „Prüfen“ ist sichtbar und von nichts verdeckt (in der Mitte des Knopfs
+ * liegt der Knopf selbst). Die Gesprächseingabe ist zu „Zurück zum Gespräch“ eingeklappt, keine Pille „Neue Antwort“, das Zeitlimit steht.
+ */
+async function expectRetryInView(page: Page, card: Locator): Promise<void> {
+  const input = card.getByTestId('rs-input');
+  await expect(input).toBeFocused();
+  await expect(input).toBeInViewport({ ratio: 1 });
+  await expect(page.getByTestId('composer-back')).toBeVisible();
+  await expect(page.getByTestId('composer-input')).toBeHidden();
+  await expect(page.getByTestId('chip-useful').first()).toBeHidden();
+  await expect(page.getByTestId('rp-newer')).toHaveCount(0);
+  const check = card.getByTestId('rs-check');
+  await expect(check).toBeVisible();
+  await expect(check).toBeInViewport({ ratio: 1 });
+  const onTop = await check.evaluate((el) => {
+    const r = el.getBoundingClientRect();
+    const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+    return !!hit && el.contains(hit);
+  });
+  expect(onTop).toBe(true);
+  const timer = page.getByTestId('rp-turn-timer');
+  const leftBefore = await timer.getAttribute('data-left');
+  await page.waitForTimeout(1_600);
+  expect(await timer.getAttribute('data-left')).toBe(leftBefore);
+}
+
 async function say(page: Page, text: string, opts: { paste?: boolean } = {}): Promise<void> {
   const before = await page.locator('[data-testid="rp-turn"][data-role="persona"]').count();
   const input = page.getByTestId('composer-input');
@@ -48,6 +75,9 @@ test('Laptop: Analyse rechts, „Sag’s nochmal“ ohne Korrektur, ein repair-c
   await startScene(page);
   await expect(page.getByTestId('rp-chapter-goal')).toBeVisible();
   await expect(page.getByTestId('rp-chapter-goal-item').first()).toHaveAttribute('data-have', '0');
+  // Im Gespräch nur die Liste mit Stand (der Satz steht schon im Szenenstart); am Laptop nie eingeklappt.
+  await expect(page.getByTestId('rp-chapter-goal')).not.toContainText('In diesem Gespräch:');
+  await expect(page.getByTestId('rp-chapter-goal-toggle')).toHaveCount(0);
 
   await say(page, 'We must delay the start by two weeks.');
   const panel = page.getByTestId('analysis-panel');
@@ -133,7 +163,19 @@ test('Handy (iPhone): Hinweis zur Spracheingabe, zwei Versuche, dann Korrektur z
   await page.setViewportSize({ width: 390, height: 844 });
   const { errors } = await boot(page, { migrated: true, localStorage: { 'lx:input': 'touch' }, fake: { patch: INTRO } });
   await startScene(page);
+  // Vor dem ersten Zug: Liste mit Stand, ohne den Satz aus dem Szenenstart.
+  await expect(page.getByTestId('rp-chapter-goal-item').first()).toBeVisible();
+  await expect(page.getByTestId('rp-chapter-goal')).not.toContainText('In diesem Gespräch:');
   await say(page, 'Our budget is fixed for this quarter.', { paste: true });
+  // Handy nach dem ersten Zug: eine aufklappbare Zeile „Kapitelziel x/y“.
+  const goalToggle = page.getByTestId('rp-chapter-goal-toggle');
+  await expect(goalToggle).toHaveText(/^Kapitelziel \d+\/\d+$/);
+  await expect(goalToggle).toHaveAttribute('aria-expanded', 'false');
+  await expect(page.getByTestId('rp-chapter-goal-item')).toHaveCount(0);
+  await goalToggle.click();
+  await expect(page.getByTestId('rp-chapter-goal-item').first()).toBeVisible();
+  await goalToggle.click();
+  await expect(page.getByTestId('rp-chapter-goal-item')).toHaveCount(0);
   await say(page, 'We must delay the start by two weeks.');
   const chip = page.locator('[data-testid="an-chip"]').nth(1);
   await expect(chip).toHaveAttribute('data-state', 'errors', { timeout: 15_000 });
@@ -142,6 +184,14 @@ test('Handy (iPhone): Hinweis zur Spracheingabe, zwei Versuche, dann Korrektur z
   await card.getByTestId('rs-open').click();
   await expect(card.getByTestId('rs-iphone')).toBeVisible();
   await expect(card.getByTestId('an-error')).toHaveCount(0);
+  await expectRetryInView(page, card);
+
+  // „Zurück zum Gespräch“ schließt das Feld, die Eingabe ist wieder da; erneut öffnen bringt Fokus und Sicht zurück.
+  await page.getByTestId('composer-back').click();
+  await expect(card.getByTestId('rs-panel')).toHaveCount(0);
+  await expect(page.getByTestId('composer-input')).toBeVisible();
+  await card.getByTestId('rs-open').click();
+  await expectRetryInView(page, card);
 
   await card.getByTestId('rs-input').fill('We zzno delay the start.');
   await card.getByTestId('rs-check').click();
@@ -157,6 +207,9 @@ test('Handy (iPhone): Hinweis zur Spracheingabe, zwei Versuche, dann Korrektur z
   await expect(card.getByTestId('an-error')).toHaveCount(1);
   await expect(card.getByTestId('rs-result')).toHaveAttribute('data-state', 'no');
   await expect(card.getByTestId('rs-open')).toHaveCount(0);
+  // Feld zu: Gesprächseingabe wieder offen.
+  await expect(page.getByTestId('composer-input')).toBeVisible();
+  await expect(page.getByTestId('composer-back')).toHaveCount(0);
   expect(await layoutProblems(page)).toEqual([]);
 
   await page.getByTestId('rp-end').click();

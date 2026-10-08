@@ -57,6 +57,7 @@ export const exEn = {
   exCounterExtra: '+{n}',
   exCounterExtraLabel: '{n} repeats in this round',
   exKeysHint: 'Enter checks and moves on · A–D or 1–4 choose · T hint · ? rule',
+  exKeysHintN: 'Enter checks and moves on · {letters} or {nums} choose · T hint · ? rule',
   exKeysHintTyped: 'Enter checks and moves on · T hint · ? rule',
   exSidePlaceholder: 'Decide on your own first. The rule appears after you check.',
   exEndFacts: 'What stuck today',

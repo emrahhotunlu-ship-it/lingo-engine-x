@@ -15,6 +15,7 @@ export const wxEn = {
   wxSynonymAsk: 'Was that also right?',
   wxAiNote: 'From Claude, may contain mistakes.',
   wxToWord: 'About the word',
+  wxNotSame: 'is not the same as',
   wxIntroTitle: 'Meet a new word',
   wxIntroKind: 'New word',
   wxIntroKnown: 'I know it',

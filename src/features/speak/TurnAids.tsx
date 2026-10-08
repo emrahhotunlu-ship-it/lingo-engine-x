@@ -11,18 +11,27 @@ export function turnTimerOn(): boolean {
   return local.get(KEY) !== '0';
 }
 
-/** Zeitbalken je Zug: läuft ab der letzten Antwort der Figur (neuer `key` je Zug beim Aufrufer). */
+/** Zeitbalken je Zug: läuft ab der letzten Antwort der Figur (neuer `key` je Zug beim Aufrufer), nur solange `active`; pausiert behält er die Restzeit. */
 export function TurnTimer({ active }: { active: boolean }) {
   const { t } = useT();
   const [on, setOn] = useState(turnTimerOn);
-  const [start] = useState(() => Date.now());
-  const [now, setNow] = useState(() => Date.now());
+  // Verbrauchte Zeit zählt nur, solange der Balken läuft (R5: „Sag’s nochmal“ hält ihn an, danach geht es mit der Restzeit weiter).
+  const [spent, setSpent] = useState(0);
   useEffect(() => {
     if (!on || !active) return;
-    const id = window.setInterval(() => setNow(Date.now()), 500);
-    return () => window.clearInterval(id);
+    let last = Date.now();
+    const tick = () => {
+      const t = Date.now();
+      setSpent((v) => v + (t - last));
+      last = t;
+    };
+    const id = window.setInterval(tick, 500);
+    return () => {
+      window.clearInterval(id);
+      tick();
+    };
   }, [on, active]);
-  const left = Math.max(0, TURN_SEC - Math.floor((now - start) / 1000));
+  const left = Math.max(0, TURN_SEC - Math.floor(spent / 1000));
   const toggle = () => {
     const next = !on;
     setOn(next);

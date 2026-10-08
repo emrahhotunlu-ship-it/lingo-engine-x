@@ -7,6 +7,7 @@ export const ttP51De = {
   ttTkGoalWhy: 'Diese Muster übst du gerade in Kapitel {n} ({chapter}). Im Gespräch zeigt sich, ob sie frei sitzen.',
   ttTkGoalHave: '{name}: {have} von {need}',
   ttTkGoalReached: 'Kapitelziel erreicht',
+  ttTkGoalShort: 'Kapitelziel {have}/{need}',
   ttTkSayBtn: 'Sag’s nochmal',
   ttTkSayTask: 'Sag oder tipp den Satz noch einmal, diesmal richtig. Die Korrektur bleibt verdeckt, solange du es versuchst.',
   ttTkSayWhy: 'Was du selbst reparierst, behältst du besser, als wenn du nur die Lösung liest.',

@@ -63,6 +63,7 @@ export const exDe = {
   exCounterExtra: '+{n}',
   exCounterExtraLabel: '{n} Wiederholungen in dieser Runde',
   exKeysHint: 'Enter prüft und geht weiter · A–D oder 1–4 wählen · T Tipp · ? Regel',
+  exKeysHintN: 'Enter prüft und geht weiter · {letters} oder {nums} wählen · T Tipp · ? Regel',
   exKeysHintTyped: 'Enter prüft und geht weiter · T Tipp · ? Regel',
   exSidePlaceholder: 'Erst selbst entscheiden. Die Regel kommt nach dem Prüfen.',
   // Rundenende mit Zuwachs

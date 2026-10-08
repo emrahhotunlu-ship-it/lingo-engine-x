@@ -45,9 +45,11 @@ type Props = {
   renderInline: (idx: number) => ReactNode;
   /** Anruf-Modus (B9): Text der Figur verdeckt, bis getippt wird; die Stimme liest vor. */
   call?: boolean;
+  /** Pille „Neue Antwort ↓“ erlaubt (R5: aus, solange „Sag’s nochmal“ offen ist, sie verdeckte sonst das Feld). */
+  pill?: boolean;
 };
 
-export function ChatLog({ turns, analyses, persona, sceneId, sceneTitle, partial, phase, onStop, openIdx, onChip, renderInline, call = false }: Props) {
+export function ChatLog({ turns, analyses, persona, sceneId, sceneTitle, partial, phase, onStop, openIdx, onChip, renderInline, call = false, pill = true }: Props) {
   const { t } = useT();
   const [shown, setShown] = useState<ReadonlySet<number>>(() => new Set());
   const count = turns.length + (partial ? 1 : 0);
@@ -159,7 +161,7 @@ export function ChatLog({ turns, analyses, persona, sceneId, sceneTitle, partial
       )}
 
       <AnimatePresence>
-        {jump && <NewerPill label={t('spNewer')} arrow onClick={toBottom} testId="rp-newer" className="fixed bottom-40 left-1/2 z-30 -translate-x-1/2 bg-surface-solid" />}
+        {jump && pill && <NewerPill label={t('spNewer')} arrow onClick={toBottom} testId="rp-newer" className="fixed bottom-40 left-1/2 z-30 -translate-x-1/2 bg-surface-solid" />}
       </AnimatePresence>
     </div>
   );

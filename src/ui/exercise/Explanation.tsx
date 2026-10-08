@@ -4,7 +4,7 @@ import { EnglishText } from '../../engine/EnglishText';
 import type { WordTapArea } from '../../engine/wordTap';
 import { useT, type MessageKey } from '../../i18n';
 import { FoldToggle } from './FoldToggle';
-import { visibleLines } from './explainDepth';
+import { liftLines, visibleLines } from './explainDepth';
 import { splitHead, splitWhy } from './wordParts';
 import { Slot } from '../../app/slots';
 
@@ -24,6 +24,8 @@ type Props = {
   only?: 'open' | 'folded' | 'yours';
   /** UX-Prüfung W2: diese Zeilenarten stehen immer unter „Mehr“ (Typischer Fehler, Nicht verwechseln, Hinweise). */
   fold?: ReadonlyArray<ExplainLine['k']>;
+  /** R5 (Kontrast-Schritt): diese Zeilenarten stehen immer offen, auch wenn die Tiefe sie sonst einklappt (z. B. „Nicht verwechseln“). */
+  unfold?: ReadonlyArray<ExplainLine['k']>;
   /** UX-Prüfung W2: „Deine Antwort“ steht oben in der Karte (eigener Aufruf mit `only="yours"`), hier nicht noch einmal. */
   skipYours?: boolean;
 };
@@ -38,9 +40,9 @@ const LABEL: Record<ExplainLine['k'], MessageKey> = {
 };
 const SYMBOL: Record<ExplainLine['k'], string> = { pattern: '◇', yours: '›', why: '✓', mistake: '✕', contrast: '⇄', note: 'i' };
 
-export function Explanation({ model, depth, learning = true, area = 'trainer', onFoldChange, hideWord = false, only, fold, skipYours = false }: Props) {
+export function Explanation({ model, depth, learning = true, area = 'trainer', onFoldChange, hideWord = false, only, fold, unfold, skipYours = false }: Props) {
   const { t, lang } = useT();
-  const v0 = visibleLines(model, depth, { learning });
+  const v0 = liftLines(visibleLines(model, depth, { learning }), model, unfold);
   const moved = fold ? v0.open.filter((l) => fold.includes(l.k)) : [];
   const keep = (l: ExplainLine): boolean => !moved.includes(l) && !(skipYours && l.k === 'yours');
   const v = { ...v0, open: v0.open.filter(keep), folded: [...moved, ...v0.folded] };
@@ -239,3 +241,4 @@ export function Explanation({ model, depth, learning = true, area = 'trainer', o
     </div>
   );
 }
+

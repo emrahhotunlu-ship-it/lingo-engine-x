@@ -14,7 +14,8 @@ import { CUE_LABEL, ifThenLine } from './studyTimeText';
 // `app/profile.ii`. Ein Vorschlag, keine Bedingung: Plan und Serie bleiben unberührt. Sie erscheint nur auf der Abschlusskarte („Morgen um 7:30 · …“).
 // Dazu die Anleitung „Erinnerung im iPhone einrichten“. Gespeichert wird erst auf „Lernzeit speichern“ (ein Schreibvorgang, nur bei Änderung).
 
-const CHIP = 'lx-hit inline-flex items-center rounded-full px-3 text-sm';
+// R5 (S6): Rahmen auch ungewählt, sonst verschwinden die Chips im Hellmodus auf der Fläche.
+const CHIP = 'lx-hit inline-flex items-center rounded-full border px-3 text-sm';
 const INPUT = 'lx-glass min-h-11 w-full rounded-[var(--radius-control)] px-3 text-base text-fg placeholder:text-subtle';
 
 export function StudyTime() {
@@ -81,14 +82,14 @@ export function StudyTime() {
                   if (!on) setOwn('');
                 }}
                 data-value={id}
-                className={`${CHIP} ${on ? 'bg-accent-soft font-semibold text-accent-text' : 'bg-surface-strong text-fg hover:bg-surface'}`}
+                className={`${CHIP} ${on ? 'border-transparent bg-accent-soft font-semibold text-accent-text' : 'border-line-strong bg-surface-strong text-fg hover:bg-surface'}`}
               >
                 {t(CUE_LABEL[id])}
               </button>
             );
           })}
         </div>
-        <label htmlFor={ownId} className="sr-only">
+        <label htmlFor={ownId} className="lx-t-meta mt-1 text-muted">
           {t('moStOwn')}
         </label>
         <input
@@ -96,7 +97,7 @@ export function StudyTime() {
           type="text"
           value={own}
           maxLength={CUE_MAX}
-          placeholder={t('moStOwn')}
+          placeholder={t('moStOwnPlaceholder')}
           onChange={(e) => {
             setOwn(e.target.value);
             if (e.target.value.trim()) setPreset(null);

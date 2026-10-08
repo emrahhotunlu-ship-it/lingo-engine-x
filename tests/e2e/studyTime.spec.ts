@@ -66,11 +66,15 @@ test('Einstellungen › Lernen: Uhrzeit und Anker speichern (ein Feld, < 100 Byt
 test.describe('Abschlusskarte', () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
 
-  test('mit Lernzeit: „Morgen um 7:30 Uhr · nach dem ersten Kaffee“', async ({ page }) => {
+  test('mit Lernzeit: eine Zeile „Morgen um 7:30 Uhr nach dem ersten Kaffee: {Thema}“ statt zwei', async ({ page }) => {
     const { errors } = await boot(page, { migrated: true, now: MON_9, fake: { patch: { ...profileWith(MON, donePlan(MON), DONE, { ii: { t: '07:30', cue: 'coffee' } }), ...reviewedLog(MON) } } });
     await screen(page, 'today');
     await expect(page.getByTestId('today-card')).toHaveAttribute('data-done', 'true');
-    await expect(page.getByTestId('today-studytime')).toHaveText('Morgen um 7:30 Uhr · nach dem ersten Kaffee');
+    await expect(page.getByTestId('today-studytime')).toHaveText(/^Morgen um 7:30 Uhr nach dem ersten Kaffee: \S.{3,}$/);
+    await expect(page.getByTestId('today-studytime')).toHaveAttribute('data-merged', '');
+    // Die Zeile „Morgen: …“ steht nicht noch einmal da; ihr Thema steckt in der einen Zeile.
+    await expect(page.getByTestId('today-tomorrow')).toHaveCount(0);
+    await expect(page.getByTestId('today-card').getByText(/^Morgen/)).toHaveCount(1);
     await expect(page.getByTestId('today-card')).not.toContainText(BAD);
     expect(errors).toEqual([]);
   });
@@ -78,7 +82,8 @@ test.describe('Abschlusskarte', () => {
   test('Englisch im 12-Stunden-Format', async ({ page }) => {
     await boot(page, { migrated: true, lang: 'en', now: MON_9, fake: { patch: { ...profileWith(MON, donePlan(MON), DONE, { ii: { t: '19:15', cue: 'train' } }), ...reviewedLog(MON) } } });
     await screen(page, 'today');
-    await expect(page.getByTestId('today-studytime')).toHaveText('Tomorrow at 7:15 PM · on the train');
+    await expect(page.getByTestId('today-studytime')).toHaveText(/^Tomorrow at 7:15 PM on the train: \S.{3,}$/);
+    await expect(page.getByTestId('today-tomorrow')).toHaveCount(0);
   });
 
   test('ohne Lernzeit keine Zeile', async ({ page }) => {
@@ -86,6 +91,8 @@ test.describe('Abschlusskarte', () => {
     await screen(page, 'today');
     await expect(page.getByTestId('today-card')).toHaveAttribute('data-done', 'true');
     await expect(page.getByTestId('today-studytime')).toHaveCount(0);
+    // Ohne Lernzeit bleibt die alte Zeile „Morgen: …“.
+    await expect(page.getByTestId('today-tomorrow')).toHaveText(/^Morgen: \S/);
   });
 
   test('während der Pflicht nie', async ({ page }) => {

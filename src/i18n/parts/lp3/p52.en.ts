@@ -2,4 +2,5 @@
 
 export const ttP52En = {
   ttWcPurposeContrast: 'Learn to tell apart two words you mixed up.',
+  ttWcPurposeContrastPair: "Bonus question: {a} and {b} are easy to mix up. It doesn't count toward the round.",
 } as const;

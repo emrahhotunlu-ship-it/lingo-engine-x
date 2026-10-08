@@ -1,4 +1,4 @@
-import { useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { useT } from '../../i18n';
 import { MicButton } from '../../engine/MicButton';
 import { useInputProfile } from '../../platform/input';
@@ -17,6 +17,9 @@ import { SAY_AGAIN_TRIES, type SayAgainState } from './useRoleplay';
 const MAX_LEN = 300;
 
 /** Teilt den Satz in Stücke und markiert die falschen Stellen (`wrong` der Fehler, ohne Groß/Klein). Ohne Fund: ein unmarkiertes Stück. Rein. */
+/** So lange nach dem Öffnen folgt die Seite dem wachsenden Feld (ms). */
+const RETRY_SETTLE_MS = 1000;
+
 export function markSpans(sentence: string, wrongs: readonly string[]): Array<{ text: string; off: boolean }> {
   const lower = sentence.toLowerCase();
   const ranges: Array<[number, number]> = [];
@@ -65,12 +68,37 @@ export function RetrySay({ idx, sentence, wrongs, state, hidden, open, onOpen, o
   const phase = state?.phase;
   const tries = state?.tries ?? 0;
   const left = tries < SAY_AGAIN_TRIES;
+  const panelRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const actionsRef = useRef<HTMLDivElement>(null);
+  const showing = open && hidden && phase !== 'ok';
+
+  // R5 (M1): Beim Öffnen das Feld fokussieren und das Feld samt „Prüfen“ über den fest stehenden Eingabebereich ins Bild holen. Der Abstand kommt aus
+  // `scroll-padding-bottom` der Seite (Composer → ui/chat/scroll), deshalb hier nur `scrollIntoView` ohne eigene Rechnung.
+  // Feld und Seite bewegen sich beim Öffnen noch (Einblenden, Aufklappen): kurz nachführen, solange das Feld den Fokus hat.
+  useEffect(() => {
+    const panel = panelRef.current;
+    if (!showing || !panel) return;
+    inputRef.current?.focus({ preventScroll: true });
+    // Die Knopfzeile (direkt unter dem Feld) ins Bild holen, nicht die ganze Karte: Sie ist am Handy höher als der freie Bereich, dann bewegt `nearest` nichts.
+    const reveal = () => (actionsRef.current ?? panel).scrollIntoView({ block: 'nearest' });
+    reveal();
+    const until = performance.now() + RETRY_SETTLE_MS;
+    const ro = new ResizeObserver(() => {
+      if (performance.now() > until || document.activeElement !== inputRef.current) return ro.disconnect();
+      reveal();
+    });
+    ro.observe(panel);
+    // Auch die Seite: Die Karte darüber kann noch aufklappen (Höhen-Animation), dann verschiebt sich das Feld, ohne selbst zu wachsen.
+    ro.observe(document.body);
+    return () => ro.disconnect();
+  }, [showing]);
 
   // Erledigt heißt erledigt: eine reparierte Stelle ist Zustand, kein Knopf mehr.
   if (phase === 'ok') {
     return (
-      <div data-testid="rs-result" data-idx={idx} data-state="ok" className="flex flex-col gap-1 rounded-2xl bg-accent-soft px-3 py-2 text-sm">
-        <p className="flex items-center gap-1.5 font-semibold text-accent-text">
+      <div data-testid="rs-result" data-idx={idx} data-state="ok" className="flex flex-col gap-1 rounded-2xl bg-ok-soft px-3 py-2 text-sm">
+        <p className="flex items-center gap-1.5 font-semibold text-ok-text">
           <Icon name="check" size={16} />
           {t('ttTkSayOk')}
         </p>
@@ -125,7 +153,7 @@ export function RetrySay({ idx, sentence, wrongs, state, hidden, open, onOpen, o
   };
 
   return (
-    <div data-testid="rs-panel" data-idx={idx} className="flex flex-col gap-3 rounded-2xl border border-line px-3 py-3">
+    <div ref={panelRef} data-testid="rs-panel" data-idx={idx} className="flex flex-col gap-3 rounded-2xl border border-line px-3 py-3">
       <div className="flex flex-col gap-1 text-sm">
         <p className="font-semibold">{t('ttTkSayTask')}</p>
         <p className="text-muted">{t('ttTkSayWhy')}</p>
@@ -166,6 +194,7 @@ export function RetrySay({ idx, sentence, wrongs, state, hidden, open, onOpen, o
           </label>
           <div className="flex items-start gap-2">
             <textarea
+              ref={inputRef}
               id={inputId}
               value={text}
               rows={2}
@@ -191,7 +220,7 @@ export function RetrySay({ idx, sentence, wrongs, state, hidden, open, onOpen, o
         </div>
       ) : null}
 
-      <div className="flex flex-wrap items-center gap-2">
+      <div ref={actionsRef} className="flex flex-wrap items-center gap-2">
         {left && !busy && (
           <Button variant="primary" icon="check" onClick={() => void check()} disabled={!text.trim()} data-ai="" data-testid="rs-check">
             {t('ttTkSayCheck')}

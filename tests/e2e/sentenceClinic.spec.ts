@@ -56,6 +56,8 @@ test.describe('Handy 390 px', () => {
     await expect(page.getByTestId('cl-result')).toBeVisible();
     expect(await calls(page)).toEqual(['sentence-clinic:default']);
     await expect(page.getByTestId('cl-verdict')).toHaveText('Fast richtig');
+    // R5 K5: echter Grammatikfehler → Fehlerfarbe, nicht Gold.
+    await expect(page.getByTestId('cl-verdict')).toHaveAttribute('data-tone', 'wrong');
     await expect(page.getByTestId('cl-mark-0')).toHaveText('discussed about');
     await expect(page.getByTestId('cl-edit-why')).toContainText('kein „about“');
     await expect(page.getByTestId('cl-edit-pat')).toBeVisible();

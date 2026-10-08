@@ -7,6 +7,7 @@ export const ttP51En = {
   ttTkGoalWhy: 'You are practicing these patterns in Chapter {n} ({chapter}). The conversation shows whether you can use them freely.',
   ttTkGoalHave: '{name}: {have} of {need}',
   ttTkGoalReached: 'Chapter goal reached',
+  ttTkGoalShort: 'Chapter goal {have}/{need}',
   ttTkSayBtn: 'Say it again',
   ttTkSayTask: 'Say or type the sentence again, correctly this time. The correction stays hidden while you try.',
   ttTkSayWhy: 'Fixing it yourself makes it stick better than just reading the correction.',

@@ -6,7 +6,7 @@ import type { ProdInput } from '../c1/prod';
 import { isoWeek } from '../date';
 import { outId, type OutItem } from '../nbdrill/outDoc';
 import type { NewRepair } from '../repair/repair';
-import { CLINIC_REPAIR_CAP, errorCount, normWs, ownWords, repairsFromEdits } from './edits';
+import { CLINIC_REPAIR_CAP, errorCount, errorEdits, normWs, ownWords, repairsFromEdits } from './edits';
 import { patListText } from './patList';
 
 // Satz-Klinik, die reinen Teile (Lernplattform 3.0 P46, KT T4): Eingabe, Ergebnis → Speicherformen (`out/<Monat>`, Fehlersätze, K7-Eintrag) und
@@ -35,6 +35,16 @@ export function clinicVars(i: { sentence: string; purpose: string; ctx: string; 
 export function clinicErrors(out: ClinicOut): number {
   const n = errorCount(out.edits);
   return out.verdict === 'correct' ? 0 : Math.max(1, n);
+}
+
+/** Farbe des Urteils (R5 K5): Gold („fast richtig“) nur, wenn alle Fehler Tipp- oder Zeichensetzungsfehler sind; ein echter Grammatik- oder Wortfehler bekommt die Fehlerfarbe, auch wenn Claude „minor“ sagt. */
+export type ClinicTone = 'ok' | 'near' | 'wrong';
+const SLIP_KINDS: ReadonlySet<string> = new Set(['spelling', 'punctuation']);
+export function clinicTone(out: Pick<ClinicOut, 'verdict' | 'edits'>): ClinicTone {
+  if (out.verdict === 'correct') return 'ok';
+  if (out.verdict === 'wrong') return 'wrong';
+  const errs = errorEdits(out.edits);
+  return errs.length > 0 && errs.every((e) => SLIP_KINDS.has(e.kind)) ? 'near' : 'wrong';
 }
 
 export type ClinicRun = {

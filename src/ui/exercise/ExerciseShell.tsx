@@ -2,7 +2,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { useLive } from '../../data/live';
 import { useSharedTarget } from '../../engine/shared';
-import type { ExplainDepth, ExplanationModel, ResultVerdict } from '../../domain/explain/types';
+import type { ExplainDepth, ExplainLine, ExplanationModel, ResultVerdict } from '../../domain/explain/types';
 import type { WordOp } from '../../domain/learn/types';
 import type { UnitState } from '../../domain/metrics';
 import { useT } from '../../i18n';
@@ -19,7 +19,8 @@ import { Examples } from './Examples';
 import { Explanation } from './Explanation';
 import { HintLine } from './HintLine';
 import { shouldAutoAdvance } from './autoAdvance';
-import { visibleLines } from './explainDepth';
+import { liftLines, visibleLines } from './explainDepth';
+import { choiceKeyRange } from '../../engine/choiceKeys';
 import { useAutoAdvance } from './useAutoAdvance';
 import { Verdict } from './Verdict';
 
@@ -89,6 +90,8 @@ export type ExerciseShellProps = {
   wrapCard?: (card: ReactNode) => ReactNode;
   /** Tastaturhinweis am Laptop je Übungsart (UX-Prüfung W5/W9): eigener Text, `null` = keiner; sonst nach Art (Auswahl oder Tippen). */
   keysHint?: string | null;
+  /** Zahl der Optionen einer Auswahl: der Standardhinweis nennt dann genau so viele Tasten („A–B oder 1–2“) statt immer „A–D oder 1–4“. */
+  choiceCount?: number;
   /** Skelett in Kartengröße statt Inhalt (nie ein Leerbild). */
   loading?: boolean;
   /** Optional: `retry` (Hinweis mit Leitfrage, Eingabe bleibt) und `aiError`; sonst aus `feedback`/`primary.busy` abgeleitet. */
@@ -104,9 +107,10 @@ export function deriveShellState(p: Pick<ExerciseShellProps, 'loading' | 'state'
 }
 
 export function ExerciseShell(props: ExerciseShellProps) {
-  const { meta, status, task, aid = null, prompt, answer, hint = null, secondary = [], primary, barOverride, feedback = null, side = null, layout = 'auto', keysHint, wrapCard } = props;
+  const { meta, status, task, aid = null, prompt, answer, hint = null, secondary = [], primary, barOverride, feedback = null, side = null, layout = 'auto', keysHint, choiceCount, wrapCard } = props;
   const { t } = useT();
   const state = deriveShellState(props);
+  const keyRange = typeof choiceCount === 'number' ? choiceKeyRange(choiceCount) : null;
   const profileSplit = useSplitLayout();
   const split = layout === 'split' || (layout === 'auto' && profileSplit);
   const tablet = useMediaQuery('(min-width: 768px)');
@@ -176,12 +180,17 @@ export function ExerciseShell(props: ExerciseShellProps) {
     ) : null;
   const asideSecondary = tablet && secondaryNode;
 
-  const depthLines = feedback?.explanation ? visibleLines(feedback.explanation, feedback.depth, { learning }) : null;
   // UX-Prüfung W2 (07.10.2026): EINE Rückmeldekarte für alle Arten – Urteil (+ „Wieder in“) → Du → Richtig → Muster → Richtig, weil → Beispiel → „Mehr“.
   // Unter „Mehr“: Typischer Fehler, Nicht verwechseln, Hinweise, „Warum nicht …?“ und die Zählweise (`after`), weitere Beispiele.
-  const FOLD = ['mistake', 'contrast', 'note'] as const;
-  const moreLines = depthLines ? depthLines.folded.length + depthLines.open.filter((l) => (FOLD as readonly string[]).includes(l.k)).length : 0;
-  const explainProps = feedback?.explanation ? { model: feedback.explanation, depth: feedback.depth, learning, hideWord: status.area === 'words', fold: FOLD } : null;
+  // R5: Im Kontrast-Schritt („Welches Wort passt?“) IST „Nicht verwechseln“ der Inhalt – die Zeile steht dort offen, nie unter „Mehr“.
+  const contrastStep = meta.ex === 'contrast';
+  const FOLD: ReadonlyArray<ExplainLine['k']> = contrastStep ? ['mistake', 'note'] : ['mistake', 'contrast', 'note'];
+  const UNFOLD: ReadonlyArray<ExplainLine['k']> | undefined = contrastStep ? ['contrast'] : undefined;
+  const depthLines = feedback?.explanation ? liftLines(visibleLines(feedback.explanation, feedback.depth, { learning }), feedback.explanation, UNFOLD) : null;
+  const moreLines = depthLines ? depthLines.folded.length + depthLines.open.filter((l) => FOLD.includes(l.k)).length : 0;
+  const explainProps = feedback?.explanation
+    ? { model: feedback.explanation, depth: feedback.depth, learning, hideWord: status.area === 'words', fold: FOLD, ...(UNFOLD ? { unfold: UNFOLD } : {}) }
+    : null;
   const moreExtra =
     explainProps && (moreLines > 0 || feedback?.after) ? (
       <>
@@ -370,7 +379,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
           {/* Hinweis je Art: nur wo Optionen stehen, nennt er „A–D oder 1–4 wählen“ (Auswahl per CSS `:has`, dz2.css). */}
           {keysHint ?? (
             <>
-              <span className="dz-kh-choice">{t('exKeysHint')}</span>
+              <span className="dz-kh-choice">{keyRange ? t('exKeysHintN', keyRange) : t('exKeysHint')}</span>
               <span className="dz-kh-typed">{t('exKeysHintTyped')}</span>
             </>
           )}
