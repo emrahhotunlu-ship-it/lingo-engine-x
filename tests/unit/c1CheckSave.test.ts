@@ -84,7 +84,18 @@ describe('Prognose am neuen Eintrag', () => {
 });
 
 describe('checkFcFor: nie aus Lesefehlern', () => {
-  const live = () => useLive.setState({ day: null, docs: { 'app/c1': { v: 1, checks: [entry({ d: '2026-08-29' }), entry({ d: '2026-09-26', f: 'B' })], gates: [], prod: [], bad: [] } }, collections: {} });
+  const live = () => useLive.setState({ day: null, docs: { 'app/c1': { v: 1, checks: [entry({ d: '2026-08-29' }), entry({ d: '2026-09-26', f: 'B' })], gates: [], prod: [], bad: [] }, 'app/profile': null }, collections: { vocab: new Map(), chunk: new Map(), grammar: new Map() } });
+  it('ohne vollständig geladene Live-Daten keine Prognose (wie im Blatt)', async () => {
+    const wasWay = flags.way;
+    flags.way = true;
+    try {
+      live();
+      useLive.setState({ collections: { vocab: new Map(), chunk: new Map() } });
+      expect(await checkFcFor('2026-10-28', Date.parse('2026-10-28T09:00:00+01:00'))).toBeNull();
+    } finally {
+      flags.way = wasWay;
+    }
+  });
   it('fehlende Dokumente sind erlaubt, ein geworfener Lesefehler heißt keine Prognose', async () => {
     const wasWay = flags.way;
     flags.way = true;
