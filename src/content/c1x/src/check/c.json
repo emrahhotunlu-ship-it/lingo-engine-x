@@ -1,0 +1,1446 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "mcc-2057",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "pc.recent",
+   "topic": "pres-perf-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "probe": true,
+   "form": "C",
+   "text": "I ___ a lot of overtime lately, so I am taking Friday off to rest.",
+   "options": [
+    "did",
+    "have been doing",
+    "am doing",
+    "had done"
+   ],
+   "answer": 1,
+   "why": {
+    "ok": {
+     "de": "Was in letzter Zeit läuft und jetzt Spuren hinterlässt: have been + -ing mit lately/recently (I have been doing a lot of overtime).",
+     "en": "An activity of the recent past that still affects now: have been + -ing with lately/recently."
+    },
+    "wrong": [
+     {
+      "opt": "did",
+      "cat": "grammar",
+      "de": "lately verlangt eine Zeit, die bis jetzt reicht; did ist abgeschlossen.",
+      "en": "lately needs a tense that reaches up to now; did is finished."
+     },
+     {
+      "opt": "am doing",
+      "cat": "calque",
+      "de": "Deutsch „ich mache in letzter Zeit viel“ steht im Präsens; mit lately braucht Englisch have been + -ing.",
+      "en": "German uses the present here; with lately English needs have been + -ing."
+     },
+     {
+      "opt": "had done",
+      "cat": "grammar",
+      "de": "had done blickt von einem Punkt in der Vergangenheit zurück; hier geht es um jetzt.",
+      "en": "had done looks back from a point in the past; this is about now."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-2058",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "cp.within",
+   "topic": "c1-precision",
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "probe": true,
+   "form": "C",
+   "text": "Please confirm your hotel booking ___ two days; otherwise the reservation will be canceled.",
+   "options": [
+    "within",
+    "during",
+    "since",
+    "until"
+   ],
+   "answer": 0,
+   "why": {
+    "ok": {
+     "de": "within + Zeitspanne = innerhalb von, spätestens nach (within two days).",
+     "en": "within + period = inside that time limit (within two days)."
+    },
+    "wrong": [
+     {
+      "opt": "during",
+      "cat": "calque",
+      "de": "Deutsch „während“: during nennt einen Zeitraum, in dem etwas passiert, keine Frist.",
+      "en": "during names a period in which something happens, not a time limit."
+     },
+     {
+      "opt": "since",
+      "cat": "grammar",
+      "de": "since braucht einen Zeitpunkt in der Vergangenheit (since Monday).",
+      "en": "since needs a point in the past (since Monday)."
+     },
+     {
+      "opt": "until",
+      "cat": "meaning",
+      "de": "until heißt „bis“ und braucht einen Zeitpunkt, keine Dauer.",
+      "en": "until means “up to” and needs a point in time, not a length of time."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-2059",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "ca.in-case",
+   "topic": "cond-alt",
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "probe": true,
+   "form": "C",
+   "text": "Take a warm jacket with you ___ it gets cold up in the mountains tonight.",
+   "options": [
+    "unless",
+    "in case",
+    "otherwise",
+    "as long as"
+   ],
+   "answer": 1,
+   "why": {
+    "ok": {
+     "de": "in case = für den Fall, dass: Du tust etwas vorher zur Vorsicht (Take a jacket in case it gets cold).",
+     "en": "in case = as a precaution in the event that (Take a jacket in case it gets cold)."
+    },
+    "wrong": [
+     {
+      "opt": "unless",
+      "cat": "meaning",
+      "de": "unless heißt „wenn nicht“: Du würdest die Jacke nur mitnehmen, wenn es NICHT kalt wird.",
+      "en": "unless means “except if”: you would only take the jacket if it did NOT get cold."
+     },
+     {
+      "opt": "otherwise",
+      "cat": "grammar",
+      "de": "otherwise verbindet keinen Nebensatz; es heißt „sonst“.",
+      "en": "otherwise does not start a clause like this; it means “or else”."
+     },
+     {
+      "opt": "as long as",
+      "cat": "meaning",
+      "de": "as long as heißt „solange“ oder „unter der Bedingung“; gemeint ist Vorsicht.",
+      "en": "as long as means “on the condition that”; the sentence is about a precaution."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-2060",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "qu.indirect",
+   "topic": "questions",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "probe": true,
+   "form": "C",
+   "text": "Could you tell me where ___, so I can take the documents there directly?",
+   "options": [
+    "is the legal department",
+    "does the legal department",
+    "the legal department is",
+    "the legal department are"
+   ],
+   "answer": 2,
+   "why": {
+    "ok": {
+     "de": "Indirekte Frage: Fragewort + Subjekt + Verb, wie in einer Aussage (where the legal department is).",
+     "en": "Indirect question: question word + subject + verb, as in a statement (where the legal department is)."
+    },
+    "wrong": [
+     {
+      "opt": "is the legal department",
+      "cat": "calque",
+      "de": "Wie im Deutschen eine direkte Frage; nach Could you tell me where steht die Aussage-Wortstellung.",
+      "en": "This is direct question order; after Could you tell me where, use statement word order."
+     },
+     {
+      "opt": "does the legal department",
+      "cat": "grammar",
+      "de": "In einer indirekten Frage steht kein does, und es fehlt das Verb.",
+      "en": "An indirect question has no does, and the verb is missing."
+     },
+     {
+      "opt": "the legal department are",
+      "cat": "grammar",
+      "de": "the legal department ist hier Einzahl: is.",
+      "en": "the legal department is singular here: is."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-2061",
+   "kind": "mcc",
+   "area": "gram",
+   "pat": "prp.no-prep",
+   "topic": "prepositions",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "probe": true,
+   "form": "C",
+   "text": "We will ___ the new pricing model at the next sales meeting on Thursday.",
+   "options": [
+    "discuss about",
+    "talk",
+    "speak",
+    "discuss"
+   ],
+   "answer": 3,
+   "why": {
+    "ok": {
+     "de": "discuss steht direkt mit Objekt, ohne Präposition: discuss the new model (aber: talk about).",
+     "en": "discuss takes a direct object, no preposition: discuss the new model (but: talk about)."
+    },
+    "wrong": [
+     {
+      "opt": "discuss about",
+      "cat": "calque",
+      "de": "Deutsch „über etwas diskutieren“; discuss steht ohne about.",
+      "en": "German “über etwas diskutieren”; discuss takes no about."
+     },
+     {
+      "opt": "talk",
+      "cat": "grammar",
+      "de": "talk braucht about: talk about the model.",
+      "en": "talk needs about: talk about the model."
+     },
+     {
+      "opt": "speak",
+      "cat": "grammar",
+      "de": "speak braucht about: speak about the model.",
+      "en": "speak needs about: speak about the model."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-2062",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.pay-attention",
+   "lex": [
+    "pay attention"
+   ],
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "probe": true,
+   "form": "C",
+   "text": "Please ___ special attention to the delivery dates in section four of the contract.",
+   "options": [
+    "make",
+    "put",
+    "pay",
+    "take"
+   ],
+   "answer": 2,
+   "why": {
+    "ok": {
+     "de": "Feste Verbindung: pay attention to = auf etwas achten.",
+     "en": "Fixed collocation: pay attention to = focus on something."
+    },
+    "wrong": [
+     {
+      "opt": "make",
+      "cat": "calque",
+      "de": "Deutsch „machen“ passt hier nicht; die Verbindung heißt pay attention.",
+      "en": "German “machen” does not fit; the collocation is pay attention."
+     },
+     {
+      "opt": "put",
+      "cat": "partner",
+      "de": "put attention sagt man nicht; es heißt pay attention to.",
+      "en": "People do not say put attention; it is pay attention to."
+     },
+     {
+      "opt": "take",
+      "cat": "partner",
+      "de": "take attention sagt man nicht; es heißt pay attention to.",
+      "en": "People do not say take attention; it is pay attention to."
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-2063",
+   "kind": "mcc",
+   "area": "lex",
+   "pat": "lx.make-progress",
+   "lex": [
+    "make progress"
+   ],
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "probe": true,
+   "form": "C",
+   "text": "The negotiations were difficult, but in the end we ___ real progress on the price.",
+   "options": [
+    "made",
+    "did",
+    "had",
+    "took"
+   ],
+   "answer": 0,
+   "why": {
+    "ok": {
+     "de": "Feste Verbindung: make progress = Fortschritte machen (progress ist unzählbar: kein a, kein -s).",
+     "en": "Fixed collocation: make progress (progress is uncountable: no a, no -s)."
+    },
+    "wrong": [
+     {
+      "opt": "did",
+      "cat": "calque",
+      "de": "Deutsch „Fortschritte machen“ führt zu do; es heißt make progress.",
+      "en": "German “Fortschritte machen” leads to do; English says make progress."
+     },
+     {
+      "opt": "had",
+      "cat": "partner",
+      "de": "had progress sagt man nicht; es heißt make progress.",
+      "en": "People do not say have progress; it is make progress."
+     },
+     {
+      "opt": "took",
+      "cat": "partner",
+      "de": "took progress sagt man nicht; es heißt make progress.",
+      "en": "People do not say take progress; it is make progress."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-2064",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "pt.by-until",
+   "topic": "prep-time",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "probe": true,
+   "form": "C",
+   "text": "Please send me your comments ___ the end of Thursday at the latest, so I can still update the slides.",
+   "accept": [
+    "by",
+    "before"
+   ],
+   "cls": "prep",
+   "chips": [
+    "until",
+    "since",
+    "for"
+   ],
+   "why": {
+    "ok": {
+     "de": "Frist („spätestens bis“): by + Zeitpunkt (by the end of Thursday). Dauer („bis dahin durchgehend“): until.",
+     "en": "Deadline: by + point in time (by the end of Thursday). Duration up to then: until."
+    },
+    "wrong": [
+     {
+      "if": [
+       "until"
+      ],
+      "de": "until heißt „bis“ für eine Dauer; eine Frist (at the latest) braucht by.",
+      "en": "until means “up to” for a duration; a deadline (at the latest) needs by."
+     },
+     {
+      "if": [
+       "since"
+      ],
+      "de": "since braucht einen Zeitpunkt in der Vergangenheit.",
+      "en": "since needs a point in the past."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "for nennt eine Dauer (for two days), keine Frist.",
+      "en": "for names a duration (for two days), not a deadline."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-2065",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "fut.continuous",
+   "topic": "future-perf-cont",
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "probe": true,
+   "form": "C",
+   "text": "This time tomorrow, I will ___ sitting on a plane to Chicago, so I cannot come to your party.",
+   "accept": [
+    "be"
+   ],
+   "cls": "aux",
+   "chips": [
+    "being",
+    "been",
+    "have"
+   ],
+   "why": {
+    "ok": {
+     "de": "Was zu einem Zeitpunkt in der Zukunft gerade läuft: will be + -ing (This time tomorrow I will be sitting …).",
+     "en": "Something in progress at a point in the future: will be + -ing (This time tomorrow I will be sitting …)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "being"
+      ],
+      "de": "will being gibt es nicht; nach will steht die Grundform be.",
+      "en": "will being does not exist; the base form be follows will."
+     },
+     {
+      "if": [
+       "been"
+      ],
+      "de": "will been gibt es nicht; es fehlt have (will have been).",
+      "en": "will been does not exist; have is missing (will have been)."
+     },
+     {
+      "if": [
+       "have"
+      ],
+      "de": "will have sitting gibt es nicht; es heißt will be sitting.",
+      "en": "will have sitting does not exist; it is will be sitting."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-2066",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "cn.third",
+   "topic": "conditionals",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "probe": true,
+   "form": "C",
+   "text": "We would have won the contract if our offer ___ arrived one day earlier.",
+   "accept": [
+    "had"
+   ],
+   "cls": "aux",
+   "chips": [
+    "would",
+    "has",
+    "have"
+   ],
+   "why": {
+    "ok": {
+     "de": "Verpasste Chance (3. Konditional): if + had + Partizip, would have + Partizip.",
+     "en": "A missed chance (third conditional): if + had + participle, would have + participle."
+    },
+    "wrong": [
+     {
+      "if": [
+       "would"
+      ],
+      "de": "Im if-Teil steht kein would; es heißt if our offer had arrived.",
+      "en": "would does not go in the if-clause; it is if our offer had arrived."
+     },
+     {
+      "if": [
+       "has"
+      ],
+      "de": "has passt nicht zum gedachten Fall in der Vergangenheit (would have won).",
+      "en": "has does not fit an imagined past (would have won)."
+     },
+     {
+      "if": [
+       "have"
+      ],
+      "de": "have braucht hier had: if our offer had arrived.",
+      "en": "have must be had here: if our offer had arrived."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-2067",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "mnd.negation",
+   "topic": "mandative",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "probe": true,
+   "form": "C",
+   "text": "Our lawyer recommended that we ___ sign anything until the audit is complete.",
+   "accept": [
+    "not",
+    "never",
+    "shouldn't"
+   ],
+   "cls": "adv",
+   "chips": [
+    "didn't",
+    "no",
+    "won't"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach recommend, insist, suggest + that steht die Grundform; verneint: not + Grundform (that we not sign).",
+     "en": "After recommend, insist, suggest + that, use the base form; the negative is not + base form (that we not sign)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "didn't"
+      ],
+      "de": "Nach recommend that steht die Grundform; die Verneinung ist not, ohne do.",
+      "en": "After recommend that, use the base form; the negative is not, without do."
+     },
+     {
+      "if": [
+       "no"
+      ],
+      "de": "no steht vor Nomen, nicht vor einem Verb.",
+      "en": "no goes before nouns, not before a verb."
+     },
+     {
+      "if": [
+       "won't"
+      ],
+      "de": "Nach recommend that steht kein will; verneint wird mit not + Grundform.",
+      "en": "No will after recommend that; the negative is not + base form."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-2068",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ma.had-better",
+   "topic": "modals-advice",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "probe": true,
+   "form": "C",
+   "text": "You had ___ leave now; the last train to the city goes in ten minutes.",
+   "accept": [
+    "better",
+    "best"
+   ],
+   "cls": "adv",
+   "chips": [
+    "rather",
+    "must",
+    "should"
+   ],
+   "why": {
+    "ok": {
+     "de": "Dringender Rat oder Warnung: had better + Grundform (You had better leave now). had best ist seltener, gilt aber auch.",
+     "en": "Urgent advice or a warning: had better + base form (You had better leave now). had best is rarer but also accepted."
+    },
+    "wrong": [
+     {
+      "if": [
+       "rather"
+      ],
+      "de": "had rather ist veraltet und heißt „lieber“; als Warnung steht had better.",
+      "en": "had rather is old-fashioned and means “prefer”; a warning is had better."
+     },
+     {
+      "if": [
+       "must"
+      ],
+      "de": "had must gibt es nicht.",
+      "en": "had must does not exist."
+     },
+     {
+      "if": [
+       "should"
+      ],
+      "de": "had should gibt es nicht.",
+      "en": "had should does not exist."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-2069",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "rc.where-why",
+   "topic": "relative",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "probe": true,
+   "form": "C",
+   "text": "That is exactly the reason ___ we switched to a cloud-based archive last year.",
+   "accept": [
+    "why",
+    "that"
+   ],
+   "cls": "rel",
+   "chips": [
+    "because",
+    "which",
+    "where"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach the reason steht why (oder that): the reason why we switched = der Grund, warum wir gewechselt haben.",
+     "en": "the reason is followed by why (or that): the reason why we switched."
+    },
+    "wrong": [
+     {
+      "if": [
+       "because"
+      ],
+      "de": "the reason because gibt es nicht; nach the reason steht why oder that.",
+      "en": "the reason because does not work; the reason is followed by why or that."
+     },
+     {
+      "if": [
+       "which"
+      ],
+      "de": "the reason which geht nicht; der Satz braucht why (oder that).",
+      "en": "the reason which does not work; the sentence needs why (or that)."
+     },
+     {
+      "if": [
+       "where"
+      ],
+      "de": "where steht nach einem Ort, nicht nach reason.",
+      "en": "where follows a place, not reason."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-2070",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "cp.having",
+   "topic": "c1-participle",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "probe": true,
+   "form": "C",
+   "text": "___ checked all the invoices twice, the accountant was sure the mistake was not hers.",
+   "accept": [
+    "Having"
+   ],
+   "cls": "aux",
+   "chips": [
+    "Being",
+    "After",
+    "Has"
+   ],
+   "why": {
+    "ok": {
+     "de": "Having + Partizip = nachdem (dasselbe Subjekt): Having checked all the invoices, the accountant …",
+     "en": "Having + participle = after doing something (same subject): Having checked all the invoices, the accountant …"
+    },
+    "wrong": [
+     {
+      "if": [
+       "Being"
+      ],
+      "de": "Being checked wäre Passiv („geprüft werdend“); die Buchhalterin hat selbst geprüft.",
+      "en": "Being checked would be passive; the accountant did the checking herself."
+     },
+     {
+      "if": [
+       "After"
+      ],
+      "de": "After checked geht nicht; nach After steht -ing: After checking.",
+      "en": "After checked does not work; After needs -ing: After checking."
+     },
+     {
+      "if": [
+       "Has"
+      ],
+      "de": "Has am Satzanfang macht eine Frage, keinen Nebensatz.",
+      "en": "Has at the start makes a question, not a participle clause."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-2071",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-noun",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "probe": true,
+   "form": "C",
+   "lex": [
+    "reduction"
+   ],
+   "text": "The new routing software has led to a fifteen percent ___ in fuel costs.",
+   "stem": "REDUCE",
+   "accept": [
+    "reduction"
+   ],
+   "pos": "noun",
+   "parts": {
+    "base": "reduce",
+    "suf": [
+     "tion"
+    ]
+   },
+   "family": [
+    "reduce",
+    "reduced",
+    "reduction"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „a fifteen percent“ steht ein Nomen: reduce + -tion (das e fällt weg) = reduction (Senkung).",
+     "en": "A noun follows “a fifteen percent”: reduce + -tion (drop the e) = reduction."
+    },
+    "wrong": [
+     {
+      "if": [
+       "reduce"
+      ],
+      "de": "„reduce“ ist ein Verb; nach „a fifteen percent“ steht ein Nomen.",
+      "en": "“reduce” is a verb; a noun follows “a fifteen percent”."
+     },
+     {
+      "if": [
+       "reduced"
+      ],
+      "de": "„reduced“ ist eine Verbform oder ein Adjektiv; hier braucht der Satz ein Nomen.",
+      "en": "“reduced” is a verb form or adjective; the sentence needs a noun."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-2072",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-adj",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "probe": true,
+   "form": "C",
+   "lex": [
+    "comparable"
+   ],
+   "text": "Our prices are ___ to those of our main competitor, but our delivery is much faster.",
+   "stem": "COMPARE",
+   "accept": [
+    "comparable"
+   ],
+   "pos": "adj",
+   "parts": {
+    "base": "compare",
+    "suf": [
+     "able"
+    ]
+   },
+   "family": [
+    "compare",
+    "comparable",
+    "comparison",
+    "comparatively"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „are“ steht ein Adjektiv: compare + -able (das e fällt weg) = comparable (vergleichbar); comparable to = vergleichbar mit.",
+     "en": "An adjective follows “are”: compare + -able (drop the e) = comparable; comparable to = similar to."
+    },
+    "wrong": [
+     {
+      "if": [
+       "compare"
+      ],
+      "de": "„compare“ ist ein Verb; nach „are“ steht ein Adjektiv.",
+      "en": "“compare” is a verb; an adjective follows “are”."
+     },
+     {
+      "if": [
+       "comparison"
+      ],
+      "de": "„comparison“ ist ein Nomen; nach „are“ steht ein Adjektiv.",
+      "en": "“comparison” is a noun; an adjective follows “are”."
+     },
+     {
+      "if": [
+       "comparatively"
+      ],
+      "de": "„comparatively“ ist ein Adverb; nach „are“ steht ein Adjektiv.",
+      "en": "“comparatively” is an adverb; an adjective follows “are”."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-2073",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-adv",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "probe": true,
+   "form": "C",
+   "lex": [
+    "conveniently"
+   ],
+   "text": "Our new apartment is ___ located just five minutes from the main train station.",
+   "stem": "CONVENIENT",
+   "accept": [
+    "conveniently"
+   ],
+   "pos": "adv",
+   "parts": {
+    "base": "convenient",
+    "suf": [
+     "ly"
+    ]
+   },
+   "family": [
+    "convenient",
+    "convenience",
+    "conveniently",
+    "inconvenient"
+   ],
+   "why": {
+    "ok": {
+     "de": "Vor einem Partizip (located) steht ein Adverb: convenient + -ly = conveniently (günstig gelegen).",
+     "en": "An adverb goes before a participle (located): convenient + -ly = conveniently."
+    },
+    "wrong": [
+     {
+      "if": [
+       "convenient"
+      ],
+      "de": "„convenient“ ist ein Adjektiv; vor „located“ steht ein Adverb.",
+      "en": "“convenient” is an adjective; an adverb goes before “located”."
+     },
+     {
+      "if": [
+       "convenience"
+      ],
+      "de": "„convenience“ ist ein Nomen; vor „located“ steht ein Adverb.",
+      "en": "“convenience” is a noun; an adverb goes before “located”."
+     },
+     {
+      "if": [
+       "inconvenient"
+      ],
+      "de": "„inconvenient“ ist ein Adjektiv mit dem Gegenteil; vor „located“ steht ein Adverb.",
+      "en": "“inconvenient” is an adjective with the opposite meaning; an adverb goes before “located”."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-2074",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-neg",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "probe": true,
+   "form": "C",
+   "lex": [
+    "unclear"
+   ],
+   "text": "It is still ___ whether the client will renew the contract next year.",
+   "stem": "CLEAR",
+   "accept": [
+    "unclear"
+   ],
+   "pos": "adj",
+   "parts": {
+    "pre": "un",
+    "base": "clear"
+   },
+   "family": [
+    "clear",
+    "clearly",
+    "unclear",
+    "clarity"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „is still“ steht ein Adjektiv mit verneintem Sinn (whether = ob): un- + clear = unclear (unklar).",
+     "en": "An adjective with a negative meaning follows “is still” (whether shows doubt): un- + clear = unclear."
+    },
+    "wrong": [
+     {
+      "if": [
+       "clear"
+      ],
+      "de": "„clear“ ergibt mit „still … whether“ keinen Sinn; gemeint ist „noch nicht klar“.",
+      "en": "“clear” makes no sense with “still … whether”; the sentence means “not yet known”."
+     },
+     {
+      "if": [
+       "clearly"
+      ],
+      "de": "„clearly“ ist ein Adverb; nach „is still“ steht ein Adjektiv.",
+      "en": "“clearly” is an adverb; an adjective follows “is still”."
+     },
+     {
+      "if": [
+       "clarity"
+      ],
+      "de": "„clarity“ ist ein Nomen; nach „is still“ steht ein Adjektiv.",
+      "en": "“clarity” is a noun; an adjective follows “is still”."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-2075",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-noun",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "probe": true,
+   "form": "C",
+   "lex": [
+    "maintenance"
+   ],
+   "text": "The elevators will be out of service on Saturday because of routine ___.",
+   "stem": "MAINTAIN",
+   "accept": [
+    "maintenance"
+   ],
+   "pos": "noun",
+   "parts": {
+    "base": "maintain",
+    "suf": [
+     "ance"
+    ],
+    "change": "ai → e"
+   },
+   "family": [
+    "maintain",
+    "maintained",
+    "maintenance"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „routine“ steht ein Nomen: maintain → maintenance (ai wird e, dazu -ance) = Wartung.",
+     "en": "A noun follows “routine”: maintain → maintenance (ai becomes e, add -ance)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "maintain"
+      ],
+      "de": "„maintain“ ist ein Verb; nach „routine“ steht ein Nomen.",
+      "en": "“maintain” is a verb; a noun follows “routine”."
+     },
+     {
+      "if": [
+       "maintained"
+      ],
+      "de": "„maintained“ ist eine Verbform; nach „routine“ steht ein Nomen.",
+      "en": "“maintained” is a verb form; a noun follows “routine”."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-2076",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-verb",
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "probe": true,
+   "form": "C",
+   "lex": [
+    "modernize"
+   ],
+   "text": "Next year we plan to ___ the old bathroom in our house.",
+   "stem": "MODERN",
+   "accept": [
+    "modernize"
+   ],
+   "pos": "verb",
+   "parts": {
+    "base": "modern",
+    "suf": [
+     "ize"
+    ]
+   },
+   "family": [
+    "modern",
+    "modernize",
+    "modernization",
+    "modernity"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „plan to“ steht ein Verb: modern + -ize = modernize (modernisieren; britisch auch modernise).",
+     "en": "A verb follows “plan to”: modern + -ize = modernize (British also modernise)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "modern"
+      ],
+      "de": "„modern“ ist ein Adjektiv; nach „plan to“ steht ein Verb.",
+      "en": "“modern” is an adjective; a verb follows “plan to”."
+     },
+     {
+      "if": [
+       "modernization"
+      ],
+      "de": "„modernization“ ist ein Nomen; nach „plan to“ steht ein Verb.",
+      "en": "“modernization” is a noun; a verb follows “plan to”."
+     },
+     {
+      "if": [
+       "modernity"
+      ],
+      "de": "„modernity“ ist ein Nomen; nach „plan to“ steht ein Verb.",
+      "en": "“modernity” is a noun; a verb follows “plan to”."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-2077",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-adj",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "probe": true,
+   "form": "C",
+   "lex": [
+    "essential"
+   ],
+   "text": "A good internet connection is ___ for anyone who works from home.",
+   "stem": "ESSENCE",
+   "accept": [
+    "essential"
+   ],
+   "pos": "adj",
+   "parts": {
+    "base": "essence",
+    "suf": [
+     "tial"
+    ],
+    "change": "ce → tial"
+   },
+   "family": [
+    "essence",
+    "essential",
+    "essentially"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „is“ steht ein Adjektiv: essence → essential (ce wird zu tial) = unverzichtbar.",
+     "en": "An adjective follows “is”: essence → essential (ce becomes tial) = absolutely necessary."
+    },
+    "wrong": [
+     {
+      "if": [
+       "essence"
+      ],
+      "de": "„essence“ ist ein Nomen; nach „is“ steht hier ein Adjektiv.",
+      "en": "“essence” is a noun; an adjective follows “is” here."
+     },
+     {
+      "if": [
+       "essentially"
+      ],
+      "de": "„essentially“ ist ein Adverb; nach „is“ steht ein Adjektiv.",
+      "en": "“essentially” is an adverb; an adjective follows “is”."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-2078",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "pp.first-time",
+   "topic": "past-perfect",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "probe": true,
+   "form": "C",
+   "lead": "Lisa had never given a talk in English before the conference in Boston.",
+   "key": "FIRST",
+   "before": "The conference in Boston was the",
+   "after": "a talk in English.",
+   "keys": [
+    {
+     "a": [
+      "first time"
+     ],
+     "b": [
+      "Lisa had given",
+      "she had given",
+      "she'd given",
+      "that Lisa had given",
+      "that she had given",
+      "that she'd given"
+     ]
+    }
+   ],
+   "tiles": [
+    "time",
+    "Lisa",
+    "had",
+    "given"
+   ],
+   "extra": [
+    "has",
+    "gave",
+    "ever"
+   ],
+   "traps": [
+    "first time Lisa gave",
+    "first time Lisa has given"
+   ],
+   "why": {
+    "ok": {
+     "de": "It was the first time + had + Partizip. Teil 1: first time. Teil 2: Lisa had given.",
+     "en": "It was the first time + had + participle. Part 1: first time. Part 2: Lisa had given."
+    },
+    "wrong": [
+     {
+      "if": [
+       "first",
+       "time",
+       "lisa",
+       "gave"
+      ],
+      "de": "Nach the first time steht hier das Plusquamperfekt (was): had given.",
+      "en": "After the first time, use the past perfect here (was): had given."
+     },
+     {
+      "if": [
+       "first",
+       "time",
+       "lisa",
+       "has",
+       "given"
+      ],
+      "de": "Der Satz spielt in der Vergangenheit (was): had given, nicht has given.",
+      "en": "The sentence is in the past (was): had given, not has given."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-2079",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "ca.unless",
+   "topic": "cond-alt",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "probe": true,
+   "form": "C",
+   "lead": "We will cancel the order if the supplier does not confirm the date this week.",
+   "key": "UNLESS",
+   "before": "We will cancel the order",
+   "after": "the date this week.",
+   "keys": [
+    {
+     "a": [
+      "unless"
+     ],
+     "b": [
+      "the supplier confirms",
+      "the supplier has confirmed"
+     ]
+    }
+   ],
+   "tiles": [
+    "the",
+    "supplier",
+    "confirms"
+   ],
+   "extra": [
+    "not",
+    "will",
+    "if"
+   ],
+   "traps": [
+    "unless the supplier does not confirm",
+    "unless the supplier will confirm"
+   ],
+   "why": {
+    "ok": {
+     "de": "unless = wenn nicht. Teil 1: unless. Teil 2: the supplier confirms, ohne not und ohne will.",
+     "en": "unless = if not. Part 1: unless. Part 2: the supplier confirms, without not and without will."
+    },
+    "wrong": [
+     {
+      "if": [
+       "unless",
+       "the",
+       "supplier",
+       "does",
+       "not",
+       "confirm"
+      ],
+      "de": "unless heißt schon „wenn nicht“: kein zweites not.",
+      "en": "unless already means “if not”: no second not."
+     },
+     {
+      "if": [
+       "unless",
+       "the",
+       "supplier",
+       "will",
+       "confirm"
+      ],
+      "de": "Nach unless steht kein will: the supplier confirms.",
+      "en": "No will after unless: the supplier confirms."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-2080",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "md.must-have",
+   "topic": "modals-deduction",
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "probe": true,
+   "form": "C",
+   "lead": "I am convinced that somebody has taken my bike from the garden; it was here an hour ago.",
+   "key": "MUST",
+   "before": "Somebody",
+   "after": "my bike from the garden.",
+   "keys": [
+    {
+     "a": [
+      "must have"
+     ],
+     "b": [
+      "taken",
+      "removed",
+      "borrowed"
+     ]
+    }
+   ],
+   "tiles": [
+    "have",
+    "taken"
+   ],
+   "extra": [
+    "can",
+    "had",
+    "took"
+   ],
+   "traps": [
+    "must had taken",
+    "must have took"
+   ],
+   "why": {
+    "ok": {
+     "de": "Fast sicher (Vergangenheit): must have + Partizip. Teil 1: must have. Teil 2: taken.",
+     "en": "Almost certain (past): must have + participle. Part 1: must have. Part 2: taken."
+    },
+    "wrong": [
+     {
+      "if": [
+       "must",
+       "had",
+       "taken"
+      ],
+      "de": "Nach must steht have, nicht had: must have taken.",
+      "en": "must is followed by have, not had: must have taken."
+     },
+     {
+      "if": [
+       "must",
+       "have",
+       "took"
+      ],
+      "de": "took ist Past Simple; nach have steht das Partizip taken.",
+      "en": "took is the past simple; have is followed by the participle taken."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-2081",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "vp.remember-forget",
+   "topic": "verb-patterns",
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "probe": true,
+   "form": "C",
+   "lead": "I locked the front door this morning, but I have no memory of doing it.",
+   "key": "REMEMBER",
+   "before": "I locked the front door this morning, but I",
+   "after": "it.",
+   "keys": [
+    {
+     "a": [
+      "do not",
+      "don't"
+     ],
+     "b": [
+      "remember locking",
+      "remember doing"
+     ]
+    },
+    {
+     "a": [
+      "cannot",
+      "can't"
+     ],
+     "b": [
+      "remember locking",
+      "remember doing"
+     ]
+    }
+   ],
+   "tiles": [
+    "do",
+    "not",
+    "locking"
+   ],
+   "extra": [
+    "to",
+    "lock",
+    "forget"
+   ],
+   "traps": [
+    "do not remember to lock"
+   ],
+   "why": {
+    "ok": {
+     "de": "remember + -ing = sich an etwas Getanes erinnern. Teil 1: do not. Teil 2: remember locking.",
+     "en": "remember + -ing = recall something you did. Part 1: do not. Part 2: remember locking."
+    },
+    "wrong": [
+     {
+      "if": [
+       "do",
+       "not",
+       "remember",
+       "to",
+       "lock"
+      ],
+      "de": "remember to lock heißt „daran denken, es zu tun“; gemeint ist die Erinnerung: remember locking.",
+      "en": "remember to lock means “not forget to do it”; the sentence means the memory: remember locking."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-2082",
+   "kind": "kwt",
+   "area": "gram",
+   "pat": "cmp.the-the",
+   "topic": "comparison",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "probe": true,
+   "form": "C",
+   "lead": "The cost of fixing the problem rises with every week that we wait.",
+   "key": "MORE",
+   "before": "The longer we wait,",
+   "after": "the problem becomes.",
+   "keys": [
+    {
+     "a": [
+      "the more"
+     ],
+     "b": [
+      "expensive",
+      "costly"
+     ]
+    }
+   ],
+   "tiles": [
+    "the",
+    "expensive"
+   ],
+   "extra": [
+    "most",
+    "than",
+    "expensively"
+   ],
+   "traps": [
+    "the more expensively",
+    "more and more expensive"
+   ],
+   "why": {
+    "ok": {
+     "de": "Je …, desto …: the + Komparativ, the + Komparativ. Teil 1: the more. Teil 2: expensive.",
+     "en": "The …, the …: the + comparative, the + comparative. Part 1: the more. Part 2: expensive."
+    },
+    "wrong": [
+     {
+      "if": [
+       "the",
+       "more",
+       "expensively"
+      ],
+      "de": "Nach becomes steht ein Adjektiv: expensive, nicht expensively.",
+      "en": "becomes is followed by an adjective: expensive, not expensively."
+     },
+     {
+      "if": [
+       "more",
+       "and",
+       "expensive"
+      ],
+      "de": "Das Muster heißt the …, the …: The longer we wait, the more expensive.",
+      "en": "The pattern is the …, the …: The longer we wait, the more expensive."
+     }
+    ]
+   }
+  }
+ ]
+}

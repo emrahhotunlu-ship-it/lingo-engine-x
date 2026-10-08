@@ -32,7 +32,7 @@ describe('Neue Themen', () => {
   });
   it('Alltag und Beruf: je Thema etwa ein Drittel Alltag (30 bis 40 Prozent), in der Einstufung mindestens 20 Prozent', () => {
     for (const topic of DONE) {
-      const mine = all.filter((i) => i.topic === topic && !i.pool);
+      const mine = all.filter((i) => i.topic === topic && !i.pool && !i.probe);
       const life = mine.filter((i) => i.dom === 'life').length / mine.length;
       expect(life, topic).toBeGreaterThanOrEqual(0.3);
       expect(life, topic).toBeLessThanOrEqual(0.42);
@@ -55,7 +55,7 @@ describe('Neue Themen', () => {
         }
       });
       it('mindestens 24 c1x-Aufgaben in allen vier Arten (je mindestens 6), jedes Muster mehrfach geübt', () => {
-        const mine = all.filter((i) => i.topic === topic && !i.pool);
+        const mine = all.filter((i) => i.topic === topic && !i.pool && !i.probe);
         expect(mine.length).toBeGreaterThanOrEqual(24);
         for (const k of ['mcc', 'ocl', 'err', 'kwt']) expect(mine.filter((i) => i.kind === k).length, k).toBeGreaterThanOrEqual(6);
         for (const p of pats?.patterns ?? []) expect(mine.filter((i) => i.pat === p.id).length, p.id).toBeGreaterThanOrEqual(3);

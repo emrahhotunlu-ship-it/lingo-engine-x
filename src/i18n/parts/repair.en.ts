@@ -33,5 +33,6 @@ export const repairEn = {
   rxSrc_preply: 'from an earlier lesson',
   rxSrc_say: 'from an earlier exercise',
   rxSrc_lesson: 'from the lesson',
+  rxSrc_check: 'from the C1 check',
   rxStand: 'Mistake sentences: {open} open, {safe} secure',
 } as const;

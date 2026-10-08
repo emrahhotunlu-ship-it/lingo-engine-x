@@ -15,8 +15,8 @@ export const REPAIR_MAX = 150;
 export const REPAIR_TEXT_MAX = 300;
 export const REPAIR_WHY_MAX = 200;
 
-/** `fluency` = Flüssigkeit 90 – 60 – 45 (V6), `pattern` = Deutsch-Fallen (V3), `tone` = drei Tonlagen (Vorschlag 8). */
-export type RepairSrc = 'say' | 'talk' | 'write' | 'preply' | 'teacher' | 'lesson' | 'fluency' | 'pattern' | 'tone';
+/** `fluency` = Flüssigkeit 90 – 60 – 45 (V6), `pattern` = Deutsch-Fallen (V3), `tone` = drei Tonlagen (Vorschlag 8), `check` = C1-Check (LP3 P40). */
+export type RepairSrc = 'say' | 'talk' | 'write' | 'preply' | 'teacher' | 'lesson' | 'fluency' | 'pattern' | 'tone' | 'check';
 
 export type RepairItem = {
   id: string;

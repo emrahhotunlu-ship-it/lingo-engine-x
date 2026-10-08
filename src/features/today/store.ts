@@ -41,6 +41,8 @@ import { normGoalMin } from '../../domain/progress/settings';
 import { historyPatch, historySnapshot } from '../../domain/progress/history';
 import { vocabGoal } from '../../domain/vocab/goal';
 import { recordProfileFields } from '../progress/persist';
+import { readC1 } from '../../domain/c1/c1doc';
+import { nextDeskForm } from '../../domain/c1/check/select';
 
 // Tagesplan = Tageseinheit (plan.md §1.5, N10/N12): einmal je Lerntag festgelegt und in
 // app/profile.plan gespeichert, nie neu gewürfelt (Kap. 15). Ein schon gespeicherter Plan von heute
@@ -238,7 +240,7 @@ export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
   const step3 = step3Format(today, { kindOn: kindEnabled, tempoOn: flags.tempo });
   // `app/c1` wird erst mit dem Programm (P31) abonniert; bis dahin fehlt das Dokument und der Check-Tag bleibt aus.
   const c1doc = (live.docs as Record<string, Readonly<Record<string, unknown>> | null | undefined>)['app/c1'] ?? null;
-  const c1 = checkPlanned(today, draft.shape, { programStarted: !!c1doc, lastCheck: lastCheckDay(c1doc), formAvailable: flags.c1check }) ? ('check' as const) : undefined;
+  const c1 = checkPlanned(today, draft.shape, { programStarted: !!c1doc, lastCheck: lastCheckDay(c1doc), formAvailable: flags.c1check && nextDeskForm(readC1(c1doc).checks) !== null }) ? ('check' as const) : undefined;
   const goal = fest ? nextGoal({ festUnits: fest.units, vocabFest: fest.vocab, history: profile?.history, today }) : null;
   return buildUnitStored({
     day: today,
