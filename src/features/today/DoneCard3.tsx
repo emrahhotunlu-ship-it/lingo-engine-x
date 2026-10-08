@@ -1,19 +1,22 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { emit } from '../../engine/fx';
+import { startMoment } from '../../engine/fx/measure';
 import { useClock } from '../../app/clock';
+import { levelUpFor } from '../../domain/moments/detect';
+import { offerLevelUp } from '../../ui/moments/store';
 import { useT } from '../../i18n';
 import { useLive } from '../../data/live';
 import { streakWeek, weekGoal } from '../../domain/metrics';
 import { comebackGap } from '../../domain/plan/comeback';
 import type { WeekDay } from '../../domain/streak';
 import { logWarn } from '../../platform/diagnostics';
-import { KEY_PREFIX, local } from '../../platform/storage';
-import { CountUp } from '../../ui/CountUp';
 import { Icon } from '../../ui/Icon';
-import { SegmentRing } from '../../ui/ProgressRing';
+import { DayRing } from '../../ui/DayRing';
+import { Odometer } from '../../ui/Odometer';
 import { WeekStrip } from '../progress/StandHeader';
 import { bigGain, patternGains } from './doneCard';
 import { useDoneFacts } from './doneFacts';
+import { takeDayMoment } from './dayMoment';
 import { footParts, footText } from './goalLine';
 import type { TodayView } from './state';
 
@@ -59,6 +62,9 @@ export function StreakFoot() {
   );
 }
 
+/** Die Aufstiegskarte folgt dem Tagesmoment (der in 1,4 s still steht). */
+const LEVEL_AFTER_DAY_MS = 1500;
+
 /** Funken des Tagesmoments (EE M7): 12 Richtungen und Verzögerungen, rein dekorativ, nur Stufe `full`. */
 const SPARKS: ReadonlyArray<readonly [number, number, number]> = [
   [-70, -72, 0],
@@ -76,19 +82,21 @@ const SPARKS: ReadonlyArray<readonly [number, number, number]> = [
 ];
 
 /**
- * Der Tagesmoment spielt einmal je Lerntag und Browser (EE M7: „beim späteren Öffnen steht der fertige Ring still“).
- * Gemerkt nur im Browser (Bequemlichkeit, kein Lernstand).
+ * Der Tagesmoment spielt nur beim Übergang „offen → fertig“ in dieser Sitzung und höchstens einmal je Lerntag und Browser (EE M7: „beim späteren
+ * Öffnen steht der fertige Ring still“; `dayMoment.ts`).
  */
 function usePlayOnce(today: string, ring: React.RefObject<HTMLElement | null>): boolean {
-  const key = `${KEY_PREFIX}daymoment:${today}`;
-  const [play] = useState(() => local.get(key) !== '1');
+  const [play] = useState(() => takeDayMoment(today));
   useEffect(() => {
     if (!play) return;
-    local.set(key, '1');
-    // Funken, wenn sich der Ring geschlossen hat (EE M7 ≈ 640 ms); nur Stufe „Voll“ (Dirigent).
+    const stop = startMoment('day');
+    // Funken und Ton, wenn sich der Ring geschlossen hat (EE M7 ≈ 640 ms); Funken nur Stufe „Voll“ (Dirigent).
     const id = setTimeout(() => emit({ k: 'moment', m: 'day', el: ring.current }), 640);
-    return () => clearTimeout(id);
-  }, [play, key, ring]);
+    return () => {
+      clearTimeout(id);
+      stop();
+    };
+  }, [play, ring]);
   return play;
 }
 
@@ -121,6 +129,14 @@ export function DoneCard3({ view, tomorrow, today }: { view: TodayView; tomorrow
   const goalText = !msText && facts.goal ? t(facts.goal.key, facts.goal.params) : null;
   const ringRef = useRef<HTMLSpanElement>(null);
   const play = usePlayOnce(today, ringRef);
+  // P60: ein großer Meilenstein (Kapitel, C1, Wort-Marken ab 250) bekommt einmal je Gerät die Aufstiegskarte, nach dem Tagesmoment.
+  const msId = ms?.id ?? null;
+  const msN = ms?.n;
+  useEffect(() => {
+    if (!msId || !levelUpFor(msId)) return;
+    const id = setTimeout(() => offerLevelUp([msId], msN), play ? LEVEL_AFTER_DAY_MS : 0);
+    return () => clearTimeout(id);
+  }, [msId, msN, play]);
   const heroText = big ? t(big.kind === 'words' ? 'hxDoneBigWords' : 'hxDoneBigPatterns', { n: big.n }) : t('nbHeuteDoneSteps', { blocks });
   const hero = splitHero(heroText);
   return (
@@ -133,11 +149,11 @@ export function DoneCard3({ view, tomorrow, today }: { view: TodayView; tomorrow
           </span>
         </p>
         <span className="dz-done-ring" data-play={play ? '' : undefined} ref={ringRef}>
-          <SegmentRing segments={Math.max(1, blocks)} done={blocks} size={168} stroke={12} label={t('nbHeuteRingLabel', { done: blocks, total: blocks })}>
+          <DayRing fills={Array.from({ length: Math.max(1, blocks) }, () => 1)} closed play={play} size={168} stroke={14} label={t('nbHeuteRingLabel', { done: blocks, total: blocks })}>
             <span className="dz-done-check inline-flex text-ok-text">
               <Icon name="check" size={72} strokeWidth={2.4} />
             </span>
-          </SegmentRing>
+          </DayRing>
           <span className="dz-sparks" aria-hidden="true">
             {SPARKS.map(([dx, dy, d]) => (
               <i key={`${dx}:${dy}`} style={{ ['--dx' as string]: `${dx}px`, ['--dy' as string]: `${dy}px`, ['--d' as string]: `${d}ms` }} />
@@ -154,7 +170,7 @@ export function DoneCard3({ view, tomorrow, today }: { view: TodayView; tomorrow
           {hero ? (
             <>
               <span className="dz-hero-n">
-                <CountUp text={hero[0]} play={play} delay={820} />
+                <Odometer text={hero[0]} id={`day-hero:${today}`} play={play} delay={820} />
               </span> <span className="dz-hero-l">{hero[1]}</span>
             </>
           ) : (

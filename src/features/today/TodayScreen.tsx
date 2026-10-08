@@ -9,7 +9,8 @@ import { useNav } from '../../app/nav';
 import { useT, type MessageKey } from '../../i18n';
 import { Button } from '../../ui/Button';
 import { Icon } from '../../ui/Icon';
-import { SegmentRing } from '../../ui/ProgressRing';
+import { DayRing, dutyFills } from '../../ui/DayRing';
+import { noteDayOpen } from './dayMoment';
 import { topicName } from '../grammar/topicUi';
 import { ExtraRow } from './ExtraRow';
 import { Skeleton } from '../../ui/Skeleton';
@@ -181,12 +182,12 @@ function UnitCard({ view, rows, minLeft, fixNone }: { view: TodayView; rows: Car
       onClickCapture={(e) => armShared('lx-hero', e.currentTarget)}
     >
       <div className="flex items-center gap-3.5">
-        <SegmentRing segments={Math.max(1, total)} done={done} size={112} stroke={8} label={t('nbHeuteRingLabel', { done, total })}>
+        <DayRing fills={dutyFills(view.duties.items)} size={112} stroke={8} label={t('nbHeuteRingLabel', { done, total })}>
           <span className="flex flex-col items-center gap-0.5">
             <span className="text-2xl leading-none font-semibold tracking-tight">{minLeft}</span>
             <span className="text-xs font-normal text-subtle">{t('hxTodayRingOpen')}</span>
           </span>
-        </SegmentRing>
+        </DayRing>
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
           <h2 id="td-unit-title" className="text-lg leading-7 font-semibold tracking-tight text-balance" data-testid="today-title">
             {title}
@@ -321,12 +322,14 @@ export function TodayScreen() {
   const seenOpen = useRef(false);
   useEffect(() => {
     if (!ready || !dayLoaded) return;
-    if (view.status === 'open') seenOpen.current = true;
-    else if (view.status === 'allDone' && seenOpen.current) {
+    if (view.status === 'open') {
+      seenOpen.current = true;
+      noteDayOpen(view.day);
+    } else if (view.status === 'allDone' && seenOpen.current) {
       seenOpen.current = false;
       void maybeAutoAssess(Date.now());
     }
-  }, [ready, dayLoaded, view.status]);
+  }, [ready, dayLoaded, view.status, view.day]);
 
   const unit = isUnitPlan(plan) ? plan : null;
   const up = useMemo(() => (unit ? unitPlanOf(unit, null) : null), [unit]);

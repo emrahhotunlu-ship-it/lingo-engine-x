@@ -17,6 +17,7 @@ import { dayKey } from '../../domain/date';
 import { setLogContext } from '../../platform/diagnostics';
 import { deepLinkApplied, isSystemScreen, useDeepLink, useEnsureDay, useScreen, type SystemScreen } from '../boot';
 import { useNav } from '../nav';
+import { useClock } from '../clock';
 import { resumables } from '../registry';
 import { installResume, useAutoResume } from '../resume';
 import { routeToString } from '../router/deeplink';
@@ -29,6 +30,8 @@ import { SheetHost } from './SheetHost';
 import { TabBar } from './TabBar';
 import { tabOfPlace, type Place } from './tabs';
 import { TopBar } from './TopBar';
+import { AmbientLight } from '../../engine/fx/AmbientLight';
+import { LevelUpHost } from '../../ui/moments/LevelUp';
 
 // App-Rahmen (docs/neubau/architektur.md §2.2): Kopf · Ebenen · Reiterleiste · Blätter · Hinweise,
 // dazu die Wurzel-Fehlergrenze, das Fortsetzen nach Neuladen und der Diagnose-Kontext.
@@ -95,6 +98,8 @@ function Frame() {
   const exercise = !system && kind === 'exercise';
   // Design-Lead: aktiver Reiter am Wurzelelement (Bereichslicht und Reiterfarbe in `styles/parts/dz.css`), reine Darstellung.
   const activeTab = useNav((s) => s.tab);
+  const routeName = useNav((s) => s.route.name);
+  const today = useClock((s) => s.today);
   useEffect(() => {
     const root = document.documentElement;
     root.setAttribute('data-lx-tab', activeTab);
@@ -104,6 +109,7 @@ function Frame() {
 
   return (
     <>
+      <AmbientLight scene={`${activeTab}:${kind}:${routeName}:${String(screen)}`} exercise={exercise} day={today} />
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-xl focus:bg-surface-solid focus:px-4 focus:py-3"
@@ -129,6 +135,7 @@ function Frame() {
       <Toaster />
       <CompanionLayer />
       <LookupLayer />
+      <LevelUpHost />
     </>
   );
 }

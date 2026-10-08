@@ -14,11 +14,12 @@ import { isPhraseCard } from '../../../domain/srs/vocabList';
 import { EnglishText } from '../../../engine/EnglishText';
 import { useHiddenInput } from '../../../engine/HiddenInput';
 import { SpeakButton } from '../../../engine/SpeakButton';
-import { classifySwipe, swipeExcluded } from '../../../engine/swipe';
+import { useCardSwipe } from '../../../engine/cardSwipe';
 import { useHotkeys } from '../../../engine/useHotkeys';
 import { useT, type MessageKey } from '../../../i18n';
 import { ExerciseShell, Explanation, Examples } from '../../../ui/exercise';
 import { GradeButtons } from '../../../ui/GradeButtons';
+import { StackBehind } from '../../../ui/CardStack';
 import { nextT } from '../../progress/persist';
 import { useDecks } from '../decksStore';
 import { WordExtras } from '../WordExtras';
@@ -52,7 +53,8 @@ function idle(fn: () => void): void {
   else window.setTimeout(fn, 60);
 }
 
-export function FlipCard({ exercise, again = false, onDone }: { exercise: Exercise; again?: boolean; onDone: (kind: FirstKind) => void }) {
+/** `behind` = noch kommende Karten (P54: höchstens zwei Kanten hinter der Vorderseite). */
+export function FlipCard({ exercise, again = false, onDone, behind = 0 }: { exercise: Exercise; again?: boolean; onDone: (kind: FirstKind) => void; behind?: number }) {
   const { t, lang } = useT();
   const api = useHiddenInput();
   const ai = useAiAvailable();
@@ -147,32 +149,15 @@ export function FlipCard({ exercise, again = false, onDone }: { exercise: Exerci
     gradeRef.current = grade;
     suggestRef.current = shown?.suggest ?? null;
   });
-  useEffect(() => {
-    let start: { x: number; y: number; t: number; id: number } | null = null;
-    const down = (ev: TouchEvent) => {
-      const p = ev.touches.length === 1 ? ev.touches[0] : undefined;
-      if (!p || suggestRef.current === null || document.querySelector('[role="dialog"][aria-modal="true"]') || swipeExcluded(ev.target, p.clientX, window.innerWidth)) {
-        start = null;
-        return;
-      }
-      start = { x: p.clientX, y: p.clientY, t: ev.timeStamp, id: p.identifier };
-    };
-    const up = (ev: TouchEvent) => {
-      const s = start;
-      start = null;
-      if (!s || suggestRef.current === null) return;
-      const p = Array.from(ev.changedTouches).find((x) => x.identifier === s.id);
-      const dirn = p ? classifySwipe(s, { x: p.clientX, y: p.clientY, t: ev.timeStamp }) : null;
-      if (dirn === 'left') gradeRef.current(1);
-      else if (dirn === 'right') gradeRef.current(suggestRef.current);
-    };
-    window.addEventListener('touchstart', down, { passive: true });
-    window.addEventListener('touchend', up, { passive: true });
-    return () => {
-      window.removeEventListener('touchstart', down);
-      window.removeEventListener('touchend', up);
-    };
-  }, []);
+  // P54: auf der Karte folgt sie dem Finger (Achse rastet nach 10 px ein); die Entscheidung bleibt `classifySwipe` (`engine/cardSwipe.ts`).
+  const rootRef = useRef<HTMLDivElement>(null);
+  useCardSwipe(rootRef, {
+    enabled: shown !== null,
+    onLeft: () => gradeRef.current(1),
+    onRight: () => {
+      if (suggestRef.current !== null) gradeRef.current(suggestRef.current);
+    },
+  });
 
   const src = { area: 'trainer' as const, source: card.path, title: card.word };
   const mask = useMemo(() => maskOf(card.context?.gap ?? card.word), [card]);
@@ -207,6 +192,7 @@ export function FlipCard({ exercise, again = false, onDone }: { exercise: Exerci
           {meaning}
         </p>
         {ctx && !shown && <EnglishText as="p" className="max-w-[34ch] text-muted" text={ctx.sentence} {...src} slot={{ start: ctx.start, end: ctx.end, node: gapNode }} testId="flip-sentence" />}
+        {!shown && <StackBehind n={behind} />}
       </div>
     ) : (
       <div className="dz-flip flex flex-col items-center gap-3 text-center">
@@ -214,6 +200,7 @@ export function FlipCard({ exercise, again = false, onDone }: { exercise: Exerci
           {card.word}
         </p>
         {ctx && !shown && <EnglishText as="p" className="max-w-[34ch] text-muted" text={ctx.sentence} {...src} highlight={[ctx.start, ctx.end]} testId="flip-sentence" />}
+        {!shown && <StackBehind n={behind} />}
       </div>
     );
   const back = shown ? (
@@ -255,6 +242,11 @@ export function FlipCard({ exercise, again = false, onDone }: { exercise: Exerci
 
   return (
     <div
+      ref={rootRef}
+      className="lx-swipe-card"
+      // Beschriftung der Färbung beim Wischen (CSS `attr()`, kein zweiter Text im Baum).
+      data-swipe-left={shown ? t('nbWsGrade1') : undefined}
+      data-swipe-right={shown ? t(GRADE_KEY[shown.suggest]) : undefined}
       data-testid="flip"
       data-card={card.id}
       data-kind={card.kind}

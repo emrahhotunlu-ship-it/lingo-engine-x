@@ -1,0 +1,15 @@
+{
+  "v": 1,
+  "round": {
+    "right": 8,
+    "total": 10,
+    "ups": [
+      { "id": "d1", "word": "in hindsight", "to": "firm" },
+      { "id": "d2", "word": "leverage", "to": "safe" },
+      { "id": "d3", "word": "to iron out", "to": "safe" },
+      { "id": "d4", "word": "albeit", "to": "learning" }
+    ]
+  },
+  "day": { "fills": [1, 1, 1, 1], "before": "9", "hero": "12" },
+  "level": ["ch3", "c1ready", "fest500"]
+}

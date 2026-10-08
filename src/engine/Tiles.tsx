@@ -1,4 +1,6 @@
 import { motion, useReducedMotion } from 'framer-motion';
+import { useFxLevel } from './fx/level';
+import { SPRINGS } from '../ui/motion';
 import { useLayoutEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
 import { createPortal } from 'react-dom';
 import type { Tile } from '../domain/drills/order';
@@ -37,6 +39,7 @@ type Drag = { id: number; from: 'pool' | 'line'; x0: number; y0: number; dx: num
 
 export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabels, slots, poolTarget = null, inline = false }: Props) {
   const reduce = useReducedMotion();
+  const fx = useFxLevel();
   const line = useRef<HTMLDivElement>(null);
   const refs = useRef(new Map<number, HTMLButtonElement>());
   const [drag, setDrag] = useState<Drag | null>(null);
@@ -170,7 +173,9 @@ export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabe
     return (
       <motion.button
         key={id}
-        layout={!reduce && !dragging}
+        // P54 (EE B9): Bausteine gleiten mit `settle` an ihren Platz; Stufe „Aus“ und reduzierte Bewegung ohne Layout-Bewegung.
+        layout={!reduce && fx !== 'off' && !dragging}
+        transition={{ layout: SPRINGS.settle }}
         ref={(el: HTMLButtonElement | null) => {
           if (el) refs.current.set(id, el);
           else refs.current.delete(id);
@@ -185,7 +190,7 @@ export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabe
         data-selected={(where === 'line' && !mark && !locked) || undefined}
         data-dragging={dragging || undefined}
         disabled={locked}
-        style={{ ...(where === 'pool' && !locked ? { touchAction: 'pan-y' } : null), ...(dragging ? { transform: `translate(${drag.dx}px, ${drag.dy}px)`, position: 'relative' } : null) }}
+        style={{ ...(where === 'pool' && !locked ? { touchAction: 'pan-y' } : null), ...(dragging ? { transform: `translate(${drag.dx}px, ${drag.dy}px)`, position: 'relative' } : null), ...(mark ? { ['--lx-mark-i' as string]: String(Math.max(0, placed.indexOf(id))) } : null) }}
         onPointerDown={(e) => onPointerDown(e, id, where)}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}

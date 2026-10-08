@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { CardStack } from '../../ui/CardStack';
 import { useEffect, useLayoutEffect } from 'react';
 import { leaveBack, useNav } from '../../app/nav';
 import { patternById } from '../../domain/grammar/patterns';
@@ -6,7 +6,6 @@ import { patternState, type PatternState } from '../../domain/metrics/pattern';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { useT } from '../../i18n';
-import { DURATION, EASE_OUT } from '../../ui/motion';
 import { SessionEnd } from '../../ui/SessionEnd';
 import { STATE_DOTS } from '../../ui/exercise';
 import { flush } from '../progress/persist';
@@ -65,9 +64,8 @@ export function GrammarSessionScreen() {
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="grammar-session" data-mode={s.mode} data-ctx={s.ctx} data-profile={s.profile}>
       <RoundTop onClose={leave} progress={grammarProgress(s)} ctx={s.ctx} duty="ch:gram" />
-      {/* Leistung (N45): kein Warten auf das Ausblenden – die nächste Aufgabe steht sofort da
-          und blendet nur kurz ein (≤ 150 ms, Deckkraft/Verschieben). */}
-      <motion.div key={s.status === 'summary' ? 'summary' : showCards ? `intro-${s.step}` : `g-${s.step}`} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: DURATION.fast, ease: EASE_OUT }}>
+      {/* Leistung (N45): kein Warten auf das Ausblenden – die nächste Aufgabe steht sofort da und rückt aus dem Kartenstapel nach vorn (P54, ≤ 300 ms). */}
+      <CardStack stackKey={s.status === 'summary' ? 'summary' : showCards ? `intro-${s.step}` : `g-${s.step}`}>
         {showCards && s.intro ? (
           <IntroFlow
             topic={s.intro.topic}
@@ -88,7 +86,7 @@ export function GrammarSessionScreen() {
             <GrammarEnd lang={lang} />
           </div>
         )}
-      </motion.div>
+      </CardStack>
     </div>
   );
 }
