@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { boot, bootAt, openTab, screen, SEED_EVENING } from './fixtures';
-import { answerGrammar, grammarKey, nextItem, shownPrompt, skipMiniLesson } from './learnHelpers';
+import { answerGrammar, grammarKey, nextItem, openAllChapters, openTopicList, shownPrompt, skipMiniLesson } from './learnHelpers';
 import { DAY, dump, type Dump } from './trainerHelpers';
 
 // Grammatik (phase2-plan §5.2, §9.3): Runden mit allen vier Aufgabentypen, Ergebnis an fester
@@ -116,6 +116,7 @@ test('freie Runde vollständig: richtig und falsch mit Vergleich, Form-Hinweis u
 test('Themenrunde: Satzkorrektur, Umformen und Lücke; deutlich andere freie Antwort ist sofort falsch, ohne auf Claude zu warten (27.09.)', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true });
   await openGrammar(page);
+  await openAllChapters(page);
   await page.locator('[data-testid="topic"][data-topic="used-to"]').click();
   await expect(page.getByTestId('rule-sheet')).toBeVisible();
   await page.getByTestId('topic-start').click();
@@ -156,6 +157,7 @@ test('Auswahl, Lücke, Umformen, Satzkorrektur: alle vier Typen über zwei Runde
   const a = await playRound(page);
   await page.getByTestId('session-end-secondary').or(page.getByTestId('session-end-next')).first().click();
   await openGrammar(page);
+  await openAllChapters(page);
   await page.locator('[data-testid="topic"][data-topic="used-to"]').click();
   await page.getByTestId('topic-start').click();
   await skipMiniLesson(page);
@@ -190,6 +192,7 @@ test('Fehler von heute kommt am nächsten Tag in der Wiederholung', async ({ bro
   const b2 = await boot(p2, { now: next, fake: { seed: state } });
   await openGrammar(p2);
   await expect(p2.getByTestId('hub-errors')).toBeVisible();
+  await openAllChapters(p2);
   await p2.locator(`[data-testid="topic"][data-topic="${missed.topic}"]`).click();
   await p2.getByTestId('topic-start').click();
   await expect(p2.getByTestId('grammar-session')).toHaveAttribute('data-mode', 'topic');
@@ -214,6 +217,7 @@ test('Fehler von heute kommt am nächsten Tag in der Wiederholung', async ({ bro
 test('Regelblatt: Wörter antippbar (Bedeutung, Lautschrift)', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true });
   await openGrammar(page);
+  await openAllChapters(page);
   await page.locator('[data-testid="topic"][data-topic="passive"]').click();
   const sheet = page.getByTestId('rule-sheet');
   await expect(sheet).toBeVisible();
@@ -229,6 +233,7 @@ test('Regelblatt: Wörter antippbar (Bedeutung, Lautschrift)', async ({ page }) 
 test('Pfad: 47 Themen in Lehrreihenfolge mit Zustand; Englisch: Formmuster ohne deutsche Fachwörter', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true, lang: 'en' });
   await openGrammar(page);
+  await openTopicList(page);
   const ids = await page.getByTestId('topic').evaluateAll((els) => els.map((e) => e.getAttribute('data-topic') ?? ''));
   // 16 alte + 16 neue Themen des Grammatik-Pfads + 7 des C1-Werkzeugkastens + 4 neue Themen (P36), alle in einer Liste (Lehrplan Kap. 4).
   expect(ids).toHaveLength(47);
@@ -243,6 +248,7 @@ test('Pfad: 47 Themen in Lehrreihenfolge mit Zustand; Englisch: Formmuster ohne 
   await expect(page.locator('[data-testid="topic"][aria-current="step"]')).toHaveCount(1);
   const next = await page.getByTestId('hub-next-topic').getAttribute('data-topic');
   await expect(page.locator(`[data-testid="topic"][data-topic="${next}"]`)).toHaveAttribute('aria-current', 'step');
+  await openAllChapters(page);
   await page.locator('[data-testid="topic"][data-topic="passive"]').click();
   // Mit Musterdatei (passive hat eine) zeigt das Themenblatt die Formeln der Muster; ohne das Regelblatt die Formmuster.
   const patterns = page.getByTestId('rule-sheet').locator('[data-testid="rule-pattern"], [data-testid="pattern-formula"]');
@@ -256,6 +262,7 @@ test('Pfad: 47 Themen in Lehrreihenfolge mit Zustand; Englisch: Formmuster ohne 
 test('ohne KI (?fake=nosample): kein Absturz, keine KI-Knöpfe, freie Antwort „nicht sicher prüfbar"', async ({ page }) => {
   const { errors, external } = await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
   await openGrammar(page);
+  await openAllChapters(page);
   await page.locator('[data-testid="topic"][data-topic="used-to"]').click();
   await expect(page.getByTestId('rule-sheet')).toBeVisible();
   await expect(page.locator('[data-ai]')).toHaveCount(0);

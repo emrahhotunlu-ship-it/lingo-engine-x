@@ -31,6 +31,7 @@ import { TabBar } from './TabBar';
 import { tabOfPlace, type Place } from './tabs';
 import { TopBar } from './TopBar';
 import { AmbientLight } from '../../engine/fx/AmbientLight';
+import { GateHost } from '../../features/c1/gate/GateHost';
 import { LevelUpHost } from '../../ui/moments/LevelUp';
 
 // App-Rahmen (docs/neubau/architektur.md §2.2): Kopf · Ebenen · Reiterleiste · Blätter · Hinweise,
@@ -135,6 +136,7 @@ function Frame() {
       <Toaster />
       <CompanionLayer />
       <LookupLayer />
+      <GateHost />
       <LevelUpHost />
     </>
   );

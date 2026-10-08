@@ -8,6 +8,8 @@ import { Sheet } from '../../ui/Sheet';
 import { topicName } from '../grammar/topicUi';
 import { filmForTopics } from '../../domain/c1/anim';
 import { FilmLauncher, filmEnabled } from './film/FilmLauncher';
+import { GateSection } from './gate/GateCard';
+import { flags } from '../../app/flags';
 
 // Kapitelblatt (Lernplattform 3.0 P32): ein Kapitel des C1-Programms mit Ziel („Abgeschlossen heißt …“), den Themen mit Ring „Muster sicher a/b“,
 // der Prüfungsfokus und der Satz für den Lehrer. Alle Zahlen kommen aus `chapterState` (eine Quelle); das Blatt rechnet nichts selbst.
@@ -93,6 +95,8 @@ export function ChapterSheet({ open, chapter, progress, onClose }: { open: boole
               })}
             </ul>
           </section>
+
+          {flags.program && <GateSection chapter={chapter.n} />}
 
           <section className="flex flex-col gap-1" aria-labelledby="px-ch-exam">
             <h3 id="px-ch-exam" className="lx-eyebrow">

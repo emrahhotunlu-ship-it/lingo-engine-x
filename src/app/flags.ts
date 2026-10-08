@@ -1,6 +1,6 @@
 // Funktionsschalter (Lernplattform 3.0 §10.0 Nr. 7). Ein Paket schaltet seine Funktion erst im letzten Schritt ein.
-// Alle Schalter sind zunächst `false`; die Pakete von Release 1 setzen `c1xKinds.<art>` auf `true`, sobald Rahmen, Wertung,
-// Buchung und Inhalte der Art stehen.
+// Die Schalter sind zunächst `false`; die Pakete von Release 1 setzen `c1xKinds.<art>` auf `true`, sobald Rahmen, Wertung, Buchung und Inhalte der Art
+// stehen. `program` (R3 „Dein Weg“) steht seit 08.10.2026 auf `true`; `lx:flags` = `{"program":false}` schaltet ihn je Gerät wieder ab.
 import type { C1Kind } from '../domain/c1x/types';
 import { local } from '../platform/storage';
 
@@ -21,7 +21,7 @@ export const flags: Flags = {
   slotPlan: false,
   tempo: true,
   c1check: false,
-  program: false,
+  program: true,
   tutor: { explain: false, gen: false, diagnose: false, clinic: false },
   fx: { moments: false, rings: false, sparks: false, field: false, sky: true, film: true },
 };

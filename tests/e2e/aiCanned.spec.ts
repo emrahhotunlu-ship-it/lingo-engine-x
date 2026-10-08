@@ -3,7 +3,7 @@ import { legacyTaskKey } from '../../src/domain/grammar/key';
 import bank from '../../src/content/grammar-bank.json' with { type: 'json' };
 import { expect, test, type Page } from '@playwright/test';
 import { boot, screen, openTab } from './fixtures';
-import { skipMiniLesson } from './learnHelpers';
+import { openTopicList, skipMiniLesson } from './learnHelpers';
 import { dump } from './trainerHelpers';
 
 // KI-Wege, die bisher ohne feste Testantwort waren (Prüfbericht): „Mit Claude ergänzen",
@@ -85,6 +85,7 @@ test('„Neue Aufgaben zu {Thema}": gespeichert im Pool und in der nächsten The
   await openTab(page, 'learn');
   await expect(page.getByTestId('learn-hub')).toBeVisible();
   // Das erste Thema, bei dem der Knopf erscheint (weniger als 8 ungesehene Aufgaben).
+  await openTopicList(page);
   const topics = await page.getByTestId('topic').evaluateAll((els) => els.map((e) => e.getAttribute('data-topic') ?? ''));
   let found = '';
   for (const tp of topics) {

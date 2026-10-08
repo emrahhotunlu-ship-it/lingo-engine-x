@@ -3,7 +3,7 @@ import { boot, bootAt, layoutProblems, openApplyFolds, openTab, screen } from '.
 import { setInputProfile } from './input';
 import { NO_GRAMMAR_ERRORS } from './heuteHelpers';
 import { writes } from './trainerHelpers';
-import { openAllChapters, skipMiniLesson } from './learnHelpers';
+import { openAllChapters, openTopicList, skipMiniLesson } from './learnHelpers';
 
 // Paket P2 (docs/neubau/plan.md §4.3), umgebaut zum Grammatik-Pfad (W5): Hub mit Weiter-Karte, Pfad, Fehler und Extra, jede Übung ≤ 2 Tipps ab
 // Grammatik, Tageseinheit Block 4 (Fokus, Mini-Drill bei Fallen-Korrektur) und Block 5 (beide
@@ -28,8 +28,12 @@ test('Grammatik-Reiter: Weiter-Karte, Pfad mit allen Themen, Fehler korrigieren,
   await expect(page.getByTestId('hub-next-start')).toBeVisible();
   // Der Pfad: alle 47 Themen in Lehrreihenfolge, je Thema ein Zustand.
   // Handy: nur das aktuelle Kapitel ist offen („Du bist hier“); alle sieben aufklappen.
+  await openTopicList(page);
   await expect(page.getByTestId('chapter')).toHaveCount(7);
-  await expect(page.getByTestId('chapter-here')).toHaveCount(1);
+  // Mit Programm zeigt nur die C1-Reise „Du bist hier“ (UX-Prüfung B2); der Pfad markiert das aktuelle Kapitel nur als Zustand.
+  await expect(page.locator('[data-testid="chapter"][data-here="true"]')).toHaveCount(1);
+  await expect(page.getByTestId('program-here')).toHaveCount(1);
+  await expect(page.getByTestId('chapter-here')).toHaveCount(0);
   await openAllChapters(page);
   await expect(page.locator('[data-testid="topic"]')).toHaveCount(47);
   const states = await page.getByTestId('topic').evaluateAll((els) => els.map((e) => e.getAttribute('data-state')));

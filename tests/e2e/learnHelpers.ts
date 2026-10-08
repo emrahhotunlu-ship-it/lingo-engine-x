@@ -311,6 +311,12 @@ export async function skipMiniLesson(page: Page): Promise<void> {
   await expect(item.first()).toBeVisible();
 }
 
+/** Klappt nur die Themenliste „Alle … Themen“ auf (seit dem Schalter `program` Standard eingeklappt; ohne Schalter nichts zu tun). */
+export async function openTopicList(page: Page): Promise<void> {
+  const all = page.locator('[data-testid="hub-all-topics"][aria-expanded="false"]');
+  if ((await all.count()) > 0) await all.first().click();
+}
+
 /** Klappt alle Kapitel des Grammatik-Lernwegs auf (am Handy ist nur das aktuelle offen, Lernplattform 2.0 §2.4). */
 export async function openAllChapters(page: Page): Promise<void> {
   // Mit Schalter `program` steht die Themenliste eingeklappt unter „Alle … Themen“.

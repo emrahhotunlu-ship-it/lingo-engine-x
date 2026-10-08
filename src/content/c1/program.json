@@ -36,7 +36,14 @@
     }
    },
    "note": "This month I'm working on tenses: Past Simple versus Present Perfect, and by versus until. Could you create speaking situations where I need them, for example a project update?",
-   "weeks": 3.5
+   "weeks": 3.5,
+   "use": {
+    "de": "Projektstatus im Lenkungskreis",
+    "en": "Project status in the steering committee",
+    "ex": [
+     "Since we went live in March, we've processed more than 1.2 million invoices, and we had already migrated the legacy archive before the audit started."
+    ]
+   }
   },
   {
    "id": "k2",
@@ -69,7 +76,14 @@
     }
    },
    "note": "This month I'm working on talking about the future: plans, deadlines and forecasts. Could you create speaking situations where I need them, for example giving a status update before a deadline?",
-   "weeks": 2.5
+   "weeks": 2.5,
+   "use": {
+    "de": "Roadmap-Termin beim Kunden",
+    "en": "Roadmap date with a customer",
+    "ex": [
+     "The e-invoicing module is due to launch in Q3, and by the end of the year we will have moved all customers to the new platform."
+    ]
+   }
   },
   {
    "id": "k3",
@@ -101,7 +115,15 @@
     }
    },
    "note": "This month I'm working on conditionals and polite distance in negotiations. Could you create speaking situations where I need them, for example agreeing terms with a client?",
-   "weeks": 2
+   "weeks": 2,
+   "use": {
+    "de": "Preisverhandlung und Rückblick auf eine Eskalation",
+    "en": "Price negotiation and looking back at an escalation",
+    "ex": [
+     "Provided that you commit to a three-year term, we can include the migration at no extra cost.",
+     "Had we involved IT earlier, we wouldn't be facing this delay now."
+    ]
+   }
   },
   {
    "id": "k4",
@@ -137,7 +159,15 @@
     }
    },
    "note": "This month I'm working on the passive and on reporting what others said. Could you create speaking situations where I need them, for example summarising a meeting or an audit result?",
-   "weeks": 3.5
+   "weeks": 3.5,
+   "use": {
+    "de": "Fragebogen der IT-Sicherheit",
+    "en": "IT security questionnaire",
+    "ex": [
+     "All documents are encrypted at rest, and every access is logged in a tamper-proof audit trail.",
+     "We recommend that the archive be migrated before go-live."
+    ]
+   }
   },
   {
    "id": "k5",
@@ -170,7 +200,14 @@
     }
    },
    "note": "This month I'm working on modal verbs for assessing risks and softening criticism. Could you create speaking situations where I need them, for example discussing a risk with a colleague?",
-   "weeks": 2
+   "weeks": 2,
+   "use": {
+    "de": "Ein Risiko vorsichtig ansprechen",
+    "en": "Raising a risk carefully",
+    "ex": [
+     "The rollout may well take longer than planned, so it might be worth building in a two-week buffer."
+    ]
+   }
   },
   {
    "id": "k6",
@@ -209,7 +246,15 @@
     }
    },
    "note": "This month I'm working on verb patterns, prepositions and phrasal verbs. Could you create speaking situations where I need them, for example phoning a supplier about a late delivery?",
-   "weeks": 5
+   "weeks": 5,
+   "use": {
+    "de": "Mail an einen Interessenten",
+    "en": "Email to a prospect",
+    "ex": [
+     "Our solution prevents duplicate invoices from entering the approval workflow.",
+     "We look forward to hearing from you."
+    ]
+   }
   },
   {
    "id": "k7",
@@ -250,7 +295,15 @@
     }
    },
    "note": "This month I'm working on inversion and cleft sentences. Could you create speaking situations where I need them, for example presenting a proposal and stressing the key point?",
-   "weeks": 5
+   "weeks": 5,
+   "use": {
+    "de": "Pitch vor der Geschäftsführung",
+    "en": "Pitch to the management board",
+    "ex": [
+     "Not only does the platform cut invoice processing time in half, it also keeps you audit-ready at all times.",
+     "What our customers value most is the complete audit trail."
+    ]
+   }
   }
  ]
 }

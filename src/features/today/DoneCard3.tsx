@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { emit } from '../../engine/fx';
 import { startMoment } from '../../engine/fx/measure';
 import { useClock } from '../../app/clock';
+import { chapterById } from '../../domain/c1/chapters';
 import { levelUpFor } from '../../domain/moments/detect';
 import { offerLevelUp } from '../../ui/moments/store';
 import { useT } from '../../i18n';
@@ -24,6 +25,19 @@ import type { TodayView } from './state';
 // in fester Reihenfolge: 1 Wahrheitszeile · 2 Meilenstein ODER nächstes Ziel · 3 „Morgen …“ · 4 Wochenstreifen mit „Serie 12 · Woche 4 von 6“.
 // Am ersten Tag nach einer Pause von mindestens 3 Lerntagen heißt die Überschrift „Erster Tag zurück“. Ein Zustand, kein Knopf, kein Konfetti.
 // Jede Zahl kommt aus den Selektoren (`domain/metrics`); die Serienregel selbst bleibt unberührt.
+
+/** Der Satz zu einem Meilenstein (Zeile 2 der Abschlusskarte). */
+function milestoneText(ms: { id: string; n?: number }, t: ReturnType<typeof useT>['t'], lang: 'de' | 'en'): string {
+  if (ms.id.startsWith('fest')) return t('nbHeuteMsFest', { n: ms.n ?? 0 });
+  if (ms.id === 'topic1') return t('nbHeuteMsTopic');
+  if (ms.id === 'fix10') return t('nbHeuteMsFix', { n: ms.n ?? 0 });
+  if (ms.id === 'place') return t('moMsPlace');
+  if (ms.id === 'c1check1') return t('moMsCheck');
+  if (ms.id === 'c1ready') return t('moMsC1');
+  const ch = /^ch([1-7])$/.exec(ms.id);
+  if (ch) return t('moMsChapter', { n: Number(ch[1]), name: chapterById(Number(ch[1]))?.name[lang] ?? '' });
+  return t('nbHeuteMsOver');
+}
 
 /** Pause in Lerntagen, ab der der erste Tag danach „Erster Tag zurück“ heißt. */
 export const BACK_GAP = 3;
@@ -125,7 +139,7 @@ export function DoneCard3({ view, tomorrow, today }: { view: TodayView; tomorrow
   ].filter((x): x is string => x !== null);
   // Zeile 2: entweder der Meilenstein-Satz oder das nächste Ziel, nie beides.
   const ms = facts.milestone;
-  const msText = ms ? (ms.id.startsWith('fest') ? t('nbHeuteMsFest', { n: ms.n ?? 0 }) : ms.id === 'topic1' ? t('nbHeuteMsTopic') : ms.id === 'fix10' ? t('nbHeuteMsFix', { n: ms.n ?? 0 }) : t('nbHeuteMsOver')) : null;
+  const msText = ms ? milestoneText(ms, t, lang) : null;
   const goalText = !msText && facts.goal ? t(facts.goal.key, facts.goal.params) : null;
   const ringRef = useRef<HTMLSpanElement>(null);
   const play = usePlayOnce(today, ringRef);
