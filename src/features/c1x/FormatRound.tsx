@@ -4,6 +4,7 @@ import type { UnitBlockNo } from '../../app/unit/types';
 import { useLive } from '../../data/live';
 import { FORMAT_MIN, FORMAT_N } from '../../domain/c1/checkSchedule';
 import { kindRound } from '../../domain/grammar/kindRound';
+import { lexDoneSet } from './lexDone';
 import type { Step3Fmt } from '../../domain/plan/types';
 import { startGrammar } from '../grammar/session';
 import { ensureC1xLoaded } from './resolve';
@@ -19,7 +20,7 @@ type Docs = ReadonlyMap<string, Readonly<Record<string, unknown>>>;
 export function formatAvailable(fmt: Step3Fmt, docs: Docs, day: string): boolean {
   if (!flags.c1xKinds[fmt]) return false;
   ensureC1xLoaded();
-  return kindRound({ kind: fmt, size: FORMAT_N[fmt], grammarDocs: docs, seed: `${day}|fmt` }).length >= FORMAT_MIN;
+  return kindRound({ kind: fmt, size: FORMAT_N[fmt], grammarDocs: docs, seed: `${day}|fmt`, lexDone: lexDoneSet() }).length >= FORMAT_MIN;
 }
 
 export type FormatStart = { route: Route; first: 'typed' | 'choice' | null };

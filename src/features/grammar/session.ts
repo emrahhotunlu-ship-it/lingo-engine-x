@@ -6,6 +6,7 @@ import { useSettings } from '../../app/settings';
 import { answerRight } from '../../domain/learn/right';
 import { flags } from '../../app/flags';
 import { kindRound } from '../../domain/grammar/kindRound';
+import { lexDoneSet } from '../c1x/lexDone';
 import type { C1Kind } from '../../domain/c1x/types';
 import { c1ErrorResolver, ensureC1xLoaded } from '../c1x/resolve';
 import { useLive } from '../../data/live';
@@ -216,7 +217,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
 
   if (o.kind) {
     // Anwenden: eine Runde nur einer c1x-Art, über die eingeführten Muster.
-    tasks = kindRound({ kind: o.kind, size: o.size ?? 6, grammarDocs: docs, seed, wordsToday: words });
+    tasks = kindRound({ kind: o.kind, size: o.size ?? 6, grammarDocs: docs, seed, wordsToday: words, lexDone: lexDoneSet() });
   } else if (o.pat && o.topic) {
     // Ein Muster üben (Themenblatt): 4 Aufgaben nur dieses Musters.
     tasks = selectRound({ ...common, mode: 'topic', size: 4, errorsMax: 0, introBlock: { topic: o.topic, pats: [o.pat] }, gt: null });

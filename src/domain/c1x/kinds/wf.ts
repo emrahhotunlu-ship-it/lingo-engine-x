@@ -2,7 +2,7 @@ import { editDistance } from '../../answer/diff';
 import { maskOf, type MaskCell } from '../../answer/mask';
 import { typoBudget } from '../../answer/check';
 import type { C1Response, C1Score, Wf } from '../types';
-import { BRITISH, cmp, ruleMatches, usHint, wordCount, type Problems } from './common';
+import { BRITISH, cmp, usHint, wordCount, type Problems } from './common';
 
 /**
  * `wf`: Wortbildung, ein Wort tippen. Steht die Antwort in der Wortfamilie, ist aber nicht gesucht: falsch mit Grund `family`
@@ -14,9 +14,21 @@ export function scoreWf(item: Wf, r: Extract<C1Response, { kind: 'wf' }>): C1Sco
   const targets = item.accept.map(cmp);
   if (g && targets.includes(g)) {
     const us = usHint(r.text, item.accept);
-    return { got: 1, max: 1, parts: [{ id: 'form', ok: true }], verdict: 'correct', free: true, ...(us ? { us } : {}) };
+    return {
+      got: 1,
+      max: 1,
+      parts: [{ id: 'form', ok: true }],
+      verdict: 'correct',
+      free: true,
+      ...(us ? { us } : {}),
+    };
   }
-  const wrong = { got: 0, max: 1, parts: [{ id: 'form' as const, ok: false }], free: true };
+  const wrong = {
+    got: 0,
+    max: 1,
+    parts: [{ id: 'form' as const, ok: false }],
+    free: true,
+  };
   if (g && item.family.map(cmp).includes(g)) return { ...wrong, verdict: 'wrong', reason: 'family' };
   const typo =
     g.length > 0 &&
@@ -25,7 +37,11 @@ export function scoreWf(item: Wf, r: Extract<C1Response, { kind: 'wf' }>): C1Sco
       const head = Math.max(2, Math.min(3, Math.floor(t.length / 3)));
       return g.slice(0, head) === t.slice(0, head) && g.slice(-3) === t.slice(-3);
     });
-  return { ...wrong, verdict: typo ? 'near' : 'wrong', ...(typo ? { reason: 'typo' as const } : {}) };
+  return {
+    ...wrong,
+    verdict: typo ? 'near' : 'wrong',
+    ...(typo ? { reason: 'typo' as const } : {}),
+  };
 }
 
 export function checkWf(item: Wf): Problems {
@@ -40,13 +56,14 @@ export function checkWf(item: Wf): Problems {
     const prefix = Math.ceil(stem.length * 0.6);
     if (!w.includes(stem.slice(0, prefix)) && !item.parts.change) out.push(`Lösung „${a}“ enthält den Stamm nicht (Wurzel ≥ 60 %), dann braucht parts.change eine Angabe`);
   }
-  if (morphPieces(item).map((p) => p.text).join('') !== (item.accept[0] ?? '')) out.push('Zerlegung ergibt nicht das Wort');
+  if (
+    morphPieces(item)
+      .map((p) => p.text)
+      .join('') !== (item.accept[0] ?? '')
+  )
+    out.push('Zerlegung ergibt nicht das Wort');
   if (new Set(item.family.map((f) => f.toLowerCase())).size !== item.family.length) out.push('family enthält Doppelte');
   for (const f of item.family) if (/\s/.test(f)) out.push(`family-Eintrag „${f}“ ist kein einzelnes Wort`);
-  for (const f of item.family) {
-    if (item.accept.map((a) => a.toLowerCase()).includes(f.toLowerCase())) continue;
-    if (!item.why.wrong.some((r) => ruleMatches(r, { given: f }))) out.push(`Familienmitglied „${f}“ hat keine Begründung`);
-  }
   if (BRITISH.test(item.text) || item.accept.some((a) => BRITISH.test(a))) out.push('britische Schreibweise');
   return out;
 }

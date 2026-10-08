@@ -40,18 +40,18 @@ export function useWfUi(ctrl: C1Ctrl): C1Ui {
       onChange={(v, info) => {
         setValue(v);
         const text = v.trim();
-        ctrl.setResponse(text ? { kind: 'wf', text } : null, { form: 'typed', chars: v.length, deletions: info.deleted });
+        ctrl.setResponse(text ? { kind: 'wf', text } : null, {
+          form: 'typed',
+          chars: v.length,
+          deletions: info.deleted,
+        });
         if (info.firstKey) ctrl.markFirstKey();
       }}
       onEnter={ctrl.submit}
     />
   );
   const m = GAP.exec(item.text);
-  const sentence = m ? (
-    <EnglishText as="p" testId="sentence" text={item.text} {...src} slot={{ start: m.index, end: m.index + m[0].length, node: gap }} />
-  ) : (
-    <EnglishText as="p" testId="sentence" text={item.text} {...src} />
-  );
+  const sentence = m ? <EnglishText as="p" testId="sentence" text={item.text} {...src} slot={{ start: m.index, end: m.index + m[0].length, node: gap }} /> : <EnglishText as="p" testId="sentence" text={item.text} {...src} />;
 
   return {
     aid: (
@@ -65,7 +65,10 @@ export function useWfUi(ctrl: C1Ctrl): C1Ui {
     maxTip: 2,
     tipText: (n) =>
       n === 1
-        ? t('cxWfTip1', { pos: t(`cxWfPos_${item.pos}` as MessageKey), pre: t(item.parts.pre ? 'cxWfPre_yes' : 'cxWfPre_no') })
+        ? t('cxWfTip1', {
+            pos: t(`cxWfPos_${item.pos}` as MessageKey),
+            pre: t(item.parts.pre ? 'cxWfPre_yes' : 'cxWfPre_no'),
+          })
         : t('cxWfTip2'),
     prompt: (
       <div className="flex flex-col gap-2" data-testid="c1x-wf" data-wf-pos={item.pos}>

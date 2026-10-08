@@ -142,10 +142,11 @@ export function ApplyHub() {
   const order = drill('order', 'grid', 'drOrder', 'lhOrderSub', 'grammar', touch);
   const cloze = drill('cloze', 'link', 'drCloze', 'lhClozeSub', 'cards', touch);
   const wordPartner = withMeta(entry('training-colloc'), touch, t('hxApplyWordPartner'));
-  const ruleTiles = [withMeta(entry('training-wordform'), touch), withMeta(entry('training-register'), touch), withMeta(entry('training-phrasal'), touch), withMeta(entry('training-transition'), touch)];
+  const oldWordform = entry('training-wordform');
+  const ruleTilesBase = [withMeta(oldWordform, touch), withMeta(entry('training-register'), touch), withMeta(entry('training-phrasal'), touch), withMeta(entry('training-transition'), touch)];
   const oldTransform = entry('training-transform');
   // Ist `kwt` angeboten, führt die Zeile „Umformen“ auf die Aufgabenart `kwt` (am Handy mit Bausteinen); gibt es dort nichts zu üben, gilt die alte Übung.
-  const startKind = (kind: 'kwt' | 'err', fallback?: () => void): void => {
+  const startKind = (kind: 'kwt' | 'err' | 'wf', fallback?: () => void): void => {
     const first = startGrammar({ mode: 'xtra', kind });
     if (!useGrammarSession.getState().tasks.length) {
       fallback?.();
@@ -156,6 +157,8 @@ export function ApplyHub() {
     go({ name: 'grammarSession', mode: 'xtra' });
   };
   const startKwt = (): void => startKind('kwt', () => oldTransform?.run());
+  // Ist `wf` angeboten, führt die Kachel „Wortbildung“ auf die Aufgabenart `wf` (Wort umbauen); gibt es dort nichts zu üben, gilt die alte Übung.
+  const startWf = (): void => startKind('wf', () => oldWordform?.run());
   const findErr: TileData | null = kindEnabled('err') ? { id: 'hub-find-err', icon: 'search', channel: 'grammar', title: t('hxApplyFindErr'), sub: t('hxApplyFindErrSub'), meta: touch, run: () => startKind('err', () => toast(t('hxApplyFindErrNone'))) } : null;
   const transform = kindEnabled('kwt') && oldTransform ? withMeta({ ...oldTransform, run: startKwt }, touch) : withMeta(oldTransform, laptop);
   const speak: TileData = { id: 'hub-speak', icon: 'chat', channel: 'speak', title: t('apRoleplay'), sub: t('apRoleplaySub'), meta: profile === 'touch' ? t('hxApplySpeakPhone') : laptop, run: () => go({ name: 'speak' }) };
@@ -165,6 +168,7 @@ export function ApplyHub() {
   const render = (xs: TileData[], featured?: string) => xs.map((x) => <Tile key={x.id} icon={x.icon} channel={x.channel} title={x.title} sub={x.sub} meta={x.meta} onClick={x.run} testId={x.id} featured={x.id === featured} />);
 
   // Reihenfolge nach Gerät (§2.6): Handy zuerst kurze Textübungen, Kopfhörer-Übungen danach, Laptop-Übungen eingeklappt; Laptop: Hören und Schreiben oben.
+  const ruleTiles = kindEnabled('wf') && oldWordform ? [withMeta({ ...oldWordform, run: startWf }, touch), ...ruleTilesBase.slice(1)] : ruleTilesBase;
   const phoneFirst = list([repair, wordPartner, order, ...ruleTiles, ...(kindEnabled('kwt') ? [transform] : []), findErr]);
   const featured = phoneFirst[0];
   const phoneRest = phoneFirst.slice(1);

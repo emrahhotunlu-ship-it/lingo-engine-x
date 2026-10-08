@@ -10,6 +10,7 @@ import { logError } from '../../platform/diagnostics';
 import { saveOut } from '../nbdrill/shared';
 import { nextT, recordAnswer } from '../progress/persist';
 import { saveCard } from '../vocab/persist';
+import { rememberLex } from './lexDone';
 
 // Buchung der betroffenen Wortkarten einer c1x-Aufgabe mit `lex[]` (Lernplattform 3.0 §3.4, Pflichtauflösung 5, P20). Die reine Regel steht in
 // `domain/c1x/lexBook.ts`; hier läuft nur das Schreiben: je betroffener Karte HÖCHSTENS EINE Wiederholung je Lerntag (über alle Quellen: der Trainer schreibt
@@ -52,6 +53,7 @@ export type LexWriteInput = {
 
 /** Bucht die Karten und den Verlaufseintrag. Fehler stehen im Protokoll und halten die Runde nie auf. */
 export async function bookLex(i: LexWriteInput): Promise<number> {
+  if (i.item.kind === 'wf' && !i.measure && !i.item.probe && !i.item.pool) rememberLex(i.item.id);
   if (i.measure || i.item.probe || i.item.pool) return 0;
   const nowMs = Date.now();
   if (bookedDay !== i.day) {

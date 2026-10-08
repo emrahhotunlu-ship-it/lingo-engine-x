@@ -18,7 +18,8 @@ export function MorphSplit({ pieces, animate = true, className }: MorphSplitProp
   const move = animate && !reduce;
   const mid = pieces.findIndex((p) => p.role === 'core');
   return (
-    <p className={`wf-split${className ? ` ${className}` : ''}`} lang="en" data-testid="morph-split" data-pieces={pieces.length} data-motion={move ? 'on' : 'off'} aria-label={pieces.map((p) => p.text).join('')}>
+    <p className={`wf-split${className ? ` ${className}` : ''}`} lang="en" data-testid="morph-split" data-pieces={pieces.length} data-motion={move ? 'on' : 'off'}>
+      <span className="sr-only">{pieces.map((p) => p.text).join('')}</span>
       {pieces.map((p, i) => {
         const from = i < mid ? 14 : i > mid ? -14 : 0;
         return (
