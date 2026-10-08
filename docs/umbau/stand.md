@@ -223,3 +223,10 @@ Tests: 1953 Unit; E2E der berührten Bildschirme grün (a11y: Kontrast der „Ne
 ## 07.10.2026 spät – Nachtauftrag Emrah: „bis morgen fertig mit neuem Design premium“
 - Design (W5–W11) in fokus zusammengeführt: `c01377e` (Unit 4693 grün, volle E2E läuft).
 - R6 gestartet in zwei Spuren (Opus): A `claude/umbau-r6-a` (P54–P57, P60), B `claude/umbau-r6-b` (P58, P59, P61 + 6 Pilotfilme). Danach: Lehrer-Prüfung der Filme, Zusammenführen, volle Tests, ux-reviewer, Test-Link mit Design + Premium. Live erst nach „Ja live nehmen“.
+
+## 08.10.2026 – Test-Link 7 (Premium-Design + R6)
+- R6-E UX-Korrekturen B1, B2, W1–W10 zusammengeführt (1e74094), Bilder `docs/umbau/design-vergleich/r6e-*.png`.
+- Dirigent-Sperrzeit nur für gleiches Urteil (46511db) → haptics.spec in voller Suite grün.
+- Volle E2E: 618 grün; rot nur perf.spec CPU 4× (5,0–5,4 s gegen 4 s). Gegenmessung: Stand Test-Link 6 (712d8f9) misst auf derselben Maschine 5,4–5,6 s → Umgebung, keine Regression. Grenze nicht angehoben. Unter 4 s nur mit Architektur-Änderung (Code-Aufteilung / Plan über 1500 Karten nach der Statuszeile) – offen für Entscheidung.
+- Unit 4759/4759 grün, typecheck grün, check:platform FREIGABE 4,85 MiB; lint: 9 bekannte Altfehler in scripts/*.mjs (src/tests sauber).
+- Test-Link `AXHkh6…` Version 50 `1791432328-9ec7` (Rückweg: Version 49 `1791405486-6ab2`). Live `JLL8…` unverändert v68 `1791365099-c789`.
