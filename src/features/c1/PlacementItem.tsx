@@ -139,7 +139,7 @@ function KwtBody({ item, set }: { item: Kwt; set: (r: C1Response | null) => void
       <div className="flex flex-col gap-0.5">
         <span className="lx-t-meta text-muted">{t('pxPlKwtSecond')}</span>
         <p className="lx-t-prompt" lang="en">
-          {`${item.before} ______ ${item.after}`.trim()}
+          {`${item.before} ______${/^[.,;:!?]/.test(item.after) ? '' : ' '}${item.after}`.trim()}
         </p>
       </div>
       <Tiles
