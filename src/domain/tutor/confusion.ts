@@ -24,7 +24,7 @@ export const PAIRS_MAX = 3;
 /** Ein Paar braucht mindestens so viele Belege. */
 export const PAIR_MIN = 2;
 /** Belegzeilen höchstens so viele UTF-8-Bytes (Prompt bleibt weit unter 8 KB). */
-export const EVIDENCE_MAX_BYTES = 5600;
+export const EVIDENCE_MAX_BYTES = 4900;
 
 export type ConfusionSources = {
   /** `grammar/<thema>` nach Thema. */
@@ -229,7 +229,7 @@ export function confusionOf(src: ConfusionSources, today: string): Confusion {
     const id = pr.confirmed ? `cf:${pr.a}>${pr.b}` : `pc:${pr.a}|${pr.b}`;
     lines.push(
       pr.confirmed
-        ? { id, text: `${A} mixed up with ${B}: ${pr.n}×${ex}${perWeek(pr.weeks)}` }
+        ? { id, text: `${B} used where ${A} was needed: ${pr.n}×${ex}${perWeek(pr.weeks)}` }
         : {
             id,
             text: `${A}: ${pr.n} wrong answers. The course teaches ${A} together with ${B} as a contrast pair; it is NOT recorded that the learner chose ${B} instead. Wrong answers per week in ${A} and ${B} combined (oldest first): ${pr.weeks.join(', ')}`,

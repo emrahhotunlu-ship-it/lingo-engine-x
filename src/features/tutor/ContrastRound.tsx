@@ -14,7 +14,7 @@ import { toast } from '../../ui/Toast';
 import { patternById } from '../../domain/grammar/patterns';
 import { startGrammar } from '../grammar/session';
 
-// Kontrast-Runde (Lernplattform 3.0 P49): 8 Aufgaben zu zwei verwechselten Mustern im Wechsel (A, B, A, B …). Freiwillig (Kontext `xtra`), nie Pflicht,
+// Kontrast-Runde (Lernplattform 3.0 P49): bis zu 8 Aufgaben zu zwei Mustern, gemischt (höchstens zwei gleiche hintereinander, ausgewogen). Freiwillig (Kontext `xtra`), nie Pflicht,
 // ohne Claude. Der Knopf baut die Aufgaben aus festen Inhalten (`domain/tutor/contrast.ts`); gibt es auf einer Seite zu wenig, sagt er das ehrlich.
 
 type Props = { a: string; b: string; nameA: string; nameB: string; testId?: string };
@@ -31,7 +31,11 @@ export function ContrastButton({ a, b, nameA, nameB, testId = 'dx-contrast' }: P
     let alive = true;
     preloadC1x(C1_KINDS.filter((k) => kindEnabled(k))).then(
       () => alive && setReady(true),
-      (err: unknown) => logWarn('diagnose:contrast', err),
+      (err: unknown) => {
+        // Auch bei einem Ladefehler geht es weiter: die Zahl kommt dann aus dem, was schon da ist (feste Lehrplan-Aufgaben), statt den Knopf zu sperren.
+        logWarn('diagnose:contrast', err);
+        if (alive) setReady(true);
+      },
     );
     return () => {
       alive = false;
@@ -58,7 +62,7 @@ export function ContrastButton({ a, b, nameA, nameB, testId = 'dx-contrast' }: P
       go({ name: 'grammarSession', mode: 'xtra' });
     } catch (err) {
       logWarn('diagnose:contrast', err);
-      toast(t('ttDxContrastBusy'));
+      toast(t('ttDxContrastErr'));
     } finally {
       setBusy(false);
     }

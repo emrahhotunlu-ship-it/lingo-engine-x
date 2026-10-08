@@ -5,8 +5,9 @@ import { dayKey } from '../../src/domain/date';
 import { slotPlan, type PatInfo } from '../../src/domain/grammar/slotPlan';
 import { isWrongLang } from '../../src/domain/lang/detect';
 import { lastWeekOf, newFestWords, weekFacts } from '../../src/domain/progress/weekly';
-import { bigNumber, focusFor, focusOptions, focusTopicOf, focusWeekOf, readWf, teacherText, weeklyUse, weekly3, wfOp } from '../../src/domain/progress/weekly3';
+import { bigNumber, teacherName, focusFor, focusOptions, focusTopicOf, focusWeekOf, readWf, teacherText, weeklyUse, weekly3, wfOp } from '../../src/domain/progress/weekly3';
 import type { Confusion } from '../../src/domain/tutor/confusion';
+import { patternsOf, topicsWithPatterns } from '../../src/domain/grammar/patterns';
 
 // P50 (Lernplattform 3.0, Wochenrückblick 3.0): große Zahl, neu Feste, Text für den Lehrer (reines Englisch), Fokuswahl (wirkt erst ab dem nächsten Plan).
 // Die Zeitumstellung ist der 25.10.2026 (die Woche vom 19. bis 25.10. hat einen Tag mit 25 Stunden).
@@ -67,11 +68,11 @@ describe('Text für den Lehrer (feste Vorlage, reines Englisch)', () => {
     });
     const [first, second] = t.split('\n\n');
     expect(first).toBe(note);
-    expect(second).toContain('This week I worked on wish + past perfect, mixed conditionals and inversion.');
+    expect(second).toContain('This week I worked on wish + past perfect, mixed conditionals, and inversion.');
     expect(second).not.toContain('fourth');
-    expect(second).toContain('New in my active vocabulary: leverage, upsell, churn, onboarding and roadmap and 2 more.');
-    expect(second).toContain('Still tricky: the definite article versus the indefinite article (for example, in "We need ___ approval." I wrote "the" instead of "an").');
-    expect(second).toMatch(/Could we practice this in our next lesson\?$/);
+    expect(second).toContain('Words and phrases I can now recall reliably: leverage, upsell, churn, onboarding, roadmap, and 2 more.');
+    expect(second).toContain('Still tricky: the definite article versus the indefinite article. For example, in "We need ___ approval." I wrote "the" instead of "an".');
+    expect(second).toMatch(/Could we practice this in our next lesson, for example in a short role-play\?$/);
     expect(t.split('\n\n')).toHaveLength(2);
   });
 
@@ -86,14 +87,14 @@ describe('Text für den Lehrer (feste Vorlage, reines Englisch)', () => {
   it('ein Beispiel mit deutscher oder unsinniger Antwort wird weggelassen, der Rest bleibt', () => {
     const t = teacherText({ note: null, practiced: [], fest: [], tricky: { names: ['present perfect'], example: { q: 'We ___ the report yet.', given: 'haben nicht fertig gemacht heute', ans: 'have not finished' } } });
     expect(t).toContain('Still tricky: present perfect.');
-    expect(t).not.toContain('for example');
+    expect(t).not.toContain('For example');
     const quoted = teacherText({ note: null, practiced: [], fest: [], tricky: { names: ['present perfect'], example: { q: 'He said "yes".', given: 'x', ans: 'y' } } });
-    expect(quoted).not.toContain('for example');
+    expect(quoted).not.toContain('For example');
   });
 
   it('ein nicht belegtes Paar behauptet keine Verwechslung', () => {
     const t = teacherText({ note: null, practiced: [], fest: [], tricky: { names: ['the definite article', 'the indefinite article'], example: null, confirmed: false } });
-    expect(t).toContain('Still tricky: the definite article (and how it differs from the indefinite article).');
+    expect(t).toContain('Still tricky: the definite article, especially how it differs from the indefinite article.');
     expect(t).not.toContain('versus');
     expect(teacherText({ note: null, practiced: [], fest: [], tricky: { names: ['a', 'b'], example: null, confirmed: true } })).toContain('Still tricky: a versus b.');
   });
@@ -261,5 +262,29 @@ describe('Wortwahl: nie „verfehlt“, nie Ausrufezeichen', () => {
     const all = [...mine(de), ...mine(en)];
     expect(all.length).toBeGreaterThan(40);
     expect(all.filter((v) => /verfehl|!/i.test(v))).toEqual([]);
+  });
+});
+
+describe('Namen für den Lehrer', () => {
+  it('bei keinem Kontrastpaar des Kurses sind die beiden Namen gleich, und keiner ist leer', () => {
+    const pairs: Array<[string, string]> = [];
+    for (const topic of topicsWithPatterns()) {
+      for (const p of patternsOf(topic)?.patterns ?? []) {
+        const w = p.contrast?.with;
+        if (w) pairs.push([p.id, w.includes(':') ? w.slice(w.indexOf(':') + 1) : w]);
+      }
+    }
+    expect(pairs.length).toBeGreaterThan(20);
+    const same = pairs.filter(([a, b]) => teacherName(a) === teacherName(b));
+    expect(same).toEqual([]);
+    for (const [a, b] of pairs) {
+      expect(teacherName(a).length).toBeGreaterThan(1);
+      expect(teacherName(b).length).toBeGreaterThan(1);
+    }
+  });
+
+  it('Form und Verwendung bleiben zusammen: „the · unique things“ wird „the (unique things)“', () => {
+    expect(teacherName('art.the-unique')).not.toBe(teacherName('art.definite'));
+    expect(teacherName('unbekannt.id')).toBe('unbekannt.id');
   });
 });

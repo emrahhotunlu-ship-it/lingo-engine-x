@@ -31,7 +31,9 @@ export function diagnoseReply(input: string): string {
   const onlyInvent = /zzonlyinvent/i.test(mode);
   const first = {
     title: de ? 'Zwei Formen vertauscht' : 'Two forms mixed up',
-    why: de ? 'Du nimmst oft die Form, die zur Gegenwart passt, wo der Satz etwas Früheres meint. Achte auf das Signalwort.' : 'You often use the form for the present where the sentence refers to something earlier. Look at the signal word.',
+    why: de
+      ? 'Du hast „have signed“ geschrieben, wo „signed“ nötig war: „last week“ nennt einen abgeschlossenen Zeitpunkt, also Past Simple.'
+      : 'You wrote "have signed" where "signed" was needed: "last week" marks a finished time, so use the past simple.',
     rule: de ? 'Frage dich: Geht es um jetzt oder um früher?' : 'Ask yourself: is it about now or about earlier?',
     ev: onlyInvent ? ['p:invented.one'] : invent ? [evFor(act(0), 0), 'p:invented.one'] : [evFor(act(0), 0)],
     action: act(0),

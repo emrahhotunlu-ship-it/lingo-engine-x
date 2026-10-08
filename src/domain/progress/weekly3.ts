@@ -62,7 +62,8 @@ export type TeacherInput = {
   tricky: { names: readonly string[]; example: { q: string; given: string; ans: string } | null; /** Aus eigenen Fehlern belegt (`cf`)? Sonst ist das zweite Muster nur das Kontrastpaar des Kurses. */ confirmed?: boolean } | null;
 };
 
-const list = (xs: readonly string[]): string => (xs.length <= 1 ? (xs[0] ?? '') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);
+/** Aufzählung mit Oxford-Komma: „a“, „a and b“, „a, b, and c“. */
+const list = (xs: readonly string[]): string => (xs.length <= 1 ? (xs[0] ?? '') : xs.length === 2 ? `${xs[0]} and ${xs[1]}` : `${xs.slice(0, -1).join(', ')}, and ${xs[xs.length - 1]}`);
 const FEST_SHOWN = 5;
 
 /** Ein Beispiel nur, wenn es als Englisch durchgeht (die Antworten des Lernenden können Unsinn oder Deutsch enthalten). */
@@ -77,7 +78,7 @@ function exampleLine(e: { q: string; given: string; ans: string }): string | nul
     return /[äöüÄÖÜß]/.test(x) || (de >= 1 && de >= en) || isWrongLang(x, 'en');
   };
   if ([q, g, a].some(german)) return null;
-  return `for example, in "${q}" I wrote "${g}" instead of "${a}"`;
+  return `For example, in "${q}" I wrote "${g}" instead of "${a}".`;
 }
 
 /**
@@ -92,15 +93,16 @@ export function teacherText(i: TeacherInput): string {
   if (i.fest.length) {
     const shown = i.fest.slice(0, FEST_SHOWN);
     const more = i.fest.length - shown.length;
-    body.push(`New in my active vocabulary: ${list(shown)}${more > 0 ? ` and ${more} more` : ''}.`);
+    body.push(`Words and phrases I can now recall reliably: ${more > 0 ? `${shown.join(', ')}, and ${more} more` : list(shown)}.`);
   }
   if (i.tricky && i.tricky.names.length) {
     const ex = i.tricky.example ? exampleLine(i.tricky.example) : null;
     const [a, b] = i.tricky.names;
     // „versus“ behauptet eine Verwechslung: nur, wenn sie belegt ist; sonst geht es um das eine Muster und den Unterschied zum Kontrastpaar.
-    const what = b ? (i.tricky.confirmed === false ? `${a} (and how it differs from ${b})` : `${a} versus ${b}`) : a;
-    body.push(`Still tricky: ${what}${ex ? ` (${ex})` : ''}.`);
-    body.push('Could we practice this in our next lesson?');
+    const what = b ? (i.tricky.confirmed === false ? `${a}, especially how it differs from ${b}` : `${a} versus ${b}`) : a;
+    body.push(`Still tricky: ${what}.`);
+    if (ex) body.push(ex);
+    body.push('Could we practice this in our next lesson, for example in a short role-play?');
   }
   if (body.length) lines.push(body.join(' '));
   return lines.join('\n\n');
@@ -241,8 +243,18 @@ export function practicedPatterns(grammar: ReadonlyMap<string, Doc>, days: reado
   return hit.sort((a, b) => b.last - a.last || a.id.localeCompare(b.id)).map((h) => h.id);
 }
 
-/** Kurzname eines Musters für den Lehrer: nur die Form vor „ · “ („wish + past perfect“), nicht die deutsche Anwendungszeile. */
-export const teacherName = (id: string): string => (patternById(id)?.name.en ?? id).split(' · ')[0]?.trim() || id;
+/**
+ * Name eines Musters für den Lehrer: „Form (Verwendung)“ aus den englischen Teilen des Namens („the · unique things“ → „the (unique things)“). Nur das Abschneiden
+ * am ersten „ · “ gäbe gleiche oder sinnlose Namen („the versus the“).
+ */
+export const teacherName = (id: string): string => {
+  const parts = (patternById(id)?.name.en ?? id)
+    .split(' · ')
+    .map((x) => x.trim())
+    .filter(Boolean);
+  if (parts.length < 2) return parts[0] ?? id;
+  return `${parts.slice(0, -1).join(' / ')} (${parts[parts.length - 1]})`;
+};
 
 export function weekly3(i: {
   today: string;

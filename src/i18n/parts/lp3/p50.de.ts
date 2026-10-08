@@ -1,7 +1,7 @@
 // Lernplattform 3.0 · P50 (Wochenrückblick 3.0): Texte mit Präfix `mo`, Deutsch. Der Text für den Lehrer ist Inhalt (Englisch) und steht in `domain/progress/weekly3.ts`.
 
 export const moP50De = {
-  moWkEntry: 'Wochenbericht',
+  moWkEntry: 'Wochenrückblick',
   moWkEntrySub: 'Neu fest, Fokus und ein Text für deinen Lehrer',
   moWkEntryAria: 'Wochenrückblick öffnen',
   moWkRange: 'KW {w} · {from} bis {to}',
@@ -24,10 +24,10 @@ export const moP50De = {
   moWkTeachLead: 'Ein englischer Text zum Kopieren, zum Beispiel für die nächste Stunde. Er entsteht aus deinen Zahlen, ohne Claude.',
   moWkTeachLabel: 'Text für den Lehrer, Englisch',
   moWkFocusTitle: 'Fokus für diese Woche',
-  moWkFocusLead: 'Du wählst, was in den nächsten Tagen öfter dran kommt. Der Plan von heute bleibt, die Wahl gilt ab dem nächsten Plan.',
+  moWkFocusLead: 'Du wählst, was in den nächsten Tagen öfter drankommt. Der Plan von heute bleibt, die Wahl gilt ab dem nächsten Plan.',
   moWkFocusAuto: 'Die App entscheidet',
   moWkFocusAutoSub: 'Der Plan mischt wie bisher.',
-  moWkFocusConf: 'Du vertauschst es oft mit {other}.',
+  moWkFocusConf: 'Du verwechselst es oft mit {other}.',
   moWkFocusWeak: 'Noch nicht sicher in Kapitel {n}.',
   moWkFocusNone: 'Zur Auswahl gibt es noch kein geübtes Muster.',
   moWkFocusChosen: 'Gewählt',

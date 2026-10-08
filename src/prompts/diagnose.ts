@@ -12,7 +12,7 @@ import type { PromptTemplate, UiLang } from './types';
 
 export type DiagnoseVars = {
   lang: UiLang;
-  /** Belegzeilen `[kennung] Text` (≤ 5,6 KB). */
+  /** Belegzeilen `[kennung] Text` (≤ 4,9 KB). */
   evidence: string;
   /** Kennungen der Belegzeilen ohne Klammern. */
   ids: readonly string[];
@@ -39,10 +39,16 @@ export const DIAGNOSE_FINDINGS_MAX = 3;
 export const DIAGNOSE_EXAMPLE =
   '{"headline":"…","findings":[{"title":"…","why":"…","rule":"…","ev":["p:…"],"action":"contrast:a|b"}],"better":{"text":"…","ev":["p:…"]},"next":"…"}';
 
+/** Die Muster-Kennungen, die eine Belegkennung nennt: `p:a` → a · `cf:a>b` → a, b · `pc:a|b` → a, b · `src:write:a` → a. Exakter Vergleich, kein Teilstring. */
+export function evPatterns(id: string): string[] {
+  const rest = id.startsWith('src:') ? id.split(':').slice(2).join(':') : id.slice(id.indexOf(':') + 1);
+  return rest.split(/[>|]/).filter(Boolean);
+}
+
 /** Passt die Aktion (`contrast:a|b`, `pattern:id`) zu den zitierten Belegen? Mindestens eine Kennung nennt eines der Muster. */
 export function actionFits(action: string, ev: readonly string[]): boolean {
-  const pats = action.replace(/^(contrast|pattern):/, '').split('|');
-  return ev.some((id) => pats.some((p) => p && id.includes(p)));
+  const pats = action.replace(/^(contrast|pattern):/, '').split('|').filter(Boolean);
+  return ev.some((id) => evPatterns(id).some((p) => pats.includes(p)));
 }
 
 export function diagnoseSchema(v: Pick<DiagnoseVars, 'lang' | 'ids' | 'allowed'>): z.ZodType<DiagnoseOut> {
@@ -90,11 +96,14 @@ export const diagnose: PromptTemplate<DiagnoseVars, DiagnoseOut> = {
       '- The action must concern a pattern named in the evidence ids you cite.',
       '- No CEFR level, score or percentage. Calm and factual: no praise, no blame.',
       `- Each finding cites 1–${DIAGNOSE_EV_MAX} evidence ids in "ev", copied exactly from the brackets (without the brackets).`,
-      '- title: the two things mixed up (or the one pattern). why: what is mixed up and how to tell them apart. rule: a decision question or rule of thumb.',
+      '- title: for [cf:…] the two forms that get mixed up; otherwise the one pattern. why: what goes wrong and how to tell the forms apart. rule: a decision question or rule of thumb.',
+      '- why: if the cited line contains the learner\'s own example ("…" instead of "…"), quote it. Never make up a learner example; you may add one short correct model sentence from a sales or client context, clearly as a model.',
       '- action: exactly one allowed action for the finding.',
       '- better: only if the evidence shows a pattern that went from clearly worse to clearly better; otherwise null.',
-      '- next: one concrete next step (one sentence).',
+      '- next: one concrete step for this week (one sentence), ideally using the form in a real work situation (an email, a client call) or the allowed contrast round.',
+      'Evidence format: [p:id] pattern: attempts and wrong answers in the last 28 days, "before" = the 28 days before that. [cf:a>b] the learner used b where a was correct. [pc:a|b] a contrast pair from the course, no mix-up recorded; use the [p:a] line for the threshold. [src:…] mistakes in the learner\'s own writing or sentences.',
       'Language rules:',
+      'Address the learner directly as "du" in German and "you" in English.',
       `- Write headline, titles, why, rule and next in ${langName(v.lang)}. Grammar terms and example phrases may stay in English (American English).`,
       prev,
       'Evidence:',

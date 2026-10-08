@@ -40,7 +40,7 @@ for (const [label, width, height] of [
           const value = await textarea.inputValue();
           expect(value.split('\n')[0]).toMatch(/^This month I'm working on /);
           expect(value).toContain('This week I worked on');
-          expect(value).toContain('New in my active vocabulary:');
+          expect(value).toContain('Words and phrases I can now recall reliably:');
           expect(value).not.toMatch(/[äöüÄÖÜß]|verfehl|!/i);
           await expect(page.getByTestId('wk-focus-opt')).toHaveCount(3);
           await expect(page.getByTestId('wk-use')).toBeVisible();

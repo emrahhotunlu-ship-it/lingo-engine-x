@@ -11,7 +11,7 @@ import { initCapabilities, markSampleConfirmed, useCapabilities } from '../../sr
 import { createMemoryDb } from '../../src/platform/dev/memoryDb';
 import type { SampleFn } from '../../src/platform/types';
 import { PROMPT_MAX_BYTES } from '../../src/prompts/common';
-import { diagnose, diagnoseSchema, type DiagnoseOut, type DiagnoseVars } from '../../src/prompts/diagnose';
+import { actionFits, diagnose, diagnoseSchema, type DiagnoseOut, type DiagnoseVars } from '../../src/prompts/diagnose';
 import { TEMPLATES } from '../../src/prompts/registry';
 
 // P49 (Lernplattform 3.0, KI-Tutor T5): Vorlage diagnose@1 (Schema, Prompt, Fehlerweg nach A6.3, Budget) und das Protokoll
@@ -19,7 +19,7 @@ import { TEMPLATES } from '../../src/prompts/registry';
 
 const vars: DiagnoseVars = {
   lang: 'de',
-  evidence: '[p:art.definite] the definite article: 6 attempts, 4 wrong\n[cf:art.indefinite>art.definite] a mixed up with the: 3×',
+  evidence: '[p:art.definite] the definite article: 6 attempts, 4 wrong\n[cf:art.indefinite>art.definite] the used where a was needed: 3×',
   ids: ['p:art.definite', 'cf:art.indefinite>art.definite'],
   allowed: ['contrast:art.indefinite|art.definite', 'pattern:art.definite'],
   prev: null,
@@ -44,7 +44,7 @@ describe('diagnose@1: Prompt', () => {
     expect(diagnose.budget).toEqual({ bgPerDay: 1 });
     expect(diagnose.verb).toBe('text-json');
     // Höchstwert: 6 KB Belege (Obergrenze der App) plus Rahmen bleibt unter 8 KB.
-    const big = diagnose.build({ ...vars, evidence: `[p:x] ${'a'.repeat(5590)}`, prev: { headline: 'h'.repeat(300), titles: ['t'.repeat(200), 'u', 'v', 'w'] } });
+    const big = diagnose.build({ ...vars, evidence: `[p:x] ${'a'.repeat(4890)}`, prev: { headline: 'h'.repeat(300), titles: ['t'.repeat(200), 'u', 'v', 'w'] } });
     expect(new TextEncoder().encode(big).length).toBeLessThan(8000);
     expect(new TextEncoder().encode(big).length).toBeLessThan(PROMPT_MAX_BYTES);
   });
@@ -274,6 +274,20 @@ describe('app/patterns.diag: Beanspruchung, Ergebnis, Melden', () => {
     expect(p).toContain('Never lower the threshold');
     expect(p).toContain('Only [cf:…] lines prove a mix-up.');
     expect(p).toContain('No CEFR level, score or percentage.');
+    expect(p).toContain('Evidence format: [p:id]');
+    expect(p).toContain('Address the learner directly as "du" in German');
+    expect(p).toContain('for [cf:…] the two forms that get mixed up');
+    expect(p).toContain('Never make up a learner example');
+    expect(p).toContain('an email, a client call');
+  });
+
+  it('actionFits vergleicht die Kennung genau, nicht als Teilstring', () => {
+    expect(actionFits('contrast:art.definite|art.indefinite', ['p:art.indefinite'])).toBe(true);
+    expect(actionFits('contrast:art.definite|art.indefinite', ['cf:art.indefinite>art.definite'])).toBe(true);
+    expect(actionFits('contrast:art.definite|art.indefinite', ['pc:art.definite|art.indefinite'])).toBe(true);
+    expect(actionFits('pattern:art.zero', ['src:write:art.zero'])).toBe(true);
+    expect(actionFits('pattern:art.zero', ['p:art.zero-extra', 'p:art.zer'])).toBe(false);
+    expect(actionFits('pattern:art.definite', ['p:art.indefinite'])).toBe(false);
   });
 
   it('die Aktion muss zur Evidenz passen', () => {
