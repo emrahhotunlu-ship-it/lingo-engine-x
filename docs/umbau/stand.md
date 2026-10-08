@@ -312,3 +312,7 @@ Tests: 1953 Unit; E2E der berührten Bildschirme grün (a11y: Kontrast der „Ne
 - Prüfung: typecheck und eslint sauber, Unit gezielt 83/83, E2E gezielt (wordTutor, retrySay, sentenceClinic, studyTime, tutorExplain, wortschatz, a11y) 92/93; voller E2E-Lauf nach dem UX-Merge auf Emrahs Wunsch („zum Abschluss“) nach ~300/808 abgebrochen, bis dahin nur der bekannte Wackler a11y „Umstellung“ (Kontrast mitten im Einblenden, Bildschirm seit langem unverändert). check:platform FREIGABE, 5,23 MiB.
 - Test-Link `AXHkh6…` Version 54 `1791498822-49bc` (Rückweg v53 `1791473854-a326`). Live unverändert v71 `1791474840-7485`. Stand `775c0c9`.
 - Offen („kann“): K2 gemischte Sprache beim Szenenstart, K4 Diagnose-Beispieltext; platform-guard-Hinweise (repair-check-Neuversuch 24 h zwischengespeichert, Hintergrundbudget zählt den Schema-Neuversuch einfach). Vor „Ja live nehmen“ einmal den vollen E2E-Lauf nachholen.
+
+## 08.10.2026 – R5 „Dein Lehrer“ live
+- Emrah: „Ja live nehmen“. Vorher voller E2E-Lauf auf `35bec3f`: 755 grün, 6 rot; einzeln nachgeprüft: c1xErr, perf CPU 1× und fxStage1 grün (fxStage1 2× wiederholt 16/16), nur perf CPU 4× rot (Umgebung, akzeptiert).
+- Live `JLL8…` Version 72 `1791500848-5d8d` (Rückweg v71 `1791474840-7485`). Stand `dist` aus Commit nach `35bec3f` (Build-Stempel). Test-Link `AXHkh6…` v54 `1791498822-49bc`.
