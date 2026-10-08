@@ -26,7 +26,7 @@ test('Kollokationen: 5 Aufgaben, Lehnübersetzung → Hinweis → Lösung, Ergeb
   await boot(page, { migrated: true });
   await openEntry(page, 'training-colloc');
   await screen(page, 'nbdrill');
-  await expect(page.getByTestId('round-progress')).toHaveText('1 / 5');
+  await expect(page.getByTestId('round-progress')).toHaveText('1 von 5');
   await expect(page.getByTestId('training-note')).toHaveText('Extra');
 
   // c01 deal: Lehnübersetzung „finish“ → Hinweis mit Grund, zählt nicht als Fehlversuch.
@@ -84,7 +84,7 @@ test('Satz-Umformung: Hinweis, zweiter Versuch, Neuladen setzt an derselben Aufg
   await page.reload();
   await screen(page, 'nbdrill');
   await expect(page.getByTestId('transform-item')).toHaveAttribute('data-id', 'u02');
-  await expect(page.getByTestId('round-progress')).toHaveText('2 / 5');
+  await expect(page.getByTestId('round-progress')).toHaveText('2 von 5');
 });
 
 const levels = (l: number, w: number[] = [], n = w.length) => ({ 'app/levels': { v: 1, k: { 'nb-objection': { l, w, n, ch: '' } } } });
@@ -163,7 +163,7 @@ test('Einwand-Training mit KI, Stufe 5: Bedenkzeit, Zeitziel, Claude prüft das 
   await expect(page.getByTestId('pressure-pattern').locator('[data-move="ask"]')).toHaveAttribute('data-on', 'true');
   await expect(page.getByTestId('result')).toContainText('side by side');
   await page.getByTestId('next').click();
-  await expect(page.getByTestId('round-progress')).toHaveText('2 / 5');
+  await expect(page.getByTestId('round-progress')).toHaveText('2 von 5');
 });
 
 test('Deep-Link öffnet die Übung direkt (neue Runde als Extra)', async ({ page }) => {
@@ -188,7 +188,7 @@ test('Soll N107: Register-Leiter – ganzer Satz, Hinweis, zweiter Versuch', asy
   await expect(item).toHaveAttribute('data-state', 'close');
   await expect(page.getByTestId('result')).toContainText('receive');
   await page.getByTestId('next').click();
-  await expect(page.getByTestId('round-progress')).toHaveText('2 / 5');
+  await expect(page.getByTestId('round-progress')).toHaveText('2 von 5');
 });
 
 test('Soll N107: Überleitungen und Wortbildung erreichbar', async ({ page }) => {
@@ -222,14 +222,14 @@ test('G4: lx:crash-once – Aufgabe überspringen, die Runde läuft weiter', asy
   await expect(page.getByTestId('boundary-step')).toBeVisible();
   await page.getByTestId('boundary-skip').click();
   await expect(page.getByTestId('colloc-item')).toBeVisible();
-  await expect(page.getByTestId('round-progress')).toHaveText('2 / 5');
+  await expect(page.getByTestId('round-progress')).toHaveText('2 von 5');
 });
 
 test('G4: lx:crash-once auch im Einwand-Training', async ({ page }) => {
   await bootAt(page, { name: 'pressure' }, { localStorage: crashOnce('pressure') });
   await screen(page, 'pressure');
   await page.getByTestId('boundary-skip').click();
-  await expect(page.getByTestId('round-progress')).toHaveText('2 / 5');
+  await expect(page.getByTestId('round-progress')).toHaveText('2 von 5');
 });
 
 // Lernplattform 2.0 P8 (§5.9, §6): Hörübung mit „Gerade kein Ton“, Eigener Satz je Eingabeprofil.

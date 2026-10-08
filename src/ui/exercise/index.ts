@@ -3,7 +3,7 @@ export { Examples } from './Examples';
 export { ExerciseMenu } from './ExerciseMenu';
 export { ExerciseShell, deriveShellState } from './ExerciseShell';
 export type { ExerciseArea, ExerciseShellProps, ShellAction, ShellFeedback, ShellMenuId, ShellSecondary, ShellState, ShellStatus } from './ExerciseShell';
-export { ExerciseStatus, STATE_DOTS } from './ExerciseStatus';
+export { ExerciseStatus, STATE_DOTS, isUnsure } from './ExerciseStatus';
 export { Explanation } from './Explanation';
 export { HintLine } from './HintLine';
 export { MarkedSentence, markSpans } from './MarkedSentence';

@@ -7,7 +7,7 @@ import { patsOf, patternState, type PatternState } from '../../domain/metrics/pa
 import { EnglishText } from '../../engine/EnglishText';
 import { useT, type MessageKey } from '../../i18n';
 import { Button } from '../../ui/Button';
-import { STATE_DOTS } from '../../ui/exercise';
+import { isUnsure, STATE_DOTS } from '../../ui/exercise';
 
 // Themenblatt (Lernplattform 2.0 §5.5): ersetzt den Querschnitt des Regelblatts, wenn das Thema eine Musterdatei hat.
 // Reihenfolge: „Das kannst du danach“ (canDo) und Muster-Chips mit Zustand → je Muster eine Karte in fester Reihenfolge
@@ -18,7 +18,7 @@ const WORD: Record<PatternState, MessageKey> = { new: 'exStateNew', learning: 'e
 
 function Dots({ state }: { state: PatternState }) {
   return (
-    <span className="lx-dots" aria-hidden="true">
+    <span className="lx-dots" aria-hidden="true" data-unsure={isUnsure(state) || undefined} data-testid="pattern-dots" data-state={state}>
       {[0, 1, 2, 3].map((i) => (
         <span key={i} className="lx-dot" data-on={i < STATE_DOTS[state] || undefined} />
       ))}

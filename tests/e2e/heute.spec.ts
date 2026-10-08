@@ -223,7 +223,7 @@ test('Block 2 Grammatik aus Heute: Grammatikrunde als Pflicht mit 6 Aufgaben, �
   const session = page.getByTestId('grammar-session');
   await expect(session).toHaveAttribute('data-ctx', 'duty');
   // Rundengröße aus dem Plan (Block 2, volle Einheit: 6 Aufgaben).
-  await expect(page.getByTestId('round-progress')).toHaveText('1 / 6');
+  await expect(page.getByTestId('round-progress')).toHaveText('1 von 6');
   const solve = grammarKey();
   for (let i = 0; i < 12; i++) {
     await expect(page.getByTestId('gr-item').or(page.getByTestId('summary')).first()).toBeVisible();

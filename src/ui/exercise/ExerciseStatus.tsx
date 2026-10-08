@@ -8,6 +8,8 @@ import type { ShellStatus } from './ExerciseShell';
 const WORD: Record<UnitState, MessageKey> = { new: 'exStateNew', learning: 'exStateLearning', safe: 'exStateSafe', firm: 'exStateFirm' };
 /** Gefüllte Punkte von vier: Neu 1, Lernt 2, Sicher 3, Fest 4. */
 export const STATE_DOTS: Record<UnitState, number> = { new: 1, learning: 2, safe: 3, firm: 4 };
+/** UX-Prüfung W10: Grün heißt „sicher“. Neue und lernende Einheiten zeigen ihre Punkte neutral (`data-unsure` an `.lx-dots`). */
+export const isUnsure = (state: UnitState | null | undefined): boolean => state === 'new' || state === 'learning';
 
 export function ExerciseStatus({ area, state, kindLabel, topic, pattern, badge }: ShellStatus) {
   const { t } = useT();
@@ -17,7 +19,7 @@ export function ExerciseStatus({ area, state, kindLabel, topic, pattern, badge }
     <p className="lx-t-meta flex flex-wrap items-center gap-x-2 gap-y-1 font-medium text-muted" data-testid="status" data-area={area} data-state={state ?? undefined}>
       {state && word && (
         <span className="inline-flex items-center gap-2" role="img" aria-label={t('exStateLabel', { state: word })}>
-          <span className="lx-dots" aria-hidden="true">
+          <span className="lx-dots" aria-hidden="true" data-unsure={isUnsure(state) || undefined}>
             {[0, 1, 2, 3].map((i) => (
               <span key={i} className="lx-dot" data-on={i < STATE_DOTS[state] || undefined} />
             ))}

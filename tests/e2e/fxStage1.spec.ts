@@ -155,7 +155,11 @@ test.describe('Einstellungen › Effekte', () => {
     await section.scrollIntoViewIfNeeded();
     await expect(section).toHaveAttribute('data-level', 'calm');
     await expect(page.getByTestId('fx-now')).toContainText('Ruhig');
-    await expect(page.getByTestId('fx-frames')).toBeVisible();
+    // UX-Prüfung W7: die Bildrate steht in der Diagnose, nicht mehr zwischen den Wahlknöpfen.
+    await expect(section.getByTestId('fx-frames')).toHaveCount(0);
+    await page.getByTestId('diag-toggle').click();
+    await expect(page.getByTestId('diag').getByTestId('fx-frames')).toBeVisible();
+    await section.scrollIntoViewIfNeeded();
     await page.getByTestId('fx-off').click();
     await expect(page.locator('html')).toHaveAttribute('data-fx', 'off');
     await expect(section).toHaveAttribute('data-level', 'off');

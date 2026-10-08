@@ -24,6 +24,7 @@ import { LearningSection, SoundSection } from './LearningSection';
 import { Fold } from '../../ui/Fold';
 import { HapticSection } from './HapticSection';
 import { diagText } from './diagText';
+import { FxFramesLine } from './EffectsSection';
 import { perfText, readPerfMarks, type PerfName } from './perfMarks';
 import { Slot } from '../../app/slots';
 
@@ -336,6 +337,7 @@ function Diagnostics({ open }: { open: boolean }) {
               {t('nbProfilPerfCopy')}
             </Button>
           </div>
+          <FxFramesLine />
           <h4 className="mt-2 text-sm font-semibold">{t('diagLog')}</h4>
           {log.length === 0 ? (
             <p className="text-sm text-muted">{t('diagLogEmpty')}</p>

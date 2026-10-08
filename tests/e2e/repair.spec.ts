@@ -38,7 +38,7 @@ for (const size of SIZES) {
     await expect(item).toHaveAttribute('data-mode', 'review');
     await expect(page.getByTestId('repair-input')).toHaveValue(A.wrong);
     await expect(page.getByTestId('repair-right')).toHaveCount(0);
-    await expect(page.getByTestId('trainer-progress')).toHaveText('1 / 3');
+    await expect(page.getByTestId('trainer-progress')).toHaveText('1 von 3');
     expect(await layoutProblems(page)).toEqual([]);
     await page.waitForTimeout(450);
     const axe = await new AxeBuilder({ page }).include('[data-testid="repair-item"]').analyze();

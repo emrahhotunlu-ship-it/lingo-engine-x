@@ -31,7 +31,7 @@ test('Rückgängig: dieselbe Karte von vorn, gespeichert wird nur die neue Bewer
   // Befund 29.09. (Emrahs Kommentar „blockiert den Counter"): die Zahl „n / total" bleibt jetzt
   // auch während „Rückgängig" sichtbar, statt für die 5 s zu verschwinden.
   // R4: Nenner fest (geplante Runde), die Wiedervorlage der „Nochmal“-Karte steht getrennt als „+1“.
-  await expect(page.getByTestId('trainer-progress')).toContainText('2 / 3');
+  await expect(page.getByTestId('trainer-progress')).toContainText('2 von 3');
   await expect(page.getByTestId('round-extra')).toHaveText('+1');
   await page.getByTestId('undo').click();
   await expect(page.getByTestId('undo-bar')).toHaveCount(0);

@@ -58,8 +58,8 @@ export const exDe = {
   exAiError: 'Claude hat gerade nicht geantwortet.',
   exLoading: 'Lädt …',
   // Leiste und Zähler
-  exCounterDuty: 'Pflicht {n}/{total}',
-  exCounterCard: 'Karte {n}/{total}',
+  exCounterDuty: 'Pflicht {n} von {total}',
+  exCounterCard: 'Karte {n} von {total}',
   exCounterExtra: '+{n}',
   exCounterExtraLabel: '{n} Wiederholungen in dieser Runde',
   exKeysHint: 'Enter prüft und geht weiter · A–D oder 1–4 wählen · T Tipp · ? Regel',

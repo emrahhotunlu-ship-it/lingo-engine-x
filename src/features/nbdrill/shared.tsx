@@ -168,7 +168,7 @@ export function TrainingBar({ unit, progress, onClose }: { route?: Route; unit: 
       onClose={close}
       closeLabel={t('trClose')}
       progress={progress}
-      progressLabel={progress ? `${progress.n} / ${progress.total}` : undefined}
+      progressLabel={progress ? t('nvProgress', { n: progress.n, total: progress.total }) : undefined}
       note={<span data-testid="training-note">{note}</span>}
       end={<ExerciseActions />}
     />

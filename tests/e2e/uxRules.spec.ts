@@ -172,13 +172,13 @@ test('Rundgang: Grammatik-Übung (Frage und Ergebnis) und Zähler mit festem Nen
   await skipMiniLesson(page);
   await expect(page.getByTestId('gr-item')).toBeVisible();
   await page.waitForTimeout(450);
-  const total0 = (await page.getByTestId('round-progress').innerText()).split('/')[1]?.trim();
+  const total0 = (await page.getByTestId('round-progress').innerText()).split(' von ')[1]?.trim();
   await rules(page, 'Grammatik-Aufgabe', 'dark');
   // Falsch antworten: Nenner bleibt, n fällt nie, Wiederholungen stehen separat.
   const seen: number[] = [];
   for (let i = 0; i < 12 && !(await page.getByTestId('summary').isVisible()); i++) {
     await expect(page.getByTestId('gr-item')).toBeVisible();
-    const [n, total] = (await page.getByTestId('round-progress').innerText()).split('/').map((x) => Number(x.trim()));
+    const [n, total] = (await page.getByTestId('round-progress').innerText()).split(' von ').map((x) => Number(x.trim()));
     seen.push(n ?? 0);
     expect(String(total), 'R4: Nenner fest').toBe(total0);
     const item = page.getByTestId('gr-item');
