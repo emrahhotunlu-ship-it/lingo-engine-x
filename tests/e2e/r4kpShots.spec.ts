@@ -1,6 +1,6 @@
 import { test, type Page } from '@playwright/test';
 import { boot, openTab, screen, type Theme } from './fixtures';
-import { answerItem, chapterOnePatch, openChapterOne, runGate, type Doc } from './gateHelpers';
+import { answerItem, answerWord, chapterOnePatch, openChapterOne, runGate, type Doc } from './gateHelpers';
 import { MON, MON_9, VG_BLOCKS, profileWith, reviewedLog, vgPlan } from './heuteHelpers';
 
 // Bildschirmfotos für den Design-Vergleich (R4 Spur Kapitelprüfung, P42/P43) nach `docs/umbau/design-vergleich/r4-kp-*.png`.
@@ -89,9 +89,13 @@ for (const s of sizes) {
       await openChapterOne(page);
       await page.getByTestId('gate-start-sheet').click();
       await page.getByTestId('gate-go').click();
-      // Ein paar richtig, der Rest „Weiß ich nicht“: das Ergebnis zeigt Themen und den neuen Termin.
-      for (let k = 0; k < 4; k++) await answerItem(page, false);
-      await runGate(page, { grammarRight: false, wordsRight: false }).catch(() => undefined);
+      // Neun von vierzehn richtig, die Wörter „Weiß ich nicht“: das Ergebnis zeigt die Themen mit Fehlern und den neuen Termin.
+      for (let k = 0; k < 14; k++) await answerItem(page, k >= 9);
+      for (let k = 0; k < 8; k++) {
+        await page.getByTestId('gate-word').or(page.getByTestId('gate-result')).waitFor();
+        if (!(await page.getByTestId('gate-word').count())) break;
+        await answerWord(page, true);
+      }
       await page.getByTestId('gate-result').waitFor();
       await page.waitForTimeout(500);
       await page.screenshot({ path: `${OUT}/r4-kp-08-ergebnis-nicht-bestanden-${s.name}.png` });
