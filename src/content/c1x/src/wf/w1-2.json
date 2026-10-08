@@ -877,8 +877,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Nach „about 200“ steht ein Nomen im Plural: employ + -ee + -s = die Beschäftigten. -ee bezeichnet die Person, die etwas bekommt.",
-     "en": "A plural noun follows “about 200”: employ + -ee + -s. The ending -ee marks the person who receives something."
+     "de": "Nach „about 200“ steht ein Nomen im Plural: employ + -ee + -s = die Beschäftigten. -ee bezeichnet die Person, mit der etwas geschieht (employ → employee).",
+     "en": "A plural noun follows “about 200”: employ + -ee + -s. The ending -ee marks the person something is done to (employ → employee)."
     },
     "wrong": [
      {

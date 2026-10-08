@@ -3,7 +3,7 @@ import { boot, screen } from './fixtures';
 import { dump } from './trainerHelpers';
 
 // Plan 3.0 (Lernplattform 3.0 §2.1, P23): Schritt 3 hängt vom Wochentag ab. Testuhr = fester Tag; der Plan wird beim ersten Öffnen angelegt und eingefroren.
-// Standard der Schalter: ocl, mcc, kwt und Tempo (P24) an, wf aus – eine nicht angebotene Art bleibt Satzbau.
+// Standard der Schalter: ocl, mcc, kwt und Tempo (P24) an, wf an (R4) – eine nicht angebotene Art bleibt Satzbau.
 
 type Doc = Record<string, unknown>;
 const DAYS: Array<[string, string]> = [
@@ -28,8 +28,8 @@ const step3 = (p: Plan): Doc | undefined => p.u.b.find(([n]) => n === 3)?.[3];
 test.describe('Handy', () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
 
-  const EXPECT: Record<string, Doc | undefined> = { Mo: undefined, Di: { mode: 'format', fmt: 'ocl' }, Mi: undefined, Do: { mode: 'format', fmt: 'kwt' }, Fr: { mode: 'format', fmt: 'mcc' }, Sa: { mode: 'tempo' } };
-  const NAME: Record<string, string> = { Mo: 'Satzbau', Di: 'Kleines Wort', Mi: 'Satzbau', Do: 'Umformen', Fr: 'Passendes Wort', Sa: 'Satzbau' };
+  const EXPECT: Record<string, Doc | undefined> = { Mo: undefined, Di: { mode: 'format', fmt: 'ocl' }, Mi: { mode: 'format', fmt: 'wf' }, Do: { mode: 'format', fmt: 'kwt' }, Fr: { mode: 'format', fmt: 'mcc' }, Sa: { mode: 'tempo' } };
+  const NAME: Record<string, string> = { Mo: 'Satzbau', Di: 'Kleines Wort', Mi: 'Wort umbauen', Do: 'Umformen', Fr: 'Passendes Wort', Sa: 'Satzbau' };
 
   for (const [wd, now] of DAYS) {
     if (wd === 'So') continue;

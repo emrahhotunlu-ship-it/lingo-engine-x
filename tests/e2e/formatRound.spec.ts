@@ -34,11 +34,11 @@ const PATTERNS: Record<string, Doc> = {
 };
 
 /** Plan von Dienstag mit Format in Schritt 3 (Schritt 1 und 2 erledigt). */
-function formatPlan(): Doc {
+function formatPlan(fmt: 'ocl' | 'wf' = 'ocl'): Doc {
   const plan = vgPlan(TUE);
   const u = plan.u as Doc;
   u.rv = 2;
-  u.b = VG_BLOCKS.map(([n, k, m]) => (n === 3 ? [n, k, m, { mode: 'format', fmt: 'ocl' }] : [n, k, m]));
+  u.b = VG_BLOCKS.map(([n, k, m]) => (n === 3 ? [n, k, m, { mode: 'format', fmt }] : [n, k, m]));
   return plan;
 }
 
@@ -55,6 +55,19 @@ test.describe('Handy', () => {
     await screen(page, 'grammarSession');
     await expect(page.getByTestId('grammar-session')).toHaveAttribute('data-ctx', 'duty');
     await expect(page.getByTestId('gr-item')).toHaveAttribute('data-c1x', 'ocl');
+    expect(errors).toEqual([]);
+  });
+
+  test('Mittwoch: „Wort umbauen“ (wf) läuft auch ohne eingeführte Muster, weil die Wortbildungs-Aufgaben zu keinem Grammatikthema gehören', async ({ page }) => {
+    const { errors } = await boot(page, { migrated: true, now: TUE_9, fake: { patch: { ...profileWith(TUE, formatPlan('wf'), ['u-focus']), ...reviewedLog(TUE) } } });
+    await screen(page, 'today');
+    const row = page.locator('[data-testid="duty"][data-duty="ch:u-task"]');
+    await expect(row).toContainText('Wort umbauen');
+    await page.getByTestId('start').click();
+    await screen(page, 'grammarSession');
+    await expect(page.getByTestId('grammar-session')).toHaveAttribute('data-ctx', 'duty');
+    await expect(page.getByTestId('gr-item')).toHaveAttribute('data-c1x', 'wf');
+    await expect(page.getByTestId('gr-item').getByTestId('wf-stem')).toBeVisible();
     expect(errors).toEqual([]);
   });
 
