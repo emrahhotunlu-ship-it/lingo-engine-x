@@ -9,6 +9,7 @@ import { roundSparks } from "../domain/moments/detect";
 import { Eyebrow } from "./Eyebrow";
 import { emit } from "../engine/fx";
 import { startMoment } from "../engine/fx/measure";
+import { isUnsure } from "./exercise/ExerciseStatus";
 
 // Gemeinsames Ende einer Runde (N06, plan.md §4.10, Prototyp v1): Kacheln Richtig · Zeit · Neu,
 // „Das nimmst du mit“ (antippbar – die Übung reicht antippbare Wörter herein), GENAU EIN nächster
@@ -91,11 +92,13 @@ function GrowthDots({
   to,
   max,
   label,
+  unsure = false,
 }: {
   from: number;
   to: number;
   max: number;
   label: string;
+  unsure?: boolean;
 }) {
   const [shown, setShown] = useState(from);
   useEffect(() => {
@@ -109,6 +112,7 @@ function GrowthDots({
       aria-label={label}
       data-from={from}
       data-to={to}
+      data-unsure={unsure || undefined}
     >
       {Array.from({ length: max }, (_, i) => (
         <span key={i} className="lx-dot" data-on={i < shown || undefined} />
@@ -266,6 +270,7 @@ function GrowthEnd({
                     to={it.to}
                     max={it.max}
                     label={label}
+                    unsure={isUnsure(it.state)}
                   />
                 </li>
               );
@@ -422,7 +427,7 @@ function TilesEnd({
       </p>
       <div className="grid grid-cols-3 gap-2" aria-hidden="true">
         <Tile
-          value={`${right}/${total}`}
+          value={t("nvProgress", { n: right, total })}
           label={t("nbShEndRight")}
           testId="session-end-right"
         />

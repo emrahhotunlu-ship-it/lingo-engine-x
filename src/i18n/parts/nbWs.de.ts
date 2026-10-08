@@ -227,8 +227,8 @@ export const nbWsDe = {
 
   // Hub nach Gesamtkonzept 3.3 (Zielkarte, Wiederholen-Karte, drei Stapel) und Extra-Blatt 3.7
   nbWsHAddLabel: 'Wort hinzufügen',
-  nbWsHGoalEyebrow: 'Atlas 8.000',
-  nbWsHGoalOf: '{now} von {target}',
+  nbWsHGoalEyebrow: 'Wortschatzziel C1',
+  nbWsHGoalOf: '{now} von {target} Wörtern',
   nbWsHGoalMark: 'C1-Marke bei {mark}',
   nbWsHGoalPace: 'Tempo: {n} neue Wörter pro Woche · in rund {weeks} Wochen am Ziel',
   nbWsHGoalPaceOpen: 'Tempo: {n} neue Wörter pro Woche',

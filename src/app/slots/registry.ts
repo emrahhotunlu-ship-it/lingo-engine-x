@@ -13,7 +13,8 @@ export const SLOT_NAMES = [
   'progress.words', // … Reiter Wörter
   'progress.grammar', // … Reiter Grammatik
   'progress.review', // … Reiter Rückblick
-  'grammar.head', // features/learn/LearnHub: unter dem Titel
+  'grammar.head', // features/learn/LearnHub: unter dem Titel (Eigenschaft `next`: die Weiter-Karte des Reiters)
+  'grammar.foot', // features/learn/LearnHub: unter der Fehlersätze-Zeile
   'apply.tiles', // features/apply/ApplyHub: Kacheln
   'vocab.hub', // features/vocab/hub/VocabHub: unter dem Wortziel
   'settings.sections', // features/settings/SettingsSheet: weitere Abschnitte

@@ -29,7 +29,7 @@ export const hxEn = {
   hxWsSource: 'Passive estimate (test of {date}) · actively firm {fest}',
   hxWsSourceNone: 'Not measured yet · firmly practiced {fest}',
   hxWsC1Reached: 'Passively above the C1 mark of 4,500 · actively, the firm words count.',
-  hxWsAtlasSub: '{n} words and phrases by frequency',
+  hxWsAtlasSub: '{n} entries by frequency: {words} words, {pack} from the C1 pack',
   hxPathChapter: 'Chapter {n} · {name}',
   hxPathHere: 'You are here',
   hxPathSafe: '{a} of {b} topics secure',

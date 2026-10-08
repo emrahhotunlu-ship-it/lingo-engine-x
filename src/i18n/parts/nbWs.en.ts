@@ -218,8 +218,8 @@ export const nbWsEn: Record<keyof typeof nbWsDe, string> = {
 
   // Hub per overall concept 3.3 (goal card, review card, three decks) and extra sheet 3.7
   nbWsHAddLabel: 'Add word',
-  nbWsHGoalEyebrow: 'Atlas 8,000',
-  nbWsHGoalOf: '{now} of {target}',
+  nbWsHGoalEyebrow: 'C1 vocabulary goal',
+  nbWsHGoalOf: '{now} of {target} words',
   nbWsHGoalMark: 'C1 mark at {mark}',
   nbWsHGoalPace: 'Pace: {n} new words per week · about {weeks} weeks to the goal',
   nbWsHGoalPaceOpen: 'Pace: {n} new words per week',

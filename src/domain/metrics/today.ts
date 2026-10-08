@@ -73,6 +73,12 @@ export function vocabEstimate(i: { profile: Doc | null | undefined; cards: reado
 /** Zahl der Einträge im Atlas (`content/atlas/meta.json`, von P3 mit dem Inhalt gepflegt). */
 export const atlasSize = (): number => atlasMeta.atlas;
 
+/**
+ * Atlas-Zahlen für jede Anzeige (UX-Prüfung W3: eine Quelle): Einzelwörter des Atlas, Einträge des C1-Pakets und zusammen.
+ * `meta.json` wird von `tests/unit/atlasContent.test.ts` gegen den Inhalt geprüft.
+ */
+export const atlasCounts = (): { words: number; pack: number; total: number } => ({ words: atlasMeta.atlas, pack: atlasMeta.pack, total: atlasMeta.atlas + atlasMeta.pack });
+
 /** Feste Karten (Anzeige „Wörter fest 312“): dieselbe Definition wie überall. */
 export const festNow = (cards: readonly TrainCard[]): number => festCount(cards.filter((c) => c.path.startsWith('vocab/')));
 

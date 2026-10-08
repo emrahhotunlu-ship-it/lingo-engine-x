@@ -100,7 +100,7 @@ export function ExerciseMenu({ items, onOpenChange }: { items: Partial<Record<Sh
       {wide ? (
         open && <div className="lx-popover right-0 top-full z-20 mt-1 w-64 rounded-[var(--radius-control)] p-1" style={{ position: 'absolute' }}>{list}</div>
       ) : (
-        <Sheet open={open} onClose={() => setOpen(false)} title={t('exMenu')} closeLabel={t('exMenuClose')}>
+        <Sheet open={open} onClose={() => setOpen(false)} title={t('exMenu')} closeLabel={t('exMenuClose')} fit>
           {list}
         </Sheet>
       )}

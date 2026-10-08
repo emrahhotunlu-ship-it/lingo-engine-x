@@ -89,58 +89,73 @@ export function DayRing({ fills, size = 56, stroke = 7, label, closed = false, p
       data-play={animate ? '' : undefined}
     >
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label={label}>
-        <defs>
-          {arcs.map((a, i) => {
-            const [x1, y1] = pt(c, r, a.start);
-            const [x2, y2] = pt(c, r, a.start + a.len);
-            return (
-              <linearGradient key={i} id={`${uid}g${i}`} gradientUnits="userSpaceOnUse" x1={x1} y1={y1} x2={x2} y2={y2}>
+        {isClosed ? (
+          // Geschlossen (UX-Prüfung W1): EIN Kreis mit EINEM Verlauf, ohne runde Enden – keine Knubbel oder Nähte an den früheren Bogengrenzen.
+          <>
+            <defs>
+              <linearGradient id={`${uid}w`} gradientUnits="userSpaceOnUse" x1={0} y1={0} x2={size} y2={size}>
                 <stop offset="0" stopColor="var(--lx-ok)" />
                 <stop offset="1" stopColor="var(--lx-ok-text)" />
               </linearGradient>
-            );
-          })}
-        </defs>
-        <g transform={`rotate(-90 ${c} ${c})`}>
-          {arcs.map((a, i) => (
-            <circle
-              key={`t${i}`}
-              className="lx-dayring-arc"
-              cx={c}
-              cy={c}
-              r={r}
-              fill="none"
-              stroke="var(--lx-track)"
-              strokeWidth={stroke}
-              strokeLinecap="round"
-              pathLength={360}
-              strokeDasharray={`${a.len} ${360 - a.len}`}
-              strokeDashoffset={-a.start}
-            />
-          ))}
-          {arcs.map((a, i) => {
-            const f = shown[i] ?? 0;
-            const len = a.len * f;
-            return (
-              <circle
-                key={`f${i}`}
-                className="lx-dayring-arc lx-dayring-fill"
-                data-fill={f >= 1 ? 'full' : f > 0 ? 'part' : 'none'}
-                cx={c}
-                cy={c}
-                r={r}
-                fill="none"
-                stroke={`url(#${uid}g${i})`}
-                strokeWidth={stroke}
-                strokeLinecap="round"
-                pathLength={360}
-                strokeDasharray={`${len} ${360 - len}`}
-                strokeDashoffset={-a.start}
-                opacity={f > 0 ? 1 : 0}
-              />
-            );
-          })}
-        </g>
+            </defs>
+            <circle className="lx-dayring-whole" data-testid="today-ring-whole" cx={c} cy={c} r={r} fill="none" stroke={`url(#${uid}w)`} strokeWidth={stroke} />
+          </>
+        ) : (
+          <>
+            <defs>
+              {arcs.map((a, i) => {
+                const [x1, y1] = pt(c, r, a.start);
+                const [x2, y2] = pt(c, r, a.start + a.len);
+                return (
+                  <linearGradient key={i} id={`${uid}g${i}`} gradientUnits="userSpaceOnUse" x1={x1} y1={y1} x2={x2} y2={y2}>
+                    <stop offset="0" stopColor="var(--lx-ok)" />
+                    <stop offset="1" stopColor="var(--lx-ok-text)" />
+                  </linearGradient>
+                );
+              })}
+            </defs>
+            <g transform={`rotate(-90 ${c} ${c})`}>
+              {arcs.map((a, i) => (
+                <circle
+                  key={`t${i}`}
+                  className="lx-dayring-arc"
+                  cx={c}
+                  cy={c}
+                  r={r}
+                  fill="none"
+                  stroke="var(--lx-track)"
+                  strokeWidth={stroke}
+                  strokeLinecap="round"
+                  pathLength={360}
+                  strokeDasharray={`${a.len} ${360 - a.len}`}
+                  strokeDashoffset={-a.start}
+                />
+              ))}
+              {arcs.map((a, i) => {
+                const f = shown[i] ?? 0;
+                const len = a.len * f;
+                return (
+                  <circle
+                    key={`f${i}`}
+                    className="lx-dayring-arc lx-dayring-fill"
+                    data-fill={f >= 1 ? 'full' : f > 0 ? 'part' : 'none'}
+                    cx={c}
+                    cy={c}
+                    r={r}
+                    fill="none"
+                    stroke={`url(#${uid}g${i})`}
+                    strokeWidth={stroke}
+                    strokeLinecap="round"
+                    pathLength={360}
+                    strokeDasharray={`${len} ${360 - len}`}
+                    strokeDashoffset={-a.start}
+                    opacity={f > 0 ? 1 : 0}
+                  />
+                );
+              })}
+            </g>
+          </>
+        )}
       </svg>
       {children !== undefined && (
         <span className="lx-tnum absolute inset-0 flex items-center justify-center text-center text-xs leading-none font-semibold" aria-hidden="true">

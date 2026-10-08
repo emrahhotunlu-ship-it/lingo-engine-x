@@ -652,6 +652,10 @@ h3 {
   .lx-dot[data-on] {
     background: var(--lx-ok);
   }
+  /* UX-Prüfung W10: Grün nur für „sicher“/„fest“; neue und lernende Einheiten zeigen ihre Punkte neutral. */
+  .lx-dots[data-unsure] .lx-dot[data-on] {
+    background: var(--lx-fg-muted);
+  }
   .lx-popover {
     position: fixed;
     z-index: 50;

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import { useClock } from '../../app/clock';
 import { useLive } from '../../data/live';
 import { pendingName, programChapters } from '../../domain/c1/chapters';
@@ -6,9 +6,9 @@ import type { ProgramChapter } from '../../domain/c1/programTypes';
 import { chapterState, type ChapterProgress, type ChapterStateResult } from '../../domain/c1/state';
 import { useT } from '../../i18n';
 import { useWide } from '../../platform/input';
-import { Button } from '../../ui/Button';
+import { Icon } from '../../ui/Icon';
 import { topicName } from '../grammar/topicUi';
-import { ChapterSheet, topicTone } from './ChapterSheet';
+import { ChapterSheet, TONE_KEY, topicTone } from './ChapterSheet';
 import { JourneyMap, StatusChip } from './journey/JourneyMap';
 
 // Programmkarte „Dein Weg zu C1“ (Lernplattform 3.0 P32), im Grammatik-Reiter unter dem Titel (Slot `grammar.head`).
@@ -22,11 +22,16 @@ const EMPTY = new Map<string, Doc>();
 /** Kapitelstand aus den Live-Daten (für Programmkarte und später die C1-Reise). */
 export function useChapterState(): ChapterStateResult {
   const today = useClock((s) => s.today);
+  const nowMs = useClock((s) => s.now);
   const docs = useLive((s) => s.collections.grammar) ?? EMPTY;
-  return useMemo(() => chapterState({ docs, today }), [docs, today]);
+  return useMemo(() => chapterState({ docs, today, nowMs }), [docs, today, nowMs]);
 }
 
-export function ProgramMap() {
+/**
+ * UX-Prüfung B2 (eine rote Linie): Die Reise ist der Kopf des Reiters. Unter dem aktuellen Kapitel steht die Weiter-Karte des Reiters
+ * (`next`, vom LearnHub über die Slot-Eigenschaften gereicht) mit dem EINEN Hauptknopf; „Kapitel ansehen“ ist nur ein Textlink.
+ */
+export function ProgramMap({ next }: { next?: ReactNode }) {
   const { t } = useT();
   const today = useClock((s) => s.today);
   const wide = useWide();
@@ -34,7 +39,8 @@ export function ProgramMap() {
   const chs = programChapters();
   const [picked, setPicked] = useState<number | null>(null);
   const [sheet, setSheet] = useState<{ idx: number; open: boolean } | null>(null);
-  if (!chs.length || state.chapters.length !== chs.length) return null;
+  // Ohne Programm bleibt wenigstens die Weiter-Karte stehen (sie hängt sonst nirgends).
+  if (!chs.length || state.chapters.length !== chs.length) return <>{next}</>;
 
   const openSheet = (idx: number): void => setSheet({ idx, open: true });
   const sheetIdx = sheet?.idx ?? 0;
@@ -53,10 +59,12 @@ export function ProgramMap() {
       {wide ? (
         <JourneyMap chapters={chs} progress={state.chapters} orientation="horizontal" picked={pickedIdx} onSelect={setPicked}>
           <Detail c={chs[pickedIdx]!} p={state.chapters[pickedIdx]!} onOpen={() => openSheet(pickedIdx)} />
+          {next}
         </JourneyMap>
       ) : (
         <JourneyMap chapters={chs} progress={state.chapters} orientation="vertical" onSelect={openSheet} centerDay={today}>
-          {here >= 0 && <Goal c={chs[here]!} p={state.chapters[here]!} onOpen={() => openSheet(here)} />}
+          {here >= 0 && <Goal c={chs[here]!} onOpen={() => openSheet(here)} />}
+          {next}
         </JourneyMap>
       )}
 
@@ -66,18 +74,13 @@ export function ProgramMap() {
 }
 
 /** Ziel des aktuellen Kapitels: „Abgeschlossen heißt …“ und der Knopf zum Kapitelblatt. */
-function Goal({ c, p, onOpen }: { c: ProgramChapter; p: ChapterProgress; onOpen: () => void }) {
+function Goal({ c, onOpen }: { c: ProgramChapter; onOpen: () => void }) {
   const { t, lang } = useT();
   return (
     <div className="flex flex-col gap-2 rounded-[0.875rem] border border-line bg-surface-solid p-3.5" data-testid="program-goal" data-chapter={c.id}>
       <p className="lx-eyebrow">{t('pxMapGoalLabel')}</p>
       <p className="text-sm leading-relaxed">{c.done[lang]}</p>
-      {p.ready && <p className="lx-tnum text-sm font-medium">{t('pxMapPats', { a: p.patSafe, b: p.patTotal })}</p>}
-      <div>
-        <Button variant="secondary" onClick={onOpen} data-testid="program-more">
-          {t('pxMapMore')}
-        </Button>
-      </div>
+      <MoreLink onOpen={onOpen} />
     </div>
   );
 }
@@ -106,16 +109,25 @@ function Detail({ c, p, onOpen }: { c: ProgramChapter; p: ChapterProgress; onOpe
               className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-line px-3 text-sm"
             >
               <span>{name}</span>
-              <span className="lx-tnum text-muted">{r.exists && r.patTotal > 0 ? `${r.patSafe}/${r.patTotal}` : t('pxChTopicSoon')}</span>
+              <span className="text-muted">{r.exists ? t(TONE_KEY[topicTone(r)]) : t('pxChTopicSoon')}</span>
             </li>
           );
         })}
       </ul>
-      <div>
-        <Button variant="secondary" onClick={onOpen} data-testid="program-more">
-          {t('pxMapMore')}
-        </Button>
-      </div>
+      <MoreLink onOpen={onOpen} />
+    </div>
+  );
+}
+
+/** „Kapitel ansehen“: Textlink, kein zweiter Knopf neben dem Hauptknopf der Weiter-Karte. */
+function MoreLink({ onOpen }: { onOpen: () => void }) {
+  const { t } = useT();
+  return (
+    <div>
+      <button type="button" onClick={onOpen} className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-accent-text hover:underline" data-testid="program-more">
+        {t('pxMapMore')}
+        <Icon name="arrowRight" size={16} />
+      </button>
     </div>
   );
 }

@@ -58,6 +58,7 @@ export const nbLernenEn: Record<keyof typeof nbLernenDe, string> = {
   nbLernenNextNew: 'New topic · short explanation first · about {n} min',
   nbLernenNextStart: 'Continue',
   nbLernenNextStartNew: 'Start topic',
+  nbLernenPathAll: 'All {n} topics from B2 to C1',
   nbLernenPathTitle: 'Your path · {n} topics from B2 to C1',
   nbLernenPathNext: 'up next',
   nbLernenStateNew: 'New',

@@ -59,6 +59,7 @@ export const nbLernenDe = {
   nbLernenNextNew: 'Neues Thema · mit kurzer Erklärung · etwa {n} Min.',
   nbLernenNextStart: 'Weiter',
   nbLernenNextStartNew: 'Thema beginnen',
+  nbLernenPathAll: 'Alle {n} Themen von B2 bis C1',
   nbLernenPathTitle: 'Dein Weg · {n} Themen von B2 bis C1',
   nbLernenPathNext: 'als Nächstes',
   nbLernenStateNew: 'Neu',

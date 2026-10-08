@@ -478,6 +478,10 @@
   color: var(--lx-fg);
   cursor: pointer;
 }
+.lx-jr[data-orient='vertical'] .lx-jr-stop[data-compact='true'] .lx-jr-btn {
+  min-height: 2.875rem;
+  padding-block: 0.125rem;
+}
 .lx-jr-btn:focus-visible {
   outline: 2px solid var(--lx-focus);
   outline-offset: 2px;

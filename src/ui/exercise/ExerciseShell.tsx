@@ -57,6 +57,8 @@ export type ShellFeedback = {
   after?: ReactNode;
   /** „Richtig: …“ als erste Inhaltszeile der Karte (c1x: kwt-Lösung, err-Korrektur), UX-Prüfung W2. */
   right?: ReactNode;
+  /** Warum zur Form direkt unter „Deine Antwort / Richtig“ (Wörter: „overcame = Vergangenheit von overcome“), UX-Prüfung W8. */
+  why?: ReactNode;
   /** Kopf der Rückmeldung (Wörter: Wort, Vorlesen, Lautschrift, „Zum Wort“): steht direkt unter dem Urteil, vor der Erklärung (Design-Lead). */
   head?: ReactNode;
   /** Fuß der Rückmeldung (Wörter: „Zum Wort“), ganz unten in der Ergebnis-Karte. */
@@ -83,6 +85,8 @@ export type ExerciseShellProps = {
   feedback?: ShellFeedback | null;
   side?: ReactNode | null;
   layout?: 'auto' | 'stack' | 'split';
+  /** Hülle nur um Vorlage und Antwort (Anki: die wischbare Karte, UX-Prüfung W6 – Kopf und Aufgabe bleiben beim Wischen stehen). */
+  wrapCard?: (card: ReactNode) => ReactNode;
   /** Tastaturhinweis am Laptop je Übungsart (UX-Prüfung W5/W9): eigener Text, `null` = keiner; sonst nach Art (Auswahl oder Tippen). */
   keysHint?: string | null;
   /** Skelett in Kartengröße statt Inhalt (nie ein Leerbild). */
@@ -100,7 +104,7 @@ export function deriveShellState(p: Pick<ExerciseShellProps, 'loading' | 'state'
 }
 
 export function ExerciseShell(props: ExerciseShellProps) {
-  const { meta, status, task, aid = null, prompt, answer, hint = null, secondary = [], primary, barOverride, feedback = null, side = null, layout = 'auto', keysHint } = props;
+  const { meta, status, task, aid = null, prompt, answer, hint = null, secondary = [], primary, barOverride, feedback = null, side = null, layout = 'auto', keysHint, wrapCard } = props;
   const { t } = useT();
   const state = deriveShellState(props);
   const profileSplit = useSplitLayout();
@@ -123,12 +127,20 @@ export function ExerciseShell(props: ExerciseShellProps) {
     : false;
   const { running, fire } = useAutoAdvance({ active: auto, onNext: primary.onClick, nextTestId: primary.testId, resetKey: resultKey });
 
-  // Am Handy rollt das Urteil beim Erscheinen unter den Kopf.
+  // Am Handy rollt das Urteil beim Erscheinen ins Bild – aber nie über die Aufgabe hinaus (UX-Prüfung W8: die Aufgabenzeile bleibt sichtbar).
+  // Passt das Urteil schon ganz ins Bild, bleibt alles stehen; sonst kommt die Aufgabenzeile nach oben, das Urteil folgt darunter.
   const resultRef = useRef<HTMLElement>(null);
+  const taskRef = useRef<HTMLDivElement>(null);
   const hasResult = feedback !== null;
   useEffect(() => {
     if (!hasResult || split || tablet) return;
-    resultRef.current?.scrollIntoView?.({ block: 'start', behavior: 'auto' });
+    const res = resultRef.current;
+    if (!res) return;
+    const r = res.getBoundingClientRect();
+    if (r.top >= 0 && r.bottom <= window.innerHeight) return;
+    const task = taskRef.current;
+    if (task && task.getBoundingClientRect().top < r.top) task.scrollIntoView?.({ block: 'start', behavior: 'auto' });
+    else res.scrollIntoView?.({ block: 'start', behavior: 'auto' });
   }, [hasResult, resultKey, split, tablet]);
 
   // Hauptknopf in der Bereichsfarbe (Design LP2): Wörter violett, Grammatik blau; nur solange die Übung steht.
@@ -211,6 +223,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
             <Comparison given={feedback.comparison.given} ops={feedback.comparison.ops} compact={!!feedback.comparison.compact} />
           </div>
         )}
+        {feedback.why && <div data-slot="why">{feedback.why}</div>}
         {explainProps && (
           <div data-slot="explanation">
             <Explanation {...explainProps} onFoldChange={onFold} only="open" skipYours />
@@ -274,7 +287,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
           <Icon name="info" size={18} />
         </button>
       </div>
-      <div data-slot="task" className="flex flex-col gap-1">
+      <div ref={taskRef} data-slot="task" className="flex scroll-mt-4 flex-col gap-1">
         {info && (
           <p id={infoId} className="lx-t-support m-0 text-muted" data-testid="purpose">
             {[status.topic, status.pattern].filter(Boolean).length > 0 && (
@@ -288,10 +301,14 @@ export function ExerciseShell(props: ExerciseShellProps) {
         </h2>
       </div>
       {aid && <div data-slot="aid">{aid}</div>}
-      <div data-slot="prompt" className="lx-t-prompt">
-        {prompt}
-      </div>
-      <div data-slot="answer">{answer}</div>
+      {(wrapCard ?? ((c: ReactNode) => c))(
+        <>
+          <div data-slot="prompt" className="lx-t-prompt">
+            {prompt}
+          </div>
+          <div data-slot="answer">{answer}</div>
+        </>,
+      )}
       {!asideSecondary && secondaryNode}
       {hint && state !== 'aiError' && (
         <div data-slot="hint" data-state={state === 'retry' ? 'retry' : undefined}>

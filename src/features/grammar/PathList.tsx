@@ -22,7 +22,7 @@ export const STATE_KEYS: Record<TopicState, MessageKey> = {
   firm: 'nbLernenStateFirm',
 };
 
-export function PathList({ onOpen, highlight = null }: { onOpen: (topic: string) => void; highlight?: string | null }) {
+export function PathList({ onOpen, highlight = null, program = false }: { onOpen: (topic: string) => void; highlight?: string | null; program?: boolean }) {
   const { t, tn, lang } = useT();
   const now = useClock((s) => s.now);
   const today = useClock((s) => s.today);
@@ -64,13 +64,16 @@ export function PathList({ onOpen, highlight = null }: { onOpen: (topic: string)
               <span className="flex min-w-0 flex-1 flex-col gap-0.5">
                 <span className="lx-t-answer tracking-tight">
                   {t('hxPathChapter', { n: ci + 1, name: lang === 'en' ? c.name.en : c.name.de })}
-                  {here && (
+                  {/* Mit Programm zeigt nur die C1-Reise „Du bist hier“ (UX-Prüfung B2). */}
+                  {here && !program && (
                     <span className="dz-here ml-2 inline-flex h-[1.375rem] items-center rounded-full px-2.5 align-middle text-xs font-bold" style={{ background: 'var(--lx-btn-grammar)', color: '#fff' }} data-testid="chapter-here">
                       {t('hxPathHere')}
                     </span>
                   )}
                 </span>
-                <span className="lx-tnum text-sm text-muted">{t('hxPathSafe', { a: c.safe, b: c.topics.length })}</span>
+                <span className="lx-tnum text-sm text-muted" data-testid="chapter-safe" data-safe={c.safe} data-total={c.topics.length}>
+                  {t('hxPathSafe', { a: c.safe, b: c.topics.length })}
+                </span>
                 {/* UX-Prüfung W10: die Fällig-Pille steht unter dem Titel, nicht daneben (kein Umbruch des Titels am Handy). */}
                 {c.due > 0 && (
                   <span className="mt-1 self-start rounded-full bg-surface-strong px-2.5 py-0.5 text-xs font-medium text-fg" data-testid="chapter-due" data-n={c.due}>

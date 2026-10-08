@@ -29,7 +29,7 @@ export const hxDe = {
   hxWsSource: 'Passiv geschätzt (Test vom {date}) · aktiv fest {fest}',
   hxWsSourceNone: 'Noch nicht gemessen · fest geübt {fest}',
   hxWsC1Reached: 'Passiv über der C1-Marke von 4.500 · aktiv zählen die festen Wörter.',
-  hxWsAtlasSub: '{n} Wörter und Wendungen nach Häufigkeit',
+  hxWsAtlasSub: '{n} Einträge nach Häufigkeit: {words} Wörter, {pack} aus dem C1-Paket',
   hxPathChapter: 'Kapitel {n} · {name}',
   hxPathHere: 'Du bist hier',
   hxPathSafe: '{a} von {b} Themen sicher',

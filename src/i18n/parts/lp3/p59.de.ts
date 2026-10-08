@@ -9,6 +9,7 @@ export const eeP59De = {
   eeSkyVeil: 'Blauer Schleier: geschätzt bekannt laut Wortschatztest vom {d}',
   eeSkyNoVeil: 'Ohne Wortschatztest der letzten 90 Tage gibt es keinen Schleier.',
   eeSkyLegendAria: 'Legende',
+  eeSkyCards: 'Davon übst du {n} als Karte:',
   eeSkyStars: '{n} als Karte',
   eeSkyZoomIn: 'Vergrößern',
   eeSkyZoomOut: 'Ganzer Himmel',

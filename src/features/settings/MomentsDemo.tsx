@@ -100,6 +100,13 @@ export function MomentsDemo() {
   const show = useLevelUp((s) => s.show);
   const lines = useSyncExternalStore(subscribeMomentLines, momentLines, momentLines);
   const pre = useRef<HTMLPreElement>(null);
+  const stage = useRef<HTMLDivElement>(null);
+  // UX-Prüfung W7: die Bühne beim Abspielen ins Bild holen (Mitte), sonst läuft der Moment am Handy unter dem Bildrand ab.
+  useEffect(() => {
+    if (!scene || run === 0) return;
+    const off = document.documentElement.dataset['fx'] === 'off';
+    stage.current?.scrollIntoView({ block: 'center', behavior: off ? 'auto' : 'smooth' });
+  }, [scene, run]);
   if (!data) return null;
   const play = (s: Exclude<Scene, null>): void => {
     setScene(s);
@@ -127,7 +134,7 @@ export function MomentsDemo() {
         </button>
       </div>
       {scene && (
-        <div className="lx-moments-stage" data-testid="demo-stage" data-scene={scene}>
+        <div ref={stage} className="lx-moments-stage" data-testid="demo-stage" data-scene={scene}>
           {scene === 'round' ? <RoundScene key={run} data={data.round} /> : <DayScene key={run} data={data.day} />}
         </div>
       )}

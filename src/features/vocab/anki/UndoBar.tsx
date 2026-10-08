@@ -33,7 +33,7 @@ export function UndoBar({ progress, progressTestId = 'round-progress' }: { progr
     <div className="flex min-w-0 items-center gap-2" role="status" data-testid="undo-bar">
       {progress && progress.total > 0 && (
         <span className="lx-tnum flex-none text-xs text-muted" data-testid={progressTestId}>
-          {Math.max(1, Math.min(progress.total, progress.n))} / {progress.total}
+          {t('nvProgress', { n: Math.max(1, Math.min(progress.total, progress.n)), total: progress.total })}
         </span>
       )}
       {!!progress?.extra && (

@@ -2,9 +2,9 @@
 // (checked by `tests/unit/motivationText.test.ts`).
 
 export const moP22En = {
-  moWeekProgress: 'Week {n} of 6',
-  moWeekReached: 'Week 6 of 6 ✓',
-  moWeekReached7: 'Week 6 of 6 ✓ · 7 days',
+  moWeekProgress: '{n} of 6 study days',
+  moWeekReached: '6 of 6 study days ✓',
+  moWeekReached7: '6 of 6 study days ✓ · 7 days',
   moWeekOver: 'This week: {n} study days · Monday starts fresh',
   moStreakWeek: 'Streak {streak} · {week}',
   moRestFree: 'Rest day free this week',

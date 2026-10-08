@@ -70,7 +70,7 @@ export function ExerciseBar({ onClose, closeLabel, closeTestId = 'round-close', 
               </span>
             ) : (
               <span className="lx-tnum flex-none text-xs text-muted" data-testid={progressTestId}>
-                {n} / {progress.total}
+                {t('nvProgress', { n, total: progress.total })}
               </span>
             )}
             {!counter && !!progress.extra && (

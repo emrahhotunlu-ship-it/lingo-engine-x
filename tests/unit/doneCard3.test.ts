@@ -30,10 +30,10 @@ function week(pattern: string): WeekDay[] {
 }
 
 describe('weekText', () => {
-  it('ohne Pflichttag in der Woche keine Zeile (nie „Woche 0 von 6“)', () => {
+  it('ohne Pflichttag in der Woche keine Zeile (nie „0 von 6 Lerntagen“)', () => {
     expect(weekText(weekGoal(week('tffffff')))).toBeNull();
   });
-  it('Woche 4 von 6, Woche geschafft, Woche geschafft mit 7 Tagen', () => {
+  it('4 von 6 Lerntagen, Woche geschafft, Woche geschafft mit 7 Tagen', () => {
     expect(weekText(weekGoal(week('ddddtff')))).toEqual({ key: 'moWeekProgress', params: { n: 4 } });
     expect(weekText(weekGoal(week('dddddd' + 't')))).toEqual({ key: 'moWeekReached', params: {} });
     expect(weekText(weekGoal(week('ddddddd')))).toEqual({ key: 'moWeekReached7', params: {} });
@@ -46,14 +46,14 @@ describe('weekText', () => {
 });
 
 describe('Kartenfuß', () => {
-  it('„Serie 12 · Woche 4 von 6“ (Deutsch und Englisch)', () => {
+  it('„Serie 12 · 4 von 6 Lerntagen“ (Deutsch und Englisch)', () => {
     const p = footParts({ streak: 12, goal: weekGoal(week('ddddtff')) })!;
-    expect(footText(p, tde)).toBe('Serie 12 · Woche 4 von 6');
-    expect(footText(p, ten)).toBe('Streak 12 · Week 4 of 6');
+    expect(footText(p, tde)).toBe('Serie 12 · 4 von 6 Lerntagen');
+    expect(footText(p, ten)).toBe('Streak 12 · 4 of 6 study days');
   });
   it('ohne Serie nur die Woche, ohne Woche nur die Serie, ohne beides keine Zeile', () => {
-    expect(footText(footParts({ streak: 0, goal: weekGoal(week('ddtffff')) })!, tde)).toBe('Woche 2 von 6');
-    expect(footText(footParts({ streak: null, goal: weekGoal(week('ddtffff')) })!, tde)).toBe('Woche 2 von 6');
+    expect(footText(footParts({ streak: 0, goal: weekGoal(week('ddtffff')) })!, tde)).toBe('2 von 6 Lerntagen');
+    expect(footText(footParts({ streak: null, goal: weekGoal(week('ddtffff')) })!, tde)).toBe('2 von 6 Lerntagen');
     expect(footText(footParts({ streak: 12, goal: weekGoal(week('tffffff')) })!, tde)).toBe('Serie 12');
     expect(footParts({ streak: 0, goal: weekGoal(week('tffffff')) })).toBeNull();
   });

@@ -9,6 +9,7 @@ export const eeP59En = {
   eeSkyVeil: 'Blue haze: estimated known words from your vocabulary test on {d}',
   eeSkyNoVeil: 'Without a vocabulary test in the last 90 days there is no haze.',
   eeSkyLegendAria: 'Legend',
+  eeSkyCards: 'You practice {n} of them as cards:',
   eeSkyStars: '{n} as cards',
   eeSkyZoomIn: 'Zoom in',
   eeSkyZoomOut: 'Whole sky',

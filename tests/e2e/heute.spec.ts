@@ -88,7 +88,7 @@ test('Montag: ohne Bestätigungskarte, Blöcke bis „Fertig“, Serie +1, ohne 
   expect(act).toMatchObject({ 'u-focus': 1, 'u-task': 1, 'u-again': 1 });
   // `app/week` bleibt unberührt (kein Wochenthema mehr, nichts wird geschrieben).
   expect((await dump(page))['app/week']).toMatchObject({ cur: { wk: '2026-W38' } });
-  await expect(page.getByTestId('today-streak')).toHaveText('Serie 13 · Woche 1 von 6');
+  await expect(page.getByTestId('today-streak')).toHaveText('Serie 13 · 1 von 6 Lerntagen');
   expect(errors).toEqual([]);
 });
 
@@ -161,11 +161,11 @@ test('Fehlergrenze (lx:crash-once) in Block 2 der Einheit (Grammatik): Hinweis s
   await expect(page.getByTestId('grammar-session')).toHaveAttribute('data-ctx', 'duty');
   await expect(page.getByTestId('boundary-step')).toBeVisible();
   await expect(page.getByTestId('boundary-exercise')).toHaveCount(0);
-  await expect(page.getByTestId('round-progress')).toHaveText(/^1 \/ \d+$/);
+  await expect(page.getByTestId('round-progress')).toHaveText(/^1 von \d+$/);
   await page.getByTestId('boundary-skip').click();
   // Überspringen führt ohne Bewertung zur nächsten Aufgabe; die Runde läuft weiter.
   await expect(page.getByTestId('boundary-step')).toHaveCount(0);
-  await expect(page.getByTestId('round-progress')).toHaveText(/^2 \/ \d+$/);
+  await expect(page.getByTestId('round-progress')).toHaveText(/^2 von \d+$/);
   expect(errors.filter((e) => !e.includes('crash-once'))).toEqual([]);
 });
 
@@ -223,7 +223,7 @@ test('Block 2 Grammatik aus Heute: Grammatikrunde als Pflicht mit 6 Aufgaben, �
   const session = page.getByTestId('grammar-session');
   await expect(session).toHaveAttribute('data-ctx', 'duty');
   // Rundengröße aus dem Plan (Block 2, volle Einheit: 6 Aufgaben).
-  await expect(page.getByTestId('round-progress')).toHaveText('1 / 6');
+  await expect(page.getByTestId('round-progress')).toHaveText('1 von 6');
   const solve = grammarKey();
   for (let i = 0; i < 12; i++) {
     await expect(page.getByTestId('gr-item').or(page.getByTestId('summary')).first()).toBeVisible();

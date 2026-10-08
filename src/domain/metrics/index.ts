@@ -10,7 +10,7 @@ export { FEST_GOAL, expectedKnown, festCount, festForecast, festGrowth28, festGr
 export { errorSentenceStats, grammarDistribution, topicStage, type ErrorSentenceStats, type GrammarDistribution, type TopicStage } from './grammar';
 export { checkMean, vtestView, type CheckMean, type VtestView } from './tests';
 // Lernplattform 2.0 (§4.9): Zahlen von Heute, Wörtern und Grammatik, Musterzustand, Messwerte.
-export { EXTRA_ROUND_MAX, atlasSize, dayLeft, fehlersaetzeDue, festNow, fixAll, fixLimitOfPlan, fixToday, grammarErrorsDue, laptopDeepen, newToday, reviewAll, reviewToday, vocabEstimate, wordsToday } from './today';
+export { EXTRA_ROUND_MAX, atlasCounts, atlasSize, dayLeft, fehlersaetzeDue, festNow, fixAll, fixLimitOfPlan, fixToday, grammarErrorsDue, laptopDeepen, newToday, reviewAll, reviewToday, vocabEstimate, wordsToday } from './today';
 export { PATTERN_STATES, patPush, patternState, patternStateNo, patsOf, readPatEntry, topicStateFromPatterns, type PatEntry, type PatternState } from './pattern';
 export { EFFECT_RULES, learningEffect, motivationSignals, type LearningEffect, type MotivationSignals, type Rate } from './effect';
 export { nextGoal, type GoalId, type NextGoal } from './goals';

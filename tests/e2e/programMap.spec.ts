@@ -58,15 +58,22 @@ test.describe('Handy 360', () => {
     await expect(sheet.locator('[data-testid="chapter-topic"][data-exists="false"]')).toHaveCount(0);
     await page.keyboard.press('Escape');
 
-    // Invariante: Muster sicher je Kapitel = Summe der Themenzeilen des Lernpfads.
+    // Invariante (UX-Prüfung B2: EINE Einheit): „Themen sicher“ je Kapitel in der Reise = Kapitelkopf des Lernpfads, Nenner = Themenzeilen.
     await openAllChapters(page);
-    for (const id of ['k1', 'k4', 'k6']) {
+    // Weit vorausliegende Kapitel stehen in der Reise kompakt ohne Zahl (damit „Du bist hier“ bei 390 px sichtbar bleibt); geprüft wird jede gezeigte Zahl.
+    let checked = 0;
+    for (const id of ['k1', 'k2', 'k3', 'k4', 'k5', 'k6', 'k7']) {
       const prog = page.locator(`[data-testid="program-chapter"][data-chapter="${id}"] [data-testid="program-pats"]`);
-      const rows = await page.locator(`[data-testid="chapter"][data-chapter="${id}"] [data-testid="topic-pats"]`).evaluateAll((els) => els.map((e) => [Number(e.getAttribute('data-safe')), Number(e.getAttribute('data-total'))] as const));
-      expect(rows.length).toBeGreaterThan(0);
-      await expect(prog).toHaveAttribute('data-total', String(rows.reduce((s, r) => s + r[1], 0)));
-      await expect(prog).toHaveAttribute('data-safe', String(rows.reduce((s, r) => s + r[0], 0)));
+      if ((await prog.count()) === 0) continue;
+      checked++;
+      const path = page.locator(`[data-testid="chapter"][data-chapter="${id}"] [data-testid="chapter-safe"]`);
+      const rows = await page.locator(`[data-testid="chapter"][data-chapter="${id}"] [data-testid="topic-pats"]`).count();
+      expect(rows).toBeGreaterThan(0);
+      await expect(path).toHaveAttribute('data-total', String(rows));
+      await expect(prog).toHaveAttribute('data-total', String(rows));
+      await expect(prog).toHaveAttribute('data-safe', (await path.getAttribute('data-safe')) ?? '');
     }
+    expect(checked).toBeGreaterThanOrEqual(2);
     expect(errors).toEqual([]);
   });
 

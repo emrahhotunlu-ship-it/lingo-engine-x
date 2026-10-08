@@ -33,8 +33,9 @@ export function demoJourney(): ChapterProgress[] {
       topics: [],
       patSafe: Math.min(d.patSafe, d.patTotal),
       patTotal: d.patTotal,
+      topicSafe: d.patTotal > 0 ? Math.round((Math.min(d.patSafe, d.patTotal) / d.patTotal) * c.topics.length) : 0,
       introduced: 0,
-      liveTopics: 0,
+      liveTopics: c.topics.length,
       allIntroduced: d.status === 'done',
       allSafe: d.status === 'done',
     };

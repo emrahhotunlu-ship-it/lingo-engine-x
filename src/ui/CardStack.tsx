@@ -71,6 +71,11 @@ export class CardStack extends Component<Props> {
     const target = inner ?? clone;
     const to = snap.exit === 'left' ? 'translateX(-120%) rotate(-8deg)' : snap.exit === 'right' ? 'translateX(120%) rotate(8deg)' : `translateX(${STACK.exitX}px) rotate(${STACK.exitRot}deg)`;
     const out = target.animate([{ transform: from, opacity: 1 }, { transform: to, opacity: 0 }], { duration: snap.exit ? STACK.flyMs : STACK.exitMs, easing: 'cubic-bezier(0.4, 0, 1, 1)', fill: 'forwards' });
+    // Fliegt nur die gewischte Karte (UX-Prüfung W6), ist der stehende Rest des Abbilds unsichtbar: kein doppelter Kopf über der neuen Karte.
+    if (inner) {
+      clone.style.visibility = 'hidden';
+      inner.style.visibility = 'visible';
+    }
     const drop = (): void => {
       clone.remove();
       this.ghosts.delete(clone);

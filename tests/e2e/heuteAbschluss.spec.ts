@@ -3,7 +3,7 @@ import { boot, screen } from './fixtures';
 import { MON, MON_9, VG_BLOCKS, profileWith, reviewedLog, vgPlan } from './heuteHelpers';
 
 // Abschlusskarte Heute 3.0 (Lernplattform 3.0 P27, Motivation §4.4, §4.5, §4.8, §4.10): Ring, eine große Zahl, höchstens vier Zeilen,
-// Kartenfuß „Serie 12 · Woche 4 von 6“, Pausen ohne Vorwurf. Die Serienregel selbst bleibt unberührt (Fixtures der Serien-Tests).
+// Kartenfuß „Serie 12 · 4 von 6 Lerntagen“, Pausen ohne Vorwurf. Die Serienregel selbst bleibt unberührt (Fixtures der Serien-Tests).
 
 type Doc = Record<string, unknown>;
 const DONE = ['u-focus', 'u-task', 'u-again'];
@@ -25,7 +25,7 @@ test.describe('Handy 390 × 844', () => {
     await expect(card).toHaveAttribute('data-done', 'true');
     await expect(page.getByTestId('today-status')).toHaveText('Fertig für heute');
     // Zeile 4: Serie und Woche an einer Stelle (im Kopf des Wochenstreifens), die Zählung der Tage steht nicht noch einmal daneben.
-    await expect(page.getByTestId('today-streak')).toHaveText(/^Serie 1\d · Woche 1 von 6$/);
+    await expect(page.getByTestId('today-streak')).toHaveText(/^Serie 1\d · 1 von 6 Lerntagen$/);
     await expect(page.getByTestId('today-streak')).toHaveCount(1);
     await expect(page.getByTestId('week-summary')).toHaveCount(0);
     // Zeile 2: das eine nächste Ziel (kein Meilenstein heute).

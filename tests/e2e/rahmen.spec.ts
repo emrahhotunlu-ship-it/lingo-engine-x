@@ -147,8 +147,8 @@ for (const [theme, lang] of [
     const { errors } = await boot(page, { migrated: true, theme, lang });
     await screen(page, 'today');
     await expect(page.getByTestId('profile-streak')).toHaveCount(0);
-    // UX-Prüfung KLEIN: Heute-Fußzeile in einem Format „Woche n von 6“ (Text geändert, Zahlen unverändert).
-    await expect(page.getByTestId('today-streak')).toHaveText(lang === 'de' ? 'Serie 12 · Woche 6 von 6 ✓ · 7 Tage' : 'Streak 12 · Week 6 of 6 ✓ · 7 days');
+    // UX-Prüfung KLEIN: Heute-Fußzeile in einem Format „n von 6 Lerntagen“ (Text geändert, Zahlen unverändert).
+    await expect(page.getByTestId('today-streak')).toHaveText(lang === 'de' ? 'Serie 12 · 6 von 6 Lerntagen ✓ · 7 Tage' : 'Streak 12 · 6 of 6 study days ✓ · 7 days');
     await expect(page.getByTestId('tab-vocab')).toHaveText(lang === 'de' ? 'Wörter' : 'Words');
     expect(await layoutProblems(page)).toEqual([]);
     await openProfile(page);

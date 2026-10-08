@@ -242,11 +242,6 @@ export function FlipCard({ exercise, again = false, onDone, behind = 0 }: { exer
 
   return (
     <div
-      ref={rootRef}
-      className="lx-swipe-card"
-      // Beschriftung der Färbung beim Wischen (CSS `attr()`, kein zweiter Text im Baum).
-      data-swipe-left={shown ? t('nbWsGrade1') : undefined}
-      data-swipe-right={shown ? t(GRADE_KEY[shown.suggest]) : undefined}
       data-testid="flip"
       data-card={card.id}
       data-kind={card.kind}
@@ -262,6 +257,18 @@ export function FlipCard({ exercise, again = false, onDone, behind = 0 }: { exer
         // UX-Prüfung W5: keine Seitenkarte rechts bei Anki; Tastaturhinweis passend zur Seite (Rückseite: Enter = Vorschlag, 1–4 = selbst).
         // eslint-disable-next-line no-restricted-syntax -- Gerüst-Eigenschaft „gestapelt“ (keine Layout-Animation)
         layout="stack"
+        // UX-Prüfung W6: nur die Karte (Vorder- und Rückseite) folgt dem Finger, Kopf, Aufgabe und Bewertungsleiste bleiben stehen.
+        wrapCard={(c) => (
+          <div
+            ref={rootRef}
+            className="lx-swipe-card flex flex-col gap-4"
+            // Beschriftung der Färbung beim Wischen (CSS `attr()`, kein zweiter Text im Baum).
+            data-swipe-left={shown ? t('nbWsGrade1') : undefined}
+            data-swipe-right={shown ? t(GRADE_KEY[shown.suggest]) : undefined}
+          >
+            {c}
+          </div>
+        )}
         keysHint={shown ? t('trEnterHint') : null}
         status={{ area: 'words', state: state0, kindLabel: t('nbWsFlipKind'), badge: again ? t('trAgainBadge') : null }}
         task={{ text: t(dir === 'de-en' ? 'nbWsFlipTaskDeEn' : 'nbWsFlipTaskEnDe'), purpose: `${t('nbWsFlipInfo')} ${t('nbWsGradeInfo')}` }}
