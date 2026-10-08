@@ -191,8 +191,9 @@ test('Soll N107: Register-Leiter – ganzer Satz, Hinweis, zweiter Versuch', asy
   await expect(page.getByTestId('round-progress')).toHaveText('2 von 5');
 });
 
+// Seit R4 (P38) führt die Kachel „Wortbildung“ auf „Wort umbauen“ (`wf`, geprüft in c1xWf.spec); die alte Übung bleibt der Rückfall bei ausgeschaltetem `wf`.
 test('Soll N107: Überleitungen und Wortbildung erreichbar', async ({ page }) => {
-  await boot(page, { migrated: true });
+  await boot(page, { migrated: true, localStorage: { 'lx:flags': '{"c1xKinds":{"wf":false}}' } });
   await openEntry(page, 'training-transition');
   await screen(page, 'nbdrill');
   await expect(page.getByTestId('transition-item')).toBeVisible();
