@@ -21,8 +21,8 @@ export const ProgramChapterSchema = z.object({
   note: z.string().min(1),
   /** Modellrechnung in Wochen (keine Messung). */
   weeks: z.number().positive(),
-  /** Einsatz-Satz („Wozu brauchst du das?“): kommt mit P42 nach Prüfung durch den Englischlehrer. */
-  use: Bi.optional(),
+  /** Einsatz im Job (P42, Motivation §4.2): `de`/`en` = die Situation, `ex` = ein bis zwei Beispielsätze (US-Englisch, vom Englischlehrer geprüft). */
+  use: z.object({ de: z.string().min(1), en: z.string().min(1), ex: z.array(z.string().min(10)).min(1).max(2) }).optional(),
 });
 
 export const ProgramFileSchema = z.object({

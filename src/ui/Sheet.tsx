@@ -33,6 +33,10 @@ export function Sheet({ open, onClose, title, closeLabel, children, titleLayoutI
     if (!open) return;
     opener.current = document.activeElement;
     const onKey = (e: KeyboardEvent) => {
+      // Liegen mehrere Blätter übereinander (z. B. Kapitelprüfung über dem Kapitelblatt), reagiert nur das oberste auf Esc und Tab.
+      const dialogs = document.querySelectorAll('[role="dialog"][aria-modal="true"]');
+      const top = dialogs[dialogs.length - 1];
+      if (top && panel.current && top !== panel.current) return;
       if (e.key === 'Escape') {
         onClose();
         return;

@@ -137,8 +137,8 @@ test.describe('Handy 390', () => {
     expect(errors).toEqual([]);
   });
 
-  test('ohne Schalter erscheint nichts', async ({ page }) => {
-    await start(page, 'kwt');
+  test('mit abgeschaltetem Schalter erscheint nichts', async ({ page }) => {
+    await start(page, '{"program":false}');
     await expect(page.getByTestId('learn-hub')).toBeVisible();
     await expect(page.getByTestId('place-card')).toHaveCount(0);
   });

@@ -1,0 +1,276 @@
+// P43 Prüfungsvorrat Kapitel 1, Teil b: past-perfect, used-to, prep-time, stative-adv. Reihenfolge je Thema: ocl · kwt · err · ocl · kwt · err · ocl · kwt.
+export const items = [
+  // ================= past-perfect =================
+  {
+    k: 'ocl', p: 'pp.earlier', lv: 'B2', dom: 'life', cls: 'aux', a: ['had'],
+    t: 'By the time we reached the cinema, the film ___ already started, so we missed the opening scene.',
+    c: {
+      has: 'has gehört zum Present Perfect; der Satz erzählt aber in der Vergangenheit. || has belongs to the present perfect, but the sentence tells a story in the past.',
+      was: 'was already started klänge wie Passiv; der Film begann von selbst. || was already started would sound passive; the film started by itself.',
+      did: 'did braucht die Grundform (start), nicht started. || did needs the base form (start), not started.',
+    },
+    ok: 'Das Frühere vor einem Zeitpunkt in der Vergangenheit: had + Partizip (had already started). || What happened earlier than a past point in time: had + participle (had already started).',
+  },
+  {
+    k: 'kwt', p: 'pp.reported', lv: 'B2+', dom: 'biz',
+    lead: 'On Monday my manager promised to send me the report the next day.', key: 'SAID',
+    before: 'My manager', after: 'the report the next day.', a: ['said she would', 'said he would'], b: ['send me'], v: [{ a: ['said that she', 'said that he'], b: ['would send me'] }], x: ['told', 'has', 'sends'],
+    traps: [['said she will send me', 'In der berichteten Rede rückt will eine Stufe zurück: would.', 'In reported speech will moves one step back: would.']],
+    ok: ['Teil 1: said she would, denn die Aussage lag in der Vergangenheit, deshalb rückt will zu would. Teil 2: send me, nach would folgt die Grundform.', 'Part 1: said she would, because the statement was in the past, so will moves back to would. Part 2: send me, the base form follows would.'],
+  },
+  {
+    k: 'err', p: 'pp.duration', lv: 'B2+', dom: 'biz',
+    text: 'When the inspector arrived at nine, we were waiting for him since half past seven.',
+    bad: { span: 'were waiting', fix: ['had been waiting'], ch: ['have been waiting', 'waited'] },
+    ok: ['Eine Dauer bis zu einem Zeitpunkt in der Vergangenheit braucht had been + -ing: had been waiting since half past seven.', 'A length of time up to a point in the past needs had been + -ing: had been waiting since half past seven.'],
+    c1: ['have been waiting gehört in die Gegenwart; die Erzählung steht aber in der Vergangenheit.', 'have been waiting belongs to the present, but the story is told in the past.'],
+    c2: ['Mit since und einer Dauer braucht es die Verlaufsform mit had been, nicht das einfache Past Simple.', 'With since and a length of time the continuous form with had been is needed, not the simple past.'],
+  },
+  {
+    k: 'ocl', p: 'pp.first-time', lv: 'B2', dom: 'life', cls: 'aux', a: ['had'],
+    t: 'It was the first time I ___ ever traveled alone, and I was a little nervous at the airport.',
+    c: {
+      have: 'have passt zur Gegenwart; der Satz erzählt aber in der Vergangenheit (was). || have fits the present, but the sentence is told in the past (was).',
+      was: 'was braucht -ing oder ein Adjektiv; traveled ist weder noch. || was needs -ing or an adjective; traveled is neither.',
+      did: 'did braucht die Grundform (travel), nicht traveled. || did needs the base form (travel), not traveled.',
+    },
+    ok: 'Nach It was the first time steht das Past Perfect: I had ever traveled. || After It was the first time the past perfect follows: I had ever traveled.',
+  },
+  {
+    k: 'kwt', p: 'pp.inversion', lv: 'C1', dom: 'biz',
+    lead: 'We had barely started the demo when the projector stopped working.', key: 'SOONER',
+    before: 'No', after: 'the demo than the projector stopped working.', a: ['sooner had'], b: ['we started'], x: ['hardly', 'when', 'did'],
+    traps: [['sooner we had started', 'Nach No sooner steht had vor dem Subjekt: had we started.', 'After No sooner, had comes before the subject: had we started.']],
+    ok: ['Teil 1: sooner had, nach No sooner steht das Hilfsverb. Teil 2: we started, danach folgt das Subjekt mit dem Partizip.', 'Part 1: sooner had, the auxiliary follows No sooner. Part 2: we started, the subject and participle come next.'],
+  },
+  {
+    k: 'err', p: 'pp.earlier', lv: 'B2', dom: 'life',
+    text: 'By the time the guests arrived, we had already cleaned the apartment and cooked dinner.',
+    bad: null,
+    ok: ['Kein Fehler: had already cleaned zeigt, dass das Putzen vor der Ankunft der Gäste fertig war.', 'No mistake: had already cleaned shows that the cleaning was finished before the guests arrived.'],
+    fa: [['had', 'had + Partizip ist hier richtig: Es war schon vor der Ankunft passiert.', 'had + participle is right here: it had already happened before the arrival.']],
+  },
+  {
+    k: 'ocl', p: 'pp.reported', lv: 'B2+', dom: 'life', cls: 'aux', a: ['had'],
+    t: 'My teacher asked whether we ___ already finished the homework for the weekend before the lesson began.',
+    c: {
+      did: 'did braucht die Grundform (finish), nicht finished. || did needs the base form (finish), not finished.',
+      would: 'would braucht die Grundform (finish), nicht finished. || would needs the base form (finish), not finished.',
+      were: 'were already finished passt nicht zu we als Täter; es wäre ein Zustand statt einer Handlung. || were already finished does not fit we as the doers; it would be a state instead of an action.',
+    },
+    ok: 'Berichtete Frage in der Vergangenheit: had + Partizip (had already finished) für das Frühere. || A reported question in the past: had + participle (had already finished) for the earlier action.',
+  },
+  {
+    k: 'kwt', p: 'pp.duration', lv: 'B2+', dom: 'biz',
+    lead: 'Our team began testing the update at seven, and the client arrived at nine.', key: 'BEEN',
+    before: 'When the client arrived, we', after: 'the update for two hours.', a: ['had been'], b: ['testing'], x: ['tested', 'were', 'have'],
+    traps: [['had been tested', 'Mit -ed wäre es Passiv („wurde getestet“). Das Team testet selbst, also -ing.', 'With -ed it would be passive (“was tested”). The team does the testing, so -ing.']],
+    ok: ['Teil 1: had been, denn die Dauer endet vor dem Zeitpunkt in der Vergangenheit. Teil 2: testing, die -ing-Form zeigt die Tätigkeit.', 'Part 1: had been, because the length of time ends before a point in the past. Part 2: testing, the -ing form shows the activity.'],
+  },
+
+  // ================= used-to =================
+  {
+    k: 'ocl', p: 'ut.used-to', lv: 'B2', dom: 'life', cls: 'aux', a: ['used'],
+    t: 'When I was a student, I ___ to cycle to the university every day, but now I take the bus.',
+    c: {
+      use: 'In der bejahten Aussage heißt es used to, mit -d. || In a positive statement it is used to, with a -d.',
+      would: 'would to gibt es nicht; would steht ohne to direkt vor der Grundform. || would to does not exist; would comes directly before the base form without to.',
+      am: 'am to cycle passt nicht zur Vergangenheit (When I was a student). || am to cycle does not fit the past (When I was a student).',
+    },
+    ok: 'used to + Grundform beschreibt eine frühere Gewohnheit, die heute nicht mehr gilt. || used to + base form describes an earlier habit that no longer applies today.',
+  },
+  {
+    k: 'kwt', p: 'ut.be-used-to', lv: 'B2+', dom: 'biz',
+    lead: 'Working under constant time pressure no longer feels strange to me.', key: 'USED',
+    before: 'I', after: 'under constant time pressure.', a: ['am used to'], b: ['working'], x: ['get', 'would', 'did'],
+    traps: [['am used to work', 'Nach be used to folgt die -ing-Form: working.', 'After be used to the -ing form follows: working.'], ['used to work', 'used to + Grundform meint früher; be used to + -ing meint gewohnt sein.', 'used to + base form means formerly; be used to + -ing means being accustomed.']],
+    ok: ['Teil 1: am used to, so sagst du „ich bin es gewohnt“. Teil 2: working, nach used to steht hier die -ing-Form, weil to eine Präposition ist.', 'Part 1: am used to, that is how you say “I am accustomed to it”. Part 2: working, the -ing form follows because to is a preposition here.'],
+  },
+  {
+    k: 'err', p: 'ut.did-use-to', lv: 'B2', dom: 'life',
+    text: "We didn't used to have a dishwasher, so we washed everything by hand after dinner.",
+    bad: { span: "didn't used", fix: ["didn't use", 'did not use'], ch: ["don't use", "weren't use"] },
+    ok: ['Nach didn’t steht die Grundform: didn’t use to. Das -d von used verschwindet, weil didn’t schon die Vergangenheit trägt.', 'After didn’t the base form follows: didn’t use to. The -d of used disappears, because didn’t already carries the past.'],
+    c1: ['don’t use ist Gegenwart; der Satz erzählt aber von früher (washed).', 'don’t use is present tense, but the sentence tells about the past (washed).'],
+    c2: ['weren’t braucht ein Partizip oder -ing, nicht use.', 'weren’t needs a participle or -ing, not use.'],
+  },
+  {
+    k: 'ocl', p: 'ut.get-used-to', lv: 'B2+', dom: 'biz', cls: 'prep', a: ['to'],
+    t: 'It took the new team a few months to get used ___ the strict approval process.',
+    c: {
+      with: 'get used with gibt es nicht; die feste Verbindung ist get used to. || get used with does not exist; the fixed combination is get used to.',
+      for: 'get used for hieße „benutzt werden für“ und ergibt hier keinen Sinn. || get used for would mean “be used for” and makes no sense here.',
+      at: 'at passt nicht zu get used; die Verbindung braucht to. || at does not go with get used; the combination needs to.',
+    },
+    ok: 'get used to + Nomen beschreibt den Weg zum Gewohntsein: get used to the process. || get used to + noun describes becoming accustomed: get used to the process.',
+  },
+  {
+    k: 'kwt', p: 'ut.would', lv: 'B2+', dom: 'life',
+    lead: 'Every summer in my childhood, we frequently drove to the lake at weekends.', key: 'WOULD',
+    before: 'Every summer in my childhood, we', after: 'to the lake at weekends.', a: ['would often', 'would regularly', 'would frequently'], b: ['drive'], x: ['used', 'driving', 'were'],
+    traps: [['often would drive', 'Bei would steht das Häufigkeitswort danach: would often drive.', 'With would the frequency word comes after it: would often drive.']],
+    ok: ['Teil 1: would often, so erzählst du wiederholte Handlungen in der Vergangenheit. Teil 2: drive, nach would steht die Grundform.', 'Part 1: would often, that is how you tell repeated actions in the past. Part 2: drive, the base form follows would.'],
+  },
+  {
+    k: 'err', p: 'ut.be-used-to', lv: 'B2+', dom: 'biz',
+    text: "After years in sales, I'm used to deal with difficult customers on a daily basis.",
+    bad: { span: 'used to deal', fix: ['used to dealing'], ch: ['use to deal', 'used dealing'] },
+    ok: ['be used to + -ing: I’m used to dealing. Hier ist to eine Präposition, deshalb folgt die -ing-Form.', 'be used to + -ing: I’m used to dealing. Here to is a preposition, so the -ing form follows.'],
+    c1: ['use to deal gibt es nicht in dieser Form; be used to braucht used mit -d und -ing.', 'use to deal does not exist in this form; be used to needs used with -d and -ing.'],
+    c2: ['used dealing lässt to weg: be used to + -ing.', 'used dealing leaves out to: be used to + -ing.'],
+  },
+  {
+    k: 'ocl', p: 'ut.did-use-to', lv: 'B2', dom: 'life', cls: 'aux', a: ['did'],
+    t: 'Before the pandemic started, ___ you use to go to the gym at least three times a week?',
+    c: {
+      do: 'do you use to passt nicht zu Before the pandemic started (Vergangenheit). || do you use to does not fit Before the pandemic started (past).',
+      were: 'were you use to gibt es nicht; die Frage braucht did. || were you use to does not exist; the question needs did.',
+      have: 'have you use to gibt es nicht; die Frage braucht did. || have you use to does not exist; the question needs did.',
+    },
+    ok: 'Frage über früher: did + Subjekt + use to + Grundform; das -d von used entfällt. || A question about the past: did + subject + use to + base form; the -d of used drops.',
+  },
+  {
+    k: 'kwt', p: 'ut.used-to', lv: 'B2', dom: 'biz',
+    lead: 'Years ago our company produced paper files, but now everything is digital.', key: 'USED',
+    before: 'Our company', after: 'paper files, but now everything is digital.', a: ['used to'], b: ['produce'], x: ['would', 'did', 'use'],
+    traps: [['used to producing', 'Nach used to steht die Grundform: produce.', 'After used to the base form follows: produce.'], ['was used to produce', 'was used to + -ing meint gewohnt sein; früher heißt used to + Grundform.', 'was used to + -ing means being accustomed; formerly is used to + base form.']],
+    ok: ['Teil 1: used to, für eine frühere Gewohnheit oder einen früheren Zustand. Teil 2: produce, die Grundform.', 'Part 1: used to, for an earlier habit or state. Part 2: produce, the base form.'],
+  },
+
+  // ================= prep-time =================
+  {
+    k: 'ocl', p: 'pt.at-on-in', lv: 'B2', dom: 'life', cls: 'prep', a: ['on'],
+    t: 'Our family reunion is scheduled ___ the last Saturday of August, right after the school holidays end.',
+    c: {
+      at: 'at steht bei Uhrzeiten (at 3 p.m.), nicht bei Tagen. || at is used with clock times (at 3 p.m.), not with days.',
+      in: 'in steht bei Monaten und Jahren (in August), nicht bei einem bestimmten Tag. || in is used with months and years (in August), not with a specific day.',
+      by: 'by nennt eine Frist, nicht den Termin selbst. || by names a deadline, not the date itself.',
+    },
+    ok: 'Mit einem bestimmten Tag steht on: on the last Saturday of August. || With a specific day on is used: on the last Saturday of August.',
+  },
+  {
+    k: 'kwt', p: 'pt.by-until', lv: 'B2', dom: 'biz',
+    lead: 'Please do not send the signed contract after Thursday.', key: 'BY',
+    before: 'Please send the signed contract', after: '.', a: ['by'], b: ['Thursday at the latest'], x: ['until', 'within', 'on'],
+    traps: [['by Thursday latest', 'Die feste Wendung heißt at the latest: by Thursday at the latest.', 'The fixed phrase is at the latest: by Thursday at the latest.']],
+    ok: ['Teil 1: by nennt die Frist („bis spätestens“). Teil 2: Thursday at the latest, „spätestens“ heißt at the latest.', 'Part 1: by names the deadline (“no later than”). Part 2: Thursday at the latest, “spätestens” is at the latest.'],
+  },
+  {
+    k: 'err', p: 'pt.for-since', lv: 'B2', dom: 'life',
+    text: 'I have not seen my cousin for last Christmas, so we are planning a visit next month.',
+    bad: { span: 'for last Christmas', fix: ['since last Christmas'], ch: ['from last Christmas', 'by last Christmas'] },
+    ok: ['since nennt einen Startpunkt (last Christmas), for eine Dauer (six months). Hier ist es ein Zeitpunkt, also since.', 'since names a starting point (last Christmas), for a length of time (six months). Here it is a point in time, so since.'],
+    c1: ['from verlangt ein Gegenstück (from … to …) und passt nicht zu have not seen.', 'from needs a counterpart (from … to …) and does not fit have not seen.'],
+    c2: ['by nennt eine Frist („spätestens bis“), keinen Startpunkt.', 'by names a deadline (“no later than”), not a starting point.'],
+  },
+  {
+    k: 'ocl', p: 'pt.during-within', lv: 'B2+', dom: 'biz', cls: 'prep', a: ['within'],
+    t: 'We promise to resolve every critical ticket ___ four hours of receiving it.',
+    c: {
+      during: 'during steht vor einer Phase (during the call), nicht vor einer Frist mit of. || during goes before a phase (during the call), not before a time limit with of.',
+      in: 'in four hours of receiving it ist keine feste Wendung; die Frist braucht within. || in four hours of receiving it is not a fixed phrase; a time limit needs within.',
+      by: 'by nennt einen Zeitpunkt (by noon), keine Spanne. || by names a point in time (by noon), not a span.',
+    },
+    ok: 'within + Zeitspanne nennt die Frist, innerhalb derer etwas geschieht. || within + length of time names the limit inside which something happens.',
+  },
+  {
+    k: 'kwt', p: 'pt.during-within', lv: 'B2+', dom: 'biz',
+    lead: 'Nobody may use the old portal while the migration weekend lasts.', key: 'DURING',
+    before: 'Nobody may use the old portal', after: '.', a: ['during'], b: ['the migration weekend'], x: ['while', 'within', 'for'],
+    traps: [['during the migration weekend lasts', 'during steht vor einem Nomen, while vor einem ganzen Satz.', 'during goes before a noun, while before a whole clause.']],
+    ok: ['Teil 1: during nennt die Phase, in der etwas gilt. Teil 2: the migration weekend, nach during folgt ein Nomen, kein Satz.', 'Part 1: during names the phase in which something applies. Part 2: the migration weekend, a noun follows during, not a clause.'],
+  },
+  {
+    k: 'err', p: 'pt.at-on-in', lv: 'B2', dom: 'biz',
+    text: 'The new regulation will come into force at January 1, so we must update our contracts.',
+    bad: { span: 'at January 1', fix: ['on January 1'], ch: ['in January 1', 'at the January 1'] },
+    ok: ['Mit einem bestimmten Datum steht on: on January 1. at gehört zu Uhrzeiten.', 'With a specific date on is used: on January 1. at belongs to clock times.'],
+    c1: ['in steht bei Monaten (in January), nicht bei einem einzelnen Datum.', 'in is used with months (in January), not with a single date.'],
+    c2: ['at the January 1 ist keine übliche Form; at gehört zu Uhrzeiten.', 'at the January 1 is not a normal form; at belongs to clock times.'],
+  },
+  {
+    k: 'ocl', p: 'pt.by-until', lv: 'B2', dom: 'life', cls: 'prep', a: ['until', 'till'],
+    t: 'I will be away on holiday ___ the end of August, so please do not schedule anything before then.',
+    c: {
+      by: 'by nennt eine Frist („spätestens bis“), until die Dauer („die ganze Zeit bis“). || by names a deadline (“no later than”), until a duration (“the whole time up to”).',
+      within: 'within braucht eine Zeitspanne (within two weeks), keinen Zeitpunkt. || within needs a span (within two weeks), not a point in time.',
+      during: 'during steht vor einer Phase und nicht vor the end of August. || during goes before a phase and not before the end of August.',
+    },
+    ok: 'Eine Abwesenheit, die bis zum Ende andauert, braucht until: away until the end of August. || An absence that lasts up to the end needs until: away until the end of August.',
+  },
+  {
+    k: 'kwt', p: 'pt.for-since', lv: 'B2', dom: 'biz',
+    lead: 'We started working with this supplier eight years ago and still do.', key: 'FOR',
+    before: 'We', after: 'eight years.', a: ['have worked'], b: ['with this supplier for'], x: ['since', 'are', 'during'],
+    traps: [['worked with this supplier for', 'Das Past Simple endet in der Vergangenheit; die Dauer bis heute braucht have worked.', 'The past simple ends in the past; a duration up to now needs have worked.']],
+    ok: ['Teil 1: have worked, weil die Zusammenarbeit bis heute dauert. Teil 2: for + Dauer (eight years).', 'Part 1: have worked, because the cooperation lasts until today. Part 2: for + length of time (eight years).'],
+  },
+
+  // ================= stative-adv =================
+  {
+    k: 'ocl', p: 'sa.trend', lv: 'B2', dom: 'biz', cls: 'aux', a: ['are'],
+    t: 'Cloud costs ___ rising quickly this quarter, so we are reviewing every subscription.',
+    c: {
+      is: 'costs ist Plural: is passt nur zu Singular. || costs is plural: is only goes with the singular.',
+      do: 'do rising gibt es nicht; vor -ing steht eine Form von be. || do rising does not exist; -ing needs a form of be.',
+      have: 'have rising braucht been: have been rising. || have rising needs been: have been rising.',
+    },
+    ok: 'Eine Entwicklung, die jetzt läuft: are rising (Present Continuous). Zu costs passt are. || A development that is going on now: are rising (present continuous). The plural costs goes with are.',
+  },
+  {
+    k: 'kwt', p: 'sa.soft', lv: 'B2', dom: 'biz',
+    lead: 'Please send me the updated figures before the call.', key: 'WONDERING',
+    before: 'I', after: 'send me the updated figures before the call.', a: ['was wondering'], b: ['if you could'], x: ['asked', 'will', 'would'],
+    traps: [['was wondering could you', 'Nach I was wondering folgt if oder whether, keine Frageform.', 'After I was wondering comes if or whether, not a question form.']],
+    ok: ['Teil 1: was wondering macht die Bitte weich und höflich. Teil 2: if you could, danach folgt ein Nebensatz mit normaler Wortstellung.', 'Part 1: was wondering makes the request soft and polite. Part 2: if you could, a clause with normal word order follows.'],
+  },
+  {
+    k: 'err', p: 'sa.no-ing', lv: 'B2', dom: 'biz',
+    text: 'We are knowing that the budget is tight, but the board still expects results by June.',
+    bad: { span: 'are knowing', fix: ['know'], ch: ['are known', 'knows'] },
+    ok: ['know ist ein Zustandsverb und hat keine -ing-Form: We know … Auch „gerade jetzt“ ändert daran nichts.', 'know is a state verb and has no -ing form: We know … Even “right now” does not change that.'],
+    c1: ['are known wäre Passiv („werden bekannt“); hier weiß das Team selbst etwas.', 'are known would be passive; here the team itself knows something.'],
+    c2: ['knows passt zu he/she/it, nicht zu we.', 'knows goes with he/she/it, not with we.'],
+  },
+  {
+    k: 'ocl', p: 'sa.being', lv: 'B2+', dom: 'life', cls: 'aux', a: ['is'],
+    t: 'Please ignore Tom today; he ___ being unusually rude because of the pressure at work.',
+    c: {
+      has: 'has being gibt es nicht; has braucht ein Partizip (been). || has being does not exist; has needs a participle (been).',
+      does: 'does braucht die Grundform (be), nicht being. || does needs the base form (be), not being.',
+      was: 'was being wäre Vergangenheit, der Satz meint aber heute. || was being would be past, but the sentence is about today.',
+    },
+    ok: 'is being + Adjektiv beschreibt Verhalten für den Moment: Er benimmt sich gerade so. || is being + adjective describes behavior for the moment: he is acting that way right now.',
+  },
+  {
+    k: 'kwt', p: 'sa.trend', lv: 'B2', dom: 'biz',
+    lead: 'These days our competitors become more aggressive with their pricing.', key: 'GETTING',
+    before: 'Our competitors', after: 'with their pricing.', a: ['are getting'], b: ['more aggressive'], x: ['become', 'were', 'gets'],
+    traps: [['is getting more aggressive', 'competitors ist Plural: are getting, nicht is getting.', 'competitors is plural: are getting, not is getting.']],
+    ok: ['Teil 1: are getting beschreibt eine Veränderung, die gerade läuft. Teil 2: more aggressive, danach steht der Komparativ.', 'Part 1: are getting describes a change that is going on right now. Part 2: more aggressive, the comparative follows.'],
+  },
+  {
+    k: 'err', p: 'sa.soft', lv: 'B2', dom: 'biz',
+    text: 'I was hoping you could take a quick look at the draft before it goes to the client.',
+    bad: null,
+    ok: ['Kein Fehler: was hoping macht die Bitte höflich und weich. Die Vergangenheit rückt die Bitte in die Ferne.', 'No mistake: was hoping makes the request polite and soft. The past tense puts distance on the request.'],
+    fa: [['hoping', 'was hoping ist hier die höfliche Form; hope im Präsens wäre direkter, aber nicht falsch.', 'was hoping is the polite form here; hope in the present would be more direct, but not wrong.']],
+  },
+  {
+    k: 'ocl', p: 'sa.no-ing', lv: 'B2', dom: 'biz', cls: 'aux', a: ['does'],
+    t: 'The client ___ not want a printed version of the final report; a PDF by e-mail is enough.',
+    c: {
+      is: 'is not want gibt es nicht; want hat keine -ing-Form. || is not want does not exist; want takes no -ing form.',
+      do: 'client ist Singular: do passt zu I, you, we, they. || client is singular: do goes with I, you, we, they.',
+      has: 'has braucht ein Partizip (wanted), nicht die Grundform. || has needs a participle (wanted), not the base form.',
+    },
+    ok: 'want ist ein Zustandsverb: Present Simple mit does not, bei he/she/it. || want is a state verb: present simple with does not for he/she/it.',
+  },
+  {
+    k: 'kwt', p: 'sa.being', lv: 'B2+', dom: 'life',
+    lead: 'My brother behaves in a very selfish way at the moment.', key: 'BEING',
+    before: 'My brother', after: 'at the moment.', a: ['is being'], b: ['very selfish'], x: ['has', 'selfishly', 'been'],
+    traps: [['being very selfish', 'Ohne is fehlt das Hilfsverb: is being very selfish.', 'Without is the auxiliary is missing: is being very selfish.']],
+    ok: ['Teil 1: is being drückt aus, dass er sich gerade so verhält. Teil 2: very selfish, danach steht ein Adjektiv.', 'Part 1: is being expresses that he is behaving that way right now. Part 2: very selfish, an adjective follows.'],
+  },
+];

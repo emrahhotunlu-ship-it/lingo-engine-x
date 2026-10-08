@@ -7,6 +7,7 @@ import { openAllChapters } from './learnHelpers';
 // Zahlen gleich dem Lernpfad, „in Vorbereitung“ für Kapitel ohne Inhalte, axe 0. Schalter `program` per `lx:flags`.
 
 const start = async (page: Page, flags = 'program') => {
+  // Seit 08.10.2026 ist `program` Standard; ein leerer Wert lässt den Standard gelten.
   const booted = await boot(page, { migrated: true, localStorage: { 'lx:flags': flags } });
   await screen(page, 'today');
   await openTab(page, 'learn');
@@ -77,8 +78,13 @@ test.describe('Handy 360', () => {
     expect(errors).toEqual([]);
   });
 
-  test('ohne Schalter erscheint die Karte nicht', async ({ page }) => {
-    await start(page, 'kwt');
+  test('ist die Karte standardmäßig da und lässt sie sich mit {"program":false} abschalten', async ({ page }) => {
+    await start(page, '');
+    await expect(page.getByTestId('program-map')).toHaveCount(1);
+  });
+
+  test('mit abgeschaltetem Schalter erscheint die Karte nicht', async ({ page }) => {
+    await start(page, '{"program":false}');
     await expect(page.getByTestId('learn-hub')).toBeVisible();
     await expect(page.getByTestId('program-map')).toHaveCount(0);
   });

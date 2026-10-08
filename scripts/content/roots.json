@@ -10,6 +10,7 @@
     "c1x-cnet": { "dirs": ["src/content/c1x/src/cnet"] },
     "c1x-reg": { "dirs": ["src/content/c1x/src/reg"] },
     "c1x-para": { "dirs": ["src/content/c1x/src/para"] },
-    "c1x-place": { "dirs": ["src/content/c1x/src/place"] }
+    "c1x-place": { "dirs": ["src/content/c1x/src/place"] },
+    "c1x-gate": { "dirs": ["src/content/c1x/src/gate"] }
   }
 }

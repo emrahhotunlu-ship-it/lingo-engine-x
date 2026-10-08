@@ -1,14 +1,14 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useClock } from '../../app/clock';
 import { useSettings } from '../../app/settings';
 import { invalidIdsOf, useLive } from '../../data/live';
-import { cardStats, fixedStats, milestonePatch, newMilestones, topicsFest, truthParts, type Milestone } from '../../domain/plan/dayStats';
+import { readC1 } from '../../domain/c1/c1doc';
+import { cardStats, fixedStats, newMilestones, topicsFest, truthParts, type Milestone } from '../../domain/plan/dayStats';
 import { buildTrainCards, festUnits } from '../../domain/metrics';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
-import { vocabGoal } from '../../domain/vocab/goal';
 import { logWarn } from '../../platform/diagnostics';
-import { recordProfileFields } from '../progress/persist';
 import { goalLine, type TextRef } from './goalLine';
+import { claimMilestone } from './milestoneClaim';
 import type { TodayView } from './state';
 
 // Abschluss von „Heute“ (Gesamtkonzept 3.2): Die Wahrheitszeile „Heute neu sicher: n · Fehler weg: n · überfällig −n“ und der
@@ -38,6 +38,7 @@ export function useDoneFacts(view: Pick<TodayView, 'plan' | 'status'>, active: b
   const lang = useSettings((s) => s.lang);
   const profile = useLive((s) => s.docs['app/profile']);
   const repairDoc = useLive((s) => s.docs['app/repair']);
+  const c1Raw = useLive((s) => s.docs['app/c1']);
   const vocab = useLive((s) => s.collections.vocab) ?? EMPTY;
   const chunk = useLive((s) => s.collections.chunk) ?? EMPTY;
   const grammar = useLive((s) => s.collections.grammar) ?? EMPTY;
@@ -54,27 +55,42 @@ export function useDoneFacts(view: Pick<TodayView, 'plan' | 'status'>, active: b
       const ov = plan?.u?.ov ?? null;
       const sure0 = plan?.u?.sure ?? null;
       const parts = truthParts({ sure: st.sure, sure0, fixed: fixed.today, overdue: st.overdue, overdue0: ov });
-      const fest = vocabGoal({ profile, cards: all, today }).fest;
-      const ms = newMilestones({ fest, topicsFest: topicsFest(grammar, now), fixTotal: fixed.total, overdue0: ov, overdue: ov === null ? null : st.overdue, seen: profile?.ms as Record<string, unknown> | undefined });
+      // Wort-Marken zählen Wörter UND Wendungen (`festUnits`, K-14); die Umstellung merkt schon erreichte Marken still (`pickMilestone`).
+      const fest = festUnits(all);
+      const c1 = readC1(c1Raw);
+      const ms = newMilestones({
+        fest,
+        topicsFest: topicsFest(grammar, now),
+        fixTotal: fixed.total,
+        overdue0: ov,
+        overdue: ov === null ? null : st.overdue,
+        seen: profile?.ms as Record<string, unknown> | undefined,
+        chapters: c1.gates.filter((g) => g.ok).map((g) => g.ch),
+        place: !!c1.place,
+        checks: c1.checks.length,
+      });
       const goal = goalLine({ nx: plan?.u?.nx, festUnits: festUnits(all), vocabFest: festUnits(cards), history: profile?.history, today });
       return { parts, ms, goal };
     } catch (err) {
       logWarn('today:done', err);
       return null;
     }
-  }, [active, vocab, chunk, grammar, repairDoc, profile, plan, lang, now, today]);
+  }, [active, vocab, chunk, grammar, repairDoc, c1Raw, profile, plan, lang, now, today]);
 
-  // Den wichtigsten Meilenstein einmal festhalten (die Liste ist nach Wichtigkeit sortiert).
-  if (calc && calc.ms.length && !shown.has(today)) shown.set(today, calc.ms[0] ?? null);
+  // Meilenstein beanspruchen (ein Schritt auf dem frischen Stand): nur das Gerät, das den Eintrag anlegt, zeigt die Karte; der Tag behält sie.
+  const [, bump] = useState(0);
   useEffect(() => {
     if (!calc || !calc.ms.length) return;
-    const ids = calc.ms.map((m) => m.id).filter((id) => !marking.has(`${today}:${id}`));
-    if (!ids.length) return;
-    for (const id of ids) marking.add(`${today}:${id}`);
-    void recordProfileFields('today:milestone', (cur) => milestonePatch(cur, ids, today)).then((ok) => {
-      if (!ok) for (const id of ids) marking.delete(`${today}:${id}`);
+    const key = `${today}:${calc.ms.map((m) => m.id).join(',')}`;
+    if (marking.has(key)) return;
+    marking.add(key);
+    void claimMilestone(calc.ms, profile?.ms as Record<string, unknown> | undefined, today).then((m) => {
+      if (m && !shown.get(today)) {
+        shown.set(today, m);
+        bump((x) => x + 1);
+      }
     });
-  }, [calc, today]);
+  }, [calc, profile, today]);
 
   if (!calc) return EMPTY_FACTS;
   return { sure: calc.parts.sure, fixed: calc.parts.fixed, over: calc.parts.over, milestone: shown.get(today) ?? null, goal: calc.goal };
