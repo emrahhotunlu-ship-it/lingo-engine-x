@@ -193,35 +193,37 @@ export const assess: PromptTemplate<AssessVars, AssessOut> = {
   cache: false,
   verb: 'text-json',
   build(v) {
-    const prev = v.prev
-      ? `Previous assessment: overall ${v.prev.cefr ?? '–'}; ${Object.entries(v.prev.dims)
-          .map(([k, l]) => `${k}=${l ?? 'none'}`)
-          .join(' ')}`
-      : 'Previous assessment: none';
-    return [
-      header({ id: ID, version: VERSION }),
-      'You are a strict CEFR examiner for a German-speaking Head of Business Development, currently B2 and aiming for C1.',
-      `Today is ${v.today}.`,
-      'Judgment rules:',
-      '- Judge ONLY from the numbered evidence below. Never invent results.',
-      '- Give a skill level (A2, B1, B1+, B2, B2+, C1, C1+) only where the evidence supports it; otherwise level null and confidence "thin".',
-      '- Prefer "thin" to guessing. confidence: "thin" = little evidence, "fair" = some, "good" = plenty and consistent.',
-      '- trend compares with the previous assessment and the recent logs: "up", "flat" or "down".',
-      `- Every strength and blocker cites 1–${EV_MAX} evidence ids in "ev", copied exactly from the brackets.`,
-      '- blockers: why it stands out at C1 ("why"), how to get it right ("fix", one model sentence in American English), and one action from the allowed list.',
-      '- focus: the one thing for the next days, with an allowed action and days 1–7.',
-      'Language rules:',
-      `- Write level, levelWhy, trendWhy, today, c1gap, titles and every "why" in ${langName(v.lang)}.`,
-      '- "fix" is always American English. Grammar terms may stay in English.',
-      prev,
-      'Evidence:',
-      v.evidence,
-      `Allowed actions: ${v.allowed.join(', ')}`,
-      'Length limits: level 20–220 characters, levelWhy ≤ 400, trendWhy ≤ 300, today ≤ 160, each c1gap item ≤ 90 (2–4 items), titles ≤ 60, why ≤ 240, fix ≤ 200, dims.why ≤ 200.',
-      'Exactly 2 strengths, 2–3 blockers, and both skills in dims (grammar, vocabulary). Judge only grammar and vocabulary; do not rate reading, listening, writing or speaking.',
-      'Reply with only one JSON object, no other text, exactly this shape:',
-      JSON.stringify(assessExample(v)),
-    ].join('\n');
+    return [header({ id: ID, version: VERSION }), ...assessBody(v), 'Reply with only one JSON object, no other text, exactly this shape:', JSON.stringify(assessExample(v))].join('\n');
   },
   schema: (v) => assessSchema(v),
 };
+
+/** Anweisung, Regeln und Belege zwischen Kopfzeile und Antwortform (geteilt mit `assess@4`; Wortlaut von assess@3 unverändert). */
+export function assessBody(v: AssessVars): string[] {
+  const prev = v.prev
+    ? `Previous assessment: overall ${v.prev.cefr ?? '–'}; ${Object.entries(v.prev.dims)
+        .map(([k, l]) => `${k}=${l ?? 'none'}`)
+        .join(' ')}`
+    : 'Previous assessment: none';
+  return [
+    'You are a strict CEFR examiner for a German-speaking Head of Business Development, currently B2 and aiming for C1.',
+    `Today is ${v.today}.`,
+    'Judgment rules:',
+    '- Judge ONLY from the numbered evidence below. Never invent results.',
+    '- Give a skill level (A2, B1, B1+, B2, B2+, C1, C1+) only where the evidence supports it; otherwise level null and confidence "thin".',
+    '- Prefer "thin" to guessing. confidence: "thin" = little evidence, "fair" = some, "good" = plenty and consistent.',
+    '- trend compares with the previous assessment and the recent logs: "up", "flat" or "down".',
+    `- Every strength and blocker cites 1–${EV_MAX} evidence ids in "ev", copied exactly from the brackets.`,
+    '- blockers: why it stands out at C1 ("why"), how to get it right ("fix", one model sentence in American English), and one action from the allowed list.',
+    '- focus: the one thing for the next days, with an allowed action and days 1–7.',
+    'Language rules:',
+    `- Write level, levelWhy, trendWhy, today, c1gap, titles and every "why" in ${langName(v.lang)}.`,
+    '- "fix" is always American English. Grammar terms may stay in English.',
+    prev,
+    'Evidence:',
+    v.evidence,
+    `Allowed actions: ${v.allowed.join(', ')}`,
+    'Length limits: level 20–220 characters, levelWhy ≤ 400, trendWhy ≤ 300, today ≤ 160, each c1gap item ≤ 90 (2–4 items), titles ≤ 60, why ≤ 240, fix ≤ 200, dims.why ≤ 200.',
+    'Exactly 2 strengths, 2–3 blockers, and both skills in dims (grammar, vocabulary). Judge only grammar and vocabulary; do not rate reading, listening, writing or speaking.',
+  ];
+}

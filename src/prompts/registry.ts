@@ -18,7 +18,7 @@ import { wordLookup } from './wordLookup';
 import { turnAnalysis } from './turnAnalysis';
 import { roleplayReport } from './roleplayReport';
 import { roleplayTurn } from './roleplayTurn';
-import { assess } from './assess';
+import { assess4 } from './assess4';
 import { weeklyReport } from './weeklyReport';
 import { repairCheck } from './repairCheck';
 import { patterns } from './patterns';
@@ -51,8 +51,8 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   translate,
   // Lehrer-Feedback (28.09.2026, ersetzt die Preply-Brücke)
   teacherFeedback,
-  // Phase 6 – Urteil
-  assess,
+  // Phase 6 – Urteil; seit LP3 P45 assess@4 mit „Weg zu C1“ (assess@3 bleibt als Datei, läuft bei ausgeschaltetem Schalter `way`)
+  assess4,
   weeklyReport,
   // Lernberatung 27.09., V2 – Reparatur-Sätze
   repairCheck,

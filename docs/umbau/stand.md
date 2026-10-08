@@ -252,3 +252,10 @@ Tests: 1953 Unit; E2E der berührten Bildschirme grün (a11y: Kontrast der „Ne
 - Tests: Unit 4837 grün (Wettlauf in shared.test behoben), E2E 643+ grün, N107 auf Rückfall bei `wf` aus umgestellt; rot nur perf.spec CPU 4× (4,5–5,7 s, Umgebung, bekannt). check:platform FREIGABE 4,95 MiB.
 - Test-Link `AXHkh6…` Version 52 `1791461301-13f2` (Rückweg Version 51 `1791450884-39b4`). Live `JLL8…` unverändert v69 `1791450962-60da`.
 - **LIVE 08.10.2026** nach Emrahs „Live schalten“: `JLL8…` Version 70 `1791461796-73f8` (Stand Test-Link 8). Rückweg: Version 69 `1791450962-60da`.
+
+## 08.10.2026 – R4 „Messen“: Kriterien, Prognose, „Weg zu C1“ (P44, P45), Branch `claude/umbau-r4-weg`
+- **P44 (rein, mit festem Datum testbar):** `domain/c1/criteria.ts` (K1–K7, Zustandswörter erreicht/auf Kurs/noch offen/zu wenig Daten, „C1-Etappe“ erst bei allen sieben), `domain/c1/forecast.ts` (Zeitraum in Monaten, erst ab 3 Checks und 6 Wochen, eingefroren in `checks[].fc`), `domain/c1/prod.ts` (einziger Schreiber von `app/c1.prod[]`, Kappung und Verdichtung), `domain/metrics/c1.ts` (Messwerte K1–K6). K7 zeigt „zu wenig Daten“, bis P46/P47/P51 liefern.
+- **P45:** `features/c1/WayToC1.tsx` + `waytoc1.slot.tsx` (Slot `progress.head`): Urteil in Worten, „Was dir noch fehlt“ (≤ 3, „Üben“), K1–K7 mit Detail (vier Fragen), Kapitelband, Prognose, „Messwerte dahinter“; Laptop zweispaltig; Leerzustand ohne Daten. `domain/c1/way.ts` rechnet alles in einem reinen Aufruf und liefert die Belegzeilen für **assess@4** (`prompts/assess4.ts`: assess@3 plus Feld `c1`, keine Punkt-/Prozentzahl, Sprachtreue, „bereit“ nur bei Etappe).
+- **Schalter `way` an** (letzter Schritt); `{"way":false}` je Gerät führt zurück auf assess@3.
+- Bilder: `docs/umbau/design-vergleich/r4-weg-01…05-*.png` (390, dunkel; Spec `r4WegShots.spec.ts`, nur mit `LX_SHOTS=1`).
+- Abweichungen: `docs/entscheidungen.md` (08.10.2026, R4 „Messen“).
