@@ -276,3 +276,9 @@ Tests: 1953 Unit; E2E der berührten Bildschirme grün (a11y: Kontrast der „Ne
 - Test-Link `AXHkh6…` Version 53 `1791473854-a326` (Rückweg v52 `1791461301-13f2`). Live unverändert v70 `1791461796-73f8`.
 - Hinweis: Der C1-Check erscheint nur im Check-Fenster (letzte 7 Tage des Monats, ab 25.10.).
 - **LIVE 08.10.2026** nach Emrahs „ja gefällt mir so live nehmen bitte“: `JLL8…` Version 71 `1791474840-7485` (Stand Test-Link 9, dist 2708c3f). Rückweg: Version 70 `1791461796-73f8`.
+
+## 08.10.2026 – R5 „Dein Lehrer in der App“, Spur b: P49 und P50, Zweig `claude/umbau-r5-b`
+- **P49 Wochen-Diagnose + Kontrast-Runde:** `domain/tutor/{confusion,diag,contrast}.ts`, `prompts/diagnose.ts` (`diagnose@1`, `complex`, `text-json`, Budget 1), `features/tutor/{DiagnoseCard,ContrastRound,diagnoseStore}` + `diagnose.slot.tsx` (Slots `progress.grammar` und `session.end`), Texte `lp3/p49`, Testantworten `canned/lp3/p49.ts`, Schalter `tutor.diagnose` an (`{"tutor":{"diagnose":false}}` je Gerät). Daten: `app/patterns.diag[]` (≤ 12). Tests: Unit `confusion` (13), `diagnose` (21), `contrastRound` (5); E2E `diagnose.spec.ts` (Handy/Laptop × 3 Modi × DE/EN mit axe, zwei Geräte, Fehlerwege, Rundenende-Auslöser).
+- **P50 Wochenrückblick 3.0:** `domain/progress/weekly3.ts` (+ `weekFacts` mit `ff`), `features/progress/{WeeklyReview3,TeacherCard,FocusPick,useWeeklyText}` + `weekly.slot.tsx`, Texte `lp3/p50`, Schalter `weekly3` an. Daten: `app/profile.wf` (≤ 12). Fokus wirkt über `focusFor` (nur Pläne nach der Wahl) in `grammar/session.ts`. Tests: Unit `weekly3` (20), `progress6` angepasst; E2E `wochenrueckblick.spec.ts`; `progress.spec`/`acceptance.spec` auf `wk3` umgestellt (Erwartungen ersetzt, nicht gelöscht).
+- Bilder: `docs/umbau/design-vergleich/r5-b-*.png`. Abweichungen und Festlegungen: `docs/entscheidungen.md` (08.10.2026, R5-b).
+

@@ -81,7 +81,7 @@ test('Kap. 14/9: der Tagesauftrag funktioniert unverändert – daily/* und feed
   await expect(page.getByTestId('history')).toBeVisible();
   // Der Wochenbericht ist im Neubau eine eigene Seite (Profil › Wochenbericht), nicht mehr im Verlauf.
   await openWeekly(page);
-  await expect(page.getByTestId('weekly')).toBeVisible();
+  await expect(page.getByTestId('wk3')).toBeVisible();
   await page.waitForTimeout(800);
   const db = await dump(page);
   const keys = Object.keys(SEED).filter((k) => k.startsWith('daily/') || k.startsWith('feed/'));

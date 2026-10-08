@@ -29,7 +29,7 @@ export const flags: Flags = {
   program: true,
   way: true,
   tutor: { explain: false, gen: false, diagnose: true, clinic: false },
-  weekly3: false,
+  weekly3: true,
   fx: { moments: false, rings: false, sparks: false, field: false, sky: true, film: true },
 };
 

@@ -23,6 +23,7 @@ Messung nach **jedem** Paket (Byte der `dist/index.html`, Differenz zum Vorgäng
 | 07.10.2026 | Design-Lead (Branch `claude/umbau-design`) | 4.632.093 | +34.677 ggü. eingechecktem Test-Link-6-`dist` | 4,42 | `styles/parts/dz.css` + `dz2.css` (Bereichslicht, Tiefe, Momente), Wort-Rückmeldung in Blöcken (`ui/exercise/wordParts.ts`), Canvas-2D-Teilchen (`engine/fx/particles.ts`, `moments.ts`). Eine Datei, keine Zusatzdateien; Warnschwelle 6 MiB unverändert |
 | 07.10.2026 | UX-Prüfung (Branch `claude/umbau-design`) | 4.661.088 | +28.995 ggü. Design-Lead | 4,45 | Eine Rückmeldekarte je Übung, Aufgabenzeile aus der Form, Bausteine in der Lücke, Anwenden als Liste, Grammatik-Pfad einzeilig, Einstellungen; überwiegend Umbau statt Zuwachs |
 | 08.10.2026 | P49 (Branch `claude/umbau-r5-b`) | 5.340.178 | +30.840 ggü. eingechecktem `dist` (307547f: 5.309.338) | 5,09 | Wochen-Diagnose: `diagnose@1`, Belege (`confusion.ts`), Karte „Häufigste Verwechslungen“, Kontrast-Runde, Protokoll `diag[]`, Texte DE/EN |
+| 08.10.2026 | P50 (Branch `claude/umbau-r5-b`) | 5.354.787 | +14.609 ggü. P49 (5.340.178); +45.449 ggü. eingechecktem `dist` | 5,11 | Wochenrückblick 3.0: große Zahl, Namen, Muster, Lehrer-Karte, Fokuswahl (`wf`), Einsatz-Satz, `weekFacts` mit `ff`, Texte DE/EN |
 
 ## Planrechnung (LP3 §9, Modell)
 

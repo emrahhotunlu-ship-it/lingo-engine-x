@@ -195,6 +195,15 @@ test.describe('Handy 390: Verhalten', () => {
     expect(await diagCalls(page)).toEqual([]);
   });
 
+  test('Ein Muster-Dokument mit unerwartetem Aufbau wird nie angefasst: kein Aufruf, kein Schreiben, ein ruhiger Fehler', async ({ page }) => {
+    await openDiagnose(page, { patch: { 'app/patterns': { items: 'kaputt' } } });
+    const before = (await dumpDb(page))['app/patterns'];
+    await page.getByTestId('dx-ask').click();
+    await expect(page.getByTestId('ai-error')).toBeVisible();
+    expect(await diagCalls(page)).toEqual([]);
+    expect((await dumpDb(page))['app/patterns']).toEqual(before);
+  });
+
   test('Zwei Seiten nacheinander: die zweite sieht das Ergebnis der ersten und ruft nie auf (genau ein Aufruf je Woche)', async ({ browser }) => {
     const opts = { viewport: { width: 390, height: 844 }, hasTouch: true, timezoneId: 'Europe/Berlin', locale: 'de-DE' };
     const c1 = await browser.newContext(opts);

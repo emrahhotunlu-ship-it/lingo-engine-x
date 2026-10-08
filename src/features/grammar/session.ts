@@ -6,6 +6,7 @@ import { useSettings } from '../../app/settings';
 import { answerRight } from '../../domain/learn/right';
 import { flags } from '../../app/flags';
 import { kindRound } from '../../domain/grammar/kindRound';
+import { focusFor, focusTopicOf } from '../../domain/progress/weekly3';
 import { lexDoneSet } from '../c1x/lexDone';
 import type { C1Kind } from '../../domain/c1x/types';
 import { c1ErrorResolver, ensureC1xLoaded } from '../c1x/resolve';
@@ -195,6 +196,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
   const rv = planRvOf(plan);
   const errorsMax = mode === 'duty' ? unitGrammarArgs(plan).errs : undefined;
   const words = safeWords(nowMs, plan);
+  const wfFocus = focusFor(live.docs['app/profile']?.wf, { planAt: plan?.at ?? null, day });
   roundNo++;
   const seed = `${day}|${mode}|${o.topic ?? ''}|${roundNo}`;
   const base = {
@@ -255,8 +257,9 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
       size,
       // Einführungsbremse (höchstens 1 neues Thema je 3 Lerntage, nie bei ≥ 10 offenen Fehlersätzen): nur die Pflichtrunde führt ein Thema ein.
       introduce: mode === 'duty' && !gt ? introTopic(docs, day, nowMs) : null,
-      focusTopic: mode === 'duty' && !gt ? planFocusTopic(plan) : null,
-      ...(flags.slotPlan && (mode === 'duty' || mode === 'xtra') ? { slotPlan: { focus: null } } : {}),
+      // Wochenfokus (P50): erst für Pläne, die nach der Wahl angelegt wurden; der gespeicherte Plan von heute bleibt eingefroren.
+      focusTopic: mode === 'duty' && !gt ? (focusTopicOf(wfFocus) ?? planFocusTopic(plan)) : null,
+      ...(flags.slotPlan && (mode === 'duty' || mode === 'xtra') ? { slotPlan: { focus: wfFocus } } : {}),
     });
     // Regelkarte vor der ersten Runde eines neuen Themas (Lernweg ①): das erste Thema der Runde, das noch nie geübt wurde.
     const t0 = tasks.find((t) => t.errorT === null && isNewTopic(docs.get(t.topic)))?.topic ?? null;

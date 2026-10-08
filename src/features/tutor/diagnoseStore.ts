@@ -10,9 +10,10 @@ import { getWriter } from '../../data';
 import type { Writer } from '../../data/writer';
 import { useLive } from '../../data/live';
 import { readDoc } from '../../data/reads';
+import { validateDoc } from '../../data/validate';
 import { addDays } from '../../domain/date';
 import { confusionOf, evidenceText, newMappedErrors, type Confusion, type ConfusionSources } from '../../domain/tutor/confusion';
-import { claimOp, diagState, finishOp, lastDone, readDiag, releaseOp, reportOp, weekOf, type DiagEntry, type DiagState } from '../../domain/tutor/diag';
+import { activeClaim, claimOp, diagState, doneOf, finishOp, lastDone, readDiag, releaseOp, reportOp, weekOf, type DiagEntry, type DiagState } from '../../domain/tutor/diag';
 import { diagnose } from '../../prompts/diagnose';
 import { getDb } from '../../platform/capabilities';
 import { logWarn } from '../../platform/diagnostics';
@@ -127,6 +128,9 @@ export const stopDiagnose = (): void => ctl?.abort();
 
 export type RunResult = 'done' | 'skip' | 'busy' | 'error' | 'cancelled';
 
+/** Darf in dieses Dokument geschrieben werden? Fehlt es, ja; hat es einen unerwarteten Aufbau, nie. */
+const writable = (cur: Doc | undefined): boolean => !cur || validateDoc(PATTERNS_PATH, cur).ok;
+
 /** Zustand der Woche aus einem frischen Lesen von `app/patterns`. */
 async function freshState(db: Db, sources: ConfusionSources, today: string, now: number): Promise<{ state: DiagState; entries: DiagEntry[]; last: DiagEntry | null }> {
   // Ohne frisches Lesen kein Aufruf (K-10): „nicht lesbar“ ist nie „noch keine Diagnose“, deshalb wird der Lesefehler weitergereicht.
@@ -134,6 +138,8 @@ async function freshState(db: Db, sources: ConfusionSources, today: string, now:
     logWarn('diagnose:read', err, PATTERNS_PATH);
     throw err;
   });
+  // Ein Dokument mit unerwartetem Aufbau wird nie angefasst (Kap. 9): kein Aufruf, keine Beanspruchung.
+  if (r.status === 'invalid') throw new Error(`${PATTERNS_PATH} hat einen unerwarteten Aufbau`);
   const doc: Doc | null = r.status === 'valid' ? r.doc : null;
   const entries = readDiag(doc);
   const last = lastDone(entries);
@@ -149,6 +155,7 @@ export async function claimWeek(writer: Writer, i: { w: string; dev: string; now
   if (!lease.acquired) return false;
   const box: { claimed: boolean } = { claimed: false };
   await writer.transform(PATTERNS_PATH, (cur) => {
+    if (!writable(cur)) return null;
     const r = claimOp(cur, i);
     box.claimed = r.claimed;
     return r.op;
@@ -181,12 +188,21 @@ export async function runDiagnose(o: { trigger: 'auto' | 'manual'; now?: number 
     const t = claimedAt;
     claimedAt = 0;
     try {
-      await writer.transform(PATTERNS_PATH, (cur) => releaseOp(cur, { dev, t }));
+      await writer.transform(PATTERNS_PATH, (cur) => (writable(cur) ? releaseOp(cur, { dev, t }) : null));
     } catch (err) {
       logWarn('diagnose:release', err, PATTERNS_PATH);
     }
   };
   try {
+    // Billig zuerst: gibt es in dieser Woche schon ein Ergebnis oder eine gültige Beanspruchung, werden die Protokolle gar nicht erst gelesen.
+    const early = await readDoc(db, PATTERNS_PATH);
+    if (early.status === 'valid') {
+      const e = readDiag(early.doc);
+      if (doneOf(e, w) || activeClaim(e, w, now)) {
+        useDiagRun.setState({ phase: 'idle', error: null });
+        return 'skip';
+      }
+    }
     const sources = await loadSources(db, today);
     const fresh = await freshState(db, sources, today, now);
     if (fresh.state.kind !== 'due') {
@@ -221,7 +237,7 @@ export async function runDiagnose(o: { trigger: 'auto' | 'manual'; now?: number 
     });
     useDiagRun.setState({ phase: 'saving' });
     const t = claimedAt;
-    await writer.transform(PATTERNS_PATH, (cur) => finishOp(cur, { dev, t, w, now: Date.now(), out: r.data, pv: `${diagnose.id}@${diagnose.version}`, lang, rep: conf.mapped }));
+    await writer.transform(PATTERNS_PATH, (cur) => (!writable(cur) ? null : finishOp(cur, { dev, t, w, now: Date.now(), out: r.data, pv: `${diagnose.id}@${diagnose.version}`, lang, rep: conf.mapped })));
     claimedAt = 0;
     useDiagRun.setState({ phase: 'idle', error: null });
     return 'done';
@@ -249,7 +265,7 @@ export async function reportFinding(w: string, index: number): Promise<void> {
   const writer = getWriter();
   if (!writer) return;
   try {
-    await writer.transform(PATTERNS_PATH, (cur) => reportOp(cur, { w, index }));
+    await writer.transform(PATTERNS_PATH, (cur) => (writable(cur) ? reportOp(cur, { w, index }) : null));
   } catch (err) {
     logWarn('diagnose:report', err, PATTERNS_PATH);
   }

@@ -196,11 +196,14 @@ test('Weg nach C1: Status je Punkt, „Kann ich" wird in profile.canDo gespeiche
   await expect.poll(async () => ((await dump(page))['app/profile']?.canDo as Record<string, unknown>)[id ?? '']).toBeNull();
 });
 
+// Wochenrückblick 3.0 (P50): „neu Fest“ kommt aus `ff` (erster Fest-Tag); die Testdaten haben es noch nicht, deshalb setzt der Test es für die Woche 07.–13.09.
+const FF_WEEK = { 'vocab/deserve': { ff: '2026-09-08' }, 'vocab/convince': { ff: '2026-09-09' }, 'vocab/avoid': { ff: '2026-09-11' } };
+
 test('Wochenbericht mit Fakten und gespeichertem KI-Text; Verlauf mit Diagramm und Messwerten; Statistik mit Karten-Messwerten', async ({ page }) => {
-  const { errors } = await boot(page, { migrated: true });
+  const { errors } = await boot(page, { migrated: true, fake: { patch: FF_WEEK } });
   await openWeekly(page);
-  await expect(page.getByTestId('weekly')).toHaveAttribute('data-week', '2026-W37');
-  await expect(page.getByTestId('weekly-fact').first()).toBeVisible();
+  await expect(page.getByTestId('wk3')).toHaveAttribute('data-week', '2026-W37');
+  await expect(page.getByTestId('wk-name').first()).toBeVisible();
   await expect(page.getByTestId('weekly-text')).toBeVisible();
   await expect.poll(async () => ((await dump(page))['app/weekly']?.items as unknown[] | undefined)?.length).toBe(1);
   expect(await calls(page, 'weekly-report')).toHaveLength(1);
@@ -225,7 +228,7 @@ test('Wochenbericht mit Fakten und gespeichertem KI-Text; Verlauf mit Diagramm u
 });
 
 test('Verlauf: Wochenbericht schlägt fehl → Hinweis mit „Erneut versuchen", der Neuversuch fragt frisch (refresh)', async ({ page }) => {
-  const { errors } = await boot(page, { migrated: true, fake: { sampleFailOnce: { 'weekly-report': 'upstream_error' } } });
+  const { errors } = await boot(page, { migrated: true, fake: { patch: FF_WEEK, sampleFailOnce: { 'weekly-report': 'upstream_error' } } });
   await openWeekly(page);
   await expect(page.getByTestId('weekly-error')).toBeVisible();
   await expect(page.getByTestId('weekly-text')).toHaveCount(0);
