@@ -70,3 +70,6 @@ export function morphSteps(steps: readonly { en: string; hi?: readonly number[] 
   });
   return out;
 }
+
+/** Wörter ohne Hervorhebung: vor der Vorhersage dürfen Signalwörter die Lösung nicht verraten (P61/P62). */
+export const withoutHi = (ws: readonly MorphWord[]): MorphWord[] => ws.map((w) => (w.hi ? { ...w, hi: false } : w));

@@ -132,3 +132,17 @@ test.describe('Handy 390', () => {
     expect(errors).toEqual([]);
   });
 });
+
+test.describe('Vorhersage verrät nichts', () => {
+  test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
+
+  test('Vor der Antwort leuchtet kein Wort; nach der Antwort zeigt Schritt 0 seine Signalwörter', async ({ page }) => {
+    const { errors, film } = await chapterFilm(page, 'full');
+    await expect(film.getByTestId('film-word').first()).toBeVisible();
+    await expect(film.locator('[data-testid="film-word"][data-hi]')).toHaveCount(0);
+    await predict(page);
+    // Schritt 0 hat in jedem Film Signalwörter (Struktur-Filme der Charge 1 und der Piloten): erst jetzt sind sie sichtbar.
+    await expect(film.locator('[data-testid="film-word"][data-hi]').first()).toBeVisible();
+    expect(errors).toEqual([]);
+  });
+});

@@ -3,7 +3,7 @@ import type { Film } from '../../../domain/c1/anim';
 import { SentenceMorph, type TapState } from '../../../engine/SentenceMorph';
 import { DWELL_MS, MORPH_MS } from './timing';
 import { Button } from '../../../ui/Button';
-import { morphSteps } from '../../../engine/morphPlan';
+import { morphSteps, withoutHi } from '../../../engine/morphPlan';
 import { useFxLevel } from '../../../engine/fx/level';
 import { useT } from '../../../i18n';
 import { speak, stopSpeech, useSpeech } from '../../../platform/speech';
@@ -109,7 +109,8 @@ export function FilmPlayer({ film, onClose }: { film: Film; onClose?: (() => voi
     return p.ans.includes(i) ? 'answer' : 'dim';
   };
   const cur = film.steps[step];
-  const words = phase === 'predict' ? steps[0]! : (steps[step] ?? steps[0]!);
+  // Vor der Vorhersage leuchtet nichts (Signalwörter würden die Lösung verraten); erst nach der Antwort kommt die Hervorhebung von Schritt 0.
+  const words = phase === 'predict' ? (answered ? steps[0]! : withoutHi(steps[0]!)) : (steps[step] ?? steps[0]!);
 
   return (
     <div ref={root} className="lx-fm flex flex-col gap-4" data-testid="film" data-film={film.id} data-phase={phase} data-step={step} data-manual={manual ? 'true' : undefined}>

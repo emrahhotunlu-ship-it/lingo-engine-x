@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { animFilms, filmFor, filmForTopics, parseFilmFiles, words } from '../../src/domain/c1/anim';
 import { patternById } from '../../src/domain/grammar/patterns';
-import { morphSteps, planMorph } from '../../src/engine/morphPlan';
+import { morphSteps, planMorph, withoutHi, norm } from '../../src/engine/morphPlan';
 import { filmSeconds } from '../../src/features/c1/film/timing';
 
 // Lernplattform 3.0 P61: Struktur-Filme (Format, Pilotcharge a1) und die Wort-Zuordnung zwischen den Schritten.
@@ -121,5 +121,76 @@ describe('planMorph', () => {
 
   it('jeder Pilotfilm ergibt eindeutige Kennungen je Schritt', () => {
     for (const f of animFilms()) for (const step of morphSteps(f.steps)) expect(new Set(step.map((w) => w.id)).size).toBe(step.length);
+  });
+});
+
+// Charge 1 (P62): Kapitel 1–4 (Zeiten, Zukunft, Bedingung und Wunsch, Passiv und Berichten).
+const CH1_4 = [
+  'pres-simple-cont', 'past-simple-perfect', 'pres-perf-cont', 'past-perfect', 'used-to', 'prep-time', 'stative-adv',
+  'future-forms', 'future-perf-cont', 'time-clauses', 'future-past', 'c1-precision',
+  'conditionals', 'cond-alt', 'mixed-cond', 'c1-diplomacy',
+  'passive', 'passive-plus', 'reported', 'report-verbs', 'questions', 'mandative', 'c1-nominal',
+];
+
+describe('Struktur-Filme: Charge 1 und Vorhersage', () => {
+  const films = animFilms();
+
+  it('mindestens 70 neue Filme für Kapitel 1–4, in allen vier Kapiteln und mehreren Mustern je Thema', () => {
+    const mine = films.filter((f) => CH1_4.includes(f.topic));
+    expect(mine.length).toBeGreaterThanOrEqual(73);
+    const topics = new Set(mine.map((f) => f.topic));
+    expect(topics.size).toBeGreaterThanOrEqual(20);
+  });
+
+  it('Wahl-Vorhersage: die richtige Option steht im Film, die falsche in keinem Schritt', () => {
+    for (const f of films) {
+      if (f.predict.kind !== 'pick') continue;
+      const strip = (o: string): string => o.replace(/\s*…$/, '').trim().toLowerCase();
+      const right = strip(f.predict.opts[f.predict.ans]);
+      const wrong = strip(f.predict.opts[f.predict.ans === 0 ? 1 : 0]);
+      const texts = f.steps.map((s) => s.en.toLowerCase());
+      expect(texts.slice(1).some((t) => t.includes(right)), `${f.id}: richtige Option fehlt in den Schritten nach 0`).toBe(true);
+      expect(texts.some((t) => t.includes(wrong)), `${f.id}: die falsche Option kommt im Film vor`).toBe(false);
+      expect(right).not.toBe(wrong);
+    }
+  });
+
+  it('Tipp-Vorhersage: Wörter, die per move nur ihre Form ändern, sind keine Lösung; die Lösung kommt nicht im Film unverändert an derselben Stelle vor', () => {
+    for (const f of films) {
+      if (f.predict.kind !== 'tap') continue;
+      const w0 = words(f.steps[0]!.en);
+      const w1 = words(f.steps[1]!.en);
+      for (const a of f.predict.ans) {
+        for (const [from, to] of f.steps[1]?.move ?? []) {
+          if (from !== a) continue;
+          expect(norm(w0[a] ?? ''), `${f.id}: „${w0[a]}“ ändert nur die Form (→ „${w1[to]}“) und ist keine zulässige Tipp-Lösung`).toBe(norm(w1[to] ?? ''));
+        }
+      }
+      // Die Lösung wandert oder fällt weg: dasselbe Wort steht in Schritt 1 nicht an derselben Stelle.
+      const map = planMorph(w0, w1, f.steps[1]?.move ?? []);
+      for (const a of f.predict.ans) {
+        const b = map.indexOf(a);
+        expect(b === -1 || b !== a, `${f.id}: „${w0[a]}“ bleibt an derselben Stelle`).toBe(true);
+      }
+    }
+  });
+
+  it('Schritt 0 verrät in der Vorhersage nichts: withoutHi nimmt alle Hervorhebungen weg', () => {
+    for (const f of films) {
+      const s0 = morphSteps(f.steps)[0]!;
+      const masked = withoutHi(s0);
+      expect(masked.some((w) => w.hi)).toBe(false);
+      expect(masked.map((w) => w.text)).toEqual(s0.map((w) => w.text));
+      expect(masked.map((w) => w.id)).toEqual(s0.map((w) => w.id));
+    }
+  });
+
+  it('Notizen: DE und EN zweisprachig, kurz (Regel plus höchstens ein Satz zu Wirkung/Register)', () => {
+    for (const f of films) {
+      for (const s of f.steps) {
+        expect(s.note.de.length, f.id).toBeLessThanOrEqual(330);
+        expect(s.note.en.length, f.id).toBeLessThanOrEqual(330);
+      }
+    }
   });
 });
