@@ -132,17 +132,18 @@
    "dom": "biz",
    "src": "seed",
    "text": "Cloud customers value the ___ of our platform when their document volume doubles overnight.",
-   "stem": "SCALABLE",
+   "stem": "SCALE",
    "accept": [
     "scalability"
    ],
    "pos": "noun",
    "parts": {
-    "base": "scalable",
+    "base": "scale",
     "suf": [
+     "able",
      "ity"
     ],
-    "change": "ble → bil"
+    "change": "e entfällt; -ble wird -bil-"
    },
    "family": [
     "scale",
@@ -151,16 +152,16 @@
    ],
    "why": {
     "ok": {
-     "de": "Nach „the“ steht ein Nomen: scalable → scalability (-ble wird -bility). Scalability = die Fähigkeit mitzuwachsen.",
-     "en": "A noun follows “the”: scalable → scalability (-ble becomes -bility). Scalability = the ability to grow with demand."
+     "de": "Nach „the“ steht ein Nomen: scale → scalable → scalability. Scalability = die Fähigkeit mitzuwachsen.",
+     "en": "A noun follows “the”: scale → scalable → scalability. Scalability = the ability to grow with demand."
     },
     "wrong": [
      {
       "if": [
        "scale"
       ],
-      "de": "„scale“ ist ein Verb; hier braucht der Satz ein Nomen (nach „the“, vor „of“).",
-      "en": "“scale” is a verb; the sentence needs a noun here (after “the”, before “of”)."
+      "de": "„scale“ ist hier als Nomen „Größe, Umfang“ möglich, gemeint ist aber die Fähigkeit mitzuwachsen: scalability.",
+      "en": "“scale” as a noun means size; the sentence means the ability to grow with demand: scalability."
      },
      {
       "if": [
@@ -1354,7 +1355,7 @@
    "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "text": "Before we promise a launch date, we need a study on the ___ of the project.",
+   "text": "Before we promise a launch date, we need to assess the ___ of the project.",
    "stem": "FEASIBLE",
    "accept": [
     "feasibility"
@@ -1375,7 +1376,7 @@
    ],
    "why": {
     "ok": {
-     "de": "Nach „the“ steht ein Nomen: feasible → feasibility (-ble wird -bility). A study on the feasibility = eine Machbarkeitsstudie.",
+     "de": "Nach „the“ steht ein Nomen: feasible → feasibility (-ble wird -bility). Assess the feasibility = die Machbarkeit prüfen; feasibility study = Machbarkeitsstudie.",
      "en": "A noun follows “the”: feasible → feasibility (-ble becomes -bility). A feasibility study checks whether something can be done."
     },
     "wrong": [

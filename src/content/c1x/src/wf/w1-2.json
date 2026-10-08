@@ -255,12 +255,8 @@
    ],
    "pos": "adv",
    "parts": {
-    "pre": "in",
-    "base": "evitable",
-    "suf": [
-     "ly"
-    ],
-    "change": "ble → bly"
+    "base": "inevitable",
+    "change": "-ble wird -bly"
    },
    "family": [
     "inevitable",
@@ -2308,7 +2304,7 @@
    "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "text": "A well-kept archive is ___ when an auditor asks for a contract from 2019.",
+   "text": "A well-kept archive is an ___ asset when an auditor asks for a contract from 2019.",
    "stem": "VALUE",
    "accept": [
     "invaluable"
@@ -2329,30 +2325,30 @@
    ],
    "why": {
     "ok": {
-     "de": "Nach „is“ steht ein Adjektiv: in- + value + -able = unschätzbar wertvoll. Das Präfix in- verneint hier nicht: invaluable ist NICHT „wertlos“.",
-     "en": "An adjective follows “is”: in- + value + -able = extremely useful. The prefix does not negate here: invaluable is NOT “worthless”."
+     "de": "Vor dem Nomen „asset“ steht ein Adjektiv, und nach „an“ beginnt es mit einem Vokal: in- + value + -able = unschätzbar wertvoll. Das in- verneint hier nicht: invaluable heißt NICHT „wertlos“.",
+     "en": "An adjective goes before “asset”, and after “an” it starts with a vowel: in- + value + -able = extremely useful. The prefix does not negate here: invaluable does NOT mean “worthless”."
     },
     "wrong": [
      {
       "if": [
        "value"
       ],
-      "de": "„value“ ist ein Nomen; hier braucht der Satz ein Adjektiv (nach „is“, vor „when“).",
-      "en": "“value” is a noun; the sentence needs an adjective here (after “is”, before “when”)."
+      "de": "„value“ ist ein Nomen; hier braucht der Satz ein Adjektiv (nach „an“, vor „asset“).",
+      "en": "“value” is a noun; the sentence needs an adjective here (after “an”, before “asset”)."
      },
      {
       "if": [
        "valuable"
       ],
-      "de": "valuable heißt wertvoll; invaluable ist stärker: unschätzbar wertvoll.",
-      "en": "valuable means worth a lot; invaluable is stronger: extremely useful."
+      "de": "valuable heißt wertvoll; nach „an“ passt es nicht, und gemeint ist die stärkere Form: invaluable.",
+      "en": "valuable means worth a lot; it does not fit after “an”, and the sentence wants the stronger word: invaluable."
      },
      {
       "if": [
        "valueless"
       ],
-      "de": "valueless heißt wertlos; invaluable heißt aber gerade nicht wertlos.",
-      "en": "valueless means worth nothing; invaluable does not mean that."
+      "de": "valueless heißt wertlos und passt nicht nach „an“; invaluable heißt gerade nicht wertlos.",
+      "en": "valueless means worth nothing and does not fit after “an”; invaluable means the opposite."
      },
      {
       "if": [

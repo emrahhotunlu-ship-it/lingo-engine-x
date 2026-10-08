@@ -11,6 +11,7 @@ import { scoreC1 } from '../../src/domain/c1x/score';
 import type { C1Item, Wf } from '../../src/domain/c1x/types';
 import { kindRound } from '../../src/domain/grammar/kindRound';
 import { registerC1Items, resetC1Store } from '../../src/domain/c1x/preload';
+import { toUS } from '../../src/domain/answer/spelling';
 import { slotCount } from '../../src/domain/answer/mask';
 
 const ROOT = join(process.cwd(), 'src/content/c1x/src/wf');
@@ -211,5 +212,15 @@ describe('wf: Runde und Lehrer-Befunde', () => {
       for (const { it, r } of rules) if (!r.de.includes('Partizip') || !r.en.includes('participle') || (w !== 'summarized' && !r.de.includes(`„${y}“`)) || /ist ein Adjektiv/.test(r.de)) bad.push(`${it.id} ${w}: ${r.de}`);
     }
     expect(bad).toEqual([]);
+  });
+
+  it('britische Form zählt voll (Urteil richtig, Note unberührt, nur ein Hinweis); toUS arbeitet mit Ausnahmeliste, nicht pauschal -ise → -ize', () => {
+    const it = items.find((i) => i.accept[0] === 'prioritize') as Wf;
+    const s = scoreC1(it, resp('prioritise'));
+    expect(s).toMatchObject({ got: 1, max: 1, verdict: 'correct', free: true, us: 'prioritize' });
+    expect(s.reason).toBeUndefined();
+    for (const w of ['advise', 'advised', 'advising', 'surprise', 'surprised', 'surprisingly', 'compromise', 'compromised', 'advertise', 'advertising', 'promise', 'exercise', 'precise', 'revise']) expect(toUS(w), w).toBe(w);
+    expect(toUS('organisation')).toBe('organization');
+    expect(toUS('emphasise')).toBe('emphasize');
   });
 });
