@@ -284,3 +284,5 @@ Tests: 1953 Unit; E2E der berührten Bildschirme grün (a11y: Kontrast der „Ne
 - Abweichungen und offene Punkte: `docs/entscheidungen.md` (08.10.2026, R5 Spur A). Offen für die Hauptsitzung: `english-teacher` auf `mail-situations.json`, `learning-scientist` auf die beiden Vorlagen, `data-guard` (ctx2, `repair.pat`, `out` clinic/c1mail, `prod` clinic/mail).
 
 **08.10.2026 R5 P46/P47 zusammengeführt** (Satz-Klinik, E-Mail-Werkstatt; `35a15ea`): english-teacher, learning-scientist und data-guard je Runde 2 frei. Offen als Vermerk aus P50-Prüfung: Wochenfokus wirkt nicht an Einführungstagen (`gt.intro`) und rückt nur das Thema vor, nicht das einzelne Muster.
+
+**08.10.2026 R5 gekürzt:** P48 zurückgestellt, P52 ohne Wortgruppen (siehe entscheidungen.md). P51 auf `claude/umbau-r5-d` in Arbeit, P49/P50 letzte Lehrer-Korrekturen auf `claude/umbau-r5-b`.
