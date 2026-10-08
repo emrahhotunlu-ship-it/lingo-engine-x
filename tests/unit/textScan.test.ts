@@ -21,6 +21,8 @@ const ALLOWED: ReadonlyArray<RegExp> = [
   // (sie ersetzen den Standardwert „Hören entfällt“ des Gesamtkonzepts). Der Reiter und seine Texte (`ap*`) dürfen Hören nennen.
   /^(ap[A-Z]|hxApply|lrBackToApply|nbShTabApply)/,
   /^(nbWsModeListen|nbWsListenHint|nbWsListenNoTts|nbWsLoop|exName_listen_mc|exMode_listen|purposeListen|purposeDictate|lhDictateSub|drDictate)/,
+  // „Weg zu C1“ (P45, Plan §4.4): der Pflichtsatz „Sprechen, Hören und Lesen misst die App nicht“ grenzt ab, er bietet nichts an.
+  /^pxWayNotMeasured$/,
   // Fehlerprotokoll (Diagnose) zeigt Schreibzugriffe der Datenbank, keine Fertigkeit.
   /^diagMsg_/,
 ];

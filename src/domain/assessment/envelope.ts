@@ -1,4 +1,4 @@
-import { DIMS, isConfidence, type Confidence, isLevel, TRENDS, type AssessData, type AssessDim, type AssessHist, type AssessRead, type Dim, type Trend } from './types';
+import { C1_VERDICTS, DIMS, isConfidence, type AssessC1, type Confidence, isLevel, TRENDS, type AssessData, type AssessDim, type AssessHist, type AssessRead, type Dim, type Trend } from './types';
 import { assess } from '../../prompts/assess';
 
 // `app/assess` lesen und schreiben (Plan §4.1, A6.10). Gelesen werden beide Formen: die Hülle
@@ -29,6 +29,20 @@ const confOf = (v: unknown): Confidence => (isConfidence(v) ? v : typeof v === '
 
 const trendOf = (v: unknown): Trend | null => ((TRENDS as readonly unknown[]).includes(v) ? (v as Trend) : null);
 
+/** `data.c1` (assess@4) tolerant: unbekannter Status oder leerer Text → `null`; höchstens 3 fehlende Kriterien (k1–k7). */
+export function readAssessC1(raw: unknown): AssessC1 | null {
+  const o = obj(raw);
+  const status = (C1_VERDICTS as readonly unknown[]).includes(o.status) ? (o.status as AssessC1['status']) : null;
+  const why = text(o.why);
+  if (!status || !why) return null;
+  const missing = arr(o.missing)
+    .map(obj)
+    .map((m) => ({ crit: text(m.crit) ?? '', title: text(m.title) ?? '' }))
+    .filter((m) => /^k[1-7]$/.test(m.crit) && m.title)
+    .slice(0, 3);
+  return { status, why, missing, ev: strs(o.ev) };
+}
+
 /** `data` aus einem Dokument beider Formen, tolerant normalisiert. */
 export function readAssessData(raw: unknown): AssessData {
   const d = obj(raw);
@@ -58,6 +72,7 @@ export function readAssessData(raw: unknown): AssessData {
       .map((b) => ({ title: text(b.title) ?? '', why: text(b.why) ?? '', fix: text(b.fix) ?? '', action: text(b.action), ev: strs(b.ev) })),
     dims,
     focus: text(f.title) ? { title: text(f.title) ?? '', why: text(f.why) ?? '', action: text(f.action), days: Math.max(1, Math.min(7, Math.round(num(f.days) || 3))), channels: strs(f.channels) } : null,
+    c1: readAssessC1(d.c1),
   };
 }
 
@@ -111,6 +126,8 @@ export function fullData(d: AssessData): Record<string, unknown> {
     blockers: d.blockers.map((b) => ({ title: b.title, why: b.why, fix: b.fix, action: b.action, ev: b.ev })),
     dims: d.dims.map((x) => ({ id: x.id, level: x.level, confidence: x.confidence, why: x.why })),
     focus: d.focus ? { title: d.focus.title, why: d.focus.why, action: d.focus.action, days: d.focus.days, channels: d.focus.channels } : null,
+    // assess@4: immer gesetzt (`null` löscht ein altes Urteil, denn `update` mischt verschachtelte Objekte).
+    c1: d.c1 ? { status: d.c1.status, why: d.c1.why, missing: d.c1.missing.map((m) => ({ crit: m.crit, title: m.title })), ev: d.c1.ev } : null,
   };
 }
 
@@ -123,6 +140,8 @@ export type AssessResult = {
   tier: string;
   basis: Record<string, unknown>;
   data: AssessData;
+  /** Vorlage@Version der Antwort (assess@4 mit „Weg zu C1“); fehlt → `ASSESS_PV`. */
+  pv?: string;
 };
 
 export type AssessOp = { set: Doc } | { update: Doc };
@@ -135,7 +154,7 @@ export type AssessOp = { set: Doc } | { update: Doc };
  */
 export function assessWrite(cur: Doc | undefined, r: AssessResult, startedAt: number): AssessOp | null {
   const entry: AssessHist = { d: r.day, cefr: r.data.cefr, trend: r.data.trend, dims: Object.fromEntries(r.data.dims.map((x) => [x.id, x.level])) };
-  const body = { d: r.day, t: r.t, lang: r.lang, answers: r.answers, writings: r.writings, v: 2, pv: ASSESS_PV, tier: r.tier, basis: r.basis, data: fullData(r.data) };
+  const body = { d: r.day, t: r.t, lang: r.lang, answers: r.answers, writings: r.writings, v: 2, pv: r.pv ?? ASSESS_PV, tier: r.tier, basis: r.basis, data: fullData(r.data) };
   if (!cur) return { set: { ...body, hist: [entry] } };
   if (num(cur.t) > startedAt) return null;
   const prev = arr(cur.hist).filter((h) => obj(h).d !== r.day);

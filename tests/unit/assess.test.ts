@@ -136,7 +136,7 @@ describe('app/assess: beide Formen lesen, Hülle schreiben (A6.10)', () => {
   });
 
   it('fullData setzt jeden Schlüssel', () => {
-    expect(Object.keys(fullData(readAssessData({})))).toHaveLength(11);
+    expect(Object.keys(fullData(readAssessData({})))).toHaveLength(12);
   });
 });
 
@@ -408,7 +408,7 @@ describe('Ablauf der Einschätzung (Plan §4.5)', () => {
     expect(m.fake.control.sampleCalls[0]?.tier).toBe('complex');
     expect(m.fake.control.sampleCalls[0]?.cache).toBe(false);
     const doc = m.fake.control.db.dump()['app/assess']!;
-    expect(doc).toMatchObject({ v: 2, pv: 'assess@3', tier: 'complex', lang: 'de', d: today });
+    expect(doc).toMatchObject({ v: 2, pv: 'assess@4', tier: 'complex', lang: 'de', d: today });
     expect((doc.data as Doc).dims).toHaveLength(2);
     expect((doc.hist as Doc[]).length).toBeGreaterThanOrEqual(1);
     const read = readAssess(doc)!;

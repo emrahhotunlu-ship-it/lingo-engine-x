@@ -35,6 +35,8 @@ export const assessDataSchema = z.looseObject({
   dims: z.array(z.looseObject({ id: str, level: str, confidence: str, why: str })).nullish(),
   // `channels`: Kanäle des Tagesplans, auf die der Fokus wirkt (Phase 6, Plan §4.6).
   focus: z.looseObject({ title: str, why: str, action: str, days: num, channels: strArr }).nullish(),
+  // Neu (Lernplattform 3.0 P45, assess@4): C1-Urteil in Worten `{status, why, missing: [{crit, title}], ev}`, tolerant.
+  c1: z.looseObject({ status: str, why: str, missing: looseArr, ev: strArr }).nullish(),
 });
 
 /** Die alte App schreibt eine Hülle `{d, t, lang, answers, writings, data}`, Anhang B zeigt den Inhalt flach. */

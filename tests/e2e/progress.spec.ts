@@ -43,7 +43,7 @@ test('Öffnen löst genau eine Einschätzung aus (complex, ohne Zwischenspeicher
   await tab(page, 'judge');
   await expect.poll(async () => (await dump(page))['app/assess']?.d).toBe('2026-09-20');
   const doc = (await dump(page))['app/assess']!;
-  expect(doc).toMatchObject({ v: 2, pv: 'assess@3', tier: 'complex', lang: 'de' });
+  expect(doc).toMatchObject({ v: 2, pv: 'assess@4', tier: 'complex', lang: 'de' });
   expect((doc.run as Record<string, unknown>).d).toBe('2026-09-20');
   // Befund H3: Die Einschätzung der alten App (Seed, 18.09., ohne hist) ist erster Verlaufseintrag.
   const hist = doc.hist as Array<Record<string, unknown>>;

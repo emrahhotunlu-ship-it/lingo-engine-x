@@ -15,6 +15,12 @@ import { addDays, dayKey } from '../../domain/date';
 import { errorsOf } from '../../domain/grammar/errors';
 import { mergedVocab } from '../../domain/overview';
 import { assess as assessTemplate } from '../../prompts/assess';
+import { assess4 } from '../../prompts/assess4';
+import { flags } from '../../app/flags';
+import { preloadC1x } from '../../domain/c1x/preload';
+import { c1EvidenceLines, c1EvidenceText, openCrit } from '../../domain/c1/way';
+import { C1_LOG_DAYS } from '../../domain/metrics/c1';
+import { PATTERNS_DOC, wayFromLive } from '../c1/wayData';
 import { getDb, getSample, useCapabilities } from '../../platform/capabilities';
 import { logError, logWarn } from '../../platform/diagnostics';
 import type { Db } from '../../platform/types';
@@ -167,11 +173,14 @@ export async function runAssess(trigger: 'auto' | 'manual', nowMs: number = Date
     const profile = live.docs['app/profile'] ?? {};
     const grammar = live.collections.grammar ?? new Map<string, Doc>();
     const vocab = mergedVocab(live.collections.vocab ?? new Map());
-    const days = Array.from({ length: LOG_DAYS }, (_, k) => addDays(today, -k));
+    // „Weg zu C1“ (P45, Schalter `way`): 28 Protokolltage statt 14 (die Belege der Einschätzung bleiben bei 14), dazu `app/patterns`.
+    const way = flags.way;
+    const days = Array.from({ length: way ? C1_LOG_DAYS : LOG_DAYS }, (_, k) => addDays(today, -k));
     const radar = await safeDoc(db, 'app/radar');
+    const patternsDoc = way ? await safeDoc(db, PATTERNS_DOC) : null;
     const logDocs = await inPool(days, 4, (d) => safeDoc(db, `log/${d}`));
     const logs = new Map<string, Doc>();
-    days.forEach((d, k) => {
+    days.slice(0, LOG_DAYS).forEach((d, k) => {
       const doc = logDocs[k];
       if (doc) logs.set(d, doc);
     });
@@ -183,23 +192,28 @@ export async function runAssess(trigger: 'auto' | 'manual', nowMs: number = Date
     const answers = typeof profile.answers === 'number' ? profile.answers : 0;
     useAssessRun.setState({ phase: 'asking', answers: pack.counts.answers14 || answers });
 
-    const res = await askJson({
-      template: assessTemplate,
-      vars: {
-        lang,
-        evidence: evidenceText(pack),
-        ids: pack.ids,
-        allowed,
-        prev: prev ? { cefr: prev.data.cefr, dims: Object.fromEntries(prev.data.dims.map((d) => [d.id, d.level])) } : null,
-        today,
-      },
-      signal: c.signal,
-      priority: 'background',
-      onPhase: (p) => {
-        if (ctl !== c) return;
-        if (p === 'thinking' || p === 'streaming' || p === 'slow' || p === 'queued') useAssessRun.setState({ aiPhase: p });
-      },
-    });
+    const vars = {
+      lang,
+      evidence: evidenceText(pack),
+      ids: pack.ids,
+      allowed,
+      prev: prev ? { cefr: prev.data.cefr, dims: Object.fromEntries(prev.data.dims.map((d) => [d.id, d.level])) } : null,
+      today,
+    };
+    const onPhase = (p: string): void => {
+      if (ctl !== c) return;
+      if (p === 'thinking' || p === 'streaming' || p === 'slow' || p === 'queued') useAssessRun.setState({ aiPhase: p });
+    };
+    let c1Vars: { evidence: string; ids: string[]; open: string[] } | null = null;
+    if (way) {
+      await preloadC1x(['err']);
+      const w = wayFromLive(useLive.getState(), { today, nowMs, logs: logDocs.filter((d): d is Doc => !!d), patterns: patternsDoc ?? undefined });
+      const lines = c1EvidenceLines(w);
+      c1Vars = { evidence: c1EvidenceText(lines), ids: lines.map((l) => l.id), open: openCrit(w.crit) };
+    }
+    const res = c1Vars
+      ? await askJson({ template: assess4, vars: { ...vars, c1: c1Vars }, signal: c.signal, priority: 'background', onPhase })
+      : await askJson({ template: assessTemplate, vars, signal: c.signal, priority: 'background', onPhase });
 
     useAssessRun.setState({ phase: 'saving', aiPhase: null });
     const data = finalizeAssess(readAssessData(res.data), allStrengths(pack.counts));
@@ -217,6 +231,7 @@ export async function runAssess(trigger: 'auto' | 'manual', nowMs: number = Date
         vtestD: pack.counts.vtestD,
       },
       data,
+      pv: c1Vars ? `${assess4.id}@${assess4.version}` : undefined,
     };
     await writer.transform('app/assess', (cur) => assessWrite(cur, result, startedAt));
     if (ctl === c) useAssessRun.setState({ phase: 'done' });
