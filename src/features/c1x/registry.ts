@@ -5,6 +5,7 @@ import { useKwtUi } from './kinds/Kwt';
 import { useMccUi } from './kinds/McCloze';
 import { useOclUi } from './kinds/OpenCloze';
 import { useStubUi } from './kinds/Stub';
+import { useWfUi } from './kinds/WordForm';
 import type { C1KindEntry } from './types';
 
 // Welche Aufgabenarten der Rahmen kennt (Lernplattform 3.0 P14). Jede Art ist ein Hook (`kinds/<Art>.tsx`); im Build bietet die Registry keine Art an,
@@ -14,7 +15,7 @@ const stub: C1KindEntry = { useUi: useStubUi };
 const ENTRIES: Record<C1Kind, C1KindEntry> = {
   mcc: { useUi: useMccUi },
   ocl: { useUi: useOclUi },
-  wf: stub,
+  wf: { useUi: useWfUi },
   kwt: { useUi: useKwtUi },
   err: { useUi: useErrUi },
   pair: stub,

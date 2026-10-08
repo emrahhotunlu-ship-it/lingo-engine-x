@@ -1,0 +1,2938 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "wf-0051",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-adj",
+   "lex": [
+    "advantageous"
+   ],
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Moving your archive to the cloud would be highly ___ for a company of your size.",
+   "stem": "ADVANTAGE",
+   "accept": [
+    "advantageous"
+   ],
+   "pos": "adj",
+   "parts": {
+    "base": "advantage",
+    "suf": [
+     "ous"
+    ],
+    "change": "e → eous"
+   },
+   "family": [
+    "advantage",
+    "advantageous",
+    "disadvantage",
+    "disadvantageous"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „would be highly“ steht ein Adjektiv: advantage → advantageous (-ous). Das Nomen advantage wird zum Adjektiv.",
+     "en": "An adjective follows “would be highly”: advantage → advantageous (-ous)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "advantage"
+      ],
+      "de": "„advantage“ ist ein Nomen; hier braucht der Satz ein Adjektiv (nach „would be highly“).",
+      "en": "“advantage” is a noun; the sentence needs an adjective here (after “would be highly”)."
+     },
+     {
+      "if": [
+       "disadvantage"
+      ],
+      "de": "„disadvantage“ ist ein Nomen; hier braucht der Satz ein Adjektiv (nach „would be highly“).",
+      "en": "“disadvantage” is a noun; the sentence needs an adjective here (after “would be highly”)."
+     },
+     {
+      "if": [
+       "disadvantageous"
+      ],
+      "de": "disadvantageous heißt nachteilig; ein Verkäufer meint hier das Gegenteil.",
+      "en": "disadvantageous means harmful; the speaker means the opposite."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0052",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-neg",
+   "lex": [
+    "unwilling"
+   ],
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "After weeks of talks, the client is still ___ to accept any price increase.",
+   "stem": "WILLING",
+   "accept": [
+    "unwilling"
+   ],
+   "pos": "adj",
+   "parts": {
+    "pre": "un",
+    "base": "willing"
+   },
+   "family": [
+    "willing",
+    "willingness",
+    "unwillingness",
+    "unwilling"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „is still“ steht ein Adjektiv: un- + willing = nicht bereit.",
+     "en": "An adjective follows “is still”: un- + willing = not ready."
+    },
+    "wrong": [
+     {
+      "if": [
+       "willing"
+      ],
+      "de": "willing heißt bereit; „After weeks of talks … still“ zeigt, dass der Kunde nicht nachgibt.",
+      "en": "willing means ready; “After weeks of talks … still” shows that the client does not give in."
+     },
+     {
+      "if": [
+       "willingness"
+      ],
+      "de": "„willingness“ ist ein Nomen; hier braucht der Satz ein Adjektiv (nach „is still“, vor „to accept“).",
+      "en": "“willingness” is a noun; the sentence needs an adjective here (after “is still”, before “to accept”)."
+     },
+     {
+      "if": [
+       "unwillingness"
+      ],
+      "de": "„unwillingness“ ist ein Nomen; hier braucht der Satz ein Adjektiv (nach „is still“, vor „to accept“).",
+      "en": "“unwillingness” is a noun; the sentence needs an adjective here (after “is still”, before “to accept”)."
+     },
+     {
+      "if": [
+       "inwilling"
+      ],
+      "de": "Vor willing steht un-, nicht in-.",
+      "en": "Willing takes un-, not in-."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0053",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-neg",
+   "lex": [
+    "unsuitable"
+   ],
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "These shoes are totally ___ for a long walk in the rain.",
+   "stem": "SUITABLE",
+   "accept": [
+    "unsuitable"
+   ],
+   "pos": "adj",
+   "parts": {
+    "pre": "un",
+    "base": "suitable"
+   },
+   "family": [
+    "suit",
+    "suitable",
+    "suitability",
+    "unsuitable"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „are totally“ steht ein Adjektiv: un- + suitable = ungeeignet.",
+     "en": "An adjective follows “are totally”: un- + suitable = not right for the purpose."
+    },
+    "wrong": [
+     {
+      "if": [
+       "suit"
+      ],
+      "de": "„suit“ ist ein Verb; hier braucht der Satz ein Adjektiv (nach „are totally“).",
+      "en": "“suit” is a verb; the sentence needs an adjective here (after “are totally”)."
+     },
+     {
+      "if": [
+       "suitable"
+      ],
+      "de": "suitable heißt geeignet; ein langer Spaziergang im Regen spricht gegen diese Schuhe.",
+      "en": "suitable means right for the purpose; a long walk in the rain speaks against these shoes."
+     },
+     {
+      "if": [
+       "suitability"
+      ],
+      "de": "„suitability“ ist ein Nomen; hier braucht der Satz ein Adjektiv (nach „are totally“).",
+      "en": "“suitability” is a noun; the sentence needs an adjective here (after “are totally”)."
+     },
+     {
+      "if": [
+       "insuitable"
+      ],
+      "de": "Vor suitable steht un-, nicht in-.",
+      "en": "Suitable takes un-, not in-."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0054",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-adv",
+   "lex": [
+    "cautiously"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We are ___ optimistic that the contract will be signed before the end of the quarter.",
+   "stem": "CAUTION",
+   "accept": [
+    "cautiously"
+   ],
+   "pos": "adv",
+   "parts": {
+    "base": "caution",
+    "change": "caution → cautious-"
+   },
+   "family": [
+    "caution",
+    "cautious",
+    "cautiously"
+   ],
+   "why": {
+    "ok": {
+     "de": "Vor einem Adjektiv steht ein Adverb: caution → cautious → cautiously = vorsichtig. Cautiously optimistic ist eine feste Verbindung.",
+     "en": "An adverb goes before an adjective: caution → cautious → cautiously. “Cautiously optimistic” is a fixed combination."
+    },
+    "wrong": [
+     {
+      "if": [
+       "caution"
+      ],
+      "de": "„caution“ ist ein Nomen; hier braucht der Satz ein Adverb (vor „optimistic“).",
+      "en": "“caution” is a noun; the sentence needs an adverb here (before “optimistic”)."
+     },
+     {
+      "if": [
+       "cautious"
+      ],
+      "de": "„cautious“ ist ein Adjektiv; hier braucht der Satz ein Adverb (vor „optimistic“).",
+      "en": "“cautious” is an adjective; the sentence needs an adverb here (before “optimistic”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0055",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-adv",
+   "lex": [
+    "obviously"
+   ],
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "The figures are ___ wrong, because the total is smaller than one of the items.",
+   "stem": "OBVIOUS",
+   "accept": [
+    "obviously"
+   ],
+   "pos": "adv",
+   "parts": {
+    "base": "obvious",
+    "suf": [
+     "ly"
+    ]
+   },
+   "family": [
+    "obvious",
+    "obviously"
+   ],
+   "why": {
+    "ok": {
+     "de": "Vor einem Adjektiv steht ein Adverb: obvious + -ly = offensichtlich. Das Argument nach „because“ begründet die Schlussfolgerung.",
+     "en": "An adverb goes before an adjective: obvious + -ly = clearly. The clause after “because” gives the evidence."
+    },
+    "wrong": [
+     {
+      "if": [
+       "obvious"
+      ],
+      "de": "„obvious“ ist ein Adjektiv; hier braucht der Satz ein Adverb (vor „wrong“).",
+      "en": "“obvious” is an adjective; the sentence needs an adverb here (before “wrong”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0056",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-adj",
+   "lex": [
+    "dependent"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The final price is ___ on the number of users and the contract length.",
+   "stem": "DEPEND",
+   "accept": [
+    "dependent"
+   ],
+   "pos": "adj",
+   "parts": {
+    "base": "depend",
+    "suf": [
+     "ent"
+    ]
+   },
+   "family": [
+    "depend",
+    "dependent",
+    "dependence",
+    "dependable",
+    "independent"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „is“ steht ein Adjektiv: depend + -ent = abhängig. Dependent on = abhängig von.",
+     "en": "An adjective follows “is”: depend + -ent. “Dependent on” means determined by."
+    },
+    "wrong": [
+     {
+      "if": [
+       "depend"
+      ],
+      "de": "„depend“ ist ein Verb; hier braucht der Satz ein Adjektiv (nach „is“, vor „on“).",
+      "en": "“depend” is a verb; the sentence needs an adjective here (after “is”, before “on”)."
+     },
+     {
+      "if": [
+       "dependence"
+      ],
+      "de": "„dependence“ ist ein Nomen; hier braucht der Satz ein Adjektiv (nach „is“, vor „on“).",
+      "en": "“dependence” is a noun; the sentence needs an adjective here (after “is”, before “on”)."
+     },
+     {
+      "if": [
+       "dependable"
+      ],
+      "de": "dependable heißt zuverlässig; „on the number of users“ verlangt dependent.",
+      "en": "dependable means reliable; “on the number of users” needs dependent."
+     },
+     {
+      "if": [
+       "independent"
+      ],
+      "de": "independent heißt unabhängig; der Preis hängt hier gerade von etwas ab.",
+      "en": "independent means not relying on; here the price does depend on something."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0057",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-adv",
+   "lex": [
+    "precisely"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "That is ___ what our customers told us in the survey.",
+   "stem": "PRECISE",
+   "accept": [
+    "precisely"
+   ],
+   "pos": "adv",
+   "parts": {
+    "base": "precise",
+    "change": "e → ely"
+   },
+   "family": [
+    "precise",
+    "precisely",
+    "precision",
+    "imprecise"
+   ],
+   "why": {
+    "ok": {
+     "de": "Vor „what“ steht ein Adverb: precise + -ly = genau. Precisely what = genau das, was.",
+     "en": "An adverb goes before “what”: precise + -ly = exactly. “Precisely what” stresses the match."
+    },
+    "wrong": [
+     {
+      "if": [
+       "precise"
+      ],
+      "de": "„precise“ ist ein Adjektiv; hier braucht der Satz ein Adverb (vor „what“).",
+      "en": "“precise” is an adjective; the sentence needs an adverb here (before “what”)."
+     },
+     {
+      "if": [
+       "precision"
+      ],
+      "de": "„precision“ ist ein Nomen; hier braucht der Satz ein Adverb (vor „what“).",
+      "en": "“precision” is a noun; the sentence needs an adverb here (before “what”)."
+     },
+     {
+      "if": [
+       "imprecise"
+      ],
+      "de": "„imprecise“ ist ein Adjektiv; hier braucht der Satz ein Adverb (vor „what“).",
+      "en": "“imprecise” is an adjective; the sentence needs an adverb here (before “what”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0058",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-noun",
+   "lex": [
+    "reliability"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Customers choose us because of the ___ of our service.",
+   "stem": "RELY",
+   "accept": [
+    "reliability"
+   ],
+   "pos": "noun",
+   "parts": {
+    "base": "rely",
+    "suf": [
+     "ability"
+    ],
+    "change": "rely → reliab-"
+   },
+   "family": [
+    "rely",
+    "reliable",
+    "reliability",
+    "unreliable",
+    "reliance"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „the“ steht ein Nomen: rely → reliable → reliability. Reliability = Verlässlichkeit.",
+     "en": "A noun follows “the”: rely → reliable → reliability. Reliability = being dependable."
+    },
+    "wrong": [
+     {
+      "if": [
+       "rely"
+      ],
+      "de": "„rely“ ist ein Verb; hier braucht der Satz ein Nomen (nach „the“, vor „of“).",
+      "en": "“rely” is a verb; the sentence needs a noun here (after “the”, before “of”)."
+     },
+     {
+      "if": [
+       "reliable"
+      ],
+      "de": "„reliable“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „the“, vor „of“).",
+      "en": "“reliable” is an adjective; the sentence needs a noun here (after “the”, before “of”)."
+     },
+     {
+      "if": [
+       "unreliable"
+      ],
+      "de": "„unreliable“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „the“, vor „of“).",
+      "en": "“unreliable” is an adjective; the sentence needs a noun here (after “the”, before “of”)."
+     },
+     {
+      "if": [
+       "reliance"
+      ],
+      "de": "reliance heißt Angewiesensein auf etwas; die Eigenschaft „verlässlich“ heißt reliability.",
+      "en": "reliance means depending on something; the quality of being dependable is reliability."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0059",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-neg",
+   "lex": [
+    "unreliable"
+   ],
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Their old system was slow and ___.",
+   "stem": "RELY",
+   "accept": [
+    "unreliable"
+   ],
+   "pos": "adj",
+   "parts": {
+    "pre": "un",
+    "base": "rely",
+    "change": "rely → reliab-"
+   },
+   "family": [
+    "rely",
+    "reliable",
+    "reliability",
+    "unreliable",
+    "reliance"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „slow and“ steht ein Adjektiv: un- + reliable = unzuverlässig. Das „and“ verbindet zwei negative Eigenschaften.",
+     "en": "An adjective follows “slow and”: un- + reliable = not dependable. The “and” joins two negative qualities."
+    },
+    "wrong": [
+     {
+      "if": [
+       "rely"
+      ],
+      "de": "„rely“ ist ein Verb; hier braucht der Satz ein Adjektiv (nach „slow and“).",
+      "en": "“rely” is a verb; the sentence needs an adjective here (after “slow and”)."
+     },
+     {
+      "if": [
+       "reliable"
+      ],
+      "de": "reliable heißt zuverlässig; zu „slow and“ passt ein negatives Wort.",
+      "en": "reliable means dependable; a negative word fits after “slow and”."
+     },
+     {
+      "if": [
+       "reliability"
+      ],
+      "de": "„reliability“ ist ein Nomen; hier braucht der Satz ein Adjektiv (nach „slow and“).",
+      "en": "“reliability” is a noun; the sentence needs an adjective here (after “slow and”)."
+     },
+     {
+      "if": [
+       "reliance"
+      ],
+      "de": "„reliance“ ist ein Nomen; hier braucht der Satz ein Adjektiv (nach „slow and“).",
+      "en": "“reliance” is a noun; the sentence needs an adjective here (after “slow and”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0060",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-noun",
+   "lex": [
+    "availability"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "In our contract, we guarantee 99.9 percent ___ for the whole year.",
+   "stem": "AVAILABLE",
+   "accept": [
+    "availability"
+   ],
+   "pos": "noun",
+   "parts": {
+    "base": "available",
+    "suf": [
+     "ity"
+    ],
+    "change": "ble → bil"
+   },
+   "family": [
+    "available",
+    "availability",
+    "unavailable"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „99.9 percent“ steht ein Nomen: aus -ble wird -bility. Availability = Verfügbarkeit.",
+     "en": "A noun follows “99.9 percent”: -ble becomes -bility. Availability = how often it works."
+    },
+    "wrong": [
+     {
+      "if": [
+       "available"
+      ],
+      "de": "„available“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „99.9 percent“).",
+      "en": "“available” is an adjective; the sentence needs a noun here (after “99.9 percent”)."
+     },
+     {
+      "if": [
+       "unavailable"
+      ],
+      "de": "„unavailable“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „99.9 percent“).",
+      "en": "“unavailable” is an adjective; the sentence needs a noun here (after “99.9 percent”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0061",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-noun",
+   "lex": [
+    "analysis"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "A quick ___ of your invoices shows that they wait nine days on average.",
+   "stem": "ANALYZE",
+   "accept": [
+    "analysis"
+   ],
+   "pos": "noun",
+   "parts": {
+    "base": "analyze",
+    "change": "ze → sis"
+   },
+   "family": [
+    "analyze",
+    "analysis",
+    "analyst",
+    "analytical",
+    "analytics"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „A quick“ steht ein Nomen: analyze → analysis (-ze wird -sis). Eine Analyse von etwas = analysis of.",
+     "en": "A noun follows “A quick”: analyze → analysis (-ze becomes -sis). “Analysis of” fits a single check."
+    },
+    "wrong": [
+     {
+      "if": [
+       "analyze"
+      ],
+      "de": "„analyze“ ist ein Verb; hier braucht der Satz ein Nomen (nach „A quick“, vor „of“).",
+      "en": "“analyze” is a verb; the sentence needs a noun here (after “A quick”, before “of”)."
+     },
+     {
+      "if": [
+       "analyst"
+      ],
+      "de": "analyst ist die Person, die auswertet; gemeint ist das Ergebnis der Prüfung.",
+      "en": "an analyst is the person who evaluates; the sentence needs the result of the check."
+     },
+     {
+      "if": [
+       "analytical"
+      ],
+      "de": "„analytical“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „A quick“, vor „of“).",
+      "en": "“analytical” is an adjective; the sentence needs a noun here (after “A quick”, before “of”)."
+     },
+     {
+      "if": [
+       "analytics"
+      ],
+      "de": "analytics ist die Datenauswertung als Werkzeug; eine einzelne Prüfung heißt analysis.",
+      "en": "analytics is data evaluation as a tool; a single check is called an analysis."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0062",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-adj",
+   "lex": [
+    "analytical"
+   ],
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "She has a very ___ approach to sales and checks every number twice.",
+   "stem": "ANALYZE",
+   "accept": [
+    "analytical",
+    "analytic"
+   ],
+   "pos": "adj",
+   "parts": {
+    "base": "analyze",
+    "change": "ze → tical"
+   },
+   "family": [
+    "analyze",
+    "analysis",
+    "analyst",
+    "analytical",
+    "analytic",
+    "analytics"
+   ],
+   "why": {
+    "ok": {
+     "de": "Vor einem Nomen steht ein Adjektiv: analyze → analytical (-ical). Analytic ist ebenfalls möglich, aber seltener.",
+     "en": "An adjective goes before a noun: analyze → analytical (-ical). Analytic is also possible, but rarer."
+    },
+    "wrong": [
+     {
+      "if": [
+       "analyze"
+      ],
+      "de": "„analyze“ ist ein Verb; hier braucht der Satz ein Adjektiv (zwischen „very“ und „approach“).",
+      "en": "“analyze” is a verb; the sentence needs an adjective here (between “very” and “approach”)."
+     },
+     {
+      "if": [
+       "analysis"
+      ],
+      "de": "„analysis“ ist ein Nomen; hier braucht der Satz ein Adjektiv (zwischen „very“ und „approach“).",
+      "en": "“analysis” is a noun; the sentence needs an adjective here (between “very” and “approach”)."
+     },
+     {
+      "if": [
+       "analyst"
+      ],
+      "de": "„analyst“ ist ein Nomen; hier braucht der Satz ein Adjektiv (zwischen „very“ und „approach“).",
+      "en": "“analyst” is a noun; the sentence needs an adjective here (between “very” and “approach”)."
+     },
+     {
+      "if": [
+       "analytics"
+      ],
+      "de": "„analytics“ ist ein Nomen; hier braucht der Satz ein Adjektiv (zwischen „very“ und „approach“).",
+      "en": "“analytics” is a noun; the sentence needs an adjective here (between “very” and “approach”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0063",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-adj",
+   "lex": [
+    "competitive"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We offer very ___ prices for resellers who sign up before March.",
+   "stem": "COMPETE",
+   "accept": [
+    "competitive"
+   ],
+   "pos": "adj",
+   "parts": {
+    "base": "compete",
+    "change": "te → titive"
+   },
+   "family": [
+    "compete",
+    "competition",
+    "competitor",
+    "competitive"
+   ],
+   "why": {
+    "ok": {
+     "de": "Vor einem Nomen steht ein Adjektiv: compete → competitive (-itive). Competitive prices = Preise, die im Wettbewerb bestehen.",
+     "en": "An adjective goes before a noun: compete → competitive. “Competitive prices” can match other sellers."
+    },
+    "wrong": [
+     {
+      "if": [
+       "compete"
+      ],
+      "de": "„compete“ ist ein Verb; hier braucht der Satz ein Adjektiv (zwischen „very“ und „prices“).",
+      "en": "“compete” is a verb; the sentence needs an adjective here (between “very” and “prices”)."
+     },
+     {
+      "if": [
+       "competition"
+      ],
+      "de": "„competition“ ist ein Nomen; hier braucht der Satz ein Adjektiv (zwischen „very“ und „prices“).",
+      "en": "“competition” is a noun; the sentence needs an adjective here (between “very” and “prices”)."
+     },
+     {
+      "if": [
+       "competitor"
+      ],
+      "de": "„competitor“ ist ein Nomen; hier braucht der Satz ein Adjektiv (zwischen „very“ und „prices“).",
+      "en": "“competitor” is a noun; the sentence needs an adjective here (between “very” and “prices”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0064",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-noun",
+   "lex": [
+    "competitors"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Most of our ___ are based in Germany, so we focus on the DACH region.",
+   "stem": "COMPETE",
+   "accept": [
+    "competitors"
+   ],
+   "pos": "noun",
+   "parts": {
+    "base": "compete",
+    "change": "te → titors"
+   },
+   "family": [
+    "compete",
+    "competition",
+    "competitor",
+    "competitors",
+    "competitive"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „Most of our“ steht ein Nomen im Plural: compete → competitor + -s. Das Verb „are“ bestätigt den Plural.",
+     "en": "A plural noun follows “Most of our”: compete → competitor + -s. The verb “are” confirms the plural."
+    },
+    "wrong": [
+     {
+      "if": [
+       "compete"
+      ],
+      "de": "„compete“ ist ein Verb; hier braucht der Satz ein Nomen (nach „Most of our“, vor „are“).",
+      "en": "“compete” is a verb; the sentence needs a noun here (after “Most of our”, before “are”)."
+     },
+     {
+      "if": [
+       "competition"
+      ],
+      "de": "competition ist nicht zählbar und passt zu „is“, nicht zu „are based“.",
+      "en": "competition is uncountable and takes “is”, not “are based”."
+     },
+     {
+      "if": [
+       "competitor"
+      ],
+      "de": "Nach „Most of our“ braucht das Nomen den Plural: competitors (Verb „are“).",
+      "en": "After “Most of our” the noun needs the plural: competitors (verb “are”)."
+     },
+     {
+      "if": [
+       "competitive"
+      ],
+      "de": "„competitive“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „Most of our“, vor „are“).",
+      "en": "“competitive” is an adjective; the sentence needs a noun here (after “Most of our”, before “are”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0065",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-noun",
+   "lex": [
+    "employees"
+   ],
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The company currently has about 200 ___ in three countries.",
+   "stem": "EMPLOY",
+   "accept": [
+    "employees"
+   ],
+   "pos": "noun",
+   "parts": {
+    "base": "employ",
+    "suf": [
+     "ees"
+    ]
+   },
+   "family": [
+    "employ",
+    "employment",
+    "employer",
+    "employee",
+    "employees"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „about 200“ steht ein Nomen im Plural: employ + -ee + -s = die Beschäftigten. -ee bezeichnet die Person, die etwas bekommt.",
+     "en": "A plural noun follows “about 200”: employ + -ee + -s. The ending -ee marks the person who receives something."
+    },
+    "wrong": [
+     {
+      "if": [
+       "employ"
+      ],
+      "de": "„employ“ ist ein Verb; hier braucht der Satz ein Nomen (nach „about 200“).",
+      "en": "“employ” is a verb; the sentence needs a noun here (after “about 200”)."
+     },
+     {
+      "if": [
+       "employment"
+      ],
+      "de": "employment heißt Beschäftigung oder Anstellung; gemeint sind die Personen (employees).",
+      "en": "employment means a job or being employed; the sentence means the people (employees)."
+     },
+     {
+      "if": [
+       "employer"
+      ],
+      "de": "employer ist der Arbeitgeber; gemeint sind die Beschäftigten (employees).",
+      "en": "an employer is the boss; the sentence means the people who work there (employees)."
+     },
+     {
+      "if": [
+       "employee"
+      ],
+      "de": "Nach „about 200“ braucht das Nomen den Plural: employees.",
+      "en": "After “about 200” the noun needs the plural: employees."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0066",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-noun",
+   "lex": [
+    "intention"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Do you have any ___ of expanding to the Nordic market this year?",
+   "stem": "INTEND",
+   "accept": [
+    "intention",
+    "intentions"
+   ],
+   "pos": "noun",
+   "parts": {
+    "base": "intend",
+    "change": "d → tion"
+   },
+   "family": [
+    "intend",
+    "intended",
+    "intention",
+    "intentions",
+    "intentional",
+    "unintentional"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „any“ steht ein Nomen: intend → intention. Intention of + -ing = die Absicht zu.",
+     "en": "A noun follows “any”: intend → intention. “Intention of” + -ing = a plan to do something."
+    },
+    "wrong": [
+     {
+      "if": [
+       "intend"
+      ],
+      "de": "„intend“ ist ein Verb; hier braucht der Satz ein Nomen (nach „any“, vor „of expanding“).",
+      "en": "“intend” is a verb; the sentence needs a noun here (after “any”, before “of expanding”)."
+     },
+     {
+      "if": [
+       "intended"
+      ],
+      "de": "„intended“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „any“, vor „of expanding“).",
+      "en": "“intended” is an adjective; the sentence needs a noun here (after “any”, before “of expanding”)."
+     },
+     {
+      "if": [
+       "intentional"
+      ],
+      "de": "„intentional“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „any“, vor „of expanding“).",
+      "en": "“intentional” is an adjective; the sentence needs a noun here (after “any”, before “of expanding”)."
+     },
+     {
+      "if": [
+       "unintentional"
+      ],
+      "de": "„unintentional“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „any“, vor „of expanding“).",
+      "en": "“unintentional” is an adjective; the sentence needs a noun here (after “any”, before “of expanding”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0067",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-noun",
+   "lex": [
+    "preference"
+   ],
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "text": "Our guests show a clear ___ for vegetarian food over meat dishes.",
+   "stem": "PREFER",
+   "accept": [
+    "preference"
+   ],
+   "pos": "noun",
+   "parts": {
+    "base": "prefer",
+    "suf": [
+     "ence"
+    ]
+   },
+   "family": [
+    "prefer",
+    "preferable",
+    "preferably",
+    "preferred",
+    "preference"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „a clear“ steht ein Nomen: prefer → preference (-ence). Preference for = Vorliebe für.",
+     "en": "A noun follows “a clear”: prefer → preference (-ence). “Preference for” means choosing one over another."
+    },
+    "wrong": [
+     {
+      "if": [
+       "prefer"
+      ],
+      "de": "„prefer“ ist ein Verb; hier braucht der Satz ein Nomen (nach „a clear“, vor „for“).",
+      "en": "“prefer” is a verb; the sentence needs a noun here (after “a clear”, before “for”)."
+     },
+     {
+      "if": [
+       "preferable"
+      ],
+      "de": "„preferable“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „a clear“, vor „for“).",
+      "en": "“preferable” is an adjective; the sentence needs a noun here (after “a clear”, before “for”)."
+     },
+     {
+      "if": [
+       "preferably"
+      ],
+      "de": "„preferably“ ist ein Adverb; hier braucht der Satz ein Nomen (nach „a clear“, vor „for“).",
+      "en": "“preferably” is an adverb; the sentence needs a noun here (after “a clear”, before “for”)."
+     },
+     {
+      "if": [
+       "preferred"
+      ],
+      "de": "„preferred“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „a clear“, vor „for“).",
+      "en": "“preferred” is an adjective; the sentence needs a noun here (after “a clear”, before “for”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0068",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-noun",
+   "lex": [
+    "subscription"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Our annual ___ includes unlimited storage and priority support.",
+   "stem": "SUBSCRIBE",
+   "accept": [
+    "subscription"
+   ],
+   "pos": "noun",
+   "parts": {
+    "base": "subscribe",
+    "change": "be → ption"
+   },
+   "family": [
+    "subscribe",
+    "subscriber",
+    "subscription",
+    "unsubscribe"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „Our annual“ steht ein Nomen: subscribe → subscription (-be wird -ption).",
+     "en": "A noun follows “Our annual”: subscribe → subscription (-be becomes -ption)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "subscribe"
+      ],
+      "de": "„subscribe“ ist ein Verb; hier braucht der Satz ein Nomen (nach „Our annual“).",
+      "en": "“subscribe” is a verb; the sentence needs a noun here (after “Our annual”)."
+     },
+     {
+      "if": [
+       "subscriber"
+      ],
+      "de": "subscriber ist die Person mit dem Abo; gemeint ist hier das Abo selbst.",
+      "en": "a subscriber is the person with the plan; the sentence means the plan itself."
+     },
+     {
+      "if": [
+       "unsubscribe"
+      ],
+      "de": "„unsubscribe“ ist ein Verb; hier braucht der Satz ein Nomen (nach „Our annual“).",
+      "en": "“unsubscribe” is a verb; the sentence needs a noun here (after “Our annual”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0069",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-noun",
+   "lex": [
+    "contribution"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Thank you for your valuable ___ to the success of this project.",
+   "stem": "CONTRIBUTE",
+   "accept": [
+    "contribution"
+   ],
+   "pos": "noun",
+   "parts": {
+    "base": "contribute",
+    "change": "te → tion"
+   },
+   "family": [
+    "contribute",
+    "contributor",
+    "contribution"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „your valuable“ steht ein Nomen: contribute → contribution (-te wird -tion). Contribution to = Beitrag zu.",
+     "en": "A noun follows “your valuable”: contribute → contribution. “Contribution to” means part of the success."
+    },
+    "wrong": [
+     {
+      "if": [
+       "contribute"
+      ],
+      "de": "„contribute“ ist ein Verb; hier braucht der Satz ein Nomen (nach „your valuable“, vor „to“).",
+      "en": "“contribute” is a verb; the sentence needs a noun here (after “your valuable”, before “to”)."
+     },
+     {
+      "if": [
+       "contributor"
+      ],
+      "de": "contributor ist die Person, die etwas beiträgt; gemeint ist der Beitrag.",
+      "en": "a contributor is the person who gives; the sentence means the thing given."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0070",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-noun",
+   "lex": [
+    "participation"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Active ___ in the workshop will help you get the most out of it.",
+   "stem": "PARTICIPATE",
+   "accept": [
+    "participation"
+   ],
+   "pos": "noun",
+   "parts": {
+    "base": "participate",
+    "change": "te → tion"
+   },
+   "family": [
+    "participate",
+    "participant",
+    "participation"
+   ],
+   "why": {
+    "ok": {
+     "de": "Das Subjekt braucht ein Nomen: participate → participation (-te wird -tion). Participation in = Teilnahme an.",
+     "en": "The subject needs a noun: participate → participation. “Participation in” means taking part in."
+    },
+    "wrong": [
+     {
+      "if": [
+       "participate"
+      ],
+      "de": "„participate“ ist ein Verb; hier braucht der Satz ein Nomen (nach „Active“, vor „in“).",
+      "en": "“participate” is a verb; the sentence needs a noun here (after “Active”, before “in”)."
+     },
+     {
+      "if": [
+       "participant"
+      ],
+      "de": "participant ist die Person, die teilnimmt; gemeint ist das Mitmachen.",
+      "en": "a participant is the person taking part; the sentence means the act of taking part."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0071",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-noun",
+   "lex": [
+    "reference"
+   ],
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "Please include your order number as a ___ when you contact support.",
+   "stem": "REFER",
+   "accept": [
+    "reference"
+   ],
+   "pos": "noun",
+   "parts": {
+    "base": "refer",
+    "suf": [
+     "ence"
+    ]
+   },
+   "family": [
+    "refer",
+    "referral",
+    "reference"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „as a“ steht ein Nomen: refer → reference (-ence). Eine Referenznummer hilft dem Support, den Fall zu finden.",
+     "en": "A noun follows “as a”: refer → reference (-ence). A reference number helps support find your case."
+    },
+    "wrong": [
+     {
+      "if": [
+       "refer"
+      ],
+      "de": "„refer“ ist ein Verb; hier braucht der Satz ein Nomen (nach „as a“).",
+      "en": "“refer” is a verb; the sentence needs a noun here (after “as a”)."
+     },
+     {
+      "if": [
+       "referral"
+      ],
+      "de": "referral heißt Weiterempfehlung oder Überweisung; eine Kennung heißt reference.",
+      "en": "referral means a recommendation or transfer; an identifier is called a reference."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0072",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-noun",
+   "lex": [
+    "apology"
+   ],
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "text": "Please accept our sincere ___ for the inconvenience.",
+   "stem": "APOLOGIZE",
+   "accept": [
+    "apology",
+    "apologies"
+   ],
+   "pos": "noun",
+   "parts": {
+    "base": "apologize",
+    "change": "ize → y"
+   },
+   "family": [
+    "apologize",
+    "apologetic",
+    "apologetically",
+    "apology",
+    "apologies"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „our sincere“ steht ein Nomen: apologize → apology. Beide Formen gehen: Plural apologies ist üblicher.",
+     "en": "A noun follows “our sincere”: apologize → apology. Both forms work: the plural apologies is more common."
+    },
+    "wrong": [
+     {
+      "if": [
+       "apologize"
+      ],
+      "de": "„apologize“ ist ein Verb; hier braucht der Satz ein Nomen (nach „our sincere“, vor „for“).",
+      "en": "“apologize” is a verb; the sentence needs a noun here (after “our sincere”, before “for”)."
+     },
+     {
+      "if": [
+       "apologetic"
+      ],
+      "de": "„apologetic“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „our sincere“, vor „for“).",
+      "en": "“apologetic” is an adjective; the sentence needs a noun here (after “our sincere”, before “for”)."
+     },
+     {
+      "if": [
+       "apologetically"
+      ],
+      "de": "„apologetically“ ist ein Adverb; hier braucht der Satz ein Nomen (nach „our sincere“, vor „for“).",
+      "en": "“apologetically” is an adverb; the sentence needs a noun here (after “our sincere”, before “for”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0073",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-noun",
+   "lex": [
+    "congratulations"
+   ],
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "Please pass on our ___ to the whole team on the successful launch.",
+   "stem": "CONGRATULATE",
+   "accept": [
+    "congratulations"
+   ],
+   "pos": "noun",
+   "parts": {
+    "base": "congratulate",
+    "change": "te → tions"
+   },
+   "family": [
+    "congratulate",
+    "congratulatory",
+    "congratulations"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „our“ steht ein Nomen im Plural: congratulate → congratulations. Das Wort steht fast immer im Plural.",
+     "en": "A plural noun follows “our”: congratulate → congratulations. The word is almost always plural."
+    },
+    "wrong": [
+     {
+      "if": [
+       "congratulate"
+      ],
+      "de": "„congratulate“ ist ein Verb; hier braucht der Satz ein Nomen (nach „our“, vor „to the whole team“).",
+      "en": "“congratulate” is a verb; the sentence needs a noun here (after “our”, before “to the whole team”)."
+     },
+     {
+      "if": [
+       "congratulatory"
+      ],
+      "de": "„congratulatory“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „our“, vor „to the whole team“).",
+      "en": "“congratulatory” is an adjective; the sentence needs a noun here (after “our”, before “to the whole team”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0074",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-noun",
+   "lex": [
+    "applications"
+   ],
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We received more than fifty ___ for the sales manager position.",
+   "stem": "APPLY",
+   "accept": [
+    "applications"
+   ],
+   "pos": "noun",
+   "parts": {
+    "base": "apply",
+    "change": "y → ication"
+   },
+   "family": [
+    "apply",
+    "applicant",
+    "applicants",
+    "application",
+    "applications"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „more than fifty“ steht ein Nomen im Plural: apply → application + -s. Man erhält Bewerbungen, nicht Bewerber.",
+     "en": "A plural noun follows “more than fifty”: apply → application + -s. A company receives applications, not people."
+    },
+    "wrong": [
+     {
+      "if": [
+       "apply"
+      ],
+      "de": "„apply“ ist ein Verb; hier braucht der Satz ein Nomen (nach „more than fifty“).",
+      "en": "“apply” is a verb; the sentence needs a noun here (after “more than fifty”)."
+     },
+     {
+      "if": [
+       "applicant"
+      ],
+      "de": "Nach „more than fifty“ braucht das Nomen den Plural; außerdem ist ein applicant eine Person.",
+      "en": "After “more than fifty” the noun needs the plural; also, an applicant is a person."
+     },
+     {
+      "if": [
+       "applicants"
+      ],
+      "de": "applicants sind die Bewerber; ein Unternehmen erhält Bewerbungen (applications).",
+      "en": "applicants are the people; a company receives applications."
+     },
+     {
+      "if": [
+       "application"
+      ],
+      "de": "Nach „more than fifty“ braucht das Nomen den Plural: applications.",
+      "en": "After “more than fifty” the noun needs the plural: applications."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0075",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-adj",
+   "lex": [
+    "encouraging"
+   ],
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "text": "The first feedback from our customers is very ___.",
+   "stem": "ENCOURAGE",
+   "accept": [
+    "encouraging"
+   ],
+   "pos": "adj",
+   "parts": {
+    "base": "encourage",
+    "change": "e → ing"
+   },
+   "family": [
+    "encourage",
+    "encouragement",
+    "encouraged",
+    "discouraging",
+    "encouraging"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „is very“ steht ein Adjektiv: encourage → encouraging (-ing). Die Sache wirkt ermutigend, die Person fühlt sich encouraged.",
+     "en": "An adjective follows “is very”: encourage → encouraging. The thing is encouraging; the person feels encouraged."
+    },
+    "wrong": [
+     {
+      "if": [
+       "encourage"
+      ],
+      "de": "„encourage“ ist ein Verb; hier braucht der Satz ein Adjektiv (nach „is very“).",
+      "en": "“encourage” is a verb; the sentence needs an adjective here (after “is very”)."
+     },
+     {
+      "if": [
+       "encouragement"
+      ],
+      "de": "„encouragement“ ist ein Nomen; hier braucht der Satz ein Adjektiv (nach „is very“).",
+      "en": "“encouragement” is a noun; the sentence needs an adjective here (after “is very”)."
+     },
+     {
+      "if": [
+       "encouraged"
+      ],
+      "de": "encouraged beschreibt die Person, die sich ermutigt fühlt; das Feedback selbst ist encouraging.",
+      "en": "encouraged describes the person who feels cheered up; the feedback itself is encouraging."
+     },
+     {
+      "if": [
+       "discouraging"
+      ],
+      "de": "discouraging heißt entmutigend; „very …“ meint hier eine gute Nachricht.",
+      "en": "discouraging means disheartening; “very …” here means good news."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0076",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-adv",
+   "lex": [
+    "surprisingly"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "___, the older version of the software performed better than the new one.",
+   "stem": "SURPRISE",
+   "accept": [
+    "surprisingly"
+   ],
+   "pos": "adv",
+   "parts": {
+    "base": "surprise",
+    "suf": [
+     "ing",
+     "ly"
+    ],
+    "change": "e → ingly"
+   },
+   "family": [
+    "surprise",
+    "surprised",
+    "surprising",
+    "surprisingly"
+   ],
+   "why": {
+    "ok": {
+     "de": "Am Satzanfang kommentiert ein Adverb den ganzen Satz: surprise → surprising → surprisingly = überraschenderweise.",
+     "en": "At the start, an adverb comments on the whole sentence: surprise → surprising → surprisingly."
+    },
+    "wrong": [
+     {
+      "if": [
+       "surprise"
+      ],
+      "de": "„surprise“ ist ein Nomen; hier braucht der Satz ein Adverb (am Satzanfang, vor dem Komma).",
+      "en": "“surprise” is a noun; the sentence needs an adverb here (at the start of the sentence, before the comma)."
+     },
+     {
+      "if": [
+       "surprised"
+      ],
+      "de": "„surprised“ ist ein Adjektiv; hier braucht der Satz ein Adverb (am Satzanfang, vor dem Komma).",
+      "en": "“surprised” is an adjective; the sentence needs an adverb here (at the start of the sentence, before the comma)."
+     },
+     {
+      "if": [
+       "surprising"
+      ],
+      "de": "„surprising“ ist ein Adjektiv; hier braucht der Satz ein Adverb (am Satzanfang, vor dem Komma).",
+      "en": "“surprising” is an adjective; the sentence needs an adverb here (at the start of the sentence, before the comma)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0077",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-noun",
+   "lex": [
+    "assistance"
+   ],
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "If you need any ___ with the setup, our team is happy to help.",
+   "stem": "ASSIST",
+   "accept": [
+    "assistance"
+   ],
+   "pos": "noun",
+   "parts": {
+    "base": "assist",
+    "suf": [
+     "ance"
+    ]
+   },
+   "family": [
+    "assist",
+    "assistance",
+    "assistant"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „any“ steht ein nicht zählbares Nomen: assist + -ance = die Hilfe. Assistance with = Unterstützung bei.",
+     "en": "An uncountable noun follows “any”: assist + -ance. “Assistance with” means help with."
+    },
+    "wrong": [
+     {
+      "if": [
+       "assist"
+      ],
+      "de": "„assist“ ist ein Verb; hier braucht der Satz ein Nomen (nach „any“, vor „with“).",
+      "en": "“assist” is a verb; the sentence needs a noun here (after “any”, before “with”)."
+     },
+     {
+      "if": [
+       "assistant"
+      ],
+      "de": "assistant ist die Person, die hilft; gemeint ist die Hilfe selbst.",
+      "en": "an assistant is the person who helps; the sentence means the help itself."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0078",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-noun",
+   "lex": [
+    "attendance"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "___ at the weekly sales meeting is compulsory for all account managers.",
+   "stem": "ATTEND",
+   "accept": [
+    "attendance"
+   ],
+   "pos": "noun",
+   "parts": {
+    "base": "attend",
+    "suf": [
+     "ance"
+    ]
+   },
+   "family": [
+    "attend",
+    "attendee",
+    "attendance"
+   ],
+   "why": {
+    "ok": {
+     "de": "Das Subjekt braucht ein Nomen: attend + -ance = die Anwesenheit. Attendance at = Teilnahme an.",
+     "en": "The subject needs a noun: attend + -ance = being present. “Attendance at” is used for meetings."
+    },
+    "wrong": [
+     {
+      "if": [
+       "attend"
+      ],
+      "de": "„attend“ ist ein Verb; hier braucht der Satz ein Nomen (am Satzanfang, vor „at“).",
+      "en": "“attend” is a verb; the sentence needs a noun here (at the start, before “at”)."
+     },
+     {
+      "if": [
+       "attendee"
+      ],
+      "de": "attendee ist die Person, die dabei ist; gemeint ist das Dabeisein.",
+      "en": "an attendee is the person who is there; the sentence means being there."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0079",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-adv",
+   "lex": [
+    "efficiently"
+   ],
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The new workflow lets the team work more ___ than before.",
+   "stem": "EFFICIENT",
+   "accept": [
+    "efficiently"
+   ],
+   "pos": "adv",
+   "parts": {
+    "base": "efficient",
+    "suf": [
+     "ly"
+    ]
+   },
+   "family": [
+    "efficient",
+    "efficiently",
+    "efficiency",
+    "inefficient"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach dem Verb „work“ steht ein Adverb: efficient + -ly = wirksam. Ein Adjektiv wäre hier falsch.",
+     "en": "After the verb “work” an adverb is needed: efficient + -ly. An adjective would be wrong here."
+    },
+    "wrong": [
+     {
+      "if": [
+       "efficient"
+      ],
+      "de": "„efficient“ ist ein Adjektiv; hier braucht der Satz ein Adverb (nach „work more“, vor „than“).",
+      "en": "“efficient” is an adjective; the sentence needs an adverb here (after “work more”, before “than”)."
+     },
+     {
+      "if": [
+       "efficiency"
+      ],
+      "de": "„efficiency“ ist ein Nomen; hier braucht der Satz ein Adverb (nach „work more“, vor „than“).",
+      "en": "“efficiency” is a noun; the sentence needs an adverb here (after “work more”, before “than”)."
+     },
+     {
+      "if": [
+       "inefficient"
+      ],
+      "de": "inefficient ist ein Adjektiv und heißt das Gegenteil; nach „work more“ steht ein Adverb.",
+      "en": "inefficient is an adjective with the opposite meaning; “work more” needs an adverb."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0080",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-adv",
+   "lex": [
+    "significantly"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Our response time has improved ___ since we hired two more engineers.",
+   "stem": "SIGNIFICANT",
+   "accept": [
+    "significantly"
+   ],
+   "pos": "adv",
+   "parts": {
+    "base": "significant",
+    "suf": [
+     "ly"
+    ]
+   },
+   "family": [
+    "significant",
+    "significantly",
+    "significance",
+    "insignificant"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach dem Verb steht ein Adverb: significant + -ly = deutlich, erheblich.",
+     "en": "After the verb an adverb is needed: significant + -ly = by a large amount."
+    },
+    "wrong": [
+     {
+      "if": [
+       "significant"
+      ],
+      "de": "„significant“ ist ein Adjektiv; hier braucht der Satz ein Adverb (nach „has improved“).",
+      "en": "“significant” is an adjective; the sentence needs an adverb here (after “has improved”)."
+     },
+     {
+      "if": [
+       "significance"
+      ],
+      "de": "„significance“ ist ein Nomen; hier braucht der Satz ein Adverb (nach „has improved“).",
+      "en": "“significance” is a noun; the sentence needs an adverb here (after “has improved”)."
+     },
+     {
+      "if": [
+       "insignificant"
+      ],
+      "de": "„insignificant“ ist ein Adjektiv; hier braucht der Satz ein Adverb (nach „has improved“).",
+      "en": "“insignificant” is an adjective; the sentence needs an adverb here (after “has improved”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0081",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-adv",
+   "lex": [
+    "considerably"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The new tariff is ___ cheaper than the old one.",
+   "stem": "CONSIDER",
+   "accept": [
+    "considerably"
+   ],
+   "pos": "adv",
+   "parts": {
+    "base": "consider",
+    "change": "consider → considerab-"
+   },
+   "family": [
+    "consider",
+    "considerable",
+    "considerably",
+    "consideration",
+    "considerate"
+   ],
+   "why": {
+    "ok": {
+     "de": "Vor einem Komparativ steht ein Adverb: consider → considerable → considerably = deutlich.",
+     "en": "An adverb goes before a comparative: consider → considerable → considerably = by a lot."
+    },
+    "wrong": [
+     {
+      "if": [
+       "consider"
+      ],
+      "de": "„consider“ ist ein Verb; hier braucht der Satz ein Adverb (vor „cheaper“).",
+      "en": "“consider” is a verb; the sentence needs an adverb here (before “cheaper”)."
+     },
+     {
+      "if": [
+       "considerable"
+      ],
+      "de": "„considerable“ ist ein Adjektiv; hier braucht der Satz ein Adverb (vor „cheaper“).",
+      "en": "“considerable” is an adjective; the sentence needs an adverb here (before “cheaper”)."
+     },
+     {
+      "if": [
+       "consideration"
+      ],
+      "de": "„consideration“ ist ein Nomen; hier braucht der Satz ein Adverb (vor „cheaper“).",
+      "en": "“consideration” is a noun; the sentence needs an adverb here (before “cheaper”)."
+     },
+     {
+      "if": [
+       "considerate"
+      ],
+      "de": "„considerate“ ist ein Adjektiv; hier braucht der Satz ein Adverb (vor „cheaper“).",
+      "en": "“considerate” is an adjective; the sentence needs an adverb here (before “cheaper”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0082",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-adv",
+   "lex": [
+    "substantially"
+   ],
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Revenue grew ___ in the second half of the year.",
+   "stem": "SUBSTANCE",
+   "accept": [
+    "substantially"
+   ],
+   "pos": "adv",
+   "parts": {
+    "base": "substance",
+    "change": "ce → tially"
+   },
+   "family": [
+    "substance",
+    "substantial",
+    "substantially"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach dem Verb „grew“ steht ein Adverb: substance → substantial → substantially = erheblich.",
+     "en": "An adverb follows the verb “grew”: substance → substantial → substantially = by a lot."
+    },
+    "wrong": [
+     {
+      "if": [
+       "substance"
+      ],
+      "de": "„substance“ ist ein Nomen; hier braucht der Satz ein Adverb (nach „grew“).",
+      "en": "“substance” is a noun; the sentence needs an adverb here (after “grew”)."
+     },
+     {
+      "if": [
+       "substantial"
+      ],
+      "de": "„substantial“ ist ein Adjektiv; hier braucht der Satz ein Adverb (nach „grew“).",
+      "en": "“substantial” is an adjective; the sentence needs an adverb here (after “grew”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0083",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-adv",
+   "lex": [
+    "remarkably"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The migration went ___ smoothly, and nobody had to work over the weekend.",
+   "stem": "REMARK",
+   "accept": [
+    "remarkably"
+   ],
+   "pos": "adv",
+   "parts": {
+    "base": "remark",
+    "suf": [
+     "ably"
+    ]
+   },
+   "family": [
+    "remark",
+    "remarkable",
+    "remarkably"
+   ],
+   "why": {
+    "ok": {
+     "de": "Vor einem Adverb steht ein Adverb: remark → remarkable → remarkably = bemerkenswert.",
+     "en": "An adverb can modify another adverb: remark → remarkable → remarkably = unusually."
+    },
+    "wrong": [
+     {
+      "if": [
+       "remark"
+      ],
+      "de": "„remark“ ist ein Nomen; hier braucht der Satz ein Adverb (vor „smoothly“).",
+      "en": "“remark” is a noun; the sentence needs an adverb here (before “smoothly”)."
+     },
+     {
+      "if": [
+       "remarkable"
+      ],
+      "de": "„remarkable“ ist ein Adjektiv; hier braucht der Satz ein Adverb (vor „smoothly“).",
+      "en": "“remarkable” is an adjective; the sentence needs an adverb here (before “smoothly”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0084",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-adv",
+   "lex": [
+    "dramatically"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Our costs fell ___ after we switched to the new cloud provider.",
+   "stem": "DRAMA",
+   "accept": [
+    "dramatically"
+   ],
+   "pos": "adv",
+   "parts": {
+    "base": "drama",
+    "suf": [
+     "tically"
+    ]
+   },
+   "family": [
+    "drama",
+    "dramatic",
+    "dramatically"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach dem Verb „fell“ steht ein Adverb: drama → dramatic → dramatically = drastisch.",
+     "en": "An adverb follows the verb “fell”: drama → dramatic → dramatically = sharply."
+    },
+    "wrong": [
+     {
+      "if": [
+       "drama"
+      ],
+      "de": "„drama“ ist ein Nomen; hier braucht der Satz ein Adverb (nach „fell“).",
+      "en": "“drama” is a noun; the sentence needs an adverb here (after “fell”)."
+     },
+     {
+      "if": [
+       "dramatic"
+      ],
+      "de": "„dramatic“ ist ein Adjektiv; hier braucht der Satz ein Adverb (nach „fell“).",
+      "en": "“dramatic” is an adjective; the sentence needs an adverb here (after “fell”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0085",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-adv",
+   "lex": [
+    "slightly"
+   ],
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "The new version is only ___ faster than the old one, so the upgrade is optional.",
+   "stem": "SLIGHT",
+   "accept": [
+    "slightly"
+   ],
+   "pos": "adv",
+   "parts": {
+    "base": "slight",
+    "suf": [
+     "ly"
+    ]
+   },
+   "family": [
+    "slight",
+    "slightly"
+   ],
+   "why": {
+    "ok": {
+     "de": "Vor einem Komparativ steht ein Adverb: slight + -ly = ein wenig.",
+     "en": "An adverb goes before a comparative: slight + -ly = a little."
+    },
+    "wrong": [
+     {
+      "if": [
+       "slight"
+      ],
+      "de": "„slight“ ist ein Adjektiv; hier braucht der Satz ein Adverb (vor „faster“).",
+      "en": "“slight” is an adjective; the sentence needs an adverb here (before “faster”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0086",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-noun",
+   "lex": [
+    "strengths"
+   ],
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "One of our biggest ___ is the speed of our onboarding.",
+   "stem": "STRONG",
+   "accept": [
+    "strengths"
+   ],
+   "pos": "noun",
+   "parts": {
+    "base": "strong",
+    "suf": [
+     "s"
+    ],
+    "change": "strong → strength"
+   },
+   "family": [
+    "strong",
+    "strongly",
+    "strength",
+    "strengths",
+    "strengthen"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „One of our biggest“ steht ein Nomen im Plural: strong → strength + -s. Strengths = Stärken.",
+     "en": "A plural noun follows “One of our biggest”: strong → strength + -s. Strengths = what you do best."
+    },
+    "wrong": [
+     {
+      "if": [
+       "strong"
+      ],
+      "de": "„strong“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „One of our biggest“).",
+      "en": "“strong” is an adjective; the sentence needs a noun here (after “One of our biggest”)."
+     },
+     {
+      "if": [
+       "strongly"
+      ],
+      "de": "„strongly“ ist ein Adverb; hier braucht der Satz ein Nomen (nach „One of our biggest“).",
+      "en": "“strongly” is an adverb; the sentence needs a noun here (after “One of our biggest”)."
+     },
+     {
+      "if": [
+       "strength"
+      ],
+      "de": "Nach „One of our biggest“ braucht das Nomen den Plural: strengths.",
+      "en": "After “One of our biggest” the noun needs the plural: strengths."
+     },
+     {
+      "if": [
+       "strengthen"
+      ],
+      "de": "„strengthen“ ist ein Verb; hier braucht der Satz ein Nomen (nach „One of our biggest“).",
+      "en": "“strengthen” is a verb; the sentence needs a noun here (after “One of our biggest”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0087",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-noun",
+   "lex": [
+    "depth"
+   ],
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "text": "The lake reaches a ___ of more than forty meters at its center.",
+   "stem": "DEEP",
+   "accept": [
+    "depth"
+   ],
+   "pos": "noun",
+   "parts": {
+    "base": "deep",
+    "change": "deep → depth"
+   },
+   "family": [
+    "deep",
+    "deeply",
+    "deepen",
+    "depth"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „a“ steht ein Nomen: deep → depth (der Vokal ändert sich). A depth of = eine Tiefe von.",
+     "en": "A noun follows “a”: deep → depth (the vowel changes). “A depth of” gives a measurement."
+    },
+    "wrong": [
+     {
+      "if": [
+       "deep"
+      ],
+      "de": "„deep“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „a“, vor „of“).",
+      "en": "“deep” is an adjective; the sentence needs a noun here (after “a”, before “of”)."
+     },
+     {
+      "if": [
+       "deeply"
+      ],
+      "de": "„deeply“ ist ein Adverb; hier braucht der Satz ein Nomen (nach „a“, vor „of“).",
+      "en": "“deeply” is an adverb; the sentence needs a noun here (after “a”, before “of”)."
+     },
+     {
+      "if": [
+       "deepen"
+      ],
+      "de": "„deepen“ ist ein Verb; hier braucht der Satz ein Nomen (nach „a“, vor „of“).",
+      "en": "“deepen” is a verb; the sentence needs a noun here (after “a”, before “of”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0088",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-adv",
+   "lex": [
+    "widely"
+   ],
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "This brand of running shoes is ___ available in sports stores.",
+   "stem": "WIDE",
+   "accept": [
+    "widely"
+   ],
+   "pos": "adv",
+   "parts": {
+    "base": "wide",
+    "suf": [
+     "ly"
+    ]
+   },
+   "family": [
+    "wide",
+    "widely",
+    "widen",
+    "width"
+   ],
+   "why": {
+    "ok": {
+     "de": "Vor einem Adjektiv steht ein Adverb: wide + -ly = weit, überall. Widely available = breit erhältlich.",
+     "en": "An adverb goes before an adjective: wide + -ly = in many places. “Widely available” is a common combination."
+    },
+    "wrong": [
+     {
+      "if": [
+       "wide"
+      ],
+      "de": "„wide“ ist ein Adjektiv; hier braucht der Satz ein Adverb (zwischen „is“ und „available“).",
+      "en": "“wide” is an adjective; the sentence needs an adverb here (between “is” and “available”)."
+     },
+     {
+      "if": [
+       "widen"
+      ],
+      "de": "„widen“ ist ein Verb; hier braucht der Satz ein Adverb (zwischen „is“ und „available“).",
+      "en": "“widen” is a verb; the sentence needs an adverb here (between “is” and “available”)."
+     },
+     {
+      "if": [
+       "width"
+      ],
+      "de": "„width“ ist ein Nomen; hier braucht der Satz ein Adverb (zwischen „is“ und „available“).",
+      "en": "“width” is a noun; the sentence needs an adverb here (between “is” and “available”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0089",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-noun",
+   "lex": [
+    "length"
+   ],
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "The ___ of the contract is three years, with an option to extend.",
+   "stem": "LONG",
+   "accept": [
+    "length"
+   ],
+   "pos": "noun",
+   "parts": {
+    "base": "long",
+    "change": "long → length"
+   },
+   "family": [
+    "long",
+    "lengthy",
+    "lengthen",
+    "length"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „The“ steht ein Nomen: long → length (die Länge). Der Vokal ändert sich.",
+     "en": "A noun follows “The”: long → length. The vowel changes."
+    },
+    "wrong": [
+     {
+      "if": [
+       "long"
+      ],
+      "de": "„long“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „The“, vor „of“).",
+      "en": "“long” is an adjective; the sentence needs a noun here (after “The”, before “of”)."
+     },
+     {
+      "if": [
+       "lengthy"
+      ],
+      "de": "lengthy ist ein Adjektiv (langwierig); nach „The“ steht hier ein Nomen.",
+      "en": "lengthy is an adjective (taking too long); a noun follows “The” here."
+     },
+     {
+      "if": [
+       "lengthen"
+      ],
+      "de": "„lengthen“ ist ein Verb; hier braucht der Satz ein Nomen (nach „The“, vor „of“).",
+      "en": "“lengthen” is a verb; the sentence needs a noun here (after “The”, before “of”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0090",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-adv",
+   "lex": [
+    "easily"
+   ],
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Customers can ___ import their data from Excel in just a few clicks.",
+   "stem": "EASY",
+   "accept": [
+    "easily"
+   ],
+   "pos": "adv",
+   "parts": {
+    "base": "easy",
+    "change": "y → ily"
+   },
+   "family": [
+    "easy",
+    "easily",
+    "ease",
+    "easier"
+   ],
+   "why": {
+    "ok": {
+     "de": "Vor dem Verb steht ein Adverb: easy → easily (-y wird -ily).",
+     "en": "An adverb goes before the verb: easy → easily (-y becomes -ily)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "easy"
+      ],
+      "de": "„easy“ ist ein Adjektiv; hier braucht der Satz ein Adverb (vor „import“).",
+      "en": "“easy” is an adjective; the sentence needs an adverb here (before “import”)."
+     },
+     {
+      "if": [
+       "ease"
+      ],
+      "de": "„ease“ ist ein Nomen; hier braucht der Satz ein Adverb (vor „import“).",
+      "en": "“ease” is a noun; the sentence needs an adverb here (before “import”)."
+     },
+     {
+      "if": [
+       "easier"
+      ],
+      "de": "„easier“ ist ein Adjektiv; hier braucht der Satz ein Adverb (vor „import“).",
+      "en": "“easier” is an adjective; the sentence needs an adverb here (before “import”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0091",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-verb",
+   "lex": [
+    "simplify"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We want to ___ the ordering process so that customers can buy in two clicks.",
+   "stem": "SIMPLE",
+   "accept": [
+    "simplify"
+   ],
+   "pos": "verb",
+   "parts": {
+    "base": "simple",
+    "change": "le → lify"
+   },
+   "family": [
+    "simple",
+    "simply",
+    "simplicity",
+    "simplification",
+    "simplify"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „want to“ steht die Grundform eines Verbs: simple → simplify (-ify macht Verben). Simplify = einfacher machen.",
+     "en": "The base form of a verb follows “want to”: simple → simplify (-ify makes verbs). Simplify = make simpler."
+    },
+    "wrong": [
+     {
+      "if": [
+       "simple"
+      ],
+      "de": "„simple“ ist ein Adjektiv; hier braucht der Satz ein Verb (nach „want to“).",
+      "en": "“simple” is an adjective; the sentence needs a verb here (after “want to”)."
+     },
+     {
+      "if": [
+       "simply"
+      ],
+      "de": "„simply“ ist ein Adverb; hier braucht der Satz ein Verb (nach „want to“).",
+      "en": "“simply” is an adverb; the sentence needs a verb here (after “want to”)."
+     },
+     {
+      "if": [
+       "simplicity"
+      ],
+      "de": "„simplicity“ ist ein Nomen; hier braucht der Satz ein Verb (nach „want to“).",
+      "en": "“simplicity” is a noun; the sentence needs a verb here (after “want to”)."
+     },
+     {
+      "if": [
+       "simplification"
+      ],
+      "de": "„simplification“ ist ein Nomen; hier braucht der Satz ein Verb (nach „want to“).",
+      "en": "“simplification” is a noun; the sentence needs a verb here (after “want to”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0092",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-verb",
+   "lex": [
+    "broaden"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We plan to ___ our product range with two new modules next spring.",
+   "stem": "BROAD",
+   "accept": [
+    "broaden"
+   ],
+   "pos": "verb",
+   "parts": {
+    "base": "broad",
+    "suf": [
+     "en"
+    ]
+   },
+   "family": [
+    "broad",
+    "broadly",
+    "breadth",
+    "broaden"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „plan to“ steht die Grundform eines Verbs: broad + -en = breiter machen, erweitern.",
+     "en": "The base form of a verb follows “plan to”: broad + -en = make wider."
+    },
+    "wrong": [
+     {
+      "if": [
+       "broad"
+      ],
+      "de": "„broad“ ist ein Adjektiv; hier braucht der Satz ein Verb (nach „plan to“).",
+      "en": "“broad” is an adjective; the sentence needs a verb here (after “plan to”)."
+     },
+     {
+      "if": [
+       "broadly"
+      ],
+      "de": "„broadly“ ist ein Adverb; hier braucht der Satz ein Verb (nach „plan to“).",
+      "en": "“broadly” is an adverb; the sentence needs a verb here (after “plan to”)."
+     },
+     {
+      "if": [
+       "breadth"
+      ],
+      "de": "„breadth“ ist ein Nomen; hier braucht der Satz ein Verb (nach „plan to“).",
+      "en": "“breadth” is a noun; the sentence needs a verb here (after “plan to”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0093",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-neg",
+   "lex": [
+    "unacceptable"
+   ],
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "A delay of more than two days is simply ___ for our key accounts.",
+   "stem": "ACCEPT",
+   "accept": [
+    "unacceptable"
+   ],
+   "pos": "adj",
+   "parts": {
+    "pre": "un",
+    "base": "accept",
+    "suf": [
+     "able"
+    ]
+   },
+   "family": [
+    "accept",
+    "acceptance",
+    "acceptable",
+    "unacceptable"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „is simply“ steht ein Adjektiv: un- + accept + -able = nicht akzeptabel.",
+     "en": "An adjective follows “is simply”: un- + accept + -able = not good enough."
+    },
+    "wrong": [
+     {
+      "if": [
+       "accept"
+      ],
+      "de": "„accept“ ist ein Verb; hier braucht der Satz ein Adjektiv (nach „is simply“).",
+      "en": "“accept” is a verb; the sentence needs an adjective here (after “is simply”)."
+     },
+     {
+      "if": [
+       "acceptance"
+      ],
+      "de": "„acceptance“ ist ein Nomen; hier braucht der Satz ein Adjektiv (nach „is simply“).",
+      "en": "“acceptance” is a noun; the sentence needs an adjective here (after “is simply”)."
+     },
+     {
+      "if": [
+       "acceptable"
+      ],
+      "de": "acceptable heißt annehmbar; „simply … for our key accounts“ meint, dass es nicht geht.",
+      "en": "acceptable means fine; “simply … for our key accounts” means it will not do."
+     },
+     {
+      "if": [
+       "inacceptable"
+      ],
+      "de": "Das Gegenteil von acceptable bildet man mit un-, nicht mit in-.",
+      "en": "The opposite of acceptable takes un-, not in-."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0094",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-adv",
+   "lex": [
+    "relatively"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Our prices are ___ low compared with the market average.",
+   "stem": "RELATE",
+   "accept": [
+    "relatively"
+   ],
+   "pos": "adv",
+   "parts": {
+    "base": "relate",
+    "change": "te → tively"
+   },
+   "family": [
+    "relate",
+    "related",
+    "relation",
+    "relative",
+    "relatively"
+   ],
+   "why": {
+    "ok": {
+     "de": "Vor einem Adjektiv steht ein Adverb: relate → relative → relatively = verhältnismäßig.",
+     "en": "An adverb goes before an adjective: relate → relative → relatively = compared with others."
+    },
+    "wrong": [
+     {
+      "if": [
+       "relate"
+      ],
+      "de": "„relate“ ist ein Verb; hier braucht der Satz ein Adverb (vor „low“).",
+      "en": "“relate” is a verb; the sentence needs an adverb here (before “low”)."
+     },
+     {
+      "if": [
+       "related"
+      ],
+      "de": "„related“ ist ein Adjektiv; hier braucht der Satz ein Adverb (vor „low“).",
+      "en": "“related” is an adjective; the sentence needs an adverb here (before “low”)."
+     },
+     {
+      "if": [
+       "relation"
+      ],
+      "de": "„relation“ ist ein Nomen; hier braucht der Satz ein Adverb (vor „low“).",
+      "en": "“relation” is a noun; the sentence needs an adverb here (before “low”)."
+     },
+     {
+      "if": [
+       "relative"
+      ],
+      "de": "„relative“ ist ein Adjektiv; hier braucht der Satz ein Adverb (vor „low“).",
+      "en": "“relative” is an adjective; the sentence needs an adverb here (before “low”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0095",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-noun",
+   "lex": [
+    "comparison"
+   ],
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "text": "In ___ with last winter, this winter has been mild.",
+   "stem": "COMPARE",
+   "accept": [
+    "comparison"
+   ],
+   "pos": "noun",
+   "parts": {
+    "base": "compare",
+    "change": "e → ison"
+   },
+   "family": [
+    "compare",
+    "comparable",
+    "comparative",
+    "comparatively",
+    "comparison"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach der Präposition „In“ steht ein Nomen: compare → comparison. In comparison with = im Vergleich zu.",
+     "en": "A noun follows the preposition “In”: compare → comparison. “In comparison with” compares two things."
+    },
+    "wrong": [
+     {
+      "if": [
+       "compare"
+      ],
+      "de": "„compare“ ist ein Verb; hier braucht der Satz ein Nomen (nach „In“, vor „with“).",
+      "en": "“compare” is a verb; the sentence needs a noun here (after “In”, before “with”)."
+     },
+     {
+      "if": [
+       "comparable"
+      ],
+      "de": "„comparable“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „In“, vor „with“).",
+      "en": "“comparable” is an adjective; the sentence needs a noun here (after “In”, before “with”)."
+     },
+     {
+      "if": [
+       "comparative"
+      ],
+      "de": "„comparative“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „In“, vor „with“).",
+      "en": "“comparative” is an adjective; the sentence needs a noun here (after “In”, before “with”)."
+     },
+     {
+      "if": [
+       "comparatively"
+      ],
+      "de": "„comparatively“ ist ein Adverb; hier braucht der Satz ein Nomen (nach „In“, vor „with“).",
+      "en": "“comparatively” is an adverb; the sentence needs a noun here (after “In”, before “with”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0096",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-verb",
+   "lex": [
+    "emphasize"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I would like to ___ that all prices are fixed for twelve months.",
+   "stem": "EMPHASIS",
+   "accept": [
+    "emphasize"
+   ],
+   "pos": "verb",
+   "parts": {
+    "base": "emphasis",
+    "change": "is → ize"
+   },
+   "family": [
+    "emphasis",
+    "emphasize",
+    "emphatic",
+    "emphatically"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „would like to“ steht ein Verb: emphasis → emphasize (-ize). In den USA schreibt man -ize, britisch auch -ise.",
+     "en": "A verb follows “would like to”: emphasis → emphasize (-ize). US spelling uses -ize; British may use -ise."
+    },
+    "wrong": [
+     {
+      "if": [
+       "emphasis"
+      ],
+      "de": "„emphasis“ ist ein Nomen; hier braucht der Satz ein Verb (nach „would like to“).",
+      "en": "“emphasis” is a noun; the sentence needs a verb here (after “would like to”)."
+     },
+     {
+      "if": [
+       "emphatic"
+      ],
+      "de": "„emphatic“ ist ein Adjektiv; hier braucht der Satz ein Verb (nach „would like to“).",
+      "en": "“emphatic” is an adjective; the sentence needs a verb here (after “would like to”)."
+     },
+     {
+      "if": [
+       "emphatically"
+      ],
+      "de": "„emphatically“ ist ein Adverb; hier braucht der Satz ein Verb (nach „would like to“).",
+      "en": "“emphatically” is an adverb; the sentence needs a verb here (after “would like to”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0097",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-noun",
+   "lex": [
+    "organization"
+   ],
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The ___ of the event was handled by our partner in Vienna.",
+   "stem": "ORGANIZE",
+   "accept": [
+    "organization"
+   ],
+   "pos": "noun",
+   "parts": {
+    "base": "organize",
+    "change": "ize → ization"
+   },
+   "family": [
+    "organize",
+    "organized",
+    "organizer",
+    "organization",
+    "disorganized"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „The“ steht ein Nomen: organize → organization (-ization). Britisch geht auch -isation.",
+     "en": "A noun follows “The”: organize → organization (-ization). British spelling may use -isation."
+    },
+    "wrong": [
+     {
+      "if": [
+       "organize"
+      ],
+      "de": "„organize“ ist ein Verb; hier braucht der Satz ein Nomen (nach „The“, vor „of“).",
+      "en": "“organize” is a verb; the sentence needs a noun here (after “The”, before “of”)."
+     },
+     {
+      "if": [
+       "organized"
+      ],
+      "de": "„organized“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „The“, vor „of“).",
+      "en": "“organized” is an adjective; the sentence needs a noun here (after “The”, before “of”)."
+     },
+     {
+      "if": [
+       "organizer"
+      ],
+      "de": "organizer ist die Person, die organisiert; gemeint ist der Vorgang.",
+      "en": "an organizer is the person who plans; the sentence means the process."
+     },
+     {
+      "if": [
+       "disorganized"
+      ],
+      "de": "„disorganized“ ist ein Adjektiv; hier braucht der Satz ein Nomen (nach „The“, vor „of“).",
+      "en": "“disorganized” is an adjective; the sentence needs a noun here (after “The”, before “of”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0098",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-adv",
+   "lex": [
+    "arguably"
+   ],
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "For a mid-sized company, this is ___ the best solution on the market.",
+   "stem": "ARGUE",
+   "accept": [
+    "arguably"
+   ],
+   "pos": "adv",
+   "parts": {
+    "base": "argue",
+    "change": "e → ably"
+   },
+   "family": [
+    "argue",
+    "argument",
+    "arguable",
+    "arguably"
+   ],
+   "why": {
+    "ok": {
+     "de": "Vor einem Superlativ steht ein Adverb: argue → arguable → arguably = wohl, mit guten Gründen. Es schwächt die Behauptung ab.",
+     "en": "An adverb goes before a superlative: argue → arguable → arguably = you can make a case that. It softens the claim."
+    },
+    "wrong": [
+     {
+      "if": [
+       "argue"
+      ],
+      "de": "„argue“ ist ein Verb; hier braucht der Satz ein Adverb (vor „the best“).",
+      "en": "“argue” is a verb; the sentence needs an adverb here (before “the best”)."
+     },
+     {
+      "if": [
+       "argument"
+      ],
+      "de": "„argument“ ist ein Nomen; hier braucht der Satz ein Adverb (vor „the best“).",
+      "en": "“argument” is a noun; the sentence needs an adverb here (before “the best”)."
+     },
+     {
+      "if": [
+       "arguable"
+      ],
+      "de": "„arguable“ ist ein Adjektiv; hier braucht der Satz ein Adverb (vor „the best“).",
+      "en": "“arguable” is an adjective; the sentence needs an adverb here (before “the best”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0099",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-verb",
+   "lex": [
+    "prioritize"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We have to ___ the customers with the highest risk of leaving.",
+   "stem": "PRIORITY",
+   "accept": [
+    "prioritize"
+   ],
+   "pos": "verb",
+   "parts": {
+    "base": "priority",
+    "change": "ity → ize"
+   },
+   "family": [
+    "priority",
+    "prioritize",
+    "prioritization",
+    "prior"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „have to“ steht die Grundform eines Verbs: priority → prioritize (-ize). In den USA schreibt man -ize.",
+     "en": "The base form of a verb follows “have to”: priority → prioritize (-ize). US spelling uses -ize."
+    },
+    "wrong": [
+     {
+      "if": [
+       "priority"
+      ],
+      "de": "„priority“ ist ein Nomen; hier braucht der Satz ein Verb (nach „have to“).",
+      "en": "“priority” is a noun; the sentence needs a verb here (after “have to”)."
+     },
+     {
+      "if": [
+       "prioritization"
+      ],
+      "de": "„prioritization“ ist ein Nomen; hier braucht der Satz ein Verb (nach „have to“).",
+      "en": "“prioritization” is a noun; the sentence needs a verb here (after “have to”)."
+     },
+     {
+      "if": [
+       "prior"
+      ],
+      "de": "„prior“ ist ein Adjektiv; hier braucht der Satz ein Verb (nach „have to“).",
+      "en": "“prior” is an adjective; the sentence needs a verb here (after “have to”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wf-0100",
+   "kind": "wf",
+   "area": "lex",
+   "pat": "lx.wf-verb",
+   "lex": [
+    "summarize"
+   ],
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "Could you briefly ___ the plot of the film for me?",
+   "stem": "SUMMARY",
+   "accept": [
+    "summarize"
+   ],
+   "pos": "verb",
+   "parts": {
+    "base": "summary",
+    "change": "y → ize"
+   },
+   "family": [
+    "summary",
+    "summarize",
+    "summarized"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „Could you briefly“ steht die Grundform eines Verbs: summary → summarize (-ize). Summarize = kurz zusammenfassen.",
+     "en": "The base form of a verb follows “Could you briefly”: summary → summarize (-ize). Summarize = give the main points."
+    },
+    "wrong": [
+     {
+      "if": [
+       "summary"
+      ],
+      "de": "„summary“ ist ein Nomen; hier braucht der Satz ein Verb (nach „Could you briefly“).",
+      "en": "“summary” is a noun; the sentence needs a verb here (after “Could you briefly”)."
+     },
+     {
+      "if": [
+       "summarized"
+      ],
+      "de": "„summarized“ ist ein Adjektiv; hier braucht der Satz ein Verb (nach „Could you briefly“).",
+      "en": "“summarized” is an adjective; the sentence needs a verb here (after “Could you briefly”)."
+     }
+    ]
+   }
+  }
+ ]
+}

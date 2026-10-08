@@ -1,7 +1,8 @@
 import { editDistance } from '../../answer/diff';
+import { maskOf, type MaskCell } from '../../answer/mask';
 import { typoBudget } from '../../answer/check';
 import type { C1Response, C1Score, Wf } from '../types';
-import { BRITISH, cmp, usHint, wordCount, type Problems } from './common';
+import { BRITISH, cmp, ruleMatches, usHint, wordCount, type Problems } from './common';
 
 /**
  * `wf`: Wortbildung, ein Wort tippen. Steht die Antwort in der Wortfamilie, ist aber nicht gesucht: falsch mit Grund `family`
@@ -39,6 +40,52 @@ export function checkWf(item: Wf): Problems {
     const prefix = Math.ceil(stem.length * 0.6);
     if (!w.includes(stem.slice(0, prefix)) && !item.parts.change) out.push(`Lösung „${a}“ enthält den Stamm nicht (Wurzel ≥ 60 %), dann braucht parts.change eine Angabe`);
   }
+  if (morphPieces(item).map((p) => p.text).join('') !== (item.accept[0] ?? '')) out.push('Zerlegung ergibt nicht das Wort');
+  if (new Set(item.family.map((f) => f.toLowerCase())).size !== item.family.length) out.push('family enthält Doppelte');
+  for (const f of item.family) if (/\s/.test(f)) out.push(`family-Eintrag „${f}“ ist kein einzelnes Wort`);
+  for (const f of item.family) {
+    if (item.accept.map((a) => a.toLowerCase()).includes(f.toLowerCase())) continue;
+    if (!item.why.wrong.some((r) => ruleMatches(r, { given: f }))) out.push(`Familienmitglied „${f}“ hat keine Begründung`);
+  }
   if (BRITISH.test(item.text) || item.accept.some((a) => BRITISH.test(a))) out.push('britische Schreibweise');
+  return out;
+}
+
+/** Stütze nach Hinweis 2: Platzhalter je Buchstabe der ersten Lösung, der erste Buchstabe sichtbar. */
+export const wfMask = (item: Wf): MaskCell[] => maskOf(item.accept[0] ?? '', { firstLetter: true });
+
+export type MorphPiece = { text: string; role: 'pre' | 'core' | 'suf' };
+
+/**
+ * Zerlegung des gesuchten Worts für die Rückmeldung (*un · precedent · ed*). Rein: Vorsilbe (wenn das Wort so beginnt), gemeinsamer Anfang
+ * mit dem Grundwort als Kern, der Rest als Nachsilbe (an den Nachsilben der Aufgabe geteilt, wenn sie genau passen). Die Teile ergeben immer
+ * wieder das Wort (Buchstabe für Buchstabe), auch bei Änderungen im Stamm (feasib · ility).
+ */
+export function morphPieces(item: Wf): MorphPiece[] {
+  const word = item.accept[0] ?? '';
+  const lower = word.toLowerCase();
+  const out: MorphPiece[] = [];
+  let rest = word;
+  const pre = item.parts.pre ?? '';
+  if (pre && lower.startsWith(pre.toLowerCase())) {
+    out.push({ text: word.slice(0, pre.length), role: 'pre' });
+    rest = word.slice(pre.length);
+  }
+  const base = item.parts.base.toLowerCase();
+  let n = 0;
+  while (n < base.length && n < rest.length && rest[n]?.toLowerCase() === base[n]) n++;
+  if (n === 0) return [{ text: word, role: 'core' }];
+  out.push({ text: rest.slice(0, n), role: 'core' });
+  const tail = rest.slice(n);
+  if (tail) {
+    const suf = item.parts.suf ?? [];
+    if (suf.length > 1 && suf.join('').toLowerCase() === tail.toLowerCase()) {
+      let at = 0;
+      for (const sx of suf) {
+        out.push({ text: tail.slice(at, at + sx.length), role: 'suf' });
+        at += sx.length;
+      }
+    } else out.push({ text: tail, role: 'suf' });
+  }
   return out;
 }

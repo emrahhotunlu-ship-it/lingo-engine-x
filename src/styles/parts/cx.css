@@ -118,3 +118,41 @@
     background: var(--lx-line-strong);
   }
 }
+
+/* Wort umbauen (wf, P38): Stamm-Chip über dem Satz und Zerlegung nach dem Prüfen. */
+.wf-stem {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  min-height: 2.25rem;
+  padding: 0 0.875rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--lx-gold-text);
+  background: var(--lx-gold-soft);
+  color: var(--lx-gold-text);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+.wf-split {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 2px;
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+  font-weight: 600;
+}
+.wf-piece {
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  border-radius: var(--radius-inline, 8px);
+  background: var(--lx-surface-strong);
+  color: var(--lx-fg);
+}
+.wf-piece[data-role='core'] {
+  background: var(--lx-gold-soft);
+  color: var(--lx-gold-text);
+}
+.wf-family {
+  margin: 0;
+}
