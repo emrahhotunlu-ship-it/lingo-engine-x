@@ -316,3 +316,6 @@ Tests: 1953 Unit; E2E der berührten Bildschirme grün (a11y: Kontrast der „Ne
 ## 08.10.2026 – R5 „Dein Lehrer“ live
 - Emrah: „Ja live nehmen“. Vorher voller E2E-Lauf auf `35bec3f`: 755 grün, 6 rot; einzeln nachgeprüft: c1xErr, perf CPU 1× und fxStage1 grün (fxStage1 2× wiederholt 16/16), nur perf CPU 4× rot (Umgebung, akzeptiert).
 - Live `JLL8…` Version 72 `1791500848-5d8d` (Rückweg v71 `1791474840-7485`). Stand `dist` aus Commit nach `35bec3f` (Build-Stempel). Test-Link `AXHkh6…` v54 `1791498822-49bc`.
+
+## Emrahs Rückmeldungen (gesammelt ab 09.10.2026, umsetzen ab Sonntag 11.10.2026 0:00, vorher nichts bauen)
+1. **„Satz vervollständigen“ ohne Satz** (Wörter, Stufe Sicher, Wort „to overcome“): Die Aufgabe sagt „Vervollständige den Satz mit diesem Wort“, zeigt aber keinen Satzanfang/keine Lücke, nur das Wort und die Bedeutung. Emrah tippt das Wort ab und bekommt „Noch nicht“ mit Claudes Erklärung, dass ein ganzer Satz nötig sei. Erwartung: ein sichtbarer Satzanfang bzw. Satz mit Lücke, oder klare Ansage „Schreib einen eigenen Satz mit …“. Nebenbefund im selben Bild: Zeile „von Claude, kann Fehler enthalten“ steht ohne Innenabstand am linken Kartenrand.
