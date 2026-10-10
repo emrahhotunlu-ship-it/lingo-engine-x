@@ -219,6 +219,13 @@ const bareAnswer = (card: TrainCard): string => (card.kind === 'chunk' ? typedFo
 export const WORD_CTX_TPL = 'word-ctx@1';
 
 /**
+ * Text-Schlüssel der Übungsart für Aufgabe und Bezeichnung (Rückmeldung 1, 10.10.2026): „Satz vervollständigen“ ohne Satzanfang
+ * ist in Wahrheit „eigener Satz“ – dann sagt die Aufgabe das auch („Schreib einen eigenen Satz mit …“), passend zur Prüfung
+ * (Claude prüft einen ganzen Satz mit dem Wort).
+ */
+export const exTextKey = (e: Pick<Exercise, 'ex' | 'start'>): string => (e.ex === 'complete' && !e.start?.trim() ? 'complete_free' : e.ex);
+
+/**
  * `origin`: immer der Ursprungssatz (Prüfabfrage und Kontrolle nach dem Aufdecken), sonst wechselt der Satz ab Stufe 3 (`rotate.ts`; Claude-Sätze
  * schwacher Wörter `wx` schon ab Stufe 2). Zeigt die Übung einen Satz von Claude, trägt sie `ai` (Kennzeichnung und „Melden“, P52).
  */

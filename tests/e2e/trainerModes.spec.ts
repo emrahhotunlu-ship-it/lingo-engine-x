@@ -154,6 +154,24 @@ test('Eigener Satz: falsche Verwendung → „Noch nicht" mit Begründung; bei K
   await second.close();
 });
 
+test('Satz vervollständigen ohne Satzanfang: Aufgabe „Schreib einen eigenen Satz …“, Claude-Hinweis mit Innenabstand (Rückmeldung 1)', async ({ browser }) => {
+  const { page, close } = await device(browser, 'keys');
+  // „avoid“ ist ein Startwort ohne Satzanfänge (`starts` gibt es nur im C1-Paket).
+  const { errors } = await startRound(page, { 'vocab/avoid': forcedDoc(5, { ...strong('dictation', 'produce', 'cloze'), ...weak('complete') }) });
+  await expect(page.getByTestId('exercise')).toHaveAttribute('data-ex', 'complete');
+  await expect(page.getByTestId('complete-start')).toHaveCount(0);
+  await expect(page.getByTestId('task')).toContainText('eigenen Satz');
+  await page.getByTestId('complete-input').fill('We always avoid long meetings on Friday afternoons.');
+  await page.getByTestId('check').click();
+  await expect(page.getByTestId('verdict')).toBeVisible();
+  const note = page.getByTestId('ai-note');
+  await expect(note).toBeVisible();
+  const pad = await note.evaluate((el) => parseFloat(getComputedStyle(el).paddingLeft));
+  expect(pad).toBeGreaterThan(0);
+  expect(errors).toEqual([]);
+  await close();
+});
+
 test('ohne KI (nosample): Stufe 5 fällt auf KI-freie Arten zurück, kein toter Knopf', async ({ browser }) => {
   const { page, close } = await device(browser, 'keys');
   const { errors } = await startRound(page, { 'vocab/avoid': forcedDoc(5, { ...strong('dictation'), ...weak('produce') }) }, { sample: false });

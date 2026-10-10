@@ -21,7 +21,7 @@ import { scoreDictation } from '../../domain/drills/dictation';
 import { packExtraOf } from '../../domain/c1pack/packFields';
 import type { ExplainExample, ExplanationModel, ResultVerdict } from '../../domain/explain/types';
 import { unitState } from '../../domain/metrics';
-import { choiceVerdict } from '../../domain/srs/exercise';
+import { choiceVerdict, exTextKey } from '../../domain/srs/exercise';
 import { cardExamples, storedTranslation, wantsEnrichment } from '../../domain/srs/examples';
 import { explainWord, isAltAnswer } from '../../domain/srs/explainWord';
 import { posKey } from '../../domain/srs/explain';
@@ -456,6 +456,7 @@ export function ExerciseView({
       ...(isAlt ? { alt: true } : {}),
       ...(e.ex === 'contrast' && e.contrastWhy ? { contrastWhy: e.contrastWhy[lang] } : {}),
       ...(e.ex === 'contrast' ? { contrastOther: contrastOtherOf(e) } : {}),
+      ...((e.ex === 'colloc' || e.ex === 'colloc_gap') && e.colloc ? { colloc: e.colloc } : {}),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps -- nur bei einem neuen Ergebnis
   }, [fb, exampleItems]);
@@ -464,7 +465,9 @@ export function ExerciseView({
 
   const src = { area: 'trainer' as const, source: card.path, title: card.word };
   const blanked = e.sentence ? `${e.sentence.sentence.slice(0, e.sentence.start)}___${e.sentence.sentence.slice(e.sentence.end)}` : '';
-  const taskText = e.check === 'known' ? t('wxKnownTask') : t(`task_${e.ex}` as MessageKey);
+  // Rückmeldung 3: Bei „Wortpartner“ steht im Kopf die geübte Verbindung (mit Vorlesen), das Kartenwort nur als Zusatz.
+  const collocPhrase = (e.ex === 'colloc' || e.ex === 'colloc_gap') && e.colloc?.p.trim() && normalize(e.colloc.p) !== normalize(card.word) ? e.colloc.p.trim() : null;
+  const taskText = e.check === 'known' ? t('wxKnownTask') : t(`task_${exTextKey(e)}` as MessageKey);
   const seeDetail =
     e.ex === 'mc_en' || e.ex === 'ctx_mc'
       ? `${taskText}\n${e.sentence?.sentence ?? card.word}`
@@ -473,7 +476,7 @@ export function ExerciseView({
         : `${taskText}\n${blanked || e.meaning || ''}${e.meaning && blanked ? `\n(${e.meaning})` : ''}`;
   useCompanionSee({
     area: 'trainer',
-    label: `${t('cmpSeeTrainer')} · ${t(`exName_${e.ex}` as MessageKey)}`,
+    label: `${t('cmpSeeTrainer')} · ${t(`exName_${exTextKey(e)}` as MessageKey)}`,
     phase: fb ? 'feedback' : 'question',
     detail: seeDetail,
     ...(fb ? { reveal: `Solution: ${solution}. Learner: ${fb.given || '(empty)'}` } : { mask: [solution, card.word, card.lemma, ...e.accepted] }),
@@ -792,7 +795,7 @@ export function ExerciseView({
       nextIn: e.ex === 'contrast' ? null : t('trAgainIn', { when: when(fb.dueInMs) }),
       // Design-Lead: Wort, Vorlesen, Lautschrift und „Zum Wort“ stehen in der Ergebnis-Karte, genau einmal, direkt unter dem Urteil.
       // R5: im Kontrast-Schritt heißt der Kopf „avoid ≠ convince“ (richtiges Wort zuerst, beide mit Aussprache).
-      head: <WordExtras card={card} open={moreOpen} lang={lang} extras={extras} part="head" other={e.ex === 'contrast' ? (contrastOtherOf(e)?.word ?? null) : null} />,
+      head: <WordExtras card={card} open={moreOpen} lang={lang} extras={extras} part="head" other={e.ex === 'contrast' ? (contrastOtherOf(e)?.word ?? null) : null} phrase={collocPhrase} />,
       // „War das auch richtig?“ als ruhige Zeile im Ergebnis-Block (Design-Lead), nicht mehr lose über der Karte.
       parts: !fb.override && fb.result.verdict === 'wrong' && isTyped && ai && e.ex !== 'situation' ? <SynonymAsk card={card} given={fb.given} onOk={override} /> : undefined,
       foot: <WordExtras card={card} open={moreOpen} lang={lang} extras={extras} part="more" />,
@@ -820,7 +823,7 @@ export function ExerciseView({
   }
 
   const kindLabel =
-    e.check === 'control' ? t('nbWsControl') : e.check === 'probe' ? `${t('nbWsProbe')} · ${t(`exName_${e.ex}` as MessageKey)}` : e.check === 'known' ? t('wxKnownKind') : t(`exName_${e.ex}` as MessageKey);
+    e.check === 'control' ? t('nbWsControl') : e.check === 'probe' ? `${t('nbWsProbe')} · ${t(`exName_${exTextKey(e)}` as MessageKey)}` : e.check === 'known' ? t('wxKnownKind') : t(`exName_${exTextKey(e)}` as MessageKey);
   const def = exerciseDef(e.ex);
   const purposeKey: MessageKey =
     e.ex === 'colloc' || e.ex === 'colloc_gap'
@@ -840,6 +843,9 @@ export function ExerciseView({
   // R5 (S5): Der Kontrast-Schritt ist eine Extra-Frage und sagt das im Wozu – mit beiden Wörtern (alphabetisch, verrät nichts) und „zählt nicht“.
   const [pairA, pairB] = e.ex === 'contrast' ? [contrastOtherOf(e)?.word, card.word].filter((w): w is string => !!w).sort((x, y) => x.localeCompare(y, 'en')) : [];
   const contrastPurpose = pairA && pairB ? t('ttWcPurposeContrastPair', { a: pairA, b: pairB }) : null;
+  // Rückmeldung 6: Das Kartenwort kommt hier bewusst ein zweites Mal – sichtbar, warum (im Vergleich mit dem anderen Wort).
+  const contrastOther = e.ex === 'contrast' ? (contrastOtherOf(e)?.word ?? null) : null;
+  const contrastBadge = contrastOther ? t('trContrastBadge', { word: contrastOther }) : null;
   const canCheck = isChoice ? chosen !== null : isSpot ? spot !== null : isSentence ? !!sentenceText.trim() && !sentenceBusy : true;
   const primary = fb
     ? { label: t('exNext'), onClick: next, testId: 'next' }
@@ -849,7 +855,7 @@ export function ExerciseView({
     <div ref={root} data-profile={touch ? 'touch' : 'keys'} data-col={e.colloc && e.colloc.index >= 0 ? e.colloc.index : undefined}>
       <ExerciseShell
         meta={{ ex: e.ex, id: card.id, stage: e.stage, kind: card.kind }}
-        status={{ area: 'words', state: state0, kindLabel, badge: again ? t('trAgainBadge') : null }}
+        status={{ area: 'words', state: state0, kindLabel, badge: again ? t('trAgainBadge') : contrastBadge }}
         task={{ text: taskText, purpose: contrastPurpose ?? t(purposeKey) }}
         prompt={prompt}
         answer={answer}

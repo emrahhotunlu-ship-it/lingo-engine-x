@@ -24,6 +24,7 @@ export function WordExtras({
   extras,
   part = 'all',
   other = null,
+  phrase = null,
 }: {
   card: TrainCard;
   open: boolean;
@@ -31,6 +32,8 @@ export function WordExtras({
   extras: readonly StoredExample[];
   part?: 'all' | 'head' | 'more';
   other?: string | null;
+  /** Rückmeldung 3 („Wortpartner“): die geübte Verbindung („overcome objections“) steht groß mit Vorlesen; das Kartenwort klein als Zusatz. */
+  phrase?: string | null;
 }) {
   const { t } = useT();
   const [open, setOpen] = useState(false);
@@ -60,6 +63,14 @@ export function WordExtras({
             )}
           </span>
         )}
+        {phrase && (
+          <span className="inline-flex items-center gap-2" data-testid="phrase-group">
+            <span className="lx-t-answer" lang="en" data-testid="phrase-text">
+              {phrase}
+            </span>
+            <SpeakButton text={phrase} testId="phrase-listen" />
+          </span>
+        )}
         {/* Das „≠“ gehört zur Gruppe des Kartenworts: Bricht die Zeile um, steht es vorn in der zweiten Zeile, nie allein am Zeilenende. */}
         <span className="inline-flex items-center gap-2 whitespace-nowrap" data-testid="word-group">
           {other && (
@@ -68,7 +79,7 @@ export function WordExtras({
               <span className="sr-only">{t('wxNotSame')}</span>
             </span>
           )}
-          <span className="lx-t-answer" lang="en" data-testid="word-text">
+          <span className={phrase ? 'lx-t-meta font-medium text-muted' : 'lx-t-answer'} lang="en" data-testid="word-text">
             {card.word}
           </span>
           <SpeakButton text={card.word} testId="word-listen" />
