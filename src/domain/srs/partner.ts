@@ -15,14 +15,22 @@ const norm = (s: string): string => s.toLowerCase().trim();
  * customer.“ – hinter „afford to“ passt jedes Verb). Solche Lücken sind keine Wortpartner-Aufgabe.
  */
 const TO_INF_VERBS: ReadonlySet<string> = new Set([
-  'afford', 'agree', 'aim', 'arrange', 'attempt', 'choose', 'decide', 'deserve', 'expect', 'fail', 'hesitate', 'hope', 'intend', 'learn',
-  'manage', 'mean', 'need', 'offer', 'plan', 'prepare', 'pretend', 'promise', 'refuse', 'seek', 'seem', 'strive', 'struggle', 'tend',
-  'threaten', 'try', 'volunteer', 'want', 'wish',
+  'afford', 'aim', 'appear', 'arrange', 'attempt', 'begin', 'choose', 'continue', 'decide', 'decline', 'deserve', 'expect', 'fail',
+  'hesitate', 'hope', 'intend', 'learn', 'manage', 'mean', 'need', 'offer', 'opt', 'plan', 'prefer', 'prepare', 'pretend', 'proceed',
+  'promise', 'refuse', 'seek', 'seem', 'start', 'strive', 'struggle', 'tend', 'threaten', 'try', 'undertake', 'volunteer', 'want', 'wish',
 ]);
+
+// „agree“ fehlt bewusst: „agree to the terms“ ist eine echte Verbindung mit Nomen (Gegenlesung 10.10.2026).
+/** Unregelmäßige Formen der Musterverben. */
+const IRREGULAR: Readonly<Record<string, readonly string[]>> = {
+  seek: ['sought'], choose: ['chose', 'chosen'], mean: ['meant'], learn: ['learnt'], begin: ['began', 'begun'],
+  strive: ['strove', 'striven'], undertake: ['undertook', 'undertaken'],
+};
 
 const verbForm = (w: string, lemma: string): boolean => {
   const x = w.toLowerCase();
   const l = lemma.toLowerCase();
+  if (IRREGULAR[l]?.includes(x)) return true;
   if (x === l || x === `${l}s` || x === `${l}es` || x === `${l}ed` || x === `${l}d` || x === `${l}ing`) return true;
   // try → tries/tried, plan → planned/planning, hope → hoping
   if (l.endsWith('y') && (x === `${l.slice(0, -1)}ies` || x === `${l.slice(0, -1)}ied`)) return true;

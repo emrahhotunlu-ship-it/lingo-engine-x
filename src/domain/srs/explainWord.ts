@@ -143,15 +143,15 @@ export function explainWord(i: ExplainWordInput): ExplanationModel {
       let base = pick({ de: `Mit dieser Verbindung sagt man ${quote(solution, lang)}, nicht ${quote(shown || '…', lang)}.`, en: `This phrase takes ${quote(solution, lang)}, not ${quote(shown || '…', lang)}.` }, lang);
       if (col) {
         // Was gewählt wurde, als Verbindung ausgeschrieben – und kurz, warum die anderen Angebote auch nicht passen (soweit die Daten es hergeben:
-        // sie sind keine feste Verbindung mit dem Kartenwort).
+        // sie passen in diesem Satz nicht; manche sind anderswo durchaus feste Verbindungen, deshalb kein „keine feste Verbindung“).
         const good = col.p;
         const mine = shown ? swapPartner(good, col.gap, shown) : '';
         const others = col.opts.filter((o) => key(o) !== key(shown) && key(o) !== key(col.gap)).map((o) => quote(swapPartner(good, col.gap, o), lang));
         const list = (xs: string[], and: string): string => (xs.length <= 1 ? (xs[0] ?? '') : `${xs.slice(0, -1).join(', ')} ${and} ${xs.at(-1) ?? ''}`);
         base = pick(
           {
-            de: `Man sagt ${quote(good, lang)}${mine ? `, nicht ${quote(mine, lang)}` : ''}.${others.length ? ` Auch ${list(others, 'und')} ${others.length > 1 ? 'sind' : 'ist'} keine feste Verbindung.` : ''}`,
-            en: `We say ${quote(good, lang)}${mine ? `, not ${quote(mine, lang)}` : ''}.${others.length ? ` ${list(others, 'and')} ${others.length > 1 ? 'are not fixed phrases' : 'is not a fixed phrase'} either.` : ''}`,
+            de: `Hier sagt man ${quote(good, lang)}${mine ? `, nicht ${quote(mine, lang)}` : ''}.${others.length ? ` Auch ${list(others, 'und')} ${others.length > 1 ? 'passen' : 'passt'} hier nicht.` : ''}`,
+            en: `Here we say ${quote(good, lang)}${mine ? `, not ${quote(mine, lang)}` : ''}.${others.length ? ` ${list(others, 'and')} ${others.length > 1 ? "don't" : "doesn't"} fit here either.` : ''}`,
           },
           lang,
         );

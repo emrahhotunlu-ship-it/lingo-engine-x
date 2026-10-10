@@ -42,7 +42,8 @@ export function markedSignals(p: Pattern, sentence: string): string[] {
 export function stripFindLead(text: string): string {
   const m = /^\s*(?:der fehler|kein fehler|the error|no error)\s*:\s*/i.exec(text);
   if (!m) return text;
-  const rest = text.slice(m[0].length);
+  // Ein zitiertes Bruchstück direkt dahinter („Der Fehler: „could you“. Nach whether …“) fällt mit weg: Der Kopf nennt die Stelle schon.
+  const rest = text.slice(m[0].length).replace(/^[„“"][^“”"]+[“”"]\.\s*/, '');
   return rest ? rest.charAt(0).toUpperCase() + rest.slice(1) : text;
 }
 

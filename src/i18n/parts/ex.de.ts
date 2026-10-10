@@ -24,9 +24,9 @@ export const exDe = {
   // Fehler finden: Kopf der Rückmeldung (Rückmeldung 7)
   exFindSpotted: 'Richtig erkannt',
   exFindNotQuite: 'Nicht ganz',
-  exFindSpotFixNear: 'Stelle richtig, Korrektur fast',
-  exFindSpotFixWrong: 'Stelle richtig, Korrektur nicht',
-  exFindSpotOnly: 'Stelle richtig erkannt',
+  exFindSpotFixNear: 'Richtige Stelle, Korrektur fast richtig',
+  exFindSpotFixWrong: 'Richtige Stelle, Korrektur falsch',
+  exFindSpotOnly: 'Richtige Stelle gefunden',
   exFindYouTapped: 'Du hast „{word}“ getippt.',
   exFindYouNone: 'Du hast „{label}“ gewählt.',
   exFindErrIn: 'Der Fehler steckt in „{word}“.',

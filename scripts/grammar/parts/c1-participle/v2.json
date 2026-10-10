@@ -315,19 +315,19 @@
   "accepted": [],
   "why": {
    "ok": {
-    "de": "Der Angestellte benutzt den Scanner selbst, also -ing: Using. Used passt nur, wenn mit dem Subjekt etwas gemacht wird.",
-    "en": "The clerk uses the scanner himself, so -ing: Using. Used only fits when something is done to the subject."
+    "de": "Der Angestellte benutzt den Scanner selbst, also -ing: Using. Used passt nur, wenn mit dem Angestellten etwas gemacht wird.",
+    "en": "The clerk is using the scanner, so -ing: Using. Used only fits when something is done to the clerk."
    },
    "wrong": [
     {
      "tap": "none",
      "de": "Doch, hier steckt ein Fehler: Der Angestellte benutzt den Scanner selbst, also Using statt Used.",
-     "en": "There is a mistake: the clerk uses the scanner himself, so Using, not Used."
+     "en": "There is a mistake: the clerk is the one using the scanner, so Using, not Used."
     },
     {
      "tap": "*",
      "de": "Der Fehler liegt bei „Used“: Der Angestellte tut es selbst, also -ing.",
-     "en": "The mistake is in “Used”: the clerk does it himself, so -ing."
+     "en": "The mistake is in “Used”: the clerk is doing it, so -ing."
     }
    ]
   }

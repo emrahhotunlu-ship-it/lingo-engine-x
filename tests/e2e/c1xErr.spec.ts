@@ -74,7 +74,7 @@ test.describe('Handy', () => {
     const item = page.getByTestId('gr-item');
     await item.getByTestId('spot-word').nth(5).click();
     await page.getByTestId('dont-know').click();
-    await expect(item.getByTestId('verdict')).toContainText('Stelle richtig erkannt');
+    await expect(item.getByTestId('verdict')).toContainText('Richtige Stelle gefunden');
     await expect(item.getByTestId('verdict')).not.toContainText('Kein Problem');
     await expect(item.getByTestId('verdict-sub')).toContainText('Du hast „hear“ getippt.');
     const fix = item.getByTestId('err-correction');

@@ -100,7 +100,7 @@ describe('Rückmeldung 3: Wortpartner-Ergebnis zeigt die geübte Verbindung', ()
     expect(yours).toContain('overcome objections');
     expect(yours).toContain('overcome proposals');
     expect(yours).toContain('overcome meetings');
-    expect(yours).toContain('keine feste Verbindung');
+    expect(yours).toContain('passt hier nicht');
   });
   it('Beispiele zeigen die Verbindung (ein Satz ohne Partnerwort fällt weg)', () => {
     const examples = [

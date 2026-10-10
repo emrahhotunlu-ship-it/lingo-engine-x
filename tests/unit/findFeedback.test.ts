@@ -42,6 +42,9 @@ describe('Begründung ohne „Der Fehler:“-Vorspann', () => {
     expect(stripFindLead('The error: a job takes a/an.')).toBe('A job takes a/an.');
     expect(stripFindLead('Kein Fehler: an HR ist richtig.')).toBe('An HR ist richtig.');
     expect(stripFindLead('Nach would fehlt das Verb.')).toBe('Nach would fehlt das Verb.');
+    // Gegenlesung: ein zitiertes Bruchstück direkt nach dem Vorspann fällt mit weg, ein Satz, der mit Zitat beginnt, bleibt.
+    expect(stripFindLead('Der Fehler: „could you“. Nach whether steht das Subjekt vor dem Verb: you could.')).toBe('Nach whether steht das Subjekt vor dem Verb: you could.');
+    expect(stripFindLead('Der Fehler: „In contrary“ gibt es nicht. Richtig: In contrast.')).toBe('„In contrary“ gibt es nicht. Richtig: In contrast.');
   });
 
   it('keine Fehler-finden-Aufgabe beginnt ihre Begründung mit „Der Fehler:“ / „The error:“', () => {
@@ -57,14 +60,14 @@ describe('Begründung ohne „Der Fehler:“-Vorspann', () => {
   it('Scanner-Satz: Alltagsdeutsch mit -ing gegen -ed, Kontrast im Modell', () => {
     const m = grammarExplanation({ task: scanner(), verdict: 'dontKnow', given: '', lang: 'de', learning: true });
     expect(whyOf(m)).toMatch(/^Der Angestellte benutzt den Scanner selbst/);
-    expect(whyOf(m)).toContain('mit dem Subjekt etwas gemacht');
+    expect(whyOf(m)).toContain('mit dem Angestellten etwas gemacht');
     expect(m.lines.some((l) => l.k === 'contrast')).toBe(true);
   });
 });
 
 describe('Kopf der Rückmeldung bei „Fehler finden“', () => {
   it('Stelle gefunden, dann „Weiß ich nicht“: „Stelle richtig erkannt“ mit dem getippten Wort (nicht „Kein Problem“)', () => {
-    expect(findHead({ verdict: 'dontKnow', errWord: 'Used', tapped: 'Used', found: true }, 'de')).toEqual({ title: 'Stelle richtig erkannt', sub: 'Du hast „Used“ getippt.' });
+    expect(findHead({ verdict: 'dontKnow', errWord: 'Used', tapped: 'Used', found: true }, 'de')).toEqual({ title: 'Richtige Stelle gefunden', sub: 'Du hast „Used“ getippt.' });
   });
   it('richtig: „Richtig erkannt“', () => {
     expect(findHead({ verdict: 'ok', errWord: 'Used', tapped: 'Used', found: true }, 'de').title).toBe('Richtig erkannt');
@@ -75,8 +78,8 @@ describe('Kopf der Rückmeldung bei „Fehler finden“', () => {
     expect(findHead({ verdict: 'wrong', errWord: null, tapped: 'clerk', found: false }, 'en')).toEqual({ title: 'Not quite', sub: 'You tapped “clerk”. The sentence has no mistake.' });
   });
   it('Stelle richtig, Korrektur falsch oder fast', () => {
-    expect(findHead({ verdict: 'wrong', errWord: 'Used', tapped: 'Used', found: true }, 'de').title).toBe('Stelle richtig, Korrektur nicht');
-    expect(findHead({ verdict: 'near', errWord: 'Used', tapped: 'Used', found: true }, 'de').title).toBe('Stelle richtig, Korrektur fast');
+    expect(findHead({ verdict: 'wrong', errWord: 'Used', tapped: 'Used', found: true }, 'de').title).toBe('Richtige Stelle, Korrektur falsch');
+    expect(findHead({ verdict: 'near', errWord: 'Used', tapped: 'Used', found: true }, 'de').title).toBe('Richtige Stelle, Korrektur fast richtig');
   });
   it('sofort „Weiß ich nicht“: Urteilswort bleibt, Unterzeile nennt die Fehlerstelle', () => {
     expect(findHead({ verdict: 'dontKnow', errWord: 'Used', tapped: null, found: false }, 'de')).toEqual({ title: null, sub: 'Der Fehler steckt in „Used“.' });
