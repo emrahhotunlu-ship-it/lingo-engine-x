@@ -66,7 +66,8 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
 - [ ] **Lernplattform 3.0** (`docs/umbau/lernplattform-3.md`; Stand 07.10.2026)
   - [x] R1 C1-Aufgaben (kwt, err) · [x] R2 Dein Tag (ocl, mcc, Plan 3.0, Tempo, Erklär 2.0, Abschlusskarte, Effekte Stufe 1) · [x] V1 Varianz beim Befestigen · [x] Mehr-Datei-Build — alles auf Test-Link `AXHkh6…` Version `1791393276-ae06` (Test 6), **noch nicht live**
   - [ ] Design-Angleichung an die Vorschau inkl. Effekt-Engine (Branch `claude/umbau-design`) → Test-Link 7, dann live nach „Ja live nehmen“ (Emrah: Design zuerst live)
-  - [ ] R3 Dein Weg: P31–P33 zusammengeführt (Schalter `program` aus), P34–P37 + Lehrer-Korrekturen auf `claude/umbau-r3-b` in Arbeit
+  - [ ] R3 Dein Weg: P31–P37 + Lehrer-Korrekturen zusammengeführt (`claude/umbau-r3-b` vollständig in `claude/umbau-fokus`)
+  - [x] Aufräumrunde (Rückmeldungen 1–4, 6, 7) auf Test-Link `AXHkh6…` v55 `1791675188-8c8d` · [ ] Rückmeldung 5 Kapitel-Arbeiten (`docs/umbau/kapitel-plan.md`, wartet auf Emrah)
   - [ ] R4 Messen · [x] R5 Dein Lehrer (live `JLL8…` v72 `1791500848-5d8d`, Rückweg v71) · [ ] R6 Premium · [ ] R7 Fülle (nur auf Zuruf)
 - [ ] Phase 2 – Lernen: Kurs, Grammatik, Diktat, Lückenjagd, Satzbau, Sprint
 - [ ] Phase 3 – Sprechen: Rollenspiel mit Analysepanel, Sprachausgabe, Chunks mitnehmen, Business-Suite
