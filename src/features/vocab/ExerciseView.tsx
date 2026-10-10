@@ -28,8 +28,6 @@ import { posKey } from '../../domain/srs/explain';
 import { autoGrade, produceGrade } from '../../domain/srs/grade';
 import { exerciseDef } from '../../domain/srs/modes';
 import { selfCheckProduce, type SelfCheck } from '../../domain/srs/produce';
-import { reviewFsrs } from '../../domain/srs/scheduler';
-import { noteWeight } from '../../domain/srs/weight';
 import { trapForCard } from '../../domain/srs/traps';
 import type { CheckResult, Exercise, ExerciseId, Grade, Option } from '../../domain/srs/types';
 import { inputProfile } from '../../platform/input';
@@ -43,7 +41,8 @@ import { useCompanionSee } from '../companion/seeing';
 import { companionOpenedSince, companionOpenMs } from '../companion/store';
 import { saveRepairs } from '../repair/store';
 import { requestExamples, useExamples } from './examples';
-import { commitAnswer, prepareNext, useSession, type Answer, type FirstKind } from './session';
+import { answerDueIn, commitAnswer, prepareNext, useSession, type Answer, type FirstKind } from './session';
+import { nextT } from './persist';
 import { WordExtras } from './WordExtras';
 import { reportWordCtx } from './wordCtx';
 import { AiMark } from '../../ui/AiMark';
@@ -61,8 +60,10 @@ type Feedback = {
   given: string;
   chosen: Option | null;
   grade: Grade;
-  /** Abstand bis zur nächsten Fälligkeit (ms) bei dieser Note. */
+  /** Abstand bis zur nächsten Fälligkeit (ms) bei dieser Note – genau der gespeicherte (`answerDueIn`). */
   dueInMs: number;
+  /** Zeitstempel der Vorschau; geht beim Weitergehen als `t` an die Antwort (gleich für Anzeige und Speichern, wie beim Aufdecken). */
+  t: number;
   ms: number;
   /** Einspruch „Ich lag richtig“ (M4). */
   override: boolean;
@@ -260,10 +261,9 @@ export function ExerciseView({
     // „Beginnt mit …“ hieß: Emrah wusste das Wort nicht – auch ein Treffer danach ist „Nochmal“.
     const g2: Grade = retry?.kind === 'start' && forced === undefined ? 1 : g;
     const grade = forced !== undefined && companionHelp ? (Math.min(forced, 2) as Grade) : g2;
-    const t0 = Date.now();
-    const after = reviewFsrs(card.fsrs, grade, t0, noteWeight(e.ex, hintUsed));
-    const dueInMs = Math.max(0, after.due - t0);
-    setFb({ result, given, chosen: picked, grade, dueInMs, ms, override: false, hint: hintUsed, ...extraFb });
+    const t0 = nextT();
+    const dueInMs = answerDueIn(e, { grade, ok: grade > 1, hint: hintUsed }, t0);
+    setFb({ result, given, chosen: picked, grade, dueInMs, t: t0, ms, override: false, hint: hintUsed, ...extraFb });
     // Fehlen Beispiele, ergänzt Claude sie einmal (ausgelöst durch „Prüfen“).
     if (ai && wantsEnrichment(card, shownSentence, Date.now())) requestExamples(card);
     // Touch: Tastatur schließen, damit Ergebnis und Beispiele sichtbar sind.
@@ -381,7 +381,7 @@ export function ExerciseView({
 
   const next = () => {
     if (!fb) return;
-    const ans: Answer = fb.override ? { grade: 3, given: fb.given, ms: fb.ms, ok: true, override: true } : { grade: fb.grade, given: fb.given, ms: fb.ms, ok: fb.grade > 1, hint: fb.hint };
+    const ans: Answer = fb.override ? { grade: 3, given: fb.given, ms: fb.ms, ok: true, override: true, t: fb.t } : { grade: fb.grade, given: fb.given, ms: fb.ms, ok: fb.grade > 1, hint: fb.hint, t: fb.t };
     const kind = (onCommit ?? commitAnswer)(ans);
     // Tastatur am iPhone: im selben Handler fokussieren bzw. schließen.
     if (kind === 'typed') api.focusNow();
@@ -400,7 +400,8 @@ export function ExerciseView({
   };
 
   const override = () => {
-    if (fb) setFb({ ...fb, override: true });
+    // Einspruch: gespeichert wird Note 3 ohne Hilfe – „Wieder in …“ zeigt diesen Abstand.
+    if (fb) setFb({ ...fb, override: true, dueInMs: answerDueIn(e, { grade: 3, ok: true, override: true }, fb.t) });
   };
 
   useHotkeys(

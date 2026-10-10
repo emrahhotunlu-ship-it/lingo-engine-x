@@ -24,7 +24,7 @@ export const trainerDe = {
   exName_contrast: 'Welches Wort passt?',
   task_colloc_gap: 'Welches Wort passt zu dieser Verbindung?',
   task_complete: 'Vervollständige den Satz mit diesem Wort.',
-  task_complete_free: 'Schreib einen eigenen Satz mit diesem Wort – am besten aus deinem Arbeitsalltag.',
+  task_complete_free: 'Schreib einen ganzen eigenen Satz (mindestens 4 Wörter) mit diesem Wort, z. B. aus einem Kundengespräch oder einer Projektbesprechung.',
   exName_complete_free: 'Eigener Satz',
   trContrastBadge: 'noch einmal · im Vergleich mit {word}',
   task_wordfam: 'Bilde das passende Wort aus der Wortfamilie.',

@@ -8,11 +8,11 @@ import { applyUpdate, cardPatch, contrastMissOp } from '../../domain/srs/applyRe
 import { buildTrainCards } from '../../domain/metrics';
 import { toTrainCard } from '../../domain/srs/cards';
 import { buildChunkCards, toChunkCard } from '../../domain/srs/chunkCards';
-import { buildExercise, type SceneLookup } from '../../domain/srs/exercise';
+import { buildExercise, exTextKey, type SceneLookup } from '../../domain/srs/exercise';
 import { sentKey } from '../../domain/srs/variety';
 import { chooseExercise, makeEnv, NO_ENV, supports, type ExerciseEnv } from '../../domain/srs/modes';
 import { inputProfile } from '../../platform/input';
-import { knownOp } from '../../domain/srs/vocabList';
+import { KNOWN_DAYS, knownOp } from '../../domain/srs/vocabList';
 import { catchUpOn, overdueCount } from '../../domain/unit/backlog';
 import { againPos, calibration, controlAllowed, controlCounts, dirFor, lastRating, pickMode, weekStartMs, type FlipDir, type PickedMode, type RequestedMode } from '../../domain/srs/flip';
 import { deckCards, isBuiltinDeck, type DeckCtx } from '../../domain/srs/decks';
@@ -31,7 +31,7 @@ import { useSpeech } from '../../platform/speech';
 import { useWatched } from '../../data/watch';
 import { legacySceneDoc } from '../../domain/chunks/legacyScene';
 import { buildQueue, mixIntroducedToday, newQuotaLeft as newQuotaLeftFor } from '../../domain/srs/queue';
-import { isLearningState, previewIntervals } from '../../domain/srs/scheduler';
+import { isLearningState, previewIntervals, readFsrs, reviewFsrs } from '../../domain/srs/scheduler';
 import { noteWeight } from '../../domain/srs/weight';
 import type { AnswerEvent, Exercise, ExerciseId, Grade, Lang, QueueItem, TrainCard } from '../../domain/srs/types';
 import { markExhausted, useTodayPlan } from '../today/store';
@@ -618,6 +618,25 @@ export function flipIntervals(card: TrainCard, t: number): Record<Grade, number>
   return previewIntervals(card.fsrs, t, noteWeight('flip', 0, flipCatchUp(useSession.getState(), card)));
 }
 
+/** „Kenne ich“: richtig ohne Hilfe → die Karte bekommt Stufe 3 und 10 Tage statt der gewöhnlichen Planung (`knownOp`). */
+const isKnownPass = (e: Pick<Exercise, 'check' | 'card'>, ans: Pick<Answer, 'ok' | 'hint' | 'override'>): boolean => e.check === 'known' && ans.ok && !ans.hint && !ans.override && e.card.kind === 'vocab';
+
+/** „Satz vervollständigen“ ohne Satzanfang: ein ganzer eigener Satz (Gewicht wie `produce`). */
+const isFreeSentence = (e: Pick<Exercise, 'ex' | 'start'>): boolean => exTextKey(e) === 'complete_free';
+
+/**
+ * „Wieder in …“ (Lernprüfung 10.10.2026): genau der Abstand, den `commitAnswer` → `cardPatch` bzw. `knownOp` zum Zeitpunkt `t` speichert –
+ * dieselbe Note (Einspruch = 3), dasselbe Gewicht, derselbe Zeitpunkt (die ts-fsrs-Streuung hängt von der Zeit ab). EINE Regel für Anzeige und Speichern.
+ */
+export function answerDueIn(e: Exercise, ans: Pick<Answer, 'grade' | 'ok' | 'override' | 'hint'>, t: number): number {
+  if (isKnownPass(e, ans)) return KNOWN_DAYS * 86_400_000;
+  const grade: Grade = ans.override ? 3 : ans.grade;
+  const hint = ans.override ? 0 : (ans.hint ?? 0);
+  const catchUp = e.ex === 'flip' && flipCatchUp(useSession.getState(), e.card);
+  const after = reviewFsrs(readFsrs(e.card.doc, t), grade, t, noteWeight(e.ex, hint, catchUp, isFreeSentence(e)));
+  return Math.max(0, after.due - t);
+}
+
 /** Bewertete Antwort übernehmen: Karte sofort speichern, Protokoll und Zähler vormerken, weiter. */
 export function commitAnswer(ans: Answer): FirstKind {
   touch();
@@ -649,9 +668,9 @@ export function commitAnswer(ans: Answer): FirstKind {
   if (ans.override) a.override = true;
   if (ans.hint) a.hint = ans.hint;
   if (e.check === 'control' || e.check === 'probe') a.check = e.check;
-  // „Kenne ich“: richtig ohne Hilfe → die Karte bekommt Stufe 3 und 10 Tage statt der gewöhnlichen Planung.
-  const knownPass = e.check === 'known' && ans.ok && !ans.hint && !ans.override && card.kind === 'vocab';
+  const knownPass = isKnownPass(e, ans);
   if (e.ex === 'flip' && flipCatchUp(s, card)) a.catchUp = true;
+  if (isFreeSentence(e)) a.free = true;
   // P52: getippte falsche Antwort = Wort einer anderen eigenen Karte → Verwechslung für den Wörter-Tutor merken.
   if (!ans.ok && e.input === 'typed' && ans.given.trim()) noteConfusion(card, ans.given, s.pool);
 
@@ -722,7 +741,8 @@ export function commitAnswer(ans: Answer): FirstKind {
     holdAnswer({ a, seed, immediate, before: s, step: next.step, word: card.word });
     return applyAdvance(next);
   }
-  if (knownPass) void saveKnown(card.path, s.day, seed);
+  // Mit dem Zeitstempel der Antwort: gespeichert wird genau der Abstand, den „Wieder in …“ zeigte (`answerDueIn`).
+  if (knownPass) void saveKnown(card.path, s.day, seed, a.t);
   else void saveCard(a, seed);
   recordAnswer(a, immediate);
   return applyAdvance(next);

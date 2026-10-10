@@ -4,8 +4,9 @@ import { boot, bootAt, layoutProblems, openTab, screen } from './fixtures';
 import { openAllChapters } from './learnHelpers';
 
 // Struktur-Film (Lernplattform 3.0 P61, Erlebnis-Engine §5.3): erst Vorhersage (Schritt 0), dann der Satz in Bewegung, am Ende „Nochmal“/„Fertig“.
-// Drei Einstiege: Kapitelblatt, Einführungskarte (IntroFlow), Menü ⋯ „Zeig es mir“. „Film abspielen“ geht immer, auch ohne Raten, und der
-// Film läuft dann von selbst – bei Effekt-Stufe „Aus“ als Standbilder ohne Gleiten (Emrahs Rückmeldung 4, 10.10.2026).
+// Drei Einstiege: Kapitelblatt, Einführungskarte (IntroFlow), Menü ⋯ „Zeig es mir“. Raten kommt zuerst; nach dem Raten startet der Film nach ~1 s
+// von selbst, am Ende steht „Deine Vermutung: … – richtig / nicht ganz“. Der Zweitknopf „Ohne Raten abspielen“ geht immer, und der
+// Film läuft dann von selbst – bei Effekt-Stufe „Aus“ als Standbilder ohne Gleiten (Emrahs Rückmeldung 4, Lernprüfung 10.10.2026).
 // Schalter `film` (und `program` für die Karte) per `lx:flags`.
 
 const OLD = Date.parse('2020-01-01T10:00:00+01:00');
@@ -23,16 +24,17 @@ async function chapterFilm(page: Page, fx: 'full' | 'off') {
   return { ...booted, film };
 }
 
-/** Vorhersage beantworten (Wahl- oder Antipp-Frage). Der Startknopf ist schon vorher bedienbar (Raten ist freiwillig). */
+/** Vorhersage beantworten (Wahl- oder Antipp-Frage). „Ohne Raten abspielen“ ist vorher bedienbar; nach dem Raten startet der Film von selbst. */
 async function predict(page: Page) {
   const film = page.getByTestId('film');
   await expect(film.getByTestId('film-question')).toBeVisible();
   await expect(film.getByTestId('film-play')).toBeEnabled();
+  await expect(film.getByTestId('film-play')).toHaveText(/Ohne Raten abspielen|Play without guessing/);
   const opts = film.getByTestId('film-option');
   if (await opts.count()) await opts.first().click();
   else await film.getByTestId('film-word').first().click();
   await expect(film.getByTestId('film-guess')).toBeVisible();
-  await expect(film.getByTestId('film-play')).toBeEnabled();
+  await expect(film.getByTestId('film-play')).toHaveCount(0);
 }
 
 test.describe('Handy 360', () => {
@@ -43,14 +45,15 @@ test.describe('Handy 360', () => {
     const { errors, film } = await chapterFilm(page, 'full');
     expect(await layoutProblems(page)).toEqual([]);
     await predict(page);
-    await film.getByTestId('film-play').click();
-    await expect(film).toHaveAttribute('data-phase', 'play');
+    // Nach dem Raten startet der Film nach ~1 s von selbst.
+    await expect(film).toHaveAttribute('data-phase', 'play', { timeout: 3_000 });
     await expect(film.getByTestId('film-note')).not.toBeEmpty();
     const dots = await film.getByTestId('film-dot').count();
     expect(dots).toBeGreaterThanOrEqual(2);
     await expect(film).toHaveAttribute('data-phase', 'end', { timeout: 20_000 });
     await expect(film).toHaveAttribute('data-step', String(dots - 1));
     await expect(film.getByTestId('film-end')).toBeVisible();
+    await expect(film.getByTestId('film-guess-recap')).toHaveText(/^(Deine Vermutung: .+ – (richtig|nicht ganz)|Your guess: .+ – (correct|not quite))$/);
     expect(await layoutProblems(page)).toEqual([]);
     const res = await new AxeBuilder({ page }).include('[data-testid="film"]').withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
     expect(res.violations.map((v) => v.id)).toEqual([]);
@@ -63,7 +66,7 @@ test.describe('Handy 360', () => {
     expect(errors).toEqual([]);
   });
 
-  test('Rückmeldung 4: „Film abspielen“ ist ohne Raten bedienbar und spielt bis zum Ende; Bedeutung erst beim Zielsatz', async ({ page }) => {
+  test('Rückmeldung 4: „Ohne Raten abspielen“ ist bedienbar und spielt bis zum Ende; Bedeutung erst beim Zielsatz', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     const { errors, film } = await chapterFilm(page, 'full');
     const play = film.getByTestId('film-play');
@@ -75,6 +78,8 @@ test.describe('Handy 360', () => {
     await expect(film).toHaveAttribute('data-phase', 'end', { timeout: 20_000 });
     await expect(film.getByTestId('film-sentence-label')).toHaveAttribute('data-kind', 'to');
     await expect(film.getByTestId('film-meaning')).toBeVisible();
+    // Ohne Raten keine Vermutung am Ende.
+    await expect(film.getByTestId('film-guess-recap')).toHaveCount(0);
     expect(errors).toEqual([]);
   });
 

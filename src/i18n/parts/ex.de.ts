@@ -28,6 +28,7 @@ export const exDe = {
   exFindSpotFixWrong: 'Richtige Stelle, Korrektur falsch',
   exFindSpotOnly: 'Richtige Stelle gefunden',
   exFindYouTapped: 'Du hast „{word}“ getippt.',
+  exFindYouFixed: 'Du hast „{word}“ getippt und „{fix}“ eingesetzt.',
   exFindYouNone: 'Du hast „{label}“ gewählt.',
   exFindErrIn: 'Der Fehler steckt in „{word}“.',
   exFindNoErr: 'Der Satz ist fehlerfrei.',

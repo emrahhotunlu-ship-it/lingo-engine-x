@@ -466,7 +466,10 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   } else if (findTask) {
     const words = wordsOfPrompt;
     if (fb) {
-      const marks = err ? [{ span: [err[0], err[1]] as [number, number], tone: fb.verdict === 'wrong' ? ('wrong' as const) : ('ok' as const) }] : [];
+      // Wie c1x `Err`: das falsche Original-Wort ist nie grün. Es steht durchgestrichen mit der Korrektur daneben („~~hear~~ → hearing“);
+      // grün nur bei richtiger Antwort und nur zusammen mit der Korrektur (ohne Korrektur, z. B. „streichen“, bleibt es rot).
+      const fixText = solution.trim() || null;
+      const marks = err ? [{ span: [err[0], err[1]] as [number, number], tone: fb.verdict === 'correct' && fixText ? ('ok' as const) : ('wrong' as const), ...(fixText ? { fix: fixText } : {}) }] : [];
       prompt = <SpotSentence words={words} pick="one" selected={null} onSelect={() => undefined} locked marks={marks} area={area} source={src.source} testId="spot-sentence" />;
     } else if (stage === 'locate') {
       prompt = <SpotSentence words={words} pick="one" selected={tapped} onSelect={setTapped} area={area} source={src.source} testId="spot-sentence" />;
@@ -579,7 +582,8 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       const tappedNow = fb.spot ?? fb.tapped ?? null;
       const found = stage === 'replace' && !!tappedNow && tappedNow !== 'none';
       const errWord = err ? wordsOfPrompt.slice(err[0], err[1] + 1).join(' ') : null;
-      const h = findHead({ verdict: rv, errWord, tapped: tappedNow, found }, lang);
+      const fix = found && !fb.dontKnow ? fb.given.trim() : '';
+      const h = findHead({ verdict: rv, errWord, tapped: tappedNow, found, ...(fix ? { fix } : {}) }, lang);
       const fixed = task.x?.kind === 'find' ? task.x.fixed : null;
       find = {
         ...(h.title ? { title: h.title } : {}),

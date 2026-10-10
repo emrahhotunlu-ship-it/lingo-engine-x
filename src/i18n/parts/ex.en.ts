@@ -25,6 +25,7 @@ export const exEn = {
   exFindSpotFixWrong: 'Right spot, wrong correction',
   exFindSpotOnly: 'You found the right spot',
   exFindYouTapped: 'You tapped “{word}”.',
+  exFindYouFixed: 'You tapped “{word}” and wrote “{fix}”.',
   exFindYouNone: 'You chose “{label}”.',
   exFindErrIn: 'The mistake is in “{word}”.',
   exFindNoErr: 'The sentence has no mistake.',

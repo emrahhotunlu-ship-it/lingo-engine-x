@@ -58,7 +58,8 @@ for (const s of sizes) {
       const opts = film.getByTestId('film-option');
       if (await opts.count()) await opts.first().click();
       else await film.getByTestId('film-word').first().click();
-      await film.getByTestId('film-play').click();
+      // Nach dem Raten startet der Film nach ~1 s von selbst.
+      await page.locator('[data-testid="film"][data-phase="play"]').waitFor();
       await page.waitForTimeout(300);
       await film.screenshot({ path: `${OUT}/r6b-film-${s.name}-2-start.png` });
       await page.waitForTimeout(1600 + 140);

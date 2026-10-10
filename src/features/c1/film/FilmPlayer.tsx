@@ -10,8 +10,9 @@ import { speak, stopSpeech, unlockSpeech, useSpeech } from '../../../platform/sp
 import { local } from '../../../platform/storage';
 import { Icon } from '../../../ui/Icon';
 
-// Struktur-Film-Spieler (Lernplattform 3.0 P61, §6.4): Schritt 0 bietet eine Vorhersage an (Wort antippen oder eine von zwei Optionen),
-// „Film abspielen“ geht aber jederzeit, auch ohne Raten (Emrahs Rückmeldung 4, 10.10.2026: der ausgegraute Knopf wirkte kaputt).
+// Struktur-Film-Spieler (Lernplattform 3.0 P61, §6.4): Schritt 0 bietet zuerst die Vorhersage an (Wort antippen oder eine von zwei Optionen);
+// nach dem Raten startet der Film nach ~1 s von selbst (AUTO_START_MS), am Ende steht „Deine Vermutung: … – richtig / nicht ganz“.
+// Der Zweitknopf „Ohne Raten abspielen“ geht jederzeit (Emrahs Rückmeldung 4, 10.10.2026: der ausgegraute Knopf wirkte kaputt; Lernprüfung 10.10.2026).
 // Die Vorhersage wird nicht gebucht, nichts wird gespeichert (nur die Geräte-Vorlieben „langsamer“ und „Mitlesen“ in `localStorage`).
 // Steuerung: ▶/❚❚, Schrittpunkte, „langsamer“ (0,75×), „Noch einmal“; bedienbar ohne Ton.
 // Der Film läuft nach „Film abspielen“ immer von selbst (ausdrücklich gestartet). Effekt-Stufe „Aus“ (oder reduzierte Bewegung):
@@ -23,6 +24,8 @@ type Phase = 'predict' | 'play' | 'end';
 
 const SLOW_KEY = 'lx:film-slow';
 const VOICE_KEY = 'lx:film-voice';
+/** Nach dem Raten: kurz die Rückmeldung lesen, dann läuft der Film von selbst. */
+const AUTO_START_MS = 1000;
 
 function PauseIcon() {
   return (
@@ -127,6 +130,22 @@ export function FilmPlayer({ film, onClose }: { film: Film; onClose?: (() => voi
     });
   };
 
+  // Nach dem Raten startet der Film von selbst (die Sprachausgabe wurde im Tipp freigeschaltet, siehe `pickGuess`).
+  useEffect(() => {
+    if (phase !== 'predict' || guess === null) return;
+    const id = setTimeout(() => {
+      setStep(0);
+      setPaused(false);
+      setPhase('play');
+    }, AUTO_START_MS);
+    return () => clearTimeout(id);
+  }, [phase, guess]);
+  const pickGuess = (i: number): void => {
+    // Synchron im Tipp: schaltet die Sprachausgabe am iPhone frei, damit der Film nach dem Raten mit Ton startet.
+    unlockSpeech();
+    setGuess(i);
+  };
+
   const p = film.predict;
   const answered = guess !== null;
   const right = answered && (p.kind === 'tap' ? p.ans.includes(guess) : p.ans === guess);
@@ -135,6 +154,8 @@ export function FilmPlayer({ film, onClose }: { film: Film; onClose?: (() => voi
     if (i === guess) return right ? 'right' : 'wrong';
     return p.ans.includes(i) ? 'answer' : 'dim';
   };
+  // Die eigene Vermutung als Wortlaut (Antipp-Frage: das Wort aus Schritt 0 ohne Satzzeichen; Wahlfrage: die Option).
+  const guessText = guess === null ? null : p.kind === 'tap' ? (steps[0]?.[guess]?.text ?? '').replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, '') || null : (p.opts[guess] ?? null);
   const cur = film.steps[step];
   const atEnd = phase !== 'predict' && step === last;
   // Vor der Vorhersage leuchtet nichts (Signalwörter würden die Lösung verraten); erst nach der Antwort kommt die Hervorhebung von Schritt 0.
@@ -162,7 +183,7 @@ export function FilmPlayer({ film, onClose }: { film: Film; onClose?: (() => voi
           sizers={sizers}
           animate={!still && phase !== 'predict'}
           speed={speed}
-          onTap={phase === 'predict' && p.kind === 'tap' && !answered ? (i) => setGuess(i) : undefined}
+          onTap={phase === 'predict' && p.kind === 'tap' && !answered ? pickGuess : undefined}
           tapState={phase === 'predict' && p.kind === 'tap' ? tapState : undefined}
           tapLabel={(w) => t('eeFmTapWord', { word: w })}
         />
@@ -185,7 +206,7 @@ export function FilmPlayer({ film, onClose }: { film: Film; onClose?: (() => voi
               lang="en"
               disabled={answered}
               data-state={!answered ? 'idle' : i === p.ans ? 'correct' : i === guess ? 'wrong' : 'dim'}
-              onClick={() => setGuess(i)}
+              onClick={() => pickGuess(i)}
               data-testid="film-option"
             >
               {o}
@@ -201,12 +222,13 @@ export function FilmPlayer({ film, onClose }: { film: Film; onClose?: (() => voi
               {right ? t('eeFmRight') : t('eeFmWrong')}
             </p>
           )}
-          <div className="flex flex-wrap items-center gap-2">
-            <Button variant="primary" icon="play" onClick={start} data-testid="film-play">
-              {t('eeFmPlay')}
-            </Button>
-            {!answered && <span className="lx-t-support text-muted">{t('eeFmGuessOptional')}</span>}
-          </div>
+          {!answered && (
+            <div className="flex flex-wrap items-center gap-2">
+              <Button variant="secondary" icon="play" onClick={start} data-testid="film-play">
+                {t('eeFmPlayNoGuess')}
+              </Button>
+            </div>
+          )}
         </div>
       )}
 
@@ -254,6 +276,11 @@ export function FilmPlayer({ film, onClose }: { film: Film; onClose?: (() => voi
 
       {phase === 'end' && (
         <div className="flex flex-wrap items-center gap-2" data-testid="film-end">
+          {guessText !== null && (
+            <p className="lx-t-support w-full font-semibold" data-testid="film-guess-recap" data-right={right ? 'true' : 'false'}>
+              {t(right ? 'eeFmYourGuessRight' : 'eeFmYourGuessWrong', { x: guessText })}
+            </p>
+          )}
           <p className="lx-t-support w-full text-muted">{t('eeFmEnd')}</p>
           <Button icon="refresh" onClick={start} data-testid="film-again">
             {t('eeFmAgain')}
