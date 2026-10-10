@@ -1,8 +1,9 @@
 import type { ReactNode } from 'react';
-import type { ExplainDepth, ExplainLine, ExplanationModel } from '../../domain/explain/types';
+import type { ExplainDepth, ExplainLine, ExplanationModel, ResultVerdict } from '../../domain/explain/types';
 import { EnglishText } from '../../engine/EnglishText';
 import type { WordTapArea } from '../../engine/wordTap';
-import { useT, type MessageKey } from '../../i18n';
+import { useT } from '../../i18n';
+import { lineLabel } from './lineLabel';
 import { FoldToggle } from './FoldToggle';
 import { liftLines, visibleLines } from './explainDepth';
 import { splitHead, splitWhy } from './wordParts';
@@ -28,19 +29,13 @@ type Props = {
   unfold?: ReadonlyArray<ExplainLine['k']>;
   /** UX-Prüfung W2: „Deine Antwort“ steht oben in der Karte (eigener Aufruf mit `only="yours"`), hier nicht noch einmal. */
   skipYours?: boolean;
+  /** Urteil der Rückmeldung: „Richtig, weil“ steht nur bei richtiger Antwort, sonst „Warum ist das so?“ (Emrahs Rückmeldung 7, Kap. 2 Nr. 2). */
+  verdict?: ResultVerdict;
 };
 
-const LABEL: Record<ExplainLine['k'], MessageKey> = {
-  pattern: 'exLinePattern',
-  yours: 'exLineYours',
-  why: 'exLineWhy',
-  mistake: 'exLineMistake',
-  contrast: 'exLineContrast',
-  note: 'exLineNote',
-};
 const SYMBOL: Record<ExplainLine['k'], string> = { pattern: '◇', yours: '›', why: '✓', mistake: '✕', contrast: '⇄', note: 'i' };
 
-export function Explanation({ model, depth, learning = true, area = 'trainer', onFoldChange, hideWord = false, only, fold, unfold, skipYours = false }: Props) {
+export function Explanation({ model, depth, learning = true, area = 'trainer', onFoldChange, hideWord = false, only, fold, unfold, skipYours = false, verdict }: Props) {
   const { t, lang } = useT();
   const v0 = liftLines(visibleLines(model, depth, { learning }), model, unfold);
   const moved = fold ? v0.open.filter((l) => fold.includes(l.k)) : [];
@@ -157,7 +152,7 @@ export function Explanation({ model, depth, learning = true, area = 'trainer', o
         );
       return (
         <li key={`${l.k}-${i}`} className="flex flex-col gap-2 border-t border-line px-4 py-3.5" data-line="why">
-          <span className="lx-eyebrow text-subtle">{w.label ?? t(LABEL.why)}</span>
+          <span className="lx-eyebrow text-subtle">{w.label ?? t(lineLabel('why', verdict))}</span>
           {w.main && (
             <span className="lx-t-answer min-w-0 text-fg" lang={w.main.includes(' = ') ? lang : 'en'}>
               {w.main.includes(' = ') ? w.main : en(w.main)}
@@ -189,7 +184,7 @@ export function Explanation({ model, depth, learning = true, area = 'trainer', o
         <span aria-hidden="true" className="sr-only">
           {SYMBOL[l.k]}
         </span>
-        {t(LABEL[l.k])}
+        {t(lineLabel(l.k, verdict))}
       </span>
       <span className="lx-t-support min-w-0 text-fg">{body(l)}</span>
     </li>

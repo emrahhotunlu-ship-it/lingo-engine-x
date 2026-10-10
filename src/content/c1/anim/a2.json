@@ -1219,8 +1219,8 @@
    "topic": "prepositions",
    "pat": "prp.adj-prep",
    "title": {
-    "de": "satisfied with: feste Präposition",
-    "en": "satisfied with: fixed preposition"
+    "de": "aware of: feste Präposition",
+    "en": "aware of: fixed preposition"
    },
    "de": "Wir sind uns des Risikos voll bewusst.",
    "predict": {
@@ -1444,36 +1444,47 @@
     "de": "the fastest: Superlativ mit the",
     "en": "the fastest: superlative with the"
    },
-   "de": "Die meisten unserer Kunden nutzen die Cloud-Version.",
+   "de": "Unsere Cloud-Version ist das schnellste Tool auf dem Markt.",
    "predict": {
     "kind": "pick",
     "q": {
-     "de": "Welche Version stimmt?",
-     "en": "Which version is correct?"
+     "de": "Du nennst die Nummer eins. Welche Version stimmt?",
+     "en": "You name the number one. Which version is correct?"
     },
     "opts": [
-     "Most of our clients use the cloud version.",
-     "The most of our clients use the cloud version."
+     "Our cloud version is the fastest tool",
+     "Our cloud version is fastest tool"
     ],
     "ans": 0
    },
    "steps": [
     {
-     "en": "The majority of our clients use the cloud version.",
+     "en": "No other tool is as fast as our cloud version.",
+     "hi": [
+      4,
+      5,
+      6
+     ],
      "note": {
-      "de": "Nur ein Eindruck.",
-      "en": "Just an impression."
+      "de": "Vergleich mit allen anderen, noch ohne Superlativ.",
+      "en": "A comparison with all the others, still without a superlative."
      }
     },
     {
-     "en": "Most of our clients use the cloud version.",
+     "en": "Our cloud version is the fastest tool on the market.",
      "hi": [
-      0,
-      1
+      4,
+      5
+     ],
+     "move": [
+      [
+       5,
+       5
+      ]
      ],
      "note": {
-      "de": "most = die meisten, ohne the; the most nur beim Superlativ von Adjektiven: the most reliable option. Natürlicher als the majority of.",
-      "en": "most = the majority, without the; the most only for superlative adjectives: the most reliable option. More natural than the majority of."
+      "de": "Ein Superlativ vor einem Nomen steht immer mit the: the fastest, the first, the only. Ohne the klingt der Satz falsch.",
+      "en": "A superlative before a noun always takes the: the fastest, the first, the only. Without the, the sentence sounds wrong."
      }
     }
    ]
@@ -1652,8 +1663,8 @@
    "topic": "relative",
    "pat": "rc.prep",
    "title": {
-    "de": "to whom: Präposition vor whom",
-    "en": "to whom: preposition before whom"
+    "de": "with whom: Präposition vor whom",
+    "en": "with whom: preposition before whom"
    },
    "de": "Der Kunde, mit dem wir gesprochen haben, hat das Budget freigegeben.",
    "predict": {

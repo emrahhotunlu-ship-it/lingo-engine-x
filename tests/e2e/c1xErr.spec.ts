@@ -69,6 +69,35 @@ test.describe('Handy', () => {
     expect(errors).toEqual([]);
   });
 
+  test('Rückmeldung 7: Stelle getippt, dann „Weiß ich nicht“ – Kopf nennt das Wort, Korrektur sichtbar, nie „Richtig, weil“ oder „Der Fehler:“', async ({ page }) => {
+    const { errors } = await start(page, 0.5, OLD);
+    const item = page.getByTestId('gr-item');
+    await item.getByTestId('spot-word').nth(5).click();
+    await page.getByTestId('dont-know').click();
+    await expect(item.getByTestId('verdict')).toContainText('Stelle richtig erkannt');
+    await expect(item.getByTestId('verdict')).not.toContainText('Kein Problem');
+    await expect(item.getByTestId('verdict-sub')).toContainText('Du hast „hear“ getippt.');
+    const fix = item.getByTestId('err-correction');
+    await expect(fix.getByTestId('fix-old')).toHaveText('hear');
+    await expect(fix.getByTestId('fix-new')).toHaveText('hearing');
+    const result = item.getByTestId('result');
+    await expect(result).not.toContainText('Richtig, weil');
+    await expect(result).not.toContainText('Der Fehler:');
+    expect(errors).toEqual([]);
+  });
+
+  test('Rückmeldung 7: falsches Wort → „Nicht ganz“ mit getipptem Wort und echter Fehlerstelle', async ({ page }) => {
+    const { errors } = await start(page, 0.5, OLD);
+    const item = page.getByTestId('gr-item');
+    await item.getByTestId('spot-word').nth(1).click();
+    await item.getByTestId('chip').first().click();
+    await page.getByTestId('check').click();
+    await expect(item.getByTestId('verdict')).toContainText('Nicht ganz');
+    await expect(item.getByTestId('verdict-sub')).toContainText('Du hast „really“ getippt. Der Fehler steckt in „hear“.');
+    await expect(item.getByTestId('err-correction').getByTestId('fix-new')).toHaveText('hearing');
+    expect(errors).toEqual([]);
+  });
+
   test('p > 0,7: Wort antippen, Korrektur höchstens 3 Wörter tippen; zählt als freier Abruf', async ({ page }) => {
     const { errors } = await start(page, 0.95, RECENT);
     const item = page.getByTestId('gr-item');

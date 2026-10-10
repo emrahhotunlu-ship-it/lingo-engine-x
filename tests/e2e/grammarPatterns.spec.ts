@@ -55,7 +55,13 @@ test('Pilotthemen: nach dem Prüfen steht der Name des Musters, Beispiele kommen
       await answerGrammar(page, solve);
       const expl = page.getByTestId('explanation');
       await expect(expl).toBeVisible();
-      const text = await expl.innerText();
+      let text = await expl.innerText();
+      // Fehler finden (Rückmeldung 7): der Mustername steht unter „Mehr“, offen stehen Begründung und Kontrast.
+      if ((await page.getByTestId('gr-item').getAttribute('data-type')) === 'find') {
+        expect(names.some((n) => text.includes(n)), `Mustername bei Fehler finden nicht offen: „${text}“`).toBe(false);
+        await page.locator('[data-testid="explanation-more"], [data-testid="examples-more"]').first().click();
+        text = await page.getByTestId('result').innerText();
+      }
       expect(names.some((n) => text.includes(n)), `Name eines Musters von ${topic} in „${text}“`).toBe(true);
       const ex = await page.getByTestId('example').allInnerTexts();
       for (const e of ex) expect(allowed.has(e.replace(/\s*DE\s*$/, '').toLowerCase().replace(/\s+/g, ' ').trim()) || [...allowed].some((a) => e.toLowerCase().includes(a)), `Beispiel „${e}“ gehört zu ${topic}`).toBe(true);

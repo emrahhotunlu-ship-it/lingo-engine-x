@@ -37,6 +37,15 @@ export function markedSignals(p: Pattern, sentence: string): string[] {
   return p.signals.filter((s) => hasSignal(sentence, s));
 }
 
+/** Vorspann „Der Fehler:“ / „Kein Fehler:“ (Fehler-finden-Aufgaben) fällt weg: Kopf und Korrektur sagen das schon, und unter
+ *  „Richtig, weil“ widersprach „Der Fehler: …“ dem Abschnittsnamen (Emrahs Rückmeldung 7). Der Rest beginnt groß. Rein. */
+export function stripFindLead(text: string): string {
+  const m = /^\s*(?:der fehler|kein fehler|the error|no error)\s*:\s*/i.exec(text);
+  if (!m) return text;
+  const rest = text.slice(m[0].length);
+  return rest ? rest.charAt(0).toUpperCase() + rest.slice(1) : text;
+}
+
 type Input = {
   task: GrammarTask;
   verdict: ResultVerdict;
@@ -76,7 +85,7 @@ export function grammarExplanation(i: Input): ExplanationModel {
   }
 
   // 3. Warum (auch bei richtiger Antwort, dann mindestens diese Zeile)
-  let whyText = why ? pick(why.ok, lang) : '';
+  let whyText = why ? stripFindLead(pick(why.ok, lang)) : '';
   if (!whyText) {
     // Ohne aufgabengenaue Begründung: die Erklärung der Aufgabe; nie der ganze Kernsatz, wenn ein Muster bekannt ist.
     whyText = formHint({ topic: task.topic, expl: task.expl, prompt: task.prompt, pat: task.pat }, lang);

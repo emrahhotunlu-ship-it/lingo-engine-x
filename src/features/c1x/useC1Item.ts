@@ -23,11 +23,12 @@ import { useT, type MessageKey } from '../../i18n';
 import { logWarn } from '../../platform/diagnostics';
 import { inputProfile } from '../../platform/input';
 import { toast } from '../../ui/Toast';
-import { explainDepth, type ShellFeedback, type ShellMenuId, type ShellSecondary, type ExerciseShellProps } from '../../ui/exercise';
+import { explainDepth, findHead, type ShellFeedback, type ShellMenuId, type ShellSecondary, type ExerciseShellProps } from '../../ui/exercise';
 import { TutorButton } from '../../ui/exercise/TutorButton';
 import { useCompanionSee } from '../companion/seeing';
 import { nextT } from '../progress/persist';
 import { bookLex } from './lexWrite';
+import { errRange } from '../../domain/c1x/kinds/err';
 import { ResultAfter, ResultParts, useResultSub } from './ResultCard';
 import type { C1Ctrl, C1KindEntry, ResponseMeta } from './types';
 
@@ -229,7 +230,20 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fb, lang, learning, task]);
   const depth: ExplainDepth = explainDepth({ verdict: rv ?? 'ok', p, learning });
-  const sub = useResultSub(fb?.score ?? { got: 0, max: 1, parts: [], verdict: 'wrong', free: false });
+  // Fehler finden: den Grund („Fehlalarm“, „übersehen“) sagt der Kopf in ganzen Worten (Rückmeldung 7), hier nur Punkte und US-Hinweis.
+  const subScore = fb ? (item.kind === 'err' ? { got: fb.score.got, max: fb.score.max, parts: fb.score.parts, verdict: fb.score.verdict, free: fb.score.free, ...(fb.score.us ? { us: fb.score.us } : {}) } : fb.score) : null;
+  const pointsSub = useResultSub(subScore ?? { got: 0, max: 1, parts: [], verdict: 'wrong', free: false });
+  // Rückmeldung 7: Kopf „Richtig erkannt“ / „Nicht ganz“ mit dem getippten Wort und, wenn verfehlt, wo der Fehler steckt.
+  const head = useMemo(() => {
+    if (!fb || !rv || item.kind !== 'err') return null;
+    const r = fb.response.kind === 'err' ? fb.response : null;
+    const range = errRange(item);
+    const found = !!r && typeof r.tap === 'number' && !!range && r.tap >= range[0] && r.tap <= range[1];
+    const tapped = fb.meta.tapped ?? null;
+    return findHead({ verdict: rv, errWord: item.bad?.span ?? null, tapped, found }, lang, t('cxNoError'));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fb, rv, item, lang]);
+  const sub = [pointsSub, head?.sub].filter((x): x is string => !!x).join(' · ') || null;
   const matched = fb && !fb.dontKnow ? whyFor(task, { given: fb.given, ...(fb.meta.picked !== undefined ? { picked: fb.meta.picked } : {}), ...(fb.meta.tapped !== undefined ? { tapped: fb.meta.tapped } : {}) }).rule : null;
 
   // ------------------------------------------------------------------ Hinweise
@@ -278,7 +292,10 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
       );
     feedback = {
       verdict: rv,
+      ...(head?.title ? { title: head.title } : {}),
       sub,
+      // Fehler finden: die Muster-Fachsprache steht unter „Mehr“, das Kontrastbeispiel (z. B. -ing gegen -ed) offen (Rückmeldung 7).
+      ...(item.kind === 'err' ? { fold: ['pattern'] as const, unfold: ['contrast'] as const } : {}),
       explanation: model,
       depth,
       menu,

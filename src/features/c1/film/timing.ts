@@ -7,6 +7,9 @@ import type { Film } from '../../../domain/c1/anim';
 export const MORPH_MS = Math.round(SPRINGS.morph.visualDuration * 1000);
 /** Verweildauer je Schritt (ohne Stimme), bei „langsamer“ geteilt durch 0,75. */
 export const DWELL_MS = { first: 1600, step: 3200 } as const;
+/** So lange wartet ein Schritt höchstens zusätzlich auf das Ende der Sprachausgabe. Danach läuft der Film weiter, auch wenn die Stimme
+ *  nie „fertig“ meldet (iPhone ohne Freigabe der Sprachausgabe: `speak` bleibt stumm und meldet kein Ende; Emrahs Rückmeldung 4). */
+export const SPEECH_GRACE_MS = 6000;
 
 /** Ungefähre Laufzeit eines Films in Sekunden inkl. Vorhersage (für den Startknopf), auf 5 s gerundet. */
 export function filmSeconds(film: Film): number {
