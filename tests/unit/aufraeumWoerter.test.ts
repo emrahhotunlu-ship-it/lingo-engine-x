@@ -27,7 +27,7 @@ describe('Rückmeldung 1: „Satz vervollständigen“ ohne Satzanfang', () => {
       expect(dict(en)[k]).toBeTruthy();
     }
     expect(dict(de).task_complete_free).toMatch(/eigenen Satz/);
-    expect(dict(en).task_complete_free).toMatch(/your own sentence/);
+    expect(dict(en).task_complete_free).toMatch(/sentence of your own/);
   });
 });
 

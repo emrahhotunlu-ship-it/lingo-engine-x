@@ -49,7 +49,7 @@ export function isPatternGap(lemma: string, p: string, ctx: { sentence: string; 
   const pw = p.toLowerCase().replace(/^to\s+/, '').trim().split(/\s+/);
   if (pw.length >= 2 && pw[0] && verbForm(pw[0], l) && pw[1] === 'to') return true;
   if (!ctx) return false;
-  const m = /(\S+)\s+to\s+$/i.exec(ctx.sentence.slice(0, ctx.start));
+  const m = /(\S+)\s+(?:not\s+)?to\s+$/i.exec(ctx.sentence.slice(0, ctx.start));
   return !!m?.[1] && verbForm(m[1].replace(/[^a-z]/gi, ''), l);
 }
 

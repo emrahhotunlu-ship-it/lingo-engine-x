@@ -26,7 +26,7 @@ export const trainerEn: Record<keyof typeof trainerDe, string> = {
   exName_contrast: 'Which word fits?',
   task_colloc_gap: 'Which word goes with this phrase?',
   task_complete: 'Finish the sentence using this word.',
-  task_complete_free: 'Write your own sentence with this word – ideally from your work.',
+  task_complete_free: 'Write a full sentence of your own (at least 4 words) with this word, e.g. from a client call or project meeting.',
   exName_complete_free: 'Your sentence',
   trContrastBadge: 'once more · compared with {word}',
   task_wordfam: 'Form the matching word from the word family.',

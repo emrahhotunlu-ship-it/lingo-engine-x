@@ -12,6 +12,8 @@ export type FindFacts = {
   tapped: string | null;
   /** Das getippte Wort liegt in der Fehlerstelle. */
   found: boolean;
+  /** Die eingesetzte Korrektur (wenn eine abgegeben wurde); bei gefundener Stelle und nicht richtigem Urteil im Untertitel genannt. */
+  fix?: string;
 };
 
 export type FindHead = {
@@ -22,7 +24,8 @@ export type FindHead = {
 
 /** `noneLabel`: Beschriftung des Knopfs „Kein Fehler“ der jeweiligen Übung (Standard `exNoError`). */
 export function findHead(f: FindFacts, lang: Lang, noneLabel: string = translate(lang, 'exNoError')): FindHead {
-  const yours = f.tapped === 'none' ? translate(lang, 'exFindYouNone', { label: noneLabel }) : f.tapped ? translate(lang, 'exFindYouTapped', { word: f.tapped }) : null;
+  const fixed = f.found && f.verdict !== 'ok' && !!f.fix && !!f.tapped && f.tapped !== 'none';
+  const yours = fixed ? translate(lang, 'exFindYouFixed', { word: f.tapped ?? '', fix: f.fix ?? '' }) : f.tapped === 'none' ? translate(lang, 'exFindYouNone', { label: noneLabel }) : f.tapped ? translate(lang, 'exFindYouTapped', { word: f.tapped }) : null;
   const where = f.errWord ? translate(lang, 'exFindErrIn', { word: f.errWord }) : translate(lang, 'exFindNoErr');
   let title: string | null = null;
   if (f.verdict === 'ok') title = translate(lang, 'exFindSpotted');

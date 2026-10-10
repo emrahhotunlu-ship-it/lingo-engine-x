@@ -7,11 +7,14 @@ import type { ExerciseId } from './types';
 
 export const NOTE_WEIGHT = { choice: 0.55, help: 0.8, free: 1, produce: 1.1, catchUp: 0.6 } as const;
 
-/** Gewicht der Antwort je Übungsart; `hint` = genutzter Tipp (1 Platzhalter, 2 erster Buchstabe) macht aus freiem Tippen eine Stützung. */
-export function noteWeight(ex: ExerciseId, hint: 0 | 1 | 2 = 0, catchUp = false): number {
+/**
+ * Gewicht der Antwort je Übungsart; `hint` = genutzter Tipp (1 Platzhalter, 2 erster Buchstabe) macht aus freiem Tippen eine Stützung.
+ * `freeSentence`: „Satz vervollständigen“ ohne Satzanfang – ein ganzer eigener Satz, wiegt wie „Satz bilden“ (`produce`).
+ */
+export function noteWeight(ex: ExerciseId, hint: 0 | 1 | 2 = 0, catchUp = false, freeSentence = false): number {
   if (ex === 'flip') return catchUp ? NOTE_WEIGHT.catchUp : NOTE_WEIGHT.free;
-  // „Satz vervollständigen“: lokal höchstens „Schwer“ (domain/grade), mit Gewicht 0,8 (§4.8).
-  if (ex === 'complete') return NOTE_WEIGHT.help;
+  // „Satz vervollständigen“: lokal höchstens „Schwer“ (domain/grade), mit Gewicht 0,8 (§4.8); ohne Satzanfang ein eigener Satz (1,1).
+  if (ex === 'complete') return freeSentence ? NOTE_WEIGHT.produce : NOTE_WEIGHT.help;
   const input = exerciseDef(ex).input;
   if (input === 'choice' || input === 'spot') return NOTE_WEIGHT.choice;
   if (input === 'produce') return NOTE_WEIGHT.produce;

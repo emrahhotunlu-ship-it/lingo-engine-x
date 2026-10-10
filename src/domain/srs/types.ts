@@ -204,6 +204,8 @@ export type AnswerEvent = {
   check?: 'probe' | 'control';
   /** Aufdecken im Aufholmodus: gilt nur als schwacher Beleg (`weight.ts`). */
   catchUp?: true;
+  /** „Satz vervollständigen“ ohne Satzanfang (ganzer eigener Satz): wiegt wie „Satz bilden“ (`weight.ts`). Nicht im Protokoll. */
+  free?: true;
 };
 
 export type WhyPart = { key: string; vars?: Record<string, string | number>; lang?: Lang };

@@ -240,7 +240,10 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
     const range = errRange(item);
     const found = !!r && typeof r.tap === 'number' && !!range && r.tap >= range[0] && r.tap <= range[1];
     const tapped = fb.meta.tapped ?? null;
-    return findHead({ verdict: rv, errWord: item.bad?.span ?? null, tapped, found }, lang, t('cxNoError'));
+    // „near“ heißt bei `err`: Stelle richtig, Korrektur falsch oder keine (domain/c1x/kinds/err.ts). Der Kopf sagt das so;
+    // der Farbton bleibt „near“ (rv). Die getippte Korrektur nennt der Untertitel.
+    const fix = r?.fix?.trim();
+    return findHead({ verdict: rv === 'near' ? 'wrong' : rv, errWord: item.bad?.span ?? null, tapped, found, ...(fix ? { fix } : {}) }, lang, t('cxNoError'));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fb, rv, item, lang]);
   const sub = [pointsSub, head?.sub].filter((x): x is string => !!x).join(' · ') || null;
