@@ -28,7 +28,7 @@ import { lookupOpenMs, useLookup, type WordTapArea } from '../../engine/wordTap'
 import { useT, type MessageKey } from '../../i18n';
 import { inputProfile } from '../../platform/input';
 import { TutorButton } from '../../ui/exercise/TutorButton';
-import { ExerciseShell, SentenceInput, explainDepth, markSpans, type ShellFeedback, type ShellMenuId, type ShellSecondary } from '../../ui/exercise';
+import { ExerciseShell, FixedSentence, SentenceInput, explainDepth, findHead, markSpans, type ShellFeedback, type ShellMenuId, type ShellSecondary } from '../../ui/exercise';
 import { useCompanionSee } from '../companion/seeing';
 import { nextT } from '../progress/persist';
 import { isC1Task } from '../../domain/c1x/runtime';
@@ -70,6 +70,8 @@ type Fb = {
   /** Auswahl: der gewählte Text bzw. a/b/both; „Fehler finden“: das angetippte Wort oder `none`. */
   picked?: string;
   tapped?: string;
+  /** „Fehler finden“, „Weiß ich nicht“ nach gefundener Stelle: das getippte Wort (nur für den Kopf der Rückmeldung, nicht gebucht). */
+  spot?: string;
   dontKnow: boolean;
   grade: Grade;
   ms: number;
@@ -275,7 +277,8 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
 
   const dontKnow = () => {
     if (fb) return;
-    setFb({ verdict: 'wrong', check: null, given: '', dontKnow: true, grade: 1, ms: elapsed(), help, judged: 'local', unsure: false, override: false });
+    const spot = findTask && stage === 'replace' ? tappedWord() : undefined;
+    setFb({ verdict: 'wrong', check: null, given: '', dontKnow: true, grade: 1, ms: elapsed(), help, judged: 'local', unsure: false, override: false, ...(spot ? { spot } : {}) });
     api.blur();
   };
 
@@ -534,7 +537,6 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     if (fb.verdict === 'wrong' && !fb.dontKnow && !fb.override) {
       if (type === 'correct' || (type === 'transform' && whole)) comparison = { given: fb.given, ops: c?.ops ?? alignWords(fb.given, task.answer) };
       else if (type === 'kwt' && (c?.ops ?? []).filter((o) => o.op !== 'eq').length > 1) comparison = { given: fb.given, ops: c?.ops ?? [] };
-      else if (findTask && task.x?.kind === 'find' && task.x.fixed) comparison = { given: task.prompt, ops: alignWords(task.prompt, task.x.fixed) };
       else if ((type === 'gap' || type === 'transform') && !choiceType && nonEmpty(fb.given)) {
         // Die Lücke zeigt nur ein Wort: Der Vergleich nennt den ganzen Satz („Du: … → Richtig: …“) mit der markierten Stelle.
         const base = type === 'transform' ? (task.prompt.split('→').pop() ?? '').trim() : task.prompt;
@@ -570,7 +572,24 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
         onRewrite={menu.copyOnce}
       />
     );
-    feedback = { verdict: rv, sub, comparison, explanation: model, depth, menu, tutor, auto: fb.help.level === 0 && !fb.override };
+    // Rückmeldung 7 (Fehler finden): Kopf „Richtig erkannt“ / „Nicht ganz“ mit dem getippten Wort, darunter der korrigierte Satz mit sichtbarer
+    // Änderung (auch bei richtiger Antwort und „Weiß ich nicht“); die Muster-Fachsprache unter „Mehr“, das Kontrastbeispiel offen.
+    let find: Partial<ShellFeedback> = {};
+    if (findTask) {
+      const tappedNow = fb.spot ?? fb.tapped ?? null;
+      const found = stage === 'replace' && !!tappedNow && tappedNow !== 'none';
+      const errWord = err ? wordsOfPrompt.slice(err[0], err[1] + 1).join(' ') : null;
+      const h = findHead({ verdict: rv, errWord, tapped: tappedNow, found }, lang);
+      const fixed = task.x?.kind === 'find' ? task.x.fixed : null;
+      find = {
+        ...(h.title ? { title: h.title } : {}),
+        sub: [sub, h.sub].filter((x): x is string => !!x).join(' · ') || null,
+        ...(fixed ? { right: <FixedSentence from={task.prompt} to={fixed} testId="find-correction" /> } : {}),
+        fold: ['pattern'],
+        unfold: ['contrast'],
+      };
+    }
+    feedback = { verdict: rv, sub, comparison, explanation: model, depth, menu, tutor, auto: fb.help.level === 0 && !fb.override, ...find };
   }
 
   const kindLabel = t(findTask ? 'gxKind_find' : type === 'kwt' ? 'gxKind_kwt' : type === 'meaning' ? 'gxKind_meaning' : (`grKind_${type}` as MessageKey));

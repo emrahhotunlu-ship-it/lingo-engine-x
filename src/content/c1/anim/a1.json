@@ -686,15 +686,15 @@
       "predict": {
         "kind": "tap",
         "q": {
-          "de": "Welche Wörter wandern gleich an den Satzanfang? Tippe eins davon an.",
-          "en": "Which words move to the front? Tap one of them."
+          "de": "Zwei Wörter fallen gleich ganz weg, would tritt an ihre Stelle. Tippe eins davon an.",
+          "en": "Two words are about to drop out completely, and would takes their place. Tap one of them."
         },
-        "ans": [4, 5]
+        "ans": [1, 2]
       },
       "steps": [
         {
           "en": "We used to meet every Friday to review the pipeline.",
-          "hi": [4, 5],
+          "hi": [1, 2],
           "note": {
             "de": "used to sagt neutral: früher so, heute nicht mehr.",
             "en": "used to says it neutrally: that was the case before, but no longer."
@@ -1183,17 +1183,21 @@
       },
       "de": "Bis Freitag haben wir alle Verträge im DMS abgelegt.",
       "predict": {
-        "kind": "tap",
+        "kind": "pick",
         "q": {
-          "de": "Welches Wort wandert gleich an den Satzanfang? Tippe es an.",
-          "en": "Which word moves to the front? Tap it."
+          "de": "Am Freitag soll alles schon erledigt sein. Wie lautet der Satz dann?",
+          "en": "By Friday, everything should already be done. How does the sentence go?"
         },
-        "ans": [9]
+        "opts": [
+          "By Friday we will have filed all contracts …",
+          "By Friday we will file all contracts …"
+        ],
+        "ans": 0
       },
       "steps": [
         {
           "en": "We will file all contracts in the DMS before Friday.",
-          "hi": [9],
+          "hi": [1, 2],
           "note": {
             "de": "Neutral: eine Ankündigung, was ihr tun werdet.",
             "en": "Neutral: an announcement of what you will do."

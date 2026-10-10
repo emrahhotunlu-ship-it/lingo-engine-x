@@ -45,7 +45,12 @@ export type ShellSecondary = { id: 'hint' | 'dontKnow' | 'noError' | 'skip' | 'r
 export type ShellMenuId = 'override' | 'copyOnce' | 'showMe' | 'translate' | 'moreInfo' | 'askClaude' | 'wholeTopic' | 'report';
 export type ShellFeedback = {
   verdict: ResultVerdict;
+  /** Eigene Überschrift statt des Urteilsworts (Fehler finden: „Richtig erkannt“ / „Nicht ganz“, Rückmeldung 7). Ton und Zeichen bleiben beim Urteil. */
+  title?: string | null;
   sub?: string | null;
+  /** Zusätzlich unter „Mehr“ (z. B. 'pattern') bzw. immer offen (z. B. 'contrast'); `unfold` gewinnt. */
+  fold?: ReadonlyArray<ExplainLine['k']>;
+  unfold?: ReadonlyArray<ExplainLine['k']>;
   comparison?: { given: string; ops: WordOp[]; compact?: boolean; label?: string } | null;
   explanation?: ExplanationModel | null;
   depth: ExplainDepth;
@@ -125,7 +130,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
   const { ref: sharedRef, shared } = useSharedTarget<HTMLElement>('lx-hero');
   const autoPref = useLive((s) => s.docs['app/profile']?.autoNext);
 
-  const resultKey = feedback ? `${meta.id}:${feedback.verdict}:${feedback.sub ?? ''}` : `${meta.id}:answering`;
+  const resultKey = feedback ? `${meta.id}:${feedback.verdict}:${feedback.title ?? ''}:${feedback.sub ?? ''}` : `${meta.id}:answering`;
   const auto = feedback
     ? shouldAutoAdvance({ verdict: feedback.verdict, hintLevel: feedback.auto ? 0 : 1, depth: feedback.depth, autoNextPref: autoPref as boolean | null | undefined, menuOpen, foldOpen: folds > 0 })
     : false;
@@ -184,12 +189,16 @@ export function ExerciseShell(props: ExerciseShellProps) {
   // Unter „Mehr“: Typischer Fehler, Nicht verwechseln, Hinweise, „Warum nicht …?“ und die Zählweise (`after`), weitere Beispiele.
   // R5: Im Kontrast-Schritt („Welches Wort passt?“) IST „Nicht verwechseln“ der Inhalt – die Zeile steht dort offen, nie unter „Mehr“.
   const contrastStep = meta.ex === 'contrast';
-  const FOLD: ReadonlyArray<ExplainLine['k']> = contrastStep ? ['mistake', 'note'] : ['mistake', 'contrast', 'note'];
-  const UNFOLD: ReadonlyArray<ExplainLine['k']> | undefined = contrastStep ? ['contrast'] : undefined;
+  // Rückmeldung 7: Eine Übung kann Zeilen zusätzlich einklappen (`feedback.fold`, z. B. die Muster-Fachsprache bei „Fehler finden“) oder öffnen (`feedback.unfold`, das Kontrastbeispiel).
+  const unfoldExtra = feedback?.unfold ?? [];
+  const FOLD: ReadonlyArray<ExplainLine['k']> = [...(contrastStep ? ['mistake', 'note'] : ['mistake', 'contrast', 'note']), ...(feedback?.fold ?? [])].filter(
+    (k): k is ExplainLine['k'] => !unfoldExtra.includes(k as ExplainLine['k']),
+  );
+  const UNFOLD: ReadonlyArray<ExplainLine['k']> | undefined = contrastStep || unfoldExtra.length ? [...(contrastStep ? (['contrast'] as const) : []), ...unfoldExtra] : undefined;
   const depthLines = feedback?.explanation ? liftLines(visibleLines(feedback.explanation, feedback.depth, { learning }), feedback.explanation, UNFOLD) : null;
   const moreLines = depthLines ? depthLines.folded.length + depthLines.open.filter((l) => FOLD.includes(l.k)).length : 0;
   const explainProps = feedback?.explanation
-    ? { model: feedback.explanation, depth: feedback.depth, learning, hideWord: status.area === 'words', fold: FOLD, ...(UNFOLD ? { unfold: UNFOLD } : {}) }
+    ? { model: feedback.explanation, depth: feedback.depth, learning, hideWord: status.area === 'words', fold: FOLD, verdict: feedback.verdict, ...(UNFOLD ? { unfold: UNFOLD } : {}) }
     : null;
   const moreExtra =
     explainProps && (moreLines > 0 || feedback?.after) ? (
@@ -212,7 +221,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
         {...(reduce ? {} : { initial: { opacity: 0, y: -6 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.22 } })}
       >
         <div data-slot="verdict" className={`-mx-4 -mt-4 px-4 py-3.5 pr-14 ${feedback.verdict === 'ok' ? 'bg-ok-soft' : feedback.verdict === 'near' ? 'bg-near-soft' : feedback.verdict === 'wrong' ? 'bg-wrong-soft' : ''}`}>
-          <Verdict verdict={feedback.verdict} sub={feedback.sub ?? null} />
+          <Verdict verdict={feedback.verdict} sub={feedback.sub ?? null} title={feedback.title ?? null} />
           {feedback.parts}
           {feedback.nextIn && (
             <p className="lx-t-meta mt-0.5 text-muted" data-testid="next-in">

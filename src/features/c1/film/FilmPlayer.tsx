@@ -1,19 +1,22 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Film } from '../../../domain/c1/anim';
 import { SentenceMorph, type TapState } from '../../../engine/SentenceMorph';
-import { DWELL_MS, MORPH_MS } from './timing';
+import { DWELL_MS, MORPH_MS, SPEECH_GRACE_MS } from './timing';
 import { Button } from '../../../ui/Button';
 import { morphSteps, withoutHi } from '../../../engine/morphPlan';
 import { useFxLevel } from '../../../engine/fx/level';
 import { useT } from '../../../i18n';
-import { speak, stopSpeech, useSpeech } from '../../../platform/speech';
+import { speak, stopSpeech, unlockSpeech, useSpeech } from '../../../platform/speech';
 import { local } from '../../../platform/storage';
 import { Icon } from '../../../ui/Icon';
 
-// Struktur-Film-Spieler (Lernplattform 3.0 P61, §6.4): Schritt 0 ist IMMER eine Vorhersage (Wort antippen oder eine von zwei Optionen),
-// erst danach spielt der Film und löst auf. Die Vorhersage wird nicht gebucht, nichts wird gespeichert (nur die Geräte-Vorlieben
-// „langsamer“ und „Mitlesen“ in `localStorage`). Steuerung: ▶/❚❚, Schrittpunkte, „langsamer“ (0,75×), „Noch einmal“; bedienbar ohne Ton.
-// Effekt-Stufe „Aus“ (oder reduzierte Bewegung): Standbild je Schritt mit „Weiter“, kein Selbstlauf.
+// Struktur-Film-Spieler (Lernplattform 3.0 P61, §6.4): Schritt 0 bietet eine Vorhersage an (Wort antippen oder eine von zwei Optionen),
+// „Film abspielen“ geht aber jederzeit, auch ohne Raten (Emrahs Rückmeldung 4, 10.10.2026: der ausgegraute Knopf wirkte kaputt).
+// Die Vorhersage wird nicht gebucht, nichts wird gespeichert (nur die Geräte-Vorlieben „langsamer“ und „Mitlesen“ in `localStorage`).
+// Steuerung: ▶/❚❚, Schrittpunkte, „langsamer“ (0,75×), „Noch einmal“; bedienbar ohne Ton.
+// Der Film läuft nach „Film abspielen“ immer von selbst (ausdrücklich gestartet). Effekt-Stufe „Aus“ (oder reduzierte Bewegung):
+// die Wörter gleiten nicht, jeder Schritt steht als Standbild da. Die Sprachausgabe hält den Film nie fest: meldet die Stimme kein Ende
+// (iPhone ohne Freigabe), geht es nach SPEECH_GRACE_MS trotzdem weiter.
 // Zeitsteuerung nur mit `setTimeout` (läuft nur, solange der Film spielt); kein requestAnimationFrame.
 
 type Phase = 'predict' | 'play' | 'end';
@@ -33,7 +36,7 @@ function PauseIcon() {
 export function FilmPlayer({ film, onClose }: { film: Film; onClose?: (() => void) | undefined }) {
   const { t, lang } = useT();
   const level = useFxLevel();
-  const manual = level === 'off';
+  const still = level === 'off';
   const speech = useSpeech((s) => s.status);
   const canVoice = speech === 'ready';
   const steps = useMemo(() => morphSteps(film.steps), [film]);
@@ -49,33 +52,57 @@ export function FilmPlayer({ film, onClose }: { film: Film; onClose?: (() => voi
   const root = useRef<HTMLDivElement>(null);
 
   // Selbstlauf: Schritt zeigen, (optional) vorlesen, verweilen, weiter. Nur solange gespielt wird.
+  // Weiter geht es, sobald die Verweildauer um ist UND die Stimme fertig ist (plus kurze Pause) – spätestens aber nach
+  // Verweildauer + SPEECH_GRACE_MS, damit eine hängende Sprachausgabe den Film nie anhält.
   useEffect(() => {
     if (phase !== 'play' || paused) return;
     let alive = true;
-    let timer: ReturnType<typeof setTimeout> | null = null;
+    const timers: ReturnType<typeof setTimeout>[] = [];
     const dwell = (step === 0 ? DWELL_MS.first : DWELL_MS.step + MORPH_MS) / speed;
-    const spoken = voice && canVoice ? speak(film.steps[step]?.en ?? '', { rate: slow ? 0.8 : 1 }) : Promise.resolve('done' as const);
-    if (manual) return () => void (alive = false);
-    const started = Date.now();
-    void spoken.then(() => {
-      if (!alive) return;
-      const rest = Math.max(step === 0 ? 300 : 700, dwell - (Date.now() - started));
-      timer = setTimeout(() => {
+    const talking = voice && canVoice;
+    let dwelt = false;
+    let voiced = !talking;
+    const next = (): void => {
+      if (!alive || !dwelt || !voiced) return;
+      alive = false;
+      if (step < last) setStep(step + 1);
+      else setPhase('end');
+    };
+    timers.push(
+      setTimeout(() => {
+        dwelt = true;
+        next();
+      }, dwell),
+    );
+    if (talking) {
+      void speak(film.steps[step]?.en ?? '', { rate: slow ? 0.8 : 1 }).then(() => {
         if (!alive) return;
-        if (step < last) setStep(step + 1);
-        else setPhase('end');
-      }, rest);
-    });
+        timers.push(
+          setTimeout(() => {
+            voiced = true;
+            next();
+          }, step === 0 ? 300 : 700),
+        );
+      });
+      timers.push(
+        setTimeout(() => {
+          voiced = true;
+          next();
+        }, dwell + SPEECH_GRACE_MS),
+      );
+    }
     return () => {
       alive = false;
-      if (timer) clearTimeout(timer);
+      timers.forEach((t) => clearTimeout(t));
     };
-  }, [phase, paused, step, speed, voice, canVoice, manual, last, film, slow]);
+  }, [phase, paused, step, speed, voice, canVoice, last, film, slow]);
 
   // Beim Verlassen nie weitersprechen.
   useEffect(() => () => stopSpeech(), []);
 
   const start = (): void => {
+    // Synchron im Tipp: schaltet die Sprachausgabe am iPhone frei (sonst bleibt `speak` später stumm).
+    unlockSpeech();
     setStep(0);
     setPaused(false);
     setPhase('play');
@@ -109,11 +136,12 @@ export function FilmPlayer({ film, onClose }: { film: Film; onClose?: (() => voi
     return p.ans.includes(i) ? 'answer' : 'dim';
   };
   const cur = film.steps[step];
+  const atEnd = phase !== 'predict' && step === last;
   // Vor der Vorhersage leuchtet nichts (Signalwörter würden die Lösung verraten); erst nach der Antwort kommt die Hervorhebung von Schritt 0.
   const words = phase === 'predict' ? (answered ? steps[0]! : withoutHi(steps[0]!)) : (steps[step] ?? steps[0]!);
 
   return (
-    <div ref={root} className="lx-fm flex flex-col gap-4" data-testid="film" data-film={film.id} data-phase={phase} data-step={step} data-manual={manual ? 'true' : undefined}>
+    <div ref={root} className="lx-fm flex flex-col gap-4" data-testid="film" data-film={film.id} data-phase={phase} data-step={step} data-still={still ? 'true' : undefined}>
       <header className="flex flex-col gap-1">
         <p className="lx-eyebrow">{phase === 'predict' ? t('eeFmPredictLabel') : t('eeFmEyebrow')}</p>
         <h3 className="lx-t-answer tracking-tight">{film.title[lang]}</h3>
@@ -126,16 +154,21 @@ export function FilmPlayer({ film, onClose }: { film: Film; onClose?: (() => voi
       )}
 
       <div className="lx-fm-screen" data-testid="film-screen">
+        <p className="lx-eyebrow" data-testid="film-sentence-label" data-kind={atEnd ? 'to' : step === 0 ? 'from' : 'mid'}>
+          {atEnd ? t('eeFmTo') : step === 0 ? t('eeFmFrom') : t('eeFmMid')}
+        </p>
         <SentenceMorph
           words={words}
           sizers={sizers}
-          animate={!manual && phase !== 'predict'}
+          animate={!still && phase !== 'predict'}
           speed={speed}
           onTap={phase === 'predict' && p.kind === 'tap' && !answered ? (i) => setGuess(i) : undefined}
           tapState={phase === 'predict' && p.kind === 'tap' ? tapState : undefined}
           tapLabel={(w) => t('eeFmTapWord', { word: w })}
         />
-        {lang === 'de' && (
+        {/* Die deutsche Bedeutung gehört zum Zielsatz: erst im letzten Schritt zeigen (sonst stand „haben … abgelegt“ unter einem
+            Satz in Future Simple). */}
+        {lang === 'de' && atEnd && (
           <p className="lx-fm-sub" lang="de" data-testid="film-meaning">
             {film.de}
           </p>
@@ -169,14 +202,10 @@ export function FilmPlayer({ film, onClose }: { film: Film; onClose?: (() => voi
             </p>
           )}
           <div className="flex flex-wrap items-center gap-2">
-            <Button variant="primary" icon="play" onClick={start} disabled={!answered} data-testid="film-play">
+            <Button variant="primary" icon="play" onClick={start} data-testid="film-play">
               {t('eeFmPlay')}
             </Button>
-            {!answered && (
-              <button type="button" className="lx-fm-link" onClick={start} data-testid="film-skip-predict">
-                {t('eeFmSkipPredict')}
-              </button>
-            )}
+            {!answered && <span className="lx-t-support text-muted">{t('eeFmGuessOptional')}</span>}
           </div>
         </div>
       )}
@@ -192,22 +221,16 @@ export function FilmPlayer({ film, onClose }: { film: Film; onClose?: (() => voi
             </span>
           </p>
           <div className="lx-fm-controls" data-testid="film-controls">
-            {manual ? (
-              <Button variant="primary" iconAfter="arrowRight" onClick={() => (step < last ? goTo(step + 1) : setPhase('end'))} disabled={phase === 'end'} data-testid="film-next">
-                {t('eeFmNext')}
-              </Button>
-            ) : (
-              <button
-                type="button"
-                className="lx-fm-round"
-                onClick={() => (phase === 'end' ? start() : setPaused((v) => !v))}
-                aria-label={phase === 'end' ? t('eeFmAgain') : paused ? t('eeFmResume') : t('eeFmPause')}
-                data-testid="film-toggle"
-                data-paused={paused || phase === 'end' ? 'true' : 'false'}
-              >
-                {phase === 'end' ? <Icon name="refresh" size={20} /> : paused ? <Icon name="play" size={20} /> : <PauseIcon />}
-              </button>
-            )}
+            <button
+              type="button"
+              className="lx-fm-round"
+              onClick={() => (phase === 'end' ? start() : setPaused((v) => !v))}
+              aria-label={phase === 'end' ? t('eeFmAgain') : paused ? t('eeFmResume') : t('eeFmPause')}
+              data-testid="film-toggle"
+              data-paused={paused || phase === 'end' ? 'true' : 'false'}
+            >
+              {phase === 'end' ? <Icon name="refresh" size={20} /> : paused ? <Icon name="play" size={20} /> : <PauseIcon />}
+            </button>
             <ol className="lx-fm-dots" aria-label={t('eeFmStepsAria')}>
               {steps.map((_, i) => (
                 <li key={i}>
@@ -216,12 +239,10 @@ export function FilmPlayer({ film, onClose }: { film: Film; onClose?: (() => voi
               ))}
             </ol>
             <span className="flex-1" />
-            {!manual && (
-              <button type="button" className="lx-fm-chip" aria-pressed={slow} onClick={toggleSlow} data-testid="film-slow">
-                0,75×
-                <span className="sr-only"> {t('eeFmSlow')}</span>
-              </button>
-            )}
+            <button type="button" className="lx-fm-chip" aria-pressed={slow} onClick={toggleSlow} data-testid="film-slow">
+              0,75×
+              <span className="sr-only"> {t('eeFmSlow')}</span>
+            </button>
             {canVoice && (
               <button type="button" className="lx-fm-chip" aria-pressed={voice} onClick={toggleVoice} aria-label={t('eeFmVoice')} title={t('eeFmVoice')} data-testid="film-voice">
                 <Icon name="speaker" size={18} />

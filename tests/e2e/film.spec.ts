@@ -4,7 +4,8 @@ import { boot, bootAt, layoutProblems, openTab, screen } from './fixtures';
 import { openAllChapters } from './learnHelpers';
 
 // Struktur-Film (Lernplattform 3.0 P61, Erlebnis-Engine §5.3): erst Vorhersage (Schritt 0), dann der Satz in Bewegung, am Ende „Nochmal“/„Fertig“.
-// Drei Einstiege: Kapitelblatt, Einführungskarte (IntroFlow), Menü ⋯ „Zeig es mir“. Bei Effekt-Stufe „Aus“ läuft nichts von selbst (Knopf „Weiter“).
+// Drei Einstiege: Kapitelblatt, Einführungskarte (IntroFlow), Menü ⋯ „Zeig es mir“. „Film abspielen“ geht immer, auch ohne Raten, und der
+// Film läuft dann von selbst – bei Effekt-Stufe „Aus“ als Standbilder ohne Gleiten (Emrahs Rückmeldung 4, 10.10.2026).
 // Schalter `film` (und `program` für die Karte) per `lx:flags`.
 
 const OLD = Date.parse('2020-01-01T10:00:00+01:00');
@@ -22,11 +23,11 @@ async function chapterFilm(page: Page, fx: 'full' | 'off') {
   return { ...booted, film };
 }
 
-/** Vorhersage beantworten (Wahl- oder Antipp-Frage): erst danach lässt sich der Film starten. */
+/** Vorhersage beantworten (Wahl- oder Antipp-Frage). Der Startknopf ist schon vorher bedienbar (Raten ist freiwillig). */
 async function predict(page: Page) {
   const film = page.getByTestId('film');
   await expect(film.getByTestId('film-question')).toBeVisible();
-  await expect(film.getByTestId('film-play')).toBeDisabled();
+  await expect(film.getByTestId('film-play')).toBeEnabled();
   const opts = film.getByTestId('film-option');
   if (await opts.count()) await opts.first().click();
   else await film.getByTestId('film-word').first().click();
@@ -62,21 +63,64 @@ test.describe('Handy 360', () => {
     expect(errors).toEqual([]);
   });
 
-  test('Effekt-Stufe Aus: nichts läuft von selbst, „Weiter“ führt Schritt für Schritt zum Ende', async ({ page }) => {
+  test('Rückmeldung 4: „Film abspielen“ ist ohne Raten bedienbar und spielt bis zum Ende; Bedeutung erst beim Zielsatz', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    const { errors, film } = await chapterFilm(page, 'full');
+    const play = film.getByTestId('film-play');
+    await expect(play).toBeEnabled();
+    await expect(film.getByTestId('film-sentence-label')).toHaveAttribute('data-kind', 'from');
+    await expect(film.getByTestId('film-meaning')).toHaveCount(0);
+    await play.click();
+    await expect(film).toHaveAttribute('data-phase', 'play');
+    await expect(film).toHaveAttribute('data-phase', 'end', { timeout: 20_000 });
+    await expect(film.getByTestId('film-sentence-label')).toHaveAttribute('data-kind', 'to');
+    await expect(film.getByTestId('film-meaning')).toBeVisible();
+    expect(errors).toEqual([]);
+  });
+
+  test('Effekt-Stufe Aus: der Film läuft trotzdem von selbst bis zum Ende, nur ohne Gleiten', async ({ page }) => {
     const { errors, film } = await chapterFilm(page, 'off');
-    await expect(film).toHaveAttribute('data-manual', 'true');
-    await film.getByTestId('film-skip-predict').click();
-    await expect(film).toHaveAttribute('data-step', '0');
-    await page.waitForTimeout(4000);
-    await expect(film).toHaveAttribute('data-step', '0');
-    const dots = await film.getByTestId('film-dot').count();
-    for (let i = 1; i < dots; i++) {
-      await film.getByTestId('film-next').click();
-      await expect(film).toHaveAttribute('data-step', String(i));
-    }
-    await film.getByTestId('film-next').click();
-    await expect(film).toHaveAttribute('data-phase', 'end');
+    await expect(film).toHaveAttribute('data-still', 'true');
+    await film.getByTestId('film-play').click();
+    await expect(film).toHaveAttribute('data-phase', 'play');
+    await expect(film).toHaveAttribute('data-phase', 'end', { timeout: 20_000 });
     expect(await film.evaluate((el) => el.getAnimations({ subtree: true }).length)).toBe(0);
+    expect(errors).toEqual([]);
+  });
+
+  test('Sprachausgabe meldet nie ein Ende (iPhone ohne Freigabe): der Film läuft trotzdem weiter', async ({ page }) => {
+    test.setTimeout(90_000);
+    // Stimme vorhanden, aber `speak` bleibt stumm und ruft nie onend/onerror auf.
+    await page.addInitScript(() => {
+      const voice = { name: 'Samantha', lang: 'en-US', default: true, localService: true, voiceURI: 'Samantha' };
+      const synth = {
+        speaking: false,
+        pending: false,
+        paused: false,
+        onvoiceschanged: null,
+        getVoices: () => [voice],
+        speak: () => undefined,
+        cancel: () => undefined,
+        pause: () => undefined,
+        resume: () => undefined,
+        addEventListener: () => undefined,
+        removeEventListener: () => undefined,
+      };
+      Object.defineProperty(window, 'speechSynthesis', { value: synth, configurable: true });
+      Object.defineProperty(window, 'SpeechSynthesisUtterance', {
+        value: class {
+          text: string;
+          constructor(t: string) {
+            this.text = t;
+          }
+        },
+        configurable: true,
+      });
+    });
+    const { errors, film } = await chapterFilm(page, 'off');
+    await film.getByTestId('film-play').click();
+    await expect(film.getByTestId('film-voice')).toBeVisible();
+    await expect(film).toHaveAttribute('data-phase', 'end', { timeout: 80_000 });
     expect(errors).toEqual([]);
   });
 });

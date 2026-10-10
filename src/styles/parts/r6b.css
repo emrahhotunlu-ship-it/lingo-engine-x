@@ -196,22 +196,6 @@
   color: var(--lx-fg-muted);
 }
 
-.lx-fm-link {
-  min-height: 44px;
-  padding: 0 0.5rem;
-  border: 0;
-  background: transparent;
-  color: var(--lx-fg-muted);
-  font-size: 0.875rem;
-  font-weight: 500;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  cursor: pointer;
-}
-.lx-fm-link:hover {
-  color: var(--lx-fg);
-}
-
 /* Steuerleiste: ▶/❚❚ rund, Schrittpunkte, Chips. */
 .lx-fm-controls {
   display: flex;
@@ -239,8 +223,7 @@
 .lx-fm-round:focus-visible,
 .lx-fm-dot:focus-visible,
 .lx-fm-chip:focus-visible,
-.lx-fm-launch:focus-visible,
-.lx-fm-link:focus-visible {
+.lx-fm-launch:focus-visible {
   outline: 2px solid var(--lx-focus);
   outline-offset: 2px;
 }

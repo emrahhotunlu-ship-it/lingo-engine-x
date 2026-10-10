@@ -20,7 +20,7 @@ const BADGE: Record<ResultVerdict, string> = { ok: 'bg-ok', near: 'bg-near', wro
 const MARK: Record<ResultVerdict, string> = { ok: '✓', near: '≈', wrong: '✕', dontKnow: '', unchecked: '' };
 const ICON: Partial<Record<ResultVerdict, IconName>> = { dontKnow: 'lightbulb' };
 
-export function Verdict({ verdict, sub = null }: { verdict: ResultVerdict; sub?: string | null }) {
+export function Verdict({ verdict, sub = null, title = null }: { verdict: ResultVerdict; sub?: string | null; title?: string | null }) {
   const { t } = useT();
   const first = useRef(verdict);
   useEffect(() => {
@@ -38,7 +38,7 @@ export function Verdict({ verdict, sub = null }: { verdict: ResultVerdict; sub?:
           </span>
         )}
         {icon && <Icon name={icon} size={18} />}
-        <span>{t(WORD[verdict])}</span>
+        <span>{title ?? t(WORD[verdict])}</span>
       </p>
       {sub && (
         <p className="lx-t-meta text-muted" data-testid="verdict-sub">
