@@ -1,5 +1,5 @@
 import { mergedVocab } from '../overview';
-import { findContext, lemmaOf, parseCollocs } from './context';
+import { findContext, hasGapPlaceholder, lemmaOf, parseCollocs } from './context';
 import { stageOf } from './ladder';
 import { isFutureFsrs, isNewState, readFsrs } from './scheduler';
 import type { Counts, Lang, TrainCard } from './types';
@@ -23,12 +23,29 @@ export function counts(v: unknown): Record<string, Counts> {
 
 // P7-1: Satzstelle und Kollokationen hängen nur am Dokument. Unveränderte Dokumente kommen als
 // dasselbe Objekt (contract/db.d.ts, Validierungs-Cache H6) – je Dokument nur einmal suchen.
+/**
+ * Gespeicherter Satz mit Lücken-Platzhalter (Übungssatz, Rückmeldung 2): nicht als Ursprungssatz zeigen, sondern ersatzweise ein
+ * sauberes KI-Beispiel (`xEx`) oder der Satz einer Kollokation. Das Dokument bleibt unverändert (nichts löschen, Kap. 9).
+ */
+function fallbackContext(doc: Doc, word: string): TrainCard['context'] {
+  if (!hasGapPlaceholder(doc.ex)) return null;
+  const pool: unknown[] = [];
+  if (Array.isArray(doc.xEx)) for (const x of doc.xEx) if (x && typeof x === 'object') pool.push((x as Record<string, unknown>).en);
+  if (Array.isArray(doc.col)) for (const c of doc.col) if (c && typeof c === 'object') pool.push((c as Record<string, unknown>).ex);
+  for (const s of pool) {
+    const hit = findContext(s, word);
+    if (hit) return hit;
+  }
+  return null;
+}
+
 type Static = { lemma: string; context: TrainCard['context']; col: TrainCard['col'] };
 const STATIC = new WeakMap<object, Static>();
 function staticOf(doc: Doc, word: string): Static {
   const hit = STATIC.get(doc);
   if (hit) return hit;
-  const s: Static = { lemma: lemmaOf(word), context: findContext(doc.ex, word), col: parseCollocs(doc.col) };
+  const col = parseCollocs(doc.col);
+  const s: Static = { lemma: lemmaOf(word), context: findContext(doc.ex, word) ?? fallbackContext(doc, word), col };
   STATIC.set(doc, s);
   return s;
 }

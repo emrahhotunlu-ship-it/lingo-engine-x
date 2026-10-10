@@ -239,7 +239,8 @@ export function Explanation({ model, depth, learning = true, area = 'trainer', o
         </div>
       )}
       {model.ai && (
-        <p className="lx-t-meta text-muted" data-testid="ai-note">
+        // Rückmeldung 1: die Karte zieht sich mit -mx-4 an den Rand, deshalb braucht auch diese Zeile den Innenabstand der übrigen Zeilen.
+        <p className="lx-t-meta border-t border-line px-4 py-2.5 text-muted" data-testid="ai-note">
           {t('exAiNote')}
         </p>
       )}

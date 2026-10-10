@@ -218,18 +218,47 @@ export function buildQueue(i: {
 }): QueueItem[] {
   if (i.target <= 0) return [];
   const act = active(i.cards, i.lang).filter((c) => !i.exclude.has(c.key));
+  // Rückmeldung 6 (10.10.2026): dasselbe Wort steht höchstens EINMAL in der Runde, auch wenn es zwei Karten dafür gibt
+  // („overcome“ und „to overcome“, Fund und Paket). Die dringendste Karte gewinnt, die andere bleibt fällig für eine spätere Runde.
+  const taken = new Set<string>();
+  const claim = (c: TrainCard): boolean => {
+    const h = headwordOf(c.word);
+    if (!h) return true;
+    if (taken.has(h)) return false;
+    taken.add(h);
+    return true;
+  };
   const fresh = newCards(act, i.mix ?? {});
   const nNew = Math.min(Math.max(0, i.newQuotaLeft), fresh.length, i.target);
-  const due = capLeeches(dueCards(act, i.nowMs));
-  const reviews = due.slice(0, i.target - nNew).map((c): QueueItem => ({ key: c.key, reason: 'due', phase: 'quiz' }));
-  if (reviews.length + nNew < i.target) {
-    for (const c of aheadCards(act, i.nowMs).slice(0, i.target - nNew - reviews.length)) reviews.push({ key: c.key, reason: 'ahead', phase: 'quiz' });
+  const reviews: QueueItem[] = [];
+  for (const c of capLeeches(dueCards(act, i.nowMs))) {
+    if (reviews.length >= i.target - nNew) break;
+    if (claim(c)) reviews.push({ key: c.key, reason: 'due', phase: 'quiz' });
   }
-  const news = fresh.slice(0, nNew).map((c): QueueItem => ({ key: c.key, reason: 'new', phase: c.stage === 0 ? 'intro' : 'quiz' }));
+  const news: QueueItem[] = [];
+  for (const c of fresh) {
+    if (news.length >= nNew) break;
+    if (claim(c)) news.push({ key: c.key, reason: 'new', phase: c.stage === 0 ? 'intro' : 'quiz' });
+  }
+  if (reviews.length + news.length < i.target) {
+    for (const c of aheadCards(act, i.nowMs)) {
+      if (reviews.length + news.length >= i.target) break;
+      if (claim(c)) reviews.push({ key: c.key, reason: 'ahead', phase: 'quiz' });
+    }
+  }
   const out: QueueItem[] = [...reviews];
   news.forEach((n, k) => out.splice(Math.min(out.length, 2 + 3 * k), 0, n));
   return out;
 }
+
+/** Stichwort eines Worts für „dasselbe Wort“: klein, ohne „to “ vorn, Leerraum vereinheitlicht. */
+export const headwordOf = (word: string): string =>
+  word
+    .toLowerCase()
+    .replace(/[’‘`´]/g, "'")
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/^to /, '');
 
 /** Dauerfehler („Blutegel“): ab so vielen Vergessen-Fällen kostet eine Karte unverhältnismäßig viel Zeit. */
 export const LEECH_AT = 5;

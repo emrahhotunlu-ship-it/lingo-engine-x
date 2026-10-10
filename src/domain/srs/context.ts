@@ -106,7 +106,7 @@ export function formsOf(w: string): string[] {
   return [...out].sort((a, b) => b.length - a.length);
 }
 
-function stripBrackets(s: string): string {
+export function stripBrackets(s: string): string {
   return s.replace(/\[|\]/g, '');
 }
 
@@ -151,8 +151,22 @@ export function locate(sentence: string, target: string): { start: number; end: 
 const CTX_CACHE = new Map<string, ContextSpan | null>();
 const CTX_CACHE_MAX = 6000;
 
+/**
+ * Satz mit Lücken-Platzhalter aus einer Übung („Tom ? have missed them – it's ____ now.“, Emrahs Rückmeldung 2, 10.10.2026):
+ * nie ein Beispielsatz für ein Wort. Erkannt werden Unterstriche, „(?)“/„[?]“/„??“ und ein frei stehendes „?“ vor einem Wort.
+ */
+const GAP_PLACEHOLDER = /_{2,}|…{2,}|\.{4,}|[([]\s*\?\s*[)\]]|\?\?|(?:^|\s)\?(?=\s+[A-Za-z])/;
+export function hasGapPlaceholder(s: unknown): boolean {
+  return typeof s === 'string' && GAP_PLACEHOLDER.test(s);
+}
+
+/** Gedankenstrich statt Bindestrich zwischen Leerzeichen (gleiche Länge, Spannen bleiben gültig). */
+export function fixDashes(s: string): string {
+  return s.replace(/ - /g, ' – ');
+}
+
 export function findContext(ex: unknown, word: string): ContextSpan | null {
-  if (typeof ex !== 'string' || !ex.trim()) return null;
+  if (typeof ex !== 'string' || !ex.trim() || hasGapPlaceholder(ex)) return null;
   const key = `${word}\u0000${ex}`;
   const hit = CTX_CACHE.get(key);
   if (hit !== undefined) return hit ? { ...hit } : null;
@@ -225,7 +239,7 @@ function readMarks(ex: string): { text: string; spans: Span[] } {
 const wordCount = (s: string): number => s.split(/\s+/).filter(Boolean).length;
 
 function findContextUncached(ex: string, word: string): ContextSpan | null {
-  const marks = readMarks(ex);
+  const marks = readMarks(fixDashes(ex));
   const lead = marks.text.length - marks.text.trimStart().length;
   const sentence = marks.text.trim();
   const spans = marks.spans.map((s) => ({ start: s.start - lead, end: s.end - lead })).filter((s) => s.start >= 0 && s.end <= sentence.length);

@@ -1,7 +1,7 @@
 import { hash32 } from '../random';
 import { stripGapMarks } from '../text/tokenize';
 import { containsPhrase } from '../chunks/newChunk';
-import { locate, lemmaOf } from './context';
+import { fixDashes, hasGapPlaceholder, locate, lemmaOf } from './context';
 import { needsCollocs } from './collocs';
 import type { TrainCard } from './types';
 
@@ -50,9 +50,12 @@ export function cardExamples(card: Pick<TrainCard, 'context' | 'doc'>, shown: st
   const seen = new Set<string>();
   if (shown) seen.add(key(shown));
   const out: Example[] = [];
-  const add = (en: string, src: ExampleSource) => {
+  const add = (raw: string, src: ExampleSource) => {
+    // Übungssätze mit Lücken-Platzhalter („Tom ? have …“) sind nie ein Beispiel (Rückmeldung 2).
+    if (!raw || hasGapPlaceholder(raw)) return;
+    const en = fixDashes(raw);
     const k = key(en);
-    if (!en || k.split(' ').length < 3 || seen.has(k)) return;
+    if (k.split(' ').length < 3 || seen.has(k)) return;
     seen.add(k);
     out.push({ en, src });
   };
@@ -78,7 +81,8 @@ export function acceptExamples(word: string, list: readonly string[], nowMs: num
   const out: StoredExample[] = [];
   const seen = new Set<string>();
   for (const raw of list) {
-    const en = clean(raw);
+    if (hasGapPlaceholder(raw)) continue;
+    const en = fixDashes(clean(raw));
     const k = key(en);
     if (en.length < 12 || en.length > 220 || seen.has(k)) continue;
     // Wendungen: Wortfolge mit Platzhaltern („meet sb halfway“), sonst das Wort in einer Form.

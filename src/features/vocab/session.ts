@@ -31,7 +31,8 @@ import { useSpeech } from '../../platform/speech';
 import { useWatched } from '../../data/watch';
 import { legacySceneDoc } from '../../domain/chunks/legacyScene';
 import { buildQueue, mixIntroducedToday, newQuotaLeft as newQuotaLeftFor } from '../../domain/srs/queue';
-import { isLearningState } from '../../domain/srs/scheduler';
+import { isLearningState, previewIntervals } from '../../domain/srs/scheduler';
+import { noteWeight } from '../../domain/srs/weight';
 import type { AnswerEvent, Exercise, ExerciseId, Grade, Lang, QueueItem, TrainCard } from '../../domain/srs/types';
 import { markExhausted, useTodayPlan } from '../today/store';
 import { nextT, recordAnswer, recordRoundEnd, saveCard, saveContrastMiss, saveKnown, usePending } from './persist';
@@ -606,6 +607,17 @@ export type Answer = {
   t?: number;
 };
 
+/** Aufdecken im Aufholmodus: die Bewertung zählt mit dem Aufhol-Gewicht (`noteWeight`). EINE Regel für Knopf-Vorschau und Speichern. */
+const flipCatchUp = (s: Pick<SessionState, 'catchUp'>, card: Pick<TrainCard, 'stage'>): boolean => s.catchUp && card.stage >= 3;
+
+/**
+ * Abstände auf den Aufdeck-Knöpfen (Rückmeldung 6): genau das, was `commitAnswer` → `cardPatch` speichert – mit demselben Gewicht.
+ * Vorher zeigte der Knopf im Aufholmodus den ungewichteten Abstand („Gut – 7 Tage“), gespeichert wurde ein kürzerer.
+ */
+export function flipIntervals(card: TrainCard, t: number): Record<Grade, number> {
+  return previewIntervals(card.fsrs, t, noteWeight('flip', 0, flipCatchUp(useSession.getState(), card)));
+}
+
 /** Bewertete Antwort übernehmen: Karte sofort speichern, Protokoll und Zähler vormerken, weiter. */
 export function commitAnswer(ans: Answer): FirstKind {
   touch();
@@ -639,7 +651,7 @@ export function commitAnswer(ans: Answer): FirstKind {
   if (e.check === 'control' || e.check === 'probe') a.check = e.check;
   // „Kenne ich“: richtig ohne Hilfe → die Karte bekommt Stufe 3 und 10 Tage statt der gewöhnlichen Planung.
   const knownPass = e.check === 'known' && ans.ok && !ans.hint && !ans.override && card.kind === 'vocab';
-  if (e.ex === 'flip' && s.catchUp && card.stage >= 3) a.catchUp = true;
+  if (e.ex === 'flip' && flipCatchUp(s, card)) a.catchUp = true;
   // P52: getippte falsche Antwort = Wort einer anderen eigenen Karte → Verwechslung für den Wörter-Tutor merken.
   if (!ans.ok && e.input === 'typed' && ans.given.trim()) noteConfusion(card, ans.given, s.pool);
 

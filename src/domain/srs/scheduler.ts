@@ -84,9 +84,10 @@ export function reviewFsrs(f: FsrsStored, grade: Grade, nowMs: number, weight = 
 }
 
 /** Abstand bis zur nächsten Fälligkeit je Note (ms) – Beschriftung der Bewertungsknöpfe. */
-export function previewIntervals(f: FsrsStored, nowMs: number): Record<Grade, number> {
+export function previewIntervals(f: FsrsStored, nowMs: number, weight = 1): Record<Grade, number> {
   const out = {} as Record<Grade, number>;
-  for (const g of [1, 2, 3, 4] as const) out[g] = Math.max(0, reviewFsrs(f, g, nowMs).due - nowMs);
+  // Rückmeldung 6: dasselbe Gewicht wie beim Speichern (`cardPatch` → `noteWeight`), sonst verspricht der Knopf mehr Tage, als gespeichert werden.
+  for (const g of [1, 2, 3, 4] as const) out[g] = Math.max(0, reviewFsrs(f, g, nowMs, weight).due - nowMs);
   return out;
 }
 

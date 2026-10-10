@@ -10,9 +10,45 @@ import type { Colloc, TrainCard } from './types';
 
 const norm = (s: string): string => s.toLowerCase().trim();
 
+/**
+ * Verben, nach denen „to + Verb“ ein SATZMUSTER ist, kein fester Wortpartner (Rückmeldung 3, 10.10.2026: „We can't afford to ___ this
+ * customer.“ – hinter „afford to“ passt jedes Verb). Solche Lücken sind keine Wortpartner-Aufgabe.
+ */
+const TO_INF_VERBS: ReadonlySet<string> = new Set([
+  'afford', 'agree', 'aim', 'arrange', 'attempt', 'choose', 'decide', 'deserve', 'expect', 'fail', 'hesitate', 'hope', 'intend', 'learn',
+  'manage', 'mean', 'need', 'offer', 'plan', 'prepare', 'pretend', 'promise', 'refuse', 'seek', 'seem', 'strive', 'struggle', 'tend',
+  'threaten', 'try', 'volunteer', 'want', 'wish',
+]);
+
+const verbForm = (w: string, lemma: string): boolean => {
+  const x = w.toLowerCase();
+  const l = lemma.toLowerCase();
+  if (x === l || x === `${l}s` || x === `${l}es` || x === `${l}ed` || x === `${l}d` || x === `${l}ing`) return true;
+  // try → tries/tried, plan → planned/planning, hope → hoping
+  if (l.endsWith('y') && (x === `${l.slice(0, -1)}ies` || x === `${l.slice(0, -1)}ied`)) return true;
+  if (l.endsWith('e') && x === `${l.slice(0, -1)}ing`) return true;
+  const last = l.at(-1) ?? '';
+  return x === `${l}${last}ed` || x === `${l}${last}ing`;
+};
+
+/**
+ * Ist die Lücke ein „Verb + to + ___“-Satzmuster statt einer festen Verbindung? Wahr, wenn das Kartenwort ein solches Verb ist und
+ * direkt vor der Lücke „<Form des Verbs> to“ steht oder die Verbindung selbst „<Verb> to …“ lautet. Rein.
+ */
+export function isPatternGap(lemma: string, p: string, ctx: { sentence: string; start: number } | null): boolean {
+  const l = lemma.toLowerCase().replace(/^to\s+/, '').trim();
+  if (!TO_INF_VERBS.has(l)) return false;
+  const pw = p.toLowerCase().replace(/^to\s+/, '').trim().split(/\s+/);
+  if (pw.length >= 2 && pw[0] && verbForm(pw[0], l) && pw[1] === 'to') return true;
+  if (!ctx) return false;
+  const m = /(\S+)\s+to\s+$/i.exec(ctx.sentence.slice(0, ctx.start));
+  return !!m?.[1] && verbForm(m[1].replace(/[^a-z]/gi, ''), l);
+}
+
 /** Eine Partnerwort-Lücke der Karte (mit Satz und Auswahl), sonst `null`. `pickIndex` wählt unter mehreren (z. B. per Zufall). */
 export function partnerOf(card: TrainCard, pickIndex = 0): Colloc | null {
-  const own = card.col.filter((c) => c.ctx && c.opts.length >= 2);
+  // Rückmeldung 3: nur echte Verbindungen; ein Satzmuster („afford to + Verb“) ist keine Wortpartner-Aufgabe (dann eine andere Abfrageart).
+  const own = card.col.filter((c) => c.ctx && c.opts.length >= 2 && !isPatternGap(card.lemma, c.p, c.ctx));
   if (own.length) return own[Math.abs(pickIndex) % own.length] ?? own[0] ?? null;
   const ctx = card.context;
   const gap = packExtraOf(card)?.gap;
@@ -26,6 +62,7 @@ export function partnerOf(card: TrainCard, pickIndex = 0): Colloc | null {
   const word = ctx.sentence.slice(start, end);
   const opts = [...new Set(gap.wrong.filter((w) => norm(w) !== norm(word) && norm(w) !== norm(gap.at)))];
   if (!opts.length) return null;
+  if (isPatternGap(card.lemma, card.word, { sentence: ctx.sentence, start })) return null;
   return { index: -1, p: card.word, de: card.de ?? '', gap: word, opts, ctx: { sentence: ctx.sentence, start, end, gap: word } };
 }
 

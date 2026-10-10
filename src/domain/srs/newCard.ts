@@ -1,6 +1,6 @@
 import { mayCreateDoc } from '../capacity/docGuard';
 import { slug } from '../content';
-import { locate, lemmaOf } from './context';
+import { fixDashes, hasGapPlaceholder, locate, lemmaOf } from './context';
 
 // Neue Karte aus Wort-Antippen (Plan §3.4, Portierung von `cardFromAI` der alten App).
 // Der Ursprungssatz ist Pflicht (Kap. 15: keine Karten ohne Ursprungssatz). Kein `fsrs`:
@@ -45,7 +45,8 @@ const VALID_EX = /^[^[\]]*\[[^[\]]+\][^[\]]*$/;
 
 /** Satz mit eingeklammerter Fundstelle oder `''` (Klammerregel der alten App). */
 export function bracketExample(sentence: string, surface: string | null | undefined, word: string): string {
-  let s = sentence.replace(/\[/g, '(').replace(/\]/g, ')').replace(/\*\*?/g, '').replace(/\s+/g, ' ').trim();
+  if (hasGapPlaceholder(sentence)) return '';
+  let s = fixDashes(sentence).replace(/\[/g, '(').replace(/\]/g, ')').replace(/\*\*?/g, '').replace(/\s+/g, ' ').trim();
   if (!s) return '';
   const core = lemmaOf(word).replace(/^be\s+/i, '');
   const hit = (surface ? locate(s, surface) : null) ?? locate(s, core);

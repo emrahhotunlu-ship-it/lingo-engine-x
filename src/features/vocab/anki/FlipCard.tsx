@@ -8,7 +8,6 @@ import { cardExamples, wantsEnrichment } from '../../../domain/srs/examples';
 import { explainWord, registerOf } from '../../../domain/srs/explainWord';
 import { posKey } from '../../../domain/srs/explain';
 import { flipSuggest, formatInterval, seenOn, wordCount } from '../../../domain/srs/flip';
-import { previewIntervals } from '../../../domain/srs/scheduler';
 import type { Exercise, Grade } from '../../../domain/srs/types';
 import { isPhraseCard } from '../../../domain/srs/vocabList';
 import { EnglishText } from '../../../engine/EnglishText';
@@ -24,7 +23,7 @@ import { nextT } from '../../progress/persist';
 import { useDecks } from '../decksStore';
 import { WordExtras } from '../WordExtras';
 import { requestExamples, useExamples } from '../examples';
-import { commitAnswer, prepareNext, useSession, type FirstKind } from '../session';
+import { commitAnswer, flipIntervals, prepareNext, useSession, type FirstKind } from '../session';
 
 // Anki „Aufdecken“ (anki-regeln.md, architektur.md §4.1, Optik wie Prototyp v1):
 // Vorderseite Deutsch → Englisch: Bedeutung + Ursprungssatz mit Lücke (Platzhalter je Buchstabe),
@@ -100,7 +99,7 @@ export function FlipCard({ exercise, again = false, onDone, behind = 0 }: { exer
     const ms = thinkMs(shownAt.current, hiddenMs.current);
     const suggest = flipSuggest({ revealMs: ms, phrase: isPhraseCard(card), frontWords: wordCount(front), seenToday: again || seenOn(card.doc, day), hidden: wasHidden.current, strict });
     const tt = nextT();
-    setShown({ t: tt, ms: Math.round(ms), suggest, iv: previewIntervals(card.fsrs, tt) });
+    setShown({ t: tt, ms: Math.round(ms), suggest, iv: flipIntervals(card, tt) });
     // Fehlt der Rückseite ein Beispielsatz (Befund 29.09.: Karte ohne Ursprungssatz, Kap. 15),
     // ergänzt Claude ihn einmal je Karte – genau wie beim Tippen (ExerciseView.tsx).
     if (ai && wantsEnrichment(card, card.context?.sentence ?? null, Date.now())) requestExamples(card);

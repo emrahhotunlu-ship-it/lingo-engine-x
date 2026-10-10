@@ -1,6 +1,7 @@
 import { containsPhrase } from '../chunks/newChunk';
 import { isWrongLang } from '../lang/detect';
-import { lemmaOf, locate } from './context';
+import { lemmaOf, locate, stripBrackets } from './context';
+import { isPatternGap } from './partner';
 
 // Typische Wortpartner (Kollokationen) für jede Karte (Englischlehrer 02.10.2026: „`col` ist bei jeder neu angelegten Karte
 // leer“, dadurch gibt es die Übung „Wortpartner wählen“ nur für die 40 Startwörter). Claude liefert beim ersten Aufdecken
@@ -55,6 +56,9 @@ export function acceptCollocations(word: string, raw: unknown, max: number = COL
     if (!hasWord(p, word, lemma) || !hasWord(inner, word, lemma)) continue;
     // Die Lücke ist ein Partner, nicht das Kartenwort, und steht in der markierten Stelle.
     if (locate(gap, lemma) || !locate(inner, gap)) continue;
+    // Rückmeldung 3: „afford to ___“ ist ein Satzmuster, kein Wortpartner.
+    const gh = locate(stripBrackets(ex), gap);
+    if (isPatternGap(lemma, p, gh ? { sentence: stripBrackets(ex), start: gh.start } : null)) continue;
     const inPhrase = new Set([...words(p), ...words(inner)]);
     const opts: string[] = [];
     const optSeen = new Set<string>([low(gap)]);

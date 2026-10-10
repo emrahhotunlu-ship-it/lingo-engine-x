@@ -8,6 +8,7 @@ import { validateDoc } from '../../data/validate';
 import { normalize } from '../../domain/answer/normalize';
 import { poolNorm } from '../../domain/drills/orderPool';
 import { jsonEqual } from '../../domain/equal';
+import { hasGapPlaceholder } from '../../domain/srs/context';
 import { storedExamples } from '../../domain/srs/examples';
 import { contrastOf } from '../../domain/srs/exercise';
 import type { TrainCard } from '../../domain/srs/types';
@@ -75,7 +76,7 @@ export function wordCtxCandidates(answered: readonly string[], cards: ReadonlyMa
       en: c.word,
       pos: c.pos ?? '',
       de: c.de ?? '',
-      ex: c.context?.sentence ?? (typeof c.doc.ex === 'string' ? c.doc.ex : ''),
+      ex: c.context?.sentence ?? (typeof c.doc.ex === 'string' && !hasGapPlaceholder(c.doc.ex) ? c.doc.ex : ''),
       other,
     });
     for (const x of [...readWx(c.doc), ...storedExamples(c.doc)]) if (avoid.length < WORD_CTX_MAX_AVOID) avoid.push(x.en);

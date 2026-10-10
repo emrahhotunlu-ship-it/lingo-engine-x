@@ -1,3 +1,4 @@
+import { hasGapPlaceholder } from '../srs/context';
 import type { TrainCard } from '../srs/types';
 
 // Satzmaterial des Diktats (phase2-plan §5.4): nur aus dem, was die App schon hat – ohne KI. Bekanntes zuerst
@@ -26,7 +27,7 @@ export function isCleanSentence(s: string, min: number, max: number): boolean {
 
 function collect(push: (s: string, src: DrillSentence['src'], ref: string | null) => void, i: SourceInput): void {
   // 1. Beispielsätze eigener Karten: gelernte zuerst (fällige vor den übrigen), neue zuletzt.
-  const cards = [...i.cards].filter((c) => !c.hidden && typeof c.doc.ex === 'string');
+  const cards = [...i.cards].filter((c) => !c.hidden && typeof c.doc.ex === 'string' && !hasGapPlaceholder(c.doc.ex));
   const known = cards.filter((c) => !c.isNew).sort((a, b) => a.fsrs.due - b.fsrs.due || (a.key < b.key ? -1 : 1));
   const fresh = cards.filter((c) => c.isNew);
   for (const c of [...known, ...fresh]) push(plainSentence(String(c.doc.ex)), 'card', `vocab/${c.id}`);
