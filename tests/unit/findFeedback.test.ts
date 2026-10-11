@@ -112,20 +112,20 @@ describe('Kopf bei „Fehler finden“, wenn ein Wort fehlt (Emrahs Rückmeldung
   });
   it('„Kein Fehler“ gewählt: der Satz hat eine Lücke (DE + EN)', () => {
     const f = { ...base, verdict: 'wrong', tapped: 'none', found: false } as const;
-    expect(findHead(f, 'de')).toEqual({ title: 'Nicht ganz', sub: 'Du hast „Kein Fehler“ gewählt. In dem Satz fehlt ein Wort.' });
-    expect(findHead(f, 'en')).toEqual({ title: 'Not quite', sub: 'You chose “No error”. A word is missing in the sentence.' });
+    expect(findHead(f, 'de')).toEqual({ title: 'Nicht ganz', sub: 'Du hast „Kein Fehler“ gewählt. Im Satz fehlt aber ein Wort.' });
+    expect(findHead(f, 'en')).toEqual({ title: 'Not quite', sub: 'You chose “No mistake”. But a word is missing from the sentence.' });
   });
   it('falsches Wort getippt: nennt das fehlende Wort und die Stelle (DE + EN)', () => {
     const f = { ...base, verdict: 'wrong', tapped: 'presentation', found: false } as const;
-    expect(findHead(f, 'de').sub).toBe('Du hast „presentation“ getippt. Hier fehlt ein Wort: „have“ (vor „finished“).');
-    expect(findHead(f, 'en').sub).toBe('You tapped “presentation”. A word is missing here: “have” (before “finished”).');
+    expect(findHead(f, 'de').sub).toBe('Du hast „presentation“ getippt. Es fehlt „have“ vor „finished“.');
+    expect(findHead(f, 'en').sub).toBe('You tapped “presentation”. “have” is missing before “finished”.');
   });
   it('sofort „Weiß ich nicht“: nur die Lücke', () => {
-    expect(findHead({ ...base, verdict: 'dontKnow', tapped: null, found: false }, 'de').sub).toBe('Hier fehlt ein Wort: „have“ (vor „finished“).');
+    expect(findHead({ ...base, verdict: 'dontKnow', tapped: null, found: false }, 'de').sub).toBe('Es fehlt „have“ vor „finished“.');
   });
   it('mehrere fehlende Wörter und Lücke nach dem Wort', () => {
-    expect(findHead({ errWord: 'finished', answer: 'has been finished', verdict: 'wrong', tapped: 'x', found: false }, 'de').sub).toContain('Hier fehlen Wörter: „has been“ (vor „finished“).');
-    expect(findHead({ errWord: 'go', answer: 'go to', verdict: 'wrong', tapped: 'x', found: false }, 'en').sub).toContain('(after “go”)');
+    expect(findHead({ errWord: 'finished', answer: 'has been finished', verdict: 'wrong', tapped: 'x', found: false }, 'de').sub).toContain('Es fehlen die Wörter „has been“ vor „finished“.');
+    expect(findHead({ errWord: 'go', answer: 'go to', verdict: 'wrong', tapped: 'x', found: false }, 'en').sub).toContain('after “go”');
   });
   it('Stelle gefunden oder richtig: unverändert kurz; falsches Wort ohne Lücke: alter Text', () => {
     expect(findHead({ ...base, verdict: 'ok', tapped: 'finished', found: true }, 'de')).toEqual({ title: 'Richtig erkannt', sub: 'Du hast „finished“ getippt.' });
