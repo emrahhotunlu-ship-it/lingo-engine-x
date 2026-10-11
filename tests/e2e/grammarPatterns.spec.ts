@@ -169,7 +169,7 @@ test('Fehler finden, „Kein Fehler“ bei fehlendem Wort: Kopf sagt, dass ein W
         await page.getByTestId('no-error').click();
         if (!(await page.getByTestId('verdict').isVisible())) await page.getByTestId('no-error').click();
         const sub = page.getByTestId('verdict-sub');
-        await expect(sub).toContainText('Du hast „Kein Fehler“ gewählt. In dem Satz fehl');
+        await expect(sub).toContainText('Du hast „Kein Fehler“ gewählt. Im Satz fehlt aber');
         await expect(sub).not.toContainText('Der Fehler steckt in');
         seenMissing = true;
         break;
