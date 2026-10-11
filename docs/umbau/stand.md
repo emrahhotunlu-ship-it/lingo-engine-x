@@ -347,3 +347,9 @@ Tests: 1953 Unit; E2E der berührten Bildschirme grün (a11y: Kontrast der „Ne
 - Emrahs Freigabe „Ok live nehmen“ nach Test-Link v56.
 - Vorher gelesen: live `JLL8…` v72 `1791500848-5d8d` (Rückweg). Veröffentlicht: Build 76175a3 → live **v73 `1791713521-d15c`**, Fähigkeiten db, sample, downloads übernommen.
 - Damit live: alles bis einschließlich Kapitel-Arbeiten (Rückmeldung 5) und Aufräumrunde (1–4, 6, 7).
+
+## 11.10.2026 – Fehler „kaputter Beispielsatz“ (Emrahs Foto, Karte „rage“)
+- Ursache: Zwei Karten aus der alten App (`rage` 24.09., `decline` 23.09., Quelle `lookup`) haben als `ex` den eingefangenen Bildschirmtext (englischer Satz + deutsche Übersetzung + Erklärung ohne Leerzeichen + Knopf „+“), z. B. „… in Europeeskalierende Kriege … ongoing.+“. Gefunden per Lesezugriff auf `vocab/rage` (live v73); alle 192 Karten geprüft, nur diese zwei betroffen. Keine Daten verändert.
+- Fix (ccf7559): `hasGapPlaceholder` (`src/domain/srs/context.ts`) erkennt Texte, die auf „.+“ enden, wie Lückensätze: kein Ursprungssatz, Ersatz aus sauberem KI-Beispiel (`xEx`) oder Kollokationssatz, Dokument bleibt unverändert; neue Karten werden so nicht mehr gespeichert. Test in `tests/unit/aufraeumWoerter.test.ts`.
+- Tests: Unit 5226 grün; E2E Wörter (introCard, trainer*, wortschatz) 46 grün; check:platform Freigabe.
+- Test-Link `AXHkh6…` Version 57 `1791717677-ecea` (Rückweg v56 `1791693550-12d3`). Live unverändert v73 `1791713521-d15c`, wartet auf „Ja live nehmen“.
