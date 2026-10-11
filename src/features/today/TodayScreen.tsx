@@ -12,6 +12,7 @@ import { Icon } from '../../ui/Icon';
 import { DayRing, dutyFills } from '../../ui/DayRing';
 import { noteDayOpen } from './dayMoment';
 import { topicName } from '../grammar/topicUi';
+import type { GrammarDay } from '../../domain/plan/types';
 import { ExtraRow } from './ExtraRow';
 import { Skeleton } from '../../ui/Skeleton';
 import { DURATION, EASE_OUT } from '../../ui/motion';
@@ -159,8 +160,12 @@ function useStartUnit(view: TodayView): () => void {
 }
 
 /** Titel der Tageskarte: der nächste Schritt. Das Grammatikthema kommt nur aus dem eingefrorenen `u.gt` (§2.3), nie aus einer Neuberechnung. */
-function nextTitle(now: CardRow | null, intro: string | null, t: T, lang: Lang): string {
+function nextTitle(now: CardRow | null, gt: GrammarDay | null, t: T, lang: Lang): string {
   if (!now) return t('hxTodayNext', { what: t('nbHeuteBlock_review') });
+  const intro = gt?.intro ?? null;
+  // Kapitel-Arbeit (K5): Folgt der Grammatikschritt einem Kapitel (`u.gt.ch`), heißt er „Kapitel n · Thema“ wie im Lernen-Reiter.
+  const head = intro ?? gt?.topics[0] ?? null;
+  if (now.kind === 'grammar' && gt?.ch && head) return t('hxTodayNext', { what: t('pxKNext', { n: gt.ch, topic: topicName(head, lang) }) });
   if (now.kind === 'grammar' && intro) return t('hxTodayNextGrammarNew', { topic: topicName(intro, lang) });
   return t('hxTodayNext', { what: now.name });
 }
@@ -172,7 +177,7 @@ function UnitCard({ view, rows, minLeft, fixNone }: { view: TodayView; rows: Car
   const total = view.duties.total;
   const now = rows.find((r) => r.state === 'now') ?? null;
   const start = useStartUnit(view);
-  const title = nextTitle(now, view.plan?.u?.gt?.intro ?? null, t, lang);
+  const title = nextTitle(now, view.plan?.u?.gt ?? null, t, lang);
   return (
     <section
       className="lx-card flex flex-col gap-4 p-[1.125rem] sm:p-6"

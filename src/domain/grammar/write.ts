@@ -4,6 +4,7 @@ import type { GrammarAnswer } from '../learn/types';
 import { patPush, patsOf, type PatEntry } from '../metrics/pattern';
 import { guessOptions } from './check';
 import { introDay } from './path';
+import { nextTt, readTt } from './topicTest';
 import { patternsOf } from './patterns';
 import { bktStep, displayP, nextDue, p0Of } from './bkt';
 import type { NewRepair } from '../repair/repair';
@@ -86,6 +87,8 @@ function patchFor(cur: Doc, a: GrammarAnswer): { patch: Doc; overflow?: NewRepai
   // Ein früher bestandener Vortest bleibt bestanden (path.ts liest `vt.ok`); ein späterer Versuch überschreibt ihn nie.
   const oldVt = cur.vt && typeof cur.vt === 'object' && !Array.isArray(cur.vt) ? (cur.vt as Doc) : null;
   if (!claude && a.vt && oldVt?.ok !== true) patch.vt = { d: a.day, ok: a.vt.ok, pats: a.vt.pats.slice(0, 6) };
+  // Themen-Test (K4): Ergebnis mit der letzten Antwort; `ok` bleibt bestanden, `k` zählt die Versuche, ein neuer Versuch löscht „trotzdem weiter“ (`s`).
+  if (!claude && a.tt) patch.tt = nextTt(readTt(cur), { day: a.day, c: a.tt.c, n: a.tt.n });
   if (!claude && a.vt?.ok && a.vt.pats.length) {
     // Bestandener Vortest (§4.7): p = max(p, 0,6), aber nur, wenn damit alle Muster des Themas getestet sind.
     const all = patternsOf(topic)?.patterns.map((p) => p.id) ?? [];

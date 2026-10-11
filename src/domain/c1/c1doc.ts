@@ -7,7 +7,8 @@ import { jsonBytes } from '../monthDoc';
 
 // Das Dokument `app/c1` (Lernplattform 3.0 §4.8, P31): Einstufung, C1-Checks, Kapitelprüfungen, Produktionsmengen und gemeldete Aufgaben.
 // Regeln: nur ergänzend, nie gelöscht, nie in ein ungültiges Dokument, nur bei Änderung, Lesen und Schreiben in EINEM Schritt (`writer.transform`).
-// Der Kapitelstand steht hier NICHT (er wird aus den Mustern abgeleitet, `state.ts`). Höchstwerte sichern die Größe (< 30 KB) auf Dauer.
+// Der Kapitelstand steht hier NICHT (er wird aus den Mustern abgeleitet, `state.ts`); nur die WAHL des Kapitels (`ch`, Kapitel-Arbeiten 11.10.2026)
+// und ihr Verlauf (`chh`, ≤ 20) stehen hier. Höchstwerte sichern die Größe (< 30 KB) auf Dauer.
 
 export const C1_PATH = 'app/c1';
 
@@ -18,6 +19,8 @@ export const C1_LIMITS = {
   bad: 300,
   /** Einstufung: beantwortete Aufgaben (Paare Kennung/Ergebnis). */
   placeIt: 22,
+  /** Verlauf der Kapitelwahl (`chh`). */
+  chh: 20,
   /** Dokument insgesamt (Bytes, UTF-8). */
   maxBytes: 30 * 1024,
   /** Einträge von `prod`, die älter sind, werden zu Wochensummen verdichtet. */
@@ -42,6 +45,9 @@ export type C1Gate = { d: string; ch: number; g: [number, number]; w: [number, n
 /** `id` = Kennung des Textes (`out/<Monat>`-Eintrag; steht sie in `bad`, zählt der Eintrag nicht); `u: true` = unsicher (Nachzählung weicht stark ab oder Stelle gemeldet): zählt nie für „erfüllt“. Beide additiv. */
 export type C1Prod = { d: string; s: 'mail' | 'clinic' | 'talk'; w: number; e: number; wk?: true; id?: string; u?: true };
 
+/** Gewähltes Kapitel (Kapitel-Arbeiten, 11.10.2026): `n` = Nummer 1–7, `d` = Lerntag der Wahl. */
+export type C1Choice = { n: number; d: string };
+
 export type C1Doc = {
   v: 1;
   place?: C1Place;
@@ -49,6 +55,10 @@ export type C1Doc = {
   gates: C1Gate[];
   prod: C1Prod[];
   bad: string[];
+  /** Gewähltes Kapitel (nur ergänzend; fehlt = noch nie gewählt, dann gilt das abgeleitete Kapitel). */
+  ch?: C1Choice;
+  /** Verlauf der Wahl `[n, Lerntag]`, älteste zuerst, ≤ 20. */
+  chh?: Array<[number, string]>;
 };
 
 type Raw = Record<string, unknown>;
@@ -74,7 +84,46 @@ export function readC1(raw: unknown): C1Doc {
   out.gates = structuredClone(arr<C1Gate>(raw.gates));
   out.prod = structuredClone(arr<C1Prod>(raw.prod));
   out.bad = arr<string>(raw.bad).filter((x) => typeof x === 'string');
+  const ch = readChoice(raw.ch);
+  if (ch) out.ch = ch;
+  const chh = arr<unknown>(raw.chh).filter((e): e is [number, string] => Array.isArray(e) && isChapterNo(e[0]) && isDay(e[1]));
+  if (chh.length) out.chh = chh.map((e) => [e[0], e[1]]);
   return out;
+}
+
+const DAY_RE = /^\d{4}-\d{2}-\d{2}$/;
+const isDay = (v: unknown): v is string => typeof v === 'string' && DAY_RE.test(v);
+const isChapterNo = (v: unknown): v is number => typeof v === 'number' && Number.isInteger(v) && v >= 1 && v <= 7;
+
+/** Gewähltes Kapitel tolerant lesen: nur `{n: 1–7, d: Lerntag}`, sonst `null`. */
+export function readChoice(v: unknown): C1Choice | null {
+  if (!isObj(v) || !isChapterNo(v.n) || !isDay(v.d)) return null;
+  return { n: v.n, d: v.d };
+}
+
+/** Gewähltes Kapitel aus dem Roh-Dokument `app/c1` (unlesbares Dokument: `null`). */
+export const chosenChapterOf = (raw: unknown): C1Choice | null => (isObj(raw) && c1Readable(raw) ? readChoice(raw.ch) : null);
+
+/**
+ * Hat das C1-Programm begonnen? Früher reichte „`app/c1` ist da“. Seit der Kapitelwahl kann das Dokument nur `ch`/`chh` tragen: das zählt NICHT
+ * (die erste Wahl darf keinen C1-Check-Tag auslösen, K0). Ohne `ch`/`chh` gilt wie bisher „Dokument da = begonnen“; mit Wahl zählt nur Einstufung,
+ * Check, Kapitelprüfung, Produktion oder gemeldete Aufgabe.
+ */
+export function programStartedOf(raw: unknown): boolean {
+  if (!isObj(raw)) return false;
+  if (!c1Readable(raw)) return true;
+  const d = readC1(raw);
+  // Ohne Kapitelwahl gilt wie bisher: das Dokument ist da, also hat das Programm begonnen.
+  if (!d.ch && !d.chh) return true;
+  return !!d.place || d.checks.length > 0 || d.gates.length > 0 || d.prod.length > 0 || d.bad.length > 0;
+}
+
+/** Kapitel wählen (rein): `ch` setzen und an `chh` anhängen (≤ 20, die ältesten fallen weg). `null`, wenn dasselbe Kapitel schon gewählt ist. */
+export function chooseChapter(doc: C1Doc, n: number, day: string): C1Doc | null {
+  if (!isChapterNo(n) || !isDay(day)) return null;
+  if (doc.ch?.n === n) return null;
+  const chh: Array<[number, string]> = [...(doc.chh ?? []), [n, day]];
+  return { ...doc, ch: { n, d: day }, chh: chh.slice(-C1_LIMITS.chh) };
 }
 
 /** Montag der Woche eines Tagesschlüssels. */
@@ -126,7 +175,7 @@ export function compactC1(doc: C1Doc, today: string): C1Doc {
   return out;
 }
 
-const FIELDS = ['place', 'checks', 'gates', 'prod', 'bad'] as const;
+const FIELDS = ['place', 'checks', 'gates', 'prod', 'bad', 'ch', 'chh'] as const;
 
 /**
  * Schreibvorgang für `writer.transform('app/c1', …)` aus dem frischen Stand. `change` bekommt eine Kopie des gelesenen Dokuments und liefert das

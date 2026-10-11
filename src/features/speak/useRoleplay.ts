@@ -18,6 +18,7 @@ import { turnAnalysisV3 } from '../../prompts/turnAnalysisV3';
 import { repairCheck } from '../../prompts/repairCheck';
 import { flags } from '../../app/flags';
 import { useLive } from '../../data/live';
+import { chosenNow, useChosenChapter } from '../c1/chosen';
 import { addProd } from '../../domain/c1/prod';
 import { chapterTalk, retryTarget, talkProd, type ChapterTalk } from '../../domain/speak/chapterTalk';
 import { repairNorm } from '../../domain/repair/repair';
@@ -43,10 +44,10 @@ import { patternHints } from '../patterns/store';
 const EMPTY_DOCS = new Map<string, Readonly<Record<string, unknown>>>();
 
 /** Kapitel, Musterliste und Kapitelziel (LP3 P51) aus den Live-Daten; `null` bei ausgeschaltetem Schalter oder ohne Kapitel. Szenenstart und Gespräch rechnen gleich. */
-export function readChapterTalk(sceneId: string, docs: ReadonlyMap<string, Readonly<Record<string, unknown>>> | undefined, today: string, nowMs: number): ChapterTalk | null {
+export function readChapterTalk(sceneId: string, docs: ReadonlyMap<string, Readonly<Record<string, unknown>>> | undefined, today: string, nowMs: number, chosen: number | null = chosenNow()): ChapterTalk | null {
   // Ohne Kapitelprogramm (R3 „Dein Weg“ aus) gibt es kein aktuelles Kapitel, also weder Musterliste noch Ziel.
   if (!flags.tutor.talk || !flags.program) return null;
-  return chapterTalk({ docs: docs ?? EMPTY_DOCS, today, nowMs, sceneId });
+  return chapterTalk({ docs: docs ?? EMPTY_DOCS, today, nowMs, sceneId, chosen });
 }
 
 /** Dasselbe als Hook für den Szenenstart (rechnet nur bei geänderten Daten neu). */
@@ -54,7 +55,8 @@ export function useChapterTalk(sceneId: string | null): ChapterTalk | null {
   const docs = useLive((s) => s.collections.grammar);
   const today = useClock((s) => s.today);
   const nowMs = useClock((s) => s.now);
-  return useMemo(() => (sceneId ? readChapterTalk(sceneId, docs, today, nowMs) : null), [sceneId, docs, today, nowMs]);
+  const chosen = useChosenChapter();
+  return useMemo(() => (sceneId ? readChapterTalk(sceneId, docs, today, nowMs, chosen) : null), [sceneId, docs, today, nowMs, chosen]);
 }
 
 /** „Sag's nochmal“ (LP3 P51) je Zug: Versuche, Ergebnis von repair-check@1, Notiz. `ok` schließt die Stelle (keine weitere Buchung). */

@@ -373,11 +373,12 @@ test('Neues Thema: drei Karten vor der ersten Aufgabe (Alltag mit Verständnisfr
 });
 
 // Lernplattform 2.0 P7 (§2.4): Bremse aktiv → der Hauptknopf startet Fehlersätze, die Zahl auf dem Knopf ist die Zahl der Sätze der Runde.
+// Seit der Kapitel-Arbeit (Schalter `chapterRun`) gibt es im Kapitel keine Bremse mehr; der alte Weg gilt nur noch mit Schalter aus.
 test('P7 Grammatik-Reiter: bei aktiver Bremse startet der Hauptknopf die Fehlersätze, Zahl = Länge der Runde, eine Zeile „n fällig · heute m“', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   const due = Date.parse('2026-09-19T09:00:00+02:00');
   const errors = Array.from({ length: 12 }, (_, i) => ({ q: `Wrong sentence number ${i} here.`, given: `Wrong sentence number ${i} here.`, ans: `Right sentence number ${i} here.`, t: due - 5 * 86_400_000, box: 0, due, done: false }));
-  const { errors: errs } = await boot(page, { migrated: true, fake: { patch: { 'grammar/passive': { id: 'passive', p: 0.5, n: 10, c: 5, last: due, hist: [], recent: [1, 0, 1], seen: [], seenText: [], errors } } } });
+  const { errors: errs } = await boot(page, { migrated: true, localStorage: { 'lx:flags': JSON.stringify({ chapterRun: false }) }, fake: { patch: { 'grammar/passive': { id: 'passive', p: 0.5, n: 10, c: 5, last: due, hist: [], recent: [1, 0, 1], seen: [], seenText: [], errors } } } });
   await screen(page, 'today');
   await openTab(page, 'learn');
   const main = page.getByTestId('hub-next-start');

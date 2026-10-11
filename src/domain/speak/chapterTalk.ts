@@ -36,8 +36,8 @@ const introduced = (e: { i?: string; n?: number } | undefined): boolean => !!e &
  * zeigen deshalb dasselbe). Ohne aktuelles Kapitel oder ohne Muster: `null` (dann gibt es weder `pat` noch ein Ziel). Ins Ziel kommen nur
  * eingeführte Muster (geübt, nicht neu): mindestens zwei → 2 × A, 1 × B (per Hash je Szene); genau eins → 2 × A; keins → kein Ziel.
  */
-export function chapterTalk(i: { docs: ReadonlyMap<string, Doc>; today: string; nowMs?: number; sceneId: string }): ChapterTalk | null {
-  const st = chapterState({ docs: i.docs, today: i.today, ...(i.nowMs !== undefined ? { nowMs: i.nowMs } : {}) });
+export function chapterTalk(i: { docs: ReadonlyMap<string, Doc>; today: string; nowMs?: number; sceneId: string; chosen?: number | null }): ChapterTalk | null {
+  const st = chapterState({ docs: i.docs, today: i.today, ...(i.nowMs !== undefined ? { nowMs: i.nowMs } : {}), chosen: i.chosen ?? null });
   const ch = programChapters()[st.current];
   if (!ch) return null;
   const pats: TalkPat[] = [];

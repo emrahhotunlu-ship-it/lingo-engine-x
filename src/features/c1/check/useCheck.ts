@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { flags } from '../../../app/flags';
 import { useClock } from '../../../app/clock';
 import { useLive } from '../../../data/live';
-import { readC1 } from '../../../domain/c1/c1doc';
+import { programStartedOf, readC1 } from '../../../domain/c1/c1doc';
 import { checkOffered } from '../../../domain/c1/check/day';
 import { formFor } from '../../../domain/c1/check/select';
 import { useInputProfile } from '../../../platform/input';
@@ -17,7 +17,8 @@ export function useCheckCard(): CheckCard {
   const c1Raw = useLive((s) => s.docs['app/c1']);
   const profile = useInputProfile();
   return useMemo(() => {
-    if (!flags.c1check || !c1Raw) return null;
+    // Nur die Kapitelwahl (`ch`) startet das Programm nicht (Kapitel-Arbeiten K0): kein Check-Angebot allein deswegen.
+    if (!flags.c1check || !c1Raw || !programStartedOf(c1Raw)) return null;
     const checks = readC1(c1Raw).checks;
     const touch = profile === 'touch';
     const offered = checkOffered({ day: today, programStarted: true, checks, formAvailable: formFor(touch ? 'touch' : 'desk', checks) !== null });

@@ -4,6 +4,7 @@ import { useAiAvailable } from '../../ai/scope';
 import { takeTutorCall } from '../../ai/tutorBudget';
 import { useAsk } from '../../ai/useAsk';
 import { useLive } from '../../data/live';
+import { useChosenChapter } from '../c1/chosen';
 import { isoWeek } from '../../domain/date';
 import { patternById } from '../../domain/grammar/patterns';
 import { chapterState } from '../../domain/c1/state';
@@ -35,6 +36,7 @@ export function WritingStudio({ onClose }: { onClose: () => void }) {
   const nowMs = useClock((s) => s.now);
   const profile = useLive((s) => s.docs['app/profile']);
   const grammar = useLive((s) => s.collections.grammar) ?? EMPTY;
+  const chosen = useChosenChapter();
   const [shift, setShift] = useState(0);
   const [text, setText] = useState('');
   const [pasted, setPasted] = useState(false);
@@ -45,9 +47,9 @@ export function WritingStudio({ onClose }: { onClose: () => void }) {
   const busy = isBusy(ask.phase);
 
   const chapter = useMemo(() => {
-    const cur = chapterState({ docs: grammar, today, nowMs }).current;
+    const cur = chapterState({ docs: grammar, today, nowMs, chosen }).current;
     return cur >= 0 ? cur + 1 : null;
-  }, [grammar, today, nowMs]);
+  }, [grammar, today, nowMs, chosen]);
   const ctx2 = readCtx2(profile);
   const situation = useMemo(() => pickSituation({ chapter, sit: ctx2?.sit ?? [], week: isoWeek(today), shift }), [chapter, ctx2?.sit, today, shift]);
   const guard = mailGuard(text);

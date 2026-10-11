@@ -1,3 +1,4 @@
+import { effectiveChapter } from '../c1/effective';
 import { programChapters } from '../c1/chapters';
 import { chapterState } from '../c1/state';
 import { addDays, daysBetween, dayKey, isDayKey, isoWeek } from '../date';
@@ -172,9 +173,10 @@ export type FocusOption = { id: 'confusion' | 'weak'; pat: string; /** Das Paar 
  * Bis zu zwei Vorschläge: A = das häufigste Verwechslungspaar (sein erstes Muster), sonst das schwächste Muster des aktuellen Kapitels;
  * B = das schwächste noch nicht sichere Muster des aktuellen Kapitels (nicht dasselbe wie A). Nur Muster, die schon eingeführt sind.
  */
-export function focusOptions(i: { grammar: ReadonlyMap<string, Doc>; today: string; confusion: Pick<Confusion, 'pairs'> | null }): FocusOption[] {
+export function focusOptions(i: { grammar: ReadonlyMap<string, Doc>; today: string; confusion: Pick<Confusion, 'pairs'> | null; chosen?: number | null }): FocusOption[] {
   const infos = patInfos(i.grammar).filter((p) => !!p.entry && (p.entry.i !== undefined || (p.entry.n ?? 0) > 0));
-  const cur = currentChapter(infos, i.today);
+  // Kapitel-Arbeit (K1): ein gewähltes Kapitel gilt vor der Ableitung.
+  const cur = effectiveChapter(i.chosen, currentChapter(infos, i.today));
   const stateNo = (p: (typeof infos)[number]): number => patternStateNo(patternState(p.entry, i.today));
   const rate = (p: (typeof infos)[number]): number => {
     const n = p.entry?.n ?? 0;
@@ -265,10 +267,12 @@ export function weekly3(i: {
   profile: Doc;
   confusion: Confusion | null;
   fixed: number;
+  /** Kapitel-Arbeit (K1): gewähltes Kapitel (1 bis 7), sonst die Ableitung. */
+  chosen?: number | null;
 }): Weekly3 {
   const week = lastWeekOf(i.today);
   const fest = newFestWords({ days: week.days, vocab: i.vocab, chunk: i.chunk });
-  const state = chapterState({ docs: i.grammar, today: i.today, nowMs: i.nowMs });
+  const state = chapterState({ docs: i.grammar, today: i.today, nowMs: i.nowMs, chosen: i.chosen ?? null });
   const cur = state.current;
   const chapter = cur >= 0 ? (programChapters()[cur] ?? null) : null;
   const practiced = practicedPatterns(i.grammar, week.days);
@@ -292,7 +296,7 @@ export function weekly3(i: {
       fest: fest.map((f) => f.word),
       tricky,
     }),
-    options: focusOptions({ grammar: i.grammar, today: i.today, confusion: i.confusion }),
+    options: focusOptions({ grammar: i.grammar, today: i.today, confusion: i.confusion, chosen: i.chosen ?? null }),
     use: chapter ? weeklyUse(cur, isoWeek(i.today)) : null,
     chapter: chapter ? { index: cur, n: chapter.n } : null,
   };

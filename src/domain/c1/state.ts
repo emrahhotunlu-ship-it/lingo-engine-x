@@ -3,6 +3,7 @@ import { patternsOf } from '../grammar/patterns';
 import { currentChapter, type PatInfo } from '../grammar/slotPlan';
 import { patternState, patternStateNo, patsOf, type PatEntry } from '../metrics/pattern';
 import { programChapters, topicExists } from './chapters';
+import { effectiveChapter } from './effective';
 
 // Kapitelstand des C1-Programms (Lernplattform 3.0 §4.1/P31). REIN ABGELEITET aus `grammar/<thema>.pats`: gespeichert wird er nie
 // (Datenregeln: eine Quelle je Zahl). „Muster sicher n/m“ rechnet dieselbe Zustandsfunktion wie der Lernpfad (`features/grammar/chapters.ts`),
@@ -47,8 +48,10 @@ export type ChapterProgress = {
 
 export type ChapterStateResult = {
   chapters: ChapterProgress[];
-  /** Index (0-basiert) des aktuellen Kapitels, `-1` ohne Programm. */
+  /** Index (0-basiert) des aktuellen Kapitels, `-1` ohne Programm. Mit Wahl (`chosen`) ist es das gewählte Kapitel (`effectiveChapter`). */
   current: number;
+  /** `current` kommt aus Emrahs Wahl (`app/c1.ch`), nicht aus der Ableitung. */
+  chosen: boolean;
 };
 
 /** Wie `chapterNodes`: Zustand Sicher/Fest, aber ohne ein einziges sicheres Muster gilt ein Thema mit Mustern nie als sicher. */
@@ -64,7 +67,7 @@ const isIntroduced = (e: PatEntry | undefined): boolean => !!e && (e.i !== undef
  * Kapitelstand aus den Grammatik-Dokumenten (`grammar/<thema>`, nach Thema). Rein, ohne Uhr: `today` und `nowMs` kommen vom Aufrufer.
  * Ohne `nowMs` gilt ein Thema als sicher, wenn alle seine Muster sicher sind.
  */
-export function chapterState(i: { docs: ReadonlyMap<string, Doc>; today: string; nowMs?: number }): ChapterStateResult {
+export function chapterState(i: { docs: ReadonlyMap<string, Doc>; today: string; nowMs?: number; chosen?: number | null }): ChapterStateResult {
   const program = programChapters();
   const infos: PatInfo[] = [];
   const chapters = program.map((ch, idx): ChapterProgress => {
@@ -97,8 +100,11 @@ export function chapterState(i: { docs: ReadonlyMap<string, Doc>; today: string;
       allSafe: patTotal > 0 && patSafe === patTotal,
     };
   });
-  if (!chapters.length) return { chapters, current: -1 };
-  const current = Math.min(chapters.length - 1, Math.max(0, currentChapter(infos, i.today)));
-  for (const [idx, c] of chapters.entries()) c.status = c.allSafe ? 'done' : idx === current ? 'current' : 'open';
-  return { chapters, current };
+  if (!chapters.length) return { chapters, current: -1, chosen: false };
+  const derived = Math.min(chapters.length - 1, Math.max(0, currentChapter(infos, i.today)));
+  const current = effectiveChapter(i.chosen, derived, chapters.length);
+  const chosen = current !== derived || (typeof i.chosen === 'number' && i.chosen - 1 === current);
+  // Ein gewähltes Kapitel ist immer „hier“, auch wenn es schon sicher ist (Emrah will es wiederholen); sonst gilt die alte Regel.
+  for (const [idx, c] of chapters.entries()) c.status = idx === current && (chosen || !c.allSafe) ? 'current' : c.allSafe ? 'done' : 'open';
+  return { chapters, current, chosen };
 }

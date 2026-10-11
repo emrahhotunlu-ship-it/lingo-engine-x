@@ -16,7 +16,7 @@ import type { StoredPlan } from '../../domain/plan/types';
 import { repairsDoneToday, repairsDutyToday, pickDailyRepairs } from '../../domain/repair/daily';
 import { buildTrainCards, fehlersaetzeDue, festUnits, nextGoal } from '../../domain/metrics';
 import { checkPlanned, step3Format } from '../../domain/c1/checkSchedule';
-import { flags, kindEnabled } from '../../app/flags';
+import { chapterRunOn, flags, kindEnabled } from '../../app/flags';
 import { docTotal } from '../../domain/capacity/docGuard';
 import { freezeGrammarDay } from '../../domain/grammar/path';
 import { patternsOf } from '../../domain/grammar/patterns';
@@ -41,7 +41,8 @@ import { normGoalMin } from '../../domain/progress/settings';
 import { historyPatch, historySnapshot } from '../../domain/progress/history';
 import { vocabGoal } from '../../domain/vocab/goal';
 import { recordProfileFields } from '../progress/persist';
-import { readC1 } from '../../domain/c1/c1doc';
+import { chosenChapterOf, programStartedOf, readC1 } from '../../domain/c1/c1doc';
+import { chapterPlanInput } from '../../domain/c1/cursor';
 import { nextDeskForm } from '../../domain/c1/check/select';
 
 // Tagesplan = Tageseinheit (plan.md §1.5, N10/N12): einmal je Lerntag festgelegt und in
@@ -235,12 +236,16 @@ export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
   const grammarDocs = live.collections.grammar ?? new Map();
   const fixDue = fehlersaetzeDue({ grammarDocs, repairDoc: live.docs['app/repair'], nowMs, today });
   // Das Grammatikthema des Tages und die Musterzustände vom Morgen werden mit dem Plan eingefroren (Lernplattform 2.0 §2.3, für jeden neuen Plan).
-  const { gt, ps } = freezeGrammarDay({ docs: grammarDocs, today, nowMs, introPlanOf: INTRO_PLAN_OF, seed: today });
+  // Kapitel-Arbeit (K3): Mit dem Schalter `chapterRun` folgt der Grammatikschritt dem Kapitel (gewählt in `app/c1.ch`, sonst abgeleitet).
+  const c1raw = (live.docs as Record<string, Readonly<Record<string, unknown>> | null | undefined>)['app/c1'] ?? null;
+  const chapter = chapterRunOn() ? chapterPlanInput({ docs: grammarDocs, today, nowMs, chosen: chosenChapterOf(c1raw)?.n ?? null }) : null;
+  const { gt, ps } = freezeGrammarDay({ docs: grammarDocs, today, nowMs, introPlanOf: INTRO_PLAN_OF, seed: today, chapter });
   // Plan 3.0 (P23): Format von Schritt 3 nach Wochentag, Check-Tag und nächstes Ziel werden jetzt festgelegt und mit dem Plan eingefroren.
   const step3 = step3Format(today, { kindOn: kindEnabled, tempoOn: flags.tempo });
-  // `app/c1` wird erst mit dem Programm (P31) abonniert; bis dahin fehlt das Dokument und der Check-Tag bleibt aus.
-  const c1doc = (live.docs as Record<string, Readonly<Record<string, unknown>> | null | undefined>)['app/c1'] ?? null;
-  const c1 = checkPlanned(today, draft.shape, { programStarted: !!c1doc, lastCheck: lastCheckDay(c1doc), formAvailable: flags.c1check && nextDeskForm(readC1(c1doc).checks) !== null }) ? ('check' as const) : undefined;
+  // `app/c1` wird erst mit dem Programm (P31) abonniert; bis dahin fehlt das Dokument und der Check-Tag bleibt aus. Ein Dokument, das nur die
+  // Kapitelwahl trägt (`ch`/`chh`), zählt nicht als Programmstart (Kapitel-Arbeiten K0): die erste Wahl löst keinen Check-Tag aus.
+  const c1doc = c1raw;
+  const c1 = checkPlanned(today, draft.shape, { programStarted: programStartedOf(c1doc), lastCheck: lastCheckDay(c1doc), formAvailable: flags.c1check && nextDeskForm(readC1(c1doc).checks) !== null }) ? ('check' as const) : undefined;
   const goal = fest ? nextGoal({ festUnits: fest.units, vocabFest: fest.vocab, history: profile?.history, today }) : null;
   return buildUnitStored({
     day: today,

@@ -236,7 +236,7 @@ export type RoundInput = {
   /** Höchstzahl der Fehlersätze (aus dem Plan, `errs`); Standard `ERRORS_PER_ROUND`. */
   errorsMax?: number;
   /** Eingefrorenes Grammatikthema des Tages (`u.gt`, §2.3): hat Vorrang vor `rankTopics` und `introTopic`. */
-  gt?: { intro: string | null; pats: string[]; topics: string[] } | null;
+  gt?: { intro: string | null; pats: string[]; topics: string[]; ch?: number } | null;
   /** Einführung vorn: die ersten 4 Plätze (nach den Fehlersätzen) gehören diesen Mustern, ungemischt. */
   introBlock?: { topic: string; pats: string[] } | null;
   /** Eingabeprofil der Runde (einmal eingefroren): `touch` stellt nie einen ganzen Satz; `correct` wird zu `find`, wenn die Fehlerstelle eindeutig ist. */
@@ -247,6 +247,8 @@ export type RoundInput = {
   exclude?: ReadonlySet<string>;
   /** c1x (Lernplattform 3.0 §3.4): löst einen Fehlersatz mit `cid` zur Aufgabe im selben Baustein auf (`features/c1x/resolve.ts`); `null` = der Fehlersatz-Text. */
   c1?: (topic: string, e: ErrorEntry) => GrammarTask | null;
+  /** Kapitel-Arbeit (K3): Themen des gewählten Kapitels. Ihre fälligen Fehlersätze stehen vor denen anderer Themen (die Höchstzahl bleibt). */
+  chapter?: readonly string[] | null;
   /** Schritt 2 über `slotPlan()` (P15, Schalter `flags.slotPlan`): die Plätze nach Prioritätstabelle; `focus` = Wochenfokus (Muster) oder `null`. Nur Pflicht und Extra, nie in der Einführung. */
   slotPlan?: { focus: string | null } | null;
 };
@@ -421,6 +423,30 @@ export function selectVortest(i: Pick2 & { topic: string; pats: readonly string[
 }
 
 /**
+ * Themen-Test (Kapitel-Arbeit K4): `n` Aufgaben reihum über die Muster des Themas, bevorzugt getippte Formen (Lücke, Schlüsselwort, Umformen),
+ * erst ungesehene, dann auch schon gesehene. Ohne Musterdatei: beliebige Aufgaben des Themas. Ohne Hilfe gestellt; Bewertung in `topicTest.ts`.
+ */
+export function selectTopicTest(i: Pick2 & { topic: string; pats: readonly string[]; n: number }): GrammarTask[] {
+  const pk = picker({ ...i, mode: 'duty', introBlock: { topic: i.topic, pats: [...i.pats] } });
+  const out: GrammarTask[] = [];
+  const pats = i.pats.length ? i.pats : [null];
+  const forms: readonly (readonly GrammarTaskType[])[] = [['gap', 'kwt', 'transform'], ['kwt', 'transform', 'gap'], ['transform', 'gap', 'find', 'kwt']];
+  for (let k = 0; k < i.n; k++) {
+    const pat = pats[k % pats.length] ?? null;
+    const prefer = [...(forms[k % forms.length] ?? []), 'find', 'correct', 'mc', 'meaning'] as GrammarTaskType[];
+    const one = pat ? [pat] : null;
+    const all = i.pats.length ? [...i.pats] : null;
+    const t =
+      pk.take(pk.fresh({ topic: i.topic, prefer, pats: one })) ??
+      pk.take(pk.fresh({ topic: i.topic, prefer, pats: all })) ??
+      pk.take(pk.fresh({ topic: i.topic, prefer, pats: one, allowSeen: true })) ??
+      pk.take(pk.fresh({ topic: i.topic, prefer, pats: all, allowSeen: true }));
+    if (t) out.push(t);
+  }
+  return out;
+}
+
+/**
  * Eine ungesehene Variante desselben Musters (gleiches Thema, gleiches Muster, bevorzugt gleiche Form) statt derselben Aufgabe
  * (Rundenende, §4.7). `null`, wenn es keine gibt oder die Aufgabe kein Muster hat.
  */
@@ -444,7 +470,10 @@ export function selectRound(i: RoundInput): GrammarTask[] {
 
   // 1. Fällige Fehler.
   const errors: GrammarTask[] = [];
-  const due = dueErrors(i.grammarDocs, i.nowMs, i.c1).filter((d) => (i.mode === 'topic' ? d.topic === i.topic : true));
+  const due0 = dueErrors(i.grammarDocs, i.nowMs, i.c1).filter((d) => (i.mode === 'topic' ? d.topic === i.topic : true));
+  const chSet = i.chapter?.length ? new Set(i.chapter) : null;
+  // Kapitel-Arbeit: Fehlersätze aus dem Kapitel zuerst, sonst unverändert (stabile Reihenfolge).
+  const due = chSet ? [...due0.filter((d) => chSet.has(d.topic)), ...due0.filter((d) => !chSet.has(d.topic))] : due0;
   const maxErr = i.mode === 'errors' ? i.size : Math.min(i.errorsMax ?? ERRORS_PER_ROUND, i.size);
   for (const d of due) {
     if (errors.length >= maxErr) break;
