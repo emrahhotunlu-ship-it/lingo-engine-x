@@ -64,6 +64,10 @@ export type SessionEndProps = SessionEndPropsAlt & {
   warning?: { text: string; retry: () => void } | null;
   /** „Noch 12 fällig · Noch eine Runde“. */
   more?: { label: string; run: () => void } | null;
+  /** Direkt unter der Überschrift (z. B. das Ergebnis des Themen-Tests), vor allem anderen. */
+  lead?: ReactNode;
+  /** Keine Zeile „a von b richtig“ unter der Überschrift (wenn die Überschrift die Zahl schon nennt). */
+  hideScore?: boolean;
 };
 
 export type GrowthView = {
@@ -215,6 +219,8 @@ function GrowthEnd({
   takeaways,
   right,
   total,
+  lead,
+  hideScore = false,
 }: SessionEndProps) {
   const { t } = useT();
   return (
@@ -230,12 +236,13 @@ function GrowthEnd({
         <h1 className="m-0 text-2xl leading-8 font-semibold tracking-tight text-balance">
           {title ?? t("nbShEndTitle")}
         </h1>
-        {total > 0 && (
+        {total > 0 && !hideScore && (
           <p className="lx-tnum lx-t-support m-0 text-muted">
             {t("nbShEndScore", { right, total })}
           </p>
         )}
       </div>
+      {lead}
       {growth && <GrowthBlock growth={growth} />}
       {items.length > 0 && (
         <div className="lx-card flex flex-col gap-1 p-4">

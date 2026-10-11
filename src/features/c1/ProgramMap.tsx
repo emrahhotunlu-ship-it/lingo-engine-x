@@ -11,6 +11,7 @@ import { topicName } from '../grammar/topicUi';
 import { ChapterSheet, TONE_KEY, topicTone } from './ChapterSheet';
 import { JourneyMap, StatusChip } from './journey/JourneyMap';
 import { useChosenChapter } from './chosen';
+import { chapterRunOn } from '../../app/flags';
 
 // Programmkarte „Dein Weg zu C1“ (Lernplattform 3.0 P32), im Grammatik-Reiter unter dem Titel (Slot `grammar.head`).
 // Darstellung seit R6 (P58): die C1-Reise (`journey/JourneyMap.tsx`). Handy: senkrechte Route mit 7 Stationen, darunter das Ziel des aktuellen
@@ -91,6 +92,8 @@ function Goal({ c, onOpen }: { c: ProgramChapter; onOpen: () => void }) {
 /** Laptop: Ziel und Themen des gewählten Kapitels unter der waagerechten Route. */
 function Detail({ c, p, onOpen }: { c: ProgramChapter; p: ChapterProgress; onOpen: () => void }) {
   const { t, lang } = useT();
+  // Kapitel-Modus: „Geschafft“ wie im Kapitelblatt (sicher oder Themen-Test bestanden).
+  const run = chapterRunOn() && p.ready;
   return (
     <div className="flex flex-col gap-3 rounded-[0.875rem] border border-line bg-surface-solid p-4" data-testid="program-detail" data-chapter={c.id}>
       <div className="flex flex-wrap items-center gap-2">
@@ -108,11 +111,11 @@ function Detail({ c, p, onOpen }: { c: ProgramChapter; p: ChapterProgress; onOpe
               data-testid="program-topic"
               data-topic={r.id}
               data-exists={r.exists ? 'true' : 'false'}
-              data-tone={topicTone(r)}
+              data-tone={topicTone(r, run)}
               className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-line px-3 text-sm"
             >
               <span>{name}</span>
-              <span className="text-muted">{r.exists ? t(TONE_KEY[topicTone(r)]) : t('pxChTopicSoon')}</span>
+              <span className="text-muted">{r.exists ? t(TONE_KEY[topicTone(r, run)]) : t('pxChTopicSoon')}</span>
             </li>
           );
         })}

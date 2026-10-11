@@ -55,6 +55,8 @@ export type GrammarItemProps = {
   area?: WordTapArea;
   /** Zusatz in der Statuszeile (z. B. „Deine Fehler“, „Kurztest 1/2“). */
   badge?: string | null;
+  /** Farbe des Zusatzes (`hint` = neutral-cyan, z. B. „Themen-Test“); Standard Bernstein. */
+  badgeTone?: 'near' | 'hint';
   /** Wochen-Check und Vortest (M10): ohne Tipp, ohne Platzhalter und ohne Zweitversuch – es wird gemessen, nicht geholfen. */
   noHelp?: boolean;
   /** Eingabeprofil der Runde (einmal eingefroren). Ohne Angabe das des Geräts. */
@@ -98,7 +100,7 @@ export function GrammarItem(props: GrammarItemProps) {
   return isC1Task(task) ? <C1Item {...props} task={task} /> : <LegacyGrammarItem {...props} />;
 }
 
-function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = null, noHelp = false, profile: profileProp, topicRound = false }: GrammarItemProps) {
+function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = null, badgeTone, noHelp = false, profile: profileProp, topicRound = false }: GrammarItemProps) {
   const { t, lang } = useT();
   const api = useHiddenInput();
   const now = useClock((s) => s.now);
@@ -627,7 +629,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     >
       <ExerciseShell
         meta={{ ex: `gr_${type}`, id: `${task.topic}|${task.key}`, kind: type }}
-        status={{ area: 'grammar', state, kindLabel, topic: learnLine.topic, pattern: learnLine.pattern, badge }}
+        status={{ area: 'grammar', state, kindLabel, topic: learnLine.topic, pattern: learnLine.pattern, badge, ...(badgeTone ? { badgeTone } : {}), noInfo: noHelp }}
         task={{ text: taskText, purpose: t(purposeKey) }}
         // UX-Prüfung W1/W4: keine Regelkarte vor dem Prüfen (verrät die Lösung) – weder am Handy noch rechts am Laptop; die Regel gibt es als Tipp.
         aid={null}

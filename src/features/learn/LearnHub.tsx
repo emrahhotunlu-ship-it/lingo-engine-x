@@ -20,14 +20,14 @@ import { useToday } from '../today/state';
 import { TabTitle } from '../system/Chrome';
 import { TopicSheet } from '../grammar/GrammarScreen';
 import { PathList } from '../grammar/PathList';
-import { startGrammar, topicTestReady } from '../grammar/session';
+import { startGrammar } from '../grammar/session';
 import { topicName } from '../grammar/topicUi';
 import { Slot } from '../../app/slots';
 import { chapterRunOn, flags } from '../../app/flags';
 import { programChapters } from '../../domain/c1/chapters';
 import type { ChapterCursor, TopicPhase } from '../../domain/c1/cursor';
 import type { MessageKey } from '../../i18n';
-import { startChapter, useChapterNow } from '../c1/chapterRun';
+import { chapterBtnKey, cursorPrep, startChapter, useChapterNow } from '../c1/chapterRun';
 import { Disclosure } from '../../ui/Disclosure';
 
 // Reiter „Grammatik“ (Gesamtkonzept 3.4, UX-Ziel Kap. 3.3): Weiter-Karte („Als Nächstes: Thema · n Min.“, ein Knopf),
@@ -62,7 +62,6 @@ function Row({ icon, title, sub, onClick, testId, badge }: { icon: ReactNode; ti
 /** Einstiege anderer Bereiche auf dem Platz `learn` ohne eigene Gruppe (z. B. „Lehrer-Feedback einfügen“): nichts geht verloren. */
 // Kapitel-Arbeit (K5): Text und Knopf der Weiter-Karte je Phase des Kapitel-Cursors.
 const K_LINE: Record<TopicPhase, MessageKey> = { intro: 'pxKNextIntro', practice: 'pxKNextPractice', test: 'pxKNextTest', done: 'pxKNextDone' };
-const K_BTN: Record<TopicPhase, MessageKey> = { intro: 'pxKBtnIntro', practice: 'pxKBtnPractice', test: 'pxKBtnTest', done: 'pxKBtnDone' };
 
 function ForeignRows() {
   const { t } = useT();
@@ -127,8 +126,7 @@ export function LearnHub() {
   const chapterNowRes = useChapterNow();
   const cursor: ChapterCursor | null = chapterRunOn() && program ? chapterNowRes.cursor : null;
   // Themen-Test in Vorbereitung (zu wenig Testaufgaben, dieselbe Auswahl wie beim Start): Der Knopf startet eine Übung, die Karte sagt das.
-  const testTopic = cursor?.phase === 'test' ? cursor.topic : null;
-  const prep = useMemo(() => (testTopic ? !topicTestReady(testTopic, docs) : false), [testTopic, docs]);
+  const prep = useMemo(() => cursorPrep(cursor, docs), [cursor, docs]);
 
   const startNext = () => {
     if (!next) return;
@@ -156,7 +154,7 @@ export function LearnHub() {
       {(cursor.phase !== 'done' || cursor.chapter + 1 < programChapters().length) && (
         <div>
           <Button variant="primary" iconAfter="arrowRight" onClick={() => startChapter(cursor.phase === 'done' ? cursor.chapter + 1 : cursor.chapter, api)} data-testid="hub-next-start" data-action={cursor.phase} data-prep={prep ? 'true' : undefined}>
-            {t(prep ? 'pxKBtnPractice' : K_BTN[cursor.phase])}
+            {t(chapterBtnKey(cursor, prep))}
           </Button>
         </div>
       )}

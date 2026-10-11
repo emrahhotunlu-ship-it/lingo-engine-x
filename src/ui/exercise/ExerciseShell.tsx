@@ -39,6 +39,10 @@ export type ShellStatus = {
   topic?: string | null;
   pattern?: string | null;
   badge?: string | null;
+  /** Farbe des Zusatzes: `near` (Bernstein, Standard: „deine Fehler“, „noch einmal“) oder `hint` (Cyan, neutral, z. B. „Themen-Test“). */
+  badgeTone?: 'near' | 'hint';
+  /** Ohne Hilfe (Themen-Test, Vortest, Messung): kein ⓘ mit Zweck und Muster – die Aufgabe selbst nennt den Hinweis. */
+  noInfo?: boolean;
 };
 export type ShellAction = { label: string; onClick: () => void; testId: string; disabled?: boolean; busy?: boolean; busyLabel?: string };
 export type ShellSecondary = { id: 'hint' | 'dontKnow' | 'noError' | 'skip' | 'replay' | 'reset' | 'noSound'; label: string; onClick: () => void; testId: string; disabled?: boolean };
@@ -293,17 +297,19 @@ export function ExerciseShell(props: ExerciseShellProps) {
       {/* UX-Prüfung W1: Kopf in EINER Zeile („●●○○ Lernt · Lücke“) mit ⓘ rechts; dahinter Zweck und Thema. */}
       <div data-slot="status" className="flex items-center justify-between gap-3">
         <ExerciseStatus {...status} />
-        <button
-          type="button"
-          className="-my-2 -mr-2 inline-flex size-11 flex-none items-center justify-center rounded-full text-subtle transition-colors hover:text-fg"
-          aria-label={t('exInfo')}
-          aria-expanded={info}
-          aria-controls={infoId}
-          onClick={() => setInfo((v) => !v)}
-          data-testid="purpose-info"
-        >
-          <Icon name="info" size={18} />
-        </button>
+        {!status.noInfo && (
+          <button
+            type="button"
+            className="-my-2 -mr-2 inline-flex size-11 flex-none items-center justify-center rounded-full text-subtle transition-colors hover:text-fg"
+            aria-label={t('exInfo')}
+            aria-expanded={info}
+            aria-controls={infoId}
+            onClick={() => setInfo((v) => !v)}
+            data-testid="purpose-info"
+          >
+            <Icon name="info" size={18} />
+          </button>
+        )}
       </div>
       <div ref={taskRef} data-slot="task" className="flex scroll-mt-4 flex-col gap-1">
         {info && (

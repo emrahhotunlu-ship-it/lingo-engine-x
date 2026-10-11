@@ -1,5 +1,5 @@
 import { CardStack } from '../../ui/CardStack';
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { leaveBack, useNav } from '../../app/nav';
 import { patternById } from '../../domain/grammar/patterns';
 import { patternState, type PatternState } from '../../domain/metrics/pattern';
@@ -19,6 +19,13 @@ import { topicName } from './topicUi';
 import { ensureGrammar } from './resume';
 import { TT_N, TT_PASS } from '../../domain/grammar/topicTest';
 import { skipTopicTest } from '../c1/skipTest';
+import { chapterBtnKey, cursorPrep, runCursor, startChapter } from '../c1/chapterRun';
+import { useChosenChapter } from '../c1/chosen';
+import { chapterNow, withTestOutcome } from '../../domain/c1/cursor';
+import { programChapters } from '../../domain/c1/chapters';
+import { chapterRunOn } from '../../app/flags';
+import { useClock } from '../../app/clock';
+import { useLive } from '../../data/live';
 import { cardsDue, commitGrammar, grammarProgress, inRepeat, inVortest, leaveGrammar, patternGrowth, reportGrammarDone, skipGrammar, startAfterIntro, touchGrammar, useGrammarSession, type TestState } from './session';
 
 // Grammatikrunde: eine Aufgabe zur Zeit, Wechsel als kurze Seitwärts-Überblendung. Esc verlässt
@@ -64,7 +71,7 @@ export function GrammarSessionScreen() {
   const vortest = inVortest(s);
   // Themen-Test (K4): die ersten Aufgaben sind der Test, ohne Hilfe.
   const inTest = s.status === 'running' && !!s.test && s.pos < s.test.n;
-  const badge = inTest && s.test ? t('pxKTestBadge', { n: s.pos + 1, total: s.test.n }) : vortest ? t('gxBadgeVortest', { n: s.pos + 1, total: s.intro?.vtN ?? 2 }) : inRepeat(s) ? t('nbLernenRepeatBadge') : task?.errorT !== null && task ? t('grReviewBadge') : null;
+  const badge = inTest && s.test ? t('pxKTestBadge') : vortest ? t('gxBadgeVortest', { n: s.pos + 1, total: s.intro?.vtN ?? 2 }) : inRepeat(s) ? t('nbLernenRepeatBadge') : task?.errorT !== null && task ? t('grReviewBadge') : null;
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="grammar-session" data-mode={s.mode} data-ctx={s.ctx} data-profile={s.profile}>
       <RoundTop onClose={leave} progress={grammarProgress(s)} ctx={s.ctx} duty="ch:gram" />
@@ -89,7 +96,7 @@ export function GrammarSessionScreen() {
           />
         ) : s.status === 'running' && task ? (
           <StepBoundary resetKey={`g-${s.step}`} scope="grammarSession" onSkip={skipGrammar}>
-            <GrammarItem task={task} ctx={s.ctx} day={s.day} onDone={commitGrammar} profile={s.profile} noHelp={vortest || inTest} topicRound={s.mode === 'topic' || (!!s.intro && s.intro.topic === task.topic && !!task.pat && s.intro.pats.includes(task.pat))} badge={badge} />
+            <GrammarItem task={task} ctx={s.ctx} day={s.day} onDone={commitGrammar} profile={s.profile} noHelp={vortest || inTest} badgeTone={inTest ? 'hint' : undefined} topicRound={s.mode === 'topic' || (!!s.intro && s.intro.topic === task.topic && !!task.pat && s.intro.pats.includes(task.pat))} badge={badge} />
           </StepBoundary>
         ) : (
           <div data-testid="summary">
@@ -102,6 +109,7 @@ export function GrammarSessionScreen() {
 }
 
 const dots = (st: PatternState): number => STATE_DOTS[st];
+const EMPTY_DOCS = new Map<string, Record<string, unknown>>();
 
 /** Rundenende (§5.4): je geübtem Muster eine Zeile, deren Punkte wandern; „Neu sicher“, „Noch wackelig“, Fehlerliste mit „kommt morgen wieder“. */
 function GrammarEnd({ lang }: { lang: 'de' | 'en' }) {
@@ -111,6 +119,10 @@ function GrammarEnd({ lang }: { lang: 'de' | 'en' }) {
   const duties = useToday((x) => x.duties);
   const ready = useToday((x) => x.ready);
   const back = () => leaveBack(leaveGrammar);
+  // Themen-Test (K4): „Nächstes Thema trotzdem beginnen“ gilt für Ergebnisblock und Hauptknopf zugleich.
+  const [skipped, setSkipped] = useState(false);
+  const testRes: TestDone | null = s.test?.result ? { ...s.test, result: s.test.result } : null;
+  const chapterNext = useTestNext(testRes, skipped, s.day);
   const growth = patternGrowth(s);
   const pick = (b: { de: string; en: string }): string => (lang === 'de' ? b.de : b.en);
   const name = (id: string): string => {
@@ -142,16 +154,37 @@ function GrammarEnd({ lang }: { lang: 'de' | 'en' }) {
   const next = s.block ? null : ready ? firstOpenDuty({ duties }) : null;
   const main = s.block
     ? { label: t('nbShNext'), run: reportGrammarDone }
-    : next
-      ? {
-          label: t('lrNextDuty', { step: dutyLabel(next, t) }),
-          run: () => {
-            leaveGrammar();
-            startDuty(next, api);
-          },
-        }
-      : { label: t('sumBack'), run: back };
+    : (chapterNext ??
+      (next
+        ? {
+            label: t('lrNextDuty', { step: dutyLabel(next, t) }),
+            run: () => {
+              leaveGrammar();
+              startDuty(next, api);
+            },
+          }
+        : { label: t('sumBack'), run: back }));
   void tn;
+  if (testRes) {
+    // Themen-Test (UX-Prüfung Kapitel-Arbeiten): Überschrift = Ergebnis mit Zahl, der Ergebnisblock steht oben und wiederholt die Zahl nicht. Die
+    // schwachen Stellen stehen EINMAL als Liste („Das übst du als Nächstes“) und in der Fehlerliste mit Vergleich – kein „Noch wackelig“, kein
+    // „Was sich bewegt hat“. „Zurück zu Heute“ bleibt der ruhige zweite Weg.
+    const r = testRes.result;
+    return (
+      <SessionEnd
+        mode="growth"
+        title={t(r.ok ? 'pxKTestPassHead' : 'pxKTestFailHead', { c: r.c, n: r.n })}
+        hideScore
+        right={right}
+        total={s.results.length}
+        ms={s.activeMs}
+        lead={<TestResult test={testRes} lang={lang} skipped={skipped} onSkip={setSkipped} />}
+        mistakes={mistakes}
+        next={main}
+        {...(!s.block && (chapterNext || next) ? { secondary: { label: t('sumBack'), run: back } } : {})}
+      />
+    );
+  }
   return (
     <SessionEnd
       mode="growth"
@@ -162,36 +195,92 @@ function GrammarEnd({ lang }: { lang: 'de' | 'en' }) {
       items={items}
       facts={[...facts, ...plain]}
       mistakes={mistakes}
-      {...(s.test?.result ? { takeaways: <TestResult test={{ ...s.test, result: s.test.result }} lang={lang} /> } : {})}
       next={main}
       {...(!s.block && next ? { secondary: { label: t('sumBack'), run: back } } : {})}
     />
   );
 }
 
-/** Ergebnis des Themen-Tests (K4): bestanden oder „noch nicht“ mit den schwachen Stellen, „morgen noch einmal“ und dem Weg weiter. Nie gesperrt. */
-function TestResult({ test, lang }: { test: TestState & { result: NonNullable<TestState['result']> }; lang: 'de' | 'en' }) {
+type TestDone = TestState & { result: NonNullable<TestState['result']> };
+
+/** Schwache Muster des Tests (falsch oder mit Hilfe): dieselbe Regel wie `tt.w` beim Schreiben (`session.ts`). */
+function testWeakIds(results: ReadonlyArray<{ ok: boolean; help?: boolean; pat?: string | null }>, n: number): string[] {
+  return [...new Set(results.slice(0, n).filter((x) => !x.ok || x.help).map((x) => x.pat).filter((x): x is string => !!x))];
+}
+
+/**
+ * Hauptknopf nach dem Themen-Test, aus demselben Kapitel-Cursor wie die Weiter-Karte im Reiter:
+ * - nicht bestanden: „Schwache Stellen üben“ (Übung desselben Themas, genau die schwachen Muster wie `tt.w`, wie die Phase „Üben“ des Cursors);
+ * - bestanden oder „trotzdem weiter“: der nächste Schritt im Kapitel („Thema beginnen: …“, sonst derselbe Knopftext wie die Weiter-Karte).
+ * `null` ohne Themen-Test oder ohne Kapitel-Arbeit (dann gilt der bisherige Knopf).
+ */
+function useTestNext(test: TestDone | null, skipped: boolean, day: string): { label: string; run: () => void } | null {
+  const { t, lang } = useT();
+  const api = useHiddenInput();
+  const docs = useLive((x) => x.collections.grammar) ?? EMPTY_DOCS;
+  const nowMs = useClock((x) => x.now);
+  const chosen = useChosenChapter();
+  const results = useGrammarSession((x) => x.results);
+  const topic = test?.topic ?? null;
+  const ok = test?.result.ok ?? false;
+  const cursor = useMemo(
+    () => (topic ? chapterNow({ docs: withTestOutcome(docs, topic, { day, ok, skipped }), today: day, nowMs, chosen }).cursor : null),
+    [topic, ok, docs, day, nowMs, chosen, skipped],
+  );
+  const prep = useMemo(() => cursorPrep(cursor, docs), [cursor, docs]);
+  if (!test || !chapterRunOn()) return null;
+  if (!test.result.ok && !skipped) {
+    const pats = testWeakIds(results, test.n);
+    return {
+      label: t('pxKTestPracticeBtn'),
+      run: () => {
+        leaveGrammar();
+        runCursor({ chapter: cursor?.chapter ?? 0, n: cursor?.n ?? 1, topic: test.topic, phase: 'practice', pats, retry: false }, api);
+      },
+    };
+  }
+  if (!cursor) return null;
+  if (cursor.phase === 'done') {
+    if (cursor.chapter + 1 >= programChapters().length) return null;
+    return {
+      label: t('pxKBtnDone'),
+      run: () => {
+        leaveGrammar();
+        startChapter(cursor.chapter + 1, api);
+      },
+    };
+  }
+  const label = cursor.phase === 'intro' && cursor.topic ? t('pxKEndTopicBtn', { topic: topicName(cursor.topic, lang) }) : t(chapterBtnKey(cursor, prep));
+  return {
+    label,
+    run: () => {
+      leaveGrammar();
+      runCursor(cursor, api);
+    },
+  };
+}
+
+/** Ergebnis des Themen-Tests (K4), oben im Rundenende: bestanden oder „noch nicht“ mit den schwachen Stellen, „morgen noch einmal“ und dem Weg weiter. Nie gesperrt. */
+function TestResult({ test, lang, skipped, onSkip }: { test: TestDone; lang: 'de' | 'en'; skipped: boolean; onSkip: (v: boolean) => void }) {
   const { t } = useT();
-  const s = useGrammarSession((x) => x);
-  const [skipped, setSkipped] = useState(false);
+  const results = useGrammarSession((x) => x.results);
   const r = test.result;
   const topic = topicName(test.topic, lang);
-  const weak = [...new Set(s.results.slice(0, test.n).filter((x) => !x.ok || x.help).map((x) => x.pat).filter((x): x is string => !!x))]
+  const weak = testWeakIds(results, test.n)
     .map((id) => patternById(id))
     .filter((p): p is NonNullable<typeof p> => !!p)
     .map((p) => (lang === 'de' ? p.name.de : p.name.en));
   if (r.ok)
     return (
       <div className="flex flex-col gap-1" data-testid="tt-result" data-ok="true" data-c={r.c} data-n={r.n}>
-        <p className="m-0 font-semibold">{t('pxKTestPassTitle')}</p>
-        <p className="m-0 text-sm text-muted">{t('pxKTestPassText', { c: r.c, n: r.n, topic })}</p>
+        <p className="m-0 text-sm text-muted">{t('pxKTestPassLine', { topic })}</p>
       </div>
     );
   return (
     <div className="flex flex-col gap-2" data-testid="tt-result" data-ok="false" data-c={r.c} data-n={r.n}>
-      <p className="m-0 font-semibold">{t('pxKTestFailTitle')}</p>
-      <p className="m-0 text-sm text-muted">{t('pxKTestFailText', { c: r.c, n: r.n, need: r.n - (TT_N - TT_PASS) })}</p>
-      {weak.length > 0 && (
+      <p className="m-0 text-sm text-muted">{t('pxKTestFailLine', { need: r.n - (TT_N - TT_PASS) })}</p>
+      {/* Nach „trotzdem weiter“ geht es mit dem nächsten Thema weiter: dann keine Liste „Das übst du als Nächstes“ mehr. */}
+      {weak.length > 0 && !skipped && (
         <>
           <p className="m-0 text-sm">{t('pxKTestWeak')}</p>
           <ul className="m-0 flex list-disc flex-col gap-0.5 pl-5 text-sm" data-testid="tt-weak">
@@ -213,9 +302,9 @@ function TestResult({ test, lang }: { test: TestState & { result: NonNullable<Te
             className="inline-flex min-h-11 items-center text-sm font-medium text-accent-text hover:underline"
             data-testid="tt-skip"
             onClick={() => {
-              setSkipped(true);
-              void skipTopicTest(test.topic).then((ok) => {
-                if (!ok) setSkipped(false);
+              onSkip(true);
+              void skipTopicTest(test.topic).then((saved) => {
+                if (!saved) onSkip(false);
               });
             }}
           >

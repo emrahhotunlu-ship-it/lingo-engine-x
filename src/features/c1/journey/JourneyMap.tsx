@@ -2,7 +2,8 @@ import { useEffect, useLayoutEffect, useRef, useState, type ReactNode, type RefO
 import type { ProgramChapter } from '../../../domain/c1/programTypes';
 import type { ChapterProgress } from '../../../domain/c1/state';
 import { useFxLevel } from '../../../engine/fx/level';
-import { useT } from '../../../i18n';
+import { useT, type MessageKey } from '../../../i18n';
+import { chapterRunOn } from '../../../app/flags';
 import { local } from '../../../platform/storage';
 
 // C1-Reise (Lernplattform 3.0 P58, Erlebnis-Engine §5.4): die Premium-Darstellung der Programmkarte. Rein darstellend: alle Zahlen kommen vom
@@ -78,7 +79,10 @@ function Station({ n, status, frac }: { n: number; status: ChapterProgress['stat
 }
 
 // UX-Prüfung B2: eine Maßeinheit im ganzen Reiter (wie Heute und Fortschritt): „a von b Themen sicher“.
-const frac = (p: ChapterProgress): number => (p.liveTopics > 0 ? Math.min(1, p.topicSafe / p.liveTopics) : 0);
+// Kapitel-Modus (`chapterRun`): gezählt wird „geschafft“ (sicher ODER Themen-Test bestanden), wie im Kapitelblatt; sonst „sicher“.
+const doneOf = (p: ChapterProgress): number => (chapterRunOn() ? p.topicDone : p.topicSafe);
+const doneLine = (p: ChapterProgress): [MessageKey, { a: number; b: number }] => [chapterRunOn() ? 'pxKDoneCount' : 'hxPathSafe', { a: doneOf(p), b: p.liveTopics }];
+const frac = (p: ChapterProgress): number => (p.liveTopics > 0 ? Math.min(1, doneOf(p) / p.liveTopics) : 0);
 
 export function StatusChip({ status }: { status: ChapterProgress['status'] }) {
   const { t } = useT();
@@ -99,16 +103,16 @@ export function PatsLine({ p, compact = false }: { p: ChapterProgress; compact?:
   // Waagerecht ist die Spalte schmal: kurzer Balken mit „a/b“ (die ganze Zeile steht im Namen des Knopfs).
   if (compact && p.ready)
     return (
-      <span className="lx-jr-pats lx-tnum text-sm text-muted" data-testid="program-pats" data-safe={p.topicSafe} data-total={p.liveTopics} title={t('hxPathSafe', { a: p.topicSafe, b: p.liveTopics })}>
+      <span className="lx-jr-pats lx-tnum text-sm text-muted" data-testid="program-pats" data-safe={p.topicSafe} data-done={doneOf(p)} data-total={p.liveTopics} title={t(...doneLine(p))}>
         <span className="lx-jr-pats-bar" aria-hidden="true">
           <span style={{ width: `${Math.round(frac(p) * 100)}%` }} />
         </span>
-        {p.topicSafe}/{p.liveTopics}
+        {doneOf(p)}/{p.liveTopics}
       </span>
     );
   return p.ready ? (
-    <span className="lx-tnum text-sm text-muted" data-testid="program-pats" data-safe={p.topicSafe} data-total={p.liveTopics}>
-      {t('hxPathSafe', { a: p.topicSafe, b: p.liveTopics })}
+    <span className="lx-tnum text-sm text-muted" data-testid="program-pats" data-safe={p.topicSafe} data-done={doneOf(p)} data-total={p.liveTopics}>
+      {t(...doneLine(p))}
     </span>
   ) : (
     <span className="text-sm text-muted" data-testid="program-soon">

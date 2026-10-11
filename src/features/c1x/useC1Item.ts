@@ -55,6 +55,7 @@ export type C1ItemProps = {
   onDone: (a: GrammarAnswer) => 'typed' | 'choice' | null | void;
   area?: WordTapArea;
   badge?: string | null;
+  badgeTone?: 'near' | 'hint';
   /** Wochen-Check, Check, Einstufung: ohne Tipp und ohne zweiten Versuch. */
   noHelp?: boolean;
   profile?: InputProfile;
@@ -68,7 +69,7 @@ const nonEmpty = (s: string | null | undefined): s is string => !!s && s.trim().
 const tick = (): number => performance.now();
 
 export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObject<HTMLDivElement | null>): ExerciseShellProps {
-  const { task, ctx, day, onDone, area = 'trainer', badge = null, noHelp = false, profile: profileProp, topicRound = false, noAuto = false } = props;
+  const { task, ctx, day, onDone, area = 'trainer', badge = null, badgeTone, noHelp = false, profile: profileProp, topicRound = false, noAuto = false } = props;
   const item = task.c1;
   const { t, lang } = useT();
   const api = useHiddenInput();
@@ -320,7 +321,7 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
 
   const shell: ExerciseShellProps = {
     meta: { ex: `c1_${item.kind}`, id: `${task.topic}|${task.key}`, kind: item.kind },
-    status: { area: 'grammar', state, kindLabel: t(`cxKindName_${item.kind}` as MessageKey), topic: learnLine.topic, pattern: learnLine.pattern, badge },
+    status: { area: 'grammar', state, kindLabel: t(`cxKindName_${item.kind}` as MessageKey), topic: learnLine.topic, pattern: learnLine.pattern, badge, ...(badgeTone ? { badgeTone } : {}), noInfo: noHelp },
     task: { text: ui.task ?? t(`cxTask_${item.kind}` as MessageKey), purpose: t('cxPurpose') },
     aid,
     prompt: ui.prompt,

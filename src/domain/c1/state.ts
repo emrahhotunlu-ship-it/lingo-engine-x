@@ -24,6 +24,8 @@ export type TopicProgress = {
   introduced: boolean;
   /** Thema „sicher“ (Sicher oder Fest) – dieselbe Regel wie der Lernpfad (`features/grammar/chapters.ts`), Heute und Fortschritt. */
   safe: boolean;
+  /** Im Kapitel-Modus „geschafft“: sicher ODER Themen-Test bestanden (dieselbe Regel wie `topicDone` im Cursor). */
+  done: boolean;
 };
 
 export type ChapterProgress = {
@@ -82,7 +84,8 @@ export function chapterState(i: { docs: ReadonlyMap<string, Doc>; today: string;
       const patSafe = ids.filter((p) => patternStateNo(patternState(entries[p], i.today)) >= 2).length;
       const introducedPats = ids.some((p) => isIntroduced(entries[p]));
       const n = i.docs.get(id)?.n;
-      return { id, exists, patSafe, patTotal: ids.length, introduced: introducedPats || (ids.length === 0 && typeof n === 'number' && n > 0), safe: exists && topicSafe(id, i.docs.get(id), ids.length, patSafe, i.nowMs) };
+      const safe = exists && topicSafe(id, i.docs.get(id), ids.length, patSafe, i.nowMs);
+      return { id, exists, patSafe, patTotal: ids.length, introduced: introducedPats || (ids.length === 0 && typeof n === 'number' && n > 0), safe, done: exists && (safe || readTt(i.docs.get(id))?.ok === true) };
     });
     const live = topics.filter((t) => t.exists);
     const patSafe = live.reduce((s, t) => s + t.patSafe, 0);
@@ -90,7 +93,7 @@ export function chapterState(i: { docs: ReadonlyMap<string, Doc>; today: string;
     const introduced = live.filter((t) => t.introduced).length;
     return {
       topicSafe: live.filter((t) => t.safe).length,
-      topicDone: live.filter((t) => t.safe || readTt(i.docs.get(t.id))?.ok === true).length,
+      topicDone: live.filter((t) => t.done).length,
       id: ch.id,
       n: ch.n,
       status: 'open',

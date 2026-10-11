@@ -4,7 +4,7 @@ import { getWriter } from '../../data';
 import { useLive } from '../../data/live';
 import { validateDoc } from '../../data/validate';
 import { chooseChapter, patchC1, readC1 } from '../../domain/c1/c1doc';
-import { chapterNow, chapterPlanInput, type ChapterCursor } from '../../domain/c1/cursor';
+import { chapterNow, chapterPlanInput, type ChapterCursor, type TopicPhase } from '../../domain/c1/cursor';
 import { freezeGrammarDay } from '../../domain/grammar/path';
 import { focusFor, focusTopicOf } from '../../domain/progress/weekly3';
 import { patternsOf } from '../../domain/grammar/patterns';
@@ -12,7 +12,8 @@ import { readPlan } from '../../domain/plan/buildPlan';
 import { refreezeAllowed, refreezePlan } from '../../domain/plan/refreeze';
 import type { StoredPlan } from '../../domain/plan/types';
 import { logError, logWarn } from '../../platform/diagnostics';
-import { startGrammar, useGrammarSession } from '../grammar/session';
+import { startGrammar, topicTestReady, useGrammarSession } from '../grammar/session';
+import type { MessageKey } from '../../i18n';
 import { saveLocalPlan, useTodayPlan } from '../today/store';
 import { unitNow } from '../unit/run';
 import { useUnitRun } from '../unit/runStore';
@@ -30,6 +31,15 @@ const INTRO_PLAN_OF = (topic: string): string[][] | null => patternsOf(topic)?.i
 export { chosenNow, useChapterNow, useChapterPick, useChosenChapter } from './chosen';
 
 export type ChapterStart = 'intro' | 'practice' | 'test' | 'prep' | 'none';
+
+/** Knopftext je Phase des Kapitel-Cursors: EINE Quelle für die Weiter-Karte (Lernen), das Kapitelblatt und das Ende des Themen-Tests. */
+export const CHAPTER_BTN: Record<TopicPhase, MessageKey> = { intro: 'pxKBtnIntro', practice: 'pxKBtnPractice', test: 'pxKBtnTest', done: 'pxKBtnDone' };
+
+/** Themen-Test in Vorbereitung (zu wenig Testaufgaben, dieselbe Auswahl wie beim Start): der Knopf startet dann eine Übung. */
+export const cursorPrep = (c: ChapterCursor | null, docs: ReadonlyMap<string, Record<string, unknown>>): boolean => !!c && c.phase === 'test' && !!c.topic && !topicTestReady(c.topic, docs);
+
+/** Knopftext zum Cursor (mit Vorbereitung: „Weiter üben“). */
+export const chapterBtnKey = (c: ChapterCursor, prep: boolean): MessageKey => (prep ? 'pxKBtnPractice' : CHAPTER_BTN[c.phase]);
 
 /**
  * Kapitel `idx` (0-basiert) starten oder weiterarbeiten. Synchron im Klick: Runde bauen und hinnavigieren; Speichern und das einmalige
@@ -58,7 +68,7 @@ export function startChapter(idx: number, api: { focusNow: () => void }): Chapte
 }
 
 /** Die Runde zum Cursor starten und hinnavigieren. */
-function runCursor(c: ChapterCursor, api: { focusNow: () => void }): ChapterStart {
+export function runCursor(c: ChapterCursor, api: { focusNow: () => void }): ChapterStart {
   const topic = c.topic;
   if (!topic) return 'none';
   const go = useNav.getState().go;

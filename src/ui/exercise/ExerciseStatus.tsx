@@ -11,7 +11,7 @@ export const STATE_DOTS: Record<UnitState, number> = { new: 1, learning: 2, safe
 /** UX-Prüfung W10: Grün heißt „sicher“. Neue und lernende Einheiten zeigen ihre Punkte neutral (`data-unsure` an `.lx-dots`). */
 export const isUnsure = (state: UnitState | null | undefined): boolean => state === 'new' || state === 'learning';
 
-export function ExerciseStatus({ area, state, kindLabel, topic, pattern, badge }: ShellStatus) {
+export function ExerciseStatus({ area, state, kindLabel, topic, pattern, badge, badgeTone = 'near' }: ShellStatus) {
   const { t } = useT();
   const word = state ? t(WORD[state]) : null;
   const where = [topic, pattern].filter((x): x is string => !!x).join(' · ');
@@ -35,7 +35,7 @@ export function ExerciseStatus({ area, state, kindLabel, topic, pattern, badge }
       <span data-testid="ex-kind">{kindLabel}</span>
       {/* UX-Prüfung W1: „dein Fehler“ nie zusammen mit „Neu“ (ein neues Thema hat keinen alten Fehler). */}
       {badge && state !== 'new' && (
-        <span className="rounded-full bg-near-soft px-2 py-0.5 text-near-text" data-testid="again-badge">
+        <span className={`rounded-full px-2 py-0.5 ${badgeTone === 'hint' ? 'bg-hint-soft text-hint-text' : 'bg-near-soft text-near-text'}`} data-testid="again-badge" data-tone={badgeTone}>
           {badge}
         </span>
       )}

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { c1Schema, grammarSchema } from '../../src/data/schemas';
 import { programChapters } from '../../src/domain/c1/chapters';
 import { c1Update, chooseChapter, chosenChapterOf, C1_LIMITS, programStartedOf, readC1 } from '../../src/domain/c1/c1doc';
-import { chapterNow, chapterPlanInput, effectiveChapter, topicStep } from '../../src/domain/c1/cursor';
+import { chapterNow, chapterPlanInput, effectiveChapter, topicStep, withTestOutcome } from '../../src/domain/c1/cursor';
 import { chapterState } from '../../src/domain/c1/state';
 import { freezeGrammarDay, isNewTopic } from '../../src/domain/grammar/path';
 import { patternsOf } from '../../src/domain/grammar/patterns';
@@ -150,6 +150,38 @@ describe('topicStep: Einführung → Übung → Themen-Test', () => {
     const d = { ...shakyDoc(topic, 3, 2), tt: { d: '2026-10-10', c: 2, n: 6, ok: false, k: 1, s: TODAY } };
     const c = chapterNow({ docs: docsOf({ passive: d }), today: TODAY, nowMs: NOW, chosen: 4 }).cursor;
     expect(c?.topic).toBe(K[3]!.topics[1]);
+  });
+});
+
+describe('UX-Prüfung Kapitel-Arbeiten: eine Quelle für „geschafft“ und den nächsten Schritt', () => {
+  const topic = 'passive';
+  it('TopicProgress.done = sicher ODER Test bestanden; topicDone zählt genau diese Themen', () => {
+    const passed = { ...shakyDoc(topic, 3, 2), tt: { d: TODAY, c: 5, n: 6, ok: true, k: 1 } };
+    const st = chapterState({ docs: docsOf({ passive: passed }), today: TODAY, nowMs: NOW });
+    const ch = st.chapters[3]!;
+    const row = ch.topics.find((x) => x.id === topic)!;
+    expect(row.safe).toBe(false);
+    expect(row.done).toBe(true);
+    expect(ch.topicDone).toBe(ch.topics.filter((x) => x.done).length);
+    expect(ch.topicDone).toBe(1);
+    expect(ch.topicSafe).toBe(0);
+    // Ohne bestandenen Test zählt das Thema nicht als geschafft.
+    expect(chapterState({ docs: docsOf({ passive: shakyDoc(topic, 3, 2) }), today: TODAY, nowMs: NOW }).chapters[3]!.topicDone).toBe(0);
+  });
+  it('withTestOutcome: frisch bestanden/übersprungen → Cursor wie nach dem Zurückmelden; Eingabe unverändert', () => {
+    const d = shakyDoc(topic, 3, 2);
+    const docs = docsOf({ passive: d });
+    const before = chapterNow({ docs, today: TODAY, nowMs: NOW, chosen: 4 }).cursor;
+    expect(before?.topic).toBe(topic);
+    expect(before?.phase).toBe('test');
+    const passed = chapterNow({ docs: withTestOutcome(docs, topic, { day: TODAY, ok: true, skipped: false }), today: TODAY, nowMs: NOW, chosen: 4 }).cursor;
+    expect(passed?.topic).toBe(K[3]!.topics[1]);
+    const skipped = chapterNow({ docs: withTestOutcome(docs, topic, { day: TODAY, ok: false, skipped: true }), today: TODAY, nowMs: NOW, chosen: 4 }).cursor;
+    expect(skipped?.topic).toBe(K[3]!.topics[1]);
+    const failed = withTestOutcome(docs, topic, { day: TODAY, ok: false, skipped: false });
+    expect(topicStep(topic, failed.get(topic), TODAY).phase).toBe('practice');
+    expect(docs.get(topic)).toBe(d);
+    expect(d.tt).toBeUndefined();
   });
 });
 

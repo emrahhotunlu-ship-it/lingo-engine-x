@@ -151,3 +151,19 @@ export function chapterPlanInput(i: { docs: ReadonlyMap<string, Doc>; today: str
   if (!cursor || !ch) return null;
   return { n: ch.n, topics: ch.topics.filter((t) => t.exists).map((t) => t.id), cursor: { topic: cursor.topic, phase: cursor.phase, pats: cursor.pats } };
 }
+
+/**
+ * Grammatik-Dokumente mit dem Ausgang eines eben beendeten Themen-Tests (Ende des Themen-Tests): Das Ergebnis (`tt`) und „trotzdem weiter“ (`tt.s`)
+ * sind gerade erst geschrieben und vielleicht noch nicht zurückgemeldet. So zeigt der Knopf am Rundenende denselben nächsten Schritt wie danach die
+ * Weiter-Karte im Reiter. Rein; das übrige Dokument bleibt, wie es ist.
+ */
+export function withTestOutcome(docs: ReadonlyMap<string, Doc>, topic: string, o: { day: string; ok: boolean; skipped: boolean }): ReadonlyMap<string, Doc> {
+  const doc = docs.get(topic) ?? {};
+  const raw = doc.tt && typeof doc.tt === 'object' && !Array.isArray(doc.tt) ? (doc.tt as Record<string, unknown>) : {};
+  const prevOk = raw.ok === true;
+  const tt: Record<string, unknown> = { ...raw, d: o.day, ok: prevOk || o.ok };
+  if (o.skipped && !o.ok) tt.s = o.day;
+  const out = new Map(docs);
+  out.set(topic, { ...doc, tt });
+  return out;
+}
