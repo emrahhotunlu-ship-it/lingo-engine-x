@@ -369,3 +369,4 @@ Tests: 1953 Unit; E2E der berührten Bildschirme grün (a11y: Kontrast der „Ne
 ## 11.10.2026 – Vokabelbereich Vorrang (Emrah)
 - Emrah: Vokabelbereich ist das Wichtigste, Ziel 8.000+ Wörter mit den besten Methoden, täglich und bei Bedarf neue Wörter nachladen, Methodik und UX „outstanding“; Speicherentscheidung an Claude delegiert → Sammeldokumente (siehe `docs/entscheidungen.md` 11.10.2026).
 - Läuft: Sammelrunde-Fixes (Zweig `claude/umbau-vokabeln`: keine Grammatik in Vokabelrunden, Anki-Modus sichtbar, Wortpartner-Hinweis; Zweig `claude/umbau-fehlerfinden`: rote KI-Meldung, Wortlaut fehlendes Wort) und Lernprüfung des Vokabelbereichs (nur lesend, Rangliste der 10 wirksamsten Verbesserungen + Speicher-Varianten). Danach einmal planen (`docs/umbau/vokabel-plattform.md`).
+- Lernprüfung Vokabelbereich fertig; Plan nach `docs/umbau/vokabel-plattform.md` (V0–V7). Emrahs Bestand: 192 Vokabel-Dokumente (live gelesen).
