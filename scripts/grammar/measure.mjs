@@ -1,6 +1,6 @@
 // Messung der Aufgaben-Qualität (MVP-Sweep 07.10.2026). Nur Lesen. `node scripts/grammar/measure.mjs [--json datei]`
 import { writeFileSync } from 'node:fs';
-import { allSeedTasks, readJson, legacyTaskKey } from './lib.mjs';
+import { allSeedTasks, readJson } from './lib.mjs';
 import { BRITISH, wordCount } from './validate.mjs';
 
 const map = readJson('src/content/grammar/pattern-map.json');

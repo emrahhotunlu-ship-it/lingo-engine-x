@@ -6,7 +6,7 @@
 //   D  Lösung beginnt mit had/were/should (Inversion) und das Muster ist keine Inversion
 //   E  Signalwort-Regel liefert ein anderes Muster als die Zuordnung
 // Aufruf: node scripts/grammar/audit-patterns.mjs [--json] [thema …]
-import { existsSync, readdirSync } from 'node:fs';
+import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { ROOT, allSeedTasks, readJson, legacyTaskKey } from './lib.mjs';
 
@@ -14,7 +14,6 @@ const args = process.argv.slice(2);
 const only = args.filter((a) => !a.startsWith('--'));
 const PATTERNS = join(ROOT, 'src/content/grammar/patterns');
 const mapTbl = readJson('src/content/grammar/pattern-map.json');
-const norm = (s) => s.toLowerCase().replace(/[^a-z' ]+/g, ' ').replace(/\s+/g, ' ').trim();
 const key = legacyTaskKey;
 const fill = (t) => (/_{3,}/.test(t.prompt) ? t.prompt.replace(/_{3,}/, t.answer) : `${t.prompt} ${t.answer}`);
 

@@ -7,7 +7,7 @@ import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import {
   ROOT, KAP13, words, norm, kwtNorm, joinAB, contractedForms, scoreKwt, scoreErr, findSpan, applyFix, hasBritish,
-  legacyCorpus, patternIndex, chapterOf,
+  legacyCorpus, patternIndex,
 } from './lib.mjs';
 
 const CHECK_ONLY = process.argv.includes('--check');
@@ -67,7 +67,7 @@ function buildKwt(src, id) {
   return item;
 }
 
-function checkKwt(it, src) {
+function checkKwt(it) {
   const id = it.id;
   if (!/^[A-Z']+$/.test(it.key)) fail(id, 'Schlüsselwort muss GROSS sein');
   const lw = wc(it.lead);
@@ -228,7 +228,7 @@ for (const kind of ['kwt', 'err']) {
       const id = `${kind}-${String(m.meta.start + i).padStart(4, '0')}`;
       try {
         const it = kind === 'kwt' ? buildKwt(s, id) : buildErr(s, id);
-        kind === 'kwt' ? checkKwt(it, s) : checkErr(it);
+        if (kind === 'kwt') checkKwt(it); else checkErr(it);
         built.push(it);
       } catch (e) { fail(id, `Quelle unlesbar: ${e.message}`); }
     });
@@ -255,7 +255,7 @@ if (!CHECK_ONLY) {
     for (const [file, items] of Object.entries(out[kind])) {
       const dir = join(ROOT, 'src/content/c1x/src', kind);
       mkdirSync(dir, { recursive: true });
-      const clean = items.map(({ _h, ...r }) => r);
+      const clean = items.map((r) => { const c = { ...r }; delete c._h; return c; });
       writeFileSync(join(dir, `${file}.json`), JSON.stringify({ v: 1, items: clean }, null, 1) + '\n');
     }
   }

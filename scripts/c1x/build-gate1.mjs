@@ -283,7 +283,7 @@ sources.forEach((s) => {
 
 // Aufbau: 8 je Thema in KIND_ORDER, jedes Thema der Liste, in der Reihenfolge der Liste.
 const byTopic = new Map();
-const extraIds = new Set(sources.filter((x) => x.n !== undefined).map((x, i) => `${x.k}-${String(x.n).padStart(4, '0')}`));
+const extraIds = new Set(sources.filter((x) => x.n !== undefined).map((x) => `${x.k}-${String(x.n).padStart(4, '0')}`));
 for (const it of built) if (!extraIds.has(it.id)) byTopic.set(it.topic, [...(byTopic.get(it.topic) ?? []), it]);
 for (const t of TOPICS) {
   const list = byTopic.get(t) ?? [];

@@ -12,7 +12,7 @@ const path = readJson('src/content/grammar/path.json');
 const rank = {};
 let r = 0;
 path.chapters.forEach((c) => c.topics.forEach((t) => (rank[t] = r++)));
-const [cmd, a, b] = process.argv.slice(2);
+const [cmd, a] = process.argv.slice(2);
 
 if (cmd === 'extract') {
   const map = readJson('src/content/grammar/pattern-map.json');
@@ -60,7 +60,7 @@ if (cmd === 'extract') {
         for (const [i, v] of Object.entries(p.w ?? {})) if (why.wrong[i]) why.wrong[i] = { ...why.wrong[i], de: v[0], en: v[1] };
         changed = true; n++; done.push(id);
       };
-      if (kind === 'map') for (const [prompt, e] of Object.entries(data)) e.why && upd(`${topic}|${legacyTaskKey(prompt)}`, e.why);
+      if (kind === 'map') for (const [prompt, e] of Object.entries(data)) if (e.why) upd(`${topic}|${legacyTaskKey(prompt)}`, e.why);
       else for (const t of data) upd(t.id, t.why);
       if (changed) writeFileSync(f, JSON.stringify(data, null, 1) + '\n');
     }
