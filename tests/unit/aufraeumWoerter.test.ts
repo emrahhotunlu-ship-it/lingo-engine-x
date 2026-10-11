@@ -85,13 +85,13 @@ const lineText = (m: ReturnType<typeof explainWord>, k: string): string => JSON.
 
 describe('Rückmeldung 3: Wortpartner-Ergebnis zeigt die geübte Verbindung', () => {
   it('richtig: Kopf und Merke nennen die Verbindung, die Begründung steht trotzdem; Kartenwort nur als Zusatz', () => {
-    const m = explainWord({ card: overcome(), ex: 'colloc_gap', verdict: 'correct', given: 'objections', check: { verdict: 'correct' }, lang: 'de', solution: 'objections', colloc: COL });
+    const m = explainWord({ card: overcome(), ex: 'colloc_gap', verdict: 'ok', given: 'objections', check: { verdict: 'correct' }, lang: 'de', solution: 'objections', colloc: COL });
     expect(m.lines[0]).toMatchObject({ k: 'pattern', name: 'overcome objections · overcome' });
     const why = lineText(m, 'why');
     expect(why).toContain('Merke: overcome objections = Einwände ausräumen');
     expect(why).toContain('fester Partner');
     expect(m.mark[0]).toBe('overcome objections');
-    const mEn = explainWord({ card: overcome(), ex: 'colloc_gap', verdict: 'correct', given: 'objections', check: { verdict: 'correct' }, lang: 'en', solution: 'objections', colloc: COL });
+    const mEn = explainWord({ card: overcome(), ex: 'colloc_gap', verdict: 'ok', given: 'objections', check: { verdict: 'correct' }, lang: 'en', solution: 'objections', colloc: COL });
     expect(lineText(mEn, 'why')).toContain('Remember: overcome objections');
   });
   it('falsch: nennt die gewählte und die übrigen Optionen als Verbindung und warum sie nicht passen', () => {
@@ -107,7 +107,7 @@ describe('Rückmeldung 3: Wortpartner-Ergebnis zeigt die geübte Verbindung', ()
       { en: 'We overcome many problems every week.', de: null, ctx: null },
       { en: 'She helped us overcome objections from the board.', de: null, ctx: null },
     ];
-    const m = explainWord({ card: overcome(), ex: 'colloc_gap', verdict: 'correct', given: 'objections', check: { verdict: 'correct' }, lang: 'de', solution: 'objections', colloc: COL, examples });
+    const m = explainWord({ card: overcome(), ex: 'colloc_gap', verdict: 'ok', given: 'objections', check: { verdict: 'correct' }, lang: 'de', solution: 'objections', colloc: COL, examples });
     expect(m.examples.map((e) => e.en)).toEqual(['She helped us overcome objections from the board.']);
   });
   it('„afford to + Verb“ ist ein Satzmuster, keine Wortpartner-Aufgabe', () => {
