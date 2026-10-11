@@ -195,7 +195,7 @@ function TestResult({ test, lang }: { test: TestState & { result: NonNullable<Te
           </ul>
         </>
       )}
-      <p className="m-0 text-sm text-muted">{t('pxKTestAgain')}</p>
+      {!skipped && <p className="m-0 text-sm text-muted">{t('pxKTestAgain')}</p>}
       {skipped ? (
         <p className="m-0 text-sm text-muted" role="status" data-testid="tt-skipped">
           {t('pxKTestSkipped')}

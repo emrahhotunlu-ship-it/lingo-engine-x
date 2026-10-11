@@ -77,7 +77,7 @@ test.describe('Handy 390', () => {
     const main = page.getByTestId('hub-next-start');
     await expect(page.getByTestId('hub-next-topic')).toHaveAttribute('data-topic', 'passive');
     await expect(main).toHaveAttribute('data-action', 'test');
-    await expect(page.getByTestId('hub-next-line')).toContainText('6 Aufgaben ohne Hilfe. Bestanden ab 5 richtig.');
+    await expect(page.getByTestId('hub-next-line')).toContainText('Kurzer Test ohne Hilfe.');
     await main.click();
     await screen(page, 'grammarSession');
     await expect(page.getByTestId('grammar-session')).toHaveAttribute('data-ctx', 'xtra');
