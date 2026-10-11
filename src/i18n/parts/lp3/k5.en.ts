@@ -26,7 +26,7 @@ export const pxK5En = {
   pxKTestPassLine: 'Topic done: {topic}.',
   pxKTestFailLine: 'You need {need} correct to pass.',
   pxKTestPracticeBtn: 'Practice the weak spots',
-  pxKEndTopicBtn: 'Start topic: {topic}',
+  pxKEndTopicBtn: 'Start the next topic',
   pxKTestWeak: 'What you\'ll practice next:',
   pxKTestAgain: 'The test is ready again from tomorrow. Until then, you\'ll practice the weak spots.',
   pxKTestSkip: 'Start the next topic anyway',

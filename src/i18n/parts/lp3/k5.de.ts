@@ -26,7 +26,7 @@ export const pxK5De = {
   pxKTestPassLine: 'Thema geschafft: {topic}.',
   pxKTestFailLine: 'Zum Bestehen brauchst du {need} richtige.',
   pxKTestPracticeBtn: 'Schwache Stellen üben',
-  pxKEndTopicBtn: 'Thema beginnen: {topic}',
+  pxKEndTopicBtn: 'Nächstes Thema beginnen',
   pxKTestWeak: 'Das übst du als Nächstes:',
   pxKTestAgain: 'Ab morgen ist der Test wieder bereit. Bis dahin übst du die schwachen Stellen.',
   pxKTestSkip: 'Nächstes Thema trotzdem beginnen',

@@ -211,11 +211,11 @@ function testWeakIds(results: ReadonlyArray<{ ok: boolean; help?: boolean; pat?:
 /**
  * Hauptknopf nach dem Themen-Test, aus demselben Kapitel-Cursor wie die Weiter-Karte im Reiter:
  * - nicht bestanden: „Schwache Stellen üben“ (Übung desselben Themas, genau die schwachen Muster wie `tt.w`, wie die Phase „Üben“ des Cursors);
- * - bestanden oder „trotzdem weiter“: der nächste Schritt im Kapitel („Thema beginnen: …“, sonst derselbe Knopftext wie die Weiter-Karte).
+ * - bestanden oder „trotzdem weiter“: der nächste Schritt im Kapitel („Nächstes Thema beginnen“, sonst derselbe Knopftext wie die Weiter-Karte).
  * `null` ohne Themen-Test oder ohne Kapitel-Arbeit (dann gilt der bisherige Knopf).
  */
 function useTestNext(test: TestDone | null, skipped: boolean, day: string): { label: string; run: () => void } | null {
-  const { t, lang } = useT();
+  const { t } = useT();
   const api = useHiddenInput();
   const docs = useLive((x) => x.collections.grammar) ?? EMPTY_DOCS;
   const nowMs = useClock((x) => x.now);
@@ -250,7 +250,7 @@ function useTestNext(test: TestDone | null, skipped: boolean, day: string): { la
       },
     };
   }
-  const label = cursor.phase === 'intro' && cursor.topic ? t('pxKEndTopicBtn', { topic: topicName(cursor.topic, lang) }) : t(chapterBtnKey(cursor, prep));
+  const label = cursor.phase === 'intro' && cursor.topic ? t('pxKEndTopicBtn') : t(chapterBtnKey(cursor, prep));
   return {
     label,
     run: () => {

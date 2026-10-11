@@ -119,7 +119,7 @@ test.describe('Handy 390', () => {
     await expect(page.getByTestId('tt-skipped')).toBeVisible();
     // Nach „trotzdem weiter“: keine Liste der schwachen Stellen mehr, der Knopf beginnt das nächste Thema (wie die Weiter-Karte).
     await expect(page.getByTestId('tt-weak')).toHaveCount(0);
-    await expect(page.getByTestId('session-end-next')).toHaveText(/^Thema beginnen: .+/);
+    await expect(page.getByTestId('session-end-next')).toHaveText('Nächstes Thema beginnen');
     await expect.poll(async () => ((await dump(page))['grammar/passive'] as { tt?: { s?: string } }).tt?.s).toBe(TODAY);
     const tt = ((await dump(page))['grammar/passive'] as { tt: Doc }).tt;
     expect(tt).toMatchObject({ d: TODAY, n: 6, ok: false, k: 1, s: TODAY });
@@ -166,7 +166,7 @@ test.describe('Handy 390', () => {
     const c = await res.getAttribute('data-c');
     await expect(page.getByTestId('session-end').locator('h1')).toHaveText(`Themen-Test bestanden · ${c} von 6 richtig`);
     await expect(page.getByTestId('session-end-items')).toHaveCount(0);
-    await expect(page.getByTestId('session-end-next')).toHaveText(/^Thema beginnen: .+/);
+    await expect(page.getByTestId('session-end-next')).toHaveText('Nächstes Thema beginnen');
     await expect(page.getByTestId('session-end-secondary')).toHaveText('Zurück zu Heute');
     await page.keyboard.press('Escape');
     await openTab(page, 'learn');
