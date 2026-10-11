@@ -369,6 +369,19 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
 }
 
 /**
+ * Hinweis unter einer Lückenaufgabe (Rückmeldung 11.10.2026): Er beschreibt immer das, was in der Lücke steht. Bei Wortpartner-Lücken
+ * ist das nicht das Kartenwort („deserve“), sondern der Partner („break“) – dann gilt die Bedeutung der ganzen Wendung (`Colloc.de`,
+ * nur Deutsch), und fehlt sie, gibt es keinen Hinweis. Sonst (Lücke = Kartenwort) die Bedeutung der Karte.
+ */
+export function gapCue(e: Pick<Exercise, 'ex' | 'meaning' | 'colloc'>, lang: Lang): { kind: 'word' | 'phrase'; text: string } | null {
+  if (e.ex === 'colloc' || e.ex === 'colloc_gap') {
+    const de = e.colloc && e.colloc.index >= 0 ? e.colloc.de.trim() : '';
+    return lang === 'de' && de ? { kind: 'phrase', text: de } : null;
+  }
+  return e.meaning ? { kind: 'word', text: e.meaning } : null;
+}
+
+/**
  * Urteil einer Auswahl. Falsch gewählt, aber die Option bedeutet dasselbe wie die Lösung
  * (z. B. „to persuade" für „überzeugen", wenn doch einmal ein Synonym unter den Optionen ist):
  * „fast richtig" mit ehrlicher Begründung statt „Noch nicht" (B5).

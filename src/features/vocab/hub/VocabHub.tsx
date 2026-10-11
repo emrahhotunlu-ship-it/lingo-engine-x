@@ -7,7 +7,7 @@ import { addDays } from '../../../domain/date';
 import { meaningOf } from '../../../domain/srs/cards';
 import { EXTRA_ROUND_MAX, atlasCounts, newToday, reviewAll, reviewToday } from '../../../domain/metrics';
 import { estimateRoundMinutes } from '../../../domain/srs/cost';
-import { deckCards, deckCounts, visibleDecks, type BuiltinDeck, type DeckCounts } from '../../../domain/srs/decks';
+import { deckCards, deckCounts, prefsOp, visibleDecks, type BuiltinDeck, type DeckCounts } from '../../../domain/srs/decks';
 import { backlogBraked, catchUpOn, overdueCount } from '../../../domain/unit/backlog';
 import { C1_MARK, vocabGoal } from '../../../domain/vocab/goal';
 import { useToday } from '../../today/state';
@@ -17,8 +17,11 @@ import { Button, IconButton } from '../../../ui/Button';
 import { Icon } from '../../../ui/Icon';
 import { HeroCard } from '../../../ui/HeroCard';
 import { Row, RowList } from '../../../ui/RowList';
+import { Segmented } from '../../../ui/Segmented';
+import { toast } from '../../../ui/Toast';
 import { TabTitle } from '../../system/Chrome';
-import { useDecks } from '../decksStore';
+import { useDecks, writeDecks } from '../decksStore';
+import { decksErrorKey } from './errors';
 import { startAllDue } from '../start';
 import { useDeckCtx, useQuota, useVocabCards } from './data';
 import { Slot } from '../../../app/slots';
@@ -99,7 +102,12 @@ export function VocabHub() {
   const goalNow = goal.now ?? 0;
   // „Neue Wörter heute“ nennt die Zahl, die nach Bremse und Plan wirklich kommt (`newToday`), nicht das Kontingent.
   const newN = useMemo(() => newToday({ plan, cards: visible, nowMs: now, newPerDay: quota.perDay, lang }).n, [plan, visible, now, quota.perDay, lang]);
-  const modeLabel = t(mode === 'auto' ? 'nbWsModeAuto' : mode === 'flip' ? 'nbWsModeFlip' : 'nbWsModeType');
+  // Moduswahl: gleicher Speicherweg wie bisher (`prefs.mode` im Stapel-Dokument).
+  const setMode = (m: Mode) => {
+    void writeDecks((cur) => prefsOp(cur, { mode: m })).then((r) => {
+      if (!r.ok) toast(t(decksErrorKey(r.error)), 'error');
+    });
+  };
   // Drei Stapel: Alle · Schwierig · bei Bedarf der erste eigene Stapel (früher „Thema der Woche“). Alles Weitere unter „Alle Stapel“.
   const hardCards = useMemo(() => deckCards(cards, 'hard', decks, ctx), [cards, decks, ctx]);
   const ownDeck = useMemo(() => {
@@ -180,9 +188,20 @@ export function VocabHub() {
             {t('nbWsExtraRound', { n: Math.min(EXTRA_ROUND_MAX, total) })}
           </p>
         )}
-        <button type="button" className="min-h-11 self-start text-sm text-muted underline-offset-4 hover:underline" onClick={() => openSheet('x:mode')} data-testid="ws-mode-open" data-mode={mode}>
-          {t('nbWsHModeLine', { mode: modeLabel })} ›
-        </button>
+        <Segmented<Mode>
+          label={t('nbWsModeLabel')}
+          value={mode}
+          options={[
+            { value: 'flip', label: t('nbWsModeFlipAnki'), testId: 'ws-mode-flip' },
+            { value: 'type', label: t('nbWsModeType'), testId: 'ws-mode-type' },
+            { value: 'auto', label: t('nbWsModeAuto'), testId: 'ws-mode-auto' },
+          ]}
+          onChange={setMode}
+          testId="ws-mode"
+        />
+        <p className="m-0 text-sm text-muted" data-testid="ws-mode-hint" data-mode={mode}>
+          {t(mode === 'flip' ? 'nbWsModeFlipHint' : mode === 'type' ? 'nbWsModeTypeHint' : 'nbWsModeAutoHint')}
+        </p>
       </HeroCard>
 
       <HeroCard

@@ -1,8 +1,8 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { boot, layoutProblems, openOverview, openSpeak, openTab, screen } from './fixtures';
+import { boot, layoutProblems, openSpeak, openTab, screen } from './fixtures';
 import { NO_GRAMMAR_ERRORS, profileWith, vgPlan } from './heuteHelpers';
-import { DAY, answerCurrent, dump, forcedPatch, planPatch } from './trainerHelpers';
+import { DAY, dump, planPatch } from './trainerHelpers';
 
 // Reparatur-Sätze (Lernberatung 27.09., V2 „Nochmal, aber besser"): Wiederholung in der
 // Pflichtrunde (lokal richtig, KI-Nachprüfung falsch), Schritt nach dem Rollenspiel-Bericht und
@@ -22,23 +22,21 @@ const SIZES = [
 const repairs = async (page: Page): Promise<Doc[]> => (((await dump(page))['app/repair'] as { items?: Doc[] } | undefined)?.items ?? []);
 
 for (const size of SIZES) {
-  test(`Wiederholung (${size.name}): „Damals hast du gesagt“, lokal richtig, KI-Nachprüfung, zählt zur Pflicht`, async ({ page }) => {
+  test(`Fehlersätze (${size.name}): eigene Runde unter Anwenden – lokal „fast richtig“, KI-Nachprüfung, Protokoll`, async ({ page }) => {
     await page.setViewportSize({ width: size.width, height: size.height });
-    const { errors, external } = await boot(page, {
-      migrated: true,
-      fake: { patch: { 'app/profile': planPatch(3), 'vocab/avoid': forcedPatch()['vocab/avoid'] ?? {}, 'app/repair': { items: [A, B] } } },
-    });
+    // Plan v2: Schritt 4 (Sonntag) nimmt die fälligen Sätze selbst; die freiwillige Runde gibt es erst, wenn er erledigt ist.
+    const sunPlan = { ...vgPlan(DAY), duty: ['review', 'ch:u-check', 'ch:u-again'] };
+    const { errors, external } = await boot(page, { migrated: true, fake: { patch: { ...NO_GRAMMAR_ERRORS, ...profileWith(DAY, sunPlan, ['u-again']), 'app/repair': { items: [A, B] } } } });
     await screen(page, 'today');
-    await page.getByTestId('start').click();
-    await screen(page, 'trainer');
+    await openTab(page, 'apply');
+    await page.getByTestId('hub-repair-round').click();
+    await expect(page.getByTestId('repair-round')).toBeVisible();
 
     // 1. Satz: alter Satz sichtbar, bessere Fassung verborgen, vorbefülltes Feld (Tastatur).
     const item = page.getByTestId('repair-item');
     await expect(item).toHaveAttribute('data-id', 'ra1');
-    await expect(item).toHaveAttribute('data-mode', 'review');
     await expect(page.getByTestId('repair-input')).toHaveValue(A.wrong);
     await expect(page.getByTestId('repair-right')).toHaveCount(0);
-    await expect(page.getByTestId('trainer-progress')).toHaveText('1 von 3');
     expect(await layoutProblems(page)).toEqual([]);
     await page.waitForTimeout(450);
     const axe = await new AxeBuilder({ page }).include('[data-testid="repair-item"]').analyze();
@@ -65,63 +63,36 @@ for (const size of SIZES) {
     await expect(page.getByTestId('result')).toContainText('Der alte Fehler steckt noch im Satz.');
     await expect(page.getByTestId('repair-right')).toContainText(B.right);
     await page.getByTestId('repair-next').click();
+    await expect(page.getByTestId('session-end')).toBeVisible();
 
-    // Danach die Karte wie gewohnt, dann die Zusammenfassung.
-    await expect(page.getByTestId('exercise')).toBeVisible();
-    await answerCurrent(page);
-    await expect(page.getByTestId('summary')).toBeVisible();
-
-    // Schreibwege: Boxen in app/repair, Protokoll zählt zu „Wiederholen“.
-    // „Fast richtig“ (close): Box bleibt, morgen wieder (Prüfbefund S3), im Protokoll trotzdem als geschafft.
+    // Schreibwege: „Fast richtig“ (near): Box bleibt, morgen wieder (Prüfbefund S3), im Protokoll trotzdem als geschafft.
     await expect.poll(async () => (await repairs(page)).find((e) => e.id === 'ra1')?.last).toBeTruthy();
     expect((await repairs(page)).find((e) => e.id === 'ra1')).toMatchObject({ box: 0, done: false });
-    const list = await repairs(page);
-    expect(list.find((e) => e.id === 'rb2')).toMatchObject({ box: 0, done: false });
+    expect((await repairs(page)).find((e) => e.id === 'rb2')).toMatchObject({ box: 0, done: false });
     await expect
       .poll(async () => (((await dump(page))[`log/${DAY}`]?.entries as Doc[] | undefined) ?? []).filter((e) => e.type === 'repair').map((e) => [e.id, e.ok, e.ctx]))
       .toEqual([
-        ['ra1', true, 'rev'],
-        ['rb2', false, 'rev'],
+        ['ra1', true, 'xtra'],
+        ['rb2', false, 'xtra'],
       ]);
-    await page.getByTestId('session-end-secondary').or(page.getByTestId('session-end-next')).first().click();
-    await screen(page, 'today');
-    await expect(page.getByTestId('today-status')).toHaveText('Fertig für heute');
-
-    // „Fortschritt“: Karte „Fehlersätze“ (zählt Reparatur-Sätze und Themen-Fehler zusammen).
-    await openOverview(page);
-    await page.getByTestId('tab-grammar').click();
-    await expect(page.getByTestId('error-sentences')).toBeVisible();
-    await expect.poll(async () => Number(await page.getByTestId('error-sentences').getAttribute('data-open'))).toBeGreaterThanOrEqual(2);
     expect(errors).toEqual([]);
     expect(external).toEqual([]);
   });
 }
 
-// Neubau (Block 1 „Wiederholen“, domain/week/review.ts REPAIR_MAX): höchstens 3 Reparatur-Sätze je
-// Runde, der Rest bleibt fällig. Die Tagesgrenze von 4 (REPAIR_PER_DAY) prüft tests/unit/repairFlow.test.ts.
-test('Wiederholung ohne KI: die lokale Prüfung zählt; höchstens 3 je Runde, der Rest bleibt fällig', async ({ page }) => {
+// 11.10.2026 (Emrah): Die Pflichtrunde „Wörter wiederholen“ enthält nie Fehlersätze – auch nicht, wenn viele fällig sind.
+// Sie bleiben fällig und werden im Bereich Grammatik/Anwenden geübt (Test darunter).
+test('Pflichtrunde Wörter: fällige Fehlersätze kommen nicht vor, sie bleiben unverändert fällig', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   const many = Array.from({ length: 5 }, (_, i) => ({ ...B, id: `rm${i}`, wrong: `It depends of the budget number ${i + 1}.`, right: `It depends on the budget number ${i + 1}.`, due: DUE + i }));
   const { errors, external } = await boot(page, { migrated: true, fake: { capabilities: { sample: false }, patch: { 'app/profile': planPatch(8), 'app/repair': { items: many } } } });
   await screen(page, 'today');
   await page.getByTestId('start').click();
   await screen(page, 'trainer');
-  for (let i = 0; i < 3; i++) {
-    await expect(page.getByTestId('repair-item')).toHaveAttribute('data-id', `rm${i}`);
-    await page.getByTestId('repair-input').fill(i === 0 ? 'It depends of the budget number 1' : `It depends on the budget number ${i + 1}`);
-    await page.getByTestId('repair-check').click();
-    await expect(page.getByTestId('result')).toHaveAttribute('data-verdict', i === 0 ? 'wrong' : 'ok');
-    await expect(page.getByTestId('ai-phase')).toHaveCount(0);
-    await page.getByTestId('repair-next').click();
-  }
-  // Der vierte und fünfte bleiben fällig (unverändert); weiter geht es mit Karten.
-  await expect(page.getByTestId('exercise')).toBeVisible();
   await expect(page.getByTestId('repair-item')).toHaveCount(0);
-  const rest = (await repairs(page)).filter((r) => r.id === 'rm3' || r.id === 'rm4');
-  expect(rest.map((r) => [r.id, r.box, r.due])).toEqual([
-    ['rm3', 0, DUE + 3],
-    ['rm4', 0, DUE + 4],
-  ]);
+  await expect(page.getByTestId('exercise').or(page.getByTestId('intro')).or(page.getByTestId('flip')).first()).toBeVisible();
+  await expect(page.getByTestId('trainer-progress')).toHaveText('1 von 8');
+  expect((await repairs(page)).map((r) => [r.id, r.box, r.due])).toEqual(many.map((r, i) => [r.id, 0, DUE + i]));
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
 });

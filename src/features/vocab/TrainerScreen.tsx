@@ -10,14 +10,13 @@ import { IntroCard } from './IntroCard';
 import { Summary } from './Summary';
 import { abortExamples } from './examples';
 import { flush } from './persist';
-import { answerRepair, commitHeld, currentRepair, leaveSession, nextRepair, pauseActivity, roundProgress, skipCurrent, touch, useSession } from './session';
+import { commitHeld, leaveSession, pauseActivity, roundProgress, skipCurrent, touch, useSession } from './session';
 import { UndoBar, useUndoBar } from './anki/UndoBar';
 import { FlipCard } from './anki/FlipCard';
 import { StepBoundary } from '../../app/shell/Boundary';
 import { usePlayerSkip } from '../../app/shell/Player';
 import { cardShown } from './cardMark';
 import { useShallow } from 'zustand/react/shallow';
-import { RepairItem } from '../repair/RepairItem';
 import { ExerciseTop } from '../learn/ui';
 
 // Vokabeltrainer: eine Karte zur Zeit. Kartenwechsel ohne Warte-Animation (leistung.md §4 Nr. 4): die neue Karte steht sofort da und rückt aus dem
@@ -39,7 +38,6 @@ export function TrainerScreen() {
   const cards = useSession((s) => s.cards);
   const pool = useSession((s) => s.pool);
   const undo = useUndoBar();
-  const repair = useSession(currentRepair);
 
   const knownWords = useMemo(() => new Set(pool.map((c) => normalize(c.lemma))), [pool]);
 
@@ -105,22 +103,8 @@ export function TrainerScreen() {
         {status === 'summary' ? (
           <Summary onBack={leave} />
         ) : (
-          <StepBoundary resetKey={step} scope="trainer" detail={item?.key ?? 'repair'} onSkip={skip}>
-            {repair ? (
-              <RepairItem
-                key={repair.id}
-                item={repair}
-                mode="review"
-                area="trainer"
-                source={null}
-                onResult={({ ok, near, given, ms }) => answerRepair(ok, given, ms, near)}
-                onNext={() => {
-                  // Tastatur am iPhone: im selben Handler fokussieren bzw. schließen.
-                  if (nextRepair() === 'typed') api.focusNow();
-                  else api.blur();
-                }}
-              />
-            ) : introCard ? (
+          <StepBoundary resetKey={step} scope="trainer" detail={item?.key ?? 'round'} onSkip={skip}>
+            {introCard ? (
               <IntroCard card={introCard} onDone={onDone} />
             ) : exercise?.ex === 'flip' ? (
               <FlipCard key={`${exercise.card.key}-${step}`} exercise={exercise} again={item?.reason === 'again'} onDone={onDone} behind={queue.length - pos - 1} />

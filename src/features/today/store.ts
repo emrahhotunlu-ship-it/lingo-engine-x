@@ -13,7 +13,6 @@ import { cardStats } from '../../domain/plan/dayStats';
 import { type FeasibleData } from '../../domain/plan/channels';
 import { pflichtFor, pflichtMarked, type PflichtInput } from '../../domain/plan/pflicht';
 import type { StoredPlan } from '../../domain/plan/types';
-import { repairsDoneToday, repairsDutyToday, pickDailyRepairs } from '../../domain/repair/daily';
 import { buildTrainCards, fehlersaetzeDue, festUnits, nextGoal } from '../../domain/metrics';
 import { checkPlanned, step3Format } from '../../domain/c1/checkSchedule';
 import { chapterRunOn, flags, kindEnabled } from '../../app/flags';
@@ -27,7 +26,6 @@ import type { Lang, TrainCard } from '../../domain/srs/types';
 import { buildUnitStored, unitDraft, type ReviewGoal } from '../../domain/unit/plan';
 import { unitReviewGoal } from '../../domain/unit/review';
 import { packTopUp } from './pack';
-import { REPAIR_MAX } from '../../domain/unit/block1';
 import { getDb } from '../../platform/capabilities';
 import { logError, logWarn } from '../../platform/diagnostics';
 import { KEY_PREFIX, local } from '../../platform/storage';
@@ -215,12 +213,11 @@ export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
     // Wendungen (`chunk/*`) gehören zur täglichen Wiederholung (Kap. 5, M15): gleiche Planung.
     const all = [...cards, ...buildChunkCards(live.collections.chunk ?? new Map(), nowMs, invalidIdsOf(live.invalid, 'chunk'))];
     const introduced = cards.filter((c) => c.intro === today);
-    const entries = live.day?.key === today && Array.isArray(live.day.doc?.entries) ? (live.day.doc.entries as Array<{ type?: unknown; id?: unknown }>) : [];
-    const repairs = pickDailyRepairs(live.docs['app/repair'], nowMs, repairsDoneToday(entries), REPAIR_MAX, repairsDutyToday(entries)).length;
     const quota = newQuotaLeft(profile?.newPerDay, introduced.length, introduced.filter((c) => c.src === 'lesson').length);
     review = unitReviewGoal({
       cards: all,
-      repairs,
+      // Fehlersätze gehören nie in die Wörter-Runde (11.10.2026): sie zählen nicht zum Umfang von Schritt 1.
+      repairs: 0,
       nowMs,
       lang,
       budgetSec: draft.reviewSec,

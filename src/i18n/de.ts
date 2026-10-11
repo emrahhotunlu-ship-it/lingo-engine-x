@@ -300,6 +300,7 @@ export const de = {
   trGapLabel: 'Lücke im Satz: {sentence}',
   trTypeLabel: 'Englisches Wort für: {meaning}',
   trHint: 'Bedeutung: {meaning}',
+  trHintPhrase: 'Die Wendung bedeutet: {meaning}',
   trHintLetter: 'Beginnt mit „{letter}“',
   trEnterHint: 'Enter übernimmt den Vorschlag, 1–4 wählt selbst.',
   trSuggest: 'Vorschlag: {grade}',

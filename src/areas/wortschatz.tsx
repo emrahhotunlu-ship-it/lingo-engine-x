@@ -7,7 +7,7 @@ import type { UnitBlockProvider } from '../app/unit/types';
 import { installDecksWatch } from '../features/vocab/decksStore';
 import { DeckScreen } from '../features/vocab/hub/DeckScreen';
 import { VocabStatsSection, VocabSettingsSection } from '../features/vocab/hub/Sections';
-import { AddSheetHost, AllDecksSheet, ExtraSheet, ModeSheet, NewDeckSheet, WordSheetHost } from '../features/vocab/hub/Sheets';
+import { AddSheetHost, AllDecksSheet, ExtraSheet, NewDeckSheet, WordSheetHost } from '../features/vocab/hub/Sheets';
 import { VocabHub } from '../features/vocab/hub/VocabHub';
 import { VocabScreen } from '../features/vocab/list/VocabScreen';
 import { installFlushOnHide } from '../features/vocab/persist';
@@ -58,7 +58,7 @@ const trainerResume: Resumable<TrainerSnapshot> = {
   restore: restoreTrainer,
   route: (s) => ({ name: 'trainer', round: s.round, ...(s.deck !== 'all' ? { deck: s.deck } : {}) }),
   label: (s, t) => {
-    const p = roundProgress({ status: 'running', round: s.round, queue: s.queue, pos: s.pos, target: s.target, doneBefore: s.doneBefore, answered: s.answered, repairs: [], repairPos: 0 });
+    const p = roundProgress({ status: 'running', round: s.round, queue: s.queue, pos: s.pos, target: s.target, doneBefore: s.doneBefore, answered: s.answered });
     return t('nbWsResume', { deck: s.label ?? t(s.round === 'pflicht' ? 'nbWsReview' : 'nbWsDeckAll'), n: p?.n ?? s.pos + 1, total: p?.total ?? s.queue.length });
   },
 };
@@ -100,7 +100,6 @@ export const wortschatz = defineArea({
     { id: 'word', component: WordSheetHost },
     { id: 'add', component: AddSheetHost },
     { id: 'x:extra', component: ExtraSheet },
-    { id: 'x:mode', component: ModeSheet },
     { id: 'x:decks', component: AllDecksSheet },
     { id: 'x:deck-new', component: NewDeckSheet },
   ],

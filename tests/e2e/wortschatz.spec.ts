@@ -24,7 +24,19 @@ test.describe('Handy 390', () => {
     // Wiederholen-Karte: ein Hauptknopf mit Zahl, Modus als Textknopf.
     await expect(page.getByTestId('ws-due')).toBeVisible();
     await expect(page.getByTestId('ws-review')).toContainText(/Pflicht: \d+ Karten|Alle fälligen|Heute alles/);
-    await expect(page.getByTestId('ws-mode-open')).toContainText('Modus: Automatisch');
+    // Moduswahl sichtbar (kein Textlink mehr): Aufdecken (Anki) · Tippen · Automatisch, ein Tipp wechselt und merkt es.
+    const mode = page.getByTestId('ws-mode');
+    await expect(mode).toBeVisible();
+    await expect(mode.getByRole('radio')).toHaveText(['Aufdecken (Anki)', 'Tippen', 'Automatisch']);
+    await expect(page.getByTestId('ws-mode-auto')).toHaveAttribute('aria-checked', 'true');
+    await expect(page.getByTestId('ws-mode-hint')).toContainText('Die App wählt für jede Karte die passende Aufgabe');
+    expect((await page.getByTestId('ws-mode-flip').boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    await page.getByTestId('ws-mode-flip').click();
+    await expect(page.getByTestId('ws-mode-flip')).toHaveAttribute('aria-checked', 'true');
+    await expect(page.getByTestId('ws-mode-hint')).toHaveText('Karte ansehen, aufdecken, selbst bewerten – die App plant die nächste Wiederholung.');
+    await expect.poll(async () => ((await dump(page))['app/decks']?.prefs as Doc | undefined)?.mode).toBe('flip');
+    await page.getByTestId('ws-mode-auto').click();
+    await expect.poll(async () => ((await dump(page))['app/decks']?.prefs as Doc | undefined)?.mode).toBe('auto');
     await expect(page.getByTestId('ws-new-left')).toBeVisible();
     // Das Pluszeichen sitzt als Symbolknopf in der Titelzeile.
     await expect(page.getByTestId('vocab-add')).toHaveAttribute('aria-label', 'Wort hinzufügen');
@@ -173,8 +185,24 @@ test('Dein Stand: Abschnitt „Wortschatz-Statistik“ (Platz stand); ohne KI bl
   await openTab(page, 'vocab');
   await page.getByTestId('ws-review').click();
   await screen(page, 'trainer');
-  const flip = page.getByTestId('flip').or(page.getByTestId('intro')).or(page.getByTestId('repair-item'));
+  const flip = page.getByTestId('flip').or(page.getByTestId('intro'));
+  await expect(page.getByTestId('repair-item')).toHaveCount(0);
   await expect(flip.first()).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+// 11.10.2026 (Emrah): „Grammatik hat in Vokabel-Übungen nichts zu suchen“ – „Alle fälligen“ beginnt mit einer Vokabelkarte, nie mit einem Fehlersatz.
+test('Alle fälligen mit fälligen Fehlersätzen: erste Aufgabe ist eine Vokabelkarte, nie ein Fehlersatz', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const due = Date.parse('2026-09-19T12:00:00+02:00');
+  const items = Array.from({ length: 8 }, (_, i) => ({ id: `rx${i}`, wrong: `Could you give me some advice number ${i}?`, right: `Could you give me some advice ${i}?`, src: 'say', t: due - 86_400_000, box: 0, due: due + i }));
+  const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/repair': { items } } } });
+  await screen(page, 'today');
+  await openTab(page, 'vocab');
+  await page.getByTestId('ws-review').click();
+  await screen(page, 'trainer');
+  await expect(page.getByTestId('flip').or(page.getByTestId('intro')).or(page.getByTestId('exercise')).first()).toBeVisible();
+  await expect(page.getByTestId('repair-item')).toHaveCount(0);
   expect(errors).toEqual([]);
 });
 

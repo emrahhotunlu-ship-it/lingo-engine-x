@@ -21,7 +21,7 @@ import { scoreDictation } from '../../domain/drills/dictation';
 import { packExtraOf } from '../../domain/c1pack/packFields';
 import type { ExplainExample, ExplanationModel, ResultVerdict } from '../../domain/explain/types';
 import { unitState } from '../../domain/metrics';
-import { choiceVerdict, exTextKey } from '../../domain/srs/exercise';
+import { choiceVerdict, exTextKey, gapCue } from '../../domain/srs/exercise';
 import { cardExamples, storedTranslation, wantsEnrichment } from '../../domain/srs/examples';
 import { explainWord, isAltAnswer } from '../../domain/srs/explainWord';
 import { posKey } from '../../domain/srs/explain';
@@ -497,10 +497,12 @@ export function ExerciseView({
       exclude={opts.mark && !fb ? [span.start, span.end] : null}
     />
   );
-  const cue = (text: string | null) =>
-    text && !fb ? (
-      <p className="lx-t-support text-muted" data-testid="cue" lang={lang}>
-        {t('trHint', { meaning: text })}
+  // Der Hinweis passt zur Lücke: bei Wortpartner-Aufgaben die Wendung, sonst das Kartenwort (`gapCue`).
+  const gc = gapCue(e, lang);
+  const cue = () =>
+    gc && !fb ? (
+      <p className="lx-t-support text-muted" data-testid="cue" data-kind={gc.kind} lang={lang}>
+        {t(gc.kind === 'phrase' ? 'trHintPhrase' : 'trHint', { meaning: gc.text })}
       </p>
     ) : null;
 
@@ -581,7 +583,7 @@ export function ExerciseView({
             {gapNode}
           </p>
         )}
-        {e.ex !== 'type' && e.ex !== 'dictation' && e.ex !== 'situation' && e.check !== 'known' && cue(e.meaning)}
+        {e.ex !== 'type' && e.ex !== 'dictation' && e.ex !== 'situation' && e.check !== 'known' && cue()}
       </div>
     );
   } else if (isSpot) {
@@ -669,7 +671,7 @@ export function ExerciseView({
             </p>
           ))}
         {(e.ex === 'colloc_gap' || e.ex === 'match' || e.ex === 'contrast') && e.sentence && sentence(e.sentence, gapSlot)}
-        {e.ex === 'match' && e.sentence && cue(e.meaning)}
+        {e.ex === 'match' && e.sentence && cue()}
       </div>
     );
     // Die Warum-Zeile steht bei einer falschen Wahl unter der gewählten Option (und nicht noch einmal in der Erklär-Karte).

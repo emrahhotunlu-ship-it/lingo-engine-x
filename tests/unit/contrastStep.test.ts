@@ -96,8 +96,6 @@ function startWith(levDoc: Doc): void {
     results: [],
     target: 2,
     doneBefore: 0,
-    repairs: [],
-    repairPos: 0,
     mode: 'type',
     contrasted: false,
   });
