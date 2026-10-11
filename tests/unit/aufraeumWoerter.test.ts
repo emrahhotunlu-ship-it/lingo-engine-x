@@ -60,6 +60,22 @@ describe('Rückmeldung 2: Übungssätze mit Lücke sind nie Beispielsatz eines W
     expect(bare.context).toBeNull();
     expect(cardExamples(bare, null)).toEqual([]);
   });
+  it('eingefangener Bildschirmtext der alten App („…ongoing.+“) ist kein Ursprungssatz: Ersatz aus sauberem Beispiel, Dokument bleibt unverändert (Karten „rage“, „decline“)', () => {
+    const RAGE = "escalating wars [raging] in Europeeskalierende Kriege, die in Europa toben'Rage' describes a conflict that is fierce and ongoing.+";
+    const DECLINE = 'to [decline] to commit tosich nicht festlegen wollen aufDiplomatischer als „refused to say“. Typisch für Politik und Wirtschaft.+';
+    expect(hasGapPlaceholder(RAGE)).toBe(true);
+    expect(hasGapPlaceholder(DECLINE)).toBe(true);
+    expect(hasGapPlaceholder('We code in C++')).toBe(false);
+    expect(hasGapPlaceholder('Add 2 + 2.')).toBe(false);
+    const doc = { word: 'rage', de: 'Wut, Zorn', pos: 'noun', ex: RAGE, xEx: [{ en: "The client's rage over the delayed shipment led to a tense call.", t: 1 }], state: 'learning', stage: 1, S: 2, D: 2, reps: 1, last: 1, due: 2 };
+    const before = JSON.stringify(doc);
+    expect(findContext(doc.ex, 'rage')).toBeNull();
+    const card = toTrainCard('rage', doc, true, NOW)!;
+    expect(card.context?.sentence).toBe("The client's rage over the delayed shipment led to a tense call.");
+    expect(cardExamples(card, null).some((e) => e.en.includes('Europeeskalierende'))).toBe(false);
+    expect(JSON.stringify(doc)).toBe(before);
+    expect(bracketExample(RAGE, 'raging', 'rage')).toBe('');
+  });
   it('KI-Beispiele mit Platzhalter werden nicht übernommen; „ - “ wird zu „ – “', () => {
     const out = acceptExamples('contract', ['Tom ? signed the contract yesterday.', 'The contract is ready - please sign it today.'], NOW).map((x) => x.en);
     expect(out).toEqual(['The contract is ready – please sign it today.']);

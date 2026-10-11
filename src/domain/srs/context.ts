@@ -156,8 +156,14 @@ const CTX_CACHE_MAX = 6000;
  * nie ein Beispielsatz für ein Wort. Erkannt werden Unterstriche, „(?)“/„[?]“/„??“ und ein frei stehendes „?“ vor einem Wort.
  */
 const GAP_PLACEHOLDER = /_{2,}|…{2,}|\.{4,}|[([]\s*\?\s*[)\]]|\?\?|(?:^|\s)\?(?=\s+[A-Za-z])/;
+/**
+ * Eingefangener Bildschirmtext der alten App (11.10.2026, zwei Karten „rage“ und „decline“): beim Speichern wurde der ganze Block
+ * (englischer Satz + deutsche Übersetzung + Erklärung ohne Leerzeichen dazwischen) samt Knopf „+“ als Beispielsatz abgelegt
+ * („… in Europeeskalierende Kriege … ongoing.+“). Ein echter Satz endet nie auf „.+“; so ein Text ist kein Ursprungssatz.
+ */
+const CAPTURED_BLOCK = /[.!?…”"')]\+\s*$/;
 export function hasGapPlaceholder(s: unknown): boolean {
-  return typeof s === 'string' && GAP_PLACEHOLDER.test(s);
+  return typeof s === 'string' && (GAP_PLACEHOLDER.test(s) || CAPTURED_BLOCK.test(s));
 }
 
 /** Gedankenstrich statt Bindestrich zwischen Leerzeichen (gleiche Länge, Spannen bleiben gültig). */
