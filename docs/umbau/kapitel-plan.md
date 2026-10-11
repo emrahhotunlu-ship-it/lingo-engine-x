@@ -1,4 +1,4 @@
-# Plan Kapitel-Arbeiten (Rückmeldung 5) – Stand 10.10.2026, wartet auf Emrahs Antworten
+# Plan Kapitel-Arbeiten (Rückmeldung 5) – Stand 11.10.2026, freigegeben („Beides wie empfohlen“, siehe docs/entscheidungen.md)
 
 ## Ursachen (architect)
 - „Du bist hier“ aus `chapterState().current` (`src/domain/c1/state.ts`, `slotPlan.ts currentChapter`), „Als Nächstes“ aus `introTopic()/rankTopics()` über alle 47 Themen (`LearnHub.tsx:97-104`) → zwei Quellen.

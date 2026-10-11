@@ -420,3 +420,8 @@ Abweichungen vom Plan und Festlegungen (kein neuer Plan, nur Auslegung):
 - **Bewusst verschoben:** Falsche Freunde aus dem Fallen-Index zählen (noch) nicht als Verwechslung für den Kontrast. Verwechslung = getippte Antwort ist (beugungstolerant) das Wort einer anderen eigenen Karte. Grund: der Fallen-Index ist kein Wortpaar eigener Karten; ein Kontrast braucht zwei Karten ab Stufe 2.
 - **Nicht gebaut (K3):** „Kontrast nach 2 richtigen in Folge aussetzen“. Ein richtiger Kontrast schreibt bewusst nichts in die Karte (FSRS bleibt); ohne neues Datenfeld lässt sich die Folge nicht zählen.
 - **Lernzeit:** Wenn-Dann-Vorschau je Moment mit eigenen Texten; ohne Moment nur ein ruhiger Hinweis, keine Pflicht. iPhone-Anleitung in 8 Schritten (zuerst den Link in Safari kopieren).
+
+## 11.10.2026 – Kapitel-Arbeiten (Rückmeldung 5), Emrahs Antwort „Beides wie empfohlen“
+- Im Tag kommen Wiederholungen aus anderen, schon begonnenen Kapiteln vor: etwa 1 von 3 Grammatik-Aufgaben.
+- Themen-Test nicht bestanden: Übung zu den schwachen Stellen, Test am nächsten Tag erneut, Link „Nächstes Thema trotzdem beginnen“; nie gesperrt.
+- Plan: `docs/umbau/kapitel-plan.md`, Zweig `claude/umbau-kapitel`.
