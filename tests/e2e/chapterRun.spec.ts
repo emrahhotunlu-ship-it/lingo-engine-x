@@ -45,7 +45,7 @@ test.describe('Handy 390', () => {
     await expect(sheet.getByTestId('chapter-start')).toHaveCount(1);
     // UX-Prüfung C: Kapitel 4 ist (noch) nicht das wirksame Kapitel → nur der Wenn-Satz, nicht „kommt aus diesem Kapitel“.
     await expect(sheet.getByTestId('chapter-daily')).toHaveAttribute('data-active', 'false');
-    await expect(sheet.getByTestId('chapter-daily')).toHaveText('Wenn du hier startest, kommt deine Grammatik ab heute aus diesem Kapitel.');
+    await expect(sheet.getByTestId('chapter-daily')).toHaveText('Wenn du hier startest, kommt deine tägliche Grammatik ab heute aus diesem Kapitel.');
     expect(await sheet.getByTestId('chapter-topic-phase').count()).toBeGreaterThanOrEqual(5);
     // UX-Prüfung E: im Kapitel-Modus EIN Zustand je Thema (die Phase), kein zweiter Chip „Neu“/„Lernt“ daneben.
     await expect(sheet.getByTestId('chapter-topic-chip')).toHaveCount(0);
