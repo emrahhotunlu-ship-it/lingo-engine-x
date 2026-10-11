@@ -342,3 +342,8 @@ Tests: 1953 Unit; E2E der berührten Bildschirme grün (a11y: Kontrast der „Ne
 - Tests: Unit 5225 grün; E2E voll 766 grün, 6 rot = bekannte: a11y „Umstellung“ hell (Kontrast-Flake beim Einblenden) und perf „Statuszeile Großdatensatz“ (2,4 s statt < 2 s bei 1×, 6,1 s statt < 4 s bei 4×; schon auf Basis 3eecc51 rot, eigene Aufgabe).
 - Test-Link `AXHkh6…` Version 56 `1791693550-12d3` (Rückweg v55 `1791675188-8c8d`). Live unverändert v72 `1791500848-5d8d`.
 - Offen: perf-Regression Statuszeile (eigene Aufgabe); `pxKTestPrep` kommt mit heutigen Inhalten nicht vor (alle Themen ≥ 21 Testaufgaben).
+
+## 11.10.2026 – Live-Gang Kapitel-Arbeiten + Aufräumrunde
+- Emrahs Freigabe „Ok live nehmen“ nach Test-Link v56.
+- Vorher gelesen: live `JLL8…` v72 `1791500848-5d8d` (Rückweg). Veröffentlicht: Build 76175a3 → live **v73 `1791713521-d15c`**, Fähigkeiten db, sample, downloads übernommen.
+- Damit live: alles bis einschließlich Kapitel-Arbeiten (Rückmeldung 5) und Aufräumrunde (1–4, 6, 7).
