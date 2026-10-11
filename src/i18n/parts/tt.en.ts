@@ -8,5 +8,6 @@ export const ttEn: Record<keyof typeof ttDe, string> = {
   ttMark: 'by Claude · may contain errors',
   ttMore: 'Ask more',
   ttLimit: 'You have used all 20 explanations from Claude for today. More tomorrow.',
+  ttXUnavailable: 'Claude’s extra explanation isn’t available right now. The explanation above still applies.',
   ttQuestion: 'Please explain in more detail: {task}\nMy answer: {given}\nCorrect: {solution}\nTopic: {pattern}',
 };

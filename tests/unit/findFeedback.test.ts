@@ -11,7 +11,7 @@ import type { GrammarTask } from '../../src/domain/learn/types';
 import type { ExplainLine, ExplanationModel, ResultVerdict } from '../../src/domain/explain/types';
 import { Explanation } from '../../src/ui/exercise/Explanation';
 import { FixedSentence } from '../../src/ui/exercise/FixedSentence';
-import { findHead } from '../../src/ui/exercise/findHead';
+import { findHead, missingWords } from '../../src/ui/exercise/findHead';
 import { lineLabel } from '../../src/ui/exercise/lineLabel';
 
 const SCANNER = 'Used the new scanner, the clerk processed every invoice in minutes.';
@@ -92,5 +92,44 @@ describe('Korrigierter Satz mit sichtbarer Änderung', () => {
     expect(html).toMatch(/data-testid="fix-old"[^>]*>Used</);
     expect(html).toMatch(/data-testid="fix-new"[^>]*>Using</);
     expect(html).toContain('Using the new scanner, the clerk processed every invoice in minutes.');
+  });
+});
+
+describe('Kopf bei „Fehler finden“, wenn ein Wort fehlt (Emrahs Rückmeldung vom 11.10.2026: „will finished“)', () => {
+  const base = { errWord: 'finished', answer: 'have finished' } as const;
+  it('missingWords erkennt eine eingefügte Wortgruppe, sonst null', () => {
+    expect(missingWords('finished', 'have finished')).toEqual({ words: 'have', where: 'before', anchor: 'finished', many: false });
+    expect(missingWords('lawyer', 'a lawyer')).toMatchObject({ words: 'a', where: 'before' });
+    expect(missingWords('such great meeting,', 'such a great meeting,')).toEqual({ words: 'a', where: 'before', anchor: 'great', many: false });
+    expect(missingWords('go', 'go to')).toMatchObject({ words: 'to', where: 'after', anchor: 'go' });
+    expect(missingWords('finished', 'has been finished')).toMatchObject({ words: 'has been', many: true });
+    // falsches Wort, überflüssiges Wort, vertauscht, zwei Lücken: bleibt beim alten Text
+    expect(missingWords('hear', 'hearing')).toBeNull();
+    expect(missingWords('the the report', 'the report')).toBeNull();
+    expect(missingWords('report the', 'the report')).toBeNull();
+    expect(missingWords('a c', 'a b c d')).toBeNull();
+    expect(missingWords(null, 'x')).toBeNull();
+  });
+  it('„Kein Fehler“ gewählt: der Satz hat eine Lücke (DE + EN)', () => {
+    const f = { ...base, verdict: 'wrong', tapped: 'none', found: false } as const;
+    expect(findHead(f, 'de')).toEqual({ title: 'Nicht ganz', sub: 'Du hast „Kein Fehler“ gewählt. In dem Satz fehlt ein Wort.' });
+    expect(findHead(f, 'en')).toEqual({ title: 'Not quite', sub: 'You chose “No error”. A word is missing in the sentence.' });
+  });
+  it('falsches Wort getippt: nennt das fehlende Wort und die Stelle (DE + EN)', () => {
+    const f = { ...base, verdict: 'wrong', tapped: 'presentation', found: false } as const;
+    expect(findHead(f, 'de').sub).toBe('Du hast „presentation“ getippt. Hier fehlt ein Wort: „have“ (vor „finished“).');
+    expect(findHead(f, 'en').sub).toBe('You tapped “presentation”. A word is missing here: “have” (before “finished”).');
+  });
+  it('sofort „Weiß ich nicht“: nur die Lücke', () => {
+    expect(findHead({ ...base, verdict: 'dontKnow', tapped: null, found: false }, 'de').sub).toBe('Hier fehlt ein Wort: „have“ (vor „finished“).');
+  });
+  it('mehrere fehlende Wörter und Lücke nach dem Wort', () => {
+    expect(findHead({ errWord: 'finished', answer: 'has been finished', verdict: 'wrong', tapped: 'x', found: false }, 'de').sub).toContain('Hier fehlen Wörter: „has been“ (vor „finished“).');
+    expect(findHead({ errWord: 'go', answer: 'go to', verdict: 'wrong', tapped: 'x', found: false }, 'en').sub).toContain('(after “go”)');
+  });
+  it('Stelle gefunden oder richtig: unverändert kurz; falsches Wort ohne Lücke: alter Text', () => {
+    expect(findHead({ ...base, verdict: 'ok', tapped: 'finished', found: true }, 'de')).toEqual({ title: 'Richtig erkannt', sub: 'Du hast „finished“ getippt.' });
+    expect(findHead({ errWord: 'hear', answer: 'hearing', verdict: 'wrong', tapped: 'x', found: false }, 'de').sub).toBe('Du hast „x“ getippt. Der Fehler steckt in „hear“.');
+    expect(findHead({ errWord: null, answer: 'a b', verdict: 'wrong', tapped: 'none', found: false }, 'de').sub).toContain('fehlerfrei');
   });
 });

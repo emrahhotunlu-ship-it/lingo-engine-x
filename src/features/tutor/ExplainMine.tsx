@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAsk } from '../../ai/useAsk';
 import { useAiAvailable } from '../../ai/scope';
 import { takeTutorCall } from '../../ai/tutorBudget';
@@ -12,6 +12,7 @@ import { SpeakButton } from '../../engine/SpeakButton';
 import { useT } from '../../i18n';
 import { explainAnswerV2, type ExplainOut, type ExplainVars } from '../../prompts/explainAnswerV2';
 import { AiMark } from '../../ui/AiMark';
+import { logWarn } from '../../platform/diagnostics';
 import { AiRunPanel, isBusy } from '../../ui/AiRunPanel';
 import { Button } from '../../ui/Button';
 import { Examples } from '../../ui/exercise/Examples';
@@ -89,6 +90,11 @@ export function ExplainMine(props: ExplainMineProps) {
   const [limited, setLimited] = useState(false);
   const [rightTapped, setRightTapped] = useState(false);
   const [reported, setReported] = useState(false);
+  // Die Erklär-Karte darüber steht schon: Scheitert die Zusatzerklärung, gibt es keinen roten Fehlerblock, nur Diagnose-Eintrag und eine ruhige Zeile.
+  const failedKey = ask.error;
+  useEffect(() => {
+    if (failedKey) logWarn('tutor:explain', { code: failedKey, message: 'optional explanation failed; static explanation stays' }, taskKey);
+  }, [failedKey, taskKey]);
   if (!ai || reported) return null;
 
   const current: Shown | null = shown ?? (fromDb ? { out: outOfAx(fromDb), guess: '', stored: true } : null);
@@ -117,7 +123,10 @@ export function ExplainMine(props: ExplainMineProps) {
     };
     noteQuality(TPL, 'gen');
     const r = await ask.run(ev);
-    if (!r) return;
+    if (!r) {
+      setStep('idle');
+      return;
+    }
     noteQuality(TPL, 'acc');
     const entry: Shown = { out: r, guess: guess.trim(), stored: false };
     memo.set(taskKey, entry);
@@ -219,7 +228,7 @@ export function ExplainMine(props: ExplainMineProps) {
 
   return (
     <div className="flex flex-col gap-2" data-testid="tutor" data-ai="">
-      {step === 'guess' && !busy && !ask.error ? (
+      {step === 'guess' && !busy ? (
         <div className="lx-card flex flex-col gap-2 p-3" data-testid="tutor-guessbox">
           <p className="lx-t-label m-0">{t('ttXGuessTitle')}</p>
           <p className="lx-t-meta m-0 text-muted">{t('ttXGuessHint')}</p>
@@ -243,13 +252,18 @@ export function ExplainMine(props: ExplainMineProps) {
         </div>
       ) : (
         <div className="flex flex-wrap items-center gap-2">
-          {!busy && !ask.error && (
-            <Button variant="secondary" icon="sparkle" onClick={() => setStep('guess')} data-testid="tutor-ask">
-              {t('ttAsk')}
+          {!busy && (
+            <Button variant="secondary" icon="sparkle" onClick={() => (failedKey ? void go() : setStep('guess'))} data-testid="tutor-ask">
+              {failedKey ? t('aiRetry') : t('ttAsk')}
             </Button>
           )}
-          <AiRunPanel phase={ask.phase} error={ask.error} onStop={ask.stop} onRetry={() => void go()} />
+          <AiRunPanel phase={ask.phase} error={null} onStop={ask.stop} />
         </div>
+      )}
+      {failedKey && !busy && (
+        <p className="lx-t-support m-0 text-muted" role="status" data-testid="tutor-unavailable">
+          {t('ttXUnavailable')}
+        </p>
       )}
       {limited && (
         <p className="m-0 text-sm text-muted" role="status" data-testid="tutor-limit">
