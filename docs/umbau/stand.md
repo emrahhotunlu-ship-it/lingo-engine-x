@@ -358,3 +358,6 @@ Tests: 1953 Unit; E2E der berührten Bildschirme grün (a11y: Kontrast der „Ne
 
 ## 11.10.2026 – Live-Gang Fix kaputter Beispielsatz
 - Emrahs Freigabe „ja live nehmen“ nach Test-Link v58. Vorher gelesen: live v73 `1791713521-d15c` (Rückweg). Veröffentlicht: Build 7cfaf10 → live **v74 `1791718808-a803`**, Fähigkeiten db, sample, downloads übernommen.
+
+## 11.10.2026 – Sammelrunde Rückmeldungen (zweite), Liste wird gesammelt, gebaut wird erst nach Emrahs „los“
+1. Grammatik „Fehler finden“, Satz „By 9 p.m., I will finished my presentation.“ (Foto 14:46): Emrah wählte „Kein Fehler“ (falsch). Rückmeldung zeigt oben „finished → have finished“, dann „Nicht ganz … Der Fehler steckt in „finished““, „Richtig: …“, „Warum ist das so?“ (Future Perfect braucht will have + Partizip) – und darunter in Rot „Die Antwort von Claude war unvollständig. Versuch es noch einmal.“ mit Knopf „Erneut versuchen“ (`aiInvalid`, `src/i18n/parts/ai.de.ts:15`). Eine fertige Begründung steht schon da, die rote KI-Fehlermeldung stört und widerspricht („unvollständig“, obwohl alles erklärt ist). Zu klären beim Bau: warum die KI-Nachfrage ungültig war und ob sie hier überhaupt nötig ist (statische Begründung genügt); Hinweis „Fehler steckt in finished“ vs. fehlendes Wort „have“.
