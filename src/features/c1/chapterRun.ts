@@ -6,6 +6,7 @@ import { validateDoc } from '../../data/validate';
 import { chooseChapter, patchC1, readC1 } from '../../domain/c1/c1doc';
 import { chapterNow, chapterPlanInput, type ChapterCursor } from '../../domain/c1/cursor';
 import { freezeGrammarDay } from '../../domain/grammar/path';
+import { focusFor, focusTopicOf } from '../../domain/progress/weekly3';
 import { patternsOf } from '../../domain/grammar/patterns';
 import { readPlan } from '../../domain/plan/buildPlan';
 import { refreezeAllowed, refreezePlan } from '../../domain/plan/refreeze';
@@ -75,7 +76,7 @@ function runCursor(c: ChapterCursor, api: { focusNow: () => void }): ChapterStar
     if (useGrammarSession.getState().step === step0) {
       // Weniger als 4 passende Aufgaben: Test in Vorbereitung, stattdessen eine Übungsrunde zum Thema.
       res = 'prep';
-      kind = startGrammar({ mode: 'topic', topic });
+      kind = startGrammar({ mode: 'topic', topic, prep: true });
     }
   } else kind = startGrammar({ mode: 'topic', topic, pats: c.pats });
   if (kind === 'typed') api.focusNow();
@@ -85,8 +86,16 @@ function runCursor(c: ChapterCursor, api: { focusNow: () => void }): ChapterStar
 
 /** Wahl speichern; bei Fehler zurücknehmen. Danach höchstens einmal den Grammatikschritt von heute neu festlegen. */
 async function persistChoice(n: number, before: number | null, choseToday: boolean, today: string): Promise<void> {
-  const r = await patchC1((doc) => chooseChapter(doc, n, today));
-  if (r === 'failed' || r === 'unavailable') {
+  // „Unverändert“ zählt nur, wenn der frisch gelesene Stand dieses Kapitel schon trägt; sonst war `app/c1` unlesbar oder zu groß und die Wahl ist
+  // NICHT gespeichert (data-guard).
+  let already = false;
+  const r = await patchC1((doc) => {
+    const next = chooseChapter(doc, n, today);
+    already = !next && doc.ch?.n === n;
+    return next;
+  });
+  const saved = r === 'created' || r === 'updated' || (r === 'unchanged' && already);
+  if (!saved) {
     useChapterPick.setState({ n: before });
     logWarn('chapter:choose', { code: r, message: `Kapitelwahl ${n} nicht gespeichert` }, 'app/c1');
     return;
@@ -104,12 +113,14 @@ async function refreezeToday(n: number, choseToday: boolean, today: string): Pro
   const plan = tp.day === today ? tp.plan : null;
   const u = unitNow();
   const row = u?.rows.find((x) => x.block === 2) ?? null;
+  // Ohne Zeile für Schritt 2 lässt sich nicht prüfen, ob er unberührt ist: dann nichts neu festlegen.
+  if (!row) return;
   const run = useUnitRun.getState();
   const gs = useGrammarSession.getState();
   const ok = refreezeAllowed({
     n,
     gt: plan?.u?.gt ?? null,
-    step2: row ? { done: row.state === 'done', progress: row.progress?.done ?? 0 } : null,
+    step2: { done: row.state === 'done', progress: row.progress?.done ?? 0 },
     running: (run.day === today && run.block === 2) || (gs.active && gs.ctx === 'duty' && gs.day === today),
     choseToday,
   });
@@ -119,7 +130,9 @@ async function refreezeToday(n: number, choseToday: boolean, today: string): Pro
   const docs = live.collections.grammar ?? EMPTY;
   const chapter = chapterPlanInput({ docs, today, nowMs, chosen: n });
   if (!chapter) return;
-  const { gt, ps } = freezeGrammarDay({ docs, today, nowMs, introPlanOf: INTRO_PLAN_OF, seed: today, chapter });
+  // Wochenfokus wie beim Anlegen des Plans: nur, wenn er vor diesem Plan gewählt wurde.
+  const focus = focusTopicOf(focusFor(live.docs['app/profile']?.wf, { planAt: plan.at, day: today }));
+  const { gt, ps } = freezeGrammarDay({ docs, today, nowMs, introPlanOf: INTRO_PLAN_OF, seed: today, chapter, focus });
   let next: StoredPlan | null = null;
   const writer = getWriter();
   if (writer && tp.status === 'ready') {

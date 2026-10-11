@@ -271,9 +271,11 @@ export function freezeGrammarDay(i: {
   seed: string;
   /** Kapitel-Arbeit (K3): Der Grammatikschritt folgt dem gewählten Kapitel (reine Daten, damit dieser Ordner nichts vom Programm weiß). */
   chapter?: ChapterInput | null;
+  /** Wochenfokus (P50, Thema des Fokus-Musters), nur im Kapitel-Modus: ein begonnenes Fokus-Thema bekommt einen Platz (`chapterDay`). */
+  focus?: string | null;
 }): { gt: GrammarDay; ps: Record<string, PatState> } {
   let gt: GrammarDay;
-  if (i.chapter) gt = chapterDay({ ...i, chapter: i.chapter });
+  if (i.chapter) gt = chapterDay({ ...i, chapter: i.chapter, focus: i.focus ?? null });
   else {
     const step = introStepFor(i);
     const intro = step?.topic ?? null;
@@ -321,7 +323,7 @@ function introducedToday(docs: ReadonlyMap<string, Readonly<Doc>>, today: string
  * Themen (≤ 3): zuerst das Thema des Cursors, dann ein weiteres begonnenes Kapitel-Thema (nach Bedarf), dann etwa jede dritte Aufgabe Wiederholung
  * aus einem begonnenen Thema außerhalb des Kapitels. Ein nie begonnenes Thema kommt nur als Einführung des Tages hinein.
  */
-function chapterDay(i: { docs: ReadonlyMap<string, Readonly<Doc>>; today: string; nowMs: number; seed: string; chapter: ChapterInput }): GrammarDay {
+function chapterDay(i: { docs: ReadonlyMap<string, Readonly<Doc>>; today: string; nowMs: number; seed: string; chapter: ChapterInput; focus?: string | null }): GrammarDay {
   const ch = i.chapter;
   const inCh = new Set(ch.topics);
   const started = (t: string): boolean => !isNewTopic(i.docs.get(t));
@@ -337,15 +339,19 @@ function chapterDay(i: { docs: ReadonlyMap<string, Readonly<Doc>>; today: string
   }
   const ranked = rankTopics({ grammarDocs: i.docs, nowMs: i.nowMs, seed: i.seed, introduce: intro }).map((r) => r.topic);
   const head = intro ?? (ch.cursor.topic && started(ch.cursor.topic) ? ch.cursor.topic : null);
-  const chRanked = ranked.filter((t) => inCh.has(t) && t !== head && started(t));
-  const review = ranked.filter((t) => !inCh.has(t) && started(t));
-  let topics = [head, chRanked[0], review[0]].filter((t): t is string => !!t);
-  // Auffüllen, falls ein Platz leer bleibt: erst weitere Wiederholung, dann weitere Kapitel-Themen.
-  for (const t of [...review.slice(1), ...chRanked.slice(1)]) {
-    if (topics.length >= 3) break;
-    if (!topics.includes(t)) topics.push(t);
-  }
-  topics = topics.filter((t, k, a) => a.indexOf(t) === k).slice(0, 3);
+  // Wochenfokus (P50, `moWkFocusLead`): ein begonnenes Fokus-Thema rückt auf seinen Platz (außerhalb des Kapitels: der Wiederholungsplatz).
+  const focus = i.focus && started(i.focus) && i.focus !== head ? i.focus : null;
+  const lead = (list: string[]): string[] => (focus && list.includes(focus) ? [focus, ...list.filter((t) => t !== focus)] : list);
+  const chRanked = lead(ranked.filter((t) => inCh.has(t) && t !== head && started(t)));
+  const review = lead(ranked.filter((t) => !inCh.has(t) && started(t)));
+  // Zwei Plätze Kapitel, ein Platz Wiederholung (etwa jede dritte Aufgabe). Gibt es nur ein begonnenes Kapitel-Thema, bekommt es beide
+  // Kapitel-Plätze (es steht zweimal in `topics`, die Runde gibt ihm dann zwei von drei Aufgaben); die Wiederholung bleibt bei einem Platz.
+  const chTopics = [head, ...chRanked].filter((t): t is string => !!t);
+  const a = chTopics[0];
+  let topics: string[];
+  if (!a) topics = review.slice(0, 3);
+  else if (review[0]) topics = [a, chTopics[1] ?? a, review[0]];
+  else topics = chTopics.slice(0, 3);
   // Ganz am Anfang (nichts begonnen, Einführung heute schon anderswo): wie bisher das erste Thema der Rangliste, damit die Runde nicht leer ist.
   if (!topics.length) topics = ranked.slice(0, 1);
   return { intro, pats, topics, ch: ch.n };

@@ -20,7 +20,7 @@ import { useToday } from '../today/state';
 import { TabTitle } from '../system/Chrome';
 import { TopicSheet } from '../grammar/GrammarScreen';
 import { PathList } from '../grammar/PathList';
-import { startGrammar } from '../grammar/session';
+import { startGrammar, topicTestReady } from '../grammar/session';
 import { topicName } from '../grammar/topicUi';
 import { Slot } from '../../app/slots';
 import { chapterRunOn, flags } from '../../app/flags';
@@ -126,6 +126,9 @@ export function LearnHub() {
   // nichts gesperrt). Der Knopf startet die Runde der Phase (Einführung, Übung oder Themen-Test).
   const chapterNowRes = useChapterNow();
   const cursor: ChapterCursor | null = chapterRunOn() && program ? chapterNowRes.cursor : null;
+  // Themen-Test in Vorbereitung (zu wenig Testaufgaben, dieselbe Auswahl wie beim Start): Der Knopf startet eine Übung, die Karte sagt das.
+  const testTopic = cursor?.phase === 'test' ? cursor.topic : null;
+  const prep = useMemo(() => (testTopic ? !topicTestReady(testTopic, docs) : false), [testTopic, docs]);
 
   const startNext = () => {
     if (!next) return;
@@ -148,12 +151,12 @@ export function LearnHub() {
       </p>
       <p className="text-lg font-semibold tracking-tight">{t('pxKNext', { n: cursor.n, topic: cursor.topic ? topicName(cursor.topic, lang) : (programChapters()[cursor.chapter]?.name[lang] ?? '') })}</p>
       <p className="text-sm text-muted" data-testid="hub-next-line">
-        {t(cursor.phase === 'test' && cursor.retry ? 'pxKNextRetry' : K_LINE[cursor.phase], { n: cursor.phase === 'intro' ? TOPIC_ROUND_MIN + 1 : TOPIC_ROUND_MIN })}
+        {prep ? t('pxKTestPrep') : t(cursor.phase === 'test' && cursor.retry ? 'pxKNextRetry' : K_LINE[cursor.phase], { n: cursor.phase === 'intro' ? TOPIC_ROUND_MIN + 1 : TOPIC_ROUND_MIN })}
       </p>
       {(cursor.phase !== 'done' || cursor.chapter + 1 < programChapters().length) && (
         <div>
-          <Button variant="primary" iconAfter="arrowRight" onClick={() => startChapter(cursor.phase === 'done' ? cursor.chapter + 1 : cursor.chapter, api)} data-testid="hub-next-start" data-action={cursor.phase}>
-            {t(K_BTN[cursor.phase])}
+          <Button variant="primary" iconAfter="arrowRight" onClick={() => startChapter(cursor.phase === 'done' ? cursor.chapter + 1 : cursor.chapter, api)} data-testid="hub-next-start" data-action={cursor.phase} data-prep={prep ? 'true' : undefined}>
+            {t(prep ? 'pxKBtnPractice' : K_BTN[cursor.phase])}
           </Button>
         </div>
       )}

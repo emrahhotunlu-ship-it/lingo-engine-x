@@ -19,6 +19,7 @@ import { checkPlanned, step3Format } from '../../domain/c1/checkSchedule';
 import { chapterRunOn, flags, kindEnabled } from '../../app/flags';
 import { docTotal } from '../../domain/capacity/docGuard';
 import { freezeGrammarDay } from '../../domain/grammar/path';
+import { focusFor, focusTopicOf } from '../../domain/progress/weekly3';
 import { patternsOf } from '../../domain/grammar/patterns';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
 import { newQuotaLeft, quizzable } from '../../domain/srs/queue';
@@ -239,7 +240,9 @@ export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
   // Kapitel-Arbeit (K3): Mit dem Schalter `chapterRun` folgt der Grammatikschritt dem Kapitel (gewählt in `app/c1.ch`, sonst abgeleitet).
   const c1raw = (live.docs as Record<string, Readonly<Record<string, unknown>> | null | undefined>)['app/c1'] ?? null;
   const chapter = chapterRunOn() ? chapterPlanInput({ docs: grammarDocs, today, nowMs, chosen: chosenChapterOf(c1raw)?.n ?? null }) : null;
-  const { gt, ps } = freezeGrammarDay({ docs: grammarDocs, today, nowMs, introPlanOf: INTRO_PLAN_OF, seed: today, chapter });
+  // Wochenfokus (P50) im Kapitel-Modus: gilt für Pläne, die nach der Wahl angelegt werden (dieser Plan entsteht jetzt, `at` = nowMs).
+  const focus = chapter ? focusTopicOf(focusFor(profile?.wf, { planAt: nowMs, day: today })) : null;
+  const { gt, ps } = freezeGrammarDay({ docs: grammarDocs, today, nowMs, introPlanOf: INTRO_PLAN_OF, seed: today, chapter, focus });
   // Plan 3.0 (P23): Format von Schritt 3 nach Wochentag, Check-Tag und nächstes Ziel werden jetzt festgelegt und mit dem Plan eingefroren.
   const step3 = step3Format(today, { kindOn: kindEnabled, tempoOn: flags.tempo });
   // `app/c1` wird erst mit dem Programm (P31) abonniert; bis dahin fehlt das Dokument und der Check-Tag bleibt aus. Ein Dokument, das nur die

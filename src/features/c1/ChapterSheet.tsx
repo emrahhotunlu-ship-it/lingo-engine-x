@@ -62,8 +62,9 @@ export function ChapterSheet({ open, chapter, progress, onClose }: { open: boole
               {chapter.done[lang]}
             </p>
             {progress.ready ? (
-              <p className="lx-tnum text-sm text-muted" data-testid="chapter-sheet-pats" data-safe={progress.topicSafe} data-total={progress.liveTopics}>
-                {t('hxPathSafe', { a: progress.topicSafe, b: progress.liveTopics })}
+              // Im Kapitel-Modus zählt „geschafft“ wie die Liste unten (sicher oder Themen-Test bestanden), sonst wie bisher „sicher“.
+              <p className="lx-tnum text-sm text-muted" data-testid="chapter-sheet-pats" data-safe={run ? progress.topicDone : progress.topicSafe} data-total={progress.liveTopics}>
+                {run ? t('pxKDoneCount', { a: progress.topicDone, b: progress.liveTopics }) : t('hxPathSafe', { a: progress.topicSafe, b: progress.liveTopics })}
               </p>
             ) : (
               <p className="text-sm text-muted" data-testid="chapter-sheet-soon">

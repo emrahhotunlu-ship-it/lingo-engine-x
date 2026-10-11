@@ -28,7 +28,8 @@ export type TopicPhase = 'intro' | 'practice' | 'test' | 'done';
 
 export type TopicStep = {
   phase: TopicPhase;
-  /** intro: die Muster des Einführungsschritts (≤ 2); practice: die schwächsten Muster (≤ 2); sonst leer. */
+  /** intro: die Muster des Einführungsschritts (≤ 2); practice: nach nicht bestandenem Test die schwachen Muster des Tests (`tt.w`), sonst die
+   *  schwächsten Muster (≤ 2); sonst leer. */
   pats: string[];
   /** test: Der Test war schon einmal nicht bestanden (Wiederholung). */
   retry: boolean;
@@ -56,7 +57,7 @@ function weakPats(ids: readonly string[], entries: Record<string, PatEntry>, tod
  * Phase eines Themas. `done` (Thema sicher oder Themen-Test bestanden) bestimmt der Aufrufer; hier:
  * - intro: Thema neu, oder der nächste Einführungsschritt ist dran (jedes Muster des vorigen Schritts mit 3 Antworten, 2 richtig, nicht von heute).
  * - practice: Der vorige Schritt ist noch nicht so weit, oder heute ist der Test nicht bestanden worden (morgen noch einmal).
- * - test: Alle Schritte sind eingeführt und jedes Muster hat mindestens 3 Antworten (Themen ohne Musterdatei: 8 Antworten).
+ * - test: Alle Schritte sind eingeführt und jedes Muster hat mindestens 3 Antworten, 2 richtig, und ist nicht von heute (Themen ohne Musterdatei: 8 Antworten).
  * Altbestand: Ein begonnenes Thema ohne `pats` gilt als ganz eingeführt.
  */
 export function topicStep(topic: string, doc: Doc | undefined, today: string): TopicStep {
@@ -77,8 +78,12 @@ export function topicStep(topic: string, doc: Doc | undefined, today: string): T
     }
   }
   const failedToday = !!tt && !tt.ok && tt.d === today;
-  const testReady = allIds.length ? allIds.every((id) => num(entries[id]?.n) >= PAT_OK_N) || (legacy && num(doc?.n) >= TEST_READY_N) : num(doc?.n) >= TEST_READY_N;
+  // Dieselbe Regel wie zwischen den Einführungsschritten: jedes Muster 3 Antworten, 2 richtig, nicht von heute eingeführt (Altbestand: 8 Antworten).
+  const testReady = allIds.length ? allIds.every((id) => ready(entries[id], today)) || (legacy && num(doc?.n) >= TEST_READY_N) : num(doc?.n) >= TEST_READY_N;
   if (!failedToday && testReady) return { phase: 'test', pats: [], retry: !!tt && !tt.ok, skipped };
+  // Nach einem nicht bestandenen Test: genau die Muster, die im Test falsch waren (`tt.w`, wie im Ergebnis „Das übst du als Nächstes“).
+  const testWeak = tt && !tt.ok ? (tt.w ?? []).filter((id) => !allIds.length || allIds.includes(id)) : [];
+  if (testWeak.length) return { phase: 'practice', pats: testWeak, retry: false, skipped };
   const ids = allIds.length ? allIds.filter((id) => entries[id]) : [];
   return { phase: 'practice', pats: weakPats(ids.length ? ids : Object.keys(entries), entries, today), retry: false, skipped };
 }

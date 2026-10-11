@@ -177,6 +177,15 @@ export function compactC1(doc: C1Doc, today: string): C1Doc {
 
 const FIELDS = ['place', 'checks', 'gates', 'prod', 'bad', 'ch', 'chh'] as const;
 
+/** Was `next` an `base` hinten anhängt (auch wenn vorn gekappt wurde); `null`, wenn `next` nicht so entsteht. */
+function appendedTail<T>(base: readonly T[], next: readonly T[]): T[] | null {
+  for (let k = 0; k < base.length; k++) {
+    const tail = base.slice(k);
+    if (tail.length <= next.length && tail.every((e, j) => jsonEqual(e, next[j]))) return next.slice(tail.length);
+  }
+  return base.length ? null : [...next];
+}
+
 /**
  * Schreibvorgang für `writer.transform('app/c1', …)` aus dem frischen Stand. `change` bekommt eine Kopie des gelesenen Dokuments und liefert das
  * neue (oder `null` = nichts tun). Geschrieben werden nur die Felder, die sich ändern; fremde Felder bleiben unangetastet. `null`, wenn das Dokument
@@ -207,6 +216,12 @@ export function c1Update(
   for (const k of FIELDS) {
     const a = (next as Record<string, unknown>)[k];
     if (a !== undefined && !jsonEqual(a, (base as Record<string, unknown>)[k])) upd[k] = a;
+  }
+  // Verlauf der Wahl (`chh`): Gelesen wird nur gefiltert; geschrieben wird der ROHE Verlauf plus die neuen Einträge (≤ 20), damit unbekannte
+  // Einträge nicht verloren gehen (Datenregel: nie strippen).
+  if (upd.chh !== undefined && Array.isArray(cur.chh)) {
+    const added = appendedTail(base.chh ?? [], proposed.chh ?? []);
+    if (added) upd.chh = [...(cur.chh as unknown[]), ...added].slice(-C1_LIMITS.chh);
   }
   // Fehlt das Feld `v` im bestehenden Dokument, bleibt es fehlen (nur ergänzen, wenn sich sonst etwas ändert).
   if (!Object.keys(upd).length) return null;

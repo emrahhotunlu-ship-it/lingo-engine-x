@@ -1,4 +1,5 @@
 import { topicState } from '../grammar/path';
+import { readTt } from '../grammar/topicTest';
 import { patternsOf } from '../grammar/patterns';
 import { currentChapter, type PatInfo } from '../grammar/slotPlan';
 import { patternState, patternStateNo, patsOf, type PatEntry } from '../metrics/pattern';
@@ -37,6 +38,8 @@ export type ChapterProgress = {
   patTotal: number;
   /** Sichere Themen (UX-Prüfung B2: EINE Maßeinheit im Reiter, wie Heute und Fortschritt: „a von b Themen sicher“). */
   topicSafe: number;
+  /** Geschaffte Themen im Kapitel-Modus: sicher ODER Themen-Test bestanden (dieselbe Regel wie `topicDone` im Cursor und „Geschafft“ in der Liste). */
+  topicDone: number;
   /** Eingeführte / vorhandene Themen. */
   introduced: number;
   liveTopics: number;
@@ -87,6 +90,7 @@ export function chapterState(i: { docs: ReadonlyMap<string, Doc>; today: string;
     const introduced = live.filter((t) => t.introduced).length;
     return {
       topicSafe: live.filter((t) => t.safe).length,
+      topicDone: live.filter((t) => t.safe || readTt(i.docs.get(t.id))?.ok === true).length,
       id: ch.id,
       n: ch.n,
       status: 'open',

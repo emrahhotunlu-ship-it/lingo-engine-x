@@ -68,6 +68,12 @@ export function GrammarSessionScreen() {
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="grammar-session" data-mode={s.mode} data-ctx={s.ctx} data-profile={s.profile}>
       <RoundTop onClose={leave} progress={grammarProgress(s)} ctx={s.ctx} duty="ch:gram" />
+      {/* Kapitel-Arbeit: Themen-Test noch in Vorbereitung (zu wenig Testaufgaben), stattdessen Übung: kurzer Hinweis vor der ersten Aufgabe. */}
+      {s.prep && s.status === 'running' && s.pos === 0 && !showCards && (
+        <p className="m-0 text-sm text-muted" role="status" data-testid="tt-prep">
+          {t('pxKTestPrep')}
+        </p>
+      )}
       {/* Leistung (N45): kein Warten auf das Ausblenden – die nächste Aufgabe steht sofort da und rückt aus dem Kartenstapel nach vorn (P54, ≤ 300 ms). */}
       <CardStack stackKey={s.status === 'summary' ? 'summary' : showCards ? `intro-${s.step}` : `g-${s.step}`}>
         {showCards && s.intro ? (

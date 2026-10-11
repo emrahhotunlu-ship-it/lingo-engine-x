@@ -90,12 +90,14 @@ test.describe('Handy 390', () => {
     const res = page.getByTestId('tt-result');
     await expect(res).toHaveAttribute('data-ok', 'false');
     await expect(res).toHaveAttribute('data-n', '6');
-    await expect(res).toContainText('Morgen kommt der Test noch einmal.');
+    await expect(res).toContainText('Ab morgen ist der Test wieder bereit.');
     await page.getByTestId('tt-skip').click();
     await expect(page.getByTestId('tt-skipped')).toBeVisible();
     await expect.poll(async () => ((await dump(page))['grammar/passive'] as { tt?: { s?: string } }).tt?.s).toBe(TODAY);
     const tt = ((await dump(page))['grammar/passive'] as { tt: Doc }).tt;
     expect(tt).toMatchObject({ d: TODAY, n: 6, ok: false, k: 1, s: TODAY });
+    // Die schwachen Muster des Tests (`tt.w`) bleiben auch nach „trotzdem weiter“ stehen: danach wird genau das geübt.
+    expect(Array.isArray(tt.w) && (tt.w as unknown[]).length > 0).toBe(true);
     expect(errors).toEqual([]);
   });
 

@@ -7,6 +7,7 @@ export const pxK5En = {
   pxKPhaseIntro: 'Learn it',
   pxKPhasePractice: 'Practice',
   pxKPhaseTest: 'Topic test',
+  pxKDoneCount: '{a} of {b} topics done',
   pxKPhaseDone: 'Done',
   pxKNext: 'Chapter {n} · {topic}',
   pxKNextIntro: 'New: a short introduction, then a few tasks · about {n} min',

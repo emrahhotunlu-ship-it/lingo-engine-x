@@ -607,8 +607,8 @@ export function selectRound(i: RoundInput): GrammarTask[] {
     }
   }
 
-  // 5. Verschachteln.
-  const queues = topics.map((t) => [...(perTopic.get(t) ?? [])]);
+  // 5. Verschachteln. Ein Thema, das zweimal in `topics` steht (Kapitel-Plan, `chapterDay`), hat nur EINE Schlange (es zählt doppelt bei den Plätzen oben).
+  const queues = [...new Set(topics)].map((t) => [...(perTopic.get(t) ?? [])]);
   const out: GrammarTask[] = [];
   const first = topics[0];
   if (first && topics.length > 1 && pOf(first) < 0.35 && (queues[0]?.length ?? 0) >= 2) {

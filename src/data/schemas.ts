@@ -384,8 +384,9 @@ export const grammarSchema = z.looseObject({
       }),
     )
     .nullish(),
-  /** Neu (Kapitel-Arbeiten, 11.10.2026, nur ergänzend): letzter Themen-Test `{d, c, n, ok, k}` (Tag, richtig, gestellt, je bestanden, Versuche). */
-  tt: z.looseObject({ d: str, c: num, n: num, ok: bool, k: num }).nullish(),
+  /** Neu (Kapitel-Arbeiten, 11.10.2026, nur ergänzend): letzter Themen-Test `{d, c, n, ok, k}` (Tag, richtig, gestellt, je bestanden, Versuche);
+   *  `w` = schwache Muster des letzten Versuchs (Liste von Kennungen, ≤ 12, tolerant gelesen). */
+  tt: z.looseObject({ d: str, c: num, n: num, ok: bool, k: num, w: loose }).nullish(),
 });
 
 export const lessonSchema = z.looseObject({

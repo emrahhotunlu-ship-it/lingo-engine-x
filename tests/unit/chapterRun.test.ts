@@ -1,12 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { c1Schema, grammarSchema } from '../../src/data/schemas';
 import { programChapters } from '../../src/domain/c1/chapters';
-import { chooseChapter, chosenChapterOf, C1_LIMITS, programStartedOf, readC1 } from '../../src/domain/c1/c1doc';
+import { c1Update, chooseChapter, chosenChapterOf, C1_LIMITS, programStartedOf, readC1 } from '../../src/domain/c1/c1doc';
 import { chapterNow, chapterPlanInput, effectiveChapter, topicStep } from '../../src/domain/c1/cursor';
 import { chapterState } from '../../src/domain/c1/state';
 import { freezeGrammarDay, isNewTopic } from '../../src/domain/grammar/path';
 import { patternsOf } from '../../src/domain/grammar/patterns';
 import { nextTt, readTt, ttPassed } from '../../src/domain/grammar/topicTest';
+import { selectRound } from '../../src/domain/grammar/tasks';
 import { grammarWrite } from '../../src/domain/grammar/write';
 import { refreezeAllowed, refreezePlan } from '../../src/domain/plan/refreeze';
 import { readUnitMeta } from '../../src/domain/plan/unitMeta';
@@ -276,5 +277,97 @@ describe('Einmaliges Neufestlegen (Zähltest, kein neu gewürfelter Plan)', () =
       } else cur = { ...cur, choseToday: true };
     }
     expect(count).toBe(1);
+  });
+});
+
+describe('Nachbesserungen aus den Prüfungen (11.10.2026)', () => {
+  const topic = 'passive';
+  it('1. Themen-Test erst, wenn jedes Muster 3 Antworten, 2 richtig hat und nicht von heute ist', () => {
+    const d = shakyDoc(topic, 3, 2);
+    expect(topicStep(topic, d, TODAY).phase).toBe('test');
+    // Ein Muster erst heute eingeführt: noch kein Test (wie zwischen den Einführungsschritten).
+    const ids = pid(topic);
+    const today = { ...d, pats: { ...(d.pats as Doc), [ids[0]!]: { n: 3, c: 3, last: NOW, h: 0, r: 0, k: 1, dd: [], i: TODAY } } };
+    expect(topicStep(topic, today, TODAY).phase).toBe('practice');
+    expect(topicStep(topic, today, '2026-10-12').phase).toBe('test');
+    // 3 Antworten, aber nur 1 richtig: noch Übung.
+    const weak = { ...d, pats: { ...(d.pats as Doc), [ids[0]!]: { n: 3, c: 1, last: NOW - DAY, h: 0, r: 0, k: 1, dd: [], i: '2026-10-01' } } };
+    expect(topicStep(topic, weak, TODAY).phase).toBe('practice');
+    // Altbestand ohne Muster-Einträge: weiter 8 Antworten.
+    expect(topicStep(topic, { n: 8, c: 4, S: 1, D: 6, last: NOW - DAY }, TODAY).phase).toBe('test');
+  });
+  it('2. nach nicht bestandenem Test genau die Muster aus dem Test (`tt.w`), auch wenn eins davon schon fest ist', () => {
+    const ids = pid(topic);
+    const firm = safeDoc(topic);
+    const w = [ids[0]!, ids[1]!];
+    const failed = { ...firm, tt: { d: TODAY, c: 3, n: 6, ok: false, k: 1, w } };
+    const s = topicStep(topic, failed, TODAY);
+    expect(s.phase).toBe('practice');
+    expect(s.pats).toEqual(w);
+    // Alte Daten ohne `w`: wie bisher die schwächsten Muster (kein Absturz).
+    const old = { ...shakyDoc(topic, 3, 2), tt: { d: TODAY, c: 3, n: 6, ok: false, k: 1 } };
+    expect(topicStep(topic, old, TODAY).phase).toBe('practice');
+    // Unbekannte Kennungen in `w` fallen weg.
+    const junk = { ...shakyDoc(topic, 3, 2), tt: { d: TODAY, c: 3, n: 6, ok: false, k: 1, w: ['gibt-es-nicht'] } };
+    expect(topicStep(topic, junk, TODAY).pats).not.toContain('gibt-es-nicht');
+  });
+  it('2. `tt.w`: tolerant gelesen, eindeutig, ≤ 12; Schreibweg legt es an; Schema nimmt es (auch kaputt) an', () => {
+    expect(readTt({ tt: { d: TODAY, c: 3, n: 6, ok: false, k: 1, w: ['a', 'a', 7, '', 'b'] } })?.w).toEqual(['a', 'b']);
+    expect(readTt({ tt: { d: TODAY, c: 3, n: 6, ok: false, k: 1, w: 'x' } })).not.toHaveProperty('w');
+    const many = Array.from({ length: 20 }, (_, k) => `p${k}`);
+    expect(nextTt(null, { day: TODAY, c: 2, n: 6, w: many }).w).toHaveLength(12);
+    expect(nextTt(null, { day: TODAY, c: 6, n: 6, w: [] })).not.toHaveProperty('w');
+    const cur: Doc = { id: 'future-perf-cont', p: 0.5, n: 4, c: 3, last: NOW - DAY, hist: [], errors: [], seen: [], seenText: [], recent: [] };
+    const wr = grammarWrite(cur, answer({ t: NOW, day: TODAY, tt: { c: 3, n: 6, w: ['x1', 'x2'] } }));
+    if (wr.kind !== 'update') throw new Error('update erwartet');
+    expect(wr.patch.tt).toEqual({ d: TODAY, c: 3, n: 6, ok: false, k: 1, w: ['x1', 'x2'] });
+    expect(grammarSchema.safeParse({ id: 'passive', tt: { d: TODAY, c: 3, n: 6, ok: false, k: 1, w: ['x1'] } }).success).toBe(true);
+    expect(grammarSchema.safeParse({ id: 'passive', tt: { d: TODAY, c: 3, n: 6, ok: false, k: 1, w: 'kaputt' } }).success).toBe(true);
+  });
+  const outsideTopics = (): string[] => K.flatMap((c, k) => (k === 3 ? [] : c.topics)).filter((t) => !!patternsOf(t));
+  it('4. Wochenfokus im Kapitel: ein begonnenes Fokus-Thema außerhalb nimmt den Wiederholungsplatz', () => {
+    const [out1, out2, fresh] = outsideTopics() as [string, string, string];
+    const docs = docsOf({ [out1]: shakyDoc(out1, 1, 0), [out2]: safeDoc(out2), passive: shakyDoc('passive', 1, 0) });
+    const chapter = chapterPlanInput({ docs, today: TODAY, nowMs: NOW, chosen: 4 });
+    const plain = freezeGrammarDay({ docs, today: TODAY, nowMs: NOW, introPlanOf: INTRO_PLAN_OF, seed: TODAY, chapter }).gt;
+    const withFocus = freezeGrammarDay({ docs, today: TODAY, nowMs: NOW, introPlanOf: INTRO_PLAN_OF, seed: TODAY, chapter, focus: out2 }).gt;
+    const outside = (ts: string[]) => ts.filter((t) => !K[3]!.topics.includes(t));
+    expect(outside(plain.topics)).toHaveLength(1);
+    expect(outside(withFocus.topics)).toEqual([out2]);
+    // Nie begonnenes Fokus-Thema: kein Platz.
+    const f2 = freezeGrammarDay({ docs, today: TODAY, nowMs: NOW, introPlanOf: INTRO_PLAN_OF, seed: TODAY, chapter, focus: fresh }).gt;
+    expect(f2.topics).not.toContain(fresh);
+  });
+  it('5. nur ein Kapitel-Thema begonnen: es bekommt beide Kapitel-Plätze, Wiederholung bleibt bei einem', () => {
+    const [out1, out2] = outsideTopics() as [string, string];
+    const docs = docsOf({ [out1]: shakyDoc(out1, 1, 0), [out2]: shakyDoc(out2, 1, 0), passive: shakyDoc('passive', 1, 0) });
+    const chapter = chapterPlanInput({ docs, today: TODAY, nowMs: NOW, chosen: 4 });
+    expect(chapter?.cursor.topic).toBe('passive');
+    const { gt } = freezeGrammarDay({ docs, today: TODAY, nowMs: NOW, introPlanOf: INTRO_PLAN_OF, seed: TODAY, chapter });
+    expect(gt.topics).toHaveLength(3);
+    expect(gt.topics.slice(0, 2)).toEqual(['passive', 'passive']);
+    expect(gt.topics.filter((t) => !K[3]!.topics.includes(t))).toHaveLength(1);
+    // Die Runde stellt keine Aufgabe doppelt, das Kapitel-Thema bekommt die Mehrheit.
+    const tasks = selectRound({ mode: 'duty', grammarDocs: docs, dailyOpen: [], pool: [], nowMs: NOW, size: 9, seed: 'k', errorsMax: 0, gt });
+    expect(new Set(tasks.map((t) => t.key)).size).toBe(tasks.length);
+    const inCh = tasks.filter((t) => t.topic === 'passive').length;
+    expect(inCh).toBeGreaterThan(tasks.length - inCh);
+  });
+  it('8. Kapitelwahl schreibt unbekannte chh-Einträge zurück (nur anhängen, ≤ 20)', () => {
+    const op = c1Update({ v: 1, chh: [[2, TODAY], 'kaputt', { x: 1 }] }, (d) => chooseChapter(d, 3, TODAY), TODAY);
+    expect(op).toEqual({ update: { ch: { n: 3, d: TODAY }, chh: [[2, TODAY], 'kaputt', { x: 1 }, [3, TODAY]] } });
+    const full = Array.from({ length: 20 }, (_, k) => (k % 2 ? 'kaputt' : [(k % 7) + 1, TODAY]));
+    const op2 = c1Update({ v: 1, ch: { n: 1, d: TODAY }, chh: full }, (d) => chooseChapter(d, 5, TODAY), TODAY);
+    const chh = op2 && 'update' in op2 ? (op2.update.chh as unknown[]) : [];
+    expect(chh).toHaveLength(C1_LIMITS.chh);
+    expect(chh[chh.length - 1]).toEqual([5, TODAY]);
+    expect(chh.slice(0, 19)).toEqual(full.slice(1));
+  });
+  it('9. „geschafft“ zählt im Kapitelblatt wie in der Liste: sicher oder Themen-Test bestanden', () => {
+    const d = { ...shakyDoc('passive', 3, 2), tt: { d: TODAY, c: 5, n: 6, ok: true, k: 1 } };
+    const st = chapterState({ docs: docsOf({ passive: d }), today: TODAY, nowMs: NOW, chosen: 4 });
+    const ch4 = st.chapters[3]!;
+    expect(ch4.topicSafe).toBe(0);
+    expect(ch4.topicDone).toBe(1);
   });
 });

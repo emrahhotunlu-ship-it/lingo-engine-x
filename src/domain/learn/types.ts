@@ -84,7 +84,7 @@ export type GrammarAnswer = {
   /** Letzte Antwort des Vortests (§5.3): trägt das Ergebnis beider Aufgaben; der Schreibweg legt daraus `vt` im Thema an. */
   vt?: { ok: boolean; pats: string[] };
   /** Kapitel-Arbeit (K4): letzte Antwort eines Themen-Tests, trägt das Ergebnis (richtig, gestellt); der Schreibweg legt daraus `tt` im Thema an. */
-  tt?: { c: number; n: number };
+  tt?: { c: number; n: number; /** Schwache Muster des Tests (falsch oder mit Hilfe), → `tt.w`. */ w?: string[] };
   /** c1x (Lernplattform 3.0 §3.4): Punkte `[erreicht, möglich]`. Gebucht wird `ok` nur bei voller Punktzahl; „1 von 2“ ist „Fast“. */
   pts?: [number, number];
   /** Art der c1x-Aufgabe. */
