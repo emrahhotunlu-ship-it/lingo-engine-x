@@ -377,3 +377,7 @@ Tests: 1953 Unit; E2E der berührten Bildschirme grün (a11y: Kontrast der „Ne
 - Test-Link `AXHkh6…` Version 59 `1791740069-2f3e` (Rückweg v58 `1791717963-400c`). Live weiter v74 `1791718808-a803`.
 - Hinweis platform-guard (später): direkte Lesezugriffe außerhalb `src/data` in `features/lookup/store.ts:26`, `features/migration/lateRescue.ts:58`, `domain/migration/v1.ts`.
 - Nächste Stufe: Vokabel-Plattform V0 (`docs/umbau/vokabel-plattform.md`).
+
+## 11.10.2026 – Live-Gang Sammelrunde 1
+- Emrahs Freigabe „Live nehmen“ nach Test-Link v59. Vorher gelesen: live v74 `1791718808-a803` (Rückweg). Veröffentlicht: Build f0eb69a → live **v75 `1791741081-b412`**, Fähigkeiten db, sample, downloads übernommen.
+- Nächstes: Vokabel-Plattform V0 (`docs/umbau/vokabel-plattform.md`).
