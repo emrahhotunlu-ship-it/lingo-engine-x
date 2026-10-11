@@ -17,9 +17,7 @@ import { catchUpOn, overdueCount } from '../../domain/unit/backlog';
 import { againPos, calibration, controlAllowed, controlCounts, dirFor, lastRating, pickMode, weekStartMs, type FlipDir, type PickedMode, type RequestedMode } from '../../domain/srs/flip';
 import { deckCards, isBuiltinDeck, type DeckCtx } from '../../domain/srs/decks';
 import { listenExercise } from '../../domain/srs/listen';
-import { REPAIR_MAX } from '../../domain/unit/block1';
 import { unitDone } from '../../app/unit/done';
-import { unitStepArgs } from '../../domain/unit/plan';
 import { clearResume } from '../../app/resume';
 import { useDecks } from './decksStore';
 import { cardGo } from './cardMark';
@@ -37,9 +35,6 @@ import type { AnswerEvent, Exercise, ExerciseId, Grade, Lang, QueueItem, TrainCa
 import { markExhausted, useTodayPlan } from '../today/store';
 import { nextT, recordAnswer, recordRoundEnd, saveCard, saveContrastMiss, saveKnown, usePending } from './persist';
 import { flushOnHide } from '../progress/persist';
-import { pickDailyRepairs, repairsDoneToday, repairsDutyToday } from '../../domain/repair/daily';
-import type { RepairItem } from '../../domain/repair/repair';
-import { commitRepairAnswer } from '../repair/review';
 import { contrastReady, noteConfusion, requestWordCtx } from './wordCtx';
 
 // Eine Runde im Vokabeltrainer. Die Warteschlange wird synchron im Klick-Handler von „Starten"
@@ -74,8 +69,6 @@ type SessionState = {
   activeMs: number;
   lastInteract: number;
   /** Lernberatung V2: fällige Reparatur-Sätze vor den Karten (höchstens 4 je Tag). */
-  repairs: RepairItem[];
-  repairPos: number;
   /** Anki (anki-regeln.md): gewünschter Modus, Richtung der Aufdeck-Karten, Stapel. */
   mode: RequestedMode;
   dir: FlipDir;
@@ -132,8 +125,6 @@ export const useSession = create<SessionState>(() => ({
   doneBefore: 0,
   activeMs: 0,
   lastInteract: 0,
-  repairs: [],
-  repairPos: 0,
   mode: 'type',
   dir: 'de-en',
   deck: 'all',
@@ -375,12 +366,7 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
   // §8: Tageseinheit und „Alle fälligen“ immer Deutsch → Englisch.
   const dir: FlipDir = round === 'pflicht' || deck === 'all' ? 'de-en' : (opts.dir ?? defaults.dir);
   const ctx: DeckCtx = { nowMs: now, weekStartMs: weekStartMs(now) };
-  // Lernberatung V2: fällige Reparatur-Sätze zählen zur Runde (Pflicht bzw. freie Runde „alle“).
-  // Lernplattform 2.0 §2.3: Im Plan der Regelversion 2 steht Schritt 1 für Karten allein (`repairs: 0`); die Fehlersätze
-  // gehören dann in Schritt 4. Ohne Argument im Plan gilt die alte Regel (bis zu 3 Reparatur-Sätze).
-  const repairMax = round === 'pflicht' ? (unitStepArgs(plan, 1).repairs ?? REPAIR_MAX) : REPAIR_MAX;
-  const repairs = !opts.only && !opts.pick && (round === 'pflicht' || deck === 'all') && repairMax > 0 ? pickDailyRepairs(live.docs['app/repair'], now, repairsDoneToday(entries), Math.min(target, repairMax), repairsDutyToday(entries)) : [];
-  const cardTarget = Math.max(0, target - repairs.length);
+  // 11.10.2026: Eine Wortschatz-Runde enthält nur Karten, nie Fehlersätze (Entscheidung „Vokabelübungen enthalten nie Grammatik“).
   const deckPool = round === 'extra' && deck !== 'all' ? deckCards(cards, deck, useDecks.getState().decks, ctx) : cards;
   const chosen = opts.pick ? deckPool.filter(opts.pick) : deckPool;
   // anki-regeln §5: EIN Kontingent für alle Wege; Stapel bekommen neue Karten aus dem Rest, nur passende.
@@ -390,7 +376,7 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
         .map((k) => byKey.get(k))
         .filter((c): c is TrainCard => !!c && !c.hidden)
         .map((c): QueueItem => ({ key: c.key, reason: c.isNew ? 'new' : 'due', phase: c.stage === 0 ? 'intro' : 'quiz' }))
-    : buildQueue({ cards: chosen, nowMs: now, target: cardTarget, newQuotaLeft: allowNew ? newQuotaLeft : 0, exclude: round === 'pflicht' ? reviewed : answeredToday, lang, mix: { introduced: mixIntroducedToday(cards, day), phrases: introducedToday - introducedLessonToday + newQuotaLeft <= 2 ? 1 : 2 } });
+    : buildQueue({ cards: chosen, nowMs: now, target, newQuotaLeft: allowNew ? newQuotaLeft : 0, exclude: round === 'pflicht' ? reviewed : answeredToday, lang, mix: { introduced: mixIntroducedToday(cards, day), phrases: introducedToday - introducedLessonToday + newQuotaLeft <= 2 ? 1 : 2 } });
   const docs = pool.map((c) => c.doc);
   const ctl = mode === 'flip' ? controlCounts(docs, now) : { week: 0, day: 0 };
   const base: SessionState = {
@@ -414,8 +400,6 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
     doneBefore,
     activeMs: 0,
     lastInteract: performance.now(),
-    repairs,
-    repairPos: 0,
     mode,
     dir,
     deck,
@@ -432,28 +416,26 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
   };
   prebuilt = null;
   const next = { ...base, ...settle(base, 0) };
-  if (next.pos >= next.queue.length && !repairs.length) next.status = 'summary';
+  if (next.pos >= next.queue.length) next.status = 'summary';
   // H1: Pflichtrunde ohne abfragbare Karte (z. B. nach dem Neuladen) – „Wiederholen" ist erschöpft.
   if (round === 'pflicht' && target > 0 && next.status === 'summary') markExhausted(day);
   useSession.setState(next);
-  if (repairs.length) return 'choice';
   const item = next.queue[next.pos];
   if (!item || next.status === 'summary') return null;
   if (item.phase === 'intro') return 'intro';
   return firstKindOf(next.exercise);
 }
 
-/** Aktueller Reparatur-Satz der Runde (vor den Karten), sonst `null`. */
 /**
  * Fortschritt „n / gesamt“ (R4: Nenner fest, Zähler nur vorwärts). Gesamt ist die geplante Runde (`doneBefore + target`)
- * und wächst nie. Karten, die wegen „Nochmal“ wieder eingereiht werden, und Reparatur-Sätze darüber hinaus zählen
+ * und wächst nie. Karten, die wegen „Nochmal“ wieder eingereiht werden, zählen darüber hinaus
  * getrennt als `extra` („+2“); `extra` steigt nur. n zählt die verschiedenen schon beantworteten Einträge der geplanten Runde.
  */
-export function roundProgress(s: Pick<SessionState, 'status' | 'round' | 'queue' | 'pos' | 'target' | 'doneBefore' | 'answered' | 'repairs' | 'repairPos'>): { n: number; total: number; extra: number } | null {
+export function roundProgress(s: Pick<SessionState, 'status' | 'round' | 'queue' | 'pos' | 'target' | 'doneBefore' | 'answered'>): { n: number; total: number; extra: number } | null {
   if (s.status !== 'running') return null;
   const base = s.round === 'pflicht' ? s.doneBefore : 0;
   // Der Kontrast-Schritt (P52) ist ein Zusatz zur schon beantworteten Karte: er zählt weder vorwärts noch als „+1“.
-  const left = s.queue.slice(Math.max(0, s.pos)).filter((q) => q.reason !== 'contrast').length + Math.max(0, s.repairs.length - s.repairPos);
+  const left = s.queue.slice(Math.max(0, s.pos)).filter((q) => q.reason !== 'contrast').length;
   const onContrast = s.queue[s.pos]?.reason === 'contrast';
   const done = base + s.answered.length;
   const planned = base + s.target;
@@ -462,40 +444,6 @@ export function roundProgress(s: Pick<SessionState, 'status' | 'round' | 'queue'
   const extra = Math.max(0, done + left - planned);
   const distinct = base + new Set(s.answered).size;
   return { n: Math.min(total, Math.max(1, distinct + (onContrast ? 0 : 1))), total: Math.max(total, 1), extra };
-}
-
-export const currentRepair = (s: Pick<SessionState, 'status' | 'repairs' | 'repairPos'>): RepairItem | null => (s.status === 'running' ? (s.repairs[s.repairPos] ?? null) : null);
-
-/** Ergebnis eines Reparatur-Satzes übernehmen (Protokoll, `app/repair`); weiter geht es mit `nextRepair`. */
-export function answerRepair(ok: boolean, given: string, ms: number, near = false): void {
-  touch();
-  const s = useSession.getState();
-  const r = currentRepair(s);
-  if (!r) return;
-  const key = `repair/${r.id}`;
-  if (s.answered.includes(key)) return;
-  commitRepairAnswer({ item: r, ok, near, given, ms, day: s.day, lang: s.lang, ctx: s.round === 'pflicht' ? 'rev' : 'xtra', first: s.results.length === 0 });
-  useSession.setState({ answered: [...s.answered, key], results: [...s.results, { key, word: r.right.split(/\s+/).slice(0, 4).join(' ') + (r.right.split(/\s+/).length > 4 ? ' …' : ''), grade: near ? 2 : ok ? 3 : 1, ok }] });
-}
-
-/** Zum nächsten Reparatur-Satz bzw. zu den Karten (oder zur Zusammenfassung). */
-export function nextRepair(): FirstKind {
-  touch();
-  const s = useSession.getState();
-  const repairPos = s.repairPos + 1;
-  if (repairPos < s.repairs.length) {
-    useSession.setState({ repairPos, step: s.step + 1 });
-    return 'choice';
-  }
-  const next: SessionState = { ...s, repairPos, step: s.step + 1 };
-  if (next.pos >= next.queue.length) {
-    next.status = 'summary';
-    finish(next, false);
-  }
-  useSession.setState(next);
-  const item = next.queue[next.pos];
-  if (!item || next.status === 'summary') return null;
-  return item.phase === 'intro' ? 'intro' : firstKindOf(next.exercise);
 }
 
 /** Aktivität für die aktiven Minuten (Hintergrundzeit zählt nie, Ruhe über 60 s wird gekappt). */
@@ -850,7 +798,6 @@ export function skipCurrent(): FirstKind {
   commitHeld();
   const s = useSession.getState();
   if (!s.active || s.status !== 'running') return null;
-  if (currentRepair(s)) return nextRepair();
   return advanceFrom(s);
 }
 
@@ -870,8 +817,6 @@ export type TrainerSnapshot = {
   shown: Record<string, number>;
   answered: string[];
   results: ResultRow[];
-  repairs: string[];
-  repairPos: number;
   target: number;
   doneBefore: number;
   unit: boolean;
@@ -897,8 +842,6 @@ export function trainerSnapshot(): TrainerSnapshot | null {
     shown: s.shown,
     answered: s.answered,
     results: s.results.slice(-RESULTS_MAX),
-    repairs: s.repairs.map((r) => r.id),
-    repairPos: s.repairPos,
     target: s.target,
     doneBefore: s.doneBefore,
     unit: s.unit,
@@ -922,9 +865,6 @@ export function restoreTrainer(snap: TrainerSnapshot): boolean {
   const cards = allTrainCards(now);
   const byKey = new Map(cards.map((c) => [c.key, c]));
   const pool = cards.filter((c) => !c.hidden);
-  const live = useLive.getState();
-  const repairsAll = pickDailyRepairs(live.docs['app/repair'], now, new Set(), 50);
-  const repairs = (snap.repairs ?? []).map((id) => repairsAll.find((r) => r.id === id)).filter((r): r is RepairItem => !!r);
   const keep = snap.queue.map((q, i) => {
     const c = byKey.get(q.key);
     if (!c || c.hidden) return false;
@@ -957,8 +897,6 @@ export function restoreTrainer(snap: TrainerSnapshot): boolean {
     // Nur die neuen aktiven Minuten zählen (§3.2).
     activeMs: 0,
     lastInteract: performance.now(),
-    repairs,
-    repairPos: Math.min(snap.repairPos ?? 0, repairs.length),
     mode: snap.mode,
     dir: snap.dir,
     deck: snap.deck,
@@ -975,7 +913,7 @@ export function restoreTrainer(snap: TrainerSnapshot): boolean {
   };
   prebuilt = null;
   const next = { ...base, ...settle(base, pos) };
-  if (next.pos >= next.queue.length && next.repairPos >= repairs.length) return false;
+  if (next.pos >= next.queue.length) return false;
   useSession.setState(next);
   return true;
 }

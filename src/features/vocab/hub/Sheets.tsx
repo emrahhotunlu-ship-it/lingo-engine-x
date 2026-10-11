@@ -12,7 +12,7 @@ import { meaningOf } from '../../../domain/srs/cards';
 import { forecast } from '../../../domain/srs/forecast';
 import { normalizeNewPerDay } from '../../../domain/srs/queue';
 import { backlogBraked, overdueCount } from '../../../domain/unit/backlog';
-import { BUILTIN_DECKS, createDeckOp, deckCards, deckCounts, inboxReach, isLeechCard, newDeckId, prefsOp, visibleDecks, wrongSince, type DeckFilter } from '../../../domain/srs/decks';
+import { BUILTIN_DECKS, createDeckOp, deckCards, deckCounts, inboxReach, isLeechCard, newDeckId, visibleDecks, wrongSince, type DeckFilter } from '../../../domain/srs/decks';
 import { histOf, weekStartMs } from '../../../domain/srs/flip';
 import type { TrainCard } from '../../../domain/srs/types';
 import { useHiddenInput } from '../../../engine/HiddenInput';
@@ -21,7 +21,6 @@ import { Button } from '../../../ui/Button';
 import { Icon } from '../../../ui/Icon';
 import { Eyebrow } from '../../../ui/Eyebrow';
 import { Row, RowList } from '../../../ui/RowList';
-import { Segmented } from '../../../ui/Segmented';
 import { Sheet } from '../../../ui/Sheet';
 import { unlockSpeech, useSpeech } from '../../../platform/speech';
 import { toast } from '../../../ui/Toast';
@@ -289,38 +288,6 @@ export function ExtraSheet({ onClose, params }: SheetProps) {
           </button>
         )}
         <p className="text-sm text-muted">{t('nbWsXNote')}</p>
-      </div>
-    </Sheet>
-  );
-}
-
-type Mode = 'auto' | 'flip' | 'type';
-
-/** Blatt „Modus“ (`x:mode`): wie die Wiederholen-Runde abfragt (Automatisch · Aufdecken · Tippen). */
-export function ModeSheet({ onClose }: SheetProps) {
-  const { t } = useT();
-  const decks = useDecks((s) => s.decks);
-  const mode: Mode = decks.prefs.mode ?? 'auto';
-  const setMode = (m: Mode) => {
-    void writeDecks((cur) => prefsOp(cur, { mode: m })).then((r) => {
-      if (!r.ok) toast(t(decksErrorKey(r.error)), 'error');
-      else onClose();
-    });
-  };
-  return (
-    <Sheet open onClose={onClose} title={t('nbWsHModeTitle')} closeLabel={t('close')}>
-      <div className="flex flex-col gap-4" data-testid="mode-sheet">
-        <Segmented<Mode>
-          label={t('nbWsModeLabel')}
-          value={mode}
-          options={[
-            { value: 'auto', label: t('nbWsModeAuto') },
-            { value: 'flip', label: t('nbWsModeFlip') },
-            { value: 'type', label: t('nbWsModeType') },
-          ]}
-          onChange={setMode}
-          testId="ws-mode"
-        />
       </div>
     </Sheet>
   );

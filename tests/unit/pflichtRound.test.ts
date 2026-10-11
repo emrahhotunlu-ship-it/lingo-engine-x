@@ -7,8 +7,7 @@ import { dayKey } from '../../src/domain/date';
 import { buildUnitStored } from '../../src/domain/unit/plan';
 import { readDecks } from '../../src/domain/srs/decks';
 
-// Lernplattform 2.0 §2.3/§4.8: Bei Regelversion 2 enthält die Pflichtrunde (Schritt 1) nur Karten – keine Reparatur-Sätze – und die Zahl
-// der Rundenelemente ist `goal.review`. Bei Regelversion 1 gilt das alte Verhalten (bis zu 3 Reparatur-Sätze zählen mit).
+// Die Pflichtrunde (Schritt 1) und jede andere Wortschatz-Runde enthält nur Karten; die Zahl der Rundenelemente ist `goal.review`.
 
 type Doc = Record<string, unknown>;
 const holder = vi.hoisted(() => ({ writer: null as Writer | null, db: null as Db | null }));
@@ -47,25 +46,67 @@ afterEach(async () => {
   S.useSession.setState({ active: false });
 });
 
-describe('Pflichtrunde: Reparatur-Sätze nach Regelversion', () => {
-  it('rv 2: 0 Reparatur-Sätze, die Runde hat genau goal.review Karten', () => {
-    store.useTodayPlan.setState({ day: DAY, plan: planFor(2, 8), status: 'ready', exhausted: null });
-    S.startSession('pflicht');
+// 11.10.2026 (Emrah): „Grammatik Übungen hat in Vokabel Übungen nichts zu suchen“ – keine Wortschatz-Runde enthält Fehlersätze,
+// egal über welchen Einstieg und egal wie viele Fehlersätze fällig sind.
+const api = { focusNow: () => undefined, blur: () => undefined } as never;
+const keysOf = () => [...vocab.keys()].slice(0, 4).map((k) => `vocab/${k}`);
+
+describe('Wortschatz-Runden enthalten nie Fehlersätze', () => {
+  const expectCardsOnly = (n = 1) => {
     const s = S.useSession.getState();
-    expect(s.repairs).toHaveLength(0);
-    expect(s.queue).toHaveLength(8);
-    expect(s.target).toBe(8);
-  });
-  it('rv 1: das alte Verhalten, bis zu 3 Reparatur-Sätze zählen zur Runde', () => {
-    store.useTodayPlan.setState({ day: DAY, plan: planFor(1, 8), status: 'ready', exhausted: null });
-    S.startSession('pflicht');
-    const s = S.useSession.getState();
-    expect(s.repairs.length).toBe(3);
-    expect(s.queue.length + s.repairs.length).toBe(8);
-  });
-  it('freie Runde „alle“ (Extra) bleibt unberührt', () => {
+    expect(s.status).toBe('running');
+    expect(s.queue.length).toBeGreaterThanOrEqual(n);
+    expect((s as unknown as { repairs?: unknown }).repairs).toBeUndefined();
+    expect(S.trainerSnapshot()).not.toHaveProperty('repairs');
+  };
+  for (const rv of [1, 2] as const) {
+    it(`Pflichtrunde, Regelversion ${rv}: nur Karten, genau goal.review viele`, () => {
+      store.useTodayPlan.setState({ day: DAY, plan: planFor(rv, 8), status: 'ready', exhausted: null });
+      S.startSession('pflicht');
+      expectCardsOnly(8);
+      expect(S.useSession.getState().queue).toHaveLength(8);
+      expect(S.useSession.getState().target).toBe(8);
+    });
+  }
+  it('Extra „alle“ (Alle fälligen ohne Pflicht)', () => {
     store.useTodayPlan.setState({ day: DAY, plan: planFor(2, 8), status: 'ready', exhausted: null });
     S.startSession('extra', { deck: 'all', size: 6 });
-    expect(S.useSession.getState().repairs.length).toBeGreaterThan(0);
+    expectCardsOnly(6);
+    expect(S.useSession.getState().queue).toHaveLength(6);
+  });
+  it('Knopf „Alle fälligen“ (startAllDue) mit und ohne Pflicht', async () => {
+    const { startAllDue } = await import('../../src/features/vocab/start');
+    store.useTodayPlan.setState({ day: DAY, plan: planFor(1, 8), status: 'ready', exhausted: null });
+    startAllDue(api);
+    expectCardsOnly();
+    S.useSession.setState({ active: false });
+    store.useTodayPlan.setState({ day: DAY, plan: null, status: 'ready', exhausted: null });
+    startAllDue(api);
+    expectCardsOnly();
+  });
+  it('Stapel, Auswahl, Anki „Aufdecken“, einzelne Karten, Falsche wiederholen', async () => {
+    const { startExtra } = await import('../../src/features/vocab/start');
+    store.useTodayPlan.setState({ day: DAY, plan: planFor(2, 8), status: 'ready', exhausted: null });
+    startExtra(api, { deck: 'hard', size: 5 });
+    S.useSession.setState({ active: false });
+    startExtra(api, { deck: 'all', pick: () => true, size: 5 });
+    expectCardsOnly();
+    S.useSession.setState({ active: false });
+    startExtra(api, { deck: 'all', size: 5, mode: 'flip' });
+    expectCardsOnly();
+    S.useSession.setState({ active: false });
+    startExtra(api, { only: [...vocab.keys()].slice(0, 3).map((k) => `vocab/${k}`) });
+    expectCardsOnly();
+    S.useSession.setState({ active: false });
+    S.startSession('extra', { only: [keysOf()[0] as string] });
+    expectCardsOnly();
+  });
+  it('Fortsetzen nach dem Neuladen bringt keine Fehlersätze zurück', () => {
+    store.useTodayPlan.setState({ day: DAY, plan: planFor(1, 8), status: 'ready', exhausted: null });
+    S.startSession('pflicht');
+    const snap = { ...S.trainerSnapshot()!, repairs: ['r1', 'r2'], repairPos: 0 } as never;
+    S.useSession.setState({ active: false });
+    expect(S.restoreTrainer(snap)).toBe(true);
+    expectCardsOnly();
   });
 });
