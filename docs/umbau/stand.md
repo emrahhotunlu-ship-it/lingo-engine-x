@@ -370,3 +370,10 @@ Tests: 1953 Unit; E2E der berührten Bildschirme grün (a11y: Kontrast der „Ne
 - Emrah: Vokabelbereich ist das Wichtigste, Ziel 8.000+ Wörter mit den besten Methoden, täglich und bei Bedarf neue Wörter nachladen, Methodik und UX „outstanding“; Speicherentscheidung an Claude delegiert → Sammeldokumente (siehe `docs/entscheidungen.md` 11.10.2026).
 - Läuft: Sammelrunde-Fixes (Zweig `claude/umbau-vokabeln`: keine Grammatik in Vokabelrunden, Anki-Modus sichtbar, Wortpartner-Hinweis; Zweig `claude/umbau-fehlerfinden`: rote KI-Meldung, Wortlaut fehlendes Wort) und Lernprüfung des Vokabelbereichs (nur lesend, Rangliste der 10 wirksamsten Verbesserungen + Speicher-Varianten). Danach einmal planen (`docs/umbau/vokabel-plattform.md`).
 - Lernprüfung Vokabelbereich fertig; Plan nach `docs/umbau/vokabel-plattform.md` (V0–V7). Emrahs Bestand: 192 Vokabel-Dokumente (live gelesen).
+
+## 11.10.2026 – Sammelrunde 1 auf Test-Link
+- Umgesetzt: Zweig `claude/umbau-vokabeln` (881a5f1: keine Fehlersätze in Vokabelrunden, Moduswahl „Aufdecken (Anki) · Tippen · Automatisch“ sichtbar, Wortpartner-Hinweis `trHintPhrase`/`gapCue`), Zweig `claude/umbau-fehlerfinden` (37d6f01: Zusatzerklärung scheitert ruhig statt rot, „Es fehlt …“ bei fehlendem Wort, „Kein Fehler“ statt „none“, Tutor bekommt Ganzsätze), Texte nach Gegenlesung. Build f0eb69a.
+- Tests: Unit 5238 grün; E2E voll 768 grün, 6 rot: perf Statuszeile (bekannt, 3×), grammarPatterns:123 und tutorExplain:118 (Last-Aussetzer, beide allein grün), grammarPatterns:156 (veralteter Text, angepasst, grün). platform-guard und check:platform Freigabe.
+- Test-Link `AXHkh6…` Version 59 `1791740069-2f3e` (Rückweg v58 `1791717963-400c`). Live weiter v74 `1791718808-a803`.
+- Hinweis platform-guard (später): direkte Lesezugriffe außerhalb `src/data` in `features/lookup/store.ts:26`, `features/migration/lateRescue.ts:58`, `domain/migration/v1.ts`.
+- Nächste Stufe: Vokabel-Plattform V0 (`docs/umbau/vokabel-plattform.md`).
