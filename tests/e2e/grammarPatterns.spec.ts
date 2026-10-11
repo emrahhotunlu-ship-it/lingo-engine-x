@@ -2,7 +2,9 @@ import { readFileSync } from 'node:fs';
 import { expect, test, type Browser, type Page } from '@playwright/test';
 import { legacyTaskKey } from '../../src/domain/grammar/key';
 import { bootAt } from './fixtures';
-import { answerGrammar, grammarKey, nextItem, skipMiniLesson } from './learnHelpers';
+import { splitWords } from '../../src/domain/answer/align';
+import { missingWords } from '../../src/domain/text/missingWords';
+import { answerGrammar, grammarKey, nextItem, shownPrompt, skipMiniLesson } from './learnHelpers';
 import { setInputProfile } from './input';
 import type { InputProfile } from '../../src/platform/input';
 
@@ -150,3 +152,31 @@ for (const profile of ['touch', 'keys'] as const) {
     expect(seen.has('find') || seen.has('kwt')).toBe(true);
   });
 }
+
+test('Fehler finden, „Kein Fehler“ bei fehlendem Wort: Kopf sagt, dass ein Wort fehlt (Rückmeldung 11.10.2026)', async ({ browser }) => {
+  const page = await fresh(browser);
+  await topicRound(page, 'articles', 0.5);
+  let seenMissing = false;
+  for (let i = 0; i < 40 && !seenMissing; i++) {
+    const item = page.getByTestId('gr-item');
+    await expect(item).toBeVisible();
+    if ((await item.getAttribute('data-type')) === 'find') {
+      const known = solve.full(await shownPrompt(page));
+      const words = known ? splitWords(known.prompt) : [];
+      const errWord = known?.err ? words.slice(known.err[0], known.err[1] + 1).join(' ') : null;
+      if (missingWords(errWord, known?.answer)) {
+        // Erster Versuch: Leitfrage; beim zweiten Mal gilt die Antwort.
+        await page.getByTestId('no-error').click();
+        if (!(await page.getByTestId('verdict').isVisible())) await page.getByTestId('no-error').click();
+        const sub = page.getByTestId('verdict-sub');
+        await expect(sub).toContainText('Du hast „Kein Fehler“ gewählt. In dem Satz fehl');
+        await expect(sub).not.toContainText('Der Fehler steckt in');
+        seenMissing = true;
+        break;
+      }
+    }
+    await answerGrammar(page, solve);
+    await nextItem(page);
+  }
+  expect(seenMissing).toBe(true);
+});

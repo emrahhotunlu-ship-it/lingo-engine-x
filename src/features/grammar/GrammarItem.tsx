@@ -336,7 +336,9 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   const model: ExplanationModel | null = useMemo(() => {
     if (!fb) return null;
     const verdict: ResultVerdict = fb.dontKnow ? 'dontKnow' : fb.override ? 'ok' : fb.verdict === 'correct' ? 'ok' : fb.verdict === 'near' ? 'near' : 'wrong';
-    return tighten(grammarExplanation({ task, verdict, given: fb.given, ...(picked !== undefined ? { picked } : {}), ...(fb.tapped !== undefined ? { tapped: fb.tapped } : {}), lang, learning }));
+    const m = tighten(grammarExplanation({ task, verdict, given: fb.given, ...(picked !== undefined ? { picked } : {}), ...(fb.tapped !== undefined ? { tapped: fb.tapped } : {}), lang, learning }));
+    // „Kein Fehler“ gewählt (intern 'none'): in „Deine Antwort“ steht der Name des Knopfs, nicht das Rohwort.
+    return fb.picked === 'none' || fb.tapped === 'none' ? { ...m, lines: m.lines.map((l) => (l.k === 'yours' && l.given === 'none' ? { ...l, given: t('exNoError') } : l)) } : m;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fb, lang, learning, task]);
 
@@ -561,14 +563,21 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     const mx = task.x?.kind === 'meaning' ? task.x : null;
     const meaningText = (k: string | null): string => (mx ? (k === 'a' ? mx.a : k === 'b' ? mx.b : k === 'both' ? 'Both sentences mean the same' : (k ?? '')) : (k ?? ''));
     const pickedKey = mx && chosen !== null ? (MEANING_KEYS[chosen] ?? null) : null;
+    // Fehler finden: Claude bekommt Ganzsätze (Aufgabe, eigene Fassung, Lösung), nicht das Rohwort „none“ gegen eine Teillösung – sonst fehlte
+    // der Bezug und die Abweichung (`ops`) war sinnlos (vermutete Ursache der Meldung „Antwort war unvollständig“).
+    const fixedFull = task.x?.kind === 'find' ? task.x.fixed : null;
+    const findGiven = (): string => {
+      if (fb.picked === 'none' || fb.tapped === 'none' || !tapped) return task.prompt;
+      return [...wordsOfPrompt.slice(0, tapped[0]), fb.given.trim(), ...wordsOfPrompt.slice(tapped[1] + 1)].filter(Boolean).join(' ');
+    };
     const tutor = fb.dontKnow || fb.verdict === 'correct' || fb.override ? null : (
       <TutorButton
         taskKey={`gr:${task.key}:${fb.picked ?? fb.given}`}
         vars={{
           topic: task.topic,
-          prompt: mx ? `${mx.q.en}\nA: ${mx.a}\nB: ${mx.b}` : task.prompt,
-          answer: mx ? meaningText(solution) : solution,
-          given: mx ? meaningText(pickedKey) : (fb.picked ?? fb.given),
+          prompt: mx ? `${mx.q.en}\nA: ${mx.a}\nB: ${mx.b}` : findTask && fixedFull ? `Find the mistake in this sentence: ${task.prompt}` : task.prompt,
+          answer: mx ? meaningText(solution) : findTask && fixedFull ? fixedFull : solution,
+          given: mx ? meaningText(pickedKey) : findTask && fixedFull ? findGiven() : (fb.picked ?? fb.given),
           pattern: pattern ? { name: lang === 'de' ? pattern.name.de : pattern.name.en, form: lang === 'de' ? pattern.form.de : pattern.form.en } : null,
         }}
         pattern={pattern}
@@ -585,7 +594,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       const found = stage === 'replace' && !!tappedNow && tappedNow !== 'none';
       const errWord = err ? wordsOfPrompt.slice(err[0], err[1] + 1).join(' ') : null;
       const fix = found && !fb.dontKnow ? fb.given.trim() : '';
-      const h = findHead({ verdict: rv, errWord, tapped: tappedNow, found, ...(fix ? { fix } : {}) }, lang);
+      const h = findHead({ verdict: rv, errWord, tapped: tappedNow, found, ...(fix ? { fix } : {}), answer: task.answer }, lang);
       const fixed = task.x?.kind === 'find' ? task.x.fixed : null;
       find = {
         ...(h.title ? { title: h.title } : {}),

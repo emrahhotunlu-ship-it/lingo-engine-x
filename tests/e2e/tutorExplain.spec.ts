@@ -38,20 +38,26 @@ test('Vermutung zuerst, dann genau ein Aufruf; Karte mit Antwort, Begründung, B
   await expect(page.getByTestId('tutor-ask')).toHaveCount(0);
 });
 
-test('invalid_json: genau ein Aufruf, „Erneut versuchen“ fragt einmal frisch', async ({ page }) => {
+test('invalid_json: genau ein Aufruf, kein roter Fehlerblock neben der festen Erklärung, „Erneut versuchen“ fragt einmal frisch', async ({ page }) => {
   await bootAt(page, { name: 'grammarSession', mode: 'xtra' });
   await expect(page.getByTestId('gr-item')).toBeVisible();
   await mode(page, 'zzjson');
   await answerGrammar(page, solve, { wrong: true });
+  await expect(page.getByTestId('explanation')).toBeVisible();
   await page.getByTestId('tutor-ask').click();
   await page.getByTestId('tutor-go').click();
-  await expect(page.getByTestId('ai-error')).toBeVisible();
+  // Die Erklär-Karte steht schon: nur eine ruhige Zeile, nie „Die Antwort von Claude war unvollständig“ als roter Alarm.
+  await expect(page.getByTestId('tutor-unavailable')).toBeVisible();
+  await expect(page.getByTestId('ai-error')).toHaveCount(0);
+  await expect(page.getByTestId('result')).not.toContainText('war unvollständig');
+  await expect(page.getByTestId('explanation')).toBeVisible();
   expect(await calls(page)).toEqual(['explain-answer:quick']);
   await page.waitForTimeout(400);
   expect(await calls(page)).toHaveLength(1);
   await mode(page, '');
-  await page.getByTestId('ai-retry').click();
+  await page.getByTestId('tutor-ask').click();
   await expect(page.getByTestId('tutor-text')).toBeVisible();
+  await expect(page.getByTestId('tutor-unavailable')).toHaveCount(0);
   expect(await calls(page)).toHaveLength(2);
 });
 
