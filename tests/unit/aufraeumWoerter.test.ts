@@ -75,6 +75,17 @@ describe('Rückmeldung 2: Übungssätze mit Lücke sind nie Beispielsatz eines W
     expect(cardExamples(card, null).some((e) => e.en.includes('Europeeskalierende'))).toBe(false);
     expect(JSON.stringify(doc)).toBe(before);
     expect(bracketExample(RAGE, 'raging', 'rage')).toBe('');
+    // „decline“ als Hauptwort („Rückgang“): der Ersatzsatz benutzt das Wort auch als Hauptwort, nicht als Verb („started to decline“).
+    const dec = { word: 'to decline', de: 'Rückgang, Niedergang', pos: 'noun', ex: DECLINE, state: 'learning', stage: 1, S: 2, D: 2, reps: 1, last: 1, due: 2, xEx: [
+      { en: 'The housing market has started to decline after years of steady growth.', t: 1 },
+      { en: 'Coffee consumption in our region continues to decline despite marketing efforts.', t: 1 },
+      { en: 'We noticed a sharp decline in customer complaints following the new training program.', t: 1 },
+    ] };
+    expect(toTrainCard('decline', dec, true, NOW)!.context?.sentence).toBe('We noticed a sharp decline in customer complaints following the new training program.');
+    // Kein passender Satz: lieber keiner als einer in falscher Wortart.
+    expect(toTrainCard('decline', { ...dec, xEx: dec.xEx.slice(0, 2) }, true, NOW)!.context).toBeNull();
+    // Verb-Karte: Satz mit „to decline“ passt.
+    expect(toTrainCard('decline', { ...dec, pos: 'verb' }, true, NOW)!.context?.sentence).toBe('The housing market has started to decline after years of steady growth.');
   });
   it('KI-Beispiele mit Platzhalter werden nicht übernommen; „ - “ wird zu „ – “', () => {
     const out = acceptExamples('contract', ['Tom ? signed the contract yesterday.', 'The contract is ready - please sign it today.'], NOW).map((x) => x.en);

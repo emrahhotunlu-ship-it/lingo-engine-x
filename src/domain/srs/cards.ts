@@ -23,6 +23,17 @@ export function counts(v: unknown): Record<string, Counts> {
 
 // P7-1: Satzstelle und Kollokationen hängen nur am Dokument. Unveränderte Dokumente kommen als
 // dasselbe Objekt (contract/db.d.ts, Validierungs-Cache H6) – je Dokument nur einmal suchen.
+const MODAL_BEFORE = /(?:^|\s)(?:to|will|would|can|could|may|might|must|shall|should|did|does|do|not|n't)\s+$/i;
+const DET_BEFORE = /(?:^|\s)(?:a|an|the|this|that|these|those|my|your|his|her|its|our|their)\s+$/i;
+/** Passt die Fundstelle zur Wortart der Karte? Hauptwort: nicht nach „to/will/can …“; Verb: nicht nach Artikel/Possessiv. Unbekannte Wortart: passt. */
+function senseFits(hit: NonNullable<TrainCard['context']>, pos: unknown): boolean {
+  const before = hit.sentence.slice(0, hit.start);
+  const p = typeof pos === 'string' ? pos.toLowerCase() : '';
+  if (p === 'noun') return !MODAL_BEFORE.test(before);
+  if (p === 'verb') return !DET_BEFORE.test(before);
+  return true;
+}
+
 /**
  * Gespeicherter Satz mit Lücken-Platzhalter (Übungssatz, Rückmeldung 2): nicht als Ursprungssatz zeigen, sondern ersatzweise ein
  * sauberes KI-Beispiel (`xEx`) oder der Satz einer Kollokation. Das Dokument bleibt unverändert (nichts löschen, Kap. 9).
@@ -34,7 +45,8 @@ function fallbackContext(doc: Doc, word: string): TrainCard['context'] {
   if (Array.isArray(doc.col)) for (const c of doc.col) if (c && typeof c === 'object') pool.push((c as Record<string, unknown>).ex);
   for (const s of pool) {
     const hit = findContext(s, word);
-    if (hit) return hit;
+    // Ersatz nur in der Bedeutung der Karte („decline“ = Rückgang, nicht „to decline“): lieber kein Satz als einer mit falscher Wortart.
+    if (hit && senseFits(hit, doc.pos)) return hit;
   }
   return null;
 }
