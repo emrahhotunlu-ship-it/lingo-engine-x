@@ -25,6 +25,8 @@ export type WayInput = {
   /** Protokolle der letzten 28 Tage; `null` = noch nicht gelesen (K1 frei und K6 dann „zu wenig Daten“). */
   logs: readonly Doc[] | null;
   itemOf: (id: string) => C1Item | null;
+  /** Kapitel-Arbeit (K1): gewähltes Kapitel (1 bis 7, `app/c1.ch`), sonst gilt die Ableitung. */
+  chosen?: number | null;
 };
 
 export type Way = {
@@ -59,7 +61,7 @@ export function saneC1(c1: C1Doc): C1Doc {
 
 export function c1Way(i: WayInput): Way {
   const c1 = saneC1(readC1(i.c1));
-  const chapters = chapterState({ docs: i.grammar, today: i.today, nowMs: i.nowMs });
+  const chapters = chapterState({ docs: i.grammar, today: i.today, nowMs: i.nowMs, chosen: i.chosen ?? null });
   const entries = i.logs ? logEntriesOf(i.logs) : null;
   const k1 = k1Measure({ c1, chapters, grammar: i.grammar, entries, today: i.today });
   const k2 = k2Measure(i.patterns && typeof i.patterns === 'object' ? readPatterns(i.patterns as Record<string, unknown>) : null, i.today);

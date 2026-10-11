@@ -21,6 +21,11 @@ export type Flags = {
   /** Wochenrückblick 3.0 (P50): große Zahl, Namen, Fokuswahl, Karte „Für deinen Lehrer“. */
   weekly3: boolean;
   fx: { moments: boolean; rings: boolean; sparks: boolean; field: boolean; sky: boolean; film: boolean };
+  /**
+   * Kapitel-Arbeiten (Rückmeldung 5, 11.10.2026): Kapitel wählen und durcharbeiten (Einführung → Übung → Themen-Test), „Du bist hier“ = „Als Nächstes“
+   * (`effectiveChapter`), Schritt 2 aus dem Kapitel (+ etwa 1/3 Wiederholung), keine Fehlersatz-Sperre im Kapitel. `{"chapterRun":false}` schaltet je Gerät ab.
+   */
+  chapterRun: boolean;
 };
 
 export const flags: Flags = {
@@ -33,6 +38,7 @@ export const flags: Flags = {
   tutor: { explain: false, gen: false, diagnose: true, clinic: true, write: true, talk: true, words: true },
   weekly3: true,
   fx: { moments: false, rings: false, sparks: false, field: false, sky: true, film: true },
+  chapterRun: true,
 };
 
 /** Ist die Aufgabenart angeboten? (Rahmen, Auswahl und Registry fragen nur diese Funktion.) */
@@ -55,12 +61,13 @@ export function applyFlagOverrides(raw: string | null): void {
         if (k === 'way') flags.way = true;
         if (k === 'diagnose') flags.tutor.diagnose = true;
         if (k === 'weekly3') flags.weekly3 = true;
+        if (k === 'chapterRun') flags.chapterRun = true;
         if (k === 'sky' || k === 'film') flags.fx[k] = true;
         if (k === 'clinic' || k === 'write' || k === 'talk' || k === 'words') flags.tutor[k] = true;
       }
       return;
     }
-    const o = JSON.parse(t) as { c1xKinds?: Record<string, unknown>; tempo?: unknown; slotPlan?: unknown; c1check?: unknown; program?: unknown; way?: unknown; weekly3?: unknown; tutor?: Record<string, unknown>; fx?: Record<string, unknown> };
+    const o = JSON.parse(t) as { c1xKinds?: Record<string, unknown>; tempo?: unknown; slotPlan?: unknown; c1check?: unknown; program?: unknown; way?: unknown; weekly3?: unknown; chapterRun?: unknown; tutor?: Record<string, unknown>; fx?: Record<string, unknown> };
     for (const k of kinds) if (typeof o.c1xKinds?.[k] === 'boolean') flags.c1xKinds[k] = o.c1xKinds[k];
     if (typeof o.slotPlan === 'boolean') flags.slotPlan = o.slotPlan;
     if (typeof o.tempo === 'boolean') flags.tempo = o.tempo;
@@ -68,6 +75,7 @@ export function applyFlagOverrides(raw: string | null): void {
     if (typeof o.program === 'boolean') flags.program = o.program;
     if (typeof o.way === 'boolean') flags.way = o.way;
     if (typeof o.weekly3 === 'boolean') flags.weekly3 = o.weekly3;
+    if (typeof o.chapterRun === 'boolean') flags.chapterRun = o.chapterRun;
     for (const k of Object.keys(flags.tutor) as (keyof Flags['tutor'])[]) if (typeof o.tutor?.[k] === 'boolean') flags.tutor[k] = o.tutor[k];
     for (const k of Object.keys(flags.fx) as (keyof Flags['fx'])[]) if (typeof o.fx?.[k] === 'boolean') flags.fx[k] = o.fx[k];
   } catch {
@@ -76,3 +84,6 @@ export function applyFlagOverrides(raw: string | null): void {
 }
 
 applyFlagOverrides(local.get('lx:flags'));
+
+/** Kapitel-Arbeiten wirken nur mit der Programmkarte (dort wird das Kapitel gewählt). */
+export const chapterRunOn = (): boolean => flags.chapterRun && flags.program;

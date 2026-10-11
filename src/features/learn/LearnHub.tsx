@@ -23,7 +23,11 @@ import { PathList } from '../grammar/PathList';
 import { startGrammar } from '../grammar/session';
 import { topicName } from '../grammar/topicUi';
 import { Slot } from '../../app/slots';
-import { flags } from '../../app/flags';
+import { chapterRunOn, flags } from '../../app/flags';
+import { programChapters } from '../../domain/c1/chapters';
+import type { ChapterCursor, TopicPhase } from '../../domain/c1/cursor';
+import type { MessageKey } from '../../i18n';
+import { startChapter, useChapterNow } from '../c1/chapterRun';
 import { Disclosure } from '../../ui/Disclosure';
 
 // Reiter „Grammatik“ (Gesamtkonzept 3.4, UX-Ziel Kap. 3.3): Weiter-Karte („Als Nächstes: Thema · n Min.“, ein Knopf),
@@ -56,6 +60,10 @@ function Row({ icon, title, sub, onClick, testId, badge }: { icon: ReactNode; ti
 }
 
 /** Einstiege anderer Bereiche auf dem Platz `learn` ohne eigene Gruppe (z. B. „Lehrer-Feedback einfügen“): nichts geht verloren. */
+// Kapitel-Arbeit (K5): Text und Knopf der Weiter-Karte je Phase des Kapitel-Cursors.
+const K_LINE: Record<TopicPhase, MessageKey> = { intro: 'pxKNextIntro', practice: 'pxKNextPractice', test: 'pxKNextTest', done: 'pxKNextDone' };
+const K_BTN: Record<TopicPhase, MessageKey> = { intro: 'pxKBtnIntro', practice: 'pxKBtnPractice', test: 'pxKBtnTest', done: 'pxKBtnDone' };
+
 function ForeignRows() {
   const { t } = useT();
   const api = useHiddenInput();
@@ -114,6 +122,11 @@ export function LearnHub() {
   const nBrake = braked.ok ? 0 : braked.reason === 'errors' ? grammarErrorsDue({ grammarDocs: docs, nowMs: now, today }) : 0;
   const brakeActive = !braked.ok && braked.reason === 'errors' && nDue > 0;
 
+  // Kapitel-Arbeit (K5): Mit gewähltem oder abgeleitetem Kapitel kommt „Als Nächstes“ aus demselben Cursor wie „Du bist hier“ (keine Bremse,
+  // nichts gesperrt). Der Knopf startet die Runde der Phase (Einführung, Übung oder Themen-Test).
+  const chapterNowRes = useChapterNow();
+  const cursor: ChapterCursor | null = chapterRunOn() && program ? chapterNowRes.cursor : null;
+
   const startNext = () => {
     if (!next) return;
     const first = startGrammar({ mode: 'topic', topic: next.id });
@@ -128,8 +141,27 @@ export function LearnHub() {
     go({ name: 'repairRound' });
   };
 
+  const chapterCard = cursor ? (
+    <section className="flex flex-col gap-3 rounded-[0.875rem] border border-line bg-surface-solid p-3.5" aria-labelledby="lh-next" data-testid="hub-next-topic" data-topic={cursor.topic ?? ''} data-chapter={cursor.n} data-phase={cursor.phase}>
+      <p id="lh-next" className="lx-eyebrow">
+        {t('nbLernenNextEyebrow')}
+      </p>
+      <p className="text-lg font-semibold tracking-tight">{t('pxKNext', { n: cursor.n, topic: cursor.topic ? topicName(cursor.topic, lang) : (programChapters()[cursor.chapter]?.name[lang] ?? '') })}</p>
+      <p className="text-sm text-muted" data-testid="hub-next-line">
+        {t(cursor.phase === 'test' && cursor.retry ? 'pxKNextRetry' : K_LINE[cursor.phase], { n: cursor.phase === 'intro' ? TOPIC_ROUND_MIN + 1 : TOPIC_ROUND_MIN })}
+      </p>
+      {(cursor.phase !== 'done' || cursor.chapter + 1 < programChapters().length) && (
+        <div>
+          <Button variant="primary" iconAfter="arrowRight" onClick={() => startChapter(cursor.phase === 'done' ? cursor.chapter + 1 : cursor.chapter, api)} data-testid="hub-next-start" data-action={cursor.phase}>
+            {t(K_BTN[cursor.phase])}
+          </Button>
+        </div>
+      )}
+    </section>
+  ) : null;
+
   // In der C1-Reise ohne eigenen Auftritt: die Reise steht bei Effekt-Stufe „Aus“ still (keine Animation in `program-map`).
-  const nextCard = next ? (
+  const nextCard = chapterCard ?? (next ? (
     <motion.section variants={program ? undefined : item} className={program ? 'flex flex-col gap-3 rounded-[0.875rem] border border-line bg-surface-solid p-3.5' : 'lx-glass flex flex-col gap-3 rounded-[var(--radius-card)] p-5'} aria-labelledby="lh-next" data-testid="hub-next-topic" data-topic={next.id}>
         <p id="lh-next" className="lx-eyebrow">
           {t('nbLernenNextEyebrow')}
@@ -160,7 +192,8 @@ export function LearnHub() {
           </div>
         )}
       </motion.section>
-  ) : null;
+  ) : null);
+  const highlight = cursor ? cursor.topic : (next?.id ?? null);
 
   return (
     <motion.div className="mx-auto flex w-full max-w-[47.5rem] flex-col gap-6 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }} data-testid="learn-hub">
@@ -198,7 +231,7 @@ export function LearnHub() {
         <motion.section variants={item} className="flex flex-col gap-3" aria-label={t('nbLernenPathAll', { n: pathTopics().length })}>
           <Disclosure label={t('nbLernenPathAll', { n: pathTopics().length })} testId="hub-all-topics">
             <div className="pt-3">
-              <PathList onOpen={setOpen} highlight={next?.id ?? null} program />
+              <PathList onOpen={setOpen} highlight={highlight} program />
             </div>
           </Disclosure>
         </motion.section>
@@ -207,7 +240,7 @@ export function LearnHub() {
           <h2 id="lh-path" className="lx-eyebrow">
             {t('nbLernenPathTitle', { n: pathTopics().length })}
           </h2>
-          <PathList onOpen={setOpen} highlight={next?.id ?? null} />
+          <PathList onOpen={setOpen} highlight={highlight} />
         </motion.section>
       )}
 

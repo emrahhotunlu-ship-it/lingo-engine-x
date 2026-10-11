@@ -10,6 +10,7 @@ import { Icon } from '../../ui/Icon';
 import { topicName } from '../grammar/topicUi';
 import { ChapterSheet, TONE_KEY, topicTone } from './ChapterSheet';
 import { JourneyMap, StatusChip } from './journey/JourneyMap';
+import { useChosenChapter } from './chosen';
 
 // Programmkarte „Dein Weg zu C1“ (Lernplattform 3.0 P32), im Grammatik-Reiter unter dem Titel (Slot `grammar.head`).
 // Darstellung seit R6 (P58): die C1-Reise (`journey/JourneyMap.tsx`). Handy: senkrechte Route mit 7 Stationen, darunter das Ziel des aktuellen
@@ -24,7 +25,9 @@ export function useChapterState(): ChapterStateResult {
   const today = useClock((s) => s.today);
   const nowMs = useClock((s) => s.now);
   const docs = useLive((s) => s.collections.grammar) ?? EMPTY;
-  return useMemo(() => chapterState({ docs, today, nowMs }), [docs, today, nowMs]);
+  // Kapitel-Arbeit (K1): das gewählte Kapitel (`app/c1.ch`, sofort auch optimistisch) ist „Du bist hier“; ohne Wahl gilt die Ableitung.
+  const chosen = useChosenChapter();
+  return useMemo(() => chapterState({ docs, today, nowMs, chosen }), [docs, today, nowMs, chosen]);
 }
 
 /**

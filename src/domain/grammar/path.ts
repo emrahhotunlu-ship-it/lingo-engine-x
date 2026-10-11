@@ -269,16 +269,23 @@ export function freezeGrammarDay(i: {
   nowMs: number;
   introPlanOf: (topic: string) => string[][] | null;
   seed: string;
+  /** Kapitel-Arbeit (K3): Der Grammatikschritt folgt dem gewählten Kapitel (reine Daten, damit dieser Ordner nichts vom Programm weiß). */
+  chapter?: ChapterInput | null;
 }): { gt: GrammarDay; ps: Record<string, PatState> } {
-  const step = introStepFor(i);
-  const intro = step?.topic ?? null;
-  const pats = step ? step.pats.slice(0, 2) : [];
-  let topics = rankTopics({ grammarDocs: i.docs, nowMs: i.nowMs, seed: i.seed, introduce: intro })
-    .slice(0, 3)
-    .map((r) => r.topic);
-  // Wie `selectRound`: das Thema des Tages steht immer dabei, als zweites.
-  if (intro && !topics.includes(intro)) topics = [topics[0] ?? intro, intro, ...topics.slice(1, 2)].filter((t, k, a) => a.indexOf(t) === k);
-  topics = topics.slice(0, 3);
+  let gt: GrammarDay;
+  if (i.chapter) gt = chapterDay({ ...i, chapter: i.chapter });
+  else {
+    const step = introStepFor(i);
+    const intro = step?.topic ?? null;
+    const pats = step ? step.pats.slice(0, 2) : [];
+    let topics = rankTopics({ grammarDocs: i.docs, nowMs: i.nowMs, seed: i.seed, introduce: intro })
+      .slice(0, 3)
+      .map((r) => r.topic);
+    // Wie `selectRound`: das Thema des Tages steht immer dabei, als zweites.
+    if (intro && !topics.includes(intro)) topics = [topics[0] ?? intro, intro, ...topics.slice(1, 2)].filter((t, k, a) => a.indexOf(t) === k);
+    gt = { intro, pats, topics: topics.slice(0, 3) };
+  }
+  const topics = gt.topics;
   const ps: Record<string, PatState> = {};
   for (const topic of topics) {
     const doc = i.docs.get(topic);
@@ -289,5 +296,57 @@ export function freezeGrammarDay(i: {
       ps[id] = patternStateNo(patternState(entries[id], i.today));
     }
   }
-  return { gt: { intro, pats, topics }, ps };
+  return { gt, ps };
+}
+
+/** Eingabe für den Kapitel-Modus: Nummer (1 bis 7), vorhandene Themen in Lehrreihenfolge und der Cursor (`domain/c1/cursor.ts`). */
+export type ChapterInput = {
+  n: number;
+  topics: readonly string[];
+  cursor: { topic: string | null; phase: 'intro' | 'practice' | 'test' | 'done'; pats: readonly string[] };
+};
+
+/** Das Thema, das heute schon eingeführt wurde (Thema begonnen oder Schritt gelegt), sonst `null`. */
+function introducedToday(docs: ReadonlyMap<string, Readonly<Doc>>, today: string): string | null {
+  for (const topic of pathTopics()) {
+    const doc = docs.get(topic);
+    if (isNewTopic(doc)) continue;
+    if (introDay(doc) === today || Object.values(patsOf(doc)).some((e) => e.i === today)) return topic;
+  }
+  return null;
+}
+
+/**
+ * Kapitel-Modus (K3, Emrahs Entscheidung vom 11.10.2026): Die Einführungsbremse gilt im Kapitel nicht, aber höchstens eine Einführung je Lerntag.
+ * Themen (≤ 3): zuerst das Thema des Cursors, dann ein weiteres begonnenes Kapitel-Thema (nach Bedarf), dann etwa jede dritte Aufgabe Wiederholung
+ * aus einem begonnenen Thema außerhalb des Kapitels. Ein nie begonnenes Thema kommt nur als Einführung des Tages hinein.
+ */
+function chapterDay(i: { docs: ReadonlyMap<string, Readonly<Doc>>; today: string; nowMs: number; seed: string; chapter: ChapterInput }): GrammarDay {
+  const ch = i.chapter;
+  const inCh = new Set(ch.topics);
+  const started = (t: string): boolean => !isNewTopic(i.docs.get(t));
+  let intro: string | null = null;
+  let pats: string[] = [];
+  const done = introducedToday(i.docs, i.today);
+  if (done) {
+    // Heute schon eingeführt: im Kapitel bleibt die Runde dort (ohne Karten), außerhalb gibt es heute keine weitere Einführung.
+    if (inCh.has(done)) intro = done;
+  } else if (ch.cursor.topic && ch.cursor.phase === 'intro') {
+    intro = ch.cursor.topic;
+    pats = ch.cursor.pats.slice(0, 2);
+  }
+  const ranked = rankTopics({ grammarDocs: i.docs, nowMs: i.nowMs, seed: i.seed, introduce: intro }).map((r) => r.topic);
+  const head = intro ?? (ch.cursor.topic && started(ch.cursor.topic) ? ch.cursor.topic : null);
+  const chRanked = ranked.filter((t) => inCh.has(t) && t !== head && started(t));
+  const review = ranked.filter((t) => !inCh.has(t) && started(t));
+  let topics = [head, chRanked[0], review[0]].filter((t): t is string => !!t);
+  // Auffüllen, falls ein Platz leer bleibt: erst weitere Wiederholung, dann weitere Kapitel-Themen.
+  for (const t of [...review.slice(1), ...chRanked.slice(1)]) {
+    if (topics.length >= 3) break;
+    if (!topics.includes(t)) topics.push(t);
+  }
+  topics = topics.filter((t, k, a) => a.indexOf(t) === k).slice(0, 3);
+  // Ganz am Anfang (nichts begonnen, Einführung heute schon anderswo): wie bisher das erste Thema der Rangliste, damit die Runde nicht leer ist.
+  if (!topics.length) topics = ranked.slice(0, 1);
+  return { intro, pats, topics, ch: ch.n };
 }

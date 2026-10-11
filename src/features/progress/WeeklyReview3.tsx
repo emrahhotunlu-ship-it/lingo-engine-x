@@ -12,6 +12,7 @@ import { Chip } from '../../ui/Chips';
 import { Eyebrow } from '../../ui/Eyebrow';
 import { Skeleton } from '../../ui/Skeleton';
 import { useConfusion } from '../tutor/diagnoseStore';
+import { useChosenChapter } from '../c1/chosen';
 import { FocusPick } from './FocusPick';
 import { TeacherCard } from './TeacherCard';
 import { useWeeklyText } from './useWeeklyText';
@@ -36,6 +37,7 @@ export function WeeklyReview3() {
   const schema = useLive((s) => s.docs['app/schema']);
   const liveStatus = useLive((s) => s.status);
   const conf = useConfusion(true);
+  const chosen = useChosenChapter();
 
   const facts = useMemo(
     () => weekFacts({ days: lastWeekOf(today).days, vocab, chunk, grammar, writing: EMPTY, talk: EMPTY, profile: obj(profile), pflichtSince: typeof obj(schema).pflichtSince === 'string' ? (obj(schema).pflichtSince as string) : null }).filter((f) => f.kind !== 'time'),
@@ -43,8 +45,8 @@ export function WeeklyReview3() {
   );
   const fixed = useMemo(() => facts.reduce((n, f) => (f.kind === 'fixed' ? n + f.n : n), 0), [facts]);
   const w = useMemo(
-    () => weekly3({ today, nowMs: now, vocab, chunk, grammar, profile: obj(profile), confusion: conf.confusion, fixed }),
-    [today, now, vocab, chunk, grammar, profile, conf.confusion, fixed],
+    () => weekly3({ today, nowMs: now, vocab, chunk, grammar, profile: obj(profile), confusion: conf.confusion, fixed, chosen }),
+    [today, now, vocab, chunk, grammar, profile, conf.confusion, fixed, chosen],
   );
   const text = useWeeklyText(w.w, facts);
 

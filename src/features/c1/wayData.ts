@@ -1,3 +1,4 @@
+import { chosenNow } from './chosen';
 import type { useLive } from '../../data/live';
 import { invalidIdsOf } from '../../data/live';
 import { addDays } from '../../domain/date';
@@ -49,5 +50,6 @@ export function wayFromLive(live: Pick<LiveState, 'docs' | 'collections' | 'inva
     patterns: i.patterns,
     logs: i.logs,
     itemOf: c1ItemById,
+    chosen: chosenNow(),
   });
 }

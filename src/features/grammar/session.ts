@@ -15,6 +15,8 @@ import { topicById } from '../../domain/content';
 import { isNewTopic, introTopic, stepDownTasks } from '../../domain/grammar/path';
 import { SKIP_TEST_N, SKIP_TEST_PASS, skipTopicsOf } from '../../domain/c1/placement/run';
 import { patternsOf } from '../../domain/grammar/patterns';
+import { TT_MIN, TT_N, ttPassed } from '../../domain/grammar/topicTest';
+import { programChapters } from '../../domain/c1/chapters';
 import {
   allSeedTasks,
   gramRoundPartial,
@@ -22,6 +24,7 @@ import {
   planFocusTopic,
   ROUND_SIZE,
   selectRound,
+  selectTopicTest,
   selectVortest,
   variantOf,
   wholeSentence,
@@ -117,7 +120,11 @@ type State = {
   before: Record<string, PatEntry | undefined>;
   /** Beantwortete Aufgaben der Runde nach Muster, in Reihenfolge (für den Zuwachs am Ende). */
   patLog: Array<{ pat: string; ok: boolean; help: boolean; t: number }>;
+  /** Themen-Test (Kapitel-Arbeit K4): die ersten `n` Aufgaben sind der Test; `result` steht nach der letzten Testantwort fest. */
+  test: TestState | null;
 };
+
+export type TestState = { topic: string; n: number; result: { c: number; n: number; ok: boolean } | null };
 
 export const useGrammarSession = create<State>(() => ({
   active: false,
@@ -141,6 +148,7 @@ export const useGrammarSession = create<State>(() => ({
   intro: null,
   before: {},
   patLog: [],
+  test: null,
 }));
 
 const IDLE_CAP_MS = 60_000;
@@ -156,7 +164,14 @@ export function setExtraTasks(tasks: readonly GrammarTask[]): void {
 let ctxInput: Pick<RoundInput, 'grammarDocs' | 'dailyOpen' | 'pool' | 'seed' | 'gt' | 'profile' | 'wordsToday'> | null = null;
 
 /** `block`/`size`: als Block der Tageseinheit (immer Pflicht, Rundengröße aus dem Plan). `pat`: nur dieses Muster üben (Themenblatt, 4 Aufgaben). */
-export type StartOpts = { /** Nur Anwenden: eine Runde nur dieser c1x-Art (freiwillig, nie Pflicht). */ kind?: C1Kind; /** Fertig gebaute Aufgaben (Kontrast-Runde, P49): freiwillig, nie Pflicht, nie Einführung. */ tasks?: readonly GrammarTask[]; mode: RoundMode; topic?: string | null; day?: string; block?: UnitBlockNo | null; size?: number; pat?: string | null };
+export type StartOpts = {
+  /** Kapitel-Arbeit (K4): Themen-Test zu `topic` (6 Aufgaben ohne Hilfe, Kontext `xtra`). Weniger als 4 passende Aufgaben: keine Runde (Rückgabe `null`, `active` bleibt aus). */
+  test?: boolean;
+  /** Kapitel-Arbeit (K5): Einführungsschritt in einer Themenrunde (Karten, beim neuen Thema mit Vortest), wie die Einführung des Tages. */
+  intro?: { topic: string; pats: readonly string[] } | null;
+  /** Kapitel-Arbeit (K5): nur diese Muster üben (Übung der schwachen Stellen); fehlen passende Aufgaben, gilt das ganze Thema. */
+  pats?: readonly string[] | null;
+} & { /** Nur Anwenden: eine Runde nur dieser c1x-Art (freiwillig, nie Pflicht). */ kind?: C1Kind; /** Fertig gebaute Aufgaben (Kontrast-Runde, P49): freiwillig, nie Pflicht, nie Einführung. */ tasks?: readonly GrammarTask[]; mode: RoundMode; topic?: string | null; day?: string; block?: UnitBlockNo | null; size?: number; pat?: string | null };
 
 /** Lemmata der Karten von heute (Gleichstand-Brecher der Rundenwahl); ohne Karten leer. */
 function safeWords(nowMs: number, plan: ReturnType<typeof useTodayPlan.getState>['plan']): string[] {
@@ -184,7 +199,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
   const lang = useSettings.getState().lang;
   const inputs = useLearnInputs.getState();
   // D9: Eine Grammatikrunde, solange „Grammatik" heute Pflicht und offen ist, zählt als Pflicht.
-  const ctx: Ctx = o.block ? 'duty' : o.kind || o.tasks?.length ? 'xtra' : roundCtx('gram', day);
+  const ctx: Ctx = o.block ? 'duty' : o.kind || o.tasks?.length || o.test ? 'xtra' : roundCtx('gram', day);
   let mode: RoundMode = o.mode;
   if (mode === 'xtra' && ctx === 'duty') mode = 'duty';
   if (mode === 'duty' && ctx !== 'duty') mode = 'xtra';
@@ -210,14 +225,26 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
   } as const;
   ensureC1xLoaded();
   const c1 = c1ErrorResolver({ grammarDocs: docs, nowMs, seed, profile });
-  const common = { ...base, nowMs, topic: o.topic ?? null, ...(errorsMax !== undefined ? { errorsMax } : {}), ...(c1 ? { c1 } : {}) };
+  // Kapitel-Arbeit (K3): Im Kapitel-Plan stehen Fehlersätze aus dem Kapitel vorn.
+  const chapterTopics = mode === 'duty' && gt?.ch ? (programChapters()[gt.ch - 1]?.topics ?? null) : null;
+  const common = { ...base, nowMs, topic: o.topic ?? null, ...(errorsMax !== undefined ? { errorsMax } : {}), ...(c1 ? { c1 } : {}), ...(chapterTopics ? { chapter: chapterTopics } : {}) };
 
   let tasks: GrammarTask[];
   let intro: IntroState | null = null;
+  let test: TestState | null = null;
   const size = o.size ?? ROUND_SIZE[mode];
-  const introTopicId = gt ? gt.intro : null;
+  // Einführung: die des Tages (Pflicht, `u.gt`) oder ein Einführungsschritt aus dem Kapitel (`o.intro`, Themenrunde).
+  const introSrc = o.intro && topicById(o.intro.topic) ? { topic: o.intro.topic, pats: [...o.intro.pats] } : gt?.intro ? { topic: gt.intro, pats: gt.pats } : null;
+  const introTopicId = introSrc ? introSrc.topic : null;
 
-  if (o.tasks?.length) {
+  if (o.test && o.topic) {
+    // Themen-Test (K4): 6 Aufgaben über alle Muster des Themas; weniger als 4 → „in Vorbereitung“, keine Runde.
+    const all = patternsOf(o.topic)?.patterns.map((p) => p.id) ?? [];
+    const picked = selectTopicTest({ ...base, mode: 'topic', topic: o.topic, pats: all, n: TT_N });
+    if (picked.length < TT_MIN) return null;
+    tasks = picked;
+    test = { topic: o.topic, n: picked.length, result: null };
+  } else if (o.tasks?.length) {
     // Kontrast-Runde (P49): die Aufgaben stehen fest (A und B im Wechsel); Kontext `xtra`.
     tasks = [...o.tasks];
   } else if (o.kind) {
@@ -226,8 +253,8 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
   } else if (o.pat && o.topic) {
     // Ein Muster üben (Themenblatt): 4 Aufgaben nur dieses Musters.
     tasks = selectRound({ ...common, mode: 'topic', size: 4, errorsMax: 0, introBlock: { topic: o.topic, pats: [o.pat] }, gt: null });
-  } else if (gt && introTopicId && topicById(introTopicId)) {
-    const pats = gt.pats.filter((p) => patternsOf(introTopicId)?.patterns.some((x) => x.id === p));
+  } else if (introSrc && introTopicId && topicById(introTopicId)) {
+    const pats = introSrc.pats.filter((p) => patternsOf(introTopicId)?.patterns.some((x) => x.id === p));
     const fresh = isNewTopic(docs.get(introTopicId));
     if (pats.length) {
       // Kurzweg (P34): Thema in `app/c1.place.skip` und neu → Kurztest mit 4 Aufgaben über alle Muster des Themas statt zwei.
@@ -250,6 +277,11 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
       tasks = selectRound({ ...common, mode, size });
       if (fresh) intro = { topic: introTopicId, pats: [], fresh: true, vtN: 0, cards: 'pending', passed: null, alt: [], blockAt: 0, blockLen: 0 };
     }
+  } else if (o.pats?.length && o.topic) {
+    // Übung der schwachen Stellen (K5): die Muster zuerst, der Rest der Runde aus dem ganzen Thema.
+    const weak = selectRound({ ...common, mode: 'topic', size: Math.min(INTRO_TASKS, size), errorsMax: 0, introBlock: { topic: o.topic, pats: [...o.pats] }, gt: null });
+    const rest = selectRound({ ...common, mode: 'topic', size: Math.max(0, size - weak.length), introBlock: null, gt: null, exclude: new Set(weak.map((x) => x.key)) });
+    tasks = [...rest.filter((x) => x.errorT !== null), ...weak, ...rest.filter((x) => x.errorT === null)].slice(0, size);
   } else {
     tasks = selectRound({
       ...common,
@@ -258,7 +290,8 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
       // Einführungsbremse (höchstens 1 neues Thema je 3 Lerntage, nie bei ≥ 10 offenen Fehlersätzen): nur die Pflichtrunde führt ein Thema ein.
       introduce: mode === 'duty' && !gt ? introTopic(docs, day, nowMs) : null,
       // Wochenfokus (P50): erst für Pläne, die nach der Wahl angelegt wurden; der gespeicherte Plan von heute bleibt eingefroren.
-      focusTopic: mode === 'duty' ? (focusTopicOf(wfFocus) ?? (!gt ? planFocusTopic(plan) : null)) : null,
+      // Im Kapitel-Plan (`gt.ch`) rückt kein Wochenfokus nach vorn: der Tag folgt dem Kapitel.
+      focusTopic: mode === 'duty' && !gt?.ch ? (focusTopicOf(wfFocus) ?? (!gt ? planFocusTopic(plan) : null)) : null,
       ...(flags.slotPlan && (mode === 'duty' || mode === 'xtra') ? { slotPlan: { focus: wfFocus } } : {}),
     });
     // Regelkarte vor der ersten Runde eines neuen Themas (Lernweg ①): das erste Thema der Runde, das noch nie geübt wurde.
@@ -276,6 +309,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
   for (const t of tasks) if (t.pat && !(t.pat in before)) before[t.pat] = patsOf(docs.get(t.topic))[t.pat];
   const next: Partial<State> = {
     intro,
+    test,
     active: true,
     status: tasks.length ? 'running' : 'summary',
     mode,
@@ -371,6 +405,13 @@ export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
       intro = { ...intro, cards: 'done' };
     }
   }
+  // Themen-Test (K4): Mit der letzten Testantwort steht das Ergebnis fest und geht als `tt` mit dieser Antwort ins Thema. Zählt nur richtig ohne Hilfe.
+  let test = s.test;
+  if (test && !repeating && test.result === null && s.pos === test.n - 1) {
+    const c = s.results.slice(0, test.n - 1).filter((r) => r.ok && !r.help).length + (isOk(a) && a.help.level === 0 ? 1 : 0);
+    a = { ...a, tt: { c, n: test.n } };
+    test = { ...test, result: { c, n: test.n, ok: ttPassed(c, test.n) } };
+  }
   if (!repeating) void learnRecorder.grammar(a);
   const row: GrammarRow = {
     key: a.task.key,
@@ -388,7 +429,8 @@ export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
   const patLog = repeating || !a.task.pat ? s.patLog : [...s.patLog, { pat: a.task.pat, ok: row.ok, help: row.help ?? false, t: a.t }];
   const pos = s.pos + 1;
   let repeatAt = s.repeatAt;
-  if (pos >= tasks.length && repeatAt === null) {
+  // Themen-Test: keine „Nochmal“-Runde, das Ergebnis kommt sofort; die schwachen Stellen übt die nächste Runde (Cursor-Phase „Üben“).
+  if (pos >= tasks.length && repeatAt === null && !test) {
     const wrong = new Set(results.filter((r) => !r.ok).map((r) => r.key));
     const used = new Set(tasks.map((t) => t.key));
     const again: GrammarTask[] = [];
@@ -409,8 +451,9 @@ export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
     }
   }
   const done = pos >= tasks.length;
-  const next: State = { ...s, tasks, intro, repeatAt, results, patLog, pos, step: s.step + 1, status: done ? 'summary' : 'running' };
-  if (!done && !inRepeat(next) && !cardsDue(next)) {
+  const next: State = { ...s, tasks, intro, test, repeatAt, results, patLog, pos, step: s.step + 1, status: done ? 'summary' : 'running' };
+  // Im Themen-Test bleibt jede Aufgabe, wie sie ist (keine Rückstufung).
+  if (!done && !inRepeat(next) && !cardsDue(next) && !(test && pos < test.n)) {
     // Rückstufung: zwei Fehlschläge in Folge im Thema der nächsten Aufgabe → eine Form leichter (nur in dieser Runde), gleiches Muster.
     const live = useLive.getState();
     const nextTask = tasks[pos];
@@ -473,14 +516,15 @@ export type GrammarSnap = Pick<State, 'status' | 'mode' | 'topic' | 'ctx' | 'day
   rv?: 1 | 2;
   before?: State['before'];
   patLog?: State['patLog'];
+  test?: TestState | null;
 };
 
 /** Momentaufnahme der laufenden Runde (Aufgaben, Position, Ergebnisse); Antworten liegen schon in der db. */
 export function grammarSnapshot(): GrammarSnap | null {
   const s = useGrammarSession.getState();
   if (!s.active || !s.tasks.length) return null;
-  const { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt, intro, profile, rv, before, patLog } = s;
-  return { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt, intro, profile, rv, before, patLog };
+  const { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt, intro, profile, rv, before, patLog, test } = s;
+  return { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt, intro, profile, rv, before, patLog, test };
 }
 
 const legacyIntro = (topic: string): IntroState => ({ topic, pats: [], fresh: true, vtN: 0, cards: 'pending', passed: null, alt: [], blockAt: 0, blockLen: 0 });
@@ -499,6 +543,7 @@ export function restoreGrammar(snap: GrammarSnap): boolean {
     rv: snap.rv === 2 ? 2 : 1,
     before: snap.before && typeof snap.before === 'object' ? snap.before : {},
     patLog: Array.isArray(snap.patLog) ? snap.patLog : [],
+    test: snap.test && typeof snap.test === 'object' && typeof snap.test.topic === 'string' && typeof snap.test.n === 'number' ? snap.test : null,
     active: true,
     step: useGrammarSession.getState().step + 1,
     startedAt: performance.now(),

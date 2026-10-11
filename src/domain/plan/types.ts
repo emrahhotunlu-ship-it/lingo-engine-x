@@ -43,7 +43,13 @@ export type UnitMetaBlock = [block: 1 | 2 | 3 | 4 | 5, kind: string, min: number
 export type PatState = 0 | 1 | 2 | 3;
 
 /** Das Grammatikthema des Tages, beim Anlegen des Plans eingefroren (Lernplattform 2.0 §2.3). */
-export type GrammarDay = { intro: string | null; pats: string[]; topics: string[] };
+export type GrammarDay = {
+  intro: string | null;
+  pats: string[];
+  topics: string[];
+  /** Kapitel-Arbeit (K3), additiv: Der Grammatikschritt folgt diesem Kapitel (1 bis 7). Ältere Versionen lesen ihn nicht und rechnen wie bisher. */
+  ch?: number;
+};
 
 /** Eingefrorene Eckdaten der Tageseinheit (ohne `env`, Prüfbefund M5). */
 export type UnitMeta = {

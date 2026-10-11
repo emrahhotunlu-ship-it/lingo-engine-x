@@ -9,7 +9,17 @@ import { topicName } from '../grammar/topicUi';
 import { filmForTopics } from '../../domain/c1/anim';
 import { FilmLauncher, filmEnabled } from './film/FilmLauncher';
 import { GateSection } from './gate/GateCard';
-import { flags } from '../../app/flags';
+import { chapterRunOn, flags } from '../../app/flags';
+import { useMemo } from 'react';
+import { useClock } from '../../app/clock';
+import { useLive } from '../../data/live';
+import { chapterPhases, type TopicPhase } from '../../domain/c1/cursor';
+import { useHiddenInput } from '../../engine/HiddenInput';
+import { Button } from '../../ui/Button';
+import { startChapter } from './chapterRun';
+
+const PHASE_KEY: Record<TopicPhase, MessageKey> = { intro: 'pxKPhaseIntro', practice: 'pxKPhasePractice', test: 'pxKPhaseTest', done: 'pxKPhaseDone' };
+const EMPTY = new Map<string, Record<string, unknown>>();
 
 // Kapitelblatt (Lernplattform 3.0 P32): ein Kapitel des C1-Programms mit Ziel („Abgeschlossen heißt …“), den Themen mit Ring „Muster sicher a/b“,
 // der Prüfungsfokus und der Satz für den Lehrer. Alle Zahlen kommen aus `chapterState` (eine Quelle); das Blatt rechnet nichts selbst.
@@ -29,6 +39,12 @@ export function ChapterSheet({ open, chapter, progress, onClose }: { open: boole
   const { t, lang } = useT();
   // Kapitelstart (P61): der Struktur-Film des ersten Themas mit Film, ein Startknopf, der Film klappt hier im Blatt auf.
   const film = progress && filmEnabled() ? filmForTopics(progress.topics.filter((r) => r.exists).map((r) => r.id)) : null;
+  // Kapitel-Arbeit (K5): ein Hauptknopf „Kapitel starten/Weiterarbeiten“ und je Thema die Phase (Neu kennenlernen · Üben · Themen-Test · Geschafft).
+  const run = chapterRunOn() && !!progress?.ready;
+  const api = useHiddenInput();
+  const today = useClock((x) => x.today);
+  const docs = useLive((x) => x.collections.grammar) ?? EMPTY;
+  const phases = useMemo(() => (run && progress ? chapterPhases({ chapter: progress, docs, today }) : null), [run, progress, docs, today]);
   return (
     <Sheet
       open={open}
@@ -55,6 +71,26 @@ export function ChapterSheet({ open, chapter, progress, onClose }: { open: boole
               </p>
             )}
           </section>
+
+          {run && chapter && progress && (
+            <section className="flex flex-col gap-2" aria-label={t('pxKStart')} data-testid="chapter-run">
+              <p className="text-sm text-muted">{t('pxKDaily')}</p>
+              <div>
+                <Button
+                  variant="primary"
+                  iconAfter="arrowRight"
+                  data-testid="chapter-start"
+                  data-chapter={chapter.n}
+                  onClick={() => {
+                    startChapter(chapter.n - 1, api);
+                    onClose();
+                  }}
+                >
+                  {progress.introduced > 0 ? t('pxKContinue') : t('pxKStart')}
+                </Button>
+              </div>
+            </section>
+          )}
 
           {film && (
             <section className="flex flex-col gap-2" aria-labelledby="px-ch-film" data-testid="chapter-film">
@@ -88,6 +124,11 @@ export function ChapterSheet({ open, chapter, progress, onClose }: { open: boole
                     <span className="flex min-w-0 flex-1 flex-col">
                       <span className="font-medium">{name}</span>
                       {!r.exists && <span className="text-sm text-muted">{t('pxChTopicSoon')}</span>}
+                      {r.exists && phases?.get(r.id) && (
+                        <span className="text-sm text-muted" data-testid="chapter-topic-phase" data-phase={phases.get(r.id)}>
+                          {t(PHASE_KEY[phases.get(r.id)!])}
+                        </span>
+                      )}
                     </span>
                     {r.exists && <span className={`inline-flex h-6 flex-none items-center rounded-full px-2.5 text-xs font-bold ${TONE_CLASS[tone]}`}>{t(TONE_KEY[tone])}</span>}
                   </li>

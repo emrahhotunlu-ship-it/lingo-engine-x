@@ -384,6 +384,8 @@ export const grammarSchema = z.looseObject({
       }),
     )
     .nullish(),
+  /** Neu (Kapitel-Arbeiten, 11.10.2026, nur ergänzend): letzter Themen-Test `{d, c, n, ok, k}` (Tag, richtig, gestellt, je bestanden, Versuche). */
+  tt: z.looseObject({ d: str, c: num, n: num, ok: bool, k: num }).nullish(),
 });
 
 export const lessonSchema = z.looseObject({
@@ -940,4 +942,7 @@ export const c1Schema = z.looseObject({
   gates: z.array(z.looseObject({ d: str, ch: num, g: z.array(z.unknown()).nullish(), w: z.array(z.unknown()).nullish(), ok: bool })).nullish(),
   prod: z.array(z.looseObject({ d: str, s: str, w: num, e: num, id: str, u: bool })).nullish(),
   bad: strArr,
+  /** Neu (Kapitel-Arbeiten, 11.10.2026, nur ergänzend): gewähltes Kapitel `{n: 1–7, d: Lerntag}` und Verlauf `[[n, d]]` (≤ 20). */
+  ch: z.looseObject({ n: num, d: str }).nullish(),
+  chh: z.array(z.unknown()).nullish(),
 });

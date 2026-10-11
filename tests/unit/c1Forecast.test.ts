@@ -119,7 +119,7 @@ describe('Rechnung', () => {
   it('K-f (1): K1-Untergrenze aus offenen Kapiteln (1 Tag je offenes Thema, 14 Tage je Kapitel)', () => {
     const topic = (safe: boolean) => ({ id: 't', exists: true, patSafe: 0, patTotal: 1, introduced: true, safe });
     const ch = (status: 'done' | 'current' | 'open', topics: boolean[]) => ({ id: 'c', n: 1, status, ready: true, topics: topics.map(topic), patSafe: 0, patTotal: 0, topicSafe: 0, introduced: 0, liveTopics: 0, allIntroduced: false, allSafe: false });
-    const chapters: ChapterStateResult = { current: 1, chapters: [ch('done', [true, true]), ch('current', [true, false, false]), ...Array.from({ length: 5 }, () => ch('open', [false, false, false, false]))] };
+    const chapters: ChapterStateResult = { current: 1, chosen: false, chapters: [ch('done', [true, true]), ch('current', [true, false, false]), ...Array.from({ length: 5 }, () => ch('open', [false, false, false, false]))] };
     expect(k1FloorDays(chapters)).toBe(2 + 5 * 4 + 6 * 14);
     expect(k1FloorDays(undefined)).toBe(0);
     // Schnelles Muster-Tempo, aber 6 offene Kapitel: K1 wird nicht früher fertig als die Untergrenze.

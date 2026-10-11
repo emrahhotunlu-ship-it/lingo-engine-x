@@ -36,7 +36,10 @@ function readGt(v: unknown): GrammarDay | null {
   const pats = strList(o.pats, 2);
   const topics = strList(o.topics, 3);
   if (!pats || !topics || !(o.intro === null || typeof o.intro === 'string')) return null;
-  return { intro: o.intro, pats, topics };
+  const out: GrammarDay = { intro: o.intro, pats, topics };
+  // Kapitel-Arbeit (K3): nur eine ganze Zahl 1 bis 7 gilt, alles andere fällt still weg (der Plan bleibt gültig).
+  if (typeof o.ch === 'number' && Number.isInteger(o.ch) && o.ch >= 1 && o.ch <= 7) out.ch = o.ch;
+  return out;
 }
 
 function readPs(v: unknown): Record<string, PatState> | null {
