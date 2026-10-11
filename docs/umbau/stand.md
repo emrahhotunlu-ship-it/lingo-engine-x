@@ -355,3 +355,6 @@ Tests: 1953 Unit; E2E der berührten Bildschirme grün (a11y: Kontrast der „Ne
 - Test-Link `AXHkh6…` Version 57 `1791717677-ecea` (Rückweg v56 `1791693550-12d3`). Live unverändert v73 `1791713521-d15c`, wartet auf „Ja live nehmen“.
 - Nachtrag (7cfaf10): Ersatzsatz für kaputte Beispielsätze passt zur Wortart der Karte (`senseFits` in `src/domain/srs/cards.ts`; „decline“ als Hauptwort bekommt „We noticed a sharp decline …“, nicht „started to decline“; ohne passenden Satz keiner). Test in `aufraeumWoerter.test.ts`. Gegen die echten Karten `rage` und `decline` geprüft (Kopie im Arbeitsordner, nicht im Projekt). Test-Link `AXHkh6…` Version 58 `1791717963-400c` (Rückweg v57 `1791717677-ecea`). Live weiter v73, wartet auf „Ja live nehmen“.
 - Offen, Daten der alten App: Karte „decline“ heißt „to decline“ mit Wortart Hauptwort/„Rückgang“ (Widerspruch in der Karte selbst, nicht angefasst).
+
+## 11.10.2026 – Live-Gang Fix kaputter Beispielsatz
+- Emrahs Freigabe „ja live nehmen“ nach Test-Link v58. Vorher gelesen: live v73 `1791713521-d15c` (Rückweg). Veröffentlicht: Build 7cfaf10 → live **v74 `1791718808-a803`**, Fähigkeiten db, sample, downloads übernommen.
