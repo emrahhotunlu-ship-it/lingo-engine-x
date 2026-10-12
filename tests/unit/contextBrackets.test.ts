@@ -88,3 +88,19 @@ describe('alle vorhandenen Karten: Kontext ohne Klammern, Maske nicht größer a
     expect(bad).toEqual([]);
   });
 });
+
+describe('Platzhalter am Ende der Wendung: das Objekt bleibt sichtbar (Rückmeldung 12.10.2026, „reassure someone“)', () => {
+  it('nur der feste Teil wird maskiert, nicht das Objekt des Satzes', () => {
+    const c = findContext('Anna hopes to [reassure] the customer with a free workshop.', 'to reassure someone');
+    expect(c?.gap).toBe('reassure');
+    expect(c?.sentence).toBe('Anna hopes to reassure the customer with a free workshop.');
+    // ohne Klammer genauso, gebeugte Form
+    expect(findContext('She reassures the nervous client every morning.', 'to reassure someone')?.gap).toBe('reassures');
+    // mehrere feste Wörter vor dem Platzhalter: die ganze feste Wendung, nie das Objekt
+    expect(findContext('We need to look into the delay before Friday.', 'to look into something')?.gap).toBe('look into');
+  });
+  it('Platzhalter in der Mitte bleibt wie bisher komplett maskiert', () => {
+    const c = findContext(`${PREFIX}put the new price agreement in writing before Friday.`, WORD);
+    expect(c?.gap).toBe('put the new price agreement in writing');
+  });
+});

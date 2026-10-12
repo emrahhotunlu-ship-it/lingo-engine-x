@@ -254,7 +254,13 @@ function findContextUncached(ex: string, word: string): ContextSpan | null {
   const first = spans[0];
   const last = spans[spans.length - 1];
   // Wendung mit Platzhalter: komplett maskieren, auch wenn die Klammer nur das Objekt (oder nur Teile) markiert.
-  const phrase = lemma && wordCount(lemma) > 1 && lemma.split(/\s+/).some(isPlaceholder) ? locateFlex(sentence, lemma) : null;
+  // Ein Platzhalter am Ende („reassure someone“, „look into something“) ist ein beliebiges Objekt des Satzes, das niemand erraten kann
+  // (Emrahs Rückmeldung 12.10.2026: „reassure the customer“): maskiert wird nur der feste Teil, das Objekt bleibt sichtbar.
+  const lemmaWords = lemma.split(/\s+/).filter(Boolean);
+  const core = [...lemmaWords];
+  while (core.length > 1 && isPlaceholder(core[core.length - 1] ?? '')) core.pop();
+  const target = core.length < lemmaWords.length ? core.join(' ') : lemma;
+  const phrase = lemma && wordCount(lemma) > 1 && lemmaWords.some(isPlaceholder) ? locateFlex(sentence, target) : null;
   if (phrase && (!first || spans.some((s) => s.start < phrase.end && s.end > phrase.start))) return make(phrase);
   if (first && last) {
     if (first === last) return make(first);
