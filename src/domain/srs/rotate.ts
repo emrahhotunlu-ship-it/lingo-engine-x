@@ -1,5 +1,6 @@
 import { chunkContext } from './chunkCards';
-import { findContext } from './context';
+import { findContext, senseFits } from './context';
+import { gapUsable, lemmaFor } from './gapFit';
 import { crossSentences } from './crossLink';
 import { storedExamples } from './examples';
 import { readWx } from '../tutor/acceptWordCtx';
@@ -24,10 +25,18 @@ const ROTATING_WX: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['match', 'cloz
 /** Satzübungen mit Lücke im Satz, die den Satz wechseln dürfen (Erkennen auf Stufe 1–2 bleibt im Ursprungssatz). */
 export const ROTATING: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['cloze_hint', 'cloze', 'tiles', 'speed', 'dictation', 'wordfam']);
 
+/** Der Ursprungssatz ist als Lücke brauchbar (sonst wechselt er nicht mit, `gapFit.ts`). */
+const originUsable = (card: Pick<TrainCard, 'context' | 'word' | 'kind'>): boolean => !!card.context && gapUsable(card.context, lemmaFor({ word: card.word, kind: card.kind, lemma: '' }));
+
 /** Stelle des Worts (bzw. der Wendung) in einem Satz, sonst `null`. */
-function locateIn(card: Pick<TrainCard, 'word' | 'kind'>, sentence: string): ContextSpan | null {
+function locateIn(card: Pick<TrainCard, 'word' | 'kind' | 'doc'>, sentence: string): ContextSpan | null {
   // Wendungen (Lernplattform 2.0 §4.8): die Stelle der Wendung über `locateChunk`, Vokabeln über das Wort (auch gebeugt).
-  return card.kind === 'chunk' ? chunkContext(sentence, card.word) : findContext(sentence, card.word);
+  const hit = card.kind === 'chunk' ? chunkContext(sentence, card.word) : findContext(sentence, card.word);
+  // Audit 12.10.2026: Nur Sätze, in denen das Wort in der Bedeutung der Karte steht (Nomen-Karte „decline“ nicht im Satz „started to decline“)
+  // und deren Lücke genau das Wort verdeckt (kein zweites Vorkommen, kein beliebiges Objekt) wechseln mit dem Ursprungssatz ab.
+  if (!hit) return null;
+  if (card.kind !== 'chunk' && !senseFits(hit, card.doc.pos)) return null;
+  return gapUsable(hit, lemmaFor({ word: card.word, kind: card.kind, lemma: '' })) ? hit : null;
 }
 
 /**
@@ -36,7 +45,7 @@ function locateIn(card: Pick<TrainCard, 'word' | 'kind'>, sentence: string): Con
  * (mcc/ocl/err/kwt), dem Satzbau-Pool und dem C1-Paket, in denen dieselbe Lexik vorkommt (`crossLink.ts`).
  */
 export function contextsOf(card: Pick<TrainCard, 'context' | 'doc' | 'word' | 'kind'>): ContextSpan[] {
-  const out: ContextSpan[] = card.context ? [card.context] : [];
+  const out: ContextSpan[] = originUsable(card) ? [card.context as ContextSpan] : [];
   const have = new Set(out.map((c) => c.sentence.toLowerCase()));
   const push = (sentence: string): void => {
     const c = locateIn(card, sentence);
@@ -65,7 +74,7 @@ export function rotatedContext(card: TrainCard, ex: ExerciseId): ContextSpan | n
 
 /** Ursprungssatz und die neuesten (≤ 2) nicht gemeldeten Claude-Sätze des Wörter-Tutors (`wx`), in denen das Wort steht (P52, ab Stufe 2). */
 export function wxContexts(card: Pick<TrainCard, 'context' | 'doc' | 'word' | 'kind'>): ContextSpan[] {
-  const out: ContextSpan[] = card.context ? [card.context] : [];
+  const out: ContextSpan[] = originUsable(card) ? [card.context as ContextSpan] : [];
   const have = new Set(out.map((c) => c.sentence.toLowerCase()));
   let taken = 0;
   for (const x of [...readWx(card.doc)].sort((a, b) => b.t - a.t)) {

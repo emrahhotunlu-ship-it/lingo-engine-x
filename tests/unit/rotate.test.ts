@@ -27,11 +27,11 @@ const pool = (c: TrainCard): TrainCard[] => [c, ...['a', 'b', 'c', 'd'].map((id)
 describe('Kontext-Wechsel bei Wendungen (Lernplattform 2.0 §4.8)', () => {
   it('ab Stufe 3 wechselt auch die Wendung den Satz: die Stelle der Wendung im gespeicherten Satz über locateChunk', () => {
     const chunk = (reps: number, hist: unknown[] = []): TrainCard =>
-      toChunkCard('c-meet-halfway', { id: 'c-meet-halfway', en: 'meet sb halfway', de: 'jdm. entgegenkommen', def: 'to compromise', kind: 'phrase', register: 'neutral', src: { upgraded: 'We are happy to meet you halfway on the timeline.' }, state: 'review', S: 10, D: 5, last: NOW - 10 * 86_400_000, due: NOW - 1000, reps, lapses: 0, stage: 4, hist, xEx: [{ en: 'Both sides had to meet each other halfway on price.', t: 1 }] }, NOW) as TrainCard;
-    const seq = [[], [{ t: 1, m: 'type', g: 3, x: 'cloze', s: sentKey('We are happy to meet you halfway on the timeline.') }]].map((hist, reps) => rotatedContext(chunk(reps, hist), 'cloze'));
-    expect(seq[0]?.sentence).toBe('We are happy to meet you halfway on the timeline.');
-    expect(seq[1]?.sentence).toBe('Both sides had to meet each other halfway on price.');
-    expect(seq[1]?.gap).toBe('meet each other halfway');
+      toChunkCard('c-meet-halfway', { id: 'c-meet-halfway', en: 'meet halfway', de: 'jdm. entgegenkommen', def: 'to compromise', kind: 'phrase', register: 'neutral', src: { upgraded: 'We are happy to meet halfway on the timeline.' }, state: 'review', S: 10, D: 5, last: NOW - 10 * 86_400_000, due: NOW - 1000, reps, lapses: 0, stage: 4, hist, xEx: [{ en: 'Both sides had to meet halfway on price.', t: 1 }] }, NOW) as TrainCard;
+    const seq = [[], [{ t: 1, m: 'type', g: 3, x: 'cloze', s: sentKey('We are happy to meet halfway on the timeline.') }]].map((hist, reps) => rotatedContext(chunk(reps, hist), 'cloze'));
+    expect(seq[0]?.sentence).toBe('We are happy to meet halfway on the timeline.');
+    expect(seq[1]?.sentence).toBe('Both sides had to meet halfway on price.');
+    expect(seq[1]?.gap).toBe('meet halfway');
   });
 });
 

@@ -162,8 +162,45 @@ const GAP_PLACEHOLDER = /_{2,}|…{2,}|\.{4,}|[([]\s*\?\s*[)\]]|\?\?|(?:^|\s)\?(
  * („… in Europeeskalierende Kriege … ongoing.+“). Ein echter Satz endet nie auf „.+“; so ein Text ist kein Ursprungssatz.
  */
 const CAPTURED_BLOCK = /[.!?…”"')]\+\s*$/;
+/**
+ * Eingefangener Bildschirmtext ohne „+“ (Audit 12.10.2026, Karten „cutoff“ und „to reassure“): Sprechername oder Satzgrenze ohne Leerzeichen
+ * („TomI used …“, „… date.Ich habe …“) oder deutscher Text im englischen Satz („… nächste Woche zu beruhigen.“). Ein englischer Beispielsatz
+ * hat weder das eine noch das andere. Einheiten und Abkürzungen (PhD, kW, pH …) sind ausgenommen.
+ */
+const GLUED_BOUNDARY = /[a-zäöüß][.!?]["”')]?[A-ZÄÖÜ]/;
+const GLUED_SPEAKER = /[a-z][A-Z]\s/;
+const DE_WORDS = '(?:ich|nicht|und|der|mit|ist|eine|für|wir|sich|auch|von|dem)';
+const GERMAN_TEXT = new RegExp(`[äöüß][\\s\\S]*\\b${DE_WORDS}\\b|\\b${DE_WORDS}\\b[\\s\\S]*[äöüß]`, 'i');
+const UNITS = /\b(?:PhD|kW|kB|pH|mA|dB|kHz|iOS|macOS)\b/g;
+export function looksCaptured(s: string): boolean {
+  const t = s.replace(UNITS, ' ');
+  return GLUED_BOUNDARY.test(t) || GLUED_SPEAKER.test(t) || GERMAN_TEXT.test(t);
+}
 export function hasGapPlaceholder(s: unknown): boolean {
-  return typeof s === 'string' && (GAP_PLACEHOLDER.test(s) || CAPTURED_BLOCK.test(s));
+  return typeof s === 'string' && (GAP_PLACEHOLDER.test(s) || CAPTURED_BLOCK.test(s) || looksCaptured(s));
+}
+
+const MODAL_BEFORE = /(?:^|\s)(?:will|would|can|could|may|might|must|shall|should|did|does|do|not|n't)\s+$/i;
+/** „to“ vor dem Wort ist ein Infinitiv, wenn das Wort davor ihn verlangt („started to decline“) oder der Satz so beginnt; sonst ist es eine Präposition („key to survival“). */
+const INF_TO =
+  /(?:^|[\s,;:(])(?:want|wants|wanted|need|needs|needed|try|tries|tried|plan|plans|planned|hope|hopes|hoped|decide|decides|decided|expect|expects|expected|begin|begins|began|start|starts|started|continue|continues|continued|refuse|refuses|refused|agree|agrees|agreed|manage|manages|managed|fail|fails|failed|able|going|have|has|had|ought|order|how|where|what|whether|like|likes|liked|love|loved|prefer|prefers|promise|promised|seem|seems|seemed|appear|appears|tend|tends|afford|learn|learned|help|helps|helped|forget|remember|wish|allow|allowed|used|enough|ready|likely|unlikely|not|never|always|just|only|also|so|and|but|or)\s+to\s+$/i;
+const TO_AT_START = /(?:^|[,;:(]\s*)to\s+$/i;
+const DET_BEFORE = /(?:^|\s)(?:a|an|the|this|that|these|those|my|your|his|her|its|our|their)\s+$/i;
+const BE_BEFORE = /(?:^|\s)(?:am|is|are|was|were|be|been|being|get|gets|got|has|have|had)\s+$/i;
+/**
+ * Passt die Fundstelle zur Wortart der Karte? Hauptwort: nicht nach „will/can …“, nicht nach „to“ als Infinitiv und nicht als Partizip nach
+ * „was/has“ („I was mistaken“ für die Karte „mistake“); Verb: nicht nach Artikel/Possessiv. Unbekannte Wortart: passt.
+ */
+export function senseFits(hit: Pick<ContextSpan, 'sentence' | 'start' | 'end'>, pos: unknown): boolean {
+  const before = hit.sentence.slice(0, hit.start);
+  const p = typeof pos === 'string' ? pos.toLowerCase() : '';
+  if (p === 'noun') {
+    if (MODAL_BEFORE.test(before) || INF_TO.test(before) || TO_AT_START.test(before)) return false;
+    const w = hit.sentence.slice(hit.start, hit.end).toLowerCase();
+    return !(BE_BEFORE.test(before) && /(?:ed|ken|ten|sen|ven|wn)$/.test(w) && !/\s/.test(w));
+  }
+  if (p === 'verb') return !DET_BEFORE.test(before);
+  return true;
 }
 
 /** Gedankenstrich statt Bindestrich zwischen Leerzeichen (gleiche Länge, Spannen bleiben gültig). */

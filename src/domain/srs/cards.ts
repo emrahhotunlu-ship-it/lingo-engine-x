@@ -1,5 +1,5 @@
 import { mergedVocab } from '../overview';
-import { findContext, hasGapPlaceholder, lemmaOf, parseCollocs } from './context';
+import { findContext, lemmaOf, parseCollocs, senseFits } from './context';
 import { stageOf } from './ladder';
 import { isFutureFsrs, isNewState, readFsrs } from './scheduler';
 import type { Counts, Lang, TrainCard } from './types';
@@ -23,15 +23,13 @@ export function counts(v: unknown): Record<string, Counts> {
 
 // P7-1: Satzstelle und Kollokationen hängen nur am Dokument. Unveränderte Dokumente kommen als
 // dasselbe Objekt (contract/db.d.ts, Validierungs-Cache H6) – je Dokument nur einmal suchen.
-const MODAL_BEFORE = /(?:^|\s)(?:to|will|would|can|could|may|might|must|shall|should|did|does|do|not|n't)\s+$/i;
-const DET_BEFORE = /(?:^|\s)(?:a|an|the|this|that|these|those|my|your|his|her|its|our|their)\s+$/i;
-/** Passt die Fundstelle zur Wortart der Karte? Hauptwort: nicht nach „to/will/can …“; Verb: nicht nach Artikel/Possessiv. Unbekannte Wortart: passt. */
-function senseFits(hit: NonNullable<TrainCard['context']>, pos: unknown): boolean {
-  const before = hit.sentence.slice(0, hit.start);
-  const p = typeof pos === 'string' ? pos.toLowerCase() : '';
-  if (p === 'noun') return !MODAL_BEFORE.test(before);
-  if (p === 'verb') return !DET_BEFORE.test(before);
-  return true;
+/**
+ * Der gespeicherte Satz der Karte, wenn er zur Wortart der Karte passt (Audit 12.10.2026: Karte „mistake“ mit dem Satz „I was mistaken …“,
+ * Karte „blunt“ als Verb mit „a blunt weapon“). Sonst ersatzweise ein anderer Satz der Karte (`fallbackContext`), sonst keiner.
+ */
+function ownContext(doc: Doc, word: string): TrainCard['context'] {
+  const hit = findContext(doc.ex, word);
+  return hit && senseFits(hit, doc.pos) ? hit : null;
 }
 
 /**
@@ -39,7 +37,6 @@ function senseFits(hit: NonNullable<TrainCard['context']>, pos: unknown): boolea
  * sauberes KI-Beispiel (`xEx`) oder der Satz einer Kollokation. Das Dokument bleibt unverändert (nichts löschen, Kap. 9).
  */
 function fallbackContext(doc: Doc, word: string): TrainCard['context'] {
-  if (!hasGapPlaceholder(doc.ex)) return null;
   const pool: unknown[] = [];
   if (Array.isArray(doc.xEx)) for (const x of doc.xEx) if (x && typeof x === 'object') pool.push((x as Record<string, unknown>).en);
   if (Array.isArray(doc.col)) for (const c of doc.col) if (c && typeof c === 'object') pool.push((c as Record<string, unknown>).ex);
@@ -57,7 +54,7 @@ function staticOf(doc: Doc, word: string): Static {
   const hit = STATIC.get(doc);
   if (hit) return hit;
   const col = parseCollocs(doc.col);
-  const s: Static = { lemma: lemmaOf(word), context: findContext(doc.ex, word) ?? fallbackContext(doc, word), col };
+  const s: Static = { lemma: lemmaOf(word), context: ownContext(doc, word) ?? fallbackContext(doc, word), col };
   STATIC.set(doc, s);
   return s;
 }

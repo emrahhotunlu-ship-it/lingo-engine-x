@@ -5,7 +5,8 @@ import { exerciseDef } from './modes';
 import { familyFrom, partnerOf, trapTask } from './partner';
 import { packExtraOf } from '../c1pack/packFields';
 import { rotatedContext } from './rotate';
-import { findContext } from './context';
+import { findContext, formsOf, locate } from './context';
+import { gapUsable, lemmaFor } from './gapFit';
 import { readCfx, readWx } from '../tutor/acceptWordCtx';
 import { poolNorm } from '../drills/orderPool';
 import type { CheckResult, Colloc, Exercise, ExerciseId, Lang, Option, SituationTask, Stage, Tile, TrainCard } from './types';
@@ -87,28 +88,34 @@ function pick(candidates: Scored[], n: number): Scored[] {
 /** Drei Bedeutungen anderer Karten als Ablenker (gleiche Wortart bevorzugt, keine Synonyme). */
 function meaningDistractors(card: TrainCard, pool: readonly TrainCard[], lang: Lang, rng: () => number): Option[] {
   const target = meaningForTask(card, lang) ?? '';
-  const targetLabel = shortMeaning(target, lang);
+  // Sprachtreue (Audit 12.10.2026): Fehlt der Karte die Bedeutung in der Oberflächensprache (Rückfall auf die andere), stehen ALLE Optionen in dieser
+  // Sprache; sonst nur Karten, die die Bedeutung in der Oberflächensprache haben (nie „to push yourself …“ neben „blieb hinter den Erwartungen zurück“).
+  const tongue = tongueOf(card, lang);
+  const own = (c: TrainCard): string | null => (tongue === 'de' ? c.de : c.def);
   const cands: Scored[] = [];
+  const targetLabel = shortMeaning(target, tongue);
   for (const c of pool) {
-    const m = meaningForTask(c, lang);
+    const m = own(c);
     if (c.key === card.key || !m) continue;
-    const label = shortMeaning(m, lang);
+    const label = shortMeaning(m, tongue);
     if (norm(label) === norm(targetLabel) || sharesWord(m, target) || norm(c.lemma) === norm(card.lemma) || tooClose(card, c)) continue;
     const score =
       (c.kind === card.kind ? 4 : 0) + (c.pos && c.pos === card.pos ? 3 : 0) + (Math.abs(label.length - targetLabel.length) <= 12 ? 2 : 0) + (c.stage === card.stage ? 1 : 0) + rng() * 0.5 - stemPenalty(card, c);
     cands.push({ card: c, label, score });
   }
-  return pick(cands, 3).map((d, i) => ({ id: `d${i}`, label: d.label, lang, correct: false, fromWord: d.card.word, fromMeaning: m(d.card, lang) }));
+  return pick(cands, 3).map((d, i) => ({ id: `d${i}`, label: d.label, lang: tongue, correct: false, fromWord: d.card.word, fromMeaning: own(d.card) ?? '' }));
 }
 
+/** Sprache der Bedeutungs-Optionen: die Oberflächensprache, bei fehlender Bedeutung die andere (gleichwertig, `meaningForTask`). */
+export const tongueOf = (card: Pick<TrainCard, 'de' | 'def'>, lang: Lang): Lang => ((lang === 'de' ? card.de : card.def) ? lang : lang === 'de' ? 'en' : 'de');
 
 /** Drei englische Wörter anderer Karten als Ablenker. */
-function wordDistractors(card: TrainCard, pool: readonly TrainCard[], lang: Lang, rng: () => number): Option[] {
+function wordDistractors(card: TrainCard, pool: readonly TrainCard[], lang: Lang, rng: () => number, skip?: (c: TrainCard) => boolean): Option[] {
   const cands: Scored[] = [];
   const head = norm(card.lemma).slice(0, 5);
   const target = meaningForTask(card, lang) ?? '';
   for (const c of pool) {
-    if (c.key === card.key) continue;
+    if (c.key === card.key || skip?.(c)) continue;
     if (norm(c.lemma) === norm(card.lemma) || norm(c.lemma).slice(0, 5) === head) continue;
     const cm = meaningForTask(c, lang);
     if (cm && target && sharesWord(cm, target)) continue;
@@ -215,6 +222,46 @@ function pickColloc(card: TrainCard, rng: () => number): Colloc | null {
 /** Lösungsform einer freistehenden Abfrage (ohne Satz): Wort bzw. Wendung ohne „…“. */
 const bareAnswer = (card: TrainCard): string => (card.kind === 'chunk' ? typedForm(card.word) : card.word);
 
+/** Übungen, in denen die Bedeutung die Frage ist (Hinweis über der Lücke, Frage über den Optionen): sie darf die Antwort nicht enthalten. */
+const CUE_EX: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['cloze', 'cloze_hint', 'wordfam', 'dictation', 'tiles', 'match', 'mc_de', 'type', 'colloc', 'colloc_gap']);
+
+/**
+ * Bedeutung als Hinweis ohne die Lösung (Audit 12.10.2026): Deutsche Bedeutungen enthalten oft das englische Wort selbst („feiner Unterschied,
+ * Nuance“, „Anleger, Pier“): dieser Teil entfällt, solange noch ein anderer bleibt. Englische Definitionen, die das Wort enthalten („turn a
+ * device on or off with a switch“), zeigen an seiner Stelle „…“. Die Karte selbst bleibt unverändert.
+ */
+export function cueMeaning(card: Pick<TrainCard, 'lemma' | 'word' | 'def'>, meaning: string | null): string | null {
+  if (!meaning) return meaning;
+  const lem = norm(card.lemma);
+  const wordN = norm(card.word.replace(/^to\s+/i, ''));
+  let out = meaning;
+  const parts = meaning.split(/\s*([,;])\s*/);
+  const texts = parts.filter((_, i) => i % 2 === 0);
+  const same = (p: string) => {
+    const n = norm(p.replace(/\(.*?\)/g, ' ').replace(/^to\s+/i, ''));
+    return n === lem || n === wordN;
+  };
+  if (texts.length > 1 && texts.some(same) && !texts.every(same)) {
+    let acc = '';
+    texts.forEach((p, i) => {
+      if (!same(p)) acc += acc ? `${parts[2 * i - 1] ?? ','} ${p}` : p;
+    });
+    out = acc;
+  }
+  // Englische Definition (nicht die deutsche Bedeutung): das Wort selbst wird zu „…“.
+  if (card.def && meaning === card.def) {
+    const core = lem.split(/\s+/).filter(Boolean);
+    if (core.length === 1 && core[0] && core[0].length >= 4 && /^[a-z'-]+$/.test(core[0])) {
+      const forms = formsOf(core[0]).map((f) => f.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+      out = out.replace(new RegExp(`(^|[^A-Za-z'])(?:${forms.join('|')})(?![A-Za-z'])`, 'gi'), '$1…');
+    } else if (core.length > 1) {
+      const hit = locate(out, core.join(' '));
+      if (hit) out = `${out.slice(0, hit.start)}…${out.slice(hit.end)}`;
+    }
+  }
+  return out;
+}
+
 /** Kennung der Vorlage, aus der `wx`/`cfx` stammen (P52). */
 export const WORD_CTX_TPL = 'word-ctx@1';
 
@@ -223,7 +270,8 @@ export const WORD_CTX_TPL = 'word-ctx@1';
  * ist in Wahrheit „eigener Satz“ – dann sagt die Aufgabe das auch („Schreib einen eigenen Satz mit …“), passend zur Prüfung
  * (Claude prüft einen ganzen Satz mit dem Wort).
  */
-export const exTextKey = (e: Pick<Exercise, 'ex' | 'start'>): string => (e.ex === 'complete' && !e.start?.trim() ? 'complete_free' : e.ex);
+export const exTextKey = (e: Pick<Exercise, 'ex' | 'start'> & { sentence?: Exercise['sentence'] }): string =>
+  e.ex === 'complete' && !e.start?.trim() ? 'complete_free' : e.ex === 'match' && e.sentence === null ? 'mc_de' : e.ex; // „Zuordnen“ ohne Satz hat keine Lücke: Aufgabe wie „Wort wählen“ (Audit 12.10.2026)
 
 /**
  * `origin`: immer der Ursprungssatz (Prüfabfrage und Kontrolle nach dem Aufdecken), sonst wechselt der Satz ab Stufe 3 (`rotate.ts`; Claude-Sätze
@@ -254,14 +302,17 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
   const rng = mulberry32(hash32(`${card.key}|${ex}|${seed}`));
   const meaning = meaningForTask(card, lang);
   const stage = Math.max(1, card.stage) as Stage;
-  const base: Exercise = { ex, input: def.input, card, stage, sentence: null, meaning, firstLetter: null, colloc: null, options: [], accepted: [] };
-  const ctx = opts.origin ? card.context : rotatedContext(card, ex);
+  // Fragt die Übung nach dem Wort, steht die Bedeutung als Frage da und darf die Antwort nicht enthalten (`cueMeaning`); als richtige Option bleibt sie vollständig.
+  const base: Exercise = { ex, input: def.input, card, stage, sentence: null, meaning: CUE_EX.has(ex) ? cueMeaning(card, meaning) : meaning, firstLetter: null, colloc: null, options: [], accepted: [] };
+  // Eine Lücke, die mehr verdeckt als das Wort der Karte (beliebiges Objekt) oder das Wort ein zweites Mal zeigt, ist keine Lücke (`gapFit.ts`).
+  const rawCtx = opts.origin ? card.context : rotatedContext(card, ex);
+  const ctx = rawCtx && gapUsable(rawCtx, lemmaFor(card)) ? rawCtx : null;
 
   switch (ex) {
     case 'listen_mc':
     case 'mc_en': {
-      const label = shortMeaning(meaning ?? '', lang);
-      const correct: Option = { id: 'ok', label, lang, correct: true };
+      const label = shortMeaning(meaning ?? '', tongueOf(card, lang));
+      const correct: Option = { id: 'ok', label, lang: tongueOf(card, lang), correct: true };
       const options = shuffle([correct, ...meaningDistractors(card, pool, lang, rng)], rng);
       if (ex === 'listen_mc') return { ...base, sentence: card.context, options, accepted: [label], speak: card.context?.sentence ?? bareAnswer(card) };
       return { ...base, sentence: card.context, options, accepted: [label] };
@@ -274,7 +325,9 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
       // P52: ab Stufe 2 darf der Satz ein Claude-Satz des Wörter-Tutors sein (`rotate.ts`), sonst der Ursprungssatz.
       const answer = ctx?.gap ?? bareAnswer(card);
       const correct: Option = { id: 'ok', label: answer, lang: 'en', correct: true };
-      const ds = wordDistractors(card, pool, lang, rng).map((d) => ({ ...d, label: ctx ? inflectLike(answer, card.lemma, d.label) : d.label }))
+      // Ein Ablenker, dessen Wort schon im Satz steht („decline“ ← „customer complaints“), ist keine Wahl (Audit 12.10.2026).
+      const inSentence = ctx ? (c: TrainCard): boolean => locate(ctx.sentence, typedForm(c.lemma || c.word)) !== null : undefined;
+      const ds = wordDistractors(card, pool, lang, rng, inSentence).map((d) => ({ ...d, label: ctx ? inflectLike(answer, card.lemma, d.label) : d.label }))
         .filter((d) => norm(d.label) !== norm(answer));
       return { ...base, sentence: ctx, options: shuffle([correct, ...ds], rng), accepted: [answer] };
     }
@@ -334,8 +387,8 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
     }
     case 'ctx_mc': {
       // „Was heißt das hier?“: Satz mit markiertem Wort, drei deutsche Optionen (die richtige und zwei andere).
-      const label = shortMeaning(meaning ?? '', lang);
-      const correct: Option = { id: 'ok', label, lang, correct: true };
+      const label = shortMeaning(meaning ?? '', tongueOf(card, lang));
+      const correct: Option = { id: 'ok', label, lang: tongueOf(card, lang), correct: true };
       return { ...base, sentence: card.context, options: shuffle([correct, ...meaningDistractors(card, pool, lang, rng).slice(0, 2)], rng), accepted: [label] };
     }
     case 'complete': {
@@ -375,7 +428,10 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
  */
 export function gapCue(e: Pick<Exercise, 'ex' | 'meaning' | 'colloc'>, lang: Lang): { kind: 'word' | 'phrase'; text: string } | null {
   if (e.ex === 'colloc' || e.ex === 'colloc_gap') {
-    const de = e.colloc && e.colloc.index >= 0 ? e.colloc.de.trim() : '';
+    // Paket-Lücke (`index` −1): Die Verbindung IST die Wendung der Karte, die Lücke liegt darin – ihre Bedeutung ist die der Karte
+    // („address ___ concerns“ ← „Bedenken ansprechen“; ohne sie waren solve/address/fix gleich gut, Audit 12.10.2026).
+    if (e.colloc && e.colloc.index < 0) return e.meaning ? { kind: 'phrase', text: e.meaning } : null;
+    const de = e.colloc ? e.colloc.de.trim() : '';
     return lang === 'de' && de ? { kind: 'phrase', text: de } : null;
   }
   return e.meaning ? { kind: 'word', text: e.meaning } : null;
