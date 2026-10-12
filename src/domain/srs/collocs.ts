@@ -1,7 +1,7 @@
 import { containsPhrase } from '../chunks/newChunk';
 import { isWrongLang } from '../lang/detect';
 import { lemmaOf, locate, stripBrackets } from './context';
-import { isPatternGap } from './partner';
+import { isFunctionGap, isPatternGap } from './partner';
 
 // Typische Wortpartner (Kollokationen) für jede Karte (Englischlehrer 02.10.2026: „`col` ist bei jeder neu angelegten Karte
 // leer“, dadurch gibt es die Übung „Wortpartner wählen“ nur für die 40 Startwörter). Claude liefert beim ersten Aufdecken
@@ -48,7 +48,7 @@ export function acceptCollocations(word: string, raw: unknown, max: number = COL
     const pw = p.split(' ').filter(Boolean).length;
     if (p.length < 3 || p.length > 40 || pw < 2 || pw > 5 || /[[\]"„“”]/.test(p)) continue;
     if (de.length < 2 || de.length > 80 || /[[\]"]/.test(de) || isWrongLang(de, 'de')) continue;
-    if (!OPT.test(gap)) continue;
+    if (!OPT.test(gap) || isFunctionGap(gap)) continue;
     const brackets = [...ex.matchAll(/\[([^[\]]+)\]/g)];
     const exWords = ex.split(' ').length;
     if (brackets.length !== 1 || ex.length < 15 || ex.length > 170 || exWords < 5 || exWords > 30 || /["„“”]/.test(ex) || isWrongLang(ex, 'en')) continue;

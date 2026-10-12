@@ -53,10 +53,24 @@ export function isPatternGap(lemma: string, p: string, ctx: { sentence: string; 
   return !!m?.[1] && verbForm(m[1].replace(/[^a-z]/gi, ''), l);
 }
 
+/** Funktionswörter, die nie als Wortpartner-Lücke taugen (Bindewort, Artikel, Fürwort, Hilfsverb): Das ist Grammatik, kein Wortschatz. Präpositionen bleiben erlaubt („rely ON“). */
+const FUNCTION_GAPS = new Set([
+  'and', 'or', 'but', 'if', 'so', 'nor', 'yet', 'than', 'that', 'because', 'while', 'when', 'whether', 'though', 'although', 'unless',
+  'the', 'a', 'an', 'this', 'these', 'those', 'some', 'any', 'no',
+  'i', 'you', 'he', 'she', 'it', 'we', 'they', 'me', 'him', 'her', 'us', 'them', 'my', 'your', 'his', 'its', 'our', 'their',
+  'is', 'are', 'was', 'were', 'be', 'been', 'am', 'do', 'does', 'did', 'have', 'has', 'had', 'will', 'would', 'can', 'could', 'shall', 'should', 'may', 'might', 'must',
+  'not', 'ever', 'never',
+]);
+
+/** Ist die Lücke ein Funktionswort („rarely ___ ever“ mit or/and/but/if)? Solche Lücken erraten Lernende nach Grammatik, nicht nach Wortschatz. Rein. */
+export function isFunctionGap(gap: string): boolean {
+  return FUNCTION_GAPS.has(gap.trim().toLowerCase());
+}
+
 /** Eine Partnerwort-Lücke der Karte (mit Satz und Auswahl), sonst `null`. `pickIndex` wählt unter mehreren (z. B. per Zufall). */
 export function partnerOf(card: TrainCard, pickIndex = 0): Colloc | null {
   // Rückmeldung 3: nur echte Verbindungen; ein Satzmuster („afford to + Verb“) ist keine Wortpartner-Aufgabe (dann eine andere Abfrageart).
-  const own = card.col.filter((c) => c.ctx && c.opts.length >= 2 && !isPatternGap(card.lemma, c.p, c.ctx));
+  const own = card.col.filter((c) => c.ctx && c.opts.length >= 2 && !isFunctionGap(c.gap) && !isPatternGap(card.lemma, c.p, c.ctx));
   if (own.length) return own[Math.abs(pickIndex) % own.length] ?? own[0] ?? null;
   const ctx = card.context;
   const gap = packExtraOf(card)?.gap;

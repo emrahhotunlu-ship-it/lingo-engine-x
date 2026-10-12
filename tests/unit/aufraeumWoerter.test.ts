@@ -8,7 +8,7 @@ import { bracketExample } from '../../src/domain/srs/newCard';
 import { cardExamples, acceptExamples } from '../../src/domain/srs/examples';
 import { toTrainCard } from '../../src/domain/srs/cards';
 import { explainWord } from '../../src/domain/srs/explainWord';
-import { isPatternGap, partnerOf } from '../../src/domain/srs/partner';
+import { isFunctionGap, isPatternGap, partnerOf } from '../../src/domain/srs/partner';
 import { acceptCollocations } from '../../src/domain/srs/collocs';
 
 // Emrahs Rückmeldungen 1, 2 und 3 (10.10.2026).
@@ -148,6 +148,18 @@ describe('Rückmeldung 3: Wortpartner-Ergebnis zeigt die geübte Verbindung', ()
     ];
     expect(acceptCollocations('afford', raw).map((c) => c.p)).toEqual(['afford the risk']);
     const card = toTrainCard('afford', { word: 'afford', de: 'sich leisten', pos: 'verb', state: 'review', stage: 3, S: 4, D: 5, reps: 3, last: 1, due: 2, ex: "We can't [afford] it.", col: [raw[0]] }, true, NOW)!;
+    expect(partnerOf(card)).toBeNull();
+  });
+  it('Bindewort, Artikel und Co. sind nie die Lücke einer Wortpartner-Aufgabe („rarely ___ ever“, Rückmeldung 12.10.2026); Präpositionen bleiben erlaubt', () => {
+    expect(['if', 'or', 'and', 'but', 'the', 'will'].every(isFunctionGap)).toBe(true);
+    expect(['on', 'into', 'as', 'until', 'heavily', 'deadline', 'highly'].some(isFunctionGap)).toBe(false);
+    const raw = [
+      { p: 'rarely if ever', de: 'so gut wie niemals', gap: 'if', opts: ['or', 'and', 'but'], ex: 'We [rarely if ever] receive complaints about our delivery timeline performance.' },
+      { p: 'rarely complain', de: 'selten klagen', gap: 'complain', opts: ['argue', 'whine', 'refuse'], ex: 'Our clients [rarely complain] about the invoice process.' },
+    ];
+    expect(acceptCollocations('rarely', raw).map((c) => c.p)).toEqual(['rarely complain']);
+    // bereits gespeicherte Verbindung (KI, `ai: 1`): wird nicht als Wortpartner-Aufgabe gestellt
+    const card = toTrainCard('rarely', { word: 'rarely', de: 'selten', pos: 'adv', state: 'learning', stage: 3, S: 4, D: 5, reps: 3, last: 1, due: 2, ex: '', col: [{ ...raw[0], ai: 1 }] }, true, NOW)!;
     expect(partnerOf(card)).toBeNull();
   });
 });
