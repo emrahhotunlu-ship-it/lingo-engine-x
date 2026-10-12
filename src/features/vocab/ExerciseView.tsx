@@ -671,7 +671,7 @@ export function ExerciseView({
             </p>
           ))}
         {(e.ex === 'colloc_gap' || e.ex === 'match' || e.ex === 'contrast') && e.sentence && sentence(e.sentence, gapSlot)}
-        {e.ex === 'match' && e.sentence && cue()}
+        {(e.ex === 'match' || e.ex === 'colloc_gap') && e.sentence && cue()}
       </div>
     );
     // Die Warum-Zeile steht bei einer falschen Wahl unter der gewählten Option (und nicht noch einmal in der Erklär-Karte).

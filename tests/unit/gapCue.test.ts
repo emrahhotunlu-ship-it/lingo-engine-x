@@ -11,9 +11,14 @@ describe('Hinweis unter Lückenaufgaben passt zur Lücke', () => {
       expect(gapCue({ ex, meaning: 'verdienen', colloc: colloc() }, 'de')).toEqual({ kind: 'phrase', text: 'eine Pause verdienen' });
     }
   });
-  it('ohne Bedeutung der Wendung (leer, aus Paket-Lücke, englische Oberfläche): kein Hinweis', () => {
+  it('Paket-Lücke (index −1): die Verbindung ist die Wendung der Karte, ihre Bedeutung gilt (Audit 12.10.2026: „address ___ concerns“ ohne Hinweis)', () => {
+    for (const lang of ['de', 'en'] as const) {
+      expect(gapCue({ ex: 'colloc_gap', meaning: 'Bedenken ansprechen', colloc: colloc({ index: -1, p: 'address concerns', de: 'Bedenken ansprechen' }) }, lang)).toEqual({ kind: 'phrase', text: 'Bedenken ansprechen' });
+    }
+    expect(gapCue({ ex: 'colloc', meaning: null, colloc: colloc({ index: -1, de: '' }) }, 'de')).toBeNull();
+  });
+  it('ohne Bedeutung der Wendung (leer, englische Oberfläche): kein Hinweis', () => {
     expect(gapCue({ ex: 'colloc', meaning: 'verdienen', colloc: colloc({ de: '' }) }, 'de')).toBeNull();
-    expect(gapCue({ ex: 'colloc_gap', meaning: 'verdienen', colloc: colloc({ index: -1, de: 'verdienen' }) }, 'de')).toBeNull();
     expect(gapCue({ ex: 'colloc', meaning: 'deserve', colloc: colloc() }, 'en')).toBeNull();
     expect(gapCue({ ex: 'colloc', meaning: 'verdienen', colloc: null }, 'de')).toBeNull();
   });

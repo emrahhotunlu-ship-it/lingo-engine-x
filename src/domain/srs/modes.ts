@@ -1,5 +1,6 @@
 import { packExtraOf } from '../c1pack/packFields';
 import { meaningForTask } from './cards';
+import { gapUsable, lemmaFor } from './gapFit';
 import { familyFrom, hasPartner, trapTask } from './partner';
 import { distinctForms, familyOf, FEST_MIN_FORMS, varietyBias, varietyOf } from './variety';
 import type { Counts, ExerciseId, InputKind, Lang, LegacyMode, Stage, TrainCard } from './types';
@@ -58,6 +59,9 @@ export const RETIRED: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['spot', 'sp
 /** Arten, die für Wendungen nicht taugen (phase1-plan §4.2, Spalte „Chunk"). */
 const NOT_FOR_CHUNKS: ReadonlySet<ExerciseId> = new Set(['spot', 'wordfam']);
 
+/** Ursprungssatz vorhanden und als Lücke brauchbar (verdeckt genau das Wort der Karte, `gapFit.ts`)? */
+const gapOk = (card: TrainCard): boolean => !!card.context && gapUsable(card.context, lemmaFor(card));
+
 /** Was eine Übungsart an Kartendaten und Umgebung braucht. */
 export function supports(card: TrainCard, ex: ExerciseId, lang: Lang, poolSize: number, env: ExerciseEnv = NO_ENV): boolean {
   const meaning = meaningForTask(card, lang);
@@ -76,14 +80,15 @@ export function supports(card: TrainCard, ex: ExerciseId, lang: Lang, poolSize: 
       return !!meaning && !!card.context;
     case 'type':
       // „nur ohne Satz“: mit Ursprungssatz übt die Lücke (`cloze`) dasselbe im Zusammenhang.
-      return !!meaning && !card.context;
+      // Auch dann, wenn der Satz als Lücke nicht taugt (Lücke verdeckt ein beliebiges Objekt, `gapFit.ts`): die Karte bleibt abfragbar.
+      return !!meaning && !gapOk(card);
     case 'speed':
       return !!meaning;
     case 'cloze_hint':
     case 'cloze':
-      return !!card.context;
+      return gapOk(card);
     case 'tiles':
-      return !!card.context || !!meaning;
+      return gapOk(card) || !!meaning;
     case 'colloc_gap':
     case 'colloc':
       return hasPartner(card);
@@ -91,13 +96,13 @@ export function supports(card: TrainCard, ex: ExerciseId, lang: Lang, poolSize: 
       // Mit Satzanfang aus dem Paket schon früh; ohne Anfang erst in der freien Anwendung (Stufe 5).
       return !!meaning && (card.stage >= 5 || (packExtraOf(card)?.starts?.length ?? 0) > 0);
     case 'wordfam':
-      return familyFrom(card) !== null;
+      return gapOk(card) && familyFrom(card) !== null;
     case 'find_trap':
       return trapTask(card) !== null;
     case 'situation':
       return card.kind === 'chunk' && !!card.chunk?.scene && !!meaning;
     case 'dictation':
-      return canListen(env) && !!card.context;
+      return canListen(env) && gapOk(card);
     case 'produce':
       return env.ai && !env.touch && !!meaning;
     case 'flip':

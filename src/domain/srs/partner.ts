@@ -60,6 +60,8 @@ const FUNCTION_GAPS = new Set([
   'i', 'you', 'he', 'she', 'it', 'we', 'they', 'me', 'him', 'her', 'us', 'them', 'my', 'your', 'his', 'its', 'our', 'their',
   'is', 'are', 'was', 'were', 'be', 'been', 'am', 'do', 'does', 'did', 'have', 'has', 'had', 'will', 'would', 'can', 'could', 'shall', 'should', 'may', 'might', 'must',
   'not', 'ever', 'never',
+  // Fragewörter und Verweiswörter (Audit 12.10.2026: „I can't figure out ___ to export this report“ ← how): Grammatik, kein Wortschatz.
+  'how', 'what', 'why', 'where', 'who', 'whom', 'whose', 'which', 'there', 'here',
 ]);
 
 /** Ist die Lücke ein Funktionswort („rarely ___ ever“ mit or/and/but/if)? Solche Lücken erraten Lernende nach Grammatik, nicht nach Wortschatz. Rein. */

@@ -4,8 +4,10 @@ import { maskOf } from '../../../domain/answer/mask';
 import { ipaOf } from '../../../domain/lexicon/pron';
 import { meaningOf } from '../../../domain/srs/cards';
 import { phraseMaskText } from '../../../domain/srs/context';
+import { gapUsable, lemmaFor } from '../../../domain/srs/gapFit';
 import { unitState } from '../../../domain/metrics';
 import { cardExamples, wantsEnrichment } from '../../../domain/srs/examples';
+import { cueMeaning } from '../../../domain/srs/exercise';
 import { explainWord, registerOf } from '../../../domain/srs/explainWord';
 import { posKey } from '../../../domain/srs/explain';
 import { flipSuggest, formatInterval, seenOn, wordCount } from '../../../domain/srs/flip';
@@ -160,7 +162,11 @@ export function FlipCard({ exercise, again = false, onDone, behind = 0 }: { exer
   });
 
   const src = { area: 'trainer' as const, source: card.path, title: card.word };
-  const mask = useMemo(() => maskOf((card.context ? phraseMaskText(card.context.gap, card.lemma) : null) ?? card.context?.gap ?? card.word), [card]);
+  const phraseMask = useMemo(() => (card.context ? phraseMaskText(card.context.gap, card.lemma) : null), [card]);
+  const mask = useMemo(() => maskOf(phraseMask ?? card.context?.gap ?? card.word), [card, phraseMask]);
+  // Audit 12.10.2026: Verdeckt die Lücke mehr als das Wort der Karte (beliebiges Objekt) oder steht das Wort noch einmal im Satz, zeigt die
+  // Vorderseite nur die Bedeutung; der Satz kommt auf der Rückseite.
+  const frontGapOk = !!card.context && (phraseMask !== null || gapUsable(card.context, lemmaFor(card)));
   const gapNode: ReactNode = (
     <span className="lx-gap" data-masked="" data-testid="flip-gap" role="img" aria-label={t('nbWsGapLabel', { n: mask.filter((m) => m.kind === 'slot').length })}>
       <span className="lx-gap-inner">
@@ -189,9 +195,9 @@ export function FlipCard({ exercise, again = false, onDone, behind = 0 }: { exer
     dir === 'de-en' ? (
       <div className="dz-flip flex flex-col items-center gap-3 text-center">
         <p className="lx-t-title" lang={lang} data-testid="flip-front">
-          {meaning}
+          {cueMeaning(card, meaning)}
         </p>
-        {ctx && !shown && <EnglishText as="p" className="max-w-[34ch] text-muted" text={ctx.sentence} {...src} slot={{ start: ctx.start, end: ctx.end, node: gapNode }} testId="flip-sentence" />}
+        {ctx && !shown && frontGapOk && <EnglishText as="p" className="max-w-[34ch] text-muted" text={ctx.sentence} {...src} slot={{ start: ctx.start, end: ctx.end, node: gapNode }} testId="flip-sentence" />}
         {!shown && <StackBehind n={behind} />}
       </div>
     ) : (
