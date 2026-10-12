@@ -389,3 +389,9 @@ Tests: 1953 Unit; E2E der berührten Bildschirme grün (a11y: Kontrast der „Ne
 
 ## 12.10.2026 – Plan Tagesaufbau mit 5 Schritten liegt vor
 - `docs/umbau/tagesaufbau.md` (Zweig `claude/umbau-tagesplan`): fünf Schritte (Neue Wörter lernen · Wörter wiederholen · Grammatik nach Lernpfad · Fehler wiederholen · Spezial des Tages als Extra), Rückweg-sicher über `u.ta = 1` bei `u.rv = 2` (eine Zahl `u.rv = 3` würde die Live-Version v75 auf die alte Regel zurückwerfen, `unitMeta.ts:175`). Arbeitspakete T0 bis T7, Reihenfolge nach Qualitätstor Q. Drei offene Fragen an Emrah (Satzbau/Prüfungsformate, Spezial-Start, Sonntag/kurze Tage). Noch nichts gebaut.
+
+## 12.10.2026 – Sammelrunde 2 auf Test-Link
+- Zusammengeführt: Funktionswort-Lücken (`isFunctionGap`), Objekt am Wendungsende sichtbar, Platzhalter-Maske der Aufdeck-Karte (`phraseMaskText`), Nutzerblick-Audit mit Emrahs 194 echten Karten (Zweig `claude/umbau-audit-aufgaben`, feff447: `gapUsable` in `src/domain/srs/gapFit.ts`, `senseFits`, Erkennung eingeklebten Bildschirmtexts, `cueMeaning`, Sprachtreue der Optionen, Wortpartner-Hinweis auch bei Auswahl). Rangliste und offene Punkte siehe Bericht des Audits (R1–R12; offen: 30 Karten ohne englische `def`, `col[].en` fehlt, Datenfehler „wahnsinnig“ und „to might“, Lehnwort-Bedeutungen, Atlas-Namenssätze, Präposition-Lücken R8b, R12 Satzsinn).
+- Tests: Unit 5265 grün; E2E voll 773 grün, 5 rot = perf Statuszeile (bekannt, 4×) und anki.spec:37 (Zeitmessung, 37 statt 40 Protokolleinträge unter Last; allein 3× grün). platform-guard und check:platform Freigabe. Build 57a6548.
+- Test-Link `AXHkh6…` Version 60 `1791806011-313c` (Rückweg v59 `1791740069-2f3e`). Live weiter v75 `1791741081-b412`.
+- Plan Tagesaufbau liegt vor (`docs/umbau/tagesaufbau.md`, Pakete T0–T7); Standard zu den drei offenen Fragen in `docs/entscheidungen.md`. Nächste Stufe: Q1 (Wächter im Programm) und T0.
