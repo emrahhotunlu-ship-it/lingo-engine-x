@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import seed from '../../seed/sample-data.json';
 import legacyVocab from '../../src/content/legacy/vocab.json';
 import pack from '../../src/content/c1/pack.json';
-import { findContext, parseCollocs, phraseMaskText } from '../../src/domain/srs/context';
+import { findContext, parseCollocs } from '../../src/domain/srs/context';
 import { chunkContext } from '../../src/domain/srs/chunkCards';
 
 const WORD = 'to put something in writing';
@@ -102,20 +102,5 @@ describe('Platzhalter am Ende der Wendung: das Objekt bleibt sichtbar (Rückmeld
   it('Platzhalter in der Mitte bleibt wie bisher komplett maskiert', () => {
     const c = findContext(`${PREFIX}put the new price agreement in writing before Friday.`, WORD);
     expect(c?.gap).toBe('put the new price agreement in writing');
-  });
-});
-
-describe('Lücken-Kästchen der Aufdeck-Karte bei Platzhalter in der Mitte (Rückmeldung 12.10.2026, „schriftlich festhalten“)', () => {
-  it('feste Wörter bleiben Kästchen, das Objekt des Satzes wird zu „…“ – Anzahl passt zur Karte', () => {
-    expect(phraseMaskText('put the new timeline in writing', 'put something in writing')).toBe('put … in writing');
-    expect(phraseMaskText('took her word for it', "take sb's word for it")).toBe('took … word for it');
-    expect(phraseMaskText('put it in writing', 'put something in writing')).toBe('put … in writing');
-  });
-  it('ohne Platzhalter in der Mitte oder bei Platzhalter am Ende: kein Sondertext (Satz gilt wie bisher)', () => {
-    expect(phraseMaskText('reassure', 'reassure someone')).toBeNull();
-    expect(phraseMaskText('meet the deadline', 'meet the deadline')).toBeNull();
-  });
-  it('geht die Zuordnung nicht auf, bleibt es beim Satz', () => {
-    expect(phraseMaskText('write down the whole thing', 'put something in writing')).toBeNull();
   });
 });

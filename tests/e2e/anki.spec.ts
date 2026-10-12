@@ -50,9 +50,10 @@ test.describe('Desktop', () => {
       const card = (await flip.getAttribute('data-card')) ?? '';
       seen.push(card);
       if (i === 0) {
-        // Vorderseite: Bedeutung + Lücke, keine Lösung im DOM, kein ▶ (anki-regeln §0).
+        // Vorderseite (Entscheidung Emrah 12.10.2026): nur die deutsche Bedeutung, kein Satz mit Lücke, keine Lösung im DOM, kein ▶ (anki-regeln §0).
         await expect(page.getByTestId('flip-front')).not.toBeEmpty();
-        await expect(page.getByTestId('flip-gap')).toBeVisible();
+        await expect(page.getByTestId('flip-gap')).toHaveCount(0);
+        await expect(page.getByTestId('flip-sentence')).toHaveCount(0);
         await expect(page.getByTestId('flip-listen')).toHaveCount(0);
         await expect(flip).toHaveAttribute('data-dir', 'de-en');
       }
