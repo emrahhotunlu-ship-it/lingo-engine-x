@@ -3,6 +3,7 @@ import { useAiAvailable } from '../../../ai/scope';
 import { maskOf } from '../../../domain/answer/mask';
 import { ipaOf } from '../../../domain/lexicon/pron';
 import { meaningOf } from '../../../domain/srs/cards';
+import { phraseMaskText } from '../../../domain/srs/context';
 import { unitState } from '../../../domain/metrics';
 import { cardExamples, wantsEnrichment } from '../../../domain/srs/examples';
 import { explainWord, registerOf } from '../../../domain/srs/explainWord';
@@ -159,7 +160,7 @@ export function FlipCard({ exercise, again = false, onDone, behind = 0 }: { exer
   });
 
   const src = { area: 'trainer' as const, source: card.path, title: card.word };
-  const mask = useMemo(() => maskOf(card.context?.gap ?? card.word), [card]);
+  const mask = useMemo(() => maskOf((card.context ? phraseMaskText(card.context.gap, card.lemma) : null) ?? card.context?.gap ?? card.word), [card]);
   const gapNode: ReactNode = (
     <span className="lx-gap" data-masked="" data-testid="flip-gap" role="img" aria-label={t('nbWsGapLabel', { n: mask.filter((m) => m.kind === 'slot').length })}>
       <span className="lx-gap-inner">

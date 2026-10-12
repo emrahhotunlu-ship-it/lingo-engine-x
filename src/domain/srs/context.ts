@@ -183,7 +183,7 @@ export function findContext(ex: unknown, word: string): ContextSpan | null {
 }
 
 const PH_WORD = /^(?:something|someone|somebody|sth|sb|s\.?o\.?|one's|someone's|somebody's|sb's)$/i;
-const isPlaceholder = (token: string): boolean => token.split('/').every((t) => PH_WORD.test(t.replace(/[()]/g, '')));
+export const isPlaceholder = (token: string): boolean => token.split('/').every((t) => PH_WORD.test(t.replace(/[()]/g, '')));
 /** Ein Objekt: optional mit Artikel/Possessiv, ein Wort (kein Satzzeichen dazwischen). */
 const OBJ = `(?:(?:the|a|an|his|her|their|our|my|your|its|this|that|these|those|any|some|all)\\s+)?[^\\s.,;:!?]+`;
 /** Ein Platzhalter mitten in der Wendung darf ein bis fünf Wörter lang sein (Satzzeichen beenden ihn). */
@@ -298,4 +298,39 @@ export function parseCollocs(col: unknown): Colloc[] {
     out.push({ index, p: str(c.p), de: str(c.de), gap, opts, ctx, ...(c.ai === 1 || c.ai === true ? { ai: true } : {}) });
   });
   return out;
+}
+
+/**
+ * Text für die Lücken-Kästchen der Vorderseite, wenn die Wendung einen Platzhalter MITTEN drin hat („put something in writing“):
+ * die festen Wörter bleiben als Kästchen, das Objekt des Satzes („the new timeline“) wird zu einem einzigen „…“, damit Anzahl und
+ * Länge der Kästchen zur Karte passen und niemand ein beliebiges Objekt erraten muss (Rückmeldung 12.10.2026). `null`, wenn die
+ * Wendung keinen Platzhalter in der Mitte hat oder die Zuordnung nicht aufgeht (dann gilt der Satz wie bisher).
+ */
+export function phraseMaskText(gap: string, lemma: string): string | null {
+  const lw = lemma.split(/\s+/).filter(Boolean);
+  while (lw.length > 1 && isPlaceholder(lw[lw.length - 1] ?? '')) lw.pop();
+  if (!lw.some((w, i) => i > 0 && i < lw.length - 1 && isPlaceholder(w))) return null;
+  const toks = gap.split(/\s+/).filter(Boolean);
+  const bare = (t: string) => t.toLowerCase().replace(/[^a-z']/g, '');
+  const out: string[] = [];
+  let at = 0;
+  for (let i = 0; i < lw.length; i++) {
+    const w = lw[i] ?? '';
+    if (isPlaceholder(w)) {
+      const next = lw[i + 1];
+      if (!next) return null;
+      const forms = new Set(formsOf(next.toLowerCase()));
+      let j = at + 1;
+      while (j < toks.length && j - at <= 5 && !forms.has(bare(toks[j] ?? ''))) j++;
+      if (j >= toks.length || j - at > 5) return null;
+      out.push('…');
+      at = j;
+    } else {
+      const t = toks[at];
+      if (!t || !new Set(formsOf(w.toLowerCase())).has(bare(t))) return null;
+      out.push(t);
+      at++;
+    }
+  }
+  return at === toks.length ? out.join(' ') : null;
 }
