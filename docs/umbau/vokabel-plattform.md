@@ -28,3 +28,9 @@ Auftrag (Emrah): Der Vokabelbereich ist das Wichtigste. 8.000+ Wörter lernen, m
 
 Abhängigkeiten: V1 vor V2/V3; V0 vor V1. Bis V1 fertig ist, bleibt der Bestand unverändert nutzbar.
 Vorher läuft die Sammelrunde (Zweige `claude/umbau-vokabeln`, `claude/umbau-fehlerfinden`).
+
+## Q – Qualitätstor für Aufgaben (vor V0, 12.10.2026)
+Siehe `docs/entscheidungen.md` (12.10.2026): Q1 Wächter im Programm (Regeln R1–R12 des Audits, Rückfall auf andere Aufgabenart), Q2 Prüfung mit echten Karten vor jedem Test-Link, Q3 strengere KI-Annahme, Q4 „Aufgabe melden“ (`app/reports`, Sperre je Karte × Aufgabenart), Q5 Regel-Test je Fehlerklasse. Der laufende Audit (Zweig `claude/umbau-audit-aufgaben`) liefert die Regelmenge und die ersten Korrekturen.
+
+## T – Täglicher Aufbau (Entwurf, Entscheidung Emrah offen)
+Ziel: Jeden Tag gibt es erkennbar (a) neue Wörter lernen, (b) Wörter festigen/wiederholen, (c) Grammatik nach Lernpfad, (d) Fehler wiederholen, (e) Abwechslung: Phrasal Verbs, Idioms, Wortfamilien, Verwechslungspaare, Hören. Jeder Schritt hat eigenen Namen, eigene Aufgabenstellungen und eigenes Aufgabenbild (keine „sehr ähnlichen“ Aufgaben). Planversion `u.v`/`p.v` bleibt 1; die Änderung läuft über eine neue Regelversion `u.rv` (bisher 2) mit Rückfall; Serie/Pflicht-Zähler bleiben unberührt (Kap. 9).
