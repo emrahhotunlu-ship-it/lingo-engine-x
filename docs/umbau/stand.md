@@ -407,3 +407,8 @@ Lehre: Für Aufgabenfragen mit Gestaltungsspielraum zuerst Emrah mit Vorschau fr
 
 - Plan fertig: `docs/umbau/lesen-plan.md` (Pakete L0–L9, Modul `src/modules/read/`, Daten `read/d-<Tag>`, `read/m-<Monat>`, `read/p`). Offen: drei Fragen an Emrah (Erzeugung, Ansicht/Pflicht, Recherche-Routine). Kein Code geändert.
 - 13.10.2026 Ergänzung Emrah: Kurse zusätzlich (L8 Pflicht), tägliche aktuelle Infos per Aufgabe. Befund `feed/`: Tagesauftrag lieferte 23.09.–03.10. täglich ~4 echte Beiträge mit Quelle/Link, seitdem nichts mehr. Lesen liest `feed/` als „Meldungen des Tages“; Reaktivierung/Neueinrichtung des Tagesauftrags offen (Zustimmung Emrah).
+
+## 13.10.2026 – Wächter Q1 gebaut und zusammengeführt
+- Zweig `claude/umbau-waechter` (2b97e3c, in fokus 90659d5): `src/domain/srs/guard.ts` (`checkExercise` R1–R12, `guardedExercise` mit Rückfallkette, höchstens 6 Versuche, Meldung einmal je Karte/Aufgabe/Regel), eingehängt in `session.ts` (`build`), Kontrastschritt und `IntroCard` (Vorabfrage nur bei bestandener `ctx_mc`). Aufdeck-Karte wird geprüft/gemeldet, nie ersetzt. Standortbestimmung (`check/*`) nicht geschützt (feste Aufgaben).
+- Echtkarten-Prüfung (194 Karten, 8.942 Paare): 429 blockiert (4,8 %): R2 386 (meist EN-Wortpartner ohne Hinweis), R5 40, R4 23, R9 4; keine verletzende Aufgabe wird gezeigt; im ganzen Katalog + `type` nie weniger als 2 Arten je Karte; Rundenbauten: 14 von 3.880 durch andere Aufgabenart ersetzt.
+- Tests: Unit 5289 grün; E2E Wörter-Specs 99 grün, 3 rot = perf Statuszeile (bekannt). Offen: Guard-Zähler in der Diagnose-Ansicht sichtbar machen (nur im Code), Q4 „Aufgabe melden“, englische Wortpartner-Hinweise (`col[].en`).
