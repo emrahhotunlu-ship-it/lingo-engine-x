@@ -9,6 +9,7 @@ import { buildTrainCards } from '../../domain/metrics';
 import { toTrainCard } from '../../domain/srs/cards';
 import { buildChunkCards, toChunkCard } from '../../domain/srs/chunkCards';
 import { buildExercise, exTextKey, type SceneLookup } from '../../domain/srs/exercise';
+import { guardedExercise, reportViolations } from '../../domain/srs/guard';
 import { sentKey } from '../../domain/srs/variety';
 import { chooseExercise, makeEnv, NO_ENV, supports, type ExerciseEnv } from '../../domain/srs/modes';
 import { inputProfile } from '../../platform/input';
@@ -185,14 +186,20 @@ export function modeFor(s: ExCtx, card: TrainCard, item: QueueItem): PickedMode 
 
 /** `origin`: Prüfabfrage und Kontrolle bleiben beim Ursprungssatz (sonst wechselt der Satz ab Stufe 3, `domain/srs/rotate.ts`). */
 function build(s: ExCtx, card: TrainCard, ex: ExerciseId, origin = false): Exercise {
-  return buildExercise(card, ex, s.lang, s.pool, `${s.day}|${s.shown[card.key] ?? 0}`, { sceneOf: sceneLookup(s.lang), origin });
+  // Wächter (Q1): eine Aufgabe, die durch R1–R12 fällt, wird nicht gezeigt; stattdessen die nächste Aufgabenart (`domain/srs/guard.ts`).
+  return guardedExercise(card, ex, s.lang, s.pool, `${s.day}|${s.shown[card.key] ?? 0}`, { sceneOf: sceneLookup(s.lang), origin }, s.env);
 }
 
 function exerciseFor(s: ExCtx, item: QueueItem): Exercise | null {
   const card = s.cards.get(item.key);
   if (!card || item.phase !== 'quiz') return null;
   // P52: „Welches Wort passt?“ steht als eigener Schritt direkt nach der regulären Abfrage (nur, solange der Kontrast noch möglich ist).
-  if (item.reason === 'contrast') return contrastReady(card, s.pool) ? build(s, card, 'contrast') : null;
+  if (item.reason === 'contrast') {
+    if (!contrastReady(card, s.pool)) return null;
+    // Zusatzschritt: fällt er beim Wächter durch, entfällt er (kein Ersatz).
+    const c = buildExercise(card, 'contrast', s.lang, s.pool, `${s.day}|${s.shown[card.key] ?? 0}`, { sceneOf: sceneLookup(s.lang) });
+    return reportViolations(c, card, s.lang).length ? null : c;
+  }
   const hit = takePrebuilt(s, item);
   if (hit) return hit;
   // N35 Hör-Modus: die Sprachausgabe spricht, getippt wird in die Lücke (sonst die Leiter).

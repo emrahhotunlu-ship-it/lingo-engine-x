@@ -8,6 +8,7 @@ import { packExtraOf } from '../../domain/c1pack/packFields';
 import { ipaOf } from '../../domain/lexicon/pron';
 import { meaningOf, shortMeaning } from '../../domain/srs/cards';
 import { buildExercise } from '../../domain/srs/exercise';
+import { reportViolations } from '../../domain/srs/guard';
 import { supports } from '../../domain/srs/modes';
 import { posKey } from '../../domain/srs/explain';
 import { registerOf } from '../../domain/srs/explainWord';
@@ -25,7 +26,9 @@ import { continueIntro, startKnownProbe, useSession, type FirstKind } from './se
 export function IntroCard({ card, onDone }: { card: TrainCard; onDone: (kind: FirstKind) => void }) {
   const pool = useSession((s) => s.pool);
   const lang0 = useSession((s) => s.lang);
-  const ask = useMemo(() => supports(card, 'ctx_mc', lang0, pool.length - 1), [card, lang0, pool.length]);
+  const day0 = useSession((s) => s.day);
+  // Wächter (Q1): Vorab-Frage nur, wenn die Aufgabe R1–R12 besteht (sonst gleich zur Karte).
+  const ask = useMemo(() => supports(card, 'ctx_mc', lang0, pool.length - 1) && reportViolations(buildExercise(card, 'ctx_mc', lang0, pool, `${day0}|intro`), card, lang0).length === 0, [card, lang0, pool, day0]);
   const [step, setStep] = useState<'ask' | 'learn'>(ask ? 'ask' : 'learn');
   return step === 'ask' ? <Ask card={card} onNext={() => setStep('learn')} /> : <Learn card={card} onDone={onDone} />;
 }
