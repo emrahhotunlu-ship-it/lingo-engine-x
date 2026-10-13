@@ -401,3 +401,6 @@ Lehre: Für Aufgabenfragen mit Gestaltungsspielraum zuerst Emrah mit Vorschau fr
 ## 12.10.2026 – Live-Gang Sammelrunde 2
 - Emrahs Freigabe „ok live nehmen“ nach Test-Link v61. Vorher gelesen: live v75 `1791741081-b412` (Rückweg). Veröffentlicht: Build 2c1f307 → live **v76 `1791807258-d7e7`**, Fähigkeiten db, sample, downloads übernommen.
 - Offen: Antwort Emrah, ob die Altkarten „wahnsinnig“ und „to might“ gelöscht werden dürfen (nur mit Ja); Wächter Q1, Tagesaufbau T0 (`docs/umbau/tagesaufbau.md`), Vokabel-Plattform V0.
+
+## 13.10.2026 – Neuer Bereich „Lesen“ (Wunsch Emrah)
+- Entscheidung und Grenzen siehe `docs/entscheidungen.md` (13.10.2026). Plan in `docs/umbau/lesen-plan.md` (Zweig `claude/umbau-lesen-plan`).
