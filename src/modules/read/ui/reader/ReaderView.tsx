@@ -79,7 +79,7 @@ export function ReaderView({ article, state = null, view: viewProp = null, autoS
       opened: s.opened.size,
       saved: s.saved,
       answered: summarizeChecks(checks, s.answers),
-      reachedEnd: s.endSeen && canFinish(model.total, secTotal),
+      reachedEnd: (s.endSeen || (endRef.current?.getBoundingClientRect().top ?? Infinity) <= window.innerHeight) && canFinish(model.total, secTotal),
       total: model.total,
       now,
     });

@@ -26,7 +26,7 @@ function SentenceRowImpl({ sentence, view, revealed, hl, articleId, title, lang,
   const st = sentenceState(view, revealed);
   const labelKey = view === 'c' ? (revealed ? 'rdrHideEnN' : 'rdrShowEnN') : revealed ? 'rdrHideDeN' : 'rdrShowDeN';
   const en = st.showEn ? (
-    <div className="flex items-start gap-1" data-testid="rdr-en-block">
+    <div className={`flex items-start gap-1 ${st.deFirst ? 'mt-1.5 border-l-2 border-line-strong pl-3' : ''}`} data-testid="rdr-en-block">
       <EnglishText
         as="p"
         text={e}
