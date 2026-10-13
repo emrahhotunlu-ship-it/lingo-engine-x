@@ -113,9 +113,9 @@ test.describe('Bildschirm „Lesen“ (390 px)', () => {
     await expectNoOverflow(page);
     await primary.click();
     await screen(page, 'readArticle');
-    await expect(page.getByTestId('read-article-placeholder')).toHaveAttribute('data-id', /^a-2026-09-19-1-/);
+    await expect(page.getByTestId('rdr')).toHaveAttribute('data-article', /^a-2026-09-19-1-/);
     await expect(page.getByTestId('tabbar')).toBeVisible();
-    await page.getByTestId('read-article-back').click();
+    await page.getByTestId('back').first().click();
     await screen(page, 'read');
     expect(errors).toEqual([]);
     expect(external).toEqual([]);

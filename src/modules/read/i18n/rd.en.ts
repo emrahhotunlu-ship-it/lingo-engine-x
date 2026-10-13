@@ -56,7 +56,5 @@ export const rdEn = {
   rdStopped: 'Stopped. {n} of {total} articles are ready.',
   rdPartial: '{n} of {total} articles are ready. The rest is missing.',
   rdOpenArticle: 'Open article: {title}',
-  rdPlaceholderTitle: 'The reader is coming soon',
-  rdPlaceholderBody: 'This screen is built in the next step.',
   rdBack: 'Back to Read',
 };

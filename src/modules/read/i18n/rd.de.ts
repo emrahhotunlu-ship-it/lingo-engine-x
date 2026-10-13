@@ -57,7 +57,5 @@ export const rdDe = {
   rdStopped: 'Angehalten. {n} von {total} Artikeln sind fertig.',
   rdPartial: 'Fertig sind {n} von {total} Artikeln. Der Rest fehlt noch.',
   rdOpenArticle: 'Artikel öffnen: {title}',
-  rdPlaceholderTitle: 'Der Leser kommt gleich',
-  rdPlaceholderBody: 'Dieser Bildschirm wird im nächsten Schritt gebaut.',
   rdBack: 'Zurück zu Lesen',
 };

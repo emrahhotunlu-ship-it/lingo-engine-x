@@ -191,7 +191,23 @@ export default defineConfig(
     },
   },
   {
-    // shared.ts (Logik) und sharedUi.ts (Oberfläche, L3) sind die einzigen Türen nach außen; die Erlaubnisliste prüft tests/unit/read/isolation.test.ts.
+    // Eine Ebene tiefer (z. B. ui/reader/…, Paket L4): zwei Schritte hoch bleiben im Modul (`../../shared`), drei verlassen es.
+    files: ['src/modules/read/*/*/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            { regex: `/(features|domain)/(${GONE_AREAS})(/|$)`, message: 'Dieser Bereich wurde im Umbau „Fokus Wörter und Grammatik“ gelöscht (docs/umbau/gesamtkonzept.md Kap. 6).' },
+            DEV_PATTERN,
+            { regex: '^\\.\\./\\.\\./\\.\\./', message: 'Lesen-Modul: höchstens zwei Schritte hoch (../../shared); Fremdes nur über shared.ts (docs/umbau/lesen-plan.md §5.2).' },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // shared.ts ist die einzige Tür nach außen; die Erlaubnisliste prüft tests/unit/read/isolation.test.ts.
     files: ['src/modules/read/shared.ts', 'src/modules/read/sharedUi.ts'],
     rules: {
       'no-restricted-imports': [
