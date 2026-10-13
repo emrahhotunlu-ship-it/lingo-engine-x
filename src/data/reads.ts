@@ -1,6 +1,7 @@
 import type { Db } from '../platform/types';
 import { logError } from '../platform/diagnostics';
-import { APP_DOC_PATHS, COLLECTION_NAMES } from './paths';
+import { readDocCountOf } from '../modules/read/registry';
+import { APP_DOC_PATHS, EAGER_COLLECTION_NAMES } from './paths';
 import { readOnce } from './snapshot';
 import { validateCached } from './validate';
 
@@ -65,7 +66,7 @@ export async function readCollection(db: Db, name: string, opts: ReadCollectionO
 
 // ---------------------------------------------------------------- Diagnose: Dokumente zählen (P7-1 d)
 // Statt eines Voll-Schnappschusses mit Prüfung jedes Dokuments: je Sammlung ein `get()` und nur die
-// Anzahl (db.d.ts kennt keine reine Zählung). Höchstens 4 Abfragen gleichzeitig, einmal je Öffnen.
+// Anzahl (db.d.ts kennt keine reine Zählung; träge Sammlungen zählen über ihr eigenes Zähldokument). Höchstens 4 Abfragen gleichzeitig, einmal je Öffnen.
 
 export type DocCounts = { byCollection: Record<string, number>; chat: Doc | null; preply: number; possiblyTruncated: string[] };
 
@@ -80,11 +81,16 @@ export async function countDocuments(db: Db): Promise<DocCounts> {
       byCollection.app = (byCollection.app ?? 0) + 1;
       if (path === 'app/chat') chat = snap.data() ?? null;
     }),
-    ...COLLECTION_NAMES.map((name) => async () => {
+    ...EAGER_COLLECTION_NAMES.map((name) => async () => {
       const q = await readOnce(name, () => db.collection(name).get());
       byCollection[name] = q.size;
       if (q.size === 1000) possiblyTruncated.push(name);
     }),
+    // Träge Sammlung `read`: nicht als Ganzes laden (Artikeltexte!), sondern die Zahl aus `read/p` (Liste der Lerntage) ableiten.
+    async () => {
+      const snap = await readOnce('read/p', () => db.doc('read/p').get());
+      byCollection.read = readDocCountOf(snap.exists ? snap.data() : undefined);
+    },
   ];
   for (let i = 0; i < jobs.length; i += 4) await Promise.all(jobs.slice(i, i + 4).map((j) => j()));
   return { byCollection, chat, preply: byCollection.preply ?? 0, possiblyTruncated };

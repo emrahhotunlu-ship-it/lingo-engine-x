@@ -2,7 +2,7 @@ import { getDb } from '../../platform/capabilities';
 import { saveFile, type SaveOutcome } from '../../platform/downloads';
 import { logError } from '../../platform/diagnostics';
 import { readLegacyLocal } from '../../platform/legacyLocal';
-import { loadSnapshot, type DataSnapshot } from '../../data/snapshot';
+import { loadLazyBackup, loadSnapshot, type DataSnapshot, type LazyBackup } from '../../data/snapshot';
 import { dayKey } from '../../domain/date';
 import { useSettings } from '../../app/settings';
 import { translate } from '../../i18n';
@@ -24,14 +24,26 @@ export async function exportAll(snapshot?: DataSnapshot): Promise<SaveOutcome> {
       return 'error';
     }
   }
+  // Träge Sammlung „Lesen“ (Texte der Artikel) in begrenzter Größe dazu; was nicht passt, wird im Export vermerkt (nie still weggelassen).
+  const documents: Record<string, Record<string, unknown>> = Object.fromEntries(snap.raw);
+  let lazy: LazyBackup;
+  try {
+    lazy = await loadLazyBackup(db);
+  } catch (err) {
+    logError('export:read', err, 'read');
+    return 'error';
+  }
+  Object.assign(documents, lazy.docs);
+  const readOmitted = lazy.omitted;
   const schema = snap.raw.get('app/schema');
   const payload = {
     app: 'lingo-engine-x',
     exportedAt: new Date().toISOString(),
     schemaVersion: schema && typeof schema.version === 'number' ? schema.version : 0,
-    documentCount: snap.raw.size,
-    documents: Object.fromEntries(snap.raw),
+    documentCount: Object.keys(documents).length,
+    documents,
   };
+  if (readOmitted.length) Object.assign(payload, { readTextsOmitted: readOmitted });
   // Noch nicht übertragene Kopien der alten App in diesem Browser gehören mit in die Sicherung.
   const browserCopies = readLegacyLocal();
   if (Object.keys(browserCopies.dirty).length) Object.assign(payload, { browserCopies });

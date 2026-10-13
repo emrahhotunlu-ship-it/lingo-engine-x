@@ -77,14 +77,15 @@ describe('Registrierung im Schema-Routing (src/data/paths.ts)', () => {
     expect(validateDoc(READ_PREFS_PATH, { topics: { ai: 'viel' } }).ok).toBe(false);
   });
 
-  it('Voll-Lesen (Sicherung/Diagnose) nimmt `read` mit und prüft die Dokumente', async () => {
-    const h = createMemoryDb({ seed: { [readDayPath(DAY)]: dayDoc(2), [readMonthPath('2026-10')]: { v: 1, items: [] }, [READ_PREFS_PATH]: { v: 1 }, 'read/x': { items: 5 } } });
+  it('träge Sammlung: Voll-Lesen (Sicherung/Umstellung) lädt `read` nie, die Zählung geht über `read/p` (L3, Plan §11)', async () => {
+    const h = createMemoryDb({ seed: { [readDayPath(DAY)]: dayDoc(2), [readMonthPath('2026-10')]: { v: 1, items: [] }, [READ_PREFS_PATH]: { v: 1, days: [DAY] }, 'read/x': { items: 5 } } });
     const snap = await loadSnapshot(h.db);
-    expect(snap.counts.read).toEqual({ total: 4, valid: 3 });
-    expect(snap.invalid.map((i) => i.path)).toEqual(['read/x']);
-    expect(totalDocuments(snap)).toBe(4);
+    expect(snap.counts.read).toBeUndefined();
+    expect([...snap.raw.keys()].some((p) => p.startsWith('read/'))).toBe(false);
+    expect(totalDocuments(snap)).toBe(0);
     const counts = await countDocuments(h.db);
-    expect(counts.byCollection.read).toBe(4);
+    // p + 1 Tagesdokument + 1 Monatsindex; `read/x` ist unbekannt und wird nicht geraten
+    expect(counts.byCollection.read).toBe(3);
   });
 
   it('`read` wird nie als ganze Sammlung abonniert (kein Eintrag in LIVE_COLLECTIONS/LIVE_DOCS)', () => {

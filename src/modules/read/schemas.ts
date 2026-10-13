@@ -155,6 +155,11 @@ export const prefsSchema = z.looseObject({
   gen: z.looseObject({ d: str, n: num }).nullish(),
   /** Letzte Themen, neueste zuerst (Auswahl-Abwertung). Typ nicht belegt – tolerant. */
   lastTopics: loose,
+  /**
+   * Lerntage, für die ein Tagesdokument `read/d-<Tag>` existiert (aufsteigend, eindeutig). Damit zählen Wächter und Diagnose die
+   * Dokumente der Sammlung, ohne die Artikeltexte zu laden (Plan §11 Nachtrag L3). Wird neu berechnet, nie hochgezählt.
+   */
+  days: strArr,
 });
 export type ReadPrefs = {
   v?: number | null;
@@ -165,6 +170,7 @@ export type ReadPrefs = {
   autoSpeak?: boolean | null;
   gen?: { d?: string | null; n?: number | null } | null;
   lastTopics?: unknown;
+  days?: string[] | null;
 };
 
 /**
@@ -183,4 +189,5 @@ export const readSchema = z.looseObject({
   autoSpeak: bool,
   gen: z.looseObject({ d: str, n: num }).nullish(),
   lastTopics: loose,
+  days: strArr,
 });

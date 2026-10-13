@@ -1,9 +1,15 @@
 import { logError, logWarn } from './shared';
+import { parseMonthDoc, parsePrefs } from './domain/docs';
+import type { Prefs } from './domain/docs';
+import { monthsToLoad } from './domain/view';
+import { afterSavePlan, prefsPatchPlan } from './domain/prefsPlan';
+import type { AfterSave, PrefsPatch } from './domain/prefsPlan';
+import { readDaysOf } from './domain/count';
 import type { Writer } from './shared';
-import type { ArticleItem, ReadState } from './schemas';
+import type { ArticleItem, IndexItem, ReadState } from './schemas';
 import { appendArticlePlan, indexEntryOf, stateUpdatePlan, upsertIndexPlan } from './domain/day';
 import type { AppendOutcome } from './domain/day';
-import { monthOfDay, readDayPath, readMonthPath } from './domain/paths';
+import { monthOfDay, READ_PREFS_PATH, readDayPath, readMonthPath } from './domain/paths';
 import { MAX_ARTICLES_PER_DAY } from './domain/size';
 
 // Schreibzugriffe des Lesen-Moduls (docs/umbau/lesen-plan.md §4.4). Alles über den einen Schreibpfad (`Writer`, von außen gereicht):
@@ -72,6 +78,64 @@ export async function saveReadState(writer: Writer, month: string, id: string, p
     return res === 'updated' ? 'updated' : 'unchanged';
   } catch (err) {
     logError('read:state', err, readMonthPath(month));
+    throw err;
+  }
+}
+
+// ---------------------------------------------------------------- Lesen (träge, je Dokument) und Einstellungen
+
+type Doc = Record<string, unknown>;
+/** Liest EIN Dokument frisch (`undefined` = fehlt). Wirft bei Lesefehlern. Die Oberfläche reicht hier `readDoc` des Datenlayers hinein. */
+export type Reader = (path: string) => Promise<Doc | undefined>;
+
+export type Home = {
+  prefs: Prefs;
+  /** Index der geladenen Monate, älteste zuerst (Reihenfolge des Erzeugens bleibt erhalten). */
+  items: IndexItem[];
+  /** Lerntage mit Tagesdokument (aus `read/p`). */
+  days: string[];
+  /** Index-Einträge, die wegen unerwarteten Aufbaus ausgeblendet sind. */
+  hidden: number;
+};
+
+/**
+ * Alles, was der Bildschirm „Lesen“ braucht, mit wenigen kleinen Lesezugriffen: `read/p` und die Monatsindizes (aktueller Monat und Vormonat).
+ * Die Artikeltexte (`read/d-…`) werden hier NIE gelesen; der Leser holt sich genau ein Tagesdokument, wenn es geöffnet wird.
+ */
+export async function loadHome(read: Reader, today: string): Promise<Home> {
+  const p = await read(READ_PREFS_PATH);
+  const months = monthsToLoad(today).reverse();
+  const docs = await Promise.all(months.map((m) => read(readMonthPath(m))));
+  const items: IndexItem[] = [];
+  let hidden = 0;
+  for (const d of docs) {
+    const parsed = parseMonthDoc(d);
+    if (!parsed.ok) {
+      hidden++;
+      continue;
+    }
+    items.push(...parsed.items);
+    hidden += parsed.hidden.length;
+  }
+  return { prefs: parsePrefs(p), items, days: readDaysOf(p), hidden };
+}
+
+/** Einstellungen ändern (nur auf Handlung). */
+export async function savePrefs(writer: Writer, patch: PrefsPatch): Promise<void> {
+  try {
+    await writer.transform(READ_PREFS_PATH, (cur) => prefsPatchPlan(cur, patch));
+  } catch (err) {
+    logError('read:prefs', err, READ_PREFS_PATH);
+    throw err;
+  }
+}
+
+/** Nach einem gespeicherten Artikel: Lerntag, Themenverlauf und „heute erzeugt“ in `read/p` fortschreiben. */
+export async function recordSaved(writer: Writer, a: AfterSave): Promise<void> {
+  try {
+    await writer.transform(READ_PREFS_PATH, (cur) => afterSavePlan(cur, a));
+  } catch (err) {
+    logError('read:prefs', err, READ_PREFS_PATH);
     throw err;
   }
 }

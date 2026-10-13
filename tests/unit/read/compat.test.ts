@@ -18,6 +18,8 @@ vi.mock('../../../src/data/paths', async (importOriginal) => {
     ...orig,
     COLLECTIONS: old,
     COLLECTION_NAMES: Object.keys(old),
+    EAGER_COLLECTION_NAMES: Object.keys(old),
+    LAZY_COLLECTIONS: [],
     // Nachbau von v76: gleiche Logik wie schemaForPath, aber über das Register OHNE `read`.
     schemaForPath: (path: string) => {
       if (Object.hasOwn(orig.APP_DOCS, path)) return orig.APP_DOCS[path as keyof typeof orig.APP_DOCS];
@@ -29,7 +31,7 @@ vi.mock('../../../src/data/paths', async (importOriginal) => {
 });
 
 const { createMemoryDb } = await import('../../../src/platform/dev/memoryDb');
-const { COLLECTION_NAMES, schemaForPath } = await import('../../../src/data/paths');
+const { COLLECTION_NAMES, EAGER_COLLECTION_NAMES, schemaForPath } = await import('../../../src/data/paths');
 const { loadSnapshot, totalDocuments } = await import('../../../src/data/snapshot');
 const { countDocuments, readDoc } = await import('../../../src/data/reads');
 const { validateDoc } = await import('../../../src/data/validate');
@@ -70,18 +72,18 @@ describe('v76 (Register ohne `read`): `read/` ist unsichtbar und harmlos', () =>
     const { db, asked } = recording({ ...READ_DOCS, 'app/profile': { lang: 'de' }, 'vocab/w1': { word: 'ok' } });
     const snap = await loadSnapshot(db);
     expect(asked.collections).not.toContain('read');
-    expect(asked.collections.length).toBe(COLLECTION_NAMES.length);
+    expect(asked.collections.length).toBe(EAGER_COLLECTION_NAMES.length);
     expect([...snap.raw.keys()].some((p) => p.startsWith('read/'))).toBe(false);
     expect(snap.counts.read).toBeUndefined();
     expect(snap.invalid).toEqual([]);
     expect(totalDocuments(snap)).toBe(2); // app/profile + vocab/w1: der Gesamtzähler zählt `read/` nicht mit
   });
 
-  it('Diagnose-Zählung: `read` taucht nicht auf', async () => {
+  it('Diagnose-Zählung: die Sammlung `read` wird nie abgefragt (seit L3 zählt der neue Code `read/p`; v76 selbst zählt `read` gar nicht)', async () => {
     const { db, asked } = recording({ ...READ_DOCS });
-    const counts = await countDocuments(db);
-    expect(counts.byCollection.read).toBeUndefined();
+    await countDocuments(db);
     expect(asked.collections).not.toContain('read');
+    expect(asked.docs.filter((d) => d.startsWith('read/'))).toEqual(['read/p']);
   });
 
   it('Live-Abos: feste Listen ohne `read`', () => {

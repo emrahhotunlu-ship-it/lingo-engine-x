@@ -42,7 +42,7 @@ import {
   teacherSchema,
 } from './schemas';
 // Lesen-Modul (docs/umbau/lesen-plan.md §4/§5): einzige Tür für das Schema der Sammlung `read`.
-import { readSchema } from '../modules/read/registry';
+import { READ_LAZY_COLLECTION, readSchema } from '../modules/read/registry';
 
 // Alle bekannten Pfade der Datenbank (Anhang B + docs/altapp-analyse.md, Abschnitt 5).
 
@@ -112,6 +112,16 @@ export type AppDocPath = keyof typeof APP_DOCS;
 export type CollectionName = keyof typeof COLLECTIONS;
 
 export const COLLECTION_NAMES = Object.keys(COLLECTIONS) as CollectionName[];
+
+/**
+ * „Träge“ Sammlungen: Sie haben ein Schema (Prüfung beim Lesen und Schreiben), werden aber NIE als Ganzes gelesen – weder beim Start
+ * noch für die Dokumentzählung, die Sicherung oder die Umstellung -, weil ihre Dokumente große Texte tragen (Lesen: Artikeltexte,
+ * ≈ 1 MB je 33 Tage). Das besitzende Modul liest je Dokument bei Bedarf; Zählung und Sicherung gehen über eigene Wege
+ * (`countDocuments`, `loadLazyBackup`). Plan `docs/umbau/lesen-plan.md` §11 Nachtrag L3.
+ */
+export const LAZY_COLLECTIONS: readonly CollectionName[] = [READ_LAZY_COLLECTION];
+/** Sammlungen, die Start, Zählung und Umstellung vollständig lesen. */
+export const EAGER_COLLECTION_NAMES: readonly CollectionName[] = COLLECTION_NAMES.filter((n) => !LAZY_COLLECTIONS.includes(n));
 export const APP_DOC_PATHS = Object.keys(APP_DOCS) as AppDocPath[];
 
 /**
