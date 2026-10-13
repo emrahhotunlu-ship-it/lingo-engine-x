@@ -406,3 +406,4 @@ Lehre: Für Aufgabenfragen mit Gestaltungsspielraum zuerst Emrah mit Vorschau fr
 - Entscheidung und Grenzen siehe `docs/entscheidungen.md` (13.10.2026). Plan in `docs/umbau/lesen-plan.md` (Zweig `claude/umbau-lesen-plan`).
 
 - Plan fertig: `docs/umbau/lesen-plan.md` (Pakete L0–L9, Modul `src/modules/read/`, Daten `read/d-<Tag>`, `read/m-<Monat>`, `read/p`). Offen: drei Fragen an Emrah (Erzeugung, Ansicht/Pflicht, Recherche-Routine). Kein Code geändert.
+- 13.10.2026 Ergänzung Emrah: Kurse zusätzlich (L8 Pflicht), tägliche aktuelle Infos per Aufgabe. Befund `feed/`: Tagesauftrag lieferte 23.09.–03.10. täglich ~4 echte Beiträge mit Quelle/Link, seitdem nichts mehr. Lesen liest `feed/` als „Meldungen des Tages“; Reaktivierung/Neueinrichtung des Tagesauftrags offen (Zustimmung Emrah).
