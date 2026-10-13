@@ -13,6 +13,14 @@ const DEV_IMPORT_SYNTAX = {
   selector: "ImportExpression[source.value=/(^|\\/)(seed|platform\\/dev)(\\/|$)/]",
   message: 'Kein dynamisches import() von Seed oder Entwicklungs-Adapter (nur src/main.tsx).',
 };
+/**
+ * Modul „Lesen“ (docs/umbau/lesen-plan.md §5): von außen sind nur `index` und `registry` erreichbar.
+ * `GONE_AREAS` bleibt unverändert (das Modul heißt `modules/read`, die Sperre für `features/read` und `domain/read` gilt weiter).
+ */
+const READ_DOOR_PATTERN = {
+  regex: '(^|/)modules/read/(?!index$|registry$)',
+  message: 'Lesen-Modul: von außen nur über modules/read/index oder modules/read/registry (docs/umbau/lesen-plan.md §5.3).',
+};
 const PLATFORM_SYNTAX = [
   { selector: "MemberExpression[property.name='claude']", message: 'claude.use nur in src/platform (Kap. 3.3).' },
   { selector: "Identifier[name='localStorage']", message: 'localStorage nur über src/platform/storage.ts.' },
@@ -110,10 +118,11 @@ export default defineConfig(
   {
     // Entfernungs-Audit: Importe aus den gelöschten Bereichen sind verboten (sonst käme der Code unbemerkt zurück).
     files: ['src/**/*.{ts,tsx}', 'tests/**/*.ts'],
+    ignores: ['src/modules/read/**', 'tests/unit/read/**'],
     rules: {
       'no-restricted-imports': [
         'error',
-        { patterns: [{ regex: `/(features|domain)/(${GONE_AREAS})(/|$)`, message: 'Dieser Bereich wurde im Umbau „Fokus Wörter und Grammatik“ gelöscht (docs/umbau/gesamtkonzept.md Kap. 6).' }] },
+        { patterns: [{ regex: `/(features|domain)/(${GONE_AREAS})(/|$)`, message: 'Dieser Bereich wurde im Umbau „Fokus Wörter und Grammatik“ gelöscht (docs/umbau/gesamtkonzept.md Kap. 6).' }, READ_DOOR_PATTERN] },
       ],
     },
   },
@@ -121,7 +130,7 @@ export default defineConfig(
     // Eine Quelle je Zahl (Gesamtkonzept Kap. 6, tests/unit/archGuards.test.ts): Karten und Serie nur über `domain/metrics`.
     // (Die Umstellung der alten App rechnet die alte Serie bewusst selbst.) Wiederholt das Entfernungs-Audit, weil `no-restricted-imports` je Datei nur einmal gilt.
     files: ['src/**/*.{ts,tsx}'],
-    ignores: ['src/domain/metrics/**', 'src/domain/migration/**', 'src/platform/**'],
+    ignores: ['src/domain/metrics/**', 'src/domain/migration/**', 'src/platform/**', 'src/modules/read/**'],
     rules: {
       'no-restricted-imports': [
         'error',
@@ -131,6 +140,7 @@ export default defineConfig(
             { regex: '(^|/)srs/cards$', importNames: ['buildTrainCards'], message: 'Karten nur über domain/metrics (eine Quelle je Zahl).' },
             { regex: '(^|/)streak$', importNames: ['computeStreak'], message: 'Serie nur über domain/metrics (streak, streakWeek).' },
             DEV_PATTERN,
+            READ_DOOR_PATTERN,
           ],
         },
       ],
@@ -142,7 +152,61 @@ export default defineConfig(
     rules: {
       'no-restricted-imports': [
         'error',
+        { patterns: [{ regex: `/(features|domain)/(${GONE_AREAS})(/|$)`, message: 'Dieser Bereich wurde im Umbau „Fokus Wörter und Grammatik“ gelöscht (docs/umbau/gesamtkonzept.md Kap. 6).' }, DEV_PATTERN, READ_DOOR_PATTERN] },
+      ],
+    },
+  },
+  {
+    // Modul „Lesen“, Tür nach innen (docs/umbau/lesen-plan.md §5.3): Nur `shared.ts` darf aus dem Rest der App importieren.
+    // Dateien auf Modulebene dürfen kein `../` verwenden, Dateien in Unterordnern höchstens einen Schritt hoch (`../shared`).
+    // Jeder Block wiederholt die allgemeinen Muster, weil `no-restricted-imports` je Datei nur einmal gilt.
+    files: ['src/modules/read/*.ts'],
+    ignores: ['src/modules/read/shared.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            { regex: `/(features|domain)/(${GONE_AREAS})(/|$)`, message: 'Dieser Bereich wurde im Umbau „Fokus Wörter und Grammatik“ gelöscht (docs/umbau/gesamtkonzept.md Kap. 6).' },
+            DEV_PATTERN,
+            { regex: '^\\.\\./', message: 'Lesen-Modul: Importe von außen nur in modules/read/shared.ts (docs/umbau/lesen-plan.md §5.2).' },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ['src/modules/read/*/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            { regex: `/(features|domain)/(${GONE_AREAS})(/|$)`, message: 'Dieser Bereich wurde im Umbau „Fokus Wörter und Grammatik“ gelöscht (docs/umbau/gesamtkonzept.md Kap. 6).' },
+            DEV_PATTERN,
+            { regex: '^\\.\\./\\.\\./', message: 'Lesen-Modul: höchstens ein Schritt hoch (../shared); Fremdes nur über shared.ts (docs/umbau/lesen-plan.md §5.2).' },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // shared.ts ist die einzige Tür nach außen; die Erlaubnisliste prüft tests/unit/read/isolation.test.ts.
+    files: ['src/modules/read/shared.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
         { patterns: [{ regex: `/(features|domain)/(${GONE_AREAS})(/|$)`, message: 'Dieser Bereich wurde im Umbau „Fokus Wörter und Grammatik“ gelöscht (docs/umbau/gesamtkonzept.md Kap. 6).' }, DEV_PATTERN] },
+      ],
+    },
+  },
+  {
+    // Tests des Moduls dürfen ins Modul hineinsehen.
+    files: ['tests/unit/read/**/*.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        { patterns: [{ regex: `/(features|domain)/(${GONE_AREAS})(/|$)`, message: 'Dieser Bereich wurde im Umbau „Fokus Wörter und Grammatik“ gelöscht (docs/umbau/gesamtkonzept.md Kap. 6).' }] },
       ],
     },
   },

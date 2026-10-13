@@ -28,6 +28,7 @@ import { patterns } from './patterns';
 import { patternCheck } from './patternCheck';
 import { memoryExtract } from './memoryExtract';
 import { wordCtx } from './wordCtx';
+import { READ_TEMPLATES } from '../modules/read/registry';
 
 // Alle Vorlagen an einem Ort. Ein Test prüft eindeutige Kennungen und die Kopfzeile.
 
@@ -77,6 +78,8 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   c1Mail,
   // Lernplattform 3.0 P52: Wörter-Tutor (neue Sätze und Kontrast für schwache Wörter)
   wordCtx,
+  // Lesen (13.10.2026): Artikel und Themenvorschläge, Modul src/modules/read
+  ...READ_TEMPLATES,
 ];
 
 /** Gesprächsvorlagen (Freitext, gestreamt über src/ai/stream.ts; Phase 3 und 5). */

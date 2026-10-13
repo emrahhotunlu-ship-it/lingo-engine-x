@@ -41,6 +41,8 @@ import {
   c1Schema,
   teacherSchema,
 } from './schemas';
+// Lesen-Modul (docs/umbau/lesen-plan.md §4/§5): einzige Tür für das Schema der Sammlung `read`.
+import { readSchema } from '../modules/read/registry';
 
 // Alle bekannten Pfade der Datenbank (Anhang B + docs/altapp-analyse.md, Abschnitt 5).
 
@@ -102,6 +104,8 @@ export const COLLECTIONS = {
   out: outSchema,
   // Lehrer-Feedback einfügen (28.09.2026, ersetzt die Preply-Brücke): Monatsdokumente.
   teacher: teacherSchema,
+  // Lesen (13.10.2026): `read/d-<Tag>` (Artikel), `read/m-<Monat>` (Index + Lesezustand), `read/p` (Einstellungen); ein tolerantes Schema für alle drei Arten.
+  read: readSchema,
 } as const satisfies Record<string, ZodType>;
 
 export type AppDocPath = keyof typeof APP_DOCS;
