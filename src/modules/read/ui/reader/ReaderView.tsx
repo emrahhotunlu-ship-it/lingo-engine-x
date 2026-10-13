@@ -1,0 +1,257 @@
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { ArticleItem, ReadState, ReadView } from '../../schemas';
+import { VIEWS } from '../../schemas';
+import { summarizeChecks } from '../../domain/readerCheck';
+import { buildModel, highlightMap, initialRevealed, pickChecks, pickKeyWords, toggleAll, toggleSentence, topVisibleSentence, userRevealCount, viewOf } from '../../domain/readerModel';
+import { rdrText, topicKey, type RdrKey } from '../../domain/readerText';
+import { buildStatePatch, canFinish, clockSeconds, newClock, pauseClock, resumeClock, type ReadClock } from '../../domain/readerTiming';
+import { countWords, minutesFor } from '../../domain/text';
+import { Button, Icon, Segmented, lookupOpenMs, speak, unlockSpeech, useT } from '../../sharedUi';
+import { CheckCard } from './CheckCard';
+import { KeyWordsCard } from './KeyWordsCard';
+import { SentenceRow } from './SentenceRow';
+
+// Der Leser (docs/umbau/lesen-plan.md §2.2): Absätze Satz für Satz, drei Ansichten, Wort antippen, Schlüsselwörter, Check,
+// Lesezustand. Der Artikel kommt als Eigenschaft (testbarer Kern); `ReaderScreen` lädt ihn nur.
+// Lesezustand wird gebündelt geschrieben (beim Ausblenden und Verlassen der Seite), nie beim Bildlauf; die Lesezeit berührt weder
+// Pflicht noch Serie noch `app/profile`.
+
+export type ReaderViewProps = {
+  article: ArticleItem;
+  /** Bisheriger Lesezustand aus dem Monatsindex. */
+  state?: ReadState | null;
+  /** Startansicht (aus `read/p`); unbekannt = B. */
+  view?: string | null;
+  /** Beim Aufdecken eines Satzes automatisch vorlesen (`read/p.autoSpeak`, Standard aus). */
+  autoSpeak?: boolean;
+  /** Der Leser hat die Ansicht gewechselt (zum Merken in `read/p`). */
+  onViewChange?: (view: ReadView) => void;
+  /** Gebündelter Lesezustand beim Ausblenden/Verlassen; nur wenn sich etwas getan hat. */
+  onProgress?: (patch: ReadState) => void;
+};
+
+const VIEW_KEYS: Record<ReadView, { label: RdrKey; hint: RdrKey }> = {
+  a: { label: 'rdrViewA', hint: 'rdrViewHintA' },
+  b: { label: 'rdrViewB', hint: 'rdrViewHintB' },
+  c: { label: 'rdrViewC', hint: 'rdrViewHintC' },
+};
+
+export function ReaderView({ article, state = null, view: viewProp = null, autoSpeak = false, onViewChange, onProgress }: ReaderViewProps) {
+  const { lang } = useT();
+  const model = useMemo(() => buildModel(article), [article]);
+  const picks = useMemo(() => pickKeyWords(model, article.keyWords), [model, article.keyWords]);
+  const marks = useMemo(() => highlightMap(picks), [picks]);
+  const checks = useMemo(() => pickChecks(article.check), [article.check]);
+  const words = useMemo(() => model.sentences.reduce((a, s) => a + countWords(s.e), 0), [model]);
+
+  const [view, setViewState] = useState<ReadView>(() => viewOf(viewProp));
+  const [revealed, setRevealed] = useState<Set<number>>(() => initialRevealed(viewOf(viewProp), model.total));
+  const [done, setDone] = useState(state?.done === true);
+  const [resumeAt, setResumeAt] = useState<number | null>(() => (state?.pos && state.pos > 1 && !state.done && state.pos <= model.total ? state.pos : null));
+
+  // ---- Zustand außerhalb des Zeichnens: Zähler, Zwischenstand, aktuelle Rückruf-Funktionen
+  const revealedRef = useRef(revealed);
+  const viewRef = useRef(view);
+  const clock = useRef<ReadClock>(newClock());
+  const prior = useRef<ReadState | null>(state);
+  const session = useRef({ opened: new Set<number>(), saved: 0, answers: {} satisfies Record<number, number>, endSeen: false });
+  const cb = useRef({ onProgress, autoSpeak, onViewChange, sentences: model.sentences });
+  useEffect(() => {
+    cb.current = { onProgress, autoSpeak, onViewChange, sentences: model.sentences };
+  });
+  const barRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+  const endRef = useRef<HTMLDivElement>(null);
+
+  const flush = useCallback(() => {
+    const now = Date.now();
+    const c = clockSeconds(clock.current, now, lookupOpenMs());
+    const s = session.current;
+    const list = listRef.current;
+    const header = barRef.current?.getBoundingClientRect().bottom ?? 0;
+    const rows = list ? Array.from(list.querySelectorAll<HTMLElement>('[data-n]')).map((el) => ({ n: Number(el.dataset.n), bottom: el.getBoundingClientRect().bottom })) : [];
+    const pos = rows.length ? topVisibleSentence(rows, header) : (prior.current?.pos ?? 0);
+    const secTotal = (prior.current?.sec ?? 0) + c;
+    const patch = buildStatePatch({
+      prior: prior.current,
+      sec: c,
+      pos,
+      opened: s.opened.size,
+      saved: s.saved,
+      answered: summarizeChecks(checks, s.answers),
+      reachedEnd: s.endSeen && canFinish(model.total, secTotal),
+      total: model.total,
+      now,
+    });
+    if (!patch) return;
+    // Zwischenstand fortschreiben und Zähler zurücksetzen: ein späterer Aufruf zählt nichts doppelt.
+    prior.current = { ...(prior.current ?? {}), ...patch };
+    clock.current = newClock();
+    if (document.visibilityState === 'visible') clock.current = resumeClock(clock.current, now, lookupOpenMs());
+    s.opened = new Set();
+    s.saved = 0;
+    if (patch.done) setDone(true);
+    cb.current.onProgress?.(patch);
+  }, [checks, model.total]);
+
+  // Lesezeit: nur bei sichtbarer Seite; Ausblenden und Verlassen schreiben einmal.
+  useEffect(() => {
+    const on = () => {
+      clock.current = resumeClock(clock.current, Date.now(), lookupOpenMs());
+    };
+    const off = () => {
+      clock.current = pauseClock(clock.current, Date.now(), lookupOpenMs());
+    };
+    if (document.visibilityState === 'visible') on();
+    const vis = () => {
+      if (document.visibilityState === 'hidden') {
+        off();
+        flush();
+      } else on();
+    };
+    document.addEventListener('visibilitychange', vis);
+    window.addEventListener('pagehide', vis);
+    return () => {
+      document.removeEventListener('visibilitychange', vis);
+      window.removeEventListener('pagehide', vis);
+      off();
+      flush();
+    };
+  }, [flush]);
+
+  // Ende des Artikels gesehen (ein Beobachter, kein Bildlauf-Ereignis).
+  useEffect(() => {
+    const el = endRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) session.current.endSeen = true;
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  // ---- Bedienung
+  const reveal = useCallback((next: Set<number>, was: ReadonlySet<number>) => {
+    const added = [...next].filter((n) => !was.has(n));
+    for (const n of added) session.current.opened.add(n);
+    revealedRef.current = next;
+    setRevealed(next);
+    return added;
+  }, []);
+
+  const onToggle = useCallback(
+    (n: number) => {
+      unlockSpeech();
+      const was = revealedRef.current;
+      const added = reveal(toggleSentence(was, n), was);
+      const text = cb.current.sentences[n - 1]?.e;
+      if (added.length && cb.current.autoSpeak && text) void speak(text);
+    },
+    [reveal],
+  );
+
+  const changeView = useCallback(
+    (next: ReadView) => {
+      if (next === viewRef.current) return;
+      viewRef.current = next;
+      setViewState(next);
+      const fresh = initialRevealed(next, model.total);
+      revealedRef.current = fresh;
+      setRevealed(fresh);
+      cb.current.onViewChange?.(next);
+    },
+    [model.total],
+  );
+
+  const allOpen = revealed.size >= model.total && model.total > 0;
+  const onAll = () => {
+    const was = revealedRef.current;
+    reveal(toggleAll(was, model.total), was);
+  };
+
+  const jump = () => {
+    if (resumeAt) document.getElementById(`rdr-s-${resumeAt}`)?.scrollIntoView({ block: 'start', behavior: 'auto' });
+    setResumeAt(null);
+  };
+
+  const onSaved = useCallback(() => {
+    session.current.saved += 1;
+  }, []);
+  const onAnswers = useCallback((a: Record<number, number>) => {
+    session.current.answers = a;
+  }, []);
+
+  const meta = rdrText(lang, 'rdrMeta', { min: minutesFor(words), words });
+  const userOpened = userRevealCount(view, revealed, model.total);
+  const viewOptions = VIEWS.map((v) => ({ value: v, label: rdrText(lang, VIEW_KEYS[v].label), testId: `rdr-view-${v}` }));
+
+  return (
+    <article className="mx-auto flex w-full max-w-[66ch] flex-col gap-5" data-testid="rdr" data-view={view} data-article={article.id} data-opened={userOpened} data-done={done || undefined}>
+      <header className="flex flex-col gap-1.5">
+        <p className="m-0 text-2xs font-semibold uppercase tracking-wide text-accent-text" data-testid="rdr-topic">
+          {article.topic === 'custom' && article.custom ? article.custom : rdrText(lang, topicKey(article.topic))}
+        </p>
+        <h1 className="m-0 text-xl font-semibold tracking-tight text-fg" lang="en" data-testid="rdr-title">
+          {article.title}
+        </h1>
+        <p className="m-0 text-xs text-muted" data-testid="rdr-meta">
+          {meta}
+          {done ? (
+            <span className="ml-2 inline-flex items-center gap-1 font-medium text-accent-text" data-testid="rdr-done">
+              <Icon name="check" size={14} />
+              {rdrText(lang, 'rdrRead')}
+            </span>
+          ) : null}
+        </p>
+        <p className="m-0 text-xs text-subtle" data-testid="rdr-byclaude">
+          {rdrText(lang, 'rdrByClaude')}
+          {article.asOf ? ` · ${rdrText(lang, 'rdrAsOf', { asOf: article.asOf })}` : ''} · {rdrText(lang, 'rdrByClaudeHint')}
+        </p>
+      </header>
+
+      <div ref={barRef} className="sticky top-0 z-20 bg-bg py-2" data-testid="rdr-bar">
+        <Segmented label={rdrText(lang, 'rdrViewLabel')} value={view} options={viewOptions} onChange={changeView} testId="rdr-views" />
+      </div>
+
+      <div className="-mt-3 flex items-center justify-between gap-2">
+        <p className="m-0 min-w-0 flex-1 text-xs text-muted" data-testid="rdr-view-hint">
+          {rdrText(lang, VIEW_KEYS[view].hint)}
+        </p>
+        {model.total > 0 ? (
+          <Button variant="ghost" onClick={onAll} aria-pressed={allOpen} data-testid="rdr-all" className="shrink-0">
+            {rdrText(lang, allOpen ? 'rdrCoverAll' : 'rdrRevealAll')}
+          </Button>
+        ) : null}
+      </div>
+
+      {resumeAt ? (
+        <div className="lx-card flex items-center justify-between gap-3 p-3" data-testid="rdr-resume">
+          <p className="m-0 text-sm text-fg">{rdrText(lang, 'rdrResume', { n: resumeAt })}</p>
+          <Button variant="secondary" onClick={jump} data-testid="rdr-resume-go">
+            {rdrText(lang, 'rdrResumeGo')}
+          </Button>
+        </div>
+      ) : null}
+
+      {model.total === 0 ? (
+        <p className="m-0 text-sm text-muted" data-testid="rdr-removed">
+          {rdrText(lang, 'rdrTextRemoved')}
+        </p>
+      ) : (
+        <div ref={listRef} className="flex flex-col gap-4" data-testid="rdr-text" aria-label={rdrText(lang, 'rdrSentences')} role="group">
+          {model.paragraphs.map((para) => (
+            <ol key={para[0]?.n} start={para[0]?.n} className="m-0 flex list-none flex-col p-0">
+              {para.map((s) => (
+                <SentenceRow key={s.n} sentence={s} view={view} revealed={revealed.has(s.n)} hl={marks.get(s.n) ?? null} articleId={article.id} title={article.title} lang={lang} onToggle={onToggle} />
+              ))}
+            </ol>
+          ))}
+        </div>
+      )}
+
+      <div ref={endRef} aria-hidden="true" className="h-px" />
+      <KeyWordsCard picks={picks} article={article} lang={lang} onSaved={onSaved} />
+      <CheckCard checks={checks} articleId={article.id} title={article.title} lang={lang} onAnswers={onAnswers} />
+    </article>
+  );
+}

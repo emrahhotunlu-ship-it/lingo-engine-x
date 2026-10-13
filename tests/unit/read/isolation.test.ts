@@ -11,6 +11,8 @@ import { describe, expect, it } from 'vitest';
 
 const ROOT = join(import.meta.dirname, '../../..');
 const MODULE = 'src/modules/read';
+/** Die beiden Türen nach außen: shared.ts (leicht, von registry.ts erreichbar) und sharedUi.ts (schwer, nur Oberfläche; Paket L4). */
+const SHARED_FILES = [`${MODULE}/shared.ts`, `${MODULE}/sharedUi.ts`];
 
 /** Erlaubnisliste für shared.ts (Plan §5.2), als Pfade ab Projektwurzel ohne Endung. */
 const ALLOWED_SHARED: RegExp[] = [
@@ -44,7 +46,7 @@ export function resolveImport(fromRel: string, spec: string): string | null {
 export function moduleViolation(fileRel: string, spec: string): string | null {
   const target = resolveImport(fileRel, spec);
   if (target === null) return ALLOWED_PACKAGES.has(spec) ? null : `Paket "${spec}" ist im Modul nicht erlaubt`;
-  if (fileRel === `${MODULE}/shared.ts`) {
+  if (SHARED_FILES.includes(fileRel)) {
     if (target.startsWith(`${MODULE}/`)) return null;
     return ALLOWED_SHARED.some((re) => re.test(target)) ? null : `shared.ts importiert "${target}", das nicht in der Erlaubnisliste (Plan §5.2) steht`;
   }
@@ -72,7 +74,8 @@ describe('Lesen-Modul: Isolation', () => {
   it('das Modul besteht aus den erwarteten Türen und liegt höchstens zwei Ebenen tief', () => {
     const names = moduleFiles.map((f) => f.rel.slice(MODULE.length + 1));
     for (const must of ['index.ts', 'registry.ts', 'shared.ts']) expect(names).toContain(must);
-    for (const n of names) expect(n.split('/').length, n).toBeLessThanOrEqual(2);
+    // Tiefe 2, einzige Ausnahme: der Leser (ui/reader/<datei>, Paket L4) liegt eine Ebene tiefer.
+    for (const n of names) expect(n.split('/').length, n).toBeLessThanOrEqual(n.startsWith('ui/reader/') ? 3 : 2);
   });
 
   it('nur shared.ts verlässt das Modul, und nur zu Zielen der Erlaubnisliste', () => {
@@ -83,13 +86,34 @@ describe('Lesen-Modul: Isolation', () => {
     }
     expect(bad).toEqual([]);
     const leaving = moduleFiles.filter((f) => importsOf(f.text).some((s) => (resolveImport(f.rel, s) ?? MODULE + '/').startsWith(`${MODULE}/`) === false)).map((f) => f.rel);
-    expect(leaving).toEqual([`${MODULE}/shared.ts`]);
+    expect(leaving.sort()).toEqual(SHARED_FILES.filter((f) => moduleFiles.some((m) => m.rel === f)).sort());
   });
 
-  it('shared.ts hat nur Durchreichen, keine eigene Logik', () => {
-    const shared = moduleFiles.find((f) => f.rel === `${MODULE}/shared.ts`)?.text ?? '';
-    const code = shared.split('\n').filter((l) => l.trim() && !l.trim().startsWith('//'));
-    expect(code.every((l) => /^export (type )?\{[^}]*\} from '[^']+';$/.test(l.trim()))).toBe(true);
+  it('shared.ts und sharedUi.ts haben nur Durchreichen, keine eigene Logik', () => {
+    for (const rel of SHARED_FILES) {
+      const shared = moduleFiles.find((f) => f.rel === rel)?.text ?? '';
+      const code = shared.split('\n').filter((l) => l.trim() && !l.trim().startsWith('//'));
+      expect(code.every((l) => /^export (type )?\{[^}]*\} from '[^']+';$/.test(l.trim())), rel).toBe(true);
+    }
+  });
+
+  it('Importkreis-Wächter: was von registry.ts erreichbar ist (läuft beim Laden von src/data/paths), erreicht sharedUi.ts nie', () => {
+    const byRel = new Map(moduleFiles.map((f) => [f.rel, f.text]));
+    const seen = new Set<string>();
+    const walk = (rel: string): void => {
+      if (seen.has(rel)) return;
+      seen.add(rel);
+      for (const spec of importsOf(byRel.get(rel) ?? '')) {
+        const t = resolveImport(rel, spec);
+        if (t === null || !t.startsWith(`${MODULE}/`)) continue;
+        const next = [`${t}.ts`, `${t}.tsx`, `${t}/index.ts`].find((c) => byRel.has(c));
+        if (next) walk(next);
+      }
+    };
+    walk(`${MODULE}/registry.ts`);
+    expect(seen.has(`${MODULE}/registry.ts`)).toBe(true);
+    expect(seen.has(`${MODULE}/shared.ts`)).toBe(true);
+    expect([...seen].filter((r) => r === `${MODULE}/sharedUi.ts` || r.startsWith(`${MODULE}/ui/`))).toEqual([]);
   });
 
   it('von außen nur über index und registry; die Berührungsliste ist abgezählt (Plan §5.4)', () => {
@@ -169,6 +193,16 @@ describe('Gegenproben: absichtliche Fremdimporte schlagen an', () => {
     expect(hits(nested, '../../ai/gate')).toBe(true);
     expect(hits(nested, '../shared')).toBe(false);
     expect(hits(nested, './docs')).toBe(false);
+
+    // Eine Ebene tiefer (ui/reader): `../../shared` ist erlaubt, drei Schritte hoch verlassen das Modul.
+    const deep = await patternsFor(join(ROOT, MODULE, 'ui', 'reader', 'ReaderView.tsx'));
+    expect(hits(deep, '../../../ai/gate')).toBe(true);
+    expect(hits(deep, '../../shared')).toBe(false);
+    expect(hits(deep, '../../domain/readerModel')).toBe(false);
+
+    const sharedUi = await patternsFor(join(ROOT, MODULE, 'sharedUi.ts'));
+    expect(hits(sharedUi, '../../ai/gate')).toBe(false);
+    expect(hits(sharedUi, '../../features/read/x')).toBe(true);
 
     const shared = await patternsFor(join(ROOT, MODULE, 'shared.ts'));
     expect(hits(shared, '../../ai/gate')).toBe(false);
