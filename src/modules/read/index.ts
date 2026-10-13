@@ -24,6 +24,6 @@ export const readArea = defineArea({
   id: 'lesen',
   screens: {
     read: { kind: 'tab', component: ReadHome, title: 'rdTitle', keepScroll: true },
-    readArticle: { kind: 'page', component: ReaderRoute, title: 'rdTitle', keepScroll: true, params: z.object({ id: z.string().min(1).max(80) }) },
+    readArticle: { kind: 'page', chrome: 'shell', component: ReaderRoute, title: 'rdTitle', keepScroll: true, params: z.object({ id: z.string().min(1).max(80) }) },
   },
 });

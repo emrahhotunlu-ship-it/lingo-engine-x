@@ -115,7 +115,7 @@ test.describe('Bildschirm „Lesen“ (390 px)', () => {
     await screen(page, 'readArticle');
     await expect(page.getByTestId('rdr')).toHaveAttribute('data-article', /^a-2026-09-19-1-/);
     await expect(page.getByTestId('tabbar')).toBeVisible();
-    await page.getByTestId('back').first().click();
+    await page.getByTestId('page-back').first().click();
     await screen(page, 'read');
     expect(errors).toEqual([]);
     expect(external).toEqual([]);
