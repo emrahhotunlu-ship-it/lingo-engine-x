@@ -14,7 +14,7 @@ async function openVtest(page: Page): Promise<void> {
   await screen(page, 'vtest');
 }
 
-test('Einstieg: Kopf wie v1 (Profil links ohne Serienzahl, Übersetzen + Claude rechts), 4 Reiter einzeilig, Profil-Blatt', async ({ page }) => {
+test('Einstieg: Kopf wie v1 (Profil links ohne Serienzahl, Übersetzen + Claude rechts), 6 Reiter einzeilig, Profil-Blatt', async ({ page }) => {
   const { errors, external } = await boot(page, { migrated: true });
   await screen(page, 'today');
   const top = page.getByTestId('topbar');
@@ -27,14 +27,14 @@ test('Einstieg: Kopf wie v1 (Profil links ohne Serienzahl, Übersetzen + Claude 
   // Genau ein Claude-Knopf auf der Wurzel (die Seite zeichnet keinen zweiten).
   await expect(page.getByTestId('open-companion')).toHaveCount(1);
   const tabs = page.getByTestId('tabbar').locator('button');
-  // Seit 04.10.2026 (Fokus Vokabeln und Grammatik): Heute · Wortschatz · Grammatik · Anwenden („Go Anwenden“) · Fortschritt – kein Lesen-Reiter.
-  await expect(tabs).toHaveCount(5);
+  // Seit 13.10.2026: Heute · Wortschatz · Grammatik · Anwenden („Go Anwenden“) · Lesen (eigene Artikel von Claude) · Fortschritt.
+  await expect(tabs).toHaveCount(6);
   await expect(page.getByTestId('tab-apply')).toHaveText('Anwenden');
-  await expect(page.getByTestId('tab-read')).toHaveCount(0);
+  await expect(page.getByTestId('tab-read')).toHaveText('Lesen');
   await expect(page.getByTestId('tab-speak')).toHaveCount(0);
   await expect(page.getByTestId('tab-learn')).toHaveText('Grammatik');
   for (const b of await tabs.all()) expect((await b.boundingBox())?.height ?? 99).toBeLessThan(64);
-  for (const id of ['vocab', 'learn', 'apply', 'progress', 'today'] as const) {
+  for (const id of ['vocab', 'learn', 'apply', 'read', 'progress', 'today'] as const) {
     await openTab(page, id);
     await expect(page.getByTestId('topbar')).toBeVisible();
     expect(await layoutProblems(page), id).toEqual([]);

@@ -1,4 +1,5 @@
 import { installAreas, type AreaDef } from '../app/registry';
+import { readArea } from '../modules/read/index';
 import { anwenden } from './anwenden';
 import { heute } from './heute';
 import { lernen } from './lernen';
@@ -11,6 +12,6 @@ import { wortschatz } from './wortschatz';
 // Alle Bereiche des App-Rahmens (docs/neubau/architektur.md §2.2). Die Reihenfolge bestimmt die
 // Reihenfolge gleichrangiger Abschnitte und Einstiege. Beim Laden dieses Moduls einmal angemeldet.
 
-export const AREAS: readonly AreaDef[] = [system, heute, lernen, anwenden, wortschatz, sprechen, profil, training];
+export const AREAS: readonly AreaDef[] = [system, heute, lernen, anwenden, wortschatz, readArea, sprechen, profil, training];
 
 installAreas(AREAS);

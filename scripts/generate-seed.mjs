@@ -1032,6 +1032,162 @@ put('out/2026-09', {
   items: [{ id: `o${now - DAY}`, k: 'colloc', d: addDays(ANCHOR, -1), theme: 't02', ok: true, text: 'make a decision', ms: 4200 }],
 });
 
+// ------------------------------------------------------------------ Lesen (13.10.2026, docs/umbau/lesen-plan.md §4)
+// Zwei Lerntage, drei erfundene Artikel (nur Beispieltext, kein echter Inhalt): `read/d-<Tag>` (Texte), `read/m-<Monat>` (Index + Lesezustand),
+// `read/p` (Einstellungen, Liste der Lerntage). Keine Zufallszahlen, damit die übrigen Dokumente unverändert bleiben.
+const readItem = (day, n, id, topic, kind, title, summary, paras, keyWords, check) => ({
+  id: `a-${day}-${n}-${id}`,
+  t: at(day, 8 + n),
+  topic,
+  kind,
+  level: 'c1',
+  title,
+  summary,
+  asOf: 'general state as of early 2026',
+  paras,
+  keyWords,
+  check,
+  model: 'default',
+  pv: 1,
+});
+const R1 = readItem(
+  '2026-09-19',
+  1,
+  'k3m9qa',
+  'bizdev',
+  'explainer',
+  'Why Partnerships Take Longer Than Anyone Plans',
+  'Der Artikel erklärt, warum Partnerschaften im Vertrieb meist länger dauern als geplant.',
+  [
+    [
+      { e: 'A new partnership usually starts with enthusiasm and a shared slide deck.', d: 'Eine neue Partnerschaft beginnt meist mit Begeisterung und einer gemeinsamen Präsentation.' },
+      { e: 'Six months later, the same two teams are often still arguing about who owns the customer relationship.', d: 'Sechs Monate später streiten dieselben beiden Teams oft immer noch darüber, wem die Kundenbeziehung gehört.' },
+      { e: 'The delay rarely comes from bad intentions, but from unclear incentives.', d: 'Die Verzögerung kommt selten von bösem Willen, sondern von unklaren Anreizen.' },
+    ],
+    [
+      { e: 'Sales teams are paid for closed deals, so they hesitate to share a promising lead with an outside partner.', d: 'Vertriebsteams werden für abgeschlossene Geschäfte bezahlt, deshalb zögern sie, einen vielversprechenden Kontakt mit einem externen Partner zu teilen.' },
+      { e: 'Partner managers, in turn, are measured on pipeline that they cannot control.', d: 'Partnermanager wiederum werden an einer Pipeline gemessen, die sie nicht steuern können.' },
+      { e: 'Until both sides see a clear benefit, every request feels like extra work.', d: 'Solange beide Seiten keinen klaren Nutzen sehen, fühlt sich jede Anfrage wie Zusatzarbeit an.' },
+    ],
+    [
+      { e: 'Experienced teams therefore agree on a small joint goal before they sign anything.', d: 'Erfahrene Teams einigen sich deshalb auf ein kleines gemeinsames Ziel, bevor sie etwas unterschreiben.' },
+      { e: 'A single shared customer success story often does more than a long contract.', d: 'Eine einzige gemeinsame Erfolgsgeschichte mit einem Kunden bewirkt oft mehr als ein langer Vertrag.' },
+      { e: 'After that, scaling the partnership becomes a question of routine rather than of persuasion.', d: 'Danach wird das Ausweiten der Partnerschaft eher zur Frage der Routine als der Überzeugungsarbeit.' },
+    ],
+  ],
+  [
+    { w: 'incentives', de: 'Anreize', i: [0, 2] },
+    { w: 'pipeline', de: 'Vertriebspipeline', i: [1, 1] },
+    { w: 'hesitate', de: 'zögern', i: [1, 0] },
+    { w: 'persuasion', de: 'Überzeugungsarbeit', i: [2, 2] },
+    { w: 'routine', de: 'Routine', i: [2, 2] },
+  ],
+  [
+    { q: 'According to the text, what mainly delays partnerships?', o: ['Bad intentions on both sides.', 'Unclear incentives.', 'Missing slide decks.'], a: 1, why: 'Der Text nennt unklare Anreize, nicht böse Absicht, als Hauptgrund für die Verzögerung.' },
+    { q: 'What do experienced teams do before signing?', o: ['They agree on a small joint goal.', 'They wait six months.', 'They hire more partner managers.'], a: 0, why: 'Erfahrene Teams legen vorab ein kleines gemeinsames Ziel fest.' },
+  ],
+);
+const R2 = readItem(
+  '2026-09-19',
+  2,
+  'p7d2xe',
+  'ai',
+  'trend',
+  'What Language Models Change About Everyday Work',
+  'Der Artikel beschreibt, wie Sprachmodelle alltägliche Büroarbeit verändern und wo ihre Grenzen liegen.',
+  [
+    [
+      { e: 'Language models have quietly entered the daily routine of many office workers.', d: 'Sprachmodelle sind leise in den Arbeitsalltag vieler Büroangestellter eingezogen.' },
+      { e: 'They draft emails, summarize long documents and suggest wording for difficult messages.', d: 'Sie entwerfen E-Mails, fassen lange Dokumente zusammen und schlagen Formulierungen für schwierige Nachrichten vor.' },
+      { e: 'The gain is rarely dramatic on a single task, but it adds up over a week.', d: 'Der Gewinn ist bei einer einzelnen Aufgabe selten dramatisch, summiert sich aber über eine Woche.' },
+    ],
+    [
+      { e: 'The limits are just as important to understand as the benefits.', d: 'Die Grenzen sind ebenso wichtig zu verstehen wie die Vorteile.' },
+      { e: 'A model can sound confident while being wrong, so important facts still need a human check.', d: 'Ein Modell kann überzeugend klingen und trotzdem falschliegen, wichtige Fakten brauchen also weiterhin eine menschliche Prüfung.' },
+      { e: 'Teams that treat the output as a first draft, not as a final answer, tend to avoid most problems.', d: 'Teams, die das Ergebnis als ersten Entwurf und nicht als endgültige Antwort behandeln, vermeiden meist die meisten Probleme.' },
+    ],
+    [
+      { e: 'Costs deserve attention as well, because heavy use can become expensive at scale.', d: 'Auch die Kosten verdienen Aufmerksamkeit, denn eine starke Nutzung kann im großen Maßstab teuer werden.' },
+      { e: 'Many companies therefore start with a few clear use cases instead of a company-wide rollout.', d: 'Viele Unternehmen beginnen deshalb mit wenigen klaren Anwendungsfällen statt mit einer unternehmensweiten Einführung.' },
+      { e: 'Over time, the tasks that people stop doing by hand reveal where the real value lies.', d: 'Mit der Zeit zeigen die Aufgaben, die niemand mehr von Hand erledigt, wo der eigentliche Wert liegt.' },
+    ],
+  ],
+  [
+    { w: 'summarize', de: 'zusammenfassen', i: [0, 1] },
+    { w: 'draft', de: 'Entwurf', i: [1, 2] },
+    { w: 'at scale', de: 'im großen Maßstab', i: [2, 0] },
+    { w: 'rollout', de: 'Einführung', i: [2, 1] },
+    { w: 'confident', de: 'überzeugt, selbstsicher', i: [1, 1] },
+  ],
+  [
+    { q: 'How should teams treat the output of a model?', o: ['As a final answer.', 'As a first draft.', 'As a legal document.'], a: 1, why: 'Der Text empfiehlt, das Ergebnis als ersten Entwurf zu sehen und wichtige Fakten zu prüfen.' },
+    { q: 'Why do many companies start with a few use cases?', o: ['Because models are free.', 'Because costs can grow at scale.', 'Because nobody uses them.'], a: 1, why: 'Bei starker Nutzung können die Kosten im großen Maßstab steigen.' },
+  ],
+);
+const R3 = readItem(
+  '2026-09-17',
+  1,
+  'w4n8hc',
+  'management',
+  'explainer',
+  'Why Clear Feedback Beats Frequent Meetings',
+  'Der Artikel zeigt, dass klares, zeitnahes Feedback mehr bewirkt als häufige Besprechungen.',
+  [
+    [
+      { e: 'Many managers respond to uncertainty by scheduling another meeting.', d: 'Viele Führungskräfte reagieren auf Unsicherheit damit, ein weiteres Meeting anzusetzen.' },
+      { e: 'The calendar fills up, yet the team still does not know what good work looks like.', d: 'Der Kalender füllt sich, doch das Team weiß immer noch nicht, wie gute Arbeit aussieht.' },
+      { e: 'Clear feedback, given soon after the work, solves this problem at a fraction of the cost.', d: 'Klares Feedback kurz nach der Arbeit löst dieses Problem zu einem Bruchteil der Kosten.' },
+    ],
+    [
+      { e: 'Good feedback is specific, short and focused on the work rather than on the person.', d: 'Gutes Feedback ist konkret, kurz und auf die Arbeit statt auf die Person bezogen.' },
+      { e: 'It names one thing that worked and one thing to change next time.', d: 'Es nennt eine Sache, die funktioniert hat, und eine, die man beim nächsten Mal ändern sollte.' },
+      { e: 'Employees who receive such comments regularly improve faster and ask fewer questions.', d: 'Mitarbeitende, die solche Rückmeldungen regelmäßig erhalten, verbessern sich schneller und fragen weniger nach.' },
+    ],
+    [
+      { e: 'Meetings still have a place, mainly for decisions that need several people at once.', d: 'Meetings haben weiterhin ihren Platz, vor allem für Entscheidungen, die mehrere Personen gleichzeitig brauchen.' },
+      { e: 'Even then, a short written summary beforehand keeps the discussion focused.', d: 'Selbst dann hält eine kurze schriftliche Zusammenfassung vorab die Diskussion fokussiert.' },
+      { e: 'The goal is not fewer conversations, but conversations that move the work forward.', d: 'Das Ziel sind nicht weniger Gespräche, sondern Gespräche, die die Arbeit voranbringen.' },
+    ],
+  ],
+  [
+    { w: 'uncertainty', de: 'Unsicherheit', i: [0, 0] },
+    { w: 'a fraction of', de: 'ein Bruchteil von', i: [0, 2] },
+    { w: 'specific', de: 'konkret', i: [1, 0] },
+    { w: 'focused', de: 'fokussiert', i: [2, 1] },
+    { w: 'move forward', de: 'voranbringen', i: [2, 2] },
+  ],
+  [
+    { q: 'What is good feedback according to the text?', o: ['Long and general.', 'Specific, short and about the work.', 'Given once a year.'], a: 1, why: 'Gutes Feedback ist konkret, kurz und bezieht sich auf die Arbeit, nicht auf die Person.' },
+    { q: 'When do meetings still make sense?', o: ['For every question.', 'For decisions that need several people at once.', 'Never.'], a: 1, why: 'Meetings lohnen sich vor allem für Entscheidungen, die mehrere Personen gleichzeitig brauchen.' },
+  ],
+);
+const readWords = (item) => item.paras.reduce((a, p) => a + p.reduce((b, s) => b + s.e.split(/\s+/).length, 0), 0);
+const readIdx = (item, day, st) => {
+  const words = readWords(item);
+  return { id: item.id, day, title: item.title, topic: item.topic, mins: Math.max(1, Math.round(words / 130)), words, st };
+};
+put('read/d-2026-09-19', { v: 1, day: '2026-09-19', items: [R1, R2] });
+put('read/d-2026-09-17', { v: 1, day: '2026-09-17', items: [R3] });
+put('read/m-2026-09', {
+  v: 1,
+  items: [
+    readIdx(R3, '2026-09-17', { t0: at('2026-09-17', 12), sec: 410, pos: 8, done: true, open: 5, saved: 2 }),
+    readIdx(R1, '2026-09-19', { t0: at('2026-09-19', 9), sec: 90, pos: 4, done: false, open: 3, saved: 0 }),
+    readIdx(R2, '2026-09-19', { sec: 0, pos: 0, done: false, open: 0, saved: 0 }),
+  ],
+});
+put('read/p', {
+  v: 1,
+  topics: { bizdev: 1, ai: 1 },
+  custom: [],
+  perDay: 3,
+  view: 'b',
+  autoSpeak: false,
+  gen: { d: '2026-09-19', n: 2 },
+  lastTopics: ['ai', 'bizdev', 'management'],
+  days: ['2026-09-17', '2026-09-19'],
+});
+
 // ------------------------------------------------------------------ Ausgabe
 const sorted = Object.fromEntries(Object.keys(docs).sort().map((k) => [k, docs[k]]));
 mkdirSync(new URL('../seed/', import.meta.url), { recursive: true });

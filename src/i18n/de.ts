@@ -25,6 +25,7 @@ import { navDe } from './parts/nav.de';
 import { patternsDe } from './parts/patterns.de';
 import { teacherDe } from './parts/teacher.de';
 import { nbShDe } from './parts/nbSh.de';
+import { readMessages } from '../modules/read/registry';
 import { nbHeuteDe } from './parts/nbHeute.de';
 import { nbLernenDe } from './parts/nbLernen.de';
 import { nbWsDe } from './parts/nbWs.de';
@@ -78,6 +79,8 @@ export const de = {
   ...teacherDe,
   // Neubau (docs/neubau/architektur.md §2.8): je Bereich ein Teil, nur mit eigenem Präfix
   ...nbShDe,
+  // Lesen (13.10.2026): Texte des Moduls, Präfix `rd`
+  ...readMessages.de,
   ...nbHeuteDe,
   ...nbLernenDe,
   ...nbWsDe,

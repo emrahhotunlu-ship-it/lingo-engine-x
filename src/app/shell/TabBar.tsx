@@ -13,7 +13,7 @@ import { TABS, type TabDef, type TabId } from './tabs';
 // am Handy unten fest, halbdurchsichtig mit Unschärfe; aktiver Reiter in Akzentfarbe, fett und mit
 // Pille (nie nur Farbe). Abzeichen je Reiter liefert der Bereich, der es angemeldet hat. Tippen auf
 // den aktiven Reiter führt zur Wurzel und nach oben (N01).
-// Sechs Reiter am Handy: Breite nach Inhalt (`flex-auto`) statt gleich breit, sonst passt „Fortschritt“
+// Sechs Reiter am Handy (Lesen kam am 13.10.2026 dazu; gemessen bei 360/390/412 px, Pille unter 400 px schmaler, damit „Grammatik“ und „Anwenden“ Luft behalten): Breite nach Inhalt (`flex-auto`) statt gleich breit, sonst passt „Fortschritt“
 // (längste Beschriftung) bei 390 px nicht einzeilig neben „Wortschatz“.
 
 function BadgeCount({ badge }: { badge: BadgeDef }) {
@@ -53,7 +53,7 @@ function TabButton({ tab, active }: { tab: TabDef; active: boolean }) {
       {/* Design-Lead: Pille in der Bereichsfarbe hinter dem aktiven Reiter, das Symbol springt kurz auf (Erlebnis-Engine B5). P54: die Pille gleitet
           als EIN gemeinsames Element zum neuen Reiter (`layoutId`, Feder `snap`; leistung.md §4 Nr. 8 erlaubt `layoutId` für Einzelelemente). */}
       {active && <TabPill id="tab-pill-d" className="dz-tab-pill hidden md:block" />}
-      <span className={`relative isolate inline-flex rounded-full px-3.5 py-0.5 transition-colors duration-150 md:py-0 md:pr-2 md:pl-0 `}>
+      <span className={`relative isolate inline-flex rounded-full px-2 py-0.5 transition-colors duration-150 min-[400px]:px-3.5 md:py-0 md:pr-2 md:pl-0 `}>
         {active && <TabPill id="tab-pill-m" className="dz-tab-pill md:hidden" />}
         <span className="dz-tab-icon inline-flex">
           <Icon name={tab.icon} size={24} />

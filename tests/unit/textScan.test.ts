@@ -23,6 +23,8 @@ const ALLOWED: ReadonlyArray<RegExp> = [
   /^(nbWsModeListen|nbWsListenHint|nbWsListenNoTts|nbWsLoop|exName_listen_mc|exMode_listen|purposeListen|purposeDictate|lhDictateSub|drDictate)/,
   // „Weg zu C1“ (P45, Plan §4.4): der Pflichtsatz „Sprechen, Hören und Lesen misst die App nicht“ grenzt ab, er bietet nichts an.
   /^pxWayNotMeasured$/,
+  // Lesen (13.10.2026, Emrahs Entscheidung „eigener Reiter Lesen“): Texte des neu gebauten Moduls src/modules/read (Präfix `rd`).
+  /^rd[A-Z]/,
   // Fehlerprotokoll (Diagnose) zeigt Schreibzugriffe der Datenbank, keine Fertigkeit.
   /^diagMsg_/,
 ];

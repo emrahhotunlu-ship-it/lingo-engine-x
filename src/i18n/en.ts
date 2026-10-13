@@ -23,6 +23,7 @@ import { navEn } from './parts/nav.en';
 import { patternsEn } from './parts/patterns.en';
 import { teacherEn } from './parts/teacher.en';
 import { nbShEn } from './parts/nbSh.en';
+import { readMessages } from '../modules/read/registry';
 import { nbHeuteEn } from './parts/nbHeute.en';
 import { nbLernenEn } from './parts/nbLernen.en';
 import { nbWsEn } from './parts/nbWs.en';
@@ -76,6 +77,8 @@ export const en: Record<MessageKey, string> = {
   ...teacherEn,
   // Rebuild (docs/neubau/architektur.md §2.8): one part per area, own prefix only
   ...nbShEn,
+  // Lesen (13.10.2026): Texte des Moduls, Präfix `rd`
+  ...readMessages.en,
   ...nbHeuteEn,
   ...nbLernenEn,
   ...nbWsEn,

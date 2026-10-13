@@ -21,6 +21,7 @@ import { registerLp3P49Replies } from './canned/lp3/p49';
 import { registerLp3P51Replies } from './canned/lp3/p51';
 import { registerLp3P52Replies } from './canned/lp3/p52';
 import { registerTeacherFeedbackReply } from './canned/teacherFeedback';
+import { registerReadReplies } from './canned/read';
 
 // Feste, realistische Antworten des Entwicklungs-Adapters für die Vorlagen word-lookup@2,
 // produce-check@1, card-examples@2 und grammar-judge@1 (erkannt an der Kopfzeile). Sie lesen nur die festen Datenzeilen des Prompts.
@@ -296,6 +297,8 @@ export function registerCannedReplies(): void {
   registerLp3P52Replies();
   // Neubau: goal-check, claude-drill, text-cards
   registerNbReplies();
+  // Lesen (13.10.2026): read-article, read-topics
+  registerReadReplies();
 }
 
 // ---------------------------------------------------------------- Aufrufprotokoll

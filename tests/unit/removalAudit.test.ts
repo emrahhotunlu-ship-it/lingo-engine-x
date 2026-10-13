@@ -38,8 +38,9 @@ describe('Entfernungs-Audit', () => {
     expect(hits).toEqual([]);
   });
 
+  // `read` fehlt hier seit 13.10.2026: der Reiter „Lesen“ ist neu gebaut (src/modules/read, Emrahs Entscheidung), kein Altcode (`features/read` bleibt gesperrt).
   it('keine Routen der entfallenen Bildschirme', () => {
-    const re = /name: '(library|discover|history|read|listen|write|mail|pitch|say|fluency|tones|meeting|playbook|sptask|inbox|pron|compare|listenDialog|inputUnit|discoverItem|week)'/;
+    const re = /name: '(library|discover|history|listen|write|mail|pitch|say|fluency|tones|meeting|playbook|sptask|inbox|pron|compare|listenDialog|inputUnit|discoverItem|week)'/;
     const hits = FILES.filter((f) => f.includes('/src/') && re.test(read(f))).map((f) => f.replace(ROOT, ''));
     expect(hits).toEqual([]);
   });

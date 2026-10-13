@@ -21,12 +21,15 @@ const ALLOWED_SHARED: RegExp[] = [
   /^src\/ai\/(gate|useAsk|scope|errors|types)$/,
   /^src\/prompts\/(common|types)$/,
   /^src\/domain\/(date|lang\/detect|text\/tokenize|capacity\/docGuard)$/,
-  /^src\/data\/(writer|validate|live)$/,
+  /^src\/data(\/(writer|validate|live|reads))?$/,
   /^src\/app\/(nav|registry)$/,
   /^src\/features\/lookup\/store$/,
 ];
 /** Fremde Pakete, die überall im Modul erlaubt sind. */
 const ALLOWED_PACKAGES = new Set(['zod', 'react', 'react/jsx-runtime', 'framer-motion']);
+
+/** Die zwei Türen nach außen: Logik (shared.ts) und Oberfläche (sharedUi.ts, seit L3; getrennt, damit registry.ts/prompt.ts nicht die Oberfläche und i18n laden). */
+const SHARED_FILES = [`${MODULE}/shared.ts`, `${MODULE}/sharedUi.ts`];
 
 const IMPORT_RE = /(?:import|export)\s[^'"]*?from\s*['"]([^'"]+)['"]|import\s*['"]([^'"]+)['"]|import\(\s*['"]([^'"]+)['"]\s*\)/g;
 
@@ -44,7 +47,7 @@ export function resolveImport(fromRel: string, spec: string): string | null {
 export function moduleViolation(fileRel: string, spec: string): string | null {
   const target = resolveImport(fileRel, spec);
   if (target === null) return ALLOWED_PACKAGES.has(spec) ? null : `Paket "${spec}" ist im Modul nicht erlaubt`;
-  if (fileRel === `${MODULE}/shared.ts`) {
+  if (SHARED_FILES.includes(fileRel)) {
     if (target.startsWith(`${MODULE}/`)) return null;
     return ALLOWED_SHARED.some((re) => re.test(target)) ? null : `shared.ts importiert "${target}", das nicht in der Erlaubnisliste (Plan §5.2) steht`;
   }
@@ -71,7 +74,7 @@ const moduleFiles = files(join(ROOT, MODULE)).map((p) => ({ rel: rel(p), text: r
 describe('Lesen-Modul: Isolation', () => {
   it('das Modul besteht aus den erwarteten Türen und liegt höchstens zwei Ebenen tief', () => {
     const names = moduleFiles.map((f) => f.rel.slice(MODULE.length + 1));
-    for (const must of ['index.ts', 'registry.ts', 'shared.ts']) expect(names).toContain(must);
+    for (const must of ['index.ts', 'registry.ts', 'shared.ts', 'sharedUi.ts']) expect(names).toContain(must);
     for (const n of names) expect(n.split('/').length, n).toBeLessThanOrEqual(2);
   });
 
@@ -83,13 +86,15 @@ describe('Lesen-Modul: Isolation', () => {
     }
     expect(bad).toEqual([]);
     const leaving = moduleFiles.filter((f) => importsOf(f.text).some((s) => (resolveImport(f.rel, s) ?? MODULE + '/').startsWith(`${MODULE}/`) === false)).map((f) => f.rel);
-    expect(leaving).toEqual([`${MODULE}/shared.ts`]);
+    expect(leaving.sort()).toEqual(SHARED_FILES);
   });
 
-  it('shared.ts hat nur Durchreichen, keine eigene Logik', () => {
-    const shared = moduleFiles.find((f) => f.rel === `${MODULE}/shared.ts`)?.text ?? '';
-    const code = shared.split('\n').filter((l) => l.trim() && !l.trim().startsWith('//'));
-    expect(code.every((l) => /^export (type )?\{[^}]*\} from '[^']+';$/.test(l.trim()))).toBe(true);
+  it('shared.ts und sharedUi.ts haben nur Durchreichen, keine eigene Logik', () => {
+    for (const file of SHARED_FILES) {
+      const shared = moduleFiles.find((f) => f.rel === file)?.text ?? '';
+      const code = shared.split('\n').filter((l) => l.trim() && !l.trim().startsWith('//'));
+      expect(code.every((l) => /^export (type )?\{[^}]*\} from '[^']+';$/.test(l.trim())), file).toBe(true);
+    }
   });
 
   it('von außen nur über index und registry; die Berührungsliste ist abgezählt (Plan §5.4)', () => {
@@ -104,13 +109,18 @@ describe('Lesen-Modul: Isolation', () => {
     }
     expect(bad).toEqual([]);
     // Wächst diese Liste, ist ein weiteres Fremdfile vom Modul abhängig: bewusst entscheiden und Plan §5.4 nachziehen.
-    expect([...touching].sort()).toEqual(['src/data/paths.ts', 'src/prompts/registry.ts']);
+    // L3: dazu src/areas/index.ts (index), src/i18n/de.ts und en.ts (registry: readMessages), src/data/snapshot.ts und reads.ts (registry: träge Sammlung, Zählung, Sicherung).
+    expect([...touching].sort()).toEqual(['src/areas/index.ts', 'src/data/paths.ts', 'src/data/reads.ts', 'src/data/snapshot.ts', 'src/i18n/de.ts', 'src/i18n/en.ts', 'src/prompts/registry.ts']);
   });
 
   it('der Rest der App liest nichts aus dem Modul außer über registry (Schema, Vorlagen)', () => {
     const paths = readFileSync(join(ROOT, 'src/data/paths.ts'), 'utf8');
     const reg = readFileSync(join(ROOT, 'src/prompts/registry.ts'), 'utf8');
     expect(importsOf(paths).filter((s) => s.includes('modules/read'))).toEqual(['../modules/read/registry']);
+    for (const f of ['src/data/reads.ts', 'src/data/snapshot.ts', 'src/i18n/de.ts', 'src/i18n/en.ts']) {
+      expect(importsOf(readFileSync(join(ROOT, f), 'utf8')).filter((s) => s.includes('modules/read')), f).toEqual(['../modules/read/registry']);
+    }
+    expect(importsOf(readFileSync(join(ROOT, 'src/areas/index.ts'), 'utf8')).filter((s) => s.includes('modules/read'))).toEqual(['../modules/read/index']);
     expect(importsOf(reg).filter((s) => s.includes('modules/read'))).toEqual(['../modules/read/registry']);
   });
 });

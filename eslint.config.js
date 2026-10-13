@@ -161,7 +161,7 @@ export default defineConfig(
     // Dateien auf Modulebene dürfen kein `../` verwenden, Dateien in Unterordnern höchstens einen Schritt hoch (`../shared`).
     // Jeder Block wiederholt die allgemeinen Muster, weil `no-restricted-imports` je Datei nur einmal gilt.
     files: ['src/modules/read/*.ts'],
-    ignores: ['src/modules/read/shared.ts'],
+    ignores: ['src/modules/read/shared.ts', 'src/modules/read/sharedUi.ts'],
     rules: {
       'no-restricted-imports': [
         'error',
@@ -191,8 +191,8 @@ export default defineConfig(
     },
   },
   {
-    // shared.ts ist die einzige Tür nach außen; die Erlaubnisliste prüft tests/unit/read/isolation.test.ts.
-    files: ['src/modules/read/shared.ts'],
+    // shared.ts (Logik) und sharedUi.ts (Oberfläche, L3) sind die einzigen Türen nach außen; die Erlaubnisliste prüft tests/unit/read/isolation.test.ts.
+    files: ['src/modules/read/shared.ts', 'src/modules/read/sharedUi.ts'],
     rules: {
       'no-restricted-imports': [
         'error',

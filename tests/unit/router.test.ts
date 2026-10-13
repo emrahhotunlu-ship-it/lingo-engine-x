@@ -19,6 +19,7 @@ const AREAS: AreaDef[] = [
       speak: { kind: 'tab', component: Empty },
       learn: { kind: 'tab', component: Empty },
       apply: { kind: 'tab', component: Empty },
+      read: { kind: 'tab', component: Empty },
       grammar: { kind: 'page', component: Empty },
       wissen: { kind: 'page', component: Empty },
       overview: { kind: 'tab', component: Empty, params: z.object({ tab: z.enum(['judge', 'errors', 'path', 'history']).optional() }) },
@@ -36,8 +37,8 @@ const top = (c: Core): Route => c.overlay?.route ?? (c.stacks[c.tab].at(-1) as R
 beforeAll(() => installAreas(AREAS));
 
 describe('Register', () => {
-  it('fünf Reiter mit Wurzeln (Fokus Vokabeln und Grammatik, 04.10.2026; „Anwenden“ per „Go Anwenden“; zuletzt „Fortschritt“ = Dein Stand); `learn` bleibt die Test-ID von „Grammatik“', () => {
-    expect(TABS.map((t) => t.id)).toEqual(['today', 'vocab', 'learn', 'apply', 'progress']);
+  it('sechs Reiter mit Wurzeln (Fokus Vokabeln und Grammatik, 04.10.2026; „Anwenden“ per „Go Anwenden“; „Lesen“ seit 13.10.2026; zuletzt „Fortschritt“ = Dein Stand); `learn` bleibt die Test-ID von „Grammatik“', () => {
+    expect(TABS.map((t) => t.id)).toEqual(['today', 'vocab', 'learn', 'apply', 'read', 'progress']);
     expect(TABS.find((t) => t.id === 'progress')?.root.name).toBe('overview');
   });
 
