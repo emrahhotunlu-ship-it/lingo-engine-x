@@ -124,11 +124,12 @@ test('Am Handy gibt es nie Hören oder Diktat – der eigene Satz schon, mit sic
   await expect(page.getByTestId('exercise')).toHaveAttribute('data-ex', 'produce');
   await expect(page.getByTestId('replay')).toHaveCount(0);
   await expect(page.getByTestId('produce-input')).toBeVisible();
-  // Vorgaben sichtbar: Lage, Satzform, Ton (Zeitform fehlt nur beim Wenn-Satz).
+  // Vorgaben sichtbar, gestaffelt: beim ersten eigenen Satz nur Lage und Satzform (Zeit ab dem 2., Ton ab dem 3. Mal).
   await expect(page.getByTestId('produce-brief')).toBeVisible();
   await expect(page.getByTestId('brief-scene')).not.toBeEmpty();
   await expect(page.getByTestId('brief-form')).toBeVisible();
-  await expect(page.getByTestId('brief-tone')).toBeVisible();
+  await expect(page.getByTestId('brief-tone')).toHaveCount(0);
+  await expect(page.getByTestId('brief-tense')).toHaveCount(0);
   expect(await layoutProblems(page)).toEqual([]);
   expect(errors).toEqual([]);
   await close();
@@ -144,7 +145,8 @@ test('Eigener Satz: Vorprüfung ohne Claude (Wort fehlt → einmal nachbessern �
   await expect(page.getByTestId('produce-local')).toBeVisible();
   await page.getByTestId('produce-input').fill('We always avoid long meetings on Friday afternoons.');
   await page.getByTestId('produce-local').click();
-  await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
+  // Ohne Claude nie „Gut“: ungeprüft, höchstens „Schwer“ (Lernwissenschaft H1).
+  await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'unchecked');
   await expect(page.getByTestId('verdict-sub')).toContainText('Ohne Claude geprüft');
   await expect(page.getByTestId('next-in')).toBeVisible();
   expect(errors.filter((e) => !/invalid_json|zzjson|not valid JSON/i.test(e))).toEqual([]);
@@ -159,10 +161,8 @@ test('Eigener Satz: Vorprüfung ohne Claude (Wort fehlt → einmal nachbessern �
   await expect(second.page.getByTestId('verdict')).toHaveCount(0);
   await second.page.getByTestId('check').click();
   await expect(second.page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'wrong');
-  await expect(second.page.getByTestId('verdict-sub')).toContainText('Noch nicht');
-  await expect(second.page.getByTestId('ai-note')).toHaveCount(0);
-  // Kein Claude-Aufruf, also auch kein Fehlersatz aus dieser Antwort.
-  expect(((await dump(second.page))['app/repair']?.items as Doc[] | undefined)?.some((i) => i.src === 'write') ?? false).toBe(false);
+  // Mit KI entscheidet beim zweiten Versuch Claude (getrennte Wendungen erkennt die lokale Suche nicht sicher): Fehlerklasse statt lokalem „Noch nicht“.
+  await expect(second.page.getByTestId('verdict-sub')).toContainText('Wichtigster Fehler');
   await second.close();
 });
 

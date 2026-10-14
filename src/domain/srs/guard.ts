@@ -8,7 +8,7 @@ import { availableExercises, CATALOG, exerciseDef, NO_ENV, RETIRED, supports } f
 import type { ExerciseEnv } from './modes';
 import { toUS } from '../answer/spelling';
 import { isFunctionGap } from './partner';
-import { activationReady, parseBrief } from './brief';
+import { activationReady, allowsContinuous, parseBrief } from './brief';
 import { sceneById } from '../../content/activation/scenes';
 import type { Exercise, ExerciseId, Lang, TrainCard } from './types';
 
@@ -197,7 +197,8 @@ export function checkExercise(e: Exercise, card: TrainCard, lang: Lang): Violati
     else {
       if (!sceneById(b.scene)) add('R13', `unbekannte Lage „${b.scene}“`);
       if (!parseBrief(b.code)) add('R13', `Code der Vorgabe nicht lesbar („${b.code}“)`);
-      if ((b.form === 'i') !== (b.tense === '-')) add('R13', 'Wenn-Satz und Zeitform widersprechen sich');
+      if (b.form === 'i' && b.tense !== '-') add('R13', 'Wenn-Satz und Zeitform widersprechen sich');
+      if (b.tense === 'co' && !allowsContinuous(card)) add('R13', 'Verlaufsform bei Zustandsverb oder Adjektiv');
     }
     if (!e.meaning) add('R13', 'keine Bedeutung zum Zielwort');
     if (e.sentence || e.options.length || e.accepted.length) add('R13', 'eigener Satz darf keine Lücke, Optionen oder Lösung tragen');

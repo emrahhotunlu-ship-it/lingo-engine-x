@@ -25,7 +25,8 @@ describe('Oberflächentexte', () => {
     const germanMarks = /[äöüÄÖÜß]|\b(und|der|die|das|nicht|wird|werden|mit|für|noch|Karten?|Tage?)\b/;
     for (const [k, v] of Object.entries(en)) if (k !== 'appName') expect(germanMarks.test(v), `${k}: ${v}`).toBe(false);
     const englishMarks = /\b(the|and|with|your|please|loading|error|settings)\b/i;
-    for (const [k, v] of Object.entries(de)) if (k !== 'appName') expect(englishMarks.test(v), `${k}: ${v}`).toBe(false);
+    // `gh_*` (Hinweise zu typischen Fehlern) nennen englische Beispielwendungen („at the end of …“): erlaubt.
+    for (const [k, v] of Object.entries(de)) if (k !== 'appName' && !k.startsWith('gh_')) expect(englishMarks.test(v), `${k}: ${v}`).toBe(false);
   });
 
   it('englische Texte in amerikanischer Schreibweise', () => {

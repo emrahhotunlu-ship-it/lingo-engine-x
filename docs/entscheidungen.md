@@ -464,3 +464,7 @@ Verbindlich ab sofort, in `docs/umbau/arbeitsweise.md` als Prüftor übernehmen:
 
 
 - **14.10.2026, Begründungen im Leser bleiben Deutsch, offen.** Die Begründung (`why`) der Prüffragen im Lesen-Leser steht in jedem Artikel auf Deutsch, auch bei englischer Oberfläche (Mischsprache im Block „Why:“). Das Schema kennt nur `why` (Lesen-Plan §2 Nr. 7). UX-Befund 6: Optional `why_en` erzeugen lassen und passend zur Oberfläche anzeigen, oder Deutsch bewusst belassen. **Offen, Emrah entscheidet**; bis dahin wird nichts geändert.
+
+## 14.10.2026 – Wörter aktivieren, Stufe 1: Abweichung `modelTier` und Prüfergebnisse
+- **`produce-check@2` bleibt auf `quick`, bewusst abweichend von Kap. 10 („Korrekturen: default“).** Grund: Wartezeit am Handy; der Satz ist kurz, die Aufgabe eng umrissen (ein Fehler, drei Schichten, festes JSON). Absicherung: Stichproben der Rückmeldungen durch den `english-teacher` vor dem Live-Gang; zeigen sie falsche Urteile oder unnatürliche C1-Fassungen, wird auf `default` umgestellt. Die Antwort bleibt durch das Schema (Zielwort in der C1-Fassung, höchstens 25 Wörter) abgesichert.
+- Umgesetzt aus Gegenlesung und Lernprüfung: nur eindeutige Deutsch-Fehler-Muster sperren lokal (`BLOCKING_HINTS`), die übrigen gehen als Hinweis an Claude; Marken werden gestaffelt (1. Mal Lage + Form, ab 2. Mal Zeit, ab 3. Mal Ton) und der Ton kommt nur aus den Tönen, die in der Lage glaubwürdig sind; Tagesdeckel 4 eigene Sätze (ab 40 Überfälligen 1, ab 80 keiner); ohne Claude höchstens „Schwer“ und „ungeprüft“; ein Hinweis der Vorprüfung zählt als Hilfe.

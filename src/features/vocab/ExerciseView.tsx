@@ -351,17 +351,20 @@ export function ExerciseView({
     uiLang: lang,
     kind: card.kind === 'chunk' || /\s/.test(card.lemma) ? ('phrase' as const) : ('word' as const),
     brief: e.brief ? briefVarsOf(e.brief) : null,
-    hints: hints.map((h) => GERMAN_HINT_EN[h]),
+    hints: hints.slice(0, 2).map((h) => GERMAN_HINT_EN[h]),
   });
   const sentenceBusy = askSentence.phase === 'queued' || askSentence.phase === 'thinking' || askSentence.phase === 'slow' || askSentence.phase === 'streaming';
 
-  /** Lokal: `produce` bis „Gut“ (jetzt auch gegen alle gezeigten Sätze); `complete` höchstens „Schwer“ (die Notentabelle deckelt ohne Claude-Bestätigung). */
+  /**
+   * Ohne Claude: `produce` wie `complete` höchstens „Schwer“ und „ungeprüft“ (Lernwissenschaft H1): ob der Satz stimmt, weiß nur Claude; lokal ist
+   * nur geprüft, ob das Wort vorkommt, der Satz lang genug ist und nicht abgeschrieben wirkt. Ein „Gut“ ohne Prüfung würde die Planung aufblähen.
+   */
   const checkSentenceLocal = (): void => {
     const text = fullSentence();
     const self = selfCheckProduce(text, card, shownOf());
     const completeOk = e.ex === 'complete' ? self.containsTarget && text.trim().split(/\s+/).filter(Boolean).length >= 4 : self.grade >= 2;
-    const verdict: CheckResult['verdict'] = e.ex === 'complete' ? (completeOk ? 'near' : 'wrong') : self.grade === 3 ? 'correct' : self.grade === 2 ? 'near' : 'wrong';
-    const forced: Grade = e.ex === 'complete' ? (completeOk ? 2 : 1) : self.grade;
+    const verdict: CheckResult['verdict'] = e.ex === 'complete' ? (completeOk ? 'near' : 'wrong') : self.grade >= 2 ? 'near' : 'wrong';
+    const forced: Grade = e.ex === 'complete' ? (completeOk ? 2 : 1) : (Math.min(self.grade, 2) as Grade);
     finish({ verdict }, text, null, { sentence: { out: null, self, hints: germanHints(text) } }, forced);
   };
 
@@ -369,7 +372,7 @@ export function ExerciseView({
   const shownOf = (): string[] => shownSentences(card, extras);
 
   /** Rückmeldung der Vorprüfung beim ersten Durchfall: sagt, was fehlt, und lässt einmal nachbessern (ohne Claude-Aufruf). */
-  const precheckText = (issue: PrecheckIssue, hints: readonly GermanHintId[]): string => {
+  const precheckText = (issue: PrecheckIssue, hints: readonly GermanHintId[]): string => {  // hints = die sperrenden Muster
     const target = card.kind === 'chunk' ? typedForm(card.word) : card.word;
     const what =
       issue === 'target'
@@ -394,13 +397,16 @@ export function ExerciseView({
       if (pre.issue) {
         if (precheckTries.current === 0) {
           precheckTries.current = 1;
-          setPrecheckMsg(precheckText(pre.issue, pre.hints));
+          setPrecheckMsg(precheckText(pre.issue, pre.block));
           api.focusNow();
           return;
         }
-        if (HARD_ISSUES.has(pre.issue)) {
-          // Zweiter Versuch ohne Besserung: lokal „Noch nicht“, kein Claude-Aufruf, kein Fehlersatz.
-          finish({ verdict: 'wrong' }, fullSentence(), null, { sentence: { out: null, self: selfCheckProduce(fullSentence(), card, shownOf()), issue: pre.issue, hints: pre.hints } }, 1);
+        // Zweiter Versuch ohne Besserung. „Wort fehlt“ entscheidet mit KI Claude (getrennte Wendungen wie „follow it up“ erkennt die lokale Suche nicht
+        // sicher); sonst, und bei „abgeschrieben“, lokal „Noch nicht“ ohne Claude-Aufruf und ohne Fehlersatz. Weder das eine noch das andere ist ein
+        // sicheres Abrufversagen: höchstens „Schwer“ (Lernwissenschaft H3). „Zu kurz“ bleibt „Nochmal“.
+        if (HARD_ISSUES.has(pre.issue) && !(pre.issue === 'target' && ai)) {
+          const forced: Grade = pre.issue === 'short' ? 1 : 2;
+          finish({ verdict: 'wrong' }, fullSentence(), null, { sentence: { out: null, self: selfCheckProduce(fullSentence(), card, shownOf()), issue: pre.issue, hints: pre.hints } }, forced);
           return;
         }
       }
@@ -412,7 +418,8 @@ export function ExerciseView({
     const out = await askSentence.run(sentenceVars(hints));
     // Fehler (not_granted, rate_limited, …): lokales Urteil, ohne automatischen Neuversuch (A6.3); „Erneut versuchen“ bleibt beim Nutzer.
     if (!out) return;
-    const grade = produceGrade(out.verdict, out.usesTarget);
+    // Hat die Vorprüfung schon einen Hinweis gegeben (Wort, Form, typischer Fehler), zählt das als Hilfe: höchstens „Schwer“ (Lernwissenschaft N3).
+    const grade = (precheckTries.current > 0 ? Math.min(produceGrade(out.verdict, out.usesTarget), 2) : produceGrade(out.verdict, out.usesTarget)) as Grade;
     const verdict: CheckResult['verdict'] = out.verdict === 'correct' ? 'correct' : out.verdict === 'minor' ? 'near' : 'wrong';
     finish({ verdict }, fullSentence(), null, { sentence: { out, self: null, hints } }, grade, true);
     // Ein falscher oder zu schwacher Satz wird zum Fehlersatz (Box 1), nur mit echter Korrektur.
@@ -472,7 +479,7 @@ export function ExerciseView({
 
   // ------------------------------------------------------------------ Urteil und Erklär-Karte
 
-  const rv: ResultVerdict = !fb ? 'ok' : fb.dontKnow ? 'dontKnow' : fb.override ? 'ok' : fb.sentence && !fb.sentence.out && e.ex === 'complete' && fb.result.verdict !== 'wrong' ? 'unchecked' : fb.result.verdict === 'correct' ? 'ok' : fb.result.verdict === 'near' ? 'near' : 'wrong';
+  const rv: ResultVerdict = !fb ? 'ok' : fb.dontKnow ? 'dontKnow' : fb.override ? 'ok' : fb.sentence && !fb.sentence.out && fb.result.verdict !== 'wrong' ? 'unchecked' : fb.result.verdict === 'correct' ? 'ok' : fb.result.verdict === 'near' ? 'near' : 'wrong';
   const learning = state0 === 'new' || state0 === 'learning';
   const depth = explainDepth({ verdict: rv, stage: card.stage, learning });
 
@@ -845,6 +852,8 @@ export function ExerciseView({
       explanation: whyUnderRemoved(model, isChoice && fb.result.verdict === 'wrong' && chosen !== null),
       depth,
       menu,
+      // Lernwissenschaft N4: „Noch natürlicher“ und „Warum besser“ stehen bei richtigem Satz offen, sonst eingeklappt (ein Antippen unter „Mehr“) – am Handy zu lang.
+      ...(fb.sentence?.out?.verdict === 'correct' ? { unfold: ['note'] as const } : {}),
       // P52: der Kontrast-Schritt ändert die Planung nicht, also keine „Wieder in …“-Zeile.
       nextIn: e.ex === 'contrast' ? null : t('trAgainIn', { when: when(fb.dueInMs) }),
       // Design-Lead: Wort, Vorlesen, Lautschrift und „Zum Wort“ stehen in der Ergebnis-Karte, genau einmal, direkt unter dem Urteil.
@@ -990,9 +999,11 @@ function BriefMarks({ brief, lang }: { brief: NonNullable<Exercise['brief']>; la
         <span className={chip} data-testid="brief-form">
           {t('brFormLbl')}: {t(`brForm_${brief.form}` as MessageKey)}
         </span>
-        <span className={chip} data-testid="brief-tone">
-          {t('brToneLbl')}: {t(`brTone_${brief.tone}` as MessageKey)}
-        </span>
+        {brief.tone !== '-' && (
+          <span className={chip} data-testid="brief-tone">
+            {t('brToneLbl')}: {t(`brTone_${brief.tone}` as MessageKey)}
+          </span>
+        )}
         {brief.tense !== '-' && (
           <span className={chip} data-testid="brief-tense">
             {t('brTenseLbl')}: {t(`brTense_${brief.tense}` as MessageKey)}

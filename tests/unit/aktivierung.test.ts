@@ -73,12 +73,12 @@ describe('Auswahl der Vorgaben (rein, deterministisch)', () => {
     }
   });
 
-  it('Wenn-Satz trägt keine Zeitform, alle anderen Formen genau eine', () => {
+  it('Wenn-Satz trägt keine Zeitform, alle anderen Formen genau eine (ab der zweiten Aktivierung)', () => {
     const used: string[] = [];
     const seen = new Set<string>();
     for (let i = 0; i < 60; i++) {
       const b = pickBrief(`k${i % 5}`, `d${i}`, used);
-      expect((b.form === 'i') === (b.tense === '-'), b.code).toBe(true);
+      expect(b.form === 'i' ? b.tense === '-' : used.length < 1 === (b.tense === '-'), b.code).toBe(true);
       seen.add(b.form);
       used.push(b.code);
     }
@@ -128,7 +128,9 @@ describe('Auswahl der Vorgaben (rein, deterministisch)', () => {
     expect(parseBrief('j01.q.c.pf')).not.toBeNull();
     expect(parseBrief('zz9.q.c.pf')).toBeNull();
     expect(parseBrief('j01.i.c.pf')).toBeNull();
-    expect(parseBrief('j01.s.c.-')).toBeNull();
+    expect(parseBrief('j01.s.c.-')).not.toBeNull(); // gestaffelt: erste Aktivierung ohne Zeitform
+    expect(parseBrief('j01.s.-.-')).not.toBeNull();
+    expect(parseBrief('j01.s.x.pr')).toBeNull();
     expect(parseBrief('x'.repeat(50))).toBeNull();
     expect(briefCodesOf({ hist: [{ t: 2, a: 'j02.s.n.pr' }, { t: 1, a: 'kaputt' }, { t: 3, g: 3 }] })).toEqual(['j02.s.n.pr']);
     expect(() => pickBrief('k', 'd', ['kaputt', 'j01.s.n.pr'])).not.toThrow();
@@ -273,7 +275,7 @@ describe('Vorprüfung ohne KI', () => {
 
 describe('produce-check@2', () => {
   const vars: ProduceCheckV2Vars = { target: 'leverage', meaning: 'nutzen', sentence: 'We leverage our network.', uiLang: 'de', kind: 'word' };
-  const ok = { verdict: 'minor', usesTarget: true, fixed: 'We leverage our network well.', why: 'Das Wort passt; es fehlt nur ein Wort am Ende.', better: 'We make the most of our network.', whyBetter: 'Die Fassung klingt im Beruf natürlicher.', errType: 'word_order' };
+  const ok = { verdict: 'minor', usesTarget: true, fixed: 'We leverage our network well.', why: 'Das Wort passt; es fehlt nur ein Wort am Ende.', better: 'We leverage our network more effectively.', whyBetter: 'Die Fassung klingt im Beruf natürlicher.', errType: 'word_order' };
 
   it('Kopfzeile @2, quick, Vorgaben und Hinweise stehen im Prompt', () => {
     const b = pickBrief('lev', 'd', []);

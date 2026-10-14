@@ -11,7 +11,7 @@ import { buildChunkCards, toChunkCard } from '../../domain/srs/chunkCards';
 import { buildExercise, exTextKey, type SceneLookup } from '../../domain/srs/exercise';
 import { guardedExercise, reportViolations } from '../../domain/srs/guard';
 import { sentKey } from '../../domain/srs/variety';
-import { chooseExercise, makeEnv, NO_ENV, supports, type ExerciseEnv } from '../../domain/srs/modes';
+import { availableExercises, chooseExercise, makeEnv, NO_ENV, supports, type ExerciseEnv } from '../../domain/srs/modes';
 import { inputProfile } from '../../platform/input';
 import { KNOWN_DAYS, knownOp } from '../../domain/srs/vocabList';
 import { catchUpOn, overdueCount } from '../../domain/unit/backlog';
@@ -99,6 +99,10 @@ const AGAIN_WINDOW_MS = 20 * 60_000;
 const MAX_SHOWN = 3;
 /** Eigene Sätze je Runde (teuerste Übung). */
 const PRODUCE_MAX = 2;
+/** Eigene Sätze je Tag über alle Runden (Lernwissenschaft M2); bei vielen überfälligen Karten weniger: ab 40 einer, ab 80 keiner (die 25–30 Minuten gehören dann dem Wiederholen). */
+const PRODUCE_DAY_MAX = 4;
+const PRODUCE_BACKLOG_ONE = 40;
+const PRODUCE_BACKLOG_NONE = 80;
 /** Wartung reifer Karten: ab dieser Stabilität (Tage) und nur jede so vielte Wiederholung in voller Form. */
 const MAINTENANCE_S = 21;
 const MAINTENANCE_EVERY = 3;
@@ -224,11 +228,32 @@ function exerciseFor(s: ExCtx, item: QueueItem): Exercise | null {
   if (lighter) return build(s, card, lighter);
   const ex = chooseExercise(card, s.lang, s.pool.length - 1, s.recentEx, s.env);
   if (!ex) return null;
-  if (ex === 'produce' && s.produced >= PRODUCE_MAX) {
+  if (ex === 'produce' && !produceAllowed(s)) {
+    // Deckel erreicht: eine freie Art, sonst irgendeine andere Art der Stufe; „Eigener Satz“ nur, wenn es gar nichts anderes gibt (kein Leck, Lernwissenschaft M1).
     const other = chooseExercise({ ...card, stage: 4 }, s.lang, s.pool.length - 1, s.recentEx, s.env);
-    if (other && FREE_TYPED.has(other)) return build(s, card, other);
+    if (other && other !== 'produce' && FREE_TYPED.has(other)) return build(s, card, other);
+    const alt = availableExercises({ ...card, stage: 4 }, s.lang, s.pool.length - 1, s.env).find((x) => x !== 'produce');
+    if (alt) return build(s, card, alt);
   }
   return build(s, card, ex);
+}
+
+/** Eigene Sätze, die heute schon beantwortet wurden (alle Runden): `hist` der Karten, eingefroren beim Rundenstart. */
+export function producedToday(pool: readonly TrainCard[], day: string): number {
+  let n = 0;
+  for (const c of pool) {
+    const hist = Array.isArray(c.doc.hist) ? (c.doc.hist as unknown[]) : [];
+    for (const h of hist) if (h && typeof h === 'object' && (h as Doc).x === 'produce' && typeof (h as Doc).t === 'number' && dayKey((h as Doc).t as number) === day) n++;
+  }
+  return n;
+}
+
+/** Darf jetzt noch ein eigener Satz kommen? Deckel je Runde, je Tag und nach Rückstand. */
+export function produceAllowed(s: Pick<ExCtx, 'pool' | 'day' | 'produced'>): boolean {
+  if (s.produced >= PRODUCE_MAX) return false;
+  const behind = overdueCount(s.pool, useClock.getState().now);
+  const dayMax = behind >= PRODUCE_BACKLOG_NONE ? 0 : behind >= PRODUCE_BACKLOG_ONE ? 1 : PRODUCE_DAY_MAX;
+  return producedToday(s.pool, s.day) + s.produced < dayMax;
 }
 
 /** Frei getippte Arten (Stufe 4) – ohne Auswahl und ohne Stütze. */

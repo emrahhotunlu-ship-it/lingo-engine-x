@@ -368,7 +368,7 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
     }
     case 'produce':
       // Wörter aktivieren: Lage, Satzform, Ton und Zeitform wechseln von Mal zu Mal (deterministisch aus Karte, Seed und Verlauf).
-      return { ...base, accepted: [], brief: pickBrief(card.key, seed, briefCodesOf(card.doc)) };
+      return { ...base, accepted: [], brief: pickBrief(card.key, seed, briefCodesOf(card.doc), card) };
     case 'situation': {
       const typed = typedForm(card.word);
       return { ...base, accepted: [...new Set([typed, card.word])].filter(Boolean), situation: situationTask(card, lang, opts.sceneOf) };

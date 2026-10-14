@@ -424,3 +424,7 @@ Lehre: Für Aufgabenfragen mit Gestaltungsspielraum zuerst Emrah mit Vorschau fr
 - Variable Aufgabenstellung: Lage (14 Beruf, 5 Alltag, `src/content/activation/scenes.ts`), Satzform, Ton, Zeitform per Hash (`domain/srs/brief.ts`), sichtbar als Marken; Code im Verlauf `hist[].a`.
 - Vorprüfung ohne KI (`produce.ts`): Wort fehlt, zu kurz (ab 4 Wörtern), abgeschrieben (Jaccard ≥ 0,6 gegen alle gezeigten Sätze), Satzform, typische Deutsch-Fehler; einmal nachbessern. `produce-check@2` (drei Schichten, `errType`).
 - Offen (Stufe 2): Fahrplan A1–A4, Zähler `ac`, Speicher `act/…`, eigene frühere Sätze für die Abschreibprüfung.
+
+## 14.10.2026 – Wörter aktivieren, Stufe 1: Prüfbefunde abgearbeitet (Zweig `claude/umbau-aktiv1b`)
+- Englischlehrer A1–A9, Lagen-/Textänderungen, Hinweistexte, Prompt D1–D9 (ohne neue Fehlerklasse `word_choice`, bleibt bis Stufe 2), 11 neue Lagen (j15–j21, d06–d09); Lernwissenschaft H1–H3, M1–M6, N1–N4; Datenwächter: `m:'known'` zählt nicht als Abruftag.
+- Offen: `word_choice` als Fehlerklasse (Vertragsänderung, Stufe 2).
