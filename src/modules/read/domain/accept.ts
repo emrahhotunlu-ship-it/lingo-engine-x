@@ -146,7 +146,7 @@ const BRITISH = new RegExp(
     '\\banalys(?:e|ed|ing)\\b',
     '\\b(?:programme|catalogue|cheque|tyre|kerb|aluminium|artefact|sceptic|cosy|mould|plough|draught|pyjamas|aeroplane|grey|maths|whilst|amongst|learnt|spelt|dreamt|judgement|acknowledgement|ageing|storey|fortnight|jewellery)s?\\b',
     '\\b(?:fulfil|enrol|instalment|skilful|wilful|fulfilment|enrolment)s?\\b',
-    '\\b(?:travell|cancell|modell|labell|signall|channell|levell|fuell|tunnell|marvell)(?:ed|ing|er|ers|ous)\\b',
+    '\\b(?:travell|modell|labell|signall|channell|levell|fuell|tunnell|marvell)(?:ed|ing|er|ers|ous)\\b',
   ].join('|'),
   'i',
 );

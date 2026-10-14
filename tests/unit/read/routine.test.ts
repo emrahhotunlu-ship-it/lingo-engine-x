@@ -464,3 +464,11 @@ describe('Prüftore: keine falschen Alarme bei Produktnamen und Datumsangaben', 
     expect(hasInnerSentenceEnd('Das ist ein Satz. Das ist noch einer.')).toBe(true);
   });
 });
+
+describe('Rechtschreibung: „cancelled“ ist auch im US-Englisch üblich', () => {
+  it('„cancelled“ löst keine britische Schreibweise aus, „travelled“ weiter', async () => {
+    const { britishSpelling } = await import('../../../src/modules/read/domain/accept');
+    expect(britishSpelling('The meeting was cancelled.')).toBeNull();
+    expect(britishSpelling('We travelled to Berlin.')).not.toBeNull();
+  });
+});
