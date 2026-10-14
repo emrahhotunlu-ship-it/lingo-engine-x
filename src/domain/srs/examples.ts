@@ -8,8 +8,13 @@ import type { TrainCard } from './types';
 // Beispielsätze nach dem Prüfen (CLAUDE.md A7): Ursprungssatz, Sätze der Kollokationen und
 // gespeicherte KI-Beispiele (`xEx`, nur ergänzt). Doppelte und der schon sichtbare Satz fallen weg.
 
-export type ExampleSource = 'origin' | 'col' | 'ai';
-export type Example = { en: string; src: ExampleSource };
+export type ExampleSource = 'origin' | 'own' | 'col' | 'ai';
+/** `day`: nur bei `own` ("Dein Satz vom …"), der Lerntag des geprüften eigenen Satzes. */
+export type Example = { en: string; src: ExampleSource; day?: string };
+/** Ein früher von Claude geprüfter, richtiger eigener Satz der Karte (aus `act/…`). */
+export type OwnExample = { en: string; day: string };
+/** Eigene Sätze werden erst ab dieser Stufe der Karte als Beispiel gezeigt (Wörter aktivieren, Stufe 2). */
+export const OWN_EXAMPLE_MIN_STAGE = 4;
 export type StoredExample = { en: string; t: number };
 
 export const EXAMPLES_MAX = 3;
@@ -46,20 +51,23 @@ export function storedExamples(doc: Readonly<Record<string, unknown>>): StoredEx
  * Bis zu drei Beispielsätze der Karte in der Reihenfolge Ursprungssatz → Kollokationen → KI.
  * `shown` (der Satz der Übung) wird nicht wiederholt – nichts doppelt auf einem Bildschirm.
  */
-export function cardExamples(card: Pick<TrainCard, 'context' | 'doc'>, shown: string | null, extra: readonly StoredExample[] = []): Example[] {
+export function cardExamples(card: Pick<TrainCard, 'context' | 'doc'>, shown: string | null, extra: readonly StoredExample[] = [], own: readonly OwnExample[] = []): Example[] {
   const seen = new Set<string>();
   if (shown) seen.add(key(shown));
   const out: Example[] = [];
-  const add = (raw: string, src: ExampleSource) => {
+  const add = (raw: string, src: ExampleSource, day?: string) => {
     // Übungssätze mit Lücken-Platzhalter („Tom ? have …“) sind nie ein Beispiel (Rückmeldung 2).
     if (!raw || hasGapPlaceholder(raw)) return;
     const en = fixDashes(raw);
     const k = key(en);
     if (k.split(' ').length < 3 || seen.has(k)) return;
     seen.add(k);
-    out.push({ en, src });
+    out.push({ en, src, ...(day ? { day } : {}) });
   };
   add(card.context?.sentence ?? clean(card.doc.ex), 'origin');
+  // „Dein Satz vom …“: der jüngste geprüfte eigene Satz (nur ab Stufe 4, nie falsch oder ungeprüft – das filtert der Aufrufer, `reusableSentencesOf`).
+  const mine = own[0];
+  if (mine) add(mine.en, 'own', mine.day);
   if (Array.isArray(card.doc.col)) {
     for (const c of card.doc.col) if (c && typeof c === 'object') add(clean((c as Record<string, unknown>).ex), 'col');
   }

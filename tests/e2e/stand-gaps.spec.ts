@@ -240,7 +240,8 @@ test.describe('Kap. 4.1: Lücke und Prüfen-Knopf bleiben über der iPhone-Tasta
         else orig(a);
       }) as typeof window.scrollBy;
     });
-    const forced = { 'vocab/overcome': { state: 'learning', stage: 4, S: 1, D: 5, due: 1_700_000_000_000, last: 1_699_900_000_000, reps: 3, lapses: 0, xs: { cloze: { c: 0, w: 6 }, type: { c: 6, w: 0 }, colloc: { c: 6, w: 0 } } } };
+    // `na: 9`: Fahrplan der Aktivierung (Stufe 2) durch, sonst ersetzte „Eigener Satz“ (A1) die Lücke.
+    const forced = { 'vocab/overcome': { na: 9, state: 'learning', stage: 4, S: 1, D: 5, due: 1_700_000_000_000, last: 1_699_900_000_000, reps: 3, lapses: 0, xs: { cloze: { c: 0, w: 6 }, type: { c: 6, w: 0 }, colloc: { c: 6, w: 0 } } } };
     await boot(page, { migrated: true, fake: { patch: { 'app/profile': planPatch(1), ...forced } } });
     await screen(page, 'today');
     await page.getByTestId('start').click();

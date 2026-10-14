@@ -5,6 +5,8 @@ import { FEST_GOAL, buildTrainCards, checkMean, expectedKnown, festCount, festFo
 import { useT } from '../../i18n';
 import { Card } from '../../ui/Card';
 import { Disclosure } from '../../ui/Disclosure';
+import { activationRates, ratePct, readyCount } from '../../domain/activation/ready';
+import { useActs } from '../vocab/actStore';
 import { PathTab } from './PathTab';
 import { StatsTab } from './StatsTab';
 
@@ -93,6 +95,32 @@ function QualityCard({ cards, now }: { cards: ReturnType<typeof useVocabMetrics>
   );
 }
 
+/**
+ * „Einsatzbereit“ (Wörter aktivieren, Stufe 2): die vierte Zahl, eingeklappt unter den Messwerten. Aus `act/…` berechnet, nie gespeichert. Dazu der Begleitwert:
+ * Trefferquote mit gezeigtem Wort gegen ohne (A4) – nur mit genug geprüften Aktivierungen.
+ */
+function ReadyMeasure({ cards }: { cards: ReturnType<typeof useVocabMetrics>['cards'] }) {
+  const { t, num } = useT();
+  const today = useClock((s) => s.today);
+  const entries = useActs((s) => s.entries);
+  const n = useMemo(() => readyCount(cards, entries, today), [cards, entries, today]);
+  const rates = useMemo(() => activationRates(entries), [entries]);
+  const a = ratePct(rates.shown);
+  const b = ratePct(rates.hidden);
+  return (
+    <div className="flex flex-col gap-1" data-testid="ready-measure" data-n={n}>
+      <h3 className="text-sm font-semibold">{t('readyLabel')}</h3>
+      <p className="lx-tnum text-sm text-muted" data-testid="ready-count">
+        {t('readyCount', { n: num(n) })}
+      </p>
+      <p className="lx-tnum text-xs text-subtle" data-testid="ready-rate">
+        {a === null && b === null ? t('readyRateNone') : t('readyRate', { a: a === null ? '–' : `${num(a)} %`, b: b === null ? '–' : `${num(b)} %` })}
+      </p>
+      <p className="text-xs text-subtle">{t('readyHelp')}</p>
+    </div>
+  );
+}
+
 /** Wochen-Check (erst ab 3 Checks) und Wortschatztest (nur mit belastbarer Messung), eingeklappt unter den Messwerten. */
 function TestsMeasures() {
   const { t, num, date } = useT();
@@ -143,6 +171,7 @@ export function WordsSegment() {
       <QualityCard cards={cards} now={now} />
       <Disclosure label={t('nbProfilMeasures')} testId="measures-words">
         <div className="flex flex-col gap-6">
+          <ReadyMeasure cards={cards} />
           <TestsMeasures />
           <StatsTab />
           <PathTab part="cando" />

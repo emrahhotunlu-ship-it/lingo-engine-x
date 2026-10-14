@@ -31,6 +31,11 @@ export type GradeKey =
   | 'tiles'
   | 'speed'
   | 'produce'
+  | 'act_scene'
+  | 'act_rewrite'
+  | 'act_impulse'
+  | 'act_combo'
+  | 'act_mail'
   | 'flip'
   | 'mc'
   | 'gap'
@@ -131,6 +136,12 @@ export const GRADE_TABLE: Readonly<Record<GradeKey, Row>> = {
   c1_para: { form: 'transform', good: 35_000, easy: 15_000, measure: 'submit' },
   speed: { form: 'timed', good: 10_000, easy: null, measure: 'submit' },
   produce: { form: 'free', good: 0, easy: null, measure: 'submit' },
+  // Wörter aktivieren, Stufe 2: Aktivierungs-Aufgaben A2–A5 wie „Eigener Satz“ (die Note kommt aus Claudes Urteil, `activateGrade`, nie aus der Zeit).
+  act_scene: { form: 'free', good: 0, easy: null, measure: 'submit' },
+  act_rewrite: { form: 'free', good: 0, easy: null, measure: 'submit' },
+  act_impulse: { form: 'free', good: 0, easy: null, measure: 'submit' },
+  act_combo: { form: 'free', good: 0, easy: null, measure: 'submit' },
+  act_mail: { form: 'free', good: 0, easy: null, measure: 'submit' },
   flip: { form: 'free', good: 0, easy: null, measure: 'submit' },
 };
 

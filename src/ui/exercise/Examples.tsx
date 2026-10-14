@@ -14,7 +14,14 @@ function Item({ ex, area }: { ex: ExplainExample; area: WordTapArea }) {
   return (
     <li className="flex flex-col gap-0.5" data-testid="example">
       <div className="flex items-start justify-between gap-2">
-        <EnglishText as="span" text={ex.en} area={area} className="min-w-0" />
+        <span className="flex min-w-0 flex-col">
+          <EnglishText as="span" text={ex.en} area={area} className="min-w-0" />
+          {ex.from && (
+            <span className="lx-t-meta text-muted" data-testid="example-from">
+              {ex.from}
+            </span>
+          )}
+        </span>
         {ex.de && (
           <button
             type="button"

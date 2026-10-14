@@ -115,7 +115,8 @@ test.describe('Desktop', () => {
   async function collocRound(page: Page, ai: boolean) {
     const { patch } = ankiPatch(0);
     const own = { p: 'handle a complaint', de: 'eine Beschwerde bearbeiten', gap: 'complaint', opts: ['request', 'proposal', 'invoice'], ex: 'We [handle a complaint] politely.', ...(ai ? { ai: 1 } : {}) };
-    const handle = { ...(SEED['vocab/handle'] ?? {}), col: [own], state: 'learning', stage: 4, S: 1, D: 5, due: 1_700_000_000_000, last: 1_699_900_000_000, reps: 3, lapses: 0, xs: { colloc: { c: 0, w: 6 }, type: { c: 6, w: 0 }, cloze: { c: 6, w: 0 } } };
+    // `na: 9`: Fahrplan der Aktivierung (Stufe 2) durch, sonst ersetzte „Eigener Satz“ (A1) die Wortpartner-Übung.
+    const handle = { ...(SEED['vocab/handle'] ?? {}), col: [own], na: 9, state: 'learning', stage: 4, S: 1, D: 5, due: 1_700_000_000_000, last: 1_699_900_000_000, reps: 3, lapses: 0, xs: { colloc: { c: 0, w: 6 }, type: { c: 6, w: 0 }, cloze: { c: 6, w: 0 } } };
     const booted = await boot(page, { migrated: true, fake: { patch: { ...patch, ...TYPE_MODE, 'app/profile': planPatch(1), 'vocab/handle': handle } } });
     await screen(page, 'today');
     await page.getByTestId('start').click();

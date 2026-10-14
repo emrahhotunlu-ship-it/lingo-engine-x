@@ -10,6 +10,7 @@ import { companionEn } from './parts/companion.en';
 import { inputEn } from './parts/input.en';
 import { progressEn } from './parts/progress.en';
 import { trainerEn } from './parts/trainer.en';
+import { actEn } from './parts/act.en';
 import { standEn } from './parts/stand.en';
 import { engineEn } from './parts/engine.en';
 import { hintEn } from './parts/hint.en';
@@ -54,6 +55,8 @@ export const en: Record<MessageKey, string> = {
   // Phase 6 – Urteil, Fortschritt, Wortschatztest, Einstellungen
   ...progressEn,
   ...trainerEn,
+  // Wörter aktivieren, Stufe 2: Aufgaben A2–A5, Marken, Vorprüfung, Messung
+  ...actEn,
   // Gaps from the review: weekly check, week strip, color themes, work context, what's new
   ...standEn,
   // Kurs-Erweiterung, Wischgesten, Vibration

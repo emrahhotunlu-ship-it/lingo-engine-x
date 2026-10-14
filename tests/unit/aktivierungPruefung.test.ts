@@ -5,7 +5,7 @@ import { toTrainCard } from '../../src/domain/srs/cards';
 import { checkExercise } from '../../src/domain/srs/guard';
 import { BLOCKING_HINTS, closestShown, germanHints, precheckProduce, selfCheckProduce, targetSkip, usesTarget } from '../../src/domain/srs/produce';
 import type { TrainCard } from '../../src/domain/srs/types';
-import { producedToday } from '../../src/features/vocab/session';
+import { activationsOn } from '../../src/domain/srs/actBase';
 import { BETTER_MAX_WORDS, briefVarsOf, produceCheckV2, type ProduceCheckV2Vars } from '../../src/prompts/produceCheckV2';
 import { de } from '../../src/i18n/de';
 import { en } from '../../src/i18n/en';
@@ -259,8 +259,9 @@ describe('Tagesdeckel für eigene Sätze (Lernwissenschaft M2)', () => {
       mk(2, [{ t: NOW - 1000, g: 2, x: 'produce' }, { t: NOW, g: 3, x: 'cloze' }]),
       mk(3, []),
     ];
-    expect(producedToday(pool, day)).toBe(2);
-    expect(producedToday([], day)).toBe(0);
+    // EINE Zählung für die Tagesgrenze (Stufe 2): `activationsOn` zählt „Eigener Satz“ und A2–A5 gemeinsam.
+    expect(activationsOn(pool.map((c) => c.doc), day)).toBe(2);
+    expect(activationsOn([], day)).toBe(0);
   });
 });
 

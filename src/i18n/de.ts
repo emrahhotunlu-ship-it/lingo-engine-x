@@ -12,6 +12,7 @@ import { companionDe } from './parts/companion.de';
 import { inputDe } from './parts/input.de';
 import { progressDe } from './parts/progress.de';
 import { trainerDe } from './parts/trainer.de';
+import { actDe } from './parts/act.de';
 import { standDe } from './parts/stand.de';
 import { engineDe } from './parts/engine.de';
 import { hintDe } from './parts/hint.de';
@@ -55,6 +56,8 @@ export const de = {
   ...progressDe,
   // Trainer: neue Abfragearten und Wendungen
   ...trainerDe,
+  // Wörter aktivieren, Stufe 2: Aufgaben A2–A5, Marken, Vorprüfung, Messung
+  ...actDe,
   // Lücken aus dem Abgleich: Wochen-Check, Wochenstreifen, Farbthemen, Kontext, Was ist neu
   ...standDe,
   // Kurs-Erweiterung, Wischgesten, Vibration

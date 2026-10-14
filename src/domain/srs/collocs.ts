@@ -108,3 +108,20 @@ export function collocPatch(cur: Doc | undefined, add: readonly StoredColloc[], 
   if (add.length) return { col: add.slice(0, COL_MAX).map((c) => ({ p: c.p, de: c.de, gap: c.gap, opts: [...c.opts], ex: c.ex, ai: 1 as const })) };
   return colTriedRecently(cur, nowMs) ? null : { colAt: Math.floor(nowMs) };
 }
+
+// ------------------------------------------------------------------ Inhaltscharge `col` (Wortpartner für vorhandene Karten, Stufe 2)
+
+/** Wortpartner einer geprüften Charge (gegengelesen vom Englischlehrer): wie `StoredColloc`, aber OHNE die Marke `ai` („von Claude, kann Fehler enthalten“). */
+export type ChargeColloc = Omit<StoredColloc, 'ai'>;
+
+/**
+ * Schreibvorgang für eine Karte aus einer Inhaltscharge. Dieselbe strenge Prüfung wie bei Claudes Wortpartnern (`acceptCollocations`), aber nur ERGÄNZEND:
+ * Die Karte muss existieren, sichtbar sein und noch keine Wortpartner haben (auch Unerwartetes in `col` bleibt unberührt). `null` = nichts zu schreiben
+ * (oder kein Eintrag besteht die Prüfung). Die Charge wird gegengelesen, deshalb fehlt die Marke `ai`. Nie löschen, nie ersetzen.
+ */
+export function colChargeOp(cur: Doc | undefined, word: string, raw: unknown): { update: { col: ChargeColloc[] } } | null {
+  if (!cur || cur.hidden === true || hasCol(cur)) return null;
+  const ok = acceptCollocations(word, raw, COL_MAX);
+  if (!ok.length) return null;
+  return { update: { col: ok.map(({ p, de, gap, opts, ex }) => ({ p, de, gap, opts: [...opts], ex })) } };
+}

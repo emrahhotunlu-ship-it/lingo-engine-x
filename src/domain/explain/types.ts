@@ -29,7 +29,7 @@ export type ExplainLine =
   | { k: 'contrast'; a: string; b: string; diff: string; /** Nur die Bedeutungen zeigen (Kontrast-Schritt: das Wortpaar steht schon im Kopf). */ meaningOnly?: boolean }
   | { k: 'note'; text: string }; // US-Form, „Auch richtig“, Register
 
-export type ExplainExample = { en: string; de?: string | null; ctx?: 'meeting' | 'mail' | 'talk' | null };
+export type ExplainExample = { en: string; de?: string | null; ctx?: 'meeting' | 'mail' | 'talk' | null; /** „Dein Satz vom 12.10.“: Herkunftszeile bei einem früheren eigenen Satz. */ from?: string | null };
 
 export type ExplanationModel = {
   /** Feste Reihenfolge: pattern → yours → why → mistake → contrast → note. */

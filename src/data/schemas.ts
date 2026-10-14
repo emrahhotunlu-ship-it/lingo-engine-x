@@ -309,6 +309,8 @@ export const vocabSchema = z.looseObject({
   pa: num,
   ac: num,
   co: num,
+  /** Neu (Wörter aktivieren, Stufe 2): geschaffte Aktivierungen der Karte (Fahrplan A1–A5). Nicht zu verwechseln mit `ac` (Fähigkeit „Anwenden“). */
+  na: num,
   col: z.array(z.unknown()).nullish(),
   /** Neu: Herkunft einer per Wort-Antippen gespeicherten Karte (Plan §3.4). */
   origin: z.looseObject({ v: num, kind: str, ref: str, title: str, t: num }).nullish(),
@@ -930,6 +932,19 @@ export const outSchema = z.looseObject({
       }),
     )
     .nullish(),
+});
+
+/**
+ * Sammelakte der Aktivierungen je Monat (`act/<JJJJ-MM>`, Fortsetzung `act/<JJJJ-MM>-b`, `-c` …; Wörter aktivieren, Stufe 2, docs/umbau/aktivierung.md):
+ * `{v: 1, month, nx?, e: {<Kennung>: Eintrag}}`. Die Einträge stehen als Objekt-Map (nie als Liste: `update` ersetzt Listen ganz), jede Kennung genau einmal
+ * (deterministisch aus Zeitstempel und Karte). `nx: 1` = voll (200 KiB), weiter in der Fortsetzung. Einträge werden einzeln geprüft (`actEntrySchema`):
+ * ein ungültiger wird gemeldet und ausgelassen, nie das ganze Dokument verworfen.
+ */
+export const actSchema = z.looseObject({
+  v: num,
+  month: str,
+  nx: num,
+  e: z.record(z.string(), z.unknown()).nullish(),
 });
 
 /**

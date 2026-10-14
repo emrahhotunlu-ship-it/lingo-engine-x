@@ -12,7 +12,8 @@ type Doc = Record<string, unknown>;
 const solve = grammarKey();
 
 /** overcome: Stufe 4, schwächste Art „cloze" (freie Lücke ohne Platzhalter). */
-const OVERCOME = { 'vocab/overcome': { state: 'learning', stage: 4, S: 1, D: 5, due: 1_700_000_000_000, last: 1_699_900_000_000, reps: 3, lapses: 0, xs: { cloze: { c: 0, w: 6 }, type: { c: 6, w: 0 }, colloc: { c: 6, w: 0 } } } };
+// `na: 9`: Fahrplan der Aktivierung (Stufe 2) durch, sonst ersetzte „Eigener Satz“ (A1) die Lücke.
+const OVERCOME = { 'vocab/overcome': { na: 9, state: 'learning', stage: 4, S: 1, D: 5, due: 1_700_000_000_000, last: 1_699_900_000_000, reps: 3, lapses: 0, xs: { cloze: { c: 0, w: 6 }, type: { c: 6, w: 0 }, colloc: { c: 6, w: 0 } } } };
 
 const entriesFor = async (page: Page, id: string) => (((await dump(page))[`log/${DAY}`]?.entries as Doc[] | undefined) ?? []).filter((e) => e.id === id);
 

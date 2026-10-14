@@ -22,7 +22,7 @@ import { packExtraOf } from '../../domain/c1pack/packFields';
 import type { ExplainExample, ExplanationModel, ResultVerdict } from '../../domain/explain/types';
 import { unitState } from '../../domain/metrics';
 import { choiceVerdict, exTextKey, gapCue } from '../../domain/srs/exercise';
-import { cardExamples, storedTranslation, wantsEnrichment } from '../../domain/srs/examples';
+import { cardExamples, OWN_EXAMPLE_MIN_STAGE, storedTranslation, wantsEnrichment } from '../../domain/srs/examples';
 import { explainWord, isAltAnswer } from '../../domain/srs/explainWord';
 import { posKey } from '../../domain/srs/explain';
 import { autoGrade, produceGrade } from '../../domain/srs/grade';
@@ -34,6 +34,13 @@ import type { CheckResult, Exercise, ExerciseId, Grade, Option } from '../../dom
 import { inputProfile } from '../../platform/input';
 import { speak, stopSpeech, useSpeech } from '../../platform/speech';
 import { briefVarsOf, produceCheckV2, type ProduceCheckV2Out } from '../../prompts/produceCheckV2';
+import { activateCheck, activateTaskVarsOf, mailTextOf, type ActivateCheckVars, type ActivateTargetOut } from '../../prompts/activateCheck';
+import { ACT_HARD_ISSUES, activateGrade, precheckAct, selfCheckAct, type ActIssue } from '../../domain/srs/actCheck';
+import { HIDES_TARGET } from '../../domain/srs/actBrief';
+import { actMeaning } from '../../domain/srs/actTask';
+import { dayLabel } from '../../domain/activation/actDoc';
+import { ActPanel } from './ActPanel';
+import { ownTextsOf, reusableSentencesOf } from './actStore';
 import { TutorButton } from '../../ui/exercise/TutorButton';
 import { ExerciseShell, SentenceInput, explainDepth, type ShellFeedback, type ShellMenuId, type ShellSecondary } from '../../ui/exercise';
 import { AiRunPanel } from '../../ui/AiRunPanel';
@@ -42,7 +49,7 @@ import { useCompanionSee } from '../companion/seeing';
 import { companionOpenedSince, companionOpenMs } from '../companion/store';
 import { saveRepairs } from '../repair/store';
 import { requestExamples, useExamples } from './examples';
-import { answerDueIn, commitAnswer, prepareNext, useSession, type Answer, type FirstKind } from './session';
+import { answerDueIn, commitAnswer, prepareNext, useSession, type ActRecord, type Answer, type FirstKind } from './session';
 import { nextT } from './persist';
 import { WordExtras } from './WordExtras';
 import { reportWordCtx } from './wordCtx';
@@ -54,6 +61,9 @@ import { AiMark } from '../../ui/AiMark';
 //   Lücke (cloze_hint, cloze, type, colloc, wordfam, situation, dictation) → `KineticGap` in der Lücke
 //   Falle finden (find_trap) → Wort antippen · Satz vervollständigen (complete) und eigener Satz (produce) → `SentenceInput`
 // Keine Selbstbewertung: die Note folgt aus Richtigkeit, Zeit und Hilfe. Die Warum-Zeile nennt den echten Fehlergrund (`explainWord`).
+
+/** Claudes Urteil über einen Satz: `produce-check@2` oder `activate-check@1` (dieselben Felder, bei Letzterem dazu `targets` und `reusable`). */
+type SentenceOut = ProduceCheckV2Out & { targets?: ActivateTargetOut[]; reusable?: boolean };
 
 type Feedback = {
   result: CheckResult;
@@ -75,7 +85,7 @@ type Feedback = {
   /** find_trap: das angetippte Wort. */
   tapped?: [number, number] | null;
   /** complete/produce: Claudes Prüfung bzw. die lokale Prüfung. */
-  sentence?: { out: ProduceCheckV2Out | null; self: SelfCheck | null; /** Vorprüfung ohne Claude: Mangel, der den Satz als „Noch nicht“ beendet. */ issue?: PrecheckIssue; hints?: GermanHintId[] };
+  sentence?: { out: SentenceOut | null; self: SelfCheck | null; /** Vorprüfung ohne Claude: Mangel, der den Satz als „Noch nicht“ beendet. */ issue?: PrecheckIssue | ActIssue; hints?: GermanHintId[] };
 };
 
 const PURPOSE: Record<number, MessageKey> = { 1: 'purpose1', 2: 'purpose2', 3: 'purpose3', 4: 'purpose4', 5: 'purpose5' };
@@ -92,7 +102,7 @@ const LISTEN: ReadonlySet<ExerciseId> = new Set(['listen_mc', 'dictation']);
 /** „Erst ein Hinweis, dann die Lösung“: getippte Arten mit zweitem Versuch. Nicht Diktat, nicht Auswahl, nie im Wochen-Check (`noHelp`). */
 const RETRY_EX: ReadonlySet<ExerciseId> = new Set(['cloze_hint', 'cloze', 'type', 'situation', 'colloc', 'wordfam']);
 /** Arten mit einer Satzantwort (Claude prüft, lokal nur eine grobe Prüfung). */
-const SENTENCE_EX: ReadonlySet<ExerciseId> = new Set(['complete', 'produce']);
+const SENTENCE_EX: ReadonlySet<ExerciseId> = new Set(['complete', 'produce', 'act_scene', 'act_rewrite', 'act_impulse', 'act_combo', 'act_mail']);
 // Feste leere Referenz statt `?? []` im Selektor (sonst rendert die Karte endlos neu, React-Fehler #185).
 const NO_EXAMPLES: readonly { en: string; t: number }[] = [];
 /** „Welches Wort passt?“ (P52): das richtige (andere) Wort mit Kurzbedeutung aus der richtigen Option. */
@@ -152,7 +162,10 @@ export function ExerciseView({
   const [spot, setSpot] = useState<[number, number] | null>(null);
   const [copyOpen, setCopyOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
-  const askSentence = useAsk(produceCheckV2);
+  const askProduce = useAsk(produceCheckV2);
+  const askAct = useAsk(activateCheck);
+  // Aktivierungs-Aufgaben A2–A5 prüft `activate-check@1`, „Eigener Satz“ `produce-check@2`.
+  const askSentence = e.act ? askAct : askProduce;
   /** Wie oft die Vorprüfung schon zum Nachbessern geschickt hat (höchstens einmal je Aufgabe). */
   const precheckTries = useRef(0);
   const [precheckMsg, setPrecheckMsg] = useState<string | null>(null);
@@ -361,6 +374,12 @@ export function ExerciseView({
    */
   const checkSentenceLocal = (): void => {
     const text = fullSentence();
+    if (e.act) {
+      // Claude nicht erreichbar: höchstens „Schwer“, ungeprüft (nie „Gut“ ohne Prüfung).
+      const { grade, pre } = selfCheckAct(text, e.act, shownOf(), ownTextsOf(card.key));
+      finish({ verdict: grade >= 2 ? 'near' : 'wrong' }, text, null, { sentence: { out: null, self: null, hints: pre.hints } }, grade);
+      return;
+    }
     const self = selfCheckProduce(text, card, shownOf());
     const completeOk = e.ex === 'complete' ? self.containsTarget && text.trim().split(/\s+/).filter(Boolean).length >= 4 : self.grade >= 2;
     const verdict: CheckResult['verdict'] = e.ex === 'complete' ? (completeOk ? 'near' : 'wrong') : self.grade >= 2 ? 'near' : 'wrong';
@@ -387,8 +406,91 @@ export function ExerciseView({
     return `${what} ${t('ppOnce')}`;
   };
 
+  /** Vorgaben der Aufgabe A2–A5 für den Prompt (englische Beschreibungen, nie Kennungen). */
+  const activateVars = (hints: readonly GermanHintId[] = []): ActivateCheckVars => {
+    const task = e.act!;
+    return {
+      targets: task.targets.map((x) => ({
+        word: x.kind === 'chunk' ? typedForm(x.word) : x.word,
+        meaning: x.meaning ?? '',
+        kind: x.kind === 'chunk' || /\s/.test(x.lemma) ? 'phrase' : 'word',
+        shown: task.showTarget,
+      })),
+      sentence: fullSentence(),
+      uiLang: lang,
+      task: activateTaskVarsOf(task),
+      source: task.source?.text ?? null,
+      mail: mailTextOf(task),
+      prior: ownTextsOf(card.key).slice(-3),
+      hints: hints.slice(0, 2).map((h) => GERMAN_HINT_EN[h]),
+    };
+  };
+
+  /** Text der Vorprüfung bei A2–A5: sagt, was fehlt (bei A4 nie das Wort selbst), und lässt einmal nachbessern. */
+  const actPrecheckText = (pre: ReturnType<typeof precheckAct>): string => {
+    const task = e.act!;
+    const what =
+      pre.issue === 'target'
+        ? HIDES_TARGET.has(task.fmt)
+          ? t('ppAct_targetHidden', { meaning: actMeaning(task.targets[0]!, task.fmt, lang) ?? '' })
+          : t('ppAct_target', { words: pre.missing.join(', ') })
+        : pre.issue === 'short'
+          ? t('ppAct_short')
+          : pre.issue === 'same'
+            ? t('ppAct_same')
+            : pre.issue === 'copied'
+              ? t('ppAct_copied')
+              : pre.issue === 'shape'
+                ? task.fmt === 'ml'
+                  ? t('ppAct_shape_ml')
+                  : t('ppAct_shape', { shape: t(`actShape_${task.shape}` as MessageKey) })
+                : t('ppGerman', { hint: pre.block[0] ? t(`gh_${pre.block[0]}` as MessageKey) : '' });
+    return `${what} ${t('ppOnce')}`;
+  };
+
+  /** A2–A5: Vorprüfung ohne KI, dann `activate-check@1`. Ein Aufruf je Aufgabe, nie automatisch wiederholt (A6.3). */
+  async function checkAct(): Promise<void> {
+    const task = e.act!;
+    const text = fullSentence();
+    const pre = precheckAct(text, task, shownOf(), ownTextsOf(card.key));
+    if (pre.issue) {
+      if (precheckTries.current === 0) {
+        precheckTries.current = 1;
+        setPrecheckMsg(actPrecheckText(pre));
+        api.focusNow();
+        return;
+      }
+      // Zweiter Versuch ohne Besserung: Fehlt ein Zielwort, entscheidet mit KI Claude (getrennte Wendungen erkennt die lokale Suche nicht sicher). Sonst „Noch nicht“
+      // ohne Claude-Aufruf: fehlendes Wort und zu kurz sind „Nochmal“, abgeschrieben oder unverändert höchstens „Schwer“ (kein sicheres Abrufversagen).
+      if (ACT_HARD_ISSUES.has(pre.issue) && !(pre.issue === 'target' && ai)) {
+        const forced: Grade = pre.issue === 'target' || pre.issue === 'short' ? 1 : 2;
+        finish({ verdict: 'wrong' }, text, null, { sentence: { out: null, self: null, issue: pre.issue, hints: pre.hints } }, forced);
+        return;
+      }
+    }
+    if (!ai) {
+      checkSentenceLocal();
+      return;
+    }
+    const out = await askAct.run(activateVars(pre.hints));
+    // Fehler (not_granted, rate_limited, …): lokales Urteil auf Wunsch, ohne automatischen Neuversuch (A6.3); „Erneut versuchen“ bleibt beim Nutzer.
+    if (!out) return;
+    // Hat die Vorprüfung schon einen Hinweis gegeben, zählt das als Hilfe: höchstens „Schwer“ (Lernwissenschaft N3).
+    const grade = activateGrade(out, precheckTries.current > 0);
+    const verdict: CheckResult['verdict'] = out.verdict === 'correct' ? 'correct' : out.verdict === 'minor' ? 'near' : 'wrong';
+    finish({ verdict }, text, null, { sentence: { out, self: null, hints: pre.hints } }, grade, true);
+    // Ein falscher oder zu schwacher Satz wird zum Fehlersatz (Box 1), nur mit echter Korrektur und nur bei einem einzelnen kurzen Satz (nicht bei der Mail).
+    if (task.fmt !== 'ml' && out.verdict !== 'correct' && out.fixed.trim() && out.fixed.length <= 250 && text.length <= 250 && normalize(out.fixed) !== normalize(text)) {
+      void saveRepairs([{ wrong: text, right: out.fixed.trim(), why: out.why, src: 'write' }]);
+    }
+  }
+
   async function checkSentence(): Promise<void> {
     if (fb || !sentenceText.trim() || sentenceBusy) return;
+    if (e.act) {
+      await checkAct();
+      return;
+    }
     let hints: GermanHintId[] = [];
     if (e.ex === 'produce') {
       // Vorprüfung (Wörter aktivieren, Stufe 1): Wort fehlt, zu kurz, abgeschrieben, falsche Satzform, typischer Deutsch-Fehler – alles ohne KI-Aufruf.
@@ -415,7 +517,7 @@ export function ExerciseView({
       checkSentenceLocal();
       return;
     }
-    const out = await askSentence.run(sentenceVars(hints));
+    const out = await askProduce.run(sentenceVars(hints));
     // Fehler (not_granted, rate_limited, …): lokales Urteil, ohne automatischen Neuversuch (A6.3); „Erneut versuchen“ bleibt beim Nutzer.
     if (!out) return;
     // Hat die Vorprüfung schon einen Hinweis gegeben (Wort, Form, typischer Fehler), zählt das als Hilfe: höchstens „Schwer“ (Lernwissenschaft N3).
@@ -432,7 +534,8 @@ export function ExerciseView({
 
   const next = () => {
     if (!fb) return;
-    const ans: Answer = fb.override ? { grade: 3, given: fb.given, ms: fb.ms, ok: true, override: true, t: fb.t } : { grade: fb.grade, given: fb.given, ms: fb.ms, ok: fb.grade > 1, hint: fb.hint, t: fb.t };
+    const rec = actRecordOf(fb, e);
+    const ans: Answer = fb.override ? { grade: 3, given: fb.given, ms: fb.ms, ok: true, override: true, t: fb.t } : { grade: fb.grade, given: fb.given, ms: fb.ms, ok: fb.grade > 1, hint: fb.hint, t: fb.t, ...(rec ? { rec } : {}) };
     const kind = (onCommit ?? commitAnswer)(ans);
     // Tastatur am iPhone: im selben Handler fokussieren bzw. schließen.
     if (kind === 'typed') api.focusNow();
@@ -484,11 +587,16 @@ export function ExerciseView({
   const depth = explainDepth({ verdict: rv, stage: card.stage, learning });
 
   /** Beispiele dieser Karte für die Erklär-Karte (Ursprungssatz zuerst, dann Paket und Claude), nie der Satz der Aufgabe. */
-  const exampleItems: ExplainExample[] = useMemo(() => cardExamples(card, shownSentence, extras).map((x) => ({ en: x.en, de: storedTranslation(card.doc, x.en), ctx: null })), [card, shownSentence, extras]);
+  const exampleItems: ExplainExample[] = useMemo(() => {
+    // „Dein Satz vom …“: ein früher geprüfter eigener Satz (richtig, von Claude geprüft) als Beispiel – erst ab Stufe 4, nie der Satz dieser Aufgabe.
+    const own = card.kind === 'vocab' && card.stage >= OWN_EXAMPLE_MIN_STAGE ? reusableSentencesOf(card.key).slice(0, 1).map((o) => ({ en: o.text, day: o.day })) : [];
+    return cardExamples(card, shownSentence, extras, own).map((x) => ({ en: x.en, de: storedTranslation(card.doc, x.en), ctx: null, ...(x.src === 'own' && x.day ? { from: t('exOwnFrom', { date: dayLabel(x.day) }) } : {}) }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- nur bei neuer Aufgabe oder neuen Beispielen
+  }, [card, shownSentence, extras]);
 
   const model: ExplanationModel | null = useMemo(() => {
     if (!fb) return null;
-    if (fb.sentence) return sentenceModel(fb, card, exampleItems, t);
+    if (fb.sentence) return sentenceModel(fb, card, exampleItems, t, e.act);
     const picked = fb.chosen ? { label: fb.chosen.label, ...(fb.chosen.fromWord ? { fromWord: fb.chosen.fromWord } : {}), ...(fb.chosen.fromMeaning ? { fromMeaning: fb.chosen.fromMeaning } : {}) } : null;
     const isAlt = fb.result.verdict !== 'correct' && isAltAnswer(card, fb.given);
     // Verwechslung (getippt): die Bedeutung des anderen Worts aus dem Wortschatz der Runde – damit steht der echte Grund da.
@@ -520,7 +628,15 @@ export function ExerciseView({
   // Rückmeldung 3: Bei „Wortpartner“ steht im Kopf die geübte Verbindung (mit Vorlesen), das Kartenwort nur als Zusatz.
   const collocPhrase = (e.ex === 'colloc' || e.ex === 'colloc_gap') && e.colloc?.p.trim() && normalize(e.colloc.p) !== normalize(card.word) ? e.colloc.p.trim() : null;
   // „Eigener Satz“: Anweisung in drei Wortlauten, gewählt aus Karte und Verlauf (`brief.wording`), nie beim Neuzeichnen neu gewürfelt.
-  const taskText = e.check === 'known' ? t('wxKnownTask') : e.ex === 'produce' && e.brief ? t(`task_produce_${e.brief.wording + 1}` as MessageKey) : t(`task_${exTextKey(e)}` as MessageKey);
+  const actWords = e.act ? e.act.targets.map((x) => (x.kind === 'chunk' ? typedForm(x.word) : x.word)).join(' + ') : '';
+  const taskText =
+    e.check === 'known'
+      ? t('wxKnownTask')
+      : e.act
+        ? t(`act_${e.act.fmt}_${e.act.wording + 1}` as MessageKey, { words: e.act.showTarget ? actWords : '', type: e.act.type !== '-' ? t(`actType_${e.act.type}` as MessageKey) : '' })
+        : e.ex === 'produce' && e.brief
+          ? t(`task_produce_${e.brief.wording + 1}` as MessageKey)
+          : t(`task_${exTextKey(e)}` as MessageKey);
   const seeDetail =
     e.ex === 'mc_en' || e.ex === 'ctx_mc'
       ? `${taskText}\n${e.sentence?.sentence ?? card.word}`
@@ -648,7 +764,9 @@ export function ExerciseView({
     prompt = <SpotSentence words={ws} pick="one" selected={fb ? null : spot} onSelect={setSpot} locked={!!fb} {...(marks ? { marks } : {})} area="trainer" source={card.path} testId="sentence" label={t('trSpotLabel')} />;
   } else if (isSentence) {
     const target = card.kind === 'chunk' ? typedForm(card.word) : card.word;
-    prompt = (
+    prompt = e.act ? (
+      <ActPanel task={e.act} card={card} lang={lang} />
+    ) : (
       <div className="flex flex-col gap-3">
         <p className="lx-t-support flex flex-wrap items-center gap-2" data-testid="produce-target">
           <span className="text-muted">{t('trProduceTarget', { word: '' }).replace(/\s*$/, '')}</span>
@@ -681,7 +799,7 @@ export function ExerciseView({
           }}
           onSubmit={() => (fb ? next() : void checkSentence())}
           disabled={!!fb || sentenceBusy}
-          testId={e.ex === 'complete' ? 'complete-input' : 'produce-input'}
+          testId={e.ex === 'complete' ? 'complete-input' : e.act ? 'act-input' : 'produce-input'}
         />
         {!fb && <AiRunPanel phase={askSentence.phase} error={askSentence.error} onStop={askSentence.stop} onRetry={() => void checkSentence()} skeleton={false} />}
         {!fb && askSentence.error && (
@@ -767,7 +885,8 @@ export function ExerciseView({
   const secondary: ShellSecondary[] = [];
   const canTip = !noHelp && !fb && !retry && tipAvailable && tip < maxTip;
   if (canTip) secondary.push({ id: 'hint', label: t('exHint'), onClick: showTip, testId: 'hint' });
-  if (!fb && !isSentence && e.check !== 'known') secondary.push({ id: 'dontKnow', label: t('exDontKnow'), onClick: dontKnow, testId: 'dont-know' });
+  // Bei A4 (Wort nicht gezeigt) gibt es „Weiß ich nicht“: die Lösung wird gezeigt, die Karte bekommt „Nochmal“ und kommt bald wieder.
+  if (!fb && (!isSentence || (e.act && !e.act.showTarget)) && e.check !== 'known') secondary.push({ id: 'dontKnow', label: t('exDontKnow'), onClick: dontKnow, testId: 'dont-know' });
 
   const tipText = ((): string | null => {
     if (fb || tip < 1) return null;
@@ -795,8 +914,12 @@ export function ExerciseView({
         ? t('lrOverridden')
         : fb.sentence && !fb.sentence.out
           ? fb.sentence.issue
-            ? t(`ppFinal_${fb.sentence.issue === 'form' || fb.sentence.issue === 'german' ? 'short' : fb.sentence.issue}` as MessageKey)
-            : t('trProduceLocalNote')
+            ? e.act
+              ? t(`ppActFinal_${fb.sentence.issue === 'shape' || fb.sentence.issue === 'german' || fb.sentence.issue === 'form' ? 'short' : fb.sentence.issue}` as MessageKey)
+              : t(`ppFinal_${fb.sentence.issue === 'form' || fb.sentence.issue === 'german' || fb.sentence.issue === 'shape' || fb.sentence.issue === 'same' ? 'short' : fb.sentence.issue}` as MessageKey)
+            : e.act
+              ? t('actLocalNote')
+              : t('trProduceLocalNote')
           : fb.sentence?.out && fb.sentence.out.errType && fb.sentence.out.verdict !== 'correct'
             ? t('trProduceErrMain', { type: t(`trErr_${fb.sentence.out.errType === 'other' ? 'misc' : fb.sentence.out.errType}` as MessageKey) })
           : c.variant === 'uk' && c.us
@@ -886,10 +1009,12 @@ export function ExerciseView({
   }
 
   const kindLabel =
-    e.check === 'control' ? t('nbWsControl') : e.check === 'probe' ? `${t('nbWsProbe')} · ${t(`exName_${exTextKey(e)}` as MessageKey)}` : e.check === 'known' ? t('wxKnownKind') : t(`exName_${exTextKey(e)}` as MessageKey);
+    e.check === 'control' ? t('nbWsControl') : e.check === 'probe' ? `${t('nbWsProbe')} · ${t(`exName_${exTextKey(e)}` as MessageKey)}` : e.check === 'known' ? t('wxKnownKind') : e.act ? t(`actName_${e.act.fmt}` as MessageKey) : t(`exName_${exTextKey(e)}` as MessageKey);
   const def = exerciseDef(e.ex);
   const purposeKey: MessageKey =
-    e.ex === 'colloc' || e.ex === 'colloc_gap'
+    e.act
+      ? (`purposeAct${e.act.step}` as MessageKey)
+      : e.ex === 'colloc' || e.ex === 'colloc_gap'
       ? 'purposeColloc'
       : e.ex === 'contrast'
         ? 'ttWcPurposeContrast'
@@ -943,13 +1068,17 @@ function whyUnderRemoved(m: ExplanationModel, under: boolean): ExplanationModel 
  * darunter sind `yours` = richtig/falsch und warum (nur der wichtigste Fehler), `note` 1 = C1-Fassung, `note` 2 = warum sie besser ist.
  * Ohne Claude: nur die grobe lokale Prüfung und die gefundenen Deutsch-Fehler.
  */
-function sentenceModel(fb: Feedback, card: Exercise['card'], examples: ExplainExample[], t: (k: MessageKey, v?: Record<string, string | number>) => string): ExplanationModel {
+function sentenceModel(fb: Feedback, card: Exercise['card'], examples: ExplainExample[], t: (k: MessageKey, v?: Record<string, string | number>) => string, act?: Exercise['act']): ExplanationModel {
   const out = fb.sentence?.out ?? null;
   const self = fb.sentence?.self ?? null;
   const issue = fb.sentence?.issue;
   const lines: ExplanationModel['lines'] = [{ k: 'pattern', name: card.word, formula: null }];
   if (out) {
     lines.push({ k: 'yours', given: fb.given, text: out.why });
+    // Mehrere Zielwörter: je Wort ein Satz „richtig benutzt“ bzw. „fehlt oder falsch benutzt“ (nur wenn mindestens eines Probleme macht).
+    if (act && out.targets && out.targets.length > 1 && out.targets.some((x) => !(x.used && x.correct))) {
+      lines.push({ k: 'note', text: `${t('actTargetsFeedback')}: ${act.targets.map((x, i) => `${x.word} – ${out.targets?.[i]?.used && out.targets[i]?.correct ? t('actTargetOk') : t('actTargetBad')}`).join(' · ')}` });
+    }
     if (out.better.trim()) {
       lines.push({ k: 'note', text: `${t('trProduceBetter')}: ${out.better.trim()}` });
       if (out.whyBetter.trim()) lines.push({ k: 'note', text: `${t('trProduceWhyBetter')}: ${out.whyBetter.trim()}` });
@@ -957,8 +1086,29 @@ function sentenceModel(fb: Feedback, card: Exercise['card'], examples: ExplainEx
   } else if (self) {
     lines.push({ k: 'why', text: issue ? t(`ppFinal_${issue === 'form' || issue === 'german' ? 'short' : issue}` as MessageKey) : self.containsTarget ? (self.longEnough ? (self.notCopied ? t('trProduceLocalOk') : t('ppCopied')) : t('ppShort')) : t('trProduceMissing') });
     for (const h of fb.sentence?.hints ?? []) lines.push({ k: 'note', text: t(`gh_${h}` as MessageKey) });
+  } else if (act) {
+    // A2–A5 ohne Claudes Urteil: entweder hat die Vorprüfung den Text beendet, oder Claude war nicht erreichbar.
+    lines.push({ k: 'why', text: issue ? t(`ppActFinal_${issue === 'shape' || issue === 'german' || issue === 'form' ? 'short' : issue}` as MessageKey) : t('actLocalNote') });
+    for (const h of fb.sentence?.hints ?? []) lines.push({ k: 'note', text: t(`gh_${h}` as MessageKey) });
   }
   return { lines, examples, mark: [card.word, card.lemma], ai: !!out, source: 'card' };
+}
+
+/**
+ * Was die Sammelakte `act/<Monat>` von einer Satzantwort festhält (nur „Eigener Satz“ und A2–A5, nie ein „Weiß ich nicht“): der Satz, Claudes Urteil mit den
+ * drei Schichten, geprüft ja/nein, wiederverwendbar (nur wenn Claude „richtig“ sagte und den Satz für natürlich hält) und bei mehreren Zielwörtern das Urteil je Wort.
+ */
+function actRecordOf(fb: Feedback, e: Exercise): ActRecord | undefined {
+  if (!fb.sentence || fb.dontKnow || (e.ex !== 'produce' && !e.act)) return undefined;
+  const out = fb.sentence.out;
+  const v = out ? (out.verdict === 'correct' ? 'c' : out.verdict === 'minor' ? 'm' : 'w') : fb.grade >= 2 ? 'm' : 'w';
+  // „Eigener Satz“ (produce-check@2) kennt `reusable` nicht: dort gilt „richtig, ohne nötige Korrektur“.
+  const reusable = !!out && out.verdict === 'correct' && (out.reusable ?? true);
+  const ts: ActRecord['ts'] =
+    e.act && out?.targets && out.targets.length > 1
+      ? e.act.targets.map((x, i): [string, 'c' | 'm' | 'w'] => [x.key, out.targets?.[i]?.used && out.targets[i]?.correct ? (i === 0 ? v : 'c') : 'w'])
+      : undefined;
+  return { s: fb.given, ...(out?.better.trim() ? { b: out.better } : {}), ...(out?.why.trim() ? { w: out.why } : {}), v, k: out ? 1 : 0, ...(reusable ? { r: true } : {}), ...(ts ? { ts } : {}), ...(out?.errType ? { et: out.errType } : {}) };
 }
 
 /** „Einmal richtig schreiben“ (M5): freiwillig, zählt nicht als Antwort und ändert keine Note. */
