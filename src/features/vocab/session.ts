@@ -576,8 +576,8 @@ export function flipIntervals(card: TrainCard, t: number): Record<Grade, number>
 /** „Kenne ich“: richtig ohne Hilfe → die Karte bekommt Stufe 3 und 10 Tage statt der gewöhnlichen Planung (`knownOp`). */
 const isKnownPass = (e: Pick<Exercise, 'check' | 'card'>, ans: Pick<Answer, 'ok' | 'hint' | 'override'>): boolean => e.check === 'known' && ans.ok && !ans.hint && !ans.override && e.card.kind === 'vocab';
 
-/** „Satz vervollständigen“ ohne Satzanfang: ein ganzer eigener Satz (Gewicht wie `produce`). */
-const isFreeSentence = (e: Pick<Exercise, 'ex' | 'start'>): boolean => exTextKey(e) === 'complete_free';
+/** „Satz vervollständigen“ ohne Satzanfang: ein ganzer eigener Satz (Gewicht wie `produce`). Die App baut es nicht mehr; alte Daten bleiben lesbar. */
+const isFreeSentence = (e: Pick<Exercise, 'ex' | 'start'>): boolean => e.ex === 'complete' && exTextKey(e) === 'produce';
 
 /**
  * „Wieder in …“ (Lernprüfung 10.10.2026): genau der Abstand, den `commitAnswer` → `cardPatch` bzw. `knownOp` zum Zeitpunkt `t` speichert –
@@ -619,6 +619,7 @@ export function commitAnswer(ans: Answer): FirstKind {
   if ((e.ex === 'colloc' || e.ex === 'colloc_gap') && e.colloc && e.colloc.index >= 0) a.colIndex = e.colloc.index;
   a.dev = s.env.touch ? 't' : 'k';
   if (e.sentence?.sentence) a.sx = sentKey(e.sentence.sentence);
+  if (e.brief) a.act = e.brief.code;
   if (card.kind === 'chunk') a.q = card.word;
   if (ans.override) a.override = true;
   if (ans.hint) a.hint = ans.hint;

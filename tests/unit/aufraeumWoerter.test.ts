@@ -17,17 +17,19 @@ const NOW = Date.parse('2026-10-10T10:00:00+02:00');
 
 describe('Rückmeldung 1: „Satz vervollständigen“ ohne Satzanfang', () => {
   it('ohne Satzanfang lautet die Aufgabe „Schreib einen eigenen Satz …“ (DE + EN), mit Satzanfang wie bisher', () => {
-    expect(exTextKey({ ex: 'complete', start: null })).toBe('complete_free');
-    expect(exTextKey({ ex: 'complete', start: '  ' })).toBe('complete_free');
+    expect(exTextKey({ ex: 'complete', start: null })).toBe('produce');
+    expect(exTextKey({ ex: 'complete', start: '  ' })).toBe('produce');
     expect(exTextKey({ ex: 'complete', start: 'Before we sign,' })).toBe('complete');
     expect(exTextKey({ ex: 'cloze', start: null })).toBe('cloze');
     const dict = (d: unknown) => d as Record<string, string>;
-    for (const k of ['task_complete_free', 'exName_complete_free']) {
+    // Wörter aktivieren Stufe 1: „Eigener Satz“ ist eine Art (`produce`) mit drei Wortlauten; `complete_free` gibt es nicht mehr.
+    for (const k of ['task_produce_1', 'task_produce_2', 'task_produce_3', 'exName_produce']) {
       expect(dict(de)[k]).toBeTruthy();
       expect(dict(en)[k]).toBeTruthy();
     }
-    expect(dict(de).task_complete_free).toMatch(/eigenen Satz/);
-    expect(dict(en).task_complete_free).toMatch(/sentence of your own/);
+    expect(dict(de).task_complete_free).toBeUndefined();
+    expect(dict(de).task_produce_1).toMatch(/eigenen Satz/);
+    expect(dict(en).task_produce_1).toMatch(/your own sentence/);
   });
 });
 

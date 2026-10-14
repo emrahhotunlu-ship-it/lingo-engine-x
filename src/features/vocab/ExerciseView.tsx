@@ -27,12 +27,13 @@ import { explainWord, isAltAnswer } from '../../domain/srs/explainWord';
 import { posKey } from '../../domain/srs/explain';
 import { autoGrade, produceGrade } from '../../domain/srs/grade';
 import { exerciseDef } from '../../domain/srs/modes';
-import { selfCheckProduce, type SelfCheck } from '../../domain/srs/produce';
+import { GERMAN_HINT_EN, HARD_ISSUES, germanHints, precheckProduce, selfCheckProduce, shownSentences, type GermanHintId, type PrecheckIssue, type SelfCheck } from '../../domain/srs/produce';
+import { sceneText } from '../../content/activation/scenes';
 import { trapForCard } from '../../domain/srs/traps';
 import type { CheckResult, Exercise, ExerciseId, Grade, Option } from '../../domain/srs/types';
 import { inputProfile } from '../../platform/input';
 import { speak, stopSpeech, useSpeech } from '../../platform/speech';
-import { produceCheck, type ProduceCheckOut } from '../../prompts/produceCheck';
+import { briefVarsOf, produceCheckV2, type ProduceCheckV2Out } from '../../prompts/produceCheckV2';
 import { TutorButton } from '../../ui/exercise/TutorButton';
 import { ExerciseShell, SentenceInput, explainDepth, type ShellFeedback, type ShellMenuId, type ShellSecondary } from '../../ui/exercise';
 import { AiRunPanel } from '../../ui/AiRunPanel';
@@ -74,7 +75,7 @@ type Feedback = {
   /** find_trap: das angetippte Wort. */
   tapped?: [number, number] | null;
   /** complete/produce: Claudes Prüfung bzw. die lokale Prüfung. */
-  sentence?: { out: ProduceCheckOut | null; self: SelfCheck | null };
+  sentence?: { out: ProduceCheckV2Out | null; self: SelfCheck | null; /** Vorprüfung ohne Claude: Mangel, der den Satz als „Noch nicht“ beendet. */ issue?: PrecheckIssue; hints?: GermanHintId[] };
 };
 
 const PURPOSE: Record<number, MessageKey> = { 1: 'purpose1', 2: 'purpose2', 3: 'purpose3', 4: 'purpose4', 5: 'purpose5' };
@@ -151,7 +152,10 @@ export function ExerciseView({
   const [spot, setSpot] = useState<[number, number] | null>(null);
   const [copyOpen, setCopyOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
-  const askSentence = useAsk(produceCheck);
+  const askSentence = useAsk(produceCheckV2);
+  /** Wie oft die Vorprüfung schon zum Nachbessern geschickt hat (höchstens einmal je Aufgabe). */
+  const precheckTries = useRef(0);
+  const [precheckMsg, setPrecheckMsg] = useState<string | null>(null);
   const extra = useExamples((s) => s.byCard[card.id]);
   const typed = useRef('');
   const firstKeyAt = useRef<number | null>(null);
@@ -340,37 +344,77 @@ export function ExerciseView({
     const body = sentenceText.trim();
     return e.start ? `${e.start.trim()} ${body}`.trim() : body;
   };
-  const sentenceVars = () => ({
+  const sentenceVars = (hints: readonly GermanHintId[] = []) => ({
     target: card.kind === 'chunk' ? typedForm(card.word) : card.word,
     meaning: meaningText ?? '',
     sentence: fullSentence(),
     uiLang: lang,
     kind: card.kind === 'chunk' || /\s/.test(card.lemma) ? ('phrase' as const) : ('word' as const),
+    brief: e.brief ? briefVarsOf(e.brief) : null,
+    hints: hints.map((h) => GERMAN_HINT_EN[h]),
   });
   const sentenceBusy = askSentence.phase === 'queued' || askSentence.phase === 'thinking' || askSentence.phase === 'slow' || askSentence.phase === 'streaming';
 
-  /** Lokal: `produce` bis „Gut“ wie bisher; `complete` höchstens „Schwer“ (die Notentabelle deckelt ohne Claude-Bestätigung). */
+  /** Lokal: `produce` bis „Gut“ (jetzt auch gegen alle gezeigten Sätze); `complete` höchstens „Schwer“ (die Notentabelle deckelt ohne Claude-Bestätigung). */
   const checkSentenceLocal = (): void => {
     const text = fullSentence();
-    const self = selfCheckProduce(text, card);
+    const self = selfCheckProduce(text, card, shownOf());
     const completeOk = e.ex === 'complete' ? self.containsTarget && text.trim().split(/\s+/).filter(Boolean).length >= 4 : self.grade >= 2;
     const verdict: CheckResult['verdict'] = e.ex === 'complete' ? (completeOk ? 'near' : 'wrong') : self.grade === 3 ? 'correct' : self.grade === 2 ? 'near' : 'wrong';
     const forced: Grade = e.ex === 'complete' ? (completeOk ? 2 : 1) : self.grade;
-    finish({ verdict }, text, null, { sentence: { out: null, self } }, forced);
+    finish({ verdict }, text, null, { sentence: { out: null, self, hints: germanHints(text) } }, forced);
+  };
+
+  /** Alle gezeigten Sätze der Karte (Ursprung, Beispiele, Rotation) für die Abschreibprüfung. */
+  const shownOf = (): string[] => shownSentences(card, extras);
+
+  /** Rückmeldung der Vorprüfung beim ersten Durchfall: sagt, was fehlt, und lässt einmal nachbessern (ohne Claude-Aufruf). */
+  const precheckText = (issue: PrecheckIssue, hints: readonly GermanHintId[]): string => {
+    const target = card.kind === 'chunk' ? typedForm(card.word) : card.word;
+    const what =
+      issue === 'target'
+        ? t('ppTarget', { word: target })
+        : issue === 'short'
+          ? t('ppShort')
+          : issue === 'copied'
+            ? t('ppCopied')
+            : issue === 'form'
+              ? t(`ppForm_${e.brief?.form === 'q' ? 'q' : e.brief?.form === 'i' ? 'i' : 'n'}` as MessageKey)
+              : t('ppGerman', { hint: hints[0] ? t(`gh_${hints[0]}` as MessageKey) : '' });
+    return `${what} ${t('ppOnce')}`;
   };
 
   async function checkSentence(): Promise<void> {
     if (fb || !sentenceText.trim() || sentenceBusy) return;
+    let hints: GermanHintId[] = [];
+    if (e.ex === 'produce') {
+      // Vorprüfung (Wörter aktivieren, Stufe 1): Wort fehlt, zu kurz, abgeschrieben, falsche Satzform, typischer Deutsch-Fehler – alles ohne KI-Aufruf.
+      const pre = precheckProduce(fullSentence(), card, shownOf(), e.brief);
+      hints = pre.hints;
+      if (pre.issue) {
+        if (precheckTries.current === 0) {
+          precheckTries.current = 1;
+          setPrecheckMsg(precheckText(pre.issue, pre.hints));
+          api.focusNow();
+          return;
+        }
+        if (HARD_ISSUES.has(pre.issue)) {
+          // Zweiter Versuch ohne Besserung: lokal „Noch nicht“, kein Claude-Aufruf, kein Fehlersatz.
+          finish({ verdict: 'wrong' }, fullSentence(), null, { sentence: { out: null, self: selfCheckProduce(fullSentence(), card, shownOf()), issue: pre.issue, hints: pre.hints } }, 1);
+          return;
+        }
+      }
+    }
     if (!ai) {
       checkSentenceLocal();
       return;
     }
-    const out = await askSentence.run(sentenceVars());
+    const out = await askSentence.run(sentenceVars(hints));
     // Fehler (not_granted, rate_limited, …): lokales Urteil, ohne automatischen Neuversuch (A6.3); „Erneut versuchen“ bleibt beim Nutzer.
     if (!out) return;
     const grade = produceGrade(out.verdict, out.usesTarget);
     const verdict: CheckResult['verdict'] = out.verdict === 'correct' ? 'correct' : out.verdict === 'minor' ? 'near' : 'wrong';
-    finish({ verdict }, fullSentence(), null, { sentence: { out, self: null } }, grade, true);
+    finish({ verdict }, fullSentence(), null, { sentence: { out, self: null, hints } }, grade, true);
     // Ein falscher oder zu schwacher Satz wird zum Fehlersatz (Box 1), nur mit echter Korrektur.
     if (out.verdict !== 'correct' && out.fixed.trim() && normalize(out.fixed) !== normalize(fullSentence())) {
       void saveRepairs([{ wrong: fullSentence(), right: out.fixed.trim(), why: out.why, src: 'write' }]);
@@ -437,7 +481,7 @@ export function ExerciseView({
 
   const model: ExplanationModel | null = useMemo(() => {
     if (!fb) return null;
-    if (fb.sentence) return sentenceModel(fb, card, lang, exampleItems);
+    if (fb.sentence) return sentenceModel(fb, card, exampleItems, t);
     const picked = fb.chosen ? { label: fb.chosen.label, ...(fb.chosen.fromWord ? { fromWord: fb.chosen.fromWord } : {}), ...(fb.chosen.fromMeaning ? { fromMeaning: fb.chosen.fromMeaning } : {}) } : null;
     const isAlt = fb.result.verdict !== 'correct' && isAltAnswer(card, fb.given);
     // Verwechslung (getippt): die Bedeutung des anderen Worts aus dem Wortschatz der Runde – damit steht der echte Grund da.
@@ -468,7 +512,8 @@ export function ExerciseView({
   const blanked = e.sentence ? `${e.sentence.sentence.slice(0, e.sentence.start)}___${e.sentence.sentence.slice(e.sentence.end)}` : '';
   // Rückmeldung 3: Bei „Wortpartner“ steht im Kopf die geübte Verbindung (mit Vorlesen), das Kartenwort nur als Zusatz.
   const collocPhrase = (e.ex === 'colloc' || e.ex === 'colloc_gap') && e.colloc?.p.trim() && normalize(e.colloc.p) !== normalize(card.word) ? e.colloc.p.trim() : null;
-  const taskText = e.check === 'known' ? t('wxKnownTask') : t(`task_${exTextKey(e)}` as MessageKey);
+  // „Eigener Satz“: Anweisung in drei Wortlauten, gewählt aus Karte und Verlauf (`brief.wording`), nie beim Neuzeichnen neu gewürfelt.
+  const taskText = e.check === 'known' ? t('wxKnownTask') : e.ex === 'produce' && e.brief ? t(`task_produce_${e.brief.wording + 1}` as MessageKey) : t(`task_${exTextKey(e)}` as MessageKey);
   const seeDetail =
     e.ex === 'mc_en' || e.ex === 'ctx_mc'
       ? `${taskText}\n${e.sentence?.sentence ?? card.word}`
@@ -604,6 +649,7 @@ export function ExerciseView({
             {target}
           </span>
         </p>
+        {e.brief && <BriefMarks brief={e.brief} lang={lang} />}
         {e.start && (
           <p className="lx-t-prompt text-muted" lang="en" data-testid="complete-start">
             {e.start} …
@@ -624,6 +670,7 @@ export function ExerciseView({
           onChange={(v) => {
             if (firstKeyAt.current === null) firstKeyAt.current = performance.now();
             setSentenceText(v);
+            setPrecheckMsg(null);
           }}
           onSubmit={() => (fb ? next() : void checkSentence())}
           disabled={!!fb || sentenceBusy}
@@ -730,7 +777,7 @@ export function ExerciseView({
         : retry.words > 1
           ? t('rhStartPhrase', { start: retry.start, n: retry.words })
           : tn('rhStartWord', retry.letters, { start: retry.start });
-  const hint = fb ? null : retryText ? { text: retryText, tone: 'near' as const } : tipText ? { text: tipText, tone: 'hint' as const } : sentenceBusy ? { text: t('exThinking'), tone: 'hint' as const } : null;
+  const hint = fb ? null : precheckMsg ? { text: precheckMsg, tone: 'near' as const } : retryText ? { text: retryText, tone: 'near' as const } : tipText ? { text: tipText, tone: 'hint' as const } : sentenceBusy ? { text: t('exThinking'), tone: 'hint' as const } : null;
 
   let feedback: ShellFeedback | null = null;
   if (fb && model) {
@@ -740,7 +787,11 @@ export function ExerciseView({
       : fb.override
         ? t('lrOverridden')
         : fb.sentence && !fb.sentence.out
-          ? t('trProduceLocalNote')
+          ? fb.sentence.issue
+            ? t(`ppFinal_${fb.sentence.issue === 'form' || fb.sentence.issue === 'german' ? 'short' : fb.sentence.issue}` as MessageKey)
+            : t('trProduceLocalNote')
+          : fb.sentence?.out && fb.sentence.out.errType && fb.sentence.out.verdict !== 'correct'
+            ? t('trProduceErrMain', { type: t(`trErr_${fb.sentence.out.errType === 'other' ? 'misc' : fb.sentence.out.errType}` as MessageKey) })
           : c.variant === 'uk' && c.us
             ? t('trUsHint', { us: c.us })
             : c.kind === 'typo'
@@ -878,16 +929,25 @@ function whyUnderRemoved(m: ExplanationModel, under: boolean): ExplanationModel 
   return under ? { ...m, lines: m.lines.filter((l) => l.k !== 'yours') } : m;
 }
 
-/** Erklär-Karte einer Satzantwort: Claudes Begründung als „Deine Antwort“, die natürlichere Fassung als Hinweis; lokal nur die grobe Prüfung. */
-function sentenceModel(fb: Feedback, card: Exercise['card'], lang: 'de' | 'en', examples: ExplainExample[]): ExplanationModel {
+/**
+ * Erklär-Karte einer Satzantwort (vier Pflichtfragen, feste Plätze): „Was hatte ich, was ist richtig?“ steht im Vergleich darüber, die Schichten
+ * darunter sind `yours` = richtig/falsch und warum (nur der wichtigste Fehler), `note` 1 = C1-Fassung, `note` 2 = warum sie besser ist.
+ * Ohne Claude: nur die grobe lokale Prüfung und die gefundenen Deutsch-Fehler.
+ */
+function sentenceModel(fb: Feedback, card: Exercise['card'], examples: ExplainExample[], t: (k: MessageKey, v?: Record<string, string | number>) => string): ExplanationModel {
   const out = fb.sentence?.out ?? null;
   const self = fb.sentence?.self ?? null;
+  const issue = fb.sentence?.issue;
   const lines: ExplanationModel['lines'] = [{ k: 'pattern', name: card.word, formula: null }];
   if (out) {
     lines.push({ k: 'yours', given: fb.given, text: out.why });
-    if (out.better.trim()) lines.push({ k: 'note', text: `${lang === 'de' ? 'Noch natürlicher' : 'More natural'}: ${out.better.trim()}` });
+    if (out.better.trim()) {
+      lines.push({ k: 'note', text: `${t('trProduceBetter')}: ${out.better.trim()}` });
+      if (out.whyBetter.trim()) lines.push({ k: 'note', text: `${t('trProduceWhyBetter')}: ${out.whyBetter.trim()}` });
+    }
   } else if (self) {
-    lines.push({ k: 'why', text: self.containsTarget ? (self.longEnough ? (lang === 'de' ? 'Das Wort kommt vor und der Satz ist lang genug.' : 'The word is in your sentence and it is long enough.') : lang === 'de' ? 'Schreib einen ganzen Satz (mindestens sechs Wörter).' : 'Write a whole sentence (at least six words).') : lang === 'de' ? 'Das Wort kommt in deinem Satz nicht vor.' : 'The word is missing from your sentence.' });
+    lines.push({ k: 'why', text: issue ? t(`ppFinal_${issue === 'form' || issue === 'german' ? 'short' : issue}` as MessageKey) : self.containsTarget ? (self.longEnough ? (self.notCopied ? t('trProduceLocalOk') : t('ppCopied')) : t('ppShort')) : t('trProduceMissing') });
+    for (const h of fb.sentence?.hints ?? []) lines.push({ k: 'note', text: t(`gh_${h}` as MessageKey) });
   }
   return { lines, examples, mark: [card.word, card.lemma], ai: !!out, source: 'card' };
 }
@@ -915,3 +975,31 @@ function SynonymAsk({ card, given, onOk }: { card: Exercise['card']; given: stri
 }
 
 import { SynonymCheck } from './SynonymCheck';
+
+/** Vorgaben des eigenen Satzes sichtbar: die Lage als Satz, darunter Marken für Form, Ton und Zeit (Wörter aktivieren, Stufe 1). */
+function BriefMarks({ brief, lang }: { brief: NonNullable<Exercise['brief']>; lang: 'de' | 'en' }) {
+  const { t } = useT();
+  const chip = 'rounded-[var(--radius-inline)] bg-surface px-2 py-0.5 font-semibold';
+  return (
+    <div className="flex flex-col gap-2" data-testid="produce-brief" data-code={brief.code}>
+      <p className="lx-t-prompt" lang={lang} data-testid="brief-scene">
+        <span className="text-muted">{t('brLage')}: </span>
+        {sceneText(brief.scene, lang)}
+      </p>
+      <p className="lx-t-support flex flex-wrap items-center gap-2" data-testid="brief-marks">
+        <span className={chip} data-testid="brief-form">
+          {t('brFormLbl')}: {t(`brForm_${brief.form}` as MessageKey)}
+        </span>
+        <span className={chip} data-testid="brief-tone">
+          {t('brToneLbl')}: {t(`brTone_${brief.tone}` as MessageKey)}
+        </span>
+        {brief.tense !== '-' && (
+          <span className={chip} data-testid="brief-tense">
+            {t('brTenseLbl')}: {t(`brTense_${brief.tense}` as MessageKey)}
+          </span>
+        )}
+      </p>
+      <p className="lx-t-meta text-muted">{t('brShort')}</p>
+    </div>
+  );
+}

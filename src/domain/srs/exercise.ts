@@ -5,6 +5,7 @@ import { exerciseDef } from './modes';
 import { familyFrom, partnerOf, trapTask } from './partner';
 import { packExtraOf } from '../c1pack/packFields';
 import { rotatedContext } from './rotate';
+import { briefCodesOf, pickBrief } from './brief';
 import { findContext, formsOf, locate } from './context';
 import { gapUsable, lemmaFor } from './gapFit';
 import { readCfx, readWx } from '../tutor/acceptWordCtx';
@@ -267,11 +268,11 @@ export const WORD_CTX_TPL = 'word-ctx@1';
 
 /**
  * Text-Schlüssel der Übungsart für Aufgabe und Bezeichnung (Rückmeldung 1, 10.10.2026): „Satz vervollständigen“ ohne Satzanfang
- * ist in Wahrheit „eigener Satz“ – dann sagt die Aufgabe das auch („Schreib einen eigenen Satz mit …“), passend zur Prüfung
- * (Claude prüft einen ganzen Satz mit dem Wort).
+ * ist in Wahrheit „eigener Satz“ – dann heißt sie auch so (`produce`). Die Aufgabe baut diese Fälle nicht mehr (`supports`), alte Daten und
+ * Tests bleiben lesbar.
  */
 export const exTextKey = (e: Pick<Exercise, 'ex' | 'start'> & { sentence?: Exercise['sentence'] }): string =>
-  e.ex === 'complete' && !e.start?.trim() ? 'complete_free' : e.ex === 'match' && e.sentence === null ? 'mc_de' : e.ex; // „Zuordnen“ ohne Satz hat keine Lücke: Aufgabe wie „Wort wählen“ (Audit 12.10.2026)
+  e.ex === 'complete' && !e.start?.trim() ? 'produce' : e.ex === 'match' && e.sentence === null ? 'mc_de' : e.ex; // „Zuordnen“ ohne Satz hat keine Lücke: Aufgabe wie „Wort wählen“ (Audit 12.10.2026)
 
 /**
  * `origin`: immer der Ursprungssatz (Prüfabfrage und Kontrolle nach dem Aufdecken), sonst wechselt der Satz ab Stufe 3 (`rotate.ts`; Claude-Sätze
@@ -366,7 +367,8 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
       return { ...base, accepted, limitMs: speedLimitMs(accepted[0] ?? card.word) };
     }
     case 'produce':
-      return { ...base, accepted: [] };
+      // Wörter aktivieren: Lage, Satzform, Ton und Zeitform wechseln von Mal zu Mal (deterministisch aus Karte, Seed und Verlauf).
+      return { ...base, accepted: [], brief: pickBrief(card.key, seed, briefCodesOf(card.doc)) };
     case 'situation': {
       const typed = typedForm(card.word);
       return { ...base, accepted: [...new Set([typed, card.word])].filter(Boolean), situation: situationTask(card, lang, opts.sceneOf) };

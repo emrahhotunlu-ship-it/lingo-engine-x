@@ -50,12 +50,12 @@ describe('Stufenregel: jede Stufe hat für jedes Profil mindestens zwei Arten (K
   }
 });
 
-describe('Eingabeprofil touch: nie eigener Satz, nie Hören', () => {
-  it('produce, listen_mc und dictation fehlen am Handy in jeder Stufe', () => {
+describe('Eingabeprofil touch: nie Hören; der eigene Satz geht auch am Handy', () => {
+  it('listen_mc und dictation fehlen am Handy in jeder Stufe; produce nie ohne zwei Abruf-Tage', () => {
     for (const stage of [1, 2, 3, 4, 5] as Stage[]) {
       for (const c of [packCard('family-01', stage), packCard('colloc-01', stage), plain({}, stage)]) {
         const got = availableExercises(c, 'de', 100, makeEnv(true, true, true));
-        for (const x of ['produce', 'listen_mc', 'dictation'] as ExerciseId[]) expect(got, `${c.word} ${stage}`).not.toContain(x);
+        for (const x of ['produce', 'listen_mc', 'dictation'] as ExerciseId[]) expect(got, `${c.word} ${stage}`).not.toContain(x); // produce: kein Verlauf, also noch nicht bereit
       }
     }
   });
@@ -63,7 +63,9 @@ describe('Eingabeprofil touch: nie eigener Satz, nie Hören', () => {
     const env = makeEnv(true, true, false);
     expect(canListen(env)).toBe(true);
     expect(supports(plain({}, 5), 'dictation', 'de', 100, env)).toBe(true);
-    expect(supports(plain({}, 5), 'produce', 'de', 100, env)).toBe(true);
+    const ready = { hist: [{ t: NOW - 3 * 86_400_000, g: 3, x: 'cloze' }, { t: NOW - 86_400_000, g: 3, x: 'cloze' }] };
+    expect(supports(plain(ready, 5), 'produce', 'de', 100, env)).toBe(true);
+    expect(supports(plain(ready, 5), 'produce', 'de', 100, makeEnv(true, true, true))).toBe(true); // auch am Handy
     expect(supports(plain({}, 1), 'listen_mc', 'de', 100, env)).toBe(true);
   });
   it('Katalog: jede Stufe hat mindestens zwei eigene Arten, alle neuen Arten stehen darin', () => {
@@ -105,14 +107,14 @@ describe('Partnerwort-Lücke: nur am Partnerwort', () => {
 });
 
 describe('„Satz vervollständigen“, Wortfamilie, Falle finden', () => {
-  it('complete: mit Satzanfang aus dem Paket schon früh; ohne erst auf Stufe 5', () => {
+  it('complete: nur mit Satzanfang aus dem Paket; ohne Anfang ist es der eigene Satz (produce)', () => {
     const c = packCard('word-01', 3);
     expect(supports(c, 'complete', 'de', 100)).toBe(true);
     const e = buildExercise(c, 'complete', 'de', [c], 's');
     expect(e.input).toBe('sentence');
     expect(e.start && ['Every pricing decision involves a difficult', 'Faster delivery at lower cost always forces a'].includes(e.start)).toBe(true);
     expect(supports(plain({}, 3), 'complete', 'de', 100)).toBe(false);
-    expect(supports(plain({}, 5), 'complete', 'de', 100)).toBe(true);
+    expect(supports(plain({}, 5), 'complete', 'de', 100)).toBe(false);
   });
   it('wordfam: das Familienmitglied steht im Chip, das Kartenwort ist die Lösung', () => {
     const c = packCard('family-01', 4);

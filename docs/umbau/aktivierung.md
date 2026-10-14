@@ -32,7 +32,7 @@ Lokal zuerst (Zielwörter auch gebeugt, Länge, Satzform, bekannte deutsche Fehl
 „Einsatzbereit“: Stufe ≥ 4, ≥ 2 von Claude geprüfte richtige Aktivierungen mit ≥ 3 verschiedenen Merkmalen, davon 1 ohne gezeigtes Wort, ≥ 14 Tage Abstand, letzte ≤ 60 Tage. Freie Benutzung in Chat/Übersetzer/Preply lokal erkennen. Anzeige als vierte Zahl, eingeklappt.
 
 ## Bau in Stufen
-- **Stufe 1 (klein, wirkt sofort):** `produce`/„Eigener Satz“ am Handy freigeben (Zusammenführen mit `complete` ohne Anfang, ehrlich benannt) · variable Aufgabenstellung (Lage/Satzform/Ton aus Pool, 3 Wortlaute, per Hash) · Abschreibprüfung gegen alle gezeigten Beispielsätze (0,6) · `produceCheck` v2 (drei Schichten, Vorgaben, `errType`) · Leitplanke Barcroft in `tagesaufbau.md`.
+- **Stufe 1 (klein, wirkt sofort) – gebaut 14.10.2026, Zweig `claude/umbau-aktiv1` (Details `stand.md`):** `produce`/„Eigener Satz“ am Handy freigeben (Zusammenführen mit `complete` ohne Anfang, ehrlich benannt) · variable Aufgabenstellung (Lage/Satzform/Ton aus Pool, 3 Wortlaute, per Hash) · Abschreibprüfung gegen alle gezeigten Beispielsätze (0,6) · `produceCheck` v2 (drei Schichten, Vorgaben, `errType`) · Leitplanke Barcroft in `tagesaufbau.md`.
 - **Stufe 2 (mittel):** Fahrplan A1–A4 mit Vorrang/Tagesgrenze im Schritt „Wörter wiederholen“, `ac`-Zähler, Speicher `act/…`, Formate 3/4/5/10/13, `activate-check@1`, Messung „einsatzbereit“. Dazu `col` (Wortpartner) für die 194 Karten als Inhaltscharge mit Gegenlesung.
 - **Stufe 3 (groß):** Spezial „Schreibwerkstatt“ (1×/Woche), Pool ~40 Lagen/Rollen, Erkennung freier Benutzung, Transfer ohne Stichwort als Bedingung für „Fest“.
 Prüfer je Stufe: learning-scientist, english-teacher (Inhalte 100 %), data-guard, ux-reviewer.

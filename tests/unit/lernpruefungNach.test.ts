@@ -60,11 +60,15 @@ describe('Eigener Satz ohne Satzanfang', () => {
     expect(noteWeight('complete', 0, false, true)).toBe(NOTE_WEIGHT.produce);
     expect(noteWeight('complete')).toBe(NOTE_WEIGHT.help);
   });
-  it('Aufgabentext DE + EN', () => {
+  it('Aufgabentext DE + EN: drei Wortlaute für „Eigener Satz“ statt eines festen Textes', () => {
     const d = de as unknown as Record<string, string>;
     const e = en as unknown as Record<string, string>;
-    expect(d.task_complete_free).toBe('Schreib einen ganzen eigenen Satz (mindestens 4 Wörter) mit diesem Wort, z. B. aus einem Kundengespräch oder einer Projektbesprechung.');
-    expect(e.task_complete_free).toBe('Write a full sentence of your own (at least 4 words) with this word, e.g. from a client call or project meeting.');
+    expect(d.task_complete_free).toBeUndefined();
+    for (const n of [1, 2, 3]) {
+      expect(d[`task_produce_${n}`]).toBeTruthy();
+      expect(e[`task_produce_${n}`]).toBeTruthy();
+    }
+    expect(new Set([1, 2, 3].map((n) => d[`task_produce_${n}`])).size).toBe(3);
   });
 });
 

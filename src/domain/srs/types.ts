@@ -1,4 +1,5 @@
 import type { FsrsStored } from '../../data/schemas';
+import type { Brief } from './brief';
 
 // Gemeinsame Typen des Vokabeltrainers (Architektur-Entwurf §5.0, Daten-Entwurf §1.1).
 
@@ -102,6 +103,8 @@ export type TrainCard = {
 export type Option = { id: string; label: string; lang: Lang; correct: boolean; fromWord?: string; fromMeaning?: string };
 
 export type Exercise = {
+  /** `produce` („Eigener Satz“): Lage, Satzform, Ton und Zeitform dieser Aktivierung (`brief.ts`). */
+  brief?: Brief;
   ex: ExerciseId;
   input: InputKind;
   card: TrainCard;
@@ -194,6 +197,8 @@ export type AnswerEvent = {
   colIndex?: number;
   /** Schlüssel des gezeigten Satzes (`sentKey`, V1): kommt als `s` in `hist`, damit derselbe Satz nicht zweimal in Folge kommt. */
   sx?: string;
+  /** Code der Vorgabe eines eigenen Satzes (`brief.ts`, < 40 Zeichen): kommt als `a` in `hist`, damit die nächste Aktivierung anders ausfällt. */
+  act?: string;
   /** Eingabeprofil der Runde: Touch oder Tastatur (Lernplattform 2.0 §3.1). */
   dev?: 't' | 'k';
   /** Einspruch „Ich lag richtig" (M4): als richtig gewertet, höchstens „Gut", im Log `override:true`. */
