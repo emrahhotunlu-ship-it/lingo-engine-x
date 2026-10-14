@@ -450,3 +450,17 @@ function readFixtureReply(topic: string) {
     paras: e.paras, keyWords: e.keyWords as never, check: e.check as never,
   };
 }
+
+describe('Prüftore: keine falschen Alarme bei Produktnamen und Datumsangaben', () => {
+  it('Produktnamen mit Punkt (Character.AI, GitLab.com) sind keine verklebten Sätze', async () => {
+    const { gluedProblem } = await import('../../../src/modules/read/domain/accept');
+    expect(gluedProblem('Character.AI, a startup, has filed for bankruptcy.')).toBeNull();
+    expect(gluedProblem('GitLab.com already runs the patched version.')).toBeNull();
+    expect(gluedProblem('It ends here.And this is glued.')).not.toBeNull();
+  });
+  it('Deutsche Datumsangaben („am 12. Oktober“) sind kein zweites Satzende', async () => {
+    const { hasInnerSentenceEnd } = await import('../../../src/modules/read/domain/accept');
+    expect(hasInnerSentenceEnd('Laut TechStartups wurde der Antrag am 12. Oktober 2026 bekannt gegeben.')).toBe(false);
+    expect(hasInnerSentenceEnd('Das ist ein Satz. Das ist noch einer.')).toBe(true);
+  });
+});

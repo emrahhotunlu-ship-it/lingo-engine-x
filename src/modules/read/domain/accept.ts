@@ -113,15 +113,16 @@ export function hasInnerSentenceEnd(s: string): boolean {
     const token = (before.split(/\s+/).pop() ?? '').replace(/^[("„“‚'‘]+/, '').replace(/\.$/, '').toLowerCase();
     if (!/[.!?]/.test(m[0].charAt(0))) continue;
     if (m[0].charAt(0) !== '.') return true;
-    if (ABBR.has(token) || /^[a-zäöü]$/i.test(token) || /^(?:[a-zäöü]\.)+[a-zäöü]$/i.test(token)) continue;
+    if (ABBR.has(token) || /^\d{1,4}$/.test(token) || /^[a-zäöü]$/i.test(token) || /^(?:[a-zäöü]\.)+[a-zäöü]$/i.test(token)) continue;
     return true;
   }
   return false;
 }
 
 const GLUED_BOUNDARY = /[a-zäöüß][.!?]["”')]?[A-ZÄÖÜ]/;
-// Schreibweisen mit Punkt zwischen Buchstaben, die keine verklebten Sätze sind.
-const DOTTED = /\b(?:Ph\.D|ASP\.NET|[A-Za-z0-9]+\.(?:js|io|ai|NET|com|org|net|dev|app)|[a-z]\.[a-z]\.[A-Z]?)\b/g;
+// Schreibweisen mit Punkt zwischen Buchstaben, die keine verklebten Sätze sind (Character.AI, GitLab.com, Node.js; Groß/Klein egal).
+// Deutsche Ordnungszahlen („am 12. Oktober“) sind kein Satzende (Zahl vor dem Punkt).
+const DOTTED = /\b(?:Ph\.D|ASP\.NET|[A-Za-z0-9]+\.(?:js|io|ai|NET|com|org|net|dev|app)|[a-z]\.[a-z]\.[A-Z]?)\b/gi;
 const MARKUP = /[*#<>`]|\{\{|\}\}|_{2,}|\[(?:\.\.\.|…)\]/;
 const LANG_SPELL = /\b[CF]#/g;
 
