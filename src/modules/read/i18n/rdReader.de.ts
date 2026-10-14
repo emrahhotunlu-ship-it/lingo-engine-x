@@ -20,7 +20,7 @@ export const rdrDe = {
   rdrViewC: 'Deutsch zuerst',
   rdrViewHintA: 'Englisch mit Deutsch darunter. Entspannt lesen, ohne Abfrage.',
   rdrViewHintB: 'Erst Englisch allein. Tippe auf die Satznummer, wenn du das Deutsche brauchst.',
-  rdrViewHintC: 'Erst Deutsch. Tippe auf die Satznummer, um das Englische zu sehen.',
+  rdrViewHintC: 'Erst Deutsch. Sag dir den Satz auf Englisch, dann tippe die Satznummer und vergleiche.',
   rdrRevealAll: 'Alles aufdecken',
   rdrCoverAll: 'Alles zudecken',
   rdrSentences: 'Sätze des Artikels',
@@ -36,7 +36,8 @@ export const rdrDe = {
   rdrTextRemoved: 'Der Text dieses Artikels wurde gelöscht, um Platz zu sparen. Titel und gespeicherte Wörter sind noch da.',
 
   rdrKeyWords: 'Schlüsselwörter',
-  rdrKeyHint: 'Tippe auf „Als Karte“: Dann übst du das Wort im Wörter-Training, zusammen mit dem Satz aus dem Artikel.',
+  rdrKeyHint: 'Was heißt das hier im Satz? Erst überlegen, dann aufdecken. Mit „Als Karte“ übst du das Wort im Wörter-Training, zusammen mit dem Satz aus dem Artikel.',
+  rdrKeyShow: 'Bedeutung zeigen',
   rdrSaveCard: 'Als Karte',
   rdrSaveCardFor: 'Als Karte speichern: {word}',
   rdrSaving: 'Speichere …',

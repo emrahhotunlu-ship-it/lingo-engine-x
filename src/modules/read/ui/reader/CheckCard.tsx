@@ -4,7 +4,7 @@ import { judgeCheck } from '../../domain/readerCheck';
 import { rdrText, type RdrLang } from '../../domain/readerText';
 import { EnglishText, Icon } from '../../sharedUi';
 
-// Verständnis-Check (docs/umbau/lesen-plan.md §2.2): höchstens zwei Fragen, ohne Wertung und Punkte, kein KI-Aufruf beim Antworten.
+// Verständnis-Check (docs/umbau/lesen-plan.md §2.2): höchstens drei Fragen, ohne Wertung und Punkte, kein KI-Aufruf beim Antworten.
 // Rückmeldung nach dem festen Vier-Fragen-Raster (Kap. 2 Nr. 4): Was tun · Wozu · Deine Antwort / Richtig · Warum.
 // Die Begründung (`why`) kommt auch bei richtiger Antwort.
 
@@ -41,8 +41,7 @@ export function CheckCard({ checks, articleId, title, lang, onAnswers }: CheckCa
           <div key={q.q} role="group" aria-label={rdrText(lang, 'rdrQuestionN', { n: qi + 1, total: checks.length })} className="flex flex-col gap-2" data-testid="rdr-q" data-answered={out ? (out.right ? 'right' : 'wrong') : undefined}>
             <p className="m-0 text-2xs uppercase tracking-wide text-subtle">{rdrText(lang, 'rdrQuestionN', { n: qi + 1, total: checks.length })}</p>
             <EnglishText as="p" text={q.q} area="read" source={articleId} title={title} className="m-0 text-base font-medium leading-7 text-fg" />
-            {!out ? (
-              <dl className="m-0 flex flex-col gap-0.5 text-xs text-muted">
+            <dl className={`m-0 flex flex-col gap-0.5 text-xs text-muted ${out ? 'opacity-70' : ''}`}>
                 <div className="flex gap-1.5">
                   <dt className="font-semibold">{rdrText(lang, 'rdrDo')}:</dt>
                   <dd className="m-0">{rdrText(lang, 'rdrDoText')}</dd>
@@ -51,8 +50,7 @@ export function CheckCard({ checks, articleId, title, lang, onAnswers }: CheckCa
                   <dt className="font-semibold">{rdrText(lang, 'rdrPurpose')}:</dt>
                   <dd className="m-0">{rdrText(lang, 'rdrPurposeText')}</dd>
                 </div>
-              </dl>
-            ) : null}
+            </dl>
             <div className="flex flex-col gap-2">
               {q.o.map((opt, ai) => {
                 const mine = picked === ai;

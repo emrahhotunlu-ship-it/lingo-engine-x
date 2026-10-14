@@ -37,7 +37,7 @@ function SentenceRowImpl({ sentence, view, revealed, hl, articleId, title, lang,
         className="m-0 min-w-0 flex-1 text-base leading-7 text-fg"
         testId="rdr-en"
       />
-      {view === 'c' ? <SpeakButton text={e} label={rdrText(lang, 'rdrListen')} testId="rdr-speak" /> : null}
+      <SpeakButton text={e} label={rdrText(lang, 'rdrListen')} testId="rdr-speak" />
     </div>
   ) : null;
   const de = st.showDe ? (
@@ -45,7 +45,6 @@ function SentenceRowImpl({ sentence, view, revealed, hl, articleId, title, lang,
       <p lang="de" className={`m-0 min-w-0 flex-1 ${st.deFirst ? 'text-base leading-7 text-fg' : 'text-sm text-muted'}`} data-testid="rdr-de">
         {d}
       </p>
-      {st.deFirst ? null : <SpeakButton text={e} label={rdrText(lang, 'rdrListen')} testId="rdr-speak" />}
     </div>
   ) : null;
   return (

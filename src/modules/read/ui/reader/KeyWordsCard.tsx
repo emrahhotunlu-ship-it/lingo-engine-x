@@ -22,6 +22,7 @@ export type KeyWordsCardProps = {
 
 export function KeyWordsCard({ picks, article, lang, onSaved }: KeyWordsCardProps) {
   const [state, setState] = useState<Record<number, CardState>>({});
+  const [shown, setShown] = useState<Record<number, boolean>>({});
   const busy = useRef(new Set<number>());
 
   const save = useCallback(
@@ -75,9 +76,15 @@ export function KeyWordsCard({ picks, article, lang, onSaved }: KeyWordsCardProp
                   {p.kw.w}
                 </span>
                 <span className="text-muted"> · </span>
-                <span className="text-muted" lang="de">
-                  {p.kw.de}
-                </span>
+                {shown[i] || st === 'saved' || st === 'exists' ? (
+                  <span className="text-muted" lang="de" data-testid="rdr-kw-de">
+                    {p.kw.de}
+                  </span>
+                ) : (
+                  <button type="button" onClick={() => setShown((s) => ({ ...s, [i]: true }))} className="min-h-11 rounded-[var(--radius-inline)] px-2 text-sm font-medium text-accent-text" data-testid="rdr-kw-reveal">
+                    {rdrText(lang, 'rdrKeyShow')}
+                  </button>
+                )}
               </p>
               {p.sentence ? (
                 <EnglishText as="p" text={p.sentence.e} area="read" source={article.id} title={article.title} highlight={p.span} className="m-0 text-sm leading-6 text-muted" testId="rdr-kw-sentence" />

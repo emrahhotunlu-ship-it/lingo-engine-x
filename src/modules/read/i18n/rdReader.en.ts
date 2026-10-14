@@ -21,7 +21,7 @@ export const rdrEn: Record<RdrKey, string> = {
   rdrViewC: 'German first',
   rdrViewHintA: 'English with German below it. Relaxed reading, no quizzing.',
   rdrViewHintB: 'English alone first. Tap the sentence number when you need the German.',
-  rdrViewHintC: 'German first. Tap the sentence number to see the English.',
+  rdrViewHintC: 'German first. Say the sentence in English yourself, then tap the sentence number and compare.',
   rdrRevealAll: 'Reveal all',
   rdrCoverAll: 'Cover all',
   rdrSentences: 'Sentences of the article',
@@ -37,7 +37,8 @@ export const rdrEn: Record<RdrKey, string> = {
   rdrTextRemoved: 'This article’s text was removed to save space. The title and saved words are still here.',
 
   rdrKeyWords: 'Key words',
-  rdrKeyHint: 'Tap “Save as card” to practice the word in vocabulary training. The sentence from the article comes with it.',
+  rdrKeyHint: 'What does it mean here, in this sentence? Think first, then reveal. “Save as card” puts the word into vocabulary training, together with the sentence from the article.',
+  rdrKeyShow: 'Show meaning',
   rdrSaveCard: 'Save as card',
   rdrSaveCardFor: 'Save as card: {word}',
   rdrSaving: 'Saving …',

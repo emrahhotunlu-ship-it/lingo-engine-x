@@ -87,9 +87,9 @@ describe('Leser: Sätze und Ansichten', () => {
     expect(topVisibleSentence([{ n: 1, bottom: -5 }, { n: 2, bottom: -1 }], 60)).toBe(2);
   });
 
-  it('Prüffragen: höchstens zwei', () => {
-    expect(pickChecks(art.check)).toHaveLength(2);
-    expect(pickChecks([...(art.check ?? []), ...(art.check ?? [])])).toHaveLength(2);
+  it('Prüffragen: höchstens drei', () => {
+    expect(pickChecks(art.check).length).toBeLessThanOrEqual(3);
+    expect(pickChecks([...(art.check ?? []), ...(art.check ?? [])])).toHaveLength(3);
     expect(pickChecks(null)).toEqual([]);
   });
 });

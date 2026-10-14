@@ -145,9 +145,9 @@ export function cardLevel(level: string | null | undefined): string | null {
   return m ? `${(m[1] ?? '').toUpperCase()}${m[2]}` : null;
 }
 
-/** Prüffragen: höchstens die ersten zwei (der Artikel hat sie schon geprüft, hier nur die Obergrenze). */
+/** Prüffragen: höchstens die ersten drei (der Artikel hat sie schon geprüft, hier nur die Obergrenze). */
 export function pickChecks(list: readonly Check[] | null | undefined): Check[] {
-  return (list ?? []).slice(0, 2);
+  return (list ?? []).slice(0, 3);
 }
 
 /** Nummer des obersten sichtbaren Satzes aus den Unterkanten (px) der Satzzeilen und der Höhe der festen Kopfleiste. */
