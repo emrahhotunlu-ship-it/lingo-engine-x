@@ -68,7 +68,8 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
   - [ ] Design-Angleichung an die Vorschau inkl. Effekt-Engine (Branch `claude/umbau-design`) → Test-Link 7, dann live nach „Ja live nehmen“ (Emrah: Design zuerst live)
   - [ ] R3 Dein Weg: P31–P37 + Lehrer-Korrekturen zusammengeführt (`claude/umbau-r3-b` vollständig in `claude/umbau-fokus`)
   - [x] Aufräumrunde (Rückmeldungen 1–4, 6, 7) auf Test-Link `AXHkh6…` v55 `1791675188-8c8d` · [x] Rückmeldung 5 Kapitel-Arbeiten (`docs/umbau/kapitel-plan.md`) **live** `JLL8…` v76 `1791807258-d7e7` (12.10.2026, Rückweg v75 `1791741081-b412`; v73 = Kapitel-Arbeiten, v74 = Fix kaputter Beispielsatz, v75 = Sammelrunde 1, v76 = Sammelrunde 2 + Aufgaben-Audit)
-  - [x] Lesen (Reiter, Tagesartikel der Routine `trig_01LxTDBs97GGemopdDnxgyXP`, Leser) **live** `JLL8…` v78 (14.10.2026, Rückweg v77 `1791964370-abc2`, davor v76 `1791807258-d7e7`); Kurse (`docs/umbau/lesen-kurse.md`) und Aktivierung (`docs/umbau/aktivierung.md`) in Arbeit
+  - [x] Lesen (Reiter, Tagesartikel der Routine `trig_01LxTDBs97GGemopdDnxgyXP`, Leser) **live** `JLL8…` v78 (14.10.2026, Rückweg v77 `1791964370-abc2`, davor v76 `1791807258-d7e7`)
+  - [x] Gesamtpaket Aktivierung Stufe 1+2 (`docs/umbau/aktivierung.md`), Kurse K1/K5 (`docs/umbau/lesen-kurse.md`, Routine `trig_01TMp36iPogaxiZpk5mHctpL`) **live** `JLL8…` v79 `1791991464-6145` (15.10.2026, Rückweg v78 `1791970843-cb0c`). Offen: Wortpartner-Charge `col`, „Sag es laut“, Aktivierung Stufe 3 (Schreibwerkstatt), weitere Kurse K2–K4, K6–K8
   - [ ] R4 Messen · [x] R5 Dein Lehrer (live `JLL8…` v72 `1791500848-5d8d`, Rückweg v71) · [ ] R6 Premium · [ ] R7 Fülle (nur auf Zuruf)
 - [ ] Phase 2 – Lernen: Kurs, Grammatik, Diktat, Lückenjagd, Satzbau, Sprint
 - [ ] Phase 3 – Sprechen: Rollenspiel mit Analysepanel, Sprachausgabe, Chunks mitnehmen, Business-Suite
