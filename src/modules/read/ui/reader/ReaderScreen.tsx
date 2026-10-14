@@ -14,7 +14,7 @@ import { ReaderView } from './ReaderView';
 // Der Leser als Seite (docs/umbau/lesen-plan.md §2.2): lädt EINEN Artikel nach Kennung (Tagesdokument, Monatsindex, Einstellungen, je ein
 // `get`, kein Abo) und zeigt `ReaderView`. Geschrieben wird nur auf Handlung: Ansicht wechseln, Ausblenden/Verlassen.
 
-type Loaded = { article: ArticleItem; day: string; state: ReadState | null; prefs: Prefs };
+type Loaded = { article: ArticleItem; day: string; state: ReadState | null; prefs: Prefs; nextId: string | null };
 type Phase = { key: string } & ({ status: 'loading' } | { status: 'notfound' } | { status: 'failed' } | ({ status: 'ready' } & Loaded));
 
 export type ReaderScreenProps = {
@@ -22,11 +22,17 @@ export type ReaderScreenProps = {
   id: string;
   /** Der eine Schreibpfad der App; ohne Angabe wird aus der Datenbank-Fähigkeit ein eigener erzeugt. */
   writer?: Writer;
+  /** Sprung zu diesem Satz beim Öffnen über „Weiterlesen“. */
+  startAt?: number | null;
+  /** Öffnet einen anderen Artikel (Abschlussknopf „Nächster Artikel“). */
+  onOpen?: (id: string) => void;
+  /** Zurück zur Liste (Abschlussknopf ohne weiteren Artikel). */
+  onList?: () => void;
 };
 
 const writers = new WeakMap<object, Writer>();
 
-export function ReaderScreen({ id, writer }: ReaderScreenProps) {
+export function ReaderScreen({ id, writer, startAt = null, onOpen, onList }: ReaderScreenProps) {
   const { lang } = useT();
   const [loaded, setPhase] = useState<Phase | null>(null);
   const [attempt, setAttempt] = useState(0);
@@ -68,7 +74,12 @@ export function ReaderScreen({ id, writer }: ReaderScreenProps) {
         }
         const month = parseMonthDoc(m.exists ? m.data() : undefined);
         const state = month.ok ? (month.items.find((x) => x.id === id)?.st ?? null) : null;
-        setPhase({ key, status: 'ready', article, day, state, prefs: parsePrefs(p.exists ? p.data() : undefined) });
+        // Nächster Artikel des Tages, der noch nicht gelesen ist (Reihenfolge des Tagesdokuments, ab dem aktuellen, dann von vorn).
+        const items = dayDoc.ok ? dayDoc.items : [];
+        const doneIds = new Set(month.ok ? month.items.filter((x) => x.st?.done === true).map((x) => x.id) : []);
+        const at = items.findIndex((x) => x.id === id);
+        const nextId = [...items.slice(at + 1), ...items.slice(0, at)].find((x) => !doneIds.has(x.id))?.id ?? null;
+        setPhase({ key, status: 'ready', article, day, state, prefs: parsePrefs(p.exists ? p.data() : undefined), nextId });
       } catch (err) {
         logError('read:reader', err, id);
         if (alive) setPhase({ key, status: 'failed' });
@@ -117,5 +128,19 @@ export function ReaderScreen({ id, writer }: ReaderScreenProps) {
         </Button>
       </div>
     );
-  return <ReaderView key={phase.article.id} article={phase.article} state={phase.state} view={phase.prefs.view} autoSpeak={phase.prefs.autoSpeak} onViewChange={onViewChange} onProgress={onProgress} />;
+  const nextId = phase.nextId;
+  return (
+    <ReaderView
+      key={phase.article.id}
+      article={phase.article}
+      state={phase.state}
+      view={phase.prefs.view}
+      autoSpeak={phase.prefs.autoSpeak}
+      onViewChange={onViewChange}
+      onProgress={onProgress}
+      startAt={startAt}
+      onNext={onOpen && nextId ? () => onOpen(nextId) : undefined}
+      onBack={onList}
+    />
+  );
 }

@@ -98,7 +98,8 @@ test.describe('Bildschirm „Lesen“ (390 px)', () => {
     // Genau ein gefüllter Hauptknopf; er nennt den angefangenen Artikel.
     const primary = page.getByTestId('read-primary');
     await expect(primary).toHaveCount(1);
-    await expect(primary).toContainText('Weiterlesen: Why Partnerships Take Longer Than Anyone Plans');
+    await expect(primary).toHaveText('Weiterlesen'); // kein Titel im Knopf (steht in der Zeile darüber)
+    await expect(rows.nth(0)).toContainText('Angefangen · Satz 4');
     // Zwei von drei Artikeln da: der fehlende wird still angeboten (kein zweiter Hauptknopf).
     await expect(page.getByTestId('read-fetch')).toHaveText('Artikel für heute holen');
     // Wochenzeile (KW 38: ein gelesener Artikel am 17.09., 500 s ≈ 8 Min) und frühere Artikel.
@@ -114,6 +115,9 @@ test.describe('Bildschirm „Lesen“ (390 px)', () => {
     await primary.click();
     await screen(page, 'readArticle');
     await expect(page.getByTestId('rdr')).toHaveAttribute('data-article', /^a-2026-09-19-1-/);
+    // „Weiterlesen“ springt direkt zu Satz 4, ohne Zwischenkarte (ein Tipp).
+    await expect(page.getByTestId('rdr-resume')).toHaveCount(0);
+    await expect.poll(async () => (await page.locator('[data-testid="rdr-sentence"][data-n="4"]').boundingBox())?.y ?? 9999).toBeLessThan(300);
     await expect(page.getByTestId('tabbar')).toBeVisible();
     await page.getByTestId('page-back').first().click();
     await screen(page, 'read');
@@ -171,7 +175,7 @@ test.describe('Bildschirm „Lesen“ (390 px)', () => {
     await screen(page, 'today');
     await openRead(page);
     await expect(page.getByTestId('read-title')).toHaveText('Read');
-    await expect(page.getByTestId('read-primary')).toContainText('Keep reading: Why Partnerships Take Longer Than Anyone Plans');
+    await expect(page.getByTestId('read-primary')).toHaveText('Keep reading');
     await expect(page.getByTestId('read-fetch')).toHaveText('Get today’s articles');
     await expect(page.getByTestId('read-week')).toContainText('This week: 1 article · 8 min');
   });
@@ -197,7 +201,7 @@ test.describe('Artikel holen (Dev-Adapter)', () => {
     await expect(progress).toHaveCount(0);
     const primary = page.getByTestId('read-primary');
     await expect(primary).toHaveAttribute('data-kind', 'read');
-    await expect(primary).toContainText('Lesen: ');
+    await expect(primary).toHaveText('Nächsten Artikel lesen');
     await expect(page.getByTestId('read-fetch')).toHaveCount(0); // alle drei da
     // Gespeichert: Tagesdokument mit drei Artikeln, Monatsindex, Lerntage in read/p (für die Zählung ohne Texte).
     const db = await dump(page);

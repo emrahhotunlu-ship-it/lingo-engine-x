@@ -634,10 +634,16 @@ h3 {
     position: absolute;
     inset: -0.45em 0;
   }
-  .lx-word:hover,
   .lx-word[data-active] {
     background: var(--lx-cyan-soft);
     text-decoration-color: var(--lx-cyan);
+  }
+  /* Nur mit Maus: am Touch bliebe :hover nach dem Tippen am Wort haften. */
+  @media (hover: hover) {
+    .lx-word:hover {
+      background: var(--lx-cyan-soft);
+      text-decoration-color: var(--lx-cyan);
+    }
   }
   .lx-dots {
     display: inline-flex;
@@ -1146,6 +1152,25 @@ h3 {
   flex: 1 1 0;
   min-width: 0;
   width: 100%;
+}
+/* Aufdecken im Leser: kurze Einblendung (200 ms); bei reduzierter Bewegung greift die Regel oben (schlichte Überblendung). */
+@keyframes lx-reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.lx-reveal-in {
+  animation: lx-reveal-in 200ms ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lx-reveal-in {
+    animation-name: lx-bar-in;
+  }
 }
 @keyframes lx-bar-in {
   from {

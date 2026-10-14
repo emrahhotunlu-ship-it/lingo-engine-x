@@ -32,7 +32,7 @@ test.beforeAll(async () => {
   if (!existsSync(RUNTIME_URL)) await build({ root: ROOT, configFile: `${ROOT}vite.runtime.config.ts`, logLevel: 'error' });
 });
 
-type Opts = { id?: string; lang?: 'de' | 'en'; theme?: Theme; state?: Doc; prefs?: Doc; article?: Doc; width?: number; height?: number };
+type Opts = { id?: string; lang?: 'de' | 'en'; theme?: Theme; state?: Doc; prefs?: Doc; article?: Doc; width?: number; height?: number; at?: number };
 
 async function open(page: Page, o: Opts = {}): Promise<{ external: string[]; errors: string[] }> {
   const external: string[] = [];
@@ -67,7 +67,7 @@ async function open(page: Page, o: Opts = {}): Promise<{ external: string[]; err
     };
   }, { seed: 'empty', patch });
   await page.addInitScript({ content: readFileSync(RUNTIME_URL, 'utf8') });
-  await page.goto(`${ORIGIN}/#id=${encodeURIComponent(o.id ?? ID)}&lang=${o.lang ?? 'de'}&theme=${o.theme ?? 'dark'}`);
+  await page.goto(`${ORIGIN}/#id=${encodeURIComponent(o.id ?? ID)}&lang=${o.lang ?? 'de'}${o.at ? `&at=${o.at}` : ''}&theme=${o.theme ?? 'dark'}`);
   return { external, errors };
 }
 
@@ -245,6 +245,36 @@ test.describe('Leser 390 px, Deutsch, dunkel', () => {
     await expect(qs.nth(1)).toHaveAttribute('data-answered', 'right');
   });
 
+  test('Prüffragen per Tastatur: Ziffer 1 bis 3 wählt die Antwort der fokussierten Frage; Was tun und Wozu bleiben stehen', async ({ page }) => {
+    await open(page);
+    await ready(page);
+    const qs = page.getByTestId('rdr-q');
+    await qs.first().getByTestId('rdr-opt').nth(1).focus();
+    await page.keyboard.press('1');
+    await expect(qs.first()).toHaveAttribute('data-answered', /right|wrong/);
+    await expect(qs.first().getByTestId('rdr-opt').nth(0)).toHaveAttribute('aria-pressed', 'true');
+    await expect(qs.first()).toContainText('Was tun:');
+    await expect(qs.first()).toContainText('Wozu:');
+    await expect(qs.nth(1)).not.toHaveAttribute('data-answered', /.+/);
+  });
+
+  test('Abschluss: ein Hauptknopf am Ende führt zurück zur Liste', async ({ page }) => {
+    await open(page);
+    await ready(page);
+    const end = page.getByTestId('rdr-end');
+    await end.scrollIntoViewIfNeeded();
+    await expect(page.getByTestId('rdr-end-next')).toBeVisible();
+    await page.getByTestId('rdr-end-next').click();
+    await expect(page.locator('body')).toHaveAttribute('data-listed', '1');
+  });
+
+  test('Über „Weiterlesen“ geöffnet (Sprung zum Satz): keine Zwischenkarte, Satz steht oben', async ({ page }) => {
+    await open(page, { state: { sec: 120, pos: 14, open: 3 }, at: 14 });
+    await ready(page);
+    await expect(page.getByTestId('rdr-resume')).toHaveCount(0);
+    await expect.poll(async () => (await sentence(page, 14).boundingBox())?.y ?? 9999).toBeLessThan(300);
+  });
+
   test('ungültige Prüffragen fehlen still: kein Check-Block, Artikel bleibt lesbar', async ({ page }) => {
     await open(page, { article: { ...ART, check: undefined } });
     await ready(page);
@@ -359,9 +389,9 @@ test.describe('Leser Englisch', () => {
   test('Oberfläche Englisch: Ansichten, Zustände und Rückmeldungen auf Englisch (US)', async ({ page }) => {
     await open(page, { lang: 'en' });
     await ready(page);
-    await expect(page.getByTestId('rdr-view-a')).toHaveText('With German');
-    await expect(page.getByTestId('rdr-view-b')).toHaveText('English only');
-    await expect(page.getByTestId('rdr-view-c')).toHaveText('German first');
+    await expect(page.getByTestId('rdr-view-a')).toHaveText('EN + DE');
+    await expect(page.getByTestId('rdr-view-b')).toHaveText('EN only');
+    await expect(page.getByTestId('rdr-view-c')).toHaveText('DE first');
     await expect(page.getByTestId('rdr-byclaude')).toContainText('Written by Claude');
     await expect(sentence(page, 2).getByTestId('rdr-marker')).toHaveAttribute('aria-label', 'Show German for sentence 2');
     await expect(page.getByTestId('rdr-meta')).toContainText('min');

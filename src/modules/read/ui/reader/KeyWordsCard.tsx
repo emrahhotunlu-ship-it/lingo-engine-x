@@ -95,7 +95,7 @@ export function KeyWordsCard({ picks, article, lang, onSaved }: KeyWordsCardProp
                     {rdrText(lang, 'rdrCardNoSentence')}
                   </p>
                 ) : st === 'saved' || st === 'exists' ? (
-                  <p className="m-0 inline-flex items-center gap-1.5 text-sm font-medium text-accent-text" role="status" data-testid="rdr-kw-saved">
+                  <p className="m-0 inline-flex items-center gap-1.5 text-sm font-medium text-ok-text" role="status" data-testid="rdr-kw-saved">
                     <Icon name="check" size={18} />
                     {rdrText(lang, st === 'saved' ? 'rdrCardSaved' : 'rdrCardExists')}
                   </p>

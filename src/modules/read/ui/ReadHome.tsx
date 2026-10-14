@@ -60,7 +60,7 @@ function ArticleRow({ e, onOpen }: { e: IndexItem; onOpen: () => void }) {
         </span>
         <span className={`flex flex-none items-center gap-1 text-xs font-medium ${state === 'done' ? 'text-ok-text' : 'text-subtle'}`} data-testid="read-state">
           {state === 'done' && <Icon name="check" size={16} />}
-          {t(STATE_LABEL[state])}
+          {state === 'started' && (e.st?.pos ?? 0) > 1 ? t('rdStateStartedAt', { n: e.st?.pos ?? 0 }) : t(STATE_LABEL[state])}
         </span>
       </button>
     </li>
@@ -135,7 +135,8 @@ function Running({ h }: { h: ReadHome }) {
 function TodayCard({ h }: { h: ReadHome }) {
   const { t } = useT();
   const go = useNav((s) => s.go);
-  const open = (id: string) => go({ name: 'readArticle', id });
+  // „Weiterlesen“ springt gleich zum Satz, an dem man aufgehört hat (ab Satz 2; Satz 1 ist ohnehin oben).
+  const open = (id: string, at?: number | null) => go(at && at > 1 ? { name: 'readArticle', id, at } : { name: 'readArticle', id });
   const busy = h.running !== null;
   const empty = h.entries.length === 0;
   const canFetch = h.aiOn && !busy && !h.rateLocked && h.toFetch > 0;
@@ -146,8 +147,8 @@ function TodayCard({ h }: { h: ReadHome }) {
     const started = entryState(h.next) === 'started';
     action = (
       <>
-        <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => open(h.next!.id)} data-testid="read-primary" data-kind="read">
-          {t(started ? 'rdContinue' : 'rdReadNext', { title: h.next.title ?? '' })}
+        <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => open(h.next!.id, started ? h.next!.st?.pos : undefined)} data-testid="read-primary" data-kind="read">
+          {t(started ? 'rdContinue' : 'rdReadNext')}
         </Button>
         {canFetch && h.entries.length < h.perDay && (
           <Button variant="ghost" onClick={() => h.getArticles()} data-testid="read-fetch" data-ai="">
@@ -198,7 +199,7 @@ function Topics({ h }: { h: ReadHome }) {
     setMsg(r === 'invalid' ? 'rdTopicInvalid' : r === 'full' ? 'rdTopicFull' : null);
     if (r === 'ok') setText('');
   };
-  const chip = (on: boolean) => `lx-hit inline-flex items-center rounded-full px-3 text-sm whitespace-nowrap transition-colors ${on ? 'bg-accent-soft font-semibold text-accent-text' : 'bg-surface-strong text-fg hover:bg-surface'}`;
+  const chip = (on: boolean) => `lx-hit inline-flex min-w-11 items-center justify-center rounded-full px-3 text-sm whitespace-nowrap transition-colors ${on ? 'bg-accent-soft font-semibold text-accent-text' : 'bg-surface-strong text-fg hover:bg-surface'}`;
   return (
     <section className="flex flex-col gap-2.5" aria-label={t('rdTopics')} data-testid="read-topics">
       <Eyebrow>{t('rdTopics')}</Eyebrow>
@@ -277,7 +278,7 @@ function PerDay({ h }: { h: ReadHome }) {
     <div className="lx-card flex min-h-14 items-center justify-between gap-3 px-3.5 py-1" data-testid="read-perday">
       <span className="font-semibold">{t('rdPerDay')}</span>
       <span className="flex items-center gap-1">
-        <IconButton icon="arrowDown" label={t('rdPerDayLess')} onClick={() => h.setPerDay(h.perDay - 1)} disabled={h.perDay <= 1} data-testid="read-perday-less" className="[&_svg]:rotate-90" />
+        <IconButton icon="minus" label={t('rdPerDayLess')} onClick={() => h.setPerDay(h.perDay - 1)} disabled={h.perDay <= 1} data-testid="read-perday-less" />
         <span className="lx-tnum min-w-6 text-center font-semibold" data-testid="read-perday-n">
           {num(h.perDay)}
         </span>

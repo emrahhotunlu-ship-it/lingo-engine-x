@@ -38,10 +38,25 @@ export function CheckCard({ checks, articleId, title, lang, onAnswers }: CheckCa
         const picked = answers[qi];
         const out = picked === undefined ? null : judgeCheck(q, picked);
         return (
-          <div key={q.q} role="group" aria-label={rdrText(lang, 'rdrQuestionN', { n: qi + 1, total: checks.length })} className="flex flex-col gap-2" data-testid="rdr-q" data-answered={out ? (out.right ? 'right' : 'wrong') : undefined}>
+          // Ziffern 1 bis 3 wählen die Antwort, solange der Fokus in dieser Frage liegt (Kap. 4, Tastatur).
+          <div
+            key={q.q}
+            role="group"
+            aria-label={rdrText(lang, 'rdrQuestionN', { n: qi + 1, total: checks.length })}
+            className="flex flex-col gap-2"
+            onKeyDown={(ev) => {
+              if (ev.ctrlKey || ev.metaKey || ev.altKey || !/^[1-9]$/.test(ev.key)) return;
+              const ai = Number(ev.key) - 1;
+              if (ai < q.o.length) {
+                ev.preventDefault();
+                pick(qi, ai);
+              }
+            }}
+            data-testid="rdr-q"
+            data-answered={out ? (out.right ? 'right' : 'wrong') : undefined}>
             <p className="m-0 text-2xs uppercase tracking-wide text-subtle">{rdrText(lang, 'rdrQuestionN', { n: qi + 1, total: checks.length })}</p>
             <EnglishText as="p" text={q.q} area="read" source={articleId} title={title} className="m-0 text-base font-medium leading-7 text-fg" />
-            <dl className={`m-0 flex flex-col gap-0.5 text-xs text-muted ${out ? 'opacity-70' : ''}`}>
+            <dl className={`m-0 flex flex-col gap-0.5 text-xs text-muted`}>
                 <div className="flex gap-1.5">
                   <dt className="font-semibold">{rdrText(lang, 'rdrDo')}:</dt>
                   <dd className="m-0">{rdrText(lang, 'rdrDoText')}</dd>
@@ -55,13 +70,14 @@ export function CheckCard({ checks, articleId, title, lang, onAnswers }: CheckCa
               {q.o.map((opt, ai) => {
                 const mine = picked === ai;
                 const right = !!out && ai === out.correct;
-                const tone = !out ? 'lx-glass text-fg hover:bg-surface-strong' : right ? 'border border-ok bg-ok-soft text-fg' : mine ? 'border border-wrong bg-wrong-soft text-fg' : 'lx-glass text-muted opacity-70';
+                const tone = !out ? 'lx-glass text-fg hover:bg-surface-strong' : right ? 'border border-ok bg-ok-soft text-fg' : mine ? 'border border-wrong bg-wrong-soft text-fg' : 'lx-glass text-muted';
                 return (
                   <button
                     key={opt}
                     type="button"
                     disabled={!!out}
                     aria-pressed={mine}
+                    aria-keyshortcuts={String(ai + 1)}
                     onClick={() => pick(qi, ai)}
                     data-testid="rdr-opt"
                     data-state={!out ? undefined : right ? 'right' : mine ? 'wrong' : 'other'}

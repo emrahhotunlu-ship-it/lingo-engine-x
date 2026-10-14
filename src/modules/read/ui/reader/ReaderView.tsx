@@ -28,6 +28,12 @@ export type ReaderViewProps = {
   onViewChange?: (view: ReadView) => void;
   /** Gebündelter Lesezustand beim Ausblenden/Verlassen; nur wenn sich etwas getan hat. */
   onProgress?: (patch: ReadState) => void;
+  /** Öffnung über „Weiterlesen“: direkt zu diesem Satz springen (ab 1), ohne Zwischenkarte. */
+  startAt?: number | null;
+  /** Nächster ungelesener Artikel; ohne ihn führt der Abschlussknopf zurück zur Liste. */
+  onNext?: () => void;
+  /** Zurück zur Liste (Abschlussknopf, wenn es keinen nächsten Artikel gibt). */
+  onBack?: () => void;
 };
 
 const VIEW_KEYS: Record<ReadView, { label: RdrKey; hint: RdrKey }> = {
@@ -36,7 +42,7 @@ const VIEW_KEYS: Record<ReadView, { label: RdrKey; hint: RdrKey }> = {
   c: { label: 'rdrViewC', hint: 'rdrViewHintC' },
 };
 
-export function ReaderView({ article, state = null, view: viewProp = null, autoSpeak = false, onViewChange, onProgress }: ReaderViewProps) {
+export function ReaderView({ article, state = null, view: viewProp = null, autoSpeak = false, onViewChange, onProgress, startAt = null, onNext, onBack }: ReaderViewProps) {
   const { lang } = useT();
   const model = useMemo(() => buildModel(article), [article]);
   const picks = useMemo(() => pickKeyWords(model, article.keyWords), [model, article.keyWords]);
@@ -47,7 +53,7 @@ export function ReaderView({ article, state = null, view: viewProp = null, autoS
   const [view, setViewState] = useState<ReadView>(() => viewOf(viewProp));
   const [revealed, setRevealed] = useState<Set<number>>(() => initialRevealed(viewOf(viewProp), model.total));
   const [done, setDone] = useState(state?.done === true);
-  const [resumeAt, setResumeAt] = useState<number | null>(() => (state?.pos && state.pos > 1 && !state.done && state.pos <= model.total ? state.pos : null));
+  const [resumeAt, setResumeAt] = useState<number | null>(() => (!startAt && state?.pos && state.pos > 1 && !state.done && state.pos <= model.total ? state.pos : null));
 
   // ---- Zustand außerhalb des Zeichnens: Zähler, Zwischenstand, aktuelle Rückruf-Funktionen
   const revealedRef = useRef(revealed);
@@ -130,6 +136,16 @@ export function ReaderView({ article, state = null, view: viewProp = null, autoS
     return () => io.disconnect();
   }, []);
 
+  // Geöffnet über „Weiterlesen“: einmal zum Satz springen und ihn kurz markieren (nichts davon bei reduzierter Bewegung).
+  useEffect(() => {
+    if (!startAt || startAt > model.total) return;
+    const el = document.getElementById(`rdr-s-${startAt}`);
+    if (!el) return;
+    el.scrollIntoView({ block: 'start', behavior: 'auto' });
+    const calm = typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!calm && typeof el.animate === 'function') el.animate([{ backgroundColor: 'var(--lx-cyan-soft)' }, { backgroundColor: 'transparent' }], { duration: 1600, easing: 'ease-out' });
+  }, [startAt, model.total]);
+
   // ---- Bedienung
   const reveal = useCallback((next: Set<number>, was: ReadonlySet<number>) => {
     const added = [...next].filter((n) => !was.has(n));
@@ -187,7 +203,7 @@ export function ReaderView({ article, state = null, view: viewProp = null, autoS
 
   return (
     <article className="mx-auto flex w-full max-w-[66ch] flex-col gap-5" data-testid="rdr" data-view={view} data-article={article.id} data-opened={userOpened} data-done={done || undefined}>
-      <header className="flex flex-col gap-1.5">
+      <header className="flex flex-col gap-1.5 pt-2">
         <p className="m-0 text-2xs font-semibold uppercase tracking-wide text-accent-text" data-testid="rdr-topic">
           {article.topic === 'custom' && article.custom ? article.custom : rdrText(lang, topicKey(article.topic))}
         </p>
@@ -209,12 +225,12 @@ export function ReaderView({ article, state = null, view: viewProp = null, autoS
         </p>
       </header>
 
-      <div ref={barRef} className="sticky top-0 z-20 bg-bg py-2" data-testid="rdr-bar">
+      <div ref={barRef} className="lx-glass sticky top-[env(safe-area-inset-top)] z-20 rounded-2xl p-1.5 md:top-[4.5rem]" data-testid="rdr-bar">
         <Segmented label={rdrText(lang, 'rdrViewLabel')} value={view} options={viewOptions} onChange={changeView} testId="rdr-views" />
       </div>
 
       <div className="-mt-3 flex items-center justify-between gap-2">
-        <p className="m-0 min-w-0 flex-1 text-xs text-muted" data-testid="rdr-view-hint">
+        <p className="m-0 min-h-12 min-w-0 flex-1 text-xs text-muted" data-testid="rdr-view-hint">
           {rdrText(lang, VIEW_KEYS[view].hint)}
         </p>
         {model.total > 0 ? (
@@ -252,6 +268,19 @@ export function ReaderView({ article, state = null, view: viewProp = null, autoS
       <div ref={endRef} aria-hidden="true" className="h-px" />
       <KeyWordsCard picks={picks} article={article} lang={lang} onSaved={onSaved} />
       <CheckCard checks={checks} articleId={article.id} title={article.title} lang={lang} onAnswers={onAnswers} />
+      {onNext || onBack ? (
+        <footer className="flex flex-col items-stretch gap-3 pt-1 pb-4" data-testid="rdr-end">
+          {done ? (
+            <p className="m-0 inline-flex items-center gap-1.5 text-sm font-medium text-ok-text" role="status" data-testid="rdr-end-done">
+              <Icon name="check" size={16} />
+              {rdrText(lang, 'rdrDoneState')}
+            </p>
+          ) : null}
+          <Button variant="primary" size="lg" iconAfter={onNext ? 'arrowRight' : undefined} onClick={() => (onNext ?? onBack)?.()} data-testid="rdr-end-next" data-kind={onNext ? 'next' : 'back'}>
+            {rdrText(lang, onNext ? 'rdrNextArticle' : 'rdrBackToList')}
+          </Button>
+        </footer>
+      ) : null}
     </article>
   );
 }

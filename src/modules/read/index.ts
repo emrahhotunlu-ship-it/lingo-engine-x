@@ -12,7 +12,7 @@ declare module '../../app/router/types' {
     /** Reiter „Lesen“: Artikel von heute holen und öffnen. */
     read: NoParams;
     /** Der Leser eines Artikels (Kennung aus dem Monatsindex). */
-    readArticle: { id: string };
+    readArticle: { id: string; at?: number };
   }
 }
 
@@ -24,6 +24,6 @@ export const readArea = defineArea({
   id: 'lesen',
   screens: {
     read: { kind: 'tab', component: ReadHome, title: 'rdTitle', keepScroll: true },
-    readArticle: { kind: 'page', chrome: 'shell', component: ReaderRoute, title: 'rdTitle', keepScroll: true, params: z.object({ id: z.string().min(1).max(80) }) },
+    readArticle: { kind: 'page', chrome: 'shell', component: ReaderRoute, title: 'rdTitle', keepScroll: true, params: z.object({ id: z.string().min(1).max(80), at: z.number().int().min(1).max(2000).optional() }) },
   },
 });
