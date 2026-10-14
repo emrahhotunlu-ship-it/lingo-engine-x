@@ -25,7 +25,7 @@ test('Trockenlauf zeigt alles, schreibt nichts; nach Bestätigung ist die Umstel
   await expect(page.getByText('Sicherung gespeichert.')).toBeVisible();
   const backup = await page.evaluate(() => (window as FakeWindow).__LINGO_FAKE__?.saved[0]);
   expect(backup?.filename).toMatch(/^lingo-engine-x-sicherung-2026-09-20\.json$/);
-  expect(JSON.parse(backup?.data ?? '{}')).toMatchObject({ app: 'lingo-engine-x', documentCount: 216 }); // Seed + 3 Neubau-Dokumente + 4 Lesen-Dokumente (app/decks, app/week, out/2026-09) + 1 Routine-Dokument (read/r-2026-09-20)
+  expect(JSON.parse(backup?.data ?? '{}')).toMatchObject({ app: 'lingo-engine-x', documentCount: 217 }); // Seed + 3 Neubau-Dokumente + 4 Lesen-Dokumente (app/decks, app/week, out/2026-09) + 1 Routine-Dokument (read/r-2026-09-20); das Seed enthält seit Wörter aktivieren Stufe 2 auch act/2026-09
 
   // Ausführen → Übersicht mit denselben Werten.
   await page.getByRole('button', { name: 'Umstellung ausführen' }).click();
@@ -40,7 +40,7 @@ test('Trockenlauf zeigt alles, schreibt nichts; nach Bestätigung ist die Umstel
   await expect(page.getByRole('button', { name: 'Umstellung ausführen' })).toHaveCount(0);
 
   const dump = await page.evaluate(() => (window as FakeWindow).__LINGO_FAKE__?.db.dump() ?? {});
-  expect(Object.keys(dump)).toHaveLength(221); // 219 + 2 Kurslektionen der Routine (read/c-k1-01, read/c-k1-02; Paket L8). Die Umstellung nimmt sie nicht mit (träge Sammlung `read`).
+  expect(Object.keys(dump)).toHaveLength(222); // 220 + 2 Kurslektionen der Routine (read/c-k1-01, read/c-k1-02; Paket L8; träge Sammlung `read`).
   expect(dump['app/schema']).toMatchObject({ version: 1, cutover: '2026-09-20' });
   expect(dump['vocab/reliable']).toHaveProperty('fsrs');
 

@@ -5,6 +5,7 @@ import { exerciseDef } from './modes';
 import { familyFrom, partnerOf, trapTask } from './partner';
 import { packExtraOf } from '../c1pack/packFields';
 import { rotatedContext } from './rotate';
+import type { ActTask } from './actTask';
 import { briefCodesOf, pickBrief } from './brief';
 import { findContext, formsOf, locate } from './context';
 import { gapUsable, lemmaFor } from './gapFit';
@@ -278,7 +279,7 @@ export const exTextKey = (e: Pick<Exercise, 'ex' | 'start'> & { sentence?: Exerc
  * `origin`: immer der Ursprungssatz (Prüfabfrage und Kontrolle nach dem Aufdecken), sonst wechselt der Satz ab Stufe 3 (`rotate.ts`; Claude-Sätze
  * schwacher Wörter `wx` schon ab Stufe 2). Zeigt die Übung einen Satz von Claude, trägt sie `ai` (Kennzeichnung und „Melden“, P52).
  */
-export function buildExercise(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly TrainCard[], seed: string, opts: { sceneOf?: SceneLookup; origin?: boolean } = {}): Exercise {
+export function buildExercise(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly TrainCard[], seed: string, opts: { sceneOf?: SceneLookup; origin?: boolean; act?: ActTask } = {}): Exercise {
   const e = buildRaw(card, ex, lang, pool, seed, opts);
   if (e.ai || !e.sentence) return e;
   const k = poolNorm(e.sentence.sentence);
@@ -298,7 +299,7 @@ export function contrastOf(card: TrainCard): { cfx: ReturnType<typeof readCfx>[n
   return null;
 }
 
-function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly TrainCard[], seed: string, opts: { sceneOf?: SceneLookup; origin?: boolean }): Exercise {
+function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly TrainCard[], seed: string, opts: { sceneOf?: SceneLookup; origin?: boolean; act?: ActTask }): Exercise {
   const def = exerciseDef(ex);
   const rng = mulberry32(hash32(`${card.key}|${ex}|${seed}`));
   const meaning = meaningForTask(card, lang);
@@ -369,6 +370,13 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
     case 'produce':
       // Wörter aktivieren: Lage, Satzform, Ton und Zeitform wechseln von Mal zu Mal (deterministisch aus Karte, Seed und Verlauf).
       return { ...base, accepted: [], brief: pickBrief(card.key, seed, briefCodesOf(card.doc), card) };
+    case 'act_scene':
+    case 'act_rewrite':
+    case 'act_impulse':
+    case 'act_combo':
+    case 'act_mail':
+      // Wörter aktivieren, Stufe 2: die Aufgabe kommt fertig vom Fahrplan (`actTask.ts`); ohne sie meldet der Wächter R14 und es folgt eine andere Art.
+      return { ...base, accepted: [], ...(opts.act ? { act: opts.act } : {}) };
     case 'situation': {
       const typed = typedForm(card.word);
       return { ...base, accepted: [...new Set([typed, card.word])].filter(Boolean), situation: situationTask(card, lang, opts.sceneOf) };

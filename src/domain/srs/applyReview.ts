@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { fsrsSchema } from '../../data/schemas';
 import { validateDoc } from '../../data/validate';
 import { dayKey } from '../date';
+import { naOf } from './actBase';
 import { flipStage } from './flip';
 import { isFestValues } from '../metrics/definitions';
 import { stageOf, nextStage } from './ladder';
@@ -44,6 +45,8 @@ export const cardPatchSchema = z
     ac: z.number().min(0).max(1).optional(),
     co: z.number().min(0).max(1).optional(),
     colN: z.array(z.number().int().min(0)).optional(),
+    // Wörter aktivieren, Stufe 2: geschaffte Aktivierungen (Fahrplan A1–A5). NICHT `ac`: das ist die Fähigkeit „Anwenden“ (0–1, alte App).
+    na: z.number().int().min(0).max(99).optional(),
     fsrs: fsrsSchema.extend({ v: z.literal(1), src: z.literal('lx'), last: z.number().int() }),
   })
   .strict()
@@ -191,6 +194,8 @@ export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
     xs: { [a.ex]: { c: Math.round(num(prevXs.c)) + ok, w: Math.round(num(prevXs.w)) + (1 - ok) } },
     hist: [...hist, histEntry(a, def.mode)].slice(-HIST_MAX),
     ...skillPatch(cur, def.mode, a.grade, a.colIndex, col.length),
+    // Aktivierung geschafft (Note ≥ 2): der Zähler `na` steigt im selben Schreibschritt wie die Antwort. Er ist abgeleitet und aus `act/…` neu berechenbar.
+    ...(a.actStep && a.grade >= 2 ? { na: Math.min(99, naOf(cur) + 1) } : {}),
   };
   // Nur ergänzen: ein vorhandenes Einführungsdatum der alten App bleibt stehen (Kap. 9, Regel 2).
   if (wasNew && (typeof cur.intro !== 'string' || !cur.intro)) patch.intro = a.day;

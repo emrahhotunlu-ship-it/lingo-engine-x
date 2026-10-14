@@ -41,6 +41,12 @@ export const CATALOG: readonly ExerciseDef[] = [
   { ex: 'flip', stage: 0, level: 2, mode: 'recog', input: 'flip' },
   // P52 „Welches Wort passt?“ (Kontrast-Satz von Claude): ebenfalls Stufe 0, nie automatisch gewählt; die Runde setzt sie höchstens 1× ein.
   { ex: 'contrast', stage: 0, level: 2, mode: 'recog', input: 'choice' },
+  // Wörter aktivieren, Stufe 2: Aktivierungs-Aufgaben A2–A5. Stufe 0 (nie automatisch gewählt, nur der Fahrplan setzt sie ein), Eingabe wie „Eigener Satz“.
+  { ex: 'act_scene', stage: 0, level: 5, mode: 'produce', input: 'produce' },
+  { ex: 'act_rewrite', stage: 0, level: 5, mode: 'produce', input: 'produce' },
+  { ex: 'act_impulse', stage: 0, level: 5, mode: 'produce', input: 'produce' },
+  { ex: 'act_combo', stage: 0, level: 5, mode: 'produce', input: 'produce' },
+  { ex: 'act_mail', stage: 0, level: 5, mode: 'produce', input: 'produce' },
 ];
 
 /**
@@ -111,6 +117,11 @@ export function supports(card: TrainCard, ex: ExerciseId, lang: Lang, poolSize: 
       return env.ai && !!meaning && activationReady(card);
     case 'flip':
     case 'contrast':
+    case 'act_scene':
+    case 'act_rewrite':
+    case 'act_impulse':
+    case 'act_combo':
+    case 'act_mail':
       return false;
   }
 }

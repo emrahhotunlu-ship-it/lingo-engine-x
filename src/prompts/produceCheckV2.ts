@@ -16,8 +16,9 @@ import type { PromptTemplate, UiLang } from './types';
 // Schemaverletzung, mit angehängter Fehlerbeschreibung). `produce-check@1` bleibt als Datei erhalten (Hilfsfunktionen, Tests), wird nicht mehr aufgerufen.
 // Britische Formen gelten als richtig, die US-Form kommt als Hinweis (A7.3).
 
-export type ProduceErrType = 'prep' | 'false_friend' | 'word_order' | 'tense' | 'register' | 'collocation' | 'article' | 'other';
-export const PRODUCE_ERR_TYPES: readonly ProduceErrType[] = ['prep', 'false_friend', 'word_order', 'tense', 'register', 'collocation', 'article', 'other'];
+// `word_choice` (falsches Wort bei richtiger Bedeutungsrichtung) kam mit Stufe 2 dazu; produce-check@2 nennt es im Prompt nicht, liest es aber.
+export type ProduceErrType = 'prep' | 'false_friend' | 'word_order' | 'tense' | 'register' | 'collocation' | 'article' | 'word_choice' | 'other';
+export const PRODUCE_ERR_TYPES: readonly ProduceErrType[] = ['prep', 'false_friend', 'word_order', 'tense', 'register', 'collocation', 'article', 'word_choice', 'other'];
 
 /** Vorgabe der Aufgabe, so wie der Prompt sie braucht (englische Beschreibungen, keine Kennungen). */
 export type ProduceBriefVars = {
@@ -87,6 +88,7 @@ const ERR_ALIASES: ReadonlyArray<[RegExp, ProduceErrType]> = [
   [/^(register|style|tone|formality)$/, 'register'],
   [/^(collocation|collocations|word[\s_-]?partner)$/, 'collocation'],
   [/^(article|articles|determiner)$/, 'article'],
+  [/^(word[\s_-]?choice|lexical|lexis|wrong[\s_-]?word|vocabulary)$/, 'word_choice'],
 ];
 
 /** Tolerant: „Preposition“, „word order“ → die acht Werte; Unbekanntes wird `other`; leer/null bleibt `null`. */
@@ -109,7 +111,7 @@ const schemaFor = (uiLang: UiLang, target = ''): z.ZodType<ProduceCheckV2Out> =>
       why: clipped(1, 400),
       better: z.preprocess((v) => (v === undefined || v === null ? '' : v), clipped(0, 400)),
       whyBetter: z.preprocess((v) => (v === undefined || v === null ? '' : v), clipped(0, 300)),
-      errType: z.preprocess(errTypeOf, z.enum(['prep', 'false_friend', 'word_order', 'tense', 'register', 'collocation', 'article', 'other']).nullable()),
+      errType: z.preprocess(errTypeOf, z.enum(['prep', 'false_friend', 'word_order', 'tense', 'register', 'collocation', 'article', 'word_choice', 'other']).nullable()),
     })
     // Fehlerklasse: bei „richtig“ keine; fehlt sie trotz Fehler, gilt `other` (kein Neuversuch wegen eines Nebenfelds).
     .transform((v) => ({ ...v, errType: v.verdict === 'correct' ? null : (v.errType ?? ('other' as const)) }))

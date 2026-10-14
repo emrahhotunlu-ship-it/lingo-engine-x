@@ -8868,6 +8868,42 @@
    }
   ]
  },
+ "act/2026-09": {
+  "v": 1,
+  "month": "2026-09",
+  "e": {
+   "lx1a2b3c-1x9": {
+    "id": "lx1a2b3c-1x9",
+    "t": 1789369920000,
+    "d": "2026-09-14",
+    "c": "vocab/achieve",
+    "st": 1,
+    "f": "pr",
+    "a": "j05.q.-.-",
+    "s": "Did we achieve the discount target for this client?",
+    "w": "Das Wort steht richtig: achieve + Ziel.",
+    "g": 3,
+    "v": "c",
+    "k": 1,
+    "r": 1
+   },
+   "lx1a2b3d-2y8": {
+    "id": "lx1a2b3d-2y8",
+    "t": 1789803060000,
+    "d": "2026-09-19",
+    "c": "vocab/assume",
+    "st": 2,
+    "f": "sc",
+    "a": "sc.e01.cfo.-.n.pr.s",
+    "s": "I assume the rollout is on track.",
+    "w": "Kleiner Fehler: Hier passt „that“ nach assume.",
+    "g": 2,
+    "v": "m",
+    "k": 1,
+    "et": "other"
+   }
+  }
+ },
  "preply/pi1789668000000": {
   "kind": "import",
   "raw": "Teacher: \"depend of\" -> depend on. HW: write 5 sentences with \"would rather\".",

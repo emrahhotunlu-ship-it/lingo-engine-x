@@ -1031,6 +1031,15 @@ put('out/2026-09', {
   v: 1,
   items: [{ id: `o${now - DAY}`, k: 'colloc', d: addDays(ANCHOR, -1), theme: 't02', ok: true, text: 'make a decision', ms: 4200 }],
 });
+// Wörter aktivieren, Stufe 2: Sammelakte der Aktivierungen (`act/<Monat>`, Objekt-Map `e`, Kennung = Zeitstempel + Kartenhash). Zwei erfundene Einträge.
+put('act/2026-09', {
+  v: 1,
+  month: '2026-09',
+  e: {
+    'lx1a2b3c-1x9': { id: 'lx1a2b3c-1x9', t: at(addDays(ANCHOR, -6), 9, 12), d: addDays(ANCHOR, -6), c: 'vocab/achieve', st: 1, f: 'pr', a: 'j05.q.-.-', s: 'Did we achieve the discount target for this client?', w: 'Das Wort steht richtig: achieve + Ziel.', g: 3, v: 'c', k: 1, r: 1 },
+    'lx1a2b3d-2y8': { id: 'lx1a2b3d-2y8', t: at(addDays(ANCHOR, -1), 9, 31), d: addDays(ANCHOR, -1), c: 'vocab/assume', st: 2, f: 'sc', a: 'sc.e01.cfo.-.n.pr.s', s: 'I assume the rollout is on track.', w: 'Kleiner Fehler: Hier passt „that“ nach assume.', g: 2, v: 'm', k: 1, et: 'other' },
+  },
+});
 
 // ------------------------------------------------------------------ Lesen (13.10.2026, docs/umbau/lesen-plan.md §4)
 // Zwei Lerntage, drei erfundene Artikel (nur Beispieltext, kein echter Inhalt): `read/d-<Tag>` (Texte), `read/m-<Monat>` (Index + Lesezustand),

@@ -44,7 +44,8 @@ export const TYPE_MODE: Record<string, Doc> = { 'app/decks': { v: 1, prefs: { mo
 export function forcedPatch(): Record<string, Doc> {
   const out: Record<string, Doc> = { ...TYPE_MODE };
   Object.entries(FORCED).forEach(([id, f], i) => {
-    out[`vocab/${id}`] = { state: 'learning', stage: f.stage, S: 1, D: 5, due: 1_700_000_000_000 + i * 1000, last: 1_699_900_000_000, reps: 3, lapses: 0, xs: f.xs, ...(f.ex ? { ex: f.ex } : {}) };
+    // `na: 9`: der Fahrplan der Aktivierung (Stufe 2) ist für diese Wörter durch – sonst ersetzte „Eigener Satz“ (A1) die erzwungene Abfrageart (die Aktivierung hat ihre eigenen Specs, `aktivierung2.spec.ts`).
+    out[`vocab/${id}`] = { state: 'learning', stage: f.stage, S: 1, D: 5, due: 1_700_000_000_000 + i * 1000, last: 1_699_900_000_000, reps: 3, lapses: 0, xs: f.xs, na: 9, ...(f.ex ? { ex: f.ex } : {}) };
   });
   return out;
 }
@@ -270,7 +271,8 @@ export function tourPatch(touch = false): Record<string, Doc> {
   tour.forEach((t, i) => {
     const xs: Record<string, { c: number; w: number }> = { [t.ex]: { c: 0, w: 6 } };
     for (const o of t.others) xs[o] = { c: 6, w: 0 };
-    out[t.path] = { state: 'learning', stage: t.stage, S: 1, D: 5, due: 1_680_000_000_000 + i * 1000, last: 1_679_900_000_000, reps: 3, lapses: 0, xs, hist: RECALLED };
+    // Außer dem eigenen Satz: `na: 9` = Fahrplan der Aktivierung (Stufe 2) durch, sonst ersetzte „Eigener Satz“ (A1) die erzwungene Art.
+    out[t.path] = { state: 'learning', stage: t.stage, S: 1, D: 5, due: 1_680_000_000_000 + i * 1000, last: 1_679_900_000_000, reps: 3, lapses: 0, xs, hist: RECALLED, ...(t.ex === 'produce' ? {} : { na: 9 }) };
   });
   // Englische Oberfläche: die Absicht der Situationsübung braucht die englische Erklärung.
   out['chunk/c-non-negotiable'] = { ...out['chunk/c-non-negotiable'], def: 'not open to discussion or change' };

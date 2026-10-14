@@ -1,4 +1,5 @@
 import type { FsrsStored } from '../../data/schemas';
+import type { ActTask } from './actTask';
 import type { Brief } from './brief';
 
 // Gemeinsame Typen des Vokabeltrainers (Architektur-Entwurf §5.0, Daten-Entwurf §1.1).
@@ -35,7 +36,14 @@ export type ExerciseId =
   /** Anki „Aufdecken“ (anki-regeln.md): nie automatisch gewählt, nur über `pickMode`. */
   | 'flip'
   /** Lernplattform 3.0 P52: „Welches Wort passt?“ mit dem Kontrast-Satz von Claude (`cfx`); nie automatisch gewählt, nur von der Runde eingesetzt. */
-  | 'contrast';
+  | 'contrast'
+  // Wörter aktivieren, Stufe 2 (docs/umbau/aktivierung.md): A2 Mini-Szene, A3 Umformen, A4 ohne gezeigtes Wort, A5 Kombi-Satz und Kundenmail. Nie automatisch gewählt,
+  // nur vom Fahrplan eingesetzt (`fahrplan.ts`); Stufe 0 im Katalog, `supports` liefert immer `false`.
+  | 'act_scene'
+  | 'act_rewrite'
+  | 'act_impulse'
+  | 'act_combo'
+  | 'act_mail';
 /** Modus der alten App (Schlüssel in `modes` und `hist[].m`). */
 export type LegacyMode = 'recog' | 'cloze' | 'type' | 'colloc' | 'listen' | 'produce';
 export type InputKind = 'choice' | 'typed' | 'spot' | 'tiles' | 'produce' | 'flip' | 'sentence';
@@ -105,6 +113,8 @@ export type Option = { id: string; label: string; lang: Lang; correct: boolean; 
 export type Exercise = {
   /** `produce` („Eigener Satz“): Lage, Satzform, Ton und Zeitform dieser Aktivierung (`brief.ts`). */
   brief?: Brief;
+  /** Aktivierungs-Aufgabe A2–A5 (`act_*`): Format, Vorgaben, Zielwörter, Quelle (`actTask.ts`). */
+  act?: ActTask;
   ex: ExerciseId;
   input: InputKind;
   card: TrainCard;
@@ -199,6 +209,8 @@ export type AnswerEvent = {
   sx?: string;
   /** Code der Vorgabe eines eigenen Satzes (`brief.ts`, < 40 Zeichen): kommt als `a` in `hist`, damit die nächste Aktivierung anders ausfällt. */
   act?: string;
+  /** Schritt des Fahrplans (1–5), wenn die Antwort eine Aktivierung war: der Kartenzähler `na` steigt im selben Schreibschritt (Note ≥ 2). */
+  actStep?: 1 | 2 | 3 | 4 | 5;
   /** Eingabeprofil der Runde: Touch oder Tastatur (Lernplattform 2.0 §3.1). */
   dev?: 't' | 'k';
   /** Einspruch „Ich lag richtig" (M4): als richtig gewertet, höchstens „Gut", im Log `override:true`. */

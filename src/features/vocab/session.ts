@@ -10,6 +10,12 @@ import { toTrainCard } from '../../domain/srs/cards';
 import { buildChunkCards, toChunkCard } from '../../domain/srs/chunkCards';
 import { buildExercise, exTextKey, type SceneLookup } from '../../domain/srs/exercise';
 import { guardedExercise, reportViolations } from '../../domain/srs/guard';
+import { isActivationEx } from '../../domain/srs/actBase';
+import { buildActTask, EX_OF_FMT, type ActTask } from '../../domain/srs/actTask';
+import type { ActStep } from '../../domain/srs/actBrief';
+import { planActivations, type DueStep } from '../../domain/srs/fahrplan';
+import { actId, type ActEntry, type ActVerdict, type TargetVerdict } from '../../domain/activation/actDoc';
+import { reusableSentencesOf, saveActEntry } from './actStore';
 import { sentKey } from '../../domain/srs/variety';
 import { availableExercises, chooseExercise, makeEnv, NO_ENV, supports, type ExerciseEnv } from '../../domain/srs/modes';
 import { inputProfile } from '../../platform/input';
@@ -88,8 +94,11 @@ type SessionState = {
   only: string[] | null;
   /** Aufholmodus dieser Runde (viele überfällige Karten, Modus `auto`). */
   catchUp: boolean;
-  /** Eigene Sätze (`produce`) in dieser Runde (Deckel `PRODUCE_MAX`). */
-  produced: number;
+  /**
+   * Fahrplan der Aktivierung (Wörter aktivieren, Stufe 2, `domain/srs/fahrplan.ts`): fällige Karten dieser Runde, die statt der gewöhnlichen Wiederholung
+   * eine Aktivierung bekommen (Schlüssel → Schritt). Beim Rundenstart festgelegt und danach unverändert (nichts würfelt neu).
+   */
+  acts: ReadonlyMap<string, DueStep>;
   /** P52: „Welches Wort passt?“ (Kontrast) kam in dieser Runde schon (höchstens 1 je Runde). */
   contrasted: boolean;
 };
@@ -97,12 +106,6 @@ type SessionState = {
 const EXTRA_TARGET = 10;
 const AGAIN_WINDOW_MS = 20 * 60_000;
 const MAX_SHOWN = 3;
-/** Eigene Sätze je Runde (teuerste Übung). */
-const PRODUCE_MAX = 2;
-/** Eigene Sätze je Tag über alle Runden (Lernwissenschaft M2); bei vielen überfälligen Karten weniger: ab 40 einer, ab 80 keiner (die 25–30 Minuten gehören dann dem Wiederholen). */
-const PRODUCE_DAY_MAX = 4;
-const PRODUCE_BACKLOG_ONE = 40;
-const PRODUCE_BACKLOG_NONE = 80;
 /** Wartung reifer Karten: ab dieser Stabilität (Tage) und nur jede so vielte Wiederholung in voller Form. */
 const MAINTENANCE_S = 21;
 const MAINTENANCE_EVERY = 3;
@@ -141,7 +144,7 @@ export const useSession = create<SessionState>(() => ({
   unit: false,
   only: null,
   catchUp: false,
-  produced: 0,
+  acts: new Map(),
   contrasted: false,
 }));
 
@@ -172,7 +175,7 @@ function sceneLookup(lang: Lang): SceneLookup {
   };
 }
 
-type ExCtx = Pick<SessionState, 'cards' | 'pool' | 'lang' | 'day' | 'shown' | 'recentEx' | 'env' | 'mode' | 'dir' | 'controls' | 'ctlWeek' | 'ctlDay' | 'catchUp' | 'produced' | 'contrasted'>;
+type ExCtx = Pick<SessionState, 'cards' | 'pool' | 'lang' | 'day' | 'shown' | 'recentEx' | 'env' | 'mode' | 'dir' | 'controls' | 'ctlWeek' | 'ctlDay' | 'catchUp' | 'acts' | 'contrasted'>;
 
 /** Modus je Karte nach anki-regeln §1 (`pickMode`, die Regel steht nur in domain/srs/flip.ts). */
 export function modeFor(s: ExCtx, card: TrainCard, item: QueueItem): PickedMode {
@@ -189,9 +192,25 @@ export function modeFor(s: ExCtx, card: TrainCard, item: QueueItem): PickedMode 
 }
 
 /** `origin`: Prüfabfrage und Kontrolle bleiben beim Ursprungssatz (sonst wechselt der Satz ab Stufe 3, `domain/srs/rotate.ts`). */
-function build(s: ExCtx, card: TrainCard, ex: ExerciseId, origin = false): Exercise {
-  // Wächter (Q1): eine Aufgabe, die durch R1–R12 fällt, wird nicht gezeigt; stattdessen die nächste Aufgabenart (`domain/srs/guard.ts`).
-  return guardedExercise(card, ex, s.lang, s.pool, `${s.day}|${s.shown[card.key] ?? 0}`, { sceneOf: sceneLookup(s.lang), origin }, s.env);
+function build(s: ExCtx, card: TrainCard, ex: ExerciseId, origin = false, act?: ActTask): Exercise {
+  // Wächter (Q1): eine Aufgabe, die durch R1–R14 fällt, wird nicht gezeigt; stattdessen die nächste Aufgabenart (`domain/srs/guard.ts`).
+  return guardedExercise(card, ex, s.lang, s.pool, `${s.day}|${s.shown[card.key] ?? 0}`, { sceneOf: sceneLookup(s.lang), origin, ...(act ? { act } : {}) }, s.env);
+}
+
+/**
+ * Aktivierung statt der gewöhnlichen Wiederholung (Fahrplan, `domain/srs/fahrplan.ts`): A1 ist „Eigener Satz“ (`produce`), A2–A5 sind die Aufgaben aus
+ * `actTask.ts`. Gibt es keine brauchbare Aufgabe (nichts zum Umformen, keine Partnerkarte, Wächter R13/R14), folgt die gewöhnliche Wiederholung – die
+ * Karte wird nie übergangen und es gibt keinen zweiten Zeitplan.
+ */
+function activationFor(s: ExCtx, card: TrainCard, due: DueStep): Exercise | null {
+  if (due.step === 1) {
+    const e = build(s, card, 'produce');
+    return e.ex === 'produce' ? e : null;
+  }
+  const task = buildActTask({ card, step: due.step, maintenance: due.maintenance, pool: s.pool, day: s.day, lang: s.lang, own: reusableSentencesOf(card.key) });
+  if (!task) return null;
+  const e = build(s, card, EX_OF_FMT[task.fmt], false, task);
+  return e.act ? e : null;
 }
 
 function exerciseFor(s: ExCtx, item: QueueItem): Exercise | null {
@@ -224,36 +243,25 @@ function exerciseFor(s: ExCtx, item: QueueItem): Exercise | null {
     const ex = chooseExercise({ ...card, stage: 3 }, s.lang, s.pool.length - 1, s.recentEx, s.env);
     if (ex) return { ...build(s, card, ex, true), check: 'probe' };
   }
+  // Fahrplan: Diese fällige Karte bekommt heute eine Aktivierung (festgelegt beim Rundenstart) – sie ERSETZT die gewöhnliche Wiederholung.
+  const planned = picked === 'type' && item.reason === 'due' ? s.acts.get(item.key) : undefined;
+  if (planned) {
+    const a = activationFor(s, card, planned);
+    if (a) return a;
+  }
   const lighter = item.reason === 'due' ? lighterExercise(s, card) : null;
   if (lighter) return build(s, card, lighter);
   const ex = chooseExercise(card, s.lang, s.pool.length - 1, s.recentEx, s.env);
   if (!ex) return null;
-  if (ex === 'produce' && !produceAllowed(s)) {
-    // Deckel erreicht: eine freie Art, sonst irgendeine andere Art der Stufe; „Eigener Satz“ nur, wenn es gar nichts anderes gibt (kein Leck, Lernwissenschaft M1).
+  if (ex === 'produce') {
+    // „Eigener Satz“ kommt nur noch über den Fahrplan (A1, mit Abstand und Tagesgrenze), nie über die Leiter: eine freie Art, sonst irgendeine andere Art der Stufe;
+    // „Eigener Satz“ nur, wenn es gar nichts anderes gibt (kein Leck, Lernwissenschaft M1).
     const other = chooseExercise({ ...card, stage: 4 }, s.lang, s.pool.length - 1, s.recentEx, s.env);
     if (other && other !== 'produce' && FREE_TYPED.has(other)) return build(s, card, other);
     const alt = availableExercises({ ...card, stage: 4 }, s.lang, s.pool.length - 1, s.env).find((x) => x !== 'produce');
     if (alt) return build(s, card, alt);
   }
   return build(s, card, ex);
-}
-
-/** Eigene Sätze, die heute schon beantwortet wurden (alle Runden): `hist` der Karten, eingefroren beim Rundenstart. */
-export function producedToday(pool: readonly TrainCard[], day: string): number {
-  let n = 0;
-  for (const c of pool) {
-    const hist = Array.isArray(c.doc.hist) ? (c.doc.hist as unknown[]) : [];
-    for (const h of hist) if (h && typeof h === 'object' && (h as Doc).x === 'produce' && typeof (h as Doc).t === 'number' && dayKey((h as Doc).t as number) === day) n++;
-  }
-  return n;
-}
-
-/** Darf jetzt noch ein eigener Satz kommen? Deckel je Runde, je Tag und nach Rückstand. */
-export function produceAllowed(s: Pick<ExCtx, 'pool' | 'day' | 'produced'>): boolean {
-  if (s.produced >= PRODUCE_MAX) return false;
-  const behind = overdueCount(s.pool, useClock.getState().now);
-  const dayMax = behind >= PRODUCE_BACKLOG_NONE ? 0 : behind >= PRODUCE_BACKLOG_ONE ? 1 : PRODUCE_DAY_MAX;
-  return producedToday(s.pool, s.day) + s.produced < dayMax;
 }
 
 /** Frei getippte Arten (Stufe 4) – ohne Auswahl und ohne Stütze. */
@@ -300,7 +308,7 @@ export function prepareNext(): void {
   const item = s.queue[s.pos + 1];
   if (!item || item.phase !== 'quiz' || item.key === s.exercise.card.key) return;
   const recent = [...s.recentEx, s.exercise.ex].slice(-2);
-  const ctx: ExCtx = { ...s, recentEx: recent, produced: s.produced + (s.exercise.ex === 'produce' ? 1 : 0), contrasted: s.contrasted || s.exercise.ex === 'contrast' };
+  const ctx: ExCtx = { ...s, recentEx: recent, contrasted: s.contrasted || s.exercise.ex === 'contrast' };
   prebuilt = null;
   const ex = exerciseFor(ctx, item);
   if (ex) prebuilt = { sig: sigOf(ctx, item, recent), ex };
@@ -364,6 +372,15 @@ export function defaultsFor(round: Round, deck: string): { mode: RequestedMode; 
   return { mode: own?.mode ?? (std === 'type' ? 'type' : 'flip'), dir: own?.dir ?? d.prefs.dir ?? 'de-en' };
 }
 
+/**
+ * Plan der Aktivierungen für eine Runde (nur im Modus `auto` und `type`, nie beim Aufdecken oder Hören, und nur mit erreichbarer KI). Festgelegt beim Rundenstart,
+ * damit beim Neuzeichnen nichts neu gewürfelt wird (Kap. 15); der Pflicht-Zähler von „Heute“ bleibt unberührt: Eine Aktivierung ersetzt eine fällige Wiederholung.
+ */
+function actPlanFor(i: { queue: readonly QueueItem[]; cards: ReadonlyMap<string, TrainCard>; pool: readonly TrainCard[]; day: string; now: number; mode: RequestedMode; env: ExerciseEnv }): ReadonlyMap<string, DueStep> {
+  if (i.mode !== 'auto' && i.mode !== 'type') return new Map();
+  return planActivations({ queue: i.queue, cards: i.cards, pool: i.pool, day: i.day, overdue: overdueCount(i.pool, i.now), ai: i.env.ai });
+}
+
 /** Runde bauen (synchron). Rückgabe: Art der ersten Übung (für den Fokus im selben Handler). */
 export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
   commitHeld();
@@ -411,6 +428,7 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
     : buildQueue({ cards: chosen, nowMs: now, target, newQuotaLeft: allowNew ? newQuotaLeft : 0, exclude: round === 'pflicht' ? reviewed : answeredToday, lang, mix: { introduced: mixIntroducedToday(cards, day), phrases: introducedToday - introducedLessonToday + newQuotaLeft <= 2 ? 1 : 2 } });
   const docs = pool.map((c) => c.doc);
   const ctl = mode === 'flip' ? controlCounts(docs, now) : { week: 0, day: 0 };
+  const acts = actPlanFor({ queue, cards: byKey, pool, day, now, mode, env });
   const base: SessionState = {
     active: true,
     status: 'running',
@@ -443,7 +461,7 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
     unit: opts.unit === true,
     only: opts.only ? [...opts.only] : null,
     catchUp: mode === 'auto' && catchUpOn(overdueCount(pool, now)),
-    produced: 0,
+    acts,
     contrasted: false,
   };
   prebuilt = null;
@@ -585,7 +603,12 @@ export type Answer = {
   hint?: 0 | 1 | 2;
   /** Aufdecken: beim Aufdecken reservierter Zeitstempel (gleich für Vorschau und Speichern, architektur.md §4.3). */
   t?: number;
+  /** Aktivierung: Satz und Urteil für die Sammelakte `act/<Monat>` (nur „Eigener Satz“ und A2–A5). */
+  rec?: ActRecord;
 };
+
+/** Was die Oberfläche von einer Aktivierung festhält; `commitAnswer` ergänzt Karte, Schritt, Format und Code zum Eintrag der Sammelakte. */
+export type ActRecord = { s: string; b?: string; w?: string; v: ActVerdict; k: 0 | 1; r?: boolean; ts?: Array<[string, TargetVerdict]>; et?: string };
 
 /** Aufdecken im Aufholmodus: die Bewertung zählt mit dem Aufhol-Gewicht (`noteWeight`). EINE Regel für Knopf-Vorschau und Speichern. */
 const flipCatchUp = (s: Pick<SessionState, 'catchUp'>, card: Pick<TrainCard, 'stage'>): boolean => s.catchUp && card.stage >= 3;
@@ -645,6 +668,10 @@ export function commitAnswer(ans: Answer): FirstKind {
   a.dev = s.env.touch ? 't' : 'k';
   if (e.sentence?.sentence) a.sx = sentKey(e.sentence.sentence);
   if (e.brief) a.act = e.brief.code;
+  // Wörter aktivieren, Stufe 2: Code der Vorgabe in den Verlauf und Schritt des Fahrplans (der Kartenzähler `na` steigt im selben Schreibschritt, Note ≥ 2).
+  if (e.act) a.act = e.act.code;
+  const actStep: ActStep | null = card.kind !== 'vocab' || !isActivationEx(e.ex) ? null : (e.act?.step ?? (e.ex === 'produce' ? 1 : null));
+  if (actStep) a.actStep = actStep;
   if (card.kind === 'chunk') a.q = card.word;
   if (ans.override) a.override = true;
   if (ans.hint) a.hint = ans.hint;
@@ -711,7 +738,6 @@ export function commitAnswer(ans: Answer): FirstKind {
     ctlDay: s.ctlDay + control,
     ctlWeek: s.ctlWeek + control,
     recentEx: [...s.recentEx, e.ex].slice(-2),
-    produced: s.produced + (e.ex === 'produce' ? 1 : 0),
     contrasted: s.contrasted || addContrast,
     results: [...s.results, { key: card.key, word: card.word, grade: ans.grade, ok: ans.ok }],
   });
@@ -726,6 +752,31 @@ export function commitAnswer(ans: Answer): FirstKind {
   if (knownPass) void saveKnown(card.path, s.day, seed, a.t);
   else void saveCard(a, seed);
   recordAnswer(a, immediate);
+  // Sammelakte der Aktivierungen: Satz, Urteil, Vorgabe. Eigener, idempotenter Schreibvorgang (`saveActEntry`); schlägt er fehl, ist nur dieser Eintrag verloren,
+  // die Karte (Note, Zähler `na`) ist gespeichert und der Zähler aus `act/…` jederzeit neu berechenbar.
+  if (ans.rec && actStep && card.kind === 'vocab') {
+    const r = ans.rec;
+    const entry: ActEntry = {
+      id: actId(a.t, card.key),
+      t: a.t,
+      d: s.day,
+      c: card.key,
+      st: actStep,
+      f: e.act?.fmt ?? 'pr',
+      a: a.act ?? '',
+      s: r.s,
+      ...(r.b ? { b: r.b } : {}),
+      ...(r.w ? { w: r.w } : {}),
+      g: Math.min(3, Math.max(1, a.grade)) as 1 | 2 | 3,
+      v: r.v,
+      k: r.k,
+      ...(r.r ? { r: 1 as const } : {}),
+      ...(e.act && !e.act.showTarget ? { ns: 1 as const } : {}),
+      ...(r.ts && r.ts.length > 1 ? { ts: r.ts } : {}),
+      ...(r.et ? { et: r.et } : {}),
+    };
+    void saveActEntry(entry);
+  }
   return applyAdvance(next);
 }
 
@@ -941,7 +992,7 @@ export function restoreTrainer(snap: TrainerSnapshot): boolean {
     unit: snap.unit === true,
     only: null,
     catchUp: false,
-    produced: 0,
+    acts: actPlanFor({ queue: queue.slice(pos), cards: byKey, pool, day, now, mode: snap.mode, env: currentEnv() }),
     contrasted: queue.some((q) => q.reason === 'contrast'),
   };
   prebuilt = null;

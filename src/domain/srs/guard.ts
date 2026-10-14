@@ -9,6 +9,9 @@ import type { ExerciseEnv } from './modes';
 import { toUS } from '../answer/spelling';
 import { isFunctionGap } from './partner';
 import { activationReady, allowsContinuous, parseBrief } from './brief';
+import { ACT_MAX_TARGETS, actMeaning, EX_OF_FMT, type ActTask } from './actTask';
+import { HIDES_TARGET, MULTI_TARGET, NEEDS_SOURCE, parseActCode } from './actBrief';
+import { eventById } from '../../content/activation/pools';
 import { sceneById } from '../../content/activation/scenes';
 import type { Exercise, ExerciseId, Lang, TrainCard } from './types';
 
@@ -28,12 +31,13 @@ import type { Exercise, ExerciseId, Lang, TrainCard } from './types';
 //  R10 Aufdeck-Karte: Vorder- und Rückseite passen zusammen (Bedeutung vorhanden, verrät das Wort nicht, Rückseite zeigt das Kartenwort)
 //  R11 Sprachtreue: Optionen und Hinweise in einer Sprache, passend zur Oberflächensprache bzw. dem Rückfall der Karte
 //  R12 Auswahl hat genau eine richtige Option, mindestens 3 Optionen (Kontrast: 2), keine doppelten Optionen
+//  R14 Aktivierungs-Aufgabe A2–A5 (Stufe 2): Vorgabe vollständig und lesbar, Zielwörter 1–3 und verschieden, Quelle beim Umformen, A4 verrät das Wort nicht
 //  R13 „Eigener Satz“ (Wörter aktivieren): Vorgabe vollständig und stimmig (Lage bekannt, Wenn-Satz ohne Zeitform, Code lesbar, Bedeutung da),
 //      Leitplanke: nur bei Karten mit mindestens 2 richtigen Abrufen an verschiedenen Tagen (Barcroft, tagesaufbau.md T2); keine Lücke, keine Lösung
 // Nicht prüfbar im Programm: ob ein Satz inhaltlich sinnvoll ist (Satzsinn), ob eine Claude-Antwort stimmt, ob mehrere Präpositionen
 // vertretbar wären (R8b, nur Hinweis im Audit).
 
-export type GuardRule = 'R1' | 'R2' | 'R3' | 'R4' | 'R5' | 'R6' | 'R7' | 'R8' | 'R9' | 'R10' | 'R11' | 'R12' | 'R13';
+export type GuardRule = 'R1' | 'R2' | 'R3' | 'R4' | 'R5' | 'R6' | 'R7' | 'R8' | 'R9' | 'R10' | 'R11' | 'R12' | 'R13' | 'R14';
 export type Violation = { rule: GuardRule; why: string };
 
 const norm = (s: string): string => s.toLowerCase().replace(/\s+/g, ' ').trim();
@@ -87,7 +91,38 @@ function cardTexts(card: TrainCard): string[] {
   return [d.ex, ...xs, ...card.col.map((c) => c.p), ...cs].filter((x): x is string => typeof x === 'string').map((x) => norm(x.replace(/[[\]]/g, '')));
 }
 
-/** Prüft eine gebaute Aufgabe gegen R1–R12. Rein; leer = darf gezeigt werden. */
+const ACT_EX: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['act_scene', 'act_rewrite', 'act_impulse', 'act_combo', 'act_mail']);
+
+/** R14: eine Aktivierungs-Aufgabe muss vollständig, lesbar und ohne Leck sein. */
+function checkAct(e: Exercise, card: TrainCard, lang: Lang, add: (rule: GuardRule, why: string) => void): void {
+  const a: ActTask | undefined = e.act;
+  if (!a) {
+    add('R14', 'Aufgabe der Aktivierung ohne Beschreibung');
+    return;
+  }
+  if (!ACT_EX.has(e.ex) || EX_OF_FMT[a.fmt] !== e.ex) add('R14', `Format „${a.fmt}“ passt nicht zur Art „${e.ex}“`);
+  const p = parseActCode(a.code);
+  if (!p) add('R14', `Code der Vorgabe nicht lesbar („${a.code}“)`);
+  else if (p.fmt !== a.fmt) add('R14', 'Code und Format widersprechen sich');
+  if (a.targets[0]?.key !== card.key) add('R14', 'erstes Zielwort ist nicht die Karte der Aufgabe');
+  const n = a.targets.length;
+  if (n < 1 || n > ACT_MAX_TARGETS) add('R14', `${n} Zielwörter`);
+  if (new Set(a.targets.map((t) => t.key)).size !== n || new Set(a.targets.map((t) => t.lemma.toLowerCase())).size !== n) add('R14', 'Zielwörter nicht verschieden');
+  if (MULTI_TARGET.has(a.fmt) && n < 2) add('R14', 'Kombi-Aufgabe mit nur einem Zielwort');
+  if (!MULTI_TARGET.has(a.fmt) && n !== 1) add('R14', 'Aufgabe mit einem Zielwort trägt mehrere');
+  if (NEEDS_SOURCE.has(a.fmt) && (!a.source || a.source.text.trim().split(/\s+/).length < 4)) add('R14', 'Umformen ohne brauchbaren Ausgangssatz');
+  if (!e.meaning) add('R14', 'keine Bedeutung zum Zielwort');
+  if (e.sentence || e.options.length || e.accepted.length) add('R14', 'Aktivierung darf keine Lücke, Optionen oder Lösung tragen');
+  if (!activationReady(card)) add('R14', 'Karte noch nicht an zwei Tagen richtig abgerufen (kein freier Satz beim ersten Lernen)');
+  if (HIDES_TARGET.has(a.fmt)) {
+    if (a.showTarget) add('R14', 'A4 zeigt das Zielwort');
+    for (const t of a.targets) if (!actMeaning(t, a.fmt, lang)) add('R14', 'A4: Bedeutung verrät das Zielwort');
+    const ev = eventById(a.event);
+    if (ev && a.fmt === 'lg' && a.targets.some((t) => hasWords(`${ev.en} ${ev.de}`.toLowerCase(), t.lemma.toLowerCase()))) add('R14', 'A4: Lage verrät das Zielwort');
+  }
+}
+
+/** Prüft eine gebaute Aufgabe gegen R1–R12 (und R13/R14). Rein; leer = darf gezeigt werden. */
 export function checkExercise(e: Exercise, card: TrainCard, lang: Lang): Violation[] {
   const out: Violation[] = [];
   const add = (rule: GuardRule, why: string) => out.push({ rule, why });
@@ -205,6 +240,9 @@ export function checkExercise(e: Exercise, card: TrainCard, lang: Lang): Violati
     if (!activationReady(card)) add('R13', 'Karte noch nicht an zwei Tagen richtig abgerufen (kein freier Satz beim ersten Lernen)');
   }
 
+  // ---- Aktivierungs-Aufgaben A2–A5 (R14)
+  if (e.act || ACT_EX.has(e.ex)) checkAct(e, card, lang, add);
+
   // ---- Aufdeck-Karte (R10)
   if (e.ex === 'flip') {
     if (!e.meaning) add('R10', 'Vorderseite ohne Bedeutung');
@@ -271,7 +309,7 @@ export function fallbackChain(card: TrainCard, ex: ExerciseId, lang: Lang, poolS
   return [...all.filter((x) => exerciseDef(x).input === input), ...all.filter((x) => exerciseDef(x).input !== input)];
 }
 
-type BuildOpts = { sceneOf?: SceneLookup; origin?: boolean };
+type BuildOpts = { sceneOf?: SceneLookup; origin?: boolean; act?: ActTask };
 
 /**
  * Baut `ex`; fällt die Aufgabe beim Wächter durch, kommt die nächste Aufgabenart (Reihenfolge `fallbackChain`), zuletzt `type`

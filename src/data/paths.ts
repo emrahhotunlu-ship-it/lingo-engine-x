@@ -40,6 +40,7 @@ import {
   compareSchema,
   c1Schema,
   teacherSchema,
+  actSchema,
 } from './schemas';
 // Lesen-Modul (docs/umbau/lesen-plan.md §4/§5): einzige Tür für das Schema der Sammlung `read`.
 import { READ_LAZY_COLLECTION, readSchema } from '../modules/read/registry';
@@ -104,6 +105,8 @@ export const COLLECTIONS = {
   out: outSchema,
   // Lehrer-Feedback einfügen (28.09.2026, ersetzt die Preply-Brücke): Monatsdokumente.
   teacher: teacherSchema,
+  // Wörter aktivieren, Stufe 2: Sammelakte der Aktivierungen je Monat (`act/<JJJJ-MM>`, Fortsetzung `-b`). Muss hier stehen, sonst fehlt sie in Sicherung und Export.
+  act: actSchema,
   // Lesen (13.10.2026): `read/d-<Tag>` (Artikel), `read/m-<Monat>` (Index + Lesezustand), `read/p` (Einstellungen); ein tolerantes Schema für alle drei Arten.
   read: readSchema,
 } as const satisfies Record<string, ZodType>;

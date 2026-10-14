@@ -16,6 +16,7 @@ import { applyDocumentSettings, isLang, isPalette, isThemeMode, resolveTheme, us
 import { settingsWritePending } from './actions';
 import { useDocTotal } from '../features/capacity/docTotal';
 import { useC1xReady } from '../features/c1x/ready';
+import { loadActs } from '../features/vocab/actStore';
 
 // Start des App-Rahmens (aus App.tsx verschoben, unverändert): Fähigkeiten starten, Daten genau
 // einmal abonnieren, Einstellungen anwenden, Tagesplan je Lerntag festlegen. Dazu die einmaligen
@@ -45,6 +46,13 @@ export function useBoot(): void {
     const db = getDb();
     if (!db) return;
     return startDayLive(db, today);
+  }, [dbStatus, today]);
+
+  // Sammelakte der Aktivierungen (`act/<Monat>`, Wörter aktivieren Stufe 2): die letzten drei Monate einmal je Lerntag lesen. Der Rundenbau ist synchron und
+  // nimmt, was geladen ist (frühere eigene Sätze als Quelle und für die Neuheitsprüfung, „einsatzbereit“); ohne sie läuft alles wie sonst.
+  useEffect(() => {
+    if (dbStatus !== 'ready') return;
+    void loadActs(today);
   }, [dbStatus, today]);
 
   // Einmalige Installationen der Bereiche (heute: Sammel-Puffer beim Verlassen, Tastenkürzel).

@@ -11,6 +11,7 @@ import { grammarJudge } from './grammarJudge';
 import { mnemonic } from './mnemonic';
 import { NB_TEMPLATES } from './nb';
 import { produceCheckV2 } from './produceCheckV2';
+import { activateCheck } from './activateCheck';
 import { synonymCheck } from './synonymCheck';
 import { wordGen } from './wordGen';
 import { companionChat } from './companionChat';
@@ -36,6 +37,8 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   wordLookup,
   // Wörter aktivieren Stufe 1: produce-check@2 (drei Schichten, Vorgaben, errType); produce-check@1 bleibt als Datei erhalten, wird nicht mehr aufgerufen.
   produceCheckV2,
+  // Wörter aktivieren Stufe 2: activate-check@1 für A2–A5 (mehrere Zielwörter, Vorgaben, drei Schichten); ersetzt produce-check@2 nicht.
+  activateCheck,
   cardExamples,
   orderGen,
   // Anwenden, Stufe 2: Hörübung mit Frage

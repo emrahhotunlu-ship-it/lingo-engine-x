@@ -23,7 +23,7 @@ async function device(browser: Browser, kind: Device): Promise<{ page: Page; clo
 const phone = (browser: Browser) => device(browser, 'phone');
 
 /** Karte, die als erste fällig ist und deren schwächste Art feststeht. */
-const forcedDoc = (stage: number, xs: Counts, i = 0): Doc => ({ state: 'learning', stage, S: 1, D: 5, due: 1_690_000_000_000 + i, last: 1_689_900_000_000, reps: 3, lapses: 0, xs, hist: RECALLED });
+const forcedDoc = (stage: number, xs: Counts, i = 0, na = 0): Doc => ({ state: 'learning', stage, S: 1, D: 5, due: 1_690_000_000_000 + i, last: 1_689_900_000_000, reps: 3, lapses: 0, xs, hist: RECALLED, ...(na ? { na } : {}) });
 const strong = (...ids: string[]): Counts => Object.fromEntries(ids.map((id) => [id, { c: 6, w: 0 }]));
 const weak = (id: string): Counts => ({ [id]: { c: 0, w: 6 } });
 
@@ -52,7 +52,8 @@ async function startRound(page: Page, patch: Record<string, Doc>, opts: { sample
 for (const m of MODES) {
   test(`${m.device === 'phone' ? 'Handy' : 'Tastatur'}: ${m.ex} – Aufgabe, Lösen, automatische Note, Schreibweg`, async ({ browser }) => {
     const { page, close } = await device(browser, m.device);
-    const { errors, external } = await startRound(page, { 'vocab/avoid': forcedDoc(m.stage, { ...strong(...m.others), ...weak(m.ex) }) });
+    // Außer dem eigenen Satz selbst: `na: 9` = Fahrplan der Aktivierung durch, sonst ersetzte „Eigener Satz“ (A1) die erzwungene Art (`aktivierung2.spec.ts` prüft den Fahrplan).
+    const { errors, external } = await startRound(page, { 'vocab/avoid': forcedDoc(m.stage, { ...strong(...m.others), ...weak(m.ex) }, 0, m.ex === 'produce' ? 0 : 9) });
     const ex = page.getByTestId('exercise');
     await expect(ex).toHaveAttribute('data-ex', m.ex);
     await expect(ex).toHaveAttribute('data-card', 'avoid');
