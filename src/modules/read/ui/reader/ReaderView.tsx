@@ -143,7 +143,7 @@ export function ReaderView({ article, state = null, view: viewProp = null, autoS
     if (!el) return;
     el.scrollIntoView({ block: 'start', behavior: 'auto' });
     const calm = typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!calm && typeof el.animate === 'function') el.animate([{ backgroundColor: 'var(--lx-cyan-soft)' }, { backgroundColor: 'transparent' }], { duration: 1600, easing: 'ease-out' });
+    if (!calm && typeof el.animate === 'function') el.animate([{ backgroundColor: 'var(--lx-cyan-soft)' }, { backgroundColor: 'transparent' }], { duration: 300, easing: 'ease-out' });
   }, [startAt, model.total]);
 
   // ---- Bedienung
