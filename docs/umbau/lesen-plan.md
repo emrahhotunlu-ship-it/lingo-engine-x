@@ -251,3 +251,22 @@ Gebaut: sechster Reiter „Lesen“ (`src/app/shell/tabs.ts`, Symbol `book`, Tes
 - Methode des Hooks heißt `getArticles`, nicht `fetch`: die Plattformprüfung (`check:platform`) sucht im Build nach `fetch(` und blockiert sonst.
 - Angepasste Alt-Tests: Reiterzahl (`router.test.ts`, `rahmen.spec.ts`), `removalAudit.test.ts` (Route `read` ist wieder erlaubt, Ordner `features/read` bleibt gesperrt), `textScan.test.ts` (Schlüssel `rd…` sind erlaubt), `acceptance.spec.ts` (kein Reiter „Entdecken“).
 - Der Seed wurde nur um die vier `read/…`-Dokumente ergänzt (reiner Zusatz). Bekannt: `npm run seed` erzeugt gegenüber der eingecheckten Datei zusätzlich Abweichungen bei den Grammatik-Erklärungen (Inhalte unter `src/content/legacy` wurden seit der letzten Seed-Erzeugung geändert), die hier bewusst nicht mit eingecheckt sind.
+
+## Nachtrag 14.10.2026: Prüfbefunde (data-guard, english-teacher) eingearbeitet, Branch `claude/umbau-lesen-fix`
+
+**Umgesetzt (data-guard):**
+- A: `exportAll` sichert auch dann weiter, wenn das Lesen von `read/` scheitert; Fehler wird protokolliert, die Datei trägt `readBackupFailed: true` (nie still).
+- B: `loadLazyBackup` leitet Tage zusätzlich aus den Monatsindizes ab (`m-*.items[].day`); fehlt `read/p` ganz, werden die letzten 24 Monatsindizes abgesucht. Warnungen `read_days_derived` / `read_p_missing` im Protokoll.
+- C (klein): `runFetch` prüft vor dem ersten Artikel eines NEUEN Tages `mayCreateDayDoc(dayDocs, docTotal)` (Sperre bei 400 Tagesdokumenten oder voller Datenbank, Meldung "Platz voll"). Ein vorhandener Tag ist immer erlaubt.
+- D (klein): Die Sperre wird vor jedem weiteren Artikel erneuert (gleiche Kennung = Verlängerung); geht sie verloren, endet das Holen mit "läuft auf anderem Gerät".
+- E: `ReaderScreen` nimmt zuerst den globalen Schreiber (`getWriter()`), nur ohne ihn einen eigenen.
+
+**Umgesetzt (english-teacher):** Oberflächentexte (Priorität 1 und 3 vollständig), Prompt `read-article@1` (C1-Vorgaben, Struktur, Floskelverbot, Zeitwörter, idiomatisches Deutsch, mehrteilige Schlüsselwörter, 3 Fragen mit plausiblen Distraktoren, `asOf` nur als `JJJJ`/`JJJJ-MM`, App formatiert je Sprache über `formatAsOf`), `read-topics@1` (Berufsbezug, konkreter Blickwinkel), Prüftore (Floskeln, "quietly" höchstens 1, "however" höchstens 3, mindestens 2 Wortverbindungen, Sperrliste deutsch-gleicher Wörter), feste Dev-Antwort in echter Länge (`src/platform/dev/canned/readArticle.ts`, 473 Wörter), Seed-Artikel (einer in echter Länge: 468 Wörter, Distraktoren und Übersetzungen verbessert; nur `read/*` im Seed geändert).
+
+**Bewusst offen:**
+- D (Rest): Reparatur eines fehlenden Monatsindex-Eintrags beim Öffnen (Plan §4.4) ist noch nicht gebaut; der Artikeltext bleibt in der Datenbank, wäre aber in der Liste unsichtbar. Eigenes kleines Paket mit Test.
+- C (Rest): Oberfläche für die Warnung ab 250 Tagesdokumenten (`rdCapWarn`) und für das Aufräumen mit Zustimmung (`planTidy`/`tidyDayOp`) fehlt noch.
+- Hinweis-Tor für Zeitwörter ("this year", "recently") als weicher Hinweis an den Neuversuch: nur im Prompt, kein Tor (ein weiches Tor braucht eine neue Ergebnisart).
+- Teacher 2b: Feld `talk` (eine Sprech-/Schreibaufgabe nach dem Artikel) und Einbau von Emrahs offenen Grammatikthemen in den Prompt: nicht umgesetzt, brauchen Entscheidung (neues Feld im Schema, Anbindung an Sprechen/Schreiben).
+- Der Seed-Generator (`npm run seed`) erzeugt weiterhin zusätzliche Abweichungen bei den Grammatik-Erklärungen; für die Lesen-Änderung wurden nur die `read/*`-Dokumente in den eingecheckten Seed übernommen.
+- Der Name "Wörter-Training" im Kartentext (`rdrKeyHint`) ist nicht gegen die echte Reiterbezeichnung geprüft.

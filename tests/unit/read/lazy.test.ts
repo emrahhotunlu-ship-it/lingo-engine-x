@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { loadLazyBackup } from '../../../src/data/snapshot';
 import { createWriter } from '../../../src/data/writer';
 import { createMemoryDb } from '../../../src/platform/dev/memoryDb';
@@ -84,6 +84,55 @@ describe('Sicherung in begrenzter Größe', () => {
     const r = await loadLazyBackup(db);
     expect(r.omitted).toEqual([]);
     expect(Object.keys(r.docs)).toEqual(['read/p']);
+  });
+
+  it('loadLazyBackup: ein Tag, der nur im Monatsindex steht (fehlt in read/p.days), wird trotzdem gesichert', async () => {
+    const seed: Record<string, Record<string, unknown>> = {
+      'read/p': { v: 1, days: ['2026-09-17'] },
+      'read/m-2026-09': { v: 1, items: [{ id: 'a-2026-09-17-1-aaaaaa', day: '2026-09-17', title: 'A' }, { id: 'a-2026-09-18-1-bbbbbb', day: '2026-09-18', title: 'B' }, { id: 'x', day: '2026-10-01', title: 'falscher Monat' }] },
+      'read/d-2026-09-17': dayDoc('2026-09-17'),
+      'read/d-2026-09-18': dayDoc('2026-09-18'),
+    };
+    const r = await loadLazyBackup(recording(seed).db);
+    expect(Object.keys(r.docs).sort()).toEqual(['read/d-2026-09-17', 'read/d-2026-09-18', 'read/m-2026-09', 'read/p']);
+    expect(r.omitted).toEqual([]);
+  });
+
+  it('loadLazyBackup: fehlt read/p ganz, werden die letzten Monate nach Indizes abgesucht (nie still nichts sichern)', async () => {
+    const now = new Date();
+    const month = now.toISOString().slice(0, 7);
+    const day = `${month}-03`;
+    const seed: Record<string, Record<string, unknown>> = {
+      [`read/m-${month}`]: { v: 1, items: [{ id: `a-${day}-1-aaaaaa`, day, title: 'A' }] },
+      [`read/d-${day}`]: dayDoc(day),
+    };
+    const r = await loadLazyBackup(recording(seed).db);
+    expect(Object.keys(r.docs).sort()).toEqual([`read/d-${day}`, `read/m-${month}`]);
+  });
+});
+
+describe('Sicherung: Lesefehler in read/ bricht die Sicherung nicht ab', () => {
+  it('exportAll sichert ohne Lesen-Dokumente und vermerkt readBackupFailed', async () => {
+    const { exportAll } = await import('../../../src/features/settings/exportData');
+    const { snapshotFromRecord } = await import('../../../src/data/snapshot');
+    const saved: string[] = [];
+    const caps = await import('../../../src/platform/capabilities');
+    const h = createMemoryDb({ seed: { 'read/p': { v: 1, days: ['2026-10-01'] } } });
+    const failing = { ...h.db, doc: (path: string) => (path.startsWith('read/') ? { ...h.db.doc(path), get: () => Promise.reject(new Error('boom')) } : h.db.doc(path)) };
+    const dl = await import('../../../src/platform/downloads');
+    const spyCaps = vi.spyOn(caps, 'getDb').mockReturnValue(failing);
+    const spyDl = vi.spyOn(dl, 'saveFile').mockImplementation((_name: string, text: string) => {
+      saved.push(text);
+      return Promise.resolve('saved');
+    });
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const out = await exportAll(snapshotFromRecord({ 'app/profile': { v: 1 } }));
+    spyCaps.mockRestore();
+    spyDl.mockRestore();
+    expect(out).toBe('saved');
+    const payload = JSON.parse(saved[0] ?? '{}') as { readBackupFailed?: boolean; documents: Record<string, unknown> };
+    expect(payload.readBackupFailed).toBe(true);
+    expect(Object.keys(payload.documents)).toEqual(['app/profile']);
   });
 });
 

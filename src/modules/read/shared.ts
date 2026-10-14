@@ -15,7 +15,7 @@ export type { PromptTemplate } from '../../prompts/types';
 // Sprachtreue, Datum, Kapazität
 export { detectLang, isWrongLang, wordCount } from '../../domain/lang/detect';
 export { addDays, dayKey, isDayKey, isoWeek } from '../../domain/date';
-export { DOC_BLOCK_TOTAL, DOC_WARN_TOTAL, docGateOf } from '../../domain/capacity/docGuard';
+export { DOC_BLOCK_TOTAL, DOC_WARN_TOTAL, docGateOf, docTotal } from '../../domain/capacity/docGuard';
 export type { DocGate } from '../../domain/capacity/docGuard';
 
 // Diagnose-Protokoll

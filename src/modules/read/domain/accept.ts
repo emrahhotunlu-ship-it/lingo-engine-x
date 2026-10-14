@@ -34,6 +34,11 @@ export const LIMITS = {
   namesMissingShare: 0.35,
   keyWords: 5,
   keyWordsLenientMin: 3,
+  /** Mindestens so viele Schlüsselwörter sind mehrteilig (Wortverbindungen); im nachsichtigen Modus entfällt das. */
+  keyWordsMultiMin: 2,
+  /** „quietly“ höchstens einmal, „however“ höchstens dreimal im ganzen Text. */
+  quietlyMax: 1,
+  howeverMax: 3,
   questions: [2, 3],
   duplicateJaccard: 0.8,
 } as const;
@@ -141,6 +146,24 @@ const BRITISH = new RegExp(
     '\\b(?:travell|cancell|modell|labell|signall|channell|levell|fuell|tunnell|marvell)(?:ed|ing|er|ers|ous)\\b',
   ].join('|'),
   'i',
+);
+
+// Typische KI-Floskeln (Stil, im Tor „spelling“): ein Treffer löst den einen Neuversuch aus. Der Prompt verbietet sie ebenfalls.
+const CLICHES = /\b(?:in today[’']s fast[- ]paced|game[- ]?changer|delv(?:e|es|ed|ing)\s+(?:into|deeper)|navigate the complexit|unlock(?:s|ed|ing)? the (?:power|potential|full)|in conclusion,)/i;
+
+/** Floskel gefunden? Liefert die Fundstelle. */
+export function clichePhrase(text: string): string | null {
+  return CLICHES.exec(text)?.[0] ?? null;
+}
+
+/** Wie oft kommt das Wort im Text vor (ganze Wörter, ohne Groß-/Kleinschreibung)? */
+export function countWordIn(text: string, word: string): number {
+  return (text.match(new RegExp(`\\b${word}\\b`, 'gi')) ?? []).length;
+}
+
+// Wörter, die im Deutschen gleich oder fast gleich aussehen und heißen: als Schlüsselwort zu leicht (Tor 6).
+const GERMAN_SAME = new Set(
+  'routine focused specific team project problem system manager management plan idea information kontakt contact interesting normal final original social global digital local national international professional personal potential general special natural central basic simple direct action actions color market markets budget status concept process product products service services client clients online email'.split(' '),
 );
 
 /** Britische Schreibweise gefunden? Liefert die Fundstelle. */
@@ -309,6 +332,12 @@ export function acceptArticle(raw: unknown, ctx: AcceptCtx = {}): AcceptResult {
   };
   for (const { s, p, i } of flat) checkSpell(s.e, ['paras', p, i, 'e']);
   checkSpell(title, ['title']);
+  for (const { s, p, i } of flat) {
+    const hit = clichePhrase(s.e);
+    if (hit) push(issues, 'spelling', ['paras', p, i, 'e'], `avoid the filler phrase "${hit}"; write something more specific`);
+  }
+  if (countWordIn(allE, 'quietly') > LIMITS.quietlyMax) push(issues, 'spelling', ['paras'], `use "quietly" at most ${LIMITS.quietlyMax} time`);
+  if (countWordIn(allE, 'however') > LIMITS.howeverMax) push(issues, 'spelling', ['paras'], `use "however" at most ${LIMITS.howeverMax} times; vary the discourse markers`);
 
   // Tor 9: Dublette
   const tk = normKey(title);
@@ -345,8 +374,10 @@ export function acceptArticle(raw: unknown, ctx: AcceptCtx = {}): AcceptResult {
   });
   if (ctx.lenient) {
     if (keyWords.length < LIMITS.keyWordsLenientMin) push(issues, 'keywords', ['keyWords'], `needs at least ${LIMITS.keyWordsLenientMin} valid key words, got ${keyWords.length}`);
-  } else if (a.keyWords.length !== LIMITS.keyWords) {
-    push(issues, 'keywords', ['keyWords'], `needs exactly ${LIMITS.keyWords} key words, got ${a.keyWords.length}`);
+  } else {
+    if (a.keyWords.length !== LIMITS.keyWords) push(issues, 'keywords', ['keyWords'], `needs exactly ${LIMITS.keyWords} key words, got ${a.keyWords.length}`);
+    const multi = keyWords.filter((k) => k.w.split(' ').length >= 2).length;
+    if (multi < LIMITS.keyWordsMultiMin) push(issues, 'keywords', ['keyWords'], `at least ${LIMITS.keyWordsMultiMin} key words must be multi-word collocations (verb + noun, adjective + noun, fixed phrases), got ${multi}`);
   }
 
   if (issues.length > 0) return { ok: false, issues: limitPerGate(issues, 3).slice(0, 12) };
@@ -380,6 +411,7 @@ function checkKeyWord(raw: unknown, paras: Sentence[][]): { value: KeyWord; repa
   if (isWrongLang(de, 'de')) return { problem: 'de must be German' };
   const toks = normKey(w).split(' ');
   if (toks.length === 1 && FUNCTION_WORDS.has(toks[0] ?? '')) return { problem: `"${w}" is a function word, not a key word` };
+  if (toks.length === 1 && GERMAN_SAME.has(toks[0] ?? '')) return { problem: `"${w}" is too easy for a key word (it looks and means the same in German); choose a more demanding word or phrase` };
   // Fundstelle: `i` = [Absatz, Satz]; stimmt sie nicht, wird der erste Satz gesucht, der das Wort enthält (stille Reparatur).
   const at = Array.isArray(o.i) && o.i.length === 2 && Number.isInteger(o.i[0]) && Number.isInteger(o.i[1]) ? ([o.i[0], o.i[1]] as [number, number]) : null;
   const sentence = at ? paras[at[0]]?.[at[1]]?.e : undefined;

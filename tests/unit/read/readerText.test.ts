@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { rdrDe } from '../../../src/modules/read/i18n/rdReader.de';
 import { rdrEn } from '../../../src/modules/read/i18n/rdReader.en';
-import { rdrText, topicKey } from '../../../src/modules/read/domain/readerText';
+import { formatAsOf, rdrText, topicKey } from '../../../src/modules/read/domain/readerText';
 import { TOPIC_KEYS } from '../../../src/modules/read/schemas';
 
 const keys = (o: object): string[] => Object.keys(o).sort();
@@ -31,12 +31,21 @@ describe('Leser: Texte DE und EN', () => {
     expect(rdrText('en', 'rdrShowDeN', { n: 7 })).toBe('Show German for sentence 7');
     expect(rdrText('de', 'rdrMeta', { min: 5, words: 1234 })).toBe('≈ 5 Min · 1.234 Wörter');
     expect(rdrText('en', 'rdrMeta', { min: 5, words: 1234 })).toBe('≈ 5 min · 1,234 words');
-    expect(rdrText('de', 'rdrAsOf', {})).toBe('Stand: {asOf}');
+    expect(rdrText('de', 'rdrAsOf', {})).toBe('Wissensstand: {asOf}');
   });
 
   it('jedes Thema des Moduls hat einen Namen; Unbekanntes heißt „Eigenes Thema“', () => {
     for (const t of TOPIC_KEYS) expect(rdrDe[topicKey(t)].length).toBeGreaterThan(0);
     expect(topicKey('nonsense')).toBe('rdrTopic_custom');
     expect(topicKey(null)).toBe('rdrTopic_custom');
+  });
+
+  it('formatAsOf: JJJJ-MM mit Monatsnamen, JJJJ allein, Freitext nur als Jahreszahl, sonst leer', () => {
+    expect(formatAsOf('de', '2026-01')).toBe('Januar 2026');
+    expect(formatAsOf('en', '2026-01')).toBe('January 2026');
+    expect(formatAsOf('de', '2025')).toBe('2025');
+    expect(formatAsOf('de', 'general state as of early 2026')).toBe('2026');
+    expect(formatAsOf('en', 'no date')).toBe('');
+    expect(formatAsOf('en', null)).toBe('');
   });
 });

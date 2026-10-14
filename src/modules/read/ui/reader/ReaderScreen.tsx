@@ -7,7 +7,7 @@ import { rdrText } from '../../domain/readerText';
 import { saveReadState } from '../../store';
 import { logError, logWarn } from '../../shared';
 import type { Writer } from '../../shared';
-import { Button, Skeleton, createWriter, useT, waitForDb } from '../../sharedUi';
+import { Button, Skeleton, createWriter, getWriter, useT, waitForDb } from '../../sharedUi';
 import { saveView } from './persist';
 import { ReaderView } from './ReaderView';
 
@@ -51,6 +51,8 @@ export function ReaderScreen({ id, writer }: ReaderScreenProps) {
           return;
         }
         if (writer) w.current = writer;
+        // Zuerst der eine Schreibpfad der App (eine Schreibreihe je Dokument); nur ohne ihn ein eigener.
+        if (!w.current) w.current = getWriter() ?? null;
         if (!w.current) {
           const known = writers.get(db);
           w.current = known ?? createWriter(db);

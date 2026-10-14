@@ -25,3 +25,17 @@ export function topicKey(topic: string | null | undefined): RdrKey {
   const key = `rdrTopic_${topic ?? 'custom'}` as RdrKey;
   return key in rdrDe ? key : 'rdrTopic_custom';
 }
+
+/**
+ * Zeitangabe des Artikels je Sprache („2026-01“ → „Januar 2026“ / „January 2026“, „2026“ → „2026“).
+ * Das Modell liefert nur `JJJJ` oder `JJJJ-MM`; ältere Artikel tragen noch Freitext („general state as of early 2026“):
+ * daraus wird nur die Jahreszahl übernommen, damit nie englischer Modelltext in der deutschen Oberfläche steht. Ohne Jahr: leer.
+ */
+export function formatAsOf(lang: RdrLang, asOf: string | null | undefined): string {
+  const m = /\b(20\d{2}|19\d{2})(?:-(0[1-9]|1[0-2]))?\b/.exec(asOf ?? '');
+  if (!m) return '';
+  const year = m[1] ?? '';
+  if (!m[2]) return year;
+  const month = new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { month: 'long', timeZone: 'UTC' }).format(new Date(Date.UTC(Number(year), Number(m[2]) - 1, 1)));
+  return `${month} ${year}`;
+}

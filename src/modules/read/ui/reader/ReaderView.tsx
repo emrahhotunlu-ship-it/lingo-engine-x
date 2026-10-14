@@ -3,7 +3,7 @@ import type { ArticleItem, ReadState, ReadView } from '../../schemas';
 import { VIEWS } from '../../schemas';
 import { summarizeChecks } from '../../domain/readerCheck';
 import { buildModel, highlightMap, initialRevealed, pickChecks, pickKeyWords, toggleAll, toggleSentence, topVisibleSentence, userRevealCount, viewOf } from '../../domain/readerModel';
-import { rdrText, topicKey, type RdrKey } from '../../domain/readerText';
+import { formatAsOf, rdrText, topicKey, type RdrKey } from '../../domain/readerText';
 import { buildStatePatch, canFinish, clockSeconds, newClock, pauseClock, resumeClock, type ReadClock } from '../../domain/readerTiming';
 import { countWords, minutesFor } from '../../domain/text';
 import { Button, Icon, Segmented, lookupOpenMs, speak, unlockSpeech, useT } from '../../sharedUi';
@@ -205,7 +205,7 @@ export function ReaderView({ article, state = null, view: viewProp = null, autoS
         </p>
         <p className="m-0 text-xs text-subtle" data-testid="rdr-byclaude">
           {rdrText(lang, 'rdrByClaude')}
-          {article.asOf ? ` · ${rdrText(lang, 'rdrAsOf', { asOf: article.asOf })}` : ''} · {rdrText(lang, 'rdrByClaudeHint')}
+          {formatAsOf(lang, article.asOf) ? ` · ${rdrText(lang, 'rdrAsOf', { asOf: formatAsOf(lang, article.asOf) })}` : ''} · {rdrText(lang, 'rdrByClaudeHint')}
         </p>
       </header>
 

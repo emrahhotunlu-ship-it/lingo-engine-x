@@ -1,6 +1,6 @@
 import type { Db } from '../platform/types';
 import { logError, logWarn } from '../platform/diagnostics';
-import { fitTextBudget, READ_BACKUP_TEXT_BUDGET_BYTES, readBackupPlan, docBytes } from '../modules/read/registry';
+import { daysFromMonthDocs, fitTextBudget, READ_BACKUP_TEXT_BUDGET_BYTES, readBackupPlan, recentMonths, docBytes } from '../modules/read/registry';
 import { APP_DOC_PATHS, EAGER_COLLECTION_NAMES, collectionOf } from './paths';
 import { validateDoc } from './validate';
 
@@ -107,14 +107,25 @@ export async function loadLazyBackup(db: Db, textBudget: number = READ_BACKUP_TE
   const docs: Record<string, Doc> = {};
   const p = await readOnce('read/p', () => db.doc('read/p').get());
   const pData = p.exists ? p.data() : undefined;
-  if (!pData) return { docs, omitted: [], textBytes: 0 };
-  const plan = readBackupPlan(pData);
-  docs['read/p'] = pData;
-  await inBatches(plan.index.filter((x) => x !== 'read/p'), 4, async (path) => {
+  if (pData) docs['read/p'] = pData;
+  // Monatsindizes: aus den Tagen in `read/p`; fehlt `read/p` ganz, werden die letzten 24 Monate gesucht (nie still nichts sichern).
+  const listed = readBackupPlan(pData);
+  const monthNames = pData ? listed.index.filter((x) => x !== 'read/p').map((x) => x.slice('read/m-'.length)) : recentMonths(new Date().toISOString().slice(0, 10), 24);
+  const monthDocs: Array<{ month: string; data: Doc | undefined }> = [];
+  await inBatches(monthNames, 4, async (month) => {
+    const path = `read/m-${month}`;
     const snap = await readOnce(path, () => db.doc(path).get());
     const data = snap.exists ? snap.data() : undefined;
     if (data) docs[path] = data;
+    monthDocs.push({ month, data });
   });
+  // Tage, die nur im Monatsindex stehen (nicht in `read/p.days`), gehören trotzdem in die Sicherung.
+  const known = new Set(pData && Array.isArray(pData.days) ? (pData.days as unknown[]) : []);
+  const extra = daysFromMonthDocs(monthDocs).filter((d) => !known.has(d));
+  if (!pData && extra.length === 0 && Object.keys(docs).length === 0) return { docs, omitted: [], textBytes: 0 };
+  if (!pData) logWarn('data:backup', { code: 'read_p_missing', message: 'read/p fehlt, Tage aus den Monatsindizes abgeleitet' }, 'read');
+  else if (extra.length > 0) logWarn('data:backup', { code: 'read_days_derived', message: `${extra.length} Lesetage nur im Monatsindex gefunden` }, 'read');
+  const plan = readBackupPlan({ days: [...(pData && Array.isArray(pData.days) ? (pData.days as unknown[]) : []), ...extra] });
   // Artikeltexte: neueste zuerst, in kleinen Gruppen; sobald das Budget erreicht ist, wird nicht weiter geladen.
   const included: Array<{ path: string; bytes: number; data: Doc }> = [];
   const missing = new Set<string>();

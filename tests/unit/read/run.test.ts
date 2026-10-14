@@ -185,4 +185,32 @@ describe('runFetch', () => {
     expect(res.saved).toBe(8);
     expect(calls).toHaveLength(8);
   });
+
+  it('Sperre wird vor jedem weiteren Artikel erneuert; läuft sie weg, hört das Holen mit „anderes Gerät“ auf', async () => {
+    const { writer, base } = setup();
+    let acquires = 0;
+    const flaky: Writer = {
+      ...writer,
+      acquire: () => {
+        acquires += 1;
+        return Promise.resolve({ acquired: acquires < 3 });
+      },
+    };
+    const { ask, calls } = stub();
+    const res = await runFetch(base({ writer: flaky, count: 3, deps: { ask } }));
+    expect(acquires).toBe(3); // einmal vorab, einmal vor Artikel 2, einmal vor Artikel 3 (verloren)
+    expect(res).toMatchObject({ saved: 2, failure: { type: 'device_busy' } });
+    expect(calls).toHaveLength(2);
+  });
+
+  it('Kapazitätswächter: ein NEUER Tag legt bei 400 Tagesdokumenten oder voller Datenbank nichts an; ein vorhandener Tag schon', async () => {
+    const { base } = setup();
+    const { ask, calls } = stub();
+    expect(await runFetch(base({ dayDocs: 400, deps: { ask } }))).toMatchObject({ saved: 0, failure: { type: 'full' } });
+    expect(await runFetch(base({ docTotal: 4_300, deps: { ask } }))).toMatchObject({ saved: 0, failure: { type: 'full' } });
+    expect(calls).toHaveLength(0);
+    const today: IndexItem[] = [{ id: 'a-2026-10-02-1-aaaaaa', day: DAY, title: 'Heute schon da', topic: 'ai' }];
+    const res = await runFetch(base({ dayDocs: 400, docTotal: 4_300, items: today, count: 1, deps: { ask } }));
+    expect(res.saved).toBe(1);
+  });
 });

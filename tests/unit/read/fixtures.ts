@@ -53,18 +53,18 @@ const PARAS: S[][] = [
 
 export function goodRaw(): Raw {
   return {
-    title: 'Why Pricing Pages Quietly Decide Growth',
+    title: 'Why Pricing Pages Decide Growth',
     topic: 'saas',
     kind: 'explainer',
     level: 'c1',
-    asOf: 'general state as of early 2026',
+    asOf: '2026-01',
     summary: 'Der Artikel zeigt, warum Preisseiten das Wachstum von Softwareunternehmen leise steuern.',
     paras: PARAS.map((p) => p.map((s) => ({ ...s }))),
     keyWords: [
       { w: 'tiers', de: 'Stufen', i: [2, 0] },
       { w: 'forecast', de: 'vorhersagen', i: [1, 1] },
       { w: 'churn', de: 'Kundenabwanderung', i: [3, 0] },
-      { w: 'onboarding', de: 'Einführung neuer Kunden', i: [3, 2] },
+      { w: 'part ways', de: 'auseinandergehen', i: [3, 3] },
       { w: 'breach of trust', de: 'Vertrauensbruch', i: [4, 2] },
     ],
     check: [

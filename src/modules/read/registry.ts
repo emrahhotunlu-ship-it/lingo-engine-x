@@ -15,4 +15,4 @@ export const READ_TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [re
 
 export const readMessages = { de: rdDe, en: rdEn } as const;
 export { readDocCountOf, READ_LAZY_COLLECTION } from './domain/count';
-export { docBytes, fitTextBudget, READ_BACKUP_TEXT_BUDGET_BYTES, readBackupPlan } from './domain/backup';
+export { daysFromMonthDocs, docBytes, fitTextBudget, READ_BACKUP_TEXT_BUDGET_BYTES, readBackupPlan, recentMonths } from './domain/backup';

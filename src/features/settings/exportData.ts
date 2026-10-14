@@ -26,12 +26,14 @@ export async function exportAll(snapshot?: DataSnapshot): Promise<SaveOutcome> {
   }
   // Träge Sammlung „Lesen“ (Texte der Artikel) in begrenzter Größe dazu; was nicht passt, wird im Export vermerkt (nie still weggelassen).
   const documents: Record<string, Record<string, unknown>> = Object.fromEntries(snap.raw);
-  let lazy: LazyBackup;
+  // Die Sicherung hängt nicht an diesem neuen, trägen Teil: scheitert das Lesen von `read/`, wird ohne Lesen-Dokumente gesichert und das vermerkt.
+  let lazy: LazyBackup = { docs: {}, omitted: [], textBytes: 0 };
+  let readBackupFailed = false;
   try {
     lazy = await loadLazyBackup(db);
   } catch (err) {
+    readBackupFailed = true;
     logError('export:read', err, 'read');
-    return 'error';
   }
   Object.assign(documents, lazy.docs);
   const readOmitted = lazy.omitted;
@@ -44,6 +46,7 @@ export async function exportAll(snapshot?: DataSnapshot): Promise<SaveOutcome> {
     documents,
   };
   if (readOmitted.length) Object.assign(payload, { readTextsOmitted: readOmitted });
+  if (readBackupFailed) Object.assign(payload, { readBackupFailed: true });
   // Noch nicht übertragene Kopien der alten App in diesem Browser gehören mit in die Sicherung.
   const browserCopies = readLegacyLocal();
   if (Object.keys(browserCopies.dirty).length) Object.assign(payload, { browserCopies });

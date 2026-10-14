@@ -69,7 +69,7 @@ describe('generateArticle über das KI-Tor', () => {
     expect(options[0]?.modelTier).toBe('default');
     expect(options[0]?.cache).toBe(false);
     expect(item.id).toMatch(/^a-2026-10-13-1-[0-9a-z]{6}$/);
-    expect(item).toMatchObject({ t: 1_790_000_000_000, topic: 'saas', kind: 'explainer', level: 'c1', title: 'Why Pricing Pages Quietly Decide Growth', model: 'default', pv: 1 });
+    expect(item).toMatchObject({ t: 1_790_000_000_000, topic: 'saas', kind: 'explainer', level: 'c1', title: 'Why Pricing Pages Decide Growth', model: 'default', pv: 1 });
     expect(item.keyWords).toHaveLength(5);
     expect(item.paras.flat()).toHaveLength(21);
   });
@@ -94,7 +94,7 @@ describe('generateArticle über das KI-Tor', () => {
     // Der Neuversuch ist eine andere Eingabe (trifft nie den Zwischenspeicher); der Artikelaufruf speichert ohnehin nie (cache: false).
     expect(inputs[1]).not.toBe(inputs[0]);
     expect(options[1]?.cache).toBe(false);
-    expect(item.title).toBe('Why Pricing Pages Quietly Decide Growth');
+    expect(item.title).toBe('Why Pricing Pages Decide Growth');
   });
 
   it('zweimal ungültig: Fehler invalid, kein dritter Aufruf, nie ein Teilartikel', async () => {

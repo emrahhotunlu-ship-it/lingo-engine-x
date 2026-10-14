@@ -1043,7 +1043,7 @@ const readItem = (day, n, id, topic, kind, title, summary, paras, keyWords, chec
   level: 'c1',
   title,
   summary,
-  asOf: 'general state as of early 2026',
+  asOf: '2026-01',
   paras,
   keyWords,
   check,
@@ -1057,34 +1057,59 @@ const R1 = readItem(
   'bizdev',
   'explainer',
   'Why Partnerships Take Longer Than Anyone Plans',
-  'Der Artikel erklärt, warum Partnerschaften im Vertrieb meist länger dauern als geplant.',
+  'Der Artikel erklärt, warum Partnerschaften im Vertrieb meist länger dauern als geplant, und wie erfahrene Teams damit umgehen.',
   [
     [
-      { e: 'A new partnership usually starts with enthusiasm and a shared slide deck.', d: 'Eine neue Partnerschaft beginnt meist mit Begeisterung und einer gemeinsamen Präsentation.' },
+      { e: 'A new partnership usually starts with enthusiasm, a shared slide deck and a launch date that both sides consider realistic.', d: 'Eine neue Partnerschaft beginnt meist mit Begeisterung, einem gemeinsamen Foliensatz und einem Starttermin, den beide Seiten für realistisch halten.' },
       { e: 'Six months later, the same two teams are often still arguing about who owns the customer relationship.', d: 'Sechs Monate später streiten dieselben beiden Teams oft immer noch darüber, wem die Kundenbeziehung gehört.' },
-      { e: 'The delay rarely comes from bad intentions, but from unclear incentives.', d: 'Die Verzögerung kommt selten von bösem Willen, sondern von unklaren Anreizen.' },
+      { e: 'The delay rarely stems from bad intentions; far more often, it comes from incentives that point in different directions.', d: 'Die Verzögerung rührt selten von bösem Willen her; weit häufiger kommt sie von Anreizen, die in unterschiedliche Richtungen zeigen.' },
+      { e: 'Understanding those incentives early is arguably the most valuable work that a partner manager can do.', d: 'Diese Anreize früh zu verstehen, ist wohl die wertvollste Arbeit, die ein Partnermanager leisten kann.' },
+      { e: 'Each side tends to assume that the other will adapt first.', d: 'Jede Seite geht meist davon aus, dass sich die andere zuerst anpasst.' },
     ],
     [
       { e: 'Sales teams are paid for closed deals, so they hesitate to share a promising lead with an outside partner.', d: 'Vertriebsteams werden für abgeschlossene Geschäfte bezahlt, deshalb zögern sie, einen vielversprechenden Kontakt mit einem externen Partner zu teilen.' },
-      { e: 'Partner managers, in turn, are measured on pipeline that they cannot control.', d: 'Partnermanager wiederum werden an einer Pipeline gemessen, die sie nicht steuern können.' },
+      { e: 'Partner managers, in turn, are measured on pipeline that they cannot fully control.', d: 'Partnermanager wiederum werden an einer Pipeline gemessen, die sie nicht vollständig steuern können.' },
+      { e: 'Meanwhile, the legal and security teams of the larger company add review steps that the smaller partner never anticipated.', d: 'Währenddessen fügen die Rechts- und Sicherheitsabteilungen des größeren Unternehmens Prüfschritte hinzu, mit denen der kleinere Partner nie gerechnet hat.' },
       { e: 'Until both sides see a clear benefit, every request feels like extra work.', d: 'Solange beide Seiten keinen klaren Nutzen sehen, fühlt sich jede Anfrage wie Zusatzarbeit an.' },
+    ],
+    [
+      { e: 'Imagine a cloud vendor that wants a consulting firm to recommend its document platform to clients.', d: 'Stellen wir uns einen Cloud-Anbieter vor, der möchte, dass eine Beratungsfirma seine Dokumentenplattform bei Kunden empfiehlt.' },
+      { e: 'The consultants would gladly do so, but only if the platform helps them win projects rather than lose billable hours.', d: 'Die Berater würden das gern tun, aber nur, wenn die Plattform ihnen hilft, Projekte zu gewinnen, statt abrechenbare Stunden zu verlieren.' },
+      { e: 'If the vendor ignores this tension, the partnership produces plenty of workshops and almost no revenue.', d: 'Ignoriert der Anbieter diese Spannung, bringt die Partnerschaft viele Workshops und kaum Umsatz.' },
+      { e: 'Consultants and vendors then blame each other for the missing results, and the original enthusiasm turns into polite silence.', d: 'Berater und Anbieter machen dann einander für die fehlenden Ergebnisse verantwortlich, und aus der anfänglichen Begeisterung wird höfliches Schweigen.' },
+      { e: 'If it addresses the tension openly, for example through a fee for implementation work, the interests start to align.', d: 'Spricht er die Spannung offen an, etwa durch eine Vergütung für Einführungsarbeiten, beginnen sich die Interessen anzunähern.' },
     ],
     [
       { e: 'Experienced teams therefore agree on a small joint goal before they sign anything.', d: 'Erfahrene Teams einigen sich deshalb auf ein kleines gemeinsames Ziel, bevor sie etwas unterschreiben.' },
       { e: 'A single shared customer success story often does more than a long contract.', d: 'Eine einzige gemeinsame Erfolgsgeschichte mit einem Kunden bewirkt oft mehr als ein langer Vertrag.' },
-      { e: 'After that, scaling the partnership becomes a question of routine rather than of persuasion.', d: 'Danach wird das Ausweiten der Partnerschaft eher zur Frage der Routine als der Überzeugungsarbeit.' },
+      { e: 'It gives both sales forces a concrete argument, and it exposes the practical obstacles while the stakes are still low.', d: 'Sie gibt beiden Vertriebsmannschaften ein konkretes Argument und deckt die praktischen Hindernisse auf, solange der Einsatz noch gering ist.' },
+      { e: 'Only after such a pilot does it make sense to discuss targets, territories and revenue sharing.', d: 'Erst nach einem solchen Pilotprojekt ist es sinnvoll, über Ziele, Gebiete und Umsatzbeteiligung zu sprechen.' },
+      { e: 'In practice, a pilot with three or four shared accounts is usually enough to reveal the real friction.', d: 'In der Praxis genügt ein Pilotprojekt mit drei oder vier gemeinsamen Kunden meist, um die tatsächlichen Reibungspunkte sichtbar zu machen.' },
+    ],
+    [
+      { e: 'There is, of course, a counterargument: a small pilot can create a false sense of progress.', d: 'Es gibt freilich ein Gegenargument: Ein kleines Pilotprojekt kann ein trügerisches Gefühl von Fortschritt erzeugen.' },
+      { e: 'One happy customer does not prove that the model works at scale, and the enthusiasm of an early adopter rarely reflects the average buyer.', d: 'Ein zufriedener Kunde beweist nicht, dass das Modell im großen Maßstab funktioniert, und die Begeisterung eines frühen Anwenders spiegelt selten den durchschnittlichen Käufer wider.' },
+      { e: 'Even so, a modest start with honest metrics beats an ambitious plan that nobody has tested.', d: 'Trotzdem ist ein bescheidener Start mit ehrlichen Kennzahlen besser als ein ehrgeiziger Plan, den niemand erprobt hat.' },
+      { e: 'The metrics should include the effort on both sides, not only the number of leads that were passed along.', d: 'Zu den Kennzahlen sollte der Aufwand auf beiden Seiten gehören, nicht nur die Zahl der weitergegebenen Kontakte.' },
+    ],
+    [
+      { e: 'The practical takeaway is to review the partnership every quarter and to ask one uncomfortable question: who gains, and who bears the extra work?', d: 'Die praktische Konsequenz lautet, die Partnerschaft jedes Quartal zu überprüfen und eine unbequeme Frage zu stellen: Wer gewinnt, und wer trägt die zusätzliche Arbeit?' },
+      { e: 'If the answer is always the same side, the arrangement will not last.', d: 'Ist die Antwort immer dieselbe Seite, wird die Vereinbarung nicht lange halten.' },
+      { e: 'If both sides can name a clear gain, scaling the partnership becomes a question of routine rather than of persuasion.', d: 'Können beide Seiten einen klaren Gewinn nennen, wird das Ausweiten der Partnerschaft eher zur Frage der Routine als der Überzeugungsarbeit.' },
+      { e: 'Teams that review honestly tend to adjust early, while others discover the problem only at the annual planning meeting.', d: 'Teams, die ehrlich Bilanz ziehen, korrigieren meist früh, während andere das Problem erst bei der Jahresplanung entdecken.' },
     ],
   ],
   [
-    { w: 'incentives', de: 'Anreize', i: [0, 2] },
-    { w: 'pipeline', de: 'Vertriebspipeline', i: [1, 1] },
-    { w: 'hesitate', de: 'zögern', i: [1, 0] },
-    { w: 'persuasion', de: 'Überzeugungsarbeit', i: [2, 2] },
-    { w: 'routine', de: 'Routine', i: [2, 2] },
+    { w: 'hesitate to share', de: 'zögern, zu teilen', i: [1, 0] },
+    { w: 'billable hours', de: 'abrechenbare Stunden', i: [2, 1] },
+    { w: 'addresses the tension', de: 'spricht die Spannung an', i: [2, 4] },
+    { w: 'false sense of progress', de: 'trügerisches Gefühl von Fortschritt', i: [4, 0] },
+    { w: 'early adopter', de: 'früher Anwender', i: [4, 1] },
   ],
   [
-    { q: 'According to the text, what mainly delays partnerships?', o: ['Bad intentions on both sides.', 'Unclear incentives.', 'Missing slide decks.'], a: 1, why: 'Der Text nennt unklare Anreize, nicht böse Absicht, als Hauptgrund für die Verzögerung.' },
-    { q: 'What do experienced teams do before signing?', o: ['They agree on a small joint goal.', 'They wait six months.', 'They hire more partner managers.'], a: 0, why: 'Erfahrene Teams legen vorab ein kleines gemeinsames Ziel fest.' },
+    { q: 'According to the text, what mainly delays partnerships?', o: ['Disagreements about the launch date.', 'Incentives that point in different directions.', 'A lack of enthusiasm on both sides.'], a: 1, why: 'Der Text nennt Anreize, die in unterschiedliche Richtungen zeigen, als häufigsten Grund. Mangelnde Begeisterung ist es nicht: Die Partnerschaft beginnt ja mit Begeisterung.' },
+    { q: 'Why might the consultants in the example be reluctant to recommend the platform?', o: ['They fear it could reduce the hours they can bill.', 'They consider the platform too expensive for their clients.', 'They have no experience with cloud software.'], a: 0, why: 'Die Berater empfehlen die Plattform nur, wenn sie ihnen Projekte bringt, statt abrechenbare Stunden zu kosten. Von Preis oder fehlender Erfahrung ist im Text keine Rede.' },
+    { q: 'What does the author mean by “a false sense of progress”?', o: ['A pilot that has failed in public.', 'A budget that is smaller than agreed.', 'The impression that a partnership works because one early project went well.'], a: 2, why: 'Gemeint ist der Eindruck, die Partnerschaft funktioniere, nur weil ein erstes kleines Projekt gut lief. Das beweist noch nicht, dass das Modell im großen Maßstab trägt.' },
   ],
 );
 const R2 = readItem(
@@ -1097,14 +1122,14 @@ const R2 = readItem(
   'Der Artikel beschreibt, wie Sprachmodelle alltägliche Büroarbeit verändern und wo ihre Grenzen liegen.',
   [
     [
-      { e: 'Language models have quietly entered the daily routine of many office workers.', d: 'Sprachmodelle sind leise in den Arbeitsalltag vieler Büroangestellter eingezogen.' },
+      { e: 'Language models have quietly entered the daily routine of many office workers.', d: 'Sprachmodelle sind unbemerkt in den Arbeitsalltag vieler Büroangestellter eingezogen.' },
       { e: 'They draft emails, summarize long documents and suggest wording for difficult messages.', d: 'Sie entwerfen E-Mails, fassen lange Dokumente zusammen und schlagen Formulierungen für schwierige Nachrichten vor.' },
       { e: 'The gain is rarely dramatic on a single task, but it adds up over a week.', d: 'Der Gewinn ist bei einer einzelnen Aufgabe selten dramatisch, summiert sich aber über eine Woche.' },
     ],
     [
       { e: 'The limits are just as important to understand as the benefits.', d: 'Die Grenzen sind ebenso wichtig zu verstehen wie die Vorteile.' },
-      { e: 'A model can sound confident while being wrong, so important facts still need a human check.', d: 'Ein Modell kann überzeugend klingen und trotzdem falschliegen, wichtige Fakten brauchen also weiterhin eine menschliche Prüfung.' },
-      { e: 'Teams that treat the output as a first draft, not as a final answer, tend to avoid most problems.', d: 'Teams, die das Ergebnis als ersten Entwurf und nicht als endgültige Antwort behandeln, vermeiden meist die meisten Probleme.' },
+      { e: 'A model can sound confident while being wrong, so important facts still need a human check.', d: 'Ein Modell kann selbstsicher klingen und trotzdem falschliegen, wichtige Fakten brauchen also weiterhin eine menschliche Prüfung.' },
+      { e: 'Teams that treat the output as a first draft, not as a final answer, tend to avoid most problems.', d: 'Teams, die das Ergebnis als ersten Entwurf und nicht als endgültige Antwort behandeln, umgehen die meisten Probleme.' },
     ],
     [
       { e: 'Costs deserve attention as well, because heavy use can become expensive at scale.', d: 'Auch die Kosten verdienen Aufmerksamkeit, denn eine starke Nutzung kann im großen Maßstab teuer werden.' },
@@ -1113,15 +1138,15 @@ const R2 = readItem(
     ],
   ],
   [
-    { w: 'summarize', de: 'zusammenfassen', i: [0, 1] },
-    { w: 'draft', de: 'Entwurf', i: [1, 2] },
+    { w: 'sound confident', de: 'selbstsicher klingen', i: [1, 1] },
+    { w: 'first draft', de: 'erster Entwurf', i: [1, 2] },
     { w: 'at scale', de: 'im großen Maßstab', i: [2, 0] },
-    { w: 'rollout', de: 'Einführung', i: [2, 1] },
-    { w: 'confident', de: 'überzeugt, selbstsicher', i: [1, 1] },
+    { w: 'company-wide rollout', de: 'unternehmensweite Einführung', i: [2, 1] },
+    { w: 'adds up', de: 'summiert sich', i: [0, 2] },
   ],
   [
-    { q: 'How should teams treat the output of a model?', o: ['As a final answer.', 'As a first draft.', 'As a legal document.'], a: 1, why: 'Der Text empfiehlt, das Ergebnis als ersten Entwurf zu sehen und wichtige Fakten zu prüfen.' },
-    { q: 'Why do many companies start with a few use cases?', o: ['Because models are free.', 'Because costs can grow at scale.', 'Because nobody uses them.'], a: 1, why: 'Bei starker Nutzung können die Kosten im großen Maßstab steigen.' },
+    { q: 'How should teams treat the output of a model?', o: ['As a final answer that needs no review.', 'As a first draft that still needs a human check.', 'As a replacement for the person who wrote the request.'], a: 1, why: 'Der Text empfiehlt, das Ergebnis als ersten Entwurf zu sehen und wichtige Fakten zu prüfen. Eine endgültige Antwort ohne Prüfung wäre riskant, weil Modelle selbstsicher falschliegen können.' },
+    { q: 'Why do many companies start with a few use cases?', o: ['Because heavy use can become expensive at scale.', 'Because models cannot handle more than a few tasks.', 'Because employees refuse to use them.'], a: 0, why: 'Bei starker Nutzung können die Kosten im großen Maßstab steigen. Dass Modelle nur wenige Aufgaben könnten, behauptet der Text nicht.' },
   ],
 );
 const R3 = readItem(
@@ -1150,15 +1175,15 @@ const R3 = readItem(
     ],
   ],
   [
+    { w: 'scheduling another meeting', de: 'ein weiteres Meeting ansetzen', i: [0, 0] },
+    { w: 'at a fraction of the cost', de: 'zu einem Bruchteil der Kosten', i: [0, 2] },
+    { w: 'keeps the discussion focused', de: 'hält die Diskussion fokussiert', i: [2, 1] },
+    { w: 'move the work forward', de: 'die Arbeit voranbringen', i: [2, 2] },
     { w: 'uncertainty', de: 'Unsicherheit', i: [0, 0] },
-    { w: 'a fraction of', de: 'ein Bruchteil von', i: [0, 2] },
-    { w: 'specific', de: 'konkret', i: [1, 0] },
-    { w: 'focused', de: 'fokussiert', i: [2, 1] },
-    { w: 'move forward', de: 'voranbringen', i: [2, 2] },
   ],
   [
-    { q: 'What is good feedback according to the text?', o: ['Long and general.', 'Specific, short and about the work.', 'Given once a year.'], a: 1, why: 'Gutes Feedback ist konkret, kurz und bezieht sich auf die Arbeit, nicht auf die Person.' },
-    { q: 'When do meetings still make sense?', o: ['For every question.', 'For decisions that need several people at once.', 'Never.'], a: 1, why: 'Meetings lohnen sich vor allem für Entscheidungen, die mehrere Personen gleichzeitig brauchen.' },
+    { q: 'What is good feedback according to the text?', o: ['Detailed, general and given once a year.', 'Short, concrete and about the work rather than the person.', 'Friendly in tone but without a clear point.'], a: 1, why: 'Gutes Feedback ist konkret, kurz und bezieht sich auf die Arbeit, nicht auf die Person. Allgemeines Feedback einmal im Jahr hilft kaum, denn es kommt zu spät und sagt nichts Genaues.' },
+    { q: 'When do meetings still make sense?', o: ['For decisions that need several people at once.', 'For every question that comes up in a team.', 'For giving feedback on individual work.'], a: 0, why: 'Meetings lohnen sich vor allem für Entscheidungen, die mehrere Personen gleichzeitig brauchen. Feedback zur Einzelarbeit läuft laut Text besser direkt und zeitnah.' },
   ],
 );
 const readWords = (item) => item.paras.reduce((a, p) => a + p.reduce((b, s) => b + s.e.split(/\s+/).length, 0), 0);

@@ -134,7 +134,7 @@ test.describe('Bildschirm „Lesen“ (390 px)', () => {
     await expect(page.getByTestId('read-primary')).toHaveCount(0);
     await expect(page.getByTestId('read-today')).toContainText('Heute alles gelesen');
     await expect(page.getByTestId('read-today')).toHaveAttribute('data-tone', 'done');
-    await expect(page.getByTestId('read-fetch')).toHaveText('Noch einen holen (neues Thema)');
+    await expect(page.getByTestId('read-fetch')).toHaveText('Noch einen Artikel holen (anderes Thema)');
     await expect(page.getByTestId('read-row').first()).toHaveAttribute('data-state', 'done');
   });
 
@@ -160,7 +160,7 @@ test.describe('Bildschirm „Lesen“ (390 px)', () => {
     await openRead(page);
     await expect(page.getByTestId('read-row')).toHaveCount(2);
     await expect(page.getByTestId('read-fetch')).toHaveCount(0);
-    await expect(page.getByTestId('read-today')).toContainText('Claude ist in dieser Ansicht nicht verfügbar');
+    await expect(page.getByTestId('read-today')).toContainText('Claude ist hier gerade nicht verfügbar');
     await expect(page.getByTestId('read-suggest')).toHaveCount(0);
     // Der Hauptknopf liest weiter.
     await expect(page.getByTestId('read-primary')).toHaveAttribute('data-kind', 'read');
@@ -254,7 +254,7 @@ test.describe('Artikel holen (Dev-Adapter)', () => {
     await screen(page, 'today');
     await openRead(page);
     await page.getByTestId('read-primary').click();
-    await expect(page.getByTestId('read-error')).toContainText('Claude braucht gerade eine Pause');
+    await expect(page.getByTestId('read-error')).toContainText('Claude braucht gerade eine kurze Pause');
     await expect(page.getByTestId('read-retry')).toHaveCount(0);
     await expect(page.getByTestId('read-primary')).toHaveCount(0);
     await expect(page.getByTestId('read-fetch')).toHaveCount(0);
@@ -297,7 +297,7 @@ test.describe('Artikel holen (Dev-Adapter)', () => {
     await page.getByTestId('read-topic-add').click();
     await expect(page.getByTestId('read-custom')).toHaveCount(1);
     await page.getByTestId('read-primary').click();
-    await expect(page.getByTestId('read-error')).toContainText('Dieser Artikel war nicht in Ordnung');
+    await expect(page.getByTestId('read-error')).toContainText('Claude hat keinen brauchbaren Artikel geliefert');
     await expect(page.getByTestId('read-retry')).toBeVisible();
     const db = await dump(page);
     expect(Object.keys(db).filter((k) => k.startsWith('read/d-'))).toEqual([]);

@@ -344,7 +344,7 @@ describe('Tor 8: amerikanische Schreibweise', () => {
 describe('Tor 9: Dublette', () => {
   it('gut: anderer Titel, oder ähnlicher Titel in einem anderen Thema', () => {
     expect(gatesOf(goodRaw(), { topic: 'saas', recent: [{ title: 'How remote teams decide faster', topic: 'management' }] })).toEqual([]);
-    expect(gatesOf(goodRaw(), { topic: 'saas', recent: [{ title: 'Why Pricing Pages Quietly Decide Growth Faster', topic: 'ai' }] })).toEqual([]);
+    expect(gatesOf(goodRaw(), { topic: 'saas', recent: [{ title: 'Why Pricing Pages Decide Growth Faster', topic: 'ai' }] })).toEqual([]);
   });
 
   it('kaputt: normalisierter Titel gleich (Groß-/Kleinschreibung und Satzzeichen egal)', () => {
@@ -352,7 +352,7 @@ describe('Tor 9: Dublette', () => {
   });
 
   it('kaputt: fast gleicher Titel im selben Thema', () => {
-    expect(gatesOf(goodRaw(), { topic: 'saas', recent: [{ title: 'Why Pricing Pages Quietly Decide Growth Faster', topic: 'saas' }] })).toEqual(['duplicate']);
+    expect(gatesOf(goodRaw(), { topic: 'saas', recent: [{ title: 'Why Pricing Pages Decide Growth Faster', topic: 'saas' }] })).toEqual(['duplicate']);
   });
 });
 
@@ -380,5 +380,37 @@ describe('Ergebnis', () => {
     const r = acceptArticle(a);
     expect(r.ok).toBe(false);
     if (!r.ok) expect(r.issues[0]).toEqual({ gate: 'glued', path: ['paras', 1, 0, 'e'], message: 'double spaces' });
+  });
+});
+
+describe('Stil (Tor 8) und Schlüsselwörter (Tor 6): Lehrer-Gegenlesung', () => {
+  it('KI-Floskeln im Text lösen das Tor „spelling“ aus', () => {
+    const a = goodRaw();
+    a.paras[0]![1]!.e = 'This is a game-changer for most software companies and their pricing pages today.';
+    a.paras[0]![1]!.d = 'Das ist ein Wendepunkt für die meisten Softwareunternehmen und ihre Preisseiten heute.';
+    expect(messages(a).join('\n')).toMatch(/spelling: avoid the filler phrase "game-changer"/);
+  });
+
+  it('„quietly“ höchstens einmal, „however“ höchstens dreimal', () => {
+    const a = goodRaw();
+    a.paras[1]![0]!.e = 'Consider how pricing quietly shapes the common choice between charging per seat and charging for usage.';
+    expect(messages(a).join('\n')).toMatch(/spelling: use "quietly" at most 1 time/);
+    const b = goodRaw();
+    for (const [p, s] of [[0, 1], [1, 1], [2, 0], [3, 0]] as const) b.paras[p]![s]!.e = `${b.paras[p]![s]!.e.replace(/\.$/, '')}, however.`;
+    expect(messages(b).join('\n')).toMatch(/use "however" at most 3 times/);
+  });
+
+  it('Schlüsselwörter: mindestens zwei Wortverbindungen', () => {
+    const a = goodRaw();
+    a.keyWords[3] = { w: 'onboarding', de: 'Einführung neuer Kunden', i: [3, 2] };
+    expect(messages(a).join('\n')).toMatch(/keywords: at least 2 key words must be multi-word collocations/);
+    expect(acceptArticle(goodRaw()).ok).toBe(true);
+  });
+
+  it('Schlüsselwörter: im Deutschen gleich aussehende Wörter sind zu leicht', () => {
+    const a = goodRaw();
+    a.paras[0]![1]!.e = a.paras[0]![1]!.e.replace('pricing', 'routine');
+    a.keyWords[0] = { w: 'routine', de: 'Routine', i: [0, 1] };
+    expect(messages(a).join('\n')).toMatch(/keywords: "routine" is too easy/);
   });
 });

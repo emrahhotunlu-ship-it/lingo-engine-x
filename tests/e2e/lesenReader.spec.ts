@@ -87,7 +87,7 @@ test.describe('Leser 390 px, Deutsch, dunkel', () => {
     await expect(page.getByTestId('rdr-views').locator('[role="radio"][aria-checked="true"]')).toHaveAttribute('data-testid', 'rdr-view-b');
     await expect(page.getByTestId('rdr-title')).toHaveText(ART.title);
     await expect(page.getByTestId('rdr-byclaude')).toContainText('Von Claude geschrieben');
-    await expect(page.getByTestId('rdr-byclaude')).toContainText(`Stand: ${ART.asOf}`);
+    await expect(page.getByTestId('rdr-byclaude')).toContainText('Wissensstand: Januar 2026');
     await expect(page.getByTestId('rdr-en')).toHaveCount(TOTAL);
     await expect(page.getByTestId('rdr-de')).toHaveCount(0);
     await expect(page.getByTestId('rdr-topic')).toHaveText('SaaS');
@@ -310,7 +310,7 @@ test.describe('Leser 390 px, Deutsch, dunkel', () => {
 
   test('aufgeräumter Artikel (paras: []) zeigt Titel, Wörter und den Hinweis, ohne Absturz', async ({ page }) => {
     const { errors } = await open(page, { article: { ...ART, paras: [] } });
-    await expect(page.getByTestId('rdr-removed')).toContainText('aufgeräumt');
+    await expect(page.getByTestId('rdr-removed')).toContainText('gelöscht, um Platz zu sparen');
     await expect(page.getByTestId('rdr-keywords')).toBeVisible();
     await expect(page.getByTestId('rdr-kw-save')).toHaveCount(0);
     await expect(page.getByTestId('rdr-kw-nosentence').first()).toBeVisible();

@@ -1,3 +1,4 @@
+import { isDayKey } from '../shared';
 import { readDaysOf } from './count';
 import { monthOfDay, READ_PREFS_PATH, readDayPath, readMonthPath } from './paths';
 
@@ -42,4 +43,33 @@ export function fitTextBudget(sizes: ReadonlyArray<{ path: string; bytes: number
     included.push(s.path);
   }
   return { included, omitted: sizes.slice(i).map((s) => s.path) };
+}
+
+/**
+ * Tage aus den Monatsindizes (`m-<Monat>.items[].day`), die zum Monat des Dokuments passen. Sicherheitsnetz für die Sicherung:
+ * Fehlt ein Tag in `read/p.days` (Absturz nach dem Artikel, Wettlauf zweier Geräte), steht sein Text trotzdem in der Sicherung.
+ */
+export function daysFromMonthDocs(months: ReadonlyArray<{ month: string; data: Record<string, unknown> | undefined }>): string[] {
+  const out = new Set<string>();
+  for (const { month, data } of months) {
+    const items = data && Array.isArray(data.items) ? (data.items as unknown[]) : [];
+    for (const it of items) {
+      const day = it && typeof it === 'object' ? (it as Record<string, unknown>).day : undefined;
+      if (typeof day === 'string' && isDayKey(day) && monthOfDay(day) === month) out.add(day);
+    }
+  }
+  return [...out].sort();
+}
+
+/** Die letzten `n` Monate (`JJJJ-MM`, neueste zuerst) ab einem Tag: für die Suche, wenn `read/p` fehlt. */
+export function recentMonths(fromDay: string, n: number): string[] {
+  const y = Number(fromDay.slice(0, 4));
+  const m = Number(fromDay.slice(5, 7));
+  if (!Number.isFinite(y) || !Number.isFinite(m)) return [];
+  const out: string[] = [];
+  for (let i = 0; i < n; i++) {
+    const t = y * 12 + (m - 1) - i;
+    out.push(`${Math.floor(t / 12)}-${String((t % 12) + 1).padStart(2, '0')}`);
+  }
+  return out;
 }

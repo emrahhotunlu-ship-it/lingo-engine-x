@@ -9,6 +9,7 @@ import type { TopicHistoryItem } from './domain/topics';
 import { recentTitles } from './domain/view';
 import type { IndexItem } from './schemas';
 import { claimDay, recordSaved, saveArticle } from './store';
+import { mayCreateDayDoc } from './domain/retention';
 
 // Das Holen der Artikel (docs/umbau/lesen-plan.md §3.1, A6 Nr. 2/3). Nur auf Handlung (Tippen), ein Artikel nach dem anderen, nie aus Schleife
 // oder Timer im Sinne des Vertrags: die Schleife hier ist die Reihe der vom Nutzer gewollten Artikel und endet beim ersten Fehler.
@@ -48,6 +49,9 @@ export type RunInput = {
   /** Nach einem Schemafehler: beim Knopf „Erneut versuchen“ den Zwischenspeicher übergehen. */
   refresh?: boolean;
   deps?: GenerateDeps;
+  /** Anzahl vorhandener Tagesdokumente (`read/p.days`) und aller Dokumente der App (0 = unbekannt) für den Kapazitätswächter. */
+  dayDocs?: number;
+  docTotal?: number;
 };
 
 export type RunResult = { saved: number; total: number; stopped: boolean; failure: RunFailure | null };
@@ -75,6 +79,10 @@ export async function runFetch(input: RunInput): Promise<RunResult> {
   const result: RunResult = { saved: 0, total, stopped: false, failure: null };
   if (total === 0) return { ...result, failure: { type: 'full' } };
 
+  // Kapazitätswächter (Plan §4.3): ein NEUER Tag legt ein neues Dokument an; ein vorhandener Tag ist immer erlaubt.
+  const hasToday = input.items.some((e) => e.day === day);
+  if (!hasToday && !mayCreateDayDoc(input.dayDocs ?? 0, input.docTotal ?? 0)) return { ...result, failure: { type: 'full' } };
+
   const claim = await claimDay(writer, day, input.holder).catch((err: unknown) => {
     logError('read:claim', err, day);
     return null;
@@ -89,6 +97,15 @@ export async function runFetch(input: RunInput): Promise<RunResult> {
 
   for (let i = 1; i <= total; i++) {
     if (signal.aborted) return { ...result, stopped: true };
+    // Die Sperre (120 s) vor jedem weiteren Artikel erneuern (gleiche Kennung = Verlängerung), sonst läuft sie bei langen Reihen ab.
+    if (i > 1) {
+      const again = await claimDay(writer, day, input.holder).catch((err: unknown) => {
+        logError('read:claim', err, day);
+        return null;
+      });
+      if (!again) return { ...result, failure: { type: 'save' } };
+      if (!again.acquired) return { ...result, failure: { type: 'device_busy' } };
+    }
     onEvent?.({ kind: 'start', n: i, total });
     const choice = pickTopic(prefs, history, rand);
     n += 1;

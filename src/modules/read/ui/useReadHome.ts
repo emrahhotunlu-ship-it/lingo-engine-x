@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { dayKey, logError } from '../shared';
+import { dayKey, docTotal, logError } from '../shared';
 import type { AiPhase } from '../shared';
 import { getDb, getWriter, readDoc, useAiAvailable, useAiScope } from '../sharedUi';
 import type { AiMessageKey } from '../shared';
@@ -130,6 +130,8 @@ export function useReadHome(): ReadHome {
         signal: c.signal,
         holder: HOLDER,
         refresh: retry,
+        dayDocs: h.days.length,
+        docTotal: docTotal(),
         onEvent: (e) => {
           if (!alive.current) return;
           if (e.kind === 'start') setRunning({ n: e.n, total: e.total, phase: 'queued' });
