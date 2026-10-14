@@ -434,7 +434,7 @@ function checkQuestions(raw: unknown[]): { ok: true; value: Check[] } | { ok: fa
   const out: Check[] = [];
   for (const r of raw) {
     if (!r || typeof r !== 'object') return { ok: false, reason: 'question must be an object' };
-    const o = r as { q?: unknown; o?: unknown; a?: unknown; why?: unknown };
+    const o = r as { q?: unknown; o?: unknown; a?: unknown; why?: unknown; why_en?: unknown };
     const q = typeof o.q === 'string' ? o.q.trim() : '';
     const why = typeof o.why === 'string' ? o.why.trim() : '';
     if (!q || Array.from(q).length > 200) return { ok: false, reason: 'q missing or too long' };
@@ -444,7 +444,10 @@ function checkQuestions(raw: unknown[]): { ok: true; value: Check[] } | { ok: fa
     if (typeof o.a !== 'number' || !Number.isInteger(o.a) || o.a < 0 || o.a > 2) return { ok: false, reason: 'a must be 0, 1 or 2' };
     if (!why || isWrongLang(why, 'de')) return { ok: false, reason: 'why must be German' };
     if (isWrongLang(q, 'en') || britishSpelling(q) || opts.some((x) => britishSpelling(x))) return { ok: false, reason: 'question must be American English' };
-    out.push({ q, o: [opts[0] ?? '', opts[1] ?? '', opts[2] ?? ''], a: o.a, why });
+    // `why_en` (Kurslektionen): die Begründung in der anderen Oberflächensprache. Ungültig oder nicht Englisch → still weglassen (Rückfall auf `why`), nie ein Fehler.
+    const whyEn = typeof o.why_en === 'string' ? o.why_en.trim() : '';
+    const keepEn = whyEn.length >= 10 && Array.from(whyEn).length <= 420 && !isWrongLang(whyEn, 'en') && detectLang(whyEn) !== 'de' && !britishSpelling(whyEn);
+    out.push({ q, o: [opts[0] ?? '', opts[1] ?? '', opts[2] ?? ''], a: o.a, why, ...(keepEn ? { why_en: whyEn } : {}) });
   }
   return { ok: true, value: out };
 }

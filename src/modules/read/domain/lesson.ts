@@ -24,8 +24,8 @@ export const LESSON_PHRASES = [4, 5] as const;
 export const LESSON_QUESTIONS = 3;
 export const SOURCES_MAX = 6;
 
-export type LessonTip = { wrong: string; right: string; why: string };
-export type LessonApply = { situation: string; targets: string[]; model: string[] };
+export type LessonTip = { wrong: string; right: string; why: string; /** Englische Begründung (optional, Sprachtreue). */ whyEn?: string };
+export type LessonApply = { situation: string; /** Englische Lage (optional, Sprachtreue). */ situationEn?: string; targets: string[]; model: string[] };
 export type LessonSource = { title: string; url: string };
 
 export type Lesson = {
@@ -35,6 +35,8 @@ export type Lesson = {
   n: number;
   title: string;
   goal: string;
+  /** Englisches Ziel (optional, Sprachtreue). */
+  goalEn?: string;
   paras: Sentence[][];
   phrases: KeyWord[];
   check: Check[];
@@ -48,6 +50,12 @@ export type Lesson = {
 export type LessonResult = { ok: true; lesson: Lesson } | { ok: false; reason: string };
 
 const clean = (v: unknown, max: number): string => Array.from(typeof v === 'string' ? v.replace(/\s+/g, ' ').trim() : '').slice(0, max).join('').trimEnd();
+/** Optionaler englischer Zusatztext (`*_en`): nur übernommen, wenn er wirklich Englisch ist; sonst still weglassen (Rückfall auf Deutsch), nie ein Fehler. */
+function optionalEnglish(v: unknown, min: number, max: number): string | undefined {
+  const t = clean(normalizeDashes(typeof v === 'string' ? v : ''), max);
+  if (Array.from(t).length < min || isWrongLang(t, 'en') || detectLang(t) === 'de' || gluedProblem(t) || britishSpelling(t)) return undefined;
+  return t;
+}
 const fail = (reason: string): { ok: false; reason: string } => ({ ok: false, reason });
 
 /** Muss diese Lektion Quellen und Stand tragen? Claude-Code-Kurse immer; sonst, sobald Recht (EU AI Act, DSGVO) oder Zahlen vorkommen. */
@@ -104,6 +112,8 @@ export function acceptLesson(raw: unknown, expect: { course: CourseId; n: number
   if (isWrongLang(goal, 'de') || detectLang(goal) === 'en') return fail('lessonGoal must be German');
   if (gluedProblem(goal)) return fail('lessonGoal contains markup or glued text');
 
+  const goalEn = optionalEnglish(o.lessonGoal_en, 20, 240);
+
   // Sprachtipp: falsch → richtig → Grund
   const tipRaw = (o.tip && typeof o.tip === 'object' ? o.tip : {}) as Doc;
   const wrong = clean(tipRaw.wrong, 160);
@@ -117,12 +127,14 @@ export function acceptLesson(raw: unknown, expect: { course: CourseId; n: number
   if (normKey(wrong) === normKey(right)) return fail('tip.wrong and tip.right must differ');
   if (isWrongLang(right, 'en') || detectLang(right) === 'de') return fail('tip.right must be English');
   if (Array.from(why).length < 20 || isWrongLang(why, 'de') || detectLang(why) === 'en') return fail('tip.why must be German (20 to 320 characters)');
+  const whyEn = optionalEnglish(tipRaw.why_en, 20, 320);
 
   // Anwenden: Lage (Deutsch), Zielwendungen aus den Schlüsselwendungen, Musterlösung (Englisch)
   const ap = (o.apply && typeof o.apply === 'object' ? o.apply : {}) as Doc;
   const situation = clean(normalizeDashes(typeof ap.situation === 'string' ? ap.situation : ''), 300);
   if (Array.from(situation).length < 20 || isWrongLang(situation, 'de') || detectLang(situation) === 'en') return fail('apply.situation must be German (20 to 300 characters)');
   if (gluedProblem(situation)) return fail('apply.situation contains markup or glued text');
+  const situationEn = optionalEnglish(ap.situation_en, 20, 300);
   const rawTargets = Array.isArray(ap.targets) ? ap.targets : [];
   if (rawTargets.length < 2 || rawTargets.length > 4 || !rawTargets.every((t) => typeof t === 'string')) return fail('apply.targets needs 2 to 4 phrases');
   const targets: string[] = [];
@@ -179,11 +191,12 @@ export function acceptLesson(raw: unknown, expect: { course: CourseId; n: number
       n: expect.n,
       title: a.title,
       goal,
+      ...(goalEn ? { goalEn } : {}),
       paras: a.paras,
       phrases,
       check,
-      tip: { wrong, right, why },
-      apply: { situation, targets, model },
+      tip: { wrong, right, why, ...(whyEn ? { whyEn } : {}) },
+      apply: { situation, ...(situationEn ? { situationEn } : {}), targets, model },
       sources,
       asOf: asOfOk ? asOfRaw : '',
       words,

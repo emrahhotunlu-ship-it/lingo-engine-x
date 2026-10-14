@@ -1182,7 +1182,9 @@ h3 {
 }
 /* Am Handy ersetzt die Aktionsleiste die Reiterleiste, solange sie steht (sonst lägen zwei feste Leisten übereinander). */
 @media (max-width: 767.98px) {
-  html[data-actionbar] nav[data-testid='tabbar'] {
+  html[data-actionbar] nav[data-testid='tabbar'],
+  /* Tippt man in ein Feld auf einer Seite ohne Aktionsleiste (Lektion: Aufwärmen, Anwenden), steht die Reiterleiste nicht vor dem Feld (UX-Prüfung 14.10.). */
+  html[data-field-focus] nav[data-testid='tabbar'] {
     display: none;
   }
 }

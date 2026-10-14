@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { logError, logWarn } from '../shared';
+import { dayKey, logError, logWarn } from '../shared';
 import { Button, Skeleton, getWriter, useNav, useT } from '../sharedUi';
 import type { ScreenProps } from '../sharedUi';
 import { loadLesson, saveLessonProgress } from '../courseStore';
@@ -13,7 +13,7 @@ import { buildModel, pickKeyWords } from '../domain/readerModel';
 import { formatAsOf } from '../domain/readerText';
 import { buildWarmup, keptPhrasesOf } from '../domain/warmup';
 import type { ArticleItem, ReadState, ReadView } from '../schemas';
-import { ApplyCard, GoalCard, StepsCard, TipCard, WarmupCard } from './LessonParts';
+import { ApplyCard, GoalCard, StepsCard, TipCard, WarmupCard, useFieldFocusFlag } from './LessonParts';
 import { KeyWordsCard } from './reader/KeyWordsCard';
 import { ReaderView } from './reader/ReaderView';
 import type { LessonSlots } from './reader/ReaderView';
@@ -131,6 +131,7 @@ function LessonView({ data }: { data: Loaded }) {
   const { t, lang } = useT();
   const go = useNav((s) => s.go);
   const { lesson } = data;
+  useFieldFocusFlag();
   const def = courseDef(lesson.course);
   const key = lessonKey(lesson.course, lesson.n);
   const flushRef = useRef<(() => void) | null>(null);
@@ -212,6 +213,9 @@ function LessonView({ data }: { data: Loaded }) {
   const total = def?.lessons ?? lesson.n;
   const nextKey = lesson.n < total ? lessonKey(lesson.course, lesson.n + 1) : null;
   const done = entry.done === true;
+  // Wurde die Lektion heute fertig, gibt es keine Aufforderung zur nächsten (Tempo, Kap. 7): „Fertig für heute“, die nächste nur leise (Lernwissenschaft N3).
+  const [today] = useState(() => dayKey(Date.now()));
+  const restToday = done && typeof entry.tD === 'number' && entry.tD > 0 && dayKey(entry.tD) === today;
   const toCourse = useCallback(() => go({ name: 'readCourse', id: lesson.course }), [go, lesson.course]);
   const asOf = formatAsOf(lang, lesson.asOf);
 
@@ -230,7 +234,7 @@ function LessonView({ data }: { data: Loaded }) {
     afterCheck: (
       <>
         <ApplyCard lesson={lesson} submitted={entry.ap === true ? (entry.mine ?? '') : null} onSubmit={onSubmit} />
-        <KeyWordsCard picks={picks} article={{ id: lesson.id, title: lesson.title, level: 'c1' }} lang={lang} onSaved={() => undefined} />
+        <KeyWordsCard picks={picks} article={{ id: lesson.id, title: lesson.title, level: 'c1' }} lang={lang} onSaved={() => undefined} core />
         {lesson.sources.length > 0 ? (
           <section className="lx-card flex flex-col gap-2 p-4" aria-labelledby="lsn-src-h" data-testid="lsn-sources">
             <h2 id="lsn-src-h" className="m-0 text-base font-semibold text-fg">
@@ -247,7 +251,7 @@ function LessonView({ data }: { data: Loaded }) {
             </ul>
           </section>
         ) : null}
-        <StepsCard steps={{ read: entry.rd === true, questions: entry.qa ?? 0, applied: entry.ap === true, done }} onToCourse={toCourse} onNext={done && nextKey ? () => go({ name: 'readLesson', id: nextKey }) : null} />
+        <StepsCard steps={{ read: entry.rd === true, questions: entry.qa ?? 0, applied: entry.ap === true, done }} onToCourse={toCourse} onNext={done && nextKey ? () => go({ name: 'readLesson', id: nextKey }) : null} restToday={restToday} onHome={() => go({ name: 'read' })} nextN={nextKey ? lesson.n + 1 : null} />
       </>
     ),
   };

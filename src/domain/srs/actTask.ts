@@ -3,6 +3,7 @@ import { activationCodesOf, fmtOfCode, HIDES_TARGET, MULTI_TARGET, NEEDS_SOURCE,
 import type { ToneId } from './brief';
 import { recallDays } from './brief';
 import { meaningForTask } from './cards';
+import { isCoreWord } from './coreWord';
 import { contextsOf } from './rotate';
 import type { CardKind, ExerciseId, Lang, TrainCard } from './types';
 import { leastRecent } from './variety';
@@ -89,6 +90,15 @@ export function actMeaning(t: Pick<ActTarget, 'de' | 'def' | 'meaning' | 'lemma'
   return all.find((m) => !spoils(m, t.lemma)) ?? null;
 }
 
+/**
+ * Kann das Zielwort bei A4 verdeckt werden, ohne dass die Bedeutung es verrät? Bei Wörtern, die im Deutschen gleich lauten (Compliance, Audit, Workflow),
+ * geht das nicht: Ohne diese Prüfung bliebe die Karte bei A4 hängen (Lernwissenschaft M1). Für solche Karten ersetzt eine Aufgabe mit gezeigtem Wort den Schritt.
+ */
+export function canHideTarget(card: Pick<TrainCard, 'kind' | 'de' | 'def' | 'lemma'>, lang: Lang, meaning: string | null = null): boolean {
+  if (card.kind !== 'vocab') return true;
+  return actMeaning({ de: card.de, def: card.def, lemma: card.lemma, meaning }, 'im', lang) !== null || actMeaning({ de: card.de, def: card.def, lemma: card.lemma, meaning }, 'lg', lang) !== null;
+}
+
 const SOURCE_MIN_WORDS = 4;
 
 /**
@@ -126,16 +136,20 @@ export function buildActTask(i: BuildIn): ActTask | null {
   const used = activationCodesOf(card.doc);
   const source = pickSource(card, i.own, card.key);
   const partners = pickPartners(card, pool, day, lang, 2);
-  const can = (f: ActFmt): boolean => (NEEDS_SOURCE.has(f) ? !!source : f === 'kb' ? partners.length >= 1 : f === 'ml' ? partners.length >= 1 : true);
+  const mainTarget = targetOf(card, lang);
+  // Formate, die das Wort verdecken, nur mit einer Bedeutung, die es nicht verrät (Lernwissenschaft M1).
+  const can = (f: ActFmt): boolean => (NEEDS_SOURCE.has(f) ? !!source : f === 'kb' ? partners.length >= 1 : f === 'ml' ? partners.length >= 1 : HIDES_TARGET.has(f) ? actMeaning(mainTarget, f, lang) !== null : true);
   let fmts = STEP_FMTS[step].filter(can);
   if (!fmts.length && step === 3) fmts = ['sc'];
   if (!fmts.length && step === 5) fmts = STEP_FMTS[4].filter(can);
+  // Verrät die Bedeutung das Wort immer (gleichlautend im Deutschen), ersetzt eine Mini-Szene mit gezeigtem Wort den Schritt: Die Karte bleibt nicht hängen.
+  if (!fmts.length && (step === 4 || step === 5)) fmts = ['sc'];
   if (!fmts.length) return null;
   const fmt = leastRecent(fmts, (f) => f, used.map((c) => fmtOfCode(c)).filter((f): f is ActFmt => f !== null && f !== 'pr'), hash32(`${card.key}|${day}|fmt`)) as ActFmt;
   const nTargets = fmt === 'kb' ? 2 : fmt === 'ml' ? (partners.length >= 2 && hash32(`${card.key}|${day}|n`) % 2 === 1 ? 3 : 2) : 1;
-  const targets = [targetOf(card, lang), ...partners.slice(0, nTargets - 1).map((c) => targetOf(c, lang))];
+  const targets = [mainTarget, ...partners.slice(0, nTargets - 1).map((c) => targetOf(c, lang))];
   const src = NEEDS_SOURCE.has(fmt) ? source : null;
-  const brief = pickActBrief(fmt, card.key, day, used, { lemmas: targets.map((t) => t.lemma), card, sourceTone: src?.tone ?? null });
+  const brief = pickActBrief(fmt, card.key, day, used, { lemmas: targets.map((t) => t.lemma), card, sourceTone: src?.tone ?? null, core: isCoreWord(card) });
   const stepOfTask: ActStep = step;
   return { ...brief, step: stepOfTask, maintenance: i.maintenance, targets, showTarget: !HIDES_TARGET.has(fmt), source: src };
 }

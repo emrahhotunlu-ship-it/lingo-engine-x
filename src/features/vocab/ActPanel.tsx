@@ -26,7 +26,7 @@ export function ActPanel({ task, card, lang }: { task: ActTask; card: TrainCard;
     <div className="flex flex-col gap-2" data-testid="act-panel" data-fmt={task.fmt} data-step={task.step} data-code={task.code}>
       {!hidden && (
         <p className="lx-t-support flex flex-wrap items-center gap-2" data-testid="act-targets">
-          <span className="text-muted">{t('actLblWords')}</span>
+          <span className="text-muted">{t(task.targets.length > 1 ? 'actLblWords' : 'actLblWord')}</span>
           {task.targets.map((x) => (
             <span key={x.key} className={chip} lang="en" data-testid="target-chip">
               {x.kind === 'chunk' ? typedForm(x.word) : x.word}
@@ -37,7 +37,7 @@ export function ActPanel({ task, card, lang }: { task: ActTask; card: TrainCard;
       {hidden && meaning && (
         <p className="lx-t-prompt" lang={lang} data-testid="act-meaning">
           <span className="text-muted">{task.fmt === 'im' ? t('actLblThought') : t('actLblMeaning')}: </span>
-          <span className="font-semibold">{task.fmt === 'im' ? `„${meaning}“` : meaning}</span>
+          <span className="font-semibold">{meaning}</span>
         </p>
       )}
       {event && (
@@ -81,7 +81,7 @@ export function ActPanel({ task, card, lang }: { task: ActTask; card: TrainCard;
         )}
         {task.shape !== '-' && (
           <span className={chip} data-testid="act-shape">
-            {t('actLblShape')}: {t(`actShape_${task.shape}` as MessageKey)}
+            {t('actLblShape')}: {t((task.fmt === 'ml' ? `actGoal_${task.shape}` : `actShape_${task.shape}`) as MessageKey)}
           </span>
         )}
       </p>

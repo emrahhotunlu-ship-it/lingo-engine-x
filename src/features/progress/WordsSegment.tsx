@@ -110,7 +110,7 @@ function ReadyMeasure({ cards }: { cards: ReturnType<typeof useVocabMetrics>['ca
   return (
     <div className="flex flex-col gap-1" data-testid="ready-measure" data-n={n}>
       <h3 className="text-sm font-semibold">{t('readyLabel')}</h3>
-      <p className="lx-tnum text-sm text-muted" data-testid="ready-count">
+      <p className="lx-tnum text-2xl font-semibold tracking-tight" data-testid="ready-count">
         {t('readyCount', { n: num(n) })}
       </p>
       <p className="lx-tnum text-xs text-subtle" data-testid="ready-rate">

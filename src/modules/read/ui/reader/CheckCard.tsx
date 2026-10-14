@@ -33,6 +33,17 @@ export function CheckCard({ checks, articleId, title, lang, onAnswers }: CheckCa
           {rdrText(lang, 'rdrCheck')}
         </h2>
         <p className="m-0 text-xs text-muted">{rdrText(lang, 'rdrCheckHint')}</p>
+        {/* Was tun und Wozu stehen einmal im Kopf der Karte, nicht unter jeder Frage (Kap. 15: nichts dreimal). */}
+        <dl className="m-0 mt-1 flex flex-col gap-0.5 text-xs text-muted" data-testid="rdr-check-raster">
+          <div className="flex gap-1.5">
+            <dt className="font-semibold">{rdrText(lang, 'rdrDo')}:</dt>
+            <dd className="m-0">{rdrText(lang, 'rdrDoText')}</dd>
+          </div>
+          <div className="flex gap-1.5">
+            <dt className="font-semibold">{rdrText(lang, 'rdrPurpose')}:</dt>
+            <dd className="m-0">{rdrText(lang, 'rdrPurposeText')}</dd>
+          </div>
+        </dl>
       </div>
       {checks.map((q, qi) => {
         const picked = answers[qi];
@@ -56,16 +67,6 @@ export function CheckCard({ checks, articleId, title, lang, onAnswers }: CheckCa
             data-answered={out ? (out.right ? 'right' : 'wrong') : undefined}>
             <p className="m-0 text-2xs uppercase tracking-wide text-subtle">{rdrText(lang, 'rdrQuestionN', { n: qi + 1, total: checks.length })}</p>
             <EnglishText as="p" text={q.q} area="read" source={articleId} title={title} className="m-0 text-base font-medium leading-7 text-fg" />
-            <dl className={`m-0 flex flex-col gap-0.5 text-xs text-muted`}>
-                <div className="flex gap-1.5">
-                  <dt className="font-semibold">{rdrText(lang, 'rdrDo')}:</dt>
-                  <dd className="m-0">{rdrText(lang, 'rdrDoText')}</dd>
-                </div>
-                <div className="flex gap-1.5">
-                  <dt className="font-semibold">{rdrText(lang, 'rdrPurpose')}:</dt>
-                  <dd className="m-0">{rdrText(lang, 'rdrPurposeText')}</dd>
-                </div>
-            </dl>
             <div className="flex flex-col gap-2">
               {q.o.map((opt, ai) => {
                 const mine = picked === ai;
@@ -95,16 +96,19 @@ export function CheckCard({ checks, articleId, title, lang, onAnswers }: CheckCa
                   <Icon name={out.right ? 'check' : 'close'} size={16} />
                   {rdrText(lang, out.right ? 'rdrRightMsg' : 'rdrWrongMsg')}
                 </p>
+                {/* „Richtig ist“ nur bei falscher Antwort: bei richtiger steht die Option schon grün markiert da. Das Warum kommt immer (Kap. 2 Nr. 4). */}
                 {!out.right ? (
-                  <p className="m-0 text-muted">
-                    <span className="font-semibold">{rdrText(lang, 'rdrYours')}:</span> <span lang="en">{q.o[out.picked]}</span>
-                  </p>
+                  <>
+                    <p className="m-0 text-muted">
+                      <span className="font-semibold">{rdrText(lang, 'rdrYours')}:</span> <span lang="en">{q.o[out.picked]}</span>
+                    </p>
+                    <p className="m-0 text-muted">
+                      <span className="font-semibold">{rdrText(lang, 'rdrCorrect')}:</span> <span lang="en">{q.o[out.correct]}</span>
+                    </p>
+                  </>
                 ) : null}
-                <p className="m-0 text-muted">
-                  <span className="font-semibold">{rdrText(lang, 'rdrCorrect')}:</span> <span lang="en">{q.o[out.correct]}</span>
-                </p>
                 <p className="m-0 text-fg">
-                  <span className="font-semibold">{rdrText(lang, 'rdrWhy')}:</span> <span lang="de">{q.why}</span>
+                  <span className="font-semibold">{rdrText(lang, 'rdrWhy')}:</span> <span lang={lang === 'en' && q.why_en ? 'en' : 'de'}>{lang === 'en' && q.why_en ? q.why_en : q.why}</span>
                 </p>
               </div>
             ) : null}

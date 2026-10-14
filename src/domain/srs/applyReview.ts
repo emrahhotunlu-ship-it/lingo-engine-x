@@ -20,7 +20,7 @@ export type SkipReason = 'missing' | 'invalid' | 'hidden' | 'already_applied' | 
 export type CardWrite = { kind: 'update'; patch: Doc } | { kind: 'create'; doc: Doc } | { kind: 'skip'; reason: SkipReason };
 
 export const HIST_MAX = 12;
-const MAX_CARD_BYTES = 64 * 1024;
+export const MAX_CARD_BYTES = 64 * 1024;
 
 const legacyMode = z.enum(['recog', 'cloze', 'type', 'colloc', 'listen', 'produce']);
 const countsSchema = z.object({ c: z.number().int().min(0), w: z.number().int().min(0) });
@@ -150,9 +150,9 @@ const answeredOn = (cur: Doc, day: string): boolean => typeof cur.last === 'numb
  * der eigenen – sie prüft Gehör und Schreibung, nicht die Bedeutung. Auf Stufe 4–5 (Leiter) ändert
  * das nichts; im Hör-Modus hebt eine junge Karte so je Antwort nur um eine Stufe und fällt nie tiefer.
  */
-/** Verlaufseintrag; `s` = Schlüssel des gezeigten Satzes (V1, nur wenn die Abfrage einen Satz hatte), `a` = Code der Vorgabe eines eigenen Satzes. */
+/** Verlaufseintrag; `s` = Schlüssel des gezeigten Satzes (V1, nur wenn die Abfrage einen Satz hatte), `a` = Code der Vorgabe eines eigenen Satzes, `u` = ungeprüfte Aktivierung. */
 function histEntry(a: AnswerEvent, mode: LegacyMode): Record<string, unknown> {
-  return { t: a.t, m: mode, g: a.grade, x: a.ex, ...(a.sx ? { s: a.sx } : {}), ...(a.act ? { a: a.act } : {}) };
+  return { t: a.t, m: mode, g: a.grade, x: a.ex, ...(a.sx ? { s: a.sx } : {}), ...(a.act ? { a: a.act } : {}), ...(a.actStep && a.actUnverified ? { u: 1 } : {}) };
 }
 
 export function levelFor(ex: ExerciseId, stage: number): number {
@@ -194,8 +194,8 @@ export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
     xs: { [a.ex]: { c: Math.round(num(prevXs.c)) + ok, w: Math.round(num(prevXs.w)) + (1 - ok) } },
     hist: [...hist, histEntry(a, def.mode)].slice(-HIST_MAX),
     ...skillPatch(cur, def.mode, a.grade, a.colIndex, col.length),
-    // Aktivierung geschafft (Note ≥ 2): der Zähler `na` steigt im selben Schreibschritt wie die Antwort. Er ist abgeleitet und aus `act/…` neu berechenbar.
-    ...(a.actStep && a.grade >= 2 ? { na: Math.min(99, naOf(cur) + 1) } : {}),
+    // Aktivierung geschafft (Note ≥ 2, von Claude geprüft, ohne Hilfe): der Zähler `na` steigt im selben Schreibschritt wie die Antwort. Er ist abgeleitet und aus `act/…` neu berechenbar.
+    ...(a.actStep && a.grade >= 2 && !a.actUnverified ? { na: Math.min(99, naOf(cur) + 1) } : {}),
   };
   // Nur ergänzen: ein vorhandenes Einführungsdatum der alten App bleibt stehen (Kap. 9, Regel 2).
   if (wasNew && (typeof cur.intro !== 'string' || !cur.intro)) patch.intro = a.day;

@@ -45,8 +45,10 @@ export const checkSchema = z.looseObject({
   o: z.array(z.string().min(1)).length(3),
   a: z.number().int().min(0).max(2),
   why: z.string().min(1),
+  /** Englische Begründung (nur Kurslektionen, optional): wird bei englischer Oberfläche gezeigt, sonst Rückfall auf `why`. */
+  why_en: z.string().min(1).optional(),
 });
-export type Check = { q: string; o: [string, string, string]; a: number; why: string };
+export type Check = { q: string; o: [string, string, string]; a: number; why: string; why_en?: string };
 
 /** Ein gespeicherter Artikel im Tagesdokument. Pflicht ist nur, was ihn lesbar macht. */
 export const articleItemSchema = z.looseObject({

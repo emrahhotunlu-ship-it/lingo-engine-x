@@ -6,7 +6,7 @@ import { useT } from '../../i18n';
 // mit dem Text `value` statt der alten Wörter. (Die Lücke mit Bewegung baut Teilpaket B in `src/engine`.)
 
 type Common = { value: string; onChange: (v: string) => void; onSubmit: () => void; testId: string; disabled?: boolean };
-type Free = Common & { mode: 'free'; maxWords?: number };
+type Free = Common & { mode: 'free'; maxWords?: number; /** Platzhalter im leeren Feld. */ placeholder?: string; /** Mehrzeilig vorgeben (Kundenmail, Kombi-Satz: 2–4 Sätze, mindestens 120 px). */ tall?: boolean };
 type Edit = Common & { mode: 'edit-span'; base: string; span: readonly [number, number] };
 export type SentenceInputProps = Free | Edit;
 
@@ -42,7 +42,8 @@ export function SentenceInput(props: SentenceInputProps) {
       <textarea
         ref={area}
         rows={1}
-        className="lx-field lx-t-prompt min-h-14 w-full resize-none overflow-hidden"
+        className={`lx-field lx-t-prompt w-full resize-none overflow-hidden scroll-mb-40 ${props.tall ? 'min-h-[120px]' : 'min-h-14'}`}
+        placeholder={props.placeholder}
         data-sentence=""
         data-testid={testId}
         aria-label={t('exSentenceLabel')}

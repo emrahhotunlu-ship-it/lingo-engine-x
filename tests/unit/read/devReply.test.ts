@@ -107,7 +107,7 @@ describe('Seed: erfundene Lesetage', () => {
     // Kurslektionen tragen als Quelle die offizielle Dokumentation (Claude-Code-Kurs), sonst nichts Fremdes.
     const lessons = JSON.stringify(readDocs.filter((k) => k.startsWith('read/c-')).map((k) => seed[k]));
     expect(lessons).not.toContain('@');
-    for (const u of lessons.match(/https?:\/\/[^"]+/g) ?? []) expect(u, u).toMatch(/^https:\/\/(docs\.claude\.com|www\.anthropic\.com)\//);
+    for (const u of lessons.match(/https?:\/\/[^"]+/g) ?? []) expect(u, u).toMatch(/^https:\/\/(docs\.claude\.com|code\.claude\.com|www\.anthropic\.com)\//);
   });
 
   it('Routine-Tag im Seed: zwei gültige Artikel mit Quelle, ein bewusst fehlerhafter wird ausgeblendet', () => {

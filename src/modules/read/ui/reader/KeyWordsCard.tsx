@@ -18,9 +18,11 @@ export type KeyWordsCardProps = {
   lang: RdrLang;
   /** Eine NEUE Karte wurde angelegt (für den Lesezustand). */
   onSaved: () => void;
+  /** Wendungen einer Kurslektion sind Berufswortschatz: die Karte wird als Kernwort markiert (Fahrplan A5, Lernwissenschaft N4). */
+  core?: boolean;
 };
 
-export function KeyWordsCard({ picks, article, lang, onSaved }: KeyWordsCardProps) {
+export function KeyWordsCard({ picks, article, lang, onSaved, core = false }: KeyWordsCardProps) {
   const [state, setState] = useState<Record<number, CardState>>({});
   const [shown, setShown] = useState<Record<number, boolean>>({});
   const busy = useRef(new Set<number>());
@@ -40,6 +42,7 @@ export function KeyWordsCard({ picks, article, lang, onSaved }: KeyWordsCardProp
           ex: p.sentence.e,
           surface: p.surface,
           src: 'read',
+          ...(core ? { core: true } : {}),
           origin: { v: 1, kind: 'read', t: Date.now(), ref: article.id, title: article.title },
           today: dayKey(Date.now()),
           ...(level ? { level } : {}),
@@ -54,7 +57,7 @@ export function KeyWordsCard({ picks, article, lang, onSaved }: KeyWordsCardProp
         setState((s) => ({ ...s, [i]: next }));
       }
     },
-    [picks, article.id, article.title, article.level, onSaved],
+    [picks, article.id, article.title, article.level, onSaved, core],
   );
 
   if (!picks.length) return null;

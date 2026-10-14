@@ -1,7 +1,8 @@
 import { dayKey, daysBetween } from '../date';
 import { activationReady, recallDays } from './brief';
-import { activationsOn, lastActivation, naOf } from './actBase';
+import { activationUnitsOn, lastActivation, naOf } from './actBase';
 import type { ActStep } from './actBrief';
+import { CORE_SRC, isCoreWord } from './coreWord';
 import type { QueueItem, TrainCard } from './types';
 
 // Fahrplan der Aktivierung (Wörter aktivieren, Stufe 2; docs/umbau/aktivierung.md). Rein, ohne Zufall und ohne Schreiben.
@@ -9,10 +10,15 @@ import type { QueueItem, TrainCard } from './types';
 // bestimmt die Karte selbst: Stufe, richtige Abrufe an verschiedenen Tagen und der Mindestabstand zur vorigen Aktivierung. Es gibt keinen zweiten Zeitplan:
 // Eine Aktivierung ERSETZT die fällige Wiederholung der Karte (FSRS bewertet die Antwort wie jede andere), sie kommt nie zusätzlich.
 
-export const ACT_DAY_MAX = 5;
-/** Ab so vielen überfälligen Karten gibt es höchstens `ACT_BACKLOG_MAX` Aktivierungen am Tag, und nur noch A4/A5. */
+// Das Tagesbudget zählt Satz-Einheiten, nicht Aufgaben (Lernwissenschaft M3): Kundenmail 2, Kombi-Satz 1,5, alles andere 1 (`unitsOfCode`).
+// Eine Mini-Szene dauert am Handy etwa eine Minute, eine Kundenmail mit drei Schichten Rückmeldung etwa drei.
+/** Satz-Einheiten am Tag (ohne Rückstand). */
+export const ACT_DAY_UNITS = 4;
+/** Kosten eines Schritts bei der Planung: A5 ist Kombi-Satz (1,5) oder Kundenmail (2), das Format steht erst beim Bauen fest – geplant wird mit dem Höchstwert. */
+export const STEP_UNITS: Readonly<Record<ActStep, number>> = { 1: 1, 2: 1, 3: 1, 4: 1, 5: 2 };
+/** Ab so vielen überfälligen Karten gibt es höchstens `ACT_BACKLOG_UNITS` Einheiten am Tag, und nur noch A4 (keine Kundenmail, kein Kombi-Satz). */
 export const ACT_BACKLOG_HIGH = 40;
-export const ACT_BACKLOG_MAX = 2;
+export const ACT_BACKLOG_UNITS = 2;
 /** Ab so vielen überfälligen Karten gibt es keine Aktivierung mehr (die Zeit gehört dem Wiederholen). */
 export const ACT_BACKLOG_NONE = 80;
 
@@ -36,8 +42,7 @@ export const STEP_RULES: Readonly<Record<ActStep, { stage: number; recallDays: n
 export const STEP_RANK: Readonly<Record<ActStep, number>> = { 1: 1, 2: 2, 3: 3, 4: 4, 5: 4 };
 
 /** Kernwörter bekommen A5: Wörter aus Lektionen, Startwortschatz und den C1-Paketen (oder ausdrücklich `core: true` auf der Karte). */
-export const CORE_SRC: ReadonlySet<string> = new Set(['lesson', 'seed', 'pack']);
-export const isCoreWord = (card: Pick<TrainCard, 'src' | 'doc'>): boolean => card.doc.core === true || (card.src !== null && CORE_SRC.has(card.src));
+export { CORE_SRC, isCoreWord };
 
 /** Der nächste Schritt nach `na` geschafften Aktivierungen; `null` = Fahrplan durch. */
 export function nextStep(na: number, core: boolean): ActStep | null {
@@ -79,10 +84,10 @@ export function dueStep(card: Pick<TrainCard, 'kind' | 'hidden' | 'stage' | 'src
   return { step, maintenance };
 }
 
-/** Wie viele Aktivierungen sind heute noch erlaubt? Tagesgrenze 5, bei Rückstand weniger (ab 40 höchstens 2, ab 80 keine). */
-export function remainingToday(doneToday: number, overdue: number): number {
-  const max = overdue >= ACT_BACKLOG_NONE ? 0 : overdue >= ACT_BACKLOG_HIGH ? ACT_BACKLOG_MAX : ACT_DAY_MAX;
-  return Math.max(0, max - doneToday);
+/** Wie viele Satz-Einheiten sind heute noch erlaubt? Tagesgrenze 4, bei Rückstand weniger (ab 40 höchstens 2, ab 80 keine). `doneUnits` = schon gemachte Einheiten. */
+export function remainingToday(doneUnits: number, overdue: number): number {
+  const max = overdue >= ACT_BACKLOG_NONE ? 0 : overdue >= ACT_BACKLOG_HIGH ? ACT_BACKLOG_UNITS : ACT_DAY_UNITS;
+  return Math.max(0, max - doneUnits);
 }
 
 export type PlanIn = {
@@ -95,31 +100,39 @@ export type PlanIn = {
   overdue: number;
   /** Claude muss erreichbar sein: ohne Prüfung zählt keine Aktivierung (Noten höchstens „Schwer“, „ungeprüft“). */
   ai: boolean;
+  /** Optional: Nur Karten, die in dieser Runde getippt abgefragt werden, bekommen einen Platz (Aufdeckkarten im Aufholmodus lassen ihn sonst verfallen, Lernwissenschaft N1). */
+  allow?: (key: string) => boolean;
 };
 
 /**
  * Plan der Runde: welche fälligen Karten bekommen eine Aktivierung statt der gewöhnlichen Wiederholung (Schlüssel → Schritt)? Feste Reihenfolge
- * (Vorrang A4/A5 > A3 > A2 > A1, dann die am längsten fällige Karte), Obergrenze `remainingToday`, bei Rückstand ab 40 nur A4/A5. Gleicher Stand, gleicher
+ * (Vorrang A4/A5 > A3 > A2 > A1, dann die am längsten fällige Karte), Obergrenze in Satz-Einheiten (`remainingToday`), bei Rückstand ab 40 nur A4. Gleicher Stand, gleicher
  * Plan: Beim Neuzeichnen würfelt nichts.
  */
 export function planActivations(i: PlanIn): Map<string, DueStep> {
   const out = new Map<string, DueStep>();
   if (!i.ai) return out;
-  const room = remainingToday(activationsOn(i.pool.map((c) => c.doc), i.day), i.overdue);
+  let room = remainingToday(activationUnitsOn(i.pool.map((c) => c.doc), i.day), i.overdue);
   if (room <= 0) return out;
   const high = i.overdue >= ACT_BACKLOG_HIGH;
   const cands: Array<{ key: string; due: DueStep; at: number }> = [];
   const seen = new Set<string>();
   for (const q of i.queue) {
-    if (q.reason !== 'due' || q.phase !== 'quiz' || seen.has(q.key)) continue;
+    if (q.reason !== 'due' || q.phase !== 'quiz' || seen.has(q.key) || (i.allow && !i.allow(q.key))) continue;
     seen.add(q.key);
     const card = i.cards.get(q.key);
     if (!card) continue;
     const due = dueStep(card, i.day);
-    if (!due || (high && STEP_RANK[due.step] < 4)) continue;
+    if (!due || (high && due.step !== 4)) continue;
     cands.push({ key: q.key, due, at: card.fsrs.due });
   }
   cands.sort((a, b) => STEP_RANK[b.due.step] - STEP_RANK[a.due.step] || a.at - b.at || a.key.localeCompare(b.key));
-  for (const c of cands.slice(0, room)) out.set(c.key, c.due);
+  for (const c of cands) {
+    const cost = STEP_UNITS[c.due.step];
+    if (cost > room) continue;
+    out.set(c.key, c.due);
+    room -= cost;
+    if (room <= 0) break;
+  }
   return out;
 }

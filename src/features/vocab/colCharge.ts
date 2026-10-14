@@ -1,4 +1,6 @@
 import { getWriter } from '../../data';
+import { validateDoc } from '../../data/validate';
+import { applyUpdate, MAX_CARD_BYTES } from '../../domain/srs/applyReview';
 import { colChargeOp } from '../../domain/srs/collocs';
 import { logError, logWarn } from '../../platform/diagnostics';
 
@@ -15,7 +17,17 @@ export async function applyColCharge(items: readonly ColChargeItem[]): Promise<C
   for (const it of items) {
     const path = `vocab/${it.id}`;
     try {
-      const r = await writer.transform(path, (cur) => colChargeOp(cur, it.word, it.col));
+      const r = await writer.transform(path, (cur) => {
+        const op = colChargeOp(cur, it.word, it.col);
+        if (!op || !cur) return null;
+        // Wie beim Antwort-Schreiben: Das Ergebnis muss das Karten-Schema bestehen und unter 64 KiB bleiben (Datenwächter 14.10.2026, Warnung 7).
+        const merged = applyUpdate(cur, op.update);
+        if (!validateDoc(path, merged).ok || new TextEncoder().encode(JSON.stringify(merged)).length >= MAX_CARD_BYTES) {
+          logWarn('data:col', { code: 'invalid_result', message: `${path}: Ergebnis ungültig oder zu groß, nichts geschrieben` }, path);
+          return null;
+        }
+        return op;
+      });
       (r === 'updated' ? out.written : out.skipped).push(it.id);
       if (r !== 'updated') logWarn('data:col', { code: 'skipped', message: `${path}: nichts geschrieben (Karte fehlt, ausgeblendet, hat schon Wortpartner oder keine gültigen)` }, path);
     } catch (err) {

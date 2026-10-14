@@ -184,7 +184,7 @@ export function Explanation({ model, depth, learning = true, area = 'trainer', o
         <span aria-hidden="true" className="sr-only">
           {SYMBOL[l.k]}
         </span>
-        {t(lineLabel(l.k, verdict))}
+        {l.k === 'yours' && l.head ? l.head : t(lineLabel(l.k, verdict))}
       </span>
       <span className="lx-t-support min-w-0 text-fg">{body(l)}</span>
     </li>

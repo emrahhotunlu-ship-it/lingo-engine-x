@@ -32,6 +32,8 @@ export type NewVocabInput = {
   src: 'lookup' | 'coach' | 'lesson' | 'user' | 'ai' | 'job' | 'preply' | 'teacher' | 'translate' | 'claude' | 'read' | 'listen' | 'write' | 'pack';
   /** Lektion, aus der die Karte stammt (`src:'lesson'`, Phase 2 D17). */
   lesson?: string | null;
+  /** Kernwort (Berufswendung, z. B. aus einer Kurslektion): bekommt im Fahrplan A5 (`fahrplan.isCoreWord`); die Quelle bleibt `read`. */
+  core?: boolean;
   origin: CardOrigin;
   today: string;
   /**
@@ -108,6 +110,7 @@ export function newVocabDoc(i: NewVocabInput): { id: string; doc: Record<string,
       added: i.today,
       origin,
       ...(i.lesson ? { lesson: i.lesson } : {}),
+      ...(i.core ? { core: true } : {}),
       ...keepFields(i.keep),
     },
   };

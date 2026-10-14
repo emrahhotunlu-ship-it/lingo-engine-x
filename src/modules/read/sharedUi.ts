@@ -22,11 +22,13 @@ export { Row, RowList } from '../../ui/RowList';
 export { Segmented } from '../../ui/Segmented';
 export { Skeleton } from '../../ui/Skeleton';
 export { Eyebrow } from '../../ui/Eyebrow';
+export { Disclosure } from '../../ui/Disclosure';
 export { AiRunPanel, isBusy } from '../../ui/AiRunPanel';
 export { toast } from '../../ui/Toast';
 
 // Antippbarer Text, Nachschlage-Fenster und Sprachausgabe
 export { EnglishText } from '../../engine/EnglishText';
+export { KineticGap } from '../../engine/KineticGap';
 export { lookupOpenMs } from '../../engine/wordTap';
 export { SpeakButton } from '../../engine/SpeakButton';
 export { speak, stopSpeech, unlockSpeech } from '../../platform/speech';

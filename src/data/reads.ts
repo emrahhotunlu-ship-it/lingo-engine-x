@@ -86,10 +86,11 @@ export async function countDocuments(db: Db): Promise<DocCounts> {
       byCollection[name] = q.size;
       if (q.size === 1000) possiblyTruncated.push(name);
     }),
-    // Träge Sammlung `read`: nicht als Ganzes laden (Artikeltexte!), sondern die Zahl aus `read/p` (Liste der Lerntage) ableiten.
+    // Träge Sammlung `read`: nicht als Ganzes laden (Artikeltexte!), sondern die Zahl aus `read/p` (Liste der Lerntage) und `read/cp` (Kursfortschritt) ableiten.
     async () => {
       const snap = await readOnce('read/p', () => db.doc('read/p').get());
-      byCollection.read = readDocCountOf(snap.exists ? snap.data() : undefined);
+      const cp = await readOnce('read/cp', () => db.doc('read/cp').get());
+      byCollection.read = readDocCountOf(snap.exists ? snap.data() : undefined, cp.exists ? cp.data() : undefined);
     },
   ];
   for (let i = 0; i < jobs.length; i += 4) await Promise.all(jobs.slice(i, i + 4).map((j) => j()));

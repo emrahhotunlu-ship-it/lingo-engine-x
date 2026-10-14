@@ -1,5 +1,6 @@
 import type { Db } from '../platform/types';
 import { logError, logWarn } from '../platform/diagnostics';
+import { dayKey } from '../domain/date';
 import { daysFromMonthDocs, fitTextBudget, READ_BACKUP_TEXT_BUDGET_BYTES, readBackupPlan, recentMonths, routineBackupPaths, docBytes, READ_PROGRESS_PATH } from '../modules/read/registry';
 import { APP_DOC_PATHS, EAGER_COLLECTION_NAMES, collectionOf } from './paths';
 import { validateDoc } from './validate';
@@ -115,7 +116,7 @@ export async function loadLazyBackup(db: Db, textBudget: number = READ_BACKUP_TE
   if (cpData) docs[READ_PROGRESS_PATH] = cpData;
   // Monatsindizes: aus den Tagen in `read/p`; fehlt `read/p` ganz, werden die letzten 24 Monate gesucht (nie still nichts sichern).
   const listed = readBackupPlan(pData);
-  const monthNames = pData ? listed.index.filter((x) => x !== 'read/p').map((x) => x.slice('read/m-'.length)) : recentMonths(new Date().toISOString().slice(0, 10), 24);
+  const monthNames = pData ? listed.index.filter((x) => x !== 'read/p').map((x) => x.slice('read/m-'.length)) : recentMonths(dayKey(Date.now()), 24);
   const monthDocs: Array<{ month: string; data: Doc | undefined }> = [];
   await inBatches(monthNames, 4, async (month) => {
     const path = `read/m-${month}`;
@@ -132,7 +133,7 @@ export async function loadLazyBackup(db: Db, textBudget: number = READ_BACKUP_TE
   else if (extra.length > 0) logWarn('data:backup', { code: 'read_days_derived', message: `${extra.length} Lesetage nur im Monatsindex gefunden` }, 'read');
   const plan = readBackupPlan({ days: [...(pData && Array.isArray(pData.days) ? (pData.days as unknown[]) : []), ...extra] });
   // Routine-Dokumente der letzten Tage (nur die Routine schreibt sie) gehören als Neueste dazu; fehlende sind normal und zählen nicht als weggelassen.
-  plan.texts = [...routineBackupPaths(new Date().toISOString().slice(0, 10)), ...plan.texts];
+  plan.texts = [...routineBackupPaths(dayKey(Date.now())), ...plan.texts];
   // Artikeltexte: neueste zuerst, in kleinen Gruppen; sobald das Budget erreicht ist, wird nicht weiter geladen.
   const included: Array<{ path: string; bytes: number; data: Doc }> = [];
   const missing = new Set<string>();

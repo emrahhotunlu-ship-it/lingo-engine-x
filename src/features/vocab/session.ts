@@ -376,9 +376,17 @@ export function defaultsFor(round: Round, deck: string): { mode: RequestedMode; 
  * Plan der Aktivierungen für eine Runde (nur im Modus `auto` und `type`, nie beim Aufdecken oder Hören, und nur mit erreichbarer KI). Festgelegt beim Rundenstart,
  * damit beim Neuzeichnen nichts neu gewürfelt wird (Kap. 15); der Pflicht-Zähler von „Heute“ bleibt unberührt: Eine Aktivierung ersetzt eine fällige Wiederholung.
  */
-function actPlanFor(i: { queue: readonly QueueItem[]; cards: ReadonlyMap<string, TrainCard>; pool: readonly TrainCard[]; day: string; now: number; mode: RequestedMode; env: ExerciseEnv }): ReadonlyMap<string, DueStep> {
+function actPlanFor(i: { queue: readonly QueueItem[]; cards: ReadonlyMap<string, TrainCard>; pool: readonly TrainCard[]; day: string; now: number; mode: RequestedMode; env: ExerciseEnv; lang: Lang; catchUp: boolean; ctl: { week: number; day: number } }): ReadonlyMap<string, DueStep> {
   if (i.mode !== 'auto' && i.mode !== 'type') return new Map();
-  return planActivations({ queue: i.queue, cards: i.cards, pool: i.pool, day: i.day, overdue: overdueCount(i.pool, i.now), ai: i.env.ai });
+  // Nur Karten, die diese Runde getippt abgefragt werden: Im Aufholmodus kommen reife Karten oft als Aufdeckkarte, der reservierte Platz würde verfallen (N1).
+  const allow = (key: string): boolean => {
+    const card = i.cards.get(key);
+    return (
+      !!card &&
+      pickMode({ card, requested: i.mode, day: i.day, lang: i.lang, due: true, controlAllowed: controlAllowed({ week: i.ctl.week, day: i.ctl.day, session: 0 }), catchUp: i.catchUp && i.mode === 'auto', key: card.key }) === 'type'
+    );
+  };
+  return planActivations({ queue: i.queue, cards: i.cards, pool: i.pool, day: i.day, overdue: overdueCount(i.pool, i.now), ai: i.env.ai, allow });
 }
 
 /** Runde bauen (synchron). Rückgabe: Art der ersten Übung (für den Fokus im selben Handler). */
@@ -428,7 +436,8 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
     : buildQueue({ cards: chosen, nowMs: now, target, newQuotaLeft: allowNew ? newQuotaLeft : 0, exclude: round === 'pflicht' ? reviewed : answeredToday, lang, mix: { introduced: mixIntroducedToday(cards, day), phrases: introducedToday - introducedLessonToday + newQuotaLeft <= 2 ? 1 : 2 } });
   const docs = pool.map((c) => c.doc);
   const ctl = mode === 'flip' ? controlCounts(docs, now) : { week: 0, day: 0 };
-  const acts = actPlanFor({ queue, cards: byKey, pool, day, now, mode, env });
+  const catchUp = mode === 'auto' && catchUpOn(overdueCount(pool, now));
+  const acts = actPlanFor({ queue, cards: byKey, pool, day, now, mode, env, lang, catchUp, ctl });
   const base: SessionState = {
     active: true,
     status: 'running',
@@ -460,7 +469,7 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
     strict: mode !== 'type' && calibration(docs, now).strict,
     unit: opts.unit === true,
     only: opts.only ? [...opts.only] : null,
-    catchUp: mode === 'auto' && catchUpOn(overdueCount(pool, now)),
+    catchUp,
     acts,
     contrasted: false,
   };
@@ -608,7 +617,7 @@ export type Answer = {
 };
 
 /** Was die Oberfläche von einer Aktivierung festhält; `commitAnswer` ergänzt Karte, Schritt, Format und Code zum Eintrag der Sammelakte. */
-export type ActRecord = { s: string; b?: string; w?: string; v: ActVerdict; k: 0 | 1; r?: boolean; ts?: Array<[string, TargetVerdict]>; et?: string };
+export type ActRecord = { s: string; b?: string; w?: string; v: ActVerdict; k: 0 | 1; r?: boolean; /** Mit Hilfe der Vorprüfung (Hinweis): zählt nicht für den Fahrplan. */ hp?: true; ts?: Array<[string, TargetVerdict]>; et?: string };
 
 /** Aufdecken im Aufholmodus: die Bewertung zählt mit dem Aufhol-Gewicht (`noteWeight`). EINE Regel für Knopf-Vorschau und Speichern. */
 const flipCatchUp = (s: Pick<SessionState, 'catchUp'>, card: Pick<TrainCard, 'stage'>): boolean => s.catchUp && card.stage >= 3;
@@ -672,6 +681,8 @@ export function commitAnswer(ans: Answer): FirstKind {
   if (e.act) a.act = e.act.code;
   const actStep: ActStep | null = card.kind !== 'vocab' || !isActivationEx(e.ex) ? null : (e.act?.step ?? (e.ex === 'produce' ? 1 : null));
   if (actStep) a.actStep = actStep;
+  // Nur eine von Claude geprüfte Leistung ohne Hilfe der Vorprüfung rückt den Fahrplan weiter (Lernwissenschaft H1): nicht abgeschrieben, nicht ungeprüft, nicht „falsch“.
+  if (actStep && !(ans.rec && ans.rec.k === 1 && ans.rec.v !== 'w' && !ans.rec.hp)) a.actUnverified = true;
   if (card.kind === 'chunk') a.q = card.word;
   if (ans.override) a.override = true;
   if (ans.hint) a.hint = ans.hint;
@@ -992,7 +1003,7 @@ export function restoreTrainer(snap: TrainerSnapshot): boolean {
     unit: snap.unit === true,
     only: null,
     catchUp: false,
-    acts: actPlanFor({ queue: queue.slice(pos), cards: byKey, pool, day, now, mode: snap.mode, env: currentEnv() }),
+    acts: actPlanFor({ queue: queue.slice(pos), cards: byKey, pool, day, now, mode: snap.mode, env: currentEnv(), lang: useSettings.getState().lang, catchUp: false, ctl }),
     contrasted: queue.some((q) => q.reason === 'contrast'),
   };
   prebuilt = null;

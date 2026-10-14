@@ -84,7 +84,8 @@ export type ShellState = 'loading' | 'answering' | 'busy' | 'retry' | 'result' |
 export type ExerciseShellProps = {
   meta: { ex: string; id: string; stage?: number; kind?: string };
   status: ShellStatus;
-  task: { text: string; purpose: string };
+  /** `open`: das Wozu steht immer als ruhige Zeile über der Aufgabe (Aktivierung), nicht hinter dem ⓘ (Kap. 2.4: an fester Stelle). */
+  task: { text: string; purpose: string; open?: boolean };
   aid?: ReactNode | null;
   prompt: ReactNode;
   answer: ReactNode;
@@ -297,7 +298,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
       {/* UX-Prüfung W1: Kopf in EINER Zeile („●●○○ Lernt · Lücke“) mit ⓘ rechts; dahinter Zweck und Thema. */}
       <div data-slot="status" className="flex items-center justify-between gap-3">
         <ExerciseStatus {...status} />
-        {!status.noInfo && (
+        {!status.noInfo && !task.open && (
           <button
             type="button"
             className="-my-2 -mr-2 inline-flex size-11 flex-none items-center justify-center rounded-full text-subtle transition-colors hover:text-fg"
@@ -312,7 +313,12 @@ export function ExerciseShell(props: ExerciseShellProps) {
         )}
       </div>
       <div ref={taskRef} data-slot="task" className="flex scroll-mt-4 flex-col gap-1">
-        {info && (
+        {task.open && (
+          <p className="lx-t-meta m-0 text-muted" data-testid="purpose" data-open="">
+            {task.purpose}
+          </p>
+        )}
+        {info && !task.open && (
           <p id={infoId} className="lx-t-support m-0 text-muted" data-testid="purpose">
             {[status.topic, status.pattern].filter(Boolean).length > 0 && (
               <span className="block text-fg">{[status.topic, status.pattern].filter(Boolean).join(' · ')}</span>

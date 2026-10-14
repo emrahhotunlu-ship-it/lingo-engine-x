@@ -16,7 +16,7 @@ const SHARED_FILES = [`${MODULE}/shared.ts`, `${MODULE}/sharedUi.ts`];
 
 /** Erlaubnisliste für shared.ts (Plan §5.2), als Pfade ab Projektwurzel ohne Endung. */
 const ALLOWED_SHARED: RegExp[] = [
-  /^src\/engine\/(EnglishText|wordTap|SpeakButton)$/,
+  /^src\/engine\/(EnglishText|wordTap|SpeakButton|KineticGap)$/,
   /^src\/ui\/[A-Za-z]+$/,
   /^src\/i18n(\/[A-Za-z.]+)?$/,
   /^src\/platform\/(speech|diagnostics|storage|input|capabilities)$/,

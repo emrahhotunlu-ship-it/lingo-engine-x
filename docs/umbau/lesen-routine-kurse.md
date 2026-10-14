@@ -42,9 +42,10 @@ Du arbeitest in einer geplanten Sitzung mit Websuche (WebSearch, WebFetch) und d
 - Die 4 bis 5 **neuen** Wendungen von Lektion `n` dürfen **keine Wendung der Wendungsliste** wiederholen (keine Doppelungen, auch nicht gebeugt). **Einzige Ausnahme ist Lektion 10** (Abschluss des Kurses): Dort sollen mindestens 3 der 4 bis 5 `phrases` die wichtigsten Wendungen aus den früheren Lektionen wieder aufnehmen, damit der Abschlusstext sie bündelt.
 - Im Text von Lektion `n` sollen **ein bis zwei Wendungen aus früheren Lektionen** natürlich wiederkehren (nicht als neue `phrases`), damit sie sich festigen.
 - Wiederhole keine Beispiele und keine Anfangssätze früherer Lektionen.
+- Führe auch eine **Tippliste** wie die Wendungsliste: Der Sprachtipp (`tip`) jeder früheren Lektion nennt einen Fehlertyp. **Kein Fehlertyp kommt zweimal im Kurs vor.** Wechsle ab: Zeitform, Präposition, falscher Freund, Wortstellung, Artikel, Register.
 
 **Schritt 4: Recherche, bevor du schreibst.**
-- **Kurs `k1` (Claude Code): nur nach Recherche in der offiziellen Anthropic-Dokumentation.** Rufe mit WebFetch die passenden Seiten ab (docs.claude.com bzw. code.claude.com, anthropic.com/engineering) und lies sie, bevor du schreibst. Schreibe nur, was auf den gelesenen Seiten steht oder daraus unmittelbar folgt. **Keine Bedienungsdetails ohne wörtliche Quelle**: keine Befehle, Menüpunkte, Optionsnamen, Dateipfade, Tastenkürzel, Versionsnummern, Preise oder Limits, es sei denn, sie stehen wörtlich auf einer von dir gelesenen Seite. Bist du unsicher, beschreibe das Prinzip allgemein („the assistant asks for your approval“), ohne Einzelheiten zu nennen. Trage jede wirklich gelesene Seite in `sources` ein.
+- **Kurs `k1` (Claude Code): nur nach Recherche in der offiziellen Anthropic-Dokumentation.** Rufe mit WebFetch die passenden Seiten ab (docs.claude.com bzw. code.claude.com, anthropic.com/engineering) und lies sie, bevor du schreibst. Schreibe nur, was auf den gelesenen Seiten steht oder daraus unmittelbar folgt. **Keine Bedienungsdetails ohne wörtliche Quelle**: keine Befehle, Menüpunkte, Optionsnamen, Dateipfade, Tastenkürzel, Versionsnummern, Preise oder Limits, es sei denn, sie stehen wörtlich auf einer von dir gelesenen Seite. Bist du unsicher, beschreibe das Prinzip allgemein („the assistant asks for your approval“), ohne Einzelheiten zu nennen. **Aussagen über Rechte, Freigaben und Voreinstellungen immer mit „by default“, nie mit only, never oder always; nichts behaupten, was nur für eine Umgebung (Terminal, IDE, Web, Desktop) gilt.** Ein Begriff wie „audit trail“ steht nur im Text, wenn er wörtlich auf einer gelesenen Seite steht. Trage jede wirklich gelesene Seite in `sources` ein. Die offizielle Dokumentation liegt unter code.claude.com (die alte Adresse docs.claude.com leitet dorthin weiter); nimm in `sources` die aktuelle Adresse.
 - **Kurs `k5` (KI im Unternehmen):** Aussagen zu **EU AI Act, Datenschutz/DSGVO** und alle **Zahlen** (Prozente, Beträge, Studien, Umfragen) nur nach Recherche in einer offiziellen oder seriösen Quelle (Seite der EU, Behörde, Hersteller, Studie), die du mit WebFetch gelesen hast. Keine Rechtsberatung: schreibe „as a rule“, „in general“, empfehle bei Einzelfragen die Rechtsabteilung. Keine Zahl aus dem Gedächtnis. Hat die Lektion weder Recht noch Zahlen, brauchst du keine Quelle.
 - Alle Lektionen: keine erfundenen Zitate, Personen, Firmen, Studien. Beispiele sind erkennbar hypothetisch („Imagine a mid-sized insurer …“).
 
@@ -58,12 +59,13 @@ Du arbeitest in einer geplanten Sitzung mit Websuche (WebSearch, WebFetch) und d
 | `n` | Lektionsnummer als Zahl, passend zum Dokumentnamen |
 | `title` | englischer Titel der Lektion, höchstens 90 Zeichen; nimm den Titel aus dem Katalog unten |
 | `lessonGoal` | **ein** deutscher Satz (20 bis 240 Zeichen) in der Du-Form: „Du kannst …“, das Ziel der Lektion |
+| `lessonGoal_en` | derselbe Satz auf Englisch („You can …“, 20 bis 240 Zeichen). **Pflicht für Kurslektionen** (Sprachtreue: die App zeigt die Sprache der Oberfläche). |
 | `asOf` | `JJJJ-MM` der Recherche (Pflicht bei Quellen) |
 | `paras` | Absätze → Sätze → Paare `{ "e": englischer Satz, "d": deutscher Satz }` |
 | `phrases` | 4 bis 5 **neue** Schlüsselwendungen `{ "w", "de", "i" }` |
-| `check` | genau 3 Prüffragen |
-| `tip` | Sprachtipp `{ "wrong", "right", "why" }` |
-| `apply` | Anwenden-Aufgabe `{ "situation", "targets", "model" }` |
+| `check` | genau 3 Prüffragen, je mit `why` (Deutsch) **und** `why_en` (Englisch) |
+| `tip` | Sprachtipp `{ "wrong", "right", "why", "why_en" }` (`why_en` = dieselbe Begründung auf Englisch) |
+| `apply` | Anwenden-Aufgabe `{ "situation", "situation_en", "targets", "model" }` (`situation_en` = dieselbe Lage auf Englisch) |
 | `sources` | Liste `{ "title", "url" }` der wirklich gelesenen Seiten (`k1`: Pflicht, mindestens eine offizielle Anthropic-Seite; `k5`: Pflicht bei Recht oder Zahlen), `url` beginnt mit `https://` |
 
 **Der englische Text (`e`).**
@@ -77,14 +79,14 @@ Du arbeitest in einer geplanten Sitzung mit Websuche (WebSearch, WebFetch) und d
 - Idiomatisches, natürliches Deutsch, nicht Wort für Wort; Fachbegriffe so, wie man sie im deutschen Berufsalltag sagt.
 - Alle **Zahlen** des englischen Satzes stehen im deutschen Satz (10,000 wird 10.000), Eigennamen bleiben erhalten. Der deutsche Text ist insgesamt 0,85- bis 1,35-mal so lang wie der englische.
 
-**Wendungen (`phrases`).** 4 bis 5, mindestens 3 davon mehrteilig (Verb + Nomen, Adjektiv + Nomen, feste Wendungen: „get up to speed“, „stay in control“). Keine Wörter, die im Deutschen gleich aussehen und heißen (team, system, plan, manager, project). `w` steht **genau so** (Endungen erlaubt) in einem englischen Satz des Textes, `de` ist die deutsche Bedeutung im Zusammenhang (höchstens 60 Zeichen), `i` ist `[Absatz, Satz]` des Satzes, in dem sie steht, nullbasiert (`[0, 2]` = dritter Satz im ersten Absatz). Dieser Satz wird später der Ursprungssatz der Lernkarte. Keine Wendung der Wendungsliste des Kurses (Schritt 3).
+**Wendungen (`phrases`).** 4 bis 5, mindestens 3 davon mehrteilig (Verb + Nomen, Adjektiv + Nomen, feste Wendungen: „get up to speed“, „stay in control“). Keine Wörter, die im Deutschen gleich aussehen und heißen (team, system, plan, manager, project). `w` steht **genau so** (Endungen erlaubt) in einem englischen Satz des Textes, `de` ist die deutsche Bedeutung im Zusammenhang (höchstens 60 Zeichen), `i` ist `[Absatz, Satz]` des Satzes, in dem sie steht, nullbasiert (`[0, 2]` = dritter Satz im ersten Absatz). Dieser Satz wird später der Ursprungssatz der Lernkarte. Keine Wendung der Wendungsliste des Kurses (Schritt 3). **Schreibe den Katalog-Wortschatz der Lektion als Wortverbindungen** („grant access“, „flag a risk“, „err on the side of caution“), nicht als Einzelwörter („repository“, „retrieve“). **Mindestens eine Wendung je Lektion ist direkt im Kundengespräch verwendbar** (das ist der eigentliche Transfer). **Jeder Text enthält mindestens zwei C1-Merkmale**: Abschwächung (tends to, arguably, in many cases) und Diskursmarker (That said, In practice, In other words); eins davon darf eine Wendung sein.
 
-**Prüffragen (`check`).** Genau 3, je 3 Antworten in `o`, `a` ist der Index der richtigen Antwort (0, 1 oder 2; wechsle die Lage). Frage 1 prüft die **Kernaussage**, Frage 2 eine **Schlussfolgerung** (was folgt daraus, was ist nicht belegt), Frage 3 eine **Wendung im Kontext** (was bedeutet „…“ hier). `q` und `o` sind Englisch (US), kurz; die Falschantworten plausibel und etwa gleich lang wie die richtige, nie offensichtlich absurd, kein „alle/keine der obigen“. `why` ist Deutsch, ein bis zwei Sätze, erklärt **warum** die Antwort stimmt.
+**Prüffragen (`check`).** Genau 3, je 3 Antworten in `o`, `a` ist der Index der richtigen Antwort (0, 1 oder 2; wechsle die Lage). Frage 1 prüft die **Kernaussage**, Frage 2 eine **Schlussfolgerung** (was folgt daraus, was ist nicht belegt), Frage 3 eine **Wendung im Kontext** (was bedeutet „…“ hier). `q` und `o` sind Englisch (US), kurz; die Falschantworten plausibel und etwa gleich lang wie die richtige, nie offensichtlich absurd, kein „alle/keine der obigen“. **Die richtige Antwort ist nicht regelmäßig die längste.** In Frage 3 steht die Wendung **in Anführungszeichen** (`What does \"stay in control\" mean here?`). `why` ist Deutsch, ein bis zwei Sätze, erklärt **warum** die Antwort stimmt; `why_en` ist dieselbe Begründung auf Englisch.
 
-**Sprachtipp (`tip`).** Ein typischer Fehler deutschsprachiger Englischlerner, der zum Thema der Lektion passt: `wrong` ist der fehlerhafte englische Satz (so, wie ihn Deutschsprachige oft sagen, höchstens 160 Zeichen), `right` die richtige Fassung (US-Schreibweise), `why` erklärt auf Deutsch in ein bis zwei Sätzen, **warum** (Bezug zur deutschen Struktur, 20 bis 320 Zeichen). `wrong` und `right` müssen sich unterscheiden. Erfinde keinen Fehler, der keiner ist.
+**Sprachtipp (`tip`).** Ein typischer Fehler deutschsprachiger Englischlerner, der zum Thema der Lektion passt: `wrong` ist der fehlerhafte englische Satz (so, wie ihn Deutschsprachige oft sagen, höchstens 160 Zeichen), `right` die richtige Fassung (US-Schreibweise), `why` erklärt auf Deutsch in ein bis zwei Sätzen, **warum** (Bezug zur deutschen Struktur, 20 bis 320 Zeichen). `wrong` und `right` müssen sich unterscheiden. Erfinde keinen Fehler, der keiner ist. `why_en` ist die Begründung auf Englisch (aus Sicht eines Deutschsprachigen, 20 bis 320 Zeichen). Der Fehlertyp wechselt von Lektion zu Lektion (Tippliste, Schritt 3).
 
 **Anwenden (`apply`).**
-- `situation`: eine konkrete Lage aus dem Berufsalltag auf **Deutsch** (20 bis 300 Zeichen), in der Emrah **zwei Sätze auf Englisch** schreiben soll („Dein Kollege Jonas fragt …“).
+- `situation`: eine konkrete Lage aus dem Berufsalltag auf **Deutsch** (20 bis 300 Zeichen), in der Emrah **zwei Sätze auf Englisch** schreiben soll; `situation_en` ist dieselbe Lage auf Englisch. **Das Gegenüber wechselt von Lektion zu Lektion**: Kunde, Chef, Partner, Kollegin (nicht immer „Kollege Jonas“). Die Zielwendungen kommen in der Musterlösung **natürlich** vor, nie als Meta-Satz („I state the goal“, „I use the phrase …“): die Lage verlangt etwas, das man wirklich so sagen würde.
 - `targets`: 2 Wendungen, die er benutzen soll, **genau wie in `phrases[].w`** derselben Lektion geschrieben. In der **letzten Lektion** (Nr. 10) sind es 4 Wendungen aus den `phrases` dieser Lektion (siehe Schritt 3, Ausnahme) und die Aufgabe ist der Abschluss: bei `k1` ein kurzer 60-Sekunden-Pitch (die Aufgabe nennt dann bis zu 6 Sätze), bei `k5` ein kurzer Kundentext.
 - `model`: die **Musterlösung**, 2 bis 6 englische Sätze (jeder 3 bis 45 Wörter, ein Satz je Eintrag, US-Schreibweise), die **alle** `targets` benutzen, natürlich und passend zur Lage.
 
@@ -94,16 +96,16 @@ Du arbeitest in einer geplanten Sitzung mit Websuche (WebSearch, WebFetch) und d
 1. 350 bis 450 Wörter Englisch, 4 bis 5 Absätze, jeder Satz hat sein deutsches Gegenstück, alle Zahlen stehen auch im Deutschen.
 2. `course` und `n` passen zum Dokumentnamen; `title` stammt aus dem Katalog.
 3. 4 bis 5 neue Wendungen, keine aus der Wendungsliste (außer in Lektion 10); jede steht wörtlich im Text; `i` stimmt; mindestens 3 mehrteilig.
-4. Genau 3 Prüffragen mit je 3 verschiedenen, plausiblen Antworten; `why` auf Deutsch.
-5. `tip` hat einen echten, typischen Fehler; `apply.targets` stehen in `phrases`, die Musterlösung benutzt jede davon.
-6. `k1`: jede Aussage steht auf einer gelesenen Seite, keine Bedienungsdetails ohne wörtliche Quelle, `sources` nennt eine offizielle Anthropic-Seite. `k5`: Recht und Zahlen nur mit Quelle.
+4. Genau 3 Prüffragen mit je 3 verschiedenen, plausiblen Antworten (die richtige nicht regelmäßig die längste; die Wendung in Frage 3 in Anführungszeichen); `why` auf Deutsch, `why_en` auf Englisch.
+5. `lessonGoal_en`, `tip.why_en` und `apply.situation_en` stehen da. `tip` hat einen echten, typischen Fehler, der noch nicht in einer früheren Lektion vorkam; `apply.targets` stehen in `phrases`, die Musterlösung benutzt jede davon.
+6. `k1`: jede Aussage steht auf einer gelesenen Seite, Rechte und Voreinstellungen nur mit „by default“, keine Bedienungsdetails ohne wörtliche Quelle, `sources` nennt eine offizielle Anthropic-Seite (code.claude.com). `k5`: Recht und Zahlen nur mit Quelle.
 7. Nichts erfunden, nichts aus einer Quelle wörtlich kopiert, keine Floskeln.
 8. Das ganze Dokument ist gültiges JSON (Anführungszeichen in Texten mit `\"` schützen), kleiner als 60 KB.
 
 **Schritt 7: Schreiben.** Rufe `ArtifactData` mit der Aktion `set` auf Sammlung `read`, Dokument `read/c-<Kurs>-<nn>` auf, mit dem **ganzen** Dokument (nicht in Teilen):
 
 ```
-{ "v": 1, "by": "routine", "course": "<Kurs>", "n": <Nummer>, "title": …, "lessonGoal": …, "asOf": …, "paras": […], "phrases": […], "check": […], "tip": {…}, "apply": {…}, "sources": […] }
+{ "v": 1, "by": "routine", "course": "<Kurs>", "n": <Nummer>, "title": …, "lessonGoal": …, "lessonGoal_en": …, "asOf": …, "paras": […], "phrases": […], "check": […], "tip": {…}, "apply": {…}, "sources": […] }
 ```
 
 Schreibe **nur** `read/c-<Kurs>-<nn>`. Schreibe nie in `read/cp`, `read/m-…`, `read/d-…`, `read/p`, `read/r-…` oder ein anderes Dokument der App, und **lösche nie ein Dokument** (das gilt auch für alte Lektionen).
@@ -113,46 +115,46 @@ Schreibe **nur** `read/c-<Kurs>-<nn>`. Schreibe nie in `read/cp`, `read/m-…`, 
 **Katalog K1: Claude Code in 10 Tagen** (Englisch: Claude Code in 10 Days). Ziel: Erklären, was Claude Code kann und wie man sicher damit arbeitet, in verständlichem Business-Englisch. Lektionen (Nr. **Titel** (deutsch) und Inhalt):
 
 1. **What Claude Code Is** (Was Claude Code ist)
-   Was Claude Code ist: ein KI-Assistent für Softwarearbeit, der im Projekt arbeitet (Dateien lesen, Befehle ausführen, Änderungen vorschlagen) und nicht nur chattet. Wo man ihn startet, was er kann, was nicht. Wortschatz: Programmierarbeit beschreiben (codebase, repository, command line, assistant).
+   Was Claude Code ist: ein KI-Assistent für Softwarearbeit, der im Projekt arbeitet (Dateien lesen, Befehle ausführen, Änderungen vorschlagen) und nicht nur chattet. Wo man ihn startet, was er kann, was nicht. Wortschatz: Programmierarbeit beschreiben (work inside a codebase, explore a repository, run commands, stay in control).
 2. **Briefing a Task** (Eine Aufgabe briefen)
-   Eine Aufgabe klar übergeben: Ziel, Kontext, Randbedingungen, Abnahmekriterien. Schlechtes und gutes Briefing im Vergleich. Wortschatz: Anforderungen formulieren (scope, constraint, acceptance criteria, be specific about).
+   Eine Aufgabe klar übergeben: Ziel, Kontext, Randbedingungen, Abnahmekriterien. Schlechtes und gutes Briefing im Vergleich. Wortschatz: Anforderungen formulieren (define the scope, name the constraints, set acceptance criteria, be specific about).
 3. **Project Memory with CLAUDE.md** (Projektgedächtnis mit CLAUDE.md)
-   Die Datei CLAUDE.md: was hineingehört (Befehle, Regeln, Stil), was nicht, warum sie Wiederholung spart. Wortschatz: Regeln und Konventionen (convention, guideline, house rules, keep it concise).
+   Die Datei CLAUDE.md: was hineingehört (Befehle, Regeln, Stil), was nicht, warum sie Wiederholung spart. Wortschatz: Regeln und Konventionen (follow a convention, set a guideline, agree on house rules, keep it concise).
 4. **Permissions and Safety** (Rechte und Sicherheit)
-   Wer darf was: Rückfragen vor Änderungen, erlaubte und gesperrte Befehle, Vorsicht bei sensiblen Daten. Wortschatz: Risiko und Freigabe (grant access, approve, sensitive data, safeguard, audit trail).
+   Wer darf was: Rückfragen vor Änderungen, erlaubte und gesperrte Befehle, Vorsicht bei sensiblen Daten. Wortschatz: Risiko und Freigabe (grant access, flag a risk, err on the side of caution, handle sensitive data).
 5. **Plan First, Then Build** (Erst planen, dann bauen)
-   Erst einen Plan prüfen lassen, dann umsetzen: warum das Fehler früh abfängt, wie man einen Plan bewertet. Wortschatz: Vorgehen abstimmen (walk through, trade-off, sign off on, step by step).
+   Erst einen Plan prüfen lassen, dann umsetzen: warum das Fehler früh abfängt, wie man einen Plan bewertet. Wortschatz: Vorgehen abstimmen (walk through a plan, weigh a trade-off, sign off on, step by step).
 6. **Delegating to Subagents** (Aufgaben an Subagenten abgeben)
-   Spezialisierte Hilfsagenten für Teilaufgaben: wann sich Delegieren lohnt, wie man Aufträge zuschneidet, wie man Ergebnisse prüft. Wortschatz: Delegieren (hand off, in parallel, specialized, report back).
+   Spezialisierte Hilfsagenten für Teilaufgaben: wann sich Delegieren lohnt, wie man Aufträge zuschneidet, wie man Ergebnisse prüft. Wortschatz: Delegieren (hand off a task, work in parallel, report back, split up the work).
 7. **Automating with Hooks** (Automatisieren mit Hooks)
-   Hooks: Befehle, die bei bestimmten Ereignissen automatisch laufen (zum Beispiel vor oder nach einer Aktion). Wofür sie taugen, wo die Grenzen liegen. Wortschatz: Automatisierung (trigger, run automatically, enforce a rule, side effect).
+   Hooks: Befehle, die bei bestimmten Ereignissen automatisch laufen (zum Beispiel vor oder nach einer Aktion). Wofür sie taugen, wo die Grenzen liegen. Wortschatz: Automatisierung (trigger an action, run automatically, enforce a rule, cause a side effect).
 8. **Connecting Tools with MCP** (Werkzeuge anbinden mit MCP)
-   MCP als offener Standard, um Claude mit Werkzeugen und Datenquellen zu verbinden (zum Beispiel Tickets, Datenbanken). Nutzen und Vorsicht. Wortschatz: Anbindungen (integrate, connect to, data source, access scope).
+   MCP als offener Standard, um Claude mit Werkzeugen und Datenquellen zu verbinden (zum Beispiel Tickets, Datenbanken). Nutzen und Vorsicht. Wortschatz: Anbindungen (integrate with a tool, connect to a data source, limit the access scope, plug into).
 9. **Tests as a Safety Net** (Tests als Sicherheitsnetz)
-   Warum Tests bei KI-gestützter Arbeit noch wichtiger sind: Änderungen prüfen, Fehler früh finden, Tests zuerst schreiben lassen. Wortschatz: Qualität sichern (regression, catch bugs early, green build, coverage).
+   Warum Tests bei KI-gestützter Arbeit noch wichtiger sind: Änderungen prüfen, Fehler früh finden, Tests zuerst schreiben lassen. Wortschatz: Qualität sichern (guard against regressions, catch bugs early, keep the build green, cover edge cases).
 10. **Pitching It Internally** (Intern überzeugen)
    Abschluss: Nutzen, Risiken und nächste Schritte für Claude Code im Unternehmen in einem 60-Sekunden-Pitch darstellen. Die Anwenden-Aufgabe ist der Pitch mit vier Wendungen aus dem Kurs.
 
 **Katalog K5: KI im Unternehmen** (Englisch: AI in the Enterprise). Ziel: KI-Projekte mit Kunden und Kollegen besprechen: Nutzen, Risiken, Datenschutz und Einführung. Lektionen (Nr. **Titel** (deutsch) und Inhalt):
 
 1. **What Language Models Can Do** (Was Sprachmodelle können)
-   Was große Sprachmodelle gut können (Texte verstehen, zusammenfassen, formulieren, Code schreiben) und wo sie unzuverlässig sind. Wortschatz: Fähigkeiten und Grenzen (capability, limitation, hallucination, ground in data).
+   Was große Sprachmodelle gut können (Texte verstehen, zusammenfassen, formulieren, Code schreiben) und wo sie unzuverlässig sind. Wortschatz: Fähigkeiten und Grenzen (play to its strengths, hit a limitation, ground in data, check the output).
 2. **Hype Versus Value** (Hype oder Wert)
-   Wie man Versprechen von echtem Nutzen trennt: Fragen an Anbieter, realistische Erwartungen, Belege statt Schlagworte. Wortschatz: Skepsis und Beleg (cut through the hype, proof point, overpromise, measurable).
+   Wie man Versprechen von echtem Nutzen trennt: Fragen an Anbieter, realistische Erwartungen, Belege statt Schlagworte. Wortschatz: Skepsis und Beleg (cut through the hype, back it up with proof, overpromise and underdeliver, set measurable goals).
 3. **Choosing a Use Case** (Einen Anwendungsfall wählen)
    Wie man den ersten Einsatz wählt: häufige, klar umrissene Aufgabe, Daten vorhanden, Fehler verkraftbar, Nutzen messbar. Wortschatz: Priorisieren (low-hanging fruit, narrow scope, business case, pain point).
 4. **Data Protection and the EU AI Act** (Datenschutz und EU-AI-Act)
-   Was bei KI und Datenschutz zu beachten ist (DSGVO, Auftragsverarbeitung) und was der EU AI Act grob regelt (Risikoklassen). NUR nach Recherche in der offiziellen Quelle, ohne Rechtsberatung, mit Quelle und Stand.
+   Was bei KI und Datenschutz zu beachten ist (DSGVO, Auftragsverarbeitung) und was der EU AI Act grob regelt (Risikoklassen). NUR nach Recherche in der offiziellen Quelle, ohne Rechtsberatung, mit Quelle und Stand. Wortschatz: Daten und Regeln (sign a data processing agreement, rely on a lawful basis, classify as high-risk, comply with).
 5. **Build, Buy or Partner** (Selbst bauen, kaufen oder Partner)
-   Die drei Wege im Vergleich: Kosten, Tempo, Kontrolle, Abhängigkeit vom Anbieter. Wortschatz: Entscheidungen (vendor lock-in, in-house, total cost, time to market).
+   Die drei Wege im Vergleich: Kosten, Tempo, Kontrolle, Abhängigkeit vom Anbieter. Wortschatz: Entscheidungen (avoid vendor lock-in, build in-house, calculate the total cost of ownership, shorten the time to market).
 6. **From Pilot to Production** (Vom Pilot in den Betrieb)
-   Warum viele Piloten stecken bleiben und was für den Betrieb nötig ist: Verantwortliche, Überwachung, Qualitätskriterien, Rollout. Wortschatz: Einführung (roll out, scale up, ownership, success criteria).
+   Warum viele Piloten stecken bleiben und was für den Betrieb nötig ist: Verantwortliche, Überwachung, Qualitätskriterien, Rollout. Wortschatz: Einführung (roll out, scale up, take ownership, define success criteria).
 7. **Measuring ROI** (Nutzen messen (ROI))
-   Wie man den Nutzen einer KI-Lösung belegt: Ausgangswert, Zeitersparnis, Qualität, Kosten. Ehrlich bleiben bei Zahlen. Wortschatz: Zahlen darstellen (baseline, payback period, time saved, tangible).
+   Wie man den Nutzen einer KI-Lösung belegt: Ausgangswert, Zeitersparnis, Qualität, Kosten. Ehrlich bleiben bei Zahlen. Wortschatz: Zahlen darstellen (set a baseline, reach the payback period, quantify the time saved, show tangible results).
 8. **People and Change** (Menschen und Wandel)
-   Akzeptanz im Team: Sorgen ernst nehmen, Schulung, Rollen, früh einbinden. Wortschatz: Veränderung begleiten (buy-in, resistance, upskill, early adopters).
+   Akzeptanz im Team: Sorgen ernst nehmen, Schulung, Rollen, früh einbinden. Wortschatz: Veränderung begleiten (win buy-in, overcome resistance, upskill the team, involve early adopters).
 9. **AI in Document Management** (KI im Dokumentenmanagement)
-   Typische Einsatzfelder in Dokumentenmanagement und Archiv: Suche, Klassifizieren, Zusammenfassen, Extraktion. Was dabei zu beachten ist (Rechte, Nachvollziehbarkeit). Wortschatz: Dokumente und Inhalte (retrieve, classify, extract, audit-proof).
+   Typische Einsatzfelder in Dokumentenmanagement und Archiv: Suche, Klassifizieren, Zusammenfassen, Extraktion. Was dabei zu beachten ist (Rechte, Nachvollziehbarkeit). Wortschatz: Dokumente und Inhalte (retrieve relevant documents, classify incoming mail, extract key data, stay audit-ready, keep a retention policy; tamper-evident statt „audit-proof“).
 10. **Selling AI Responsibly** (KI verantwortungsvoll verkaufen)
    Abschluss: Kunden ehrlich beraten, Grenzen benennen, Erwartungen setzen, Einwände ruhig beantworten. Die Anwenden-Aufgabe ist ein kurzer Kundentext mit vier Wendungen aus dem Kurs.
 
@@ -179,8 +181,8 @@ Schreibe **nur** `read/c-<Kurs>-<nn>`. Schreibe nie in `read/cp`, `read/m-…`, 
         "d": "Claude Code funktioniert anders."
       },
       {
-        "e": "It is an AI assistant for software work that runs in your terminal, right next to your project.",
-        "d": "Es ist ein KI-Assistent für Softwarearbeit, der in deinem Terminal läuft, direkt neben deinem Projekt."
+        "e": "It is an AI assistant for software work that you can use in your terminal and other tools, right next to your project.",
+        "d": "Es ist ein KI-Assistent für Softwarearbeit, den du in deinem Terminal und in anderen Werkzeugen nutzen kannst, direkt neben deinem Projekt."
       },
       {
         "e": "Instead of pasting code into a chat, you describe a task and the assistant reads the relevant files itself.",
@@ -193,16 +195,16 @@ Schreibe **nur** `read/c-<Kurs>-<nn>`. Schreibe nie in `read/cp`, `read/m-…`, 
     ],
     [
       {
-        "e": "That difference changes the way you work.",
-        "d": "Dieser Unterschied verändert die Art, wie du arbeitest."
+        "e": "In practice, this means a different way of working.",
+        "d": "In der Praxis heißt das: anders arbeiten."
       },
       {
         "e": "Claude Code can explore a codebase, run commands and propose changes to several files at once.",
         "d": "Claude Code kann eine Codebasis erkunden, Befehle ausführen und Änderungen an mehreren Dateien gleichzeitig vorschlagen."
       },
       {
-        "e": "It asks for your approval before it edits a file or runs a command, so you stay in control.",
-        "d": "Es bittet um deine Freigabe, bevor es eine Datei ändert oder einen Befehl ausführt, sodass du die Kontrolle behältst."
+        "e": "By default, it asks for your approval before it edits a file or runs a command, so you stay in control.",
+        "d": "Standardmäßig bittet es um deine Freigabe, bevor es eine Datei ändert oder einen Befehl ausführt, sodass du die Kontrolle behältst."
       },
       {
         "e": "Think of it as a capable colleague who can work at the command line, not as a search engine for code.",
@@ -235,8 +237,8 @@ Schreibe **nur** `read/c-<Kurs>-<nn>`. Schreibe nie in `read/cp`, `read/m-…`, 
         "d": "Es kann auch Routinearbeiten übernehmen, etwa Commit-Nachrichten schreiben oder die Dokumentation aktualisieren."
       },
       {
-        "e": "In each case, the assistant works inside your own environment and sees only what you allow it to see.",
-        "d": "In jedem Fall arbeitet der Assistent in deiner eigenen Umgebung und sieht nur das, was du ihm erlaubst."
+        "e": "In each case, the assistant works inside your own environment, in the folder where you start it.",
+        "d": "In jedem Fall arbeitet der Assistent in deiner eigenen Umgebung, in dem Ordner, in dem du ihn startest."
       },
       {
         "e": "For a manager, the value lies less in the code itself and more in the hours that routine work no longer takes.",
@@ -258,7 +260,7 @@ Schreibe **nur** `read/c-<Kurs>-<nn>`. Schreibe nie in `read/cp`, `read/m-…`, 
       },
       {
         "e": "It does not replace a code review, and it should never be the only safeguard before a release.",
-        "d": "Er ersetzt keine Code-Prüfung und sollte nie die einzige Absicherung vor einer Veröffentlichung sein."
+        "d": "Er ersetzt kein Code-Review und sollte nie die einzige Absicherung vor einem Release sein."
       },
       {
         "e": "For this reason, many teams start with small, low-risk tasks and widen the scope step by step.",
@@ -306,11 +308,11 @@ Schreibe **nur** `read/c-<Kurs>-<nn>`. Schreibe nie in `read/cp`, `read/m-…`, 
       ]
     },
     {
-      "w": "run the tests",
-      "de": "die Tests ausführen",
+      "w": "handle routine chores",
+      "de": "Routinearbeiten übernehmen",
       "i": [
         2,
-        2
+        3
       ]
     },
     {
@@ -335,55 +337,61 @@ Schreibe **nur** `read/c-<Kurs>-<nn>`. Schreibe nie in `read/cp`, `read/m-…`, 
       "q": "What is the main idea of the lesson?",
       "o": [
         "Claude Code is mainly a faster search engine for code snippets.",
-        "Claude Code works on a real project, so it needs a clear task and a human review.",
-        "Claude Code can release software safely without any human review."
+        "Claude Code works on a real project, so it needs a clear task and a review.",
+        "Claude Code mainly saves time by writing code faster than a person."
       ],
       "a": 1,
-      "why": "Die Lektion beschreibt Claude Code als Assistenten, der am echten Projekt arbeitet. Deshalb brauchen Aufgabe und Ergebnis einen Menschen, der klar beschreibt und prüft."
+      "why": "Die Lektion beschreibt Claude Code als Assistenten, der am echten Projekt arbeitet. Deshalb brauchen Aufgabe und Ergebnis einen Menschen, der klar beschreibt und prüft.",
+      "why_en": "The lesson describes Claude Code as an assistant that works on a real project. That is why the task and the result need a person who describes clearly and reviews."
     },
     {
       "q": "What can you conclude about using Claude Code in a team?",
       "o": [
         "It is wise to begin with small tasks and extend the use gradually.",
-        "It should be switched on for every task from the first day.",
+        "It works best when it gets the whole project at once.",
         "It makes tests unnecessary because the assistant checks everything."
       ],
       "a": 0,
-      "why": "Der Text empfiehlt, mit kleinen, risikoarmen Aufgaben zu beginnen und den Umfang schrittweise zu erweitern. Von Tests oder Prüfung ist als Ersatz keine Rede."
+      "why": "Der Text empfiehlt, mit kleinen, risikoarmen Aufgaben zu beginnen und den Umfang schrittweise zu erweitern. Von Tests oder Prüfung ist als Ersatz keine Rede.",
+      "why_en": "The text recommends starting with small, low-risk tasks and widening the scope step by step. It never says that tests or reviews could be replaced."
     },
     {
-      "q": "What does stay in control mean in this lesson?",
+      "q": "What does \"stay in control\" mean here?",
       "o": [
         "You write all the code yourself.",
         "You turn the assistant off after each task.",
         "You decide what the assistant may change."
       ],
       "a": 2,
-      "why": "Claude Code fragt vor Änderungen nach deiner Freigabe. Du entscheidest also, was geändert oder ausgeführt werden darf, und behältst die Kontrolle."
+      "why": "Standardmäßig fragt Claude Code vor Änderungen nach deiner Freigabe. Du entscheidest also, was geändert oder ausgeführt werden darf, und behältst die Kontrolle.",
+      "why_en": "By default, Claude Code asks for your approval before it makes changes. So you decide what may be changed or run, and you stay in control."
     }
   ],
   "tip": {
     "wrong": "I use Claude Code since two weeks.",
     "right": "I have been using Claude Code for two weeks.",
-    "why": "Im Deutschen sagt man „ich nutze es seit zwei Wochen“ im Präsens. Im Englischen braucht eine Handlung, die bis jetzt andauert, das Present Perfect (have been using). Eine Zeitspanne steht mit for, ein Startpunkt mit since (since Monday)."
+    "why": "Im Deutschen sagt man „ich nutze es seit zwei Wochen“ im Präsens. Im Englischen braucht eine Handlung, die bis jetzt andauert, das Present Perfect (have been using). Eine Zeitspanne steht mit for, ein Startpunkt mit since (since Monday).",
+    "why_en": "In German you say \"ich nutze es seit zwei Wochen\" in the present tense. In English, an action that continues up to now needs the present perfect (have been using). A period of time takes \"for\", a starting point takes \"since\" (since Monday)."
   },
   "apply": {
     "situation": "Dein Kollege Jonas fragt, was Claude Code ist. Erkläre ihm in zwei Sätzen, wie du damit arbeitest und warum du die Kontrolle behältst.",
+    "situation_en": "Your colleague Jonas asks what Claude Code is. Explain to him in two sentences how you work with it and why you stay in control.",
     "targets": [
       "stay in control",
-      "run the tests"
+      "handle routine chores"
     ],
     "model": [
-      "Claude Code works inside my project, and I stay in control because it asks before it changes a file.",
-      "After each change it can run the tests, so I see quickly whether something broke."
+      "Claude Code works inside my project, and I stay in control because, by default, it asks before it changes a file.",
+      "It can also handle routine chores, such as updating the documentation, so I can focus on the decisions."
     ]
   },
   "sources": [
     {
       "title": "Claude Code overview (Anthropic documentation)",
-      "url": "https://docs.claude.com/en/docs/claude-code/overview"
+      "url": "https://code.claude.com/docs/en/overview"
     }
-  ]
+  ],
+  "lessonGoal_en": "You can explain what Claude Code is, what it can do and where its limits lie."
 }
 ```
 <!-- BEISPIEL-JSON-ENDE -->

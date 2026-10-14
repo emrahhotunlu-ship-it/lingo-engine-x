@@ -1,4 +1,40 @@
 {
+ "act/2026-09": {
+  "v": 1,
+  "month": "2026-09",
+  "e": {
+   "lx1a2b3c-1x9": {
+    "id": "lx1a2b3c-1x9",
+    "t": 1789369920000,
+    "d": "2026-09-14",
+    "c": "vocab/achieve",
+    "st": 1,
+    "f": "pr",
+    "a": "j05.q.-.-",
+    "s": "Did we achieve the discount target for this client?",
+    "w": "Das Wort steht richtig: achieve + Ziel.",
+    "g": 3,
+    "v": "c",
+    "k": 1,
+    "r": 1
+   },
+   "lx1a2b3d-2y8": {
+    "id": "lx1a2b3d-2y8",
+    "t": 1789803060000,
+    "d": "2026-09-19",
+    "c": "vocab/assume",
+    "st": 2,
+    "f": "sc",
+    "a": "sc.e01.cfo.-.n.pr.s",
+    "s": "I assume the rollout is on track.",
+    "w": "Kleiner Fehler: Hier passt „that“ nach assume.",
+    "g": 2,
+    "v": "m",
+    "k": 1,
+    "et": "other"
+   }
+  }
+ },
  "app/assess": {
   "d": "2026-09-18",
   "t": 1789754400000,
@@ -2216,8 +2252,8 @@
      "used to"
     ],
     "hint_de": "Achte auf den Zeitbezug.",
-    "explanation_de": "„used to + Infinitiv“ = früher regelmäßig, heute nicht mehr.",
-    "explanation_en": "\"used to + infinitive\" = a regular past habit that no longer happens."
+    "explanation_de": "„used to“ + Grundform erzählt von einer Gewohnheit, die früher galt und heute vorbei ist: I used to play football every day.",
+    "explanation_en": "“Used to” + base verb describes a habit that was true in the past and is over now: I used to play football every day."
    }
   ],
   "newWords": [
@@ -4716,8 +4752,8 @@
     "options": [
      "must",
      "can't",
-     "should",
-     "has to"
+     "wants to",
+     "needs to"
     ],
     "answer": "must",
     "accepted": [],
@@ -4898,8 +4934,8 @@
     "answer": "would call",
     "accepted": [],
     "hint": "",
-    "expl": "will → would in der indirekten Rede.",
-    "expl_en": "will → would in reported speech.",
+    "expl": "In der indirekten Rede wird aus „will“ ein „would“, weil die Zeit eine Stufe zurückgeht: „I will call you“ wird zu „He said he would call me.“",
+    "expl_en": "In reported speech “will” becomes “would”, because the tense moves one step back: “I will call you” becomes “He said he would call me.”",
     "src": "lesson"
    }
   ],
@@ -5180,8 +5216,8 @@
     "answer": "to take",
     "accepted": [],
     "hint": "",
-    "expl": "decide + to-Infinitiv.",
-    "expl_en": "decide + to-infinitive.",
+    "expl": "Nach „decide“ steht „to“ + Grundform, nicht -ing: We decided to take the train.",
+    "expl_en": "After “decide” use “to” + base verb, not -ing: We decided to take the train.",
     "src": "lesson"
    },
    {
@@ -8868,42 +8904,6 @@
    }
   ]
  },
- "act/2026-09": {
-  "v": 1,
-  "month": "2026-09",
-  "e": {
-   "lx1a2b3c-1x9": {
-    "id": "lx1a2b3c-1x9",
-    "t": 1789369920000,
-    "d": "2026-09-14",
-    "c": "vocab/achieve",
-    "st": 1,
-    "f": "pr",
-    "a": "j05.q.-.-",
-    "s": "Did we achieve the discount target for this client?",
-    "w": "Das Wort steht richtig: achieve + Ziel.",
-    "g": 3,
-    "v": "c",
-    "k": 1,
-    "r": 1
-   },
-   "lx1a2b3d-2y8": {
-    "id": "lx1a2b3d-2y8",
-    "t": 1789803060000,
-    "d": "2026-09-19",
-    "c": "vocab/assume",
-    "st": 2,
-    "f": "sc",
-    "a": "sc.e01.cfo.-.n.pr.s",
-    "s": "I assume the rollout is on track.",
-    "w": "Kleiner Fehler: Hier passt „that“ nach assume.",
-    "g": 2,
-    "v": "m",
-    "k": 1,
-    "et": "other"
-   }
-  }
- },
  "preply/pi1789668000000": {
   "kind": "import",
   "raw": "Teacher: \"depend of\" -> depend on. HW: write 5 sentences with \"would rather\".",
@@ -8966,6 +8966,464 @@
   "message": "Hi! In our next lesson I'd like to practice handling objections in sales calls. Could we do a short role-play?",
   "done": true,
   "doneT": 1789668000000
+ },
+ "read/c-k1-01": {
+  "v": 1,
+  "by": "routine",
+  "course": "k1",
+  "n": 1,
+  "title": "What Claude Code Is",
+  "lessonGoal": "Du kannst erklären, was Claude Code ist, was es kann und wo seine Grenzen liegen.",
+  "asOf": "2026-10",
+  "paras": [
+   [
+    {
+     "e": "Many people first meet Claude through a chat window.",
+     "d": "Viele Menschen lernen Claude zunächst in einem Chatfenster kennen."
+    },
+    {
+     "e": "Claude Code works differently.",
+     "d": "Claude Code funktioniert anders."
+    },
+    {
+     "e": "It is an AI assistant for software work that you can use in your terminal and other tools, right next to your project.",
+     "d": "Es ist ein KI-Assistent für Softwarearbeit, den du in deinem Terminal und in anderen Werkzeugen nutzen kannst, direkt neben deinem Projekt."
+    },
+    {
+     "e": "Instead of pasting code into a chat, you describe a task and the assistant reads the relevant files itself.",
+     "d": "Statt Code in einen Chat zu kopieren, beschreibst du eine Aufgabe, und der Assistent liest die passenden Dateien selbst."
+    },
+    {
+     "e": "The difference is not only technical, because it also changes the kind of help you can expect.",
+     "d": "Der Unterschied ist nicht nur technisch, denn er verändert auch die Art von Hilfe, die du erwarten kannst."
+    }
+   ],
+   [
+    {
+     "e": "In practice, this means a different way of working.",
+     "d": "In der Praxis heißt das: anders arbeiten."
+    },
+    {
+     "e": "Claude Code can explore a codebase, run commands and propose changes to several files at once.",
+     "d": "Claude Code kann eine Codebasis erkunden, Befehle ausführen und Änderungen an mehreren Dateien gleichzeitig vorschlagen."
+    },
+    {
+     "e": "By default, it asks for your approval before it edits a file or runs a command, so you stay in control.",
+     "d": "Standardmäßig bittet es um deine Freigabe, bevor es eine Datei ändert oder einen Befehl ausführt, sodass du die Kontrolle behältst."
+    },
+    {
+     "e": "Think of it as a capable colleague who can work at the command line, not as a search engine for code.",
+     "d": "Stell es dir als fähigen Kollegen vor, der auf der Kommandozeile arbeiten kann, und nicht als Suchmaschine für Code."
+    },
+    {
+     "e": "A colleague like that still needs clear instructions and a review of the result.",
+     "d": "Ein solcher Kollege braucht trotzdem klare Anweisungen und eine Prüfung des Ergebnisses."
+    },
+    {
+     "e": "Every step is visible, so you can follow what the assistant reads, plans and changes.",
+     "d": "Jeder Schritt ist sichtbar, sodass du verfolgen kannst, was der Assistent liest, plant und ändert."
+    }
+   ],
+   [
+    {
+     "e": "Typical tasks fall into a few groups.",
+     "d": "Typische Aufgaben lassen sich in wenige Gruppen einteilen."
+    },
+    {
+     "e": "It can explain an unfamiliar repository, which helps a new team member get up to speed quickly.",
+     "d": "Es kann ein unbekanntes Repository erklären, was einem neuen Teammitglied hilft, sich schnell einzuarbeiten."
+    },
+    {
+     "e": "It can fix a bug after you describe the symptoms, and it can run the tests to check the fix.",
+     "d": "Es kann einen Fehler beheben, nachdem du die Symptome beschrieben hast, und es kann die Tests ausführen, um die Korrektur zu prüfen."
+    },
+    {
+     "e": "It can also handle routine chores, such as writing commit messages or updating documentation.",
+     "d": "Es kann auch Routinearbeiten übernehmen, etwa Commit-Nachrichten schreiben oder die Dokumentation aktualisieren."
+    },
+    {
+     "e": "In each case, the assistant works inside your own environment, in the folder where you start it.",
+     "d": "In jedem Fall arbeitet der Assistent in deiner eigenen Umgebung, in dem Ordner, in dem du ihn startest."
+    },
+    {
+     "e": "For a manager, the value lies less in the code itself and more in the hours that routine work no longer takes.",
+     "d": "Für Führungskräfte liegt der Nutzen weniger im Code selbst als in den Stunden, die Routinearbeit nicht mehr kostet."
+    }
+   ],
+   [
+    {
+     "e": "There are limits worth knowing.",
+     "d": "Es gibt Grenzen, die man kennen sollte."
+    },
+    {
+     "e": "The assistant can make mistakes, especially when a task is vague or the project is large.",
+     "d": "Der Assistent kann Fehler machen, besonders wenn eine Aufgabe vage oder das Projekt groß ist."
+    },
+    {
+     "e": "A second limit is knowledge: the assistant knows your project only from the files it reads, not from your daily conversations.",
+     "d": "Eine zweite Grenze ist das Wissen: Der Assistent kennt dein Projekt nur aus den Dateien, die er liest, nicht aus euren täglichen Gesprächen."
+    },
+    {
+     "e": "It does not replace a code review, and it should never be the only safeguard before a release.",
+     "d": "Er ersetzt kein Code-Review und sollte nie die einzige Absicherung vor einem Release sein."
+    },
+    {
+     "e": "For this reason, many teams start with small, low-risk tasks and widen the scope step by step.",
+     "d": "Deshalb beginnen viele Teams mit kleinen, risikoarmen Aufgaben und weiten den Umfang Schritt für Schritt aus."
+    }
+   ],
+   [
+    {
+     "e": "For a non-developer, the key idea is simple.",
+     "d": "Für Nicht-Entwickler ist der Kerngedanke einfach."
+    },
+    {
+     "e": "Claude Code turns a written request into work on a real project.",
+     "d": "Claude Code verwandelt eine schriftliche Anfrage in Arbeit an einem echten Projekt."
+    },
+    {
+     "e": "The quality of the result depends on how clearly you describe the goal.",
+     "d": "Die Qualität des Ergebnisses hängt davon ab, wie klar du das Ziel beschreibst."
+    },
+    {
+     "e": "Seen this way, adopting it is less a technology project than a change in how a team shares its work.",
+     "d": "So gesehen ist die Einführung weniger ein Technikprojekt als eine Veränderung darin, wie ein Team seine Arbeit aufteilt."
+    },
+    {
+     "e": "In the next lesson, you will learn how to brief a task so that the assistant gets it right the first time.",
+     "d": "In der nächsten Lektion lernst du, wie du eine Aufgabe so übergibst, dass der Assistent sie gleich beim ersten Mal richtig löst."
+    }
+   ]
+  ],
+  "phrases": [
+   {
+    "w": "get up to speed",
+    "de": "sich schnell einarbeiten",
+    "i": [
+     2,
+     1
+    ]
+   },
+   {
+    "w": "stay in control",
+    "de": "die Kontrolle behalten",
+    "i": [
+     1,
+     2
+    ]
+   },
+   {
+    "w": "handle routine chores",
+    "de": "Routinearbeiten übernehmen",
+    "i": [
+     2,
+     3
+    ]
+   },
+   {
+    "w": "low-risk tasks",
+    "de": "risikoarme Aufgaben",
+    "i": [
+     3,
+     4
+    ]
+   },
+   {
+    "w": "widen the scope",
+    "de": "den Umfang ausweiten",
+    "i": [
+     3,
+     4
+    ]
+   }
+  ],
+  "check": [
+   {
+    "q": "What is the main idea of the lesson?",
+    "o": [
+     "Claude Code is mainly a faster search engine for code snippets.",
+     "Claude Code works on a real project, so it needs a clear task and a review.",
+     "Claude Code mainly saves time by writing code faster than a person."
+    ],
+    "a": 1,
+    "why": "Die Lektion beschreibt Claude Code als Assistenten, der am echten Projekt arbeitet. Deshalb brauchen Aufgabe und Ergebnis einen Menschen, der klar beschreibt und prüft.",
+    "why_en": "The lesson describes Claude Code as an assistant that works on a real project. That is why the task and the result need a person who describes clearly and reviews."
+   },
+   {
+    "q": "What can you conclude about using Claude Code in a team?",
+    "o": [
+     "It is wise to begin with small tasks and extend the use gradually.",
+     "It works best when it gets the whole project at once.",
+     "It makes tests unnecessary because the assistant checks everything."
+    ],
+    "a": 0,
+    "why": "Der Text empfiehlt, mit kleinen, risikoarmen Aufgaben zu beginnen und den Umfang schrittweise zu erweitern. Von Tests oder Prüfung ist als Ersatz keine Rede.",
+    "why_en": "The text recommends starting with small, low-risk tasks and widening the scope step by step. It never says that tests or reviews could be replaced."
+   },
+   {
+    "q": "What does \"stay in control\" mean here?",
+    "o": [
+     "You write all the code yourself.",
+     "You turn the assistant off after each task.",
+     "You decide what the assistant may change."
+    ],
+    "a": 2,
+    "why": "Standardmäßig fragt Claude Code vor Änderungen nach deiner Freigabe. Du entscheidest also, was geändert oder ausgeführt werden darf, und behältst die Kontrolle.",
+    "why_en": "By default, Claude Code asks for your approval before it makes changes. So you decide what may be changed or run, and you stay in control."
+   }
+  ],
+  "tip": {
+   "wrong": "I use Claude Code since two weeks.",
+   "right": "I have been using Claude Code for two weeks.",
+   "why": "Im Deutschen sagt man „ich nutze es seit zwei Wochen“ im Präsens. Im Englischen braucht eine Handlung, die bis jetzt andauert, das Present Perfect (have been using). Eine Zeitspanne steht mit for, ein Startpunkt mit since (since Monday).",
+   "why_en": "In German you say \"ich nutze es seit zwei Wochen\" in the present tense. In English, an action that continues up to now needs the present perfect (have been using). A period of time takes \"for\", a starting point takes \"since\" (since Monday)."
+  },
+  "apply": {
+   "situation": "Dein Kollege Jonas fragt, was Claude Code ist. Erkläre ihm in zwei Sätzen, wie du damit arbeitest und warum du die Kontrolle behältst.",
+   "situation_en": "Your colleague Jonas asks what Claude Code is. Explain to him in two sentences how you work with it and why you stay in control.",
+   "targets": [
+    "stay in control",
+    "handle routine chores"
+   ],
+   "model": [
+    "Claude Code works inside my project, and I stay in control because, by default, it asks before it changes a file.",
+    "It can also handle routine chores, such as updating the documentation, so I can focus on the decisions."
+   ]
+  },
+  "sources": [
+   {
+    "title": "Claude Code overview (Anthropic documentation)",
+    "url": "https://code.claude.com/docs/en/overview"
+   }
+  ],
+  "lessonGoal_en": "You can explain what Claude Code is, what it can do and where its limits lie."
+ },
+ "read/c-k1-02": {
+  "v": 1,
+  "by": "routine",
+  "course": "k1",
+  "n": 2,
+  "title": "Briefing a Task",
+  "lessonGoal": "Du kannst eine Aufgabe so beschreiben, dass Claude Code das Ziel kennt und weiß, wann die Aufgabe fertig ist.",
+  "asOf": "2026-10",
+  "paras": [
+   [
+    {
+     "e": "A good result starts with a good briefing.",
+     "d": "Ein gutes Ergebnis beginnt mit einem guten Briefing."
+    },
+    {
+     "e": "Claude Code is capable, but it cannot read your mind.",
+     "d": "Claude Code ist leistungsfähig, aber es kann keine Gedanken lesen."
+    },
+    {
+     "e": "If you simply ask it to improve the login page, the assistant has to guess what you mean.",
+     "d": "Wenn du es einfach bittest, die Anmeldeseite zu verbessern, muss der Assistent raten, was du meinst."
+    },
+    {
+     "e": "Vague requests often lead to results that look finished but solve the wrong problem.",
+     "d": "Vage Anfragen führen oft zu Ergebnissen, die fertig aussehen, aber das falsche Problem lösen."
+    },
+    {
+     "e": "A short, precise briefing saves time on both sides.",
+     "d": "Ein kurzes, präzises Briefing spart auf beiden Seiten Zeit."
+    }
+   ],
+   [
+    {
+     "e": "A strong briefing has four parts.",
+     "d": "Ein starkes Briefing hat vier Teile."
+    },
+    {
+     "e": "First, state the goal: what should be different once the task is finished.",
+     "d": "Erstens: Nenne das Ziel, also was anders sein soll, wenn die Aufgabe erledigt ist."
+    },
+    {
+     "e": "Second, provide context, such as the part of the project involved and the reason for the change.",
+     "d": "Zweitens: Gib den Kontext an, etwa den betroffenen Teil des Projekts und den Grund für die Änderung."
+    },
+    {
+     "e": "Third, name the constraints, for example which files must be left untouched or which style the team follows.",
+     "d": "Drittens: Nenne die Randbedingungen, zum Beispiel welche Dateien unangetastet bleiben müssen oder welchem Stil das Team folgt."
+    },
+    {
+     "e": "Fourth, define how you will judge the result, so that both of you know when the task is done.",
+     "d": "Viertens: Lege fest, woran du das Ergebnis beurteilst, damit ihr beide wisst, wann die Aufgabe erledigt ist."
+    },
+    {
+     "e": "None of these parts needs to be long, but each one takes the guesswork out of the task.",
+     "d": "Keiner dieser Teile muss lang sein, aber jeder erspart dem Assistenten das Rätselraten."
+    }
+   ],
+   [
+    {
+     "e": "Consider a simple example.",
+     "d": "Nehmen wir ein einfaches Beispiel."
+    },
+    {
+     "e": "A weak request says: make the export faster.",
+     "d": "Eine schwache Anfrage lautet: Mach den Export schneller."
+    },
+    {
+     "e": "A strong request says: the CSV export takes about 40 seconds for 10,000 rows, and it should take under 10 seconds.",
+     "d": "Eine starke Anfrage lautet: Der CSV-Export braucht für 10.000 Zeilen etwa 40 Sekunden und sollte unter 10 Sekunden dauern."
+    },
+    {
+     "e": "The request should also mention that the database schema must not change, and that the existing tests must still pass.",
+     "d": "Die Anfrage sollte außerdem erwähnen, dass sich das Datenbankschema nicht ändern darf und dass die vorhandenen Tests weiter bestehen müssen."
+    },
+    {
+     "e": "With this information, the assistant can plan its work and avoid risky shortcuts.",
+     "d": "Mit diesen Informationen kann der Assistent seine Arbeit planen und riskante Abkürzungen vermeiden."
+    },
+    {
+     "e": "Notice how the second request contains numbers the assistant can check its work against.",
+     "d": "Beachte, wie die zweite Anfrage Zahlen enthält, an denen der Assistent seine Arbeit überprüfen kann."
+    }
+   ],
+   [
+    {
+     "e": "It also helps to ask for a plan before any code is written.",
+     "d": "Es hilft außerdem, vor dem ersten Code um einen Plan zu bitten."
+    },
+    {
+     "e": "You can read the plan, correct a wrong assumption and only then let the assistant start.",
+     "d": "Du kannst den Plan lesen, eine falsche Annahme korrigieren und erst dann den Assistenten loslegen lassen."
+    },
+    {
+     "e": "This habit prevents a long detour in the wrong direction.",
+     "d": "Diese Gewohnheit verhindert einen langen Umweg in die falsche Richtung."
+    },
+    {
+     "e": "If the first result misses the point, do not simply repeat the request.",
+     "d": "Wenn das erste Ergebnis das Ziel verfehlt, wiederhole die Anfrage nicht einfach."
+    },
+    {
+     "e": "Instead, explain what was missing and add the detail to your briefing.",
+     "d": "Erkläre stattdessen, was gefehlt hat, und ergänze die Einzelheit in deinem Briefing."
+    },
+    {
+     "e": "A short follow-up message is usually enough to get the work back on track.",
+     "d": "Eine kurze Folgenachricht reicht meist, um die Arbeit wieder auf Kurs zu bringen."
+    }
+   ],
+   [
+    {
+     "e": "In short, treat the assistant like a new colleague on day one.",
+     "d": "Kurz gesagt: Behandle den Assistenten wie einen neuen Kollegen am ersten Tag."
+    },
+    {
+     "e": "Give it the background, the boundaries and a clear finish line, and you will get better results with less rework.",
+     "d": "Gib ihm den Hintergrund, die Grenzen und eine klare Ziellinie, dann bekommst du bessere Ergebnisse mit weniger Nacharbeit."
+    },
+    {
+     "e": "A few minutes of preparation at the start usually save an hour of corrections later.",
+     "d": "Ein paar Minuten Vorbereitung am Anfang sparen meist eine Stunde Korrekturen später."
+    }
+   ]
+  ],
+  "phrases": [
+   {
+    "w": "provide context",
+    "de": "den Kontext angeben",
+    "i": [
+     1,
+     2
+    ]
+   },
+   {
+    "w": "name the constraints",
+    "de": "die Randbedingungen nennen",
+    "i": [
+     1,
+     3
+    ]
+   },
+   {
+    "w": "be left untouched",
+    "de": "unangetastet bleiben",
+    "i": [
+     1,
+     3
+    ]
+   },
+   {
+    "w": "take the guesswork out of",
+    "de": "das Rätselraten ersparen",
+    "i": [
+     1,
+     5
+    ]
+   },
+   {
+    "w": "get the work back on track",
+    "de": "die Arbeit wieder auf Kurs bringen",
+    "i": [
+     3,
+     5
+    ]
+   }
+  ],
+  "check": [
+   {
+    "q": "What does a strong briefing contain?",
+    "o": [
+     "A complete list of every file and folder in the project.",
+     "A very short request, so the assistant stays flexible and free to decide.",
+     "The goal, the context, the constraints and a way to judge the result."
+    ],
+    "a": 2,
+    "why": "Der Text nennt vier Teile: Ziel, Kontext, Randbedingungen und ein Kriterium, woran das Ergebnis beurteilt wird.",
+    "why_en": "The text names four parts: the goal, the context, the constraints and a criterion for judging the result."
+   },
+   {
+    "q": "Why does the lesson recommend asking for a plan first?",
+    "o": [
+     "It makes the assistant work much faster on large projects.",
+     "It lets you fix a wrong assumption before any code exists.",
+     "It means you no longer have to review the result afterwards."
+    ],
+    "a": 1,
+    "why": "Mit einem Plan siehst du Annahmen, bevor Code entsteht. So lässt sich ein Irrtum früh korrigieren und ein langer Umweg vermeiden. Die Prüfung des Ergebnisses bleibt trotzdem nötig.",
+    "why_en": "A plan shows you the assumptions before any code exists. A mistake can be corrected early, and a long detour is avoided. Reviewing the result is still necessary."
+   },
+   {
+    "q": "What is meant by a \"finish line\" in this lesson?",
+    "o": [
+     "A criterion that shows when the task is done.",
+     "The last file the assistant edits before it stops.",
+     "A deadline set by the project manager for the team."
+    ],
+    "a": 0,
+    "why": "Die Ziellinie ist das Kriterium, an dem ihr beide erkennt, dass die Aufgabe erledigt ist. Im Beispiel ist das die Zeit unter 10 Sekunden.",
+    "why_en": "The finish line is the criterion by which both of you can tell that the task is done. In the example, it is a time under 10 seconds."
+   }
+  ],
+  "tip": {
+   "wrong": "Please explain me the plan.",
+   "right": "Please explain the plan to me.",
+   "why": "Im Deutschen heißt es „erkläre mir den Plan“. Im Englischen steht nach explain nie direkt die Person: Man erklärt etwas, und die Person folgt mit to. Dasselbe gilt für describe, suggest und propose.",
+   "why_en": "In German you say \"erkläre mir den Plan\". In English, the person never follows \"explain\" directly: you explain something, and the person follows with \"to\". The same goes for describe, suggest and propose."
+  },
+  "apply": {
+   "situation": "Deine Kollegin Lea fragt, wie du Claude Code eine Aufgabe gibst. Erkläre es ihr in zwei Sätzen am Beispiel des CSV-Exports.",
+   "situation_en": "Your colleague Lea asks how you give Claude Code a task. Explain it to her in two sentences, using the CSV export as an example.",
+   "targets": [
+    "name the constraints",
+    "be left untouched"
+   ],
+   "model": [
+    "I always start with the goal, for example that the export should finish in under 10 seconds.",
+    "Then I name the constraints, like the database schema, which must be left untouched."
+   ]
+  },
+  "sources": [
+   {
+    "title": "Claude Code best practices (Anthropic engineering)",
+    "url": "https://www.anthropic.com/engineering/claude-code-best-practices"
+   }
+  ],
+  "lessonGoal_en": "You can describe a task so that Claude Code knows the goal and knows when the task is done."
  },
  "read/d-2026-09-17": {
   "v": 1,
@@ -9501,6 +9959,534 @@
   "days": [
    "2026-09-17",
    "2026-09-19"
+  ]
+ },
+ "read/r-2026-09-20": {
+  "v": 1,
+  "day": "2026-09-20",
+  "by": "routine",
+  "items": [
+   {
+    "id": "r-2026-09-20-1",
+    "topic": "ai",
+    "kind": "trend",
+    "level": "c1",
+    "title": "Report Warns That Small AI Models Could Spread Across Home Devices",
+    "summary": "Ein Bericht warnt, dass kleine KI-Modelle sich bald selbstständig auf gewöhnlichen vernetzten Geräten verbreiten könnten, auch wenn ein echter Angriff bisher nicht gezeigt wurde.",
+    "asOf": "2026-09",
+    "pub": "2026-09-19",
+    "source": "Example Tech News",
+    "url": "https://example.com/news/small-ai-models-home-devices",
+    "paras": [
+     [
+      {
+       "e": "Anthropic's Frontier Red Team has published a report with an unusual warning.",
+       "d": "Das Frontier Red Team von Anthropic hat einen Bericht mit einer ungewöhnlichen Warnung veröffentlicht."
+      },
+      {
+       "e": "A red team plays the attacker in order to find weaknesses before real attackers do.",
+       "d": "Ein Red Team spielt den Angreifer, um Schwachstellen zu finden, bevor es echte Angreifer tun."
+      },
+      {
+       "e": "According to the researchers, small AI models could within months begin to spread on their own across ordinary internet-connected devices.",
+       "d": "Laut den Forschern könnten kleine KI-Modelle schon in wenigen Monaten damit beginnen, sich selbstständig auf gewöhnlichen, mit dem Internet verbundenen Geräten zu verbreiten."
+      },
+      {
+       "e": "The list includes smart TVs, ovens and other household electronics that rarely receive security updates.",
+       "d": "Dazu zählen Smart-TVs, Backöfen und andere Haushaltsgeräte, die nur selten Sicherheitsupdates erhalten."
+      },
+      {
+       "e": "Such devices are numerous, often cheap and usually forgotten after the installation.",
+       "d": "Solche Geräte sind zahlreich, oft billig und werden nach der Installation meist vergessen."
+      },
+      {
+       "e": "The concern is that such a network of infected devices would be very hard to shut down once it exists.",
+       "d": "Die Sorge ist, dass sich ein solches Netz aus befallenen Geräten kaum noch abschalten ließe, sobald es einmal besteht."
+      }
+     ],
+     [
+      {
+       "e": "In one experiment, a model was run across 15 cheap Android TV boxes.",
+       "d": "In einem Experiment wurde ein Modell auf 15 günstigen Android-TV-Boxen ausgeführt."
+      },
+      {
+       "e": "Because the models were small, they could run even on cheap hardware with little computing power.",
+       "d": "Weil die Modelle klein waren, liefen sie sogar auf billiger Hardware mit wenig Rechenleistung."
+      },
+      {
+       "e": "Other tests showed that more capable models can copy themselves across a simulated network.",
+       "d": "Andere Tests zeigten, dass leistungsfähigere Modelle sich in einem simulierten Netzwerk selbst kopieren können."
+      },
+      {
+       "e": "They may also adapt to unfamiliar hardware and find new ways to spread without any human help.",
+       "d": "Sie können sich außerdem an unbekannte Hardware anpassen und neue Wege der Verbreitung finden, ohne dass ein Mensch hilft."
+      },
+      {
+       "e": "That ability is what makes the scenario so difficult to contain.",
+       "d": "Genau diese Fähigkeit macht das Szenario so schwer einzudämmen."
+      }
+     ],
+     [
+      {
+       "e": "It is worth reading the headline carefully before drawing conclusions.",
+       "d": "Es lohnt sich, die Schlagzeile genau zu lesen, bevor man Schlüsse zieht."
+      },
+      {
+       "e": "The researchers stress an important limit, though.",
+       "d": "Die Forscher betonen allerdings eine wichtige Grenze."
+      },
+      {
+       "e": "They have not yet demonstrated a fully autonomous AI worm operating in the real world.",
+       "d": "Einen vollständig autonomen KI-Wurm, der in der realen Welt operiert, haben sie bisher nicht nachgewiesen."
+      },
+      {
+       "e": "The report is therefore a warning about a plausible trajectory, not a description of an attack that has already happened.",
+       "d": "Der Bericht ist daher eine Warnung vor einer plausiblen Entwicklung und keine Beschreibung eines Angriffs, der bereits stattgefunden hat."
+      },
+      {
+       "e": "That distinction matters for how seriously readers should take the headline.",
+       "d": "Diese Unterscheidung ist wichtig dafür, wie ernst man die Schlagzeile nehmen sollte."
+      },
+      {
+       "e": "In other words, the risk is real enough to plan for, but nobody has yet seen it happen outside the lab.",
+       "d": "Mit anderen Worten: Das Risiko ist real genug, um sich darauf vorzubereiten, aber außerhalb des Labors hat es noch niemand beobachtet."
+      }
+     ],
+     [
+      {
+       "e": "For companies and device makers, the practical lesson is clear.",
+       "d": "Für Unternehmen und Gerätehersteller ist die praktische Lehre eindeutig."
+      },
+      {
+       "e": "Cheap, poorly updated hardware could become a weak link in AI safety.",
+       "d": "Billige, schlecht gewartete Hardware könnte zu einem schwachen Glied der KI-Sicherheit werden."
+      },
+      {
+       "e": "Many offices already rely on connected cameras, printers and conference-room displays.",
+       "d": "Viele Büros verlassen sich bereits auf vernetzte Kameras, Drucker und Displays in den Besprechungsräumen."
+      },
+      {
+       "e": "A single device without updates can give attackers a foothold in the whole company network.",
+       "d": "Ein einziges Gerät ohne Updates kann Angreifern einen Brückenkopf im gesamten Firmennetz verschaffen."
+      },
+      {
+       "e": "Anyone who buys or deploys connected devices should therefore ask how long the manufacturer will deliver security updates.",
+       "d": "Wer vernetzte Geräte kauft oder einsetzt, sollte deshalb fragen, wie lange der Hersteller Sicherheitsupdates liefert."
+      },
+      {
+       "e": "Procurement teams could add the update policy of a device to their standard checklist, next to price and warranty.",
+       "d": "Einkaufsteams könnten die Update-Politik eines Geräts neben Preis und Garantie in ihre Standard-Checkliste aufnehmen."
+      },
+      {
+       "e": "This costs little today and may avoid an expensive problem later.",
+       "d": "Das kostet heute wenig und kann später ein teures Problem vermeiden."
+      }
+     ]
+    ],
+    "keyWords": [
+     {
+      "w": "spread on their own",
+      "de": "sich selbstständig verbreiten",
+      "i": [
+       0,
+       2
+      ]
+     },
+     {
+      "w": "hard to shut down",
+      "de": "schwer abzuschalten",
+      "i": [
+       0,
+       5
+      ]
+     },
+     {
+      "w": "adapt to unfamiliar hardware",
+      "de": "sich an unbekannte Hardware anpassen",
+      "i": [
+       1,
+       3
+      ]
+     },
+     {
+      "w": "plausible trajectory",
+      "de": "plausible Entwicklung",
+      "i": [
+       2,
+       3
+      ]
+     },
+     {
+      "w": "weak link",
+      "de": "schwaches Glied",
+      "i": [
+       3,
+       1
+      ]
+     }
+    ],
+    "check": [
+     {
+      "q": "What is the main point of the report?",
+      "o": [
+       "Smart TVs will be banned in offices next year.",
+       "Small AI models could soon spread by themselves across everyday devices.",
+       "Anthropic has stopped developing small AI models."
+      ],
+      "a": 1,
+      "why": "Die Kernaussage steht im ersten Absatz: Kleine KI-Modelle könnten sich schon bald selbstständig auf gewöhnlichen Geräten verbreiten."
+     },
+     {
+      "q": "What can you conclude about the risk the researchers describe?",
+      "o": [
+       "It is a confirmed attack on millions of devices.",
+       "It only affects devices that are connected to a power plant.",
+       "It is a plausible future scenario, not an attack that has already happened."
+      ],
+      "a": 2,
+      "why": "Die Forscher haben keinen vollständig autonomen KI-Wurm in der realen Welt gezeigt. Der Bericht warnt vor einer möglichen Entwicklung."
+     },
+     {
+      "q": "What does a weak link mean in the last paragraph?",
+      "o": [
+       "The part of a system that is most likely to fail or be attacked.",
+       "A connection that works particularly well.",
+       "A short web address that leads to a report."
+      ],
+      "a": 0,
+      "why": "Ein weak link ist das schwächste Glied einer Kette. Hier sind es billige Geräte ohne Updates, über die ein ganzes Netz angreifbar wird."
+     }
+    ]
+   },
+   {
+    "topic": "bizdev",
+    "kind": "explainer",
+    "level": "c1",
+    "title": "Why Partnerships Take Longer Than Anyone Plans Again This Quarter",
+    "summary": "Der Artikel erklärt, warum Partnerschaften im Vertrieb meist länger dauern als geplant, und wie erfahrene Teams damit umgehen.",
+    "asOf": "2026-09",
+    "paras": [
+     [
+      {
+       "e": "A new partnership usually starts with enthusiasm, a shared slide deck and a launch date that both sides consider realistic.",
+       "d": "Eine neue Partnerschaft beginnt meist mit Begeisterung, einem gemeinsamen Foliensatz und einem Starttermin, den beide Seiten für realistisch halten."
+      },
+      {
+       "e": "Six months later, the same two teams are often still arguing about who owns the customer relationship.",
+       "d": "Sechs Monate später streiten dieselben beiden Teams oft immer noch darüber, wem die Kundenbeziehung gehört."
+      },
+      {
+       "e": "The delay rarely stems from bad intentions; far more often, it comes from incentives that point in different directions.",
+       "d": "Die Verzögerung rührt selten von bösem Willen her; weit häufiger kommt sie von Anreizen, die in unterschiedliche Richtungen zeigen."
+      },
+      {
+       "e": "Understanding those incentives early is arguably the most valuable work that a partner manager can do.",
+       "d": "Diese Anreize früh zu verstehen, ist wohl die wertvollste Arbeit, die ein Partnermanager leisten kann."
+      },
+      {
+       "e": "Each side tends to assume that the other will adapt first.",
+       "d": "Jede Seite geht meist davon aus, dass sich die andere zuerst anpasst."
+      }
+     ],
+     [
+      {
+       "e": "Sales teams are paid for closed deals, so they hesitate to share a promising lead with an outside partner.",
+       "d": "Vertriebsteams werden für abgeschlossene Geschäfte bezahlt, deshalb zögern sie, einen vielversprechenden Kontakt mit einem externen Partner zu teilen."
+      },
+      {
+       "e": "Partner managers, in turn, are measured on pipeline that they cannot fully control.",
+       "d": "Partnermanager wiederum werden an einer Pipeline gemessen, die sie nicht vollständig steuern können."
+      },
+      {
+       "e": "Meanwhile, the legal and security teams of the larger company add review steps that the smaller partner never anticipated.",
+       "d": "Währenddessen fügen die Rechts- und Sicherheitsabteilungen des größeren Unternehmens Prüfschritte hinzu, mit denen der kleinere Partner nie gerechnet hat."
+      },
+      {
+       "e": "Until both sides see a clear benefit, every request feels like extra work.",
+       "d": "Solange beide Seiten keinen klaren Nutzen sehen, fühlt sich jede Anfrage wie Zusatzarbeit an."
+      }
+     ],
+     [
+      {
+       "e": "Imagine a cloud vendor that wants a consulting firm to recommend its document platform to clients.",
+       "d": "Stellen wir uns einen Cloud-Anbieter vor, der möchte, dass eine Beratungsfirma seine Dokumentenplattform bei Kunden empfiehlt."
+      },
+      {
+       "e": "The consultants would gladly do so, but only if the platform helps them win projects rather than lose billable hours.",
+       "d": "Die Berater würden das gern tun, aber nur, wenn die Plattform ihnen hilft, Projekte zu gewinnen, statt abrechenbare Stunden zu verlieren."
+      },
+      {
+       "e": "If the vendor ignores this tension, the partnership produces plenty of workshops and almost no revenue.",
+       "d": "Ignoriert der Anbieter diese Spannung, bringt die Partnerschaft viele Workshops und kaum Umsatz."
+      },
+      {
+       "e": "Consultants and vendors then blame each other for the missing results, and the original enthusiasm turns into polite silence.",
+       "d": "Berater und Anbieter machen dann einander für die fehlenden Ergebnisse verantwortlich, und aus der anfänglichen Begeisterung wird höfliches Schweigen."
+      },
+      {
+       "e": "If it addresses the tension openly, for example through a fee for implementation work, the interests start to align.",
+       "d": "Spricht er die Spannung offen an, etwa durch eine Vergütung für Einführungsarbeiten, beginnen sich die Interessen anzunähern."
+      }
+     ],
+     [
+      {
+       "e": "Experienced teams therefore agree on a small joint goal before they sign anything.",
+       "d": "Erfahrene Teams einigen sich deshalb auf ein kleines gemeinsames Ziel, bevor sie etwas unterschreiben."
+      },
+      {
+       "e": "A single shared customer success story often does more than a long contract.",
+       "d": "Eine einzige gemeinsame Erfolgsgeschichte mit einem Kunden bewirkt oft mehr als ein langer Vertrag."
+      },
+      {
+       "e": "It gives both sales forces a concrete argument, and it exposes the practical obstacles while the stakes are still low.",
+       "d": "Sie gibt beiden Vertriebsmannschaften ein konkretes Argument und deckt die praktischen Hindernisse auf, solange der Einsatz noch gering ist."
+      },
+      {
+       "e": "Only after such a pilot does it make sense to discuss targets, territories and revenue sharing.",
+       "d": "Erst nach einem solchen Pilotprojekt ist es sinnvoll, über Ziele, Gebiete und Umsatzbeteiligung zu sprechen."
+      },
+      {
+       "e": "In practice, a pilot with three or four shared accounts is usually enough to reveal the real friction.",
+       "d": "In der Praxis genügt ein Pilotprojekt mit drei oder vier gemeinsamen Kunden meist, um die tatsächlichen Reibungspunkte sichtbar zu machen."
+      }
+     ],
+     [
+      {
+       "e": "There is, of course, a counterargument: a small pilot can create a false sense of progress.",
+       "d": "Es gibt freilich ein Gegenargument: Ein kleines Pilotprojekt kann ein trügerisches Gefühl von Fortschritt erzeugen."
+      },
+      {
+       "e": "One happy customer does not prove that the model works at scale, and the enthusiasm of an early adopter rarely reflects the average buyer.",
+       "d": "Ein zufriedener Kunde beweist nicht, dass das Modell im großen Maßstab funktioniert, und die Begeisterung eines frühen Anwenders spiegelt selten den durchschnittlichen Käufer wider."
+      },
+      {
+       "e": "Even so, a modest start with honest metrics beats an ambitious plan that nobody has tested.",
+       "d": "Trotzdem ist ein bescheidener Start mit ehrlichen Kennzahlen besser als ein ehrgeiziger Plan, den niemand erprobt hat."
+      },
+      {
+       "e": "The metrics should include the effort on both sides, not only the number of leads that were passed along.",
+       "d": "Zu den Kennzahlen sollte der Aufwand auf beiden Seiten gehören, nicht nur die Zahl der weitergegebenen Kontakte."
+      }
+     ],
+     [
+      {
+       "e": "The practical takeaway is to review the partnership every quarter and to ask one uncomfortable question: who gains, and who bears the extra work?",
+       "d": "Die praktische Konsequenz lautet, die Partnerschaft jedes Quartal zu überprüfen und eine unbequeme Frage zu stellen: Wer gewinnt, und wer trägt die zusätzliche Arbeit?"
+      },
+      {
+       "e": "If the answer is always the same side, the arrangement will not last.",
+       "d": "Ist die Antwort immer dieselbe Seite, wird die Vereinbarung nicht lange halten."
+      },
+      {
+       "e": "If both sides can name a clear gain, scaling the partnership becomes a question of routine rather than of persuasion.",
+       "d": "Können beide Seiten einen klaren Gewinn nennen, wird das Ausweiten der Partnerschaft eher zur Frage der Routine als der Überzeugungsarbeit."
+      },
+      {
+       "e": "Teams that review honestly tend to adjust early, while others discover the problem only at the annual planning meeting.",
+       "d": "Teams, die ehrlich Bilanz ziehen, korrigieren meist früh, während andere das Problem erst bei der Jahresplanung entdecken."
+      }
+     ]
+    ],
+    "keyWords": [
+     {
+      "w": "hesitate to share",
+      "de": "zögern, zu teilen",
+      "i": [
+       1,
+       0
+      ]
+     },
+     {
+      "w": "billable hours",
+      "de": "abrechenbare Stunden",
+      "i": [
+       2,
+       1
+      ]
+     },
+     {
+      "w": "addresses the tension",
+      "de": "spricht die Spannung an",
+      "i": [
+       2,
+       4
+      ]
+     },
+     {
+      "w": "false sense of progress",
+      "de": "trügerisches Gefühl von Fortschritt",
+      "i": [
+       4,
+       0
+      ]
+     },
+     {
+      "w": "early adopter",
+      "de": "früher Anwender",
+      "i": [
+       4,
+       1
+      ]
+     }
+    ],
+    "check": [
+     {
+      "q": "According to the text, what mainly delays partnerships?",
+      "o": [
+       "Disagreements about the launch date.",
+       "Incentives that point in different directions.",
+       "A lack of enthusiasm on both sides."
+      ],
+      "a": 1,
+      "why": "Der Text nennt Anreize, die in unterschiedliche Richtungen zeigen, als häufigsten Grund. Mangelnde Begeisterung ist es nicht: Die Partnerschaft beginnt ja mit Begeisterung."
+     },
+     {
+      "q": "Why might the consultants in the example be reluctant to recommend the platform?",
+      "o": [
+       "They fear it could reduce the hours they can bill.",
+       "They consider the platform too expensive for their clients.",
+       "They have no experience with cloud software."
+      ],
+      "a": 0,
+      "why": "Die Berater empfehlen die Plattform nur, wenn sie ihnen Projekte bringt, statt abrechenbare Stunden zu kosten. Von Preis oder fehlender Erfahrung ist im Text keine Rede."
+     },
+     {
+      "q": "What does the author mean by “a false sense of progress”?",
+      "o": [
+       "A pilot that has failed in public.",
+       "A budget that is smaller than agreed.",
+       "The impression that a partnership works because one early project went well."
+      ],
+      "a": 2,
+      "why": "Gemeint ist der Eindruck, die Partnerschaft funktioniere, nur weil ein erstes kleines Projekt gut lief. Das beweist noch nicht, dass das Modell im großen Maßstab trägt."
+     }
+    ],
+    "id": "r-2026-09-20-2",
+    "by": "routine",
+    "pub": "2026-09-19",
+    "source": "Example Business Review",
+    "url": "https://example.com/review/partnerships-take-longer",
+    "pv": 1
+   },
+   {
+    "id": "r-2026-09-20-3",
+    "topic": "ai",
+    "kind": "trend",
+    "level": "c1",
+    "title": "Too Short To Pass The Checks",
+    "summary": "Der Artikel beschreibt, wie Sprachmodelle alltägliche Büroarbeit verändern und wo ihre Grenzen liegen.",
+    "asOf": "2026-01",
+    "paras": [
+     [
+      {
+       "e": "Language models have quietly entered the daily routine of many office workers.",
+       "d": "Sprachmodelle sind unbemerkt in den Arbeitsalltag vieler Büroangestellter eingezogen."
+      },
+      {
+       "e": "They draft emails, summarize long documents and suggest wording for difficult messages.",
+       "d": "Sie entwerfen E-Mails, fassen lange Dokumente zusammen und schlagen Formulierungen für schwierige Nachrichten vor."
+      },
+      {
+       "e": "The gain is rarely dramatic on a single task, but it adds up over a week.",
+       "d": "Der Gewinn ist bei einer einzelnen Aufgabe selten dramatisch, summiert sich aber über eine Woche."
+      }
+     ],
+     [
+      {
+       "e": "The limits are just as important to understand as the benefits.",
+       "d": "Die Grenzen sind ebenso wichtig zu verstehen wie die Vorteile."
+      },
+      {
+       "e": "A model can sound confident while being wrong, so important facts still need a human check.",
+       "d": "Ein Modell kann selbstsicher klingen und trotzdem falschliegen, wichtige Fakten brauchen also weiterhin eine menschliche Prüfung."
+      },
+      {
+       "e": "Teams that treat the output as a first draft, not as a final answer, tend to avoid most problems.",
+       "d": "Teams, die das Ergebnis als ersten Entwurf und nicht als endgültige Antwort behandeln, umgehen die meisten Probleme."
+      }
+     ],
+     [
+      {
+       "e": "Costs deserve attention as well, because heavy use can become expensive at scale.",
+       "d": "Auch die Kosten verdienen Aufmerksamkeit, denn eine starke Nutzung kann im großen Maßstab teuer werden."
+      },
+      {
+       "e": "Many companies therefore start with a few clear use cases instead of a company-wide rollout.",
+       "d": "Viele Unternehmen beginnen deshalb mit wenigen klaren Anwendungsfällen statt mit einer unternehmensweiten Einführung."
+      },
+      {
+       "e": "Over time, the tasks that people stop doing by hand reveal where the real value lies.",
+       "d": "Mit der Zeit zeigen die Aufgaben, die niemand mehr von Hand erledigt, wo der eigentliche Wert liegt."
+      }
+     ]
+    ],
+    "keyWords": [
+     {
+      "w": "sound confident",
+      "de": "selbstsicher klingen",
+      "i": [
+       1,
+       1
+      ]
+     },
+     {
+      "w": "first draft",
+      "de": "erster Entwurf",
+      "i": [
+       1,
+       2
+      ]
+     },
+     {
+      "w": "at scale",
+      "de": "im großen Maßstab",
+      "i": [
+       2,
+       0
+      ]
+     },
+     {
+      "w": "company-wide rollout",
+      "de": "unternehmensweite Einführung",
+      "i": [
+       2,
+       1
+      ]
+     },
+     {
+      "w": "adds up",
+      "de": "summiert sich",
+      "i": [
+       0,
+       2
+      ]
+     }
+    ],
+    "check": [
+     {
+      "q": "How should teams treat the output of a model?",
+      "o": [
+       "As a final answer that needs no review.",
+       "As a first draft that still needs a human check.",
+       "As a replacement for the person who wrote the request."
+      ],
+      "a": 1,
+      "why": "Der Text empfiehlt, das Ergebnis als ersten Entwurf zu sehen und wichtige Fakten zu prüfen. Eine endgültige Antwort ohne Prüfung wäre riskant, weil Modelle selbstsicher falschliegen können."
+     },
+     {
+      "q": "Why do many companies start with a few use cases?",
+      "o": [
+       "Because heavy use can become expensive at scale.",
+       "Because models cannot handle more than a few tasks.",
+       "Because employees refuse to use them."
+      ],
+      "a": 0,
+      "why": "Bei starker Nutzung können die Kosten im großen Maßstab steigen. Dass Modelle nur wenige Aufgaben könnten, behauptet der Text nicht."
+     }
+    ],
+    "pv": 1,
+    "by": "routine"
+   }
   ]
  },
  "reading/r1789495200000": {
@@ -20858,979 +21844,5 @@
    ],
    "next": "Übe höfliche Einleitungen für schlechte Nachrichten."
   }
- },
- "read/r-2026-09-20": {
-  "v": 1,
-  "day": "2026-09-20",
-  "by": "routine",
-  "items": [
-   {
-    "id": "r-2026-09-20-1",
-    "topic": "ai",
-    "kind": "trend",
-    "level": "c1",
-    "title": "Report Warns That Small AI Models Could Spread Across Home Devices",
-    "summary": "Ein Bericht warnt, dass kleine KI-Modelle sich bald selbstständig auf gewöhnlichen vernetzten Geräten verbreiten könnten, auch wenn ein echter Angriff bisher nicht gezeigt wurde.",
-    "asOf": "2026-09",
-    "pub": "2026-09-19",
-    "source": "Example Tech News",
-    "url": "https://example.com/news/small-ai-models-home-devices",
-    "paras": [
-     [
-      {
-       "e": "Anthropic's Frontier Red Team has published a report with an unusual warning.",
-       "d": "Das Frontier Red Team von Anthropic hat einen Bericht mit einer ungewöhnlichen Warnung veröffentlicht."
-      },
-      {
-       "e": "A red team plays the attacker in order to find weaknesses before real attackers do.",
-       "d": "Ein Red Team spielt den Angreifer, um Schwachstellen zu finden, bevor es echte Angreifer tun."
-      },
-      {
-       "e": "According to the researchers, small AI models could within months begin to spread on their own across ordinary internet-connected devices.",
-       "d": "Laut den Forschern könnten kleine KI-Modelle schon in wenigen Monaten damit beginnen, sich selbstständig auf gewöhnlichen, mit dem Internet verbundenen Geräten zu verbreiten."
-      },
-      {
-       "e": "The list includes smart TVs, ovens and other household electronics that rarely receive security updates.",
-       "d": "Dazu zählen Smart-TVs, Backöfen und andere Haushaltsgeräte, die nur selten Sicherheitsupdates erhalten."
-      },
-      {
-       "e": "Such devices are numerous, often cheap and usually forgotten after the installation.",
-       "d": "Solche Geräte sind zahlreich, oft billig und werden nach der Installation meist vergessen."
-      },
-      {
-       "e": "The concern is that such a network of infected devices would be very hard to shut down once it exists.",
-       "d": "Die Sorge ist, dass sich ein solches Netz aus befallenen Geräten kaum noch abschalten ließe, sobald es einmal besteht."
-      }
-     ],
-     [
-      {
-       "e": "In one experiment, a model was run across 15 cheap Android TV boxes.",
-       "d": "In einem Experiment wurde ein Modell auf 15 günstigen Android-TV-Boxen ausgeführt."
-      },
-      {
-       "e": "Because the models were small, they could run even on cheap hardware with little computing power.",
-       "d": "Weil die Modelle klein waren, liefen sie sogar auf billiger Hardware mit wenig Rechenleistung."
-      },
-      {
-       "e": "Other tests showed that more capable models can copy themselves across a simulated network.",
-       "d": "Andere Tests zeigten, dass leistungsfähigere Modelle sich in einem simulierten Netzwerk selbst kopieren können."
-      },
-      {
-       "e": "They may also adapt to unfamiliar hardware and find new ways to spread without any human help.",
-       "d": "Sie können sich außerdem an unbekannte Hardware anpassen und neue Wege der Verbreitung finden, ohne dass ein Mensch hilft."
-      },
-      {
-       "e": "That ability is what makes the scenario so difficult to contain.",
-       "d": "Genau diese Fähigkeit macht das Szenario so schwer einzudämmen."
-      }
-     ],
-     [
-      {
-       "e": "It is worth reading the headline carefully before drawing conclusions.",
-       "d": "Es lohnt sich, die Schlagzeile genau zu lesen, bevor man Schlüsse zieht."
-      },
-      {
-       "e": "The researchers stress an important limit, though.",
-       "d": "Die Forscher betonen allerdings eine wichtige Grenze."
-      },
-      {
-       "e": "They have not yet demonstrated a fully autonomous AI worm operating in the real world.",
-       "d": "Einen vollständig autonomen KI-Wurm, der in der realen Welt operiert, haben sie bisher nicht nachgewiesen."
-      },
-      {
-       "e": "The report is therefore a warning about a plausible trajectory, not a description of an attack that has already happened.",
-       "d": "Der Bericht ist daher eine Warnung vor einer plausiblen Entwicklung und keine Beschreibung eines Angriffs, der bereits stattgefunden hat."
-      },
-      {
-       "e": "That distinction matters for how seriously readers should take the headline.",
-       "d": "Diese Unterscheidung ist wichtig dafür, wie ernst man die Schlagzeile nehmen sollte."
-      },
-      {
-       "e": "In other words, the risk is real enough to plan for, but nobody has yet seen it happen outside the lab.",
-       "d": "Mit anderen Worten: Das Risiko ist real genug, um sich darauf vorzubereiten, aber außerhalb des Labors hat es noch niemand beobachtet."
-      }
-     ],
-     [
-      {
-       "e": "For companies and device makers, the practical lesson is clear.",
-       "d": "Für Unternehmen und Gerätehersteller ist die praktische Lehre eindeutig."
-      },
-      {
-       "e": "Cheap, poorly updated hardware could become a weak link in AI safety.",
-       "d": "Billige, schlecht gewartete Hardware könnte zu einem schwachen Glied der KI-Sicherheit werden."
-      },
-      {
-       "e": "Many offices already rely on connected cameras, printers and conference-room displays.",
-       "d": "Viele Büros verlassen sich bereits auf vernetzte Kameras, Drucker und Displays in den Besprechungsräumen."
-      },
-      {
-       "e": "A single device without updates can give attackers a foothold in the whole company network.",
-       "d": "Ein einziges Gerät ohne Updates kann Angreifern einen Brückenkopf im gesamten Firmennetz verschaffen."
-      },
-      {
-       "e": "Anyone who buys or deploys connected devices should therefore ask how long the manufacturer will deliver security updates.",
-       "d": "Wer vernetzte Geräte kauft oder einsetzt, sollte deshalb fragen, wie lange der Hersteller Sicherheitsupdates liefert."
-      },
-      {
-       "e": "Procurement teams could add the update policy of a device to their standard checklist, next to price and warranty.",
-       "d": "Einkaufsteams könnten die Update-Politik eines Geräts neben Preis und Garantie in ihre Standard-Checkliste aufnehmen."
-      },
-      {
-       "e": "This costs little today and may avoid an expensive problem later.",
-       "d": "Das kostet heute wenig und kann später ein teures Problem vermeiden."
-      }
-     ]
-    ],
-    "keyWords": [
-     {
-      "w": "spread on their own",
-      "de": "sich selbstständig verbreiten",
-      "i": [
-       0,
-       2
-      ]
-     },
-     {
-      "w": "hard to shut down",
-      "de": "schwer abzuschalten",
-      "i": [
-       0,
-       5
-      ]
-     },
-     {
-      "w": "adapt to unfamiliar hardware",
-      "de": "sich an unbekannte Hardware anpassen",
-      "i": [
-       1,
-       3
-      ]
-     },
-     {
-      "w": "plausible trajectory",
-      "de": "plausible Entwicklung",
-      "i": [
-       2,
-       3
-      ]
-     },
-     {
-      "w": "weak link",
-      "de": "schwaches Glied",
-      "i": [
-       3,
-       1
-      ]
-     }
-    ],
-    "check": [
-     {
-      "q": "What is the main point of the report?",
-      "o": [
-       "Smart TVs will be banned in offices next year.",
-       "Small AI models could soon spread by themselves across everyday devices.",
-       "Anthropic has stopped developing small AI models."
-      ],
-      "a": 1,
-      "why": "Die Kernaussage steht im ersten Absatz: Kleine KI-Modelle könnten sich schon bald selbstständig auf gewöhnlichen Geräten verbreiten."
-     },
-     {
-      "q": "What can you conclude about the risk the researchers describe?",
-      "o": [
-       "It is a confirmed attack on millions of devices.",
-       "It only affects devices that are connected to a power plant.",
-       "It is a plausible future scenario, not an attack that has already happened."
-      ],
-      "a": 2,
-      "why": "Die Forscher haben keinen vollständig autonomen KI-Wurm in der realen Welt gezeigt. Der Bericht warnt vor einer möglichen Entwicklung."
-     },
-     {
-      "q": "What does a weak link mean in the last paragraph?",
-      "o": [
-       "The part of a system that is most likely to fail or be attacked.",
-       "A connection that works particularly well.",
-       "A short web address that leads to a report."
-      ],
-      "a": 0,
-      "why": "Ein weak link ist das schwächste Glied einer Kette. Hier sind es billige Geräte ohne Updates, über die ein ganzes Netz angreifbar wird."
-     }
-    ]
-   },
-   {
-    "topic": "bizdev",
-    "kind": "explainer",
-    "level": "c1",
-    "title": "Why Partnerships Take Longer Than Anyone Plans Again This Quarter",
-    "summary": "Der Artikel erklärt, warum Partnerschaften im Vertrieb meist länger dauern als geplant, und wie erfahrene Teams damit umgehen.",
-    "asOf": "2026-09",
-    "paras": [
-     [
-      {
-       "e": "A new partnership usually starts with enthusiasm, a shared slide deck and a launch date that both sides consider realistic.",
-       "d": "Eine neue Partnerschaft beginnt meist mit Begeisterung, einem gemeinsamen Foliensatz und einem Starttermin, den beide Seiten für realistisch halten."
-      },
-      {
-       "e": "Six months later, the same two teams are often still arguing about who owns the customer relationship.",
-       "d": "Sechs Monate später streiten dieselben beiden Teams oft immer noch darüber, wem die Kundenbeziehung gehört."
-      },
-      {
-       "e": "The delay rarely stems from bad intentions; far more often, it comes from incentives that point in different directions.",
-       "d": "Die Verzögerung rührt selten von bösem Willen her; weit häufiger kommt sie von Anreizen, die in unterschiedliche Richtungen zeigen."
-      },
-      {
-       "e": "Understanding those incentives early is arguably the most valuable work that a partner manager can do.",
-       "d": "Diese Anreize früh zu verstehen, ist wohl die wertvollste Arbeit, die ein Partnermanager leisten kann."
-      },
-      {
-       "e": "Each side tends to assume that the other will adapt first.",
-       "d": "Jede Seite geht meist davon aus, dass sich die andere zuerst anpasst."
-      }
-     ],
-     [
-      {
-       "e": "Sales teams are paid for closed deals, so they hesitate to share a promising lead with an outside partner.",
-       "d": "Vertriebsteams werden für abgeschlossene Geschäfte bezahlt, deshalb zögern sie, einen vielversprechenden Kontakt mit einem externen Partner zu teilen."
-      },
-      {
-       "e": "Partner managers, in turn, are measured on pipeline that they cannot fully control.",
-       "d": "Partnermanager wiederum werden an einer Pipeline gemessen, die sie nicht vollständig steuern können."
-      },
-      {
-       "e": "Meanwhile, the legal and security teams of the larger company add review steps that the smaller partner never anticipated.",
-       "d": "Währenddessen fügen die Rechts- und Sicherheitsabteilungen des größeren Unternehmens Prüfschritte hinzu, mit denen der kleinere Partner nie gerechnet hat."
-      },
-      {
-       "e": "Until both sides see a clear benefit, every request feels like extra work.",
-       "d": "Solange beide Seiten keinen klaren Nutzen sehen, fühlt sich jede Anfrage wie Zusatzarbeit an."
-      }
-     ],
-     [
-      {
-       "e": "Imagine a cloud vendor that wants a consulting firm to recommend its document platform to clients.",
-       "d": "Stellen wir uns einen Cloud-Anbieter vor, der möchte, dass eine Beratungsfirma seine Dokumentenplattform bei Kunden empfiehlt."
-      },
-      {
-       "e": "The consultants would gladly do so, but only if the platform helps them win projects rather than lose billable hours.",
-       "d": "Die Berater würden das gern tun, aber nur, wenn die Plattform ihnen hilft, Projekte zu gewinnen, statt abrechenbare Stunden zu verlieren."
-      },
-      {
-       "e": "If the vendor ignores this tension, the partnership produces plenty of workshops and almost no revenue.",
-       "d": "Ignoriert der Anbieter diese Spannung, bringt die Partnerschaft viele Workshops und kaum Umsatz."
-      },
-      {
-       "e": "Consultants and vendors then blame each other for the missing results, and the original enthusiasm turns into polite silence.",
-       "d": "Berater und Anbieter machen dann einander für die fehlenden Ergebnisse verantwortlich, und aus der anfänglichen Begeisterung wird höfliches Schweigen."
-      },
-      {
-       "e": "If it addresses the tension openly, for example through a fee for implementation work, the interests start to align.",
-       "d": "Spricht er die Spannung offen an, etwa durch eine Vergütung für Einführungsarbeiten, beginnen sich die Interessen anzunähern."
-      }
-     ],
-     [
-      {
-       "e": "Experienced teams therefore agree on a small joint goal before they sign anything.",
-       "d": "Erfahrene Teams einigen sich deshalb auf ein kleines gemeinsames Ziel, bevor sie etwas unterschreiben."
-      },
-      {
-       "e": "A single shared customer success story often does more than a long contract.",
-       "d": "Eine einzige gemeinsame Erfolgsgeschichte mit einem Kunden bewirkt oft mehr als ein langer Vertrag."
-      },
-      {
-       "e": "It gives both sales forces a concrete argument, and it exposes the practical obstacles while the stakes are still low.",
-       "d": "Sie gibt beiden Vertriebsmannschaften ein konkretes Argument und deckt die praktischen Hindernisse auf, solange der Einsatz noch gering ist."
-      },
-      {
-       "e": "Only after such a pilot does it make sense to discuss targets, territories and revenue sharing.",
-       "d": "Erst nach einem solchen Pilotprojekt ist es sinnvoll, über Ziele, Gebiete und Umsatzbeteiligung zu sprechen."
-      },
-      {
-       "e": "In practice, a pilot with three or four shared accounts is usually enough to reveal the real friction.",
-       "d": "In der Praxis genügt ein Pilotprojekt mit drei oder vier gemeinsamen Kunden meist, um die tatsächlichen Reibungspunkte sichtbar zu machen."
-      }
-     ],
-     [
-      {
-       "e": "There is, of course, a counterargument: a small pilot can create a false sense of progress.",
-       "d": "Es gibt freilich ein Gegenargument: Ein kleines Pilotprojekt kann ein trügerisches Gefühl von Fortschritt erzeugen."
-      },
-      {
-       "e": "One happy customer does not prove that the model works at scale, and the enthusiasm of an early adopter rarely reflects the average buyer.",
-       "d": "Ein zufriedener Kunde beweist nicht, dass das Modell im großen Maßstab funktioniert, und die Begeisterung eines frühen Anwenders spiegelt selten den durchschnittlichen Käufer wider."
-      },
-      {
-       "e": "Even so, a modest start with honest metrics beats an ambitious plan that nobody has tested.",
-       "d": "Trotzdem ist ein bescheidener Start mit ehrlichen Kennzahlen besser als ein ehrgeiziger Plan, den niemand erprobt hat."
-      },
-      {
-       "e": "The metrics should include the effort on both sides, not only the number of leads that were passed along.",
-       "d": "Zu den Kennzahlen sollte der Aufwand auf beiden Seiten gehören, nicht nur die Zahl der weitergegebenen Kontakte."
-      }
-     ],
-     [
-      {
-       "e": "The practical takeaway is to review the partnership every quarter and to ask one uncomfortable question: who gains, and who bears the extra work?",
-       "d": "Die praktische Konsequenz lautet, die Partnerschaft jedes Quartal zu überprüfen und eine unbequeme Frage zu stellen: Wer gewinnt, und wer trägt die zusätzliche Arbeit?"
-      },
-      {
-       "e": "If the answer is always the same side, the arrangement will not last.",
-       "d": "Ist die Antwort immer dieselbe Seite, wird die Vereinbarung nicht lange halten."
-      },
-      {
-       "e": "If both sides can name a clear gain, scaling the partnership becomes a question of routine rather than of persuasion.",
-       "d": "Können beide Seiten einen klaren Gewinn nennen, wird das Ausweiten der Partnerschaft eher zur Frage der Routine als der Überzeugungsarbeit."
-      },
-      {
-       "e": "Teams that review honestly tend to adjust early, while others discover the problem only at the annual planning meeting.",
-       "d": "Teams, die ehrlich Bilanz ziehen, korrigieren meist früh, während andere das Problem erst bei der Jahresplanung entdecken."
-      }
-     ]
-    ],
-    "keyWords": [
-     {
-      "w": "hesitate to share",
-      "de": "zögern, zu teilen",
-      "i": [
-       1,
-       0
-      ]
-     },
-     {
-      "w": "billable hours",
-      "de": "abrechenbare Stunden",
-      "i": [
-       2,
-       1
-      ]
-     },
-     {
-      "w": "addresses the tension",
-      "de": "spricht die Spannung an",
-      "i": [
-       2,
-       4
-      ]
-     },
-     {
-      "w": "false sense of progress",
-      "de": "trügerisches Gefühl von Fortschritt",
-      "i": [
-       4,
-       0
-      ]
-     },
-     {
-      "w": "early adopter",
-      "de": "früher Anwender",
-      "i": [
-       4,
-       1
-      ]
-     }
-    ],
-    "check": [
-     {
-      "q": "According to the text, what mainly delays partnerships?",
-      "o": [
-       "Disagreements about the launch date.",
-       "Incentives that point in different directions.",
-       "A lack of enthusiasm on both sides."
-      ],
-      "a": 1,
-      "why": "Der Text nennt Anreize, die in unterschiedliche Richtungen zeigen, als häufigsten Grund. Mangelnde Begeisterung ist es nicht: Die Partnerschaft beginnt ja mit Begeisterung."
-     },
-     {
-      "q": "Why might the consultants in the example be reluctant to recommend the platform?",
-      "o": [
-       "They fear it could reduce the hours they can bill.",
-       "They consider the platform too expensive for their clients.",
-       "They have no experience with cloud software."
-      ],
-      "a": 0,
-      "why": "Die Berater empfehlen die Plattform nur, wenn sie ihnen Projekte bringt, statt abrechenbare Stunden zu kosten. Von Preis oder fehlender Erfahrung ist im Text keine Rede."
-     },
-     {
-      "q": "What does the author mean by “a false sense of progress”?",
-      "o": [
-       "A pilot that has failed in public.",
-       "A budget that is smaller than agreed.",
-       "The impression that a partnership works because one early project went well."
-      ],
-      "a": 2,
-      "why": "Gemeint ist der Eindruck, die Partnerschaft funktioniere, nur weil ein erstes kleines Projekt gut lief. Das beweist noch nicht, dass das Modell im großen Maßstab trägt."
-     }
-    ],
-    "id": "r-2026-09-20-2",
-    "by": "routine",
-    "pub": "2026-09-19",
-    "source": "Example Business Review",
-    "url": "https://example.com/review/partnerships-take-longer",
-    "pv": 1
-   },
-   {
-    "id": "r-2026-09-20-3",
-    "topic": "ai",
-    "kind": "trend",
-    "level": "c1",
-    "title": "Too Short To Pass The Checks",
-    "summary": "Der Artikel beschreibt, wie Sprachmodelle alltägliche Büroarbeit verändern und wo ihre Grenzen liegen.",
-    "asOf": "2026-01",
-    "paras": [
-     [
-      {
-       "e": "Language models have quietly entered the daily routine of many office workers.",
-       "d": "Sprachmodelle sind unbemerkt in den Arbeitsalltag vieler Büroangestellter eingezogen."
-      },
-      {
-       "e": "They draft emails, summarize long documents and suggest wording for difficult messages.",
-       "d": "Sie entwerfen E-Mails, fassen lange Dokumente zusammen und schlagen Formulierungen für schwierige Nachrichten vor."
-      },
-      {
-       "e": "The gain is rarely dramatic on a single task, but it adds up over a week.",
-       "d": "Der Gewinn ist bei einer einzelnen Aufgabe selten dramatisch, summiert sich aber über eine Woche."
-      }
-     ],
-     [
-      {
-       "e": "The limits are just as important to understand as the benefits.",
-       "d": "Die Grenzen sind ebenso wichtig zu verstehen wie die Vorteile."
-      },
-      {
-       "e": "A model can sound confident while being wrong, so important facts still need a human check.",
-       "d": "Ein Modell kann selbstsicher klingen und trotzdem falschliegen, wichtige Fakten brauchen also weiterhin eine menschliche Prüfung."
-      },
-      {
-       "e": "Teams that treat the output as a first draft, not as a final answer, tend to avoid most problems.",
-       "d": "Teams, die das Ergebnis als ersten Entwurf und nicht als endgültige Antwort behandeln, umgehen die meisten Probleme."
-      }
-     ],
-     [
-      {
-       "e": "Costs deserve attention as well, because heavy use can become expensive at scale.",
-       "d": "Auch die Kosten verdienen Aufmerksamkeit, denn eine starke Nutzung kann im großen Maßstab teuer werden."
-      },
-      {
-       "e": "Many companies therefore start with a few clear use cases instead of a company-wide rollout.",
-       "d": "Viele Unternehmen beginnen deshalb mit wenigen klaren Anwendungsfällen statt mit einer unternehmensweiten Einführung."
-      },
-      {
-       "e": "Over time, the tasks that people stop doing by hand reveal where the real value lies.",
-       "d": "Mit der Zeit zeigen die Aufgaben, die niemand mehr von Hand erledigt, wo der eigentliche Wert liegt."
-      }
-     ]
-    ],
-    "keyWords": [
-     {
-      "w": "sound confident",
-      "de": "selbstsicher klingen",
-      "i": [
-       1,
-       1
-      ]
-     },
-     {
-      "w": "first draft",
-      "de": "erster Entwurf",
-      "i": [
-       1,
-       2
-      ]
-     },
-     {
-      "w": "at scale",
-      "de": "im großen Maßstab",
-      "i": [
-       2,
-       0
-      ]
-     },
-     {
-      "w": "company-wide rollout",
-      "de": "unternehmensweite Einführung",
-      "i": [
-       2,
-       1
-      ]
-     },
-     {
-      "w": "adds up",
-      "de": "summiert sich",
-      "i": [
-       0,
-       2
-      ]
-     }
-    ],
-    "check": [
-     {
-      "q": "How should teams treat the output of a model?",
-      "o": [
-       "As a final answer that needs no review.",
-       "As a first draft that still needs a human check.",
-       "As a replacement for the person who wrote the request."
-      ],
-      "a": 1,
-      "why": "Der Text empfiehlt, das Ergebnis als ersten Entwurf zu sehen und wichtige Fakten zu prüfen. Eine endgültige Antwort ohne Prüfung wäre riskant, weil Modelle selbstsicher falschliegen können."
-     },
-     {
-      "q": "Why do many companies start with a few use cases?",
-      "o": [
-       "Because heavy use can become expensive at scale.",
-       "Because models cannot handle more than a few tasks.",
-       "Because employees refuse to use them."
-      ],
-      "a": 0,
-      "why": "Bei starker Nutzung können die Kosten im großen Maßstab steigen. Dass Modelle nur wenige Aufgaben könnten, behauptet der Text nicht."
-     }
-    ],
-    "pv": 1,
-    "by": "routine"
-   }
-  ]
- },
- "read/c-k1-01": {
-  "v": 1,
-  "by": "routine",
-  "course": "k1",
-  "n": 1,
-  "title": "What Claude Code Is",
-  "lessonGoal": "Du kannst erklären, was Claude Code ist, was es kann und wo seine Grenzen liegen.",
-  "asOf": "2026-10",
-  "paras": [
-   [
-    {
-     "e": "Many people first meet Claude through a chat window.",
-     "d": "Viele Menschen lernen Claude zunächst in einem Chatfenster kennen."
-    },
-    {
-     "e": "Claude Code works differently.",
-     "d": "Claude Code funktioniert anders."
-    },
-    {
-     "e": "It is an AI assistant for software work that runs in your terminal, right next to your project.",
-     "d": "Es ist ein KI-Assistent für Softwarearbeit, der in deinem Terminal läuft, direkt neben deinem Projekt."
-    },
-    {
-     "e": "Instead of pasting code into a chat, you describe a task and the assistant reads the relevant files itself.",
-     "d": "Statt Code in einen Chat zu kopieren, beschreibst du eine Aufgabe, und der Assistent liest die passenden Dateien selbst."
-    },
-    {
-     "e": "The difference is not only technical, because it also changes the kind of help you can expect.",
-     "d": "Der Unterschied ist nicht nur technisch, denn er verändert auch die Art von Hilfe, die du erwarten kannst."
-    }
-   ],
-   [
-    {
-     "e": "That difference changes the way you work.",
-     "d": "Dieser Unterschied verändert die Art, wie du arbeitest."
-    },
-    {
-     "e": "Claude Code can explore a codebase, run commands and propose changes to several files at once.",
-     "d": "Claude Code kann eine Codebasis erkunden, Befehle ausführen und Änderungen an mehreren Dateien gleichzeitig vorschlagen."
-    },
-    {
-     "e": "It asks for your approval before it edits a file or runs a command, so you stay in control.",
-     "d": "Es bittet um deine Freigabe, bevor es eine Datei ändert oder einen Befehl ausführt, sodass du die Kontrolle behältst."
-    },
-    {
-     "e": "Think of it as a capable colleague who can work at the command line, not as a search engine for code.",
-     "d": "Stell es dir als fähigen Kollegen vor, der auf der Kommandozeile arbeiten kann, und nicht als Suchmaschine für Code."
-    },
-    {
-     "e": "A colleague like that still needs clear instructions and a review of the result.",
-     "d": "Ein solcher Kollege braucht trotzdem klare Anweisungen und eine Prüfung des Ergebnisses."
-    },
-    {
-     "e": "Every step is visible, so you can follow what the assistant reads, plans and changes.",
-     "d": "Jeder Schritt ist sichtbar, sodass du verfolgen kannst, was der Assistent liest, plant und ändert."
-    }
-   ],
-   [
-    {
-     "e": "Typical tasks fall into a few groups.",
-     "d": "Typische Aufgaben lassen sich in wenige Gruppen einteilen."
-    },
-    {
-     "e": "It can explain an unfamiliar repository, which helps a new team member get up to speed quickly.",
-     "d": "Es kann ein unbekanntes Repository erklären, was einem neuen Teammitglied hilft, sich schnell einzuarbeiten."
-    },
-    {
-     "e": "It can fix a bug after you describe the symptoms, and it can run the tests to check the fix.",
-     "d": "Es kann einen Fehler beheben, nachdem du die Symptome beschrieben hast, und es kann die Tests ausführen, um die Korrektur zu prüfen."
-    },
-    {
-     "e": "It can also handle routine chores, such as writing commit messages or updating documentation.",
-     "d": "Es kann auch Routinearbeiten übernehmen, etwa Commit-Nachrichten schreiben oder die Dokumentation aktualisieren."
-    },
-    {
-     "e": "In each case, the assistant works inside your own environment and sees only what you allow it to see.",
-     "d": "In jedem Fall arbeitet der Assistent in deiner eigenen Umgebung und sieht nur das, was du ihm erlaubst."
-    },
-    {
-     "e": "For a manager, the value lies less in the code itself and more in the hours that routine work no longer takes.",
-     "d": "Für Führungskräfte liegt der Nutzen weniger im Code selbst als in den Stunden, die Routinearbeit nicht mehr kostet."
-    }
-   ],
-   [
-    {
-     "e": "There are limits worth knowing.",
-     "d": "Es gibt Grenzen, die man kennen sollte."
-    },
-    {
-     "e": "The assistant can make mistakes, especially when a task is vague or the project is large.",
-     "d": "Der Assistent kann Fehler machen, besonders wenn eine Aufgabe vage oder das Projekt groß ist."
-    },
-    {
-     "e": "A second limit is knowledge: the assistant knows your project only from the files it reads, not from your daily conversations.",
-     "d": "Eine zweite Grenze ist das Wissen: Der Assistent kennt dein Projekt nur aus den Dateien, die er liest, nicht aus euren täglichen Gesprächen."
-    },
-    {
-     "e": "It does not replace a code review, and it should never be the only safeguard before a release.",
-     "d": "Er ersetzt keine Code-Prüfung und sollte nie die einzige Absicherung vor einer Veröffentlichung sein."
-    },
-    {
-     "e": "For this reason, many teams start with small, low-risk tasks and widen the scope step by step.",
-     "d": "Deshalb beginnen viele Teams mit kleinen, risikoarmen Aufgaben und weiten den Umfang Schritt für Schritt aus."
-    }
-   ],
-   [
-    {
-     "e": "For a non-developer, the key idea is simple.",
-     "d": "Für Nicht-Entwickler ist der Kerngedanke einfach."
-    },
-    {
-     "e": "Claude Code turns a written request into work on a real project.",
-     "d": "Claude Code verwandelt eine schriftliche Anfrage in Arbeit an einem echten Projekt."
-    },
-    {
-     "e": "The quality of the result depends on how clearly you describe the goal.",
-     "d": "Die Qualität des Ergebnisses hängt davon ab, wie klar du das Ziel beschreibst."
-    },
-    {
-     "e": "Seen this way, adopting it is less a technology project than a change in how a team shares its work.",
-     "d": "So gesehen ist die Einführung weniger ein Technikprojekt als eine Veränderung darin, wie ein Team seine Arbeit aufteilt."
-    },
-    {
-     "e": "In the next lesson, you will learn how to brief a task so that the assistant gets it right the first time.",
-     "d": "In der nächsten Lektion lernst du, wie du eine Aufgabe so übergibst, dass der Assistent sie gleich beim ersten Mal richtig löst."
-    }
-   ]
-  ],
-  "phrases": [
-   {
-    "w": "get up to speed",
-    "de": "sich schnell einarbeiten",
-    "i": [
-     2,
-     1
-    ]
-   },
-   {
-    "w": "stay in control",
-    "de": "die Kontrolle behalten",
-    "i": [
-     1,
-     2
-    ]
-   },
-   {
-    "w": "run the tests",
-    "de": "die Tests ausführen",
-    "i": [
-     2,
-     2
-    ]
-   },
-   {
-    "w": "low-risk tasks",
-    "de": "risikoarme Aufgaben",
-    "i": [
-     3,
-     4
-    ]
-   },
-   {
-    "w": "widen the scope",
-    "de": "den Umfang ausweiten",
-    "i": [
-     3,
-     4
-    ]
-   }
-  ],
-  "check": [
-   {
-    "q": "What is the main idea of the lesson?",
-    "o": [
-     "Claude Code is mainly a faster search engine for code snippets.",
-     "Claude Code works on a real project, so it needs a clear task and a human review.",
-     "Claude Code can release software safely without any human review."
-    ],
-    "a": 1,
-    "why": "Die Lektion beschreibt Claude Code als Assistenten, der am echten Projekt arbeitet. Deshalb brauchen Aufgabe und Ergebnis einen Menschen, der klar beschreibt und prüft."
-   },
-   {
-    "q": "What can you conclude about using Claude Code in a team?",
-    "o": [
-     "It is wise to begin with small tasks and extend the use gradually.",
-     "It should be switched on for every task from the first day.",
-     "It makes tests unnecessary because the assistant checks everything."
-    ],
-    "a": 0,
-    "why": "Der Text empfiehlt, mit kleinen, risikoarmen Aufgaben zu beginnen und den Umfang schrittweise zu erweitern. Von Tests oder Prüfung ist als Ersatz keine Rede."
-   },
-   {
-    "q": "What does stay in control mean in this lesson?",
-    "o": [
-     "You write all the code yourself.",
-     "You turn the assistant off after each task.",
-     "You decide what the assistant may change."
-    ],
-    "a": 2,
-    "why": "Claude Code fragt vor Änderungen nach deiner Freigabe. Du entscheidest also, was geändert oder ausgeführt werden darf, und behältst die Kontrolle."
-   }
-  ],
-  "tip": {
-   "wrong": "I use Claude Code since two weeks.",
-   "right": "I have been using Claude Code for two weeks.",
-   "why": "Im Deutschen sagt man „ich nutze es seit zwei Wochen“ im Präsens. Im Englischen braucht eine Handlung, die bis jetzt andauert, das Present Perfect (have been using). Eine Zeitspanne steht mit for, ein Startpunkt mit since (since Monday)."
-  },
-  "apply": {
-   "situation": "Dein Kollege Jonas fragt, was Claude Code ist. Erkläre ihm in zwei Sätzen, wie du damit arbeitest und warum du die Kontrolle behältst.",
-   "targets": [
-    "stay in control",
-    "run the tests"
-   ],
-   "model": [
-    "Claude Code works inside my project, and I stay in control because it asks before it changes a file.",
-    "After each change it can run the tests, so I see quickly whether something broke."
-   ]
-  },
-  "sources": [
-   {
-    "title": "Claude Code overview (Anthropic documentation)",
-    "url": "https://docs.claude.com/en/docs/claude-code/overview"
-   }
-  ]
- },
- "read/c-k1-02": {
-  "v": 1,
-  "by": "routine",
-  "course": "k1",
-  "n": 2,
-  "title": "Briefing a Task",
-  "lessonGoal": "Du kannst eine Aufgabe so beschreiben, dass Claude Code das Ziel kennt und weiß, wann die Aufgabe fertig ist.",
-  "asOf": "2026-10",
-  "paras": [
-   [
-    {
-     "e": "A good result starts with a good briefing.",
-     "d": "Ein gutes Ergebnis beginnt mit einem guten Briefing."
-    },
-    {
-     "e": "Claude Code is capable, but it cannot read your mind.",
-     "d": "Claude Code ist leistungsfähig, aber es kann keine Gedanken lesen."
-    },
-    {
-     "e": "If your request is only to improve the login page, the assistant has to guess what you mean.",
-     "d": "Wenn deine Anfrage nur lautet, die Anmeldeseite zu verbessern, muss der Assistent raten, was du meinst."
-    },
-    {
-     "e": "Vague requests often lead to results that look finished but solve the wrong problem.",
-     "d": "Vage Anfragen führen oft zu Ergebnissen, die fertig aussehen, aber das falsche Problem lösen."
-    },
-    {
-     "e": "A short, precise briefing saves time on both sides.",
-     "d": "Ein kurzes, präzises Briefing spart auf beiden Seiten Zeit."
-    }
-   ],
-   [
-    {
-     "e": "A strong briefing has four parts.",
-     "d": "Ein starkes Briefing hat vier Teile."
-    },
-    {
-     "e": "First, state the goal, which means what should be different when the task is finished.",
-     "d": "Erstens: Nenne das Ziel, also was anders sein soll, wenn die Aufgabe erledigt ist."
-    },
-    {
-     "e": "Second, give the context, such as the part of the project involved and the reason for the change.",
-     "d": "Zweitens: Gib den Zusammenhang an, etwa den betroffenen Teil des Projekts und den Grund für die Änderung."
-    },
-    {
-     "e": "Third, name the constraints, for example which files must stay untouched or which style the team follows.",
-     "d": "Drittens: Nenne die Randbedingungen, zum Beispiel welche Dateien unangetastet bleiben müssen oder welchem Stil das Team folgt."
-    },
-    {
-     "e": "Fourth, define how you will judge the result, so that both of you know when the task is done.",
-     "d": "Viertens: Lege fest, woran du das Ergebnis beurteilst, damit ihr beide wisst, wann die Aufgabe erledigt ist."
-    },
-    {
-     "e": "None of these parts needs to be long, but each one removes a guess.",
-     "d": "Keiner dieser Teile muss lang sein, aber jeder nimmt dem Assistenten eine Vermutung ab."
-    }
-   ],
-   [
-    {
-     "e": "Consider a simple example.",
-     "d": "Nehmen wir ein einfaches Beispiel."
-    },
-    {
-     "e": "A weak request says: make the export faster.",
-     "d": "Eine schwache Anfrage lautet: Mach den Export schneller."
-    },
-    {
-     "e": "A strong request says: the CSV export takes about 40 seconds for 10,000 rows, and it should take under 10 seconds.",
-     "d": "Eine starke Anfrage lautet: Der CSV-Export braucht für 10.000 Zeilen etwa 40 Sekunden und sollte unter 10 Sekunden dauern."
-    },
-    {
-     "e": "The request should also mention that the database schema must not change, and that the existing tests must still pass.",
-     "d": "Die Anfrage sollte außerdem erwähnen, dass sich das Datenbankschema nicht ändern darf und dass die vorhandenen Tests weiter bestehen müssen."
-    },
-    {
-     "e": "With this information, the assistant can plan its work and avoid risky shortcuts.",
-     "d": "Mit diesen Informationen kann der Assistent seine Arbeit planen und riskante Abkürzungen vermeiden."
-    },
-    {
-     "e": "Notice how the second request contains numbers that the assistant can measure.",
-     "d": "Beachte, wie die zweite Anfrage Zahlen enthält, die der Assistent messen kann."
-    }
-   ],
-   [
-    {
-     "e": "It also helps to ask for a plan before any code is written.",
-     "d": "Es hilft außerdem, vor dem ersten Code um einen Plan zu bitten."
-    },
-    {
-     "e": "You can read the plan, correct a wrong assumption and only then let the assistant start.",
-     "d": "Du kannst den Plan lesen, eine falsche Annahme korrigieren und erst dann den Assistenten loslegen lassen."
-    },
-    {
-     "e": "This habit prevents a long detour in the wrong direction.",
-     "d": "Diese Gewohnheit verhindert einen langen Umweg in die falsche Richtung."
-    },
-    {
-     "e": "If the first result misses the point, do not simply repeat the request.",
-     "d": "Wenn das erste Ergebnis am Thema vorbeigeht, wiederhole die Anfrage nicht einfach."
-    },
-    {
-     "e": "Instead, explain what was missing and add the detail to your briefing.",
-     "d": "Erkläre stattdessen, was gefehlt hat, und ergänze die Einzelheit in deinem Briefing."
-    },
-    {
-     "e": "A short follow-up message is usually enough to bring the work back on track.",
-     "d": "Eine kurze Folgenachricht reicht meist, um die Arbeit wieder in die richtige Richtung zu lenken."
-    }
-   ],
-   [
-    {
-     "e": "In short, treat the assistant like a new colleague on day one.",
-     "d": "Kurz gesagt: Behandle den Assistenten wie einen neuen Kollegen am ersten Tag."
-    },
-    {
-     "e": "Give it the background, the boundaries and a clear finish line, and you will get better results with less rework.",
-     "d": "Gib ihm den Hintergrund, die Grenzen und eine klare Ziellinie, dann bekommst du bessere Ergebnisse mit weniger Nacharbeit."
-    },
-    {
-     "e": "A few minutes of preparation at the start usually save an hour of corrections later.",
-     "d": "Ein paar Minuten Vorbereitung am Anfang sparen meist eine Stunde Korrekturen später."
-    }
-   ]
-  ],
-  "phrases": [
-   {
-    "w": "state the goal",
-    "de": "das Ziel nennen",
-    "i": [
-     1,
-     1
-    ]
-   },
-   {
-    "w": "give the context",
-    "de": "den Zusammenhang angeben",
-    "i": [
-     1,
-     2
-    ]
-   },
-   {
-    "w": "stay untouched",
-    "de": "unangetastet bleiben",
-    "i": [
-     1,
-     3
-    ]
-   },
-   {
-    "w": "avoid risky shortcuts",
-    "de": "riskante Abkürzungen vermeiden",
-    "i": [
-     2,
-     4
-    ]
-   },
-   {
-    "w": "clear finish line",
-    "de": "klare Ziellinie",
-    "i": [
-     4,
-     1
-    ]
-   }
-  ],
-  "check": [
-   {
-    "q": "What does a strong briefing contain?",
-    "o": [
-     "A complete list of all files in the project.",
-     "As few words as possible, so the assistant stays flexible.",
-     "The goal, the context, the constraints and a way to judge the result."
-    ],
-    "a": 2,
-    "why": "Der Text nennt vier Teile: Ziel, Zusammenhang, Randbedingungen und ein Kriterium, woran das Ergebnis beurteilt wird."
-   },
-   {
-    "q": "Why does the lesson recommend asking for a plan first?",
-    "o": [
-     "It makes the assistant work faster on large projects.",
-     "It lets you correct a wrong assumption before any code is written.",
-     "It means you no longer have to review the result."
-    ],
-    "a": 1,
-    "why": "Mit einem Plan siehst du Annahmen, bevor Code entsteht. So lässt sich ein Irrtum früh korrigieren und ein langer Umweg vermeiden. Die Prüfung des Ergebnisses bleibt trotzdem nötig."
-   },
-   {
-    "q": "What is meant by a finish line in this lesson?",
-    "o": [
-     "A clear criterion that tells you when the task is done.",
-     "The last file the assistant edits.",
-     "A deadline set by the project manager."
-    ],
-    "a": 0,
-    "why": "Die Ziellinie ist das Kriterium, an dem ihr beide erkennt, dass die Aufgabe erledigt ist. Im Beispiel ist das die Zeit unter 10 Sekunden."
-   }
-  ],
-  "tip": {
-   "wrong": "Please explain me the plan.",
-   "right": "Please explain the plan to me.",
-   "why": "Im Deutschen heißt es „erkläre mir den Plan“. Im Englischen steht nach explain nie direkt die Person: Man erklärt etwas, und die Person folgt mit to. Dasselbe gilt für describe, suggest und propose."
-  },
-  "apply": {
-   "situation": "Du bittest Claude Code, den CSV-Export schneller zu machen. Schreibe zwei Sätze mit dem Ziel und einer Randbedingung.",
-   "targets": [
-    "state the goal",
-    "stay untouched"
-   ],
-   "model": [
-    "First, I state the goal: the export should finish in under 10 seconds.",
-    "The database schema must stay untouched, and the existing tests have to pass."
-   ]
-  },
-  "sources": [
-   {
-    "title": "Claude Code best practices (Anthropic engineering)",
-    "url": "https://www.anthropic.com/engineering/claude-code-best-practices"
-   }
-  ]
  }
 }

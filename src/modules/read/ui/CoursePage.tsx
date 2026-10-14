@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Button, Eyebrow, HeroCard, Icon, Row, RowList, Skeleton, useNav, useT } from '../sharedUi';
+import { Button, Disclosure, Eyebrow, HeroCard, Icon, Row, RowList, Skeleton, useNav, useT } from '../sharedUi';
 import type { ScreenProps } from '../sharedUi';
 import { COURSES, LESSON_MINUTES, courseDef, lessonPlan } from '../domain/courses';
 import type { CourseDef, CourseId } from '../domain/courses';
@@ -11,7 +11,7 @@ import type { UseCourseHome } from './useCourseHome';
 // Kurse im Reiter „Lesen“ (Paket L8): die Kursübersicht (Karte auf dem Bildschirm „Lesen“), die Lektionsliste je Kurs (Seite `readCourse`)
 // und der Text des Hauptknopfs. Zustände: gesperrt · wird vorbereitet · offen · angefangen · fertig (Zustand, kein Knopf).
 
-/** Text des Hauptknopfs für eine Lektion: „Heute: K1 · Lektion 3 · ca. 10 Min“ bzw. „Weiter: K1 · Lektion 3“. */
+/** Text des Lektionsknopfs, kurz und ohne Umbruch: „Lektion 3 · 10 Min“ bzw. „Weiter mit Lektion 3“ (kein „Heute:“, Lektionen sind immer freiwillig). */
 export function useLessonButtonText(): (n: NextLesson) => string {
   const { t } = useT();
   return (n) => t(n.state === 'started' ? 'rdcContinue' : 'rdcToday', { code: n.course.toUpperCase(), n: n.n, min: LESSON_MINUTES });
@@ -24,20 +24,49 @@ const titleOf = (def: CourseDef, lang: 'de' | 'en'): string => (lang === 'de' ? 
 export function CoursesCard({ c }: { c: UseCourseHome }) {
   const { t, lang } = useT();
   const go = useNav((s) => s.go);
+  const lessonText = useLessonButtonText();
   if (c.load === 'loading') return <Skeleton className="h-40 w-full rounded-2xl" />;
   const entries = c.home?.entries ?? [];
+  // Die nächste Lektion steht hier, in der eigenen Zeile „Kurs“, und nicht mehr als zweiter Hauptknopf in der Karte mit den Artikeln: Der rote Faden bleibt
+  // der Artikel, die Lektion ist ein Angebot (Kap. 2 Nr. 6). Angefangen immer, eine offene nur, wenn heute noch keine fertig wurde.
+  const next = c.home?.next ?? null;
+  const lesson = next && (next.state === 'started' || !c.doneToday) ? next : null;
+  const lessonDef = lesson ? courseDef(lesson.course) : null;
+  const lessonName = lessonDef ? `${titleOf(lessonDef, lang)} · ${lessonTitle(lesson!.course, lesson!.n, lang) || t('rdcLessonN', { n: lesson!.n })}` : '';
+  const active = COURSES.filter((d) => d.active);
+  const later = COURSES.filter((d) => !d.active);
+  const row = (def: CourseDef) => {
+    const title = titleOf(def, lang);
+    const goal = lang === 'de' ? def.goalDe : def.goalEn;
+    const sub = `${goal} · ${t('rdcLessonsCount', { n: def.lessons })}`;
+    if (!def.active) return <Row key={def.id} title={title} sub={sub} value={t('rdcLater')} testId="read-course" data={{ 'data-course': def.id, 'data-active': 'false' }} />;
+    const p = courseProgress(def.id, entries);
+    return <Row key={def.id} title={title} sub={sub} value={t('rdcProgressShort', { done: p.done, total: p.total })} chevron onClick={() => go({ name: 'readCourse', id: def.id })} testId="read-course" data={{ 'data-course': def.id, 'data-active': 'true' }} />;
+  };
   return (
     <section className="flex flex-col gap-2.5" aria-label={t('rdcTitle')} data-testid="read-courses" data-load={c.load}>
+      {lesson ? (
+        <div className="lx-card flex flex-col gap-3 p-3.5" data-testid="read-next-lesson">
+          <div className="flex min-w-0 flex-col gap-0.5">
+            <Eyebrow>{t('rdcCourseEyebrow')}</Eyebrow>
+            <p className="m-0 font-semibold">{lessonName}</p>
+          </div>
+          <Button variant="secondary" iconAfter="arrowRight" onClick={() => go({ name: 'readLesson', id: lesson.key })} data-testid="read-lesson" data-kind="lesson" data-lesson={lesson.key} className="whitespace-nowrap">
+            {lessonText(lesson)}
+          </Button>
+        </div>
+      ) : null}
       <RowList title={t('rdcTitle')} testId="read-courses-list">
-        {COURSES.map((def) => {
-          const title = titleOf(def, lang);
-          const goal = lang === 'de' ? def.goalDe : def.goalEn;
-          const sub = `${goal} · ${t('rdcLessonsCount', { n: def.lessons })}`;
-          if (!def.active) return <Row key={def.id} title={title} sub={sub} value={t('rdcLater')} testId="read-course" data={{ 'data-course': def.id, 'data-active': 'false' }} />;
-          const p = courseProgress(def.id, entries);
-          return <Row key={def.id} title={title} sub={sub} value={t('rdcProgressShort', { done: p.done, total: p.total })} chevron onClick={() => go({ name: 'readCourse', id: def.id })} testId="read-course" data={{ 'data-course': def.id, 'data-active': 'true' }} />;
-        })}
+        {active.map(row)}
       </RowList>
+      {/* Die übrigen Kurse stehen noch nicht bereit: zugeklappt, damit die Liste ruhig bleibt. */}
+      {later.length > 0 ? (
+        <Disclosure label={t('rdcMoreCourses', { n: later.length })} testId="read-courses-later">
+          <RowList testId="read-courses-later-list" label={t('rdcMoreCourses', { n: later.length })}>
+            {later.map(row)}
+          </RowList>
+        </Disclosure>
+      ) : null}
       <p className="m-0 text-xs text-muted">{c.load === 'error' ? t('rdcLoadFailed') : t('rdcHint')}</p>
     </section>
   );
@@ -76,6 +105,20 @@ export function CoursePage({ route }: ScreenProps<'readCourse'>) {
   const title = titleOf(def, lang);
   const goal = lang === 'de' ? def.goalDe : def.goalEn;
   const openLesson = (key: string) => go({ name: 'readLesson', id: key });
+  // Rechts in der Zeile: erledigt = Häkchen in Smaragd (Kap. 8), gesperrt = ruhiges Wort, sonst der Zustand.
+  const stateValue = (state: LessonRowState): ReactNode => {
+    if (state === 'done') {
+      return (
+        <span className="inline-flex items-center text-ok-text">
+          <Icon name="check" size={16} />
+          <span className="sr-only">{t('rdcStateDone')}</span>
+        </span>
+      );
+    }
+    if (state === 'locked') return <span className="text-subtle">{t(STATE_KEY.locked)}</span>;
+    return t(STATE_KEY[state]);
+  };
+  const isLocked = (r: { state: LessonRowState }): boolean => r.state === 'locked';
 
   let action: ReactNode = null;
   if (current && (current.state === 'open' || current.state === 'started')) {
@@ -130,8 +173,8 @@ export function CoursePage({ route }: ScreenProps<'readCourse'>) {
                 <Row
                   key={r.key}
                   title={lessonTitle(id, r.n, lang) ? `${t('rdcLessonN', { n: r.n })} · ${lessonTitle(id, r.n, lang)}` : t('rdcLessonN', { n: r.n })}
-                  sub={r.state === 'locked' ? t('rdcLockedShort') : r.state === 'pending' ? t('rdcPendingShort') : undefined}
-                  value={r.state === 'done' ? <Icon name="check" size={16} /> : t(STATE_KEY[r.state])}
+                  sub={r.state === 'pending' ? t('rdcPendingShort') : undefined}
+                  value={stateValue(r.state)}
                   chevron={clickable}
                   {...(clickable ? { onClick: () => openLesson(r.key) } : {})}
                   testId="course-lesson"
@@ -140,6 +183,11 @@ export function CoursePage({ route }: ScreenProps<'readCourse'>) {
               );
             })}
           </RowList>
+          {rows.some(isLocked) ? (
+            <p className="m-0 text-xs text-muted" data-testid="course-locked-note">
+              {t('rdcLockedShort')}
+            </p>
+          ) : null}
         </>
       )}
     </div>

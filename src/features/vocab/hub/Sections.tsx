@@ -92,7 +92,6 @@ export function VocabStatsSection() {
         {cell(t('nbWsActive'), num(s.active), 'ws-stat-active', t('nbWsActiveSub', { n: s.practicing }))}
         {cell(t('nbWsExpected'), num(s.expected), 'ws-stat-expected', t('nbWsExpectedSub'))}
         {cell(t('nbWsSure'), num(s.sure), 'ws-stat-sure')}
-        {cell(t('nbWsStateMatureL'), num(s.byState.mature), 'ws-stat-mature')}
       </div>
       <dl className="lx-tnum flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted" data-testid="ws-stat-states">
         {(
@@ -100,7 +99,6 @@ export function VocabStatsSection() {
             ['nbWsStateNewL', s.byState.new],
             ['nbWsStateLearnL', s.byState.learning],
             ['nbWsStateYoungL', s.byState.young],
-            ['nbWsStateMatureL', s.byState.mature],
           ] as const
         ).map(([k, n]) => (
           <div key={k} className="flex gap-1">

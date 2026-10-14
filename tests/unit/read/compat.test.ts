@@ -83,7 +83,7 @@ describe('v76 (Register ohne `read`): `read/` ist unsichtbar und harmlos', () =>
     const { db, asked } = recording({ ...READ_DOCS });
     await countDocuments(db);
     expect(asked.collections).not.toContain('read');
-    expect(asked.docs.filter((d) => d.startsWith('read/'))).toEqual(['read/p']);
+    expect(asked.docs.filter((d) => d.startsWith('read/'))).toEqual(['read/p', 'read/cp']);
   });
 
   it('Live-Abos: feste Listen ohne `read`', () => {

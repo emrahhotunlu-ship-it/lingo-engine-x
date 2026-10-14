@@ -106,6 +106,8 @@ export type PickCtx = {
   card?: { lemma?: string; pos?: string | null };
   /** Ton der Quelle (nur Ton wechseln): der neue Ton ist ein anderer. */
   sourceTone?: ToneId | null;
+  /** Kernwort (Lektion, Startwortschatz, C1-Paket): seine Lagen kommen aus dem Beruf, nicht aus dem Alltag (Englischlehrer A7). */
+  core?: boolean;
 };
 
 /**
@@ -124,7 +126,9 @@ export function pickActBrief(fmt: ActFmt, key: string, day: string, used: readon
   for (let salt = 0; salt < 4; salt++) {
     const rng = mulberry32(hash32(`${key}|${day}|${fmt}|${used.length}|${used.at(-1) ?? ''}|${salt}`));
     const roll = () => Math.floor(rng() * 1000);
-    const kind: PoolKind = fmt === 'sc' || fmt === 'im' || fmt === 'lg' ? (rng() < DAILY_SHARE ? 'daily' : 'job') : 'job';
+    // Die Art der Lage richtet sich nach dem Wort: Berufswörter bekommen Lagen aus dem Beruf; der Alltag kommt nur bei übrigen Wörtern vor.
+    const dailyRoll = fmt === 'sc' || fmt === 'im' || fmt === 'lg' ? rng() < DAILY_SHARE : false;
+    const kind: PoolKind = dailyRoll && !ctx.core ? 'daily' : 'job';
     // Lage bzw. Mail
     let event: string = NONE;
     let eventTones: readonly PoolTone[] = ['c', 'n', 'f'];
@@ -140,22 +144,26 @@ export function pickActBrief(fmt: ActFmt, key: string, day: string, used: readon
       event = e.id;
       eventTones = e.tones;
     }
-    // Gegenüber
-    let role: string = NONE;
-    let roleTones: readonly PoolTone[] = ['c', 'n', 'f'];
-    if (fmt !== 'ml') {
-      const roles = ACT_ROLES.filter((r) => r.kind === kind);
-      const r = leastRecent(roles, (x) => x.id, vals('role'), roll()) ?? roles[0]!;
-      role = r.id;
-      roleTones = r.tones;
-    }
-    // Textsorte (nur beim Umformen)
+    // Textsorte (nur beim Umformen) – vor dem Gegenüber, weil nicht jede Textsorte zu jedem Gegenüber passt (Englischlehrer A8)
     let type: string = NONE;
     let typeTones: readonly PoolTone[] = ['c', 'n', 'f'];
+    let typeRoles: readonly string[] | null = null;
     if (NEEDS_SOURCE.has(fmt)) {
       const t = leastRecent(ACT_TYPES, (x) => x.id, vals('type'), roll()) ?? ACT_TYPES[0]!;
       type = t.id;
       typeTones = t.tones;
+      typeRoles = t.roles;
+    }
+    // Gegenüber
+    let role: string = NONE;
+    let roleTones: readonly PoolTone[] = ['c', 'n', 'f'];
+    if (fmt !== 'ml') {
+      const ofKind = ACT_ROLES.filter((r) => r.kind === kind);
+      const fitting = typeRoles ? ofKind.filter((r) => typeRoles.includes(r.id)) : ofKind;
+      const roles = fitting.length ? fitting : ofKind;
+      const r = leastRecent(roles, (x) => x.id, vals('role'), roll()) ?? roles[0]!;
+      role = r.id;
+      roleTones = r.tones;
     }
     // Ton: nur dort, wo er verlangt wird (beim Umschreiben und Erweitern bleibt der Ton der Quelle)
     let tone: ToneId = NONE;
@@ -165,11 +173,13 @@ export function pickActBrief(fmt: ActFmt, key: string, day: string, used: readon
       tone = leastRecent(opts, (x) => x, vals('tone'), roll()) as ToneId;
     }
     // Besonderheit
-    const shapes = SHAPES[fmt];
+    // Kundenmail: nur Antwortziele, die zur Mail passen (Englischlehrer A2)
+    const shapes: readonly string[] = fmt === 'ml' ? (mailById(event)?.goals ?? SHAPES.ml) : SHAPES[fmt];
     const shape = shapes.length > 1 ? (leastRecent(shapes, (x) => x, vals('shape'), roll()) as string) : (shapes[0] as string);
     // Zeitform: nicht beim Umformen; beim Wenn-Satz bestimmt die Bedingung die Zeitform
     let tense: TenseId = NONE;
-    if (!NEEDS_SOURCE.has(fmt) && !(fmt === 'sc' && shape === 'i')) {
+    // Auch nicht bei Kundenmail und Kombi-Satz: Eine Zeitform vorzugeben ist dort kein echter Auftrag und senkt gute Antworten (Englischlehrer A3).
+    if (!NEEDS_SOURCE.has(fmt) && fmt !== 'ml' && fmt !== 'kb' && !(fmt === 'sc' && shape === 'i')) {
       const tenses = allowsContinuous(ctx.card ?? {}) ? TENSES : TENSES.filter((x) => x !== 'co');
       tense = leastRecent(tenses, (x) => x, vals('tense'), roll()) as TenseId;
     }

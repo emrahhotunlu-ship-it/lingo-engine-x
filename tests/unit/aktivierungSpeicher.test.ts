@@ -3,7 +3,7 @@ import { COLLECTION_NAMES, COLLECTIONS, schemaForPath } from '../../src/data/pat
 import { loadSnapshot } from '../../src/data/snapshot';
 import { createWriter, type Writer } from '../../src/data/writer';
 import { ACT_DOC_MAX_BYTES, actEntrySchema, actId, actPath, clipChars, deriveNa, entriesOf, normalizeEntry, planAct, type ActEntry } from '../../src/domain/activation/actDoc';
-import { activationRates, isReady, qualifies, ratePct, readyCount } from '../../src/domain/activation/ready';
+import { activationRates, isReady, qualifies, ratePct, readyCount, readyMaxAge } from '../../src/domain/activation/ready';
 import { dayKey } from '../../src/domain/date';
 import { applyUpdate, cardPatch, cardPatchSchema, chunkPatchSchema, reviewWrite } from '../../src/domain/srs/applyReview';
 import { colChargeOp } from '../../src/domain/srs/collocs';
@@ -306,7 +306,30 @@ describe('Messung „einsatzbereit“', () => {
     expect(isReady(card, good, '2026-12-01')).toBe(false);
     // ungeprüft oder nicht richtig zählt nie
     expect(isReady(card, [ok('2026-09-10', A, { k: 0 }), ok('2026-10-01', C, { ns: 1 })], TODAY)).toBe(false);
-    expect(isReady(card, [ok('2026-09-10', A, { v: 'm' }), ok('2026-10-01', C, { ns: 1 })], TODAY)).toBe(false);
+    expect(isReady(card, [ok('2026-09-10', A, { v: 'w' }), ok('2026-10-01', C, { ns: 1 })], TODAY)).toBe(false);
+    // ein kleiner Fehler (Zeitform) bei richtig benutztem Hauptwort zählt (Lernwissenschaft M5) – ein Fehler in Wortwahl, Kollokation oder falschem Freund nicht
+    expect(isReady(card, [ok('2026-09-10', A, { v: 'm', et: 'tense' }), ok('2026-10-01', C, { ns: 1 })], TODAY)).toBe(true);
+    expect(isReady(card, [ok('2026-09-10', A, { v: 'm', et: 'collocation' }), ok('2026-10-01', C, { ns: 1 })], TODAY)).toBe(false);
+    expect(isReady(card, [ok('2026-09-10', A, { v: 'm', et: 'word_choice' }), ok('2026-10-01', C, { ns: 1 })], TODAY)).toBe(false);
+  });
+  it('M5: die Altersgrenze wächst mit dem Intervall der Karte (mindestens 60 Tage, sonst Intervall + 7)', () => {
+    const good = [ok('2026-09-10', A), ok('2026-10-01', C, { ns: 1 })];
+    const at = (due: number, last: number) => ({ ...card, fsrs: { due, last } as never });
+    const day = 86_400_000;
+    const t0 = Date.parse('2026-10-01T12:00:00+02:00');
+    expect(readyMaxAge({})).toBe(60);
+    expect(readyMaxAge(at(t0 + 30 * day, t0))).toBe(60);
+    expect(readyMaxAge(at(t0 + 120 * day, t0))).toBe(127);
+    // letzte Aktivierung vor 76 Tagen: bei 60 Tagen Grenze zu alt, bei einem Intervall von 120 Tagen noch gültig
+    expect(isReady(card, good, '2026-12-16')).toBe(false);
+    expect(isReady(at(t0 + 120 * day, t0), good, '2026-12-16')).toBe(true);
+    expect(isReady(at(t0 + 120 * day, t0), good, '2027-03-01')).toBe(false);
+  });
+  it('M1: bei Wörtern, die sich nicht verdecken lassen (Compliance), entfällt die Bedingung „einmal ohne gezeigtes Wort“', () => {
+    const noHide = { ...card, kind: 'vocab' as const, lemma: 'compliance', de: 'Compliance', def: 'compliance with the rules' };
+    const two = [ok('2026-09-10', A), ok('2026-10-01', 'tw.e05.team.slack.c.-.-')];
+    expect(isReady(card, two, TODAY)).toBe(false);
+    expect(isReady(noHide, two, TODAY)).toBe(true);
   });
   it('das Partnerwort einer Kombi-Aufgabe zählt, wenn Claude es als richtig ausweist', () => {
     const combo = ok('2026-09-10', 'sc.e01.cfo.-.n.pr.s', { c: 'vocab/other', ts: [['vocab/other', 'c'], ['vocab/w1', 'c']] });

@@ -211,6 +211,8 @@ export type AnswerEvent = {
   act?: string;
   /** Schritt des Fahrplans (1–5), wenn die Antwort eine Aktivierung war: der Kartenzähler `na` steigt im selben Schreibschritt (Note ≥ 2). */
   actStep?: 1 | 2 | 3 | 4 | 5;
+  /** Die Aktivierung war nicht von Claude geprüft, abgeschrieben oder mit Hilfe der Vorprüfung: Der Verlaufseintrag trägt `u: 1`, `na` steigt nicht (Lernwissenschaft H1). */
+  actUnverified?: true;
   /** Eingabeprofil der Runde: Touch oder Tastatur (Lernplattform 2.0 §3.1). */
   dev?: 't' | 'k';
   /** Einspruch „Ich lag richtig" (M4): als richtig gewertet, höchstens „Gut", im Log `override:true`. */

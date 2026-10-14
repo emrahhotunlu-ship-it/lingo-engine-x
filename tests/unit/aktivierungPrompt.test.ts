@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { activateCheckReply } from '../../src/platform/dev/canned/act';
 import { PROMPT_MAX_BYTES, promptBytes } from '../../src/prompts/common';
-import { ACTIVATE_CHECK_EXAMPLE, activateCheck, activateTaskVarsOf, mailTextOf, type ActivateCheckVars } from '../../src/prompts/activateCheck';
+import { ACTIVATE_CHECK_EXAMPLE, ACTIVATE_CHECK_EXAMPLE_MINOR, activateCheck, activateCheckDeep, activateTaskVarsOf, activateTemplateFor, mailTextOf, type ActivateCheckVars } from '../../src/prompts/activateCheck';
 import { errTypeOf, PRODUCE_ERR_TYPES } from '../../src/prompts/produceCheckV2';
 import { TEMPLATES } from '../../src/prompts/registry';
 
@@ -163,5 +163,67 @@ describe('activate-check@1', () => {
       expect(activateCheck.schema(v).safeParse(JSON.parse(activateCheckReply(retry))).success).toBe(true);
       expect(() => JSON.parse(activateCheckReply(activateCheck.build({ ...one, sentence: 'zzjson leverage' }))) as unknown).toThrow();
     });
+  });
+});
+
+describe('activate-check: Prüfung 14.10.2026', () => {
+  const hidden: ActivateCheckVars = { ...one, targets: [{ ...one.targets[0]!, shown: false }], task: activateTaskVarsOf({ fmt: 'lg', event: 'e03', role: 'it', type: '-', tone: 'n', tense: 'pr', shape: 's' }) };
+  it('beide Beispiele (richtig und kleiner Fehler) stehen im Prompt und bestehen das Schema; kein Beispiel hält sich an „minor/tense“ fest', () => {
+    const p = activateCheck.build(two);
+    expect(p).toContain(ACTIVATE_CHECK_EXAMPLE);
+    expect(p).toContain(ACTIVATE_CHECK_EXAMPLE_MINOR);
+    for (const ex of [ACTIVATE_CHECK_EXAMPLE, ACTIVATE_CHECK_EXAMPLE_MINOR]) expect(activateCheck.schema(two).safeParse(JSON.parse(ex)).success, ex).toBe(true);
+    expect((JSON.parse(ACTIVATE_CHECK_EXAMPLE) as { verdict: string }).verdict).toBe('correct');
+  });
+  it('Regeln: falscher Partner der Kollokation, Deutsch-Fehler-Liste, Tippfehler, schlechte Lage, Antwortziel der Mail', () => {
+    const p = activateCheck.build(two);
+    expect(p).toContain('wrong collocation partner');
+    expect(p).toContain('until vs. by');
+    expect(p).toContain('adress, developement');
+    expect(p).toContain('poor fit for the target');
+    const mail = activateCheck.build({ ...two, mail: 'Hi, can we talk?', task: activateTaskVarsOf({ fmt: 'ml', event: 'm01', role: '-', type: '-', tone: 'f', tense: '-', shape: 'q' }) });
+    expect(mail).toContain('does not fit the customer email');
+    expect(mail).toContain('ask a clarifying question');
+  });
+  it('mainVerdict: Fehler nur am Partnerwort senkt das Urteil über das Hauptwort nicht; fehlt es, gilt das Gesamturteil', () => {
+    const partner = activateCheck.schema(two).safeParse(reply({ verdict: 'wrong', mainVerdict: 'correct', targets: [{ used: true, correct: true }, { used: true, correct: false }], fixed: 'Our leverage grows with a full pipeline.', errType: 'word_choice' }, 2));
+    expect(partner.data).toMatchObject({ verdict: 'wrong', mainVerdict: 'correct' });
+    const noField = activateCheck.schema(two).safeParse(reply({ verdict: 'wrong', targets: [{ used: true, correct: true }, { used: true, correct: false }], fixed: 'Our leverage grows with a full pipeline.', errType: 'word_choice' }, 2));
+    expect(noField.data?.mainVerdict).toBe('minor');
+    const mainBad = activateCheck.schema(two).safeParse(reply({ verdict: 'correct', mainVerdict: 'correct', targets: [{ used: true, correct: false }, { used: true, correct: true }], fixed: 'Our leverage grows with a full pipeline.' }, 2));
+    expect(mainBad.data?.mainVerdict).toBe('wrong');
+  });
+  it('A4: alt (richtiges Ersatzwort) macht aus „wrong“ einen Teilerfolg; ohne verdecktes Wort wird alt verworfen', () => {
+    const miss = reply({ verdict: 'wrong', targets: [{ used: false, correct: false }], alt: 'push back', fixed: 'We will postpone the launch by two weeks.', errType: 'word_choice' });
+    const r = activateCheck.schema(hidden).safeParse(miss);
+    expect(r.data).toMatchObject({ verdict: 'minor', mainVerdict: 'minor', alt: 'push back', errType: 'word_choice', usesTarget: false });
+    // Wort war gezeigt: alt zählt nicht
+    expect(activateCheck.schema(one).safeParse(miss).data).toMatchObject({ verdict: 'wrong', alt: '' });
+    // Hauptwort benutzt: alt ist bedeutungslos
+    expect(activateCheck.schema(hidden).safeParse(reply({ alt: 'push back' })).data?.alt).toBe('');
+  });
+  it('Stufe je Aufgabe: Kundenmail und Kombi-Satz laufen auf default, die kurzen Aufgaben auf quick (gleiche Kennung)', () => {
+    expect(activateCheck.tier).toBe('quick');
+    expect(activateCheckDeep.tier).toBe('default');
+    expect(activateTemplateFor('ml')).toBe(activateCheckDeep);
+    expect(activateTemplateFor('kb')).toBe(activateCheckDeep);
+    expect(activateTemplateFor('sc')).toBe(activateCheck);
+    expect(activateTemplateFor('im')).toBe(activateCheck);
+    expect(activateCheckDeep.id).toBe(activateCheck.id);
+    expect(activateCheckDeep.version).toBe(activateCheck.version);
+    expect(TEMPLATES.filter((t) => t.id === 'activate-check')).toHaveLength(1);
+  });
+  it('Antwortziel q heißt „ask a clarifying question“ (nur bei der Kundenmail)', () => {
+    expect(activateTaskVarsOf({ fmt: 'ml', event: 'm02', role: '-', type: '-', tone: 'f', tense: '-', shape: 'q' }).shape).toBe('ask a clarifying question');
+    expect(activateTaskVarsOf({ fmt: 'sc', event: 'e01', role: 'cfo', type: '-', tone: 'f', tense: 'pf', shape: 'q' }).shape).toBe('question');
+  });
+  it('Dev-Adapter liefert bei „correct“ und „minor“ die zweite und dritte Schicht', () => {
+    for (const sentence of ['Our leverage grows with a full pipeline.', 'our leverage grows with a full pipeline']) {
+      const v = { ...two, sentence };
+      const out = activateCheck.schema(v).safeParse(JSON.parse(activateCheckReply(activateCheck.build(v))));
+      expect(out.success, JSON.stringify(out.error?.issues)).toBe(true);
+      expect(out.data?.better).toContain('leverage');
+      expect(out.data?.whyBetter.length).toBeGreaterThan(5);
+    }
   });
 });

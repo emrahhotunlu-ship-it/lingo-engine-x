@@ -238,7 +238,7 @@ export function ReaderView({ article, state = null, view: viewProp = null, autoS
         <p className="m-0 text-2xs font-semibold uppercase tracking-wide text-accent-text" data-testid="rdr-topic">
           {lesson ? lesson.kicker : article.topic === 'custom' && article.custom ? article.custom : rdrText(lang, topicKey(article.topic))}
         </p>
-        <h1 className="m-0 text-xl font-semibold tracking-tight text-fg" lang="en" data-testid="rdr-title">
+        <h1 className={lesson ? 'm-0 text-2xl leading-tight font-bold tracking-[-0.02em] text-fg sm:text-3xl' : 'm-0 text-xl font-semibold tracking-tight text-fg'} lang="en" data-testid="rdr-title">
           {article.title}
         </h1>
         <p className="m-0 text-xs text-muted" data-testid="rdr-meta">
@@ -277,7 +277,9 @@ export function ReaderView({ article, state = null, view: viewProp = null, autoS
 
       {lesson?.top}
 
-      <div ref={barRef} className="lx-glass sticky top-[env(safe-area-inset-top)] z-20 rounded-2xl p-1.5 md:top-[4.5rem]" data-testid="rdr-bar">
+      {/* Die Ansichtsleiste klebt nur im Textabschnitt (nicht durch die ganze Lektion) und ist deckend, damit nichts durchschimmert (UX-Prüfung 14.10.). */}
+      <div className="flex flex-col gap-5" data-testid="rdr-textsection">
+      <div ref={barRef} className="sticky top-[env(safe-area-inset-top)] z-20 rounded-2xl border border-line bg-bg p-1.5 md:top-[4.5rem]" data-testid="rdr-bar">
         <Segmented label={rdrText(lang, 'rdrViewLabel')} value={view} options={viewOptions} onChange={changeView} testId="rdr-views" />
       </div>
 
@@ -316,6 +318,8 @@ export function ReaderView({ article, state = null, view: viewProp = null, autoS
           ))}
         </div>
       )}
+
+      </div>
 
       <div ref={endRef} aria-hidden="true" className="h-px" />
       {lesson?.afterText}

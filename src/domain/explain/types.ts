@@ -23,7 +23,7 @@ export type TaskWhy = { ok: Bi; wrong: WhyRule[] };
 
 export type ExplainLine =
   | { k: 'pattern'; name: string; formula: string | null }
-  | { k: 'yours'; given: string; text: string }
+  | { k: 'yours'; given: string; text: string; /** Eigene Überschrift statt „Deine Antwort“ (Satzantworten: „Warum“, weil die eigene Antwort schon im Vergleich steht). */ head?: string }
   | { k: 'why'; text: string }
   | { k: 'mistake'; bad: string; good: string; cause: string | null }
   | { k: 'contrast'; a: string; b: string; diff: string; /** Nur die Bedeutungen zeigen (Kontrast-Schritt: das Wortpaar steht schon im Kopf). */ meaningOnly?: boolean }

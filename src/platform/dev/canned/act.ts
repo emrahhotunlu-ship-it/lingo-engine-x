@@ -28,6 +28,8 @@ const WHY = {
   wrong: { de: 'Mindestens ein Zielwort fehlt in deinem Text. Baue es ein, damit die Übung zählt.', en: 'At least one target word is missing from your text. Include it so the exercise counts.' },
 } as const;
 
+const WHY_BETTER = { de: 'So klingt es im Beruf knapper und natürlicher.', en: 'It sounds shorter and more natural at work.' } as const;
+
 export function activateCheckReply(input: string): string {
   const text = line(input, 'Learner text');
   const lang = /^Explanation language: German$/m.test(input) ? 'de' : 'en';
@@ -39,14 +41,18 @@ export function activateCheckReply(input: string): string {
   const allUsed = used.every(Boolean);
   const tidy = /^[A-Z]/.test(text) && /[.!?]$/.test(text);
   const verdict = !allUsed ? 'wrong' : tidy ? 'correct' : 'minor';
+  // Zweite und dritte Schicht (C1-Fassung, warum besser) auch bei „correct“ und „minor“, damit die Schichten testbar sind (UX-Prüfung 14.10.).
+  const better = verdict === 'wrong' ? '' : `At work, we use ${words.join(' and ')} in one clear, concise sentence.`;
   const fixed = verdict === 'correct' ? text : verdict === 'minor' ? `${text.charAt(0).toUpperCase()}${text.slice(1)}${/[.!?]$/.test(text) ? '' : '.'}` : `At work, we always use ${words.join(' and ')} in a clear sentence.`;
   return JSON.stringify({
     verdict,
+    mainVerdict: used[0] === false ? 'wrong' : verdict === 'wrong' ? 'minor' : verdict,
     targets: used.map((u) => ({ used: u, correct: u })),
+    alt: '',
     fixed,
     why: WHY[verdict][lang],
-    better: '',
-    whyBetter: '',
+    better,
+    whyBetter: better ? WHY_BETTER[lang] : '',
     errType: verdict === 'correct' ? null : 'other',
     reusable: verdict === 'correct',
   });

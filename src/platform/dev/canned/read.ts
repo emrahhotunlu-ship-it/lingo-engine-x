@@ -126,7 +126,9 @@ export function readApplyReply(input: string): string {
     verdict: sentences >= 2 && /[.!?]$/.test(text) ? 'right' : 'almost',
     fixed,
     c1: model,
-    why: 'Deine Sätze sind gut verständlich. Die gehobene Fassung klingt natürlicher, weil sie die Wendung im passenden Zusammenhang benutzt.',
+    why: /^Explanation language: English$/m.test(input)
+      ? 'Your sentences are easy to understand. The more natural version sounds better because it uses the phrase in the right context.'
+      : 'Deine Sätze sind gut verständlich. Die natürlichere Fassung klingt besser, weil sie die Wendung im passenden Zusammenhang benutzt.',
   });
 }
 

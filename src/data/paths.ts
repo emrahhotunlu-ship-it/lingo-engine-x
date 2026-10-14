@@ -151,9 +151,15 @@ export function collectionOf(path: string): string {
   return i === -1 ? path : path.slice(0, i);
 }
 
+/**
+ * Dokumente in `read`, die nur die Claude-Routine schreibt: Kurslektionen `read/c-<Kurs>-<nn>` und Routine-Tagesdokumente `read/r-<Tag>`.
+ * Die App liest sie nur; der Schreibpfad verweigert jeden Zugriff darauf (Datenwächter 14.10.2026, Warnung 3). Muster wie `modules/read/domain/paths.ts`.
+ */
+const ROUTINE_ONLY_RE = /^read\/(?:c-k[1-9]-\d{2}|r-\d{4}-\d{2}-\d{2})$/;
+
 export function isReadOnlyPath(path: string): boolean {
   const c = collectionOf(path);
-  return (READ_ONLY_COLLECTIONS as readonly string[]).includes(c) && path.split('/').length === 2;
+  return ((READ_ONLY_COLLECTIONS as readonly string[]).includes(c) && path.split('/').length === 2) || ROUTINE_ONLY_RE.test(path);
 }
 
 export function schemaForPath(path: string): ZodType | null {

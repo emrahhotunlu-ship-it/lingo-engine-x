@@ -27,17 +27,16 @@ import { explainWord, isAltAnswer } from '../../domain/srs/explainWord';
 import { posKey } from '../../domain/srs/explain';
 import { autoGrade, produceGrade } from '../../domain/srs/grade';
 import { exerciseDef } from '../../domain/srs/modes';
-import { GERMAN_HINT_EN, HARD_ISSUES, germanHints, precheckProduce, selfCheckProduce, shownSentences, type GermanHintId, type PrecheckIssue, type SelfCheck } from '../../domain/srs/produce';
+import { GERMAN_HINT_EN, HARD_ISSUES, germanHints, jaccard, precheckProduce, selfCheckProduce, shownSentences, type GermanHintId, type PrecheckIssue, type SelfCheck } from '../../domain/srs/produce';
 import { sceneText } from '../../content/activation/scenes';
 import { trapForCard } from '../../domain/srs/traps';
 import type { CheckResult, Exercise, ExerciseId, Grade, Option } from '../../domain/srs/types';
 import { inputProfile } from '../../platform/input';
 import { speak, stopSpeech, useSpeech } from '../../platform/speech';
 import { briefVarsOf, produceCheckV2, type ProduceCheckV2Out } from '../../prompts/produceCheckV2';
-import { activateCheck, activateTaskVarsOf, mailTextOf, type ActivateCheckVars, type ActivateTargetOut } from '../../prompts/activateCheck';
+import { activateTaskVarsOf, activateTemplateFor, mailTextOf, type ActivateCheckVars, type ActivateTargetOut } from '../../prompts/activateCheck';
 import { ACT_HARD_ISSUES, activateGrade, precheckAct, selfCheckAct, type ActIssue } from '../../domain/srs/actCheck';
 import { HIDES_TARGET } from '../../domain/srs/actBrief';
-import { actMeaning } from '../../domain/srs/actTask';
 import { dayLabel } from '../../domain/activation/actDoc';
 import { ActPanel } from './ActPanel';
 import { ownTextsOf, reusableSentencesOf } from './actStore';
@@ -63,7 +62,7 @@ import { AiMark } from '../../ui/AiMark';
 // Keine Selbstbewertung: die Note folgt aus Richtigkeit, Zeit und Hilfe. Die Warum-Zeile nennt den echten Fehlergrund (`explainWord`).
 
 /** Claudes Urteil über einen Satz: `produce-check@2` oder `activate-check@1` (dieselben Felder, bei Letzterem dazu `targets` und `reusable`). */
-type SentenceOut = ProduceCheckV2Out & { targets?: ActivateTargetOut[]; reusable?: boolean };
+type SentenceOut = ProduceCheckV2Out & { targets?: ActivateTargetOut[]; reusable?: boolean; mainVerdict?: ProduceCheckV2Out['verdict']; alt?: string };
 
 type Feedback = {
   result: CheckResult;
@@ -85,7 +84,7 @@ type Feedback = {
   /** find_trap: das angetippte Wort. */
   tapped?: [number, number] | null;
   /** complete/produce: Claudes Prüfung bzw. die lokale Prüfung. */
-  sentence?: { out: SentenceOut | null; self: SelfCheck | null; /** Vorprüfung ohne Claude: Mangel, der den Satz als „Noch nicht“ beendet. */ issue?: PrecheckIssue | ActIssue; hints?: GermanHintId[] };
+  sentence?: { out: SentenceOut | null; self: SelfCheck | null; /** Vorprüfung ohne Claude: Mangel, der den Satz als „Noch nicht“ beendet. */ issue?: PrecheckIssue | ActIssue; hints?: GermanHintId[]; /** A2–A5: Die Vorprüfung hatte schon einen Hinweis gegeben. */ helped?: boolean };
 };
 
 const PURPOSE: Record<number, MessageKey> = { 1: 'purpose1', 2: 'purpose2', 3: 'purpose3', 4: 'purpose4', 5: 'purpose5' };
@@ -114,7 +113,7 @@ const escapeRe = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 const CHOICE_LANGS = { de: 'de', en: 'en' } as const;
 
 /** Höchste Tipp-Stufe je Art: getippte Arten und Auswahl 2, Falle finden und Diktat 1, Satzantworten keiner. */
-const maxTipOf = (ex: ExerciseId, input: Exercise['input']): 0 | 1 | 2 => (SENTENCE_EX.has(ex) ? 0 : FREE_TYPED.has(ex) || input === 'choice' ? 2 : 1);
+const maxTipOf = (ex: ExerciseId, input: Exercise['input'], hiddenAct = false): 0 | 1 | 2 => (SENTENCE_EX.has(ex) ? (hiddenAct ? 1 : 0) : FREE_TYPED.has(ex) || input === 'choice' ? 2 : 1);
 
 /** Wörter eines Satzes mit Zeichenstellen (für „Falle finden“: angetipptes Wort ↔ Stelle der Falle). */
 function wordsWithOffsets(text: string): Array<{ w: string; start: number; end: number }> {
@@ -163,7 +162,8 @@ export function ExerciseView({
   const [copyOpen, setCopyOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const askProduce = useAsk(produceCheckV2);
-  const askAct = useAsk(activateCheck);
+  // Kundenmail und Kombi-Satz laufen auf `default`, die kurzen Aufgaben auf `quick` (Lernwissenschaft M4).
+  const askAct = useAsk(activateTemplateFor(e.act?.fmt ?? 'sc'));
   // Aktivierungs-Aufgaben A2–A5 prüft `activate-check@1`, „Eigener Satz“ `produce-check@2`.
   const askSentence = e.act ? askAct : askProduce;
   /** Wie oft die Vorprüfung schon zum Nachbessern geschickt hat (höchstens einmal je Aufgabe). */
@@ -224,12 +224,19 @@ export function ExerciseView({
   // ------------------------------------------------------------------ Tipp-Leiter
   // Stufe 1 Wortart und Bedeutung bzw. Erklärung (nie die Lösung), Stufe 2 der erste Buchstabe (getippt) bzw. eine falsche Option weniger (Auswahl).
   // Partnerwort getippt: Stufe 1 erster Buchstabe, Stufe 2 die Möglichkeiten (Plan §5.6). Falle finden: die Leitfrage der Falle.
-  const maxTip: 0 | 1 | 2 = noHelp ? 0 : maxTipOf(e.ex, e.input);
+  // A4 (Wort nicht gezeigt) bekommt eine Stütze: erster Buchstabe und Wortart, mit Stütze höchstens „Schwer“ (Lernwissenschaft M2).
+  const hiddenAct = !!e.act && !e.act.showTarget;
+  const maxTip: 0 | 1 | 2 = noHelp ? 0 : maxTipOf(e.ex, e.input, hiddenAct);
   const fam = packExtraOf(card)?.fam;
   const maskWord = (s: string): string =>
     [card.word, card.lemma, ...(e.ex === 'wordfam' ? Object.values(fam ?? {}) : [])].filter(Boolean).reduce((acc, w) => acc.replace(new RegExp(escapeRe(w), 'gi'), '…'), s);
   const trap = trapForCard(card);
   const tipBase: string | null = (() => {
+    if (hiddenAct) {
+      const letter = (card.kind === 'chunk' ? typedForm(card.word) : card.word).trim().charAt(0);
+      const pk = posKey(card.pos);
+      return letter ? t('actTip', { letter, pos: pk ? `, ${t(pk as MessageKey)}` : '' }) : null;
+    }
     if (e.ex === 'find_trap') return trap ? (lang === 'de' ? trap.hint.de : trap.hint.en) : null;
     const pk = posKey(card.pos);
     const def = card.def ? maskWord(card.def) : null;
@@ -432,7 +439,7 @@ export function ExerciseView({
     const what =
       pre.issue === 'target'
         ? HIDES_TARGET.has(task.fmt)
-          ? t('ppAct_targetHidden', { meaning: actMeaning(task.targets[0]!, task.fmt, lang) ?? '' })
+          ? t('ppAct_targetHidden')
           : t('ppAct_target', { words: pre.missing.join(', ') })
         : pre.issue === 'short'
           ? t('ppAct_short')
@@ -476,9 +483,9 @@ export function ExerciseView({
     // Fehler (not_granted, rate_limited, …): lokales Urteil auf Wunsch, ohne automatischen Neuversuch (A6.3); „Erneut versuchen“ bleibt beim Nutzer.
     if (!out) return;
     // Hat die Vorprüfung schon einen Hinweis gegeben, zählt das als Hilfe: höchstens „Schwer“ (Lernwissenschaft N3).
-    const grade = activateGrade(out, precheckTries.current > 0);
+    const grade = activateGrade(out, precheckTries.current > 0 || tip > 0);
     const verdict: CheckResult['verdict'] = out.verdict === 'correct' ? 'correct' : out.verdict === 'minor' ? 'near' : 'wrong';
-    finish({ verdict }, text, null, { sentence: { out, self: null, hints: pre.hints } }, grade, true);
+    finish({ verdict }, text, null, { sentence: { out, self: null, hints: pre.hints, helped: precheckTries.current > 0 } }, grade, true);
     // Ein falscher oder zu schwacher Satz wird zum Fehlersatz (Box 1), nur mit echter Korrektur und nur bei einem einzelnen kurzen Satz (nicht bei der Mail).
     if (task.fmt !== 'ml' && out.verdict !== 'correct' && out.fixed.trim() && out.fixed.length <= 250 && text.length <= 250 && normalize(out.fixed) !== normalize(text)) {
       void saveRepairs([{ wrong: text, right: out.fixed.trim(), why: out.why, src: 'write' }]);
@@ -628,12 +635,11 @@ export function ExerciseView({
   // Rückmeldung 3: Bei „Wortpartner“ steht im Kopf die geübte Verbindung (mit Vorlesen), das Kartenwort nur als Zusatz.
   const collocPhrase = (e.ex === 'colloc' || e.ex === 'colloc_gap') && e.colloc?.p.trim() && normalize(e.colloc.p) !== normalize(card.word) ? e.colloc.p.trim() : null;
   // „Eigener Satz“: Anweisung in drei Wortlauten, gewählt aus Karte und Verlauf (`brief.wording`), nie beim Neuzeichnen neu gewürfelt.
-  const actWords = e.act ? e.act.targets.map((x) => (x.kind === 'chunk' ? typedForm(x.word) : x.word)).join(' + ') : '';
   const taskText =
     e.check === 'known'
       ? t('wxKnownTask')
       : e.act
-        ? t(`act_${e.act.fmt}_${e.act.wording + 1}` as MessageKey, { words: e.act.showTarget ? actWords : '', type: e.act.type !== '-' ? t(`actType_${e.act.type}` as MessageKey) : '' })
+        ? t(`act_${e.act.fmt}_${e.act.wording + 1}` as MessageKey, { type: e.act.type !== '-' ? t(`actTypeIn_${e.act.type}` as MessageKey) : '' })
         : e.ex === 'produce' && e.brief
           ? t(`task_produce_${e.brief.wording + 1}` as MessageKey)
           : t(`task_${exTextKey(e)}` as MessageKey);
@@ -769,7 +775,7 @@ export function ExerciseView({
     ) : (
       <div className="flex flex-col gap-3">
         <p className="lx-t-support flex flex-wrap items-center gap-2" data-testid="produce-target">
-          <span className="text-muted">{t('trProduceTarget', { word: '' }).replace(/\s*$/, '')}</span>
+          <span className="text-muted">{t('actLblWord')}</span>
           <span className="rounded-[var(--radius-inline)] bg-surface px-2 py-0.5 font-semibold" lang="en" data-testid="target-chip">
             {target}
           </span>
@@ -781,7 +787,8 @@ export function ExerciseView({
           </p>
         )}
         {e.meaning && (
-          <p className="lx-t-support text-muted" lang={lang} data-testid="cue">
+          <p className="lx-t-support" lang={lang} data-testid="cue">
+            <span className="text-muted">{t('actTaskMarkMeaning')}: </span>
             {e.meaning}
           </p>
         )}
@@ -800,6 +807,8 @@ export function ExerciseView({
           onSubmit={() => (fb ? next() : void checkSentence())}
           disabled={!!fb || sentenceBusy}
           testId={e.ex === 'complete' ? 'complete-input' : e.act ? 'act-input' : 'produce-input'}
+          placeholder={e.ex === 'complete' ? undefined : t('actPlaceholder')}
+          tall={e.act?.fmt === 'ml' || e.act?.fmt === 'kb'}
         />
         {!fb && <AiRunPanel phase={askSentence.phase} error={askSentence.error} onStop={askSentence.stop} onRetry={() => void checkSentence()} skeleton={false} />}
         {!fb && askSentence.error && (
@@ -915,13 +924,15 @@ export function ExerciseView({
         : fb.sentence && !fb.sentence.out
           ? fb.sentence.issue
             ? e.act
-              ? t(`ppActFinal_${fb.sentence.issue === 'shape' || fb.sentence.issue === 'german' || fb.sentence.issue === 'form' ? 'short' : fb.sentence.issue}` as MessageKey)
+              ? fb.sentence.issue === 'target' && hiddenAct
+                ? t('ppActFinal_targetHidden', { word: card.kind === 'chunk' ? typedForm(card.word) : card.word })
+                : t(`ppActFinal_${fb.sentence.issue === 'shape' || fb.sentence.issue === 'german' || fb.sentence.issue === 'form' ? 'short' : fb.sentence.issue}` as MessageKey)
               : t(`ppFinal_${fb.sentence.issue === 'form' || fb.sentence.issue === 'german' || fb.sentence.issue === 'shape' || fb.sentence.issue === 'same' ? 'short' : fb.sentence.issue}` as MessageKey)
             : e.act
               ? t('actLocalNote')
               : t('trProduceLocalNote')
-          : fb.sentence?.out && fb.sentence.out.errType && fb.sentence.out.verdict !== 'correct'
-            ? t('trProduceErrMain', { type: t(`trErr_${fb.sentence.out.errType === 'other' ? 'misc' : fb.sentence.out.errType}` as MessageKey) })
+          : fb.sentence?.out && fb.sentence.out.errType && fb.sentence.out.errType !== 'other' && fb.sentence.out.verdict !== 'correct'
+            ? t('trProduceErrMain', { type: t(`trErr_${fb.sentence.out.errType}` as MessageKey) })
           : c.variant === 'uk' && c.us
             ? t('trUsHint', { us: c.us })
             : c.kind === 'typo'
@@ -933,7 +944,29 @@ export function ExerciseView({
                   : null;
     let comparison: ShellFeedback['comparison'] = null;
     const fixed = fb.sentence?.out?.fixed;
-    if (fixed && fb.result.verdict !== 'correct' && normalize(fixed) !== normalize(fb.given)) comparison = { given: fb.given, ops: alignWords(fb.given, fixed) };
+    // Satzantwort: Die korrigierte Fassung steht offen da. Sind beide Sätze ähnlich (mehr als die Hälfte gleicher Wörter), als markierter Vergleich;
+    // sonst sagt ein Wort-für-Wort-Vergleich nichts, und „Deine Antwort“ / „So ginge es“ stehen untereinander (UX-Prüfung 14.10.).
+    let right: ReactNode | undefined;
+    if (fixed && fb.result.verdict !== 'correct' && fixed.trim() !== fb.given.trim()) {
+      if (jaccard(fb.given, fixed) > 0.5) comparison = { given: fb.given, ops: alignWords(fb.given, fixed) };
+      else
+        right = (
+          <div className="lx-t-support flex flex-col gap-1.5" data-testid="sentence-stack">
+            <p>
+              <span className="text-muted">{t('actYourAnswer')}: </span>
+              <span lang="en" data-testid="stack-given">
+                {fb.given}
+              </span>
+            </p>
+            <p>
+              <span className="text-muted">{t('actSoItGoes')}: </span>
+              <span lang="en" className="font-semibold" data-testid="stack-fixed">
+                {fixed}
+              </span>
+            </p>
+          </div>
+        );
+    }
     const wrongTyped = fb.result.verdict === 'wrong' && !fb.dontKnow && !fb.override && (isTyped || e.ex === 'colloc_gap');
     // UX-Prüfung W8: Falsch heißt dieselbe Karte wie in der Grammatik – „Du: …“, „Richtig: …“ und das Warum zur Form („overcame = Vergangenheit“).
     const wrongWord = fb.result.verdict === 'wrong' && !fb.override && (isTyped || isChoice);
@@ -954,8 +987,9 @@ export function ExerciseView({
     if (wrongTyped && (isTyped || card.col.some((x) => x.ai))) menu.override = override;
     if (wrongTyped && isTyped) menu.copyOnce = () => setCopyOpen(true);
     menu.moreInfo = () => setMoreOpen(true);
+    // „Weiß ich nicht“ hat keine Antwort, die man sich erklären lassen könnte (UX-Prüfung 14.10.).
     const tutor =
-      fb.result.verdict === 'correct' || fb.override ? null : (
+      fb.result.verdict === 'correct' || fb.override || fb.dontKnow ? null : (
         <TutorButton
           taskKey={`wd:${card.path}:${e.ex}:${fb.given}`}
           vars={{ topic: card.word, prompt: shownSentence ?? card.word, answer: solution, given: fb.given, pattern: meaningText ? { name: card.word, form: meaningText } : null }}
@@ -970,6 +1004,7 @@ export function ExerciseView({
       verdict: rv,
       sub,
       comparison,
+      ...(right ? { right } : {}),
       why: formWhy ?? undefined,
       tutor,
       explanation: whyUnderRemoved(model, isChoice && fb.result.verdict === 'wrong' && chosen !== null),
@@ -1004,6 +1039,7 @@ export function ExerciseView({
           </p>
         )}
         {copyOpen && fb.result.verdict === 'wrong' && isTyped && <CopyOnceField solution={solution} />}
+        {fb.dontKnow && hiddenAct && <SayAnywayField word={card.kind === 'chunk' ? typedForm(card.word) : card.word} />}
       </>
     );
   }
@@ -1044,7 +1080,7 @@ export function ExerciseView({
       <ExerciseShell
         meta={{ ex: e.ex, id: card.id, stage: e.stage, kind: card.kind }}
         status={{ area: 'words', state: state0, kindLabel, badge: again ? t('trAgainBadge') : contrastBadge }}
-        task={{ text: taskText, purpose: contrastPurpose ?? t(purposeKey) }}
+        task={{ text: taskText, purpose: contrastPurpose ?? t(purposeKey), ...(e.act || e.ex === 'produce' ? { open: true } : {}) }}
         prompt={prompt}
         answer={answer}
         hint={hint}
@@ -1074,7 +1110,7 @@ function sentenceModel(fb: Feedback, card: Exercise['card'], examples: ExplainEx
   const issue = fb.sentence?.issue;
   const lines: ExplanationModel['lines'] = [{ k: 'pattern', name: card.word, formula: null }];
   if (out) {
-    lines.push({ k: 'yours', given: fb.given, text: out.why });
+    lines.push({ k: 'yours', given: fb.given, text: out.why, head: t('actWhyHead') });
     // Mehrere Zielwörter: je Wort ein Satz „richtig benutzt“ bzw. „fehlt oder falsch benutzt“ (nur wenn mindestens eines Probleme macht).
     if (act && out.targets && out.targets.length > 1 && out.targets.some((x) => !(x.used && x.correct))) {
       lines.push({ k: 'note', text: `${t('actTargetsFeedback')}: ${act.targets.map((x, i) => `${x.word} – ${out.targets?.[i]?.used && out.targets[i]?.correct ? t('actTargetOk') : t('actTargetBad')}`).join(' · ')}` });
@@ -1101,14 +1137,42 @@ function sentenceModel(fb: Feedback, card: Exercise['card'], examples: ExplainEx
 function actRecordOf(fb: Feedback, e: Exercise): ActRecord | undefined {
   if (!fb.sentence || fb.dontKnow || (e.ex !== 'produce' && !e.act)) return undefined;
   const out = fb.sentence.out;
-  const v = out ? (out.verdict === 'correct' ? 'c' : out.verdict === 'minor' ? 'm' : 'w') : fb.grade >= 2 ? 'm' : 'w';
+  // Das Urteil für die Karte der Aufgabe: bei mehreren Zielwörtern nach dem Hauptzielwort allein (`mainVerdict`), ein Fehler am Partnerwort zählt hier nicht (Lernwissenschaft H2).
+  const mv = out ? (out.mainVerdict ?? out.verdict) : null;
+  const mainOk = !out?.targets?.[0] || (out.targets[0].used && out.targets[0].correct);
+  const v = mv && mainOk ? (mv === 'correct' ? 'c' : mv === 'minor' ? 'm' : 'w') : mv ? 'w' : fb.grade >= 2 ? 'm' : 'w';
   // „Eigener Satz“ (produce-check@2) kennt `reusable` nicht: dort gilt „richtig, ohne nötige Korrektur“.
   const reusable = !!out && out.verdict === 'correct' && (out.reusable ?? true);
+  const helped = fb.sentence.helped === true;
   const ts: ActRecord['ts'] =
     e.act && out?.targets && out.targets.length > 1
       ? e.act.targets.map((x, i): [string, 'c' | 'm' | 'w'] => [x.key, out.targets?.[i]?.used && out.targets[i]?.correct ? (i === 0 ? v : 'c') : 'w'])
       : undefined;
-  return { s: fb.given, ...(out?.better.trim() ? { b: out.better } : {}), ...(out?.why.trim() ? { w: out.why } : {}), v, k: out ? 1 : 0, ...(reusable ? { r: true } : {}), ...(ts ? { ts } : {}), ...(out?.errType ? { et: out.errType } : {}) };
+  return { s: fb.given, ...(out?.better.trim() ? { b: out.better } : {}), ...(out?.why.trim() ? { w: out.why } : {}), v, k: out ? 1 : 0, ...(helped ? { hp: true as const } : {}), ...(reusable ? { r: true } : {}), ...(ts ? { ts } : {}), ...(out?.errType ? { et: out.errType } : {}) };
+}
+
+/**
+ * A4, „Weiß ich nicht“: Das Wort ist jetzt gezeigt; ein freiwilliger Satz damit schließt die Aufgabe positiv ab (Lernwissenschaft M2). Er zählt nicht
+ * und ändert keine Note – die Antwort „Weiß ich nicht“ bleibt „Nochmal“.
+ */
+function SayAnywayField({ word }: { word: string }) {
+  const { t } = useT();
+  const [value, setValue] = useState('');
+  const ok = value.trim().split(/\s+/).filter(Boolean).length >= 4 && value.toLowerCase().includes(word.toLowerCase().slice(0, Math.max(4, word.length - 2)));
+  return (
+    <div className="flex flex-col gap-1" data-testid="say-anyway">
+      <label className="lx-t-support text-muted" htmlFor="say-anyway-input">
+        {t('actSayAnywayLabel', { word })}
+      </label>
+      <input id="say-anyway-input" className="lx-field" lang="en" value={value} placeholder={t('actPlaceholder')} onChange={(ev) => setValue(ev.target.value)} data-testid="say-anyway-input" autoCapitalize="off" autoCorrect="off" spellCheck={false} />
+      <p className="lx-t-meta text-subtle">{t('actSayAnywayHint')}</p>
+      {ok && (
+        <p className="lx-t-meta text-ok-text" role="status">
+          ✓
+        </p>
+      )}
+    </div>
+  );
 }
 
 /** „Einmal richtig schreiben“ (M5): freiwillig, zählt nicht als Antwort und ändert keine Note. */
@@ -1147,7 +1211,7 @@ function BriefMarks({ brief, lang }: { brief: NonNullable<Exercise['brief']>; la
       </p>
       <p className="lx-t-support flex flex-wrap items-center gap-2" data-testid="brief-marks">
         <span className={chip} data-testid="brief-form">
-          {t('brFormLbl')}: {t(`brForm_${brief.form}` as MessageKey)}
+          {t('actLblShape')}: {t(`brForm_${brief.form}` as MessageKey)}
         </span>
         {brief.tone !== '-' && (
           <span className={chip} data-testid="brief-tone">

@@ -16,6 +16,7 @@ const vars: ReadApplyVars = {
   targets: ['stay in control', 'run the tests'],
   model: ['Claude Code works inside my project, and I stay in control because it asks before it changes a file.', 'After each change it can run the tests, so I see quickly whether something broke.'],
   text: 'I stay in control of the project. The assistant can run the tests after each change.',
+  uiLang: 'de',
 };
 const ROOT = join(import.meta.dirname, '../../..');
 
@@ -50,10 +51,29 @@ describe('read-apply@1', () => {
     const good = { verdict: 'almost', fixed: 'I stay in control of the project. The assistant can run the tests after each change.', c1: 'I stay in control of the project, and the assistant can run the tests after every change.', why: 'Deine Sätze sind verständlich. Die zweite Fassung klingt natürlicher, weil sie die Sätze verbindet.' };
     expect(schema.safeParse(good).success).toBe(true);
     expect(schema.safeParse({ ...good, c1: 'The assistant checks everything after every change in the project.' }).success).toBe(false);
+    // Die C1-Fassung behält JEDE Zielwendung (Lernwissenschaft M8): nur eine von zwei reicht nicht.
+    expect(schema.safeParse({ ...good, c1: 'I stay in control of the project, and the assistant checks everything after every change.' }).success).toBe(false);
     expect(schema.safeParse({ ...good, c1: 'I stay in control of the colour scheme, and the assistant can run the tests.' }).success).toBe(false);
     expect(schema.safeParse({ ...good, why: 'Your sentences are clear and the second version sounds more natural and fluent.' }).success).toBe(false);
     expect(schema.safeParse({ ...good, fixed: 'Ich behalte die Kontrolle über das Projekt und die Tests laufen.' }).success).toBe(false);
     expect(schema.safeParse({ ...good, verdict: 'perfect' }).success).toBe(false);
+  });
+});
+
+describe('read-apply@1: Sprachtreue (Oberflächensprache EN)', () => {
+  const en = { ...vars, uiLang: 'en' as const };
+  it('der Prompt nennt die Erklärsprache; why muss Englisch sein, nicht Deutsch', () => {
+    const p = readApply.build(en);
+    expect(p).toContain('Explanation language: English');
+    expect(readApply.build(vars)).toContain('Explanation language: German');
+    const good = { verdict: 'almost', fixed: 'I stay in control of the project. The assistant can run the tests after each change.', c1: 'I stay in control of the project, and the assistant can run the tests after every change.', why: 'Your sentences are clear. The second version sounds more natural because it joins the two ideas.' };
+    expect(readApply.schema(en).safeParse(good).success).toBe(true);
+    expect(readApply.schema(en).safeParse({ ...good, why: 'Deine Sätze sind verständlich. Die zweite Fassung klingt natürlicher, weil sie die Sätze verbindet.' }).success).toBe(false);
+    expect(readApply.schema(vars).safeParse(good).success).toBe(false);
+  });
+  it('die feste Dev-Antwort richtet sich nach der Erklärsprache', () => {
+    const out = JSON.parse(readApplyReply(readApply.build(en))) as unknown;
+    expect(readApply.schema(en).safeParse(out).success).toBe(true);
   });
 });
 
