@@ -21350,5 +21350,451 @@
     "by": "routine"
    }
   ]
+ },
+ "read/c-k1-01": {
+  "v": 1,
+  "by": "routine",
+  "course": "k1",
+  "n": 1,
+  "title": "What Claude Code Is",
+  "lessonGoal": "Du kannst erklären, was Claude Code ist, was es kann und wo seine Grenzen liegen.",
+  "asOf": "2026-10",
+  "paras": [
+   [
+    {
+     "e": "Many people first meet Claude through a chat window.",
+     "d": "Viele Menschen lernen Claude zunächst in einem Chatfenster kennen."
+    },
+    {
+     "e": "Claude Code works differently.",
+     "d": "Claude Code funktioniert anders."
+    },
+    {
+     "e": "It is an AI assistant for software work that runs in your terminal, right next to your project.",
+     "d": "Es ist ein KI-Assistent für Softwarearbeit, der in deinem Terminal läuft, direkt neben deinem Projekt."
+    },
+    {
+     "e": "Instead of pasting code into a chat, you describe a task and the assistant reads the relevant files itself.",
+     "d": "Statt Code in einen Chat zu kopieren, beschreibst du eine Aufgabe, und der Assistent liest die passenden Dateien selbst."
+    },
+    {
+     "e": "The difference is not only technical, because it also changes the kind of help you can expect.",
+     "d": "Der Unterschied ist nicht nur technisch, denn er verändert auch die Art von Hilfe, die du erwarten kannst."
+    }
+   ],
+   [
+    {
+     "e": "That difference changes the way you work.",
+     "d": "Dieser Unterschied verändert die Art, wie du arbeitest."
+    },
+    {
+     "e": "Claude Code can explore a codebase, run commands and propose changes to several files at once.",
+     "d": "Claude Code kann eine Codebasis erkunden, Befehle ausführen und Änderungen an mehreren Dateien gleichzeitig vorschlagen."
+    },
+    {
+     "e": "It asks for your approval before it edits a file or runs a command, so you stay in control.",
+     "d": "Es bittet um deine Freigabe, bevor es eine Datei ändert oder einen Befehl ausführt, sodass du die Kontrolle behältst."
+    },
+    {
+     "e": "Think of it as a capable colleague who can work at the command line, not as a search engine for code.",
+     "d": "Stell es dir als fähigen Kollegen vor, der auf der Kommandozeile arbeiten kann, und nicht als Suchmaschine für Code."
+    },
+    {
+     "e": "A colleague like that still needs clear instructions and a review of the result.",
+     "d": "Ein solcher Kollege braucht trotzdem klare Anweisungen und eine Prüfung des Ergebnisses."
+    },
+    {
+     "e": "Every step is visible, so you can follow what the assistant reads, plans and changes.",
+     "d": "Jeder Schritt ist sichtbar, sodass du verfolgen kannst, was der Assistent liest, plant und ändert."
+    }
+   ],
+   [
+    {
+     "e": "Typical tasks fall into a few groups.",
+     "d": "Typische Aufgaben lassen sich in wenige Gruppen einteilen."
+    },
+    {
+     "e": "It can explain an unfamiliar repository, which helps a new team member get up to speed quickly.",
+     "d": "Es kann ein unbekanntes Repository erklären, was einem neuen Teammitglied hilft, sich schnell einzuarbeiten."
+    },
+    {
+     "e": "It can fix a bug after you describe the symptoms, and it can run the tests to check the fix.",
+     "d": "Es kann einen Fehler beheben, nachdem du die Symptome beschrieben hast, und es kann die Tests ausführen, um die Korrektur zu prüfen."
+    },
+    {
+     "e": "It can also handle routine chores, such as writing commit messages or updating documentation.",
+     "d": "Es kann auch Routinearbeiten übernehmen, etwa Commit-Nachrichten schreiben oder die Dokumentation aktualisieren."
+    },
+    {
+     "e": "In each case, the assistant works inside your own environment and sees only what you allow it to see.",
+     "d": "In jedem Fall arbeitet der Assistent in deiner eigenen Umgebung und sieht nur das, was du ihm erlaubst."
+    },
+    {
+     "e": "For a manager, the value lies less in the code itself and more in the hours that routine work no longer takes.",
+     "d": "Für Führungskräfte liegt der Nutzen weniger im Code selbst als in den Stunden, die Routinearbeit nicht mehr kostet."
+    }
+   ],
+   [
+    {
+     "e": "There are limits worth knowing.",
+     "d": "Es gibt Grenzen, die man kennen sollte."
+    },
+    {
+     "e": "The assistant can make mistakes, especially when a task is vague or the project is large.",
+     "d": "Der Assistent kann Fehler machen, besonders wenn eine Aufgabe vage oder das Projekt groß ist."
+    },
+    {
+     "e": "A second limit is knowledge: the assistant knows your project only from the files it reads, not from your daily conversations.",
+     "d": "Eine zweite Grenze ist das Wissen: Der Assistent kennt dein Projekt nur aus den Dateien, die er liest, nicht aus euren täglichen Gesprächen."
+    },
+    {
+     "e": "It does not replace a code review, and it should never be the only safeguard before a release.",
+     "d": "Er ersetzt keine Code-Prüfung und sollte nie die einzige Absicherung vor einer Veröffentlichung sein."
+    },
+    {
+     "e": "For this reason, many teams start with small, low-risk tasks and widen the scope step by step.",
+     "d": "Deshalb beginnen viele Teams mit kleinen, risikoarmen Aufgaben und weiten den Umfang Schritt für Schritt aus."
+    }
+   ],
+   [
+    {
+     "e": "For a non-developer, the key idea is simple.",
+     "d": "Für Nicht-Entwickler ist der Kerngedanke einfach."
+    },
+    {
+     "e": "Claude Code turns a written request into work on a real project.",
+     "d": "Claude Code verwandelt eine schriftliche Anfrage in Arbeit an einem echten Projekt."
+    },
+    {
+     "e": "The quality of the result depends on how clearly you describe the goal.",
+     "d": "Die Qualität des Ergebnisses hängt davon ab, wie klar du das Ziel beschreibst."
+    },
+    {
+     "e": "Seen this way, adopting it is less a technology project than a change in how a team shares its work.",
+     "d": "So gesehen ist die Einführung weniger ein Technikprojekt als eine Veränderung darin, wie ein Team seine Arbeit aufteilt."
+    },
+    {
+     "e": "In the next lesson, you will learn how to brief a task so that the assistant gets it right the first time.",
+     "d": "In der nächsten Lektion lernst du, wie du eine Aufgabe so übergibst, dass der Assistent sie gleich beim ersten Mal richtig löst."
+    }
+   ]
+  ],
+  "phrases": [
+   {
+    "w": "get up to speed",
+    "de": "sich schnell einarbeiten",
+    "i": [
+     2,
+     1
+    ]
+   },
+   {
+    "w": "stay in control",
+    "de": "die Kontrolle behalten",
+    "i": [
+     1,
+     2
+    ]
+   },
+   {
+    "w": "run the tests",
+    "de": "die Tests ausführen",
+    "i": [
+     2,
+     2
+    ]
+   },
+   {
+    "w": "low-risk tasks",
+    "de": "risikoarme Aufgaben",
+    "i": [
+     3,
+     4
+    ]
+   },
+   {
+    "w": "widen the scope",
+    "de": "den Umfang ausweiten",
+    "i": [
+     3,
+     4
+    ]
+   }
+  ],
+  "check": [
+   {
+    "q": "What is the main idea of the lesson?",
+    "o": [
+     "Claude Code is mainly a faster search engine for code snippets.",
+     "Claude Code works on a real project, so it needs a clear task and a human review.",
+     "Claude Code can release software safely without any human review."
+    ],
+    "a": 1,
+    "why": "Die Lektion beschreibt Claude Code als Assistenten, der am echten Projekt arbeitet. Deshalb brauchen Aufgabe und Ergebnis einen Menschen, der klar beschreibt und prüft."
+   },
+   {
+    "q": "What can you conclude about using Claude Code in a team?",
+    "o": [
+     "It is wise to begin with small tasks and extend the use gradually.",
+     "It should be switched on for every task from the first day.",
+     "It makes tests unnecessary because the assistant checks everything."
+    ],
+    "a": 0,
+    "why": "Der Text empfiehlt, mit kleinen, risikoarmen Aufgaben zu beginnen und den Umfang schrittweise zu erweitern. Von Tests oder Prüfung ist als Ersatz keine Rede."
+   },
+   {
+    "q": "What does stay in control mean in this lesson?",
+    "o": [
+     "You write all the code yourself.",
+     "You turn the assistant off after each task.",
+     "You decide what the assistant may change."
+    ],
+    "a": 2,
+    "why": "Claude Code fragt vor Änderungen nach deiner Freigabe. Du entscheidest also, was geändert oder ausgeführt werden darf, und behältst die Kontrolle."
+   }
+  ],
+  "tip": {
+   "wrong": "I use Claude Code since two weeks.",
+   "right": "I have been using Claude Code for two weeks.",
+   "why": "Im Deutschen sagt man „ich nutze es seit zwei Wochen“ im Präsens. Im Englischen braucht eine Handlung, die bis jetzt andauert, das Present Perfect (have been using). Eine Zeitspanne steht mit for, ein Startpunkt mit since (since Monday)."
+  },
+  "apply": {
+   "situation": "Dein Kollege Jonas fragt, was Claude Code ist. Erkläre ihm in zwei Sätzen, wie du damit arbeitest und warum du die Kontrolle behältst.",
+   "targets": [
+    "stay in control",
+    "run the tests"
+   ],
+   "model": [
+    "Claude Code works inside my project, and I stay in control because it asks before it changes a file.",
+    "After each change it can run the tests, so I see quickly whether something broke."
+   ]
+  },
+  "sources": [
+   {
+    "title": "Claude Code overview (Anthropic documentation)",
+    "url": "https://docs.claude.com/en/docs/claude-code/overview"
+   }
+  ]
+ },
+ "read/c-k1-02": {
+  "v": 1,
+  "by": "routine",
+  "course": "k1",
+  "n": 2,
+  "title": "Briefing a Task",
+  "lessonGoal": "Du kannst eine Aufgabe so beschreiben, dass Claude Code das Ziel kennt und weiß, wann die Aufgabe fertig ist.",
+  "asOf": "2026-10",
+  "paras": [
+   [
+    {
+     "e": "A good result starts with a good briefing.",
+     "d": "Ein gutes Ergebnis beginnt mit einem guten Briefing."
+    },
+    {
+     "e": "Claude Code is capable, but it cannot read your mind.",
+     "d": "Claude Code ist leistungsfähig, aber es kann keine Gedanken lesen."
+    },
+    {
+     "e": "If your request is only to improve the login page, the assistant has to guess what you mean.",
+     "d": "Wenn deine Anfrage nur lautet, die Anmeldeseite zu verbessern, muss der Assistent raten, was du meinst."
+    },
+    {
+     "e": "Vague requests often lead to results that look finished but solve the wrong problem.",
+     "d": "Vage Anfragen führen oft zu Ergebnissen, die fertig aussehen, aber das falsche Problem lösen."
+    },
+    {
+     "e": "A short, precise briefing saves time on both sides.",
+     "d": "Ein kurzes, präzises Briefing spart auf beiden Seiten Zeit."
+    }
+   ],
+   [
+    {
+     "e": "A strong briefing has four parts.",
+     "d": "Ein starkes Briefing hat vier Teile."
+    },
+    {
+     "e": "First, state the goal, which means what should be different when the task is finished.",
+     "d": "Erstens: Nenne das Ziel, also was anders sein soll, wenn die Aufgabe erledigt ist."
+    },
+    {
+     "e": "Second, give the context, such as the part of the project involved and the reason for the change.",
+     "d": "Zweitens: Gib den Zusammenhang an, etwa den betroffenen Teil des Projekts und den Grund für die Änderung."
+    },
+    {
+     "e": "Third, name the constraints, for example which files must stay untouched or which style the team follows.",
+     "d": "Drittens: Nenne die Randbedingungen, zum Beispiel welche Dateien unangetastet bleiben müssen oder welchem Stil das Team folgt."
+    },
+    {
+     "e": "Fourth, define how you will judge the result, so that both of you know when the task is done.",
+     "d": "Viertens: Lege fest, woran du das Ergebnis beurteilst, damit ihr beide wisst, wann die Aufgabe erledigt ist."
+    },
+    {
+     "e": "None of these parts needs to be long, but each one removes a guess.",
+     "d": "Keiner dieser Teile muss lang sein, aber jeder nimmt dem Assistenten eine Vermutung ab."
+    }
+   ],
+   [
+    {
+     "e": "Consider a simple example.",
+     "d": "Nehmen wir ein einfaches Beispiel."
+    },
+    {
+     "e": "A weak request says: make the export faster.",
+     "d": "Eine schwache Anfrage lautet: Mach den Export schneller."
+    },
+    {
+     "e": "A strong request says: the CSV export takes about 40 seconds for 10,000 rows, and it should take under 10 seconds.",
+     "d": "Eine starke Anfrage lautet: Der CSV-Export braucht für 10.000 Zeilen etwa 40 Sekunden und sollte unter 10 Sekunden dauern."
+    },
+    {
+     "e": "The request should also mention that the database schema must not change, and that the existing tests must still pass.",
+     "d": "Die Anfrage sollte außerdem erwähnen, dass sich das Datenbankschema nicht ändern darf und dass die vorhandenen Tests weiter bestehen müssen."
+    },
+    {
+     "e": "With this information, the assistant can plan its work and avoid risky shortcuts.",
+     "d": "Mit diesen Informationen kann der Assistent seine Arbeit planen und riskante Abkürzungen vermeiden."
+    },
+    {
+     "e": "Notice how the second request contains numbers that the assistant can measure.",
+     "d": "Beachte, wie die zweite Anfrage Zahlen enthält, die der Assistent messen kann."
+    }
+   ],
+   [
+    {
+     "e": "It also helps to ask for a plan before any code is written.",
+     "d": "Es hilft außerdem, vor dem ersten Code um einen Plan zu bitten."
+    },
+    {
+     "e": "You can read the plan, correct a wrong assumption and only then let the assistant start.",
+     "d": "Du kannst den Plan lesen, eine falsche Annahme korrigieren und erst dann den Assistenten loslegen lassen."
+    },
+    {
+     "e": "This habit prevents a long detour in the wrong direction.",
+     "d": "Diese Gewohnheit verhindert einen langen Umweg in die falsche Richtung."
+    },
+    {
+     "e": "If the first result misses the point, do not simply repeat the request.",
+     "d": "Wenn das erste Ergebnis am Thema vorbeigeht, wiederhole die Anfrage nicht einfach."
+    },
+    {
+     "e": "Instead, explain what was missing and add the detail to your briefing.",
+     "d": "Erkläre stattdessen, was gefehlt hat, und ergänze die Einzelheit in deinem Briefing."
+    },
+    {
+     "e": "A short follow-up message is usually enough to bring the work back on track.",
+     "d": "Eine kurze Folgenachricht reicht meist, um die Arbeit wieder in die richtige Richtung zu lenken."
+    }
+   ],
+   [
+    {
+     "e": "In short, treat the assistant like a new colleague on day one.",
+     "d": "Kurz gesagt: Behandle den Assistenten wie einen neuen Kollegen am ersten Tag."
+    },
+    {
+     "e": "Give it the background, the boundaries and a clear finish line, and you will get better results with less rework.",
+     "d": "Gib ihm den Hintergrund, die Grenzen und eine klare Ziellinie, dann bekommst du bessere Ergebnisse mit weniger Nacharbeit."
+    },
+    {
+     "e": "A few minutes of preparation at the start usually save an hour of corrections later.",
+     "d": "Ein paar Minuten Vorbereitung am Anfang sparen meist eine Stunde Korrekturen später."
+    }
+   ]
+  ],
+  "phrases": [
+   {
+    "w": "state the goal",
+    "de": "das Ziel nennen",
+    "i": [
+     1,
+     1
+    ]
+   },
+   {
+    "w": "give the context",
+    "de": "den Zusammenhang angeben",
+    "i": [
+     1,
+     2
+    ]
+   },
+   {
+    "w": "stay untouched",
+    "de": "unangetastet bleiben",
+    "i": [
+     1,
+     3
+    ]
+   },
+   {
+    "w": "avoid risky shortcuts",
+    "de": "riskante Abkürzungen vermeiden",
+    "i": [
+     2,
+     4
+    ]
+   },
+   {
+    "w": "clear finish line",
+    "de": "klare Ziellinie",
+    "i": [
+     4,
+     1
+    ]
+   }
+  ],
+  "check": [
+   {
+    "q": "What does a strong briefing contain?",
+    "o": [
+     "A complete list of all files in the project.",
+     "As few words as possible, so the assistant stays flexible.",
+     "The goal, the context, the constraints and a way to judge the result."
+    ],
+    "a": 2,
+    "why": "Der Text nennt vier Teile: Ziel, Zusammenhang, Randbedingungen und ein Kriterium, woran das Ergebnis beurteilt wird."
+   },
+   {
+    "q": "Why does the lesson recommend asking for a plan first?",
+    "o": [
+     "It makes the assistant work faster on large projects.",
+     "It lets you correct a wrong assumption before any code is written.",
+     "It means you no longer have to review the result."
+    ],
+    "a": 1,
+    "why": "Mit einem Plan siehst du Annahmen, bevor Code entsteht. So lässt sich ein Irrtum früh korrigieren und ein langer Umweg vermeiden. Die Prüfung des Ergebnisses bleibt trotzdem nötig."
+   },
+   {
+    "q": "What is meant by a finish line in this lesson?",
+    "o": [
+     "A clear criterion that tells you when the task is done.",
+     "The last file the assistant edits.",
+     "A deadline set by the project manager."
+    ],
+    "a": 0,
+    "why": "Die Ziellinie ist das Kriterium, an dem ihr beide erkennt, dass die Aufgabe erledigt ist. Im Beispiel ist das die Zeit unter 10 Sekunden."
+   }
+  ],
+  "tip": {
+   "wrong": "Please explain me the plan.",
+   "right": "Please explain the plan to me.",
+   "why": "Im Deutschen heißt es „erkläre mir den Plan“. Im Englischen steht nach explain nie direkt die Person: Man erklärt etwas, und die Person folgt mit to. Dasselbe gilt für describe, suggest und propose."
+  },
+  "apply": {
+   "situation": "Du bittest Claude Code, den CSV-Export schneller zu machen. Schreibe zwei Sätze mit dem Ziel und einer Randbedingung.",
+   "targets": [
+    "state the goal",
+    "stay untouched"
+   ],
+   "model": [
+    "First, I state the goal: the export should finish in under 10 seconds.",
+    "The database schema must stay untouched, and the existing tests have to pass."
+   ]
+  },
+  "sources": [
+   {
+    "title": "Claude Code best practices (Anthropic engineering)",
+    "url": "https://www.anthropic.com/engineering/claude-code-best-practices"
+   }
+  ]
  }
 }

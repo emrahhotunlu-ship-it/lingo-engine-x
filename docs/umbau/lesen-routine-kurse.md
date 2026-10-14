@@ -1,0 +1,401 @@
+# Routine „Lesen“: Kurslektionen (Paket L8, Stand 14.10.2026)
+
+Zweck: Die Kurse im Reiter „Lesen“ (Startkurse **K1 Claude Code in 10 Tagen** und **K5 KI im Unternehmen**) bekommen ihre Lektionen von der **täglichen Routine**, nicht vorab (Emrahs Entscheidung vom 14.10.2026, `docs/umbau/lesen-kurse.md` §6). Dieselbe geplante Claude-Aufgabe, die schon die Tagesartikel schreibt (`docs/umbau/lesen-routine.md`), legt zusätzlich Lektionen im Voraus ab. Die App liest und prüft sie streng, blendet Fehlerhaftes aus (löscht nie) und führt den Fortschritt selbst.
+
+Abschnitt 1 und 2 erklären, was die App damit macht. Abschnitt 3 ist die **vollständige, direkt verwendbare Anweisung** (als weiteren Teil des Auftragstexts der geplanten Aufgabe einfügen, zwischen den Markierungen `ANWEISUNG-BEGINN` und `ANWEISUNG-ENDE`). Abschnitt 4 ist für die Hauptsitzung (Einrichtung, Test, Rückweg). Das Beispiel in Abschnitt 3 und der Katalog werden von `tests/unit/read/routineCourses.test.ts` gegen die echten Prüftore der App und gegen den Kurskatalog im Code geprüft: Ändert sich der Prüfer oder der Katalog, schlägt der Test an, bevor die Anweisung veraltet.
+
+## 1. Wer schreibt was (die eine Regel)
+
+| Dokument | Schreibt | Liest | Inhalt |
+|---|---|---|---|
+| `read/c-<Kurs>-<nn>` (z. B. `read/c-k1-03`) | **nur die Routine** | App | genau eine Lektion (ein Dokument je Lektion) |
+| `read/cp` | **nur die App** | App, Routine (nur lesen) | Kursfortschritt: je Lektion Zeit, gelesen, Fragen, eigene Sätze, fertig |
+| `read/r-<Tag>`, `read/d-<Tag>`, `read/m-<Monat>`, `read/p` | wie in `lesen-routine.md` | | Tagesartikel, Lesestand, Einstellungen (**für die Kurse nicht relevant**) |
+
+Die Routine schreibt für Kurse **nur** `read/c-<Kurs>-<nn>` und **löscht nie**. Sie überschreibt keine vorhandene Lektion. `read/cp` liest sie nur, um zu wissen, wie weit Emrah ist.
+
+## 2. Was die App mit den Lektionen macht
+
+- Beim Öffnen von „Lesen“ liest die App `read/cp` und je aktivem Kurs **genau das Dokument der aktuellen Lektion** (die erste, die noch nicht fertig ist): drei kleine Zugriffe, nie die Sammlung, nie alle Lektionen.
+- **Jede Lektion wird streng geprüft** (`src/modules/read/domain/lesson.ts`): Kurs und Nummer passen zum Dokumentnamen, `by` ist `routine`, der Text besteht dieselben Tore wie ein Tagesartikel (Form, Länge, Sprache Englisch/Deutsch, 1:1-Ausrichtung der Sätze, keine verklebten Sätze, US-Schreibweise, Floskeln), dazu 4 bis 5 Wendungen (mindestens 3 mehrteilig, jede steht im Text), genau 3 Prüffragen, ein Sprachtipp, eine Anwenden-Aufgabe (Lage, 2 bis 4 Zielwendungen aus den Wendungen, Musterlösung, die alle Zielwendungen benutzt) und Quellen mit Stand, wo sie Pflicht sind.
+- Eine Lektion, die durchfällt, wird **ausgeblendet** (Diagnose-Protokoll `read:lesson lesson_hidden` mit Grund), nie gelöscht. In der Liste steht sie als „Wird vorbereitet“. Die Routine kann sie beim nächsten Lauf nicht reparieren (sie überschreibt nichts): Emrah meldet es, die Hauptsitzung korrigiert das Dokument.
+- **Lektion n+1 öffnet erst nach n.** „Fertig“ = Text zu Ende gelesen **und** drei Fragen beantwortet **und** eigene Sätze abgeschickt. Fertig ist ein Zustand, kein Knopf; die App setzt ihn selbst.
+- Der Hauptknopf im Reiter heißt „Heute: K1 · Lektion 3 · ca. 10 Min“, wenn die aktuelle Lektion bereit ist. Ist sie nicht bereit, zeigt der Kurs „Wird vorbereitet“ und der Knopf bietet weiter den Artikel an. **Lektionen sind immer Extra**: nie Pflicht, zählen nicht zur Serie.
+- Die Wendungen einer Lektion nimmt Emrah mit einem Tipp als Lernkarten mit (Ursprungssatz aus dem Lektionstext, `origin.ref` = `c-<Kurs>-<nn>`), sie laufen wie alle anderen neuen Karten in die aktive Spur und kommen nur innerhalb des Tageskontingents neuer Wörter dran.
+- Beim Aufwärmen baut die App zwei Lücken aus den Wendungen **früherer, fertiger Lektionen** desselben Kurses (lokal, ohne Claude). Deshalb dürfen sich Wendungen nicht wiederholen und sollen in späteren Lektionen im Text wiederkehren (siehe Anweisung).
+
+## 3. ANWEISUNG (zum Einfügen)
+
+<!-- ANWEISUNG-BEGINN -->
+
+**Auftrag: Kurslektionen für die Englisch-App von Emrah im Voraus schreiben**
+
+Du arbeitest in einer geplanten Sitzung mit Websuche (WebSearch, WebFetch) und dem Werkzeug `ArtifactData`. Verwende dieselbe Artefakt-URL (`url`), mit der du auch `read/r-<Datum>` schreibst. Dein Ergebnis sind **bis zu 2 neue Lektionen je aktivem Kurs**, jede als **eigenes Dokument** `read/c-<Kurs>-<nn>`. Der Leser ist Emrah, Berufstätiger, Englisch B2 auf dem Weg zu C1, Deutsch ist seine Muttersprache. Er liest jeden Satz auf Englisch, kann den deutschen Satz daneben aufdecken, beantwortet Fragen und schreibt am Ende zwei eigene englische Sätze.
+
+**Aktive Kurse (nur diese):** `k1` (Claude Code in 10 Tagen, 10 Lektionen) und `k5` (KI im Unternehmen, 10 Lektionen). Schreibe nie für andere Kurse. `<nn>` ist die zweistellige Lektionsnummer (`01` bis `10`), z. B. `read/c-k1-03`.
+
+**Schritt 1: Stand lesen.** Lies mit `ArtifactData` (Aktion `get`) das Dokument `read/cp` (es gehört der App, du liest es nur; fehlt es, hat Emrah noch nichts begonnen). Darin steht `items`, je Lektion ein Eintrag `{ "id": "k1-03", "course": "k1", "n": 3, "done": true, … }`. Für jeden aktiven Kurs ist `cur` die kleinste Lektionsnummer, die **nicht** mit `"done": true` erscheint (ohne Eintrag: 1). Ist `cur` größer als 10, ist der Kurs durch, dafür schreibst du nichts.
+
+**Schritt 2: Was fehlt?** Ziel: Für jeden aktiven Kurs sollen die Lektionen `cur` und `cur+1` (höchstens bis 10) als Dokument vorhanden sein, also **mindestens zwei bereit**. Prüfe mit `get`, ob `read/c-<Kurs>-<cur>` und `read/c-<Kurs>-<cur+1>` existieren. Schreibe nur die fehlenden, in dieser Reihenfolge, **höchstens 2 neue Lektionen je Kurs und Lauf**. Existiert ein Dokument schon, **überschreibe es nie** und fasse es nicht an (auch wenn du es besser schreiben würdest). Ist alles vorhanden, schreibe nichts und antworte mit „schon vorhanden“.
+
+**Schritt 3: Aufbauen auf dem Vorherigen.** Bevor du Lektion `n` schreibst (n > 1), lies mit `get` die vorherige Lektion `n-1` desselben Kurses (falls vorhanden) und führe eine **Wendungsliste des Kurses**: alle `phrases[].w` der Lektionen 1 bis n-1, die du lesen kannst. Die Lektionen bauen aufeinander auf: Was Lektion `n-1` erklärt, darfst du als bekannt voraussetzen und knapp wieder aufgreifen. Regeln:
+- Die 4 bis 5 **neuen** Wendungen von Lektion `n` dürfen **keine Wendung der Wendungsliste** wiederholen (keine Doppelungen, auch nicht gebeugt). **Einzige Ausnahme ist Lektion 10** (Abschluss des Kurses): Dort sollen mindestens 3 der 4 bis 5 `phrases` die wichtigsten Wendungen aus den früheren Lektionen wieder aufnehmen, damit der Abschlusstext sie bündelt.
+- Im Text von Lektion `n` sollen **ein bis zwei Wendungen aus früheren Lektionen** natürlich wiederkehren (nicht als neue `phrases`), damit sie sich festigen.
+- Wiederhole keine Beispiele und keine Anfangssätze früherer Lektionen.
+
+**Schritt 4: Recherche, bevor du schreibst.**
+- **Kurs `k1` (Claude Code): nur nach Recherche in der offiziellen Anthropic-Dokumentation.** Rufe mit WebFetch die passenden Seiten ab (docs.claude.com bzw. code.claude.com, anthropic.com/engineering) und lies sie, bevor du schreibst. Schreibe nur, was auf den gelesenen Seiten steht oder daraus unmittelbar folgt. **Keine Bedienungsdetails ohne wörtliche Quelle**: keine Befehle, Menüpunkte, Optionsnamen, Dateipfade, Tastenkürzel, Versionsnummern, Preise oder Limits, es sei denn, sie stehen wörtlich auf einer von dir gelesenen Seite. Bist du unsicher, beschreibe das Prinzip allgemein („the assistant asks for your approval“), ohne Einzelheiten zu nennen. Trage jede wirklich gelesene Seite in `sources` ein.
+- **Kurs `k5` (KI im Unternehmen):** Aussagen zu **EU AI Act, Datenschutz/DSGVO** und alle **Zahlen** (Prozente, Beträge, Studien, Umfragen) nur nach Recherche in einer offiziellen oder seriösen Quelle (Seite der EU, Behörde, Hersteller, Studie), die du mit WebFetch gelesen hast. Keine Rechtsberatung: schreibe „as a rule“, „in general“, empfehle bei Einzelfragen die Rechtsabteilung. Keine Zahl aus dem Gedächtnis. Hat die Lektion weder Recht noch Zahlen, brauchst du keine Quelle.
+- Alle Lektionen: keine erfundenen Zitate, Personen, Firmen, Studien. Beispiele sind erkennbar hypothetisch („Imagine a mid-sized insurer …“).
+
+**Schritt 5: Die Lektion schreiben (Feld für Feld).**
+
+| Feld | Inhalt |
+|---|---|
+| `v` | immer `1` |
+| `by` | immer `"routine"` |
+| `course` | `"k1"` oder `"k5"`, passend zum Dokumentnamen |
+| `n` | Lektionsnummer als Zahl, passend zum Dokumentnamen |
+| `title` | englischer Titel der Lektion, höchstens 90 Zeichen; nimm den Titel aus dem Katalog unten |
+| `lessonGoal` | **ein** deutscher Satz (20 bis 240 Zeichen) in der Du-Form: „Du kannst …“, das Ziel der Lektion |
+| `asOf` | `JJJJ-MM` der Recherche (Pflicht bei Quellen) |
+| `paras` | Absätze → Sätze → Paare `{ "e": englischer Satz, "d": deutscher Satz }` |
+| `phrases` | 4 bis 5 **neue** Schlüsselwendungen `{ "w", "de", "i" }` |
+| `check` | genau 3 Prüffragen |
+| `tip` | Sprachtipp `{ "wrong", "right", "why" }` |
+| `apply` | Anwenden-Aufgabe `{ "situation", "targets", "model" }` |
+| `sources` | Liste `{ "title", "url" }` der wirklich gelesenen Seiten (`k1`: Pflicht, mindestens eine offizielle Anthropic-Seite; `k5`: Pflicht bei Recht oder Zahlen), `url` beginnt mit `https://` |
+
+**Der englische Text (`e`).**
+- 350 bis 450 Wörter, 4 bis 5 Absätze, 18 bis 28 Sätze, kein Satz über 35 Wörter. Die App lehnt weniger als 300 und mehr als 600 Wörter ab.
+- Aufbau: Absatz 1 holt das Thema ab und knüpft an die vorige Lektion an, die mittleren Absätze erklären das Thema an einem konkreten, hypothetischen Beispiel aus dem Berufsalltag, der letzte Absatz fasst die Kernaussage zusammen und führt zur Anwenden-Aufgabe hin. Eine kurze Frage an den Leser ist erlaubt, ein Fachbegriff wird im Satz erklärt.
+- Niveau C1 für einen Berufstätigen, sachlicher Magazinstil, wechselnde Satzlängen, Wortverbindungen statt Einzelwörter. **US-Schreibweise** (color, organization, analyze). Verboten sind Floskeln wie „game changer“, „in today’s fast-paced world“, „delve into“, „unlock the potential“, „in conclusion,“. „however“ höchstens 3-mal, „quietly“ höchstens 1-mal.
+- Reiner Text: kein Markdown, kein HTML, keine Sternchen, keine Aufzählungszeichen, keine Zeilenumbrüche mitten im Satz, keine doppelten Leerzeichen, nach jedem Satzzeichen ein Leerzeichen. Ein Eintrag = genau **ein** Satz (kein zweites Satzende darin; ein Doppelpunkt mit anschließender Aussage ist erlaubt).
+
+**Die deutsche Übersetzung (`d`).**
+- Zu **jedem** englischen Satz genau ein deutscher Satz im selben Paar: nichts zusammenfassen, auslassen, hinzufügen oder umstellen. Verschmilz keine zwei Sätze und teile keinen.
+- Idiomatisches, natürliches Deutsch, nicht Wort für Wort; Fachbegriffe so, wie man sie im deutschen Berufsalltag sagt.
+- Alle **Zahlen** des englischen Satzes stehen im deutschen Satz (10,000 wird 10.000), Eigennamen bleiben erhalten. Der deutsche Text ist insgesamt 0,85- bis 1,35-mal so lang wie der englische.
+
+**Wendungen (`phrases`).** 4 bis 5, mindestens 3 davon mehrteilig (Verb + Nomen, Adjektiv + Nomen, feste Wendungen: „get up to speed“, „stay in control“). Keine Wörter, die im Deutschen gleich aussehen und heißen (team, system, plan, manager, project). `w` steht **genau so** (Endungen erlaubt) in einem englischen Satz des Textes, `de` ist die deutsche Bedeutung im Zusammenhang (höchstens 60 Zeichen), `i` ist `[Absatz, Satz]` des Satzes, in dem sie steht, nullbasiert (`[0, 2]` = dritter Satz im ersten Absatz). Dieser Satz wird später der Ursprungssatz der Lernkarte. Keine Wendung der Wendungsliste des Kurses (Schritt 3).
+
+**Prüffragen (`check`).** Genau 3, je 3 Antworten in `o`, `a` ist der Index der richtigen Antwort (0, 1 oder 2; wechsle die Lage). Frage 1 prüft die **Kernaussage**, Frage 2 eine **Schlussfolgerung** (was folgt daraus, was ist nicht belegt), Frage 3 eine **Wendung im Kontext** (was bedeutet „…“ hier). `q` und `o` sind Englisch (US), kurz; die Falschantworten plausibel und etwa gleich lang wie die richtige, nie offensichtlich absurd, kein „alle/keine der obigen“. `why` ist Deutsch, ein bis zwei Sätze, erklärt **warum** die Antwort stimmt.
+
+**Sprachtipp (`tip`).** Ein typischer Fehler deutschsprachiger Englischlerner, der zum Thema der Lektion passt: `wrong` ist der fehlerhafte englische Satz (so, wie ihn Deutschsprachige oft sagen, höchstens 160 Zeichen), `right` die richtige Fassung (US-Schreibweise), `why` erklärt auf Deutsch in ein bis zwei Sätzen, **warum** (Bezug zur deutschen Struktur, 20 bis 320 Zeichen). `wrong` und `right` müssen sich unterscheiden. Erfinde keinen Fehler, der keiner ist.
+
+**Anwenden (`apply`).**
+- `situation`: eine konkrete Lage aus dem Berufsalltag auf **Deutsch** (20 bis 300 Zeichen), in der Emrah **zwei Sätze auf Englisch** schreiben soll („Dein Kollege Jonas fragt …“).
+- `targets`: 2 Wendungen, die er benutzen soll, **genau wie in `phrases[].w`** derselben Lektion geschrieben. In der **letzten Lektion** (Nr. 10) sind es 4 Wendungen aus den `phrases` dieser Lektion (siehe Schritt 3, Ausnahme) und die Aufgabe ist der Abschluss: bei `k1` ein kurzer 60-Sekunden-Pitch (die Aufgabe nennt dann bis zu 6 Sätze), bei `k5` ein kurzer Kundentext.
+- `model`: die **Musterlösung**, 2 bis 6 englische Sätze (jeder 3 bis 45 Wörter, ein Satz je Eintrag, US-Schreibweise), die **alle** `targets` benutzen, natürlich und passend zur Lage.
+
+**Quellen und Stand.** `sources` nur mit Seiten, die du wirklich gelesen hast (Titel kurz, höchstens 120 Zeichen). `asOf` ist der Monat der Recherche (`JJJJ-MM`). Ohne Quellen darf bei `k5` nichts über EU AI Act, DSGVO oder Zahlen stehen.
+
+**Schritt 6: Selbstprüfung vor dem Schreiben** (für jede Lektion, sonst verbessern oder weglassen):
+1. 350 bis 450 Wörter Englisch, 4 bis 5 Absätze, jeder Satz hat sein deutsches Gegenstück, alle Zahlen stehen auch im Deutschen.
+2. `course` und `n` passen zum Dokumentnamen; `title` stammt aus dem Katalog.
+3. 4 bis 5 neue Wendungen, keine aus der Wendungsliste (außer in Lektion 10); jede steht wörtlich im Text; `i` stimmt; mindestens 3 mehrteilig.
+4. Genau 3 Prüffragen mit je 3 verschiedenen, plausiblen Antworten; `why` auf Deutsch.
+5. `tip` hat einen echten, typischen Fehler; `apply.targets` stehen in `phrases`, die Musterlösung benutzt jede davon.
+6. `k1`: jede Aussage steht auf einer gelesenen Seite, keine Bedienungsdetails ohne wörtliche Quelle, `sources` nennt eine offizielle Anthropic-Seite. `k5`: Recht und Zahlen nur mit Quelle.
+7. Nichts erfunden, nichts aus einer Quelle wörtlich kopiert, keine Floskeln.
+8. Das ganze Dokument ist gültiges JSON (Anführungszeichen in Texten mit `\"` schützen), kleiner als 60 KB.
+
+**Schritt 7: Schreiben.** Rufe `ArtifactData` mit der Aktion `set` auf Sammlung `read`, Dokument `read/c-<Kurs>-<nn>` auf, mit dem **ganzen** Dokument (nicht in Teilen):
+
+```
+{ "v": 1, "by": "routine", "course": "<Kurs>", "n": <Nummer>, "title": …, "lessonGoal": …, "asOf": …, "paras": […], "phrases": […], "check": […], "tip": {…}, "apply": {…}, "sources": […] }
+```
+
+Schreibe **nur** `read/c-<Kurs>-<nn>`. Schreibe nie in `read/cp`, `read/m-…`, `read/d-…`, `read/p`, `read/r-…` oder ein anderes Dokument der App, und **lösche nie ein Dokument** (das gilt auch für alte Lektionen).
+
+**Schritt 8: Antwort.** Antworte mit einer kurzen Liste: Datum, je geschriebener Lektion Dokument, Titel, Zahl der Quellen. Keine weiteren Texte.
+
+**Katalog K1: Claude Code in 10 Tagen** (Englisch: Claude Code in 10 Days). Ziel: Erklären, was Claude Code kann und wie man sicher damit arbeitet, in verständlichem Business-Englisch. Lektionen (Nr. **Titel** (deutsch) und Inhalt):
+
+1. **What Claude Code Is** (Was Claude Code ist)
+   Was Claude Code ist: ein KI-Assistent für Softwarearbeit, der im Projekt arbeitet (Dateien lesen, Befehle ausführen, Änderungen vorschlagen) und nicht nur chattet. Wo man ihn startet, was er kann, was nicht. Wortschatz: Programmierarbeit beschreiben (codebase, repository, command line, assistant).
+2. **Briefing a Task** (Eine Aufgabe briefen)
+   Eine Aufgabe klar übergeben: Ziel, Kontext, Randbedingungen, Abnahmekriterien. Schlechtes und gutes Briefing im Vergleich. Wortschatz: Anforderungen formulieren (scope, constraint, acceptance criteria, be specific about).
+3. **Project Memory with CLAUDE.md** (Projektgedächtnis mit CLAUDE.md)
+   Die Datei CLAUDE.md: was hineingehört (Befehle, Regeln, Stil), was nicht, warum sie Wiederholung spart. Wortschatz: Regeln und Konventionen (convention, guideline, house rules, keep it concise).
+4. **Permissions and Safety** (Rechte und Sicherheit)
+   Wer darf was: Rückfragen vor Änderungen, erlaubte und gesperrte Befehle, Vorsicht bei sensiblen Daten. Wortschatz: Risiko und Freigabe (grant access, approve, sensitive data, safeguard, audit trail).
+5. **Plan First, Then Build** (Erst planen, dann bauen)
+   Erst einen Plan prüfen lassen, dann umsetzen: warum das Fehler früh abfängt, wie man einen Plan bewertet. Wortschatz: Vorgehen abstimmen (walk through, trade-off, sign off on, step by step).
+6. **Delegating to Subagents** (Aufgaben an Subagenten abgeben)
+   Spezialisierte Hilfsagenten für Teilaufgaben: wann sich Delegieren lohnt, wie man Aufträge zuschneidet, wie man Ergebnisse prüft. Wortschatz: Delegieren (hand off, in parallel, specialized, report back).
+7. **Automating with Hooks** (Automatisieren mit Hooks)
+   Hooks: Befehle, die bei bestimmten Ereignissen automatisch laufen (zum Beispiel vor oder nach einer Aktion). Wofür sie taugen, wo die Grenzen liegen. Wortschatz: Automatisierung (trigger, run automatically, enforce a rule, side effect).
+8. **Connecting Tools with MCP** (Werkzeuge anbinden mit MCP)
+   MCP als offener Standard, um Claude mit Werkzeugen und Datenquellen zu verbinden (zum Beispiel Tickets, Datenbanken). Nutzen und Vorsicht. Wortschatz: Anbindungen (integrate, connect to, data source, access scope).
+9. **Tests as a Safety Net** (Tests als Sicherheitsnetz)
+   Warum Tests bei KI-gestützter Arbeit noch wichtiger sind: Änderungen prüfen, Fehler früh finden, Tests zuerst schreiben lassen. Wortschatz: Qualität sichern (regression, catch bugs early, green build, coverage).
+10. **Pitching It Internally** (Intern überzeugen)
+   Abschluss: Nutzen, Risiken und nächste Schritte für Claude Code im Unternehmen in einem 60-Sekunden-Pitch darstellen. Die Anwenden-Aufgabe ist der Pitch mit vier Wendungen aus dem Kurs.
+
+**Katalog K5: KI im Unternehmen** (Englisch: AI in the Enterprise). Ziel: KI-Projekte mit Kunden und Kollegen besprechen: Nutzen, Risiken, Datenschutz und Einführung. Lektionen (Nr. **Titel** (deutsch) und Inhalt):
+
+1. **What Language Models Can Do** (Was Sprachmodelle können)
+   Was große Sprachmodelle gut können (Texte verstehen, zusammenfassen, formulieren, Code schreiben) und wo sie unzuverlässig sind. Wortschatz: Fähigkeiten und Grenzen (capability, limitation, hallucination, ground in data).
+2. **Hype Versus Value** (Hype oder Wert)
+   Wie man Versprechen von echtem Nutzen trennt: Fragen an Anbieter, realistische Erwartungen, Belege statt Schlagworte. Wortschatz: Skepsis und Beleg (cut through the hype, proof point, overpromise, measurable).
+3. **Choosing a Use Case** (Einen Anwendungsfall wählen)
+   Wie man den ersten Einsatz wählt: häufige, klar umrissene Aufgabe, Daten vorhanden, Fehler verkraftbar, Nutzen messbar. Wortschatz: Priorisieren (low-hanging fruit, narrow scope, business case, pain point).
+4. **Data Protection and the EU AI Act** (Datenschutz und EU-AI-Act)
+   Was bei KI und Datenschutz zu beachten ist (DSGVO, Auftragsverarbeitung) und was der EU AI Act grob regelt (Risikoklassen). NUR nach Recherche in der offiziellen Quelle, ohne Rechtsberatung, mit Quelle und Stand.
+5. **Build, Buy or Partner** (Selbst bauen, kaufen oder Partner)
+   Die drei Wege im Vergleich: Kosten, Tempo, Kontrolle, Abhängigkeit vom Anbieter. Wortschatz: Entscheidungen (vendor lock-in, in-house, total cost, time to market).
+6. **From Pilot to Production** (Vom Pilot in den Betrieb)
+   Warum viele Piloten stecken bleiben und was für den Betrieb nötig ist: Verantwortliche, Überwachung, Qualitätskriterien, Rollout. Wortschatz: Einführung (roll out, scale up, ownership, success criteria).
+7. **Measuring ROI** (Nutzen messen (ROI))
+   Wie man den Nutzen einer KI-Lösung belegt: Ausgangswert, Zeitersparnis, Qualität, Kosten. Ehrlich bleiben bei Zahlen. Wortschatz: Zahlen darstellen (baseline, payback period, time saved, tangible).
+8. **People and Change** (Menschen und Wandel)
+   Akzeptanz im Team: Sorgen ernst nehmen, Schulung, Rollen, früh einbinden. Wortschatz: Veränderung begleiten (buy-in, resistance, upskill, early adopters).
+9. **AI in Document Management** (KI im Dokumentenmanagement)
+   Typische Einsatzfelder in Dokumentenmanagement und Archiv: Suche, Klassifizieren, Zusammenfassen, Extraktion. Was dabei zu beachten ist (Rechte, Nachvollziehbarkeit). Wortschatz: Dokumente und Inhalte (retrieve, classify, extract, audit-proof).
+10. **Selling AI Responsibly** (KI verantwortungsvoll verkaufen)
+   Abschluss: Kunden ehrlich beraten, Grenzen benennen, Erwartungen setzen, Einwände ruhig beantworten. Die Anwenden-Aufgabe ist ein kurzer Kundentext mit vier Wendungen aus dem Kurs.
+
+**Das Beispiel** unten zeigt eine vollständige Lektion (K1, Lektion 1) in genau dem Aufbau, den die App akzeptiert. Es ist ein Dokument, nicht eine Liste. Übernimm den Aufbau und die Genauigkeit, nicht den Inhalt.
+
+<!-- BEISPIEL-JSON-BEGINN -->
+```json
+{
+  "v": 1,
+  "by": "routine",
+  "course": "k1",
+  "n": 1,
+  "title": "What Claude Code Is",
+  "lessonGoal": "Du kannst erklären, was Claude Code ist, was es kann und wo seine Grenzen liegen.",
+  "asOf": "2026-10",
+  "paras": [
+    [
+      {
+        "e": "Many people first meet Claude through a chat window.",
+        "d": "Viele Menschen lernen Claude zunächst in einem Chatfenster kennen."
+      },
+      {
+        "e": "Claude Code works differently.",
+        "d": "Claude Code funktioniert anders."
+      },
+      {
+        "e": "It is an AI assistant for software work that runs in your terminal, right next to your project.",
+        "d": "Es ist ein KI-Assistent für Softwarearbeit, der in deinem Terminal läuft, direkt neben deinem Projekt."
+      },
+      {
+        "e": "Instead of pasting code into a chat, you describe a task and the assistant reads the relevant files itself.",
+        "d": "Statt Code in einen Chat zu kopieren, beschreibst du eine Aufgabe, und der Assistent liest die passenden Dateien selbst."
+      },
+      {
+        "e": "The difference is not only technical, because it also changes the kind of help you can expect.",
+        "d": "Der Unterschied ist nicht nur technisch, denn er verändert auch die Art von Hilfe, die du erwarten kannst."
+      }
+    ],
+    [
+      {
+        "e": "That difference changes the way you work.",
+        "d": "Dieser Unterschied verändert die Art, wie du arbeitest."
+      },
+      {
+        "e": "Claude Code can explore a codebase, run commands and propose changes to several files at once.",
+        "d": "Claude Code kann eine Codebasis erkunden, Befehle ausführen und Änderungen an mehreren Dateien gleichzeitig vorschlagen."
+      },
+      {
+        "e": "It asks for your approval before it edits a file or runs a command, so you stay in control.",
+        "d": "Es bittet um deine Freigabe, bevor es eine Datei ändert oder einen Befehl ausführt, sodass du die Kontrolle behältst."
+      },
+      {
+        "e": "Think of it as a capable colleague who can work at the command line, not as a search engine for code.",
+        "d": "Stell es dir als fähigen Kollegen vor, der auf der Kommandozeile arbeiten kann, und nicht als Suchmaschine für Code."
+      },
+      {
+        "e": "A colleague like that still needs clear instructions and a review of the result.",
+        "d": "Ein solcher Kollege braucht trotzdem klare Anweisungen und eine Prüfung des Ergebnisses."
+      },
+      {
+        "e": "Every step is visible, so you can follow what the assistant reads, plans and changes.",
+        "d": "Jeder Schritt ist sichtbar, sodass du verfolgen kannst, was der Assistent liest, plant und ändert."
+      }
+    ],
+    [
+      {
+        "e": "Typical tasks fall into a few groups.",
+        "d": "Typische Aufgaben lassen sich in wenige Gruppen einteilen."
+      },
+      {
+        "e": "It can explain an unfamiliar repository, which helps a new team member get up to speed quickly.",
+        "d": "Es kann ein unbekanntes Repository erklären, was einem neuen Teammitglied hilft, sich schnell einzuarbeiten."
+      },
+      {
+        "e": "It can fix a bug after you describe the symptoms, and it can run the tests to check the fix.",
+        "d": "Es kann einen Fehler beheben, nachdem du die Symptome beschrieben hast, und es kann die Tests ausführen, um die Korrektur zu prüfen."
+      },
+      {
+        "e": "It can also handle routine chores, such as writing commit messages or updating documentation.",
+        "d": "Es kann auch Routinearbeiten übernehmen, etwa Commit-Nachrichten schreiben oder die Dokumentation aktualisieren."
+      },
+      {
+        "e": "In each case, the assistant works inside your own environment and sees only what you allow it to see.",
+        "d": "In jedem Fall arbeitet der Assistent in deiner eigenen Umgebung und sieht nur das, was du ihm erlaubst."
+      },
+      {
+        "e": "For a manager, the value lies less in the code itself and more in the hours that routine work no longer takes.",
+        "d": "Für Führungskräfte liegt der Nutzen weniger im Code selbst als in den Stunden, die Routinearbeit nicht mehr kostet."
+      }
+    ],
+    [
+      {
+        "e": "There are limits worth knowing.",
+        "d": "Es gibt Grenzen, die man kennen sollte."
+      },
+      {
+        "e": "The assistant can make mistakes, especially when a task is vague or the project is large.",
+        "d": "Der Assistent kann Fehler machen, besonders wenn eine Aufgabe vage oder das Projekt groß ist."
+      },
+      {
+        "e": "A second limit is knowledge: the assistant knows your project only from the files it reads, not from your daily conversations.",
+        "d": "Eine zweite Grenze ist das Wissen: Der Assistent kennt dein Projekt nur aus den Dateien, die er liest, nicht aus euren täglichen Gesprächen."
+      },
+      {
+        "e": "It does not replace a code review, and it should never be the only safeguard before a release.",
+        "d": "Er ersetzt keine Code-Prüfung und sollte nie die einzige Absicherung vor einer Veröffentlichung sein."
+      },
+      {
+        "e": "For this reason, many teams start with small, low-risk tasks and widen the scope step by step.",
+        "d": "Deshalb beginnen viele Teams mit kleinen, risikoarmen Aufgaben und weiten den Umfang Schritt für Schritt aus."
+      }
+    ],
+    [
+      {
+        "e": "For a non-developer, the key idea is simple.",
+        "d": "Für Nicht-Entwickler ist der Kerngedanke einfach."
+      },
+      {
+        "e": "Claude Code turns a written request into work on a real project.",
+        "d": "Claude Code verwandelt eine schriftliche Anfrage in Arbeit an einem echten Projekt."
+      },
+      {
+        "e": "The quality of the result depends on how clearly you describe the goal.",
+        "d": "Die Qualität des Ergebnisses hängt davon ab, wie klar du das Ziel beschreibst."
+      },
+      {
+        "e": "Seen this way, adopting it is less a technology project than a change in how a team shares its work.",
+        "d": "So gesehen ist die Einführung weniger ein Technikprojekt als eine Veränderung darin, wie ein Team seine Arbeit aufteilt."
+      },
+      {
+        "e": "In the next lesson, you will learn how to brief a task so that the assistant gets it right the first time.",
+        "d": "In der nächsten Lektion lernst du, wie du eine Aufgabe so übergibst, dass der Assistent sie gleich beim ersten Mal richtig löst."
+      }
+    ]
+  ],
+  "phrases": [
+    {
+      "w": "get up to speed",
+      "de": "sich schnell einarbeiten",
+      "i": [
+        2,
+        1
+      ]
+    },
+    {
+      "w": "stay in control",
+      "de": "die Kontrolle behalten",
+      "i": [
+        1,
+        2
+      ]
+    },
+    {
+      "w": "run the tests",
+      "de": "die Tests ausführen",
+      "i": [
+        2,
+        2
+      ]
+    },
+    {
+      "w": "low-risk tasks",
+      "de": "risikoarme Aufgaben",
+      "i": [
+        3,
+        4
+      ]
+    },
+    {
+      "w": "widen the scope",
+      "de": "den Umfang ausweiten",
+      "i": [
+        3,
+        4
+      ]
+    }
+  ],
+  "check": [
+    {
+      "q": "What is the main idea of the lesson?",
+      "o": [
+        "Claude Code is mainly a faster search engine for code snippets.",
+        "Claude Code works on a real project, so it needs a clear task and a human review.",
+        "Claude Code can release software safely without any human review."
+      ],
+      "a": 1,
+      "why": "Die Lektion beschreibt Claude Code als Assistenten, der am echten Projekt arbeitet. Deshalb brauchen Aufgabe und Ergebnis einen Menschen, der klar beschreibt und prüft."
+    },
+    {
+      "q": "What can you conclude about using Claude Code in a team?",
+      "o": [
+        "It is wise to begin with small tasks and extend the use gradually.",
+        "It should be switched on for every task from the first day.",
+        "It makes tests unnecessary because the assistant checks everything."
+      ],
+      "a": 0,
+      "why": "Der Text empfiehlt, mit kleinen, risikoarmen Aufgaben zu beginnen und den Umfang schrittweise zu erweitern. Von Tests oder Prüfung ist als Ersatz keine Rede."
+    },
+    {
+      "q": "What does stay in control mean in this lesson?",
+      "o": [
+        "You write all the code yourself.",
+        "You turn the assistant off after each task.",
+        "You decide what the assistant may change."
+      ],
+      "a": 2,
+      "why": "Claude Code fragt vor Änderungen nach deiner Freigabe. Du entscheidest also, was geändert oder ausgeführt werden darf, und behältst die Kontrolle."
+    }
+  ],
+  "tip": {
+    "wrong": "I use Claude Code since two weeks.",
+    "right": "I have been using Claude Code for two weeks.",
+    "why": "Im Deutschen sagt man „ich nutze es seit zwei Wochen“ im Präsens. Im Englischen braucht eine Handlung, die bis jetzt andauert, das Present Perfect (have been using). Eine Zeitspanne steht mit for, ein Startpunkt mit since (since Monday)."
+  },
+  "apply": {
+    "situation": "Dein Kollege Jonas fragt, was Claude Code ist. Erkläre ihm in zwei Sätzen, wie du damit arbeitest und warum du die Kontrolle behältst.",
+    "targets": [
+      "stay in control",
+      "run the tests"
+    ],
+    "model": [
+      "Claude Code works inside my project, and I stay in control because it asks before it changes a file.",
+      "After each change it can run the tests, so I see quickly whether something broke."
+    ]
+  },
+  "sources": [
+    {
+      "title": "Claude Code overview (Anthropic documentation)",
+      "url": "https://docs.claude.com/en/docs/claude-code/overview"
+    }
+  ]
+}
+```
+<!-- BEISPIEL-JSON-ENDE -->
+
+<!-- ANWEISUNG-ENDE -->
+
+## 4. Für die Hauptsitzung: Einrichtung, Test, Rückweg
+
+1. **Auftragstext** der geplanten Aufgabe (`trig_01LxTDBs97GGemopdDnxgyXP`, täglich 05:07 UTC): Den Text zwischen `ANWEISUNG-BEGINN` und `ANWEISUNG-ENDE` als **dritten Teil** an den bestehenden Auftrag hängen (nach dem Teil für `feed/<Datum>` und dem Teil für `read/r-<Datum>`). Die Teile sind unabhängig: Fällt einer aus, laufen die anderen. Der Trigger wurde in diesem Paket **nicht** geändert.
+2. **Kosten und Dauer:** Pro Lauf höchstens 4 Lektionen (2 je Kurs) à ≈ 4.000 Ausgabe-Token plus Recherche (K1 mit WebFetch auf die Dokumentation). Im eingeschwungenen Zustand schreibt die Routine nur dann, wenn Emrah vorangekommen ist (zwei Lektionen im Voraus), also im Schnitt weniger als 1 Lektion je Tag.
+3. **Größe:** ≈ 12 KB je Lektion, insgesamt höchstens 20 Lektionsdokumente für K1 und K5 (≈ 240 KB), dazu `read/cp` (< 40 KB). Grenze der Datenbank 256 KiB je Dokument, weit unterschritten. Die Sicherung nimmt `read/cp` immer mit (Fortschritt und eigene Sätze); die Lektionsdokumente nicht, denn die Routine schreibt sie bei Bedarf neu.
+4. **Ersttest:** Die Routine einmal von Hand auslösen (`fire_trigger`), danach in der App „Lesen“ öffnen. Erwartet: Karte „Kurse“ mit K1 und K5 aktiv (Fortschritt „0 von 10“), K2, K3, K4, K6, K7, K8 mit „Später“; der Hauptknopf heißt „Heute: K1 · Lektion 1 · ca. 10 Min“. Fehlt eine Lektion, zeigt der Kurs „Wird vorbereitet“, und das Diagnose-Protokoll (Einstellungen) zeigt `read:lesson lesson_hidden` mit dem Grund, wenn sie die Prüftore nicht bestand.
+5. **Stichprobe (Pflicht statt Gegenlesung vorab):** Einmal im Monat liest der `english-teacher` eine Stichprobe von je 2 Lektionen je Kurs gegen (Sprache, Übersetzung, Fragen, Sprachtipp, Quellen) und meldet Befunde als Korrektur an die Hauptsitzung (`docs/umbau/lesen-kurse.md` §6 Nr. 1).
+6. **Monatliche Aktualitätsprüfung von K1/K2:** Claude-Code-Lektionen können veralten. Einmal im Monat die `asOf`-Werte prüfen und bei Neuerungen in der offiziellen Dokumentation die betroffenen Lektionen von der Hauptsitzung neu schreiben lassen (die Routine überschreibt nie).
+7. **Rückweg:** Teil 3 aus dem Auftragstext der geplanten Aufgabe entfernen. Bereits geschriebene `read/c-…`-Dokumente stören nichts (ältere App-Versionen kennen den Pfad nicht und ignorieren ihn), `read/cp` bleibt erhalten.

@@ -112,7 +112,26 @@ export function readTopicsReply(input: string): string {
   return JSON.stringify({ topics: all.filter((t) => !chosen.has(norm(t))).slice(0, 6) });
 }
 
+/**
+ * `read-apply@1` (Kurslektion, „Claude prüfen“): die gehobene Fassung ist die Musterlösung aus dem Prompt (sie enthält die Zielwendungen),
+ * die korrigierte Fassung der Text des Nutzers. Sonderwort `zzjson` im Text: gar kein JSON (→ `invalid_json`).
+ */
+export function readApplyReply(input: string): string {
+  const text = (/<<<\n([\s\S]*?)\n>>>/.exec(input)?.[1] ?? '').trim();
+  if (/\bzzjson\b/i.test(text)) return 'Sorry, I cannot give a clean answer for that right now.';
+  const model = (/^Reference solution[^:]*: (.*)$/m.exec(input)?.[1] ?? '').trim() || text;
+  const fixed = /[.!?]$/.test(text) ? text : `${text}.`;
+  const sentences = text.split(/(?<=[.!?])\s+/).filter(Boolean).length;
+  return JSON.stringify({
+    verdict: sentences >= 2 && /[.!?]$/.test(text) ? 'right' : 'almost',
+    fixed,
+    c1: model,
+    why: 'Deine Sätze sind gut verständlich. Die gehobene Fassung klingt natürlicher, weil sie die Wendung im passenden Zusammenhang benutzt.',
+  });
+}
+
 export function registerReadReplies(): void {
   registerCannedReply('read-article', readArticleReply);
   registerCannedReply('read-topics', readTopicsReply);
+  registerCannedReply('read-apply', readApplyReply);
 }

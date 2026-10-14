@@ -9,6 +9,9 @@ import type { RunFailure } from '../run';
 import { PER_DAY_MAX } from '../domain/docs';
 import { useReadHome } from './useReadHome';
 import type { ReadHome } from './useReadHome';
+import { CoursesCard, useLessonButtonText } from './CoursePage';
+import { useCourseHome } from './useCourseHome';
+import type { UseCourseHome } from './useCourseHome';
 
 // Bildschirm „Lesen“ (Reiter-Wurzel `read`, docs/umbau/lesen-plan.md §2.1): ein großer Knopf, die Artikel von heute,
 // Themen, eine Wochenzeile, frühere Artikel. Keine doppelten Aussagen; „gelesen“ ist ein Zustand.
@@ -137,9 +140,21 @@ function Running({ h }: { h: ReadHome }) {
   );
 }
 
-function TodayCard({ h }: { h: ReadHome }) {
+function TodayCard({ h, courses }: { h: ReadHome; courses: UseCourseHome }) {
   const { t } = useT();
   const go = useNav((s) => s.go);
+  const lessonText = useLessonButtonText();
+  // Kurslektion (Paket L8): angefangen immer, eine offene nur, wenn heute noch keine fertig wurde. Dann ist SIE der eine Hauptknopf, der Artikel wird leiser.
+  const nextLesson = courses.home?.next ?? null;
+  const lesson = nextLesson && (nextLesson.state === 'started' || !courses.doneToday) ? nextLesson : null;
+  const lessonButton = lesson ? (
+    <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => go({ name: 'readLesson', id: lesson.key })} data-testid="read-primary" data-kind="lesson" data-lesson={lesson.key}>
+      {lessonText(lesson)}
+    </Button>
+  ) : null;
+  const articleVariant = lesson ? 'ghost' : 'primary';
+  const articleSize = lesson ? 'md' : 'lg';
+  const articleId = lesson ? 'read-article' : 'read-primary';
   // „Weiterlesen“ springt gleich zum Satz, an dem man aufgehört hat (ab Satz 2; Satz 1 ist ohnehin oben).
   const open = (id: string, at?: number | null) => go(at && at > 1 ? { name: 'readArticle', id, at } : { name: 'readArticle', id });
   const busy = h.running !== null;
@@ -152,7 +167,8 @@ function TodayCard({ h }: { h: ReadHome }) {
     const started = entryState(h.next) === 'started';
     action = (
       <>
-        <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => open(h.next!.id, started ? h.next!.st?.pos : undefined)} data-testid="read-primary" data-kind="read">
+        {lessonButton}
+        <Button variant={articleVariant} size={articleSize} iconAfter="arrowRight" onClick={() => open(h.next!.id, started ? h.next!.st?.pos : undefined)} data-testid={articleId} data-kind="read">
           {t(started ? 'rdContinue' : 'rdReadNext')}
         </Button>
         {canFetch && (h.routineToday > 0 || h.entries.length < h.perDay) && (
@@ -163,17 +179,27 @@ function TodayCard({ h }: { h: ReadHome }) {
       </>
     );
   } else if (empty) {
-    action = canFetch ? (
-      <Button variant="primary" size="lg" icon="sparkle" onClick={() => h.getArticles()} data-testid="read-primary" data-kind="fetch" data-ai="">
-        {t('rdFetch')}
-      </Button>
-    ) : null;
+    action = (
+      <>
+        {lessonButton}
+        {canFetch ? (
+          <Button variant={articleVariant} size={articleSize} icon="sparkle" onClick={() => h.getArticles()} data-testid={articleId} data-kind="fetch" data-ai="">
+            {t('rdFetch')}
+          </Button>
+        ) : null}
+      </>
+    );
   } else {
-    action = canFetch ? (
-      <Button variant="secondary" onClick={() => h.getArticles()} data-testid="read-fetch" data-ai="">
-        {t(h.routineToday > 0 ? 'rdFetchExtra' : 'rdMore')}
-      </Button>
-    ) : null;
+    action = (
+      <>
+        {lessonButton}
+        {canFetch ? (
+          <Button variant="secondary" onClick={() => h.getArticles()} data-testid="read-fetch" data-ai="">
+            {t(h.routineToday > 0 ? 'rdFetchExtra' : 'rdMore')}
+          </Button>
+        ) : null}
+      </>
+    );
   }
 
   return (
@@ -318,6 +344,7 @@ function Earlier({ h }: { h: ReadHome }) {
 export function ReadHome() {
   const { t, tn } = useT();
   const h = useReadHome();
+  const courses = useCourseHome();
   return (
     <div className="mx-auto flex w-full max-w-[47.5rem] flex-col gap-6 py-6 sm:py-10" data-testid="read" data-load={h.load}>
       <Title />
@@ -340,7 +367,8 @@ export function ReadHome() {
       )}
       {h.load === 'ready' && (
         <>
-          <TodayCard h={h} />
+          <TodayCard h={h} courses={courses} />
+          <CoursesCard c={courses} />
           <Topics h={h} />
           <PerDay h={h} />
           <p className="m-0 text-sm text-muted lx-tnum" data-testid="read-week">

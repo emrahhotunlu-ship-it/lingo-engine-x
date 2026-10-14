@@ -1,3 +1,4 @@
+import { rdcDe } from './rdCourses.de';
 // Oberflächentexte des Lesen-Moduls, Deutsch (docs/umbau/lesen-plan.md §7). Nur Schlüssel mit Präfix `rd`.
 // Einfache Sprache, keine Fachwörter (CLAUDE.md A2). Artikeltexte selbst stehen nicht hier (Lerntext, nicht Oberfläche).
 export const rdDe = {
@@ -61,4 +62,5 @@ export const rdDe = {
   rdPartial: '{n} von {total} Artikeln sind fertig. Den Rest kannst du gleich noch holen.',
   rdOpenArticle: 'Artikel öffnen: {title}',
   rdBack: 'Zurück zu Lesen',
+  ...rdcDe,
 };

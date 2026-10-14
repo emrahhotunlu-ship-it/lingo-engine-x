@@ -6,6 +6,17 @@ import { boot, openTab, screen, type BootOptions, type Lang, type Theme } from '
 // Themen, Reiterleiste bei 360/390/412 px und am Desktop, Barrierefreiheit in drei Modi. Alle Daten erfunden (seed/sample-data.json, `read/…`).
 
 const EVENING_19 = '2026-09-19T21:00:00+02:00';
+
+/**
+ * Ohne Kurs-Dokumente (`read/c-k1-01`, `read/c-k1-02` aus dem Seed): diese Datei prüft Artikel; sonst wäre die Kurslektion der Hauptknopf (Paket L8,
+ * Kurse prüft tests/e2e/lesenKurse.spec.ts). Wer eine Kurslektion braucht, legt die Dokumente selbst per `fake.patch` zurück.
+ */
+const NO_COURSE: Record<string, null> = { 'read/c-k1-01': null, 'read/c-k1-02': null };
+function bootRead(page: Page, opts: BootOptions = {}) {
+  const fake = opts.fake === false ? false : { ...(opts.fake ?? {}), patch: { ...NO_COURSE, ...(opts.fake?.patch ?? {}) } };
+  return boot(page, { ...opts, fake });
+}
+
 type Dump = Record<string, Record<string, unknown>>;
 const dump = (page: Page): Promise<Dump> => page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { db: { dump(): Dump } } }).__LINGO_FAKE__.db.dump());
 const calls = (page: Page): Promise<number> =>
@@ -30,7 +41,7 @@ for (const lang of ['de', 'en'] as const satisfies readonly Lang[]) {
     test(`Reiterleiste mit sechs Reitern bei ${w} px einzeilig und mit Luft (${lang})`, async ({ browser }) => {
       const context = await browser.newContext({ viewport: { width: w, height: 800 }, isMobile: true, hasTouch: true, timezoneId: 'Europe/Berlin' });
       const page = await context.newPage();
-      const { errors } = await boot(page, { lang, migrated: true });
+      const { errors } = await bootRead(page, { lang, migrated: true });
       await screen(page, 'today');
       const boxes = await page.getByTestId('tabbar').locator('button').evaluateAll((els) =>
         els.map((el) => {
@@ -68,7 +79,7 @@ for (const lang of ['de', 'en'] as const satisfies readonly Lang[]) {
 test('Desktop: sechs Reiter in der Pillen-Leiste, Lesen öffnet den Bildschirm', async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 1280, height: 800 }, timezoneId: 'Europe/Berlin' });
   const page = await context.newPage();
-  const { errors } = await boot(page, { migrated: true });
+  const { errors } = await bootRead(page, { migrated: true });
   await screen(page, 'today');
   await expect(page.getByTestId('tabbar').locator('button')).toHaveCount(6);
   await openRead(page);
@@ -84,7 +95,7 @@ test.describe('Bildschirm „Lesen“ (390 px)', () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
 
   test('Lerntag mit Artikeln: Liste mit Zuständen, ein Hauptknopf „Weiterlesen“, Wochenzeile, frühere Artikel; Tippen öffnet den Leser (Platzhalter)', async ({ page }) => {
-    const { errors, external } = await boot(page, { migrated: true, now: EVENING_19 });
+    const { errors, external } = await bootRead(page, { migrated: true, now: EVENING_19 });
     await screen(page, 'today');
     await openRead(page);
     await expect(page.getByTestId('read-byline')).toContainText('Von Claude geschrieben');
@@ -132,7 +143,7 @@ test.describe('Bildschirm „Lesen“ (390 px)', () => {
       { id: 'a-2026-09-19-2-p7d2xe', day: '2026-09-19', title: 'What Language Models Change About Everyday Work', topic: 'ai', mins: 2, words: 280, st: done },
       { id: 'a-2026-09-19-3-zzzzzz', day: '2026-09-19', title: 'A third one', topic: 'saas', mins: 2, words: 280, st: done },
     ];
-    await boot(page, { migrated: true, now: EVENING_19, fake: { patch: { 'read/m-2026-09': { v: 1, items } } } });
+    await bootRead(page, { migrated: true, now: EVENING_19, fake: { patch: { 'read/m-2026-09': { v: 1, items } } } });
     await screen(page, 'today');
     await openRead(page);
     await expect(page.getByTestId('read-primary')).toHaveCount(0);
@@ -143,7 +154,7 @@ test.describe('Bildschirm „Lesen“ (390 px)', () => {
   });
 
   test('erste Nutzung: freundlicher Leerzustand, ein großer Knopf, Skelett beim Laden', async ({ page }) => {
-    await boot(page, { migrated: true, fake: NO_READ });
+    await bootRead(page, { migrated: true, fake: NO_READ });
     await screen(page, 'today');
     await page.getByTestId('tab-read').click();
     await screen(page, 'read');
@@ -159,7 +170,7 @@ test.describe('Bildschirm „Lesen“ (390 px)', () => {
   });
 
   test('ohne Claude (sample fehlt): Reiter bleibt, alte Artikel lesbar, Holen ausgeblendet', async ({ page }) => {
-    await boot(page, { migrated: true, now: EVENING_19, fake: { capabilities: { sample: false } } });
+    await bootRead(page, { migrated: true, now: EVENING_19, fake: { capabilities: { sample: false } } });
     await screen(page, 'today');
     await openRead(page);
     await expect(page.getByTestId('read-row')).toHaveCount(2);
@@ -171,7 +182,7 @@ test.describe('Bildschirm „Lesen“ (390 px)', () => {
   });
 
   test('Englisch: Texte der Oberfläche auf Englisch, Artikelinhalt bleibt Lerntext', async ({ page }) => {
-    await boot(page, { migrated: true, now: EVENING_19, lang: 'en' });
+    await bootRead(page, { migrated: true, now: EVENING_19, lang: 'en' });
     await screen(page, 'today');
     await openRead(page);
     await expect(page.getByTestId('read-title')).toHaveText('Read');
@@ -187,7 +198,7 @@ test.describe('Artikel holen (Dev-Adapter)', () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
 
   test('Knopf holt drei Artikel nacheinander mit Fortschritt, speichert jeden, Liste und Hauptknopf folgen', async ({ page }) => {
-    const { errors, external } = await boot(page, { migrated: true, fake: { ...NO_READ, sampleTickMs: 4 } });
+    const { errors, external } = await bootRead(page, { migrated: true, fake: { ...NO_READ, sampleTickMs: 4 } });
     await screen(page, 'today');
     await openRead(page);
     await page.getByTestId('read-primary').click();
@@ -225,7 +236,7 @@ test.describe('Artikel holen (Dev-Adapter)', () => {
   });
 
   test('Anzahl pro Tag ist einstellbar: bei 2 holt der Knopf zwei Artikel', async ({ page }) => {
-    await boot(page, { migrated: true, fake: NO_READ });
+    await bootRead(page, { migrated: true, fake: NO_READ });
     await screen(page, 'today');
     await openRead(page);
     await expect(page.getByTestId('read-perday-n')).toHaveText('3');
@@ -238,7 +249,7 @@ test.describe('Artikel holen (Dev-Adapter)', () => {
   });
 
   test('Stopp: der Knopf hält an, es entsteht kein Fehler, nichts Halbes wird gespeichert', async ({ page }) => {
-    await boot(page, { migrated: true, fake: { ...NO_READ, sampleTickMs: 150 } });
+    await bootRead(page, { migrated: true, fake: { ...NO_READ, sampleTickMs: 150 } });
     await screen(page, 'today');
     await openRead(page);
     await page.getByTestId('read-primary').click();
@@ -254,7 +265,7 @@ test.describe('Artikel holen (Dev-Adapter)', () => {
   });
 
   test('Claude braucht eine Pause (rate_limited): ruhiger Hinweis, kein Neustart-Knopf, kein weiterer Aufruf', async ({ page }) => {
-    await boot(page, { migrated: true, fake: { ...NO_READ, sampleFail: { 'read-article': 'rate_limited' } } });
+    await bootRead(page, { migrated: true, fake: { ...NO_READ, sampleFail: { 'read-article': 'rate_limited' } } });
     await screen(page, 'today');
     await openRead(page);
     await page.getByTestId('read-primary').click();
@@ -266,7 +277,7 @@ test.describe('Artikel holen (Dev-Adapter)', () => {
   });
 
   test('Fehler mit „Erneut versuchen“: ein Tipp, ein neuer Aufruf, danach klappt es', async ({ page }) => {
-    await boot(page, { migrated: true, fake: { ...NO_READ, sampleFailOnce: { 'read-article': 'upstream_error' } } });
+    await bootRead(page, { migrated: true, fake: { ...NO_READ, sampleFailOnce: { 'read-article': 'upstream_error' } } });
     await screen(page, 'today');
     await openRead(page);
     await page.getByTestId('read-primary').click();
@@ -281,7 +292,7 @@ test.describe('Artikel holen (Dev-Adapter)', () => {
   });
 
   test('Claude nicht erlaubt (not_granted) im Lauf: Funktion verschwindet, alte Artikel bleiben lesbar', async ({ page }) => {
-    await boot(page, { migrated: true, now: EVENING_19, fake: { sampleMode: 'not_granted' } });
+    await bootRead(page, { migrated: true, now: EVENING_19, fake: { sampleMode: 'not_granted' } });
     await screen(page, 'today');
     await openRead(page);
     await page.getByTestId('read-fetch').click();
@@ -293,7 +304,7 @@ test.describe('Artikel holen (Dev-Adapter)', () => {
   });
 
   test('ungültige Antwort (kein JSON): verständlicher Fehler und „Erneut versuchen“, nichts gespeichert', async ({ page }) => {
-    await boot(page, { migrated: true, fake: NO_READ });
+    await bootRead(page, { migrated: true, fake: NO_READ });
     await screen(page, 'today');
     await openRead(page);
     await page.getByTestId('read-newtopic').click();
@@ -314,7 +325,7 @@ test.describe('Aktuelle Meldungen der Routine (read/r-<Tag>, nur die Routine sch
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
 
   test('beim Öffnen stehen die Routine-Artikel von heute da (ohne Tippen), mit Quelle; der fehlerhafte ist ausgeblendet; Holen ist nur ein Zusatz', async ({ page }) => {
-    const { errors, external } = await boot(page, { migrated: true });
+    const { errors, external } = await bootRead(page, { migrated: true });
     await screen(page, 'today');
     await openRead(page);
     const rows = page.getByTestId('read-row');
@@ -338,7 +349,7 @@ test.describe('Aktuelle Meldungen der Routine (read/r-<Tag>, nur die Routine sch
   });
 
   test('Antippen öffnet den Leser mit Quelle und Link; der Lesestand wird von der App in den Monatsindex geschrieben, das Routine-Dokument bleibt unverändert', async ({ page }) => {
-    await boot(page, { migrated: true });
+    await bootRead(page, { migrated: true });
     await screen(page, 'today');
     await openRead(page);
     const routineBefore = JSON.stringify((await dump(page))['read/r-2026-09-20']);
@@ -367,7 +378,7 @@ test.describe('Aktuelle Meldungen der Routine (read/r-<Tag>, nur die Routine sch
   });
 
   test('„Noch einen Artikel schreiben lassen“ holt genau einen eigenen Artikel dazu (Tagesdokument `read/d-…`), die Routine-Artikel bleiben', async ({ page }) => {
-    await boot(page, { migrated: true, fake: { sampleTickMs: 4 } });
+    await bootRead(page, { migrated: true, fake: { sampleTickMs: 4 } });
     await screen(page, 'today');
     await openRead(page);
     await page.getByTestId('read-fetch').click();
@@ -382,7 +393,7 @@ test.describe('Aktuelle Meldungen der Routine (read/r-<Tag>, nur die Routine sch
   });
 
   test('Englisch: Zeile mit Quelle und Zusatzknopf auf Englisch', async ({ page }) => {
-    await boot(page, { migrated: true, lang: 'en' });
+    await bootRead(page, { migrated: true, lang: 'en' });
     await screen(page, 'today');
     await openRead(page);
     await expect(page.getByTestId('read-row').nth(0)).toContainText('Current news · Source: Example Tech News');
@@ -390,7 +401,7 @@ test.describe('Aktuelle Meldungen der Routine (read/r-<Tag>, nur die Routine sch
   });
 
   test('ohne Claude (sample fehlt): Routine-Artikel sind trotzdem da und lesbar, kein Holen', async ({ page }) => {
-    await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
+    await bootRead(page, { migrated: true, fake: { capabilities: { sample: false } } });
     await screen(page, 'today');
     await openRead(page);
     await expect(page.getByTestId('read-row')).toHaveCount(2);
@@ -405,7 +416,7 @@ test.describe('Themen und „Neues Thema“', () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
 
   test('Chips wählen und abwählen, werden in read/p gespeichert und bestimmen das Thema', async ({ page }) => {
-    await boot(page, { migrated: true, fake: NO_READ });
+    await bootRead(page, { migrated: true, fake: NO_READ });
     await screen(page, 'today');
     await openRead(page);
     const ai = page.locator('[data-testid="read-topic"][data-topic="ai"]');
@@ -421,7 +432,7 @@ test.describe('Themen und „Neues Thema“', () => {
   });
 
   test('Neues Thema: eigenes Thema anlegen, Fehlermeldungen, entfernen; „Claude schlägt vor“ liefert Vorschläge', async ({ page }) => {
-    await boot(page, { migrated: true, fake: NO_READ });
+    await bootRead(page, { migrated: true, fake: NO_READ });
     await screen(page, 'today');
     await openRead(page);
     await page.getByTestId('read-newtopic').click();
@@ -449,7 +460,7 @@ for (const theme of ['dark', 'dim', 'light'] as const satisfies readonly Theme[]
     test(`axe · Lesen · ${theme} · ${width}px`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 });
       await page.emulateMedia({ reducedMotion: 'reduce' });
-      await boot(page, { theme, migrated: true, now: EVENING_19 });
+      await bootRead(page, { theme, migrated: true, now: EVENING_19 });
       await screen(page, 'today');
       await openRead(page);
       // Zusätzlich offen: das Panel „Neues Thema“, damit auch das Formular geprüft wird.

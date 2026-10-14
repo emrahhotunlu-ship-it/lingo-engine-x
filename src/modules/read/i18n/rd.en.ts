@@ -1,3 +1,4 @@
+import { rdcEn } from './rdCourses.en';
 // UI texts of the Read module, English (US spelling). Keys must match rd.de.ts exactly (tests/unit/read/i18n.test.ts).
 export const rdEn = {
   rdTab: 'Read',
@@ -60,4 +61,5 @@ export const rdEn = {
   rdPartial: '{n} of {total} articles are ready. You can get the rest in a moment.',
   rdOpenArticle: 'Open article: {title}',
   rdBack: 'Back to Read',
+  ...rdcEn,
 };

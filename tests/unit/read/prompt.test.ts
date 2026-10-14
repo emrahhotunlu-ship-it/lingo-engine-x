@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { TEMPLATES } from '../../../src/prompts/registry';
 import { PROMPT_MAX_BYTES, promptBytes } from '../../../src/prompts/common';
 import { answerShape } from '../../../src/modules/read/domain/accept';
-import { READ_ARTICLE_EXAMPLE, READ_TOPICS_EXAMPLE, readArticle, readArticleSchema, readTopics, RECENT_TITLES_MAX, TOPIC_BRIEF } from '../../../src/modules/read/prompt';
+import { READ_ARTICLE_EXAMPLE, READ_TOPICS_EXAMPLE, readApply, readArticle, readArticleSchema, readTopics, RECENT_TITLES_MAX, TOPIC_BRIEF } from '../../../src/modules/read/prompt';
 import { READ_TEMPLATES } from '../../../src/modules/read/registry';
 import { TOPIC_KEYS } from '../../../src/modules/read/schemas';
 import { goodRaw } from './fixtures';
@@ -18,7 +18,7 @@ describe('read-article@1', () => {
     expect(readArticle.build(vars).split('\n')[0]).toBe('[read-article@1]');
     expect(TEMPLATES).toContain(readArticle);
     expect(TEMPLATES).toContain(readTopics);
-    expect(READ_TEMPLATES).toEqual([readArticle, readTopics]);
+    expect(READ_TEMPLATES).toEqual([readArticle, readTopics, readApply]);
     expect(TEMPLATES.filter((t) => t.id === 'read-article')).toHaveLength(1);
   });
 

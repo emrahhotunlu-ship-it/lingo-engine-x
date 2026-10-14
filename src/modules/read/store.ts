@@ -74,6 +74,10 @@ export function onReadStateSaved(cb: () => void): () => void {
   stateListeners.add(cb);
   return () => stateListeners.delete(cb);
 }
+/** Meldet der Liste, dass ein Lesestand (Artikel oder Kurslektion) geschrieben wurde. */
+export function notifyReadStateSaved(): void {
+  for (const cb of stateListeners) cb();
+}
 
 /** Lesezustand eines Artikels fortschreiben (Maximum bei Zeit, `done` nur aufwärts). Nur auf Handlung (Verlassen/Ausblenden). `seed` = Indexeintrag eines Routine-Artikels, der beim ersten Mal angelegt wird. */
 export async function saveReadState(writer: Writer, month: string, id: string, patch: ReadState, seed?: IndexItem): Promise<'updated' | 'unchanged'> {
@@ -86,7 +90,7 @@ export async function saveReadState(writer: Writer, month: string, id: string, p
     });
     if (box.missing) logWarn('read:state', { code: 'index_missing', message: `${id} nicht im Monatsindex ${month}` }, readMonthPath(month));
     const changed = res === 'updated' || res === 'created';
-    if (changed) for (const cb of stateListeners) cb();
+    if (changed) notifyReadStateSaved();
     return changed ? 'updated' : 'unchanged';
   } catch (err) {
     logError('read:state', err, readMonthPath(month));

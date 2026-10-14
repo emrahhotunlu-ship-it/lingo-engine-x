@@ -67,7 +67,8 @@ describe('Seed: erfundene Lesetage', () => {
   const seed = JSON.parse(readFileSync(join(import.meta.dirname, '../../../seed/sample-data.json'), 'utf8')) as Record<string, Record<string, unknown>>;
   const readDocs = Object.keys(seed).filter((k) => k.startsWith('read/'));
   // Routine-Dokumente (`read/r-…`) schreibt nur die Routine; `read/p.days` und die Zählung kennen sie nicht (die Routine räumt sie nach 45 Tagen auf).
-  const appDocs = readDocs.filter((k) => !k.startsWith('read/r-'));
+  // Routine-Dokumente (Artikel `read/r-`, Lektionen `read/c-`) schreibt nur die Routine: sie zählen nicht zu den App-Dokumenten von `read/p`.
+  const appDocs = readDocs.filter((k) => !k.startsWith('read/r-') && !k.startsWith('read/c-'));
 
   it('zwei Tage, drei Artikel; Tages- und Monatsdokumente und Einstellungen bestehen die Feinprüfung ohne ausgeblendete Einträge', () => {
     const dayPaths = readDocs.filter((k) => k.startsWith('read/d-'));
@@ -103,6 +104,10 @@ describe('Seed: erfundene Lesetage', () => {
     const urls = routine.match(/https?:\/\/[^"]+/g) ?? [];
     expect(urls.length).toBeGreaterThan(0);
     for (const u of urls) expect(u, u).toMatch(/^https:\/\/example\.com\//);
+    // Kurslektionen tragen als Quelle die offizielle Dokumentation (Claude-Code-Kurs), sonst nichts Fremdes.
+    const lessons = JSON.stringify(readDocs.filter((k) => k.startsWith('read/c-')).map((k) => seed[k]));
+    expect(lessons).not.toContain('@');
+    for (const u of lessons.match(/https?:\/\/[^"]+/g) ?? []) expect(u, u).toMatch(/^https:\/\/(docs\.claude\.com|www\.anthropic\.com)\//);
   });
 
   it('Routine-Tag im Seed: zwei gültige Artikel mit Quelle, ein bewusst fehlerhafter wird ausgeblendet', () => {

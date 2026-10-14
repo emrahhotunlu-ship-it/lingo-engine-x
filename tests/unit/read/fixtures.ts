@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 // Erfundene Testartikel für das Lesen-Modul (keine echten Daten). `goodArticle()` besteht alle neun Tore.
 
 import type { ArticleItem } from '../../../src/modules/read/schemas';
@@ -99,3 +101,6 @@ export function itemNo(n: number, day = '2026-10-13'): ArticleItem {
   const g = goodItem(`a-${day}-${n}-${n.toString(36).padStart(6, '0')}`);
   return { ...g, title: `${g.title} (part ${n})` };
 }
+
+// Kurslektionen des Seeds (Paket L8): seed/read-courses.json, erfundene Lektionen 1 und 2 von K1.
+export const seedLesson = (n: 1 | 2): Record<string, unknown> => (JSON.parse(readFileSync(join(import.meta.dirname, '../../../seed/read-courses.json'), 'utf8')) as Record<string, Record<string, unknown>>)[`read/c-k1-0${n}`] as Record<string, unknown>;

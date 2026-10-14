@@ -5,6 +5,8 @@ import { isDayKey } from '../shared';
 export const READ_COLLECTION = 'read';
 /** Einstellungen. */
 export const READ_PREFS_PATH = 'read/p';
+/** Kursfortschritt (Paket L8): NUR die App schreibt, die Routine liest höchstens. */
+export const READ_PROGRESS_PATH = 'read/cp';
 
 const MONTH_RE = /^\d{4}-\d{2}$/;
 
@@ -23,11 +25,27 @@ export const readRoutinePath = (day: string): string => `read/r-${day}`;
 export const routineArticleId = (day: string, n: number): string => `r-${day}-${Math.max(1, Math.floor(n))}`;
 export const isRoutineId = (id: string): boolean => /^r-\d{4}-\d{2}-\d{2}-\d{1,3}$/.test(id);
 
-export type ReadDocKind = 'day' | 'routine' | 'month' | 'prefs' | 'unknown';
+/**
+ * Kurslektion (Paket L8, docs/umbau/lesen-routine-kurse.md): `read/c-<Kurs>-<nn>`, z. B. `read/c-k1-03`. Je Lektion ein Dokument; NUR die Routine schreibt.
+ * Die Kennung der Lektion in der App (auch `origin.ref` der Karten) ist `c-<Kurs>-<nn>`.
+ */
+export const readLessonPath = (course: string, n: number): string => `read/${lessonDocId(course, n)}`;
+export const lessonDocId = (course: string, n: number): string => `c-${course}-${String(Math.max(1, Math.floor(n))).padStart(2, '0')}`;
+export const isLessonDocId = (id: string): boolean => /^c-k[1-9]-\d{2}$/.test(id);
+/** Kennung `c-k1-03` → `{course:'k1', n:3}`, sonst null. */
+export function parseLessonDocId(id: string): { course: string; n: number } | null {
+  const m = /^c-(k[1-9])-(\d{2})$/.exec(id);
+  const n = m ? Number(m[2]) : 0;
+  return m && n >= 1 ? { course: m[1] ?? '', n } : null;
+}
+
+export type ReadDocKind = 'day' | 'routine' | 'month' | 'prefs' | 'lesson' | 'progress' | 'unknown';
 
 /** Art eines Dokuments der Sammlung `read` nach seinem Pfad. */
 export function readDocKind(path: string): ReadDocKind {
   if (path === READ_PREFS_PATH) return 'prefs';
+  if (path === READ_PROGRESS_PATH) return 'progress';
+  if (path.startsWith('read/') && isLessonDocId(path.slice('read/'.length))) return 'lesson';
   const m = /^read\/(d|m|r)-(.+)$/.exec(path);
   if (!m) return 'unknown';
   if (m[1] === 'd') return isDayKey(m[2]) ? 'day' : 'unknown';

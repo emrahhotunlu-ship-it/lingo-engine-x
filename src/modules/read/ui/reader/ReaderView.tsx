@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { ReactNode } from 'react';
 import type { ArticleItem, ReadState, ReadView } from '../../schemas';
 import { VIEWS } from '../../schemas';
 import { summarizeChecks } from '../../domain/readerCheck';
@@ -34,6 +35,26 @@ export type ReaderViewProps = {
   onNext?: () => void;
   /** Zurück zur Liste (Abschlussknopf, wenn es keinen nächsten Artikel gibt). */
   onBack?: () => void;
+  /** Kurslektion (Paket L8): eigene Kopfzeile, Einschübe vor und nach dem Text, Abschluss steht in `afterCheck`. Ohne Angabe: ein Tagesartikel. */
+  lesson?: LessonSlots;
+};
+
+/** Einschübe einer Kurslektion im Leser. Der Rest (Ansichten, Satzzeilen, Wort antippen, Prüffragen, Lesezeit) ist derselbe wie beim Artikel. */
+export type LessonSlots = {
+  /** Kopfzeile statt des Themas, z. B. „K1 · Lektion 3 von 10“. */
+  kicker: string;
+  /** Zeile unter dem Titel statt „Von Claude geschrieben …“. */
+  byline: string;
+  /** Zwischen Kopf und Ansichtsleiste: Ziel, Aufwärmen, Wendungen. */
+  top?: ReactNode;
+  /** Direkt unter dem Text (Sprachtipp). */
+  afterText?: ReactNode;
+  /** Nach den Prüffragen: Anwenden, Wendungen mitnehmen, Abschluss. */
+  afterCheck?: ReactNode;
+  /** Der Leser meldet hier seine „Zwischenstand jetzt schreiben“-Funktion an (und beim Verlassen `null` ab); der Abschluss ruft sie, bevor er „Text gelesen“ auswertet. */
+  registerFlush?: (flush: (() => void) | null) => void;
+  /** Neue Antwort auf eine Prüffrage (Frage ab 0 → Antwort). */
+  onAnswers?: (answers: Record<number, number>) => void;
 };
 
 const VIEW_KEYS: Record<ReadView, { label: RdrKey; hint: RdrKey }> = {
@@ -42,7 +63,7 @@ const VIEW_KEYS: Record<ReadView, { label: RdrKey; hint: RdrKey }> = {
   c: { label: 'rdrViewC', hint: 'rdrViewHintC' },
 };
 
-export function ReaderView({ article, state = null, view: viewProp = null, autoSpeak = false, onViewChange, onProgress, startAt = null, onNext, onBack }: ReaderViewProps) {
+export function ReaderView({ article, state = null, view: viewProp = null, autoSpeak = false, onViewChange, onProgress, startAt = null, onNext, onBack, lesson }: ReaderViewProps) {
   const { lang } = useT();
   const model = useMemo(() => buildModel(article), [article]);
   const picks = useMemo(() => pickKeyWords(model, article.keyWords), [model, article.keyWords]);
@@ -61,9 +82,10 @@ export function ReaderView({ article, state = null, view: viewProp = null, autoS
   const clock = useRef<ReadClock>(newClock());
   const prior = useRef<ReadState | null>(state);
   const session = useRef({ opened: new Set<number>(), saved: 0, answers: {} satisfies Record<number, number>, endSeen: false });
-  const cb = useRef({ onProgress, autoSpeak, onViewChange, sentences: model.sentences });
+  const lessonAnswers = lesson?.onAnswers;
+  const cb = useRef({ onProgress, autoSpeak, onViewChange, sentences: model.sentences, lessonAnswers });
   useEffect(() => {
-    cb.current = { onProgress, autoSpeak, onViewChange, sentences: model.sentences };
+    cb.current = { onProgress, autoSpeak, onViewChange, sentences: model.sentences, lessonAnswers };
   });
   const barRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
@@ -99,6 +121,14 @@ export function ReaderView({ article, state = null, view: viewProp = null, autoS
     if (patch.done) setDone(true);
     cb.current.onProgress?.(patch);
   }, [checks, model.total]);
+
+  // Kurslektion: der Abschluss ruft den Zwischenstand von außen ab, bevor er „Text gelesen“ auswertet.
+  const registerFlush = lesson?.registerFlush;
+  useEffect(() => {
+    if (!registerFlush) return;
+    registerFlush(flush);
+    return () => registerFlush(null);
+  }, [flush, registerFlush]);
 
   // Lesezeit: nur bei sichtbarer Seite; Ausblenden und Verlassen schreiben einmal.
   useEffect(() => {
@@ -195,6 +225,7 @@ export function ReaderView({ article, state = null, view: viewProp = null, autoS
   }, []);
   const onAnswers = useCallback((a: Record<number, number>) => {
     session.current.answers = a;
+    cb.current.lessonAnswers?.(a);
   }, []);
 
   const meta = rdrText(lang, 'rdrMeta', { min: minutesFor(words), words });
@@ -205,7 +236,7 @@ export function ReaderView({ article, state = null, view: viewProp = null, autoS
     <article className="mx-auto flex w-full max-w-[66ch] flex-col gap-5" data-testid="rdr" data-view={view} data-article={article.id} data-opened={userOpened} data-done={done || undefined}>
       <header className="flex flex-col gap-1.5 pt-2">
         <p className="m-0 text-2xs font-semibold uppercase tracking-wide text-accent-text" data-testid="rdr-topic">
-          {article.topic === 'custom' && article.custom ? article.custom : rdrText(lang, topicKey(article.topic))}
+          {lesson ? lesson.kicker : article.topic === 'custom' && article.custom ? article.custom : rdrText(lang, topicKey(article.topic))}
         </p>
         <h1 className="m-0 text-xl font-semibold tracking-tight text-fg" lang="en" data-testid="rdr-title">
           {article.title}
@@ -219,7 +250,11 @@ export function ReaderView({ article, state = null, view: viewProp = null, autoS
             </span>
           ) : null}
         </p>
-        {article.by === 'routine' && article.source ? (
+        {lesson ? (
+          <p className="m-0 text-xs text-subtle" data-testid="rdr-byclaude">
+            {lesson.byline}
+          </p>
+        ) : article.by === 'routine' && article.source ? (
           <p className="m-0 text-xs text-subtle" data-testid="rdr-routine">
             {rdrText(lang, 'rdrRoutineLine', { source: article.source })}
             {article.pub ? ` · ${article.pub}` : ''} · {rdrText(lang, 'rdrRoutineHint')}
@@ -239,6 +274,8 @@ export function ReaderView({ article, state = null, view: viewProp = null, autoS
           </p>
         )}
       </header>
+
+      {lesson?.top}
 
       <div ref={barRef} className="lx-glass sticky top-[env(safe-area-inset-top)] z-20 rounded-2xl p-1.5 md:top-[4.5rem]" data-testid="rdr-bar">
         <Segmented label={rdrText(lang, 'rdrViewLabel')} value={view} options={viewOptions} onChange={changeView} testId="rdr-views" />
@@ -281,8 +318,10 @@ export function ReaderView({ article, state = null, view: viewProp = null, autoS
       )}
 
       <div ref={endRef} aria-hidden="true" className="h-px" />
-      <KeyWordsCard picks={picks} article={article} lang={lang} onSaved={onSaved} />
+      {lesson?.afterText}
+      {lesson ? null : <KeyWordsCard picks={picks} article={article} lang={lang} onSaved={onSaved} />}
       <CheckCard checks={checks} articleId={article.id} title={article.title} lang={lang} onAnswers={onAnswers} />
+      {lesson?.afterCheck}
       {onNext || onBack ? (
         <footer className="flex flex-col items-stretch gap-3 pt-1 pb-4" data-testid="rdr-end">
           {done ? (

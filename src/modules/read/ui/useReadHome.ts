@@ -23,7 +23,7 @@ export type Progress = { n: number; total: number; phase: AiPhase | 'idle' };
 
 const HOLDER = `tab-${Math.random().toString(36).slice(2, 10)}`;
 
-async function readDocOrUndefined(path: string): Promise<Record<string, unknown> | undefined> {
+export async function readDocOrUndefined(path: string): Promise<Record<string, unknown> | undefined> {
   const db = getDb();
   if (!db) throw new Error('no_db');
   const r = await readDoc(db, path);

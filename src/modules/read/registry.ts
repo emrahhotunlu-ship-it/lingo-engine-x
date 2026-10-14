@@ -1,5 +1,5 @@
 import type { PromptTemplate } from './shared';
-import { readArticle, readTopics } from './prompt';
+import { readApply, readArticle, readTopics } from './prompt';
 import { rdDe } from './i18n/rd.de';
 import { rdEn } from './i18n/rd.en';
 
@@ -11,8 +11,9 @@ import { rdEn } from './i18n/rd.en';
 
 export { readSchema } from './schemas';
 
-export const READ_TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [readArticle, readTopics];
+export const READ_TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [readArticle, readTopics, readApply];
 
 export const readMessages = { de: rdDe, en: rdEn } as const;
 export { readDocCountOf, READ_LAZY_COLLECTION } from './domain/count';
 export { daysFromMonthDocs, docBytes, fitTextBudget, READ_BACKUP_TEXT_BUDGET_BYTES, readBackupPlan, recentMonths, routineBackupPaths } from './domain/backup';
+export { READ_PROGRESS_PATH } from './domain/paths';

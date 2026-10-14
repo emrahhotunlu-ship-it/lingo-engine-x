@@ -1,6 +1,6 @@
 import type { Db } from '../platform/types';
 import { logError, logWarn } from '../platform/diagnostics';
-import { daysFromMonthDocs, fitTextBudget, READ_BACKUP_TEXT_BUDGET_BYTES, readBackupPlan, recentMonths, routineBackupPaths, docBytes } from '../modules/read/registry';
+import { daysFromMonthDocs, fitTextBudget, READ_BACKUP_TEXT_BUDGET_BYTES, readBackupPlan, recentMonths, routineBackupPaths, docBytes, READ_PROGRESS_PATH } from '../modules/read/registry';
 import { APP_DOC_PATHS, EAGER_COLLECTION_NAMES, collectionOf } from './paths';
 import { validateDoc } from './validate';
 
@@ -108,6 +108,11 @@ export async function loadLazyBackup(db: Db, textBudget: number = READ_BACKUP_TE
   const p = await readOnce('read/p', () => db.doc('read/p').get());
   const pData = p.exists ? p.data() : undefined;
   if (pData) docs['read/p'] = pData;
+  // Kursfortschritt (Paket L8): vom Nutzer erarbeitet (Lektionen fertig, eigene Sätze), klein und nicht wiederherstellbar: gehört immer in die Sicherung.
+  // Die Lektionstexte selbst schreibt die Routine und sind nicht Teil davon.
+  const cp = await readOnce(READ_PROGRESS_PATH, () => db.doc(READ_PROGRESS_PATH).get());
+  const cpData = cp.exists ? cp.data() : undefined;
+  if (cpData) docs[READ_PROGRESS_PATH] = cpData;
   // Monatsindizes: aus den Tagen in `read/p`; fehlt `read/p` ganz, werden die letzten 24 Monate gesucht (nie still nichts sichern).
   const listed = readBackupPlan(pData);
   const monthNames = pData ? listed.index.filter((x) => x !== 'read/p').map((x) => x.slice('read/m-'.length)) : recentMonths(new Date().toISOString().slice(0, 10), 24);
