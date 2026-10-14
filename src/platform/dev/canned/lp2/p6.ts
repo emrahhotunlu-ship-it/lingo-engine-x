@@ -26,10 +26,14 @@ export function synonymCheckReply(input: string): string {
  * der Satz zum Fehlersatz (`src:'write'`, Lernplattform 2.0 §5.6).
  */
 export function produceCheckReplyV2(input: string): string {
-  const out = JSON.parse(produceCheckReply(input)) as { verdict?: string; fixed?: string };
-  if (out.verdict === 'wrong' && typeof out.fixed === 'string') {
-    const target = /^Target (?:word|phrase): (.*) \(meaning: /m.exec(input)?.[1]?.trim() ?? 'the word';
-    out.fixed = `At work, we always use ${target} in a clear sentence.`;
+  const out = JSON.parse(produceCheckReply(input)) as { verdict?: string; fixed?: string; better?: string; whyBetter?: string; errType?: string | null };
+  const target = /^Target (?:word|phrase): (.*) \(meaning: /m.exec(input)?.[1]?.trim() ?? 'the word';
+  if (out.verdict === 'wrong' && typeof out.fixed === 'string') out.fixed = `At work, we always use ${target} in a clear sentence.`;
+  // produce-check@2: drei Schichten – bei einem Fehler auch die C1-Fassung mit Begründung (nur Testantwort, kein echter Inhalt).
+  if (out.verdict && out.verdict !== 'correct') {
+    const de = /Explanation language: German/.test(input);
+    out.better = `At work, we always use ${target} in a clear, precise sentence.`;
+    out.whyBetter = de ? 'Die Fassung ist genauer und klingt im Beruf natürlicher.' : 'This version is more precise and sounds more natural at work.';
   }
   return JSON.stringify(out);
 }

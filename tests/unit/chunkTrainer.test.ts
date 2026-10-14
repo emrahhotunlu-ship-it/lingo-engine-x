@@ -203,17 +203,20 @@ describe('Abfrageart je Stufe: mindestens zwei, Stufe 5 mit eigenem Satz, Rückf
     }
   });
 
-  it('Stufe 5 „Sicher anwenden“: eigener Satz nur mit KI, Diktat nur mit Sprachausgabe', () => {
-    const c = vcard({ stage: 5 });
-    expect(availableExercises(c, 'de', 100, { tts: true, ai: true })).toEqual(['complete', 'cloze', 'dictation', 'produce']);
-    expect(availableExercises(c, 'de', 100, { tts: false, ai: true })).toEqual(['complete', 'cloze', 'produce']);
-    // Am Handy (touch): kein eigener Satz, kein Hören – aber weiter mindestens zwei Arten.
-    expect(availableExercises(c, 'de', 100, { tts: true, ai: true, touch: true })).toEqual(['complete', 'cloze']);
+  it('Stufe 5 „Sicher anwenden“: eigener Satz nur mit KI (auch am Handy) und nach zwei Abruf-Tagen, Diktat nur mit Sprachausgabe', () => {
+    // Zwei richtige Abrufe an verschiedenen Tagen: erst dann darf der eigene Satz kommen (Barcroft-Leitplanke).
+    const hist = [{ t: T - 3 * 86_400_000, g: 3, x: 'cloze' }, { t: T - 86_400_000, g: 3, x: 'cloze' }];
+    const c = vcard({ stage: 5, hist });
+    expect(availableExercises(c, 'de', 100, { tts: true, ai: true })).toEqual(['cloze', 'dictation', 'produce']);
+    expect(availableExercises(c, 'de', 100, { tts: false, ai: true })).toEqual(['cloze', 'produce']);
+    // Am Handy (touch): kein Hören, aber der eigene Satz – „Satz vervollständigen“ ohne Satzanfang gibt es nicht mehr.
+    expect(availableExercises(c, 'de', 100, { tts: true, ai: true, touch: true })).toEqual(['cloze', 'produce']);
+    expect(availableExercises(vcard({ stage: 5 }), 'de', 100, { tts: true, ai: true })).not.toContain('produce');
     const noAi = availableExercises(c, 'de', 100, { tts: false, ai: false });
     expect(noAi).not.toContain('produce');
     expect(noAi.length).toBeGreaterThanOrEqual(2);
     // Schwächste Art gewinnt: produce nie geübt → gewählt, ohne KI nie.
-    const weak = vcard({ stage: 5, xs: { type: { c: 5, w: 0 }, dictation: { c: 5, w: 0 }, complete: { c: 5, w: 0 }, cloze: { c: 5, w: 0 } } });
+    const weak = vcard({ stage: 5, hist, xs: { type: { c: 5, w: 0 }, dictation: { c: 5, w: 0 }, complete: { c: 5, w: 0 }, cloze: { c: 5, w: 0 } } });
     expect(chooseExercise(weak, 'de', 100, [], { tts: true, ai: true })).toBe('produce');
     expect(chooseExercise(weak, 'de', 100, [], { tts: true, ai: false })).not.toBe('produce');
   });

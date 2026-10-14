@@ -1,6 +1,6 @@
 import { expect, test, type Browser, type Page } from '@playwright/test';
 import { boot, layoutProblems, screen, openTab } from './fixtures';
-import { DAY, answerCurrent, dump, planPatch, produceSentence } from './trainerHelpers';
+import { DAY, RECALLED, answerCurrent, dump, planPatch, produceFor } from './trainerHelpers';
 import { TYPE_MODE } from './trainerHelpers';
 
 // Neue Abfragearten (phase1-plan §4.2) und Wendungen in der täglichen Wiederholung (Kap. 5, M15):
@@ -23,17 +23,19 @@ async function device(browser: Browser, kind: Device): Promise<{ page: Page; clo
 const phone = (browser: Browser) => device(browser, 'phone');
 
 /** Karte, die als erste fällig ist und deren schwächste Art feststeht. */
-const forcedDoc = (stage: number, xs: Counts, i = 0): Doc => ({ state: 'learning', stage, S: 1, D: 5, due: 1_690_000_000_000 + i, last: 1_689_900_000_000, reps: 3, lapses: 0, xs });
+const forcedDoc = (stage: number, xs: Counts, i = 0): Doc => ({ state: 'learning', stage, S: 1, D: 5, due: 1_690_000_000_000 + i, last: 1_689_900_000_000, reps: 3, lapses: 0, xs, hist: RECALLED });
 const strong = (...ids: string[]): Counts => Object.fromEntries(ids.map((id) => [id, { c: 6, w: 0 }]));
 const weak = (id: string): Counts => ({ [id]: { c: 0, w: 6 } });
 
-// Hören (listen_mc, dictation) und der eigene Satz (produce) gibt es nur mit Tastatur (Profil keys, Geräte-Matrix); am Handy fehlen sie.
+// Hören (listen_mc, dictation) gibt es nur mit Tastatur (Profil keys, Geräte-Matrix); der eigene Satz (produce) geht seit „Wörter aktivieren“ Stufe 1 auch am Handy.
+// Jede Karte hat schon zwei Abruf-Tage (`RECALLED`), sonst bietet die App den eigenen Satz nie an (Barcroft-Leitplanke).
 const MODES: Array<{ ex: string; stage: number; others: string[]; device: Device }> = [
   { ex: 'ctx_mc', stage: 1, others: ['mc_en'], device: 'phone' },
   { ex: 'match', stage: 2, others: ['mc_de'], device: 'phone' },
   { ex: 'listen_mc', stage: 1, others: ['mc_en', 'ctx_mc'], device: 'keys' },
-  { ex: 'dictation', stage: 5, others: ['produce', 'complete', 'cloze'], device: 'keys' },
-  { ex: 'produce', stage: 5, others: ['dictation', 'complete', 'cloze'], device: 'keys' },
+  { ex: 'dictation', stage: 5, others: ['produce', 'cloze'], device: 'keys' },
+  { ex: 'produce', stage: 5, others: ['dictation', 'cloze'], device: 'keys' },
+  { ex: 'produce', stage: 5, others: ['cloze'], device: 'phone' },
 ];
 
 async function startRound(page: Page, patch: Record<string, Doc>, opts: { sample?: boolean } = {}) {
@@ -76,7 +78,7 @@ for (const m of MODES) {
       await page.getByTestId('check').click();
     } else if (m.ex === 'produce') {
       await page.getByTestId('produce-input').click();
-      await page.getByTestId('produce-input').fill(produceSentence('avoid'));
+      await page.getByTestId('produce-input').fill(await produceFor(page, 'avoid'));
       await page.getByTestId('check').click();
     } else {
       await page.getByTestId('gap-input').click();
@@ -114,24 +116,30 @@ for (const m of MODES) {
   });
 }
 
-test('Am Handy gibt es nie Hören, Diktat oder eigenen Satz – auch nicht, wenn sie die schwächste Art wären', async ({ browser }) => {
+test('Am Handy gibt es nie Hören oder Diktat – der eigene Satz schon, mit sichtbaren Vorgaben', async ({ browser }) => {
   const { page, close } = await phone(browser);
-  const { errors } = await startRound(page, { 'vocab/avoid': forcedDoc(5, { ...strong('cloze', 'complete'), ...weak('dictation'), produce: { c: 0, w: 9 } }) });
+  const { errors } = await startRound(page, { 'vocab/avoid': forcedDoc(5, { ...strong('cloze'), ...weak('dictation'), produce: { c: 0, w: 9 } }) });
   const ex = await page.getByTestId('exercise').getAttribute('data-ex');
-  // V1: ab Stufe 4 mit wenig Formen kommen auch Nachbar-Arten (z. B. Wortpartner) dazu; verboten bleiben Hören, Diktat und der eigene Satz.
-  expect(['dictation', 'listen_mc', 'produce', 'flip']).not.toContain(ex);
+  expect(['dictation', 'listen_mc', 'flip']).not.toContain(ex);
+  await expect(page.getByTestId('exercise')).toHaveAttribute('data-ex', 'produce');
   await expect(page.getByTestId('replay')).toHaveCount(0);
-  await expect(page.getByTestId('produce-input')).toHaveCount(0);
+  await expect(page.getByTestId('produce-input')).toBeVisible();
+  // Vorgaben sichtbar: Lage, Satzform, Ton (Zeitform fehlt nur beim Wenn-Satz).
+  await expect(page.getByTestId('produce-brief')).toBeVisible();
+  await expect(page.getByTestId('brief-scene')).not.toBeEmpty();
+  await expect(page.getByTestId('brief-form')).toBeVisible();
+  await expect(page.getByTestId('brief-tone')).toBeVisible();
+  expect(await layoutProblems(page)).toEqual([]);
   expect(errors).toEqual([]);
   await close();
 });
 
-test('Eigener Satz: falsche Verwendung → „Noch nicht" mit Begründung; bei KI-Fehler „Ohne Claude prüfen"', async ({ browser }) => {
+test('Eigener Satz: Vorprüfung ohne Claude (Wort fehlt → einmal nachbessern → „Noch nicht“); bei KI-Fehler „Ohne Claude prüfen“', async ({ browser }) => {
   const { page, close } = await device(browser, 'keys');
-  const { errors } = await startRound(page, { 'vocab/avoid': forcedDoc(5, { ...strong('dictation', 'complete', 'cloze'), ...weak('produce') }) });
+  const { errors } = await startRound(page, { 'vocab/avoid': forcedDoc(5, { ...strong('dictation', 'cloze'), ...weak('produce') }) });
   await expect(page.getByTestId('exercise')).toHaveAttribute('data-ex', 'produce');
   // „zzjson" liefert keine gültige Antwort: Fehlerzustand, Knopf „Erneut versuchen" und Prüfung ohne Claude.
-  await page.getByTestId('produce-input').fill('I zzjson this every day at work.');
+  await page.getByTestId('produce-input').fill(await produceFor(page, 'avoid', { extra: 'zzjson' }));
   await page.getByTestId('check').click();
   await expect(page.getByTestId('produce-local')).toBeVisible();
   await page.getByTestId('produce-input').fill('We always avoid long meetings on Friday afternoons.');
@@ -143,27 +151,37 @@ test('Eigener Satz: falsche Verwendung → „Noch nicht" mit Begründung; bei K
   await close();
 
   const second = await device(browser, 'keys');
-  await startRound(second.page, { 'vocab/avoid': forcedDoc(5, { ...strong('dictation', 'complete', 'cloze'), ...weak('produce') }) });
+  await startRound(second.page, { 'vocab/avoid': forcedDoc(5, { ...strong('dictation', 'cloze'), ...weak('produce') }) });
   await second.page.getByTestId('produce-input').fill('The meeting starts at nine.');
   await second.page.getByTestId('check').click();
+  // Erster Durchfall: Rückmeldung ohne KI-Aufruf, die Eingabe bleibt, einmal nachbessern.
+  await expect(second.page.getByTestId('hint-line')).toContainText('kommt in deinem Satz nicht vor');
+  await expect(second.page.getByTestId('verdict')).toHaveCount(0);
+  await second.page.getByTestId('check').click();
   await expect(second.page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'wrong');
-  // UX-Prüfung W2: „Deine Antwort“ ist ein eigener Block derselben Rückmeldekarte (`explanation-yours`), direkt unter dem Urteil.
-  await expect(second.page.getByTestId('explanation-yours')).toContainText('Zielwort');
-  // Ein falscher Satz wird zum Fehlersatz (Box 1) – nur mit Claudes Korrektur.
-  await expect.poll(async () => ((await dump(second.page))['app/repair']?.items as Doc[] | undefined)?.some((i) => i.src === 'write') ?? false).toBe(true);
+  await expect(second.page.getByTestId('verdict-sub')).toContainText('Noch nicht');
+  await expect(second.page.getByTestId('ai-note')).toHaveCount(0);
+  // Kein Claude-Aufruf, also auch kein Fehlersatz aus dieser Antwort.
+  expect(((await dump(second.page))['app/repair']?.items as Doc[] | undefined)?.some((i) => i.src === 'write') ?? false).toBe(false);
   await second.close();
 });
 
-test('Satz vervollständigen ohne Satzanfang: Aufgabe „Schreib einen eigenen Satz …“, Claude-Hinweis mit Innenabstand (Rückmeldung 1)', async ({ browser }) => {
+test('Eigener Satz: abgeschrieben (Beispielsatz) wird ohne Claude abgewiesen; drei Schichten und Hauptfehler bei kleinem Fehler', async ({ browser }) => {
   const { page, close } = await device(browser, 'keys');
-  // „avoid“ ist ein Startwort ohne Satzanfänge (`starts` gibt es nur im C1-Paket).
-  const { errors } = await startRound(page, { 'vocab/avoid': forcedDoc(5, { ...strong('dictation', 'produce', 'cloze'), ...weak('complete') }) });
-  await expect(page.getByTestId('exercise')).toHaveAttribute('data-ex', 'complete');
-  await expect(page.getByTestId('complete-start')).toHaveCount(0);
-  await expect(page.getByTestId('task')).toContainText('eigenen Satz');
-  await page.getByTestId('complete-input').fill('We always avoid long meetings on Friday afternoons.');
+  const { errors } = await startRound(page, { 'vocab/avoid': forcedDoc(5, { ...strong('dictation', 'cloze'), ...weak('produce') }) });
+  await expect(page.getByTestId('exercise')).toHaveAttribute('data-ex', 'produce');
+  const task = (await page.getByTestId('task').innerText()).trim();
+  expect(task.length).toBeGreaterThan(10);
+  // Der Ursprungssatz der Karte, wörtlich abgeschrieben: Rückmeldung, aber noch kein Ergebnis.
+  await page.getByTestId('produce-input').fill('Try to avoid driving in rush hour.');
   await page.getByTestId('check').click();
-  await expect(page.getByTestId('verdict')).toBeVisible();
+  await expect(page.getByTestId('hint-line')).toContainText('schon gesehen');
+  await expect(page.getByTestId('verdict')).toHaveCount(0);
+  // Eigener Satz ohne Großbuchstabe und Punkt: „kleine Korrektur“ mit allen drei Schichten und dem Hauptfehler.
+  await page.getByTestId('produce-input').fill(await produceFor(page, 'avoid', { tidy: false }));
+  await page.getByTestId('check').click();
+  await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'near');
+  await expect(page.getByTestId('verdict-sub')).toContainText('Wichtigster Fehler');
   const note = page.getByTestId('ai-note');
   await expect(note).toBeVisible();
   const pad = await note.evaluate((el) => parseFloat(getComputedStyle(el).paddingLeft));
@@ -177,10 +195,10 @@ test('ohne KI (nosample): Stufe 5 fällt auf KI-freie Arten zurück, kein toter 
   const { errors } = await startRound(page, { 'vocab/avoid': forcedDoc(5, { ...strong('dictation'), ...weak('produce') }) }, { sample: false });
   const ex = page.getByTestId('exercise');
   await expect(ex).toBeVisible();
-  expect(['dictation', 'complete', 'cloze']).toContain(await ex.getAttribute('data-ex'));
+  // V1: ohne Satzanfang und ohne KI bleibt Diktat, Lücke oder eine Nachbar-Art (z. B. Wortpartner); nie der eigene Satz.
+  expect(await ex.getAttribute('data-ex')).not.toBe('produce');
   await expect(page.getByTestId('produce-input')).toHaveCount(0);
   await expect(page.locator('[data-ai]')).toHaveCount(0);
-  // Ohne Claude zählt „Satz vervollständigen“ höchstens als „Schwer“: die Karte kommt in der Runde noch einmal.
   for (let i = 0; i < 5 && !(await page.getByTestId('summary').isVisible()); i++) await answerCurrent(page);
   await expect(page.getByTestId('summary')).toBeVisible();
   expect(errors).toEqual([]);

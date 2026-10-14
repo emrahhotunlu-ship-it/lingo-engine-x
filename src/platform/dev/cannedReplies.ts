@@ -200,7 +200,8 @@ export function produceCheckReply(input: string): string {
   const verdict = !uses ? 'wrong' : tidy ? 'correct' : 'minor';
   const fixed =
     verdict === 'minor' ? `${sentence.charAt(0).toUpperCase()}${sentence.slice(1)}${/[.!?]$/.test(sentence) ? '' : '.'}` : sentence || '—';
-  return JSON.stringify({ verdict, usesTarget: uses, fixed, why: WHY[verdict][lang], better: '' });
+  // produce-check@2: die zusätzlichen Felder ignoriert das Schema von @1 (`better` bleibt leer, damit auch @2 ohne `whyBetter` besteht).
+  return JSON.stringify({ verdict, usesTarget: uses, fixed, why: WHY[verdict][lang], better: '', whyBetter: '', errType: verdict === 'correct' ? null : 'other' });
 }
 
 // ---------------------------------------------------------------- card-examples@2

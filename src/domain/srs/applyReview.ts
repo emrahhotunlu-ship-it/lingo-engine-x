@@ -147,9 +147,9 @@ const answeredOn = (cur: Doc, day: string): boolean => typeof cur.last === 'numb
  * der eigenen – sie prüft Gehör und Schreibung, nicht die Bedeutung. Auf Stufe 4–5 (Leiter) ändert
  * das nichts; im Hör-Modus hebt eine junge Karte so je Antwort nur um eine Stufe und fällt nie tiefer.
  */
-/** Verlaufseintrag; `s` = Schlüssel des gezeigten Satzes (V1, nur wenn die Abfrage einen Satz hatte). */
+/** Verlaufseintrag; `s` = Schlüssel des gezeigten Satzes (V1, nur wenn die Abfrage einen Satz hatte), `a` = Code der Vorgabe eines eigenen Satzes. */
 function histEntry(a: AnswerEvent, mode: LegacyMode): Record<string, unknown> {
-  return { t: a.t, m: mode, g: a.grade, x: a.ex, ...(a.sx ? { s: a.sx } : {}) };
+  return { t: a.t, m: mode, g: a.grade, x: a.ex, ...(a.sx ? { s: a.sx } : {}), ...(a.act ? { a: a.act } : {}) };
 }
 
 export function levelFor(ex: ExerciseId, stage: number): number {

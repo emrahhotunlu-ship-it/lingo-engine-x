@@ -1,5 +1,6 @@
 import { packExtraOf } from '../c1pack/packFields';
 import { meaningForTask } from './cards';
+import { activationReady } from './brief';
 import { gapUsable, lemmaFor } from './gapFit';
 import { familyFrom, hasPartner, trapTask } from './partner';
 import { distinctForms, familyOf, FEST_MIN_FORMS, varietyBias, varietyOf } from './variety';
@@ -10,7 +11,8 @@ import type { Counts, ExerciseId, InputKind, Lang, LegacyMode, Stage, TrainCard 
 // Sprachausgabe × mit/ohne KI) mindestens zwei Arten (Kap. 15):
 //   1 mc_en, ctx_mc, listen_mc (Hören)   2 mc_de, match   3 cloze_hint, colloc_gap, complete (mit Satzanfang)
 //   4 cloze, colloc (getippt), wordfam, find_trap, type (nur ohne Satz), situation
-//   5 cloze im neuen Satz (Satzwechsel), complete ohne Satzanfang, produce (KI, nicht am Handy), dictation (Hören)
+//   5 cloze im neuen Satz (Satzwechsel), produce „Eigener Satz“ (KI; auch am Handy, Wörter aktivieren Stufe 1), dictation (Hören)
+// „Eigener Satz“ ist EINE Art (`produce`): „Satz vervollständigen“ ohne Satzanfang gibt es nicht mehr, `complete` braucht einen Satzanfang aus dem Paket.
 
 export type ExerciseDef = { ex: ExerciseId; stage: Stage; level: number; mode: LegacyMode; input: InputKind; also?: readonly Stage[] };
 
@@ -43,7 +45,8 @@ export const CATALOG: readonly ExerciseDef[] = [
 
 /**
  * Was die Umgebung kann: Sprachausgabe, KI und das Eingabeprofil. `listen` = `tts && !touch` (Hören gibt es nur mit Tastatur,
- * Kap. 6 Geräte-Matrix); `touch` sperrt auch den eigenen Satz (`produce`). Das Profil wird je Runde einmal eingefroren.
+ * Kap. 6 Geräte-Matrix). Der eigene Satz (`produce`) geht auch am Handy (Wörter aktivieren Stufe 1: kurze Sätze genügen).
+ * Das Profil wird je Runde einmal eingefroren.
  */
 export type ExerciseEnv = { tts: boolean; ai: boolean; touch?: boolean; listen?: boolean };
 export const NO_ENV: ExerciseEnv = { tts: false, ai: false, touch: false, listen: false };
@@ -93,8 +96,8 @@ export function supports(card: TrainCard, ex: ExerciseId, lang: Lang, poolSize: 
     case 'colloc':
       return hasPartner(card);
     case 'complete':
-      // Mit Satzanfang aus dem Paket schon früh; ohne Anfang erst in der freien Anwendung (Stufe 5).
-      return !!meaning && (card.stage >= 5 || (packExtraOf(card)?.starts?.length ?? 0) > 0);
+      // Nur mit Satzanfang aus dem Paket. Ohne Anfang ist es ein eigener Satz und heißt `produce`.
+      return !!meaning && (packExtraOf(card)?.starts?.length ?? 0) > 0;
     case 'wordfam':
       return gapOk(card) && familyFrom(card) !== null;
     case 'find_trap':
@@ -104,7 +107,8 @@ export function supports(card: TrainCard, ex: ExerciseId, lang: Lang, poolSize: 
     case 'dictation':
       return canListen(env) && gapOk(card);
     case 'produce':
-      return env.ai && !env.touch && !!meaning;
+      // Leitplanke (Barcroft, tagesaufbau.md T2): nie bei einer Karte, die noch nicht an mindestens zwei Tagen richtig abgerufen wurde.
+      return env.ai && !!meaning && activationReady(card);
     case 'flip':
     case 'contrast':
       return false;

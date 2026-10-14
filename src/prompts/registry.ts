@@ -10,7 +10,7 @@ import { grammarItems } from './grammarItems';
 import { grammarJudge } from './grammarJudge';
 import { mnemonic } from './mnemonic';
 import { NB_TEMPLATES } from './nb';
-import { produceCheck } from './produceCheck';
+import { produceCheckV2 } from './produceCheckV2';
 import { synonymCheck } from './synonymCheck';
 import { wordGen } from './wordGen';
 import { companionChat } from './companionChat';
@@ -34,7 +34,8 @@ import { READ_TEMPLATES } from '../modules/read/registry';
 
 export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   wordLookup,
-  produceCheck,
+  // Wörter aktivieren Stufe 1: produce-check@2 (drei Schichten, Vorgaben, errType); produce-check@1 bleibt als Datei erhalten, wird nicht mehr aufgerufen.
+  produceCheckV2,
   cardExamples,
   orderGen,
   // Anwenden, Stufe 2: Hörübung mit Frage

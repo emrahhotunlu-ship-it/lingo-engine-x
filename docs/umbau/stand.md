@@ -418,3 +418,9 @@ Lehre: Für Aufgabenfragen mit Gestaltungsspielraum zuerst Emrah mit Vorschau fr
 - Geprüft: data-guard, english-teacher, ux-reviewer, learning-scientist, platform-guard; Befunde eingearbeitet. verify: 826 grün; rot nur perf-Statuszeile (4×, bekannt).
 - Offen: Entscheidung Satz-Schreiben nach Artikel (`talk`), Menge pro Tag (Standard 3), Sprache der Begründungen; L5–L9; Tagesauftrag `trig_01LxTDBs97GGemopdDnxgyXP` (täglich 05:07 UTC) – morgen prüfen, ob `feed/<Datum>` ankommt.
 - Karten „wahnsinnig“, „to might“ auf Emrahs Ja aus der Live-DB gelöscht.
+
+## 14.10.2026 – Wörter aktivieren, Stufe 1 (Zweig `claude/umbau-aktiv1`, noch nicht veröffentlicht)
+- „Eigener Satz“ (`produce`) geht jetzt auch am Handy; „Satz vervollständigen“ ohne Satzanfang ist darin aufgegangen (`complete` nur noch mit Satzanfang aus dem Paket). Leitplanke Barcroft in `modes.ts`, Wächter-Regel R13 und `tagesaufbau.md` T2: nie bei Karten unter Stufe 3 und nur nach 2 richtigen Abrufen an verschiedenen Tagen.
+- Variable Aufgabenstellung: Lage (14 Beruf, 5 Alltag, `src/content/activation/scenes.ts`), Satzform, Ton, Zeitform per Hash (`domain/srs/brief.ts`), sichtbar als Marken; Code im Verlauf `hist[].a`.
+- Vorprüfung ohne KI (`produce.ts`): Wort fehlt, zu kurz (ab 4 Wörtern), abgeschrieben (Jaccard ≥ 0,6 gegen alle gezeigten Sätze), Satzform, typische Deutsch-Fehler; einmal nachbessern. `produce-check@2` (drei Schichten, `errType`).
+- Offen (Stufe 2): Fahrplan A1–A4, Zähler `ac`, Speicher `act/…`, eigene frühere Sätze für die Abschreibprüfung.

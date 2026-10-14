@@ -8,6 +8,8 @@ import { availableExercises, CATALOG, exerciseDef, NO_ENV, RETIRED, supports } f
 import type { ExerciseEnv } from './modes';
 import { toUS } from '../answer/spelling';
 import { isFunctionGap } from './partner';
+import { activationReady, parseBrief } from './brief';
+import { sceneById } from '../../content/activation/scenes';
 import type { Exercise, ExerciseId, Lang, TrainCard } from './types';
 
 // Wächter (Entscheidung Q1/Q5, 12.10.2026): Jede gebaute Vokabel-Aufgabe wird vor dem Zeigen gegen feste Regeln R1–R12 des Audits geprüft.
@@ -26,10 +28,12 @@ import type { Exercise, ExerciseId, Lang, TrainCard } from './types';
 //  R10 Aufdeck-Karte: Vorder- und Rückseite passen zusammen (Bedeutung vorhanden, verrät das Wort nicht, Rückseite zeigt das Kartenwort)
 //  R11 Sprachtreue: Optionen und Hinweise in einer Sprache, passend zur Oberflächensprache bzw. dem Rückfall der Karte
 //  R12 Auswahl hat genau eine richtige Option, mindestens 3 Optionen (Kontrast: 2), keine doppelten Optionen
+//  R13 „Eigener Satz“ (Wörter aktivieren): Vorgabe vollständig und stimmig (Lage bekannt, Wenn-Satz ohne Zeitform, Code lesbar, Bedeutung da),
+//      Leitplanke: nur bei Karten mit mindestens 2 richtigen Abrufen an verschiedenen Tagen (Barcroft, tagesaufbau.md T2); keine Lücke, keine Lösung
 // Nicht prüfbar im Programm: ob ein Satz inhaltlich sinnvoll ist (Satzsinn), ob eine Claude-Antwort stimmt, ob mehrere Präpositionen
 // vertretbar wären (R8b, nur Hinweis im Audit).
 
-export type GuardRule = 'R1' | 'R2' | 'R3' | 'R4' | 'R5' | 'R6' | 'R7' | 'R8' | 'R9' | 'R10' | 'R11' | 'R12';
+export type GuardRule = 'R1' | 'R2' | 'R3' | 'R4' | 'R5' | 'R6' | 'R7' | 'R8' | 'R9' | 'R10' | 'R11' | 'R12' | 'R13';
 export type Violation = { rule: GuardRule; why: string };
 
 const norm = (s: string): string => s.toLowerCase().replace(/\s+/g, ' ').trim();
@@ -185,6 +189,20 @@ export function checkExercise(e: Exercise, card: TrainCard, lang: Lang): Violati
 
   // ---- Sprachtreue des Hinweises (R11)
   if (lang === 'en' && card.def && e.meaning && /[äöüß]/i.test(e.meaning) && !/[äöüß]/i.test(card.def)) add('R11', 'englische Oberfläche zeigt deutsche Bedeutung, obwohl eine englische Definition da ist');
+
+  // ---- Eigener Satz (R13): ohne Lücke und Lösung; die Vorgaben müssen stimmen, und frisch gelernte Wörter bekommen ihn nie
+  if (e.ex === 'produce') {
+    const b = e.brief;
+    if (!b) add('R13', 'Vorgaben (Lage, Form, Ton, Zeit) fehlen');
+    else {
+      if (!sceneById(b.scene)) add('R13', `unbekannte Lage „${b.scene}“`);
+      if (!parseBrief(b.code)) add('R13', `Code der Vorgabe nicht lesbar („${b.code}“)`);
+      if ((b.form === 'i') !== (b.tense === '-')) add('R13', 'Wenn-Satz und Zeitform widersprechen sich');
+    }
+    if (!e.meaning) add('R13', 'keine Bedeutung zum Zielwort');
+    if (e.sentence || e.options.length || e.accepted.length) add('R13', 'eigener Satz darf keine Lücke, Optionen oder Lösung tragen');
+    if (!activationReady(card)) add('R13', 'Karte noch nicht an zwei Tagen richtig abgerufen (kein freier Satz beim ersten Lernen)');
+  }
 
   // ---- Aufdeck-Karte (R10)
   if (e.ex === 'flip') {

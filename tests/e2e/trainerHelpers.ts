@@ -146,8 +146,30 @@ export async function placeTiles(page: Page, answer: string, opts: { wrong?: boo
   for (const p of seq) await page.locator(`[data-testid="tile"][data-where="pool"][data-tile="${p.replace(/"/g, '\\"')}"]`).first().click();
 }
 
-/** Satz für „Eigener Satz“, den die feste Testantwort als richtig wertet (Großbuchstabe, Punkt, Zielwort). */
+/** Satz für „Eigener Satz“, den die feste Testantwort als richtig wertet (Großbuchstabe, Punkt, Zielwort). Ohne Vorgabe der Aufgabe (Aussage). */
 export const produceSentence = (target: string): string => `In our team we ${target} every single week.`;
+
+/** Zwei richtige Abrufe an verschiedenen Tagen: erst dann bietet die App den eigenen Satz an (Barcroft-Leitplanke, tagesaufbau.md T2). */
+export const RECALLED = [
+  { t: 1_689_600_000_000, m: 'type', g: 3, x: 'type' },
+  { t: 1_689_800_000_000, m: 'type', g: 3, x: 'type' },
+];
+
+/**
+ * Satz, der die Vorgabe der Aufgabe einhält (Satzform steht im Code der Marken: `data-code` = Lage.Form.Ton.Zeit) und das Zielwort enthält.
+ * `extra` kommt als Wort in den Satz (z. B. `zzjson`, damit die feste Testantwort ungültig ausfällt); `tidy: false` = ohne Großbuchstabe und Punkt.
+ */
+export async function produceFor(page: Page, target: string, opts: { extra?: string; tidy?: boolean } = {}): Promise<string> {
+  const code = (await page.getByTestId('produce-brief').getAttribute('data-code')) ?? '';
+  const form = code.split('.')[1] ?? 's';
+  const x = opts.extra ? ` ${opts.extra}` : '';
+  const base =
+    form === 'q' ? `Do we ${target}${x} long meetings on Friday afternoons?`
+    : form === 'n' ? `In our team we never ${target}${x} long meetings on Friday afternoons.`
+    : form === 'i' ? `If we ${target}${x} long meetings on Friday afternoons, we save time.`
+    : `In our team we ${target}${x} long meetings on Friday afternoons.`;
+  return opts.tidy === false ? base.charAt(0).toLowerCase() + base.slice(1).replace(/[.?]$/, '') : base;
+}
 
 // Eingabeprofil der App (Testschalter `__LINGO_INPUT__` oder Touch-Gerät), nicht nur der Zeiger.
 const isTouch = (page: Page): Promise<boolean> =>
@@ -190,8 +212,17 @@ export async function answerOnly(page: Page, opts: { wrong?: boolean } = {}): Pr
     else await words.filter({ hasText: new RegExp(`^${target}`, 'i') }).first().click();
     await page.getByTestId('check').click();
   } else if (ex === 'produce' || ex === 'complete') {
-    await page.getByTestId(ex === 'complete' ? 'complete-input' : 'produce-input').fill(opts.wrong ? 'The meeting starts at nine.' : produceSentence(answer));
-    await page.getByTestId('check').click();
+    const input = page.getByTestId(ex === 'complete' ? 'complete-input' : 'produce-input');
+    if (ex === 'produce' && opts.wrong) {
+      // Falsch = das Zielwort fehlt: die Vorprüfung meldet es einmal (ohne Claude), beim zweiten Mal endet der Satz als „Noch nicht“.
+      await input.fill('The meeting starts at nine.');
+      await page.getByTestId('check').click();
+      await expect(page.getByTestId('hint-line')).toBeVisible();
+      await page.getByTestId('check').click();
+    } else {
+      await input.fill(ex === 'produce' ? await produceFor(page, answer) : opts.wrong ? 'The meeting starts at nine.' : produceSentence(answer));
+      await page.getByTestId('check').click();
+    }
   } else {
     await page.getByTestId('gap-input').click();
     await page.keyboard.type(opts.wrong ? 'zzzz' : answer, { delay: 30 });
@@ -213,21 +244,21 @@ export async function answerOnly(page: Page, opts: { wrong?: boolean } = {}): Pr
  * „aus der Situation“ und das Blatt einer Wendung in der Wortschatzliste.
  */
 type TourStop = { path: string; ex: string; stage: number; others: string[] };
-/** Tastatur-Profil: mit Hören, Diktat und eigenem Satz (Geräte-Matrix, Lernplattform 2.0 §6). */
+/** Tastatur-Profil: mit Hören, Diktat und eigenem Satz (Geräte-Matrix, Lernplattform 2.0 §6). Alle Karten haben schon zwei Abruf-Tage. */
 export const TOUR: ReadonlyArray<TourStop> = [
   // „Im Satz finden“, Tempo und Bausteine sind aus der Wörter-Leiter entfernt (Umbau Fokus).
   { path: 'vocab/deserve', ex: 'listen_mc', stage: 1, others: ['mc_en', 'ctx_mc'] },
   { path: 'vocab/convince', ex: 'match', stage: 2, others: ['mc_de'] },
-  { path: 'vocab/achieve', ex: 'dictation', stage: 5, others: ['produce', 'complete', 'cloze'] },
-  { path: 'vocab/affect', ex: 'produce', stage: 5, others: ['dictation', 'complete', 'cloze'] },
+  { path: 'vocab/achieve', ex: 'dictation', stage: 5, others: ['produce', 'cloze'] },
+  { path: 'vocab/affect', ex: 'produce', stage: 5, others: ['dictation', 'cloze'] },
   { path: 'chunk/c-non-negotiable', ex: 'situation', stage: 4, others: ['type', 'cloze'] },
 ];
-/** Touch-Profil (Handy): ohne Hören, Diktat und eigenen Satz; dafür „Was heißt das hier?“ und „Satz vervollständigen“. */
+/** Touch-Profil (Handy): ohne Hören und Diktat; dafür „Was heißt das hier?“ und der eigene Satz (Wörter aktivieren, Stufe 1). */
 export const TOUR_TOUCH: ReadonlyArray<TourStop> = [
   { path: 'vocab/deserve', ex: 'ctx_mc', stage: 1, others: ['mc_en'] },
   { path: 'vocab/convince', ex: 'match', stage: 2, others: ['mc_de'] },
-  { path: 'vocab/achieve', ex: 'complete', stage: 5, others: ['cloze'] },
-  { path: 'vocab/affect', ex: 'cloze', stage: 5, others: ['complete'] },
+  { path: 'vocab/achieve', ex: 'produce', stage: 5, others: ['cloze'] },
+  { path: 'vocab/affect', ex: 'cloze', stage: 5, others: ['produce'] },
   { path: 'chunk/c-non-negotiable', ex: 'situation', stage: 4, others: ['type', 'cloze'] },
 ];
 export const tourOf = (touch: boolean): ReadonlyArray<TourStop> => (touch ? TOUR_TOUCH : TOUR);
@@ -239,7 +270,7 @@ export function tourPatch(touch = false): Record<string, Doc> {
   tour.forEach((t, i) => {
     const xs: Record<string, { c: number; w: number }> = { [t.ex]: { c: 0, w: 6 } };
     for (const o of t.others) xs[o] = { c: 6, w: 0 };
-    out[t.path] = { state: 'learning', stage: t.stage, S: 1, D: 5, due: 1_680_000_000_000 + i * 1000, last: 1_679_900_000_000, reps: 3, lapses: 0, xs };
+    out[t.path] = { state: 'learning', stage: t.stage, S: 1, D: 5, due: 1_680_000_000_000 + i * 1000, last: 1_679_900_000_000, reps: 3, lapses: 0, xs, hist: RECALLED };
   });
   // Englische Oberfläche: die Absicht der Situationsübung braucht die englische Erklärung.
   out['chunk/c-non-negotiable'] = { ...out['chunk/c-non-negotiable'], def: 'not open to discussion or change' };
