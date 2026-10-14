@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { ArticleItem, ReadState } from '../../schemas';
+import type { ArticleItem, IndexItem, ReadState } from '../../schemas';
 import { parseDayDoc, parseMonthDoc, parsePrefs } from '../../domain/docs';
 import type { Prefs } from '../../domain/docs';
-import { dayOfArticleId, monthOfDay, readDayPath, readMonthPath, READ_PREFS_PATH } from '../../domain/paths';
+import { articleDocPath, dayOfArticleId, isRoutineId, monthOfDay, readMonthPath, READ_PREFS_PATH } from '../../domain/paths';
+import { parseRoutineDoc, routineEntryOf } from '../../domain/routine';
 import { rdrText } from '../../domain/readerText';
 import { saveReadState } from '../../store';
 import { logError, logWarn } from '../../shared';
@@ -14,7 +15,7 @@ import { ReaderView } from './ReaderView';
 // Der Leser als Seite (docs/umbau/lesen-plan.md §2.2): lädt EINEN Artikel nach Kennung (Tagesdokument, Monatsindex, Einstellungen, je ein
 // `get`, kein Abo) und zeigt `ReaderView`. Geschrieben wird nur auf Handlung: Ansicht wechseln, Ausblenden/Verlassen.
 
-type Loaded = { article: ArticleItem; day: string; state: ReadState | null; prefs: Prefs; nextId: string | null };
+type Loaded = { article: ArticleItem; day: string; state: ReadState | null; prefs: Prefs; nextId: string | null; seed: IndexItem | null };
 type Phase = { key: string } & ({ status: 'loading' } | { status: 'notfound' } | { status: 'failed' } | ({ status: 'ready' } & Loaded));
 
 export type ReaderScreenProps = {
@@ -64,8 +65,11 @@ export function ReaderScreen({ id, writer, startAt = null, onOpen, onList }: Rea
           w.current = known ?? createWriter(db);
           writers.set(db, w.current);
         }
-        const [d, m, p] = await Promise.all([db.doc(readDayPath(day)).get(), db.doc(readMonthPath(monthOfDay(day))).get(), db.doc(READ_PREFS_PATH).get()]);
-        const dayDoc = parseDayDoc(d.exists ? d.data() : undefined);
+        const routine = isRoutineId(id);
+        const [d, m, p] = await Promise.all([db.doc(articleDocPath(id, day)).get(), db.doc(readMonthPath(monthOfDay(day))).get(), db.doc(READ_PREFS_PATH).get()]);
+        // Routine-Artikel liegen in `read/r-<Tag>` (nur die Routine schreibt) und laufen durch dieselben Prüftore wie in der Liste;
+        // eigene Artikel in `read/d-<Tag>`.
+        const dayDoc = routine ? parseRoutineDoc(d.exists ? d.data() : undefined, day) : parseDayDoc(d.exists ? d.data() : undefined);
         const article = dayDoc.ok ? dayDoc.items.find((x) => x.id === id) : undefined;
         if (!alive) return;
         if (!article) {
@@ -79,7 +83,9 @@ export function ReaderScreen({ id, writer, startAt = null, onOpen, onList }: Rea
         const doneIds = new Set(month.ok ? month.items.filter((x) => x.st?.done === true).map((x) => x.id) : []);
         const at = items.findIndex((x) => x.id === id);
         const nextId = [...items.slice(at + 1), ...items.slice(0, at)].find((x) => !doneIds.has(x.id))?.id ?? null;
-        setPhase({ key, status: 'ready', article, day, state, prefs: parsePrefs(p.exists ? p.data() : undefined), nextId });
+        // Routine-Artikel haben im Monatsindex erst einen Eintrag, wenn der erste Lesestand gespeichert wird: die App legt ihn selbst an.
+        const seed = routine ? routineEntryOf(article, day) : null;
+        setPhase({ key, status: 'ready', article, day, state, prefs: parsePrefs(p.exists ? p.data() : undefined), nextId, seed });
       } catch (err) {
         logError('read:reader', err, id);
         if (alive) setPhase({ key, status: 'failed' });
@@ -92,13 +98,14 @@ export function ReaderScreen({ id, writer, startAt = null, onOpen, onList }: Rea
 
   const phase: Phase = loaded && loaded.key === `${id}#${attempt}` ? loaded : { key: '', status: 'loading' };
   const day = phase.status === 'ready' ? phase.day : null;
+  const seed = phase.status === 'ready' ? phase.seed : null;
   const onProgress = useCallback(
     (patch: ReadState) => {
       const writer2 = w.current;
       if (!writer2 || !day) return;
-      saveReadState(writer2, monthOfDay(day), id, patch).catch((err: unknown) => logWarn('read:progress', err, id));
+      saveReadState(writer2, monthOfDay(day), id, patch, seed ?? undefined).catch((err: unknown) => logWarn('read:progress', err, id));
     },
-    [day, id],
+    [day, id, seed],
   );
   const onViewChange = useCallback((view: 'a' | 'b' | 'c') => {
     if (w.current) void saveView(w.current, view);

@@ -1,4 +1,4 @@
-import { logError, logWarn } from './shared';
+import { addDays, logError, logWarn } from './shared';
 import { parseMonthDoc, parsePrefs } from './domain/docs';
 import type { Prefs } from './domain/docs';
 import { monthsToLoad } from './domain/view';
@@ -9,7 +9,9 @@ import type { Writer } from './shared';
 import type { ArticleItem, IndexItem, ReadState } from './schemas';
 import { appendArticlePlan, indexEntryOf, stateUpdatePlan, upsertIndexPlan } from './domain/day';
 import type { AppendOutcome } from './domain/day';
-import { monthOfDay, READ_PREFS_PATH, readDayPath, readMonthPath } from './domain/paths';
+import { monthOfDay, READ_PREFS_PATH, readDayPath, readMonthPath, readRoutinePath } from './domain/paths';
+import { mergeRoutine, parseRoutineDoc, ROUTINE_DAYS_BACK } from './domain/routine';
+import type { LoadedRoutineDay } from './domain/routine';
 import { MAX_ARTICLES_PER_DAY } from './domain/size';
 
 // Schreibzugriffe des Lesen-Moduls (docs/umbau/lesen-plan.md §4.4). Alles über den einen Schreibpfad (`Writer`, von außen gereicht):
@@ -65,17 +67,27 @@ export async function saveArticle(writer: Writer, day: string, item: ArticleItem
   return outcome;
 }
 
-/** Lesezustand eines Artikels fortschreiben (Maximum bei Zeit, `done` nur aufwärts). Nur auf Handlung (Verlassen/Ausblenden). */
-export async function saveReadState(writer: Writer, month: string, id: string, patch: ReadState): Promise<'updated' | 'unchanged'> {
+// Wer den Lesestand anzeigt (die Liste), will wissen, wann er sich geändert hat: der Leser schreibt beim Verlassen, oft erst NACHDEM die Liste
+// schon geladen hat. Reiner Hinweis ohne Daten; die Liste liest dann ihren Index neu (kein Abo, nur auf eine Handlung hin).
+const stateListeners = new Set<() => void>();
+export function onReadStateSaved(cb: () => void): () => void {
+  stateListeners.add(cb);
+  return () => stateListeners.delete(cb);
+}
+
+/** Lesezustand eines Artikels fortschreiben (Maximum bei Zeit, `done` nur aufwärts). Nur auf Handlung (Verlassen/Ausblenden). `seed` = Indexeintrag eines Routine-Artikels, der beim ersten Mal angelegt wird. */
+export async function saveReadState(writer: Writer, month: string, id: string, patch: ReadState, seed?: IndexItem): Promise<'updated' | 'unchanged'> {
   const box = { missing: false };
   try {
     const res = await writer.transform(readMonthPath(month), (cur) => {
-      const plan = stateUpdatePlan(cur, id, patch);
-      box.missing = plan.outcome !== 'updated';
+      const plan = stateUpdatePlan(cur, id, patch, seed, month);
+      box.missing = plan.outcome !== 'updated' && plan.outcome !== 'created';
       return plan.op;
     });
     if (box.missing) logWarn('read:state', { code: 'index_missing', message: `${id} nicht im Monatsindex ${month}` }, readMonthPath(month));
-    return res === 'updated' ? 'updated' : 'unchanged';
+    const changed = res === 'updated' || res === 'created';
+    if (changed) for (const cb of stateListeners) cb();
+    return changed ? 'updated' : 'unchanged';
   } catch (err) {
     logError('read:state', err, readMonthPath(month));
     throw err;
@@ -96,6 +108,8 @@ export type Home = {
   days: string[];
   /** Index-Einträge, die wegen unerwarteten Aufbaus ausgeblendet sind. */
   hidden: number;
+  /** Artikel der Routine, die die Prüftore nicht bestanden haben (ausgeblendet, nie gelöscht). */
+  routineHidden: number;
 };
 
 /**
@@ -105,7 +119,7 @@ export type Home = {
 export async function loadHome(read: Reader, today: string): Promise<Home> {
   const p = await read(READ_PREFS_PATH);
   const months = monthsToLoad(today).reverse();
-  const docs = await Promise.all(months.map((m) => read(readMonthPath(m))));
+  const [docs, routine] = await Promise.all([Promise.all(months.map((m) => read(readMonthPath(m)))), loadRoutine(read, today)]);
   const items: IndexItem[] = [];
   let hidden = 0;
   for (const d of docs) {
@@ -117,7 +131,35 @@ export async function loadHome(read: Reader, today: string): Promise<Home> {
     items.push(...parsed.items);
     hidden += parsed.hidden.length;
   }
-  return { prefs: parsePrefs(p), items, days: readDaysOf(p), hidden };
+  return { prefs: parsePrefs(p), items: mergeRoutine(items, routine.days), days: readDaysOf(p), hidden, routineHidden: routine.hidden };
+}
+
+/**
+ * Routine-Dokumente (`read/r-<Tag>`) von heute und den zwei Tagen davor: je ein `get`, nie die Sammlung. Ein fehlendes Dokument ist normal
+ * (die Routine hat noch nicht geschrieben), ein Lesefehler oder unbrauchbarer Aufbau blendet nur diesen Tag aus und bricht die Liste nie ab.
+ */
+async function loadRoutine(read: Reader, today: string): Promise<{ days: LoadedRoutineDay[]; hidden: number }> {
+  const days: LoadedRoutineDay[] = [];
+  let hidden = 0;
+  for (let back = ROUTINE_DAYS_BACK; back >= 0; back--) {
+    const day = addDays(today, -back);
+    let doc: Record<string, unknown> | undefined;
+    try {
+      doc = await read(readRoutinePath(day));
+    } catch (err) {
+      logWarn('read:routine', err, readRoutinePath(day));
+      continue;
+    }
+    const parsed = parseRoutineDoc(doc, day);
+    if (!parsed.ok) {
+      logWarn('read:routine', { code: 'invalid_doc', message: 'Routine-Dokument unbrauchbar' }, readRoutinePath(day));
+      hidden++;
+      continue;
+    }
+    hidden += parsed.hidden.length;
+    if (parsed.items.length > 0 || parsed.hidden.length > 0) days.push({ day, items: parsed.items });
+  }
+  return { days, hidden };
 }
 
 /** Einstellungen ändern (nur auf Handlung). */

@@ -22,6 +22,14 @@ export function nextToRead(entries: readonly IndexItem[]): IndexItem | null {
   return entries.find((e) => entryState(e) === 'started') ?? entries.find((e) => entryState(e) === 'open') ?? null;
 }
 
+/**
+ * Wie viele selbst geholte Artikel der Knopf erzeugt, wenn schon Routine-Artikel von heute da sind: höchstens einer je Tipp
+ * („Noch einen Artikel schreiben lassen“), nie mehr als der Tag aufnimmt. Die Routine liefert die Hauptmenge, der Knopf ist ein Zusatz.
+ */
+export function fetchCountWithRoutine(ownToday: number, dayMax: number): number {
+  return ownToday >= dayMax ? 0 : 1;
+}
+
 /** Wie viele Artikel der Knopf „holen“ erzeugt: die fehlenden bis `perDay`, danach einer mehr; 0, wenn der Tag voll ist. */
 export function fetchCount(todayCount: number, perDay: number, dayMax: number): number {
   if (todayCount >= dayMax) return 0;

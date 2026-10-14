@@ -12,7 +12,7 @@ const calls = (page: Page): Promise<number> =>
   page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { sampleCalls: Array<{ id: string }> } }).__LINGO_FAKE__.sampleCalls.filter((c) => c.id === 'read-article').length);
 
 /** Ohne `read/…`-Dokumente: erste Nutzung. */
-const NO_READ: BootOptions['fake'] = { patch: { 'read/p': null, 'read/m-2026-09': null, 'read/d-2026-09-17': null, 'read/d-2026-09-19': null }, sampleTickMs: 1 };
+const NO_READ: BootOptions['fake'] = { patch: { 'read/p': null, 'read/m-2026-09': null, 'read/d-2026-09-17': null, 'read/d-2026-09-19': null, 'read/r-2026-09-20': null }, sampleTickMs: 1 };
 
 async function openRead(page: Page): Promise<void> {
   await openTab(page, 'read');
@@ -305,6 +305,97 @@ test.describe('Artikel holen (Dev-Adapter)', () => {
     await expect(page.getByTestId('read-retry')).toBeVisible();
     const db = await dump(page);
     expect(Object.keys(db).filter((k) => k.startsWith('read/d-'))).toEqual([]);
+  });
+});
+
+// ---------------------------------------------------------------- Routine: aktuelle Meldungen ohne Knopf
+
+test.describe('Aktuelle Meldungen der Routine (read/r-<Tag>, nur die Routine schreibt)', () => {
+  test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
+
+  test('beim Öffnen stehen die Routine-Artikel von heute da (ohne Tippen), mit Quelle; der fehlerhafte ist ausgeblendet; Holen ist nur ein Zusatz', async ({ page }) => {
+    const { errors, external } = await boot(page, { migrated: true });
+    await screen(page, 'today');
+    await openRead(page);
+    const rows = page.getByTestId('read-row');
+    // Zwei gültige Artikel des Seeds; der dritte (zu kurz, ohne Quelle) wird ausgeblendet.
+    await expect(rows).toHaveCount(2);
+    await expect(rows.nth(0)).toContainText('Report Warns That Small AI Models Could Spread Across Home Devices');
+    await expect(rows.nth(0)).toContainText('Aktuelle Meldung · Quelle: Example Tech News');
+    await expect(rows.nth(1)).toContainText('Aktuelle Meldung · Quelle: Example Business Review');
+    // Ein großer Hauptknopf zum Lesen; kein „Artikel für heute holen“ als Hauptknopf, sondern ein ruhiger Zusatz.
+    const primary = page.getByTestId('read-primary');
+    await expect(primary).toHaveCount(1);
+    await expect(primary).toHaveAttribute('data-kind', 'read');
+    await expect(primary).toHaveText('Nächsten Artikel lesen');
+    await expect(page.getByTestId('read-fetch')).toHaveText('Noch einen Artikel schreiben lassen');
+    // Es wurde nichts geschrieben, nur gelesen (Routine-Dokument und App-Dokumente unverändert).
+    const db = await dump(page);
+    expect(db['read/r-2026-09-20']).toBeTruthy();
+    expect(await calls(page)).toBe(0);
+    expect(errors).toEqual([]);
+    expect(external).toEqual([]);
+  });
+
+  test('Antippen öffnet den Leser mit Quelle und Link; der Lesestand wird von der App in den Monatsindex geschrieben, das Routine-Dokument bleibt unverändert', async ({ page }) => {
+    await boot(page, { migrated: true });
+    await screen(page, 'today');
+    await openRead(page);
+    const routineBefore = JSON.stringify((await dump(page))['read/r-2026-09-20']);
+    await page.getByTestId('read-primary').click();
+    await screen(page, 'readArticle');
+    await expect(page.getByTestId('rdr')).toHaveAttribute('data-article', 'r-2026-09-20-1');
+    await expect(page.getByTestId('rdr-routine')).toContainText('Aktuelle Meldung · Quelle: Example Tech News');
+    const link = page.getByTestId('rdr-source-link');
+    await expect(link).toHaveAttribute('href', 'https://example.com/news/small-ai-models-home-devices');
+    await expect(link).toHaveAttribute('rel', /noopener/);
+    await expect(page.getByTestId('rdr-byclaude')).toHaveCount(0);
+    // Einen Satz aufdecken, zurück zur Liste: die App legt den Eintrag mit Lesestand selbst an.
+    await page.locator('[data-testid="rdr-sentence"][data-n="2"]').getByTestId('rdr-marker').click();
+    await page.getByTestId('page-back').first().click();
+    await screen(page, 'read');
+    await expect
+      .poll(async () => {
+        const m = (await dump(page))['read/m-2026-09']?.items as Array<{ id: string; src?: string; st?: { open?: number } }> | undefined;
+        return m?.find((e) => e.id === 'r-2026-09-20-1');
+      })
+      .toMatchObject({ src: 'routine', st: { open: 1 } });
+    expect(JSON.stringify((await dump(page))['read/r-2026-09-20'])).toBe(routineBefore);
+    // Die Liste zeigt den Artikel jetzt als angefangen und führt ihn mit dem Hauptknopf fort.
+    await expect(page.getByTestId('read-row').nth(0)).toHaveAttribute('data-state', 'started');
+    await expect(page.getByTestId('read-primary')).toHaveText('Weiterlesen');
+  });
+
+  test('„Noch einen Artikel schreiben lassen“ holt genau einen eigenen Artikel dazu (Tagesdokument `read/d-…`), die Routine-Artikel bleiben', async ({ page }) => {
+    await boot(page, { migrated: true, fake: { sampleTickMs: 4 } });
+    await screen(page, 'today');
+    await openRead(page);
+    await page.getByTestId('read-fetch').click();
+    await expect(page.getByTestId('read-row')).toHaveCount(3, { timeout: 30_000 });
+    expect(await calls(page)).toBe(1);
+    const db = await dump(page);
+    expect((db['read/d-2026-09-20']!.items as unknown[]).length).toBe(1);
+    expect(JSON.stringify((db['read/r-2026-09-20']!.items as Array<{ id: string }>).map((i) => i.id))).toBe(JSON.stringify(['r-2026-09-20-1', 'r-2026-09-20-2', 'r-2026-09-20-3']));
+    // Die Routine-Artikel stehen vor dem eigenen, das Zusatz-Angebot bleibt.
+    await expect(page.getByTestId('read-row').nth(2)).not.toContainText('Aktuelle Meldung');
+    await expect(page.getByTestId('read-fetch')).toHaveText('Noch einen Artikel schreiben lassen');
+  });
+
+  test('Englisch: Zeile mit Quelle und Zusatzknopf auf Englisch', async ({ page }) => {
+    await boot(page, { migrated: true, lang: 'en' });
+    await screen(page, 'today');
+    await openRead(page);
+    await expect(page.getByTestId('read-row').nth(0)).toContainText('Current news · Source: Example Tech News');
+    await expect(page.getByTestId('read-fetch')).toHaveText('Have one more article written');
+  });
+
+  test('ohne Claude (sample fehlt): Routine-Artikel sind trotzdem da und lesbar, kein Holen', async ({ page }) => {
+    await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
+    await screen(page, 'today');
+    await openRead(page);
+    await expect(page.getByTestId('read-row')).toHaveCount(2);
+    await expect(page.getByTestId('read-fetch')).toHaveCount(0);
+    await expect(page.getByTestId('read-primary')).toHaveAttribute('data-kind', 'read');
   });
 });
 

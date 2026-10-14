@@ -100,7 +100,7 @@ test('Datenexport über downloads liefert alle Dokumente als JSON', async ({ pag
   await expect(page.getByText('Sicherung gespeichert.')).toBeVisible();
   const saved = await page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { saved: Array<{ data: string }> } }).__LINGO_FAKE__.saved[0]?.data ?? '{}');
   const json = JSON.parse(saved) as { documentCount: number; schemaVersion: number; documents: Record<string, unknown> };
-  expect(json.documentCount).toBe(218);
+  expect(json.documentCount).toBe(219); // inkl. read/r-2026-09-20 (Routine-Dokument, Sicherung nimmt die letzten 14 Tage mit)
   expect(json.schemaVersion).toBe(1);
   expect(Object.keys(json.documents)).toContain('daily/2026-09-20');
 });

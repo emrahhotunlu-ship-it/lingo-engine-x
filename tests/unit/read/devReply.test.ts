@@ -5,6 +5,7 @@ import { readArticleReply, readTopicsReply } from '../../../src/platform/dev/can
 import { acceptArticle } from '../../../src/modules/read/domain/accept';
 import { parseDayDoc, parseMonthDoc, parsePrefs } from '../../../src/modules/read/domain/docs';
 import { readDocCountOf } from '../../../src/modules/read/domain/count';
+import { parseRoutineDoc } from '../../../src/modules/read/domain/routine';
 import { TOPIC_KEYS } from '../../../src/modules/read/schemas';
 import type { TopicKey } from '../../../src/modules/read/schemas';
 import { readArticle, readTopics } from '../../../src/modules/read/prompt';
@@ -65,6 +66,8 @@ describe('Dev-Adapter: read-topics@1', () => {
 describe('Seed: erfundene Lesetage', () => {
   const seed = JSON.parse(readFileSync(join(import.meta.dirname, '../../../seed/sample-data.json'), 'utf8')) as Record<string, Record<string, unknown>>;
   const readDocs = Object.keys(seed).filter((k) => k.startsWith('read/'));
+  // Routine-Dokumente (`read/r-…`) schreibt nur die Routine; `read/p.days` und die Zählung kennen sie nicht (die Routine räumt sie nach 45 Tagen auf).
+  const appDocs = readDocs.filter((k) => !k.startsWith('read/r-'));
 
   it('zwei Tage, drei Artikel; Tages- und Monatsdokumente und Einstellungen bestehen die Feinprüfung ohne ausgeblendete Einträge', () => {
     const dayPaths = readDocs.filter((k) => k.startsWith('read/d-'));
@@ -88,11 +91,26 @@ describe('Seed: erfundene Lesetage', () => {
   });
 
   it('die Dokumentzählung aus read/p stimmt mit den Dokumenten im Seed überein', () => {
-    expect(readDocCountOf(seed['read/p'])).toBe(readDocs.length);
+    expect(readDocCountOf(seed['read/p'])).toBe(appDocs.length);
   });
 
   it('der Seed ist erfunden: keine echten Namen oder Adressen', () => {
-    const text = JSON.stringify(readDocs.map((k) => seed[k]));
+    const text = JSON.stringify(appDocs.map((k) => seed[k]));
     expect(text).not.toMatch(/@|https?:\/\//);
+    // Routine-Artikel tragen eine Quelle: nur erfundene Adressen (example.com), keine E-Mail-Adressen.
+    const routine = JSON.stringify(readDocs.filter((k) => k.startsWith('read/r-')).map((k) => seed[k]));
+    expect(routine).not.toContain('@');
+    const urls = routine.match(/https?:\/\/[^"]+/g) ?? [];
+    expect(urls.length).toBeGreaterThan(0);
+    for (const u of urls) expect(u, u).toMatch(/^https:\/\/example\.com\//);
+  });
+
+  it('Routine-Tag im Seed: zwei gültige Artikel mit Quelle, ein bewusst fehlerhafter wird ausgeblendet', () => {
+    const r = parseRoutineDoc(seed['read/r-2026-09-20'], '2026-09-20');
+    expect(r.ok && r.items.map((i) => [i.id, i.source])).toEqual([
+      ['r-2026-09-20-1', 'Example Tech News'],
+      ['r-2026-09-20-2', 'Example Business Review'],
+    ]);
+    expect(r.ok && r.hidden.map((h) => h.id)).toEqual(['r-2026-09-20-3']);
   });
 });

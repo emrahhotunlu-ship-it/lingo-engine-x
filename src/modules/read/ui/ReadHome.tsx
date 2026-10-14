@@ -57,6 +57,11 @@ function ArticleRow({ e, onOpen }: { e: IndexItem; onOpen: () => void }) {
           <span className="text-xs leading-snug text-muted">
             {t(topic)} · {t('rdMinWords', { min: e.mins ?? 1, n: e.words ?? 0 })}
           </span>
+          {e.src === 'routine' && (
+            <span className="text-xs leading-snug text-accent-text" data-testid="read-row-routine">
+              {t('rdRoutineTag', { source: e.source ?? '' })}
+            </span>
+          )}
         </span>
         <span className={`flex flex-none items-center gap-1 text-xs font-medium ${state === 'done' ? 'text-ok-text' : 'text-subtle'}`} data-testid="read-state">
           {state === 'done' && <Icon name="check" size={16} />}
@@ -150,9 +155,9 @@ function TodayCard({ h }: { h: ReadHome }) {
         <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => open(h.next!.id, started ? h.next!.st?.pos : undefined)} data-testid="read-primary" data-kind="read">
           {t(started ? 'rdContinue' : 'rdReadNext')}
         </Button>
-        {canFetch && h.entries.length < h.perDay && (
+        {canFetch && (h.routineToday > 0 || h.entries.length < h.perDay) && (
           <Button variant="ghost" onClick={() => h.getArticles()} data-testid="read-fetch" data-ai="">
-            {t('rdFetch')}
+            {t(h.routineToday > 0 ? 'rdFetchExtra' : 'rdFetch')}
           </Button>
         )}
       </>
@@ -166,7 +171,7 @@ function TodayCard({ h }: { h: ReadHome }) {
   } else {
     action = canFetch ? (
       <Button variant="secondary" onClick={() => h.getArticles()} data-testid="read-fetch" data-ai="">
-        {t('rdMore')}
+        {t(h.routineToday > 0 ? 'rdFetchExtra' : 'rdMore')}
       </Button>
     ) : null;
   }
