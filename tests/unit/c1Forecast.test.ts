@@ -117,7 +117,7 @@ describe('Rechnung', () => {
     expect(fcOf(calc)).toEqual({ pause: 'k4' });
   });
   it('K-f (1): K1-Untergrenze aus offenen Kapiteln (1 Tag je offenes Thema, 14 Tage je Kapitel)', () => {
-    const topic = (safe: boolean) => ({ id: 't', exists: true, patSafe: 0, patTotal: 1, introduced: true, safe });
+    const topic = (safe: boolean) => ({ id: 't', exists: true, patSafe: 0, patTotal: 1, introduced: true, safe, done: safe });
     const ch = (status: 'done' | 'current' | 'open', topics: boolean[]) => ({ id: 'c', n: 1, status, ready: true, topics: topics.map(topic), patSafe: 0, patTotal: 0, topicSafe: 0, topicDone: 0, introduced: 0, liveTopics: 0, allIntroduced: false, allSafe: false });
     const chapters: ChapterStateResult = { current: 1, chosen: false, chapters: [ch('done', [true, true]), ch('current', [true, false, false]), ...Array.from({ length: 5 }, () => ch('open', [false, false, false, false]))] };
     expect(k1FloorDays(chapters)).toBe(2 + 5 * 4 + 6 * 14);
