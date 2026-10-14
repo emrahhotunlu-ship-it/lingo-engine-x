@@ -2,7 +2,7 @@
 export const rdcEn = {
   rdcTitle: 'Courses',
   rdcHint: 'Short lesson series for your work. About ten minutes each, always optional.',
-  rdcLessonsCount: '{n} lessons',
+  rdcLessonsCount: '{n}\u00a0lessons',
   rdcLater: 'Later',
   rdcProgressShort: '{done} of {total}',
   rdcToday: 'Lesson {n} · {min}\u00a0min',

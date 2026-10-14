@@ -1,5 +1,7 @@
 # Routine „Lesen“: tägliche aktuelle Meldungen direkt in der App (Paket L7, Stand 14.10.2026)
 
+> **Sprache der Begründungen (14.10.2026):** Bei Tagesartikeln bleibt `why` je Prüffrage Deutsch (bewusste Ausnahme, Emrah liest Deutsch; `docs/entscheidungen.md`). Nur die Kurslektionen (`lesen-routine-kurse.md`) liefern zusätzlich `why_en`, `lessonGoal_en`, `tip.why_en` und `apply.situation_en`.
+
 Zweck: Emrah soll morgens **nichts** tippen und **nicht warten**. Eine geplante Claude-Aufgabe (eigene Sitzung mit Websuche und dem Werkzeug `ArtifactData` auf die Datenbank der App) recherchiert aktuelle Meldungen und legt sie **fertig im Leser-Format** ab. Die App zeigt sie beim Öffnen von „Lesen“ ohne Knopf. Der Knopf „Noch einen Artikel schreiben lassen“ bleibt nur als zusätzliches Angebot.
 
 Der Abschnitt 3 ist die **vollständige, direkt verwendbare Anweisung** (zum Einfügen als Auftragstext der geplanten Aufgabe). Abschnitt 1 und 2 erklären, was die App damit macht. Abschnitt 4 ist für die Hauptsitzung (Einrichtung, Test, Rückweg). Das Beispiel in Abschnitt 3 wird von `tests/unit/read/routine.test.ts` gegen die echten Prüftore der App geprüft: Ändert sich der Prüfer, schlägt der Test an, bevor die Anweisung veraltet.

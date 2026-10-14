@@ -44,6 +44,11 @@ export function SentenceInput(props: SentenceInputProps) {
         rows={1}
         className={`lx-field lx-t-prompt w-full resize-none overflow-hidden scroll-mb-40 ${props.tall ? 'min-h-[120px]' : 'min-h-14'}`}
         placeholder={props.placeholder}
+        // Am Handy bleibt das Feld sichtbar, wenn die Tastatur aufgeht (UX-Prüfung 14.10.): nach der Tastatur-Animation in die Mitte rollen.
+        onFocus={(e) => {
+          const el = e.currentTarget;
+          window.setTimeout(() => el.scrollIntoView?.({ block: 'center', behavior: 'smooth' }), 320);
+        }}
         data-sentence=""
         data-testid={testId}
         aria-label={t('exSentenceLabel')}

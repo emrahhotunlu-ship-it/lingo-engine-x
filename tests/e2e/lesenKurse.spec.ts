@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { boot, bootAt, openTab, screen, type BootOptions, type Lang, type Theme } from './fixtures';
+import { typeInGap } from './learnHelpers';
 
 // Kurse im Reiter „Lesen“ (Paket L8, docs/umbau/lesen-kurse.md, docs/umbau/lesen-routine-kurse.md): Kursübersicht, Lektionsliste, Lektion lesen,
 // Fragen, Anwenden mit Musterlösung und „Claude prüfen“, Fortschritt (fertig = Zustand), Karten mitnehmen, Aufwärmen, Sperren, Handy und Desktop,
@@ -20,7 +21,7 @@ const PH1 = [
 ];
 const LESSON1_DONE: Item = { id: 'k1-01', course: 'k1', n: 1, sec: 400, rd: true, qa: 3, qok: 3, ap: true, mine: 'I stay in control. We run the tests.', done: true, tD: Date.parse('2026-09-19T10:00:00+02:00'), ph: PH1 };
 
-const GOOD = 'Claude Code works inside my project and I stay in control of every change. After each change it can run the tests, so I see problems early.';
+const GOOD = 'Claude Code works inside my project and I stay in control of every change. It can also handle routine chores, so I see problems early.';
 
 async function expectNoOverflow(page: Page): Promise<void> {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
@@ -41,29 +42,37 @@ const open = async (page: Page, opts: BootOptions = {}, id = 'k1-01'): Promise<R
 test.describe('Kurse: Übersicht auf „Lesen“ und Lektionsliste (390 px)', () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
 
-  test('acht Kurse, nur K1 und K5 aktiv; ein Hauptknopf „Heute: K1 · Lektion 1 · ca. 10 Min“; Artikel bleibt als leiser Knopf', async ({ page }) => {
+  test('acht Kurse, nur K1 und K5 aktiv (die übrigen zugeklappt); der Artikel ist der eine Hauptknopf, die Lektion steht in der eigenen Zeile „Kurs“ ohne „Heute:“', async ({ page }) => {
     const { errors, external } = await boot(page, { migrated: true });
     await screen(page, 'today');
     await openRead(page);
     const rows = page.getByTestId('read-course');
+    // Zugeklappt: nur die aktiven Kurse; die sechs weiteren hinter „Weitere Kurse (6) folgen“.
+    await expect(rows).toHaveCount(2);
+    await expect(page.getByTestId('read-courses-later')).toContainText('Weitere Kurse (6) folgen');
+    await page.getByTestId('read-courses-later').click();
     await expect(rows).toHaveCount(8);
     const active = await rows.evaluateAll((els) => els.map((el) => `${el.getAttribute('data-course')}:${el.getAttribute('data-active')}`));
-    expect(active).toEqual(['k1:true', 'k2:false', 'k3:false', 'k4:false', 'k5:true', 'k6:false', 'k7:false', 'k8:false']);
+    expect(active).toEqual(['k1:true', 'k5:true', 'k2:false', 'k3:false', 'k4:false', 'k6:false', 'k7:false', 'k8:false']);
     await expect(rows.nth(0)).toContainText('Claude Code in 10 Tagen');
     await expect(rows.nth(0)).toContainText('10 Lektionen');
     await expect(rows.nth(0)).toContainText('0 von 10');
-    await expect(rows.nth(4)).toContainText('KI im Unternehmen');
+    await expect(rows.nth(1)).toContainText('KI im Unternehmen');
     await expect(rows.nth(6)).toContainText('12 Lektionen');
-    await expect(rows.nth(1)).toContainText('Später');
+    await expect(rows.nth(2)).toContainText('Später');
     // Nur die aktiven Kurse sind antippbar.
-    expect(await rows.nth(1).evaluate((el) => el.tagName)).toBe('DIV');
+    expect(await rows.nth(2).evaluate((el) => el.tagName)).toBe('DIV');
     expect(await rows.nth(0).evaluate((el) => el.tagName)).toBe('BUTTON');
-    // Genau ein gefüllter Hauptknopf; der Artikel ist leiser.
+    // Ein gefüllter Hauptknopf: der Artikel. Die Lektion steht getrennt in der Zeile „Kurs“, kurz und ohne Umbruch.
     const primary = page.getByTestId('read-primary');
     await expect(primary).toHaveCount(1);
-    await expect(primary).toHaveAttribute('data-kind', 'lesson');
-    await expect(primary).toHaveText('Heute: K1 · Lektion 1 · ca. 10 Min');
-    await expect(page.getByTestId('read-article')).toBeVisible();
+    await expect(primary).toHaveAttribute('data-kind', 'read');
+    const lesson = page.getByTestId('read-lesson');
+    await expect(lesson).toHaveText(/^Lektion 1 · 10\s*Min$/);
+    await expect(lesson).not.toContainText('Heute');
+    await expect(page.getByTestId('read-next-lesson')).toContainText('Kurs');
+    const box = await lesson.boundingBox();
+    expect(box!.height).toBeLessThan(70); // eine Zeile
     for (const el of await page.getByTestId('read').locator('button').all()) {
       const b = await el.boundingBox();
       if (b) expect(b.height, (await el.textContent()) ?? '').toBeGreaterThanOrEqual(43.5);
@@ -88,9 +97,12 @@ test.describe('Kurse: Übersicht auf „Lesen“ und Lektionsliste (390 px)', ()
     // Gesperrte Lektionen sind Zustand, kein Knopf.
     expect(await lessons.nth(1).evaluate((el) => el.tagName)).toBe('DIV');
     expect(await lessons.first().evaluate((el) => el.tagName)).toBe('BUTTON');
-    await expect(page.getByTestId('course-hero')).toContainText('0 von 10 Lektionen');
+    await expect(page.getByTestId('course-hero')).toContainText('0 von 10 fertig');
+    // Der Gesperrt-Satz steht einmal unter der Liste, nicht an jeder Zeile.
+    await expect(page.getByTestId('course-locked-note')).toHaveCount(1);
+    await expect(lessons.nth(1)).not.toContainText('Wird frei');
     const primary = page.getByTestId('course-primary');
-    await expect(primary).toHaveText('Heute: K1 · Lektion 1 · ca. 10 Min');
+    await expect(primary).toHaveText(/^Lektion 1 · 10\s*Min$/);
     await expectNoOverflow(page);
     await primary.click();
     await screen(page, 'readLesson');
@@ -110,7 +122,7 @@ test.describe('Kurse: Übersicht auf „Lesen“ und Lektionsliste (390 px)', ()
     await screen(page, 'readCourse');
     const lessons = page.getByTestId('course-lesson');
     expect(await lessons.evaluateAll((els) => els.map((el) => el.getAttribute('data-state')))).toEqual(['pending', ...Array<string>(9).fill('locked')]);
-    await expect(page.getByTestId('course-pending')).toContainText('Claude schreibt diese Lektion gerade für dich');
+    await expect(page.getByTestId('course-pending')).toContainText('Claude schreibt diese Lektion für dich');
     await expect(page.getByTestId('course-primary')).toHaveCount(0);
     // Die kaputte Lektion wurde nicht überschrieben oder gelöscht.
     expect(JSON.stringify((await dump(page))['read/c-k1-01'])).toBe(before);
@@ -145,12 +157,19 @@ test.describe('Lektion lesen und abschließen (390 px)', () => {
     await expect(first.getByTestId('rdr-de')).toContainText('Viele Menschen lernen Claude zunächst in einem Chatfenster kennen');
     // Wörter sind antippbar (ein Knopf je Wort).
     expect(await page.locator('[data-testid="rdr-text"] button.lx-word').count()).toBeGreaterThan(100);
+    // Sprachtipp als Mini-Aufgabe: erst der falsche Satz mit „Wo steckt der Fehler?“, dann aufdecken (freiwillig).
+    await expect(page.getByTestId('lsn-tip-find')).toContainText('Wo steckt der Fehler?');
+    await expect(page.getByTestId('lsn-tip-sentence')).toContainText('I use Claude Code since two weeks.');
+    await expect(page.getByTestId('lsn-tip-right')).toHaveCount(0);
+    await page.getByTestId('lsn-tip-input').fill('I have been using Claude Code for two weeks.');
+    await page.getByTestId('lsn-tip-reveal').click();
+    await expect(page.getByTestId('lsn-tip-mine')).toContainText('I have been using Claude Code for two weeks.');
     await expect(page.getByTestId('lsn-tip-wrong')).toContainText('I use Claude Code since two weeks.');
     await expect(page.getByTestId('lsn-tip-right')).toContainText('I have been using Claude Code for two weeks.');
     await expect(page.getByTestId('lsn-tip-why')).toContainText('Present Perfect');
     await expect(page.getByTestId('rdr-q')).toHaveCount(3);
     await expect(page.getByTestId('lsn-apply')).toBeVisible();
-    await expect(page.getByTestId('lsn-apply-target')).toHaveText([/stay in control/, /run the tests/]);
+    await expect(page.getByTestId('lsn-apply-target')).toHaveText([/stay in control/, /handle routine chores/]);
     await expect(page.getByTestId('lsn-sources')).toContainText('Claude Code overview');
     await expect(page.getByTestId('lsn-step')).toHaveCount(3);
     await expect(page.getByTestId('lsn-end')).toHaveCount(0); // fertig ist ein Zustand, vorher gibt es keinen Knopf
@@ -187,8 +206,8 @@ test.describe('Lektion lesen und abschließen (390 px)', () => {
     await input.fill(GOOD);
     await page.getByTestId('lsn-apply-send').click();
     await expect(page.getByTestId('lsn-apply')).toHaveAttribute('data-sent', 'true');
-    await expect(page.getByTestId('lsn-apply-allused')).toHaveText('Alle Wendungen sind dabei.');
-    await expect(page.getByTestId('lsn-apply-target')).toHaveText([/stay in control/, /run the tests/]);
+    await expect(page.getByTestId('lsn-apply-allused')).toHaveText('Du hast alle Wendungen benutzt.');
+    await expect(page.getByTestId('lsn-apply-target')).toHaveText([/stay in control/, /handle routine chores/]);
     await expect(page.getByTestId('lsn-apply-target').first()).toHaveAttribute('data-state', 'used');
     await expect(page.getByTestId('lsn-model')).toContainText('Claude Code works inside my project, and I stay in control');
     await expect(input).toHaveAttribute('readonly', '');
@@ -197,8 +216,10 @@ test.describe('Lektion lesen und abschließen (390 px)', () => {
     await page.getByTestId('lsn-claude-go').click();
     const reply = page.getByTestId('lsn-claude-reply');
     await expect(reply).toHaveAttribute('data-verdict', 'right');
-    await expect(page.getByTestId('lsn-claude-fixed')).toContainText('I stay in control');
-    await expect(page.getByTestId('lsn-claude-c1')).toContainText('stay in control');
+    // Nichts doppelt (Kap. 15): Der Text war schon richtig, also „Keine Korrektur nötig“; die natürlichere Fassung ist hier die Musterlösung und entfällt.
+    await expect(page.getByTestId('lsn-claude-nofix')).toHaveText('Keine Korrektur nötig');
+    await expect(page.getByTestId('lsn-claude-fixed')).toHaveCount(0);
+    await expect(page.getByTestId('lsn-claude-c1')).toHaveCount(0);
     await expect(page.getByTestId('lsn-claude-why')).toContainText('Wendung');
     expect(await sampleCalls(page, 'read-apply')).toBe(1);
     // Abschluss: alles erledigt, Zustand statt Knopf, ein Hauptknopf zur nächsten Lektion.
@@ -207,8 +228,11 @@ test.describe('Lektion lesen und abschließen (390 px)', () => {
     await expect(stepsCard).toContainText('Lektion fertig');
     await expect(steps).toHaveText([/Text gelesen/, /Fragen beantwortet \(3 von 3\)/, /Eigene Sätze abgeschickt/]);
     for (let i = 0; i < 3; i++) await expect(steps.nth(i)).toHaveAttribute('data-state', 'done');
-    await expect(page.getByTestId('lsn-end')).toHaveAttribute('data-kind', 'next');
-    await expect(page.getByTestId('lsn-end')).toHaveText('Nächste Lektion');
+    // Heute fertig: Ruhezeile und „Fertig für heute“ als Hauptknopf, die nächste Lektion nur leise (kein Zwang, Tempo 3–4 je Woche).
+    await expect(page.getByTestId('lsn-rest')).toContainText('Für heute geschafft');
+    await expect(page.getByTestId('lsn-end')).toHaveAttribute('data-kind', 'rest');
+    await expect(page.getByTestId('lsn-end')).toHaveText('Fertig für heute');
+    await expect(page.getByTestId('lsn-next-now')).toHaveText('Lektion 2 schon jetzt');
     // Fortschritt gespeichert: nur read/cp, mit eigenem Text und den behaltenen Wendungen; die Lektion selbst ist unverändert.
     await expect
       .poll(async () => ((await dump(page))['read/cp']?.items as Item[] | undefined)?.[0])
@@ -220,11 +244,11 @@ test.describe('Lektion lesen und abschließen (390 px)', () => {
     expect(errors).toEqual([]);
     expect(external).toEqual([]);
     // Weiter zur nächsten Lektion: sie ist frei, das Aufwärmen baut zwei Lücken aus Lektion 1.
-    await page.getByTestId('lsn-end').click();
+    await page.getByTestId('lsn-next-now').click();
     await screen(page, 'readLesson');
     await expect(page.getByTestId('lsn')).toHaveAttribute('data-lesson', 'k1-02');
     await expect(page.getByTestId('rdr-title')).toHaveText('Briefing a Task');
-    await expect(page.getByTestId('lsn-warm-item')).toHaveCount(2);
+    await expect(page.getByTestId('lsn-warm-item')).toHaveCount(1); // eine Lücke nach der anderen
   });
 
   test('Wendungen als Lernkarten mitnehmen: Ursprungssatz aus dem Lektionstext, origin.ref = Kurs und Lektion', async ({ page }) => {
@@ -237,25 +261,37 @@ test.describe('Lektion lesen und abschließen (390 px)', () => {
     await expect(first.getByTestId('rdr-kw-saved')).toBeVisible();
     await expect
       .poll(async () => Object.values(await dump(page)).find((d) => (d.origin as { ref?: string } | undefined)?.ref === 'c-k1-01'))
-      .toMatchObject({ src: 'read', origin: { kind: 'read', ref: 'c-k1-01', title: 'What Claude Code Is' }, state: 'new' });
+      .toMatchObject({ src: 'read', core: true, origin: { kind: 'read', ref: 'c-k1-01', title: 'What Claude Code Is' }, state: 'new' });
     const card = Object.values(await dump(page)).find((d) => (d.origin as { ref?: string } | undefined)?.ref === 'c-k1-01') as { ex: string; word: string };
     expect(card.ex).toMatch(/\[[^\]]+\]/); // Ursprungssatz mit markierter Fundstelle
   });
 
-  test('Aufwärmen aus einer früheren Lektion: Lücken, eine gebeugte Eingabe gilt, eine falsche zeigt die Lösung; zählt nicht für „fertig“', async ({ page }) => {
+  test('Aufwärmen aus einer früheren Lektion: eine Lücke nach der anderen, getippt wird IN die Lücke; gebeugte Eingabe gilt (grün), falsche zeigt die Lösung (rot, eigene Eingabe sichtbar) und das Warum; zählt nicht für „fertig“', async ({ page }) => {
     await open(page, { migrated: true, fake: { patch: { 'read/cp': { v: 1, items: [LESSON1_DONE] } } } }, 'k1-02');
     await expect(page.getByTestId('lsn-warmup')).toBeVisible();
+    await expect(page.getByTestId('lsn-warmup')).toContainText('so festigst du sie');
     const items = page.getByTestId('lsn-warm-item');
-    await expect(items).toHaveCount(2);
+    // Zuerst nur die erste Lücke; die Eingabe sitzt in der Lücke (kein Feld unter dem Satz).
+    await expect(items).toHaveCount(1);
+    await expect(items.first().getByTestId('gap')).toBeVisible();
+    await expect(items.first().locator('input.lx-field')).toHaveCount(0);
     await expect(page.getByTestId('lsn-warm-gap').first()).toContainText('and it can');
     await expect(page.getByTestId('lsn-warm-gap').first()).toContainText('to check the fix');
-    await items.nth(0).getByTestId('lsn-warm-input').fill('running the tests');
+    await typeInGap(page, 'running the tests');
     await items.nth(0).getByTestId('lsn-warm-check').click();
     await expect(items.nth(0)).toHaveAttribute('data-state', 'right');
-    await items.nth(1).getByTestId('lsn-warm-input').fill('keep calm');
+    await expect(items.nth(0).getByTestId('gap')).toHaveAttribute('data-state', 'correct');
+    await expect(items.nth(0).getByTestId('lsn-warm-why')).toContainText('(aus Lektion 1)');
+    // Jetzt erscheint die zweite Lücke (das Eingabefeld hängt erst nach dem Zeichnen an ihr: warten, bis es ihre Beschriftung trägt).
+    await expect(items).toHaveCount(2);
+    await expect(page.getByTestId('gap-input')).toHaveAttribute('aria-label', 'Lücke 2');
+    await typeInGap(page, 'keep calm');
     await items.nth(1).getByTestId('lsn-warm-check').click();
     await expect(items.nth(1)).toHaveAttribute('data-state', 'wrong');
     await expect(items.nth(1).getByTestId('lsn-warm-result')).toContainText('Gesucht war: stay in control');
+    await expect(items.nth(1).getByTestId('gap-given')).toContainText('keep calm');
+    await expect(items.nth(1).getByTestId('gap-solution')).toContainText('stay in control');
+    await expect(items.nth(1).getByTestId('lsn-warm-why')).toContainText('die Kontrolle behalten');
     // Aufwärmen verändert den Fortschritt nicht.
     await expect(page.getByTestId('lsn-steps')).not.toHaveAttribute('data-done', 'true');
     await page.getByTestId('lsn-warm-toggle').click();
@@ -289,12 +325,13 @@ test.describe('Lektion lesen und abschließen (390 px)', () => {
     await boot(page, { migrated: true, fake: { patch: { 'read/cp': { v: 1, items: [{ ...LESSON1_DONE, tD: Date.parse('2026-09-20T18:00:00+02:00') }] } } } });
     await openRead(page);
     await expect(page.getByTestId('read-primary')).toHaveAttribute('data-kind', 'read'); // heute schon eine Lektion fertig: Lektionen sind Extra
+    await expect(page.getByTestId('read-lesson')).toHaveCount(0); // und die Zeile „Kurs“ bietet keine zweite an
     await expect(page.getByTestId('read-course').first()).toContainText('1 von 10');
     await page.getByTestId('read-course').first().click();
     await screen(page, 'readCourse');
     const states = await page.getByTestId('course-lesson').evaluateAll((els) => els.map((el) => el.getAttribute('data-state')));
     expect(states).toEqual(['done', 'open', ...Array<string>(8).fill('locked')]);
-    await expect(page.getByTestId('course-primary')).toHaveText('Heute: K1 · Lektion 2 · ca. 10 Min');
+    await expect(page.getByTestId('course-primary')).toHaveText(/^Lektion 2 · 10\s*Min$/);
     // Eine fertige Lektion bleibt antippbar (zum Nachlesen), zeigt aber ihren eigenen Text und kein „Abschicken“ mehr.
     await page.getByTestId('course-lesson').first().click();
     await screen(page, 'readLesson');
@@ -303,11 +340,12 @@ test.describe('Lektion lesen und abschließen (390 px)', () => {
     await expect(page.getByTestId('lsn-apply-send')).toHaveCount(0);
   });
 
-  test('eine angefangene Lektion hat immer den Hauptknopf („Weiter: K1 · Lektion 1“), auch wenn heute schon eine fertig wurde', async ({ page }) => {
+  test('eine angefangene Lektion steht immer in der Zeile „Kurs“ („Weiter mit Lektion 2“), auch wenn heute schon eine fertig wurde', async ({ page }) => {
     await boot(page, { migrated: true, fake: { patch: { 'read/cp': { v: 1, items: [{ ...LESSON1_DONE, tD: Date.parse('2026-09-20T18:00:00+02:00') }, { id: 'k1-02', course: 'k1', n: 2, sec: 30, pos: 3 }] } } } });
     await openRead(page);
-    await expect(page.getByTestId('read-primary')).toHaveAttribute('data-kind', 'lesson');
-    await expect(page.getByTestId('read-primary')).toHaveText('Weiter: K1 · Lektion 2');
+    await expect(page.getByTestId('read-lesson')).toHaveAttribute('data-kind', 'lesson');
+    await expect(page.getByTestId('read-lesson')).toHaveText('Weiter mit Lektion 2');
+    await expect(page.getByTestId('read-primary')).toHaveAttribute('data-kind', 'read');
   });
 });
 
@@ -318,13 +356,25 @@ test.describe('Kurse auf Englisch und am Desktop', () => {
     await page.setViewportSize({ width: 1280, height: 900 });
     const { errors } = await boot(page, { migrated: true, lang: 'en' });
     await openRead(page);
-    await expect(page.getByTestId('read-primary')).toHaveText('Today: K1 · Lesson 1 · about 10 min');
+    await expect(page.getByTestId('read-lesson')).toHaveText(/^Lesson 1 · 10\s*min$/);
     await expect(page.getByTestId('read-course').first()).toContainText('Claude Code in 10 Days');
-    await expect(page.getByTestId('read-course').nth(1)).toContainText('Later');
-    await page.getByTestId('read-primary').click();
+    await page.getByTestId('read-courses-later').click();
+    await expect(page.getByTestId('read-course').nth(2)).toContainText('Later');
+    await page.getByTestId('read-lesson').click();
     await screen(page, 'readLesson');
     await expect(page.getByTestId('rdr-topic')).toHaveText('K1 · Lesson 1 of 10');
     await expect(page.getByTestId('lsn-goal')).toContainText('Goal of this lesson');
+    // Sprachtreue: Ziel, Lage und Begründungen stehen auf Englisch, wenn die Lektion sie mitbringt (kein Deutsch daneben).
+    await expect(page.getByTestId('lsn-goal-text')).toContainText('You can explain what Claude Code is');
+    await expect(page.getByTestId('lsn-goal-text')).toHaveAttribute('lang', 'en');
+    await expect(page.getByTestId('lsn-apply-situation')).toContainText('Your colleague Jonas asks');
+    await page.getByTestId('lsn-tip-reveal').click();
+    await expect(page.getByTestId('lsn-tip-why')).toContainText('present perfect');
+    await expect(page.getByTestId('lsn-tip-why')).toHaveAttribute('lang', 'en');
+    const q = page.getByTestId('rdr-q');
+    await q.first().scrollIntoViewIfNeeded();
+    await q.first().getByTestId('rdr-opt').nth(0).click();
+    await expect(q.first().getByTestId('rdr-q-feedback')).toContainText('Why: The lesson describes');
     await expect(page.getByTestId('lsn-tip')).toContainText('Language tip');
     await expect(page.getByTestId('lsn-apply')).toContainText('Use it yourself');
     await expectNoOverflow(page);

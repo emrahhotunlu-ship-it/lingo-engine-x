@@ -83,17 +83,16 @@ test('A2 am Handy: Mini-Szene ersetzt die fällige Wiederholung – Vorgaben sic
   expect(await layoutProblems(page)).toEqual([]);
   await page.getByTestId('next').click();
   // Die Karte steht noch in Lernschritten und kommt in der Runde einmal wieder (als gewöhnliche Wiederholung, nie als zweite Aktivierung).
-  await expect.poll(async () => ((await dump(page))['vocab/avoid'])?.na).toBe(2);
   await expect.poll(async () => entriesOf(await dump(page)).length).toBe(1);
   await expect(page.getByTestId('exercise')).not.toHaveAttribute('data-ex', /^act_/);
 
   const d = await dump(page);
   const avoid = d['vocab/avoid'] as Doc & { hist: Doc[] };
-  // Zähler na im selben Schreibschritt wie die Antwort; ac (Fähigkeit) ist ein anderes Feld.
-  expect(avoid.na).toBe(2);
+  // Der Hinweis der Vorprüfung zählt als Hilfe: Der richtige Satz danach ist höchstens „Schwer“ (Note 2), nie „Leicht“, und er rückt den Fahrplan NICHT weiter
+  // (na bleibt 1, der Verlaufseintrag trägt u = 1; Lernwissenschaft H1: nur geprüfte Leistung ohne Hilfe zählt). ac (Fähigkeit) ist ein anderes Feld.
+  expect(avoid.na).toBe(1);
   const last = avoid.hist.at(-1)!;
-  // Der Hinweis der Vorprüfung zählt als Hilfe: der richtige Satz danach ist höchstens „Schwer“ (Note 2), nie „Leicht“.
-  expect(last).toMatchObject({ x: 'act_scene', g: 2 });
+  expect(last).toMatchObject({ x: 'act_scene', g: 2, u: 1 });
   expect(String(last.a)).toMatch(/^sc\./);
   // Sammelakte: genau ein Eintrag, geprüft, wiederverwendbar.
   const entries = entriesOf(d);
@@ -106,6 +105,23 @@ test('A2 am Handy: Mini-Szene ersetzt die fällige Wiederholung – Vorgaben sic
   expect(((await dump(page))[`log/${DAY}`]?.entries as Doc[]).filter((e) => e.ctx === 'rev')).toHaveLength(1);
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
+  await close();
+});
+
+test('A2 ohne Hinweis: der richtige Satz beim ersten Mal ist „Gut“ und rückt den Fahrplan weiter (na 2)', async ({ browser }) => {
+  const { page, close } = await phone(browser);
+  const { errors } = await startRound(page, { 'vocab/avoid': card(4, hist(1, [[6, 3, 'produce', 'j05.q.-.-']]), { na: 1 }) });
+  await expect(page.getByTestId('exercise')).toHaveAttribute('data-ex', 'act_scene');
+  await page.getByTestId('act-input').fill(await sceneSentence(page, 'avoid'));
+  await page.getByTestId('check').click();
+  await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
+  // Die drei Schichten sind sichtbar prüfbar: Die Testantwort liefert bei „richtig“ auch eine natürlichere Fassung und das Warum.
+  await page.getByTestId('next').click();
+  await expect.poll(async () => ((await dump(page))['vocab/avoid'])?.na).toBe(2);
+  const last = ((await dump(page))['vocab/avoid'] as Doc & { hist: Doc[] }).hist.at(-1)!;
+  expect(last).toMatchObject({ x: 'act_scene', g: 3 });
+  expect(last.u).toBeUndefined();
+  expect(errors).toEqual([]);
   await close();
 });
 

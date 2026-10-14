@@ -29,17 +29,28 @@ const pickLang = (lang: 'de' | 'en', de: string, en: string | undefined): { text
 export function useFieldFocusFlag(): void {
   useEffect(() => {
     const root = document.documentElement;
+    let timer: number | null = null;
+    const isField = (el: Element | null): boolean => !!el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA');
     const on = (e: FocusEvent) => {
-      const el = e.target as HTMLElement | null;
-      if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA')) root.setAttribute('data-field-focus', '');
+      if (timer !== null) window.clearTimeout(timer);
+      timer = null;
+      if (isField(e.target as Element | null)) root.setAttribute('data-field-focus', '');
     };
-    const off = () => root.removeAttribute('data-field-focus');
+    // Verzögert zurücknehmen: Tippt man nach dem Schreiben auf einen Knopf, verliert das Feld schon beim Drücken den Fokus. Käme die Reiterleiste sofort zurück,
+    // läge sie beim Loslassen über dem Knopf, und das Tippen ginge ins Leere.
+    const off = () => {
+      if (timer !== null) window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        if (!isField(document.activeElement)) root.removeAttribute('data-field-focus');
+      }, 600);
+    };
     document.addEventListener('focusin', on);
     document.addEventListener('focusout', off);
     return () => {
       document.removeEventListener('focusin', on);
       document.removeEventListener('focusout', off);
-      off();
+      if (timer !== null) window.clearTimeout(timer);
+      root.removeAttribute('data-field-focus');
     };
   }, []);
 }

@@ -4,7 +4,7 @@ export const rdcDe = {
   // Übersicht auf dem Bildschirm „Lesen“
   rdcTitle: 'Kurse',
   rdcHint: 'Kleine Lektionsreihen für deinen Berufsalltag. Etwa zehn Minuten je Lektion, immer freiwillig.',
-  rdcLessonsCount: '{n} Lektionen',
+  rdcLessonsCount: '{n}\u00a0Lektionen',
   rdcLater: 'Später',
   rdcProgressShort: '{done} von {total}',
   rdcToday: 'Lektion {n} · {min}\u00a0Min',

@@ -227,8 +227,12 @@ test.describe('Leser 390 px, Deutsch, dunkel', () => {
     const qs = page.getByTestId('rdr-q');
     await expect(qs).toHaveCount(2);
     await qs.first().scrollIntoViewIfNeeded();
-    await expect(qs.first()).toContainText('Was tun:');
-    await expect(qs.first()).toContainText('Wozu:');
+    // Was tun und Wozu stehen einmal im Kopf der Karte, nicht unter jeder Frage (Kap. 15).
+    const raster = page.getByTestId('rdr-check-raster');
+    await expect(page.getByTestId('rdr-check')).toContainText('Was tun:');
+    await expect(raster).toContainText('Wozu:');
+    await expect(raster).toHaveCount(1);
+    await expect(qs.first()).not.toContainText('Was tun:');
     // falsche Antwort
     await qs.first().getByTestId('rdr-opt').nth(0).click();
     const fb = qs.first().getByTestId('rdr-q-feedback');
@@ -241,6 +245,8 @@ test.describe('Leser 390 px, Deutsch, dunkel', () => {
     await qs.nth(1).getByTestId('rdr-opt').nth(0).click();
     const fb2 = qs.nth(1).getByTestId('rdr-q-feedback');
     await expect(fb2).toContainText('Richtig.');
+    // „Richtig ist“ steht nur bei falscher Antwort (die richtige Option ist schon grün markiert); das Warum kommt immer.
+    await expect(fb2).not.toContainText('Richtig ist:');
     await expect(fb2).toContainText('Warum: Kleine Tests mit wenigen Besuchern');
     await expect(qs.nth(1)).toHaveAttribute('data-answered', 'right');
   });
@@ -253,8 +259,8 @@ test.describe('Leser 390 px, Deutsch, dunkel', () => {
     await page.keyboard.press('1');
     await expect(qs.first()).toHaveAttribute('data-answered', /right|wrong/);
     await expect(qs.first().getByTestId('rdr-opt').nth(0)).toHaveAttribute('aria-pressed', 'true');
-    await expect(qs.first()).toContainText('Was tun:');
-    await expect(qs.first()).toContainText('Wozu:');
+    await expect(page.getByTestId('rdr-check-raster')).toContainText('Was tun:');
+    await expect(page.getByTestId('rdr-check-raster')).toContainText('Wozu:');
     await expect(qs.nth(1)).not.toHaveAttribute('data-answered', /.+/);
   });
 

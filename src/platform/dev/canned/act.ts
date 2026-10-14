@@ -53,7 +53,8 @@ export function activateCheckReply(input: string): string {
     why: WHY[verdict][lang],
     better,
     whyBetter: better ? WHY_BETTER[lang] : '',
-    errType: verdict === 'correct' ? null : 'other',
+    // Eine konkrete Klasse (die Oberfläche lässt „Sonstiges“ weg): fehlendes Zielwort = Wortwahl, kleiner Fehler = Wortstellung.
+    errType: verdict === 'correct' ? null : verdict === 'wrong' ? 'word_choice' : 'word_order',
     reusable: verdict === 'correct',
   });
 }
