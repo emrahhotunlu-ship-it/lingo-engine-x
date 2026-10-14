@@ -50,6 +50,8 @@ export type AcceptCtx = {
   topic?: TopicKey;
   /** Nachsichtig (nur für die Antwort des einen Neuversuchs): ≥ 3 gültige Schlüsselwörter genügen, der Rest wird verworfen. */
   lenient?: boolean;
+  /** Eigene Wortgrenzen für den englischen Text (Standard: `LIMITS.words`). Die Routine schreibt kürzere Meldungen (Artikel der App: 380-800). */
+  words?: readonly [number, number];
 };
 
 export type AcceptedArticle = {
@@ -252,7 +254,8 @@ export function acceptArticle(raw: unknown, ctx: AcceptCtx = {}): AcceptResult {
   // Tor 2: Länge
   const wordsE = flat.reduce((acc, f) => acc + countWords(f.s.e), 0);
   const wordsD = flat.reduce((acc, f) => acc + countWords(f.s.d), 0);
-  if (wordsE < LIMITS.words[0] || wordsE > LIMITS.words[1]) push(issues, 'length', ['paras'], `English text must have ${LIMITS.words[0]} to ${LIMITS.words[1]} words, got ${wordsE}`);
+  const [minWords, maxWords] = ctx.words ?? LIMITS.words;
+  if (wordsE < minWords || wordsE > maxWords) push(issues, 'length', ['paras'], `English text must have ${minWords} to ${maxWords} words, got ${wordsE}`);
   if (Array.from(title).length > LIMITS.titleChars) push(issues, 'length', ['title'], `title must have at most ${LIMITS.titleChars} characters`);
 
   // Tor 3: Sprachtreue (Englisch links, Deutsch rechts; Kurzsätze unter 4 Wörtern prüft detect nicht)

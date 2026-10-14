@@ -1,6 +1,6 @@
 import type { Db } from '../platform/types';
 import { logError, logWarn } from '../platform/diagnostics';
-import { daysFromMonthDocs, fitTextBudget, READ_BACKUP_TEXT_BUDGET_BYTES, readBackupPlan, recentMonths, docBytes } from '../modules/read/registry';
+import { daysFromMonthDocs, fitTextBudget, READ_BACKUP_TEXT_BUDGET_BYTES, readBackupPlan, recentMonths, routineBackupPaths, docBytes } from '../modules/read/registry';
 import { APP_DOC_PATHS, EAGER_COLLECTION_NAMES, collectionOf } from './paths';
 import { validateDoc } from './validate';
 
@@ -126,6 +126,8 @@ export async function loadLazyBackup(db: Db, textBudget: number = READ_BACKUP_TE
   if (!pData) logWarn('data:backup', { code: 'read_p_missing', message: 'read/p fehlt, Tage aus den Monatsindizes abgeleitet' }, 'read');
   else if (extra.length > 0) logWarn('data:backup', { code: 'read_days_derived', message: `${extra.length} Lesetage nur im Monatsindex gefunden` }, 'read');
   const plan = readBackupPlan({ days: [...(pData && Array.isArray(pData.days) ? (pData.days as unknown[]) : []), ...extra] });
+  // Routine-Dokumente der letzten Tage (nur die Routine schreibt sie) gehören als Neueste dazu; fehlende sind normal und zählen nicht als weggelassen.
+  plan.texts = [...routineBackupPaths(new Date().toISOString().slice(0, 10)), ...plan.texts];
   // Artikeltexte: neueste zuerst, in kleinen Gruppen; sobald das Budget erreicht ist, wird nicht weiter geladen.
   const included: Array<{ path: string; bytes: number; data: Doc }> = [];
   const missing = new Set<string>();

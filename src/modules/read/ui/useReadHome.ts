@@ -3,14 +3,15 @@ import { dayKey, docTotal, logError } from '../shared';
 import type { AiPhase } from '../shared';
 import { getDb, getWriter, readDoc, useAiAvailable, useAiScope } from '../sharedUi';
 import type { AiMessageKey } from '../shared';
-import { loadHome, savePrefs } from '../store';
+import { loadHome, onReadStateSaved, savePrefs } from '../store';
 import type { Home } from '../store';
 import { runFetch } from '../run';
 import type { RunFailure, RunResult } from '../run';
 import { suggestTopics } from '../suggest';
 import { CUSTOM_TOPICS_MAX, PER_DAY_MAX } from '../domain/docs';
 import { sanitizeCustomTopic } from '../domain/topics';
-import { earlierEntries, entriesOfDay, fetchCount, nextToRead, weekStats } from '../domain/view';
+import { earlierEntries, entriesOfDay, fetchCount, fetchCountWithRoutine, nextToRead, weekStats } from '../domain/view';
+import { isOwn } from '../domain/routine';
 import type { WeekStats } from '../domain/view';
 import type { IndexItem } from '../schemas';
 
@@ -39,6 +40,8 @@ export type ReadHome = {
   earlier: IndexItem[];
   week: WeekStats;
   perDay: number;
+  /** Artikel der Routine von heute (gültige). */
+  routineToday: number;
   toFetch: number;
   running: Progress | null;
   outcome: { result: RunResult; failure: RunFailure | null } | null;
@@ -54,6 +57,15 @@ export type ReadHome = {
   suggestions: { state: 'idle' | 'busy' | 'error'; topics: string[]; key: AiMessageKey | null };
   reload: () => void;
 };
+
+/**
+ * Wie viele Artikel der Knopf schreiben lässt. Sind Routine-Artikel von heute da, ist der Knopf nur ein Zusatz (einer je Tipp);
+ * sonst gilt „bis zur Tageszahl auffüllen“. Routine-Artikel zählen nicht zum Tagesdokument `read/d-…` und nicht zur Tageszahl.
+ */
+function fetchCountFor(todayEntries: readonly IndexItem[], perDay: number): number {
+  const own = todayEntries.filter(isOwn).length;
+  return todayEntries.length > own ? fetchCountWithRoutine(own, PER_DAY_MAX) : fetchCount(own, perDay, PER_DAY_MAX);
+}
 
 export function useReadHome(): ReadHome {
   const scope = useAiScope();
@@ -99,12 +111,16 @@ export function useReadHome(): ReadHome {
     reload();
   }, [reload]);
 
+  // Der Leser schreibt den Lesestand beim Verlassen, oft nachdem die Liste schon geladen hat: dann den Index neu lesen.
+  useEffect(() => onReadStateSaved(reload), [reload]);
+
   const entries = useMemo(() => (home ? entriesOfDay(home.items, today) : []), [home, today]);
   const next = useMemo(() => nextToRead(entries), [entries]);
   const earlier = useMemo(() => (home ? earlierEntries(home.items, today) : []), [home, today]);
   const week = useMemo(() => (home ? weekStats(home.items, today) : { articles: 0, minutes: 0 }), [home, today]);
   const perDay = home?.prefs.perDay ?? 3;
-  const toFetch = fetchCount(entries.length, perDay, PER_DAY_MAX);
+  const routineToday = useMemo(() => entries.filter((e) => !isOwn(e)).length, [entries]);
+  const toFetch = fetchCountFor(entries, perDay);
 
   const stop = useCallback(() => {
     ctl.current?.abort();
@@ -116,7 +132,7 @@ export function useReadHome(): ReadHome {
       const writer = getWriter();
       if (!h || !writer || ctl.current) return;
       const day = dayKey(Date.now());
-      const count = fetchCount(entriesOfDay(h.items, day).length, h.prefs.perDay, PER_DAY_MAX);
+      const count = fetchCountFor(entriesOfDay(h.items, day), h.prefs.perDay);
       const c = scope.controller();
       ctl.current = c;
       setOutcome(null);
@@ -224,5 +240,5 @@ export function useReadHome(): ReadHome {
     });
   }, [scope, suggestions.state]);
 
-  return { load, home, today, aiOn, entries, next, earlier, week, perDay, toFetch, running, outcome, rateLocked, getArticles, stop, toggleTopic, addCustom, removeCustom, setPerDay, suggest, suggestions, reload };
+  return { load, home, today, aiOn, entries, next, earlier, week, perDay, routineToday, toFetch, running, outcome, rateLocked, getArticles, stop, toggleTopic, addCustom, removeCustom, setPerDay, suggest, suggestions, reload };
 }

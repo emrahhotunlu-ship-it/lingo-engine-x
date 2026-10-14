@@ -10,6 +10,7 @@ import { recentTitles } from './domain/view';
 import type { IndexItem } from './schemas';
 import { claimDay, recordSaved, saveArticle } from './store';
 import { mayCreateDayDoc } from './domain/retention';
+import { isOwn } from './domain/routine';
 
 // Das Holen der Artikel (docs/umbau/lesen-plan.md §3.1, A6 Nr. 2/3). Nur auf Handlung (Tippen), ein Artikel nach dem anderen, nie aus Schleife
 // oder Timer im Sinne des Vertrags: die Schleife hier ist die Reihe der vom Nutzer gewollten Artikel und endet beim ersten Fehler.
@@ -80,7 +81,7 @@ export async function runFetch(input: RunInput): Promise<RunResult> {
   if (total === 0) return { ...result, failure: { type: 'full' } };
 
   // Kapazitätswächter (Plan §4.3): ein NEUER Tag legt ein neues Dokument an; ein vorhandener Tag ist immer erlaubt.
-  const hasToday = input.items.some((e) => e.day === day);
+  const hasToday = input.items.some((e) => e.day === day && isOwn(e));
   if (!hasToday && !mayCreateDayDoc(input.dayDocs ?? 0, input.docTotal ?? 0)) return { ...result, failure: { type: 'full' } };
 
   const claim = await claimDay(writer, day, input.holder).catch((err: unknown) => {
@@ -93,7 +94,7 @@ export async function runFetch(input: RunInput): Promise<RunResult> {
   const rand = input.rand ?? Math.random;
   let items: IndexItem[] = [...input.items];
   let history = historyFromPrefs(prefs.lastTopics);
-  let n = items.filter((e) => e.day === day).length;
+  let n = items.filter((e) => e.day === day && isOwn(e)).length;
 
   for (let i = 1; i <= total; i++) {
     if (signal.aborted) return { ...result, stopped: true };
@@ -145,7 +146,7 @@ export async function runFetch(input: RunInput): Promise<RunResult> {
     history = [{ topic: choice.topic, ...(choice.custom ? { custom: choice.custom } : {}) }, ...history];
     result.saved += 1;
     try {
-      await recordSaved(writer, { day, topicId: topicId(choice.topic, choice.custom), countToday: items.filter((e) => e.day === day).length });
+      await recordSaved(writer, { day, topicId: topicId(choice.topic, choice.custom), countToday: items.filter((e) => e.day === day && isOwn(e)).length });
     } catch {
       // Der Artikel ist gespeichert; fehlt nur der Verlauf, ist das für den Nutzer folgenlos (protokolliert).
     }

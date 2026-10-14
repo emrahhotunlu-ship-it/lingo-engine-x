@@ -66,8 +66,13 @@ export const articleItemSchema = z.looseObject({
   check: z.array(checkSchema).nullish(),
   model: str,
   pv: num,
-  /** Reserviert für die spätere Routine (Paket L7): `by: 'routine'`. */
+  /** `'routine'`: Artikel der geplanten Claude-Routine (docs/umbau/lesen-routine.md). Fehlt bei selbst geholten Artikeln. */
   by: str,
+  /** Nur Routine: Name der Quelle (z. B. „InfoQ“) und Link zur Originalmeldung (https). */
+  source: str,
+  url: str,
+  /** Nur Routine: Veröffentlichungstag der Meldung `JJJJ-MM-TT` (Anzeige, optional). */
+  pub: str,
 });
 export type ArticleItem = {
   id: string;
@@ -85,6 +90,9 @@ export type ArticleItem = {
   model?: string | null;
   pv?: number | null;
   by?: string | null;
+  source?: string | null;
+  url?: string | null;
+  pub?: string | null;
 };
 
 // ---------------------------------------------------------------- Lesezustand im Monatsindex
@@ -123,6 +131,10 @@ export const indexItemSchema = z.looseObject({
   mins: num,
   words: num,
   st: stateSchema.nullish(),
+  /** `'routine'`: Eintrag eines Routine-Artikels (Text liegt in `read/r-<Tag>`, nicht in `read/d-<Tag>`). */
+  src: str,
+  /** Nur Routine: Name der Quelle für die Liste. */
+  source: str,
 });
 export type IndexItem = {
   id: string;
@@ -132,6 +144,8 @@ export type IndexItem = {
   mins?: number | null;
   words?: number | null;
   st?: ReadState | null;
+  src?: string | null;
+  source?: string | null;
 };
 
 // ---------------------------------------------------------------- Dokumente je Art (streng genug für das Modul)

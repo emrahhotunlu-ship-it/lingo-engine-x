@@ -137,7 +137,7 @@ describe('Sicherung: Lesefehler in read/ bricht die Sicherung nicht ab', () => {
 });
 
 describe('Laden ohne Artikeltexte', () => {
-  it('loadHome liest nur read/p und zwei Monatsindizes, nie ein Tagesdokument oder die Sammlung', async () => {
+  it('loadHome liest nur read/p, zwei Monatsindizes und drei Routine-Dokumente, nie ein Tagesdokument oder die Sammlung', async () => {
     const { db, asked } = recording({
       'read/p': { v: 1, perDay: 2, days: ['2026-09-30', '2026-10-01'] },
       'read/m-2026-09': { v: 1, items: [{ id: 'a-2026-09-30-1-aaaaaa', day: '2026-09-30', title: 'Alt', topic: 'ai', mins: 4, words: 520, st: { done: true } }] },
@@ -149,7 +149,8 @@ describe('Laden ohne Artikeltexte', () => {
       return s.exists ? s.data() : undefined;
     }, '2026-10-02');
     expect(asked.collections).toEqual([]);
-    expect(asked.docs.sort()).toEqual(['read/m-2026-09', 'read/m-2026-10', 'read/p']);
+    // Dazu je ein `get` für die Routine-Dokumente von heute und den zwei Tagen davor (fehlende sind normal); nie `read/d-…`.
+    expect(asked.docs.sort()).toEqual(['read/m-2026-09', 'read/m-2026-10', 'read/p', 'read/r-2026-09-30', 'read/r-2026-10-01', 'read/r-2026-10-02']);
     expect(h.items.map((i) => i.title)).toEqual(['Alt', 'Neu']); // älteste zuerst
     expect(h.hidden).toBe(1);
     expect(h.prefs.perDay).toBe(2);

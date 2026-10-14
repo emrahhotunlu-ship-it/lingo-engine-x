@@ -72,9 +72,16 @@ export function mergeState(old: ReadState | null | undefined, patch: ReadState):
   return out;
 }
 
-/** Lesezustand eines Artikels im Monatsindex fortschreiben (nur dieses Feld; der Rest des Dokuments bleibt). */
-export function stateUpdatePlan(cur: Doc | undefined, id: string, patch: ReadState): { op: TransformOp | null; outcome: 'updated' | 'missing' | 'invalid_doc' } {
-  if (!cur) return { op: null, outcome: 'missing' };
+/**
+ * Lesezustand eines Artikels im Monatsindex fortschreiben (nur dieses Feld; der Rest des Dokuments bleibt).
+ * `seed`: nur für Routine-Artikel. Ihr Indexeintrag entsteht erst hier, beim ersten gespeicherten Lesestand (die App legt ihn selbst an,
+ * die Routine schreibt nie in App-Dokumente). Ohne `seed` bleibt ein fehlender Eintrag `missing`.
+ */
+export function stateUpdatePlan(cur: Doc | undefined, id: string, patch: ReadState, seed?: IndexItem, month = '0000-00'): { op: TransformOp | null; outcome: 'updated' | 'created' | 'missing' | 'invalid_doc' } {
+  if (!cur) {
+    if (!seed) return { op: null, outcome: 'missing' };
+    return { op: { set: { v: 1, items: [{ ...seed, st: mergeState(seed.st, patch) }] } }, outcome: 'created' };
+  }
   const parsed = parseMonthDoc(cur);
   if (!parsed.ok) return { op: null, outcome: 'invalid_doc' };
   const rawItems = Array.isArray(cur.items) ? (cur.items as unknown[]) : [];
@@ -85,5 +92,9 @@ export function stateUpdatePlan(cur: Doc | undefined, id: string, patch: ReadSta
     const e = x as IndexItem;
     return { ...e, st: mergeState(e.st, patch) };
   });
-  return hit ? { op: { update: { items: next } }, outcome: 'updated' } : { op: null, outcome: 'missing' };
+  if (hit) return { op: { update: { items: next } }, outcome: 'updated' };
+  if (!seed) return { op: null, outcome: 'missing' };
+  const entry: IndexItem = { ...seed, st: mergeState(seed.st, patch) };
+  if (!checkMonthFits(rawItems, entry, month).ok) return { op: null, outcome: 'missing' };
+  return { op: { update: { items: [...rawItems, entry], ...(cur.v == null ? { v: 1 } : {}) } }, outcome: 'created' };
 }

@@ -219,10 +219,25 @@ export function ReaderView({ article, state = null, view: viewProp = null, autoS
             </span>
           ) : null}
         </p>
-        <p className="m-0 text-xs text-subtle" data-testid="rdr-byclaude">
-          {rdrText(lang, 'rdrByClaude')}
-          {formatAsOf(lang, article.asOf) ? ` · ${rdrText(lang, 'rdrAsOf', { asOf: formatAsOf(lang, article.asOf) })}` : ''} · {rdrText(lang, 'rdrByClaudeHint')}
-        </p>
+        {article.by === 'routine' && article.source ? (
+          <p className="m-0 text-xs text-subtle" data-testid="rdr-routine">
+            {rdrText(lang, 'rdrRoutineLine', { source: article.source })}
+            {article.pub ? ` · ${article.pub}` : ''} · {rdrText(lang, 'rdrRoutineHint')}
+            {article.url ? (
+              <>
+                {' · '}
+                <a href={article.url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center font-medium text-accent-text underline" data-testid="rdr-source-link" aria-label={rdrText(lang, 'rdrOpenSource', { source: article.source })}>
+                  {article.source}
+                </a>
+              </>
+            ) : null}
+          </p>
+        ) : (
+          <p className="m-0 text-xs text-subtle" data-testid="rdr-byclaude">
+            {rdrText(lang, 'rdrByClaude')}
+            {formatAsOf(lang, article.asOf) ? ` · ${rdrText(lang, 'rdrAsOf', { asOf: formatAsOf(lang, article.asOf) })}` : ''} · {rdrText(lang, 'rdrByClaudeHint')}
+          </p>
+        )}
       </header>
 
       <div ref={barRef} className="lx-glass sticky top-[env(safe-area-inset-top)] z-20 rounded-2xl p-1.5 md:top-[4.5rem]" data-testid="rdr-bar">

@@ -1193,6 +1193,9 @@ const readIdx = (item, day, st) => {
 };
 put('read/d-2026-09-19', { v: 1, day: '2026-09-19', items: [R1, R2] });
 put('read/d-2026-09-17', { v: 1, day: '2026-09-17', items: [R3] });
+// Routine-Tagesdokument (docs/umbau/lesen-routine.md): `read/r-<Tag>` schreibt nur die geplante Claude-Routine. Zwei gültige Artikel mit erfundener
+// Quelle (example.com) und ein bewusst zu kurzer Artikel, den die App ausblendet. Der Inhalt steht in seed/read-routine.json.
+put('read/r-2026-09-20', read('seed/read-routine.json'));
 put('read/m-2026-09', {
   v: 1,
   items: [

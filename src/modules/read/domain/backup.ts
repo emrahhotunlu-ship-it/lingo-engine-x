@@ -1,6 +1,6 @@
-import { isDayKey } from '../shared';
+import { addDays, isDayKey } from '../shared';
 import { readDaysOf } from './count';
-import { monthOfDay, READ_PREFS_PATH, readDayPath, readMonthPath } from './paths';
+import { monthOfDay, READ_PREFS_PATH, readDayPath, readMonthPath, readRoutinePath } from './paths';
 
 // Sicherung der Sammlung `read` in begrenzter Größe (Plan §11 Nachtrag L3, Punkt für data-guard).
 //
@@ -72,4 +72,11 @@ export function recentMonths(fromDay: string, n: number): string[] {
     out.push(`${Math.floor(t / 12)}-${String((t % 12) + 1).padStart(2, '0')}`);
   }
   return out;
+}
+
+/** Tage, deren Routine-Dokumente (`read/r-<Tag>`) in die Sicherung gehören: heute und die 13 Tage davor (neueste zuerst). Die Routine räumt selbst nach 45 Tagen auf. */
+export const ROUTINE_BACKUP_DAYS = 14;
+export function routineBackupPaths(today: string, n = ROUTINE_BACKUP_DAYS): string[] {
+  if (!isDayKey(today)) return [];
+  return Array.from({ length: n }, (_, i) => readRoutinePath(addDays(today, -i)));
 }
