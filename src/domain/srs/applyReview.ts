@@ -6,10 +6,9 @@ import { naOf } from './actBase';
 import { flipStage } from './flip';
 import { isFestValues } from '../metrics/definitions';
 import { stageOf, nextStage } from './ladder';
-import { FREE_DAYS_FOR_ADVANCE, freeCorrectDays } from './variety';
+import { freeCorrectDays, freeDaysNeeded } from './variety';
 import { exerciseDef } from './modes';
 import { readFsrs, reviewFsrs, isFutureFsrs } from './scheduler';
-import { lapsesOf } from './lapses';
 import { noteWeight } from './weight';
 import type { AnswerEvent, ExerciseId, LegacyMode } from './types';
 
@@ -131,21 +130,34 @@ function skillPatch(cur: Doc, mode: LegacyMode, grade: number, colIndex: number 
   return out;
 }
 
+type StageAnswer = Pick<AnswerEvent, 't' | 'day' | 'ex' | 'grade' | 'colIndex' | 'interrupted'>;
+
 /**
  * Neue Stufe: Aufdecken (`flip`) nach der Stufenregel aus anki-regeln.md §3 (höchstens bis 2, je
  * Antwort höchstens eine Stufe, nie unter 1), sonst die Leiter (`nextStage`).
  */
-function stageAfter(cur: Doc, a: AnswerEvent): number {
+function stageAfter(cur: Doc, a: StageAnswer): number {
+  return stageStep(cur, a).stage;
+}
+
+/** Neue Stufe und, wenn nur das Tor der freien Antworten den Aufstieg verhindert, wie viele freie Tage noch fehlen (für die Erklärung, Lernwissenschaft M1). */
+export function stageStep(cur: Doc, a: StageAnswer): { stage: number; missing: number } {
   const now = stageOf(cur);
   const next = a.ex === 'flip' ? flipStage(now, a.grade) : nextStage(now, levelFor(a.ex, now), a.grade);
   // Tagesbremse (phase1-plan §4, Prüfung Lernwissenschaft 02.10.2026): höchstens EIN Aufstieg je Karte und Lerntag. Wiederholungen
   // am selben Tag (Lernschritte, „Nochmal“-Wiedervorlage) beweisen nichts über das Gedächtnis von morgen und heben die Stufe nicht.
   // Abstieg bleibt immer möglich.
-  if (next > now && answeredOn(cur, a.day)) return now;
-  // Auswertung 15.10.2026, Punkt 4: Aufstieg auf Stufe 4 und 5 nur mit mindestens zwei richtigen FREIEN Antworten (ohne Auswahl und Stütze) an verschiedenen Tagen.
-  // Nur der Aufstieg wird strenger; Karten, die schon höher stehen, werden nie zurückgestuft (hier wird nur `next` begrenzt).
-  if (next > now && next >= 4 && freeCorrectDays(cur, { t: a.t, ex: a.ex, grade: a.grade }) < FREE_DAYS_FOR_ADVANCE) return now;
-  return next;
+  if (next > now && answeredOn(cur, a.day)) return { stage: now, missing: 0 };
+  // Eine richtige Antwort nach einer Unterbrechung (> 60 s) ist Note 3, beweist aber kein Können: kein Aufstieg (Lernwissenschaft N1).
+  if (next > now && a.interrupted) return { stage: now, missing: 0 };
+  // Auswertung 15.10.2026, Punkt 4: Aufstieg auf Stufe 4 nur mit mindestens zwei richtigen FREIEN Antworten (ohne Auswahl und Stütze) an verschiedenen Tagen,
+  // auf Stufe 5 mit einem weiteren freien Tag. Nur der Aufstieg wird strenger; Karten, die schon höher stehen, werden nie zurückgestuft (hier wird nur `next` begrenzt).
+  if (next > now && next >= 4) {
+    const need = freeDaysNeeded(next);
+    const have = freeCorrectDays(cur, { t: a.t, ex: a.ex, grade: a.grade, ...(a.colIndex !== undefined ? { ci: a.colIndex } : {}) });
+    if (have < need) return { stage: now, missing: need - have };
+  }
+  return { stage: next, missing: 0 };
 }
 
 /** Wurde die Karte an diesem Lerntag schon beantwortet? (`last` = Zeitpunkt der letzten Antwort.) */
@@ -156,9 +168,9 @@ const answeredOn = (cur: Doc, day: string): boolean => typeof cur.last === 'numb
  * der eigenen – sie prüft Gehör und Schreibung, nicht die Bedeutung. Auf Stufe 4–5 (Leiter) ändert
  * das nichts; im Hör-Modus hebt eine junge Karte so je Antwort nur um eine Stufe und fällt nie tiefer.
  */
-/** Verlaufseintrag; `s` = Schlüssel des gezeigten Satzes (V1, nur wenn die Abfrage einen Satz hatte), `a` = Code der Vorgabe eines eigenen Satzes, `u` = ungeprüfte Aktivierung. */
+/** Verlaufseintrag; `s` = Schlüssel des gezeigten Satzes (V1, nur wenn die Abfrage einen Satz hatte), `a` = Code der Vorgabe eines eigenen Satzes, `u` = ungeprüfte Aktivierung, `ci` = Index des Partnerworts (Treffer am Partnerwort ist kein freier Beleg für das Hauptwort). */
 function histEntry(a: AnswerEvent, mode: LegacyMode): Record<string, unknown> {
-  return { t: a.t, m: mode, g: a.grade, x: a.ex, ...(a.sx ? { s: a.sx } : {}), ...(a.act ? { a: a.act } : {}), ...(a.actStep && a.actUnverified ? { u: 1 } : {}) };
+  return { t: a.t, m: mode, g: a.grade, x: a.ex, ...(a.sx ? { s: a.sx } : {}), ...(a.act ? { a: a.act } : {}), ...((a.actStep && a.actUnverified) || a.unverified ? { u: 1 } : {}), ...(a.colIndex !== undefined && a.colIndex >= 0 ? { ci: a.colIndex } : {}) };
 }
 
 export function levelFor(ex: ExerciseId, stage: number): number {
@@ -173,17 +185,51 @@ function festPatch(cur: Doc, patch: Doc, day: string): void {
   if (typeof patch.stage === 'number' && f && isFestValues(patch.stage, f.stability)) patch.ff = day;
 }
 
+/** Gespeicherter Wert von `lapses` (Feld der alten App), nur um +1 bei einem echten Rückfall erhöht; das Maximum mit `fsrs.lapses` bildet allein der Leser (`lapsesOf`). */
+const storedLapses = (cur: Doc): number => Math.max(0, Math.round(num(cur.lapses)));
+
+/** Fehler am Partnerwort einer Kollokation (Index ≥ 0) bei einer Karte, die nicht neu ist. */
+export function isPartnerMiss(cur: Doc, a: Pick<AnswerEvent, 'ex' | 'grade' | 'colIndex'>): boolean {
+  return cur.state !== 'new' && a.grade === 1 && exerciseDef(a.ex).mode === 'colloc' && a.colIndex !== undefined && a.colIndex >= 0;
+}
+
+/** Streng, nur für den Partnerwort-Fehler: Verlauf und Zähler, sonst nichts. */
+export const partnerMissPatchSchema = z
+  .object({
+    modes: z.partialRecord(legacyMode, countsSchema),
+    xs: z.record(z.string().max(24), countsSchema),
+    hist: z.array(z.looseObject({ t: z.number(), g: z.number().optional() })).max(HIST_MAX),
+    co: z.number().min(0).max(1),
+  })
+  .strict();
+
+function partnerMissPatch(cur: Doc, a: AnswerEvent): Doc {
+  const def = exerciseDef(a.ex);
+  const modes = isObj(cur.modes) ? cur.modes : {};
+  const prevMode = isObj(modes[def.mode]) ? (modes[def.mode] as Doc) : {};
+  const xs = isObj(cur.xs) ? cur.xs : {};
+  const prevXs = isObj(xs[a.ex]) ? (xs[a.ex] as Doc) : {};
+  const hist: unknown[] = Array.isArray(cur.hist) ? (cur.hist as unknown[]) : [];
+  const col: unknown[] = Array.isArray(cur.col) ? (cur.col as unknown[]) : [];
+  return {
+    modes: { [def.mode]: { c: Math.round(num(prevMode.c)), w: Math.round(num(prevMode.w)) + 1 } },
+    xs: { [a.ex]: { c: Math.round(num(prevXs.c)), w: Math.round(num(prevXs.w)) + 1 } },
+    hist: [...hist, histEntry(a, def.mode)].slice(-HIST_MAX),
+    ...skillPatch(cur, def.mode, 1, a.colIndex, col.length),
+  };
+}
+
 /** Patch für eine Karte, deren Dokument vorliegt (bzw. aus der Voreinstellung angelegt wird). */
 export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
   if (a.kind === 'chunk') return chunkPatch(cur, a);
   const def = exerciseDef(a.ex);
   const wasNew = cur.state === 'new';
-  // Auswertung 15.10.2026, Punkt 3: Ein Fehler am Partnerwort einer Kollokation (`col`/`colN`, Index ≥ 0) heißt nicht, dass das Hauptwort vergessen wurde.
-  // Er zählt nicht als Rückfall (`lapses` und `fsrs.lapses`) und verschiebt weder Stabilität noch Fälligkeit der Hauptkarte; er bleibt in `modes`/`xs`/`hist`
-  // sichtbar (die schwache Abfrageart wird weiter geübt, Punkt 4). Gilt nur für künftige Antworten, nichts Gespeichertes wird umgeschrieben.
-  const partnerMiss = !wasNew && a.grade === 1 && def.mode === 'colloc' && a.colIndex !== undefined && a.colIndex >= 0;
+  // Auswertung 15.10.2026, Punkt 3 (Prüfung H2): Ein Fehler am Partnerwort einer Kollokation (`col`/`colN`, Index ≥ 0) heißt nicht, dass das Hauptwort vergessen wurde.
+  // Es wird NUR der Verlauf geschrieben (`hist`, `modes`, `xs`, `co`): `stage`, `fsrs`, `due`, `reps`, `last`, `lapses`, Stabilität und Schwierigkeit bleiben stehen,
+  // auch der Abstand zur letzten Wiederholung (sonst würde die nächste echte Antwort mit falschem Abstand gerechnet). Die schwache Abfrageart wird weiter geübt (Punkt 4).
+  if (isPartnerMiss(cur, a)) return partnerMissPatch(cur, a);
   const prevFsrs = readFsrs(cur, a.t);
-  const f = partnerMiss ? { ...prevFsrs, v: 1 as const, src: 'lx' as const, last: a.t, reps: prevFsrs.reps + 1 } : reviewFsrs(prevFsrs, a.grade, a.t, noteWeight(a.ex, a.hint ?? 0, a.catchUp === true, a.free === true));
+  const f = reviewFsrs(prevFsrs, a.grade, a.t, noteWeight(a.ex, a.hint ?? 0, a.catchUp === true, a.free === true));
   const modes = isObj(cur.modes) ? cur.modes : {};
   const prevMode = isObj(modes[def.mode]) ? (modes[def.mode] as Doc) : {};
   const xs = isObj(cur.xs) ? cur.xs : {};
@@ -199,7 +245,7 @@ export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
     last: a.t,
     state: f.state === 2 ? 'review' : 'learning',
     reps: Math.max(0, Math.round(num(cur.reps))) + 1,
-    lapses: lapsesOf(cur) + (a.grade === 1 && !wasNew && !partnerMiss ? 1 : 0),
+    lapses: storedLapses(cur) + (a.grade === 1 && !wasNew ? 1 : 0),
     stage: stageAfter(cur, a),
     modes: { [def.mode]: { c: Math.round(num(prevMode.c)) + ok, w: Math.round(num(prevMode.w)) + (1 - ok) } },
     xs: { [a.ex]: { c: Math.round(num(prevXs.c)) + ok, w: Math.round(num(prevXs.w)) + (1 - ok) } },
@@ -231,7 +277,7 @@ export function chunkPatch(cur: Doc, a: AnswerEvent): Doc {
     last: a.t,
     state: f.state === 2 ? 'review' : 'learning',
     reps: Math.max(0, Math.round(num(cur.reps))) + 1,
-    lapses: lapsesOf(cur) + (a.grade === 1 && !wasNew ? 1 : 0),
+    lapses: storedLapses(cur) + (a.grade === 1 && !wasNew ? 1 : 0),
     stage: stageAfter(cur, a),
     xs: { [a.ex]: { c: Math.round(num(prevXs.c)) + ok, w: Math.round(num(prevXs.w)) + (1 - ok) } },
     hist: [...hist, histEntry(a, def.mode)].slice(-HIST_MAX),
@@ -285,8 +331,11 @@ export function reviewWrite(path: string, current: Doc | undefined, a: AnswerEve
     if (isFutureFsrs(current)) return { kind: 'skip', reason: 'future_fsrs' };
     base = current;
   }
+  const miss = !chunk && !create && isPartnerMiss(base, a);
+  // Partnerwort-Fehler schreibt `last` nicht neu: Doppelschutz über den Verlauf (Eintrag mit diesem Zeitstempel schon da).
+  if (miss && Array.isArray(base.hist) && (base.hist as unknown[]).some((h) => isObj(h) && h.t === a.t)) return { kind: 'skip', reason: 'already_applied' };
   const patch = chunk ? chunkPatch(base, a) : cardPatch(base, a);
-  if (!(chunk ? chunkPatchSchema : cardPatchSchema).safeParse(patch).success) return { kind: 'skip', reason: 'invalid_result' };
+  if (!(miss ? partnerMissPatchSchema : chunk ? chunkPatchSchema : cardPatchSchema).safeParse(patch).success) return { kind: 'skip', reason: 'invalid_result' };
   const merged = applyUpdate(base, patch);
   if (!validateDoc(path, merged).ok) return { kind: 'skip', reason: 'invalid_result' };
   if (new TextEncoder().encode(JSON.stringify(merged)).length >= MAX_CARD_BYTES) return { kind: 'skip', reason: 'invalid_result' };

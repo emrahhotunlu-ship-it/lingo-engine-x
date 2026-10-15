@@ -1,11 +1,18 @@
 // Evaluation of 10/15/2026 (items 1-6): small hints, English (US).
 
 export const awEn = {
-  awFixUnsure: 'There is no corrected version here yet: Claude was not sure about the correction. It has not been checked reliably.',
+  awFixUnsure: "No reliable correction here: Claude wasn't sure. The explanation still applies.",
+  awFixUnsureTyped: 'No reliable correction here. The mistake is in: {type}. The explanation still applies.',
+  awStageHold_one: 'For stage {stage} you still need {n} free answer on another day. Multiple choice and hints do not count here, because recognizing is easier than recalling.',
+  awStageHold_other: 'For stage {stage} you still need {n} free answers on other days. Multiple choice and hints do not count here, because recognizing is easier than recalling.',
   awAuxName: 'Verb form after an auxiliary',
-  awAuxLead: 'will, would, have, had, been, having: a specific verb form always follows these words. Here are the five patterns that prevent most of these mistakes.',
-  awLoadHigh: 'Many of your cards slipped again in the last 7 days. Suggestion: fewer new words today, and secure the hard ones first.',
-  awLoadAction: 'Set fewer new words',
-  awReadNoJob: 'Probably not related to your job',
-  awWeeklyOpen: 'Still open in the radar: {topics}',
+  awAuxLead: 'A specific verb form always follows will, would, have, had, been, and having. These five patterns prevent most of these mistakes.',
+  awLoadHigh: 'Many of your cards were forgotten again in the last 7 days. Suggestion: fewer new words today, and lock in the hard ones first.',
+  awLoadAction: 'Fewer new words per day',
+  awReadNoJob: 'Probably not relevant to your job',
+  awRadarStill: 'Radar still shows mistakes',
+  awAuxFreeOk: 'Good: the verb forms in your sentence are right.',
+  awAuxFreeErr: 'Take another look at this spot: "{text}". A specific verb form follows the auxiliary (see the rules above).',
+  awAuxFreePurpose: 'Your own sentence practices the verb form the way you will really need it later.',
+  awWeeklyOpen: 'Still open on your radar: {topics}',
 } as const;

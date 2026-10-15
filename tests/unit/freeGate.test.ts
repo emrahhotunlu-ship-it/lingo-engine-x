@@ -65,7 +65,9 @@ describe('Aufstieg auf Stufe 4 und 5 nur mit freien Antworten an verschiedenen T
 
   it('Stufe 4 → 5 ebenso', () => {
     expect(cardPatch(doc({ stage: 4 }), answer('dictation', 3)).stage).toBe(4);
-    expect(cardPatch(doc({ stage: 4, hist: hist([6, 'cloze', 3]) }), answer('produce', 3, { ex: 'produce' })).stage).toBe(5);
+    // Stufe 5 ist strenger als Stufe 4 (Prüfung M2): drei freie Tage, nicht zwei.
+    expect(cardPatch(doc({ stage: 4, hist: hist([6, 'cloze', 3]) }), answer('produce', 3, { ex: 'produce' })).stage).toBe(4);
+    expect(cardPatch(doc({ stage: 4, hist: hist([7, 'type', 3], [6, 'cloze', 3]) }), answer('produce', 3, { ex: 'produce' })).stage).toBe(5);
   });
 
   it('nichts wird zurückgestuft: ohne Verlauf bleibt eine Karte auf Stufe 4 oder 5 stehen, ein Fehler senkt wie bisher', () => {

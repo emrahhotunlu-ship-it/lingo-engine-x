@@ -103,11 +103,15 @@ export const FREE_ANSWER: ReadonlySet<string> = new Set([
 /** So viele verschiedene Lerntage mit einer richtigen freien Antwort braucht der Aufstieg auf Stufe 4 und 5. */
 export const FREE_DAYS_FOR_ADVANCE = 2;
 
-type Answer = { t: number; ex: string; grade: number };
+/** Wie viele richtige freie Tage der Aufstieg auf die Stufe `next` braucht: Stufe 4 zwei, Stufe 5 einen mehr (Prüfung M2: Stufe 5 ist strenger als Stufe 4). */
+export const freeDaysNeeded = (next: number): number => FREE_DAYS_FOR_ADVANCE + (next >= 5 ? 1 : 0);
+
+type Answer = { t: number; ex: string; grade: number; /** Index des Partnerworts (Treffer am Partnerwort ist kein freier Beleg für das Hauptwort). */ ci?: number };
 
 /**
  * Wie viele verschiedene Tage haben eine richtige (Note ≥ 2) freie Antwort in den letzten gespeicherten Antworten (`hist`, höchstens 12)?
- * `extra` = die Antwort, die gerade gegeben wird. Ungeprüfte Aktivierungen (`u: 1`) zählen nicht.
+ * `extra` = die Antwort, die gerade gegeben wird. Ungeprüfte Antworten (`u: 1`: Aktivierung ohne Claude, Satz ohne Prüfung) zählen nicht, ebenso wenig
+ * Treffer am Partnerwort (`colloc` mit `ci`): sie zeigen das Partnerwort, nicht den freien Abruf des Hauptworts (Lernwissenschaft M3).
  */
 export function freeCorrectDays(doc: Readonly<Record<string, unknown>>, extra?: Answer): number {
   const raw = Array.isArray(doc.hist) ? (doc.hist as unknown[]) : [];
@@ -117,8 +121,9 @@ export function freeCorrectDays(doc: Readonly<Record<string, unknown>>, extra?: 
     const r = h as Record<string, unknown>;
     if (typeof r.t !== 'number' || typeof r.x !== 'string' || typeof r.g !== 'number') continue;
     if (r.u === 1 || !FREE_ANSWER.has(r.x) || r.g < 2) continue;
+    if (r.x === 'colloc' && typeof r.ci === 'number') continue;
     days.add(dayKey(r.t));
   }
-  if (extra && FREE_ANSWER.has(extra.ex) && extra.grade >= 2) days.add(dayKey(extra.t));
+  if (extra && FREE_ANSWER.has(extra.ex) && extra.grade >= 2 && !(extra.ex === 'colloc' && extra.ci !== undefined && extra.ci >= 0)) days.add(dayKey(extra.t));
   return days.size;
 }

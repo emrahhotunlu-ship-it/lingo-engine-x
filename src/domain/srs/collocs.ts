@@ -61,7 +61,7 @@ export function acceptCollocations(word: string, raw: unknown, max: number = COL
     const gh = locate(stripBrackets(ex), gap);
     if (isPatternGap(lemma, p, gh ? { sentence: stripBrackets(ex), start: gh.start } : null)) continue;
     const inPhrase = new Set([...words(p), ...words(inner)]);
-    const alts = collocAlternatives(p, gap);
+    const alts = collocAlternatives(p, gap, gh ? { sentence: stripBrackets(ex), start: gh.start } : undefined);
     const opts: string[] = [];
     const optSeen = new Set<string>([low(gap)]);
     for (const o of Array.isArray(x.opts) ? x.opts : []) {

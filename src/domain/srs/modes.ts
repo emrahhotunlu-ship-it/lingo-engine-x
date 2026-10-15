@@ -3,7 +3,7 @@ import { meaningForTask } from './cards';
 import { activationReady } from './brief';
 import { gapUsable, lemmaFor } from './gapFit';
 import { familyFrom, hasPartner, trapTask } from './partner';
-import { distinctForms, familyOf, FEST_MIN_FORMS, varietyBias, varietyOf } from './variety';
+import { distinctForms, familyOf, FEST_MIN_FORMS, FREE_ANSWER, freeCorrectDays, freeDaysNeeded, varietyBias, varietyOf } from './variety';
 import type { Counts, ExerciseId, InputKind, Lang, LegacyMode, Stage, TrainCard } from './types';
 
 // Katalog der Abfragearten (phase1-plan §4.2, Lernplattform 2.0 §4.8). Jede Art gehört fest zu einer Stufe (`also`: auch zu
@@ -156,6 +156,10 @@ const score = (c: Counts) => (c.c + 1) / (c.c + c.w + 2);
 export const CHOICE_PENALTY = 0.3;
 /** Abschlag für eine Produktions-Art bei einer Karte, die im Produzieren hinter dem Erkennen liegt. */
 export const PRODUCTION_BOOST = 0.15;
+/** Zählt die Art als freier Beweis für das Tor? Treffer am Partnerwort (`colloc`) nicht (Prüfung M3). */
+const GATE_FREE = (ex: string): boolean => FREE_ANSWER.has(ex) && ex !== 'colloc';
+/** Eine Stütz- oder Auswahl-Art mit mindestens dieser Trefferquote (geglättet) gilt als gekonnt. */
+export const GATE_DROP_SCORE = 0.6;
 const isChoiceEx = (ex: ExerciseId): boolean => {
   const input = exerciseDef(ex).input;
   return input === 'choice' || input === 'spot' || input === 'flip';
@@ -166,10 +170,15 @@ const isProductionEx = (ex: ExerciseId): boolean => {
   return def.stage > 0 && (def.input === 'typed' || def.input === 'sentence') && ex !== 'produce';
 };
 const sumCounts = (card: TrainCard, modes: readonly LegacyMode[]): Counts => modes.reduce<Counts>((a, m) => ({ c: a.c + (card.modes[m]?.c ?? 0), w: a.w + (card.modes[m]?.w ?? 0) }), { c: 0, w: 0 });
-/** Liegt die Karte im Produzieren hinter dem Erkennen (oder wurde noch kaum produziert, obwohl oft erkannt)? */
+const sumFree = (card: TrainCard): Counts => [...FREE_ANSWER].reduce<Counts>((a, ex) => ({ c: a.c + (card.xs[ex]?.c ?? 0), w: a.w + (card.xs[ex]?.w ?? 0) }), { c: 0, w: 0 });
+/**
+ * Liegt die Karte im Produzieren hinter dem Erkennen (oder wurde noch kaum produziert, obwohl oft erkannt)? „Produzieren“ zählen nur FREIE Antworten (`xs` der freien Arten):
+ * `cloze_hint` (mit Anfangsbuchstaben) und `colloc_gap` (Auswahl) haben zwar die alten Modi cloze/colloc, sind aber Stütze und Erkennen (Prüfung H1).
+ * Karten ohne `xs` (nur alte Zähler) fallen auf die alten Modi zurück.
+ */
 export function productionWeak(card: TrainCard): boolean {
   const recog = sumCounts(card, ['recog']);
-  const prod = sumCounts(card, ['cloze', 'type', 'colloc', 'listen', 'produce']);
+  const prod = Object.keys(card.xs).length > 0 ? sumFree(card) : sumCounts(card, ['cloze', 'type', 'colloc', 'listen', 'produce']);
   const rn = recog.c + recog.w;
   const pn = prod.c + prod.w;
   if (rn < 4) return false;
@@ -188,13 +197,25 @@ function countsFor(card: TrainCard, ex: ExerciseId): Counts {
  */
 export function chooseExercise(card: TrainCard, lang: Lang, poolSize: number, recent: readonly ExerciseId[] = [], env: ExerciseEnv = NO_ENV): ExerciseId | null {
   const v = varietyOf(card.doc);
-  const all = availableExercises(card, lang, poolSize, env);
+  let all = availableExercises(card, lang, poolSize, env);
   if (!all.length) return null;
   // Vorbereitung auf „Fest“ (V1): Eine Karte ab Stufe 4 mit weniger als drei verschiedenen Formenfamilien im Verlauf bekommt, wenn ihre Stufe nicht genug
   // Familien anbietet, Arten der Nachbarstufe dazu (erst die höhere, bei Stufe 5 die darunter). Nur die Auswahl; die Fest-Definition bleibt unberührt.
   if (card.stage >= 4 && distinctForms(v) < FEST_MIN_FORMS && new Set(all.map(familyOf)).size < FEST_MIN_FORMS) {
     const near = availableExercises({ ...card, stage: card.stage >= 5 ? 4 : ((card.stage + 1) as 5) }, lang, poolSize, env);
     for (const ex of near) if (!all.includes(ex)) all.push(ex);
+  }
+  // Tor der freien Antworten (Prüfung H1): Ab Stufe 3 steht immer mindestens eine freie Art der Stufe 4 zur Wahl, solange der Aufstieg noch freie Beweise an anderen Tagen braucht.
+  // Sonst bliebe eine Karte mit nur zwei Stütz-Arten (cloze_hint, colloc_gap) für immer auf Stufe 3, weil nie eine freie Abfrage kommt.
+  // Solange das Tor offen ist, stehen freie Arten zur Wahl, und gut gekonnte Stütz-/Auswahl-Arten entfallen. Ein Abschlag auf freie Arten würde den Satz nicht mehr wechseln lassen (V1) und eine ganz neue Karte sofort ohne Stütze fragen.
+  const gatePending = card.stage >= 3 && card.stage <= 4 && freeCorrectDays(card.doc) < freeDaysNeeded(card.stage + 1);
+  if (gatePending) {
+    const free = availableExercises({ ...card, stage: 4 }, lang, poolSize, env).filter((ex) => GATE_FREE(ex) && !all.includes(ex));
+    all.push(...free);
+    // Stütz- und Auswahl-Arten, die die Karte schon gut kann, beweisen für das Tor nichts mehr: sie entfallen, solange eine freie Art da ist. Schwache bleiben (schwächste zuerst).
+    const kept = all.filter((ex) => GATE_FREE(ex) || score(countsFor(card, ex)) < GATE_DROP_SCORE);
+    // Nie auf eine einzige Art zusammenstreichen, die schon die letzte war (V1: dieselbe Art nie zweimal in Folge).
+    if (kept.some((ex) => GATE_FREE(ex)) && kept.some((ex) => ex !== card.lastEx)) all = kept;
   }
   // Schwäche im Produzieren: Arten der nächsthöheren Stufe, die produzieren lassen, kommen als Kandidaten dazu (Aufstieg nur mit freien Antworten, Punkt 4).
   const weakProd = card.stage >= 2 && productionWeak(card);

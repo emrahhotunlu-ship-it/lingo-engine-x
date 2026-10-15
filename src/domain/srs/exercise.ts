@@ -393,7 +393,7 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
       const c = pickColloc(card, rng);
       const answer = c?.ctx?.gap ?? c?.gap ?? '';
       // Gleichwertige Partner (hold/have a meeting, meet/hit a deadline) gelten als richtig und erscheinen nie als falscher Ablenker (Auswertung 15.10.2026).
-      const alts = c ? collocAlternatives(c.p, answer) : [];
+      const alts = c ? collocAlternatives(c.p, answer, c.ctx ? { sentence: c.ctx.sentence, start: c.ctx.start } : undefined) : [];
       const opts = (c?.opts ?? []).filter((o) => norm(o) !== norm(answer) && !alts.includes(norm(o))).slice(0, 3);
       const options: Option[] = [{ id: 'ok', label: answer, lang: 'en', correct: true }, ...opts.map((o, i) => ({ id: `d${i}`, label: o, lang: 'en' as const, correct: false }))];
       return { ...base, sentence: c?.ctx ?? null, colloc: c, options: shuffle(options, rng), accepted: [answer, ...alts] };

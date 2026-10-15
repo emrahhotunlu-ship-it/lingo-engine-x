@@ -4,7 +4,7 @@ import { useSettings } from '../../app/settings';
 import { invalidIdsOf, useLive } from '../../data/live';
 import { dayKey } from '../../domain/date';
 import { mergeEntries, type DayEntry } from '../../domain/plan/buildPlan';
-import { applyUpdate, cardPatch, contrastMissOp } from '../../domain/srs/applyReview';
+import { applyUpdate, cardPatch, contrastMissOp, isPartnerMiss } from '../../domain/srs/applyReview';
 import { buildTrainCards } from '../../domain/metrics';
 import { toTrainCard } from '../../domain/srs/cards';
 import { buildChunkCards, toChunkCard } from '../../domain/srs/chunkCards';
@@ -610,6 +610,10 @@ export type Answer = {
   override?: boolean;
   /** Genutzte Hilfe der Antwort (`weight.ts`). */
   hint?: 0 | 1 | 2;
+  /** Richtig, aber nach einer Unterbrechung (> 60 s): Note 3, hebt die Stufe nicht. */
+  interrupted?: true;
+  /** Satzantwort ohne Prüfung durch Claude: zählt nicht als freier Beleg. */
+  unverified?: true;
   /** Aufdecken: beim Aufdecken reservierter Zeitstempel (gleich für Vorschau und Speichern, architektur.md §4.3). */
   t?: number;
   /** Aktivierung: Satz und Urteil für die Sammelakte `act/<Monat>` (nur „Eigener Satz“ und A2–A5). */
@@ -645,6 +649,8 @@ export function answerDueIn(e: Exercise, ans: Pick<Answer, 'grade' | 'ok' | 'ove
   const grade: Grade = ans.override ? 3 : ans.grade;
   const hint = ans.override ? 0 : (ans.hint ?? 0);
   const catchUp = e.ex === 'flip' && flipCatchUp(useSession.getState(), e.card);
+  // Fehler am Partnerwort: Fälligkeit der Hauptkarte bleibt, wie sie war.
+  if (e.card.kind === 'vocab' && (e.ex === 'colloc' || e.ex === 'colloc_gap') && e.colloc && isPartnerMiss(e.card.doc, { ex: e.ex, grade, colIndex: e.colloc.index })) return Math.max(0, readFsrs(e.card.doc, t).due - t);
   const after = reviewFsrs(readFsrs(e.card.doc, t), grade, t, noteWeight(e.ex, hint, catchUp, isFreeSentence(e)));
   return Math.max(0, after.due - t);
 }
@@ -686,6 +692,8 @@ export function commitAnswer(ans: Answer): FirstKind {
   if (card.kind === 'chunk') a.q = card.word;
   if (ans.override) a.override = true;
   if (ans.hint) a.hint = ans.hint;
+  if (ans.interrupted && ans.ok && !ans.override) a.interrupted = true;
+  if (ans.unverified) a.unverified = true;
   if (e.check === 'control' || e.check === 'probe') a.check = e.check;
   const knownPass = isKnownPass(e, ans);
   if (e.ex === 'flip' && flipCatchUp(s, card)) a.catchUp = true;
@@ -730,7 +738,9 @@ export function commitAnswer(ans: Answer): FirstKind {
 
   const shown = { ...s.shown, [card.key]: (s.shown[card.key] ?? 0) + 1 };
   const queue = [...s.queue];
-  const again = isLearningState(updated.fsrs) && updated.fsrs.due - a.t <= AGAIN_WINDOW_MS && (shown[card.key] ?? 0) < MAX_SHOWN;
+  // Fehler am Partnerwort ändert die Planung nicht (Lernwissenschaft H2): die Hauptkarte kommt in dieser Runde nicht wieder.
+  const partnerOnly = card.kind === 'vocab' && isPartnerMiss(card.doc, a);
+  const again = !partnerOnly && isLearningState(updated.fsrs) && updated.fsrs.due - a.t <= AGAIN_WINDOW_MS && (shown[card.key] ?? 0) < MAX_SHOWN;
   // anki-regeln §2: Aufdecken nach 5 anderen Karten (pos + 6), Tippen nach 3 (pos + 4).
   if (again) queue.splice(againPos(s.pos, queue.length, e.ex === 'flip', ans.grade >= 3), 0, { key: card.key, reason: 'again', phase: 'quiz' });
   // P52: Kontrast ZUSÄTZLICH direkt nach der regulären Abfrage (die reguläre Abfrage benotet die Karte wie immer), nur wenn sie richtig war,

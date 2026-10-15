@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import { useClock } from '../../app/clock';
 import { useLive } from '../../data/live';
+import { useDocWatch } from '../../data/watch';
+import { radarOpenTopics } from '../../domain/radar/open';
 import { dueErrors } from '../../domain/grammar/errors';
 import { lernweg, type TopicState } from '../../domain/grammar/path';
 import { useT, type MessageKey } from '../../i18n';
@@ -34,6 +36,9 @@ export function PathList({ onOpen, highlight = null, program = false }: { onOpen
     for (const d of dueErrors(docs, now)) m.set(d.topic, (m.get(d.topic) ?? 0) + 1);
     return m;
   }, [docs, now]);
+  // „Sicher“ und ein Radar mit frischen Fehlern zum selben Thema widersprechen sich (Kap. 2 Nr. 2): das Zeichen sagt es ehrlich (Prüfung N4).
+  const radar = useDocWatch('app/radar');
+  const radarOpen = useMemo(() => radarOpenTopics(radar.data?.events, now), [radar.data, now]);
   const path = useMemo(() => chapterNodes({ docs, nowMs: now, today, dueByTopic }), [docs, now, today, dueByTopic]);
   const lernwegOf = (id: string) => lernweg(id, docs.get(id), now).done.filter(Boolean).length;
   return (
@@ -101,7 +106,14 @@ export function PathList({ onOpen, highlight = null, program = false }: { onOpen
                       <span className="sr-only">{first + k}</span>
                       {/* UX-Prüfung W10: je Thema EINE Zeile – Titel und Punkte; Zustand, Muster-Zähler und „als Nächstes“ nur für Vorleseprogramme
                           (der nächste Schritt ist am Rand erkennbar und steht schon oben in „Als Nächstes“). */}
-                      <span className="min-w-0 flex-1 font-semibold">{topicName(r.id, lang)}</span>
+                      <span className="min-w-0 flex-1">
+                        <span className="font-semibold">{topicName(r.id, lang)}</span>
+                        {radarOpen.has(r.id) && (r.state === 'safe' || r.state === 'firm') && (
+                          <span className="block text-xs text-muted" data-testid="topic-radar-open">
+                            {t('awRadarStill')}
+                          </span>
+                        )}
+                      </span>
                       <span className="flex flex-none items-center text-sm text-muted">
                         <Dots n={lernwegOf(r.id)} />
                       </span>

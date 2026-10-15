@@ -76,7 +76,10 @@ export function radarView(events: unknown, nowMs: number): RadarRow[] {
     .filter((r) => r.n30 > 0 || r.nPrev30 > 0)
     .sort((a, b) => b.n30 - a.n30 || b.nPrev30 - a.nPrev30 || a.c.localeCompare(b.c));
   const aux = auxRow(list, nowMs);
-  return aux ? [aux, ...base] : base;
+  if (!aux) return base;
+  // Die Regelzeile steht nach ihrer Häufigkeit (n30) an der passenden Stelle, nicht immer ganz oben (Prüfung M6); bei Gleichstand zuerst.
+  const at = base.findIndex((r) => r.n30 < aux.n30 || (r.n30 === aux.n30 && r.nPrev30 <= aux.nPrev30));
+  return at < 0 ? [...base, aux] : [...base.slice(0, at), aux, ...base.slice(at)];
 }
 
 /**

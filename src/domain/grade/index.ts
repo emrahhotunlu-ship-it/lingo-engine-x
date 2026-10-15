@@ -110,7 +110,8 @@ export const GRADE_TABLE: Readonly<Record<GradeKey, Row>> = {
   // Lernplattform 2.0 (§4.10). `complete` hat keine Zeitgrenzen (frei): lokal höchstens „Schwer“, „Gut“ nur nach der Claude-Kurzprüfung (`aiChecked: true`).
   ctx_mc: choice(9000),
   contrast: choice(9000),
-  colloc_gap: typed(7000, 2500),
+  // Auswahl (Katalog: input 'choice'): nie „Leicht“ (Prüfung N3), Zeitgrenze wie die übrigen Wortpartner-Auswahlen.
+  colloc_gap: choice(9000),
   complete: { form: 'free', good: 0, easy: null, measure: 'submit' },
   wordfam: typed(8000, 3000),
   find_trap: typed(9000, 3500),

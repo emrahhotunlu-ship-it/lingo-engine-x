@@ -26,7 +26,9 @@ import { cardExamples, OWN_EXAMPLE_MIN_STAGE, storedTranslation, wantsEnrichment
 import { explainWord, isAltAnswer } from '../../domain/srs/explainWord';
 import { posKey } from '../../domain/srs/explain';
 import { autoGrade, produceGrade } from '../../domain/srs/grade';
+import { wasInterrupted } from '../../domain/grade';
 import { exerciseDef } from '../../domain/srs/modes';
+import { stageStep } from '../../domain/srs/applyReview';
 import { GERMAN_HINT_EN, HARD_ISSUES, germanHints, jaccard, precheckProduce, selfCheckProduce, shownSentences, type GermanHintId, type PrecheckIssue, type SelfCheck } from '../../domain/srs/produce';
 import { sceneText } from '../../content/activation/scenes';
 import { trapForCard } from '../../domain/srs/traps';
@@ -79,6 +81,10 @@ type Feedback = {
   override: boolean;
   /** Genutzte Hilfe (Tipp, zweiter Versuch, Begleiter): gewichtet die Antwort geringer. */
   hint: 0 | 1 | 2;
+  /** Richtig, aber nach einer Unterbrechung (> 60 s): Note 3, die Stufe steigt nicht. */
+  interrupted?: true;
+  /** Richtig, die Stufe steigt aber noch nicht: so viele richtige freie Antworten an anderen Tagen fehlen noch (Erklärung unter dem Ergebnis). */
+  hold?: number;
   /** „Weiß ich nicht“: die Lösung wird gezeigt, ohne Wertung als Fehlgriff. */
   dontKnow?: boolean;
   /** find_trap: das angetippte Wort. */
@@ -287,7 +293,10 @@ export function ExerciseView({
     const grade = forced !== undefined && companionHelp ? (Math.min(forced, 2) as Grade) : g2;
     const t0 = nextT();
     const dueInMs = answerDueIn(e, { grade, ok: grade > 1, hint: hintUsed }, t0);
-    setFb({ result, given, chosen: picked, grade, dueInMs, t: t0, ms, override: false, hint: hintUsed, ...extraFb });
+    const interrupted = forced === undefined && result.verdict === 'correct' && wasInterrupted({ key: e.ex, timeMs: ms, firstKeyMs: firstKey });
+    // Warum die Stufe nicht steigt (M1): richtig, aber das Tor der freien Antworten ist noch zu.
+    const hold = grade > 1 ? stageStep(card.doc, { t: t0, day: useSession.getState().day, ex: e.ex, grade, ...(e.colloc && e.colloc.index >= 0 ? { colIndex: e.colloc.index } : {}), ...(interrupted ? { interrupted: true as const } : {}) }).missing : 0;
+    setFb({ result, given, chosen: picked, grade, dueInMs, t: t0, ms, override: false, hint: hintUsed, ...(interrupted ? { interrupted: true as const } : {}), ...(hold > 0 ? { hold } : {}), ...extraFb });
     // Fehlen Beispiele, ergänzt Claude sie einmal (ausgelöst durch „Prüfen“).
     if (ai && wantsEnrichment(card, shownSentence, Date.now())) requestExamples(card);
     // Touch: Tastatur schließen, damit Ergebnis und Beispiele sichtbar sind.
@@ -542,7 +551,7 @@ export function ExerciseView({
   const next = () => {
     if (!fb) return;
     const rec = actRecordOf(fb, e);
-    const ans: Answer = fb.override ? { grade: 3, given: fb.given, ms: fb.ms, ok: true, override: true, t: fb.t } : { grade: fb.grade, given: fb.given, ms: fb.ms, ok: fb.grade > 1, hint: fb.hint, t: fb.t, ...(rec ? { rec } : {}) };
+    const ans: Answer = fb.override ? { grade: 3, given: fb.given, ms: fb.ms, ok: true, override: true, t: fb.t } : { grade: fb.grade, given: fb.given, ms: fb.ms, ok: fb.grade > 1, hint: fb.hint, t: fb.t, ...(fb.interrupted ? { interrupted: true as const } : {}), ...(fb.sentence && !fb.sentence.out && !fb.override ? { unverified: true as const } : {}), ...(rec ? { rec } : {}) };
     const kind = (onCommit ?? commitAnswer)(ans);
     // Tastatur am iPhone: im selben Handler fokussieren bzw. schließen.
     if (kind === 'typed') api.focusNow();
@@ -920,7 +929,9 @@ export function ExerciseView({
     const sub: string | null = fb.dontKnow
       ? null
       : fb.sentence?.out?.fixedUnsure && fb.result.verdict !== 'correct'
-        ? t('awFixUnsure')
+        ? fb.sentence.out.errType && fb.sentence.out.errType !== 'other'
+          ? t('awFixUnsureTyped', { type: t(`trErr_${fb.sentence.out.errType}` as MessageKey) })
+          : t('awFixUnsure')
         : fb.override
         ? t('lrOverridden')
         : fb.sentence && !fb.sentence.out
@@ -1016,6 +1027,7 @@ export function ExerciseView({
       ...(fb.sentence?.out?.verdict === 'correct' ? { unfold: ['note'] as const } : {}),
       // P52: der Kontrast-Schritt ändert die Planung nicht, also keine „Wieder in …“-Zeile.
       nextIn: e.ex === 'contrast' ? null : t('trAgainIn', { when: when(fb.dueInMs) }),
+      stageNote: e.ex !== 'contrast' && fb.hold && !fb.override ? tn('awStageHold', fb.hold, { stage: Math.min(5, Math.max(4, card.stage + 1)) }) : null,
       // Design-Lead: Wort, Vorlesen, Lautschrift und „Zum Wort“ stehen in der Ergebnis-Karte, genau einmal, direkt unter dem Urteil.
       // R5: im Kontrast-Schritt heißt der Kopf „avoid ≠ convince“ (richtiges Wort zuerst, beide mit Aussprache).
       head: <WordExtras card={card} open={moreOpen} lang={lang} extras={extras} part="head" other={e.ex === 'contrast' ? (contrastOtherOf(e)?.word ?? null) : null} phrase={collocPhrase} />,

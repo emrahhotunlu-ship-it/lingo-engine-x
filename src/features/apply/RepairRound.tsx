@@ -31,7 +31,7 @@ export function useOpenRepairs(): Fehlersatz[] {
   return useMemo(() => {
     const entries = Array.isArray(dayDoc?.entries) ? (dayDoc.entries as Array<{ type?: unknown; id?: unknown }>) : [];
     const done = repairsDoneToday(entries);
-    return dueFehlersaetze({ grammarDocs: grammarDocs ?? NO_DOCS, repairDoc, nowMs: now, today, lang }).filter((e) => !done.has(e.id));
+    return dueFehlersaetze({ grammarDocs: grammarDocs ?? NO_DOCS, repairDoc, nowMs: now, today, lang, mix: true }).filter((e) => !done.has(e.id));
   }, [grammarDocs, repairDoc, dayDoc, now, today, lang]);
 }
 

@@ -29,7 +29,7 @@ export type Fehlersatz = {
 const str = (v: unknown): string => (typeof v === 'string' ? v : '');
 
 
-export function dueFehlersaetze(i: { grammarDocs: ReadonlyMap<string, Doc>; repairDoc: Doc | null | undefined; nowMs: number; today: string; limit?: number; lang?: Lang }): Fehlersatz[] {
+export function dueFehlersaetze(i: { grammarDocs: ReadonlyMap<string, Doc>; repairDoc: Doc | null | undefined; nowMs: number; today: string; limit?: number; /** Eigene Sätze und Grammatik-Fehlersätze im Wechsel statt „älteste zuerst“. Ohne Angabe: gemischt, sobald eine Grenze (`limit`) gesetzt ist. */ mix?: boolean; lang?: Lang }): Fehlersatz[] {
   const out: Fehlersatz[] = [];
   for (const r of dueRepairs(readRepairs(i.repairDoc ?? undefined), i.nowMs)) {
     if (dayKey(r.t) === i.today) continue;
@@ -47,10 +47,10 @@ export function dueFehlersaetze(i: { grammarDocs: ReadonlyMap<string, Doc>; repa
   const seen = new Set<string>();
   // Auswertung 15.10.2026, Punkt 5: Mit Grenze (`limit`) wechseln sich Reparatur-Sätze (eigene Sätze) und Grammatik-Fehlersätze ab, je Speicher nach Fälligkeit.
   // Reine „älteste zuerst“-Reihenfolge ließ die eigenen Sätze aus dem Schreiben auf Box 0 liegen (25 von 25 ohne eine einzige Wiederholung), weil die
-  // übrigen, älteren Einträge jeden Platz belegten. Ohne Grenze (Zählungen) bleibt es bei „älteste zuerst“.
+  // übrigen, älteren Einträge jeden Platz belegten. Ohne Grenze (Zählungen) bleibt es bei „älteste zuerst“, außer `mix: true` (Reparatur-Durchgang: erst mischen, erledigte Sätze entfernen, dann die ersten 5 nehmen).
   const byDue = (a: Fehlersatz, b: Fehlersatz): number => a.due - b.due;
   const ordered = ((): Fehlersatz[] => {
-    if (i.limit === undefined) return out.sort(byDue);
+    if (!(i.mix ?? i.limit !== undefined)) return out.sort(byDue);
     const own = out.filter((f) => f.store === 'repair').sort(byDue);
     const gram = out.filter((f) => f.store === 'grammar').sort(byDue);
     const mixed: Fehlersatz[] = [];

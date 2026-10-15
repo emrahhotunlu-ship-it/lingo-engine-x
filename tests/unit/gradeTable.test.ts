@@ -54,7 +54,7 @@ describe('Neue Notenschlüssel (§4.10)', () => {
   it('Tabelle: Gut bis, Leicht bis und Messung je Schlüssel wie im Plan', () => {
     const t = GRADE_TABLE;
     expect(t.ctx_mc).toMatchObject({ form: 'choice', good: 9000, easy: null });
-    expect(t.colloc_gap).toMatchObject({ form: 'typed', good: 7000, easy: 2500, measure: 'firstKey' });
+    expect(t.colloc_gap).toMatchObject({ form: 'choice', good: 9000, easy: null, measure: 'submit' });
     expect(t.wordfam).toMatchObject({ form: 'typed', good: 8000, easy: 3000, measure: 'firstKey' });
     expect(t.find_trap).toMatchObject({ form: 'typed', good: 9000, easy: 3500 });
     expect(t.find).toMatchObject({ form: 'typed', good: 9000, easy: 3500 });
@@ -70,10 +70,10 @@ describe('Neue Notenschlüssel (§4.10)', () => {
     expect(ok('ctx_mc', 1)).toBe(3);
     expect(ok('meaning', 10_000)).toBe(3);
     expect(ok('meaning', 10_001)).toBe(2);
-    expect(ok('colloc_gap', 2500)).toBe(4);
-    expect(ok('colloc_gap', 2501)).toBe(3);
-    expect(ok('colloc_gap', 7000)).toBe(3);
-    expect(ok('colloc_gap', 7001)).toBe(2);
+    // Wortpartner-Auswahl ist eine Auswahl-Art: nie „Leicht“ (Prüfung N3).
+    expect(ok('colloc_gap', 1)).toBe(3);
+    expect(ok('colloc_gap', 9000)).toBe(3);
+    expect(ok('colloc_gap', 9001)).toBe(2);
     expect(ok('wordfam', 3000)).toBe(4);
     expect(ok('wordfam', 8001)).toBe(2);
     expect(ok('find', 3500)).toBe(4);

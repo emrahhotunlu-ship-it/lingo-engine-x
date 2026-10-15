@@ -37,7 +37,13 @@ export function topicOfEvent(e: Pick<Ev, 'c' | 'q'>): string | null {
   return topicByTask(e.q);
 }
 
-/** Themen mit mindestens einem Radar-Fehler in den letzten `days` Tagen. */
+/** Ende der Berichtswoche in ms: 04:00 Uhr am Tag nach dem letzten Lerntag `JJJJ-MM-TT` (Tageswechsel). Der Wochenbericht rechnet das Radar ab hier, nicht ab „jetzt“ (Prüfung N4). */
+export function weekEndMs(lastDay: string): number {
+  const [y, m, d] = lastDay.split('-').map(Number);
+  return new Date(y ?? 1970, (m ?? 1) - 1, (d ?? 1) + 1, 4).getTime();
+}
+
+/** Themen mit mindestens einem Radar-Fehler in den letzten `days` Tagen (vor `nowMs`; spätere Ereignisse zählen nicht). */
 export function radarOpenTopics(events: unknown, nowMs: number, days = 7): Set<string> {
   const out = new Set<string>();
   for (const e of radarEventsOf(events)) {

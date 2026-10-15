@@ -223,6 +223,10 @@ export type AnswerEvent = {
   check?: 'probe' | 'control';
   /** Aufdecken im Aufholmodus: gilt nur als schwacher Beleg (`weight.ts`). */
   catchUp?: true;
+  /** Satzantwort ohne Prüfung durch Claude (lokale Prüfung): der Verlaufseintrag trägt `u: 1` und zählt nicht als freier Beleg (Lernwissenschaft N6). */
+  unverified?: true;
+  /** Richtige Antwort nach einer Unterbrechung (> 60 s, `wasInterrupted`): Note 3, hebt die Stufe aber nicht (kein Beleg für Können). Nicht gespeichert. */
+  interrupted?: true;
   /** „Satz vervollständigen“ ohne Satzanfang (ganzer eigener Satz): wiegt wie „Satz bilden“ (`weight.ts`). Nicht im Protokoll. */
   free?: true;
 };

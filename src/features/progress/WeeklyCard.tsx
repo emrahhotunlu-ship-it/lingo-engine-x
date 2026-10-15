@@ -5,7 +5,7 @@ import { useLive } from '../../data/live';
 import { useDocWatch } from '../../data/watch';
 import { LESSONS } from '../../domain/content';
 import { patternById } from '../../domain/grammar/patterns';
-import { radarOpenTopics } from '../../domain/radar/open';
+import { radarOpenTopics, weekEndMs } from '../../domain/radar/open';
 import { citableFacts, lastWeekOf, topicName, weekFacts, type WeekFact } from '../../domain/progress/weekly';
 import { detectLang } from '../../domain/lang/detect';
 import { useT, type MessageKey } from '../../i18n';
@@ -63,10 +63,10 @@ export function WeeklyCard() {
   const grammar = useLive((s) => s.collections.grammar) ?? EMPTY;
   const schema = useLive((s) => s.docs['app/schema']);
   const weekly = useDocWatch('app/weekly');
-  const now = useClock((s) => s.now);
   // Auswertung 15.10.2026: kein „neu sicher“ für Muster, zu denen das Radar in den letzten 7 Tagen Fehler zeigt.
   const radar = useDocWatch('app/radar');
-  const radarOpen = useMemo(() => radarOpenTopics(radar.data?.events, now), [radar.data, now]);
+  // Ab dem Ende der Berichtswoche gerechnet, nicht ab jetzt (Prüfung N4).
+  const radarOpen = useMemo(() => radarOpenTopics(radar.data?.events, weekEndMs(lastWeekOf(today).days[6] ?? today)), [radar.data, today]);
   const ai = useAiAvailable();
   const scope = useAiScope();
   const week = useMemo(() => lastWeekOf(today), [today]);

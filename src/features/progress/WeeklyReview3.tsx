@@ -4,7 +4,7 @@ import { useLive } from '../../data/live';
 import { useDocWatch } from '../../data/watch';
 import { patternById } from '../../domain/grammar/patterns';
 import { lastWeekOf, topicName, weekFacts } from '../../domain/progress/weekly';
-import { radarOpenTopics } from '../../domain/radar/open';
+import { radarOpenTopics, weekEndMs } from '../../domain/radar/open';
 import { FEST_NAMES_MAX, weekly3 } from '../../domain/progress/weekly3';
 import { useT } from '../../i18n';
 import { AiMark } from '../../ui/AiMark';
@@ -42,7 +42,8 @@ export function WeeklyReview3() {
   const chosen = useChosenChapter();
   // Auswertung 15.10.2026: Ein Muster gilt nicht als „sicher“, solange das Radar in den letzten 7 Tagen Fehler zum Thema zeigt.
   const radar = useDocWatch('app/radar');
-  const radarOpen = useMemo(() => radarOpenTopics(radar.data?.events, now), [radar.data, now]);
+  // Ab dem Ende der Berichtswoche gerechnet, nicht ab jetzt: ein älterer Bericht ändert sich nicht nachträglich.
+  const radarOpen = useMemo(() => radarOpenTopics(radar.data?.events, weekEndMs(lastWeekOf(today).days[6] ?? today)), [radar.data, today]);
 
   const facts = useMemo(
     () => weekFacts({ days: lastWeekOf(today).days, vocab, chunk, grammar, writing: EMPTY, talk: EMPTY, profile: obj(profile), pflichtSince: typeof obj(schema).pflichtSince === 'string' ? (obj(schema).pflichtSince as string) : null, radarOpen }).filter((f) => f.kind !== 'time'),

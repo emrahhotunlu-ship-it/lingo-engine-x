@@ -74,6 +74,8 @@ export type ShellFeedback = {
   /** Fuß der Rückmeldung (Wörter: „Zum Wort“), ganz unten in der Ergebnis-Karte. */
   foot?: ReactNode;
   nextIn?: string | null;
+  /** Warum die Stufe noch nicht steigt (Wörter: so viele freie Antworten an anderen Tagen fehlen noch), eigene ruhige Zeile unter „Wieder in …“. */
+  stageNote?: string | null;
   /**
    * Die Übung meldet: keine Hilfe genutzt. Zusammen mit Urteil `ok`, Tiefe `min` und `app/profile.autoNext`
    * ≠ false (`shouldAutoAdvance`) läuft dann der 4-s-Zeitgeber; ein Menü oder Aufklappbereich hält ihn an.
@@ -231,6 +233,11 @@ export function ExerciseShell(props: ExerciseShellProps) {
           {feedback.nextIn && (
             <p className="lx-t-meta mt-0.5 text-muted" data-testid="next-in">
               {feedback.nextIn}
+            </p>
+          )}
+          {feedback.stageNote && (
+            <p className="lx-t-meta mt-0.5 text-muted" data-testid="stage-hold">
+              {feedback.stageNote}
             </p>
           )}
         </div>

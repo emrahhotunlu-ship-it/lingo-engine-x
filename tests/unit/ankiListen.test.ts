@@ -54,8 +54,8 @@ describe('Hör-Lücke: Stufe höchstens +1', () => {
     expect(cardPatch(doc(1, { stage: 3 }), answer({ grade: 1, given: 'x' })).stage).toBe(3);
   });
   it('Leiter auf Stufe 4–5 unverändert (4 → 5, 5 falsch → 4)', () => {
-    // Aufstieg auf 4/5 braucht zwei freie Antworten an verschiedenen Tagen (Auswertung 15.10.2026): eine liegt im Verlauf, die Hör-Lücke ist die zweite.
-    const free = [{ t: NOW - 3 * D, m: 'type', g: 3, x: 'type' }];
+    // Aufstieg auf 4 braucht zwei, auf 5 drei freie Antworten an verschiedenen Tagen (Auswertung 15.10.2026, Prüfung M2): zwei liegen im Verlauf, die Hör-Lücke ist die dritte.
+    const free = [{ t: NOW - 4 * D, m: 'type', g: 3, x: 'type' }, { t: NOW - 3 * D, m: 'type', g: 3, x: 'cloze' }];
     expect(cardPatch(doc(1, { stage: 4, hist: free }), answer({ grade: 3 })).stage).toBe(5);
     expect(cardPatch(doc(1, { stage: 5 }), answer({ grade: 1, given: 'x' })).stage).toBe(4);
   });
