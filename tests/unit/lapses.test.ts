@@ -31,6 +31,7 @@ const base: Record<string, unknown> = {
   src: 'ai',
 };
 const seeded = { ...base, fsrs: { ...legacyToFsrs(base, NOW), lapses: 2 } };
+type P = { lapses: number; fsrs: { lapses: number }; due: number; S: number; modes: Record<string, { c: number; w: number }>; xs: Record<string, { c: number; w: number }>; hist: Array<Record<string, unknown>>; colN?: number[] };
 const ans = (over: Partial<AnswerEvent> = {}): AnswerEvent => ({ t: NOW, day: '2026-10-14', kind: 'v', id: 'eventually', ex: 'colloc', grade: 1, given: 'say', ans: 'decide', ms: 4000, lang: 'de', ctx: 'rev', colIndex: 0, ...over });
 
 describe('lapsesOf: eine Lesefunktion', () => {
@@ -51,7 +52,7 @@ describe('lapsesOf: eine Lesefunktion', () => {
 
 describe('Partnerwort-Fehler (colloc, Index ≥ 0) ist kein Rückfall der Hauptkarte', () => {
   it('lapses und fsrs.lapses bleiben, Fälligkeit und Stabilität auch; der Fehler steht in modes/xs/hist', () => {
-    const p = cardPatch(seeded, ans()) as Record<string, any>;
+    const p = cardPatch(seeded, ans()) as unknown as P;
     expect(p.lapses).toBe(2);
     expect(p.fsrs.lapses).toBe(2);
     expect(p.due).toBe(base.due);
@@ -64,24 +65,24 @@ describe('Partnerwort-Fehler (colloc, Index ≥ 0) ist kein Rückfall der Hauptk
   });
 
   it('colloc_gap (Auswahl) genauso', () => {
-    const p = cardPatch(seeded, ans({ ex: 'colloc_gap' })) as Record<string, any>;
+    const p = cardPatch(seeded, ans({ ex: 'colloc_gap' })) as unknown as P;
     expect(p.lapses).toBe(2);
     expect(p.fsrs.lapses).toBe(2);
   });
 
   it('ein Fehler bei einer anderen Abfrageart zählt weiter als Rückfall', () => {
-    const p = cardPatch(seeded, ans({ ex: 'cloze', colIndex: undefined })) as Record<string, any>;
+    const p = cardPatch(seeded, ans({ ex: 'cloze', colIndex: undefined })) as unknown as P;
     expect(p.lapses).toBe(3);
     expect(p.fsrs.lapses).toBe(3);
   });
 
   it('colloc ohne Partner-Index (die Wendung ist die Karte selbst, Index −1) zählt weiter', () => {
-    const p = cardPatch(seeded, ans({ colIndex: undefined })) as Record<string, any>;
+    const p = cardPatch(seeded, ans({ colIndex: undefined })) as unknown as P;
     expect(p.lapses).toBe(3);
   });
 
   it('richtige Antwort am Partnerwort läuft wie bisher', () => {
-    const p = cardPatch(seeded, ans({ grade: 3, given: 'decide' })) as Record<string, any>;
+    const p = cardPatch(seeded, ans({ grade: 3, given: 'decide' })) as unknown as P;
     expect(p.lapses).toBe(2);
     expect(p.colN).toEqual([1]);
     expect(p.S).toBeGreaterThan(10);
@@ -89,7 +90,7 @@ describe('Partnerwort-Fehler (colloc, Index ≥ 0) ist kein Rückfall der Hauptk
 
   it('der Zähler wächst aus dem größeren der beiden alten Werte (11 gegen 7), ohne etwas Altes umzuschreiben', () => {
     const doc = { ...base, lapses: 11, fsrs: { ...legacyToFsrs(base, NOW), lapses: 7 } };
-    const p = cardPatch(doc, ans({ ex: 'cloze', colIndex: undefined })) as Record<string, any>;
+    const p = cardPatch(doc, ans({ ex: 'cloze', colIndex: undefined })) as unknown as P;
     expect(p.lapses).toBe(12);
     expect(doc.lapses).toBe(11);
   });

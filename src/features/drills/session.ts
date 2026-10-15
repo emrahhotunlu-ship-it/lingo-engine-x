@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { useClock } from '../../app/clock';
 import { useSettings } from '../../app/settings';
 import { invalidIdsOf, useLive } from '../../data/live';
+import { buildAuxDrill } from '../../domain/drills/auxform';
 import { buildCloze, CLOZE_ROUND, type ClozeItem } from '../../domain/drills/cloze';
 import { buildOrder, ORDER_ROUND, type OrderItem } from '../../domain/drills/order';
 import { orderPool, poolNorm, type PoolEntry } from '../../domain/drills/orderPool';
@@ -147,6 +148,39 @@ const contextWords = (cards: readonly TrainCard[]): string[] =>
 
 /** Thema eines Satzbau-Satzes (aus der Herkunft `rules/<topic>` bzw. `grammar/<topic>`). */
 export const orderTopic = (it: OrderItem): string | null => /\|(?:rules|grammar)\/([a-z0-9-]+)$/.exec(it.key)?.[1] ?? null;
+
+/**
+ * „Verbform nach Hilfsverb“ (Auswertung 15.10.2026, Punkt 5): fünf Lückensätze, einer je Muster, in der Lückenjagd. Freiwillig (`xtra`), keine Karte betroffen.
+ * Rückgabe wie `startDrill` (Eingabeart der ersten Aufgabe).
+ */
+export function startAuxDrill(): 'typed' {
+  const nowMs = useClock.getState().now;
+  const d = useClock.getState().today;
+  roundNo++;
+  useDrill.setState({
+    ...useDrill.getState(),
+    active: true,
+    status: 'running',
+    kind: 'cloze',
+    ctx: 'xtra',
+    day: d,
+    lang: useSettings.getState().lang,
+    dictate: [],
+    cloze: buildAuxDrill(`${d}|auxform|${roundNo}|${nowMs}`),
+    order: [],
+    sprint: [],
+    cards: new Map(),
+    allCols: [],
+    pos: 0,
+    step: useDrill.getState().step + 1,
+    results: [],
+    activeMs: 0,
+    lastInteract: performance.now(),
+    block: null,
+    profile: inputProfile(),
+  });
+  return 'typed';
+}
 
 /** Runde bauen. Rückgabe: Eingabeart der ersten Aufgabe (für den Fokus im selben Handler). */
 export function startDrill(kind: DrillKind, day?: string, block: UnitBlockNo | null = null): 'typed' | 'choice' | null {

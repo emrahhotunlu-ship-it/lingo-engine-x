@@ -1,10 +1,10 @@
 import { useNav, type Route } from '../../app/nav';
 import type { Lang } from '../../app/settings';
-import { isKnownAction } from '../../domain/assessment/actions';
+import { AUX_ACTION, isKnownAction } from '../../domain/assessment/actions';
 import { lessonById, TOPICS } from '../../domain/content';
 import type { MessageKey } from '../../i18n';
 import { unlockSpeech } from '../../platform/speech';
-import { startDrill } from '../drills/session';
+import { startAuxDrill, startDrill } from '../drills/session';
 import { startGrammar } from '../grammar/session';
 import { startSession } from '../vocab/session';
 
@@ -28,6 +28,7 @@ export function actionRoute(action: string | null): Route | null {
   if (!action || !isKnownAction(action)) return null;
   const fixed = FIXED[action];
   if (fixed) return fixed.route;
+  if (action === AUX_ACTION) return { name: 'drill', kind: 'cloze', ctx: 'xtra' };
   const [kind, id] = action.split(':') as [string, string];
   if (kind === 'grammar' || kind === 'errors') return { name: 'grammarSession', mode: 'topic', topic: id };
   // `lesson:<id>` (alte gespeicherte Einschätzungen): den Kurs gibt es nicht mehr, also kein Üben-Knopf.
@@ -38,6 +39,7 @@ export function actionRoute(action: string | null): Route | null {
 export function actionLabel(action: string, t: T, lang: Lang): string {
   const fixed = FIXED[action];
   if (fixed) return t(fixed.label);
+  if (action === AUX_ACTION) return t('awAuxName');
   const [kind, id] = action.split(':') as [string, string | undefined];
   if ((kind === 'grammar' || kind === 'errors') && id) {
     const topic = TOPICS.find((x) => x.id === id);
@@ -61,7 +63,7 @@ export function startAction(action: string, api: FocusApi): boolean {
     if (first === 'typed') api.focusNow();
     else api.blur();
   } else if (route.name === 'drill') {
-    const first = startDrill(route.kind);
+    const first = action === AUX_ACTION ? startAuxDrill() : startDrill(route.kind);
     if (first === 'typed') api.focusNow();
     else api.blur();
   } else if (route.name === 'trainer') {

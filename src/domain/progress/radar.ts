@@ -1,5 +1,6 @@
 import { TOPICS } from '../content';
 import { CAT_IDS, topicCat } from '../grammar/radar';
+import { AUX_ROW, auxFormEvents } from '../radar/open';
 
 // Fehler-Radar für „Dein Stand" (Plan §7.1): Ereignisse `app/radar.events` je Kategorie der
 // letzten 30 Tage gegen die 30 Tage davor, mit Quellen und bis zu zwei Beispielen. Nur lesend:
@@ -9,7 +10,8 @@ import { CAT_IDS, topicCat } from '../grammar/radar';
 const DAY = 86_400_000;
 export const RADAR_READ_MAX = 400;
 
-export type RadarRowKind = 'cat' | 'topic' | 'raw';
+/** `rule` = eine themenübergreifende Regel (Verbform nach Hilfsverb), gezählt aus Ereignissen mehrerer Kategorien; kein eigener Eintrag im Radar-Dokument. */
+export type RadarRowKind = 'cat' | 'topic' | 'raw' | 'rule';
 export type RadarRow = {
   c: string;
   kind: RadarRowKind;
@@ -60,7 +62,7 @@ export function radarView(events: unknown, nowMs: number): RadarRow[] {
     } else r.nPrev30++;
     rows.set(e.c, r);
   }
-  return [...rows.entries()]
+  const base = [...rows.entries()]
     .map(([c, r]): RadarRow => {
       const trend = r.n30 > r.nPrev30 ? 'more' : r.n30 < r.nPrev30 ? 'fewer' : 'same';
       const topic = catTopic(c);
@@ -73,6 +75,37 @@ export function radarView(events: unknown, nowMs: number): RadarRow[] {
     })
     .filter((r) => r.n30 > 0 || r.nPrev30 > 0)
     .sort((a, b) => b.n30 - a.n30 || b.nPrev30 - a.nPrev30 || a.c.localeCompare(b.c));
+  const aux = auxRow(list, nowMs);
+  return aux ? [aux, ...base] : base;
+}
+
+/**
+ * Die Regel „Verbform nach Hilfsverb“ quer über alle Themen (Auswertung 15.10.2026, Punkt 5): will worked, wouldn't missed, had sign, has been felt, Having wrote …
+ * Dieselben Ereignisse zählen weiter unter ihrem Thema; hier steht die Regel als EIN Übungsziel (Aktion `auxform`). `null`, wenn es keine solchen Fehler gibt.
+ */
+function auxRow(list: readonly Ev[], nowMs: number): RadarRow | null {
+  const hits = auxFormEvents(list).filter((e) => {
+    const age = nowMs - e.t;
+    return age >= 0 && age < 60 * DAY;
+  });
+  if (!hits.length) return null;
+  const n30 = hits.filter((e) => nowMs - e.t < 30 * DAY).length;
+  const nPrev30 = hits.length - n30;
+  const recent = hits.filter((e) => nowMs - e.t < 30 * DAY).sort((a, b) => b.t - a.t);
+  const examples = recent
+    .filter((e, i, a) => a.findIndex((x) => x.g === e.g && x.a === e.a) === i)
+    .slice(0, 2)
+    .map((e) => ({ g: e.g, a: e.a, q: e.q }));
+  return {
+    c: AUX_ROW,
+    kind: 'rule',
+    n30,
+    nPrev30,
+    trend: n30 > nPrev30 ? 'more' : n30 < nPrev30 ? 'fewer' : 'same',
+    sources: [...new Set(recent.map((e) => e.s).filter(Boolean))].sort(),
+    examples,
+    action: AUX_ROW,
+  };
 }
 
 /** Summen für den Can-Do-Beleg `errors` (Plan §7.2). */
@@ -80,6 +113,8 @@ export function radarTotals(events: unknown, nowMs: number): { n30: number; nPre
   let n30 = 0;
   let nPrev30 = 0;
   for (const r of radarView(events, nowMs)) {
+    // Die Regelzeile zählt dieselben Ereignisse ein zweites Mal (themenübergreifend), nie doppelt in der Summe.
+    if (r.kind === 'rule') continue;
     n30 += r.n30;
     nPrev30 += r.nPrev30;
   }

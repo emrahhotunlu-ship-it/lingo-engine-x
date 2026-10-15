@@ -9,8 +9,11 @@ export const FIXED_ACTIONS = ['vocab:review', 'vocab:leech', 'chunks', 'cloze', 
 const TOPIC_IDS: ReadonlySet<string> = new Set(TOPICS.map((t) => t.id));
 
 /** Gehört die Aktion zum festen Katalog (ohne Blick auf die Daten)? */
+/** Übung „Verbform nach Hilfsverb“ (Auswertung 15.10.2026): nur über das Radar erreichbar, steht nicht in der Liste für die KI-Einschätzung. */
+export const AUX_ACTION = 'auxform';
+
 export function isKnownAction(a: string): boolean {
-  if ((FIXED_ACTIONS as readonly string[]).includes(a)) return true;
+  if ((FIXED_ACTIONS as readonly string[]).includes(a) || a === AUX_ACTION) return true;
   const m = /^(grammar|errors|lesson):(.+)$/.exec(a);
   if (!m) return false;
   if (m[1] === 'lesson') return /^l\d{2}$/.test(m[2] ?? '');

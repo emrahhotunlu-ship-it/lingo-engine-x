@@ -45,8 +45,22 @@ export function dueFehlersaetze(i: { grammarDocs: ReadonlyMap<string, Doc>; repa
     out.push({ id: `g:${d.topic}:${t}`, wrong, right, ...(why ? { why } : {}), due: d.due, store: 'grammar', src: 'lesson', topic: d.topic, errorT: t });
   }
   const seen = new Set<string>();
-  const list = out
-    .sort((a, b) => a.due - b.due)
+  // Auswertung 15.10.2026, Punkt 5: Mit Grenze (`limit`) wechseln sich Reparatur-Sätze (eigene Sätze) und Grammatik-Fehlersätze ab, je Speicher nach Fälligkeit.
+  // Reine „älteste zuerst“-Reihenfolge ließ die eigenen Sätze aus dem Schreiben auf Box 0 liegen (25 von 25 ohne eine einzige Wiederholung), weil die
+  // übrigen, älteren Einträge jeden Platz belegten. Ohne Grenze (Zählungen) bleibt es bei „älteste zuerst“.
+  const byDue = (a: Fehlersatz, b: Fehlersatz): number => a.due - b.due;
+  const ordered = ((): Fehlersatz[] => {
+    if (i.limit === undefined) return out.sort(byDue);
+    const own = out.filter((f) => f.store === 'repair').sort(byDue);
+    const gram = out.filter((f) => f.store === 'grammar').sort(byDue);
+    const mixed: Fehlersatz[] = [];
+    for (let k = 0; k < Math.max(own.length, gram.length); k++) {
+      if (own[k]) mixed.push(own[k]!);
+      if (gram[k]) mixed.push(gram[k]!);
+    }
+    return mixed;
+  })();
+  const list = ordered
     .filter((f) => {
       const k = repairNorm(f.wrong);
       if (seen.has(k)) return false;

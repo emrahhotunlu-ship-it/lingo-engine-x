@@ -18,6 +18,7 @@ import { actionRoute, startAction } from './actionRoute';
 
 export function radarName(r: Pick<RadarRow, 'c' | 'kind'>, t: (k: MessageKey) => string, lang: 'de' | 'en'): string {
   if (r.kind === 'cat') return t(`rc_${r.c}` as MessageKey);
+  if (r.kind === 'rule') return t('awAuxName');
   if (r.kind === 'topic') return topicName(r.c, lang);
   return r.c;
 }
@@ -60,6 +61,11 @@ export function ErrorRadar() {
                   <div className="flex min-w-0 flex-col gap-1">
                     <h3 className="text-base font-semibold">{radarName(r, t, lang)}</h3>
                     {/* Vergleich nur mit echtem Vorzeitraum (Befund H8): ohne Fehler davor keine „(0)". */}
+                    {r.kind === 'rule' && (
+                      <p className="text-sm text-muted" data-testid="radar-rule-lead">
+                        {t('awAuxLead')}
+                      </p>
+                    )}
                     {r.nPrev30 > 0 && <p className="text-sm text-muted">{t(`radarTrend_${r.trend}`, { n: r.nPrev30 })}</p>}
                     {r.sources.some((s) => SOURCES.has(s)) && (
                       <p className="text-xs text-subtle" data-label="">

@@ -183,10 +183,25 @@ export type GradeInput = {
   timedOut?: boolean;
 };
 
+/**
+ * Antwortzeiten über dieser Grenze sind eine Unterbrechung (Telefon, Tür, Pause), keine langsame Antwort (Auswertung 15.10.2026, Punkt 5: 146, 347 und
+ * 402 Sekunden beim Aufdecken). Die Zeit geht dann nicht in die Note ein: eine richtige Antwort zählt als „Gut“ (ohne Zeitabzug, ohne Zeitbonus).
+ */
+export const INTERRUPT_MS = 60_000;
+
+/** Unterbrochen? Gemessen wird die Zeit, die die Zeile der Tabelle zählt (bis zur Wahl bzw. zum ersten Zeichen bzw. zum Abschicken). */
+export function wasInterrupted(i: Pick<GradeInput, 'key' | 'timeMs' | 'firstKeyMs'>): boolean {
+  const row = GRADE_TABLE[i.key];
+  if (row.form === 'free' || row.form === 'timed') return false;
+  const raw = row.measure === 'firstKey' ? (i.firstKeyMs ?? i.timeMs) : i.timeMs;
+  return raw > INTERRUPT_MS;
+}
+
 function byTime(i: GradeInput): Grade {
   const row = GRADE_TABLE[i.key];
   const replays = Math.max(0, i.replays ?? 0);
   if (row.form === 'free') return 3;
+  if (wasInterrupted(i)) return 3;
   if (row.form === 'timed') {
     const G = i.limitMs ?? row.good;
     if (i.timedOut || i.timeMs > G) return 2;

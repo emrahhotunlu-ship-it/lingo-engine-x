@@ -1,8 +1,10 @@
 import { useMemo } from 'react';
 import { useClock } from '../../app/clock';
 import { useLive } from '../../data/live';
+import { useDocWatch } from '../../data/watch';
 import { patternById } from '../../domain/grammar/patterns';
-import { lastWeekOf, weekFacts } from '../../domain/progress/weekly';
+import { lastWeekOf, topicName, weekFacts } from '../../domain/progress/weekly';
+import { radarOpenTopics } from '../../domain/radar/open';
 import { FEST_NAMES_MAX, weekly3 } from '../../domain/progress/weekly3';
 import { useT } from '../../i18n';
 import { AiMark } from '../../ui/AiMark';
@@ -38,15 +40,18 @@ export function WeeklyReview3() {
   const liveStatus = useLive((s) => s.status);
   const conf = useConfusion(true);
   const chosen = useChosenChapter();
+  // Auswertung 15.10.2026: Ein Muster gilt nicht als „sicher“, solange das Radar in den letzten 7 Tagen Fehler zum Thema zeigt.
+  const radar = useDocWatch('app/radar');
+  const radarOpen = useMemo(() => radarOpenTopics(radar.data?.events, now), [radar.data, now]);
 
   const facts = useMemo(
-    () => weekFacts({ days: lastWeekOf(today).days, vocab, chunk, grammar, writing: EMPTY, talk: EMPTY, profile: obj(profile), pflichtSince: typeof obj(schema).pflichtSince === 'string' ? (obj(schema).pflichtSince as string) : null }).filter((f) => f.kind !== 'time'),
-    [today, vocab, chunk, grammar, profile, schema],
+    () => weekFacts({ days: lastWeekOf(today).days, vocab, chunk, grammar, writing: EMPTY, talk: EMPTY, profile: obj(profile), pflichtSince: typeof obj(schema).pflichtSince === 'string' ? (obj(schema).pflichtSince as string) : null, radarOpen }).filter((f) => f.kind !== 'time'),
+    [today, vocab, chunk, grammar, profile, schema, radarOpen],
   );
   const fixed = useMemo(() => facts.reduce((n, f) => (f.kind === 'fixed' ? n + f.n : n), 0), [facts]);
   const w = useMemo(
-    () => weekly3({ today, nowMs: now, vocab, chunk, grammar, profile: obj(profile), confusion: conf.confusion, fixed, chosen }),
-    [today, now, vocab, chunk, grammar, profile, conf.confusion, fixed, chosen],
+    () => weekly3({ today, nowMs: now, vocab, chunk, grammar, profile: obj(profile), confusion: conf.confusion, fixed, chosen, radarOpen }),
+    [today, now, vocab, chunk, grammar, profile, conf.confusion, fixed, chosen, radarOpen],
   );
   const text = useWeeklyText(w.w, facts);
 
@@ -117,6 +122,11 @@ export function WeeklyReview3() {
                     ))}
                   </ul>
                 </div>
+              )}
+              {w.radarOpen.length > 0 && (
+                <p className="m-0 text-sm text-muted" data-testid="wk-radar-open">
+                  {t('awWeeklyOpen', { topics: w.radarOpen.map((id) => topicName(id, lang)).join(', ') })}
+                </p>
               )}
               {w.fixed > 0 && (
                 <p className="lx-tnum m-0 text-sm" data-testid="wk-fixed">

@@ -66,15 +66,24 @@ export function newFestWords(i: { days: readonly string[]; vocab: ReadonlyMap<st
 }
 
 /** Muster, deren erster „Sicher“-Tag (`pats[muster].s`) in `days` liegt; nur Muster, die es in den Inhalten gibt. Sortiert nach Kennung. */
-export function patternsNewSafe(grammar: ReadonlyMap<string, Doc>, days: readonly string[]): string[] {
+export function patternsNewSafe(grammar: ReadonlyMap<string, Doc>, days: readonly string[], radarOpen?: ReadonlySet<string>): string[] {
   const set = new Set(days);
   const out = new Set<string>();
   for (const d of grammar.values()) {
     for (const [pat, e] of Object.entries(obj(d.pats))) {
-      if (set.has(str(obj(e).s)) && patternById(pat)) out.add(pat);
+      const p = set.has(str(obj(e).s)) ? patternById(pat) : null;
+      // Auswertung 15.10.2026, Punkt 5: Solange das Radar in den letzten 7 Tagen Fehler zu diesem Thema zeigt, ist das Muster nicht „sicher“ (Kap. 2 Nr. 2, keine Widersprüche).
+      if (p && !radarOpen?.has(p.topic)) out.add(pat);
     }
   }
   return [...out].sort();
+}
+
+/** Muster, die in der Woche „sicher“ wurden, aber wegen offener Radar-Fehler (letzte 7 Tage) noch nicht so genannt werden: ihre Themen, sortiert. */
+export function patternsHeldBack(grammar: ReadonlyMap<string, Doc>, days: readonly string[], radarOpen: ReadonlySet<string>): string[] {
+  const all = patternsNewSafe(grammar, days);
+  const kept = new Set(patternsNewSafe(grammar, days, radarOpen));
+  return [...new Set(all.filter((p) => !kept.has(p)).map((p) => patternById(p)?.topic ?? '').filter(Boolean))].sort();
 }
 
 export function weekFacts(i: {
@@ -90,6 +99,8 @@ export function weekFacts(i: {
   prompts?: ReadonlyMap<string, Doc>;
   /** `app/schema.pflichtSince`: erst ab diesem Tag wird die Pflicht gezählt (Befund W4). */
   pflichtSince?: string | null;
+  /** Themen mit Radar-Fehlern in den letzten 7 Tagen (`radarOpenTopics`): deren Muster stehen nicht als „neu sicher“ im Bericht. */
+  radarOpen?: ReadonlySet<string>;
 }): WeekFact[] {
   const set = new Set(i.days);
   const first = i.days[0] ?? '';
@@ -100,7 +111,7 @@ export function weekFacts(i: {
   facts.push(...newFestWords({ days: i.days, vocab: i.vocab, ...(i.chunk ? { chunk: i.chunk } : {}) }).slice(0, WORDS_MAX));
 
   // Muster, die in der Woche neu Sicher wurden (`pats[*].s`).
-  for (const pat of patternsNewSafe(i.grammar, i.days)) facts.push({ id: `gp:${pat}`, kind: 'pattern', pat });
+  for (const pat of patternsNewSafe(i.grammar, i.days, i.radarOpen)) facts.push({ id: `gp:${pat}`, kind: 'pattern', pat });
 
   // Grammatik: Anstieg von p über die Woche (hist [{d,p}]).
   for (const [id, d] of i.grammar) {

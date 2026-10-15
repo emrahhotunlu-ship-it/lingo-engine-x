@@ -8,7 +8,7 @@ import { currentChapter } from '../grammar/slotPlan';
 import { isWrongLang, langScores } from '../lang/detect';
 import { patternState, patternStateNo, patsOf } from '../metrics/pattern';
 import type { Confusion } from '../tutor/confusion';
-import { lastWeekOf, newFestWords, patternsNewSafe } from './weekly';
+import { lastWeekOf, newFestWords, patternsHeldBack, patternsNewSafe } from './weekly';
 
 // Wochenrückblick 3.0 (Lernplattform 3.0 P50, Motivation §4.9 mit K-15). Rein, nichts wird gelesen oder gespeichert.
 //   - Die eine große Zahl „+31 fest“ (Wörter und Wendungen, `history[].vu`, Wochenende gegen Wochenende), die Namen der neu Festen (`ff`),
@@ -222,6 +222,8 @@ export type Weekly3 = {
   /** Alle neu Festen (Namen), die ersten 12 werden gezeigt. */
   fest: Array<{ id: string; label: string; unit: 'vocab' | 'chunk' }>;
   patternsSafe: string[];
+  /** Themen, deren Muster diese Woche sicher wurden, aber nicht so heißen, solange das Radar in den letzten 7 Tagen Fehler dazu zeigt (Auswertung 15.10.2026). */
+  radarOpen: string[];
   /** Fehlersätze, die in der Woche erledigt wurden (Zahl). */
   fixed: number;
   teacher: string;
@@ -269,6 +271,8 @@ export function weekly3(i: {
   fixed: number;
   /** Kapitel-Arbeit (K1): gewähltes Kapitel (1 bis 7), sonst die Ableitung. */
   chosen?: number | null;
+  /** Themen mit Radar-Fehlern in den letzten 7 Tagen (`radarOpenTopics`). */
+  radarOpen?: ReadonlySet<string>;
 }): Weekly3 {
   const week = lastWeekOf(i.today);
   const fest = newFestWords({ days: week.days, vocab: i.vocab, chunk: i.chunk });
@@ -288,7 +292,8 @@ export function weekly3(i: {
     days: week.days,
     big: bigNumber(i.profile.history, week.days, fest.length),
     fest: fest.map((f) => ({ id: f.id, label: f.word, unit: f.unit })),
-    patternsSafe: patternsNewSafe(i.grammar, week.days),
+    patternsSafe: patternsNewSafe(i.grammar, week.days, i.radarOpen),
+    radarOpen: i.radarOpen ? patternsHeldBack(i.grammar, week.days, i.radarOpen) : [],
     fixed: i.fixed,
     teacher: teacherText({
       note: chapter?.note ?? null,

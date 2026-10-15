@@ -5,6 +5,7 @@ import { useLive } from '../../data/live';
 import { useDocWatch } from '../../data/watch';
 import { LESSONS } from '../../domain/content';
 import { patternById } from '../../domain/grammar/patterns';
+import { radarOpenTopics } from '../../domain/radar/open';
 import { citableFacts, lastWeekOf, topicName, weekFacts, type WeekFact } from '../../domain/progress/weekly';
 import { detectLang } from '../../domain/lang/detect';
 import { useT, type MessageKey } from '../../i18n';
@@ -62,12 +63,16 @@ export function WeeklyCard() {
   const grammar = useLive((s) => s.collections.grammar) ?? EMPTY;
   const schema = useLive((s) => s.docs['app/schema']);
   const weekly = useDocWatch('app/weekly');
+  const now = useClock((s) => s.now);
+  // Auswertung 15.10.2026: kein „neu sicher“ für Muster, zu denen das Radar in den letzten 7 Tagen Fehler zeigt.
+  const radar = useDocWatch('app/radar');
+  const radarOpen = useMemo(() => radarOpenTopics(radar.data?.events, now), [radar.data, now]);
   const ai = useAiAvailable();
   const scope = useAiScope();
   const week = useMemo(() => lastWeekOf(today), [today]);
   const facts = useMemo(
-    () => weekFacts({ days: week.days, vocab, chunk, grammar, writing: EMPTY, talk: EMPTY, profile: obj(profile), pflichtSince: typeof obj(schema).pflichtSince === 'string' ? (obj(schema).pflichtSince as string) : null }).filter((f) => f.kind !== 'time'),
-    [week, vocab, chunk, grammar, profile, schema],
+    () => weekFacts({ days: week.days, vocab, chunk, grammar, writing: EMPTY, talk: EMPTY, profile: obj(profile), pflichtSince: typeof obj(schema).pflichtSince === 'string' ? (obj(schema).pflichtSince as string) : null, radarOpen }).filter((f) => f.kind !== 'time'),
+    [week, vocab, chunk, grammar, profile, schema, radarOpen],
   );
   const stored = weekly.status === 'ready' ? storedWeekly(weekly.data, week.w, lang) : null;
   const wants = ai && weekly.status === 'ready' && !stored && citableFacts(facts).length >= WEEKLY_MIN_FACTS;

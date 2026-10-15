@@ -245,7 +245,7 @@ export function ClozeItemView({ item, ctx, day, profile, onDone }: ItemProps<Clo
               : null;
   const explanation: ExplanationModel | null = fb
     ? {
-        lines: fb.res.belongsTo.length > 0 ? [{ k: 'why', text: t('clBelongs', { given: fb.given.trim(), list: fb.res.belongsTo.join(', ') }) }] : [],
+        lines: item.note ? [{ k: 'why', text: item.note[lang] }] : fb.res.belongsTo.length > 0 ? [{ k: 'why', text: t('clBelongs', { given: fb.given.trim(), list: fb.res.belongsTo.join(', ') }) }] : [],
         examples,
         mark: [],
         ai: false,
@@ -298,10 +298,17 @@ export function ClozeItemView({ item, ctx, day, profile, onDone }: ItemProps<Clo
                 ),
               }}
             />
-            {item.de && lang === 'de' && (
-              <p className="lx-t-support text-muted" data-testid={fb ? 'meaning' : 'cue'} lang="de">
-                {fb ? `${item.phrase} – ${item.de}` : t('clCue', { de: item.de })}
+            {item.cue ? (
+              <p className="lx-t-support text-muted" data-testid="cue" lang={lang}>
+                {item.cue[lang]}
               </p>
+            ) : (
+              item.de &&
+              lang === 'de' && (
+                <p className="lx-t-support text-muted" data-testid={fb ? 'meaning' : 'cue'} lang="de">
+                  {fb ? `${item.phrase} – ${item.de}` : t('clCue', { de: item.de })}
+                </p>
+              )
             )}
           </div>
         }

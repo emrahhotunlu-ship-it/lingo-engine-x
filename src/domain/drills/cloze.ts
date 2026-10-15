@@ -28,6 +28,12 @@ export type ClozeItem = {
   de: string;
   /** Falsche Partner der Karte (für die Rückmeldung, nie vor dem Prüfen gezeigt). */
   wrongPartners: string[];
+  /** Strenge Formübung („Verbform nach Hilfsverb“): eine andere Form desselben Verbs ist falsch, nicht „fast richtig“. */
+  strict?: boolean;
+  /** Hinweis vor dem Antworten in beiden Sprachen (ersetzt „Gesucht: …“), z. B. das Verb der Formübung. */
+  cue?: { de: string; en: string };
+  /** Regel, die nach dem Prüfen erklärt wird (zweisprachig). */
+  note?: { de: string; en: string };
 };
 
 export function clozeCandidates(cards: readonly TrainCard[]): ClozeItem[] {
@@ -93,6 +99,8 @@ export function checkCloze(item: ClozeItem, givenRaw: string, deps: { allCols?: 
   if (targets.includes(g)) return { verdict: 'correct', belongsTo: [] };
   const us = toUS(g);
   if (targets.some((t) => toUS(t) === us)) return { verdict: 'correct', kind: 'uk', us, belongsTo: [] };
+  // Formübung: dasselbe Verb in der falschen Form (worked statt work) ist ein Fehler, kein Tippfehler.
+  if (item.strict) return { verdict: 'wrong', belongsTo: [] };
   const lg = lemmaCandidates(g);
   if (targets.some((t) => lemmaCandidates(t).some((x) => lg.includes(x)))) return { verdict: 'near', kind: 'form', belongsTo: [] };
   const belongsTo = (deps.allCols ?? [])
