@@ -1,9 +1,13 @@
+import { useMemo } from 'react';
+import { useClock } from '../../app/clock';
+import { lapseLoad, lowerNewPerDay } from '../../domain/srs/load';
 import { useT } from '../../i18n';
 import { changeGoalMin, changeNewPerDay, changeSound, useOptimistic } from '../../app/actions';
 import { useLive } from '../../data/live';
 import { GOAL_MIN_OPTIONS, NEW_PER_DAY_OPTIONS, normGoalMin, normNewPerDay, normSound } from '../../domain/progress/settings';
 import { useCapabilities } from '../../platform/capabilities';
 import { playCue, setSoundEnabled, soundSupported, unlockSound } from '../../platform/sound';
+import { Button } from '../../ui/Button';
 import { Segmented } from '../../ui/Segmented';
 import { Switch } from '../../ui/Switch';
 import { InputProfileSection } from './InputProfileSection';
@@ -16,9 +20,14 @@ export function LearningSection() {
   const db = useCapabilities((s) => s.db);
   const profile = useLive((s) => s.docs['app/profile']);
   const opt = useOptimistic();
+  const vocab = useLive((s) => s.collections.vocab);
+  const now = useClock((s) => s.now);
+  // Auswertung 15.10.2026: fällt mindestens die Hälfte der geübten Karten in 7 Tagen durch, kommt ein Vorschlag (nie ein stilles Überschreiben).
+  const load = useMemo(() => lapseLoad(vocab, now), [vocab, now]);
   if (db !== 'ready') return null;
   const goal = normGoalMin(opt.goalMin ?? profile?.goalMin);
   const perDay = normNewPerDay(opt.newPerDay ?? profile?.newPerDay);
+  const lower = load.high ? lowerNewPerDay(perDay) : null;
   return (
     <section className="flex flex-col gap-3" data-testid="learning-section">
       {/* Die Gruppe „Lernen“ trägt schon die Überschrift (UX-Beratung Nr. 11). */}
@@ -32,6 +41,16 @@ export function LearningSection() {
         onChange={(v) => void changeNewPerDay(Number(v))}
       />
       <p className="text-sm text-muted">{t('setNewPerDayHint')}</p>
+      {lower !== null && (
+        <div className="flex flex-col gap-2 rounded-lg border border-line p-3" data-testid="lapse-load-hint">
+          <p className="m-0 text-sm">{t('awLoadHigh')}</p>
+          <div>
+            <Button variant="secondary" onClick={() => void changeNewPerDay(lower)} data-testid="lapse-load-apply">
+              {t('awLoadAction')} ({lower})
+            </Button>
+          </div>
+        </div>
+      )}
       <p className="mt-2 text-sm font-medium">{t('setGoalMin')}</p>
       <Segmented
         label={t('setGoalMin')}

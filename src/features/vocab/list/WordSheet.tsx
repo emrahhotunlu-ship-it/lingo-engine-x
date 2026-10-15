@@ -7,7 +7,7 @@ import { CONFIDENCE_KEYS, confidenceDots, confidenceOf } from '../../../domain/s
 import { cardExamples } from '../../../domain/srs/examples';
 import { posKey } from '../../../domain/srs/explain';
 import { retrievability } from '../../../domain/srs/scheduler';
-import { exerciseBalance } from '../../../domain/srs/vocabList';
+import { exerciseBalance, isReadOffTopic } from '../../../domain/srs/vocabList';
 import type { AnswerEvent, TrainCard } from '../../../domain/srs/types';
 import { EnglishText } from '../../../engine/EnglishText';
 import { SpeakButton } from '../../../engine/SpeakButton';
@@ -197,6 +197,11 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
         {why && (
           <p className="text-sm text-muted" lang={lang} data-testid="chunk-why">
             {why}
+          </p>
+        )}
+        {isReadOffTopic(card) && (
+          <p className="text-sm text-muted" data-testid="word-offtopic">
+            {t('awReadNoJob')}
           </p>
         )}
         <p className="text-sm text-muted" data-testid="word-next">

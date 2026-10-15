@@ -31,6 +31,11 @@ const low = (s: string | null | undefined) => (s ?? '').toLowerCase();
 export const isPhraseCard = (c: Pick<TrainCard, 'word' | 'pos'> & Partial<Pick<TrainCard, 'kind'>>): boolean =>
   c.kind === 'chunk' || /\s/.test(c.word.replace(/^to\s+/i, '').trim()) || /phras/i.test(c.pos ?? '');
 export const isJobCard = (c: Pick<TrainCard, 'src'>): boolean => c.src === 'job';
+/**
+ * Wort aus einem Lesetext ohne Kernwort-Marke (`core`): passt vermutlich nicht zum Beruf (Auswertung 15.10.2026: shores, sturdier, strait kosten Wiederholungszeit).
+ * Nur ein Hinweis in der Karten-Ansicht; die Karte bleibt unverändert und wird nie ausgeblendet oder anders eingeplant.
+ */
+export const isReadOffTopic = (c: Pick<TrainCard, 'src' | 'doc'>): boolean => c.src === 'read' && c.doc.core !== true;
 /** Schwierig: oft vergessen oder noch unsicher (Stufe 1–2). */
 export const isHardCard = (c: TrainCard): boolean => !c.isNew && (lapsesOf(c.doc) >= 2 || c.stage <= 2);
 
