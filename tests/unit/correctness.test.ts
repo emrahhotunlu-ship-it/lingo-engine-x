@@ -20,8 +20,10 @@ describe('fixedProblems – bekannte Fehler in der „richtigen“ Fassung', () 
 
   it('falsche Freunde: „I suggest absolving“, „eventually“ im Sinn von eventuell', () => {
     expect(fixedProblems('I suggest absolving the training in March.')[0]?.id).toBe('false_friend');
-    expect(fixedPasses('We can eventually offer a discount.')).toBe(false);
-    expect(fixedPasses('Eventually, we could move the deadline.')).toBe(false);
+    // „eventually“ = irgendwann/schließlich ist richtig; gesperrt nur mit naher Zeitangabe (Prüfung B1).
+    expect(fixedPasses('We can eventually offer a discount.')).toBe(true);
+    expect(fixedPasses('We could eventually expand into the US.')).toBe(true);
+    expect(fixedPasses('Could you eventually send me the file tomorrow?')).toBe(false);
     expect(fixedPasses('Eventually, the product stability is good.')).toBe(true);
     expect(fixedPasses('After the last bug fixes, we eventually shipped the release.')).toBe(true);
     expect(fixedPasses('We should act consistently and follow up.')).toBe(true);
@@ -35,7 +37,8 @@ describe('fixedProblems – bekannte Fehler in der „richtigen“ Fassung', () 
     expect(fixedPasses('I will see you bald.')).toBe(false);
     expect(fixedPasses('I called my chef yesterday.')).toBe(false);
     expect(fixedPasses('We need a handy tool for this.')).toBe(true);
-    expect(fixedPasses('I forgot my handy at home.')).toBe(false);
+    expect(fixedPasses('I forgot my handy.')).toBe(false);
+    expect(fixedPasses('Call me on my handy.')).toBe(false);
   });
 
   it('fehlender Artikel: „you have gut feeling“', () => {
@@ -62,7 +65,9 @@ describe('fixedProblems – bekannte Fehler in der „richtigen“ Fassung', () 
     expect(articleProblem('She is a engineer.')).toContain('an engineer');
     expect(articleProblem('It is a university project, an hour long, an HR topic, a URL, an SLA.')).toBeNull();
     expect(articleProblem('He is an honest manager and a user of the tool.')).toBeNull();
-    expect(articleProblem('Send it to a SLA owner.')).toContain('an SLA');
+    // „a SLA“ ist uneindeutig (Wortaussprache möglich) und wird nicht gesperrt; „a API“, „a ERP“ sind die echten Fehler.
+    expect(articleProblem('Send it to a SLA owner.')).toBeNull();
+    expect(articleProblem('We expose a API for partners.')).toContain('an API');
   });
 
   it('Verbform nach Hilfsverb in der korrigierten Fassung', () => {
@@ -91,7 +96,7 @@ describe('Liste der falschen Freunde (Daten)', () => {
     }
     const words = FALSE_FRIENDS.map((f) => f.word);
     for (const w of ['eventually', 'actual', 'absolve', 'at first', 'become', 'chef', 'control', 'consequent', 'possibility', 'sensible', 'handy', 'gift', 'bald']) expect(words).toContain(w);
-    expect(falseFriendLines().some((l) => l.includes('"eventually" is NOT German "eventuell"'))).toBe(true);
+    expect(falseFriendLines().some((l) => l.includes('eventuell = possibly, perhaps, maybe (not eventually)'))).toBe(true);
   });
 });
 

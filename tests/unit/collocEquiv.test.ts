@@ -24,8 +24,13 @@ describe('gleichwertige Wortpartner', () => {
   });
 
   it('hold a meeting, make a decision, give a presentation', () => {
-    expect(collocAlternatives('hold a meeting', 'hold')).toEqual(expect.arrayContaining(['have', 'run', 'schedule']));
-    expect(collocAlternatives('hold a meeting', 'held')).toEqual(expect.arrayContaining(['had', 'ran']));
+    // „meeting“ sind drei Dinge (Prüfung A6): stattfinden lassen (hold, have), ansetzen (arrange, schedule …), leiten (run, chair, lead).
+    expect(collocAlternatives('hold a meeting', 'hold')).toEqual(['have']);
+    expect(collocAlternatives('hold a meeting', 'held')).toEqual(['had']);
+    expect(collocAlternatives('schedule a meeting', 'schedule')).toEqual(expect.arrayContaining(['arrange', 'organize', 'set', 'book', 'call']));
+    expect(collocAlternatives('schedule a meeting', 'schedule')).not.toContain('chair');
+    expect(collocAlternatives('run a meeting', 'run')).toEqual(expect.arrayContaining(['chair', 'lead']));
+    expect(collocAlternatives('run a meeting', 'run')).not.toContain('schedule');
     expect(collocAlternatives('make a decision', 'make')).toEqual(expect.arrayContaining(['take', 'reach']));
     expect(collocAlternatives('give a presentation', 'give')).toEqual(expect.arrayContaining(['deliver', 'make']));
     expect(collocAlternatives('give a presentation', 'gave')).toContain('delivered');

@@ -29,6 +29,8 @@ export function britishSpelling(text: string): string | null {
 /** US-Form eines einzelnen Worts mit Groß-/Kleinschreibung des Originals (Satzanfang, ALLES GROSS). */
 function usWordCase(word: string): string {
   if (word.toLowerCase() === 'analyses') return word; // Mehrzahl von „analysis“, kein britisches Verb
+  // „dialogue“ ist auch im US-Englisch die Standardform („an open dialogue with the customer“); „dialog“ steht fast nur für Dialogfenster in Software.
+  if (/^dialogues?$/i.test(word)) return word;
   const us = usSpelling(word.toLowerCase());
   if (us === word.toLowerCase()) return word;
   if (word === word.toUpperCase() && word.length > 1) return us.toUpperCase();

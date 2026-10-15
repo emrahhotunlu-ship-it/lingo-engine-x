@@ -171,6 +171,8 @@ const ISE_KEEP = new Set([
   'concise', 'demise', 'despise', 'devise', 'enterprise', 'excise', 'exercise', 'expertise', 'franchise', 'improvise',
   'incise', 'merchandise', 'mortise', 'paradise', 'precise', 'premise', 'promise', 'reprise', 'revise', 'rise',
   'sunrise', 'supervise', 'surmise', 'surprise', 'televise', 'treatise', 'valise', 'vise',
+  // Vornamen auf -ise (Denise, Elise) bleiben.
+  'denise', 'elise', 'louise', 'eloise',
 ]);
 const YSE_RE = /^([a-z]*l)ys(e|es|ed|ing|er|ers)$/;
 const TRE_RE = /^([a-z]*(?:cent|met|lit|theat|fib|calib|somb|spect|lust|meag|sab|mit|scept))re(s|d)?$/;

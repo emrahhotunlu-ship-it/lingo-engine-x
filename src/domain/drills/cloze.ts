@@ -34,6 +34,8 @@ export type ClozeItem = {
   cue?: { de: string; en: string };
   /** Regel, die nach dem Prüfen erklärt wird (zweisprachig). */
   note?: { de: string; en: string };
+  /** Abschließender eigener Satz („Verbform nach Hilfsverb“): keine Lücke, ein frei geschriebener Satz, lokal auf die Verbform-Regel geprüft. */
+  free?: true;
 };
 
 export function clozeCandidates(cards: readonly TrainCard[]): ClozeItem[] {
@@ -93,7 +95,7 @@ export type ClozeCheck = {
 export function checkCloze(item: ClozeItem, givenRaw: string, deps: { allCols?: ReadonlyArray<{ p: string; gap: string }> } = {}): ClozeCheck {
   const g = normalize(givenRaw);
   // Gleichwertige Partner (hold/have a meeting, meet/hit a deadline) sind ebenfalls richtig (Auswertung 15.10.2026, Punkt 2).
-  const alts = [...collocAlternatives(item.phrase, item.gap), ...collocAlternatives(item.phrase, item.base)];
+  const alts = [...collocAlternatives(item.phrase, item.gap, { sentence: item.sentence.sentence, start: item.sentence.start }), ...collocAlternatives(item.phrase, item.base)];
   const targets = [...new Set([normalize(item.gap), normalize(item.base), ...alts.map(normalize)])].filter(Boolean);
   if (!g) return { verdict: 'wrong', belongsTo: [] };
   if (targets.includes(g)) return { verdict: 'correct', belongsTo: [] };

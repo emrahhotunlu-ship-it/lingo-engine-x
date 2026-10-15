@@ -72,18 +72,50 @@ describe('Radar: Verbform nach Hilfsverb als EIN Übungsziel', () => {
 });
 
 describe('Übung „Verbform nach Hilfsverb“: 5 Muster', () => {
-  it('fünf Muster, je eine Lücke, jede Lücke genau das Wort im Satz', () => {
+  it('fünf Muster, je eine Lücke (bei „been“ Dauer und Passiv), zum Schluss ein eigener Satz; jede Lücke genau das Wort im Satz', () => {
     expect(AUX_PATTERNS).toHaveLength(5);
     const items = buildAuxDrill('2026-10-15|auxform|1');
     expect(items).toHaveLength(AUX_ROUND);
-    expect(new Set(items.map((i) => i.phrase)).size).toBe(5);
-    for (const it of items) {
+    expect(items.at(-1)?.free).toBe(true);
+    const gaps = items.filter((i) => !i.free);
+    expect(gaps).toHaveLength(AUX_ROUND - 1);
+    expect(new Set(gaps.map((i) => i.phrase)).size).toBe(5);
+    expect(gaps.filter((i) => i.phrase === 'been')).toHaveLength(2);
+    for (const it of gaps) {
       expect(it.sentence.sentence.slice(it.sentence.start, it.sentence.end)).toBe(it.gap);
       expect(it.strict).toBe(true);
-      expect(it.cue?.de).toContain('Verb:');
+      expect(it.cue?.de).toMatch(/Verb:|Falsche Form:/);
       expect(it.note?.de.length).toBeGreaterThan(20);
     }
     for (const p of AUX_PATTERNS) for (const it of p.items) expect(it.sentence).toContain(it.gap);
+  });
+
+  it('6 bis 8 Sätze je Muster; „been“ hat beide Arten', () => {
+    for (const p of AUX_PATTERNS) {
+      expect(p.items.length, p.id).toBeGreaterThanOrEqual(6);
+      expect(p.items.length, p.id).toBeLessThanOrEqual(8);
+    }
+    const been = AUX_PATTERNS.find((p) => p.id === 'been')!;
+    expect(been.items.some((i) => i.kind === 'passive')).toBe(true);
+    expect(been.items.some((i) => i.kind === 'ongoing')).toBe(true);
+    expect(been.rule.de).toContain('Ausnahme Passiv');
+    expect(been.rule.en).toContain('passive');
+  });
+
+  it('Muster „modal“ zeigt die falsche Form zum Verbessern, nicht die Lösung', () => {
+    const modal = AUX_PATTERNS.find((p) => p.id === 'modal')!;
+    for (const it of modal.items) {
+      expect(it.wrong, it.sentence).toBeTruthy();
+      expect(it.wrong).not.toBe(it.gap);
+    }
+    const item = buildAuxDrill('m').find((i) => i.phrase === 'modal')!;
+    expect(item.cue?.de).toContain('Falsche Form');
+    expect(item.cue?.de).not.toContain(`Verb: ${item.gap}`);
+  });
+
+  it('die Sätze sind unregelmäßig und aus dem Beruf (lose, chosen, sent, written …)', () => {
+    const gaps = new Set(AUX_PATTERNS.flatMap((p) => p.items.map((i) => i.gap)));
+    for (const g of ['lost', 'chosen', 'sent', 'written', 'found', 'taken']) expect(gaps.has(g), g).toBe(true);
   });
 
   it('eine andere Form desselben Verbs ist falsch, nicht „fast richtig“; die richtige Form (auch US/GB, Groß/Klein) ist richtig', () => {

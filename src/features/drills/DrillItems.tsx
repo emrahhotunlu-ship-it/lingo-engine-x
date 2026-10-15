@@ -2,7 +2,11 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useClock } from '../../app/clock';
 import { useLive } from '../../data/live';
 import { maskOf } from '../../domain/answer/mask';
+import { AUX_FREE_PROMPT } from '../../content/auxForm';
+import { AUX_CARD_ID } from '../../domain/drills/auxform';
+import { auxFormErrors, type AuxError } from '../../domain/text/auxForm';
 import { checkCloze, type ClozeCheck, type ClozeItem } from '../../domain/drills/cloze';
+import { saveRepairs } from '../repair/store';
 import { missedWords, scoreDictation, type DictationScore } from '../../domain/drills/dictation';
 import { checkOrder, type OrderCheck, type OrderItem } from '../../domain/drills/order';
 import { orderExplanation } from '../../domain/drills/orderExplain';
@@ -186,7 +190,61 @@ export function DictationItem({ item, ctx, day, profile, onDone }: ItemProps<{ s
 
 // ------------------------------------------------------------------ Lückenjagd
 
-export function ClozeItemView({ item, ctx, day, profile, onDone }: ItemProps<ClozeItem>) {
+/** Lückenjagd-Aufgabe: Lückensatz, oder (nur „Verbform nach Hilfsverb“) zum Schluss ein frei geschriebener Satz. */
+export function ClozeItemView(props: ItemProps<ClozeItem>) {
+  return props.item.free ? <AuxFreeItem {...props} /> : <ClozeGapItem {...props} />;
+}
+
+/** Abschluss der Übung „Verbform nach Hilfsverb“: ein eigener Satz, lokal auf die Verbform-Regel geprüft (kein Claude-Aufruf, keine Karte betroffen). */
+function AuxFreeItem({ item, ctx, day, profile, onDone }: ItemProps<ClozeItem>) {
+  const { t, lang } = useT();
+  const api = useHiddenInput();
+  const timing = useTiming();
+  const [text, setText] = useState('');
+  const [fb, setFb] = useState<{ errors: AuxError[]; given: string; ms: number } | null>(null);
+  const check = () => {
+    if (fb) return;
+    const given = text.trim();
+    if (!given) return;
+    setFb({ errors: auxFormErrors(given, { strict: true }), given, ms: timing.elapsed() });
+    if (profile === 'touch') api.blur();
+  };
+  const next = () => {
+    if (!fb) return;
+    const verdict: Verdict = fb.errors.length ? 'wrong' : 'correct';
+    const a: DrillAnswer = { kind: 'x', t: nextT(), day, lang, ctx, type: 'cloze', q: AUX_FREE_PROMPT.en, given: fb.given, ans: '', verdict, grade: verdict === 'correct' ? 3 : 1, ms: fb.ms, dev: devOf(profile) };
+    onDone(a, item.phrase);
+    api.blur();
+  };
+  const verdict: ResultVerdict = fb ? (fb.errors.length ? 'wrong' : 'ok') : 'ok';
+  const feedback: ShellFeedback | null = fb
+    ? {
+        verdict,
+        sub: null,
+        explanation: { lines: [{ k: 'why', text: fb.errors.length ? t('awAuxFreeErr', { text: fb.errors[0]?.text ?? '' }) : t('awAuxFreeOk') }], examples: [], mark: [], ai: false, source: 'card' },
+        depth: explainDepth({ verdict, stage: null, learning: false }),
+        menu: {},
+        auto: false,
+      }
+    : null;
+  return (
+    <Item kind="cloze">
+      <ExerciseShell
+        meta={{ ex: 'drill_cloze', id: 'cloze|aux|free', kind: 'cloze' }}
+        status={{ area: 'words', state: null, kindLabel: t('drCloze') }}
+        task={{ text: AUX_FREE_PROMPT[lang], purpose: t('awAuxFreePurpose') }}
+        prompt={null}
+        answer={
+          <SentenceInput mode="free" value={text} onChange={(v) => { if (v) timing.markKey(); setText(v); }} onSubmit={() => (fb ? next() : check())} disabled={!!fb} testId="aux-free-input" placeholder={t('actPlaceholder')} />
+        }
+        primary={fb ? { label: t('exNext'), onClick: next, testId: 'next' } : { label: t('exCheck'), onClick: check, testId: 'check' }}
+        feedback={feedback}
+      />
+    </Item>
+  );
+}
+
+function ClozeGapItem({ item, ctx, day, profile, onDone }: ItemProps<ClozeItem>) {
   const { t, lang } = useT();
   const api = useHiddenInput();
   const timing = useTiming();
@@ -220,6 +278,11 @@ export function ClozeItemView({ item, ctx, day, profile, onDone }: ItemProps<Clo
     const verdict: Verdict = fb.override ? 'correct' : fb.res.verdict;
     const radar = fb.res.kind === 'confusable' && !fb.override ? radarEvent('wordchoice', 'v', tNow, { q: item.sentence.sentence, g: fb.given, a: item.gap }) : undefined;
     const a: DrillAnswer = { kind: 'x', t: tNow, day, lang, ctx, type: 'cloze', q: item.sentence.sentence, given: fb.given, ans: item.gap, verdict, grade: fb.override ? 3 : fb.grade, ms: fb.ms, dev: devOf(profile), ...(radar ? { radar } : {}), ...(fb.override ? { override: true } : {}) };
+    // „Verbform nach Hilfsverb“: ein falscher Satz wird zum Fehlersatz (Boxen 1/3/9) und kommt über „Fehler korrigieren“ wieder (Prüfung M6).
+    if (item.cardId === AUX_CARD_ID && verdict === 'wrong' && fb.given.trim()) {
+      const sent = item.sentence;
+      void saveRepairs([{ wrong: `${sent.sentence.slice(0, sent.start)}${fb.given.trim()}${sent.sentence.slice(sent.end)}`, right: sent.sentence, why: item.note?.[lang] ?? null, src: 'pattern' }]);
+    }
     const kind = onDone(a, item.phrase);
     if (kind === 'typed') api.focusNow();
     else api.blur();

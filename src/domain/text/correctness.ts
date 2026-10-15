@@ -27,11 +27,13 @@ const WHY_GERMAN: Readonly<Record<string, string>> = {
 // ------------------------------------------------------------------ Subjekt und Verb
 
 /** Köpfe, die im Singular stehen, auch wenn danach ein Plural folgt („the list of document types IS“). */
-const SINGULAR_HEADS = 'list|amount|level|lack|quality|cost|price|length|size|range|variety|series|rate|number|rest|result|set|summary|overview|status|review|exchange|schedule|total|average|majority|selection|group';
+// `majority`, `rest`, `group` fehlen bewusst: „the majority of customers ARE“, „the rest of the documents ARE“ (Verb richtet sich nach dem Nomen hinter „of“).
+const SINGULAR_HEADS = 'list|amount|level|lack|quality|cost|price|length|size|range|variety|series|rate|number|result|set|summary|overview|status|review|exchange|schedule|total|average|selection';
 // „the number of customers are“ ist falsch, „a number of customers are“ richtig – deshalb steht vor dem Kopf nur ein bestimmter Artikel oder Possessivpronomen.
 const HEAD_RE = new RegExp(`\\b(?:the|this|that|our|your|my|his|her|their)\\s+(?:[a-z-]+\\s+)?(${SINGULAR_HEADS})\\s+(?:of|with|for|from|about|on)\\s+((?:[a-z0-9'’,-]+\\s+){1,6}?)(are|were|have|do|don't|aren't|weren't|haven't)\\b`, 'i');
 // Wörter, die einen neuen Teilsatz oder einen Relativsatz beginnen: dann gehört das Verb nicht mehr zum Kopf.
-const CLAUSE_WORDS = /\b(?:that|which|who|whom|whose|where|when|while|if|because|since|and|but|or|so|as|although|though|whereas|then|after|before|until)\b|[,;:()]/i;
+// Auch ein Subjektpronomen im Mittelteil zeigt einen Relativsatz ohne „that“ („the list of tasks WE have“, „the quality of the files YOU have“).
+const CLAUSE_WORDS = /\b(?:that|which|who|whom|whose|where|when|while|if|because|since|and|but|or|so|as|although|though|whereas|then|after|before|until|i|you|we|they|he|she|it)\b|[,;:()]/i;
 const PLURAL_DEM_RE = /\b(?:these|those)\s+(?:[a-z-]+\s+)?[a-z]+s\s+(is|was|has|doesn't|isn't|wasn't|hasn't)\b/i;
 // „one of the customers are“ / „each of the steps are“: Kopf ist „one/each/every“.
 const ONE_OF_RE = /\b(?:one|each|every one|neither|either)\s+of\s+(?:the|our|my|your|these|those|their)\s+(?:[a-z-]+\s+)?[a-z]+s\s+(are|were|have|don't|aren't|weren't|haven't)\b/i;
@@ -48,29 +50,44 @@ export function agreementProblem(text: string): string | null {
 
 // ------------------------------------------------------------------ a / an
 
-// Wörter, die mit Vokalbuchstaben beginnen, aber mit Konsonantenlaut gesprochen werden („a university“), und umgekehrt („an hour“).
-const A_BEFORE_VOWEL_OK = /^(?:uni[a-z]*|use[a-z]*|usu[a-z]*|uti[a-z]*|ubiq[a-z]*|eu[a-z]*|one|once|ukrain[a-z]*|uran[a-z]*|urin[a-z]*|usa|uk|ufo|unesco)$/i;
-const AN_BEFORE_CONS_OK = /^(?:hour[a-z]*|honest[a-z]*|honou?r[a-z]*|heir[a-z]*|herb[a-z]*|hono[a-z]*)$/i;
+// Wörter, die mit Vokalbuchstaben beginnen, aber mit Konsonantenlaut gesprochen werden („a university“, „a one-off“, „a usable“), und umgekehrt („an hour“).
+const A_BEFORE_VOWEL_OK = /^(?:uni[a-z]*|use[a-z]*|usu[a-z]*|usab[a-z]*|uti[a-z]*|ubiq[a-z]*|eu[a-z]*|unan[a-z]*|(?:one|once)(?:-[a-z0-9-]*)?|ukrain[a-z]*|uran[a-z]*|urin[a-z]*|usa|uk|ufo|unesco)$/i;
+// Eindeutige Wörter mit Konsonantenlaut („an university“, „an unique“, „an European“, „an used“, „an one“): hier ist „an“ ein Fehler. Bewusst eng: „an unintended“, „an uninterrupted“ sind richtig.
+const AN_BEFORE_CONS_ERR = /^(?:univers[a-z]*|uniqu[a-z]*|unicorn[a-z]*|uniform[a-z]*|union[a-z]*|unit(?:s|ed|y|ary)?|unified|unify|unilateral[a-z]*|unanim[a-z]*|usab[a-z]*|use|used|useful|useless|uses|user[a-z]*|usual[a-z]*|usage|utilit[a-z]*|utiliz[a-z]*|utilis[a-z]*|europe[a-z]*|euro|euros|eulog[a-z]*|(?:one|once)(?:-[a-z0-9-]*)?)$/i;
+const AN_BEFORE_CONS_OK = /^(?:hour[a-z-]*|honest[a-z-]*|honou?r[a-z-]*|heir[a-z-]*|herb[a-z-]*|hono[a-z-]*)$/i;
 // Abkürzungen werden nach dem Buchstabennamen gesprochen: „an HR manager“, „an SLA“, „an MVP“, „a UI“, „a URL“.
+// „a“ vor F, H, L, M, N, R, S, X ist uneindeutig („a SQL query“, „a SWOT analysis“, „a SIM card“) und wird nicht gesperrt.
 const AN_LETTERS = new Set('FHLMNRSX'.split(''));
 const A_LETTERS = new Set('AEIO'.split(''));
+// Abkürzungen mit Vokalbuchstaben, vor denen „a“ trotzdem stimmt (Wortaussprache).
+const A_ACRONYM_OK = new Set(['EULA']);
 
 export function articleProblem(text: string): string | null {
-  const re = /\b(a|an)\s+([A-Za-z][A-Za-z0-9'’-]*)/gi;
+  const re = /\b(a|an)\s+([A-Za-z][A-Za-z0-9'’&-]*)/gi;
   for (const m of text.matchAll(re)) {
-    const art = (m[1] ?? '').toLowerCase();
-    const w = m[2] ?? '';
+    const artRaw = m[1] ?? '';
+    const art = artRaw.toLowerCase();
+    const w0 = m[2] ?? '';
+    // „&“ gehört nur dann zum Wort, wenn davor ein einzelner Buchstabe steht („R&D“, „M&A“).
+    const single = /^[A-Z]&[A-Za-z]/.test(w0);
+    const w = single ? w0.charAt(0) : w0.replace(/&.*$/, '');
     const first = w.charAt(0);
-    const acronym = w.length >= 2 && w === w.toUpperCase() && /^[A-Z]+$/.test(w);
-    // „A“ am Satzanfang als Großbuchstabe nach Satzende ist trotzdem ein Artikel; „a“/„an“ in Zitaten wird nicht geprüft.
+    // Ein großes „A“ mitten im Satz ist eine Bezeichnung („Option A is cheaper“, „Plan A“, „Series A“), kein Artikel.
+    if (artRaw === 'A') {
+      const before = text.slice(0, m.index ?? 0).trimEnd();
+      if (before && !/[.!?:;"“(\n]$/.test(before)) continue;
+    }
+    // Abkürzungen: Großbuchstaben (auch mit Ziffern: S3, M365, B2B) und einzelne Buchstaben vor „&“ (R&D, M&A).
+    const acronym = single || (w.length >= 2 && /^[A-Z][A-Z0-9]*$/.test(w));
     if (acronym) {
-      if (art === 'a' && AN_LETTERS.has(first)) return `"a ${w}": use "an ${w}" (the letter ${first} starts with a vowel sound)`;
+      if (art === 'a' && A_LETTERS.has(first) && !A_ACRONYM_OK.has(w)) return `"a ${w}": use "an ${w}" (the letter ${first} starts with a vowel sound)`;
       if (art === 'an' && !AN_LETTERS.has(first) && !A_LETTERS.has(first)) return `"an ${w}": use "a ${w}"`;
       continue;
     }
     const vowel = /[aeiou]/i.test(first);
     if (art === 'a' && vowel && !A_BEFORE_VOWEL_OK.test(w)) return `"a ${w}": use "an ${w}" (vowel sound)`;
     if (art === 'an' && !vowel && !AN_BEFORE_CONS_OK.test(w)) return `"an ${w}": use "a ${w}" (consonant sound)`;
+    if (art === 'an' && vowel && AN_BEFORE_CONS_ERR.test(w)) return `"an ${w}": use "a ${w}" (consonant sound)`;
   }
   return null;
 }
@@ -79,12 +96,18 @@ export function articleProblem(text: string): string | null {
 
 const KNOWN_ERRORS: ReadonlyArray<{ re: RegExp; why: string }> = [
   { re: /\blook(?:s|ed|ing)?\s+forward\s+(?:for|on|at)\b/i, why: '"look forward for" is wrong: use "look forward to"' },
-  { re: /\blook(?:s|ing)?\s+forward\s+to\s+(?:see|meet|hear|work|talk|discuss|have|get|call|speak|receive|read|welcome|start|go)\b/i, why: '"look forward to" takes an -ing form (looking forward to seeing)' },
+  { re: /\blook(?:s|ing)?\s+forward\s+to\s+(?:see|meet|hear|work|talk|discuss|have|get|call|speak|receive|read|welcome|start|go)\b(?!-)/i, why: '"look forward to" takes an -ing form (looking forward to seeing)' },
   { re: /\b(?:I|we|they|he|she|you)\s+used\s+to\s+(?!(?:sing|bring|ring|swing|spring|sting|cling|fling|wring|string|king|thing|ping)\b)[a-z]+ing\b/i, why: '"used to" takes the base form (I used to drive); "used to driving" belongs with "be/get used to"' },
   { re: /\b(?:have|has|had|having|get|got|gets|give|gives)\s+gut\s+feeling\b/i, why: 'the article is missing: "have a gut feeling"' },
   { re: /\b(?:can|could|should|must|might|would|shall)\s+to\s+(?:be|go|do|have|get|make|take|see|send|call|meet|check|work|use|help|find)\b/i, why: 'no "to" after a modal verb' },
-  { re: /\b(?:I|you|we|they)\s+(?:has|is)\b/i, why: 'subject and verb do not agree ("I has", "you is")' },
+  // „I“ nur am Satzanfang oder klein geschrieben: „Phase I is complete“ ist richtig.
+  { re: /(?:^|[.!?"“]\s*)I\s+(?:has|is)\b|\bi\s+(?:has|is)\b/, why: 'subject and verb do not agree ("I has")' },
+  { re: /\b(?:you|we|they)\s+(?:has|is)\b/i, why: 'subject and verb do not agree ("you is", "they has")' },
   { re: /\bdepends?\s+of\s+(?!course)/i, why: '"depends of" is wrong: use "depends on"' },
+  { re: /\bsince\s+\d+\s+(?:years?|months?|weeks?|days?)\b/i, why: '"since 3 years" is German: use "for 3 years" (since + a point in time)' },
+  { re: /\bhow\s+(?:it|this|that)\s+looks\s+like\b/i, why: '"how it looks like" is wrong: use "how it looks" or "what it looks like"' },
+  { re: /\baccording\s+to\s+me\b/i, why: '"according to me" is wrong: use "in my opinion" or "I think"' },
+  { re: /\b(?:make|makes|made|making)\s+a\s+photos?\b(?!\s+(?:book|album|collage|gallery|wall|print|booth|montage|essay))/i, why: '"make a photo" is German: use "take a photo"' },
   { re: /\bin\s+the\s+last\s+years\b(?!\s+of\b)/i, why: '"in the last years" is German: use "in recent years" or "in the past few years"' },
 ];
 

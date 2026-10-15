@@ -11,12 +11,14 @@ export type AuxError = { aux: string; verb: string; text: string; cls: AuxClass 
 const MODALS = new Set(['will', 'would', 'shall', 'should', 'might', 'may', 'can', 'could', 'must']);
 const PERFECT = new Set(['have', 'has', 'had']);
 const SKIP_ADV = new Set(['not', 'never', 'always', 'also', 'still', 'just', 'already', 'really', 'definitely', 'probably', 'only', 'even', 'ever', 'simply', 'finally', 'actually', 'surely', 'certainly', 'soon', 'now', 'then', 'both', 'all', 'first', 'recently']);
+// Fragewörter: Steht das Modalverb direkt danach oder am Satzanfang, ist es eine Frage mit vorangestelltem Hilfsverb („Can scanned invoices be archived?“, „What will onboarding cost?“).
+const WH = new Set(['what', 'how', 'when', 'where', 'why', 'who', 'whom', 'which', 'whose']);
 // Monat „May“ und Namen vor dem Modal: dort ist es kein Hilfsverb.
 const MAY_BEFORE = new Set(['in', 'since', 'until', 'of', 'by', 'next', 'last', 'this', 'every', 'early', 'late', 'mid', 'end', 'to', 'from']);
 
 /** Eindeutig falsche Formen (übergeneralisiert oder falsch geschrieben), unabhängig vom Hilfsverb. */
 export const OVERREGULARIZED: ReadonlySet<string> = new Set(
-  'catched choosen writen writed taked gived goed speaked knowed growed throwed drived buyed teached thinked bringed runned eated falled stealed breaked forgetted begined finded losed sended sleeped standed understanded meeted feeled keeped heared builded sitted comed becomed holded readed telled maked sayed leaved weared drawed drinked swimmed singed ringed flyed hidded bited shaked'.split(' '),
+  'catched choosen writen writed taked gived goed speaked knowed growed throwed drived buyed teached thinked bringed runned eated falled stealed breaked forgetted begined finded losed sended sleeped standed understanded meeted feeled keeped heared builded sitted comed becomed holded readed telled maked sayed leaved weared drawed drinked swimmed flyed hidded bited shaked payed splitted cutted setted spended choosed lended'.split(' '),
 );
 
 /** Einfache Vergangenheit, die vom Partizip abweicht: nach have/has/had/having falsch („had wrote“). */
@@ -26,11 +28,13 @@ const PAST_NE = new Set(
 /** Grundformen, deren Partizip anders heißt: nach have/has/had/having falsch („had send“). Ohne Wörter, die auch Nomen sind (drink, ride, swim, ring, drive, draw, break, rise, fall). */
 const BASE_NE = new Set('write send give take see go begin choose speak forget eat know grow throw steal wake freeze forgive undertake overtake do become come'.split(' '));
 // Zusammensetzungen und feste Nomen, in denen die Grundform erlaubt ist („write access“, „go-to“, „know-how“, „have a go“).
+// Gilt nach allen Formen von have (has write access, had write permissions, having write access).
 const COMPOUND_NEXT = /^(?:access|permission|permissions|privileges?|rights|capabilit(?:y|ies)|mode|only|protection|operations?|back|ups?|how|to|live)$/;
 
 /** Wörter auf -ed, die keine Vergangenheitsform sind (Grundformen, Nomen, Adjektive). */
 const NOT_ED = new Set('need feed speed seed proceed succeed exceed bleed breed heed embed shed red bed wed sled hundred kindred naked wicked sacred beloved rugged ragged crooked'.split(' '));
-const NOT_ING = new Set('sing bring ring swing spring sting cling fling wring string king thing ping bing wing'.split(' '));
+// Nomen auf -ing: nach einem Modalverb kein Verb („We will have pricing ready“, „Will onboarding take long?“).
+const NOT_ING = new Set('sing bring ring swing spring sting cling fling wring string king thing ping bing wing anything something everything nothing during morning evening pricing funding training onboarding billing licensing marketing meeting building ceiling'.split(' '));
 
 type Tok = { raw: string; w: string; start: number; end: number; neg: boolean };
 
@@ -61,6 +65,9 @@ function nextIdx(toks: readonly Tok[], i: number): number {
   while (j < toks.length && SKIP_ADV.has(toks[j]?.w ?? '')) j++;
   return j < toks.length ? j : -1;
 }
+
+/** Steht das Wort am Satzanfang (nach Satzende, Anführungszeichen oder Klammer)? */
+const atSentenceStart = (text: string, t: Tok): boolean => /(^|[.!?:;]\s*|["“(]\s*)$/.test(text.slice(0, t.start));
 
 /** Folgt auf den Tokenindex ein Bindestrich (Zusammensetzung wie „know-how“)? */
 const hyphenAfter = (text: string, t: Tok): boolean => text.charAt(t.end) === '-';
@@ -106,6 +113,11 @@ export function auxFormErrors(text: string, opts: { strict?: boolean; right?: st
     const v = toks[j] as Tok;
     if (boundaryBetween(text, t, v) || hyphenAfter(text, v)) continue;
     if (isModal) {
+      // Frage mit vorangestelltem Modalverb („Can scanned invoices be archived?“, „Will pricing change?“, „What will onboarding cost?“): kein Hilfsverb + Verb.
+      // Nur in der strengen Prüfung ganzer Texte; Radar-Antworten sind oft Satzteile („would missed“), dort sagt `right` die Gegenprobe.
+      if (strict && (atSentenceStart(text, t) || WH.has(prevW))) continue;
+      // Großes „Will“ mitten im Satz ist ein Name („Will was in the call“).
+      if (strict && t.raw === 'Will') continue;
       // will worked / would finished / can used / will has / will opening / will have living
       if (v.w === 'has' || v.w === 'had' || v.w === 'was' || v.w === 'were' || isRegularPast(v.w) || PAST_NE.has(v.w) || isIng(v.w)) {
         // „can opening“ u. ä. mit Nomen davor („a can“, „the will“) ist keine Verbindung Hilfsverb + Verb.
@@ -114,13 +126,14 @@ export function auxFormErrors(text: string, opts: { strict?: boolean; right?: st
       } else if (v.w === 'have') {
         const k = nextIdx(toks, j);
         const w2 = k >= 0 ? (toks[k] as Tok) : null;
-        if (w2 && !boundaryBetween(text, v, w2) && (isIng(w2.w) || (!strict && BASE_NE.has(w2.w) && w2.w !== 'be'))) push(t, w2, 'modal');
+        // Streng: „Modalverb + have + -ing“ gar nicht prüfen („We should have training ready“, „It would have nothing to do with …“).
+        if (w2 && !boundaryBetween(text, v, w2) && !strict && (isIng(w2.w) || (BASE_NE.has(w2.w) && w2.w !== 'be'))) push(t, w2, 'modal');
       }
     } else if (isPerfect || isHaving) {
       const cls: AuxClass = isHaving ? 'having' : 'perfect';
       if (OVERREGULARIZED.has(v.w)) continue; // oben schon gezählt
       if (PAST_NE.has(v.w) && !(v.w === 'was' || v.w === 'were')) push(t, v, cls);
-      else if (BASE_NE.has(v.w) && !(t.w === 'have' && COMPOUND_NEXT.test(toks[nextIdx(toks, j)]?.w ?? '')) && !(v.w === 'become' || v.w === 'come' || v.w === 'do' || v.w === 'go')) push(t, v, cls);
+      else if (BASE_NE.has(v.w) && !COMPOUND_NEXT.test(toks[nextIdx(toks, j)]?.w ?? '') && !(v.w === 'become' || v.w === 'come' || v.w === 'do' || v.w === 'go')) push(t, v, cls);
       else if (!strict && (rightWords.has(`${v.w}ed`) || rightWords.has(`${v.w}d`)) && !isRegularPast(v.w)) push(t, v, cls);
       // had been/has been … wird beim Tokenindex von „been“ geprüft.
     } else if (isBeen && !strict) {

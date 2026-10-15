@@ -50,7 +50,7 @@ describe('withFixedGate in produce-check@2', () => {
   it('Prompt: Regeln für die Fassung, falsche Freunde und US-Schreibweise stehen drin', () => {
     const p = produceCheckV2.build(vars);
     expect(p).toContain('Fix EVERY error');
-    expect(p).toContain('"eventually" is NOT German "eventuell"');
+    expect(p).toContain('eventuell = possibly, perhaps, maybe (not eventually)');
     expect(p).toContain('American spelling');
     expect(p).toContain('set fixed to ""');
     expect(correctionRules().length).toBeGreaterThanOrEqual(5);

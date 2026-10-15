@@ -25,6 +25,21 @@ export const VERB_FORMS: Readonly<Record<string, VerbForms>> = {
   do: ['do', 'does', 'did', 'done', 'doing'],
   book: ['book', 'books', 'booked', 'booked', 'booking'],
   achieve: ['achieve', 'achieves', 'achieved', 'achieved', 'achieving'],
+  set: ['set', 'sets', 'set', 'set', 'setting'],
+  lead: ['lead', 'leads', 'led', 'led', 'leading'],
+  close: ['close', 'closes', 'closed', 'closed', 'closing'],
+  seal: ['seal', 'seals', 'sealed', 'sealed', 'sealing'],
+  clinch: ['clinch', 'clinches', 'clinched', 'clinched', 'clinching'],
+  land: ['land', 'lands', 'landed', 'landed', 'landing'],
+  win: ['win', 'wins', 'won', 'won', 'winning'],
+  handle: ['handle', 'handles', 'handled', 'handled', 'handling'],
+  address: ['address', 'addresses', 'addressed', 'addressed', 'addressing'],
+  overcome: ['overcome', 'overcomes', 'overcame', 'overcome', 'overcoming'],
+  strike: ['strike', 'strikes', 'struck', 'struck', 'striking'],
+  cut: ['cut', 'cuts', 'cut', 'cut', 'cutting'],
+  reduce: ['reduce', 'reduces', 'reduced', 'reduced', 'reducing'],
+  lower: ['lower', 'lowers', 'lowered', 'lowered', 'lowering'],
+  place: ['place', 'places', 'placed', 'placed', 'placing'],
 };
 
 export type CollocGroup = {
@@ -34,11 +49,24 @@ export type CollocGroup = {
   verbs: readonly string[];
 };
 
+// Gruppen nur, wo die Verben dasselbe bedeuten. „meeting“ sind drei verschiedene Dinge: ansetzen (arrange), stattfinden lassen (hold, have), leiten (run, chair):
+// „We chaired a meeting for Monday“ oder „Who will schedule the meeting?“ (leiten) wären sonst richtig. „hold a presentation“ und „make a meeting“ bleiben
+// bewusst falsche Antworten (typisch deutsche Fehler).
 export const COLLOC_GROUPS: readonly CollocGroup[] = [
   { nouns: ['deadline'], verbs: ['meet', 'hit', 'make', 'beat'] },
-  { nouns: ['target', 'goal', 'quota'], verbs: ['meet', 'hit', 'reach', 'achieve'] },
-  { nouns: ['meeting'], verbs: ['hold', 'have', 'run', 'arrange', 'schedule', 'organize', 'call', 'chair'] },
+  { nouns: ['target', 'goal'], verbs: ['meet', 'hit', 'reach', 'achieve'] },
+  // „Did you make quota?“ ist Kern-Vertriebssprache in den USA; „achieve a quota“ klingt schief.
+  { nouns: ['quota'], verbs: ['meet', 'hit', 'make', 'reach'] },
+  { nouns: ['meeting'], verbs: ['arrange', 'schedule', 'organize', 'set', 'book', 'call'] },
+  { nouns: ['meeting'], verbs: ['hold', 'have'] },
+  { nouns: ['meeting'], verbs: ['run', 'chair', 'lead'] },
   { nouns: ['decision'], verbs: ['make', 'take', 'reach'] },
   { nouns: ['presentation'], verbs: ['give', 'deliver', 'make', 'do'] },
-  { nouns: ['appointment'], verbs: ['make', 'schedule', 'book', 'arrange'] },
+  // „set an appointment“ ist sehr üblich im US-Vertrieb.
+  { nouns: ['appointment'], verbs: ['make', 'schedule', 'book', 'arrange', 'set'] },
+  { nouns: ['deal'], verbs: ['close', 'seal', 'clinch', 'land', 'win'] },
+  { nouns: ['objection'], verbs: ['handle', 'address', 'overcome'] },
+  { nouns: ['agreement'], verbs: ['reach', 'strike'] },
+  { nouns: ['cost'], verbs: ['cut', 'reduce', 'lower'] },
+  { nouns: ['order'], verbs: ['place', 'make'] },
 ];

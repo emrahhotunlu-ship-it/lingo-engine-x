@@ -2,6 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { boot, layoutProblems, openOverview, screen, type Lang } from './fixtures';
 import { openWeekly } from './profilHelpers';
 import { AUX_PATTERNS } from '../../src/content/auxForm';
+import { AUX_ROUND } from '../../src/domain/drills/auxform';
 import { typeInGap } from './learnHelpers';
 
 // Phase 6 (Plan §13): „Dein Stand" mit Urteil · Fehler · Weg nach C1 · Verlauf gegen den
@@ -209,10 +210,11 @@ test('Fehler-Radar: „Verbform nach Hilfsverb“ steht als eine Regel quer übe
     }
     throw new Error(`Satz nicht gefunden: ${pre}|${post}`);
   };
-  for (let i = 0; i < 5; i++) {
+  // Fünf Muster (bei „been“ ein Paar: Dauer und Passiv) als Lückensätze, danach ein eigener Satz.
+  for (let i = 0; i < AUX_ROUND - 1; i++) {
     const item = page.getByTestId('drill-item');
     await expect(item).toHaveAttribute('data-kind', 'cloze');
-    await expect(item.getByTestId('cue')).toContainText('Verb:');
+    await expect(item.getByTestId('cue')).toContainText(/Verb:|Falsche Form:/);
     const answer = await solutionOf();
     if (i === 0) {
       // Eine andere Form desselben Verbs ist falsch (strenge Formübung) und erklärt die Regel.
@@ -230,6 +232,12 @@ test('Fehler-Radar: „Verbform nach Hilfsverb“ steht als eine Regel quer übe
     await page.getByTestId('next').click();
     await expect(page.getByTestId('drill-item').getByTestId('verdict')).toHaveCount(0);
   }
+  // Abschluss: ein eigener Satz, lokal auf die Verbform geprüft (ohne Claude).
+  await expect(page.getByTestId('drill-item')).toHaveAttribute('data-kind', 'cloze');
+  await page.getByTestId('aux-free-input').fill('If we had won the deal, we would have signed the contract last week.');
+  await page.keyboard.press('Enter');
+  await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
+  await page.getByTestId('next').click();
   await expect(page.getByTestId('session-end')).toBeVisible();
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
