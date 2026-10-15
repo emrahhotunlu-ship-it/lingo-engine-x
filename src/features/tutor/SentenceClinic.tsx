@@ -91,6 +91,11 @@ function Result({ shown, onAgain, onDone }: { shown: Shown; onAgain: () => void;
           </p>
         </div>
       )}
+      {o.verdict !== 'correct' && o.fixedUnsure && (
+        <p className="lx-t-meta m-0 text-muted" data-testid="cl-unsure">
+          {t('awFixUnsure')}
+        </p>
+      )}
       {differs && (
         <Disclosure label={t('ttClBetter')} testId="cl-better">
           <p className="lx-t-body m-0" lang="en" data-testid="cl-better-text">

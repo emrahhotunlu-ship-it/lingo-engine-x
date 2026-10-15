@@ -6,6 +6,7 @@ import { locateChunk } from '../domain/srs/chunkCards';
 import { locate } from '../domain/srs/context';
 import { clip, header, langName, langOf } from './common';
 import { LEARNER_SENTENCE_MAX, MEANING_MAX, TARGET_MAX, looseBool, produceVerdict, type ProduceVerdict } from './produceCheck';
+import { correctionRules, withFixedGate } from './fixedGate';
 import { clipped } from './tolerant';
 import type { PromptTemplate, UiLang } from './types';
 
@@ -50,6 +51,8 @@ export type ProduceCheckV2Out = {
   better: string;
   whyBetter: string;
   errType: ProduceErrType | null;
+  /** Die korrigierte Fassung hat die Selbstprüfung nicht bestanden (oder fehlt): `fixed` ist leer, die App zeigt „noch nicht sicher geprüft“. */
+  fixedUnsure?: boolean;
 };
 
 const FORM_EN: Record<Brief['form'], ProduceBriefVars['form']> = { s: 'statement', q: 'question', n: 'negation', i: 'if-sentence' };
@@ -102,7 +105,8 @@ export function errTypeOf(v: unknown): unknown {
   return 'other';
 }
 
-const schemaFor = (uiLang: UiLang, target = ''): z.ZodType<ProduceCheckV2Out> =>
+const schemaFor = (uiLang: UiLang, target = '', lenient = false): z.ZodType<ProduceCheckV2Out> =>
+  withFixedGate<ProduceCheckV2Out>(
   z
     .object({
       verdict: z.preprocess(produceVerdict, z.enum(['correct', 'minor', 'wrong'])),
@@ -116,7 +120,6 @@ const schemaFor = (uiLang: UiLang, target = ''): z.ZodType<ProduceCheckV2Out> =>
     // Fehlerklasse: bei „richtig“ keine; fehlt sie trotz Fehler, gilt `other` (kein Neuversuch wegen eines Nebenfelds).
     .transform((v) => ({ ...v, errType: v.verdict === 'correct' ? null : (v.errType ?? ('other' as const)) }))
     .superRefine((v, ctx) => {
-      if (v.verdict !== 'correct' && !v.fixed.trim()) ctx.addIssue({ code: 'custom', path: ['fixed'], message: 'fixed must contain the corrected sentence' });
       // Keine Widersprüche (Kap. 2): „richtig“ setzt voraus, dass das Zielwort vorkommt.
       if (v.verdict !== 'wrong' && !v.usesTarget) ctx.addIssue({ code: 'custom', path: ['verdict'], message: 'must be "wrong" when usesTarget is false' });
       // Dritte Schicht: eine C1-Fassung braucht ihre Begründung; ohne Fassung gibt es keine.
@@ -126,7 +129,9 @@ const schemaFor = (uiLang: UiLang, target = ''): z.ZodType<ProduceCheckV2Out> =>
       if (v.better.trim() && !hasTarget(v.better, target)) ctx.addIssue({ code: 'custom', path: ['better'], message: 'better must keep the target word or phrase' });
       if (v.better.trim().split(/\s+/).length > BETTER_MAX_WORDS) ctx.addIssue({ code: 'custom', path: ['better'], message: `better must have at most ${BETTER_MAX_WORDS} words` });
     })
-    .superRefine(langOf(['why', 'whyBetter'], uiLang));
+    .superRefine(langOf(['why', 'whyBetter'], uiLang)),
+  { needs: (o) => o.verdict !== 'correct', lenient },
+  );
 
 export const produceCheckV2: PromptTemplate<ProduceCheckV2Vars, ProduceCheckV2Out> = {
   id: ID,
@@ -167,6 +172,7 @@ export const produceCheckV2: PromptTemplate<ProduceCheckV2Vars, ProduceCheckV2Ou
       '- In fixed and better, do not add facts, numbers, names or content that the learner did not write. fixed keeps the target.',
       '- usesTarget: true if the target (any inflected form; a separable phrasal verb may be split, e.g. "follow it up") is used with the right meaning.',
       '- fixed: the sentence corrected with minimal changes (identical if nothing to fix).',
+      ...correctionRules(),
       '- why (layer 1, right or wrong): one or two sentences in the explanation language about the single most important error and why it is one.',
       '  Priority: target misused > error that changes meaning > typical German-speaker error > register > style. Never list several errors.',
       '  Always explain, also when correct: then name the specific thing that works (e.g. the collocation or the hedge), no generic praise.',
@@ -178,4 +184,5 @@ export const produceCheckV2: PromptTemplate<ProduceCheckV2Vars, ProduceCheckV2Ou
     ].join('\n');
   },
   schema: (vars) => schemaFor(vars.uiLang, vars.target),
+  lenient: (vars) => schemaFor(vars.uiLang, vars.target, true),
 };

@@ -115,7 +115,9 @@ describe('activate-check@1', () => {
       expect(s().safeParse(reply({ targets: [true] })).success).toBe(true);
     });
     it('Fehler brauchen die Korrektur, Fehlerklasse fehlt → other, bei „correct“ nie eine Klasse', () => {
-      expect(s().safeParse(reply({ verdict: 'minor', fixed: '' })).success).toBe(false);
+      // Leere Korrektur: erlaubt, aber als „nicht sicher geprüft“ markiert; eine Fassung mit eindeutigem Fehler besteht nicht (Auswertung 15.10.2026).
+      expect(s().parse(reply({ verdict: 'minor', fixed: '' }))).toMatchObject({ fixed: '', fixedUnsure: true });
+      expect(s().safeParse(reply({ verdict: 'minor', fixed: 'We discussed about the price.' })).success).toBe(false);
       const r = s().safeParse(reply({ verdict: 'minor', fixed: 'We use leverage in every price talk.', errType: undefined, reusable: true }));
       expect(r.data?.errType).toBe('other');
       expect(r.data?.reusable).toBe(false);

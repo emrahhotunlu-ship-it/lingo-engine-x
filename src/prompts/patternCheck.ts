@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { clip, header, langName, langOf } from './common';
 import { looseBool, produceVerdict, type ProduceVerdict } from './produceCheck';
+import { correctionRules, withFixedGate } from './fixedGate';
 import { clipped } from './tolerant';
 import type { PromptTemplate, UiLang } from './types';
 
@@ -20,7 +21,14 @@ export type PatternCheckVars = {
   uiLang: UiLang;
 };
 
-export type PatternCheckOut = { verdict: ProduceVerdict; avoided: boolean; fixed: string; why: string };
+export type PatternCheckOut = {
+  verdict: ProduceVerdict;
+  avoided: boolean;
+  fixed: string;
+  why: string;
+  /** Die korrigierte Fassung hat die Selbstprüfung nicht bestanden (oder fehlt): `fixed` ist leer, die App zeigt „noch nicht sicher geprüft“. */
+  fixedUnsure?: boolean;
+};
 
 export const PC_SENTENCE_MAX = 300;
 export const PATTERN_CHECK_EXAMPLE = '{"verdict":"correct","avoided":true,"fixed":"","why":"…"}';
@@ -49,10 +57,16 @@ export const patternCheck: PromptTemplate<PatternCheckVars, PatternCheckOut> = {
       '- verdict: "correct" (no mistake), "minor" (small slip, trap avoided) or "wrong" (the trap or another real mistake).',
       '- avoided: true if the sentence does NOT contain the error pattern (false also if the task was ignored).',
       '- fixed: the corrected sentence in American English; empty if verdict is "correct".',
+      ...correctionRules(),
       '- why: one short sentence in the explanation language.',
     ].join('\n');
   },
-  schema: (v) =>
+  schema: (v) => schemaFor(v, false),
+  lenient: (v) => schemaFor(v, true),
+};
+
+function schemaFor(v: PatternCheckVars, lenient: boolean): z.ZodType<PatternCheckOut> {
+  return withFixedGate<PatternCheckOut>(
     z
       .object({
         verdict: z.preprocess(produceVerdict, z.enum(['correct', 'minor', 'wrong'])),
@@ -61,9 +75,10 @@ export const patternCheck: PromptTemplate<PatternCheckVars, PatternCheckOut> = {
         why: clipped(1, 300),
       })
       .superRefine((o, ctx) => {
-        if (o.verdict !== 'correct' && !o.fixed.trim()) ctx.addIssue({ code: 'custom', path: ['fixed'], message: 'fixed must contain the corrected sentence' });
         // Keine Widersprüche (Kap. 2): in die Falle getappt heißt nicht richtig.
         if (o.verdict !== 'wrong' && !o.avoided) ctx.addIssue({ code: 'custom', path: ['verdict'], message: 'must be "wrong" when avoided is false' });
       })
       .superRefine(langOf(['why'], v.uiLang)),
-};
+    { needs: (o) => o.verdict !== 'correct', lenient },
+  );
+}

@@ -3,6 +3,7 @@ import { isWrongLang } from '../domain/lang/detect';
 import { errorEdits, keepEdits, normWs, type Edit } from '../domain/tutor/edits';
 import { patIdsOf } from '../domain/tutor/patList';
 import { clip, fenced, header, langName, langOf } from './common';
+import { correctionRules, withFixedGate } from './fixedGate';
 import { produceVerdict } from './produceCheck';
 import { clipped } from './tolerant';
 import type { PromptTemplate, UiLang } from './types';
@@ -31,6 +32,8 @@ export type ClinicOut = {
   verdict: ClinicVerdict;
   /** Der Satz mit den kleinsten nötigen Korrekturen (US-Englisch); bei `correct` leer. */
   fixed: string;
+  /** Die korrigierte Fassung hat die Selbstprüfung nicht bestanden (oder fehlt): `fixed` ist leer, die App zeigt „noch nicht sicher geprüft“. */
+  fixedUnsure?: boolean;
   edits: Edit[];
   /** Eine natürlichere C1-Fassung, oder leer. */
   better: string;
@@ -54,10 +57,11 @@ export const CLINIC_EXAMPLE =
 const asList = (v: unknown): unknown => (v === undefined || v === null ? [] : typeof v === 'string' ? [] : v);
 const blank = (v: unknown): unknown => (v === undefined || v === null ? '' : v);
 
-export function clinicSchema(v: ClinicVars): z.ZodType<ClinicOut> {
+export function clinicSchema(v: ClinicVars, lenient = false): z.ZodType<ClinicOut> {
   const ids = patIdsOf(v.pats);
   const given = clip(v.sentence, CLINIC_SENTENCE_MAX);
-  return z
+  return withFixedGate<ClinicOut>(
+    z
     .object({
       verdict: z.preprocess(produceVerdict, z.enum(['correct', 'minor', 'wrong'])),
       fixed: z.preprocess(blank, clipped(0, 400)),
@@ -73,7 +77,6 @@ export function clinicSchema(v: ClinicVars): z.ZodType<ClinicOut> {
       const errs = errorEdits(o.edits).length;
       // Nicht „richtig“ heißt: mindestens eine belegte Fehlerstelle (Stil allein macht einen Satz nie „fast richtig“).
       if (o.verdict !== 'correct' && errs === 0) ctx.addIssue({ code: 'custom', path: ['edits'], message: 'a verdict other than correct needs at least one edit with sev error quoted exactly from the sentence' });
-      if (o.verdict !== 'correct' && errs > 0 && !o.fixed.trim()) ctx.addIssue({ code: 'custom', path: ['fixed'], message: 'fixed must contain the corrected sentence' });
       if (o.verdict !== 'correct' && errs > 0 && o.fixed.trim() && normWs(o.fixed) === normWs(given)) ctx.addIssue({ code: 'custom', path: ['fixed'], message: 'fixed must differ from the learner sentence' });
       // „Richtig“ lässt Verbesserungen (sev upgrade) zu, aber keine Fehlerstelle.
       if (o.verdict === 'correct' && errs > 0) ctx.addIssue({ code: 'custom', path: ['edits'], message: 'no edit with sev error when the verdict is correct (style ideas are sev upgrade or go into better)' });
@@ -83,7 +86,9 @@ export function clinicSchema(v: ClinicVars): z.ZodType<ClinicOut> {
       });
       for (const f of ['fixed', 'better'] as const) if (isWrongLang(o[f], 'en')) ctx.addIssue({ code: 'custom', path: [f], message: 'must be written in English' });
     })
-    .superRefine(langOf(['note', 'good'], v.uiLang));
+    .superRefine(langOf(['note', 'good'], v.uiLang)),
+    { needs: (o) => o.verdict !== 'correct' && errorEdits(o.edits).length > 0, lenient },
+  );
 }
 
 export const sentenceClinic: PromptTemplate<ClinicVars, ClinicOut> = {
@@ -113,6 +118,7 @@ export const sentenceClinic: PromptTemplate<ClinicVars, ClinicOut> = {
       'Rules:',
       '- verdict: "correct" = no mistake, even if a more elegant version exists (put style ideas into "better" or as edits with sev "upgrade"); "minor" = one or two small mistakes (including a wrong collocation or a word a native speaker would not use in this meaning); "wrong" = clearly ungrammatical or misleading. Correct but plain or less elegant wording is never "minor". Style ideas never change the verdict.',
       '- fixed: the sentence with only the necessary corrections (empty string if verdict is correct).',
+      ...correctionRules(),
       '- edits: at most 3 (if there are more than 3 errors, list the 3 most important; "fixed" still corrects all of them), each with "from" copied EXACTLY from the learner sentence (no paraphrase, no quote marks added), "to", kind (grammar, word, collocation, spelling, punctuation or register), sev ("error" for a mistake, "upgrade" for an optional improvement; kind register is always sev upgrade), pat (id or null) and "why" (one short sentence in the explanation language: the rule or the reason). If the verdict is correct, there must be no edit with sev "error".',
       '- better: a more natural C1 version in American English, or an empty string. Style ideas belong here, never in edits with sev "error".',
       '- register: "formal", "neutral" or "informal" for the learner sentence. note: one short sentence about tone in the explanation language, or an empty string.',
@@ -123,4 +129,5 @@ export const sentenceClinic: PromptTemplate<ClinicVars, ClinicOut> = {
       .join('\n');
   },
   schema: (v) => clinicSchema(v),
+  lenient: (v) => clinicSchema(v, true),
 };

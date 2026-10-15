@@ -919,7 +919,9 @@ export function ExerciseView({
     const c = fb.result;
     const sub: string | null = fb.dontKnow
       ? null
-      : fb.override
+      : fb.sentence?.out?.fixedUnsure && fb.result.verdict !== 'correct'
+        ? t('awFixUnsure')
+        : fb.override
         ? t('lrOverridden')
         : fb.sentence && !fb.sentence.out
           ? fb.sentence.issue

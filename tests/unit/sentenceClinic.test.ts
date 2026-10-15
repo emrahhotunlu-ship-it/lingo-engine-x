@@ -92,7 +92,9 @@ describe('Vorlage sentence-clinic@1', () => {
 
   it('Schema: fehlendes oder unverändertes fixed bei minor/wrong → Fehler; falsche Sprache der Begründung → Fehler', () => {
     const schema = clinicSchema(vars());
-    expect(schema.safeParse({ ...good, fixed: '' }).success).toBe(false);
+    // Leeres fixed ist erlaubt, aber nie „sicher“ (Auswertung 15.10.2026); eine Fassung mit eindeutigem Fehler besteht nicht.
+    expect(schema.parse({ ...good, fixed: '' })).toMatchObject({ fixed: '', fixedUnsure: true });
+    expect(schema.safeParse({ ...good, fixed: 'We discussed about the offer.' }).success).toBe(false);
     expect(schema.safeParse({ ...good, fixed: SENTENCE }).success).toBe(false);
     const en = { ...good, edits: [{ ...good.edits[0], why: 'There is no preposition after this verb, so it has to go away here.' }] };
     expect(schema.safeParse(en).success).toBe(false);

@@ -175,6 +175,7 @@ export const roleplayReport: PromptTemplate<RoleplayReportVars, RoleplayReportOu
       '- strengths: 1–2 items; quote copied word for word from a learner turn.',
       '- focus: 0–3 items (none if there is nothing to improve); said copied word for word from a learner turn; better = how a C1 speaker would say it;',
       `  cat one of ${ERROR_CATS.join(', ')}.`,
+      '  better must itself be correct (subject-verb agreement, a/an, verb form after will/would/have/had/been), never keep a false friend of a German speaker (eventually is not eventuell, absolve is not absolvieren), American spelling only.',
       '- phrases: up to 3 useful phrases for this situation that the learner has not saved yet; ex contains en word for word.',
       '- toolkit (C1 toolkit): 0–3 items, at most one per skill: "hedge" (softening, hedging, diplomatic distance), "structure" (discourse markers such as That said, To build on that, Coming back to), "emphasis" (cleft sentences, inversion).',
       '  used = true if the learner did it well at least once, false if it was missing where it would have helped; note = one short sentence in the explanation language, quoting or suggesting an English phrase.',

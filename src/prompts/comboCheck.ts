@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { clip, header, langName, langOf } from './common';
 import { looseBool } from './produceCheck';
+import { correctionRules, withFixedGate } from './fixedGate';
 import { clipped } from './tolerant';
 import type { PromptTemplate, UiLang } from './types';
 
@@ -27,6 +28,8 @@ export type ComboCheckOut = {
   /** Korrigierte Fassung (nur nötig, wenn der Satz nicht richtig ist; sonst leer). */
   fixed: string;
   why: string;
+  /** Die korrigierte Fassung hat die Selbstprüfung nicht bestanden (oder fehlt): `fixed` ist leer, die App zeigt „noch nicht sicher geprüft“. */
+  fixedUnsure?: boolean;
 };
 
 const ID = 'combo-check';
@@ -56,11 +59,17 @@ export const comboCheck: PromptTemplate<ComboCheckVars, ComboCheckOut> = {
       '- ruleOk: true only if the sentence really uses the given rule in the right form. A correct sentence that avoids the rule is ruleOk false.',
       '- correct: true only if there is no grammar, word-choice or spelling mistake anywhere in the sentence.',
       '- fixed: if correct is false, the corrected sentence in American English that keeps his idea and his word; keep it close to his sentence. If correct is true, an empty string.',
+      ...correctionRules(),
       '- why: one or two short sentences in the explanation language: what is right, or what exactly was wrong and why. Name the German habit if it caused the mistake.',
       '- No straight double quotes inside the strings.',
     ].join('\n');
   },
-  schema: (v) =>
+  schema: (v) => schemaFor(v, false),
+  lenient: (v) => schemaFor(v, true),
+};
+
+function schemaFor(v: ComboCheckVars, lenient: boolean): z.ZodType<ComboCheckOut> {
+  return withFixedGate<ComboCheckOut>(
     z
       .object({
         ruleOk: z.preprocess(looseBool, z.boolean()),
@@ -68,8 +77,7 @@ export const comboCheck: PromptTemplate<ComboCheckVars, ComboCheckOut> = {
         fixed: z.preprocess((x) => (x === undefined || x === null ? '' : x), clipped(0, 400)),
         why: clipped(1, 400),
       })
-      .superRefine(langOf(['why'], v.uiLang))
-      .superRefine((o, ctx) => {
-        if (!o.correct && !o.fixed.trim()) ctx.addIssue({ code: 'custom', path: ['fixed'], message: 'give the corrected sentence when correct is false' });
-      }),
-};
+      .superRefine(langOf(['why'], v.uiLang)),
+    { needs: (o) => !o.correct, lenient },
+  );
+}

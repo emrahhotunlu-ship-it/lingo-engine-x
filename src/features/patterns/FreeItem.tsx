@@ -51,6 +51,7 @@ export function FreeItem({ task, pattern, example, status, onResult, onNext }: P
     ? {
         verdict: VERDICT[res.out.verdict],
         comparison: fixed && normText(fixed) !== normText(res.given) ? { given: res.given, ops: alignWords(res.given, fixed) } : null,
+        sub: res.out.fixedUnsure ? t('awFixUnsure') : null,
         explanation: { lines: [{ k: 'why', text: res.out.why }], examples: [], mark: [], ai: true, source: 'fallback' },
         depth: 'full',
         auto: false,

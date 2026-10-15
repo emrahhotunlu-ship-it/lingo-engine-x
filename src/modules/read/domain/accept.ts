@@ -1,8 +1,11 @@
 import { z } from 'zod';
-import { detectLang, isWrongLang, wordCount } from '../shared';
+import { britishSpelling, detectLang, isWrongLang, wordCount } from '../shared';
 import { ARTICLE_KINDS, TOPIC_KEYS } from '../schemas';
 import type { ArticleKind, Check, KeyWord, Sentence, TopicKey } from '../schemas';
 import { countWords, normKey, normalizeDashes } from './text';
+
+// `britishSpelling` liegt jetzt in src/domain/text/british.ts (gemeinsam mit den KI-Korrekturen); hier nur durchgereicht.
+export { britishSpelling };
 
 // Prüftore für einen erzeugten Artikel (docs/umbau/lesen-plan.md §3.4). Reine Funktion `acceptArticle`, wie Q3 „accept*“:
 // Verstoß = Schemafehler im KI-Tor (löst den EINEN Neuversuch aus, A6 Nr. 3), danach Fehlerkarte; nie ein schief ausgerichteter Artikel.
@@ -135,22 +138,6 @@ export function gluedProblem(s: string): string | null {
   return null;
 }
 
-// US-Schreibweise (Tor 8): britische Formen im erzeugten Text. In Emrahs EINGABEN sind britische Formen richtig (CLAUDE.md A7), im erzeugten Text gilt US.
-const BRITISH = new RegExp(
-  [
-    '\\b(?:colour|favour|honour|behaviour|labour|neighbour|humour|rumour|harbour|flavour|savour|vapour|endeavour|armour|odour)\\w*',
-    '\\b(?:centre|metre|litre|theatre|fibre|calibre)s?\\b',
-    '\\b(?:defence|offence|licence|pretence)s?\\b',
-    '\\w+isation(?:s)?\\b',
-    '\\b(?:organis|realis|recognis|optimis|prioritis|minimis|maximis|summaris|utilis|customis|standardis|specialis|categoris|capitalis|authoris|finalis|digitis|monetis|harmonis|centralis|localis|globalis|generalis|synchronis|visualis|personalis|apologis|criticis|itemis|emphasis|memoris|normalis|stabilis|mobilis|modernis|penalis|revolutionis|rationalis|socialis|commercialis|industrialis|incentivis|operationalis|virtualis|containeris|materialis|neutralis|familiaris)(?:e|ed|es|ing|er|ers)\\b',
-    '\\banalys(?:e|ed|ing)\\b',
-    '\\b(?:programme|catalogue|cheque|tyre|kerb|aluminium|artefact|sceptic|cosy|mould|plough|draught|pyjamas|aeroplane|grey|maths|whilst|amongst|learnt|spelt|dreamt|judgement|acknowledgement|ageing|storey|fortnight|jewellery)s?\\b',
-    '\\b(?:fulfil|enrol|instalment|skilful|wilful|fulfilment|enrolment)s?\\b',
-    '\\b(?:travell|modell|labell|signall|channell|levell|fuell|tunnell|marvell)(?:ed|ing|er|ers|ous)\\b',
-  ].join('|'),
-  'i',
-);
-
 // Typische KI-Floskeln (Stil, im Tor „spelling“): ein Treffer löst den einen Neuversuch aus. Der Prompt verbietet sie ebenfalls.
 const CLICHES = /\b(?:in today[’']s fast[- ]paced|game[- ]?changer|delv(?:e|es|ed|ing)\s+(?:into|deeper)|navigate the complexit|unlock(?:s|ed|ing)? the (?:power|potential|full)|in conclusion,)/i;
 
@@ -168,11 +155,6 @@ export function countWordIn(text: string, word: string): number {
 const GERMAN_SAME = new Set(
   'routine focused specific team project problem system manager management plan idea information kontakt contact interesting normal final original social global digital local national international professional personal potential general special natural central basic simple direct action actions color market markets budget status concept process product products service services client clients online email'.split(' '),
 );
-
-/** Britische Schreibweise gefunden? Liefert die Fundstelle. */
-export function britishSpelling(text: string): string | null {
-  return BRITISH.exec(text)?.[0] ?? null;
-}
 
 const FUNCTION_WORDS = new Set(
   'a an the and or but nor so yet of in on at to for from by with without into onto over under about as is are was were be been being am do does did has have had it its this that these those there here which who whom whose what when where why how not no than then also very more most can could may might must shall should will would'.split(' '),

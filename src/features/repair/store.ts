@@ -2,7 +2,8 @@ import { getWriter } from '../../data';
 import { validateDoc } from '../../data/validate';
 import { reviewError } from '../../domain/grammar/errors';
 import { addRepairs, readRepairs, repairId, reviewRepair, type NewRepair, type RepairItem } from '../../domain/repair/repair';
-import { logError } from '../../platform/diagnostics';
+import { fixedProblems } from '../../domain/text/correctness';
+import { logError, logWarn } from '../../platform/diagnostics';
 
 // Schreibwege für `app/repair` (Lernberatung 27.09., V2): immer ein `transform` auf dem frischen
 // Stand, nur ergänzen bzw. die eine Wiederholung eintragen. Nie gelöscht außer über die Kappung.
@@ -24,9 +25,19 @@ function writable(cur: Readonly<Doc> | undefined): boolean {
 }
 
 /** Reparatur-Sätze anlegen (z. B. aus Sag es, Gespräch, Schreiben). true = gespeichert oder nichts zu tun (alle schon da); false = nicht geschrieben (keine Datenbank, Fehler, unerwarteter Aufbau). */
-export async function saveRepairs(add: readonly NewRepair[]): Promise<boolean> {
+export async function saveRepairs(input: readonly NewRepair[]): Promise<boolean> {
   const writer = getWriter();
-  if (!writer || !add.length) return false;
+  if (!writer || !input.length) return false;
+  // Selbstprüfung der besseren Fassung (Auswertung 15.10.2026): Was die KI als „richtig“ liefert, aber selbst noch einen eindeutigen Fehler hat, wird nicht
+  // als Vorbild gespeichert (sonst übt Emrah den Fehler ein). Lehrer-Texte (Preply, Unterricht) stammen nicht von der KI und bleiben ungeprüft.
+  const add = input.filter((a) => {
+    if (a.src === 'teacher' || a.src === 'preply' || a.src === 'lesson') return true;
+    const problem = fixedProblems(a.right)[0];
+    if (!problem) return true;
+    logWarn('repair:selfcheck', { code: 'unsure_fix', message: `bessere Fassung nicht gespeichert: ${problem.id}` });
+    return false;
+  });
+  if (!add.length) return true;
   // Unerwarteter Aufbau: nichts geschrieben, also auch nicht „gespeichert“ melden (data-guard P40, Sollte 4).
   let blocked = false;
   try {

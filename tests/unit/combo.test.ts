@@ -27,7 +27,10 @@ describe('Eigener Satz: Paare und Prüfvorlage', () => {
     expect(comboCheck.build(v).split('\n')[0]).toBe('[combo-check@1]');
     const s = comboCheck.schema(v);
     expect(s.safeParse({ ruleOk: false, correct: false, fixed: 'We have been working on it.', why: 'Hier braucht die Regel eine andere Form.' }).success).toBe(true);
-    expect(s.safeParse({ ruleOk: false, correct: false, fixed: '', why: 'Hier braucht die Regel eine andere Form.' }).success).toBe(false);
+    // Leere Korrektur bei falschem Satz: erlaubt, aber als „nicht sicher geprüft“ markiert (Auswertung 15.10.2026), nie als richtige Fassung.
+    expect(s.parse({ ruleOk: false, correct: false, fixed: '', why: 'Hier braucht die Regel eine andere Form.' })).toMatchObject({ fixed: '', fixedUnsure: true });
+    // Eine korrigierte Fassung mit eindeutigem Fehler besteht nicht (Selbstprüfung).
+    expect(s.safeParse({ ruleOk: false, correct: false, fixed: 'We discussed about the deadline.', why: 'Hier braucht die Regel eine andere Form.' }).success).toBe(false);
     expect(s.safeParse({ ruleOk: 'yes', correct: 'true', why: 'Die Regel ist richtig angewendet, sehr gut.' }).success).toBe(true);
     expect(COMBO_CHECK_EXAMPLE).toContain('ruleOk');
     const out = s.parse(JSON.parse(comboCheckReply(comboCheck.build({ ...v, sentence: 'zzno sentence about the deadline' }))));

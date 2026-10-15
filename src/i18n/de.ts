@@ -38,6 +38,7 @@ import { gxDe } from './parts/gx.de';
 import { wxDe } from './parts/wx.de';
 import { hxDe } from './parts/hx.de';
 import { fxDe } from './parts/fx.de';
+import { awDe } from './parts/aw.de';
 
 export const de = {
   ...aiDe,
@@ -96,6 +97,7 @@ export const de = {
   ...wxDe,
   ...hxDe,
   ...fxDe,
+  ...awDe,
   // Lernplattform 3.0: Teile unter `parts/lp3/` (Glob, Präfix je Bereich)
   ...lp3De,
   appName: 'Lingo-Engine X',

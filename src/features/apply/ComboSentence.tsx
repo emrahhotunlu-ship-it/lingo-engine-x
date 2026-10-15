@@ -130,6 +130,7 @@ export function ComboSentenceScreen() {
           comparison: willRepair(res.out, res.given) ? { given: res.given, ops: alignWords(res.given, res.out.fixed.trim()) } : null,
           explanation: { lines: [{ k: 'why', text: res.out.why }], examples: [], mark: [], ai: true, source: 'fallback' },
           nextIn: willRepair(res.out, res.given) ? t('apComboRepairNote') : null,
+          sub: res.out.fixedUnsure ? t('awFixUnsure') : null,
           depth: 'full',
           auto: false,
         }

@@ -8,6 +8,7 @@ import type { ActFmt } from '../domain/srs/actBrief';
 import { clip, header, langName, langOf } from './common';
 import { looseBool, produceVerdict, LEARNER_SENTENCE_MAX, MEANING_MAX, TARGET_MAX, type ProduceVerdict } from './produceCheck';
 import { PRODUCE_ERR_TYPES, errTypeOf, type ProduceErrType } from './produceCheckV2';
+import { correctionRules, withFixedGate } from './fixedGate';
 import { clipped } from './tolerant';
 import type { PromptTemplate, UiLang } from './types';
 
@@ -63,6 +64,8 @@ export type ActivateCheckOut = {
   usesTarget: boolean;
   targets: ActivateTargetOut[];
   fixed: string;
+  /** Die korrigierte Fassung hat die Selbstprüfung nicht bestanden (oder fehlt): `fixed` ist leer, die App zeigt „noch nicht sicher geprüft“. */
+  fixedUnsure?: boolean;
   why: string;
   better: string;
   whyBetter: string;
@@ -152,11 +155,12 @@ const targetItem = z.preprocess(
   z.object({ used: z.preprocess(looseBool, z.boolean()), correct: z.preprocess(looseBool, z.boolean()) }).transform((x) => ({ used: x.used, correct: x.used && x.correct })),
 );
 
-const schemaFor = (vars: Pick<ActivateCheckVars, 'uiLang' | 'targets' | 'task'>): z.ZodType<ActivateCheckOut> => {
+const schemaFor = (vars: Pick<ActivateCheckVars, 'uiLang' | 'targets' | 'task'>, lenient = false): z.ZodType<ActivateCheckOut> => {
   const words = vars.targets.map((t) => t.word);
   const maxWords = vars.task.fmt === 'ml' ? BETTER_MAX_WORDS_MAIL : BETTER_MAX_WORDS_ACT;
   const hiddenMain = vars.targets[0] ? !vars.targets[0].shown : false;
-  return z
+  return withFixedGate<ActivateCheckOut>(
+    z
     .object({
       verdict: z.preprocess(produceVerdict, z.enum(['correct', 'minor', 'wrong'])),
       mainVerdict: z.preprocess((v) => (v === undefined || v === null || v === '' ? undefined : produceVerdict(v)), z.enum(['correct', 'minor', 'wrong']).optional()),
@@ -195,14 +199,15 @@ const schemaFor = (vars: Pick<ActivateCheckVars, 'uiLang' | 'targets' | 'task'>)
       };
     })
     .superRefine((v, ctx) => {
-      if (v.verdict !== 'correct' && !v.fixed.trim()) ctx.addIssue({ code: 'custom', path: ['fixed'], message: 'fixed must contain the corrected text' });
       if (v.better.trim() && !v.whyBetter.trim()) ctx.addIssue({ code: 'custom', path: ['whyBetter'], message: 'whyBetter must explain why "better" is better' });
       if (!v.better.trim() && v.whyBetter.trim()) ctx.addIssue({ code: 'custom', path: ['better'], message: 'better must contain the C1 version when whyBetter is given' });
       // Die C1-Fassung behält alle Zielwörter (sonst übt Emrah, sie zu umgehen) und bleibt kurz.
       if (v.better.trim() && words.some((w) => !hasTarget(v.better, w))) ctx.addIssue({ code: 'custom', path: ['better'], message: 'better must keep every target word or phrase' });
       if (v.better.trim().split(/\s+/).length > maxWords) ctx.addIssue({ code: 'custom', path: ['better'], message: `better must have at most ${maxWords} words` });
     })
-    .superRefine(langOf(['why', 'whyBetter'], vars.uiLang));
+    .superRefine(langOf(['why', 'whyBetter'], vars.uiLang)),
+    { needs: (o) => o.verdict !== 'correct', lenient },
+  );
 };
 
 export const activateCheck: PromptTemplate<ActivateCheckVars, ActivateCheckOut> = {
@@ -257,6 +262,7 @@ export const activateCheck: PromptTemplate<ActivateCheckVars, ActivateCheckOut> 
       '- Watch especially for: since/for + present perfect, until vs. by for deadlines, explain/describe/suggest + to sb, informations/advices, false friends (become, actual, eventually, chef), an adverb between verb and object ("I have yesterday sent"), "In the attachment you find".',
       '- In fixed and better, do not add facts, numbers, names or content that the learner did not write. fixed keeps every target.',
       '- fixed: the text corrected with minimal changes (identical if nothing to fix).',
+      ...correctionRules(),
       '- why (layer 1, right or wrong): one or two sentences in the explanation language about the single most important error and why it is one.',
       '  Priority: target missing or misused > error that changes meaning > typical German-speaker error > register > style. Never list several errors.',
       '  Always explain, also when correct: then name the specific thing that works (e.g. the collocation, the hedge, the register), no generic praise.',
@@ -269,6 +275,7 @@ export const activateCheck: PromptTemplate<ActivateCheckVars, ActivateCheckOut> 
     ].join('\n');
   },
   schema: (vars) => schemaFor(vars),
+  lenient: (vars) => schemaFor(vars, true),
 };
 
 /**

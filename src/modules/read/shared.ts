@@ -13,6 +13,7 @@ export { block, clip, header } from '../../prompts/common';
 export type { PromptTemplate } from '../../prompts/types';
 
 // Sprachtreue, Datum, Kapazität
+export { britishSpelling } from '../../domain/text/british';
 export { detectLang, isWrongLang, wordCount } from '../../domain/lang/detect';
 export { addDays, dayKey, isDayKey, isoWeek } from '../../domain/date';
 export { DOC_BLOCK_TOTAL, DOC_WARN_TOTAL, docGateOf, docTotal } from '../../domain/capacity/docGuard';
