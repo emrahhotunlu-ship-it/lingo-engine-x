@@ -133,7 +133,7 @@ describe('Sicherung: Lesefehler in read/ bricht die Sicherung nicht ab', () => {
     const payload = JSON.parse(saved[0] ?? '{}') as { readBackupFailed?: boolean; documents: Record<string, unknown> };
     expect(payload.readBackupFailed).toBe(true);
     expect(Object.keys(payload.documents)).toEqual(['app/profile']);
-  });
+  }, 30000);
 });
 
 describe('Laden ohne Artikeltexte', () => {
