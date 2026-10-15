@@ -1,6 +1,8 @@
 import { expect, test, type Page } from '@playwright/test';
 import { boot, layoutProblems, openOverview, screen, type Lang } from './fixtures';
 import { openWeekly } from './profilHelpers';
+import { AUX_PATTERNS } from '../../src/content/auxForm';
+import { typeInGap } from './learnHelpers';
 
 // Phase 6 (Plan §13): „Dein Stand" mit Urteil · Fehler · Weg nach C1 · Verlauf gegen den
 // Produktions-Build. Feste Antworten des Adapters: assess@3 und weekly-report@2 in DE und EN.
@@ -173,6 +175,64 @@ test('Fehler-Radar: Zeilen mit Trend, Beispiele, „Üben" führt zur Fehlerwied
   const practice = page.getByTestId('radar-practice').first();
   await practice.click();
   await screen(page, 'grammarSession');
+});
+
+test('Fehler-Radar: „Verbform nach Hilfsverb“ steht als eine Regel quer über Themen, „Üben“ startet die kurze Übung (Auswertung 15.10.)', async ({ page }) => {
+  const t0 = Date.UTC(2026, 8, 18, 9);
+  const ev = (k: number, c: string, g: string, a: string, q: string) => ({ c, s: 'g', t: t0 + k * 60_000, q, g, a });
+  const events = [
+    ev(1, 'tense', 'will worked', 'will have worked', 'By the end of this year, she ___ (work) here for five years.'),
+    ev(2, 'cond', "wouldn't missed", 'would not have missed', 'If they had left earlier, they ___ (not/miss) the train.'),
+    ev(3, 'tense', 'has been felt', 'has been feeling', 'He ___ (feel) tired lately.'),
+    ev(4, 'verbform', 'Having wrote', 'Having written', 'Having wrote the report'),
+  ];
+  const { errors, external } = await boot(page, { migrated: true, fake: { capabilities: { sample: false }, patch: { 'app/radar': { events } } } });
+  await openOverview(page);
+  await tab(page, 'errors');
+  const row = page.locator('[data-testid="radar-row"][data-c="auxform"]');
+  await expect(row).toBeVisible();
+  await expect(page.getByTestId('radar-row').first()).toHaveAttribute('data-c', 'auxform');
+  await expect(row.getByTestId('radar-rule-lead')).toContainText('Verbform');
+  await row.getByTestId('radar-practice').click();
+  await screen(page, 'drill');
+  const solutionOf = async (): Promise<string> => {
+    const [pre, post] = await page.getByTestId('sentence').evaluate((el) => {
+      const c = el.cloneNode(true) as HTMLElement;
+      c.querySelector('[data-testid="gap"]')?.replaceWith(document.createTextNode('\u0000'));
+      const [a, b] = (c.textContent ?? '').replace(/\s+/g, ' ').split('\u0000');
+      return [a ?? '', b ?? ''];
+    });
+    for (const p of AUX_PATTERNS) {
+      for (const it of p.items) {
+        if (it.sentence.startsWith(pre.trimStart().trimEnd()) && it.sentence.endsWith(post.trimStart().trimEnd())) return it.gap;
+      }
+    }
+    throw new Error(`Satz nicht gefunden: ${pre}|${post}`);
+  };
+  for (let i = 0; i < 5; i++) {
+    const item = page.getByTestId('drill-item');
+    await expect(item).toHaveAttribute('data-kind', 'cloze');
+    await expect(item.getByTestId('cue')).toContainText('Verb:');
+    const answer = await solutionOf();
+    if (i === 0) {
+      // Eine andere Form desselben Verbs ist falsch (strenge Formübung) und erklärt die Regel.
+      const base = AUX_PATTERNS.flatMap((p) => p.items).find((it) => it.gap === answer)?.base ?? 'zz';
+      await typeInGap(page, base === answer ? 'zzz' : base);
+      await page.keyboard.press('Enter');
+      await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'wrong');
+      await page.getByTestId('next').click();
+      await expect(page.getByTestId('drill-item').getByTestId('verdict')).toHaveCount(0);
+      continue;
+    }
+    await typeInGap(page, answer);
+    await page.keyboard.press('Enter');
+    await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
+    await page.getByTestId('next').click();
+    await expect(page.getByTestId('drill-item').getByTestId('verdict')).toHaveCount(0);
+  }
+  await expect(page.getByTestId('session-end')).toBeVisible();
+  expect(errors).toEqual([]);
+  expect(external).toEqual([]);
 });
 
 test('Weg nach C1: Status je Punkt, „Kann ich" wird in profile.canDo gespeichert und zählt', async ({ page }) => {
