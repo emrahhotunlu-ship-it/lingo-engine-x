@@ -5,6 +5,7 @@ import { toUS } from '../answer/spelling';
 import type { Verdict } from '../learn/types';
 import { hash32, mulberry32, shuffle } from '../random';
 import type { ContextSpan, TrainCard } from '../srs/types';
+import { collocAlternatives } from '../srs/collocEquiv';
 import { lemmaCandidates } from '../text/lemma';
 
 // Lückenjagd (phase2-plan §5.5): Abruf des Partnerworts einer Kollokation im Kontextsatz
@@ -85,7 +86,9 @@ export type ClozeCheck = {
  */
 export function checkCloze(item: ClozeItem, givenRaw: string, deps: { allCols?: ReadonlyArray<{ p: string; gap: string }> } = {}): ClozeCheck {
   const g = normalize(givenRaw);
-  const targets = [...new Set([normalize(item.gap), normalize(item.base)])].filter(Boolean);
+  // Gleichwertige Partner (hold/have a meeting, meet/hit a deadline) sind ebenfalls richtig (Auswertung 15.10.2026, Punkt 2).
+  const alts = [...collocAlternatives(item.phrase, item.gap), ...collocAlternatives(item.phrase, item.base)];
+  const targets = [...new Set([normalize(item.gap), normalize(item.base), ...alts.map(normalize)])].filter(Boolean);
   if (!g) return { verdict: 'wrong', belongsTo: [] };
   if (targets.includes(g)) return { verdict: 'correct', belongsTo: [] };
   const us = toUS(g);

@@ -1,3 +1,4 @@
+import { collocAlternatives } from './collocEquiv';
 import { hash32, mulberry32, shuffle } from '../random';
 import { typedForm } from '../chunks/situation';
 import { meaningForTask, shortMeaning } from './cards';
@@ -391,9 +392,11 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
       // Die Lücke steht nur am Partnerwort. `colloc` (Stufe 4) wird getippt; die Optionen dienen dort nur als Tipp 2.
       const c = pickColloc(card, rng);
       const answer = c?.ctx?.gap ?? c?.gap ?? '';
-      const opts = (c?.opts ?? []).filter((o) => norm(o) !== norm(answer)).slice(0, 3);
+      // Gleichwertige Partner (hold/have a meeting, meet/hit a deadline) gelten als richtig und erscheinen nie als falscher Ablenker (Auswertung 15.10.2026).
+      const alts = c ? collocAlternatives(c.p, answer) : [];
+      const opts = (c?.opts ?? []).filter((o) => norm(o) !== norm(answer) && !alts.includes(norm(o))).slice(0, 3);
       const options: Option[] = [{ id: 'ok', label: answer, lang: 'en', correct: true }, ...opts.map((o, i) => ({ id: `d${i}`, label: o, lang: 'en' as const, correct: false }))];
-      return { ...base, sentence: c?.ctx ?? null, colloc: c, options: shuffle(options, rng), accepted: [answer] };
+      return { ...base, sentence: c?.ctx ?? null, colloc: c, options: shuffle(options, rng), accepted: [answer, ...alts] };
     }
     case 'ctx_mc': {
       // „Was heißt das hier?“: Satz mit markiertem Wort, drei deutsche Optionen (die richtige und zwei andere).

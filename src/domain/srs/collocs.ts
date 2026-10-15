@@ -1,5 +1,6 @@
 import { containsPhrase } from '../chunks/newChunk';
 import { isWrongLang } from '../lang/detect';
+import { collocAlternatives } from './collocEquiv';
 import { lemmaOf, locate, stripBrackets } from './context';
 import { isFunctionGap, isPatternGap } from './partner';
 
@@ -60,11 +61,13 @@ export function acceptCollocations(word: string, raw: unknown, max: number = COL
     const gh = locate(stripBrackets(ex), gap);
     if (isPatternGap(lemma, p, gh ? { sentence: stripBrackets(ex), start: gh.start } : null)) continue;
     const inPhrase = new Set([...words(p), ...words(inner)]);
+    const alts = collocAlternatives(p, gap);
     const opts: string[] = [];
     const optSeen = new Set<string>([low(gap)]);
     for (const o of Array.isArray(x.opts) ? x.opts : []) {
       const w = clean(o);
-      if (!OPT.test(w) || optSeen.has(low(w)) || inPhrase.has(low(w)) || locate(w, lemma)) continue;
+      // Ein gleichwertiger Partner (hit statt meet a deadline) wäre kein falscher Ablenker (Auswertung 15.10.2026, Punkt 2).
+      if (!OPT.test(w) || optSeen.has(low(w)) || inPhrase.has(low(w)) || locate(w, lemma) || alts.includes(low(w))) continue;
       optSeen.add(low(w));
       opts.push(w);
       if (opts.length >= 3) break;

@@ -27,6 +27,10 @@ export function checkTyped(givenRaw: string, accepted: readonly string[], deps: 
   const g = withoutTo(given);
   if (targets.includes(given) || targets.includes(g)) return { verdict: 'correct' };
 
+  // Bindestrich oder Leerzeichen („well known“ = „well-known“) ändern nichts an der Richtigkeit.
+  const squash = (x: string): string => x.replace(/[\s-]+/g, '');
+  if (targets.some((t) => squash(t) === squash(g))) return { verdict: 'correct' };
+
   const us = toUS(g);
   if (targets.some((t) => toUS(t) === us)) return us !== g ? { verdict: 'correct', variant: 'uk', us } : { verdict: 'correct' };
 
