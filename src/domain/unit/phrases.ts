@@ -1,4 +1,5 @@
 import type { WeekTargets } from './types';
+import { lapsesOf } from '../srs/lapses';
 
 // `UnitCtx.phrases` (Prüfbefund M8): Die Wendungen, die Block 3 benutzen soll. Geräteübergreifend
 // aus den Daten: Karten mit Herkunft Lesen/Hören von heute, sonst die 5 Wendungen der Woche.
@@ -22,8 +23,8 @@ const num = (v: unknown): number => (typeof v === 'number' && Number.isFinite(v)
  */
 export function weakWords(cards: readonly WeakCardLike[], max: number = WEAK_MAX): string[] {
   const rows = cards
-    .filter((c) => !c.hidden && !c.isNew && c.word.trim() && (num(c.doc.lapses) >= 2 || (c.stage <= 2 && num(c.doc.reps) >= 3)))
-    .map((c) => ({ w: c.word.trim(), lapses: num(c.doc.lapses), stage: c.stage }))
+    .filter((c) => !c.hidden && !c.isNew && c.word.trim() && (lapsesOf(c.doc) >= 2 || (c.stage <= 2 && num(c.doc.reps) >= 3)))
+    .map((c) => ({ w: c.word.trim(), lapses: lapsesOf(c.doc), stage: c.stage }))
     .sort((a, b) => b.lapses - a.lapses || a.stage - b.stage || (a.w < b.w ? -1 : a.w > b.w ? 1 : 0));
   return [...new Set(rows.map((r) => r.w))].slice(0, Math.max(0, max));
 }

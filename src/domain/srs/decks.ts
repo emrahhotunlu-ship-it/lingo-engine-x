@@ -7,6 +7,7 @@ import { stageOf } from './ladder';
 import { isLearningState } from './scheduler';
 import type { TrainCard } from './types';
 import { isHardCard, isJobCard, isPhraseCard } from './vocabList';
+import { lapsesOf } from './lapses';
 
 // Stapel = gespeicherte Filter (architektur.md §4.4, plan.md N22, data-guard 00:35).
 // Eingebaute Stapel werden nie gespeichert; eigene Stapel liegen in EINEM Dokument `app/decks`.
@@ -119,7 +120,7 @@ const DAY_MS = 86_400_000;
 
 /** Fehlschläge einer Karte: Lapses bzw. falsche Antworten (neue `xs` oder alte `modes`). */
 export function failures(c: Pick<TrainCard, 'doc' | 'xs' | 'modes'>): number {
-  const lapses = numOr(c.doc.lapses) ?? 0;
+  const lapses = lapsesOf(c.doc);
   const sum = (r: Record<string, { w: number }>) => Object.values(r).reduce((a, x) => a + (x.w || 0), 0);
   return Math.max(lapses, sum(c.xs), sum(c.modes));
 }

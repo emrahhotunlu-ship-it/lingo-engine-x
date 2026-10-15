@@ -1,4 +1,5 @@
 import { TOPICS } from '../content';
+import { lapsesOf } from '../srs/lapses';
 
 // Lernstand-Kurzfassung für den Begleiter und die Stundenvorbereitung (Phase 5 §6.1).
 // Aus Daten, die ohnehin live geladen sind (kein neues Abo), höchstens 2.500 Zeichen.
@@ -54,7 +55,7 @@ export function openGrammarErrors(grammar: ReadonlyMap<string, Doc> | undefined,
 export function stubbornWords(vocab: ReadonlyMap<string, Doc> | undefined, max: number): string[] {
   const rows: Array<{ w: string; l: number }> = [];
   for (const v of vocab?.values() ?? []) {
-    const l = num(v.lapses) ?? 0;
+    const l = lapsesOf(v);
     const w = str(v.word);
     if (w && l >= 4 && v.hidden !== true) rows.push({ w, l });
   }

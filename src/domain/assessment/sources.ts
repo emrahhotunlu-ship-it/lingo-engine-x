@@ -1,4 +1,5 @@
 import { addDays, isDayKey } from '../date';
+import { lapsesOf } from '../srs/lapses';
 
 // Tolerante Leser je Quelle (Plan §0.1, §4.2): der EINE Adapter zwischen den Formaten aus
 // Phase 1–5 (und der alten App) und dem Belegpaket. Eine fehlende oder fremd geformte Quelle
@@ -214,7 +215,7 @@ export function vocabSource(vocab: ReadonlyMap<string, Doc>, nowMs: number): Voc
       rSum += Math.pow(1 + (19 / 81) * (days / s), -0.5);
       rN++;
     }
-    const lapses = num(f.lapses) || num(d.lapses);
+    const lapses = lapsesOf(d);
     if (lapses >= 3) leech.push({ w: str(d.word), l: lapses });
     for (const h of arr(d.hist).map(obj)) if (num(h.t) > nowMs - 30 * DAY) reviews30++;
   }

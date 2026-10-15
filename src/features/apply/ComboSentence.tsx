@@ -22,6 +22,7 @@ import { ExerciseShell, SentenceInput, type ShellFeedback } from '../../ui/exerc
 import { ExerciseTop } from '../learn/ui';
 import { saveRepairs } from '../repair/store';
 import { useVocabCards } from '../vocab/hub/data';
+import { lapsesOf } from '../../domain/srs/lapses';
 
 // „Eigener Satz“ im Reiter Anwenden (Stufe 2, Übung 2 Teil B; Plan docs/umbau/anwenden-plan.md): Emrah schreibt einen
 // Satz mit einem Wort aus seinem Wortschatz und einer Grammatikregel. Das Wort prüft die App selbst, Regel und Satz prüft
@@ -49,10 +50,9 @@ export function useComboPairs(): ComboPair[] {
   return useMemo(() => {
     // „Am Laptop vertiefen“ (Matrix §6): Wörter, die heute am Handy geübt wurden und fest sitzen, kommen zuerst.
     const deepen = new Set(laptopDeepen({ log, cards, today }).map((w) => w.toLowerCase()));
-    const num = (v: unknown): number => (typeof v === 'number' && Number.isFinite(v) ? v : 0);
     const words = cards
       .filter((c) => !c.hidden && !c.isNew && c.stage >= 1 && c.word.trim() && c.word.trim().split(/\s+/).length <= 2)
-      .map((c) => ({ word: c.word.trim(), lapses: num(c.doc.lapses) + (deepen.has(c.word.trim().toLowerCase()) ? DEEPEN_BOOST : 0), stage: c.stage }));
+      .map((c) => ({ word: c.word.trim(), lapses: lapsesOf(c.doc) + (deepen.has(c.word.trim().toLowerCase()) ? DEEPEN_BOOST : 0), stage: c.stage }));
     const errorTopics = [...(grammar ?? new Map<string, Record<string, unknown>>()).entries()].filter(([, d]) => errorsOf(d).some((e) => e.done !== true)).map(([id]) => id);
     return pickPairs(words, TOPICS, errorTopics, today);
   }, [cards, grammar, today, log]);

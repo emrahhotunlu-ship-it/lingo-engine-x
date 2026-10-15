@@ -1,5 +1,6 @@
 import { TOPICS } from '../content';
 import { topicP } from '../grammar/bkt';
+import { lapsesOf } from '../srs/lapses';
 
 // „Messwerte dahinter" (Kap. 5, Plan §7.5), nur eingeklappt sichtbar: FSRS-Kennzahlen der Karten
 // und die Beherrschung je Grammatikthema (BKT mit Anzeige-Verfall).
@@ -39,7 +40,7 @@ export function fsrsMeasures(vocab: ReadonlyMap<string, Doc>, nowMs: number, log
       sSum += s;
       rN++;
     }
-    if ((num(f.lapses) || num(d.lapses)) >= 3) leeches++;
+    if (lapsesOf(d) >= 3) leeches++;
   }
   let accuracy30: FsrsMeasures['accuracy30'] = null;
   if (logs) {

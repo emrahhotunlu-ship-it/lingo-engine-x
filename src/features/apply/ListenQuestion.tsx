@@ -17,6 +17,7 @@ import { SessionEnd } from '../../ui/SessionEnd';
 import { ExerciseShell, type ShellFeedback, type ShellSecondary } from '../../ui/exercise';
 import { ExerciseTop } from '../learn/ui';
 import { useVocabCards } from '../vocab/hub/data';
+import { lapsesOf } from '../../domain/srs/lapses';
 
 // Hörübung mit Frage (Anwenden, Stufe 2, Übung 3; Plan docs/umbau/anwenden-plan.md). Die Sprachausgabe liest einen
 // kurzen Text mit einem Wort aus Emrahs Wortschatz vor, der Text bleibt verdeckt, danach eine Frage mit drei Antworten.
@@ -31,10 +32,9 @@ type Result = { picked: number; ok: boolean };
 
 /** Wörter für die Texte: die schwächsten bekannten Karten zuerst, höchstens 8. */
 export function pickListenWords(cards: ReturnType<typeof useVocabCards>): string[] {
-  const num = (v: unknown): number => (typeof v === 'number' && Number.isFinite(v) ? v : 0);
   return cards
     .filter((c) => !c.hidden && !c.isNew && c.word.trim() && c.word.trim().split(/\s+/).length <= 3)
-    .sort((a, b) => num(b.doc.lapses) - num(a.doc.lapses) || a.stage - b.stage || (a.key < b.key ? -1 : 1))
+    .sort((a, b) => lapsesOf(b.doc) - lapsesOf(a.doc) || a.stage - b.stage || (a.key < b.key ? -1 : 1))
     .slice(0, 8)
     .map((c) => c.word.trim());
 }

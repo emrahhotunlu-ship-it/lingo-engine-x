@@ -8,6 +8,7 @@ import { useT } from '../../i18n';
 import { logError } from '../../platform/diagnostics';
 import { mnemonic } from '../../prompts/mnemonic';
 import { Button } from '../../ui/Button';
+import { lapsesOf } from '../../domain/srs/lapses';
 
 // Merkhilfe für hartnäckige Wörter (Funktionsabgleich M3): Knopf nur nach dem Prüfen und nur
 // bei Karten, die mindestens viermal vergessen wurden. Einmal von Claude erzeugt und an der Karte
@@ -17,7 +18,6 @@ type Doc = Record<string, unknown>;
 
 export const LEECH_LAPSES = 4;
 
-const num = (v: unknown): number => (typeof v === 'number' && Number.isFinite(v) ? v : 0);
 
 export function storedMnemo(doc: Readonly<Doc>, lang: 'de' | 'en'): string | null {
   const m = doc.mnemo;
@@ -33,7 +33,7 @@ export function mnemoPatch(cur: Readonly<Doc> | undefined, path: string, m: { te
   return { update: { mnemo: { text: m.text, lang: m.lang, t: m.t } } };
 }
 
-export const isLeech = (doc: Readonly<Doc>): boolean => num(doc.lapses) >= LEECH_LAPSES;
+export const isLeech = (doc: Readonly<Doc>): boolean => lapsesOf(doc) >= LEECH_LAPSES;
 
 export function MnemonicBlock({ card, always = false }: { card: TrainCard; always?: boolean }) {
   const { t, lang } = useT();

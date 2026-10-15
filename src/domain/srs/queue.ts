@@ -3,6 +3,7 @@ import { cardSec, NEW_SEC } from './cost';
 import { availableExercises } from './modes';
 import { isLearningState, retrievability } from './scheduler';
 import type { Lang, QueueItem, TrainCard } from './types';
+import { lapsesOf } from './lapses';
 
 // Runde „Wiederholen" (Lern-Entwurf §3): fällige Karten nach Dringlichkeit, dazu neue Karten
 // im Tageskontingent – auch an Tagen mit vielen Fälligen (Kap. 15) – früh eingemischt.
@@ -268,7 +269,7 @@ export const LEECH_MAX = 3;
 /** Begrenzt Dauerfehler-Karten in einer Runde (Reihenfolge der übrigen bleibt). */
 export function capLeeches(due: readonly TrainCard[]): TrainCard[] {
   let n = 0;
-  return due.filter((c) => (c.fsrs.lapses >= LEECH_AT ? ++n <= LEECH_MAX : true));
+  return due.filter((c) => (lapsesOf(c.doc) >= LEECH_AT ? ++n <= LEECH_MAX : true));
 }
 
 /** Wiedervorlage in der Runde: frühestens drei Karten später (höchstens ans Ende). */

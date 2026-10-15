@@ -30,6 +30,7 @@ import { useDecks, writeDecks } from '../decksStore';
 import { decksErrorKey } from '../hub/errors';
 import { requestExamples, useExamples } from '../examples';
 import { useAiAvailable } from '../../../ai/scope';
+import { lapsesOf } from '../../../domain/srs/lapses';
 
 // Wortblatt (M1): oben Status (Sicherheit, Stufe, nächste Wiederholung), dann Ursprungssatz und
 // Beispiele (jedes Wort antippbar), Wortpartner, Bilanz je Abfrageart, Merkhilfe (M3) und die
@@ -387,7 +388,7 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
           <dt className="text-muted">{t('vcRawReps')}</dt>
           <dd className="lx-tnum">{num(card.fsrs.reps)}</dd>
           <dt className="text-muted">{t('vcRawLapses')}</dt>
-          <dd className="lx-tnum">{num(card.fsrs.lapses)}</dd>
+          <dd className="lx-tnum">{num(lapsesOf(card.doc))}</dd>
         </dl>
       </Disclosure>
     </div>

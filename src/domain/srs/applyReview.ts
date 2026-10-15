@@ -8,6 +8,7 @@ import { isFestValues } from '../metrics/definitions';
 import { stageOf, nextStage } from './ladder';
 import { exerciseDef } from './modes';
 import { readFsrs, reviewFsrs, isFutureFsrs } from './scheduler';
+import { lapsesOf } from './lapses';
 import { noteWeight } from './weight';
 import type { AnswerEvent, ExerciseId, LegacyMode } from './types';
 
@@ -172,7 +173,12 @@ export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
   if (a.kind === 'chunk') return chunkPatch(cur, a);
   const def = exerciseDef(a.ex);
   const wasNew = cur.state === 'new';
-  const f = reviewFsrs(readFsrs(cur, a.t), a.grade, a.t, noteWeight(a.ex, a.hint ?? 0, a.catchUp === true, a.free === true));
+  // Auswertung 15.10.2026, Punkt 3: Ein Fehler am Partnerwort einer Kollokation (`col`/`colN`, Index ≥ 0) heißt nicht, dass das Hauptwort vergessen wurde.
+  // Er zählt nicht als Rückfall (`lapses` und `fsrs.lapses`) und verschiebt weder Stabilität noch Fälligkeit der Hauptkarte; er bleibt in `modes`/`xs`/`hist`
+  // sichtbar (die schwache Abfrageart wird weiter geübt, Punkt 4). Gilt nur für künftige Antworten, nichts Gespeichertes wird umgeschrieben.
+  const partnerMiss = !wasNew && a.grade === 1 && def.mode === 'colloc' && a.colIndex !== undefined && a.colIndex >= 0;
+  const prevFsrs = readFsrs(cur, a.t);
+  const f = partnerMiss ? { ...prevFsrs, v: 1 as const, src: 'lx' as const, last: a.t, reps: prevFsrs.reps + 1 } : reviewFsrs(prevFsrs, a.grade, a.t, noteWeight(a.ex, a.hint ?? 0, a.catchUp === true, a.free === true));
   const modes = isObj(cur.modes) ? cur.modes : {};
   const prevMode = isObj(modes[def.mode]) ? (modes[def.mode] as Doc) : {};
   const xs = isObj(cur.xs) ? cur.xs : {};
@@ -188,7 +194,7 @@ export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
     last: a.t,
     state: f.state === 2 ? 'review' : 'learning',
     reps: Math.max(0, Math.round(num(cur.reps))) + 1,
-    lapses: Math.max(0, Math.round(num(cur.lapses))) + (a.grade === 1 && !wasNew ? 1 : 0),
+    lapses: lapsesOf(cur) + (a.grade === 1 && !wasNew && !partnerMiss ? 1 : 0),
     stage: stageAfter(cur, a),
     modes: { [def.mode]: { c: Math.round(num(prevMode.c)) + ok, w: Math.round(num(prevMode.w)) + (1 - ok) } },
     xs: { [a.ex]: { c: Math.round(num(prevXs.c)) + ok, w: Math.round(num(prevXs.w)) + (1 - ok) } },
@@ -220,7 +226,7 @@ export function chunkPatch(cur: Doc, a: AnswerEvent): Doc {
     last: a.t,
     state: f.state === 2 ? 'review' : 'learning',
     reps: Math.max(0, Math.round(num(cur.reps))) + 1,
-    lapses: Math.max(0, Math.round(num(cur.lapses))) + (a.grade === 1 && !wasNew ? 1 : 0),
+    lapses: lapsesOf(cur) + (a.grade === 1 && !wasNew ? 1 : 0),
     stage: stageAfter(cur, a),
     xs: { [a.ex]: { c: Math.round(num(prevXs.c)) + ok, w: Math.round(num(prevXs.w)) + (1 - ok) } },
     hist: [...hist, histEntry(a, def.mode)].slice(-HIST_MAX),

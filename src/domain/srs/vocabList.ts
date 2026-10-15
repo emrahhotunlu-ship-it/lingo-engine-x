@@ -5,6 +5,7 @@ import { FSRS_VERSION, readFsrs } from './scheduler';
 import type { TrainCard } from './types';
 import { CATALOG } from './modes';
 import { clampStage, stageOf } from './ladder';
+import { lapsesOf } from './lapses';
 
 // Wortschatz-Bereich (Funktionsabgleich M1, M2, M9): Liste mit Suche, Filtern und Sortierung,
 // Stapel der freien Runde und die Aktionen am Wort. Rein und testbar; geschrieben wird im
@@ -31,7 +32,7 @@ export const isPhraseCard = (c: Pick<TrainCard, 'word' | 'pos'> & Partial<Pick<T
   c.kind === 'chunk' || /\s/.test(c.word.replace(/^to\s+/i, '').trim()) || /phras/i.test(c.pos ?? '');
 export const isJobCard = (c: Pick<TrainCard, 'src'>): boolean => c.src === 'job';
 /** Schwierig: oft vergessen oder noch unsicher (Stufe 1–2). */
-export const isHardCard = (c: TrainCard): boolean => !c.isNew && (num(c.doc.lapses) >= 2 || c.stage <= 2);
+export const isHardCard = (c: TrainCard): boolean => !c.isNew && (lapsesOf(c.doc) >= 2 || c.stage <= 2);
 
 export function inDeck(c: TrainCard, deck: Deck): boolean {
   switch (deck) {

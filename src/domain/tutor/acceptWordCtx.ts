@@ -5,6 +5,7 @@ import { histOf } from '../srs/flip';
 import { storedExamples } from '../srs/examples';
 import { phraseIn } from '../../prompts/tolerant';
 import { findContext } from '../srs/context';
+import { lapsesOf } from '../srs/lapses';
 
 // Wörter-Tutor (Lernplattform 3.0 P52, KI-Tutor T3): rein und deterministisch. Welche Karte ist schwach, braucht sie neue Sätze, und was von der
 // Antwort `word-ctx@1` besteht die formale Prüfung. Gespeichert wird nur ergänzend in `vocab/<id>.wx[]` (≤ 4) und `vocab/<id>.cfx[]` (≤ 2);
@@ -53,11 +54,8 @@ const str = (v: unknown): string => (typeof v === 'string' ? v.replace(/\s+/g, '
 const num = (v: unknown): number => (typeof v === 'number' && Number.isFinite(v) ? v : 0);
 const words = (s: string): number => s.split(/\s+/).filter(Boolean).length;
 
-/** Rückfälle der Karte (FSRS zuerst, sonst die Felder der alten App). */
-export function lapsesOf(doc: Doc): number {
-  const f = isObj(doc.fsrs) ? doc.fsrs : {};
-  return Math.max(num(f.lapses), num(doc.lapses));
-}
+// Rückfälle der Karte: die eine Lesefunktion liegt in `domain/srs/lapses.ts` (Auswertung 15.10.2026, Punkt 3).
+export { lapsesOf };
 
 /** Schwach nur bis zu dieser Stufe: eine Karte ab Stufe 4 sitzt, alte Rückfälle machen sie nicht wieder schwach. */
 export const WEAK_MAX_STAGE = 3;
