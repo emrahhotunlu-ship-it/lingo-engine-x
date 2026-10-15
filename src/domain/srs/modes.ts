@@ -149,6 +149,34 @@ export function availableExercises(card: TrainCard, lang: Lang, poolSize: number
 
 const score = (c: Counts) => (c.c + 1) / (c.c + c.w + 2);
 
+// Abfrageart nach der Schwäche der Karte (Auswertung 15.10.2026, Punkt 4): Erkennen (Auswahl, Aufdecken) lief auf 98,7 % (Deckeneffekt), Produzieren auf 50–68 %.
+// Die App wich der schwachen Art aus (20 Erkennungen gegen 3 Produktionen). Ab Stufe 3 zählen Auswahlarten deshalb nur noch, wenn nichts Freieres da ist,
+// und eine Karte, die erkannt, aber nicht produziert wird, bekommt auch Abfragen der nächsthöheren Stufe, die sie produzieren lassen.
+/** Aufschlag auf die Rangzahl einer Auswahl-Art bei Karten ab Stufe 3 (größer = seltener). */
+export const CHOICE_PENALTY = 0.3;
+/** Abschlag für eine Produktions-Art bei einer Karte, die im Produzieren hinter dem Erkennen liegt. */
+export const PRODUCTION_BOOST = 0.15;
+const isChoiceEx = (ex: ExerciseId): boolean => {
+  const input = exerciseDef(ex).input;
+  return input === 'choice' || input === 'spot' || input === 'flip';
+};
+/** Getippte oder selbst gebildete Arten (ohne Auswahl, ohne Bausteine); `produce` und die Aktivierungen kommen nur über den Fahrplan. */
+const isProductionEx = (ex: ExerciseId): boolean => {
+  const def = exerciseDef(ex);
+  return def.stage > 0 && (def.input === 'typed' || def.input === 'sentence') && ex !== 'produce';
+};
+const sumCounts = (card: TrainCard, modes: readonly LegacyMode[]): Counts => modes.reduce<Counts>((a, m) => ({ c: a.c + (card.modes[m]?.c ?? 0), w: a.w + (card.modes[m]?.w ?? 0) }), { c: 0, w: 0 });
+/** Liegt die Karte im Produzieren hinter dem Erkennen (oder wurde noch kaum produziert, obwohl oft erkannt)? */
+export function productionWeak(card: TrainCard): boolean {
+  const recog = sumCounts(card, ['recog']);
+  const prod = sumCounts(card, ['cloze', 'type', 'colloc', 'listen', 'produce']);
+  const rn = recog.c + recog.w;
+  const pn = prod.c + prod.w;
+  if (rn < 4) return false;
+  if (pn < 2) return true;
+  return prod.c / pn < recog.c / rn - 0.15;
+}
+
 function countsFor(card: TrainCard, ex: ExerciseId): Counts {
   return card.xs[ex] ?? card.modes[exerciseDef(ex).mode] ?? { c: 0, w: 0 };
 }
@@ -168,11 +196,17 @@ export function chooseExercise(card: TrainCard, lang: Lang, poolSize: number, re
     const near = availableExercises({ ...card, stage: card.stage >= 5 ? 4 : ((card.stage + 1) as 5) }, lang, poolSize, env);
     for (const ex of near) if (!all.includes(ex)) all.push(ex);
   }
+  // Schwäche im Produzieren: Arten der nächsthöheren Stufe, die produzieren lassen, kommen als Kandidaten dazu (Aufstieg nur mit freien Antworten, Punkt 4).
+  const weakProd = card.stage >= 2 && productionWeak(card);
+  if (weakProd) {
+    const up = availableExercises({ ...card, stage: Math.min(5, card.stage + 1) as Stage }, lang, poolSize, env).filter((ex) => isProductionEx(ex) && !all.includes(ex));
+    all.push(...up);
+  }
   // Varianz (V1): dieselbe Art wie bei der letzten Antwort dieser Karte kommt nie zweimal in Folge, solange es eine andere gibt.
   const others = card.lastEx ? all.filter((ex) => ex !== card.lastEx) : all;
   const avail = others.length ? others : all;
   const ranked = avail
-    .map((ex, i) => ({ ex, i, s: score(countsFor(card, ex)) + varietyBias(ex, v, card.stage) }))
+    .map((ex, i) => ({ ex, i, s: score(countsFor(card, ex)) + varietyBias(ex, v, card.stage) + (card.stage >= 3 && isChoiceEx(ex) ? CHOICE_PENALTY : 0) - (weakProd && isProductionEx(ex) ? PRODUCTION_BOOST : 0) }))
     .sort((a, b) => a.s - b.s || a.i - b.i);
   const best = ranked[0];
   if (!best) return null;

@@ -269,7 +269,7 @@ export const LEECH_MAX = 3;
 /** Begrenzt Dauerfehler-Karten in einer Runde (Reihenfolge der übrigen bleibt). */
 export function capLeeches(due: readonly TrainCard[]): TrainCard[] {
   let n = 0;
-  return due.filter((c) => (lapsesOf(c.doc) >= LEECH_AT ? ++n <= LEECH_MAX : true));
+  return due.filter((c) => (Math.max(c.fsrs.lapses, lapsesOf(c.doc)) >= LEECH_AT ? ++n <= LEECH_MAX : true));
 }
 
 /** Wiedervorlage in der Runde: frühestens drei Karten später (höchstens ans Ende). */

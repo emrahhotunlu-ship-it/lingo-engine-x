@@ -1,3 +1,4 @@
+import { dayKey } from '../date';
 import { hash32 } from '../random';
 import type { ExerciseId } from './types';
 
@@ -88,4 +89,36 @@ export function leastRecent<T>(items: readonly T[], keyOf: (x: T) => string, use
   const min = Math.min(...items.map(age));
   const cands = items.filter((x) => age(x) === min);
   return cands[Math.abs(tie) % cands.length];
+}
+
+// ------------------------------------------------------------------ Freie Antworten (Auswertung 15.10.2026, Punkt 4)
+// Auswahl und Aufdecken zeigen Erkennen (98,7 % richtig, Deckeneffekt), nicht Können. Der Aufstieg auf Stufe 4 und 5 braucht deshalb Beweise aus FREIEN Antworten:
+// getippt oder selbst gebildet, ohne Auswahl und ohne Stütze (Lückenhilfe, Bausteine). Rein.
+
+/** Übungsarten, deren Antwort frei gebildet wird (ohne Auswahl und ohne Stütze). `cloze_hint` (Anfangsbuchstabe) und `tiles` (Bausteine) zählen nicht. */
+export const FREE_ANSWER: ReadonlySet<string> = new Set([
+  'cloze', 'type', 'situation', 'wordfam', 'dictation', 'colloc', 'complete', 'speed', 'produce', 'act_scene', 'act_rewrite', 'act_impulse', 'act_combo', 'act_mail',
+]);
+
+/** So viele verschiedene Lerntage mit einer richtigen freien Antwort braucht der Aufstieg auf Stufe 4 und 5. */
+export const FREE_DAYS_FOR_ADVANCE = 2;
+
+type Answer = { t: number; ex: string; grade: number };
+
+/**
+ * Wie viele verschiedene Tage haben eine richtige (Note ≥ 2) freie Antwort in den letzten gespeicherten Antworten (`hist`, höchstens 12)?
+ * `extra` = die Antwort, die gerade gegeben wird. Ungeprüfte Aktivierungen (`u: 1`) zählen nicht.
+ */
+export function freeCorrectDays(doc: Readonly<Record<string, unknown>>, extra?: Answer): number {
+  const raw = Array.isArray(doc.hist) ? (doc.hist as unknown[]) : [];
+  const days = new Set<string>();
+  for (const h of raw) {
+    if (!h || typeof h !== 'object') continue;
+    const r = h as Record<string, unknown>;
+    if (typeof r.t !== 'number' || typeof r.x !== 'string' || typeof r.g !== 'number') continue;
+    if (r.u === 1 || !FREE_ANSWER.has(r.x) || r.g < 2) continue;
+    days.add(dayKey(r.t));
+  }
+  if (extra && FREE_ANSWER.has(extra.ex) && extra.grade >= 2) days.add(dayKey(extra.t));
+  return days.size;
 }

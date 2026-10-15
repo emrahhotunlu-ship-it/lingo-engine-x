@@ -164,7 +164,8 @@ describe('Tagesbremse: höchstens ein Aufstieg je Karte und Lerntag (phase1-plan
   it('die Nachtgrenze gilt (04:00): eine Antwort um 03:00 und eine um 05:00 sind verschiedene Lerntage', () => {
     const night = berlin('2026-09-21', 3);
     const morning = berlin('2026-09-21', 5);
-    let d = step(doc(), at(night, '2026-09-20', 'cloze_hint', 3));
+    // Der Aufstieg auf Stufe 4 braucht zwei freie Antworten an verschiedenen Tagen (Auswertung 15.10.2026): eine liegt schon im Verlauf.
+    let d = step(doc({ hist: [{ t: night - 4 * DAY, m: 'type', g: 3, x: 'type' }] }), at(night, '2026-09-20', 'cloze_hint', 3));
     expect(d.stage).toBe(3);
     d = step(d, at(morning, '2026-09-21', 'cloze', 3));
     expect(d.stage).toBe(4);

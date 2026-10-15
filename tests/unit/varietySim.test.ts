@@ -152,12 +152,14 @@ describe.each([
       n++;
       if (new Set(list.map((s) => familyOf(s.ex))).size >= 3) ok++;
     }
-    expect(n).toBeGreaterThan(5);
+    // Auswertung 15.10.2026: Der Aufstieg auf Stufe 4 braucht zwei freie Antworten an verschiedenen Tagen, daher erreichen etwas weniger Karten Stufe 4 (vorher > 5).
+    expect(n).toBeGreaterThanOrEqual(4);
     expect(ok / n).toBeGreaterThan(0.8);
   });
 
   it('Karten, die „Fest“ werden, haben vorher mindestens drei verschiedene Formenfamilien gezeigt (soweit die Karte so viele anbietet)', () => {
-    expect(sim.fest.length).toBeGreaterThan(10);
+    // Auswertung 15.10.2026: strengerer Aufstieg (zwei freie Antworten), daher etwas weniger feste Karten in 60 Tagen (vorher > 10).
+    expect(sim.fest.length).toBeGreaterThanOrEqual(7);
     const short = sim.fest.filter((f) => f.forms < f.cap);
     expect(short).toEqual([]);
   });

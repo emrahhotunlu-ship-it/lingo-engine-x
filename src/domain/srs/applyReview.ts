@@ -6,6 +6,7 @@ import { naOf } from './actBase';
 import { flipStage } from './flip';
 import { isFestValues } from '../metrics/definitions';
 import { stageOf, nextStage } from './ladder';
+import { FREE_DAYS_FOR_ADVANCE, freeCorrectDays } from './variety';
 import { exerciseDef } from './modes';
 import { readFsrs, reviewFsrs, isFutureFsrs } from './scheduler';
 import { lapsesOf } from './lapses';
@@ -140,7 +141,11 @@ function stageAfter(cur: Doc, a: AnswerEvent): number {
   // Tagesbremse (phase1-plan §4, Prüfung Lernwissenschaft 02.10.2026): höchstens EIN Aufstieg je Karte und Lerntag. Wiederholungen
   // am selben Tag (Lernschritte, „Nochmal“-Wiedervorlage) beweisen nichts über das Gedächtnis von morgen und heben die Stufe nicht.
   // Abstieg bleibt immer möglich.
-  return next > now && answeredOn(cur, a.day) ? now : next;
+  if (next > now && answeredOn(cur, a.day)) return now;
+  // Auswertung 15.10.2026, Punkt 4: Aufstieg auf Stufe 4 und 5 nur mit mindestens zwei richtigen FREIEN Antworten (ohne Auswahl und Stütze) an verschiedenen Tagen.
+  // Nur der Aufstieg wird strenger; Karten, die schon höher stehen, werden nie zurückgestuft (hier wird nur `next` begrenzt).
+  if (next > now && next >= 4 && freeCorrectDays(cur, { t: a.t, ex: a.ex, grade: a.grade }) < FREE_DAYS_FOR_ADVANCE) return now;
+  return next;
 }
 
 /** Wurde die Karte an diesem Lerntag schon beantwortet? (`last` = Zeitpunkt der letzten Antwort.) */

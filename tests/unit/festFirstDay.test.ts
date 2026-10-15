@@ -12,7 +12,7 @@ type Doc = Record<string, unknown>;
 const NOW = berlin('2026-10-05', 10);
 const DAY = dayKey(NOW);
 const D = 86_400_000;
-const doc = (over: Doc = {}): Doc => ({ word: 'leverage', de: 'nutzen', def: 'to use', ex: 'We can [leverage] it.', pos: 'verb', state: 'review', S: 30, D: 5, due: NOW - D, last: NOW - 30 * D, stage: 3, reps: 6, lapses: 0, src: 'lookup', added: '2026-06-01', ...over });
+const doc = (over: Doc = {}): Doc => ({ word: 'leverage', de: 'nutzen', def: 'to use', ex: 'We can [leverage] it.', pos: 'verb', state: 'review', S: 30, D: 5, due: NOW - D, last: NOW - 30 * D, stage: 3, reps: 6, lapses: 0, src: 'lookup', added: '2026-06-01', hist: [{ t: NOW - 6 * D, m: 'type', g: 3, x: 'type' }], ...over });
 const ans = (over: Partial<AnswerEvent> = {}): AnswerEvent => ({ t: NOW, day: DAY, kind: 'v', id: 'leverage', ex: 'type', grade: 3, given: 'leverage', ans: 'leverage', ms: 3000, lang: 'de', ctx: 'rev', ...over });
 
 function write(cur: Doc, a: AnswerEvent, path = 'vocab/leverage'): Doc {
@@ -37,7 +37,7 @@ describe('ff (erster Fest-Tag)', () => {
   });
 
   it('Wendungen bekommen `ff` ebenso', () => {
-    const chunk: Doc = { en: 'push back on', de: 'sich wehren', state: 'review', S: 30, D: 5, due: NOW - D, last: NOW - 30 * D, stage: 3, reps: 5, lapses: 0, src: { kind: 'scene', upgraded: 'Their CFO will push back on the price.' } };
+    const chunk: Doc = { en: 'push back on', de: 'sich wehren', state: 'review', S: 30, D: 5, due: NOW - D, last: NOW - 30 * D, stage: 3, reps: 5, lapses: 0, hist: [{ t: NOW - 6 * D, m: 'cloze', g: 3, x: 'cloze' }], src: { kind: 'scene', upgraded: 'Their CFO will push back on the price.' } };
     const w = reviewWrite('chunk/c1', chunk, ans({ kind: 'chunk', id: 'c1', q: 'push back on' }), null);
     expect(w.kind).toBe('update');
     if (w.kind === 'update') expect(w.patch.ff).toBe(DAY);
