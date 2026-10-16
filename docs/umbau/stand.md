@@ -452,3 +452,5 @@ Lehre: Für Aufgabenfragen mit Gestaltungsspielraum zuerst Emrah mit Vorschau fr
 - Enthält: Auswertungs-Korrekturen (v66), neue Aufdeck-Karte, Schwebefenster Fragen/Übersetzen, Chat scrollt beim Schreiben nicht mit, Hintergrund mit Rauschen (AmbientLight-Ebene), Grammatik-Muster passt zur Lücke. Live unverändert v79 `1791991464-6145`.
 - Gesamttest in Abschnitten (Umgebung startet zwischendurch neu): Typ, Lint, Unit (5957), Build, E2E grün bis auf perf-Statuszeile 3× (bekannt) und zwei Lastwackler (companion C-03, phase5-a11y Fokusfalle), einzeln und 8× wiederholt grün; check:platform grün.
 - Offen: Gedämpft/Hell-Hintergrund nicht angesehen; Lehrer-Blick auf mcc-0017, kwt-0817, kwt-0059; Umbruch der Grammatik-Lücke nicht reproduziert.
+
+## 16.10.2026 – LIVE v80 `1792157236-1fb8` (Emrah: „kannst live nehmen“). Rückweg v79 `1791991464-6145`.
