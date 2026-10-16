@@ -88,7 +88,7 @@ export function mapEntryOf(topic: string, key: string): PatternMap[string] | nul
   return patternMap()[`${topic}|${key}`] ?? null;
 }
 
-type TaskRef = Pick<GrammarTask, 'topic' | 'prompt'> & { pat?: string | null; answer?: string };
+type TaskRef = Pick<GrammarTask, 'topic' | 'prompt'> & { pat?: string | null; answer?: string; src?: string };
 
 /** Zeichenfolge aus Satz und Lösung für den Signalwort-Abgleich (Lücke gefüllt). */
 const sentenceOf = (t: TaskRef): string => (t.answer ? t.prompt.replace(/_{3,}/, t.answer) + ' ' + t.answer : t.prompt);
@@ -99,6 +99,55 @@ export function hasSignal(text: string, signal: string): boolean {
   const s = signal.trim();
   if (!s) return false;
   return new RegExp(`(^|[^A-Za-z'])${escapeRe(s).replace(/\s+/g, '\\s+')}($|[^A-Za-z'])`, 'i').test(text);
+}
+
+/** Kleinster Abstand (in Zeichen) eines Signalwort-Treffers zur gefüllten Lücke `[from, to)`; `null` ohne Treffer. */
+function signalDistance(text: string, signals: readonly string[], from: number, to: number): number | null {
+  let best: number | null = null;
+  for (const sg of signals) {
+    const s = sg.trim();
+    if (!s) continue;
+    const re = new RegExp(`(^|[^A-Za-z'])(${escapeRe(s).replace(/\s+/g, '\\s+')})(?=$|[^A-Za-z'])`, 'gi');
+    for (let m = re.exec(text); m; m = re.exec(text)) {
+      const a = m.index + (m[1]?.length ?? 0);
+      const b = a + (m[2]?.length ?? 0);
+      const d = b <= from ? from - b : a >= to ? a - to : 0;
+      if (best === null || d < best) best = d;
+    }
+  }
+  return best;
+}
+
+/**
+ * Welches Muster des Themas trägt die Lücke? Das Muster mit dem Signalwort, das der Lücke am nächsten steht (Kontrastsätze wie
+ * „We ___ it yet, although we sent it on Monday“ tragen Signale zweier Muster). `null` bei Gleichstand oder ohne Treffer.
+ * Der Prompt braucht eine Lücke `___`; die Lösung wird eingesetzt.
+ */
+export function patternNearGap(tp: TopicPatterns, prompt: string, answer: string): Pattern | null {
+  const gap = /_{3,}/.exec(prompt);
+  if (!gap || !answer) return null;
+  const text = prompt.replace(/_{3,}/, answer);
+  const from = gap.index;
+  const to = from + answer.length;
+  const scored = tp.patterns.flatMap((p) => {
+    const d = signalDistance(text, p.signals, from, to);
+    return d === null ? [] : [{ p, d }];
+  });
+  if (!scored.length) return null;
+  const min = Math.min(...scored.map((x) => x.d));
+  const top = scored.filter((x) => x.d === min);
+  return top.length === 1 ? (top[0] as { p: Pattern }).p : null;
+}
+
+/** Trägt der Satz Signalwörter eines ANDEREN Musters desselben Themas (die das gewählte nicht auch führt)? Liefert dessen Kennung. */
+export function foreignSignalPattern(tp: TopicPatterns, patId: string, text: string): string | null {
+  const own = tp.patterns.find((p) => p.id === patId);
+  const ownSig = (own?.signals ?? []).map((o) => o.toLowerCase());
+  for (const q of tp.patterns) {
+    if (q.id === patId) continue;
+    if (q.signals.some((sg) => hasSignal(text, sg) && !ownSig.includes(sg.toLowerCase()))) return q.id;
+  }
+  return null;
 }
 
 // ------------------------------------------------------------------ Passung Muster ↔ Aufgabe
@@ -129,6 +178,22 @@ export function patternFits(p: Pattern, text: string): boolean {
 }
 
 /**
+ * Anzeige-Wächter für von Claude erzeugte Aufgaben (`src: 'ai'`, gespeichert ohne Prüfung gegen die Lücke): Trägt der Satz außerhalb der Lücke
+ * Signalwörter eines anderen Musters desselben Themas, zählt das Muster des Signals nahe der Lücke. Ergebnis: das passende Muster, `null`
+ * (kein Muster zeigen, lieber nichts als etwas Falsches) oder `undefined` (kein Eingriff, `p` bleibt). Kuratierte Aufgaben fasst er nie an.
+ */
+function guardAiPattern(p: Pattern & { topic: string }, task: TaskRef): Pattern | null | undefined {
+  const tp = patternsOf(task.topic);
+  if (!tp || !task.answer || !/_{3,}/.test(task.prompt)) return undefined;
+  if (mapEntryOf(task.topic, legacyTaskKey(task.prompt))) return undefined;
+  if (!foreignSignalPattern(tp, p.id, task.prompt.replace(/_{3,}/, ' '))) return undefined;
+  const near = patternNearGap(tp, task.prompt, task.answer);
+  if (!near) return null;
+  if (near.id === p.id) return undefined;
+  return patternFits(near, sentenceOf(task)) ? near : null;
+}
+
+/**
  * Muster einer Aufgabe: erst `task.pat`, dann die Zuordnungstabelle, bei Aufgaben außerhalb der Tabelle (Pool, Tagesauftrag)
  * über die Signalwörter in Satz und Lösung, aber nur bei eindeutigem Treffer (genau ein Muster mit der höchsten Wertung,
  * mindestens ein Treffer). Muster aus `pat` und Signalen müssen `patternFits` bestehen, sonst `null` (lieber kein Muster als
@@ -137,7 +202,11 @@ export function patternFits(p: Pattern, text: string): boolean {
 export function patternOf(task: TaskRef): Pattern | null {
   if (task.pat) {
     const p = patternById(task.pat.includes(':') ? task.pat : `${task.topic}:${task.pat}`);
-    if (p && (!task.answer || patternFits(p, sentenceOf(task)))) return p;
+    if (p && (!task.answer || patternFits(p, sentenceOf(task)))) {
+      const fixed = task.src === 'ai' && task.answer ? guardAiPattern(p, task) : undefined;
+      if (fixed !== undefined) return fixed;
+      return p;
+    }
   }
   const tp = patternsOf(task.topic);
   if (!tp) return null;

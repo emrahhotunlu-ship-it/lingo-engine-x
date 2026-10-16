@@ -109,7 +109,8 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   const [pStart] = useState(() => topicP(task.topic, doc, now));
   const p = topicP(task.topic, doc, now);
   const pattern = useMemo(() => patternOf(task), [task]);
-  const patId = task.pat ?? pattern?.id ?? null;
+  // Bei Claude-Aufgaben entscheidet der Anzeige-Wächter (`patternOf`), nicht das gespeicherte `pat`.
+  const patId = task.src === 'ai' ? (pattern?.id ?? null) : (task.pat ?? pattern?.id ?? null);
   const patEntry = patId ? patsOf(doc)[patId] : undefined;
   // Lernphase: die ersten 3 Antworten auf ein Muster und jede Themenrunde (§5.1). Dann steht die Musterkarte offen.
   const learning = !!pattern && (topicRound || (patEntry?.n ?? 0) < 3);

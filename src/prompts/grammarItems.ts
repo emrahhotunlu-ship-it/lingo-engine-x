@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { hasSignal } from '../domain/grammar/patterns';
+import { foreignSignalPattern, hasSignal, patternNearGap, patternsOf } from '../domain/grammar/patterns';
 import { isWrongLang } from '../domain/lang/detect';
 import { clip, header, lenientArray, normalizeTaskRaw } from './common';
 import type { PromptTemplate } from './types';
@@ -8,6 +8,8 @@ import type { PromptTemplate } from './types';
 // („Neue Aufgaben zu {Thema}"). Ausgabe im Pool-Format der alten App, damit sie per
 // `poolIntake` gespeichert werden können. Erklärungen fest zweisprachig (de + en): Welche
 // angezeigt wird, entscheidet die Oberflächensprache, gemischt wird nie.
+// @4: Trägt der Satz außerhalb der Lücke Signalwörter eines ANDEREN Musters desselben Themas (Kontrastsatz, z. B. „yet“ + „on Monday“), muss das gewählte
+// Muster das Signal sein, das der Lücke am nächsten steht, sonst fällt die Aufgabe weg; der Prompt sagt es ausdrücklich.
 // @3: Hat das Thema Muster, bekommt Claude die Liste der EINGEFÜHRTEN Muster (Kennung, Name, Formel, Signalwörter) und ordnet jede Aufgabe genau
 // einem davon zu (`pat`); Aufgaben ohne eines dieser Muster oder ohne Signalwort des Musters im Satz fallen weg (Prüfung). `why_not` begründet
 // bei Auswahlaufgaben, warum eine falsche Option nicht passt (wird zu `why.wrong`). Die neuen Arten (Schlüsselwort, Fehler finden, Bedeutung) gibt es
@@ -55,7 +57,7 @@ export const GRAMMAR_ITEMS_EXAMPLE =
   '{"items":[{"topic":"passive","type":"gap","prompt":"The new contract ___ (sign) yesterday.","answer":"was signed","accepted":[],"options":null,"hint_de":"(sign)","explanation_de":"„yesterday“ zeigt eine abgeschlossene Zeit, und der Vertrag handelt nicht selbst → was + 3. Form.","explanation_en":"“yesterday” shows finished time, and the contract does not act itself → was + past participle.","src":"ai"}]}';
 
 const ID = 'grammar-items';
-const VERSION = 3;
+const VERSION = 4;
 
 const blanks = (s: string) => (s.match(/_{3,}/g) ?? []).length;
 
@@ -95,6 +97,14 @@ const itemSchema = (topic: string, patterns: NonNullable<GrammarItemsVars['patte
         else {
           const text = `${it.prompt.replace(/_{3,}/, it.answer)} ${it.answer}`;
           if (!p.signals.some((sg) => hasSignal(text, sg))) ctx.addIssue({ code: 'custom', path: ['pat'], message: `the sentence must contain a signal word of the pattern (${p.signals.join(', ')})` });
+          else {
+            // Kontrastsatz: Signal eines anderen Musters im Satz (außerhalb der Lücke) → das gewählte Muster muss das der Lücke nächste Signal tragen.
+            const tp = patternsOf(topic);
+            if (tp && /_{3,}/.test(it.prompt) && foreignSignalPattern(tp, p.id, it.prompt.replace(/_{3,}/, ' '))) {
+              const near = patternNearGap(tp, it.prompt, it.answer);
+              if (near?.id !== p.id) ctx.addIssue({ code: 'custom', path: ['pat'], message: 'the sentence contains signal words of another pattern; use a sentence with only the signal that forces the gap' });
+            }
+          }
         }
       }
       if (it.why_not && it.type === 'mc' && !it.why_not.every((w) => (it.options ?? []).includes(w.opt) && w.opt !== it.answer)) ctx.addIssue({ code: 'custom', path: ['why_not'], message: 'why_not options must be wrong options of the item' });
@@ -152,7 +162,8 @@ export const grammarItems: PromptTemplate<GrammarItemsVars, GrammarItemsOut> = {
       '- "mc": prompt with one ___ and 3–4 options, "answer" identical to one option. "gap": one ___, hint_de gives the base form like "(work)".',
       '  "transform": a sentence, then "→" and the new sentence with one ___; answer is only the missing part.',
       '  "correct": one sentence with exactly one typical error; answer is the full corrected sentence; options null.',
-      ...(v.patterns?.length ? ['- "pat": the id of the pattern the item trains. For "mc" items add "why_not": up to 3 objects {"opt": a WRONG option exactly as written in options, "de": German, "en": English; max 140 characters each} saying why that option does not fit THIS sentence.'] : []),
+      ...(v.patterns?.length ? ['- Signal words: the sentence may contain only the signal word(s) of the ONE pattern it trains, and that signal must be what forces the gap. Never combine signals of two patterns in one sentence (no contrast sentences like "We ___ it yet, although we sent it on Monday").',
+      '- "pat": the id of the pattern the item trains. For "mc" items add "why_not": up to 3 objects {"opt": a WRONG option exactly as written in options, "de": German, "en": English; max 140 characters each} saying why that option does not fit THIS sentence.'] : []),
       '- explanation_de: 1–2 short sentences in simple German: the signal word and the rule it triggers (never just repeat the answer); put English words and phrases in “…”.',
       '- explanation_en: the same in simple English.',
     ].join('\n');
