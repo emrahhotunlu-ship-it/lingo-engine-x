@@ -11,10 +11,10 @@ import { RememberChip } from './RememberChip';
 import { Composer } from './Composer';
 import { useCurrentSeeing } from './seeing';
 import { allMsgs, closeCompanion, msgKey, resend, retrySave, sendMessage, stopTurn, useCompanion } from './store';
-import { useStickToBottom } from '../../ui/chat/scroll';
+import { useReadingScroll } from '../../ui/chat/scroll';
 import { NewerPill } from '../../ui/chat/ChatInput';
 import { AnimatePresence } from 'framer-motion';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 // Reiter „Fragen" des Begleiters (Phase 5 §8.1): Verlauf ohne Scroll-Springen, laufende Antwort,
 // Fehler mit „Erneut senden", Vorschläge und Aktionen, Eingabe.
@@ -24,7 +24,7 @@ export function ChatPane({ focusSeq }: { focusSeq: number }) {
   const s = useCompanion();
   const seeing = useCurrentSeeing();
   const go = useNav((n) => n.go);
-  const { scroller, content, jump, toBottom } = useStickToBottom();
+  const { scroller, content, spacer, jump, toBottom, anchorSend } = useReadingScroll('[data-testid="chat-msg"][data-role="user"]');
   const ai = useAiAvailable();
 
   const msgs = allMsgs(s);
@@ -42,15 +42,19 @@ export function ChatPane({ focusSeq }: { focusSeq: number }) {
     void sendMessage(text);
   };
 
-  // Eigenes Senden ist eine ausdrückliche Handlung: nach unten (§8.1) – auf jedem Weg (Eingabe,
-  // Vorschlag, „Claude fragen" aus dem Wort-Popup), auch wenn vorher hochgescrollt war.
+  // Eigenes Senden ist eine ausdrückliche Handlung (§8.1) – auf jedem Weg (Eingabe, Vorschlag, „Claude fragen"
+  // aus dem Wort-Popup): einmal so scrollen, dass die eigene Frage oben im Fenster steht. Danach scrollt die
+  // einlaufende Antwort NIE von selbst weiter (Rückmeldung: oben mitlesen); die Pille „Neue Antwort ↓" führt nach unten.
+  // Ein alter Zähler beim erneuten Einblenden des Reiters löst nichts aus.
   const sentSeq = s.sentSeq;
+  const handled = useRef(running ? 0 : sentSeq);
   useEffect(() => {
-    if (!sentSeq) return;
-    toBottom();
-    const id = requestAnimationFrame(() => toBottom());
+    if (!sentSeq || sentSeq === handled.current) return;
+    handled.current = sentSeq;
+    anchorSend();
+    const id = requestAnimationFrame(() => anchorSend());
     return () => cancelAnimationFrame(id);
-  }, [sentSeq, toBottom]);
+  }, [sentSeq, anchorSend]);
 
   // Vorschläge: vor dem ersten Wechsel umbrechend; sobald ein Gespräch läuft, eine Zeile zum Wischen.
   const compact = current.length > 0 || running;
@@ -166,6 +170,7 @@ export function ChatPane({ focusSeq }: { focusSeq: number }) {
               </div>
             )}
           </div>
+          <div ref={spacer} aria-hidden="true" style={{ height: 0 }} />
         </div>
         <AnimatePresence>{jump && <NewerPill label={t('cmpJump')} onClick={toBottom} testId="chat-jump" className="absolute bottom-3 left-1/2 -translate-x-1/2" />}</AnimatePresence>
       </div>

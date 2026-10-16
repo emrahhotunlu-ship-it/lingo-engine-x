@@ -92,7 +92,8 @@ function Frame() {
   const system = isSystemScreen(screen);
   const kind = useVisibleKind();
   const sheetOpen = useSheets((s) => s.stack.length > 0);
-  const companionOpen = useCompanion((s) => s.open);
+  // Nur das Vollbild des Begleiters sperrt die Seite dahinter; das Schwebefenster lässt die Aufgabe bedienbar.
+  const companionOpen = useCompanion((s) => s.open && s.winMode === 'full');
   useEnsureDay(!system);
   useResumeInstall();
   useDeepLink(!system);
