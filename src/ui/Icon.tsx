@@ -19,6 +19,7 @@ const paths = {
   plus: 'M12 5v14M5 12h14',
   minus: 'M5 12h14',
   expand: 'M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5',
+  restore: 'M8 8V4.5h11.5V16H16M4.5 8H16v11.5H4.5z',
   shrink: 'M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5',
   refresh: 'M20 11a8 8 0 10-2.3 5.7M20 5v6h-6',
   copy: 'M9 9h11v11H9zM5 15H4V4h11v1',

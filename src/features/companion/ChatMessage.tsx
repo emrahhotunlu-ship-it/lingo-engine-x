@@ -29,7 +29,7 @@ export function ChatMessage({ msg, state, earlier, truncated, interrupted, onAsk
   if (msg.role === 'user') {
     return (
       <div className={`flex justify-end ${earlier ? 'opacity-70' : ''}`} data-testid="chat-msg" data-role="user" data-lang={dataLang} data-state={state}>
-        <div className="max-w-[85%] rounded-2xl rounded-br-md bg-surface-strong px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap break-words">
+        <div className="max-w-[85%] rounded-2xl rounded-br-md bg-track px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap break-words">
           <span className="sr-only">{t('cmpYou')}: </span>
           {msg.content}
         </div>

@@ -255,7 +255,10 @@ test.describe('Handy 390 (Touch)', () => {
     expect(Math.round(box?.width ?? 0)).toBe(390 - 16);
     expect(Math.round(box?.height ?? 0)).toBeGreaterThanOrEqual(Math.round(844 * 0.5));
     expect(Math.round(box?.height ?? 0)).toBeLessThanOrEqual(Math.round(844 * 0.65));
-    expect((box?.y ?? 0) + (box?.height ?? 0)).toBeGreaterThan(844 - 24);
+    // Unten sitzt es direkt über der Reiterleiste (verdeckt sie nicht).
+    const barTop = (await page.locator('.dz-tabbar').first().boundingBox())?.y ?? 844;
+    expect((box?.y ?? 0) + (box?.height ?? 0)).toBeLessThanOrEqual(barTop + 1);
+    expect((box?.y ?? 0) + (box?.height ?? 0)).toBeGreaterThan(barTop - 24);
     await page.getByTestId('chat-input').fill('Was heißt leverage?');
     await page.getByTestId('chat-send').tap();
     await expect(page.locator('[data-testid="chat-msg"][data-role="assistant"]').last()).toHaveAttribute('data-state', 'done');

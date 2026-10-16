@@ -96,7 +96,7 @@ export function ChatPane({ focusSeq }: { focusSeq: number }) {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <div className="relative min-h-0 flex-1">
+      <div className="relative min-h-[7.5rem] flex-1">
         <div
           ref={scroller}
           className="absolute inset-0 overflow-y-auto overscroll-contain px-4 sm:px-6"
@@ -190,7 +190,7 @@ export function ChatPane({ focusSeq }: { focusSeq: number }) {
         )}
         {!running && ai && (
           <div
-            className={compact ? '-mx-4 flex flex-nowrap gap-2 overflow-x-auto px-4 [scrollbar-width:none] sm:-mx-6 sm:px-6' : 'flex flex-wrap gap-2'}
+            className={`group-data-[low]/cmp:hidden ${compact ? '-mx-4 flex flex-nowrap gap-2 overflow-x-auto px-4 [scrollbar-width:none] sm:-mx-6 sm:px-6' : 'flex flex-wrap gap-2'}`}
             role="group"
             aria-label={t('cmpSuggestLabel')}
             data-testid="chat-suggestions"

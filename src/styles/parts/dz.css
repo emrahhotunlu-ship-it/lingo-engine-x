@@ -53,12 +53,6 @@
   --lx-field: var(--lx-ch-grammar);
 }
 
-/* Lichtfeld (EE §5.1, als CSS statt Canvas: ein fester Verlauf, kein Neuzeichnen beim Scrollen). EINE ruhige Lichtquelle oben mittig in der Bereichsfarbe (ersetzt die zwei Flecken). */
-html body::before {
-  background:
-    radial-gradient(120% 440px at 50% -140px, color-mix(in srgb, var(--lx-field) var(--lx-field-strength), transparent), transparent 74%);
-}
-
 /* ------------------------------------------------------------------ Flächen (EE §8.3: Ebene 1 mit Lichtkante oben) */
 .lx-card {
   background-image: var(--lx-sheen);
@@ -555,6 +549,18 @@ html[data-lx-area] [data-testid='exercise-bar'] [role='progressbar'] > div {
   line-height: 1.375rem;
   font-weight: 500;
   color: var(--lx-fg-muted);
+}
+/* Rückseite: Wortart-Chips mit sichtbarer Fläche (auch hell), „Merke“ folgt mit Abstand statt Linie. */
+.lx-flipback [data-chip] {
+  background: var(--lx-track);
+  box-shadow: inset 0 0 0 1px var(--lx-border);
+}
+.lx-flipback li[data-line='pattern'] {
+  padding-bottom: 0.5rem;
+}
+.lx-flipback li[data-line='why'] {
+  border-top: 0;
+  padding-top: 0.5rem;
 }
 .lx-flipback {
   margin-top: 1rem;

@@ -97,9 +97,9 @@ test.describe('Schwebefenster · Desktop 1440', () => {
     expect(h.width).toBeGreaterThanOrEqual(44);
     expect(h.height).toBeGreaterThanOrEqual(28);
     // Nach links oben ziehen am Griff unten rechts verkleinert (Ecke unten rechts folgt dem Zeiger).
-    await drag(page, { x: h.x + h.width - 10, y: h.y + h.height / 2 }, -120, -100);
+    await drag(page, { x: h.x + h.width - 10, y: h.y + h.height / 2 }, -80, -100);
     const b1 = await box(page);
-    expect(Math.round(b1.width)).toBe(Math.round(b0.width - 120));
+    expect(Math.round(b1.width)).toBe(Math.round(b0.width - 80));
     expect(Math.round(b1.height)).toBe(Math.round(b0.height - 100));
     expect([Math.round(b1.x), Math.round(b1.y)]).toEqual([Math.round(b0.x), Math.round(b0.y)]);
     // Linke Kante nach links: wird breiter.
@@ -110,7 +110,7 @@ test.describe('Schwebefenster · Desktop 1440', () => {
     // Sehr klein ziehen: Mindestgröße.
     await drag(page, { x: b2.x + b2.width - 4, y: b2.y + b2.height - 12 }, -2000, -2000);
     const b3 = await box(page);
-    expect(Math.round(b3.width)).toBe(280);
+    expect(Math.round(b3.width)).toBe(340);
     expect(Math.round(b3.height)).toBe(240);
     // Sehr groß ziehen: höchstens der Bildschirm.
     await drag(page, { x: b3.x + b3.width - 4, y: b3.y + b3.height - 12 }, 3000, 3000);
@@ -239,7 +239,7 @@ test.describe('Schwebefenster · Handy 390', () => {
     await expect(win(page)).toBeVisible();
     const b = await box(page);
     expect(Math.round(b.height)).toBeGreaterThanOrEqual(Math.round(844 * 0.5));
-    expect(b.y).toBeGreaterThan(844 * 0.3);
+    expect(b.y).toBeGreaterThan(844 * 0.25);
     // Aufgabe oben bleibt sichtbar und erreichbar (kein Scrim darüber).
     expect(await page.evaluate(() => !document.elementFromPoint(195, 120)?.closest('[data-testid="companion"]'))).toBe(true);
     expect(await page.evaluate(() => document.querySelectorAll('[inert]').length)).toBe(0);

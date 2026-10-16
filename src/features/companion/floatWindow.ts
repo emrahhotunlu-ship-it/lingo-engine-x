@@ -11,7 +11,7 @@ export type WinMode = 'float' | 'full';
 export type SavedWin = { rect: Rect; mode: WinMode };
 export type Handle = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw';
 
-export const MIN_W = 280;
+export const MIN_W = 340;
 export const MIN_H = 240;
 /** Unter dieser Fensterbreite gilt „Handy“. */
 export const MOBILE_MAX = 768;
@@ -27,6 +27,46 @@ const clamp = (v: number, lo: number, hi: number): number => Math.min(Math.max(v
 
 export const isMobileWidth = (width: number): boolean => width < MOBILE_MAX;
 
+/** Kürzeste Seite unter dieser Größe: Handy, auch im Querformat (844 × 390). */
+export const PHONE_SHORT_SIDE = 500;
+
+/** Handy: schmal (< 768) ODER kurze Seite < 500 (Querformat) ODER Touch-Gerät mit kurzer Seite < 768. */
+export function isPhone(width: number, height: number, coarse = false): boolean {
+  const short = Math.min(width, height);
+  return width < MOBILE_MAX || short < PHONE_SHORT_SIDE || (coarse && short < MOBILE_MAX);
+}
+
+/** Bereich ohne die feste Aktionsleiste und die untere Reiterleiste (`reserve` = gemessene Höhe, 0 = nichts zu schonen). */
+export function homeVp(vp: Vp, reserve: number): Vp {
+  const r = Math.max(0, Math.min(Math.round(reserve), Math.max(0, vp.height - MIN_H)));
+  return r ? { ...vp, height: vp.height - r } : vp;
+}
+
+/** Bei offener Tastatur oder niedriger Höhe: Kopf-Zeilen ausblenden, der Verlauf bekommt den Platz. */
+export const LOW_H = 420;
+export const isLow = (h: number, keyboard: boolean): boolean => keyboard || h < LOW_H;
+
+/** Beim Tippen am Handy: das Fenster wächst bis zur vollen Höhe über der Tastatur. */
+export function keyboardRect(r: Rect, vp: Vp): Rect {
+  return clampRect({ x: r.x, y: vp.top + GAP / 2, w: r.w, h: vp.height - GAP }, vp);
+}
+
+/** Pille bewegen (Höhe fest, kein Mindestmaß des Fensters). */
+export function movePill(start: Rect, dx: number, dy: number, vp: Vp): Rect {
+  return {
+    ...start,
+    x: clamp(Math.round(start.x + dx), vp.left, vp.left + vp.width - start.w),
+    y: clamp(Math.round(start.y + dy), vp.top, vp.top + vp.height - start.h),
+  };
+}
+
+/** Handy: die Pille parkt oben rechts unter den Kopf-Symbolen der Seite (`top` = Unterkante dieser Symbole). */
+export function parkedPill(vp: Vp, top: number): Rect {
+  const w = Math.min(PILL_MAX_W, Math.max(Math.min(PILL_MIN_W, vp.width), vp.width - 2 * GAP));
+  const h = Math.min(PILL_H, vp.height);
+  return { x: vp.left + vp.width - w - GAP, y: clamp(top, vp.top, vp.top + vp.height - h), w, h };
+}
+
 /** Rechteck in den sichtbaren Bereich zwingen: Mindestgröße (soweit der Bereich es zulässt) bis Bereichsgröße, Lage komplett innen. */
 export function clampRect(r: Rect, vp: Vp): Rect {
   const minW = Math.min(MIN_W, vp.width);
@@ -39,9 +79,14 @@ export function clampRect(r: Rect, vp: Vp): Rect {
 }
 
 /** Standardlage: Handy = unteres Drittel mit ~60 % Höhe; Desktop = unten rechts. Die Aufgabe oben bleibt sichtbar. */
-export function defaultRect(vp: Vp): Rect {
-  if (isMobileWidth(vp.width)) {
-    const h = Math.round(vp.height * 0.6);
+export function defaultRect(vp: Vp, mobile: boolean = isMobileWidth(vp.width)): Rect {
+  if (mobile && vp.width > vp.height) {
+    // Handy im Querformat: schmales Fenster rechts über die ganze Höhe, die Aufgabe links bleibt sichtbar.
+    const w = Math.min(440, Math.round(vp.width * 0.5));
+    return clampRect({ x: vp.left + vp.width - w - GAP, y: vp.top + GAP, w, h: vp.height - 2 * GAP }, vp);
+  }
+  if (mobile) {
+    const h = Math.round(vp.height * 0.68);
     return clampRect({ x: vp.left + GAP, y: vp.top + vp.height - h - GAP, w: vp.width - 2 * GAP, h }, vp);
   }
   const w = Math.min(440, vp.width - 32);
@@ -50,8 +95,8 @@ export function defaultRect(vp: Vp): Rect {
 }
 
 /** Vollbild: Handy ganze Fläche, Desktop zentriert wie das frühere große Fenster. */
-export function fullRect(vp: Vp): Rect {
-  if (isMobileWidth(vp.width)) return { x: vp.left, y: vp.top, w: vp.width, h: vp.height };
+export function fullRect(vp: Vp, mobile: boolean = isMobileWidth(vp.width)): Rect {
+  if (mobile) return { x: vp.left, y: vp.top, w: vp.width, h: vp.height };
   const w = Math.min(896, Math.round(vp.width * 0.92));
   const h = Math.min(960, Math.round(vp.height * 0.88));
   return { x: vp.left + Math.round((vp.width - w) / 2), y: vp.top + Math.round((vp.height - h) / 2), w, h };

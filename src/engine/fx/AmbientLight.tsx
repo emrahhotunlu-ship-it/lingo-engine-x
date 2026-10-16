@@ -195,6 +195,7 @@ export function AmbientLight({ scene, exercise, day }: Props) {
   return (
     <>
       <canvas ref={canvas} className="lx-ambient" aria-hidden="true" data-testid="ambient" data-exercise={exercise ? 'true' : undefined} />
+      <span className="lx-ambient-dither" aria-hidden="true" data-testid="ambient-dither" />
       <span ref={probe} className="lx-ambient-probe" aria-hidden="true" />
     </>
   );

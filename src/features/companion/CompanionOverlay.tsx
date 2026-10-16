@@ -6,11 +6,12 @@ import { watchDoc } from '../../data/watch';
 import { useT } from '../../i18n';
 import { getDb, useCapabilities } from '../../platform/capabilities';
 import { logWarn } from '../../platform/diagnostics';
+import { inputProfile } from '../../platform/input';
 import { IconButton } from '../../ui/Button';
 import { Icon } from '../../ui/Icon';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { ChatPane } from './ChatPane';
-import { clampRect, defaultRect, fullRect, isMobileWidth, loadWin, moveRect, pillRect, resizeRect, saveWin, type Handle, type Rect, type Vp, type WinMode } from './floatWindow';
+import { clampRect, defaultRect, fullRect, homeVp, isLow, isPhone, keyboardRect, loadWin, moveRect, movePill, parkedPill, pillRect, resizeRect, saveWin, type Handle, type Rect, type Vp, type WinMode } from './floatWindow';
 import { useCurrentSeeing } from './seeing';
 import { closeCompanion, isTurnRunning, newConversation, receiveChatDoc, removeAttach, setCompanionTab, setMinimized, setTier, setWinMode, useCompanion, type CompanionTab } from './store';
 import { TranslatePane } from './translate/TranslatePane';
@@ -27,6 +28,28 @@ import { useKeyboardBox } from '../../ui/chat/keyboard';
 export function CompanionLayer() {
   const open = useCompanion((s) => s.open);
   return <AnimatePresence>{open && <CompanionOverlay key="companion" />}</AnimatePresence>;
+}
+
+/** Höhe der festen Aktionsleiste und der unteren Reiterleiste, soweit sie das Fenster (Breite `x0`…`x1`) verdecken könnten. */
+function measureReserve(x0: number, x1: number): number {
+  let reserve = 0;
+  for (const el of document.querySelectorAll<HTMLElement>('[data-testid="actionbar"], .dz-tabbar')) {
+    const r = el.getBoundingClientRect();
+    if (r.height < 8 || r.width < 8 || r.top < window.innerHeight * 0.4 || r.right <= x0 || r.left >= x1) continue;
+    reserve = Math.max(reserve, window.innerHeight - r.top);
+  }
+  return Math.ceil(reserve);
+}
+
+/** Unterkante der Kopf-Symbole der Seite (Pille parkt darunter); sonst ein fester Wert. */
+function measureHeadBottom(): number {
+  let bottom = 0;
+  for (const el of document.querySelectorAll<HTMLElement>('[data-testid="topbar"], [data-testid="page-bar"], [data-testid="open-companion"]')) {
+    if (el.closest('[data-testid="companion"]')) continue;
+    const r = el.getBoundingClientRect();
+    if (r.height > 0 && r.top < 120) bottom = Math.max(bottom, r.bottom);
+  }
+  return Math.ceil(bottom || 56) + 8;
 }
 
 function useChatWatch(): void {
@@ -48,8 +71,8 @@ const HANDLES: Array<{ h: Handle; cls: string }> = [
   { h: 'n', cls: 'inset-x-4 top-0 h-2 cursor-ns-resize' },
   { h: 'nw', cls: 'left-0 top-0 size-4 cursor-nwse-resize' },
   { h: 'ne', cls: 'right-0 top-0 size-4 cursor-nesw-resize' },
-  { h: 'w', cls: 'left-0 top-4 bottom-8 w-2 cursor-ew-resize' },
-  { h: 'e', cls: 'right-0 top-4 bottom-8 w-2 cursor-ew-resize' },
+  { h: 'w', cls: 'left-0 top-4 bottom-11 w-2 cursor-ew-resize' },
+  { h: 'e', cls: 'right-0 top-4 bottom-11 w-2 cursor-ew-resize' },
 ];
 
 function CompanionOverlay() {
@@ -68,8 +91,13 @@ function CompanionOverlay() {
   const reduced = useReducedMotion();
   const [focusSeq, setFocusSeq] = useState(0);
   const [size, setSize] = useState(() => ({ w: window.innerWidth, h: window.innerHeight }));
-  const mobile = isMobileWidth(size.w);
-  const kb = useKeyboardBox(mobile);
+  const coarse = inputProfile() === 'touch';
+  const mobile = isPhone(size.w, size.h, coarse);
+  // Immer aktiv: greift erst, wenn die Tastatur wirklich mehr als 80 px nimmt.
+  const kb = useKeyboardBox(true);
+  const [reserve, setReserve] = useState(0);
+  const [head, setHead] = useState(56);
+  const [pillPos, setPillPos] = useState<Rect | null>(null);
   const [custom, setCustom] = useState<Rect | null>(() => loadWin()?.rect ?? null);
   const [smooth, setSmooth] = useState(false);
   const inside = useRef(true);
@@ -78,14 +106,23 @@ function CompanionOverlay() {
   const modal = mode === 'full';
   // Sichtbarer Bereich: bei offener Tastatur nur der Teil darüber (visualViewport).
   const vp: Vp = kb ? { left: 0, top: kb.top, width: size.w, height: kb.height } : { left: 0, top: 0, width: size.w, height: size.h };
+  // Standard- und Pillenlage liegen über der Aktionsleiste und der Reiterleiste (frei verschiebbar bleibt das Fenster im ganzen Bereich `vp`).
+  const home = kb ? vp : homeVp(vp, reserve);
   // Während des Ziehens wird die Lage direkt am Element gesetzt (`paint`), nicht im Zustand: das Fenster folgt dem Finger
   // ohne Neuaufbau des Chats. Beim Loslassen übernimmt der Zustand denselben Wert.
   const vpRef = useRef(vp);
   // Gemerkte oder Standardlage, bei jedem Zeichnen neu in den sichtbaren Bereich geklemmt (Drehen, Fenstergröße).
-  const base = clampRect(custom ?? defaultRect(vp), vp);
+  const base = clampRect(custom ?? defaultRect(home, mobile), vp);
   const baseRef = useRef(base);
-  const place = (r: Rect, v: Vp): Rect => (modal ? fullRect(v) : minimized ? pillRect(r, v) : r);
+  const low = isLow(vp.height, !!kb);
+  // Pille: vom Nutzer gezogene Lage, sonst am Handy oben rechts unter den Kopf-Symbolen, am Desktop am unteren Rand des Fensters (über den Leisten).
+  const pillBase = (r: Rect, v: Vp, h: Vp): Rect => {
+    if (pillPos) return movePill(pillPos, 0, 0, v);
+    return mobile && !custom ? parkedPill(v, head) : pillRect(r, h === v ? v : custom ? v : h);
+  };
+  const place = (r: Rect, v: Vp): Rect => (modal ? fullRect(v, mobile) : minimized ? pillBase(r, v, home) : kb && mobile ? keyboardRect(r, v) : r);
   const shown = place(base, vp);
+  const pillRef = useRef(shown);
 
   useEffect(() => {
     const on = () => setSize({ w: window.innerWidth, h: window.innerHeight });
@@ -97,10 +134,42 @@ function CompanionOverlay() {
     };
   }, []);
 
+  // Leisten messen: bei Größen- und Seitenwechsel sowie wenn die Aktionsleiste erscheint oder verschwindet (`html[data-actionbar]`).
+  useEffect(() => {
+    let raf = 0;
+    const measure = () => {
+      raf = 0;
+      const x0 = mobile ? 0 : window.innerWidth - 480;
+      setReserve((old) => {
+        const n = measureReserve(x0, window.innerWidth);
+        return old === n ? old : n;
+      });
+      setHead((old) => {
+        const n = measureHeadBottom();
+        return old === n ? old : n;
+      });
+    };
+    const later = () => {
+      if (!raf) raf = requestAnimationFrame(measure);
+    };
+    later();
+    const obs = new MutationObserver(later);
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-actionbar', 'data-theme'] });
+    const host = document.getElementById('lx-actionbar-host');
+    if (host) obs.observe(host, { childList: true, subtree: true });
+    window.addEventListener('resize', later);
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      obs.disconnect();
+      window.removeEventListener('resize', later);
+    };
+  }, [mobile, size.w, size.h, route]);
+
   const modalRef = useRef(modal);
   useEffect(() => {
     vpRef.current = vp;
     baseRef.current = base;
+    pillRef.current = shown;
     modalRef.current = modal;
   });
   useEffect(() => {
@@ -158,13 +227,14 @@ function CompanionOverlay() {
   };
   const toggleMin = () => {
     animate();
+    setPillPos(null);
     setMinimized(!minimized);
   };
 
   const paint = (r: Rect) => {
     const el = panel.current;
     if (!el) return;
-    const p = minimized ? pillRect(r, vpRef.current) : r;
+    const p = r;
     el.style.left = `${p.x}px`;
     el.style.top = `${p.y}px`;
     el.style.width = `${p.w}px`;
@@ -180,7 +250,8 @@ function CompanionOverlay() {
     const id = e.pointerId;
     const x0 = e.clientX;
     const y0 = e.clientY;
-    const start = baseRef.current;
+    const pillDrag = minimized && handle === 'move';
+    const start = pillDrag ? pillRef.current : baseRef.current;
     const wasMin = minimized;
     let moved = false;
     let next = start;
@@ -196,7 +267,7 @@ function CompanionOverlay() {
       const dy = ev.clientY - y0;
       if (Math.abs(dx) + Math.abs(dy) > 3) moved = true;
       if (!moved) return;
-      next = handle === 'move' ? moveRect(start, dx, dy, vpRef.current) : resizeRect(handle, start, dx, dy, vpRef.current);
+      next = pillDrag ? movePill(start, dx, dy, vpRef.current) : handle === 'move' ? moveRect(start, dx, dy, vpRef.current) : resizeRect(handle, start, dx, dy, vpRef.current);
       paint(next);
     };
     const finish = (ev: PointerEvent) => {
@@ -204,7 +275,9 @@ function CompanionOverlay() {
       el.removeEventListener('pointermove', onMove);
       el.removeEventListener('pointerup', finish);
       el.removeEventListener('pointercancel', finish);
-      if (moved) {
+      if (moved && pillDrag) {
+        setPillPos(next);
+      } else if (moved) {
         setCustom(next);
         saveWin({ rect: next, mode: 'float' });
       } else if (wasMin && handle === 'move' && ev.type === 'pointerup') {
@@ -276,19 +349,22 @@ function CompanionOverlay() {
         data-tab={tab}
         data-mode={modal ? 'full' : 'float'}
         data-minimized={minimized ? '' : undefined}
+        data-low={low && !modal ? '' : undefined}
+        data-phone={mobile ? '' : undefined}
         initial={reduced ? { opacity: 0 } : { opacity: 0, y: 24 }}
         animate={reduced ? { opacity: 1 } : { opacity: 1, y: 0 }}
         exit={reduced ? { opacity: 0 } : { opacity: 0, y: 16 }}
         transition={{ duration: reduced ? DURATION.fast : DURATION.slow, ease: EASE_OUT }}
         style={style}
-        className={`pointer-events-auto fixed @container flex flex-col overflow-hidden bg-surface-solid shadow-2xl outline-none ${fullMobile ? 'pt-[env(safe-area-inset-top)]' : 'rounded-[1.25rem] border border-line'} ${smooth ? 'transition-[left,top,width,height] duration-200 ease-out' : ''}`}
+        className={`group/cmp pointer-events-auto fixed @container flex flex-col overflow-hidden bg-surface-solid shadow-2xl outline-none ${fullMobile ? 'pt-[env(safe-area-inset-top)]' : 'rounded-[1.25rem] border border-line-strong'} ${smooth ? 'transition-[left,top,width,height] duration-200 ease-out' : ''}`}
       >
         <header
-          className={`flex flex-none items-center gap-1 px-2 pt-1.5 pb-1 select-none sm:px-3 ${modal ? '' : 'cursor-grab touch-none active:cursor-grabbing'}`}
+          className={`relative flex flex-none items-center gap-1 px-2 pt-2.5 pb-1 select-none sm:px-3 ${modal ? '' : 'cursor-grab touch-none active:cursor-grabbing'}`}
           onPointerDown={(e) => startGesture(e, 'move')}
           title={modal ? undefined : t('cmpMoveHint')}
           data-testid="companion-grip"
         >
+          {!modal && <span className="pointer-events-none absolute top-1 left-1/2 h-1 w-9 -translate-x-1/2 rounded-full bg-[var(--lx-line-strong)]" aria-hidden="true" data-testid="companion-grab" />}
           <h2 id={titleId} className="flex flex-none items-center gap-2 px-2 text-lg font-semibold tracking-tight">
             <Icon name="sparkle" size={20} />
             <span className={minimized ? '' : 'sr-only @min-[30rem]:not-sr-only'}>{t('cmpTitle')}</span>
@@ -296,7 +372,7 @@ function CompanionOverlay() {
           {minimized ? (
             <span className="min-w-0 flex-1" />
           ) : (
-            <div role="tablist" aria-label={t('cmpTabsLabel')} className="mx-auto flex rounded-[var(--radius-control)] bg-track p-1">
+            <div role="tablist" aria-label={t('cmpTabsLabel')} className="mx-auto flex flex-none rounded-[var(--radius-control)] bg-track p-1">
               {tabs.map((x) => (
                 <button
                   key={x.id}
@@ -304,7 +380,7 @@ function CompanionOverlay() {
                   role="tab"
                   aria-selected={tab === x.id}
                   onClick={() => setCompanionTab(x.id)}
-                  className={`min-h-11 rounded-[calc(var(--radius-control)-4px)] px-3 text-sm transition-colors @min-[26rem]:px-4 ${tab === x.id ? 'bg-surface-solid font-semibold text-fg shadow-sm' : 'font-medium text-muted hover:text-fg'}`}
+                  className={`min-h-11 whitespace-nowrap rounded-[calc(var(--radius-control)-4px)] px-2 text-sm transition-colors @min-[26rem]:px-4 ${tab === x.id ? 'bg-surface-solid font-semibold text-fg shadow-sm' : 'font-medium text-muted hover:text-fg'}`}
                   data-testid={`companion-tab-${x.id}`}
                 >
                   {x.label}
@@ -312,13 +388,15 @@ function CompanionOverlay() {
               ))}
             </div>
           )}
-          {!modal && <IconButton icon={minimized ? 'expand' : 'minus'} label={minimized ? t('cmpRestore') : t('cmpMinimize')} onClick={toggleMin} className="flex-none" data-testid="companion-min" />}
+          <div className="flex flex-none items-center gap-1">
+          {!modal && <IconButton icon={minimized ? 'restore' : 'minus'} label={minimized ? t('cmpRestore') : t('cmpMinimize')} onClick={toggleMin} className="flex-none" data-testid="companion-min" />}
           {!minimized && <IconButton icon={modal ? 'shrink' : 'expand'} label={modal ? t('cmpFloat') : t('cmpFull')} onClick={() => switchMode(modal ? 'float' : 'full')} className="flex-none @max-[22rem]:hidden" data-testid="companion-mode" />}
           <IconButton icon="close" label={t('close')} onClick={closeCompanion} className="flex-none" data-testid="companion-close" />
+          </div>
         </header>
         <div className={minimized ? 'hidden' : 'flex min-h-0 flex-1 flex-col'} aria-hidden={minimized ? true : undefined}>
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 border-b border-line px-5 pb-2.5 sm:px-6">
-            <p className="flex min-w-0 flex-1 items-center gap-2 text-xs text-muted" data-testid="seeing" data-area={seeing?.area ?? route}>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 border-b border-line px-5 pb-2.5 group-data-[low]/cmp:hidden sm:px-6" data-testid="companion-sub">
+            <p className="flex min-w-0 flex-1 items-center @max-[26rem]:basis-full gap-2 text-xs text-muted" data-testid="seeing" data-area={seeing?.area ?? route}>
               <span className="inline-block size-1.5 flex-none rounded-full bg-accent" aria-hidden="true" />
               <span className="min-w-0 break-words">{t('cmpSeeing', { label: areaLabel })}</span>
             </p>
@@ -365,11 +443,11 @@ function CompanionOverlay() {
           {tab === 'chat' ? <ChatPane focusSeq={focusSeq} /> : <TranslatePane focusSeq={focusSeq} />}
           {!modal && (
             // Fußleiste mit dem Griff unten rechts (am Handy gut greifbar): hier sitzt die Größenänderung, nichts überdeckt die Eingabe.
-            <div className="relative h-8 flex-none touch-none" data-testid="companion-foot">
-              <div className="absolute inset-y-0 left-12 right-12 cursor-ns-resize touch-none" onPointerDown={(e) => startGesture(e, 's')} aria-hidden="true" />
-              <div className="absolute inset-y-0 left-0 w-12 cursor-nesw-resize touch-none" onPointerDown={(e) => startGesture(e, 'sw')} aria-hidden="true" />
+            <div className="relative h-11 flex-none touch-none" data-testid="companion-foot">
+              <div className="absolute inset-y-0 left-14 right-14 cursor-ns-resize touch-none" onPointerDown={(e) => startGesture(e, 's')} aria-hidden="true" />
+              <div className="absolute inset-y-0 left-0 w-14 cursor-nesw-resize touch-none" onPointerDown={(e) => startGesture(e, 'sw')} aria-hidden="true" />
               <div
-                className="absolute inset-y-0 right-0 flex w-14 cursor-nwse-resize touch-none items-center justify-end pr-2.5 text-subtle"
+                className="absolute inset-y-0 right-0 flex w-14 cursor-nwse-resize touch-none items-center justify-center text-subtle"
                 onPointerDown={(e) => startGesture(e, 'se')}
                 title={t('cmpResize')}
                 data-testid="companion-resize"

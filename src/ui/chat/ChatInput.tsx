@@ -62,7 +62,7 @@ export const ChatInput = forwardRef<HTMLTextAreaElement, ChatInputProps>(functio
   };
 
   return (
-    <div className="flex items-end gap-2 rounded-2xl border border-line bg-surface-solid p-1.5 pl-3 focus-within:border-[var(--lx-fg-subtle)]">
+    <div className="flex items-end gap-2 rounded-2xl border border-line bg-surface-solid p-1.5 pl-3 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[var(--lx-focus)]">
       <label className="sr-only" htmlFor={p.id}>
         {p.label}
       </label>
@@ -77,7 +77,7 @@ export const ChatInput = forwardRef<HTMLTextAreaElement, ChatInputProps>(functio
         enterKeyHint="send"
         maxLength={p.maxLength}
         {...(p.lang ? { lang: p.lang } : {})}
-        className="max-h-48 min-h-11 flex-1 resize-none bg-transparent py-2.5 text-base leading-6 text-fg outline-none placeholder:text-subtle"
+        className="max-h-48 min-h-11 flex-1 resize-none bg-transparent py-2.5 text-base leading-6 text-fg outline-none focus-visible:outline-none placeholder:text-subtle"
         data-testid={p.testIds.input}
       />
       {p.extra}

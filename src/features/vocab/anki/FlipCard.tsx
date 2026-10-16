@@ -11,6 +11,8 @@ import { flipSuggest, formatInterval, seenOn, wordCount } from '../../../domain/
 import type { Exercise, Grade } from '../../../domain/srs/types';
 import { isPhraseCard } from '../../../domain/srs/vocabList';
 import { EnglishText } from '../../../engine/EnglishText';
+import { useInputProfile } from '../../../platform/input';
+import { useCompanionSee } from '../../companion/seeing';
 import { useHiddenInput } from '../../../engine/HiddenInput';
 import { SpeakButton } from '../../../engine/SpeakButton';
 import { useCardSwipe } from '../../../engine/cardSwipe';
@@ -56,6 +58,7 @@ function idle(fn: () => void): void {
 export function FlipCard({ exercise, again = false, onDone, behind = 0 }: { exercise: Exercise; again?: boolean; onDone: (kind: FirstKind) => void; behind?: number }) {
   const { t, lang } = useT();
   const api = useHiddenInput();
+  const profile = useInputProfile();
   const ai = useAiAvailable();
   const day = useSession((s) => s.day);
   const strict = useSession((s) => s.strict);
@@ -158,6 +161,16 @@ export function FlipCard({ exercise, again = false, onDone, behind = 0 }: { exer
     },
   });
 
+  // „Sieht gerade“: die Karte beim Namen nennen. Vor dem Aufdecken nur die Vorderseite (bei Deutsch → Englisch ist das Wort die Lösung und bleibt verdeckt).
+  const frontText = (dir === 'de-en' ? cueMeaning(card, meaning) : card.word) ?? card.word;
+  useCompanionSee({
+    area: 'trainer',
+    label: `${t('cmpSeeTrainer')} · ${shown ? card.word : frontText}`.slice(0, 60),
+    phase: shown ? 'feedback' : 'question',
+    detail: frontText,
+    ...(shown ? { reveal: `Solution: ${card.word}` } : dir === 'de-en' ? { mask: [card.word, card.lemma] } : {}),
+  });
+
   const src = { area: 'trainer' as const, source: card.path, title: card.word };
   const ctx = card.context;
   const pk = posKey(card.pos);
@@ -176,7 +189,7 @@ export function FlipCard({ exercise, again = false, onDone, behind = 0 }: { exer
   // nach dem Aufdecken schrumpft die Frage zur Zeile über der Trennlinie, die Rückseite steht in DERSELBEN Fläche.
   const tap = !shown ? (
     <p className="dz-flip-tap lx-t-meta m-0" aria-hidden="true">
-      {t('nbWsFlipTap')}
+      {t(profile === 'touch' ? 'nbWsFlipTap' : 'nbWsFlipClick')}
     </p>
   ) : null;
   const prompt =

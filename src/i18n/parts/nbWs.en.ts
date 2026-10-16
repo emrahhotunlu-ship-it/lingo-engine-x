@@ -7,6 +7,7 @@ export const nbWsEn: Record<keyof typeof nbWsDe, string> = {
   nbWsFlipTaskEnDe: 'What does this mean?',
   nbWsFlipShow: 'Show answer',
   nbWsFlipTap: 'Tap to reveal',
+  nbWsFlipClick: 'Click or press Space to reveal',
   nbWsFlipKind: 'Flashcard',
   nbWsControl: 'Check',
   nbWsProbe: 'Recall check',

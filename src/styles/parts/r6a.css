@@ -19,8 +19,15 @@
   visibility: hidden;
   pointer-events: none;
 }
-html[data-ambient] body::before {
-  background: none;
+/* Rauschebene (Dithering) über dem Canvas: bricht die Stufen des hochskalierten Verlaufs, bleibt in jedem Lichtstufen-Modus stehen. Kein Bewegtbild. */
+.lx-ambient-dither {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.55;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .9 -.35'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.07'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
 }
 
 /* ------------------------------------------------------------------ P55 Zähler (Odometer) */

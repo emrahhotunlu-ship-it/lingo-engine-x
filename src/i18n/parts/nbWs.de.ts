@@ -7,6 +7,7 @@ export const nbWsDe = {
   nbWsFlipTaskEnDe: 'Was bedeutet das?',
   nbWsFlipShow: 'Antwort zeigen',
   nbWsFlipTap: 'Tippen zum Aufdecken',
+  nbWsFlipClick: 'Klicken oder Leertaste zum Aufdecken',
   nbWsFlipKind: 'Aufdecken',
   nbWsControl: 'Kontrolle',
   nbWsProbe: 'Prüfabfrage',

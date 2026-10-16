@@ -1,5 +1,5 @@
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
-import { clampRect, defaultRect, fullRect, loadWin, MIN_H, MIN_W, moveRect, parseSaved, pillRect, PILL_H, resizeRect, saveWin, WIN_KEY, type Vp } from '../../src/features/companion/floatWindow';
+import { clampRect, defaultRect, fullRect, homeVp, isLow, isPhone, keyboardRect, loadWin, MIN_H, MIN_W, moveRect, movePill, parkedPill, parseSaved, pillRect, PILL_H, resizeRect, saveWin, WIN_KEY, type Vp } from '../../src/features/companion/floatWindow';
 import { nextScroll, READ_MARGIN_PX, readingSpacer } from '../../src/ui/chat/scroll';
 
 // Schwebefenster des Begleiters (Klemmen, Standardlage, Verschieben, Größe ändern, Merken je Gerät)
@@ -36,7 +36,7 @@ const inside = (r: { x: number; y: number; w: number; h: number }, v: Vp) => r.x
 describe('Schwebefenster: Standardlage', () => {
   it('Handy: unteres Drittel, ~60 % Höhe, ganze Breite minus Rand; die Aufgabe oben bleibt sichtbar', () => {
     const r = defaultRect(phone);
-    expect(r.h).toBe(Math.round(844 * 0.6));
+    expect(r.h).toBe(Math.round(844 * 0.68));
     expect(r.y + r.h).toBeGreaterThan(844 - 20);
     expect(r.y).toBeGreaterThan(844 * 0.3);
     expect(r.w).toBe(390 - 16);
@@ -162,5 +162,56 @@ describe('Leseregel des Begleiter-Chats (nextScroll, Modus read)', () => {
     expect(readingSpacer(600, 700, 500)).toBe(392);
     expect(readingSpacer(600, 900, 500)).toBe(192);
     expect(readingSpacer(600, 1200, 500)).toBe(0);
+  });
+});
+
+describe('Schwebefenster: Leisten, Handy-Erkennung, Tastatur', () => {
+  it('Mindestbreite 340', () => {
+    expect(MIN_W).toBe(340);
+    expect(clampRect({ x: 0, y: 0, w: 200, h: 300 }, desk).w).toBe(340);
+  });
+  it('Handy-Erkennung: schmal, Querformat 844x390, Touch-Tablet; Desktop nicht', () => {
+    expect(isPhone(390, 844)).toBe(true);
+    expect(isPhone(844, 390)).toBe(true);
+    expect(isPhone(700, 600, true)).toBe(true);
+    expect(isPhone(1440, 900)).toBe(false);
+    expect(isPhone(1024, 768, true)).toBe(false);
+  });
+  it('Standardlage und Pille liegen über der Aktionsleiste (home-Bereich), Handy wie Desktop', () => {
+    const bar = 96;
+    for (const [v, mob] of [[phone, true], [desk, false], [{ left: 0, top: 0, width: 2560, height: 1440 }, false]] as const) {
+      const h = homeVp(v, bar);
+      expect(h.height).toBe(v.height - bar);
+      const r = defaultRect(h, mob);
+      expect(r.y + r.h).toBeLessThanOrEqual(v.height - bar);
+      const p = pillRect(r, h);
+      expect(p.y + p.h).toBeLessThanOrEqual(v.height - bar);
+    }
+  });
+  it('Querformat 844x390: Fenster rechts über die Höhe, innen', () => {
+    const land: Vp = { left: 0, top: 0, width: 844, height: 390 };
+    const r = defaultRect(land, true);
+    expect(inside(r, land)).toBe(true);
+    expect(r.x).toBeGreaterThan(844 / 2 - 20);
+    expect(r.w).toBeGreaterThanOrEqual(MIN_W);
+    expect(fullRect(land, true)).toEqual({ x: 0, y: 0, w: 844, h: 390 });
+  });
+  it('Tastatur: Fenster wächst bis zur vollen Höhe über der Tastatur, niedrige Höhe blendet Zeilen aus', () => {
+    const kbVp: Vp = { left: 0, top: 0, width: 390, height: 360 };
+    const r = keyboardRect(defaultRect(kbVp, true), kbVp);
+    expect(r.h).toBeGreaterThanOrEqual(360 - 8);
+    expect(inside(r, kbVp)).toBe(true);
+    expect(isLow(900, true)).toBe(true);
+    expect(isLow(390, false)).toBe(true);
+    expect(isLow(900, false)).toBe(false);
+  });
+  it('Pille parkt am Handy oben rechts und bleibt beim Ziehen innen', () => {
+    const p = parkedPill(phone, 64);
+    expect(p.y).toBe(64);
+    expect(p.x + p.w).toBeLessThanOrEqual(390);
+    expect(p.x).toBeGreaterThan(0);
+    const m = movePill(p, 500, 5000, phone);
+    expect(m.x + m.w).toBe(390);
+    expect(m.y + m.h).toBe(844);
   });
 });

@@ -660,7 +660,8 @@ export function ExerciseView({
         : `${taskText}\n${blanked || e.meaning || ''}${e.meaning && blanked ? `\n(${e.meaning})` : ''}`;
   useCompanionSee({
     area: 'trainer',
-    label: `${t('cmpSeeTrainer')} · ${t(`exName_${exTextKey(e)}` as MessageKey)}`,
+    // Das Wort selbst erst nach dem Prüfen (vorher wäre es die Lösung); davor die Bedeutung, falls vorhanden.
+    label: `${t('cmpSeeTrainer')} · ${t(`exName_${exTextKey(e)}` as MessageKey)}${fb ? ` · ${card.word}` : meaningText && !meaningText.toLowerCase().includes(card.word.toLowerCase()) ? ` · ${meaningText}` : ''}`.slice(0, 60),
     phase: fb ? 'feedback' : 'question',
     detail: seeDetail,
     ...(fb ? { reveal: `Solution: ${solution}. Learner: ${fb.given || '(empty)'}` } : { mask: [solution, card.word, card.lemma, ...e.accepted] }),

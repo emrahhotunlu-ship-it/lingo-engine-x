@@ -129,7 +129,7 @@ export function Explanation({ model, depth, learning = true, area = 'trainer', o
             </span>
           )}
           {h.chips.map((c) => (
-            <span key={c} className="lx-t-meta inline-flex min-h-7 items-center rounded-full bg-surface-strong px-2.5 font-medium text-muted">
+            <span key={c} data-chip="" className="lx-t-meta inline-flex min-h-7 items-center rounded-full bg-surface-strong px-2.5 font-medium text-muted">
               {c}
             </span>
           ))}
