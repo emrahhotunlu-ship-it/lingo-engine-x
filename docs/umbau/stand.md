@@ -447,3 +447,8 @@ Lehre: Für Aufgabenfragen mit Gestaltungsspielraum zuerst Emrah mit Vorschau fr
 - (3) Beim Schreiben der Antwort scrollt „Frag Claude“ automatisch mit nach unten; er will oben mitlesen → beim Senden zur eigenen Frage/Antwortanfang, danach nie automatisch mitscrollen (nur Pille „Neue Antwort ↓“).
 - Kommt gebündelt in den nächsten Test-Link zusammen mit v66 (Auswertungs-Korrekturen, wartet auf „Ja live nehmen“).
 - Hintergrund auf großen Bildschirmen (40 Zoll) pixelig/gestuft → Verlauf mit mehr Zwischenstufen + feines Rauschen (src/styles/index.css, body::before); kommt in den gemeinsamen Test-Link.
+
+## 16.10.2026 – Test-Link 8 (Version 67 `1792156649-9c44`, Rückweg v66 `1792088112-ea3f`)
+- Enthält: Auswertungs-Korrekturen (v66), neue Aufdeck-Karte, Schwebefenster Fragen/Übersetzen, Chat scrollt beim Schreiben nicht mit, Hintergrund mit Rauschen (AmbientLight-Ebene), Grammatik-Muster passt zur Lücke. Live unverändert v79 `1791991464-6145`.
+- Gesamttest in Abschnitten (Umgebung startet zwischendurch neu): Typ, Lint, Unit (5957), Build, E2E grün bis auf perf-Statuszeile 3× (bekannt) und zwei Lastwackler (companion C-03, phase5-a11y Fokusfalle), einzeln und 8× wiederholt grün; check:platform grün.
+- Offen: Gedämpft/Hell-Hintergrund nicht angesehen; Lehrer-Blick auf mcc-0017, kwt-0817, kwt-0059; Umbruch der Grammatik-Lücke nicht reproduziert.
