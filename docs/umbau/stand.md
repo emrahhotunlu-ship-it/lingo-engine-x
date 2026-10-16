@@ -446,3 +446,4 @@ Lehre: Für Aufgabenfragen mit Gestaltungsspielraum zuerst Emrah mit Vorschau fr
 - (2) Claude-Begleiter/Übersetzer öffnen immer mittig über der Aufgabe und sind nicht verschiebbar → freies Schwebefenster: verschiebbar, in der Größe änderbar, wahlweise offen lassen (kein schmaler Streifen), Aufgabe dahinter bedienbar, Lage/Größe wird gemerkt.
 - (3) Beim Schreiben der Antwort scrollt „Frag Claude“ automatisch mit nach unten; er will oben mitlesen → beim Senden zur eigenen Frage/Antwortanfang, danach nie automatisch mitscrollen (nur Pille „Neue Antwort ↓“).
 - Kommt gebündelt in den nächsten Test-Link zusammen mit v66 (Auswertungs-Korrekturen, wartet auf „Ja live nehmen“).
+- Hintergrund auf großen Bildschirmen (40 Zoll) pixelig/gestuft → Verlauf mit mehr Zwischenstufen + feines Rauschen (src/styles/index.css, body::before); kommt in den gemeinsamen Test-Link.
