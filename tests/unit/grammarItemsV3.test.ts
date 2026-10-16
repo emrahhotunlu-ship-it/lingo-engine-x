@@ -19,7 +19,7 @@ const run = (items: unknown[]) => {
 describe('grammar-items@3', () => {
   it('Prompt nennt die Muster und verlangt `pat`', () => {
     const p = grammarItems.build(vars);
-    expect(p.split('\n')[0]).toBe('[grammar-items@3]');
+    expect(p.split('\n')[0]).toBe('[grammar-items@4]');
     expect(p).toContain('- ca.unless | unless | unless + present | signals: unless');
     expect(p).toContain('"pat"');
   });

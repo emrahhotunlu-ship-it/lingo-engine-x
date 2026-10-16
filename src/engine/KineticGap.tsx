@@ -179,6 +179,8 @@ export function KineticGap({ label, maxLength, state, marks, mask, shown, onChan
     while (box && getComputedStyle(box).display.startsWith('inline')) box = box.parentElement;
     const avail = box && box.clientWidth > 0 ? box.clientWidth : Infinity;
     const target = Math.min(Math.max(3.5 * em, natural + 0.6 * em), avail);
+    // Passt die Antwort in die Zeile, bricht sie nie im Kasten um (auch nicht, solange die Breite noch nachzieht); nur zu lange Antworten umbrechen.
+    i.style.flexWrap = natural + 0.6 * em <= avail ? 'nowrap' : 'wrap';
     const cur = width.get();
     if (typeof cur !== 'number' || reduce) width.set(target);
     else if (cur !== target) void animate(width, target, { type: 'spring', stiffness: 520, damping: 40 });
