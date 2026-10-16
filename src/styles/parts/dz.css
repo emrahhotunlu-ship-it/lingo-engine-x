@@ -506,17 +506,67 @@ html[data-lx-area] [data-testid='exercise-bar'] [role='progressbar'] > div {
 .lx-gap[data-masked]:not([data-state='correct']):not([data-state='near']):not([data-state='wrong']):not([data-state='reveal']) {
   background: transparent;
 }
-/* Anki-Vorderseite als Karte (EE §8.3 Ebene 2: die aktuelle Karte ist gehoben), Frage groß in der Mitte. */
-.dz-flip {
-  padding: 2rem 1.25rem 1.75rem;
+/* Anki-Karte: genau EINE Fläche (`.lx-flipface`, Hülle um Vorder- und Rückseite), Kanten des Stapels liegen dahinter.
+   Vorderseite: Frage groß und mittig, „Tippen zum Aufdecken“ dezent unten; Rückseite: dieselbe Fläche, Frage als Zeile darüber. */
+.lx-flipface {
+  overflow: hidden;
   border-radius: var(--radius-card);
   border: 1px solid var(--lx-border);
   background: var(--lx-sheen), var(--lx-surface-solid);
   box-shadow: var(--lx-elev-2);
 }
-:root[data-fx='full'] .dz-flip,
-:root[data-fx='calm'] .dz-flip {
+:root[data-fx='full'] .lx-flipface,
+:root[data-fx='calm'] .lx-flipface {
   animation: dz-rise 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.dz-flip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 15rem;
+  padding: 2rem 1.5rem 1.25rem;
+  text-align: center;
+}
+.dz-flip-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin-block: auto;
+}
+.dz-flip-tap {
+  margin-top: 1.5rem;
+  color: var(--lx-fg-subtle);
+  letter-spacing: 0.02em;
+}
+/* Aufgedeckt: die Frage wird zur ruhigen Zeile, darunter Trennlinie und Antwort in derselben Fläche. */
+[data-shown] .dz-flip {
+  min-height: 0;
+  padding: 1.25rem 1rem 0;
+  align-items: flex-start;
+  text-align: left;
+}
+[data-shown] .dz-flip-main {
+  margin-block: 0;
+  align-items: flex-start;
+}
+[data-shown] .dz-flip [data-testid='flip-front'] {
+  font-size: 0.9375rem;
+  line-height: 1.375rem;
+  font-weight: 500;
+  color: var(--lx-fg-muted);
+}
+.lx-flipback {
+  margin-top: 1rem;
+  padding: 1.25rem 1rem 1rem;
+  border-top: 1px solid var(--lx-border);
+}
+/* Anki: die Aufgabenzeile über der Karte ist klein und ruhig, die Karte trägt die Bedeutung. */
+[data-ex='flip'] [data-testid='task'] {
+  font-size: 0.9375rem;
+  line-height: 1.375rem;
+  font-weight: 500;
+  color: var(--lx-fg-muted);
 }
 
 /* Ergebnis-Karte: die Erklärung schließt ohne Lücke an das farbige Urteilsband an (eine Fläche, klare Gruppen). */

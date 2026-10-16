@@ -172,25 +172,38 @@ export function FlipCard({ exercise, again = false, onDone, behind = 0 }: { exer
     [shown, card, lang, extras],
   );
   const reg = registerOf(card);
+  // Eine Kartenfläche (`lx-flipface`, siehe `wrapCard`): Vorderseite = Frage groß in der Mitte, dezenter Hinweis unten;
+  // nach dem Aufdecken schrumpft die Frage zur Zeile über der Trennlinie, die Rückseite steht in DERSELBEN Fläche.
+  const tap = !shown ? (
+    <p className="dz-flip-tap lx-t-meta m-0" aria-hidden="true">
+      {t('nbWsFlipTap')}
+    </p>
+  ) : null;
   const prompt =
     dir === 'de-en' ? (
-      <div className="dz-flip flex flex-col items-center gap-3 text-center">
-        <p className="lx-t-title" lang={lang} data-testid="flip-front">
-          {cueMeaning(card, meaning)}
-        </p>
+      <div className="dz-flip">
+        <div className="dz-flip-main">
+          <p className="lx-t-title" lang={lang} data-testid="flip-front">
+            {cueMeaning(card, meaning)}
+          </p>
+        </div>
+        {tap}
         {!shown && <StackBehind n={behind} />}
       </div>
     ) : (
-      <div className="dz-flip flex flex-col items-center gap-3 text-center">
-        <p className="lx-t-title" lang="en" data-testid="flip-front">
-          {card.word}
-        </p>
-        {ctx && !shown && <EnglishText as="p" className="max-w-[34ch] text-muted" text={ctx.sentence} {...src} highlight={[ctx.start, ctx.end]} testId="flip-sentence" />}
+      <div className="dz-flip">
+        <div className="dz-flip-main">
+          <p className="lx-t-title" lang="en" data-testid="flip-front">
+            {card.word}
+          </p>
+          {ctx && !shown && <EnglishText as="p" className="max-w-[34ch] text-muted" text={ctx.sentence} {...src} highlight={[ctx.start, ctx.end]} testId="flip-sentence" />}
+        </div>
+        {tap}
         {!shown && <StackBehind n={behind} />}
       </div>
     );
   const back = shown ? (
-    <section className="lx-card flex flex-col gap-3 overflow-hidden p-4 text-left" data-testid="flip-back" aria-live="polite">
+    <section className="lx-flipback flex flex-col gap-3 text-left" data-testid="flip-back" aria-live="polite">
       {/* Kopf (Design-Lead): Wort groß, Vorlesen und Lautschrift genau einmal; Wortart und Register stehen als Chips in der Erklärung darunter. */}
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
         <p className="lx-t-title" lang="en" data-testid="flip-answer">
@@ -252,7 +265,7 @@ export function FlipCard({ exercise, again = false, onDone, behind = 0 }: { exer
             data-swipe-left={shown ? t('nbWsGrade1') : undefined}
             data-swipe-right={shown ? t(GRADE_KEY[shown.suggest]) : undefined}
           >
-            {c}
+            <div className="lx-flipface">{c}</div>
           </div>
         )}
         keysHint={shown ? t('trEnterHint') : null}

@@ -117,12 +117,8 @@ html[data-ambient] body::before {
 }
 /* Im Stapel übernimmt der Stapel den Auftritt (eine Bewegung statt drei übereinander: dz-next, dz-rise und Stapel). */
 :root[data-fx] .lx-stack > .lx-stack-card[data-step],
-:root[data-fx] .lx-stack .dz-flip {
+:root[data-fx] .lx-stack .lx-flipface {
   animation: none;
-}
-.dz-flip {
-  position: relative;
-  isolation: isolate;
 }
 .lx-stack-behind {
   position: absolute;
@@ -154,6 +150,7 @@ html[data-ambient] body::before {
 /* ------------------------------------------------------------------ P54 Wischen mit Finger: nur senkrecht scrollt die Seite */
 .lx-swipe-card {
   position: relative;
+  isolation: isolate;
   touch-action: pan-y;
   will-change: auto;
 }
@@ -187,10 +184,10 @@ html[data-ambient] body::before {
 .lx-swipe-card[data-swipe='right']::after {
   opacity: 1;
 }
-.lx-swipe-card[data-swipe='left'] .dz-flip {
+.lx-swipe-card[data-swipe='left'] .lx-flipface {
   box-shadow: var(--lx-elev-2), inset 0 0 0 2px color-mix(in srgb, var(--lx-wrong) calc(var(--lx-swipe-p, 0) * 70%), transparent);
 }
-.lx-swipe-card[data-swipe='right'] .dz-flip {
+.lx-swipe-card[data-swipe='right'] .lx-flipface {
   box-shadow: var(--lx-elev-2), inset 0 0 0 2px color-mix(in srgb, var(--lx-ok) calc(var(--lx-swipe-p, 0) * 70%), transparent);
 }
 
