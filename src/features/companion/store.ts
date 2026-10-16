@@ -13,6 +13,7 @@ import { logWarn } from '../../platform/diagnostics';
 import { KEY_PREFIX, local } from '../../platform/storage';
 import { saveChatMsgs, saveChatSince, type SaveOutcome } from './persistChat';
 import { currentSeeing } from './seeing';
+import { loadWin, type WinMode } from './floatWindow';
 
 // Zustand des Claude-Begleiters (Phase 5 §3.3/§3.4). Der laufende Aufruf lebt HIER und nicht in
 // einem Bildschirm: Schließen des Overlays bricht die Antwort nicht ab, sie wird fertig
@@ -39,6 +40,10 @@ export type MsgNote = { truncated?: boolean };
 
 type State = {
   open: boolean;
+  /** Schwebefenster (Aufgabe dahinter bleibt bedienbar) oder Vollbild (modal wie früher). */
+  winMode: WinMode;
+  /** Nur die Kopfleiste als Pille. */
+  minimized: boolean;
   tab: CompanionTab;
   attach: Attach | null;
   /** Aus `app/chat` (live, solange offen). */
@@ -72,6 +77,8 @@ const readTab = (): CompanionTab => (local.get(TAB_KEY) === 'translate' ? 'trans
 
 export const useCompanion = create<State>(() => ({
   open: false,
+  winMode: 'float',
+  minimized: false,
   tab: 'chat',
   attach: null,
   dbMsgs: [],
@@ -110,8 +117,8 @@ export function openCompanion(o: { tab?: CompanionTab; attach?: Attach; send?: s
   const s = useCompanion.getState();
   const now = performance.now();
   const tab = o.tab ?? (o.attach || o.send ? 'chat' : readTab());
-  const patch: Partial<State> = { tab, tier: readTier() };
-  if (!s.open) Object.assign(patch, { open: true, openedAt: now, lastOpenAt: now });
+  const patch: Partial<State> = { tab, tier: readTier(), minimized: false };
+  if (!s.open) Object.assign(patch, { open: true, openedAt: now, lastOpenAt: now, winMode: loadWin()?.mode ?? 'float' });
   if (o.attach) patch.attach = o.attach;
   if (o.text !== undefined) patch.prefill = { tab, text: o.text, seq: ++prefillSeq };
   useCompanion.setState(patch);
@@ -122,6 +129,15 @@ export function closeCompanion(): void {
   const s = useCompanion.getState();
   if (!s.open) return;
   useCompanion.setState({ open: false, openMsTotal: s.openMsTotal + (performance.now() - s.openedAt), openedAt: 0 });
+}
+
+/** Schwebefenster ↔ Vollbild (das Merken je Gerät übernimmt das Fenster selbst). */
+export function setWinMode(winMode: WinMode): void {
+  useCompanion.setState({ winMode, minimized: false });
+}
+
+export function setMinimized(minimized: boolean): void {
+  useCompanion.setState({ minimized });
 }
 
 export function setCompanionTab(tab: CompanionTab): void {

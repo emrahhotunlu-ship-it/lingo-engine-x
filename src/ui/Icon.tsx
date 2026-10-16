@@ -18,6 +18,8 @@ const paths = {
   grammar: 'M5 19L10 5h1l5 14M7 14h7M17 9h3M18.5 7.5v3',
   plus: 'M12 5v14M5 12h14',
   minus: 'M5 12h14',
+  expand: 'M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5',
+  shrink: 'M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5',
   refresh: 'M20 11a8 8 0 10-2.3 5.7M20 5v6h-6',
   copy: 'M9 9h11v11H9zM5 15H4V4h11v1',
   speaker: 'M4 9.5h3.5L12 5.5v13l-4.5-4H4zM15.5 9a4 4 0 010 6M18 6.5a7.5 7.5 0 010 11',

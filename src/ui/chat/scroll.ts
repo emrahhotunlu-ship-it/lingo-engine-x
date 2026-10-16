@@ -29,11 +29,45 @@ export function afterScroll(prevAtBottom: boolean, m: ScrollMetrics, pinnedTop: 
   return false;
 }
 
-/** Was beim Wachsen des Inhalts (`grow`) bzw. nach eigenem Senden (`send`) zu tun ist. */
-export function nextScroll(prev: { atBottom: boolean }, m: ScrollMetrics, reason: 'grow' | 'send'): ScrollDecision {
+/** Abstand zwischen Oberkante des Fensters und der eigenen Frage nach dem Senden (Lesemodus). */
+export const READ_MARGIN_PX = 8;
+
+export type ScrollMode = 'follow' | 'read';
+
+/**
+ * Was beim Wachsen des Inhalts (`grow`) bzw. nach eigenem Senden (`send`) zu tun ist.
+ * - `follow` (Standard, Rollenspiel): siehe oben.
+ * - `read` (Begleiter-Chat): Nach dem Senden steht die eigene Frage oben im Fenster (`anchorTop` = ihre
+ *   Oberkante im Scroll-Inhalt), danach wird beim Einlaufen NIE weiter gescrollt; nur die Pille zeigt,
+ *   dass unten noch etwas ist.
+ */
+export function nextScroll(
+  prev: { atBottom: boolean },
+  m: ScrollMetrics,
+  reason: 'grow' | 'send',
+  opts: { mode?: ScrollMode; anchorTop?: number } = {},
+): ScrollDecision {
   const bottom = Math.max(0, m.scrollHeight - m.clientHeight);
+  if (opts.mode === 'read') {
+    if (reason === 'send') {
+      const top = opts.anchorTop === undefined ? bottom : Math.min(Math.max(0, Math.round(opts.anchorTop - READ_MARGIN_PX)), bottom);
+      const at = isAtBottom({ ...m, scrollTop: top });
+      return { scrollTop: top, atBottom: at, jump: !at };
+    }
+    const at = isAtBottom(m);
+    return { scrollTop: null, atBottom: at, jump: !at };
+  }
   if (reason === 'send' || prev.atBottom) return { scrollTop: bottom, atBottom: true, jump: false };
   return { scrollTop: null, atBottom: false, jump: !isAtBottom(m) };
+}
+
+/**
+ * Leerer Platz unter dem Inhalt, damit die eigene Frage ganz nach oben rücken kann, obwohl die
+ * Antwort noch kurz ist. Er schrumpft in dem Maß, wie die Antwort wächst (der Inhalt springt nicht).
+ * `anchorTop` und `contentBottom` im Scroll-Inhalt, `clientHeight` = Höhe des sichtbaren Bereichs.
+ */
+export function readingSpacer(anchorTop: number, contentBottom: number, clientHeight: number): number {
+  return Math.max(0, Math.round(clientHeight + (anchorTop - READ_MARGIN_PX) - contentBottom));
 }
 
 /** Eigener Scroll-Bereich: Refs für Bereich und Inhalt sowie die Pille „Neue Antwort ↓". */
@@ -78,6 +112,120 @@ export function useStickToBottom() {
 
   const toBottom = useCallback(() => apply('send'), [apply]);
   return { scroller, content, jump, toBottom };
+}
+
+/**
+ * Lesemodus für den Begleiter-Chat (Rückmeldung: „Ich will oben mitlesen“; Kap. 15 „Chat springt beim
+ * Lesen nach unten“): Bis zum ersten eigenen Senden gilt die gewohnte Regel (Verlauf lädt, Ansicht
+ * unten). `anchorSend()` rückt danach die eigene Frage (`anchorSelector`, letzte im Inhalt) an den
+ * oberen Rand; beim Einlaufen der Antwort scrollt nichts mehr von selbst. Die Pille erscheint nur,
+ * wenn echter Inhalt unter dem sichtbaren Bereich liegt (der leere Platz zählt nicht).
+ */
+export function useReadingScroll(anchorSelector: string) {
+  const scroller = useRef<HTMLDivElement>(null);
+  const content = useRef<HTMLDivElement>(null);
+  const spacer = useRef<HTMLDivElement>(null);
+  const following = useRef(true);
+  const anchor = useRef<HTMLElement | null>(null);
+  const atBottom = useRef(true);
+  const pinned = useRef<number | null>(null);
+  const [jump, setJump] = useState(false);
+
+  /** Maße ohne den leeren Platz: so weit reicht der echte Inhalt. */
+  const real = useCallback((): ScrollMetrics | null => {
+    const el = scroller.current;
+    const inner = content.current;
+    if (!el || !inner) return null;
+    const contentBottom = inner.getBoundingClientRect().bottom - el.getBoundingClientRect().top + el.scrollTop;
+    return { scrollTop: el.scrollTop, clientHeight: el.clientHeight, scrollHeight: Math.round(contentBottom) };
+  }, []);
+
+  const anchorTop = useCallback((): number | null => {
+    const el = scroller.current;
+    const a = anchor.current;
+    if (!el || !a || !a.isConnected) return null;
+    return a.getBoundingClientRect().top - el.getBoundingClientRect().top + el.scrollTop;
+  }, []);
+
+  const fit = useCallback(() => {
+    const sp = spacer.current;
+    const m = real();
+    const top = anchorTop();
+    if (!sp || !m) return;
+    sp.style.height = top === null ? '0px' : `${readingSpacer(top, m.scrollHeight, m.clientHeight)}px`;
+  }, [real, anchorTop]);
+
+  const onGrow = useCallback(() => {
+    const el = scroller.current;
+    if (!el) return;
+    if (following.current) {
+      const d = nextScroll({ atBottom: atBottom.current }, el, 'grow');
+      atBottom.current = d.atBottom;
+      if (d.scrollTop !== null) {
+        el.scrollTop = d.scrollTop;
+        pinned.current = el.scrollTop;
+      }
+      setJump(d.jump);
+      return;
+    }
+    fit();
+    const m = real();
+    if (m) setJump(!isAtBottom(m));
+  }, [fit, real]);
+
+  /** Eigene Frage nach oben rücken (einmal je Senden). */
+  const anchorSend = useCallback(() => {
+    const el = scroller.current;
+    const inner = content.current;
+    if (!el || !inner) return;
+    const all = inner.querySelectorAll<HTMLElement>(anchorSelector);
+    const last = all.item(all.length - 1) as HTMLElement | null;
+    if (!last) return;
+    following.current = false;
+    anchor.current = last;
+    fit();
+    const top = anchorTop();
+    const d = nextScroll({ atBottom: false }, el, 'send', top === null ? { mode: 'read' } : { mode: 'read', anchorTop: top });
+    if (d.scrollTop !== null) el.scrollTop = d.scrollTop;
+    const m = real();
+    setJump(m ? !isAtBottom(m) : false);
+  }, [anchorSelector, fit, anchorTop, real]);
+
+  /** Pille: bewusst ans Ende des echten Inhalts. */
+  const toBottom = useCallback(() => {
+    const el = scroller.current;
+    const m = real();
+    if (!el || !m) return;
+    el.scrollTop = Math.max(0, m.scrollHeight - m.clientHeight);
+    atBottom.current = true;
+    setJump(false);
+  }, [real]);
+
+  useEffect(() => {
+    const el = scroller.current;
+    const inner = content.current;
+    if (!el || !inner) return;
+    const onScroll = () => {
+      if (following.current) {
+        atBottom.current = afterScroll(atBottom.current, el, pinned.current);
+        if (!atBottom.current) pinned.current = null;
+        if (isAtBottom(el)) setJump(false);
+        return;
+      }
+      const m = real();
+      if (m) setJump(!isAtBottom(m));
+    };
+    el.addEventListener('scroll', onScroll, { passive: true });
+    const ro = new ResizeObserver(onGrow);
+    ro.observe(inner);
+    ro.observe(el);
+    return () => {
+      el.removeEventListener('scroll', onScroll);
+      ro.disconnect();
+    };
+  }, [onGrow, real]);
+
+  return { scroller, content, spacer, jump, toBottom, anchorSend };
 }
 
 const pageMetrics = (): ScrollMetrics => ({ scrollTop: window.scrollY, scrollHeight: document.documentElement.scrollHeight, clientHeight: window.innerHeight });
