@@ -440,3 +440,9 @@ Lehre: Für Aufgabenfragen mit Gestaltungsspielraum zuerst Emrah mit Vorschau fr
 
 ## 15.10.2026 – Auswertung der echten Lerndaten: sechs Befunde behoben (Zweig `claude/umbau-auswertung`, noch nicht veröffentlicht)
 - Details und Grenzen in `docs/entscheidungen.md` (Abschnitt gleichen Datums). Kurz: Selbstprüfung der korrigierten Fassung, gleichwertige Wortpartner, Partnerwort-Fehler kein Rückfall, Abfrageart nach Schwäche und Aufstieg nur mit zwei freien Antworten, Radar-Zeile und Übung „Verbform nach Hilfsverb“, Lapse-Vorschlag. Test-Link und Live-Gang stehen aus.
+
+## 16.10.2026 – Rückmeldung Emrah (Karte, Fenster, Chat-Scrollen) – Zweige `claude/umbau-karte`, `claude/umbau-fenster`
+- (1) Aufdeck-Karte („What is the English word?“, Karte in Karte) sieht „echt hässlich“ aus → ruhiger, einschichtiger Entwurf.
+- (2) Claude-Begleiter/Übersetzer öffnen immer mittig über der Aufgabe und sind nicht verschiebbar → freies Schwebefenster: verschiebbar, in der Größe änderbar, wahlweise offen lassen (kein schmaler Streifen), Aufgabe dahinter bedienbar, Lage/Größe wird gemerkt.
+- (3) Beim Schreiben der Antwort scrollt „Frag Claude“ automatisch mit nach unten; er will oben mitlesen → beim Senden zur eigenen Frage/Antwortanfang, danach nie automatisch mitscrollen (nur Pille „Neue Antwort ↓“).
+- Kommt gebündelt in den nächsten Test-Link zusammen mit v66 (Auswertungs-Korrekturen, wartet auf „Ja live nehmen“).
