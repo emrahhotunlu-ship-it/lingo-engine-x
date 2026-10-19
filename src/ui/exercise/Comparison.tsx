@@ -8,10 +8,10 @@ import { useT } from '../../i18n';
 // `typo`: gold unterstrichen. Nie Farbe allein: durch-/unterstrichen bzw. gestrichelter Rahmen.
 
 /** `compact`: die Lücke im Satz zeigt deine Antwort schon (durchgestrichen, Lösung darin) – hier steht nur noch „Richtig: …“ (Design-Lead, Vorschau ref-s5). */
-export function Comparison({ given, ops, compact = false, label }: { given: string; ops: readonly WordOp[]; compact?: boolean; label?: string }) {
+export function Comparison({ given, ops, compact = false, label, correct: solution }: { given: string; ops: readonly WordOp[]; compact?: boolean; label?: string; /** Musterlösung direkt (statt aus dem Vergleich rekonstruiert). */ correct?: string }) {
   const { t } = useT();
   const empty = !given.trim();
-  const correct = ops
+  const correct = solution?.trim() ? solution.trim() : ops
     .filter((o) => o.op === 'eq' || o.op === 'typo' || o.op === 'sub' || o.op === 'del')
     .map((o) => (o.op === 'eq' ? o.given : (o.expected ?? o.given)) ?? '')
     .filter(Boolean)

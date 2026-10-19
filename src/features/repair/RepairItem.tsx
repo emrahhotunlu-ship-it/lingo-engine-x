@@ -164,14 +164,16 @@ export function RepairItem({ item, mode, area, source, status = null, profile: p
     : null;
 
   // Aufgabenzeile und Eingabe je Form.
-  const taskKey: MessageKey = form === 'field' ? 'fxRTaskField' : form === 'tiles' ? 'fxRTaskTiles' : cur === null ? 'fxRTaskSpot' : 'fxRTaskReplace';
+  const multi = form === 'spots' && total > 1;
+  const taskKey: MessageKey =
+    form === 'field' ? 'fxRTaskField' : form === 'tiles' ? 'fxRTaskTiles' : cur === null ? (multi ? 'fxRTaskSpotN' : 'fxRTaskSpot') : multi ? 'fxRTaskReplaceN' : 'fxRTaskReplace';
   let prompt;
   let answer = null;
   if (res) {
     prompt = <EnglishText as="p" text={item.right} area={area} source={source} testId="repair-right" />;
   } else if (form === 'spots' && fixes) {
     if (cur === null) {
-      prompt = <SpotSentence words={words} pick="span" selected={tapped} onSelect={setTapped} area={area} source={source} testId="spot-sentence" label={t('fxRSpotLabel')} />;
+      prompt = <SpotSentence words={words} pick="span" wide selected={tapped} onSelect={setTapped} area={area} source={source} testId="spot-sentence" label={t('fxRSpotLabel')} />;
     } else {
       // Ersetzte Stellen stehen schon im Satz; die gerade gewählte ist das Eingabefeld.
       const base: string[] = [];
@@ -199,6 +201,7 @@ export function RepairItem({ item, mode, area, source, status = null, profile: p
         placed={placed}
         onChange={setPlaced}
         locked={false}
+        slots={placed.length < tiles.texts.length ? placed.length + 1 : placed.length}
         labels={{ line: t('drTileLine'), pool: t('drTilePool') }}
         markLabels={{ ok: t('drMarkOk'), near: t('drMarkNear'), off: t('drMarkOff') }}
       />
@@ -208,12 +211,19 @@ export function RepairItem({ item, mode, area, source, status = null, profile: p
   }
 
   // Ohne eigene Antwort („Weiß ich nicht“, zweiter Fehlgriff) zeigt der Vergleich den Fehlersatz selbst: was war falsch, was ist richtig.
+  // Ein gültiger Gegenvorschlag (Urteil „ok“) bekommt keinen roten Vergleich, nur eine ruhige Zeile „Auch richtig“.
   const comparison =
-    res && res.verdict !== 'exact'
+    res && res.verdict !== 'exact' && res.verdict !== 'ok'
       ? res.given
-        ? { given: res.given, ops: alignWords(res.given, item.right) }
-        : { given: item.wrong, ops: alignWords(item.wrong, item.right), label: t('fxRCmpWrong') }
+        ? { given: res.given, ops: alignWords(res.given, item.right), correct: item.right }
+        : { given: item.wrong, ops: alignWords(item.wrong, item.right), label: t('fxRCmpWrong'), correct: item.right }
       : null;
+  const alsoOk =
+    res && res.verdict === 'ok' && res.given && res.given.trim() !== item.right.trim() ? (
+      <p className="lx-t-support text-muted" data-testid="repair-also-ok">
+        {t('fxRAlsoOk')} <span lang="en" className="text-fg">{res.given}</span>
+      </p>
+    ) : null;
   const secondary: ShellSecondary[] = res
     ? []
     : [
@@ -230,15 +240,16 @@ export function RepairItem({ item, mode, area, source, status = null, profile: p
         : nudge
           ? { text: t('fxRMiss'), tone: 'near' as const }
           : null;
+  // Kopf: nur Herkunft (und ggf. „Satz n von m“ der Runde); die Box steht hinter dem (i), „Stelle n von m“ in der Aufgabenzeile.
   const boxLabel = item.box === undefined ? null : t('fxRBadge', { n: Math.min(BOXES, item.box + 1), total: BOXES });
-  const badge = [t(`rxSrc_${item.src}` as MessageKey), boxLabel, status, form === 'spots' && total > 1 && !res ? t('fxRSpotNo', { n: stepNo, total }) : null].filter(Boolean).join(' · ') || null;
+  const badge = [t(`rxSrc_${item.src}` as MessageKey), status].filter(Boolean).join(' · ') || null;
   const primaryDisabled = busy || (form === 'spots' ? (cur === null ? !tapped : !typed.trim()) : form === 'tiles' ? placed.length < tiles.texts.length : !text.trim() || text.trim() === item.wrong.trim());
   const checkLabel = form === 'spots' && cur === null ? t('fxRCheckSpot') : t('exCheck');
   // Paket FK (B3): Fehlerart mit Zahl, gespeicherter Kontext und Lückenhinweis der damaligen Aufgabe stehen über dem Satz (Kap. 15: „Karten ohne Ursprungssatz“).
   const kindName = patName ? (lang === 'de' ? patName.de : patName.en) : item.topic ? topicName(item.topic, lang) : null;
   const ctxLines = [
     kindName ? (item.n === 1 ? t('fxRKindLineOnce', { name: kindName }) : item.n && item.n > 1 ? t('fxRKindLineN', { name: kindName, n: item.n }) : t('fxRKindLine', { name: kindName })) : null,
-    item.ctx?.trim() ? t('fxRCtxLine', { ctx: item.ctx.trim() }) : null,
+    item.ctx?.trim() ? t(item.ctx.includes('___') ? 'fxRCtxTask' : 'fxRCtxLine', { ctx: item.ctx.trim() }) : null,
     item.gapHint?.trim() ? t('fxRGapLine', { hint: item.gapHint.trim() }) : null,
   ].filter((x): x is string => !!x);
   const aid = !res && ctxLines.length ? (
@@ -253,15 +264,15 @@ export function RepairItem({ item, mode, area, source, status = null, profile: p
     <div data-testid="repair-item" data-id={item.id} data-mode={mode} data-form={form} data-profile={profile} data-state={res ? res.verdict : 'open'}>
       <ExerciseShell
         meta={{ ex: 'repair', id: item.id, kind: form }}
-        status={{ area: 'grammar', state: null, kindLabel: t('rxKind'), topic: null, pattern: null, badge }}
-        task={{ text: t(taskKey), purpose: t('fxRPurpose') }}
+        status={{ area: 'grammar', state: null, kindLabel: t('rxKind'), topic: null, pattern: boxLabel, badge, badgeTone: 'neutral' }}
+        task={{ text: multi ? t(taskKey, { n: stepNo, total }) : t(taskKey), purpose: t('fxRPurpose') }}
         aid={aid}
         prompt={prompt}
         answer={answer}
         hint={hint}
         secondary={secondary}
         primary={res ? { label: nextLabel ?? t('exNext'), onClick: onNext, testId: 'repair-next' } : { label: checkLabel, onClick: submit, testId: 'repair-check', disabled: primaryDisabled, busy, busyLabel: t('exChecking') }}
-        feedback={res && verdict ? { verdict, sub: res.note, comparison, explanation: model, depth: explainDepth({ verdict, p: null, learning: (item.box ?? 0) === 0 }), menu: {} } : null}
+        feedback={res && verdict ? { verdict, sub: res.note, comparison, ...(alsoOk ? { right: alsoOk } : {}), explanation: model, depth: explainDepth({ verdict, p: null, learning: (item.box ?? 0) === 0 }), menu: {} } : null}
       />
     </div>
   );

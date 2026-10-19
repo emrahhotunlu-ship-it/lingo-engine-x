@@ -44,7 +44,9 @@ test.describe('Fehler korrigieren: Kann ich nicht nachvollziehen', () => {
     await expect(page.getByTestId('result')).toHaveAttribute('data-verdict', 'ok');
     await page.getByTestId('repair-next').click();
     await expect(page.getByTestId('summary')).toBeVisible();
-    await expect(page.getByTestId('again-unclear-note')).toContainText('Herausgenommene Sätze kommen nicht wieder');
+    await expect(page.getByTestId('again-unclear-note')).toHaveText('1 Satz herausgenommen – kommt nicht wieder, zählt nicht als falsch.');
+    // Der Hinweis steht unter der Zusammenfassung, nicht darüber; die Überschrift bleibt neutral.
+    await expect(page.getByTestId('summary').getByTestId('again-unclear-note')).toBeVisible();
     // Merker gesetzt, Eintrag bleibt (nie löschen), Box und Fälligkeit unverändert, nichts im Tagesprotokoll.
     await expect.poll(async () => (await repairs(page)).find((e) => e.id === 'fk1')?.unclear).toEqual(expect.any(Number));
     const all = await repairs(page);
@@ -132,6 +134,8 @@ test.describe('Neue Aufgabenformen', () => {
     const { errors, external } = await bootAt(page, { name: 'unitAgain' }, { fake: { patch: { ...usedTo(1, []), 'app/repair': null } } });
     await screen(page, 'unitAgain');
     await expect(page.getByTestId('repair-item')).toHaveAttribute('data-form', 'b2');
+    // Kopf ohne Box und ohne „Fehlersatz“ doppelt (UX-Prüfung W-1/W-2); die Box steht hinter dem (i).
+    await expect(page.getByTestId('status')).not.toContainText('Box');
     const choices = page.getByTestId('fk-b2-choices').getByTestId('choice');
     await expect(choices).toHaveCount(2);
     expect(await layoutProblems(page)).toEqual([]);
@@ -147,7 +151,7 @@ test.describe('Neue Aufgabenformen', () => {
     await page.getByTestId('fk-b2-choices').getByTestId('choice').filter({ has: page.getByText('using', { exact: true }) }).click();
     await page.getByTestId('repair-check').click();
     await expect(page.getByTestId('result')).toHaveAttribute('data-verdict', 'ok');
-    await expect(page.getByTestId('repair-right')).toContainText('It took me weeks to get used to the new expense system.');
+    await expect(page.getByTestId('repair-right')).toContainText("I used to use the old tool every day, so I'm still getting used to using the new one.");
     await expect.poll(async () => ((await dump(page))['grammar/used-to']?.errors as Doc[] | undefined)?.[0]?.box).toBe(2);
     expect(errors).toEqual([]);
     expect(external).toEqual([]);
@@ -166,6 +170,8 @@ test.describe('Neue Aufgabenformen', () => {
     await page.getByTestId('fk-b2-choices').getByTestId('choice').first().click();
     await page.getByTestId('repair-check').click();
     await expect(page.getByTestId('result')).toHaveAttribute('data-verdict', 'wrong');
+    // „Richtig:“ zeigt die Musterlösung des neuen Satzes, nicht die eigene Eingabe (W-3/W-5).
+    await expect(page.getByTestId('diff-correct')).toHaveText(await page.getByTestId('repair-right').innerText());
     await expect.poll(async () => ((await dump(page))['grammar/used-to']?.errors as Doc[] | undefined)?.[0]?.box).toBe(0);
     expect(errors).toEqual([]);
   });

@@ -115,11 +115,6 @@ export function AgainScreen() {
         </section>
       ) : (
         <div data-testid="summary" className="flex flex-col gap-3">
-          {s.skipped > 0 && (
-            <p className="lx-t-support text-muted" data-testid="again-unclear-note" role="status">
-              {t('fxRUnclearNote', { n: s.skipped })}
-            </p>
-          )}
           <SessionEnd
             mode="growth"
             title={t('fxREndTitle')}
@@ -130,6 +125,11 @@ export function AgainScreen() {
             mistakes={s.results.filter((r) => !r.ok).slice(0, 4).map((r) => ({ wrong: r.wrong, right: r.right, rule: r.why ?? '', when: t('gxEndTomorrow') }))}
             next={{ label: s.block ? t('nbShNext') : t('nbLernenDone'), run: finish }}
           />
+          {s.skipped > 0 && (
+            <p className="lx-t-support px-1 text-muted" data-testid="again-unclear-note" role="status">
+              {t(s.skipped === 1 ? 'fxRUnclearOne' : 'fxRUnclearMany', { n: s.skipped })}
+            </p>
+          )}
         </div>
       )}
     </div>
