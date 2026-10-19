@@ -213,3 +213,9 @@ Deklariert in WP0a (`src/data/{paths,schemas}.ts`, tolerant/`looseObject`); gesc
 
 | `app/repair.items[].unclear`, `grammar/<thema>.errors[].unclear` | Zeitpunkt (ms): „Kann ich nicht nachvollziehen“ (Paket FK, 19.10.2026); Satz wird dauerhaft nicht mehr als Aufgabe gezeigt, zählt nicht als falsch, nie gelöscht | `markUnclear` (`features/repair/store.ts`) → `writer.transform`, idempotent |
 | `app/repair.items[].held` | `{r, d?, t}`: Eintritts-Wächter (`domain/repair/gate.ts`, 19.10.2026) hält den Satz zurück, weil die „richtige“ Fassung selbst falsch ist oder die Begründung nicht passt (`r` = Grund, `d` = Fundstelle, `t` = ms); wird nicht vorgelegt, zählt nicht als falsch, Box/Fälligkeit bleiben, nie gelöscht, steht in der KI-Stichprobe (Lehrer-Liste) | `saveRepairs` beim Anlegen, `holdGatedRepairs` beim Vorlegen (`features/repair/store.ts`) → `writer.transform`, idempotent |
+
+## Engine-Verdrahtung S4 (19.10.2026, additiv, nichts gelöscht)
+
+| Pfad | Neu | Grenze | Schreibweg |
+|---|---|---|---|
+| `vocab/<id>.col` | Wortpartner der geprüften Charge (`src/content/col`, gegengelesen, **ohne** Marke `ai`): `[{p, de, gap, opts[2–3], ex}]` (≤ 2). Die Karte zeigt sie beim Lesen, solange sie keine eigenen hat (`chargeCollocsFor`); gespeichert werden sie erst mit der ersten Wortpartner-Antwort im selben Schreibschritt wie die Antwort, damit `colIndex`/`colN` dieselbe Liste meinen. Nur wenn `col` fehlt oder leer ist und die Karte nicht ausgeblendet ist; nie ersetzt. Höchstens **eine** Wortpartner-Aufgabe (`colloc`, `colloc_gap`) je Karte und Lerntag (aus `hist[].x`, kein neues Feld). | ≤ 2 Einträge, Karte < 64 KiB | `writer.transform` (`reviewWrite` → `cardPatch`/`partnerMissPatch`, streng geprüft in `cardPatchSchema`/`partnerMissPatchSchema`) |

@@ -1,3 +1,4 @@
+import { colChargeFor } from '../../content/col';
 import { containsPhrase } from '../chunks/newChunk';
 import { isWrongLang } from '../lang/detect';
 import { collocAlternatives } from './collocEquiv';
@@ -99,7 +100,8 @@ export function colTriedRecently(doc: Doc, nowMs: number): boolean {
  * erfolglosen Versuch erst nach `COL_RETRY_DAYS` wieder (sonst bekäme eine Karte bei jedem Aufdecken eine neue Anfrage).
  */
 export function needsCollocs(card: { kind: string; inDb: boolean; doc: Doc }, nowMs: number): boolean {
-  return card.kind === 'vocab' && card.inDb && !hasCol(card.doc) && !colTriedRecently(card.doc, nowMs);
+  // Hat die geprüfte Charge Wortpartner für das Wort, fragt die App Claude nicht (die Charge geht vor, sie ist gegengelesen).
+  return card.kind === 'vocab' && card.inDb && !hasCol(card.doc) && !colTriedRecently(card.doc, nowMs) && !chargeCollocsFor(card.doc);
 }
 
 /**
@@ -127,4 +129,32 @@ export function colChargeOp(cur: Doc | undefined, word: string, raw: unknown): {
   const ok = acceptCollocations(word, raw, COL_MAX);
   if (!ok.length) return null;
   return { update: { col: ok.map(({ p, de, gap, opts, ex }) => ({ p, de, gap, opts: [...opts], ex })) } };
+}
+
+// Anschluss der Charge (Engine-Verdrahtung 19.10.2026): Die Karte zeigt die geprüften Wortpartner beim Lesen (`chargeCollocsFor`), geschrieben wird erst mit der ersten
+// Wortpartner-Antwort im selben Schreibschritt wie die Antwort (`chargeColPatch` in `cardPatch`). So entsteht kein Schreibvorgang ohne Übung, und `colIndex` zeigt beim
+// Schreiben auf dieselbe Liste, die die Übung gezeigt hat (dieselbe Prüfung, dieselbe Reihenfolge).
+const CHARGE_MEMO = new Map<string, readonly ChargeColloc[] | null>();
+
+/** Geprüfte Charge-Wortpartner für eine Karte ohne eigene (`null`: Karte hat schon welche, ist ausgeblendet oder das Wort steht nicht in der Charge). Je Wort einmal geprüft. */
+export function chargeCollocsFor(doc: Doc): readonly ChargeColloc[] | null {
+  if (doc.hidden === true || hasCol(doc)) return null;
+  const word = typeof doc.word === 'string' ? doc.word.trim() : '';
+  if (!word) return null;
+  const k = word.toLowerCase();
+  let hit = CHARGE_MEMO.get(k);
+  if (hit === undefined) {
+    const raw = colChargeFor(word);
+    hit = raw ? (colChargeOp({}, word, raw)?.update.col ?? null) : null;
+    CHARGE_MEMO.set(k, hit);
+  }
+  return hit;
+}
+
+/** Feld `col` für den Antwort-Patch: nur bei einer Wortpartner-Antwort (`colIndex` ≥ 0) auf eine Karte ohne eigene Wortpartner, deren Wort in der Charge steht. Frische Kopie. */
+export function chargeColPatch(cur: Doc, colIndex: number | undefined): ChargeColloc[] | null {
+  if (colIndex === undefined || colIndex < 0) return null;
+  const add = chargeCollocsFor(cur);
+  if (!add || colIndex >= add.length) return null;
+  return add.map((c) => ({ p: c.p, de: c.de, gap: c.gap, opts: [...c.opts], ex: c.ex }));
 }

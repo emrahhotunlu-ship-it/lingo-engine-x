@@ -5,6 +5,7 @@ import { dayKey } from '../date';
 import { naOf } from './actBase';
 import { flipStage } from './flip';
 import { wordFest } from '../tutor/learnerWords';
+import { chargeColPatch, COL_MAX } from './collocs';
 import { findContext } from './context';
 import { stageOf, nextStage } from './ladder';
 import { freeCorrectDays, freeDaysNeeded } from './variety';
@@ -26,6 +27,11 @@ export const MAX_CARD_BYTES = 64 * 1024;
 
 const legacyMode = z.enum(['recog', 'cloze', 'type', 'colloc', 'listen', 'produce']);
 const countsSchema = z.object({ c: z.number().int().min(0), w: z.number().int().min(0) });
+/** Wortpartner aus der geprüften Charge, mit der ersten Wortpartner-Antwort ergänzt (nur wenn die Karte noch keine hatte). */
+const chargeCollocSchema = z
+  .object({ p: z.string().min(3).max(40), de: z.string().min(2).max(80), gap: z.string().min(2).max(20), opts: z.array(z.string().min(2).max(20)).min(2).max(3), ex: z.string().min(15).max(170) })
+  .strict();
+const chargeColSchema = z.array(chargeCollocSchema).min(1).max(COL_MAX);
 
 /** Streng, nur für die geschriebenen Felder (Daten-Entwurf §1.5). Die Lese-Schemas bleiben locker. */
 export const cardPatchSchema = z
@@ -49,6 +55,7 @@ export const cardPatchSchema = z
     colN: z.array(z.number().int().min(0)).optional(),
     // Wörter aktivieren, Stufe 2: geschaffte Aktivierungen (Fahrplan A1–A5). NICHT `ac`: das ist die Fähigkeit „Anwenden“ (0–1, alte App).
     na: z.number().int().min(0).max(99).optional(),
+    col: chargeColSchema.optional(),
     fsrs: fsrsSchema.extend({ v: z.literal(1), src: z.literal('lx'), last: z.number().int() }),
   })
   .strict()
@@ -206,6 +213,7 @@ export const partnerMissPatchSchema = z
     xs: z.record(z.string().max(24), countsSchema),
     hist: z.array(z.looseObject({ t: z.number(), g: z.number().optional() })).max(HIST_MAX),
     co: z.number().min(0).max(1),
+    col: chargeColSchema.optional(),
   })
   .strict();
 
@@ -216,12 +224,14 @@ function partnerMissPatch(cur: Doc, a: AnswerEvent): Doc {
   const xs = isObj(cur.xs) ? cur.xs : {};
   const prevXs = isObj(xs[a.ex]) ? (xs[a.ex] as Doc) : {};
   const hist: unknown[] = Array.isArray(cur.hist) ? (cur.hist as unknown[]) : [];
-  const col: unknown[] = Array.isArray(cur.col) ? (cur.col as unknown[]) : [];
+  const charge = chargeColPatch(cur, a.colIndex);
+  const col: unknown[] = charge ?? (Array.isArray(cur.col) ? (cur.col as unknown[]) : []);
   return {
     modes: { [def.mode]: { c: Math.round(num(prevMode.c)), w: Math.round(num(prevMode.w)) + 1 } },
     xs: { [a.ex]: { c: Math.round(num(prevXs.c)), w: Math.round(num(prevXs.w)) + 1 } },
     hist: [...hist, histEntry(a, def.mode)].slice(-HIST_MAX),
     ...skillPatch(cur, def.mode, 1, a.colIndex, col.length),
+    ...(charge ? { col: charge } : {}),
   };
 }
 
@@ -242,7 +252,9 @@ export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
   const prevXs = isObj(xs[a.ex]) ? (xs[a.ex] as Doc) : {};
   const ok = a.grade > 1 ? 1 : 0;
   const hist: unknown[] = Array.isArray(cur.hist) ? (cur.hist as unknown[]) : [];
-  const col: unknown[] = Array.isArray(cur.col) ? (cur.col as unknown[]) : [];
+  // Charge `col`: Die Übung zeigte die geprüften Wortpartner der Charge (Karte ohne eigene); mit dieser Antwort werden sie ergänzt, damit `colIndex`/`colN` dazu passen.
+  const charge = def.mode === 'colloc' ? chargeColPatch(cur, a.colIndex) : null;
+  const col: unknown[] = charge ?? (Array.isArray(cur.col) ? (cur.col as unknown[]) : []);
   const patch: Doc = {
     fsrs: f,
     S: Math.min(round4(f.stability), 365),
@@ -259,6 +271,7 @@ export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
     ...skillPatch(cur, def.mode, a.grade, a.colIndex, col.length),
     // Aktivierung geschafft (Note ≥ 2, von Claude geprüft, ohne Hilfe): der Zähler `na` steigt im selben Schreibschritt wie die Antwort. Er ist abgeleitet und aus `act/…` neu berechenbar.
     ...(a.actStep && a.grade >= 2 && !a.actUnverified ? { na: Math.min(99, naOf(cur) + 1) } : {}),
+    ...(charge ? { col: charge } : {}),
   };
   // Nur ergänzen: ein vorhandenes Einführungsdatum der alten App bleibt stehen (Kap. 9, Regel 2).
   if (wasNew && (typeof cur.intro !== 'string' || !cur.intro)) patch.intro = a.day;

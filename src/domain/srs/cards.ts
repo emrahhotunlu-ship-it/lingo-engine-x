@@ -1,4 +1,6 @@
+import { dayKey } from '../date';
 import { mergedVocab } from '../overview';
+import { chargeCollocsFor } from './collocs';
 import { findContext, lemmaOf, parseCollocs, senseFits } from './context';
 import { stageOf } from './ladder';
 import { isFutureFsrs, isNewState, readFsrs } from './scheduler';
@@ -53,10 +55,24 @@ const STATIC = new WeakMap<object, Static>();
 function staticOf(doc: Doc, word: string): Static {
   const hit = STATIC.get(doc);
   if (hit) return hit;
-  const col = parseCollocs(doc.col);
+  // Karte ohne eigene Wortpartner: die geprüfte Charge `col` (gegengelesen, ohne Marke `ai`). Geschrieben wird sie erst mit der ersten Wortpartner-Antwort (`cardPatch`).
+  const col = parseCollocs(chargeCollocsFor(doc) ?? doc.col);
   const s: Static = { lemma: lemmaOf(word), context: ownContext(doc, word) ?? fallbackContext(doc, word), col };
   STATIC.set(doc, s);
   return s;
+}
+
+/** Wortpartner-Arten (Auswahl und getippt): höchstens EINE solche Aufgabe je Karte und Lerntag (Engine-Verdrahtung 19.10.2026). */
+const PARTNER_EX: ReadonlySet<string> = new Set(['colloc', 'colloc_gap']);
+
+/** Hatte die Karte an diesem Lerntag (Wechsel 04:00) schon eine Wortpartner-Aufgabe? Aus dem Verlauf, rein. */
+export function partnerDoneToday(hist: readonly unknown[], nowMs: number): boolean {
+  const today = dayKey(nowMs);
+  return hist.some((h) => {
+    if (!h || typeof h !== 'object') return false;
+    const e = h as Record<string, unknown>;
+    return typeof e.x === 'string' && PARTNER_EX.has(e.x) && typeof e.t === 'number' && Number.isFinite(e.t) && dayKey(e.t) === today;
+  });
 }
 
 export function toTrainCard(id: string, doc: Doc, inDb: boolean, nowMs: number): TrainCard | null {
@@ -88,6 +104,7 @@ export function toTrainCard(id: string, doc: Doc, inDb: boolean, nowMs: number):
     modes: counts(doc.modes),
     lastMode: last && typeof last.m === 'string' ? last.m : null,
     lastEx: last && typeof last.x === 'string' ? last.x : null,
+    ...(partnerDoneToday(hist, nowMs) ? { partnerToday: true } : {}),
     chunk: null,
     intro: str(doc.intro),
     order: num(doc.order, 900),
