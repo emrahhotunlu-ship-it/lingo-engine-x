@@ -472,3 +472,7 @@ Lehre: Für Aufgabenfragen mit Gestaltungsspielraum zuerst Emrah mit Vorschau fr
 - Tutor-Engine: Konzept `docs/umbau/tutor-engine-v3.md` (Opus), Entscheidungen Emrah in `entscheidungen.md`.
 
 ## 20.10.2026 – LIVE v81 `1792429447-2142` (Emrah: „nimm den jetzigen Stand schon einmal live“). Inhalt = Test-Link 9 (FK, WL, ST, MD). Rückweg v80 `1792157236-1fb8`. Bekannte offene UX-Befunde in `claude/umbau-md-ux`.
+
+## 20.10.2026 – Zusammenführung Engine + Backlog
+- `claude/umbau-engine-fixes` (Lehrer-Korrekturen, 67a129d) und `claude/umbau-engine-ui` (judge in Grammatik-Bildschirmen, composeFeedback, Zielform, fitAlt) in `claude/umbau-fokus` zusammengeführt; Typprüfung, Lint, 6243 Unit-Tests grün. Offen: Generator `scripts/grammar/build-content.mjs` driftet von `tasks-v2.json` (nicht ausführen); buildLearnerModel-Messwert im Worst Case über Ziel (kalt 664 ms, warm 35 ms).
+- **Backlog (Emrah, 20.10.):** Mehrere Wörter auf einmal markieren können (Wort-Antippen für Wortgruppen); die App zeigt dann Bedeutung im Zusammenhang oder als Karte an.
