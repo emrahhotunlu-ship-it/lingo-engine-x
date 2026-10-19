@@ -84,11 +84,11 @@ export function readRepairs(doc: Readonly<Doc> | undefined): RepairItem[] {
     const src = str(e.src) as RepairSrc;
     const h = e.held && typeof e.held === 'object' && !Array.isArray(e.held) ? (e.held as Doc) : null;
     const held = h && str(h.r) ? { r: str(h.r), ...(str(h.d) ? { d: str(h.d) } : {}), t: num(h.t) ?? 0 } : undefined;
-    const { held: _raw, ...rest } = e as Partial<RepairItem>;
-    void _raw;
+    // Ein lesbares `held` wird bereinigt übernommen; ein unbekanntes bleibt roh stehen (nie still verlieren, data-guard).
+    const { held: rawHeld, ...rest } = e as Partial<RepairItem>;
     out.push({
       ...rest,
-      ...(held ? { held } : {}),
+      ...(held ? { held } : rawHeld !== undefined ? { held: rawHeld } : {}),
       id: str(e.id) || repairId(wrong),
       wrong,
       right,

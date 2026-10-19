@@ -47,6 +47,9 @@ export const RELEASE_MAX_UNCLEAR_GAPS = 2;
 export const SB_MIN_WORDS = 8;
 export const SB_MAX_WORDS = 18;
 export const SB_SOURCE_MAX_WORDS = 30;
+/** Harte Zeichengrenzen je Satz (zu lang → verworfen mit Grund `length`); hält `vocab/<id>` mit 8 Sätzen weit unter 256 KiB. */
+export const SB_EN_MAX_CHARS = 220;
+export const SB_DE_MAX_CHARS = 300;
 
 const DAY_MS = 86_400_000;
 const KINDS: readonly SbKind[] = ['work', 'life', 'form'];
@@ -246,6 +249,7 @@ function checkSentence(s: unknown, word: string, seen: Set<string>, maxWords: nu
   const en = str(s.en);
   const de = str(s.de);
   if (!en || (needDe && !de)) return 'shape';
+  if (en.length > SB_EN_MAX_CHARS || de.length > SB_DE_MAX_CHARS) return 'length';
   const fault = sentenceFault(en, maxWords);
   if (fault) return fault;
   if (!phraseIn(en, word)) return 'missing_word';

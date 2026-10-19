@@ -200,10 +200,13 @@ describe('H4: Tagesauftrag nach 20 Uhr beim Sichtbarwerden neu abgleichen', () =
     store.useTodayPlan.setState({ day, plan: plan(day, []), status: 'ready', exhausted: null });
     // Der Tagesauftrag kommt erst im Laufe des Tages an.
     await h.db.doc(`daily/${day}`).set({ newWords: [{ word: 'to pivot', pos: 'verb', de: 'umschwenken', def: 'to change direction', ex: 'We had to [pivot].', level: 'B2' }], grammarItems: [] });
-    await store.ensureDay(berlin(day, 19));
+    // Die App rechnet mit der Ortszeit des Geräts (getHours, Tageswechsel 04:00). Darum Ortszeit bauen, nicht Berliner Zeit:
+    // so ist der Test unabhängig von der Zeitzone des Prozesses und von der echten Uhr.
+    const local = (h: number): number => new Date(2026, 9, 6, h).getTime();
+    await store.ensureDay(local(19));
     await new Promise((r) => setTimeout(r, 30));
     expect(Object.keys(h.dump()).filter((k) => k.startsWith('vocab/'))).toHaveLength(0);
-    await store.ensureDay(berlin(day, 21));
+    await store.ensureDay(local(21));
     await vi.waitFor(() => expect(Object.keys(h.dump()).filter((k) => k.startsWith('vocab/'))).toHaveLength(1));
   });
 });

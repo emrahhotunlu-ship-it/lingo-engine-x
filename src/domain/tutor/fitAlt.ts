@@ -18,7 +18,7 @@ const PV_MAX = 24;
 
 type Doc = Readonly<Record<string, unknown>>;
 export type FitAltPatch = { fitAlt: Record<string, Record<string, FitAltEntry | null>> };
-export type FitAltSkip = 'same' | 'empty' | 'too_big';
+export type FitAltSkip = 'same' | 'empty' | 'too_big' | 'bad_type';
 
 const obj = (v: unknown): Record<string, unknown> | null => (v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : null);
 const bytes = (v: unknown): number => new TextEncoder().encode(JSON.stringify(v ?? {})).length;
@@ -30,6 +30,8 @@ const bytes = (v: unknown): number => new TextEncoder().encode(JSON.stringify(v 
 export function fitAltPatch(cur: Doc | undefined, taskKey: string, given: string, by: FitAltEntry['by'], pv: string, t: number): FitAltPatch | FitAltSkip {
   const a = given.trim().replace(/\s+/g, ' ').slice(0, A_MAX);
   if (!a || !taskKey) return 'empty';
+  // Typprüfung vor dem Schreiben: steht dort etwas anderes als ein Objekt (Text, Liste, Zahl), wird es nie überschrieben.
+  if (cur?.fitAlt !== undefined && cur.fitAlt !== null && !obj(cur.fitAlt)) return 'bad_type';
   const h = fitAltHash(a);
   const index = readFitAlt(cur);
   const old = index[taskKey]?.[h];

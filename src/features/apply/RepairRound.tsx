@@ -45,6 +45,8 @@ export function RepairRoundScreen() {
   // Einmal beim Öffnen festlegen: die Liste ändert sich während der Runde, die Runde nicht.
   const [items] = useState(() => open.slice(0, REPAIR_ROUND_MAX));
   // Eintritts-Wächter: fragwürdige Einträge still ruhend stellen (einmal beim Öffnen; vorgelegt werden sie ohnehin nicht).
+  // Bewusste Ausnahme von „kein Schreiben im Effekt“: Der Schreibvorgang ist idempotent (nur ergänzend, nur bei Änderung, über den Schreibweg
+  // `holdGatedRepairs`), ein zweiter Lauf (z. B. StrictMode) ändert nichts, und das Ergebnis beeinflusst die Anzeige nicht.
   useEffect(() => {
     void holdGatedRepairs(useLive.getState().docs['app/repair']);
   }, []);
