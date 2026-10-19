@@ -20,7 +20,7 @@ export const isDue = (c: DueLike, nowMs: number): boolean => !c.hidden && !c.isN
 /** Überfällig: schon vor dem heutigen Lerntag fällig. */
 export const isOverdue = (c: DueLike, nowMs: number): boolean => !c.hidden && !c.isNew && c.fsrs.due < learningDayStart(nowMs);
 
-/** Sitzt die Karte fest? Stufe 5, Stabilität ≥ 21 Tage, im neuen Satz gekonnt, letzte Antwort richtig. Neue und ausgeblendete Karten nie. */
+/** Sitzt die Karte fest? Die ganze Regel steht in `cardStatus.ts` (Stufe 5, 21 Tage Haltbarkeit, in einem anderen Satz gekonnt, kein offener Fehler). Neue und ausgeblendete Karten nie. */
 export const isFest = (c: Pick<TrainCard, 'hidden' | 'isNew' | 'stage' | 'fsrs' | 'doc'>, nowMs?: number): boolean => isFestCard(c, nowMs);
 
 /** Neu · Lernt · Wackelt · Sicher · Fest einer Wort- oder Wendungskarte (Anzeigenamen stehen in i18n). */

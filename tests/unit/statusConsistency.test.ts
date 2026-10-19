@@ -6,6 +6,7 @@ import { addDays } from '../../src/domain/date';
 import { buildTrainCards, cardStatus, counts, festCount, unitState, UNIT_STATES } from '../../src/domain/metrics';
 import type { UnitState } from '../../src/domain/metrics/definitions';
 import { skyTones } from '../../src/domain/atlas/sky';
+import { sentKey } from '../../src/domain/srs/variety';
 import { toTrainCard } from '../../src/domain/srs/cards';
 import { vocabStatistics } from '../../src/domain/srs/retention';
 import { filterCards } from '../../src/domain/srs/vocabList';
@@ -42,7 +43,8 @@ const CASES: Array<[string, TrainCard, UnitState]> = [
   ['nur Auswahl-Antworten, Stufe 3', mk('auswahl', { stage: 3, S: 8, last: NOW - 3 * D, hist: [choice(9), choice(3)] }), 'learning'],
   ['Anki-Karte (Aufdecken)', mk('anki', { stage: 2, S: 9, last: NOW - 4 * D, hist: [{ t: NOW - 9 * D, g: 3, x: 'flip' }, { t: NOW - 4 * D, g: 3, x: 'flip' }] }), 'learning'],
   ['Stufe 5, fest, im neuen Satz', mk('fest', { stage: 5, S: 40, last: NOW - 5 * D, hist: [free(12, 3, 'sA'), free(5, 3, 'sB')] }), 'firm'],
-  ['Stufe 5, Stabilität 40, aber nur ein Satz', mk('einsatz', { stage: 5, S: 40, last: NOW - 5 * D, hist: [free(12, 3, 'sA'), free(5, 3, 'sA')] }), 'safe'],
+  ['Stufe 5, Stabilität 40, ein anderer Satz als der Ursprungssatz', mk('einsatz', { stage: 5, S: 40, last: NOW - 5 * D, hist: [free(12, 3, 'sA'), free(5, 3, 'sA')] }), 'firm'],
+  ['Stufe 5, Stabilität 40, nur im Ursprungssatz gekonnt', mk('ursprung', { stage: 5, S: 40, last: NOW - 5 * D, hist: [free(12, 3, sentKey('We ursprung it.')), free(5, 3, sentKey('We ursprung it.'))] }), 'safe'],
   ['Stufe 5 ohne Verlauf (alte Karte)', mk('alt', { stage: 5, S: 60, last: NOW - 5 * D, hist: [] }), 'learning'],
   ['gerade beantwortet (kein Abstand)', mk('heute', { stage: 4, S: 5, last: NOW - 3_600_000, hist: [free(8), free(0.04)] }), 'safe'],
   ['fest, aber über ein Jahr Pause', mk('pause', { stage: 5, S: 25, last: NOW - 400 * D, due: NOW - 375 * D, hist: [free(410, 3, 'sA'), free(400, 3, 'sB')] }), 'wobbly'],
@@ -128,7 +130,9 @@ describe('Status: Liste, Wortblatt, Übung, Hub, Atlas und Fortschritt widerspre
           }
           // „zuletzt falsch am …“ steht genau dann da, wenn es einen Fehler im Verlauf gibt (nie bei Neu).
           const hasWrong = st.lastWrong !== null && st.tier !== 'new';
-          expect(/zuletzt falsch am|last wrong on/.test(detail)).toBe(hasWrong);
+          expect(/falsch am|wrong on/.test(detail)).toBe(hasWrong);
+          // … und nie doppelt.
+          expect((detail.match(/falsch am|wrong on/g) ?? []).length).toBeLessThanOrEqual(1);
           // „Noch kein Abstand“ nur, wenn die Abrufwahrscheinlichkeit nicht belastbar ist.
           if (st.mind === 'noGap') expect(st.r).toBeNull();
           if (st.mind !== 'noGap' && st.mind !== 'none') expect(st.r).not.toBeNull();

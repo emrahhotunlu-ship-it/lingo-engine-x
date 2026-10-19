@@ -6,10 +6,12 @@ export const stxDe = {
   stxDetailRecognize: 'du erkennst es, aber noch nicht aus dem Kopf',
   stxDetailHelp: 'mit Hilfe geschafft, noch nicht frei',
   stxDetailFree: 'frei abgerufen an {n} von 3 Tagen',
-  stxDetailWobblyWrong: 'zuletzt falsch, noch nicht wieder geübt',
+  stxDetailWobblyWrong: 'falsch am {date}, seitdem nicht geübt',
   stxDetailWobblyRecover: 'seit dem Fehler noch nicht an 2 Tagen wieder frei richtig',
   stxDetailWobblyGap: 'nach langer Pause nicht mehr sicher',
   stxDetailFirm: 'im neuen Satz gekonnt',
+  stxDetailOld: 'Stand aus der alten App, noch nicht neu belegt',
+  stxDetailFlip: 'im Kopf abgerufen (selbst bewertet), noch nicht getippt',
   stxDetailStart: 'wird gerade gelernt',
   stxLastWrong: 'zuletzt falsch am {date}',
   // Wortblatt: die Leiter der Belege
@@ -22,8 +24,7 @@ export const stxDe = {
   stxStepOwn: 'Selbst benutzt (von Claude geprüft)',
   stxYes: 'ja',
   stxNot: 'noch nicht',
-  stxExplain:
-    'Sicher heißt: an 2 verschiedenen Tagen ohne Auswahl und ohne Hilfe getippt. Fest heißt: dazu mindestens 21 Tage Haltbarkeit, im neuen Satz gekonnt und kein offener Fehler. Wackelt heißt: war schon weiter, aber nach dem letzten Fehler hast du es noch nicht an 2 Tagen wieder frei richtig gewusst, oder die Erinnerung ist nach langer Pause schwach.',
+  stxExplain: 'Sicher: an 2 Tagen ohne Hilfe getippt. Fest: dazu 3 Wochen haltbar und in einem anderen Satz gekonnt. Wackelt: nach einem Fehler oder langer Pause noch nicht wieder bestätigt.',
   // Jetzt im Kopf
   stxMindLabel: 'Jetzt im Kopf',
   stxMindGood: 'gut',
@@ -35,7 +36,7 @@ export const stxDe = {
   // Messwerte dahinter
   stxRawStage: 'Stufe (höchste bestandene Abfrageart)',
   // Erklärzeile zur strengeren Fest-Zählung (gilt ab 20.10.2026, einige Wochen sichtbar)
-  stxFestRuleNote: 'Fest zählt jetzt strenger: Du musst das Wort in mindestens zwei verschiedenen Sätzen selbst gewusst haben, ohne Auswahl und ohne Hilfe. Deshalb ist die Zahl gerade klein. Sie wächst, sobald die Sätze wechseln und du die Wörter öfter frei schreibst.',
+  stxFestRuleNote: 'Fest zählt seit heute strenger: Die App braucht jetzt einen Beleg, dass du das Wort auch in einem anderen Satz oder in einem eigenen Satz ohne Hilfe weißt. Viele ältere Antworten wurden dafür noch nicht aufgezeichnet – deshalb ist die Zahl gerade klein. Das sagt nichts darüber, was du vergessen hast.',
   stxGoalSafe: 'sicher',
   stxGoalFirm: 'fest',
   // Filter der Wortliste

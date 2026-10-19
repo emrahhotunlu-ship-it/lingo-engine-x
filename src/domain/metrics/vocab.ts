@@ -24,7 +24,7 @@ export const FEST_GOAL = 1500;
  * wurden nach der alten Regel gezählt: Ein Unterschied zwischen alt und neu ist kein Rückgang. Zuwachs und Wochenzahl vergleichen deshalb nur
  * Werte ab diesem Tag (kein neues Speicherfeld nötig). Die Erklärzeile zur neuen Zählung steht `FEST_NOTE_DAYS` Tage lang.
  */
-export const FEST_RULE_FROM = '2026-10-20';
+export const FEST_RULE_FROM = '2026-10-19';
 export const FEST_NOTE_DAYS = 42;
 /** Die Grenze gilt erst, wenn der Tag selbst nach ihr liegt (vor dem Stichtag gibt es noch keine Werte der neuen Regel; so bleiben Testwelten und Vorabstände unverändert). */
 export const ruleCut = (day: string, ruleFrom: string = FEST_RULE_FROM): string => (day >= ruleFrom ? ruleFrom : '');
