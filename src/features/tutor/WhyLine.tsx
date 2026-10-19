@@ -16,7 +16,7 @@ export function WinLine({ task }: { task: GrammarTask }) {
   const mark = useTutorSession((x) => x.marks[taskMarkKey(task)] ?? null);
   if (mark !== 'known') return null;
   return (
-    <p className="m-0 text-sm text-muted" role="status" data-testid="tutor-win">
+    <p className="m-0 px-1.25 text-sm text-muted" role="status" data-testid="tutor-win">
       {t('ttWin')}
     </p>
   );
@@ -38,7 +38,7 @@ export function WhyLine({ task }: { task: GrammarTask }) {
     setFact(whyOf(task, m, mark));
   };
   return (
-    <div className="flex flex-col gap-1" data-testid="why">
+    <div className="flex flex-col gap-1 px-1.25" data-testid="why">
       <div>
         <button type="button" className="inline-flex min-h-11 items-center text-sm font-medium text-accent-text hover:underline" aria-expanded={!!fact} data-testid="why-toggle" onClick={toggle}>
           {t(fact ? 'ttWhyHide' : 'ttWhyToggle')}
