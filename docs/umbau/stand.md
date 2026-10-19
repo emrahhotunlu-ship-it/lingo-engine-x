@@ -454,3 +454,10 @@ Lehre: Für Aufgabenfragen mit Gestaltungsspielraum zuerst Emrah mit Vorschau fr
 - Offen: Gedämpft/Hell-Hintergrund nicht angesehen; Lehrer-Blick auf mcc-0017, kwt-0817, kwt-0059; Umbruch der Grammatik-Lücke nicht reproduziert.
 
 ## 16.10.2026 – LIVE v80 `1792157236-1fb8` (Emrah: „kannst live nehmen“). Rückweg v79 `1791991464-6145`.
+
+## 19.10.2026 – Rückmeldung Emrah (Lernen von Wörtern, Statusanzeige, Satzvarianz, „Fehler korrigieren“)
+- (1) Neue Wörter/Wendungen lernt er „extrem zäh“; viele Wörter sind komplexe Wendungen/Phrasen.
+- (2) Der angezeigte Lernstatus („wie gut kann ich das Wort wirklich“) wirkt nicht stimmig – mal kann er es besser, mal schlechter als angezeigt; unklar, wie gemessen wird.
+- (3) Varianz: Beim Üben eines Wortes kommt immer derselbe Satz → er merkt sich den Satz, nicht den Gebrauch des Wortes.
+- (4) „Fehler korrigieren“ auf der Startseite: Aufgaben/Texte ohne Kontext oder mit eigenen alten Fehlern, die er selbst nicht erkennt → „sehr sehr schlimm“; komplett entfernen/ersetzen oder komplett anders gestalten.
+- Vorgehen: Fachanalyse (Lernwissenschaft, Englischlehrer, Echtdaten-Befund) → Vorschlag an Emrah → Bau → Test-Link.
