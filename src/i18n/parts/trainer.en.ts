@@ -30,6 +30,7 @@ export const trainerEn: Record<keyof typeof trainerDe, string> = {
   exName_situation: 'From the situation',
   purpose5: 'Use it with confidence – in your own sentence and in a new context.',
   task_ctx_mc: 'What does the marked word mean here?',
+  task_ctx_mc_chunk: 'What does the marked phrase mean here?',
   task_contrast: 'Which word fits this sentence?',
   exName_contrast: 'Which word fits?',
   task_colloc_gap: 'Which word goes with this phrase?',

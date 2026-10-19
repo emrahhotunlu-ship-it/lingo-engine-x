@@ -28,6 +28,7 @@ export const trainerDe = {
   exName_situation: 'Aus der Situation',
   purpose5: 'Sicher anwenden – im eigenen Satz und in neuem Zusammenhang.',
   task_ctx_mc: 'Was bedeutet das markierte Wort hier?',
+  task_ctx_mc_chunk: 'Was bedeutet die markierte Wendung hier?',
   task_contrast: 'Welches Wort passt in diesen Satz?',
   exName_contrast: 'Welches Wort passt?',
   task_colloc_gap: 'Welches Wort passt zu dieser Verbindung?',

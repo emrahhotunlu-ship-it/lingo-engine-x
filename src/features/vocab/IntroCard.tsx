@@ -57,7 +57,7 @@ function Ask({ card, onNext }: { card: TrainCard; onNext: () => void }) {
     <ExerciseShell
       meta={{ ex: 'ctx_mc', id: `${card.id}:intro`, kind: card.kind }}
       status={{ area: 'words', state: null, kindLabel: t('wxIntroAskKind') }}
-      task={{ text: t('task_ctx_mc'), purpose: t('introPurpose') }}
+      task={{ text: t(card.kind === 'chunk' ? 'task_ctx_mc_chunk' : 'task_ctx_mc'), purpose: t('introPurpose') }}
       prompt={
         sentence ? (
           <EnglishText as="p" testId="sentence" text={sentence.sentence} area="intro" source={card.path} title={card.word} highlight={[sentence.start, sentence.end]} exclude={revealed ? null : [sentence.start, sentence.end]} />
@@ -109,17 +109,42 @@ function Learn({ card, onDone }: { card: TrainCard; onDone: (kind: FirstKind) =>
       <dd className="lx-t-support m-0 min-w-0">{body}</dd>
     </div>
   );
+  // Der Ursprungssatz gehört zur Karte und steht auch ohne Bedeutung da (eigene Zeile), sonst unter der Bedeutung.
+  const originSentence = card.context ? (
+    <EnglishText
+      as="p"
+      className={meanings.length > 0 ? 'mt-1' : undefined}
+      testId="origin-sentence"
+      text={card.context.sentence}
+      area="intro"
+      source={card.path}
+      title={card.word}
+      highlight={[card.context.start, card.context.end]}
+    />
+  ) : null;
   const secondary: ShellSecondary[] = card.kind === 'vocab' ? [{ id: 'skip', label: t('wxIntroKnown'), onClick: known, testId: 'intro-known' }] : [];
   return (
     <div data-testid="intro" data-card={card.id}>
       <ExerciseShell
         meta={{ ex: 'intro', id: card.id, stage: 0, kind: card.kind }}
-        status={{ area: 'words', state: 'new', kindLabel: t('wxIntroKind') }}
-        task={{ text: t('wxIntroTitle'), purpose: t('introPurpose') }}
+        // Einführungskarte: keine Seitenkarte „Erst selbst entscheiden“ und keine Tastenzeile (hier gibt es weder Tipp noch Prüfen).
+        // eslint-disable-next-line no-restricted-syntax -- Gerüst-Eigenschaft „gestapelt“ (keine Layout-Animation)
+        layout="stack"
+        keysHint={null}
+        status={{ area: 'words', state: 'new', kindLabel: t(card.kind === 'chunk' ? 'wxIntroKindChunk' : 'wxIntroKind') }}
+        task={{ text: t(card.kind === 'chunk' ? 'wxIntroTitleChunk' : 'wxIntroTitle'), purpose: t('introPurpose') }}
         prompt={
           <div className="flex flex-col gap-1">
             <p className="flex items-center gap-2" lang="en" data-testid="intro-word">
-              <span className="lx-t-title">{card.word}</span>
+              <span className="lx-t-title" data-testid="intro-title">
+                {/* Umbruch nur zwischen den Wörtern, nie im Bindestrich („go-“ / „live“). */}
+                {card.word.split(' ').map((w, i) => (
+                  <span key={i} className="whitespace-nowrap">
+                    {i > 0 ? ' ' : ''}
+                    {w}
+                  </span>
+                ))}
+              </span>
               <SpeakButton text={card.word} testId="intro-listen" />
             </p>
             {ipa && (
@@ -139,18 +164,7 @@ function Learn({ card, onDone }: { card: TrainCard; onDone: (kind: FirstKind) =>
                     {meanings.map((m) => shortMeaning(m, lang)).join(' · ')}
                     {pk && <span className="text-muted"> · {t(pk as MessageKey)}</span>}
                   </span>
-                  {card.context && (
-                    <EnglishText
-                      as="p"
-                      className="mt-1"
-                      testId="origin-sentence"
-                      text={card.context.sentence}
-                      area="intro"
-                      source={card.path}
-                      title={card.word}
-                      highlight={[card.context.start, card.context.end]}
-                    />
-                  )}
+                  {originSentence}
                   {card.doc.exMark === 'atlas' && (
                     <span className="lx-t-meta mt-0.5 block text-subtle" data-testid="intro-atlas-note">
                       {t('wxExFromAtlas')}
@@ -159,6 +173,7 @@ function Learn({ card, onDone }: { card: TrainCard; onDone: (kind: FirstKind) =>
                 </>,
                 'intro-row-meaning',
               )}
+            {meanings.length === 0 && originSentence && row(t('wxIntroSentence'), originSentence, 'intro-row-sentence')}
             {parts.length > 1 &&
               row(
                 t('wxIntroParts'),

@@ -3,6 +3,7 @@ import { useAiAvailable } from '../../ai/scope';
 import { useAsk } from '../../ai/useAsk';
 import { useT, type MessageKey } from '../../i18n';
 import { Choices } from '../../engine/Choices';
+import { Tiles } from '../../engine/Tiles';
 import { EnglishText } from '../../engine/EnglishText';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { KineticGap, hintOffset, type GapState } from '../../engine/KineticGap';
@@ -23,7 +24,7 @@ import type { ExplainExample, ExplanationModel, ResultVerdict } from '../../doma
 import { cardStatus } from '../../domain/metrics';
 import { useClock } from '../../app/clock';
 import { statusDetail } from './statusText';
-import { choiceVerdict, exTextKey, gapCue } from '../../domain/srs/exercise';
+import { choiceVerdict, exTextKey, gapCue, tilesAnswer } from '../../domain/srs/exercise';
 import { cardExamples, OWN_EXAMPLE_MIN_STAGE, storedTranslation, wantsEnrichment } from '../../domain/srs/examples';
 import { explainWord, isAltAnswer } from '../../domain/srs/explainWord';
 import { posKey } from '../../domain/srs/explain';
@@ -177,6 +178,9 @@ export function ExerciseView({
   const [chosen, setChosen] = useState<number | null>(null);
   const [sentenceText, setSentenceText] = useState('');
   const [spot, setSpot] = useState<[number, number] | null>(null);
+  /** Bausteine (tiles): gelegte Baustein-Nummern und der Platz, in den der Vorrat gezeichnet wird. */
+  const [placed, setPlaced] = useState<number[]>([]);
+  const [poolEl, setPoolEl] = useState<HTMLElement | null>(null);
   const [copyOpen, setCopyOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const askProduce = useAsk(produceCheckV2);
@@ -235,6 +239,7 @@ export function ExerciseView({
   const isSpot = e.input === 'spot';
   const isSentence = SENTENCE_EX.has(e.ex);
   const isTyped = e.input === 'typed';
+  const isTiles = e.input === 'tiles' && !!e.tiles;
   const shownSentence = isTyped || isChoice || isSpot ? (e.sentence?.sentence ?? null) : null;
   const solution = e.accepted[0] ?? card.word;
   const meaningText = lang === 'de' ? (card.de ?? card.def) : (card.def ?? card.de);
@@ -347,6 +352,12 @@ export function ExerciseView({
       if (!a || !b) return;
       const ok = a.start < e.sentence.end && b.end > e.sentence.start;
       finish(ok ? { verdict: 'correct' } : { verdict: 'wrong' }, ws.slice(spot[0], spot[1] + 1).map((x) => x.w).join(' '), null, { tapped: spot });
+      return;
+    }
+    if (isTiles && e.tiles) {
+      if (!placed.length) return;
+      const given = tilesAnswer(e.tiles, placed, /\s/.test(solution) ? 'words' : 'letters');
+      finish(checkTyped(given, e.accepted, { lemma: card.lemma }), given, null);
       return;
     }
     if (isSentence) {
@@ -591,7 +602,7 @@ export function ExerciseView({
       enter: () => {
         if (useLookup.getState().req) return;
         if (fb) next();
-        else if (isTyped || isChoice || isSpot) check();
+        else if (isTyped || isChoice || isSpot || isTiles) check();
       },
     },
     api.isInput,
@@ -783,6 +794,36 @@ export function ExerciseView({
         {e.ex !== 'type' && e.ex !== 'dictation' && e.ex !== 'situation' && e.check !== 'known' && cue()}
       </div>
     );
+  } else if (isTiles && e.tiles) {
+    // Bausteine: Der Satz zeigt die Lücke als Ablagezeile, der Vorrat steht darunter. Die Zahl der Plätze verrät die Wortzahl nicht (immer einer mehr als gelegt).
+    const line = (
+      <Tiles
+        tiles={e.tiles}
+        placed={placed}
+        onChange={(p) => {
+          if (firstKeyAt.current === null) firstKeyAt.current = performance.now();
+          setPlaced(p);
+        }}
+        locked={!!fb}
+        {...(fb ? { marks: Object.fromEntries(e.tiles.filter((x) => placed.includes(x.id)).map((x) => [x.id, fb.result.verdict === 'correct' ? 'ok' : 'off'] as const)) } : {})}
+        labels={{ line: t('drTileLine'), pool: t('drTilePool') }}
+        markLabels={{ ok: t('drMarkOk'), near: t('drMarkNear'), off: t('drMarkOff') }}
+        slots={placed.length + 1}
+        {...(e.sentence ? { poolTarget: poolEl, inline: true } : {})}
+      />
+    );
+    prompt = (
+      <div className="flex flex-col gap-3" data-testid="tiles-task">
+        {!e.sentence && e.meaning && (
+          <p className="lx-t-task" lang={lang} data-testid="cue-meaning">
+            {e.meaning}
+          </p>
+        )}
+        {e.sentence ? sentence(e.sentence, line) : null}
+        {e.sentence && cue()}
+      </div>
+    );
+    answer = e.sentence ? <div ref={setPoolEl} data-testid="tiles-pool" /> : line;
   } else if (isSpot) {
     const all = e.sentence ? wordsWithOffsets(e.sentence.sentence) : [];
     const ws = all.map((x) => x.w);
@@ -917,6 +958,7 @@ export function ExerciseView({
   const secondary: ShellSecondary[] = [];
   const canTip = !noHelp && !fb && !retry && tipAvailable && tip < maxTip;
   if (canTip) secondary.push({ id: 'hint', label: t('exHint'), onClick: showTip, testId: 'hint' });
+  if (isTiles && !fb && placed.length > 0) secondary.push({ id: 'reset', label: t('drReset'), onClick: () => setPlaced([]), testId: 'tiles-reset' });
   // Bei A4 (Wort nicht gezeigt) gibt es „Weiß ich nicht“: die Lösung wird gezeigt, die Karte bekommt „Nochmal“ und kommt bald wieder.
   if (!fb && (!isSentence || (e.act && !e.act.showTarget)) && e.check !== 'known') secondary.push({ id: 'dontKnow', label: t('exDontKnow'), onClick: dontKnow, testId: 'dont-know' });
 
@@ -1098,7 +1140,7 @@ export function ExerciseView({
   // Rückmeldung 6: Das Kartenwort kommt hier bewusst ein zweites Mal – sichtbar, warum (im Vergleich mit dem anderen Wort).
   const contrastOther = e.ex === 'contrast' ? (contrastOtherOf(e)?.word ?? null) : null;
   const contrastBadge = contrastOther ? t('trContrastBadge', { word: contrastOther }) : null;
-  const canCheck = isChoice ? chosen !== null : isSpot ? spot !== null : isSentence ? !!sentenceText.trim() && !sentenceBusy : true;
+  const canCheck = isChoice ? chosen !== null : isSpot ? spot !== null : isSentence ? !!sentenceText.trim() && !sentenceBusy : isTiles ? placed.length > 0 : true;
   const primary = fb
     ? { label: t('exNext'), onClick: next, testId: 'next' }
     : { label: t('exCheck'), onClick: check, testId: 'check', disabled: !canCheck, busy: sentenceBusy, busyLabel: t('exChecking') };
