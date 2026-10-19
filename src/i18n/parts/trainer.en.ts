@@ -6,8 +6,8 @@ import type { trainerDe } from './trainer.de';
 export const trainerEn: Record<keyof typeof trainerDe, string> = {
   task_fits: 'Does the marked word fit this sentence?',
   exName_fits: 'Does it fit?',
-  fitsYes: 'Yes, it fits',
-  fitsNo: 'No, it does not fit',
+  fitsYes: 'Yes',
+  fitsNo: 'No',
   task_spot: 'Tap the word in the sentence that has this meaning.',
   task_listen_mc: 'Listen and choose the meaning.',
   task_match: 'Put the right word in the blank.',

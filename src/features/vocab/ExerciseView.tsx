@@ -119,7 +119,7 @@ const escapeRe = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 const CHOICE_LANGS = { de: 'de', en: 'en' } as const;
 
 /** Höchste Tipp-Stufe je Art: getippte Arten und Auswahl 2, Falle finden und Diktat 1, Satzantworten keiner. */
-const maxTipOf = (ex: ExerciseId, input: Exercise['input'], hiddenAct = false): 0 | 1 | 2 => (SENTENCE_EX.has(ex) ? (hiddenAct ? 1 : 0) : FREE_TYPED.has(ex) || input === 'choice' ? 2 : 1);
+const maxTipOf = (ex: ExerciseId, input: Exercise['input'], hiddenAct = false): 0 | 1 | 2 => (ex === 'fits' ? 0 : SENTENCE_EX.has(ex) ? (hiddenAct ? 1 : 0) : FREE_TYPED.has(ex) || input === 'choice' ? 2 : 1);
 
 /** Wörter eines Satzes mit Zeichenstellen (für „Falle finden“: angetipptes Wort ↔ Stelle der Falle). */
 function wordsWithOffsets(text: string): Array<{ w: string; start: number; end: number }> {
@@ -150,7 +150,15 @@ export function ExerciseView({
   const api = useHiddenInput();
   const ai = useAiAvailable();
   const tts = useSpeech((s) => s.status === 'ready');
-  const e = exercise;
+  // „Passt das Wort?“: Die Optionen tragen im Bereich Domäne nur ihre Kennung (yes/no); beschriftet wird hier in der Oberflächensprache (Antwort, Lösung und Ergebnis zeigen dann Klartext).
+  const e = useMemo(
+    () =>
+      exercise.ex === 'fits'
+        ? { ...exercise, options: exercise.options.map((o) => ({ ...o, label: t(o.id === 'yes' ? 'fitsYes' : 'fitsNo'), lang })), accepted: [t(exercise.fits?.truth ? 'fitsYes' : 'fitsNo')] }
+        : exercise,
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- nur bei neuer Aufgabe oder anderer Sprache
+    [exercise, lang],
+  );
   const card = e.card;
   // Das Eingabeprofil der Runde (einmal eingefroren, Session) bzw. des Geräts (Wochen-Check).
   const [touch] = useState(() => {
@@ -874,8 +882,8 @@ export function ExerciseView({
     }
     answer = (
       <Choices
-        options={visibleOptions.map((o) => (e.ex === 'fits' ? t(o.id === 'yes' ? 'fitsYes' : 'fitsNo') : o.label))}
-        langs={visibleOptions.map((o) => (e.ex === 'fits' ? lang : CHOICE_LANGS[o.lang]))}
+        options={visibleOptions.map((o) => o.label)}
+        langs={visibleOptions.map((o) => CHOICE_LANGS[o.lang])}
         chosen={chosen}
         correct={correctIdx >= 0 ? correctIdx : null}
         revealed={!!fb}

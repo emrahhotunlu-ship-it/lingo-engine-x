@@ -101,28 +101,25 @@ function showsColloc(sentence: string, c: Pick<Colloc, 'p' | 'gap'>, lemma: stri
 
 const CHOICE_EX: ReadonlySet<ExerciseId> = new Set(['mc_en', 'fits', 'mc_de', 'ctx_mc', 'listen_mc', 'match', 'colloc_gap', 'contrast']);
 
-/** Begründung zu „Passt das Wort in diesen Satz?“: `corrective` = Zeile unter einer falschen Antwort, sonst die Warum-Zeile (auch bei richtiger Antwort, Kap. 2 Nr. 4). */
-function fitsText(card: TrainCard, f: NonNullable<ExplainWordInput['fits']>, meaning: string | null, lang: Lang, corrective: boolean): string {
+/**
+ * Zeilen zu „Passt das Wort in diesen Satz?“. `yours` = Zeile unter einer FALSCHEN Antwort (sagt, was stimmt), `why` = Warum-Zeile (immer, auch bei richtiger
+ * Antwort, Kap. 2 Nr. 4); bei falscher Antwort wiederholt sie das nicht, sondern nennt nur die Bedeutung des Kartenworts.
+ */
+function fitsText(card: TrainCard, f: NonNullable<ExplainWordInput['fits']>, meaning: string | null, lang: Lang, kind: 'yours' | 'why', wrong: boolean): string {
   const w = quote(card.word, lang);
   const mean = meaning ? quote(shortMeaning(meaning, lang), lang) : null;
   const foil = f.foil ? quote(f.foil.word, lang) : null;
   const fm = f.foil?.meaning ? quote(shortMeaning(f.foil.meaning, lang), lang) : null;
-  if (f.truth) {
-    return pick(
-      {
-        de: `${corrective ? 'Doch, ' : 'Ja: '}${w}${mean ? ` heißt ${mean} und` : ''} passt in diesen Satz.`,
-        en: `${corrective ? 'It does: ' : 'Yes: '}${w}${mean ? ` means ${mean} and` : ''} fits this sentence.`,
-      },
-      lang,
-    );
+  if (kind === 'yours') {
+    return f.truth
+      ? pick({ de: `Doch, ${w} passt hier.`, en: `It does fit: ${w} works here.` }, lang)
+      : pick({ de: `Nein, in diesen Satz gehört ${foil ?? 'ein anderes Wort'}${fm ? ` (${fm})` : ''}.`, en: `No, this sentence needs ${foil ?? 'a different word'}${fm ? ` (${fm})` : ''}.` }, lang);
   }
-  return pick(
-    {
-      de: `${corrective ? 'Nein, ' : 'Nein: '}in diesen Satz gehört ${foil ?? 'ein anderes Wort'}${fm ? ` (${fm})` : ''}. ${w}${mean ? ` heißt ${mean}` : ' passt nicht'}.`,
-      en: `${corrective ? 'No, ' : 'No: '}this sentence needs ${foil ?? 'a different word'}${fm ? ` (${fm})` : ''}. ${w}${mean ? ` means ${mean}` : " doesn't fit"}.`,
-    },
-    lang,
-  );
+  const own = mean ? pick({ de: `${w} heißt ${mean}.`, en: `${w} means ${mean}.` }, lang) : '';
+  if (wrong) return own;
+  return f.truth
+    ? pick({ de: `Ja, ${w} passt in diesen Satz.`, en: `Yes, ${w} fits this sentence.` }, lang) + (own ? ` ${own}` : '')
+    : pick({ de: `Nein, in diesen Satz gehört ${foil ?? 'ein anderes Wort'}${fm ? ` (${fm})` : ''}.`, en: `No, this sentence needs ${foil ?? 'a different word'}${fm ? ` (${fm})` : ''}.` }, lang) + (own ? ` ${own}` : '');
 }
 
 export function explainWord(i: ExplainWordInput): ExplanationModel {
@@ -150,7 +147,7 @@ export function explainWord(i: ExplainWordInput): ExplanationModel {
   if (wrong) {
     const pk = i.picked;
     if (i.ex === 'fits' && i.fits) {
-      yours = fitsText(card, i.fits, meaning, lang, true);
+      yours = fitsText(card, i.fits, meaning, lang, 'yours', true);
     } else if (CHOICE_EX.has(i.ex) && i.ex !== 'colloc_gap' && pk?.fromWord) {
       // Auswahl: die gewählte Option gehört zu einer anderen Karte.
       yours =
@@ -214,7 +211,7 @@ export function explainWord(i: ExplainWordInput): ExplanationModel {
     );
     const word = meaning && colExtra ? `${card.word} = ${shortMeaning(meaning, lang)}` : null;
     lines.push({ k: 'why', text: [`${colMerke}. ${reason}`, why, word].filter(Boolean).join('; ') });
-  } else if (i.ex === 'fits' && i.fits) lines.push({ k: 'why', text: [fitsText(card, i.fits, meaning, lang, false), why].filter(Boolean).join(' ') });
+  } else if (i.ex === 'fits' && i.fits) lines.push({ k: 'why', text: [fitsText(card, i.fits, meaning, lang, 'why', wrong), why].filter(Boolean).join(' ') });
   else lines.push({ k: 'why', text: i.ex === 'contrast' && i.contrastWhy ? i.contrastWhy : why ? `${merke}. ${why}` : merke });
 
   // 4. Typischer Fehler: die Deutsch-Falle der Karte

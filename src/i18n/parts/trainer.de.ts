@@ -4,8 +4,8 @@
 export const trainerDe = {
   task_fits: 'Passt das markierte Wort in diesen Satz?',
   exName_fits: 'Passt das?',
-  fitsYes: 'Ja, es passt',
-  fitsNo: 'Nein, es passt nicht',
+  fitsYes: 'Ja',
+  fitsNo: 'Nein',
   task_spot: 'Tippe im Satz auf das Wort mit dieser Bedeutung.',
   task_listen_mc: 'Hör zu und wähle die Bedeutung.',
   task_match: 'Leg das passende Wort in die Lücke.',
