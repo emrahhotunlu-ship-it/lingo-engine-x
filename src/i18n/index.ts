@@ -19,6 +19,11 @@ export function formatDate(lang: Lang, ms: number): string {
   return new Intl.DateTimeFormat(locales[lang], { day: 'numeric', month: 'long', year: 'numeric' }).format(ms);
 }
 
+/** Kurzes Datum ohne Jahr („12. Okt.“ / „Oct 12“) für „zuletzt falsch am …“. */
+export function formatShortDate(lang: Lang, ms: number): string {
+  return new Intl.DateTimeFormat(locales[lang], { day: 'numeric', month: 'short' }).format(ms);
+}
+
 export function translate(lang: Lang, key: MessageKey, vars?: Vars): string {
   // Ein fehlender Schlüssel zeigt sich als er selbst (nie ein leerer Text); `i18nParts.test.ts` prüft, dass jeder benutzte Schlüssel existiert.
   const template = dicts[lang][key] ?? key;
@@ -43,5 +48,6 @@ export function useT() {
     tn: (base: PluralBase, n: number, vars?: Vars) => translatePlural(lang, base, n, vars),
     num: (n: number) => formatNumber(lang, n),
     date: (ms: number) => formatDate(lang, ms),
+    dateShort: (ms: number) => formatShortDate(lang, ms),
   };
 }

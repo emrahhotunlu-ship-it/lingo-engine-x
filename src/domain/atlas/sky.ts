@@ -12,8 +12,8 @@ export const SKY_RING_RANK = 5000;
 /** Breite eines Bands des Wortschatztests in Rängen (10 Bänder). */
 export const VTEST_BAND = 1000;
 
-export type SkyTone = 'firm' | 'safe' | 'learning' | 'new' | 'none';
-export const SKY_TONES: readonly SkyTone[] = ['none', 'new', 'learning', 'safe', 'firm'];
+export type SkyTone = 'firm' | 'safe' | 'wobbly' | 'learning' | 'new' | 'none';
+export const SKY_TONES: readonly SkyTone[] = ['none', 'new', 'learning', 'wobbly', 'safe', 'firm'];
 
 export type SkyLayout = {
   /** Normierte Lage je Eintrag in [-1, 1] (Mittelpunkt 0,0). */
@@ -50,11 +50,11 @@ export function skyTones(ids: readonly string[], hasCard: (id: string) => boolea
   return ids.map((id) => (hasCard(id) ? (stateOf(id) ?? 'new') : 'none'));
 }
 
-export type SkyCounts = { words: number; stars: number; firm: number; safe: number; learning: number; fresh: number; inRing: number };
+export type SkyCounts = { words: number; stars: number; firm: number; safe: number; wobbly: number; learning: number; fresh: number; inRing: number };
 
 /** Zahlen für Legende und Vorlesetext (Sterne = Atlas-Wörter mit Karte, dieselbe Zahl wie die Atlas-Zeile). */
 export function skyCounts(entries: readonly { r: number }[], tones: readonly SkyTone[]): SkyCounts {
-  const c: SkyCounts = { words: entries.length, stars: 0, firm: 0, safe: 0, learning: 0, fresh: 0, inRing: 0 };
+  const c: SkyCounts = { words: entries.length, stars: 0, firm: 0, safe: 0, wobbly: 0, learning: 0, fresh: 0, inRing: 0 };
   entries.forEach((e, i) => {
     if (e.r <= SKY_RING_RANK) c.inRing++;
     const t = tones[i] ?? 'none';
@@ -62,6 +62,7 @@ export function skyCounts(entries: readonly { r: number }[], tones: readonly Sky
     c.stars++;
     if (t === 'firm') c.firm++;
     else if (t === 'safe') c.safe++;
+    else if (t === 'wobbly') c.wobbly++;
     else if (t === 'learning') c.learning++;
     else c.fresh++;
   });

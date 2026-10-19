@@ -6,6 +6,7 @@ import { patternById } from '../grammar/patterns';
 import { patInfos } from '../grammar/slotInput';
 import { currentChapter } from '../grammar/slotPlan';
 import { isWrongLang, langScores } from '../lang/detect';
+import { FEST_RULE_FROM, ruleCut } from '../metrics/vocab';
 import { patternState, patternStateNo, patsOf } from '../metrics/pattern';
 import type { Confusion } from '../tutor/confusion';
 import { lastWeekOf, newFestWords, patternsHeldBack, patternsNewSafe } from './weekly';
@@ -33,14 +34,14 @@ export type Big = { n: number; src: 'vu' | 'ff' };
 
 /**
  * „+n fest“: Fest-Zahl der Wörter und Wendungen (`history[].vu`) am letzten Tag der Woche gegen den letzten Wert vor der Woche. Negativ ist möglich
- * (nach einer Pause). Fehlt einer der beiden Werte, gilt die Zahl der in der Woche neu Festen (`ff`), sonst `null`.
+ * (nach einer Pause). Werte vor `FEST_RULE_FROM` stammen aus der alten Fest-Regel und werden nie verglichen (sonst „−9“ nur wegen der Regel). Fehlt einer der beiden Werte, gilt die Zahl der in der Woche neu Festen (`ff`), sonst `null`.
  */
-export function bigNumber(history: unknown, days: readonly string[], newFest: number): Big | null {
+export function bigNumber(history: unknown, days: readonly string[], newFest: number, ruleFrom: string = FEST_RULE_FROM): Big | null {
   const first = days[0];
   const last = days[days.length - 1];
   if (first && last) {
     const rows = arr(history)
-      .filter((h) => isDayKey(h.d) && typeof h.vu === 'number' && Number.isFinite(h.vu))
+      .filter((h) => isDayKey(h.d) && h.d >= ruleCut(last, ruleFrom) && typeof h.vu === 'number' && Number.isFinite(h.vu))
       .map((h) => ({ d: str(h.d), v: num(h.vu) }))
       .sort((a, b) => (a.d < b.d ? -1 : 1));
     const end = [...rows].reverse().find((r) => r.d <= last && r.d >= first);

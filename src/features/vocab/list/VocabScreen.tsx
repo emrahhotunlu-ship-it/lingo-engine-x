@@ -4,7 +4,7 @@ import { useNav } from '../../../app/nav';
 import { openSheet } from '../../../app/sheets';
 import { useLive } from '../../../data/live';
 import { meaningOf } from '../../../domain/srs/cards';
-import { CONFIDENCE_KEYS, confidenceDots, confidenceOf } from '../../../domain/srs/confidence';
+import { cardStatus } from '../../../domain/metrics';
 import { addIdsOp, isLeechCard, visibleDecks } from '../../../domain/srs/decks';
 import { filterCards, VOCAB_FILTERS, vocabStats, type VocabFilter, type VocabSort } from '../../../domain/srs/vocabList';
 import { normalizeNewPerDay } from '../../../domain/srs/queue';
@@ -13,7 +13,8 @@ import { useT, type MessageKey } from '../../../i18n';
 import { Button } from '../../../ui/Button';
 import { Icon } from '../../../ui/Icon';
 import { toast } from '../../../ui/Toast';
-import { Dots } from '../../grammar/GrammarScreen';
+import { StateDots } from '../StateDots';
+import { STATE_WORD, statusDetail } from '../statusText';
 import { ScreenHeader } from '../../learn/ui';
 import { useDecks, writeDecks } from '../decksStore';
 import { useVocabCards } from '../hub/data';
@@ -32,9 +33,10 @@ const FILTER_KEY: Record<Filter, MessageKey> = {
   all: 'vcFilterAll',
   due: 'vcFilterDue',
   new: 'vcFilterNew',
-  shaky: 'vcFilterShaky',
-  helped: 'vcFilterHelped',
-  solid: 'vcFilterSolid',
+  learning: 'stxFilterLearning',
+  wobbly: 'stxFilterWobbly',
+  safe: 'stxFilterSafe',
+  firm: 'stxFilterFirm',
   job: 'vcFilterJob',
   phrases: 'vcFilterPhrases',
   leech: 'nbWsFilterLeech',
@@ -199,9 +201,9 @@ export function VocabScreen({ filter: initialFilter, q: initialQ }: { filter?: s
   );
 }
 
-function WordRow({ card, nowMs, lang, onOpen, selecting, selected }: { card: TrainCard; nowMs: number; lang: 'de' | 'en'; onOpen: () => void; selecting: boolean; selected: boolean }) {
-  const { t } = useT();
-  const conf = confidenceOf(card, nowMs);
+export function WordRow({ card, nowMs, lang, onOpen, selecting, selected }: { card: TrainCard; nowMs: number; lang: 'de' | 'en'; onOpen: () => void; selecting: boolean; selected: boolean }) {
+  const { t, dateShort } = useT();
+  const st = cardStatus(card, nowMs);
   const meaning = meaningOf(card, lang);
   return (
     <button
@@ -212,6 +214,7 @@ function WordRow({ card, nowMs, lang, onOpen, selecting, selected }: { card: Tra
       data-word={card.id}
       data-kind={card.kind}
       data-stage={card.stage}
+      data-state={st.tier}
       data-hidden={card.hidden || undefined}
       aria-pressed={selecting ? selected : undefined}
     >
@@ -232,10 +235,14 @@ function WordRow({ card, nowMs, lang, onOpen, selecting, selected }: { card: Tra
             {meaning}
           </span>
         )}
+        {/* Paket ST: derselbe Beleg wie im Wortblatt und in der Übung. */}
+        <span className="text-xs text-subtle [overflow-wrap:anywhere]" data-testid="vocab-row-detail">
+          {statusDetail(st, t, dateShort)}
+        </span>
       </span>
-      <span className="flex flex-none items-center gap-2 text-xs text-muted" title={t(CONFIDENCE_KEYS[conf])}>
-        <Dots n={confidenceDots(conf)} />
-        <span className="sr-only">{t(CONFIDENCE_KEYS[conf])}</span>
+      <span className="flex flex-none items-center gap-2 text-xs text-muted">
+        <StateDots state={st.tier} />
+        <span data-testid="vocab-row-state">{t(STATE_WORD[st.tier])}</span>
       </span>
     </button>
   );

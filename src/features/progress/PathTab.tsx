@@ -67,7 +67,7 @@ export function PathTab({ part }: { part: 'goal' | 'cando' }) {
 
   const statusOf = (i: CanDoItem) => canDoStatus(i, env);
   const summary = canDoSummary(FOCUS_CANDO_ITEMS, statusOf);
-  const goal = useMemo(() => vocabGoal({ profile, cards: buildTrainCards(vocab, now, invalidIdsOf(invalid, 'vocab')), today }), [profile, vocab, now, invalid, today]);
+  const goal = useMemo(() => vocabGoal({ profile, cards: buildTrainCards(vocab, now, invalidIdsOf(invalid, 'vocab')), today, nowMs: now }), [profile, vocab, now, invalid, today]);
   const gap = assess && assess.lang === lang ? assess.data.c1gap : [];
 
   const goalText = !goal.measured || goal.now === null

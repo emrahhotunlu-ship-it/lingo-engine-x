@@ -64,7 +64,7 @@ test('Status statt Erklärtexten, Platzhalter je Buchstabe, keine Bewertungsknö
   await expect(page.getByTestId('explanation')).toContainText('Verb');
   await expect(page.getByTestId('next-in')).toHaveText(/^Wieder in \d+ (Min\.|Std\.|Tagen?)$/);
   // Richtig, aber Stufe 4 braucht freie Antworten an anderen Tagen: die Karte sagt es (Auswertung 15.10., Prüfung M1).
-  await expect(page.getByTestId('stage-hold')).toContainText('Für Stufe 4 brauchst du noch');
+  await expect(page.getByTestId('stage-hold')).toContainText('dann gilt das Wort als sicher');
   // Beispiele: Kollokationssätze, nicht der schon sichtbare Satz (bei dieser Stufe unter „Weitere Beispiele“).
   await page.getByTestId('examples-more').click();
   await expect(page.getByTestId('examples').getByTestId('example')).toHaveCount(3);

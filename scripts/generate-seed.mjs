@@ -247,6 +247,14 @@ vocab.forEach((c, i) => {
     co: isNew ? 0 : round(0.15 + stage * 0.08),
   });
   if (i === 42 || i === 97) c.hidden = true;
+  // Paket ST: je ein Beispiel für „Fest“, „Wackelt“ und „Sicher“ (ohne Zufallszahlen, die übrigen Karten bleiben gleich). `s` = Satz-Schlüssel, `x` = Abfrageart.
+  const free = (daysAgo, s, g = 3) => ({ t: now - daysAgo * DAY, m: 'type', g, x: 'cloze', s });
+  const showcase = {
+    gradually: { stage: 5, S: 40, D: 4, lapses: 0, last: now - 5 * DAY, due: now + 33 * DAY, hist: [free(16, 'sa1'), free(10, 'sb2'), free(5, 'sc3')] },
+    counteroffer: { stage: 4, S: 14, D: 5, lapses: 1, last: now - 3 * DAY, due: now + 10 * DAY, hist: [free(14, 'sa1'), free(9, 'sb2'), free(3, 'sc3', 1)] },
+    downtime: { stage: 4, S: 16, D: 5, lapses: 0, last: now - 3 * DAY, due: now + 12 * DAY, hist: [free(12, 'sa1'), free(3, 'sa1')] },
+  }[c.id];
+  if (showcase) Object.assign(c, showcase, { state: 'review', reps: Math.max(c.reps, 8) });
   put(`vocab/${c.id}`, Object.fromEntries(Object.entries(c).filter(([, v]) => v !== undefined)));
 });
 

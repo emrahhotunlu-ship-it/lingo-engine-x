@@ -40,19 +40,19 @@ describe('Fenster: die letzte abgeschlossene Woche über die Zeitumstellung', ()
 describe('große Zahl „+n fest“', () => {
   const days = lastWeekOf('2026-10-26').days;
   it('Wochenende gegen den Wert vor der Woche; negativ nach einer Pause', () => {
-    expect(bigNumber(hist([['2026-10-18', 100], ['2026-10-25', 131]]), days, 5)).toEqual({ n: 31, src: 'vu' });
-    expect(bigNumber(hist([['2026-10-17', 100], ['2026-10-22', 96]]), days, 0)).toEqual({ n: -4, src: 'vu' });
+    expect(bigNumber(hist([['2026-10-18', 100], ['2026-10-25', 131]]), days, 5, '')).toEqual({ n: 31, src: 'vu' });
+    expect(bigNumber(hist([['2026-10-17', 100], ['2026-10-22', 96]]), days, 0, '')).toEqual({ n: -4, src: 'vu' });
   });
   it('nimmt den letzten Wert der Woche und den letzten davor, nicht den ersten', () => {
-    expect(bigNumber(hist([['2026-10-10', 80], ['2026-10-17', 100], ['2026-10-20', 110], ['2026-10-24', 120]]), days, 0)).toEqual({ n: 20, src: 'vu' });
+    expect(bigNumber(hist([['2026-10-10', 80], ['2026-10-17', 100], ['2026-10-20', 110], ['2026-10-24', 120]]), days, 0, '')).toEqual({ n: 20, src: 'vu' });
     // Ein Vergleichswert, der mehr als 3 Tage vor der Woche liegt, ist kein Wochenvergleich.
-    expect(bigNumber(hist([['2026-10-14', 100], ['2026-10-24', 120]]), days, 5)).toEqual({ n: 5, src: 'ff' });
+    expect(bigNumber(hist([['2026-10-14', 100], ['2026-10-24', 120]]), days, 5, '')).toEqual({ n: 5, src: 'ff' });
   });
   it('ohne Vergleichswert gilt die Zahl der neu Festen (ff), sonst nichts', () => {
-    expect(bigNumber(hist([['2026-10-25', 131]]), days, 4)).toEqual({ n: 4, src: 'ff' });
-    expect(bigNumber(hist([['2026-09-01', 50], ['2026-10-25', 131]]), days, 4)).toEqual({ n: 4, src: 'ff' });
-    expect(bigNumber(undefined, days, 0)).toBeNull();
-    expect(bigNumber([{ d: 'kaputt', vu: 3 }, { d: '2026-10-25' }], days, 0)).toBeNull();
+    expect(bigNumber(hist([['2026-10-25', 131]]), days, 4, '')).toEqual({ n: 4, src: 'ff' });
+    expect(bigNumber(hist([['2026-09-01', 50], ['2026-10-25', 131]]), days, 4, '')).toEqual({ n: 4, src: 'ff' });
+    expect(bigNumber(undefined, days, 0, '')).toBeNull();
+    expect(bigNumber([{ d: 'kaputt', vu: 3 }, { d: '2026-10-25' }], days, 0, '')).toBeNull();
   });
 });
 
@@ -236,7 +236,8 @@ describe('Einsatz-Satz und Gesamtbild', () => {
     const conf: Confusion = { window: { from: '', to: '', prevFrom: '', prevTo: '' }, pairs: [], pats: [{ pat: 'art.definite', n: 10, w: 4, prevN: 0, prevW: 0, weeks: [0, 1, 1, 2] }], lines: [], ids: [], allowed: [], mapped: 4 };
     const w = weekly3({ today, nowMs: at('2026-10-26T10:00:00+01:00'), vocab, chunk, grammar, profile: { history: hist([['2026-10-18', 200], ['2026-10-25', 203]]) }, confusion: conf, fixed: 2 });
     expect(w.w).toBe('2026-W43');
-    expect(w.big).toEqual({ n: 3, src: 'vu' });
+    // Der Vergleichswert vom 18.10. stammt aus der alten Fest-Regel (vor dem 20.10.): kein Vergleich, sondern die Zahl der neu Festen (`ff`).
+    expect(w.big).toEqual({ n: 2, src: 'ff' });
     expect(w.fest.map((f) => f.label)).toEqual(['on the same page', 'leverage']);
     expect(w.patternsSafe).toEqual(['art.definite']);
     expect(w.fixed).toBe(2);
@@ -247,6 +248,14 @@ describe('Einsatz-Satz und Gesamtbild', () => {
     expect(empty.big).toBeNull();
     expect(empty.fest).toEqual([]);
     expect(empty.options).toEqual([]);
+  });
+
+  it('Werte vor der strengeren Fest-Regel werden nie verglichen: kein „−9“ nur wegen der Regel', () => {
+    const days = ['2026-10-19', '2026-10-20', '2026-10-21', '2026-10-22', '2026-10-23', '2026-10-24', '2026-10-25'];
+    expect(bigNumber(hist([['2026-10-18', 9], ['2026-10-25', 0]]), days, 0)).toBeNull();
+    expect(bigNumber(hist([['2026-10-18', 9], ['2026-10-25', 0]]), days, 3)).toEqual({ n: 3, src: 'ff' });
+    // Ab 20.10. verglichen: Start und Ende nach derselben Regel.
+    expect(bigNumber(hist([['2026-10-26', 0], ['2026-11-01', 2]]), ['2026-10-27', '2026-10-28', '2026-10-29', '2026-10-30', '2026-10-31', '2026-11-01', '2026-11-02'], 0)).toEqual({ n: 2, src: 'vu' });
   });
 
   it('weekFacts über die Zeitumstellung: ff am 25.10. in KW 43', () => {

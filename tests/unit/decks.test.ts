@@ -165,11 +165,14 @@ describe('Prognose und Statistik (N27)', () => {
       mk('d', { S: 10, hist: [{ t: NOW - 40 * D, g: 1, x: 'flip' }] }),
     ];
     const s = vocabStatistics(cards, NOW);
-    // Behaltensquote 28 Tage (domain/metrics): erste Antwort je Karte und Tag nach mindestens 7 Tagen Pause.
-    expect(s.answers).toBe(2);
-    expect(s.retention).toBe(0.5);
+    // Behaltensquote 28 Tage (domain/metrics, Paket ST): frei abgerufen (cloze) getrennt vom Erkennen (flip).
+    expect(s.answers).toBe(1);
+    expect(s.retention).toBe(1);
+    expect(s.recognition).toEqual({ rate: 0, n: 1 });
     expect(s.byState.new).toBe(1);
-    expect(s.byState.mature).toBe(1);
+    // Karte a: Stufe 5, S 30, aber die letzte Antwort war falsch → wackelt (nicht fest).
+    expect(s.byState.wobbly).toBe(1);
+    expect(s.byState.firm).toBe(0);
     expect(s.total).toBe(4);
     expect(s.medianStability).toBe(10);
     expect(median([1, 2, 3, 4])).toBe(2.5);

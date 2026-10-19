@@ -1,9 +1,9 @@
-import type { UnitState } from '../metrics/definitions';
+import { UNIT_RANK, type UnitState } from '../metrics/definitions';
 
 // Momente erkennen (Lernplattform 3.0 P56, Erlebnis-Engine §2.2/§4): Vorher/Nachher → Zustandswechsel. Rein und ohne Seiteneffekte; ob und wie ein
 // Moment spielt (Stufe, Ton, Funken), entscheidet der Dirigent. Hier steht nur, OB sich etwas wirklich geändert hat (Kap. 2 Nr. 2: keine Feier ohne Grund).
 
-const RANK: Readonly<Record<UnitState, number>> = { new: 0, learning: 1, safe: 2, firm: 3 };
+const RANK: Readonly<Record<UnitState, number>> = UNIT_RANK;
 
 export type StateUp = { id: string; from: UnitState; to: UnitState };
 

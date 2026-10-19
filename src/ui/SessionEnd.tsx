@@ -86,6 +86,7 @@ const GROWTH_NAMES = 6;
 const STATE_KEY: Record<UnitState, MessageKey> = {
   new: "exStateNew",
   learning: "exStateLearning",
+  wobbly: "exStateWobbly",
   safe: "exStateSafe",
   firm: "exStateFirm",
 };

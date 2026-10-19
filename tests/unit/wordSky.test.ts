@@ -42,7 +42,7 @@ describe('Wort-Himmel: Zählung', () => {
     const state: Record<string, 'firm' | 'safe' | 'learning'> = { a: 'firm', c: 'safe', d: 'learning' };
     const tones = skyTones(ids, (id) => cards.has(id), (id) => state[id]);
     expect(tones).toEqual(['firm', 'none', 'safe', 'learning', 'new']);
-    expect(skyCounts(entries, tones)).toEqual({ words: 5, stars: 4, firm: 1, safe: 1, learning: 1, fresh: 1, inRing: 2 });
+    expect(skyCounts(entries, tones)).toEqual({ words: 5, stars: 4, firm: 1, safe: 1, wobbly: 0, learning: 1, fresh: 1, inRing: 2 });
   });
 });
 

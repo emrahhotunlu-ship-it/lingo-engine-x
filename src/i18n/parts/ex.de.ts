@@ -10,6 +10,7 @@ export const exDe = {
   // Zustand einer Einheit (Wort, Muster)
   exStateNew: 'Neu',
   exStateLearning: 'Lernt',
+  exStateWobbly: 'Wackelt',
   exStateSafe: 'Sicher',
   exStateFirm: 'Fest',
   exStateLabel: 'Stand: {state}',

@@ -178,11 +178,11 @@ export const nbWsDe = {
   nbWsListTitle: 'Alle Einträge',
   // Statistik (Platz „stand“)
   nbWsActive: 'Fest',
-  nbWsActiveSub: 'dazu {n} in Übung',
+  nbWsActiveSub: 'dazu {n} sicher',
   nbWsExpected: 'Erwartet gekonnt',
   nbWsExpectedSub: 'Schätzung, sinkt ohne Wiederholen',
   nbWsStatsTitle: 'Wortschatz-Statistik',
-  nbWsRetention: 'Erinnerungsquote (30 Tage)',
+  nbWsRetention: 'Frei abgerufen (28 Tage)',
   nbWsStateNewL: 'Neu',
   nbWsStateLearnL: 'Lernen',
   nbWsStateYoungL: 'Jung',

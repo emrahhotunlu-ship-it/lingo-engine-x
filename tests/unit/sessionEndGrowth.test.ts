@@ -21,8 +21,9 @@ const html = (growth: GrowthView | null, extra: { right?: number; total?: number
 describe('Rundenende Wachstum', () => {
   it('nennt höchstens 6 Namen der Aufgestiegenen, den Rest als Zahl; keine Kachel x/y, nur eine kleine Zeile', () => {
     const ids = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-    const before = ids.map((id) => mk(id, { stage: 3, S: 10 }));
-    const after = ids.map((id) => answered(id, 40, { stage: 4, S: 40 }));
+    const firmHist = [{ t: NOW - 9 * D, g: 3, x: 'cloze', s: 'sA' }, { t: NOW - 5 * D, g: 3, x: 'cloze', s: 'sB' }];
+    const before = ids.map((id) => mk(id, { stage: 4, S: 10, hist: firmHist }));
+    const after = ids.map((id) => answered(id, 40, { stage: 5, S: 40, hist: firmHist }));
     const rg = roundGrowth(before, after);
     expect(rg.up).toHaveLength(8);
     const out = html({ up: rg.up, memory: rg.memory, down: rg.down, hard: false });

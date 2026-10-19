@@ -56,7 +56,7 @@ export function useDoneFacts(view: Pick<TodayView, 'plan' | 'status'>, active: b
       const sure0 = plan?.u?.sure ?? null;
       const parts = truthParts({ sure: st.sure, sure0, fixed: fixed.today, overdue: st.overdue, overdue0: ov });
       // Wort-Marken zählen Wörter UND Wendungen (`festUnits`, K-14); die Umstellung merkt schon erreichte Marken still (`pickMilestone`).
-      const fest = festUnits(all);
+      const fest = festUnits(all, now);
       const c1 = readC1(c1Raw);
       const ms = newMilestones({
         fest,
@@ -69,7 +69,7 @@ export function useDoneFacts(view: Pick<TodayView, 'plan' | 'status'>, active: b
         place: !!c1.place,
         checks: c1.checks.length,
       });
-      const goal = goalLine({ nx: plan?.u?.nx, festUnits: festUnits(all), vocabFest: festUnits(cards), history: profile?.history, today });
+      const goal = goalLine({ nx: plan?.u?.nx, festUnits: festUnits(all, now), vocabFest: festUnits(cards, now), history: profile?.history, today });
       return { parts, ms, goal };
     } catch (err) {
       logWarn('today:done', err);

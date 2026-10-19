@@ -22,7 +22,7 @@ export type WordSkyProps = {
   onAdd: (e: AtlasEntry) => void;
 };
 
-const STATE_KEY: Record<UnitState, MessageKey> = { new: 'exStateNew', learning: 'exStateLearning', safe: 'exStateSafe', firm: 'exStateFirm' };
+const STATE_KEY: Record<UnitState, MessageKey> = { new: 'exStateNew', learning: 'exStateLearning', wobbly: 'exStateWobbly', safe: 'exStateSafe', firm: 'exStateFirm' };
 const INTRO_MS = 600;
 const ZOOM = 3;
 const DOUBLE_MS = 320;
@@ -195,6 +195,7 @@ export function WordSky({ entries, tones, veil, onAdd }: WordSkyProps) {
       ctx.globalCompositeOperation = 'source-over';
       star('new', withAlpha(pal.violet, 0.45), 1.7);
       star('learning', withAlpha(pal.violet, 0.75), 2);
+      star('wobbly', withAlpha(pal.ring, 0.9), 2.2);
       star('safe', withAlpha(pal.ok, 0.75), 2.2);
       star('firm', pal.ok, 2.5);
       if (!pal.light) star('firm', withAlpha(pal.fg, 0.85), 1);
@@ -331,6 +332,10 @@ export function WordSky({ entries, tones, veil, onAdd }: WordSkyProps) {
         <li data-tone="safe">
           <i aria-hidden="true" />
           {t('exStateSafe')} <b className="lx-tnum">{num(counts.safe)}</b>
+        </li>
+        <li data-tone="wobbly">
+          <i aria-hidden="true" />
+          {t('exStateWobbly')} <b className="lx-tnum">{num(counts.wobbly)}</b>
         </li>
         <li data-tone="learning">
           <i aria-hidden="true" />

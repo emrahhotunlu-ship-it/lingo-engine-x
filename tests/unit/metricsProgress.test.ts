@@ -16,15 +16,21 @@ const D = 86_400_000;
 const doc = (over: Doc = {}): Doc => ({ word: 'leverage', de: 'nutzen', def: 'to use', ex: 'We can [leverage] it.', pos: 'verb', state: 'review', S: 30, D: 5, due: NOW + 5 * D, last: NOW - 2 * D, stage: 4, reps: 6, lapses: 0, src: 'lookup', added: '2026-06-01', ...over });
 const card = (over: Doc = {}, id = 'w'): TrainCard => toTrainCard(id, doc(over), true, NOW) as TrainCard;
 
+// Im neuen Satz gekonnt (Paket ST): richtig frei in mindestens 2 verschiedenen Sätzen.
+const FIRM = [{ t: NOW - 9 * D, g: 3, x: 'cloze', s: 'sA' }, { t: NOW - 5 * D, g: 3, x: 'cloze', s: 'sB' }];
+
 describe('festCount', () => {
-  it('Fest = Stufe ≥ 4 und Stabilität ≥ 21 Tage; Neue, Ausgeblendete und Stufe 3 nie', () => {
+  it('Fest = Stufe 5, Stabilität ≥ 21 Tage und im neuen Satz gekonnt; Neue, Ausgeblendete, Stufe 4 und Karten ohne Beleg nie', () => {
     const cards = [
-      card({ stage: 4, S: 21 }, 'a'),
-      card({ stage: 5, S: 80 }, 'b'),
-      card({ stage: 3, S: 40 }, 'c'),
-      card({ stage: 4, S: 20.9 }, 'd'),
-      card({ stage: 4, S: 40, hidden: true }, 'e'),
+      card({ stage: 5, S: 21, hist: FIRM }, 'a'),
+      card({ stage: 5, S: 80, hist: FIRM }, 'b'),
+      card({ stage: 3, S: 40, hist: FIRM }, 'c'),
+      card({ stage: 5, S: 20.9, hist: FIRM }, 'd'),
+      card({ stage: 5, S: 40, hidden: true, hist: FIRM }, 'e'),
       card({ state: 'new', stage: 0, S: 0, due: 0, last: 0 }, 'f'),
+      card({ stage: 4, S: 40, hist: FIRM }, 'g'),
+      card({ stage: 5, S: 40, hist: [] }, 'h'),
+      card({ stage: 5, S: 40, hist: [...FIRM, { t: NOW - 3 * D, g: 1, x: 'cloze', s: 'sC' }] }, 'i'),
     ];
     expect(festCount(cards)).toBe(2);
   });
@@ -43,7 +49,7 @@ describe('expectedKnown', () => {
 });
 
 describe('retention28', () => {
-  const hist = (entries: Array<[number, number]>): Doc => ({ hist: entries.map(([daysAgo, g]) => ({ t: NOW - daysAgo * D, g, m: 'recog' })) });
+  const hist = (entries: Array<[number, number]>): Doc => ({ hist: entries.map(([daysAgo, g]) => ({ t: NOW - daysAgo * D, g, m: 'type', x: 'cloze' })) });
   it('zählt nur Antworten nach mindestens sieben Tagen Pause, Note ≥ 2 = behalten', () => {
     const cards = [
       // Vorige Antwort vor 20 Tagen, jetzt vor 10: Pause 10 Tage → zählt (Note 3).
@@ -58,6 +64,16 @@ describe('retention28', () => {
     expect(r.rate).toBe(0.5);
     expect(r.enough).toBe(false);
     expect(r.band).toBeNull();
+  });
+  it('Erkennen (Auswahl, Aufdecken) und freier Abruf werden getrennt gezählt; gezeigt wird frei', () => {
+    const mixed = (x: string, g: number): Doc => ({ hist: [{ t: NOW - 20 * D, g: 3, x }, { t: NOW - 10 * D, g, x }] });
+    const r = retention28([card(mixed('cloze', 1), 'a'), card(mixed('mc_en', 3), 'b'), card(mixed('flip', 3), 'c'), card(mixed('cloze_hint', 3), 'd')], NOW);
+    expect(r.n).toBe(1);
+    expect(r.rate).toBe(0);
+    expect(r.recognition).toEqual({ rate: 1, n: 2 });
+    // Ungeprüfte Sätze (u: 1) sind kein freier Beleg.
+    const u = card({ hist: [{ t: NOW - 20 * D, g: 3, x: 'produce' }, { t: NOW - 10 * D, g: 3, x: 'produce', u: 1 }] }, 'u');
+    expect(retention28([u], NOW).n).toBe(0);
   });
   it('die erste Antwort ohne Vorgänger und Antworten außerhalb von 28 Tagen zählen nicht', () => {
     const r = retention28([card(hist([[40, 3], [35, 3]]), 'a'), card(hist([[5, 3]]), 'b')], NOW);
@@ -75,7 +91,7 @@ describe('retention28', () => {
     expect(retention28(mk(30, 30), NOW).band).toBe('high'); // 100 %
   });
   it('mehrere Antworten am selben Tag zählen einmal', () => {
-    const c = card({ hist: [{ t: NOW - 30 * D, g: 3 }, { t: NOW - 10 * D, g: 3 }, { t: NOW - 10 * D + 1000, g: 1 }] }, 'a');
+    const c = card({ hist: [{ t: NOW - 30 * D, g: 3, x: 'cloze' }, { t: NOW - 10 * D, g: 3, x: 'cloze' }, { t: NOW - 10 * D + 1000, g: 1, x: 'cloze' }] }, 'a');
     expect(retention28([c], NOW).n).toBe(1);
   });
 });
@@ -83,22 +99,22 @@ describe('retention28', () => {
 describe('festGrowth28 und festForecast', () => {
   const snap = (daysAgo: number, va: number) => ({ d: addDays(TODAY, -daysAgo), va });
   it('ohne Tagesbilder oder unter 21 Tagen Datenbasis keine Zahl', () => {
-    expect(festGrowth28(50, undefined, TODAY)).toBeNull();
-    expect(festGrowth28(50, [], TODAY)).toBeNull();
-    expect(festGrowth28(50, [snap(20, 40)], TODAY)).toBeNull();
-    expect(festGrowth28(50, [{ d: addDays(TODAY, -27) }], TODAY)).toBeNull();
+    expect(festGrowth28(50, undefined, TODAY, '')).toBeNull();
+    expect(festGrowth28(50, [], TODAY, '')).toBeNull();
+    expect(festGrowth28(50, [snap(20, 40)], TODAY, '')).toBeNull();
+    expect(festGrowth28(50, [{ d: addDays(TODAY, -27) }], TODAY, '')).toBeNull();
   });
   it('nimmt den ältesten Eintrag der letzten 28 Tage', () => {
-    const g = festGrowth28(60, [snap(40, 5), snap(28, 40), snap(10, 52)], TODAY);
+    const g = festGrowth28(60, [snap(40, 5), snap(28, 40), snap(10, 52)], TODAY, '');
     expect(g).toEqual({ delta: 20, days: 28, per28: 20 });
   });
   it('Fest darf sinken, die Prognose entfällt dann', () => {
-    const g = festGrowth28(35, [snap(25, 40)], TODAY);
+    const g = festGrowth28(35, [snap(25, 40)], TODAY, '');
     expect(g?.delta).toBe(-5);
     expect(festForecast(35, g, 1500)).toBeNull();
   });
   it('Prognose als Zeitraum, nie als einzelne Zahl', () => {
-    const g = festGrowth28(100, [snap(28, 72)], TODAY); // +28 in 28 Tagen = 7 je Woche
+    const g = festGrowth28(100, [snap(28, 72)], TODAY, ''); // +28 in 28 Tagen = 7 je Woche
     const f = festForecast(100, g, 1500);
     expect(f).not.toBeNull();
     expect(f!.weeksLo).toBeLessThan(f!.weeksHi);

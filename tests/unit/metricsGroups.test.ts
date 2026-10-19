@@ -10,7 +10,7 @@ import { berlin } from './helpers';
 const NOW = berlin('2026-10-05', 10);
 const D = 86_400_000;
 const mk = (id: string, ref: string, over: Record<string, unknown> = {}): TrainCard =>
-  toTrainCard(id, { word: id, de: 'x', def: 'x y', ex: `We [${id}] it.`, pos: 'verb', state: 'review', S: 30, D: 5, due: NOW + D, last: NOW - D, stage: 4, reps: 6, lapses: 0, src: 'lookup', added: '2026-06-01', origin: { v: 1, kind: 'pack', ref }, ...over }, true, NOW)!;
+  toTrainCard(id, { word: id, de: 'x', def: 'x y', ex: `We [${id}] it.`, pos: 'verb', state: 'review', S: 30, D: 5, due: NOW + D, last: NOW - D, stage: 5, reps: 6, lapses: 0, src: 'lookup', added: '2026-06-01', hist: [{ t: NOW - 9 * D, g: 3, x: 'cloze', s: 'sA' }, { t: NOW - 5 * D, g: 3, x: 'cloze', s: 'sB' }], origin: { v: 1, kind: 'pack', ref }, ...over }, true, NOW)!;
 
 describe('groupMastery', () => {
   const entries = [
@@ -24,7 +24,7 @@ describe('groupMastery', () => {
     const cards = [
       mk('a', 'c1pack/colloc-01'),
       mk('b', 'c1pack/colloc-02', { stage: 3, S: 10 }),
-      mk('c', 'c1pack/colloc-03', { stage: 1, S: 2 }),
+      mk('c', 'c1pack/colloc-03', { stage: 1, S: 2, hist: [] }),
       mk('z', 'c1pack/word-01'),
     ];
     const g = groupMastery('colloc', cards, entries);

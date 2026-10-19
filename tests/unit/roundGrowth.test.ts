@@ -15,9 +15,10 @@ const answered = (id: string, days: number, over: Record<string, unknown> = {}):
 
 describe('roundGrowth', () => {
   it('Aufgestiegene mit Namen und neuem Zustand, Rückfälle als Zahl', () => {
-    const before = [card('a', { stage: 3, S: 10 }), card('b', { stage: 4, S: 30 }), card('c')];
-    const after = [answered('a', 40, { stage: 4, S: 40 }), answered('b', 2, { stage: 2, S: 2 }), answered('c', 6)];
-    const g = roundGrowth(before, after);
+    const firmHist = [{ t: NOW - 9 * D, g: 3, x: 'cloze', s: 'sA' }, { t: NOW - 5 * D, g: 3, x: 'cloze', s: 'sB' }];
+    const before = [card('a', { stage: 4, S: 10, hist: firmHist }), card('b', { stage: 5, S: 30, hist: firmHist }), card('c')];
+    const after = [answered('a', 40, { stage: 5, S: 40, hist: firmHist }), answered('b', 2, { stage: 2, S: 2, hist: [...firmHist, { t: NOW, g: 1, x: 'cloze', s: 'sC' }] }), answered('c', 6)];
+    const g = roundGrowth(before, after, NOW);
     expect(g.up.map((u) => [u.word, u.to])).toEqual([['a', 'firm']]);
     expect(g.down).toBe(1);
   });

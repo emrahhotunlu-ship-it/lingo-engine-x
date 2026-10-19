@@ -716,6 +716,9 @@
 .lx-sky-pick [data-tone='new'] {
   color: var(--lx-ch-cards);
 }
+.lx-sky-pick [data-tone='wobbly'] {
+  color: var(--lx-near-text);
+}
 .lx-sky-pick [data-tone='none'] {
   color: var(--lx-fg-muted);
 }
@@ -749,6 +752,9 @@
 }
 .lx-sky-legend [data-tone='safe'] i {
   background: color-mix(in srgb, var(--lx-ok) 75%, transparent);
+}
+.lx-sky-legend [data-tone='wobbly'] i {
+  background: var(--lx-gold-text);
 }
 .lx-sky-legend [data-tone='learning'] i {
   background: color-mix(in srgb, var(--lx-ch-cards) 75%, transparent);

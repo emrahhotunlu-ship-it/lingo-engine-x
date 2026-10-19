@@ -58,7 +58,7 @@ describe('nextGoal', () => {
     const g = nextGoal({ festUnits: 212, history: [], today });
     expect(g).toEqual({ id: 'fest250', have: 212, need: 250, weeks: null });
     const hist = [{ d: addDays(today, -28), vu: 180 }];
-    const g2 = nextGoal({ festUnits: 212, history: hist, today });
+    const g2 = nextGoal({ festUnits: 212, history: hist, today, ruleFrom: '' });
     expect(g2?.weeks).not.toBeNull();
   });
   it('kleinster relativer Restweg gewinnt, bei Gleichstand die Fest-Marke', () => {
@@ -78,10 +78,10 @@ describe('festGrowthUnits', () => {
   it('bleibt bei `va`, bis 28 Tage `vu` vorliegen, und springt dabei nicht', () => {
     const va = [{ d: addDays(today, -28), va: 100 }];
     const early = [...va, { d: addDays(today, -10), va: 120, vu: 160 }];
-    const a = festGrowthUnits({ vocabFest: 130, unitsFest: 175, history: early, today });
+    const a = festGrowthUnits({ vocabFest: 130, unitsFest: 175, history: early, today, ruleFrom: '' });
     expect(a?.delta).toBe(30);
     const late = [...va, { d: addDays(today, -28), vu: 140 }];
-    const b = festGrowthUnits({ vocabFest: 130, unitsFest: 175, history: late, today });
+    const b = festGrowthUnits({ vocabFest: 130, unitsFest: 175, history: late, today, ruleFrom: '' });
     expect(b?.delta).toBe(35);
   });
   it('ohne Daten null', () => expect(festGrowthUnits({ vocabFest: 1, unitsFest: 1, history: [], today })).toBeNull());
@@ -90,7 +90,7 @@ describe('festGrowthUnits', () => {
 describe('festUnits', () => {
   const NOW = berlin('2026-10-05', 10);
   const mk = (id: string, over: Record<string, unknown> = {}) =>
-    toTrainCard(id, { word: id, de: 'x', def: 'x y', ex: `We [${id}] it.`, pos: 'verb', state: 'review', S: 30, D: 5, due: NOW + 86_400_000, last: NOW - 86_400_000, stage: 4, reps: 6, lapses: 0, src: 'lookup', added: '2026-06-01', ...over }, true, NOW)!;
+    toTrainCard(id, { word: id, de: 'x', def: 'x y', ex: `We [${id}] it.`, pos: 'verb', state: 'review', S: 30, D: 5, due: NOW + 86_400_000, last: NOW - 86_400_000, stage: 5, reps: 6, lapses: 0, src: 'lookup', added: '2026-06-01', hist: [{ t: NOW - 9 * 86_400_000, g: 3, x: 'cloze', s: 'sA' }, { t: NOW - 5 * 86_400_000, g: 3, x: 'cloze', s: 'sB' }], ...over }, true, NOW)!;
   it('zählt Wörter und Wendungen zusammen, Neue und Ausgeblendete nie', () => {
     expect(festUnits([mk('a'), mk('b'), mk('c', { hidden: true }), mk('d', { stage: 3 })])).toBe(2);
   });

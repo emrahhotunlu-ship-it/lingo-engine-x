@@ -34,6 +34,7 @@ import { nbSprechenDe } from './parts/nbSprechen.de';
 import { nbProfilDe } from './parts/nbProfil.de';
 import { nbTrainingDe } from './parts/nbTraining.de';
 import { exDe } from './parts/ex.de';
+import { stxDe } from './parts/stx.de';
 import { gxDe } from './parts/gx.de';
 import { wxDe } from './parts/wx.de';
 import { hxDe } from './parts/hx.de';
@@ -93,6 +94,7 @@ export const de = {
   ...nbTrainingDe,
   // Lernplattform 2.0: je Paket ein Teil, nur mit eigenem Präfix
   ...exDe,
+  ...stxDe,
   ...gxDe,
   ...wxDe,
   ...hxDe,

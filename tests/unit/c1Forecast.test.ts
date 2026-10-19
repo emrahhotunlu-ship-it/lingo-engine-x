@@ -14,7 +14,7 @@ const check = (d: string, pts: number, inp: 'desk' | 'touch' = 'desk', fc?: C1Ch
 };
 
 const k1: K1Measure = { gates: 2, safe: 40, total: 100, free: { ok: 30, n: 40 }, newSafe56: 16 };
-const k4: K4Measure = { fest: 450, learned: 900, retention: { rate: 0.9, n: 60, enough: true, band: 'in' }, growth: { delta: 56, days: 56 } };
+const k4: K4Measure = { fest: 450, learned: 900, retention: { rate: 0.9, n: 60, enough: true, band: 'in', recognition: { rate: null, n: 0 } }, growth: { delta: 56, days: 56 } };
 const input = (c1: C1Doc, today: string, o: Partial<CriteriaInput> = {}): CriteriaInput => ({
   today,
   c1,
