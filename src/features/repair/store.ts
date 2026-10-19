@@ -105,7 +105,7 @@ export async function recordGrammarError(topic: string, errorT: number, ok: bool
 /**
  * Gemeldete Claude-Fehlersätze (Lernplattform 3.0 P46/P47) aus der Wiederholung nehmen: Der Eintrag wird `done` (erledigt), nie gelöscht.
  * `wrongs` sind die falschen Sätze, aus denen die Einträge entstanden sind (die Kennung ist daraus abgeleitet); nur Einträge der genannten
- * Herkunft (`src`). `true` = geschrieben oder nichts zu tun.
+ * Herkunft (`src`). `true` = geschrieben oder schon markiert; `false` = Eintrag nicht gefunden, Dokument gesperrt oder Fehler (der Satz bleibt dann sichtbar).
  */
 export async function retireRepairs(wrongs: readonly string[], src: string): Promise<boolean> {
   const writer = getWriter();
@@ -132,7 +132,7 @@ export async function retireRepairs(wrongs: readonly string[], src: string): Pro
 /**
  * „Kann ich nicht nachvollziehen“ (Paket FK): Der Fehlersatz wird dauerhaft aus der Wiederholung genommen. Es ist nur ein Merker (`unclear` =
  * Zeitpunkt) am Eintrag, nichts wird gelöscht, Box und Fälligkeit bleiben, und die Antwort zählt nie als falsch. Ein unerwarteter Aufbau wird
- * nie angefasst. `true` = geschrieben oder nichts zu tun.
+ * nie angefasst. `true` = geschrieben oder schon markiert; `false` = Eintrag nicht gefunden, Dokument gesperrt oder Fehler (der Satz bleibt dann sichtbar).
  */
 export async function markUnclear(target: { store: 'repair' | 'grammar'; id: string; topic?: string; errorT?: number }): Promise<boolean> {
   const writer = getWriter();
@@ -142,29 +142,39 @@ export async function markUnclear(target: { store: 'repair' | 'grammar'; id: str
     if (target.store === 'grammar') {
       if (!target.topic || target.errorT === undefined) return false;
       const path = `grammar/${target.topic}`;
+      let ok = false;
       await writer.transform(path, (cur) => {
         if (!cur || !validateDoc(path, cur).ok || !Array.isArray(cur.errors)) return null;
+        let found = false;
         let changed = false;
         const next = (cur.errors as Array<Record<string, unknown>>).map((e) => {
-          if (e.t !== target.errorT || typeof e.unclear === 'number') return e;
+          if (e.t !== target.errorT) return e;
+          found = true;
+          if (typeof e.unclear === 'number') return e;
           changed = true;
           return { ...e, unclear: t };
         });
+        ok = found;
         return changed ? { update: { errors: next } } : null;
       });
-      return true;
+      return ok;
     }
+    let ok = false;
     await writer.transform(REPAIR_PATH, (cur) => {
       if (!cur || !writable(cur)) return null;
+      let found = false;
       let changed = false;
       const next = readRepairs(cur).map((e) => {
-        if (e.id !== target.id || typeof e.unclear === 'number') return e;
+        if (e.id !== target.id) return e;
+        found = true;
+        if (typeof e.unclear === 'number') return e;
         changed = true;
         return { ...e, unclear: t };
       });
+      ok = found;
       return changed ? opFor(cur, next) : null;
     });
-    return true;
+    return ok;
   } catch (err) {
     logError('repair:unclear', err, target.id);
     return false;

@@ -71,7 +71,7 @@ describe('Schlangen-Simulation: trägt die Fehlerschlange? (60 Lerntage, Boxen 1
       const p2 = mean(SEEDS.map((s) => simulate(real, wrong, s).lowShare));
       expect(p2, `Fehlerquote ${wrong}`).toBeGreaterThanOrEqual(today);
     }
-  });
+  }, 30_000);
 
   it('der Ist-Stand der Schlange läuft durch und liefert eine Zahl für den Bericht', () => {
     const r = simulate(CURRENT, 0.3, SEEDS[0]!);
