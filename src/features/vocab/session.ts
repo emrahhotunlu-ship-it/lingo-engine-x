@@ -44,6 +44,7 @@ import { markExhausted, useTodayPlan } from '../today/store';
 import { nextT, recordAnswer, recordRoundEnd, saveCard, saveContrastMiss, saveKnown, usePending } from './persist';
 import { flushOnHide } from '../progress/persist';
 import { contrastReady, noteConfusion, requestWordCtx } from './wordCtx';
+import { requestWordBank } from './sentenceBank';
 
 // Eine Runde im Vokabeltrainer. Die Warteschlange wird synchron im Klick-Handler von „Starten"
 // gebaut – so kann derselbe Handler die Tastatur öffnen (iPhone). Die Karten sind für die Runde
@@ -547,6 +548,8 @@ function finish(s: SessionState, aborted: boolean): void {
   if (!aborted && s.unit) unitDone(1);
   // P52: Wörter-Tutor im Hintergrund (höchstens 1 Aufruf je Tag, nie im Aufholmodus; still bei Fehlern).
   if (n > 0) requestWordCtx({ answered: s.answered, cards: s.cards, pool: s.pool, catchUp: s.catchUp });
+  // Satzbank (Engine-Verdrahtung 19.10.2026): gebündelt für Karten mit Bedarf, Hintergrund, höchstens 3 je Tag; Sätze erst nach Quarantäne sichtbar.
+  if (n > 0) requestWordBank({ answered: s.answered, cards: s.cards, pool: s.pool, catchUp: s.catchUp });
 }
 
 /** Einführung einer neuen Karte gesehen: die erste Abfrage folgt zwei Karten später. */

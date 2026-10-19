@@ -127,6 +127,8 @@ export const profileSchema = z.looseObject({
   ctx2: z.looseObject({ v: num, role: str, field: str, who: loose, sit: loose, terms: loose, t: num }).nullish(),
   /** Neu ab Lernplattform 3.0 (P53): Lernzeit `{t: 'HH:MM', cue}` (< 100 Bytes), nur ein Vorschlag (Plan und Serie lesen sie nie); tolerant gelesen. */
   ii: loose,
+  /** Neu (Satzbank, 19.10.2026): Freigabe-Schalter `{start, on, checkedAt?, review?: {hard, unclear}}` (< 200 Bytes); tolerant gelesen (`readGate`), damit das Profil nie daran scheitert. */
+  sbGate: loose,
   ctxChecked: bool,
   lang: str,
   voice: str,
@@ -328,6 +330,8 @@ export const vocabSchema = z.looseObject({
   wx: z.array(z.unknown()).nullish(),
   /** Neu (Lernplattform 3.0 P52, nur ergänzend): Kontrast-Sätze zu einem verwechselten Wort `[{w, en, why: {de, en}, t, pv, bad?}]` (≤ 2), tolerant gelesen. */
   cfx: z.array(z.unknown()).nullish(),
+  /** Neu (Satzbank, Engine-Verdrahtung 19.10.2026, nur ergänzend): Beispielsätze `[{en, de, sit, k, src, t, pv, bad?}]` (≤ 8), tolerant gelesen (`readSb`). */
+  sb: z.array(z.unknown()).nullish(),
   ...schedulingFields,
 });
 

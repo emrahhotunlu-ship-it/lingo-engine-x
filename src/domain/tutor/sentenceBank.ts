@@ -18,6 +18,9 @@ import { knownKeys, readCfx, readWx, wordRepeats } from './acceptWordCtx';
 // Fehler UND höchstens 2 nicht eindeutigen Lücken (`releaseGate`, Gegenlesung S4). Danach monatliche Stichprobe. Gemeldete Sätze (`bad: 1`)
 // erscheinen nie wieder. Sätze aus Lesetexten und C1-Aufgaben sind geprüfter Inhalt und sofort sichtbar.
 //
+// Verdrahtung (19.10.2026): Speichern in `features/vocab/sentenceBank.ts` (Rundenende, Hintergrund, `writer.transform` je Karte), Schalter in
+// `app/profile.sbGate` (`effectiveGate`), Stichprobe in Einstellungen › KI-Stichprobe, Anzeige im Wortblatt.
+//
 // Eintrag: `{en, de, sit, k, src, t, pv, bad?}` – `k` Satzart (`work` | `life` | `form`), `pv` Vorlage oder Quelle (`word-bank@1`, `read:<id>`, `c1:<id>`).
 // ≈ 250 Byte je Satz, höchstens 8 je Karte (≈ 2 KB, weit unter 64 KiB je Karte); kein neues Dokument.
 
@@ -109,6 +112,17 @@ export const reviewPasses = (r: SbReview): boolean =>
 export function releaseGate(gate: SbGate, nowMs: number, review: SbReview): SbGate {
   const ok = quarantineOver(gate, nowMs) && reviewPasses(review);
   return { ...gate, on: ok, checkedAt: Math.floor(nowMs), review: { hard: review.hard, unclear: review.unclear } };
+}
+
+/**
+ * Wirksamer Schalter (Engine-Verdrahtung 19.10.2026): Der gespeicherte Schalter (`app/profile.sbGate`, gesetzt von der Hauptsitzung nach der
+ * Stichprobe) gilt nur, wenn sein Befund die Schwelle besteht UND die Prüfung frühestens 4 Wochen nach dem ersten gesammelten Satz war. Ein von Hand
+ * gesetztes `on: true` ohne gültigen Befund lässt die Bank also geschlossen.
+ */
+export function effectiveGate(gate: SbGate): SbGate {
+  const checked = gate.checkedAt ?? null;
+  const ok = gate.on && gate.start !== null && !!gate.review && reviewPasses(gate.review) && checked !== null && checked - gate.start >= QUARANTINE_DAYS * DAY_MS;
+  return ok ? gate : { ...gate, on: false };
 }
 
 /** Darf der Satz gezeigt werden? Gemeldete nie; Lesetext/C1 sofort; Claude-Sätze erst nach der Freigabe UND 4 Wochen nach ihrer Erzeugung. */
@@ -323,4 +337,22 @@ export function teacherSample(cards: ReadonlyArray<{ id: string; word: string; d
     out.push(r);
   }
   return out;
+}
+
+/** Stand der Satzbank für die Lehrer-Datei: Schalter, Zähler und die Stichprobe (vor der Freigabe alle Sätze, danach nur seit der letzten Prüfung). */
+export type BankSample = { gate: SbGate; n: number; quarantined: number; sample: SampleRow[] };
+
+export function bankSample(vocab: ReadonlyMap<string, Doc> | undefined, gate: SbGate, nowMs: number, n: number = TEACHER_SAMPLE): BankSample {
+  const cards: Array<{ id: string; word: string; doc: Doc }> = [];
+  let total = 0;
+  let quarantined = 0;
+  for (const [id, doc] of vocab ?? new Map<string, Doc>()) {
+    const ai = readSb(doc).filter((e) => e.src === 'ai');
+    if (!ai.length) continue;
+    total += ai.length;
+    quarantined += ai.filter((e) => !sbVisible(e, gate, nowMs)).length;
+    cards.push({ id, word: str(doc.word) || id, doc });
+  }
+  const since = gate.on ? (gate.checkedAt ?? 0) : 0;
+  return { gate, n: total, quarantined, sample: teacherSample(cards, n, since) };
 }

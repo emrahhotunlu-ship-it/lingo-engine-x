@@ -30,6 +30,11 @@ import { decksErrorKey } from '../hub/errors';
 import { requestExamples, useExamples } from '../examples';
 import { useAiAvailable } from '../../../ai/scope';
 import { lapsesOf } from '../../../domain/srs/lapses';
+import { useLive } from '../../../data/live';
+import { poolNorm } from '../../../domain/drills/orderPool';
+import { visibleSb } from '../../../domain/tutor/sentenceBank';
+import { AiMark } from '../../../ui/AiMark';
+import { currentGate, reportSb } from '../sentenceBank';
 
 // Wortblatt (M1): oben Status (Sicherheit, Stufe, nächste Wiederholung), dann Ursprungssatz und
 // Beispiele (jedes Wort antippbar), Wortpartner, Bilanz je Abfrageart, Merkhilfe (M3) und die
@@ -105,6 +110,7 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
   const now = useClock((s) => s.now);
   const today = useClock((s) => s.today);
   const tts = useSpeech((s) => s.status === 'ready');
+  const profile = useLive((s) => s.docs['app/profile']);
   const [probe, setProbe] = useState<'idle' | 'asking' | 'wrong'>('idle');
   const [answer, setAnswer] = useState('');
   const [confirmReset, setConfirmReset] = useState(false);
@@ -115,6 +121,9 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
   const why = chunkWhy(card, lang);
   // Der Ursprungssatz einer Wendung steht schon beim Ursprung – nichts doppelt.
   const examples = cardExamples(card, card.kind === 'chunk' ? (card.context?.sentence ?? card.chunk?.upgraded ?? null) : null);
+  // Satzbank: nur sichtbare Sätze (Lesetext/C1 sofort, Claude-Sätze erst nach Freigabe und 4 Wochen), ohne die oben schon gezeigten.
+  const shownKeys = new Set(examples.map((x) => poolNorm(x.en)));
+  const bank = visibleSb(card.doc, currentGate(profile), now).filter((x) => !shownKeys.has(poolNorm(x.en)));
   const balance = exerciseBalance(card);
   const src = { area: 'lookup' as const, source: card.path, title: card.word };
   const ai = useAiAvailable();
@@ -214,6 +223,24 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
             {examples.map((x) => (
               <li key={x.en} className="lx-t-support" data-testid="example" data-src={x.src}>
                 <EnglishText as="span" text={x.en} {...src} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+      {bank.length > 0 && (
+        <section className="flex flex-col gap-1.5" data-testid="word-sb">
+          <p className="lx-eyebrow">{t('ttSbTitle')}</p>
+          <ul className="flex flex-col gap-2">
+            {bank.map((x) => (
+              <li key={x.en} className="flex flex-col gap-0.5" data-testid="word-sb-item" data-src={x.src}>
+                <EnglishText as="span" className="lx-t-support" text={x.en} {...src} />
+                {lang === 'de' && x.de && (
+                  <span className="text-sm text-muted" lang="de">
+                    {x.de}
+                  </span>
+                )}
+                {x.src === 'ai' && <AiMark variant="sentence" tpl={x.pv || 'word-bank@1'} id={`${card.path}:sb:${x.en}`} onReport={() => void reportSb(card.path, x.en)} data-testid="word-sb-mark" />}
               </li>
             ))}
           </ul>

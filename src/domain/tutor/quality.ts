@@ -1,6 +1,7 @@
 import { local } from '../../platform/storage';
 import type { HeldRepairRow } from '../repair/gate';
 import type { FitAltRow } from './fitAlt';
+import type { BankSample } from './sentenceBank';
 
 // Qualitätszähler und Stichprobe der Claude-Inhalte (Lernplattform 3.0 P25, KT §3.1). Nur Browser (Bequemlichkeit, Kap. 3.1), keine Datenbank:
 // - `lx:ai-q` = `{<vorlage>: {gen, acc, shown, flag}}`: erzeugt · formal bestanden · gezeigt · gemeldet.
@@ -110,7 +111,7 @@ export const shownSample = (): ShownItem[] => readShown();
  * Inhalt der Datei „KI-Stichprobe“ (JSON). `fitAlt`: die gemerkten „Auch richtig“-Antworten aller Themen (Tutor-Engine v3 §3.2) für die
  * Gegenlesung durch den Englischlehrer; nur ergänzend, die Datei bleibt `v: 1`.
  */
-export function sampleFile(now: number = Date.now(), fitAlt: readonly FitAltRow[] = [], held: readonly HeldRepairRow[] = []): { name: string; data: string } {
+export function sampleFile(now: number = Date.now(), fitAlt: readonly FitAltRow[] = [], held: readonly HeldRepairRow[] = [], bank: BankSample | null = null): { name: string; data: string } {
   const body = {
     v: 1,
     at: new Date(now).toISOString(),
@@ -119,6 +120,18 @@ export function sampleFile(now: number = Date.now(), fitAlt: readonly FitAltRow[
     ...(fitAlt.length ? { fitAlt: fitAlt.map((r) => ({ ...r, at: new Date(r.t).toISOString() })) } : {}),
     // Eintritts-Wächter (19.10.2026): zurückgehaltene Fehlersätze zum Gegenlesen durch den Englischlehrer.
     ...(held.length ? { heldRepairs: held.map((r) => ({ ...r, at: new Date(r.t).toISOString() })) } : {}),
+    // Satzbank (Engine-Verdrahtung 19.10.2026): Stichprobe von 30 Claude-Sätzen; Befund `{hard, unclear}` setzt die Hauptsitzung in `app/profile.sbGate`.
+    ...(bank && bank.n
+      ? {
+          sentenceBank: {
+            gate: bank.gate,
+            n: bank.n,
+            quarantined: bank.quarantined,
+            review: 'hard = Sätze mit hartem Fehler, unclear = Sätze, deren Lücke nicht eindeutig wäre; frei bei hard ≤ 1 und unclear ≤ 2',
+            sample: bank.sample.map((r) => ({ ...r, at: new Date(r.t).toISOString() })),
+          },
+        }
+      : {}),
   };
   return { name: `ki-stichprobe-${new Date(now).toISOString().slice(0, 10)}.json`, data: JSON.stringify(body, null, 2) };
 }

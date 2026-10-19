@@ -24,4 +24,7 @@ export const ttJudgeEn = {
   ttJgAltErr: 'A different spot, also correctly fixed.',
   ttJgFitAltRow: 'Learned “also correct” answers: {n} (included in the file)',
   ttHeldRepairsRow: 'Held-back error sentences (questionable correction, paused without a grade): {n} (included in the file)',
+  ttSbSampleRow: 'Sentence bank: {n} sentences collected from Claude, {q} of them still in the 4-week review period. Release: {state}. Sample for the teacher: {s} sentences (included in the file)',
+  ttSbGateOn: 'on',
+  ttSbGateOff: 'not yet',
 };
