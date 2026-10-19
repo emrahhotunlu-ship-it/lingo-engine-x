@@ -34,6 +34,10 @@ export const stxDe = {
   stxMindNew: 'noch nicht gelernt',
   // Messwerte dahinter
   stxRawStage: 'Stufe (höchste bestandene Abfrageart)',
+  // Erklärzeile zur strengeren Fest-Zählung (gilt ab 20.10.2026, einige Wochen sichtbar)
+  stxFestRuleNote: 'Fest zählt jetzt strenger: Du musst das Wort in mindestens zwei verschiedenen Sätzen selbst gewusst haben, ohne Auswahl und ohne Hilfe. Deshalb ist die Zahl gerade klein. Sie wächst, sobald die Sätze wechseln und du die Wörter öfter frei schreibst.',
+  stxGoalSafe: 'sicher',
+  stxGoalFirm: 'fest',
   // Filter der Wortliste
   stxFilterLearning: 'Lernt',
   stxFilterWobbly: 'Wackelt',

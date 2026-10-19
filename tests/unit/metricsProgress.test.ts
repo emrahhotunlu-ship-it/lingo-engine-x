@@ -99,22 +99,22 @@ describe('retention28', () => {
 describe('festGrowth28 und festForecast', () => {
   const snap = (daysAgo: number, va: number) => ({ d: addDays(TODAY, -daysAgo), va });
   it('ohne Tagesbilder oder unter 21 Tagen Datenbasis keine Zahl', () => {
-    expect(festGrowth28(50, undefined, TODAY)).toBeNull();
-    expect(festGrowth28(50, [], TODAY)).toBeNull();
-    expect(festGrowth28(50, [snap(20, 40)], TODAY)).toBeNull();
-    expect(festGrowth28(50, [{ d: addDays(TODAY, -27) }], TODAY)).toBeNull();
+    expect(festGrowth28(50, undefined, TODAY, '')).toBeNull();
+    expect(festGrowth28(50, [], TODAY, '')).toBeNull();
+    expect(festGrowth28(50, [snap(20, 40)], TODAY, '')).toBeNull();
+    expect(festGrowth28(50, [{ d: addDays(TODAY, -27) }], TODAY, '')).toBeNull();
   });
   it('nimmt den ältesten Eintrag der letzten 28 Tage', () => {
-    const g = festGrowth28(60, [snap(40, 5), snap(28, 40), snap(10, 52)], TODAY);
+    const g = festGrowth28(60, [snap(40, 5), snap(28, 40), snap(10, 52)], TODAY, '');
     expect(g).toEqual({ delta: 20, days: 28, per28: 20 });
   });
   it('Fest darf sinken, die Prognose entfällt dann', () => {
-    const g = festGrowth28(35, [snap(25, 40)], TODAY);
+    const g = festGrowth28(35, [snap(25, 40)], TODAY, '');
     expect(g?.delta).toBe(-5);
     expect(festForecast(35, g, 1500)).toBeNull();
   });
   it('Prognose als Zeitraum, nie als einzelne Zahl', () => {
-    const g = festGrowth28(100, [snap(28, 72)], TODAY); // +28 in 28 Tagen = 7 je Woche
+    const g = festGrowth28(100, [snap(28, 72)], TODAY, ''); // +28 in 28 Tagen = 7 je Woche
     const f = festForecast(100, g, 1500);
     expect(f).not.toBeNull();
     expect(f!.weeksLo).toBeLessThan(f!.weeksHi);

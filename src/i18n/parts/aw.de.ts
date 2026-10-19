@@ -3,8 +3,8 @@
 export const awDe = {
   awFixUnsure: 'Keine sichere Korrektur: Claude war sich hier nicht sicher. Die Erklärung gilt trotzdem.',
   awFixUnsureTyped: 'Keine sichere Korrektur. Der Fehler liegt bei: {type}. Die Erklärung gilt trotzdem.',
-  awStageHold_one: 'Für Stufe {stage} brauchst du noch {n} freie Antwort an einem anderen Tag. Auswahl und Hilfen zählen hier nicht, weil Erkennen leichter ist als Abrufen.',
-  awStageHold_other: 'Für Stufe {stage} brauchst du noch {n} freie Antworten an anderen Tagen. Auswahl und Hilfen zählen hier nicht, weil Erkennen leichter ist als Abrufen.',
+  awStageHold_one: 'Noch {n} freie Antwort an einem anderen Tag, dann gilt das Wort als {goal}. Auswahl und Hilfen zählen hier nicht, weil Erkennen leichter ist als Abrufen.',
+  awStageHold_other: 'Noch {n} freie Antworten an verschiedenen Tagen, dann gilt das Wort als {goal}. Auswahl und Hilfen zählen hier nicht, weil Erkennen leichter ist als Abrufen.',
   awAuxName: 'Verbform nach Hilfsverb',
   awAuxLead: 'Nach will, would, have, had, been und having steht immer eine bestimmte Verbform. Mit diesen fünf Mustern vermeidest du die meisten dieser Fehler.',
   awLoadHigh: 'Viele deiner Karten sind in den letzten 7 Tagen wieder durchgefallen. Vorschlag: Heute weniger neue Wörter, dafür die schwierigen sicher machen.',

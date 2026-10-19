@@ -43,11 +43,13 @@ export function nextGoal(i: {
   today: string;
   chapter?: GoalCandidate | null;
   check?: GoalCandidate | null;
+  /** Nur für Tests: erster Tag der aktuellen Fest-Regel (`FEST_RULE_FROM`). */
+  ruleFrom?: string;
 }): NextGoal | null {
   const cands: Cand[] = [];
   const m = nextMark(i.festUnits);
   if (m) {
-    const g = festForecast(i.festUnits, festGrowthUnits({ vocabFest: i.vocabFest ?? i.festUnits, unitsFest: i.festUnits, history: i.history, today: i.today }), m.mark);
+    const g = festForecast(i.festUnits, festGrowthUnits({ vocabFest: i.vocabFest ?? i.festUnits, unitsFest: i.festUnits, history: i.history, today: i.today, ...(i.ruleFrom !== undefined ? { ruleFrom: i.ruleFrom } : {}) }), m.mark);
     cands.push({ id: `fest${m.mark}`, have: i.festUnits, need: m.mark, from: m.from, weeks: g ? [g.weeksLo, g.weeksHi] : null });
   }
   for (const c of [i.chapter, i.check]) if (c && c.need > c.have) cands.push({ id: c.id, have: c.have, need: c.need, from: c.from ?? 0, weeks: null });

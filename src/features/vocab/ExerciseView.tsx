@@ -1032,7 +1032,7 @@ export function ExerciseView({
       ...(fb.sentence?.out?.verdict === 'correct' ? { unfold: ['note'] as const } : {}),
       // P52: der Kontrast-Schritt ändert die Planung nicht, also keine „Wieder in …“-Zeile.
       nextIn: e.ex === 'contrast' ? null : t('trAgainIn', { when: when(fb.dueInMs) }),
-      stageNote: e.ex !== 'contrast' && fb.hold && !fb.override ? tn('awStageHold', fb.hold, { stage: Math.min(5, Math.max(4, card.stage + 1)) }) : null,
+      stageNote: e.ex !== 'contrast' && fb.hold && !fb.override ? tn('awStageHold', fb.hold, { goal: t(card.stage + 1 >= 5 ? 'stxGoalFirm' : 'stxGoalSafe') }) : null,
       // Design-Lead: Wort, Vorlesen, Lautschrift und „Zum Wort“ stehen in der Ergebnis-Karte, genau einmal, direkt unter dem Urteil.
       // R5: im Kontrast-Schritt heißt der Kopf „avoid ≠ convince“ (richtiges Wort zuerst, beide mit Aussprache).
       head: <WordExtras card={card} open={moreOpen} lang={lang} extras={extras} part="head" other={e.ex === 'contrast' ? (contrastOtherOf(e)?.word ?? null) : null} phrase={collocPhrase} />,

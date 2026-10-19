@@ -336,8 +336,8 @@ test('Fortschritt Wörter: Fest-Zahl im Kopf, höchstens drei Karten, Messwerte 
   await openOverview(page);
   await expect(page.locator('h1')).toHaveText('Fortschritt');
   // Kopf: Fest statt „Wörter gesamt“. Fest braucht seit Paket ST Stufe 5, 21 Tage und einen Beleg im neuen Satz (zwei verschiedene Sätze frei richtig):
-  // In den Seed-Daten hat das keine Karte (vorher: 12 nach der alten Regel „Stufe ≥ 4 und 21 Tage“).
-  await expect(page.getByTestId('stand-fest')).toHaveText('0');
+  // In den Seed-Daten erfüllt genau eine Karte das (vorher: 12 nach der alten Regel „Stufe ≥ 4 und 21 Tage“).
+  await expect(page.getByTestId('stand-fest')).toHaveText('1');
   await expect(page.getByTestId('vocab-total')).toHaveCount(0);
   await tab(page, 'path');
   const seg = page.getByTestId('seg-words');
@@ -346,8 +346,9 @@ test('Fortschritt Wörter: Fest-Zahl im Kopf, höchstens drei Karten, Messwerte 
   await expect(seg.getByTestId('vocab-goal')).toBeVisible();
   await expect(seg.getByTestId('quality-card')).toBeVisible();
   // Ohne Tagesbilder mit Fest-Zahl keine erfundene Prognose und kein Zuwachs.
-  // Ohne feste Karte steht der ehrliche Leerzustand (mit Fest-Karten und ohne Verlauf: „… nach etwa drei Wochen“).
-  await expect(page.getByTestId('fest-growth')).toContainText('Noch kein Wort ist fest');
+  // Mit Fest-Karten, aber ohne Verlauf nach der neuen Regel: „… nach etwa drei Wochen“, dazu die Erklärzeile zur strengeren Zählung.
+  await expect(page.getByTestId('fest-growth')).toContainText('drei Wochen');
+  await expect(page.getByTestId('fest-rule-note')).toContainText('Fest zählt jetzt strenger');
   await expect(page.getByTestId('fest-forecast')).toHaveCount(0);
   await expect(page.getByTestId('expected-known')).not.toHaveText('–');
   // Behaltensquote: zu wenig Antworten → Strich und Hinweis, keine Zahl.

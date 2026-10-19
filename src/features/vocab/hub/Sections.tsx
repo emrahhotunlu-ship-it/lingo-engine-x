@@ -1,3 +1,4 @@
+import { festNoteActive } from '../../../domain/metrics';
 import { useMemo } from 'react';
 import { useClock } from '../../../app/clock';
 import { prefsOp, type ReviewModePref } from '../../../domain/srs/decks';
@@ -72,6 +73,7 @@ export function VocabSettingsSection() {
 export function VocabStatsSection() {
   const { t, lang } = useT();
   const now = useClock((s) => s.now);
+  const today = useClock((s) => s.today);
   const cards = useVocabCards();
   const s = useMemo(() => vocabStatistics(cards, now), [cards, now]);
   const pct = s.retention === null ? '–' : `${Math.round(s.retention * 100)} %`;
@@ -109,6 +111,11 @@ export function VocabStatsSection() {
           </div>
         ))}
       </dl>
+      {festNoteActive(today) && (
+        <p className="text-xs text-subtle" data-testid="ws-fest-rule-note">
+          {t('stxFestRuleNote')}
+        </p>
+      )}
       {s.recognition.rate !== null && (
         <p className="text-xs text-subtle" data-testid="ws-stat-recognition">
           {t('stxRetentionRecognition', { pct: Math.round(s.recognition.rate * 100), n: s.recognition.n })} · {t('stxRetentionNote')}

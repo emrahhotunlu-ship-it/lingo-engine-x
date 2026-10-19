@@ -19,6 +19,16 @@ export const GROWTH_MIN_DAYS = 21;
 export const GROWTH_WINDOW_DAYS = 28;
 /** Orientierungsziel für die Prognose (03-lernmodell K1: 1.500 aktiv feste Einträge). */
 export const FEST_GOAL = 1500;
+/**
+ * Erster Lerntag mit der strengeren Fest-Regel (Paket ST: Stufe 5, 21 Tage, im neuen Satz gekonnt). Tagesbilder (`history[].va`/`vu`) davor
+ * wurden nach der alten Regel gezählt: Ein Unterschied zwischen alt und neu ist kein Rückgang. Zuwachs und Wochenzahl vergleichen deshalb nur
+ * Werte ab diesem Tag (kein neues Speicherfeld nötig). Die Erklärzeile zur neuen Zählung steht `FEST_NOTE_DAYS` Tage lang.
+ */
+export const FEST_RULE_FROM = '2026-10-20';
+export const FEST_NOTE_DAYS = 42;
+/** Die Grenze gilt erst, wenn der Tag selbst nach ihr liegt (vor dem Stichtag gibt es noch keine Werte der neuen Regel; so bleiben Testwelten und Vorabstände unverändert). */
+export const ruleCut = (day: string, ruleFrom: string = FEST_RULE_FROM): string => (day >= ruleFrom ? ruleFrom : '');
+export const festNoteActive = (today: string): boolean => daysBetween(FEST_RULE_FROM, today) <= FEST_NOTE_DAYS;
 
 type CardLike = Pick<TrainCard, 'hidden' | 'isNew' | 'stage' | 'fsrs' | 'doc'>;
 type FestLike = Pick<TrainCard, 'hidden' | 'isNew' | 'stage' | 'fsrs' | 'doc'>;
@@ -111,10 +121,11 @@ export type FestGrowth = {
  * „+n in 28 Tagen“ aus den Tagesbildern (`profile.history[].va` = Fest-Zahl des Tages): der älteste Eintrag
  * der letzten 28 Tage. `null`, solange die Datenbasis kürzer als 21 Tage ist (K1: keine Prognose aus dünnen Daten).
  */
-export function festGrowth28(festNow: number, history: unknown, today: string): FestGrowth | null {
+export function festGrowth28(festNow: number, history: unknown, today: string, ruleFrom: string = FEST_RULE_FROM): FestGrowth | null {
+  const cut = ruleCut(today, ruleFrom);
   const rows = (Array.isArray(history) ? history : [])
     .filter((h): h is Doc => !!h && typeof h === 'object')
-    .filter((h) => isDayKey(h.d) && typeof h.va === 'number' && Number.isFinite(h.va))
+    .filter((h) => isDayKey(h.d) && h.d >= cut && typeof h.va === 'number' && Number.isFinite(h.va))
     .map((h) => ({ d: h.d as string, va: h.va as number }))
     .filter((h) => daysBetween(h.d, today) >= 0 && daysBetween(h.d, today) <= GROWTH_WINDOW_DAYS)
     .sort((a, b) => (a.d < b.d ? -1 : 1));
@@ -152,10 +163,11 @@ export function festUnits(cards: readonly FestLike[], nowMs?: number): number {
 /** Tagesbild-Feld, aus dem der Zuwachs gerechnet wird: `va` (nur Vokabeln, alt) oder `vu` (Wörter und Wendungen, neu). */
 type GrowthKey = 'va' | 'vu';
 
-function growthOf(key: GrowthKey, now: number, history: unknown, today: string, minDays: number): FestGrowth | null {
+function growthOf(key: GrowthKey, now: number, history: unknown, today: string, minDays: number, ruleFrom: string): FestGrowth | null {
+  const cut = ruleCut(today, ruleFrom);
   const rows = (Array.isArray(history) ? history : [])
     .filter((h): h is Doc => !!h && typeof h === 'object')
-    .filter((h) => isDayKey(h.d) && typeof h[key] === 'number' && Number.isFinite(h[key]))
+    .filter((h) => isDayKey(h.d) && h.d >= cut && typeof h[key] === 'number' && Number.isFinite(h[key]))
     .map((h) => ({ d: h.d as string, v: h[key] as number }))
     .filter((h) => daysBetween(h.d, today) >= 0 && daysBetween(h.d, today) <= GROWTH_WINDOW_DAYS)
     .sort((a, b) => (a.d < b.d ? -1 : 1));
@@ -171,6 +183,7 @@ function growthOf(key: GrowthKey, now: number, history: unknown, today: string, 
  * „+n in 28 Tagen“ für Wörter und Wendungen: wechselt erst auf `vu`, wenn 28 Tage davon vorliegen; bis dahin gilt `va` mit der
  * Vokabel-Fest-Zahl (kein Sprung am Umstellungstag, weil beide Reihen nie vermischt werden).
  */
-export function festGrowthUnits(i: { vocabFest: number; unitsFest: number; history: unknown; today: string }): FestGrowth | null {
-  return growthOf('vu', i.unitsFest, i.history, i.today, GROWTH_WINDOW_DAYS) ?? growthOf('va', i.vocabFest, i.history, i.today, GROWTH_MIN_DAYS);
+export function festGrowthUnits(i: { vocabFest: number; unitsFest: number; history: unknown; today: string; ruleFrom?: string }): FestGrowth | null {
+  const from = i.ruleFrom ?? FEST_RULE_FROM;
+  return growthOf('vu', i.unitsFest, i.history, i.today, GROWTH_WINDOW_DAYS, from) ?? growthOf('va', i.vocabFest, i.history, i.today, GROWTH_MIN_DAYS, from);
 }

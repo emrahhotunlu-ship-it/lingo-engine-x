@@ -58,7 +58,7 @@ describe('nextGoal', () => {
     const g = nextGoal({ festUnits: 212, history: [], today });
     expect(g).toEqual({ id: 'fest250', have: 212, need: 250, weeks: null });
     const hist = [{ d: addDays(today, -28), vu: 180 }];
-    const g2 = nextGoal({ festUnits: 212, history: hist, today });
+    const g2 = nextGoal({ festUnits: 212, history: hist, today, ruleFrom: '' });
     expect(g2?.weeks).not.toBeNull();
   });
   it('kleinster relativer Restweg gewinnt, bei Gleichstand die Fest-Marke', () => {
@@ -78,10 +78,10 @@ describe('festGrowthUnits', () => {
   it('bleibt bei `va`, bis 28 Tage `vu` vorliegen, und springt dabei nicht', () => {
     const va = [{ d: addDays(today, -28), va: 100 }];
     const early = [...va, { d: addDays(today, -10), va: 120, vu: 160 }];
-    const a = festGrowthUnits({ vocabFest: 130, unitsFest: 175, history: early, today });
+    const a = festGrowthUnits({ vocabFest: 130, unitsFest: 175, history: early, today, ruleFrom: '' });
     expect(a?.delta).toBe(30);
     const late = [...va, { d: addDays(today, -28), vu: 140 }];
-    const b = festGrowthUnits({ vocabFest: 130, unitsFest: 175, history: late, today });
+    const b = festGrowthUnits({ vocabFest: 130, unitsFest: 175, history: late, today, ruleFrom: '' });
     expect(b?.delta).toBe(35);
   });
   it('ohne Daten null', () => expect(festGrowthUnits({ vocabFest: 1, unitsFest: 1, history: [], today })).toBeNull());
