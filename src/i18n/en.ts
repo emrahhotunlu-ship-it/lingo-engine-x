@@ -213,7 +213,7 @@ export const en: Record<MessageKey, string> = {
   stage2: 'Match',
   stage3: 'Recall with a hint',
   stage4: 'Recall freely',
-  stage5: 'Use with confidence',
+  stage5: 'Apply freely',
   grammarLabel: 'Grammar',
   grammarWeakest: 'Need the most practice',
   assessLabel: 'Assessment',

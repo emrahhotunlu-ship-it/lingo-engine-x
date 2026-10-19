@@ -272,7 +272,7 @@ const FREE_TYPED: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['type', 'cloze'
  * Billigere, aber gleichwertige Abfrage in zwei Fällen (Methodenplan Lernwissenschaft 02.10.2026), nur im Modus `auto`:
  * - L5: Nach einer bestandenen Stützen-Abfrage an einem früheren Tag (Stufe 3, Lücke mit Hilfe oder Bausteine) kommt der nächste
  *   getippte Termin FREI (ohne Anfangsbuchstaben) – sonst läuft Stufe 3 zweimal mit Hilfe und der erste freie Abruf käme erst am 4. Termin.
- * - L4: Reife Karten (Stufe 5, Stabilität ≥ 21 Tage) bekommen die volle „Sicher anwenden“-Form nur bei jeder dritten Wiederholung;
+ * - L4: Reife Karten (Stufe 5, Stabilität ≥ 21 Tage) bekommen die volle „Frei anwenden“-Form nur bei jeder dritten Wiederholung;
  *   sonst genügt freies Tippen (Stufe 4).
  */
 function lighterExercise(s: ExCtx, card: TrainCard): ExerciseId | null {

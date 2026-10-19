@@ -64,13 +64,11 @@ const attr = (html: string, testId: string, name: string): string | null => {
 };
 
 function surfaces(card: TrainCard, now: number, lang: 'de' | 'en') {
-  const t = (k: Parameters<typeof translate>[1], v?: Record<string, string | number>) => translate(lang, k, v);
   const st = cardStatus(card, now);
-  const dateShort = (ms: number) => new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { day: 'numeric', month: 'short' }).format(ms);
   const row = renderToStaticMarkup(createElement(WordRow, { card, nowMs: now, lang, onOpen: () => undefined, selecting: false, selected: false }));
   const head = renderToStaticMarkup(createElement(StatusHeader, { card, now }));
   const ladder = renderToStaticMarkup(createElement(StatusLadder, { card, now }));
-  const exercise = renderToStaticMarkup(createElement(ExerciseStatus, { area: 'words', state: st.tier, detail: statusDetail(st, t, dateShort), kindLabel: 'x' }));
+  const exercise = renderToStaticMarkup(createElement(ExerciseStatus, { area: 'words', state: st.tier, kindLabel: 'x' }));
   return { st, row, head, ladder, exercise };
 }
 
@@ -93,7 +91,8 @@ describe('Status: Liste, Wortblatt, Übung, Hub, Atlas und Fortschritt widerspre
           const detail = textOf(s.head, 'word-status-detail');
           expect(detail.length).toBeGreaterThan(0);
           expect(textOf(s.row, 'vocab-row-detail')).toBe(detail);
-          expect(textOf(s.exercise, 'status-detail')).toBe(detail);
+          // Übung: der Beleg steht im ⓘ-Fenster (ExerciseShell), nicht in der Kopfzeile.
+          expect(s.exercise).not.toContain('status-detail');
           // Genau ein Filter der Liste enthält die Karte (außer Neu: eigener Filter), und es ist der des Zustands.
           const hits = (['new', 'learning', 'wobbly', 'safe', 'firm'] as const).filter((f) => filterCards([card], { filter: f, query: '', sort: 'az', nowMs: NOW }).length === 1);
           expect(hits).toEqual([expected]);

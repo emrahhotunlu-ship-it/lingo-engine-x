@@ -26,7 +26,7 @@ export const trainerDe = {
   exName_speed: 'Tempo',
   exName_produce: 'Eigener Satz',
   exName_situation: 'Aus der Situation',
-  purpose5: 'Sicher anwenden – im eigenen Satz und in neuem Zusammenhang.',
+  purpose5: 'Frei anwenden – im eigenen Satz und in neuem Zusammenhang.',
   task_ctx_mc: 'Was bedeutet das markierte Wort hier?',
   task_contrast: 'Welches Wort passt in diesen Satz?',
   exName_contrast: 'Welches Wort passt?',
