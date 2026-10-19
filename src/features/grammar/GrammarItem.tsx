@@ -813,7 +813,8 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
         // Die Lücke zeigt nur ein Wort: Der Vergleich nennt den ganzen Satz („Du: … → Richtig: …“) mit der markierten Stelle.
         const base = type === 'transform' ? (task.prompt.split('→').pop() ?? '').trim() : task.prompt;
         if (GAP.test(base)) {
-          const full = (fill: string): string => base.replace(GAP, fill.trim());
+          // Der Wort-Hinweis hinter der Lücke („___ (have)“) gehört nicht in den ausgeschriebenen Satz.
+          const full = (fill: string): string => base.replace(/_{3,}(\s*\([^)]*\))?/, fill.trim());
           comparison = { given: full(fb.given), ops: alignWords(full(fb.given), full(task.answer)), compact: true };
         }
       }
@@ -864,7 +865,8 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       const h = findHead({ verdict: rv, errWord, tapped: tappedNow, found, ...(fix ? { fix } : {}), answer: spotAnswer }, lang);
       find = {
         ...(h.title ? { title: h.title } : {}),
-        sub: [sub, h.sub].filter((x): x is string => !!x).join(' · ') || null,
+        // Andere gültige Stelle (`errAlt`): „Du hast … getippt“ entfällt, die Zeile sagt schon, was passiert ist.
+        sub: [sub, fb.altWhy ? null : h.sub].filter((x): x is string => !!x).join(' · ') || null,
         fold: ['pattern'],
         unfold: ['contrast'],
       };
@@ -873,7 +875,8 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     const alsoRight = c?.kind === 'other' && !fb.override;
     // Handlung aus `composeFeedback`: „Claude fragen“, „Zählt“ oder Zielform schreiben; dazu die Zeile zum Urteil von Claude (§6.4).
     const action: FeedbackAction = composed?.action ?? 'next';
-    const want = pattern ? (lang === 'de' ? pattern.name.de : pattern.name.en) : solution;
+    // Zielform als Formel („used to + Grundform“), nicht als Lösung: der Zweitversuch soll abrufen, nicht abschreiben.
+    const want = pattern ? (lang === 'de' ? pattern.form.de : pattern.form.en) : solution;
     const foot = (
       <JudgeFoot
         action={action}

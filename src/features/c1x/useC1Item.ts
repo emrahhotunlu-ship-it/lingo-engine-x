@@ -514,7 +514,7 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
         onAsk: askNow,
         onSkip: fit.skip,
         onCounts: counts,
-        want: wanted,
+        want: pattern ? (lang === 'de' ? pattern.form.de : pattern.form.en) : wanted,
         target: fb.target ?? null,
         onTarget: tryTarget,
       }),
