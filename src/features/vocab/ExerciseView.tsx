@@ -20,7 +20,9 @@ import { checkSituation, typedForm } from '../../domain/chunks/situation';
 import { scoreDictation } from '../../domain/drills/dictation';
 import { packExtraOf } from '../../domain/c1pack/packFields';
 import type { ExplainExample, ExplanationModel, ResultVerdict } from '../../domain/explain/types';
-import { unitState } from '../../domain/metrics';
+import { cardStatus } from '../../domain/metrics';
+import { useClock } from '../../app/clock';
+import { statusDetail } from './statusText';
 import { choiceVerdict, exTextKey, gapCue } from '../../domain/srs/exercise';
 import { cardExamples, OWN_EXAMPLE_MIN_STAGE, storedTranslation, wantsEnrichment } from '../../domain/srs/examples';
 import { explainWord, isAltAnswer } from '../../domain/srs/explainWord';
@@ -146,7 +148,7 @@ export function ExerciseView({
   /** Wochen-Check (M10): ohne Tipp-Knopf – der Check misst, statt zu helfen. */
   noHelp?: boolean;
 }) {
-  const { t, tn, lang } = useT();
+  const { t, tn, lang, dateShort } = useT();
   const api = useHiddenInput();
   const ai = useAiAvailable();
   const tts = useSpeech((s) => s.status === 'ready');
@@ -157,7 +159,9 @@ export function ExerciseView({
     const s = useSession.getState();
     return s.active ? !!s.env.touch : inputProfile() === 'touch';
   });
-  const [state0] = useState(() => unitState(card));
+  // Status zu Beginn der Aufgabe (Paket ST): dieselbe Rechnung wie Liste, Wortblatt, Hub und Fortschritt.
+  const [stat0] = useState(() => cardStatus(card, useClock.getState().now));
+  const state0 = stat0.tier;
   const [fb, setFb] = useState<Feedback | null>(null);
   const [tip, setTip] = useState<0 | 1 | 2>(0);
   /** Hinweis nach einem falschen ersten Versuch; gesetzt = zweiter Versuch läuft bzw. lief. */
@@ -599,7 +603,7 @@ export function ExerciseView({
   // ------------------------------------------------------------------ Urteil und Erklär-Karte
 
   const rv: ResultVerdict = !fb ? 'ok' : fb.dontKnow ? 'dontKnow' : fb.override ? 'ok' : fb.sentence && !fb.sentence.out && fb.result.verdict !== 'wrong' ? 'unchecked' : fb.result.verdict === 'correct' ? 'ok' : fb.result.verdict === 'near' ? 'near' : 'wrong';
-  const learning = state0 === 'new' || state0 === 'learning';
+  const learning = state0 === 'new' || state0 === 'learning' || state0 === 'wobbly';
   const depth = explainDepth({ verdict: rv, stage: card.stage, learning });
 
   /** Beispiele dieser Karte für die Erklär-Karte (Ursprungssatz zuerst, dann Paket und Claude), nie der Satz der Aufgabe. */
@@ -1094,7 +1098,7 @@ export function ExerciseView({
     <div ref={root} data-profile={touch ? 'touch' : 'keys'} data-col={e.colloc && e.colloc.index >= 0 ? e.colloc.index : undefined}>
       <ExerciseShell
         meta={{ ex: e.ex, id: card.id, stage: e.stage, kind: card.kind }}
-        status={{ area: 'words', state: state0, kindLabel, badge: again ? t('trAgainBadge') : contrastBadge }}
+        status={{ area: 'words', state: state0, detail: statusDetail(stat0, t, dateShort), kindLabel, badge: again ? t('trAgainBadge') : contrastBadge }}
         task={{ text: taskText, purpose: contrastPurpose ?? t(purposeKey), ...(e.act || e.ex === 'produce' ? { open: true } : {}) }}
         prompt={prompt}
         answer={answer}

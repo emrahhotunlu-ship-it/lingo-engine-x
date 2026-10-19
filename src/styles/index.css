@@ -652,6 +652,10 @@ h3 {
   .lx-dots[data-unsure] .lx-dot[data-on] {
     background: var(--lx-fg-muted);
   }
+  /* Paket ST: „Wackelt“ in Bernstein (gleiche Farbe wie „fast richtig“), nie Grün. */
+  .lx-dots[data-wobbly] .lx-dot[data-on] {
+    background: var(--lx-near);
+  }
   .lx-popover {
     position: fixed;
     z-index: 50;

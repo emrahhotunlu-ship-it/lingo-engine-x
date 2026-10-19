@@ -83,30 +83,31 @@ describe('Fällig: eine Definition, überall dieselbe Zahl', () => {
 });
 
 describe('Fest: eine Definition', () => {
-  it('Stufe ≥ 4 und Stabilität ≥ 21 Tage; Fortschritt, Wörter-Statistik, Ziel und Liste zählen dasselbe', () => {
-    expect(FEST_STAGE).toBe(4);
+  it('Stufe 5, Stabilität ≥ 21 Tage, im neuen Satz gekonnt; Fortschritt, Wörter-Statistik, Ziel und Liste zählen dasselbe', () => {
+    expect(FEST_STAGE).toBe(5);
     expect(FEST_DAYS).toBe(21);
     for (const now of MOMENTS) {
       for (const cards of [buildTrainCards(coll('vocab'), now), randomCards(200, now, 11)]) {
         const fest = festCount(cards);
         expect(counts(cards, now).fest).toBe(fest);
         expect(cards.filter(isFest).length).toBe(fest);
-        expect(vocabStatistics(cards, now).active).toBe(fest);
-        expect(filterCards(cards, { filter: 'solid', query: '', sort: 'az', nowMs: now }).length).toBe(fest);
-        expect(cards.filter((c) => !c.hidden && !c.isNew && c.stage >= 4 && c.fsrs.stability >= 21).length).toBe(fest);
+        expect(vocabStatistics(cards, now).byState.firm).toBe(fest);
+        expect(filterCards(cards, { filter: 'firm', query: '', sort: 'az', nowMs: now }).length).toBe(fest);
+        // Fest ist enger als „Stufe und Stabilität“ allein: nie mehr Fest-Karten als solche.
+        expect(fest).toBeLessThanOrEqual(cards.filter((c) => !c.hidden && !c.isNew && c.stage >= 5 && c.fsrs.stability >= 21).length);
       }
     }
     const goal = vocabGoal({ profile: seed['app/profile'], cards: buildTrainCards(coll('vocab'), MOMENTS[1] as number), today: SEED_ANCHOR });
     expect(goal.fest).toBe(festCount(buildTrainCards(coll('vocab'), MOMENTS[1] as number).filter((c) => c.path.startsWith('vocab/'))));
   });
 
-  it('die vier Zustände summieren sich zur Zahl der sichtbaren Karten; Fest = Zustand „firm“', () => {
+  it('die fünf Zustände summieren sich zur Zahl der sichtbaren Karten; Fest = Zustand „firm“', () => {
     for (const now of MOMENTS) {
       const cards = randomCards(200, now, 3);
       const c = counts(cards, now);
       expect(UNIT_STATES.reduce((a, s) => a + c.byState[s], 0)).toBe(c.total);
       expect(c.byState.firm).toBe(c.fest);
-      expect(cards.filter((x) => !x.hidden && unitState(x) === 'new').length).toBe(c.new);
+      expect(cards.filter((x) => !x.hidden && unitState(x, now) === 'new').length).toBe(c.new);
     }
   });
 

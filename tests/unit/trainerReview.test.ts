@@ -8,7 +8,7 @@ import { maskOf } from '../../src/domain/answer/mask';
 import { cachePatch, compactLookup, jsonBytes, LOOKUP_COMPACT_BYTES, LOOKUP_COMPACT_KEEP, LOOKUP_MAX_BYTES, LOOKUP_MAX_KEYS, type LookupEntry } from '../../src/domain/lookup/cache';
 import { posHint } from '../../src/domain/lookup/resolve';
 import { shortMeaning, toTrainCard } from '../../src/domain/srs/cards';
-import { confidenceOf } from '../../src/domain/srs/confidence';
+import { cardStatus } from '../../src/domain/metrics';
 import { buildExercise, choiceVerdict, defsClash } from '../../src/domain/srs/exercise';
 import { saveCardOp } from '../../src/domain/srs/newCard';
 import { reviewFsrs } from '../../src/domain/srs/scheduler';
@@ -47,19 +47,25 @@ describe('B1: vorgegebener Anfangsbuchstabe ist keine Falle', () => {
   });
 });
 
-describe('B4/F5: Sicherheit passt zum Ergebnis', () => {
+describe('B4/F5: Status passt zum Ergebnis (Paket ST)', () => {
   const base = { v: 1, due: NOW, stability: 10, difficulty: 5, state: 2, reps: 5, lapses: 0, last: NOW - 10 * DAY, scheduledDays: 10, learningSteps: 0, src: 'lx' };
-  it('nach „Nochmal" höchstens unsicher, obwohl die Abrufwahrscheinlichkeit bei 1 liegt', () => {
+  it('nach „Nochmal" wackelt eine Karte ab Stufe 4, obwohl die Abrufwahrscheinlichkeit bei 1 liegt', () => {
     const after = reviewFsrs(base, 1, NOW);
     expect(after.state).toBe(3);
-    expect(confidenceOf({ isNew: false, stage: 4, fsrs: after }, NOW + 60_000)).toBe(1);
-    // Vorher sicher, direkt nach richtiger Antwort weiter mindestens „wird fester".
+    const s = cardStatus({ isNew: false, stage: 4, fsrs: after, doc: { hist: [{ t: NOW, g: 1, x: 'cloze' }] } }, NOW + 60_000);
+    expect(s.tier).toBe('wobbly');
+    expect(s.lastWasWrong).toBe(true);
+    expect(s.mind).toBe('noGap');
+    // Direkt nach richtiger freier Antwort: nicht wackelig.
     const good = reviewFsrs(base, 3, NOW);
-    expect(confidenceOf({ isNew: false, stage: 4, fsrs: good }, NOW + 60_000)).toBeGreaterThanOrEqual(2);
+    const g = cardStatus({ isNew: false, stage: 4, fsrs: good, doc: { hist: [{ t: NOW, g: 3, x: 'cloze' }] } }, NOW + 60_000);
+    expect(g.tier).not.toBe('wobbly');
   });
-  it('unter einem Tag Abstand zählt die Abrufwahrscheinlichkeit nicht', () => {
+  it('unter einem Tag Abstand zählt die Abrufwahrscheinlichkeit nicht („noch kein Abstand“)', () => {
     const fresh = { ...base, stability: 0.2, last: NOW - 3_600_000 };
-    expect(confidenceOf({ isNew: false, stage: 3, fsrs: fresh }, NOW)).toBe(2);
+    const s = cardStatus({ isNew: false, stage: 3, fsrs: fresh, doc: { hist: [] } }, NOW);
+    expect(s.mind).toBe('noGap');
+    expect(s.r).toBeNull();
   });
 });
 

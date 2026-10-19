@@ -7,7 +7,7 @@ import { toUS } from '../../src/domain/answer/spelling';
 import { cacheEntry, cachePatch, LOOKUP_MAX, lookupKey, readEntry } from '../../src/domain/lookup/cache';
 import { posHint, resolveWord } from '../../src/domain/lookup/resolve';
 import { toTrainCard } from '../../src/domain/srs/cards';
-import { confidenceDots, confidenceOf } from '../../src/domain/srs/confidence';
+import { cardStatus } from '../../src/domain/metrics';
 import { acceptExamples, cardExamples, examplesPatch } from '../../src/domain/srs/examples';
 import { autoGrade } from '../../src/domain/srs/grade';
 import { bracketExample, displayWord, newVocabDoc, saveCardOp } from '../../src/domain/srs/newCard';
@@ -40,19 +40,34 @@ describe('automatische Note', () => {
   });
 });
 
-describe('Sicherheit (fünf Punkte)', () => {
+describe('Status (Paket ST): neu · lernt · wackelt · sicher · fest', () => {
   const base = { v: 1, due: NOW, stability: 10, difficulty: 5, state: 2, reps: 5, lapses: 0, last: NOW - 10 * DAY, scheduledDays: 10, learningSteps: 0, src: 'lx' };
-  it('neu, unsicher, wird fester, sicher, sehr sicher', () => {
-    expect(confidenceOf({ isNew: true, stage: 0, fsrs: { ...base, state: 0 } }, NOW)).toBe(0);
-    expect(confidenceOf({ isNew: false, stage: 1, fsrs: base }, NOW)).toBe(1);
-    expect(confidenceOf({ isNew: false, stage: 3, fsrs: base }, NOW)).toBe(2);
-    expect(confidenceOf({ isNew: false, stage: 4, fsrs: { ...base, stability: 3, last: NOW - 3 * DAY } }, NOW)).toBe(2);
-    expect(confidenceOf({ isNew: false, stage: 4, fsrs: base }, NOW)).toBe(3);
-    expect(confidenceOf({ isNew: false, stage: 5, fsrs: { ...base, stability: 40, last: NOW - 5 * DAY } }, NOW)).toBe(4);
-    // Lange überfällig: Abrufwahrscheinlichkeit gering → unsicher, auch auf hoher Stufe.
-    expect(confidenceOf({ isNew: false, stage: 5, fsrs: { ...base, stability: 2, last: NOW - 60 * DAY } }, NOW)).toBe(1);
-    expect(confidenceDots(0)).toBe(1);
-    expect(confidenceDots(4)).toBe(5);
+  const free = (dt: number, g = 3, s = 'sA') => ({ t: NOW - dt * DAY, g, x: 'cloze', s });
+  const tier = (stage: number, fsrs: typeof base, hist: unknown[], na = 0) => cardStatus({ isNew: false, stage: stage as 0, fsrs, doc: { hist, na } }, NOW).tier;
+  it('neu', () => expect(cardStatus({ isNew: true, stage: 0, fsrs: { ...base, state: 0 }, doc: {} }, NOW).tier).toBe('new'));
+  it('lernt, bis an 2 verschiedenen Tagen frei richtig abgerufen wurde', () => {
+    expect(tier(3, base, [])).toBe('learning');
+    expect(tier(4, base, [free(5)])).toBe('learning');
+    expect(tier(4, base, [free(8), free(5)])).toBe('safe');
+    // Auswahl-Antworten zählen nie als freier Abruf.
+    expect(tier(4, base, [{ t: NOW - 8 * DAY, g: 3, x: 'mc_en' }, { t: NOW - 5 * DAY, g: 3, x: 'mc_de' }])).toBe('learning');
+  });
+  it('wackelt: ab Stufe 4 (oder mit 2 freien Tagen) nach einem Fehler ohne Erholung oder bei Abruf unter 70 %; Stufe 3 ohne Beleg wackelt nie', () => {
+    expect(tier(4, base, [free(8), free(5), free(2, 1)])).toBe('wobbly');
+    expect(tier(3, base, [free(5), free(2, 1)])).toBe('learning');
+    // Erholt: nach dem Fehler an 2 verschiedenen Tagen wieder frei richtig.
+    expect(tier(4, base, [free(9, 1), free(5), free(2)])).toBe('safe');
+    expect(tier(5, { ...base, stability: 2, last: NOW - 60 * DAY }, [free(70), free(65)])).toBe('wobbly');
+  });
+  it('fest: Stufe 5, 21 Tage Stabilität und im neuen Satz (2 verschiedene Sätze frei richtig) oder selbst benutzt; Stufe 4 nie', () => {
+    const f = { ...base, stability: 40, last: NOW - 5 * DAY };
+    expect(tier(5, f, [free(9, 3, 'sOne'), free(5, 3, 'sTwo')])).toBe('firm');
+    expect(tier(5, f, [free(9, 3, 'sOne'), free(5, 3, 'sOne')], 1)).toBe('firm');
+    expect(tier(4, f, [free(9, 3, 'sOne'), free(5, 3, 'sTwo')])).toBe('safe');
+    // Nur in einem einzigen Satz gekonnt (vielleicht auswendig): sicher, nicht fest.
+    expect(tier(5, f, [free(9, 3, 'sOne'), free(5, 3, 'sOne')])).toBe('safe');
+    // Letzte Antwort falsch: nicht mehr fest.
+    expect(tier(5, f, [free(9, 3, 'sOne'), free(5, 3, 'sTwo'), free(1, 1, 'sThree')])).toBe('wobbly');
   });
 });
 

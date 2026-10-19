@@ -36,6 +36,8 @@ export type ShellStatus = {
   /** `null` = keine Punkte (nie ein falsches „Neu“). */
   state: UnitState | null;
   kindLabel: string;
+  /** Wörter: der Beleg hinter dem Zustandswort („frei abgerufen an 1 von 3 Tagen · zuletzt falsch am 12. Okt.“), aus `features/vocab/statusText.ts`. */
+  detail?: string | null;
   topic?: string | null;
   pattern?: string | null;
   badge?: string | null;
@@ -178,7 +180,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
     );
   }
 
-  const learning = status.state === 'new' || status.state === 'learning';
+  const learning = status.state === 'new' || status.state === 'learning' || status.state === 'wobbly';
   const showSecondary = secondary.slice(0, 2);
   const secondaryNode =
     showSecondary.length > 0 && !feedback ? (

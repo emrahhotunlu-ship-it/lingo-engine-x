@@ -19,7 +19,7 @@ const input = (o: Partial<CriteriaInput> = {}): CriteriaInput => ({
   k1: { gates: 2, safe: 40, total: 100, free: { ok: 30, n: 40 }, newSafe56: 16 },
   k2: { relapses: 3, prev: 5, traps: 6 },
   k3: { view: { state: 'valid', t: 0, passive: 3500, lo: 3200, hi: 3800 }, series: [] },
-  k4: { fest: 450, learned: 900, retention: { rate: 0.9, n: 60, enough: true, band: 'in' }, growth: { delta: 56, days: 56 } },
+  k4: { fest: 450, learned: 900, retention: { rate: 0.9, n: 60, enough: true, band: 'in', recognition: { rate: null, n: 0 } }, growth: { delta: 56, days: 56 } },
   k6: { n: 25, ok: 18, clean: 8, cleanOk: 7, older: 0.6, recent: 0.8, unmarked: 0 },
   ...o,
 });
@@ -31,9 +31,9 @@ describe('Kriterien', () => {
     expect(c1Criteria(input({ k1: { ...k1, newSafe56: K1_TREND_MIN } })).list[0]?.trend).toBe('up');
   });
   it('B1: „noch offen“ trägt den Grund – weit weg (< 50 %) oder ohne Fortschritt (≥ 50 %)', () => {
-    const far = c1Criteria(input({ k4: { fest: 300, learned: 900, retention: { rate: 0.9, n: 60, enough: true, band: 'in' }, growth: { delta: 30, days: 56 } } })).list[3]!;
+    const far = c1Criteria(input({ k4: { fest: 300, learned: 900, retention: { rate: 0.9, n: 60, enough: true, band: 'in', recognition: { rate: null, n: 0 } }, growth: { delta: 30, days: 56 } } })).list[3]!;
     expect(far).toMatchObject({ state: 'open', why: 'far' });
-    const flat = c1Criteria(input({ k4: { fest: 450, learned: 900, retention: { rate: 0.9, n: 60, enough: true, band: 'in' }, growth: { delta: 0, days: 56 } } })).list[3]!;
+    const flat = c1Criteria(input({ k4: { fest: 450, learned: 900, retention: { rate: 0.9, n: 60, enough: true, band: 'in', recognition: { rate: null, n: 0 } }, growth: { delta: 0, days: 56 } } })).list[3]!;
     expect(flat).toMatchObject({ state: 'open', why: 'flat' });
     expect(c1Criteria(input()).list[3]?.why).toBeUndefined(); // auf Kurs
   });

@@ -63,7 +63,7 @@ export function newToday(i: { plan: StoredPlan | null; cards: readonly TrainCard
 }
 
 /** Geschätzter Wortschatz aus dem letzten Test: Zahl, Zeitpunkt der Messung, C1-Marke erreicht. `null`, wenn nie gemessen. */
-export function vocabEstimate(i: { profile: Doc | null | undefined; cards: readonly TrainCard[]; today: string }): { n: number; at: number; c1Reached: boolean } | null {
+export function vocabEstimate(i: { profile: Doc | null | undefined; cards: readonly TrainCard[]; today: string; nowMs?: number }): { n: number; at: number; c1Reached: boolean } | null {
   const g = vocabGoal(i);
   if (!g.measured || g.now === null) return null;
   const at = g.measuredOn ? new Date(`${g.measuredOn}T12:00:00`).getTime() : 0;
@@ -80,7 +80,7 @@ export const atlasSize = (): number => atlasMeta.atlas;
 export const atlasCounts = (): { words: number; pack: number; total: number } => ({ words: atlasMeta.atlas, pack: atlasMeta.pack, total: atlasMeta.atlas + atlasMeta.pack });
 
 /** Feste Karten (Anzeige „Wörter fest 312“): dieselbe Definition wie überall. */
-export const festNow = (cards: readonly TrainCard[]): number => festCount(cards.filter((c) => c.path.startsWith('vocab/')));
+export const festNow = (cards: readonly TrainCard[], nowMs?: number): number => festCount(cards.filter((c) => c.path.startsWith('vocab/')), nowMs);
 
 // ------------------------------------------------------------------ Tag
 

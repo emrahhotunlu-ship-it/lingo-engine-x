@@ -1,10 +1,10 @@
 import { z } from 'zod';
-import { fsrsSchema } from '../../data/schemas';
+import { fsrsSchema, type FsrsStored } from '../../data/schemas';
 import { validateDoc } from '../../data/validate';
 import { dayKey } from '../date';
 import { naOf } from './actBase';
 import { flipStage } from './flip';
-import { isFestValues } from '../metrics/definitions';
+import { isFestState } from '../metrics/cardStatus';
 import { stageOf, nextStage } from './ladder';
 import { freeCorrectDays, freeDaysNeeded } from './variety';
 import { exerciseDef } from './modes';
@@ -178,11 +178,12 @@ export function levelFor(ex: ExerciseId, stage: number): number {
   return ex === 'dictation' ? Math.min(level, Math.max(1, stage) + 1) : level;
 }
 
-/** Erster Fest-Tag (`ff`, P22): einmal gesetzt, sobald die Karte nach dieser Antwort fest sitzt (Stufe ≥ 4, Stabilität ≥ 21 Tage); nie überschrieben. */
+/** Erster Fest-Tag (`ff`, P22): einmal gesetzt, sobald die Karte nach dieser Antwort fest sitzt (dieselbe Regel wie die Anzeige: Stufe 5, Stabilität ≥ 21 Tage, im neuen Satz gekonnt, Paket ST); nie überschrieben. */
 function festPatch(cur: Doc, patch: Doc, day: string): void {
   if (typeof cur.ff === 'string' && cur.ff) return;
-  const f = patch.fsrs as { stability: number } | undefined;
-  if (typeof patch.stage === 'number' && f && isFestValues(patch.stage, f.stability)) patch.ff = day;
+  const f = patch.fsrs as FsrsStored | undefined;
+  if (typeof patch.stage !== 'number' || !f) return;
+  if (isFestState({ isNew: false, stage: patch.stage as 0, fsrs: f, doc: { ...cur, ...patch } })) patch.ff = day;
 }
 
 /** Gespeicherter Wert von `lapses` (Feld der alten App), nur um +1 bei einem echten Rückfall erhöht; das Maximum mit `fsrs.lapses` bildet allein der Leser (`lapsesOf`). */

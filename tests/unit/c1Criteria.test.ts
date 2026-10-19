@@ -28,7 +28,7 @@ const allMet = (): CriteriaInput => {
     k1: { gates: 7, safe: 85, total: 100, free: { ok: 40, n: 50 }, newSafe56: 5 },
     k2: { relapses: 1, prev: 4, traps: 6 },
     k3: { view: { state: 'valid', t: 1, passive: 4200, lo: 3800, hi: 4600 }, series: [] },
-    k4: { fest: 800, learned: 1200, retention: { rate: 0.9, n: 80, enough: true, band: 'in' }, growth: { delta: 40, days: 56 } },
+    k4: { fest: 800, learned: 1200, retention: { rate: 0.9, n: 80, enough: true, band: 'in', recognition: { rate: null, n: 0 } }, growth: { delta: 40, days: 56 } },
     k6: { n: 30, ok: 26, clean: 10, cleanOk: 9, older: 0.8, recent: 0.9, unmarked: 0 },
   };
 };

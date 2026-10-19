@@ -70,13 +70,13 @@ export function AtlasScreen() {
   const tones = useMemo(() => {
     if (!sky) return [];
     const st = new Map<string, UnitState>();
-    for (const c of cards) if (c.kind === 'vocab') st.set(c.id, unitState(c));
+    for (const c of cards) if (c.kind === 'vocab') st.set(c.id, unitState(c, now));
     return skyTones(
       words.map(atlasId),
       (id) => vocab.has(id),
       (id) => st.get(id),
     );
-  }, [sky, cards, words, vocab]);
+  }, [sky, cards, words, vocab, now]);
   const veil = useMemo(() => (sky ? skyVeil(profile, now) : null), [sky, profile, now]);
   const add = async (e: AtlasEntry) => {
     // Nie still scheitern: voll oder heute genug neue Wörter → ruhiger Hinweis, nichts wird geschrieben.

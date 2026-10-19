@@ -8,6 +8,7 @@ export const exEn = {
   exVerdictUnchecked: 'Saved without checking',
   exStateNew: 'New',
   exStateLearning: 'Learning',
+  exStateWobbly: 'Wobbly',
   exStateSafe: 'Safe',
   exStateFirm: 'Firm',
   exStateLabel: 'Status: {state}',

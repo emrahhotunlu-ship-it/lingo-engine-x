@@ -32,6 +32,7 @@ import { nbSprechenEn } from './parts/nbSprechen.en';
 import { nbProfilEn } from './parts/nbProfil.en';
 import { nbTrainingEn } from './parts/nbTraining.en';
 import { exEn } from './parts/ex.en';
+import { stxEn } from './parts/stx.en';
 import { gxEn } from './parts/gx.en';
 import { wxEn } from './parts/wx.en';
 import { hxEn } from './parts/hx.en';
@@ -91,6 +92,7 @@ export const en: Record<MessageKey, string> = {
   ...nbTrainingEn,
   // Lernplattform 2.0: je Paket ein Teil, nur mit eigenem Präfix
   ...exEn,
+  ...stxEn,
   ...gxEn,
   ...wxEn,
   ...hxEn,

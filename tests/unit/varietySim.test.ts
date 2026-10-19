@@ -159,7 +159,8 @@ describe.each([
 
   it('Karten, die „Fest“ werden, haben vorher mindestens drei verschiedene Formenfamilien gezeigt (soweit die Karte so viele anbietet)', () => {
     // Auswertung 15.10.2026: strengerer Aufstieg (zwei freie Antworten), daher etwas weniger feste Karten in 60 Tagen (vorher > 10).
-    expect(sim.fest.length).toBeGreaterThanOrEqual(7);
+    // Paket ST: Fest braucht zusätzlich den Beleg im neuen Satz (zwei verschiedene Sätze frei richtig), deshalb weniger Karten als vorher (7).
+    expect(sim.fest.length).toBeGreaterThanOrEqual(5);
     const short = sim.fest.filter((f) => f.forms < f.cap);
     expect(short).toEqual([]);
   });

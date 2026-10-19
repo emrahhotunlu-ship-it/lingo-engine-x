@@ -98,7 +98,7 @@ export function VocabHub() {
   // Der Knopf nennt, was er startet: die offene Pflichtrunde, sonst alle fälligen Karten.
   const startCount = dutyRound ? rt.left : total;
   const minutes = dutyRound ? rt.minutes : extraMinutes;
-  const goal = useMemo(() => vocabGoal({ profile, cards, today }), [profile, cards, today]);
+  const goal = useMemo(() => vocabGoal({ profile, cards, today, nowMs: now }), [profile, cards, today, now]);
   const goalNow = goal.now ?? 0;
   // „Neue Wörter heute“ nennt die Zahl, die nach Bremse und Plan wirklich kommt (`newToday`), nicht das Kontingent.
   const newN = useMemo(() => newToday({ plan, cards: visible, nowMs: now, newPerDay: quota.perDay, lang }).n, [plan, visible, now, quota.perDay, lang]);

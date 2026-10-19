@@ -3,7 +3,6 @@ import { useClock } from '../../../app/clock';
 import { useNav } from '../../../app/nav';
 import { checkTyped } from '../../../domain/answer/check';
 import { meaningOf } from '../../../domain/srs/cards';
-import { CONFIDENCE_KEYS, confidenceDots, confidenceOf } from '../../../domain/srs/confidence';
 import { cardExamples } from '../../../domain/srs/examples';
 import { posKey } from '../../../domain/srs/explain';
 import { retrievability } from '../../../domain/srs/scheduler';
@@ -20,7 +19,7 @@ import { Disclosure } from '../../../ui/Disclosure';
 import { Sheet } from '../../../ui/Sheet';
 import { toast } from '../../../ui/Toast';
 import { nextT, recordAnswer } from '../../progress/persist';
-import { Dots } from '../../grammar/GrammarScreen';
+import { StatusHeader, StatusLadder } from '../StatusBlock';
 import { isLeech, MnemonicBlock } from '../mnemonic';
 import { startSession } from '../session';
 import { againTomorrow, editCard, markKnown, resetCard, setHidden } from './actions';
@@ -80,7 +79,6 @@ function ChunkOrigin({ card }: { card: TrainCard }) {
     </section>
   );
 }
-const STAGE_KEYS: MessageKey[] = ['stage0', 'stage1', 'stage2', 'stage3', 'stage4', 'stage5'];
 
 export function WordSheet({ card, onClose }: { card: TrainCard | null; onClose: () => void }) {
   const { t } = useT();
@@ -111,7 +109,6 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
   const [answer, setAnswer] = useState('');
   const [confirmReset, setConfirmReset] = useState(false);
   const [busy, setBusy] = useState(false);
-  const conf = confidenceOf(card, now);
   const meaning = meaningOf(card, lang);
   const pk = posKey(card.pos);
   const register = card.chunk?.register && REGISTER_KEYS[card.chunk.register] ? t(REGISTER_KEYS[card.chunk.register] as MessageKey) : null;
@@ -178,14 +175,7 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
   return (
     <div className="flex flex-col gap-6 pb-4" data-testid="word-sheet" data-word={card.id}>
       <section className="flex flex-col gap-2">
-        <p className="flex flex-wrap items-center gap-2 text-sm text-muted" data-testid="word-status">
-          <Dots n={confidenceDots(conf)} />
-          <span>{t(CONFIDENCE_KEYS[conf])}</span>
-          <span className="text-subtle">·</span>
-          <span>{t('lkStage', { n: card.stage })}</span>
-          {/* Stufe 0 heißt schon „neu“ – den Namen nicht doppelt zeigen (UX-Beratung Nr. 12). */}
-          {card.stage > 0 && <span className="text-subtle">· {t(STAGE_KEYS[card.stage] ?? 'stage0')}</span>}
-        </p>
+        <StatusHeader card={card} now={now} />
         {(meaning || pk || register) && (
           <p className="text-base">
             {meaning && <span lang={lang}>{meaning}</span>}
@@ -215,6 +205,7 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
           </div>
         )}
       </section>
+      <StatusLadder card={card} now={now} />
       {card.kind === 'chunk' && <ChunkOrigin card={card} />}
       {examples.length > 0 && (
         <section className="flex flex-col gap-1.5" data-testid="examples">
@@ -384,6 +375,10 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
       {card.kind === 'vocab' && card.inDb && !card.hidden && <EditCard card={card} />}
       <Disclosure label={t('grRaw')}>
         <dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm" data-testid="word-raw">
+          <dt className="text-muted">{t('stxRawStage')}</dt>
+          <dd className="lx-tnum" data-testid="word-raw-stage">
+            {t('lkStage', { n: card.stage })}
+          </dd>
           <dt className="text-muted">{t('vcRawR')}</dt>
           <dd className="lx-tnum">{card.isNew ? '–' : `${num(Math.round(retrievability(card.fsrs, now) * 100))} %`}</dd>
           <dt className="text-muted">{t('vcRawS')}</dt>

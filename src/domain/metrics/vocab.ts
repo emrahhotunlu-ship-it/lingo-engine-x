@@ -1,6 +1,7 @@
 import { dayKey, daysBetween, isDayKey } from '../date';
 import { histOf } from '../srs/flip';
 import { retrievability } from '../srs/scheduler';
+import { FREE_ANSWER } from '../srs/variety';
 import type { TrainCard } from '../srs/types';
 import { isFest } from './definitions';
 
@@ -20,12 +21,13 @@ export const GROWTH_WINDOW_DAYS = 28;
 export const FEST_GOAL = 1500;
 
 type CardLike = Pick<TrainCard, 'hidden' | 'isNew' | 'stage' | 'fsrs' | 'doc'>;
+type FestLike = Pick<TrainCard, 'hidden' | 'isNew' | 'stage' | 'fsrs' | 'doc'>;
 
 export { isFest };
 
-export function festCount(cards: readonly Pick<TrainCard, 'hidden' | 'isNew' | 'stage' | 'fsrs'>[]): number {
+export function festCount(cards: readonly FestLike[], nowMs?: number): number {
   let n = 0;
-  for (const c of cards) if (isFest(c)) n++;
+  for (const c of cards) if (isFest(c, nowMs)) n++;
   return n;
 }
 
@@ -36,43 +38,62 @@ export function expectedKnown(cards: readonly Pick<TrainCard, 'hidden' | 'isNew'
   return Math.round(sum);
 }
 
-export type Retention28 = {
+export type RetentionPart = {
   /** Anteil Note ≥ 2, `null` ohne Antworten. */
   rate: number | null;
   n: number;
-  /** Mindestens 30 Antworten: erst dann wird die Zahl gezeigt. */
+};
+
+export type Retention28 = {
+  /** Behalten bei FREIEM Abruf (getippt, ohne Auswahl und ohne Stütze): Anteil Note ≥ 2, `null` ohne Antworten. Diese Zahl wird gezeigt. */
+  rate: number | null;
+  n: number;
+  /** Mindestens 30 freie Antworten: erst dann wird die Zahl gezeigt. */
   enough: boolean;
   /** Lage zum Korridor (nur bei `enough`). */
   band: 'low' | 'in' | 'high' | null;
+  /** Getrennt gerechnet: Behalten beim Erkennen (Auswahl, Aufdecken). Liegt fast immer höher; wird nur eingeklappt gezeigt. */
+  recognition: RetentionPart;
 };
 
+/** Erkennen: Antworten mit Auswahl oder Aufdecken. Frei: `FREE_ANSWER` (ohne ungeprüfte Sätze). Alles andere (Stütze, alter Verlauf ohne Art) zählt in keinem von beiden. */
+const RECOGNITION: ReadonlySet<string> = new Set(['mc_en', 'ctx_mc', 'listen_mc', 'mc_de', 'match', 'contrast', 'flip', 'spot', 'find_trap']);
+
 /**
- * Behaltensquote der letzten 28 Tage: erste Antwort je Karte und Lerntag, nur wenn die vorige Antwort
- * mindestens 7 Tage zurücklag (sonst misst sie Kurzzeitgedächtnis). Note ≥ 2 = behalten.
+ * Behaltensquote der letzten 28 Tage: erste Antwort je Karte, Lerntag und Art (Erkennen oder frei), nur wenn die vorige Antwort
+ * mindestens 7 Tage zurücklag (sonst misst sie Kurzzeitgedächtnis). Note ≥ 2 = behalten. Erkennen und frei werden getrennt gezählt
+ * (Auswertung 15.10.2026: Auswahl 95 % richtig, frei 68 %); die Hauptzahl ist die freie.
  */
 export function retention28(cards: readonly CardLike[], nowMs: number): Retention28 {
   const from = nowMs - GROWTH_WINDOW_DAYS * DAY_MS;
-  let ok = 0;
-  let n = 0;
+  const free = { ok: 0, n: 0 };
+  const rec = { ok: 0, n: 0 };
   for (const c of cards) {
     if (c.hidden) continue;
     const hist = histOf(c.doc);
+    const raw = Array.isArray(c.doc.hist) ? (c.doc.hist as unknown[]) : [];
+    const unchecked = new Set<number>();
+    for (const h of raw) if (h && typeof h === 'object' && (h as Record<string, unknown>).u === 1 && typeof (h as Record<string, unknown>).t === 'number') unchecked.add((h as Record<string, number>).t as number);
     const seen = new Set<string>();
     for (let i = 1; i < hist.length; i++) {
       const h = hist[i]!;
       if (h.t < from || h.t > nowMs || h.g === null) continue;
       if (h.t - hist[i - 1]!.t < RETENTION_GAP_DAYS * DAY_MS) continue;
-      const d = dayKey(h.t);
-      if (seen.has(d)) continue;
-      seen.add(d);
-      n++;
-      if (h.g >= 2) ok++;
+      const isFree = h.x !== null && FREE_ANSWER.has(h.x) && !unchecked.has(h.t);
+      const isRec = h.x !== null && RECOGNITION.has(h.x);
+      if (!isFree && !isRec) continue;
+      const key = `${dayKey(h.t)}:${isFree ? 'f' : 'r'}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const part = isFree ? free : rec;
+      part.n++;
+      if (h.g >= 2) part.ok++;
     }
   }
-  const rate = n ? ok / n : null;
-  const enough = n >= RETENTION_MIN_ANSWERS;
+  const rate = free.n ? free.ok / free.n : null;
+  const enough = free.n >= RETENTION_MIN_ANSWERS;
   const band = !enough || rate === null ? null : rate < RETENTION_BAND[0] ? 'low' : rate > RETENTION_BAND[1] ? 'high' : 'in';
-  return { rate, n, enough, band };
+  return { rate, n: free.n, enough, band, recognition: { rate: rec.n ? rec.ok / rec.n : null, n: rec.n } };
 }
 
 type Doc = Readonly<Record<string, unknown>>;
@@ -124,8 +145,8 @@ export function festForecast(festNow: number, growth: FestGrowth | null, target:
  * Wörter UND Wendungen fest (Motivation §4.6, I7): `cards` = Vokabel- und Wendungskarten zusammen. Kopf des Fortschritts, Marken,
  * Ziel und Wochenrückblick lesen nur diese Funktion. `festNow` (nur `vocab/*`, Tagesbild `va`) bleibt unverändert.
  */
-export function festUnits(cards: readonly Pick<TrainCard, 'hidden' | 'isNew' | 'stage' | 'fsrs'>[]): number {
-  return festCount(cards);
+export function festUnits(cards: readonly FestLike[], nowMs?: number): number {
+  return festCount(cards, nowMs);
 }
 
 /** Tagesbild-Feld, aus dem der Zuwachs gerechnet wird: `va` (nur Vokabeln, alt) oder `vu` (Wörter und Wendungen, neu). */

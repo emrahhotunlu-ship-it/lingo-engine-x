@@ -33,7 +33,7 @@ describe('Architektur: eine Quelle je Zahl', () => {
   });
 
   it('„Fest“ (Stufe und 21 Tage) steht nur in domain/metrics', () => {
-    const bad = outside.filter((f) => /stability\s*>=\s*(21|MATURE_DAYS|FEST_DAYS)/.test(f.text) && f.rel !== 'domain/srs/confidence.ts').map((f) => f.rel);
+    const bad = outside.filter((f) => /stability\s*>=\s*(21|MATURE_DAYS|FEST_DAYS)/.test(f.text)).map((f) => f.rel);
     expect(bad).toEqual([]);
   });
 });

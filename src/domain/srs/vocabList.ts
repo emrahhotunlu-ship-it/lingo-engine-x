@@ -1,5 +1,5 @@
 import { validateDoc } from '../../data/validate';
-import { isDue, isFest } from '../metrics/definitions';
+import { isDue, unitState } from '../metrics/definitions';
 import { legacyToFsrs } from './legacyFsrs';
 import { FSRS_VERSION, readFsrs } from './scheduler';
 import type { TrainCard } from './types';
@@ -14,7 +14,7 @@ import { lapsesOf } from './lapses';
 
 type Doc = Record<string, unknown>;
 
-export const VOCAB_FILTERS = ['all', 'due', 'new', 'shaky', 'helped', 'solid', 'job', 'phrases', 'hidden'] as const;
+export const VOCAB_FILTERS = ['all', 'due', 'new', 'learning', 'wobbly', 'safe', 'firm', 'job', 'phrases', 'hidden'] as const;
 export type VocabFilter = (typeof VOCAB_FILTERS)[number];
 export type VocabSort = 'stage' | 'az';
 
@@ -62,12 +62,12 @@ export function matchesFilter(c: TrainCard, f: VocabFilter, nowMs: number): bool
       return isDue(c, nowMs);
     case 'new':
       return c.isNew;
-    case 'shaky':
-      return !c.isNew && c.stage >= 1 && c.stage <= 2;
-    case 'helped':
-      return c.stage === 3;
-    case 'solid':
-      return isFest(c);
+    // Zustände: dieselbe Rechnung wie Wortblatt, Übung, Hub und Fortschritt (`metrics/cardStatus.ts`).
+    case 'learning':
+    case 'wobbly':
+    case 'safe':
+    case 'firm':
+      return unitState(c, nowMs) === f;
     case 'job':
       return isJobCard(c);
     case 'phrases':

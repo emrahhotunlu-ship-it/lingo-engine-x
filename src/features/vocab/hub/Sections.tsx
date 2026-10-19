@@ -89,16 +89,18 @@ export function VocabStatsSection() {
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
         {cell(t('nbWsRetention'), pct, 'ws-stat-retention', t('nbWsAnswers', { n: s.answers }))}
         {cell(t('nbWsMedianS'), s.medianStability === null ? '–' : t('nbWsDaysN', { n: s.medianStability }), 'ws-stat-median')}
-        {cell(t('nbWsActive'), num(s.active), 'ws-stat-active', t('nbWsActiveSub', { n: s.practicing }))}
+        {cell(t('nbWsActive'), num(s.byState.firm), 'ws-stat-active', t('nbWsActiveSub', { n: s.byState.safe }))}
         {cell(t('nbWsExpected'), num(s.expected), 'ws-stat-expected', t('nbWsExpectedSub'))}
         {cell(t('nbWsSure'), num(s.sure), 'ws-stat-sure')}
       </div>
       <dl className="lx-tnum flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted" data-testid="ws-stat-states">
         {(
           [
-            ['nbWsStateNewL', s.byState.new],
-            ['nbWsStateLearnL', s.byState.learning],
-            ['nbWsStateYoungL', s.byState.young],
+            ['exStateNew', s.byState.new],
+            ['exStateLearning', s.byState.learning],
+            ['exStateWobbly', s.byState.wobbly],
+            ['exStateSafe', s.byState.safe],
+            ['exStateFirm', s.byState.firm],
           ] as const
         ).map(([k, n]) => (
           <div key={k} className="flex gap-1">
@@ -107,6 +109,11 @@ export function VocabStatsSection() {
           </div>
         ))}
       </dl>
+      {s.recognition.rate !== null && (
+        <p className="text-xs text-subtle" data-testid="ws-stat-recognition">
+          {t('stxRetentionRecognition', { pct: Math.round(s.recognition.rate * 100), n: s.recognition.n })} · {t('stxRetentionNote')}
+        </p>
+      )}
     </section>
   );
 }

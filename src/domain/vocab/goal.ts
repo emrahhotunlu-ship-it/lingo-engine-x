@@ -28,7 +28,7 @@ type Doc = Readonly<Record<string, unknown>>;
 const arr = (v: unknown): Doc[] => (Array.isArray(v) ? v.filter((x): x is Doc => !!x && typeof x === 'object') : []);
 const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
 
-export function vocabGoal(i: { profile: Doc | null | undefined; cards: readonly TrainCard[]; today: string }): VocabGoal {
+export function vocabGoal(i: { profile: Doc | null | undefined; cards: readonly TrainCard[]; today: string; nowMs?: number }): VocabGoal {
   const p = i.profile ?? {};
   const tests = arr(p.vtests)
     .filter((v) => num(v.passive) !== null)
@@ -59,6 +59,6 @@ export function vocabGoal(i: { profile: Doc | null | undefined; cards: readonly 
   const now = v0 === null ? null : Math.round(v0 + learned);
   const reached = now !== null && now >= VOCAB_TARGET;
   const weeks = now === null || reached || perWeek < 1 ? null : Math.ceil((VOCAB_TARGET - now) / perWeek);
-  const fest = festCount(vocab);
+  const fest = festCount(vocab, i.nowMs);
   return { fest, target: VOCAB_TARGET, now, band, measuredOn, perWeek, weeks, reached, measured: v0 !== null };
 }

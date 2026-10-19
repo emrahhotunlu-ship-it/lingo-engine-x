@@ -136,7 +136,7 @@ export type K4Measure = {
 };
 
 export function k4Measure(cards: readonly Card[], history: unknown, nowMs: number, today: string): K4Measure {
-  const fest = festUnits(cards);
+  const fest = festUnits(cards, nowMs);
   const learned = cards.filter((c) => !c.hidden && !c.isNew).length;
   const rows = arr(history)
     .filter(isObj)

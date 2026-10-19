@@ -23,7 +23,7 @@ export function useVocabMetrics() {
   const vocab = useLive((s) => s.collections.vocab) ?? EMPTY;
   const invalid = useLive((s) => s.invalid);
   const cards = useMemo(() => buildTrainCards(vocab, now, invalidIdsOf(invalid, 'vocab')), [vocab, now, invalid]);
-  const fest = useMemo(() => festCount(cards), [cards]);
+  const fest = useMemo(() => festCount(cards, now), [cards, now]);
   return { cards, fest, now };
 }
 
@@ -89,6 +89,11 @@ function QualityCard({ cards, now }: { cards: ReturnType<typeof useVocabMetrics>
             {ret.enough ? t(bandKey) : t('nbProfilRetentionNone', { n: num(ret.n) })}
           </span>
           <span className="text-xs text-subtle">{t('nbProfilRetentionSub')}</span>
+          {ret.recognition.rate !== null && (
+            <span className="lx-tnum text-xs text-subtle" data-testid="retention-recognition">
+              {t('stxRetentionRecognition', { pct: num(Math.round(ret.recognition.rate * 100)), n: num(ret.recognition.n) })}
+            </span>
+          )}
         </div>
       </div>
     </Card>

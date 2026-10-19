@@ -2,7 +2,9 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useAiAvailable } from '../../../ai/scope';
 import { ipaOf } from '../../../domain/lexicon/pron';
 import { meaningOf } from '../../../domain/srs/cards';
-import { unitState } from '../../../domain/metrics';
+import { cardStatus } from '../../../domain/metrics';
+import { useClock } from '../../../app/clock';
+import { statusDetail } from '../statusText';
 import { cardExamples, wantsEnrichment } from '../../../domain/srs/examples';
 import { cueMeaning } from '../../../domain/srs/exercise';
 import { explainWord, registerOf } from '../../../domain/srs/explainWord';
@@ -56,7 +58,7 @@ function idle(fn: () => void): void {
 
 /** `behind` = noch kommende Karten (P54: höchstens zwei Kanten hinter der Vorderseite). */
 export function FlipCard({ exercise, again = false, onDone, behind = 0 }: { exercise: Exercise; again?: boolean; onDone: (kind: FirstKind) => void; behind?: number }) {
-  const { t, lang } = useT();
+  const { t, lang, dateShort } = useT();
   const api = useHiddenInput();
   const profile = useInputProfile();
   const ai = useAiAvailable();
@@ -73,7 +75,8 @@ export function FlipCard({ exercise, again = false, onDone, behind = 0 }: { exer
   const hiddenAt = useRef<number | null>(null);
   const wasHidden = useRef(false);
   const done = useRef(false);
-  const [state0] = useState(() => unitState(card));
+  const [stat0] = useState(() => cardStatus(card, useClock.getState().now));
+  const state0 = stat0.tier;
 
   // Denkzeit ab dem ersten Bild der Vorderseite; Zeit im Hintergrund zählt nicht (§2).
   useEffect(() => {
@@ -282,7 +285,7 @@ export function FlipCard({ exercise, again = false, onDone, behind = 0 }: { exer
           </div>
         )}
         keysHint={shown ? t('trEnterHint') : null}
-        status={{ area: 'words', state: state0, kindLabel: t('nbWsFlipKind'), badge: again ? t('trAgainBadge') : null }}
+        status={{ area: 'words', state: state0, detail: statusDetail(stat0, t, dateShort), kindLabel: t('nbWsFlipKind'), badge: again ? t('trAgainBadge') : null }}
         task={{ text: t(dir === 'de-en' ? 'nbWsFlipTaskDeEn' : 'nbWsFlipTaskEnDe'), purpose: `${t('nbWsFlipInfo')} ${t('nbWsGradeInfo')}` }}
         prompt={prompt}
         answer={back}

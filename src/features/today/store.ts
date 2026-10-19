@@ -226,7 +226,7 @@ export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
     });
     const st = cardStats(all, lang, nowMs);
     facts = { ov: st.overdue, sure: st.sure };
-    fest = { units: festUnits(all), vocab: festUnits(cards) };
+    fest = { units: festUnits(all, nowMs), vocab: festUnits(cards, nowMs) };
   }
   // Die Neustart-Woche endet nach 7 Lerntagen oder sobald weniger als 40 Karten überfällig sind; danach Kurz-Plan, solange es ≥ 40 sind (Prüfbefund S9).
   const mode = comebackMode(profile, today, facts?.ov ?? null);
@@ -385,8 +385,8 @@ function ensureHistory(today: string, nowMs: number): void {
   if (!profile) return;
   historyDay = today;
   const cards = buildTrainCards(live.collections.vocab ?? new Map(), nowMs, invalidIdsOf(live.invalid, 'vocab'));
-  const goal = vocabGoal({ profile, cards, today });
-  void recordProfileFields('today:history', (cur) => historyPatch(cur, historySnapshot({ day: today, nowMs, profile: cur, grammar: live.collections.grammar ?? new Map(), vocabNow: goal.now, festNow: goal.fest, unitsFest: festUnits([...cards, ...buildChunkCards(live.collections.chunk ?? new Map(), nowMs, invalidIdsOf(live.invalid, 'chunk'))]), docCount: docTotal() }))).then((ok) => {
+  const goal = vocabGoal({ profile, cards, today, nowMs });
+  void recordProfileFields('today:history', (cur) => historyPatch(cur, historySnapshot({ day: today, nowMs, profile: cur, grammar: live.collections.grammar ?? new Map(), vocabNow: goal.now, festNow: goal.fest, unitsFest: festUnits([...cards, ...buildChunkCards(live.collections.chunk ?? new Map(), nowMs, invalidIdsOf(live.invalid, 'chunk'))], nowMs), docCount: docTotal() }))).then((ok) => {
     if (!ok) historyDay = null;
   });
 }

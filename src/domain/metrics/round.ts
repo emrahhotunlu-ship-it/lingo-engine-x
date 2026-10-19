@@ -1,7 +1,7 @@
 import { dayKey } from '../date';
 import { isLearningState } from '../srs/scheduler';
 import type { TrainCard } from '../srs/types';
-import { UNIT_STATES, unitState, type UnitState } from './definitions';
+import { UNIT_RANK, unitState, type UnitState } from './definitions';
 
 // Wachstum einer Runde statt Antwortzahl (Motivation §4.7): Was ist aufgestiegen, wie lange hält das Gedächtnis jetzt, was kommt morgen
 // wieder. Die Runde hält den Stand vom Start (`before`), der Stand danach ist live (`after`). Rein, nichts wird geschrieben.
@@ -22,7 +22,7 @@ export type RoundGrowth = {
   down: number;
 };
 
-const rank = (s: UnitState): number => UNIT_STATES.indexOf(s);
+const rank = (s: UnitState): number => UNIT_RANK[s];
 
 const median = (xs: readonly number[]): number => {
   const s = [...xs].sort((a, b) => a - b);
@@ -35,7 +35,7 @@ const round1 = (x: number): number => Math.round(x * 10) / 10;
  * Gedächtnis-Zeit: nur Karten, die vorher im FSRS-Zustand „Review“ waren (keine Lernschritte, keine neuen) und in dieser Runde ihre erste
  * Antwort des Tages bekamen. vorher = `due − last` vor der Runde, nachher = `due` nach der Runde minus Antwortzeit, je in Tagen.
  */
-export function roundGrowth(before: readonly TrainCard[], after: readonly TrainCard[]): RoundGrowth {
+export function roundGrowth(before: readonly TrainCard[], after: readonly TrainCard[], nowMs: number = Date.now()): RoundGrowth {
   const was = new Map(before.map((c) => [c.key, c]));
   const up: RoundUp[] = [];
   let down = 0;
@@ -44,8 +44,8 @@ export function roundGrowth(before: readonly TrainCard[], after: readonly TrainC
   for (const c of after) {
     const o = was.get(c.key);
     if (!o || c.hidden || o.hidden) continue;
-    const from = unitState(o);
-    const to = unitState(c);
+    const from = unitState(o, nowMs);
+    const to = unitState(c, nowMs);
     if (rank(to) > rank(from)) up.push({ id: c.key, word: c.word, to });
     else if (rank(to) < rank(from) && !o.isNew) down++;
     const lastBefore = o.fsrs.last;

@@ -144,7 +144,7 @@ test.describe('Desktop', () => {
     await page.getByTestId('vocab-bulk-hide').click();
     await expect.poll(async () => [(await dump(page))[a]?.hidden, (await dump(page))[b]?.hidden]).toEqual([true, true]);
     await page.getByTestId('vocab-select').click();
-    await page.locator('[data-testid="vocab-filter"][data-filter="solid"]').click();
+    await page.locator('[data-testid="vocab-filter"][data-filter="learning"]').click();
     const row = page.getByTestId('vocab-row').first();
     const id = (await row.getAttribute('data-word')) ?? '';
     const before = (await dump(page))[`vocab/${id}`] as Doc;

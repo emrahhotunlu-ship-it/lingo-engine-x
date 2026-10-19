@@ -90,7 +90,7 @@ describe('festGrowthUnits', () => {
 describe('festUnits', () => {
   const NOW = berlin('2026-10-05', 10);
   const mk = (id: string, over: Record<string, unknown> = {}) =>
-    toTrainCard(id, { word: id, de: 'x', def: 'x y', ex: `We [${id}] it.`, pos: 'verb', state: 'review', S: 30, D: 5, due: NOW + 86_400_000, last: NOW - 86_400_000, stage: 4, reps: 6, lapses: 0, src: 'lookup', added: '2026-06-01', ...over }, true, NOW)!;
+    toTrainCard(id, { word: id, de: 'x', def: 'x y', ex: `We [${id}] it.`, pos: 'verb', state: 'review', S: 30, D: 5, due: NOW + 86_400_000, last: NOW - 86_400_000, stage: 5, reps: 6, lapses: 0, src: 'lookup', added: '2026-06-01', hist: [{ t: NOW - 9 * 86_400_000, g: 3, x: 'cloze', s: 'sA' }, { t: NOW - 5 * 86_400_000, g: 3, x: 'cloze', s: 'sB' }], ...over }, true, NOW)!;
   it('zählt Wörter und Wendungen zusammen, Neue und Ausgeblendete nie', () => {
     expect(festUnits([mk('a'), mk('b'), mk('c', { hidden: true }), mk('d', { stage: 3 })])).toBe(2);
   });
