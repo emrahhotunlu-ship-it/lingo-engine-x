@@ -22,6 +22,11 @@ function patternsIn(input: string): Pat[] {
  */
 export function grammarItemsReplyV3(input: string): string {
   const base = JSON.parse(grammarItemsReply(input)) as { items: Array<Record<string, unknown>> };
+  // @5: Selbstprüfung je Aufgabe, Ziel-Satz für „Satz verbessern“ (Tutor-Engine v3 §6.3).
+  for (const it of base.items) {
+    it.self = { solved: it.answer, also: [] };
+    if (it.type === 'correct') it.goal = { de: 'Der Bericht ist letzte Woche verschickt worden.', en: 'The report went out last week.' };
+  }
   const pats = patternsIn(input);
   if (!pats.length) return JSON.stringify(base);
   base.items.forEach((it, k) => {

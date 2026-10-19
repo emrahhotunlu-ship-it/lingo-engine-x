@@ -1,9 +1,15 @@
 import { z } from 'zod';
 import { foreignSignalPattern, hasSignal, patternNearGap, patternsOf } from '../domain/grammar/patterns';
 import { isWrongLang } from '../domain/lang/detect';
+import { acceptGrammarItem } from '../domain/tutor/acceptGrammarItem';
 import { clip, header, lenientArray, normalizeTaskRaw } from './common';
 import type { PromptTemplate } from './types';
 
+// @5 (Tutor-Engine v3 §6.3, E5, im Konzept „grammar-items@3“): eingebaute Lösungs-Selbstprüfung. Claude löst jede Aufgabe ein zweites Mal blind
+// (`self.solved`) und nennt jede weitere gültige Antwort (`self.also`); „Satz verbessern“ braucht einen Ziel-Satz (`goal`). Danach prüft die App jede
+// Aufgabe lokal mit `acceptGrammarItem` (`judge` + `lintTask`, ohne KI): ohne eindeutige Lösung oder mit Lint-Befund fällt sie weg. Sind danach zu
+// wenige übrig, ist das ein Schemafehler mit Begründung – genau ein Neuversuch nach A6.3, sonst nie. `budget` gilt nur für den Hintergrund-Nachschub
+// (E5); der Knopf „Neue Aufgaben zu {Thema}“ ist ein Nutzeraufruf und bleibt ungedeckelt.
 // grammar-items@3 (Lernplattform 2.0 §10.4 P5, Schritt 8; zuvor @2, phase2-plan §7): neue Aufgaben zu EINEM Thema, nur auf Knopfdruck
 // („Neue Aufgaben zu {Thema}"). Ausgabe im Pool-Format der alten App, damit sie per
 // `poolIntake` gespeichert werden können. Erklärungen fest zweisprachig (de + en): Welche
@@ -46,6 +52,8 @@ export type GrammarItem = {
   pat?: string;
   /** Begründung je falscher Option (nur `mc`), zweisprachig; daraus entsteht `why.wrong`. */
   why?: { ok: { de: string; en: string }; wrong: Array<{ opt: string; de: string; en: string }> };
+  /** Ziel des Satzes (nur „Satz verbessern“, Pflicht seit @5): was der Satz sagen will, zweisprachig. */
+  goal?: { de: string; en: string };
 };
 export type GrammarItemsOut = { items: GrammarItem[] };
 
@@ -54,10 +62,25 @@ export const ITEMS_SEEN_MAX = 20;
 export const ITEMS_ERRORS_MAX = 5;
 
 export const GRAMMAR_ITEMS_EXAMPLE =
-  '{"items":[{"topic":"passive","type":"gap","prompt":"The new contract ___ (sign) yesterday.","answer":"was signed","accepted":[],"options":null,"hint_de":"(sign)","explanation_de":"„yesterday“ zeigt eine abgeschlossene Zeit, und der Vertrag handelt nicht selbst → was + 3. Form.","explanation_en":"“yesterday” shows finished time, and the contract does not act itself → was + past participle.","src":"ai"}]}';
+  '{"items":[{"topic":"passive","type":"gap","prompt":"The new contract ___ (sign) yesterday.","answer":"was signed","accepted":[],"options":null,"hint_de":"(sign)","explanation_de":"„yesterday“ zeigt eine abgeschlossene Zeit, und der Vertrag handelt nicht selbst → was + 3. Form.","explanation_en":"“yesterday” shows finished time, and the contract does not act itself → was + past participle.","src":"ai","self":{"solved":"was signed","also":[]}},{"topic":"passive","type":"correct","prompt":"The invoices was sent to the client last Friday.","answer":"The invoices were sent to the client last Friday.","accepted":[],"options":null,"hint_de":"","explanation_de":"„invoices“ ist Plural, deshalb steht im Passiv „were“ statt „was“.","explanation_en":"“invoices” is plural, so the passive needs “were”, not “was”.","src":"ai","goal":{"de":"Die Rechnungen gingen letzten Freitag an den Kunden.","en":"The invoices went to the client last Friday."},"self":{"solved":"The invoices were sent to the client last Friday.","also":[]}}]}';
 
 const ID = 'grammar-items';
-const VERSION = 4;
+const VERSION = 5;
+/** Hintergrund-Nachschub (E5) je Gerät und Tag; die Summe deckelt `BG_PER_DAY` (src/ai/budget.ts). */
+export const GRAMMAR_ITEMS_BG_PER_DAY = 2;
+
+/** Begründung je Ablehnungsgrund (geht beim einen Neuversuch nach A6.3 an Claude zurück). */
+const REJECT_HINT: Readonly<Record<string, string>> = {
+  shape: 'invalid item',
+  lint: 'item is ambiguous or incomplete (one ___ only, a base-form hint like "(sign)" for verbs, enough sentence around the gap, a source sentence for transform)',
+  answer_not_correct: 'the answer does not fill the gap as written',
+  accepted_not_correct: 'an accepted variant is not a valid answer',
+  distractor_ok: 'a wrong option is also a correct answer',
+  error_kept: 'the sentence to correct is already correct or nearly correct',
+  self_missing: 'self check missing',
+  self_wrong: 'your blind solution does not match the answer',
+  also_uncovered: 'another valid answer is not listed in accepted; list it or change the sentence so only one answer fits',
+};
 
 const blanks = (s: string) => (s.match(/_{3,}/g) ?? []).length;
 
@@ -79,6 +102,8 @@ const itemSchema = (topic: string, patterns: NonNullable<GrammarItemsVars['patte
       explanation_de: z.string().trim().min(8).max(400),
       explanation_en: z.string().trim().min(8).max(400),
       src: z.literal('ai').default('ai'),
+      goal: z.object({ de: z.string().trim().min(4).max(200), en: z.string().trim().min(4).max(200) }).optional(),
+      self: z.object({ solved: z.string().trim().min(1).max(300), also: z.array(z.string().trim().min(1).max(300)).max(4).default([]) }),
     })
     .superRefine((it, ctx) => {
       if (it.type === 'mc') {
@@ -108,12 +133,23 @@ const itemSchema = (topic: string, patterns: NonNullable<GrammarItemsVars['patte
         }
       }
       if (it.why_not && it.type === 'mc' && !it.why_not.every((w) => (it.options ?? []).includes(w.opt) && w.opt !== it.answer)) ctx.addIssue({ code: 'custom', path: ['why_not'], message: 'why_not options must be wrong options of the item' });
+      if (it.type === 'correct' && !it.goal) ctx.addIssue({ code: 'custom', path: ['goal'], message: '"correct" items need "goal" {de, en}: what the sentence wants to say' });
+      if (it.goal && isWrongLang(it.goal.de, 'de')) ctx.addIssue({ code: 'custom', path: ['goal', 'de'], message: 'must be written in German' });
+      // Lösungs-Selbstprüfung: lokal mit `judge` und `lintTask` (keine KI). Jede Verletzung verwirft nur diese Aufgabe.
+      for (const reason of acceptGrammarItem(it, { src: 'ai', requireSelf: true }).reasons) {
+        ctx.addIssue({ code: 'custom', path: [], message: `${REJECT_HINT[reason.startsWith('lint:') ? 'lint' : reason] ?? 'invalid item'} (${reason})` });
+      }
     })
-    .transform(({ why_not, ...it }) => ({
-      ...it,
-      ...(it.pat && patterns.length ? { pat: it.pat } : { pat: undefined }),
-      ...(why_not?.length ? { why: { ok: { de: it.explanation_de, en: it.explanation_en }, wrong: why_not } } : {}),
-    }));
+    .transform(({ why_not, ...withSelf }) => {
+      // `self` dient nur der Prüfung; gespeichert wird die Aufgabe ohne sie.
+      const it: Omit<typeof withSelf, 'self'> & { self?: unknown } = { ...withSelf };
+      delete it.self;
+      return {
+        ...it,
+        ...(it.pat && patterns.length ? { pat: it.pat } : { pat: undefined }),
+        ...(why_not?.length ? { why: { ok: { de: it.explanation_de, en: it.explanation_en }, wrong: why_not } } : {}),
+      };
+    });
 
 // W8: Aufgaben einzeln prüfen – ungültige fallen weg, gescheitert wird nur bei zu wenigen gültigen.
 const schemaFor = (v: GrammarItemsVars): z.ZodType<GrammarItemsOut> =>
@@ -124,6 +160,7 @@ export const grammarItems: PromptTemplate<GrammarItemsVars, GrammarItemsOut> = {
   version: VERSION,
   tier: 'default',
   cache: false,
+  budget: { bgPerDay: GRAMMAR_ITEMS_BG_PER_DAY },
   build(v) {
     const style =
       v.p < 0.4 ? 'mostly mc with clear contrasts and short sentences, some gap' : v.p <= 0.7 ? 'mostly gap and transform' : 'mostly correct and transform (less guessable)';
@@ -152,7 +189,7 @@ export const grammarItems: PromptTemplate<GrammarItemsVars, GrammarItemsOut> = {
           .map((e) => `${clip(e.q, 140)} :: ${clip(e.given, 60)} → ${clip(e.ans, 60)}`)
           .join(' | ') || '(none)'
       }`,
-      'Reply with only one JSON object of this shape (one item shown):',
+      'Reply with only one JSON object of this shape (two items shown):',
       GRAMMAR_ITEMS_EXAMPLE,
       'Rules:',
       '- EXACTLY ONE correct answer per item. Reject any item where a second option is also grammatical in some context.',
@@ -161,7 +198,11 @@ export const grammarItems: PromptTemplate<GrammarItemsVars, GrammarItemsOut> = {
       '- If there are recent mistakes, write NEW items that test exactly the same confusion with different sentences.',
       '- "mc": prompt with one ___ and 3–4 options, "answer" identical to one option. "gap": one ___, hint_de gives the base form like "(work)".',
       '  "transform": a sentence, then "→" and the new sentence with one ___; answer is only the missing part.',
-      '  "correct": one sentence with exactly one typical error; answer is the full corrected sentence; options null.',
+      '  "correct": one sentence with exactly one typical error; answer is the full corrected sentence; options null; "goal": {"de","en"} says in plain words what the sentence wants to say.',
+      '- Self check for EVERY item: after writing it, solve it again as if you had never seen the answer and put that solution in "self.solved".',
+      '  In "self.also" list every OTHER answer a careful native speaker would accept (other tenses, contractions, word order, British forms), max 4.',
+      '  Every answer in "self.also" must also be in "accepted" – otherwise rewrite the sentence so that only one answer fits. Good English is never wrong.',
+      '- The app checks every item again and drops items with a second valid answer, a gap without a base-form hint for a verb, or a correct sentence to "correct".',
       ...(v.patterns?.length ? ['- Signal words: the sentence may contain only the signal word(s) of the ONE pattern it trains, and that signal must be what forces the gap. Never combine signals of two patterns in one sentence (no contrast sentences like "We ___ it yet, although we sent it on Monday").',
       '- "pat": the id of the pattern the item trains. For "mc" items add "why_not": up to 3 objects {"opt": a WRONG option exactly as written in options, "de": German, "en": English; max 140 characters each} saying why that option does not fit THIS sentence.'] : []),
       '- explanation_de: 1–2 short sentences in simple German: the signal word and the rule it triggers (never just repeat the answer); put English words and phrases in “…”.',

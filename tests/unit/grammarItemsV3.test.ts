@@ -10,7 +10,7 @@ const patterns = [
 ];
 const vars: GrammarItemsVars = { topic: 'cond-alt', nameEn: 'Alternatives to if', ruleEn: 'unless = if not', examples: [], p: 0.5, types: ['gap', 'mc'], seenText: [], errors: [], count: 4, patterns };
 const base = { topic: 'cond-alt', type: 'gap', accepted: [], options: null, hint_de: '', explanation_de: 'Unless heißt „wenn nicht“, deshalb steht kein not mehr im Satz.', explanation_en: 'Unless means “if not”, so no second negation is needed in the clause.', src: 'ai' };
-const item = (o: object) => ({ ...base, prompt: 'We will cancel the event unless 20 people ___ (sign) up.', answer: 'sign', pat: 'ca.unless', ...o });
+const item = (o: object) => ({ ...base, prompt: 'We will cancel the event unless 20 people ___ (sign) up.', answer: 'sign', pat: 'ca.unless', self: { solved: (o as { answer?: string }).answer ?? 'sign', also: [] }, ...o });
 const run = (items: unknown[]) => {
   const r = grammarItems.schema(vars).safeParse({ items });
   return r.success ? (r.data as { items: Array<Record<string, unknown>> }).items : null;
@@ -19,7 +19,7 @@ const run = (items: unknown[]) => {
 describe('grammar-items@3', () => {
   it('Prompt nennt die Muster und verlangt `pat`', () => {
     const p = grammarItems.build(vars);
-    expect(p.split('\n')[0]).toBe('[grammar-items@4]');
+    expect(p.split('\n')[0]).toBe('[grammar-items@5]');
     expect(p).toContain('- ca.unless | unless | unless + present | signals: unless');
     expect(p).toContain('"pat"');
   });

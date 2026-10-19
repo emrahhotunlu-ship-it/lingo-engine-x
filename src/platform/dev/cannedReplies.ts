@@ -20,6 +20,7 @@ import { registerLp3P47Replies } from './canned/lp3/p47';
 import { registerLp3P49Replies } from './canned/lp3/p49';
 import { registerLp3P51Replies } from './canned/lp3/p51';
 import { registerLp3P52Replies } from './canned/lp3/p52';
+import { registerS4Replies } from './canned/s4';
 import { registerTeacherFeedbackReply } from './canned/teacherFeedback';
 import { registerReadReplies } from './canned/read';
 import { registerActReplies } from './canned/act';
@@ -318,6 +319,8 @@ export function registerCannedReplies(): void {
   registerLp3P49Replies();
   registerLp3P51Replies();
   registerLp3P52Replies();
+  // Tutor-Engine S4: nach P49, denn `diagnose@2` teilt die Kennung mit @1 (die Antwort erkennt die Version an der Kopfzeile)
+  registerS4Replies();
   // Neubau: goal-check, claude-drill, text-cards
   registerNbReplies();
   // Lesen (13.10.2026): read-article, read-topics

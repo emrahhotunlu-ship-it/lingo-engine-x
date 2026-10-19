@@ -173,6 +173,8 @@ const item = (o: object) => ({
   explanation_de: '„yesterday“ zeigt eine abgeschlossene Zeit, und der Vertrag handelt nicht selbst → was + 3. Form.',
   explanation_en: '“yesterday” shows finished time, so we use was + past participle.',
   src: 'ai',
+  // @5: Selbstprüfung (blind gelöst = Lösung, keine weitere gültige Antwort).
+  self: { solved: (o as { answer?: string }).answer ?? 'was signed', also: [] },
   ...o,
 });
 
@@ -199,7 +201,7 @@ describe('grammar-items@3 (W8, Lernplattform 2.0)', () => {
 
   it('Prompt: Version 3, englische Wendungen in “…”', () => {
     const p = grammarItems.build(v);
-    expect(p.split('\n')[0]).toBe('[grammar-items@4]');
+    expect(p.split('\n')[0]).toBe('[grammar-items@5]');
     expect(p).toContain('put English words and phrases in “…”');
   });
 });

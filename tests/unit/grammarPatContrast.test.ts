@@ -22,6 +22,7 @@ const item = (o: object) => ({
   explanation_en: '“yet” shows it still matters now, so Present Perfect.',
   src: 'ai',
   pat: 'psp.result-now',
+  self: { solved: (o as { answer?: string }).answer ?? "haven't received", also: [] },
   ...o,
 });
 const clean = (pat: string) => item({ prompt: 'They ___ the invoice yet.', answer: "haven't paid", pat });
@@ -33,7 +34,7 @@ const run = (items: unknown[]) => {
 describe('grammar-items@4: Kontrastsätze', () => {
   it('Prompt verbietet Kontrastsätze', () => {
     const p = grammarItems.build(vars);
-    expect(p.split('\n')[0]).toBe('[grammar-items@4]');
+    expect(p.split('\n')[0]).toBe('[grammar-items@5]');
     expect(p).toContain('Never combine signals of two patterns');
   });
 

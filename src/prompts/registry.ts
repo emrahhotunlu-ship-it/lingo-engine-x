@@ -2,7 +2,9 @@ import { cardExamples } from './cardExamples';
 import { comboCheck } from './comboCheck';
 import { listenQ } from './listenQ';
 import { orderGen } from './orderGen';
-import { diagnose } from './diagnose';
+import { diagnoseV2 } from './diagnoseV2';
+import { solveCheck } from './solveCheck';
+import { wordBank } from './wordBank';
 import { explainAnswerV2 } from './explainAnswerV2';
 import { sentenceClinic } from './sentenceClinic';
 import { c1Mail } from './c1Mail';
@@ -48,10 +50,12 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   // Lernplattform 2.0 P2: „Erklär mir meine Antwort“
   // `explain-answer@1` (LP2 P2, `explainAnswer.ts`) bleibt als Datei erhalten, wird nicht mehr aufgerufen; die Kennung ist je Vorlage einmalig.
   explainAnswerV2,
-  // Lernplattform 3.0 P49: Wochen-Diagnose „Was du verwechselst“
-  diagnose,
-  // Phase 2 (docs/phase2-plan.md §7)
+  // Lernplattform 3.0 P49: Wochen-Diagnose „Was du verwechselst“; seit Tutor-Engine S4 diagnose@2 mit Annahmen (`diagnose.ts` @1 bleibt als Datei und
+  // wird von `features/tutor/diagnoseStore.ts` weiter aufgerufen, bis der Bildschirm umgestellt ist).
+  diagnoseV2,
+  // Phase 2 (docs/phase2-plan.md §7); seit Tutor-Engine S4 grammar-items@5 mit Lösungs-Selbstprüfung, dazu der zweite Löser solve-check@1
   grammarItems,
+  solveCheck,
   grammarJudge,
   // 19.10.2026: „Auch richtig“ durch Claude (Lücke und Ersetzen)
   grammarFit,
@@ -85,6 +89,8 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   c1Mail,
   // Lernplattform 3.0 P52: Wörter-Tutor (neue Sätze und Kontrast für schwache Wörter)
   wordCtx,
+  // Tutor-Engine S4 (E6): Satzbank je Karte (Quarantäne in `domain/tutor/sentenceBank.ts`)
+  wordBank,
   // Lesen (13.10.2026): Artikel und Themenvorschläge, Modul src/modules/read
   ...READ_TEMPLATES,
 ];
