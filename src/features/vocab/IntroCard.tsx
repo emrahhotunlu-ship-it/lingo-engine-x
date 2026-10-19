@@ -25,7 +25,7 @@ import { continueIntro, startKnownProbe, useSession, type FirstKind } from './se
 // Schreibt nichts: die Karte wird erst bei der ersten Antwort geplant.
 
 /** Bedeutung eines Platzhalters der Wendung: jemand, etwas oder ein Besitzwort (sein/ihr). */
-const slotKey = (w: string): MessageKey => (/^(one's|someone's)$/i.test(w) ? 'wxSlotPoss' : /^(sth|something)$/i.test(w) ? 'wxSlotThing' : 'wxSlotPerson');
+const slotKey = (w: string): MessageKey => (/^someone's$/i.test(w) ? 'wxSlotPersonPoss' : /^one's$/i.test(w) ? 'wxSlotPoss' : /^(sth|something)$/i.test(w) ? 'wxSlotThing' : 'wxSlotPerson');
 
 export function IntroCard({ card, onDone }: { card: TrainCard; onDone: (kind: FirstKind) => void }) {
   const pool = useSession((s) => s.pool);
@@ -175,8 +175,8 @@ function Learn({ card, onDone }: { card: TrainCard; onDone: (kind: FirstKind) =>
                     {(fixedPhrase
                       ? [t('wxIntroFixed')]
                       : [
-                          t('wxIntroCore', { words: parts.filter((p) => p.kind === 'core').map((p) => p.text).join(' · ') }),
-                          parts.some((p) => p.kind === 'frame') ? t('wxIntroFrame', { words: parts.filter((p) => p.kind === 'frame').map((p) => p.text).join(' · ') }) : null,
+                          t('wxIntroCore', { words: parts.filter((p) => p.kind === 'core').map((p) => p.text).join(', ') }),
+                          parts.some((p) => p.kind === 'frame') ? t('wxIntroFrame', { words: parts.filter((p) => p.kind === 'frame').map((p) => p.text).join(', ') }) : null,
                         ]
                     )
                       .concat(parts.filter((p) => p.kind === 'slot').map((p) => `${p.text} = ${t(slotKey(p.text))}`))
