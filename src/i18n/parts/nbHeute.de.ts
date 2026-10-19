@@ -30,7 +30,7 @@ export const nbHeuteDe = {
   nbHeuteWhy_focus: 'Deine Korrekturen und typischen Fehler',
   nbHeuteWhy_grammar: 'Deine Fehlerthemen, fällige und neue Grammatik, gemischt',
   nbHeuteWhy_order: 'Wortstellung im ganzen Satz üben',
-  nbHeuteWhy_again: 'Deine falschen Sätze von früher richtig schreiben',
+  nbHeuteWhy_again: 'Deine typischen Fehler in neuen Sätzen richtig sagen',
   // Fertig-Zustand (N15)
   nbHeuteDoneTitle: 'Fertig für heute',
   nbHeuteDoneAnswers_one: '{n} Antwort',

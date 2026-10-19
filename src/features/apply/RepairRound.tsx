@@ -10,6 +10,7 @@ import { SessionEnd } from '../../ui/SessionEnd';
 import { ExerciseTop } from '../learn/ui';
 import { flush } from '../progress/persist';
 import { commitRepairAnswer } from '../repair/review';
+import { markUnclear } from '../repair/store';
 import { RepairItem } from '../repair/RepairItem';
 
 // „Fehler korrigieren“ im Reiter „Anwenden“ (Plan docs/umbau/anwenden-plan.md, Stufe 2, Übung 1): die fälligen
@@ -31,7 +32,7 @@ export function useOpenRepairs(): Fehlersatz[] {
   return useMemo(() => {
     const entries = Array.isArray(dayDoc?.entries) ? (dayDoc.entries as Array<{ type?: unknown; id?: unknown }>) : [];
     const done = repairsDoneToday(entries);
-    return dueFehlersaetze({ grammarDocs: grammarDocs ?? NO_DOCS, repairDoc, nowMs: now, today, lang, mix: true }).filter((e) => !done.has(e.id));
+    return dueFehlersaetze({ grammarDocs: grammarDocs ?? NO_DOCS, repairDoc, nowMs: now, today, lang, mix: true }).filter((e) => !done.has(e.id) && !e.hidden);
   }, [grammarDocs, repairDoc, dayDoc, now, today, lang]);
 }
 
@@ -45,6 +46,8 @@ export function RepairRoundScreen() {
   const [items] = useState(() => open.slice(0, REPAIR_ROUND_MAX));
   const [pos, setPos] = useState(0);
   const [right, setRight] = useState(0);
+  // Paket FK: „Kann ich nicht nachvollziehen“ nimmt den Satz heraus; er zählt weder als richtig noch als falsch.
+  const [skipped, setSkipped] = useState(0);
   const [startedAt] = useState(() => performance.now());
 
   const leave = () => {
@@ -64,7 +67,7 @@ export function RepairRoundScreen() {
           {t('apRepairNone')}
         </p>
       ) : finished ? (
-        <SessionEnd right={right} total={items.length} ms={Math.max(1, endedAt - startedAt)} next={{ label: t('lrBackToApply'), run: leave }} />
+        <SessionEnd right={right} total={Math.max(0, items.length - skipped)} ms={Math.max(1, endedAt - startedAt)} next={{ label: t('lrBackToApply'), run: leave }} />
       ) : (
         cur && (
           <RepairItem
@@ -76,6 +79,13 @@ export function RepairRoundScreen() {
             onResult={({ ok, near, given, ms }) => {
               commitRepairAnswer({ item: cur, ok, near, given, ms, day: today, lang, ctx: 'xtra', first: pos === 0 });
               if (ok) setRight((n) => n + 1);
+            }}
+            onUnclear={() => {
+              void markUnclear({ store: cur.store, id: cur.id, ...(cur.topic ? { topic: cur.topic } : {}), ...(cur.errorT !== undefined ? { errorT: cur.errorT } : {}) });
+              setSkipped((n) => n + 1);
+              setPos((p) => p + 1);
+              setEndedAt(performance.now());
+              api.blur();
             }}
             onNext={() => {
               setPos((p) => p + 1);

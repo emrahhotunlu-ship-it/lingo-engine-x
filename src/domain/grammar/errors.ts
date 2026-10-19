@@ -42,6 +42,8 @@ export type ErrorEntry = Doc & {
   cid?: unknown;
   /** c1x: erreichte und mögliche Punkte der Antwort `[n, n]`. */
   pts?: unknown;
+  /** Paket FK: Zeitpunkt von „Kann ich nicht nachvollziehen“ (Merker, nie löschen, zählt nicht als falsch). */
+  unclear?: unknown;
 };
 
 export const MORE_MAX = 3;
@@ -328,6 +330,8 @@ export function dueErrors(grammarDocs: ReadonlyMap<string, Readonly<Doc>>, nowMs
   const seen = new Set<string>();
   for (const [topic, doc] of grammarDocs) {
     for (const e of [...liveErrorsOf(doc, topic)].reverse()) {
+      // Paket FK: „Kann ich nicht nachvollziehen“ (`unclear` = Zeitpunkt): der Eintrag bleibt gespeichert, kommt aber nie wieder als fällig.
+      if (num(e.unclear) !== null) continue;
       const k = legacyNorm(e.q);
       if (seen.has(k)) continue;
       seen.add(k);

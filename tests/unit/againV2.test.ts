@@ -43,6 +43,6 @@ describe('Diagnosezeile', () => {
   it('zählt Sätze ohne Bereich und mit 2–3 Stellen (nur eigene Sätze, keine Varianten)', () => {
     const one = [{ span: [1, 1] as [number, number], fix: 'a' }];
     const two = [...one, { span: [4, 4] as [number, number], fix: 'b' }];
-    expect(repairDiag([{ spans: one, variant: null }, { spans: two, variant: null }, { spans: null, variant: null }])).toEqual({ n: 3, noSpan: 1, multi: 1 });
+    expect(repairDiag([{ spans: one, variant: null, kind: 'fix' }, { spans: two, variant: null, kind: 'fix' }, { spans: null, variant: null, kind: 'fix' }])).toEqual({ n: 3, noSpan: 1, multi: 1, b1: 0, b2: 0 });
   });
 });

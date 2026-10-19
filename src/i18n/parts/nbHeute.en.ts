@@ -29,7 +29,7 @@ export const nbHeuteEn: Record<keyof typeof nbHeuteDe, string> = {
   nbHeuteWhy_focus: 'Your corrections and typical mistakes',
   nbHeuteWhy_grammar: 'Your mistake topics, due and new grammar, mixed',
   nbHeuteWhy_order: 'Practice word order in whole sentences',
-  nbHeuteWhy_again: 'Write your earlier wrong sentences correctly',
+  nbHeuteWhy_again: 'Say your typical mistakes correctly in new sentences',
   nbHeuteDoneTitle: 'Done for today',
   nbHeuteDoneAnswers_one: '{n} answer',
   nbHeuteDoneAnswers_other: '{n} answers',

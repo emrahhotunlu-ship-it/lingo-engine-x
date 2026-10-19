@@ -65,7 +65,7 @@ export const levelsSchema = z.looseObject({ v: num, k: z.record(z.string(), z.un
 
 export const repairSchema = z.looseObject({
   items: z
-    .array(z.looseObject({ id: str, wrong: str, right: str, why: str, src: str, ctx: str, t: num, box: num, due: num, done: bool, last: num, fix: strArr, pat: str }))
+    .array(z.looseObject({ id: str, wrong: str, right: str, why: str, src: str, ctx: str, t: num, box: num, due: num, done: bool, last: num, fix: strArr, pat: str, unclear: num }))
     .nullish(),
 });
 
@@ -383,6 +383,8 @@ export const grammarSchema = z.looseObject({
         /** Neu (Lernplattform 3.0 P26, nur ergänzend): Erklärung von Claude zur falschen Antwort (`explain-answer@2`), höchstens 1 KB; `cf` = Kontrastmuster. */
         ax: loose,
         cf: str,
+        /** Neu (Paket FK, nur ergänzend): Zeitpunkt von „Kann ich nicht nachvollziehen“ (Merker, nie löschen). */
+        unclear: num,
       }),
     )
     .nullish(),

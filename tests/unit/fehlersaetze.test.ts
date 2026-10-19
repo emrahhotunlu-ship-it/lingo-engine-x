@@ -26,15 +26,15 @@ describe('dueFehlersaetze', () => {
   it('beide Speicher in einer Liste, älteste Fälligkeit zuerst, Sätze vom Anlegetag nie, nichts doppelt', () => {
     const early = berlin(TODAY, 6);
     const g = grammar(err('A report ___ daily.', 'is checked', NOW - 2 * DAY), err('Fresh ___ today.', 'is made', early, { due: early }));
-    const r = { items: [rep('I am agree', NOW - 4 * DAY), rep('He go home', early, { due: early }), rep('I am agree', NOW - 4 * DAY, { id: 'r-dup' })] };
+    const r = { items: [rep('I am agree with your plan for the contract', NOW - 4 * DAY), rep('He go home after the long meeting today', early, { due: early }), rep('I am agree with your plan for the contract', NOW - 4 * DAY, { id: 'r-dup' })] };
     const list = dueFehlersaetze({ grammarDocs: g, repairDoc: r, nowMs: NOW, today: TODAY });
     expect(list.map((x) => x.store)).toEqual(['repair', 'grammar']);
-    expect(list.map((x) => x.wrong)).toEqual(['I am agree', 'A report are repaired daily.']);
+    expect(list.map((x) => x.wrong)).toEqual(['I am agree with your plan for the contract', 'A report are repaired daily.']);
   });
 
   it('Schritt „Fehler korrigieren“ (againSource) übernimmt Grammatik-Fehler samt Speicher-Angabe; limit schneidet ab', () => {
     const g = grammar(err('A report ___ daily.', 'is checked', NOW - 2 * DAY));
-    const src = againSource({ day: TODAY, task: null, repairDoc: { items: [rep('I am agree', NOW - 4 * DAY)] }, grammarDocs: g, now: NOW });
+    const src = againSource({ day: TODAY, task: null, repairDoc: { items: [rep('I am agree with your plan for the contract', NOW - 4 * DAY)] }, grammarDocs: g, now: NOW });
     expect(src.olds?.map((o) => [o.store, o.topic ?? null])).toEqual([
       ['repair', null],
       ['grammar', 'passive'],

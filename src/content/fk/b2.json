@@ -1,0 +1,133 @@
+{
+  "$comment": "Paket FK, Aufgabenform B2 „Welche Fassung schickst du?“: zwei Fassungen (`good` richtig, `bad` mit dem typischen Fehler), Begründung, danach ein neuer Satz mit zwei Stellen (`next.s` mit {1} und {2}; je Stelle zwei Optionen, `ok` = Index der richtigen). Gegenlesung durch den english-teacher vor dem Test-Link.",
+  "tasks": [
+    {
+      "id": "b2-psp-01", "pat": "psp.since-for",
+      "sit": { "de": "Du schreibst einem Kunden, der seit Tagen nicht antwortet.", "en": "You write to a customer who has not replied for days." },
+      "good": "I haven't heard from you since Monday.",
+      "bad": "I didn't hear from you since Monday.",
+      "why": { "de": "„Since Monday“ reicht bis jetzt, also Present Perfect: „haven't heard“. Das Past Simple passt nur zu einer abgeschlossenen Zeit.", "en": "“Since Monday” reaches up to now, so it takes the Present Perfect: “haven't heard”. The Past Simple only fits a finished time." },
+      "next": { "s": "We {1} on this ticket {2} two days.", "gaps": [{ "o": ["have been working", "are working"], "ok": 0 }, { "o": ["for", "since"], "ok": 0 }] }
+    },
+    {
+      "id": "b2-pv-01", "pat": "pv.simple",
+      "sit": { "de": "Du schreibst der Geschäftsführung einen Kurzbericht über einen Ausfall.", "en": "You write a short report to the management about an outage." },
+      "good": "Over 200 customers were affected by the outage last month.",
+      "bad": "Over 200 customers are affected by the outage last month.",
+      "why": { "de": "„Last month“ liegt in der Vergangenheit, also steht das Passiv im Past Simple: „were affected“.", "en": "“Last month” is in the past, so the passive takes the Past Simple: “were affected”." },
+      "next": { "s": "The server {1} yesterday, and the data {2} within an hour.", "gaps": [{ "o": ["was restarted", "is restarted"], "ok": 0 }, { "o": ["was restored", "restored"], "ok": 0 }] }
+    },
+    {
+      "id": "b2-cn-01", "pat": "cn.second",
+      "sit": { "de": "Du erklärst deiner Chefin, was du mit mehr Budget tun würdest.", "en": "You tell your manager what you would do with a bigger budget." },
+      "good": "If I had more budget, I would hire another developer.",
+      "bad": "If I would have more budget, I would hire another developer.",
+      "why": { "de": "Im „if“-Satz einer unwahrscheinlichen Annahme steht das Past Simple („had“). „Would“ gehört nur in den Hauptsatz.", "en": "In the “if” clause of an unlikely situation the Past Simple is used (“had”). “Would” belongs only in the main clause." },
+      "next": { "s": "If the customer {1} faster, we {2} the offer today.", "gaps": [{ "o": ["answered", "would answer"], "ok": 0 }, { "o": ["would send", "sent"], "ok": 0 }] }
+    },
+    {
+      "id": "b2-art-01", "pat": "art.zero",
+      "sit": { "de": "Du bedankst dich bei einem Kollegen für seine Hilfe.", "en": "You thank a colleague for his help." },
+      "good": "Could you give me some advice on this contract?",
+      "bad": "Could you give me an advice on this contract?",
+      "why": { "de": "„Advice“ ist nicht zählbar: kein „an“, keine Mehrzahl. Man sagt „some advice“.", "en": "“Advice” is uncountable: no “an”, no plural. You say “some advice”." },
+      "next": { "s": "Thanks for the {1}. The {2} in your mail was very helpful.", "gaps": [{ "o": ["advice", "advices"], "ok": 0 }, { "o": ["information", "informations"], "ok": 0 }] }
+    },
+    {
+      "id": "b2-rs-01", "pat": "rs.tell-say",
+      "sit": { "de": "Du gibst eine Aussage der Kundin an deinen Chef weiter.", "en": "You pass a customer's statement on to your boss." },
+      "good": "She told me that she had already sent the invoice.",
+      "bad": "She told that she had already sent the invoice.",
+      "why": { "de": "„Tell“ braucht direkt eine Person („told me“). Ohne Person sagt man „said“.", "en": "“Tell” needs a person right after it (“told me”). Without a person you say “said”." },
+      "next": { "s": "He {1} me he {2} the file the next day.", "gaps": [{ "o": ["told", "said"], "ok": 0 }, { "o": ["would send", "will send"], "ok": 0 }] }
+    },
+    {
+      "id": "b2-gi-01", "pat": "gi.ing-verbs",
+      "sit": { "de": "Du berichtest von einem Terminvorschlag deines Kollegen.", "en": "You report a colleague's suggestion for a meeting." },
+      "good": "He suggested meeting at the office.",
+      "bad": "He suggested to meet at the office.",
+      "why": { "de": "Nach „suggest“ folgt die -ing-Form oder ein „that“-Satz, nicht „to“ + Grundform.", "en": "“Suggest” is followed by the -ing form or a “that” clause, not “to” + base form." },
+      "next": { "s": "I look forward to {1} you, and I enjoy {2} with your team.", "gaps": [{ "o": ["seeing", "see"], "ok": 0 }, { "o": ["working", "to work"], "ok": 0 }] }
+    },
+    {
+      "id": "b2-ut-01", "pat": "ut.get-used-to",
+      "sit": { "de": "Du erzählst, wie es dir mit der neuen Spesen-Software ging.", "en": "You say how it went with the new expense software." },
+      "good": "It took me weeks to get used to the new expense system.",
+      "bad": "It took me weeks to be used to the new expense system.",
+      "why": { "de": "„Get used to“ ist der Vorgang des Gewöhnens (das dauerte Wochen). „Be used to“ ist der Zustand, schon gewohnt zu sein.", "en": "“Get used to” is the process of becoming accustomed (it took weeks). “Be used to” is the state of already being accustomed." },
+      "next": { "s": "I'm used to {1} the old tool, so I'm still getting used to {2} the new one.", "gaps": [{ "o": ["using", "use"], "ok": 0 }, { "o": ["using", "use"], "ok": 0 }] }
+    },
+    {
+      "id": "b2-fut-01", "pat": "fut.perfect",
+      "sit": { "de": "Du planst die Migration der Archive.", "en": "You plan the migration of the archives." },
+      "good": "By next spring, we will have migrated all archives.",
+      "bad": "By next spring, we will migrated all archives.",
+      "why": { "de": "Bis zu einem künftigen Zeitpunkt abgeschlossen: Future Perfect, „will have“ + Partizip.", "en": "Finished by a future point: Future Perfect, “will have” + past participle." },
+      "next": { "s": "By Friday, I {1} the report, and by Monday we {2} the data.", "gaps": [{ "o": ["will have finished", "will finished"], "ok": 0 }, { "o": ["will have checked", "will have check"], "ok": 0 }] }
+    },
+    {
+      "id": "b2-prp-01", "pat": "prp.verb-prep",
+      "sit": { "de": "Du schließt eine Mail an einen Kunden ab.", "en": "You close an email to a customer." },
+      "good": "I'm looking forward to your reply.",
+      "bad": "I'm looking forward for your reply.",
+      "why": { "de": "Es heißt „look forward to“, nicht „for“.", "en": "The phrase is “look forward to”, not “for”." },
+      "next": { "s": "Can you explain {1} how the tool works, and can I share the numbers {2} you?", "gaps": [{ "o": ["to me", "me"], "ok": 0 }, { "o": ["with", "to"], "ok": 0 }] }
+    },
+    {
+      "id": "b2-cnt-01", "pat": "cnt.verb",
+      "sit": { "de": "Du bittest per Mail um die Dokumenttypen.", "en": "You ask for the document types by email." },
+      "good": "The list of document types is needed by Friday.",
+      "bad": "The list of document types are needed by Friday.",
+      "why": { "de": "Das Verb richtet sich nach „the list“ (Einzahl), nicht nach „document types“.", "en": "The verb agrees with “the list” (singular), not with “document types”." },
+      "next": { "s": "The news {1} good, and the next steps {2} clear.", "gaps": [{ "o": ["is", "are"], "ok": 0 }, { "o": ["are", "is"], "ok": 0 }] }
+    },
+    {
+      "id": "b2-cp-01", "pat": "cp.pp",
+      "sit": { "de": "Du erklärst, warum das Update zu spät kam.", "en": "You explain why the update was late." },
+      "good": "Delayed by a server outage, the update went live late.",
+      "bad": "Delaying by a server outage, the update went live late.",
+      "why": { "de": "Das Update wurde verzögert: passive Bedeutung, also das Partizip Perfekt („delayed“).", "en": "The update was delayed: passive meaning, so the past participle (“delayed”)." },
+      "next": { "s": "{1} the proposal, she sent it to the board. {2} by the budget, they postponed the launch.", "gaps": [{ "o": ["Having finished", "Finished"], "ok": 0 }, { "o": ["Limited", "Limiting"], "ok": 0 }] }
+    },
+    {
+      "id": "b2-mc-01", "pat": "mc.wish-past",
+      "sit": { "de": "Du blickst auf ein verspätetes Projekt zurück.", "en": "You look back on a late project." },
+      "good": "I wish we had hired a second developer earlier.",
+      "bad": "I wish we would have hired a second developer earlier.",
+      "why": { "de": "Bedauern über die Vergangenheit: „wish“ + Past Perfect. „Would have“ steht nicht nach „wish“.", "en": "Regret about the past: “wish” + Past Perfect. “Would have” does not follow “wish”." },
+      "next": { "s": "I wish the migration {1} already finished, and I wish we {2} the plan last year.", "gaps": [{ "o": ["were", "would be"], "ok": 0 }, { "o": ["had changed", "would change"], "ok": 0 }] }
+    },
+    {
+      "id": "b2-md-01", "pat": "md.cant-have",
+      "sit": { "de": "Du suchst im Team nach der Ursache eines Fehlers.", "en": "You look for the cause of a bug with the team." },
+      "good": "Sven can't have caused this error; he was on vacation.",
+      "bad": "Sven mustn't have caused this error; he was on vacation.",
+      "why": { "de": "Eine sichere Folgerung gegen etwas in der Vergangenheit: „can't have“ + Partizip. „Mustn't“ heißt „darf nicht“.", "en": "A confident deduction against something in the past: “can't have” + past participle. “Mustn't” means “is not allowed to”." },
+      "next": { "s": "The logs show a login at 3 a.m., so someone {1} the file, and it {2} Sven.", "gaps": [{ "o": ["must have opened", "can't have opened"], "ok": 0 }, { "o": ["can't have been", "must have been"], "ok": 0 }] }
+    },
+    {
+      "id": "b2-pc-01", "pat": "pc.since-for",
+      "sit": { "de": "Du fragst beim Support nach dem Stand.", "en": "You ask support for a status update." },
+      "good": "We have been waiting for an answer for three hours.",
+      "bad": "We are waiting for an answer since three hours.",
+      "why": { "de": "Eine Tätigkeit von früher bis jetzt braucht das Present Perfect Continuous. Die Länge der Zeit bekommt „for“.", "en": "An activity from earlier until now needs the Present Perfect Continuous. A length of time takes “for”." },
+      "next": { "s": "We {1} for the update {2} Monday.", "gaps": [{ "o": ["have been waiting", "are waiting"], "ok": 0 }, { "o": ["since", "for"], "ok": 0 }] }
+    },
+    {
+      "id": "b2-ff-01", "pat": "ff.no-will-after",
+      "sit": { "de": "Du sagst einem Kunden zu, sich zu melden.", "en": "You promise a customer to get in touch." },
+      "good": "I'll call you as soon as the update is finished.",
+      "bad": "I'll call you as soon as the update will be finished.",
+      "why": { "de": "Nach „as soon as“ steht für die Zukunft das Present, nicht „will be“.", "en": "After “as soon as” the present tense refers to the future, not “will be”." },
+      "next": { "s": "When the customer {1}, we {2} the contract.", "gaps": [{ "o": ["signs", "will sign"], "ok": 0 }, { "o": ["will send", "would have sent"], "ok": 0 }] }
+    },
+    {
+      "id": "b2-pv-02", "pat": "pv.prep-agent",
+      "sit": { "de": "Du stellst einen Bericht im Meeting vor.", "en": "You present a report in a meeting." },
+      "good": "The report was written by our analyst.",
+      "bad": "The report was written from our analyst.",
+      "why": { "de": "Im Passiv wird der Handelnde mit „by“ angeschlossen.", "en": "In a passive sentence the doer is introduced with “by”." },
+      "next": { "s": "The contract {1} by both teams and {2} to the customer.", "gaps": [{ "o": ["was approved", "has approve"], "ok": 0 }, { "o": ["was sent", "was send"], "ok": 0 }] }
+    }
+  ]
+}

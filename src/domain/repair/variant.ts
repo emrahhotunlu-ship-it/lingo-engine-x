@@ -8,6 +8,8 @@ import type { GrammarTask } from '../learn/types';
 import { patsOf } from '../metrics/pattern';
 import { hash32 } from '../random';
 import type { Fehlersatz } from './fehlersaetze';
+import { fkPool, pickFk, type FkB1, type FkB2 } from './fk';
+import type { HideReason } from './quality';
 import { readRepairs, type RepairSrc } from './repair';
 
 // Schritt 4 „Fehler korrigieren“ (Lernplattform 2.0 §5.7): Welcher Satz erscheint und wie wird er korrigiert? Rein, schreibt nichts.
@@ -15,6 +17,9 @@ import { readRepairs, type RepairSrc } from './repair';
 //  - Ab Box 1 mit bekanntem Muster (`pat`): eine ungesehene `find`- oder `gap`-Aufgabe desselben, eingeführten Musters
 //    (`dup` der Zuordnung bevorzugt). Gebucht wird weiter am Originaleintrag (`topic`, `errorT`). Ohne Variante der Originalsatz.
 //  - Reparatur-Sätze ohne Muster zeigen immer den eigenen Satz.
+//  - Paket FK: Hat das Muster (oder Thema) eine neue Aufgabenform, ersetzt sie ab Box 1 die Variante: abwechselnd B1 „Sag es richtig“ und B2
+//    „Welche Fassung schickst du?“ (`kind`). Ein Fehlersatz, den die Ausschlussregeln ausgeblendet haben (`hidden`), kommt nur als B1 wieder.
+//    Ein sauberer Originalsatz in Box 0 bleibt die Korrektur (B3), jetzt mit Fehlerart-Etikett und gespeichertem Kontext.
 //  - Am Handy (`touch`) wird die Fehlerstelle angetippt (`spans`, bis zu 3 Stellen mit je ≤ 4 Wörtern) und nur der Ersatz getippt;
 //    sonst legt `tiles` die Wörter der richtigen Fassung. Nie ein Textfeld mit dem ganzen Satz.
 
@@ -22,6 +27,9 @@ type Doc = Readonly<Record<string, unknown>>;
 
 /** Eine Fehlerstelle: Wortbereich des falschen Satzes und der Text, der dort stehen soll (nie leer). */
 export type SpanFix = { span: Span; fix: string };
+
+/** `fix` = der Originalsatz wird korrigiert (B3 mit Etikett), `variant` = ungesehene find-/gap-Aufgabe (Rückfall), `b1` / `b2` = neue Aufgabenformen. */
+export type RepairKind = 'fix' | 'variant' | 'b1' | 'b2';
 
 export type RepairCard = {
   /** Kennung des Originaleintrags (`Fehlersatz.id`). */
@@ -43,6 +51,15 @@ export type RepairCard = {
   spans: SpanFix[] | null;
   /** Gesetzt: eine ungesehene Aufgabe desselben Musters statt des Originalsatzes. */
   variant: GrammarTask | null;
+  kind: RepairKind;
+  /** Paket FK: die gewählte Aufgabe (B1 bzw. B2), sonst `null`. */
+  fk1: FkB1 | null;
+  fk2: FkB2 | null;
+  /** Gespeicherter Kontext, Lückenhinweis der damaligen Aufgabe und Zahl der Vorkommen dieser Fehlerart (Anzeige). */
+  ctx?: string;
+  gapHint?: string;
+  n?: number;
+  hidden?: HideReason;
 };
 
 const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
@@ -179,12 +196,42 @@ export function variantFor(i: { topic: string; pat: string; q: string; doc: Doc 
   return pool[hash32(i.seed) % pool.length] ?? null;
 }
 
-/** Die Karten von Schritt 4 (eingefroren beim Start), in der Reihenfolge der Fehlersätze. */
-export function repairCards(i: { items: readonly Fehlersatz[]; grammarDocs: ReadonlyMap<string, Doc>; repairDoc?: Doc | null }): RepairCard[] {
+/**
+ * Die Karten von Schritt 4 (eingefroren beim Start), in der Reihenfolge der Fehlersätze. `seen` = schon gezeigte B1-/B2-Aufgaben (bevorzugt werden
+ * neue). `forms: false` schaltet die neuen Aufgabenformen ab (nur für Tests des Rückfalls auf die Varianten).
+ */
+export function repairCards(i: { items: readonly Fehlersatz[]; grammarDocs: ReadonlyMap<string, Doc>; repairDoc?: Doc | null; seen?: ReadonlySet<string>; forms?: boolean }): RepairCard[] {
+  const seen = i.seen ?? new Set<string>();
+  const forms = i.forms ?? true;
   return i.items.map((f) => {
     const e = entryOf(f, i.grammarDocs, i.repairDoc);
+    const seed = `${f.id}|${e.rh}|${e.box}`;
+    const ref = { pat: e.pat ?? f.pat ?? null, topic: f.topic ?? null };
     const shown = e.box === 0 ? (newestMore(e.more) ?? { wrong: f.wrong, right: f.right }) : { wrong: f.wrong, right: f.right };
-    const variant = f.store === 'grammar' && f.topic && e.pat && e.box >= 1 ? variantFor({ topic: f.topic, pat: e.pat, q: shown.wrong, doc: i.grammarDocs.get(f.topic), seed: `${f.id}|${e.rh}|${e.box}` }) : null;
+    let kind: RepairKind = 'fix';
+    let fk1: FkB1 | null = null;
+    let fk2: FkB2 | null = null;
+    let variant: GrammarTask | null = null;
+    if (forms && f.hidden) {
+      fk1 = pickFk('b1', ref, seed, seen);
+      if (fk1) kind = 'b1';
+    } else if (forms && e.box >= 1) {
+      // Abwechselnd B1 und B2 (nach Zahl der bisherigen Antworten); fehlt eine der beiden Formen, gilt die andere.
+      const has1 = fkPool('b1', ref).length > 0;
+      const has2 = fkPool('b2', ref).length > 0;
+      const second = (e.rh + e.box) % 2 === 1;
+      if ((second && has2) || (!has1 && has2)) {
+        fk2 = pickFk('b2', ref, seed, seen);
+        if (fk2) kind = 'b2';
+      } else if (has1) {
+        fk1 = pickFk('b1', ref, seed, seen);
+        if (fk1) kind = 'b1';
+      }
+    }
+    if (kind === 'fix' && f.store === 'grammar' && f.topic && e.pat && e.box >= 1) {
+      variant = variantFor({ topic: f.topic, pat: e.pat, q: shown.wrong, doc: i.grammarDocs.get(f.topic), seed });
+      if (variant) kind = 'variant';
+    }
     return {
       id: f.id,
       store: f.store,
@@ -199,12 +246,19 @@ export function repairCards(i: { items: readonly Fehlersatz[]; grammarDocs: Read
       ...(f.fix ? { fix: f.fix } : {}),
       spans: spanFixes(shown.wrong, shown.right),
       variant,
+      kind,
+      fk1,
+      fk2,
+      ...(f.ctx ? { ctx: f.ctx } : {}),
+      ...(f.gapHint ? { gapHint: f.gapHint } : {}),
+      ...(f.n && f.n > 1 ? { n: f.n } : {}),
+      ...(f.hidden ? { hidden: f.hidden } : {}),
     };
   });
 }
 
 /** Diagnosezeile (§5.7 Nr. 8): „Fehlersätze n, davon ohne Bereich m, mit 2–3 Stellen k“. */
-export function repairDiag(cards: readonly Pick<RepairCard, 'spans' | 'variant'>[]): { n: number; noSpan: number; multi: number } {
-  const own = cards.filter((c) => !c.variant);
-  return { n: cards.length, noSpan: own.filter((c) => !c.spans).length, multi: own.filter((c) => (c.spans?.length ?? 0) >= 2).length };
+export function repairDiag(cards: readonly Pick<RepairCard, 'spans' | 'variant' | 'kind'>[]): { n: number; noSpan: number; multi: number; b1: number; b2: number } {
+  const own = cards.filter((c) => c.kind === 'fix');
+  return { n: cards.length, noSpan: own.filter((c) => !c.spans).length, multi: own.filter((c) => (c.spans?.length ?? 0) >= 2).length, b1: cards.filter((c) => c.kind === 'b1').length, b2: cards.filter((c) => c.kind === 'b2').length };
 }

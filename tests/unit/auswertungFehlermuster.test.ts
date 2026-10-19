@@ -183,10 +183,11 @@ describe('Antwortzeiten über 60 Sekunden sind Unterbrechungen', () => {
 });
 
 describe('Eigene Sätze im Fehlersatz-Schritt werden nicht ausgehungert', () => {
+  // FK (19.10.2026): Mitschriften vom Sprechen (`src: 'talk'`) sind ohne Bestätigung ausgeblendet, deshalb ist der dritte Satz hier ein getippter („say“).
   it('mit Grenze wechseln sich Reparatur-Sätze und Grammatik-Fehlersätze ab; ohne Grenze bleibt „älteste zuerst“', () => {
     const old = NOW - 10 * DAY;
     let list = readRepairs(undefined);
-    list = addRepairs(list, [{ wrong: 'Alpha one is wrong.', right: 'Alpha one is right.', src: 'write' }, { wrong: 'Beta two is wrong.', right: 'Beta two is right.', src: 'write' }, { wrong: 'Gamma three is wrong.', right: 'Gamma three is right.', src: 'talk' }], old)!;
+    list = addRepairs(list, [{ wrong: 'Alpha one is wrong.', right: 'Alpha one is right.', src: 'write' }, { wrong: 'Beta two is wrong.', right: 'Beta two is right.', src: 'write' }, { wrong: 'Gamma three is wrong.', right: 'Gamma three is right.', src: 'say' }], old)!;
     const repairDoc = { items: list };
     const grammarDocs = new Map<string, Record<string, unknown>>();
     for (let k = 0; k < 6; k++) {

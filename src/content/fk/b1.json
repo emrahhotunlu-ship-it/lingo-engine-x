@@ -1,0 +1,525 @@
+{
+  "$comment": "Paket FK, Aufgabenform B1 „Sag es richtig“: Lage + deutsche Absicht -> ein englischer Satz. `model` ist die Musterlösung, `ok` weitere richtige Fassungen (US-Englisch zuerst, britische Formen gelten auch), `bad` der typische Fehler (Grundlage der Prüfung). Inhalte: Business-Kontext Vertrieb, Software, Dokumentenmanagement. Gegenlesung durch den english-teacher vor dem Test-Link.",
+  "tasks": [
+    {
+      "id": "b1-ut-01", "pat": "ut.get-used-to",
+      "sit": { "de": "Du erzählst einer neuen Kollegin, wie es dir mit dem neuen CRM geht.", "en": "You tell a new colleague how you are doing with the new CRM." },
+      "intent": { "de": "Am Anfang war es ungewohnt, aber ich gewöhne mich gerade an das neue CRM.", "en": "Say that it felt strange at first, but you are slowly becoming comfortable with the new CRM." },
+      "hint": { "de": "Gewöhnung als Vorgang", "en": "becoming accustomed (a process)" },
+      "model": "I'm getting used to the new CRM.",
+      "ok": ["I am getting used to the new CRM.", "I'm getting used to the new CRM system.", "I am getting used to the new CRM system."],
+      "bad": "I'm used to the new CRM.",
+      "why": { "de": "„Get used to“ beschreibt den Vorgang des Gewöhnens (ich gewöhne mich gerade daran). „Be used to“ heißt: schon gewohnt, der Vorgang ist abgeschlossen.", "en": "“Get used to” describes the process of becoming accustomed. “Be used to” means you are already accustomed; the process is over." }
+    },
+    {
+      "id": "b1-ut-02", "pat": "ut.be-used-to",
+      "sit": { "de": "Ein Kunde fragt, ob dich das Fahren in England nach Jahren dort noch stört.", "en": "A customer asks whether driving in England still bothers you after years there." },
+      "intent": { "de": "Ich bin es gewohnt, links zu fahren.", "en": "Say that you are used to driving on the left." },
+      "hint": { "de": "gewohnt sein + -ing", "en": "be used to + -ing" },
+      "model": "I'm used to driving on the left.",
+      "ok": ["I am used to driving on the left.", "I'm used to driving on the left side.", "I am used to driving on the left side of the road."],
+      "bad": "I used to driving on the left.",
+      "why": { "de": "„Be used to“ + -ing drückt einen Zustand aus: gewohnt sein. Es braucht eine Form von „be“, und nach „to“ folgt die -ing-Form. „I used to drive“ wäre etwas anderes: früher gefahren.", "en": "“Be used to” + -ing describes a state: being accustomed. It needs a form of “be”, and “to” is followed by the -ing form. “I used to drive” would mean something else: I did it in the past." }
+    },
+    {
+      "id": "b1-ut-03", "pat": "ut.used-to",
+      "sit": { "de": "Du erklärst, wie euer Team Verträge früher abgelegt hat.", "en": "You explain how your team used to file contracts." },
+      "intent": { "de": "Früher haben wir alle Verträge auf Papier abgelegt.", "en": "Say that in the past you filed all contracts on paper." },
+      "hint": { "de": "frühere Gewohnheit", "en": "a past habit that has ended" },
+      "model": "We used to file all contracts on paper.",
+      "ok": ["We used to store all contracts on paper.", "We used to keep all contracts on paper.", "We used to file every contract on paper.", "We used to file all of our contracts on paper."],
+      "bad": "We were used to file all contracts on paper.",
+      "why": { "de": "„Used to“ + Grundform beschreibt eine frühere Gewohnheit, die heute nicht mehr gilt. „Were used to“ bedeutet etwas anderes (gewohnt sein) und verlangt -ing.", "en": "“Used to” + base form describes a past habit that no longer applies. “Were used to” means something different (being accustomed) and needs -ing." }
+    },
+    {
+      "id": "b1-pc-01", "pat": "pc.since-for",
+      "sit": { "de": "Du rufst den Support deines DMS-Anbieters an.", "en": "You call the support team of your document management provider." },
+      "intent": { "de": "Wir warten seit drei Stunden auf eine Antwort Ihres Supports.", "en": "Say that you have been waiting for three hours for an answer from their support." },
+      "hint": { "de": "Zeitform bei „seit“ und Länge der Zeit", "en": "tense with “for” and a length of time" },
+      "model": "We have been waiting for an answer from your support for three hours.",
+      "ok": ["We've been waiting for an answer from your support for three hours.", "We have been waiting for an answer from your support team for three hours.", "We have been waiting for a reply from your support for three hours.", "We have been waiting for three hours for an answer from your support."],
+      "bad": "We are waiting for an answer from your support since three hours.",
+      "why": { "de": "Eine Handlung, die vor Stunden begann und jetzt noch läuft, steht im Present Perfect Continuous. Die Länge der Zeit (drei Stunden) bekommt „for“, nicht „since“. „Since“ steht nur bei einem Anfangszeitpunkt.", "en": "An action that began hours ago and is still going on takes the Present Perfect Continuous. A length of time (three hours) takes “for”, not “since”. “Since” is only used with a starting point." }
+    },
+    {
+      "id": "b1-pc-02", "pat": "pc.form",
+      "sit": { "de": "Du erklärst einem Kollegen, warum du noch nicht fertig bist.", "en": "You explain to a colleague why you have not finished yet." },
+      "intent": { "de": "Ich lese seit drei Wochen dieses Buch über Verhandlungsführung, aber ich bin noch nicht fertig.", "en": "Say that you have been reading this book on negotiation for three weeks, and you still have not finished it." },
+      "hint": { "de": "Form: have been + -ing", "en": "the form have been + -ing" },
+      "model": "I have been reading this book on negotiation for three weeks, but I haven't finished it yet.",
+      "ok": ["I've been reading this book on negotiation for three weeks, but I still haven't finished it.", "I've been reading this book about negotiating for three weeks, but I haven't finished it yet.", "I have been reading this book on negotiation for three weeks, but I still haven't finished it.", "I have been reading this book about negotiation for three weeks, but I haven't finished it yet."],
+      "bad": "I am reading this book on negotiation for three weeks, but I haven't finished it yet.",
+      "why": { "de": "Eine Tätigkeit seit drei Wochen bis jetzt braucht „have been reading“. Das einfache Present („I am reading“) passt nicht zu einer Zeitspanne mit „for“.", "en": "An activity that has lasted three weeks up to now needs “have been reading”. The simple present (“I am reading”) does not go with a time span introduced by “for”." }
+    },
+    {
+      "id": "b1-pc-03", "pat": "pc.recent",
+      "sit": { "de": "Im Team-Meeting erklärst du, warum die Migration stockt.", "en": "In the team meeting you explain why the migration is stalling." },
+      "intent": { "de": "In letzter Zeit haben wir kaum Fortschritte bei der Migration gemacht.", "en": "Say that recently you have made hardly any progress on the migration." },
+      "hint": { "de": "Zeitform bei „in letzter Zeit“", "en": "tense with “lately”" },
+      "model": "We haven't been making much progress on the migration lately.",
+      "ok": ["We haven't made much progress on the migration lately.", "We have not been making much progress on the migration lately.", "We have made little progress on the migration lately.", "We haven't been making any progress on the migration recently.", "We haven't made much progress on the migration recently."],
+      "bad": "We don't make much progress on the migration lately.",
+      "why": { "de": "„Lately“ und „recently“ verbinden die jüngere Vergangenheit mit jetzt. Dafür steht das Present Perfect (oder Continuous), nicht das einfache Present.", "en": "“Lately” and “recently” connect the recent past with now. That calls for the Present Perfect (or Continuous), not the simple present." }
+    },
+    {
+      "id": "b1-psp-01", "pat": "psp.since-for",
+      "sit": { "de": "Ein Kunde fragt dich nach der Entscheidung deiner Kollegin.", "en": "A customer asks you about your colleague's decision." },
+      "intent": { "de": "Ich habe meine Kollegin seit Montag nicht gesehen, deshalb kann ich dir noch nicht sagen, was sie entschieden hat.", "en": "Say that you have not seen your colleague since Monday, so you cannot tell him yet what she decided." },
+      "hint": { "de": "Zeitform bei „seit Montag“", "en": "tense with “since Monday”" },
+      "model": "I haven't seen my colleague since Monday, so I can't tell you yet what she decided.",
+      "ok": ["I have not seen my colleague since Monday, so I cannot tell you yet what she decided.", "I haven't seen my colleague since Monday, so I can't tell you what she has decided yet.", "I haven't seen my colleague since Monday, so I can't tell you what she decided yet.", "I haven't seen her since Monday, so I can't tell you yet what she decided."],
+      "bad": "I didn't see my colleague since Monday, so I can't tell you yet what she decided.",
+      "why": { "de": "„Since Monday“ nennt einen Startpunkt, der bis jetzt reicht. Das verlangt das Present Perfect („haven't seen“). Das Past Simple („didn't see“) passt nur zu einer abgeschlossenen Zeit.", "en": "“Since Monday” names a starting point that reaches up to now. That calls for the Present Perfect (“haven't seen”). The Past Simple (“didn't see”) only fits a finished time." }
+    },
+    {
+      "id": "b1-psp-02", "pat": "psp.finished-time",
+      "sit": { "de": "Du berichtest dem Vertriebsleiter über einen Abschluss.", "en": "You report a closed deal to the sales manager." },
+      "intent": { "de": "Wir haben den Vertrag letzte Woche unterschrieben.", "en": "Say that you signed the contract last week." },
+      "hint": { "de": "Zeitform bei „letzte Woche“", "en": "tense with “last week”" },
+      "model": "We signed the contract last week.",
+      "ok": ["We signed the agreement last week.", "We signed the contract just last week.", "Last week, we signed the contract."],
+      "bad": "We have signed the contract last week.",
+      "why": { "de": "Mit einer festen Zeitangabe in der Vergangenheit (last week) steht das Past Simple. Im Deutschen sagt man oft das Perfekt, im Englischen passt das Present Perfect nicht zu einem datierten Zeitpunkt.", "en": "With a fixed time in the past (last week) you use the Past Simple. German often uses the perfect tense here, but the English Present Perfect does not go with a dated point in time." }
+    },
+    {
+      "id": "b1-psp-03", "pat": "psp.experience",
+      "sit": { "de": "Ein Kunde fragt nach deiner Erfahrung mit großen Archiven.", "en": "A customer asks about your experience with large archives." },
+      "intent": { "de": "Ich habe noch nie mit einem so großen Archiv gearbeitet.", "en": "Say that you have never worked with such a large archive." },
+      "hint": { "de": "Erfahrung bis jetzt", "en": "experience up to now" },
+      "model": "I have never worked with such a large archive.",
+      "ok": ["I've never worked with such a large archive.", "I have never worked with an archive this large.", "I've never worked with an archive this large.", "I have never worked with an archive as large as this one."],
+      "bad": "I did never work with such a large archive.",
+      "why": { "de": "Erfahrung bis zum heutigen Tag steht im Present Perfect mit „never“ („have never worked“). „Did never work“ gibt es im Englischen nicht: „never“ steht zwischen Hilfsverb und Verb.", "en": "Experience up to today takes the Present Perfect with “never” (“have never worked”). “Did never work” does not exist in English: “never” sits between the auxiliary and the main verb." }
+    },
+    {
+      "id": "b1-fut-01", "pat": "fut.perfect",
+      "sit": { "de": "Du planst die Expansion des Vertriebs.", "en": "You are planning the sales expansion." },
+      "intent": { "de": "Bis Ende des Monats haben wir drei neue Büros eröffnet.", "en": "Say that by the end of the month you will have opened three new offices." },
+      "hint": { "de": "Zeitform bei „bis Ende des Monats“", "en": "tense with a deadline in the future" },
+      "model": "By the end of the month, we will have opened three new offices.",
+      "ok": ["By the end of this month, we will have opened three new offices.", "By the end of the month we'll have opened three new offices.", "By the end of the month, we will have opened three new branches.", "By the end of this month, we'll have opened three new offices."],
+      "bad": "By the end of the month, we will opening three new offices.",
+      "why": { "de": "Etwas, das bis zu einem Zeitpunkt in der Zukunft abgeschlossen ist, steht im Future Perfect: will have + Partizip (opened).", "en": "Something that will be finished before a point in the future takes the Future Perfect: will have + past participle (opened)." }
+    },
+    {
+      "id": "b1-fut-02", "pat": "fut.perf-cont",
+      "sit": { "de": "Du sprichst bei der Jahresfeier über deine Zeit in der Firma.", "en": "At the company anniversary you talk about your time with the company." },
+      "intent": { "de": "Ende dieses Jahres arbeite ich seit fünf Jahren hier.", "en": "Say that by the end of this year you will have been working here for five years." },
+      "hint": { "de": "Dauer bis zu einem Zeitpunkt in der Zukunft", "en": "duration up to a future point" },
+      "model": "By the end of this year, I will have been working here for five years.",
+      "ok": ["By the end of this year, I will have worked here for five years.", "By the end of the year, I will have been working at this company for five years.", "By the end of this year, I'll have been working here for five years.", "By the end of the year, I will have been working here for five years."],
+      "bad": "By the end of this year, I will has been working here for five years.",
+      "why": { "de": "Die Dauer bis zu einem künftigen Zeitpunkt wird mit „will have been + -ing“ gesagt. Nach „will“ steht immer die Grundform („have“), nie „has“.", "en": "A duration up to a future point is expressed with “will have been + -ing”. After “will” the base form (“have”) is always used, never “has”." }
+    },
+    {
+      "id": "b1-fut-03", "pat": "fut.continuous",
+      "sit": { "de": "Ein Kunde fragt, ob du morgen Nachmittag erreichbar bist.", "en": "A customer asks whether you are available tomorrow afternoon." },
+      "intent": { "de": "Morgen um 15 Uhr leite ich gerade einen Workshop beim Kunden.", "en": "Say that at 3 p.m. tomorrow you will be in the middle of running a workshop at a customer's site." },
+      "hint": { "de": "Handlung mitten im Ablauf in der Zukunft", "en": "an action in progress at a future time" },
+      "model": "Tomorrow at 3 p.m., I'll be running a workshop at the customer's site.",
+      "ok": ["Tomorrow at 3 p.m., I will be running a workshop at the customer's site.", "Tomorrow at 3 p.m., I'll be running a workshop at a customer's site.", "At 3 p.m. tomorrow, I'll be running a workshop at a customer's site.", "Tomorrow at 3 p.m., I'll be leading a workshop at the customer's site."],
+      "bad": "Tomorrow at 3 p.m., I will running a workshop at the customer's site.",
+      "why": { "de": "Eine Handlung, die zu einem künftigen Zeitpunkt gerade läuft, steht im Future Continuous: will be + -ing. „Will“ braucht danach „be“.", "en": "An action that will be in progress at a future time takes the Future Continuous: will be + -ing. “Will” needs “be” after it." }
+    },
+    {
+      "id": "b1-ff-01", "pat": "ff.no-will-after",
+      "sit": { "de": "Ein Kunde wartet auf ein Software-Update. Du sagst ihm Bescheid.", "en": "A customer is waiting for a software update. You promise to let him know." },
+      "intent": { "de": "Ich rufe Sie an, sobald das Update fertig ist.", "en": "Say that you will call him as soon as the update is finished." },
+      "hint": { "de": "Zeitform nach „sobald“", "en": "tense after “as soon as”" },
+      "model": "I'll call you as soon as the update is finished.",
+      "ok": ["I will call you as soon as the update is finished.", "I'll call you as soon as the update is done.", "I'll call you as soon as the update is ready.", "I will call you as soon as the update is complete.", "I'll call you when the update is finished."],
+      "bad": "I'll call you as soon as the update will be finished.",
+      "why": { "de": "Nach Zeitwörtern wie „as soon as“, „when“ oder „until“ steht für die Zukunft das Present („is finished“), nicht „will be“. Das „will“ gehört nur in den Hauptsatz.", "en": "After time words like “as soon as”, “when” or “until” the present tense (“is finished”) refers to the future, not “will be”. “Will” belongs only in the main clause." }
+    },
+    {
+      "id": "b1-ff-02", "pat": "ff.will-now",
+      "sit": { "de": "Ein Kunde meldet ein Problem mit seinem Zugang. Du entscheidest spontan.", "en": "A customer reports a problem with his access. You decide on the spot." },
+      "intent": { "de": "Ich kümmere mich sofort darum.", "en": "Say that you will take care of it right away." },
+      "hint": { "de": "spontane Entscheidung", "en": "a decision made at the moment of speaking" },
+      "model": "I'll take care of it right away.",
+      "ok": ["I will take care of it right away.", "I'll take care of it right now.", "I'll take care of that right away.", "I'll handle it right away.", "I will handle it right away."],
+      "bad": "I take care of it right away.",
+      "why": { "de": "Eine Entscheidung im Moment des Sprechens, ein Angebot oder Versprechen, steht mit „will“ („I'll“). Das einfache Present wäre eine Gewohnheit.", "en": "A decision made while speaking, an offer or a promise, takes “will” (“I'll”). The simple present would describe a habit." }
+    },
+    {
+      "id": "b1-cn-01", "pat": "cn.zero",
+      "sit": { "de": "Du erklärst einem neuen Mitarbeiter eine Regel im DMS.", "en": "You explain a rule in the document management system to a new employee." },
+      "intent": { "de": "Wenn ein Dokument gesperrt ist, kann niemand es bearbeiten.", "en": "Say that if a document is locked, nobody can edit it." },
+      "hint": { "de": "Zeitform im „wenn“-Satz einer festen Regel", "en": "tense in the “if” clause of a fixed rule" },
+      "model": "If a document is locked, nobody can edit it.",
+      "ok": ["If a document is locked, no one can edit it.", "If a document is locked, nobody can change it.", "When a document is locked, nobody can edit it.", "If a file is locked, nobody can edit it.", "If a document is locked, nobody is able to edit it."],
+      "bad": "If a document will be locked, nobody can edit it.",
+      "why": { "de": "Bei einer festen Regel stehen beide Satzteile im Present. „Will“ hat im „if“-Teil nichts zu suchen.", "en": "For a fixed rule both clauses are in the present tense. “Will” does not belong in the “if” part." }
+    },
+    {
+      "id": "b1-cn-02", "pat": "cn.first",
+      "sit": { "de": "Du verhandelst den Preis mit einem Kunden.", "en": "You negotiate the price with a customer." },
+      "intent": { "de": "Wenn Sie bis Freitag unterschreiben, geben wir Ihnen zehn Prozent Rabatt.", "en": "Say that if he signs by Friday, you will give him a ten percent discount." },
+      "hint": { "de": "Zeitform im „wenn“-Satz bei einer realen Möglichkeit", "en": "tense in the “if” clause of a real possibility" },
+      "model": "If you sign by Friday, we will give you a ten percent discount.",
+      "ok": ["If you sign by Friday, we'll give you a 10% discount.", "If you sign by Friday, we will give you 10 percent off.", "If you sign by Friday, we'll offer you a ten percent discount.", "If you sign by Friday, we'll give you a ten percent discount.", "If you sign by Friday, we will give you a 10 percent discount."],
+      "bad": "If you will sign by Friday, we will give you a ten percent discount.",
+      "why": { "de": "Im „if“-Satz einer realen künftigen Möglichkeit steht das Present („sign“), nicht „will sign“. „Will“ steht nur im Hauptsatz.", "en": "In the “if” clause of a real future possibility the present tense is used (“sign”), not “will sign”. “Will” appears only in the main clause." }
+    },
+    {
+      "id": "b1-cn-03", "pat": "cn.second",
+      "sit": { "de": "Du erklärst deiner Chefin, was du mit mehr Budget tun würdest.", "en": "You tell your manager what you would do with a bigger budget." },
+      "intent": { "de": "Wenn ich mehr Budget hätte, würde ich ein zweites Team einstellen.", "en": "Say that if you had more budget, you would hire a second team." },
+      "hint": { "de": "Zeitform im „wenn“-Satz bei einer unwahrscheinlichen Annahme", "en": "tense in the “if” clause of an unlikely situation" },
+      "model": "If I had more budget, I would hire a second team.",
+      "ok": ["If I had a bigger budget, I would hire a second team.", "If I had more budget, I'd hire another team.", "If I had more budget, I would hire another team.", "If I had more money, I would hire a second team."],
+      "bad": "If I would have more budget, I would hire a second team.",
+      "why": { "de": "Im „if“-Satz einer unwahrscheinlichen Annahme steht das Past Simple („had“), nicht „would have“. „Would“ gehört nur in den Hauptsatz.", "en": "In the “if” clause of an unlikely situation the Past Simple is used (“had”), not “would have”. “Would” belongs only in the main clause." }
+    },
+    {
+      "id": "b1-cn-04", "pat": "cn.third",
+      "sit": { "de": "Du erklärst, warum ein Kunde den alten Preis nicht mehr bekommt.", "en": "You explain why a customer no longer gets the old price." },
+      "intent": { "de": "Wenn Markus letztes Jahr unterschrieben hätte, hätte er den alten Preis bekommen.", "en": "Say that if Markus had signed last year, he would have got the old price." },
+      "hint": { "de": "Bedingung in der Vergangenheit, die nicht eingetreten ist", "en": "a past condition that did not happen" },
+      "model": "If Markus had signed last year, he would have gotten the old price.",
+      "ok": ["If Markus had signed last year, he would have got the old price.", "If Markus had signed last year, he would have received the old price.", "If Markus had signed last year, he'd have gotten the old price.", "Had Markus signed last year, he would have gotten the old price.", "If Markus had signed last year, he would have gotten the old rate."],
+      "bad": "If Markus would have signed last year, he would have gotten the old price.",
+      "why": { "de": "Eine nicht eingetretene Bedingung in der Vergangenheit: „if“ + Past Perfect (had signed), im Hauptsatz „would have“ + Partizip. „Would have“ darf nicht im „if“-Teil stehen.", "en": "An unreal condition in the past: “if” + Past Perfect (had signed), and in the main clause “would have” + past participle. “Would have” must not appear in the “if” part." }
+    },
+    {
+      "id": "b1-mc-01", "pat": "mc.wish-past",
+      "sit": { "de": "Das Projekt ist spät dran. Du blickst im Rückblick darauf.", "en": "The project is late. You look back on it." },
+      "intent": { "de": "Ich wünschte, wir hätten früher einen zweiten Entwickler eingestellt.", "en": "Say that you wish you had hired a second developer earlier." },
+      "hint": { "de": "Bedauern über die Vergangenheit", "en": "regret about the past" },
+      "model": "I wish we had hired a second developer earlier.",
+      "ok": ["I wish we had hired another developer earlier.", "I wish we'd hired a second developer earlier.", "I wish we had hired a second developer sooner.", "I wish we had hired a second developer earlier on."],
+      "bad": "I wish we would have hired a second developer earlier.",
+      "why": { "de": "Nach „wish“ steht für Bedauern über die Vergangenheit das Past Perfect („had hired“). „Would have“ ist nach „wish“ nicht üblich.", "en": "After “wish”, regret about the past takes the Past Perfect (“had hired”). “Would have” is not used after “wish”." }
+    },
+    {
+      "id": "b1-mc-02", "pat": "mc.wish-now",
+      "sit": { "de": "Die Migration läuft noch. Du bist ungeduldig.", "en": "The migration is still running. You are impatient." },
+      "intent": { "de": "Ich wünschte, die Migration wäre schon fertig.", "en": "Say that you wish the migration were already finished." },
+      "hint": { "de": "Wunsch für die Gegenwart", "en": "a wish about the present" },
+      "model": "I wish the migration were already finished.",
+      "ok": ["I wish the migration was already finished.", "I wish the migration were already done.", "I wish the migration was already done.", "I wish the migration were finished already.", "I wish the migration were already complete."],
+      "bad": "I wish the migration would be already finished.",
+      "why": { "de": "Ein Wunsch für die Gegenwart: „wish“ + Past Simple. Bei „be“ steht „were“ (im Alltag auch „was“). „Would be“ ist nur für Ärger über das Verhalten anderer.", "en": "A wish about the present takes “wish” + Past Simple. With “be” the form is “were” (in everyday speech also “was”). “Would be” is only used for annoyance at someone's behavior." }
+    },
+    {
+      "id": "b1-mc-03", "pat": "mc.past-cond",
+      "sit": { "de": "Der Vertrag wurde zu spät unterschrieben. Du erklärst die Folgen.", "en": "The contract was signed too late. You explain the consequences." },
+      "intent": { "de": "Wenn wir den Vertrag im Mai unterschrieben hätten, hätten wir jetzt schon Zugriff auf das System.", "en": "Say that if you had signed the contract in May, you would have access to the system by now." },
+      "hint": { "de": "Bedingung früher, Folge jetzt", "en": "condition in the past, result now" },
+      "model": "If we had signed the contract in May, we would have access to the system now.",
+      "ok": ["If we had signed the contract in May, we would already have access to the system now.", "If we'd signed the contract in May, we'd have access to the system now.", "If we had signed the agreement in May, we would have access to the system now.", "If we had signed the contract in May, we would have access to the system by now."],
+      "bad": "If we would have signed the contract in May, we would have access to the system now.",
+      "why": { "de": "Die Bedingung liegt in der Vergangenheit (had signed), die Folge gilt jetzt („would have access“). Im „if“-Teil steht kein „would“.", "en": "The condition lies in the past (had signed), the result applies now (“would have access”). There is no “would” in the “if” part." }
+    },
+    {
+      "id": "b1-gi-01", "pat": "gi.ing-verbs",
+      "sit": { "de": "Du antwortest, ob dein Team das System noch einmal prüfen kann.", "en": "You answer whether your team can test the system again." },
+      "intent": { "de": "Unser Team hat nichts dagegen, das neue System noch einmal zu testen.", "en": "Say that your team does not mind testing the new system again." },
+      "hint": { "de": "Verb nach „mind“", "en": "the verb form after “mind”" },
+      "model": "Our team doesn't mind testing the new system again.",
+      "ok": ["Our team does not mind testing the new system again.", "Our team doesn't mind testing the new system once more.", "Our team doesn't mind testing the system again.", "Our team won't mind testing the new system again."],
+      "bad": "Our team doesn't mind to test the new system again.",
+      "why": { "de": "Nach „mind“ folgt die -ing-Form, nie „to“ + Grundform. Das gilt auch für „enjoy“, „avoid“, „finish“ und „suggest“.", "en": "“Mind” is followed by the -ing form, never “to” + base form. The same is true for “enjoy”, “avoid”, “finish” and “suggest”." }
+    },
+    {
+      "id": "b1-gi-02", "pat": "gi.ing-verbs",
+      "sit": { "de": "Du beschreibst eine Kollegin in einer Empfehlung.", "en": "You describe a colleague in a recommendation." },
+      "intent": { "de": "Sie arbeitet gern im Team.", "en": "Say that she enjoys working in a team." },
+      "hint": { "de": "Verb nach „enjoy“", "en": "the verb form after “enjoy”" },
+      "model": "She enjoys working in a team.",
+      "ok": ["She likes working in a team.", "She likes to work in a team.", "She enjoys working with a team.", "She enjoys being part of a team.", "She enjoys working as part of a team."],
+      "bad": "She enjoys to work in a team.",
+      "why": { "de": "Nach „enjoy“ steht die -ing-Form. „To work“ ist hier falsch. „Like“ dagegen erlaubt beides: „likes working“ und „likes to work“.", "en": "“Enjoy” is followed by the -ing form. “To work” is wrong here. “Like”, on the other hand, allows both: “likes working” and “likes to work”." }
+    },
+    {
+      "id": "b1-gi-03", "pat": "gi.prep-ing",
+      "sit": { "de": "Du schließt eine E-Mail an einen Kunden ab.", "en": "You end an email to a customer." },
+      "intent": { "de": "Ich freue mich darauf, Sie am Freitag zu sehen.", "en": "Say that you look forward to seeing him on Friday." },
+      "hint": { "de": "Verb nach „look forward to“", "en": "the verb form after “look forward to”" },
+      "model": "I look forward to seeing you on Friday.",
+      "ok": ["I'm looking forward to seeing you on Friday.", "I am looking forward to seeing you on Friday.", "I look forward to meeting you on Friday.", "I'm looking forward to meeting you on Friday.", "I am looking forward to meeting you on Friday."],
+      "bad": "I look forward to see you on Friday.",
+      "why": { "de": "Bei „look forward to“ ist „to“ eine Präposition. Nach einer Präposition steht die -ing-Form („seeing“), nicht die Grundform.", "en": "In “look forward to”, “to” is a preposition. After a preposition the -ing form is used (“seeing”), not the base form." }
+    },
+    {
+      "id": "b1-gi-04", "pat": "gi.to-verbs",
+      "sit": { "de": "Du berichtest das Ergebnis einer Projektbesprechung.", "en": "You report the outcome of a project meeting." },
+      "intent": { "de": "Wir haben beschlossen, die Altdaten nicht zu migrieren.", "en": "Say that you decided not to migrate the legacy data." },
+      "hint": { "de": "„nicht“ bei decide + to", "en": "“not” with decide + to" },
+      "model": "We decided not to migrate the legacy data.",
+      "ok": ["We have decided not to migrate the legacy data.", "We've decided not to migrate the old data.", "We decided not to migrate the old data.", "We decided against migrating the legacy data."],
+      "bad": "We decided not migrating the legacy data.",
+      "why": { "de": "Nach „decide“ folgt „to“ + Grundform. Die Verneinung steht vor „to“: „decided not to migrate“.", "en": "“Decide” is followed by “to” + base form. The negation comes before “to”: “decided not to migrate”." }
+    },
+    {
+      "id": "b1-gi-05", "pat": "gi.ing-verbs",
+      "sit": { "de": "Du berichtest von einem Terminvorschlag.", "en": "You report a suggestion for a meeting place." },
+      "intent": { "de": "Er hat vorgeschlagen, sich im Büro statt im Café zu treffen.", "en": "Say that he suggested meeting at the office instead of at the café." },
+      "hint": { "de": "Verb nach „suggest“", "en": "the verb form after “suggest”" },
+      "model": "He suggested meeting at the office instead of at the café.",
+      "ok": ["He suggested meeting at the office instead of the café.", "He suggested that we meet at the office instead of the café.", "He suggested that we meet at the office instead of at the café.", "He suggested meeting in the office instead of at the café."],
+      "bad": "He suggested to meet at the office instead of at the café.",
+      "why": { "de": "Nach „suggest“ folgt die -ing-Form oder ein „that“-Satz, nie „to“ + Grundform. Im Deutschen sagt man „vorschlagen, zu treffen“, im Englischen geht das nicht.", "en": "“Suggest” is followed by the -ing form or a “that” clause, never “to” + base form. German says “vorschlagen, zu treffen”, but English does not allow that pattern." }
+    },
+    {
+      "id": "b1-pv-01", "pat": "pv.simple",
+      "sit": { "de": "Du berichtest der Geschäftsführung über einen Vorfall.", "en": "You report an incident to the management." },
+      "intent": { "de": "Letzten Monat waren über 200 Kunden von dem Datenleck betroffen.", "en": "Say that over 200 customers were affected by the data breach last month." },
+      "hint": { "de": "Zeitform des Passivs bei „letzten Monat“", "en": "passive tense with “last month”" },
+      "model": "Over 200 customers were affected by the data breach last month.",
+      "ok": ["More than 200 customers were affected by the data breach last month.", "Over 200 customers were affected by last month's data breach.", "Last month, over 200 customers were affected by the data breach.", "More than 200 customers were affected by last month's data breach."],
+      "bad": "Over 200 customers are affected by the data breach last month.",
+      "why": { "de": "Das Passiv folgt der Zeit: „last month“ ist vergangen, also „were affected“. „Are affected“ steht im Present und passt nicht zu „last month“.", "en": "The passive follows the time: “last month” is in the past, so it is “were affected”. “Are affected” is present and does not go with “last month”." }
+    },
+    {
+      "id": "b1-pv-02", "pat": "pv.modal-future",
+      "sit": { "de": "Du kündigst an, wann die Unterlagen für ein Meeting kommen.", "en": "You announce when the meeting documents will arrive." },
+      "intent": { "de": "Die Tagesordnung wird morgen früh an alle Teilnehmer geschickt.", "en": "Say that the agenda will be sent to all participants tomorrow morning." },
+      "hint": { "de": "Passiv im Futur", "en": "passive in the future" },
+      "model": "The agenda will be sent to all participants tomorrow morning.",
+      "ok": ["The agenda will be sent out to all participants tomorrow morning.", "The agenda will be sent to all attendees tomorrow morning.", "Tomorrow morning, the agenda will be sent to all participants.", "The agenda will be sent to everyone tomorrow morning."],
+      "bad": "The agenda will sent to all participants tomorrow morning.",
+      "why": { "de": "Das Passiv im Futur lautet „will be“ + Partizip. Das „be“ darf nicht fehlen: „will be sent“.", "en": "The future passive is “will be” + past participle. The “be” must not be left out: “will be sent”." }
+    },
+    {
+      "id": "b1-pv-03", "pat": "pv.prep-agent",
+      "sit": { "de": "Du stellst einen Bericht im Meeting vor.", "en": "You present a report in a meeting." },
+      "intent": { "de": "Der Bericht wurde von unserem Analysten geschrieben und von der Geschäftsführung geprüft.", "en": "Say that the report was written by our analyst and reviewed by the management." },
+      "hint": { "de": "Wort vor dem Handelnden im Passiv", "en": "the word before the doer in a passive sentence" },
+      "model": "The report was written by our analyst and reviewed by the management.",
+      "ok": ["The report was written by our analyst and reviewed by management.", "The report was written by our analyst and checked by the management.", "The report was written by our analyst and reviewed by the executive team.", "The report was written by our analyst and was reviewed by the management."],
+      "bad": "The report was written from our analyst and reviewed from the management.",
+      "why": { "de": "Im Passiv wird der Handelnde mit „by“ angeschlossen, nicht mit „from“ oder „von“-Übersetzungen. Man sagt „written by“ und „reviewed by“.", "en": "In a passive sentence the doer is introduced with “by”, not with “from” or a translation of German “von”. You say “written by” and “reviewed by”." }
+    },
+    {
+      "id": "b1-pv-04", "pat": "pv.perfect",
+      "sit": { "de": "Du gibst dem Kunden ein Update zur Migration.", "en": "You give the customer an update on the migration." },
+      "intent": { "de": "Alle Dokumente sind bereits in das neue Archiv überführt worden.", "en": "Say that all documents have already been moved to the new archive." },
+      "hint": { "de": "Passiv im Present Perfect", "en": "passive in the Present Perfect" },
+      "model": "All documents have already been moved to the new archive.",
+      "ok": ["All the documents have already been moved to the new archive.", "All documents have been moved to the new archive already.", "All documents have already been transferred to the new archive.", "All documents have already been migrated to the new archive."],
+      "bad": "All documents are already moved to the new archive.",
+      "why": { "de": "Eine abgeschlossene Handlung mit Bezug zu jetzt steht im Present Perfect Passiv: „have been moved“. „Are moved“ klingt nach einer laufenden Handlung.", "en": "A finished action with a link to now takes the Present Perfect passive: “have been moved”. “Are moved” sounds like an action in progress." }
+    },
+    {
+      "id": "b1-art-01", "pat": "art.zero",
+      "sit": { "de": "Du bittest einen erfahrenen Kollegen um Hilfe bei einem schwierigen Kunden.", "en": "You ask an experienced colleague for help with a difficult customer." },
+      "intent": { "de": "Können Sie mir einen Rat geben, wie ich mit diesem Kunden umgehen soll?", "en": "Ask whether he could give you some advice on how to handle this client." },
+      "hint": { "de": "Artikel bei „Rat“", "en": "the article with “advice”" },
+      "model": "Could you give me some advice on how to handle this client?",
+      "ok": ["Could you give me advice on how to handle this client?", "Could you give me some advice on how to deal with this client?", "Could you give me a piece of advice on how to handle this client?", "Could you give me a bit of advice on how to handle this client?", "Could you give me some advice on how to handle this customer?"],
+      "bad": "Could you give me an advice on how to handle this client?",
+      "why": { "de": "„Advice“ ist nicht zählbar: kein „an“, keine Mehrzahl. Man sagt „some advice“ oder „a piece of advice“, obwohl „Rat“ im Deutschen zählbar ist.", "en": "“Advice” is uncountable: no “an”, no plural. You say “some advice” or “a piece of advice”, even though German “Rat” can be counted." }
+    },
+    {
+      "id": "b1-art-02", "pat": "art.sound",
+      "sit": { "de": "Du hebst im Kundengespräch einen Punkt hervor.", "en": "You highlight a point in a customer conversation." },
+      "intent": { "de": "Das ist ein wichtiger Punkt für den Kunden.", "en": "Say that this is an important point for the customer." },
+      "hint": { "de": "a oder an", "en": "a or an" },
+      "model": "That is an important point for the customer.",
+      "ok": ["That's an important point for the customer.", "This is an important point for the customer.", "It's an important point for the customer.", "That is an important point for our customer."],
+      "bad": "That is a important point for the customer.",
+      "why": { "de": "Vor einem Vokallaut steht „an“ („an important“). Es zählt der Laut, nicht der Buchstabe.", "en": "Before a vowel sound you use “an” (“an important”). What counts is the sound, not the letter." }
+    },
+    {
+      "id": "b1-art-03", "pat": "art.fixed",
+      "sit": { "de": "Du hängst einen Bericht an eine E-Mail an.", "en": "You attach a report to an email." },
+      "intent": { "de": "Zu Ihrer Information: Der Bericht ist angehängt.", "en": "Say, “For your information, the report is attached.”" },
+      "hint": { "de": "feste Wendung", "en": "a fixed phrase" },
+      "model": "For your information, the report is attached.",
+      "ok": ["FYI, the report is attached.", "For your information: the report is attached.", "For your information, I've attached the report.", "For your information, the report is enclosed.", "For your information, I have attached the report."],
+      "bad": "As an information, the report is attached.",
+      "why": { "de": "„For your information“ ist eine feste Wendung. „Information“ ist nicht zählbar, deshalb gibt es kein „an information“.", "en": "“For your information” is a fixed phrase. “Information” is uncountable, so there is no “an information”." }
+    },
+    {
+      "id": "b1-cnt-01", "pat": "cnt.uncount",
+      "sit": { "de": "Du erklärst den Nutzen eures Dokumentenmanagements.", "en": "You explain the benefit of your document management system." },
+      "intent": { "de": "Das System findet alle Informationen zu einem Kunden in Sekunden.", "en": "Say that the system finds all the information about a customer in seconds." },
+      "hint": { "de": "Mehrzahl bei „Informationen“", "en": "plural with “information”" },
+      "model": "The system finds all the information about a customer in seconds.",
+      "ok": ["The system finds all information about a customer in seconds.", "The system finds all the information on a customer in seconds.", "The system finds all the information about a client in seconds.", "The system finds all the information about a customer within seconds."],
+      "bad": "The system finds all the informations about a customer in seconds.",
+      "why": { "de": "„Information“ ist im Englischen nicht zählbar und hat keine Mehrzahl. Das Deutsche sagt „Informationen“, das Englische bleibt bei „information“.", "en": "“Information” is uncountable in English and has no plural. German says “Informationen”, English stays with “information”." }
+    },
+    {
+      "id": "b1-cnt-02", "pat": "cnt.verb",
+      "sit": { "de": "Du schreibst einem Kollegen eine kurze Mail.", "en": "You write a short email to a colleague." },
+      "intent": { "de": "Die Liste mit den Dokumenttypen wird bis Freitag gebraucht.", "en": "Say that the list of document types is needed by Friday." },
+      "hint": { "de": "Verb zum richtigen Hauptwort", "en": "the verb that agrees with the right noun" },
+      "model": "The list of document types is needed by Friday.",
+      "ok": ["We need the list of document types by Friday.", "The list of document types is required by Friday.", "The list of document types will be needed by Friday.", "The list of document types is needed no later than Friday."],
+      "bad": "The list of document types are needed by Friday.",
+      "why": { "de": "Das Verb richtet sich nach dem Kern des Satzteils: „the list“ (Einzahl), nicht nach „document types“. Deshalb „is needed“.", "en": "The verb agrees with the head of the phrase: “the list” (singular), not “document types”. So it is “is needed”." }
+    },
+    {
+      "id": "b1-pt-01", "pat": "pt.by-until",
+      "sit": { "de": "Du setzt einem Kollegen eine Frist.", "en": "You set a deadline for a colleague." },
+      "intent": { "de": "Wir brauchen die Dokumenttypen spätestens bis Freitag.", "en": "Say that you need the document types by Friday at the latest." },
+      "hint": { "de": "„bis“ als Frist", "en": "“by” for a deadline" },
+      "model": "We need the document types by Friday.",
+      "ok": ["We need the document types by Friday at the latest.", "We need the document types no later than Friday.", "We need the document types by the end of the day on Friday.", "We need the document types by Friday, at the latest."],
+      "bad": "We need the document types until Friday.",
+      "why": { "de": "Eine Frist, bis zu der etwas fertig sein muss, heißt „by“. „Until“ beschreibt, wie lange etwas andauert: „We will wait until Friday.“", "en": "A deadline by which something must be done is “by”. “Until” describes how long something continues: “We will wait until Friday.”" }
+    },
+    {
+      "id": "b1-rs-01", "pat": "rs.backshift",
+      "sit": { "de": "Du berichtest, was eine Kollegin dir gesagt hat.", "en": "You report what a colleague told you." },
+      "intent": { "de": "Sie sagte mir, dass sie das Projekt in der folgenden Woche abschließen würde.", "en": "Say that she told you she would finish the project the following week." },
+      "hint": { "de": "Zeitform in der indirekten Rede", "en": "tense in reported speech" },
+      "model": "She told me that she would finish the project the following week.",
+      "ok": ["She told me she would finish the project the following week.", "She told me that she would finish the project the next week.", "She told me that she would finish the project next week.", "She told me she would finish the project next week.", "She told me she would complete the project the following week."],
+      "bad": "She told me that she will finish the project next week.",
+      "why": { "de": "In der indirekten Rede nach einem Verb der Vergangenheit rutscht „will“ zu „would“. Der Zeitpunkt wird zu „the following week“ (oder bleibt „next week“, wenn er noch aktuell ist).", "en": "In reported speech after a past reporting verb, “will” moves back to “would”. The time becomes “the following week” (or stays “next week” if it is still ahead)." }
+    },
+    {
+      "id": "b1-rs-02", "pat": "rs.time-shift",
+      "sit": { "de": "Du gibst die Zusage eines Kunden weiter.", "en": "You pass on a customer's promise." },
+      "intent": { "de": "Sie sagte, sie rufe mich am nächsten Tag an.", "en": "Say that she said she would call you the next day." },
+      "hint": { "de": "Zeitform und Zeitwort in der indirekten Rede", "en": "tense and time word in reported speech" },
+      "model": "She said she would call me the next day.",
+      "ok": ["She said that she would call me the next day.", "She said she would call me the following day.", "She said that she would call me the following day.", "She said she'd call me the next day.", "She said she would call me the day after."],
+      "bad": "She said she called me the next day.",
+      "why": { "de": "Was sie ankündigte, liegt aus der Sicht des Berichts in der Zukunft: „would call“. „Called“ wäre eine abgeschlossene Handlung und würde etwas anderes aussagen.", "en": "What she announced lies in the future from the point of view of the report: “would call”. “Called” would be a completed action and would say something different." }
+    },
+    {
+      "id": "b1-rs-03", "pat": "rs.tell-say",
+      "sit": { "de": "Du gibst weiter, was ein Kollege zum Vertrag gesagt hat.", "en": "You pass on what a colleague said about the contract." },
+      "intent": { "de": "Er sagte mir, dass er den Vertrag bereits geschickt hatte.", "en": "Say that he told you he had already sent the contract." },
+      "hint": { "de": "„tell“ oder „say“", "en": "“tell” or “say”" },
+      "model": "He told me that he had already sent the contract.",
+      "ok": ["He told me he had already sent the contract.", "He said that he had already sent the contract.", "He said he had already sent the contract.", "He told me that he'd already sent the contract.", "He told me he'd already sent the contract."],
+      "bad": "He told that he had already sent the contract.",
+      "why": { "de": "„Tell“ braucht eine Person direkt danach („told me“). Ohne Person sagt man „said“: „He said that …“.", "en": "“Tell” needs a person right after it (“told me”). Without a person you use “said”: “He said that …”." }
+    },
+    {
+      "id": "b1-md-01", "pat": "md.cant-have",
+      "sit": { "de": "Im Fehlerbericht sprichst du über einen Kollegen, der im Urlaub war.", "en": "In a bug report you talk about a colleague who was on vacation." },
+      "intent": { "de": "Sven kann diesen Fehler nicht verursacht haben, er war im Urlaub.", "en": "Say that Sven cannot have caused this error because he was on vacation." },
+      "hint": { "de": "Schlussfolgerung über die Vergangenheit", "en": "a deduction about the past" },
+      "model": "Sven can't have caused this error; he was on vacation.",
+      "ok": ["Sven cannot have caused this error; he was on vacation.", "Sven can't have caused this error, he was on vacation.", "Sven couldn't have caused this error; he was on vacation.", "Sven can't have caused this error because he was on vacation.", "Sven can't have caused this error, because he was on vacation."],
+      "bad": "Sven mustn't have caused this error; he was on vacation.",
+      "why": { "de": "Eine sichere Folgerung, dass etwas früher nicht passiert ist, heißt „can't have“ + Partizip. „Mustn't“ bedeutet „darf nicht“ und passt hier nicht.", "en": "A confident deduction that something did not happen is “can't have” + past participle. “Mustn't” means “is not allowed to” and does not fit here." }
+    },
+    {
+      "id": "b1-md-02", "pat": "md.must-have",
+      "sit": { "de": "Du wertest einen Bericht mit einem Kollegen aus.", "en": "You go through a report with a colleague." },
+      "intent": { "de": "Der Bericht zeigt 200 neue Verträge im Dezember, Tom hat sie also bestimmt übersehen.", "en": "Say that the report shows 200 new contracts in December, so Tom must have missed them." },
+      "hint": { "de": "Schlussfolgerung über die Vergangenheit", "en": "a deduction about the past" },
+      "model": "The report shows 200 new contracts in December, so Tom must have missed them.",
+      "ok": ["The report shows 200 new contracts for December, so Tom must have missed them.", "The report shows 200 new contracts in December, so Tom must have overlooked them.", "The report shows 200 new contracts in December, so Tom must have missed them."],
+      "bad": "The report shows 200 new contracts in December, so Tom can't have missed them.",
+      "why": { "de": "Wenn die Belege für etwas sprechen, folgert man mit „must have“ + Partizip. „Can't have“ würde das Gegenteil sagen: sicher nicht übersehen.", "en": "When the evidence points to something, you deduce it with “must have” + past participle. “Can't have” would say the opposite: surely not missed." }
+    },
+    {
+      "id": "b1-pp-01", "pat": "pp.earlier",
+      "sit": { "de": "Du erzählst, was am Morgen im Büro los war.", "en": "You tell what happened at the office this morning." },
+      "intent": { "de": "Als ich im Büro ankam, hatte der Kunde schon angerufen.", "en": "Say that when you got to the office, the customer had already called." },
+      "hint": { "de": "Zeitform für das, was früher geschah", "en": "tense for what happened earlier" },
+      "model": "When I got to the office, the customer had already called.",
+      "ok": ["When I arrived at the office, the customer had already called.", "By the time I got to the office, the customer had already called.", "When I got to the office, the customer had already phoned.", "When I arrived at the office, the customer had already phoned."],
+      "bad": "When I got to the office, the customer has already called.",
+      "why": { "de": "Von zwei vergangenen Ereignissen steht das frühere im Past Perfect: „had called“ (zuerst) und „got“ (danach). „Has called“ gehört nicht in eine Geschichte in der Vergangenheit.", "en": "Of two past events the earlier one takes the Past Perfect: “had called” (first) and “got” (after). “Has called” does not belong in a story set in the past." }
+    },
+    {
+      "id": "b1-pp-02", "pat": "pp.duration",
+      "sit": { "de": "Du erzählst von einer langen Preisverhandlung.", "en": "You tell about a long price negotiation." },
+      "intent": { "de": "Wir hatten schon zwei Stunden über den Preis diskutiert, bevor der Chef dazukam.", "en": "Say that you had been discussing the price for two hours before the boss joined." },
+      "hint": { "de": "Dauer vor einem Zeitpunkt in der Vergangenheit", "en": "duration before a point in the past" },
+      "model": "We had been discussing the price for two hours before the boss joined.",
+      "ok": ["We had been discussing the price for two hours before the boss came.", "We had discussed the price for two hours before the boss joined.", "We had been discussing the pricing for two hours before the boss joined.", "We had been discussing the price for two hours before our boss joined."],
+      "bad": "We had discussing the price for two hours before the boss joined.",
+      "why": { "de": "Die Dauer einer Tätigkeit vor einem Zeitpunkt in der Vergangenheit: Past Perfect Continuous, „had been“ + -ing. „Had“ allein reicht vor -ing nicht.", "en": "The duration of an activity before a past point: Past Perfect Continuous, “had been” + -ing. “Had” alone is not enough before -ing." }
+    },
+    {
+      "id": "b1-tc-01", "pat": "tc.by-the-time",
+      "sit": { "de": "Du erklärst, warum ein Kunde verloren ging.", "en": "You explain why a customer was lost." },
+      "intent": { "de": "Bis der Support antwortete, hatte der Kunde schon gekündigt.", "en": "Say that by the time support replied, the customer had already canceled." },
+      "hint": { "de": "Zeitform im Hauptsatz nach „by the time“", "en": "tense in the main clause after “by the time”" },
+      "model": "By the time support replied, the customer had already canceled.",
+      "ok": ["By the time support answered, the customer had already canceled.", "By the time the support team replied, the customer had already cancelled.", "By the time support replied, the customer had already cancelled.", "By the time support responded, the customer had already canceled."],
+      "bad": "By the time support replied, the customer already canceled.",
+      "why": { "de": "„By the time“ + Past Simple nennt den späteren Zeitpunkt. Was schon vorher passiert war, steht im Past Perfect: „had already canceled“.", "en": "“By the time” + Past Simple names the later point. What had already happened before it takes the Past Perfect: “had already canceled”." }
+    },
+    {
+      "id": "b1-prp-01", "pat": "prp.verb-prep",
+      "sit": { "de": "Du schreibst dem Kunden, dass die Migration abgeschlossen ist.", "en": "You write to the customer that the migration is complete." },
+      "intent": { "de": "Ich teile die Neuigkeit gern mit Ihnen: Die Migration ist abgeschlossen.", "en": "Say that you are happy to share the news with him: the migration is complete." },
+      "hint": { "de": "Reihenfolge und Präposition bei „share“", "en": "word order and preposition with “share”" },
+      "model": "I am happy to share the news with you: the migration is complete.",
+      "ok": ["I'm happy to share the news with you: the migration is finished.", "I am happy to share the news with you that the migration is complete.", "I'm happy to share with you that the migration is complete.", "I am happy to share the news with you: the migration is finished.", "I'm happy to share the news with you: the migration is complete."],
+      "bad": "I am happy to share you the news: the migration is complete.",
+      "why": { "de": "„Share“ nimmt die Person nicht direkt: „share something with someone“. „Share you the news“ ist eine Übertragung von „dir etwas mitteilen“.", "en": "“Share” does not take the person directly: “share something with someone”. “Share you the news” is a transfer from the German pattern “dir etwas mitteilen”." }
+    },
+    {
+      "id": "b1-prp-02", "pat": "prp.verb-prep",
+      "sit": { "de": "Du beendest eine E-Mail an einen Kunden.", "en": "You end an email to a customer." },
+      "intent": { "de": "Ich freue mich auf Ihre E-Mail.", "en": "Say that you are looking forward to his email." },
+      "hint": { "de": "Präposition nach „look forward“", "en": "the preposition after “look forward”" },
+      "model": "I'm looking forward to your email.",
+      "ok": ["I look forward to your email.", "I am looking forward to your email.", "I'm looking forward to your reply.", "I look forward to your reply.", "I am looking forward to your reply."],
+      "bad": "I'm looking forward for your email.",
+      "why": { "de": "Es heißt „look forward to“, nicht „for“. Das deutsche „sich freuen auf“ verleitet zu „for“.", "en": "The phrase is “look forward to”, not “for”. German “sich freuen auf” tempts you to use “for”." }
+    },
+    {
+      "id": "b1-prp-03", "pat": "prp.person-to",
+      "sit": { "de": "Du bittest den Support um eine Erklärung.", "en": "You ask support for an explanation." },
+      "intent": { "de": "Können Sie mir erklären, wie das Archiv funktioniert?", "en": "Ask whether he can explain to you how the archive works." },
+      "hint": { "de": "Person nach „explain“", "en": "the person after “explain”" },
+      "model": "Can you explain to me how the archive works?",
+      "ok": ["Could you explain to me how the archive works?", "Can you explain how the archive works to me?", "Could you explain how the archive works?", "Can you explain how the archive works?", "Could you explain how the archive works to me?"],
+      "bad": "Can you explain me how the archive works?",
+      "why": { "de": "Nach „explain“ steht die Person mit „to“: „explain to me“. „Explain me“ ist eine Übertragung von „erklär mir“.", "en": "After “explain” the person needs “to”: “explain to me”. “Explain me” is a transfer from German “erklär mir”." }
+    },
+    {
+      "id": "b1-cp-01", "pat": "cp.pp",
+      "sit": { "de": "Du erklärst, warum ein Update später online ging.", "en": "You explain why an update went live later." },
+      "intent": { "de": "Von einem Serverausfall verzögert, ging das Update zwei Stunden später live.", "en": "Say that, delayed by a server outage, the update went live two hours late." },
+      "hint": { "de": "Partizip am Satzanfang (passive Bedeutung)", "en": "participle at the start (passive meaning)" },
+      "model": "Delayed by a server outage, the update went live two hours late.",
+      "ok": ["Delayed by a server outage, the update went live two hours later than planned.", "Delayed by a server failure, the update went live two hours late.", "Delayed by a server outage, the update went live two hours behind schedule.", "Delayed by a server outage, the update went live two hours late."],
+      "bad": "Delaying by a server outage, the update went live two hours late.",
+      "why": { "de": "Das Update wurde verzögert, es verzögert nicht selbst. Passive Bedeutung braucht das Partizip Perfekt („delayed“), nicht die -ing-Form.", "en": "The update was delayed; it did not delay anything itself. A passive meaning needs the past participle (“delayed”), not the -ing form." }
+    },
+    {
+      "id": "b1-cp-02", "pat": "cp.having",
+      "sit": { "de": "Du beschreibst den Ablauf einer Angebotserstellung.", "en": "You describe how a proposal was prepared." },
+      "intent": { "de": "Nachdem sie das Angebot geschrieben hatte, schickte sie es an den Vorstand.", "en": "Say that having written the proposal, she sent it to the board." },
+      "hint": { "de": "Partizip für das, was vorher geschah", "en": "participle for what happened before" },
+      "model": "Having written the proposal, she sent it to the board.",
+      "ok": ["Having written the proposal, she sent it to the executive board.", "Having written the offer, she sent it to the board.", "Having written the proposal, she sent it to the management.", "Having written the proposal, she sent it to the board of directors."],
+      "bad": "Having wrote the proposal, she sent it to the board.",
+      "why": { "de": "Nach „having“ steht das Partizip Perfekt: „written“, nicht die Vergangenheitsform „wrote“. „Having“ + Partizip zeigt, dass das eine vor dem anderen geschah.", "en": "After “having” comes the past participle: “written”, not the past form “wrote”. “Having” + participle shows that one thing happened before the other." }
+    },
+    {
+      "id": "b1-cp-03", "pat": "cp.ing",
+      "sit": { "de": "Du lobst die Wirkung eines neuen Scanners.", "en": "You praise the effect of a new scanner." },
+      "intent": { "de": "Mit dem neuen Scanner verarbeitete die Mitarbeiterin jede Rechnung in wenigen Minuten.", "en": "Say that using the new scanner, the clerk processed every invoice in minutes." },
+      "hint": { "de": "Partizip am Satzanfang (aktive Bedeutung)", "en": "participle at the start (active meaning)" },
+      "model": "Using the new scanner, the clerk processed every invoice in minutes.",
+      "ok": ["Using the new scanner, the employee processed every invoice in minutes.", "Using the new scanner, she processed every invoice in just a few minutes.", "Using the new scanner, the clerk processed every invoice within minutes.", "Using the new scanner, the clerk processed each invoice in minutes."],
+      "bad": "Used the new scanner, the clerk processed every invoice in minutes.",
+      "why": { "de": "Die Mitarbeiterin benutzt den Scanner selbst, die Bedeutung ist aktiv: -ing-Form („using“). Das Partizip Perfekt („used“) wäre passiv.", "en": "The clerk uses the scanner herself, so the meaning is active: the -ing form (“using”). The past participle (“used”) would be passive." }
+    },
+    {
+      "id": "b1-psc-01", "pat": "psc.now",
+      "sit": { "de": "Du bist im Büro, der Drucker streikt.", "en": "You are in the office and the printer has stopped working." },
+      "intent": { "de": "Schau, der Drucker funktioniert schon wieder nicht! Kannst du den IT-Support rufen?", "en": "Say, “Look! The printer is not working again. Can you call IT support?”" },
+      "hint": { "de": "Zeitform für etwas, das gerade passiert", "en": "tense for something happening now" },
+      "model": "Look! The printer isn't working again. Can you call IT support?",
+      "ok": ["Look! The printer is not working again. Can you call IT support?", "Look, the printer isn't working again. Can you call IT support?", "Look! The printer is not working again. Can you call IT?", "Look, the printer is not working again. Can you call IT support?"],
+      "bad": "Look! The printer doesn't work again. Can you call IT support?",
+      "why": { "de": "Etwas, das jetzt gerade passiert („Look!“), steht im Present Continuous: „is not working“. Das einfache Present beschreibt Gewohnheiten und Tatsachen.", "en": "Something happening right now (“Look!”) takes the Present Continuous: “is not working”. The simple present describes habits and facts." }
+    },
+    {
+      "id": "b1-psc-02", "pat": "psc.habit",
+      "sit": { "de": "Du erklärst einem Kollegen den Stand der Preisverhandlung.", "en": "You explain the state of the price negotiation to a colleague." },
+      "intent": { "de": "Soweit ich weiß, verhandelt mein Chef mit Ihrem Chef über zehn Prozent Rabatt.", "en": "Say that, as far as you know, your manager negotiates with their manager over a 10% discount." },
+      "hint": { "de": "-s bei he / she / it", "en": "the -s with he / she / it" },
+      "model": "As far as I know, my manager negotiates with your manager over a 10% discount.",
+      "ok": ["As far as I know, my manager is negotiating with your manager over a 10% discount.", "As far as I know, my manager is negotiating a 10% discount with your manager.", "As far as I know, my manager negotiates with your manager about a 10% discount.", "As far as I know, my manager is negotiating with your manager about a 10% discount.", "As far as I know, my manager negotiates a 10% discount with your manager."],
+      "bad": "As far as I know, my manager negotiate with your manager over a 10% discount.",
+      "why": { "de": "Bei „he / she / it“ bekommt das Verb im Present ein -s: „my manager negotiates“. Auch das Present Continuous („is negotiating“) ist hier richtig, wenn es um den laufenden Vorgang geht.", "en": "With “he / she / it” the verb in the present tense takes an -s: “my manager negotiates”. The Present Continuous (“is negotiating”) is also correct here if you mean the process under way." }
+    }
+  ]
+}

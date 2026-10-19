@@ -11,7 +11,7 @@ import { DAY, dump, planPatch } from './trainerHelpers';
 
 type Doc = Record<string, unknown>;
 const DUE = Date.parse('2026-09-19T12:00:00+02:00');
-const A = { id: 'ra1', wrong: 'We are working on it since two years.', right: 'We have been working on it for two years.', why: 'Für eine Dauer bis jetzt: Present Perfect Continuous und „for“.', src: 'talk', t: DUE - 86_400_000, box: 0, due: DUE, fix: ['have been working', 'for two years'] };
+const A = { id: 'ra1', wrong: 'We are working on it since two years.', right: 'We have been working on it for two years.', why: 'Für eine Dauer bis jetzt: Present Perfect Continuous und „for“.', src: 'say', t: DUE - 86_400_000, box: 0, due: DUE, fix: ['have been working', 'for two years'] };
 const B = { id: 'rb2', wrong: 'It depends of the budget.', right: 'It depends on the budget.', why: 'Nach „depend“ steht „on“.', src: 'preply', t: DUE - 86_400_000, box: 0, due: DUE + 1 };
 
 const SIZES = [

@@ -2,6 +2,8 @@ import { dayKey } from '../date';
 import { whyOfError } from '../grammar/errorWhy';
 import type { Lang } from '../srs/types';
 import { dueErrors, errorSentences } from '../grammar/errors';
+import { hasFk } from './fk';
+import { fehlersatzProblem, gapHintOf, type HideReason } from './quality';
 import { dueRepairs, readRepairs, repairNorm, type RepairSrc } from './repair';
 
 // Fehlersätze (Schritt „Fehler korrigieren“): EINE Liste aus beiden Speichern, `app/repair` (eigene Sätze, Boxen 1/3/9) und
@@ -24,25 +26,74 @@ export type Fehlersatz = {
   /** Nur Grammatik: Thema und Zeitstempel des Fehlereintrags (Schlüssel für `reviewError`). */
   topic?: string;
   errorT?: number;
+  /** Muster (Kennung wie im Eintrag), falls bekannt. */
+  pat?: string;
+  /** Wie oft dieselbe Fehlerart schon vorkam (Fehlerart-Etikett von B3): der Eintrag selbst plus die gemerkten Zusatzsätze. */
+  n?: number;
+  /** Gespeicherter Kontext: Herkunft des Satzes (`ctx` des Reparatur-Satzes) bzw. die damalige Aufgabe mit Lücke. */
+  ctx?: string;
+  /** Lückenhinweis der damaligen Aufgabe („already / send“). */
+  gapHint?: string;
+  /** Gesetzt: der Satz ist als Korrektur-Aufgabe unbrauchbar (Ausschlussregel) und kommt nur als B1 „Sag es richtig“ wieder. */
+  hidden?: HideReason;
 };
+
+export type HiddenFehlersatz = { id: string; reason: HideReason };
 
 const str = (v: unknown): string => (typeof v === 'string' ? v : '');
 
 
-export function dueFehlersaetze(i: { grammarDocs: ReadonlyMap<string, Doc>; repairDoc: Doc | null | undefined; nowMs: number; today: string; limit?: number; /** Eigene Sätze und Grammatik-Fehlersätze im Wechsel statt „älteste zuerst“. Ohne Angabe: gemischt, sobald eine Grenze (`limit`) gesetzt ist. */ mix?: boolean; lang?: Lang }): Fehlersatz[] {
+type CollectIn = { grammarDocs: ReadonlyMap<string, Doc>; repairDoc: Doc | null | undefined; nowMs: number; today: string; limit?: number; /** Eigene Sätze und Grammatik-Fehlersätze im Wechsel statt „älteste zuerst“. Ohne Angabe: gemischt, sobald eine Grenze (`limit`) gesetzt ist. */ mix?: boolean; lang?: Lang };
+
+/**
+ * Fällige Fehlersätze beider Speicher mit den Ausschlussregeln von Paket FK (`quality.ts`): Ein unbrauchbarer Satz (verstümmelt, nur ein Wort,
+ * Anweisung als Satz, Dopplung, Mitschrift, schon richtig) wird nicht als Korrektur gezeigt. Hat sein Muster oder Thema eine „Sag es richtig“-Aufgabe,
+ * kommt er mit `hidden` wieder (und zählt mit), sonst fällt er heraus (`dropped`, nur für die Diagnose). Nichts wird gelöscht; wer „Kann ich nicht
+ * nachvollziehen“ gedrückt hat (`unclear`), kommt nie wieder.
+ */
+function collect(i: CollectIn): { list: Fehlersatz[]; dropped: HiddenFehlersatz[] } {
   const out: Fehlersatz[] = [];
+  const dropped: HiddenFehlersatz[] = [];
+  const keep = (f: Fehlersatz, problem: HideReason | null): void => {
+    if (!problem) {
+      out.push(f);
+      return;
+    }
+    if (hasFk({ pat: f.pat ?? null, topic: f.topic ?? null })) out.push({ ...f, hidden: problem });
+    else dropped.push({ id: f.id, reason: problem });
+  };
   for (const r of dueRepairs(readRepairs(i.repairDoc ?? undefined), i.nowMs)) {
     if (dayKey(r.t) === i.today) continue;
-    out.push({ id: r.id, wrong: r.wrong, right: r.right, ...(r.why ? { why: r.why } : {}), due: r.due, store: 'repair', src: r.src, ...(r.fix ? { fix: r.fix } : {}) });
+    const f: Fehlersatz = { id: r.id, wrong: r.wrong, right: r.right, ...(r.why ? { why: r.why } : {}), due: r.due, store: 'repair', src: r.src, ...(r.fix ? { fix: r.fix } : {}), ...(r.pat ? { pat: r.pat } : {}), ...(r.ctx ? { ctx: r.ctx } : {}) };
+    keep(f, fehlersatzProblem({ wrong: r.wrong, right: r.right, src: r.src, confirmed: (r as { confirmed?: unknown }).confirmed === true }));
   }
   for (const d of dueErrors(i.grammarDocs, i.nowMs)) {
     const t = typeof d.e.t === 'number' ? d.e.t : null;
     if (t === null || dayKey(t) === i.today) continue;
     const q = str(d.e.q).trim();
-    const { wrong, right } = errorSentences(q, str(d.e.given), d.task.answer);
-    if (!wrong || !right || repairNorm(wrong) === repairNorm(right)) continue;
+    const given = str(d.e.given);
+    const { wrong, right } = errorSentences(q, given, d.task.answer);
+    if (!right || repairNorm(wrong) === repairNorm(right)) continue;
     const why = whyOfError(d.topic, d.e, i.lang ?? 'de');
-    out.push({ id: `g:${d.topic}:${t}`, wrong, right, ...(why ? { why } : {}), due: d.due, store: 'grammar', src: 'lesson', topic: d.topic, errorT: t });
+    const pat = str(d.e.pat).trim();
+    const hint = q.includes('___') ? gapHintOf(q) : null;
+    const f: Fehlersatz = {
+      id: `g:${d.topic}:${t}`,
+      wrong,
+      right,
+      ...(why ? { why } : {}),
+      due: d.due,
+      store: 'grammar',
+      src: 'lesson',
+      topic: d.topic,
+      errorT: t,
+      ...(pat ? { pat } : {}),
+      n: 1 + (Array.isArray(d.e.more) ? d.e.more.length : 0),
+      // Die damalige Aufgabe mit Lücke ist der Kontext des gefüllten Fehlersatzes; ein Satz ohne Lücke ist selbst die Aufgabe.
+      ...(q.includes('___') ? { ctx: q.replace(/\s*\([^()]*\)/, '') } : {}),
+      ...(hint ? { gapHint: hint } : {}),
+    };
+    keep(f, wrong ? fehlersatzProblem({ wrong, right, src: 'lesson', q, given }) : 'empty');
   }
   const seen = new Set<string>();
   // Auswertung 15.10.2026, Punkt 5: Mit Grenze (`limit`) wechseln sich Reparatur-Sätze (eigene Sätze) und Grammatik-Fehlersätze ab, je Speicher nach Fälligkeit.
@@ -60,14 +111,22 @@ export function dueFehlersaetze(i: { grammarDocs: ReadonlyMap<string, Doc>; repa
     }
     return mixed;
   })();
-  const list = ordered
-    .filter((f) => {
-      const k = repairNorm(f.wrong);
-      if (seen.has(k)) return false;
-      seen.add(k);
-      return true;
-    });
-  return i.limit === undefined ? list : list.slice(0, i.limit);
+  const list = ordered.filter((f) => {
+    const k = repairNorm(f.wrong);
+    if (seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
+  return { list: i.limit === undefined ? list : list.slice(0, i.limit), dropped };
+}
+
+export function dueFehlersaetze(i: CollectIn): Fehlersatz[] {
+  return collect(i).list;
+}
+
+/** Fehlersätze, die als Aufgabe ganz herausfallen (Ausschlussregel ohne passende B1-Aufgabe), mit Grund: Diagnose-Zähler. Die Einträge bleiben gespeichert. */
+export function droppedFehlersaetze(i: CollectIn): HiddenFehlersatz[] {
+  return collect({ ...i, limit: undefined }).dropped;
 }
 
 /**

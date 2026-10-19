@@ -40,6 +40,8 @@ export type RepairItem = {
   fix?: string[];
   /** Muster (Kennung aus der Grammatik, LP3 P46/P47), falls Claude eines genannt hat und es existiert. */
   pat?: string;
+  /** Paket FK: Zeitpunkt, an dem Emrah „Kann ich nicht nachvollziehen“ gewählt hat. Der Satz kommt nie wieder, bleibt aber gespeichert (nie löschen). */
+  unclear?: number;
 };
 
 export type NewRepair = { wrong: string; right: string; why?: string | null; src: RepairSrc; ctx?: string | null; fix?: readonly string[] | null; pat?: string | null };
@@ -163,7 +165,7 @@ export function addRepairs(list: readonly RepairItem[], add: readonly NewRepair[
 /** Fällige, nicht erledigte Einträge, älteste Fälligkeit zuerst. Fällig = vor dem Ende des Lerntags (04:00 Uhr), wie bei den Fehlersätzen der Grammatik. */
 export function dueRepairs(list: readonly RepairItem[], nowMs: number): RepairItem[] {
   const end = learningDayEnd(nowMs);
-  return list.filter((e) => !e.done && e.due < end).sort((a, b) => a.due - b.due);
+  return list.filter((e) => !e.done && !e.unclear && e.due < end).sort((a, b) => a.due - b.due);
 }
 
 /**

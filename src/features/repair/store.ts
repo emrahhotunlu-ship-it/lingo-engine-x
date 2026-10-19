@@ -128,3 +128,45 @@ export async function retireRepairs(wrongs: readonly string[], src: string): Pro
     return false;
   }
 }
+
+/**
+ * „Kann ich nicht nachvollziehen“ (Paket FK): Der Fehlersatz wird dauerhaft aus der Wiederholung genommen. Es ist nur ein Merker (`unclear` =
+ * Zeitpunkt) am Eintrag, nichts wird gelöscht, Box und Fälligkeit bleiben, und die Antwort zählt nie als falsch. Ein unerwarteter Aufbau wird
+ * nie angefasst. `true` = geschrieben oder nichts zu tun.
+ */
+export async function markUnclear(target: { store: 'repair' | 'grammar'; id: string; topic?: string; errorT?: number }): Promise<boolean> {
+  const writer = getWriter();
+  if (!writer) return false;
+  const t = Date.now();
+  try {
+    if (target.store === 'grammar') {
+      if (!target.topic || target.errorT === undefined) return false;
+      const path = `grammar/${target.topic}`;
+      await writer.transform(path, (cur) => {
+        if (!cur || !validateDoc(path, cur).ok || !Array.isArray(cur.errors)) return null;
+        let changed = false;
+        const next = (cur.errors as Array<Record<string, unknown>>).map((e) => {
+          if (e.t !== target.errorT || typeof e.unclear === 'number') return e;
+          changed = true;
+          return { ...e, unclear: t };
+        });
+        return changed ? { update: { errors: next } } : null;
+      });
+      return true;
+    }
+    await writer.transform(REPAIR_PATH, (cur) => {
+      if (!cur || !writable(cur)) return null;
+      let changed = false;
+      const next = readRepairs(cur).map((e) => {
+        if (e.id !== target.id || typeof e.unclear === 'number') return e;
+        changed = true;
+        return { ...e, unclear: t };
+      });
+      return changed ? opFor(cur, next) : null;
+    });
+    return true;
+  } catch (err) {
+    logError('repair:unclear', err, target.id);
+    return false;
+  }
+}

@@ -2,11 +2,11 @@ import type { Resumable } from '../../../app/resume';
 import { ensureWith } from '../../grammar/resumeKit';
 import { againSnapshot, restoreAgain, startAgain, useAgain, type AgainSnap } from './session';
 
-// Fortsetzen von Schritt 4 (G3): Karten, Stelle in der Schlange und bisherige Antworten bleiben nach dem Neuladen (Version 2: Satz für Satz).
+// Fortsetzen von Schritt 4 (G3): Karten, Stelle in der Schlange und bisherige Antworten bleiben nach dem Neuladen (Version 3: Paket FK, Karten mit `kind`/`fk1`/`fk2`).
 
 export const againResume: Resumable<AgainSnap> = {
   id: 'unitAgain',
-  version: 2,
+  version: 3,
   origin: 'today',
   snapshot: againSnapshot,
   subscribe: (cb) => useAgain.subscribe(cb),

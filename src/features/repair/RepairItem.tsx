@@ -4,6 +4,7 @@ import { useAsk } from '../../ai/useAsk';
 import { alignWords, splitWords } from '../../domain/answer/align';
 import type { ExplanationModel, ResultVerdict } from '../../domain/explain/types';
 import { patternById } from '../../domain/grammar/patterns';
+import { topicName } from '../grammar/topicUi';
 import { inputProfile, type InputProfile } from '../../platform/input';
 import { checkRepairLocal } from '../../domain/repair/check';
 import type { RepairItem as Repair } from '../../domain/repair/repair';
@@ -31,6 +32,10 @@ export type RepairView = Pick<Repair, 'id' | 'wrong' | 'right' | 'why' | 'src' |
   /** Thema und Muster (Kennung) für die Statuszeile. */
   topic?: string | null;
   pat?: string | null;
+  /** Paket FK: gespeicherter Kontext (Herkunft bzw. damalige Aufgabe), Lückenhinweis der damaligen Aufgabe und Zahl der Vorkommen dieser Fehlerart. */
+  ctx?: string | null;
+  gapHint?: string | null;
+  n?: number | null;
 };
 
 export type RepairVerdict = 'exact' | 'close' | 'ok' | 'no';
@@ -48,13 +53,15 @@ type Props = {
   onResult: (r: { ok: boolean; near: boolean; given: string; ms: number }) => void;
   onNext: () => void;
   onSkip?: () => void;
+  /** Paket FK: „Kann ich nicht nachvollziehen“ – nimmt den Satz dauerhaft heraus, zählt nicht als falsch. Ohne Angabe gibt es den Knopf nicht. */
+  onUnclear?: () => void;
   nextLabel?: string;
 };
 
 const VERDICT: Record<RepairVerdict, ResultVerdict> = { exact: 'ok', ok: 'ok', close: 'near', no: 'wrong' };
 const BOXES = 3;
 
-export function RepairItem({ item, mode, area, source, status = null, profile: profileProp, onResult, onNext, onSkip, nextLabel }: Props) {
+export function RepairItem({ item, mode, area, source, status = null, profile: profileProp, onResult, onNext, onSkip, onUnclear, nextLabel }: Props) {
   const { t, lang } = useT();
   const ai = useAiAvailable();
   const ask = useAsk(repairCheck);
@@ -142,7 +149,7 @@ export function RepairItem({ item, mode, area, source, status = null, profile: p
   };
 
   const verdict = res ? VERDICT[res.verdict] : null;
-  const patName = item.pat ? (patternById(item.pat.includes(':') ? item.pat : `${item.topic ?? ''}:${item.pat}`)?.name ?? null) : null;
+  const patName = item.pat ? (patternById(item.pat.includes(':') || !item.topic ? item.pat : `${item.topic ?? ''}:${item.pat}`)?.name ?? null) : null;
   const model: ExplanationModel | null = res
     ? {
         lines: [
@@ -211,6 +218,7 @@ export function RepairItem({ item, mode, area, source, status = null, profile: p
     ? []
     : [
         { id: 'dontKnow', label: t('exDontKnow'), onClick: dontKnow, testId: 'repair-dontknow' },
+        ...(onUnclear && !busy ? [{ id: 'unclear' as const, label: t('fxRUnclear'), onClick: onUnclear, testId: 'repair-unclear' }] : []),
         ...(onSkip ? [{ id: 'skip' as const, label: t('exSkip'), onClick: onSkip, testId: 'repair-skip' }] : []),
       ];
   const hint = res
@@ -226,6 +234,20 @@ export function RepairItem({ item, mode, area, source, status = null, profile: p
   const badge = [t(`rxSrc_${item.src}` as MessageKey), boxLabel, status, form === 'spots' && total > 1 && !res ? t('fxRSpotNo', { n: stepNo, total }) : null].filter(Boolean).join(' · ') || null;
   const primaryDisabled = busy || (form === 'spots' ? (cur === null ? !tapped : !typed.trim()) : form === 'tiles' ? placed.length < tiles.texts.length : !text.trim() || text.trim() === item.wrong.trim());
   const checkLabel = form === 'spots' && cur === null ? t('fxRCheckSpot') : t('exCheck');
+  // Paket FK (B3): Fehlerart mit Zahl, gespeicherter Kontext und Lückenhinweis der damaligen Aufgabe stehen über dem Satz (Kap. 15: „Karten ohne Ursprungssatz“).
+  const kindName = patName ? (lang === 'de' ? patName.de : patName.en) : item.topic ? topicName(item.topic, lang) : null;
+  const ctxLines = [
+    kindName ? (item.n && item.n > 1 ? t('fxRKindLineN', { name: kindName, n: item.n }) : t('fxRKindLine', { name: kindName })) : null,
+    item.ctx?.trim() ? t('fxRCtxLine', { ctx: item.ctx.trim() }) : null,
+    item.gapHint?.trim() ? t('fxRGapLine', { hint: item.gapHint.trim() }) : null,
+  ].filter((x): x is string => !!x);
+  const aid = !res && ctxLines.length ? (
+    <ul className="flex flex-col gap-0.5 text-sm text-muted" data-testid="repair-context">
+      {ctxLines.map((l, k) => (
+        <li key={k}>{l}</li>
+      ))}
+    </ul>
+  ) : null;
 
   return (
     <div data-testid="repair-item" data-id={item.id} data-mode={mode} data-form={form} data-profile={profile} data-state={res ? res.verdict : 'open'}>
@@ -233,6 +255,7 @@ export function RepairItem({ item, mode, area, source, status = null, profile: p
         meta={{ ex: 'repair', id: item.id, kind: form }}
         status={{ area: 'grammar', state: null, kindLabel: t('rxKind'), topic: null, pattern: null, badge }}
         task={{ text: t(taskKey), purpose: t('fxRPurpose') }}
+        aid={aid}
         prompt={prompt}
         answer={answer}
         hint={hint}

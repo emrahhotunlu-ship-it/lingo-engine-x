@@ -17,14 +17,14 @@ const rep = (wrong: string, t: number, extra: Doc = {}): Doc => ({ id: `r-${wron
 describe('fixesDue: fällige Fehlersätze aus beiden Speichern', () => {
   it('zählt Grammatik-Fehler und Reparatur-Sätze früherer Tage', () => {
     const g = grammar(err('The road ___ every year.', NOW - 3 * DAY), err('The bridge ___ last week.', NOW - 2 * DAY));
-    const r = repair(rep('I am agree', NOW - 4 * DAY), rep('He go home', NOW - 2 * DAY));
+    const r = repair(rep('I am agree with your plan for the contract', NOW - 4 * DAY), rep('He go home after the long meeting today', NOW - 2 * DAY));
     expect(fixesDue({ grammarDocs: g, repairDoc: r, nowMs: NOW, today: TODAY })).toBe(4);
   });
 
   it('ein Satz vom Anlegetag zählt nie, auch wenn er schon fällig wäre (Uhrzeit)', () => {
     const early = berlin(TODAY, 6);
     const g = grammar(err('The road ___ every year.', early, { due: early }));
-    const r = repair(rep('I am agree', early, { due: early }));
+    const r = repair(rep('I am agree with your plan for the contract', early, { due: early }));
     expect(fixesDue({ grammarDocs: g, repairDoc: r, nowMs: NOW, today: TODAY })).toBe(0);
   });
 

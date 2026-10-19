@@ -18,7 +18,8 @@ const Q = 'If I would have known, I would have called you.';
 const FIXED = 'If I had known, I would have called you.';
 const entry = (extra: Doc = {}): Doc => ({ q: Q, given: Q, ans: FIXED, t: NOW - 5 * DAY, src: 'test', pat: PAT, box: 1, due: NOW - DAY, ...extra });
 const docs = (e: Doc, extra: Doc = {}): ReadonlyMap<string, Doc> => new Map([[TOPIC, { errors: [e], ...extra }]]);
-const cardsOf = (g: ReadonlyMap<string, Doc>, repairDoc: Doc | null = null) => repairCards({ items: dueFehlersaetze({ grammarDocs: g, repairDoc, nowMs: NOW, today: TODAY }), grammarDocs: g, repairDoc });
+// FK (19.10.2026): Die neuen Aufgabenformen B1/B2 ersetzen die Variante ab Box 1. Dieser Test prüft die Variante als Rückfall (`forms: false`); die neue Auswahl steht in fehlersatzQuality.test.ts.
+const cardsOf = (g: ReadonlyMap<string, Doc>, repairDoc: Doc | null = null) => repairCards({ items: dueFehlersaetze({ grammarDocs: g, repairDoc, nowMs: NOW, today: TODAY }), grammarDocs: g, repairDoc, forms: false });
 
 describe('Varianten der Fehlerschlange', () => {
   it('Box 0: der falsche Satz selbst – der neueste aus `more`, sonst `q`', () => {
