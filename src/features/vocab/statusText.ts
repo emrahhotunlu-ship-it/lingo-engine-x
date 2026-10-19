@@ -45,3 +45,9 @@ export function statusDetail(s: CardStatus, t: Tr, dateShort: (ms: number) => st
 export function mindLine(s: CardStatus, t: Tr): string {
   return `${t('stxMindLabel')}: ${s.mind === 'none' ? t('stxMindNew') : t(MIND_WORD[s.mind])}`;
 }
+
+/** „Jetzt im Kopf“ nur, wenn es etwas ANDERES sagt als das Zustandswort: nicht bei „gut“ (der Zustand sagt es schon) und nicht bei „Wackelt“ (der Beleg nennt dort den Grund). */
+export function mindAdds(s: CardStatus): boolean {
+  if (s.mind === 'none' || s.mind === 'good') return false;
+  return s.tier !== 'wobbly';
+}

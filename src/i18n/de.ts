@@ -215,7 +215,7 @@ export const de = {
   stage2: 'Zuordnen',
   stage3: 'Mit Stütze abrufen',
   stage4: 'Frei abrufen',
-  stage5: 'Sicher anwenden',
+  stage5: 'Frei anwenden',
   grammarLabel: 'Grammatik',
   grammarWeakest: 'Brauchen am meisten Übung',
   assessLabel: 'Einschätzung',

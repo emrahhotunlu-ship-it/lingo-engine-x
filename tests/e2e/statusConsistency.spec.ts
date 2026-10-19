@@ -58,8 +58,7 @@ test('Wort-Hub: die Zahlen je Zustand sind die Zahlen der Liste; Behaltensquote 
     const dd = dl.locator('div', { has: page.getByText(LABEL[s], { exact: true }) }).locator('dd');
     await expect(dd).toHaveText(String(counts[s]));
   }
-  await expect(page.getByTestId('ws-stat-active')).toContainText(String(counts.firm));
-  await expect(page.getByText('Frei abgerufen (28 Tage)')).toBeVisible();
+  await expect(page.getByTestId('retention-28')).toBeVisible();
   expect(errors).toEqual([]);
 });
 
@@ -87,7 +86,10 @@ for (const s of ['learning', 'wobbly', 'safe', 'firm'] as const) {
     const status = page.getByTestId('status').first();
     await expect(status).toBeVisible();
     await expect(status).toHaveAttribute('data-state', s);
-    await expect(status.getByTestId('status-detail')).toHaveText(detail);
+    await expect(status.getByTestId('status-detail')).toHaveCount(0); // nie in der Kopfzeile
+    // Offene Aufgaben (Eigener Satz, Anwenden) haben kein ⓘ: dort steht der Beleg unter dem Zweck.
+    if (await page.getByTestId('purpose-info').count()) await page.getByTestId('purpose-info').click();
+    await expect(page.getByTestId('status-detail')).toHaveText(detail);
     expect(errors).toEqual([]);
   });
 }

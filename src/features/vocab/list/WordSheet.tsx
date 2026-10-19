@@ -374,7 +374,7 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
 
       {card.kind === 'vocab' && card.inDb && !card.hidden && <EditCard card={card} />}
       <Disclosure label={t('grRaw')}>
-        <dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm" data-testid="word-raw">
+        <dl className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-4 gap-y-1 text-sm" lang={lang} data-testid="word-raw">
           <dt className="text-muted">{t('stxRawStage')}</dt>
           <dd className="lx-tnum" data-testid="word-raw-stage">
             {t('lkStage', { n: card.stage })}

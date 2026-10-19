@@ -325,12 +325,22 @@ export function ExerciseShell(props: ExerciseShellProps) {
         {task.open && (
           <p className="lx-t-meta m-0 text-muted" data-testid="purpose" data-open="">
             {task.purpose}
+            {status.state && status.detail && (
+              <span className="mt-0.5 block text-subtle" data-testid="status-detail">
+                {status.detail}
+              </span>
+            )}
           </p>
         )}
         {info && !task.open && (
           <p id={infoId} className="lx-t-support m-0 text-muted" data-testid="purpose">
             {[status.topic, status.pattern].filter(Boolean).length > 0 && (
               <span className="block text-fg">{[status.topic, status.pattern].filter(Boolean).join(' · ')}</span>
+            )}
+            {status.state && status.detail && (
+              <span className="block" data-testid="status-detail">
+                {status.detail}
+              </span>
             )}
             {task.purpose}
           </p>

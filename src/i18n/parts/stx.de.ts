@@ -34,7 +34,7 @@ export const stxDe = {
   stxMindNoGapHint: 'Erst nach einem Tag Pause kann die App sagen, wie gut es sitzt.',
   stxMindNew: 'noch nicht gelernt',
   // Messwerte dahinter
-  stxRawStage: 'Stufe (höchste bestandene Abfrageart)',
+  stxRawStage: 'Höchste Stufe',
   // Erklärzeile zur strengeren Fest-Zählung (gilt ab 20.10.2026, einige Wochen sichtbar)
   stxFestRuleNote: 'Fest zählt seit heute strenger: Die App braucht jetzt einen Beleg, dass du das Wort auch in einem anderen Satz oder in einem eigenen Satz ohne Hilfe weißt. Viele ältere Antworten wurden dafür noch nicht aufgezeichnet – deshalb ist die Zahl gerade klein. Das sagt nichts darüber, was du vergessen hast.',
   stxGoalSafe: 'sicher',

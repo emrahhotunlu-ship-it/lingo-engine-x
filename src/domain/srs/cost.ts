@@ -4,7 +4,7 @@ import type { TrainCard } from './types';
 // Geschätzte Sekunden je Karte – EINE Quelle für den Tagesplan (`unit/review.ts`), die ältere Rundenplanung
 // (`queue.ts`) und die Zeitanzeige im Wortschatz (vorher drei verschiedene Annahmen: 8 s, 12/20/35 s und 27 s je Karte,
 // dadurch standen auf einem Bildschirm zwei sich widersprechende Minutenangaben).
-// Frische Stufen gehen schneller (Antippen), frei Getipptes dauert länger, „Sicher anwenden“ am längsten.
+// Frische Stufen gehen schneller (Antippen), frei Getipptes dauert länger, „Frei anwenden“ am längsten.
 
 export const CARD_SEC = { early: 12, mid: 20, late: 35 } as const;
 /** Neue Karte: Einführung + erste Abfrage. */

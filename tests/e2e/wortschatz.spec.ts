@@ -180,8 +180,9 @@ test('Dein Stand: Abschnitt „Wortschatz-Statistik“ (Platz stand); ohne KI bl
   const stats = page.getByTestId('ws-stats');
   await stats.scrollIntoViewIfNeeded();
   await expect(stats).toBeVisible();
-  // Behaltensquote (28 Tage, `retention28`): ohne Antworten mit mindestens 7 Tagen Pause steht „–“, sonst ein Prozentwert.
-  await expect(page.getByTestId('ws-stat-retention')).toContainText(/%|–/);
+  // Behaltensquote (28 Tage, `retention28`) steht in „Wie gut sitzt es?“: „–“ unter der Mindestzahl, sonst ein Prozentwert; die Statistik wiederholt sie nicht.
+  await expect(page.getByTestId('retention-28')).toContainText(/%|–/);
+  await expect(page.getByTestId('ws-stat-median')).toBeVisible();
   await openTab(page, 'vocab');
   await page.getByTestId('ws-review').click();
   await screen(page, 'trainer');

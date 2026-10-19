@@ -2,7 +2,7 @@ import type { Grade, Stage } from './types';
 
 // Fünfstufige Leiter mit den Formeln der alten App (Daten-Entwurf §1.4), damit `stage`
 // für beide Apps dieselbe Bedeutung behält: 0 Neu · 1 Erkennen · 2 Zuordnen ·
-// 3 Mit Stütze abrufen · 4 Frei abrufen · 5 Sicher anwenden.
+// 3 Mit Stütze abrufen · 4 Frei abrufen · 5 Frei anwenden.
 
 type Doc = Readonly<Record<string, unknown>>;
 const num = (v: unknown): number => (typeof v === 'number' && Number.isFinite(v) ? v : 0);

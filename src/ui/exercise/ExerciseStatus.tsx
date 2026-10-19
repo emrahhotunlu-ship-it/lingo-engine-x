@@ -11,7 +11,7 @@ export const STATE_DOTS: Record<UnitState, number> = { new: 1, learning: 2, wobb
 /** UX-Prüfung W10: Grün heißt „sicher“. Neue und lernende Einheiten zeigen ihre Punkte neutral (`data-unsure` an `.lx-dots`). */
 export const isUnsure = (state: UnitState | null | undefined): boolean => state === 'new' || state === 'learning';
 
-export function ExerciseStatus({ area, state, kindLabel, topic, pattern, badge, badgeTone = 'near', detail }: ShellStatus) {
+export function ExerciseStatus({ area, state, kindLabel, topic, pattern, badge, badgeTone = 'near' }: ShellStatus) {
   const { t } = useT();
   const word = state ? t(WORD[state]) : null;
   const where = [topic, pattern].filter((x): x is string => !!x).join(' · ');
@@ -27,23 +27,10 @@ export function ExerciseStatus({ area, state, kindLabel, topic, pattern, badge, 
           <span aria-hidden="true">{word}</span>
         </span>
       )}
-      {/* Paket ST: derselbe Beleg wie in Liste und Wortblatt (nur Wörter; Grammatik hat keinen). */}
-      {state && detail && (
-        <>
-          <span aria-hidden="true" className="text-subtle">
-            ·
-          </span>
-          <span className="max-w-full font-normal text-subtle [overflow-wrap:anywhere]" data-testid="status-detail">
-            {detail}
-          </span>
-        </>
-      )}
-      {state && (
-        <span aria-hidden="true" className="text-subtle">
-          ·
-        </span>
-      )}
-      <span data-testid="ex-kind">{kindLabel}</span>
+      {/* Trennpunkt als ::before des folgenden Elements: bricht die Zeile, hängt nie ein Punkt am Zeilenende. */}
+      <span data-testid="ex-kind" className={state ? "before:mr-2 before:text-subtle before:content-['·']" : undefined}>
+        {kindLabel}
+      </span>
       {/* UX-Prüfung W1: „dein Fehler“ nie zusammen mit „Neu“ (ein neues Thema hat keinen alten Fehler). */}
       {badge && state !== 'new' && (
         <span className={`rounded-full px-2 py-0.5 ${badgeTone === 'hint' ? 'bg-hint-soft text-hint-text' : badgeTone === 'neutral' ? 'bg-surface text-muted' : 'bg-near-soft text-near-text'}`} data-testid="again-badge" data-tone={badgeTone}>

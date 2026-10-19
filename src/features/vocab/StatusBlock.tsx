@@ -3,7 +3,7 @@ import { FREE_DAYS_GOAL } from '../../domain/metrics/cardStatus';
 import type { TrainCard } from '../../domain/srs/types';
 import { useT } from '../../i18n';
 import { StateDots } from './StateDots';
-import { STATE_WORD, mindLine, statusDetail } from './statusText';
+import { STATE_WORD, mindAdds, mindLine, statusDetail } from './statusText';
 
 // Der EINE Status im Wortblatt (Paket ST): oben eine Zeile „Zustand · Beleg · zuletzt falsch“, darunter „Jetzt im Kopf“ und die Leiter der Belege.
 // Liste, Übung, Hub und Fortschritt lesen dieselbe Rechnung (`cardStatus`) und dieselben Texte (`statusText`).
@@ -24,7 +24,7 @@ export function StatusHeader({ card, now }: { card: Card; now: number }) {
           {statusDetail(st, t, dateShort)}
         </p>
       </div>
-      {!card.isNew && (
+      {!card.isNew && mindAdds(st) && (
         <p className="text-sm text-muted" data-testid="word-mind" data-mind={st.mind}>
           {mindLine(st, t)}
           {st.mind === 'noGap' && <span className="text-subtle"> · {t('stxMindNoGapHint')}</span>}
@@ -52,7 +52,7 @@ export function StatusLadder({ card, now }: { card: Card; now: number }) {
         {rows.map(([id, label, done, extra]) => (
           <li key={id} className="flex items-baseline justify-between gap-3" data-step={id} data-done={done || undefined}>
             <span className={done ? '' : 'text-muted'}>{label}</span>
-            <span className={`lx-tnum ${done ? 'text-accent-text' : 'text-subtle'}`}>{extra && done ? extra : done ? t('stxYes') : t('stxNot')}</span>
+            <span className={`lx-tnum ${done ? 'text-ok-text' : 'text-subtle'}`}>{extra && done ? extra : done ? t('stxYes') : t('stxNot')}</span>
           </li>
         ))}
       </ul>

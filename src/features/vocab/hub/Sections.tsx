@@ -1,4 +1,3 @@
-import { festNoteActive } from '../../../domain/metrics';
 import { useMemo } from 'react';
 import { useClock } from '../../../app/clock';
 import { prefsOp, type ReviewModePref } from '../../../domain/srs/decks';
@@ -73,27 +72,17 @@ export function VocabSettingsSection() {
 export function VocabStatsSection() {
   const { t, lang } = useT();
   const now = useClock((s) => s.now);
-  const today = useClock((s) => s.today);
   const cards = useVocabCards();
   const s = useMemo(() => vocabStatistics(cards, now), [cards, now]);
-  const pct = s.retention === null ? '–' : `${Math.round(s.retention * 100)} %`;
   const num = (n: number) => n.toLocaleString(lang === 'de' ? 'de-DE' : 'en-US');
-  const cell = (label: string, value: string, testId: string, sub?: string) => (
-    <div className="flex flex-col gap-0.5 rounded-2xl bg-surface p-3" data-testid={testId}>
-      <span className="text-xs text-muted">{label}</span>
-      <span className="lx-tnum text-lg font-semibold">{value}</span>
-      {sub && <span className="text-xs text-subtle">{sub}</span>}
-    </div>
-  );
+  // Nur, was „Wie gut sitzt es?“ darüber nicht schon sagt: Stabilität und die Verteilung je Zustand (EINE Darstellung).
+  // „Erwartet gekonnt“, Behalten nach Pause und die Erkennungsquote stehen dort, aus derselben Quelle.
   return (
     <section className="flex flex-col gap-3" data-testid="ws-stats">
       <h2 className="lx-eyebrow">{t('nbWsStatsTitle')}</h2>
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-        {cell(t('nbWsRetention'), pct, 'ws-stat-retention', t('nbWsAnswers', { n: s.answers }))}
-        {cell(t('nbWsMedianS'), s.medianStability === null ? '–' : t('nbWsDaysN', { n: s.medianStability }), 'ws-stat-median')}
-        {cell(t('nbWsActive'), num(s.byState.firm), 'ws-stat-active', t('nbWsActiveSub', { n: s.byState.safe }))}
-        {cell(t('nbWsExpected'), num(s.expected), 'ws-stat-expected', t('nbWsExpectedSub'))}
-        {cell(t('nbWsSure'), num(s.sure), 'ws-stat-sure')}
+      <div className="flex flex-col gap-0.5 rounded-2xl bg-surface p-3" data-testid="ws-stat-median">
+        <span className="text-xs text-muted">{t('nbWsMedianS')}</span>
+        <span className="lx-tnum text-lg font-semibold">{s.medianStability === null ? '–' : t('nbWsDaysN', { n: s.medianStability })}</span>
       </div>
       <dl className="lx-tnum flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted" data-testid="ws-stat-states">
         {(
@@ -111,16 +100,6 @@ export function VocabStatsSection() {
           </div>
         ))}
       </dl>
-      {festNoteActive(today) && (
-        <p className="text-xs text-subtle" data-testid="ws-fest-rule-note">
-          {t('stxFestRuleNote')}
-        </p>
-      )}
-      {s.recognition.rate !== null && (
-        <p className="text-xs text-subtle" data-testid="ws-stat-recognition">
-          {t('stxRetentionRecognition', { pct: Math.round(s.recognition.rate * 100), n: s.recognition.n })} · {t('stxRetentionNote')}
-        </p>
-      )}
     </section>
   );
 }

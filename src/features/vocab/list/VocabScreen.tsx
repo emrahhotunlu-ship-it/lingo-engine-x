@@ -4,7 +4,7 @@ import { useNav } from '../../../app/nav';
 import { openSheet } from '../../../app/sheets';
 import { useLive } from '../../../data/live';
 import { meaningOf } from '../../../domain/srs/cards';
-import { cardStatus } from '../../../domain/metrics';
+import { cardStatus, reviewToday } from '../../../domain/metrics';
 import { addIdsOp, isLeechCard, visibleDecks } from '../../../domain/srs/decks';
 import { filterCards, VOCAB_FILTERS, vocabStats, type VocabFilter, type VocabSort } from '../../../domain/srs/vocabList';
 import { normalizeNewPerDay } from '../../../domain/srs/queue';
@@ -17,6 +17,7 @@ import { StateDots } from '../StateDots';
 import { STATE_WORD, statusDetail } from '../statusText';
 import { ScreenHeader } from '../../learn/ui';
 import { useDecks, writeDecks } from '../decksStore';
+import { useToday } from '../../today/state';
 import { useVocabCards } from '../hub/data';
 import { decksErrorKey } from '../hub/errors';
 import { setHidden } from './actions';
@@ -71,6 +72,10 @@ export function VocabScreen({ filter: initialFilter, q: initialQ }: { filter?: s
   const sortLabel = t(sort === 'stage' ? 'vcSortStage' : 'vcSortAz');
   const newLine = stats.stockEmpty ? t('vcStockEmpty') : t('vcNewToday', { n: Math.min(stats.newToday, stats.quota), total: stats.quota });
   const own = visibleDecks(decks);
+  // „46 fällig, davon 30 heute im Plan“: dieselbe Pflichtzahl wie auf Heute (`reviewToday`), nie zwei Zahlen ohne Verbindung.
+  const plan = useToday((s) => s.plan);
+  const planned = useMemo(() => (plan && plan.duty.includes('review') ? reviewToday({ plan, cards: cards.filter((c) => !c.hidden), nowMs: now }).total : 0), [plan, cards, now]);
+  const dueLine = planned > 0 && planned < stats.due ? t('vcDuePlan', { n: stats.due, plan: planned }) : tn('vocabDue', stats.due);
 
   const toggle = (key: string) =>
     setSelected((s) => {
@@ -105,8 +110,7 @@ export function VocabScreen({ filter: initialFilter, q: initialQ }: { filter?: s
         back={back}
         lead={
           <span className="lx-tnum block truncate text-sm" data-testid="vocab-status">
-            {tn('vcTotal', stats.total - chunkCount)}
-            {chunkCount > 0 && <> · {tn('vcChunks', chunkCount)}</>} · {tn('vocabDue', stats.due)}
+            {dueLine}
           </span>
         }
         titleAction={
@@ -124,7 +128,7 @@ export function VocabScreen({ filter: initialFilter, q: initialQ }: { filter?: s
               type="search"
               className="lx-field pl-10"
               value={query}
-              placeholder={t('vcSearch')}
+              placeholder={t('vcSearchPh')}
               onChange={(e) => {
                 setQuery(e.target.value);
                 setLimit(PAGE);
@@ -174,7 +178,8 @@ export function VocabScreen({ filter: initialFilter, q: initialQ }: { filter?: s
       )}
       <div className="flex flex-col gap-2">
         <p className="lx-tnum text-sm text-muted" data-testid="vocab-count">
-          {tn('vcShown', list.length)} · {newLine}
+          {tn('vcShown', list.length)}
+          {filter === 'all' && !q.trim() && chunkCount > 0 && ` (${tn('vcTotal', stats.total - chunkCount)}, ${tn('vcChunks', chunkCount)})`} · {newLine}
         </p>
         {list.length === 0 ? (
           <p className="text-base text-muted" data-testid="vocab-empty">
@@ -236,7 +241,7 @@ export function WordRow({ card, nowMs, lang, onOpen, selecting, selected }: { ca
           </span>
         )}
         {/* Paket ST: derselbe Beleg wie im Wortblatt und in der Übung. */}
-        <span className="text-xs text-subtle [overflow-wrap:anywhere]" data-testid="vocab-row-detail">
+        <span className={`text-xs text-subtle [overflow-wrap:anywhere] ${st.tier === 'new' ? 'sr-only' : ''}`} data-testid="vocab-row-detail">
           {statusDetail(st, t, dateShort)}
         </span>
       </span>

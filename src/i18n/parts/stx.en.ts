@@ -30,7 +30,7 @@ export const stxEn = {
   stxMindNoGap: 'no gap yet',
   stxMindNoGapHint: 'The app can only tell how well it sticks after a day of break.',
   stxMindNew: 'not learned yet',
-  stxRawStage: 'Level (highest question type passed)',
+  stxRawStage: 'Highest level',
   stxFestRuleNote: 'Firm now counts more strictly as of today: the app needs proof that you also know the word in a different sentence or in a sentence of your own, without help. Many older answers were not recorded in that detail, so the number is small right now. That says nothing about what you have forgotten.',
   stxGoalSafe: 'safe',
   stxGoalFirm: 'firm',
