@@ -5,10 +5,12 @@ import { chunkGapWords, chunkParts, locateChunkWords, toChunkCard } from '../../
 import { buildExercise, chunkWordGap } from '../../src/domain/srs/exercise';
 import { explainWord } from '../../src/domain/srs/explainWord';
 import { checkExercise } from '../../src/domain/srs/guard';
-import { availableExercises, makeEnv, supports } from '../../src/domain/srs/modes';
+import { availableExercises, chooseExercise, makeEnv, supports } from '../../src/domain/srs/modes';
 import { isLongChunk, LONG_CHUNKS_PER_DAY, MIX_PHRASES, newCards } from '../../src/domain/srs/queue';
 import type { ExerciseId, Stage, TrainCard } from '../../src/domain/srs/types';
 import { familyOf, freeCorrectDays } from '../../src/domain/srs/variety';
+import { packExtraOf } from '../../src/domain/c1pack/packFields';
+import { gateJam, sentenceChangeShare } from '../../src/domain/srs/wlDiagnose';
 import { berlin } from './helpers';
 
 vi.mock('../../src/domain/srs/crossLink', () => ({ crossSentences: () => [] }));
@@ -42,6 +44,34 @@ describe('Tor: „Schwer“ ist kein freier Beleg', () => {
   });
 });
 
+describe('Tor bei Wendungen: cloze_part (ein Wort) untergräbt das Tor nicht', () => {
+  const D = 86_400_000;
+  const h = (t: number, x: string, g = 3) => ({ t, m: 'type', g, x });
+  it('zählt nur für den Aufstieg auf Stufe 4 und dort für höchstens einen Tag, nie für Stufe 5', () => {
+    const two = { hist: [h(NOW - 4 * D, 'cloze_part'), h(NOW - 2 * D, 'cloze_part')] };
+    expect(freeCorrectDays(two, undefined, 4)).toBe(1);
+    expect(freeCorrectDays(two, undefined, 5)).toBe(0);
+    expect(freeCorrectDays(two)).toBe(0);
+    expect(freeCorrectDays({ hist: [...two.hist, h(NOW - D, 'cloze')] }, undefined, 4)).toBe(2);
+    expect(freeCorrectDays({ hist: [h(NOW - 2 * D, 'cloze_part')] }, { t: NOW, ex: 'cloze_part', grade: 3 }, 4)).toBe(1);
+    expect(freeCorrectDays({ hist: [h(NOW - 2 * D, 'cloze_part', 2)] }, undefined, 4)).toBe(0);
+  });
+
+  const ch = (hist: unknown[], xs: Doc) => chunk('weigh up the options', 'We should weigh up the options before Friday.', { stage: 3, hist, xs });
+  const env = makeEnv(true, true, true);
+  const strong = (...ids: string[]) => Object.fromEntries(ids.map((i) => [i, { c: 6, w: 0 }]));
+  const weak = (id: string) => ({ [id]: { c: 0, w: 6 } });
+  it('Stufe 3 mit offenem Tor: erst das freie Einzelwort, die ganze freie Lücke erst nach einem cloze_part-Tag', () => {
+    const before = ch([], { ...strong('cloze_hint', 'tiles', 'complete', 'colloc_gap'), ...weak('cloze_part') });
+    expect(chooseExercise(before, 'de', 6, [], env)).toBe('cloze_part');
+    const noWhole = ch([], { ...strong('cloze_part', 'cloze_hint', 'tiles', 'complete', 'colloc_gap'), ...weak('cloze') });
+    expect(availableExercises(noWhole, 'de', 6, env)).not.toContain('cloze');
+    expect(chooseExercise(noWhole, 'de', 6, [], env)).not.toBe('cloze');
+    const after = ch([h(NOW - 3 * D, 'cloze_part')], { ...strong('cloze_hint', 'tiles', 'complete', 'colloc_gap', 'cloze_part'), ...weak('cloze') });
+    expect(chooseExercise(after, 'de', 6, [], env)).toBe('cloze');
+  });
+});
+
 describe('Jede Stufe am Handy mindestens zwei echte Abfrage-Familien', () => {
   const envs = [makeEnv(true, true, true), makeEnv(false, false, true), makeEnv(true, false, true)];
   const families = (list: ExerciseId[]): number => new Set(list.map(familyOf)).size;
@@ -65,10 +95,13 @@ describe('Jede Stufe am Handy mindestens zwei echte Abfrage-Familien', () => {
       }
   });
 
-  it('Stufe 1 bietet „Passt das Wort?“, Stufe 2 den Wortanfang', () => {
+  it('Stufe 1 bietet zwei Familien (Bedeutung wählen, Wort wählen), Stufe 2 den Wortanfang; „Passt das Wort?“ (fits) wird nie angeboten', () => {
     const env = makeEnv(true, true, true);
-    expect(availableExercises(cards({ stage: 1 })[0]!, 'de', 6, env)).toContain('fits');
+    const s1 = availableExercises(cards({ stage: 1 })[0]!, 'de', 6, env);
+    expect(s1).toEqual(expect.arrayContaining(['mc_en', 'mc_de']));
     expect(availableExercises(cards({ stage: 2 })[0]!, 'de', 6, env)).toContain('cloze_hint');
+    for (const stage of [0, 1, 2, 3, 4, 5] as Stage[]) for (const c of cards({ stage })) expect(availableExercises(c, 'de', 6, env), `${c.id}@${stage}`).not.toContain('fits');
+    expect(supports(cards({ stage: 1 })[0]!, 'fits', 'de', 6)).toBe(false);
   });
 });
 
@@ -117,10 +150,6 @@ describe('„Passt das Wort in diesen Satz?“ (fits)', () => {
     }
   });
 
-  it('Wendungen bekommen die Art nicht', () => {
-    const ch = chunk('meet a deadline', 'We always meet a deadline for the client.', { stage: 1 });
-    expect(supports(ch, 'fits', 'de', 6)).toBe(false);
-  });
 });
 
 describe('Wendungen zerlegt', () => {
@@ -138,24 +167,44 @@ describe('Wendungen zerlegt', () => {
     expect(chunkGapWords('They pushed back the go-live.', 'push back the go-live').map((w) => w.w)).toEqual(['pushed', 'go-live', 'back']);
   });
 
-  it('keine Überspringerei mehr: Stufe 1 und 2 sind echte Stufen, die ersten Tippaufgaben haben nur ein Wort als Lücke', () => {
-    const c1 = chunk('meet a deadline', ex, { stage: 1 });
-    expect(c1.stage).toBe(1);
-    const hint = buildExercise(chunk('meet a deadline', ex, { stage: 2 }), 'cloze_hint', 'de', [], 'x|0');
-    expect(hint.sentence?.gap).toBe('meet');
-    expect(hint.accepted).toEqual(['meet']);
-    const free2 = buildExercise(chunk('meet a deadline', ex, { stage: 3 }), 'cloze', 'de', [], 'x|0');
-    expect(free2.sentence?.gap.split(' ')).toHaveLength(1);
+  const ex2 = 'We should weigh up the options before Friday.';
+  it('keine Überspringerei mehr: Stufe 1 und 2 sind echte Stufen; Stütze auf Stufe 2 hat nur ein Wort als Lücke, `cloze_part` ein freies Einzelwort', () => {
+    expect(chunk('weigh up the options', ex2, { stage: 1 }).stage).toBe(1);
+    const hint = buildExercise(chunk('weigh up the options', ex2, { stage: 2 }), 'cloze_hint', 'de', [], 'x|0');
+    expect(hint.sentence?.gap.split(' ')).toHaveLength(1);
+    expect(hint.accepted).toEqual([hint.sentence?.gap]);
+    const part = buildExercise(chunk('weigh up the options', ex2, { stage: 3 }), 'cloze_part', 'de', [], 'x|0');
+    expect(part.ex).toBe('cloze_part');
+    expect(part.sentence?.gap.split(' ')).toHaveLength(1);
+    // `cloze` ist immer die ganze Wendung.
+    const whole = buildExercise(chunk('weigh up the options', ex2, { stage: 3 }), 'cloze', 'de', [], 'x|0');
+    expect(whole.sentence?.gap).toBe('weigh up the options');
   });
 
-  it('das Lückenwort wechselt mit dem Verlauf', () => {
-    const base = chunk('meet a deadline', ex, { stage: 2 });
+  it('das Paket steuert die erste Lücke: gap.at, phrasal (abhängige Präposition), frame (nicht zerlegt)', () => {
+    expect(chunkGapWords(ex, 'meet a deadline', { at: 'deadline' })[0]?.w).toBe('deadline');
+    expect(chunkGapWords('We will push back on that plan.', 'push back on', { cat: 'phrasal' })[0]?.w).toBe('on');
+    expect(chunkGapWords('We will look into it today.', 'look into', { cat: 'phrasal' })[0]?.w).toBe('into');
+    expect(chunkParts('push back on', { cat: 'phrasal' }).map((p) => `${p.text}:${p.kind}`)).toEqual(['push:core', 'back:core', 'on:frame']);
+    expect(chunkParts('I see where you are coming from', { cat: 'frame' }).every((p) => p.kind === 'fixed')).toBe(true);
+    expect(chunkGapWords('I see where you are coming from.', 'I see where you are coming from', { cat: 'frame', at: 'coming' })[0]?.w).toBe('coming');
+    expect(chunkGapWords('We are fine for the time being.', 'for the time being', { cat: 'frame', at: 'for' })[0]?.w).toBe('for');
+  });
+
+  it('das Lückenwort wechselt weiter, auch wenn `hist` bei 12 Einträgen gedeckelt ist (Zähler: reps)', () => {
+    const hist = Array.from({ length: 12 }, (_, i) => ({ t: i + 1, m: 'cloze', g: 3 }));
     const seen = new Set<string>();
-    for (let n = 0; n < 4; n++) {
-      const c = { ...base, doc: { ...base.doc, hist: Array.from({ length: n }, (_, i) => ({ t: i + 1, m: 'cloze', g: 3 })) } } as TrainCard;
-      seen.add(chunkWordGap(c, c.context!)!.gap);
+    for (let reps = 12; reps < 18; reps++) {
+      const base = chunk('weigh up the options', ex2, { stage: 2, reps, hist });
+      seen.add(chunkWordGap(base, base.context!)!.gap);
     }
-    expect([...seen].sort()).toEqual(['deadline', 'meet']);
+    expect(seen.size).toBeGreaterThanOrEqual(3);
+  });
+
+  it('ein bekanntes Wort der Wendung wird nicht als Erstes abgefragt', () => {
+    const base = chunk('weigh up the options', ex2, { stage: 2, reps: 0 });
+    expect(chunkWordGap(base, base.context!)!.gap).toBe('weigh');
+    expect(chunkWordGap(base, base.context!, new Set(['weigh']))!.gap).toBe('options');
   });
 
   it('Stufe 3: ganze Wendung mit Anfangsbuchstaben je Wort; frei (cloze) ganz erst ab Stufe 4', () => {
@@ -220,5 +269,29 @@ describe('Menge: Mix 1:1, höchstens zwei lange Wendungen, bekanntes Kernwort zu
   it('neue Wendungen ohne Satz werden zurückgestellt (Kap. 15)', () => {
     const noSentence = { ...mk('no sentence', 'chunk'), context: null } as TrainCard;
     expect(newCards([noSentence, mk('with sentence', 'chunk')]).map((c) => c.word)).toEqual(['with sentence']);
+  });
+});
+
+describe('Diagnosewerte und Paket-Kategorie', () => {
+  it('Tor-Stau: Stufe 3, mindestens 4 freie Versuche, kein einziger Gut', () => {
+    const tries = (g: number, n: number) => Array.from({ length: n }, (_, i) => ({ t: NOW - (n - i) * 86_400_000, m: 'type', g, x: 'cloze' }));
+    const jam = { stage: 3 as Stage, hidden: false, doc: { hist: tries(2, 4) } };
+    const ok = { stage: 3 as Stage, hidden: false, doc: { hist: [...tries(2, 4), { t: NOW, m: 'type', g: 3, x: 'cloze' }] } };
+    const few = { stage: 3 as Stage, hidden: false, doc: { hist: tries(2, 3) } };
+    expect(gateJam([jam, ok, few, { ...jam, stage: 4 }])).toBe(1);
+  });
+
+  it('Satzwechsel ab Tag 2: Anteil der Wiederholungen mit anderem Satz als zuletzt', () => {
+    const D = 86_400_000;
+    const doc = { hist: [{ t: NOW - 3 * D, s: 'a' }, { t: NOW - 2 * D, s: 'b' }, { t: NOW - D, s: 'b' }, { t: NOW, s: 'c' }] };
+    const r = sentenceChangeShare([{ doc }]);
+    expect(r.n).toBe(3);
+    expect(r.share).toBeCloseTo(2 / 3);
+    expect(sentenceChangeShare([{ doc: { hist: [] } }]).share).toBeNull();
+  });
+
+  it('Paketeintrag liefert die Kategorie', () => {
+    expect(packExtraOf('push back on')?.cat).toBe('phrasal');
+    expect(packExtraOf('push back on')?.gap?.at).toBe('on');
   });
 });

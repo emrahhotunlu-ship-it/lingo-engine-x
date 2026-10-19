@@ -45,9 +45,9 @@ const bare = (t: string): string => t.toLowerCase().replace(/[^a-zäöüß0-9'-]
 const toks = (s: string): string[] => s.split(/\s+/).filter(Boolean);
 
 /** Übungen mit einer Lücke auf dem Kartenwort in einem Satz. */
-const GAP_EX: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['cloze', 'cloze_hint', 'wordfam', 'dictation', 'tiles', 'speed', 'match']);
+const GAP_EX: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['cloze', 'cloze_part', 'cloze_hint', 'wordfam', 'dictation', 'tiles', 'speed', 'match']);
 /** Übungen, in denen die Bedeutung die Frage ist und die Antwort das Wort/die Wendung: der Hinweis darf es nicht enthalten. */
-const WORD_ANSWER: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['cloze', 'cloze_hint', 'wordfam', 'tiles', 'match', 'mc_de', 'type', 'speed']);
+const WORD_ANSWER: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['cloze', 'cloze_part', 'cloze_hint', 'wordfam', 'tiles', 'match', 'mc_de', 'type', 'speed']);
 const MEANING_OPTIONS: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['mc_en', 'ctx_mc', 'listen_mc']);
 const WORD_OPTIONS: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['mc_de', 'match', 'colloc_gap', 'colloc', 'contrast']);
 

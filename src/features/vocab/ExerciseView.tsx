@@ -95,7 +95,7 @@ type Feedback = {
 
 const PURPOSE: Record<number, MessageKey> = { 1: 'purpose1', 2: 'purpose2', 3: 'purpose3', 4: 'purpose4', 5: 'purpose5' };
 /** Freie Tipp-Arten: „Tipp“ deckt Platzhalter bzw. den ersten Buchstaben auf (zählt als Hilfe). */
-const FREE_TYPED: ReadonlySet<ExerciseId> = new Set(['cloze', 'type', 'situation', 'colloc', 'wordfam']);
+const FREE_TYPED: ReadonlySet<ExerciseId> = new Set(['cloze', 'cloze_part', 'type', 'situation', 'colloc', 'wordfam']);
 /**
  * Arten, deren Frage die deutsche Bedeutung nach der Antwort noch zeigt – im Ergebnis nicht noch einmal (H3, Kap. 15).
  * Die Erklär-Karte nennt die Bedeutung nie als eigene Zeile; sie steht im Satz bzw. in „Merke“.
@@ -105,7 +105,7 @@ const ANSWER_IS_DE: ReadonlySet<ExerciseId> = new Set(['mc_en', 'ctx_mc', 'liste
 const MEANING_SHOWN: ReadonlySet<ExerciseId> = new Set(['mc_de', 'type', 'match', 'situation']);
 const LISTEN: ReadonlySet<ExerciseId> = new Set(['listen_mc', 'dictation']);
 /** „Erst ein Hinweis, dann die Lösung“: getippte Arten mit zweitem Versuch. Nicht Diktat, nicht Auswahl, nie im Wochen-Check (`noHelp`). */
-const RETRY_EX: ReadonlySet<ExerciseId> = new Set(['cloze_hint', 'cloze', 'type', 'situation', 'colloc', 'wordfam']);
+const RETRY_EX: ReadonlySet<ExerciseId> = new Set(['cloze_hint', 'cloze', 'cloze_part', 'type', 'situation', 'colloc', 'wordfam']);
 /** Arten mit einer Satzantwort (Claude prüft, lokal nur eine grobe Prüfung). */
 const SENTENCE_EX: ReadonlySet<ExerciseId> = new Set(['complete', 'produce', 'act_scene', 'act_rewrite', 'act_impulse', 'act_combo', 'act_mail']);
 // Feste leere Referenz statt `?? []` im Selektor (sonst rendert die Karte endlos neu, React-Fehler #185).

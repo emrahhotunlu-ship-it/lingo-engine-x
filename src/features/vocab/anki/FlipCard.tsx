@@ -233,6 +233,13 @@ export function FlipCard({ exercise, again = false, onDone, behind = 0 }: { exer
       {ctx && (
         <EnglishText as="p" className="lx-t-support m-0 text-muted" text={ctx.sentence} {...src} highlight={[ctx.start, ctx.end]} testId="flip-origin" />
       )}
+      {/* WL: Zeigt die Karte einen anderen Satz als den Ursprungssatz, steht der Ursprungssatz mit seiner Herkunft zusätzlich auf der Rückseite. */}
+      {card.context && ctx && card.context.sentence !== ctx.sentence && (
+        <p className="lx-t-meta m-0 text-subtle" data-testid="flip-origin-anchor">
+          <span lang={lang}>{t('flipOriginLabel')}</span>{' '}
+          <EnglishText as="span" text={card.context.sentence} {...src} highlight={[card.context.start, card.context.end]} />
+        </p>
+      )}
       {/* Die deutsche Bedeutung steht genau einmal: bei Deutsch → Englisch zeigt sie schon die Vorderseite. */}
       {dir === 'en-de' && meaning && (
         <p className="lx-t-body m-0" lang={lang}>

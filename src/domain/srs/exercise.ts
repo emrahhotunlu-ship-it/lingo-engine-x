@@ -227,7 +227,7 @@ function pickColloc(card: TrainCard, rng: () => number): Colloc | null {
 const bareAnswer = (card: TrainCard): string => (card.kind === 'chunk' ? typedForm(card.word) : card.word);
 
 /** Übungen, in denen die Bedeutung die Frage ist (Hinweis über der Lücke, Frage über den Optionen): sie darf die Antwort nicht enthalten. */
-const CUE_EX: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['cloze', 'cloze_hint', 'wordfam', 'dictation', 'tiles', 'match', 'mc_de', 'type', 'colloc', 'colloc_gap']);
+const CUE_EX: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['cloze', 'cloze_part', 'cloze_hint', 'wordfam', 'dictation', 'tiles', 'match', 'mc_de', 'type', 'colloc', 'colloc_gap']);
 
 /**
  * Bedeutung als Hinweis ohne die Lösung (Audit 12.10.2026): Deutsche Bedeutungen enthalten oft das englische Wort selbst („feiner Unterschied,
@@ -275,11 +275,11 @@ export const WORD_CTX_TPL = 'word-ctx@1';
  * Tests bleiben lesbar.
  */
 export const exTextKey = (e: Pick<Exercise, 'ex' | 'start'> & { sentence?: Exercise['sentence'] }): string =>
-  e.ex === 'complete' && !e.start?.trim() ? 'produce' : e.ex === 'match' && e.sentence === null ? 'mc_de' : e.ex; // „Zuordnen“ ohne Satz hat keine Lücke: Aufgabe wie „Wort wählen“ (Audit 12.10.2026)
+  e.ex === 'cloze_part' ? 'cloze' : e.ex === 'complete' && !e.start?.trim() ? 'produce' : e.ex === 'match' && e.sentence === null ? 'mc_de' : e.ex; // „Zuordnen“ ohne Satz hat keine Lücke: Aufgabe wie „Wort wählen“ (Audit 12.10.2026)
 
 /**
- * `origin`: immer der Ursprungssatz (Prüfabfrage und Kontrolle nach dem Aufdecken), sonst wechselt der Satz ab Stufe 3 (`rotate.ts`; Claude-Sätze
- * schwacher Wörter `wx` schon ab Stufe 2). Zeigt die Übung einen Satz von Claude, trägt sie `ai` (Kennzeichnung und „Melden“, P52).
+ * `origin`: immer der Ursprungssatz (Prüfabfrage und Einführung), sonst wechselt der Satz ab der ersten Wiederholung an einem anderen Tag (`rotate.ts`, Tag 1
+ * bleibt der Ursprungssatz der Anker). Zeigt die Übung einen Satz von Claude, trägt sie `ai` (Kennzeichnung und „Melden“, P52).
  */
 export function buildExercise(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly TrainCard[], seed: string, opts: { sceneOf?: SceneLookup; origin?: boolean; act?: ActTask } = {}): Exercise {
   const e = buildRaw(card, ex, lang, pool, seed, opts);
@@ -311,11 +311,14 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
   // Eine Lücke, die mehr verdeckt als das Wort der Karte (beliebiges Objekt) oder das Wort ein zweites Mal zeigt, ist keine Lücke (`gapFit.ts`).
   const day = /^(\d{4}-\d{2}-\d{2})\|/.exec(seed)?.[1];
   const rawCtx = opts.origin ? card.context : rotatedContext(card, ex, day);
-  // Wendungen (WL): Bis Stufe 2 ist nur EIN Wort der Wendung die Lücke (bei Stütze und Bausteinen), das wechselnde Wort ergibt sich aus dem Verlauf; Stufe 3 zeigt die ganze
-  // Wendung mit Stütze (Anfangsbuchstabe je Wort, Bausteine); „frei“ (`cloze`) ist die ganze Wendung erst ab Stufe 4. Davor ist `cloze` ein freies EINZELnes Wort.
-  const wordGap = card.kind === 'chunk' && !!rawCtx && (((ex === 'cloze_hint' || ex === 'tiles') && stage <= 2) || (ex === 'cloze' && stage < CHUNK_FREE_STAGE));
-  const single = wordGap && rawCtx ? chunkWordGap(card, rawCtx) : null;
-  const ctx = single && gapUsable(single, lemmaFor(card)) ? single : !wordGap && rawCtx && gapUsable(rawCtx, lemmaFor(card)) ? rawCtx : null;
+  // Wendungen (WL): Bis Stufe 2 ist nur EIN Wort der Wendung die Lücke (Stütze, Bausteine); `cloze_part` (Stufe 3) ist ein freies Einzelwort. Das wechselnde Wort ergibt sich aus der
+  // Zahl der bisherigen Wiederholungen; Stufe 3 zeigt sonst die ganze Wendung mit Stütze (Anfangsbuchstabe je Wort, Bausteine); `cloze` ist immer die ganze Wendung (Tor: Stufe 3 erst
+  // nach einem `cloze_part`-Tag, `modes.ts`). Findet sich kein einzelnes Wort, gibt es nie still eine ganze Wendung ohne Satz (Kap. 15): `cloze_part` wird zur Stütz-Lücke (`cloze_hint`).
+  const wordGap = card.kind === 'chunk' && !!rawCtx && (ex === 'cloze_part' || ((ex === 'cloze_hint' || ex === 'tiles') && stage <= 2));
+  const single = wordGap && rawCtx ? chunkWordGap(card, rawCtx, knownHeadwords(pool)) : null;
+  const singleOk = !!single && gapUsable(single, lemmaFor(card));
+  if (ex === 'cloze_part' && !singleOk) return buildRaw(card, 'cloze_hint', lang, pool, seed, opts);
+  const ctx = singleOk ? single : rawCtx && gapUsable(rawCtx, lemmaFor(card)) ? rawCtx : null;
 
   switch (ex) {
     case 'listen_mc':
@@ -435,6 +438,7 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
       return { ...base, sentence, accepted: [sentence?.gap ?? card.word], trap: t };
     }
     case 'cloze_hint':
+    case 'cloze_part':
     case 'cloze': {
       const gap = ctx?.gap ?? card.word;
       return { ...base, sentence: ctx, firstLetter: ex === 'cloze_hint' ? gap.slice(0, 1) : null, accepted: [gap] };
@@ -480,15 +484,27 @@ export function choiceVerdict(e: Pick<Exercise, 'ex' | 'card' | 'meaning'>, chos
   return { verdict: 'wrong' };
 }
 
-/** Ab dieser Stufe wird die ganze Wendung frei getippt (davor ein Wort der Wendung oder mit Stütze). */
-export const CHUNK_FREE_STAGE = 4;
+/** Stichwörter der schon gelernten Wörter (Karten, die nicht neu sind): Ein bekanntes Kernwort einer Wendung wird nicht als Erstes abgefragt. */
+function knownHeadwords(pool: readonly TrainCard[]): Set<string> {
+  const out = new Set<string>();
+  for (const c of pool) if (c.kind === 'vocab' && !c.isNew) for (const w of [c.lemma, c.word]) out.add(norm(w).replace(/^to /, ''));
+  return out;
+}
 
-/** Das wechselnde Wort der Wendung als Lücke: reihum durch die Lückenwörter (Kern zuerst), nach der Zahl der bisherigen Antworten. */
-export function chunkWordGap(card: Pick<TrainCard, 'word' | 'doc'>, ctx: NonNullable<TrainCard['context']>): NonNullable<TrainCard['context']> | null {
-  const cands = chunkGapWords(ctx.sentence, card.word);
+/**
+ * Das wechselnde Wort der Wendung als Lücke: reihum durch die Lückenwörter, nach der Zahl der bisherigen Wiederholungen (`reps`, wächst auch, wenn `hist` bei 12 gedeckelt ist).
+ * Reihenfolge nach Paketangaben (`gap.at` zuerst, `phrasal`: abhängige Präposition, `frame`: Schlüsselwörter, `chunkGapWords`). Wörter, die schon eine bekannte Wortkarte sind, kommen
+ * nur dran, wenn es kein anderes gibt (bei bekanntem Kernwort fragt die App zuerst das Rahmenwort bzw. den Partner).
+ */
+export function chunkWordGap(card: Pick<TrainCard, 'word' | 'doc'>, ctx: NonNullable<TrainCard['context']>, known: ReadonlySet<string> = new Set()): NonNullable<TrainCard['context']> | null {
+  const extra = packExtraOf(card);
+  const cands = chunkGapWords(ctx.sentence, card.word, { cat: extra?.cat, at: extra?.gap?.at });
   if (!cands.length) return null;
-  const n = Array.isArray(card.doc.hist) ? (card.doc.hist as unknown[]).length : 0;
-  const w = cands[n % cands.length] as (typeof cands)[number];
+  const unknown = cands.filter((x) => !known.has(norm(x.w)));
+  const list = unknown.length ? unknown : cands;
+  const fsrs = card.doc.fsrs as { reps?: unknown } | undefined;
+  const reps = Math.max(typeof card.doc.reps === 'number' ? card.doc.reps : 0, typeof fsrs?.reps === 'number' ? fsrs.reps : 0, 0);
+  const w = list[reps % list.length] as (typeof list)[number];
   return { sentence: ctx.sentence, start: w.start, end: w.end, gap: ctx.sentence.slice(w.start, w.end) };
 }
 

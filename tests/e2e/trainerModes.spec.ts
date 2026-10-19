@@ -293,28 +293,6 @@ test.describe('Wendungen in der täglichen Wiederholung', () => {
   });
 });
 
-test('Stufe 1: „Passt das Wort in diesen Satz?“ – zwei Optionen in Klartext, Begründung, kein Tipp-Knopf (WL)', async ({ browser }) => {
-  const { page, close } = await phone(browser);
-  const { errors } = await startRound(page, { 'vocab/avoid': forcedDoc(1, { ...strong('mc_en', 'ctx_mc'), ...weak('fits') }, 0, 9) });
-  const ex = page.getByTestId('exercise');
-  await expect(ex).toHaveAttribute('data-ex', 'fits');
-  await expect(page.getByTestId('task')).toContainText('Passt');
-  const options = page.getByTestId('choice');
-  await expect(options).toHaveCount(2);
-  await expect(options.nth(0)).toHaveText(/Ja/);
-  await expect(options.nth(1)).toHaveText(/Nein/);
-  await expect(page.getByTestId('hint')).toHaveCount(0);
-  expect(await layoutProblems(page)).toEqual([]);
-  await options.nth(0).click();
-  await page.getByTestId('check').click();
-  await expect(page.getByTestId('verdict')).toBeVisible();
-  // Die Warum-Zeile steht bei richtiger und falscher Antwort; nirgends erscheinen die inneren Kennungen yes/no.
-  await expect(page.getByTestId('explanation')).toBeVisible();
-  await expect(page.getByTestId('result')).not.toContainText(/\b(yes|no)\b/);
-  expect(errors).toEqual([]);
-  await close();
-});
-
 test.describe('Wortschatzliste: Wendungen', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 

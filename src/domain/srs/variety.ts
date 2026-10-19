@@ -31,6 +31,7 @@ const FAMILY: Readonly<Partial<Record<ExerciseId, string>>> = {
   cloze_hint: 'gap-hint',
   tiles: 'gap-hint',
   cloze: 'gap',
+  cloze_part: 'gap',
   speed: 'gap',
   colloc_gap: 'colloc',
   colloc: 'colloc',
@@ -126,7 +127,7 @@ export function leastRecent<T>(items: readonly T[], keyOf: (x: T) => string, use
 
 /** Übungsarten, deren Antwort frei gebildet wird (ohne Auswahl und ohne Stütze). `cloze_hint` (Anfangsbuchstabe) und `tiles` (Bausteine) zählen nicht. */
 export const FREE_ANSWER: ReadonlySet<string> = new Set([
-  'cloze', 'type', 'situation', 'wordfam', 'dictation', 'colloc', 'complete', 'speed', 'produce', 'act_scene', 'act_rewrite', 'act_impulse', 'act_combo', 'act_mail',
+  'cloze', 'cloze_part', 'type', 'situation', 'wordfam', 'dictation', 'colloc', 'complete', 'speed', 'produce', 'act_scene', 'act_rewrite', 'act_impulse', 'act_combo', 'act_mail',
 ]);
 
 /** Kleinste Note, die als freier Beleg zählt: Gut. */
@@ -141,13 +142,16 @@ export const freeDaysNeeded = (next: number): number => FREE_DAYS_FOR_ADVANCE + 
 type Answer = { t: number; ex: string; grade: number; /** Index des Partnerworts (Treffer am Partnerwort ist kein freier Beleg für das Hauptwort). */ ci?: number };
 
 /**
- * Wie viele verschiedene Tage haben eine richtige (Note ≥ 2) freie Antwort in den letzten gespeicherten Antworten (`hist`, höchstens 12)?
+ * Wie viele verschiedene Tage haben eine gute (Note ≥ 3, `FREE_MIN_GRADE`) freie Antwort in den letzten gespeicherten Antworten (`hist`, höchstens 12)?
  * `extra` = die Antwort, die gerade gegeben wird. Ungeprüfte Antworten (`u: 1`: Aktivierung ohne Claude, Satz ohne Prüfung) zählen nicht, ebenso wenig
  * Treffer am Partnerwort (`colloc` mit `ci`): sie zeigen das Partnerwort, nicht den freien Abruf des Hauptworts (Lernwissenschaft M3).
+ * `cloze_part` (ein Wort einer Wendung als freie Lücke, WL) zählt nur für den Aufstieg auf Stufe 4 (`next` = 4) und dort für höchstens EINEN Tag;
+ * der zweite Tag muss eine ganze Wendung sein. Für Stufe 5 und ohne `next` zählt es nie.
  */
-export function freeCorrectDays(doc: Readonly<Record<string, unknown>>, extra?: Answer): number {
+export function freeCorrectDays(doc: Readonly<Record<string, unknown>>, extra?: Answer, next?: number): number {
   const raw = Array.isArray(doc.hist) ? (doc.hist as unknown[]) : [];
   const days = new Set<string>();
+  const partDays = new Set<string>();
   for (const h of raw) {
     if (!h || typeof h !== 'object') continue;
     const r = h as Record<string, unknown>;
@@ -155,8 +159,18 @@ export function freeCorrectDays(doc: Readonly<Record<string, unknown>>, extra?: 
     // WL (19.10.2026): „Schwer“ (2) ist kein freier Beleg – nur Gut (3) und Leicht (4) zählen.
     if (r.u === 1 || !FREE_ANSWER.has(r.x) || r.g < FREE_MIN_GRADE) continue;
     if (r.x === 'colloc' && typeof r.ci === 'number') continue;
-    days.add(dayKey(r.t));
+    (r.x === 'cloze_part' ? partDays : days).add(dayKey(r.t));
   }
-  if (extra && FREE_ANSWER.has(extra.ex) && extra.grade >= FREE_MIN_GRADE && !(extra.ex === 'colloc' && extra.ci !== undefined && extra.ci >= 0)) days.add(dayKey(extra.t));
+  if (extra && FREE_ANSWER.has(extra.ex) && extra.grade >= FREE_MIN_GRADE && !(extra.ex === 'colloc' && extra.ci !== undefined && extra.ci >= 0)) (extra.ex === 'cloze_part' ? partDays : days).add(dayKey(extra.t));
+  if (next === 4) {
+    const extraDay = [...partDays].find((d) => !days.has(d));
+    if (extraDay) days.add(extraDay);
+  }
   return days.size;
+}
+
+/** Wie viele verschiedene Tage haben eine gute `cloze_part`-Antwort? (Für die Wahl der Art bei Wendungen auf Stufe 3.) */
+export function partDaysOf(doc: Readonly<Record<string, unknown>>): number {
+  const raw = Array.isArray(doc.hist) ? (doc.hist as unknown[]) : [];
+  return new Set(raw.flatMap((h) => (h && typeof h === 'object' && (h as Record<string, unknown>).x === 'cloze_part' && typeof (h as Record<string, unknown>).t === 'number' && ((h as Record<string, unknown>).g as number) >= FREE_MIN_GRADE && (h as Record<string, unknown>).u !== 1 ? [dayKey((h as { t: number }).t)] : []))).size;
 }

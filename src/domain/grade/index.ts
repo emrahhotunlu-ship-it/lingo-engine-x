@@ -26,6 +26,7 @@ export type GradeKey =
   | 'colloc'
   | 'cloze_hint'
   | 'cloze'
+  | 'cloze_part'
   | 'type'
   | 'situation'
   | 'dictation'
@@ -100,6 +101,7 @@ export const GRADE_TABLE: Readonly<Record<GradeKey, Row>> = {
   mc: choice(8000),
   cloze_hint: typed(6000, 2500),
   cloze: typed(8000, 3000),
+  cloze_part: typed(8000, 3000),
   type: typed(8000, 3000),
   situation: typed(10_000, 4000),
   dictation: typed(6000, 2500),

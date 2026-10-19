@@ -101,12 +101,20 @@ export const isLongChunk = (c: Pick<TrainCard, 'kind' | 'word'>): boolean => c.k
 
 /**
  * Startposition des Tagesmixes: Wie viele Karten aus dem Mix wurden heute schon eingeführt (`introduced`), und wie viele Wendungen
- * kommen je Wort (`phrases`: 2 im Normalfall, 1 bei Rückstand mit 2 neuen Wörtern am Tag). Ohne Angabe beginnt das Muster vorn.
+ * kommen je Wort (`phrases`: 1 im Normalfall, das frühere Muster 2:1 bleibt mit `phrases: 2` möglich). Ohne Angabe beginnt das Muster vorn.
  */
-export type MixStart = { introduced?: number; phrases?: number; /** Heute schon eingeführte lange Wendungen (zählen gegen `LONG_CHUNKS_PER_DAY`). */ longToday?: number };
+export type MixStart = {
+  introduced?: number;
+  phrases?: number;
+  /** Heute schon eingeführte lange Wendungen (zählen gegen `LONG_CHUNKS_PER_DAY`). */
+  longToday?: number;
+  /** Heute schon eingeführte neue Wörter und Wendungen (aus allen Körben): Ist heute schon eine Wendung neu, aber noch kein Wort, kommt als Nächstes ein Wort, wenn eines vorrätig ist. */
+  wordsToday?: number;
+  chunksToday?: number;
+};
 
 /**
- * Mischt Wendungen (`chunk/…`, auch die des Pakets) und Wörter im Muster Wendung, Wendung, Wort, Wendung, Wendung, Wort …
+ * Mischt Wendungen (`chunk/…`, auch die des Pakets) und Wörter im Muster Wendung, Wort, Wendung, Wort … (`MIX_PHRASES`)
  * Fehlt eine Sorte, bleibt die Reihenfolge der anderen unverändert. Das Muster läuft über den Tag weiter: Die heute schon
  * eingeführten Karten (`start.introduced`) bestimmen, an welcher Stelle des Musters es steht – sonst kämen bei zwei neuen
  * Wörtern am Tag nie Wörter, nur Wendungen.
@@ -127,6 +135,12 @@ export function mixPhrases<T extends { kind: string }>(list: readonly T[], start
   }
   return out;
 }
+
+/** Heute schon eingeführte neue Wörter bzw. Wendungen (alle Körbe), für `MixStart.wordsToday`/`chunksToday`. */
+export const introducedKindsToday = (cards: readonly TrainCard[], day: string): { wordsToday: number; chunksToday: number } => ({
+  wordsToday: cards.filter((c) => c.intro === day && c.kind !== 'chunk').length,
+  chunksToday: cards.filter((c) => c.intro === day && c.kind === 'chunk').length,
+});
 
 /** Heute schon eingeführte lange Wendungen, für `MixStart.longToday`. */
 export const longIntroducedToday = (cards: readonly TrainCard[], day: string): number => cards.filter((c) => c.intro === day && isLongChunk(c)).length;
@@ -152,7 +166,13 @@ export function newCards(cards: readonly TrainCard[], start: MixStart = {}): Tra
   const mixed = cut === -1 ? sorted : [...sorted.slice(0, cut), ...mixPhrases(sorted.slice(cut), start)];
   // Höchstens zwei lange Wendungen je Tag (die heute schon eingeführten zählen mit).
   let longs = start.longToday ?? 0;
-  return mixed.filter((c) => !isLongChunk(c) || ++longs <= LONG_CHUNKS_PER_DAY);
+  const capped = mixed.filter((c) => !isLongChunk(c) || ++longs <= LONG_CHUNKS_PER_DAY);
+  // Untergrenze: Auch wenn die Körbe vor dem C1-Paket nur Wendungen enthalten, kommt täglich mindestens ein neues Wort, sobald heute schon eine Wendung neu war (wenn eines vorrätig ist).
+  if ((start.wordsToday ?? 0) === 0 && (start.chunksToday ?? 0) >= 1 && capped[0]?.kind === 'chunk') {
+    const w = capped.findIndex((c) => c.kind !== 'chunk');
+    if (w > 0) return [capped[w] as TrainCard, ...capped.slice(0, w), ...capped.slice(w + 1)];
+  }
+  return capped;
 }
 
 function aheadCards(cards: readonly TrainCard[], nowMs: number): TrainCard[] {

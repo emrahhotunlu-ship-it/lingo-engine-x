@@ -24,6 +24,8 @@ export type ExerciseId =
   | 'tiles'
   | 'type'
   | 'cloze'
+  /** WL: nur Wendungen: EIN Wort der Wendung als freie Lücke im Satz (Stufe 3). Eigener Verlaufsschlüssel, damit das Tor sie zählen kann: höchstens ein Tag für Stufe 4, nie für Stufe 5. */
+  | 'cloze_part'
   | 'colloc'
   | 'situation'
   | 'dictation'

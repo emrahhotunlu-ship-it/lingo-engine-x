@@ -70,12 +70,15 @@ function simulate(env: ExerciseEnv, days: number, cardsN: number, seed: number):
       if (!ex) continue;
       const e = buildExercise(card, ex, 'de', pool, `${today}|${pos}`);
       const sk = e.sentence?.sentence ? sentKey(e.sentence.sentence) : null;
-      const ok = rng() < 0.85;
+      // Notenverteilung (WL): 15 % Nochmal, 20 % Schwer, 65 % Gut.
+      const r = rng();
+      const grade = r < 0.15 ? (1 as const) : r < 0.35 ? (2 as const) : (3 as const);
+      const ok = grade >= 2;
       const list = steps.get(id) ?? [];
       list.push({ ex, sk, stage: card.stage, sents: contextsOf(card).length, avail: availableExercises(card, 'de', pool.length - 1, env).length, again: false, day: today });
       steps.set(id, list);
       const doc = docs.get(id)!;
-      const ev = { t, day: today, kind: card.kind === 'chunk' ? ('chunk' as const) : ('v' as const), id, ex, grade: ok ? (3 as const) : (1 as const), given: '', ans: '', ms: 3000, lang: 'de' as const, ctx: 'rev' as const, ...(sk ? { sx: sk } : {}) };
+      const ev = { t, day: today, kind: card.kind === 'chunk' ? ('chunk' as const) : ('v' as const), id, ex, grade, given: '', ans: '', ms: 3000, lang: 'de' as const, ctx: 'rev' as const, ...(sk ? { sx: sk } : {}) };
       const before = doc.ff;
       const next: Doc = { ...applyUpdate(doc, cardPatch(doc, ev)), __chunk: doc.__chunk };
       docs.set(id, next);
@@ -125,12 +128,14 @@ describe.each([
         const b = list[i]!;
         // WL: Am ersten Lerntag einer Karte bleibt der Ursprungssatz der Anker (auch bei „Nochmal“ in derselben Runde); gewechselt wird ab einem anderen Tag.
         // Wortpartner-Aufgaben haben ihre eigenen Partnersätze (`col[].ex`), nicht den wechselnden Satz der Karte.
-        if (a.day !== b.day && b.ex !== 'colloc' && b.ex !== 'colloc_gap' && b.stage >= 3 && b.sents >= 2 && a.sk && b.sk && a.sk === b.sk) bad.push(`${id}@${i}:${b.ex}`);
+        if (a.day !== b.day && b.ex !== 'colloc' && b.ex !== 'colloc_gap' && b.stage >= 1 && b.sents >= 2 && a.sk && b.sk && a.sk === b.sk) bad.push(`${id}@${i}:${b.ex}`);
       }
     }
     // Ausnahmen sind nur Formen, die bewusst im Ursprungssatz bleiben (Erkennen/Auswahl). Die Zahl bleibt klein.
-    const total = [...sim.steps.values()].reduce((n, l) => n + l.filter((s) => s.stage >= 3 && s.sents >= 2).length, 0);
-    expect(bad.length / Math.max(1, total)).toBeLessThan(0.05);
+    const total = [...sim.steps.values()].reduce((n, l) => n + l.filter((s) => s.stage >= 1 && s.sents >= 2).length, 0);
+    // WL: ab Stufe 1 und ab einem anderen Tag nie derselbe Satz wie zuletzt (Wortpartner ausgenommen).
+    expect(total).toBeGreaterThan(50);
+    expect(bad).toEqual([]);
   });
 
   it('Karten mit mehreren Sätzen zeigen über 60 Tage mehrere verschiedene Sätze', () => {

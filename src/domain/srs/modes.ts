@@ -3,7 +3,7 @@ import { meaningForTask } from './cards';
 import { activationReady } from './brief';
 import { gapUsable, lemmaFor } from './gapFit';
 import { familyFrom, hasPartner, trapTask } from './partner';
-import { distinctForms, familyOf, FEST_MIN_FORMS, FREE_ANSWER, freeCorrectDays, freeDaysNeeded, varietyBias, varietyOf } from './variety';
+import { distinctForms, familyOf, FEST_MIN_FORMS, FREE_ANSWER, freeCorrectDays, freeDaysNeeded, partDaysOf, varietyBias, varietyOf } from './variety';
 import type { Counts, ExerciseId, InputKind, Lang, LegacyMode, Stage, TrainCard } from './types';
 
 // Katalog der Abfragearten (phase1-plan §4.2, Lernplattform 2.0 §4.8). Jede Art gehört fest zu einer Stufe (`also`: auch zu
@@ -31,6 +31,8 @@ export const CATALOG: readonly ExerciseDef[] = [
   { ex: 'complete', stage: 3, level: 3, mode: 'type', input: 'sentence', also: [5] },
   { ex: 'tiles', stage: 3, level: 3, mode: 'cloze', input: 'tiles' },
   { ex: 'cloze', stage: 4, level: 4, mode: 'type', input: 'typed', also: [5] },
+  // WL: nur Wendungen, ein Wort als freie Lücke; wie `cloze`, aber mit eigenem Verlaufsschlüssel fürs Tor (`freeCorrectDays`).
+  { ex: 'cloze_part', stage: 3, level: 4, mode: 'type', input: 'typed' },
   { ex: 'colloc', stage: 4, level: 4, mode: 'colloc', input: 'typed' },
   { ex: 'wordfam', stage: 4, level: 4, mode: 'type', input: 'typed' },
   { ex: 'find_trap', stage: 4, level: 4, mode: 'recog', input: 'spot' },
@@ -66,7 +68,8 @@ export const canListen = (env: ExerciseEnv): boolean => env.listen ?? (env.tts &
 export const exerciseDef = (ex: ExerciseId): ExerciseDef => CATALOG.find((d) => d.ex === ex) ?? (CATALOG[0] as ExerciseDef);
 
 /** Aus der Wörter-Leiter entfernte Arten: nie verfügbar, alte Daten bleiben lesbar. */
-export const RETIRED: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['spot', 'speed', 'tiles']);
+export const RETIRED: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['spot', 'speed', 'tiles', 'fits']);
+// `fits` („Passt das Wort in diesen Satz?“) ist abgeschaltet (Lehrer-Probe 19.10.2026: etwa die Hälfte der automatischen Gegen-Sätze war unbrauchbar). Code und Texte bleiben; Rückkehr nur mit geprüftem Material, siehe docs/entscheidungen.md.
 
 /** Entfernt für diese Karte? Bausteine (`tiles`) gibt es für Wendungen wieder (WL: Wort-Bausteine statt der ganzen Wendung auf einmal tippen). */
 export const retiredFor = (card: Pick<TrainCard, 'kind'>, ex: ExerciseId): boolean => RETIRED.has(ex) && !(ex === 'tiles' && card.kind === 'chunk');
@@ -107,6 +110,8 @@ export function supports(card: TrainCard, ex: ExerciseId, lang: Lang, poolSize: 
       return gapOk(card);
     case 'tiles':
       return gapOk(card) || !!meaning;
+    case 'cloze_part':
+      return card.kind === 'chunk' && card.stage <= 3 && gapOk(card);
     case 'colloc_gap':
     case 'colloc':
       return hasPartner(card);
@@ -223,10 +228,15 @@ export function chooseExercise(card: TrainCard, lang: Lang, poolSize: number, re
   // Tor der freien Antworten (Prüfung H1): Ab Stufe 3 steht immer mindestens eine freie Art der Stufe 4 zur Wahl, solange der Aufstieg noch freie Beweise an anderen Tagen braucht.
   // Sonst bliebe eine Karte mit nur zwei Stütz-Arten (cloze_hint, colloc_gap) für immer auf Stufe 3, weil nie eine freie Abfrage kommt.
   // Solange das Tor offen ist, stehen freie Arten zur Wahl, und gut gekonnte Stütz-/Auswahl-Arten entfallen. Ein Abschlag auf freie Arten würde den Satz nicht mehr wechseln lassen (V1) und eine ganz neue Karte sofort ohne Stütze fragen.
-  const gatePending = card.stage >= 3 && card.stage <= 4 && freeCorrectDays(card.doc) < freeDaysNeeded(card.stage + 1);
+  const gatePending = card.stage >= 3 && card.stage <= 4 && freeCorrectDays(card.doc, undefined, card.stage + 1) < freeDaysNeeded(card.stage + 1);
   if (gatePending) {
-    const free = availableExercises({ ...card, stage: 4 }, lang, poolSize, env).filter((ex) => GATE_FREE(ex) && !all.includes(ex));
+    // Wendungen auf Stufe 3 (WL): zuerst das freie Einzelwort (`cloze_part`, zählt für höchstens einen Tag); erst wenn ein solcher Tag vorliegt, kommt die ganze freie
+    // Lücke, und `cloze_part` entfällt – der zweite Tag für Stufe 4 muss eine ganze Wendung sein.
+    const partial = card.kind === 'chunk' && card.stage === 3;
+    const parts = partial ? partDaysOf(card.doc) : 0;
+    const free = availableExercises({ ...card, stage: 4 }, lang, poolSize, env).filter((ex) => GATE_FREE(ex) && !all.includes(ex) && !(partial && parts === 0 && ex === 'cloze'));
     all.push(...free);
+    if (partial && parts >= 1) all = all.filter((ex) => ex !== 'cloze_part');
     // Stütz- und Auswahl-Arten, die die Karte schon gut kann, beweisen für das Tor nichts mehr: sie entfallen, solange eine freie Art da ist. Schwache bleiben (schwächste zuerst).
     const kept = all.filter((ex) => GATE_FREE(ex) || score(countsFor(card, ex)) < GATE_DROP_SCORE);
     // Nie auf eine einzige Art zusammenstreichen, die schon die letzte war (V1: dieselbe Art nie zweimal in Folge).

@@ -37,7 +37,7 @@ export type PackExtra = z.infer<typeof PackExtraSchema>;
 
 /** Alte Felder eines Eintrags, soweit `packExtraOf` sie bei Bedarf mitliefert. */
 export type PackBase = { id: string; en: string; register?: 'formal' | 'neutral' | 'informal'; why?: string };
-export type PackExtraView = PackExtra & { id: string; register?: PackBase['register']; why?: string };
+export type PackExtraView = PackExtra & { id: string; register?: PackBase['register']; why?: string; /** Kategorie des Eintrags (`phrasal`, `frame`, `colloc` …). */ cat?: string };
 
 type Row = Record<string, unknown>;
 let byId: ReadonlyMap<string, Row> | null = null;
@@ -82,6 +82,7 @@ function viewOf(r: Row): PackExtraView | null {
   return {
     ...parsed.data,
     id: String(r.id),
+    ...(typeof r.cat === 'string' && r.cat ? { cat: r.cat } : {}),
     ...(reg === 'formal' || reg === 'neutral' || reg === 'informal' ? { register: reg } : {}),
     ...(typeof why === 'string' && why ? { why } : {}),
   };

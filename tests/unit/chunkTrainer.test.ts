@@ -222,7 +222,7 @@ describe('Abfrageart je Stufe: mindestens zwei, Stufe 5 mit eigenem Satz, Rückf
   });
 
   it('Stufe 1: Hören nur mit Sprachausgabe; „Im Satz finden“, Tempo und Bausteine sind aus der Leiter entfernt', () => {
-    expect(availableExercises(vcard({ stage: 1 }), 'de', 100, { tts: true, ai: false })).toEqual(['mc_en', 'ctx_mc', 'fits', 'listen_mc']);
+    expect(availableExercises(vcard({ stage: 1 }), 'de', 100, { tts: true, ai: false })).toEqual(['mc_en', 'ctx_mc', 'listen_mc', 'mc_de']);
     const all = new Set<ExerciseId>();
     for (const stage of [1, 2, 3, 4, 5] as Stage[]) for (const x of availableExercises(vcard({ stage }), 'de', 100, { tts: true, ai: true })) all.add(x);
     for (const gone of ['spot', 'speed', 'tiles'] as const) expect(all.has(gone), gone).toBe(false);

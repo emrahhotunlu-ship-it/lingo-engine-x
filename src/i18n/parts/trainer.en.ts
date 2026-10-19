@@ -8,6 +8,7 @@ export const trainerEn: Record<keyof typeof trainerDe, string> = {
   exName_fits: 'Does it fit?',
   fitsYes: 'Yes',
   fitsNo: 'No',
+  flipOriginLabel: 'Your original sentence:',
   task_spot: 'Tap the word in the sentence that has this meaning.',
   task_listen_mc: 'Listen and choose the meaning.',
   task_match: 'Put the right word in the blank.',

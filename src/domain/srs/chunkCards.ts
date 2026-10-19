@@ -95,20 +95,25 @@ const FRAME_WORDS = new Set([
   'between', 'of', 'onto', 'upon', 'under', 'within', 'without', 'after', 'before', 'behind', 'beyond', 'toward', 'towards', 'to',
 ]);
 
-export type ChunkPart = { text: string; kind: 'core' | 'frame' | 'slot' };
+export type ChunkPart = { text: string; kind: 'core' | 'frame' | 'slot' | 'fixed' };
+/** Angaben aus dem Paket, die die Zerlegung steuern: Kategorie (`phrasal`, `frame`, …) und das Wort der Partnerwort-Lücke (`gap.at`). */
+export type ChunkHints = { cat?: string | undefined; at?: string | undefined };
 
 /**
- * Die Wendung in Teile: Kern (Inhaltswörter), Rahmen (Präposition, Partikel, Artikel, Hilfsverb) und Platzhalter („sb“, „sth“). Rein, nur Anzeige.
- * Besteht die Wendung nur aus Rahmenwörtern („in return for“), ist das erste Inhaltswort der Kern: hier das längste Wort.
+ * Die Wendung in Teile: Kern (Inhaltswörter), Rahmen (feste kleine Wörter: Präposition, Partikel, Artikel, Hilfsverb) und Platzhalter („sb“, „sth“). Rein, nur Anzeige.
+ * - `frame` (feste Formeln wie „that said“, „I see where you are coming from“): nicht zerlegt, alle Teile `fixed`.
+ * - `phrasal`: Verb und Partikel sind Kern, nur eine abhängige Präposition am Ende („push back ON“) ist Rahmen.
+ * - Besteht die Wendung nur aus Rahmenwörtern („in return for“), ist das längste Wort der Kern.
  */
-export function chunkParts(phrase: string): ChunkPart[] {
-  const parts: ChunkPart[] = typedForm(phrase)
-    .split(/\s+/)
-    .filter(Boolean)
-    .map((text) => {
-      const w = normWord(text);
-      return { text, kind: PLACEHOLDERS.has(w) ? 'slot' : FRAME_WORDS.has(w) || isFunctionGap(w) ? 'frame' : 'core' };
-    });
+export function chunkParts(phrase: string, hints: ChunkHints = {}): ChunkPart[] {
+  const toks = typedForm(phrase).split(/\s+/).filter(Boolean);
+  if (hints.cat === 'frame') return toks.map((text) => ({ text, kind: PLACEHOLDERS.has(normWord(text)) ? 'slot' : 'fixed' }));
+  const parts: ChunkPart[] = toks.map((text, i) => {
+    const w = normWord(text);
+    if (PLACEHOLDERS.has(w)) return { text, kind: 'slot' };
+    if (hints.cat === 'phrasal') return { text, kind: (i === toks.length - 1 && i >= 2 && FRAME_WORDS.has(w)) || isFunctionGap(w) ? 'frame' : 'core' };
+    return { text, kind: FRAME_WORDS.has(w) || isFunctionGap(w) ? 'frame' : 'core' };
+  });
   if (parts.length && !parts.some((x) => x.kind === 'core')) {
     const longest = parts.reduce<number>((best, x, i) => (x.kind === 'frame' && x.text.length > (parts[best]?.text.length ?? 0) ? i : best), 0);
     const hit = parts[longest];
@@ -118,18 +123,30 @@ export function chunkParts(phrase: string): ChunkPart[] {
 }
 
 /**
- * Wörter der Wendung im Satz, die als einzelne Lücke taugen (nie Artikel, Hilfsverben, Platzhalter): Kernwörter zuerst, danach Präpositionen/Partikeln.
- * `[]`, wenn die Wendung im Satz nicht steht.
+ * Wörter der Wendung im Satz, die als einzelne Lücke taugen (nie Artikel, Hilfsverben, Platzhalter), in der Reihenfolge, in der sie gefragt werden:
+ * zuerst das Wort der Partnerwort-Lücke aus dem Paket (`gap.at`), dann bei `phrasal` die abhängige Präposition, sonst Kernwörter, zuletzt Präpositionen/Partikeln.
+ * Bei `frame` nur Schlüsselwörter vor den kleinen Wörtern. `[]`, wenn die Wendung im Satz nicht steht.
  */
-export function chunkGapWords(sentence: string, phrase: string): ChunkWordSpan[] {
+export function chunkGapWords(sentence: string, phrase: string, hints: ChunkHints = {}): ChunkWordSpan[] {
   const hit = locateChunkWords(sentence, phrase);
   if (!hit) return [];
   const usable = hit.words.filter((x) => {
     const w = normWord(x.w);
     return w.length >= 2 && w !== 'to' && !PLACEHOLDERS.has(w) && !isFunctionGap(w);
   });
-  const core = usable.filter((x) => !FRAME_WORDS.has(normWord(x.w)));
-  return [...core, ...usable.filter((x) => FRAME_WORDS.has(normWord(x.w)))];
+  const small = (x: ChunkWordSpan): boolean => FRAME_WORDS.has(normWord(x.w));
+  let ordered = [...usable.filter((x) => !small(x)), ...usable.filter(small)];
+  if (hints.cat === 'phrasal') {
+    const last = usable.at(-1);
+    const dependent = last && small(last) && typedForm(phrase).split(/\s+/).length >= 2 ? last : undefined;
+    if (dependent) ordered = [dependent, ...usable.filter((x) => x !== dependent)];
+  }
+  const at = hints.at ? normWord(hints.at) : '';
+  if (at) {
+    const first = ordered.find((x) => normWord(x.w) === at) ?? ordered.find((x) => at.length >= 4 && normWord(x.w).startsWith(at.slice(0, 4)));
+    if (first) ordered = [first, ...ordered.filter((x) => x !== first)];
+  }
+  return ordered;
 }
 
 export function chunkContext(sentence: string | null, en: string): ContextSpan | null {
