@@ -44,6 +44,7 @@ describe('diagnose@2: Prompt', () => {
     expect(diagnoseV2.verb).toBe('text-json');
     expect(p).toContain(`${HYP} | used psp.result-now where psp.finished-time was right | state=open | 4 cases on 3 days | l1:perfekt`);
     expect(p).toContain('Good English is never an error');
+    expect(p).toContain('In American English the simple past with just, already and yet is correct; accept it: such a case is not evidence for an error.');
     expect(p).toContain('l1:perfekt: Deutsches Perfekt');
   });
 
@@ -212,6 +213,11 @@ describe('solve-check@1', () => {
   it('Schema: Beispiel besteht; tolerant (nacktes Array, Text statt Liste), unbekannte Indizes fallen weg', () => {
     const s = solveCheck.schema({ tasks });
     expect(s.safeParse(JSON.parse(SOLVE_CHECK_EXAMPLE)).success).toBe(true);
+    // Gegenlesung S4: zwei gleichwertige Formen sind NICHT mehrdeutig (beide stehen in answers); echte Mehrdeutigkeit = ohne Zeitangabe.
+    const three = Array.from({ length: 3 }, () => tasks[0] as SolveCheckTask);
+    const ex = solveCheck.schema({ tasks: three }).parse(JSON.parse(SOLVE_CHECK_EXAMPLE));
+    expect(ex.results.map((x) => x.ambiguous)).toEqual([false, false, true]);
+    expect(ex.results[1]?.answers).toEqual(['has worked', 'has been working']);
     const r = s.safeParse([{ i: 2, answers: 'Report 14 was sent to Mia last week.', ambiguous: false, why: { de: 'a', en: 'b' } }, { i: 9, answers: ['x'] }, { i: 0, answers: ['was sent'] }, { i: 0, answers: ['x'] }]);
     expect(r.success).toBe(true);
     expect(r.data?.results.map((x) => x.i)).toEqual([0, 2]);

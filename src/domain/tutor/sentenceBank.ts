@@ -12,10 +12,11 @@ import { knownKeys, readCfx, readWx, wordRepeats } from './acceptWordCtx';
 //   ai    Claude-Satzbank `word-bank@1` (gebündelt, 6–8 Karten je Anfrage, je Karte 4 Sätze: 2 Beruf, 1 Alltag, 1 andere Satzform).
 // Ziel: mindestens 4 Sätze je Karte vor Stufe 4, 6 vor „Fest“.
 //
-// Quarantäne (tutor-e8-lehrer-routine.md Leitplanke 5, gleiche Regel wie für Aufgabenvorschläge): Claude-Sätze werden in den ersten 4 Wochen nur
-// GESAMMELT, nicht gezeigt. Danach prüft der Englischlehrer eine Stichprobe von 30 (`teacherSample`); die Hauptsession setzt die Freigabe nur bei
-// höchstens 2 harten Fehlern (`releaseGate`). Danach monatliche Stichprobe. Gemeldete Sätze (`bad: 1`) erscheinen nie wieder. Sätze aus Lesetexten
-// und C1-Aufgaben sind geprüfter Inhalt und sofort sichtbar.
+// Quarantäne (tutor-e8-lehrer-routine.md Leitplanke 5, gleiche Regel wie für Aufgabenvorschläge): JEDER Claude-Satz wird ab seiner Erzeugung (`t`)
+// 4 Wochen nur GESAMMELT, nicht gezeigt (Klärung 19.10.2026: „4 Wochen je Satz ab Erzeugung“). Zusätzlich gilt ein gemeinsamer Freigabe-Schalter:
+// Nach den ersten 4 Wochen prüft der Englischlehrer eine Stichprobe von 30 (`teacherSample`); die Hauptsession gibt nur frei bei höchstens 1 hartem
+// Fehler UND höchstens 2 nicht eindeutigen Lücken (`releaseGate`, Gegenlesung S4). Danach monatliche Stichprobe. Gemeldete Sätze (`bad: 1`)
+// erscheinen nie wieder. Sätze aus Lesetexten und C1-Aufgaben sind geprüfter Inhalt und sofort sichtbar.
 //
 // Eintrag: `{en, de, sit, k, src, t, pv, bad?}` – `k` Satzart (`work` | `life` | `form`), `pv` Vorlage oder Quelle (`word-bank@1`, `read:<id>`, `c1:<id>`).
 // ≈ 250 Byte je Satz, höchstens 8 je Karte (≈ 2 KB, weit unter 64 KiB je Karte); kein neues Dokument.
@@ -33,11 +34,12 @@ export const SB_MIN_BEFORE_STAGE4 = 4;
 export const SB_MIN_BEFORE_FEST = 6;
 /** Claude-Sätze je Karte und Anfrage. */
 export const SB_PER_REQUEST = 4;
-/** Quarantäne: so lange (Tage) werden Claude-Sätze nur gesammelt. */
+/** Quarantäne: so lange (Tage) wird jeder Claude-Satz ab seiner Erzeugung nur gesammelt. */
 export const QUARANTINE_DAYS = 28;
-/** Stichprobe für den Englischlehrer und erlaubte harte Fehler für die Freigabe. */
+/** Stichprobe für den Englischlehrer; erlaubte harte Fehler und (eigenes Merkmal) nicht eindeutige Lücken für die Freigabe. */
 export const TEACHER_SAMPLE = 30;
-export const RELEASE_MAX_HARD_ERRORS = 2;
+export const RELEASE_MAX_HARD_ERRORS = 1;
+export const RELEASE_MAX_UNCLEAR_GAPS = 2;
 /** Satzlänge in Wörtern (Claude-Sätze; wie `word-ctx`). Sätze aus echten Texten dürfen länger sein. */
 export const SB_MIN_WORDS = 8;
 export const SB_MAX_WORDS = 18;
@@ -68,46 +70,61 @@ export function readSb(doc: Doc, withBad = false): SbEntry[] {
 
 // ------------------------------------------------------------------ Quarantäne und Freigabe
 
+/** Befund einer Stichprobe: harte Fehler und (eigenes Merkmal) Sätze, deren Lücke nicht eindeutig wäre. */
+export type SbReview = { hard: number; unclear: number };
+
 /** Freigabe-Schalter der Claude-Sätze (gespeichert vom Aufrufer, z. B. neben `items: on` in `tutor/fb`). `start` = erster gesammelter Claude-Satz. */
-export type SbGate = { start: number | null; on: boolean; checkedAt?: number | null };
+export type SbGate = { start: number | null; on: boolean; checkedAt?: number | null; review?: SbReview | null };
 
 export const GATE_CLOSED: SbGate = { start: null, on: false };
+
+const count = (v: unknown): number | null => (typeof v === 'number' && Number.isInteger(v) && v >= 0 ? v : null);
 
 /** Gate tolerant lesen (fehlt es oder ist es kaputt: geschlossen). */
 export function readGate(v: unknown): SbGate {
   if (!isObj(v)) return GATE_CLOSED;
   const start = num(v.start) || null;
-  return { start, on: v.on === true && start !== null, checkedAt: num(v.checkedAt) || null };
+  const r = isObj(v.review) ? { hard: count(v.review.hard), unclear: count(v.review.unclear) } : null;
+  const review = r && r.hard !== null && r.unclear !== null ? { hard: r.hard, unclear: r.unclear } : null;
+  return { start, on: v.on === true && start !== null, checkedAt: num(v.checkedAt) || null, review };
 }
 
-/** Sind die 4 Wochen Sammelzeit vorbei (dann ist die Stichprobe fällig)? */
+/** Sind die ersten 4 Wochen Sammelzeit vorbei (dann ist die erste Stichprobe fällig)? */
 export const quarantineOver = (gate: SbGate, nowMs: number): boolean => gate.start !== null && nowMs - gate.start >= QUARANTINE_DAYS * DAY_MS;
+
+/** Ist die 4-Wochen-Quarantäne DIESES Satzes vorbei (ab Erzeugung `t`)? Ohne gültigen Zeitstempel: nie. */
+export const sentenceQuarantineOver = (e: Pick<SbEntry, 't'>, nowMs: number): boolean => e.t > 0 && nowMs - e.t >= QUARANTINE_DAYS * DAY_MS;
 
 /** Nach dem ersten gesammelten Claude-Satz: Startzeit setzen (nur einmal). `null` = nichts zu ändern. */
 export const gateStartPatch = (gate: SbGate, nowMs: number): SbGate | null => (gate.start === null ? { ...gate, start: Math.floor(nowMs) } : null);
 
+/** Besteht der Befund die Schwelle (≤ 1 harter Fehler, ≤ 2 nicht eindeutige Lücken)? */
+export const reviewPasses = (r: SbReview): boolean =>
+  count(r.hard) !== null && count(r.unclear) !== null && r.hard <= RELEASE_MAX_HARD_ERRORS && r.unclear <= RELEASE_MAX_UNCLEAR_GAPS;
+
 /**
- * Freigabe nach der Stichprobe des Englischlehrers: nur wenn die Sammelzeit vorbei ist und höchstens 2 harte Fehler gefunden wurden.
- * Sonst bleibt die Bank geschlossen (die Hauptsession meldet Emrah den Befund). Gibt den neuen Schalter zurück.
+ * Freigabe nach der Stichprobe des Englischlehrers: nur wenn die ersten 4 Wochen vorbei sind und der Befund die Schwelle besteht.
+ * Sonst bleibt die Bank geschlossen (die Hauptsession meldet Emrah den Befund). Gibt den neuen Schalter mit dem Befund zurück.
  */
-export function releaseGate(gate: SbGate, nowMs: number, hardErrors: number): SbGate {
-  const ok = quarantineOver(gate, nowMs) && Number.isFinite(hardErrors) && hardErrors >= 0 && hardErrors <= RELEASE_MAX_HARD_ERRORS;
-  return { ...gate, on: ok, checkedAt: Math.floor(nowMs) };
+export function releaseGate(gate: SbGate, nowMs: number, review: SbReview): SbGate {
+  const ok = quarantineOver(gate, nowMs) && reviewPasses(review);
+  return { ...gate, on: ok, checkedAt: Math.floor(nowMs), review: { hard: review.hard, unclear: review.unclear } };
 }
 
-/** Darf der Satz gezeigt werden? Gemeldete nie; Lesetext/C1 sofort; Claude-Sätze erst nach der Freigabe. */
-export const sbVisible = (e: SbEntry, gate: SbGate): boolean => e.bad !== 1 && (e.src !== 'ai' || gate.on);
+/** Darf der Satz gezeigt werden? Gemeldete nie; Lesetext/C1 sofort; Claude-Sätze erst nach der Freigabe UND 4 Wochen nach ihrer Erzeugung. */
+export const sbVisible = (e: SbEntry, gate: SbGate, nowMs: number): boolean =>
+  e.bad !== 1 && (e.src !== 'ai' || (gate.on && sentenceQuarantineOver(e, nowMs)));
 
 /** Sichtbare Sätze der Bank. */
-export const visibleSb = (doc: Doc, gate: SbGate): SbEntry[] => readSb(doc).filter((e) => sbVisible(e, gate));
+export const visibleSb = (doc: Doc, gate: SbGate, nowMs: number): SbEntry[] => readSb(doc).filter((e) => sbVisible(e, gate, nowMs));
 
-/** Claude-Sätze in Quarantäne (gesammelt, noch nicht freigegeben). */
-export const quarantinedSb = (doc: Doc, gate: SbGate): SbEntry[] => (gate.on ? [] : readSb(doc).filter((e) => e.src === 'ai'));
+/** Claude-Sätze in Quarantäne (gesammelt, noch nicht sichtbar). */
+export const quarantinedSb = (doc: Doc, gate: SbGate, nowMs: number): SbEntry[] => readSb(doc).filter((e) => e.src === 'ai' && !sbVisible(e, gate, nowMs));
 
 // ------------------------------------------------------------------ Bedarf
 
 /** Satzvorrat der Karte: Ursprungssatz, gespeicherte Kontexte (`xEx`) und sichtbare Bank-Sätze (ohne Dubletten). */
-export function sentenceCount(doc: Doc, gate: SbGate): number {
+export function sentenceCount(doc: Doc, gate: SbGate, nowMs: number): number {
   const keys = new Set<string>();
   const add = (s: string): void => {
     const k = poolNorm(s);
@@ -115,7 +132,7 @@ export function sentenceCount(doc: Doc, gate: SbGate): number {
   };
   add(str(doc.ex));
   for (const x of storedExamples(doc)) add(x.en);
-  for (const x of visibleSb(doc, gate)) add(x.en);
+  for (const x of visibleSb(doc, gate, nowMs)) add(x.en);
   return keys.size;
 }
 
@@ -126,10 +143,10 @@ export const sentenceTarget = (stage: number): number => (stage >= 4 ? SB_MIN_BE
  * Braucht die Karte neue Claude-Sätze? Gezählt wird, was sichtbar ist, PLUS was in Quarantäne wartet – sonst würde während der Sammelzeit bei jeder
  * Runde neu gefragt. Volle Bank: nie.
  */
-export function needsBank(doc: Doc, gate: SbGate): boolean {
+export function needsBank(doc: Doc, gate: SbGate, nowMs: number): boolean {
   const all = readSb(doc, true);
   if (all.length >= SB_MAX) return false;
-  const have = sentenceCount(doc, gate) + quarantinedSb(doc, gate).length;
+  const have = sentenceCount(doc, gate, nowMs) + quarantinedSb(doc, gate, nowMs).length;
   return have < sentenceTarget(num(doc.stage));
 }
 

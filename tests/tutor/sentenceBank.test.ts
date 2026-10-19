@@ -93,33 +93,43 @@ describe('acceptBankItem: Claude-Sätze prüfen', () => {
 describe('Quarantäne: 4 Wochen sammeln, Stichprobe, Freigabe', () => {
   const started: SbGate = { start: T0, on: false };
 
-  it('Gate tolerant lesen; Start nur einmal setzen', () => {
+  it('Gate tolerant lesen (auch der Befund); Start nur einmal setzen', () => {
     expect(readGate(undefined)).toEqual(GATE_CLOSED);
     expect(readGate({ on: true })).toMatchObject({ on: false, start: null });
+    expect(readGate({ start: T0, on: true, review: { hard: 1, unclear: 2 } })).toMatchObject({ on: true, review: { hard: 1, unclear: 2 } });
+    expect(readGate({ start: T0, on: true, review: { hard: -1, unclear: 'x' } }).review).toBeNull();
     expect(gateStartPatch(GATE_CLOSED, T0)).toEqual(started);
     expect(gateStartPatch(started, T0 + DAY)).toBeNull();
   });
 
-  it('Claude-Sätze sind in der Sammelzeit unsichtbar, Lesetext-Sätze sofort; gemeldete nie', () => {
-    const doc = { sb: [ai('We need a reliable supplier who can deliver the parts on time.'), read('Only a reliable supplier could secure the production targets for next year.'), ai('A reliable partner keeps every promise made in the contract.', T0, { bad: 1 })] };
-    expect(visibleSb(doc, started).map((e) => e.src)).toEqual(['read']);
-    expect(quarantinedSb(doc, started)).toHaveLength(1);
+  it('jeder Claude-Satz 4 Wochen ab Erzeugung unsichtbar (auch nach der Freigabe), Lesetext-Sätze sofort; gemeldete nie', () => {
+    const late = T0 + 10 * DAY;
+    const doc = { sb: [ai('We need a reliable supplier who can deliver the parts on time.'), read('Only a reliable supplier could secure the production targets for next year.'), ai('A reliable partner keeps every promise made in the contract.', T0, { bad: 1 }), ai('Our reliable supplier delivered every single order on time this year.', late)] };
+    expect(visibleSb(doc, started, T0 + DAY).map((e) => e.src)).toEqual(['read']);
+    expect(quarantinedSb(doc, started, T0 + DAY)).toHaveLength(2);
     const open = { ...started, on: true };
-    expect(visibleSb(doc, open).map((e) => e.src)).toEqual(['ai', 'read']);
-    expect(quarantinedSb(doc, open)).toEqual([]);
-    expect(sbVisible({ ...ai('x'), bad: 1 }, open)).toBe(false);
-    expect(readSb(doc, true)).toHaveLength(3);
+    // Freigegeben, aber der zweite Satz ist erst 18 Tage alt.
+    const day28 = T0 + QUARANTINE_DAYS * DAY;
+    expect(visibleSb(doc, open, day28).map((e) => e.t)).toEqual([T0, T0]);
+    expect(quarantinedSb(doc, open, day28).map((e) => e.t)).toEqual([late]);
+    expect(visibleSb(doc, open, late + QUARANTINE_DAYS * DAY).filter((e) => e.src === 'ai')).toHaveLength(2);
+    // Ohne Freigabe bleibt auch ein alter Satz verborgen; ohne Zeitstempel nie sichtbar.
+    expect(visibleSb(doc, started, day28).map((e) => e.src)).toEqual(['read']);
+    expect(sbVisible(ai('x', 0), open, day28)).toBe(false);
+    expect(sbVisible({ ...ai('x'), bad: 1 }, open, day28)).toBe(false);
+    expect(readSb(doc, true)).toHaveLength(4);
   });
 
-  it('Freigabe nur nach 28 Tagen und mit höchstens 2 harten Fehlern', () => {
+  it('Freigabe nur nach 28 Tagen, mit höchstens 1 hartem Fehler und höchstens 2 nicht eindeutigen Lücken', () => {
     const before = T0 + (QUARANTINE_DAYS - 1) * DAY;
     const after = T0 + QUARANTINE_DAYS * DAY;
     expect(quarantineOver(started, before)).toBe(false);
-    expect(releaseGate(started, before, 0).on).toBe(false);
-    expect(releaseGate(started, after, 2)).toEqual({ start: T0, on: true, checkedAt: after });
-    expect(releaseGate(started, after, 3).on).toBe(false);
-    expect(releaseGate(GATE_CLOSED, after, 0).on).toBe(false);
-    expect(releaseGate(started, after, Number.NaN).on).toBe(false);
+    expect(releaseGate(started, before, { hard: 0, unclear: 0 }).on).toBe(false);
+    expect(releaseGate(started, after, { hard: 1, unclear: 2 })).toEqual({ start: T0, on: true, checkedAt: after, review: { hard: 1, unclear: 2 } });
+    expect(releaseGate(started, after, { hard: 2, unclear: 0 }).on).toBe(false);
+    expect(releaseGate(started, after, { hard: 0, unclear: 3 }).on).toBe(false);
+    expect(releaseGate(GATE_CLOSED, after, { hard: 0, unclear: 0 }).on).toBe(false);
+    expect(releaseGate(started, after, { hard: Number.NaN, unclear: 0 }).on).toBe(false);
   });
 
   it('Stichprobe: deterministisch, höchstens 30, höchstens 2 je Karte, nur ungemeldete Claude-Sätze, optional ab Datum', () => {
@@ -145,12 +155,14 @@ describe('Bedarf und Speichern', () => {
     expect(sentenceTarget(4)).toBe(6);
     const doc = { stage: 2, ex: 'Our supplier is very reliable.', xEx: [{ en: 'A reliable partner matters.', t: 1 }], sb: [ai('We need a reliable supplier who can deliver the parts on time.')] };
     const gate: SbGate = { start: T0, on: false };
-    expect(sentenceCount(doc, gate)).toBe(2);
-    expect(needsBank(doc, gate)).toBe(true);
+    expect(sentenceCount(doc, gate, T0)).toBe(2);
+    expect(needsBank(doc, gate, T0)).toBe(true);
     const enough = { ...doc, sb: [...doc.sb, ai('Second reliable sentence for the weekly sales meeting.')] };
-    expect(needsBank(enough, gate)).toBe(false);
-    expect(needsBank({ ...enough, stage: 4 }, gate)).toBe(true);
-    expect(needsBank({ stage: 5, sb: Array.from({ length: SB_MAX }, (_, i) => ai(`Reliable sentence number ${i} for the team.`)) }, gate)).toBe(false);
+    expect(needsBank(enough, gate, T0)).toBe(false);
+    // Nach Freigabe und 4 Wochen zählen dieselben Sätze als sichtbar statt wartend: gleicher Bedarf.
+    expect(needsBank(enough, { ...gate, on: true }, T0 + QUARANTINE_DAYS * DAY)).toBe(false);
+    expect(needsBank({ ...enough, stage: 4 }, gate, T0)).toBe(true);
+    expect(needsBank({ stage: 5, sb: Array.from({ length: SB_MAX }, (_, i) => ai(`Reliable sentence number ${i} for the team.`)) }, gate, T0)).toBe(false);
   });
 
   it('sbPatch hängt an; volle Bank: älteste ungemeldete Claude-Sätze weichen, anderes nie', () => {

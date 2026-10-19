@@ -15,6 +15,9 @@ export function promptBytes(text: string): number {
   return encoder.encode(text).length;
 }
 
+/** Gegenlesung english-teacher (S4): Simple Past mit just/already/yet ist im US-Englisch richtig – nie als Fehler werten (grammar-items, diagnose@2). */
+export const US_SIMPLE_PAST_RULE = 'In American English the simple past with just, already and yet is correct; accept it';
+
 /** Kopfzeile, an der der Entwicklungs-Adapter die Vorlage erkennt. */
 export function header(t: Pick<PromptTemplate<unknown, unknown>, 'id' | 'version'>): string {
   return `[${t.id}@${t.version}]`;
