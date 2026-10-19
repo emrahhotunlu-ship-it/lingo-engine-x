@@ -1,0 +1,534 @@
+{
+  "v": 1,
+  "entries": [
+    {
+      "id": "l1:seit-praesens",
+      "pat": "psp.since-for",
+      "vs": "psc.habit",
+      "kind": "error",
+      "trigger_de": "seit + Präsens (Ich arbeite seit 2020 hier.)",
+      "example": { "de": "Ich arbeite seit 2020 im Vertrieb.", "en": "I have worked in sales since 2020." },
+      "why": {
+        "de": "Etwas begann früher und gilt bis jetzt: Englisch nimmt dafür das Present Perfect, nicht das Präsens wie im Deutschen mit „seit“.",
+        "en": "Something started in the past and is still true: English uses the present perfect here, not the present tense German uses with \"seit\"."
+      },
+      "bad": "\\b(?:i|we|they|you)\\s+(?:work|know|use|sell|live|am|are)\\b[^.?!,]{0,30}\\bsince\\b"
+    },
+    {
+      "id": "l1:seit-verlauf",
+      "pat": "pc.since-for",
+      "vs": "psc.now",
+      "kind": "error",
+      "trigger_de": "seit + Verlauf (Ich warte seit Montag auf die Antwort.)",
+      "example": { "de": "Ich warte seit Montag auf die Freigabe.", "en": "I have been waiting for the approval since Monday." },
+      "why": {
+        "de": "Eine Handlung läuft seit einem Zeitpunkt bis jetzt: have/has been + -ing. Die Verlaufsform im Präsens (I am waiting) reicht nicht bis in die Vergangenheit.",
+        "en": "An action has been going on since a point in the past: have/has been + -ing. The present continuous (I am waiting) does not reach back into the past."
+      },
+      "bad": "\\b(?:am|are|is|['’]m|['’]re)\\s+[a-z]+ing\\b[^.?!,]{0,30}\\bsince\\b"
+    },
+    {
+      "id": "l1:since-zeitraum",
+      "pat": "pt.for-since",
+      "vs": "use:since+period",
+      "kind": "error",
+      "trigger_de": "seit + Zeitraum (seit drei Jahren)",
+      "example": { "de": "Wir arbeiten seit drei Jahren mit diesem Kunden.", "en": "We have worked with this client for three years." },
+      "why": {
+        "de": "„seit“ hat zwei Entsprechungen: since + Zeitpunkt (since 2020), for + Zeitraum (for three years).",
+        "en": "German \"seit\" has two English equivalents: since + a point in time (since 2020), for + a period (for three years)."
+      },
+      "bad": "\\bsince\\s+(?:\\d+|one|two|three|four|five|six|seven|eight|nine|ten|several|many|a\\s+few)\\s+(?:years?|months?|weeks?|days?|hours?|minutes?)\\b(?!\\s+ago)"
+    },
+    {
+      "id": "l1:depend-of",
+      "use": "use:depend+on",
+      "vs": "use:depend+of",
+      "kind": "error",
+      "trigger_de": "abhängen von",
+      "example": { "de": "Der Preis hängt von der Zahl der Nutzer ab.", "en": "The price depends on the number of users." },
+      "why": {
+        "de": "„von“ wird hier zu on: depend on. „depend of“ gibt es im Englischen nicht.",
+        "en": "The verb takes on: depend on. \"Depend of\" does not exist in English."
+      },
+      "bad": "\\bdepend(?:s|ed|ing)?\\s+of\\b"
+    },
+    {
+      "id": "l1:discuss-about",
+      "use": "use:discuss+obj",
+      "vs": "use:discuss+about",
+      "kind": "error",
+      "trigger_de": "diskutieren über",
+      "example": { "de": "Wir müssen über den Preis diskutieren.", "en": "We need to discuss the price." },
+      "why": {
+        "de": "discuss steht direkt mit dem Objekt, ohne about. Nur das Nomen hat about: a discussion about the price.",
+        "en": "Discuss takes a direct object, without about. Only the noun takes about: a discussion about the price."
+      },
+      "bad": "\\bdiscuss(?:es|ed|ing)?\\s+about\\b"
+    },
+    {
+      "id": "l1:explain-me",
+      "use": "use:explain+to",
+      "vs": "use:explain+me",
+      "kind": "error",
+      "trigger_de": "mir etwas erklären",
+      "example": { "de": "Können Sie mir den Prozess erklären?", "en": "Can you explain the process to me?" },
+      "why": {
+        "de": "Die Person kommt mit to nach der Sache: explain something to someone. „explain me“ ist falsch.",
+        "en": "The person comes after the thing, with to: explain something to someone. \"Explain me\" is wrong."
+      },
+      "bad": "\\bexplain(?:s|ed|ing)?\\s+(?:me|us|him)\\b"
+    },
+    {
+      "id": "l1:say-me",
+      "pat": "rs.tell-say",
+      "vs": "use:say+person",
+      "kind": "error",
+      "trigger_de": "mir sagen",
+      "example": { "de": "Sie hat mir gesagt, dass der Vertrag unterschrieben ist.", "en": "She told me that the contract was signed." },
+      "why": {
+        "de": "Mit Person direkt danach steht tell (tell me). say braucht to vor der Person (say to me) und wird meist ohne Person benutzt.",
+        "en": "With a person right after the verb, use tell (tell me). Say needs to before the person (say to me) and usually goes without one."
+      },
+      "bad": "\\bsa(?:y|ys|id|ying)\\s+(?:me|us|him)\\b"
+    },
+    {
+      "id": "l1:suggest-to",
+      "pat": "rv.suggest-rec",
+      "vs": "use:suggest+to",
+      "kind": "error",
+      "trigger_de": "vorschlagen, etwas zu tun",
+      "example": { "de": "Ich schlage vor, das Meeting auf Freitag zu verschieben.", "en": "I suggest moving the meeting to Friday." },
+      "why": {
+        "de": "Nach suggest folgt -ing oder ein that-Satz (I suggest that we move …), nie to + Grundform.",
+        "en": "Suggest is followed by -ing or a that-clause (I suggest that we move …), never by to + base verb."
+      },
+      "bad": "\\bsuggest(?:s|ed|ing)?\\s+(?:(?:you|him|them|us)\\s+)?to\\s+(?!the\\b|a\\b|an\\b|my\\b|our\\b|your\\b|his\\b|her\\b|their\\b|him\\b|them\\b|us\\b|me\\b)[a-z]+\\b"
+    },
+    {
+      "id": "l1:look-forward-inf",
+      "pat": "vp.look-forward",
+      "vs": "use:look-forward+inf",
+      "kind": "error",
+      "trigger_de": "sich darauf freuen, etwas zu tun",
+      "example": { "de": "Ich freue mich darauf, Sie nächste Woche zu treffen.", "en": "I look forward to meeting you next week." },
+      "why": {
+        "de": "to ist hier eine Präposition, deshalb folgt -ing: look forward to meeting, nicht to meet.",
+        "en": "Here to is a preposition, so -ing follows: look forward to meeting, not to meet."
+      },
+      "bad": "\\blook(?:ing|s)?\\s+forward\\s+to\\s+(?:meet|see|hear|work|talk|speak|discuss|receive|get|start|welcome)\\b"
+    },
+    {
+      "id": "l1:avoid-to",
+      "use": "use:avoid+ing",
+      "vs": "use:avoid+to",
+      "kind": "error",
+      "trigger_de": "vermeiden, etwas zu tun",
+      "example": { "de": "Wir vermeiden es, Rabatte zu früh anzubieten.", "en": "We avoid offering discounts too early." },
+      "why": {
+        "de": "Nach avoid steht immer -ing, nie to + Grundform.",
+        "en": "Avoid is always followed by -ing, never by to + base verb."
+      },
+      "bad": "\\bavoid(?:s|ed|ing)?\\s+to\\s+[a-z]+"
+    },
+    {
+      "id": "l1:prep-to-inf",
+      "pat": "gi.prep-ing",
+      "vs": "use:prep+to-inf",
+      "kind": "error",
+      "trigger_de": "bevor/ohne/statt … zu tun",
+      "example": { "de": "Bitte prüfen Sie den Vertrag, bevor Sie ihn unterschreiben.", "en": "Please review the contract before signing it." },
+      "why": {
+        "de": "Nach einer Präposition (before, after, without, instead of) steht -ing. Das deutsche „zu“ wird nicht zu to.",
+        "en": "After a preposition (before, after, without, instead of) use -ing. German \"zu\" does not become to."
+      },
+      "bad": "\\b(?:before|after|without|instead\\s+of)\\s+to\\s+[a-z]+"
+    },
+    {
+      "id": "l1:wuerde-im-if",
+      "pat": "cn.second",
+      "vs": "use:if+would",
+      "kind": "error",
+      "trigger_de": "würde im wenn-Satz (Wenn ich mehr Zeit hätte / haben würde …)",
+      "example": { "de": "Wenn ich mehr Zeit hätte, würde ich den Bericht selbst schreiben.", "en": "If I had more time, I would write the report myself." },
+      "why": {
+        "de": "Im if-Teil steht die Vergangenheitsform (If I had), would nur im anderen Satzteil. Das deutsche „würde“ im wenn-Satz wird nicht übernommen.",
+        "en": "The if-clause takes the past form (If I had); would belongs only in the other clause. German \"würde\" in the if-clause does not carry over."
+      },
+      "bad": "\\bif\\s+(?:i|we)\\s+would\\s+(?:have|be|know)\\b"
+    },
+    {
+      "id": "l1:will-zeitsatz",
+      "pat": "tc.present-for-future",
+      "vs": "use:time-clause+will",
+      "kind": "error",
+      "trigger_de": "sobald/wenn ich … werde (Zukunft im Zeitsatz)",
+      "example": { "de": "Sobald ich die Zahlen habe, rufe ich Sie an.", "en": "As soon as I have the numbers, I'll call you." },
+      "why": {
+        "de": "Nach when, as soon as, once, until mit Zukunftsbedeutung steht das Präsens, will nur im Hauptsatz.",
+        "en": "After when, as soon as, once and until with future meaning, use the present tense; will goes only in the main clause."
+      },
+      "bad": "\\b(?:as\\s+soon\\s+as|once|until)\\s+(?:i|we|you|they|he|she)\\s+will\\b|^\\s*when\\s+(?:i|we)\\s+will\\b"
+    },
+    {
+      "id": "l1:praesens-fuer-zukunft",
+      "pat": "ff.will-now",
+      "vs": "psc.habit",
+      "kind": "error",
+      "trigger_de": "Präsens für spontane Zusage (Ich rufe dich morgen an.)",
+      "example": { "de": "Ich schicke Ihnen das Angebot morgen.", "en": "I'll send you the quote tomorrow." },
+      "why": {
+        "de": "Ein Versprechen oder eine spontane Zusage braucht will. Das deutsche Präsens mit Zeitangabe trägt das nicht.",
+        "en": "A promise or a spontaneous offer needs will. The German present tense with a time word does not carry over."
+      },
+      "bad": "\\b(?:i|we)\\s+(?:call|send|write|email|check|ask|forward)\\s+(?:(?:you|it|them|him|her)\\s+)?(?:(?:back|the\\s+\\w+|an?\\s+\\w+)\\s+)?(?:tomorrow|later\\s+today|next\\s+week|on\\s+monday|on\\s+friday)\\b"
+    },
+    {
+      "id": "l1:perfekt-mit-zeitpunkt",
+      "pat": "psp.finished-time",
+      "vs": "psp.result-now",
+      "kind": "error",
+      "trigger_de": "Perfekt mit abgeschlossenem Zeitpunkt (Ich habe ihn gestern angerufen.)",
+      "example": { "de": "Ich habe den Kunden gestern angerufen.", "en": "I called the client yesterday." },
+      "why": {
+        "de": "Mit einem abgeschlossenen Zeitpunkt (yesterday, last week, two days ago) steht das Past Simple. Das deutsche Perfekt wird hier nicht zum Present Perfect.",
+        "en": "With a finished time (yesterday, last week, two days ago) English uses the past simple. The German Perfekt does not become the present perfect here."
+      },
+      "bad": "\\b(?:have|has)\\s+(?:already\\s+)?(?:[a-z]+ed|sent|sold|met|seen|spoken|written|signed|made|done|got|gotten|been)\\b(?:(?!\\bsince\\b)[^.?!]){0,25}\\b(?:yesterday|ago|last\\s+(?:week|month|year|monday|tuesday|wednesday|thursday|friday))\\b"
+    },
+    {
+      "id": "l1:mustnt-dont-have-to",
+      "pat": "ma.dont-have-to",
+      "vs": "use:must+not",
+      "kind": "error",
+      "trigger_de": "nicht müssen (Du musst nicht kommen.)",
+      "example": { "de": "Sie müssen den Bericht heute nicht schicken.", "en": "You don't have to send the report today." },
+      "why": {
+        "de": "„nicht müssen“ heißt don't have to (keine Pflicht). mustn't heißt „nicht dürfen“ (Verbot).",
+        "en": "\"Nicht müssen\" means don't have to (no obligation). Mustn't means something is not allowed."
+      },
+      "bad": "\\bmust\\s*n['’]?t\\b|\\bmust\\s+not\\b",
+      "when": "\\b(?:do|does|did)\\s*(?:n['’]t|\\s+not)\\s+(?:have|need)\\s+to\\b"
+    },
+    {
+      "id": "l1:bis-by-until",
+      "pat": "pt.by-until",
+      "vs": "use:until+deadline",
+      "kind": "error",
+      "trigger_de": "bis (Frist): bis Freitag schicken",
+      "example": { "de": "Bitte schicken Sie den Vertrag bis Freitag.", "en": "Please send the contract by Friday." },
+      "why": {
+        "de": "„bis“ als Frist (spätestens) heißt by. until heißt „bis dahin andauernd“ (We are closed until Monday).",
+        "en": "\"Bis\" as a deadline (at the latest) is by. Until means something continues up to that point (We are closed until Monday)."
+      },
+      "bad": "\\buntil\\b",
+      "when": "\\bby\\b"
+    },
+    {
+      "id": "l1:waehrend-during",
+      "pat": "pt.during-within",
+      "vs": "use:during+clause",
+      "kind": "error",
+      "trigger_de": "während ich … (Nebensatz)",
+      "example": { "de": "Während ich telefonierte, kam die E-Mail.", "en": "While I was on the phone, the email came in." },
+      "why": {
+        "de": "during steht vor einem Nomen (during the call), while vor einem Satz mit Subjekt und Verb (while I was on the phone).",
+        "en": "During goes before a noun (during the call); while goes before a clause with subject and verb (while I was on the phone)."
+      },
+      "bad": "\\bduring\\s+(?:i|we|you|he|she|they)\\s+[a-z]+"
+    },
+    {
+      "id": "l1:despite-of",
+      "pat": "lk.despite",
+      "vs": "use:despite+of",
+      "kind": "error",
+      "trigger_de": "trotz",
+      "example": { "de": "Trotz der Verzögerung haben wir den Termin gehalten.", "en": "Despite the delay, we met the deadline." },
+      "why": {
+        "de": "despite steht ohne of. Mit of heißt es in spite of.",
+        "en": "Despite takes no of. With of, it is in spite of."
+      },
+      "bad": "\\bdespite\\s+of\\b"
+    },
+    {
+      "id": "l1:although-nomen",
+      "pat": "lk.although",
+      "vs": "lk.despite",
+      "kind": "error",
+      "trigger_de": "obwohl + Nomen (trotz)",
+      "example": { "de": "Trotz des hohen Preises hat der Kunde unterschrieben.", "en": "Despite the high price, the client signed." },
+      "why": {
+        "de": "although braucht einen ganzen Satz mit Verb (although the price was high). Vor einem Nomen steht despite.",
+        "en": "Although needs a full clause with a verb (although the price was high). Before a noun, use despite."
+      },
+      "bad": "\\balthough\\s+(?:the|a|an|our|this|their|its)\\s+[a-z]+\\s*,"
+    },
+    {
+      "id": "l1:informationen",
+      "pat": "cnt.uncount",
+      "vs": "use:information+plural",
+      "kind": "error",
+      "trigger_de": "Informationen, Ratschläge (deutscher Plural)",
+      "example": { "de": "Danke für die Informationen.", "en": "Thanks for the information." },
+      "why": {
+        "de": "information und advice sind im Englischen nicht zählbar: kein -s und kein a/an.",
+        "en": "Information and advice are uncountable in English: no -s and no a/an."
+      },
+      "bad": "\\binformations\\b|\\badvices\\b"
+    },
+    {
+      "id": "l1:an-information",
+      "pat": "cnt.unit",
+      "vs": "use:a+information",
+      "kind": "error",
+      "trigger_de": "eine Information, ein Rat",
+      "example": { "de": "Ich habe eine wichtige Information für Sie.", "en": "I have an important piece of information for you." },
+      "why": {
+        "de": "Bei nicht zählbaren Nomen steht kein a/an. Für „eine“ sagt man a piece of information oder some information.",
+        "en": "Uncountable nouns take no a/an. For one item, say a piece of information or some information."
+      },
+      "bad": "\\ban?\\s+(?:important\\s+|useful\\s+|good\\s+|quick\\s+)?(?:information|advice)\\b(?!\\s+(?:desk|session|sheet|pack|packet|center|system|technology|security|management|request))"
+    },
+    {
+      "id": "l1:beruf-ohne-artikel",
+      "pat": "art.indefinite",
+      "vs": "use:job+zero",
+      "kind": "error",
+      "trigger_de": "Ich bin Verkäufer (Beruf ohne Artikel)",
+      "example": { "de": "Ich bin Account Manager bei einem Softwarehaus.", "en": "I'm an account manager at a software company." },
+      "why": {
+        "de": "Vor einem Beruf steht im Englischen a/an: I'm an account manager.",
+        "en": "English puts a/an before a job: I'm an account manager."
+      },
+      "bad": "\\b(?:i\\s+am|i['’]m|she\\s+is|he\\s+is|works?\\s+as|worked\\s+as)\\s+(?:account\\s+manager|salesman|saleswoman|sales\\s+manager|engineer|developer|consultant|lawyer|accountant)\\b"
+    },
+    {
+      "id": "l1:make-photo",
+      "use": "use:take+photo",
+      "vs": "use:make+photo",
+      "kind": "error",
+      "trigger_de": "ein Foto / einen Screenshot machen",
+      "example": { "de": "Können Sie einen Screenshot von der Fehlermeldung machen?", "en": "Can you take a screenshot of the error message?" },
+      "why": {
+        "de": "Fotos und Screenshots „nimmt“ man im Englischen: take a photo, take a screenshot.",
+        "en": "In English you take a photo or a screenshot."
+      },
+      "bad": "\\b(?:make|makes|making|made)\\s+(?:a\\s+|the\\s+|some\\s+)?(?:photo|photos|screenshot|screenshots)\\b"
+    },
+    {
+      "id": "l1:meet-decision",
+      "use": "use:make+decision",
+      "vs": "use:meet+decision",
+      "kind": "error",
+      "trigger_de": "eine Entscheidung treffen",
+      "example": { "de": "Wir müssen bis Freitag eine Entscheidung treffen.", "en": "We need to make a decision by Friday." },
+      "why": {
+        "de": "Eine Entscheidung „macht“ man: make a decision. „treffen“ wird hier nicht zu meet.",
+        "en": "In English you make a decision. German \"treffen\" does not become meet here."
+      },
+      "bad": "\\b(?:meet|meets|met)\\s+(?:a\\s+|the\\s+|this\\s+|our\\s+|any\\s+)?decisions?\\b"
+    },
+    {
+      "id": "l1:do-mistake",
+      "use": "use:make+mistake",
+      "vs": "use:do+mistake",
+      "kind": "error",
+      "trigger_de": "einen Fehler machen",
+      "example": { "de": "Wir haben bei der Rechnung einen Fehler gemacht.", "en": "We made a mistake on the invoice." },
+      "why": {
+        "de": "Fehler „macht“ man mit make: make a mistake. do passt nicht.",
+        "en": "You make a mistake; do does not go with mistake."
+      },
+      "bad": "\\b(?:do|does|did|doing|done)\\s+(?:a\\s+|the\\s+|this\\s+|some\\s+|many\\s+|several\\s+|no\\s+|any\\s+)?mistakes?\\b(?!\\s+(?:happen|occur|slip|get|go|appear|show))"
+    },
+    {
+      "id": "l1:make-meeting",
+      "use": "use:have+meeting",
+      "vs": "use:make+meeting",
+      "kind": "error",
+      "trigger_de": "ein Meeting machen",
+      "example": { "de": "Lass uns am Montag ein kurzes Meeting machen.", "en": "Let's have a short meeting on Monday." },
+      "why": {
+        "de": "Ein Meeting hat oder hält man: have a meeting, hold a meeting, set up a meeting.",
+        "en": "You have, hold or set up a meeting."
+      },
+      "bad": "\\b(?:make|makes|made|making)\\s+a\\s+(?:short\\s+|quick\\s+)?meeting\\b"
+    },
+    {
+      "id": "l1:interested-for",
+      "use": "use:interested+in",
+      "vs": "use:interested+for",
+      "kind": "error",
+      "trigger_de": "sich interessieren für",
+      "example": { "de": "Der Kunde interessiert sich für die Cloud-Version.", "en": "The client is interested in the cloud version." },
+      "why": {
+        "de": "interested steht mit in, nicht mit for.",
+        "en": "Interested takes in, not for."
+      },
+      "bad": "\\binterested\\s+(?:for|on|about)\\b"
+    },
+    {
+      "id": "l1:participate-at",
+      "use": "use:participate+in",
+      "vs": "use:participate+at",
+      "kind": "error",
+      "trigger_de": "teilnehmen an",
+      "example": { "de": "Drei Kunden nehmen an der Demo teil.", "en": "Three clients are taking part in the demo." },
+      "why": {
+        "de": "„teilnehmen an“ heißt participate in oder take part in, nicht at.",
+        "en": "\"Teilnehmen an\" is participate in or take part in, not at."
+      },
+      "bad": "\\bparticipat(?:e|es|ed|ing)\\s+(?:at|on)\\b|\\b(?:take|takes|took|taking|taken)\\s+part\\s+at\\b"
+    },
+    {
+      "id": "l1:listen-to",
+      "use": "use:listen+to",
+      "vs": "use:listen+obj",
+      "kind": "error",
+      "trigger_de": "etwas anhören",
+      "example": { "de": "Ich habe mir die Aufnahme vom Call angehört.", "en": "I listened to the recording of the call." },
+      "why": {
+        "de": "listen braucht to vor dem, was man hört: listen to the recording.",
+        "en": "Listen needs to before what you hear: listen to the recording."
+      },
+      "bad": "\\blisten(?:s|ed|ing)?\\s+(?:the\\s+(?:call|recording|podcast|customer|client)|music)\\b"
+    },
+    {
+      "id": "l1:am-agree",
+      "use": "use:agree+subject",
+      "vs": "use:be+agree",
+      "kind": "error",
+      "trigger_de": "Ich bin einverstanden",
+      "example": { "de": "Ich bin mit dem Vorschlag einverstanden.", "en": "I agree with the proposal." },
+      "why": {
+        "de": "agree ist ein Verb, kein Adjektiv: I agree, nicht I am agree.",
+        "en": "Agree is a verb, not an adjective: I agree, not I am agree."
+      },
+      "bad": "\\b(?:i|we|they|you)\\s+(?:am|are|['’]m|['’]re)\\s+(?:not\\s+)?agree\\b"
+    },
+    {
+      "id": "l1:adverb-vor-objekt",
+      "pat": "wo.verb-object",
+      "vs": "use:verb+adv-obj",
+      "kind": "error",
+      "trigger_de": "Ich mag sehr dieses Tool (Adverb zwischen Verb und Objekt)",
+      "example": { "de": "Ich mag dieses Tool sehr.", "en": "I really like this tool." },
+      "why": {
+        "de": "Zwischen Verb und Objekt steht im Englischen nichts: like this tool very much oder really like this tool.",
+        "en": "In English nothing goes between the verb and its object: like this tool very much or really like this tool."
+      },
+      "bad": "\\b(?:like|love|enjoy|need|want|prefer)\\s+(?:very\\s+much|really|also|always|often)\\s+(?:the|this|that|our|your|it)\\b|\\bspeaks?\\s+(?:very\\s+)?(?:well|good|fluently)\\s+(?:english|german|french|spanish)\\b"
+    },
+    {
+      "id": "l1:indirekte-frage",
+      "pat": "qu.indirect",
+      "vs": "qu.direct",
+      "kind": "error",
+      "trigger_de": "Können Sie mir sagen, wo die Datei ist? (Fragestellung im Nebensatz)",
+      "example": { "de": "Können Sie mir sagen, wann der Vertrag beginnt?", "en": "Can you tell me when the contract starts?" },
+      "why": {
+        "de": "In der indirekten Frage steht die normale Satzstellung: Subjekt vor Verb, ohne do/does (when the contract starts).",
+        "en": "An indirect question uses normal word order: subject before verb, no do/does (when the contract starts)."
+      },
+      "bad": "\\b(?:tell\\s+(?:me|us)|know|wonder|wondering|ask(?:ed)?|explain|sure)\\s+(?:where|when|what|why|how)\\s+(?:is|are|was|were|does|do|did|can|will|should)\\s+(?:the|this|that|it|he|she|we|they|you|our|your|my)\\b"
+    },
+    {
+      "id": "l1:same-like",
+      "pat": "cmp.as-as",
+      "vs": "use:same+like",
+      "kind": "error",
+      "trigger_de": "das Gleiche wie / so schnell wie",
+      "example": { "de": "Der Preis ist der gleiche wie letztes Jahr.", "en": "The price is the same as last year." },
+      "why": {
+        "de": "Nach the same und as … steht as: the same as, as fast as. „wie“ wird hier nicht zu like.",
+        "en": "After the same and as …, use as: the same as, as fast as. German \"wie\" does not become like here."
+      },
+      "bad": "\\bthe\\s+same\\s+like\\b|\\bas\\s+(?:fast|good|big|cheap|expensive|high|low|quick|easy|simple|important|long|much|many)\\s+like\\b"
+    },
+    {
+      "id": "l1:komparativ-as",
+      "pat": "cmp.than",
+      "vs": "use:comparative+as",
+      "kind": "error",
+      "trigger_de": "größer als (Vergleich mit „als“)",
+      "example": { "de": "Die neue Version ist schneller als die alte.", "en": "The new version is faster than the old one." },
+      "why": {
+        "de": "Nach einem Vergleich (faster, more flexible) steht than. „als“ wird hier nicht zu as.",
+        "en": "After a comparative (faster, more flexible) use than. German \"als\" does not become as here."
+      },
+      "bad": "\\b(?:(?:more|less)\\s+[a-z]+|bigger|smaller|cheaper|faster|higher|lower|larger|easier|longer|shorter|quicker)\\s+as\\b(?!\\s+(?:a|an|the|well|soon|long|far|much)\\b)"
+    },
+    {
+      "id": "l1:used-to-oder-past",
+      "pat": "ut.used-to",
+      "vs": "psp.finished-time",
+      "kind": "note",
+      "trigger_de": "früher (Gewohnheit oder Zustand in der Vergangenheit)",
+      "example": { "de": "Früher hatten wir ein Papierarchiv.", "en": "We used to have a paper archive. (We had a paper archive. is also correct.)" },
+      "why": {
+        "de": "Für frühere Gewohnheiten und Zustände sind used to und das Past Simple beide richtig. used to betont: heute nicht mehr.",
+        "en": "For past habits and states, both used to and the past simple are correct. Used to stresses that it is no longer true."
+      }
+    },
+    {
+      "id": "l1:us-past-already-yet",
+      "pat": "psp.result-now",
+      "vs": "psp.finished-time",
+      "kind": "note",
+      "trigger_de": "schon / noch nicht (already, yet, just)",
+      "example": { "de": "Hast du den Vertrag schon geschickt?", "en": "Have you sent the contract yet? (Did you send the contract yet? is common in American English.)" },
+      "why": {
+        "de": "Mit already, yet und just nimmt man meist das Present Perfect. Im amerikanischen Englisch ist das Past Simple hier im Alltag auch üblich.",
+        "en": "With already, yet and just, the present perfect is usual. In everyday American English, the past simple is also common here."
+      }
+    },
+    {
+      "id": "l1:if-you-would",
+      "pat": "cn.second",
+      "vs": "use:if+would",
+      "kind": "note",
+      "trigger_de": "höfliche Bitte mit if you would",
+      "example": { "de": "Wenn Sie mir die Datei bitte schicken würden, …", "en": "If you would send me the file, I can start right away." },
+      "why": {
+        "de": "if you would + Grundform ist eine höfliche Bitte und richtig. Nur in echten Bedingungssätzen (If I had time …) steht kein would im if-Teil.",
+        "en": "If you would + base verb is a polite request and correct. Only in real conditional clauses (If I had time …) does the if-clause avoid would."
+      }
+    },
+    {
+      "id": "l1:will-going-to",
+      "pat": "ff.going-to",
+      "vs": "ff.will-now",
+      "kind": "note",
+      "trigger_de": "werden (Zukunft): will oder going to",
+      "example": { "de": "Wir werden nächstes Quartal expandieren.", "en": "We're going to expand next quarter. (We will expand next quarter. is also correct.)" },
+      "why": {
+        "de": "Für Pläne passen going to und will oft beide. going to betont den schon gefassten Plan, will die Entscheidung oder Vorhersage.",
+        "en": "For plans, going to and will often both work. Going to stresses a plan already made; will stresses a decision or a prediction."
+      }
+    },
+    {
+      "id": "l1:gotten",
+      "pat": "psp.result-now",
+      "vs": "use:have+got",
+      "kind": "note",
+      "trigger_de": "bekommen (Partizip): got oder gotten",
+      "example": { "de": "Wir haben viel Feedback bekommen.", "en": "We've gotten a lot of feedback." },
+      "why": {
+        "de": "Im amerikanischen Englisch ist gotten das übliche Partizip von get (have gotten). have got heißt meist einfach „haben“.",
+        "en": "In American English, gotten is the usual past participle of get (have gotten). Have got usually just means have."
+      }
+    },
+    {
+      "id": "l1:that-weglassen",
+      "pat": "rc.who-which",
+      "vs": "rc.that-what",
+      "kind": "note",
+      "trigger_de": "der/die/das (Relativpronomen als Objekt)",
+      "example": { "de": "Das ist das Angebot, das wir geschickt haben.", "en": "This is the offer we sent. (This is the offer that we sent. is also correct.)" },
+      "why": {
+        "de": "Ist das Relativpronomen das Objekt, kann that/which wegfallen. Beide Fassungen sind richtig.",
+        "en": "When the relative pronoun is the object, that/which can be left out. Both versions are correct."
+      }
+    }
+  ]
+}

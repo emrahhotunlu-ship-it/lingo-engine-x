@@ -6725,6 +6725,22 @@
     "On my way to work,",
     "On the way to work,"
    ],
+   "errAlt": [
+    {
+     "err": [
+      3,
+      6
+     ],
+     "answer": "I heard my phone ring twice.",
+     "accepted": [
+      "I heard my phone ringing twice."
+     ],
+     "why": {
+      "de": "Auch richtig: Mit „I“ im Hauptsatz gehört „Walking to work“ jetzt zu dir, und du gehst zur Arbeit.",
+      "en": "Also right: with “I” in the main clause, “Walking to work” now refers to you, and you are the one walking."
+     }
+    }
+   ],
    "why": {
     "ok": {
      "de": "Der Fehler: Dein Telefon geht nicht zur Arbeit. Das Partizip braucht ein passendes Subjekt.",

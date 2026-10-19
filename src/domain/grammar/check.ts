@@ -53,7 +53,9 @@ export function altFamily(task: Pick<GrammarTask, 'topic' | 'prompt' | 'answer'>
   }
   if (famOk('whichThat') && !/,\s*_{2,}/.test(task.prompt)) {
     const unify = (x: string) => x.replace(/\b(which|who|that)\b/g, 'that');
-    if (unify(gs) === unify(cs)) return 'whichThat';
+    // Nur „that“ ↔ which/who (Hinweis der Familie). which ↔ who ist kein „Auch richtig“: „The sales rep which …“ bleibt falsch (Tutor-Engine v3, Gold-Liste).
+    const swap = (a: string, b: string) => /\bwhich\b/.test(a) && !/\bwhich\b/.test(b) && /\bwho\b/.test(b);
+    if (unify(gs) === unify(cs) && !swap(gs, cs) && !swap(cs, gs)) return 'whichThat';
   }
   if (famOk('gerInf')) {
     const before = (task.prompt.split(/_{2,}/)[0] ?? '').trim().split(/\s+/).pop() ?? '';
@@ -119,7 +121,8 @@ export function checkGrammar(task: GrammarTask, givenRaw: string, deps: GrammarC
   const us = usPhrase(g);
   if (us !== g && targets.some((t) => usPhrase(t) === us)) return { verdict: 'correct', kind: 'uk', us, ops, needsJudge: false };
   if (targets.some((t) => usPhrase(t) === us)) return { verdict: 'correct', ops, needsJudge: false };
-  if (altFamily(task, raw) || task.accepted.some((a) => altFamily({ ...task, answer: a }, raw))) return { verdict: 'correct', kind: 'alt', ops, needsJudge: false };
+  // whichThat nur gegen die Lösung selbst: über ein akzeptiertes „that“ würde sonst which ↔ who durchrutschen.
+  if (altFamily(task, raw) || task.accepted.some((a) => ((f) => f !== null && f !== 'whichThat')(altFamily({ ...task, answer: a }, raw)))) return { verdict: 'correct', kind: 'alt', ops, needsJudge: false };
   if ((task.alt ?? []).map(legacyNorm).some((a) => a && (a === g || usPhrase(a) === us))) return { verdict: 'correct', kind: 'other', ops, needsJudge: false };
   if (task.type === 'correct' && g === legacyNorm(task.prompt)) return { verdict: 'wrong', ops, needsJudge: false };
   // Eine andere Form desselben Worts ist ein Formfehler, kein Tippfehler (work statt works).

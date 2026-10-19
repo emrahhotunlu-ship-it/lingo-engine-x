@@ -108,7 +108,7 @@ export function fromV2(t: V2Task): GrammarTask | null {
   const base = { topic: t.topic, accepted: [] as string[], options: null, hint: null, expl: { de: t.why.ok.de, en: t.why.ok.en }, src: 'seed' as const, ref: 'content/grammar/tasks-v2', errorT: null, pat: t.pat, why: t.why };
   if (!topicById(t.topic)) return null;
   if (t.type === 'kwt') return { ...base, key: legacyTaskKey(t.frame), type: 'kwt', prompt: t.frame, answer: t.answer, accepted: [...t.accepted], x: { kind: 'kwt', from: t.from, key: t.key, words: [t.words[0], t.words[1]] } };
-  if (t.type === 'find') return { ...base, key: legacyTaskKey(t.prompt), type: 'find', prompt: t.prompt, answer: t.answer ?? '', accepted: [...t.accepted], ...(t.hint ? { goal: { de: t.hint.de, en: t.hint.en } } : {}), x: { kind: 'find', err: t.err ? [t.err[0], t.err[1]] : null, fixed: t.fixed ?? null } };
+  if (t.type === 'find') return { ...base, key: legacyTaskKey(t.prompt), type: 'find', prompt: t.prompt, answer: t.answer ?? '', accepted: [...t.accepted], ...(t.hint ? { goal: { de: t.hint.de, en: t.hint.en } } : {}), x: { kind: 'find', err: t.err ? [t.err[0], t.err[1]] : null, fixed: t.fixed ?? null, ...(t.errAlt?.length ? { errAlt: t.errAlt.map((a) => ({ err: [a.err[0], a.err[1]] as [number, number], answer: a.answer, accepted: [...a.accepted], why: { de: a.why.de, en: a.why.en } })) } : {}) } };
   return { ...base, key: legacyTaskKey(t.a), type: 'meaning', prompt: t.a, answer: t.answer, x: { kind: 'meaning', a: t.a, b: t.b, q: { de: t.q.de, en: t.q.en } } };
 }
 
