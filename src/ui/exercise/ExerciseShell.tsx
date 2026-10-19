@@ -42,11 +42,11 @@ export type ShellStatus = {
   pattern?: string | null;
   badge?: string | null;
   /** Farbe des Zusatzes: `near` (Bernstein, Standard: „deine Fehler“, „noch einmal“) oder `hint` (Cyan, neutral, z. B. „Themen-Test“). */
-  badgeTone?: 'near' | 'hint';
+  badgeTone?: 'near' | 'hint' | 'neutral';
   /** Ohne Hilfe (Themen-Test, Vortest, Messung): kein ⓘ mit Zweck und Muster – die Aufgabe selbst nennt den Hinweis. */
   noInfo?: boolean;
 };
-export type ShellAction = { label: string; onClick: () => void; testId: string; disabled?: boolean; busy?: boolean; busyLabel?: string };
+export type ShellAction = { /** Pfeil auch ohne Ergebnis (z. B. „Weiter“ mitten in der Aufgabe). */ arrow?: boolean; label: string; onClick: () => void; testId: string; disabled?: boolean; busy?: boolean; busyLabel?: string };
 export type ShellSecondary = { id: 'hint' | 'dontKnow' | 'unclear' | 'noError' | 'skip' | 'replay' | 'reset' | 'noSound'; label: string; onClick: () => void; testId: string; disabled?: boolean };
 export type ShellMenuId = 'override' | 'copyOnce' | 'showMe' | 'translate' | 'moreInfo' | 'askClaude' | 'wholeTopic' | 'report';
 export type ShellFeedback = {
@@ -57,7 +57,7 @@ export type ShellFeedback = {
   /** Zusätzlich unter „Mehr“ (z. B. 'pattern') bzw. immer offen (z. B. 'contrast'); `unfold` gewinnt. */
   fold?: ReadonlyArray<ExplainLine['k']>;
   unfold?: ReadonlyArray<ExplainLine['k']>;
-  comparison?: { given: string; ops: WordOp[]; compact?: boolean; label?: string } | null;
+  comparison?: { given: string; ops: WordOp[]; compact?: boolean; label?: string; correct?: string } | null;
   explanation?: ExplanationModel | null;
   depth: ExplainDepth;
   menu?: Partial<Record<ShellMenuId, () => void>>;
@@ -252,7 +252,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
         {feedback.right && <div data-slot="right">{feedback.right}</div>}
         {feedback.comparison && (
           <div data-slot="comparison">
-            <Comparison given={feedback.comparison.given} ops={feedback.comparison.ops} compact={!!feedback.comparison.compact} {...(feedback.comparison.label ? { label: feedback.comparison.label } : {})} />
+            <Comparison given={feedback.comparison.given} ops={feedback.comparison.ops} compact={!!feedback.comparison.compact} {...(feedback.comparison.label ? { label: feedback.comparison.label } : {})} {...(feedback.comparison.correct ? { correct: feedback.comparison.correct } : {})} />
           </div>
         )}
         {feedback.why && <div data-slot="why">{feedback.why}</div>}
@@ -367,7 +367,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
           disabled={primary.disabled}
           busy={primary.busy}
           busyLabel={primary.busyLabel}
-          iconAfter={feedback ? 'arrowRight' : undefined}
+          iconAfter={feedback || primary.arrow ? 'arrowRight' : undefined}
           testId={primary.testId}
           data-auto={running ? '' : undefined}
           className="overflow-hidden"

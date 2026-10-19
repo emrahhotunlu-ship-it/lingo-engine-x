@@ -70,7 +70,7 @@ export function FkB1Item({ task, area, source, status = null, onNext, onUnclear,
   const model: ExplanationModel | null = res
     ? { lines: [...(patLine(task.pat, lang) ? [patLine(task.pat, lang)!] : []), { k: 'why' as const, text: why }], examples: [], mark: [], ai: false, source: 'task' }
     : null;
-  const comparison = res && res.v !== 'ok' ? (res.given ? { given: res.given, ops: alignWords(res.given, task.model) } : null) : null;
+  const comparison = res && res.v !== 'ok' ? (res.given ? { given: res.given, ops: alignWords(res.given, task.model), correct: task.model } : null) : null;
   const secondary: ShellSecondary[] = res
     ? []
     : [
@@ -84,7 +84,7 @@ export function FkB1Item({ task, area, source, status = null, onNext, onUnclear,
     <div data-testid="repair-item" data-id={task.id} data-mode="review" data-form="b1" data-state={res ? res.v : 'open'}>
       <ExerciseShell
         meta={{ ex: 'repair', id: task.id, kind: 'b1' }}
-        status={{ area: 'grammar', state: null, kindLabel: t('fxB1Kind'), topic: null, pattern: null, badge: status }}
+        status={{ area: 'grammar', state: null, kindLabel: t('fxB1Kind'), topic: null, pattern: null, badge: status, badgeTone: 'neutral' }}
         task={{ text: t('fxB1Task'), purpose: t('fxB1Purpose') }}
         aid={
           res ? null : (
@@ -101,8 +101,9 @@ export function FkB1Item({ task, area, source, status = null, onNext, onUnclear,
               <p className="lx-t-support text-muted" data-testid="fk-sit">
                 {task.sit[lang]}
               </p>
-              <p className="lx-t-prompt" lang={lang} data-testid="fk-intent">
-                {lang === 'de' ? `„${task.intent.de}“` : task.intent.en}
+              {/* Die Absicht steht immer in der Ausgangssprache: die englische Fassung würde die Lösung verraten. */}
+              <p className="lx-t-prompt" lang="de" data-testid="fk-intent">
+                {`„${task.intent.de}“`}
               </p>
             </div>
           )
@@ -160,11 +161,11 @@ export function FkB2Item({ task, area, source, status = null, onNext, onUnclear,
     finish(pickOk && allGaps ? 'ok' : pickOk ? 'close' : 'no', given, final);
   };
 
-  const primary = ((): { label: string; onClick: () => void; testId: string; disabled?: boolean } => {
+  const primary = ((): { label: string; onClick: () => void; testId: string; disabled?: boolean; arrow?: boolean } => {
     if (res) return { label: t('exNext'), onClick: onNext, testId: 'repair-next' };
     if (step === 'pick') {
       if (!pickShown) return { label: t('exCheck'), onClick: () => setPickShown(true), testId: 'repair-check', disabled: picked === null };
-      return { label: t('exNext'), onClick: () => setStep('gap1'), testId: 'fk-b2-continue' };
+      return { label: t('exNext'), onClick: () => setStep('gap1'), testId: 'fk-b2-continue', arrow: true };
     }
     const cur = gaps[gapIdx];
     return {
@@ -172,6 +173,7 @@ export function FkB2Item({ task, area, source, status = null, onNext, onUnclear,
       onClick: () => (step === 'gap1' ? setStep('gap2') : conclude(gaps)),
       testId: step === 'gap1' ? 'fk-b2-gap-next' : 'repair-check',
       disabled: cur === null,
+      ...(step === 'gap1' ? { arrow: true } : {}),
     };
   })();
 
@@ -187,9 +189,11 @@ export function FkB2Item({ task, area, source, status = null, onNext, onUnclear,
     setGaps(g);
   };
 
+  // Das Warum gehört zur Fassung aus Schritt 1; sie steht davor, damit klar ist, worauf es sich bezieht.
   const model: ExplanationModel | null = res
-    ? { lines: [...(patLine(task.pat, lang) ? [patLine(task.pat, lang)!] : []), { k: 'why' as const, text: why }], examples: [], mark: [], ai: false, source: 'task' }
+    ? { lines: [...(patLine(task.pat, lang) ? [patLine(task.pat, lang)!] : []), { k: 'why' as const, text: `„${task.good}“ – ${why}` }], examples: [], mark: [], ai: false, source: 'task' }
     : null;
+  const comparison = res && res.v !== 'ok' && res.given ? { given: res.given, ops: alignWords(res.given, fullRight), correct: fullRight } : null;
   const secondary: ShellSecondary[] =
     res || step !== 'pick' || pickShown
       ? []
@@ -197,11 +201,12 @@ export function FkB2Item({ task, area, source, status = null, onNext, onUnclear,
           { id: 'dontKnow', label: t('exDontKnow'), onClick: () => finish('no', '', [null, null]), testId: 'repair-dontknow' },
           ...(onUnclear ? [{ id: 'unclear' as const, label: t('fxRUnclear'), onClick: onUnclear, testId: 'repair-unclear' }] : []),
         ];
-  const hint = !res && step === 'pick' && pickShown ? { text: why, tone: pickOk ? ('hint' as const) : ('near' as const) } : null;
+  // Die Begründung nach der Wahl ist ein ruhiger Hinweis (kein Gold: Gold heißt „fast“ oder „noch einmal“).
+  const hint = !res && step === 'pick' && pickShown ? { text: why, tone: 'hint' as const } : null;
   const verdict: ResultVerdict | null = res ? VERDICT[res.v] : null;
 
   let prompt;
-  if (res) prompt = <EnglishText as="p" text={task.good} area={area} source={source} testId="repair-right" />;
+  if (res) prompt = <EnglishText as="p" text={fullRight} area={area} source={source} testId="repair-right" />;
   else if (step === 'pick')
     prompt = (
       <p className="lx-t-support text-muted" data-testid="fk-sit">
@@ -223,7 +228,7 @@ export function FkB2Item({ task, area, source, status = null, onNext, onUnclear,
     <div data-testid="repair-item" data-id={task.id} data-mode="review" data-form="b2" data-step={step} data-state={res ? res.v : 'open'}>
       <ExerciseShell
         meta={{ ex: 'repair', id: task.id, kind: 'b2' }}
-        status={{ area: 'grammar', state: null, kindLabel: t('fxB2Kind'), topic: null, pattern: null, badge: status }}
+        status={{ area: 'grammar', state: null, kindLabel: t('fxB2Kind'), topic: null, pattern: null, badge: status, badgeTone: 'neutral' }}
         task={{ text: step === 'pick' ? t('fxB2Task') : t('fxB2TaskGap', { n: gapIdx + 1 }), purpose: t('fxB2Purpose') }}
         prompt={prompt}
         answer={
@@ -245,7 +250,7 @@ export function FkB2Item({ task, area, source, status = null, onNext, onUnclear,
         hint={hint}
         secondary={secondary}
         primary={primary}
-        feedback={res && verdict ? { verdict, sub: t('fxB2Sub', { s: fullRight }), comparison: null, explanation: model, depth: explainDepth({ verdict, p: null, learning: true }), menu: {} } : null}
+        feedback={res && verdict ? { verdict, sub: null, comparison, explanation: model, depth: explainDepth({ verdict, p: null, learning: true }), menu: {} } : null}
       />
     </div>
   );

@@ -46,7 +46,7 @@ export function ExerciseStatus({ area, state, kindLabel, topic, pattern, badge, 
       <span data-testid="ex-kind">{kindLabel}</span>
       {/* UX-Prüfung W1: „dein Fehler“ nie zusammen mit „Neu“ (ein neues Thema hat keinen alten Fehler). */}
       {badge && state !== 'new' && (
-        <span className={`rounded-full px-2 py-0.5 ${badgeTone === 'hint' ? 'bg-hint-soft text-hint-text' : 'bg-near-soft text-near-text'}`} data-testid="again-badge" data-tone={badgeTone}>
+        <span className={`rounded-full px-2 py-0.5 ${badgeTone === 'hint' ? 'bg-hint-soft text-hint-text' : badgeTone === 'neutral' ? 'bg-surface text-muted' : 'bg-near-soft text-near-text'}`} data-testid="again-badge" data-tone={badgeTone}>
           {badge}
         </span>
       )}

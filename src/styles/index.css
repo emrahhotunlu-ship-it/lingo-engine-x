@@ -1205,6 +1205,33 @@ html[data-kb] .lx-actionbar {
 html[data-actionbar] #main {
   padding-bottom: calc(var(--lx-bar-h) + env(safe-area-inset-bottom) + 1rem);
 }
+/* Querformat am Handy (UX-Prüfung Fehler korrigieren, W-7): Mit Tastatur bleiben kaum 150 px. Die Leiste steht dann nicht fest, sondern am Ende
+   des Inhalts, und die Übung rückt zusammen, damit der Satz und das Feld sichtbar bleiben. */
+@media (max-height: 500px) {
+  .lx-actionbar {
+    position: static;
+    min-height: 0;
+    padding-top: 0;
+    border-top: 0;
+    z-index: auto;
+  }
+  html[data-actionbar] #main {
+    padding-bottom: 1rem;
+  }
+  .lx-exercise {
+    gap: 0.5rem;
+  }
+  .lx-exercise [data-col='main'] {
+    gap: 0.5rem;
+  }
+  .lx-exercise [data-slot='task'] h2 {
+    font-size: var(--text-base);
+    line-height: 1.35;
+  }
+  .lx-exercise [data-slot='prompt'] {
+    font-size: var(--text-base);
+  }
+}
 
 /* ---------------------------------------------------------------- Lernplattform 2.0 (P1): Rollen, Dichte, Gerüst */
 :root {

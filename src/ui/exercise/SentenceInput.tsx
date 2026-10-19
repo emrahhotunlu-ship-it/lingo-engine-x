@@ -72,6 +72,8 @@ export function SentenceInput(props: SentenceInputProps) {
       <input
         type="text"
         className="lx-field lx-t-prompt inline-block min-h-11 max-w-full align-baseline"
+        // `.lx-field` ist 100 % breit; im Satz soll das Feld die Lücke sein: feste Anfangsbreite, wächst mit dem Text.
+        style={{ width: `calc(${Math.max(8, value.length + 2)}ch + 1.75rem)` }}
         data-testid={testId}
         aria-label={t('exSentenceLabel')}
         size={size}
@@ -79,6 +81,10 @@ export function SentenceInput(props: SentenceInputProps) {
         disabled={disabled}
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={onKey}
+        onFocus={(e) => {
+          const el = e.currentTarget;
+          window.setTimeout(() => el.scrollIntoView?.({ block: 'center', behavior: 'smooth' }), 320);
+        }}
         {...textProps}
       />
       {after && <span> {after}</span>}
