@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useLive } from '../../data/live';
+import { repairGate } from '../../domain/repair/gate';
 import { readRepairs, repairId, type NewRepair, type RepairItem as Repair } from '../../domain/repair/repair';
 import type { WordTapArea } from '../../engine/wordTap';
 import { useT } from '../../i18n';
@@ -34,6 +35,8 @@ function pick(candidates: readonly NewRepair[]): Array<RepairView & { add: NewRe
     const k = known.get(id);
     // Seit dem (erneuten) Anlegen schon geübt → nicht noch einmal.
     if (k && !k.done && (k.last ?? 0) >= k.t) continue;
+    // Eintritts-Wächter: eine fragwürdige Korrektur wird nie vorgelegt (gespeichert ruht sie, `saveRepairs`).
+    if (k?.held || repairGate(c)) continue;
     if (out.some((o) => o.id === id)) continue;
     out.push({ id, wrong: c.wrong.trim(), right: c.right.trim(), ...(c.why ? { why: c.why } : {}), src: c.src, ...(c.fix?.length ? { fix: [...c.fix] } : {}), add: c });
     if (out.length >= STEP_MAX) break;

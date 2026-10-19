@@ -65,7 +65,7 @@ export const levelsSchema = z.looseObject({ v: num, k: z.record(z.string(), z.un
 
 export const repairSchema = z.looseObject({
   items: z
-    .array(z.looseObject({ id: str, wrong: str, right: str, why: str, src: str, ctx: str, t: num, box: num, due: num, done: bool, last: num, fix: strArr, pat: str, unclear: num }))
+    .array(z.looseObject({ id: str, wrong: str, right: str, why: str, src: str, ctx: str, t: num, box: num, due: num, done: bool, last: num, fix: strArr, pat: str, unclear: num, held: z.looseObject({ r: str, d: str, t: num }).nullish() }))
     .nullish(),
 });
 

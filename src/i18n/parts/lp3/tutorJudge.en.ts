@@ -23,4 +23,5 @@ export const ttJudgeEn = {
   ttJgByMe: 'Noted: this answer now counts as correct for this exercise.',
   ttJgAltErr: 'A different spot, also correctly fixed.',
   ttJgFitAltRow: 'Learned “also correct” answers: {n} (included in the file)',
+  ttHeldRepairsRow: 'Held-back error sentences (questionable correction, paused without a grade): {n} (included in the file)',
 };

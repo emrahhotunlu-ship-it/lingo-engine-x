@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
 import { useLive } from '../../data/live';
@@ -10,7 +10,7 @@ import { SessionEnd } from '../../ui/SessionEnd';
 import { ExerciseTop } from '../learn/ui';
 import { flush } from '../progress/persist';
 import { commitRepairAnswer } from '../repair/review';
-import { markUnclear } from '../repair/store';
+import { holdGatedRepairs, markUnclear } from '../repair/store';
 import { RepairItem } from '../repair/RepairItem';
 
 // „Fehler korrigieren“ im Reiter „Anwenden“ (Plan docs/umbau/anwenden-plan.md, Stufe 2, Übung 1): die fälligen
@@ -44,6 +44,10 @@ export function RepairRoundScreen() {
   const open = useOpenRepairs();
   // Einmal beim Öffnen festlegen: die Liste ändert sich während der Runde, die Runde nicht.
   const [items] = useState(() => open.slice(0, REPAIR_ROUND_MAX));
+  // Eintritts-Wächter: fragwürdige Einträge still ruhend stellen (einmal beim Öffnen; vorgelegt werden sie ohnehin nicht).
+  useEffect(() => {
+    void holdGatedRepairs(useLive.getState().docs['app/repair']);
+  }, []);
   const [pos, setPos] = useState(0);
   const [right, setRight] = useState(0);
   // Paket FK: „Kann ich nicht nachvollziehen“ nimmt den Satz heraus; er zählt weder als richtig noch als falsch.

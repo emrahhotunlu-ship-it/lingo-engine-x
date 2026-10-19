@@ -83,12 +83,19 @@ const containsSeq = (hay: readonly string[], needle: readonly string[]): boolean
 
 export type LocalVerdict = 'exact' | 'close' | 'no';
 
+/** Unverändert (Rückmeldung 19.10.2026): Die Antwort ist nach der Vereinheitlichung der falsche Satz selbst. Nie bestanden, nie „Fast richtig“. */
+export function isUnchanged(given: string, wrong: string): boolean {
+  const g = words(given);
+  return g.length > 0 && g.join(' ') === words(wrong).join(' ');
+}
+
 export function checkRepairLocal(given: string, item: Pick<RepairItem, 'wrong' | 'right' | 'fix'>): LocalVerdict {
   const g = words(given);
   const r = words(item.right);
   const w = words(item.wrong);
   if (!g.length) return 'no';
   if (g.join(' ') === r.join(' ')) return 'exact';
+  if (g.join(' ') === w.join(' ')) return 'no';
   const dist = wordDistance(g, r);
   const allowed = r.length >= 6 ? 2 : 1;
   if (dist > allowed) return 'no';

@@ -1,6 +1,8 @@
 import { addLocalDays, learningDayEnd } from '../date';
 import { logWarn } from '../../platform/diagnostics';
 import { hash32 } from '../random';
+import { repairGate } from './gate';
+import { repairNorm } from './norm';
 
 // Reparatur-Sätze (Lernberatung 27.09., V2 „Nochmal, aber besser"): Emrahs eigene falsche oder
 // schwache Sätze aus freiem Formulieren (Sag es, Gespräch, Schreiben, Preply) mit der besseren
@@ -42,9 +44,14 @@ export type RepairItem = {
   pat?: string;
   /** Paket FK: Zeitpunkt, an dem Emrah „Kann ich nicht nachvollziehen“ gewählt hat. Der Satz kommt nie wieder, bleibt aber gespeichert (nie löschen). */
   unclear?: number;
+  /**
+   * Eintritts-Wächter (`gate.ts`, 19.10.2026): Der Eintrag ruht, weil seine „richtige“ Fassung selbst falsch ist oder die Begründung nicht passt.
+   * `r` = Grund, `d` = Fundstelle, `t` = Zeitpunkt. Kein Fehler für Emrah (Box und Fälligkeit bleiben), nie gelöscht, steht in der Lehrer-Liste.
+   */
+  held?: { r: string; d?: string; t: number };
 };
 
-export type NewRepair = { wrong: string; right: string; why?: string | null; src: RepairSrc; ctx?: string | null; fix?: readonly string[] | null; pat?: string | null };
+export type NewRepair = { wrong: string; right: string; why?: string | null; src: RepairSrc; ctx?: string | null; fix?: readonly string[] | null; pat?: string | null; held?: RepairItem['held'] | null };
 
 const str = (v: unknown): string => (typeof v === 'string' ? v : '');
 const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
@@ -58,15 +65,7 @@ function fixOf(fix: readonly string[] | null | undefined, right: string): string
   return out.length ? out : null;
 }
 
-/** Vergleichsform: klein, ohne Satzzeichen und doppelte Leerzeichen. */
-export function repairNorm(s: string): string {
-  return s
-    .toLowerCase()
-    .replace(/[’‘]/g, "'")
-    .replace(/[^a-z0-9' ]+/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
+export { repairNorm };
 
 export const repairId = (wrong: string): string => `r${hash32(repairNorm(wrong)).toString(36)}`;
 
@@ -83,8 +82,13 @@ export function readRepairs(doc: Readonly<Doc> | undefined): RepairItem[] {
     if (!wrong || !right) continue;
     const t = num(e.t) ?? 0;
     const src = str(e.src) as RepairSrc;
+    const h = e.held && typeof e.held === 'object' && !Array.isArray(e.held) ? (e.held as Doc) : null;
+    const held = h && str(h.r) ? { r: str(h.r), ...(str(h.d) ? { d: str(h.d) } : {}), t: num(h.t) ?? 0 } : undefined;
+    const { held: _raw, ...rest } = e as Partial<RepairItem>;
+    void _raw;
     out.push({
-      ...(e as Partial<RepairItem>),
+      ...rest,
+      ...(held ? { held } : {}),
       id: str(e.id) || repairId(wrong),
       wrong,
       right,
@@ -140,6 +144,7 @@ export function addRepairs(list: readonly RepairItem[], add: readonly NewRepair[
       ...(a.ctx?.trim() ? { ctx: clip(a.ctx.trim(), 120) } : {}),
       ...(fix ? { fix } : {}),
       ...(a.pat?.trim() ? { pat: clip(a.pat.trim(), 40) } : {}),
+      ...(a.held ? { held: a.held } : {}),
       t: nowMs,
       box: 0,
       due: addLocalDays(nowMs, 1),
@@ -148,7 +153,10 @@ export function addRepairs(list: readonly RepairItem[], add: readonly NewRepair[
       out.push(fresh);
       changed = true;
     } else if (out[i]!.done) {
-      out[i] = { ...out[i]!, ...fresh, done: false };
+      // Neu angelegt: der alte Ruhe-Merker gilt nicht für die neue Fassung (der Wächter entscheidet neu, `fresh.held`).
+      const { held: _old, ...prev } = out[i]!;
+      void _old;
+      out[i] = { ...prev, ...fresh, done: false };
       changed = true;
     }
   }
@@ -162,10 +170,14 @@ export function addRepairs(list: readonly RepairItem[], add: readonly NewRepair[
   return capped;
 }
 
-/** Fällige, nicht erledigte Einträge, älteste Fälligkeit zuerst. Fällig = vor dem Ende des Lerntags (04:00 Uhr), wie bei den Fehlersätzen der Grammatik. */
+/**
+ * Fällige, nicht erledigte Einträge, älteste Fälligkeit zuerst. Fällig = vor dem Ende des Lerntags (04:00 Uhr), wie bei den Fehlersätzen der Grammatik.
+ * Ruhende Einträge (`held`) und solche, die der Eintritts-Wächter jetzt sperrt (`repairGate`), kommen nie: so sagen Zähler und Runde dasselbe,
+ * auch bevor der Merker geschrieben ist.
+ */
 export function dueRepairs(list: readonly RepairItem[], nowMs: number): RepairItem[] {
   const end = learningDayEnd(nowMs);
-  return list.filter((e) => !e.done && !e.unclear && e.due < end).sort((a, b) => a.due - b.due);
+  return list.filter((e) => !e.done && !e.unclear && !e.held && e.due < end && !repairGate(e)).sort((a, b) => a.due - b.due);
 }
 
 /**

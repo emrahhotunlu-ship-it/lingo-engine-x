@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useLive } from '../../data/live';
+import { heldRepairRows } from '../../domain/repair/gate';
+import { readRepairs } from '../../domain/repair/repair';
 import { fitAltRows } from '../../domain/tutor/fitAlt';
 import { sampleFile, shownSample, totalQuality } from '../../domain/tutor/quality';
 import { useT } from '../../i18n';
@@ -18,6 +20,8 @@ export function StichprobeSection() {
   const downloads = useCapabilities((s) => s.downloads);
   const grammar = useLive((s) => s.collections.grammar);
   const fitRows = useMemo(() => (grammar ? fitAltRows(grammar) : []), [grammar]);
+  const repairDoc = useLive((s) => s.docs['app/repair']);
+  const heldRows = useMemo(() => heldRepairRows(readRepairs(repairDoc ?? undefined)), [repairDoc]);
   const [n, setN] = useState(() => shownSample().length);
   const [busy, setBusy] = useState(false);
   if (downloads !== 'ready') return null;
@@ -25,13 +29,13 @@ export function StichprobeSection() {
   const save = async () => {
     const items = shownSample();
     setN(items.length);
-    if (!items.length && !fitRows.length) {
+    if (!items.length && !fitRows.length && !heldRows.length) {
       toast(t('ttSampleEmpty'));
       return;
     }
     setBusy(true);
     try {
-      const f = sampleFile(Date.now(), fitRows);
+      const f = sampleFile(Date.now(), fitRows, heldRows);
       const r = await saveFile(f.name, f.data);
       toast(r === 'saved' ? t('ttSampleSaved') : t('ttSampleFailed'), r === 'saved' ? 'info' : 'error');
     } finally {
@@ -47,6 +51,9 @@ export function StichprobeSection() {
       </p>
       <p className="m-0 text-xs text-subtle" data-testid="ai-fitalt">
         {t('ttJgFitAltRow', { n: num(fitRows.length) })}
+      </p>
+      <p className="m-0 text-xs text-subtle" data-testid="ai-held-repairs">
+        {t('ttHeldRepairsRow', { n: num(heldRows.length) })}
       </p>
       <div>
         <Button variant="secondary" onClick={() => void save()} busy={busy} data-testid="ai-sample-save">

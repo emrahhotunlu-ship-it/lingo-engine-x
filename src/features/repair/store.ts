@@ -1,6 +1,7 @@
 import { getWriter } from '../../data';
 import { validateDoc } from '../../data/validate';
 import { reviewError } from '../../domain/grammar/errors';
+import { newlyGated, repairGate, type GateHit } from '../../domain/repair/gate';
 import { addRepairs, readRepairs, repairId, reviewRepair, type NewRepair, type RepairItem } from '../../domain/repair/repair';
 import { fixedProblems } from '../../domain/text/correctness';
 import { logError, logWarn } from '../../platform/diagnostics';
@@ -38,6 +39,15 @@ export async function saveRepairs(input: readonly NewRepair[]): Promise<boolean>
     return false;
   });
   if (!add.length) return true;
+  // Eintritts-Wächter (19.10.2026): Ein Eintrag mit falscher „richtiger“ Fassung oder unpassender Begründung wird gespeichert, ruht aber sofort
+  // (`held`): er wird nie vorgelegt, zählt nicht als Fehler und steht in der Lehrer-Liste. Nichts wird verworfen, was der Lehrer prüfen soll.
+  const now = Date.now();
+  const gated = add.map((a): NewRepair => {
+    const hit = repairGate(a);
+    if (!hit) return a;
+    gateLog(hit, repairId(a.wrong.trim()));
+    return { ...a, held: { r: hit.reason, d: hit.detail, t: now } };
+  });
   // Unerwarteter Aufbau: nichts geschrieben, also auch nicht „gespeichert“ melden (data-guard P40, Sollte 4).
   let blocked = false;
   try {
@@ -47,12 +57,44 @@ export async function saveRepairs(input: readonly NewRepair[]): Promise<boolean>
         logError('repair:save', new Error('app/repair unerwarteter Aufbau – nicht geschrieben'));
         return null;
       }
-      const next = addRepairs(readRepairs(cur), add, Date.now());
+      const next = addRepairs(readRepairs(cur), gated, now);
       return next ? opFor(cur, next) : null;
     });
     return !blocked;
   } catch (err) {
     logError('repair:save', err);
+    return false;
+  }
+}
+
+function gateLog(hit: GateHit, id: string): void {
+  logWarn('repair:gate', { code: hit.reason, message: `Fehlersatz ruht (${hit.reason}: ${hit.detail})` }, id);
+}
+
+/**
+ * Eintritts-Wächter beim Vorlegen (19.10.2026): Offene Einträge, die der Wächter jetzt sperrt (z. B. vor dem Wächter gespeichert), still ruhend
+ * stellen – wie „Kann ich nicht nachvollziehen“ nur ein Merker (`held`), ohne Strafe, Box und Fälligkeit bleiben, nichts wird gelöscht. Vorgelegt
+ * werden sie ohnehin nicht (`dueRepairs`); der Merker hält die Entscheidung fest und füllt die Lehrer-Liste. Idempotent; `true` = geschrieben oder nichts zu tun.
+ */
+export async function holdGatedRepairs(doc: Readonly<Doc> | null | undefined): Promise<boolean> {
+  if (!newlyGated(readRepairs(doc ?? undefined)).length) return true;
+  const writer = getWriter();
+  if (!writer) return false;
+  const t = Date.now();
+  let hits = new Map<string, GateHit>();
+  try {
+    await writer.transform(REPAIR_PATH, (cur) => {
+      hits = new Map();
+      if (!cur || !writable(cur)) return null;
+      const list = readRepairs(cur);
+      hits = new Map(newlyGated(list).map((x) => [x.id, x.hit]));
+      if (!hits.size) return null;
+      return opFor(cur, list.map((e) => { const hit = hits.get(e.id); return hit ? { ...e, held: { r: hit.reason, d: hit.detail, t } } : e; }));
+    });
+    for (const [id, hit] of hits) gateLog(hit, id);
+    return true;
+  } catch (err) {
+    logError('repair:gate', err);
     return false;
   }
 }

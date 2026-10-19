@@ -55,12 +55,12 @@ for (const size of SIZES) {
     await page.screenshot({ path: `test-results/screens/reparatur-wiederholung-${size.width}.png`, fullPage: true });
     await page.getByTestId('repair-next').click();
 
-    // 2. Satz: der alte Fehler steckt noch drin → lokal nein → KI (repair-check@1) sagt nein.
+    // 2. Satz: unverändert abgeschickt → immer nein, ohne KI, mit Hinweis (Rückmeldung 19.10.2026: nie „Fast richtig“).
     await expect(item).toHaveAttribute('data-id', 'rb2');
     await page.getByTestId('repair-input').fill('It depends of the budget');
     await page.getByTestId('repair-check').click();
     await expect(page.getByTestId('result')).toHaveAttribute('data-verdict', 'wrong');
-    await expect(page.getByTestId('result')).toContainText('Der alte Fehler steckt noch im Satz.');
+    await expect(page.getByTestId('result')).toContainText('Du hast nichts geändert.');
     await expect(page.getByTestId('repair-right')).toContainText(B.right);
     await page.getByTestId('repair-next').click();
     await expect(page.getByTestId('session-end')).toBeVisible();

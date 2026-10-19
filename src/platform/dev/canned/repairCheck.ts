@@ -1,4 +1,4 @@
-import { repairNorm } from '../../../domain/repair/repair';
+import { repairNorm } from '../../../domain/repair/norm';
 
 // Feste Antwort für repair-check@1 (Lernberatung 27.09., V2). Richtig, sobald die Neufassung
 // nicht mehr der alte Satz ist; `zzno` in der Neufassung → falsch, `zzjson` → kein JSON.

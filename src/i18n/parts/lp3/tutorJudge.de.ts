@@ -23,4 +23,5 @@ export const ttJudgeDe = {
   ttJgByMe: 'Gemerkt: Diese Antwort gilt bei dieser Aufgabe ab jetzt als richtig.',
   ttJgAltErr: 'Andere Stelle, auch richtig korrigiert.',
   ttJgFitAltRow: 'Gelernte „Auch richtig“-Antworten: {n} (kommen mit in die Datei)',
+  ttHeldRepairsRow: 'Zurückgehaltene Fehlersätze (Korrektur fragwürdig, ruhen ohne Wertung): {n} (kommen mit in die Datei)',
 };

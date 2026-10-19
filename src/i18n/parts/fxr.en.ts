@@ -8,6 +8,7 @@ export const fxrEn = {
   fxRTaskTiles: 'Put the sentence together correctly.',
   fxRPurpose: 'You got this sentence wrong once before. Correcting it yourself makes the right form stick.',
   fxRSpotLabel: 'Sentence with a mistake: tap the wrong spot',
+  fxRUnchanged: 'You didn’t change anything. The sentence still has the mistake.',
   fxRMiss: 'Not that one yet. Look again at the small words and the verb forms.',
   fxRBadge: 'Box {n} of {total}',
   fxRSpotNo: 'Spot {n} of {total}',

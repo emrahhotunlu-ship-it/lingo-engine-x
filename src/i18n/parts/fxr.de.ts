@@ -8,6 +8,7 @@ export const fxrDe = {
   fxRTaskTiles: 'Lege den Satz richtig zusammen.',
   fxRPurpose: 'Diesen Satz hast du schon einmal falsch gemacht. Wenn du ihn selbst korrigierst, bleibt die richtige Form hängen.',
   fxRSpotLabel: 'Satz mit Fehler: tippe auf die falsche Stelle',
+  fxRUnchanged: 'Du hast nichts geändert. Der Satz enthält noch den Fehler.',
   fxRMiss: 'Das war es noch nicht. Schau noch einmal auf die kleinen Wörter und die Verbformen.',
   fxRBadge: 'Box {n} von {total}',
   fxRSpotNo: 'Stelle {n} von {total}',

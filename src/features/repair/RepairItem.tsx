@@ -6,7 +6,7 @@ import type { ExplanationModel, ResultVerdict } from '../../domain/explain/types
 import { patternById } from '../../domain/grammar/patterns';
 import { topicName } from '../grammar/topicUi';
 import { inputProfile, type InputProfile } from '../../platform/input';
-import { checkRepairLocal } from '../../domain/repair/check';
+import { checkRepairLocal, isUnchanged } from '../../domain/repair/check';
 import type { RepairItem as Repair } from '../../domain/repair/repair';
 import { applyFixes, repairTiles, spanFixes, type SpanFix } from '../../domain/repair/variant';
 import { EnglishText } from '../../engine/EnglishText';
@@ -94,6 +94,11 @@ export function RepairItem({ item, mode, area, source, status = null, profile: p
 
   const judge = async (given: string) => {
     if (res || busy || !given.trim()) return;
+    // Nichts geändert: immer nicht bestanden, ohne KI und ohne „Fast richtig“, mit klarem Hinweis (Rückmeldung 19.10.2026).
+    if (isUnchanged(given, item.wrong)) {
+      finish('no', t('fxRUnchanged'), given.trim());
+      return;
+    }
     const local = checkRepairLocal(given, item);
     if (local !== 'no' || !ai) {
       finish(local, null, given.trim());

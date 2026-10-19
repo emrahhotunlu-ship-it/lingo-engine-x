@@ -13,6 +13,7 @@ import { inputProfile } from '../../../platform/input';
 import type { InputProfile } from '../../../domain/grammar/tasks';
 import { local } from '../../../platform/storage';
 import { useTodayPlan } from '../../today/store';
+import { holdGatedRepairs } from '../store';
 
 // Schritt 4 der Tageseinheit „Fehler korrigieren“ (Lernplattform 2.0 §5.7): die EINE Fehlerschlange, Satz für Satz. Die Karten
 // (Grammatikfehler und Reparatur-Sätze aus `dueFehlersaetze`, höchstens `limit`) werden beim Start eingefroren; jede Antwort wird
@@ -101,6 +102,8 @@ export function startAgain(ctx: Pick<UnitCtx, 'day' | 'block'> | null): boolean 
   const cards = againCards(day, limit, lang);
   useAgain.setState({ ...initial(), active: true, status: cards.length ? 'running' : 'summary', day, lang, block: ctx ? ctx.block : null, profile: inputProfile(), cards, startedAt: Date.now() });
   diagOnce(day, cards, droppedNow(day, lang));
+  // Eintritts-Wächter: fragwürdige Einträge still ruhend stellen (vorgelegt werden sie ohnehin nicht, `dueRepairs`).
+  void holdGatedRepairs(useLive.getState().docs['app/repair']);
   return true;
 }
 

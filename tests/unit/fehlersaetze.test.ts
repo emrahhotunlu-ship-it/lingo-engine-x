@@ -11,7 +11,8 @@ const DAY = 86_400_000;
 type Doc = Record<string, unknown>;
 const err = (q: string, ans: string, t: number, extra: Doc = {}): Doc => ({ q, given: 'are repaired', ans, t, src: 'test', ...extra });
 const grammar = (...errors: Doc[]): ReadonlyMap<string, Doc> => new Map([['passive', { errors }]]);
-const rep = (wrong: string, t: number, extra: Doc = {}): Doc => ({ id: `r-${wrong}`, wrong, right: `${wrong} fixed`, src: 'say', t, box: 0, due: t + DAY, ...extra });
+// Die bessere Fassung behebt den Fehler wirklich (sonst sperrt der Eintritts-Wächter den Eintrag: „I am agree“ ist ein bekannter Übertragungsfehler).
+const rep = (wrong: string, t: number, extra: Doc = {}): Doc => ({ id: `r-${wrong}`, wrong, right: `${wrong.replace('I am agree', 'I agree')} fixed`, src: 'say', t, box: 0, due: t + DAY, ...extra });
 
 describe('dueFehlersaetze', () => {
   it('nur Grammatik-Fehler fällig: die Runde ist nicht leer, mit Sätzen „falsch → richtig“ und Speicher grammar', () => {
