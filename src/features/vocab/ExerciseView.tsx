@@ -630,6 +630,7 @@ export function ExerciseView({
       ...(MEANING_SHOWN.has(e.ex) && (e.ex !== 'match' || !e.sentence) ? { meaningShown: true } : {}),
       ...(other ? { otherMeaning: lang === 'de' ? (other.de ?? other.def) : (other.def ?? other.de) } : {}),
       ...(isAlt ? { alt: true } : {}),
+      ...(e.ex === 'fits' && e.fits ? { fits: e.fits } : {}),
       ...(e.ex === 'contrast' && e.contrastWhy ? { contrastWhy: e.contrastWhy[lang] } : {}),
       ...(e.ex === 'contrast' ? { contrastOther: contrastOtherOf(e) } : {}),
       ...((e.ex === 'colloc' || e.ex === 'colloc_gap') && e.colloc ? { colloc: e.colloc } : {}),
@@ -653,7 +654,7 @@ export function ExerciseView({
           ? t(`task_produce_${e.brief.wording + 1}` as MessageKey)
           : t(`task_${exTextKey(e)}` as MessageKey);
   const seeDetail =
-    e.ex === 'mc_en' || e.ex === 'ctx_mc'
+    e.ex === 'mc_en' || e.ex === 'ctx_mc' || e.ex === 'fits'
       ? `${taskText}\n${e.sentence?.sentence ?? card.word}`
       : e.ex === 'situation' && e.situation
         ? `${taskText}\n${e.situation.sceneTitle}\n${e.situation.intent}`
@@ -853,7 +854,7 @@ export function ExerciseView({
             <mark className="lx-mark text-fg">{card.word}</mark>
           </p>
         )}
-        {(e.ex === 'mc_en' || e.ex === 'ctx_mc') &&
+        {(e.ex === 'mc_en' || e.ex === 'ctx_mc' || e.ex === 'fits') &&
           (e.sentence ? (
             sentence(e.sentence, null, { mark: true })
           ) : (
@@ -873,8 +874,8 @@ export function ExerciseView({
     }
     answer = (
       <Choices
-        options={visibleOptions.map((o) => o.label)}
-        langs={visibleOptions.map((o) => CHOICE_LANGS[o.lang])}
+        options={visibleOptions.map((o) => (e.ex === 'fits' ? t(o.id === 'yes' ? 'fitsYes' : 'fitsNo') : o.label))}
+        langs={visibleOptions.map((o) => (e.ex === 'fits' ? lang : CHOICE_LANGS[o.lang]))}
         chosen={chosen}
         correct={correctIdx >= 0 ? correctIdx : null}
         revealed={!!fb}

@@ -19,11 +19,14 @@ export type ExerciseDef = { ex: ExerciseId; stage: Stage; level: number; mode: L
 export const CATALOG: readonly ExerciseDef[] = [
   { ex: 'mc_en', stage: 1, level: 1, mode: 'recog', input: 'choice' },
   { ex: 'ctx_mc', stage: 1, level: 1, mode: 'recog', input: 'choice' },
+  // WL: zweite Abfrage-Familie auf Stufe 1 („Passt das Wort in diesen Satz?“), damit Stufe 1 am Handy nicht nur „Bedeutung wählen“ kennt.
+  { ex: 'fits', stage: 1, level: 1, mode: 'recog', input: 'choice' },
   { ex: 'spot', stage: 1, level: 1, mode: 'recog', input: 'spot' },
   { ex: 'listen_mc', stage: 1, level: 1, mode: 'recog', input: 'choice' },
   { ex: 'mc_de', stage: 2, level: 2, mode: 'recog', input: 'choice' },
   { ex: 'match', stage: 2, level: 2, mode: 'recog', input: 'choice' },
-  { ex: 'cloze_hint', stage: 3, level: 3, mode: 'cloze', input: 'typed' },
+  // WL: Wortanfang (erster Buchstabe) schon auf Stufe 2, damit auch Stufe 2 am Handy nicht nur Auswahl kennt; die Art bleibt eine Stütz-Art der Stufe 3 (`level` 3).
+  { ex: 'cloze_hint', stage: 3, level: 3, mode: 'cloze', input: 'typed', also: [2] },
   { ex: 'colloc_gap', stage: 3, level: 3, mode: 'colloc', input: 'choice' },
   { ex: 'complete', stage: 3, level: 3, mode: 'type', input: 'sentence', also: [5] },
   { ex: 'tiles', stage: 3, level: 3, mode: 'cloze', input: 'tiles' },
@@ -85,6 +88,9 @@ export function supports(card: TrainCard, ex: ExerciseId, lang: Lang, poolSize: 
       return !!meaning && !!card.context && poolSize >= 3;
     case 'listen_mc':
       return canListen(env) && !!meaning && poolSize >= 3;
+    case 'fits':
+      // Nur Wörter (Wendungen haben ihre eigene Leiter) mit Ursprungssatz; ohne sicheren Gegen-Satz fragt die Art nur „passt“ (Ja).
+      return card.kind === 'vocab' && !!meaning && !!card.context && poolSize >= 3;
     case 'spot':
       return !!meaning && !!card.context;
     case 'type':
@@ -136,11 +142,15 @@ export function availableExercises(card: TrainCard, lang: Lang, poolSize: number
   const k = Math.max(1, card.stage);
   const ok = (d: ExerciseDef) => supports(card, d.ex, lang, poolSize, env);
   const out = CATALOG.filter((d) => inStage(d, k) && ok(d)).map((d) => d.ex);
-  for (let dist = 1; out.length < 2 && dist <= 4; dist++) {
+  // WL: Mindestens zwei Arten UND zwei verschiedene Abfrage-Familien (nicht zweimal „Bedeutung wählen“), wo möglich.
+  const families = (): number => new Set(out.map(familyOf)).size;
+  for (let dist = 1; (out.length < 2 || families() < 2) && dist <= 4; dist++) {
     for (const s of [k + dist, k - dist]) {
       for (const d of CATALOG) {
-        if (out.length >= 2) break;
-        if (inStage(d, s) && ok(d) && !out.includes(d.ex)) out.push(d.ex);
+        if (out.length >= 2 && families() >= 2) break;
+        if (!inStage(d, s) || !ok(d) || out.includes(d.ex)) continue;
+        if (out.length >= 2 && out.some((x) => familyOf(x) === familyOf(d.ex))) continue;
+        out.push(d.ex);
       }
     }
   }

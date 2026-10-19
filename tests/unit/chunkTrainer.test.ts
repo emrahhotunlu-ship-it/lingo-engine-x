@@ -222,7 +222,7 @@ describe('Abfrageart je Stufe: mindestens zwei, Stufe 5 mit eigenem Satz, Rückf
   });
 
   it('Stufe 1: Hören nur mit Sprachausgabe; „Im Satz finden“, Tempo und Bausteine sind aus der Leiter entfernt', () => {
-    expect(availableExercises(vcard({ stage: 1 }), 'de', 100, { tts: true, ai: false })).toEqual(['mc_en', 'ctx_mc', 'listen_mc']);
+    expect(availableExercises(vcard({ stage: 1 }), 'de', 100, { tts: true, ai: false })).toEqual(['mc_en', 'ctx_mc', 'fits', 'listen_mc']);
     const all = new Set<ExerciseId>();
     for (const stage of [1, 2, 3, 4, 5] as Stage[]) for (const x of availableExercises(vcard({ stage }), 'de', 100, { tts: true, ai: true })) all.add(x);
     for (const gone of ['spot', 'speed', 'tiles'] as const) expect(all.has(gone), gone).toBe(false);
@@ -280,7 +280,7 @@ describe('Übungen bauen: Bausteine, Einsetzen, Hören, Tempo, Situation', () =>
     expect(inflectLike('reliable', 'reliable', 'robust')).toBe('robust');
     const c = pool.find((x) => x.kind === 'vocab' && x.context && x.context.gap !== x.lemma);
     expect(c).toBeDefined();
-    const e = buildExercise({ ...c!, stage: 2 }, 'match', 'de', pool, 's');
+    const e = buildExercise({ ...c!, stage: 2 }, 'match', 'de', pool, 's', { origin: true });
     expect(e.options).toHaveLength(4);
     expect(e.options.filter((o) => o.correct).map((o) => o.label)).toEqual([c!.context!.gap]);
     expect(new Set(e.options.map((o) => o.label.toLowerCase())).size).toBe(4);

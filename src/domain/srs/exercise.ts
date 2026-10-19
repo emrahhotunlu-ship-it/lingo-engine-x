@@ -5,7 +5,7 @@ import { meaningForTask, shortMeaning } from './cards';
 import { exerciseDef } from './modes';
 import { familyFrom, partnerOf, trapTask } from './partner';
 import { packExtraOf } from '../c1pack/packFields';
-import { rotatedContext } from './rotate';
+import { isTruncated, rotatedContext } from './rotate';
 import type { ActTask } from './actTask';
 import { briefCodesOf, pickBrief } from './brief';
 import { findContext, formsOf, locate } from './context';
@@ -308,7 +308,8 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
   // Fragt die Übung nach dem Wort, steht die Bedeutung als Frage da und darf die Antwort nicht enthalten (`cueMeaning`); als richtige Option bleibt sie vollständig.
   const base: Exercise = { ex, input: def.input, card, stage, sentence: null, meaning: CUE_EX.has(ex) ? cueMeaning(card, meaning) : meaning, firstLetter: null, colloc: null, options: [], accepted: [] };
   // Eine Lücke, die mehr verdeckt als das Wort der Karte (beliebiges Objekt) oder das Wort ein zweites Mal zeigt, ist keine Lücke (`gapFit.ts`).
-  const rawCtx = opts.origin ? card.context : rotatedContext(card, ex);
+  const day = /^(\d{4}-\d{2}-\d{2})\|/.exec(seed)?.[1];
+  const rawCtx = opts.origin ? card.context : rotatedContext(card, ex, day);
   const ctx = rawCtx && gapUsable(rawCtx, lemmaFor(card)) ? rawCtx : null;
 
   switch (ex) {
@@ -317,8 +318,18 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
       const label = shortMeaning(meaning ?? '', tongueOf(card, lang));
       const correct: Option = { id: 'ok', label, lang: tongueOf(card, lang), correct: true };
       const options = shuffle([correct, ...meaningDistractors(card, pool, lang, rng)], rng);
-      if (ex === 'listen_mc') return { ...base, sentence: card.context, options, accepted: [label], speak: card.context?.sentence ?? bareAnswer(card) };
-      return { ...base, sentence: card.context, options, accepted: [label] };
+      if (ex === 'listen_mc') return { ...base, sentence: rawCtx, options, accepted: [label], speak: rawCtx?.sentence ?? bareAnswer(card) };
+      return { ...base, sentence: rawCtx, options, accepted: [label] };
+    }
+    case 'fits': {
+      // Satz mit hervorgehobenem Wort; Ja = das Kartenwort steht in seinem Satz, Nein = es steht im Satz einer anderen Karte (Wortart und Beugung passen, die Bedeutung nicht).
+      const here = rawCtx ?? card.context;
+      const foil = rng() < 0.5 ? fitsFoil(card, pool, lang, rng) : null;
+      const truth = !foil;
+      const span = foil ? foil.span : here;
+      const yes: Option = { id: 'yes', label: 'yes', lang: 'de', correct: truth };
+      const no: Option = { id: 'no', label: 'no', lang: 'de', correct: !truth };
+      return { ...base, sentence: span, options: [yes, no], accepted: [truth ? 'yes' : 'no'], fits: { truth, foil: foil ? { word: foil.other.word, meaning: m(foil.other, lang) || null } : null } };
     }
     case 'spot': {
       const gap = card.context?.gap ?? card.word;
@@ -402,7 +413,7 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
       // „Was heißt das hier?“: Satz mit markiertem Wort, drei deutsche Optionen (die richtige und zwei andere).
       const label = shortMeaning(meaning ?? '', tongueOf(card, lang));
       const correct: Option = { id: 'ok', label, lang: tongueOf(card, lang), correct: true };
-      return { ...base, sentence: card.context, options: shuffle([correct, ...meaningDistractors(card, pool, lang, rng).slice(0, 2)], rng), accepted: [label] };
+      return { ...base, sentence: rawCtx, options: shuffle([correct, ...meaningDistractors(card, pool, lang, rng).slice(0, 2)], rng), accepted: [label] };
     }
     case 'complete': {
       const starts = packExtraOf(card)?.starts ?? [];
@@ -430,7 +441,7 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
     }
     case 'flip':
       // Anki (anki-regeln §1): Vorderseite Bedeutung + Ursprungssatz mit Lücke, Rückseite voll.
-      return { ...base, sentence: card.context, accepted: [card.context?.gap ?? bareAnswer(card)] };
+      return { ...base, sentence: rawCtx, accepted: [rawCtx?.gap ?? bareAnswer(card)] };
   }
 }
 
@@ -462,6 +473,52 @@ export function choiceVerdict(e: Pick<Exercise, 'ex' | 'card' | 'meaning'>, chos
     if (meaningsOverlap(other, e.meaning)) return { verdict: 'near', kind: 'synonym', ...(chosen.fromWord ? { otherWord: chosen.fromWord } : {}) };
   }
   return { verdict: 'wrong' };
+}
+
+// ------------------------------------------------------------------ „Passt das Wort in diesen Satz?“ (fits, WL 19.10.2026)
+
+/** Texte der Karte, in denen ein Nachbarwort-Paar belegt sein kann (wie der Wächter R5). */
+function attestedTexts(card: TrainCard): string[] {
+  const d = card.doc;
+  const xs = Array.isArray(d.xEx) ? (d.xEx as { en?: unknown }[]).map((x) => x.en) : [];
+  const cs = Array.isArray(d.col) ? (d.col as { ex?: unknown }[]).map((x) => x.ex) : [];
+  return [d.ex, ...xs, ...cs, card.context?.sentence].filter((x): x is string => typeof x === 'string').map((x) => ` ${norm(x.replace(/[[\]]/g, '')).replace(/[^a-zäöüß0-9' ]+/g, ' ').replace(/\s+/g, ' ')} `);
+}
+
+/**
+ * Ein Satz einer anderen Karte, in den das Kartenwort NICHT passt: gleiche Wortart, ähnliche Beugung, keine Synonyme, und das Kartenwort bildet mit den
+ * Nachbarwörtern kein belegtes Paar (sonst könnte es doch passen). `null`, wenn es keinen sicheren Satz gibt – dann fragt die App nur „passt“.
+ */
+function fitsFoil(card: TrainCard, pool: readonly TrainCard[], lang: Lang, rng: () => number): { span: NonNullable<Exercise['sentence']>; other: TrainCard } | null {
+  if (!card.pos) return null;
+  const head = norm(card.lemma).slice(0, 5);
+  const target = meaningForTask(card, lang) ?? '';
+  const texts = attestedTexts(card);
+  const cands = shuffle(
+    pool.filter((c) => c.key !== card.key && c.kind === 'vocab' && c.pos === card.pos && c.context && !isTruncated(c.context.sentence) && !/\s/.test(c.context.gap)),
+    rng,
+  );
+  for (const c of cands) {
+    const ctx = c.context as NonNullable<TrainCard['context']>;
+    if (norm(c.lemma).slice(0, 5) === head || norm(c.lemma) === norm(card.lemma) || tooClose(card, c)) continue;
+    const cm = meaningForTask(c, lang);
+    if (cm && target && sharesWord(cm, target)) continue;
+    if (!gapUsable(ctx, lemmaFor(c))) continue;
+    // Beugung: nur regelmäßige Formen (-ed, -ing, -s) oder die Grundform lassen sich sauber übertragen, sonst verriete die Endung das „Nein“.
+    const sol = ctx.gap.toLowerCase();
+    const lem = c.lemma.toLowerCase().replace(/^to\s+/, '');
+    const regular = sol === lem || /(ing|ed)$/.test(sol) || (/s$/.test(sol) && !/ss$/.test(sol));
+    if (!regular) continue;
+    const word = inflectLike(ctx.gap, c.lemma, card.lemma);
+    if (!word || norm(word) === norm(ctx.gap)) continue;
+    const sentence = `${ctx.sentence.slice(0, ctx.start)}${word}${ctx.sentence.slice(ctx.end)}`;
+    const prev = norm(ctx.sentence.slice(0, ctx.start)).split(/[^a-zäöüß0-9']+/).filter(Boolean).at(-1);
+    const next = norm(ctx.sentence.slice(ctx.end)).split(/[^a-zäöüß0-9']+/).filter(Boolean)[0];
+    const w = norm(word);
+    if ((prev && texts.some((t) => t.includes(` ${prev} ${w} `))) || (next && texts.some((t) => t.includes(` ${w} ${next} `)))) continue;
+    return { span: { sentence, start: ctx.start, end: ctx.start + word.length, gap: word }, other: c };
+  }
+  return null;
 }
 
 // ------------------------------------------------------------------ Bausteine per Tastatur (Emrah 02.10.2026)

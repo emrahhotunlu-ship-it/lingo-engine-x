@@ -5,28 +5,28 @@ import { crossSentences } from './crossLink';
 import { storedExamples } from './examples';
 import { readWx } from '../tutor/acceptWordCtx';
 import type { ContextSpan, ExerciseId, TrainCard } from './types';
-import { leastRecent, sentKey, varietyOf } from './variety';
+import { hash32 } from '../random';
+import { isFirstDay, leastRecent, sentKey, shownSentences } from './variety';
 
-// Kontext-Wechsel (Emrah 02.10.2026, Prüfung Lernwissenschaft L2 und Englischlehrer „Transfer“): Wer ein Wort immer im
-// selben Satz abfragt, lernt den Satz, nicht das Wort. Ab Stufe 3 wechseln sich bei den Satzübungen der Ursprungssatz und
-// die gespeicherten Claude-Sätze (`xEx`, nur ergänzt, nie überschrieben) ab. Nur eine andere Ansicht: nichts wird geschrieben.
+// Kontext-Wechsel (Emrah 02.10.2026, Prüfung Lernwissenschaft L2 und Englischlehrer „Transfer“): Wer ein Wort immer im selben Satz abfragt, lernt den Satz,
+// nicht das Wort. Seit WL (19.10.2026, Befund: 97 % der Auswahlfragen und 61 von 102 Karten immer im selben Satz) wechselt der Satz ab der ersten Wiederholung
+// an einem anderen Tag, bei JEDER Satzübung (auch Erkennen, Zuordnen, Hören, Aufdecken). Tag 1 bleibt der Ursprungssatz der Anker. Der Satz der letzten Antwort
+// kommt nie noch einmal, solange es einen anderen gibt. Nur eine andere Ansicht: nichts wird geschrieben.
 // V1: Aus dem Verlauf (`hist[].s`) wird der am längsten nicht gezeigte Satz gewählt, derselbe Stand zeigt denselben Satz (kein Zufall).
-// Aufdecken, Prüfabfrage und Kontrolle bleiben beim Ursprungssatz (der Aufrufer reicht `origin` durch).
+// Prüfabfrage und Kontrolle bleiben beim Ursprungssatz (der Aufrufer reicht `origin` durch).
 
-export const ROTATE_FROM_STAGE = 3;
-/**
- * Lernplattform 3.0 P52 (KI-Tutor T3): die neuen Claude-Sätze schwacher Wörter (`wx`, nicht gemeldet) wechseln schon ab Stufe 2 mit dem Ursprungssatz ab –
- * auch bei „Wort zuordnen“ (`match`, Stufe 2). Die übrigen Quellen (`xEx`, Wortpartner, feste Sätze) bleiben bei Stufe 3.
- */
-export const WX_FROM_STAGE = 2;
-/** Auf Stufe 2 wechseln höchstens so viele Claude-Sätze (die neuesten, nicht gemeldeten) mit dem Ursprungssatz: zusammen höchstens 3 Kontexte. */
-export const WX_ROTATE_MAX = 2;
-const ROTATING_WX: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['match', 'cloze_hint', 'cloze', 'tiles', 'speed', 'dictation', 'wordfam']);
-/** Satzübungen mit Lücke im Satz, die den Satz wechseln dürfen (Erkennen auf Stufe 1–2 bleibt im Ursprungssatz). */
-export const ROTATING: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['cloze_hint', 'cloze', 'tiles', 'speed', 'dictation', 'wordfam']);
+export const ROTATE_FROM_STAGE = 1;
+/** Satzübungen, die den Satz wechseln dürfen. Ohne Satz (Wortbedeutung, Wortpartner, eigener Satz) gibt es nichts zu wechseln. */
+export const ROTATING: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['mc_en', 'ctx_mc', 'listen_mc', 'match', 'flip', 'cloze_hint', 'cloze', 'tiles', 'speed', 'dictation', 'wordfam']);
+
+/** Satzübungen mit Lücke: Der Satz muss die Lücke fair verdecken (`gapFit.ts`). */
+const GAP_EX: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['cloze_hint', 'cloze', 'tiles', 'speed', 'dictation', 'wordfam']);
+
+/** Der Satz bricht ab oder beginnt mittendrin („… and then we left“, „We use it to …“): aus einem Lesetext geschnitten. */
+export const isTruncated = (sentence: string): boolean => /^\s*(…|\.\.\.)/.test(sentence) || /(…|\.\.\.)\s*$/.test(sentence);
 
 /** Der Ursprungssatz ist als Lücke brauchbar (sonst wechselt er nicht mit, `gapFit.ts`). */
-const originUsable = (card: Pick<TrainCard, 'context' | 'word' | 'kind'>): boolean => !!card.context && gapUsable(card.context, lemmaFor({ word: card.word, kind: card.kind, lemma: '' }));
+const originUsable = (card: Pick<TrainCard, 'context' | 'word' | 'kind'>): boolean => !!card.context && !isTruncated(card.context.sentence) && gapUsable(card.context, lemmaFor({ word: card.word, kind: card.kind, lemma: '' }));
 
 /** Stelle des Worts (bzw. der Wendung) in einem Satz, sonst `null`. */
 function locateIn(card: Pick<TrainCard, 'word' | 'kind' | 'doc'>, sentence: string): ContextSpan | null {
@@ -62,28 +62,21 @@ export function contextsOf(card: Pick<TrainCard, 'context' | 'doc' | 'word' | 'k
 }
 
 /**
- * Satz für diese Übung: bei Rotation der am längsten nicht gezeigte Satz (V1). Der zuletzt gezeigte kommt nie, solange es einen anderen gibt;
- * unter gleich lange nicht gezeigten gilt die Reihenfolge der Liste (Ursprungssatz zuerst, dann reihum wie bisher). Ohne Satz-Verlauf
- * (neue Karten, alte Karten vor V1) beginnt es mit dem Ursprungssatz.
+ * Satz für diese Übung. Tag 1 (noch keine Antwort an einem früheren Tag): der Ursprungssatz als Anker. Danach der am längsten nicht gezeigte Satz (V1);
+ * der zuletzt gezeigte kommt nie, solange es einen anderen gibt. Gleichstand unter nie gezeigten Sätzen entscheidet ein fester Wert aus Karte und
+ * Verlaufslänge (kein Zufall, aber auch nicht immer der erste). Ältere Einträge ohne `s` gelten als Ursprungssatz (`shownSentences`).
+ * Ein abgeschnittener Ursprungssatz (mit „…“) wechselt mit, sobald es einen anderen Satz gibt. `day`: der Lerntag (aus dem Seed der Übung).
  */
-export function rotatedContext(card: TrainCard, ex: ExerciseId): ContextSpan | null {
-  const all = card.stage >= ROTATE_FROM_STAGE && ROTATING.has(ex) ? contextsOf(card) : card.stage >= WX_FROM_STAGE && ROTATING_WX.has(ex) ? wxContexts(card) : [];
-  if (all.length < 2) return card.context;
-  return leastRecent(all, (c) => sentKey(c.sentence), varietyOf(card.doc).sents) ?? card.context;
-}
-
-/** Ursprungssatz und die neuesten (≤ 2) nicht gemeldeten Claude-Sätze des Wörter-Tutors (`wx`), in denen das Wort steht (P52, ab Stufe 2). */
-export function wxContexts(card: Pick<TrainCard, 'context' | 'doc' | 'word' | 'kind'>): ContextSpan[] {
-  const out: ContextSpan[] = originUsable(card) ? [card.context as ContextSpan] : [];
-  const have = new Set(out.map((c) => c.sentence.toLowerCase()));
-  let taken = 0;
-  for (const x of [...readWx(card.doc)].sort((a, b) => b.t - a.t)) {
-    if (taken >= WX_ROTATE_MAX) break;
-    const c = locateIn(card, x.en);
-    if (!c || have.has(c.sentence.toLowerCase())) continue;
-    have.add(c.sentence.toLowerCase());
-    out.push(c);
-    taken++;
-  }
-  return out;
+export function rotatedContext(card: TrainCard, ex: ExerciseId, day?: string): ContextSpan | null {
+  if (card.stage < ROTATE_FROM_STAGE || !ROTATING.has(ex)) return card.context;
+  const origin = card.context;
+  const originOk = originUsable(card);
+  // Erkennen, Zuordnen, Hören und Aufdecken zeigen den Satz nur; er muss dort keine faire Lücke sein, aber auch nicht abgeschnitten.
+  const showable = !!origin && !isTruncated(origin.sentence) && (originOk || !GAP_EX.has(ex));
+  const all = showable && !originOk && origin ? [origin, ...contextsOf(card)] : contextsOf(card);
+  // Tag 1: der Ursprungssatz ist der Anker.
+  if (showable && isFirstDay(card.doc, day)) return origin;
+  if (all.length < (showable ? 2 : 1)) return origin;
+  const used = shownSentences(card.doc, origin ? sentKey(origin.sentence) : null);
+  return leastRecent(all, (c) => sentKey(c.sentence), used, hash32(`${card.key}|${used.length}`)) ?? origin;
 }

@@ -174,7 +174,7 @@ export function checkExercise(e: Exercise, card: TrainCard, lang: Lang): Violati
 
   // ---- Sätze (R6, R7)
   if (e.sentence && e.ex !== 'find_trap') {
-    if (e.ex !== 'contrast' && !isColloc && !senseFits(e.sentence, card.doc.pos)) add('R6', 'Wortart des Satzes passt nicht zur Karte');
+    if (e.ex !== 'contrast' && !(e.ex === 'fits' && e.fits?.truth === false) && !isColloc && !senseFits(e.sentence, card.doc.pos)) add('R6', 'Wortart des Satzes passt nicht zur Karte');
     const sd = sentenceDefects(e.sentence.sentence);
     if (sd.length) add('R7', sd.join('; '));
   }
@@ -188,7 +188,7 @@ export function checkExercise(e: Exercise, card: TrainCard, lang: Lang): Violati
   if (e.options.length || e.input === 'choice') {
     const labels = e.options.map((o) => norm(o.label));
     const correct = e.options.filter((o) => o.correct);
-    const minOpts = e.ex === 'contrast' ? 2 : 3;
+    const minOpts = e.ex === 'contrast' || e.ex === 'fits' ? 2 : 3;
     if (e.input === 'choice' && e.options.length < minOpts) add('R12', `nur ${e.options.length} Optionen`);
     if (e.input === 'choice' && correct.length !== 1) add('R12', `${correct.length} richtige Optionen`);
     if (new Set(labels).size !== labels.length) {

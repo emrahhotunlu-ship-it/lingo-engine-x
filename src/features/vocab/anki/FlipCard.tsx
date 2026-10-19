@@ -96,7 +96,7 @@ export function FlipCard({ exercise, again = false, onDone, behind = 0 }: { exer
     };
   }, []);
 
-  const front = dir === 'de-en' ? (card.context?.sentence ?? null) : (card.context?.sentence ?? null);
+  const front = e.sentence?.sentence ?? null;
   const reveal = () => {
     if (shown) return;
     const ms = thinkMs(shownAt.current, hiddenMs.current);
@@ -105,7 +105,7 @@ export function FlipCard({ exercise, again = false, onDone, behind = 0 }: { exer
     setShown({ t: tt, ms: Math.round(ms), suggest, iv: flipIntervals(card, tt) });
     // Fehlt der Rückseite ein Beispielsatz (Befund 29.09.: Karte ohne Ursprungssatz, Kap. 15),
     // ergänzt Claude ihn einmal je Karte – genau wie beim Tippen (ExerciseView.tsx).
-    if (ai && wantsEnrichment(card, card.context?.sentence ?? null, Date.now())) requestExamples(card);
+    if (ai && wantsEnrichment(card, e.sentence?.sentence ?? null, Date.now())) requestExamples(card);
     idle(prepareNext);
   };
 
@@ -172,7 +172,7 @@ export function FlipCard({ exercise, again = false, onDone, behind = 0 }: { exer
   });
 
   const src = { area: 'trainer' as const, source: card.path, title: card.word };
-  const ctx = card.context;
+  const ctx = e.sentence ?? card.context;
   const pk = posKey(card.pos);
   const ipa = shown ? ipaOf(card.word) : null;
   const freshEntry = useExamples((s) => s.byCard[card.id]);

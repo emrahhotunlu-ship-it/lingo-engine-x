@@ -18,6 +18,7 @@ export type GradeForm = 'choice' | 'typed' | 'tiles' | 'transform' | 'timed' | '
 /** Übungsart (Wörter: ExerciseId) oder Aufgabenart (Grammatik und Übungen) als Schlüssel der Tabelle. */
 export type GradeKey =
   | 'mc_en'
+  | 'fits'
   | 'mc_de'
   | 'match'
   | 'listen_mc'
@@ -89,6 +90,8 @@ const rewrite: Row = { form: 'transform', good: 20_000, easy: 8000, measure: 'su
 /** Die Tabelle: je Schlüssel Eingabeform und Zeitgrenzen. */
 export const GRADE_TABLE: Readonly<Record<GradeKey, Row>> = {
   mc_en: choice(8000),
+  // „Passt das Wort in diesen Satz?“: zwei Optionen, Lesen des Satzes und Urteil (WL, 19.10.2026).
+  fits: choice(8000),
   spot: choice(8000),
   listen_mc: choice(8000),
   mc_de: choice(9000),
