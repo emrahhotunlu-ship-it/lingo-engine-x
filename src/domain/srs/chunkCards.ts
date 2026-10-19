@@ -141,6 +141,8 @@ export function chunkGapWords(sentence: string, phrase: string, hints: ChunkHint
     const dependent = last && small(last) && typedForm(phrase).split(/\s+/).length >= 2 ? last : undefined;
     if (dependent) ordered = [dependent, ...usable.filter((x) => x !== dependent)];
   }
+  // Feste Formeln: „let“ (Let me …, Let us …) ist nie die erste Lücke.
+  if (hints.cat === 'frame') ordered = [...ordered.filter((x) => normWord(x.w) !== 'let'), ...ordered.filter((x) => normWord(x.w) === 'let')];
   const at = hints.at ? normWord(hints.at) : '';
   if (at) {
     const first = ordered.find((x) => normWord(x.w) === at) ?? ordered.find((x) => at.length >= 4 && normWord(x.w).startsWith(at.slice(0, 4)));

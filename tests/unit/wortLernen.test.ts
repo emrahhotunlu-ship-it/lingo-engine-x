@@ -191,6 +191,11 @@ describe('Wendungen zerlegt', () => {
     expect(chunkGapWords('We are fine for the time being.', 'for the time being', { cat: 'frame', at: 'for' })[0]?.w).toBe('for');
   });
 
+  it('Pack: gap.at der Formeln; ohne gap.at ist „let“ nie die erste Lücke', () => {
+    for (const [en, at] of [['on the other hand', 'hand'], ['as far as I can tell', 'tell'], ['let me push back on that', 'push'], ['I see where you are coming from', 'coming'], ['let me take a step back', 'step'], ['let us circle back to', 'circle']] as const) expect(packExtraOf(en)?.gap?.at, en).toBe(at);
+    expect(chunkGapWords('Let me explain this.', 'let me explain this', { cat: 'frame' })[0]?.w).toBe('explain');
+  });
+
   it('das Lückenwort wechselt weiter, auch wenn `hist` bei 12 Einträgen gedeckelt ist (Zähler: reps)', () => {
     const hist = Array.from({ length: 12 }, (_, i) => ({ t: i + 1, m: 'cloze', g: 3 }));
     const seen = new Set<string>();

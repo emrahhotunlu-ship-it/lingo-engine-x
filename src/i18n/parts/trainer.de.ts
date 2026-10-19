@@ -6,7 +6,7 @@ export const trainerDe = {
   exName_fits: 'Passt das?',
   fitsYes: 'Ja',
   fitsNo: 'Nein',
-  flipOriginLabel: 'Dein Ursprungssatz:',
+  flipOriginLabel: 'Hier hast du es gelernt:',
   task_spot: 'Tippe im Satz auf das Wort mit dieser Bedeutung.',
   task_listen_mc: 'Hör zu und wähle die Bedeutung.',
   task_match: 'Leg das passende Wort in die Lücke.',
