@@ -24,6 +24,14 @@
   {
    "key": "articles|ilovethemusicespeciallythejazz",
    "reason": "Prüfung 06.10.2026: bad ist ohne Kontext nicht falsch (bestimmte Musik möglich)."
+  },
+  {
+   "key": "future-past|shepromisedthatshewillreviewthedraftbymonday",
+   "reason": "Gegenlesung 19.10.2026: bad ist vertretbar richtig (will bleibt, wenn es noch Zukunft ist); ersetzt durch fp-f6b."
+  },
+  {
+   "key": "past-perfect|theclientsaidtheysignedthecontractthedaybefore",
+   "reason": "Gegenlesung 19.10.2026: bad ist im US-Englisch normal; ersetzt durch pp-rep-f3b."
   }
  ]
 }

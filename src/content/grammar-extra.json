@@ -5,7 +5,7 @@
       "topic": "used-to",
       "type": "gap",
       "prompt": "We ___ (have) a paper archive, but now everything is in the cloud.",
-      "hint": "(have)",
+      "hint": "(3 words)",
       "answer": "used to have",
       "expl": "Früher war es so, heute nicht mehr: „used to“ + Grundform (We used to have a paper archive).",
       "expl_en": "It was like that before, but not anymore: “used to” + base verb (We used to have a paper archive)."
@@ -52,7 +52,7 @@
       "topic": "modals-deduction",
       "type": "gap",
       "prompt": "The lights are off, so they ___ (be) in the office any more.",
-      "hint": "(be)",
+      "hint": "(impossible)",
       "answer": "can't be",
       "accepted": [
         "cannot be",
@@ -72,16 +72,20 @@
         "must've forgotten"
       ],
       "expl": "Du bist fast sicher, was früher war: „must have“ + 3. Verbform (z. B. must have forgotten).",
-      "expl_en": "A confident guess about the past → must have + past participle."
+      "expl_en": "A confident guess about the past → must have + past participle.",
+      "hint": "(modal verb)"
     },
     {
       "topic": "prepositions",
       "type": "gap",
       "prompt": "We have been waiting ___ their answer since Monday.",
-      "hint": "(for / on / at)",
+      "hint": "(for / at / to)",
       "answer": "for",
-      "expl": "wait for someone/something – die Präposition gehört fest zum Verb.",
-      "expl_en": "wait for someone/something – the preposition belongs to the verb."
+      "expl": "wait for someone/something – die Präposition gehört fest zum Verb. Im amerikanischen Englisch hörst du auch „wait on“ (eher locker); im Business-Text ist „wait for“ die sichere Wahl.",
+      "expl_en": "wait for someone/something – the preposition belongs to the verb. In American English you also hear “wait on” (more casual); in business writing “wait for” is the safe choice.",
+      "accepted": [
+        "on"
+      ]
     },
     {
       "topic": "future-forms",
@@ -90,10 +94,14 @@
       "hint": "(meet)",
       "answer": "am meeting",
       "accepted": [
-        "'m meeting"
+        "'m meeting",
+        "am going to meet",
+        "'m going to meet",
+        "will be meeting",
+        "'ll be meeting"
       ],
-      "expl": "Ein fester Termin im Kalender: Dafür nimmst du das Present Continuous, auch für die Zukunft.",
-      "expl_en": "A fixed arrangement (in the calendar) → present continuous for the future."
+      "expl": "Ein fester Termin im Kalender: Dafür nimmst du das Present Continuous (I'm meeting), auch für die Zukunft. „I'm going to meet“ und „I'll be meeting“ gehen auch; „I'll meet“ klingt hier nach spontaner Entscheidung.",
+      "expl_en": "A fixed arrangement (in the calendar) → present continuous for the future (I'm meeting). “I'm going to meet” and “I'll be meeting” also work; “I'll meet” sounds like a decision made on the spot."
     },
     {
       "topic": "articles",

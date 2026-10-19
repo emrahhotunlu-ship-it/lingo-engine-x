@@ -149,10 +149,12 @@
     "is constantly",
     "'s constantly",
     "is continually",
-    "'s continually"
+    "'s continually",
+    "keeps"
    ],
-   "expl": "„always“ mit Present Continuous drückt Ärger über eine ständige Wiederholung aus (He's always interrupting …).",
-   "expl_en": "\"always\" with the Present Continuous expresses annoyance at constant repetition (He's always interrupting …)."
+   "expl": "„always“ mit Present Continuous drückt Ärger über eine ständige Wiederholung aus (He's always interrupting …). „He keeps interrupting“ sagt dasselbe.",
+   "expl_en": "\"always\" with the Present Continuous expresses annoyance at constant repetition (He's always interrupting …). “He keeps interrupting” says the same.",
+   "hint": "(annoyance)"
   },
   {
    "topic": "pres-simple-cont",
@@ -688,8 +690,8 @@
     "'d closed"
    ],
    "hint": "(close)",
-   "expl": "„the first time“ in der Vergangenheit → Past Perfect (had closed).",
-   "expl_en": "\"the first time\" in a past story → Past Perfect (had closed)."
+   "expl": "„the first time“ in der Vergangenheit → Past Perfect (had closed). Im lockeren US-Englisch hörst du auch „the first time she closed“; im Business-Text: had closed.",
+   "expl_en": "\"the first time\" in a past story → Past Perfect (had closed). In casual American English you also hear “the first time she closed”; in business writing: had closed."
   },
   {
    "topic": "past-perfect",
@@ -736,10 +738,12 @@
    "prompt": "She started working at 8:00. We called her at 10:00, and she was still working. → When we called, she ___ for two hours.",
    "answer": "had been working",
    "accepted": [
-    "'d been working"
+    "'d been working",
+    "had worked",
+    "'d worked"
    ],
-   "expl": "Dauer („for two hours“) vor einem Zeitpunkt in der Vergangenheit → had been + -ing.",
-   "expl_en": "Duration (\"for two hours\") before a point in the past → had been + -ing."
+   "expl": "Dauer („for two hours“) vor einem Zeitpunkt in der Vergangenheit → had been + -ing. „had worked“ ist auch richtig; „had been working“ betont, dass sie noch mittendrin war.",
+   "expl_en": "Duration (\"for two hours\") before a point in the past → had been + -ing. “had worked” is also correct; “had been working” stresses that she was still in the middle of it."
   },
   {
    "topic": "past-perfect",
@@ -886,8 +890,8 @@
     "'s leaving"
    ],
    "hint": "(leave)",
-   "expl": "Für Fahr- und Flugpläne nimmst du das Present Simple, auch wenn es um die Zukunft geht: The flight leaves at 7:20.",
-   "expl_en": "For timetables use the Present Simple, even when you talk about the future: The flight leaves at 7:20."
+   "expl": "Für Fahr- und Flugpläne nimmst du das Present Simple, auch wenn es um die Zukunft geht: The flight leaves at 7:20. „is leaving“ und „will leave“ gehen auch; bei Fahrplänen klingt „leaves“ am natürlichsten.",
+   "expl_en": "For timetables use the Present Simple, even when you talk about the future: The flight leaves at 7:20. “is leaving” and “will leave” also work; for timetables “leaves” sounds most natural."
   },
   {
    "topic": "future-forms",
@@ -1062,7 +1066,7 @@
    "accepted": [
     "'ll have fixed"
    ],
-   "hint": "(fix)",
+   "hint": "(fix · 3 words)",
    "expl": "„By Friday“ = bis dahin abgeschlossen → will have + Partizip.",
    "expl_en": "\"By Friday\" = completed by then → will have + past participle."
   },
@@ -1325,7 +1329,8 @@
     "'d travel"
    ],
    "expl": "Eine frühere Gewohnheit, die vorbei ist → used to + Infinitiv.",
-   "expl_en": "A past habit that has stopped → used to + infinitive."
+   "expl_en": "A past habit that has stopped → used to + infinitive.",
+   "hint": "(travel · 3 words)"
   },
   {
    "topic": "used-to",
@@ -1497,11 +1502,15 @@
    "prompt": "I'd be happier if I ___ so much time in traffic every day.",
    "answer": "didn't spend",
    "accepted": [
-    "did not spend"
+    "did not spend",
+    "wasn't spending",
+    "weren't spending",
+    "was not spending",
+    "were not spending"
    ],
    "hint": "(not / spend)",
-   "expl": "Second Conditional: If + Past Simple. Verneint: didn't + Infinitiv.",
-   "expl_en": "Second conditional: if + Past Simple. Negative: didn't + infinitive."
+   "expl": "Second Conditional: If + Past Simple. Verneint: didn't + Infinitiv. „wasn't/weren't spending“ geht auch und betont die Dauer.",
+   "expl_en": "Second conditional: if + Past Simple. Negative: didn't + infinitive. “wasn't/weren't spending” also works and stresses the duration."
   },
   {
    "topic": "conditionals",
@@ -2407,7 +2416,7 @@
     "must not have received",
     "must not have gotten"
    ],
-   "hint": "(receive)",
+   "hint": "(impossible: receive)",
    "expl": "Unmöglich in der Vergangenheit → can't have + Partizip.",
    "expl_en": "Impossible in the past → can't have + past participle."
   },
@@ -2420,7 +2429,7 @@
     "may have sent",
     "could have sent"
    ],
-   "hint": "(send)",
+   "hint": "(possible: send)",
    "expl": "Nur eine Möglichkeit in der Vergangenheit → might have + Partizip.",
    "expl_en": "Just a possibility in the past → might have + past participle."
   },
@@ -2449,7 +2458,7 @@
     "could not be",
     "must not be"
    ],
-   "hint": "(be)",
+   "hint": "(impossible: be)",
    "expl": "Unmöglich (sie hat nur eine Schwester) → can't be.",
    "expl_en": "Impossible (she only has a sister) → can't be."
   },
@@ -2462,7 +2471,8 @@
    "expl_en": "Almost certain about the past → must have + past participle (forget – forgot – forgotten).",
    "accepted": [
     "must've forgotten"
-   ]
+   ],
+   "hint": "(modal verb)"
   },
   {
    "topic": "modals-deduction",
@@ -2475,7 +2485,8 @@
     "could not have written"
    ],
    "expl": "Unmöglich in der Vergangenheit → can't have + Partizip (write – wrote – written).",
-   "expl_en": "Impossible in the past → can't have + past participle (write – wrote – written)."
+   "expl_en": "Impossible in the past → can't have + past participle (write – wrote – written).",
+   "hint": "(modal verb)"
   },
   {
    "topic": "modals-deduction",
@@ -2936,9 +2947,7 @@
    "answer": "an",
    "expl": "„honest“ beginnt mit stummem h, also mit Vokallaut → an.",
    "expl_en": "\"honest\" starts with a silent h, so with a vowel sound → an.",
-   "accepted": [
-    "the"
-   ]
+   "accepted": []
   },
   {
    "topic": "articles",
@@ -2947,9 +2956,7 @@
    "answer": "a",
    "expl": "„university“ beginnt mit dem Konsonantenlaut /j/ → a, nicht an.",
    "expl_en": "\"university\" starts with the consonant sound /j/ → a, not an.",
-   "accepted": [
-    "the"
-   ]
+   "accepted": []
   },
   {
    "topic": "articles",
@@ -2972,7 +2979,9 @@
    "type": "transform",
    "prompt": "No other product in our range sells better than this one. → This is ___ best-selling product in our range.",
    "answer": "the",
-   "accepted": ["our"],
+   "accepted": [
+    "our"
+   ],
    "expl": "Vor einem Superlativ steht „the“: This is the best-selling product.",
    "expl_en": "Put “the” before a superlative: This is the best-selling product."
   },

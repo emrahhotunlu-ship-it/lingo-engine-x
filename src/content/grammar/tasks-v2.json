@@ -6338,7 +6338,12 @@
    ],
    "answer": "Opening",
    "fixed": "Opening the file, the analyst found three formatting errors.",
-   "accepted": [],
+   "accepted": [
+    "Having opened",
+    "After opening",
+    "Upon opening",
+    "When opening"
+   ],
    "why": {
     "ok": {
      "de": "Der Fehler: Am Satzanfang braucht das Partizip -ing: Opening, nicht Open.",
@@ -6716,7 +6721,9 @@
     "When I was walking to work,",
     "When I walked to work,",
     "While I walked to work,",
-    "As I was walking to work,"
+    "As I was walking to work,",
+    "On my way to work,",
+    "On the way to work,"
    ],
    "why": {
     "ok": {
@@ -6736,7 +6743,11 @@
      }
     ]
    },
-   "topic": "c1-participle"
+   "topic": "c1-participle",
+   "hint": {
+    "de": "Das Partizip am Anfang passt nicht zum Subjekt. Schreibe die markierte Stelle so um, dass der Satz stimmt.",
+    "en": "The participle at the start does not match the subject. Rewrite the marked part so the sentence works."
+   }
   },
   {
    "id": "cp-sub-f2",
@@ -6751,7 +6762,12 @@
    "fixed": "When I read the report, the figures seemed wrong to me.",
    "accepted": [
     "As I read the report,",
-    "While I was reading the report,"
+    "While I was reading the report,",
+    "As I was reading the report,",
+    "When I was reading the report,",
+    "While I read the report,",
+    "After I read the report,",
+    "After I had read the report,"
    ],
    "why": {
     "ok": {
@@ -6771,7 +6787,11 @@
      }
     ]
    },
-   "topic": "c1-participle"
+   "topic": "c1-participle",
+   "hint": {
+    "de": "Das Partizip am Anfang passt nicht zum Subjekt. Schreibe die markierte Stelle so um, dass der Satz stimmt.",
+    "en": "The participle at the start does not match the subject. Rewrite the marked part so the sentence works."
+   }
   },
   {
    "id": "cp-sub-f3",
@@ -7416,7 +7436,8 @@
    "answer": "within",
    "fixed": "We will respond to your complaint within 48 hours.",
    "accepted": [
-    "in under"
+    "in under",
+    "in less than"
    ],
    "why": {
     "ok": {
@@ -11446,7 +11467,9 @@
    ],
    "answer": "rains",
    "fixed": "If it rains tomorrow, we'll move the team lunch indoors.",
-   "accepted": [],
+   "accepted": [
+    "should rain"
+   ],
    "why": {
     "ok": {
      "de": "Der Fehler: Nach if steht bei möglicher Zukunft das Präsens (rains), kein will.",
@@ -11857,7 +11880,8 @@
    "answer": "could",
    "fixed": "If our budget were not so tight, we could hire another analyst.",
    "accepted": [
-    "would"
+    "would",
+    "might"
    ],
    "why": {
     "ok": {
@@ -16456,7 +16480,10 @@
    ],
    "answer": "were going",
    "fixed": "We were going to launch in June, but the supplier delayed everything.",
-   "accepted": [],
+   "accepted": [
+    "were planning",
+    "had planned"
+   ],
    "why": {
     "ok": {
      "de": "Der Fehler: Der Plan liegt in der Vergangenheit. Richtig: were going to.",
@@ -16564,7 +16591,12 @@
    ],
    "answer": "would later become",
    "fixed": "He joined as a trainee in 2012 and would later become the head of sales.",
-   "accepted": [],
+   "accepted": [
+    "later became",
+    "went on to become",
+    "would go on to become",
+    "eventually became"
+   ],
    "why": {
     "ok": {
      "de": "Der Fehler: Aus der Vergangenheit auf Späteres braucht es would. Richtig: would later become.",
@@ -16586,21 +16618,24 @@
    "topic": "future-past"
   },
   {
-   "id": "fp-f6",
+   "id": "fp-f6b",
    "type": "find",
    "pat": "fp.would-narr",
-   "prompt": "She promised that she will review the draft by Monday.",
+   "prompt": "Last year our CEO promised that the new office will open the following spring.",
    "err": [
-    4,
-    5
+    9,
+    10
    ],
-   "answer": "would review",
-   "fixed": "She promised that she would review the draft by Monday.",
-   "accepted": [],
+   "answer": "would open",
+   "fixed": "Last year our CEO promised that the new office would open the following spring.",
+   "accepted": [
+    "was going to open",
+    "was to open"
+   ],
    "why": {
     "ok": {
-     "de": "Der Fehler: Nach promised steht would statt will. Richtig: would review.",
-     "en": "The error: after promised, would replaces will. Correct: would review."
+     "de": "Der Fehler: Nach promised (Vergangenheit) und „the following spring“ steht would statt will. Richtig: would open.",
+     "en": "The error: after promised (past) and “the following spring”, would replaces will. Correct: would open."
     },
     "wrong": [
      {
@@ -16628,7 +16663,16 @@
    ],
    "answer": "was to open",
    "fixed": "The new warehouse was to open in March, but the permit was delayed.",
-   "accepted": [],
+   "accepted": [
+    "was supposed to open",
+    "was due to open",
+    "was scheduled to open",
+    "was meant to open",
+    "should have opened",
+    "was set to open",
+    "was slated to open",
+    "was expected to open"
+   ],
    "why": {
     "ok": {
      "de": "Der Fehler: Für einen Plan in der Vergangenheit gilt was to. Richtig: was to open.",
@@ -24461,7 +24505,8 @@
    "answer": "must have crashed",
    "fixed": "The database must have crashed during the update – nothing was saved.",
    "accepted": [
-    "must've crashed"
+    "must've crashed",
+    "had to have crashed"
    ],
    "why": {
     "ok": {
@@ -24685,12 +24730,14 @@
    "accepted": [
     "cannot have been",
     "couldn't have been",
-    "could not have been"
+    "could not have been",
+    "couldn't be",
+    "could not be"
    ],
    "why": {
     "ok": {
-     "de": "Der Fehler: „last week“ meint früher, also can't have been sent, nicht can't be.",
-     "en": "The error: “last week” is earlier, so can't have been sent, not can't be."
+     "de": "Der Fehler: „last week“ meint früher, also can't have been sent, nicht can't be. Auch richtig: „couldn't be sent“ – dann ist es keine Vermutung, sondern eine Tatsache (es ging nicht).",
+     "en": "The error: “last week” is earlier, so can't have been sent, not can't be. Also correct: “couldn't be sent” – then it is a fact, not a guess (it wasn't possible)."
     },
     "wrong": [
      {
@@ -27350,7 +27397,8 @@
    "answer": "will be sent",
    "fixed": "The agenda will be sent to all participants tomorrow morning.",
    "accepted": [
-    "'ll be sent"
+    "'ll be sent",
+    "is going to be sent"
    ],
    "why": {
     "ok": {
@@ -29315,8 +29363,8 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "Der Fehler: Nach „It was the first time“ steht had + Partizip: had won.",
-     "en": "The error: after “It was the first time” comes had + participle: had won."
+     "de": "Der Fehler: Nach „It was the first time“ steht had + Partizip: had won. Im lockeren US-Englisch hörst du auch „won“; im Business-Text und in Prüfungen: had won.",
+     "en": "The error: after “It was the first time” comes had + participle: had won. In casual American English you also hear “won”; in business writing and exams: had won."
     },
     "wrong": [
      {
@@ -29605,32 +29653,32 @@
    "topic": "past-perfect"
   },
   {
-   "id": "pp-rep-f3",
+   "id": "pp-rep-f3b",
    "type": "find",
    "pat": "pp.reported",
-   "prompt": "The client said they signed the contract the day before.",
+   "prompt": "On Friday the client told us they have signed the contract two days earlier.",
    "err": [
-    4,
-    4
+    7,
+    8
    ],
    "answer": "had signed",
-   "fixed": "The client said they had signed the contract the day before.",
+   "fixed": "On Friday the client told us they had signed the contract two days earlier.",
    "accepted": [],
    "why": {
     "ok": {
-     "de": "Der Fehler: Mit „the day before“ braucht das Berichtete had + Partizip.",
-     "en": "The error: with “the day before” the reported event needs had + participle."
+     "de": "Der Fehler: Berichtet wird aus der Vergangenheit, und „two days earlier“ liegt davor: had + Partizip.",
+     "en": "The error: this is reported from the past, and “two days earlier” came before that: had + participle."
     },
     "wrong": [
      {
       "tap": "none",
-      "de": "Doch, hier steckt ein Fehler: „signed“ passt nicht zu „the day before“.",
-      "en": "There is an error: “signed” does not fit “the day before”."
+      "de": "Doch, hier steckt ein Fehler: „have signed“ passt nicht zu „two days earlier“.",
+      "en": "There is an error: “have signed” does not fit “two days earlier”."
      },
      {
       "tap": "*",
-      "de": "Der Fehler liegt bei „signed“: Es braucht had signed.",
-      "en": "The error is at “signed”: it needs had signed."
+      "de": "Der Fehler liegt bei „have signed“: Es braucht had signed.",
+      "en": "The error is at “have signed”: it needs had signed."
      }
     ]
    },
