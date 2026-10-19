@@ -172,9 +172,17 @@ export const isFestState = (c: StatusCard, nowMs?: number): boolean => festByEvi
  */
 export const isFestCard = (c: StatusCard & Pick<TrainCard, 'hidden'>, nowMs?: number): boolean => !c.hidden && isFestState(c, nowMs);
 
+/** Der Beleg-Teil einer Karte (ohne Uhrzeit), zum Zwischenspeichern je Dokument (Lernermodell, `learner.ts`). */
+export type CardEvidence = ReturnType<typeof evidence>;
+export const cardEvidence = (c: StatusCard): CardEvidence => evidence(c);
+
 /** Der Status einer Karte zum Zeitpunkt `nowMs`. */
 export function cardStatus(c: StatusCard, nowMs: number): CardStatus {
-  const e = evidence(c);
+  return cardStatusFrom(c, evidence(c), nowMs);
+}
+
+/** Wie `cardStatus`, mit schon gerechnetem Beleg-Teil (`cardEvidence` derselben Karte). Gleiches Ergebnis. */
+export function cardStatusFrom(c: StatusCard, e: CardEvidence, nowMs: number): CardStatus {
   const r = reliableR(c, nowMs);
   let mind: Mind = 'none';
   if (!c.isNew) {

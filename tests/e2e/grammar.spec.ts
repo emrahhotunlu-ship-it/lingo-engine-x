@@ -133,7 +133,9 @@ test('Themenrunde: Satzkorrektur, Umformen und Lücke; deutlich andere freie Ant
     if (type === 'correct' && !judged) {
       // Emrahs Wunsch 27.09.: Bewertung sofort. Deutlich andere Antwort → Hinweis, dann falsch; kein Claude-Aufruf.
       await answerGrammar(page, solve, { given: 'Getting up early is something I have been used to for many years.' });
-      await expect(item.getByTestId('verdict')).toHaveAttribute('data-verdict', 'wrong');
+      // Tutor-Engine v3 §4.1 („kein falsches falsch“): ein frei umgebauter Satz ohne bekannte falsche Form ist „unsicher“ (gebucht wie „Fast“)
+      // und bekommt den Knopf „Claude fragen“; die App fragt ohne Zustimmung nie von selbst.
+      await expect(item.getByTestId('verdict')).toHaveAttribute('data-verdict', /^(wrong|near)$/);
       judged = true;
     } else {
       await answerGrammar(page, solve);

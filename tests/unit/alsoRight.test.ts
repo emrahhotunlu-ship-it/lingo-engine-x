@@ -6,7 +6,7 @@ import { defaultTopic } from '../../src/domain/content';
 import { topicById } from '../../src/domain/content';
 import { answer } from './learnHelpers';
 import { grammarFit } from '../../src/prompts/grammarFit';
-import { abandonFit, fitAccepts, fitKey, runFit, type FitRun } from '../../src/features/grammar/fit';
+import { abandonFit, fitAccepts, fitErrOf, fitKey, runFit, type FitResult, type FitRun } from '../../src/features/grammar/fit';
 import { task } from './learnHelpers';
 import { fromV2 } from '../../src/domain/grammar/tasks';
 import { V2TaskSchema } from '../../src/domain/grammar/patternTypes';
@@ -51,16 +51,41 @@ describe('„Auch richtig“ (Art other)', () => {
     expect(fitKey('t|k', ' Had. ')).toBe(fitKey('t|k', 'had'));
   });
 
-  it('Prompt grammar-fit@1: Schema, Sprachtreue, Regeln', () => {
-    const v = { topic: 'Used to', pattern: 'used to + verb', mode: 'gap' as const, task: 'We ___ a paper archive.', sentence: 'We had a paper archive.', expected: 'We used to have a paper archive.', given: 'had', uiLang: 'de' as const };
+  it('Prompt grammar-fit@2: Kopf, Beispiele-Satz, Ziel und Regel, Schema mit Kappen statt Neufragen', () => {
+    const v = {
+      topic: 'Used to',
+      pattern: 'used to + verb',
+      rule: 'used to + base form',
+      goal: 'past habit',
+      accepted: ['used to keep'],
+      mode: 'gap' as const,
+      task: 'We ___ a paper archive.',
+      sentence: 'We had a paper archive.',
+      expected: 'We used to have a paper archive.',
+      given: 'had',
+      uiLang: 'de' as const,
+    };
     const p = grammarFit.build(v);
-    expect(p.startsWith('[grammar-fit@1]')).toBe(true);
-    expect(p).toContain('certain');
+    expect(p.startsWith('[grammar-fit@2]')).toBe(true);
+    expect(p).toContain('The listed answers are examples, not exhaustive.');
+    expect(p).toContain('Pattern rule: used to + base form');
+    expect(p).toContain('Goal of the exercise: past habit');
+    expect(p).toContain('Other accepted answers: used to keep');
+    expect(p).toContain('fitsGoal');
     expect(new TextEncoder().encode(p).length).toBeLessThan(60_000);
     const s = grammarFit.schema(v);
-    expect(s.safeParse({ fits: true, certain: true, why: 'Der ganze Satz ist grammatisch richtig und passt zum Zusammenhang.' }).success).toBe(true);
-    expect(s.safeParse({ fits: 'yes', certain: 'true', why: 'Der Satz ist richtig.' }).success).toBe(true);
-    expect(s.safeParse({ fits: true, why: 'x' }).success).toBe(false);
+    const why = { de: 'Der ganze Satz ist richtig.', en: 'The whole sentence is correct.' };
+    const ok = s.safeParse({ fits: true, certain: true, fitsGoal: false, why, edits: [], vs: 'ut.past-simple', retryHint: null });
+    expect(ok.success).toBe(true);
+    // Tolerant: Wahrheitswerte als Text, zu lange Liste gekappt, unbekannte Kennung → null, fehlendes fitsGoal → false.
+    const loose = s.safeParse({ fits: 'yes', certain: 'true', why, edits: [1, 2, 3, 4].map((i) => ({ from: `a${i}`, to: `b${i}`, sev: 'upgrade' })), vs: 'nonsense id', retryHint: 7 });
+    expect(loose.success).toBe(true);
+    if (loose.success) expect([loose.data.edits.length, loose.data.vs, loose.data.fitsGoal, loose.data.retryHint]).toEqual([3, null, false, null]);
+    // „passt“ mit echter Fehlerkorrektur ist nicht sicher.
+    const err = s.safeParse({ fits: true, certain: true, fitsGoal: true, why, edits: [{ from: 'had', to: 'used to have', sev: 'error' }], vs: null, retryHint: null });
+    expect(err.success && err.data.certain).toBe(false);
+    // Ohne zweisprachige Begründung ungültig (das KI-Tor fragt höchstens einmal neu, A6.3).
+    expect(s.safeParse({ fits: true, certain: true, why: 'x' }).success).toBe(false);
   });
 
   it('shortWhy: erster Satz, gekürzt', () => {
@@ -108,18 +133,39 @@ describe('„Auch richtig“ (Art other)', () => {
   it('runFit: genau eine Auswertung (Claude, Überspringen und Verwerfen schließen sich aus)', async () => {
     const calls: string[] = [];
     const ctl: { current: FitRun | null } = { current: null };
-    let resolve: (v: { fits: boolean; certain: boolean; why: string }) => void = () => undefined;
-    runFit(ctl, new Promise((r) => (resolve = r)), () => calls.push('accept'), () => calls.push('local'));
+    const out = { fits: true, certain: true, fitsGoal: false, why: { de: 'x', en: 'x' }, edits: [], vs: null, retryHint: null };
+    let resolve: (v: FitResult) => void = () => undefined;
+    runFit(ctl, new Promise<FitResult>((r) => (resolve = r)), () => calls.push('accept'), () => calls.push('local'));
     ctl.current?.skip();
-    resolve({ fits: true, certain: true, why: 'x' });
+    resolve({ out, err: null });
     await Promise.resolve();
     await Promise.resolve();
     expect(calls).toEqual(['local']);
     const ctl2: { current: FitRun | null } = { current: null };
-    runFit(ctl2, Promise.resolve({ fits: true, certain: true, why: 'x' }), () => calls.push('accept2'), () => calls.push('local2'));
+    runFit(ctl2, Promise.resolve({ out, err: null }), () => calls.push('accept2'), () => calls.push('local2'));
     abandonFit(ctl2);
     await Promise.resolve();
     await Promise.resolve();
     expect(calls).toEqual(['local']);
+    // Fehler: das lokale Urteil bekommt die Fehlerart (§6.4).
+    const ctl3: { current: FitRun | null } = { current: null };
+    const got: Array<FitResult | null> = [];
+    runFit(ctl3, Promise.resolve({ out: null, err: 'busy' }), () => calls.push('accept3'), (r) => got.push(r));
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(got).toEqual([{ out: null, err: 'busy' }]);
+  });
+
+  it('Fehlerarten des KI-Tors → Folge in der Übung (§6.4)', () => {
+    expect(fitErrOf('cancelled')).toBeNull();
+    expect(fitErrOf('unavailable')).toBe('off');
+    expect(fitErrOf('busy')).toBe('busy');
+    expect(fitErrOf('signin')).toBe('signin');
+    expect(fitErrOf('refused')).toBe('final');
+    expect(fitErrOf('empty')).toBe('final');
+    expect(fitErrOf('invalid')).toBe('retry');
+    expect(fitErrOf('failed')).toBe('retry');
+    expect(fitErrOf('bug')).toBe('bug');
+    expect(fitErrOf('too_large')).toBe('bug');
   });
 });

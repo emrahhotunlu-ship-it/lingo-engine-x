@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { useLive } from '../../data/live';
+import { fitAltRows } from '../../domain/tutor/fitAlt';
 import { sampleFile, shownSample, totalQuality } from '../../domain/tutor/quality';
 import { useT } from '../../i18n';
 import { saveFile } from '../../platform/downloads';
@@ -9,10 +11,13 @@ import { toast } from '../../ui/Toast';
 // Einstellungen › Diagnose: „KI-Stichprobe sichern“ (Lernplattform 3.0 P25). Die letzten 30 gezeigten Inhalte von Claude (Aufgabe, Antwort,
 // Erklärung, Meldung) als JSON-Datei über `downloads`; dazu eine Zeile mit den Qualitätszählern. Emrah schickt die Datei in claude.ai, der
 // Englischlehrer prüft sie dort. Ohne `downloads` gibt es den Knopf nicht.
+// Tutor-Engine v3 §3.2: dieselbe Datei trägt die gemerkten „Auch richtig“-Antworten (`grammar/<topic>.fitAlt`) zur Gegenlesung.
 
 export function StichprobeSection() {
   const { t, num } = useT();
   const downloads = useCapabilities((s) => s.downloads);
+  const grammar = useLive((s) => s.collections.grammar);
+  const fitRows = useMemo(() => (grammar ? fitAltRows(grammar) : []), [grammar]);
   const [n, setN] = useState(() => shownSample().length);
   const [busy, setBusy] = useState(false);
   if (downloads !== 'ready') return null;
@@ -20,13 +25,13 @@ export function StichprobeSection() {
   const save = async () => {
     const items = shownSample();
     setN(items.length);
-    if (!items.length) {
+    if (!items.length && !fitRows.length) {
       toast(t('ttSampleEmpty'));
       return;
     }
     setBusy(true);
     try {
-      const f = sampleFile();
+      const f = sampleFile(Date.now(), fitRows);
       const r = await saveFile(f.name, f.data);
       toast(r === 'saved' ? t('ttSampleSaved') : t('ttSampleFailed'), r === 'saved' ? 'info' : 'error');
     } finally {
@@ -39,6 +44,9 @@ export function StichprobeSection() {
       <p className="m-0 text-sm text-muted">{t('ttSampleText', { n: num(n) })}</p>
       <p className="m-0 text-xs text-subtle" data-testid="ai-quality">
         {t('ttQualityRow', { gen: num(q.gen), acc: num(q.acc), shown: num(q.shown), flag: num(q.flag) })}
+      </p>
+      <p className="m-0 text-xs text-subtle" data-testid="ai-fitalt">
+        {t('ttJgFitAltRow', { n: num(fitRows.length) })}
       </p>
       <div>
         <Button variant="secondary" onClick={() => void save()} busy={busy} data-testid="ai-sample-save">
