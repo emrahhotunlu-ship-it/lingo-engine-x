@@ -24,8 +24,9 @@ async function startWith(page: Page, patch: Record<string, Record<string, unknow
   return booted;
 }
 
-const avoid = () => forcedPatch()['vocab/avoid'] ?? {};
-const overcome = () => forcedPatch()['vocab/overcome'] ?? {};
+// Tag 1 (leerer Verlauf): der Ursprungssatz ist der Anker. Mit dem Seed-Verlauf wechselte der Satz seit WL bewusst (Satzrotation ab Stufe 1), diese Specs prüfen aber den Ursprungssatz.
+const avoid = () => ({ ...(forcedPatch()['vocab/avoid'] ?? {}), hist: [] });
+const overcome = () => ({ ...(forcedPatch()['vocab/overcome'] ?? {}), hist: [] });
 
 test('Status statt Erklärtexten, Platzhalter je Buchstabe, keine Bewertungsknöpfe, Beispiele', async ({ page }) => {
   const { errors } = await startWith(page, { 'vocab/avoid': avoid() });
