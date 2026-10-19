@@ -8912,7 +8912,7 @@
    ]
   }
  },
- "mandative|isuggestthathedoesnotsignthecontractyet": {
+ "mandative|isuggesthimnottosignthecontractyet": {
   "pat": "mnd.negation",
   "why": {
    "ok": {
@@ -8920,6 +8920,14 @@
     "en": "Right: the negation goes before the base form: that he not sign."
    },
    "wrong": [
+    {
+     "if": [
+      "him",
+      "to"
+     ],
+     "de": "Nach suggest steht kein Objekt mit to: nicht „suggest him to sign“, sondern „suggest (that) he not sign“.",
+     "en": "Suggest does not take an object + to: not “suggest him to sign” but “suggest (that) he not sign”."
+    },
     {
      "if": [
       "does",
@@ -9735,7 +9743,7 @@
    ]
   }
  },
- "modals-advice|youbringalaptopwewillprovideone": {
+ "modals-advice|youbringalaptopwewillprovideonebutfeelfreetobringyourown": {
   "pat": "ma.dont-have-to",
   "why": {
    "ok": {

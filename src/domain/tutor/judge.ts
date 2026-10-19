@@ -2,7 +2,7 @@ import { checkFind, checkGrammar, checkKwt, checkMeaning, closeVariant, fitAskab
 import { legacyNorm } from '../grammar/key';
 import type { FindAlt, GrammarCheck, GrammarTask } from '../learn/types';
 import type { GrammarFitOut } from '../../prompts/grammarFit';
-import { diagnoseAnswer, sharesContent, type Diagnosis } from './diagnose';
+import { diagnoseAnswer, sameClass, sharesContent, type Diagnosis } from './diagnose';
 import { WRONG_CAUSES, type Verdict } from './tutorTypes';
 
 // Urteil der Tutor-Engine (docs/umbau/tutor-engine-v3.md §4.1, Invariante „kein falsches falsch“). Rein, ohne KI, deterministisch.
@@ -152,7 +152,8 @@ export function judge(task: GrammarTask, given: string, ctx: JudgeCtx): Judgemen
 
   const dx = ctx.dx ?? diagnoseAnswer(task, raw, ctx.model ?? null);
   const hardKind = check.kind === 'key' || check.kind === 'words' || check.kind === 'form';
-  const plausible = closeVariant(task, raw) || sharesContent(task, raw);
+  // Plausibel: nah an einer Lösung, gemeinsames Inhaltswort oder (nur Funktionswörter) dieselbe Wortklasse → „unsicher“ statt „falsch“.
+  const plausible = closeVariant(task, raw) || sharesContent(task, raw) || sameClass(task, raw);
   const wrong = dx.known || WRONG_CAUSES.has(dx.cause) || hardKind || !plausible;
   const v: Verdict = wrong ? 'wrong' : 'unsure';
 

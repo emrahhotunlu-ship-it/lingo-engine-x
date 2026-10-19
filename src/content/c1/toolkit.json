@@ -4009,7 +4009,10 @@
    "prompt": "The audit trail convinced them. → It was the audit trail ___ convinced them.",
    "answer": "that",
    "expl": "It-Cleft mit einer Sache: that.",
-   "expl_en": "It-cleft with a thing: that."
+   "expl_en": "It-cleft with a thing: that.",
+   "accepted": [
+    "which"
+   ]
   },
   {
    "topic": "c1-emphasis",
@@ -4678,7 +4681,13 @@
     "have double-checked",
     "double-check",
     "have reviewed",
-    "review"
+    "review",
+    "have gone through",
+    "'ve gone through",
+    "go through",
+    "have gone over",
+    "'ve gone over",
+    "go over"
    ],
    "hint": "(check)",
    "expl": "Nach „after“ bei Zukünftigem: Present Perfect (oder Präsens).",
@@ -5506,7 +5515,7 @@
   {
    "topic": "modals-advice",
    "type": "gap",
-   "prompt": "You ___ bring a laptop; we'll provide one.",
+   "prompt": "You ___ bring a laptop; we'll provide one, but feel free to bring your own.",
    "answer": "don't have to",
    "accepted": [
     "do not have to",
@@ -5526,7 +5535,9 @@
    "prompt": "It would be wise to back up the data. → You ___ back up the data.",
    "answer": "should",
    "accepted": [
-    "ought to"
+    "ought to",
+    "'d better",
+    "had better"
    ],
    "expl": "„Should“ gibt einen Rat.",
    "expl_en": "“Should” gives advice."
@@ -5541,7 +5552,9 @@
     "ought not to",
     "had better not",
     "oughtn't to",
-    "'d better not"
+    "'d better not",
+    "mustn't",
+    "must not"
    ],
    "expl": "„Shouldn't“ rät von etwas ab.",
    "expl_en": "“Shouldn't” advises against something."
@@ -5873,14 +5886,19 @@
   {
    "topic": "mandative",
    "type": "correct",
-   "prompt": "I suggest that he doesn't sign the contract yet.",
+   "prompt": "I suggest him not to sign the contract yet.",
    "answer": "I suggest that he not sign the contract yet.",
    "accepted": [
+    "I suggest he not sign the contract yet.",
     "I suggest that he should not sign the contract yet.",
-    "I suggest that he shouldn't sign the contract yet."
+    "I suggest that he shouldn't sign the contract yet.",
+    "I suggest he shouldn't sign the contract yet.",
+    "I suggest not signing the contract yet.",
+    "I suggest that he doesn't sign the contract yet.",
+    "I suggest he doesn't sign the contract yet."
    ],
-   "expl": "Im Mandativ steht im formellen Stil „not“ + Grundform, kein „doesn't“.",
-   "expl_en": "In the mandative, formal style uses “not” + base form, not “doesn't”."
+   "expl": "Nach „suggest“ steht kein Objekt mit to-Infinitiv. Im Mandativ folgt ein that-Satz: that + Subjekt + not + Grundform.",
+   "expl_en": "“Suggest” does not take an object + to-infinitive. The mandative uses a that-clause: that + subject + not + base form."
   },
   {
    "topic": "countable",
@@ -6242,7 +6260,14 @@
    "type": "gap",
    "prompt": "We've been waiting for the delivery ___ three weeks.",
    "answer": "for",
-   "accepted": [],
+   "accepted": [
+    "for almost",
+    "for nearly",
+    "for about",
+    "for around",
+    "for over",
+    "for more than"
+   ],
    "hint": "(Präposition)",
    "expl": "„for“ nennt die Dauer.",
    "expl_en": "“For” gives the duration."
@@ -6273,7 +6298,10 @@
    "type": "transform",
    "prompt": "Please finish the draft before Thursday. → Please finish the draft ___ Thursday.",
    "answer": "by",
-   "accepted": [],
+   "accepted": [
+    "no later than",
+    "before"
+   ],
    "expl": "„by“ nennt die Frist.",
    "expl_en": "“By” names the deadline."
   },
@@ -6802,7 +6830,8 @@
    "prompt": "She got the job ___ her lack of experience.",
    "answer": "despite",
    "accepted": [
-    "in spite of"
+    "in spite of",
+    "notwithstanding"
    ],
    "hint": "(trotz + Nomen)",
    "expl": "Vor einem Nomen steht „despite“ oder „in spite of“.",

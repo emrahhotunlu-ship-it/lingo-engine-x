@@ -1,7 +1,6 @@
 import { FALSE_FRIENDS } from '../../content/falseFriends';
 import { alignWords, splitWords } from '../answer/align';
-import { typoBudget } from '../answer/check';
-import { editDistance } from '../answer/diff';
+import { wordTypo } from '../grammar/check';
 import { legacyNorm } from '../grammar/key';
 import { foreignSignalPattern, patternOf, patternsOf, whyFor } from '../grammar/patterns';
 import { splitTransform } from '../grammar/tasks';
@@ -63,7 +62,8 @@ const GRAMMAR_PARTNERS: ReadonlySet<string> = new Set(['ing', 'inf', 'to-inf', '
 
 const key = (w: string): string => legacyNorm(w).replace(/^'+|'+$/g, '');
 const words = (s: string): string[] => splitWords(legacyNorm(s)).map(key).filter(Boolean);
-const isTypo = (a: string, b: string): boolean => a.length >= 4 && editDistance(a, b) <= typoBudget(Math.max(a.length, b.length));
+/** Tippfehler nur innerhalb eines Worts (≥ 4 Buchstaben); Artikel, Präpositionen und Endungen nie (Gegenlesung Englischlehrer). */
+const isTypo = wordTypo;
 const lemmas = (w: string): readonly string[] => lemmaCandidates(w);
 const shareLemma = (a: string, b: string): boolean => {
   const la = lemmas(a);
@@ -197,7 +197,10 @@ export function diagnoseAnswer(
   if (targets.some(formOf)) return out('form', 'sure', false, { l1: note });
 
   // 6. Fehler finden: Der Ersatz behält den Fehler (nur umgebeugt oder umrahmt: „Walked to work,“, „While walking to work,“).
-  if (task.type === 'find' && orig) {
+  //    Nur bei Partizip-Aufgaben (Muster cp.*) oder einer Fehlerstelle, die mit einer -ing/-ed-Form beginnt. Sonst wäre „before“ statt
+  //    „until“ ein bekannter Fehler, nur weil before ein Rahmenwort ist (Gegenlesung Englischlehrer, pt-bu-f1).
+  const participle = (task.pat ?? '').startsWith('cp.') || /(?:ing|ed)$/.test(words(orig)[0] ?? '');
+  if (task.type === 'find' && orig && participle) {
     const ow = words(orig);
     const olem = new Set(ow.flatMap((w) => [...lemmas(w)]));
     const keeps = (ws: readonly string[]): boolean => ws.length > 0 && ws.every((w) => FRAME_WORDS.has(w) || lemmas(w).some((x) => olem.has(x)));
@@ -276,4 +279,71 @@ export function sharesContent(task: Pick<GrammarTask, 'answer' | 'accepted'>, gi
   const gl = new Set(words(given).filter(isContent).flatMap((w) => [...lemmas(w)]));
   if (!gl.size) return false;
   return [task.answer, ...task.accepted].some((t) => words(t).filter(isContent).some((w) => lemmas(w).some((x) => gl.has(x))));
+}
+
+// ------------------------------------------------------------------ Plausibilität bei Funktionswörtern (Gegenlesung Englischlehrer, Teil 4 Nr. 9)
+
+/** Mehrwortige Einheiten (gierig, die längste zuerst): Präpositionen, Modalverben, Konjunktionen. */
+const CLASS_UNITS: ReadonlyArray<readonly [string, string]> = (
+  [
+    ['no later than', 'prep'], ['in spite of', 'prep'], ['in front of', 'prep'], ['regardless of', 'prep'], ['prior to', 'prep'], ['ahead of', 'prep'],
+    ['up to', 'prep'], ['as of', 'prep'], ['because of', 'prep'], ['due to', 'prep'], ['instead of', 'prep'], ['next to', 'prep'],
+    ['had better', 'modal'], ['d better', 'modal'], ['ought to', 'modal'], ['have to', 'modal'], ['has to', 'modal'], ['had to', 'modal'],
+    ['need to', 'modal'], ['do have to', 'modal'], ['does have to', 'modal'], ['did have to', 'modal'], ['do need to', 'modal'],
+    ['does need to', 'modal'], ['did need to', 'modal'], ['even though', 'linker'], ['even if', 'linker'],
+  ] as const
+)
+  .slice()
+  .sort((a, b) => b[0].split(' ').length - a[0].split(' ').length);
+const CLASS_WORDS: ReadonlyMap<string, readonly string[]> = (() => {
+  const m = new Map<string, string[]>();
+  const add = (cls: string, ws: readonly string[]): void => ws.forEach((w) => m.set(w, [...(m.get(w) ?? []), cls]));
+  add('prep', [...PREPS, 'despite', 'notwithstanding', 'throughout', 'beyond', 'around', 'near', 'past']);
+  add('det', ['a', 'an', 'the', 'this', 'that', 'these', 'those', 'my', 'your', 'his', 'her', 'its', 'our', 'their', 'some', 'any', 'no', 'every', 'each']);
+  add('rel', ['that', 'which', 'who', 'whom', 'whose', 'where', 'when']);
+  add('modal', ['can', 'could', 'may', 'might', 'must', 'shall', 'should', 'will', 'would', 'need']);
+  add('linker', ['although', 'though', 'while', 'whilst', 'whereas']);
+  return m;
+})();
+/** Wörter, die die Wortklasse nicht ändern (Verneinung, Gradadverbien): „for almost“, „must not“. */
+const CLASS_SKIP: ReadonlySet<string> = new Set(['not', 'almost', 'nearly', 'just', 'already', 'still', 'also', 'really', 'even', 'only', 'possibly', 'probably']);
+
+/** Wortklassen einer Antwort aus Funktionswörtern (je Einheit die möglichen Klassen) oder `null`, sobald ein Wort keine Klasse hat. */
+function classesOf(s: string): string[][] | null {
+  const ws = words(s);
+  const out: string[][] = [];
+  for (let i = 0; i < ws.length; ) {
+    const unit = CLASS_UNITS.find(([u]) => u.split(' ').every((w, k) => ws[i + k] === w));
+    if (unit) {
+      out.push([unit[1]]);
+      i += unit[0].split(' ').length;
+      continue;
+    }
+    const w = ws[i] as string;
+    i++;
+    if (CLASS_SKIP.has(w)) continue;
+    const cls = CLASS_WORDS.get(w);
+    if (!cls) return null;
+    out.push([...cls]);
+  }
+  return out.length ? out : null;
+}
+
+/**
+ * Gleiche Wortklasse wie eine Lösung: eine Antwort aus höchstens 3 Einheiten Funktionswörtern (Präposition, Begleiter, Relativpronomen, Modalverb,
+ * Konjunktion), Stelle für Stelle dieselbe Klasse wie eine Lösung. Dann ist sie eine mögliche Alternative (which im Cleft-Satz, our, for almost,
+ * no later than, 'd better) und wird „unsicher“ statt „falsch“. which ↔ who bleibt ausgeschlossen: Person oder Sache kennt die Aufgabe.
+ */
+export function sameClass(task: Pick<GrammarTask, 'answer' | 'accepted'>, given: string): boolean {
+  if (words(given).length > 4) return false;
+  const gc = classesOf(given);
+  if (!gc || gc.length > 3) return false;
+  const gw = new Set(words(given));
+  const targets = [task.answer, ...task.accepted].filter((t) => t.trim() !== '');
+  const tw = new Set(targets.flatMap(words));
+  if ((gw.has('which') && tw.has('who')) || (gw.has('who') && tw.has('which'))) return false;
+  return targets.some((t) => {
+    const tc = classesOf(t);
+    return !!tc && tc.length === gc.length && tc.every((cs, i) => cs.some((c) => (gc[i] as string[]).includes(c)));
+  });
 }

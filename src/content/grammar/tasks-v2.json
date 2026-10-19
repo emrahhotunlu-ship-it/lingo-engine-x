@@ -6723,7 +6723,11 @@
     "While I walked to work,",
     "As I was walking to work,",
     "On my way to work,",
-    "On the way to work,"
+    "On the way to work,",
+    "On my walk to work,",
+    "While I was on my way to work,",
+    "As I was on my way to work,",
+    "When I was on my way to work,"
    ],
    "errAlt": [
     {
@@ -6733,11 +6737,21 @@
      ],
      "answer": "I heard my phone ring twice.",
      "accepted": [
-      "I heard my phone ringing twice."
+      "I heard my phone ringing twice.",
+      "I heard my phone go off twice.",
+      "I got two calls.",
+      "I got two phone calls.",
+      "I received two calls.",
+      "I received two phone calls.",
+      "I got called twice.",
+      "I was called twice.",
+      "I had two calls.",
+      "I heard my cell phone ring twice.",
+      "I heard my phone ring two times."
      ],
      "why": {
-      "de": "Auch richtig: Mit „I“ im Hauptsatz gehört „Walking to work“ jetzt zu dir, und du gehst zur Arbeit.",
-      "en": "Also right: with “I” in the main clause, “Walking to work” now refers to you, and you are the one walking."
+      "de": "Auch richtig: Jetzt ist „I“ das Subjekt. „Walking to work“ gehört zu dir, und du gehst ja zur Arbeit.",
+      "en": "Also correct: now “I” is the subject, so “Walking to work” refers to you, and you are the one walking."
      }
     }
    ],
@@ -33356,7 +33370,10 @@
    ],
    "answer": "by",
    "fixed": "The vendor has to confirm the order by Friday noon.",
-   "accepted": [],
+   "accepted": [
+    "no later than",
+    "before"
+   ],
    "why": {
     "ok": {
      "de": "Der Fehler: Bestätigen ist einmalig. Die Frist nennt by, nicht until.",

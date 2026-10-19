@@ -501,7 +501,10 @@
   ],
   "answer": "by",
   "fixed": "The vendor has to confirm the order by Friday noon.",
-  "accepted": [],
+  "accepted": [
+   "no later than",
+   "before"
+  ],
   "why": {
    "ok": {
     "de": "Der Fehler: Bestätigen ist einmalig. Die Frist nennt by, nicht until.",

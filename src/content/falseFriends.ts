@@ -28,8 +28,8 @@ export const FALSE_FRIENDS: readonly FalseFriend[] = [
   { word: 'actual', de: 'aktuell', en: 'current, latest, up to date', bad: /\b(?:the|our)\s+actual\s+(?:version|release|status|state)\b|\bat\s+the\s+actual\s+moment\b/i },
   // „Möglichkeit zu …“ = option / chance to …; „possibility to“ + Infinitiv ist Deutsch.
   { word: 'possibility', de: 'Möglichkeit', en: 'option, opportunity, chance (to …)', bad: /\bpossibilit(?:y|ies)\s+to\s+[a-z]+/i },
-  // „konsequent“ = consistent(ly). consequent = daraus folgend.
-  { word: 'consequent', de: 'konsequent', en: 'consistent(ly), rigorous(ly)', bad: /\b(?:act|acts|acting|follow|follows|following|apply|applies|applying|implement|implements|implementing|use|uses|using|proceed|proceeding|pursue|pursuing|enforce|enforcing)\s+consequently\b|\bconsequent\b(?!\s+(?:upon|on|to)\b)/i },
+  // „konsequent“ = consistent(ly). consequent = daraus folgend; das Adjektiv vor einem Nomen ist richtig („the consequent delays“).
+  { word: 'consequent', de: 'konsequent', en: 'consistent(ly), rigorous(ly)', bad: /\b(?:act|acts|acting|follow|follows|following|apply|applies|applying|implement|implements|implementing|use|uses|using|proceed|proceeding|pursue|pursuing|enforce|enforcing)\s+consequently\b|\b(?:be|is|are|am|was|were|been|being|stay|stays|stayed|remain|remains|remained|very|more|really|so|too|quite)\s+consequent\b(?!\s+(?:upon|on|to)\b)|\bconsequent\s+(?:in|with|about)\b/i },
   // „sensibel“ = sensitive. sensible = vernünftig („sensible customers“ ist richtig).
   { word: 'sensible', de: 'sensibel', en: 'sensitive', bad: /\bsensible\s+(?:data|information|topics?|subjects?|issues?|matters?|documents?|content|areas?)\b/i },
   // „Provision“ (Vertrieb) = commission. provision = Bestimmung, Vorsorge.
@@ -62,8 +62,8 @@ export const FALSE_FRIENDS: readonly FalseFriend[] = [
   { word: 'bald', de: 'bald', en: 'soon', bad: /\b(?:see|call|meet|talk|write|send|contact|speak|reply|respond)(?:\s+you)?\s+bald\b|\b(?:we|I)\s+(?:will|['’]ll)\s+bald\b/i },
   // „Fabrik“ = factory, plant. fabric = Stoff.
   { word: 'fabric', de: 'Fabrik', en: 'factory, plant', bad: /\b(?:production|manufacturing)\s+fabrics?\b/i },
-  // „absolvieren“ = complete, finish, take (a course). absolve = freisprechen.
-  { word: 'absolve', de: 'absolvieren', en: 'complete, finish, take (a course)', bad: /\babsolv(?:e|es|ed|ing)\b/i },
+  // „absolvieren“ = complete, finish, take (a course). absolve = freisprechen; „absolve the vendor of liability“ ist richtige Vertragssprache.
+  { word: 'absolve', de: 'absolvieren', en: 'complete, finish, take (a course)', bad: /\babsolv(?:e|es|ed|ing)\b(?!(?:\s+[\w'’-]+){1,3}\s+(?:of|from)\b)/i },
   // „selbstbewusst“ = self-confident. self-conscious = befangen.
   { word: 'self-conscious', de: 'selbstbewusst', en: 'self-confident', bad: null },
   // „Pension“ (Gästehaus).

@@ -190,7 +190,7 @@
    ]
   }
  },
- "You ___ bring a laptop; we'll provide one.": {
+ "You ___ bring a laptop; we'll provide one, but feel free to bring your own.": {
   "pat": "ma.dont-have-to",
   "why": {
    "ok": {

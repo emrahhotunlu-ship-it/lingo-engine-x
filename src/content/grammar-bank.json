@@ -553,7 +553,9 @@
    "accepted": [
     "I've been waiting for your reply since Monday.",
     "I have waited for your reply since Monday.",
-    "I've waited for your reply since Monday."
+    "I've waited for your reply since Monday.",
+    "I've been waiting on your reply since Monday.",
+    "I have been waiting on your reply since Monday."
    ],
    "expl": "„since Monday“ verlangt Present Perfect (Continuous), nicht Present Continuous. Deutsch „Ich warte seit Montag“ führt oft zu diesem Fehler.",
    "expl_en": "\"since Monday\" needs the Present Perfect (Continuous), not the Present Continuous. German \"Ich warte seit Montag\" often causes this mistake."
@@ -564,7 +566,8 @@
    "prompt": "How long do you work in this industry?",
    "answer": "How long have you been working in this industry?",
    "accepted": [
-    "How long have you worked in this industry?"
+    "How long have you worked in this industry?",
+    "How long have you been in this industry?"
    ],
    "expl": "„How long“ + Dauer bis jetzt → Present Perfect (Continuous), nie Present Simple.",
    "expl_en": "\"How long\" + duration up to now → Present Perfect (Continuous), never Present Simple."
@@ -887,7 +890,10 @@
    "accepted": [
     "is leaving",
     "will leave",
-    "'s leaving"
+    "'s leaving",
+    "departs",
+    "is departing",
+    "'s departing"
    ],
    "hint": "(leave)",
    "expl": "Für Fahr- und Flugpläne nimmst du das Present Simple, auch wenn es um die Zukunft geht: The flight leaves at 7:20. „is leaving“ und „will leave“ gehen auch; bei Fahrplänen klingt „leaves“ am natürlichsten.",
@@ -933,7 +939,9 @@
     "am planning to visit",
     "'m planning to visit",
     "will visit",
-    "'ll visit"
+    "'ll visit",
+    "am planning on visiting",
+    "'m planning on visiting"
    ],
    "expl": "Ein Plan oder eine Absicht → going to (Present Continuous ist bei fester Verabredung auch möglich).",
    "expl_en": "A plan or intention → going to (the Present Continuous is also possible for a fixed arrangement)."
@@ -1452,7 +1460,8 @@
    "answer": "sign",
    "accepted": [
     "have signed",
-    "'ve signed"
+    "'ve signed",
+    "can sign"
    ],
    "hint": "(sign)",
    "expl": "First Conditional: If + Present Simple. Kein „will“ im if-Teil.",
@@ -1506,7 +1515,9 @@
     "wasn't spending",
     "weren't spending",
     "was not spending",
-    "were not spending"
+    "were not spending",
+    "didn't have to spend",
+    "did not have to spend"
    ],
    "hint": "(not / spend)",
    "expl": "Second Conditional: If + Past Simple. Verneint: didn't + Infinitiv. „wasn't/weren't spending“ geht auch und betont die Dauer.",
@@ -1864,7 +1875,20 @@
     "is being presented",
     "'ll be presented",
     "'s going to be presented",
-    "is to be presented"
+    "is to be presented",
+    "will be showcased",
+    "'ll be showcased",
+    "is going to be showcased",
+    "will be shown",
+    "'ll be shown",
+    "will be displayed",
+    "'ll be displayed",
+    "will be exhibited",
+    "'ll be exhibited",
+    "will be unveiled",
+    "'ll be unveiled",
+    "will be launched",
+    "'ll be launched"
    ],
    "hint": "(present)",
    "expl": "Für das Passiv in der Zukunft nimmst du „will be“ + 3. Verbform: The product will be presented next week.",
@@ -1877,7 +1901,11 @@
    "answer": "have been made",
    "accepted": [
     "are made",
-    "'ve been made"
+    "'ve been made",
+    "have been implemented",
+    "'ve been implemented",
+    "have been completed",
+    "'ve been completed"
    ],
    "hint": "(make)",
    "expl": "Abgeschlossen bis zum Unterschreiben → Present Perfect Passiv: have been + Partizip.",
@@ -1901,7 +1929,10 @@
     "'s been stolen"
    ],
    "expl": "Present Perfect Passiv: has/have been + Partizip.",
-   "expl_en": "Present Perfect passive: has/have been + past participle."
+   "expl_en": "Present Perfect passive: has/have been + past participle.",
+   "alt": [
+    "was stolen"
+   ]
   },
   {
    "topic": "passive",
@@ -1913,7 +1944,10 @@
     "needs to be updated"
    ],
    "expl": "Das Passiv mit einem Modalverb bildest du mit „be“ + 3. Verbform: The contract must be updated.",
-   "expl_en": "Form the passive with a modal verb with “be” + past participle: The contract must be updated."
+   "expl_en": "Form the passive with a modal verb with “be” + past participle: The contract must be updated.",
+   "alt": [
+    "needs updating"
+   ]
   },
   {
    "topic": "passive",
@@ -2991,7 +3025,8 @@
    "prompt": "There are many reasons for the delay. The main one is that we don't have enough staff. → The main reason for the delay is ___ lack of staff.",
    "answer": "a",
    "accepted": [
-    "the"
+    "the",
+    "our"
    ],
    "expl": "Feste Verbindung: a lack of (the lack of ist auch möglich).",
    "expl_en": "Fixed combination: a lack of (the lack of is also possible)."

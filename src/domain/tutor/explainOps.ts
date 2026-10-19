@@ -1,7 +1,6 @@
 import { alignWords } from '../answer/align';
-import { typoBudget } from '../answer/check';
-import { editDistance } from '../answer/diff';
 import { BRITISH } from '../c1x/kinds/common';
+import { wordTypo } from '../grammar/check';
 import { familyOf, patternById, patternsOf } from '../grammar/patterns';
 import { legacyNorm } from '../grammar/key';
 import { wordCount } from '../text/textStats';
@@ -17,16 +16,13 @@ export const OPS_MAX = 6;
 export function explainOps(given: string, answer: string): ExplainOp[] {
   if (!given.trim() || !answer.trim()) return [];
   const out: ExplainOp[] = [];
-  for (const o of alignWords(given, answer, { typo: isTypo })) {
+  for (const o of alignWords(given, answer, { typo: wordTypo })) {
     if (o.op === 'eq') continue;
     out.push({ op: o.op, g: o.given ?? '', e: o.expected ?? '' });
     if (out.length >= OPS_MAX) break;
   }
   return out;
 }
-
-/** Tippfehler wie bei der Prüfung getippter Antworten: kleiner Abstand je nach Wortlänge (`typoBudget`). */
-const isTypo = (a: string, b: string): boolean => a.length >= 5 && editDistance(a, b) <= typoBudget(Math.max(a.length, b.length));
 
 export type NeighborRef = { id: string; name: string };
 export const NEIGHBORS_MAX = 4;

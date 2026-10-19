@@ -12,7 +12,7 @@
         "de": "Etwas begann früher und gilt bis jetzt: Englisch nimmt dafür das Present Perfect, nicht das Präsens wie im Deutschen mit „seit“.",
         "en": "Something started in the past and is still true: English uses the present perfect here, not the present tense German uses with \"seit\"."
       },
-      "bad": "\\b(?:i|we|they|you)\\s+(?:work|know|use|sell|live|am|are)\\b[^.?!,]{0,30}\\bsince\\b"
+      "bad": "\\b(?:i|we|they|you)\\s+(?:work|know|use|sell|live|am|are)\\b[^.?!,]{0,30}\\bsince\\s+(?:\\d|last\\b|early\\b|then\\b|yesterday\\b|(?:january|february|march|april|may|june|july|august|september|october|november|december|monday|tuesday|wednesday|thursday|friday|saturday|sunday)\\b|the\\s+(?:start|beginning|launch|merger|kickoff|pilot|go-live)\\b|(?:i|we|they|you)\\s+(?:joined|started|moved|launched|met|signed)\\b)"
     },
     {
       "id": "l1:seit-verlauf",
@@ -25,7 +25,7 @@
         "de": "Eine Handlung läuft seit einem Zeitpunkt bis jetzt: have/has been + -ing. Die Verlaufsform im Präsens (I am waiting) reicht nicht bis in die Vergangenheit.",
         "en": "An action has been going on since a point in the past: have/has been + -ing. The present continuous (I am waiting) does not reach back into the past."
       },
-      "bad": "\\b(?:am|are|is|['’]m|['’]re)\\s+[a-z]+ing\\b[^.?!,]{0,30}\\bsince\\b"
+      "bad": "\\b(?:am|are|is|['’]m|['’]re)\\s+[a-z]+ing\\b[^.?!,]{0,30}\\bsince\\s+(?:\\d|last\\b|early\\b|then\\b|yesterday\\b|(?:january|february|march|april|may|june|july|august|september|october|november|december|monday|tuesday|wednesday|thursday|friday|saturday|sunday)\\b|the\\s+(?:start|beginning|launch|merger|kickoff|pilot|go-live)\\b|(?:i|we|they|you)\\s+(?:joined|started|moved|launched|met|signed)\\b)"
     },
     {
       "id": "l1:since-zeitraum",
@@ -64,7 +64,7 @@
         "de": "discuss steht direkt mit dem Objekt, ohne about. Nur das Nomen hat about: a discussion about the price.",
         "en": "Discuss takes a direct object, without about. Only the noun takes about: a discussion about the price."
       },
-      "bad": "\\bdiscuss(?:es|ed|ing)?\\s+about\\b"
+      "bad": "\\bdiscuss(?:es|ed|ing)?\\s+about\\b(?!\\s+(?:\\d|a\\s+dozen|half|twenty|thirty|a\\s+hundred))"
     },
     {
       "id": "l1:explain-me",
@@ -77,7 +77,7 @@
         "de": "Die Person kommt mit to nach der Sache: explain something to someone. „explain me“ ist falsch.",
         "en": "The person comes after the thing, with to: explain something to someone. \"Explain me\" is wrong."
       },
-      "bad": "\\bexplain(?:s|ed|ing)?\\s+(?:me|us|him)\\b"
+      "bad": "\\bexplain(?:s|ed|ing)?\\s+(?:me|us|him)\\b(?!\\s+(?:sales|tax|taxes|law|laws|market|markets|pricing|customers|clients|companies|regulations|rules|dollars?)\\b)"
     },
     {
       "id": "l1:say-me",
@@ -90,7 +90,7 @@
         "de": "Mit Person direkt danach steht tell (tell me). say braucht to vor der Person (say to me) und wird meist ohne Person benutzt.",
         "en": "With a person right after the verb, use tell (tell me). Say needs to before the person (say to me) and usually goes without one."
       },
-      "bad": "\\bsa(?:y|ys|id|ying)\\s+(?:me|us|him)\\b"
+      "bad": "\\bsa(?:y|ys|id|ying)\\s+(?:me|us|him)\\b(?!\\s+(?:sales|tax|taxes|law|laws|market|markets|pricing|customers|clients|companies|regulations|rules|dollars?)\\b)"
     },
     {
       "id": "l1:suggest-to",
@@ -103,7 +103,7 @@
         "de": "Nach suggest folgt -ing oder ein that-Satz (I suggest that we move …), nie to + Grundform.",
         "en": "Suggest is followed by -ing or a that-clause (I suggest that we move …), never by to + base verb."
       },
-      "bad": "\\bsuggest(?:s|ed|ing)?\\s+(?:(?:you|him|them|us)\\s+)?to\\s+(?!the\\b|a\\b|an\\b|my\\b|our\\b|your\\b|his\\b|her\\b|their\\b|him\\b|them\\b|us\\b|me\\b)[a-z]+\\b"
+      "bad": "\\bsuggest(?:s|ed|ing)?\\s+(?:(?:you|him|her|them|us|me)\\s+)?to\\s+(?:not\\s+)?(?:call|send|move|wait|meet|use|start|postpone|delay|offer|go|do|have|make|try|ask|book|schedule|review|sign|check|talk|discuss|focus|reduce|increase|cancel|keep|add|change|consider|look|set|hold|push|run|stop|switch|take|give|get|buy|pay|order|update|prepare|involve|contact)\\b"
     },
     {
       "id": "l1:look-forward-inf",
@@ -116,7 +116,7 @@
         "de": "to ist hier eine Präposition, deshalb folgt -ing: look forward to meeting, nicht to meet.",
         "en": "Here to is a preposition, so -ing follows: look forward to meeting, not to meet."
       },
-      "bad": "\\blook(?:ing|s)?\\s+forward\\s+to\\s+(?:meet|see|hear|work|talk|speak|discuss|receive|get|start|welcome)\\b"
+      "bad": "\\blook(?:ing|s|ed)?\\s+forward\\s+to\\s+(?:meet|see|hear|work|talk|speak|discuss|receive|get|start|welcome)\\b"
     },
     {
       "id": "l1:avoid-to",
@@ -155,7 +155,7 @@
         "de": "Im if-Teil steht die Vergangenheitsform (If I had), would nur im anderen Satzteil. Das deutsche „würde“ im wenn-Satz wird nicht übernommen.",
         "en": "The if-clause takes the past form (If I had); would belongs only in the other clause. German \"würde\" in the if-clause does not carry over."
       },
-      "bad": "\\bif\\s+(?:i|we)\\s+would\\s+(?:have|be|know)\\b"
+      "bad": "(?<!\\b(?:wonder|wondering|wondered|ask|asked|asking|know|sure|see|check|doubt|unclear)\\s)\\bif\\s+(?:i|we)\\s+would(?:\\s+not|n't)?\\s+(?:have|be|know|need|get|spend|pay|lose|sign|buy|go|make|take|send|wait|start)\\b"
     },
     {
       "id": "l1:will-zeitsatz",
@@ -168,7 +168,7 @@
         "de": "Nach when, as soon as, once, until mit Zukunftsbedeutung steht das Präsens, will nur im Hauptsatz.",
         "en": "After when, as soon as, once and until with future meaning, use the present tense; will goes only in the main clause."
       },
-      "bad": "\\b(?:as\\s+soon\\s+as|once|until)\\s+(?:i|we|you|they|he|she)\\s+will\\b|^\\s*when\\s+(?:i|we)\\s+will\\b"
+      "bad": "\\b(?:as\\s+soon\\s+as|once|until)\\s+(?:i|we|you|they|he|she|it|the\\s+\\w+|our\\s+\\w+|all\\s+the\\s+\\w+)\\s+will\\b|^\\s*when\\s+(?:i|we)\\s+will\\b"
     },
     {
       "id": "l1:praesens-fuer-zukunft",
@@ -181,7 +181,7 @@
         "de": "Ein Versprechen oder eine spontane Zusage braucht will. Das deutsche Präsens mit Zeitangabe trägt das nicht.",
         "en": "A promise or a spontaneous offer needs will. The German present tense with a time word does not carry over."
       },
-      "bad": "\\b(?:i|we)\\s+(?:call|send|write|email|check|ask|forward)\\s+(?:(?:you|it|them|him|her)\\s+)?(?:(?:back|the\\s+\\w+|an?\\s+\\w+)\\s+)?(?:tomorrow|later\\s+today|next\\s+week|on\\s+monday|on\\s+friday)\\b"
+      "bad": "(?<!\\b(?:if|when|once|unless|before|after|until|as\\s+soon\\s+as|shall|should|can|could|may|might|must|will|would|do|did|don't|didn't|suggest|suggested|recommend|recommended|propose|proposed|maybe|perhaps)\\s)\\b(?:i|we)\\s+(?:call|send|write|email|check|ask|forward)\\s+(?:(?:you|it|them|him|her)\\s+)?(?:(?:back|the\\s+\\w+|an?\\s+\\w+)\\s+)?(?:tomorrow|later\\s+today|next\\s+week|on\\s+monday|on\\s+friday)\\b"
     },
     {
       "id": "l1:perfekt-mit-zeitpunkt",
@@ -194,7 +194,7 @@
         "de": "Mit einem abgeschlossenen Zeitpunkt (yesterday, last week, two days ago) steht das Past Simple. Das deutsche Perfekt wird hier nicht zum Present Perfect.",
         "en": "With a finished time (yesterday, last week, two days ago) English uses the past simple. The German Perfekt does not become the present perfect here."
       },
-      "bad": "\\b(?:have|has)\\s+(?:already\\s+)?(?:[a-z]+ed|sent|sold|met|seen|spoken|written|signed|made|done|got|gotten|been)\\b(?:(?!\\bsince\\b)[^.?!]){0,25}\\b(?:yesterday|ago|last\\s+(?:week|month|year|monday|tuesday|wednesday|thursday|friday))\\b"
+      "bad": "\\b(?:have|has)\\s+(?:already\\s+)?(?:[a-z]+ed|sent|sold|met|seen|spoken|written|signed|made|done|got|gotten|been)\\b(?:(?!\\bsince\\b)[^.?!]){0,25}(?<!\\b(?:from|of|than|until|since)\\s)\\b(?:yesterday|ago|last\\s+(?:week|month|year|monday|tuesday|wednesday|thursday|friday))\\b(?!['’]s)"
     },
     {
       "id": "l1:mustnt-dont-have-to",
@@ -208,7 +208,7 @@
         "en": "\"Nicht müssen\" means don't have to (no obligation). Mustn't means something is not allowed."
       },
       "bad": "\\bmust\\s*n['’]?t\\b|\\bmust\\s+not\\b",
-      "when": "\\b(?:do|does|did)\\s*(?:n['’]t|\\s+not)\\s+(?:have|need)\\s+to\\b"
+      "when": "\\b(?:do|does|did)\\s*(?:n['’]t|\\s+not)\\s+(?:have|need)\\s+to\\b|\\bneed\\s*n['’]t\\b|\\bneed\\s+not\\b"
     },
     {
       "id": "l1:bis-by-until",
@@ -222,7 +222,7 @@
         "en": "\"Bis\" as a deadline (at the latest) is by. Until means something continues up to that point (We are closed until Monday)."
       },
       "bad": "\\buntil\\b",
-      "when": "\\bby\\b"
+      "when": "\\bby\\s+(?:the\\s+end|eod|noon|tomorrow|tonight|then|next|\\d|monday|tuesday|wednesday|thursday|friday|saturday|sunday|january|february|march|april|may|june|july|august|september|october|november|december)"
     },
     {
       "id": "l1:waehrend-during",
@@ -261,7 +261,7 @@
         "de": "although braucht einen ganzen Satz mit Verb (although the price was high). Vor einem Nomen steht despite.",
         "en": "Although needs a full clause with a verb (although the price was high). Before a noun, use despite."
       },
-      "bad": "\\balthough\\s+(?:the|a|an|our|this|their|its)\\s+[a-z]+\\s*,"
+      "bad": "\\balthough\\s+(?:the|a|an|our|their|its)\\s+[a-z]+\\s*,(?!\\s*(?:who|which|whose)\\b)"
     },
     {
       "id": "l1:informationen",
@@ -326,7 +326,7 @@
         "de": "Eine Entscheidung „macht“ man: make a decision. „treffen“ wird hier nicht zu meet.",
         "en": "In English you make a decision. German \"treffen\" does not become meet here."
       },
-      "bad": "\\b(?:meet|meets|met)\\s+(?:a\\s+|the\\s+|this\\s+|our\\s+|any\\s+)?decisions?\\b"
+      "bad": "\\b(?:meet|meets|met)\\s+(?:a\\s+|the\\s+|this\\s+|our\\s+|any\\s+)?decisions?\\b(?!\\s+(?:deadline|date|criteria|point))"
     },
     {
       "id": "l1:do-mistake",
@@ -339,7 +339,7 @@
         "de": "Fehler „macht“ man mit make: make a mistake. do passt nicht.",
         "en": "You make a mistake; do does not go with mistake."
       },
-      "bad": "\\b(?:do|does|did|doing|done)\\s+(?:a\\s+|the\\s+|this\\s+|some\\s+|many\\s+|several\\s+|no\\s+|any\\s+)?mistakes?\\b(?!\\s+(?:happen|occur|slip|get|go|appear|show))"
+      "bad": "\\b(?:do|does|did|doing|done)\\s+(?:a\\s+|the\\s+|this\\s+|some\\s+|many\\s+|several\\s+|no\\s+|any\\s+)?mistakes?\\b(?!\\s+(?:happen|occur|slip|get|go|appear|show|affect|cause|matter|mean|count|change|cost))"
     },
     {
       "id": "l1:make-meeting",
@@ -352,7 +352,7 @@
         "de": "Ein Meeting hat oder hält man: have a meeting, hold a meeting, set up a meeting.",
         "en": "You have, hold or set up a meeting."
       },
-      "bad": "\\b(?:make|makes|made|making)\\s+a\\s+(?:short\\s+|quick\\s+)?meeting\\b"
+      "bad": "(?<!\\b(?:can't|cannot|couldn't|won't|can|could)\\s)\\b(?:make|makes|made|making)\\s+a\\s+(?:short\\s+|quick\\s+)?meeting\\b"
     },
     {
       "id": "l1:interested-for",
@@ -378,7 +378,7 @@
         "de": "„teilnehmen an“ heißt participate in oder take part in, nicht at.",
         "en": "\"Teilnehmen an\" is participate in or take part in, not at."
       },
-      "bad": "\\bparticipat(?:e|es|ed|ing)\\s+(?:at|on)\\b|\\b(?:take|takes|took|taking|taken)\\s+part\\s+at\\b"
+      "bad": "\\bparticipat(?:e|es|ed|ing)\\s+at\\b(?!\\s+(?:all|every|each|any|a\\s+high|the\\s+highest|the\\s+same)\\b)|\\b(?:take|takes|took|taking|taken)\\s+part\\s+at\\b"
     },
     {
       "id": "l1:listen-to",
@@ -417,7 +417,7 @@
         "de": "Zwischen Verb und Objekt steht im Englischen nichts: like this tool very much oder really like this tool.",
         "en": "In English nothing goes between the verb and its object: like this tool very much or really like this tool."
       },
-      "bad": "\\b(?:like|love|enjoy|need|want|prefer)\\s+(?:very\\s+much|really|also|always|often)\\s+(?:the|this|that|our|your|it)\\b|\\bspeaks?\\s+(?:very\\s+)?(?:well|good|fluently)\\s+(?:english|german|french|spanish)\\b"
+      "bad": "\\b(?:like|love|enjoy|need|want|prefer)\\s+(?:very\\s+much|really|also|always|often)\\s+(?:the|this|that|our|your|it)\\b|\\bspeaks?\\s+(?:very\\s+)?(?:well|fluently)\\s+(?:english|german|french|spanish)\\b"
     },
     {
       "id": "l1:indirekte-frage",
@@ -456,7 +456,7 @@
         "de": "Nach einem Vergleich (faster, more flexible) steht than. „als“ wird hier nicht zu as.",
         "en": "After a comparative (faster, more flexible) use than. German \"als\" does not become as here."
       },
-      "bad": "\\b(?:(?:more|less)\\s+[a-z]+|bigger|smaller|cheaper|faster|higher|lower|larger|easier|longer|shorter|quicker)\\s+as\\b(?!\\s+(?:a|an|the|well|soon|long|far|much)\\b)"
+      "bad": "\\b(?:(?:more|less)\\s+[a-z]+|bigger|smaller|cheaper|faster|higher|lower|larger|easier|longer|shorter|quicker)\\s+as\\b(?!\\s+(?:a|an|the|well|soon|long|far|much|of|i|we|you|they|he|she|it|our|your|their|its|this|that|these|those|demand|volume|usage|needed|required|necessary|follows|such)\\b)"
     },
     {
       "id": "l1:used-to-oder-past",
@@ -491,7 +491,7 @@
       "example": { "de": "Wenn Sie mir die Datei bitte schicken würden, …", "en": "If you would send me the file, I can start right away." },
       "why": {
         "de": "if you would + Grundform ist eine höfliche Bitte und richtig. Nur in echten Bedingungssätzen (If I had time …) steht kein would im if-Teil.",
-        "en": "If you would + base verb is a polite request and correct. Only in real conditional clauses (If I had time …) does the if-clause avoid would."
+        "en": "If you would + base verb is a polite request and correct. Only in ordinary conditional clauses (If I had time …) does the if-clause avoid would."
       }
     },
     {
@@ -502,8 +502,8 @@
       "trigger_de": "werden (Zukunft): will oder going to",
       "example": { "de": "Wir werden nächstes Quartal expandieren.", "en": "We're going to expand next quarter. (We will expand next quarter. is also correct.)" },
       "why": {
-        "de": "Für Pläne passen going to und will oft beide. going to betont den schon gefassten Plan, will die Entscheidung oder Vorhersage.",
-        "en": "For plans, going to and will often both work. Going to stresses a plan already made; will stresses a decision or a prediction."
+        "de": "Für Pläne passen going to und will oft beide. going to betont den schon gefassten Plan, will die spontane Entscheidung, das Versprechen oder die Vorhersage.",
+        "en": "For plans, going to and will often both work. Going to stresses a plan already made; will stresses a spontaneous decision, a promise or a prediction."
       }
     },
     {
@@ -524,11 +524,141 @@
       "vs": "rc.that-what",
       "kind": "note",
       "trigger_de": "der/die/das (Relativpronomen als Objekt)",
-      "example": { "de": "Das ist das Angebot, das wir geschickt haben.", "en": "This is the offer we sent. (This is the offer that we sent. is also correct.)" },
+      "example": { "de": "Das ist das Angebot, das wir geschickt haben.", "en": "This is the quote we sent. (This is the quote that we sent. is also correct.)" },
       "why": {
         "de": "Ist das Relativpronomen das Objekt, kann that/which wegfallen. Beide Fassungen sind richtig.",
         "en": "When the relative pronoun is the object, that/which can be left out. Both versions are correct."
       }
+    },
+    {
+      "id": "l1:how-long-present",
+      "pat": "psp.since-for",
+      "vs": "psc.habit",
+      "kind": "error",
+      "trigger_de": "Wie lange … schon? (Wie lange arbeiten Sie schon hier?)",
+      "example": { "de": "Wie lange arbeiten Sie schon mit dem System?", "en": "How long have you been working with the system?" },
+      "why": {
+        "de": "„Wie lange … schon?“ fragt nach der Zeit bis jetzt: How long have you …, nicht How long do/are you …",
+        "en": "To ask about the time up to now, use how long have you … (present perfect), not how long do/are you …"
+      },
+      "bad": "\\bhow\\s+long\\s+(?:do|does)\\s+(?:you|we|they|he|she)\\s+(?:work|live|know|use|sell)\\b(?![^.?!]*\\b(?:each|every|per|usually|normally|typically|a\\s+day|a\\s+week)\\b)|\\bhow\\s+long\\s+(?:are|is)\\s+(?:you|we|they|he|she)\\s+(?:working|living|using|selling|waiting)\\b(?![^.?!]*\\b(?:next|tomorrow|tonight|this\\s+(?:week|month|year|summer))\\b)"
+    },
+    {
+      "id": "l1:want-that",
+      "use": "use:want+inf",
+      "vs": "use:want+that",
+      "kind": "error",
+      "trigger_de": "möchten/wollen, dass jemand etwas tut",
+      "example": { "de": "Ich möchte, dass Sie sich das Angebot bis Freitag ansehen.", "en": "I'd like you to review the quote by Friday." },
+      "why": {
+        "de": "Nach want und would like steht kein that-Satz, sondern Person + to + Grundform: I'd like you to review …",
+        "en": "Want and would like do not take a that-clause; use person + to + base verb: I'd like you to review …"
+      },
+      "bad": "\\b(?:want|wants|wanted|wanting|would\\s+like|['’]d\\s+like)\\s+that\\s+(?:you|he|she|we|they|i|it|our|the|my|your|their|his|her)\\b"
+    },
+    {
+      "id": "l1:hold-presentation",
+      "use": "use:give+presentation",
+      "vs": "use:hold+presentation",
+      "kind": "error",
+      "trigger_de": "eine Präsentation / einen Vortrag halten",
+      "example": { "de": "Ich halte nächste Woche die Präsentation beim Kunden.", "en": "I'm giving the presentation to the client next week." },
+      "why": {
+        "de": "Eine Präsentation oder einen Vortrag „gibt“ man: give a presentation, give a talk. hold passt zu Meetings und Konferenzen.",
+        "en": "You give a presentation or a talk. Hold goes with meetings and conferences, not with talks."
+      },
+      "bad": "\\b(?:hold|holds|held|holding)\\s+(?:a|an|the|my|our|his|her|this|that|their)\\s+(?:short\\s+|quick\\s+|brief\\s+|final\\s+)?(?:presentation|speech|talk|lecture|keynote)s?\\b(?!\\s+(?:until|till|for|off|back|over)\\b)"
+    },
+    {
+      "id": "l1:attached-find",
+      "use": "use:attach+file",
+      "vs": "use:find+attachment",
+      "kind": "note",
+      "trigger_de": "Im Anhang / Anbei finden Sie",
+      "example": { "de": "Im Anhang finden Sie das Angebot.", "en": "I've attached the quote. (Please find the quote attached. is also common.)" },
+      "why": {
+        "de": "„In the attachment you will find …“ ist verständlich, klingt aber deutsch. Üblich: I've attached …, Attached is …, Please find … attached.",
+        "en": "\"In the attachment you will find …\" is understandable but sounds German. Common: I've attached …, Attached is …, Please find … attached."
+      },
+      "bad": "\\bin\\s+the\\s+(?:attachment|attached\\s+file|appendix)\\s+you\\s+(?:will\\s+|can\\s+|'ll\\s+)?find\\b"
+    },
+    {
+      "id": "l1:under-number",
+      "use": "use:reach+at",
+      "vs": "use:reach+under",
+      "kind": "error",
+      "trigger_de": "unter dieser Nummer / Adresse / diesem Link",
+      "example": { "de": "Sie erreichen mich unter 0171 2345678.", "en": "You can reach me at 0171 2345678." },
+      "why": {
+        "de": "Bei Nummern und Adressen steht at: at this number, at this address. Bei Links: via this link.",
+        "en": "Numbers and addresses take at: at this number, at this address. For links, say via this link."
+      },
+      "bad": "\\bunder\\s+(?:this|that|the\\s+following|the\\s+above|my|our|his|her|the\\s+same)\\s+(?:phone\\s+number|number|address|email\\s+address|e-mail\\s+address|link|url)\\b|\\b(?:reach|call|contact)\\s+(?:me|us|him|her)\\s+under\\s+\\+?\\d"
+    },
+    {
+      "id": "l1:on-phone",
+      "use": "use:phone+on",
+      "vs": "use:phone+in",
+      "kind": "error",
+      "trigger_de": "im Internet / am Telefon",
+      "example": { "de": "Ich war den ganzen Morgen am Telefon.", "en": "I was on the phone all morning." },
+      "why": {
+        "de": "Internet und Telefon nehmen on: on the internet, on the phone.",
+        "en": "Internet and phone take on: on the internet, on the phone."
+      },
+      "bad": "\\bin\\s+the\\s+internet\\b(?!\\s+(?:age|era))|\\bat\\s+the\\s+phone\\b(?!\\s+(?:store|shop|booth|desk))"
+    },
+    {
+      "id": "l1:feedback",
+      "pat": "cnt.uncount",
+      "vs": "use:feedback+plural",
+      "kind": "error",
+      "trigger_de": "Feedbacks / ein Feedback",
+      "example": { "de": "Danke für das schnelle Feedback!", "en": "Thanks for the quick feedback!" },
+      "why": {
+        "de": "feedback ist nicht zählbar: kein -s und kein a. Für Einzelnes: some feedback, a piece of feedback, comments.",
+        "en": "Feedback is uncountable: no -s and no a. For single items: some feedback, a piece of feedback, comments."
+      },
+      "bad": "\\bfeedbacks\\b|\\ba\\s+(?:quick\\s+|short\\s+|good\\s+|positive\\s+|negative\\s+|first\\s+)?feedback\\b(?!\\s+(?:loop|form|session|survey|call|round|meeting|request|tool|mechanism|cycle|button|channel|process))"
+    },
+    {
+      "id": "l1:question-to",
+      "use": "use:question+for",
+      "vs": "use:question+to",
+      "kind": "error",
+      "trigger_de": "eine Frage an Sie haben",
+      "example": { "de": "Ich habe eine kurze Frage an Sie zum Vertrag.", "en": "I have a quick question for you about the contract." },
+      "why": {
+        "de": "Eine Frage „an“ jemanden ist a question for someone.",
+        "en": "A question you want someone to answer is a question for that person."
+      },
+      "bad": "\\b(?:have|got|had|has)\\s+(?:a|one|another|some|two|three|a\\s+few)\\s+(?:quick\\s+|short\\s+|small\\s+|brief\\s+)?questions?\\s+to\\s+(?:you|him|her|them|the\\s+team|everyone|all\\s+of\\s+you)\\b"
+    },
+    {
+      "id": "l1:make-break",
+      "use": "use:take+break",
+      "vs": "use:make+break",
+      "kind": "error",
+      "trigger_de": "Pause / Urlaub machen",
+      "example": { "de": "Lass uns zehn Minuten Pause machen.", "en": "Let's take a ten-minute break." },
+      "why": {
+        "de": "Pausen und Urlaub „nimmt“ man: take a break, take a vacation; auch go on vacation.",
+        "en": "You take a break or take a vacation; you can also go on vacation."
+      },
+      "bad": "\\b(?:make|makes|made|making)\\s+(?:a\\s+)?(?:short\\s+|quick\\s+|little\\s+|\\w+-minute\\s+)?(?:break|pause|vacation|holiday|holidays)\\b(?!\\s+(?:for|plans?|arrangements|bookings|reservations|requests?)\\b)"
+    },
+    {
+      "id": "l1:angebot-quote",
+      "use": "use:send+quote",
+      "vs": "use:send+offer",
+      "kind": "note",
+      "trigger_de": "ein (Preis-)Angebot schicken / erstellen",
+      "example": { "de": "Ich schicke Ihnen bis Freitag ein Angebot.", "en": "I'll send you a quote by Friday. (A detailed one is a proposal.)" },
+      "why": {
+        "de": "Ein Preisangebot heißt im US-Vertrieb meist quote, ein ausführliches proposal. offer ist nicht falsch, klingt aber nach Sonderangebot oder Jobangebot.",
+        "en": "In US sales a price offer is usually a quote; a detailed one is a proposal. Offer is not wrong but sounds like a special deal or a job offer."
+      },
+      "bad": "\\b(?:send|sends|sent|sending|prepare|prepared|preparing|create|created|revise|revised|update|updated)\\s+(?:you\\s+|him\\s+|her\\s+|them\\s+|us\\s+)?(?:a|an|the|our|my|your|this|that)\\s+(?:new\\s+|revised\\s+|updated\\s+|final\\s+)?offer\\b(?!\\s+letter)"
     }
   ]
 }

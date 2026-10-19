@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { alignWords, countOps } from '../../src/domain/answer/align';
-import { checkGrammar } from '../../src/domain/grammar/check';
+import { altFamily, checkGrammar, wordTypo } from '../../src/domain/grammar/check';
 import { alsoRight, examplesFor, formHint, ruleOf } from '../../src/domain/grammar/rules';
 import { learnGrade } from '../../src/domain/learn/grade';
 import { task } from './learnHelpers';
@@ -21,10 +21,41 @@ describe('checkGrammar', () => {
   });
 
   it('„Auch richtig"-Familien des Regelwerks', () => {
-    const t = task({ topic: 'relative', prompt: 'The report ___ you sent was great.', answer: 'that' });
-    expect(checkGrammar(t, 'which')).toMatchObject({ verdict: 'correct', kind: 'alt' });
+    // which/who für „that“ nur, wenn genau dieses Wort schon in Lösung oder accepted steht (Gegenlesung Englischlehrer).
+    const t = task({ topic: 'relative', prompt: 'The report ___ you sent was great.', answer: 'which' });
+    expect(checkGrammar(t, 'that')).toMatchObject({ verdict: 'correct', kind: 'alt' });
+    const thatOnly = task({ topic: 'relative', prompt: 'The report ___ you sent was great.', answer: 'that' });
+    expect(checkGrammar(thatOnly, 'who').verdict).toBe('wrong');
+    expect(checkGrammar(thatOnly, 'which').verdict).toBe('wrong');
     const w = task({ topic: 'future-forms', prompt: 'Look at the clouds – it ___ rain.', answer: 'is going to' });
     expect(checkGrammar(w, 'will')).toMatchObject({ verdict: 'correct', kind: 'alt' });
+  });
+
+  it('Familien abgesichert: perfCont nur Verlaufsform → einfache Form, thatOpt nur vor Subjekt, wereWas nur im Singular, gerInf über die Grundform', () => {
+    const pc = (answer: string, given: string) => altFamily({ topic: 'pres-perf-cont', prompt: 'I ___ on this project for two years.', answer }, given);
+    expect(pc('have been working', 'have worked')).toBe('perfCont');
+    expect(pc('have been studying', 'have studied')).toBe('perfCont');
+    expect(altFamily({ topic: 'future-perf-cont', prompt: 'By Friday, I ___ the invoices.', answer: 'will have sent' }, 'will have been sending')).toBeNull();
+    const rel = (answer: string, given: string) => altFamily({ topic: 'relative', prompt: 'This is the supplier ___ the order.', answer }, given);
+    expect(rel('that we chose for', 'we chose for')).toBe('thatOpt');
+    expect(rel('that closed', 'closed')).toBeNull();
+    const cond = (prompt: string, given: string) => altFamily({ topic: 'conditionals', prompt, answer: 'were' }, given);
+    expect(cond('If I ___ you, I would sign.', 'was')).toBe('wereWas');
+    expect(cond('If our prices ___ lower, we would sell more.', 'was')).toBeNull();
+    const gi = (prompt: string, answer: string, given: string) => altFamily({ topic: 'gerund-inf', prompt, answer }, given);
+    expect(gi('He likes ___ from home.', 'working', 'to work')).toBe('gerInf');
+    expect(gi('We started ___ a new plan.', 'to make', 'making')).toBe('gerInf');
+    expect(gi('They continued ___ the budget.', 'planning', 'to plan')).toBe('gerInf');
+  });
+
+  it('Tippfehler nur innerhalb eines Worts: Artikel, Präpositionen und Endungen nie', () => {
+    expect(wordTypo('finsihed', 'finished')).toBe(true);
+    expect(wordTypo('a', 'an')).toBe(false);
+    expect(wordTypo('in', 'on')).toBe(false);
+    expect(wordTypo('works', 'work')).toBe(false);
+    expect(wordTypo('studied', 'studies')).toBe(false);
+    const art = task({ type: 'correct', topic: 'articles', prompt: 'She gave me an advice.', answer: 'She gave me advice.', accepted: ['She gave me some advice.'] });
+    expect(checkGrammar(art, 'She gave me a advice.').verdict).toBe('wrong');
   });
 
   it('Tippfehler → fast richtig; falsche Form → falsch (die Form ist der Lernstoff)', () => {
