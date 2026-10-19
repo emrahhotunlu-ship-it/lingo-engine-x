@@ -95,7 +95,7 @@ type Feedback = {
 
 const PURPOSE: Record<number, MessageKey> = { 1: 'purpose1', 2: 'purpose2', 3: 'purpose3', 4: 'purpose4', 5: 'purpose5' };
 /** Freie Tipp-Arten: „Tipp“ deckt Platzhalter bzw. den ersten Buchstaben auf (zählt als Hilfe). */
-const FREE_TYPED: ReadonlySet<ExerciseId> = new Set(['cloze', 'type', 'situation', 'colloc', 'wordfam']);
+const FREE_TYPED: ReadonlySet<ExerciseId> = new Set(['cloze', 'cloze_part', 'type', 'situation', 'colloc', 'wordfam']);
 /**
  * Arten, deren Frage die deutsche Bedeutung nach der Antwort noch zeigt – im Ergebnis nicht noch einmal (H3, Kap. 15).
  * Die Erklär-Karte nennt die Bedeutung nie als eigene Zeile; sie steht im Satz bzw. in „Merke“.
@@ -105,7 +105,7 @@ const ANSWER_IS_DE: ReadonlySet<ExerciseId> = new Set(['mc_en', 'ctx_mc', 'liste
 const MEANING_SHOWN: ReadonlySet<ExerciseId> = new Set(['mc_de', 'type', 'match', 'situation']);
 const LISTEN: ReadonlySet<ExerciseId> = new Set(['listen_mc', 'dictation']);
 /** „Erst ein Hinweis, dann die Lösung“: getippte Arten mit zweitem Versuch. Nicht Diktat, nicht Auswahl, nie im Wochen-Check (`noHelp`). */
-const RETRY_EX: ReadonlySet<ExerciseId> = new Set(['cloze_hint', 'cloze', 'type', 'situation', 'colloc', 'wordfam']);
+const RETRY_EX: ReadonlySet<ExerciseId> = new Set(['cloze_hint', 'cloze', 'cloze_part', 'type', 'situation', 'colloc', 'wordfam']);
 /** Arten mit einer Satzantwort (Claude prüft, lokal nur eine grobe Prüfung). */
 const SENTENCE_EX: ReadonlySet<ExerciseId> = new Set(['complete', 'produce', 'act_scene', 'act_rewrite', 'act_impulse', 'act_combo', 'act_mail']);
 // Feste leere Referenz statt `?? []` im Selektor (sonst rendert die Karte endlos neu, React-Fehler #185).
@@ -119,7 +119,7 @@ const escapeRe = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 const CHOICE_LANGS = { de: 'de', en: 'en' } as const;
 
 /** Höchste Tipp-Stufe je Art: getippte Arten und Auswahl 2, Falle finden und Diktat 1, Satzantworten keiner. */
-const maxTipOf = (ex: ExerciseId, input: Exercise['input'], hiddenAct = false): 0 | 1 | 2 => (SENTENCE_EX.has(ex) ? (hiddenAct ? 1 : 0) : FREE_TYPED.has(ex) || input === 'choice' ? 2 : 1);
+const maxTipOf = (ex: ExerciseId, input: Exercise['input'], hiddenAct = false): 0 | 1 | 2 => (ex === 'fits' ? 0 : SENTENCE_EX.has(ex) ? (hiddenAct ? 1 : 0) : FREE_TYPED.has(ex) || input === 'choice' ? 2 : 1);
 
 /** Wörter eines Satzes mit Zeichenstellen (für „Falle finden“: angetipptes Wort ↔ Stelle der Falle). */
 function wordsWithOffsets(text: string): Array<{ w: string; start: number; end: number }> {
@@ -150,7 +150,15 @@ export function ExerciseView({
   const api = useHiddenInput();
   const ai = useAiAvailable();
   const tts = useSpeech((s) => s.status === 'ready');
-  const e = exercise;
+  // „Passt das Wort?“: Die Optionen tragen im Bereich Domäne nur ihre Kennung (yes/no); beschriftet wird hier in der Oberflächensprache (Antwort, Lösung und Ergebnis zeigen dann Klartext).
+  const e = useMemo(
+    () =>
+      exercise.ex === 'fits'
+        ? { ...exercise, options: exercise.options.map((o) => ({ ...o, label: t(o.id === 'yes' ? 'fitsYes' : 'fitsNo'), lang })), accepted: [t(exercise.fits?.truth ? 'fitsYes' : 'fitsNo')] }
+        : exercise,
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- nur bei neuer Aufgabe oder anderer Sprache
+    [exercise, lang],
+  );
   const card = e.card;
   // Das Eingabeprofil der Runde (einmal eingefroren, Session) bzw. des Geräts (Wochen-Check).
   const [touch] = useState(() => {
@@ -630,6 +638,7 @@ export function ExerciseView({
       ...(MEANING_SHOWN.has(e.ex) && (e.ex !== 'match' || !e.sentence) ? { meaningShown: true } : {}),
       ...(other ? { otherMeaning: lang === 'de' ? (other.de ?? other.def) : (other.def ?? other.de) } : {}),
       ...(isAlt ? { alt: true } : {}),
+      ...(e.ex === 'fits' && e.fits ? { fits: e.fits } : {}),
       ...(e.ex === 'contrast' && e.contrastWhy ? { contrastWhy: e.contrastWhy[lang] } : {}),
       ...(e.ex === 'contrast' ? { contrastOther: contrastOtherOf(e) } : {}),
       ...((e.ex === 'colloc' || e.ex === 'colloc_gap') && e.colloc ? { colloc: e.colloc } : {}),
@@ -653,7 +662,7 @@ export function ExerciseView({
           ? t(`task_produce_${e.brief.wording + 1}` as MessageKey)
           : t(`task_${exTextKey(e)}` as MessageKey);
   const seeDetail =
-    e.ex === 'mc_en' || e.ex === 'ctx_mc'
+    e.ex === 'mc_en' || e.ex === 'ctx_mc' || e.ex === 'fits'
       ? `${taskText}\n${e.sentence?.sentence ?? card.word}`
       : e.ex === 'situation' && e.situation
         ? `${taskText}\n${e.situation.sceneTitle}\n${e.situation.intent}`
@@ -694,9 +703,9 @@ export function ExerciseView({
   const mask = placeholdersOnly
     ? maskOf(solution, { firstLetter: false })
     : e.ex === 'cloze_hint' || retry?.kind === 'start'
-      ? maskOf(solution, { firstLetter: true })
+      ? maskOf(solution, { firstLetter: true, perWord: card.kind === 'chunk' })
       : FREE_TYPED.has(e.ex) && tip > 0
-        ? maskOf(solution, { firstLetter: e.ex === 'wordfam' || colTyped ? tip >= 1 && !(e.ex === 'wordfam' && tip === 1) : tip >= 2 })
+        ? maskOf(solution, { firstLetter: e.ex === 'wordfam' || colTyped ? tip >= 1 && !(e.ex === 'wordfam' && tip === 1) : tip >= 2, perWord: card.kind === 'chunk' })
         : null;
   const gapReveal = fb && fb.result.verdict !== 'correct' && isTyped ? { solution, given: fb.given.trim() ? fb.given : null } : null;
   const gapNode = (
@@ -853,7 +862,7 @@ export function ExerciseView({
             <mark className="lx-mark text-fg">{card.word}</mark>
           </p>
         )}
-        {(e.ex === 'mc_en' || e.ex === 'ctx_mc') &&
+        {(e.ex === 'mc_en' || e.ex === 'ctx_mc' || e.ex === 'fits') &&
           (e.sentence ? (
             sentence(e.sentence, null, { mark: true })
           ) : (

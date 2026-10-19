@@ -21,6 +21,7 @@ export function sentKey(sentence: string): string {
 /** Formenfamilien: Abfragen, die im Kern dasselbe verlangen, zählen für die Vielfalt als eine Form. */
 const FAMILY: Readonly<Partial<Record<ExerciseId, string>>> = {
   mc_en: 'pick-meaning',
+  fits: 'judge',
   ctx_mc: 'pick-meaning',
   listen_mc: 'pick-meaning',
   mc_de: 'pick-word',
@@ -30,6 +31,7 @@ const FAMILY: Readonly<Partial<Record<ExerciseId, string>>> = {
   cloze_hint: 'gap-hint',
   tiles: 'gap-hint',
   cloze: 'gap',
+  cloze_part: 'gap',
   speed: 'gap',
   colloc_gap: 'colloc',
   colloc: 'colloc',
@@ -55,6 +57,34 @@ export function varietyOf(doc: Readonly<Record<string, unknown>>): Variety {
   const forms = rows.flatMap((h) => (typeof h.x === 'string' && !NOT_A_FORM.has(h.x) ? [h.x] : []));
   const sents = rows.flatMap((h) => (typeof h.s === 'string' && h.s ? [h.s] : []));
   return { forms, sents };
+}
+
+/** Abfragen, die einen Satz zeigen: Ein Verlaufseintrag ohne `s` dieser Arten (aus der Zeit vor dem Satz-Verlauf) zeigte den Ursprungssatz. */
+const SENTENCE_EX: ReadonlySet<string> = new Set(['mc_en', 'fits', 'ctx_mc', 'listen_mc', 'match', 'contrast', 'cloze_hint', 'cloze', 'tiles', 'speed', 'dictation', 'wordfam', 'flip', 'spot', 'find_trap']);
+
+/**
+ * Welche Sätze wurden bisher gezeigt (älteste zuerst)? Einträge mit `s` zählen mit diesem Satz; ältere Einträge ohne `s` aus einer Art mit Satz (oder ohne
+ * Art, ganz alte Daten) zeigten den Ursprungssatz (`originKey`). „Kenne ich“ und Abfragen ohne Satz zählen nicht. Rein, liest nur (WL, 19.10.2026).
+ */
+export function shownSentences(doc: Readonly<Record<string, unknown>>, originKey: string | null): string[] {
+  const raw = Array.isArray(doc.hist) ? (doc.hist as unknown[]) : [];
+  const rows = raw
+    .filter((h): h is Record<string, unknown> => !!h && typeof h === 'object' && typeof (h as Record<string, unknown>).t === 'number')
+    .sort((a, b) => (a.t as number) - (b.t as number));
+  const out: string[] = [];
+  for (const h of rows) {
+    if (typeof h.s === 'string' && h.s) out.push(h.s);
+    else if (originKey && h.m !== 'known' && h.x !== 'known' && (typeof h.x !== 'string' || SENTENCE_EX.has(h.x))) out.push(originKey);
+  }
+  return out;
+}
+
+/** Hat die Karte noch keinen Lerntag hinter sich? Ohne Antworten, oder (mit `day`) alle bisherigen Antworten stammen von diesem Tag: Tag 1, der Ursprungssatz ist der Anker. */
+export function isFirstDay(doc: Readonly<Record<string, unknown>>, day?: string): boolean {
+  const raw = Array.isArray(doc.hist) ? (doc.hist as unknown[]) : [];
+  const ts = raw.flatMap((h) => (h && typeof h === 'object' && typeof (h as Record<string, unknown>).t === 'number' && (h as Record<string, unknown>).m !== 'known' ? [(h as { t: number }).t] : []));
+  if (!ts.length) return true;
+  return day !== undefined && ts.every((t) => dayKey(t) === day);
 }
 
 /** Mindestzahl verschiedener Formenfamilien, bevor eine Karte „Fest“ wird (Auswahl-Vorliebe, ändert die Fest-Definition nicht). */
@@ -97,8 +127,11 @@ export function leastRecent<T>(items: readonly T[], keyOf: (x: T) => string, use
 
 /** Übungsarten, deren Antwort frei gebildet wird (ohne Auswahl und ohne Stütze). `cloze_hint` (Anfangsbuchstabe) und `tiles` (Bausteine) zählen nicht. */
 export const FREE_ANSWER: ReadonlySet<string> = new Set([
-  'cloze', 'type', 'situation', 'wordfam', 'dictation', 'colloc', 'complete', 'speed', 'produce', 'act_scene', 'act_rewrite', 'act_impulse', 'act_combo', 'act_mail',
+  'cloze', 'cloze_part', 'type', 'situation', 'wordfam', 'dictation', 'colloc', 'complete', 'speed', 'produce', 'act_scene', 'act_rewrite', 'act_impulse', 'act_combo', 'act_mail',
 ]);
+
+/** Kleinste Note, die als freier Beleg zählt: Gut. */
+export const FREE_MIN_GRADE = 3;
 
 /** So viele verschiedene Lerntage mit einer richtigen freien Antwort braucht der Aufstieg auf Stufe 4 und 5. */
 export const FREE_DAYS_FOR_ADVANCE = 2;
@@ -109,21 +142,35 @@ export const freeDaysNeeded = (next: number): number => FREE_DAYS_FOR_ADVANCE + 
 type Answer = { t: number; ex: string; grade: number; /** Index des Partnerworts (Treffer am Partnerwort ist kein freier Beleg für das Hauptwort). */ ci?: number };
 
 /**
- * Wie viele verschiedene Tage haben eine richtige (Note ≥ 2) freie Antwort in den letzten gespeicherten Antworten (`hist`, höchstens 12)?
+ * Wie viele verschiedene Tage haben eine gute (Note ≥ 3, `FREE_MIN_GRADE`) freie Antwort in den letzten gespeicherten Antworten (`hist`, höchstens 12)?
  * `extra` = die Antwort, die gerade gegeben wird. Ungeprüfte Antworten (`u: 1`: Aktivierung ohne Claude, Satz ohne Prüfung) zählen nicht, ebenso wenig
  * Treffer am Partnerwort (`colloc` mit `ci`): sie zeigen das Partnerwort, nicht den freien Abruf des Hauptworts (Lernwissenschaft M3).
+ * `cloze_part` (ein Wort einer Wendung als freie Lücke, WL) zählt nur für den Aufstieg auf Stufe 4 (`next` = 4) und dort für höchstens EINEN Tag;
+ * der zweite Tag muss eine ganze Wendung sein. Für Stufe 5 und ohne `next` zählt es nie.
  */
-export function freeCorrectDays(doc: Readonly<Record<string, unknown>>, extra?: Answer): number {
+export function freeCorrectDays(doc: Readonly<Record<string, unknown>>, extra?: Answer, next?: number): number {
   const raw = Array.isArray(doc.hist) ? (doc.hist as unknown[]) : [];
   const days = new Set<string>();
+  const partDays = new Set<string>();
   for (const h of raw) {
     if (!h || typeof h !== 'object') continue;
     const r = h as Record<string, unknown>;
     if (typeof r.t !== 'number' || typeof r.x !== 'string' || typeof r.g !== 'number') continue;
-    if (r.u === 1 || !FREE_ANSWER.has(r.x) || r.g < 2) continue;
+    // WL (19.10.2026): „Schwer“ (2) ist kein freier Beleg – nur Gut (3) und Leicht (4) zählen.
+    if (r.u === 1 || !FREE_ANSWER.has(r.x) || r.g < FREE_MIN_GRADE) continue;
     if (r.x === 'colloc' && typeof r.ci === 'number') continue;
-    days.add(dayKey(r.t));
+    (r.x === 'cloze_part' ? partDays : days).add(dayKey(r.t));
   }
-  if (extra && FREE_ANSWER.has(extra.ex) && extra.grade >= 2 && !(extra.ex === 'colloc' && extra.ci !== undefined && extra.ci >= 0)) days.add(dayKey(extra.t));
+  if (extra && FREE_ANSWER.has(extra.ex) && extra.grade >= FREE_MIN_GRADE && !(extra.ex === 'colloc' && extra.ci !== undefined && extra.ci >= 0)) (extra.ex === 'cloze_part' ? partDays : days).add(dayKey(extra.t));
+  if (next === 4) {
+    const extraDay = [...partDays].find((d) => !days.has(d));
+    if (extraDay) days.add(extraDay);
+  }
   return days.size;
+}
+
+/** Wie viele verschiedene Tage haben eine gute `cloze_part`-Antwort? (Für die Wahl der Art bei Wendungen auf Stufe 3.) */
+export function partDaysOf(doc: Readonly<Record<string, unknown>>): number {
+  const raw = Array.isArray(doc.hist) ? (doc.hist as unknown[]) : [];
+  return new Set(raw.flatMap((h) => (h && typeof h === 'object' && (h as Record<string, unknown>).x === 'cloze_part' && typeof (h as Record<string, unknown>).t === 'number' && ((h as Record<string, unknown>).g as number) >= FREE_MIN_GRADE && (h as Record<string, unknown>).u !== 1 ? [dayKey((h as { t: number }).t)] : []))).size;
 }

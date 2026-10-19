@@ -81,6 +81,8 @@ export type ExplainWordInput = {
   contrastWhy?: string | null;
   /** `contrast` (P52): das richtige (andere) Wort mit Kurzbedeutung. Die Kopfzeile nennt es, die Kontrastzeile steht immer (auch bei richtiger Antwort). */
   contrastOther?: { word: string; meaning: string | null } | null;
+  /** `fits` (WL): Stimmte der Satz (das Wort passt) oder stand das Kartenwort in einem fremden Satz? Dann ist `foil` das Wort, das dort eigentlich steht. */
+  fits?: { truth: boolean; foil: { word: string; meaning: string | null } | null } | null;
   /** „Wortpartner“ (`colloc`, `colloc_gap`): die geübte Verbindung. Kopf, Merke und Beispiele nennen SIE, das Kartenwort nur als Zusatz. */
   colloc?: Pick<Colloc, 'p' | 'de' | 'gap' | 'opts'> | null;
 };
@@ -97,7 +99,28 @@ function showsColloc(sentence: string, c: Pick<Colloc, 'p' | 'gap'>, lemma: stri
   return !!c.gap && !!locate(sentence, c.gap) && !!locate(sentence, lemma);
 }
 
-const CHOICE_EX: ReadonlySet<ExerciseId> = new Set(['mc_en', 'mc_de', 'ctx_mc', 'listen_mc', 'match', 'colloc_gap', 'contrast']);
+const CHOICE_EX: ReadonlySet<ExerciseId> = new Set(['mc_en', 'fits', 'mc_de', 'ctx_mc', 'listen_mc', 'match', 'colloc_gap', 'contrast']);
+
+/**
+ * Zeilen zu „Passt das Wort in diesen Satz?“. `yours` = Zeile unter einer FALSCHEN Antwort (sagt, was stimmt), `why` = Warum-Zeile (immer, auch bei richtiger
+ * Antwort, Kap. 2 Nr. 4); bei falscher Antwort wiederholt sie das nicht, sondern nennt nur die Bedeutung des Kartenworts.
+ */
+function fitsText(card: TrainCard, f: NonNullable<ExplainWordInput['fits']>, meaning: string | null, lang: Lang, kind: 'yours' | 'why', wrong: boolean): string {
+  const w = quote(card.word, lang);
+  const mean = meaning ? quote(shortMeaning(meaning, lang), lang) : null;
+  const foil = f.foil ? quote(f.foil.word, lang) : null;
+  const fm = f.foil?.meaning ? quote(shortMeaning(f.foil.meaning, lang), lang) : null;
+  if (kind === 'yours') {
+    return f.truth
+      ? pick({ de: `Doch, ${w} passt hier.`, en: `It does fit: ${w} works here.` }, lang)
+      : pick({ de: `Nein, in diesen Satz gehört ${foil ?? 'ein anderes Wort'}${fm ? ` (${fm})` : ''}.`, en: `No, this sentence needs ${foil ?? 'a different word'}${fm ? ` (${fm})` : ''}.` }, lang);
+  }
+  const own = mean ? pick({ de: `${w} heißt ${mean}.`, en: `${w} means ${mean}.` }, lang) : '';
+  if (wrong) return own;
+  return f.truth
+    ? pick({ de: `Ja, ${w} passt in diesen Satz.`, en: `Yes, ${w} fits this sentence.` }, lang) + (own ? ` ${own}` : '')
+    : pick({ de: `Nein, in diesen Satz gehört ${foil ?? 'ein anderes Wort'}${fm ? ` (${fm})` : ''}.`, en: `No, this sentence needs ${foil ?? 'a different word'}${fm ? ` (${fm})` : ''}.` }, lang) + (own ? ` ${own}` : '');
+}
 
 export function explainWord(i: ExplainWordInput): ExplanationModel {
   const { card, lang } = i;
@@ -123,7 +146,9 @@ export function explainWord(i: ExplainWordInput): ExplanationModel {
   let yours: string | null = null;
   if (wrong) {
     const pk = i.picked;
-    if (CHOICE_EX.has(i.ex) && i.ex !== 'colloc_gap' && pk?.fromWord) {
+    if (i.ex === 'fits' && i.fits) {
+      yours = fitsText(card, i.fits, meaning, lang, 'yours', true);
+    } else if (CHOICE_EX.has(i.ex) && i.ex !== 'colloc_gap' && pk?.fromWord) {
       // Auswahl: die gewählte Option gehört zu einer anderen Karte.
       yours =
         i.ex === 'mc_en' || i.ex === 'ctx_mc' || i.ex === 'listen_mc'
@@ -186,7 +211,8 @@ export function explainWord(i: ExplainWordInput): ExplanationModel {
     );
     const word = meaning && colExtra ? `${card.word} = ${shortMeaning(meaning, lang)}` : null;
     lines.push({ k: 'why', text: [`${colMerke}. ${reason}`, why, word].filter(Boolean).join('; ') });
-  } else lines.push({ k: 'why', text: i.ex === 'contrast' && i.contrastWhy ? i.contrastWhy : why ? `${merke}. ${why}` : merke });
+  } else if (i.ex === 'fits' && i.fits) lines.push({ k: 'why', text: [fitsText(card, i.fits, meaning, lang, 'why', wrong), why].filter(Boolean).join(' ') });
+  else lines.push({ k: 'why', text: i.ex === 'contrast' && i.contrastWhy ? i.contrastWhy : why ? `${merke}. ${why}` : merke });
 
   // 4. Typischer Fehler: die Deutsch-Falle der Karte
   if (trap) lines.push({ k: 'mistake', bad: trap.wrong, good: trap.right, cause: pick(trap.why, lang) });

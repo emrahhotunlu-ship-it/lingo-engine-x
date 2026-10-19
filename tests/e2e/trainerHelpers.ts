@@ -185,6 +185,14 @@ export async function answerCurrent(page: Page, opts: { wrong?: boolean } = {}):
   return ex;
 }
 
+/** Steht in der Lücke nur ein Wort der Wendung (weniger Buchstabenfelder als die ganze Wendung), ist es das Wort mit dieser Buchstabenzahl. */
+async function narrowedChunkAnswer(page: Page, full: string): Promise<string> {
+  const n = await page.getByTestId('gap').locator('[data-slot="letter"]').count();
+  const count = (w: string): number => w.replace(/[^\p{L}\p{N}]/gu, '').length;
+  if (!n || n >= count(full)) return full;
+  return full.split(/\s+/).find((w) => count(w) === n) ?? full;
+}
+
 /** Beantwortet die aktuelle Übung bis zum Ergebnis (ohne „Weiter"). */
 export async function answerOnly(page: Page, opts: { wrong?: boolean } = {}): Promise<{ ex: string; step: string }> {
   // Erst antworten, wenn genau eine Übung steht (kein Übergang mehr läuft).
@@ -197,7 +205,9 @@ export async function answerOnly(page: Page, opts: { wrong?: boolean } = {}): Pr
   const kind = (await exEl.getAttribute('data-kind')) ?? 'vocab';
   const colAttr = await page.locator('[data-col]').first().getAttribute('data-col').catch(() => null);
   const lang = await page.evaluate(() => document.documentElement.lang);
-  const answer = expected(ex, id, colAttr === null ? null : Number(colAttr), kind, lang);
+  let answer = expected(ex, id, colAttr === null ? null : Number(colAttr), kind, lang);
+  // WL: Bei Wendungen unter Stufe 3 (Stütze) bzw. 4 (frei) ist nur EIN Wort der Wendung die Lücke: das Wort mit der passenden Buchstabenzahl tippen.
+  if (kind === 'chunk' && (ex === 'cloze' || ex === 'cloze_hint')) answer = await narrowedChunkAnswer(page, answer);
   if (['mc_en', 'ctx_mc', 'mc_de', 'colloc_gap', 'listen_mc', 'match'].includes(ex)) {
     const labels = (await page.getByTestId('choice').locator('[lang]').allInnerTexts()).map((l) => l.trim());
     const idx = labels.findIndex((l) => l === answer);

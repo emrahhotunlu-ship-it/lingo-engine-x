@@ -12,6 +12,7 @@ import { reportViolations } from '../../domain/srs/guard';
 import { supports } from '../../domain/srs/modes';
 import { posKey } from '../../domain/srs/explain';
 import { registerOf } from '../../domain/srs/explainWord';
+import { chunkParts, chunkWhy } from '../../domain/srs/chunkCards';
 import { trapForCard } from '../../domain/srs/traps';
 import type { TrainCard } from '../../domain/srs/types';
 import { useT, type MessageKey } from '../../i18n';
@@ -22,6 +23,9 @@ import { continueIntro, startKnownProbe, useSession, type FirstKind } from './se
 // bevor die Antwort kommt (Pretesting). 1) Feste Zeilen: Wort ▶ mit US-Lautschrift · Bedeutung im Satz · So benutzt man es (Wortpartner) ·
 // Register · Vorsicht (Deutsch-Falle, nur wenn es eine gibt) · Wortfamilie. „Kenne ich“ startet keine Behauptung, sondern eine Prüffrage.
 // Schreibt nichts: die Karte wird erst bei der ersten Antwort geplant.
+
+/** Bedeutung eines Platzhalters der Wendung: jemand, etwas oder ein Besitzwort (sein/ihr). */
+const slotKey = (w: string): MessageKey => (/^(one's|someone's)$/i.test(w) ? 'wxSlotPoss' : /^(sth|something)$/i.test(w) ? 'wxSlotThing' : 'wxSlotPerson');
 
 export function IntroCard({ card, onDone }: { card: TrainCard; onDone: (kind: FirstKind) => void }) {
   const pool = useSession((s) => s.pool);
@@ -81,6 +85,9 @@ function Learn({ card, onDone }: { card: TrainCard; onDone: (kind: FirstKind) =>
   const ipa = ipaOf(card.word);
   const pk = posKey(card.pos);
   const col = extra?.col?.[0]?.en ?? card.col.find((c) => c.p)?.p ?? null;
+  const parts = card.kind === 'chunk' ? chunkParts(card.word, { cat: extra?.cat }) : [];
+  const fixedPhrase = parts.length > 1 && parts.every((p) => p.kind === 'fixed' || p.kind === 'slot');
+  const chunkReason = card.kind === 'chunk' ? chunkWhy(card, lang) : null;
   const fam = extra?.fam ? Object.entries(extra.fam).filter(([, w]) => !!w) : [];
   const go = () => {
     const kind = continueIntro();
@@ -152,6 +159,34 @@ function Learn({ card, onDone }: { card: TrainCard; onDone: (kind: FirstKind) =>
                 </>,
                 'intro-row-meaning',
               )}
+            {parts.length > 1 &&
+              row(
+                t('wxIntroParts'),
+                <>
+                  <span lang="en" className="lx-t-body" data-testid="intro-parts">
+                    {parts.map((p, i) => (
+                      <span key={i} data-part={p.kind} className={p.kind === 'core' ? 'font-semibold text-fg' : p.kind === 'frame' ? 'text-muted' : p.kind === 'fixed' ? 'text-fg' : 'italic text-subtle'}>
+                        {i > 0 ? ' ' : ''}
+                        {p.text}
+                      </span>
+                    ))}
+                  </span>
+                  <span className="lx-t-meta mt-0.5 block text-subtle" lang={lang} data-testid="intro-parts-legend">
+                    {(fixedPhrase
+                      ? [t('wxIntroFixed')]
+                      : [
+                          t('wxIntroCore', { words: parts.filter((p) => p.kind === 'core').map((p) => p.text).join(' · ') }),
+                          parts.some((p) => p.kind === 'frame') ? t('wxIntroFrame', { words: parts.filter((p) => p.kind === 'frame').map((p) => p.text).join(' · ') }) : null,
+                        ]
+                    )
+                      .concat(parts.filter((p) => p.kind === 'slot').map((p) => `${p.text} = ${t(slotKey(p.text))}`))
+                      .filter(Boolean)
+                      .join(' · ')}
+                  </span>
+                </>,
+                'intro-row-parts',
+              )}
+            {chunkReason && row(t('wxIntroWhy'), <span lang={lang}>{chunkReason}</span>, 'intro-row-why')}
             {col &&
               row(
                 t('wxIntroUse'),

@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { toTrainCard } from '../../src/domain/srs/cards';
 import { buildExercise, contrastOf } from '../../src/domain/srs/exercise';
-import { rotatedContext, WX_FROM_STAGE, WX_ROTATE_MAX, wxContexts } from '../../src/domain/srs/rotate';
+import { contextsOf, rotatedContext } from '../../src/domain/srs/rotate';
 import { explainWord } from '../../src/domain/srs/explainWord';
 import type { TrainCard } from '../../src/domain/srs/types';
 import { sentKey } from '../../src/domain/srs/variety';
@@ -428,11 +428,10 @@ describe('Prompt word-ctx@1', () => {
   });
 });
 
-describe('Satzwechsel ab Stufe 2 und Kennzeichnung', () => {
+describe('Satzwechsel ab Stufe 1 und Kennzeichnung', () => {
   const WX = [{ ...S1, t: NOW, pv: PV }];
 
-  it('ab Stufe 2 wechselt „Wort zuordnen“ zwischen Ursprungssatz und wx-Satz; der wx-Satz trägt die KI-Kennzeichnung', () => {
-    expect(WX_FROM_STAGE).toBe(2);
+  it('nach dem ersten Tag wechselt „Wort zuordnen“ zwischen Ursprungssatz und wx-Satz; der wx-Satz trägt die KI-Kennzeichnung', () => {
     const shown = sentKey('We use leverage in every price talk.');
     const c = card({
       wx: WX,
@@ -444,25 +443,22 @@ describe('Satzwechsel ab Stufe 2 und Kennzeichnung', () => {
     expect(e.ai).toEqual({ tpl: PV, kind: 'wx', en: S1.en });
   });
 
-  it('Stufe 2: höchstens 3 Kontexte (Ursprungssatz und die 2 neuesten ungemeldeten wx-Sätze)', () => {
-    expect(WX_ROTATE_MAX).toBe(2);
+  it('die wx-Sätze stehen unter den Kontexten, gemeldete (bad) nicht', () => {
     const many = [
-      { en: 'Last year the bank gave us more leverage in the talks with the new owners.', de: 'x', sit: 'a', t: NOW - 5 * DAY, pv: PV },
       { ...S1, t: NOW - 2 * DAY, pv: PV },
       { ...S2, t: NOW - DAY, pv: PV },
       { en: 'Without any leverage, the small shop had to accept the higher rent again.', de: 'x', sit: 'b', t: NOW, pv: PV, bad: 1 },
     ];
-    const ctx = wxContexts(card({ wx: many }));
-    expect(ctx).toHaveLength(3);
-    expect(ctx.map((c) => c.sentence)).toEqual(['We use leverage in every price talk.', S2.en, S1.en]);
+    const ctx = contextsOf(card({ wx: many }));
+    expect(ctx.map((c) => c.sentence)).toEqual(['We use leverage in every price talk.', S1.en, S2.en]);
   });
 
-  it('gemeldete wx-Sätze kommen nicht mehr; Stufe 1 bleibt beim Ursprungssatz', () => {
+  it('gemeldete wx-Sätze kommen nicht mehr; Tag 1 bleibt beim Ursprungssatz', () => {
     const shown = sentKey('We use leverage in every price talk.');
     const hist = [{ t: NOW - DAY, m: 'type', g: 3, x: 'match', s: shown }];
-    expect(rotatedContext(card({ wx: [{ ...WX[0], bad: 1 }], hist }), 'match')?.sentence).toBe('We use leverage in every price talk.');
-    expect(rotatedContext(card({ wx: WX, hist, stage: 1 }), 'match')?.sentence).toBe('We use leverage in every price talk.');
-    expect(buildExercise(card({ stage: 1, wx: WX, hist }), 'match', 'de', [], 'seed').ai).toBeUndefined();
+    expect(rotatedContext(card({ wx: [{ ...WX[0], bad: 1 }], hist }), 'match')?.sentence).not.toBe(WX[0]!.en);
+    expect(rotatedContext(card({ wx: WX, hist: [], stage: 1 }), 'match')?.sentence).toBe('We use leverage in every price talk.');
+    expect(buildExercise(card({ stage: 1, wx: WX, hist: [] }), 'match', 'de', [], 'seed').ai).toBeUndefined();
   });
 });
 

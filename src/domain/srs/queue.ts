@@ -2,6 +2,7 @@ import { isDue } from '../metrics/definitions';
 import { cardSec, NEW_SEC } from './cost';
 import { availableExercises } from './modes';
 import { isLearningState, retrievability } from './scheduler';
+import { chunkParts } from './chunkCards';
 import type { Lang, QueueItem, TrainCard } from './types';
 import { lapsesOf } from './lapses';
 
@@ -85,17 +86,35 @@ export function dueCards(cards: readonly TrainCard[], nowMs: number): TrainCard[
 
 /** Erste Stufe, ab der der Tagesmix gilt: das C1-Paket (davor stehen Emrahs eigene Funde und Lehrer-Wörter, die bleiben vorn). */
 const MIX_FROM_TIER = INBOX_TIERS.findIndex((t) => t.includes('pack'));
-/** Tagesmix (Gesamtkonzept 3.3): von je drei neuen Wörtern zwei Wendungen und eins allgemein. */
-export const MIX_PHRASES = 2;
+/**
+ * Tagesmix: je neue Wendung ein neues Wort (1:1). Bis 19.10.2026 galt 2:1 (Gesamtkonzept 3.3); Befund: 43 % der Karten und über 40 % der neuen Einträge
+ * waren Wendungen, die erste getippte Antwort einer Wendung war nur zu 25 % richtig (WL, `docs/entscheidungen.md`).
+ */
+export const MIX_PHRASES = 1;
+/** Höchstens so viele lange Wendungen (drei Wörter oder mehr) werden an einem Tag neu eingeführt. */
+export const LONG_CHUNKS_PER_DAY = 2;
+/** Eine Wendung mit mindestens so vielen Wörtern gilt als lang. */
+export const LONG_CHUNK_WORDS = 3;
+
+/** Ist die Karte eine lange Wendung (drei oder mehr Wörter, Platzhalter und „…“ zählen nicht)? */
+export const isLongChunk = (c: Pick<TrainCard, 'kind' | 'word'>): boolean => c.kind === 'chunk' && c.word.split(/\s+/).filter((w) => /[a-z]/i.test(w) && !/^(sb|sth|someone|something|somebody)$/i.test(w)).length >= LONG_CHUNK_WORDS;
 
 /**
  * Startposition des Tagesmixes: Wie viele Karten aus dem Mix wurden heute schon eingeführt (`introduced`), und wie viele Wendungen
- * kommen je Wort (`phrases`: 2 im Normalfall, 1 bei Rückstand mit 2 neuen Wörtern am Tag). Ohne Angabe beginnt das Muster vorn.
+ * kommen je Wort (`phrases`: 1 im Normalfall, das frühere Muster 2:1 bleibt mit `phrases: 2` möglich). Ohne Angabe beginnt das Muster vorn.
  */
-export type MixStart = { introduced?: number; phrases?: number };
+export type MixStart = {
+  introduced?: number;
+  phrases?: number;
+  /** Heute schon eingeführte lange Wendungen (zählen gegen `LONG_CHUNKS_PER_DAY`). */
+  longToday?: number;
+  /** Heute schon eingeführte neue Wörter und Wendungen (aus allen Körben): Ist heute schon eine Wendung neu, aber noch kein Wort, kommt als Nächstes ein Wort, wenn eines vorrätig ist. */
+  wordsToday?: number;
+  chunksToday?: number;
+};
 
 /**
- * Mischt Wendungen (`chunk/…`, auch die des Pakets) und Wörter im Muster Wendung, Wendung, Wort, Wendung, Wendung, Wort …
+ * Mischt Wendungen (`chunk/…`, auch die des Pakets) und Wörter im Muster Wendung, Wort, Wendung, Wort … (`MIX_PHRASES`)
  * Fehlt eine Sorte, bleibt die Reihenfolge der anderen unverändert. Das Muster läuft über den Tag weiter: Die heute schon
  * eingeführten Karten (`start.introduced`) bestimmen, an welcher Stelle des Musters es steht – sonst kämen bei zwei neuen
  * Wörtern am Tag nie Wörter, nur Wendungen.
@@ -117,6 +136,15 @@ export function mixPhrases<T extends { kind: string }>(list: readonly T[], start
   return out;
 }
 
+/** Heute schon eingeführte neue Wörter bzw. Wendungen (alle Körbe), für `MixStart.wordsToday`/`chunksToday`. */
+export const introducedKindsToday = (cards: readonly TrainCard[], day: string): { wordsToday: number; chunksToday: number } => ({
+  wordsToday: cards.filter((c) => c.intro === day && c.kind !== 'chunk').length,
+  chunksToday: cards.filter((c) => c.intro === day && c.kind === 'chunk').length,
+});
+
+/** Heute schon eingeführte lange Wendungen, für `MixStart.longToday`. */
+export const longIntroducedToday = (cards: readonly TrainCard[], day: string): number => cards.filter((c) => c.intro === day && isLongChunk(c)).length;
+
 /** Schon heute eingeführte Karten aus den Mix-Stufen (ab dem Paket), für `MixStart.introduced`. */
 export const mixIntroducedToday = (cards: readonly TrainCard[], day: string): number => cards.filter((c) => c.intro === day && inboxTier(tierSrc(c)) >= MIX_FROM_TIER).length;
 
@@ -126,12 +154,25 @@ export const mixIntroducedToday = (cards: readonly TrainCard[], day: string): nu
  */
 export function newCards(cards: readonly TrainCard[], start: MixStart = {}): TrainCard[] {
   const tier = new Map(cards.filter((c) => c.isNew).map((c) => [c.key, inboxTier(tierSrc(c))]));
+  // Wendungen, deren Kernwort schon bekannt ist (ein gelerntes Wort der Wendung), kommen vor ganz neuen Wendungen derselben Stufe.
+  const known = new Set(cards.filter((c) => c.kind !== 'chunk' && !c.isNew).flatMap((c) => [headwordOf(c.word), headwordOf(c.lemma)]));
+  const knownCore = new Map(cards.filter((c) => c.isNew && c.kind === 'chunk').map((c) => [c.key, chunkParts(c.word).some((p) => p.kind === 'core' && known.has(headwordOf(p.text))) ? 0 : 1]));
+  const rank = (c: TrainCard): number => ((tier.get(c.key) ?? LAST_TIER) >= MIX_FROM_TIER ? (knownCore.get(c.key) ?? 0) : 0);
+  // Wendungen ohne Satz werden zurückgestellt (Kap. 15: Karten ohne Ursprungssatz): Sie kommen erst, wenn ein Satz da ist.
   const sorted = cards
-    .filter((c) => c.isNew)
-    .sort((a, b) => (tier.get(a.key) ?? LAST_TIER) - (tier.get(b.key) ?? LAST_TIER) || (a.added < b.added ? -1 : a.added > b.added ? 1 : 0) || a.order - b.order || (a.key < b.key ? -1 : 1));
+    .filter((c) => c.isNew && !(c.kind === 'chunk' && !c.context))
+    .sort((a, b) => (tier.get(a.key) ?? LAST_TIER) - (tier.get(b.key) ?? LAST_TIER) || rank(a) - rank(b) || (a.added < b.added ? -1 : a.added > b.added ? 1 : 0) || a.order - b.order || (a.key < b.key ? -1 : 1));
   const cut = sorted.findIndex((c) => (tier.get(c.key) ?? LAST_TIER) >= MIX_FROM_TIER);
-  if (cut === -1) return sorted;
-  return [...sorted.slice(0, cut), ...mixPhrases(sorted.slice(cut), start)];
+  const mixed = cut === -1 ? sorted : [...sorted.slice(0, cut), ...mixPhrases(sorted.slice(cut), start)];
+  // Höchstens zwei lange Wendungen je Tag (die heute schon eingeführten zählen mit).
+  let longs = start.longToday ?? 0;
+  const capped = mixed.filter((c) => !isLongChunk(c) || ++longs <= LONG_CHUNKS_PER_DAY);
+  // Untergrenze: Auch wenn die Körbe vor dem C1-Paket nur Wendungen enthalten, kommt täglich mindestens ein neues Wort, sobald heute schon eine Wendung neu war (wenn eines vorrätig ist).
+  if ((start.wordsToday ?? 0) === 0 && (start.chunksToday ?? 0) >= 1 && capped[0]?.kind === 'chunk') {
+    const w = capped.findIndex((c) => c.kind !== 'chunk');
+    if (w > 0) return [capped[w] as TrainCard, ...capped.slice(0, w), ...capped.slice(w + 1)];
+  }
+  return capped;
 }
 
 function aheadCards(cards: readonly TrainCard[], nowMs: number): TrainCard[] {

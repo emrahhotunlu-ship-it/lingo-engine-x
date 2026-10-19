@@ -17,6 +17,7 @@ import { planActivations, type DueStep } from '../../domain/srs/fahrplan';
 import { actId, type ActEntry, type ActVerdict, type TargetVerdict } from '../../domain/activation/actDoc';
 import { reusableSentencesOf, saveActEntry } from './actStore';
 import { sentKey } from '../../domain/srs/variety';
+import { reportWlDiagnostics } from '../../domain/srs/wlDiagnose';
 import { availableExercises, chooseExercise, makeEnv, NO_ENV, supports, type ExerciseEnv } from '../../domain/srs/modes';
 import { inputProfile } from '../../platform/input';
 import { KNOWN_DAYS, knownOp } from '../../domain/srs/vocabList';
@@ -35,7 +36,7 @@ import { useCapabilities } from '../../platform/capabilities';
 import { useSpeech } from '../../platform/speech';
 import { useWatched } from '../../data/watch';
 import { legacySceneDoc } from '../../domain/chunks/legacyScene';
-import { buildQueue, mixIntroducedToday, newQuotaLeft as newQuotaLeftFor } from '../../domain/srs/queue';
+import { buildQueue, introducedKindsToday, longIntroducedToday, mixIntroducedToday, newQuotaLeft as newQuotaLeftFor } from '../../domain/srs/queue';
 import { isLearningState, previewIntervals, readFsrs, reviewFsrs } from '../../domain/srs/scheduler';
 import { noteWeight } from '../../domain/srs/weight';
 import type { AnswerEvent, Exercise, ExerciseId, Grade, Lang, QueueItem, TrainCard } from '../../domain/srs/types';
@@ -233,10 +234,10 @@ function exerciseFor(s: ExCtx, item: QueueItem): Exercise | null {
   const picked = modeFor(s, card, item);
   if (picked === 'flip') return { ...build(s, card, 'flip'), dir: dirFor(card.key, s.dir, s.day) };
   if (picked === 'control') {
-    // Kontrolle (§4): frei im Ursprungssatz (`cloze`), ohne Satz `type`; die App bewertet.
+    // Kontrolle (§4): frei (`cloze`), ohne Satz `type`; die App bewertet. WL: nicht im Ursprungssatz, sondern im Satz der Vorderseite (Tag 1) bzw. in einem dritten Satz.
     const n = s.pool.length - 1;
     const ex: ExerciseId | null = supports(card, 'cloze', s.lang, n, s.env) ? 'cloze' : supports(card, 'type', s.lang, n, s.env) ? 'type' : null;
-    if (ex) return { ...build(s, card, ex, true), check: 'control' };
+    if (ex) return { ...build(s, card, ex, false), check: 'control' };
   }
   if (picked === 'probe') {
     // Prüfabfrage (§1 Regel 6): tippen mit Stütze, Leiter auf Stufe 3 (cloze_hint/tiles).
@@ -265,7 +266,7 @@ function exerciseFor(s: ExCtx, item: QueueItem): Exercise | null {
 }
 
 /** Frei getippte Arten (Stufe 4) – ohne Auswahl und ohne Stütze. */
-const FREE_TYPED: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['type', 'cloze', 'situation']);
+const FREE_TYPED: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['type', 'cloze', 'cloze_part', 'situation']);
 
 /**
  * Billigere, aber gleichwertige Abfrage in zwei Fällen (Methodenplan Lernwissenschaft 02.10.2026), nur im Modus `auto`:
@@ -399,6 +400,7 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
   const cards = allTrainCards(now);
   const byKey = new Map(cards.map((c) => [c.key, c]));
   const pool = cards.filter((c) => !c.hidden);
+  reportWlDiagnostics(cards, day);
   const entries = todayEntries(day);
   // B3 (Phase-3-Plan): nur Vokabel-Einträge zählen als „Wiederholen“, nie Sprech- oder Business-Einträge.
   // Wendungen zählen wie Vokabeln (Schlüssel `chunk/<id>`).
@@ -433,7 +435,7 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
         .map((k) => byKey.get(k))
         .filter((c): c is TrainCard => !!c && !c.hidden)
         .map((c): QueueItem => ({ key: c.key, reason: c.isNew ? 'new' : 'due', phase: c.stage === 0 ? 'intro' : 'quiz' }))
-    : buildQueue({ cards: chosen, nowMs: now, target, newQuotaLeft: allowNew ? newQuotaLeft : 0, exclude: round === 'pflicht' ? reviewed : answeredToday, lang, mix: { introduced: mixIntroducedToday(cards, day), phrases: introducedToday - introducedLessonToday + newQuotaLeft <= 2 ? 1 : 2 } });
+    : buildQueue({ cards: chosen, nowMs: now, target, newQuotaLeft: allowNew ? newQuotaLeft : 0, exclude: round === 'pflicht' ? reviewed : answeredToday, lang, mix: { introduced: mixIntroducedToday(cards, day), longToday: longIntroducedToday(cards, day), ...introducedKindsToday(cards, day) } });
   const docs = pool.map((c) => c.doc);
   const ctl = mode === 'flip' ? controlCounts(docs, now) : { week: 0, day: 0 };
   const catchUp = mode === 'auto' && catchUpOn(overdueCount(pool, now));

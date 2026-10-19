@@ -154,7 +154,7 @@ export function stageStep(cur: Doc, a: StageAnswer): { stage: number; missing: n
   // auf Stufe 5 mit einem weiteren freien Tag. Nur der Aufstieg wird strenger; Karten, die schon höher stehen, werden nie zurückgestuft (hier wird nur `next` begrenzt).
   if (next > now && next >= 4) {
     const need = freeDaysNeeded(next);
-    const have = freeCorrectDays(cur, { t: a.t, ex: a.ex, grade: a.grade, ...(a.colIndex !== undefined ? { ci: a.colIndex } : {}) });
+    const have = freeCorrectDays(cur, { t: a.t, ex: a.ex, grade: a.grade, ...(a.colIndex !== undefined ? { ci: a.colIndex } : {}) }, next);
     if (have < need) return { stage: now, missing: need - have };
   }
   return { stage: next, missing: 0 };

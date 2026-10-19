@@ -14,6 +14,8 @@ export type Lang = 'de' | 'en';
  */
 export type ExerciseId =
   | 'mc_en'
+  /** WL (19.10.2026): „Passt das Wort in diesen Satz?“ Ja/Nein mit Begründung (Stufe 1, nur Wörter): zweite Abfrage-Familie neben „Bedeutung wählen“. */
+  | 'fits'
   | 'spot'
   | 'listen_mc'
   | 'mc_de'
@@ -22,6 +24,8 @@ export type ExerciseId =
   | 'tiles'
   | 'type'
   | 'cloze'
+  /** WL: nur Wendungen: EIN Wort der Wendung als freie Lücke im Satz (Stufe 3). Eigener Verlaufsschlüssel, damit das Tor sie zählen kann: höchstens ein Tag für Stufe 4, nie für Stufe 5. */
+  | 'cloze_part'
   | 'colloc'
   | 'situation'
   | 'dictation'
@@ -150,6 +154,8 @@ export type Exercise = {
   trap?: { id: string; sentence: string; start: number; end: number } | null;
   /** Lernplattform 3.0 P52: der Satz stammt von Claude (`wx` bzw. `cfx`): die Übung zeigt `AiMark`, „Melden“ markiert genau diesen Satz. */
   ai?: { tpl: string; kind: 'wx' | 'cfx'; en: string } | null;
+  /** `fits`: stimmt der Satz (das Wort passt) oder nicht? Bei „passt nicht“ das Wort, das hier eigentlich steht. */
+  fits?: { truth: boolean; foil: { word: string; meaning: string | null } | null };
   /** `contrast`: Begründung von Claude, zweisprachig (gezeigt in der Oberflächensprache). */
   contrastWhy?: { de: string; en: string } | null;
 };

@@ -5,7 +5,8 @@ import { meaningForTask, shortMeaning } from './cards';
 import { exerciseDef } from './modes';
 import { familyFrom, partnerOf, trapTask } from './partner';
 import { packExtraOf } from '../c1pack/packFields';
-import { rotatedContext } from './rotate';
+import { isTruncated, rotatedContext } from './rotate';
+import { chunkGapWords } from './chunkCards';
 import type { ActTask } from './actTask';
 import { briefCodesOf, pickBrief } from './brief';
 import { findContext, formsOf, locate } from './context';
@@ -226,7 +227,7 @@ function pickColloc(card: TrainCard, rng: () => number): Colloc | null {
 const bareAnswer = (card: TrainCard): string => (card.kind === 'chunk' ? typedForm(card.word) : card.word);
 
 /** Übungen, in denen die Bedeutung die Frage ist (Hinweis über der Lücke, Frage über den Optionen): sie darf die Antwort nicht enthalten. */
-const CUE_EX: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['cloze', 'cloze_hint', 'wordfam', 'dictation', 'tiles', 'match', 'mc_de', 'type', 'colloc', 'colloc_gap']);
+const CUE_EX: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['cloze', 'cloze_part', 'cloze_hint', 'wordfam', 'dictation', 'tiles', 'match', 'mc_de', 'type', 'colloc', 'colloc_gap']);
 
 /**
  * Bedeutung als Hinweis ohne die Lösung (Audit 12.10.2026): Deutsche Bedeutungen enthalten oft das englische Wort selbst („feiner Unterschied,
@@ -274,11 +275,11 @@ export const WORD_CTX_TPL = 'word-ctx@1';
  * Tests bleiben lesbar.
  */
 export const exTextKey = (e: Pick<Exercise, 'ex' | 'start'> & { sentence?: Exercise['sentence'] }): string =>
-  e.ex === 'complete' && !e.start?.trim() ? 'produce' : e.ex === 'match' && e.sentence === null ? 'mc_de' : e.ex; // „Zuordnen“ ohne Satz hat keine Lücke: Aufgabe wie „Wort wählen“ (Audit 12.10.2026)
+  e.ex === 'cloze_part' ? 'cloze' : e.ex === 'complete' && !e.start?.trim() ? 'produce' : e.ex === 'match' && e.sentence === null ? 'mc_de' : e.ex; // „Zuordnen“ ohne Satz hat keine Lücke: Aufgabe wie „Wort wählen“ (Audit 12.10.2026)
 
 /**
- * `origin`: immer der Ursprungssatz (Prüfabfrage und Kontrolle nach dem Aufdecken), sonst wechselt der Satz ab Stufe 3 (`rotate.ts`; Claude-Sätze
- * schwacher Wörter `wx` schon ab Stufe 2). Zeigt die Übung einen Satz von Claude, trägt sie `ai` (Kennzeichnung und „Melden“, P52).
+ * `origin`: immer der Ursprungssatz (Prüfabfrage und Einführung), sonst wechselt der Satz ab der ersten Wiederholung an einem anderen Tag (`rotate.ts`, Tag 1
+ * bleibt der Ursprungssatz der Anker). Zeigt die Übung einen Satz von Claude, trägt sie `ai` (Kennzeichnung und „Melden“, P52).
  */
 export function buildExercise(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly TrainCard[], seed: string, opts: { sceneOf?: SceneLookup; origin?: boolean; act?: ActTask } = {}): Exercise {
   const e = buildRaw(card, ex, lang, pool, seed, opts);
@@ -308,8 +309,16 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
   // Fragt die Übung nach dem Wort, steht die Bedeutung als Frage da und darf die Antwort nicht enthalten (`cueMeaning`); als richtige Option bleibt sie vollständig.
   const base: Exercise = { ex, input: def.input, card, stage, sentence: null, meaning: CUE_EX.has(ex) ? cueMeaning(card, meaning) : meaning, firstLetter: null, colloc: null, options: [], accepted: [] };
   // Eine Lücke, die mehr verdeckt als das Wort der Karte (beliebiges Objekt) oder das Wort ein zweites Mal zeigt, ist keine Lücke (`gapFit.ts`).
-  const rawCtx = opts.origin ? card.context : rotatedContext(card, ex);
-  const ctx = rawCtx && gapUsable(rawCtx, lemmaFor(card)) ? rawCtx : null;
+  const day = /^(\d{4}-\d{2}-\d{2})\|/.exec(seed)?.[1];
+  const rawCtx = opts.origin ? card.context : rotatedContext(card, ex, day);
+  // Wendungen (WL): Bis Stufe 2 ist nur EIN Wort der Wendung die Lücke (Stütze, Bausteine); `cloze_part` (Stufe 3) ist ein freies Einzelwort. Das wechselnde Wort ergibt sich aus der
+  // Zahl der bisherigen Wiederholungen; Stufe 3 zeigt sonst die ganze Wendung mit Stütze (Anfangsbuchstabe je Wort, Bausteine); `cloze` ist immer die ganze Wendung (Tor: Stufe 3 erst
+  // nach einem `cloze_part`-Tag, `modes.ts`). Findet sich kein einzelnes Wort, gibt es nie still eine ganze Wendung ohne Satz (Kap. 15): `cloze_part` wird zur Stütz-Lücke (`cloze_hint`).
+  const wordGap = card.kind === 'chunk' && !!rawCtx && (ex === 'cloze_part' || ((ex === 'cloze_hint' || ex === 'tiles') && stage <= 2));
+  const single = wordGap && rawCtx ? chunkWordGap(card, rawCtx, knownHeadwords(pool)) : null;
+  const singleOk = !!single && gapUsable(single, lemmaFor(card));
+  if (ex === 'cloze_part' && !singleOk) return buildRaw(card, 'cloze_hint', lang, pool, seed, opts);
+  const ctx = singleOk ? single : rawCtx && gapUsable(rawCtx, lemmaFor(card)) ? rawCtx : null;
 
   switch (ex) {
     case 'listen_mc':
@@ -317,8 +326,18 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
       const label = shortMeaning(meaning ?? '', tongueOf(card, lang));
       const correct: Option = { id: 'ok', label, lang: tongueOf(card, lang), correct: true };
       const options = shuffle([correct, ...meaningDistractors(card, pool, lang, rng)], rng);
-      if (ex === 'listen_mc') return { ...base, sentence: card.context, options, accepted: [label], speak: card.context?.sentence ?? bareAnswer(card) };
-      return { ...base, sentence: card.context, options, accepted: [label] };
+      if (ex === 'listen_mc') return { ...base, sentence: rawCtx, options, accepted: [label], speak: rawCtx?.sentence ?? bareAnswer(card) };
+      return { ...base, sentence: rawCtx, options, accepted: [label] };
+    }
+    case 'fits': {
+      // Satz mit hervorgehobenem Wort; Ja = das Kartenwort steht in seinem Satz, Nein = es steht im Satz einer anderen Karte (Wortart und Beugung passen, die Bedeutung nicht).
+      const here = rawCtx ?? card.context;
+      const foil = rng() < 0.5 ? fitsFoil(card, pool, lang, rng) : null;
+      const truth = !foil;
+      const span = foil ? foil.span : here;
+      const yes: Option = { id: 'yes', label: 'yes', lang: 'de', correct: truth };
+      const no: Option = { id: 'no', label: 'no', lang: 'de', correct: !truth };
+      return { ...base, sentence: span, options: [yes, no], accepted: [truth ? 'yes' : 'no'], fits: { truth, foil: foil ? { word: foil.other.word, meaning: m(foil.other, lang) || null } : null } };
     }
     case 'spot': {
       const gap = card.context?.gap ?? card.word;
@@ -402,7 +421,7 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
       // „Was heißt das hier?“: Satz mit markiertem Wort, drei deutsche Optionen (die richtige und zwei andere).
       const label = shortMeaning(meaning ?? '', tongueOf(card, lang));
       const correct: Option = { id: 'ok', label, lang: tongueOf(card, lang), correct: true };
-      return { ...base, sentence: card.context, options: shuffle([correct, ...meaningDistractors(card, pool, lang, rng).slice(0, 2)], rng), accepted: [label] };
+      return { ...base, sentence: rawCtx, options: shuffle([correct, ...meaningDistractors(card, pool, lang, rng).slice(0, 2)], rng), accepted: [label] };
     }
     case 'complete': {
       const starts = packExtraOf(card)?.starts ?? [];
@@ -419,6 +438,7 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
       return { ...base, sentence, accepted: [sentence?.gap ?? card.word], trap: t };
     }
     case 'cloze_hint':
+    case 'cloze_part':
     case 'cloze': {
       const gap = ctx?.gap ?? card.word;
       return { ...base, sentence: ctx, firstLetter: ex === 'cloze_hint' ? gap.slice(0, 1) : null, accepted: [gap] };
@@ -430,7 +450,7 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
     }
     case 'flip':
       // Anki (anki-regeln §1): Vorderseite Bedeutung + Ursprungssatz mit Lücke, Rückseite voll.
-      return { ...base, sentence: card.context, accepted: [card.context?.gap ?? bareAnswer(card)] };
+      return { ...base, sentence: rawCtx, accepted: [rawCtx?.gap ?? bareAnswer(card)] };
   }
 }
 
@@ -462,6 +482,76 @@ export function choiceVerdict(e: Pick<Exercise, 'ex' | 'card' | 'meaning'>, chos
     if (meaningsOverlap(other, e.meaning)) return { verdict: 'near', kind: 'synonym', ...(chosen.fromWord ? { otherWord: chosen.fromWord } : {}) };
   }
   return { verdict: 'wrong' };
+}
+
+/** Stichwörter der schon gelernten Wörter (Karten, die nicht neu sind): Ein bekanntes Kernwort einer Wendung wird nicht als Erstes abgefragt. */
+function knownHeadwords(pool: readonly TrainCard[]): Set<string> {
+  const out = new Set<string>();
+  for (const c of pool) if (c.kind === 'vocab' && !c.isNew) for (const w of [c.lemma, c.word]) out.add(norm(w).replace(/^to /, ''));
+  return out;
+}
+
+/**
+ * Das wechselnde Wort der Wendung als Lücke: reihum durch die Lückenwörter, nach der Zahl der bisherigen Wiederholungen (`reps`, wächst auch, wenn `hist` bei 12 gedeckelt ist).
+ * Reihenfolge nach Paketangaben (`gap.at` zuerst, `phrasal`: abhängige Präposition, `frame`: Schlüsselwörter, `chunkGapWords`). Wörter, die schon eine bekannte Wortkarte sind, kommen
+ * nur dran, wenn es kein anderes gibt (bei bekanntem Kernwort fragt die App zuerst das Rahmenwort bzw. den Partner).
+ */
+export function chunkWordGap(card: Pick<TrainCard, 'word' | 'doc'>, ctx: NonNullable<TrainCard['context']>, known: ReadonlySet<string> = new Set()): NonNullable<TrainCard['context']> | null {
+  const extra = packExtraOf(card);
+  const cands = chunkGapWords(ctx.sentence, card.word, { cat: extra?.cat, at: extra?.gap?.at });
+  if (!cands.length) return null;
+  const unknown = cands.filter((x) => !known.has(norm(x.w)));
+  const list = unknown.length ? unknown : cands;
+  const fsrs = card.doc.fsrs as { reps?: unknown } | undefined;
+  const reps = Math.max(typeof card.doc.reps === 'number' ? card.doc.reps : 0, typeof fsrs?.reps === 'number' ? fsrs.reps : 0, 0);
+  const w = list[reps % list.length] as (typeof list)[number];
+  return { sentence: ctx.sentence, start: w.start, end: w.end, gap: ctx.sentence.slice(w.start, w.end) };
+}
+
+// ------------------------------------------------------------------ „Passt das Wort in diesen Satz?“ (fits, WL 19.10.2026)
+
+/** Texte der Karte, in denen ein Nachbarwort-Paar belegt sein kann (wie der Wächter R5). */
+function attestedTexts(card: TrainCard): string[] {
+  const d = card.doc;
+  const xs = Array.isArray(d.xEx) ? (d.xEx as { en?: unknown }[]).map((x) => x.en) : [];
+  const cs = Array.isArray(d.col) ? (d.col as { ex?: unknown }[]).map((x) => x.ex) : [];
+  return [d.ex, ...xs, ...cs, card.context?.sentence].filter((x): x is string => typeof x === 'string').map((x) => ` ${norm(x.replace(/[[\]]/g, '')).replace(/[^a-zäöüß0-9' ]+/g, ' ').replace(/\s+/g, ' ')} `);
+}
+
+/**
+ * Ein Satz einer anderen Karte, in den das Kartenwort NICHT passt: gleiche Wortart, ähnliche Beugung, keine Synonyme, und das Kartenwort bildet mit den
+ * Nachbarwörtern kein belegtes Paar (sonst könnte es doch passen). `null`, wenn es keinen sicheren Satz gibt – dann fragt die App nur „passt“.
+ */
+function fitsFoil(card: TrainCard, pool: readonly TrainCard[], lang: Lang, rng: () => number): { span: NonNullable<Exercise['sentence']>; other: TrainCard } | null {
+  if (!card.pos) return null;
+  const head = norm(card.lemma).slice(0, 5);
+  const target = meaningForTask(card, lang) ?? '';
+  const texts = attestedTexts(card);
+  const cands = shuffle(
+    pool.filter((c) => c.key !== card.key && c.kind === 'vocab' && c.pos === card.pos && c.context && !isTruncated(c.context.sentence) && !/\s/.test(c.context.gap)),
+    rng,
+  );
+  for (const c of cands) {
+    const ctx = c.context as NonNullable<TrainCard['context']>;
+    if (norm(c.lemma).slice(0, 5) === head || norm(c.lemma) === norm(card.lemma) || tooClose(card, c)) continue;
+    const cm = meaningForTask(c, lang);
+    if (cm && target && sharesWord(cm, target)) continue;
+    if (!gapUsable(ctx, lemmaFor(c))) continue;
+    // Beugung: nur regelmäßige Formen (-ed, -ing, -s) oder die Grundform lassen sich sauber übertragen, sonst verriete die Endung das „Nein“.
+    const sol = ctx.gap.toLowerCase();
+    const lem = c.lemma.toLowerCase().replace(/^to\s+/, '');
+    const regular = sol === lem || /(ing|ed)$/.test(sol) || (/s$/.test(sol) && !/ss$/.test(sol));
+    if (!regular) continue;
+    const word = inflectLike(ctx.gap, c.lemma, card.lemma);
+    if (!word || norm(word) === norm(ctx.gap)) continue;
+    const sentence = `${ctx.sentence.slice(0, ctx.start)}${word}${ctx.sentence.slice(ctx.end)}`;
+    const prev = norm(ctx.sentence.slice(0, ctx.start)).split(/[^a-zäöüß0-9']+/).filter(Boolean).at(-1);
+    const next = norm(ctx.sentence.slice(ctx.end)).split(/[^a-zäöüß0-9']+/).filter(Boolean)[0];
+    const w = norm(word);
+    if ((prev && texts.some((t) => t.includes(` ${prev} ${w} `))) || (next && texts.some((t) => t.includes(` ${w} ${next} `)))) continue;
+    return { span: { sentence, start: ctx.start, end: ctx.start + word.length, gap: word }, other: c };
+  }
+  return null;
 }
 
 // ------------------------------------------------------------------ Bausteine per Tastatur (Emrah 02.10.2026)

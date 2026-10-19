@@ -3,7 +3,7 @@ import { meaningForTask } from './cards';
 import { activationReady } from './brief';
 import { gapUsable, lemmaFor } from './gapFit';
 import { familyFrom, hasPartner, trapTask } from './partner';
-import { distinctForms, familyOf, FEST_MIN_FORMS, FREE_ANSWER, freeCorrectDays, freeDaysNeeded, varietyBias, varietyOf } from './variety';
+import { distinctForms, familyOf, FEST_MIN_FORMS, FREE_ANSWER, freeCorrectDays, freeDaysNeeded, partDaysOf, varietyBias, varietyOf } from './variety';
 import type { Counts, ExerciseId, InputKind, Lang, LegacyMode, Stage, TrainCard } from './types';
 
 // Katalog der Abfragearten (phase1-plan §4.2, Lernplattform 2.0 §4.8). Jede Art gehört fest zu einer Stufe (`also`: auch zu
@@ -19,15 +19,20 @@ export type ExerciseDef = { ex: ExerciseId; stage: Stage; level: number; mode: L
 export const CATALOG: readonly ExerciseDef[] = [
   { ex: 'mc_en', stage: 1, level: 1, mode: 'recog', input: 'choice' },
   { ex: 'ctx_mc', stage: 1, level: 1, mode: 'recog', input: 'choice' },
+  // WL: zweite Abfrage-Familie auf Stufe 1 („Passt das Wort in diesen Satz?“), damit Stufe 1 am Handy nicht nur „Bedeutung wählen“ kennt.
+  { ex: 'fits', stage: 1, level: 1, mode: 'recog', input: 'choice' },
   { ex: 'spot', stage: 1, level: 1, mode: 'recog', input: 'spot' },
   { ex: 'listen_mc', stage: 1, level: 1, mode: 'recog', input: 'choice' },
   { ex: 'mc_de', stage: 2, level: 2, mode: 'recog', input: 'choice' },
   { ex: 'match', stage: 2, level: 2, mode: 'recog', input: 'choice' },
-  { ex: 'cloze_hint', stage: 3, level: 3, mode: 'cloze', input: 'typed' },
+  // WL: Wortanfang (erster Buchstabe) schon auf Stufe 2, damit auch Stufe 2 am Handy nicht nur Auswahl kennt; die Art bleibt eine Stütz-Art der Stufe 3 (`level` 3).
+  { ex: 'cloze_hint', stage: 3, level: 3, mode: 'cloze', input: 'typed', also: [2] },
   { ex: 'colloc_gap', stage: 3, level: 3, mode: 'colloc', input: 'choice' },
   { ex: 'complete', stage: 3, level: 3, mode: 'type', input: 'sentence', also: [5] },
   { ex: 'tiles', stage: 3, level: 3, mode: 'cloze', input: 'tiles' },
   { ex: 'cloze', stage: 4, level: 4, mode: 'type', input: 'typed', also: [5] },
+  // WL: nur Wendungen, ein Wort als freie Lücke; wie `cloze`, aber mit eigenem Verlaufsschlüssel fürs Tor (`freeCorrectDays`).
+  { ex: 'cloze_part', stage: 3, level: 4, mode: 'type', input: 'typed' },
   { ex: 'colloc', stage: 4, level: 4, mode: 'colloc', input: 'typed' },
   { ex: 'wordfam', stage: 4, level: 4, mode: 'type', input: 'typed' },
   { ex: 'find_trap', stage: 4, level: 4, mode: 'recog', input: 'spot' },
@@ -63,7 +68,11 @@ export const canListen = (env: ExerciseEnv): boolean => env.listen ?? (env.tts &
 export const exerciseDef = (ex: ExerciseId): ExerciseDef => CATALOG.find((d) => d.ex === ex) ?? (CATALOG[0] as ExerciseDef);
 
 /** Aus der Wörter-Leiter entfernte Arten: nie verfügbar, alte Daten bleiben lesbar. */
-export const RETIRED: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['spot', 'speed', 'tiles']);
+export const RETIRED: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['spot', 'speed', 'tiles', 'fits']);
+// `fits` („Passt das Wort in diesen Satz?“) ist abgeschaltet (Lehrer-Probe 19.10.2026: etwa die Hälfte der automatischen Gegen-Sätze war unbrauchbar). Code und Texte bleiben; Rückkehr nur mit geprüftem Material, siehe docs/entscheidungen.md.
+
+/** Entfernt für diese Karte? Bausteine (`tiles`) gibt es für Wendungen wieder (WL: Wort-Bausteine statt der ganzen Wendung auf einmal tippen). */
+export const retiredFor = (card: Pick<TrainCard, 'kind'>, ex: ExerciseId): boolean => RETIRED.has(ex) && !(ex === 'tiles' && card.kind === 'chunk');
 
 /** Arten, die für Wendungen nicht taugen (phase1-plan §4.2, Spalte „Chunk"). */
 const NOT_FOR_CHUNKS: ReadonlySet<ExerciseId> = new Set(['spot', 'wordfam']);
@@ -74,7 +83,7 @@ const gapOk = (card: TrainCard): boolean => !!card.context && gapUsable(card.con
 /** Was eine Übungsart an Kartendaten und Umgebung braucht. */
 export function supports(card: TrainCard, ex: ExerciseId, lang: Lang, poolSize: number, env: ExerciseEnv = NO_ENV): boolean {
   const meaning = meaningForTask(card, lang);
-  if (RETIRED.has(ex)) return false;
+  if (retiredFor(card, ex)) return false;
   if (card.kind === 'chunk' && NOT_FOR_CHUNKS.has(ex)) return false;
   switch (ex) {
     case 'mc_en':
@@ -85,6 +94,9 @@ export function supports(card: TrainCard, ex: ExerciseId, lang: Lang, poolSize: 
       return !!meaning && !!card.context && poolSize >= 3;
     case 'listen_mc':
       return canListen(env) && !!meaning && poolSize >= 3;
+    case 'fits':
+      // Nur Wörter (Wendungen haben ihre eigene Leiter) mit Ursprungssatz; ohne sicheren Gegen-Satz fragt die Art nur „passt“ (Ja).
+      return card.kind === 'vocab' && !!meaning && !!card.context && poolSize >= 3;
     case 'spot':
       return !!meaning && !!card.context;
     case 'type':
@@ -98,6 +110,8 @@ export function supports(card: TrainCard, ex: ExerciseId, lang: Lang, poolSize: 
       return gapOk(card);
     case 'tiles':
       return gapOk(card) || !!meaning;
+    case 'cloze_part':
+      return card.kind === 'chunk' && card.stage <= 3 && gapOk(card);
     case 'colloc_gap':
     case 'colloc':
       return hasPartner(card);
@@ -135,12 +149,18 @@ const inStage = (d: ExerciseDef, k: number): boolean => d.stage === k || (d.also
 export function availableExercises(card: TrainCard, lang: Lang, poolSize: number, env: ExerciseEnv = NO_ENV): ExerciseId[] {
   const k = Math.max(1, card.stage);
   const ok = (d: ExerciseDef) => supports(card, d.ex, lang, poolSize, env);
-  const out = CATALOG.filter((d) => inStage(d, k) && ok(d)).map((d) => d.ex);
-  for (let dist = 1; out.length < 2 && dist <= 4; dist++) {
+  // Wendungen: auch die bausteinweise Eingabe schon auf Stufe 2 (ein Wort der Wendung, Buchstaben-Bausteine).
+  const inK = (d: ExerciseDef, st: number): boolean => inStage(d, st) || (card.kind === 'chunk' && d.ex === 'tiles' && st === 2);
+  const out = CATALOG.filter((d) => inK(d, k) && ok(d)).map((d) => d.ex);
+  // WL: Mindestens zwei Arten UND zwei verschiedene Abfrage-Familien (nicht zweimal „Bedeutung wählen“), wo möglich.
+  const families = (): number => new Set(out.map(familyOf)).size;
+  for (let dist = 1; (out.length < 2 || families() < 2) && dist <= 4; dist++) {
     for (const s of [k + dist, k - dist]) {
       for (const d of CATALOG) {
-        if (out.length >= 2) break;
-        if (inStage(d, s) && ok(d) && !out.includes(d.ex)) out.push(d.ex);
+        if (out.length >= 2 && families() >= 2) break;
+        if (!inK(d, s) || !ok(d) || out.includes(d.ex)) continue;
+        if (out.length >= 2 && out.some((x) => familyOf(x) === familyOf(d.ex))) continue;
+        out.push(d.ex);
       }
     }
   }
@@ -208,10 +228,15 @@ export function chooseExercise(card: TrainCard, lang: Lang, poolSize: number, re
   // Tor der freien Antworten (Prüfung H1): Ab Stufe 3 steht immer mindestens eine freie Art der Stufe 4 zur Wahl, solange der Aufstieg noch freie Beweise an anderen Tagen braucht.
   // Sonst bliebe eine Karte mit nur zwei Stütz-Arten (cloze_hint, colloc_gap) für immer auf Stufe 3, weil nie eine freie Abfrage kommt.
   // Solange das Tor offen ist, stehen freie Arten zur Wahl, und gut gekonnte Stütz-/Auswahl-Arten entfallen. Ein Abschlag auf freie Arten würde den Satz nicht mehr wechseln lassen (V1) und eine ganz neue Karte sofort ohne Stütze fragen.
-  const gatePending = card.stage >= 3 && card.stage <= 4 && freeCorrectDays(card.doc) < freeDaysNeeded(card.stage + 1);
+  const gatePending = card.stage >= 3 && card.stage <= 4 && freeCorrectDays(card.doc, undefined, card.stage + 1) < freeDaysNeeded(card.stage + 1);
   if (gatePending) {
-    const free = availableExercises({ ...card, stage: 4 }, lang, poolSize, env).filter((ex) => GATE_FREE(ex) && !all.includes(ex));
+    // Wendungen auf Stufe 3 (WL): zuerst das freie Einzelwort (`cloze_part`, zählt für höchstens einen Tag); erst wenn ein solcher Tag vorliegt, kommt die ganze freie
+    // Lücke, und `cloze_part` entfällt – der zweite Tag für Stufe 4 muss eine ganze Wendung sein.
+    const partial = card.kind === 'chunk' && card.stage === 3;
+    const parts = partial ? partDaysOf(card.doc) : 0;
+    const free = availableExercises({ ...card, stage: 4 }, lang, poolSize, env).filter((ex) => GATE_FREE(ex) && !all.includes(ex) && !(partial && parts === 0 && ex === 'cloze'));
     all.push(...free);
+    if (partial && parts >= 1) all = all.filter((ex) => ex !== 'cloze_part');
     // Stütz- und Auswahl-Arten, die die Karte schon gut kann, beweisen für das Tor nichts mehr: sie entfallen, solange eine freie Art da ist. Schwache bleiben (schwächste zuerst).
     const kept = all.filter((ex) => GATE_FREE(ex) || score(countsFor(card, ex)) < GATE_DROP_SCORE);
     // Nie auf eine einzige Art zusammenstreichen, die schon die letzte war (V1: dieselbe Art nie zweimal in Folge).
@@ -227,7 +252,7 @@ export function chooseExercise(card: TrainCard, lang: Lang, poolSize: number, re
   const others = card.lastEx ? all.filter((ex) => ex !== card.lastEx) : all;
   const avail = others.length ? others : all;
   const ranked = avail
-    .map((ex, i) => ({ ex, i, s: score(countsFor(card, ex)) + varietyBias(ex, v, card.stage) + (card.stage >= 3 && isChoiceEx(ex) ? CHOICE_PENALTY : 0) - (weakProd && isProductionEx(ex) ? PRODUCTION_BOOST : 0) }))
+    .map((ex, i) => ({ ex, i, s: score(countsFor(card, ex)) + varietyBias(ex, v, card.stage) + ((card.stage >= 3 || (card.kind === 'chunk' && card.stage >= 2)) && isChoiceEx(ex) ? CHOICE_PENALTY : 0) - (weakProd && isProductionEx(ex) ? PRODUCTION_BOOST : 0) }))
     .sort((a, b) => a.s - b.s || a.i - b.i);
   const best = ranked[0];
   if (!best) return null;

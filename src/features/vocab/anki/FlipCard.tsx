@@ -96,7 +96,7 @@ export function FlipCard({ exercise, again = false, onDone, behind = 0 }: { exer
     };
   }, []);
 
-  const front = dir === 'de-en' ? (card.context?.sentence ?? null) : (card.context?.sentence ?? null);
+  const front = e.sentence?.sentence ?? null;
   const reveal = () => {
     if (shown) return;
     const ms = thinkMs(shownAt.current, hiddenMs.current);
@@ -105,7 +105,7 @@ export function FlipCard({ exercise, again = false, onDone, behind = 0 }: { exer
     setShown({ t: tt, ms: Math.round(ms), suggest, iv: flipIntervals(card, tt) });
     // Fehlt der Rückseite ein Beispielsatz (Befund 29.09.: Karte ohne Ursprungssatz, Kap. 15),
     // ergänzt Claude ihn einmal je Karte – genau wie beim Tippen (ExerciseView.tsx).
-    if (ai && wantsEnrichment(card, card.context?.sentence ?? null, Date.now())) requestExamples(card);
+    if (ai && wantsEnrichment(card, e.sentence?.sentence ?? null, Date.now())) requestExamples(card);
     idle(prepareNext);
   };
 
@@ -172,7 +172,7 @@ export function FlipCard({ exercise, again = false, onDone, behind = 0 }: { exer
   });
 
   const src = { area: 'trainer' as const, source: card.path, title: card.word };
-  const ctx = card.context;
+  const ctx = e.sentence ?? card.context;
   const pk = posKey(card.pos);
   const ipa = shown ? ipaOf(card.word) : null;
   const freshEntry = useExamples((s) => s.byCard[card.id]);
@@ -232,6 +232,13 @@ export function FlipCard({ exercise, again = false, onDone, behind = 0 }: { exer
       {/* UX-Prüfung W5 (Kap. 15 „Karten ohne Ursprungssatz“): der Ursprungssatz mit gefüllter Lücke steht unter dem Wort. */}
       {ctx && (
         <EnglishText as="p" className="lx-t-support m-0 text-muted" text={ctx.sentence} {...src} highlight={[ctx.start, ctx.end]} testId="flip-origin" />
+      )}
+      {/* WL: Zeigt die Karte einen anderen Satz als den Ursprungssatz, steht der Ursprungssatz mit seiner Herkunft zusätzlich auf der Rückseite. */}
+      {card.context && ctx && card.context.sentence !== ctx.sentence && (
+        <p className="lx-t-meta m-0 text-subtle" data-testid="flip-origin-anchor">
+          <span lang={lang}>{t('flipOriginLabel')}</span>{' '}
+          <EnglishText as="span" text={card.context.sentence} {...src} highlight={[card.context.start, card.context.end]} />
+        </p>
       )}
       {/* Die deutsche Bedeutung steht genau einmal: bei Deutsch → Englisch zeigt sie schon die Vorderseite. */}
       {dir === 'en-de' && meaning && (

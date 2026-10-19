@@ -4,7 +4,7 @@ import { formsOf, hasGapPlaceholder, locate, senseFits } from './context';
 import { buildExercise, gapCue, meaningParts, tongueOf } from './exercise';
 import type { SceneLookup } from './exercise';
 import { coreWords, gapUsable, lemmaFor } from './gapFit';
-import { availableExercises, CATALOG, exerciseDef, NO_ENV, RETIRED, supports } from './modes';
+import { availableExercises, CATALOG, exerciseDef, NO_ENV, retiredFor, supports } from './modes';
 import type { ExerciseEnv } from './modes';
 import { toUS } from '../answer/spelling';
 import { isFunctionGap } from './partner';
@@ -45,9 +45,9 @@ const bare = (t: string): string => t.toLowerCase().replace(/[^a-zäöüß0-9'-]
 const toks = (s: string): string[] => s.split(/\s+/).filter(Boolean);
 
 /** Übungen mit einer Lücke auf dem Kartenwort in einem Satz. */
-const GAP_EX: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['cloze', 'cloze_hint', 'wordfam', 'dictation', 'tiles', 'speed', 'match']);
+const GAP_EX: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['cloze', 'cloze_part', 'cloze_hint', 'wordfam', 'dictation', 'tiles', 'speed', 'match']);
 /** Übungen, in denen die Bedeutung die Frage ist und die Antwort das Wort/die Wendung: der Hinweis darf es nicht enthalten. */
-const WORD_ANSWER: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['cloze', 'cloze_hint', 'wordfam', 'tiles', 'match', 'mc_de', 'type', 'speed']);
+const WORD_ANSWER: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['cloze', 'cloze_part', 'cloze_hint', 'wordfam', 'tiles', 'match', 'mc_de', 'type', 'speed']);
 const MEANING_OPTIONS: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['mc_en', 'ctx_mc', 'listen_mc']);
 const WORD_OPTIONS: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['mc_de', 'match', 'colloc_gap', 'colloc', 'contrast']);
 
@@ -174,7 +174,7 @@ export function checkExercise(e: Exercise, card: TrainCard, lang: Lang): Violati
 
   // ---- Sätze (R6, R7)
   if (e.sentence && e.ex !== 'find_trap') {
-    if (e.ex !== 'contrast' && !isColloc && !senseFits(e.sentence, card.doc.pos)) add('R6', 'Wortart des Satzes passt nicht zur Karte');
+    if (e.ex !== 'contrast' && !(e.ex === 'fits' && e.fits?.truth === false) && !isColloc && !senseFits(e.sentence, card.doc.pos)) add('R6', 'Wortart des Satzes passt nicht zur Karte');
     const sd = sentenceDefects(e.sentence.sentence);
     if (sd.length) add('R7', sd.join('; '));
   }
@@ -188,7 +188,7 @@ export function checkExercise(e: Exercise, card: TrainCard, lang: Lang): Violati
   if (e.options.length || e.input === 'choice') {
     const labels = e.options.map((o) => norm(o.label));
     const correct = e.options.filter((o) => o.correct);
-    const minOpts = e.ex === 'contrast' ? 2 : 3;
+    const minOpts = e.ex === 'contrast' || e.ex === 'fits' ? 2 : 3;
     if (e.input === 'choice' && e.options.length < minOpts) add('R12', `nur ${e.options.length} Optionen`);
     if (e.input === 'choice' && correct.length !== 1) add('R12', `${correct.length} richtige Optionen`);
     if (new Set(labels).size !== labels.length) {
@@ -300,7 +300,7 @@ export const MAX_TRIES = 6;
 export function fallbackChain(card: TrainCard, ex: ExerciseId, lang: Lang, poolSize: number, env: ExerciseEnv = NO_ENV): ExerciseId[] {
   const input = exerciseDef(ex).input;
   const stage = Math.max(1, card.stage);
-  const ok = (x: ExerciseId): boolean => x !== ex && x !== 'type' && !RETIRED.has(x) && supports(card, x, lang, poolSize, env);
+  const ok = (x: ExerciseId): boolean => x !== ex && x !== 'type' && !retiredFor(card, x) && supports(card, x, lang, poolSize, env);
   const first = availableExercises({ ...card, stage: card.stage }, lang, poolSize, env).filter(ok);
   const rest = CATALOG.filter((d) => ok(d.ex) && !first.includes(d.ex))
     .sort((a, b) => Math.abs(a.stage - stage) - Math.abs(b.stage - stage))
