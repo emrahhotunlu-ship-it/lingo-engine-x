@@ -1,5 +1,6 @@
 import { validateDoc } from '../../data/validate';
-import { isDue, unitState } from '../metrics/definitions';
+import { isDue } from '../metrics/definitions';
+import { wordTier } from '../tutor/learnerWords';
 import { legacyToFsrs } from './legacyFsrs';
 import { FSRS_VERSION, readFsrs } from './scheduler';
 import type { TrainCard } from './types';
@@ -67,7 +68,7 @@ export function matchesFilter(c: TrainCard, f: VocabFilter, nowMs: number): bool
     case 'wobbly':
     case 'safe':
     case 'firm':
-      return unitState(c, nowMs) === f;
+      return wordTier(c, nowMs) === f;
     case 'job':
       return isJobCard(c);
     case 'phrases':

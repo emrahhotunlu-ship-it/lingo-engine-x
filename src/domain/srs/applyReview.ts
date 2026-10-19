@@ -4,7 +4,7 @@ import { validateDoc } from '../../data/validate';
 import { dayKey } from '../date';
 import { naOf } from './actBase';
 import { flipStage } from './flip';
-import { isFestState } from '../metrics/cardStatus';
+import { wordFest } from '../tutor/learnerWords';
 import { findContext } from './context';
 import { stageOf, nextStage } from './ladder';
 import { freeCorrectDays, freeDaysNeeded } from './variety';
@@ -188,7 +188,7 @@ function festPatch(cur: Doc, patch: Doc, day: string): void {
   const up = (cur.src as { upgraded?: unknown } | undefined)?.upgraded;
   const hit = typeof cur.ex === 'string' && typeof cur.word === 'string' ? findContext(cur.ex, cur.word) : null;
   const context = hit ? { sentence: hit.sentence } : typeof up === 'string' && up ? { sentence: up } : null;
-  if (isFestState({ isNew: false, stage: patch.stage as 0, fsrs: f, doc: { ...cur, ...patch }, context })) patch.ff = day;
+  if (wordFest({ isNew: false, stage: patch.stage as 0, fsrs: f, doc: { ...cur, ...patch }, context })) patch.ff = day;
 }
 
 /** Gespeicherter Wert von `lapses` (Feld der alten App), nur um +1 bei einem echten Rückfall erhöht; das Maximum mit `fsrs.lapses` bildet allein der Leser (`lapsesOf`). */

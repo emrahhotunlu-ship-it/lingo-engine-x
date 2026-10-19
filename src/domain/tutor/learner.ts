@@ -4,7 +4,7 @@ import { certainty, topicP } from '../grammar/bkt';
 import { patternById, patternOf, patternsOf, topicsWithPatterns } from '../grammar/patterns';
 import { patInfos } from '../grammar/slotInput';
 import { currentChapter } from '../grammar/slotPlan';
-import { cardEvidence, cardStatusFrom, type CardEvidence } from '../metrics/cardStatus';
+import { cardStatusFrom, type CardEvidence } from '../metrics/cardStatus';
 import { patsOf, patternState, type PatEntry, type PatternState } from '../metrics/pattern';
 import { DONT_KNOW } from '../progress/logPatch';
 import { toTrainCard } from '../srs/cards';
@@ -14,7 +14,10 @@ import { usesChunk } from '../text/chunkMatch';
 import { readCtx2, type Ctx2 } from './ctx2';
 import type { DiagEntry } from './diag';
 import { errorEvidence, hypothesesOf, logEvidence, logSig, type Evidence, type Hypothesis } from './hypotheses';
+import { wordEvidence } from './learnerWords';
 import { isUseId, type PatternId, type UseId } from './tutorTypes';
+
+export { wordFest, wordStatus, wordTier } from './learnerWords';
 
 // Lernermodell der Tutor-Engine (docs/umbau/tutor-engine-v3.md §6.2). Rein und deterministisch: gleiche Quellen und gleiche Uhrzeit ergeben
 // dasselbe Modell; nichts wird gelesen oder geschrieben, es gibt keinen Zufall. Aufgerufen wird es nur bei Rundenstart und bei jeder Rückmeldung.
@@ -32,6 +35,7 @@ import { isUseId, type PatternId, type UseId } from './tutorTypes';
 //   uses      Gebrauchsmuster `use:<erstes>+<letztes Wort>` aus den Wendungen der Karten (`col`), belegt durch eigene Sätze (`act/…`) und Fehlerbelege.
 //   hyps      Fehlerannahmen (`hypotheses.ts`, §3.3).
 //   pace      Median der Antwortzeit je Aufgabenart (`g:<art>`, `v:<modus>`), nur 0 < ms ≤ 60 s.
+//   proofs    Fortschrittsbeleg je Muster (`progressProof`): „vor 3 Wochen 4 von 9, jetzt 8 von 9“, nur aus getippten Antworten im Protokoll.
 //   goals     aktuelles Kapitel (`currentChapter`, `null`, solange kein Muster eingeführt ist), C1-Ziele (folgen mit S3), Berufsprofil (`ctx2`).
 
 type Doc = Readonly<Record<string, unknown>>;
@@ -67,7 +71,16 @@ export type LearnerModel = {
   hyps: readonly Hypothesis[];
   pace: Readonly<Record<string, number>>;
   goals: { chapter: number | null; c1: readonly PatternId[]; ctx: Ctx2 | null };
+  /** Fortschrittsbelege je Muster (S2); fehlt ein Muster, reichen die Daten nicht (nie erfunden). Ältere Aufrufer ohne Feld: keine Belege. */
+  proofs?: ReadonlyMap<PatternId, ProgressProof>;
 };
+
+/**
+ * Fortschrittsbeleg (Tutor-Engine v3 S2): zwei Fenster aus getippten Antworten auf EIN Muster. „Jetzt“ = die letzten 7 Lerntage, „damals“ = die
+ * jüngsten Antworten, die mindestens 14 Tage zurückliegen (im 56-Tage-Fenster). Je Fenster höchstens 9 Antworten (die jüngsten), mindestens 4.
+ * `weeks` = ganze Wochen zwischen dem jüngsten Tag von „damals“ und heute (mindestens 2).
+ */
+export type ProgressProof = { thenOk: number; thenN: number; nowOk: number; nowN: number; weeks: number; trend: 'up' | 'flat' | 'down' };
 export type LearnerSources = {
   /** `grammar/<thema>` nach Thema. */
   grammarDocs: ReadonlyMap<string, Doc>;
@@ -269,7 +282,7 @@ function wordStatic(id: string, doc: Doc, now: number): WordStatic {
     return hit.v;
   }
   const card = toTrainCard(id, doc, true, now);
-  const entry: WordEntry = { sig, v: { card, ev: card ? cardEvidence(card) : null, vs: vocabStaticOf(doc) }, nowDep: !hasDue(doc) };
+  const entry: WordEntry = { sig, v: { card, ev: card ? wordEvidence(card) : null, vs: vocabStaticOf(doc) }, nowDep: !hasDue(doc) };
   if (WORD_CACHE.size >= CACHE_MAX && !hit) WORD_CACHE.delete(WORD_CACHE.keys().next().value as string);
   WORD_CACHE.set(path, entry);
   WORD_BY_DOC.set(doc, entry);
@@ -326,6 +339,35 @@ const bitsOf = (e: PatEntry | undefined): number[] => {
   return out;
 };
 
+/** Je Fenster höchstens so viele Antworten (die jüngsten) und mindestens so viele, sonst kein Beleg. */
+export const PROOF_MAX = 9;
+export const PROOF_MIN = 4;
+const PROOF_NOW_DAYS = 7;
+const PROOF_GAP_DAYS = 14;
+/** Ab diesem Unterschied der Quoten (20 Prozentpunkte) gilt der Verlauf als besser bzw. schlechter. */
+const PROOF_TREND = 0.2;
+
+const dayDiff = (a: string, b: string): number => Math.round((Date.parse(`${b}T12:00:00Z`) - Date.parse(`${a}T12:00:00Z`)) / 86_400_000);
+
+/**
+ * Fortschrittsbeleg aus Antwortzeilen eines Musters (rein). Gezählt werden nur getippte Antworten (`typed`); `null`, wenn eines der beiden
+ * Fenster weniger als `PROOF_MIN` Antworten hat. Zeilen nach `today` zählen nicht.
+ */
+export function progressProof(rows: ReadonlyArray<{ t: number; day: string; ok: boolean; typed: boolean }>, today: string): ProgressProof | null {
+  const typed = rows.filter((r) => r.typed && r.day <= today).sort((a, b) => a.t - b.t);
+  const nowFrom = addDays(today, -(PROOF_NOW_DAYS - 1));
+  const thenTo = addDays(today, -PROOF_GAP_DAYS);
+  const nowRows = typed.filter((r) => r.day >= nowFrom).slice(-PROOF_MAX);
+  const thenRows = typed.filter((r) => r.day <= thenTo).slice(-PROOF_MAX);
+  if (nowRows.length < PROOF_MIN || thenRows.length < PROOF_MIN) return null;
+  const nowOk = nowRows.filter((r) => r.ok).length;
+  const thenOk = thenRows.filter((r) => r.ok).length;
+  const lastThen = thenRows[thenRows.length - 1]?.day ?? thenTo;
+  const weeks = Math.max(2, Math.round(dayDiff(lastThen, today) / 7));
+  const d = nowOk / nowRows.length - thenOk / thenRows.length;
+  return { thenOk, thenN: thenRows.length, nowOk, nowN: nowRows.length, weeks, trend: d >= PROOF_TREND ? 'up' : d <= -PROOF_TREND ? 'down' : 'flat' };
+}
+
 const sortedMap = <K extends string, V>(entries: Array<[K, V]>): Map<K, V> => new Map(entries.sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0)));
 
 export function buildLearnerModel(src: LearnerSources, now: number): LearnerModel {
@@ -377,6 +419,7 @@ export function buildLearnerModel(src: LearnerSources, now: number): LearnerMode
     else byPat.set(r.pat, [r]);
   }
   const patterns: Array<[PatternId, PatternKnow]> = [];
+  const proofs: Array<[PatternId, ProgressProof]> = [];
   for (const topic of topicsWithPatterns()) {
     const doc = src.grammarDocs.get(topic);
     const pats = patsOf(doc);
@@ -390,6 +433,8 @@ export function buildLearnerModel(src: LearnerSources, now: number): LearnerMode
       const free = new Set<string>([...(entry?.dd ?? []), ...mine.filter((r) => r.free).map((r) => r.day)]);
       let lastWrong = errLast.get(p.id) ?? 0;
       for (const r of mine) if (!r.ok && r.t > lastWrong) lastWrong = r.t;
+      const proof = progressProof(mine, today);
+      if (proof) proofs.push([p.id, proof]);
       patterns.push([
         p.id,
         {
@@ -495,5 +540,6 @@ export function buildLearnerModel(src: LearnerSources, now: number): LearnerMode
     hyps,
     pace,
     goals: { chapter: anyIntro ? currentChapter(infos, today) : null, c1: [], ctx: readCtx2(src.profile) },
+    proofs: sortedMap(proofs),
   };
 }

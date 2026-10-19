@@ -4,7 +4,7 @@ import { displayP } from '../grammar/bkt';
 import { liveErrorsOf } from '../grammar/errors';
 import { dueFehlersaetze } from '../repair/fehlersaetze';
 import { readRepairs } from '../repair/repair';
-import { unitState } from '../metrics/definitions';
+import { wordTier } from '../tutor/learnerWords';
 import { quizzable } from '../srs/queue';
 import type { Lang, TrainCard } from '../srs/types';
 import { overdueCount } from '../unit/backlog';
@@ -19,7 +19,7 @@ const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFi
 export function cardStats(cards: readonly TrainCard[], lang: Lang, nowMs: number): { overdue: number; sure: number } {
   const pool = cards.filter((c) => !c.hidden);
   const act = pool.filter((c) => quizzable(c, lang, pool.length - 1));
-  return { overdue: overdueCount(act, nowMs), sure: pool.filter((c) => { const s = unitState(c, nowMs); return s === 'safe' || s === 'firm'; }).length };
+  return { overdue: overdueCount(act, nowMs), sure: pool.filter((c) => { const s = wordTier(c, nowMs); return s === 'safe' || s === 'firm'; }).length };
 }
 
 /**
