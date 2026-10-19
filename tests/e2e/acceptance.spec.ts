@@ -64,8 +64,9 @@ test('Kap. 14: alle bisherigen Daten sichtbar, Serie läuft weiter', async ({ pa
   await openOverview(page);
   // Kurs x/24 steht nicht mehr im Kopf (Fokus-Umbau); die Kursdaten bleiben in der Datenbank.
   await expect(page.getByTestId('course-done')).toHaveCount(0);
-  // Kopfzahl ist „Fest“ (Stufe ≥ 4, Stabilität ≥ 21 Tage), nicht mehr „Wörter gesamt“ inkl. Neuer.
-  await expect(page.getByTestId('stand-fest')).toHaveText('12');
+  // Kopfzahl ist „Fest“, nicht mehr „Wörter gesamt“ inkl. Neuer. Seit Paket ST (19.10.2026) gilt die strengere Regel
+  // (Stufe 5, Stabilität ≥ 21 Tage, im neuen Satz gekonnt, kein offener Fehler): in den Seed-Daten 5 statt 12.
+  await expect(page.getByTestId('stand-fest')).toHaveText('5');
   await expect(page.getByTestId('vocab-total')).toHaveCount(0);
 });
 
