@@ -19,22 +19,30 @@ const expand = (n: string): string =>
     .replace(/\bcan not\b/g, 'cannot');
 
 const NUM: Record<string, string> = { one: '1', two: '2', three: '3', four: '4', five: '5', six: '6', seven: '7', eight: '8', nine: '9', ten: '10', eleven: '11', twelve: '12', fifteen: '15', twenty: '20', fifty: '50' };
-const PARTICIPLE = /^(?:\w+ed|been|got|had|gone|done|made|seen|taken|given|known|written|sent|chosen|spoken|broken)$/;
+const PARTICIPLE = /^(?:\w+ed|been|got|gotten|had|gone|done|made|seen|taken|given|known|written|sent|chosen|spoken|broken|told|left|met|paid|heard|found|thought|bought|brought|sold|spent|lost|built)$/;
+/** Grundformen auf -ed: nach „'d“ steht „would“ („we'd need“), nie „had“. */
+const BASE_ED = new Set(['need', 'proceed', 'succeed', 'exceed', 'feed', 'speed', 'bleed', 'breed', 'seed', 'bed', 'red']);
+const ADVERBS = '(?:already|never|just|also|not|ever|still|probably|really)';
+/** Hauptwörter auf -ing: „the meeting's pricing“ ist kein „is“. */
+const ING_NOUNS = '(?:meeting|morning|evening|thing|pricing|marketing|building|bring|spring|during|training|ceiling|string|king|ring|wing|sing)';
 
 /**
- * Schreibweisen angleichen, bevor Wörter verglichen werden (Gegenlesung FK): p.m./pm/PM, 10 %/10 percent/ten percent, Akzente (café = cafe),
- * „'s“ vor einer -ing-Form = „is“ („the customer's calling“), „'d“ vor einem Partizip = „had“, sonst „would“ („we'd already have“).
+ * Schreibweisen angleichen, bevor Wörter verglichen werden (Gegenlesung FK): p.m./pm/PM, 10 %/10 percent/ten percent/10 per cent, Akzente (café = cafe),
+ * „'s“ vor einer -ing-Form = „is“ („the customer's calling“, nicht „let's“ und nicht vor Hauptwörtern wie „meeting“), „'d“ vor einem Partizip = „had“
+ * (Adverbien wie „never“ werden übersprungen; „you'd better“ = „had better“), sonst „would“ („we'd already have“, „we'd need“).
  */
 function prepare(s: string): string {
   return s
     .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/\bper\s+cent\b/gi, 'percent')
     .replace(/(\d)\s*%/g, '$1 percent')
-    .replace(/\b([ap])\.\s?m\.?/gi, '$1m')
-    .replace(/['’]s(?=\s+\w+ing\b)/gi, ' is')
-    .replace(/['’]d(\s+(?:already\s+)?\w+)?/gi, (_m, rest: string | undefined) => {
-      const next = rest?.trim().split(/\s+/).pop()?.toLowerCase() ?? '';
-      return ` ${PARTICIPLE.test(next) ? 'had' : 'would'}${rest ?? ''}`;
+    .replace(/(\d)\s*([ap])\.?\s?m\b\.?/gi, '$1 $2m')
+    .replace(new RegExp(`(?<!\\blet)(?<=\\w)['’]s(?=\\s+(?!${ING_NOUNS}\\b)\\w+ing\\b)`, 'gi'), ' is')
+    .replace(new RegExp(`(?<=\\w)['’]d((?:\\s+${ADVERBS})*)(\\s+\\w+)?`, 'gi'), (_m, advs: string | undefined, rest: string | undefined) => {
+      const next = rest?.trim().toLowerCase() ?? '';
+      const had = next === 'better' || (PARTICIPLE.test(next) && !BASE_ED.has(next));
+      return ` ${had ? 'had' : 'would'}${advs ?? ''}${rest ?? ''}`;
     });
 }
 

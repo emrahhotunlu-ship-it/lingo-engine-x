@@ -67,10 +67,38 @@ describe('FK-Gegenlesung: Umfang, Normalisierung, Abdeckung', () => {
     expect(checkB1("If we'd signed the contract in May, we'd already have access to the system.", d)).toBe('exact');
     expect(checkB1("If we'd signed the contract in May, we'd have access to the system.", d)).not.toBe('exact');
   });
+  it("„'d“: Grundformen auf -ed bleiben „would“, „you'd better“ = „had better“, Adverbien werden übersprungen, mehr Partizipien", () => {
+    const same = (a: string, b: string): void => {
+      const t = { model: b, ok: [] as string[], bad: 'zzz yyy xxx www vvv uuu' };
+      expect(checkB1(a, t), `${a} = ${b}`).toBe('exact');
+    };
+    same("We'd need more time to check it.", 'We would need more time to check it.');
+    same("We'd proceed with the plan if you agree.", 'We would proceed with the plan if you agree.');
+    same("You'd better check the contract today.", 'You had better check the contract today.');
+    same("If we'd never seen the file, we would ask.", 'If we had never seen the file, we would ask.');
+    same("If he'd just told us, we would wait.", 'If he had just told us, we would wait.');
+    same("If we'd gotten the offer, we would sign.", 'If we had gotten the offer, we would sign.');
+    same("O'Donnell sent the draft to us today.", "O'Donnell sent the draft to us today.");
+  });
+  it("„'s“ vor -ing nur als „is“, nicht bei „let's“ und Hauptwörtern; „per cent“, „3pm“", () => {
+    const same = (a: string, b: string): void => expect(checkB1(a, { model: b, ok: [], bad: 'zzz yyy xxx www vvv uuu' }), `${a} = ${b}`).toBe('exact');
+    same("The customer's calling me right now.", 'The customer is calling me right now.');
+    same("Let's check the meeting's pricing today.", "Let's check the meeting's pricing today.");
+    expect(checkB1("The meeting's pricing is calling for a change here.", { model: 'The meeting is pricing is calling for a change here.', ok: [], bad: 'zzz yyy xxx www vvv uuu' })).not.toBe('exact');
+    same('We give you a discount of 10 per cent at 3pm.', 'We give you a discount of 10 percent at 3 p.m.');
+  });
+  it('b1-pt-02: auch „is testing … for two weeks“ ist falsch; psc-01/psc-02 sind entfernt', () => {
+    const t = b1Tasks().find((x) => x.id === 'b1-pt-02')!;
+    expect(checkB1('Our customer is testing the software for two weeks.', t)).toBe('no');
+    expect(checkB1('Our customer has been testing the software for two weeks.', t)).toBe('exact');
+    expect(b1Tasks().some((x) => x.id === 'b1-psc-01' || x.id === 'b1-psc-02')).toBe(false);
+    const p4 = b1Tasks().find((x) => x.id === 'b1-prp-04')!;
+    expect(checkB1("We'll talk about the price with the customer tomorrow.", p4)).toBe('exact');
+  });
   it('Abdeckungslücken aus der Gegenlesung sind als Muster vorhanden', () => {
     const pats = new Set(b1Tasks().map((t) => t.pat));
     for (const p of ['wo.place-time', 'qu.indirect', 'ma.dont-have-to', 'prp.no-prep', 'vp.look-forward', 'pt.for-since', 'vp.to-verbs', 'dip.wondering', 'psc.now', 'psc.habit']) expect(pats.has(p), p).toBe(true);
-    expect(b1Tasks().length).toBeGreaterThanOrEqual(58);
+    expect(b1Tasks().length).toBeGreaterThanOrEqual(56);
   });
 });
 

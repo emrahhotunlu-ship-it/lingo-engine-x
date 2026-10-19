@@ -36,7 +36,7 @@
       "pat": "ut.be-used-to",
       "sit": {
         "de": "Du bist oft geschäftlich in London. Ein Kunde fragt, ob dir das Linksfahren mit dem Mietwagen noch schwerfällt.",
-        "en": "A customer asks whether driving in England still bothers you after years there."
+        "en": "You are often in London on business. A customer asks whether driving on the left in a rental car is still hard for you."
       },
       "intent": {
         "de": "Ich bin es gewohnt, links zu fahren.",
@@ -259,8 +259,8 @@
       ],
       "bad": "I have never work with such a large archive.",
       "why": {
-        "de": "Erfahrung bis zum heutigen Tag steht im Present Perfect mit „never“ („have never worked“). „Did never work“ gibt es im Englischen nicht: „never“ steht zwischen Hilfsverb und Verb.",
-        "en": "Experience up to today takes the Present Perfect with “never” (“have never worked”). “Did never work” does not exist in English: “never” sits between the auxiliary and the main verb."
+        "de": "Erfahrung bis heute steht im Present Perfect: „have“ + Partizip („have never worked“). Nach „have“ steht nie die Grundform („have never work“).",
+        "en": "Experience up to today takes the Present Perfect: “have” + past participle (“have never worked”). After “have” the base form (“have never work”) is never used."
       }
     },
     {
@@ -319,7 +319,7 @@
       "bad": "By the end of this year, I have been working here for five years.",
       "why": {
         "de": "Im Deutschen sagt man „Ende dieses Jahres arbeite ich seit fünf Jahren hier“. Für die Dauer bis zu einem Zeitpunkt in der Zukunft braucht das Englische „will have been + -ing“.",
-        "en": "A duration up to a future point is expressed with “will have been + -ing”. After “will” the base form (“have”) is always used, never “has”."
+        "en": "German says “Ende dieses Jahres arbeite ich seit fünf Jahren hier” in the present tense. For a duration up to a point in the future, English needs “will have been + -ing”."
       }
     },
     {
@@ -348,8 +348,8 @@
       ],
       "bad": "Tomorrow at 3 p.m., I run a workshop at the customer's site.",
       "why": {
-        "de": "Eine Handlung, die zu einem künftigen Zeitpunkt gerade läuft, steht im Future Continuous: will be + -ing. „Will“ braucht danach „be“.",
-        "en": "An action that will be in progress at a future time takes the Future Continuous: will be + -ing. “Will” needs “be” after it."
+        "de": "Für etwas, das zu einem festen Zeitpunkt in der Zukunft gerade läuft, steht „I'll be running“ (oder für einen festen Termin „I'm running“). Das einfache Present („I run“) beschreibt Gewohnheiten, nicht diesen einen Termin.",
+        "en": "For something in progress at a set time in the future, use “I'll be running” (or “I'm running” for a fixed arrangement). The simple present (“I run”) describes habits, not this one appointment."
       }
     },
     {
@@ -554,7 +554,7 @@
       "bad": "I wish we would have hired a second developer earlier.",
       "why": {
         "de": "Nach „wish“ steht für Bedauern über die Vergangenheit das Past Perfect („had hired“). „Would have“ hört man in den USA umgangssprachlich, im Geschäftsenglisch gilt es als falsch.",
-        "en": "After “wish”, regret about the past takes the Past Perfect (“had hired”). “Would have” is not used after “wish”."
+        "en": "After “wish”, regret about the past takes the Past Perfect (“had hired”). You may hear “would have” in casual American speech, but in business English it counts as wrong."
       }
     },
     {
@@ -583,7 +583,7 @@
       "bad": "I wish the migration would be already finished.",
       "why": {
         "de": "Ein Wunsch über die Gegenwart: „wish“ + Vergangenheitsform. Bei „be“ steht „were“ (im Alltag auch „was“). „Would“ nach „wish“ benutzt man nur, wenn sich jemand oder etwas ändern soll („I wish he would call back“), nicht für einen Zustand wie „fertig sein“.",
-        "en": "A wish about the present takes “wish” + Past Simple. With “be” the form is “were” (in everyday speech also “was”). “Would be” is only used for annoyance at someone's behavior."
+        "en": "A wish about the present takes “wish” + past form. With “be” it is “were” (in everyday speech also “was”). “Would” after “wish” is only used when you want someone or something to change (“I wish he would call back”), not for a state like “being finished”."
       }
     },
     {
@@ -1047,7 +1047,7 @@
       "pat": "rs.backshift",
       "sit": {
         "de": "Du erzählst im Rückblick von einem Projekt aus dem letzten Jahr.",
-        "en": "Looking back, you tell about a project from last year."
+        "en": "Looking back, you talk about a project from last year."
       },
       "intent": {
         "de": "Sie sagte mir damals, dass sie das Projekt in der folgenden Woche abschließen würde.",
@@ -1447,61 +1447,6 @@
       }
     },
     {
-      "id": "b1-psc-01",
-      "pat": "psc.now",
-      "sit": {
-        "de": "Du bist im Büro, der Drucker streikt.",
-        "en": "You are in the office and the printer has stopped working."
-      },
-      "intent": {
-        "de": "Schau, der Drucker funktioniert schon wieder nicht! Kannst du den IT-Support rufen?",
-        "en": "Say, “Look! The printer is not working again. Can you call IT support?”"
-      },
-      "hint": {
-        "de": "Zeitform für etwas, das gerade passiert",
-        "en": "tense for something happening now"
-      },
-      "model": "Look! The printer isn't working again. Can you call IT support?",
-      "ok": [
-        "Look! The printer is not working again. Can you call IT support?",
-        "Look! The printer is not working again. Can you call IT?"
-      ],
-      "bad": "Look! The printer doesn't work again. Can you call IT support?",
-      "why": {
-        "de": "Etwas, das jetzt gerade passiert („Look!“), steht im Present Continuous: „is not working“. Das einfache Present beschreibt Gewohnheiten und Tatsachen.",
-        "en": "Something happening right now (“Look!”) takes the Present Continuous: “is not working”. The simple present describes habits and facts."
-      }
-    },
-    {
-      "id": "b1-psc-02",
-      "pat": "psc.habit",
-      "sit": {
-        "de": "Du erklärst einem Kollegen den Stand der Preisverhandlung.",
-        "en": "You explain the state of the price negotiation to a colleague."
-      },
-      "intent": {
-        "de": "Soweit ich weiß, verhandelt mein Chef mit Ihrem Chef über zehn Prozent Rabatt.",
-        "en": "Say that, as far as you know, your manager negotiates with their manager over a 10% discount."
-      },
-      "hint": {
-        "de": "-s bei he / she / it",
-        "en": "the -s with he / she / it"
-      },
-      "model": "As far as I know, my manager negotiates with your manager over a 10% discount.",
-      "ok": [
-        "As far as I know, my manager is negotiating with your manager over a 10% discount.",
-        "As far as I know, my manager is negotiating a 10% discount with your manager.",
-        "As far as I know, my manager negotiates with your manager about a 10% discount.",
-        "As far as I know, my manager is negotiating with your manager about a 10% discount.",
-        "As far as I know, my manager negotiates a 10% discount with your manager."
-      ],
-      "bad": "As far as I know, my manager negotiate with your manager over a 10% discount.",
-      "why": {
-        "de": "Bei „he / she / it“ bekommt das Verb im Present ein -s: „my manager negotiates“. Auch das Present Continuous („is negotiating“) ist hier richtig, wenn es um den laufenden Vorgang geht.",
-        "en": "With “he / she / it” the verb in the present tense takes an -s: “my manager negotiates”. The Present Continuous (“is negotiating”) is also correct here if you mean the process under way."
-      }
-    },
-    {
       "id": "b1-psc-03",
       "pat": "psc.now",
       "sit": {
@@ -1579,7 +1524,10 @@
         "I have a meeting at 10 a.m. tomorrow.",
         "I've got a meeting tomorrow at 10 a.m.",
         "I have an appointment tomorrow at 10 a.m.",
-        "Tomorrow at 10 a.m., I have a meeting."
+        "Tomorrow at 10 a.m., I have a meeting.",
+        "I have a meeting tomorrow at 10.",
+        "I have a meeting at 10 tomorrow morning.",
+        "I have an appointment at 10 a.m. tomorrow."
       ],
       "bad": "I have tomorrow a meeting at 10 a.m.",
       "why": {
@@ -1607,7 +1555,9 @@
         "Could you tell me where the contract is?",
         "Can you tell me where the contract is stored?",
         "Could you tell me where the contract is stored?",
-        "Can you tell me where the contract is saved?"
+        "Can you tell me where the contract is saved?",
+        "Do you know where the contract is?",
+        "Can you tell me where I can find the contract?"
       ],
       "bad": "Can you tell me where is the contract?",
       "why": {
@@ -1635,7 +1585,8 @@
         "You do not have to send the report today; Monday is fine.",
         "You don't have to send the report today; Monday works.",
         "You don't need to send the report today; Monday is fine.",
-        "You needn't send the report today; Monday is fine."
+        "You needn't send the report today; Monday is fine.",
+        "There's no need to send the report today; Monday is fine."
       ],
       "bad": "You mustn't send the report today; Monday is fine.",
       "why": {
@@ -1648,10 +1599,10 @@
       "pat": "prp.no-prep",
       "sit": {
         "de": "Du erklärst dem Team, was morgen ansteht.",
-        "en": "You tell the team what is on tomorrow."
+        "en": "You tell the team what is on the agenda for tomorrow."
       },
       "intent": {
-        "de": "Wir besprechen den Preis morgen mit dem Kunden.",
+        "de": "Wir diskutieren morgen mit dem Kunden über den Preis.",
         "en": "Say that you will discuss the price with the customer tomorrow."
       },
       "hint": {
@@ -1664,12 +1615,14 @@
         "We are going to discuss the price with the customer tomorrow.",
         "We will discuss the price with the client tomorrow.",
         "Tomorrow we will discuss the price with the customer.",
-        "We're discussing the price with the customer tomorrow."
+        "We're discussing the price with the customer tomorrow.",
+        "We'll talk about the price with the customer tomorrow.",
+        "We'll go over the price with the customer tomorrow."
       ],
       "bad": "We will discuss about the price with the customer tomorrow.",
       "why": {
-        "de": "„Discuss“ nimmt sein Objekt direkt, ohne „about“. Das deutsche „besprechen über“ verleitet zu „discuss about“.",
-        "en": "“Discuss” takes its object directly, with no “about”. German “sprechen über” tempts you to say “discuss about”."
+        "de": "„Discuss“ nimmt sein Objekt direkt, ohne „about“. Das deutsche „diskutieren über“ verleitet zu „discuss about“. Mit „about“ geht dagegen „talk about“.",
+        "en": "“Discuss” takes its object directly, with no “about”. German “diskutieren über” tempts you to say “discuss about”. “Talk about” does take “about”."
       }
     },
     {
@@ -1710,7 +1663,7 @@
       },
       "intent": {
         "de": "Unser Kunde testet die Software seit zwei Wochen.",
-        "en": "Say that our customer has been testing the software for two weeks."
+        "en": "Say that your customer has been testing the software for two weeks."
       },
       "hint": {
         "de": "„seit“ bei einer Zeitspanne",
@@ -1723,10 +1676,10 @@
         "Our customer has tested the software for two weeks.",
         "Our customer has been testing the software for the past two weeks."
       ],
-      "bad": "Our customer has been testing the software since two weeks.",
+      "bad": "Our customer is testing the software since two weeks.",
       "why": {
-        "de": "Eine Zeitspanne (zwei Wochen) bekommt „for“. „Since“ nennt einen Anfangspunkt („since Monday“). Das deutsche „seit“ deckt beides ab.",
-        "en": "A length of time (two weeks) takes “for”. “Since” names a starting point (“since Monday”). German “seit” covers both."
+        "de": "Eine Zeitspanne (zwei Wochen) bekommt „for“, „since“ steht nur bei einem Anfangspunkt („since Monday“). Und was bis jetzt andauert, steht im Present Perfect („has been testing“), nicht im Present. Das deutsche „seit“ verleitet zu beidem.",
+        "en": "A length of time (two weeks) takes “for”; “since” is only for a starting point (“since Monday”). And something that has lasted up to now takes the Present Perfect (“has been testing”), not the present. German “seit” leads to both mistakes."
       }
     },
     {
@@ -1744,13 +1697,13 @@
         "de": "Satzbau nach „want“",
         "en": "sentence structure after “want”"
       },
-      "model": "I want you to check the contract by Friday.",
+      "model": "I'd like you to check the contract by Friday.",
       "ok": [
         "I would like you to check the contract by Friday.",
         "I want you to review the contract by Friday.",
         "I would like you to review the contract by Friday.",
-        "I'd like you to check the contract by Friday.",
-        "I'd like you to review the contract by Friday."
+        "I'd like you to review the contract by Friday.",
+        "I want you to check the contract by Friday."
       ],
       "bad": "I want that you check the contract by Friday.",
       "why": {
@@ -1778,12 +1731,14 @@
         "I was wondering whether you could give us a discount.",
         "I was wondering if you could offer us a discount.",
         "I was wondering if you would be able to give us a discount.",
-        "I was wondering if you could give us a bit of a discount."
+        "I was wondering if you could give us a bit of a discount.",
+        "We were wondering if you could give us a discount.",
+        "I was wondering whether you could offer us a discount."
       ],
-      "bad": "Give us a discount, please.",
+      "bad": "I asked myself if you could give us a discount.",
       "why": {
-        "de": "„I was wondering if you could …“ ist die höfliche, weiche Form einer Bitte. Der direkte Befehl („Give us …“) klingt im Geschäftsenglisch schroff.",
-        "en": "“I was wondering if you could …” is the polite, soft way to make a request. The direct command (“Give us …”) sounds blunt in business English."
+        "de": "„Ich habe mich gefragt“ ist hier eine höfliche Bitte. Wörtlich übersetzt („I asked myself“) klingt es nach Selbstgespräch. Die feste höfliche Form ist „I was wondering if you could …“.",
+        "en": "Here “Ich habe mich gefragt” is a polite request. Translated word for word (“I asked myself”), it sounds like talking to yourself. The fixed polite form is “I was wondering if you could …”."
       }
     }
   ]
