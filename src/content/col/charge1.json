@@ -1,0 +1,308 @@
+{
+  "v": 1,
+  "note": "Wortpartner-Charge col (Tutor-Engine S4, wort-lernen-plan.md). Erfundene Sätze, US-Englisch. Gegenlesung english-teacher: docs/umbau/s4-inhalte-pruefung.md.",
+  "items": [
+    { "word": "absent", "pos": "adj", "col": [
+      { "p": "notably absent", "de": "auffällig abwesend", "en": "missing in a way people notice", "gap": "notably", "opts": ["strongly", "heavily", "deeply"], "ex": "Two key stakeholders were [notably absent] from the kickoff meeting on Monday." }
+    ] },
+    { "word": "action item", "pos": "noun", "col": [
+      { "p": "open action items", "de": "offene Punkte", "en": "tasks that are not done yet", "gap": "open", "opts": ["free", "loose", "empty"], "ex": "We still have three [open action items] from last week's call with the client." }
+    ] },
+    { "word": "argue", "pos": "verb", "col": [
+      { "p": "argue convincingly", "de": "überzeugend argumentieren", "en": "give reasons that persuade people", "gap": "convincingly", "opts": ["heavily", "deeply", "tightly"], "ex": "In her memo, Dana [argued convincingly] that the old pricing model was holding us back." }
+    ] },
+    { "word": "attendee", "pos": "noun", "col": [
+      { "p": "registered attendees", "de": "angemeldete Teilnehmer", "en": "people who signed up for an event", "gap": "registered", "opts": ["inscribed", "subscribed", "noted"], "ex": "We expect around 200 [registered attendees] at the partner summit in Denver." }
+    ] },
+    { "word": "attendees", "pos": "noun", "col": [
+      { "p": "registered attendees", "de": "angemeldete Teilnehmer", "en": "people who signed up for an event", "gap": "registered", "opts": ["inscribed", "subscribed", "noted"], "ex": "Only [registered attendees] will receive the slides after the webinar." }
+    ] },
+    { "word": "attitude", "pos": "noun", "col": [
+      { "p": "attitude toward risk", "de": "Einstellung zum Risiko", "en": "how someone thinks about risk", "gap": "toward", "opts": ["against", "for", "at"], "ex": "The new CFO has a much more relaxed [attitude toward risk] than her predecessor." }
+    ] },
+    { "word": "balance sheet", "pos": "noun", "col": [
+      { "p": "strong balance sheet", "de": "solide Bilanz", "en": "a healthy financial position", "gap": "strong", "opts": ["fat", "thick", "hard"], "ex": "Thanks to a [strong balance sheet], the company kept investing during the downturn." }
+    ] },
+    { "word": "break even", "pos": "verb", "col": [
+      { "p": "expect to break even", "de": "erwarten, die Kosten zu decken", "en": "think you will stop losing money", "gap": "expect", "opts": ["await", "wait", "attend"], "ex": "We [expect to break even] in the third quarter of next year." }
+    ] },
+    { "word": "bring up", "pos": "verb", "col": [
+      { "p": "bring up the subject", "de": "das Thema ansprechen", "en": "start talking about a topic", "gap": "subject", "opts": ["thesis", "object", "motive"], "ex": "I will [bring up the subject] of pricing at the end of the call." }
+    ] },
+    { "word": "broad", "pos": "adj", "col": [
+      { "p": "a broad range of", "de": "ein breites Spektrum an", "en": "many different kinds of", "gap": "range", "opts": ["width", "stretch", "row"], "ex": "Our new platform supports [a broad range of] payment methods across Europe." }
+    ] },
+    { "word": "catch up", "pos": "verb", "col": [
+      { "p": "catch up on emails", "de": "E-Mails aufarbeiten", "en": "deal with emails you could not answer before", "gap": "on", "opts": ["at", "by", "for"], "ex": "I need an hour this morning to [catch up on emails] after the trip." }
+    ] },
+    { "word": "clarify", "pos": "verb", "col": [
+      { "p": "clarify this with legal", "de": "das mit der Rechtsabteilung klären", "en": "check a point with the legal team", "gap": "with", "opts": ["by", "at", "from"], "ex": "Let me [clarify this with legal] before we send the contract to the client." }
+    ] },
+    { "word": "compete", "pos": "verb", "col": [
+      { "p": "compete for customers", "de": "um Kunden konkurrieren", "en": "try to win the same customers", "gap": "for", "opts": ["about", "around", "after"], "ex": "Three local agencies [compete for customers] in the same small market." }
+    ] },
+    { "word": "complaint", "pos": "noun", "col": [
+      { "p": "file a complaint", "de": "eine Beschwerde einreichen", "en": "officially complain", "gap": "filed", "opts": ["did", "gave", "set"], "ex": "The customer [filed a complaint] about the late delivery on Friday." }
+    ] },
+    { "word": "confirm", "pos": "verb", "col": [
+      { "p": "confirm receipt", "de": "den Eingang bestätigen", "en": "say that you have received something", "gap": "receipt", "opts": ["reception", "income", "entrance"], "ex": "Could you please [confirm receipt] of the signed contract by Friday?" }
+    ] },
+    { "word": "consider", "pos": "verb", "col": [
+      { "p": "carefully consider", "de": "sorgfältig prüfen", "en": "think about something in detail", "gap": "carefully", "opts": ["exactly", "neatly", "tidily"], "ex": "We will [carefully consider] your proposal and get back to you next week." }
+    ] },
+    { "word": "constraint", "pos": "noun", "col": [
+      { "p": "impose constraints", "de": "Einschränkungen auferlegen", "en": "set limits on something", "gap": "impose", "opts": ["push", "press", "stand"], "ex": "The new regulations [impose strict constraints] on how we store customer data." }
+    ] },
+    { "word": "contradictory", "pos": "adj", "col": [
+      { "p": "send contradictory signals", "de": "widersprüchliche Signale senden", "en": "communicate two opposite messages", "gap": "sending", "opts": ["making", "doing", "saying"], "ex": "Management keeps [sending contradictory signals] about the reorganization." }
+    ] },
+    { "word": "contradicts", "pos": "verb", "col": [
+      { "p": "directly contradicts", "de": "widerspricht direkt", "en": "says the exact opposite of", "gap": "directly", "opts": ["straight", "right", "plain"], "ex": "The new report [directly contradicts] the figures we presented last month." }
+    ] },
+    { "word": "crowded", "pos": "adj", "col": [
+      { "p": "crowded with tourists", "de": "voller Touristen", "en": "full of tourists", "gap": "with", "opts": ["of", "from", "at"], "ex": "In August the old town is [crowded with tourists] from early morning." }
+    ] },
+    { "word": "discount", "pos": "noun", "col": [
+      { "p": "offer a discount", "de": "einen Rabatt anbieten", "en": "say you will lower the price", "gap": "offer", "opts": ["make", "do", "put"], "ex": "We can [offer a discount] if you sign up for two years." },
+      { "p": "a discount on", "de": "Rabatt auf", "en": "a lower price for something", "gap": "on", "opts": ["at", "to", "in"], "ex": "Members get [a 10 percent discount on] all annual subscriptions." }
+    ] },
+    { "word": "entire", "pos": "adj", "col": [
+      { "p": "spend the entire day", "de": "den ganzen Tag verbringen", "en": "use all of a day for something", "gap": "spent", "opts": ["brought", "made", "held"], "ex": "We [spent the entire day] going through the contract line by line." }
+    ] },
+    { "word": "expense", "pos": "noun", "col": [
+      { "p": "travel expenses", "de": "Reisekosten", "en": "money you spend on business trips", "gap": "travel", "opts": ["journey", "voyage", "tour"], "ex": "Please submit your [travel expenses] by the end of the month." }
+    ] },
+    { "word": "extent", "pos": "noun", "col": [
+      { "p": "to a large extent", "de": "weitgehend, in hohem Maße", "en": "mostly", "gap": "large", "opts": ["big", "wide", "high"], "ex": "The delay was, [to a large extent], caused by missing data from the client." }
+    ] },
+    { "word": "fair point", "pos": "phrase", "col": [
+      { "p": "make a fair point", "de": "einen berechtigten Einwand bringen", "en": "say something reasonable", "gap": "made", "opts": ["did", "took", "held"], "ex": "Tom [made a fair point] about the risks of launching in December." }
+    ] },
+    { "word": "fall behind", "pos": "verb", "col": [
+      { "p": "fall behind schedule", "de": "in Verzug geraten", "en": "become late compared to the plan", "gap": "schedule", "opts": ["calendar", "agenda", "clock"], "ex": "If the supplier is late again, we will [fall behind schedule] on the launch." }
+    ] },
+    { "word": "figure", "pos": "noun", "col": [
+      { "p": "sales figures", "de": "Verkaufszahlen", "en": "numbers that show how much was sold", "gap": "sales", "opts": ["selling", "sold", "buying"], "ex": "The latest [sales figures] look much better than we expected." }
+    ] },
+    { "word": "flu", "pos": "noun", "col": [
+      { "p": "come down with the flu", "de": "die Grippe bekommen", "en": "become sick with the flu", "gap": "down", "opts": ["up", "off", "over"], "ex": "Half the team [came down with the flu] right before the trade show." }
+    ] },
+    { "word": "get carried away", "pos": "phrase", "col": [
+      { "p": "get carried away by", "de": "sich von etwas mitreißen lassen", "en": "become too excited about something", "gap": "by", "opts": ["from", "of", "through"], "ex": "Let's not [get carried away by] one good month of sales." }
+    ] },
+    { "word": "graduate", "pos": "verb", "col": [
+      { "p": "graduate from college", "de": "den Hochschulabschluss machen", "en": "finish a college degree", "gap": "from", "opts": ["at", "of", "off"], "ex": "She [graduated from college] in 2015 and joined our sales team." }
+    ] },
+    { "word": "grant", "pos": "noun", "col": [
+      { "p": "apply for a grant", "de": "einen Zuschuss beantragen", "en": "formally ask for funding", "gap": "applied", "opts": ["registered", "subscribed", "enrolled"], "ex": "The startup [applied for a grant] to fund its research project." }
+    ] },
+    { "word": "guardrail", "pos": "noun", "col": [
+      { "p": "put guardrails in place", "de": "Schutzmechanismen einführen", "en": "set up rules that prevent problems", "gap": "place", "opts": ["stand", "spot", "site"], "ex": "We need to [put guardrails in place] before the team uses the new AI tools." }
+    ] },
+    { "word": "hypocrite", "pos": "noun", "col": [
+      { "p": "a complete hypocrite", "de": "ein echter Heuchler", "en": "a person who does what they criticize", "gap": "complete", "opts": ["whole", "full", "round"], "ex": "Calling it a team decision made him look like [a complete hypocrite] in the meeting." }
+    ] },
+    { "word": "introductory rate", "pos": "noun", "col": [
+      { "p": "offer an introductory rate", "de": "einen Einführungspreis anbieten", "en": "give new customers a lower first price", "gap": "offers", "opts": ["makes", "does", "holds"], "ex": "The new gym [offers an introductory rate] of 20 dollars for the first month." }
+    ] },
+    { "word": "invoice", "pos": "noun", "col": [
+      { "p": "issue an invoice", "de": "eine Rechnung ausstellen", "en": "create and send a bill", "gap": "issue", "opts": ["exhibit", "display", "pose"], "ex": "Our accounting team will [issue the invoice] once the project is completed." }
+    ] },
+    { "word": "jump in", "pos": "verb", "col": [
+      { "p": "feel free to jump in", "de": "einfach einhaken", "en": "you are welcome to interrupt", "gap": "free", "opts": ["open", "loose", "easy"], "ex": "If you have a question, [feel free to jump in] at any time." }
+    ] },
+    { "word": "live up to", "pos": "phrase", "col": [
+      { "p": "live up to expectations", "de": "den Erwartungen gerecht werden", "en": "be as good as people hoped", "gap": "expectations", "opts": ["expectancies", "prospects", "views"], "ex": "The new CRM did not [live up to expectations] in the first few months." }
+    ] },
+    { "word": "mention", "pos": "verb", "col": [
+      { "p": "briefly mention", "de": "kurz erwähnen", "en": "say something in a few words", "gap": "briefly", "opts": ["shortly", "short", "brief"], "ex": "In the call, she only [briefly mentioned] the new pricing model." },
+      { "p": "worth mentioning", "de": "erwähnenswert", "en": "important enough to say", "gap": "worth", "opts": ["value", "worthy", "merit"], "ex": "It is [worth mentioning] that the client renewed early last year." }
+    ] },
+    { "word": "milestone", "pos": "noun", "col": [
+      { "p": "reach a milestone", "de": "einen Meilenstein erreichen", "en": "get to an important point in a project", "gap": "reached", "opts": ["arrived", "came", "gained"], "ex": "The project [reached an important milestone] when the first client went live." }
+    ] },
+    { "word": "nuanced", "pos": "adj", "col": [
+      { "p": "take a nuanced view", "de": "eine differenzierte Sicht haben", "en": "see more than one side of an issue", "gap": "takes", "opts": ["makes", "does", "sets"], "ex": "On pricing, the board [takes a more nuanced view] than the sales team." }
+    ] },
+    { "word": "obstacle", "pos": "noun", "col": [
+      { "p": "overcome an obstacle", "de": "ein Hindernis überwinden", "en": "deal successfully with a problem", "gap": "overcame", "opts": ["overstepped", "overtook", "overdid"], "ex": "We [overcame the last obstacle] when legal approved the contract." }
+    ] },
+    { "word": "obtain", "pos": "verb", "col": [
+      { "p": "obtain approval from", "de": "eine Genehmigung einholen von", "en": "get official permission from", "gap": "from", "opts": ["of", "at", "off"], "ex": "We need to [obtain approval from] the board before we sign the lease." }
+    ] },
+    { "word": "on track", "pos": "phrase", "col": [
+      { "p": "keep the project on track", "de": "das Projekt im Plan halten", "en": "make sure the project goes as planned", "gap": "keep", "opts": ["hold", "lay", "sit"], "ex": "Weekly check-ins help us [keep the project on track] despite the tight timeline." }
+    ] },
+    { "word": "overrun", "pos": "noun", "col": [
+      { "p": "cost overrun", "de": "Kostenüberschreitung", "en": "spending more than planned", "gap": "cost", "opts": ["price", "fee", "charge"], "ex": "The [cost overrun] on the office move was almost 30 percent." }
+    ] },
+    { "word": "pass on", "pos": "verb", "col": [
+      { "p": "pass on the savings to", "de": "die Einsparungen weitergeben an", "en": "let others benefit from lower costs", "gap": "to", "opts": ["at", "by", "from"], "ex": "We will [pass on the savings to] our customers in the next price list." }
+    ] },
+    { "word": "peer", "pos": "noun", "col": [
+      { "p": "peer pressure", "de": "Gruppenzwang", "en": "pressure to act like the people around you", "gap": "pressure", "opts": ["press", "push", "stress"], "ex": "Many new hires work late because of [peer pressure] in the team." }
+    ] },
+    { "word": "phase out", "pos": "verb", "col": [
+      { "p": "phase out over two years", "de": "über zwei Jahre auslaufen lassen", "en": "stop using something step by step", "gap": "over", "opts": ["during", "since", "along"], "ex": "The old licenses will be [phased out over two years] to give clients time." }
+    ] },
+    { "word": "pour", "pos": "verb", "col": [
+      { "p": "pour money into", "de": "Geld in etwas stecken", "en": "invest a lot of money in", "gap": "into", "opts": ["at", "to", "over"], "ex": "Investors [poured money into] AI startups over the last two years." }
+    ] },
+    { "word": "proceed", "pos": "verb", "col": [
+      { "p": "proceed with caution", "de": "vorsichtig vorgehen", "en": "continue carefully", "gap": "caution", "opts": ["attention", "precaution", "carefulness"], "ex": "Given the legal risks, we should [proceed with caution] on this deal." }
+    ] },
+    { "word": "process", "pos": "verb", "col": [
+      { "p": "processed within five days", "de": "innerhalb von fünf Tagen bearbeitet", "en": "handled in no more than five days", "gap": "within", "opts": ["during", "since", "until"], "ex": "All refunds are [processed within five business days] after we receive the item." }
+    ] },
+    { "word": "quote", "pos": "noun", "col": [
+      { "p": "a quote for", "de": "ein Angebot für", "en": "a price offer for", "gap": "for", "opts": ["about", "over", "after"], "ex": "Can you send me [a quote for the new laptops] by Thursday?" }
+    ] },
+    { "word": "reassure", "pos": "verb", "col": [
+      { "p": "reassure staff about", "de": "die Belegschaft wegen etwas beruhigen", "en": "make employees less worried about", "gap": "about", "opts": ["for", "at", "around"], "ex": "The CEO tried to [reassure staff about] the planned job cuts." }
+    ] },
+    { "word": "recap", "pos": "verb", "col": [
+      { "p": "a quick recap", "de": "eine kurze Zusammenfassung", "en": "a short summary", "gap": "quick", "opts": ["fast", "rapid", "hasty"], "ex": "Let me give you [a quick recap] of what we agreed last week." }
+    ] },
+    { "word": "recognize", "pos": "verb", "col": [
+      { "p": "widely recognized as", "de": "weithin anerkannt als", "en": "accepted by many people as", "gap": "widely", "opts": ["wildly", "vastly", "deeply"], "ex": "She is [widely recognized as] one of the best negotiators in the industry." }
+    ] },
+    { "word": "resist", "pos": "verb", "col": [
+      { "p": "resist the temptation", "de": "der Versuchung widerstehen", "en": "not do something you want to do", "gap": "temptation", "opts": ["seduction", "attempt", "trial"], "ex": "I had to [resist the temptation] to reply to every email right away." }
+    ] },
+    { "word": "retention", "pos": "noun", "col": [
+      { "p": "retention rate", "de": "Kundenbindungsrate", "en": "the share of customers who stay", "gap": "rate", "opts": ["quota", "share", "quote"], "ex": "Our [retention rate] rose to 92 percent after the new onboarding program." }
+    ] },
+    { "word": "revise", "pos": "verb", "col": [
+      { "p": "revise downward", "de": "nach unten korrigieren", "en": "lower a number or plan", "gap": "downward", "opts": ["below", "under", "beneath"], "ex": "We had to [revise our forecast downward] after the second quarter." }
+    ] },
+    { "word": "satisfied", "pos": "adj", "col": [
+      { "p": "satisfied with", "de": "zufrieden mit", "en": "happy with", "gap": "with", "opts": ["of", "about", "from"], "ex": "Most clients are [satisfied with] the new support hours." }
+    ] },
+    { "word": "squeeze", "pos": "verb", "col": [
+      { "p": "squeeze margins", "de": "die Margen drücken", "en": "make profits per sale smaller", "gap": "margins", "opts": ["edges", "borders", "spans"], "ex": "Rising energy costs continue to [squeeze our profit margins] this year." }
+    ] },
+    { "word": "stall", "pos": "noun", "col": [
+      { "p": "set up a stall", "de": "einen Stand aufbauen", "en": "build a small table or booth to sell things", "gap": "set", "opts": ["make", "do", "lay"], "ex": "Every Saturday they [set up a stall] at the farmers market downtown." }
+    ] },
+    { "word": "strip", "pos": "verb", "col": [
+      { "p": "strip someone of", "de": "jemandem etwas aberkennen", "en": "officially take something away from someone", "gap": "of", "opts": ["from", "off", "by"], "ex": "The committee voted to [strip him of his title] after the scandal." }
+    ] },
+    { "word": "subtle", "pos": "adj", "col": [
+      { "p": "a subtle difference", "de": "ein feiner Unterschied", "en": "a small difference that is hard to notice", "gap": "difference", "opts": ["distance", "diversity", "division"], "ex": "There is [a subtle difference] between a discount and a rebate." }
+    ] },
+    { "word": "succeed", "pos": "verb", "col": [
+      { "p": "succeed in", "de": "es schaffen, etwas zu tun", "en": "manage to do something", "gap": "in", "opts": ["to", "by", "on"], "ex": "We finally [succeeded in getting] the client to sign the renewal." }
+    ] },
+    { "word": "sustainable", "pos": "adj", "col": [
+      { "p": "environmentally sustainable", "de": "umweltverträglich", "en": "not harmful to the environment", "gap": "environmentally", "opts": ["environmental", "environment", "nature"], "ex": "The new packaging is cheaper and more [environmentally sustainable] than the old one." }
+    ] },
+    { "word": "tense", "pos": "adj", "col": [
+      { "p": "tense atmosphere", "de": "angespannte Stimmung", "en": "a mood full of stress", "gap": "atmosphere", "opts": ["weather", "flavor", "aura"], "ex": "There was a [tense atmosphere] in the room before the budget vote." }
+    ] },
+    { "word": "terms and conditions", "pos": "noun", "col": [
+      { "p": "under the terms and conditions", "de": "gemäß den Vertragsbedingungen", "en": "according to the contract rules", "gap": "under", "opts": ["below", "beneath", "among"], "ex": "[Under the terms and conditions], the client can cancel with 30 days' notice." }
+    ] },
+    { "word": "trade-off", "pos": "noun", "col": [
+      { "p": "make a trade-off", "de": "einen Kompromiss eingehen", "en": "accept less of one thing to get more of another", "gap": "make", "opts": ["do", "take", "hold"], "ex": "Every pricing model forces us to [make a trade-off] between growth and margin." }
+    ] },
+    { "word": "vulnerable", "pos": "adj", "col": [
+      { "p": "vulnerable to attacks", "de": "anfällig für Angriffe", "en": "easy to attack", "gap": "to", "opts": ["for", "against", "of"], "ex": "Old servers are especially [vulnerable to attacks] from outside." }
+    ] },
+    { "word": "walk away", "pos": "phrase", "col": [
+      { "p": "walk away from", "de": "aussteigen aus", "en": "decide to leave a deal", "gap": "from", "opts": ["of", "off", "out"], "ex": "If they cut the price again, we should [walk away from the deal]." }
+    ] },
+    { "word": "within", "pos": "prep", "col": [
+      { "p": "within budget", "de": "im Budget", "en": "not spending more than planned", "gap": "budget", "opts": ["money", "finance", "cash"], "ex": "We managed to finish the project on time and [within budget] this spring." }
+    ] },
+    { "word": "deadline", "pos": "noun", "col": [
+      { "p": "extend the deadline", "de": "die Frist verlängern", "en": "give more time", "gap": "extend", "opts": ["lengthen", "widen", "enlarge"], "ex": "The client agreed to [extend the deadline] by two weeks." }
+    ] },
+    { "word": "feedback", "pos": "noun", "col": [
+      { "p": "constructive feedback", "de": "konstruktives Feedback", "en": "helpful comments that help you improve", "gap": "constructive", "opts": ["constructional", "structural", "built"], "ex": "Thanks for the [constructive feedback] on my presentation yesterday." }
+    ] },
+    { "word": "priority", "pos": "noun", "col": [
+      { "p": "top priority", "de": "höchste Priorität", "en": "the most important thing", "gap": "top", "opts": ["upper", "peak", "head"], "ex": "Fixing the billing bug is our [top priority] this week." }
+    ] },
+    { "word": "risk", "pos": "noun", "col": [
+      { "p": "take a risk", "de": "ein Risiko eingehen", "en": "do something that might go wrong", "gap": "take", "opts": ["make", "do", "go"], "ex": "We cannot [take that risk] two weeks before the launch." }
+    ] },
+    { "word": "budget", "pos": "noun", "col": [
+      { "p": "tight budget", "de": "knappes Budget", "en": "very little money to spend", "gap": "tight", "opts": ["narrow", "close", "scarce"], "ex": "We are working with a very [tight budget] this quarter." }
+    ] },
+    { "word": "proposal", "pos": "noun", "col": [
+      { "p": "submit a proposal", "de": "ein Angebot einreichen", "en": "formally send a plan or offer", "gap": "submit", "opts": ["subject", "admit", "commit"], "ex": "We have until Friday to [submit our proposal] to the city." }
+    ] },
+    { "word": "demand", "pos": "noun", "col": [
+      { "p": "meet demand", "de": "die Nachfrage decken", "en": "supply as much as people want", "gap": "meet", "opts": ["join", "reach", "hit"], "ex": "We hired ten new drivers to [meet the growing demand] in December." }
+    ] },
+    { "word": "concern", "pos": "noun", "col": [
+      { "p": "raise concerns", "de": "Bedenken äußern", "en": "say that you are worried", "gap": "raised", "opts": ["lifted", "heightened", "elevated"], "ex": "Several engineers [raised concerns] about the new release schedule." }
+    ] },
+    { "word": "expectation", "pos": "noun", "col": [
+      { "p": "manage expectations", "de": "Erwartungen steuern", "en": "make sure people expect the right things", "gap": "manage", "opts": ["lead", "direct", "rule"], "ex": "Good account managers [manage client expectations] from the very first call." }
+    ] },
+    { "word": "attention", "pos": "noun", "col": [
+      { "p": "draw attention to", "de": "die Aufmerksamkeit lenken auf", "en": "make people notice", "gap": "draw", "opts": ["pull", "drag", "lead"], "ex": "I would like to [draw your attention to] the second page of the contract." }
+    ] },
+    { "word": "consensus", "pos": "noun", "col": [
+      { "p": "reach a consensus", "de": "einen Konsens erzielen", "en": "come to an agreement as a group", "gap": "reached", "opts": ["arrived", "came", "landed"], "ex": "After two hours, the team finally [reached a consensus] on pricing." }
+    ] },
+    { "word": "workload", "pos": "noun", "col": [
+      { "p": "heavy workload", "de": "hohe Arbeitsbelastung", "en": "a lot of work to do", "gap": "heavy", "opts": ["strong", "thick", "fat"], "ex": "With two colleagues on leave, the team has a very [heavy workload] this month." }
+    ] },
+    { "word": "estimate", "pos": "noun", "col": [
+      { "p": "a rough estimate", "de": "eine grobe Schätzung", "en": "a guess that is not exact", "gap": "rough", "opts": ["raw", "rude", "harsh"], "ex": "Can you give me [a rough estimate] of the costs by Friday?" }
+    ] },
+    { "word": "contract", "pos": "noun", "col": [
+      { "p": "terminate a contract", "de": "einen Vertrag kündigen", "en": "officially end a contract", "gap": "terminate", "opts": ["quit", "dismiss", "fire"], "ex": "The client can [terminate the contract] with three months' notice." }
+    ] },
+    { "word": "negotiation", "pos": "noun", "col": [
+      { "p": "enter into negotiations", "de": "in Verhandlungen eintreten", "en": "start to negotiate", "gap": "enter", "opts": ["step", "walk", "tread"], "ex": "We will [enter into negotiations] with the supplier next month." }
+    ] },
+    { "word": "assumption", "pos": "noun", "col": [
+      { "p": "make an assumption", "de": "eine Annahme treffen", "en": "believe something without proof", "gap": "made", "opts": ["did", "took", "met"], "ex": "We [made the assumption] that prices would stay flat this year." }
+    ] },
+    { "word": "responsibility", "pos": "noun", "col": [
+      { "p": "take responsibility for", "de": "die Verantwortung übernehmen für", "en": "accept that something is your job or fault", "gap": "took", "opts": ["made", "gave", "caught"], "ex": "The project lead [took full responsibility for] the delay." }
+    ] },
+    { "word": "advantage", "pos": "noun", "col": [
+      { "p": "take advantage of", "de": "etwas nutzen", "en": "use a chance well", "gap": "take", "opts": ["make", "use", "draw"], "ex": "We should [take advantage of] the lower prices before the end of the year." }
+    ] },
+    { "word": "impact", "pos": "noun", "col": [
+      { "p": "have an impact on", "de": "Auswirkungen haben auf", "en": "change or affect something", "gap": "on", "opts": ["of", "at", "for"], "ex": "The new law will [have a big impact on] small suppliers." }
+    ] },
+    { "word": "effort", "pos": "noun", "col": [
+      { "p": "make an effort", "de": "sich Mühe geben", "en": "try hard", "gap": "made", "opts": ["did", "held", "took"], "ex": "She [made a real effort] to learn the names of all new clients." }
+    ] },
+    { "word": "progress", "pos": "noun", "col": [
+      { "p": "make progress", "de": "Fortschritte machen", "en": "move forward with something", "gap": "made", "opts": ["did", "took", "had"], "ex": "We [made good progress] on the integration this week." }
+    ] },
+    { "word": "commitment", "pos": "noun", "col": [
+      { "p": "make a commitment", "de": "sich fest verpflichten", "en": "promise to do something", "gap": "made", "opts": ["did", "took", "put"], "ex": "The board [made a firm commitment] to cut emissions by 2030." }
+    ] },
+    { "word": "question", "pos": "noun", "col": [
+      { "p": "raise a question", "de": "eine Frage aufwerfen", "en": "bring up a question", "gap": "raised", "opts": ["rose", "lifted", "grew"], "ex": "Her comment [raised an important question] about our pricing." }
+    ] },
+    { "word": "issue", "pos": "noun", "col": [
+      { "p": "address an issue", "de": "ein Problem angehen", "en": "deal with a problem", "gap": "address", "opts": ["adjust", "direct", "speak"], "ex": "We need to [address this issue] before the launch." }
+    ] },
+    { "word": "pressure", "pos": "noun", "col": [
+      { "p": "under pressure", "de": "unter Druck", "en": "stressed by demands", "gap": "under", "opts": ["in", "on", "at"], "ex": "The team has been [under a lot of pressure] since January." }
+    ] },
+    { "word": "attempt", "pos": "noun", "col": [
+      { "p": "make an attempt", "de": "einen Versuch unternehmen", "en": "try to do something", "gap": "made", "opts": ["did", "put", "set"], "ex": "We [made one last attempt] to save the contract on Friday." }
+    ] },
+    { "word": "call", "pos": "noun", "col": [
+      { "p": "return a call", "de": "jemanden zurückrufen", "en": "call someone back", "gap": "return", "opts": ["reply", "respond", "repeat"], "ex": "I will [return her call] as soon as the meeting ends." }
+    ] },
+    { "word": "solution", "pos": "noun", "col": [
+      { "p": "find a solution", "de": "eine Lösung finden", "en": "solve a problem", "gap": "find", "opts": ["meet", "catch", "win"], "ex": "We still need to [find a workable solution] for the night shift." }
+    ] },
+    { "word": "effect", "pos": "noun", "col": [
+      { "p": "take effect", "de": "in Kraft treten", "en": "start to apply", "gap": "takes", "opts": ["makes", "gets", "goes"], "ex": "The new travel policy [takes effect] on March 1." }
+    ] },
+    { "word": "interest", "pos": "noun", "col": [
+      { "p": "show interest in", "de": "Interesse zeigen an", "en": "seem keen on something", "gap": "showed", "opts": ["made", "did", "put"], "ex": "Two investors [showed strong interest in] the project last month." }
+    ] }
+  ]
+}
