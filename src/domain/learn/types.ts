@@ -24,6 +24,10 @@ export type GrammarTask = {
   prompt: string;
   answer: string;
   accepted: string[];
+  /** Richtig, aber ein anderes Muster als das geübte (z. B. `had` statt `used to have`): „Auch richtig“, zählt nie als Fehler, aber auch nicht als Beleg für das Muster. */
+  alt?: string[];
+  /** Ziel der Aufgabe in einem Satz (nur „Fehler finden“), ohne die Lösung zu verraten. */
+  goal?: { de: string; en: string };
   options: string[] | null;
   hint: string | null;
   expl: { de: string | null; en: string | null };
@@ -52,7 +56,7 @@ export type Help = { level: 0 | 1 | 2; replays?: number };
 export type WordOp = { op: 'eq' | 'typo' | 'sub' | 'ins' | 'del'; given?: string; expected?: string };
 export type GrammarCheck = {
   verdict: Verdict;
-  kind?: 'typo' | 'uk' | 'contraction' | 'alt' | 'form' | 'key' | 'words';
+  kind?: 'typo' | 'uk' | 'contraction' | 'alt' | 'other' | 'form' | 'key' | 'words';
   /** US-Form als Hinweis, wenn britisch geantwortet wurde (A7.3). */
   us?: string;
   ops: WordOp[];
@@ -77,6 +81,8 @@ export type GrammarAnswer = {
   judged: 'local' | 'ai' | 'noai';
   /** Einspruch „Ich lag richtig" (M4): als richtig gewertet, höchstens „Gut", im Log `override:true`. */
   override?: boolean;
+  /** „Auch richtig“ (Art `other`): grammatisch richtig, aber nicht das geübte Muster. Richtig gewertet, kein Fehler, aber kein Beleg für das Muster (kein BKT-Schritt, kein `pats`). */
+  alt?: boolean;
   /** Erster, falscher Versuch vor dem Hinweis (Selbstkorrektur): zählt für Beherrschung und Fehler als falsch. */
   firstWrong?: string;
   /** Eingabeprofil der Runde: Touch oder Tastatur (Lernplattform 2.0 §3.1). */

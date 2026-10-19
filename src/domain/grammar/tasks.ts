@@ -83,6 +83,7 @@ export function normalizeTask(raw: unknown, src: TaskSrc, ref: string | null = n
   const pat = entry?.pat ?? strOrNull(it.pat) ?? patternOf({ topic, prompt, answer })?.id ?? null;
   const own = TaskWhySchema.safeParse(it.why);
   const why = entry?.why ?? (own.success ? own.data : null);
+  const alt = Array.isArray(it.alt) ? it.alt.map(s).map((x) => x.trim()).filter(Boolean) : [];
   return {
     key,
     topic,
@@ -90,6 +91,7 @@ export function normalizeTask(raw: unknown, src: TaskSrc, ref: string | null = n
     prompt,
     answer,
     accepted,
+    ...(alt.length ? { alt } : {}),
     options,
     hint: strOrNull(it.hint_de) ?? strOrNull(it.hint),
     expl: { de: strOrNull(it.explanation_de) ?? strOrNull(it.expl), en: strOrNull(it.explanation_en) ?? strOrNull(it.expl_en) },
@@ -106,7 +108,7 @@ export function fromV2(t: V2Task): GrammarTask | null {
   const base = { topic: t.topic, accepted: [] as string[], options: null, hint: null, expl: { de: t.why.ok.de, en: t.why.ok.en }, src: 'seed' as const, ref: 'content/grammar/tasks-v2', errorT: null, pat: t.pat, why: t.why };
   if (!topicById(t.topic)) return null;
   if (t.type === 'kwt') return { ...base, key: legacyTaskKey(t.frame), type: 'kwt', prompt: t.frame, answer: t.answer, accepted: [...t.accepted], x: { kind: 'kwt', from: t.from, key: t.key, words: [t.words[0], t.words[1]] } };
-  if (t.type === 'find') return { ...base, key: legacyTaskKey(t.prompt), type: 'find', prompt: t.prompt, answer: t.answer ?? '', accepted: [...t.accepted], x: { kind: 'find', err: t.err ? [t.err[0], t.err[1]] : null, fixed: t.fixed ?? null } };
+  if (t.type === 'find') return { ...base, key: legacyTaskKey(t.prompt), type: 'find', prompt: t.prompt, answer: t.answer ?? '', accepted: [...t.accepted], ...(t.hint ? { goal: { de: t.hint.de, en: t.hint.en } } : {}), x: { kind: 'find', err: t.err ? [t.err[0], t.err[1]] : null, fixed: t.fixed ?? null } };
   return { ...base, key: legacyTaskKey(t.a), type: 'meaning', prompt: t.a, answer: t.answer, x: { kind: 'meaning', a: t.a, b: t.b, q: { de: t.q.de, en: t.q.en } } };
 }
 
@@ -119,6 +121,7 @@ export function toPoolItem(t: GrammarTask): Doc {
     options: t.options,
     answer: t.answer,
     accepted: t.accepted,
+    ...(t.alt?.length ? { alt: t.alt } : {}),
     hint_de: t.hint ?? '',
     explanation_de: t.expl.de ?? '',
     explanation_en: t.expl.en ?? '',

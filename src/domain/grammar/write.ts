@@ -47,7 +47,8 @@ function patchFor(cur: Doc, a: GrammarAnswer): { patch: Doc; overflow?: NewRepai
   // Claude-Aufgaben (Lernplattform 3.0 §3.4, K-8) buchen nie BKT, nie `pats`: richtig → nur `seen`; falsch → zusätzlich ein Fehlersatz (unten).
   const claude = a.task.c1?.src === 'ai';
   const patch: Doc = {};
-  if (!claude) {
+  // „Auch richtig“ (`alt`, 19.10.2026): richtig und nie ein Fehler, aber kein Beleg für das geübte Muster: kein BKT-Schritt, kein `pats`, kein `recent`.
+  if (!claude && a.alt !== true) {
     const pNow = displayP(num(cur.p, p0), p0, typeof cur.last === 'number' && cur.last > 0 ? cur.last : null, t);
     // c1x: ein getippter Anteil ist nicht ratbar (Typ `gap`, GUESS_TYPED), sonst gilt die Ratewahrscheinlichkeit der Art (`nOpt`, z. B. `pair` = 6).
     const c1Typed = !!a.pts && a.free === true;

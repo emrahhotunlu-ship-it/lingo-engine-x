@@ -93,6 +93,8 @@ export const V2TaskSchema = z.discriminatedUnion('type', [
     answer: z.string().optional(),
     /** Der ganze richtige Satz (Anzeige und Prüfung); fehlt bei fehlerfreien Sätzen. */
     fixed: z.string().optional(),
+    /** Ziel der Korrektur in einem Satz (Aufgabenzeile „Ziel: …“), ohne die Lösung zu verraten. */
+    hint: Bi.optional(),
     accepted: z.array(z.string()).default([]),
   }),
   z.object({

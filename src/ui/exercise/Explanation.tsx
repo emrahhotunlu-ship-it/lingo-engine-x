@@ -62,14 +62,15 @@ export function Explanation({ model, depth, learning = true, area = 'trainer', o
         // UX-Prüfung W2/R7: ein ganzer Satz steht schon im Antwortfeld darüber – dann nennt die Zeile nur die Begründung (kein doppelter Text).
         const short = !!g && g.split(/\s+/).length <= 3;
         const dup = !!g && l.text.trim().toLowerCase().startsWith(g.toLowerCase());
+        // Rückmeldung (19.10.2026): die durchgestrichene Antwort steht in einer eigenen Zeile, der Erklärtext darunter (nie „Walked to work Der Fehler …“).
         return (
           <>
             {g && short && (
-              <span className="mr-1.5 font-semibold text-wrong-text line-through decoration-1" lang="en">
+              <span className="mb-1 block font-semibold text-wrong-text line-through decoration-1" lang="en" data-testid="yours-given">
                 {g}
               </span>
             )}
-            <span lang={lang}>{dup && short ? l.text.trim().slice(g.length).trimStart() : l.text}</span>
+            <span className="block" lang={lang}>{dup && short ? l.text.trim().slice(g.length).trimStart() : l.text}</span>
           </>
         );
       }

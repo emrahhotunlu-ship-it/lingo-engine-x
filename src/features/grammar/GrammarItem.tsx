@@ -7,7 +7,8 @@ import { maskOf } from '../../domain/answer/mask';
 import { topicById } from '../../domain/content';
 import type { ExplainDepth, ExplanationModel, ResultVerdict } from '../../domain/explain/types';
 import { topicP } from '../../domain/grammar/bkt';
-import { checkFind, checkGrammar, checkKwt, checkMeaning, closeVariant } from '../../domain/grammar/check';
+import { asAlsoRight, checkFind, checkGrammar, checkKwt, checkMeaning, closeVariant, fitAskable } from '../../domain/grammar/check';
+import { shortWhy } from '../../domain/grammar/alsoRight';
 import { grammarExplanation } from '../../domain/grammar/explain';
 import { patternOf } from '../../domain/grammar/patterns';
 import { topicState } from '../../domain/grammar/path';
@@ -31,6 +32,7 @@ import { TutorButton } from '../../ui/exercise/TutorButton';
 import { ExerciseShell, FixedSentence, SentenceInput, explainDepth, findHead, markSpans, type ShellFeedback, type ShellMenuId, type ShellSecondary } from '../../ui/exercise';
 import { useCompanionSee } from '../companion/seeing';
 import { nextT } from '../progress/persist';
+import { fitAccepts, useFitJudge } from './fit';
 import { isC1Task } from '../../domain/c1x/runtime';
 import { C1Item } from '../c1x/C1Item';
 import { TopicSheet } from './GrammarScreen';
@@ -81,6 +83,8 @@ type Fb = {
   judged: GrammarAnswer['judged'];
   unsure: boolean;
   override: boolean;
+  /** Begründung von Claude bei „Auch richtig“ (nur Anzeige). */
+  aiWhy?: string;
 };
 
 
@@ -140,6 +144,9 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   const [filmOpen, setFilmOpen] = useState(false);
   const film = filmEnabled() ? filmFor(task.topic, patId) : null;
   const firstWrong = useRef<string | null>(null);
+  const fit = useFitJudge();
+  const judging = useRef(false);
+  const fbRef = useRef<Fb | null>(null);
   const typed = useRef('');
   const shownAt = useRef(0);
   const firstKeyAt = useRef<number | null>(null);
@@ -155,6 +162,9 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     if (!a || a === document.body) root.current?.focus({ preventScroll: true });
   }, []);
 
+  useEffect(() => {
+    fbRef.current = fb;
+  }, [fb]);
   const solution = task.answer;
   const typedKind = !choiceType && !findTask;
   const gapKind = typedKind && !whole && (type === 'gap' || type === 'transform' || type === 'kwt');
@@ -173,7 +183,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   });
 
   const elapsed = () => Math.max(0, Math.round(performance.now() - shownAt.current - (lookupOpenMs() - lookupAt.current)));
-  const hintVisible = !!task.hint && (task.prompt.includes(task.hint) || type === 'gap' || (whole && type === 'transform'));
+  const hintVisible = !!task.hint && (task.prompt.includes(task.hint) || type === 'gap' || type === 'transform');
 
   // ------------------------------------------------------------------ Prüfen
 
@@ -195,7 +205,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   };
 
   const submit = () => {
-    if (fb) return;
+    if (fb || judging.current) return;
     if (choiceType) {
       if (chosen === null) return;
       if (type === 'mc') {
@@ -248,13 +258,31 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     }
     if (!given.trim()) return;
     const res = type === 'kwt' ? checkKwt(task, given) : checkGrammar(task, given);
-    if (res.verdict !== 'wrong' || !res.needsJudge) {
-      finishCheck(res.verdict, res, given);
+    const settle = (): void => {
+      if (res.verdict !== 'wrong' || !res.needsJudge) {
+        finishCheck(res.verdict, res, given);
+        return;
+      }
+      // Bewertung sofort, kein Warten auf Claude: sehr ähnlich zur Lösung → mögliche gültige Variante („nicht sicher prüfbar“), sonst falsch.
+      if (closeVariant(task, given)) finishCheck('near', res, given, { judged: 'noai', unsure: true });
+      else finishCheck('wrong', res, given);
+    };
+    // „Auch richtig“ (19.10.2026): Eine lokal abgelehnte Lückenantwort fragt genau einmal, ob sie im ganzen Satz trotzdem richtig ist (`grammar-fit@1`).
+    if (fitAskable({ type, prompt: task.prompt, pat: patId }, res, given)) {
+      judging.current = true;
+      const base = type === 'transform' ? (task.prompt.split('→').pop() ?? '').trim() : task.prompt;
+      const full = (fill: string): string => base.replace(GAP, fill.trim());
+      void fit
+        .judge(`${task.topic}|${task.key}`, { topic: topicLabel, pattern: pattern ? pattern.name.en : null, mode: 'gap', task: base, sentence: full(given), expected: full(solution), given: given.trim(), uiLang: lang })
+        .then((out) => {
+          judging.current = false;
+          if (fbRef.current) return;
+          if (fitAccepts(out)) finishCheck('correct', asAlsoRight(res), given, { judged: 'ai', aiWhy: out.why });
+          else settle();
+        });
       return;
     }
-    // Bewertung sofort, kein Warten auf Claude: sehr ähnlich zur Lösung → mögliche gültige Variante („nicht sicher prüfbar“), sonst falsch.
-    if (closeVariant(task, given)) finishCheck('near', res, given, { judged: 'noai', unsure: true });
-    else finishCheck('wrong', res, given);
+    settle();
   };
 
   const tappedWord = (): string | undefined => (tapped ? wordsOfPrompt.slice(tapped[0], tapped[1] + 1).join(' ') : undefined);
@@ -280,6 +308,10 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
 
   const dontKnow = () => {
     if (fb) return;
+    if (judging.current) {
+      judging.current = false;
+      fit.cancel();
+    }
     const spot = findTask && stage === 'replace' ? tappedWord() : undefined;
     setFb({ verdict: 'wrong', check: null, given: '', dontKnow: true, grade: 1, ms: elapsed(), help, judged: 'local', unsure: false, override: false, ...(spot ? { spot } : {}) });
     api.blur();
@@ -306,6 +338,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       ms: fb.ms,
       help: fb.help,
       judged: fb.judged,
+      ...(fb.check?.kind === 'other' && !fb.override ? { alt: true } : {}),
       dev: profile === 'touch' ? 't' : 'k',
       ...(fb.override ? { override: true } : {}),
       ...(retry && firstWrong.current !== null ? { firstWrong: firstWrong.current } : {}),
@@ -337,7 +370,10 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   const model: ExplanationModel | null = useMemo(() => {
     if (!fb) return null;
     const verdict: ResultVerdict = fb.dontKnow ? 'dontKnow' : fb.override ? 'ok' : fb.verdict === 'correct' ? 'ok' : fb.verdict === 'near' ? 'near' : 'wrong';
-    const m = tighten(grammarExplanation({ task, verdict, given: fb.given, ...(picked !== undefined ? { picked } : {}), ...(fb.tapped !== undefined ? { tapped: fb.tapped } : {}), lang, learning }));
+    const other = fb.check?.kind === 'other' && !fb.override;
+    const m0 = tighten(grammarExplanation({ task, verdict, given: fb.given, ...(picked !== undefined ? { picked } : {}), ...(fb.tapped !== undefined ? { tapped: fb.tapped } : {}), lang, learning }));
+    // „Auch richtig“: die Begründung des geübten Musters steht in der Zeile „Gesucht war …“, hier nur Muster, Gegenüberstellung und der Hinweis, dass es nicht zählt.
+    const m: ExplanationModel = other ? { ...m0, lines: [...m0.lines.filter((l) => l.k === 'pattern' || l.k === 'contrast'), { k: 'note', text: t('grAltNoCount') }] } : m0;
     // „Kein Fehler“ gewählt (intern 'none'): in „Deine Antwort“ steht der Name des Knopfs, nicht das Rohwort.
     return fb.picked === 'none' || fb.tapped === 'none' ? { ...m, lines: m.lines.map((l) => (l.k === 'yours' && l.given === 'none' ? { ...l, given: t('exNoError') } : l)) } : m;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -466,6 +502,11 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       <div className="flex flex-col gap-2">
         {from && <EnglishText as="p" className="text-muted" text={from} {...src} testId="transform-from" />}
         {sentenceWithSlot(target, gapNode)}
+        {task.hint && !task.prompt.includes(task.hint) && (
+          <p className="lx-t-support text-muted" lang={/[äöüÄÖÜß]/.test(task.hint) ? 'de' : lang} data-testid="cue">
+            {t('grCue', { cue: task.hint })}
+          </p>
+        )}
       </div>
     );
   } else if (findTask) {
@@ -519,11 +560,15 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   let feedback: ShellFeedback | null = null;
   if (fb && model) {
     const c = fb.check;
+    const why = shortWhy(task.why ? (lang === 'de' ? task.why.ok.de : task.why.ok.en) : lang === 'de' ? task.expl.de : task.expl.en);
+    const altLine = why ? t('grAltWanted', { want: solution, why }) : t('grAltWantedBare', { want: solution });
     const sub: string | null = fb.dontKnow
       ? null
       : fb.override
         ? t('lrOverridden')
-        : fb.unsure
+        : fb.check?.kind === 'other'
+          ? altLine
+          : fb.unsure
           ? t('grUnsure')
           : c?.kind === 'uk' && c.us
             ? t('trUsHint', { us: c.us })
@@ -605,7 +650,9 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
         unfold: ['contrast'],
       };
     }
-    feedback = { verdict: rv, sub, comparison, explanation: model, depth, menu, tutor, auto: fb.help.level === 0 && !fb.override, ...find };
+    // „Auch richtig“ (Art `other`): eigener Kopf, nie rot; bleibt stehen (kein Weiter von allein), damit „Gesucht war …“ gelesen wird.
+    const alsoRight = c?.kind === 'other' && !fb.override;
+    feedback = { verdict: rv, ...(alsoRight ? { title: t('exAlsoRight') } : {}), sub, comparison, explanation: model, depth, menu, tutor, auto: fb.help.level === 0 && !fb.override && !alsoRight, ...find };
   }
 
   const kindLabel = t(findTask ? 'gxKind_find' : type === 'kwt' ? 'gxKind_kwt' : type === 'meaning' ? 'gxKind_meaning' : (`grKind_${type}` as MessageKey));
@@ -613,11 +660,12 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   const purposeKey: MessageKey = findTask ? 'gxPurpose_find' : type === 'kwt' ? 'gxPurpose_kwt' : type === 'meaning' ? 'gxPurpose_meaning' : 'purposeGrammar';
   const learnLine = learning && pattern ? { topic: topicLabel, pattern: lang === 'de' ? pattern.name.de : pattern.name.en } : { topic: null, pattern: null };
   // UX-Prüfung W1 (07.10.2026): vor dem Prüfen kein „Geübt wird: …“ – das Muster steht danach in der Rückmeldekarte.
-  const taskText = t(taskKey);
+  const goalText = findTask && task.goal && (stage === 'replace' || !!fb) ? (lang === 'de' ? task.goal.de : task.goal.en) : '';
+  const taskText = goalText ? `${t(taskKey)} ${t('grGoal', { goal: goalText })}` : t(taskKey);
 
   const primary = fb
     ? { label: t('exNext'), onClick: () => next(), testId: 'next' }
-    : { label: t('exCheck'), onClick: () => submit(), testId: 'check', disabled: choiceType ? chosen === null : findTask && stage === 'locate' ? !tapped : false };
+    : { label: fit.busy ? t('exChecking') : t('exCheck'), onClick: () => submit(), testId: 'check', disabled: fit.busy || (choiceType ? chosen === null : findTask && stage === 'locate' ? !tapped : false) };
 
 
   return (

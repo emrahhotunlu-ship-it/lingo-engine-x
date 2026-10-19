@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { splitWords } from '../../../domain/answer/align';
-import { errRange } from '../../../domain/c1x/kinds/err';
+import { errFixed, errRange } from '../../../domain/c1x/kinds/err';
 import { errChipOrder } from '../../../domain/c1x/mix';
 import type { Err } from '../../../domain/c1x/types';
 import { ChipRow } from '../../../engine/ChipRow';
@@ -89,7 +89,7 @@ export function useErrUi(ctrl: C1Ctrl): C1Ui {
   // UX-Prüfung B2: die Korrektur steht im Satz („~~hear~~ → hearing“), wie bei der Lücke; das falsche Wort wird nie grün.
   const fixText = item.bad?.fix[0] ?? null;
   const marks = ctrl.locked && range ? [{ span: range, tone: verdict === 'correct' ? ('ok' as const) : ('wrong' as const), ...(fixText ? { fix: fixText } : {}) }] : [];
-  const fixedSentence = range && fixText ? [...words.slice(0, range[0]), fixText, ...words.slice(range[1] + 1)].join(' ') : null;
+  const fixedSentence = range && fixText ? errFixed(item, fixText) : null;
   const correctChip = choices && item.bad ? choices.findIndex((c) => item.bad?.fix.some((f) => f.trim().toLowerCase() === c.trim().toLowerCase())) : -1;
 
   return {
@@ -118,6 +118,12 @@ export function useErrUi(ctrl: C1Ctrl): C1Ui {
     ),
     answer: (
       <div className="flex flex-col gap-3">
+        {item.goal && (sel !== null || ctrl.locked) && (
+          // Ziel der Korrektur erst nach dem Antippen der Stelle (sonst verriete es, wo der Fehler steht).
+          <p className="lx-t-support text-muted" lang={ctrl.lang} data-testid="err-goal">
+            {t('grGoal', { goal: ctrl.lang === 'de' ? item.goal.de : item.goal.en })}
+          </p>
+        )}
         {!ctrl.locked && sel === null && (
           <p className="lx-t-support text-muted" data-testid="err-hint">
             {t('cxErrTapHint')}

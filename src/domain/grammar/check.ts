@@ -11,6 +11,8 @@ import { altFamilies } from './rules';
 // 1. gleich (nach `legacyNorm`: Kurzformen wie 've, n't, I'm allgemein aufgelöst, ohne `accepted`),
 // 2. britische Schreibweise/britisches Wort → richtig, US-Form als Hinweis (CLAUDE.md A7.3),
 // 3. „Auch richtig"-Familien des Regelwerks (that weglassen, were/was, will/going to …) → richtig,
+// 3b. `task.alt` (richtig, aber anderes Muster: had statt used to have) → „Auch richtig“ (Art `other`), zählt nie als Fehler,
+//    aber nicht als Beleg fürs Muster (siehe `GrammarAnswer.alt`). `accepted` dagegen = gleiche Aufgabe richtig gelöst,
 // 4. Tippfehler im Budget → fast richtig,
 // 5. sonst falsch; bei freien Formen (transform, correct) mit ≥ 3 Wörtern darf das KI-Urteil
 //    gefragt werden (`needsJudge`). Eine unveränderte Satzkorrektur ist immer falsch.
@@ -118,6 +120,7 @@ export function checkGrammar(task: GrammarTask, givenRaw: string, deps: GrammarC
   if (us !== g && targets.some((t) => usPhrase(t) === us)) return { verdict: 'correct', kind: 'uk', us, ops, needsJudge: false };
   if (targets.some((t) => usPhrase(t) === us)) return { verdict: 'correct', ops, needsJudge: false };
   if (altFamily(task, raw) || task.accepted.some((a) => altFamily({ ...task, answer: a }, raw))) return { verdict: 'correct', kind: 'alt', ops, needsJudge: false };
+  if ((task.alt ?? []).map(legacyNorm).some((a) => a && (a === g || usPhrase(a) === us))) return { verdict: 'correct', kind: 'other', ops, needsJudge: false };
   if (task.type === 'correct' && g === legacyNorm(task.prompt)) return { verdict: 'wrong', ops, needsJudge: false };
   // Eine andere Form desselben Worts ist ein Formfehler, kein Tippfehler (work statt works).
   if (targets.some((t) => otherForm(g, t))) return { verdict: 'wrong', kind: 'form', ops, needsJudge: false };
@@ -199,4 +202,26 @@ export function checkFind(task: GrammarTask, step: { tapped: [number, number] | 
 /** Bedeutungspaar: `a`, `b` oder `both`. */
 export function checkMeaning(task: GrammarTask, pick: 'a' | 'b' | 'both'): GrammarCheck {
   return { verdict: pick === task.answer ? 'correct' : 'wrong', ops: [], needsJudge: false };
+}
+
+// ------------------------------------------------------------------ „Auch richtig“ durch Claude (grammar-fit@1)
+
+/**
+ * Darf bei dieser abgelehnten Antwort gefragt werden, ob sie im ganzen Satz trotzdem richtig ist? Nur Lücken (`gap`, Umformung mit Lücke) mit
+ * Grammatik-Muster und ein echtes, lokal als falsch geprüftes Ergebnis. Nicht bei Schlüsselwort (das Wort ist Pflicht), Auswahl, Fehlersuche,
+ * Bedeutungspaaren, Ganzsatz-Eingabe und nicht bei Formfehlern (work statt works: die Form ist der Lernstoff).
+ */
+export function fitAskable(task: Pick<GrammarTask, 'type' | 'prompt' | 'pat'>, check: Pick<GrammarCheck, 'verdict' | 'kind'>, given: string): boolean {
+  if (check.verdict !== 'wrong' || check.kind === 'form' || check.kind === 'key' || check.kind === 'words') return false;
+  if (!task.pat) return false;
+  const gapPrompt = task.type === 'transform' ? (task.prompt.split('→').pop() ?? '') : task.prompt;
+  if (task.type !== 'gap' && task.type !== 'transform') return false;
+  if (!/_{3,}/.test(gapPrompt)) return false;
+  const words = splitWords(given);
+  return words.length >= 1 && words.length <= 8 && given.trim().length <= 80;
+}
+
+/** Aus „falsch“ wird durch das KI-Urteil „Auch richtig“ (nur bei `fits && certain`, das prüft der Aufrufer). */
+export function asAlsoRight(check: GrammarCheck): GrammarCheck {
+  return { ...check, verdict: 'correct', kind: 'other', needsJudge: false };
 }

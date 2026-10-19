@@ -453,7 +453,7 @@ export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
     clean: cleanAnswer(a),
   };
   const results = repeating ? s.results : [...s.results, row];
-  const patLog = repeating || !a.task.pat ? s.patLog : [...s.patLog, { pat: a.task.pat, ok: row.ok, help: row.help ?? false, t: a.t }];
+  const patLog = repeating || !a.task.pat || a.alt ? s.patLog : [...s.patLog, { pat: a.task.pat, ok: row.ok, help: row.help ?? false, t: a.t }];
   const pos = s.pos + 1;
   let repeatAt = s.repeatAt;
   // Themen-Test: keine „Nochmal“-Runde, das Ergebnis kommt sofort; die schwachen Stellen übt die nächste Runde (Cursor-Phase „Üben“).

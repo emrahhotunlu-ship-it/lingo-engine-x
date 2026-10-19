@@ -7,6 +7,7 @@ import { explainAnswerV2 } from './explainAnswerV2';
 import { sentenceClinic } from './sentenceClinic';
 import { c1Mail } from './c1Mail';
 import { grammarItems } from './grammarItems';
+import { grammarFit } from './grammarFit';
 import { grammarJudge } from './grammarJudge';
 import { mnemonic } from './mnemonic';
 import { NB_TEMPLATES } from './nb';
@@ -52,6 +53,8 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   // Phase 2 (docs/phase2-plan.md §7)
   grammarItems,
   grammarJudge,
+  // 19.10.2026: „Auch richtig“ durch Claude (Lücke und Ersetzen)
+  grammarFit,
   // Phase 2, Funktionsabgleich M2/M3
   wordGen,
   mnemonic,

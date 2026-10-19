@@ -21,7 +21,9 @@ export function errFixed(item: Pick<Err, 'text' | 'bad'>, fix: string): string {
   const range = errRange(item);
   if (!range) return item.text;
   const words = splitWords(item.text);
-  return [...words.slice(0, range[0]), ...(fix ? [fix] : []), ...words.slice(range[1] + 1)].join(' ');
+  // Steht die Stelle am Satzanfang, beginnt auch der Ersatz groß (und das nächste Wort klein, wenn der Ersatz leer ist, bleibt es wie es ist).
+  const put = fix && range[0] === 0 ? fix.charAt(0).toUpperCase() + fix.slice(1) : fix;
+  return [...words.slice(0, range[0]), ...(put ? [put] : []), ...words.slice(range[1] + 1)].join(' ');
 }
 
 const fixKey = (s: string): string => cmp(s);
