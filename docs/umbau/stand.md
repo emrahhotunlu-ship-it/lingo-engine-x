@@ -470,3 +470,5 @@ Lehre: Für Aufgabenfragen mit Gestaltungsspielraum zuerst Emrah mit Vorschau fr
 - Enthält FK (neues „Fehler korrigieren“), WL (Satzwechsel, Wendungen zerlegt, Bausteine), ST (ehrlicher Status), MD (Auch richtig, Hinweise, Aufgaben-Audit). Gesamttest in Abschnitten: grün bis auf perf-Statuszeile (4×, bekannt); danach E2E-Testdaten-Korrekturen (Tag-1-Karten) grün.
 - Bekannte offene Befunde (Opus-ux-reviewer, Korrekturrunde auf `claude/umbau-md-ux` läuft): „Richtig:“-Zeile mit großem W bei Fehler finden, „Auch richtig“-Kopfzeile doppelt, Notiz/Claude-Begründung nicht sichtbar, Fit-Aufruf nicht bei Fehler finden (tasks-v2), Lücke editierbar während „Prüft …“, kein „Ohne Zweitmeinung weiter“, Touch-Ziele spot-word.
 - Tutor-Engine: Konzept `docs/umbau/tutor-engine-v3.md` (Opus), Entscheidungen Emrah in `entscheidungen.md`.
+
+## 20.10.2026 – LIVE v81 `1792429447-2142` (Emrah: „nimm den jetzigen Stand schon einmal live“). Inhalt = Test-Link 9 (FK, WL, ST, MD). Rückweg v80 `1792157236-1fb8`. Bekannte offene UX-Befunde in `claude/umbau-md-ux`.
