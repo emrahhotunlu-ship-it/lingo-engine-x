@@ -6,7 +6,8 @@ import { TYPE_MODE } from './trainerHelpers';
 // Befunde aus Daten-, Plattform- und UX-Prüfung des umgebauten Vokabeltrainers.
 // Gegen den Produktions-Build mit eingespieltem Adapter.
 
-const forced = (id: string) => forcedPatch()[`vocab/${id}`] ?? {};
+// Tag 1 (leerer Verlauf): der Ursprungssatz ist der Anker; mit dem Seed-Verlauf wechselt der Satz seit WL bewusst (Satzrotation ab Stufe 1, wort-lernen-plan WL 3).
+const forced = (id: string) => ({ ...(forcedPatch()[`vocab/${id}`] ?? {}), hist: [] });
 
 async function startWith(page: Page, patch: Record<string, Record<string, unknown>>, opts: { lang?: Lang } = {}) {
   const booted = await boot(page, { migrated: true, ...(opts.lang ? { lang: opts.lang } : {}), fake: { patch: { ...TYPE_MODE, 'app/profile': planPatch(1), ...patch } } });
