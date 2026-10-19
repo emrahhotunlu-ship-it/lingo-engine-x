@@ -1,4 +1,4 @@
-# Tutor-Engine – Gesamtplan (19.10.2026)
+# Tutor-Engine (ersetzt durch tutor-engine-v3.md)
 
 Anlass: Emrahs Rückmeldung („Aufgabenannäherung und Erläuterung nicht intelligent, zu kurz gedacht, nur starrer Code; ich will eine Engine, die versteht, wo der Schüler steht“). Grundlage: Architekt, Lernwissenschaftler, Englischlehrer (alle 19.10.2026). Die Engine ist **kein Parallelsystem**: sie fasst KI-Tutor T1/T2 (`ki-tutor.md`), Pakete MD, FK, ST, WL, SB (`wort-lernen-plan.md`) und eine fehlende Schicht (Lernermodell, Diagnose, Aufgaben-Policy) zusammen.
 
