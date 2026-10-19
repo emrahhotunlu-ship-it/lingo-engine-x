@@ -30,7 +30,8 @@ import { nextT } from '../progress/persist';
 import { bookLex } from './lexWrite';
 import { errFixed, errRange } from '../../domain/c1x/kinds/err';
 import { shortWhy } from '../../domain/grammar/alsoRight';
-import { fitAccepts, useFitJudge } from '../grammar/fit';
+import { abandonFit, runFit, useFitJudge } from '../grammar/fit';
+import { FitSlow } from '../grammar/FitSlow';
 import { ResultAfter, ResultParts, useResultSub } from './ResultCard';
 import type { C1Ctrl, C1KindEntry, ResponseMeta } from './types';
 
@@ -50,6 +51,8 @@ type Fb = {
   help: HelpLevel;
   /** „Auch richtig“ (Claude, `grammar-fit@1`): zählt nie als Fehler und nicht als Beleg fürs Muster. */
   alt?: boolean;
+  /** Begründung von Claude zu „Auch richtig“. */
+  aiWhy?: string;
 };
 
 export type C1ItemProps = {
@@ -99,8 +102,6 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
   const respRef = useRef<{ r: C1Response; meta: ResponseMeta } | null>(null);
   const firstWrong = useRef<string | null>(null);
   const fit = useFitJudge();
-  const judging = useRef(false);
-  const fbRef = useRef<Fb | null>(null);
   const shownAt = useRef(0);
   const firstKeyAt = useRef<number | null>(null);
   const lookupAt = useRef(0);
@@ -112,9 +113,6 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
     if (!a || a === document.body) root.current?.focus({ preventScroll: true });
   }, [root]);
 
-  useEffect(() => {
-    fbRef.current = fb;
-  }, [fb]);
   const elapsed = (): number => Math.max(0, Math.round(tick() - shownAt.current - (lookupOpenMs() - lookupAt.current)));
   const help: HelpLevel = tip >= 2 || retry ? 2 : tip >= 1 ? 1 : 0;
 
@@ -139,7 +137,7 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
   };
 
   const submit = (): void => {
-    if (fb || judging.current) return;
+    if (fb || fit.ctl.current) return;
     const cur = respRef.current;
     if (!cur) return;
     const score = scoreC1(item, cur.r);
@@ -148,15 +146,12 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
     if (item.kind === 'err' && item.bad && score.verdict === 'near' && r.kind === 'err' && typeof r.tap === 'number' && r.typed && r.fix?.trim() && (patId ?? item.pat)) {
       const bad = item.bad;
       const given = r.fix.trim();
-      judging.current = true;
-      void fit
-        .judge(`${task.topic}|${task.key}`, { topic: topicLabel ?? task.topic, pattern: pattern ? pattern.name.en : null, mode: 'replace', task: item.text, sentence: errFixed(item, given), expected: errFixed(item, bad.fix[0] ?? ''), given, uiLang: lang })
-        .then((out) => {
-          judging.current = false;
-          if (fbRef.current) return;
-          if (fitAccepts(out)) finish({ ...score, got: score.max, verdict: 'correct', parts: score.parts.map((x) => ({ ...x, ok: true })) }, cur.r, cur.meta, { alt: true });
-          else settle(score, cur);
-        });
+      runFit(
+        fit.ctl,
+        fit.judge(`${task.topic}|${task.key}`, { topic: topicLabel ?? task.topic, pattern: pattern ? pattern.name.en : null, mode: 'replace', task: item.text, sentence: errFixed(item, given), expected: errFixed(item, bad.fix[0] ?? ''), given, uiLang: lang }),
+        (out) => finish({ ...score, got: score.max, verdict: 'correct', parts: score.parts.map((x) => ({ ...x, ok: true })) }, cur.r, cur.meta, { alt: true, aiWhy: out.why }),
+        () => settle(score, cur),
+      );
       return;
     }
     settle(score, cur);
@@ -175,8 +170,8 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
 
   const dontKnow = (): void => {
     if (fb) return;
-    if (judging.current) {
-      judging.current = false;
+    if (fit.ctl.current) {
+      abandonFit(fit.ctl);
       fit.cancel();
     }
     const cur = respRef.current;
@@ -244,6 +239,8 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
     area,
     p,
     locked: fb !== null,
+    busy: fit.busy,
+    ownFix: fb?.alt && !fb.override && fb.response.kind === 'err' ? (fb.response.fix?.trim() ?? null) : null,
     score: fb?.score ?? null,
     tip,
     retry: retry !== null,
@@ -262,9 +259,15 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
   const rv: ResultVerdict | null = !fb ? null : fb.dontKnow ? 'dontKnow' : fb.override ? 'ok' : fb.score.verdict === 'correct' ? 'ok' : fb.score.verdict === 'near' ? 'near' : 'wrong';
   const model: ExplanationModel | null = useMemo(() => {
     if (!fb || !rv) return null;
-    const m = grammarExplanation({ task, verdict: rv, given: fb.given, ...(fb.meta.picked !== undefined ? { picked: fb.meta.picked } : {}), ...(fb.meta.tapped !== undefined ? { tapped: fb.meta.tapped } : {}), lang, learning });
+    // Stelle getroffen: die Erklärung gilt der Korrektur, nie dem Text für eine falsch angetippte Stelle („Der Fehler liegt am Anfang …“).
+    const rr = fb.response.kind === 'err' ? fb.response : null;
+    const rg = item.kind === 'err' ? errRange(item) : null;
+    const spotHit = !!rr && typeof rr.tap === 'number' && !!rg && rr.tap >= rg[0] && rr.tap <= rg[1];
+    const m = grammarExplanation({ task, verdict: rv, given: fb.given, ...(fb.meta.picked !== undefined ? { picked: fb.meta.picked } : {}), ...(fb.meta.tapped !== undefined && !spotHit ? { tapped: fb.meta.tapped } : {}), lang, learning });
     // „Auch richtig“: die Begründung des geübten Musters steht in der Zeile „Gesucht war …“; hier nur Muster, Gegenüberstellung und der Hinweis, dass es nicht zählt.
-    return fb.alt && !fb.override ? { ...m, lines: [...m.lines.filter((l) => l.k === 'pattern' || l.k === 'contrast'), { k: 'note' as const, text: t('grAltNoCount') }] } : m;
+    return fb.alt && !fb.override
+      ? { ...m, ai: !!fb.aiWhy, lines: [...m.lines.filter((l) => l.k === 'pattern'), ...(fb.aiWhy ? [{ k: 'why' as const, text: fb.aiWhy }] : []), ...m.lines.filter((l) => l.k === 'contrast'), { k: 'note' as const, text: t('grAltNoCount') }] }
+      : m;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fb, lang, learning, task]);
   const depth: ExplainDepth = explainDepth({ verdict: rv ?? 'ok', p, learning });
@@ -339,13 +342,13 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
       ...(fb.alt && !fb.override ? { title: t('exAlsoRight') } : head?.title ? { title: head.title } : {}),
       sub: fb.alt && !fb.override ? altSub : sub,
       // Fehler finden: die Muster-Fachsprache steht unter „Mehr“, das Kontrastbeispiel (z. B. -ing gegen -ed) offen (Rückmeldung 7).
-      ...(item.kind === 'err' ? { fold: ['pattern'] as const, unfold: ['contrast'] as const } : {}),
+      ...(item.kind === 'err' ? { fold: ['pattern'] as const, unfold: fb.alt && !fb.override ? (['contrast', 'note'] as const) : (['contrast'] as const) } : fb.alt && !fb.override ? { unfold: ['note'] as const } : {}),
       explanation: model,
       depth,
       menu,
       tutor,
       parts: createElement(ResultParts, { score: fb.score }),
-      right: ui.right ?? null,
+      right: item.kind === 'err' ? null : (ui.right ?? null),
       after: createElement(ResultAfter, { item, matched, day }),
       auto: !noAuto && fb.help === 0 && !fb.override && fb.score.free && !fb.alt,
     };
@@ -365,7 +368,7 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
     task: { text: ui.task ?? t(`cxTask_${item.kind}` as MessageKey), purpose: t('cxPurpose') },
     aid,
     prompt: ui.prompt,
-    answer: ui.answer,
+    answer: fit.phase === 'slow' && !fb ? createElement('div', { className: 'flex flex-col gap-3' }, ui.answer, createElement(FitSlow, { phase: fit.phase, onSkip: fit.skip })) : ui.answer,
     hint,
     secondary,
     primary,

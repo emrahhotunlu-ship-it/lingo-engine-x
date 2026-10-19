@@ -20,7 +20,7 @@ export function FixedSentence({ from, to, testId }: { from: string; to: string; 
   );
   const parts: ReactNode[] = ops.map((o, i) => {
     const sep = i > 0 ? ' ' : '';
-    if (o.op === 'eq') return <span key={i}>{sep + (o.given ?? '')}</span>;
+    if (o.op === 'eq') return <span key={i}>{sep + (o.expected ?? o.given ?? '')}</span>;
     if (o.op === 'ins')
       return (
         <span key={i}>

@@ -29,8 +29,7 @@ export type FindHead = {
 
 /** `noneLabel`: Beschriftung des Knopfs „Kein Fehler“ der jeweiligen Übung (Standard `exNoError`). */
 export function findHead(f: FindFacts, lang: Lang, noneLabel: string = translate(lang, 'exNoError')): FindHead {
-  const fixed = f.found && f.verdict !== 'ok' && !!f.fix && !!f.tapped && f.tapped !== 'none';
-  const yours = fixed ? translate(lang, 'exFindYouFixed', { word: f.tapped ?? '', fix: f.fix ?? '' }) : f.tapped === 'none' ? translate(lang, 'exFindYouNone', { label: noneLabel }) : f.tapped ? translate(lang, 'exFindYouTapped', { word: f.tapped }) : null;
+  const yours = f.tapped === 'none' ? translate(lang, 'exFindYouNone', { label: noneLabel }) : f.tapped ? translate(lang, 'exFindYouTapped', { word: f.tapped }) : null;
   const miss = missingWords(f.errWord, f.answer);
   const where = miss
     ? f.tapped === 'none'

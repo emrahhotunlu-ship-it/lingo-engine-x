@@ -34,6 +34,39 @@ export function fitStore(k: string, out: GrammarFitOut): void {
 /** `fits && certain`: nur dann wird aus „falsch“ „Auch richtig“. */
 export const fitAccepts = (o: GrammarFitOut | null): o is GrammarFitOut => !!o && o.fits && o.certain;
 
+/** Ein laufendes Urteil: `skip` = „Ohne Zweitmeinung weiter“ (lokales Urteil), `done` = bereits abgeschlossen oder verworfen. */
+export type FitRun = { done: boolean; skip: () => void };
+
+/**
+ * Wertet ein Claude-Urteil genau einmal aus: `accept` bei `fits && certain`, sonst oder bei `skip` das lokale Urteil (`local`).
+ * Nie doppelt („Weiß ich nicht“, Überspringen und die Antwort von Claude schließen sich aus).
+ */
+export function runFit(ctl: { current: FitRun | null }, p: Promise<GrammarFitOut | null>, accept: (out: GrammarFitOut) => void, local: () => void): void {
+  const run: FitRun = {
+    done: false,
+    skip: () => {
+      if (run.done) return;
+      run.done = true;
+      ctl.current = null;
+      local();
+    },
+  };
+  ctl.current = run;
+  void p.then((out) => {
+    if (run.done) return;
+    run.done = true;
+    ctl.current = null;
+    if (fitAccepts(out)) accept(out);
+    else local();
+  });
+}
+
+/** „Weiß ich nicht“ während des Urteils: das Urteil wird verworfen. */
+export function abandonFit(ctl: { current: FitRun | null }): void {
+  if (ctl.current) ctl.current.done = true;
+  ctl.current = null;
+}
+
 /**
  * Das eine Urteil zu einer Antwort: erst Speicher, dann (nur wenn Claude nutzbar ist) genau ein Aufruf. `null` = kein Urteil (kein Claude,
  * Fehler, Abbruch): der Aufrufer bleibt beim lokalen Ergebnis. Aufrufen nur aus „Prüfen“ (ausdrückliche Handlung).
@@ -41,6 +74,7 @@ export const fitAccepts = (o: GrammarFitOut | null): o is GrammarFitOut => !!o &
 export function useFitJudge() {
   const ask = useAsk(grammarFit);
   const token = useRef(0);
+  const ctl = useRef<FitRun | null>(null);
   const judge = useCallback(
     async (taskKey: string, vars: GrammarFitVars): Promise<GrammarFitOut | null> => {
       const k = fitKey(taskKey, vars.given);
@@ -61,6 +95,13 @@ export function useFitJudge() {
     token.current++;
     ask.stop();
   }, [ask]);
+  /** „Ohne Zweitmeinung weiter“: bricht ab und löst das lokale Urteil aus. */
+  const skip = useCallback(() => {
+    const c = ctl.current;
+    token.current++;
+    ask.stop();
+    c?.skip();
+  }, [ask.stop]); // eslint-disable-line react-hooks/exhaustive-deps
   const busy = ask.phase === 'queued' || ask.phase === 'thinking' || ask.phase === 'slow' || ask.phase === 'streaming';
-  return { judge, cancel, busy, phase: ask.phase };
+  return { judge, cancel, skip, ctl, busy, phase: ask.phase };
 }

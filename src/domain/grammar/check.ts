@@ -221,6 +221,13 @@ export function fitAskable(task: Pick<GrammarTask, 'type' | 'prompt' | 'pat'>, c
   return words.length >= 1 && words.length <= 8 && given.trim().length <= 80;
 }
 
+/** „Ersetze nur die markierte Stelle“: darf der getippte Ersatz von Claude im ganzen Satz geprüft werden? (Lokal falsch, kurz, nicht leer.) */
+export function fitAskableReplace(check: Pick<GrammarCheck, 'verdict' | 'kind'>, given: string): boolean {
+  if (check.verdict !== 'wrong' || check.kind === 'form') return false;
+  const words = splitWords(given);
+  return words.length >= 1 && words.length <= 8 && given.trim().length <= 80;
+}
+
 /** Aus „falsch“ wird durch das KI-Urteil „Auch richtig“ (nur bei `fits && certain`, das prüft der Aufrufer). */
 export function asAlsoRight(check: GrammarCheck): GrammarCheck {
   return { ...check, verdict: 'correct', kind: 'other', needsJudge: false };

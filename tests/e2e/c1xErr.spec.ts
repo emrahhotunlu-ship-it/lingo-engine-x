@@ -77,9 +77,10 @@ test.describe('Handy', () => {
     await expect(item.getByTestId('verdict')).toContainText('Richtige Stelle gefunden');
     await expect(item.getByTestId('verdict')).not.toContainText('Kein Problem');
     await expect(item.getByTestId('verdict-sub')).toContainText('Du hast „hear“ getippt.');
-    const fix = item.getByTestId('err-correction');
-    await expect(fix.getByTestId('fix-old')).toHaveText('hear');
-    await expect(fix.getByTestId('fix-new')).toHaveText('hearing');
+    // Die Korrektur steht im Satz oben („~~hear~~ → hearing“), nicht noch einmal als „Richtig:“-Zeile.
+    await expect(item.getByTestId('spot-mark')).toContainText('hear');
+    await expect(item.getByTestId('spot-mark')).toContainText('hearing');
+    await expect(item.getByTestId('err-correction')).toHaveCount(0);
     const result = item.getByTestId('result');
     await expect(result).not.toContainText('Richtig, weil');
     await expect(result).not.toContainText('Der Fehler:');
@@ -94,7 +95,7 @@ test.describe('Handy', () => {
     await page.getByTestId('check').click();
     await expect(item.getByTestId('verdict')).toContainText('Nicht ganz');
     await expect(item.getByTestId('verdict-sub')).toContainText('Du hast „really“ getippt. Der Fehler steckt in „hear“.');
-    await expect(item.getByTestId('err-correction').getByTestId('fix-new')).toHaveText('hearing');
+    await expect(item.getByTestId('spot-mark')).toContainText('hearing');
     expect(errors).toEqual([]);
   });
 

@@ -28,12 +28,12 @@ const S = await import('../../src/features/vocab/session');
 const { useDecks } = await import('../../src/features/vocab/decksStore');
 
 describe('Fehler finden: Kopf nennt die eingesetzte Korrektur', () => {
-  it('Stelle gefunden, Korrektur falsch: „Du hast … getippt und … eingesetzt.“ (DE + EN)', () => {
+  it('Stelle gefunden, Korrektur falsch: „nur das getippte Wort (die Korrektur steht im Satz)“ (DE + EN)', () => {
     const f = { verdict: 'wrong' as const, errWord: 'Used', tapped: 'Used', found: true, fix: 'Use' };
     const d = findHead(f, 'de');
     expect(d.title).toBe('Richtige Stelle, Korrektur falsch');
-    expect(d.sub).toBe('Du hast „Used“ getippt und „Use“ eingesetzt.');
-    expect(findHead(f, 'en').sub).toBe('You tapped “Used” and wrote “Use”.');
+    expect(d.sub).toBe('Du hast „Used“ getippt.');
+    expect(findHead(f, 'en').sub).toBe('You tapped “Used”.');
   });
   it('richtig oder ohne Korrektur: wie bisher nur das getippte Wort', () => {
     expect(findHead({ verdict: 'ok', errWord: 'Used', tapped: 'Used', found: true, fix: 'Using' }, 'de').sub).toBe('Du hast „Used“ getippt.');

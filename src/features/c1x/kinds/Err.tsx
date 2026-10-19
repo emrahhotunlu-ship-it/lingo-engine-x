@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { splitWords } from '../../../domain/answer/align';
-import { errFixed, errRange } from '../../../domain/c1x/kinds/err';
+import { errRange } from '../../../domain/c1x/kinds/err';
 import { errChipOrder } from '../../../domain/c1x/mix';
 import type { Err } from '../../../domain/c1x/types';
 import { ChipRow } from '../../../engine/ChipRow';
@@ -9,7 +9,6 @@ import { WordCounter } from '../../../engine/WordCounter';
 import { kwtCount } from '../../../domain/c1x/kwtNorm';
 import { useT } from '../../../i18n';
 import { Button } from '../../../ui/Button';
-import { FixedSentence } from '../../../ui/exercise/FixedSentence';
 import type { C1Ctrl, C1Ui } from '../types';
 
 // `err` (Fehler finden, auch fehlerfreie Sätze), P17. Erst das Wort antippen, dann die Korrektur (Lernplattform 3.0 §2.10, §3.4):
@@ -88,13 +87,12 @@ export function useErrUi(ctrl: C1Ctrl): C1Ui {
   const verdict = ctrl.score?.verdict;
   // UX-Prüfung B2: die Korrektur steht im Satz („~~hear~~ → hearing“), wie bei der Lücke; das falsche Wort wird nie grün.
   const fixText = item.bad?.fix[0] ?? null;
-  const marks = ctrl.locked && range ? [{ span: range, tone: verdict === 'correct' ? ('ok' as const) : ('wrong' as const), ...(fixText ? { fix: fixText } : {}) }] : [];
-  const fixedSentence = range && fixText ? errFixed(item, fixText) : null;
+  const shownFix = ctrl.ownFix || fixText;
+  const marks = ctrl.locked && range ? [{ span: range, tone: verdict === 'correct' ? ('ok' as const) : ('wrong' as const), ...(shownFix ? { fix: shownFix } : {}) }] : [];
   const correctChip = choices && item.bad ? choices.findIndex((c) => item.bad?.fix.some((f) => f.trim().toLowerCase() === c.trim().toLowerCase())) : -1;
 
   return {
     // Rückmeldung 7: der korrigierte Satz mit sichtbarer Änderung („~~Used~~ Using the new scanner, …“), auch bei richtiger Antwort.
-    right: ctrl.locked && fixedSentence ? <FixedSentence from={words.join(' ')} to={fixedSentence} testId="err-correction" /> : null,
     prompt: (
       <div className="flex flex-col gap-2" data-testid="c1x-err" data-err-mode={mode}>
         <TapSentence
@@ -156,7 +154,7 @@ export function useErrUi(ctrl: C1Ctrl): C1Ui {
               spellCheck={false}
               value={fix}
               placeholder={t('cxAnswerPlaceholder')}
-              disabled={sel === null}
+              disabled={sel === null || ctrl.busy}
               data-testid="err-fix"
               onChange={(e) => {
                 setFix(e.target.value);
