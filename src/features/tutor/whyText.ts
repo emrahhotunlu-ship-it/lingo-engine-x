@@ -54,11 +54,16 @@ function extraText(x: WhyExtra, name: string, lang: Lang): string {
   return translate(lang, 'ttWhyPlus_weakD', { name, days: x.days });
 }
 
-/** Grund der Aufgabe, dahinter höchstens ein Datenbeleg als Zusatz. */
+/** Was „sicher richtig“ heißt (ohne Formel oder Fachbegriff), einmal hinter Quote oder Fortschrittsbeleg. */
+export const sureNote = (lang: Lang): string => translate(lang, 'ttSureNote');
+
+/** Grund der Aufgabe, dahinter höchstens ein Datenbeleg als Zusatz (bei der Quote mit der Erklärung von „sicher“). */
 export function whyText(f: WhyFact, lang: Lang): string {
   const name = nameOf(f, lang);
   const main = mainText(f, name, lang);
-  return f.extra ? `${main} ${extraText(f.extra, name, lang)}` : main;
+  if (!f.extra) return main;
+  const plus = extraText(f.extra, name, lang);
+  return f.extra.k === 'weakQ' ? `${main} ${plus} ${sureNote(lang)}` : `${main} ${plus}`;
 }
 
 /** Fortschrittsbeleg in Worten („vor 3 Wochen 4 von 9 ohne Hilfe richtig, jetzt 8 von 9“). */

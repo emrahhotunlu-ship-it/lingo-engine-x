@@ -17,7 +17,7 @@ export const ttPolicyEn = {
   ttWhy_mix: 'Mixed review: {name} comes back so it does not get rusty.',
   ttWhy_plan: '{name} is part of today’s round.',
   ttWhyPlus_hyp: 'Related: with {name}, you recently used {vs} {n} times.',
-  ttWhyPlus_weakQ: 'Related: with {name}, {ok} of {n} typed answers in the last 4 weeks were right without help.',
+  ttWhyPlus_weakQ: 'Related: with {name}, {ok} of {n} typed answers in the last 4 weeks were reliably right.',
   ttWhyPlus_weakD0: 'Related: with {name}, one answer today was wrong.',
   ttWhyPlus_weakD1: 'Related: with {name}, one answer yesterday was wrong.',
   ttWhyPlus_weakD: 'Related: with {name}, one answer {days} days ago was wrong.',
@@ -26,5 +26,6 @@ export const ttPolicyEn = {
   ttWhy_supported: 'One step easier, so the rule sticks first.',
   ttWin: 'Something familiar for a moment, then on we go.',
   ttLessonWhy: 'More questions will not help right now. The rule in short:',
-  ttProof: '{name}: {weeks} weeks ago {thenOk} of {thenN} right without help, now {nowOk} of {nowN}.',
+  ttProof: '{name}: {weeks} weeks ago {thenOk} of {thenN} reliably right, now {nowOk} of {nowN}.',
+  ttSureNote: 'Reliably means: no guiding question, formula or first letter, right on the first try and at your usual pace.',
 };

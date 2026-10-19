@@ -95,6 +95,8 @@ export type GrammarLogEntry = {
   tm?: number;
   /** Antwort aus einer Tempo-Runde (P44-Nachbesserung): zählt nie für K6 „Fehler finden“. Nur ergänzend. */
   tp?: true;
+  /** Tutor-Engine v3 (Nachprüfung N2, nur ergänzend, nur wenn > 0): Hilfestufe vor dem Prüfen (1 Leitfrage/Formel, 2 erster Buchstabe). */
+  hl?: 1 | 2;
   /** Tutor-Engine v3 §3.2 (nur ergänzend, ≤ 60 B): Urteil c/a/n/w/u, Ursache, Gegenmuster. */
   v?: 'c' | 'a' | 'n' | 'w' | 'u';
   h?: string;
@@ -146,6 +148,12 @@ export type AnyLogEntry = LogEntry | ChunkLogEntry | GrammarLogEntry | DrillLogE
 
 export const DONT_KNOW = "(don't know)";
 
+/** Hilfestufe nur, wenn Hilfe genutzt wurde (tolerant: ältere Antwort-Objekte ohne `help` schreiben nichts). */
+function hlOf(a: GrammarAnswer): { hl?: 1 | 2 } {
+  const lv: unknown = (a as { help?: { level?: unknown } }).help?.level;
+  return lv === 1 || lv === 2 ? { hl: lv } : {};
+}
+
 export function grammarLogEntry(a: GrammarAnswer): GrammarLogEntry {
   const lesson = a.task.src === 'lesson' && a.task.ref?.startsWith('lesson/') ? a.task.ref.slice(7) : undefined;
   return {
@@ -172,6 +180,7 @@ export function grammarLogEntry(a: GrammarAnswer): GrammarLogEntry {
     ...(a.task.c1?.src === 'ai' ? { ai: true as const } : {}),
     ...(a.pts && a.free ? { free: true as const, tm: Math.max(1, Math.round(a.ms)) } : {}),
     ...(a.tempo ? { tp: true as const } : {}),
+    ...hlOf(a),
     ...(a.tj ? { v: a.tj.v, ...(a.tj.h ? { h: a.tj.h.slice(0, 12) } : {}), ...(a.tj.vs ? { vs: a.tj.vs.slice(0, 40) } : {}) } : {}),
   };
 }

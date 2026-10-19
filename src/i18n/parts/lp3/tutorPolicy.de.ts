@@ -17,7 +17,7 @@ export const ttPolicyDe = {
   ttWhy_mix: 'Mischung: {name} kommt wieder dran, damit es nicht einrostet.',
   ttWhy_plan: '{name} gehört zu deiner heutigen Runde.',
   ttWhyPlus_hyp: 'Passt dazu: Bei {name} hast du zuletzt {n}-mal {vs} genommen.',
-  ttWhyPlus_weakQ: 'Passt dazu: Bei {name} waren in den letzten 4 Wochen {ok} von {n} getippten Antworten ohne Hilfe richtig.',
+  ttWhyPlus_weakQ: 'Passt dazu: Bei {name} waren in den letzten 4 Wochen {ok} von {n} getippten Antworten sicher richtig.',
   ttWhyPlus_weakD0: 'Passt dazu: Bei {name} war heute eine Antwort falsch.',
   ttWhyPlus_weakD1: 'Passt dazu: Bei {name} war gestern eine Antwort falsch.',
   ttWhyPlus_weakD: 'Passt dazu: Bei {name} war vor {days} Tagen eine Antwort falsch.',
@@ -26,5 +26,6 @@ export const ttPolicyDe = {
   ttWhy_supported: 'Eine Stufe leichter, damit die Regel erst einmal sicher sitzt.',
   ttWin: 'Kurz etwas Bekanntes, dann weiter.',
   ttLessonWhy: 'Abfragen hilft hier gerade nicht. Die Regel in Kürze:',
-  ttProof: '{name}: vor {weeks} Wochen {thenOk} von {thenN} ohne Hilfe richtig, jetzt {nowOk} von {nowN}.',
+  ttProof: '{name}: vor {weeks} Wochen {thenOk} von {thenN} sicher richtig, jetzt {nowOk} von {nowN}.',
+  ttSureNote: 'Sicher heißt: ohne Leitfrage, Formel oder ersten Buchstaben, im ersten Versuch und im üblichen Tempo.',
 };

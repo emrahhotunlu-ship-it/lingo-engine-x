@@ -146,4 +146,8 @@ describe('Protokoll: v/h/vs (≤ 60 B)', () => {
     const plain = grammarLogEntry(answer({ t: 6 }));
     expect('v' in plain || 'h' in plain || 'vs' in plain).toBe(false);
   });
+  it('Hilfestufe `hl` nur, wenn Hilfe genutzt wurde (N2, ergänzendes Feld)', () => {
+    expect(grammarLogEntry(answer({ t: 7, help: { level: 2 } })).hl).toBe(2);
+    expect('hl' in grammarLogEntry(answer({ t: 8, help: { level: 0 } }))).toBe(false);
+  });
 });

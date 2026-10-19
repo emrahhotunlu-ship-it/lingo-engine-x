@@ -69,7 +69,7 @@ describe('progressProof', () => {
 
 describe('progressProof aus dem Protokoll: nur saubere Antworten, „Weiß ich nicht“ im Nenner', () => {
   // gap-Aufgabe des Musters psp.since-for (Thema past-simple-perfect); die Musterkennung steht in der Zeile.
-  const entry = (day: string, h: number, x: { ok: boolean; g?: number; override?: boolean; given?: string }) => ({
+  const entry = (day: string, h: number, x: { ok: boolean; g?: number; override?: boolean; given?: string; hl?: number }) => ({
     t: at(day, h),
     ok: x.ok,
     lang: 'de',
@@ -82,6 +82,7 @@ describe('progressProof aus dem Protokoll: nur saubere Antworten, „Weiß ich n
     pat: 'psp.since-for',
     ...(x.g !== undefined ? { g: x.g } : {}),
     ...(x.override ? { override: true } : {}),
+    ...(x.hl ? { hl: x.hl } : {}),
   });
   const logsOf = (rows: Array<ReturnType<typeof entry>>) => {
     const logs = new Map<string, { entries: unknown[] }>();
@@ -113,5 +114,36 @@ describe('progressProof aus dem Protokoll: nur saubere Antworten, „Weiß ich n
     expect(m.proofs?.get('psp.since-for')).toEqual({ thenOk: 2, thenN: 6, nowOk: 4, nowN: 7, weeks: 3, trend: 'up' });
     // Dieselbe Definition für die 28-Tage-Quote („Warum diese Aufgabe?“).
     expect(m.patterns.get('psp.since-for')?.q28).toEqual({ n: 13, ok: 6 });
+  });
+
+  it('N1: alte Zeilen ohne Note zählen weder richtig noch falsch (kein erfundener Zuwachs); der letzte Fehler nutzt sie weiter', () => {
+    const then = [0, 1, 2, 3, 4, 5].map((i) => entry('2026-09-28', 8 + i, i < 3 ? { ok: true, g: 3 } : { ok: false, g: 1 }));
+    // Alte App: ohne `g`, richtige wie falsche.
+    const oldThen = [0, 1, 2, 3].map((i) => entry('2026-09-29', 8 + i, { ok: i === 0 }));
+    const now = [0, 1, 2, 3, 4, 5].map((i) => entry('2026-10-17', 8 + i, i < 5 ? { ok: true, g: 3 } : { ok: false, g: 1 }));
+    const oldNow = [entry('2026-10-18', 9, { ok: true }), entry('2026-10-18', 10, { ok: false })];
+    const m = model([...then, ...oldThen, ...now, ...oldNow]);
+    expect(m.proofs?.get('psp.since-for')).toEqual({ thenOk: 3, thenN: 6, nowOk: 5, nowN: 6, weeks: 3, trend: 'up' });
+    expect(m.patterns.get('psp.since-for')?.q28).toEqual({ n: 12, ok: 8 });
+    expect(m.patterns.get('psp.since-for')?.lastWrong).toBe(at('2026-10-18', 10));
+    // Nur alte Zeilen: gar kein Beleg.
+    expect(model([...oldThen, ...oldNow]).proofs?.get('psp.since-for') ?? null).toBeNull();
+  });
+
+  it('N2: mit Hilfestufe (`hl`) im Nenner, aber nicht sicher richtig', () => {
+    const then = [0, 1, 2, 3, 4, 5].map((i) => entry('2026-09-28', 8 + i, i < 2 ? { ok: true, g: 3 } : { ok: false, g: 1 }));
+    const now = [0, 1, 2, 3, 4, 5].map((i) => entry('2026-10-18', 8 + i, i < 3 ? { ok: true, g: 3 } : { ok: true, g: 3, hl: 1 }));
+    expect(model([...then, ...now]).proofs?.get('psp.since-for')).toMatchObject({ thenOk: 2, nowOk: 3, nowN: 6, trend: 'flat' });
+  });
+});
+
+describe('progressProof: Trend über Raten (K-a)', () => {
+  it('unterschiedlich große Fenster: 6 von 9 → 6 von 6 ist ein Zuwachs', () => {
+    const rows = [...many('2026-09-28', [...n(6, true), ...n(3, false)]), ...many('2026-10-18', n(6, true))];
+    expect(progressProof(rows, TODAY)?.trend).toBe('up');
+  });
+  it('9 von 9 → 6 von 6 ist kein Rückgang; 6 von 6 → 4 von 9 schon', () => {
+    expect(progressProof([...many('2026-09-28', n(9, true)), ...many('2026-10-18', n(6, true))], TODAY)?.trend).toBe('flat');
+    expect(progressProof([...many('2026-09-28', n(6, true)), ...many('2026-10-18', [...n(4, true), ...n(5, false)])], TODAY)?.trend).toBe('down');
   });
 });

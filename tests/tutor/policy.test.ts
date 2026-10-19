@@ -26,7 +26,7 @@ import {
   type AnswerFact,
   type Session,
 } from '../../src/domain/tutor/policy';
-import { proofText, refName, whyText } from '../../src/features/tutor/whyText';
+import { proofText, refName, sureNote, whyText } from '../../src/features/tutor/whyText';
 
 // Zug-Entscheidung der Tutor-Engine (S2/S3): reine Funktionen, deterministisch. Alle Daten sind erfunden.
 
@@ -378,11 +378,16 @@ describe('whyText und proofText', () => {
       for (const lang of ['de', 'en'] as const) expect(whyText({ code: 'plan', pat: 'a', topic: 'tp', extra }, lang)).not.toMatch(/\{|\}|undefined/);
     expect(whyText({ code: 'plan', pat: 'a', topic: 'tp' }, 'de')).not.toContain('Passt dazu');
   });
-  it('Gebrauchsmuster und Fortschrittsbeleg (M2: „ohne Hilfe richtig“)', () => {
+  it('Gebrauchsmuster und Fortschrittsbeleg (N2: „sicher richtig“ mit Erklärung)', () => {
     expect(refName('use:depend+on', 'de')).toBe('depend on');
     expect(refName('unbekannt', 'en')).toBe('unbekannt');
-    expect(proofText('x', { thenOk: 4, thenN: 9, nowOk: 8, nowN: 9, weeks: 3, trend: 'up' }, 'de')).toBe('x: vor 3 Wochen 4 von 9 ohne Hilfe richtig, jetzt 8 von 9.');
-    expect(proofText('x', { thenOk: 4, thenN: 9, nowOk: 8, nowN: 9, weeks: 3, trend: 'up' }, 'en')).toBe('x: 3 weeks ago 4 of 9 right without help, now 8 of 9.');
+    expect(proofText('x', { thenOk: 4, thenN: 9, nowOk: 8, nowN: 9, weeks: 3, trend: 'up' }, 'de')).toBe('x: vor 3 Wochen 4 von 9 sicher richtig, jetzt 8 von 9.');
+    expect(proofText('x', { thenOk: 4, thenN: 9, nowOk: 8, nowN: 9, weeks: 3, trend: 'up' }, 'en')).toBe('x: 3 weeks ago 4 of 9 reliably right, now 8 of 9.');
+    expect(sureNote('de')).toMatch(/^Sicher heißt: .*ersten Buchstaben.*ersten Versuch.*Tempo\.$/);
+    expect(sureNote('en')).toMatch(/^Reliably means: .*first letter.*first try.*pace\.$/);
+    // Die Quote im Zusatz sagt mit, was „sicher“ heißt; andere Zusätze nicht.
+    expect(whyText({ code: 'plan', pat: 'a', topic: 'tp', extra: { k: 'weakQ', n: 9, ok: 4 } }, 'de')).toContain('4 von 9 getippten Antworten sicher richtig. Sicher heißt:');
+    expect(whyText({ code: 'plan', pat: 'a', topic: 'tp', extra: { k: 'weakD', days: 2 } }, 'de')).not.toContain('Sicher heißt');
   });
 });
 

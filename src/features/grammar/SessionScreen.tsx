@@ -27,7 +27,7 @@ import { chapterRunOn } from '../../app/flags';
 import { useClock } from '../../app/clock';
 import { useLive } from '../../data/live';
 import { WhyLine, WinLine } from '../tutor/WhyLine';
-import { proofText } from '../tutor/whyText';
+import { proofText, sureNote } from '../tutor/whyText';
 import { scheduleLearner, useLearner } from '../tutor/learnerLive';
 import { cardsDue, commitGrammar, grammarProgress, inRepeat, inVortest, leaveGrammar, patternGrowth, reportGrammarDone, skipGrammar, startAfterIntro, touchGrammar, useGrammarSession, type TestState } from './session';
 
@@ -164,6 +164,7 @@ function GrammarEnd({ lang }: { lang: 'de' | 'en' }) {
         k++;
       }
     }
+    if (k > 0) facts.push(sureNote(lang));
   }
   const wrongPats = new Set(s.results.filter((r) => !r.ok && r.pat).map((r) => r.pat as string));
   for (const g of growth) if (wrongPats.has(g.pat) && patternState(g.to, s.day) === 'learning') facts.push(t('gxEndWobbly', { name: name(g.pat) }));

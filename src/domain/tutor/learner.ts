@@ -177,10 +177,11 @@ function logDigest(path: string, doc: Doc, sig: string): LogDigest {
       const dk = given === DONT_KNOW;
       const kind = TYPED.has(str(e.type)) || e.free === true;
       const free = kind && !dk && e.ok === true && e.override !== true;
-      const clean = e.ok === true && e.override !== true && num(e.g) >= CLEAN_GRADE;
-      // Ohne Note (nur bei sehr alten Zeilen denkbar) ist „sauber“ nicht bekannt: eine richtige Antwort ohne Note zählt dann nirgends mit.
-      const graded = e.ok !== true || num(e.g) > 0;
-      g.push({ t, day: dayKey(t), pat: patOfEntry(e), ok: e.ok === true, typed: kind && graded && e.ai !== true, clean, free });
+      // Sicher richtig: richtig, ohne Einspruch, Note mindestens „Gut“ (kein Zweitversuch, übliches Tempo) und ohne Hilfe (`hl`, nur neue Zeilen).
+      const clean = e.ok === true && e.override !== true && num(e.g) >= CLEAN_GRADE && !(num(e.hl) > 0);
+      // Ohne Note (Zeilen der alten App) ist „sicher“ nicht bekannt: solche Zeilen zählen für Beleg und Quote weder richtig noch falsch
+      // (beidseitig, sonst entstünde ein erfundener Zuwachs). Letzter Fehler und freie Tage nutzen sie weiter.
+      g.push({ t, day: dayKey(t), pat: patOfEntry(e), ok: e.ok === true, typed: kind && num(e.g) > 0 && e.ai !== true, clean, free });
     }
     return { g, pace };
   });
@@ -364,8 +365,8 @@ const dayDiff = (a: string, b: string): number => Math.round((Date.parse(`${b}T1
 /**
  * Fortschrittsbeleg aus Antwortzeilen eines Musters (rein). Gezählt werden nur getippte Antworten (`typed`, „Weiß ich nicht“ als falsch im
  * Nenner); richtig heißt sauber (`clean`: ohne Hilfe, ohne „Zählt“, Note mindestens „Gut“). `null`, wenn eines der beiden Fenster weniger als
- * `PROOF_MIN` Antworten hat. Zeilen nach `today` zählen nicht. „besser“ verlangt 20 Prozentpunkte UND mindestens 2 saubere Antworten mehr
- * (kein Rauschen wie „1 von 4 → 3 von 4“ als Erfolg).
+ * `PROOF_MIN` Antworten hat. Zeilen nach `today` zählen nicht. „besser“ verlangt 20 Prozentpunkte UND mindestens 2 saubere Antworten mehr,
+ * als die alte Quote im jetzigen Fenster ergäbe (Raten, nicht rohe Zahlen; kein Rauschen als Erfolg).
  */
 export function progressProof(rows: ReadonlyArray<{ t: number; day: string; clean: boolean; typed: boolean }>, today: string): ProgressProof | null {
   const typed = rows.filter((r) => r.typed && r.day <= today).sort((a, b) => a.t - b.t);
@@ -378,8 +379,11 @@ export function progressProof(rows: ReadonlyArray<{ t: number; day: string; clea
   const thenOk = thenRows.filter((r) => r.clean).length;
   const lastThen = thenRows[thenRows.length - 1]?.day ?? thenTo;
   const weeks = Math.max(2, Math.round(dayDiff(lastThen, today) / 7));
-  const d = nowOk / nowRows.length - thenOk / thenRows.length;
-  const trend = d >= PROOF_TREND && nowOk - thenOk >= PROOF_STEP ? 'up' : d <= -PROOF_TREND && thenOk - nowOk >= PROOF_STEP ? 'down' : 'flat';
+  const thenRate = thenOk / thenRows.length;
+  const d = nowOk / nowRows.length - thenRate;
+  // Über Raten (die Fenster sind unterschiedlich groß): so viele wären jetzt mit der alten Quote richtig.
+  const expected = Math.round(thenRate * nowRows.length);
+  const trend = d >= PROOF_TREND && nowOk - expected >= PROOF_STEP ? 'up' : d <= -PROOF_TREND && expected - nowOk >= PROOF_STEP ? 'down' : 'flat';
   return { thenOk, thenN: thenRows.length, nowOk, nowN: nowRows.length, weeks, trend };
 }
 

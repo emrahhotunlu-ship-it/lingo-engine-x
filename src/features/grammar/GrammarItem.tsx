@@ -588,7 +588,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
           ...(retry ? { firstWrong: '' } : {}),
           ...(fb.dx && fb.dx.cause !== 'unknown' ? { tj: { v: 'w' as const, h: fb.dx.cause } } : {}),
         },
-        task.errorT === null && !plantedOf(task),
+        task.errorT === null && !task.c1 && !plantedOf(task),
       );
       const model0 = learnerNow();
       if (tutorPreview(fact, model0).move === 'explain') {
