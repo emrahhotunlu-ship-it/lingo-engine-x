@@ -49,8 +49,11 @@ export type GrammarTask = {
 /** `kwt`: Ausgangssatz, Schlüsselwort (Großbuchstaben), erlaubte Wortzahl in der Lücke. `find`: Wortbereich des Fehlers (`null` = fehlerfrei) und der ganze richtige Satz. `meaning`: Satz a und b, Frage. */
 export type TaskExtra =
   | { kind: 'kwt'; from: string; key: string; words: [number, number] }
-  | { kind: 'find'; err: [number, number] | null; fixed: string | null }
+  | { kind: 'find'; err: [number, number] | null; fixed: string | null; errAlt?: readonly FindAlt[] }
   | { kind: 'meaning'; a: string; b: string; q: { de: string; en: string } };
+
+/** „Fehler finden“: andere gültige Korrektur an einer anderen Stelle (Tutor-Engine v3 §3.2, `errAlt`). Wortbereich einschließlich, 0-basiert. */
+export type FindAlt = { err: [number, number]; answer: string; accepted: readonly string[]; why: { de: string; en: string } };
 
 export type Help = { level: 0 | 1 | 2; replays?: number };
 export type WordOp = { op: 'eq' | 'typo' | 'sub' | 'ins' | 'del'; given?: string; expected?: string };

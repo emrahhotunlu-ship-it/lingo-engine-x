@@ -4,6 +4,7 @@
 // `c1check` (R4 C1-Check, P40) steht seit 08.10.2026 auf `true`; `lx:flags` = `{"c1check":false}` schaltet ihn je Gerät ab.
 // `tutor.talk` (R5 P51 Rollenspiel+: turn-analysis@3, Kapitelziel, „Sag's nochmal“, K7 aus dem Gespräch) steht seit 08.10.2026 auf `true`; `{"tutor":{"talk":false}}` schaltet es je Gerät ab.
 import type { C1Kind } from '../domain/c1x/types';
+import { logWarn } from '../platform/diagnostics';
 import { local } from '../platform/storage';
 
 export type Flags = {
@@ -78,8 +79,9 @@ export function applyFlagOverrides(raw: string | null): void {
     if (typeof o.chapterRun === 'boolean') flags.chapterRun = o.chapterRun;
     for (const k of Object.keys(flags.tutor) as (keyof Flags['tutor'])[]) if (typeof o.tutor?.[k] === 'boolean') flags.tutor[k] = o.tutor[k];
     for (const k of Object.keys(flags.fx) as (keyof Flags['fx'])[]) if (typeof o.fx?.[k] === 'boolean') flags.fx[k] = o.fx[k];
-  } catch {
+  } catch (err) {
     // Ungültige Übersteuerung: die eingebauten Schalter gelten.
+    logWarn('app:flags', err, 'lx:flags');
   }
 }
 

@@ -4,7 +4,7 @@ import { contentStore } from './scripts/content/vite-plugin.mjs';
 export default defineConfig({
   plugins: [contentStore()],
   test: {
-    include: ['tests/unit/**/*.test.ts'],
+    include: ['tests/unit/**/*.test.ts', 'tests/tutor/**/*.test.ts'],
     environment: 'node',
   },
 });

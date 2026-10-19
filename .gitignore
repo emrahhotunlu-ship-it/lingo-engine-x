@@ -6,5 +6,8 @@ playwright-report/
 .DS_Store
 .env*
 
+# Warnliste von lintTask (tests/tutor/lint.test.ts), nur lokal
+tests/tutor/lint-report.txt
+
 # Arbeitskopien der Hintergrund-Helfer (Claude Code)
 .claude/worktrees/

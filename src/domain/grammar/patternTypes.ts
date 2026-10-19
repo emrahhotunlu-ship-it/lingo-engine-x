@@ -96,6 +96,14 @@ export const V2TaskSchema = z.discriminatedUnion('type', [
     /** Ziel der Korrektur in einem Satz (Aufgabenzeile „Ziel: …“), ohne die Lösung zu verraten. */
     hint: Bi.optional(),
     accepted: z.array(z.string()).default([]),
+    /**
+     * Andere gültige Korrektur an einer ANDEREN Stelle (Tutor-Engine v3 §3.2, ergänzend): z. B. bei „Walking to work, my phone rang twice.“
+     * den Hauptsatz zu „I heard my phone ring twice.“ umbauen. Wortbereich, Ersatz, weitere gültige Ersätze und eigene Begründung.
+     */
+    errAlt: z
+      .array(z.object({ err: z.tuple([z.number().int(), z.number().int()]), answer: z.string(), accepted: z.array(z.string()).default([]), why: Bi }))
+      .max(4)
+      .optional(),
   }),
   z.object({
     ...Base,
