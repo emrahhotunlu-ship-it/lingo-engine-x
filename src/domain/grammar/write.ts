@@ -10,6 +10,7 @@ import { bktStep, displayP, nextDue, p0Of } from './bkt';
 import type { NewRepair } from '../repair/repair';
 import { addError, errorSentences, errorsOf, gapFill, hasOpenError, reviewError } from './errors';
 import { answerRight } from '../learn/right';
+import { fitAltPatch, isFitAltPatch } from '../tutor/fitAlt';
 
 // Schreibweg `grammar/<topic>` je bewerteter Antwort (phase2-plan §4.3, 1:1 wie `updateTopic`
 // der alten App, session.js:431–436). Rein; ausgeführt im Writer per `transform` auf dem
@@ -105,9 +106,14 @@ function patchFor(cur: Doc, a: GrammarAnswer): { patch: Doc; overflow?: NewRepai
     if (next) patch.errors = next;
   } else if (!ok) {
     // Jede falsche Antwort und auch „Weiß ich nicht“ (`given` leer, die Anzeige sagt dann „Weiß ich nicht“) ergibt genau einen Fehlersatz.
-    const next = addError(errors, { q: a.task.prompt, given: a.dontKnow ? '' : (a.firstWrong ?? a.given), ans: errorAnswer(a.task), t, src: a.task.src, expl: a.task.expl, pat: a.task.pat ?? null, cid: a.task.c1?.id ?? null, pts: a.pts ?? null });
+    const next = addError(errors, { q: a.task.prompt, given: a.dontKnow ? '' : (a.firstWrong ?? a.given), ans: errorAnswer(a.task), t, src: a.task.src, expl: a.task.expl, pat: a.task.pat ?? null, cid: a.task.c1?.id ?? null, pts: a.pts ?? null, h: a.tj?.h ?? null });
     if (next !== errors) patch.errors = next;
     else if (!hasOpenError(errors, a.task.prompt)) overflow = overflowRepair(a);
+  }
+  // Gelernte „Auch richtig“-Antwort (Tutor-Engine v3 §3.2) im selben Schreibweg; Claude-Aufgaben nie.
+  if (a.fit && !claude && !a.dontKnow) {
+    const fa = fitAltPatch(cur, a.task.key, a.fit.a ?? a.given, a.fit.by, a.fit.pv, t);
+    if (isFitAltPatch(fa)) patch.fitAlt = fa.fitAlt;
   }
   return { patch, ...(overflow ? { overflow } : {}) };
 }

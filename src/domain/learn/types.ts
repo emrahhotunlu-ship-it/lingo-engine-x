@@ -106,6 +106,13 @@ export type GrammarAnswer = {
   again?: boolean;
   /** Zahl der Wahlmöglichkeiten für die Ratekorrektur im BKT (z. B. `pair` = 6, `err` Fundort = Wortzahl); sonst aus der Aufgabenart. */
   nOpt?: number;
+  /**
+   * Urteil der Tutor-Engine (v3 §3.2), nur ergänzend: `v` c/a/n/w/u (richtig, auch richtig, fast, falsch, unsicher), `h` Ursache (≤ 12 Zeichen),
+   * `vs` Gegenmuster (≤ 40, nur bei sicherer Diagnose). Landet im Log-Eintrag derselben Schreibaktion und als `h` im Fehlersatz.
+   */
+  tj?: { v: 'c' | 'a' | 'n' | 'w' | 'u'; h?: string; vs?: string };
+  /** Gelernte Antwort für `grammar/<topic>.fitAlt` (Claudes Ja `ai`, Emrahs Einspruch `me`), im selben Schreibweg wie die Antwort. */
+  fit?: { by: 'ai' | 'me'; pv: string; /** Die gemerkte Antwort, falls sie nicht `given` ist (Zielform-Zweitversuch). */ a?: string };
 };
 
 /** Quellen: g Grammatik, s Sprint, w Schreiben, v Vokabeln (alte App); k Sprechen, b Business (Phase 3). */

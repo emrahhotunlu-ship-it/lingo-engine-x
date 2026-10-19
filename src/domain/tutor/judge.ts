@@ -38,7 +38,8 @@ export type Judgement = {
 export type JudgeCtx = {
   fitAlt: FitAltIndex;
   dx?: Diagnosis;
-  ai?: (GrammarFitOut & { fitsGoal?: boolean }) | null;
+  /** Claudes Urteil (grammar-fit@2); ältere Formen mit `why` als Text werden toleriert. */
+  ai?: (Pick<GrammarFitOut, 'fits' | 'certain'> & { fitsGoal?: boolean; why?: unknown }) | null;
   aiState: { confirmed: boolean; available: boolean; budgetLeft: number };
   /** Fehler finden: angetippter Bereich (für `errAlt` an einer anderen Stelle). */
   tapped?: readonly [number, number] | null;

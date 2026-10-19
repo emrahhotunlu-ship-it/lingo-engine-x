@@ -108,9 +108,9 @@ export function logSig(entries: readonly Doc[]): string {
 const sigOf = logSig;
 
 /** Belege eines Tagesprotokolls (`log/<tag>`), zwischengespeichert. */
-export function logEvidence(path: string, doc: Doc | undefined): Evidence[] {
+export function logEvidence(path: string, doc: Doc | undefined, knownSig?: string): Evidence[] {
   const entries = arr(doc?.entries);
-  const sig = sigOf(entries);
+  const sig = knownSig ?? sigOf(entries);
   const hit = LOG_CACHE.get(path);
   if (hit && hit.sig === sig) return hit.ev;
   const ev: Evidence[] = [];

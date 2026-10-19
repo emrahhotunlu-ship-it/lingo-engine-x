@@ -4,10 +4,11 @@ import { certainty, topicP } from '../grammar/bkt';
 import { patternById, patternOf, patternsOf, topicsWithPatterns } from '../grammar/patterns';
 import { patInfos } from '../grammar/slotInput';
 import { currentChapter } from '../grammar/slotPlan';
-import { cardStatus } from '../metrics/cardStatus';
+import { cardEvidence, cardStatusFrom, type CardEvidence } from '../metrics/cardStatus';
 import { patsOf, patternState, type PatEntry, type PatternState } from '../metrics/pattern';
 import { DONT_KNOW } from '../progress/logPatch';
 import { toTrainCard } from '../srs/cards';
+import type { TrainCard } from '../srs/types';
 import { parseCollocs } from '../srs/context';
 import { usesChunk } from '../text/chunkMatch';
 import { readCtx2, type Ctx2 } from './ctx2';
@@ -103,6 +104,21 @@ function cached<T>(cache: Map<string, { sig: string; v: T }>, path: string, sig:
   return v;
 }
 
+/**
+ * Vorstufe ohne Signatur: Unveränderte Dokumente kommen als dasselbe Objekt (contract/db.d.ts, „compare with ===“). Ist das Objekt schon
+ * bekannt (unter demselben Pfad), gilt das gespeicherte Ergebnis; sonst rechnet `make` (mit Signatur-Zwischenspeicher) und merkt es sich.
+ */
+function byDoc<T>(wm: WeakMap<object, { path: string; v: T }>, path: string, doc: Doc, make: () => T): T {
+  const hit = wm.get(doc);
+  if (hit && hit.path === path) return hit.v;
+  const v = make();
+  wm.set(doc, { path, v });
+  return v;
+}
+const LOG_BY_DOC = new WeakMap<object, { path: string; v: { dg: LogDigest; ev: Evidence[] } }>();
+const GRAMMAR_BY_DOC = new WeakMap<object, { path: string; v: GrammarDigest }>();
+const ACT_BY_DOC = new WeakMap<object, { path: string; v: ActEntry[] }>();
+
 // ------------------------------------------------------------------ Protokoll (log/<tag>)
 
 /** Getippte Aufgabenarten (keine Auswahl, kein Bedeutungspaar, kein Antippen). */
@@ -122,9 +138,9 @@ function patOfEntry(e: Doc): string | null {
 }
 
 const LOG_CACHE = new Map<string, { sig: string; v: LogDigest }>();
-function logDigest(path: string, doc: Doc): LogDigest {
+function logDigest(path: string, doc: Doc, sig: string): LogDigest {
   const entries = arr(doc.entries);
-  return cached(LOG_CACHE, path, logSig(entries), () => {
+  return cached(LOG_CACHE, path, sig, () => {
     const g: GRow[] = [];
     const pace: Array<[string, number]> = [];
     for (const e of entries) {
@@ -186,30 +202,87 @@ export function toUseId(phrase: string): UseId | null {
 }
 
 type VocabStatic = { sentences: number; uses: Array<{ id: UseId; p: string }> };
-const VOCAB_CACHE = new Map<string, { sig: string; v: VocabStatic }>();
-function vocabStatic(id: string, doc: Doc): VocabStatic {
-  const hist = arr(doc.hist);
-  // Verlauf wird nur angehängt (höchstens 12, gleitend): Zahl, erster und letzter Zeitpunkt; Wendungen: ihre Texte.
-  const col = arr(doc.col)
-    .map((c) => str(c.p))
-    .join('|');
-  const sig = `${hist.length}:${num(hist[0]?.t)}:${num(hist[hist.length - 1]?.t)}:${col}`;
-  return cached(VOCAB_CACHE, `vocab/${id}`, sig, () => {
-    const sent = new Set<string>();
-    for (const h of hist) if (num(h.g) >= 2 && str(h.s)) sent.add(str(h.s));
-    const uses: VocabStatic['uses'] = [];
-    for (const c of parseCollocs(doc.col)) {
-      const u = toUseId(c.p);
-      if (u && !uses.some((x) => x.id === u)) uses.push({ id: u, p: c.p });
-    }
-    return { sentences: sent.size, uses };
-  });
+/** Sätze mit guter Antwort und Gebrauchsmuster der Wendungen (zwischengespeichert mit der Karte, `wordStatic`). */
+function vocabStaticOf(doc: Doc): VocabStatic {
+  const sent = new Set<string>();
+  for (const h of arr(doc.hist)) if (num(h.g) >= 2 && str(h.s)) sent.add(str(h.s));
+  const uses: VocabStatic['uses'] = [];
+  for (const c of parseCollocs(doc.col)) {
+    const u = toUseId(c.p);
+    if (u && !uses.some((x) => x.id === u)) uses.push({ id: u, p: c.p });
+  }
+  return { sentences: sent.size, uses };
+}
+
+// Karte und Beleg-Teil des Wortstatus je Dokument (Leistung, §6.2): `toTrainCard` und der Verlauf-Teil von `cardStatus` hängen nicht von der Uhrzeit ab,
+// solange `due` gesetzt ist (sonst setzt die Umrechnung alter Werte `due` auf „jetzt“ – dann gehört die Uhrzeit mit in die Signatur). Die Abruf-
+// wahrscheinlichkeit und alles daraus rechnet `cardStatusFrom` jedes Mal neu.
+// Zwei Stufen: (1) dasselbe Dokument-Objekt (unveränderte Dokumente kommen laut contract/db.d.ts als dasselbe Objekt) → sofort;
+// (2) neues Objekt → Signatur als Liste von Einzelwerten, verglichen mit `===` (ohne Zahl-zu-Text-Umwandlung, die bei 5.000 Karten teuer ist).
+// Die Signatur deckt alle Felder ab, die Karte und Beleg lesen (Planung alt und neu, Stufe, Verlauf je Eintrag, Satz-Felder für den
+// Ursprungssatz, ausgeblendet, eigene Sätze). Ein Objekt im Wert (statt Zahl/Text) trifft nie: dann wird sicher neu gerechnet.
+type WordStatic = { card: TrainCard | null; ev: CardEvidence | null; vs: VocabStatic };
+type WordEntry = { sig: unknown[]; v: WordStatic; nowDep: boolean };
+const WORD_CACHE = new Map<string, WordEntry>();
+const WORD_BY_DOC = new WeakMap<object, WordEntry>();
+
+const hasDue = (doc: Doc): boolean => typeof doc.due === 'number' && Number.isFinite(doc.due) && doc.due > 0;
+
+function wordSig(doc: Doc, now: number): unknown[] {
+  const f = obj(doc.fsrs);
+  const s: unknown[] = [doc.word, doc.pos, doc.stage, doc.S, doc.D, doc.due, doc.last, doc.state, doc.reps, doc.lapses, doc.hidden, doc.na, doc.ex, doc.ac, doc.pa, doc.fsrs === undefined];
+  s.push(f.v, f.due, f.stability, f.difficulty, f.state, f.reps, f.lapses, f.last, f.scheduledDays, f.learningSteps, f.src);
+  const hist = Array.isArray(doc.hist) ? (doc.hist as unknown[]) : [];
+  s.push(hist.length);
+  for (const raw of hist) {
+    const h = obj(raw);
+    s.push(h.t, h.g, h.x, h.m, h.u, typeof h.ci === 'number', h.s);
+  }
+  const xEx = Array.isArray(doc.xEx) ? (doc.xEx as unknown[]) : [];
+  s.push(xEx.length);
+  for (const x of xEx) s.push(obj(x).en);
+  const col = Array.isArray(doc.col) ? (doc.col as unknown[]) : [];
+  s.push(col.length);
+  for (const c of col) s.push(obj(c).p, obj(c).ex, obj(c).de, obj(c).gap);
+  if (!hasDue(doc)) s.push(now);
+  return s;
+}
+
+function sameSig(a: readonly unknown[], b: readonly unknown[]): boolean {
+  if (a.length !== b.length) return false;
+  for (let i = 0; i < a.length; i++) {
+    const x = a[i];
+    const y = b[i];
+    if (x !== y && !(typeof x === 'number' && typeof y === 'number' && Number.isNaN(x) && Number.isNaN(y))) return false;
+  }
+  return true;
+}
+
+function wordStatic(id: string, doc: Doc, now: number): WordStatic {
+  const byDoc = WORD_BY_DOC.get(doc);
+  if (byDoc && !byDoc.nowDep) return byDoc.v;
+  const path = `vocab/${id}`;
+  const sig = wordSig(doc, now);
+  const hit = WORD_CACHE.get(path);
+  if (hit && sameSig(hit.sig, sig)) {
+    WORD_BY_DOC.set(doc, hit);
+    return hit.v;
+  }
+  const card = toTrainCard(id, doc, true, now);
+  const entry: WordEntry = { sig, v: { card, ev: card ? cardEvidence(card) : null, vs: vocabStaticOf(doc) }, nowDep: !hasDue(doc) };
+  if (WORD_CACHE.size >= CACHE_MAX && !hit) WORD_CACHE.delete(WORD_CACHE.keys().next().value as string);
+  WORD_CACHE.set(path, entry);
+  WORD_BY_DOC.set(doc, entry);
+  return entry.v;
 }
 
 // ------------------------------------------------------------------ Eigene Sätze (act/…)
 
 const ACT_CACHE = new Map<string, { sig: string; v: ActEntry[] }>();
 function actEntries(path: string, doc: Doc): ActEntry[] {
+  return byDoc(ACT_BY_DOC, path, doc, () => actEntriesSig(path, doc));
+}
+function actEntriesSig(path: string, doc: Doc): ActEntry[] {
   const keys = Object.keys(obj(doc.e));
   let max = '';
   for (const k of keys) if (k > max) max = k;
@@ -217,6 +290,28 @@ function actEntries(path: string, doc: Doc): ActEntry[] {
 }
 
 // ------------------------------------------------------------------ Modell
+
+/** Sortierte Schlüssel einer Map; dieselbe (unveränderte) Map wird nur einmal sortiert. Die Map wird nie verändert (Lieferungen sind fest). */
+const SORTED = new WeakMap<object, string[]>();
+function sortedKeys(m: ReadonlyMap<string, unknown>): readonly string[] {
+  const hit = SORTED.get(m);
+  if (hit && hit.length === m.size) return hit;
+  const keys = [...m.keys()].sort();
+  SORTED.set(m, keys);
+  return keys;
+}
+
+/** `usesChunk` mit Gedächtnis (Satz und Wendung ändern sich nicht; rein). */
+const CHUNK_MEMO = new Map<string, boolean>();
+function usesChunkMemo(s: string, p: string): boolean {
+  const k = `${p}\u0000${s}`;
+  const hit = CHUNK_MEMO.get(k);
+  if (hit !== undefined) return hit;
+  const v = usesChunk(s, p);
+  if (CHUNK_MEMO.size >= CACHE_MAX) CHUNK_MEMO.clear();
+  CHUNK_MEMO.set(k, v);
+  return v;
+}
 
 function median(xs: number[]): number {
   const s = [...xs].sort((a, b) => a - b);
@@ -247,7 +342,10 @@ export function buildLearnerModel(src: LearnerSources, now: number): LearnerMode
   for (const day of logKeys) {
     const doc = src.logs.get(day) as Doc;
     const path = `log/${day}`;
-    const dg = logDigest(path, doc);
+    const { dg, ev } = byDoc(LOG_BY_DOC, path, doc, () => {
+      const sig = logSig(arr(doc.entries));
+      return { dg: logDigest(path, doc, sig), ev: logEvidence(path, doc, sig) };
+    });
     for (const r of dg.g) {
       if (r.t > now) continue;
       rows.push(r);
@@ -258,13 +356,14 @@ export function buildLearnerModel(src: LearnerSources, now: number): LearnerMode
       if (l) l.push(ms);
       else paceIn.set(k, [ms]);
     }
-    evidence.push(...logEvidence(path, doc));
+    for (const e of ev) evidence.push(e);
   }
 
   // Grammatik-Dokumente: Fehlersätze (letzter Fehler je Muster) und Belege, die nicht schon im Protokoll stehen.
   const errLast = new Map<string, number>();
   for (const topic of [...src.grammarDocs.keys()].sort()) {
-    const dg = grammarDigest(topic, src.grammarDocs.get(topic) as Doc);
+    const gdoc = src.grammarDocs.get(topic) as Doc;
+    const dg = byDoc(GRAMMAR_BY_DOC, `grammar/${topic}`, gdoc, () => grammarDigest(topic, gdoc));
     for (const e of dg.errs) if (e.pat && e.t <= now && e.t > (errLast.get(e.pat) ?? 0)) errLast.set(e.pat, e.t);
     for (const e of dg.ev) if (!seenT.has(e.t)) evidence.push(e);
   }
@@ -310,12 +409,13 @@ export function buildLearnerModel(src: LearnerSources, now: number): LearnerMode
   const words: Array<[string, WordKnow]> = [];
   const cardUses = new Map<string, VocabStatic['uses']>();
   const useCards = new Map<UseId, Set<string>>();
-  for (const id of [...src.vocab.keys()].sort()) {
+  for (const id of sortedKeys(src.vocab)) {
     const doc = src.vocab.get(id) as Doc;
-    const card = toTrainCard(id, doc, true, now);
-    if (!card || card.hidden) continue;
-    const vs = vocabStatic(id, doc);
-    const st = cardStatus(card, now);
+    const ws = wordStatic(id, doc, now);
+    const card = ws.card;
+    if (!card || card.hidden || !ws.ev) continue;
+    const vs = ws.vs;
+    const st = cardStatusFrom(card, ws.ev, now);
     const status: WordKnow['status'] = st.own ? 'used' : st.newSentence ? 'newSentence' : st.freeDays > 0 ? 'free' : st.helped ? 'withHelp' : 'recognize';
     words.push([id, { id, R: st.r, freeDays: st.freeDays, sentences: vs.sentences, stage: card.stage, status, head: st.mind === 'none' ? 'noGap' : st.mind }]);
     if (vs.uses.length) cardUses.set(`vocab/${id}`, vs.uses);
@@ -335,7 +435,7 @@ export function buildLearnerModel(src: LearnerSources, now: number): LearnerMode
       const targets: Array<[string, string]> = e.ts?.length ? e.ts.map(([k, v]) => [k, v]) : [[e.c, e.v]];
       for (const [cardKey, verdict] of targets) {
         for (const u of cardUses.get(cardKey) ?? []) {
-          if (!usesChunk(e.s, u.p)) continue;
+          if (!usesChunkMemo(e.s, u.p)) continue;
           useSeen.set(u.id, (useSeen.get(u.id) ?? 0) + 1);
           if (verdict === 'c') {
             const days = useOkDays.get(u.id) ?? new Map<string, number>();
@@ -390,7 +490,8 @@ export function buildLearnerModel(src: LearnerSources, now: number): LearnerMode
     day: today,
     patterns: sortedMap(patterns),
     uses: sortedMap(uses),
-    words: sortedMap(words),
+    // Schon sortiert (Schleife über die sortierten Kennungen).
+    words: new Map(words),
     hyps,
     pace,
     goals: { chapter: anyIntro ? currentChapter(infos, today) : null, c1: [], ctx: readCtx2(src.profile) },

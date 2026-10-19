@@ -1,0 +1,26 @@
+// Tutor engine v3 (verdict in the exercise, §4.1/§5/§6.4): texts with prefix `tt`, English (US).
+
+export const ttJudgeEn = {
+  ttJgAsk: 'Ask Claude',
+  ttJgAskAria: 'Ask Claude whether your answer is also correct',
+  ttJgAsking: 'Claude is checking your answer …',
+  ttJgCounts: 'Counts',
+  ttJgCountsAria: 'Uses the practiced pattern: count it as correct',
+  ttJgTargetLabel: 'Write it once with {want}',
+  ttJgTargetCheck: 'Check',
+  ttJgTargetOk: 'Correct. Counts half because it was the second try.',
+  ttJgTargetWrong: 'Not the practiced pattern yet. Wanted: {want}.',
+  ttJgAiYes: 'Claude: This is also correct.',
+  ttJgAiNo: 'Claude: This doesn’t work here.',
+  ttJgAiUnsure: 'Claude isn’t sure. The rating above stays.',
+  ttJgBusy: 'Claude is busy right now. Ask again later.',
+  ttJgSignin: 'Your claude.ai sign-in has expired. Sign in again, then ask once more.',
+  ttJgFinal: 'Claude couldn’t rate this answer. The rating above stays.',
+  ttJgRetryText: 'Claude’s reply couldn’t be read.',
+  ttJgRetry: 'Try again',
+  ttJgLimit: 'You’ve used today’s questions to Claude. More tomorrow.',
+  ttJgBug: 'Claude can’t check this exercise right now.',
+  ttJgByMe: 'Noted: this answer now counts as correct for this exercise.',
+  ttJgAltErr: 'A different spot, also correctly fixed.',
+  ttJgFitAltRow: 'Learned “also correct” answers: {n} (included in the file)',
+};

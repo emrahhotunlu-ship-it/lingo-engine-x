@@ -95,6 +95,10 @@ export type GrammarLogEntry = {
   tm?: number;
   /** Antwort aus einer Tempo-Runde (P44-Nachbesserung): zählt nie für K6 „Fehler finden“. Nur ergänzend. */
   tp?: true;
+  /** Tutor-Engine v3 §3.2 (nur ergänzend, ≤ 60 B): Urteil c/a/n/w/u, Ursache, Gegenmuster. */
+  v?: 'c' | 'a' | 'n' | 'w' | 'u';
+  h?: string;
+  vs?: string;
 };
 
 /** Übungs-Eintrag (Diktat, Lückenjagd, Satzbau, Lektionsfrage) in der Form der alten App. */
@@ -168,6 +172,7 @@ export function grammarLogEntry(a: GrammarAnswer): GrammarLogEntry {
     ...(a.task.c1?.src === 'ai' ? { ai: true as const } : {}),
     ...(a.pts && a.free ? { free: true as const, tm: Math.max(1, Math.round(a.ms)) } : {}),
     ...(a.tempo ? { tp: true as const } : {}),
+    ...(a.tj ? { v: a.tj.v, ...(a.tj.h ? { h: a.tj.h.slice(0, 12) } : {}), ...(a.tj.vs ? { vs: a.tj.vs.slice(0, 40) } : {}) } : {}),
   };
 }
 

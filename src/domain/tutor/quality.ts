@@ -1,4 +1,5 @@
 import { local } from '../../platform/storage';
+import type { FitAltRow } from './fitAlt';
 
 // Qualitätszähler und Stichprobe der Claude-Inhalte (Lernplattform 3.0 P25, KT §3.1). Nur Browser (Bequemlichkeit, Kap. 3.1), keine Datenbank:
 // - `lx:ai-q` = `{<vorlage>: {gen, acc, shown, flag}}`: erzeugt · formal bestanden · gezeigt · gemeldet.
@@ -104,9 +105,12 @@ export function flagShown(id: string, tpl: string, reason: string, now: number =
 
 export const shownSample = (): ShownItem[] => readShown();
 
-/** Inhalt der Datei „KI-Stichprobe“ (JSON). */
-export function sampleFile(now: number = Date.now()): { name: string; data: string } {
-  const body = { v: 1, at: new Date(now).toISOString(), quality: readQuality(), items: readShown() };
+/**
+ * Inhalt der Datei „KI-Stichprobe“ (JSON). `fitAlt`: die gemerkten „Auch richtig“-Antworten aller Themen (Tutor-Engine v3 §3.2) für die
+ * Gegenlesung durch den Englischlehrer; nur ergänzend, die Datei bleibt `v: 1`.
+ */
+export function sampleFile(now: number = Date.now(), fitAlt: readonly FitAltRow[] = []): { name: string; data: string } {
+  const body = { v: 1, at: new Date(now).toISOString(), quality: readQuality(), items: readShown(), ...(fitAlt.length ? { fitAlt: fitAlt.map((r) => ({ ...r, at: new Date(r.t).toISOString() })) } : {}) };
   return { name: `ki-stichprobe-${new Date(now).toISOString().slice(0, 10)}.json`, data: JSON.stringify(body, null, 2) };
 }
 

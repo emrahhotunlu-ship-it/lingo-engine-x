@@ -262,13 +262,18 @@ export function grammarJudgeReply(input: string): string {
  * `grammar-fit@1`: „had“, „as I …“, „when I …“ und alles mit „fit“ passt sicher; „unsure…“ passt unsicher; sonst passt es nicht. `zzjson` → kein JSON.
  */
 export function grammarFitReply(input: string): string {
+  // grammar-fit@2: `why`/`retryHint` zweisprachig, `fitsGoal` (trifft das geübte Muster). „fitgoal…“ und „used to…“ treffen es, „had“, „fit…“,
+  // „as/when/while I…“ sind nur „auch richtig“; „unsure…“ passt, aber unsicher; „zzjson“ ist kein JSON.
   const given = line(input, 'Learner answer only').toLowerCase();
   if (/\bzzjson\b/.test(given)) return NOT_JSON;
-  const fits = given === 'had' || given.startsWith('fit') || given.startsWith('unsure') || /^(as i|when i|while i)\b/.test(given);
+  const fits = given === 'had' || given.startsWith('fit') || given.startsWith('unsure') || given.startsWith('used to') || /^(as i|when i|while i)\b/.test(given);
   const certain = !given.startsWith('unsure');
-  const de = explanationLang(input) === 'de';
-  const why = fits ? (de ? 'Der ganze Satz ist grammatisch richtig und passt zum Zusammenhang.' : 'The whole sentence is grammatical and fits the context.') : de ? 'Im ganzen Satz passt das nicht.' : 'It does not fit in the whole sentence.';
-  return JSON.stringify({ fits, certain, why });
+  const fitsGoal = fits && (given.startsWith('fitgoal') || given.startsWith('used to'));
+  const why = fits
+    ? { de: 'Der ganze Satz ist grammatisch richtig und passt zum Zusammenhang.', en: 'The whole sentence is grammatical and fits the context.' }
+    : { de: 'Im ganzen Satz passt das nicht.', en: 'It does not fit in the whole sentence.' };
+  const retryHint = fits ? null : { de: 'Welche Form verlangt der Satz an dieser Stelle?', en: 'Which form does the sentence need here?' };
+  return JSON.stringify({ fits, certain, fitsGoal, why, edits: [], vs: null, retryHint });
 }
 
 /** Meldet die festen Antworten beim Entwicklungs-Adapter an. */

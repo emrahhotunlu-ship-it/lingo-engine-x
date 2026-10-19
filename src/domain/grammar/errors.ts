@@ -118,14 +118,14 @@ function explPair(v: { de: string | null; en: string | null } | null | undefined
  */
 export function addError(
   list: readonly ErrorEntry[],
-  e: { q: string; given: string; ans: string; t: number; src: string; expl?: { de: string | null; en: string | null } | null; pat?: string | null; cid?: string | null; pts?: readonly [number, number] | null },
+  e: { q: string; given: string; ans: string; t: number; src: string; expl?: { de: string | null; en: string | null } | null; pat?: string | null; cid?: string | null; pts?: readonly [number, number] | null; /** Ursache (Tutor-Engine v3 §3.2), ≤ 12 Zeichen. */ h?: string | null },
   max = ERRORS_MAX,
 ): readonly ErrorEntry[] {
   const k = legacyNorm(e.q);
   if (list.some((x) => x.done !== true && legacyNorm(x.q) === k)) return list;
   const pat = typeof e.pat === 'string' && e.pat.trim() ? e.pat.trim().slice(0, PAT_MAX) : '';
   // c1x: die Aufgaben-ID und die Punkte der letzten falschen Antwort; eine nicht c1x-Antwort lässt vorhandene Felder stehen.
-  const c1 = e.cid ? { cid: e.cid.slice(0, 40), ...(e.pts ? { pts: [e.pts[0], e.pts[1]] as [number, number] } : {}) } : {};
+  const c1 = { ...(e.cid ? { cid: e.cid.slice(0, 40), ...(e.pts ? { pts: [e.pts[0], e.pts[1]] as [number, number] } : {}) } : {}), ...(e.h ? { h: e.h.slice(0, 12) } : {}) };
   // Ein offener Eintrag je Muster (§5.7): Ein zweiter Fehler auf dasselbe Muster setzt den vorhandenen auf Box 0, morgen fällig,
   // und hängt den neuen falschen Satz an `more` an. Der Eintrag selbst und seine Felder bleiben erhalten; nur der älteste Zusatzsatz in `more` wird verdrängt, wenn es mehr als 3 werden (die Regel zählt, nicht der Satz).
   if (pat) {

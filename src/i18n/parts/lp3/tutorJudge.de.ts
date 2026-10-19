@@ -1,0 +1,26 @@
+// Tutor-Engine v3 (Urteil in der Übung, §4.1/§5/§6.4): Texte mit Präfix `tt`, Deutsch.
+
+export const ttJudgeDe = {
+  ttJgAsk: 'Claude fragen',
+  ttJgAskAria: 'Claude fragen, ob deine Antwort auch richtig ist',
+  ttJgAsking: 'Claude prüft deine Antwort …',
+  ttJgCounts: 'Zählt',
+  ttJgCountsAria: 'Trifft das geübte Muster: als richtig zählen',
+  ttJgTargetLabel: 'Schreib es einmal mit {want}',
+  ttJgTargetCheck: 'Prüfen',
+  ttJgTargetOk: 'Richtig. Zählt halb, weil es der zweite Versuch war.',
+  ttJgTargetWrong: 'Noch nicht das geübte Muster. Gesucht war: {want}.',
+  ttJgAiYes: 'Claude: Auch so richtig.',
+  ttJgAiNo: 'Claude: So passt es nicht.',
+  ttJgAiUnsure: 'Claude ist sich nicht sicher. Es bleibt bei der Bewertung oben.',
+  ttJgBusy: 'Claude ist gerade ausgelastet. Frag später noch einmal.',
+  ttJgSignin: 'Deine Anmeldung bei claude.ai ist abgelaufen. Melde dich neu an und frag dann noch einmal.',
+  ttJgFinal: 'Claude konnte diese Antwort nicht beurteilen. Es bleibt bei der Bewertung oben.',
+  ttJgRetryText: 'Claudes Antwort war nicht lesbar.',
+  ttJgRetry: 'Erneut versuchen',
+  ttJgLimit: 'Für heute sind die Fragen an Claude aufgebraucht. Morgen geht es weiter.',
+  ttJgBug: 'Claude kann diese Aufgabe gerade nicht prüfen.',
+  ttJgByMe: 'Gemerkt: Diese Antwort gilt bei dieser Aufgabe ab jetzt als richtig.',
+  ttJgAltErr: 'Andere Stelle, auch richtig korrigiert.',
+  ttJgFitAltRow: 'Gelernte „Auch richtig“-Antworten: {n} (kommen mit in die Datei)',
+};

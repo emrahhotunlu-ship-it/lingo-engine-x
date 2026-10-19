@@ -30,8 +30,16 @@ import { nextT } from '../progress/persist';
 import { bookLex } from './lexWrite';
 import { errFixed, errRange } from '../../domain/c1x/kinds/err';
 import { shortWhy } from '../../domain/grammar/alsoRight';
-import { abandonFit, runFit, useFitJudge } from '../grammar/fit';
+import { abandonFit, fitAiState, runFit, useFitJudge, type FitResult } from '../grammar/fit';
 import { FitSlow } from '../grammar/FitSlow';
+import { JudgeFoot, type AiMsg, type TargetState } from '../grammar/JudgeFoot';
+import { judge, readFitAlt } from '../../domain/tutor/judge';
+import { composeFeedback, type FeedbackAction } from '../../domain/tutor/feedback';
+import type { Diagnosis } from '../../domain/tutor/diagnose';
+import type { Verdict as TutorVerdict } from '../../domain/tutor/tutorTypes';
+import type { GrammarTask } from '../../domain/learn/types';
+import { GRAMMAR_FIT_PV, type GrammarFitOut } from '../../prompts/grammarFit';
+import { learnerNow, lintOnce, scheduleLearner } from '../tutor/learnerLive';
 import { ResultAfter, ResultParts, useResultSub } from './ResultCard';
 import type { C1Ctrl, C1KindEntry, ResponseMeta } from './types';
 
@@ -53,7 +61,19 @@ type Fb = {
   alt?: boolean;
   /** Begründung von Claude zu „Auch richtig“. */
   aiWhy?: string;
+  /** Tutor-Engine v3 (nur Fehler finden mit getippter Korrektur): Urteil, Diagnose, Knopf „Claude fragen“, Meldung, gemerkte Antwort, Zielform. */
+  tv?: TutorVerdict;
+  by?: 'local' | 'ai' | 'me';
+  fitsGoal?: boolean | null;
+  dx?: Diagnosis | null;
+  ask?: boolean;
+  aiMsg?: AiMsg | null;
+  aiNoWhy?: string | null;
+  fit?: { by: 'ai' | 'me'; pv: string; a: string };
+  target?: TargetState;
 };
+
+const TJ_V: Record<TutorVerdict, 'c' | 'a' | 'n' | 'w' | 'u'> = { correct: 'c', alt_ok: 'a', near: 'n', wrong: 'w', unsure: 'u' };
 
 export type C1ItemProps = {
   task: C1Task;
@@ -106,6 +126,15 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
   const firstKeyAt = useRef<number | null>(null);
   const lookupAt = useRef(0);
 
+  // Tutor-Engine v3: Aufgaben-Prüfung als Warnzähler (nie Sperre); Lernermodell bei Rundenstart und bei jeder Rückmeldung, verzögert.
+  useEffect(() => {
+    lintOnce(task);
+    if (!learnerNow()) scheduleLearner();
+  }, [task]);
+  useEffect(() => {
+    if (fb) scheduleLearner();
+  }, [fb]);
+
   useEffect(() => {
     shownAt.current = tick();
     lookupAt.current = lookupOpenMs();
@@ -141,23 +170,97 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
     const cur = respRef.current;
     if (!cur) return;
     const score = scoreC1(item, cur.r);
-    // „Auch richtig“ (19.10.2026): Stelle gefunden, getippter Ersatz nicht in der Liste → genau einmal fragen, ob der Satz damit trotzdem stimmt.
+    // Tutor-Engine v3 (§4.1): Stelle gefunden, getippter Ersatz nicht in der Liste → `judge` über die Korrektur: gemerkte Antworten (`fitAlt`)
+    // zuerst, dann die Diagnose; unsicher → Claude automatisch nur mit `sampleConfirmed` und Tagesbremse, sonst Knopf „Claude fragen“.
     const r = cur.r;
     if (item.kind === 'err' && item.bad && score.verdict === 'near' && r.kind === 'err' && typeof r.tap === 'number' && r.typed && r.fix?.trim() && (patId ?? item.pat)) {
-      const bad = item.bad;
       const given = r.fix.trim();
-      runFit(
-        fit.ctl,
-        fit.judge(`${task.topic}|${task.key}`, { topic: topicLabel ?? task.topic, pattern: pattern ? pattern.name.en : null, mode: 'replace', task: item.text, sentence: errFixed(item, given), expected: errFixed(item, bad.fix[0] ?? ''), given, uiLang: lang }),
-        (out) => finish({ ...score, got: score.max, verdict: 'correct', parts: score.parts.map((x) => ({ ...x, ok: true })) }, cur.r, cur.meta, { alt: true, aiWhy: out.why }),
-        () => settle(score, cur),
-      );
+      const j = judge(fixTask(), given, { fitAlt: readFitAlt(doc), aiState: fitAiState(), model: learnerNow() });
+      const jx: Partial<Fb> = { tv: j.v, by: j.by, fitsGoal: j.fitsGoal, dx: j.dx, ask: j.askAi === 'button' };
+      const full: C1Score = { ...score, got: score.max, verdict: 'correct', parts: score.parts.map((x) => ({ ...x, ok: true })) };
+      if (j.v === 'correct' || (j.v === 'alt_ok' && j.kind === 'alt')) {
+        finish(full, cur.r, cur.meta, { ...jx, tv: 'correct', ...(j.by === 'me' ? { aiMsg: 'byMe' as const } : {}) });
+        return;
+      }
+      if (j.v === 'alt_ok') {
+        finish(full, cur.r, cur.meta, { ...jx, alt: true });
+        return;
+      }
+      if (j.askAi === 'auto') {
+        runFit(fit.ctl, fit.judge(`${task.topic}|${task.key}`, fitVarsFor(given)), (out) => finish(full, cur.r, cur.meta, aiYes(out, given)), (res) => settle(score, cur, { ...jx, ...aiNotYes(res, true) }));
+        return;
+      }
+      settle(score, cur, jx);
       return;
     }
     settle(score, cur);
   };
 
-  const settle = (score: C1Score, cur: { r: C1Response; meta: ResponseMeta }): void => {
+  /** Die Korrektur der Fehlerstelle als Lückenaufgabe (für `judge`): Lösung und weitere Fassungen aus `bad.fix`. */
+  const errIt = item.kind === 'err' ? item : null;
+  const fixes: readonly string[] = errIt?.bad?.fix ?? [];
+  const fixTask = (): GrammarTask => ({ ...task, type: 'gap', answer: fixes[0] ?? '', accepted: fixes.slice(1), alt: [] });
+  const fitVarsFor = (given: string) => ({
+    topic: topicLabel ?? task.topic,
+    pattern: pattern ? pattern.name.en : null,
+    rule: pattern ? pattern.form.en : null,
+    accepted: fixes.slice(1, 7),
+    mode: 'replace' as const,
+    task: errIt?.text ?? task.prompt,
+    sentence: errIt ? errFixed(errIt, given) : given,
+    expected: errIt ? errFixed(errIt, fixes[0] ?? '') : task.answer,
+    given,
+    uiLang: lang,
+  });
+  const aiYes = (out: GrammarFitOut, given: string): Partial<Fb> => ({
+    alt: true,
+    aiWhy: lang === 'de' ? out.why.de : out.why.en,
+    tv: 'alt_ok',
+    by: 'ai',
+    fitsGoal: out.fitsGoal,
+    ask: false,
+    aiMsg: null,
+    fit: { by: 'ai', pv: GRAMMAR_FIT_PV, a: given },
+  });
+  const aiNotYes = (res: FitResult | null, wasAsk: boolean): Partial<Fb> => {
+    if (!res) return { ask: wasAsk };
+    if (res.out) return { ask: false, aiMsg: res.out.fits ? 'unsure' : 'no', aiNoWhy: res.out.fits ? null : lang === 'de' ? res.out.why.de : res.out.why.en };
+    if (res.err === 'busy' || res.err === 'signin' || res.err === 'retry') return { ask: true, aiMsg: res.err };
+    if (res.err === 'off') {
+      logWarn('grammar:fit', { message: 'Claude nicht verfügbar' }, task.key);
+      return { ask: false, aiMsg: null };
+    }
+    return res.err ? { ask: false, aiMsg: res.err } : { ask: wasAsk };
+  };
+
+  /** „Claude fragen“ nach der Rückmeldung (Knopf): stuft nur hoch. */
+  const askNow = (): void => {
+    if (!fb || fit.busy || fit.ctl.current || fb.response.kind !== 'err') return;
+    const given = fb.response.fix?.trim() ?? '';
+    if (!given) return;
+    const refresh = fb.aiMsg === 'retry';
+    runFit(
+      fit.ctl,
+      fit.judge(`${task.topic}|${task.key}`, fitVarsFor(given), { refresh }),
+      (out) => setFb((c) => (c ? { ...c, score: { ...c.score, got: c.score.max, verdict: 'correct', parts: c.score.parts.map((x) => ({ ...x, ok: true })) }, ...aiYes(out, given) } : c)),
+      (res) => setFb((c) => (c ? { ...c, ...aiNotYes(res, true) } : c)),
+    );
+  };
+
+  /** „Zählt“: Claude sagt, das geübte Muster ist getroffen (andere Form) → wie „Ich lag richtig“, voll gebucht. */
+  const counts = (): void => {
+    if (!fb) return;
+    setFb({ ...fb, override: true, alt: false, tv: 'correct', by: 'me', ask: false, aiMsg: null, fit: { by: 'me', pv: GRAMMAR_FIT_PV, a: fb.given.trim() } });
+  };
+
+  /** Zielform nach „Auch richtig“ mit anderem Muster: die App prüft selbst gegen die Korrekturen der Stelle. */
+  const tryTarget = (value: string): void => {
+    if (!fb || fb.target) return;
+    const j = judge(fixTask(), value, { fitAlt: {}, aiState: { available: false, confirmed: false, budgetLeft: 0 }, targetRetry: true });
+    setFb({ ...fb, target: { given: value.trim(), ok: j.v === 'correct' || j.v === 'near' || (j.v === 'alt_ok' && j.kind === 'alt') } });
+  };
+
+  const settle = (score: C1Score, cur: { r: C1Response; meta: ResponseMeta }, extra: Partial<Fb> = {}): void => {
     // Erst ein Hinweis, dann der zweite Versuch: nur bei getippten Formen ganz ohne Punkte (Auswahl ist ratbar), nie im Check.
     if (score.verdict === 'wrong' && score.free && !retry && !noHelp) {
       firstWrong.current = givenOf(item, cur.r);
@@ -165,7 +268,7 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
       api.focusNow();
       return;
     }
-    finish(score, cur.r, cur.meta);
+    finish(score, cur.r, cur.meta, extra);
   };
 
   const dontKnow = (): void => {
@@ -183,11 +286,38 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
 
   const override = (): void => {
     if (!fb) return;
-    setFb({ ...fb, override: true });
+    if (fit.ctl.current) {
+      abandonFit(fit.ctl);
+      fit.cancel();
+    }
+    // Einspruch bei einer getippten Korrektur an der richtigen Stelle: als Emrahs Antwort gemerkt (`fitAlt` by `me`), nächstes Mal richtig.
+    const fix = fb.response.kind === 'err' && typeof fb.response.tap === 'number' && fb.response.typed ? (fb.response.fix?.trim() ?? '') : '';
+    setFb({ ...fb, override: true, alt: false, ask: false, ...(fix ? { tv: 'correct' as const, by: 'me' as const, aiMsg: 'byMe' as const, fit: { by: 'me' as const, pv: GRAMMAR_FIT_PV, a: fix } } : {}) });
   };
 
   const next = (): void => {
     if (!fb) return;
+    if (fit.ctl.current) {
+      abandonFit(fit.ctl);
+      fit.cancel();
+    }
+    const tv: TutorVerdict = fb.tv ?? (fb.override || fb.score.verdict === 'correct' ? (fb.alt ? 'alt_ok' : 'correct') : fb.score.verdict);
+    const tj: NonNullable<GrammarAnswer['tj']> = {
+      v: fb.override ? 'c' : TJ_V[tv],
+      ...(fb.dx && fb.dx.cause !== 'unknown' ? { h: fb.dx.cause.slice(0, 12) } : {}),
+      ...(fb.dx?.known && tv === 'wrong' && fb.dx.vs ? { vs: fb.dx.vs.slice(0, 40) } : {}),
+    };
+    // Zielform-Zweitversuch richtig: halbes Gewicht (Hilfe 1), ohne `firstWrong`; die erste Antwort bleibt als gemerkte Antwort (`fit`).
+    if (fb.target?.ok && fb.response.kind === 'err') {
+      const response: C1Response = { ...fb.response, fix: fb.target.given };
+      const full: C1Score = { ...fb.score, got: fb.score.max, verdict: 'correct', parts: fb.score.parts.map((x) => ({ ...x, ok: true })) };
+      const runT: C1Run = { form: fb.meta.form, inp, timeMs: fb.ms, firstKeyMs: fb.firstKeyMs, help: 1, ...(seenBefore ? { again: true } : {}), day, t: nextT(), lang, ctx, given: fb.target.given };
+      const aT = bookAnswer(task, full, response, runT);
+      const kindT = onDone({ ...aT, tj: { v: 'c' }, ...(fb.fit ? { fit: fb.fit } : {}) });
+      if (kindT === 'typed') api.focusNow();
+      else api.blur();
+      return;
+    }
     const run: C1Run = {
       form: fb.meta.form,
       inp,
@@ -212,7 +342,12 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
       const score = fb.override ? { ...fb.score, verdict: 'correct' as const } : fb.score;
       void bookLex({ item, score, grade: a.grade, day, lang, ms: fb.ms, given: fb.given, dev: inp === 'touch' ? 't' : 'k', ...(seenBefore ? { again: true } : {}), ...(noHelp ? { measure: true } : {}) });
     }
-    const booked: GrammarAnswer = { ...(retry && firstWrong.current !== null ? { ...a, firstWrong: firstWrong.current } : a), ...(fb.alt && !fb.override ? { alt: true } : {}) };
+    const booked: GrammarAnswer = {
+      ...(retry && firstWrong.current !== null ? { ...a, firstWrong: firstWrong.current } : a),
+      ...(fb.alt && !fb.override ? { alt: true } : {}),
+      tj,
+      ...(fb.fit && !fb.dontKnow ? { fit: fb.fit } : {}),
+    };
     const kind = onDone(booked);
     if (kind === 'typed') api.focusNow();
     else api.blur();
@@ -315,6 +450,26 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
   const altWhy = shortWhy(task.why ? (lang === 'de' ? task.why.ok.de : task.why.ok.en) : lang === 'de' ? task.expl.de : task.expl.en);
   const wanted = item.kind === 'err' && item.bad ? (item.bad.fix[0] ?? '') : task.answer;
   const altSub = altWhy ? t('grAltWanted', { want: wanted, why: altWhy }) : t('grAltWantedBare', { want: wanted });
+  // Tutor-Engine v3: die eine Handlung unter der Rückmeldung (`composeFeedback`); die Erklärung selbst bleibt das c1x-Modell oben.
+  const action: FeedbackAction =
+    fb && model && fb.tv
+      ? composeFeedback({
+          base: model,
+          v: fb.override ? 'correct' : fb.alt ? 'alt_ok' : fb.tv,
+          by: fb.by ?? 'local',
+          fitsGoal: fb.fitsGoal ?? null,
+          dontKnow: fb.dontKnow,
+          override: fb.override,
+          dx: fb.dx ?? null,
+          pat: patId,
+          hyps: [],
+          aiWhy: fb.aiWhy ?? null,
+          altWhy: null,
+          askAi: fb.ask ? 'button' : 'no',
+          targetTried: !!fb.target || noHelp,
+          texts: { altNoCount: t('grAltNoCount') },
+        }).action
+      : 'next';
   let feedback: ShellFeedback | null = null;
   if (fb && model && rv) {
     const typedWrong = fb.score.free && fb.score.verdict !== 'correct' && !fb.dontKnow && !fb.override;
@@ -350,7 +505,20 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
       parts: createElement(ResultParts, { score: fb.score }),
       right: item.kind === 'err' ? null : (ui.right ?? null),
       after: createElement(ResultAfter, { item, matched, day }),
-      auto: !noAuto && fb.help === 0 && !fb.override && fb.score.free && !fb.alt,
+      foot: createElement(JudgeFoot, {
+        action,
+        aiMsg: fb.aiMsg ?? null,
+        aiNoWhy: fb.aiNoWhy ?? null,
+        busy: fit.busy,
+        phase: fit.phase,
+        onAsk: askNow,
+        onSkip: fit.skip,
+        onCounts: counts,
+        want: wanted,
+        target: fb.target ?? null,
+        onTarget: tryTarget,
+      }),
+      auto: !noAuto && fb.help === 0 && !fb.override && fb.score.free && !fb.alt && action === 'next' && !fb.aiMsg,
     };
   }
 

@@ -189,11 +189,18 @@ const overlaps = (a: readonly [number, number], b: readonly [number, number]): b
  * „Fehler finden“: Schritt 1 (`tapped`) prüft nur die Stelle (Wort oder Bereich antippen, `'none'` = „Kein Fehler“), Schritt 2 (`replacement`)
  * den Ersatz des Bereichs. `found` sagt, ob die Stelle getroffen ist. Ein fehlerfreier Satz (`err: null`) ist nur mit `'none'` richtig.
  */
-export function checkFind(task: GrammarTask, step: { tapped: [number, number] | 'none' } | { replacement: string }): GrammarCheck & { found?: boolean } {
+export function checkFind(task: GrammarTask, step: { tapped: [number, number] | 'none' } | { replacement: string }): GrammarCheck & { found?: boolean; altErr?: [number, number] } {
   const x = task.x?.kind === 'find' ? task.x : null;
   const err = x?.err ?? null;
   if ('tapped' in step) {
     const found = step.tapped === 'none' ? err === null : err !== null && overlaps(step.tapped, err);
+    // Andere gültige Korrektur an einer anderen Stelle (`errAlt`, Tutor-Engine v3 §3.2): auch diese Stelle gilt als gefunden; der Ersatz wird
+    // dann dort geprüft (`judge` mit `tapped` = `altErr`). „Walking …, I heard my phone ring“ korrigiert den Hauptsatz statt des Anfangs.
+    if (!found && step.tapped !== 'none' && err !== null) {
+      const tap = step.tapped;
+      const alt = x?.errAlt?.find((a) => overlaps(tap, a.err));
+      if (alt) return { verdict: 'correct', ops: [], needsJudge: false, found: true, altErr: [alt.err[0], alt.err[1]] };
+    }
     return { verdict: found ? 'correct' : 'wrong', ops: [], needsJudge: false, found };
   }
   if (err === null) return { verdict: 'wrong', ops: [], needsJudge: false, found: false };

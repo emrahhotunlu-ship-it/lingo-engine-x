@@ -108,7 +108,16 @@ describe('buildLearnerModel: Leistung mit 5.000 Dokumenten', () => {
       runs.push(performance.now() - t0);
     }
     const warm = Math.min(...runs);
-    const line = `buildLearnerModel 5000 Dokumente: kalt ${cold.toFixed(0)} ms, warm ${warm.toFixed(0)} ms (Ziel < 100 ms)`;
+    // Warm mit denselben Objekten: unveränderte Dokumente kommen laut contract/db.d.ts als dasselbe Objekt – der übliche Fall nach einer Antwort.
+    const same: number[] = [];
+    let last = m;
+    for (let i = 0; i < 10; i++) {
+      t0 = performance.now();
+      last = buildLearnerModel(src, NOW + 10 + i);
+      same.push(performance.now() - t0);
+    }
+    const line = `buildLearnerModel 5000 Dokumente: kalt ${cold.toFixed(0)} ms, warm neue Objekte ${warm.toFixed(0)} ms, warm gleiche Objekte ${Math.min(...same).toFixed(0)} ms (Ziel Handy < 30 ms bei 4× Drossel ≈ < 7,5 ms hier)`;
+    expect(last.words.size).toBe(m.words.size);
     console.warn(line);
     // Optional in eine Datei (die Testausgabe zeigt console nicht immer): LX_PERF_OUT=/pfad npm test -- learner.perf
     if (process.env.LX_PERF_OUT) writeFileSync(process.env.LX_PERF_OUT, `${line}\n`);

@@ -385,9 +385,14 @@ export const grammarSchema = z.looseObject({
         cf: str,
         /** Neu (Paket FK, nur ergänzend): Zeitpunkt von „Kann ich nicht nachvollziehen“ (Merker, nie löschen). */
         unclear: num,
+        /** Neu (Tutor-Engine v3 §3.2, nur ergänzend): Ursache der falschen Antwort (`form`, `confuse` …, ≤ 12 Zeichen). */
+        h: str,
       }),
     )
     .nullish(),
+  /** Neu (Tutor-Engine v3 §3.2, nur ergänzend): gelernte „Auch richtig“-Antworten `{[taskKey]: {[hash]: {a, t, by:'ai'|'me', pv} | null}}`,
+   *  höchstens 8 je Aufgabe, 60 je Thema, ≤ 8 KB; verdrängte Einträge stehen als `null` (das Zusammenführen von `update` kann keine Schlüssel entfernen). */
+  fitAlt: loose,
   /** Neu (Kapitel-Arbeiten, 11.10.2026, nur ergänzend): letzter Themen-Test `{d, c, n, ok, k}` (Tag, richtig, gestellt, je bestanden, Versuche);
    *  `w` = schwache Muster des letzten Versuchs (Liste von Kennungen, ≤ 12, tolerant gelesen). */
   tt: z.looseObject({ d: str, c: num, n: num, ok: bool, k: num, w: loose }).nullish(),
