@@ -38,6 +38,10 @@ export type C1Ctrl = {
   p: number;
   /** Nach „Prüfen“: die Eingabe ist gesperrt, `score` ist da. */
   locked: boolean;
+  /** Claude prüft noch („Auch richtig“, `grammar-fit@1`): die Eingabe ist gesperrt. */
+  busy: boolean;
+  /** „Auch richtig“ bei „Fehler finden“: der eigene Ersatz (statt der Musterlösung im Satz zeigen). */
+  ownFix: string | null;
   score: C1Score | null;
   /** Stufe der Tipp-Leiter (0 = keine Hilfe) und ob gerade ein zweiter Versuch nach Hinweis läuft. */
   tip: 0 | 1 | 2 | 3;

@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { asAlsoRight, checkGrammar, fitAskable } from '../../src/domain/grammar/check';
+import { asAlsoRight, checkGrammar, fitAskable, fitAskableReplace } from '../../src/domain/grammar/check';
 import { shortWhy } from '../../src/domain/grammar/alsoRight';
 import { grammarWrite } from '../../src/domain/grammar/write';
 import { defaultTopic } from '../../src/domain/content';
 import { topicById } from '../../src/domain/content';
 import { answer } from './learnHelpers';
 import { grammarFit } from '../../src/prompts/grammarFit';
-import { fitAccepts, fitKey } from '../../src/features/grammar/fit';
+import { abandonFit, fitAccepts, fitKey, runFit, type FitRun } from '../../src/features/grammar/fit';
 import { task } from './learnHelpers';
 import { fromV2 } from '../../src/domain/grammar/tasks';
 import { V2TaskSchema } from '../../src/domain/grammar/patternTypes';
@@ -92,5 +92,34 @@ describe('„Auch richtig“ (Art other)', () => {
     expect(t?.goal?.de).toBe('Mach daraus einen Nebensatz.');
     const g = normalizeTask({ topic: 'used-to', type: 'gap', prompt: 'We ___ a map.', answer: 'used to have', alt: ['had', ' '] }, 'seed');
     expect(g?.alt).toEqual(['had']);
+  });
+
+  it('shortWhy: ohne „: Lösung“ und mit großem Anfang', () => {
+    expect(shortWhy('Richtig: früher so, heute nicht mehr: used to + Grundform (have).')).toBe('Früher so, heute nicht mehr');
+  });
+
+  it('fitAskableReplace: nur lokal falsche, kurze Ersetzungen', () => {
+    expect(fitAskableReplace({ verdict: 'wrong' }, 'When I headed to work,')).toBe(true);
+    expect(fitAskableReplace({ verdict: 'correct' }, 'x')).toBe(false);
+    expect(fitAskableReplace({ verdict: 'wrong', kind: 'form' }, 'x')).toBe(false);
+    expect(fitAskableReplace({ verdict: 'wrong' }, 'a b c d e f g h i')).toBe(false);
+  });
+
+  it('runFit: genau eine Auswertung (Claude, Überspringen und Verwerfen schließen sich aus)', async () => {
+    const calls: string[] = [];
+    const ctl: { current: FitRun | null } = { current: null };
+    let resolve: (v: { fits: boolean; certain: boolean; why: string }) => void = () => undefined;
+    runFit(ctl, new Promise((r) => (resolve = r)), () => calls.push('accept'), () => calls.push('local'));
+    ctl.current?.skip();
+    resolve({ fits: true, certain: true, why: 'x' });
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(calls).toEqual(['local']);
+    const ctl2: { current: FitRun | null } = { current: null };
+    runFit(ctl2, Promise.resolve({ fits: true, certain: true, why: 'x' }), () => calls.push('accept2'), () => calls.push('local2'));
+    abandonFit(ctl2);
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(calls).toEqual(['local']);
   });
 });

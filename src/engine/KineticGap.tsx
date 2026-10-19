@@ -19,6 +19,8 @@ type Props = {
   label: string;
   maxLength: number;
   state: GapState;
+  /** Claude prüft noch (`grammar-fit@1`): die Eingabe ist gesperrt, die Antwort bleibt stehen. */
+  busy?: boolean | undefined;
   /** Nach der Prüfung: je Zeichen, ob es abweicht (goldene Markierung). */
   marks?: boolean[] | undefined;
   /** Buchstaben-Platzhalter (nur Länge und Trennzeichen, nie die Lösung). */
@@ -60,7 +62,7 @@ function textWidth(text: string, font: string): number {
   return ctx.measureText(text).width;
 }
 
-export function KineticGap({ label, maxLength, state, marks, mask, shown, onChange, onEnter, onKey, reveal, silent = false }: Props) {
+export function KineticGap({ label, maxLength, state, busy = false, marks, mask, shown, onChange, onEnter, onKey, reveal, silent = false }: Props) {
   const { t } = useT();
   const api = useHiddenInput();
   const reduce = useReducedMotion();
@@ -71,7 +73,7 @@ export function KineticGap({ label, maxLength, state, marks, mask, shown, onChan
   const [flyers, setFlyers] = useState<Flyer[]>([]);
   const [focused, setFocused] = useState(false);
   const width = useMotionValue<number | string>('3.5em');
-  const locked = state !== 'input';
+  const locked = state !== 'input' || busy;
   // Ton und Vibration zur Rückmeldung (Kap. 4.7, 4.3) melden wir nur als Lernereignis; der Dirigent (`engine/fx`) spielt sie, einmal je Prüfen.
   useEffect(() => {
     if (state === 'input' || silent) return;
