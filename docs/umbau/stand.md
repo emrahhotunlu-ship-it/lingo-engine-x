@@ -465,3 +465,8 @@ Lehre: Für Aufgabenfragen mit Gestaltungsspielraum zuerst Emrah mit Vorschau fr
 ## 19.10.2026 – Rückmeldung Emrah: richtige Alternativantwort wird als falsch gewertet
 - Grammatik-Lücke „We ___ (have) a paper archive, but now everything is in the cloud.“ – erwartet „used to have“, Emrah schrieb „had“ (ebenfalls richtig) → „Noch nicht“. „Woher soll ich schätzen, was genau du willst?“ – kommt oft vor.
 - Vorgehen: Paket MD (Mehrdeutigkeit): (1) Mechanik: richtige, aber nicht gesuchte Antworten gelten NIE als Fehler („Auch richtig – gesucht war …, weil …“, Note nicht abwertend), lokale Varianten-Liste zuerst, bei Lücken mit Grammatikprüfung Claude `quick` als Zweitmeinung; (2) Inhalt: Audit der Lückenaufgaben auf mehrdeutige Lagen (`accepted` ergänzen oder Aufgabe eindeutig machen, z. B. Zeitsignal/Hinweis), Gegenlesung Englischlehrer.
+
+## 20.10.2026 – Test-Link 9 (Version 68 `1792429165-59be`, Rückweg v67 `1792156649-9c44`; Live unverändert v80 `1792157236-1fb8`)
+- Enthält FK (neues „Fehler korrigieren“), WL (Satzwechsel, Wendungen zerlegt, Bausteine), ST (ehrlicher Status), MD (Auch richtig, Hinweise, Aufgaben-Audit). Gesamttest in Abschnitten: grün bis auf perf-Statuszeile (4×, bekannt); danach E2E-Testdaten-Korrekturen (Tag-1-Karten) grün.
+- Bekannte offene Befunde (Opus-ux-reviewer, Korrekturrunde auf `claude/umbau-md-ux` läuft): „Richtig:“-Zeile mit großem W bei Fehler finden, „Auch richtig“-Kopfzeile doppelt, Notiz/Claude-Begründung nicht sichtbar, Fit-Aufruf nicht bei Fehler finden (tasks-v2), Lücke editierbar während „Prüft …“, kein „Ohne Zweitmeinung weiter“, Touch-Ziele spot-word.
+- Tutor-Engine: Konzept `docs/umbau/tutor-engine-v3.md` (Opus), Entscheidungen Emrah in `entscheidungen.md`.
