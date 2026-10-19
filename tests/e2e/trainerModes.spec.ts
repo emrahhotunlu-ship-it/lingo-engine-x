@@ -61,7 +61,7 @@ for (const m of MODES) {
     // Lösung steht vor dem Prüfen nicht im DOM (außer als Option).
     if (m.ex === 'dictation') await expect(page.getByTestId('sentence')).not.toContainText('avoid');
     if (m.ex === 'listen_mc' || m.ex === 'dictation') {
-      await expect.poll(async () => page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { spoken: string[] } }).__LINGO_FAKE__.spoken.join(' | '))).toContain('Try to avoid driving in rush hour.');
+      await expect.poll(async () => page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { spoken: string[] } }).__LINGO_FAKE__.spoken.join(' | '))).toMatch(/avoid/i); // ab der ersten Wiederholung wechselt der Satz (WL): irgendein Satz der Karte, immer mit dem Wort
       await expect(page.getByTestId('replay')).toBeVisible();
     }
     if (m.ex === 'listen_mc') await expect(page.getByTestId('sentence')).toHaveCount(0);
@@ -272,19 +272,21 @@ test.describe('Wendungen in der täglichen Wiederholung', () => {
     expect(errors).toEqual([]);
   });
 
-  test('Wendung aus der Mail auf Stufe 2: keine Auswahlfrage mehr, sondern Abruf mit Stütze; Protokoll als Wendung (Lernberatung 27.09.)', async ({ page }) => {
+  test('Wendung aus der Mail auf Stufe 2: keine ganze Wendung, sondern ein Wort der Wendung als Lücke; Protokoll als Wendung (WL, 19.10.2026)', async ({ page }) => {
     const { errors } = await boot(page, {
       migrated: true,
-      fake: { patch: { ...TYPE_MODE, 'app/profile': planPatch(1), 'chunk/c-behind-schedule': forcedDoc(2, { ...strong('mc_de'), ...weak('match') }) } },
+      fake: { patch: { ...TYPE_MODE, 'app/profile': planPatch(1), 'chunk/c-behind-schedule': forcedDoc(2, { ...strong('mc_de', 'match'), ...weak('cloze_hint') }) } },
     });
     await screen(page, 'today');
     await page.getByTestId('start').click();
     await screen(page, 'trainer');
     const ex = page.getByTestId('exercise');
     await expect(ex).toHaveAttribute('data-card', 'c-behind-schedule');
-    // Wendungen überspringen Erkennen/Zuordnen (Stufen 1–2): abgefragt wird ab „Mit Stütze abrufen".
-    const kind = await ex.getAttribute('data-ex');
-    expect(['match', 'mc_de', 'mc_en']).not.toContain(kind);
+    // Wendungen haben alle fünf Stufen; auf Stufe 2 ist ein einzelnes Wort der Wendung die Lücke (Stütze: erster Buchstabe), nie die ganze Wendung.
+    await expect(ex).toHaveAttribute('data-ex', 'cloze_hint');
+    const letters = await page.getByTestId('gap').locator('[data-slot="letter"]').count();
+    expect(letters).toBeGreaterThan(0);
+    expect(letters).toBeLessThan('behind schedule'.replace(/\s/g, '').length);
     await answerCurrent(page);
     await expect.poll(async () => ((await dump(page))[`log/${DAY}`]?.entries as Doc[] | undefined)?.find((e) => e.id === 'c-behind-schedule')).toMatchObject({ type: 'chunk' });
     expect(errors).toEqual([]);
