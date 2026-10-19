@@ -14,7 +14,10 @@ import { validateDoc } from '../../data/validate';
 import { addDays } from '../../domain/date';
 import { confusionOf, evidenceText, newMappedErrors, type Confusion, type ConfusionSources } from '../../domain/tutor/confusion';
 import { activeClaim, claimOp, diagState, doneOf, finishOp, lastDone, readDiag, releaseOp, reportOp, weekOf, type DiagEntry, type DiagState } from '../../domain/tutor/diag';
-import { diagnose } from '../../prompts/diagnose';
+import { buildLearnerModel } from '../../domain/tutor/learner';
+import { l1ById } from '../../domain/tutor/l1';
+import { patListText } from '../../domain/tutor/patList';
+import { diagnoseV2, type DiagnoseHypIn, type DiagnoseV2Vars } from '../../prompts/diagnoseV2';
 import { getDb } from '../../platform/capabilities';
 import { logWarn } from '../../platform/diagnostics';
 import type { Db } from '../../platform/types';
@@ -24,7 +27,10 @@ import { tabId } from '../progress/persist';
 // Wochen-Diagnose „Was du verwechselst“ (Lernplattform 3.0 P49, K-9/K-10). Hier liegt alles mit Nebenwirkung; die Rechnung steht rein in
 // `domain/tutor/confusion.ts` und `domain/tutor/diag.ts`.
 //
-// Ablauf eines Laufs (genau ein Aufruf von `diagnose@1`, nie in einer Schleife, nie aus Render oder Timer):
+// Seit der Engine-Verdrahtung (19.10.2026) läuft `diagnose@2` (complex, Annahmen aus `hypotheses.ts`, Hintergrund höchstens 1 je Tag); alte Ergebnisse
+// von `diagnose@1` im selben Speicher bleiben lesbar (`diag.ts`: `out`/`out2`).
+//
+// Ablauf eines Laufs (genau ein Aufruf von `diagnose@2`, nie in einer Schleife, nie aus Render oder Timer):
 //   1. Schalter, KI nutzbar, Daten fertig geladen (Snapshot), kein Lauf in dieser Ansicht.
 //   2. `app/patterns` FRISCH lesen: Ergebnis dieser Woche da? gültige Beanspruchung eines Geräts? zu wenige neue Fehler? → kein Aufruf.
 //   3. Hintergrund: Zustimmung bekannt und Tagesbudget frei (`bgVerdict`), sonst still kein Aufruf und KEINE Beanspruchung.
@@ -121,6 +127,31 @@ export function useConfusion(enabled: boolean): { status: 'loading' | 'ready' | 
   return { status: state.status, confusion, sources: state.sources };
 }
 
+// ------------------------------------------------------------------ Eingabe für diagnose@2
+
+/** Höchstens so viele Annahmen gehen in die Eingabe (offene zuerst, `hypothesesOf` sortiert); der Prompt kappt zusätzlich auf 1 KB. */
+const HYPS_IN_MAX = 8;
+
+/**
+ * Eingabe für `diagnose@2` aus denselben Belegquellen wie die Karte: Musterstatistik und Belegzeilen (`confusionOf`), Annahmen aus dem Lernermodell
+ * (`hypotheses.ts`; Protokolle der 56 Tage, Fehlersätze, Vokabeln), die Übertragungstabelle nur für die Annahmen und die Musterliste. Rein bis auf
+ * das Lesen der Live-Daten (Vokabeln, Profil).
+ */
+export function diagnoseVars(sources: ConfusionSources, conf: Confusion, i: { lang: DiagnoseV2Vars['lang']; today: string; now: number }): DiagnoseV2Vars {
+  const live = useLive.getState();
+  const model = buildLearnerModel(
+    { grammarDocs: sources.grammar ?? new Map(), logs: sources.logs ?? new Map(), vocab: live.collections.vocab ?? new Map(), act: new Map(), profile: live.docs['app/profile'] ?? null, diag: [] },
+    i.now,
+  );
+  const hyps: DiagnoseHypIn[] = model.hyps.slice(0, HYPS_IN_MAX).map((h) => ({ id: h.id, from: h.from, to: h.to, state: h.state, n: h.n, days: h.days, l1: h.l1 }));
+  const l1Ids = [...new Set(hyps.map((h) => h.l1).filter((x): x is string => !!x))];
+  const l1 = l1Ids.flatMap((id) => {
+    const e = l1ById(id);
+    return e ? [{ id, trigger: e.trigger_de }] : [];
+  });
+  return { lang: i.lang, today: i.today, stats: conf.pats, evidence: evidenceText(conf.lines), ids: conf.ids, hyps, l1, patList: patListText() };
+}
+
 // ------------------------------------------------------------------ Lauf
 
 let ctl: AbortController | null = null;
@@ -210,7 +241,7 @@ export async function runDiagnose(o: { trigger: 'auto' | 'manual'; now?: number 
       return 'skip';
     }
     // Hintergrund: ohne bekannte Zustimmung oder ohne Tagesbudget gar nicht erst beanspruchen.
-    if (o.trigger === 'auto' && bgVerdict(diagnose.id, diagnose.budget?.bgPerDay ?? 1, now) !== null) {
+    if (o.trigger === 'auto' && bgVerdict(diagnoseV2.id, diagnoseV2.budget?.bgPerDay ?? 1, now) !== null) {
       useDiagRun.setState({ phase: 'idle', error: null });
       return 'skip';
     }
@@ -225,10 +256,9 @@ export async function runDiagnose(o: { trigger: 'auto' | 'manual'; now?: number 
       useDiagRun.setState({ phase: 'idle', error: null });
       return 'skip';
     }
-    const prev = fresh.last?.out ? { headline: fresh.last.out.headline, titles: fresh.last.out.findings.map((f) => f.title) } : null;
     const r = await askJson({
-      template: diagnose,
-      vars: { lang, evidence: evidenceText(conf.lines), ids: conf.ids, allowed: conf.allowed, prev, today },
+      template: diagnoseV2,
+      vars: diagnoseVars(sources, conf, { lang, today, now }),
       signal: c.signal,
       priority: o.trigger === 'auto' ? 'background' : 'user',
       onPhase: (p) => {
@@ -237,7 +267,7 @@ export async function runDiagnose(o: { trigger: 'auto' | 'manual'; now?: number 
     });
     useDiagRun.setState({ phase: 'saving' });
     const t = claimedAt;
-    await writer.transform(PATTERNS_PATH, (cur) => (!writable(cur) ? null : finishOp(cur, { dev, t, w, now: Date.now(), out: r.data, pv: `${diagnose.id}@${diagnose.version}`, lang, rep: conf.mapped })));
+    await writer.transform(PATTERNS_PATH, (cur) => (!writable(cur) ? null : finishOp(cur, { dev, t, w, now: Date.now(), out: r.data, pv: `${diagnoseV2.id}@${diagnoseV2.version}`, lang, rep: conf.mapped })));
     claimedAt = 0;
     useDiagRun.setState({ phase: 'idle', error: null });
     return 'done';

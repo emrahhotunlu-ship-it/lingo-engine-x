@@ -59,8 +59,99 @@ function PairRow({ pair, nameOf }: { pair: Pair; nameOf: (id: string) => string 
   );
 }
 
+/** Annahme `h:<von>><zu>` in ihre zwei Kennungen zerlegen (`null`, wenn die Form nicht passt). */
+function hypPair(id: string): { a: string; b: string } | null {
+  const m = /^h:([^>]+)>(.+)$/.exec(id);
+  return m?.[1] && m[2] ? { a: m[1], b: m[2] } : null;
+}
+
+const VERDICT_KEY = { likely: 'ttDxVerdict_likely', unclear: 'ttDxVerdict_unclear', unlikely: 'ttDxVerdict_unlikely' } as const;
+
+/** Ergebnis von `diagnose@2` (seit 19.10.2026): Zusammenfassung, Annahmen mit Urteil und Begründung, Wochenfokus. Gleiches Melden wie bei @1 (Index = Annahme). */
+function ClaudeResult2({ entry, nameOf }: { entry: DiagEntry; nameOf: (id: string) => string }) {
+  const { t, lang } = useT();
+  const out = entry.out2;
+  if (!out) return null;
+  const summary = lang === 'de' ? out.summary.de : out.summary.en;
+  const focus = out.focus.filter((p) => patternById(p));
+  const focusRow =
+    focus.length > 0 ? (
+      <div className="flex flex-col gap-2" data-testid="dx-focus">
+        <p className="m-0 text-sm text-muted">{t('ttDxFocus')}</p>
+        <div className="flex flex-wrap gap-2">
+          {focus.map((p) => (
+            <PatternPracticeButton key={p} pat={p} name={nameOf(p)} testId="dx-focus-practice" />
+          ))}
+        </div>
+      </div>
+    ) : null;
+  if (out.hyps.length === 0) {
+    return (
+      <div className="flex flex-col gap-2" data-testid="dx-none" data-week={entry.w} data-pv={entry.pv}>
+        <Eyebrow as="h3">{t('ttDxClaudeTitle')}</Eyebrow>
+        <p className="m-0 text-base font-medium" data-testid="dx-headline">
+          {summary}
+        </p>
+        <p className="m-0 text-sm text-muted">{t('ttDxNoHyps')}</p>
+        {focusRow}
+        <AiMark variant="diag" tpl={entry.pv || 'diagnose@2'} />
+      </div>
+    );
+  }
+  const shown = out.hyps.map((h, i) => ({ h, i })).filter(({ i }) => !entry.bad.includes(i));
+  if (!shown.length) {
+    return (
+      <p className="m-0 text-sm text-muted" data-testid="dx-gone">
+        {t('ttDxGone')}
+      </p>
+    );
+  }
+  return (
+    <div className="flex flex-col gap-3" data-testid="dx-claude" data-week={entry.w} data-pv={entry.pv}>
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <Eyebrow as="h3">{t('ttDxClaudeTitle')}</Eyebrow>
+        <span className="text-xs text-subtle">{t('ttDxWeek', { w: Number(entry.w.slice(6)) })}</span>
+      </div>
+      <p className="m-0 text-base font-medium" data-testid="dx-headline">
+        {summary}
+      </p>
+      <ul className="m-0 flex list-none flex-col gap-3 p-0">
+        {shown.map(({ h, i }) => {
+          const pair = hypPair(h.id);
+          return (
+            <li key={i} className="flex flex-col gap-1.5 rounded-[var(--radius-control)] bg-surface p-3" data-testid="dx-finding" data-hyp={h.id} data-verdict={h.verdict}>
+              <p className="m-0 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                <span className="text-sm font-semibold">{pair ? t('ttDxHypTitle', { a: nameOf(pair.a), b: nameOf(pair.b) }) : h.id}</span>
+                <span className="text-xs text-muted" data-testid="dx-verdict">
+                  {t(VERDICT_KEY[h.verdict])}
+                </span>
+              </p>
+              <p className="m-0 text-sm text-muted">{lang === 'de' ? h.why.de : h.why.en}</p>
+              {pair && patternById(pair.a) && patternById(pair.b) ? (
+                <div className="pt-1">
+                  <ContrastButton a={pair.a} b={pair.b} nameA={nameOf(pair.a)} nameB={nameOf(pair.b)} testId="dx-finding-contrast" />
+                </div>
+              ) : null}
+            </li>
+          );
+        })}
+      </ul>
+      {focusRow}
+      <AiMark
+        variant="diag"
+        tpl={entry.pv || 'diagnose@2'}
+        id={entry.w}
+        onReport={() => {
+          for (const { i } of shown) void reportFinding(entry.w, i);
+        }}
+      />
+    </div>
+  );
+}
+
 function ClaudeResult({ entry, nameOf }: { entry: DiagEntry; nameOf: (id: string) => string }) {
   const { t } = useT();
+  if (entry.out2) return <ClaudeResult2 entry={entry} nameOf={nameOf} />;
   const out = entry.out;
   if (!out) return null;
   // Keine Befunde: ehrlich sagen, dass die Evidenz noch dünn ist (die Schwelle wird nie gesenkt).
@@ -152,7 +243,8 @@ export function DiagnoseCard() {
   const watch = useDocWatch(PATTERNS_PATH);
   const run = useDiagRun();
   const entries = useMemo(() => readDiag(watch.data), [watch.data]);
-  const nameOf = (id: string): string => patternById(id)?.name[lang] ?? id;
+  // Gebrauchsmuster (`use:make+decision`) haben keinen Namen: lesbar als „make … decision“.
+  const nameOf = (id: string): string => patternById(id)?.name[lang] ?? (id.startsWith('use:') ? id.slice(4).replace('+', ' … ') : id);
   const w = weekOf(today);
   const done = doneOf(entries, w);
   const last = lastDone(entries);

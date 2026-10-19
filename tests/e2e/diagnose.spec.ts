@@ -6,7 +6,8 @@ import { answerGrammar, grammarKey, nextItem } from './learnHelpers';
 import { diagCalls, diagPatch, dumpDb, openDiagnose, setDiagMode, WEEK } from './diagnoseHelpers';
 
 // P49 (Lernplattform 3.0, KI-Tutor T5): Karte „Häufigste Verwechslungen · 28 Tage“ (ohne Claude immer da), Block „Diagnose von Claude“ (einmal je
-// ISO-Woche, geräteübergreifend), Kontrast-Runde. Die Testlaufzeit antwortet fest (`canned/lp3/p49.ts`); Schalter per `lx:flags`.
+// ISO-Woche, geräteübergreifend), Kontrast-Runde. Die Testlaufzeit antwortet fest (`canned/s4.ts` für `diagnose@2`); Schalter per `lx:flags`.
+// Seit der Engine-Verdrahtung (19.10.2026) holt der Lauf `diagnose@2` (Annahmen); ein gespeichertes Ergebnis von `diagnose@1` bleibt lesbar (OTHER_DONE).
 
 const OTHER_DONE = {
   w: WEEK,
@@ -56,7 +57,11 @@ for (const [label, width, height] of [
           expect(await axe(page)).toEqual([]);
           await page.getByTestId('dx-ask').click();
           await expect(page.getByTestId('dx-claude')).toBeVisible();
-          await expect(page.getByTestId('dx-finding')).toHaveCount(2);
+          await expect(page.getByTestId('dx-claude')).toHaveAttribute('data-pv', 'diagnose@2');
+          // Annahmen der App mit Urteil (die Testdaten tragen „the statt a“ an drei Tagen), dazu der Wochenfokus.
+          await expect(page.getByTestId('dx-finding').first()).toHaveAttribute('data-hyp', /^h:/);
+          await expect(page.getByTestId('dx-finding').first()).toHaveAttribute('data-verdict', 'likely');
+          await expect(page.getByTestId('dx-verdict').first()).toHaveText(lang === 'de' ? 'Wahrscheinlich' : 'Likely');
           await expect(card.locator('[data-ai-mark="diag"]')).toContainText(lang === 'de' ? 'Auswertung von Claude' : 'Analysis from Claude');
           await expect(page.getByTestId('dx-ask')).toHaveCount(0);
           // Genau ein Aufruf, Stufe complex.
@@ -81,8 +86,12 @@ test.describe('Handy 390: Verhalten', () => {
     const db = await dumpDb(page);
     const diag = (db['app/patterns']?.diag ?? []) as Array<Record<string, unknown>>;
     expect(diag).toHaveLength(1);
-    expect(diag[0]).toMatchObject({ w: WEEK, st: 'done', pv: 'diagnose@1', lang: 'de' });
-    expect((diag[0]?.out as { findings: unknown[] }).findings.length).toBeGreaterThan(0);
+    expect(diag[0]).toMatchObject({ w: WEEK, st: 'done', pv: 'diagnose@2', lang: 'de' });
+    const out = diag[0]?.out as { hyps: Array<{ id: string }>; focus: string[]; summary: { de: string; en: string } };
+    expect(out.hyps.length).toBeGreaterThan(0);
+    expect(out.hyps.every((h) => h.id.startsWith('h:'))).toBe(true);
+    expect(out.summary.de.length).toBeGreaterThan(0);
+    expect(out.summary.en.length).toBeGreaterThan(0);
     // Die Beanspruchung (pending) ist ersetzt, nicht gehäuft.
     expect(diag.filter((e) => e.st === 'pending')).toEqual([]);
     // Wieder öffnen (anderer Reiter und zurück): kein weiterer Aufruf.
@@ -182,7 +191,9 @@ test.describe('Handy 390: Verhalten', () => {
     await expect(page.getByTestId('dx-claude')).toHaveCount(0);
     await expect(page.getByTestId('dx-gone')).toBeVisible();
     await expect(page.getByTestId('dx-pair')).toHaveCount(1);
-    await expect.poll(async () => (((await dumpDb(page))['app/patterns']?.diag ?? []) as Array<{ bad?: number[]; out?: unknown }>)[0]?.bad).toEqual([0, 1]);
+    const n = ((((await dumpDb(page))['app/patterns']?.diag ?? []) as Array<{ out?: { hyps?: unknown[] } }>)[0]?.out?.hyps ?? []).length;
+    expect(n).toBeGreaterThan(0);
+    await expect.poll(async () => (((await dumpDb(page))['app/patterns']?.diag ?? []) as Array<{ bad?: number[]; out?: unknown }>)[0]?.bad).toEqual(Array.from({ length: n }, (_, i) => i));
     const diag = ((await dumpDb(page))['app/patterns']?.diag ?? []) as Array<{ out?: unknown }>;
     expect(diag[0]?.out).toBeTruthy();
   });
@@ -202,9 +213,9 @@ test.describe('Handy 390: Verhalten', () => {
     await expect(page.getByTestId('dx-none')).toBeVisible();
     await expect(page.getByTestId('dx-finding')).toHaveCount(0);
     await expect(page.getByTestId('dx-ask')).toHaveCount(0);
-    const diag = ((await dumpDb(page))['app/patterns']?.diag ?? []) as Array<{ st?: string; out?: { findings: unknown[] } }>;
+    const diag = ((await dumpDb(page))['app/patterns']?.diag ?? []) as Array<{ st?: string; out?: { hyps: unknown[] } }>;
     expect(diag[0]?.st).toBe('done');
-    expect(diag[0]?.out?.findings).toEqual([]);
+    expect(diag[0]?.out?.hyps).toEqual([]);
     expect(await diagCalls(page)).toHaveLength(1);
   });
 

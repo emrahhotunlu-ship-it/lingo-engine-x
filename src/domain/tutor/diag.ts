@@ -1,5 +1,6 @@
 import { isoWeek } from '../date';
 import type { DiagnoseOut } from '../../prompts/diagnose';
+import type { DiagnoseHypOut, DiagnoseHypVerdict, DiagnoseV2Out } from '../../prompts/diagnoseV2';
 import { NEW_ERRORS_MIN } from './confusion';
 
 // Das Protokoll der Wochen-Diagnose in `app/patterns.diag[]` (Lernplattform 3.0 P49, K-10). Rein.
@@ -13,6 +14,8 @@ import { NEW_ERRORS_MIN } from './confusion';
 //   - abgelaufene oder fremde `pending`-Einträge (reine Protokollzeilen der Beanspruchung) fallen weg,
 //   - Ausnahme von „nichts löschen“ (docs/datenmodell.md): von den Ergebnissen behalten nur die jüngsten 12 ihr `out`; ältere werden auf die Kurzform
 //     ohne `out` gekürzt (der Eintrag selbst bleibt). Je Woche gibt es höchstens einen: ≈ 60 Byte je Woche.
+// Ab der Engine-Verdrahtung (19.10.2026) schreibt der Lauf `diagnose@2`: gleicher Eintrag, `pv: 'diagnose@2'`, `out = {hyps[], focus[], summary}`. Gelesen wird beides:
+// `out` (Form @1) und `out2` (Form @2); welche Form vorliegt, sagt der Aufbau (`summary` als Objekt), nicht nur `pv`.
 // Eine Beanspruchung gilt 10 Minuten; die Ausschließlichkeit zwischen Geräten stellt die kooperative Sperre (`acquire`) her, die Transform prüft frisch.
 
 type Doc = Readonly<Record<string, unknown>>;
@@ -27,7 +30,50 @@ export const CLAIM_TTL_MS = 10 * 60_000;
 export const FUTURE_SLACK_MS = 60_000;
 const WEEK_RE = /^\d{4}-W\d{2}$/;
 
-export type DiagEntry = { w: string; t: number; st: 'pending' | 'done'; dev: string; pv: string; lang: string; rep: number; out: DiagnoseOut | null; bad: number[] };
+export type DiagEntry = {
+  w: string;
+  t: number;
+  st: 'pending' | 'done';
+  dev: string;
+  pv: string;
+  lang: string;
+  rep: number;
+  /** Ergebnis in der Form von `diagnose@1` (alte Wochen). */
+  out: DiagnoseOut | null;
+  /** Ergebnis in der Form von `diagnose@2` (Annahmen, Wochenfokus, Zusammenfassung). */
+  out2: DiagnoseV2Out | null;
+  bad: number[];
+};
+
+/** Höchstens so viele gemeldete Befunde bzw. Annahmen je Woche (@1: 3 Befunde, @2: 5 Annahmen). */
+export const BAD_MAX = 5;
+
+const VERDICTS: ReadonlySet<string> = new Set<DiagnoseHypVerdict>(['likely', 'unlikely', 'unclear']);
+const bi = (v: unknown): { de: string; en: string } | null => {
+  const o = obj(v);
+  return str(o.de) && str(o.en) ? { de: str(o.de), en: str(o.en) } : null;
+};
+
+/** Ergebnis von `diagnose@2` tolerant lesen; `null`, wenn die Zusammenfassung fehlt (dann ist es keine @2-Form). */
+export function readOut2(v: unknown): DiagnoseV2Out | null {
+  const o = obj(v);
+  const summary = bi(o.summary);
+  if (!summary) return null;
+  const hyps: DiagnoseHypOut[] = [];
+  for (const h of Array.isArray(o.hyps) ? o.hyps : []) {
+    const x = obj(h);
+    const why = bi(x.why);
+    if (!str(x.id) || !why) continue;
+    const verdict = VERDICTS.has(str(x.verdict)) ? (str(x.verdict) as DiagnoseHypVerdict) : 'unclear';
+    hyps.push({ id: str(x.id), verdict, ev: (Array.isArray(x.ev) ? x.ev : []).filter((e): e is string => typeof e === 'string').slice(0, 5), why });
+    if (hyps.length >= 5) break;
+  }
+  const focus = (Array.isArray(o.focus) ? o.focus : []).filter((f): f is string => typeof f === 'string' && !!f).slice(0, 3);
+  return { hyps, focus, summary };
+}
+
+/** Hat der Eintrag ein lesbares Ergebnis (gleich welcher Form)? */
+export const hasOut = (e: DiagEntry): boolean => !!e.out || !!e.out2;
 
 /** Ergebnis tolerant lesen (nur die Teile, die die Karte zeigt). Leere Befunde sind erlaubt („noch nichts Systematisches“). */
 export function readOut(v: unknown): DiagnoseOut | null {
@@ -61,7 +107,8 @@ function parse(r: unknown): DiagEntry | null {
     lang: str(e.lang),
     rep: num(e.rep),
     out: st === 'done' ? readOut(e.out) : null,
-    bad: (Array.isArray(e.bad) ? e.bad : []).filter((x): x is number => typeof x === 'number' && Number.isInteger(x) && x >= 0).slice(0, 3),
+    out2: st === 'done' ? readOut2(e.out) : null,
+    bad: (Array.isArray(e.bad) ? e.bad : []).filter((x): x is number => typeof x === 'number' && Number.isInteger(x) && x >= 0).slice(0, BAD_MAX),
   };
 }
 
@@ -132,7 +179,7 @@ function tidy(list: readonly unknown[], w: string, now: number): unknown[] {
   });
   const withOut = keep
     .map((r, k) => ({ k, e: parse(r) }))
-    .filter((x): x is { k: number; e: DiagEntry } => !!x.e && x.e.st === 'done' && !!x.e.out)
+    .filter((x): x is { k: number; e: DiagEntry } => !!x.e && x.e.st === 'done' && hasOut(x.e))
     .sort((a, b) => b.e.t - a.e.t);
   const short = new Set(withOut.slice(DIAG_FULL).map((x) => x.k));
   return keep.map((r, k) => (short.has(k) ? shorten(r) : r));
@@ -166,7 +213,7 @@ export function releaseOp(cur: Doc | undefined, i: { dev: string; t: number }): 
 }
 
 /** Ergebnis eintragen: der eigene `pending`-Eintrag wird zu `done` (Spread: unbekannte Felder bleiben). Gibt es schon ein Ergebnis dieser Woche, bleibt es. */
-export function finishOp(cur: Doc | undefined, i: { dev: string; t: number; w: string; now: number; out: DiagnoseOut; pv: string; lang: string; rep: number }): { update: Record<string, unknown> } | null {
+export function finishOp(cur: Doc | undefined, i: { dev: string; t: number; w: string; now: number; out: DiagnoseOut | DiagnoseV2Out; pv: string; lang: string; rep: number }): { update: Record<string, unknown> } | null {
   if (!cur) return null;
   if (doneOf(readDiag(cur), i.w)) return null;
   const raw = rawDiag(cur);
@@ -190,10 +237,10 @@ export function reportOp(cur: Doc | undefined, i: { w: string; index: number }):
   let at = -1;
   raw.forEach((r, k) => {
     const e = parse(r);
-    if (e && e.w === i.w && e.st === 'done' && e.out && (at < 0 || e.t >= (parse(raw[at])?.t ?? 0))) at = k;
+    if (e && e.w === i.w && e.st === 'done' && hasOut(e) && (at < 0 || e.t >= (parse(raw[at])?.t ?? 0))) at = k;
   });
   const e = parse(raw[at]);
   if (at < 0 || !e || e.bad.includes(i.index)) return null;
-  const next = raw.map((r, k) => (k === at ? { ...obj(r), bad: [...e.bad, i.index].sort((a, b) => a - b).slice(0, 3) } : r));
+  const next = raw.map((r, k) => (k === at ? { ...obj(r), bad: [...e.bad, i.index].sort((a, b) => a - b).slice(0, BAD_MAX) } : r));
   return { update: { diag: next } };
 }

@@ -32,4 +32,11 @@ export const ttP49En = {
   ttDxGone: 'You reported this week’s diagnosis. The count above stays.',
   ttDxNone: 'Nothing systematic yet: the evidence from the last 28 days is not enough for a finding.',
   ttDxContrastErr: 'The tasks could not be loaded. Please try again in a moment.',
+  // Engine wiring 10/19/2026: result of diagnose@2 (hypotheses, weekly focus).
+  ttDxHypTitle: '{b} instead of {a}',
+  ttDxVerdict_likely: 'Likely',
+  ttDxVerdict_unclear: 'Not clear yet',
+  ttDxVerdict_unlikely: 'Unlikely',
+  ttDxFocus: 'Focus this week',
+  ttDxNoHyps: 'No hypothesis yet: a mix-up needs at least three pieces of evidence on two different days.',
 } as const;

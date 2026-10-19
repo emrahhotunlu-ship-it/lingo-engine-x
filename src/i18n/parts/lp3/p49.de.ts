@@ -32,4 +32,11 @@ export const ttP49De = {
   ttDxGone: 'Du hast die Diagnose dieser Woche gemeldet. Die Zählung oben bleibt.',
   ttDxNone: 'Noch nichts Systematisches: Die Belege der letzten 28 Tage reichen noch nicht für einen Befund.',
   ttDxContrastErr: 'Die Aufgaben konnten nicht geladen werden. Versuche es gleich noch einmal.',
+  // Engine-Verdrahtung 19.10.2026: Ergebnis von diagnose@2 (Annahmen, Wochenfokus).
+  ttDxHypTitle: '{b} statt {a}',
+  ttDxVerdict_likely: 'Wahrscheinlich',
+  ttDxVerdict_unclear: 'Noch unklar',
+  ttDxVerdict_unlikely: 'Eher nicht',
+  ttDxFocus: 'Wochenfokus',
+  ttDxNoHyps: 'Noch keine Annahme: Für eine Verwechslung braucht es mindestens drei Belege an zwei verschiedenen Tagen.',
 } as const;
