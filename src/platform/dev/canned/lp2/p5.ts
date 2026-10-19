@@ -3,6 +3,7 @@
 
 import { registerCannedReply } from '../../fakeSample';
 import { grammarItemsReply } from '../../cannedLearn';
+import { foreignSignalPattern, hasSignal, patternNearGap, patternsOf } from '../../../../domain/grammar/patterns';
 
 type Pat = { id: string; signal: string };
 
@@ -29,11 +30,28 @@ export function grammarItemsReplyV3(input: string): string {
   }
   const pats = patternsIn(input);
   if (!pats.length) return JSON.stringify(base);
+  const topic = base.items[0]?.topic;
+  const tp = patternsOf(typeof topic === 'string' ? topic : '');
+  // Passt der Satz zu diesem Muster (wie die Prüfung von `grammar-items`: Signal im Satz, ein fremdes Signal nur, wenn das eigene der Lücke näher ist)?
+  const fits = (prompt: string, answer: string, id: string): boolean => {
+    const own = tp?.patterns.find((x) => x.id === id);
+    if (!tp || !own) return true;
+    if (!own.signals.some((sg) => hasSignal(`${prompt.replace(/_{3,}/, answer)} ${answer}`, sg))) return false;
+    if (!/_{3,}/.test(prompt) || !foreignSignalPattern(tp, id, prompt.replace(/_{3,}/, ' '))) return true;
+    return patternNearGap(tp, prompt, answer)?.id === id;
+  };
   base.items.forEach((it, k) => {
-    const p = pats[k % pats.length] as Pat;
-    it.pat = p.id;
     const prompt = String(it.prompt);
-    it.prompt = prompt.includes('→') ? prompt : prompt.replace(/([.?!])$/, `, ${p.signal}$1`);
+    const answer = String(it.answer);
+    const add = (q: Pat): string => (prompt.includes('→') ? prompt : prompt.replace(/([.?!])$/, `, ${q.signal}$1`));
+    // Zuerst ein Muster, dessen Signal schon im Satz steht, sonst eines mit angehängtem Signal (wie bisher reihum).
+    const order = pats.map((_, j) => pats[(k + j) % pats.length] as Pat);
+    const hit = order.find((q) => fits(prompt, answer, q.id)) ?? order.find((q) => fits(add(q), answer, q.id));
+    const fallback = pats[k % pats.length];
+    if (!fallback) return;
+    const p = hit ?? fallback;
+    it.pat = p.id;
+    it.prompt = hit && fits(prompt, answer, hit.id) ? prompt : add(p);
     if (it.type === 'mc' && Array.isArray(it.options)) {
       const wrong = (it.options as string[]).find((o) => o !== it.answer);
       if (wrong) it.why_not = [{ opt: wrong, de: `„${wrong}“ passt nicht zum Signalwort „${p.signal}“.`, en: `“${wrong}” does not fit the signal “${p.signal}”.` }];

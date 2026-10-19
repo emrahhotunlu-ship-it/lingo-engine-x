@@ -84,6 +84,9 @@ export function normalizeTask(raw: unknown, src: TaskSrc, ref: string | null = n
   const own = TaskWhySchema.safeParse(it.why);
   const why = entry?.why ?? (own.success ? own.data : null);
   const alt = Array.isArray(it.alt) ? it.alt.map(s).map((x) => x.trim()).filter(Boolean) : [];
+  // Ziel-Satz der Aufgabe (`grammar-items@5`, Engine-Verdrahtung 19.10.2026): nur zweisprachig gültig, sonst weg (keine Mischsprache).
+  const g = it.goal && typeof it.goal === 'object' && !Array.isArray(it.goal) ? (it.goal as Doc) : null;
+  const goal = g && s(g.de).trim() && s(g.en).trim() ? { de: s(g.de).trim().slice(0, 300), en: s(g.en).trim().slice(0, 300) } : null;
   return {
     key,
     topic,
@@ -100,6 +103,7 @@ export function normalizeTask(raw: unknown, src: TaskSrc, ref: string | null = n
     errorT: null,
     ...(pat ? { pat } : {}),
     ...(why ? { why } : {}),
+    ...(goal ? { goal } : {}),
   };
 }
 
@@ -130,6 +134,7 @@ export function toPoolItem(t: GrammarTask): Doc {
   if (t.ref) out.ref = t.ref;
   if (t.pat) out.pat = t.pat;
   if (t.why) out.why = t.why;
+  if (t.goal && t.type !== 'find') out.goal = { de: t.goal.de, en: t.goal.en };
   return out;
 }
 

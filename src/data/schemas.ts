@@ -221,6 +221,8 @@ const exerciseItem = z.looseObject({
   ref: str,
   /** Neu ab Phase 5: feste Kennung einer Aufgabe aus dem Preply-Import (`pi<ms>-t<i>`). */
   id: str,
+  /** Neu (Engine-Verdrahtung 19.10.2026): Ziel-Satz einer von Claude erzeugten Aufgabe `{de, en}` (je ≤ 300 Zeichen); tolerant gelesen. */
+  goal: z.unknown().optional(),
 });
 
 export const poolSchema = z.looseObject({

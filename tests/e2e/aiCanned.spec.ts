@@ -101,6 +101,8 @@ test('„Neue Aufgaben zu {Thema}": gespeichert im Pool und in der nächsten The
   expect(found, 'ein Thema mit „Neue Aufgaben"').not.toBe('');
   await page.getByTestId('gr-generate').click();
   await expect.poll(async () => calls(page, 'grammar-items')).toBe(1);
+  // Engine-Verdrahtung 19.10.2026: der zweite Löser (`solve-check@1`, Hintergrund) prüft die neuen Aufgaben genau einmal; in den Pool kommt nur Bestätigtes.
+  await expect.poll(async () => calls(page, 'solve-check')).toBe(1);
   await expect.poll(async () => JSON.stringify((await dump(page))['app/pool'] ?? {})).toContain(`"topic":"${found}"`);
   await page.getByTestId('topic-start').click();
   await skipMiniLesson(page);
@@ -111,10 +113,11 @@ test('„Neue Aufgaben zu {Thema}": gespeichert im Pool und in der nächsten The
     await expect(item).toBeVisible();
     await expect(item).toHaveAttribute('data-topic', found);
     src = (await item.getAttribute('data-src')) ?? '';
-    if (src === 'pool') break;
+    // Neue Aufgaben kommen in dieser Ansicht direkt aus der Erzeugung (`ai`), in späteren Runden aus dem Pool (`pool`).
+    if (src === 'pool' || src === 'ai') break;
     await item.getByTestId('dont-know').click();
     await page.getByTestId('next').click();
   }
-  expect(src).toBe('pool');
+  expect(['pool', 'ai']).toContain(src);
   expect(errors).toEqual([]);
 });
