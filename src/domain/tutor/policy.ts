@@ -1,11 +1,10 @@
 import { dayKey, daysBetween } from '../date';
 import type { ExplainExample, ExplainLine } from '../explain/types';
-import { chapters } from '../grammar/patterns';
 import type { Pattern } from '../grammar/patternTypes';
 import type { SlotRole } from '../grammar/slotPlan';
 import { wantTypes, wholeSentence, type InputProfile } from '../grammar/tasks';
 import { answerRight } from '../learn/right';
-import type { GrammarAnswer, GrammarTask, GrammarTaskType } from '../learn/types';
+import type { GrammarAnswer, GrammarTask, GrammarTaskType, TaskSlot } from '../learn/types';
 import { hash32 } from '../random';
 import type { LearnerModel, PatternKnow } from './learner';
 
@@ -15,6 +14,8 @@ import type { LearnerModel, PatternKnow } from './learner';
 // Rang (die erste zutreffende Regel gewinnt):
 //   1 hint       erster Versuch falsch (nicht bei Auswahl) → vorhandener Zweitversuch mit Leitfrage; dazu die Hinweisleiter `hintLadder`.
 //   2 win        3 getippte Antworten in Folge falsch → ein Muster mit p > 0,7 in einer leichteren Form („Kurz etwas Bekanntes, dann weiter.“).
+//                Höchstens einmal je Runde. Steht zugleich eine Mini-Lektion an (Rang 3), hat sie Vorrang: Wer dreimal am selben Grund
+//                scheitert, braucht die Regel, keine Ablenkung. „Weiß ich nicht“ ohne vorherigen Tippversuch verlängert die Serie nicht.
 //   3 explain    2 Fehler mit derselben Ursache am selben Muster in dieser Sitzung → Mini-Lektion (≤ 3 Erklärzeilen), danach eine Stufe leichter.
 //   4 review     Fälliges im Slot: macht schon `selectRound` (Fehlersätze vorn), hier nicht noch einmal.
 //   5/6 Stufe    Quote der letzten 20 NEU gestellten Grammatikaufgaben > 85 % → eine Stufe freier, < 75 % → eine Stufe gestützter;
@@ -24,7 +25,12 @@ import type { LearnerModel, PatternKnow } from './learner';
 // liegt als −1/0/+1 auf der p-gesteuerten Form (`wantTypes`), der gespeicherte Plan bleibt unberührt.
 
 export type Move = 'ask' | 'hint' | 'explain' | 'review' | 'win';
-export type WhyCode = 'due' | 'weak' | 'chapter' | 'mix' | 'known' | 'freer' | 'supported' | 'hyp';
+/**
+ * Grund einer Aufgabe. Ursächlich sind nur der Platz, für den `selectRound` sie gewählt hat (`GrammarTask.slot`: due/intro/chapter/focus/need/
+ * family/chosen/mix; ohne Platz `plan`), und der Zug der Sitzung (known/freer/supported). Datenbelege, die die Wahl nicht ausgelöst haben,
+ * stehen nur als Zusatz daneben (`WhyExtra`).
+ */
+export type WhyCode = 'due' | 'intro' | 'chapter' | 'focus' | 'need' | 'family' | 'chosen' | 'mix' | 'plan' | 'known' | 'freer' | 'supported';
 export type Shift = -1 | 0 | 1;
 
 export type Session = {
@@ -40,6 +46,12 @@ export type Session = {
   lastMove: Move | null;
   /** Pflichtrunde (wird leichter, nie kürzer). */
   duty: boolean;
+  /** `win` gab es in dieser Runde schon (höchstens einmal je Runde). */
+  won: boolean;
+  /** Muster der letzten Mini-Lektion, bis die nächste Antwort zu diesem Muster kommt (Beobachtung „Erfolg nach Mini-Lektion“). */
+  lessonPat: string | null;
+  /** Nur beobachtet, steuert nichts: Antworten zum Muster direkt nach einer Mini-Lektion und davon richtig ohne Hilfe (Konzept §2.2). */
+  afterLesson: { n: number; ok: number };
 };
 
 export const QUOTA_WINDOW = 20;
@@ -54,7 +66,18 @@ export const KNOWN_P = 0.7;
 /** Ursachen ohne Lehrwert für eine Mini-Lektion (Tippfehler, unklar). */
 const NO_LESSON = new Set(['typo', 'unknown']);
 
-export const newSession = (duty: boolean): Session => ({ lastNew20: [], wrongRun: 0, sameCause: {}, sinceShift: 0, shift: 0, lastMove: null, duty });
+export const newSession = (duty: boolean): Session => ({
+  lastNew20: [],
+  wrongRun: 0,
+  sameCause: {},
+  sinceShift: 0,
+  shift: 0,
+  lastMove: null,
+  duty,
+  won: false,
+  lessonPat: null,
+  afterLesson: { n: 0, ok: 0 },
+});
 
 /** Was eine Antwort für die Sitzung bedeutet. */
 export type AnswerFact = {
@@ -62,22 +85,32 @@ export type AnswerFact = {
   typed: boolean;
   /** Falsch (auch „Weiß ich nicht“). */
   wrong: boolean;
-  /** Richtig im ersten Versuch (die Quote). */
+  /** Richtig im ersten Versuch und ohne Hilfe (die Quote). */
   ok: boolean;
-  /** Neu gestellte Grammatikaufgabe (keine Wiederholung, kein Fehlersatz, kein Test): zählt für die Quote. */
+  /** Neu gestellte Grammatikaufgabe (keine Wiederholung, kein Fehlersatz, kein Test, nicht von der Engine eingesetzt): zählt für die Quote. */
   fresh: boolean;
   pat: string | null;
   /** Ursache der Diagnose (`tj.h`), sonst `null`. */
   cause: string | null;
+  /** „Weiß ich nicht“ ohne vorherigen Tippversuch: verlängert die Serie falscher Antworten nicht (sonst ließe sich `win` erzwingen). */
+  blind: boolean;
 };
 
 const CHOICE: ReadonlySet<GrammarTaskType> = new Set<GrammarTaskType>(['mc', 'meaning']);
 
-export function factOf(a: Pick<GrammarAnswer, 'task' | 'verdict' | 'dontKnow' | 'pts' | 'firstWrong' | 'free' | 'c1k' | 'tj'>, fresh: boolean): AnswerFact {
+export function factOf(a: Pick<GrammarAnswer, 'task' | 'verdict' | 'dontKnow' | 'pts' | 'firstWrong' | 'free' | 'c1k' | 'tj' | 'help'>, fresh: boolean): AnswerFact {
   const c1 = a.c1k ?? a.task.c1?.kind ?? null;
   const typed = c1 ? a.free === true : !CHOICE.has(a.task.type);
   const right = answerRight(a);
-  return { typed, wrong: !right, ok: right && a.firstWrong === undefined, fresh, pat: a.task.pat ?? null, cause: a.tj?.h ?? null };
+  return {
+    typed,
+    wrong: !right,
+    ok: right && a.firstWrong === undefined && a.help.level === 0,
+    fresh,
+    pat: a.task.pat ?? null,
+    cause: a.tj?.h ?? null,
+    blind: a.dontKnow && a.firstWrong === undefined,
+  };
 }
 
 /** Antwort in die Sitzung eintragen (rein). */
@@ -87,12 +120,14 @@ export function recordAnswer(s: Session, f: AnswerFact): Session {
     const k = `${f.pat}|${f.cause}`;
     sameCause[k] = (sameCause[k] ?? 0) + 1;
   }
+  const after = s.lessonPat !== null && f.pat === s.lessonPat;
   return {
     ...s,
     lastNew20: f.fresh ? [...s.lastNew20, f.ok].slice(-QUOTA_WINDOW) : s.lastNew20,
-    wrongRun: f.typed ? (f.wrong ? s.wrongRun + 1 : 0) : s.wrongRun,
+    wrongRun: f.typed ? (f.wrong ? (f.blind ? s.wrongRun : s.wrongRun + 1) : 0) : s.wrongRun,
     sameCause,
     sinceShift: s.sinceShift + 1,
+    ...(after ? { lessonPat: null, afterLesson: { n: s.afterLesson.n + 1, ok: s.afterLesson.ok + (f.ok ? 1 : 0) } } : {}),
   };
 }
 
@@ -118,12 +153,15 @@ export function lessonKey(s: Pick<Session, 'sameCause'>): { pat: string; cause: 
 
 /**
  * Nächster Zug nach der Antwort (die Antwort ist in `s` schon eingetragen, `recordAnswer`). `firstTryWrong`: Prüfen im ersten Versuch falsch
- * (dann zuerst der Zweitversuch). Ohne Lernermodell (`null`) gibt es kein `win` (kein Beleg für „bekannt“).
+ * (dann zuerst der Zweitversuch). Ohne Lernermodell (`null`) gibt es kein `win` (kein Beleg für „bekannt“). `noWin`: `win` ließ sich nicht
+ * umsetzen (keine bekannte Aufgabe, Ende des gezählten Teils) → die nächste Regel entscheidet.
  */
-export function decideMove(s: Session, m: LearnerModel | null, firstTryWrong: boolean): { move: Move; why: WhyCode } {
+export function decideMove(s: Session, m: LearnerModel | null, firstTryWrong: boolean, opts: { noWin?: boolean } = {}): { move: Move; why: WhyCode } {
   if (firstTryWrong) return { move: 'hint', why: 'mix' };
-  if (s.wrongRun >= WIN_AFTER && m && knownPatterns(m).length) return { move: 'win', why: 'known' };
-  if (s.lastMove !== 'explain' && lessonKey(s)) return { move: 'explain', why: 'supported' };
+  const explainOpen = s.lastMove !== 'explain' && !!lessonKey(s);
+  // Mini-Lektion vor `win`: Steht eine an, kommt sie zuerst (auch bei drei Fehlern in Folge).
+  if (!explainOpen && !opts.noWin && !s.won && s.wrongRun >= WIN_AFTER && m && knownPatterns(m).length) return { move: 'win', why: 'known' };
+  if (explainOpen) return { move: 'explain', why: 'supported' };
   const q = quota(s);
   if (q !== null && s.sinceShift >= SHIFT_EVERY) {
     if (q > QUOTA_HIGH && s.shift < 1) return { move: 'ask', why: 'freer' };
@@ -136,13 +174,17 @@ export function decideMove(s: Session, m: LearnerModel | null, firstTryWrong: bo
 export function applyMove(s: Session, d: { move: Move; why: WhyCode }): Session {
   if (d.move === 'hint') return s;
   const out: Session = { ...s, lastMove: d.move };
-  if (d.move === 'win') out.wrongRun = 0;
+  if (d.move === 'win') {
+    out.wrongRun = 0;
+    out.won = true;
+  }
   if (d.move === 'explain') {
     const k = lessonKey(s);
     if (k) {
       const sc = { ...s.sameCause };
       delete sc[`${k.pat}|${k.cause}`];
       out.sameCause = sc;
+      out.lessonPat = k.pat;
     }
   }
   if (d.move === 'ask' && d.why === 'freer') {
@@ -231,38 +273,46 @@ export function nextTasks(m: LearnerModel, pool: readonly GrammarTask[], slot: S
 
 // ------------------------------------------------------------------ „Warum diese Aufgabe?“
 
-/** Grund einer Aufgabe mit den Zahlen dazu (nur aus Daten; fehlt ein Wert, fehlt er im Satz). */
-export type WhyFact = { code: WhyCode; pat: string | null; topic: string; n?: number; ok?: number; days?: number; vs?: string };
+/** Datenbeleg als Zusatz („Passt dazu: …“): offene Fehlerannahme (`hyp`), Quote ohne Hilfe der letzten 28 Tage (`weakQ`), letzter Fehler (`weakD`). */
+export type WhyExtra = { k: 'hyp'; n: number; vs: string } | { k: 'weakQ'; n: number; ok: number } | { k: 'weakD'; days: number };
+/** Grund einer Aufgabe (ursächlich) und höchstens ein Datenbeleg als Zusatz; Zahlen nur aus Daten (fehlt ein Wert, fehlt er im Satz). */
+export type WhyFact = { code: WhyCode; pat: string | null; topic: string; days?: number; extra?: WhyExtra };
 
 const WEAK_RATE = 0.75;
 const WEAK_DAYS = 14;
-const chapterIndexOf = (topic: string): number => chapters().findIndex((c) => c.topics.includes(topic));
+
+const SLOT_CODE: Readonly<Record<TaskSlot, WhyCode>> = { intro: 'intro', chapter: 'chapter', focus: 'focus', need: 'need', family: 'family', chosen: 'chosen', mix: 'mix' };
+
+/** Datenbeleg zum Muster (nur Zusatz, nie der Grund): Annahme → schwache Quote (≥ 3 Antworten, unter 75 % ohne Hilfe) → Fehler in den letzten 14 Tagen. */
+function extraOf(pat: string | null, m: LearnerModel | null): WhyExtra | null {
+  if (!m || !pat) return null;
+  const hyp = m.hyps.find((h) => h.state === 'open' && h.from === pat);
+  if (hyp) return { k: 'hyp', n: hyp.n, vs: hyp.to };
+  const k = m.patterns.get(pat);
+  if (k && k.q28.n >= 3 && k.q28.ok / k.q28.n < WEAK_RATE) return { k: 'weakQ', n: k.q28.n, ok: k.q28.ok };
+  if (k && k.lastWrong) {
+    const days = daysBetween(dayKey(k.lastWrong), m.day);
+    if (days >= 0 && days <= WEAK_DAYS) return { k: 'weakD', days };
+  }
+  return null;
+}
 
 /**
- * „Warum diese Aufgabe?“ (S2): ein Grund aus echten Belegen. Reihenfolge: Zug der Sitzung (`mark`: known/freer/supported) → Fehlersatz (`due`,
- * mit Tagen) → offene Fehlerannahme zum Muster (`hyp`, mit Gegenmuster) → schwache Quote der letzten 28 Tage (`weak`, x von n) → Fehler in den
- * letzten 14 Tagen (`weak`, mit Tagen) → aktuelles Kapitel (`chapter`) → `mix` (Mischung, damit nichts einrostet).
+ * „Warum diese Aufgabe?“ (S2): der Grund, aus dem die Aufgabe wirklich in der Runde steht. Reihenfolge: Zug der Sitzung (`mark`: known/freer/
+ * supported) → Fehlersatz (`due`, mit Tagen) → Platz aus `selectRound` (`task.slot`) → ohne Platz `plan` („gehört zu deiner Runde“). Ein
+ * Datenbeleg, der die Wahl nicht ausgelöst hat, kommt nur als Zusatz (`extra`); beim Zug der Sitzung keiner.
  */
-export function whyOf(task: Pick<GrammarTask, 'topic' | 'pat' | 'errorT'>, m: LearnerModel | null, mark?: WhyCode | null): WhyFact {
+export function whyOf(task: Pick<GrammarTask, 'topic' | 'pat' | 'errorT' | 'slot'>, m: LearnerModel | null, mark?: WhyCode | null): WhyFact {
   const pat = task.pat ?? null;
   const base = { pat, topic: task.topic };
   if (mark) return { code: mark, ...base };
-  const today = m?.day ?? null;
+  const extra = extraOf(pat, m);
+  const plus = extra ? { extra } : {};
   if (task.errorT !== null) {
-    const days = today ? Math.max(0, daysBetween(dayKey(task.errorT), today)) : undefined;
-    return { code: 'due', ...base, ...(days !== undefined ? { days } : {}) };
+    const days = m ? Math.max(0, daysBetween(dayKey(task.errorT), m.day)) : undefined;
+    return { code: 'due', ...base, ...(days !== undefined ? { days } : {}), ...plus };
   }
-  if (!m) return { code: 'mix', ...base };
-  const k = pat ? m.patterns.get(pat) : undefined;
-  const hyp = pat ? m.hyps.find((h) => h.state === 'open' && h.from === pat) : undefined;
-  if (hyp) return { code: 'hyp', ...base, vs: hyp.to, n: hyp.n };
-  if (k && k.q28.n >= 3 && k.q28.ok / k.q28.n < WEAK_RATE) return { code: 'weak', ...base, n: k.q28.n, ok: k.q28.ok };
-  if (k && k.lastWrong) {
-    const days = daysBetween(dayKey(k.lastWrong), m.day);
-    if (days >= 0 && days <= WEAK_DAYS) return { code: 'weak', ...base, days };
-  }
-  if (m.goals.chapter !== null && chapterIndexOf(task.topic) === m.goals.chapter) return { code: 'chapter', ...base };
-  return { code: 'mix', ...base };
+  return { code: task.slot ? SLOT_CODE[task.slot] : 'plan', ...base, ...plus };
 }
 
 // ------------------------------------------------------------------ Mini-Lektion und Hinweisleiter
@@ -273,21 +323,34 @@ export const LESSON_MAX_LINES = 3;
 const firstSentence = (s: string): string => (s.trim().split(/(?<=[.!?])\s+/)[0] ?? s).trim();
 
 /**
- * Mini-Lektion (Rang 3): Regel in einem Satz, ein Beispiel aus dem Beruf, Kontrast nur mit Beleg (`proof`: Verwechslung in dieser Antwort oder
- * offene Annahme). Höchstens 3 Erklärzeilen (das Beispiel zählt mit); die Zielzeile (Muster) zählt nicht und kommt vom Aufrufer.
+ * Mini-Lektion (Rang 3): die eigene Antwort mit Grund (`own`: Zeile `yours` oder `mistake` der Rückmeldung, Pflichtfrage 3/4), die Regel in
+ * einem Satz, dann Kontrast nur mit Beleg (`proof`: Verwechslung in dieser Antwort oder offene Annahme), sonst ein Beispiel aus dem Beruf
+ * (Besprechung oder Mail zuerst). Höchstens 3 Erklärzeilen (das Beispiel zählt mit; es fällt zuerst weg); die Zielzeile (Muster) zählt nicht und
+ * kommt vom Aufrufer. Reihenfolge wie im Erklärmodell: yours → why → mistake → contrast.
  */
-export function miniLesson(p: Pick<Pattern, 'use' | 'ex' | 'contrast'>, proof: 'confuse' | 'hyp' | null, lang: 'de' | 'en'): { lines: ExplainLine[]; examples: ExplainExample[] } {
-  const lines: ExplainLine[] = [{ k: 'why', text: firstSentence(lang === 'de' ? p.use.de : p.use.en) }];
-  const ex = p.ex[0];
-  const examples: ExplainExample[] = ex ? [{ en: ex.en, ...(ex.de ? { de: ex.de } : {}), ctx: ex.ctx }] : [];
+export function miniLesson(
+  p: Pick<Pattern, 'use' | 'ex' | 'contrast'>,
+  proof: 'confuse' | 'hyp' | null,
+  lang: 'de' | 'en',
+  own: ExplainLine | null = null,
+): { lines: ExplainLine[]; examples: ExplainExample[] } {
+  const mine = own && (own.k === 'yours' || own.k === 'mistake') ? own : null;
+  const rule: ExplainLine = { k: 'why', text: firstSentence(lang === 'de' ? p.use.de : p.use.en) };
+  const lines: ExplainLine[] = mine?.k === 'yours' ? [mine, rule] : mine ? [rule, mine] : [rule];
   if (proof && p.contrast) lines.push({ k: 'contrast', a: p.contrast.a, b: p.contrast.b, diff: lang === 'de' ? p.contrast.diff.de : p.contrast.diff.en });
-  return { lines: lines.slice(0, LESSON_MAX_LINES - examples.length), examples };
+  const kept = lines.slice(0, LESSON_MAX_LINES);
+  const ex = p.ex.find((e) => e.ctx === 'meeting' || e.ctx === 'mail') ?? p.ex[0];
+  const examples: ExplainExample[] = ex && kept.length < LESSON_MAX_LINES ? [{ en: ex.en, ...(ex.de ? { de: ex.de } : {}), ctx: ex.ctx }] : [];
+  return { lines: kept, examples };
 }
 
-/** Hinweisleiter (Rang 1, vor dem Prüfen): 1 Leitfrage · 2 Formel · 3 erster Buchstabe (nur bei Lücken). */
+/**
+ * Hinweisleiter (Rang 1, vor dem Prüfen): 1 Leitfrage · 2 Formel · 3 erster Buchstabe (nur bei Lücken, deren Lösung das Feld zeigt: `gap`,
+ * `transform`). `kwt` hat keine dritte Stufe: Die Maske zeigt dort keinen Buchstaben, der Knopf hätte sonst keine Wirkung.
+ */
 export type HintStep = 'nudge' | 'formula' | 'firstLetter';
 export function hintLadder(task: Pick<GrammarTask, 'type' | 'prompt'>): readonly HintStep[] {
-  const gapLike = !CHOICE.has(task.type) && task.type !== 'find' && !wholeSentence(task) && (task.type === 'gap' || task.type === 'transform' || task.type === 'kwt');
+  const gapLike = (task.type === 'gap' || task.type === 'transform') && !wholeSentence(task);
   return gapLike ? ['nudge', 'formula', 'firstLetter'] : ['nudge', 'formula'];
 }
 export const maxHint = (task: Pick<GrammarTask, 'type' | 'prompt'>): number => hintLadder(task).length;
@@ -315,12 +378,13 @@ export type RoundMoveIn = {
 
 /**
  * Den Zug in der eingefrorenen Runde umsetzen (rein). Die Zahl der Aufgaben bleibt gleich (Pflicht wird leichter, nie kürzer); ersetzt wird nur
- * eine feste Aufgabe (nie ein Fehlersatz, nie im Wiederholungsteil). Rückgabe `at` = ersetzte Stelle (sonst `null`), `why` = Grund für die Anzeige.
+ * eine feste Aufgabe (nie ein Fehlersatz, nie im Wiederholungsteil). Rückgabe `at` = ersetzte Stelle (sonst `null`), `why` = Grund für die Anzeige,
+ * `displaced` = die verdrängte Aufgabe bei `win` (der Aufrufer nimmt sie vorrangig in die freiwillige Wiederholung auf).
  * - win: eine bekannte Aufgabe (anderes Muster als das gerade falsche) rückt an `pos`; dafür fällt die erste feste Aufgabe ab `pos` weg.
  * - explain: die nächste Aufgabe wird dasselbe Muster eine Stufe leichter.
  * - ask mit Verschiebung ≠ 0: passt die Form der nächsten Aufgabe nicht zur verschobenen Stufe, kommt dasselbe Muster in passender Form.
  */
-export function roundMove(i: RoundMoveIn): { tasks: GrammarTask[]; at: number | null; why: WhyCode | null } {
+export function roundMove(i: RoundMoveIn): { tasks: GrammarTask[]; at: number | null; why: WhyCode | null; displaced?: GrammarTask } {
   const same = { tasks: [...i.tasks], at: null, why: null };
   const cur = i.tasks[i.pos];
   if (!cur || i.pos >= i.end) return same;
@@ -340,9 +404,9 @@ export function roundMove(i: RoundMoveIn): { tasks: GrammarTask[]; at: number | 
     const p = pick('known', 0, i.pat ? { avoid: new Set([i.pat]) } : {});
     if (!p) return same;
     const out = [...i.tasks];
-    out.splice(j, 1);
+    const [displaced] = out.splice(j, 1);
     out.splice(i.pos, 0, p.task);
-    return { tasks: out, at: i.pos, why: 'known' };
+    return { tasks: out, at: i.pos, why: 'known', ...(displaced ? { displaced } : {}) };
   }
   if (cur.errorT !== null) return same;
   if (i.d.move === 'explain') {

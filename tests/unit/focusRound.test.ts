@@ -50,6 +50,13 @@ describe('Fokus-Thema bei eingefrorenem Plan', () => {
     expect(same).toEqual(selectRound(base({})).map((x) => x.key));
   });
 
+  it('Tutor S1: jede feste Aufgabe trägt ihren Platz (Fokus → focus), Fehlersätze keinen', () => {
+    const r = selectRound(base({ focusTopic }));
+    expect(r.filter((t) => t.topic === focusTopic).every((t) => t.slot === 'focus')).toBe(true);
+    expect(r.filter((t) => t.errorT === null).every((t) => !!t.slot)).toBe(true);
+    expect(r.filter((t) => t.errorT !== null).every((t) => t.slot === undefined)).toBe(true);
+  });
+
   it('das Thema des Tages (Einführung) bleibt: ein noch neues Fokus-Thema rückt nie vor', () => {
     const fresh = new Map(d);
     fresh.set(focusTopic, { n: 0 });

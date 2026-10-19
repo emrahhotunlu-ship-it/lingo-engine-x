@@ -38,7 +38,7 @@ import { JudgeFoot, type AiMsg, type TargetState } from './JudgeFoot';
 import { judge, readFitAlt, type Judgement } from '../../domain/tutor/judge';
 import { composeFeedback, contrastProof, type FeedbackAction } from '../../domain/tutor/feedback';
 import { factOf, maxHint, miniLesson } from '../../domain/tutor/policy';
-import { tutorPreview } from '../tutor/sessionStore';
+import { plantedOf, tutorPreview } from '../tutor/sessionStore';
 import type { Diagnosis } from '../../domain/tutor/diagnose';
 import type { Verdict as TutorVerdict } from '../../domain/tutor/tutorTypes';
 import { legacyNorm } from '../../domain/grammar/key';
@@ -578,13 +578,23 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     const m = out.model;
     // Tutor-Engine (S3, Rang 3): zweiter Fehler mit derselben Ursache am selben Muster → Mini-Lektion statt Abfrage (Vorschau; gebucht wird mit „Weiter“).
     if (tutorOn && pattern && fb.verdict === 'wrong' && !fb.override) {
+      // Wie die Buchung mit „Weiter“: Hilfe und Zweitversuch (`retry` steht genau dann, wenn es einen ersten Fehlversuch gab) gehen mit ein.
       const fact = factOf(
-        { task, verdict: fb.verdict, dontKnow: fb.dontKnow, ...(fb.dx && fb.dx.cause !== 'unknown' ? { tj: { v: 'w' as const, h: fb.dx.cause } } : {}) },
-        task.errorT === null,
+        {
+          task,
+          verdict: fb.verdict,
+          dontKnow: fb.dontKnow,
+          help: fb.help,
+          ...(retry ? { firstWrong: '' } : {}),
+          ...(fb.dx && fb.dx.cause !== 'unknown' ? { tj: { v: 'w' as const, h: fb.dx.cause } } : {}),
+        },
+        task.errorT === null && !plantedOf(task),
       );
       const model0 = learnerNow();
       if (tutorPreview(fact, model0).move === 'explain') {
-        const mini = miniLesson(pattern, contrastProof(fb.dx, patId, model0?.hyps ?? []), lang);
+        // Ziel → deine Antwort mit Grund (Pflichtfrage 3) → Regel → Kontrast oder Beispiel; höchstens 3 Zeilen ohne die Zielzeile.
+        const own = m.lines.find((l) => l.k === 'yours') ?? m.lines.find((l) => l.k === 'mistake') ?? null;
+        const mini = miniLesson(pattern, contrastProof(fb.dx, patId, model0?.hyps ?? []), lang, own);
         const goal = m.lines.filter((l) => l.k === 'pattern').slice(0, 1);
         return { model: { ...m, lines: [...goal, ...mini.lines], examples: mini.examples, ai: false }, action: 'next' as const, lesson: true };
       }
@@ -593,7 +603,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     const model = fb.picked === 'none' || fb.tapped === 'none' ? { ...m, lines: m.lines.map((l) => (l.k === 'yours' && l.given === 'none' ? { ...l, given: t('exNoError') } : l)) } : m;
     return { model, action: out.action, lesson: false };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fb, lang, learning, task, findTask, stage, patId, noHelp, tutorOn]);
+  }, [fb, lang, learning, task, findTask, stage, patId, noHelp, tutorOn, retry]);
   const lesson = composed?.lesson ?? false;
   const model = composed?.model ?? null;
 

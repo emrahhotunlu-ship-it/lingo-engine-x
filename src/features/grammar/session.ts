@@ -47,7 +47,7 @@ import { allTrainCards } from '../vocab/session';
 import { wordsToday } from '../../domain/metrics';
 import { factOf, roundMove, type Move, type WhyCode } from '../../domain/tutor/policy';
 import { learnerNow } from '../tutor/learnerLive';
-import { markTask, tutorRecord, tutorRoundStart, useTutorSession } from '../tutor/sessionStore';
+import { markTask, plantedOf, tutorRecord, tutorRoundStart, useTutorSession } from '../tutor/sessionStore';
 
 // Eine Grammatikrunde (phase2-plan §5.2): die Aufgaben werden synchron im Klick zusammengestellt
 // (Tastatur am iPhone) und für die Runde eingefroren. Jede bewertete Antwort geht sofort über
@@ -129,6 +129,8 @@ type State = {
   prep: boolean;
   /** Feste Aufgabenfolge (Themen-Test, Kontrast-Runde, Runde einer c1x-Art): die Tutor-Engine ersetzt dort nichts. */
   fixed?: boolean;
+  /** Von `win` verdrängte Aufgaben (Tutor-Engine S3): kommen vorrangig in die freiwillige Wiederholung am Ende. */
+  displaced?: GrammarTask[];
 };
 
 export type TestState = { topic: string; n: number; result: { c: number; n: number; ok: boolean } | null };
@@ -360,7 +362,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
     before,
     patLog: [],
   };
-  useGrammarSession.setState({ ...next, fixed: !!(test || o.tasks?.length || o.kind) });
+  useGrammarSession.setState({ ...next, fixed: !!(test || o.tasks?.length || o.kind), displaced: [] });
   tutorRoundStart(day, ctx === 'duty');
   return tasks.length ? firstKind({ tasks, intro }) : null;
 }
@@ -467,6 +469,12 @@ export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
     const wrong = new Set(results.filter((r) => !r.ok).map((r) => r.key));
     const used = new Set(tasks.map((t) => t.key));
     const again: GrammarTask[] = [];
+    // Von `win` verdrängte Aufgaben zuerst (sie kamen heute sonst nicht mehr dran), dann die falschen.
+    for (const t of s.displaced ?? []) {
+      if (again.length >= REPEAT_MAX || used.has(t.key)) continue;
+      used.add(t.key);
+      again.push(t);
+    }
     for (const t of tasks.filter((x) => wrong.has(x.key))) {
       if (again.length >= REPEAT_MAX) break;
       // Eine ungesehene Variante desselben Musters statt derselben Aufgabe (§4.7). Ohne Muster gilt nur in Plänen der alten Regel dieselbe Aufgabe.
@@ -489,7 +497,9 @@ export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
   // Tutor-Engine (S3): Zug nach der Antwort (bekannte Aufgabe nach 3 Fehlern, Mini-Lektion, Stufenwechsel). Nie im Vortest, Themen-Test, in der
   // Wiederholung am Ende oder in einer festen Aufgabenfolge; ersetzt wird an Ort und Stelle, die Runde wird nie kürzer.
   const acted = !repeating && !inVortest(s) && !(s.test && s.pos < s.test.n) ? tutorStep(s, next, a, done) : false;
-  if (!acted && !done && !inRepeat(next) && !cardsDue(next) && !(test && pos < test.n)) {
+  // Hat die Tutor-Engine die Runde schon eine Stufe gestützter gestellt (−1), greift die alte Rückstufung nicht zusätzlich (nicht doppelt erleichtern).
+  const eased = !next.fixed && useTutorSession.getState().s.shift === -1;
+  if (!acted && !eased && !done && !inRepeat(next) && !cardsDue(next) && !(test && pos < test.n)) {
     // Rückstufung: zwei Fehlschläge in Folge im Thema der nächsten Aufgabe → eine Form leichter (nur in dieser Runde), gleiches Muster.
     const live = useLive.getState();
     const nextTask = tasks[pos];
@@ -526,7 +536,8 @@ function seenAll(): Set<string> {
  * (dann keine zusätzliche Rückstufung). Ohne Lernermodell zählt die Sitzung mit, ersetzt wird nichts.
  */
 function tutorStep(s: State, next: State, a: GrammarAnswer, done: boolean): boolean {
-  const fresh = a.task.errorT === null && !a.task.c1;
+  // Von der Engine absichtlich leicht eingesetzte Aufgaben (`win`, nach `explain`) zählen nicht für die Quote (sie würden sie nach oben ziehen).
+  const fresh = a.task.errorT === null && !a.task.c1 && !plantedOf(a.task);
   const m = learnerNow();
   const open = !done && !next.fixed && !inRepeat(next) && !cardsDue(next) && !!m;
   const end = next.repeatAt ?? next.tasks.length;
@@ -542,8 +553,9 @@ function tutorStep(s: State, next: State, a: GrammarAnswer, done: boolean): bool
   if (!r || r.at === null) return false;
   const t = r.tasks[r.at] as GrammarTask;
   next.tasks = r.tasks;
+  if (r.displaced) next.displaced = [...(next.displaced ?? []), r.displaced];
   if (t.pat && !(t.pat in next.before)) next.before = { ...next.before, [t.pat]: patsOf(useLive.getState().collections.grammar?.get(t.topic))[t.pat] };
-  if (r.why) markTask(t, r.why);
+  if (r.why) markTask(t, r.why, d.move === 'win' || d.move === 'explain');
   return true;
 }
 
@@ -593,14 +605,15 @@ export type GrammarSnap = Pick<State, 'status' | 'mode' | 'topic' | 'ctx' | 'day
   patLog?: State['patLog'];
   test?: TestState | null;
   fixed?: boolean;
+  displaced?: GrammarTask[];
 };
 
 /** Momentaufnahme der laufenden Runde (Aufgaben, Position, Ergebnisse); Antworten liegen schon in der db. */
 export function grammarSnapshot(): GrammarSnap | null {
   const s = useGrammarSession.getState();
   if (!s.active || !s.tasks.length) return null;
-  const { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt, intro, profile, rv, before, patLog, test, fixed } = s;
-  return { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt, intro, profile, rv, before, patLog, test, ...(fixed ? { fixed } : {}) };
+  const { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt, intro, profile, rv, before, patLog, test, fixed, displaced } = s;
+  return { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt, intro, profile, rv, before, patLog, test, ...(fixed ? { fixed } : {}), ...(displaced?.length ? { displaced } : {}) };
 }
 
 const legacyIntro = (topic: string): IntroState => ({ topic, pats: [], fresh: true, vtN: 0, cards: 'pending', passed: null, alt: [], blockAt: 0, blockLen: 0 });
@@ -622,6 +635,7 @@ export function restoreGrammar(snap: GrammarSnap): boolean {
     test: snap.test && typeof snap.test === 'object' && typeof snap.test.topic === 'string' && typeof snap.test.n === 'number' ? snap.test : null,
     prep: false,
     fixed: !!(snap.test && typeof snap.test === 'object') || !!snap.fixed,
+    displaced: Array.isArray(snap.displaced) ? snap.displaced : [],
     active: true,
     step: useGrammarSession.getState().step + 1,
     startedAt: performance.now(),

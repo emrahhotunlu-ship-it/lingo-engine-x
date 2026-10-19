@@ -70,22 +70,30 @@ const task = (key: string, pat: string | null, type: GrammarTaskType = 'gap', ex
   pat,
   ...extra,
 });
-const fact = (f: Partial<AnswerFact>): AnswerFact => ({ typed: true, wrong: false, ok: true, fresh: true, pat: 'a', cause: null, ...f });
+const fact = (f: Partial<AnswerFact>): AnswerFact => ({ typed: true, wrong: false, ok: true, fresh: true, pat: 'a', cause: null, blind: false, ...f });
 const feed = (s: Session, fs: AnswerFact[]): Session => fs.reduce(recordAnswer, s);
 
 describe('factOf', () => {
+  const h0 = { level: 0 as const };
   it('getippt, falsch, Quote ohne Hilfe, Ursache', () => {
     const t = task('k1', 'a');
-    expect(factOf({ task: t, verdict: 'wrong', dontKnow: false, tj: { v: 'w', h: 'tense' } }, true)).toEqual({ typed: true, wrong: true, ok: false, fresh: true, pat: 'a', cause: 'tense' });
-    expect(factOf({ task: t, verdict: 'near', dontKnow: false }, true).wrong).toBe(false);
-    expect(factOf({ task: t, verdict: 'correct', dontKnow: false, firstWrong: 'x' }, true)).toMatchObject({ wrong: false, ok: false });
-    expect(factOf({ task: t, verdict: 'correct', dontKnow: true }, false)).toMatchObject({ wrong: true, fresh: false });
+    expect(factOf({ task: t, verdict: 'wrong', dontKnow: false, help: h0, tj: { v: 'w', h: 'tense' } }, true)).toEqual({ typed: true, wrong: true, ok: false, fresh: true, pat: 'a', cause: 'tense', blind: false });
+    expect(factOf({ task: t, verdict: 'near', dontKnow: false, help: h0 }, true).wrong).toBe(false);
+    expect(factOf({ task: t, verdict: 'correct', dontKnow: false, help: h0 }, true).ok).toBe(true);
+    expect(factOf({ task: t, verdict: 'correct', dontKnow: false, help: h0, firstWrong: 'x' }, true)).toMatchObject({ wrong: false, ok: false });
+    expect(factOf({ task: t, verdict: 'correct', dontKnow: true, help: h0 }, false)).toMatchObject({ wrong: true, fresh: false, blind: true });
+    expect(factOf({ task: t, verdict: 'correct', dontKnow: true, help: h0, firstWrong: 'x' }, false).blind).toBe(false);
+  });
+  it('M1: mit Hilfe (Tipp, erster Buchstabe) zählt nicht als „richtig ohne Hilfe“', () => {
+    const t = task('k1', 'a');
+    expect(factOf({ task: t, verdict: 'correct', dontKnow: false, help: { level: 1 } }, true)).toMatchObject({ wrong: false, ok: false });
+    expect(factOf({ task: t, verdict: 'correct', dontKnow: false, help: { level: 2 } }, true).ok).toBe(false);
   });
   it('Auswahl zählt nicht als getippt; c1x nur mit free', () => {
-    expect(factOf({ task: task('k', 'a', 'mc'), verdict: 'wrong', dontKnow: false }, true).typed).toBe(false);
-    expect(factOf({ task: task('k', 'a', 'meaning'), verdict: 'wrong', dontKnow: false }, true).typed).toBe(false);
-    expect(factOf({ task: task('k', 'a', 'gap'), verdict: 'wrong', dontKnow: false, c1k: 'kwt' }, true).typed).toBe(false);
-    expect(factOf({ task: task('k', 'a', 'gap'), verdict: 'wrong', dontKnow: false, c1k: 'kwt', free: true }, true).typed).toBe(true);
+    expect(factOf({ task: task('k', 'a', 'mc'), verdict: 'wrong', dontKnow: false, help: h0 }, true).typed).toBe(false);
+    expect(factOf({ task: task('k', 'a', 'meaning'), verdict: 'wrong', dontKnow: false, help: h0 }, true).typed).toBe(false);
+    expect(factOf({ task: task('k', 'a', 'gap'), verdict: 'wrong', dontKnow: false, help: h0, c1k: 'kwt' }, true).typed).toBe(false);
+    expect(factOf({ task: task('k', 'a', 'gap'), verdict: 'wrong', dontKnow: false, help: h0, c1k: 'kwt', free: true }, true).typed).toBe(true);
   });
 });
 
@@ -113,6 +121,26 @@ describe('recordAnswer und quota', () => {
     s = recordAnswer(s, fact({ wrong: false }));
     expect(s.wrongRun).toBe(0);
   });
+  it('S3: „Weiß ich nicht“ ohne Tippversuch verlängert die Serie nicht', () => {
+    let s = feed(newSession(true), [fact({ wrong: true, ok: false }), fact({ wrong: true, ok: false })]);
+    s = feed(s, [fact({ wrong: true, ok: false, blind: true }), fact({ wrong: true, ok: false, blind: true })]);
+    expect(s.wrongRun).toBe(2);
+    expect(s.lastNew20).toEqual([false, false, false, false]);
+    s = recordAnswer(s, fact({ wrong: true, ok: false }));
+    expect(s.wrongRun).toBe(3);
+  });
+  it('K4: Erfolg nach Mini-Lektion wird beobachtet (nächste Antwort zum Muster)', () => {
+    let s = feed(newSession(true), [fact({ wrong: true, cause: 'tense' }), fact({ wrong: true, cause: 'tense' })]);
+    s = applyMove(s, { move: 'explain', why: 'supported' });
+    expect(s.lessonPat).toBe('a');
+    s = recordAnswer(s, fact({ pat: 'b' }));
+    expect(s.afterLesson).toEqual({ n: 0, ok: 0 });
+    s = recordAnswer(s, fact({ pat: 'a' }));
+    expect(s.afterLesson).toEqual({ n: 1, ok: 1 });
+    expect(s.lessonPat).toBeNull();
+    s = recordAnswer(s, fact({ pat: 'a', ok: false }));
+    expect(s.afterLesson).toEqual({ n: 1, ok: 1 });
+  });
   it('gleiche Ursache je Muster; Tippfehler und unklar zählen nicht', () => {
     const s = feed(newSession(true), [fact({ wrong: true, cause: 'tense' }), fact({ wrong: true, cause: 'typo' }), fact({ wrong: true, cause: 'unknown' }), fact({ wrong: true, cause: 'tense', pat: 'b' }), fact({ wrong: false, cause: 'tense' })]);
     expect(s.sameCause).toEqual({ 'a|tense': 1, 'b|tense': 1 });
@@ -135,6 +163,23 @@ describe('decideMove', () => {
     const two = feed(newSession(true), [fact({ wrong: true }), fact({ wrong: true, pat: 'b' })]);
     expect(decideMove(two, m, false).move).toBe('ask');
     expect(applyMove(wrong3, { move: 'win', why: 'known' }).wrongRun).toBe(0);
+  });
+  it('S3: win höchstens einmal je Runde; noWin → nächste Regel', () => {
+    const won = applyMove(wrong3, { move: 'win', why: 'known' });
+    expect(won.won).toBe(true);
+    const again = feed(won, [fact({ wrong: true }), fact({ wrong: true, pat: 'b' }), fact({ wrong: true, pat: 'c' })]);
+    expect(again.wrongRun).toBe(3);
+    expect(decideMove(again, m, false).move).toBe('ask');
+    expect(decideMove(wrong3, m, false, { noWin: true }).move).toBe('ask');
+    expect(newSession(true).won).toBe(false);
+  });
+  it('S2: Mini-Lektion hat Vorrang vor win (drei Fehler, davon zwei mit derselben Ursache)', () => {
+    const s = feed(newSession(true), [fact({ wrong: true, cause: 'tense' }), fact({ wrong: true, pat: 'b' }), fact({ wrong: true, cause: 'tense' })]);
+    expect(s.wrongRun).toBe(3);
+    expect(decideMove(s, m, false)).toEqual({ move: 'explain', why: 'supported' });
+    // Nach der Mini-Lektion (nie zweimal hintereinander) darf win kommen.
+    const after = feed(applyMove(s, { move: 'explain', why: 'supported' }), [fact({ wrong: true, cause: 'tense', pat: 'c' }), fact({ wrong: true, cause: 'tense', pat: 'c' })]);
+    expect(decideMove(after, m, false).move).toBe('win');
   });
   it('Rang 3: zwei Fehler mit derselben Ursache → explain, nie zweimal hintereinander', () => {
     const s = feed(newSession(true), [fact({ wrong: true, cause: 'tense' }), fact({ wrong: false }), fact({ wrong: true, cause: 'tense' })]);
@@ -245,6 +290,7 @@ describe('roundMove', () => {
     expect(r.tasks.map((t) => t.key)).toEqual(['a1', 'k1', 'a9']);
     expect(r.at).toBe(1);
     expect(r.why).toBe('known');
+    expect(r.displaced?.key).toBe('b1');
   });
   it('win ersetzt nie einen Fehlersatz und nie im Wiederholungsteil', () => {
     const err = task('e1', 'b', 'gap', { errorT: at('2026-10-01') });
@@ -282,50 +328,61 @@ describe('roundMove', () => {
 });
 
 describe('whyOf', () => {
-  const ch = chapters().findIndex((c) => c.topics.length > 0);
-  const chTopic = chapters()[ch]?.topics[0] ?? 'tp';
-  it('Zug der Sitzung zuerst', () => {
-    expect(whyOf(task('k', 'a'), null, 'known')).toEqual({ code: 'known', pat: 'a', topic: 'tp' });
+  const hyp = { id: 'h', from: 'a', to: 'b', l1: null, n: 4, days: 3, lastT: 0, state: 'open' as const, ev: [] };
+  it('Zug der Sitzung zuerst, ohne Zusatz', () => {
+    expect(whyOf(task('k', 'a'), model([know('a', 0.5)], { hyps: [hyp] }), 'known')).toEqual({ code: 'known', pat: 'a', topic: 'tp' });
   });
   it('Fehlersatz mit Tagen (ohne Modell ohne Tage)', () => {
     const t = task('e', 'a', 'gap', { errorT: at('2026-10-16') });
     expect(whyOf(t, model([]))).toMatchObject({ code: 'due', days: 3 });
     expect(whyOf(t, null)).toEqual({ code: 'due', pat: 'a', topic: 'tp' });
   });
-  it('offene Fehlerannahme, schwache Quote, Fehler in 14 Tagen, Kapitel, Mischung', () => {
-    const hyp = { id: 'h', from: 'a', to: 'b', l1: null, n: 4, days: 3, lastT: 0, state: 'open' as const, ev: [] };
-    expect(whyOf(task('k', 'a'), model([know('a', 0.5)], { hyps: [hyp] }))).toMatchObject({ code: 'hyp', vs: 'b', n: 4 });
-    expect(whyOf(task('k', 'a'), model([know('a', 0.5, { q28: { n: 9, ok: 4 } })]))).toMatchObject({ code: 'weak', n: 9, ok: 4 });
-    expect(whyOf(task('k', 'a'), model([know('a', 0.5, { q28: { n: 9, ok: 8 }, lastWrong: at('2026-10-18') })]))).toMatchObject({ code: 'weak', days: 1 });
-    expect(whyOf(task('k', 'a'), model([know('a', 0.5, { lastWrong: at('2026-09-01') })])).code).toBe('mix');
-    expect(whyOf(task('k', 'a', 'gap', { topic: chTopic }), model([], { goals: { chapter: ch, c1: [], ctx: null } })).code).toBe('chapter');
-    expect(whyOf(task('k', 'a'), model([])).code).toBe('mix');
-    expect(whyOf(task('k', 'a'), null).code).toBe('mix');
+  it('S1: der Platz aus selectRound ist der Grund; ohne Platz „gehört zu deiner Runde“', () => {
+    for (const slot of ['intro', 'chapter', 'focus', 'need', 'family', 'chosen', 'mix'] as const) expect(whyOf(task('k', 'a', 'gap', { slot }), model([])).code).toBe(slot);
+    expect(whyOf(task('k', 'a'), model([])).code).toBe('plan');
+    expect(whyOf(task('k', 'a'), null)).toEqual({ code: 'plan', pat: 'a', topic: 'tp' });
+  });
+  it('S1: Datenbelege nur als Zusatz: Annahme, schwache Quote, Fehler in 14 Tagen', () => {
+    const t = task('k', 'a', 'gap', { slot: 'chapter' });
+    expect(whyOf(t, model([know('a', 0.5)], { hyps: [hyp] }))).toEqual({ code: 'chapter', pat: 'a', topic: 'tp', extra: { k: 'hyp', n: 4, vs: 'b' } });
+    expect(whyOf(t, model([know('a', 0.5, { q28: { n: 9, ok: 4 } })])).extra).toEqual({ k: 'weakQ', n: 9, ok: 4 });
+    expect(whyOf(t, model([know('a', 0.5, { q28: { n: 9, ok: 8 }, lastWrong: at('2026-10-18') })])).extra).toEqual({ k: 'weakD', days: 1 });
+    expect(whyOf(t, model([know('a', 0.5, { lastWrong: at('2026-09-01') })])).extra).toBeUndefined();
+    const e = task('e', 'a', 'gap', { errorT: at('2026-10-16') });
+    expect(whyOf(e, model([know('a', 0.5, { q28: { n: 9, ok: 4 } })]))).toMatchObject({ code: 'due', days: 3, extra: { k: 'weakQ' } });
   });
   it('wenig Daten: keine Quote unter 3 Antworten', () => {
-    expect(whyOf(task('k', 'a'), model([know('a', 0.5, { q28: { n: 2, ok: 0 } })])).code).toBe('mix');
+    expect(whyOf(task('k', 'a'), model([know('a', 0.5, { q28: { n: 2, ok: 0 } })])).extra).toBeUndefined();
   });
 });
 
 describe('whyText und proofText', () => {
   it('jeder Grund ergibt einen Satz in beiden Sprachen, Zahlen nur aus dem Fakt', () => {
-    expect(whyText({ code: 'weak', pat: 'a', topic: 'tp', n: 9, ok: 4 }, 'de')).toContain('4 von 9');
-    expect(whyText({ code: 'weak', pat: 'a', topic: 'tp', n: 9, ok: 4 }, 'en')).toContain('4 of 9');
     expect(whyText({ code: 'due', pat: 'a', topic: 'tp', days: 3 }, 'de')).toContain('vor 3 Tagen');
     expect(whyText({ code: 'due', pat: 'a', topic: 'tp' }, 'en')).not.toMatch(/\d/);
     expect(whyText({ code: 'known', pat: 'a', topic: 'tp' }, 'de')).toBe('Kurz etwas Bekanntes, dann weiter.');
-    for (const code of ['due', 'weak', 'chapter', 'mix', 'known', 'freer', 'supported', 'hyp'] as const)
+    for (const code of ['due', 'intro', 'chapter', 'focus', 'need', 'family', 'chosen', 'mix', 'plan', 'known', 'freer', 'supported'] as const)
       for (const lang of ['de', 'en'] as const) {
         const s = whyText({ code, pat: 'a', topic: 'tp' }, lang);
         expect(s.length).toBeGreaterThan(10);
         expect(s).not.toMatch(/\{|\}|undefined/);
       }
   });
-  it('Gebrauchsmuster und Fortschrittsbeleg', () => {
+  it('S1: Zusatz „Passt dazu“ steht hinter dem Grund, nie als Grund', () => {
+    const de = whyText({ code: 'chapter', pat: 'a', topic: 'tp', extra: { k: 'weakQ', n: 9, ok: 4 } }, 'de');
+    expect(de).toContain('Passt dazu');
+    expect(de).toContain('4 von 9');
+    expect(de.indexOf('Passt dazu')).toBeGreaterThan(0);
+    expect(whyText({ code: 'chapter', pat: 'a', topic: 'tp', extra: { k: 'weakQ', n: 9, ok: 4 } }, 'en')).toContain('4 of 9');
+    for (const extra of [{ k: 'hyp', n: 4, vs: 'b' }, { k: 'weakD', days: 0 }, { k: 'weakD', days: 1 }, { k: 'weakD', days: 5 }] as const)
+      for (const lang of ['de', 'en'] as const) expect(whyText({ code: 'plan', pat: 'a', topic: 'tp', extra }, lang)).not.toMatch(/\{|\}|undefined/);
+    expect(whyText({ code: 'plan', pat: 'a', topic: 'tp' }, 'de')).not.toContain('Passt dazu');
+  });
+  it('Gebrauchsmuster und Fortschrittsbeleg (M2: „ohne Hilfe richtig“)', () => {
     expect(refName('use:depend+on', 'de')).toBe('depend on');
     expect(refName('unbekannt', 'en')).toBe('unbekannt');
-    expect(proofText('x', { thenOk: 4, thenN: 9, nowOk: 8, nowN: 9, weeks: 3, trend: 'up' }, 'de')).toBe('x: vor 3 Wochen 4 von 9, jetzt 8 von 9.');
-    expect(proofText('x', { thenOk: 4, thenN: 9, nowOk: 8, nowN: 9, weeks: 3, trend: 'up' }, 'en')).toBe('x: 3 weeks ago 4 of 9, now 8 of 9.');
+    expect(proofText('x', { thenOk: 4, thenN: 9, nowOk: 8, nowN: 9, weeks: 3, trend: 'up' }, 'de')).toBe('x: vor 3 Wochen 4 von 9 ohne Hilfe richtig, jetzt 8 von 9.');
+    expect(proofText('x', { thenOk: 4, thenN: 9, nowOk: 8, nowN: 9, weeks: 3, trend: 'up' }, 'en')).toBe('x: 3 weeks ago 4 of 9 right without help, now 8 of 9.');
   });
 });
 
@@ -347,6 +404,25 @@ describe('miniLesson und Hinweisleiter', () => {
       }
     expect(patternById(real.id)).not.toBeNull();
   });
+  it('S4: die eigene Antwort bleibt (yours vor der Regel, mistake danach); das Beispiel fällt zuerst weg', () => {
+    expect(real).toBeTruthy();
+    if (!real) return;
+    const yours = { k: 'yours' as const, given: 'did', text: 'Du hast „did“ geschrieben.' };
+    const a = miniLesson(real, 'confuse', 'de', yours);
+    expect(a.lines.map((x) => x.k)).toEqual(['yours', 'why', 'contrast']);
+    expect(a.examples).toEqual([]);
+    const b = miniLesson(real, null, 'de', yours);
+    expect(b.lines.map((x) => x.k)).toEqual(['yours', 'why']);
+    expect(b.examples).toHaveLength(1);
+    const mistake = { k: 'mistake' as const, bad: 'did', good: 'have done', cause: null };
+    expect(miniLesson(real, null, 'en', mistake).lines.map((x) => x.k)).toEqual(['why', 'mistake']);
+    expect(miniLesson(real, null, 'en', { k: 'why', text: 'x' }).lines.map((x) => x.k)).toEqual(['why']);
+  });
+  it('K3: Beispiel aus Besprechung oder Mail zuerst', () => {
+    const p = { use: { de: 'Regel.', en: 'Rule.' }, contrast: null, ex: [{ en: 'Small talk.', ctx: 'small' }, { en: 'Per my mail.', ctx: 'mail' }] };
+    expect(miniLesson(p as never, null, 'en').examples[0]?.en).toBe('Per my mail.');
+    expect(miniLesson({ ...p, ex: [p.ex[0]] } as never, null, 'en').examples[0]?.en).toBe('Small talk.');
+  });
   it('Regel in einem Satz', () => {
     const l = miniLesson({ use: { de: 'Erster Satz. Zweiter Satz.', en: 'First one. Second one.' }, ex: [], contrast: null } as never, null, 'en');
     expect(l.lines).toEqual([{ k: 'why', text: 'First one.' }]);
@@ -359,6 +435,9 @@ describe('miniLesson und Hinweisleiter', () => {
     expect(maxHint(task('m', 'a', 'mc'))).toBe(2);
     expect(maxHint(task('f', 'a', 'find'))).toBe(2);
     expect(maxHint(task('w', 'a', 'gap', { prompt: 'Whole sentence without gap.' }))).toBe(2);
+    expect(maxHint(task('t', 'a', 'transform'))).toBe(3);
+    // S5: kwt zeigt in der Maske keinen Buchstaben → keine dritte Stufe.
+    expect(hintLadder(task('w', 'a', 'kwt', { prompt: 'It ___ late.' }))).toEqual(['nudge', 'formula']);
   });
 });
 

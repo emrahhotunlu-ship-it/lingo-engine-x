@@ -75,7 +75,7 @@ test('„Warum diese Aufgabe?“: ein Satz aus den Daten, auf- und zuklappbar, a
   await expect(btn).toHaveAttribute('aria-expanded', 'true');
   const line = page.getByTestId('why-line');
   await expect(line).toBeVisible();
-  await expect(line).toHaveAttribute('data-code', /^(due|weak|chapter|mix|hyp)$/);
+  await expect(line).toHaveAttribute('data-code', /^(due|intro|chapter|focus|need|family|chosen|mix|plan)$/);
   expect(((await line.innerText()) ?? '').length).toBeGreaterThan(15);
   await expect(line).not.toContainText('{');
   await btn.click();

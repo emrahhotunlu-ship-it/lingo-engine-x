@@ -28,14 +28,15 @@ export { wordFest, wordStatus, wordTier } from './learnerWords';
 //
 // Quellen und Ableitung:
 //   patterns  je Muster aller Themen mit Musterdatei: p (Thema-p als Vorwissen, mit den letzten ≤ 5 Ergebnissen des Musters verrechnet),
-//             Sicherheit 0–5 (`certainty`), Quote der letzten 28 Tage aus dem Protokoll (nur getippte feste Aufgaben, keine Claude-Aufgaben),
+//             Sicherheit 0–5 (`certainty`), Quote der letzten 28 Tage aus dem Protokoll (nur getippte feste Aufgaben, keine Claude-Aufgaben;
+//             richtig = sauber ohne Hilfe, „Weiß ich nicht“ zählt als falsch),
 //             freie Tage (getippt richtig: Protokoll ∪ `pats.dd`),
 //             letzter Fehler (Protokoll und Fehlersätze), Zustand (`patternState`, die eine Stelle dafür).
 //   words     je Vokabel über `toTrainCard` + `cardStatus` (die eine Stelle für den Wortstatus); ausgeblendete Karten fehlen.
 //   uses      Gebrauchsmuster `use:<erstes>+<letztes Wort>` aus den Wendungen der Karten (`col`), belegt durch eigene Sätze (`act/…`) und Fehlerbelege.
 //   hyps      Fehlerannahmen (`hypotheses.ts`, §3.3).
 //   pace      Median der Antwortzeit je Aufgabenart (`g:<art>`, `v:<modus>`), nur 0 < ms ≤ 60 s.
-//   proofs    Fortschrittsbeleg je Muster (`progressProof`): „vor 3 Wochen 4 von 9, jetzt 8 von 9“, nur aus getippten Antworten im Protokoll.
+//   proofs    Fortschrittsbeleg je Muster (`progressProof`): „vor 3 Wochen 4 von 9 ohne Hilfe richtig, jetzt 8 von 9“, nur aus getippten Antworten im Protokoll.
 //   goals     aktuelles Kapitel (`currentChapter`, `null`, solange kein Muster eingeführt ist), C1-Ziele (folgen mit S3), Berufsprofil (`ctx2`).
 
 type Doc = Readonly<Record<string, unknown>>;
@@ -137,8 +138,14 @@ const ACT_BY_DOC = new WeakMap<object, { path: string; v: ActEntry[] }>();
 /** Getippte Aufgabenarten (keine Auswahl, kein Bedeutungspaar, kein Antippen). */
 const TYPED: ReadonlySet<string> = new Set(['gap', 'transform', 'correct', 'kwt', 'ocl', 'err']);
 
-/** `typed`: getippte feste Aufgabe (für die 28-Tage-Quote, §1.1) · `free`: getippt richtig, ohne Übersteuerung (freier Tag). */
-type GRow = { t: number; day: string; pat: string | null; ok: boolean; typed: boolean; free: boolean };
+/**
+ * `typed`: getippte feste Aufgabe mit bekannter Note (zählt für die 28-Tage-Quote und den Fortschrittsbeleg, §1.1); „Weiß ich nicht“ bei
+ * getippten Aufgabenarten zählt mit (als falsch). `clean`: richtig ohne Hilfe, also ohne „Zählt“ und mit Note mindestens „Gut“ (keine
+ * Hilfe ab dem ersten Buchstaben, kein Zweitversuch, nicht zu langsam). `free`: getippt richtig, ohne Übersteuerung (freier Tag).
+ */
+type GRow = { t: number; day: string; pat: string | null; ok: boolean; typed: boolean; clean: boolean; free: boolean };
+/** Mindestnote einer sauberen Antwort (3 = „Gut“; Hilfe ab H2 und der Zweitversuch geben höchstens 2, `domain/grade`). */
+const CLEAN_GRADE = 3;
 type LogDigest = { g: GRow[]; pace: Array<[string, number]> };
 
 function patOfEntry(e: Doc): string | null {
@@ -167,9 +174,13 @@ function logDigest(path: string, doc: Doc, sig: string): LogDigest {
       }
       if (k !== 'g') continue;
       const given = str(e.given);
-      const typed = (TYPED.has(str(e.type)) || e.free === true) && given !== DONT_KNOW;
-      const free = typed && e.ok === true && e.override !== true;
-      g.push({ t, day: dayKey(t), pat: patOfEntry(e), ok: e.ok === true, typed: typed && e.ai !== true, free });
+      const dk = given === DONT_KNOW;
+      const kind = TYPED.has(str(e.type)) || e.free === true;
+      const free = kind && !dk && e.ok === true && e.override !== true;
+      const clean = e.ok === true && e.override !== true && num(e.g) >= CLEAN_GRADE;
+      // Ohne Note (nur bei sehr alten Zeilen denkbar) ist „sauber“ nicht bekannt: eine richtige Antwort ohne Note zählt dann nirgends mit.
+      const graded = e.ok !== true || num(e.g) > 0;
+      g.push({ t, day: dayKey(t), pat: patOfEntry(e), ok: e.ok === true, typed: kind && graded && e.ai !== true, clean, free });
     }
     return { g, pace };
   });
@@ -341,31 +352,35 @@ const bitsOf = (e: PatEntry | undefined): number[] => {
 
 /** Je Fenster höchstens so viele Antworten (die jüngsten) und mindestens so viele, sonst kein Beleg. */
 export const PROOF_MAX = 9;
-export const PROOF_MIN = 4;
+export const PROOF_MIN = 6;
 const PROOF_NOW_DAYS = 7;
 const PROOF_GAP_DAYS = 14;
-/** Ab diesem Unterschied der Quoten (20 Prozentpunkte) gilt der Verlauf als besser bzw. schlechter. */
+/** Ab diesem Unterschied der Quoten (20 Prozentpunkte) UND mindestens `PROOF_STEP` sauberen Antworten mehr bzw. weniger gilt der Verlauf als besser bzw. schlechter. */
 const PROOF_TREND = 0.2;
+export const PROOF_STEP = 2;
 
 const dayDiff = (a: string, b: string): number => Math.round((Date.parse(`${b}T12:00:00Z`) - Date.parse(`${a}T12:00:00Z`)) / 86_400_000);
 
 /**
- * Fortschrittsbeleg aus Antwortzeilen eines Musters (rein). Gezählt werden nur getippte Antworten (`typed`); `null`, wenn eines der beiden
- * Fenster weniger als `PROOF_MIN` Antworten hat. Zeilen nach `today` zählen nicht.
+ * Fortschrittsbeleg aus Antwortzeilen eines Musters (rein). Gezählt werden nur getippte Antworten (`typed`, „Weiß ich nicht“ als falsch im
+ * Nenner); richtig heißt sauber (`clean`: ohne Hilfe, ohne „Zählt“, Note mindestens „Gut“). `null`, wenn eines der beiden Fenster weniger als
+ * `PROOF_MIN` Antworten hat. Zeilen nach `today` zählen nicht. „besser“ verlangt 20 Prozentpunkte UND mindestens 2 saubere Antworten mehr
+ * (kein Rauschen wie „1 von 4 → 3 von 4“ als Erfolg).
  */
-export function progressProof(rows: ReadonlyArray<{ t: number; day: string; ok: boolean; typed: boolean }>, today: string): ProgressProof | null {
+export function progressProof(rows: ReadonlyArray<{ t: number; day: string; clean: boolean; typed: boolean }>, today: string): ProgressProof | null {
   const typed = rows.filter((r) => r.typed && r.day <= today).sort((a, b) => a.t - b.t);
   const nowFrom = addDays(today, -(PROOF_NOW_DAYS - 1));
   const thenTo = addDays(today, -PROOF_GAP_DAYS);
   const nowRows = typed.filter((r) => r.day >= nowFrom).slice(-PROOF_MAX);
   const thenRows = typed.filter((r) => r.day <= thenTo).slice(-PROOF_MAX);
   if (nowRows.length < PROOF_MIN || thenRows.length < PROOF_MIN) return null;
-  const nowOk = nowRows.filter((r) => r.ok).length;
-  const thenOk = thenRows.filter((r) => r.ok).length;
+  const nowOk = nowRows.filter((r) => r.clean).length;
+  const thenOk = thenRows.filter((r) => r.clean).length;
   const lastThen = thenRows[thenRows.length - 1]?.day ?? thenTo;
   const weeks = Math.max(2, Math.round(dayDiff(lastThen, today) / 7));
   const d = nowOk / nowRows.length - thenOk / thenRows.length;
-  return { thenOk, thenN: thenRows.length, nowOk, nowN: nowRows.length, weeks, trend: d >= PROOF_TREND ? 'up' : d <= -PROOF_TREND ? 'down' : 'flat' };
+  const trend = d >= PROOF_TREND && nowOk - thenOk >= PROOF_STEP ? 'up' : d <= -PROOF_TREND && thenOk - nowOk >= PROOF_STEP ? 'down' : 'flat';
+  return { thenOk, thenN: thenRows.length, nowOk, nowN: nowRows.length, weeks, trend };
 }
 
 const sortedMap = <K extends string, V>(entries: Array<[K, V]>): Map<K, V> => new Map(entries.sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0)));
@@ -441,7 +456,7 @@ export function buildLearnerModel(src: LearnerSources, now: number): LearnerMode
           pat: p.id,
           p: Math.round(pEst * 1000) / 1000,
           certainty: certainty(pEst, { n: num(entry?.n), recent: bits }).word,
-          q28: { n: q.length, ok: q.filter((r) => r.ok).length },
+          q28: { n: q.length, ok: q.filter((r) => r.clean).length },
           freeDays: free.size,
           lastWrong: lastWrong || null,
           state: patternState(entry, today),

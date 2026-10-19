@@ -2,7 +2,7 @@ import bankJson from '../../content/grammar-bank.json';
 import extraJson from '../../content/grammar-extra.json';
 import { TOPICS, topicById } from '../content';
 import { splitWords } from '../answer/align';
-import type { GrammarTask, GrammarTaskType, TaskSrc } from '../learn/types';
+import type { GrammarTask, GrammarTaskType, TaskSlot, TaskSrc } from '../learn/types';
 import { formsOfPat, patsOf } from '../metrics/pattern';
 import { dayKey } from '../date';
 import { kindsFor, pickUnseen } from '../c1x/select';
@@ -498,6 +498,8 @@ export function selectRound(i: RoundInput): GrammarTask[] {
   // 2. Themen der Runde.
   const ranked = rankTopics(i);
   let topics: string[];
+  /** Als Familienpartner (Verwechslungsgefahr) gewähltes Thema, sonst `null` (Auswahlgrund `family`). */
+  let family: string | null = null;
   const intro = gt && i.mode === 'duty' ? gt.intro : i.introduce && topicById(i.introduce) ? i.introduce : null;
   // Mit Bremse ist ein neues Fokus-Thema nur erlaubt, wenn es das eine neue Thema des Tages ist.
   // Mit eingefrorenem Plan (`gt`) kann nur ein schon begonnenes Fokus-Thema (Wochenfokus, P50) nach vorn rücken; das Thema des Tages bleibt dabei.
@@ -522,7 +524,10 @@ export function selectRound(i: RoundInput): GrammarTask[] {
     if (i.mode === 'duty' && topics[0]) {
       const partner = familyOf(topics[0]).find((t) => ranked.some((r) => r.topic === t));
       const slot = topics[1] === intro ? 2 : 1;
-      if (partner && !topics.includes(partner) && topics.length > slot) topics[slot] = partner;
+      if (partner && !topics.includes(partner) && topics.length > slot) {
+        topics[slot] = partner;
+        family = partner;
+      }
     }
   }
 
@@ -544,16 +549,20 @@ export function selectRound(i: RoundInput): GrammarTask[] {
   let slots = Math.max(0, i.size - errors.length - blockTasks.length);
   // Prioritätstabelle (P15): die Plätze werden Mustern zugeordnet; was sich so nicht füllen lässt, füllt der LP2-Weg darunter.
   const planned: GrammarTask[] = [];
+  /** Auswahlgrund je Aufgabe (Schlüssel), für „Warum diese Aufgabe?“ (Tutor-Engine v3 S2). */
+  const why = new Map<string, TaskSlot>();
   if (i.slotPlan && !block && (i.mode === 'duty' || i.mode === 'xtra') && slots > 0) {
     const day = dayKey(i.nowMs);
+    const errs = errorsByPat(i.grammarDocs);
+    const focusPat = i.slotPlan.focus;
     const plan = slotPlan({
       n: slots,
       ctx: i.mode,
       weekday: new Date(`${day}T12:00:00Z`).getUTCDay(),
       today: day,
       pats: patInfos(i.grammarDocs),
-      focus: i.slotPlan.focus,
-      errorsByPat: errorsByPat(i.grammarDocs),
+      focus: focusPat,
+      errorsByPat: errs,
       seed: i.seed,
     });
     const roundForms = new Map<string, string[]>();
@@ -579,7 +588,12 @@ export function selectRound(i: RoundInput): GrammarTask[] {
         const prefer = [...new Set([...want, ...FALLBACK[profile]])];
         pick = take(fresh({ topic, prefer, pats: [sl.pat] })) ?? take(fresh({ topic, prefer }));
       }
-      if (pick) planned.push(pick);
+      if (pick) {
+        planned.push(pick);
+        const role: TaskSlot =
+          sl.role === 'intro' || sl.role === 'vortest' ? 'intro' : sl.role === 'chapter' ? 'chapter' : sl.role === 'focus' ? (sl.pat === focusPat ? 'focus' : (errs[sl.pat] ?? 0) > 0 ? 'need' : 'mix') : 'mix';
+        why.set(pick.key, role);
+      }
     }
     slots -= planned.length;
   }
@@ -637,7 +651,16 @@ export function selectRound(i: RoundInput): GrammarTask[] {
     out.push(q.shift() as GrammarTask);
     emptyTurns = 0;
   }
-  return [...errors, ...blockTasks, ...planned, ...out];
+  // Auswahlgrund anheften (Fehlersätze erkennt man an `errorT`): Einführungsblock, Plätze der Tabelle, sonst das Thema der Aufgabe.
+  const topicSlot = (topic: string): TaskSlot =>
+    i.mode === 'topic' ? 'chosen' : topic === focus ? 'focus' : topic === intro ? 'intro' : chSet ? (chSet.has(topic) ? 'chapter' : 'mix') : topic === family ? 'family' : 'need';
+  for (const t of blockTasks) why.set(t.key, i.mode === 'topic' ? 'chosen' : 'intro');
+  for (const t of out) if (!why.has(t.key)) why.set(t.key, topicSlot(t.topic));
+  const tag = (t: GrammarTask): GrammarTask => {
+    const slot = t.errorT === null ? why.get(t.key) : undefined;
+    return slot ? { ...t, slot } : t;
+  };
+  return [...errors, ...blockTasks.map(tag), ...planned.map(tag), ...out.map(tag)];
 }
 
 /**

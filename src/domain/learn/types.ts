@@ -44,7 +44,16 @@ export type GrammarTask = {
   x?: TaskExtra;
   /** Aufgabe des Aufgabensystems c1x (Lernplattform 3.0 §3.2): der Rahmen zeigt dann `<C1Item/>`; die alten Felder bleiben die Wahrheit für `seen`, Fehlersätze und Protokoll. */
   c1?: C1Item;
+  /** Platz, für den `selectRound` die Aufgabe gewählt hat (Tutor-Engine v3 S2, „Warum diese Aufgabe?“); nur in der Runde, nie gespeichert. */
+  slot?: TaskSlot;
 };
+
+/**
+ * Auswahlgrund einer Aufgabe in der Runde (Fehlersätze erkennt man an `errorT`): `intro` neuer Schritt des Tages · `chapter` aktuelles Kapitel ·
+ * `focus` Wochen- bzw. Tagesfokus · `need` größter Übungsbedarf (`rankTopics`, Fehler-Radar) · `family` leicht verwechselbares Nachbarthema ·
+ * `chosen` selbst gewählt (Thema, Muster) · `mix` Wiederholung, damit nichts einrostet.
+ */
+export type TaskSlot = 'intro' | 'chapter' | 'focus' | 'need' | 'family' | 'chosen' | 'mix';
 
 /** `kwt`: Ausgangssatz, Schlüsselwort (Großbuchstaben), erlaubte Wortzahl in der Lücke. `find`: Wortbereich des Fehlers (`null` = fehlerfrei) und der ganze richtige Satz. `meaning`: Satz a und b, Frage. */
 export type TaskExtra =
