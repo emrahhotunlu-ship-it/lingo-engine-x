@@ -152,7 +152,8 @@
     "'s continually"
    ],
    "expl": "„always“ mit Present Continuous drückt Ärger über eine ständige Wiederholung aus (He's always interrupting …).",
-   "expl_en": "\"always\" with the Present Continuous expresses annoyance at constant repetition (He's always interrupting …)."
+   "expl_en": "\"always\" with the Present Continuous expresses annoyance at constant repetition (He's always interrupting …).",
+   "hint": "(present continuous + adverb)"
   },
   {
    "topic": "pres-simple-cont",
@@ -736,7 +737,9 @@
    "prompt": "She started working at 8:00. We called her at 10:00, and she was still working. → When we called, she ___ for two hours.",
    "answer": "had been working",
    "accepted": [
-    "'d been working"
+    "'d been working",
+    "had worked",
+    "'d worked"
    ],
    "expl": "Dauer („for two hours“) vor einem Zeitpunkt in der Vergangenheit → had been + -ing.",
    "expl_en": "Duration (\"for two hours\") before a point in the past → had been + -ing."
@@ -1325,7 +1328,8 @@
     "'d travel"
    ],
    "expl": "Eine frühere Gewohnheit, die vorbei ist → used to + Infinitiv.",
-   "expl_en": "A past habit that has stopped → used to + infinitive."
+   "expl_en": "A past habit that has stopped → used to + infinitive.",
+   "hint": "(used to / would)"
   },
   {
    "topic": "used-to",
@@ -1497,7 +1501,11 @@
    "prompt": "I'd be happier if I ___ so much time in traffic every day.",
    "answer": "didn't spend",
    "accepted": [
-    "did not spend"
+    "did not spend",
+    "wasn't spending",
+    "weren't spending",
+    "was not spending",
+    "were not spending"
    ],
    "hint": "(not / spend)",
    "expl": "Second Conditional: If + Past Simple. Verneint: didn't + Infinitiv.",
@@ -2407,7 +2415,7 @@
     "must not have received",
     "must not have gotten"
    ],
-   "hint": "(receive)",
+   "hint": "(impossible: receive)",
    "expl": "Unmöglich in der Vergangenheit → can't have + Partizip.",
    "expl_en": "Impossible in the past → can't have + past participle."
   },
@@ -2420,7 +2428,7 @@
     "may have sent",
     "could have sent"
    ],
-   "hint": "(send)",
+   "hint": "(possible: send)",
    "expl": "Nur eine Möglichkeit in der Vergangenheit → might have + Partizip.",
    "expl_en": "Just a possibility in the past → might have + past participle."
   },
@@ -2449,7 +2457,7 @@
     "could not be",
     "must not be"
    ],
-   "hint": "(be)",
+   "hint": "(impossible: be)",
    "expl": "Unmöglich (sie hat nur eine Schwester) → can't be.",
    "expl_en": "Impossible (she only has a sister) → can't be."
   },
@@ -2462,7 +2470,8 @@
    "expl_en": "Almost certain about the past → must have + past participle (forget – forgot – forgotten).",
    "accepted": [
     "must've forgotten"
-   ]
+   ],
+   "hint": "(modal verb)"
   },
   {
    "topic": "modals-deduction",
@@ -2475,7 +2484,8 @@
     "could not have written"
    ],
    "expl": "Unmöglich in der Vergangenheit → can't have + Partizip (write – wrote – written).",
-   "expl_en": "Impossible in the past → can't have + past participle (write – wrote – written)."
+   "expl_en": "Impossible in the past → can't have + past participle (write – wrote – written).",
+   "hint": "(modal verb)"
   },
   {
    "topic": "modals-deduction",
@@ -2972,7 +2982,9 @@
    "type": "transform",
    "prompt": "No other product in our range sells better than this one. → This is ___ best-selling product in our range.",
    "answer": "the",
-   "accepted": ["our"],
+   "accepted": [
+    "our"
+   ],
    "expl": "Vor einem Superlativ steht „the“: This is the best-selling product.",
    "expl_en": "Put “the” before a superlative: This is the best-selling product."
   },

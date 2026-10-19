@@ -284,9 +284,9 @@
       ],
       "ex": [
         {
-          "en": "Looking at the data, we saw a clear trend.",
-          "de": "Beim Blick auf die Daten sahen wir einen klaren Trend.",
-          "ctx": "meeting"
+          "en": "Walking to work, I heard my phone ring twice.",
+          "de": "Auf dem Weg zur Arbeit hörte ich mein Telefon zweimal klingeln.",
+          "ctx": "talk"
         },
         {
           "en": "Having read your proposal, we would like to schedule a call.",
@@ -308,12 +308,12 @@
         }
       },
       "contrast": {
-        "with": "cp.having",
-        "a": "Having checked the logs, the engineer found the bug.",
-        "b": "After the engineer checked the logs, the server restarted.",
+        "with": "cp.ing",
+        "a": "Walking to work, I heard my phone ring twice.",
+        "b": "While I was walking to work, my phone rang twice.",
         "diff": {
-          "de": "Gleiches Subjekt: Partizip möglich. Zwei verschiedene Subjekte: voller Nebensatz mit After.",
-          "en": "Same subject: a participle works. Two different subjects: a full clause with After."
+          "de": "Gleiche Person: Partizip möglich (Ich gehe und ich höre). Zwei verschiedene Subjekte (ich gehe, das Telefon klingelt): voller Nebensatz mit While oder As.",
+          "en": "Same person: a participle works (I walk and I hear). Two different subjects (I walk, the phone rings): use a full clause with While or As."
         }
       },
       "ccq": [

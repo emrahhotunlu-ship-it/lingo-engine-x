@@ -6338,7 +6338,9 @@
    ],
    "answer": "Opening",
    "fixed": "Opening the file, the analyst found three formatting errors.",
-   "accepted": [],
+   "accepted": [
+    "Having opened"
+   ],
    "why": {
     "ok": {
      "de": "Der Fehler: Am Satzanfang braucht das Partizip -ing: Opening, nicht Open.",
@@ -6736,7 +6738,11 @@
      }
     ]
    },
-   "topic": "c1-participle"
+   "topic": "c1-participle",
+   "hint": {
+    "de": "Das Partizip am Anfang passt nicht zum Subjekt. Schreibe die markierte Stelle so um, dass der Satz stimmt.",
+    "en": "The participle at the start does not match the subject. Rewrite the marked part so the sentence works."
+   }
   },
   {
    "id": "cp-sub-f2",
@@ -6751,7 +6757,12 @@
    "fixed": "When I read the report, the figures seemed wrong to me.",
    "accepted": [
     "As I read the report,",
-    "While I was reading the report,"
+    "While I was reading the report,",
+    "As I was reading the report,",
+    "When I was reading the report,",
+    "While I read the report,",
+    "After I read the report,",
+    "After I had read the report,"
    ],
    "why": {
     "ok": {
@@ -6771,7 +6782,11 @@
      }
     ]
    },
-   "topic": "c1-participle"
+   "topic": "c1-participle",
+   "hint": {
+    "de": "Das Partizip am Anfang passt nicht zum Subjekt. Schreibe die markierte Stelle so um, dass der Satz stimmt.",
+    "en": "The participle at the start does not match the subject. Rewrite the marked part so the sentence works."
+   }
   },
   {
    "id": "cp-sub-f3",
@@ -7416,7 +7431,8 @@
    "answer": "within",
    "fixed": "We will respond to your complaint within 48 hours.",
    "accepted": [
-    "in under"
+    "in under",
+    "in less than"
    ],
    "why": {
     "ok": {
@@ -11446,7 +11462,9 @@
    ],
    "answer": "rains",
    "fixed": "If it rains tomorrow, we'll move the team lunch indoors.",
-   "accepted": [],
+   "accepted": [
+    "should rain"
+   ],
    "why": {
     "ok": {
      "de": "Der Fehler: Nach if steht bei möglicher Zukunft das Präsens (rains), kein will.",
@@ -11638,7 +11656,8 @@
    "answer": "were",
    "fixed": "If the budget were larger, we would hire two more analysts.",
    "accepted": [
-    "was"
+    "was",
+    "were to be"
    ],
    "why": {
     "ok": {
@@ -11857,7 +11876,8 @@
    "answer": "could",
    "fixed": "If our budget were not so tight, we could hire another analyst.",
    "accepted": [
-    "would"
+    "would",
+    "might"
    ],
    "why": {
     "ok": {
@@ -16456,7 +16476,10 @@
    ],
    "answer": "were going",
    "fixed": "We were going to launch in June, but the supplier delayed everything.",
-   "accepted": [],
+   "accepted": [
+    "were planning",
+    "had planned"
+   ],
    "why": {
     "ok": {
      "de": "Der Fehler: Der Plan liegt in der Vergangenheit. Richtig: were going to.",
@@ -16596,7 +16619,9 @@
    ],
    "answer": "would review",
    "fixed": "She promised that she would review the draft by Monday.",
-   "accepted": [],
+   "accepted": [
+    "was going to review"
+   ],
    "why": {
     "ok": {
      "de": "Der Fehler: Nach promised steht would statt will. Richtig: would review.",
@@ -16628,7 +16653,13 @@
    ],
    "answer": "was to open",
    "fixed": "The new warehouse was to open in March, but the permit was delayed.",
-   "accepted": [],
+   "accepted": [
+    "was supposed to open",
+    "was due to open",
+    "was going to open",
+    "was scheduled to open",
+    "was meant to open"
+   ],
    "why": {
     "ok": {
      "de": "Der Fehler: Für einen Plan in der Vergangenheit gilt was to. Richtig: was to open.",
@@ -24461,7 +24492,8 @@
    "answer": "must have crashed",
    "fixed": "The database must have crashed during the update – nothing was saved.",
    "accepted": [
-    "must've crashed"
+    "must've crashed",
+    "had to have crashed"
    ],
    "why": {
     "ok": {
@@ -27350,7 +27382,8 @@
    "answer": "will be sent",
    "fixed": "The agenda will be sent to all participants tomorrow morning.",
    "accepted": [
-    "'ll be sent"
+    "'ll be sent",
+    "is going to be sent"
    ],
    "why": {
     "ok": {
@@ -29312,7 +29345,9 @@
    ],
    "answer": "had won",
    "fixed": "It was the first time our team had won a client in Asia.",
-   "accepted": [],
+   "accepted": [
+    "won"
+   ],
    "why": {
     "ok": {
      "de": "Der Fehler: Nach „It was the first time“ steht had + Partizip: had won.",
