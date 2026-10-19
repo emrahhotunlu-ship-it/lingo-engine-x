@@ -16,6 +16,12 @@ export const writes = (page: Page): Promise<Array<{ op: string; path: string }>>
 
 const SEED = JSON.parse(readFileSync(new URL('../../seed/sample-data.json', import.meta.url), 'utf8')) as Record<string, Doc>;
 
+// Wortpartner-Charge `col` (Engine-Verdrahtung 19.10.2026): Karten ohne eigene Wortpartner zeigen die der Charge (gleiche Reihenfolge, alle bestehen die Prüfung, tests/tutor/colCharge1.test.ts).
+const CHARGE = JSON.parse(readFileSync(new URL('../../src/content/col/charge1.json', import.meta.url), 'utf8')) as { items: Array<{ word: string; col: Doc[] }> };
+const chargeKey = (w: string): string => w.trim().replace(/^to\s+/i, '').toLowerCase().replace(/\s+/g, ' ');
+/** Wortpartner einer Karte: eigene (`col`), sonst die der Charge. */
+export const colOf = (d: Doc): Doc[] => (Array.isArray(d.col) && d.col.length ? (d.col as Doc[]) : (CHARGE.items.find((i) => chargeKey(i.word) === chargeKey(typeof d.word === 'string' ? d.word : ''))?.col ?? []));
+
 export const DAY = '2026-09-20';
 
 /** Plan dieser App für den Stichtag mit fester Zielmenge (sonst berechnet die App ihn selbst). */
@@ -124,7 +130,7 @@ export function expected(ex: string, id: string, col: number | null, kind: strin
     case 'colloc':
     case 'colloc_gap':
       {
-        const gap = (Array.isArray(d.col) ? (d.col[col ?? 0] as Doc) : {}).gap;
+        const gap = (colOf(d)[col ?? 0] ?? {}).gap;
         return typeof gap === 'string' ? gap : '';
       }
     default:

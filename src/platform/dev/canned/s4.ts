@@ -18,13 +18,15 @@ function section(input: string, start: string, end: string): string[] {
 /**
  * Feste Antwort für `diagnose@2` (erkannt an der Kopfzeile; alles andere geht an die Antwort von @1). Liest Annahmen, Belege und Musterliste aus dem
  * Prompt und zitiert nur sie. `diagnoseMode` wie bei @1: `zzjson` → kein JSON, `zzschema` → erster Aufruf ohne `summary` (der Neuversuch ist gültig),
- * `zzinvent` → zusätzlich eine erfundene Annahme und ein erfundener Beleg (fallen weg).
+ * `zzinvent` → zusätzlich eine erfundene Annahme und ein erfundener Beleg (fallen weg), `zzempty` → keine Annahme bestätigt (Belege dünn).
  */
 export function diagnoseReplyS4(input: string): string {
   if (!input.startsWith('[diagnose@2]')) return diagnoseReply(input);
   const mode = fakeMode();
   if (/zzjson/i.test(mode)) return 'Hier ist meine Einschätzung, aber leider ohne das verlangte Format.';
   if (/zzschema/i.test(mode) && !input.includes('did not match the required format')) return JSON.stringify({ hyps: [], focus: [] });
+  if (/zzempty/i.test(mode))
+    return JSON.stringify({ hyps: [], focus: [], summary: { de: 'Diese Woche gibt es noch zu wenig Belege für eine Annahme.', en: 'This week there is still too little evidence for a hypothesis.' } });
   const hyps = section(input, 'Hypotheses of the app:', 'German transfer notes:').map((l) => {
     const [id = '', used = ''] = l.split(' | ');
     const m = /^used (\S+) where (\S+) was right$/.exec(used);

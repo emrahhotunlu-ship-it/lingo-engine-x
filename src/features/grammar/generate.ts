@@ -1,4 +1,7 @@
 import { askJson } from '../../ai/gate';
+import { AiFailure } from '../../ai/types';
+import { bgVerdict } from '../../ai/budget';
+import { takeTutorCall, tutorLeft } from '../../ai/tutorBudget';
 import { useClock } from '../../app/clock';
 import { getWriter } from '../../data';
 import { useLive } from '../../data/live';
@@ -9,11 +12,14 @@ import { poolIntake, type PoolIntake } from '../../domain/grammar/pool';
 import { patternsOf } from '../../domain/grammar/patterns';
 import { patsOf } from '../../domain/metrics/pattern';
 import { ruleExamples, ruleOf } from '../../domain/grammar/rules';
-import { normalizeTask, wantTypes } from '../../domain/grammar/tasks';
+import { wantTypes } from '../../domain/grammar/tasks';
 import type { GrammarTask } from '../../domain/learn/types';
+import { acceptGrammarItem, acceptGrammarItems, type SolveCheckResult } from '../../domain/tutor/acceptGrammarItem';
 import { seenByTopic } from '../../domain/plan/dailyIntake';
 import { logError, logWarn } from '../../platform/diagnostics';
 import { grammarItems } from '../../prompts/grammarItems';
+import { SOLVE_CHECK_MAX_TASKS, solveCheck } from '../../prompts/solveCheck';
+import { useCapabilities } from '../../platform/capabilities';
 import { tabId } from '../progress/persist';
 import { loadLearnInputs } from '../learn/inputs';
 
@@ -23,6 +29,41 @@ import { loadLearnInputs } from '../learn/inputs';
 // gehen mit (≤ 5), damit Claude genau diese Verwechslung neu übt.
 
 const str = (v: unknown): string => (typeof v === 'string' ? v : '');
+
+export type CheckedItems = { tasks: GrammarTask[]; raws: unknown[]; checked: boolean };
+
+/**
+ * Zweiter, unabhängiger Löser für neu erzeugte Aufgaben (`solve-check@1`, Tutor-Engine v3 §6.3, E5): Hintergrund, nur mit `sampleConfirmed`, innerhalb der
+ * Tutor-Tagesbremse (`tutorBudget`) und des Hintergrund-Budgets der Vorlage (höchstens 2 je Tag, das KI-Tor zählt). Angenommen wird danach nur, was
+ * `acceptGrammarItem` mit dem Ergebnis besteht. Ohne Prüfung (kein Budget, keine Zustimmung, Fehler) bleiben die lokal angenommenen Aufgaben wie bisher.
+ * Kein Neuversuch; ein Abbruch durch den Nutzer wird weitergereicht.
+ */
+export async function checkNewItems(raws: readonly unknown[], signal: AbortSignal): Promise<CheckedItems> {
+  const local = raws.map((raw) => ({ raw, task: acceptGrammarItem(raw, { src: 'ai' }).task })).filter((x): x is { raw: unknown; task: GrammarTask } => !!x.task);
+  const plain: CheckedItems = { tasks: local.map((x) => x.task), raws: local.map((x) => x.raw), checked: false };
+  if (!local.length || !useCapabilities.getState().sampleConfirmed || tutorLeft() <= 0) return plain;
+  if (bgVerdict(solveCheck.id, solveCheck.budget?.bgPerDay ?? 0) !== null) return plain;
+  const head = local.slice(0, SOLVE_CHECK_MAX_TASKS);
+  if (!takeTutorCall()) return plain;
+  let solve: Array<SolveCheckResult | null>;
+  try {
+    const r = await askJson({ template: solveCheck, vars: { tasks: head.map((x) => x.task) }, signal, priority: 'background' });
+    solve = head.map((_, i) => r.data.results.find((x) => x.i === i) ?? null);
+  } catch (err) {
+    if (err instanceof AiFailure && err.kind === 'cancelled' && signal.aborted) throw err;
+    logWarn('grammar:solve-check', err instanceof AiFailure ? { code: err.code, message: `solve-check nicht verfügbar (${err.kind}) – lokal geprüfte Aufgaben bleiben` } : err);
+    return plain;
+  }
+  // Aufgaben ohne Ergebnis (gekappte Antwort) gelten als nicht bestätigt: Sie fallen weg (lieber eine Aufgabe weniger als eine mehrdeutige).
+  const res = acceptGrammarItems(
+    head.map((x) => x.raw),
+    { src: 'ai', solve: solve.map((x) => x ?? { answers: [], ambiguous: true }) },
+  );
+  if (res.dropped.length) logWarn('grammar:solve-check', { code: 'rejected', message: res.dropped.map((d) => `#${d.i}: ${d.reasons.join(', ')}`).join('; ') });
+  const keep = new Set(res.tasks.map((t) => t.key));
+  const kept = head.filter((x) => keep.has(x.task.key));
+  return { tasks: res.tasks, raws: kept.map((x) => x.raw), checked: true };
+}
 
 /** Eingeführte Muster des Themas (Bestand: alle, solange es noch keine `pats` gibt); leer ohne Musterdatei. */
 function introducedPatterns(topic: string, doc: Readonly<Record<string, unknown>> | undefined): Array<{ id: string; name: string; form: string; signals: string[] }> {
@@ -53,7 +94,9 @@ export async function generateTopicTasks(topic: string, signal: AbortSignal): Pr
     vars: { topic, nameEn: tp.name_en ?? tp.name, ruleEn, examples: ruleExamples(topic, 4), p, types: wantTypes(p).filter((x): x is 'mc' | 'gap' | 'transform' | 'correct' => x === 'mc' || x === 'gap' || x === 'transform' || x === 'correct'), seenText, errors, count: 6, patterns: introducedPatterns(topic, doc) },
     signal,
   });
-  const tasks = r.data.items.map((it) => normalizeTask(it, 'ai')).filter((t): t is GrammarTask => !!t);
+  // Annahme wie bisher (`grammar-items@5` prüft schon im Schema), jetzt mit Ziel-Satz (`goal`) und – wenn Budget und Zustimmung da sind – dem zweiten Löser.
+  const checked = await checkNewItems(r.data.items, signal);
+  const tasks = checked.tasks;
   const writer = getWriter();
   if (!writer || !tasks.length) return tasks;
   try {
@@ -64,7 +107,7 @@ export async function generateTopicTasks(topic: string, signal: AbortSignal): Pr
     }
     let res: PoolIntake | null = null;
     await writer.transform('app/pool', (cur) => {
-      res = poolIntake(cur, [{ day: null, src: 'ai', items: r.data.items }], seenByTopic(docs), nowMs);
+      res = poolIntake(cur, [{ day: null, src: 'ai', items: checked.raws }], seenByTopic(docs), nowMs);
       return res.op;
     });
     const out = res as PoolIntake | null;

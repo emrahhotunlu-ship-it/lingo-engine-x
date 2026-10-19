@@ -114,7 +114,8 @@ export function supports(card: TrainCard, ex: ExerciseId, lang: Lang, poolSize: 
       return card.kind === 'chunk' && card.stage <= 3 && gapOk(card);
     case 'colloc_gap':
     case 'colloc':
-      return hasPartner(card);
+      // Höchstens eine Wortpartner-Aufgabe je Karte und Lerntag (Engine-Verdrahtung 19.10.2026); andere Arten bleiben verfügbar, der Umfang ändert sich nicht.
+      return !card.partnerToday && hasPartner(card);
     case 'complete':
       // Nur mit Satzanfang aus dem Paket. Ohne Anfang ist es ein eigener Satz und heißt `produce`.
       return !!meaning && (packExtraOf(card)?.starts?.length ?? 0) > 0;

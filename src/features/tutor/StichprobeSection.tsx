@@ -1,9 +1,12 @@
 import { useMemo, useState } from 'react';
+import { useClock } from '../../app/clock';
 import { useLive } from '../../data/live';
 import { heldRepairRows } from '../../domain/repair/gate';
 import { readRepairs } from '../../domain/repair/repair';
 import { fitAltRows } from '../../domain/tutor/fitAlt';
 import { sampleFile, shownSample, totalQuality } from '../../domain/tutor/quality';
+import { bankSample } from '../../domain/tutor/sentenceBank';
+import { currentGate } from '../vocab/sentenceBank';
 import { useT } from '../../i18n';
 import { saveFile } from '../../platform/downloads';
 import { useCapabilities } from '../../platform/capabilities';
@@ -13,6 +16,7 @@ import { toast } from '../../ui/Toast';
 // Einstellungen › Diagnose: „KI-Stichprobe sichern“ (Lernplattform 3.0 P25). Die letzten 30 gezeigten Inhalte von Claude (Aufgabe, Antwort,
 // Erklärung, Meldung) als JSON-Datei über `downloads`; dazu eine Zeile mit den Qualitätszählern. Emrah schickt die Datei in claude.ai, der
 // Englischlehrer prüft sie dort. Ohne `downloads` gibt es den Knopf nicht.
+// Satzbank (19.10.2026): dieselbe Datei trägt die Stichprobe von 30 Claude-Sätzen (`bankSample`) mit dem Stand des Freigabe-Schalters.
 // Tutor-Engine v3 §3.2: dieselbe Datei trägt die gemerkten „Auch richtig“-Antworten (`grammar/<topic>.fitAlt`) zur Gegenlesung.
 
 export function StichprobeSection() {
@@ -22,6 +26,11 @@ export function StichprobeSection() {
   const fitRows = useMemo(() => (grammar ? fitAltRows(grammar) : []), [grammar]);
   const repairDoc = useLive((s) => s.docs['app/repair']);
   const heldRows = useMemo(() => heldRepairRows(readRepairs(repairDoc ?? undefined)), [repairDoc]);
+  // Satzbank (Engine-Verdrahtung 19.10.2026): Stichprobe von 30 Claude-Sätzen für den Englischlehrer.
+  const vocab = useLive((s) => s.collections.vocab);
+  const profile = useLive((s) => s.docs['app/profile']);
+  const now = useClock((s) => s.now);
+  const bank = useMemo(() => bankSample(vocab, currentGate(profile), now), [vocab, profile, now]);
   const [n, setN] = useState(() => shownSample().length);
   const [busy, setBusy] = useState(false);
   if (downloads !== 'ready') return null;
@@ -29,13 +38,13 @@ export function StichprobeSection() {
   const save = async () => {
     const items = shownSample();
     setN(items.length);
-    if (!items.length && !fitRows.length && !heldRows.length) {
+    if (!items.length && !fitRows.length && !heldRows.length && !bank.n) {
       toast(t('ttSampleEmpty'));
       return;
     }
     setBusy(true);
     try {
-      const f = sampleFile(Date.now(), fitRows, heldRows);
+      const f = sampleFile(Date.now(), fitRows, heldRows, bank);
       const r = await saveFile(f.name, f.data);
       toast(r === 'saved' ? t('ttSampleSaved') : t('ttSampleFailed'), r === 'saved' ? 'info' : 'error');
     } finally {
@@ -54,6 +63,9 @@ export function StichprobeSection() {
       </p>
       <p className="m-0 text-xs text-subtle" data-testid="ai-held-repairs">
         {t('ttHeldRepairsRow', { n: num(heldRows.length) })}
+      </p>
+      <p className="m-0 text-xs text-subtle" data-testid="ai-sb" data-n={bank.n} data-sample={bank.sample.length} data-on={bank.gate.on ? '1' : '0'}>
+        {t('ttSbSampleRow', { n: num(bank.n), q: num(bank.quarantined), s: num(bank.sample.length), state: t(bank.gate.on ? 'ttSbGateOn' : 'ttSbGateOff') })}
       </p>
       <div>
         <Button variant="secondary" onClick={() => void save()} busy={busy} data-testid="ai-sample-save">

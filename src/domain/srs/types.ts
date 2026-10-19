@@ -94,6 +94,8 @@ export type TrainCard = {
   def: string | null;
   context: ContextSpan | null;
   col: Colloc[];
+  /** Schon eine Wortpartner-Aufgabe (`colloc`, `colloc_gap`) an diesem Lerntag? Dann keine weitere (höchstens eine je Karte und Tag). */
+  partnerToday?: true;
   src: string | null;
   fsrs: FsrsStored;
   stage: Stage;

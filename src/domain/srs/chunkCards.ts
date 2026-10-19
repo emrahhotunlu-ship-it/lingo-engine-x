@@ -1,5 +1,5 @@
 import { typedForm } from '../chunks/situation';
-import { counts } from './cards';
+import { counts, partnerDoneToday } from './cards';
 import { stageOf } from './ladder';
 import { isFunctionGap } from './partner';
 
@@ -224,6 +224,7 @@ export function toChunkCard(id: string, doc: Doc, nowMs: number): TrainCard | nu
     modes: counts(doc.modes),
     lastMode: last && typeof last.m === 'string' ? last.m : null,
     lastEx: last && typeof last.x === 'string' ? last.x : null,
+    ...(partnerDoneToday(hist, nowMs) ? { partnerToday: true } : {}),
     chunk: info,
     intro: str(doc.intro),
     order: num(doc.order, 900),

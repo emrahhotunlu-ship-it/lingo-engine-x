@@ -24,4 +24,7 @@ export const ttJudgeDe = {
   ttJgAltErr: 'Andere Stelle, auch richtig korrigiert.',
   ttJgFitAltRow: 'Gelernte „Auch richtig“-Antworten: {n} (kommen mit in die Datei)',
   ttHeldRepairsRow: 'Zurückgehaltene Fehlersätze (Korrektur fragwürdig, ruhen ohne Wertung): {n} (kommen mit in die Datei)',
+  ttSbSampleRow: 'Satzbank: {n} Sätze von Claude gesammelt, {q} davon noch in der 4-Wochen-Prüfzeit. Freigabe: {state}. Stichprobe für den Lehrer: {s} Sätze (kommen mit in die Datei)',
+  ttSbGateOn: 'an',
+  ttSbGateOff: 'noch aus',
 };
