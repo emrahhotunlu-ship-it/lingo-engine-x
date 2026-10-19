@@ -274,8 +274,8 @@
         "en": "the participle belongs to the subject that follows the comma"
       },
       "use": {
-        "de": "Wer die Handlung im Partizip ausführt, muss das Subjekt des Hauptsatzes sein. Sonst passt der Bezug nicht.",
-        "en": "Whoever performs the action in the participle must be the subject of the main clause. Otherwise the reference does not fit."
+        "de": "Wer die Handlung im Partizip ausführt, muss das Subjekt des Hauptsatzes sein. Sonst passt der Bezug nicht. Ausnahme: feste Wendungen wie Based on …, Given …, Considering … sind auch mit anderem Subjekt üblich.",
+        "en": "Whoever performs the action in the participle must be the subject of the main clause. Otherwise the reference does not fit. Exception: fixed phrases like Based on …, Given …, Considering … are fine with a different subject."
       },
       "signals": [
         "Having …,",
@@ -284,9 +284,9 @@
       ],
       "ex": [
         {
-          "en": "Walking to work, I heard my phone ring twice.",
-          "de": "Auf dem Weg zur Arbeit hörte ich mein Telefon zweimal klingeln.",
-          "ctx": "talk"
+          "en": "Reviewing the contract, our lawyer spotted two risky clauses.",
+          "de": "Beim Prüfen des Vertrags entdeckte unsere Anwältin zwei riskante Klauseln.",
+          "ctx": "meeting"
         },
         {
           "en": "Having read your proposal, we would like to schedule a call.",
@@ -312,8 +312,8 @@
         "a": "Walking to work, I heard my phone ring twice.",
         "b": "While I was walking to work, my phone rang twice.",
         "diff": {
-          "de": "Gleiche Person: Partizip möglich (Ich gehe und ich höre). Zwei verschiedene Subjekte (ich gehe, das Telefon klingelt): voller Nebensatz mit While oder As.",
-          "en": "Same person: a participle works (I walk and I hear). Two different subjects (I walk, the phone rings): use a full clause with While or As."
+          "de": "Gleiches Subjekt (ich gehe, ich höre): Partizip möglich. Verschiedene Subjekte (ich gehe, das Telefon klingelt): voller Nebensatz mit While oder As.",
+          "en": "Same subject (I walk, I hear): a participle works. Different subjects (I walk, the phone rings): use a full clause with While or As."
         }
       },
       "ccq": [

@@ -149,11 +149,12 @@
     "is constantly",
     "'s constantly",
     "is continually",
-    "'s continually"
+    "'s continually",
+    "keeps"
    ],
-   "expl": "„always“ mit Present Continuous drückt Ärger über eine ständige Wiederholung aus (He's always interrupting …).",
-   "expl_en": "\"always\" with the Present Continuous expresses annoyance at constant repetition (He's always interrupting …).",
-   "hint": "(present continuous + adverb)"
+   "expl": "„always“ mit Present Continuous drückt Ärger über eine ständige Wiederholung aus (He's always interrupting …). „He keeps interrupting“ sagt dasselbe.",
+   "expl_en": "\"always\" with the Present Continuous expresses annoyance at constant repetition (He's always interrupting …). “He keeps interrupting” says the same.",
+   "hint": "(annoyance)"
   },
   {
    "topic": "pres-simple-cont",
@@ -689,8 +690,8 @@
     "'d closed"
    ],
    "hint": "(close)",
-   "expl": "„the first time“ in der Vergangenheit → Past Perfect (had closed).",
-   "expl_en": "\"the first time\" in a past story → Past Perfect (had closed)."
+   "expl": "„the first time“ in der Vergangenheit → Past Perfect (had closed). Im lockeren US-Englisch hörst du auch „the first time she closed“; im Business-Text: had closed.",
+   "expl_en": "\"the first time\" in a past story → Past Perfect (had closed). In casual American English you also hear “the first time she closed”; in business writing: had closed."
   },
   {
    "topic": "past-perfect",
@@ -741,8 +742,8 @@
     "had worked",
     "'d worked"
    ],
-   "expl": "Dauer („for two hours“) vor einem Zeitpunkt in der Vergangenheit → had been + -ing.",
-   "expl_en": "Duration (\"for two hours\") before a point in the past → had been + -ing."
+   "expl": "Dauer („for two hours“) vor einem Zeitpunkt in der Vergangenheit → had been + -ing. „had worked“ ist auch richtig; „had been working“ betont, dass sie noch mittendrin war.",
+   "expl_en": "Duration (\"for two hours\") before a point in the past → had been + -ing. “had worked” is also correct; “had been working” stresses that she was still in the middle of it."
   },
   {
    "topic": "past-perfect",
@@ -889,8 +890,8 @@
     "'s leaving"
    ],
    "hint": "(leave)",
-   "expl": "Für Fahr- und Flugpläne nimmst du das Present Simple, auch wenn es um die Zukunft geht: The flight leaves at 7:20.",
-   "expl_en": "For timetables use the Present Simple, even when you talk about the future: The flight leaves at 7:20."
+   "expl": "Für Fahr- und Flugpläne nimmst du das Present Simple, auch wenn es um die Zukunft geht: The flight leaves at 7:20. „is leaving“ und „will leave“ gehen auch; bei Fahrplänen klingt „leaves“ am natürlichsten.",
+   "expl_en": "For timetables use the Present Simple, even when you talk about the future: The flight leaves at 7:20. “is leaving” and “will leave” also work; for timetables “leaves” sounds most natural."
   },
   {
    "topic": "future-forms",
@@ -1065,7 +1066,7 @@
    "accepted": [
     "'ll have fixed"
    ],
-   "hint": "(fix)",
+   "hint": "(fix · 3 words)",
    "expl": "„By Friday“ = bis dahin abgeschlossen → will have + Partizip.",
    "expl_en": "\"By Friday\" = completed by then → will have + past participle."
   },
@@ -1329,7 +1330,7 @@
    ],
    "expl": "Eine frühere Gewohnheit, die vorbei ist → used to + Infinitiv.",
    "expl_en": "A past habit that has stopped → used to + infinitive.",
-   "hint": "(used to / would)"
+   "hint": "(travel · 3 words)"
   },
   {
    "topic": "used-to",
@@ -1508,8 +1509,8 @@
     "were not spending"
    ],
    "hint": "(not / spend)",
-   "expl": "Second Conditional: If + Past Simple. Verneint: didn't + Infinitiv.",
-   "expl_en": "Second conditional: if + Past Simple. Negative: didn't + infinitive."
+   "expl": "Second Conditional: If + Past Simple. Verneint: didn't + Infinitiv. „wasn't/weren't spending“ geht auch und betont die Dauer.",
+   "expl_en": "Second conditional: if + Past Simple. Negative: didn't + infinitive. “wasn't/weren't spending” also works and stresses the duration."
   },
   {
    "topic": "conditionals",
@@ -2946,9 +2947,7 @@
    "answer": "an",
    "expl": "„honest“ beginnt mit stummem h, also mit Vokallaut → an.",
    "expl_en": "\"honest\" starts with a silent h, so with a vowel sound → an.",
-   "accepted": [
-    "the"
-   ]
+   "accepted": []
   },
   {
    "topic": "articles",
@@ -2957,9 +2956,7 @@
    "answer": "a",
    "expl": "„university“ beginnt mit dem Konsonantenlaut /j/ → a, nicht an.",
    "expl_en": "\"university\" starts with the consonant sound /j/ → a, not an.",
-   "accepted": [
-    "the"
-   ]
+   "accepted": []
   },
   {
    "topic": "articles",
