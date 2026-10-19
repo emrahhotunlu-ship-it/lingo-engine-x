@@ -37,7 +37,11 @@ describe('Phase-2-Vorlagen: Kopfzeile, Stufe, Zwischenspeicher', () => {
     expect([grammarJudge.tier, grammarItems.tier]).toEqual(['quick', 'default']);
     expect(grammarJudge.cache).toEqual({ gcTime: 86_400_000 });
     expect(grammarItems.cache).toBe(false);
-    expect(grammarItems.build(itemsVars)).toContain('Reject any item where a second option is also grammatical in some context.');
+    // Gegenlesung S4: eindeutig in DIESEM Satz (nicht „in some context“), Simple Past mit just/already/yet ist US-Englisch.
+    const p = grammarItems.build(itemsVars);
+    expect(p).toContain('EXACTLY ONE correct answer in this sentence. If another answer also fits this sentence, list it in "accepted" or rewrite the sentence.');
+    expect(p).not.toContain('in some context');
+    expect(p).toContain('In American English the simple past with just, already and yet is correct; accept it: list it in "accepted".');
   });
 });
 

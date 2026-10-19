@@ -43,18 +43,24 @@ Schon vorab verschärft: Ablenker, die gutes Englisch wären, wurden ersetzt:
 - lay constraints → push
 - booked attendees → noted
 
+**Gegenlesung 19.10.2026 umgesetzt (Freigabe nach Änderungen):**
+- Stufe A: 4/5 noted → signed; 31 at → in; 44 of → to; 80 → rose, lifted, said.
+- Stufe B: 3 tightly → highly; 55 fast → quickly; 57 attempt → tempting; deutsche Texte 8, 26, 68, 69; Beispielsätze 34, 35, 48, 54.
+- 62 bleibt „set up a stall“, weil die Karte im Bestand „Stand, Marktstand“ bedeutet.
+- 5: Den Vorschlag „attendee list“ habe ich nicht übernommen. Die Karte heißt „attendees“ (Mehrzahl), deshalb fände die automatische Prüfung das Kartenwort in „attendee list“ nicht.
+
 Weggelassene Karten aus dem Bestand, weil es keine eindeutige Wortpartner-Lücke gibt oder die Wendung schon fest ist: perhaps, slightly, adaptive attempts, code rollbacks, usual cyber guardrails, broadly available, embodied, playing a game, as far as I know, it comes down to, be handled, wildly different, be reluctant to, be worth it, boil down to, bring about, brush aside, chair a meeting, fell short of expectations, go over something, hold back, in line with our target, lead to, look into something, miss out on, put something in writing, put up with, reach out to, reassure someone, renewal date, retention period, roll something out, spreadsheet, zero in on, come to terms with, commuters.
 
 | # | Wort | Wendung (p) | Deutsch | Lücke | Ablenker | Beispielsatz |
 |---|---|---|---|---|---|---|
 | 1 | absent | notably absent | auffällig abwesend | notably | strongly, heavily, deeply | Two key stakeholders were ⟦notably absent⟧ from the kickoff meeting on Monday. |
 | 2 | action item | open action items | offene Punkte | open | free, loose, empty | We still have three ⟦open action items⟧ from last week's call with the client. |
-| 3 | argue | argue convincingly | überzeugend argumentieren | convincingly | heavily, deeply, tightly | In her memo, Dana ⟦argued convincingly⟧ that the old pricing model was holding us back. |
-| 4 | attendee | registered attendees | angemeldete Teilnehmer | registered | inscribed, subscribed, noted | We expect around 200 ⟦registered attendees⟧ at the partner summit in Denver. |
-| 5 | attendees | registered attendees | angemeldete Teilnehmer | registered | inscribed, subscribed, noted | Only ⟦registered attendees⟧ will receive the slides after the webinar. |
+| 3 | argue | argue convincingly | überzeugend argumentieren | convincingly | heavily, deeply, highly | In her memo, Dana ⟦argued convincingly⟧ that the old pricing model was holding us back. |
+| 4 | attendee | registered attendees | angemeldete Teilnehmer | registered | inscribed, subscribed, signed | We expect around 200 ⟦registered attendees⟧ at the partner summit in Denver. |
+| 5 | attendees | registered attendees | angemeldete Teilnehmer | registered | inscribed, subscribed, signed | Only ⟦registered attendees⟧ will receive the slides after the webinar. |
 | 6 | attitude | attitude toward risk | Einstellung zum Risiko | toward | against, for, at | The new CFO has a much more relaxed ⟦attitude toward risk⟧ than her predecessor. |
 | 7 | balance sheet | strong balance sheet | solide Bilanz | strong | fat, thick, hard | Thanks to a ⟦strong balance sheet⟧, the company kept investing during the downturn. |
-| 8 | break even | expect to break even | erwarten, die Kosten zu decken | expect | await, wait, attend | We ⟦expect to break even⟧ in the third quarter of next year. |
+| 8 | break even | expect to break even | erwarten, die Gewinnschwelle zu erreichen | expect | await, wait, attend | We ⟦expect to break even⟧ in the third quarter of next year. |
 | 9 | bring up | bring up the subject | das Thema ansprechen | subject | thesis, object, motive | I will ⟦bring up the subject⟧ of pricing at the end of the call. |
 | 10 | broad | a broad range of | ein breites Spektrum an | range | width, stretch, row | Our new platform supports ⟦a broad range of⟧ payment methods across Europe. |
 | 11 | catch up | catch up on emails | E-Mails aufarbeiten | on | at, by, for | I need an hour this morning to ⟦catch up on emails⟧ after the trip. |
@@ -72,16 +78,16 @@ Weggelassene Karten aus dem Bestand, weil es keine eindeutige Wortpartner-Lücke
 | 23 | entire | spend the entire day | den ganzen Tag verbringen | spent | brought, made, held | We ⟦spent the entire day⟧ going through the contract line by line. |
 | 24 | expense | travel expenses | Reisekosten | travel | journey, voyage, tour | Please submit your ⟦travel expenses⟧ by the end of the month. |
 | 25 | extent | to a large extent | weitgehend, in hohem Maße | large | big, wide, high | The delay was, ⟦to a large extent⟧, caused by missing data from the client. |
-| 26 | fair point | make a fair point | einen berechtigten Einwand bringen | made | did, took, held | Tom ⟦made a fair point⟧ about the risks of launching in December. |
+| 26 | fair point | make a fair point | einen berechtigten Punkt ansprechen | made | did, took, held | Tom ⟦made a fair point⟧ about the risks of launching in December. |
 | 27 | fall behind | fall behind schedule | in Verzug geraten | schedule | calendar, agenda, clock | If the supplier is late again, we will ⟦fall behind schedule⟧ on the launch. |
 | 28 | figure | sales figures | Verkaufszahlen | sales | selling, sold, buying | The latest ⟦sales figures⟧ look much better than we expected. |
 | 29 | flu | come down with the flu | die Grippe bekommen | down | up, off, over | Half the team ⟦came down with the flu⟧ right before the trade show. |
 | 30 | get carried away | get carried away by | sich von etwas mitreißen lassen | by | from, of, through | Let's not ⟦get carried away by⟧ one good month of sales. |
-| 31 | graduate | graduate from college | den Hochschulabschluss machen | from | at, of, off | She ⟦graduated from college⟧ in 2015 and joined our sales team. |
+| 31 | graduate | graduate from college | den Hochschulabschluss machen | from | in, of, off | She ⟦graduated from college⟧ in 2015 and joined our sales team. |
 | 32 | grant | apply for a grant | einen Zuschuss beantragen | applied | registered, subscribed, enrolled | The startup ⟦applied for a grant⟧ to fund its research project. |
 | 33 | guardrail | put guardrails in place | Schutzmechanismen einführen | place | stand, spot, site | We need to ⟦put guardrails in place⟧ before the team uses the new AI tools. |
-| 34 | hypocrite | a complete hypocrite | ein echter Heuchler | complete | whole, full, round | Calling it a team decision made him look like ⟦a complete hypocrite⟧ in the meeting. |
-| 35 | introductory rate | offer an introductory rate | einen Einführungspreis anbieten | offers | makes, does, holds | The new gym ⟦offers an introductory rate⟧ of 20 dollars for the first month. |
+| 34 | hypocrite | a complete hypocrite | ein echter Heuchler | complete | whole, full, round | After criticizing everyone for missing deadlines, he looked like ⟦a complete hypocrite⟧ when he missed his own. |
+| 35 | introductory rate | offer an introductory rate | einen Einführungspreis anbieten | offers | makes, does, holds | The new gym ⟦offers an introductory rate⟧ of $20 for the first month. |
 | 36 | invoice | issue an invoice | eine Rechnung ausstellen | issue | exhibit, display, pose | Our accounting team will ⟦issue the invoice⟧ once the project is completed. |
 | 37 | jump in | feel free to jump in | einfach einhaken | free | open, loose, easy | If you have a question, ⟦feel free to jump in⟧ at any time. |
 | 38 | live up to | live up to expectations | den Erwartungen gerecht werden | expectations | expectancies, prospects, views | The new CRM did not ⟦live up to expectations⟧ in the first few months. |
@@ -90,20 +96,20 @@ Weggelassene Karten aus dem Bestand, weil es keine eindeutige Wortpartner-Lücke
 | 41 | milestone | reach a milestone | einen Meilenstein erreichen | reached | arrived, came, gained | The project ⟦reached an important milestone⟧ when the first client went live. |
 | 42 | nuanced | take a nuanced view | eine differenzierte Sicht haben | takes | makes, does, sets | On pricing, the board ⟦takes a more nuanced view⟧ than the sales team. |
 | 43 | obstacle | overcome an obstacle | ein Hindernis überwinden | overcame | overstepped, overtook, overdid | We ⟦overcame the last obstacle⟧ when legal approved the contract. |
-| 44 | obtain | obtain approval from | eine Genehmigung einholen von | from | of, at, off | We need to ⟦obtain approval from⟧ the board before we sign the lease. |
+| 44 | obtain | obtain approval from | eine Genehmigung einholen von | from | to, at, off | We need to ⟦obtain approval from⟧ the board before we sign the lease. |
 | 45 | on track | keep the project on track | das Projekt im Plan halten | keep | hold, lay, sit | Weekly check-ins help us ⟦keep the project on track⟧ despite the tight timeline. |
 | 46 | overrun | cost overrun | Kostenüberschreitung | cost | price, fee, charge | The ⟦cost overrun⟧ on the office move was almost 30 percent. |
 | 47 | pass on | pass on the savings to | die Einsparungen weitergeben an | to | at, by, from | We will ⟦pass on the savings to⟧ our customers in the next price list. |
-| 48 | peer | peer pressure | Gruppenzwang | pressure | press, push, stress | Many new hires work late because of ⟦peer pressure⟧ in the team. |
+| 48 | peer | peer pressure | Gruppenzwang | pressure | press, push, stress | Many new hires work late because of ⟦peer pressure⟧ on the team. |
 | 49 | phase out | phase out over two years | über zwei Jahre auslaufen lassen | over | during, since, along | The old licenses will be ⟦phased out over two years⟧ to give clients time. |
 | 50 | pour | pour money into | Geld in etwas stecken | into | at, to, over | Investors ⟦poured money into⟧ AI startups over the last two years. |
 | 51 | proceed | proceed with caution | vorsichtig vorgehen | caution | attention, precaution, carefulness | Given the legal risks, we should ⟦proceed with caution⟧ on this deal. |
 | 52 | process | processed within five days | innerhalb von fünf Tagen bearbeitet | within | during, since, until | All refunds are ⟦processed within five business days⟧ after we receive the item. |
 | 53 | quote | a quote for | ein Angebot für | for | about, over, after | Can you send me ⟦a quote for the new laptops⟧ by Thursday? |
-| 54 | reassure | reassure staff about | die Belegschaft wegen etwas beruhigen | about | for, at, around | The CEO tried to ⟦reassure staff about⟧ the planned job cuts. |
-| 55 | recap | a quick recap | eine kurze Zusammenfassung | quick | fast, rapid, hasty | Let me give you ⟦a quick recap⟧ of what we agreed last week. |
+| 54 | reassure | reassure staff about | die Belegschaft wegen etwas beruhigen | about | for, at, around | The CEO tried to ⟦reassure staff about⟧ job security after the merger. |
+| 55 | recap | a quick recap | eine kurze Zusammenfassung | quick | quickly, rapid, hasty | Let me give you ⟦a quick recap⟧ of what we agreed last week. |
 | 56 | recognize | widely recognized as | weithin anerkannt als | widely | wildly, vastly, deeply | She is ⟦widely recognized as⟧ one of the best negotiators in the industry. |
-| 57 | resist | resist the temptation | der Versuchung widerstehen | temptation | seduction, attempt, trial | I had to ⟦resist the temptation⟧ to reply to every email right away. |
+| 57 | resist | resist the temptation | der Versuchung widerstehen | temptation | seduction, tempting, trial | I had to ⟦resist the temptation⟧ to reply to every email right away. |
 | 58 | retention | retention rate | Kundenbindungsrate | rate | quota, share, quote | Our ⟦retention rate⟧ rose to 92 percent after the new onboarding program. |
 | 59 | revise | revise downward | nach unten korrigieren | downward | below, under, beneath | We had to ⟦revise our forecast downward⟧ after the second quarter. |
 | 60 | satisfied | satisfied with | zufrieden mit | with | of, about, from | Most clients are ⟦satisfied with⟧ the new support hours. |
@@ -114,8 +120,8 @@ Weggelassene Karten aus dem Bestand, weil es keine eindeutige Wortpartner-Lücke
 | 65 | succeed | succeed in | es schaffen, etwas zu tun | in | to, by, on | We finally ⟦succeeded in getting⟧ the client to sign the renewal. |
 | 66 | sustainable | environmentally sustainable | umweltverträglich | environmentally | environmental, environment, nature | The new packaging is cheaper and more ⟦environmentally sustainable⟧ than the old one. |
 | 67 | tense | tense atmosphere | angespannte Stimmung | atmosphere | weather, flavor, aura | There was a ⟦tense atmosphere⟧ in the room before the budget vote. |
-| 68 | terms and conditions | under the terms and conditions | gemäß den Vertragsbedingungen | under | below, beneath, among | ⟦Under the terms and conditions⟧, the client can cancel with 30 days' notice. |
-| 69 | trade-off | make a trade-off | einen Kompromiss eingehen | make | do, take, hold | Every pricing model forces us to ⟦make a trade-off⟧ between growth and margin. |
+| 68 | terms and conditions | under the terms and conditions | gemäß den Geschäftsbedingungen (AGB) | under | below, beneath, among | ⟦Under the terms and conditions⟧, the client can cancel with 30 days' notice. |
+| 69 | trade-off | make a trade-off | eine Abwägung treffen / Abstriche machen | make | do, take, hold | Every pricing model forces us to ⟦make a trade-off⟧ between growth and margin. |
 | 70 | vulnerable | vulnerable to attacks | anfällig für Angriffe | to | for, against, of | Old servers are especially ⟦vulnerable to attacks⟧ from outside. |
 | 71 | walk away | walk away from | aussteigen aus | from | of, off, out | If they cut the price again, we should ⟦walk away from the deal⟧. |
 | 72 | within | within budget | im Budget | budget | money, finance, cash | We managed to finish the project on time and ⟦within budget⟧ this spring. |
@@ -126,7 +132,7 @@ Weggelassene Karten aus dem Bestand, weil es keine eindeutige Wortpartner-Lücke
 | 77 | budget | tight budget | knappes Budget | tight | narrow, close, scarce | We are working with a very ⟦tight budget⟧ this quarter. |
 | 78 | proposal | submit a proposal | ein Angebot einreichen | submit | subject, admit, commit | We have until Friday to ⟦submit our proposal⟧ to the city. |
 | 79 | demand | meet demand | die Nachfrage decken | meet | join, reach, hit | We hired ten new drivers to ⟦meet the growing demand⟧ in December. |
-| 80 | concern | raise concerns | Bedenken äußern | raised | lifted, heightened, elevated | Several engineers ⟦raised concerns⟧ about the new release schedule. |
+| 80 | concern | raise concerns | Bedenken äußern | raised | rose, lifted, said | Several engineers ⟦raised concerns⟧ about the new release schedule. |
 | 81 | expectation | manage expectations | Erwartungen steuern | manage | lead, direct, rule | Good account managers ⟦manage client expectations⟧ from the very first call. |
 | 82 | attention | draw attention to | die Aufmerksamkeit lenken auf | draw | pull, drag, lead | I would like to ⟦draw your attention to⟧ the second page of the contract. |
 | 83 | consensus | reach a consensus | einen Konsens erzielen | reached | arrived, came, landed | After two hours, the team finally ⟦reached a consensus⟧ on pricing. |
@@ -156,11 +162,11 @@ Weggelassene Karten aus dem Bestand, weil es keine eindeutige Wortpartner-Lücke
 
 | Vorlage | Datei · Konstante | Inhalt | Prüffrage |
 |---|---|---|---|
-| `grammar-items@5` | `src/prompts/grammarItems.ts` · `GRAMMAR_ITEMS_EXAMPLE` | Lücke „The new contract ___ (sign) yesterday.“ → was signed; Satz verbessern „The invoices was sent to the client last Friday.“ → were sent, mit Ziel „Die Rechnungen gingen letzten Freitag an den Kunden.“; Erklärungen DE/EN | Eindeutig lösbar? Ist eine weitere Lösung möglich, die in `also` stehen müsste? |
-| `grammar-items@5` | dieselbe Datei, Regeltext im Prompt | Selbstprüfung: `self.solved` blind lösen, `self.also` = jede weitere Antwort, die ein Muttersprachler gelten ließe; „Good English is never wrong.“ | Sind die Regeln für Claude klar und vollständig? |
-| `solve-check@1` | `src/prompts/solveCheck.ts` · `SOLVE_CHECK_EXAMPLE` | „was signed“ (yesterday → Past Simple, Passiv); „has worked / has been working“ mit since 2020 → mehrdeutig | Begründungen DE/EN korrekt? |
-| `diagnose@2` | `src/prompts/diagnoseV2.ts` · `DIAGNOSE2_EXAMPLE` | Annahme „have done“ bei „yesterday/last week“ (deutsches Perfekt); Zusammenfassung DE/EN | Fachlich richtig, verständlich für B2? |
-| `word-bank@1` | `src/prompts/wordBank.ts` · `WORD_BANK_EXAMPLE` | Vier Sätze zu *reliable*: supplier … on time every month; forecasts … approved the budget; old car … to the coast; train connection … book a taxi (k = work, work, life, form) | Natürlich, 8–18 Wörter, Übersetzungen genau? |
+| `grammar-items@5` | `src/prompts/grammarItems.ts` · `GRAMMAR_ITEMS_EXAMPLE` | Lücke „The new contract ___ (sign) yesterday.“ → was signed (auch „got signed“ in `accepted` und `self.also`); Satz verbessern „The invoices was sent to the client last Friday.“ → were sent, mit Ziel „Die Rechnungen gingen letzten Freitag an den Kunden.“; Erklärungen DE/EN | Eindeutig lösbar? Ist eine weitere Lösung möglich, die in `also` stehen müsste? |
+| `grammar-items@5` | dieselbe Datei, Regeltext im Prompt | Selbstprüfung: `self.solved` blind lösen, `self.also` = jede weitere Antwort, die ein Muttersprachler gelten ließe; „Good English is never wrong.“ Neu: „EXACTLY ONE correct answer in this sentence …“ statt „in some context“; Regel Simple Past mit just/already/yet (auch in diagnose@2) | Sind die Regeln für Claude klar und vollständig? |
+| `solve-check@1` | `src/prompts/solveCheck.ts` · `SOLVE_CHECK_EXAMPLE` | „was signed“ (yesterday → Past Simple, Passiv); „has worked / has been working“ mit since 2020 → beide richtig, nicht mehrdeutig; neu: „met / have met / are meeting / will meet“ ohne Zeitangabe → mehrdeutig | Begründungen DE/EN korrekt? |
+| `diagnose@2` | `src/prompts/diagnoseV2.ts` · `DIAGNOSE2_EXAMPLE` | Annahme „have done“ bei „yesterday/last week“ (deutsches Perfekt, jetzt in du-Form); Zusammenfassung DE/EN | Fachlich richtig, verständlich für B2? |
+| `word-bank@1` | `src/prompts/wordBank.ts` · `WORD_BANK_EXAMPLE` | Vier Sätze zu *reliable*: supplier … on time every month; forecasts … approved the budget; old car … to the coast; train … break down and run late (k = work, work, life, form) | Natürlich, 8–18 Wörter, Übersetzungen genau? |
 
 ## 3. Feste Antworten für Entwicklung und Tests (nicht in der Live-App sichtbar)
 
@@ -173,9 +179,7 @@ Der Satz mit „colour“ ist **absichtlich britisch**: Mit ihm prüft der Test,
 
 ## 4. Satzbank SB (`src/domain/tutor/sentenceBank.ts`)
 
-Hier gibt es keine festen Inhalte. Neue KI-Sätze sammelt die App 4 Wochen lang nur in Quarantäne. Freigegeben werden sie erst, wenn in einer Stichprobe von 30 Sätzen (`teacherSample`) höchstens 2 harte Fehler stecken.
-
-**Prüffrage:** Reicht diese Schwelle aus Sicht des Lehrers?
+Hier gibt es keine festen Inhalte. Jeder neue KI-Satz bleibt ab seiner Erzeugung 4 Wochen in Quarantäne. Zusätzlich muss die Stichprobe von 30 Sätzen (`teacherSample`) bestehen: höchstens 1 harter Fehler und höchstens 2 nicht eindeutige Lücken. So hat es die Gegenlesung vom 19.10.2026 festgelegt.
 
 ## Ergebnis der Gegenlesung
 

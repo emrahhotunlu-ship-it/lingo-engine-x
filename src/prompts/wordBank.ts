@@ -35,7 +35,7 @@ export const WORD_BANK_EXAMPLE =
   '{"en":"We need a reliable supplier who can deliver the parts on time every month.","de":"Wir brauchen einen zuverlässigen Lieferanten, der die Teile jeden Monat pünktlich liefert.","sit":"supplier choice","k":"work"},' +
   '{"en":"Her forecasts were reliable enough that the board approved the budget without changes.","de":"Ihre Prognosen waren so verlässlich, dass der Vorstand das Budget ohne Änderungen genehmigte.","sit":"budget meeting","k":"work"},' +
   '{"en":"My old car is still surprisingly reliable, so we drove it to the coast again.","de":"Mein altes Auto ist immer noch erstaunlich zuverlässig, also sind wir wieder damit an die Küste gefahren.","sit":"weekend trip","k":"life"},' +
-  '{"en":"Is the train connection to the airport reliable in winter, or should we book a taxi?","de":"Ist die Zugverbindung zum Flughafen im Winter zuverlässig, oder sollten wir ein Taxi buchen?","sit":"travel planning","k":"form"}' +
+  '{"en":"Is the train to the airport reliable in winter, or does it break down and run late?","de":"Ist der Zug zum Flughafen im Winter zuverlässig, oder fällt er aus und hat Verspätung?","sit":"travel planning","k":"form"}' +
   ']}]}';
 
 const ID = 'word-bank';

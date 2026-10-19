@@ -4,7 +4,7 @@ import { patIdsOf } from '../domain/tutor/patList';
 import { isWrongLang } from '../domain/lang/detect';
 import type { HypState } from '../domain/tutor/tutorTypes';
 import { cleanEv } from './assess';
-import { clip, header, langName } from './common';
+import { clip, header, langName, US_SIMPLE_PAST_RULE } from './common';
 import { cut } from './tolerant';
 import type { PromptTemplate, UiLang } from './types';
 
@@ -49,7 +49,7 @@ const ID = 'diagnose';
 const VERSION = 2;
 
 export const DIAGNOSE2_EXAMPLE =
-  '{"hyps":[{"id":"h:psp.finished-time>psp.result-now","verdict":"likely","ev":["cf:psp.finished-time>psp.result-now"],"why":{"de":"Bei „yesterday“ und „last week“ steht mehrmals „have done“: das deutsche Perfekt wird übertragen.","en":"With “yesterday” and “last week” you used “have done” several times: the German Perfekt carries over."}}],"focus":["psp.finished-time"],"summary":{"de":"Die Zeitform nach abgeschlossenen Zeitangaben ist diese Woche das Hauptthema.","en":"The tense after finished time expressions is the main topic this week."}}';
+  '{"hyps":[{"id":"h:psp.finished-time>psp.result-now","verdict":"likely","ev":["cf:psp.finished-time>psp.result-now"],"why":{"de":"Bei „yesterday“ und „last week“ hast du mehrmals „have done“ benutzt: Du überträgst das deutsche Perfekt.","en":"With “yesterday” and “last week” you used “have done” several times: the German Perfekt carries over."}}],"focus":["psp.finished-time"],"summary":{"de":"Die Zeitform nach abgeschlossenen Zeitangaben ist diese Woche das Hauptthema.","en":"The tense after finished time expressions is the main topic this week."}}';
 
 const bytes = (s: string): number => new TextEncoder().encode(s).length;
 
@@ -145,6 +145,7 @@ export const diagnoseV2: PromptTemplate<DiagnoseV2Vars, DiagnoseV2Out> = {
       '- "hyps": for each hypothesis id from the list (copy the id exactly), say "likely" if the evidence clearly supports it, "unlikely" if the evidence speaks against it (e.g. the other form is also correct English, or only one context), otherwise "unclear". Never add hypotheses that are not in the list.',
       '- A hypothesis with state=quiet has no new evidence for 14 days: do not call it learned. state=resolved: the learner used the form correctly; only confirm it.',
       '- Good English is never an error: if the learner\'s form is also correct (British forms, another valid tense or word order), the verdict is "unlikely".',
+      `- ${US_SIMPLE_PAST_RULE}: such a case is not evidence for an error.`,
       `- "ev": 1–${DIAGNOSE2_EV_MAX} evidence ids copied exactly from the [brackets] (without the brackets).`,
       `- "focus": 0–${DIAGNOSE2_FOCUS_MAX} pattern ids from the pattern list that matter most this week, most important first.`,
       '- "why" and "summary": {"de": German, "en": English}, calm and factual, no praise, no blame, no CEFR level, score or percentage; address the learner as "du" / "you". Put English example words in “…”.',

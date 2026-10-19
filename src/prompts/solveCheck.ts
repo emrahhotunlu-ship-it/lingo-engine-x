@@ -23,7 +23,8 @@ export const SOLVE_ANSWERS_MAX = 6;
 export const SOLVE_CHECK_BG_PER_DAY = 2;
 
 export const SOLVE_CHECK_EXAMPLE =
-  '{"results":[{"i":0,"answers":["was signed"],"ambiguous":false,"why":{"de":"„yesterday“ verlangt Past Simple, und der Vertrag handelt nicht selbst: Passiv.","en":"“yesterday” needs the past simple, and the contract does not act itself: passive."}},{"i":1,"answers":["has worked","has been working"],"ambiguous":true,"why":{"de":"Mit „since 2020“ passen beide Formen des Present Perfect.","en":"With “since 2020” both present perfect forms fit."}}]}';
+  '{"results":[{"i":0,"answers":["was signed"],"ambiguous":false,"why":{"de":"„yesterday“ verlangt Past Simple, und der Vertrag handelt nicht selbst: Passiv.","en":"“yesterday” needs the past simple, and the contract does not act itself: passive."}},{"i":1,"answers":["has worked","has been working"],"ambiguous":false,"why":{"de":"Mit „since 2020“ passen beide Formen des Present Perfect.","en":"With “since 2020” both present perfect forms fit."}},' +
+  '{"i":2,"answers":["met","have met","are meeting","will meet"],"ambiguous":true,"why":{"de":"Ohne Zeitangabe passen mehrere Zeitformen.","en":"Without a time expression, several tenses fit."}}]}';
 
 const ID = 'solve-check';
 const VERSION = 1;

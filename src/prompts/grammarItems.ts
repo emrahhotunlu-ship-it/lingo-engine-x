@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { foreignSignalPattern, hasSignal, patternNearGap, patternsOf } from '../domain/grammar/patterns';
 import { isWrongLang } from '../domain/lang/detect';
 import { acceptGrammarItem } from '../domain/tutor/acceptGrammarItem';
-import { clip, header, lenientArray, normalizeTaskRaw } from './common';
+import { clip, header, lenientArray, normalizeTaskRaw, US_SIMPLE_PAST_RULE } from './common';
 import type { PromptTemplate } from './types';
 
 // @5 (Tutor-Engine v3 §6.3, E5, im Konzept „grammar-items@3“): eingebaute Lösungs-Selbstprüfung. Claude löst jede Aufgabe ein zweites Mal blind
@@ -62,7 +62,7 @@ export const ITEMS_SEEN_MAX = 20;
 export const ITEMS_ERRORS_MAX = 5;
 
 export const GRAMMAR_ITEMS_EXAMPLE =
-  '{"items":[{"topic":"passive","type":"gap","prompt":"The new contract ___ (sign) yesterday.","answer":"was signed","accepted":[],"options":null,"hint_de":"(sign)","explanation_de":"„yesterday“ zeigt eine abgeschlossene Zeit, und der Vertrag handelt nicht selbst → was + 3. Form.","explanation_en":"“yesterday” shows finished time, and the contract does not act itself → was + past participle.","src":"ai","self":{"solved":"was signed","also":[]}},{"topic":"passive","type":"correct","prompt":"The invoices was sent to the client last Friday.","answer":"The invoices were sent to the client last Friday.","accepted":[],"options":null,"hint_de":"","explanation_de":"„invoices“ ist Plural, deshalb steht im Passiv „were“ statt „was“.","explanation_en":"“invoices” is plural, so the passive needs “were”, not “was”.","src":"ai","goal":{"de":"Die Rechnungen gingen letzten Freitag an den Kunden.","en":"The invoices went to the client last Friday."},"self":{"solved":"The invoices were sent to the client last Friday.","also":[]}}]}';
+  '{"items":[{"topic":"passive","type":"gap","prompt":"The new contract ___ (sign) yesterday.","answer":"was signed","accepted":["got signed"],"options":null,"hint_de":"(sign)","explanation_de":"„yesterday“ zeigt eine abgeschlossene Zeit, und der Vertrag handelt nicht selbst → was + 3. Form.","explanation_en":"“yesterday” shows finished time, and the contract does not act itself → was + past participle.","src":"ai","self":{"solved":"was signed","also":["got signed"]}},{"topic":"passive","type":"correct","prompt":"The invoices was sent to the client last Friday.","answer":"The invoices were sent to the client last Friday.","accepted":[],"options":null,"hint_de":"","explanation_de":"„invoices“ ist Plural, deshalb steht im Passiv „were“ statt „was“.","explanation_en":"“invoices” is plural, so the passive needs “were”, not “was”.","src":"ai","goal":{"de":"Die Rechnungen gingen letzten Freitag an den Kunden.","en":"The invoices went to the client last Friday."},"self":{"solved":"The invoices were sent to the client last Friday.","also":[]}}]}';
 
 const ID = 'grammar-items';
 const VERSION = 5;
@@ -192,7 +192,8 @@ export const grammarItems: PromptTemplate<GrammarItemsVars, GrammarItemsOut> = {
       'Reply with only one JSON object of this shape (two items shown):',
       GRAMMAR_ITEMS_EXAMPLE,
       'Rules:',
-      '- EXACTLY ONE correct answer per item. Reject any item where a second option is also grammatical in some context.',
+      '- EXACTLY ONE correct answer in this sentence. If another answer also fits this sentence, list it in "accepted" or rewrite the sentence.',
+      `- ${US_SIMPLE_PAST_RULE}: list it in "accepted".`,
       '- Tense items (mc and gap): the sentence MUST contain a clear signal (e.g. "yesterday", "right now", "since 2020", "every Monday", "by next June") that rules out every other option. Without such a signal, "is" vs. "was" is ambiguous – never write that.',
       '  If another form would also be correct, add a signal word that rules it out, or list it in "accepted".',
       '- If there are recent mistakes, write NEW items that test exactly the same confusion with different sentences.',
