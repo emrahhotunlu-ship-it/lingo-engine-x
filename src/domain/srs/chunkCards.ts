@@ -1,16 +1,10 @@
 import { typedForm } from '../chunks/situation';
 import { counts } from './cards';
 import { stageOf } from './ladder';
+import { isFunctionGap } from './partner';
 
-/**
- * Wendungen überspringen die Auswahlstufen (Lernberatung 27.09., „weglassen"): Erkennen und
- * Zuordnen (1–2) sind für neue Business-Wendungen fast verschenkte Zeit – abgefragt wird ab
- * „Mit Stütze abrufen" (3). Die gespeicherte Stufe bleibt unverändert (Kap. 9); nach einem
- * Treffer auf Stufe 3 steigt sie regulär (nextStage).
- */
-export const chunkStage = (s: Stage): Stage => (s === 1 || s === 2 ? 3 : s);
 import { isFutureFsrs, isNewState, readFsrs } from './scheduler';
-import type { ChunkInfo, ContextSpan, Lang, Stage, TrainCard } from './types';
+import type { ChunkInfo, ContextSpan, Lang, TrainCard } from './types';
 
 // Wendungen (`chunk/<id>`, altapp-analyse §5) als Trainerkarten (phase1-plan §4.1, phase3-plan
 // Z. 25): dieselbe FSRS-Planung wie Vokabeln. Die Planungsfelder der alten App (S, D, due, last,
@@ -50,38 +44,92 @@ function sameWord(text: string, want: string, flex: boolean): boolean {
   return [want + 's', want + 'es', want + 'ed', want + 'd', base + 'ing', base + 'ed', want + want.slice(-1) + 'ed', want + want.slice(-1) + 'ing'].includes(text) || (want.endsWith('y') && [want.slice(0, -1) + 'ies', want.slice(0, -1) + 'ied'].includes(text));
 }
 
+/** Ein festes Wort der Wendung im Satz (ohne Platzhalter): Wortlaut im Satz und Stelle. */
+export type ChunkWordSpan = { w: string; start: number; end: number };
+
 /**
- * Stelle der Wendung im Satz (Zeichen-Offsets), ohne Groß/klein, Satzzeichen und „…“.
+ * Stelle der Wendung im Satz (Zeichen-Offsets) mit der Stelle jedes festen Worts, ohne Groß/klein, Satzzeichen und „…“.
  * Platzhalter passen auf 1–4 Wörter; erstes und letztes Wort dürfen gebeugt sein.
  */
-export function locateChunk(sentence: string, phrase: string): { start: number; end: number } | null {
+export function locateChunkWords(sentence: string, phrase: string): { start: number; end: number; words: ChunkWordSpan[] } | null {
   const t = words(sentence);
   const p = words(typedForm(phrase)).map((x) => x.w);
   if (!p.length || p.every((w) => PLACEHOLDERS.has(w))) return null;
   const last = p.length - 1;
-  const match = (i: number, k: number): number | null => {
-    if (k === p.length) return i;
+  const match = (i: number, k: number, acc: number[]): { end: number; acc: number[] } | null => {
+    if (k === p.length) return { end: i, acc };
     const w = p[k] as string;
     if (PLACEHOLDERS.has(w) && k > 0 && k < last) {
       for (let n = 1; n <= WILDCARD_MAX && i + n <= t.length; n++) {
-        const r = match(i + n, k + 1);
+        const r = match(i + n, k + 1, acc);
         if (r !== null) return r;
       }
       return null;
     }
     const tok = t[i];
     if (!tok || !sameWord(tok.w, w, k === 0 || k === last)) return null;
-    return match(i + 1, k + 1);
+    return match(i + 1, k + 1, [...acc, i]);
   };
   for (let i = 0; i < t.length; i++) {
-    const endIdx = match(i, 0);
-    if (endIdx !== null) {
+    const r = match(i, 0, []);
+    if (r !== null) {
       const a = t[i] as Tok;
-      const b = t[endIdx - 1] as Tok;
-      return { start: a.start, end: b.end };
+      const b = t[r.end - 1] as Tok;
+      return { start: a.start, end: b.end, words: r.acc.map((j) => ({ w: sentence.slice((t[j] as Tok).start, (t[j] as Tok).end), start: (t[j] as Tok).start, end: (t[j] as Tok).end })) };
     }
   }
   return null;
+}
+
+/** Stelle der Wendung im Satz (Zeichen-Offsets). */
+export function locateChunk(sentence: string, phrase: string): { start: number; end: number } | null {
+  const hit = locateChunkWords(sentence, phrase);
+  return hit ? { start: hit.start, end: hit.end } : null;
+}
+
+// ------------------------------------------------------------------ Kern und Rahmen (WL, 19.10.2026)
+
+/** Präpositionen und Partikeln: Sie gehören zum Rahmen der Wendung („meet ___ halfway“, „push back“). */
+const FRAME_WORDS = new Set([
+  'in', 'on', 'at', 'for', 'with', 'by', 'from', 'about', 'into', 'over', 'up', 'out', 'off', 'down', 'back', 'away', 'through', 'across', 'against', 'along', 'around',
+  'between', 'of', 'onto', 'upon', 'under', 'within', 'without', 'after', 'before', 'behind', 'beyond', 'toward', 'towards', 'to',
+]);
+
+export type ChunkPart = { text: string; kind: 'core' | 'frame' | 'slot' };
+
+/**
+ * Die Wendung in Teile: Kern (Inhaltswörter), Rahmen (Präposition, Partikel, Artikel, Hilfsverb) und Platzhalter („sb“, „sth“). Rein, nur Anzeige.
+ * Besteht die Wendung nur aus Rahmenwörtern („in return for“), ist das erste Inhaltswort der Kern: hier das längste Wort.
+ */
+export function chunkParts(phrase: string): ChunkPart[] {
+  const parts: ChunkPart[] = typedForm(phrase)
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((text) => {
+      const w = normWord(text);
+      return { text, kind: PLACEHOLDERS.has(w) ? 'slot' : FRAME_WORDS.has(w) || isFunctionGap(w) ? 'frame' : 'core' };
+    });
+  if (parts.length && !parts.some((x) => x.kind === 'core')) {
+    const longest = parts.reduce<number>((best, x, i) => (x.kind === 'frame' && x.text.length > (parts[best]?.text.length ?? 0) ? i : best), 0);
+    const hit = parts[longest];
+    if (hit && hit.kind === 'frame') hit.kind = 'core';
+  }
+  return parts;
+}
+
+/**
+ * Wörter der Wendung im Satz, die als einzelne Lücke taugen (nie Artikel, Hilfsverben, Platzhalter): Kernwörter zuerst, danach Präpositionen/Partikeln.
+ * `[]`, wenn die Wendung im Satz nicht steht.
+ */
+export function chunkGapWords(sentence: string, phrase: string): ChunkWordSpan[] {
+  const hit = locateChunkWords(sentence, phrase);
+  if (!hit) return [];
+  const usable = hit.words.filter((x) => {
+    const w = normWord(x.w);
+    return w.length >= 2 && w !== 'to' && !PLACEHOLDERS.has(w) && !isFunctionGap(w);
+  });
+  const core = usable.filter((x) => !FRAME_WORDS.has(normWord(x.w)));
+  return [...core, ...usable.filter((x) => FRAME_WORDS.has(normWord(x.w)))];
 }
 
 export function chunkContext(sentence: string | null, en: string): ContextSpan | null {
@@ -140,7 +188,7 @@ export function toChunkCard(id: string, doc: Doc, nowMs: number): TrainCard | nu
     col: [],
     src: info.srcKind,
     fsrs,
-    stage: chunkStage(stageOf(doc)),
+    stage: stageOf(doc),
     isNew: isNewState(fsrs),
     hidden: doc.hidden === true,
     xs: counts(doc.xs),

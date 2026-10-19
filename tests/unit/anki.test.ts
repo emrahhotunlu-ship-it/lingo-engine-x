@@ -122,9 +122,9 @@ describe('pickMode: alle 7 Regeln in ihrer Reihenfolge', () => {
     expect(pickMode({ ...base, card: reviewed(2, hist([NOW - 5 * D, 1, 'flip'])), requested: 'auto' })).toBe('flip');
     expect(pickMode({ ...base, card: reviewed(1, hist([NOW - 5 * D, 2, 'flip'])), requested: 'auto' })).toBe('flip');
   });
-  it('Wendung mit gespeicherter Stufe 2 wird aufgedeckt (nicht über chunkStage)', () => {
+  it('Wendung mit gespeicherter Stufe 2 wird aufgedeckt', () => {
     const c = toChunkCard('c1', chunkDoc({ state: 'review', stage: 2, reps: 2, S: 3, D: 5, due: NOW - 1000, last: NOW - 3 * D, hist: [] }), NOW) as TrainCard;
-    expect(c.stage).toBe(3);
+    expect(c.stage).toBe(2);
     expect(pickMode({ ...base, card: c, requested: 'auto' })).toBe('flip');
   });
 });

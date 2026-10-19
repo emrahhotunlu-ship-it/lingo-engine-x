@@ -68,6 +68,9 @@ export const exerciseDef = (ex: ExerciseId): ExerciseDef => CATALOG.find((d) => 
 /** Aus der Wörter-Leiter entfernte Arten: nie verfügbar, alte Daten bleiben lesbar. */
 export const RETIRED: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['spot', 'speed', 'tiles']);
 
+/** Entfernt für diese Karte? Bausteine (`tiles`) gibt es für Wendungen wieder (WL: Wort-Bausteine statt der ganzen Wendung auf einmal tippen). */
+export const retiredFor = (card: Pick<TrainCard, 'kind'>, ex: ExerciseId): boolean => RETIRED.has(ex) && !(ex === 'tiles' && card.kind === 'chunk');
+
 /** Arten, die für Wendungen nicht taugen (phase1-plan §4.2, Spalte „Chunk"). */
 const NOT_FOR_CHUNKS: ReadonlySet<ExerciseId> = new Set(['spot', 'wordfam']);
 
@@ -77,7 +80,7 @@ const gapOk = (card: TrainCard): boolean => !!card.context && gapUsable(card.con
 /** Was eine Übungsart an Kartendaten und Umgebung braucht. */
 export function supports(card: TrainCard, ex: ExerciseId, lang: Lang, poolSize: number, env: ExerciseEnv = NO_ENV): boolean {
   const meaning = meaningForTask(card, lang);
-  if (RETIRED.has(ex)) return false;
+  if (retiredFor(card, ex)) return false;
   if (card.kind === 'chunk' && NOT_FOR_CHUNKS.has(ex)) return false;
   switch (ex) {
     case 'mc_en':
@@ -141,14 +144,16 @@ const inStage = (d: ExerciseDef, k: number): boolean => d.stage === k || (d.also
 export function availableExercises(card: TrainCard, lang: Lang, poolSize: number, env: ExerciseEnv = NO_ENV): ExerciseId[] {
   const k = Math.max(1, card.stage);
   const ok = (d: ExerciseDef) => supports(card, d.ex, lang, poolSize, env);
-  const out = CATALOG.filter((d) => inStage(d, k) && ok(d)).map((d) => d.ex);
+  // Wendungen: auch die bausteinweise Eingabe schon auf Stufe 2 (ein Wort der Wendung, Buchstaben-Bausteine).
+  const inK = (d: ExerciseDef, st: number): boolean => inStage(d, st) || (card.kind === 'chunk' && d.ex === 'tiles' && st === 2);
+  const out = CATALOG.filter((d) => inK(d, k) && ok(d)).map((d) => d.ex);
   // WL: Mindestens zwei Arten UND zwei verschiedene Abfrage-Familien (nicht zweimal „Bedeutung wählen“), wo möglich.
   const families = (): number => new Set(out.map(familyOf)).size;
   for (let dist = 1; (out.length < 2 || families() < 2) && dist <= 4; dist++) {
     for (const s of [k + dist, k - dist]) {
       for (const d of CATALOG) {
         if (out.length >= 2 && families() >= 2) break;
-        if (!inStage(d, s) || !ok(d) || out.includes(d.ex)) continue;
+        if (!inK(d, s) || !ok(d) || out.includes(d.ex)) continue;
         if (out.length >= 2 && out.some((x) => familyOf(x) === familyOf(d.ex))) continue;
         out.push(d.ex);
       }
@@ -237,7 +242,7 @@ export function chooseExercise(card: TrainCard, lang: Lang, poolSize: number, re
   const others = card.lastEx ? all.filter((ex) => ex !== card.lastEx) : all;
   const avail = others.length ? others : all;
   const ranked = avail
-    .map((ex, i) => ({ ex, i, s: score(countsFor(card, ex)) + varietyBias(ex, v, card.stage) + (card.stage >= 3 && isChoiceEx(ex) ? CHOICE_PENALTY : 0) - (weakProd && isProductionEx(ex) ? PRODUCTION_BOOST : 0) }))
+    .map((ex, i) => ({ ex, i, s: score(countsFor(card, ex)) + varietyBias(ex, v, card.stage) + ((card.stage >= 3 || (card.kind === 'chunk' && card.stage >= 2)) && isChoiceEx(ex) ? CHOICE_PENALTY : 0) - (weakProd && isProductionEx(ex) ? PRODUCTION_BOOST : 0) }))
     .sort((a, b) => a.s - b.s || a.i - b.i);
   const best = ranked[0];
   if (!best) return null;

@@ -3,7 +3,7 @@ import { deriveToday, type DayEntry } from '../../src/domain/plan/buildPlan';
 import { entryCardKey, logEntry, mergeLogEntries } from '../../src/domain/progress/logPatch';
 import { applyUpdate, chunkMode, chunkPatchSchema, reviewWrite } from '../../src/domain/srs/applyReview';
 import { buildTrainCards, toTrainCard } from '../../src/domain/srs/cards';
-import { buildChunkCards, chunkStage, chunkWhy, locateChunk, toChunkCard } from '../../src/domain/srs/chunkCards';
+import { buildChunkCards, chunkWhy, locateChunk, toChunkCard } from '../../src/domain/srs/chunkCards';
 import { buildExercise, buildTiles, inflectLike, speedLimitMs, tilesAnswer } from '../../src/domain/srs/exercise';
 import { autoGrade, produceGrade } from '../../src/domain/srs/grade';
 import { availableExercises, CATALOG, chooseExercise, NO_ENV } from '../../src/domain/srs/modes';
@@ -412,8 +412,9 @@ describe('produce-check: feste Testantworten bestehen das Schema, tolerant geles
   });
 });
 
-describe('Wendungen ab „Mit Stütze abrufen" (Lernberatung 27.09.)', () => {
-  it('Stufen 1–2 werden als 3 abgefragt, 0 (neu) und ab 3 unverändert', () => {
-    expect([0, 1, 2, 3, 4, 5].map((s) => chunkStage(s as 0 | 1 | 2 | 3 | 4 | 5))).toEqual([0, 3, 3, 3, 4, 5]);
+describe('Wendungen: alle fünf Stufen (WL, 19.10.2026)', () => {
+  it('die gespeicherte Stufe gilt unverändert, es gibt kein Überspringen der Stufen 1 und 2 mehr', () => {
+    for (const stage of [1, 2, 3, 4, 5] as const) expect(ccard({ stage }).stage).toBe(stage);
+    expect(ccard({ stage: 1 }).stage).toBe(1);
   });
 });

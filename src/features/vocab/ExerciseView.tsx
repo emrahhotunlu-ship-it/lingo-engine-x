@@ -695,9 +695,9 @@ export function ExerciseView({
   const mask = placeholdersOnly
     ? maskOf(solution, { firstLetter: false })
     : e.ex === 'cloze_hint' || retry?.kind === 'start'
-      ? maskOf(solution, { firstLetter: true })
+      ? maskOf(solution, { firstLetter: true, perWord: card.kind === 'chunk' })
       : FREE_TYPED.has(e.ex) && tip > 0
-        ? maskOf(solution, { firstLetter: e.ex === 'wordfam' || colTyped ? tip >= 1 && !(e.ex === 'wordfam' && tip === 1) : tip >= 2 })
+        ? maskOf(solution, { firstLetter: e.ex === 'wordfam' || colTyped ? tip >= 1 && !(e.ex === 'wordfam' && tip === 1) : tip >= 2, perWord: card.kind === 'chunk' })
         : null;
   const gapReveal = fb && fb.result.verdict !== 'correct' && isTyped ? { solution, given: fb.given.trim() ? fb.given : null } : null;
   const gapNode = (

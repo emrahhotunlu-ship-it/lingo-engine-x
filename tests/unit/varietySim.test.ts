@@ -20,7 +20,7 @@ import { distinctForms, familyOf, sentKey, varietyOf } from '../../src/domain/sr
 
 const DAY = 86_400_000;
 type Doc = Record<string, unknown>;
-type Step = { ex: ExerciseId; sk: string | null; stage: number; sents: number; avail: number; again: boolean };
+type Step = { ex: ExerciseId; sk: string | null; stage: number; sents: number; avail: number; again: boolean; day: string };
 type Fest = { forms: number; cap: number };
 type Sim = { steps: Map<string, Step[]>; docs: Map<string, Doc>; fest: Fest[] };
 
@@ -72,7 +72,7 @@ function simulate(env: ExerciseEnv, days: number, cardsN: number, seed: number):
       const sk = e.sentence?.sentence ? sentKey(e.sentence.sentence) : null;
       const ok = rng() < 0.85;
       const list = steps.get(id) ?? [];
-      list.push({ ex, sk, stage: card.stage, sents: contextsOf(card).length, avail: availableExercises(card, 'de', pool.length - 1, env).length, again: false });
+      list.push({ ex, sk, stage: card.stage, sents: contextsOf(card).length, avail: availableExercises(card, 'de', pool.length - 1, env).length, again: false, day: today });
       steps.set(id, list);
       const doc = docs.get(id)!;
       const ev = { t, day: today, kind: card.kind === 'chunk' ? ('chunk' as const) : ('v' as const), id, ex, grade: ok ? (3 as const) : (1 as const), given: '', ans: '', ms: 3000, lang: 'de' as const, ctx: 'rev' as const, ...(sk ? { sx: sk } : {}) };
@@ -117,13 +117,15 @@ describe.each([
     expect(bad).toEqual([]);
   });
 
-  it('derselbe Satz kommt bei einer Karte mit mindestens zwei Sätzen nie zweimal hintereinander (ab Stufe 3, wo der Satz wechselt)', () => {
+  it('derselbe Satz kommt bei einer Karte mit mindestens zwei Sätzen nie zweimal hintereinander (an verschiedenen Tagen)', () => {
     const bad: string[] = [];
     for (const [id, list] of sim.steps) {
       for (let i = 1; i < list.length; i++) {
         const a = list[i - 1]!;
         const b = list[i]!;
-        if (b.stage >= 3 && b.sents >= 2 && a.sk && b.sk && a.sk === b.sk) bad.push(`${id}@${i}:${b.ex}`);
+        // WL: Am ersten Lerntag einer Karte bleibt der Ursprungssatz der Anker (auch bei „Nochmal“ in derselben Runde); gewechselt wird ab einem anderen Tag.
+        // Wortpartner-Aufgaben haben ihre eigenen Partnersätze (`col[].ex`), nicht den wechselnden Satz der Karte.
+        if (a.day !== b.day && b.ex !== 'colloc' && b.ex !== 'colloc_gap' && b.stage >= 3 && b.sents >= 2 && a.sk && b.sk && a.sk === b.sk) bad.push(`${id}@${i}:${b.ex}`);
       }
     }
     // Ausnahmen sind nur Formen, die bewusst im Ursprungssatz bleiben (Erkennen/Auswahl). Die Zahl bleibt klein.

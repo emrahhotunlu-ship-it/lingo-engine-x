@@ -6,6 +6,7 @@ import { exerciseDef } from './modes';
 import { familyFrom, partnerOf, trapTask } from './partner';
 import { packExtraOf } from '../c1pack/packFields';
 import { isTruncated, rotatedContext } from './rotate';
+import { chunkGapWords } from './chunkCards';
 import type { ActTask } from './actTask';
 import { briefCodesOf, pickBrief } from './brief';
 import { findContext, formsOf, locate } from './context';
@@ -310,7 +311,11 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
   // Eine Lücke, die mehr verdeckt als das Wort der Karte (beliebiges Objekt) oder das Wort ein zweites Mal zeigt, ist keine Lücke (`gapFit.ts`).
   const day = /^(\d{4}-\d{2}-\d{2})\|/.exec(seed)?.[1];
   const rawCtx = opts.origin ? card.context : rotatedContext(card, ex, day);
-  const ctx = rawCtx && gapUsable(rawCtx, lemmaFor(card)) ? rawCtx : null;
+  // Wendungen (WL): Bis Stufe 2 ist nur EIN Wort der Wendung die Lücke (bei Stütze und Bausteinen), das wechselnde Wort ergibt sich aus dem Verlauf; Stufe 3 zeigt die ganze
+  // Wendung mit Stütze (Anfangsbuchstabe je Wort, Bausteine); „frei“ (`cloze`) ist die ganze Wendung erst ab Stufe 4. Davor ist `cloze` ein freies EINZELnes Wort.
+  const wordGap = card.kind === 'chunk' && !!rawCtx && (((ex === 'cloze_hint' || ex === 'tiles') && stage <= 2) || (ex === 'cloze' && stage < CHUNK_FREE_STAGE));
+  const single = wordGap && rawCtx ? chunkWordGap(card, rawCtx) : null;
+  const ctx = single && gapUsable(single, lemmaFor(card)) ? single : !wordGap && rawCtx && gapUsable(rawCtx, lemmaFor(card)) ? rawCtx : null;
 
   switch (ex) {
     case 'listen_mc':
@@ -473,6 +478,18 @@ export function choiceVerdict(e: Pick<Exercise, 'ex' | 'card' | 'meaning'>, chos
     if (meaningsOverlap(other, e.meaning)) return { verdict: 'near', kind: 'synonym', ...(chosen.fromWord ? { otherWord: chosen.fromWord } : {}) };
   }
   return { verdict: 'wrong' };
+}
+
+/** Ab dieser Stufe wird die ganze Wendung frei getippt (davor ein Wort der Wendung oder mit Stütze). */
+export const CHUNK_FREE_STAGE = 4;
+
+/** Das wechselnde Wort der Wendung als Lücke: reihum durch die Lückenwörter (Kern zuerst), nach der Zahl der bisherigen Antworten. */
+export function chunkWordGap(card: Pick<TrainCard, 'word' | 'doc'>, ctx: NonNullable<TrainCard['context']>): NonNullable<TrainCard['context']> | null {
+  const cands = chunkGapWords(ctx.sentence, card.word);
+  if (!cands.length) return null;
+  const n = Array.isArray(card.doc.hist) ? (card.doc.hist as unknown[]).length : 0;
+  const w = cands[n % cands.length] as (typeof cands)[number];
+  return { sentence: ctx.sentence, start: w.start, end: w.end, gap: ctx.sentence.slice(w.start, w.end) };
 }
 
 // ------------------------------------------------------------------ „Passt das Wort in diesen Satz?“ (fits, WL 19.10.2026)

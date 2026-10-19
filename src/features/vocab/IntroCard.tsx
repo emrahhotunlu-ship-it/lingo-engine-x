@@ -12,6 +12,7 @@ import { reportViolations } from '../../domain/srs/guard';
 import { supports } from '../../domain/srs/modes';
 import { posKey } from '../../domain/srs/explain';
 import { registerOf } from '../../domain/srs/explainWord';
+import { chunkParts, chunkWhy } from '../../domain/srs/chunkCards';
 import { trapForCard } from '../../domain/srs/traps';
 import type { TrainCard } from '../../domain/srs/types';
 import { useT, type MessageKey } from '../../i18n';
@@ -81,6 +82,8 @@ function Learn({ card, onDone }: { card: TrainCard; onDone: (kind: FirstKind) =>
   const ipa = ipaOf(card.word);
   const pk = posKey(card.pos);
   const col = extra?.col?.[0]?.en ?? card.col.find((c) => c.p)?.p ?? null;
+  const parts = card.kind === 'chunk' ? chunkParts(card.word) : [];
+  const chunkReason = card.kind === 'chunk' ? chunkWhy(card, lang) : null;
   const fam = extra?.fam ? Object.entries(extra.fam).filter(([, w]) => !!w) : [];
   const go = () => {
     const kind = continueIntro();
@@ -152,6 +155,31 @@ function Learn({ card, onDone }: { card: TrainCard; onDone: (kind: FirstKind) =>
                 </>,
                 'intro-row-meaning',
               )}
+            {parts.length > 1 &&
+              row(
+                t('wxIntroParts'),
+                <>
+                  <span lang="en" className="lx-t-body" data-testid="intro-parts">
+                    {parts.map((p, i) => (
+                      <span key={i} data-part={p.kind} className={p.kind === 'core' ? 'font-semibold text-fg' : p.kind === 'frame' ? 'text-muted' : 'italic text-subtle'}>
+                        {i > 0 ? ' ' : ''}
+                        {p.text}
+                      </span>
+                    ))}
+                  </span>
+                  <span className="lx-t-meta mt-0.5 block text-subtle" lang={lang} data-testid="intro-parts-legend">
+                    {[
+                      t('wxIntroCore', { words: parts.filter((p) => p.kind === 'core').map((p) => p.text).join(' · ') }),
+                      parts.some((p) => p.kind === 'frame') ? t('wxIntroFrame', { words: parts.filter((p) => p.kind === 'frame').map((p) => p.text).join(' · ') }) : null,
+                      parts.some((p) => p.kind === 'slot') ? `${parts.filter((p) => p.kind === 'slot').map((p) => p.text).join(' / ')} = ${t('wxIntroSlotNote')}` : null,
+                    ]
+                      .filter(Boolean)
+                      .join(' · ')}
+                  </span>
+                </>,
+                'intro-row-parts',
+              )}
+            {chunkReason && row(t('wxIntroWhy'), <span lang={lang}>{chunkReason}</span>, 'intro-row-why')}
             {col &&
               row(
                 t('wxIntroUse'),

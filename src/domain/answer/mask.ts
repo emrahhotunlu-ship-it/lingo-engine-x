@@ -8,12 +8,19 @@ export type MaskCell = { kind: 'slot'; hint?: string } | { kind: 'fixed'; ch: st
 const LETTER = /[\p{L}\p{N}]/u;
 
 /** Eine Zelle je Zeichen der Lösung; `firstLetter` zeigt den ersten Buchstaben als Hilfe. */
-export function maskOf(answer: string, opts: { firstLetter?: boolean } = {}): MaskCell[] {
+export function maskOf(answer: string, opts: { firstLetter?: boolean; /** WL: bei Wendungen der erste Buchstabe JEDES Worts (nicht nur des ersten). */ perWord?: boolean } = {}): MaskCell[] {
   const chars = Array.from(answer.trim());
   let firstDone = false;
+  let wordStart = true;
   return chars.map((ch): MaskCell => {
-    if (!LETTER.test(ch)) return { kind: 'fixed', ch };
-    if (opts.firstLetter && !firstDone) {
+    if (!LETTER.test(ch)) {
+      // Ein Leerzeichen beginnt ein neues Wort; Bindestrich und Apostroph gehören noch zum Wort.
+      if (/\s/.test(ch)) wordStart = true;
+      return { kind: 'fixed', ch };
+    }
+    const first = opts.perWord ? wordStart : !firstDone;
+    wordStart = false;
+    if (opts.firstLetter && first) {
       firstDone = true;
       return { kind: 'slot', hint: ch };
     }
