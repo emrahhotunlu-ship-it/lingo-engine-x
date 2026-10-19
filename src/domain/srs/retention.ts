@@ -1,4 +1,5 @@
-import { UNIT_STATES, unitState, type UnitState } from '../metrics/definitions';
+import { UNIT_STATES, type UnitState } from '../metrics/definitions';
+import { wordTier } from '../tutor/learnerWords';
 import { expectedKnown, retention28 } from '../metrics/vocab';
 import type { TrainCard } from './types';
 
@@ -36,7 +37,7 @@ export function vocabStatistics(cards: readonly TrainCard[], nowMs: number): Voc
   for (const c of cards) {
     if (c.hidden) continue;
     out.total++;
-    const st = unitState(c, nowMs);
+    const st = wordTier(c, nowMs);
     byState[st]++;
     if (!c.isNew) stab.push(c.fsrs.stability);
     if (st === 'safe' || st === 'firm') out.sure++;

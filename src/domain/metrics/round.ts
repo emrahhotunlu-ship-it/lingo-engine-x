@@ -1,7 +1,8 @@
 import { dayKey } from '../date';
 import { isLearningState } from '../srs/scheduler';
 import type { TrainCard } from '../srs/types';
-import { UNIT_RANK, unitState, type UnitState } from './definitions';
+import { wordTier } from '../tutor/learnerWords';
+import { UNIT_RANK, type UnitState } from './definitions';
 
 // Wachstum einer Runde statt Antwortzahl (Motivation §4.7): Was ist aufgestiegen, wie lange hält das Gedächtnis jetzt, was kommt morgen
 // wieder. Die Runde hält den Stand vom Start (`before`), der Stand danach ist live (`after`). Rein, nichts wird geschrieben.
@@ -44,8 +45,8 @@ export function roundGrowth(before: readonly TrainCard[], after: readonly TrainC
   for (const c of after) {
     const o = was.get(c.key);
     if (!o || c.hidden || o.hidden) continue;
-    const from = unitState(o, nowMs);
-    const to = unitState(c, nowMs);
+    const from = wordTier(o, nowMs);
+    const to = wordTier(c, nowMs);
     if (rank(to) > rank(from)) up.push({ id: c.key, word: c.word, to });
     else if (rank(to) < rank(from) && !o.isNew) down++;
     const lastBefore = o.fsrs.last;

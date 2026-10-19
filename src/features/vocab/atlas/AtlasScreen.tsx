@@ -1,7 +1,8 @@
 import { lazy, Suspense, useMemo, useState } from 'react';
 import { flags } from '../../../app/flags';
 import { skyTones, skyVeil } from '../../../domain/atlas/sky';
-import { unitState, type UnitState } from '../../../domain/metrics/definitions';
+import type { UnitState } from '../../../domain/metrics/definitions';
+import { wordTier } from '../../../domain/tutor/learnerWords';
 import { useClock } from '../../../app/clock';
 import { useNav } from '../../../app/nav';
 import { useLive } from '../../../data/live';
@@ -70,7 +71,7 @@ export function AtlasScreen() {
   const tones = useMemo(() => {
     if (!sky) return [];
     const st = new Map<string, UnitState>();
-    for (const c of cards) if (c.kind === 'vocab') st.set(c.id, unitState(c, now));
+    for (const c of cards) if (c.kind === 'vocab') st.set(c.id, wordTier(c, now));
     return skyTones(
       words.map(atlasId),
       (id) => vocab.has(id),

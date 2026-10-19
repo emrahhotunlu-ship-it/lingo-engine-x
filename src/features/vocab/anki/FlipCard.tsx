@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useAiAvailable } from '../../../ai/scope';
 import { ipaOf } from '../../../domain/lexicon/pron';
 import { meaningOf } from '../../../domain/srs/cards';
-import { cardStatus } from '../../../domain/metrics';
+import { wordStatus } from '../../../domain/tutor/learnerWords';
 import { useClock } from '../../../app/clock';
 import { statusDetail } from '../statusText';
 import { cardExamples, wantsEnrichment } from '../../../domain/srs/examples';
@@ -75,7 +75,7 @@ export function FlipCard({ exercise, again = false, onDone, behind = 0 }: { exer
   const hiddenAt = useRef<number | null>(null);
   const wasHidden = useRef(false);
   const done = useRef(false);
-  const [stat0] = useState(() => cardStatus(card, useClock.getState().now));
+  const [stat0] = useState(() => wordStatus(card, useClock.getState().now));
   const state0 = stat0.tier;
 
   // Denkzeit ab dem ersten Bild der Vorderseite; Zeit im Hintergrund zählt nicht (§2).

@@ -176,6 +176,12 @@ export const isFestCard = (c: StatusCard & Pick<TrainCard, 'hidden'>, nowMs?: nu
 export type CardEvidence = ReturnType<typeof evidence>;
 export const cardEvidence = (c: StatusCard): CardEvidence => evidence(c);
 
+/** Wie `isFestState`, mit schon gerechnetem Beleg-Teil (`cardEvidence` derselben Karte). Gleiches Ergebnis. */
+export const isFestFrom = (c: StatusCard, e: CardEvidence, nowMs?: number): boolean => festByEvidence(c, e, nowMs === undefined ? null : reliableR(c, nowMs));
+
+/** Die Eingabe der Status-Regeln (Karte ohne `hidden`). */
+export type { StatusCard };
+
 /** Der Status einer Karte zum Zeitpunkt `nowMs`. */
 export function cardStatus(c: StatusCard, nowMs: number): CardStatus {
   return cardStatusFrom(c, evidence(c), nowMs);

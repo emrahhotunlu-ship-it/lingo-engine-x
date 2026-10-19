@@ -4,7 +4,8 @@ import { useNav } from '../../../app/nav';
 import { openSheet } from '../../../app/sheets';
 import { useLive } from '../../../data/live';
 import { meaningOf } from '../../../domain/srs/cards';
-import { cardStatus, reviewToday } from '../../../domain/metrics';
+import { reviewToday } from '../../../domain/metrics';
+import { wordStatus } from '../../../domain/tutor/learnerWords';
 import { addIdsOp, isLeechCard, visibleDecks } from '../../../domain/srs/decks';
 import { filterCards, VOCAB_FILTERS, vocabStats, type VocabFilter, type VocabSort } from '../../../domain/srs/vocabList';
 import { normalizeNewPerDay } from '../../../domain/srs/queue';
@@ -208,7 +209,7 @@ export function VocabScreen({ filter: initialFilter, q: initialQ }: { filter?: s
 
 export function WordRow({ card, nowMs, lang, onOpen, selecting, selected }: { card: TrainCard; nowMs: number; lang: 'de' | 'en'; onOpen: () => void; selecting: boolean; selected: boolean }) {
   const { t, dateShort } = useT();
-  const st = cardStatus(card, nowMs);
+  const st = wordStatus(card, nowMs);
   const meaning = meaningOf(card, lang);
   return (
     <button

@@ -14,6 +14,7 @@ import type { InputProfile } from '../../../domain/grammar/tasks';
 import { local } from '../../../platform/storage';
 import { useTodayPlan } from '../../today/store';
 import { holdGatedRepairs } from '../store';
+import { learnerNow } from '../../tutor/learnerLive';
 
 // Schritt 4 der Tageseinheit „Fehler korrigieren“ (Lernplattform 2.0 §5.7): die EINE Fehlerschlange, Satz für Satz. Die Karten
 // (Grammatikfehler und Reparatur-Sätze aus `dueFehlersaetze`, höchstens `limit`) werden beim Start eingefroren; jede Antwort wird
@@ -81,7 +82,9 @@ export function againCards(day: string, limit: number, lang: Lang): RepairCard[]
   const live = useLive.getState();
   const grammarDocs = live.collections.grammar ?? new Map<string, Readonly<Record<string, unknown>>>();
   const repairDoc = live.docs['app/repair'] ?? null;
-  const items = dueFehlersaetze({ grammarDocs, repairDoc, nowMs: useClock.getState().now, today: day, limit, lang });
+  // Ein Lernermodell (Tutor-Engine v3 S2): am selben Fälligkeitstag kommt das schwächere Muster zuerst; ohne fertiges Modell bleibt die Reihenfolge.
+  const m = learnerNow();
+  const items = dueFehlersaetze({ grammarDocs, repairDoc, nowMs: useClock.getState().now, today: day, limit, lang, ...(m ? { pOf: (pat: string) => m.patterns.get(pat.slice(pat.indexOf(':') + 1))?.p } : {}) });
   const seen = readSeen();
   const cards = repairCards({ items, grammarDocs, repairDoc, seen });
   rememberSeen(seen, cards);

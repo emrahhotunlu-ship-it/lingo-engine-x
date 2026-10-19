@@ -1,4 +1,4 @@
-import { cardStatus } from '../../domain/metrics';
+import { wordStatus } from '../../domain/tutor/learnerWords';
 import { FREE_DAYS_GOAL } from '../../domain/metrics/cardStatus';
 import type { TrainCard } from '../../domain/srs/types';
 import { useT } from '../../i18n';
@@ -6,13 +6,13 @@ import { StateDots } from './StateDots';
 import { STATE_WORD, mindAdds, mindLine, statusDetail } from './statusText';
 
 // Der EINE Status im Wortblatt (Paket ST): oben eine Zeile „Zustand · Beleg · zuletzt falsch“, darunter „Jetzt im Kopf“ und die Leiter der Belege.
-// Liste, Übung, Hub und Fortschritt lesen dieselbe Rechnung (`cardStatus`) und dieselben Texte (`statusText`).
+// Liste, Übung, Hub und Fortschritt lesen dieselbe Rechnung (Lernermodell `wordStatus`, Regeln in `cardStatus.ts`) und dieselben Texte (`statusText`).
 
 type Card = Pick<TrainCard, 'isNew' | 'stage' | 'fsrs' | 'doc'>;
 
 export function StatusHeader({ card, now }: { card: Card; now: number }) {
   const { t, dateShort } = useT();
-  const st = cardStatus(card, now);
+  const st = wordStatus(card, now);
   return (
     <>
       <div className="flex flex-col gap-1" data-testid="word-status" data-state={st.tier}>
@@ -37,7 +37,7 @@ export function StatusHeader({ card, now }: { card: Card; now: number }) {
 export function StatusLadder({ card, now }: { card: Card; now: number }) {
   const { t } = useT();
   if (card.isNew) return null;
-  const st = cardStatus(card, now);
+  const st = wordStatus(card, now);
   const rows: ReadonlyArray<readonly [string, string, boolean, string | null]> = [
     ['recognize', t('stxStepRecognize'), st.recognizes, null],
     ['help', t('stxStepHelp'), st.helped, null],

@@ -3,6 +3,7 @@ import { histOf } from '../srs/flip';
 import { retrievability } from '../srs/scheduler';
 import { FREE_ANSWER } from '../srs/variety';
 import type { TrainCard } from '../srs/types';
+import { wordFest } from '../tutor/learnerWords';
 import { isFest } from './definitions';
 
 // Wortzahlen für „Fortschritt“ (Gesamtkonzept 3.5, K1 bis K3). Reine Funktionen, eine Quelle je Zahl:
@@ -37,7 +38,7 @@ export { isFest };
 
 export function festCount(cards: readonly FestLike[], nowMs?: number): number {
   let n = 0;
-  for (const c of cards) if (isFest(c, nowMs)) n++;
+  for (const c of cards) if (wordFest(c, nowMs)) n++;
   return n;
 }
 

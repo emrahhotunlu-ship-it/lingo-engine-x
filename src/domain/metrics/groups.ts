@@ -1,6 +1,7 @@
 import { PACK, PACK_CATS, type PackCat } from '../c1pack/pack';
 import type { TrainCard } from '../srs/types';
-import { unitState, type UnitState } from './definitions';
+import { wordTier } from '../tutor/learnerWords';
+import type { UnitState } from './definitions';
 
 // Meisterschaft je Wortgruppe (Motivation §4.6): Neu · Lernt · Wackelt · Sicher · Fest. Die Summe der fünf Zustände ist immer die Gruppengröße.
 // Gruppen sind die sieben Kategorien des C1-Pakets; eine Karte gehört dazu über `origin.ref`/`src.ref` = `c1pack/<id>`.
@@ -29,7 +30,7 @@ export function groupMastery(group: PackCat, cards: readonly TrainCard[], entrie
     const id = packIdOf(c);
     if (!id || !ids.has(id) || seen.has(id) || c.hidden) continue;
     seen.add(id);
-    out[unitState(c, nowMs)]++;
+    out[wordTier(c, nowMs)]++;
   }
   out.new += ids.size - seen.size;
   return out;

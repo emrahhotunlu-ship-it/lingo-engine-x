@@ -21,7 +21,7 @@ import { checkSituation, typedForm } from '../../domain/chunks/situation';
 import { scoreDictation } from '../../domain/drills/dictation';
 import { packExtraOf } from '../../domain/c1pack/packFields';
 import type { ExplainExample, ExplanationModel, ResultVerdict } from '../../domain/explain/types';
-import { cardStatus } from '../../domain/metrics';
+import { wordStatus } from '../../domain/tutor/learnerWords';
 import { useClock } from '../../app/clock';
 import { statusDetail } from './statusText';
 import { choiceVerdict, exTextKey, gapCue, tilesAnswer } from '../../domain/srs/exercise';
@@ -169,7 +169,7 @@ export function ExerciseView({
     return s.active ? !!s.env.touch : inputProfile() === 'touch';
   });
   // Status zu Beginn der Aufgabe (Paket ST): dieselbe Rechnung wie Liste, Wortblatt, Hub und Fortschritt.
-  const [stat0] = useState(() => cardStatus(card, useClock.getState().now));
+  const [stat0] = useState(() => wordStatus(card, useClock.getState().now));
   const state0 = stat0.tier;
   const [fb, setFb] = useState<Feedback | null>(null);
   const [tip, setTip] = useState<0 | 1 | 2>(0);
