@@ -459,7 +459,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   /** „Zählt“ (Claude: das Zielmuster in anderer Form): wie „Ich lag richtig“, dann voll gebucht. */
   const counts = () => {
     if (!fb) return;
-    setFb({ ...fb, verdict: 'correct', grade: Math.min(3, Math.max(2, fb.grade)) as Grade, override: true, tv: 'correct', by: 'me', ask: false, aiMsg: null, fit: { by: 'me', pv: GRAMMAR_FIT_PV, a: fb.given.trim() } });
+    setFb({ ...fb, verdict: 'correct', grade: Math.min(3, Math.max(2, fb.grade)) as Grade, override: true, tv: 'correct', by: 'me', ask: false, aiMsg: 'byMe', fit: { by: 'me', pv: GRAMMAR_FIT_PV, a: fb.given.trim() } });
   };
 
   /** Zielform-Zweitversuch nach „Auch richtig“ mit anderem Muster: die App bewertet selbst (ohne Claude), halbes Gewicht beim Buchen. */
@@ -819,8 +819,10 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       }
     }
     const wrongTyped = fb.verdict === 'wrong' && !choiceType && !fb.dontKnow && !fb.override;
+    // Einspruch auch bei „unsicher“ (gebucht wie „Fast“): die Antwort war vielleicht richtig, die App konnte es nur nicht belegen.
+    const disputable = wrongTyped || (fb.verdict === 'near' && fb.tv === 'unsure' && !choiceType && !fb.dontKnow && !fb.override);
     const menu: Partial<Record<ShellMenuId, () => void>> = {};
-    if (wrongTyped && !findTask) menu.override = override;
+    if (disputable && !findTask) menu.override = override;
     if (wrongTyped) menu.copyOnce = () => setCopyOpen(true);
     menu.wholeTopic = () => setSheet(true);
     if (film) menu.showMe = () => setFilmOpen(true);

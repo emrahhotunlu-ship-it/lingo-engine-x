@@ -176,7 +176,12 @@ export function grammarWrite(cur: Readonly<Doc> | undefined, a: GrammarAnswer): 
   if (!validateDoc(`grammar/${topic}`, cur).ok) return { kind: 'skip', reason: 'invalid' };
   const last = typeof cur.last === 'number' ? cur.last : 0;
   if (last === a.t) return { kind: 'skip', reason: 'already_applied' };
-  if (last > a.t) return { kind: 'skip', reason: 'stale_answer' };
+  if (last > a.t) {
+    // Ein anderes Gerät hat schon Neueres gebucht: die Antwort selbst bleibt draußen, eine gelernte „Auch richtig“-Antwort geht aber nie verloren
+    // (Datenregel 9: parallele Schreiber behalten beide Einträge; `fitAltPatch` ist idempotent).
+    const fa = a.fit && a.task.c1?.src !== 'ai' && !a.dontKnow ? fitAltPatch(cur, a.task.key, a.fit.a ?? a.given, a.fit.by, a.fit.pv, a.t) : null;
+    return fa && isFitAltPatch(fa) ? { kind: 'update', patch: { fitAlt: fa.fitAlt } } : { kind: 'skip', reason: 'stale_answer' };
+  }
   const r = patchFor({ ...cur }, a);
   return { kind: 'update', patch: r.patch, ...(r.overflow ? { overflow: r.overflow } : {}) };
 }

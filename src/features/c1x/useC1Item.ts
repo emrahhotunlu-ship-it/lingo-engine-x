@@ -250,7 +250,7 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
   /** „Zählt“: Claude sagt, das geübte Muster ist getroffen (andere Form) → wie „Ich lag richtig“, voll gebucht. */
   const counts = (): void => {
     if (!fb) return;
-    setFb({ ...fb, override: true, alt: false, tv: 'correct', by: 'me', ask: false, aiMsg: null, fit: { by: 'me', pv: GRAMMAR_FIT_PV, a: fb.given.trim() } });
+    setFb({ ...fb, override: true, alt: false, tv: 'correct', by: 'me', ask: false, aiMsg: 'byMe', fit: { by: 'me', pv: GRAMMAR_FIT_PV, a: fb.given.trim() } });
   };
 
   /** Zielform nach „Auch richtig“ mit anderem Muster: die App prüft selbst gegen die Korrekturen der Stelle. */

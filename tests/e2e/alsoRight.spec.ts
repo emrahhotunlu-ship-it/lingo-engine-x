@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { bootAt } from './fixtures';
 import { grammarKey, nextItem, skipMiniLesson, answerGrammar } from './learnHelpers';
 
-// „Auch richtig“ (19.10.2026, Emrah: „had“ statt „used to have“ galt als Fehler). Der Entwicklungs-Adapter antwortet auf `grammar-fit@1`
+// „Auch richtig“ (19.10.2026, Emrah: „had“ statt „used to have“ galt als Fehler). Der Entwicklungs-Adapter antwortet auf `grammar-fit@2`
 // für Antworten, die mit „fit“ beginnen, mit fits:true/certain:true; alles andere passt nicht.
 
 const solve = grammarKey();
@@ -27,6 +27,8 @@ for (const vp of [{ width: 390, height: 844 }, { width: 1440, height: 900 }]) {
     await skipMiniLesson(page);
     await toGap(page);
     await answerGrammar(page, solve, { given: 'fitx' });
+    // Tutor-Engine v3: ohne Zustimmung in dieser Ansicht fragt die App nie von selbst, sondern bietet „Claude fragen“ an.
+    await page.getByTestId('ask-claude').click();
     const verdict = page.getByTestId('verdict');
     await expect(verdict).toHaveAttribute('data-verdict', 'ok');
     await expect(verdict).toContainText('Auch richtig');
