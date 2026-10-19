@@ -79,5 +79,8 @@ export function rotatedContext(card: TrainCard, ex: ExerciseId, day?: string): C
   if (all.length < (showable ? 2 : 1)) return origin;
   // (Ist der Ursprungssatz abgeschnitten oder als Lücke unbrauchbar, steht er nicht in `all`; dann genügt ein einziger anderer Satz.)
   const used = shownSentences(card.doc, origin ? sentKey(origin.sentence) : null);
-  return leastRecent(all, (c) => sentKey(c.sentence), used, hash32(`${card.key}|${used.length}`)) ?? origin;
+  // P52 (KI-Tutor T3): Ein neuer Claude-Satz des Wörter-Tutors (`wx`) für dieses schwache Wort kommt zuerst dran, solange er noch nie gezeigt wurde.
+  const wxKeys = new Set(readWx(card.doc).map((x) => sentKey(x.en)));
+  const freshWx = all.filter((c) => wxKeys.has(sentKey(c.sentence)) && !used.includes(sentKey(c.sentence)));
+  return leastRecent(freshWx.length ? freshWx : all, (c) => sentKey(c.sentence), used, hash32(`${card.key}|${used.length}`)) ?? origin;
 }
