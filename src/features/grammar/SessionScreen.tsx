@@ -26,6 +26,9 @@ import { programChapters } from '../../domain/c1/chapters';
 import { chapterRunOn } from '../../app/flags';
 import { useClock } from '../../app/clock';
 import { useLive } from '../../data/live';
+import { WhyLine, WinLine } from '../tutor/WhyLine';
+import { proofText } from '../tutor/whyText';
+import { scheduleLearner, useLearner } from '../tutor/learnerLive';
 import { cardsDue, commitGrammar, grammarProgress, inRepeat, inVortest, leaveGrammar, patternGrowth, reportGrammarDone, skipGrammar, startAfterIntro, touchGrammar, useGrammarSession, type TestState } from './session';
 
 // Grammatikrunde: eine Aufgabe zur Zeit, Wechsel als kurze Seitwärts-Überblendung. Esc verlässt
@@ -71,6 +74,7 @@ export function GrammarSessionScreen() {
   const vortest = inVortest(s);
   // Themen-Test (K4): die ersten Aufgaben sind der Test, ohne Hilfe.
   const inTest = s.status === 'running' && !!s.test && s.pos < s.test.n;
+  const tutorOn = !vortest && !inTest && !inRepeat(s);
   const badge = inTest && s.test ? t('pxKTestBadge') : vortest ? t('gxBadgeVortest', { n: s.pos + 1, total: s.intro?.vtN ?? 2 }) : inRepeat(s) ? t('nbLernenRepeatBadge') : task?.errorT !== null && task ? t('grReviewBadge') : null;
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="grammar-session" data-mode={s.mode} data-ctx={s.ctx} data-profile={s.profile}>
@@ -96,7 +100,12 @@ export function GrammarSessionScreen() {
           />
         ) : s.status === 'running' && task ? (
           <StepBoundary resetKey={`g-${s.step}`} scope="grammarSession" onSkip={skipGrammar}>
-            <GrammarItem task={task} ctx={s.ctx} day={s.day} onDone={commitGrammar} profile={s.profile} noHelp={vortest || inTest} badgeTone={inTest ? 'hint' : undefined} topicRound={s.mode === 'topic' || (!!s.intro && s.intro.topic === task.topic && !!task.pat && s.intro.pats.includes(task.pat))} badge={badge} />
+            {/* Tutor-Engine v3 (S2/S3): Statuszeile nach dem Tausch gegen etwas Bekanntes, „Warum diese Aufgabe?“ darunter – nicht im Vortest, im Test und in der Wiederholung. */}
+            <div className="flex flex-col gap-3">
+              {tutorOn && <WinLine task={task} />}
+              <GrammarItem task={task} ctx={s.ctx} day={s.day} onDone={commitGrammar} profile={s.profile} noHelp={vortest || inTest} badgeTone={inTest ? 'hint' : undefined} topicRound={s.mode === 'topic' || (!!s.intro && s.intro.topic === task.topic && !!task.pat && s.intro.pats.includes(task.pat))} badge={badge} tutor={tutorOn && !s.fixed} />
+              {tutorOn && <WhyLine task={task} />}
+            </div>
           </StepBoundary>
         ) : (
           <div data-testid="summary">
@@ -124,6 +133,9 @@ function GrammarEnd({ lang }: { lang: 'de' | 'en' }) {
   const testRes: TestDone | null = s.test?.result ? { ...s.test, result: s.test.result } : null;
   const chapterNext = useTestNext(testRes, skipped, s.day);
   const growth = patternGrowth(s);
+  const proofs = useLearner((x) => x.model?.proofs);
+  // Nach dem Zeichnen einmal neu rechnen, damit der Beleg die eben gegebenen Antworten kennt (nie vor dem Zeichnen).
+  useEffect(() => scheduleLearner(), []);
   const pick = (b: { de: string; en: string }): string => (lang === 'de' ? b.de : b.en);
   const name = (id: string): string => {
     const p = patternById(id);
@@ -141,6 +153,17 @@ function GrammarEnd({ lang }: { lang: 'de' | 'en' }) {
     const was = patternState(g.from, s.day);
     const now = patternState(g.to, s.day);
     if ((was === 'new' || was === 'learning') && (now === 'safe' || now === 'firm')) facts.push(t('gxEndSafe', { name: name(g.pat), k: g.clean, n: g.n }));
+  }
+  // Fortschrittsbeleg (Tutor-Engine v3 S2): nur aus dem Protokoll (`progressProof`), nur bei echtem Zuwachs, höchstens zwei Zeilen.
+  if (proofs) {
+    let k = 0;
+    for (const g of growth) {
+      const pr = proofs.get(g.pat);
+      if (pr && pr.trend === 'up' && k < 2) {
+        facts.push(proofText(g.pat, pr, lang));
+        k++;
+      }
+    }
   }
   const wrongPats = new Set(s.results.filter((r) => !r.ok && r.pat).map((r) => r.pat as string));
   for (const g of growth) if (wrongPats.has(g.pat) && patternState(g.to, s.day) === 'learning') facts.push(t('gxEndWobbly', { name: name(g.pat) }));

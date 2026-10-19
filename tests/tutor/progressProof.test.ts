@@ -33,7 +33,7 @@ describe('progressProof', () => {
   });
 
   it('je Fenster höchstens die jüngsten 9', () => {
-    const rows = [...many('2026-09-20', Array(12).fill(false)), ...many('2026-09-30', [true, true, true]), ...many('2026-10-19', Array(15).fill(true))];
+    const rows = [...many('2026-09-20', Array<boolean>(12).fill(false)), ...many('2026-09-30', [true, true, true]), ...many('2026-10-19', Array<boolean>(15).fill(true))];
     const p = progressProof(rows, TODAY);
     expect(p?.thenN).toBe(PROOF_MAX);
     expect(p?.thenOk).toBe(3);

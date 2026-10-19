@@ -43,7 +43,7 @@ export type HiddenFehlersatz = { id: string; reason: HideReason };
 const str = (v: unknown): string => (typeof v === 'string' ? v : '');
 
 
-type CollectIn = { grammarDocs: ReadonlyMap<string, Doc>; repairDoc: Doc | null | undefined; nowMs: number; today: string; limit?: number; /** Eigene Sätze und Grammatik-Fehlersätze im Wechsel statt „älteste zuerst“. Ohne Angabe: gemischt, sobald eine Grenze (`limit`) gesetzt ist. */ mix?: boolean; lang?: Lang };
+type CollectIn = { grammarDocs: ReadonlyMap<string, Doc>; repairDoc: Doc | null | undefined; nowMs: number; today: string; limit?: number; /** Eigene Sätze und Grammatik-Fehlersätze im Wechsel statt „älteste zuerst“. Ohne Angabe: gemischt, sobald eine Grenze (`limit`) gesetzt ist. */ mix?: boolean; lang?: Lang; /** Beherrschung je Muster aus dem einen Lernermodell (Tutor-Engine v3 S2): am selben Fälligkeitstag kommt das schwächere Muster zuerst. */ pOf?: (pat: string) => number | undefined };
 
 /**
  * Fällige Fehlersätze beider Speicher mit den Ausschlussregeln von Paket FK (`quality.ts`): Ein unbrauchbarer Satz (verstümmelt, nur ein Wort,
@@ -99,7 +99,9 @@ function collect(i: CollectIn): { list: Fehlersatz[]; dropped: HiddenFehlersatz[
   // Auswertung 15.10.2026, Punkt 5: Mit Grenze (`limit`) wechseln sich Reparatur-Sätze (eigene Sätze) und Grammatik-Fehlersätze ab, je Speicher nach Fälligkeit.
   // Reine „älteste zuerst“-Reihenfolge ließ die eigenen Sätze aus dem Schreiben auf Box 0 liegen (25 von 25 ohne eine einzige Wiederholung), weil die
   // übrigen, älteren Einträge jeden Platz belegten. Ohne Grenze (Zählungen) bleibt es bei „älteste zuerst“, außer `mix: true` (Reparatur-Durchgang: erst mischen, erledigte Sätze entfernen, dann die ersten 5 nehmen).
-  const byDue = (a: Fehlersatz, b: Fehlersatz): number => a.due - b.due;
+  const pOf = i.pOf;
+  const weak = (f: Fehlersatz): number => (pOf && f.pat ? (pOf(f.pat) ?? 1) : 1);
+  const byDue = (a: Fehlersatz, b: Fehlersatz): number => (pOf ? (dayKey(a.due) < dayKey(b.due) ? -1 : dayKey(a.due) > dayKey(b.due) ? 1 : weak(a) - weak(b)) : 0) || a.due - b.due;
   const ordered = ((): Fehlersatz[] => {
     if (!(i.mix ?? i.limit !== undefined)) return out.sort(byDue);
     const own = out.filter((f) => f.store === 'repair').sort(byDue);

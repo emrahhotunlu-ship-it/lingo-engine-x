@@ -36,7 +36,9 @@ import { abandonFit, fitAiState, runFit, useFitJudge, type FitResult } from './f
 import { FitSlow } from './FitSlow';
 import { JudgeFoot, type AiMsg, type TargetState } from './JudgeFoot';
 import { judge, readFitAlt, type Judgement } from '../../domain/tutor/judge';
-import { composeFeedback, type FeedbackAction } from '../../domain/tutor/feedback';
+import { composeFeedback, contrastProof, type FeedbackAction } from '../../domain/tutor/feedback';
+import { factOf, maxHint, miniLesson } from '../../domain/tutor/policy';
+import { tutorPreview } from '../tutor/sessionStore';
 import type { Diagnosis } from '../../domain/tutor/diagnose';
 import type { Verdict as TutorVerdict } from '../../domain/tutor/tutorTypes';
 import { legacyNorm } from '../../domain/grammar/key';
@@ -75,6 +77,8 @@ export type GrammarItemProps = {
   profile?: InputProfile;
   /** Themenrunde oder Einführung: die Musterkarte steht offen. */
   topicRound?: boolean;
+  /** Grammatikrunde mit Tutor-Engine (S3): nach 2 Fehlern gleicher Ursache kommt statt der Rückmeldung die Mini-Lektion. */
+  tutor?: boolean;
 };
 
 type Fb = {
@@ -133,7 +137,7 @@ export function GrammarItem(props: GrammarItemProps) {
   return isC1Task(task) ? <C1Item {...props} task={task} /> : <LegacyGrammarItem {...props} />;
 }
 
-function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = null, badgeTone, noHelp = false, profile: profileProp, topicRound = false }: GrammarItemProps) {
+function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = null, badgeTone, noHelp = false, profile: profileProp, topicRound = false, tutor: tutorOn = false }: GrammarItemProps) {
   const { t, lang } = useT();
   const api = useHiddenInput();
   const now = useClock((s) => s.now);
@@ -549,7 +553,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
 
   const picked = fb?.picked;
   // Rückmeldung der Tutor-Engine (§5, `composeFeedback`): Ziel → Urteil (Kopf) → seine Form → Grund → höchstens ein Extra → Handlung.
-  const composed: { model: ExplanationModel; action: FeedbackAction } | null = useMemo(() => {
+  const composed: { model: ExplanationModel; action: FeedbackAction; lesson: boolean } | null = useMemo(() => {
     if (!fb) return null;
     const verdict: ResultVerdict = fb.dontKnow ? 'dontKnow' : fb.override ? 'ok' : fb.verdict === 'correct' ? 'ok' : fb.verdict === 'near' ? 'near' : 'wrong';
     const m0 = tighten(grammarExplanation({ task, verdict, given: fb.given, ...(picked !== undefined ? { picked } : {}), ...(fb.tapped !== undefined && !(findTask && stage === 'replace') ? { tapped: fb.tapped } : {}), lang, learning }));
@@ -572,11 +576,25 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       texts: { altNoCount: t('grAltNoCount') },
     });
     const m = out.model;
+    // Tutor-Engine (S3, Rang 3): zweiter Fehler mit derselben Ursache am selben Muster → Mini-Lektion statt Abfrage (Vorschau; gebucht wird mit „Weiter“).
+    if (tutorOn && pattern && fb.verdict === 'wrong' && !fb.override) {
+      const fact = factOf(
+        { task, verdict: fb.verdict, dontKnow: fb.dontKnow, ...(fb.dx && fb.dx.cause !== 'unknown' ? { tj: { v: 'w' as const, h: fb.dx.cause } } : {}) },
+        task.errorT === null,
+      );
+      const model0 = learnerNow();
+      if (tutorPreview(fact, model0).move === 'explain') {
+        const mini = miniLesson(pattern, contrastProof(fb.dx, patId, model0?.hyps ?? []), lang);
+        const goal = m.lines.filter((l) => l.k === 'pattern').slice(0, 1);
+        return { model: { ...m, lines: [...goal, ...mini.lines], examples: mini.examples, ai: false }, action: 'next' as const, lesson: true };
+      }
+    }
     // „Kein Fehler“ gewählt (intern 'none'): in „Deine Antwort“ steht der Name des Knopfs, nicht das Rohwort.
     const model = fb.picked === 'none' || fb.tapped === 'none' ? { ...m, lines: m.lines.map((l) => (l.k === 'yours' && l.given === 'none' ? { ...l, given: t('exNoError') } : l)) } : m;
-    return { model, action: out.action };
+    return { model, action: out.action, lesson: false };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fb, lang, learning, task, findTask, stage, patId, noHelp]);
+  }, [fb, lang, learning, task, findTask, stage, patId, noHelp, tutorOn]);
+  const lesson = composed?.lesson ?? false;
   const model = composed?.model ?? null;
 
   const rv: ResultVerdict = !fb ? 'ok' : fb.dontKnow ? 'dontKnow' : fb.override ? 'ok' : fb.verdict === 'correct' ? 'ok' : fb.verdict === 'near' ? (fb.unsure ? 'near' : 'near') : 'wrong';
@@ -592,7 +610,8 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   const retryText = (r: GrammarRetryHint): string => (r.kind === 'nudge' ? r.text : r.kind === 'hint' ? t('rhGrammarHint', { hint: r.text }) : r.kind === 'topic' ? t('rhGrammarTopic', { topic: r.name }) : t('rhGrammarVerb'));
   const hint = fb ? null : retry ? { text: retryText(retry), tone: 'near' as const } : tip > 0 && tipText() ? { text: tipText(), tone: 'hint' as const } : null;
 
-  const maxTip = choiceType ? 2 : gapKind || type === 'kwt' ? 3 : findTask && stage === 'replace' ? 2 : type === 'correct' || whole ? 2 : 2;
+  // Hinweisleiter (Tutor-Engine, Rang 1): Leitfrage → Formel → erster Buchstabe (nur bei Lücken).
+  const maxTip = maxHint(task);
   const canTip = !noHelp && !retry && !fb && tip < maxTip && !(findTask && stage === 'locate');
   const secondary: ShellSecondary[] = [
     ...(findTask && stage === 'locate' ? [{ id: 'noError' as const, label: t('exNoError'), onClick: () => noError(), testId: 'no-error' }] : []),
@@ -779,7 +798,9 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     const c = fb.check;
     const why = shortWhy(task.why ? (lang === 'de' ? task.why.ok.de : task.why.ok.en) : lang === 'de' ? task.expl.de : task.expl.en);
     const altLine = why ? t('grAltWanted', { want: solution, why }) : t('grAltWantedBare', { want: solution });
-    const sub: string | null = fb.dontKnow
+    const sub: string | null = lesson
+      ? t('ttLessonWhy')
+      : fb.dontKnow
       ? null
       : fb.override
         ? t('lrOverridden')
@@ -902,7 +923,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       menu,
       tutor,
       foot,
-      auto: fb.help.level === 0 && !fb.override && !alsoRight && action === 'next' && !fb.aiMsg,
+      auto: fb.help.level === 0 && !fb.override && !alsoRight && action === 'next' && !fb.aiMsg && !lesson,
       ...find,
       ...(alsoRight ? { unfold: [...(find.unfold ?? []), 'note' as const] } : {}),
     };
@@ -937,6 +958,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       data-profile={profile}
       data-shared={shared ? '' : undefined}
       data-review={task.errorT !== null ? '' : undefined}
+      data-lesson={lesson ? '' : undefined}
     >
       <ExerciseShell
         meta={{ ex: `gr_${type}`, id: `${task.topic}|${task.key}`, kind: type }}
