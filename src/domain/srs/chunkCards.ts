@@ -95,6 +95,9 @@ const FRAME_WORDS = new Set([
   'between', 'of', 'onto', 'upon', 'under', 'within', 'without', 'after', 'before', 'behind', 'beyond', 'toward', 'towards', 'to',
 ]);
 
+/** Partikeln, die hinter dem Verb zum Kern gehören (nicht die Präpositionen in/on/at/for …). */
+const VERB_PARTICLES = new Set(['back', 'up', 'out', 'off', 'down', 'away', 'over', 'through']);
+
 export type ChunkPart = { text: string; kind: 'core' | 'frame' | 'slot' | 'fixed' };
 /** Angaben aus dem Paket, die die Zerlegung steuern: Kategorie (`phrasal`, `frame`, …) und das Wort der Partnerwort-Lücke (`gap.at`). */
 export type ChunkHints = { cat?: string | undefined; at?: string | undefined };
@@ -114,6 +117,13 @@ export function chunkParts(phrase: string, hints: ChunkHints = {}): ChunkPart[] 
     if (hints.cat === 'phrasal') return { text, kind: (i === toks.length - 1 && i >= 2 && FRAME_WORDS.has(w)) || isFunctionGap(w) ? 'frame' : 'core' };
     return { text, kind: FRAME_WORDS.has(w) || isFunctionGap(w) ? 'frame' : 'core' };
   });
+  // Ohne Kategorie „phrasal“: Eine Partikel gleich hinter dem Verb (push BACK the go-live, hand OVER the keys) gehört zum Kern, nie zum Rahmen.
+  if (hints.cat !== 'phrasal') {
+    for (let i = 1; i < parts.length; i++) {
+      const part = parts[i] as ChunkPart;
+      if (part.kind === 'frame' && VERB_PARTICLES.has(normWord(part.text)) && parts[i - 1]?.kind === 'core' && i < parts.length - 1) part.kind = 'core';
+    }
+  }
   if (parts.length && !parts.some((x) => x.kind === 'core')) {
     const longest = parts.reduce<number>((best, x, i) => (x.kind === 'frame' && x.text.length > (parts[best]?.text.length ?? 0) ? i : best), 0);
     const hit = parts[longest];

@@ -157,7 +157,7 @@ describe('Wendungen zerlegt', () => {
   it('Kern, Rahmen und Platzhalter', () => {
     expect(chunkParts('meet sb halfway').map((p) => `${p.text}:${p.kind}`)).toEqual(['meet:core', 'sb:slot', 'halfway:core']);
     expect(chunkParts('in return for').map((p) => `${p.text}:${p.kind}`)).toEqual(['in:frame', 'return:core', 'for:frame']);
-    expect(chunkParts('push back the go-live').map((p) => p.kind)).toEqual(['core', 'frame', 'frame', 'core']);
+    expect(chunkParts('push back the go-live').map((p) => p.kind)).toEqual(['core', 'core', 'frame', 'core']);
   });
 
   it('feste Wörter im Satz mit Stelle; Lückenwörter: Kern zuerst, nie Artikel oder Platzhalter', () => {
