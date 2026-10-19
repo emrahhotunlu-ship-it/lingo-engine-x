@@ -7,6 +7,9 @@
       "prompt": "We ___ (have) a paper archive, but now everything is in the cloud.",
       "hint": "(have)",
       "answer": "used to have",
+      "alt": [
+        "had"
+      ],
       "expl": "Früher war es so, heute nicht mehr: „used to“ + Grundform (We used to have a paper archive).",
       "expl_en": "It was like that before, but not anymore: “used to” + base verb (We used to have a paper archive)."
     },

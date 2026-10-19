@@ -74,7 +74,7 @@ export type Kwt = C1Base & {
 
 /** `fix` = gültige Ersatztexte der Fehlerstelle (`''` = streichen, nur LP2-Adapter); `choices` = drei Korrektur-Chips (bei LP2-Adapter-Aufgaben `err-v2-<n>` nicht vorhanden). */
 export type ErrBad = { span: string; nth?: number; fix: string[]; choices?: [string, string, string] };
-export type Err = C1Base & { kind: 'err'; text: string; bad: ErrBad | null };
+export type Err = C1Base & { kind: 'err'; text: string; /** Ziel der Korrektur in einem Satz (Aufgabenzeile „Ziel: …“). */ goal?: Bi; bad: ErrBad | null };
 
 export type Pair = C1Base & {
   kind: 'pair';

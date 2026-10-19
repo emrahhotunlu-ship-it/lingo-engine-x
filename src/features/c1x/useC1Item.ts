@@ -28,7 +28,9 @@ import { TutorButton } from '../../ui/exercise/TutorButton';
 import { useCompanionSee } from '../companion/seeing';
 import { nextT } from '../progress/persist';
 import { bookLex } from './lexWrite';
-import { errRange } from '../../domain/c1x/kinds/err';
+import { errFixed, errRange } from '../../domain/c1x/kinds/err';
+import { shortWhy } from '../../domain/grammar/alsoRight';
+import { fitAccepts, useFitJudge } from '../grammar/fit';
 import { ResultAfter, ResultParts, useResultSub } from './ResultCard';
 import type { C1Ctrl, C1KindEntry, ResponseMeta } from './types';
 
@@ -46,6 +48,8 @@ type Fb = {
   ms: number;
   firstKeyMs: number;
   help: HelpLevel;
+  /** „Auch richtig“ (Claude, `grammar-fit@1`): zählt nie als Fehler und nicht als Beleg fürs Muster. */
+  alt?: boolean;
 };
 
 export type C1ItemProps = {
@@ -78,7 +82,8 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
   const inp = profile === 'touch' ? 'touch' : 'desk';
   const doc = useLive((s) => s.collections.grammar?.get(task.topic));
   const p = topicP(task.topic, doc, now);
-  const pattern = useMemo(() => patternOf(task), [task]);
+  // Fehler finden: Muster, Beispiele und „Nicht verwechseln“ nur, wenn die Aufgabe ihr Muster ausdrücklich nennt (Signalwörter im Fehlersatz treffen oft ein fremdes).
+  const pattern = useMemo(() => (item.kind === 'err' && !task.pat && !item.pat ? null : patternOf(task)), [task, item]);
   const patId = task.pat ?? pattern?.id ?? null;
   const patEntry = patId ? patsOf(doc)[patId] : undefined;
   const learning = !!pattern && (topicRound || (patEntry?.n ?? 0) < 3);
@@ -93,6 +98,9 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
   const [has, setHas] = useState(false);
   const respRef = useRef<{ r: C1Response; meta: ResponseMeta } | null>(null);
   const firstWrong = useRef<string | null>(null);
+  const fit = useFitJudge();
+  const judging = useRef(false);
+  const fbRef = useRef<Fb | null>(null);
   const shownAt = useRef(0);
   const firstKeyAt = useRef<number | null>(null);
   const lookupAt = useRef(0);
@@ -104,6 +112,9 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
     if (!a || a === document.body) root.current?.focus({ preventScroll: true });
   }, [root]);
 
+  useEffect(() => {
+    fbRef.current = fb;
+  }, [fb]);
   const elapsed = (): number => Math.max(0, Math.round(tick() - shownAt.current - (lookupOpenMs() - lookupAt.current)));
   const help: HelpLevel = tip >= 2 || retry ? 2 : tip >= 1 ? 1 : 0;
 
@@ -128,10 +139,30 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
   };
 
   const submit = (): void => {
-    if (fb) return;
+    if (fb || judging.current) return;
     const cur = respRef.current;
     if (!cur) return;
     const score = scoreC1(item, cur.r);
+    // „Auch richtig“ (19.10.2026): Stelle gefunden, getippter Ersatz nicht in der Liste → genau einmal fragen, ob der Satz damit trotzdem stimmt.
+    const r = cur.r;
+    if (item.kind === 'err' && item.bad && score.verdict === 'near' && r.kind === 'err' && typeof r.tap === 'number' && r.typed && r.fix?.trim() && (patId ?? item.pat)) {
+      const bad = item.bad;
+      const given = r.fix.trim();
+      judging.current = true;
+      void fit
+        .judge(`${task.topic}|${task.key}`, { topic: topicLabel ?? task.topic, pattern: pattern ? pattern.name.en : null, mode: 'replace', task: item.text, sentence: errFixed(item, given), expected: errFixed(item, bad.fix[0] ?? ''), given, uiLang: lang })
+        .then((out) => {
+          judging.current = false;
+          if (fbRef.current) return;
+          if (fitAccepts(out)) finish({ ...score, got: score.max, verdict: 'correct', parts: score.parts.map((x) => ({ ...x, ok: true })) }, cur.r, cur.meta, { alt: true });
+          else settle(score, cur);
+        });
+      return;
+    }
+    settle(score, cur);
+  };
+
+  const settle = (score: C1Score, cur: { r: C1Response; meta: ResponseMeta }): void => {
     // Erst ein Hinweis, dann der zweite Versuch: nur bei getippten Formen ganz ohne Punkte (Auswahl ist ratbar), nie im Check.
     if (score.verdict === 'wrong' && score.free && !retry && !noHelp) {
       firstWrong.current = givenOf(item, cur.r);
@@ -144,6 +175,10 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
 
   const dontKnow = (): void => {
     if (fb) return;
+    if (judging.current) {
+      judging.current = false;
+      fit.cancel();
+    }
     const cur = respRef.current;
     const response: C1Response = cur?.r ?? ({ kind: item.kind, ...(item.kind === 'kwt' || item.kind === 'ocl' || item.kind === 'wf' ? { text: '' } : item.kind === 'err' ? { tap: 'none' } : {}) } as C1Response);
     const score = scoreC1(item, response);
@@ -182,7 +217,7 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
       const score = fb.override ? { ...fb.score, verdict: 'correct' as const } : fb.score;
       void bookLex({ item, score, grade: a.grade, day, lang, ms: fb.ms, given: fb.given, dev: inp === 'touch' ? 't' : 'k', ...(seenBefore ? { again: true } : {}), ...(noHelp ? { measure: true } : {}) });
     }
-    const booked: GrammarAnswer = retry && firstWrong.current !== null ? { ...a, firstWrong: firstWrong.current } : a;
+    const booked: GrammarAnswer = { ...(retry && firstWrong.current !== null ? { ...a, firstWrong: firstWrong.current } : a), ...(fb.alt && !fb.override ? { alt: true } : {}) };
     const kind = onDone(booked);
     if (kind === 'typed') api.focusNow();
     else api.blur();
@@ -227,7 +262,9 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
   const rv: ResultVerdict | null = !fb ? null : fb.dontKnow ? 'dontKnow' : fb.override ? 'ok' : fb.score.verdict === 'correct' ? 'ok' : fb.score.verdict === 'near' ? 'near' : 'wrong';
   const model: ExplanationModel | null = useMemo(() => {
     if (!fb || !rv) return null;
-    return grammarExplanation({ task, verdict: rv, given: fb.given, ...(fb.meta.picked !== undefined ? { picked: fb.meta.picked } : {}), ...(fb.meta.tapped !== undefined ? { tapped: fb.meta.tapped } : {}), lang, learning });
+    const m = grammarExplanation({ task, verdict: rv, given: fb.given, ...(fb.meta.picked !== undefined ? { picked: fb.meta.picked } : {}), ...(fb.meta.tapped !== undefined ? { tapped: fb.meta.tapped } : {}), lang, learning });
+    // „Auch richtig“: die Begründung des geübten Musters steht in der Zeile „Gesucht war …“; hier nur Muster, Gegenüberstellung und der Hinweis, dass es nicht zählt.
+    return fb.alt && !fb.override ? { ...m, lines: [...m.lines.filter((l) => l.k === 'pattern' || l.k === 'contrast'), { k: 'note' as const, text: t('grAltNoCount') }] } : m;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fb, lang, learning, task]);
   const depth: ExplainDepth = explainDepth({ verdict: rv ?? 'ok', p, learning });
@@ -272,6 +309,9 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
     ...(fb ? { reveal: `Solution: ${task.answer}. Learner: ${fb.given || '(empty)'}` } : { mask: [task.answer, ...task.accepted] }),
   });
 
+  const altWhy = shortWhy(task.why ? (lang === 'de' ? task.why.ok.de : task.why.ok.en) : lang === 'de' ? task.expl.de : task.expl.en);
+  const wanted = item.kind === 'err' && item.bad ? (item.bad.fix[0] ?? '') : task.answer;
+  const altSub = altWhy ? t('grAltWanted', { want: wanted, why: altWhy }) : t('grAltWantedBare', { want: wanted });
   let feedback: ShellFeedback | null = null;
   if (fb && model && rv) {
     const typedWrong = fb.score.free && fb.score.verdict !== 'correct' && !fb.dontKnow && !fb.override;
@@ -296,8 +336,8 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
       );
     feedback = {
       verdict: rv,
-      ...(head?.title ? { title: head.title } : {}),
-      sub,
+      ...(fb.alt && !fb.override ? { title: t('exAlsoRight') } : head?.title ? { title: head.title } : {}),
+      sub: fb.alt && !fb.override ? altSub : sub,
       // Fehler finden: die Muster-Fachsprache steht unter „Mehr“, das Kontrastbeispiel (z. B. -ing gegen -ed) offen (Rückmeldung 7).
       ...(item.kind === 'err' ? { fold: ['pattern'] as const, unfold: ['contrast'] as const } : {}),
       explanation: model,
@@ -307,11 +347,11 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
       parts: createElement(ResultParts, { score: fb.score }),
       right: ui.right ?? null,
       after: createElement(ResultAfter, { item, matched, day }),
-      auto: !noAuto && fb.help === 0 && !fb.override && fb.score.free,
+      auto: !noAuto && fb.help === 0 && !fb.override && fb.score.free && !fb.alt,
     };
   }
 
-  const primary = fb ? { label: t('exNext'), onClick: next, testId: 'next' } : { label: t('exCheck'), onClick: submit, testId: 'check', disabled: !has };
+  const primary = fb ? { label: t('exNext'), onClick: next, testId: 'next' } : { label: fit.busy ? t('exChecking') : t('exCheck'), onClick: submit, testId: 'check', disabled: !has || fit.busy };
   const aiMark: ReactNode = item.src === 'ai' ? createElement('p', { className: 'lx-t-meta text-muted', 'data-testid': 'ai-mark' }, t('cxAiMark')) : null;
   // Die Muster-Karte vor dem Prüfen entfällt am Handy: sie verdrängte die Bausteine unter den Bildschirmrand und verriet die Formel (UX-Prüfung R1).
   const aid: ReactNode = [ui.aid, aiMark].some(Boolean) ? createElement('div', { className: 'flex flex-col gap-2' }, ui.aid, aiMark) : null;

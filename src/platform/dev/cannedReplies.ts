@@ -258,12 +258,26 @@ export function grammarJudgeReply(input: string): string {
   return JSON.stringify({ verdict: 'correct', acceptable: true, corrected: given || '—', why: JUDGE_WHY[explanationLang(input)] });
 }
 
+/**
+ * `grammar-fit@1`: „had“, „as I …“, „when I …“ und alles mit „fit“ passt sicher; „unsure…“ passt unsicher; sonst passt es nicht. `zzjson` → kein JSON.
+ */
+export function grammarFitReply(input: string): string {
+  const given = line(input, 'Learner answer only').toLowerCase();
+  if (/\bzzjson\b/.test(given)) return NOT_JSON;
+  const fits = given === 'had' || given.startsWith('fit') || given.startsWith('unsure') || /^(as i|when i|while i)\b/.test(given);
+  const certain = !given.startsWith('unsure');
+  const de = explanationLang(input) === 'de';
+  const why = fits ? (de ? 'Der ganze Satz ist grammatisch richtig und passt zum Zusammenhang.' : 'The whole sentence is grammatical and fits the context.') : de ? 'Im ganzen Satz passt das nicht.' : 'It does not fit in the whole sentence.';
+  return JSON.stringify({ fits, certain, why });
+}
+
 /** Meldet die festen Antworten beim Entwicklungs-Adapter an. */
 export function registerCannedReplies(): void {
   registerCannedReply('word-lookup', wordLookupReply);
   registerCannedReply('produce-check', produceCheckReply);
   registerCannedReply('order-gen', orderGenReply);
   registerCannedReply('grammar-judge', grammarJudgeReply);
+  registerCannedReply('grammar-fit', grammarFitReply);
   // Phase 3 – Sprechen und Business
   registerCannedReply('roleplay-turn', roleplayTurnReply);
   registerCannedReply('turn-analysis', turnAnalysisReply);

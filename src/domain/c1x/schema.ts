@@ -75,6 +75,8 @@ const kwt = base.extend({
 const err = base.extend({
   kind: z.literal('err'),
   text: t,
+  /** Ziel der Korrektur in einem Satz (Aufgabenzeile „Ziel: …“); optional. */
+  goal: bi.optional(),
   bad: z
     .object({ span: t, nth: z.number().int().min(1).optional(), fix: z.array(z.string()).min(1), choices: z.tuple([t, t, t]).optional() })
     .nullable(),
