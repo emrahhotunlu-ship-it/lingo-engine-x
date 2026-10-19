@@ -461,3 +461,7 @@ Lehre: Für Aufgabenfragen mit Gestaltungsspielraum zuerst Emrah mit Vorschau fr
 - (3) Varianz: Beim Üben eines Wortes kommt immer derselbe Satz → er merkt sich den Satz, nicht den Gebrauch des Wortes.
 - (4) „Fehler korrigieren“ auf der Startseite: Aufgaben/Texte ohne Kontext oder mit eigenen alten Fehlern, die er selbst nicht erkennt → „sehr sehr schlimm“; komplett entfernen/ersetzen oder komplett anders gestalten.
 - Vorgehen: Fachanalyse (Lernwissenschaft, Englischlehrer, Echtdaten-Befund) → Vorschlag an Emrah → Bau → Test-Link.
+
+## 19.10.2026 – Rückmeldung Emrah: richtige Alternativantwort wird als falsch gewertet
+- Grammatik-Lücke „We ___ (have) a paper archive, but now everything is in the cloud.“ – erwartet „used to have“, Emrah schrieb „had“ (ebenfalls richtig) → „Noch nicht“. „Woher soll ich schätzen, was genau du willst?“ – kommt oft vor.
+- Vorgehen: Paket MD (Mehrdeutigkeit): (1) Mechanik: richtige, aber nicht gesuchte Antworten gelten NIE als Fehler („Auch richtig – gesucht war …, weil …“, Note nicht abwertend), lokale Varianten-Liste zuerst, bei Lücken mit Grammatikprüfung Claude `quick` als Zweitmeinung; (2) Inhalt: Audit der Lückenaufgaben auf mehrdeutige Lagen (`accepted` ergänzen oder Aufgabe eindeutig machen, z. B. Zeitsignal/Hinweis), Gegenlesung Englischlehrer.
