@@ -18,9 +18,29 @@ const expand = (n: string): string =>
     .replace(/\bi'm\b/g, 'i am')
     .replace(/\bcan not\b/g, 'cannot');
 
+const NUM: Record<string, string> = { one: '1', two: '2', three: '3', four: '4', five: '5', six: '6', seven: '7', eight: '8', nine: '9', ten: '10', eleven: '11', twelve: '12', fifteen: '15', twenty: '20', fifty: '50' };
+const PARTICIPLE = /^(?:\w+ed|been|got|had|gone|done|made|seen|taken|given|known|written|sent|chosen|spoken|broken)$/;
+
+/**
+ * Schreibweisen angleichen, bevor Wörter verglichen werden (Gegenlesung FK): p.m./pm/PM, 10 %/10 percent/ten percent, Akzente (café = cafe),
+ * „'s“ vor einer -ing-Form = „is“ („the customer's calling“), „'d“ vor einem Partizip = „had“, sonst „would“ („we'd already have“).
+ */
+function prepare(s: string): string {
+  return s
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/(\d)\s*%/g, '$1 percent')
+    .replace(/\b([ap])\.\s?m\.?/gi, '$1m')
+    .replace(/['’]s(?=\s+\w+ing\b)/gi, ' is')
+    .replace(/['’]d(\s+(?:already\s+)?\w+)?/gi, (_m, rest: string | undefined) => {
+      const next = rest?.trim().split(/\s+/).pop()?.toLowerCase() ?? '';
+      return ` ${PARTICIPLE.test(next) ? 'had' : 'would'}${rest ?? ''}`;
+    });
+}
+
 const words = (s: string): string[] => {
-  const n = expand(repairNorm(s));
-  return n ? n.split(' ').map((w) => toUS(w)) : [];
+  const n = expand(repairNorm(prepare(s)));
+  return n ? n.split(' ').map((w) => toUS(NUM[w] ?? w)) : [];
 };
 
 /** Abstand in Wörtern (Einfügen, Löschen, Ersetzen). */

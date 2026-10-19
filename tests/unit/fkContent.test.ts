@@ -49,6 +49,31 @@ describe('FK-Inhalt B1', () => {
   });
 });
 
+describe('FK-Gegenlesung: Umfang, Normalisierung, Abdeckung', () => {
+  it('höchstens 8 Varianten je Aufgabe, Musterlösung nicht doppelt in `ok`, Varianten ohne Dubletten', () => {
+    for (const t of b1Tasks()) {
+      expect(t.ok.length, t.id).toBeLessThanOrEqual(8);
+      expect(t.ok.includes(t.model), `${t.id} model in ok`).toBe(false);
+      expect(new Set(t.ok.map(repairNorm)).size, `${t.id} Dubletten`).toBe(t.ok.length);
+    }
+  });
+  it('p.m./pm, % / percent / Zahlwort, Akzente, „\'s“ vor -ing und „\'d“ werden vor dem Vergleich angeglichen', () => {
+    const t = { model: 'Tomorrow at 3 p.m., we will give you a ten percent discount at the café.', ok: [] as string[], bad: 'Tomorrow at 3 p.m., we give you ten percent discount at the café.' };
+    expect(checkB1('Tomorrow at 3 pm, we will give you a 10% discount at the cafe.', t)).toBe('exact');
+    expect(checkB1('Tomorrow at 3 PM, we will give you a 10 percent discount at the cafe.', t)).toBe('exact');
+    const c = { model: 'Sorry, the customer is calling me right now.', ok: [] as string[], bad: 'Sorry, the customer calls me right now.' };
+    expect(checkB1("Sorry, the customer's calling me right now.", c)).toBe('exact');
+    const d = { model: 'If we had signed the contract in May, we would already have access to the system.', ok: [] as string[], bad: 'If we would have signed the contract in May, we would already have access to the system.' };
+    expect(checkB1("If we'd signed the contract in May, we'd already have access to the system.", d)).toBe('exact');
+    expect(checkB1("If we'd signed the contract in May, we'd have access to the system.", d)).not.toBe('exact');
+  });
+  it('Abdeckungslücken aus der Gegenlesung sind als Muster vorhanden', () => {
+    const pats = new Set(b1Tasks().map((t) => t.pat));
+    for (const p of ['wo.place-time', 'qu.indirect', 'ma.dont-have-to', 'prp.no-prep', 'vp.look-forward', 'pt.for-since', 'vp.to-verbs', 'dip.wondering', 'psc.now', 'psc.habit']) expect(pats.has(p), p).toBe(true);
+    expect(b1Tasks().length).toBeGreaterThanOrEqual(58);
+  });
+});
+
 describe('FK-Inhalt B2', () => {
   it('mindestens 12 Aufgaben, Muster existieren, je zwei Stellen mit je zwei Optionen', () => {
     expect(b2Tasks().length).toBeGreaterThanOrEqual(12);

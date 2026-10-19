@@ -237,7 +237,7 @@ export function RepairItem({ item, mode, area, source, status = null, profile: p
   // Paket FK (B3): Fehlerart mit Zahl, gespeicherter Kontext und Lückenhinweis der damaligen Aufgabe stehen über dem Satz (Kap. 15: „Karten ohne Ursprungssatz“).
   const kindName = patName ? (lang === 'de' ? patName.de : patName.en) : item.topic ? topicName(item.topic, lang) : null;
   const ctxLines = [
-    kindName ? (item.n && item.n > 1 ? t('fxRKindLineN', { name: kindName, n: item.n }) : t('fxRKindLine', { name: kindName })) : null,
+    kindName ? (item.n === 1 ? t('fxRKindLineOnce', { name: kindName }) : item.n && item.n > 1 ? t('fxRKindLineN', { name: kindName, n: item.n }) : t('fxRKindLine', { name: kindName })) : null,
     item.ctx?.trim() ? t('fxRCtxLine', { ctx: item.ctx.trim() }) : null,
     item.gapHint?.trim() ? t('fxRGapLine', { hint: item.gapHint.trim() }) : null,
   ].filter((x): x is string => !!x);

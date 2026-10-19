@@ -251,7 +251,7 @@ export function repairCards(i: { items: readonly Fehlersatz[]; grammarDocs: Read
       fk2,
       ...(f.ctx ? { ctx: f.ctx } : {}),
       ...(f.gapHint ? { gapHint: f.gapHint } : {}),
-      ...(f.n && f.n > 1 ? { n: f.n } : {}),
+      ...(f.n ? { n: f.n } : {}),
       ...(f.hidden ? { hidden: f.hidden } : {}),
     };
   });

@@ -98,8 +98,20 @@ const chars = (a: string, b: string): number => wordDistance([...a], [...b]);
 /** Reiner Tippfehler: langes, unbekanntes Wort, höchstens 2 Zeichen daneben und keine andere Wortform (kein Anfangsstück des richtigen Worts). */
 const isTypo = (a: string, b: string): boolean => a.length >= 6 && chars(a, b) <= 2 && !a.startsWith(b) && !b.startsWith(a) && !isDictWord(a);
 
-/** Warum dieser Fehlersatz nicht als Aufgabe taugt, sonst `null`. */
+const memo = new Map<string, HideReason | null>();
+
+/** Warum dieser Fehlersatz nicht als Aufgabe taugt, sonst `null`. Das Ergebnis hängt nur vom Text ab und wird zwischengemerkt (die Zählungen rufen es oft auf). */
 export function fehlersatzProblem(i: QualityInput): HideReason | null {
+  const key = `${i.wrong}\u0001${i.right}\u0001${i.src ?? ''}\u0001${i.q ?? ''}\u0001${i.given ?? ''}\u0001${i.confirmed ? 1 : 0}`;
+  const hit = memo.get(key);
+  if (hit !== undefined) return hit;
+  const r = fehlersatzProblemRaw(i);
+  if (memo.size > 3000) memo.clear();
+  memo.set(key, r);
+  return r;
+}
+
+function fehlersatzProblemRaw(i: QualityInput): HideReason | null {
   const wrongText = i.wrong.trim();
   const plain = wrongText.replace(SCHAR, '').replace(/[…]+/g, '').trim();
   if (plain.length < 2 || /(^|\s)(…|\.\.\.)(\s|$|[.,!?])/.test(wrongText) || /[…]$/.test(wrongText)) return 'empty';
