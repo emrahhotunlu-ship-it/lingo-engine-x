@@ -134,6 +134,32 @@ describe('composeFeedback', () => {
     expect(composeFeedback(inp({ v: 'wrong', askAi: 'button', override: true })).action).toBe('next');
     expect(composeFeedback(inp({ v: 'correct' })).action).toBe('next');
   });
+
+  it('UX-Prüfung 19.10.: Einspruch – neutrale Zeile statt „Richtig: …“, kein Zusatz, keine Handlung', () => {
+    const byMe = { head: 'Dein Einspruch', text: 'Du hast gesagt, deine Antwort stimmt.' };
+    const out = composeFeedback(inp({ v: 'correct', by: 'me', override: true, texts: { altNoCount: 'x', byMe } }));
+    expect(out.model.lines.map((l) => l.k)).toEqual(['pattern', 'yours']);
+    expect(out.model.lines[1]).toMatchObject({ head: 'Dein Einspruch', text: byMe.text });
+    expect(JSON.stringify(out.model.lines)).not.toContain('Gewohnheit');
+    expect(out).toMatchObject({ extra: null, action: 'next' });
+  });
+
+  it('UX-Prüfung 19.10.: unsicher – „Erwartet war …“ statt Begründung der Lösung', () => {
+    const unsure = { head: 'Erwartet war', text: 'used to have. Ob deine Fassung auch passt, kann die App nicht sicher sagen.' };
+    const out = composeFeedback(inp({ v: 'unsure', texts: { altNoCount: 'x', unsure } }));
+    expect(out.model.lines.filter((l) => l.k === 'yours')).toEqual([{ k: 'yours', given: '', text: unsure.text, head: 'Erwartet war' }]);
+    expect(out.model.lines.some((l) => l.k === 'why')).toBe(false);
+  });
+
+  it('UX-Prüfung 19.10.: Claudes Begründung trägt „Claude sagt“, ist kurz und ohne Inhalts-Zusatz dazwischen', () => {
+    const long = 'Das passt hier. Die Form ist natürlich und üblich. Man sagt es im Büro oft so. Und noch ein vierter Satz mit vielen weiteren Wörtern, der sehr lang ist.';
+    const out = composeFeedback(inp({ v: 'alt_ok', by: 'ai', fitsGoal: true, aiWhy: long, texts: { altNoCount: 'x', claudeHead: 'Claude sagt' } }));
+    const why = out.model.lines.find((l) => l.k === 'why');
+    expect(why).toMatchObject({ head: 'Claude sagt' });
+    expect(why && why.k === 'why' ? why.text.length : 999).toBeLessThanOrEqual(140);
+    expect(out.extra).toBeNull();
+    expect(out.model.ai).toBe(true);
+  });
 });
 
 describe('Protokoll: v/h/vs (≤ 60 B)', () => {

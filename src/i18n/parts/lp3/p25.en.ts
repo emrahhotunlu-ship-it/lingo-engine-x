@@ -16,7 +16,7 @@ export const ttP25En = {
   ttReportThanks: 'Thanks, noted.',
   ttReportClose: 'Close',
   ttSampleTitle: 'AI sample',
-  ttSampleText: 'Save the latest content from Claude as a file, for example for proofreading. Kept: {n}.',
+  ttSampleText: 'Save the latest content from Claude as a file, for example for proofreading. Latest content from Claude shown on this device: {n}. The file also includes the rows below.',
   ttSampleSave: 'Save AI sample',
   ttSampleSaved: 'Saved.',
   ttSampleEmpty: 'Nothing from Claude shown yet.',

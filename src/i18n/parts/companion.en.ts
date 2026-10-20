@@ -4,7 +4,7 @@ import type { CompanionMessageKey } from './companion.de';
 
 export const companionEn: Record<CompanionMessageKey, string> = {
   // ---------------------------------------------------------------- Companion
-  openCompanion: 'Ask Claude',
+  openCompanion: 'Chat with Claude',
   cmpTitle: 'Claude',
   cmpTabsLabel: 'Section',
   cmpTabChat: 'Ask',

@@ -34,6 +34,7 @@ import { useLive } from '../../../data/live';
 import { poolNorm } from '../../../domain/drills/orderPool';
 import { visibleSb } from '../../../domain/tutor/sentenceBank';
 import { AiMark } from '../../../ui/AiMark';
+import type { ReportReason } from '../../../ui/ReportSheet';
 import { currentGate, reportSb } from '../sentenceBank';
 
 // Wortblatt (M1): oben Status (Sicherheit, Stufe, nächste Wiederholung), dann Ursprungssatz und
@@ -42,7 +43,9 @@ import { currentGate, reportSb } from '../sentenceBank';
 
 const DAY = 86_400_000;
 const REGISTER_KEYS: Record<string, MessageKey> = { formal: 'regFormal', neutral: 'regNeutral', informal: 'regInformal' };
-const ORIGIN_KEYS: Record<string, MessageKey> = { scene: 'vcOriginScene', mail: 'vcOriginMail', pitch: 'vcOriginPitch', biz: 'vcOriginBiz' };
+/** Ein Satzbank-Satz hat keine Lösung und keine Erklärung: nur die passenden Melde-Gründe (UX-Prüfung 19.10.2026). */
+const SB_REASONS: readonly ReportReason[] = ['unnatural', 'other'];
+const ORIGIN_KEYS: Record<string, MessageKey> ={ scene: 'vcOriginScene', mail: 'vcOriginMail', pitch: 'vcOriginPitch', biz: 'vcOriginBiz' };
 
 /**
  * Ursprung einer Wendung (M1): Szene bzw. Mail/Pitch/Baukasten, der eigene Satz von damals und die
@@ -231,6 +234,12 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
       {bank.length > 0 && (
         <section className="flex flex-col gap-1.5" data-testid="word-sb">
           <p className="lx-eyebrow">{t('ttSbTitle')}</p>
+          {/* „Satz von Claude · …“ einmal für die Liste, je Satz nur „Melden“ (UX-Prüfung 19.10.2026). */}
+          {bank.some((x) => x.src === 'ai') && (
+            <p className="m-0 lx-t-meta text-subtle" data-testid="word-sb-note" data-ai-mark="sentence">
+              {t('ttMarkSentence')}
+            </p>
+          )}
           <ul className="flex flex-col gap-2">
             {bank.map((x) => (
               <li key={x.en} className="flex flex-col gap-0.5" data-testid="word-sb-item" data-src={x.src}>
@@ -240,7 +249,9 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
                     {x.de}
                   </span>
                 )}
-                {x.src === 'ai' && <AiMark variant="sentence" tpl={x.pv || 'word-bank@1'} id={`${card.path}:sb:${x.en}`} onReport={() => void reportSb(card.path, x.en)} data-testid="word-sb-mark" />}
+                {x.src === 'ai' && (
+                  <AiMark variant="sentence" label={false} reasons={SB_REASONS} tpl={x.pv || 'word-bank@1'} id={`${card.path}:sb:${x.en}`} onReport={() => void reportSb(card.path, x.en)} data-testid="word-sb-mark" />
+                )}
               </li>
             ))}
           </ul>

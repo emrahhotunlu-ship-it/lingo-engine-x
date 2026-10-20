@@ -45,11 +45,16 @@ export function ExerciseMenu({ items, onOpenChange }: { items: Partial<Record<Sh
     onOpenChange?.(true);
     return () => onOpenChange?.(false);
   }, [open, onOpenChange]);
-  // Laptop-Menü: Esc und Klick daneben schließen.
+  // Laptop-Menü: Esc und Klick daneben schließen. Esc schließt NUR das Menü (das oberste Element), nie die Runde dahinter:
+  // `preventDefault` + `stopPropagation`, damit die Übungstasten (`useHotkeys`, hört auf `window`) es nicht mehr sehen.
   useEffect(() => {
     if (!open || !wide) return;
     const onKey = (e: KeyboardEvent): void => {
-      if (e.key === 'Escape') setOpen(false);
+      if (e.key !== 'Escape') return;
+      e.preventDefault();
+      e.stopPropagation();
+      setOpen(false);
+      root.current?.querySelector<HTMLButtonElement>('[data-testid="exercise-menu"]')?.focus();
     };
     const onDown = (e: PointerEvent): void => {
       if (root.current && e.target instanceof Node && !root.current.contains(e.target)) setOpen(false);

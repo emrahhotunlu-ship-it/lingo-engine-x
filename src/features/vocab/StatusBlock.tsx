@@ -38,10 +38,13 @@ export function StatusLadder({ card, now }: { card: Card; now: number }) {
   const { t } = useT();
   if (card.isNew) return null;
   const st = wordStatus(card, now);
+  // „frei abgerufen an x von 3 Tagen“ steht bei Lernt/Sicher schon oben im Beleg (derselbe Text wie in der Liste): hier dann nur „ja“
+  // (UX-Prüfung 19.10.2026: nichts doppelt).
+  const headFree = (st.tier === 'safe' || st.tier === 'learning') && st.freeDays > 0;
   const rows: ReadonlyArray<readonly [string, string, boolean, string | null]> = [
     ['recognize', t('stxStepRecognize'), st.recognizes, null],
     ['help', t('stxStepHelp'), st.helped, null],
-    ['free', t('stxStepFree'), st.freeDays > 0, t('stxStepFreeOf', { n: Math.min(FREE_DAYS_GOAL, st.freeDays) })],
+    ['free', t('stxStepFree'), st.freeDays > 0, headFree ? null : t('stxStepFreeOf', { n: Math.min(FREE_DAYS_GOAL, st.freeDays) })],
     ['sentence', t('stxStepNewSentence'), st.newSentence, null],
     ['own', t('stxStepOwn'), st.own, null],
   ];

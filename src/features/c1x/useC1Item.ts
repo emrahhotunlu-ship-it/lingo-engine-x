@@ -480,7 +480,8 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
       toast(t('cxReported'));
     };
     const tutor =
-      fb.dontKnow || fb.score.verdict === 'correct' || fb.override ? null : (
+      // Nur EIN KI-Einstieg je Karte (Kap. 15): bei „Claude fragen“ kein „Erklär mir meine Antwort“ daneben.
+      fb.dontKnow || fb.score.verdict === 'correct' || fb.override || action === 'askAi' ? null : (
         createElement(TutorButton, {
           taskKey: `c1:${item.id}:${fb.given}`,
           vars: {
@@ -505,7 +506,7 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
       parts: createElement(ResultParts, { score: fb.score }),
       right: item.kind === 'err' ? null : (ui.right ?? null),
       after: createElement(ResultAfter, { item, matched, day }),
-      foot: createElement(JudgeFoot, {
+      act: createElement(JudgeFoot, {
         action,
         aiMsg: fb.aiMsg ?? null,
         aiNoWhy: fb.aiNoWhy ?? null,
@@ -514,7 +515,8 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
         onAsk: askNow,
         onSkip: fit.skip,
         onCounts: counts,
-        want: pattern ? (lang === 'de' ? pattern.form.de : pattern.form.en) : wanted,
+        want: pattern ? null : wanted,
+        form: wanted,
         target: fb.target ?? null,
         onTarget: tryTarget,
       }),

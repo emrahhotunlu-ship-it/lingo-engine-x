@@ -3,7 +3,8 @@
 
 export const companionDe = {
   // ---------------------------------------------------------------- Begleiter
-  openCompanion: 'Claude fragen',
+  // UX-Prüfung 19.10.2026: anders benannt als der Knopf „Claude fragen“ in der Rückmeldung (prüft eine Antwort), damit nichts doppelt heißt.
+  openCompanion: 'Mit Claude chatten',
   cmpTitle: 'Claude',
   cmpTabsLabel: 'Bereich',
   cmpTabChat: 'Fragen',

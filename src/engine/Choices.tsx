@@ -132,7 +132,8 @@ function ModernChoices({ options, chosen, correct, revealed, onPick, lang = 'en'
           const isMuted = !revealed && !!muted?.includes(i);
           const state = !revealed ? (isMuted ? 'dim' : 'idle') : i === correct ? 'correct' : i === chosen ? 'wrong' : 'dim';
           if (revealed && collapse && state === 'dim') return null;
-          const line = revealed && state === 'wrong' ? why?.[i] : undefined;
+          // Am Handy (collapse) direkt unter der gewählten Option; sonst unter der Liste, damit keine Option verrutscht (UX-Prüfung 19.10.2026).
+          const line = collapse && revealed && state === 'wrong' ? why?.[i] : undefined;
           return (
             <motion.div
               key={i}
@@ -165,6 +166,11 @@ function ModernChoices({ options, chosen, correct, revealed, onPick, lang = 'en'
           );
         })}
       </AnimatePresence>
+      {!collapse && revealed && chosen !== null && chosen !== correct && why?.[chosen] && (
+        <p className="px-1 pt-2 text-sm text-muted" data-testid="choice-why">
+          {why[chosen]}
+        </p>
+      )}
     </div>
   );
 }

@@ -153,7 +153,7 @@ export function Explanation({ model, depth, learning = true, area = 'trainer', o
         );
       return (
         <li key={`${l.k}-${i}`} className="flex flex-col gap-2 border-t border-line px-4 py-3.5" data-line="why">
-          <span className="lx-eyebrow text-subtle">{w.label ?? t(lineLabel('why', verdict))}</span>
+          <span className="lx-eyebrow text-subtle">{l.head ?? w.label ?? t(lineLabel('why', verdict))}</span>
           {w.main && (
             <span className="lx-t-answer min-w-0 text-fg" lang={w.main.includes(' = ') ? lang : 'en'}>
               {w.main.includes(' = ') ? w.main : en(w.main)}
@@ -185,7 +185,7 @@ export function Explanation({ model, depth, learning = true, area = 'trainer', o
         <span aria-hidden="true" className="sr-only">
           {SYMBOL[l.k]}
         </span>
-        {l.k === 'yours' && l.head ? l.head : t(lineLabel(l.k, verdict))}
+        {(l.k === 'yours' || l.k === 'why') && l.head ? l.head : t(lineLabel(l.k, verdict))}
       </span>
       <span className="lx-t-support min-w-0 text-fg">{body(l)}</span>
     </li>

@@ -280,7 +280,10 @@ test('ohne KI (?fake=nosample): kein Absturz, keine KI-Knöpfe, freie Antwort �
       const sol = solve(await shownPrompt(page)) ?? '';
       await answerGrammar(page, solve, { given: sol.replace(/^(\S+)/, '$1 really') });
       await expect(item.getByTestId('verdict')).toHaveAttribute('data-verdict', 'near');
-      await expect(item.getByTestId('verdict-sub')).toHaveText('Nicht sicher prüfbar – zählt nicht gegen dich');
+      // UX-Prüfung 19.10.2026: Titel „Nicht sicher prüfbar“ statt „Fast richtig“, darunter nur „Zählt nicht gegen dich.“ – kein „Richtig: …“.
+      await expect(item.getByTestId('verdict')).toContainText('Nicht sicher prüfbar');
+      await expect(item.getByTestId('verdict-sub')).toHaveText('Zählt nicht gegen dich.');
+      await expect(item.getByTestId('explanation-yours')).toContainText('Erwartet war');
       sawCorrect = true;
     } else await answerGrammar(page, solve);
     await expect(page.locator('[data-ai]')).toHaveCount(0);

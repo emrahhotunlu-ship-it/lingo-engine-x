@@ -22,7 +22,7 @@ export const stxEn = {
   stxStepOwn: 'Used yourself (checked by Claude)',
   stxYes: 'yes',
   stxNot: 'not yet',
-  stxExplain: 'Safe: typed without help on 2 days. Firm: also holds for 3 weeks and works in a different sentence. Wobbly: not yet confirmed again after a mistake or a long break.',
+  stxExplain: 'Safe: recalled freely on 2 days. Firm: recalled freely on 3 days, holds for 3 weeks, and done in a new sentence or used yourself. Wobbly: not yet confirmed again after a mistake or a long break.',
   stxMindLabel: 'In your head now',
   stxMindGood: 'good',
   stxMindShaky: 'shaky',

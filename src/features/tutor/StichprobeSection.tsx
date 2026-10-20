@@ -35,6 +35,8 @@ export function StichprobeSection() {
   const [busy, setBusy] = useState(false);
   if (downloads !== 'ready') return null;
   const q = totalQuality();
+  // Einzahl/Mehrzahl („1 Satz“, „2 Sätze“); der Hinweis „kommt mit in die Datei“ steht einmal im Einleitungstext.
+  const sentences = (k: number): string => (k === 1 ? t('ttSbSentence1') : t('ttSbSentences', { n: num(k) }));
   const save = async () => {
     const items = shownSample();
     setN(items.length);
@@ -65,7 +67,7 @@ export function StichprobeSection() {
         {t('ttHeldRepairsRow', { n: num(heldRows.length) })}
       </p>
       <p className="m-0 text-xs text-subtle" data-testid="ai-sb" data-n={bank.n} data-sample={bank.sample.length} data-on={bank.gate.on ? '1' : '0'}>
-        {t('ttSbSampleRow', { n: num(bank.n), q: num(bank.quarantined), s: num(bank.sample.length), state: t(bank.gate.on ? 'ttSbGateOn' : 'ttSbGateOff') })}
+        {t('ttSbSampleRow', { ns: sentences(bank.n), q: num(bank.quarantined), ss: sentences(bank.sample.length), state: t(bank.gate.on ? 'ttSbGateOn' : 'ttSbGateOff') })}
       </p>
       <div>
         <Button variant="secondary" onClick={() => void save()} busy={busy} data-testid="ai-sample-save">

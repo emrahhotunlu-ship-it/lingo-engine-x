@@ -28,6 +28,16 @@ async function toPrompt(page: Page, needle: string): Promise<void> {
 
 const ARCHIVE = 'paper archive';
 
+/** Prüfen; ein erster Fehlversuch zeigt erst einen Hinweis, dann zählt der zweite Klick (unverändert) als Ergebnis. */
+async function checkToVerdict(page: Page): Promise<void> {
+  const item = page.getByTestId('gr-item');
+  await page.getByTestId('check').click();
+  const near = item.locator('[data-testid="hint-line"][data-tone="near"]');
+  await expect(item.getByTestId('verdict').or(near)).toBeVisible();
+  if (await near.isVisible()) await page.getByTestId('check').click();
+  await expect(item.getByTestId('verdict')).toBeVisible();
+}
+
 test('had: „Auch richtig“, Zielform-Angebot, keine Buchung', async ({ page }) => {
   const { errors } = await bootAt(page, { name: 'grammarSession', mode: 'topic', topic: 'used-to' }, { fake: { patch: { 'grammar/used-to': begun('used-to') } } });
   await skipMiniLesson(page);
@@ -79,10 +89,13 @@ test('ohne Zustimmung: unsicher → nur der Knopf „Claude fragen“; nach Clau
   await ask.click();
   await expect(page.getByTestId('verdict')).toContainText('Auch richtig');
   expect(await fitCalls(page)).toBe(1);
-  await expect(page.getByTestId('counts')).toBeVisible();
+  // Nur EIN KI-Einstieg je Karte: nach „Claude fragen“ kein „Erklär mir meine Antwort“ daneben.
+  await expect(page.getByTestId('counts')).toHaveText('Als richtig werten');
   await page.getByTestId('counts').click();
   await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
-  await expect(page.getByTestId('ai-msg')).toHaveAttribute('data-msg', 'byMe');
+  // UX-Prüfung 19.10.2026: keine widersprechende „Richtig: …“-Zeile, sondern die neutrale Zeile zur Wertung.
+  await expect(page.getByTestId('explanation-yours')).toContainText('Als richtig gewertet');
+  await expect(page.getByRole('region', { name: 'Erklärung' })).not.toContainText('Richtig:');
   await page.getByTestId('next').click();
   await expect.poll(async () => JSON.stringify((await dump(page))['grammar/used-to']?.fitAlt ?? {})).toContain('used to keep');
   expect(JSON.stringify((await dump(page))['grammar/used-to']?.fitAlt)).toContain('"by":"me"');
@@ -111,8 +124,52 @@ test('Einspruch „Ich lag richtig“: als richtig gewertet und gemerkt, kein Cl
   await page.getByTestId('menu-override').click();
   await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
   await expect(page.getByTestId('ask-claude')).toHaveCount(0);
+  // Die Erklärung widerspricht der Entscheidung nicht: neutrale Zeile statt „Richtig: used to have“.
+  await expect(page.getByTestId('explanation-yours')).toContainText('Du hast gesagt, deine Antwort stimmt.');
+  await expect(page.getByRole('region', { name: 'Erklärung' })).not.toContainText('Richtig:');
   await page.getByTestId('next').click();
   await expect.poll(async () => JSON.stringify((await dump(page))['grammar/used-to']?.fitAlt ?? {})).toContain('"by":"me"');
+  expect(errors).toEqual([]);
+});
+
+test('Einspruch bei eindeutigem Formfehler („use to have“): erst „Sicher?“, Abbrechen lässt alles, Ja speichert', async ({ page }) => {
+  const { errors } = await bootAt(page, { name: 'grammarSession', mode: 'topic', topic: 'used-to' }, { fake: { patch: { 'grammar/used-to': begun('used-to') } } });
+  await skipMiniLesson(page);
+  await toPrompt(page, ARCHIVE);
+  await typeInGap(page, 'use to have');
+  await checkToVerdict(page);
+  await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'wrong');
+  await page.getByTestId('exercise-menu').click();
+  await page.getByTestId('menu-override').click();
+  const sure = page.getByTestId('override-sure');
+  await expect(sure).toBeVisible();
+  await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'wrong');
+  await page.getByTestId('override-sure-no').click();
+  await expect(sure).toHaveCount(0);
+  await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'wrong');
+  await page.getByTestId('exercise-menu').click();
+  await page.getByTestId('menu-override').click();
+  await page.getByTestId('override-sure-yes').click();
+  await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
+  await expect(page.getByTestId('explanation-yours')).toContainText('Du hast gesagt, deine Antwort stimmt.');
+  await page.getByTestId('next').click();
+  await expect.poll(async () => JSON.stringify((await dump(page))['grammar/used-to']?.fitAlt ?? {})).toContain('use to have');
+  expect(errors).toEqual([]);
+});
+
+test('Esc bei offenem ⋯-Menü schließt nur das Menü, nicht die Runde', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const { errors } = await bootAt(page, { name: 'grammarSession', mode: 'topic', topic: 'used-to' }, { fake: { patch: { 'grammar/used-to': begun('used-to') } } });
+  await skipMiniLesson(page);
+  await toPrompt(page, ARCHIVE);
+  await typeInGap(page, 'use to have');
+  await checkToVerdict(page);
+  await page.getByTestId('exercise-menu').click();
+  await expect(page.getByTestId('menu-override')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.getByTestId('menu-override')).toHaveCount(0);
+  await expect(page.getByTestId('gr-item')).toBeVisible();
+  await expect(page.getByTestId('verdict')).toBeVisible();
   expect(errors).toEqual([]);
 });
 

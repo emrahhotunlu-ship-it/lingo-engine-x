@@ -59,9 +59,11 @@ type Props = {
   id: string;
   /** Markiert den Inhalt am Ort (z. B. `ax.bad = 1`); Fehler darin werden protokolliert. */
   onReport?: ((r: ReportInfo) => void) | undefined;
+  /** Nur diese Gründe (z. B. ein Beispielsatz ohne Lösung und Erklärung: „klingt unnatürlich“, „Anderes“); ohne Angabe alle. */
+  reasons?: readonly ReportReason[] | undefined;
 };
 
-export function ReportSheet({ open, onClose, tpl, id, onReport }: Props) {
+export function ReportSheet({ open, onClose, tpl, id, onReport, reasons }: Props) {
   const { t } = useT();
   const pick = (reason: ReportReason) => {
     const info: ReportInfo = { tpl, id, reason };
@@ -77,7 +79,7 @@ export function ReportSheet({ open, onClose, tpl, id, onReport }: Props) {
   return (
     <Sheet open={open} onClose={onClose} title={t('ttReportTitle')} closeLabel={t('ttReportClose')}>
       <div className="flex flex-col gap-2" data-testid="report-sheet">
-        {REASONS.map((r) => (
+        {REASONS.filter((r) => !reasons || reasons.includes(r.id)).map((r) => (
           <Button key={r.id} variant="secondary" onClick={() => pick(r.id)} data-testid={`report-${r.id}`}>
             {t(r.label)}
           </Button>

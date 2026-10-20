@@ -4,6 +4,7 @@ import { useAsk } from '../../ai/useAsk';
 import { alignWords, splitWords } from '../../domain/answer/align';
 import type { ExplanationModel, ResultVerdict } from '../../domain/explain/types';
 import { patternById } from '../../domain/grammar/patterns';
+import { detectLang } from '../../domain/lang/detect';
 import { topicName } from '../grammar/topicUi';
 import { inputProfile, type InputProfile } from '../../platform/input';
 import { checkRepairLocal, isUnchanged } from '../../domain/repair/check';
@@ -159,7 +160,9 @@ export function RepairItem({ item, mode, area, source, status = null, profile: p
     ? {
         lines: [
           ...(patName ? [{ k: 'pattern' as const, name: lang === 'de' ? patName.de : patName.en, formula: null }] : []),
-          ...(item.why ? [{ k: 'why' as const, text: item.why }] : []),
+          // Sprachtreue: Die gespeicherte Begründung gibt es meist nur auf Deutsch. In der englischen Oberfläche steht sie dann ehrlich
+          // gekennzeichnet da (UX-Prüfung 19.10.2026), statt still Deutsch als englische Erklärung auszugeben.
+          ...(item.why ? [{ k: 'why' as const, text: item.why, ...(lang === 'en' && detectLang(item.why) === 'de' ? { head: t('fxRWhyDeOnly') } : {}) }] : []),
         ],
         examples: [],
         mark: [],
@@ -217,11 +220,12 @@ export function RepairItem({ item, mode, area, source, status = null, profile: p
 
   // Ohne eigene Antwort („Weiß ich nicht“, zweiter Fehlgriff) zeigt der Vergleich den Fehlersatz selbst: was war falsch, was ist richtig.
   // Ein gültiger Gegenvorschlag (Urteil „ok“) bekommt keinen roten Vergleich, nur eine ruhige Zeile „Auch richtig“.
+  // Die richtige Fassung steht nach dem Prüfen oben als Satz (`repair-right`): im Vergleich keine zweite „Richtig:“-Zeile (UX-Prüfung 19.10.2026).
   const comparison =
     res && res.verdict !== 'exact' && res.verdict !== 'ok'
       ? res.given
-        ? { given: res.given, ops: alignWords(res.given, item.right), correct: item.right }
-        : { given: item.wrong, ops: alignWords(item.wrong, item.right), label: t('fxRCmpWrong'), correct: item.right }
+        ? { given: res.given, ops: alignWords(res.given, item.right) }
+        : { given: item.wrong, ops: alignWords(item.wrong, item.right), label: t('fxRCmpWrong') }
       : null;
   const alsoOk =
     res && res.verdict === 'ok' && res.given && res.given.trim() !== item.right.trim() ? (

@@ -3,6 +3,8 @@
 export const fxrDe = {
   fxRTaskField: 'Finde den Fehler und korrigiere ihn.',
   fxRCmpWrong: 'Fehlersatz',
+  // Begründung liegt nur auf Deutsch vor (englische Oberfläche): ehrlich gekennzeichnet.
+  fxRWhyDeOnly: 'Warum (nur auf Deutsch)',
   fxRTaskSpot: 'Tippe auf die Stelle mit dem Fehler.',
   fxRTaskReplace: 'Schreibe nur die richtige Form für diese Stelle. Der Rest des Satzes bleibt stehen.',
   fxRTaskTiles: 'Lege den Satz richtig zusammen.',

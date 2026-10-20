@@ -53,8 +53,10 @@ test('drei getippte Fehler in Folge: etwas Bekanntes, die Runde wird nicht kürz
   expect(typedWrong).toBe(3);
   await expect(page.getByTestId('tutor-win')).toHaveText('Kurz etwas Bekanntes, dann weiter.');
   await expect(page.getByTestId('gr-item')).toHaveAttribute('data-topic', 'pres-simple-cont');
-  // Der Grund steht schon als Statuszeile da: kein zweiter Knopf „Warum diese Aufgabe?“.
-  await expect(page.getByTestId('why-toggle')).toHaveCount(0);
+  // Der Grund steht schon als Statuszeile da: im ⓘ kein zweiter Grund.
+  await page.getByTestId('purpose-info').click();
+  await expect(page.getByTestId('why-line')).toHaveCount(0);
+  await page.getByTestId('purpose-info').click();
   expect(await total(page)).toBe(before);
   // Richtig beantwortet: die Statuszeile verschwindet mit der nächsten Aufgabe.
   await answerGrammar(page, solve);
@@ -64,11 +66,12 @@ test('drei getippte Fehler in Folge: etwas Bekanntes, die Runde wird nicht kürz
   expect(errors).toEqual([]);
 });
 
-test('„Warum diese Aufgabe?“: ein Satz aus den Daten, auf- und zuklappbar, auf Englisch in der englischen Oberfläche', async ({ page }) => {
+test('„Warum diese Aufgabe?“: ein Satz aus den Daten im ⓘ der Übung (eine feste Stelle, ohne Lösungsformel vor dem Prüfen)', async ({ page }) => {
   const { errors } = await bootAt(page, { name: 'grammarSession', mode: 'xtra' }, { fake: { patch: patches() } });
   await expect(page.getByTestId('gr-item')).toBeVisible();
-  const btn = page.getByTestId('why-toggle');
-  await expect(btn).toHaveText('Warum diese Aufgabe?');
+  // UX-Prüfung 19.10.2026: kein eigener Knopf mehr unter der Übung, der Grund steht im ⓘ.
+  await expect(page.getByTestId('why-toggle')).toHaveCount(0);
+  const btn = page.getByTestId('purpose-info');
   await expect(btn).toHaveAttribute('aria-expanded', 'false');
   await expect(page.getByTestId('why-line')).toHaveCount(0);
   await btn.click();
@@ -78,6 +81,8 @@ test('„Warum diese Aufgabe?“: ein Satz aus den Daten, auf- und zuklappbar, a
   await expect(line).toHaveAttribute('data-code', /^(due|intro|chapter|focus|need|family|chosen|mix|plan)$/);
   expect(((await line.innerText()) ?? '').length).toBeGreaterThan(15);
   await expect(line).not.toContainText('{');
+  // Vor dem Prüfen keine Formel („+ Grundform“ o. Ä.) im Grund und im Musternamen.
+  await expect(page.getByTestId('purpose')).not.toContainText('+');
   await btn.click();
   await expect(page.getByTestId('why-line')).toHaveCount(0);
   expect(errors).toEqual([]);
@@ -86,7 +91,7 @@ test('„Warum diese Aufgabe?“: ein Satz aus den Daten, auf- und zuklappbar, a
 test('Why this task? in the English interface', async ({ page }) => {
   await bootAt(page, { name: 'grammarSession', mode: 'xtra' }, { lang: 'en', fake: { patch: patches() } });
   await expect(page.getByTestId('gr-item')).toBeVisible();
-  await page.getByTestId('why-toggle').click();
-  await expect(page.getByTestId('why-toggle')).toHaveText('Hide reason');
+  await page.getByTestId('purpose-info').click();
+  await expect(page.getByTestId('why-line')).toBeVisible();
   await expect(page.getByTestId('why-line')).not.toContainText(/[äöüß]|Aufgabe|Fehler/);
 });

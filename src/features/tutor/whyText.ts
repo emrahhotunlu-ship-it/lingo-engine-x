@@ -13,7 +13,27 @@ export function refName(ref: string, lang: Lang): string {
   return p ? (lang === 'de' ? p.name.de : p.name.en) : ref;
 }
 
-const nameOf = (f: Pick<WhyFact, 'pat' | 'topic'>, lang: Lang): string => (f.pat && patternById(f.pat) ? refName(f.pat, lang) : topicName(f.topic, lang));
+/**
+ * Neutraler Mustername ohne Formel (UX-Prüfung 19.10.2026: vor dem Prüfen keine Lösungsformel): „have been + -ing · Dauer bis jetzt“ →
+ * „Dauer bis jetzt“. Besteht der Name nur aus Formelteilen (mit „+“), `null` – dann gilt der Themenname.
+ */
+export function neutralName(name: string): string | null {
+  const parts = name
+    .split(' · ')
+    .map((x) => x.trim())
+    .filter((x) => x.length > 0 && !x.includes('+'));
+  return parts.length ? parts.join(' · ') : null;
+}
+
+/** Name eines Musters ohne Formel; sonst der Name seines Themas (Gebrauchsmuster `use:` bleiben, wie sie sind). */
+export function plainName(ref: string, lang: Lang): string {
+  if (ref.startsWith('use:')) return refName(ref, lang);
+  const p = patternById(ref);
+  if (!p) return ref;
+  return neutralName(lang === 'de' ? p.name.de : p.name.en) ?? topicName(p.topic, lang);
+}
+
+const nameOf = (f: Pick<WhyFact, 'pat' | 'topic'>, lang: Lang): string => (f.pat && patternById(f.pat) ? plainName(f.pat, lang) : topicName(f.topic, lang));
 
 /** Der Grund (ein Satz): warum die Aufgabe wirklich in der Runde steht. */
 function mainText(f: WhyFact, name: string, lang: Lang): string {
@@ -47,7 +67,7 @@ function mainText(f: WhyFact, name: string, lang: Lang): string {
 
 /** Datenbeleg als Zusatz („Passt dazu: …“), nie als Grund formuliert. */
 function extraText(x: WhyExtra, name: string, lang: Lang): string {
-  if (x.k === 'hyp') return translate(lang, 'ttWhyPlus_hyp', { name, n: x.n, vs: refName(x.vs, lang) });
+  if (x.k === 'hyp') return translate(lang, 'ttWhyPlus_hyp', { name, n: x.n, vs: plainName(x.vs, lang) });
   if (x.k === 'weakQ') return translate(lang, 'ttWhyPlus_weakQ', { name, ok: x.ok, n: x.n });
   if (x.days === 0) return translate(lang, 'ttWhyPlus_weakD0', { name });
   if (x.days === 1) return translate(lang, 'ttWhyPlus_weakD1', { name });

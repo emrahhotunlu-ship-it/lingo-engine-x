@@ -1039,8 +1039,13 @@ export function ExerciseView({
     const wrongTyped = fb.result.verdict === 'wrong' && !fb.dontKnow && !fb.override && (isTyped || e.ex === 'colloc_gap');
     // UX-Prüfung W8: Falsch heißt dieselbe Karte wie in der Grammatik – „Du: …“, „Richtig: …“ und das Warum zur Form („overcame = Vergangenheit“).
     const wrongWord = fb.result.verdict === 'wrong' && !fb.override && (isTyped || isChoice);
-    if (!comparison && wrongWord && solution && normalize(solution) !== normalize(fb.given)) comparison = { given: fb.dontKnow ? '' : fb.given, ops: alignWords(fb.dontKnow ? '' : fb.given, solution) };
-    const fk = solution && !fb.override && fb.result.verdict !== 'correct' ? formKind(solution, card.word, card.pos ?? null) : null;
+    // Auswahl mit Warum-Zeile unter der Option: gewählte (✕) und richtige Option (✓) stehen schon da – kein „Deine Antwort … / Richtig …“ dazu
+    // (UX-Prüfung 19.10.2026, Kap. 15: jede Aussage einmal).
+    const shownUnder = isChoice && fb.result.verdict === 'wrong' && chosen !== null && model.lines.some((l) => l.k === 'yours');
+    if (!comparison && wrongWord && !shownUnder && solution && normalize(solution) !== normalize(fb.given)) comparison = { given: fb.dontKnow ? '' : fb.given, ops: alignWords(fb.dontKnow ? '' : fb.given, solution) };
+    // Wortpartner (colloc/colloc_gap): gesucht ist der Partner, nicht eine Form des Kartenworts – „raised = Vergangenheit von concern“ wäre falsch (UX-Prüfung 19.10.2026).
+    const partnerEx = e.ex === 'colloc' || e.ex === 'colloc_gap';
+    const fk = solution && !fb.override && fb.result.verdict !== 'correct' && !partnerEx ? formKind(solution, card.word, card.pos ?? null) : null;
     const formWhy =
       fk && fk !== 'misc' ? (
         <p className="lx-t-support m-0" data-testid="word-form-why" data-form={fk}>

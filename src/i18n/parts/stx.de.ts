@@ -24,7 +24,7 @@ export const stxDe = {
   stxStepOwn: 'Selbst benutzt (von Claude geprüft)',
   stxYes: 'ja',
   stxNot: 'noch nicht',
-  stxExplain: 'Sicher: an 2 Tagen ohne Hilfe getippt. Fest: dazu 3 Wochen haltbar und in einem anderen Satz gekonnt. Wackelt: nach einem Fehler oder langer Pause noch nicht wieder bestätigt.',
+  stxExplain: 'Sicher: an 2 Tagen frei abgerufen. Fest: an 3 Tagen frei abgerufen, 3 Wochen haltbar und im neuen Satz gekonnt oder selbst benutzt. Wackelt: nach einem Fehler oder langer Pause noch nicht wieder bestätigt.',
   // Jetzt im Kopf
   stxMindLabel: 'Jetzt im Kopf',
   stxMindGood: 'gut',

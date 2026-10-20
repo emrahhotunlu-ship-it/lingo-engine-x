@@ -16,7 +16,7 @@ export const ttP25De = {
   ttReportThanks: 'Danke, das ist gemerkt.',
   ttReportClose: 'Schließen',
   ttSampleTitle: 'KI-Stichprobe',
-  ttSampleText: 'Die letzten Inhalte von Claude als Datei sichern, zum Beispiel zum Gegenlesen. Gemerkt: {n}.',
+  ttSampleText: 'Die letzten Inhalte von Claude als Datei sichern, zum Beispiel zum Gegenlesen. Zuletzt gezeigte Inhalte von Claude auf diesem Gerät: {n}. In die Datei kommen auch die Zeilen darunter.',
   ttSampleSave: 'KI-Stichprobe sichern',
   ttSampleSaved: 'Gesichert.',
   ttSampleEmpty: 'Noch nichts von Claude gezeigt.',

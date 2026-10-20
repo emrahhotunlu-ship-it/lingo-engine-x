@@ -9,7 +9,8 @@ import type { Verdict } from './tutorTypes';
 //   - Höchstens 3 Erklärzeilen: „Deine Antwort“ (seine Form), „Warum“ (Grund) und genau ein Extra.
 //   - Extra: Kontrast („Nicht verwechseln“) nur mit Beleg – Ursache `confuse` in DIESER Antwort oder eine offene Annahme zum eigenen Muster;
 //     sonst der typische Fehler (Lernphase) oder ein Hinweis. Bei „Auch richtig“ ist das Extra der Hinweis „zählt noch nicht als geübt“.
-//   - Handlung: Zielform schreiben (Auch richtig, Ziel verfehlt) · „Zählt“ (Claude: trifft das Ziel) · „Claude fragen“ (Knopf) · Weiter.
+//   - Handlung: Zielform schreiben (Auch richtig, Ziel verfehlt) · „Als richtig werten“ (Claude: trifft das Ziel) · „Claude fragen“ (Knopf) · Weiter.
+//   - Emrahs Entscheidung (`by: 'me'`) und „unsicher“ bekommen eine neutrale Zeile statt „Richtig: …“ (kein Widerspruch zum Kopf).
 // Die Ausgabe ist wieder ein `ExplanationModel` (Beispiele, Markierung und Herkunft bleiben aus `grammarExplanation`).
 
 export type FeedbackAction = 'next' | 'targetForm' | 'counts' | 'askAi';
@@ -34,7 +35,15 @@ export type FeedbackIn = {
   askAi: 'auto' | 'button' | 'no';
   /** Zweitversuch „Zielform“ schon gemacht (dann nicht noch einmal anbieten). */
   targetTried: boolean;
-  texts: { altNoCount: string };
+  texts: {
+    altNoCount: string;
+    /** Emrahs Einspruch, „Als richtig werten“ oder ein früher gemerkter Einspruch (`by: 'me'`): neutrale Zeile statt „Richtig: …“ (UX-Prüfung 19.10.2026). */
+    byMe?: { head: string; text: string } | null;
+    /** Unsicher (lokal nicht prüfbar): „Erwartet war …“ statt „Richtig: …“ unter „Fast richtig“. */
+    unsure?: { head: string; text: string } | null;
+    /** Überschrift einer Begründung von Claude („Claude sagt“), damit die Herkunft an der Zeile steht. */
+    claudeHead?: string;
+  };
 };
 
 export type FeedbackOut = {
@@ -56,13 +65,41 @@ export function contrastProof(dx: Diagnosis | null, pat: string | null, hyps: Fe
   return null;
 }
 
+/** Begründung von Claude knapp (≤ 140 Zeichen, ganze Sätze; am Handy höchstens drei Zeilen). */
+export function brief(text: string, max = 140): string {
+  const t = text.trim();
+  if (t.length <= max) return t;
+  const parts = t.match(/[^.!?]+[.!?]+(?=\s|$)/g) ?? [];
+  let out = '';
+  for (const p of parts) {
+    if ((out + p).trim().length > max) break;
+    out += p;
+  }
+  if (out.trim()) return out.trim();
+  const cut = t.slice(0, max);
+  return `${cut.slice(0, Math.max(cut.lastIndexOf(' '), 20)).trimEnd()} …`;
+}
+
 export function composeFeedback(i: FeedbackIn): FeedbackOut {
   const L = i.base.lines;
   const goal = L.filter((l): l is Extract<ExplainLine, { k: 'pattern' }> => l.k === 'pattern').slice(0, 1);
+  // Emrahs Entscheidung gilt (Einspruch, „Als richtig werten“, früher gemerkt): die Karte widerspricht ihr nicht mit „Richtig: …“ – eine
+  // neutrale Zeile sagt, was passiert ist (vorgemerkt, der Lehrer schaut es an). Kein Zusatz, keine Handlung.
+  if (i.by === 'me' && i.texts.byMe && !i.dontKnow) {
+    const body: ExplainLine[] = [{ k: 'yours', given: '', text: i.texts.byMe.text, head: i.texts.byMe.head }];
+    return { model: { ...i.base, lines: [...goal, ...body], ai: false }, extra: null, action: 'next', lines: body.length, proof: null };
+  }
   const altOk = i.v === 'alt_ok' && !i.override;
-  const yours = altOk ? [] : L.filter((l) => l.k === 'yours').slice(0, 1);
-  const ownWhy = i.altWhy ?? (altOk ? i.aiWhy : null);
-  const why: ExplainLine[] = ownWhy ? [{ k: 'why', text: ownWhy }] : altOk ? [] : L.filter((l) => l.k === 'why').slice(0, 1);
+  // Unsicher: „Erwartet war …“ statt der Begründung der Lösung („Richtig: …“ neben „Nicht sicher prüfbar“ widerspräche sich).
+  const unsure = i.v === 'unsure' && !i.dontKnow && !i.override && i.texts.unsure ? i.texts.unsure : null;
+  const yours: ExplainLine[] = unsure ? [{ k: 'yours', given: '', text: unsure.text, head: unsure.head }] : altOk ? [] : L.filter((l) => l.k === 'yours').slice(0, 1);
+  const fromAi = !i.altWhy && altOk && !!i.aiWhy;
+  const ownWhy = i.altWhy ?? (altOk && i.aiWhy ? brief(i.aiWhy) : null);
+  const why: ExplainLine[] = ownWhy
+    ? [{ k: 'why', text: ownWhy, ...(fromAi && i.texts.claudeHead ? { head: i.texts.claudeHead } : {}) }]
+    : altOk || unsure
+      ? []
+      : L.filter((l) => l.k === 'why').slice(0, 1);
 
   const proof = contrastProof(i.dx, i.pat, i.hyps);
   let extra: FeedbackExtra = null;
@@ -70,6 +107,8 @@ export function composeFeedback(i: FeedbackIn): FeedbackOut {
   if (altOk && i.fitsGoal !== true) {
     extra = 'note';
     extraLine = { k: 'note', text: i.texts.altNoCount };
+  } else if (fromAi) {
+    // Nach Claudes Urteil kein Inhalt der Aufgabe zwischen Claudes Begründung und „von Claude“ (UX-Prüfung 19.10.2026).
   } else {
     const contrast = L.find((l) => l.k === 'contrast');
     const mistake = L.find((l) => l.k === 'mistake');

@@ -204,8 +204,9 @@ export function explainWord(i: ExplainWordInput): ExplanationModel {
     const colMerke = pick({ de: `Merke: ${col.p}${col.de.trim() ? ` = ${col.de.trim()}` : ''}`, en: `Remember: ${col.p}` }, lang);
     const reason = pick(
       {
-        de: `${quote(partner, lang)} ist ein fester Partner von ${quote(lemma, lang)}: Im Englischen sagt man es genau so, darum lernt man die Wörter als Paar`,
-        en: `${quote(partner, lang)} is a fixed partner of ${quote(lemma, lang)}: this is simply how English puts it, so learn the words as a pair`,
+        // UX-Prüfung 19.10.2026: höchstens zwei Zeilen am Handy.
+        de: `${quote(partner, lang)} ist ein fester Partner von ${quote(lemma, lang)} – als Paar lernen`,
+        en: `${quote(partner, lang)} is a fixed partner of ${quote(lemma, lang)} – learn them as a pair`,
       },
       lang,
     );

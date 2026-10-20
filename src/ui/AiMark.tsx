@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { noteQuality } from '../domain/tutor/quality';
 import { useT, type MessageKey } from '../i18n';
-import { ReportSheet, type ReportInfo } from './ReportSheet';
+import { ReportSheet, type ReportInfo, type ReportReason } from './ReportSheet';
 
 // Kennzeichnung an jedem Inhalt von Claude (Lernplattform 3.0 P25, T-R5): eine Zeile mit „von Claude · kann Fehler enthalten“ und dem Textknopf
 // „Melden“ (Tippfläche ≥ 44 px). Feste Inhalte der App tragen keine Marke. Beim ersten Zeigen zählt der Qualitätszähler `shown`.
@@ -28,11 +28,15 @@ type Props = {
   id?: string;
   /** Markiert den Inhalt am Ort (z. B. `ax.bad`). */
   onReport?: ((r: ReportInfo) => void) | undefined;
+  /** Nur passende Gründe im Melde-Blatt (ohne Angabe alle). */
+  reasons?: readonly ReportReason[] | undefined;
+  /** `false`: nur „Melden“ – die Kennzeichnung steht einmal über einer Liste (UX-Prüfung 19.10.2026: „Satz von Claude“ nur einmal). */
+  label?: boolean;
   className?: string;
   'data-testid'?: string;
 };
 
-export function AiMark({ variant, tpl, id, onReport, className, 'data-testid': testId = 'ai-mark' }: Props) {
+export function AiMark({ variant, tpl, id, onReport, reasons, label = true, className, 'data-testid': testId = 'ai-mark' }: Props) {
   const { t } = useT();
   const [open, setOpen] = useState(false);
   useEffect(() => {
@@ -44,11 +48,11 @@ export function AiMark({ variant, tpl, id, onReport, className, 'data-testid': t
   return (
     <>
       <p className={`m-0 flex flex-wrap items-center gap-x-2 lx-t-meta text-subtle ${className ?? ''}`} data-testid={testId} data-ai-mark={variant}>
-        <span>{t(TEXT[variant])}</span>
+        {label && <span>{t(TEXT[variant])}</span>}
         {id && (
           <button
             type="button"
-            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-[var(--radius-control)] px-2 font-semibold text-muted underline-offset-2 hover:text-fg hover:underline"
+            className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-[var(--radius-control)] px-2 font-semibold text-muted underline-offset-2 hover:text-fg hover:underline ${label ? '' : '-ml-2'}`}
             onClick={() => setOpen(true)}
             data-testid="ai-report"
           >
@@ -56,7 +60,7 @@ export function AiMark({ variant, tpl, id, onReport, className, 'data-testid': t
           </button>
         )}
       </p>
-      {id && <ReportSheet open={open} onClose={() => setOpen(false)} tpl={tpl} id={id} onReport={onReport} />}
+      {id && <ReportSheet open={open} onClose={() => setOpen(false)} tpl={tpl} id={id} onReport={onReport} reasons={reasons} />}
     </>
   );
 }

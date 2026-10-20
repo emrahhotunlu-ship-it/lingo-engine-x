@@ -80,7 +80,13 @@ test.describe('Satzbank', () => {
     await expect(items.first()).toHaveAttribute('data-src', 'ai');
     await expect(items.nth(1)).toHaveAttribute('data-src', 'read');
     await expect(page.getByTestId('word-sb-mark')).toHaveCount(1);
+    // „Satz von Claude · …“ steht einmal über der Liste; je Satz nur „Melden“ mit passenden Gründen.
+    await expect(page.getByTestId('word-sb-note')).toHaveCount(1);
+    await expect(page.getByTestId('word-sb')).toContainText('Satz von Claude');
+    await expect(page.getByTestId('word-sb-mark')).not.toContainText('Satz von Claude');
     await page.getByTestId('word-sb-mark').getByTestId('ai-report').click();
+    await expect(page.getByTestId('report-sheet').getByRole('button')).toHaveCount(2);
+    await expect(page.getByTestId('report-solution')).toHaveCount(0);
     await page.getByTestId('report-sheet').getByRole('button').first().click();
     await expect.poll(async () => ((await dump(page))['vocab/convince']?.sb as Array<{ bad?: number }>)[0]?.bad).toBe(1);
     await expect(items).toHaveCount(1);

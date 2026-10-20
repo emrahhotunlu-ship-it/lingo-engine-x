@@ -75,6 +75,11 @@ export type ShellFeedback = {
   head?: ReactNode;
   /** Fuß der Rückmeldung (Wörter: „Zum Wort“), ganz unten in der Ergebnis-Karte. */
   foot?: ReactNode;
+  /**
+   * Handlung der Rückmeldung (Tutor-Engine: „Claude fragen“, „Als richtig werten“, Zielform, „Sicher?“): steht ÜBER „Mehr“, direkt unter dem
+   * sichtbaren Inhalt – nie ganz unten, wo sie am Handy unter dem Weiter-Balken verschwindet (UX-Prüfung 19.10.2026).
+   */
+  act?: ReactNode;
   nextIn?: string | null;
   /** Warum die Stufe noch nicht steigt (Wörter: so viele freie Antworten an anderen Tagen fehlen noch), eigene ruhige Zeile unter „Wieder in …“. */
   stageNote?: string | null;
@@ -89,7 +94,16 @@ export type ExerciseShellProps = {
   meta: { ex: string; id: string; stage?: number; kind?: string };
   status: ShellStatus;
   /** `open`: das Wozu steht immer als ruhige Zeile über der Aufgabe (Aktivierung), nicht hinter dem ⓘ (Kap. 2.4: an fester Stelle). */
-  task: { text: string; purpose: string; open?: boolean };
+  task: {
+    text: string;
+    purpose: string;
+    open?: boolean;
+    /**
+     * „Warum diese Aufgabe?“ (Tutor-Engine): der Grund steht im ⓘ unter dem Zweck – EIN Warum-Zugang an fester Stelle, ohne Sprung nach dem
+     * Prüfen (UX-Prüfung 19.10.2026). Wird erst beim Öffnen gerechnet, nie beim Zeichnen.
+     */
+    reason?: (() => { text: string; code: string } | null) | null;
+  };
   aid?: ReactNode | null;
   prompt: ReactNode;
   answer: ReactNode;
@@ -130,6 +144,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
   const tablet = useMediaQuery('(min-width: 768px)');
   const fine = useMediaQuery('(pointer: fine)');
   const [info, setInfo] = useState(false);
+  const [reason, setReason] = useState<{ text: string; code: string } | null>(null);
   const infoId = useId();
   const [menuOpen, setMenuOpen] = useState(false);
   const [folds, setFolds] = useState(0);
@@ -269,13 +284,20 @@ export function ExerciseShell(props: ExerciseShellProps) {
               onFoldChange={onFold}
               more={{
                 label: t('exMore'),
-                before: feedback.tutor ? <div data-slot="tutor">{feedback.tutor}</div> : undefined,
+                before:
+                  feedback.tutor || feedback.act ? (
+                    <div className="flex flex-col gap-3">
+                      {feedback.act && <div data-slot="act">{feedback.act}</div>}
+                      {feedback.tutor && <div data-slot="tutor">{feedback.tutor}</div>}
+                    </div>
+                  ) : undefined,
                 extra: moreExtra,
               }}
             />
           </div>
         ) : (
           <>
+            {feedback.act && <div data-slot="act">{feedback.act}</div>}
             {feedback.tutor && <div data-slot="tutor">{feedback.tutor}</div>}
             {moreExtra && (
               <div data-slot="more" className="-mx-4 border-t border-line px-4 pt-1">
@@ -314,7 +336,10 @@ export function ExerciseShell(props: ExerciseShellProps) {
             aria-label={t('exInfo')}
             aria-expanded={info}
             aria-controls={infoId}
-            onClick={() => setInfo((v) => !v)}
+            onClick={() => {
+              if (!info && task.reason) setReason(task.reason());
+              setInfo((v) => !v);
+            }}
             data-testid="purpose-info"
           >
             <Icon name="info" size={18} />
@@ -343,6 +368,11 @@ export function ExerciseShell(props: ExerciseShellProps) {
               </span>
             )}
             {task.purpose}
+            {reason && (
+              <span className="mt-1 block" data-testid="why-line" data-code={reason.code}>
+                {reason.text}
+              </span>
+            )}
           </p>
         )}
         <h2 className="lx-t-task" data-testid="task">

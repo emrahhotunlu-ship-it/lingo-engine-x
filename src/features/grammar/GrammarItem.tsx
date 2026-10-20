@@ -35,6 +35,7 @@ import { nextT } from '../progress/persist';
 import { abandonFit, fitAiState, runFit, useFitJudge, type FitResult } from './fit';
 import { FitSlow } from './FitSlow';
 import { JudgeFoot, type AiMsg, type TargetState } from './JudgeFoot';
+import { neutralName } from '../tutor/whyText';
 import { judge, readFitAlt, type Judgement } from '../../domain/tutor/judge';
 import { composeFeedback, contrastProof, type FeedbackAction } from '../../domain/tutor/feedback';
 import { factOf, maxHint, miniLesson } from '../../domain/tutor/policy';
@@ -79,6 +80,8 @@ export type GrammarItemProps = {
   topicRound?: boolean;
   /** Grammatikrunde mit Tutor-Engine (S3): nach 2 Fehlern gleicher Ursache kommt statt der Rückmeldung die Mini-Lektion. */
   tutor?: boolean;
+  /** „Warum diese Aufgabe?“ (Tutor-Engine): Grund für das ⓘ, erst beim Öffnen gerechnet. */
+  reason?: (() => { text: string; code: string }) | null;
 };
 
 type Fb = {
@@ -115,7 +118,14 @@ type Fb = {
   fit?: { by: 'ai' | 'me'; pv: string; a: string };
   /** Zweitversuch „Zielform“ (nach „Auch richtig“ mit anderem Muster). */
   target?: TargetState;
+  /** Wie Emrahs Entscheidung zustande kam: Einspruch („Ich lag richtig“) oder „Als richtig werten“ nach Claudes Ja zum Ziel. */
+  how?: 'me' | 'counts';
+  /** Einspruch bei eindeutigem Formfehler: erst „Sicher?“ (und, mit Zustimmung, Claude prüfen lassen), dann speichern. */
+  sure?: boolean;
 };
+
+/** Eindeutiger Formfehler (Diagnose): vor einem Einspruch fragt die App „Sicher?“. */
+const formMistake = (f: Fb): boolean => !f.override && f.verdict !== 'correct' && (f.dx?.cause === 'form' || f.dx?.cause === 'auxform');
 
 /** Urteil der Tutor-Engine → Protokollfeld `v`. */
 const TJ_V: Record<TutorVerdict, 'c' | 'a' | 'n' | 'w' | 'u'> = { correct: 'c', alt_ok: 'a', near: 'n', wrong: 'w', unsure: 'u' };
@@ -137,7 +147,7 @@ export function GrammarItem(props: GrammarItemProps) {
   return isC1Task(task) ? <C1Item {...props} task={task} /> : <LegacyGrammarItem {...props} />;
 }
 
-function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = null, badgeTone, noHelp = false, profile: profileProp, topicRound = false, tutor: tutorOn = false }: GrammarItemProps) {
+function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = null, badgeTone, noHelp = false, profile: profileProp, topicRound = false, tutor: tutorOn = false, reason = null }: GrammarItemProps) {
   const { t, lang } = useT();
   const api = useHiddenInput();
   const now = useClock((s) => s.now);
@@ -151,7 +161,9 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   const patEntry = patId ? patsOf(doc)[patId] : undefined;
   // Lernphase: die ersten 3 Antworten auf ein Muster und jede Themenrunde (§5.1). Dann steht die Musterkarte offen.
   const learning = !!pattern && (topicRound || (patEntry?.n ?? 0) < 3);
-  const state = patId && pattern ? patternState(patEntry, day) : topicState(task.topic, doc, now);
+  const state0 = patId && pattern ? patternState(patEntry, day) : topicState(task.topic, doc, now);
+  // Ein wiederkehrender eigener Fehlersatz ist nie „Neu“ (UX-Prüfung 19.10.2026): er trägt das Wiederholungs-Abzeichen („dein Fehler“).
+  const state = task.errorT !== null && state0 === 'new' ? 'learning' : state0;
   const tp = topicById(task.topic);
   const topicLabel = tp ? (lang === 'en' ? (tp.name_en ?? tp.name) : tp.name) : task.topic;
 
@@ -325,7 +337,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     if (j.v === 'correct') {
       // Gültige andere Korrektur (`errAlt`) oder Emrahs früherer Einspruch (`fitAlt` by me): richtig, voll gebucht.
       const check: GrammarCheck = res.verdict === 'correct' ? res : { ...res, verdict: 'correct', ...(j.altWhy ? { kind: 'alt' as const } : {}) };
-      finishCheck('correct', check, given, { ...jx, ...at, ...(j.by === 'me' ? { aiMsg: 'byMe' as const } : {}) });
+      finishCheck('correct', check, given, { ...jx, ...at });
       return;
     }
     if (j.v === 'alt_ok') {
@@ -450,20 +462,36 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     api.blur();
   };
 
-  /** „Ich lag richtig“: zählt allein auf Emrahs Tipp (§1 Frage 4) und wird für diese Aufgabe gemerkt (`fitAlt` by me). */
+  /**
+   * „Ich lag richtig“: zählt allein auf Emrahs Tipp (§1 Frage 4) und wird für diese Aufgabe gemerkt (`fitAlt` by me, Liste für den Lehrer).
+   * Bei eindeutigem Formfehler (Diagnose `form`/`auxform`) erst „Sicher?“; mit Zustimmung zur KI prüft Claude gleichzeitig (stuft nur hoch).
+   */
   const override = () => {
+    if (!fb) return;
+    if (formMistake(fb) && !fb.sure) {
+      setFb({ ...fb, sure: true });
+      const ai = fitAiState();
+      if (fb.ask && ai.available && ai.confirmed && ai.budgetLeft > 0 && fb.aiMsg !== 'no' && fb.aiMsg !== 'unsure') askNow();
+      return;
+    }
+    overrideNow();
+  };
+  const overrideNow = () => {
     if (!fb) return;
     if (fit.ctl.current) {
       abandonFit(fit.ctl);
       fit.cancel();
     }
-    setFb({ ...fb, verdict: 'correct', grade: Math.min(3, Math.max(2, fb.grade)) as Grade, override: true, tv: 'correct', by: 'me', ask: false, aiMsg: 'byMe', ...(fb.given.trim() && !fb.dontKnow ? { fit: { by: 'me' as const, pv: GRAMMAR_FIT_PV, a: fb.given.trim() } } : {}) });
+    setFb({ ...fb, verdict: 'correct', grade: Math.min(3, Math.max(2, fb.grade)) as Grade, override: true, tv: 'correct', by: 'me', ask: false, aiMsg: null, how: 'me', sure: false, ...(fb.given.trim() && !fb.dontKnow ? { fit: { by: 'me' as const, pv: GRAMMAR_FIT_PV, a: fb.given.trim() } } : {}) });
+  };
+  const cancelSure = () => {
+    if (fb) setFb({ ...fb, sure: false });
   };
 
-  /** „Zählt“ (Claude: das Zielmuster in anderer Form): wie „Ich lag richtig“, dann voll gebucht. */
+  /** „Als richtig werten“ (Claude: das Zielmuster in anderer Form): wie „Ich lag richtig“, dann voll gebucht. */
   const counts = () => {
     if (!fb) return;
-    setFb({ ...fb, verdict: 'correct', grade: Math.min(3, Math.max(2, fb.grade)) as Grade, override: true, tv: 'correct', by: 'me', ask: false, aiMsg: 'byMe', fit: { by: 'me', pv: GRAMMAR_FIT_PV, a: fb.given.trim() } });
+    setFb({ ...fb, verdict: 'correct', grade: Math.min(3, Math.max(2, fb.grade)) as Grade, override: true, tv: 'correct', by: 'me', ask: false, aiMsg: null, how: 'counts', fit: { by: 'me', pv: GRAMMAR_FIT_PV, a: fb.given.trim() } });
   };
 
   /** Zielform-Zweitversuch nach „Auch richtig“ mit anderem Muster: die App bewertet selbst (ohne Claude), halbes Gewicht beim Buchen. */
@@ -573,7 +601,12 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       altWhy: fb.altWhy ?? null,
       askAi: fb.ask ? 'button' : 'no',
       targetTried: !!fb.target || noHelp,
-      texts: { altNoCount: t('grAltNoCount') },
+      texts: {
+        altNoCount: t('grAltNoCount'),
+        byMe: fb.by === 'me' ? (fb.how === 'counts' ? { head: t('ttJgCountedHead'), text: t('ttJgCountedWhy') } : { head: t('ttJgByMeHead'), text: t(fb.override ? 'ttJgByMeWhy' : 'ttJgByMeEarlier') }) : null,
+        unsure: { head: t('ttJgUnsureHead'), text: t('ttJgUnsureWhy', { want: findTask ? spotAnswer : solution }) },
+        claudeHead: t('ttJgClaudeHead'),
+      },
     });
     const m = out.model;
     // Tutor-Engine (S3, Rang 3): zweiter Fehler mit derselben Ursache am selben Muster → Mini-Lektion statt Abfrage (Vorschau; gebucht wird mit „Weiter“).
@@ -704,11 +737,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     prompt = (
       <>
         {sentenceWithSlot(task.prompt, gapNode)}
-        {task.hint && !task.prompt.includes(task.hint) && (
-          <p className="lx-t-support text-muted" lang={/[äöüÄÖÜß]/.test(task.hint) ? 'de' : lang} data-testid="cue">
-            {t('grCue', { cue: task.hint.replace(/^\((.*)\)$/, '$1') })}
-          </p>
-        )}
+        {task.hint && !task.prompt.includes(task.hint) && <Cue hint={task.hint} />}
       </>
     );
   } else if (type === 'kwt' && task.x?.kind === 'kwt') {
@@ -732,11 +761,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       <div className="flex flex-col gap-2">
         {from && <EnglishText as="p" className="text-muted" text={from} {...src} testId="transform-from" />}
         {sentenceWithSlot(target, gapNode)}
-        {task.hint && !task.prompt.includes(task.hint) && (
-          <p className="lx-t-support text-muted" lang={/[äöüÄÖÜß]/.test(task.hint) ? 'de' : lang} data-testid="cue">
-            {t('grCue', { cue: task.hint.replace(/^\((.*)\)$/, '$1') })}
-          </p>
-        )}
+        {task.hint && !task.prompt.includes(task.hint) && <Cue hint={task.hint} />}
       </div>
     );
   } else if (findTask) {
@@ -772,11 +797,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     prompt = (
       <div className="flex flex-col gap-3">
         <EnglishText as="p" text={task.prompt} {...src} testId="transform-from" />
-        {task.hint && !task.prompt.includes(task.hint) && (
-          <p className="lx-t-support text-muted" lang={/[äöüÄÖÜß]/.test(task.hint) ? 'de' : lang} data-testid="cue">
-            {t('grCue', { cue: task.hint.replace(/^\((.*)\)$/, '$1') })}
-          </p>
-        )}
+        {task.hint && !task.prompt.includes(task.hint) && <Cue hint={task.hint} />}
         <SentenceInput mode="free" value={text} onChange={(v) => { if (firstKeyAt.current === null) firstKeyAt.current = performance.now(); setText(v); }} onSubmit={primaryGo} disabled={!!fb || fit.busy} testId="correct-input" />
       </div>
     );
@@ -807,7 +828,8 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   if (fb && model) {
     const c = fb.check;
     const why = shortWhy(task.why ? (lang === 'de' ? task.why.ok.de : task.why.ok.en) : lang === 'de' ? task.expl.de : task.expl.en);
-    const altLine = why ? t('grAltWanted', { want: solution, why }) : t('grAltWantedBare', { want: solution });
+    // Mit Muster steht die Formel schon in der Karte (Muster-Zeile): der Untertitel nennt nur die Lösung (Formel höchstens einmal, Kap. 15).
+    const altLine = why && !pattern ? t('grAltWanted', { want: solution, why }) : t('grAltWantedBare', { want: solution });
     const sub: string | null = lesson
       ? t('ttLessonWhy')
       : fb.dontKnow
@@ -817,7 +839,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
         : fb.check?.kind === 'other'
           ? altLine
           : fb.unsure
-          ? t('grUnsure')
+          ? t('ttJgUnsureSub')
           : fb.altWhy
           ? t('ttJgAltErr')
           : c?.kind === 'uk' && c.us
@@ -869,7 +891,10 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       if (fb.picked === 'none' || fb.tapped === 'none' || !tapped) return task.prompt;
       return [...wordsOfPrompt.slice(0, tapped[0]), fb.given.trim(), ...wordsOfPrompt.slice(tapped[1] + 1)].filter(Boolean).join(' ');
     };
-    const tutor = fb.dontKnow || fb.verdict === 'correct' || fb.override ? null : (
+    // Handlung aus `composeFeedback`: „Claude fragen“, „Als richtig werten“ oder Zielform schreiben; dazu die Zeile zum Urteil von Claude (§6.4).
+    const action: FeedbackAction = composed?.action ?? 'next';
+    // Nur EIN KI-Einstieg je Karte (Kap. 15): steht „Claude fragen“ da (oder läuft „Sicher?“), gibt es „Erklär mir meine Antwort“ erst danach.
+    const tutor = fb.dontKnow || fb.verdict === 'correct' || fb.override || action === 'askAi' || fb.sure ? null : (
       <TutorButton
         taskKey={`gr:${task.key}:${fb.picked ?? fb.given}`}
         vars={{
@@ -904,10 +929,8 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     }
     // „Auch richtig“ (Art `other`): eigener Kopf, nie rot; bleibt stehen (kein Weiter von allein), damit „Gesucht war …“ gelesen wird.
     const alsoRight = c?.kind === 'other' && !fb.override;
-    // Handlung aus `composeFeedback`: „Claude fragen“, „Zählt“ oder Zielform schreiben; dazu die Zeile zum Urteil von Claude (§6.4).
-    const action: FeedbackAction = composed?.action ?? 'next';
-    // Zielform als Formel („used to + Grundform“), nicht als Lösung: der Zweitversuch soll abrufen, nicht abschreiben.
-    const want = pattern ? (lang === 'de' ? pattern.form.de : pattern.form.en) : solution;
+    // Zielform ohne Formel im Text (die steht schon an der Muster-Zeile); nach einem falschen Zweitversuch eine konkrete Form (die Lösung).
+    const want = pattern ? null : solution;
     const foot = (
       <JudgeFoot
         action={action}
@@ -919,20 +942,37 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
         onSkip={fit.skip}
         onCounts={counts}
         want={want}
+        form={findTask ? spotAnswer : solution}
         target={fb.target ?? null}
         onTarget={tryTarget}
+        sure={fb.sure && formMistake(fb) ? { onYes: overrideNow, onNo: cancelSure, onAsk: fb.ask && fb.aiMsg !== 'no' && fb.aiMsg !== 'unsure' ? askNow : null } : null}
       />
     );
+    // Höchstens drei Erklärblöcke bei „Noch nicht“ (Deine Antwort · Muster · Beispiel): „Deine Antwort“ sagt schon, warum – die allgemeine
+    // Begründung steht dann unter „Mehr“. Sonst steht die Formel höchstens einmal: steckt sie schon in der Begründung, entfällt das Etikett.
+    const hasYours = model.lines.some((l) => l.k === 'yours' && !!l.given.trim());
+    const foldWhy = fb.verdict === 'wrong' && !fb.override && !fb.dontKnow && hasYours && !lesson && !findTask;
+    const formula = pattern ? (lang === 'de' ? pattern.form.de : pattern.form.en).toLowerCase() : '';
+    const whyHasFormula = !!formula && model.lines.some((l) => l.k === 'why' && l.text.toLowerCase().includes(formula));
+    const shown: ExplanationModel = {
+      ...model,
+      lines: model.lines.map((l) =>
+        // „Richtig, weil“ + „Richtig: …“ wäre doppelt: der Vorspann der Aufgabenbegründung fällt weg.
+        l.k === 'why' ? { ...l, text: l.text.replace(/^(?:richtig|right|correct)\s*:\s*/i, '').replace(/^./, (x) => x.toUpperCase()) } : l.k === 'pattern' && whyHasFormula && !foldWhy ? { ...l, formula: null } : l,
+      ),
+    };
+    const unsureHead = fb.unsure && !fb.override && fb.verdict === 'near' && !lesson;
     feedback = {
       verdict: rv,
-      ...(alsoRight ? { title: t('exAlsoRight') } : {}),
+      ...(alsoRight ? { title: t('exAlsoRight') } : unsureHead ? { title: t('ttJgUnsureTitle') } : {}),
       sub,
       comparison,
-      explanation: model,
+      explanation: shown,
       depth,
       menu,
       tutor,
-      foot,
+      act: foot,
+      ...(foldWhy ? { fold: ['why' as const] } : {}),
       auto: fb.help.level === 0 && !fb.override && !alsoRight && action === 'next' && !fb.aiMsg && !lesson,
       ...find,
       ...(alsoRight ? { unfold: [...(find.unfold ?? []), 'note' as const] } : {}),
@@ -942,7 +982,9 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   const kindLabel = t(findTask ? 'gxKind_find' : type === 'kwt' ? 'gxKind_kwt' : type === 'meaning' ? 'gxKind_meaning' : (`grKind_${type}` as MessageKey));
   const taskKey: MessageKey = findTask ? (stage === 'locate' ? 'gxTask_find1' : 'gxTask_find2') : type === 'kwt' ? 'gxTask_kwt' : type === 'meaning' ? 'gxTask_meaning' : type === 'transform' && whole ? 'grTask_transformWhole' : (`grTask_${type}` as MessageKey);
   const purposeKey: MessageKey = findTask ? 'gxPurpose_find' : type === 'kwt' ? 'gxPurpose_kwt' : type === 'meaning' ? 'gxPurpose_meaning' : 'purposeGrammar';
-  const learnLine = learning && pattern ? { topic: topicLabel, pattern: lang === 'de' ? pattern.name.de : pattern.name.en } : { topic: null, pattern: null };
+  // Vor dem Prüfen nur ein neutraler Mustername ohne Formel (UX-Prüfung 19.10.2026: das ⓘ verrät die Lösung nicht).
+  const patName = pattern ? (lang === 'de' ? pattern.name.de : pattern.name.en) : null;
+  const learnLine = learning && pattern ? { topic: topicLabel, pattern: fb ? patName : patName ? neutralName(patName) : null } : { topic: null, pattern: null };
   // UX-Prüfung W1 (07.10.2026): vor dem Prüfen kein „Geübt wird: …“ – das Muster steht danach in der Rückmeldekarte.
   const goalText = findTask && task.goal && (stage === 'replace' || !!fb) ? (lang === 'de' ? task.goal.de : task.goal.en) : '';
   const taskText = goalText ? `${t(taskKey)} ${t('grGoal', { goal: goalText })}` : t(taskKey);
@@ -973,7 +1015,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       <ExerciseShell
         meta={{ ex: `gr_${type}`, id: `${task.topic}|${task.key}`, kind: type }}
         status={{ area: 'grammar', state, kindLabel, topic: learnLine.topic, pattern: learnLine.pattern, badge, ...(badgeTone ? { badgeTone } : {}), noInfo: noHelp }}
-        task={{ text: taskText, purpose: t(purposeKey) }}
+        task={{ text: taskText, purpose: t(purposeKey), reason }}
         // UX-Prüfung W1/W4: keine Regelkarte vor dem Prüfen (verrät die Lösung) – weder am Handy noch rechts am Laptop; die Regel gibt es als Tipp.
         aid={null}
         prompt={prompt}
@@ -1011,6 +1053,21 @@ function tighten(m: ExplanationModel): ExplanationModel {
   // Die Reihenfolge bleibt: pattern → yours → why → mistake → contrast → note (Notizen zuletzt).
   const order = ['pattern', 'yours', 'why', 'mistake', 'contrast', 'note'];
   return { ...m, lines: [...lines].sort((a, b) => order.indexOf(a.k) - order.indexOf(b.k)) };
+}
+
+/**
+ * Stichwort unter dem Satz. Eine reine Wortzahl („(3 words)“ in den Startaufgaben) ist kein Stichwort: sie steht sprachtreu als
+ * „Wortzahl: 3“ / „3 words“ (UX-Prüfung 19.10.2026, Sprachtreue); alles andere wie bisher als „Stichwort: …“.
+ */
+function Cue({ hint }: { hint: string }) {
+  const { t, lang } = useT();
+  const raw = hint.replace(/^\((.*)\)$/, '$1').trim();
+  const words = /^(\d+)\s+words?$/i.exec(raw);
+  return (
+    <p className="lx-t-support text-muted" lang={words ? lang : /[äöüÄÖÜß]/.test(raw) ? 'de' : lang} data-testid="cue">
+      {words ? t('grCueWords', { n: words[1] ?? '' }) : t('grCue', { cue: raw })}
+    </p>
+  );
 }
 
 /** „Einmal richtig schreiben“ (M5): freiwillig, zählt nicht als Antwort und ändert keine Note. */
