@@ -75,6 +75,16 @@ export function Explanation({ model, depth, learning = true, area = 'trainer', o
         );
       }
       case 'why':
+        return (
+          <>
+            <span lang={lang}>{l.text}</span>
+            {l.ai && (
+              <span className="lx-t-meta mt-1 block text-muted" data-testid="ai-note">
+                {t('exAiNote')}
+              </span>
+            )}
+          </>
+        );
       case 'note':
         return <span lang={lang}>{l.text}</span>;
       case 'mistake':

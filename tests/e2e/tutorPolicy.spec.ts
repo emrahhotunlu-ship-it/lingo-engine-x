@@ -67,6 +67,7 @@ test('drei getippte Fehler in Folge: etwas Bekanntes, die Runde wird nicht kürz
 });
 
 test('„Warum diese Aufgabe?“: ein Satz aus den Daten im ⓘ der Übung (eine feste Stelle, ohne Lösungsformel vor dem Prüfen)', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
   const { errors } = await bootAt(page, { name: 'grammarSession', mode: 'xtra' }, { fake: { patch: patches() } });
   await expect(page.getByTestId('gr-item')).toBeVisible();
   // UX-Prüfung 19.10.2026: kein eigener Knopf mehr unter der Übung, der Grund steht im ⓘ.
@@ -83,6 +84,10 @@ test('„Warum diese Aufgabe?“: ein Satz aus den Daten im ⓘ der Übung (eine
   await expect(line).not.toContainText('{');
   // Vor dem Prüfen keine Formel („+ Grundform“ o. Ä.) im Grund und im Musternamen.
   await expect(page.getByTestId('purpose')).not.toContainText('+');
+  // Nachprüfung N3: vor dem Prüfen nur der Themenname (kein Muster dahinter), am Handy höchstens drei Zeilen.
+  await expect(page.getByTestId('purpose').locator('span.text-fg')).not.toContainText(' · ');
+  const lines = await page.getByTestId('purpose').evaluate((el) => Math.round(el.getBoundingClientRect().height / parseFloat(getComputedStyle(el).lineHeight)));
+  expect(lines).toBeLessThanOrEqual(3);
   await btn.click();
   await expect(page.getByTestId('why-line')).toHaveCount(0);
   expect(errors).toEqual([]);

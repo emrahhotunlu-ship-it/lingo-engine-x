@@ -158,7 +158,9 @@ describe('composeFeedback', () => {
     expect(why).toMatchObject({ head: 'Claude sagt' });
     expect(why && why.k === 'why' ? why.text.length : 999).toBeLessThanOrEqual(140);
     expect(out.extra).toBeNull();
-    expect(out.model.ai).toBe(true);
+    // Nachprüfung N5: der Hinweis „von Claude, kann Fehler enthalten“ steht in der Zeile „Claude sagt“, nicht unten an der Karte.
+    expect(why && why.k === 'why' ? why.ai : false).toBe(true);
+    expect(out.model.ai).toBe(false);
   });
 });
 

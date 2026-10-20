@@ -137,8 +137,8 @@ export function explainWord(i: ExplainWordInput): ExplanationModel {
   const cOther = i.ex === 'contrast' ? (i.contrastOther ?? null) : null;
   // Rückmeldung 3 (10.10.2026): Bei „Wortpartner“ heißt der Kopf wie die geübte Verbindung; das Kartenwort steht als Zusatz daneben.
   const col = (i.ex === 'colloc' || i.ex === 'colloc_gap') && i.colloc?.p.trim() ? i.colloc : null;
-  const colExtra = col && key(col.p) !== key(card.word) ? card.word : null;
-  const head = cOther ? cOther.word : col ? [col.p, colExtra].filter(Boolean).join(' · ') : [card.word, posLabel(card, lang), reg ? pick(REGISTER[reg] as Bi, lang) : null].filter(Boolean).join(' · ');
+  // Nachprüfung N4: das Kartenwort steht schon im Kopf der Karte (mit Aussprache) – kein Chip mehr dazu.
+  const head = cOther ? cOther.word : col ? col.p : [card.word, posLabel(card, lang), reg ? pick(REGISTER[reg] as Bi, lang) : null].filter(Boolean).join(' · ');
   lines.push({ k: 'pattern', name: head, formula: col ? null : formula });
 
   // 2. Deine Antwort: der echte Grund, je Fehlerart
@@ -199,19 +199,24 @@ export function explainWord(i: ExplainWordInput): ExplanationModel {
   if (col) {
     // Merke nennt die geübte Verbindung (mit deutscher Bedeutung), dann den Grund – auch bei richtiger Antwort (Kap. 2 Nr. 4) –,
     // zuletzt das Kartenwort als Zusatz.
-    const partner = col.gap || solution;
-    const lemma = card.lemma || card.word;
+    // Nachprüfung N4: Partner und Kartenwort in der Form der Verbindung im Kopf („raise“ … „concerns“), nicht in der Satzform („raised“).
+    const inHead = (w: string): string => {
+      const hit = w ? locate(col.p, w) : null;
+      return hit ? col.p.slice(hit.start, hit.end) : w;
+    };
+    const partner = inHead(col.gap || solution);
+    const lemma = inHead(card.lemma || card.word);
     const colMerke = pick({ de: `Merke: ${col.p}${col.de.trim() ? ` = ${col.de.trim()}` : ''}`, en: `Remember: ${col.p}` }, lang);
     const reason = pick(
       {
         // UX-Prüfung 19.10.2026: höchstens zwei Zeilen am Handy.
-        de: `${quote(partner, lang)} ist ein fester Partner von ${quote(lemma, lang)} – als Paar lernen`,
-        en: `${quote(partner, lang)} is a fixed partner of ${quote(lemma, lang)} – learn them as a pair`,
+        de: `${quote(partner, lang)} ist der feste Partner von ${quote(lemma, lang)} – als Paar lernen`,
+        en: `${quote(partner, lang)} is the fixed partner of ${quote(lemma, lang)} – learn them as a pair`,
       },
       lang,
     );
-    const word = meaning && colExtra ? `${card.word} = ${shortMeaning(meaning, lang)}` : null;
-    lines.push({ k: 'why', text: [`${colMerke}. ${reason}`, why, word].filter(Boolean).join('; ') });
+    // Kein „concern = Bedenken“ mehr dahinter (Nachprüfung N4: jede Aussage einmal; die Bedeutung steht unter „Zum Wort“).
+    lines.push({ k: 'why', text: [`${colMerke}. ${reason}`, why].filter(Boolean).join('; ') });
   } else if (i.ex === 'fits' && i.fits) lines.push({ k: 'why', text: [fitsText(card, i.fits, meaning, lang, 'why', wrong), why].filter(Boolean).join(' ') });
   else lines.push({ k: 'why', text: i.ex === 'contrast' && i.contrastWhy ? i.contrastWhy : why ? `${merke}. ${why}` : merke });
 

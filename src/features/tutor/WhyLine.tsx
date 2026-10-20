@@ -25,14 +25,15 @@ export function WinLine({ task }: { task: GrammarTask }) {
  * Grund „Warum diese Aufgabe?“ für das ⓘ der Übung (UX-Prüfung 19.10.2026: EIN Warum-Zugang an fester Stelle, kein eigener Knopf unter der
  * Aufgabe, der nach dem Prüfen springt). Gerechnet wird erst beim Öffnen; nach dem Tausch (`known`) steht der Grund schon als Statuszeile da.
  */
-export function useWhyReason(task: GrammarTask | null, on: boolean): (() => { text: string; code: string }) | null {
+export function useWhyReason(task: GrammarTask | null, on: boolean): ((checked: boolean) => { text: string; code: string }) | null {
   const { lang } = useT();
   const mark = useTutorSession((x) => (task ? (x.marks[taskMarkKey(task)] ?? null) : null));
   if (!on || !task || mark === 'known') return null;
-  return () => {
+  // `checked`: schon geprüft? Vorher nennt der Grund nur das Thema, kein Muster (Nachprüfung N3).
+  return (checked) => {
     // Das zuletzt fertige Modell, sonst einmal sofort rechnen (die Seite ist längst gezeichnet).
     const m = learnerNow() ?? computeLearnerNow();
     const fact: WhyFact = whyOf(task, m, mark);
-    return { text: whyText(fact, lang), code: fact.code };
+    return { text: whyText(fact, lang, { before: !checked }), code: fact.code };
   };
 }

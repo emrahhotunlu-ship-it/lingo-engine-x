@@ -6,7 +6,7 @@ import type { FitErr } from './fit';
 import { FitSlow } from './FitSlow';
 
 // Handlung der Rückmeldung der Tutor-Engine (v3 §2.1, §4.1, §6.4): genau eine Handlung aus `composeFeedback` – „Claude fragen“, „Als richtig
-// werten“ oder „Schreib den Satz einmal mit dem geübten Muster“ (Zielform) – und darüber die ruhige Zeile zum Urteil von Claude bzw. zu seinem
+// werten“ oder „Schreib die Lücke (den Satz) einmal mit dem geübten Muster“ (Zielform) – und darüber die ruhige Zeile zum Urteil von Claude bzw. zu seinem
 // Fehler. Dazu „Sicher?“ vor einem Einspruch bei eindeutigem Formfehler. Steht über „Mehr“ (Platz `act`). Keine Texte im Code.
 
 /** Meldung zum Claude-Urteil: Nein, unsicher, Emrahs Einspruch gemerkt oder eine Fehlerart des KI-Tors. */
@@ -39,6 +39,8 @@ type Props = {
   onCounts: () => void;
   /** Zielform: ohne Muster die Lösung (`want`), mit Muster `null` (die Formel steht schon an der Muster-Zeile); `form`: konkrete richtige Form. */
   want: string | null;
+  /** Lückenaufgabe: „Schreib die Lücke …“, sonst „Schreib den Satz …“. */
+  gap?: boolean;
   form: string;
   target: TargetState;
   onTarget: (given: string) => void;
@@ -46,7 +48,7 @@ type Props = {
   sure?: { onYes: () => void; onNo: () => void; onAsk: (() => void) | null } | null;
 };
 
-export function JudgeFoot({ action, aiMsg, aiNoWhy = null, busy, phase, onAsk, onSkip, onCounts, want, form, target, onTarget, sure = null }: Props) {
+export function JudgeFoot({ action, aiMsg, aiNoWhy = null, busy, phase, onAsk, onSkip, onCounts, want, gap = false, form, target, onTarget, sure = null }: Props) {
   const { t } = useT();
   const msg = aiMsg && aiMsg !== 'off' ? t(MSG[aiMsg]) : null;
   const showTarget = action === 'targetForm' || target !== null;
@@ -73,7 +75,7 @@ export function JudgeFoot({ action, aiMsg, aiNoWhy = null, busy, phase, onAsk, o
           {t('ttJgCounts')}
         </Button>
       )}
-      {showTarget && <TargetForm want={want} form={form} target={target} onTarget={onTarget} />}
+      {showTarget && <TargetForm want={want} gap={gap} form={form} target={target} onTarget={onTarget} />}
     </div>
   );
 }
@@ -82,12 +84,25 @@ export function JudgeFoot({ action, aiMsg, aiNoWhy = null, busy, phase, onAsk, o
 function Sure({ sure, busy, phase, onSkip }: { sure: NonNullable<Props['sure']>; busy: boolean; phase: string; onSkip: () => void }) {
   const { t } = useT();
   const ref = useRef<HTMLDivElement>(null);
-  // Am Handy kommt die Frage nach dem Schließen des Menüs ins Bild (sie steht in der Karte, nicht im Blatt).
+  // Am Handy kommt die Frage nach dem Schließen des Menüs ins Bild (sie steht in der Karte, nicht im Blatt) – vollständig über dem festen
+  // Weiter-Balken (`scroll-margin-bottom`), und der Fokus steht auf „Ja“ (Nachprüfung N1: sonst verwirft ein Tipp auf „Weiter“ den Einspruch unbemerkt).
+  // Erst im nächsten Bild: das Menü gibt beim Schließen den Fokus an seinen Knopf zurück.
   useEffect(() => {
-    ref.current?.scrollIntoView?.({ block: 'nearest', behavior: 'auto' });
+    const id = requestAnimationFrame(() => {
+      const el = ref.current;
+      if (!el) return;
+      el.querySelector<HTMLButtonElement>('[data-testid="override-sure-yes"]')?.focus({ preventScroll: true });
+      el.scrollIntoView?.({ block: 'nearest', behavior: 'auto' });
+    });
+    return () => cancelAnimationFrame(id);
   }, []);
   return (
-    <div ref={ref} className="flex w-full flex-col gap-2 rounded-[var(--radius-control)] bg-near-soft p-3" data-testid="override-sure">
+    <div
+      ref={ref}
+      className="flex w-full flex-col gap-2 rounded-[var(--radius-control)] bg-near-soft p-3"
+      style={{ scrollMarginBottom: 'calc(var(--lx-bar-h) + env(safe-area-inset-bottom) + 1rem)', scrollMarginTop: '1rem' }}
+      data-testid="override-sure"
+    >
       <p className="lx-t-support m-0 text-fg" role="status">
         {t('ttJgSure')}
       </p>
@@ -110,7 +125,7 @@ function Sure({ sure, busy, phase, onSkip }: { sure: NonNullable<Props['sure']>;
 }
 
 /** „Schreib es einmal mit …“: ein Feld, ein Knopf; die App bewertet selbst, ein Versuch. */
-function TargetForm({ want, form, target, onTarget }: { want: string | null; form: string; target: TargetState; onTarget: (given: string) => void }) {
+function TargetForm({ want, gap, form, target, onTarget }: { want: string | null; gap: boolean; form: string; target: TargetState; onTarget: (given: string) => void }) {
   const { t } = useT();
   const [value, setValue] = useState('');
   const done = target !== null;
@@ -120,7 +135,7 @@ function TargetForm({ want, form, target, onTarget }: { want: string | null; for
   return (
     <div className="flex w-full flex-col gap-2" data-testid="target-form">
       <label className="flex flex-col gap-1">
-        <span className="lx-t-support text-muted">{want ? t('ttJgTargetLabel', { want }) : t('ttJgTargetLabelPat')}</span>
+        <span className="lx-t-support text-muted">{want ? t('ttJgTargetLabel', { want }) : t(gap ? 'ttJgTargetLabelPat' : 'ttJgTargetLabelPatSentence')}</span>
         <input
           className="lx-field"
           lang="en"

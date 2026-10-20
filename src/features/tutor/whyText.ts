@@ -78,10 +78,12 @@ function extraText(x: WhyExtra, name: string, lang: Lang): string {
 export const sureNote = (lang: Lang): string => translate(lang, 'ttSureNote');
 
 /** Grund der Aufgabe, dahinter höchstens ein Datenbeleg als Zusatz (bei der Quote mit der Erklärung von „sicher“). */
-export function whyText(f: WhyFact, lang: Lang): string {
-  const name = nameOf(f, lang);
+export function whyText(f: WhyFact, lang: Lang, opts: { before?: boolean } = {}): string {
+  // Vor dem Prüfen (Nachprüfung N3): nur der Themenname, nie ein Mustername oder Musterteil (verriete die Lösung, z. B. „Past Simple“);
+  // eine Annahme („verwechselt mit …“) nennt ein zweites Muster und entfällt dann.
+  const name = opts.before ? topicName(f.topic, lang) : nameOf(f, lang);
   const main = mainText(f, name, lang);
-  if (!f.extra) return main;
+  if (!f.extra || (opts.before && f.extra.k === 'hyp')) return main;
   const plus = extraText(f.extra, name, lang);
   return f.extra.k === 'weakQ' ? `${main} ${plus} ${sureNote(lang)}` : `${main} ${plus}`;
 }

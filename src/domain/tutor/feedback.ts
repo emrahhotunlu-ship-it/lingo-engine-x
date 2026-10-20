@@ -96,7 +96,7 @@ export function composeFeedback(i: FeedbackIn): FeedbackOut {
   const fromAi = !i.altWhy && altOk && !!i.aiWhy;
   const ownWhy = i.altWhy ?? (altOk && i.aiWhy ? brief(i.aiWhy) : null);
   const why: ExplainLine[] = ownWhy
-    ? [{ k: 'why', text: ownWhy, ...(fromAi && i.texts.claudeHead ? { head: i.texts.claudeHead } : {}) }]
+    ? [{ k: 'why', text: ownWhy, ...(fromAi && i.texts.claudeHead ? { head: i.texts.claudeHead, ai: true } : {}) }]
     : altOk || unsure
       ? []
       : L.filter((l) => l.k === 'why').slice(0, 1);
@@ -128,7 +128,8 @@ export function composeFeedback(i: FeedbackIn): FeedbackOut {
           ? 'askAi'
           : 'next';
   return {
-    model: { ...i.base, lines: [...goal, ...body], ai: i.base.ai || (altOk && !!i.aiWhy && i.by === 'ai') },
+    // Steht Claudes Begründung als eigene Zeile („Claude sagt“), trägt sie den Hinweis „von Claude, kann Fehler enthalten“ selbst (Nachprüfung N5).
+    model: { ...i.base, lines: [...goal, ...body], ai: !why.some((l) => l.k === 'why' && l.ai) && (i.base.ai || (altOk && !!i.aiWhy && i.by === 'ai')) },
     extra: body.includes(extraLine as ExplainLine) ? extra : null,
     action,
     lines: body.length,

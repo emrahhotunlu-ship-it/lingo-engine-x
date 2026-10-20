@@ -94,7 +94,7 @@ test('ohne Zustimmung: unsicher → nur der Knopf „Claude fragen“; nach Clau
   await page.getByTestId('counts').click();
   await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
   // UX-Prüfung 19.10.2026: keine widersprechende „Richtig: …“-Zeile, sondern die neutrale Zeile zur Wertung.
-  await expect(page.getByTestId('explanation-yours')).toContainText('Als richtig gewertet');
+  await expect(page.getByTestId('explanation-yours')).toContainText('Deine Wertung');
   await expect(page.getByRole('region', { name: 'Erklärung' })).not.toContainText('Richtig:');
   await page.getByTestId('next').click();
   await expect.poll(async () => JSON.stringify((await dump(page))['grammar/used-to']?.fitAlt ?? {})).toContain('used to keep');
@@ -154,6 +154,33 @@ test('Einspruch bei eindeutigem Formfehler („use to have“): erst „Sicher?�
   await expect(page.getByTestId('explanation-yours')).toContainText('Du hast gesagt, deine Antwort stimmt.');
   await page.getByTestId('next').click();
   await expect.poll(async () => JSON.stringify((await dump(page))['grammar/used-to']?.fitAlt ?? {})).toContain('use to have');
+  expect(errors).toEqual([]);
+});
+
+test('Handy 390: „Sicher?“ steht vollständig über dem Weiter-Balken, der Fokus liegt auf „Ja“', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const { errors } = await bootAt(page, { name: 'grammarSession', mode: 'topic', topic: 'used-to' }, { fake: { patch: { 'grammar/used-to': begun('used-to') } } });
+  await skipMiniLesson(page);
+  await toPrompt(page, ARCHIVE);
+  await typeInGap(page, 'use to have');
+  await checkToVerdict(page);
+  await page.getByTestId('exercise-menu').click();
+  await page.getByTestId('menu-override').click();
+  const sure = page.getByTestId('override-sure');
+  await expect(sure).toBeVisible();
+  await expect(page.getByTestId('override-sure-yes')).toBeFocused();
+  // Der Balken (Weiter) liegt fest unten: alle Knöpfe der Rückfrage enden darüber und beginnen unter dem oberen Rand.
+  const bar = page.locator('.lx-actionbar').first();
+  await expect(bar).toBeVisible();
+  await expect
+    .poll(async () => {
+      const b = await bar.boundingBox();
+      const boxes = await Promise.all(['override-sure-yes', 'override-sure-no'].map((id) => page.getByTestId(id).boundingBox()));
+      if (!b || boxes.some((x) => !x)) return false;
+      return boxes.every((x) => x!.y >= 0 && x!.y + x!.height <= b.y);
+    })
+    .toBe(true);
+  if (process.env.UX_OUT) await page.screenshot({ path: `${process.env.UX_OUT}/sure-390.png` });
   expect(errors).toEqual([]);
 });
 

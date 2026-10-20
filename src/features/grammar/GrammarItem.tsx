@@ -35,7 +35,6 @@ import { nextT } from '../progress/persist';
 import { abandonFit, fitAiState, runFit, useFitJudge, type FitResult } from './fit';
 import { FitSlow } from './FitSlow';
 import { JudgeFoot, type AiMsg, type TargetState } from './JudgeFoot';
-import { neutralName } from '../tutor/whyText';
 import { judge, readFitAlt, type Judgement } from '../../domain/tutor/judge';
 import { composeFeedback, contrastProof, type FeedbackAction } from '../../domain/tutor/feedback';
 import { factOf, maxHint, miniLesson } from '../../domain/tutor/policy';
@@ -81,7 +80,7 @@ export type GrammarItemProps = {
   /** Grammatikrunde mit Tutor-Engine (S3): nach 2 Fehlern gleicher Ursache kommt statt der Rückmeldung die Mini-Lektion. */
   tutor?: boolean;
   /** „Warum diese Aufgabe?“ (Tutor-Engine): Grund für das ⓘ, erst beim Öffnen gerechnet. */
-  reason?: (() => { text: string; code: string }) | null;
+  reason?: ((checked: boolean) => { text: string; code: string }) | null;
 };
 
 type Fb = {
@@ -942,6 +941,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
         onSkip={fit.skip}
         onCounts={counts}
         want={want}
+        gap={type === 'gap' || type === 'kwt'}
         form={findTask ? spotAnswer : solution}
         target={fb.target ?? null}
         onTarget={tryTarget}
@@ -984,7 +984,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   const purposeKey: MessageKey = findTask ? 'gxPurpose_find' : type === 'kwt' ? 'gxPurpose_kwt' : type === 'meaning' ? 'gxPurpose_meaning' : 'purposeGrammar';
   // Vor dem Prüfen nur ein neutraler Mustername ohne Formel (UX-Prüfung 19.10.2026: das ⓘ verrät die Lösung nicht).
   const patName = pattern ? (lang === 'de' ? pattern.name.de : pattern.name.en) : null;
-  const learnLine = learning && pattern ? { topic: topicLabel, pattern: fb ? patName : patName ? neutralName(patName) : null } : { topic: null, pattern: null };
+  const learnLine = learning && pattern ? { topic: topicLabel, pattern: fb ? patName : null } : { topic: null, pattern: null };
   // UX-Prüfung W1 (07.10.2026): vor dem Prüfen kein „Geübt wird: …“ – das Muster steht danach in der Rückmeldekarte.
   const goalText = findTask && task.goal && (stage === 'replace' || !!fb) ? (lang === 'de' ? task.goal.de : task.goal.en) : '';
   const taskText = goalText ? `${t(taskKey)} ${t('grGoal', { goal: goalText })}` : t(taskKey);
@@ -1015,7 +1015,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       <ExerciseShell
         meta={{ ex: `gr_${type}`, id: `${task.topic}|${task.key}`, kind: type }}
         status={{ area: 'grammar', state, kindLabel, topic: learnLine.topic, pattern: learnLine.pattern, badge, ...(badgeTone ? { badgeTone } : {}), noInfo: noHelp }}
-        task={{ text: taskText, purpose: t(purposeKey), reason }}
+        task={{ text: taskText, purpose: t(purposeKey), reason: reason ? () => reason(!!fb) : null }}
         // UX-Prüfung W1/W4: keine Regelkarte vor dem Prüfen (verrät die Lösung) – weder am Handy noch rechts am Laptop; die Regel gibt es als Tipp.
         aid={null}
         prompt={prompt}

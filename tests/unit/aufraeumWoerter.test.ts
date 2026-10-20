@@ -115,10 +115,11 @@ const lineText = (m: ReturnType<typeof explainWord>, k: string): string => JSON.
 describe('Rückmeldung 3: Wortpartner-Ergebnis zeigt die geübte Verbindung', () => {
   it('richtig: Kopf und Merke nennen die Verbindung, die Begründung steht trotzdem; Kartenwort nur als Zusatz', () => {
     const m = explainWord({ card: overcome(), ex: 'colloc_gap', verdict: 'ok', given: 'objections', check: { verdict: 'correct' }, lang: 'de', solution: 'objections', colloc: COL });
-    expect(m.lines[0]).toMatchObject({ k: 'pattern', name: 'overcome objections · overcome' });
+    expect(m.lines[0]).toMatchObject({ k: 'pattern', name: 'overcome objections' });
     const why = lineText(m, 'why');
     expect(why).toContain('Merke: overcome objections = Einwände ausräumen');
-    expect(why).toContain('fester Partner');
+    expect(why).toContain('„objections“ ist der feste Partner von „overcome“');
+    expect(why).not.toContain('overcome = ');
     expect(m.mark[0]).toBe('overcome objections');
     const mEn = explainWord({ card: overcome(), ex: 'colloc_gap', verdict: 'ok', given: 'objections', check: { verdict: 'correct' }, lang: 'en', solution: 'objections', colloc: COL });
     expect(lineText(mEn, 'why')).toContain('Remember: overcome objections');

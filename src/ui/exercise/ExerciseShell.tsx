@@ -367,9 +367,10 @@ export function ExerciseShell(props: ExerciseShellProps) {
                 {status.detail}
               </span>
             )}
-            {task.purpose}
+            {/* Nachprüfung N3: am Handy höchstens drei Zeilen – gibt es einen Grund für genau diese Aufgabe, ersetzt er den allgemeinen Zweck. */}
+            {!reason && task.purpose}
             {reason && (
-              <span className="mt-1 block" data-testid="why-line" data-code={reason.code}>
+              <span className="block" data-testid="why-line" data-code={reason.code}>
                 {reason.text}
               </span>
             )}
