@@ -22,6 +22,14 @@ for (const theme of THEMES) {
         else await screen(page, 'migration');
         // Einblendung abwarten: sonst misst axe den Kontrast mitten im Übergang (sporadisch rot).
         await page.waitForTimeout(500);
+        await page.evaluate(() =>
+          Promise.all(
+            document
+              .getAnimations()
+              .filter((a) => Number.isFinite(a.effect?.getComputedTiming().endTime ?? 0))
+              .map((a) => a.finished.catch(() => null)),
+          ),
+        );
         const res = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
         expect(res.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
       });
