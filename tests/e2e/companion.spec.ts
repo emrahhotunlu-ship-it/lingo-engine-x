@@ -251,6 +251,17 @@ test.describe('Handy 390 (Touch)', () => {
     const dlg = page.getByTestId('companion');
     await expect(dlg).toBeVisible();
     // Standard am Handy: unteres Drittel, ~60 % Höhe, die Aufgabe oben bleibt sichtbar.
+    // Erst messen, wenn die Einblend-Animation fertig ist (sonst liegt das Fenster noch ein paar Pixel zu tief).
+    let last = -1;
+    await expect
+      .poll(async () => {
+        const b = await dlg.boundingBox();
+        const y = Math.round((b?.y ?? 0) * 10);
+        const still = y === last;
+        last = y;
+        return still;
+      })
+      .toBe(true);
     const box = await dlg.boundingBox();
     expect(Math.round(box?.width ?? 0)).toBe(390 - 16);
     expect(Math.round(box?.height ?? 0)).toBeGreaterThanOrEqual(Math.round(844 * 0.5));
