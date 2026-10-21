@@ -8,6 +8,7 @@ import { installDecksWatch } from '../features/vocab/decksStore';
 import { DeckScreen } from '../features/vocab/hub/DeckScreen';
 import { VocabStatsSection, VocabSettingsSection } from '../features/vocab/hub/Sections';
 import { AddSheetHost, AllDecksSheet, ExtraSheet, NewDeckSheet, WordSheetHost } from '../features/vocab/hub/Sheets';
+import { SayOwnSheet } from '../features/vocab/hub/SayOwnSheet';
 import { VocabHub } from '../features/vocab/hub/VocabHub';
 import { VocabScreen } from '../features/vocab/list/VocabScreen';
 import { installFlushOnHide } from '../features/vocab/persist';
@@ -100,6 +101,7 @@ export const wortschatz = defineArea({
     { id: 'word', component: WordSheetHost },
     { id: 'add', component: AddSheetHost },
     { id: 'x:extra', component: ExtraSheet },
+    { id: 'x:say-own', component: SayOwnSheet },
     { id: 'x:decks', component: AllDecksSheet },
     { id: 'x:deck-new', component: NewDeckSheet },
   ],
