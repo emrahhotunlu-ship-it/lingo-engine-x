@@ -51,6 +51,8 @@ export type GradeKey =
   // Lernplattform 3.0 P52: Kontrast „Welches Wort passt?“ (Auswahl aus zwei).
   | 'contrast'
   | 'complete'
+  // Wort-Lernen 2: „Sag es“ (frei, ohne Zeitgrenze; die Note setzt die Prüfung auf das Zielwort).
+  | 'say_it'
   | 'wordfam'
   | 'find_trap'
   | 'find'
@@ -118,6 +120,7 @@ export const GRADE_TABLE: Readonly<Record<GradeKey, Row>> = {
   // Auswahl (Katalog: input 'choice'): nie „Leicht“ (Prüfung N3), Zeitgrenze wie die übrigen Wortpartner-Auswahlen.
   colloc_gap: choice(9000),
   complete: { form: 'free', good: 0, easy: null, measure: 'submit' },
+  say_it: { form: 'free', good: 0, easy: null, measure: 'submit' },
   wordfam: typed(8000, 3000),
   find_trap: typed(9000, 3500),
   find: typed(9000, 3500),

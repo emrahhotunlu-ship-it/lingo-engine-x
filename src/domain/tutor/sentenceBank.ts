@@ -2,6 +2,8 @@ import { BRITISH } from '../c1x/kinds/common';
 import { poolNorm } from '../drills/orderPool';
 import { isWrongLang } from '../lang/detect';
 import { storedExamples } from '../srs/examples';
+import { findContext, lemmaOf, senseFits } from '../srs/context';
+import { gapUsable } from '../srs/gapFit';
 import { phraseIn } from '../../prompts/tolerant';
 import { knownKeys, readCfx, readWx, wordRepeats } from './acceptWordCtx';
 
@@ -236,8 +238,9 @@ export function needsBank(doc: Doc, gate: SbGate, nowMs: number): boolean {
 
 // ------------------------------------------------------------------ Annahme
 
-export type SbReject = 'shape' | 'id' | 'missing_word' | 'repeat' | 'length' | 'punct' | 'british' | 'quote' | 'bracket' | 'de_lang' | 'duplicate';
-export type SbCard = { id: string; en: string };
+export type SbReject = 'shape' | 'id' | 'missing_word' | 'repeat' | 'length' | 'punct' | 'british' | 'quote' | 'bracket' | 'de_lang' | 'duplicate' | 'sense' | 'gap';
+/** `pos`/`lemma` (Wort-Lernen 2): Vorprüfung „Wort im richtigen Sinn“ (Wortart an der Fundstelle) und „Lücke eindeutig“ (`gapUsable`). */
+export type SbCard = { id: string; en: string; pos?: string | null; lemma?: string };
 export type AcceptedBank = { id: string; sb: SbEntry[]; rejected: SbReject[] };
 
 function sentenceFault(en: string, maxWords: number): SbReject | null {
@@ -262,7 +265,8 @@ export function bankKeys(doc: Doc, ex: string): Set<string> {
 /**
  * Prüft einen Eintrag von `word-bank@1` (`{id, sents: [{en, de, sit, k}]}`) für die Karte. Ein Satz fällt weg, wenn das Wort fehlt oder doppelt
  * vorkommt (die Lücke würde die Lösung verraten), er zu kurz/lang ist, ohne Satzzeichen endet, britisch geschrieben ist, Anführungszeichen oder
- * Klammern trägt, `de` nicht deutsch ist oder er einen bekannten Satz wiederholt. Höchstens 4 je Karte.
+ * Klammern trägt, `de` nicht deutsch ist oder er einen bekannten Satz wiederholt; dazu die Vorprüfung `preCheck` (Sinn, eindeutige Lücke).
+ * Höchstens 4 je Karte.
  */
 export function acceptBankItem(raw: unknown, card: SbCard, known: ReadonlySet<string>, nowMs: number, pv: string): AcceptedBank {
   const out: AcceptedBank = { id: card.id, sb: [], rejected: [] };
@@ -271,7 +275,8 @@ export function acceptBankItem(raw: unknown, card: SbCard, known: ReadonlySet<st
   const seen = new Set(known);
   for (const s of (Array.isArray(raw.sents) ? raw.sents : []).slice(0, SB_PER_REQUEST + 2)) {
     if (out.sb.length >= SB_PER_REQUEST) break;
-    const r = checkSentence(s, card.en, seen, SB_MAX_WORDS, true);
+    const r0 = checkSentence(s, card.en, seen, SB_MAX_WORDS, true);
+    const r = typeof r0 === 'string' ? r0 : (preCheck(r0.en, card) ?? r0);
     if (typeof r === 'string') {
       out.rejected.push(r);
       continue;
@@ -280,6 +285,18 @@ export function acceptBankItem(raw: unknown, card: SbCard, known: ReadonlySet<st
   }
   if (!out.sb.length && !out.rejected.length) out.rejected.push('shape');
   return out;
+}
+
+/**
+ * Vorprüfung vor der Quarantäne (Wort-Lernen 2, Teil 2): Steht das Wort in der Wortart der Karte (kein „to record“ für das Hauptwort „record“)?
+ * Verdeckt die Lücke genau das Wort, und steht es nicht ein zweites Mal sichtbar im Satz? Ohne Fundstelle gilt das Wort als fehlend.
+ */
+export function preCheck(en: string, card: SbCard): SbReject | null {
+  const span = findContext(en, card.en);
+  if (!span) return 'missing_word';
+  if (card.pos && !senseFits(span, card.pos)) return 'sense';
+  if (!gapUsable(span, card.lemma || lemmaOf(card.en))) return 'gap';
+  return null;
 }
 
 /**

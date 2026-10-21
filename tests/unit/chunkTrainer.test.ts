@@ -209,8 +209,9 @@ describe('Abfrageart je Stufe: mindestens zwei, Stufe 5 mit eigenem Satz, Rückf
     const c = vcard({ stage: 5, hist });
     expect(availableExercises(c, 'de', 100, { tts: true, ai: true })).toEqual(['cloze', 'dictation', 'produce']);
     expect(availableExercises(c, 'de', 100, { tts: false, ai: true })).toEqual(['cloze', 'produce']);
-    // Am Handy (touch): kein Hören, aber der eigene Satz – „Satz vervollständigen“ ohne Satzanfang gibt es nicht mehr.
-    expect(availableExercises(c, 'de', 100, { tts: true, ai: true, touch: true })).toEqual(['cloze', 'produce']);
+    // Am Handy (touch): Hören seit Wort-Lernen 2 auch, wenn die Sprachausgabe da ist; ohne Sprachausgabe nicht.
+    expect(availableExercises(c, 'de', 100, { tts: true, ai: true, touch: true })).toEqual(['cloze', 'dictation', 'produce']);
+    expect(availableExercises(c, 'de', 100, { tts: false, ai: true, touch: true })).toEqual(['cloze', 'produce']);
     expect(availableExercises(vcard({ stage: 5 }), 'de', 100, { tts: true, ai: true })).not.toContain('produce');
     const noAi = availableExercises(c, 'de', 100, { tts: false, ai: false });
     expect(noAi).not.toContain('produce');

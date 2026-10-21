@@ -11,6 +11,7 @@ import { newQuotaLeft, newCards, quizzable } from '../srs/queue';
 import { estimateRoundMinutes } from '../srs/cost';
 import { deckCounts } from '../srs/decks';
 import { lemmaOf } from '../srs/context';
+import { pickDissimilar } from '../srs/similar';
 import { C1_MARK, vocabGoal } from '../vocab/goal';
 import type { StoredPlan } from '../plan/types';
 import type { TrainCard } from '../srs/types';
@@ -137,7 +138,8 @@ export function wordsToday(i: { cards: readonly TrainCard[]; plan: StoredPlan | 
   const visible = i.cards.filter((c) => !c.hidden);
   const introduced = visible.filter((c) => c.intro === today);
   const plannedNew = i.plan?.goal.new ?? 0;
-  const fresh = newCards(visible).slice(0, Math.max(0, plannedNew - introduced.length));
+  // Wort-Lernen 2: dieselbe Ähnlichkeitssperre wie die Runde (`buildQueue` → `pickDissimilar`), sonst nennt „Heute“ andere neue Wörter als der Trainer.
+  const fresh = pickDissimilar(newCards(visible), Math.max(0, plannedNew - introduced.length), introduced);
   const seen = new Set<string>();
   const out: string[] = [];
   for (const c of [...visible.filter((x) => isDue(x, i.nowMs)), ...introduced, ...fresh]) {

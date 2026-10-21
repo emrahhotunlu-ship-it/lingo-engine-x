@@ -8,7 +8,7 @@ import { local } from '../../platform/storage';
 import { Button } from '../../ui/Button';
 import { Switch } from '../../ui/Switch';
 import { toast } from '../../ui/Toast';
-import { AUTOPLAY_KEY, autoplayOn } from '../../app/voice/autoplay';
+import { AUTOPLAY_KEY, autoplayOn, SPEAK_NEW_KEY, speakNewOn } from '../../app/voice/autoplay';
 import { resolveVoice } from '../../domain/progress/settings';
 
 // Einstellungen „Stimme“ (Plan §5.6): englische Stimmen (en-US zuerst) mit Probehören, Tempo
@@ -43,6 +43,7 @@ export function VoiceSection() {
   const voiceMissing = status === 'ready' && resolveVoice(profile?.voice, voices, current).missing;
   const [rate, setRate] = useState(savedRate);
   const [autoplay, setAutoplay] = useState(autoplayOn);
+  const [speakNew, setSpeakNew] = useState(speakNewOn);
   // Gespeicherter Wert hat sich geändert (anderes Gerät, Rückrollen): Anzeige nachziehen.
   const [shown, setShown] = useState(savedRate);
   if (shown !== savedRate) {
@@ -133,6 +134,15 @@ export function VoiceSection() {
         onChange={(v) => {
           setAutoplay(v);
           local.set(AUTOPLAY_KEY, v ? '1' : '0');
+        }}
+      />
+      <Switch
+        checked={speakNew}
+        label={t('pxWwSpeakNewSetting')}
+        testId="voice-speak-new"
+        onChange={(v) => {
+          setSpeakNew(v);
+          local.set(SPEAK_NEW_KEY, v ? '1' : '0');
         }}
       />
     </section>

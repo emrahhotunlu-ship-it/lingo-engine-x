@@ -296,6 +296,8 @@ const schedulingFields = {
   fsrs: fsrsSchema.nullish(),
   /** Neu: Trefferbilanz je Übungsart der neuen App. */
   xs: z.record(z.string(), z.looseObject({ c: num, w: num }).nullish()).nullish(),
+  /** Neu (Wort-Lernen 2, Wort-Werkstatt): `{n, t, d, p?}` Runden, Zeitpunkt und Lerntag der letzten Runde, `p: 1` = pausiert (`werkstatt.ts`). */
+  wk: z.looseObject({ n: num, t: num, d: str, p: num }).nullish(),
 };
 
 export const vocabSchema = z.looseObject({
@@ -323,7 +325,7 @@ export const vocabSchema = z.looseObject({
   /** Neu (02.10.2026): deutsche Übersetzungen der Beispielsätze `{<Schlüssel>: text}`, einmal von Claude erzeugt, nur ergänzt. */
   exDe: z.record(z.string(), z.unknown()).nullish(),
   /** Neu (Phase 2, M3): Merkhilfe von Claude für hartnäckige Wörter `{text, lang, t}`, einmal erzeugt. */
-  mnemo: z.looseObject({ text: str, lang: str, t: num }).nullish(),
+  mnemo: z.looseObject({ text: str, lang: str, t: num, own: num }).nullish(),
   /** Neu (Lernplattform 3.0 P26, nur ergänzend): Erklärungen von Claude zu falschen Antworten `[{g, y, w, ex, sig, cf, alt, pv, t, bad}]` (≤ 3), tolerant gelesen. */
   axs: z.array(z.unknown()).nullish(),
   /** Neu (Lernplattform 3.0 P52, nur ergänzend): neue Claude-Sätze für schwache Wörter `[{en, de, sit, t, pv, bad?}]` (≤ 4), tolerant gelesen. */
@@ -351,6 +353,9 @@ export const chunkSchema = z.looseObject({
   whyLang: str,
   origin: z.looseObject({ v: num, kind: str, ref: str, title: str, t: num }).nullish(),
   seen: loose,
+  /** Neu (Wort-Lernen 2): Merkhilfe `{text, lang, t, own?}` wie bei Vokabeln und geschaffte Aktivierungen A1/A2 (`na`). */
+  mnemo: z.looseObject({ text: str, lang: str, t: num, own: num }).nullish(),
+  na: num,
   ...schedulingFields,
 });
 

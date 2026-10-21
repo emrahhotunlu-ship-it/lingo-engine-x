@@ -200,7 +200,7 @@ export function requestWordBank(i: { answered: readonly string[]; cards: Readonl
           continue;
         }
         byId.delete(id);
-        const ok = acceptBankItem(raw, { id, en: p.card.word }, bankKeys(p.card.doc, p.req.ex), nowMs, PV);
+        const ok = acceptBankItem(raw, { id, en: p.card.word, pos: p.card.pos, lemma: p.card.lemma }, bankKeys(p.card.doc, p.req.ex), nowMs, PV);
         dropped += ok.rejected.length;
         if (!ok.sb.length) continue;
         if ((await saveBank(p.card.path, ok.sb)) === 'saved') kept += ok.sb.length;

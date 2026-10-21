@@ -25,6 +25,9 @@ const ALLOWED: ReadonlyArray<RegExp> = [
   /^pxWayNotMeasured$/,
   // Lesen (13.10.2026, Emrahs Entscheidung „eigener Reiter Lesen“): Texte des neu gebauten Moduls src/modules/read (Präfix `rd`).
   /^rd[A-Z]/,
+  // Wort-Lernen 2, Teil 2 (Emrahs Auftrag 21.10.2026): Übung „Sag es“ (Diktiertaste), „Sag es einmal laut“, Angebot „Sag es selbst“ und die
+  // Werkstatt-Diagnose „Beim Hören …“ gehören zum Wörter-Training (kein eigenes Sprech- oder Hörmodul).
+  /^(exName_say_it|pxWw)/,
   // Fehlerprotokoll (Diagnose) zeigt Schreibzugriffe der Datenbank, keine Fertigkeit.
   /^diagMsg_/,
 ];

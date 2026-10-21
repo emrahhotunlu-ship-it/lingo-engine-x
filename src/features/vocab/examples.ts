@@ -7,6 +7,8 @@ import { acceptExamples, examplesPatch, storedExamples, type StoredExample } fro
 import type { TrainCard } from '../../domain/srs/types';
 import { cardExamples as template } from '../../prompts/cardExamples';
 import { logError, logWarn } from '../../platform/diagnostics';
+import { useLive } from '../../data/live';
+import { tutorCtx } from '../../domain/tutor/ctx';
 
 // Fehlende Beispielsätze und typische Wortpartner einer Karte von Claude ergänzen lassen (CLAUDE.md A7, Englischlehrer
 // 02.10.2026): höchstens EIN Aufruf je Karte und Seitenaufruf, ausgelöst durch „Prüfen" (eine Handlung), nie in einer
@@ -35,7 +37,7 @@ export function requestExamples(card: TrainCard): void {
   ctl ??= new AbortController();
   const signal = ctl.signal;
   set(card.id, { status: 'loading', items: [] });
-  const vars = { word: card.word, pos: card.pos ?? '', meaning: card.def ?? card.de ?? '', sentence: card.context?.sentence ?? '' };
+  const vars = { word: card.word, pos: card.pos ?? '', meaning: card.def ?? card.de ?? '', sentence: card.context?.sentence ?? '', ctx: tutorCtx(useLive.getState().docs['app/profile'] ?? null) };
   askJson({ template, vars, signal })
     .then(async (r) => {
       const now = Date.now();

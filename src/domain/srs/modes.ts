@@ -1,6 +1,7 @@
 import { packExtraOf } from '../c1pack/packFields';
 import { meaningForTask } from './cards';
 import { activationReady } from './brief';
+import { freeLaterDays } from './spacing';
 import { gapUsable, lemmaFor } from './gapFit';
 import { familyFrom, hasPartner, trapTask } from './partner';
 import { distinctForms, familyOf, FEST_MIN_FORMS, FREE_ANSWER, freeCorrectDays, freeDaysNeeded, partDaysOf, varietyBias, varietyOf } from './variety';
@@ -41,6 +42,8 @@ export const CATALOG: readonly ExerciseDef[] = [
   { ex: 'dictation', stage: 5, level: 5, mode: 'listen', input: 'typed' },
   { ex: 'speed', stage: 5, level: 5, mode: 'type', input: 'typed' },
   { ex: 'produce', stage: 5, level: 5, mode: 'produce', input: 'produce' },
+  // Wort-Lernen 2: „Sag es“ – die deutsche Absicht als englischer Satz (am Handy per Diktiertaste). Frei, ab zwei freien Abruftagen nach der Einführung.
+  { ex: 'say_it', stage: 4, level: 4, mode: 'type', input: 'sentence', also: [5] },
   // Anki „Aufdecken“ (architektur.md §4.2): Stufe 0, damit die Nachbarstufen-Suche es nie findet;
   // `supports` liefert immer `false`. Ohne Eintrag fiele `exerciseDef('flip')` still auf `mc_en` zurück.
   { ex: 'flip', stage: 0, level: 2, mode: 'recog', input: 'flip' },
@@ -55,15 +58,15 @@ export const CATALOG: readonly ExerciseDef[] = [
 ];
 
 /**
- * Was die Umgebung kann: Sprachausgabe, KI und das Eingabeprofil. `listen` = `tts && !touch` (Hören gibt es nur mit Tastatur,
- * Kap. 6 Geräte-Matrix). Der eigene Satz (`produce`) geht auch am Handy (Wörter aktivieren Stufe 1: kurze Sätze genügen).
+ * Was die Umgebung kann: Sprachausgabe, KI und das Eingabeprofil. `listen` = `tts` (Wort-Lernen 2, 21.10.2026: Hören auch am Handy,
+ * sobald die Sprachausgabe bereitsteht; vorher nur mit Tastatur, Kap. 6 Geräte-Matrix). Der eigene Satz (`produce`) geht auch am Handy (Wörter aktivieren Stufe 1: kurze Sätze genügen).
  * Das Profil wird je Runde einmal eingefroren.
  */
 export type ExerciseEnv = { tts: boolean; ai: boolean; touch?: boolean; listen?: boolean };
 export const NO_ENV: ExerciseEnv = { tts: false, ai: false, touch: false, listen: false };
-export const makeEnv = (tts: boolean, ai: boolean, touch: boolean): ExerciseEnv => ({ tts, ai, touch, listen: tts && !touch });
-/** Hören nur mit Sprachausgabe und Tastatur-Profil (ohne Angabe des Profils wie bisher: Sprachausgabe genügt). */
-export const canListen = (env: ExerciseEnv): boolean => env.listen ?? (env.tts && !env.touch);
+export const makeEnv = (tts: boolean, ai: boolean, touch: boolean): ExerciseEnv => ({ tts, ai, touch, listen: tts });
+/** Hören, sobald die Sprachausgabe bereitsteht – Wort-Lernen 2: auch am Handy (Touch). Ohne Sprachausgabe gibt es keine Höraufgabe. */
+export const canListen = (env: ExerciseEnv): boolean => env.listen ?? env.tts;
 
 export const exerciseDef = (ex: ExerciseId): ExerciseDef => CATALOG.find((d) => d.ex === ex) ?? (CATALOG[0] as ExerciseDef);
 
@@ -127,6 +130,9 @@ export function supports(card: TrainCard, ex: ExerciseId, lang: Lang, poolSize: 
       return card.kind === 'chunk' && !!card.chunk?.scene && !!meaning;
     case 'dictation':
       return canListen(env) && gapOk(card);
+    case 'say_it':
+      // Wie die Aktivierung erst, wenn das Wort an zwei Tagen nach der Einführung frei abgerufen wurde (Barcroft-Grenze).
+      return !!meaning && freeLaterDays(card.doc) >= SAY_IT_FREE_DAYS;
     case 'produce':
       // Leitplanke (Barcroft, tagesaufbau.md T2): nie bei einer Karte, die noch nicht an mindestens zwei Tagen richtig abgerufen wurde.
       return env.ai && !!meaning && activationReady(card);
@@ -140,6 +146,9 @@ export function supports(card: TrainCard, ex: ExerciseId, lang: Lang, poolSize: 
       return false;
   }
 }
+
+/** „Sag es“ ab so vielen Lerntagen mit freiem Abruf nach dem Einführungstag. */
+export const SAY_IT_FREE_DAYS = 2;
 
 const inStage = (d: ExerciseDef, k: number): boolean => d.stage === k || (d.also?.includes(k as Stage) ?? false);
 

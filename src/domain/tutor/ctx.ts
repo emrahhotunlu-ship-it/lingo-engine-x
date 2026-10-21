@@ -22,7 +22,7 @@ export function tutorCtx(profile: Doc | null | undefined): string {
   if (role || field) parts.push([role, field && `in ${field}`].filter(Boolean).join(' '));
   const who = list(c.who, 3, 30);
   if (who.length) parts.push(`talks to ${who.join(', ')}`);
-  const sit = list(c.sit, 3, 40);
+  const sit = list(c.sit, 5, 40);
   if (sit.length) parts.push(`typical situations: ${sit.join('; ')}`);
   const terms = list(c.terms, 6, 24);
   if (terms.length) parts.push(`key terms: ${terms.join(', ')}`);

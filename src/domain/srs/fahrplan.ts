@@ -3,6 +3,7 @@ import { activationReady, recallDays } from './brief';
 import { activationUnitsOn, lastActivation, naOf } from './actBase';
 import type { ActStep } from './actBrief';
 import { CORE_SRC, isCoreWord } from './coreWord';
+import { freeLaterDays } from './spacing';
 import type { QueueItem, TrainCard } from './types';
 
 // Fahrplan der Aktivierung (Wörter aktivieren, Stufe 2; docs/umbau/aktivierung.md). Rein, ohne Zufall und ohne Schreiben.
@@ -63,7 +64,8 @@ const gapDays = (lastT: number, day: string): number => daysBetween(dayKey(lastT
  * aktiviert, Abstand nicht erreicht, Fahrplan durch). `day` = Lerntag (Wechsel 04:00).
  */
 export function dueStep(card: Pick<TrainCard, 'kind' | 'hidden' | 'stage' | 'src' | 'doc'>, day: string): DueStep | null {
-  if (card.kind !== 'vocab' || card.hidden) return null;
+  if (card.hidden) return null;
+  if (card.kind === 'chunk') return chunkDueStep(card, day);
   const na = naOf(card.doc);
   const last = lastActivation(card.doc);
   if (last && dayKey(last.t) === day) return null;
@@ -82,6 +84,21 @@ export function dueStep(card: Pick<TrainCard, 'kind' | 'hidden' | 'stage' | 'src
     if (gapDays(last.t, day) < gap) return null;
   }
   return { step, maintenance };
+}
+
+/** Wendungen (Wort-Lernen 2): Fahrplan nur A1 und A2, freigegeben ab so vielen Lerntagen mit freiem Abruf nach der Einführung; keine Erhaltung. */
+export const CHUNK_ACT_FREE_DAYS = 2;
+export const CHUNK_LAST_STEP: ActStep = 2;
+
+function chunkDueStep(card: Pick<TrainCard, 'doc'>, day: string): DueStep | null {
+  const na = naOf(card.doc);
+  if (na >= CHUNK_LAST_STEP) return null;
+  const last = lastActivation(card.doc);
+  if (last && dayKey(last.t) === day) return null;
+  if (freeLaterDays(card.doc) < CHUNK_ACT_FREE_DAYS) return null;
+  const step: ActStep = na <= 0 ? 1 : 2;
+  if (last && gapDays(last.t, day) < (last.g < 2 ? RETRY_GAP_DAYS : MIN_GAP_DAYS[step])) return null;
+  return { step, maintenance: false };
 }
 
 /** Wie viele Satz-Einheiten sind heute noch erlaubt? Tagesgrenze 4, bei Rückstand weniger (ab 40 höchstens 2, ab 80 keine). `doneUnits` = schon gemachte Einheiten. */

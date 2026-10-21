@@ -37,6 +37,7 @@ import { GERMAN_HINT_EN, HARD_ISSUES, germanHints, jaccard, precheckProduce, sel
 import { sceneText } from '../../content/activation/scenes';
 import { trapForCard } from '../../domain/srs/traps';
 import type { CheckResult, Exercise, ExerciseId, Grade, Option } from '../../domain/srs/types';
+import { checkSayIt, type SayItCheck } from '../../domain/srs/sayIt';
 import { inputProfile } from '../../platform/input';
 import { speak, stopSpeech, useSpeech } from '../../platform/speech';
 import { briefVarsOf, produceCheckV2, type ProduceCheckV2Out } from '../../prompts/produceCheckV2';
@@ -94,7 +95,7 @@ type Feedback = {
   /** find_trap: das angetippte Wort. */
   tapped?: [number, number] | null;
   /** complete/produce: Claudes Prüfung bzw. die lokale Prüfung. */
-  sentence?: { out: SentenceOut | null; self: SelfCheck | null; /** Vorprüfung ohne Claude: Mangel, der den Satz als „Noch nicht“ beendet. */ issue?: PrecheckIssue | ActIssue; hints?: GermanHintId[]; /** A2–A5: Die Vorprüfung hatte schon einen Hinweis gegeben. */ helped?: boolean };
+  sentence?: { out: SentenceOut | null; self: SelfCheck | null; /** Vorprüfung ohne Claude: Mangel, der den Satz als „Noch nicht“ beendet. */ issue?: PrecheckIssue | ActIssue; hints?: GermanHintId[]; /** A2–A5: Die Vorprüfung hatte schon einen Hinweis gegeben. */ helped?: boolean; /** „Sag es“: lokale Prüfung (Zielwort, Länge). */ sayIt?: SayItCheck };
 };
 
 /** Wort-Lernen 2: Beschriftung der Abrufe am Tag 0 und des ersten Abrufs danach („Gestern-Check“). */
@@ -114,7 +115,7 @@ const LISTEN: ReadonlySet<ExerciseId> = new Set(['listen_mc', 'dictation']);
 /** „Erst ein Hinweis, dann die Lösung“: getippte Arten mit zweitem Versuch. Nicht Diktat, nicht Auswahl, nie im Wochen-Check (`noHelp`). */
 const RETRY_EX: ReadonlySet<ExerciseId> = new Set(['cloze_hint', 'cloze', 'cloze_part', 'type', 'situation', 'colloc', 'wordfam']);
 /** Arten mit einer Satzantwort (Claude prüft, lokal nur eine grobe Prüfung). */
-const SENTENCE_EX: ReadonlySet<ExerciseId> = new Set(['complete', 'produce', 'act_scene', 'act_rewrite', 'act_impulse', 'act_combo', 'act_mail']);
+const SENTENCE_EX: ReadonlySet<ExerciseId> = new Set(['complete', 'produce', 'say_it', 'act_scene', 'act_rewrite', 'act_impulse', 'act_combo', 'act_mail']);
 // Feste leere Referenz statt `?? []` im Selektor (sonst rendert die Karte endlos neu, React-Fehler #185).
 const NO_EXAMPLES: readonly { en: string; t: number }[] = [];
 /** „Welches Wort passt?“ (P52): das richtige (andere) Wort mit Kurzbedeutung aus der richtigen Option. */
@@ -535,6 +536,13 @@ export function ExerciseView({
       await checkAct();
       return;
     }
+    if (e.ex === 'say_it') {
+      // „Sag es“: lokal, ohne KI – Zielwort da und ganzer Satz = „Gut“; sonst „Schwer“ und ungeprüft (die Spracherkennung kann sich verhört haben).
+      const text = fullSentence();
+      const c = checkSayIt(text, card);
+      finish({ verdict: c.grade >= 3 ? 'correct' : 'near' }, text, null, { sentence: { out: null, self: null, sayIt: c } }, c.grade);
+      return;
+    }
     let hints: GermanHintId[] = [];
     if (e.ex === 'produce') {
       // Vorprüfung (Wörter aktivieren, Stufe 1): Wort fehlt, zu kurz, abgeschrieben, falsche Satzform, typischer Deutsch-Fehler – alles ohne KI-Aufruf.
@@ -579,7 +587,7 @@ export function ExerciseView({
   const next = () => {
     if (!fb) return;
     const rec = actRecordOf(fb, e);
-    const ans: Answer = fb.override ? { grade: 3, given: fb.given, ms: fb.ms, ok: true, override: true, t: fb.t } : { grade: fb.grade, given: fb.given, ms: fb.ms, ok: fb.grade > 1, hint: fb.hint, t: fb.t, ...(fb.interrupted ? { interrupted: true as const } : {}), ...(fb.sentence && !fb.sentence.out && !fb.override ? { unverified: true as const } : {}), ...(rec ? { rec } : {}) };
+    const ans: Answer = fb.override ? { grade: 3, given: fb.given, ms: fb.ms, ok: true, override: true, t: fb.t } : { grade: fb.grade, given: fb.given, ms: fb.ms, ok: fb.grade > 1, hint: fb.hint, t: fb.t, ...(fb.interrupted ? { interrupted: true as const } : {}), ...(fb.sentence && !fb.sentence.out && !fb.override && fb.sentence.sayIt?.verified !== true ? { unverified: true as const } : {}), ...(rec ? { rec } : {}) };
     const kind = (onCommit ?? commitAnswer)(ans);
     // Tastatur am iPhone: im selben Handler fokussieren bzw. schließen.
     if (kind === 'typed') api.focusNow();
@@ -626,7 +634,7 @@ export function ExerciseView({
 
   // ------------------------------------------------------------------ Urteil und Erklär-Karte
 
-  const rv: ResultVerdict = !fb ? 'ok' : fb.dontKnow ? 'dontKnow' : fb.override ? 'ok' : fb.sentence && !fb.sentence.out && fb.result.verdict !== 'wrong' ? 'unchecked' : fb.result.verdict === 'correct' ? 'ok' : fb.result.verdict === 'near' ? 'near' : 'wrong';
+  const rv: ResultVerdict = !fb ? 'ok' : fb.dontKnow ? 'dontKnow' : fb.override ? 'ok' : fb.sentence && !fb.sentence.out && fb.result.verdict !== 'wrong' && fb.sentence.sayIt?.verified !== true ? 'unchecked' : fb.result.verdict === 'correct' ? 'ok' : fb.result.verdict === 'near' ? 'near' : 'wrong';
   const learning = state0 === 'new' || state0 === 'learning' || state0 === 'wobbly';
   const depth = explainDepth({ verdict: rv, stage: card.stage, learning });
 
@@ -643,6 +651,7 @@ export function ExerciseView({
 
   const model: ExplanationModel | null = useMemo(() => {
     if (!fb) return null;
+    if (fb.sentence?.sayIt) return sayItModel(fb.sentence.sayIt, card, e.sayIt?.model ?? null, exampleItems, t);
     if (fb.sentence) return sentenceModel(fb, card, exampleItems, t, e.act);
     const picked = fb.chosen ? { label: fb.chosen.label, ...(fb.chosen.fromWord ? { fromWord: fb.chosen.fromWord } : {}), ...(fb.chosen.fromMeaning ? { fromMeaning: fb.chosen.fromMeaning } : {}) } : null;
     const isAlt = fb.result.verdict !== 'correct' && isAltAnswer(card, fb.given);
@@ -848,6 +857,19 @@ export function ExerciseView({
     const target = card.kind === 'chunk' ? typedForm(card.word) : card.word;
     prompt = e.act ? (
       <ActPanel task={e.act} card={card} lang={lang} />
+    ) : e.ex === 'say_it' ? (
+      <div className="flex flex-col gap-2" data-testid="say-it">
+        <p className="lx-t-meta text-subtle">{t('pxWwSayItIntent')}</p>
+        {e.sayIt?.de ? (
+          <p className="lx-t-prompt" lang="de" data-testid="say-it-intent">
+            {e.sayIt.de}
+          </p>
+        ) : (
+          <p className="lx-t-prompt" lang={lang} data-testid="say-it-intent">
+            {meaningText}
+          </p>
+        )}
+      </div>
     ) : (
       <div className="flex flex-col gap-3">
         <p className="lx-t-support flex flex-wrap items-center gap-2" data-testid="produce-target">
@@ -882,8 +904,8 @@ export function ExerciseView({
           }}
           onSubmit={() => (fb ? next() : void checkSentence())}
           disabled={!!fb || sentenceBusy}
-          testId={e.ex === 'complete' ? 'complete-input' : e.act ? 'act-input' : 'produce-input'}
-          placeholder={e.ex === 'complete' ? undefined : t('actPlaceholder')}
+          testId={e.ex === 'complete' ? 'complete-input' : e.ex === 'say_it' ? 'say-it-input' : e.act ? 'act-input' : 'produce-input'}
+          placeholder={e.ex === 'complete' ? undefined : e.ex === 'say_it' ? t('pxWwSayItPlaceholder') : t('actPlaceholder')}
           tall={e.act?.fmt === 'ml' || e.act?.fmt === 'kb'}
         />
         {!fb && <AiRunPanel phase={askSentence.phase} error={askSentence.error} onStop={askSentence.stop} onRetry={() => void checkSentence()} skeleton={false} />}
@@ -972,7 +994,7 @@ export function ExerciseView({
   if (canTip) secondary.push({ id: 'hint', label: t('exHint'), onClick: showTip, testId: 'hint' });
   if (isTiles && !fb && placed.length > 0) secondary.push({ id: 'reset', label: t('drReset'), onClick: () => setPlaced([]), testId: 'tiles-reset' });
   // Bei A4 (Wort nicht gezeigt) gibt es „Weiß ich nicht“: die Lösung wird gezeigt, die Karte bekommt „Nochmal“ und kommt bald wieder.
-  if (!fb && (!isSentence || (e.act && !e.act.showTarget)) && e.check !== 'known') secondary.push({ id: 'dontKnow', label: t('exDontKnow'), onClick: dontKnow, testId: 'dont-know' });
+  if (!fb && (!isSentence || e.ex === 'say_it' || (e.act && !e.act.showTarget)) && e.check !== 'known') secondary.push({ id: 'dontKnow', label: t('exDontKnow'), onClick: dontKnow, testId: 'dont-know' });
 
   const tipText = ((): string | null => {
     if (fb || tip < 1) return null;
@@ -996,6 +1018,10 @@ export function ExerciseView({
     const c = fb.result;
     const sub: string | null = fb.dontKnow
       ? null
+      : fb.sentence?.sayIt
+        ? fb.sentence.sayIt.verified
+          ? null
+          : t('pxWwSayItUnverified')
       : fb.sentence?.out?.fixedUnsure && fb.result.verdict !== 'correct'
         ? fb.sentence.out.errType && fb.sentence.out.errType !== 'other'
           ? t('awFixUnsureTyped', { type: t(`trErr_${fb.sentence.out.errType}` as MessageKey) })
@@ -1217,6 +1243,15 @@ function sentenceModel(fb: Feedback, card: Exercise['card'], examples: ExplainEx
     for (const h of fb.sentence?.hints ?? []) lines.push({ k: 'note', text: t(`gh_${h}` as MessageKey) });
   }
   return { lines, examples, mark: [card.word, card.lemma], ai: !!out, source: 'card' };
+}
+
+/** Erklär-Karte zu „Sag es“: ob das Zielwort im Satz steht (bzw. warum nicht geprüft), dann der Mustersatz zum Vergleichen. */
+function sayItModel(c: SayItCheck, card: Exercise['card'], model: string | null, examples: ExplainExample[], t: (k: MessageKey, v?: Record<string, string | number>) => string): ExplanationModel {
+  const word = card.kind === 'chunk' ? typedForm(card.word) : card.word;
+  const lines: ExplanationModel['lines'] = [{ k: 'pattern', name: card.word, formula: null }];
+  lines.push({ k: 'why', text: !c.found ? t('pxWwSayItMissing', { word }) : !c.longEnough ? t('pxWwSayItShort') : t('pxWwSayItFound', { word }) });
+  if (model) lines.push({ k: 'note', text: `${t('pxWwSayItModel')}: ${model}` });
+  return { lines, examples: model ? examples.filter((x) => x.en !== model) : examples, mark: [card.word, card.lemma], ai: false, source: 'card' };
 }
 
 /**

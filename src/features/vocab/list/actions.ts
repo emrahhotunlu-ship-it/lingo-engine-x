@@ -30,7 +30,11 @@ export const setHidden = (card: TrainCard, hidden: boolean): Promise<boolean> =>
 
 export const resetCard = (card: TrainCard): Promise<boolean> => run(card.path, (cur) => resetOp(cur, card.path, Date.now()), 'vocab:reset');
 
-export const markKnown = (card: TrainCard, day: string): Promise<boolean> => run(card.path, (cur) => knownOp(cur, card.path, card.inDb ? null : { ...card.doc }, Date.now(), day), 'vocab:known');
+/**
+ * „Ich kenne es schon“ in der Wortliste (nach der Prüffrage): wie „Kenne ich“ im Trainer (Wort-Lernen 2) – die Prüffrage zählt erst am nächsten Lerntag
+ * (`pending`): fällig um 04:00 Uhr, Stufe bleibt; gelingt dort der freie Abruf, steigt die Karte auf Stufe 3.
+ */
+export const markKnown = (card: TrainCard, day: string): Promise<boolean> => run(card.path, (cur) => knownOp(cur, card.path, card.inDb ? null : { ...card.doc }, Date.now(), day, { pending: true }), 'vocab:known');
 
 /** „Morgen wieder“ (N25): am nächsten Lerntag fällig, nur `due`/`fsrs` (A6.14). */
 export const againTomorrow = (card: TrainCard): Promise<boolean> => run(card.path, (cur) => tomorrowOp(cur, card.path, Date.now()), 'vocab:tomorrow');

@@ -11,6 +11,8 @@ import { jsonEqual } from '../equal';
 export type Ctx2 = { v: 1; role: string; field: string; who: string[]; sit: string[]; terms: string[]; t: number };
 
 export const CTX2_LIMITS = { role: 60, field: 60, who: 6, whoLen: 30, sit: 6, sitLen: 40, terms: 12, termsLen: 24 } as const;
+/** Wort-Lernen 2: im Formular wählbar sind 5 Situationen (alle 5 gehen in jede Satzanfrage); gelesen und gespeichert werden weiter bis zu 6 (nichts geht verloren). */
+export const SIT_PICK_MAX = 5;
 
 /** Auswahlfelder (gespeichert wird der englische Wert, denn er geht in die Vorlagen; die Oberfläche zeigt Deutsch oder Englisch). */
 export const WHO_CHIPS = ['CFO', 'IT lead', 'procurement', 'partner', 'own team', 'investor'] as const;

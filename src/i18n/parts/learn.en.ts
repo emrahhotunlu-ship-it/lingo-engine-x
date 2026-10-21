@@ -227,7 +227,7 @@ export const learnEn: Record<keyof typeof learnDe, string> = {
   vcActions: 'Actions',
   vcPractice: 'Practice now',
   vcKnown: 'I already know this',
-  vcKnownSaved: 'Saved – the word comes back in 30 days.',
+  vcKnownSaved: 'Saved – tomorrow the app asks for the word once from memory. If you know it then, it counts as known.',
   vcProbeTask: 'Quick check: what is the English word?',
   vcProbeWrong: 'Not yet – the word was "{word}". It stays in practice.',
   vcHide: 'Hide',

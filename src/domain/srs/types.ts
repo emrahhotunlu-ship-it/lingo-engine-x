@@ -47,7 +47,9 @@ export type ExerciseId =
   | 'act_rewrite'
   | 'act_impulse'
   | 'act_combo'
-  | 'act_mail';
+  | 'act_mail'
+  /** Wort-Lernen 2: „Sag es“ – die deutsche Absicht auf Englisch sagen (Diktiertaste der Handytastatur, kein Mikrofonzugriff). Frei, ab 2 freien Tagen. */
+  | 'say_it';
 /** Modus der alten App (Schlüssel in `modes` und `hist[].m`). */
 export type LegacyMode = 'recog' | 'cloze' | 'type' | 'colloc' | 'listen' | 'produce';
 export type InputKind = 'choice' | 'typed' | 'spot' | 'tiles' | 'produce' | 'flip' | 'sentence';
@@ -165,6 +167,10 @@ export type Exercise = {
   fits?: { truth: boolean; foil: { word: string; meaning: string | null } | null };
   /** `contrast`: Begründung von Claude, zweisprachig (gezeigt in der Oberflächensprache). */
   contrastWhy?: { de: string; en: string } | null;
+  /** Wort-Werkstatt: Abruf am Ende der Werkstatt (schreibt `wk` und die Ruhe danach). */
+  wk?: true;
+  /** `say_it` („Sag es“): deutsche Absicht, die auf Englisch gesagt (diktiert) wird, und der englische Mustersatz. */
+  sayIt?: { de: string; model: string | null };
 };
 
 /** Baustein (tiles): Text und ob er ein Fremdbaustein ist. */
@@ -181,7 +187,8 @@ export type SituationTask = {
 };
 
 /** `contrast` (P52): „Welches Wort passt?“ zusätzlich direkt nach der regulären Abfrage derselben Karte (höchstens 1 je Runde). */
-export type QueueItem = { key: string; reason: 'due' | 'new' | 'ahead' | 'again' | 'contrast'; phase: 'intro' | 'quiz' };
+/** `werkstatt` (Wort-Lernen 2, `werkstatt.ts`): die Karte wird erst neu verankert (Werkstatt-Karte), dann folgt ein gestützter Abruf (`Exercise.wk`). */
+export type QueueItem = { key: string; reason: 'due' | 'new' | 'ahead' | 'again' | 'contrast'; phase: 'intro' | 'quiz' | 'werkstatt' };
 
 export type Verdict = 'correct' | 'near' | 'wrong';
 export type CheckResult = {
@@ -242,6 +249,10 @@ export type AnswerEvent = {
   interrupted?: true;
   /** „Satz vervollständigen“ ohne Satzanfang (ganzer eigener Satz): wiegt wie „Satz bilden“ (`weight.ts`). Nicht im Protokoll. */
   free?: true;
+  /** Falsche getippte Eingabe (Note 1, ≤ 40 Zeichen): kommt als `v` in `hist` (Diagnose der Wort-Werkstatt). */
+  wrong?: string;
+  /** Abruf am Ende der Wort-Werkstatt: schreibt `wk` und legt die Fälligkeit 2–3 Lerntage später (`werkstatt.ts`). */
+  wk?: true;
 };
 
 export type WhyPart = { key: string; vars?: Record<string, string | number>; lang?: Lang };

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { EnglishText } from '../../engine/EnglishText';
 import { Choices } from '../../engine/Choices';
 import { SpeakButton } from '../../engine/SpeakButton';
@@ -16,6 +16,9 @@ import { chunkParts, chunkWhy } from '../../domain/srs/chunkCards';
 import { trapForCard } from '../../domain/srs/traps';
 import type { TrainCard } from '../../domain/srs/types';
 import { useT, type MessageKey } from '../../i18n';
+import { speak, speechUnlocked, stopSpeech, useSpeech } from '../../platform/speech';
+import { speakNewOn } from '../../app/voice/autoplay';
+import { Button } from '../../ui/Button';
 import { ExerciseShell, type ShellSecondary } from '../../ui/exercise';
 import { continueIntro, startKnownProbe, useSession, type FirstKind } from './session';
 
@@ -75,6 +78,26 @@ function Ask({ card, onNext }: { card: TrainCard; onNext: () => void }) {
   );
 }
 
+/**
+ * Wort und Ursprungssatz einmal vorlesen, sobald die Einführungskarte steht (Wort-Lernen 2): nur mit bereiter Sprachausgabe, nach einer Berührung in
+ * dieser Ansicht (`speechUnlocked`, nie ungefragt beim Laden) und wenn „Neue Wörter vorlesen“ an ist. Beim Verlassen der Karte verstummt sie.
+ */
+function useReadAloudOnce(card: TrainCard): void {
+  const ready = useSpeech((s) => s.status === 'ready');
+  const done = useRef(false);
+  useEffect(() => {
+    if (done.current || !ready || !speakNewOn() || !speechUnlocked()) return;
+    done.current = true;
+    void speak(card.context ? `${card.word}. ${card.context.sentence}` : card.word);
+  }, [ready, card]);
+  useEffect(
+    () => () => {
+      if (done.current) stopSpeech();
+    },
+    [],
+  );
+}
+
 function Learn({ card, onDone }: { card: TrainCard; onDone: (kind: FirstKind) => void }) {
   const { t, lang } = useT();
   const api = useHiddenInput();
@@ -102,6 +125,8 @@ function Learn({ card, onDone }: { card: TrainCard; onDone: (kind: FirstKind) =>
     onDone(kind);
   };
   useHotkeys({ enter: go }, api.isInput);
+  useReadAloudOnce(card);
+  const [saidAloud, setSaidAloud] = useState(false);
   const meanings = (meaning ?? '').split(/\s*;\s*/).filter(Boolean);
   const row = (label: string, body: React.ReactNode, testId: string) => (
     <div className="flex flex-col gap-1 border-t border-line py-2.5 first:border-t-0 sm:grid sm:grid-cols-[8rem_1fr] sm:items-baseline sm:gap-3" data-testid={testId}>
@@ -152,6 +177,15 @@ function Learn({ card, onDone }: { card: TrainCard; onDone: (kind: FirstKind) =>
                 {ipa}
               </p>
             )}
+            {/* Freiwillig, ohne Bewertung und ohne Speichern: ein Häkchen für sich selbst (Wort-Lernen 2). */}
+            <div className="mt-1 flex flex-wrap items-center gap-2">
+              <Button variant="ghost" icon={saidAloud ? 'check' : 'mic'} aria-pressed={saidAloud} onClick={() => setSaidAloud((v) => !v)} data-testid="intro-say-aloud">
+                {saidAloud ? t('pxWwSayAloudDone') : t('pxWwSayAloud')}
+              </Button>
+              <span className="lx-t-meta text-subtle" lang={lang}>
+                {t('pxWwSayAloudHint')}
+              </span>
+            </div>
           </div>
         }
         answer={

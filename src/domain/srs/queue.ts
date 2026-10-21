@@ -4,10 +4,10 @@ import { availableExercises } from './modes';
 import { isLearningState, retrievability } from './scheduler';
 import { chunkParts } from './chunkCards';
 import type { Lang, QueueItem, TrainCard } from './types';
-import { lapsesOf } from './lapses';
 import { dayKey } from '../date';
 import { pickDissimilar } from './similar';
 import { recallStep } from './spacing';
+import { struggling } from './werkstatt';
 
 // Runde „Wiederholen" (Lern-Entwurf §3): fällige Karten nach Dringlichkeit, dazu neue Karten
 // im Tageskontingent – auch an Tagen mit vielen Fälligen (Kap. 15) – früh eingemischt.
@@ -280,7 +280,7 @@ export function buildQueue(i: {
   const day = dayKey(i.nowMs);
   const due = dueCards(act, i.nowMs);
   const isCheck = (c: TrainCard): boolean => recallStep(c, day) === 'check';
-  for (const c of capLeeches([...due.filter(isCheck), ...due.filter((c) => !isCheck(c))])) {
+  for (const c of capLeeches([...due.filter(isCheck), ...due.filter((c) => !isCheck(c))], day)) {
     if (reviews.length >= i.target - nNew) break;
     if (claim(c)) reviews.push({ key: c.key, reason: 'due', phase: 'quiz' });
   }
@@ -308,15 +308,16 @@ export const headwordOf = (word: string): string =>
     .trim()
     .replace(/^to /, '');
 
-/** Dauerfehler („Blutegel“): ab so vielen Vergessen-Fällen kostet eine Karte unverhältnismäßig viel Zeit. */
-export const LEECH_AT = 5;
-/** Höchstens so viele Dauerfehler-Karten je Runde; der Rest kommt an den nächsten Tagen (bleibt fällig, geht nie verloren). */
+/** Höchstens so viele hakende Karten je Runde; der Rest kommt an den nächsten Tagen (bleibt fällig, geht nie verloren). */
 export const LEECH_MAX = 3;
 
-/** Begrenzt Dauerfehler-Karten in einer Runde (Reihenfolge der übrigen bleibt). */
-export function capLeeches(due: readonly TrainCard[]): TrainCard[] {
+/**
+ * Begrenzt hakende Karten in einer Runde (Reihenfolge der übrigen bleibt). „Hakt“ = Auslöser der Wort-Werkstatt (`struggling`: 3 freie
+ * Fehlversuche oder Fehler an 2 Lerntagen in 14 Tagen); ersetzt seit Wort-Lernen 2 die alte Grenze „ab 5 Vergessen“.
+ */
+export function capLeeches(due: readonly TrainCard[], day: string): TrainCard[] {
   let n = 0;
-  return due.filter((c) => (Math.max(c.fsrs.lapses, lapsesOf(c.doc)) >= LEECH_AT ? ++n <= LEECH_MAX : true));
+  return due.filter((c) => (struggling(c.doc, day) ? ++n <= LEECH_MAX : true));
 }
 
 /** Wiedervorlage in der Runde: frühestens drei Karten später (höchstens ans Ende). */

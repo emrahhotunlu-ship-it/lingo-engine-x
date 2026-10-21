@@ -16,6 +16,9 @@ export function setCallMode(on: boolean): void {
 export const AUTOPLAY_KEY = `${KEY_PREFIX}speak-autoplay`;
 /** Einstellung „Antworten vorlesen“ (Standard an). */
 export const autoplayOn = (): boolean => local.get(AUTOPLAY_KEY) !== '0';
+/** Wort-Lernen 2: „Neue Wörter vorlesen“ – die Einführungskarte liest Wort und Satz einmal vor (nach einer Berührung). Bequemlichkeit, Standard an. */
+export const SPEAK_NEW_KEY = `${KEY_PREFIX}speak-new`;
+export const speakNewOn = (): boolean => local.get(SPEAK_NEW_KEY) !== '0';
 /** Wird vorgelesen? Laut Einstellung – im Anruf-Modus immer. */
 export const speakRepliesOn = (): boolean => autoplayOn() || useCallMode.getState().on;
 

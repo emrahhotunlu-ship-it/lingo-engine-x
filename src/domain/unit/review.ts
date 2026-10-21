@@ -1,3 +1,4 @@
+import { dayKey } from '../date';
 import { block1Order, NEW_MIN } from './block1';
 import { CARD_SEC, NEW_SEC, plannedCardSec, REPAIR_SEC } from '../srs/cost';
 import { capLeeches, dueCards, newCards, quizzable } from '../srs/queue';
@@ -30,7 +31,7 @@ export function unitReviewGoal(i: {
   const overdue = overdueCount(act, i.nowMs);
   const base = {
     repairs: Array.from({ length: Math.max(0, Math.floor(i.repairs)) }, () => ({ item: null, sec: REPAIR_SEC })),
-    due: capLeeches(dueCards(act, i.nowMs)).map((c) => ({ item: c, sec: plannedCardSec(c, catchUpOn(overdue)) })),
+    due: capLeeches(dueCards(act, i.nowMs), dayKey(i.nowMs)).map((c) => ({ item: c, sec: plannedCardSec(c, catchUpOn(overdue)) })),
     fresh: newCards(act).map((c) => ({ item: c, sec: NEW_SEC })),
   };
   // Plan ohne Rückstand-Zuschlag: bei Rückstand wächst die Zeit nur für Wiederholungen. Der Anteil neuer Wörter wird

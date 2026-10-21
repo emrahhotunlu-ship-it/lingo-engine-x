@@ -243,10 +243,13 @@ describe('Fahrplan: Freigabe, Abstände, Vorrang, Tagesgrenze', () => {
     expect(dueStep(mk(MAINTENANCE_GAP_DAYS - 1), TODAY)).toBeNull();
     expect(dueStep(mk(MAINTENANCE_GAP_DAYS), TODAY)).toEqual({ step: 4, maintenance: true });
   });
-  it('heute schon aktiviert, Wendung oder ausgeblendet: nichts', () => {
+  it('heute schon aktiviert oder ausgeblendet: nichts; Wendungen: nur A1/A2 (Wort-Lernen 2), ohne Erhaltung', () => {
     expect(dueStep(card({ hist: [...histOf(3), { t: NOW - 1000, m: 'produce', g: 3, x: 'produce' }] }, 4), TODAY)).toBeNull();
-    expect(dueStep({ ...card(), kind: 'chunk' }, TODAY)).toBeNull();
     expect(dueStep({ ...card(), hidden: true }, TODAY)).toBeNull();
+    const ch = { ...card(), kind: 'chunk' as const };
+    expect(dueStep(ch, TODAY)).toEqual({ step: 1, maintenance: false });
+    expect(dueStep({ ...ch, doc: { ...ch.doc, na: 1 } }, TODAY)?.step ?? null).toBe(2);
+    expect(dueStep({ ...ch, doc: { ...ch.doc, na: 2 } }, TODAY)).toBeNull();
   });
   it('Zähler na: aus dem Zähler oder dem Verlauf, das Größere gilt; Aktivierungsarten werden gezählt', () => {
     expect(naOf({ na: 3 })).toBe(3);

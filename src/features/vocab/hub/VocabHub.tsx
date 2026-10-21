@@ -22,9 +22,12 @@ import { toast } from '../../../ui/Toast';
 import { TabTitle } from '../../system/Chrome';
 import { useDecks, writeDecks } from '../decksStore';
 import { decksErrorKey } from './errors';
-import { startAllDue } from '../start';
+import { startAllDue, startExtra } from '../start';
 import { useDeckCtx, useQuota, useVocabCards } from './data';
 import { Slot } from '../../../app/slots';
+import { selectAiAvailable } from '../../../ai/scope';
+import { eveningCheckKeys, sayOwnPick } from '../../../domain/srs/offers';
+import { useCapabilities } from '../../../platform/capabilities';
 
 // Wurzel des Reiters „Wörter“ (Gesamtkonzept 3.3): Suche · EINE Zielkarte (X von 8.000, Balken mit C1-Marke, Tempo) ·
 // Wiederholen-Karte (ein Hauptknopf, Modus als Textknopf) · „Neue Wörter heute“ · drei Stapel + „Alle Stapel ›“ (Blatt `x:decks`
@@ -115,6 +118,10 @@ export function VocabHub() {
     const d = [...visibleDecks(decks)].sort((a, b) => b.created.localeCompare(a.created) || (a.id < b.id ? 1 : -1))[0];
     return d ? { id: d.id, name: d.name, counts: deckCounts(deckCards(cards, d.id, decks, ctx), now) } : null;
   }, [cards, decks, ctx, now]);
+  // Freiwillige Angebote (Wort-Lernen 2, Teil 2): nur sichtbar, wenn es etwas gibt; zählen als Extra, nie zur Pflicht.
+  const ai = useCapabilities(selectAiAvailable);
+  const evening = useMemo(() => eveningCheckKeys(visible, today, lang), [visible, today, lang]);
+  const sayOwnN = useMemo(() => (ai ? sayOwnPick(visible, today, lang).length : 0), [ai, visible, today, lang]);
   const hits = useMemo(() => {
     const k = q.trim().toLowerCase();
     if (k.length < 2) return null;
@@ -251,6 +258,24 @@ export function VocabHub() {
           testId="ws-new-today"
         />
       </RowList>
+
+      {(evening.length > 0 || sayOwnN > 0) && (
+        <RowList title={t('pxWwOffersLabel')} testId="ws-offers">
+          {evening.length > 0 && (
+            <Row
+              icon="check"
+              channel="cards"
+              title={t('pxWwEveningTitle')}
+              sub={t('pxWwEveningLead', { n: evening.length })}
+              chevron
+              onClick={() => startExtra(api, { only: evening, mode: 'type', free: true, allowNew: false, label: t('pxWwEveningRound') })}
+              testId="ws-evening"
+              data={{ 'data-n': String(evening.length) }}
+            />
+          )}
+          {sayOwnN > 0 && <Row icon="sparkle" channel="cards" title={t('pxWwSayOwnTitle')} sub={t('pxWwSayOwnLead')} chevron onClick={() => openSheet('x:say-own')} testId="ws-say-own" />}
+        </RowList>
+      )}
 
       <RowList title={t('nbWsDecks')} testId="ws-decks-main">
         <Row icon="cards" channel="cards" title={tn('nbWsAll', visible.length)} sub={t('nbWsAllSub')} value={<Counts c={all} />} chevron onClick={() => go({ name: 'vocabList' })} testId="ws-all" />

@@ -548,6 +548,9 @@ export function unlockSpeech(): void {
   if (voices.length === 0) refreshVoices();
 }
 
+/** Wurde die Sprachausgabe in dieser Ansicht schon durch eine Berührung freigeschaltet (`unlockSpeech`)? Nur dann spricht die App von selbst. */
+export const speechUnlocked = (): boolean => unlocked;
+
 /** Nur für Tests: Modulzustand verwerfen. */
 export function resetSpeech(): void {
   stopWake();

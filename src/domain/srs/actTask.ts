@@ -132,7 +132,8 @@ export type BuildIn = {
  */
 export function buildActTask(i: BuildIn): ActTask | null {
   const { card, step, pool, day, lang } = i;
-  if (card.kind !== 'vocab' || !meaningForTask(card, lang)) return null;
+  // Wendungen (Wort-Lernen 2): nur A2, die Mini-Szene mit gezeigter Wendung (`fahrplan.ts` → `chunkDueStep`).
+  if ((card.kind !== 'vocab' && !(card.kind === 'chunk' && step === 2)) || !meaningForTask(card, lang)) return null;
   const used = activationCodesOf(card.doc);
   const source = pickSource(card, i.own, card.key);
   const partners = pickPartners(card, pool, day, lang, 2);

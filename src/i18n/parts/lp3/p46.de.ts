@@ -61,7 +61,7 @@ export const ttP46De = {
   ttWpField: 'Branche oder Produkt',
   ttWpFieldPh: 'z. B. Software für Dokumentenmanagement',
   ttWpWho: 'Mit wem sprichst du?',
-  ttWpSit: 'Typische Situationen',
+  ttWpSit: 'Typische Situationen (bis zu 5)',
   ttWpOwn: 'Eigener Eintrag',
   ttWpAdd: 'Hinzufügen',
   ttWpTerms: 'Deine Fachwörter (Englisch, bis zu 12)',

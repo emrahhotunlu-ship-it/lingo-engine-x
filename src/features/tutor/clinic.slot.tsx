@@ -12,12 +12,11 @@ import { useInputProfile } from '../../platform/input';
 import { Button } from '../../ui/Button';
 import { Icon } from '../../ui/Icon';
 import { markClinicWeek, markCtx2Card, useClinicMarkers, useClinicSheet } from './clinicStore';
-import { WorkProfile } from './WorkProfile';
 
 // Einhängepunkte der Satz-Klinik und des Berufsprofils (Lernplattform 3.0 P46), alle hinter `flags.tutor.clinic` und nur mit Claude:
 // - Anwenden: die Zeile „Satz-Klinik“ (freiwillig, Handy und Laptop),
 // - Heute (nach der Pflicht, unter „Extra“): einmal eine Karte „Damit Claude Sätze aus deinem Alltag baut“, danach einmal je Woche am Handy EIN Klinik-Satz als Vorschlag,
-// - Einstellungen: der Abschnitt „Mein Arbeitsalltag“.
+// - Einstellungen: der Abschnitt „Mein Arbeitsalltag“ steht seit Wort-Lernen 2 fest in der Gruppe „Kontext“ (`SettingsSheet`), auch ohne Claude.
 // Die Blätter selbst hängen in der Shell (`ClinicHost`).
 
 function ClinicRow() {
@@ -110,19 +109,6 @@ function TodayCards() {
   return <WeekCard />;
 }
 
-function ProfileSection() {
-  const { t } = useT();
-  const ai = useAiAvailable();
-  if (!ai) return null;
-  return (
-    <section className="flex flex-col gap-3" data-testid="settings-work-profile">
-      <h3 className="lx-eyebrow">{t('ttWpTitle')}</h3>
-      <WorkProfile />
-    </section>
-  );
-}
-
 const on = (): boolean => flags.tutor.clinic;
 registerSlot({ slot: 'apply.tiles', order: 40, enabled: on, render: () => <ClinicRow /> });
 registerSlot({ slot: 'today.extra', order: 20, enabled: on, render: () => <TodayCards /> });
-registerSlot({ slot: 'settings.sections', order: 60, enabled: on, render: () => <ProfileSection /> });

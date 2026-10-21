@@ -14,6 +14,7 @@ import { findContext, formsOf, locate } from './context';
 import { gapUsable, lemmaFor } from './gapFit';
 import { readCfx, readWx } from '../tutor/acceptWordCtx';
 import { poolNorm } from '../drills/orderPool';
+import { storedTranslation } from './examples';
 import type { CheckResult, Colloc, Exercise, ExerciseId, Lang, Option, SituationTask, Stage, Tile, TrainCard } from './types';
 
 // Übung aus Karte und Art bauen (Lern-Entwurf §4.4 Ablenker). Zufall mit Startwert:
@@ -502,6 +503,13 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
       const label = shortMeaning(meaning ?? '', tongueOf(card, lang));
       const correct: Option = { id: 'ok', label, lang: tongueOf(card, lang), correct: true };
       return { ...base, sentence: rawCtx, options: shuffle([correct, ...meaningDistractors(card, pool, lang, rng).slice(0, 2)], rng), accepted: [label] };
+    }
+    case 'say_it': {
+      // Deutsche Absicht: die gespeicherte Übersetzung des Satzes (Ursprung bzw. gewechselter Satz), sonst nur die Bedeutung. Der englische Satz ist das Muster.
+      const model = rawCtx?.sentence ?? card.context?.sentence ?? null;
+      const de = model ? storedTranslation(card.doc, model) : null;
+      const target = card.kind === 'chunk' ? typedForm(card.word) : card.word;
+      return { ...base, sentence: null, accepted: [target], sayIt: { de: de ?? '', model } };
     }
     case 'complete': {
       const starts = packExtraOf(card)?.starts ?? [];

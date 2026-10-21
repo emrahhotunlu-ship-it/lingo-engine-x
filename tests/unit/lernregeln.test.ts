@@ -3,7 +3,7 @@ import { plannedCardSec } from '../../src/domain/srs/cost';
 import { againPos, PASSED_AGAIN_GAP, pickMode } from '../../src/domain/srs/flip';
 import { readFsrs, reviewFsrs } from '../../src/domain/srs/scheduler';
 import { NOTE_WEIGHT, noteWeight } from '../../src/domain/srs/weight';
-import { LEECH_AT, LEECH_MAX, capLeeches } from '../../src/domain/srs/queue';
+import { LEECH_MAX, capLeeches } from '../../src/domain/srs/queue';
 import type { TrainCard } from '../../src/domain/srs/types';
 import { CATCHUP_AT, catchUpOn } from '../../src/domain/unit/backlog';
 import { THEME_CAP_FROM, themeFirst } from '../../src/domain/unit/block1';
@@ -105,10 +105,13 @@ describe('billigere Wartung und Plan-Kosten', () => {
 });
 
 describe('Dauerfehler, Wochenthema, Wiedervorlage', () => {
-  it('höchstens drei Dauerfehler-Karten je Runde, Reihenfolge der übrigen bleibt', () => {
-    const cards = Array.from({ length: 10 }, (_, i) => ({ key: `k${i}`, fsrs: { lapses: i % 2 === 0 ? LEECH_AT + 1 : 0 } }) as unknown as TrainCard);
-    const out = capLeeches(cards);
-    expect(out.filter((c) => c.fsrs.lapses >= LEECH_AT)).toHaveLength(LEECH_MAX);
+  it('höchstens drei hakende Karten (Werkstatt-Auslöser) je Runde, Reihenfolge der übrigen bleibt', () => {
+    // Fehler an zwei Lerntagen innerhalb von 14 Tagen = hakt (Wort-Lernen 2); viele alte Vergessen allein nicht mehr.
+    const t = (d: string) => Date.parse(`${d}T09:00:00+02:00`);
+    const hakt = [{ t: t('2026-10-19'), g: 1, x: 'cloze' }, { t: t('2026-10-20'), g: 1, x: 'cloze' }];
+    const cards = Array.from({ length: 10 }, (_, i) => ({ key: `k${i}`, fsrs: { lapses: i % 2 === 0 ? 1 : 9 }, doc: { state: 'review', intro: '2026-09-01', hist: i % 2 === 0 ? hakt : [] } }) as unknown as TrainCard);
+    const out = capLeeches(cards, '2026-10-21');
+    expect(out.filter((c) => c.fsrs.lapses === 1)).toHaveLength(LEECH_MAX);
     expect(out.map((c) => c.key)).toEqual(['k0', 'k1', 'k2', 'k3', 'k4', 'k5', 'k7', 'k9']);
   });
 

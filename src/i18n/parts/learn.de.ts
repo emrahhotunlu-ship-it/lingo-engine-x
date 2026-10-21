@@ -233,7 +233,7 @@ export const learnDe = {
   vcActions: 'Aktionen',
   vcPractice: 'Jetzt üben',
   vcKnown: 'Kenne ich schon',
-  vcKnownSaved: 'Gespeichert – das Wort kommt in 30 Tagen wieder.',
+  vcKnownSaved: 'Gespeichert – morgen fragt die App das Wort einmal frei ab. Sitzt es dann, gilt es als bekannt.',
   vcProbeTask: 'Kurze Probe: Wie heißt das englische Wort?',
   vcProbeWrong: 'Noch nicht – gesucht war „{word}“. Das Wort bleibt im Training.',
   vcHide: 'Ausblenden',

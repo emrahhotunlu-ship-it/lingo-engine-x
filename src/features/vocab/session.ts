@@ -46,6 +46,7 @@ import { nextT, recordAnswer, recordRoundEnd, saveCard, saveContrastMiss, saveKn
 import { flushOnHide } from '../progress/persist';
 import { contrastReady, noteConfusion, requestWordCtx } from './wordCtx';
 import { requestWordBank } from './sentenceBank';
+import { werkstattDue, werkstattRoom } from '../../domain/srs/werkstatt';
 
 // Eine Runde im Vokabeltrainer. Die Warteschlange wird synchron im Klick-Handler von „Starten"
 // gebaut – so kann derselbe Handler die Tastatur öffnen (iPhone). Die Karten sind für die Runde
@@ -104,6 +105,8 @@ type SessionState = {
   acts: ReadonlyMap<string, DueStep>;
   /** P52: „Welches Wort passt?“ (Kontrast) kam in dieser Runde schon (höchstens 1 je Runde). */
   contrasted: boolean;
+  /** Wort-Lernen 2, „Abend-Check“: nur freier Abruf (tippen ohne Anfangsbuchstaben), keine Werkstatt, keine Aktivierung. */
+  free: boolean;
 };
 
 const EXTRA_TARGET = 10;
@@ -149,6 +152,7 @@ export const useSession = create<SessionState>(() => ({
   catchUp: false,
   acts: new Map(),
   contrasted: false,
+  free: false,
 }));
 
 /** Heutige Einträge: Datenbank und noch nicht gespeicherter Puffer. */
@@ -178,7 +182,7 @@ function sceneLookup(lang: Lang): SceneLookup {
   };
 }
 
-type ExCtx = Pick<SessionState, 'cards' | 'pool' | 'lang' | 'day' | 'shown' | 'recentEx' | 'env' | 'mode' | 'dir' | 'controls' | 'ctlWeek' | 'ctlDay' | 'catchUp' | 'acts' | 'contrasted'>;
+type ExCtx = Pick<SessionState, 'cards' | 'pool' | 'lang' | 'day' | 'shown' | 'recentEx' | 'env' | 'mode' | 'dir' | 'controls' | 'ctlWeek' | 'ctlDay' | 'catchUp' | 'acts' | 'contrasted' | 'free'>;
 
 /** Modus je Karte nach anki-regeln §1 (`pickMode`, die Regel steht nur in domain/srs/flip.ts). */
 export function modeFor(s: ExCtx, card: TrainCard, item: QueueItem): PickedMode {
@@ -228,6 +232,13 @@ function exerciseFor(s: ExCtx, item: QueueItem): Exercise | null {
   }
   const hit = takePrebuilt(s, item);
   if (hit) return hit;
+  // „Abend-Check“: nur freier Abruf ohne Stütze (Wort: Lücke frei, sonst tippen; Wendung: ein Wort frei, Lücke, tippen).
+  if (s.free) {
+    const n = s.pool.length - 1;
+    const order: readonly ExerciseId[] = card.kind === 'chunk' ? ['cloze_part', 'cloze', 'type'] : ['cloze', 'type'];
+    const ex = order.find((x) => supports(card, x, s.lang, n, s.env));
+    if (ex) return build(s, card, ex);
+  }
   // N35 Hör-Modus: die Sprachausgabe spricht, getippt wird in die Lücke (sonst die Leiter).
   if (s.mode === 'listen') {
     const lx = listenExercise(card, s.lang, s.pool.length - 1, s.env);
@@ -353,7 +364,7 @@ export function allTrainCards(nowMs: number): TrainCard[] {
 function settle(s: SessionState, from: number): Partial<SessionState> {
   for (let pos = from; pos < s.queue.length; pos++) {
     const item = s.queue[pos] as QueueItem;
-    if (item.phase === 'intro') return { pos, exercise: null, step: s.step + 1 };
+    if (item.phase === 'intro' || item.phase === 'werkstatt') return { pos, exercise: null, step: s.step + 1 };
     const exercise = exerciseFor(s, item);
     if (exercise) return { pos, exercise, step: s.step + 1 };
   }
@@ -386,6 +397,8 @@ export type SessionOpts = {
   label?: string;
   /** Block 1 der Tageseinheit. */
   unit?: boolean;
+  /** Nur freier Abruf („Abend-Check“, Wort-Lernen 2): keine Werkstatt, keine Aktivierung, keine Stütze. */
+  free?: boolean;
 };
 
 /** Modus und Richtung ohne ausdrückliche Angabe: Stapel-Merker, sonst Standard (Einstellungen „Wortschatz“). */
@@ -414,6 +427,32 @@ function actPlanFor(i: { queue: readonly QueueItem[]; cards: ReadonlyMap<string,
     );
   };
   return planActivations({ queue: i.queue, cards: i.cards, pool: i.pool, day: i.day, overdue: overdueCount(i.pool, i.now), ai: i.env.ai, allow });
+}
+
+/**
+ * Wort-Werkstatt (`domain/srs/werkstatt.ts`): Fällige Karten, die haken (3 freie Fehlversuche oder Fehler an 2 Lerntagen in 14 Tagen) und nicht in der Ruhe
+ * nach der letzten Werkstatt stehen, bekommen statt der gewöhnlichen Wiederholung die Werkstatt – höchstens 2 je Lerntag, nur im Modus `auto`/`type`, nie im
+ * Aufholmodus und nur, wenn die Karte diese Runde getippt abgefragt würde. Festgelegt beim Rundenstart (nichts würfelt neu); die Karte bleibt EIN Eintrag der
+ * Runde (gleiches Zählen für die Pflicht). Ändert `queue` an Ort und Stelle.
+ */
+function markWerkstatt(i: { queue: QueueItem[]; cards: ReadonlyMap<string, TrainCard>; pool: readonly TrainCard[]; day: string; mode: RequestedMode; lang: Lang; catchUp: boolean; ctl: { week: number; day: number } }): void {
+  if ((i.mode !== 'auto' && i.mode !== 'type') || i.catchUp) return;
+  let room = werkstattRoom(
+    i.pool.map((c) => c.doc),
+    i.day,
+  );
+  const seen = new Set<string>();
+  for (let k = 0; k < i.queue.length && room > 0; k++) {
+    const q = i.queue[k] as QueueItem;
+    if (q.reason !== 'due' || q.phase !== 'quiz' || seen.has(q.key)) continue;
+    seen.add(q.key);
+    const card = i.cards.get(q.key);
+    if (!card || card.hidden || !werkstattDue(card.doc, i.day)) continue;
+    const picked = pickMode({ card, requested: i.mode, day: i.day, lang: i.lang, due: true, controlAllowed: controlAllowed({ week: i.ctl.week, day: i.ctl.day, session: 0 }), catchUp: false, key: card.key });
+    if (picked !== 'type') continue;
+    i.queue[k] = { ...q, phase: 'werkstatt' };
+    room--;
+  }
 }
 
 /** Runde bauen (synchron). Rückgabe: Art der ersten Übung (für den Fokus im selben Handler). */
@@ -466,7 +505,10 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
   const docs = pool.map((c) => c.doc);
   const ctl = mode === 'flip' ? controlCounts(docs, now) : { week: 0, day: 0 };
   const catchUp = mode === 'auto' && catchUpOn(overdueCount(pool, now));
-  const acts = actPlanFor({ queue, cards: byKey, pool, day, now, mode, env, lang, catchUp, ctl });
+  // Wort-Werkstatt (Wort-Lernen 2): fällige Karten, die haken, werden erst neu verankert – vor dem Fahrplan, damit sie keine Aktivierung bekommen.
+  const free = opts.free === true;
+  if (!free) markWerkstatt({ queue, cards: byKey, pool, day, mode, lang, catchUp, ctl });
+  const acts = free ? new Map<string, DueStep>() : actPlanFor({ queue, cards: byKey, pool, day, now, mode, env, lang, catchUp, ctl });
   const base: SessionState = {
     active: true,
     status: 'running',
@@ -501,6 +543,7 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
     catchUp,
     acts,
     contrasted: false,
+    free,
   };
   prebuilt = null;
   const next = { ...base, ...settle(base, 0) };
@@ -510,7 +553,7 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
   useSession.setState(next);
   const item = next.queue[next.pos];
   if (!item || next.status === 'summary') return null;
-  if (item.phase === 'intro') return 'intro';
+  if (item.phase === 'intro' || item.phase === 'werkstatt') return 'intro';
   return firstKindOf(next.exercise);
 }
 
@@ -613,6 +656,60 @@ export function startKnownProbe(): FirstKind {
   return firstKindOf(exercise);
 }
 
+/**
+ * Wort-Werkstatt gesehen („Jetzt abrufen“): Die Werkstatt-Karte wird durch einen gestützten Abruf im Ursprungssatz ersetzt (Wort: Lücke mit
+ * Anfangsbuchstaben, sonst tippen; Wendung: Lücke mit Anfangsbuchstaben, sonst Bausteine). Der Abruf benotet die Karte wie jede Wiederholung und legt
+ * danach 2–3 Lerntage Ruhe (`Exercise.wk` → `AnswerEvent.wk`, `applyReview.ts`).
+ */
+export function continueWerkstatt(): FirstKind {
+  touch();
+  commitHeld();
+  const s = useSession.getState();
+  const item = s.queue[s.pos];
+  const card = item ? s.cards.get(item.key) : null;
+  if (!item || !card || item.phase !== 'werkstatt') return null;
+  const queue = [...s.queue];
+  queue[s.pos] = { ...item, phase: 'quiz' };
+  const n = s.pool.length - 1;
+  const order: readonly ExerciseId[] = card.kind === 'chunk' ? ['cloze_hint', 'tiles', 'cloze_part'] : ['cloze_hint', 'type', 'cloze'];
+  const ex = order.find((x) => supports(card, x, s.lang, n, s.env)) ?? chooseExercise(card, s.lang, n, s.recentEx, s.env);
+  if (!ex) return advanceFrom({ ...s, queue });
+  const exercise: Exercise = { ...build({ ...s, queue } as ExCtx, card, ex, true), wk: true };
+  prebuilt = null;
+  useSession.setState({ queue, exercise, step: s.step + 1 });
+  return firstKindOf(exercise);
+}
+
+/** Nächste fällige Karte, die noch nicht in der Runde steht und heute nicht beantwortet wurde (Ersatz nach „pausieren“, der Nenner bleibt fest). */
+function replacementFor(s: SessionState, skip: string): QueueItem | null {
+  const inQueue = new Set(s.queue.map((q) => q.key));
+  const today = new Set(todayEntries(s.day).map(entryCardKey).filter((k): k is string => !!k));
+  const now = useClock.getState().now;
+  const next = s.pool
+    .filter((c) => c.key !== skip && !c.hidden && !c.isNew && c.fsrs.due <= now && !inQueue.has(c.key) && !today.has(c.key))
+    .sort((a, b) => a.fsrs.due - b.fsrs.due || a.key.localeCompare(b.key))[0];
+  return next ? { key: next.key, reason: 'due', phase: 'quiz' } : null;
+}
+
+/**
+ * „Pausieren“ in der Werkstatt (ab 6 Vergessen) bzw. „Nein, ausblenden“ auf die Frage „Brauchst du dieses Wort wirklich?“: Die Karte wird ausgeblendet
+ * (`hidden`, nichts gelöscht, in der Wortliste wieder einblendbar) und verlässt die Runde ohne Bewertung. Eine andere fällige Karte rückt nach, damit die
+ * Pflichtrunde nicht kürzer wird. `hide` schreibt über den einen Schreibweg der Wortliste (`list/actions.ts` → `writer.transform`).
+ */
+export function pauseWord(hide: (card: TrainCard) => Promise<boolean>): FirstKind {
+  commitHeld();
+  const s = useSession.getState();
+  const item = s.queue[s.pos];
+  const card = item ? s.cards.get(item.key) : null;
+  if (!s.active || s.status !== 'running' || !item || !card) return null;
+  void hide(card);
+  const queue = s.queue.filter((q, i) => i <= s.pos || q.key !== card.key);
+  const rep = s.round === 'pflicht' ? replacementFor(s, card.key) : null;
+  if (rep) queue.push(rep);
+  const pool = s.pool.filter((c) => c.key !== card.key);
+  return advanceFrom({ ...s, queue, pool });
+}
+
 /** Nächster Zustand ohne Seiteneffekte (Ende → `summary`). */
 function advanceState(s: SessionState): SessionState {
   const next = { ...s, ...settle(s, s.pos + 1) };
@@ -626,7 +723,7 @@ function applyAdvance(next: SessionState): FirstKind {
   useSession.setState(next);
   const item = next.queue[next.pos];
   if (!item || next.status === 'summary') return null;
-  return item.phase === 'intro' ? 'intro' : firstKindOf(next.exercise);
+  return item.phase === 'intro' || item.phase === 'werkstatt' ? 'intro' : firstKindOf(next.exercise);
 }
 
 function advanceFrom(s: SessionState): FirstKind {
@@ -742,7 +839,8 @@ export function commitAnswer(ans: Answer): FirstKind {
   if (e.brief) a.act = e.brief.code;
   // Wörter aktivieren, Stufe 2: Code der Vorgabe in den Verlauf und Schritt des Fahrplans (der Kartenzähler `na` steigt im selben Schreibschritt, Note ≥ 2).
   if (e.act) a.act = e.act.code;
-  const actStep: ActStep | null = card.kind !== 'vocab' || !isActivationEx(e.ex) ? null : (e.act?.step ?? (e.ex === 'produce' ? 1 : null));
+  // Wort-Lernen 2: Wendungen haben A1/A2 (`fahrplan.ts` → `chunkDueStep`).
+  const actStep: ActStep | null = !isActivationEx(e.ex) ? null : (e.act?.step ?? (e.ex === 'produce' ? 1 : null));
   if (actStep) a.actStep = actStep;
   // Nur eine von Claude geprüfte Leistung ohne Hilfe der Vorprüfung rückt den Fahrplan weiter (Lernwissenschaft H1): nicht abgeschrieben, nicht ungeprüft, nicht „falsch“.
   if (actStep && !(ans.rec && ans.rec.k === 1 && ans.rec.v !== 'w' && !ans.rec.hp)) a.actUnverified = true;
@@ -751,6 +849,9 @@ export function commitAnswer(ans: Answer): FirstKind {
   if (ans.hint) a.hint = ans.hint;
   if (ans.interrupted && ans.ok && !ans.override) a.interrupted = true;
   if (ans.unverified) a.unverified = true;
+  // Wort-Werkstatt: falsch Getipptes für die Diagnose (`hist[].v`, gekürzt) und der Abruf am Ende der Werkstatt (Ruhe danach, `wk`).
+  if (!ans.ok && e.input === 'typed' && ans.given.trim()) a.wrong = ans.given;
+  if (e.wk) a.wk = true;
   if (e.check === 'control' || e.check === 'probe') a.check = e.check;
   const knownPass = isKnownPass(e, ans);
   if (e.ex === 'flip' && flipCatchUp(s, card)) a.catchUp = true;
@@ -797,14 +898,15 @@ export function commitAnswer(ans: Answer): FirstKind {
   const queue = [...s.queue];
   // Fehler am Partnerwort ändert die Planung nicht (Lernwissenschaft H2): die Hauptkarte kommt in dieser Runde nicht wieder.
   const partnerOnly = card.kind === 'vocab' && isPartnerMiss(card.doc, a);
-  const again = !partnerOnly && isLearningState(updated.fsrs) && updated.fsrs.due - a.t <= AGAIN_WINDOW_MS && (shown[card.key] ?? 0) < MAX_SHOWN;
+  // Nach der Werkstatt ruht die Karte (kein „Nochmal“, kein Kontrast in derselben Runde).
+  const again = !partnerOnly && !e.wk && isLearningState(updated.fsrs) && updated.fsrs.due - a.t <= AGAIN_WINDOW_MS && (shown[card.key] ?? 0) < MAX_SHOWN;
   // anki-regeln §2: Aufdecken nach 5 anderen Karten (pos + 6), Tippen nach 3 (pos + 4).
   // Wort-Lernen 2: Nach gelungenem Abruf 1 am Tag 0 kommt Abruf 2 frühestens nach 8 weiteren Karten (`DAY0_SECOND_GAP`).
   const day0Passed = e.recall === 'day0a' && ans.grade >= 3;
   if (again) queue.splice(againPos(s.pos, queue.length, e.ex === 'flip', ans.grade >= 3, day0Passed ? DAY0_SECOND_GAP : 0), 0, { key: card.key, reason: 'again', phase: 'quiz' });
   // P52: Kontrast ZUSÄTZLICH direkt nach der regulären Abfrage (die reguläre Abfrage benotet die Karte wie immer), nur wenn sie richtig war,
   // höchstens 1 je Runde, nie bei neuen Karten, im Anki- oder Hör-Modus und nicht nach Kontrolle/Prüfabfrage; beide Karten mindestens Stufe 2.
-  const addContrast = ans.ok && !s.contrasted && e.ex !== 'flip' && !e.check && item.reason !== 'new' && s.mode !== 'listen' && contrastReady(updated, s.pool);
+  const addContrast = ans.ok && !e.wk && !s.contrasted && e.ex !== 'flip' && !e.check && item.reason !== 'new' && s.mode !== 'listen' && contrastReady(updated, s.pool);
   if (addContrast) queue.splice(s.pos + 1, 0, { key: card.key, reason: 'contrast', phase: 'quiz' });
   const control = e.check === 'control' ? 1 : 0;
   const answered = s.answered.includes(card.key) ? s.answered : [...s.answered, card.key];
@@ -834,7 +936,7 @@ export function commitAnswer(ans: Answer): FirstKind {
   recordAnswer(a, immediate);
   // Sammelakte der Aktivierungen: Satz, Urteil, Vorgabe. Eigener, idempotenter Schreibvorgang (`saveActEntry`); schlägt er fehl, ist nur dieser Eintrag verloren,
   // die Karte (Note, Zähler `na`) ist gespeichert und der Zähler aus `act/…` jederzeit neu berechenbar.
-  if (ans.rec && actStep && card.kind === 'vocab') {
+  if (ans.rec && actStep) {
     const r = ans.rec;
     const entry: ActEntry = {
       id: actId(a.t, card.key),
@@ -985,6 +1087,8 @@ export type TrainerSnapshot = {
   doneBefore: number;
   unit: boolean;
   controls: number;
+  /** „Abend-Check“ (nur freier Abruf). */
+  free?: boolean;
 };
 
 const RESULTS_MAX = 100;
@@ -1010,6 +1114,7 @@ export function trainerSnapshot(): TrainerSnapshot | null {
     doneBefore: s.doneBefore,
     unit: s.unit,
     controls: s.controls,
+    ...(s.free ? { free: true } : {}),
   };
 }
 
@@ -1072,8 +1177,9 @@ export function restoreTrainer(snap: TrainerSnapshot): boolean {
     unit: snap.unit === true,
     only: null,
     catchUp: false,
-    acts: actPlanFor({ queue: queue.slice(pos), cards: byKey, pool, day, now, mode: snap.mode, env: currentEnv(), lang: useSettings.getState().lang, catchUp: false, ctl }),
+    acts: snap.free ? new Map<string, DueStep>() : actPlanFor({ queue: queue.slice(pos), cards: byKey, pool, day, now, mode: snap.mode, env: currentEnv(), lang: useSettings.getState().lang, catchUp: false, ctl }),
     contrasted: queue.some((q) => q.reason === 'contrast'),
+    free: snap.free === true,
   };
   prebuilt = null;
   const next = { ...base, ...settle(base, pos) };
