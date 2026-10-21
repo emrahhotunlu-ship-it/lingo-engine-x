@@ -189,6 +189,11 @@ describe('Ähnliche Bedeutung am selben Einführungstag', () => {
     expect(similarMeaning(card('take over', 'übernehmen'), card('take part', 'teilnehmen'))).toBe(false);
     expect(similarMeaning(card('leverage', 'nutzen'), card('postpone', 'verschieben'))).toBe(false);
     expect(similarMeaning(card('leverage', 'nutzen'), card('leverage', 'nutzen'))).toBe(false);
+    // Ähnliche Form (Einzelwörter ab 5 Buchstaben, Tippabstand ≤ 2): Verwechslungsgefahr beim Einprägen.
+    expect(similarMeaning(card('affect', 'beeinflussen'), card('effect', 'Wirkung'))).toBe(true);
+    expect(similarMeaning(card('adapt', 'anpassen'), card('adopt', 'übernehmen'))).toBe(true);
+    expect(similarMeaning(card('cost', 'kosten'), card('cast', 'werfen'))).toBe(false);
+    expect(similarMeaning(card('take over', 'übernehmen'), card('take on', 'annehmen'))).toBe(false);
   });
   it('pickDissimilar: ähnliche Karten werden zurückgestellt, die Zahl neuer Karten sinkt nie (Untergrenze bleibt)', () => {
     const a = card('raise concerns', 'Bedenken äußern');

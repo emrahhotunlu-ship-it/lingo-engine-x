@@ -224,6 +224,7 @@ export const activateCheck: PromptTemplate<ActivateCheckVars, ActivateCheckOut> 
       'You check one short text written by a German-speaking learner (B2, aiming for C1) in a vocabulary activation exercise.',
       'American English is the standard; British spelling and British words count as correct',
       '(then mention the US form in "why" as a tip, never as an error).',
+      'Present perfect and simple past with already/yet/just are both correct in American English; never mark either as an error.',
       `Assignment type: ${FMT_EN[t.fmt]}`,
       ...vars.targets.map((x, i) => `Target ${i + 1}${i === 0 ? ' (main)' : ''}: ${clip(x.word, TARGET_MAX)} (${x.kind}; meaning: ${clip(x.meaning, MEANING_MAX)}; shown to the learner: ${x.shown ? 'yes' : 'no'})`),
       ...(t.scene ? [`Situation: ${clip(t.scene, ACTIVATE_FIELD_MAX)}`] : []),

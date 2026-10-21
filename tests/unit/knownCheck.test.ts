@@ -65,6 +65,15 @@ describe('knownOp: Stufe 3, 10 Tage, nichts Erfundenes', () => {
     // Am selben Tag zählt sie nicht.
     expect(cardPatch(after, { ...ev, t: NOW + 60_000, day: DAY, grade: 3 }).stage).toBeLessThan(3);
   });
+  it('Wortliste (`keepFar`): Karte ab Stufe 3 mit späterer Fälligkeit behält ihren Abstand, nur Verlaufseintrag', () => {
+    const far = { ...fresh(4), state: 'review', stage: 4, S: 20, due: NOW + 20 * DAY_MS, last: NOW - 5 * DAY_MS, hist: [{ t: NOW - 5 * DAY_MS, m: 'type', g: 3, x: 'cloze' }] };
+    const p = (knownOp(far, 'vocab/word4', null, NOW, DAY, { pending: true, keepFar: true }) as { update: Doc }).update;
+    expect(Object.keys(p)).toEqual(['hist']);
+    expect((p.hist as Doc[]).at(-1)).toMatchObject({ m: 'known', g: 3 });
+    // Stufe < 3 oder baldige Fälligkeit: wie bisher vorläufige Prüfung am nächsten Lerntag.
+    const low = (knownOp({ ...far, stage: 2 }, 'vocab/word4', null, NOW, DAY, { pending: true, keepFar: true }) as { update: Doc }).update;
+    expect(low.due).toBe(knownPendingDue(DAY));
+  });
   it('bestehende Einträge der alten Regel (m:type) bleiben unverändert stehen', () => {
     const old = { ...fresh(2), hist: [{ t: 1, m: 'type', g: 4 }] };
     const hist = (knownOp(old, 'vocab/word2', null, NOW, DAY) as { update: Doc }).update.hist as Array<{ m: string }>;

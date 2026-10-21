@@ -145,24 +145,28 @@ export function resetOp(cur: Readonly<Doc> | undefined, path: string, nowMs: num
  * - Nach bestandener Prüffrage in der Einführung (`pending`, Wort-Lernen 2, 21.10.2026): Die Prüffrage kam direkt nach dem Zeigen und prüft nur das
  *   Kurzzeitgedächtnis. Sie zählt deshalb erst am nächsten Lerntag: fällig um 04:00 Uhr des nächsten Lerntags, Stufe bleibt (mindestens 1). Gelingt dort
  *   der freie Abruf, steigt die Karte auf Stufe 3 (`applyReview.ts`, `knownConfirmed`); sonst lernt sie wie jede andere.
+ * - `keepFar` (Wortliste, Datenprüfer K5): Steht die Karte schon auf Stufe ≥ 3 und ist erst nach dem nächsten Lerntag fällig, wird der Abstand nicht
+ *   verkürzt – nur der Verlaufseintrag `m:'known'` kommt dazu.
  */
 export const KNOWN_DAYS = 10;
 export const KNOWN_STAGE = 3;
 /** Fälligkeit nach bestandener Prüffrage in der Einführung: Beginn des nächsten Lerntags (04:00 Uhr). */
 export const knownPendingDue = (day: string): number => dayStartOf(addDays(day, 1));
 
-export function knownOp(cur: Readonly<Doc> | undefined, path: string, seed: Readonly<Doc> | null, nowMs: number, day: string, opts: { pending?: boolean } = {}): CardOp {
+export function knownOp(cur: Readonly<Doc> | undefined, path: string, seed: Readonly<Doc> | null, nowMs: number, day: string, opts: { pending?: boolean; keepFar?: boolean } = {}): CardOp {
   const base = cur ?? seed;
   if (!base) return null;
   if (cur && (cur.hidden === true || !validateDoc(path, cur).ok)) return null;
   const prev = readFsrs(base, nowMs);
   const pending = opts.pending === true;
   const due = pending ? knownPendingDue(day) : nowMs + KNOWN_DAYS * DAY;
+  const hist0 = Array.isArray(base.hist) ? (base.hist as unknown[]) : [];
+  if (pending && opts.keepFar && cur && stageOf(cur) >= KNOWN_STAGE && prev.due > due) return { update: { hist: [...hist0, { t: nowMs, m: 'known', g: 3 }].slice(-12) } };
   const S = Math.max(num(base.S), KNOWN_DAYS);
   const D = Math.min(10, Math.max(1, num(base.D) || 5));
   const reps = Math.max(0, Math.round(num(base.reps))) + 1;
   const fsrs = { v: FSRS_VERSION, due, stability: S, difficulty: D, state: 2, reps: Math.max(prev.reps, 0) + 1, lapses: prev.lapses, last: nowMs, scheduledDays: pending ? 1 : KNOWN_DAYS, learningSteps: 0, src: 'lx' };
-  const hist = Array.isArray(base.hist) ? (base.hist as unknown[]) : [];
+  const hist = hist0;
   const patch: Doc = {
     S,
     D,

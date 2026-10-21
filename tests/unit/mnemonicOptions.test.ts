@@ -42,6 +42,31 @@ describe('mnemonic-options@1', () => {
     expect(s.safeParse({ items: [{ id: 'v_leverage', options: ['Denk an leverage als Hebel.', 'Denk an leverage als Hebel.'] }] }).success).toBe(false);
   });
 
+  it('Lehrer-Prüfung 21.10.2026: keine erfundenen Gleichklänge, echte Wortteile, Partnerwort mitgegeben', () => {
+    const p = mnemonicOptions.build(vars());
+    expect(MNEMONIC_OPTIONS_EXAMPLE).not.toContain('Hebel-Ritsch');
+    expect(MNEMONIC_OPTIONS_EXAMPLE).toContain('In leverage steckt lever');
+    expect(p).toContain('- Option 1 (hook): use a REAL sound or spelling link only if the English word truly sounds or looks like the German word you name');
+    expect(p).toContain('Never invent a sound-alike.');
+    expect(p).toContain('Never invent etymology. Only state a word origin if it is true.');
+    expect(p).toContain('(e.g. not "nutzen = leverage")');
+    expect(p).toContain('say in which situation each one is used');
+    expect(p).toContain('the hook must target the tricky letters');
+    expect(p).toContain('British forms are not errors');
+    const partner = mnemonicOptions.build({ ...vars(), words: [{ ...vars().words[0]!, issue: 'partner', other: 'leverage our network' }] });
+    expect(partner).toContain('missed partner phrase=leverage our network');
+    expect(partner).not.toContain('typed or confused with=');
+  });
+
+  it('eine deutsche Merkhilfe mit kurzer englischer Wendung besteht die Sprachprüfung', () => {
+    const s = mnemonicOptions.schema(vars());
+    const options = [
+      'In leverage steckt lever – der Hebel. Du setzt etwas, das du schon hast, als Hebel ein.',
+      'Im Kundengespräch sagst du: „We can leverage our data to win the deal.“ Du setzt eure Daten als Hebel ein.',
+    ];
+    expect(s.safeParse({ items: [{ id: 'v_leverage', options }] }).success).toBe(true);
+  });
+
   it('liest tolerant: nacktes Array, höchstens zwei Einträge', () => {
     const s = mnemonicOptions.schema(vars());
     const item = { id: 'v_postpone', options: ['Bei postpone denkst du an die Post, die später kommt.', 'Im Meeting sagst du: Wir müssen den Termin postponen, nicht absagen.'] };

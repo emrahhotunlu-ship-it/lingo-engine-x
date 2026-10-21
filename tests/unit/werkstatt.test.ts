@@ -141,11 +141,32 @@ describe('Diagnose', () => {
     const d = diagnose(c, pool);
     expect(d.kind).toBe('confusion');
     expect(d.other?.word).toBe('exploit');
+    // Lehrer-Prüfung 21.10.2026: nie ein einzelnes deutsches Grundwort („nutzen → leverage“), stattdessen die Definition.
     const lines = contrastLines(d, c, 'de');
     expect(lines).toEqual([
-      { think: 'nutzen', say: 'leverage', mine: true },
-      { think: 'ausnutzen', say: 'exploit', mine: false },
+      { think: 'to use something to get an advantage', say: 'leverage', mine: true, en: true },
+      { think: 'to use unfairly', say: 'exploit', mine: false, en: true },
     ]);
+  });
+  it('Anker-Zeile: geprüfte Wortpartner-Verbindung der Karte zuerst, sonst eine deutsche Wendung, nie ein einzelnes Grundwort', () => {
+    const col = [{ index: 0, p: 'leverage our network', de: 'unser Netzwerk gezielt einsetzen', gap: 'network', opts: ['network', 'idea', 'time'], ctx: null, ai: true }];
+    const c = { ...card('lev'), col };
+    expect(contrastLines({ kind: 'meaning' }, c, 'de')).toEqual([{ think: 'unser Netzwerk gezielt einsetzen', say: 'leverage our network', mine: true }]);
+    expect(contrastLines({ kind: 'meaning' }, c, 'en')).toEqual([{ think: 'to use something to get an advantage', say: 'leverage our network', mine: true, en: true }]);
+    expect(contrastLines({ kind: 'meaning' }, { word: 'leverage', de: 'gezielt einsetzen', def: null }, 'de')).toEqual([{ think: 'gezielt einsetzen', say: 'leverage', mine: true }]);
+    expect(contrastLines({ kind: 'meaning' }, { word: 'leverage', de: 'nutzen', def: null }, 'de')).toEqual([]);
+    for (const lang of ['de', 'en'] as const) for (const l of contrastLines({ kind: 'meaning' }, card('lev'), lang)) expect(l.think).not.toBe('nutzen');
+  });
+  it('Partnerwort-Diagnose nennt die verfehlte Verbindung (`col[ci]`)', () => {
+    const col = [
+      { index: 0, p: 'leverage our network', de: 'unser Netzwerk gezielt einsetzen', gap: 'network', opts: ['network', 'idea', 'time'], ctx: null, ai: true },
+      { index: 1, p: 'leverage data', de: 'Daten gezielt einsetzen', gap: 'data', opts: ['data', 'idea', 'time'], ctx: null, ai: true },
+    ];
+    const c = { ...card('lev', { hist: [fail('2026-10-19', 'colloc', { ci: 0 }), fail('2026-10-20', 'colloc', { ci: 1 })] }), col };
+    const d = diagnose(c, pool);
+    expect(d.kind).toBe('partner');
+    expect(d.partner).toEqual({ p: 'leverage data', de: 'Daten gezielt einsetzen' });
+    expect(contrastLines(d, c, 'de')[0]).toEqual({ think: 'Daten gezielt einsetzen', say: 'leverage data', mine: true });
   });
   it('Verwechslung aus der Runde (confusedKey) gewinnt', () => {
     expect(diagnose(card('lev'), pool, { confusedKey: pool[1]!.key }).kind).toBe('confusion');

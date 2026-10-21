@@ -1,5 +1,6 @@
 import { packExtraOf } from '../c1pack/packFields';
 import type { TrainCard } from './types';
+import { editDistance } from './werkstatt';
 
 // Wort-Lernen 2, Paket „Kern“ (docs/umbau/wort-fest-plan.md, „Menge“): keine zwei Wörter mit ähnlicher Bedeutung am selben Einführungstag –
 // ähnliche neue Wörter stören sich gegenseitig beim Einprägen (Interferenz). Rein und deterministisch.
@@ -8,7 +9,9 @@ import type { TrainCard } from './types';
 //  1. die gleichwertigen Varianten aus dem C1-Paket (`alt`, auch an der Karte) das andere Wort enthalten oder sich überschneiden
 //     („address concerns“ ↔ „tackle concerns“), oder
 //  2. sie ein englisches Inhaltswort teilen (ab 4 Buchstaben, ohne leichte Verben und Füllwörter: „raise concerns“ ↔ „address concerns“), oder
-//  3. ihre deutschen Bedeutungen ein Inhaltswort teilen (ab 5 Buchstaben, ohne „etwas“, „jemanden“ …: „angehen“ in „tackle“ und „address“).
+//  3. ihre deutschen Bedeutungen ein Inhaltswort teilen (ab 5 Buchstaben, ohne „etwas“, „jemanden“ …: „angehen“ in „tackle“ und „address“), oder
+//  4. beide Einzelwörter ab 5 Buchstaben sind und sich in höchstens 2 Buchstaben unterscheiden (Verwechslungsgefahr der Form: „affect“ ↔ „effect“,
+//     „adapt“ ↔ „adopt“; Lernwissenschaft K, 21.10.2026).
 // Grenzen: Synonyme ohne gemeinsames Wort in Bedeutung oder Varianten (z. B. „huge“ ↔ „enormous“ mit „riesig“ ↔ „gewaltig“) erkennt die Regel nicht;
 // umgekehrt sperrt ein gemeinsames Wort auch Paare, die nur ähnlich klingen. Gesperrt wird nie ganz: Reicht der Vorrat nicht, füllt die Runde mit den
 // zurückgestellten Karten auf (die Untergrenze neuer Wörter bleibt).
@@ -67,7 +70,17 @@ const overlaps = (a: ReadonlySet<string>, b: ReadonlySet<string>): boolean => [.
 export function similarKeys(a: SimilarKey, b: SimilarKey): boolean {
   if (!a.head || !b.head || a.head === b.head) return false;
   if (a.alts.has(b.head) || b.alts.has(a.head) || overlaps(a.alts, b.alts)) return true;
-  return overlaps(a.en, b.en) || overlaps(a.de, b.de);
+  if (overlaps(a.en, b.en) || overlaps(a.de, b.de)) return true;
+  return lookAlike(a.head, b.head);
+}
+
+/** Ähnliche Form: zwei Einzelwörter ab 5 Buchstaben mit Tippabstand ≤ 2. */
+export const LOOK_ALIKE_MIN = 5;
+export const LOOK_ALIKE_MAX_DIST = 2;
+function lookAlike(a: string, b: string): boolean {
+  if (/[\s]/.test(a) || /[\s]/.test(b) || a.length < LOOK_ALIKE_MIN || b.length < LOOK_ALIKE_MIN) return false;
+  if (Math.abs(a.length - b.length) > LOOK_ALIKE_MAX_DIST) return false;
+  return editDistance(a, b) <= LOOK_ALIKE_MAX_DIST;
 }
 
 export const similarMeaning = (a: Card, b: Card): boolean => similarKeys(similarKey(a), similarKey(b));

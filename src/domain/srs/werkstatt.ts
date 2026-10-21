@@ -53,7 +53,7 @@ export function readWk(doc: Doc): Wk | null {
   return { n, t, d, ...(o.p === 1 ? { p: 1 as const } : {}) };
 }
 
-type WRow = { t: number; day: string; g: number | null; x: string | null; ci: boolean; u: boolean; v: string | null };
+type WRow = { t: number; day: string; g: number | null; x: string | null; ci: boolean; cix: number; u: boolean; v: string | null };
 
 function wrows(doc: Doc): WRow[] {
   const raw = Array.isArray(doc.hist) ? (doc.hist as unknown[]) : [];
@@ -69,6 +69,7 @@ function wrows(doc: Doc): WRow[] {
       g: typeof o.g === 'number' && Number.isFinite(o.g) ? o.g : null,
       x: typeof o.x === 'string' ? o.x : null,
       ci: typeof o.ci === 'number' && o.ci >= 0,
+      cix: typeof o.ci === 'number' && Number.isInteger(o.ci) && o.ci >= 0 ? o.ci : -1,
       u: o.u === 1,
       v: typeof o.v === 'string' && o.v.trim() ? o.v.trim().slice(0, WRONG_MAX) : null,
     });
@@ -151,9 +152,11 @@ export type Diagnosis = {
   /** Zuletzt falsch Getipptes (nur Anzeige). */
   wrong?: string;
   trap?: Trap;
+  /** Partnerwort-Diagnose: die zuletzt verfehlte Wortpartner-Verbindung der Karte (`col[ci]`), für Merkhilfe und Anzeige. */
+  partner?: { p: string; de: string };
 };
 
-type DiagCard = Pick<TrainCard, 'key' | 'kind' | 'word' | 'lemma' | 'de' | 'def' | 'doc'>;
+type DiagCard = Pick<TrainCard, 'key' | 'kind' | 'word' | 'lemma' | 'de' | 'def' | 'doc'> & { col?: TrainCard['col'] };
 
 const same = (a: string, b: string): boolean => {
   const x = withoutTo(normalize(a));
@@ -195,7 +198,11 @@ export function diagnose(card: DiagCard, pool: readonly DiagCard[], opts: { conf
   }
   const recent = all.slice(-4);
   const partner = wrows(card.doc).filter((r) => r.g === 1 && r.ci).length;
-  if (partner >= 2 && partner >= recent.length / 2) return { kind: 'partner', ...base };
+  if (partner >= 2 && partner >= recent.length / 2) {
+    const ix = wrows(card.doc).filter((r) => r.g === 1 && r.cix >= 0).at(-1)?.cix ?? -1;
+    const col = card.col?.find((c) => c.index === ix) ?? card.col?.[ix];
+    return { kind: 'partner', ...base, ...(col?.p ? { partner: { p: col.p, de: col.de } } : {}) };
+  }
   const target = withoutTo(normalize(card.word));
   if (target.length >= 3 && wrongs.some((v) => { const d = editDistance(withoutTo(normalize(v)), target); return d > 0 && d <= 2; })) return { kind: 'form', ...base };
   if (recent.length && recent.filter((r) => r.x !== null && SOUND_EX.has(r.x)).length * 2 > recent.length) return { kind: 'sound', ...base };
@@ -204,21 +211,42 @@ export function diagnose(card: DiagCard, pool: readonly DiagCard[], opts: { conf
   return { kind: 'meaning', ...base };
 }
 
-/** Eine Zeile „Deutsch denkt … → Englisch sagt …“. `mine` = die Zeile des Werkstatt-Worts. */
-export type ContrastLine = { think: string; say: string; mine: boolean };
+/** Eine Zeile „Deutsch denkt … → Englisch sagt …“. `mine` = die Zeile des Werkstatt-Worts; `en` = die linke Seite ist englisch (Definition). */
+export type ContrastLine = { think: string; say: string; mine: boolean; en?: true };
 
-const meaningIn = (c: { de: string | null; def: string | null }, lang: Lang): string | null => (lang === 'de' ? (c.de ?? c.def) : (c.def ?? c.de));
+const oneWord = (s: string): boolean => !/\s/.test(s.trim());
 
 /**
- * Gegenüberstellung zur Diagnose. Verwechslung: beide Wörter mit ihrer Bedeutung; Deutsch-Falle: falscher und richtiger Satz;
- * Schreibung: Getipptes gegen das Wort. Sonst nur die eigene Zeile (Bedeutung → Wort). Leer, wenn nichts Belastbares da ist.
+ * Bedeutung für die linke Seite. Lehrer-Prüfung 21.10.2026: nie ein einzelnes deutsches Grundwort („nutzen → leverage“ setzt ein weiteres deutsches
+ * Wort mit dem englischen gleich). Deutsch nur als Wendung aus mehreren Wörtern, sonst die englische Definition der Karte; Englisch: die Definition.
  */
-export function contrastLines(diag: Diagnosis, card: Pick<TrainCard, 'word' | 'de' | 'def'>, lang: Lang): ContrastLine[] {
-  const mine = meaningIn(card, lang);
-  const own: ContrastLine[] = mine ? [{ think: mine, say: card.word, mine: true }] : [];
+function meaningSide(c: { de: string | null; def: string | null }, lang: Lang): { think: string; en?: true } | null {
+  const de = c.de?.trim() ?? '';
+  const def = c.def?.trim() ?? '';
+  if (lang === 'de' && de && !oneWord(de)) return { think: de };
+  if (def) return { think: def, en: true };
+  return lang === 'en' && de && !oneWord(de) ? { think: de } : null;
+}
+
+/**
+ * Gegenüberstellung zur Diagnose. Eigene Zeile: eine geprüfte Wortpartner-Verbindung der Karte (`col[].p` aus card-examples, bei der Partnerwort-
+ * Diagnose die verfehlte), sonst die Bedeutung (s. `meaningSide`). Verwechslung: dazu das andere Wort mit seiner Bedeutung; Deutsch-Falle: falscher
+ * und richtiger Satz. Leer, wenn nichts Belastbares da ist.
+ */
+export function contrastLines(diag: Diagnosis, card: Pick<TrainCard, 'word' | 'de' | 'def'> & { col?: TrainCard['col'] }, lang: Lang): ContrastLine[] {
+  const col = diag.partner ?? card.col?.find((c) => c.p.trim() && c.de.trim());
+  const side = meaningSide(card, lang);
+  const own: ContrastLine[] =
+    col && lang === 'de' && col.de.trim()
+      ? [{ think: col.de.trim(), say: col.p.trim(), mine: true }]
+      : col && side
+        ? [{ think: side.think, say: col.p.trim(), mine: true, ...(side.en ? { en: true as const } : {}) }]
+        : side
+          ? [{ think: side.think, say: card.word, mine: true, ...(side.en ? { en: true as const } : {}) }]
+          : [];
   if (diag.kind === 'confusion' && diag.other) {
-    const o = meaningIn(diag.other, lang);
-    return o ? [...own, { think: o, say: diag.other.word, mine: false }] : own;
+    const o = meaningSide(diag.other, lang);
+    return o ? [...own, { think: o.think, say: diag.other.word, mine: false, ...(o.en ? { en: true as const } : {}) }] : own;
   }
   if (diag.kind === 'false_friend' && diag.trap) return [{ think: diag.trap.wrong, say: diag.trap.right, mine: true }];
   return own;

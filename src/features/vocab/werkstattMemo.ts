@@ -37,7 +37,8 @@ export function abortWkMemos(): void {
 export type MemoCard = { card: TrainCard; diag: Diagnosis };
 
 function wordOf(x: MemoCard, lang: Lang): MnemonicOptionsWord {
-  const other = x.diag.other?.word ?? x.diag.wrong ?? '';
+  // Partnerwort-Diagnose: die verfehlte Verbindung mitgeben (Lehrer-Prüfung 21.10.2026), sonst das verwechselte bzw. falsch getippte Wort.
+  const other = x.diag.partner?.p ?? x.diag.other?.word ?? x.diag.wrong ?? '';
   return { id: x.card.key, en: x.card.word, meaning: meaningOf(x.card, lang) ?? '', sentence: x.card.context?.sentence ?? '', issue: x.diag.kind, other };
 }
 
@@ -111,6 +112,11 @@ export function requestWkMemos(list: readonly MemoCard[], lang: Lang, how: 'auto
 export async function saveOwnMemo(card: TrainCard, text: string, lang: Lang): Promise<boolean> {
   const writer = getWriter();
   if (!writer) return false;
+  // Datenprüfer K2: Nur in ein vorhandenes Dokument schreiben (eine Merkhilfe legt nie ein neues an; sonst Fehler `missing`).
+  if (!card.inDb) {
+    logWarn('vocab:wk-memo-save', { reason: 'not_in_db' }, card.path);
+    return false;
+  }
   try {
     await writer.transform(card.path, (cur) => ownMnemoPatch(cur, card.path, { text, lang, t: Date.now() }));
     return true;

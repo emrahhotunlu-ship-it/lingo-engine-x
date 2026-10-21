@@ -75,7 +75,7 @@ export const cardExamples: PromptTemplate<CardExamplesVars, CardExamplesOut> = {
       'Rules:',
       '- examples: exactly 3 new, natural sentences, each 8–18 words, each containing the word (inflected forms are fine).',
       '- Use the word with the same meaning as on the card. Set the sentences in business life (meetings, e-mails, contracts, clients, projects), never in everyday small talk.',
-      ...(ctx ? ['- When it fits the meaning naturally, set at least two sentences in the learner work context above (role, industry, situations). Never bend the meaning of the word to fit it.'] : []),
+      ...(ctx ? ["- Set up to two sentences in the learner work context above, but only where the word naturally occurs there; otherwise use general business life. Never change the meaning or the part of speech to fit the context, and never invent facts about the learner's company."] : []),
       '- Do not repeat the card sentence. No brackets, no quotes, no translations in the examples.',
       '- collocations: 0 to 2 typical collocations of the word (verb + noun, adjective + noun, noun + preposition, adverb + adjective) that German speakers often get wrong. Only give one if you are sure it is natural American English; otherwise use an empty list.',
       '  - p: the collocation in base form, 2 to 5 words, containing the word. de: its German meaning in 2 to 6 words.',

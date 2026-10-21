@@ -162,7 +162,9 @@ describe('Vorlage card-examples@4', () => {
     expect(template.build(vars)).not.toContain('Learner work context');
     const p = template.build({ ...vars, ctx: 'Sales manager in logistics. typical situations: client call; budget review' });
     expect(p).toContain('Learner work context: Sales manager in logistics.');
-    expect(p).toContain('Never bend the meaning');
+    expect(p).toContain('Set up to two sentences in the learner work context above, but only where the word naturally occurs there');
+    expect(p).toContain("never invent facts about the learner's company");
+    expect(p).not.toContain('at least two');
   });
   it('der Prompt nennt die Regeln für Wortpartner', () => {
     const p = template.build(vars);

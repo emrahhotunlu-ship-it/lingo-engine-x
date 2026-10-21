@@ -129,7 +129,7 @@ export function WerkstattCard({ card, onDone }: { card: TrainCard; onDone: (kind
                     {lines.map((l, i) => (
                       <li key={i} className={`flex flex-wrap items-baseline gap-x-2 ${l.mine ? 'text-fg' : 'text-muted'}`} data-mine={l.mine ? '1' : '0'}>
                         <span className="sr-only">{t('pxWwThink')}:</span>
-                        <span lang={diag.kind === 'false_friend' ? 'en' : lang}>{l.think}</span>
+                        <span lang={diag.kind === 'false_friend' || l.en ? 'en' : lang}>{l.think}</span>
                         <span aria-hidden="true" className="text-subtle">
                           →
                         </span>
