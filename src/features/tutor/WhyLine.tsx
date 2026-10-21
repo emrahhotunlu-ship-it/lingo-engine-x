@@ -1,6 +1,7 @@
 import type { GrammarTask } from '../../domain/learn/types';
 import { whyOf, type WhyFact } from '../../domain/tutor/policy';
 import { useT } from '../../i18n';
+import { Icon } from '../../ui/Icon';
 import { computeLearnerNow, learnerNow } from './learnerLive';
 import { taskMarkKey, useTutorSession } from './sessionStore';
 import { whyText } from './whyText';
@@ -9,15 +10,24 @@ import { whyText } from './whyText';
 // gerechnet, nie vor dem Zeichnen. Hat die Runde die Aufgabe nach drei Fehlern gegen etwas Bekanntes getauscht (Rang 2), steht der Grund
 // sichtbar als Statuszeile darüber („Kurz etwas Bekanntes, dann weiter.“) – dann nicht noch einmal im ⓘ.
 
-/** Statuszeile über der Aufgabe, nur nach dem Tausch (Rang 2). */
-export function WinLine({ task }: { task: GrammarTask }) {
+/**
+ * Statuszeile über der Aufgabe, nur nach dem Tausch (Rang 2). Die Zeile hat IMMER ihren Platz (eine Zeile, auch leer), damit die Aufgabe beim
+ * Tausch nicht um ~34 px nach unten springt (Rückmeldung Emrah 21.10.2026). `on` = Tutor in dieser Phase aktiv (nicht Vortest/Test/Wiederholung).
+ * Am Laptop steht sie bündig über der Karte, mit Zeichen davor, damit klar ist, dass sie zur Aufgabe darunter gehört.
+ */
+export function WinLine({ task, on = true }: { task: GrammarTask; on?: boolean }) {
   const { t } = useT();
   const mark = useTutorSession((x) => x.marks[taskMarkKey(task)] ?? null);
-  if (mark !== 'known') return null;
+  const show = on && mark === 'known';
   return (
-    <p className="m-0 px-1.25 text-sm text-muted" role="status" data-testid="tutor-win">
-      {t('ttWin')}
-    </p>
+    <div className="flex h-5 items-center px-1.25" data-testid="tutor-win-slot" data-on={show ? '1' : '0'} role="status">
+      {show && (
+        <p className="m-0 flex items-center gap-1.5 truncate text-sm text-muted" data-testid="tutor-win">
+          <Icon name="arrowDown" size={14} aria-hidden="true" className="flex-none text-accent-text" />
+          <span className="truncate">{t('ttWin')}</span>
+        </p>
+      )}
+    </div>
   );
 }
 
