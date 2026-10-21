@@ -47,7 +47,7 @@ const toks = (s: string): string[] => s.split(/\s+/).filter(Boolean);
 /** Übungen mit einer Lücke auf dem Kartenwort in einem Satz. */
 const GAP_EX: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['cloze', 'cloze_part', 'cloze_hint', 'wordfam', 'dictation', 'tiles', 'speed', 'match']);
 /** Übungen, in denen die Bedeutung die Frage ist und die Antwort das Wort/die Wendung: der Hinweis darf es nicht enthalten. */
-const WORD_ANSWER: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['cloze', 'cloze_part', 'cloze_hint', 'wordfam', 'tiles', 'match', 'mc_de', 'type', 'speed']);
+const WORD_ANSWER: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['cloze', 'cloze_part', 'cloze_hint', 'wordfam', 'tiles', 'match', 'mc_de', 'type', 'speed', 'say_it']);
 const MEANING_OPTIONS: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['mc_en', 'ctx_mc', 'listen_mc']);
 const WORD_OPTIONS: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['mc_de', 'match', 'colloc_gap', 'colloc', 'contrast']);
 
@@ -149,7 +149,8 @@ export function checkExercise(e: Exercise, card: TrainCard, lang: Lang): Violati
   const typed = e.input === 'typed' || e.input === 'tiles' || e.input === 'choice';
   if (typed && e.ex !== 'complete' && e.ex !== 'produce' && e.ex !== 'situation' && !sol.trim()) add('R2', 'keine Lösung');
   if (WORD_ANSWER.has(e.ex) && core.length) {
-    const hay = [e.meaning ?? '', cue?.text ?? ''].join(' | ');
+    // „Sag es“: auch die deutsche Absicht darf das gesuchte Wort nicht enthalten (Lehnwörter wie „Meeting“).
+    const hay = [e.meaning ?? '', cue?.text ?? '', e.sayIt?.de ?? ''].join(' | ');
     const hit = core.length === 1 ? core[0]!.length >= 4 && toks(hay).some((w) => formsOf(core[0]!.toLowerCase()).includes(bare(w))) : core.join('').length >= 4 && locate(hay, core.join(' ')) !== null;
     if (hit) add('R4', 'Hinweis enthält das gesuchte Wort selbst');
   }

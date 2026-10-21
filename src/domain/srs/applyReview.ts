@@ -11,8 +11,9 @@ import { stageOf, nextStage } from './ladder';
 import { freeCorrectDays, freeDaysNeeded } from './variety';
 import { exerciseDef } from './modes';
 import { readFsrs, reviewFsrs, isFutureFsrs } from './scheduler';
-import { capDaysOf, capDue, day0Grade, evidenceDays, freshFreeGood, holdOnDay0, introDayOf, knownConfirmed, longGapProven, type FreshAnswer } from './spacing';
+import { capDaysOf, capDue, dayStartOf, day0Grade, evidenceDays, freshFreeGood, holdOnDay0, introDayOf, knownConfirmed, longGapProven, type FreshAnswer } from './spacing';
 import { noteWeight } from './weight';
+import { nextWk, restDay, WRONG_MAX } from './werkstatt';
 import type { AnswerEvent, ExerciseId, LegacyMode } from './types';
 
 // Schreiben je bewerteter Antwort (Daten-Entwurf §1.3/1.4): rein, ohne Seiteneffekte.
@@ -33,6 +34,8 @@ const chargeCollocSchema = z
   .object({ p: z.string().min(3).max(40), de: z.string().min(2).max(80), gap: z.string().min(2).max(20), opts: z.array(z.string().min(2).max(20)).min(2).max(3), ex: z.string().min(15).max(170) })
   .strict();
 const chargeColSchema = z.array(chargeCollocSchema).min(1).max(COL_MAX);
+/** Wort-Werkstatt (`werkstatt.ts`): Runden, Zeitpunkt, Lerntag. `p` (pausiert) schreibt nur „pausieren“, nie eine Antwort. */
+const wkSchema = z.object({ n: z.number().int().min(1).max(99), t: z.number().int().positive(), d: z.string().regex(/^\d{4}-\d{2}-\d{2}$/) }).strict();
 
 /** Streng, nur für die geschriebenen Felder (Daten-Entwurf §1.5). Die Lese-Schemas bleiben locker. */
 export const cardPatchSchema = z
@@ -57,6 +60,7 @@ export const cardPatchSchema = z
     // Wörter aktivieren, Stufe 2: geschaffte Aktivierungen (Fahrplan A1–A5). NICHT `ac`: das ist die Fähigkeit „Anwenden“ (0–1, alte App).
     na: z.number().int().min(0).max(99).optional(),
     col: chargeColSchema.optional(),
+    wk: wkSchema.optional(),
     fsrs: fsrsSchema.extend({ v: z.literal(1), src: z.literal('lx'), last: z.number().int() }),
   })
   .strict()
@@ -81,6 +85,9 @@ export const chunkPatchSchema = z
     hist: z.array(z.looseObject({ t: z.number(), g: z.number().optional() })).max(HIST_MAX),
     intro: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
     ff: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    // Wort-Lernen 2: Aktivierung A1/A2 auch für Wendungen.
+    na: z.number().int().min(0).max(99).optional(),
+    wk: wkSchema.optional(),
     fsrs: fsrsSchema.extend({ v: z.literal(1), src: z.literal('lx'), last: z.number().int() }),
   })
   .strict()
@@ -178,6 +185,22 @@ function capPatch(cur: Doc, patch: Doc, a: AnswerEvent): void {
 }
 
 /**
+ * Wort-Werkstatt (`werkstatt.ts`): Nach dem Abruf am Ende der Werkstatt ruht die Karte 2–3 Lerntage (die FSRS-Fälligkeit gilt, wenn sie dazwischen liegt).
+ * Stabilität und Schwierigkeit bleiben, wie FSRS sie rechnet; `wk` zählt die Runde.
+ */
+function wkPatch(cur: Doc, patch: Doc, a: AnswerEvent): void {
+  if (!a.wk) return;
+  const f = patch.fsrs as FsrsStored;
+  const day = restDay(dayKey(f.due), a.day);
+  const due = dayStartOf(day);
+  if (due !== f.due) {
+    patch.fsrs = { ...f, due, scheduledDays: Math.max(1, Math.round((due - a.t) / 86_400_000)) };
+    patch.due = due;
+  }
+  patch.wk = nextWk(cur, a.t, a.day);
+}
+
+/**
  * Neue Stufe: Aufdecken (`flip`) nach der Stufenregel aus anki-regeln.md §3 (höchstens bis 2, je
  * Antwort höchstens eine Stufe, nie unter 1), sonst die Leiter (`nextStage`).
  */
@@ -225,7 +248,8 @@ const answeredOn = (cur: Doc, day: string): boolean => typeof cur.last === 'numb
  */
 /** Verlaufseintrag; `s` = Schlüssel des gezeigten Satzes (V1, nur wenn die Abfrage einen Satz hatte), `a` = Code der Vorgabe eines eigenen Satzes, `u` = ungeprüfte Aktivierung, `ci` = Index des Partnerworts (Treffer am Partnerwort ist kein freier Beleg für das Hauptwort). */
 function histEntry(a: AnswerEvent, mode: LegacyMode): Record<string, unknown> {
-  return { t: a.t, m: mode, g: a.grade, x: a.ex, ...(a.sx ? { s: a.sx } : {}), ...(a.act ? { a: a.act } : {}), ...((a.actStep && a.actUnverified) || a.unverified ? { u: 1 } : {}), ...(a.colIndex !== undefined && a.colIndex >= 0 ? { ci: a.colIndex } : {}) };
+  const v = a.grade === 1 && a.wrong ? a.wrong.trim().slice(0, WRONG_MAX) : '';
+  return { t: a.t, m: mode, g: a.grade, x: a.ex, ...(a.sx ? { s: a.sx } : {}), ...(a.act ? { a: a.act } : {}), ...((a.actStep && a.actUnverified) || a.unverified ? { u: 1 } : {}), ...(a.colIndex !== undefined && a.colIndex >= 0 ? { ci: a.colIndex } : {}), ...(v ? { v } : {}) };
 }
 
 export function levelFor(ex: ExerciseId, stage: number): number {
@@ -327,6 +351,7 @@ export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
   // Nur ergänzen: ein vorhandenes Einführungsdatum der alten App bleibt stehen (Kap. 9, Regel 2).
   if (wasNew && (typeof cur.intro !== 'string' || !cur.intro)) patch.intro = a.day;
   capPatch(cur, patch, a);
+  wkPatch(cur, patch, a);
   festPatch(cur, patch, a.day);
   return patch;
 }
@@ -352,6 +377,7 @@ export function chunkPatch(cur: Doc, a: AnswerEvent): Doc {
     stage: stageAfter(cur, a),
     xs: { [a.ex]: { c: Math.round(num(prevXs.c)) + ok, w: Math.round(num(prevXs.w)) + (1 - ok) } },
     hist: [...hist, histEntry(a, def.mode)].slice(-HIST_MAX),
+    ...(a.actStep && a.grade >= 2 && !a.actUnverified ? { na: Math.min(99, naOf(cur) + 1) } : {}),
   };
   const mode = chunkMode(a.ex);
   if (mode) {
@@ -361,6 +387,7 @@ export function chunkPatch(cur: Doc, a: AnswerEvent): Doc {
   }
   if (wasNew && (typeof cur.intro !== 'string' || !cur.intro)) patch.intro = a.day;
   capPatch(cur, patch, a);
+  wkPatch(cur, patch, a);
   festPatch(cur, patch, a.day);
   return patch;
 }

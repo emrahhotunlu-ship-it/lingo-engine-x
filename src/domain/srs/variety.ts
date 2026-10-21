@@ -35,6 +35,7 @@ const FAMILY: Readonly<Partial<Record<ExerciseId, string>>> = {
   speed: 'gap',
   colloc_gap: 'colloc',
   colloc: 'colloc',
+  say_it: 'say',
 };
 export const familyOf = (ex: string): string => FAMILY[ex as ExerciseId] ?? ex;
 
@@ -127,7 +128,7 @@ export function leastRecent<T>(items: readonly T[], keyOf: (x: T) => string, use
 
 /** Übungsarten, deren Antwort frei gebildet wird (ohne Auswahl und ohne Stütze). `cloze_hint` (Anfangsbuchstabe) und `tiles` (Bausteine) zählen nicht. */
 export const FREE_ANSWER: ReadonlySet<string> = new Set([
-  'cloze', 'cloze_part', 'type', 'situation', 'wordfam', 'dictation', 'colloc', 'complete', 'speed', 'produce', 'act_scene', 'act_rewrite', 'act_impulse', 'act_combo', 'act_mail',
+  'cloze', 'cloze_part', 'type', 'situation', 'wordfam', 'dictation', 'colloc', 'complete', 'speed', 'produce', 'say_it', 'act_scene', 'act_rewrite', 'act_impulse', 'act_combo', 'act_mail',
 ]);
 
 /** Kleinste Note, die als freier Beleg zählt: Gut. */

@@ -243,12 +243,18 @@ describe('Kartenzähler na: nie ac, im selben Schritt wie die Antwort', () => {
     // aus einem vorhandenen Zähler
     expect(cardPatch({ ...base, na: 2 }, ans({ t: NOW + 1 })).na).toBe(3);
   });
-  it('Note 1 und normale Antworten lassen na unberührt; Wendungen haben nie na', () => {
+  it('Note 1 und normale Antworten lassen na unberührt; Wendungen zählen na seit Wort-Lernen 2 (A1/A2)', () => {
     expect(cardPatch(base, ans({ grade: 1 })).na).toBeUndefined();
     expect(cardPatch(base, ans({ actStep: undefined, ex: 'cloze' })).na).toBeUndefined();
-    const chunk = reviewWrite('chunk/c1', { en: 'at the end of the day', state: 'review', S: 10, D: 5, due: NOW - 1000, last: NOW - 86_400_000, reps: 3, lapses: 0, stage: 4, xs: {}, hist: [], fsrs: undefined }, ans({ kind: 'chunk', id: 'c1' }), null);
-    if (chunk.kind === 'update') expect(chunk.patch.na).toBeUndefined();
-    expect(chunkPatchSchema.safeParse({ na: 1 }).success).toBe(false);
+    const chunkDoc = { en: 'at the end of the day', state: 'review', S: 10, D: 5, due: NOW - 1000, last: NOW - 86_400_000, reps: 3, lapses: 0, stage: 4, xs: {}, hist: [], fsrs: undefined };
+    const chunk = reviewWrite('chunk/c1', chunkDoc, ans({ kind: 'chunk', id: 'c1' }), null);
+    expect(chunk.kind === 'update' ? chunk.patch.na : null).toBe(1);
+    const plain = reviewWrite('chunk/c1', chunkDoc, ans({ kind: 'chunk', id: 'c1', actStep: undefined, ex: 'cloze' }), null);
+    if (plain.kind === 'update') expect(plain.patch.na).toBeUndefined();
+    if (chunk.kind === 'update') {
+      expect(chunkPatchSchema.safeParse(chunk.patch).success).toBe(true);
+      expect(chunkPatchSchema.safeParse({ ...chunk.patch, na: -1 }).success).toBe(false);
+    }
   });
   it('Kollision ausgeschlossen: ac und na sind getrennte Felder, beide im Karten-Schema, ac bleibt 0–1', () => {
     expect(cardPatchSchema.safeParse({ ac: 1.5 }).success).toBe(false);

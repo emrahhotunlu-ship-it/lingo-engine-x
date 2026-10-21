@@ -50,11 +50,11 @@ describe('Stufenregel: jede Stufe hat für jedes Profil mindestens zwei Arten (K
   }
 });
 
-describe('Eingabeprofil touch: nie Hören; der eigene Satz geht auch am Handy', () => {
-  it('listen_mc und dictation fehlen am Handy in jeder Stufe; produce nie ohne zwei Abruf-Tage', () => {
+describe('Eingabeprofil touch: Hören nur mit Sprachausgabe (Wort-Lernen 2); der eigene Satz geht auch am Handy', () => {
+  it('listen_mc und dictation fehlen am Handy ohne Sprachausgabe in jeder Stufe; produce nie ohne zwei Abruf-Tage', () => {
     for (const stage of [1, 2, 3, 4, 5] as Stage[]) {
       for (const c of [packCard('family-01', stage), packCard('colloc-01', stage), plain({}, stage)]) {
-        const got = availableExercises(c, 'de', 100, makeEnv(true, true, true));
+        const got = availableExercises(c, 'de', 100, makeEnv(false, true, true));
         for (const x of ['produce', 'listen_mc', 'dictation'] as ExerciseId[]) expect(got, `${c.word} ${stage}`).not.toContain(x); // produce: kein Verlauf, also noch nicht bereit
       }
     }
