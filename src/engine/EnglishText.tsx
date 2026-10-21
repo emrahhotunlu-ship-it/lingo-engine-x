@@ -1,12 +1,13 @@
 import { useMemo, useRef, type KeyboardEvent, type ReactNode } from 'react';
 import { tokenize } from '../domain/text/tokenize';
 import type { Token } from '../domain/text/types';
-import { openLookup, useLookup, type WordTapArea, type WordTapRequest } from './wordTap';
+import { dragEnd, dragOver, dragStart, inDrag, tapWord, useLookup, type WordTapArea, type WordTapRequest } from './wordTap';
 
 // Englischer Text mit antippbaren Wörtern (Kap. 6.11, Plan §5.6). Jedes Wort ist ein Knopf
 // `button.lx-word`; ein Tippen öffnet das Nachschlage-Fenster. `exclude` (die Lösung während
 // der Frage) und `slot` (die Lücke) sind nicht antippbar. Genau ein Wort je Text ist per Tab
-// erreichbar, ←/→ wandern weiter.
+// erreichbar, ←/→ wandern weiter. Mehrere Wörter (21.10.2026): Umschalt-Klick oder Ziehen mit der Maus markiert eine Wortgruppe,
+// am Handy „Mehrere Wörter markieren“ im Fenster und dann das letzte Wort (wordTap.ts).
 
 type Span = readonly [number, number];
 
@@ -36,6 +37,15 @@ const TAIL = /^[^\s\p{L}\p{N}]+/u;
 export function EnglishText({ text, area, source = null, title = null, exclude = null, highlight = null, slot = null, as = 'p', className, testId, onWord = null }: EnglishTextProps) {
   const tokens = useMemo(() => tokenize(text), [text]);
   const active = useLookup((s) => s.req);
+  const pick = useLookup((s) => s.pick);
+  const drag = useLookup((s) => s.drag);
+  // Nicht antippbare Stellen (Lücke, Lösung während der Frage): eine Wortgruppe reicht nie darüber.
+  const gaps = useMemo(() => {
+    const g: Array<readonly [number, number]> = [];
+    if (slot) g.push([slot.start, slot.end]);
+    if (exclude) g.push([exclude[0], exclude[1]]);
+    return g;
+  }, [slot, exclude]);
   const root = useRef<HTMLElement>(null);
   // Fokus VOR dem Antippen (pointerdown kommt vor dem Fokuswechsel auf den Knopf).
   const focusBefore = useRef<HTMLElement | null>(null);
@@ -64,8 +74,11 @@ export function EnglishText({ text, area, source = null, title = null, exclude =
       const start = from + t.start;
       const end = from + t.end;
       if (plain || t.kind !== 'word') return <span key={`${start}-${i}`}>{t.text}</span>;
-      const index = tokens.findIndex((x) => x.start === start && x.end === end);
-      const isActive = !!active && active.text === text && active.start === start;
+      const found = tokens.findIndex((x) => x.start === start && x.end === end);
+      const index = found < 0 ? 0 : found;
+      const reqOf = (anchor: HTMLElement, returnFocus: HTMLElement | null): WordTapRequest => ({ surface: t.text, text, start, end, tokens, index, gaps, area, source, title, anchor, returnFocus });
+      const isActive = (!!active && active.text === text && start >= active.start && end <= active.end) || inDrag(drag, text, index);
+      const isAnchor = !!pick && pick.text === text && pick.start === start;
       const tab = first ? 0 : -1;
       first = false;
       return (
@@ -76,18 +89,26 @@ export function EnglishText({ text, area, source = null, title = null, exclude =
           data-word={t.text}
           data-lookup={t.text.toLowerCase()}
           data-active={isActive || undefined}
+          data-anchor={isAnchor || undefined}
           tabIndex={tab}
-          onPointerDown={() => {
+          onPointerDown={(e) => {
             const a = document.activeElement;
             focusBefore.current = a instanceof HTMLElement && a !== document.body ? a : null;
+            if (e.pointerType === 'mouse' && e.button === 0 && !e.shiftKey && !onWord) dragStart(reqOf(e.currentTarget, null));
+          }}
+          onPointerEnter={(e) => {
+            if (e.pointerType === 'mouse' && (e.buttons & 1) === 1) dragOver(text, index);
+          }}
+          onPointerUp={(e) => {
+            if (e.pointerType === 'mouse' && !onWord) dragEnd(reqOf(e.currentTarget, null));
           }}
           onClick={(e) => {
             const before = focusBefore.current;
             focusBefore.current = null;
             const returnFocus = before && before !== e.currentTarget && !before.classList.contains('lx-word') ? before : null;
-            const req: WordTapRequest = { surface: t.text, text, start, end, tokens, index: index < 0 ? 0 : index, area, source, title, anchor: e.currentTarget, returnFocus };
+            const req = reqOf(e.currentTarget, returnFocus);
             if (onWord?.(req)) return;
-            openLookup(req);
+            tapWord(req, e.shiftKey);
           }}
         >
           {t.text}

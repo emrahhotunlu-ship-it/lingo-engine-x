@@ -13,7 +13,7 @@ import { posKey } from '../../domain/srs/explain';
 import { stageOf } from '../../domain/srs/ladder';
 import { bracketExample } from '../../domain/srs/newCard';
 import { normalizeWord } from '../../domain/text/tokenize';
-import { closeLookup, focusTargetOf, useLookup, type WordTapRequest } from '../../engine/wordTap';
+import { closeLookup, focusTargetOf, isPhrase, startPick, useLookup, wordCount, type WordTapRequest } from '../../engine/wordTap';
 import { useSettings } from '../../app/settings';
 import { useT, type MessageKey } from '../../i18n';
 import { inputProfile } from '../../platform/input';
@@ -25,11 +25,13 @@ import { DURATION, EASE_OUT } from '../../ui/motion';
 import { SheetGrip, useSheetDrag } from '../../ui/sheetDrag';
 import { ensureLookupLoaded, saveLookupCard, storeLookup, useLookupData } from './store';
 import { openCompanion } from '../companion/store';
+import { PhraseBody, PickBar } from './PhraseLookup';
 
 // Nachschlage-Fenster (Kap. 6.11, Plan §5.6): am Desktop verankert unter dem Wort, am Handy
 // als Blatt von unten. Bedeutung aus eigener Karte, Zwischenspeicher oder eingebautem
 // Wörterbuch; fehlt das Wort überall, fragt es Claude (Antippen ist die Handlung).
 // US-Lautschrift, Aussprache (en-US), „Als Karte speichern", „Claude fragen". Esc/außerhalb schließt.
+// Mehrere Wörter (21.10.2026): „Mehrere Wörter markieren“ startet die Auswahl; eine Wortgruppe zeigt `PhraseBody`.
 
 type Doc = Readonly<Record<string, unknown>>;
 const str = (v: unknown): string | null => (typeof v === 'string' && v.trim() ? v.trim() : null);
@@ -58,7 +60,12 @@ function useSheetMode(): boolean {
 
 export function LookupLayer() {
   const req = useLookup((s) => s.req);
-  return <AnimatePresence>{req && <LookupPopover key={`${req.text}|${req.start}`} req={req} />}</AnimatePresence>;
+  return (
+    <>
+      <AnimatePresence>{req && <LookupPopover key={`${req.text}|${req.start}|${req.end}`} req={req} />}</AnimatePresence>
+      <PickBar />
+    </>
+  );
 }
 
 function LookupPopover({ req }: { req: WordTapRequest }) {
@@ -87,7 +94,8 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
 
   // Nichts gefunden: gleich Claude fragen (einmal je Öffnen; das Antippen ist die Handlung).
   const autoRun = auto.run;
-  const needAi = resolved.source === 'none' && ai;
+  const phrase = isPhrase(req);
+  const needAi = !phrase && resolved.source === 'none' && ai;
   useEffect(() => {
     if (!needAi) return;
     void autoRun({ word: req.surface, sentence: req.text, uiLang: useSettings.getState().lang }).then((out) => {
@@ -239,11 +247,16 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
     openCompanion({ attach: { kind: 'word', word, sentence: req.text, source: req.source }, send: t('askWordAuto', { word }) });
   };
 
+  // Mehrere Wörter markieren: nur in einem Satz mit mindestens zwei Wörtern.
+  const multi = !phrase && wordCount(req.tokens) >= 2;
+
   const phaseOf = (a: { phase: string }) => a.phase === 'queued' || a.phase === 'thinking' || a.phase === 'streaming' || a.phase === 'slow';
   const busy = phaseOf(auto) ? auto : null;
   const error = auto.error;
 
-  const content = (
+  const content = phrase ? (
+    <PhraseBody req={req} cards={cards} cache={cache} />
+  ) : (
     <div className="flex flex-col gap-3">
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
@@ -353,6 +366,11 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
             {error ? t('aiRetry') : t('lkAsk')}
           </Button>
         )}
+        {multi && (
+          <Button variant="ghost" icon="plus" onClick={() => startPick(req)} data-testid="lk-multi">
+            {t('ttPhMulti')}
+          </Button>
+        )}
       </div>
       {saveState === 'failed' && (
         <p className="text-sm text-danger-text" role="status">
@@ -362,7 +380,7 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
     </div>
   );
 
-  const label = t('lkDialog', { word: req.surface });
+  const label = phrase ? t('ttPhDialog', { words: req.surface }) : t('lkDialog', { word: req.surface });
   if (sheet) {
     return (
       <div className="fixed inset-0 z-50">

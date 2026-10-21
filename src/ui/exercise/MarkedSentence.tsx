@@ -2,7 +2,7 @@ import { Fragment, useMemo, useRef, type KeyboardEvent, type ReactNode } from 'r
 import { tokenize } from '../../domain/text/tokenize';
 import type { Token } from '../../domain/text/types';
 import { EnglishText } from '../../engine/EnglishText';
-import { openLookup, type WordTapArea, type WordTapRequest } from '../../engine/wordTap';
+import { dragEnd, dragOver, dragStart, inDrag, tapWord, useLookup, type WordTapArea, type WordTapRequest } from '../../engine/wordTap';
 
 // Übungssatz mit hervorgehobenen Signalwörtern (§4.3). `EnglishText` kennt nur EINE Hervorhebung; hier können
 // es mehrere (auch mehrwortige) sein. Jedes Wort bleibt ein antippbarer `button.lx-word`; ohne Signalwörter
@@ -52,6 +52,10 @@ export function MarkedSentence({ text, mark, area = 'trainer', source = null, cl
   const spans = useMemo(() => markSpans(text, mark), [text, mark]);
   const tokens = useMemo(() => tokenize(text), [text]);
   const root = useRef<HTMLParagraphElement>(null);
+  // Mehrere Wörter (21.10.2026) wie in `EnglishText`: Markierung der Gruppe, des festen ersten Worts und beim Ziehen.
+  const active = useLookup((s) => s.req);
+  const pick = useLookup((s) => s.pick);
+  const drag = useLookup((s) => s.drag);
   if (!spans.length) return <EnglishText as="p" text={text} area={area} source={source} {...(className ? { className } : {})} {...(testId ? { testId } : {})} />;
 
   const spanOf = (t: Token): number => spans.findIndex((s) => t.start >= s[0] && t.end <= s[1]);
@@ -72,6 +76,8 @@ export function MarkedSentence({ text, mark, area = 'trainer', source = null, cl
     if (t.kind !== 'word') return <span key={t.start}>{t.text}</span>;
     const tab = first ? 0 : -1;
     first = false;
+    const reqOf = (anchor: HTMLElement): WordTapRequest => ({ surface: t.text, text, start: t.start, end: t.end, tokens, index, area, source, title: null, anchor, returnFocus: null });
+    const isActive = (!!active && active.text === text && t.start >= active.start && t.end <= active.end) || inDrag(drag, text, index);
     return (
       <button
         key={t.start}
@@ -79,11 +85,19 @@ export function MarkedSentence({ text, mark, area = 'trainer', source = null, cl
         className="lx-word"
         data-word={t.text}
         data-lookup={t.text.toLowerCase()}
+        data-active={isActive || undefined}
+        data-anchor={(!!pick && pick.text === text && pick.start === t.start) || undefined}
         tabIndex={tab}
-        onClick={(e) => {
-          const req: WordTapRequest = { surface: t.text, text, start: t.start, end: t.end, tokens, index, area, source, title: null, anchor: e.currentTarget, returnFocus: null };
-          openLookup(req);
+        onPointerDown={(e) => {
+          if (e.pointerType === 'mouse' && e.button === 0 && !e.shiftKey) dragStart(reqOf(e.currentTarget));
         }}
+        onPointerEnter={(e) => {
+          if (e.pointerType === 'mouse' && (e.buttons & 1) === 1) dragOver(text, index);
+        }}
+        onPointerUp={(e) => {
+          if (e.pointerType === 'mouse') dragEnd(reqOf(e.currentTarget));
+        }}
+        onClick={(e) => tapWord(reqOf(e.currentTarget), e.shiftKey)}
       >
         {t.text}
       </button>

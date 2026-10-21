@@ -628,6 +628,11 @@ h3 {
     background: var(--lx-cyan-soft);
     text-decoration-color: var(--lx-cyan);
   }
+  /* „Mehrere Wörter markieren“: das feste erste Wort (Rahmen per Schatten, keine Layoutänderung). */
+  .lx-word[data-anchor] {
+    background: var(--lx-cyan-soft);
+    box-shadow: inset 0 0 0 1.5px var(--lx-cyan);
+  }
   /* Nur mit Maus: am Touch bliebe :hover nach dem Tippen am Wort haften. */
   @media (hover: hover) {
     .lx-word:hover {
