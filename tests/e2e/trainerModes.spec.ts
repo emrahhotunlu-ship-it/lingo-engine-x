@@ -24,6 +24,12 @@ const phone = (browser: Browser) => device(browser, 'phone');
 
 /** Karte, die als erste fällig ist und deren schwächste Art feststeht. */
 const forcedDoc = (stage: number, xs: Counts, i = 0, na = 0): Doc => ({ state: 'learning', stage, S: 1, D: 5, due: 1_690_000_000_000 + i, last: 1_689_900_000_000, reps: 3, lapses: 0, xs, hist: RECALLED, ...(na ? { na } : {}) });
+/**
+ * Wendung, bei der nur die Leiter entscheidet: drei freie Tage (sonst zieht „Tag 2–21 frei“, Korrektur S3 `wantsFreeRecall`, den freien Abruf vor) und
+ * Fahrplan durch (`na: 2`; seit `introDayOf` nur noch `intro` liest, zählen beide `RECALLED`-Tage, und ab 2 freien Tagen käme sonst „Eigener Satz“ dran).
+ */
+const FREE_3 = [...RECALLED, { t: 1_689_700_000_000, m: 'type', g: 3, x: 'type' }, { t: 1_689_880_000_000, m: 'type', g: 3, x: 'type' }].sort((a, b) => a.t - b.t);
+const forcedChunk = (stage: number, xs: Counts): Doc => ({ ...forcedDoc(stage, xs, 0, 2), hist: FREE_3 });
 const strong = (...ids: string[]): Counts => Object.fromEntries(ids.map((id) => [id, { c: 6, w: 0 }]));
 const weak = (id: string): Counts => ({ [id]: { c: 0, w: 6 } });
 
@@ -212,7 +218,7 @@ test.describe('Wendungen in der täglichen Wiederholung', () => {
   test('Pflichtrunde mit fälliger Wendung: Abfrage im Originalsatz, FSRS zusätzlich, Protokoll wie die alte App, Pflicht erledigt', async ({ page }) => {
     const { errors, external } = await boot(page, {
       migrated: true,
-      fake: { patch: { ...TYPE_MODE, 'app/profile': planPatch(1), 'chunk/c-non-negotiable': forcedDoc(3, { ...strong('tiles'), ...weak('cloze_hint') }) } },
+      fake: { patch: { ...TYPE_MODE, 'app/profile': planPatch(1), 'chunk/c-non-negotiable': forcedChunk(3, { ...strong('tiles'), ...weak('cloze_hint') }) } },
     });
     await screen(page, 'today');
     await page.getByTestId('start').click();
@@ -250,7 +256,7 @@ test.describe('Wendungen in der täglichen Wiederholung', () => {
   test('Aus der Situation (M15): Szene und Absicht, Wendung frei tippen, „Damals hattest du gesagt"', async ({ page }) => {
     const { errors } = await boot(page, {
       migrated: true,
-      fake: { patch: { ...TYPE_MODE, 'app/profile': planPatch(1), 'chunk/c-non-negotiable': forcedDoc(4, { ...strong('type', 'cloze'), ...weak('situation') }) } },
+      fake: { patch: { ...TYPE_MODE, 'app/profile': planPatch(1), 'chunk/c-non-negotiable': forcedChunk(4, { ...strong('type', 'cloze'), ...weak('situation') }) } },
     });
     await screen(page, 'today');
     await page.getByTestId('start').click();

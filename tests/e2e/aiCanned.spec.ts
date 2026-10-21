@@ -56,7 +56,10 @@ test('„Neue Wörter von Claude": Liste ohne bekannte Wörter, ein Wort überne
 });
 
 test('Wortblatt: alte Ergebnisse je Abfrageart sichtbar; Merkhilfe von Claude wird an der Karte gespeichert', async ({ page }) => {
-  const { errors } = await boot(page, { migrated: true, fake: { patch: { 'vocab/deserve': { lapses: 4 } } } });
+  // Merkhilfe nur für Wörter, die haken (Werkstatt-Auslöser seit der Wort-Werkstatt): Fehler an 2 Lerntagen innerhalb von 14 Tagen.
+  const fail = (iso: string) => ({ t: Date.parse(iso), m: 'type', g: 1, x: 'type' });
+  const hist = [fail('2026-09-15T10:00:00+02:00'), fail('2026-09-18T10:00:00+02:00')];
+  const { errors } = await boot(page, { migrated: true, fake: { patch: { 'vocab/deserve': { lapses: 4, hist } } } });
   await openVocab(page);
   await page.getByTestId('vocab-search-open').click();
   await page.getByTestId('vocab-search').fill('deserve');
