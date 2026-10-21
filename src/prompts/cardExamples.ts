@@ -3,7 +3,7 @@ import { isWrongLang } from '../domain/lang/detect';
 import { clip, header } from './common';
 import type { PromptTemplate } from './types';
 
-// card-examples@3 (Lernplattform 2.0 §4.8: die Beispielsätze stammen aus der Berufswelt, auch beim Atlas-Eintrag „Lernen“) · card-examples@2: zwei bis drei natürliche Beispielsätze für eine Karte, deren eigene
+// card-examples@4 (Wort-Lernen 2: optional das Berufsprofil `ctx` aus `tutorCtx()`, damit die Sätze aus dem Arbeitsalltag des Lernenden kommen) · card-examples@3 (Lernplattform 2.0 §4.8: die Beispielsätze stammen aus der Berufswelt, auch beim Atlas-Eintrag „Lernen“) · card-examples@2: zwei bis drei natürliche Beispielsätze für eine Karte, deren eigene
 // Beispiele nicht reichen (CLAUDE.md A7), und seit @2 (Englischlehrer 02.10.2026) bis zu zwei typische Wortpartner
 // (`collocations`, Format der alten App `{p, de, gap, opts, ex}`). `quick`, klein, 24 h zwischengespeichert.
 // Nur Englisch (amerikanisch), keine Erklärung – so entsteht keine Mischsprache.
@@ -11,7 +11,7 @@ import type { PromptTemplate } from './types';
 // angefragt. Das Schema prüft die Wortpartner bewusst NICHT einzeln: jeder wird mit `acceptCollocations`
 // (domain/srs/collocs.ts) geprüft, ein schlechter reißt weder die Beispielsätze noch die anderen mit.
 
-export type CardExamplesVars = { word: string; pos: string; meaning: string; sentence: string };
+export type CardExamplesVars = { word: string; pos: string; meaning: string; sentence: string; /** Berufsprofil (≤ 300 Zeichen, `tutorCtx`); leer = allgemeine Berufswelt. */ ctx?: string };
 export type CardExamplesOut = { examples: string[]; collocations: unknown[] };
 
 export const EX_WORD_MAX = 60;
@@ -23,7 +23,8 @@ export const CARD_EXAMPLES_EXAMPLE =
   '{"examples":["Our supplier has always been reliable, even during the holidays.","We need reliable data before we present the numbers to the board.","She is one of the most reliable people on the team."],"collocations":[{"p":"highly reliable","de":"äußerst zuverlässig","gap":"highly","opts":["strongly","heavily","deeply"],"ex":"The new archive system has proven [highly reliable] in daily use."}]}';
 
 const ID = 'card-examples';
-const VERSION = 3;
+const VERSION = 4;
+const CTX_MAX = 300;
 
 /** Tolerant lesen: `{en: "…"}` statt Text, mehr als vier Sätze (die ersten vier zählen). */
 function looseExamples(v: unknown): unknown {
@@ -59,6 +60,7 @@ export const cardExamples: PromptTemplate<CardExamplesVars, CardExamplesOut> = {
   tier: 'quick',
   cache: { gcTime: 86_400_000 },
   build(vars) {
+    const ctx = clip(vars.ctx ?? '', CTX_MAX);
     return [
       header({ id: ID, version: VERSION }),
       "You write example sentences for a German-speaking professional's vocabulary card (CEFR B2, aiming for C1).",
@@ -67,11 +69,13 @@ export const cardExamples: PromptTemplate<CardExamplesVars, CardExamplesOut> = {
       `Part of speech: ${clip(vars.pos, 20) || '(unknown)'}`,
       `Meaning: ${clip(vars.meaning, EX_MEANING_MAX) || '(unknown)'}`,
       `Card sentence: ${clip(vars.sentence, EX_SENTENCE_MAX) || '(none)'}`,
+      ...(ctx ? [`Learner work context: ${ctx}`] : []),
       'Reply with only one JSON object, no other text, exactly this shape:',
       CARD_EXAMPLES_EXAMPLE,
       'Rules:',
       '- examples: exactly 3 new, natural sentences, each 8–18 words, each containing the word (inflected forms are fine).',
       '- Use the word with the same meaning as on the card. Set the sentences in business life (meetings, e-mails, contracts, clients, projects), never in everyday small talk.',
+      ...(ctx ? ['- When it fits the meaning naturally, set at least two sentences in the learner work context above (role, industry, situations). Never bend the meaning of the word to fit it.'] : []),
       '- Do not repeat the card sentence. No brackets, no quotes, no translations in the examples.',
       '- collocations: 0 to 2 typical collocations of the word (verb + noun, adjective + noun, noun + preposition, adverb + adjective) that German speakers often get wrong. Only give one if you are sure it is natural American English; otherwise use an empty list.',
       '  - p: the collocation in base form, 2 to 5 words, containing the word. de: its German meaning in 2 to 6 words.',

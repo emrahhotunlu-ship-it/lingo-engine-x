@@ -61,7 +61,7 @@ export const ttP46En = {
   ttWpField: 'Industry or product',
   ttWpFieldPh: 'e.g. document management software',
   ttWpWho: 'Who do you talk to?',
-  ttWpSit: 'Typical situations',
+  ttWpSit: 'Typical situations (up to 5)',
   ttWpOwn: 'Your own entry',
   ttWpAdd: 'Add',
   ttWpTerms: 'Your key terms (English, up to 12)',

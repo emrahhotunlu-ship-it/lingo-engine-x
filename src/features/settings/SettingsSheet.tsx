@@ -17,6 +17,7 @@ import { COMPACT_ENABLED, compactPreview, runCompact } from './compactRun';
 import { useSettings, type Lang, type Palette, type ThemeMode } from '../../app/settings';
 import { changeAutoNext, changeLang, changePalette, changeTheme } from '../../app/actions';
 import { WorkContextSection } from './WorkContextSection';
+import { WorkProfile } from '../tutor/WorkProfile';
 import { exportMessage } from '../migration/MigrationScreen';
 import { exportAll, exportAnkiCsv } from './exportData';
 import { VoiceSection } from './VoiceSection';
@@ -74,6 +75,7 @@ export function SettingsSheet({ open, onClose }: { open: boolean; onClose: () =>
           <Registered groups={['voice']} />
         </Group>
         <Group title={t('nbProfilSetContext')} testId="set-group-context">
+          <WorkProfileSection />
           <WorkContextSection />
           <Registered groups={['context']} />
         </Group>
@@ -94,6 +96,22 @@ export function SettingsSheet({ open, onClose }: { open: boolean; onClose: () =>
         <Slot name="settings.sections" />
       </div>
     </Sheet>
+  );
+}
+
+/**
+ * Berufsprofil (Wort-Lernen 2, Teil 2): Branche, Rolle, bis zu 5 Situationen, einmal ausfüllen. Jede Satzanfrage an Claude trägt es (`tutorCtx`).
+ * Es sind nur Daten, deshalb auch ohne Claude sichtbar (das Formular selbst braucht die Datenbank).
+ */
+function WorkProfileSection() {
+  const { t } = useT();
+  const db = useCapabilities((s) => s.db);
+  if (db !== 'ready') return null;
+  return (
+    <section className="flex flex-col gap-3" data-testid="settings-work-profile">
+      <h3 className="lx-eyebrow">{t('ttWpTitle')}</h3>
+      <WorkProfile />
+    </section>
   );
 }
 

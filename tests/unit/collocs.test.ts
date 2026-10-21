@@ -137,11 +137,11 @@ describe('wann gefragt wird (wantsEnrichment)', () => {
   });
 });
 
-describe('Vorlage card-examples@3', () => {
+describe('Vorlage card-examples@4', () => {
   const vars = { word: 'reliable', pos: 'adj', meaning: 'can be trusted', sentence: '' };
   it('Beispielantwort und Testantwort bestehen das Schema; Antworten ohne Wortpartner auch (leer)', () => {
     const schema = template.schema(vars);
-    expect(template.version).toBe(3);
+    expect(template.version).toBe(4);
     expect(schema.safeParse(JSON.parse(CARD_EXAMPLES_EXAMPLE)).success).toBe(true);
     const out = schema.safeParse({ examples: ['This is a reliable partner for us.', 'We need reliable data today.'] });
     expect(out.success && out.data.collocations).toEqual([]);
@@ -157,6 +157,12 @@ describe('Vorlage card-examples@3', () => {
     const prompt = template.build({ ...vars, word: 'colqrun' });
     const r = template.schema(vars).safeParse(JSON.parse(cardExamplesReply(prompt)));
     expect(r.success && acceptCollocations('colqrun', r.data.collocations)).toHaveLength(1);
+  });
+  it('Berufsprofil: nur mit ctx eine Zeile „Learner work context“, ohne ctx unverändert', () => {
+    expect(template.build(vars)).not.toContain('Learner work context');
+    const p = template.build({ ...vars, ctx: 'Sales manager in logistics. typical situations: client call; budget review' });
+    expect(p).toContain('Learner work context: Sales manager in logistics.');
+    expect(p).toContain('Never bend the meaning');
   });
   it('der Prompt nennt die Regeln für Wortpartner', () => {
     const p = template.build(vars);

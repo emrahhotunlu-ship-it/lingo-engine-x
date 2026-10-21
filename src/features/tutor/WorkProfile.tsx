@@ -1,6 +1,6 @@
 import { useId, useState } from 'react';
 import { useLive } from '../../data/live';
-import { cleanCtx2, CTX2_LIMITS, saveCtx2, SIT_CHIPS, startCtx2, WHO_CHIPS } from '../../domain/tutor/ctx2';
+import { cleanCtx2, CTX2_LIMITS, saveCtx2, SIT_CHIPS, SIT_PICK_MAX, startCtx2, WHO_CHIPS } from '../../domain/tutor/ctx2';
 import { useT, type MessageKey } from '../../i18n';
 import { useCapabilities } from '../../platform/capabilities';
 import { Button } from '../../ui/Button';
@@ -132,7 +132,7 @@ export function WorkProfile() {
         <input id={fieldId} type="text" value={field} maxLength={CTX2_LIMITS.field} lang="en" placeholder={t('ttWpFieldPh')} onChange={(e) => setField(e.target.value)} className={input} data-testid="wp-field" />
       </div>
       <ChipPicker legend={t('ttWpWho')} presets={WHO_CHIPS} label={(v) => whoLabel(v, t)} values={who} max={CTX2_LIMITS.who} maxLen={CTX2_LIMITS.whoLen} onChange={setWho} testId="wp-who" />
-      <ChipPicker legend={t('ttWpSit')} presets={SIT_CHIPS} label={(v) => clinicSitLabel(v, t)} values={sit} max={CTX2_LIMITS.sit} maxLen={CTX2_LIMITS.sitLen} onChange={setSit} testId="wp-sit" />
+      <ChipPicker legend={t('ttWpSit')} presets={SIT_CHIPS} label={(v) => clinicSitLabel(v, t)} values={sit} max={SIT_PICK_MAX} maxLen={CTX2_LIMITS.sitLen} onChange={setSit} testId="wp-sit" />
       <div className="flex flex-col gap-1.5">
         <label htmlFor={termsId} className="lx-t-label">
           {t('ttWpTerms')}

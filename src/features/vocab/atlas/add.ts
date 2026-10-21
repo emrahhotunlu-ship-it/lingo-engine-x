@@ -7,16 +7,18 @@ import { bracketExample } from '../../../domain/srs/newCard';
 import { useCapabilities } from '../../../platform/capabilities';
 import { logError, logWarn } from '../../../platform/diagnostics';
 import { cardExamples } from '../../../prompts/cardExamples';
+import { useLive } from '../../../data/live';
+import { tutorCtx } from '../../../domain/tutor/ctx';
 
 /**
  * Ein Business-Satz in US-Englisch für den Atlas-Eintrag (Lernplattform 2.0 §4.8): „Lernen“ holt zuerst einen Satz aus der Berufswelt von
- * Claude (`card-examples@3`, einmal, nie automatisch wiederholt). Ohne Claude oder bei einem Fehler gilt der alte Satz des Atlas,
+ * Claude (`card-examples@4`, mit Berufsprofil, einmal, nie automatisch wiederholt). Ohne Claude oder bei einem Fehler gilt der alte Satz des Atlas,
  * gekennzeichnet über `exMark: 'atlas'` (die Karte sagt dann „Beispielsatz aus dem Wörterbuch“).
  */
 async function businessSentence(e: AtlasEntry): Promise<string | null> {
   if (!selectAiAvailable(useCapabilities.getState())) return null;
   try {
-    const r = await askJson({ template: cardExamples, vars: { word: e.w, pos: e.p ?? '', meaning: e.d, sentence: e.x }, signal: new AbortController().signal });
+    const r = await askJson({ template: cardExamples, vars: { word: e.w, pos: e.p ?? '', meaning: e.d, sentence: e.x, ctx: tutorCtx(useLive.getState().docs['app/profile'] ?? null) }, signal: new AbortController().signal });
     for (const x of r.data.examples) {
       if (bracketExample(x, null, e.w)) return x;
     }
