@@ -8,7 +8,7 @@ import type { StoredPlan } from '../../src/domain/plan/types';
 import { readWk } from '../../src/domain/srs/werkstatt';
 
 // Wort-Lernen 2, Teil 2 – Simulation: Ein Wort mit 3 freien Fehlversuchen kommt in der Pflichtrunde als Werkstatt-Schritt (Diagnose, neuer Anker),
-// danach EIN Abruf mit Ruhe 2–3 Tage. Der Pflicht-Zähler bleibt stimmig: Die Werkstatt ersetzt die Wiederholung (ein Eintrag der Runde, Nenner fest,
+// danach EIN Abruf drei Karten später (Korrekturrunde S5) mit Ruhe 2–3 Tage; nach einem Fehler einmal erneut, dann ohne Ruhe (FSRS). Der Pflicht-Zähler bleibt stimmig: Die Werkstatt ersetzt die Wiederholung (ein Eintrag der Runde, Nenner fest,
 // genau eine Antwort für das Wort) und zählt nichts dazu. „Pausieren“ blendet aus und setzt eine fällige Ersatzkarte in die Runde.
 
 type Doc = Record<string, unknown>;
@@ -132,14 +132,16 @@ describe('Werkstatt in der Pflichtrunde', () => {
       if (item.phase === 'werkstatt') {
         log.push({ key: item.key, phase: 'werkstatt', wk: false });
         S.continueWerkstatt();
-        const e = S.useSession.getState().exercise;
-        expect(e?.wk).toBe(true);
-        expect(e?.card.key).toBe('vocab/leverage');
-        // Der Abruf ist ein Abruf mit Anfangsbuchstaben bzw. Bausteinen (nach dem neuen Anker), keine Aufdeckkarte.
-        expect(e?.ex).not.toBe('flip');
+        // Der Abruf kommt NICHT sofort, sondern nach drei anderen Karten.
+        expect(S.useSession.getState().exercise?.card.key).not.toBe('vocab/leverage');
       }
       const e = S.useSession.getState().exercise;
       if (!e) break;
+      if (e.wk) {
+        // Der Abruf ist ein Abruf mit Anfangsbuchstaben bzw. Bausteinen (nach dem neuen Anker), keine Aufdeckkarte.
+        expect(e.card.key).toBe('vocab/leverage');
+        expect(e.ex).not.toBe('flip');
+      }
       log.push({ key: e.card.key, phase: 'quiz', wk: e.wk === true });
       S.commitAnswer({ grade: 3, given: e.accepted[0] ?? e.card.word, ms: 2500, ok: true });
     }
@@ -151,6 +153,8 @@ describe('Werkstatt in der Pflichtrunde', () => {
     expect(log.filter((r) => r.phase === 'werkstatt')).toHaveLength(1);
     expect(log.filter((r) => r.phase === 'quiz' && r.key === 'vocab/leverage')).toHaveLength(1);
     expect(log.filter((r) => r.wk)).toHaveLength(1);
+    const wkAt = log.findIndex((r) => r.phase === 'werkstatt');
+    expect(log.findIndex((r) => r.wk) - wkAt).toBe(4);
     // Tagesprotokoll: je beantworteter Karte genau ein Eintrag, das Sorgenwort einmal (mit Werkstatt-Kennzeichen).
     expect(entries.filter((x) => JSON.stringify(x).includes('leverage'))).toHaveLength(1);
     // Pflicht-Zähler: so viele verschiedene Karten wie geplant – nicht mehr (Werkstatt ersetzt die Wiederholung).
@@ -161,6 +165,54 @@ describe('Werkstatt in der Pflichtrunde', () => {
     await new Promise((r) => setTimeout(r, 30));
     const doc = h.dump()['vocab/leverage'];
     if (!doc) throw new Error('vocab/leverage fehlt');
+    expect(readWk(doc)).toMatchObject({ n: 1, d: DAY });
+    const dueDay = dayKey(Number(doc.due));
+    expect(dueDay >= addDays(DAY, 2) && dueDay <= addDays(DAY, 3)).toBe(true);
+  });
+
+  it('Fehler beim verzögerten Abruf → genau eine Wiederholung drei Karten später; keine Ruhe nach dem Fehler, eine Runde (n = 1)', async () => {
+    setup(deck());
+    S.startSession('pflicht');
+    const log: Array<{ key: string; wk: boolean; pos: number }> = [];
+    let first = true;
+    let lenAtFail = 0;
+    for (let guard = 0; guard < 100; guard++) {
+      const s = S.useSession.getState();
+      if (!s.active || s.status !== 'running') break;
+      const item = s.queue[s.pos];
+      if (!item) break;
+      if (item.phase === 'werkstatt') {
+        S.continueWerkstatt();
+        continue;
+      }
+      const e = s.exercise;
+      if (!e) break;
+      log.push({ key: e.card.key, wk: e.wk === true, pos: s.pos });
+      if (e.wk && first) {
+        first = false;
+        lenAtFail = s.queue.length;
+        S.commitAnswer({ grade: 1, given: 'exploit', ms: 4000, ok: false });
+        // Nach dem Fehler (vor der Wiederholung): Fälligkeit wie FSRS sie rechnet, nicht in die Ruhe geschoben.
+        await persist.flush();
+        await new Promise((r) => setTimeout(r, 30));
+        const mid = h.dump()['vocab/leverage'];
+        if (!mid) throw new Error('vocab/leverage fehlt');
+        expect(dayKey(Number(mid.due)) < addDays(DAY, 2)).toBe(true);
+        expect(readWk(mid)).toMatchObject({ n: 1, d: DAY });
+        continue;
+      }
+      S.commitAnswer({ grade: 3, given: e.accepted[0] ?? e.card.word, ms: 2500, ok: true });
+    }
+    S.commitHeld();
+    await persist.flush();
+    await new Promise((r) => setTimeout(r, 30));
+    const recalls = log.filter((r) => r.wk);
+    expect(recalls).toHaveLength(2);
+    // Drei andere Karten dazwischen – höchstens ans Ende der Runde (hier ist die Runde kürzer).
+    expect(recalls[1]!.pos - recalls[0]!.pos).toBe(Math.min(4, lenAtFail - recalls[0]!.pos));
+    const doc = h.dump()['vocab/leverage'];
+    if (!doc) throw new Error('vocab/leverage fehlt');
+    // Die gelungene Wiederholung legt die Ruhe; dieselbe Werkstatt zählt als eine Runde.
     expect(readWk(doc)).toMatchObject({ n: 1, d: DAY });
     const dueDay = dayKey(Number(doc.due));
     expect(dueDay >= addDays(DAY, 2) && dueDay <= addDays(DAY, 3)).toBe(true);

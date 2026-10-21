@@ -47,12 +47,21 @@ const TILES: Tile[] = [
 const ACC = acceptedWithAlternatives(QUARTER.en, QUARTER.en);
 
 describe('Gleichwertige Fassungen der ganzen Wendung', () => {
-  it('„a quarter of a percentage point“ kennt „a quarter percentage point“ und „a quarter-point“', () => {
-    expect(chunkAlternatives('a quarter of a percentage point')).toEqual(expect.arrayContaining(['a quarter percentage point', 'a quarter-point']));
+  it('„a quarter of a percentage point“ kennt „a quarter percentage point“ und „a quarter point“', () => {
+    expect(chunkAlternatives('a quarter of a percentage point')).toEqual(expect.arrayContaining(['a quarter percentage point', 'a quarter point', 'twenty-five basis points', '0.25 percentage points']));
     expect(ACC[0]).toBe('a quarter of a percentage point');
     // Aus den vorhandenen Bausteinen legbar und richtig: ohne „of a“, und „a quarter point“ (= a quarter-point).
     for (const given of ['a quarter percentage point', 'a quarter point', 'a quarter of a percentage point']) expect(checkTyped(given, ACC, { lemma: QUARTER.en }).verdict).toBe('correct');
     expect(checkTyped('a percentage point', ACC, { lemma: QUARTER.en }).verdict).not.toBe('correct');
+  });
+
+  it('Lehrer-Liste: Zinserhöhung in mehreren Fassungen (auch ohne „to“), „a quarter-point“ wie „a quarter point“; „to rise interest rates“ und „25 percent“ bleiben falsch', () => {
+    const acc = acceptedWithAlternatives('to raise interest rates', 'to raise interest rates');
+    for (const given of ['raise interest rates', 'to hike rates', 'hike interest rates', 'put interest rates up', 'to put up interest rates', 'increase rates']) expect(checkTyped(given, acc, { lemma: 'to raise interest rates' }).verdict).toBe('correct');
+    expect(checkTyped('to rise interest rates', acc, { lemma: 'to raise interest rates' }).verdict).not.toBe('correct');
+    expect(checkTyped('rise interest rates', acc, { lemma: 'to raise interest rates' }).verdict).not.toBe('correct');
+    expect(checkTyped('a quarter-point', ACC, { lemma: QUARTER.en }).verdict).toBe('correct');
+    for (const given of ['25 percent', 'a quarter percent', 'a quarter of a percent']) expect(checkTyped(given, ACC, { lemma: QUARTER.en }).verdict).not.toBe('correct');
   });
 
   it('nur für die ganze Wendung: ein einzelnes Wort oder eine andere Form bekommt keine fremde Fassung', () => {
@@ -65,7 +74,7 @@ describe('Gleichwertige Fassungen der ganzen Wendung', () => {
     expect(card).not.toBeNull();
     const e = buildExercise(card!, 'tiles', 'de', [card!], '2026-10-21|t');
     expect(e.accepted[0]).toBe('a quarter of a percentage point');
-    expect(e.accepted).toEqual(expect.arrayContaining(['a quarter percentage point', 'a quarter-point']));
+    expect(e.accepted).toEqual(expect.arrayContaining(['a quarter percentage point', 'a quarter point']));
     const words = (e.tiles ?? []).filter((x) => !x.distractor).map((x) => x.text);
     expect(words).toHaveLength(6);
     expect(words.filter((w) => w === 'a')).toHaveLength(2);

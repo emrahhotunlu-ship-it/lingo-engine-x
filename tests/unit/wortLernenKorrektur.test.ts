@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { applyUpdate, reviewWrite, stageStep } from '../../src/domain/srs/applyReview';
+import { applyUpdate, noteOnlyOp, reviewWrite, stageStep } from '../../src/domain/srs/applyReview';
 import { toTrainCard } from '../../src/domain/srs/cards';
 import { isFest } from '../../src/domain/metrics/definitions';
 import { wantsFreeRecall } from '../../src/domain/srs/spacing';
@@ -124,5 +124,17 @@ describe('Soll 3: Tag 2–21 frei, sobald ein freier Tag belegt ist', () => {
   });
   it('neue Karte → nie', () => {
     expect(wantsFreeRecall(reviewDoc({ state: 'new', hist: [] }))).toBe(false);
+  });
+});
+
+describe('Soll 7: „Sag es“ ohne erkanntes Zielwort ändert nur den Verlauf', () => {
+  it('nur ein Verlaufseintrag `{x: say_it, g: 2, u: 1}`, keine Planung; er unterbricht die 21-Tage-Pause nicht', () => {
+    const cur = reviewDoc();
+    const op = noteOnlyOp('vocab/leverage', cur, ev('2026-09-25', 'say_it', 2, { unverified: true, given: 'We used our network.' }));
+    expect(op).not.toBeNull();
+    expect(Object.keys(op!.update)).toEqual(['hist']);
+    expect((op!.update.hist as Doc[]).at(-1)).toMatchObject({ x: 'say_it', g: 2, u: 1 });
+    const after = applyUpdate(cur, op!.update);
+    expect(write(after, ev('2026-10-01', 'cloze', 3)).lg).toBe('2026-10-01');
   });
 });

@@ -1,6 +1,6 @@
 import { getWriter } from '../../data';
 import { knownOp } from '../../domain/srs/vocabList';
-import { contrastMissOp, reviewWrite, type SkipReason } from '../../domain/srs/applyReview';
+import { contrastMissOp, noteOnlyOp, reviewWrite, type SkipReason } from '../../domain/srs/applyReview';
 import type { AnswerEvent } from '../../domain/srs/types';
 import { logError, logWarn } from '../../platform/diagnostics';
 import { flush, usePending } from '../progress/persist';
@@ -56,6 +56,19 @@ export async function saveContrastMiss(path: string, a: AnswerEvent): Promise<bo
     return true;
   } catch (err) {
     logError('trainer:contrast', err, path);
+    return false;
+  }
+}
+
+/** Nur ein Verlaufseintrag ohne Planung („Sag es“ ohne erkanntes Zielwort, `noteOnlyOp`). Ein `transform` auf dem frischen Stand. */
+export async function saveNoteOnly(path: string, a: AnswerEvent): Promise<boolean> {
+  const writer = getWriter();
+  if (!writer) return false;
+  try {
+    await writer.transform(path, (cur) => noteOnlyOp(path, cur, a));
+    return true;
+  } catch (err) {
+    logError('trainer:note', err, path);
     return false;
   }
 }

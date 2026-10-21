@@ -4,7 +4,7 @@ import { useSettings } from '../../app/settings';
 import { invalidIdsOf, useLive } from '../../data/live';
 import { dayKey } from '../../domain/date';
 import { mergeEntries, type DayEntry } from '../../domain/plan/buildPlan';
-import { applyUpdate, cardPatch, chunkPatch, contrastMissOp, isPartnerMiss } from '../../domain/srs/applyReview';
+import { applyUpdate, cardPatch, chunkPatch, contrastMissOp, isPartnerMiss, noteOnlyOp } from '../../domain/srs/applyReview';
 import { introWasYesterday, recallStep, wantsFreeRecall } from '../../domain/srs/spacing';
 import { buildTrainCards } from '../../domain/metrics';
 import { toTrainCard } from '../../domain/srs/cards';
@@ -42,7 +42,7 @@ import { isLearningState, previewIntervals, readFsrs, reviewFsrs } from '../../d
 import { noteWeight } from '../../domain/srs/weight';
 import type { AnswerEvent, Exercise, ExerciseId, Grade, Lang, QueueItem, TrainCard } from '../../domain/srs/types';
 import { markExhausted, useTodayPlan } from '../today/store';
-import { nextT, recordAnswer, recordRoundEnd, saveCard, saveContrastMiss, saveKnown, usePending } from './persist';
+import { nextT, recordAnswer, recordRoundEnd, saveCard, saveContrastMiss, saveKnown, saveNoteOnly, usePending } from './persist';
 import { flushOnHide } from '../progress/persist';
 import { contrastReady, noteConfusion, requestWordCtx } from './wordCtx';
 import { requestWordBank } from './sentenceBank';
@@ -232,6 +232,7 @@ function exerciseFor(s: ExCtx, item: QueueItem): Exercise | null {
   }
   const hit = takePrebuilt(s, item);
   if (hit) return hit;
+  if (item.wk) return werkstattRecall(s, card);
   // „Abend-Check“: nur freier Abruf ohne Stütze (Wort: Lücke frei, sonst tippen; Wendung: ein Wort frei, Lücke, tippen).
   if (s.free) {
     const n = s.pool.length - 1;
@@ -302,6 +303,17 @@ function recallExercise(s: ExCtx, card: TrainCard): Exercise | null {
   return { ...build(s, card, ex, step === 'hint'), recall };
 }
 
+/**
+ * Abruf der Wort-Werkstatt (drei Karten nach der Werkstatt, `QueueItem.wk`): gestützt im Ursprungssatz (Wort: Lücke mit Anfangsbuchstaben, sonst tippen;
+ * Wendung: Lücke mit Anfangsbuchstaben, sonst Bausteine). Er benotet die Karte wie jede Wiederholung (`Exercise.wk` → `AnswerEvent.wk`, `applyReview.ts`).
+ */
+function werkstattRecall(s: ExCtx, card: TrainCard): Exercise | null {
+  const n = s.pool.length - 1;
+  const order: readonly ExerciseId[] = card.kind === 'chunk' ? ['cloze_hint', 'tiles', 'cloze_part'] : ['cloze_hint', 'type', 'cloze'];
+  const ex = order.find((x) => supports(card, x, s.lang, n, s.env)) ?? chooseExercise(card, s.lang, n, s.recentEx, s.env);
+  return ex ? { ...build(s, card, ex, true), wk: true } : null;
+}
+
 /** Frei getippte Arten (Stufe 4) – ohne Auswahl und ohne Stütze. */
 const FREE_TYPED: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['type', 'cloze', 'cloze_part', 'situation']);
 
@@ -333,7 +345,8 @@ function lighterExercise(s: ExCtx, card: TrainCard): ExerciseId | null {
 
 // n+1 vorberechnen (leistung.md §4 Nr. 4): nach dem Prüfen im Leerlauf, beim „Weiter“ nur noch tauschen.
 let prebuilt: { sig: string; ex: Exercise } | null = null;
-const sigOf = (s: ExCtx, item: QueueItem, recent: readonly ExerciseId[]) => `${item.key}|${s.shown[item.key] ?? 0}|${recent.join(',')}|${s.controls}|${s.mode}|${s.dir}|${s.day}|${s.contrasted ? 1 : 0}`;
+const sigOf = (s: ExCtx, item: QueueItem, recent: readonly ExerciseId[]) =>
+  `${item.key}|${s.shown[item.key] ?? 0}|${recent.join(',')}|${s.controls}|${s.mode}|${s.dir}|${s.day}|${s.contrasted ? 1 : 0}|${item.wk ?? 0}`;
 
 function takePrebuilt(s: ExCtx, item: QueueItem): Exercise | null {
   const p = prebuilt;
@@ -660,9 +673,9 @@ export function startKnownProbe(): FirstKind {
 }
 
 /**
- * Wort-Werkstatt gesehen („Jetzt abrufen“): Die Werkstatt-Karte wird durch einen gestützten Abruf im Ursprungssatz ersetzt (Wort: Lücke mit
- * Anfangsbuchstaben, sonst tippen; Wendung: Lücke mit Anfangsbuchstaben, sonst Bausteine). Der Abruf benotet die Karte wie jede Wiederholung und legt
- * danach 2–3 Lerntage Ruhe (`Exercise.wk` → `AnswerEvent.wk`, `applyReview.ts`).
+ * Wort-Werkstatt gesehen („Weiter“): Der Abruf folgt nicht sofort, sondern nach drei anderen Karten (`DAY0_FIRST_GAP`, höchstens ans Ende;
+ * Lernwissenschaft S5 – sonst prüft er nur das Kurzzeitgedächtnis). Gestützt im Ursprungssatz (`werkstattRecall`); bei Note 1 einmal erneut nach
+ * drei Karten. Ruhe 2–3 Lerntage nur nach gelungenem Abruf (`applyReview.ts` → `wkPatch`).
  */
 export function continueWerkstatt(): FirstKind {
   touch();
@@ -672,15 +685,8 @@ export function continueWerkstatt(): FirstKind {
   const card = item ? s.cards.get(item.key) : null;
   if (!item || !card || item.phase !== 'werkstatt') return null;
   const queue = [...s.queue];
-  queue[s.pos] = { ...item, phase: 'quiz' };
-  const n = s.pool.length - 1;
-  const order: readonly ExerciseId[] = card.kind === 'chunk' ? ['cloze_hint', 'tiles', 'cloze_part'] : ['cloze_hint', 'type', 'cloze'];
-  const ex = order.find((x) => supports(card, x, s.lang, n, s.env)) ?? chooseExercise(card, s.lang, n, s.recentEx, s.env);
-  if (!ex) return advanceFrom({ ...s, queue });
-  const exercise: Exercise = { ...build({ ...s, queue } as ExCtx, card, ex, true), wk: true };
-  prebuilt = null;
-  useSession.setState({ queue, exercise, step: s.step + 1 });
-  return firstKindOf(exercise);
+  queue.splice(Math.min(queue.length, s.pos + DAY0_FIRST_GAP), 0, { key: item.key, reason: item.reason, phase: 'quiz', wk: 1 });
+  return advanceFrom({ ...s, queue });
 }
 
 /** Nächste fällige Karte, die noch nicht in der Runde steht und heute nicht beantwortet wurde (Ersatz nach „pausieren“, der Nenner bleibt fest). */
@@ -745,6 +751,8 @@ export type Answer = {
   interrupted?: true;
   /** Satzantwort ohne Prüfung durch Claude: zählt nicht als freier Beleg. */
   unverified?: true;
+  /** „Sag es“ ohne erkanntes Zielwort: nur ein Verlaufseintrag (`u: 1`), keine Änderung der Planung (`noteOnlyOp`). */
+  noteOnly?: true;
   /** Aufdecken: beim Aufdecken reservierter Zeitstempel (gleich für Vorschau und Speichern, architektur.md §4.3). */
   t?: number;
   /** Aktivierung: Satz und Urteil für die Sammelakte `act/<Monat>` (nur „Eigener Satz“ und A2–A5). */
@@ -888,6 +896,29 @@ export function commitAnswer(ans: Answer): FirstKind {
     );
   }
 
+  // „Sag es“ ohne erkanntes Zielwort (Lernwissenschaft S7): nur ein Verlaufseintrag `u: 1`, Planung unverändert, kein „Nochmal“, kein Kontrast.
+  if (ans.noteOnly && e.ex === 'say_it') {
+    a.unverified = true;
+    const op = noteOnlyOp(card.path, card.doc, a);
+    const cards = new Map(s.cards);
+    if (op) {
+      const noteDoc = applyUpdate({ ...card.doc }, op.update);
+      cards.set(card.key, (card.kind === 'chunk' ? toChunkCard(card.id, noteDoc, a.t) : toTrainCard(card.id, noteDoc, card.inDb, a.t)) ?? card);
+    }
+    if (card.inDb || card.kind === 'chunk') void saveNoteOnly(card.path, a);
+    recordAnswer(a, s.results.length === 0);
+    return applyAdvance(
+      advanceState({
+        ...s,
+        cards,
+        shown: { ...s.shown, [card.key]: (s.shown[card.key] ?? 0) + 1 },
+        answered: s.answered.includes(card.key) ? s.answered : [...s.answered, card.key],
+        recentEx: [...s.recentEx, e.ex].slice(-2),
+        results: [...s.results, { key: card.key, word: card.word, grade: a.grade, ok: ans.ok }],
+      }),
+    );
+  }
+
   // Lokal sofort weiterrechnen (optimistisch); gespeichert wird auf dem frischen Stand.
   const knownDoc = knownPass ? knownOp({ ...card.doc }, card.path, null, a.t, s.day, { pending: true }) : null;
   const nextDoc = knownDoc && 'update' in knownDoc ? applyUpdate({ ...card.doc }, knownDoc.update) : applyUpdate({ ...card.doc }, cardPatch({ ...card.doc }, a));
@@ -907,6 +938,8 @@ export function commitAnswer(ans: Answer): FirstKind {
   // Wort-Lernen 2: Nach gelungenem Abruf 1 am Tag 0 kommt Abruf 2 frühestens nach 8 weiteren Karten (`DAY0_SECOND_GAP`).
   const day0Passed = e.recall === 'day0a' && ans.grade >= 3;
   if (again) queue.splice(againPos(s.pos, queue.length, e.ex === 'flip', ans.grade >= 3, day0Passed ? DAY0_SECOND_GAP : 0), 0, { key: card.key, reason: 'again', phase: 'quiz' });
+  // Wort-Werkstatt: Fehler beim verzögerten Abruf → genau eine Wiederholung nach drei anderen Karten (`wk: 2`, danach nicht mehr).
+  if (e.wk && item.wk === 1 && ans.grade === 1) queue.splice(Math.min(queue.length, s.pos + DAY0_FIRST_GAP), 0, { key: card.key, reason: 'again', phase: 'quiz', wk: 2 });
   // P52: Kontrast ZUSÄTZLICH direkt nach der regulären Abfrage (die reguläre Abfrage benotet die Karte wie immer), nur wenn sie richtig war,
   // höchstens 1 je Runde, nie bei neuen Karten, im Anki- oder Hör-Modus und nicht nach Kontrolle/Prüfabfrage; beide Karten mindestens Stufe 2.
   const addContrast = ans.ok && !e.wk && !s.contrasted && e.ex !== 'flip' && !e.check && item.reason !== 'new' && s.mode !== 'listen' && contrastReady(updated, s.pool);

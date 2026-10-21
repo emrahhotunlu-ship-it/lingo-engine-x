@@ -193,6 +193,17 @@ describe('Werkstatt-Abruf im Schreibweg', () => {
     const h = (applyUpdate(cur, wrong.patch).hist as Doc[]).at(-1)!;
     expect(h.v).toBe('exploit');
   });
+  it('Fehler beim Werkstatt-Abruf: wk gezählt, aber keine Ruhe (FSRS-Fälligkeit); Wiederholung am selben Tag zählt keine neue Runde', () => {
+    const cur = base({ hist: [fail('2026-10-20'), fail('2026-10-21')] });
+    const w = reviewWrite('vocab/lev', cur, ev({ wk: true, grade: 1, given: 'exploit' }), null);
+    if (w.kind !== 'update') throw new Error('kein Update');
+    const mid = applyUpdate(cur, w.patch);
+    expect(readWk(mid)).toEqual({ n: 1, t: NOW, d: DAY });
+    expect(dayKey(Number(mid.due)) < addDays(DAY, 2)).toBe(true);
+    const again = reviewWrite('vocab/lev', mid, ev({ wk: true, t: NOW + 600_000 }), null);
+    if (again.kind !== 'update') throw new Error('kein Update');
+    expect(readWk(applyUpdate(mid, again.patch))).toMatchObject({ n: 1, d: DAY });
+  });
   it('ohne Werkstatt bleibt wk unberührt', () => {
     const cur = base();
     const w = reviewWrite('vocab/lev', cur, ev(), null);
@@ -205,9 +216,20 @@ describe('„Sag es“ und Hören', () => {
   const c = { kind: 'vocab' as const, word: 'leverage', lemma: 'leverage' };
   it('Zielwort da und lang genug: Gut, geprüft; sonst Schwer und ungeprüft; leer: Nochmal', () => {
     expect(checkSayIt('We leveraged our network last year.', c)).toMatchObject({ found: true, grade: 3, verified: true });
-    expect(checkSayIt('We used our network.', c)).toMatchObject({ found: false, grade: 2, verified: false });
+    expect(checkSayIt('We used our network.', c)).toMatchObject({ found: false, grade: 2, verified: false, noteOnly: true });
     expect(checkSayIt('leverage it', c)).toMatchObject({ found: true, longEnough: SAY_IT_MIN_WORDS <= 2, grade: 2, verified: false });
     expect(checkSayIt('   ', c)).toMatchObject({ grade: 1, verified: true });
+    expect(checkSayIt('leverage it', c).noteOnly).toBeUndefined();
+  });
+  it('„Sag es“: gleichwertige Fassungen einer Wendung zählen; praktisch der deutsche Text ist kein Treffer', () => {
+    const chunk = { kind: 'chunk' as const, word: 'to raise interest rates', lemma: 'to raise interest rates' };
+    expect(checkSayIt('The central bank will raise interest rates in March.', chunk)).toMatchObject({ found: true, verified: true });
+    expect(checkSayIt('The central bank will hike rates again in March.', chunk)).toMatchObject({ found: true, verified: true });
+    expect(checkSayIt('They want to put interest rates up next year.', chunk)).toMatchObject({ found: true, verified: true });
+    expect(checkSayIt('The bank will rise interest rates soon.', chunk)).toMatchObject({ found: false, noteOnly: true });
+    const de = 'Wir können unser Netzwerk nutzen, um leverage zu zeigen.';
+    expect(checkSayIt('wir können unser Netzwerk leverage nutzen', c, de)).toMatchObject({ found: false, german: true, noteOnly: true });
+    expect(checkSayIt('We can leverage our network.', c, de)).toMatchObject({ found: true, verified: true });
   });
   it('„Sag es“ erst ab 2 freien Lerntagen nach der Einführung', () => {
     const env = makeEnv(true, false, true);

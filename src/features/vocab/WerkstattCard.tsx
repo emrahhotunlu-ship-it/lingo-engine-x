@@ -203,7 +203,10 @@ export function WerkstattCard({ card, onDone }: { card: TrainCard; onDone: (kind
   );
 }
 
-/** Merkhilfe: die eigene zuerst (gespeichert oder neu geschrieben), darunter zwei Vorschläge von Claude zum Auswählen. */
+/**
+ * Merkhilfe: die eigene zuerst (gespeichert oder neu geschrieben), darunter zwei Vorschläge von Claude zum Auswählen. Vorgeladene Vorschläge bleiben
+ * zugeklappt („Vorschläge ansehen“, Lernwissenschaft S6): Die eigene Merkhilfe hat Vorrang; auf Knopfdruck geholte Vorschläge sind gleich offen.
+ */
 function MemoPanel({ card, bundle }: { card: TrainCard; bundle: readonly MemoCard[] }) {
   const { t, lang } = useT();
   const ai = useAiAvailable();
@@ -213,6 +216,7 @@ function MemoPanel({ card, bundle }: { card: TrainCard; bundle: readonly MemoCar
   const [own, setOwn] = useState<string | null>(initial);
   const [draft, setDraft] = useState('');
   const [busy, setBusy] = useState(false);
+  const [open, setOpen] = useState(false);
   const save = async (text: string) => {
     const v = text.trim().slice(0, MNEMO_MAX);
     if (!v || busy) return;
@@ -225,7 +229,10 @@ function MemoPanel({ card, bundle }: { card: TrainCard; bundle: readonly MemoCar
       toast(t('pxWwMemoSaved'));
     } else toast(t('pxWwMemoSaveFailed'), 'error');
   };
-  const ask = () => requestWkMemos(bundle, lang, 'user');
+  const ask = () => {
+    setOpen(true);
+    requestWkMemos(bundle, lang, 'user');
+  };
   const labels = [t('pxWwMemoKeyword'), t('pxWwMemoScene')] as const;
   const fieldId = `wk-memo-${card.id}`;
   return (
@@ -274,8 +281,14 @@ function MemoPanel({ card, bundle }: { card: TrainCard; bundle: readonly MemoCar
           <p className="lx-t-meta text-muted" lang={lang}>
             {t('pxWwMemoNoAi')}
           </p>
+        ) : entry?.phase === 'done' && entry.options && !open ? (
+          <div>
+            <Button variant="ghost" icon="sparkle" onClick={() => setOpen(true)} aria-expanded={false} data-testid="werkstatt-memo-show">
+              {t('pxWwMemoShow')}
+            </Button>
+          </div>
         ) : entry?.phase === 'done' && entry.options ? (
-          <ul className="m-0 flex list-none flex-col gap-2 p-0">
+          <ul className="m-0 flex list-none flex-col gap-2 p-0" data-testid="werkstatt-memo-list">
             {entry.options.map((o, i) => (
               <li key={i} className="flex flex-col gap-1 rounded-lg border border-line p-2.5" data-testid={`werkstatt-memo-option-${i}`}>
                 <span className="lx-t-meta text-subtle">{labels[i]}</span>

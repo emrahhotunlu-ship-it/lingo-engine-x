@@ -266,7 +266,7 @@ export function VocabHub() {
               icon="check"
               channel="cards"
               title={t('pxWwEveningTitle')}
-              sub={t('pxWwEveningLead', { n: evening.length })}
+              sub={evening.length === 1 ? t('pxWwEveningLeadOne') : t('pxWwEveningLead', { n: evening.length })}
               chevron
               onClick={() => startExtra(api, { only: evening, mode: 'type', free: true, allowNew: false, label: t('pxWwEveningRound') })}
               testId="ws-evening"

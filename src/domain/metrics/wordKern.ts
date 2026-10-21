@@ -48,7 +48,7 @@ export type WordKernStats = {
 const rate = (n: number, ok: number): Rate => ({ n, ok, share: n ? ok / n : null });
 const verifiedFree = (r: Row): boolean => !r.known && !r.u && !r.h && isFreeForm(r.x, r.ci);
 /** Antworten, die eine Pause nicht unterbrechen (wie `spacing.ts`): Partnerwort-Fehler und „Welches Wort passt?“. */
-const breaksPause = (r: Row): boolean => !r.ci && r.x !== 'contrast';
+const breaksPause = (r: Row): boolean => !r.ci && r.x !== 'contrast' && !(r.x === 'say_it' && r.u);
 const good = (r: Row): boolean => (r.g ?? 0) >= FREE_MIN_GRADE;
 
 function median(xs: number[]): number | null {

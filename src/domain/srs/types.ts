@@ -188,7 +188,11 @@ export type SituationTask = {
 
 /** `contrast` (P52): „Welches Wort passt?“ zusätzlich direkt nach der regulären Abfrage derselben Karte (höchstens 1 je Runde). */
 /** `werkstatt` (Wort-Lernen 2, `werkstatt.ts`): die Karte wird erst neu verankert (Werkstatt-Karte), dann folgt ein gestützter Abruf (`Exercise.wk`). */
-export type QueueItem = { key: string; reason: 'due' | 'new' | 'ahead' | 'again' | 'contrast'; phase: 'intro' | 'quiz' | 'werkstatt' };
+/**
+ * Eintrag der Runde. `wk` (nur `phase: 'quiz'`): Abruf der Wort-Werkstatt – 1 = verzögerter Abruf drei Karten nach der Werkstatt,
+ * 2 = einmalige Wiederholung nach einem Fehler (wieder drei Karten später).
+ */
+export type QueueItem = { key: string; reason: 'due' | 'new' | 'ahead' | 'again' | 'contrast'; phase: 'intro' | 'quiz' | 'werkstatt'; wk?: 1 | 2 };
 
 export type Verdict = 'correct' | 'near' | 'wrong';
 export type CheckResult = {

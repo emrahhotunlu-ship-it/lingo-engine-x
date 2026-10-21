@@ -187,11 +187,14 @@ function capPatch(cur: Doc, patch: Doc, a: AnswerEvent): void {
 }
 
 /**
- * Wort-Werkstatt (`werkstatt.ts`): Nach dem Abruf am Ende der Werkstatt ruht die Karte 2–3 Lerntage (die FSRS-Fälligkeit gilt, wenn sie dazwischen liegt).
- * Stabilität und Schwierigkeit bleiben, wie FSRS sie rechnet; `wk` zählt die Runde.
+ * Wort-Werkstatt (`werkstatt.ts`): Nach dem GELUNGENEN verzögerten Abruf der Werkstatt ruht die Karte 2–3 Lerntage (die FSRS-Fälligkeit gilt, wenn sie
+ * dazwischen liegt). Nach einem Fehler (Note 1) bleibt die Fälligkeit, wie FSRS sie rechnet (Lernwissenschaft S5). Stabilität und Schwierigkeit bleiben,
+ * wie FSRS sie rechnet; `wk` zählt die Runde (eine je Lerntag).
  */
 function wkPatch(cur: Doc, patch: Doc, a: AnswerEvent): void {
   if (!a.wk) return;
+  patch.wk = nextWk(cur, a.t, a.day);
+  if (a.grade < 2) return;
   const f = patch.fsrs as FsrsStored;
   const day = restDay(dayKey(f.due), a.day);
   const due = dayStartOf(day);
@@ -199,7 +202,6 @@ function wkPatch(cur: Doc, patch: Doc, a: AnswerEvent): void {
     patch.fsrs = { ...f, due, scheduledDays: Math.max(1, Math.round((due - a.t) / 86_400_000)) };
     patch.due = due;
   }
-  patch.wk = nextWk(cur, a.t, a.day);
 }
 
 /**
@@ -418,10 +420,18 @@ export function chunkPatch(cur: Doc, a: AnswerEvent): Doc {
  * `null` = nichts zu schreiben (kein/ungültiges/ausgeblendetes Dokument, Eintrag mit diesem Zeitstempel schon da, Ergebnis zu groß).
  */
 export function contrastMissOp(path: string, cur: Doc | undefined, a: AnswerEvent): { update: Doc } | null {
+  return noteOnlyOp(path, cur, { ...a, grade: 1 });
+}
+
+/**
+ * Nur ein Verlaufseintrag, Planung und Zähler bleiben unberührt (wie `contrastMissOp`). „Sag es“ ohne erkanntes Zielwort (Lernwissenschaft S7):
+ * `{x: 'say_it', g: 2, u: 1}` – die Spracherkennung kann das Wort verhört haben; kein Fehler, kein Beleg, keine FSRS-Änderung.
+ */
+export function noteOnlyOp(path: string, cur: Doc | undefined, a: AnswerEvent): { update: Doc } | null {
   if (!cur || cur.hidden === true || !validateDoc(path, cur).ok) return null;
   const hist: unknown[] = Array.isArray(cur.hist) ? (cur.hist as unknown[]) : [];
   if (hist.some((h) => typeof h === 'object' && h !== null && (h as Doc).t === a.t)) return null;
-  const patch: Doc = { hist: [...hist, histEntry({ ...a, grade: 1 }, exerciseDef(a.ex).mode)].slice(-HIST_MAX) };
+  const patch: Doc = { hist: [...hist, histEntry(a, exerciseDef(a.ex).mode)].slice(-HIST_MAX) };
   const merged = applyUpdate(cur, patch);
   if (!validateDoc(path, merged).ok || new TextEncoder().encode(JSON.stringify(merged)).length >= MAX_CARD_BYTES) return null;
   return { update: patch };

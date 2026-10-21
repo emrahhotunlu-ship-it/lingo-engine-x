@@ -156,7 +156,7 @@ describe('Simulation: eine Karte vom Tag 0 bis „Fest“ (Wort-Lernen 2)', () =
       const ex = n === 1 ? 'cloze' : ladder(n, i, doc);
       const g = n === 3 ? 1 : 3;
       if (n === 3) wrongDone = true;
-      doc = answer(doc, t, day, n === 3 ? 'cloze' : ex, g as 1 | 3);
+      doc = answer(doc, t, day, n === 3 ? 'cloze' : ex, g);
       seen.push({ day, ex: n === 3 ? 'cloze' : ex, g });
       const card = toTrainCard('leverage', doc, true, t);
       if (!fest && card && isFest(card, t)) fest = day;

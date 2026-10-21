@@ -28,7 +28,8 @@ export function sayOwnVars(card: TrainCard, sentence: string, scene: string, lan
     targets: [{ word: card.word, meaning: meaningForTask(card, lang) ?? '', kind: card.kind === 'chunk' ? 'phrase' : 'word', shown: true }],
     sentence,
     uiLang: lang,
-    task: { fmt: 'sc', scene, counterpart: '', textType: '', tone: 'free', tense: 'free', shape: 'free' },
+    // Die Anfrage setzt selbst „Situation: …“ davor: die sichtbare Szenenzeile ohne doppeltes „Situation:“.
+    task: { fmt: 'sc', scene: scene.replace(/^Situation:\s*/, ''), counterpart: '', textType: '', tone: 'free', tense: 'free', shape: 'free' },
   };
 }
 
@@ -141,7 +142,7 @@ function SayOwnItem({ card, scene, last, pos, total, onNext }: { card: TrainCard
           )}
           {out.better.trim() && (
             <div className="border-t border-line pt-2" data-testid="say-own-better">
-              <p className="lx-t-meta m-0 text-subtle">{t('pxWwSayOwnBetter')}</p>
+              <p className="lx-t-meta m-0 text-subtle">{t(out.verdict === 'correct' ? 'pxWwSayOwnAlso' : 'pxWwSayOwnBetter')}</p>
               <p className="m-0" lang="en">
                 {out.better}
               </p>

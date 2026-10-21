@@ -1,6 +1,7 @@
 import { addDays } from '../date';
 import { hash32 } from '../random';
 import { meaningForTask } from './cards';
+import { freeLaterDays } from './spacing';
 import type { Lang, TrainCard } from './types';
 
 // Wort-Lernen 2, Teil 2: zwei freiwillige Angebote (zählen als Extra, nie zur Pflicht, kein Vorwurf). Rein, nichts wird gespeichert.
@@ -25,20 +26,26 @@ export function eveningCheckKeys(cards: readonly TrainCard[], day: string, lang:
 
 /**
  * Zwei Karten von gestern oder vorgestern (eingeführt an einem der beiden Tage). Die Wahl ist ein Hash aus Karte und Tag: beim Neuzeichnen würfelt
- * nichts neu (Kap. 15). Gestern zuerst; weniger als zwei = so viele, wie es gibt.
+ * nichts neu (Kap. 15). Gestern zuerst; weniger als zwei = so viele, wie es gibt. Nur Karten, die schon an einem Folgetag frei abgerufen wurden
+ * (`freeLaterDays ≥ 1`, Lernwissenschaft S9): Ein eigener Satz setzt freien Abruf voraus.
  */
 export function sayOwnPick(cards: readonly TrainCard[], day: string, lang: Lang): TrainCard[] {
   const y = addDays(day, -1);
   const yy = addDays(day, -2);
   const rank = (c: TrainCard): number => hash32(`${c.key}|${day}|say-own`);
-  const from = (d: string) => cards.filter((c) => c.intro === d && usable(c, lang)).sort((a, b) => rank(a) - rank(b) || a.key.localeCompare(b.key));
+  const from = (d: string) => cards.filter((c) => c.intro === d && usable(c, lang) && freeLaterDays(c.doc) >= 1).sort((a, b) => rank(a) - rank(b) || a.key.localeCompare(b.key));
   return [...from(y), ...from(yy)].slice(0, SAY_OWN_WORDS);
 }
 
-/** Szene aus dem Berufsprofil für die Mini-Szene von „Sag es selbst“ (≤ 160 Zeichen, englisch); ohne Profil der allgemeine Arbeitsalltag. */
+/**
+ * Szene aus dem Berufsprofil für die Mini-Szene von „Sag es selbst“ (≤ 160 Zeichen). Das Profil ist freier Text (vielleicht deutsch), deshalb ohne
+ * eingesetzten Artikel (Englischlehrer 21.10.2026): „Your role: <Rolle>. Situation: <Situation>.“, ohne Situation „… Situation: a normal workday.“,
+ * ohne Profil „Situation: a normal day at the office.“
+ */
 export function sayOwnScene(ctx: { role: string; field: string; sit: readonly string[] } | null, i: number): string {
   const sit = ctx?.sit.length ? ctx.sit[i % ctx.sit.length] : null;
-  const who = [ctx?.role, ctx?.field ? `in ${ctx.field}` : ''].filter(Boolean).join(' ');
-  const s = sit ? `At work${who ? ` (${who})` : ''}: ${sit}` : who ? `At work as ${who}` : 'At work: a normal day at the office';
+  const who = [ctx?.role, ctx?.field ? `in ${ctx.field}` : ''].filter(Boolean).join(' ').trim();
+  const end = (x: string): string => x.trim().replace(/[.!?…]+$/, '');
+  const s = who ? `Your role: ${end(who)}. Situation: ${sit ? end(sit) : 'a normal workday'}.` : `Situation: ${sit ? end(sit) : 'a normal day at the office'}.`;
   return s.slice(0, 160);
 }

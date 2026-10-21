@@ -239,5 +239,7 @@ export const WK_N_MAX = 99;
 /** Werkstatt-Stand nach einer Runde (Abruf am Ende der Werkstatt). Vorhandene Felder (`p`) bleiben stehen; `n` höchstens 99. */
 export function nextWk(doc: Doc, t: number, day: string): Wk {
   const prev = readWk(doc);
-  return { ...(prev ?? {}), n: Math.min(WK_N_MAX, (prev?.n ?? 0) + 1), t, d: day };
+  // Eine Runde je Lerntag: die Wiederholung nach einem Fehler (am selben Tag) zählt nicht als neue Runde.
+  const n = prev && prev.d === day ? prev.n : Math.min(WK_N_MAX, (prev?.n ?? 0) + 1);
+  return { ...(prev ?? {}), n, t, d: day };
 }

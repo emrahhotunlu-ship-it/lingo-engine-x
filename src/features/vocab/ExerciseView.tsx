@@ -539,7 +539,7 @@ export function ExerciseView({
     if (e.ex === 'say_it') {
       // „Sag es“: lokal, ohne KI – Zielwort da und ganzer Satz = „Gut“; sonst „Schwer“ und ungeprüft (die Spracherkennung kann sich verhört haben).
       const text = fullSentence();
-      const c = checkSayIt(text, card);
+      const c = checkSayIt(text, card, e.sayIt?.de ?? '');
       finish({ verdict: c.grade >= 3 ? 'correct' : 'near' }, text, null, { sentence: { out: null, self: null, sayIt: c } }, c.grade);
       return;
     }
@@ -587,7 +587,7 @@ export function ExerciseView({
   const next = () => {
     if (!fb) return;
     const rec = actRecordOf(fb, e);
-    const ans: Answer = fb.override ? { grade: 3, given: fb.given, ms: fb.ms, ok: true, override: true, t: fb.t } : { grade: fb.grade, given: fb.given, ms: fb.ms, ok: fb.grade > 1, hint: fb.hint, t: fb.t, ...(fb.interrupted ? { interrupted: true as const } : {}), ...(fb.sentence && !fb.sentence.out && !fb.override && fb.sentence.sayIt?.verified !== true ? { unverified: true as const } : {}), ...(rec ? { rec } : {}) };
+    const ans: Answer = fb.override ? { grade: 3, given: fb.given, ms: fb.ms, ok: true, override: true, t: fb.t } : { grade: fb.grade, given: fb.given, ms: fb.ms, ok: fb.grade > 1, hint: fb.hint, t: fb.t, ...(fb.interrupted ? { interrupted: true as const } : {}), ...(fb.sentence && !fb.sentence.out && !fb.override && fb.sentence.sayIt?.verified !== true ? { unverified: true as const } : {}), ...(fb.sentence?.sayIt?.noteOnly && !fb.override ? { noteOnly: true as const } : {}), ...(rec ? { rec } : {}) };
     const kind = (onCommit ?? commitAnswer)(ans);
     // Tastatur am iPhone: im selben Handler fokussieren bzw. schließen.
     if (kind === 'typed') api.focusNow();
@@ -869,6 +869,11 @@ export function ExerciseView({
             {meaningText}
           </p>
         )}
+        {!fb && (
+          <p className="lx-t-meta text-subtle" data-testid="say-it-tip">
+            {t('pxWwSayItTip')}
+          </p>
+        )}
       </div>
     ) : (
       <div className="flex flex-col gap-3">
@@ -1020,8 +1025,12 @@ export function ExerciseView({
       ? null
       : fb.sentence?.sayIt
         ? fb.sentence.sayIt.verified
-          ? null
-          : t('pxWwSayItUnverified')
+          ? fb.sentence.sayIt.found
+            ? t('pxWwSayItChecked', { word: card.kind === 'chunk' ? typedForm(card.word) : card.word })
+            : null
+          : fb.sentence.sayIt.noteOnly
+            ? t('pxWwSayItNoted')
+            : t('pxWwSayItUnverified')
       : fb.sentence?.out?.fixedUnsure && fb.result.verdict !== 'correct'
         ? fb.sentence.out.errType && fb.sentence.out.errType !== 'other'
           ? t('awFixUnsureTyped', { type: t(`trErr_${fb.sentence.out.errType}` as MessageKey) })
@@ -1249,7 +1258,7 @@ function sentenceModel(fb: Feedback, card: Exercise['card'], examples: ExplainEx
 function sayItModel(c: SayItCheck, card: Exercise['card'], model: string | null, examples: ExplainExample[], t: (k: MessageKey, v?: Record<string, string | number>) => string): ExplanationModel {
   const word = card.kind === 'chunk' ? typedForm(card.word) : card.word;
   const lines: ExplanationModel['lines'] = [{ k: 'pattern', name: card.word, formula: null }];
-  lines.push({ k: 'why', text: !c.found ? t('pxWwSayItMissing', { word }) : !c.longEnough ? t('pxWwSayItShort') : t('pxWwSayItFound', { word }) });
+  lines.push({ k: 'why', text: c.german ? t('pxWwSayItGerman') : !c.found ? t('pxWwSayItMissing', { word }) : !c.longEnough ? t('pxWwSayItShort') : t('pxWwSayItFound', { word }) });
   if (model) lines.push({ k: 'note', text: `${t('pxWwSayItModel')}: ${model}` });
   return { lines, examples: model ? examples.filter((x) => x.en !== model) : examples, mark: [card.word, card.lemma], ai: false, source: 'card' };
 }

@@ -109,7 +109,8 @@ export function longGapProven(doc: Doc): boolean {
  * Antworten, die eine Pause NICHT unterbrechen: „Kenne ich“, Fehler am Partnerwort (`ci`) und „Welches Wort passt?“ (`contrast`) – sie schreiben nur den Verlauf,
  * nicht die Planung, und fragen das Wort selbst nicht ab.
  */
-const breaksPause = (r: Row): boolean => !r.known && !r.ci && r.x !== 'contrast';
+// „Sag es“ ohne erkanntes Zielwort (`u`, nur Verlaufseintrag) unterbricht die Pause ebenfalls nicht.
+const breaksPause = (r: Row): boolean => !r.known && !r.ci && r.x !== 'contrast' && !(r.x === 'say_it' && r.u);
 
 /** Lerntag der letzten Antwort vor `t`, die eine Pause unterbricht (`null` = keine). */
 export function lastPauseBreak(doc: Doc, t: number): string | null {

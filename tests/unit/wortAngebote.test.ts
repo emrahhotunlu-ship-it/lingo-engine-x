@@ -53,32 +53,38 @@ describe('Abend-Check', () => {
 describe('Sag es selbst', () => {
   const y = addDays(DAY, -1);
   const yy = addDays(DAY, -2);
-  const cards = [card('vocab/y1', doc('settle', y, 1)), card('vocab/y2', doc('verify', y, 2)), card('vocab/y3', doc('submit', y, 3)), card('vocab/yy', doc('obtain', yy, 4)), card('vocab/t', doc('today', DAY, 5))];
+  // Ein freier Abruf an einem Folgetag (Lernwissenschaft S9: nur Karten mit `freeLaterDays ≥ 1`).
+  const freeNext = (intro: string): Doc => ({ hist: [{ t: berlin(intro, 9), m: 'type', g: 3, x: 'cloze_hint' }, { t: berlin(addDays(intro, 1), 9), m: 'type', g: 3, x: 'cloze' }] });
+  const cards = [card('vocab/y1', doc('settle', y, 1, freeNext(y))), card('vocab/y2', doc('verify', y, 2, freeNext(y))), card('vocab/y3', doc('submit', y, 3, freeNext(y))), card('vocab/yy', doc('obtain', yy, 4, freeNext(yy))), card('vocab/t', doc('today', DAY, 5))];
   it('zwei Wörter, gestern zuerst; beim Neuzeichnen gleich (Kap. 15); vorgestern füllt auf', () => {
     const a = sayOwnPick(cards, DAY, 'de');
     expect(a).toHaveLength(SAY_OWN_WORDS);
     expect(a.every((c) => c.intro === y)).toBe(true);
     expect(sayOwnPick(cards, DAY, 'de').map((c) => c.key)).toEqual(a.map((c) => c.key));
-    const onlyOne = [card('vocab/y1', doc('settle', y, 1)), card('vocab/yy', doc('obtain', yy, 4))];
+    const onlyOne = [card('vocab/y1', doc('settle', y, 1, freeNext(y))), card('vocab/yy', doc('obtain', yy, 4, freeNext(yy)))];
     expect(sayOwnPick(onlyOne, DAY, 'de').map((c) => c.key)).toEqual(['vocab/y1', 'vocab/yy']);
+    // Noch kein freier Abruf an einem Folgetag: kein Angebot für diese Karte.
+    expect(sayOwnPick([card('vocab/y1', doc('settle', y, 1)), card('vocab/yy', doc('obtain', yy, 4, freeNext(yy)))], DAY, 'de').map((c) => c.key)).toEqual(['vocab/yy']);
     expect(sayOwnPick([cards[4]!], DAY, 'de')).toEqual([]);
   });
   it('Szene aus dem Berufsprofil (reihum), ohne Profil der allgemeine Arbeitsalltag, höchstens 160 Zeichen', () => {
     const ctx = { role: 'Sales manager', field: 'software', sit: ['negotiation', 'client email'] };
-    expect(sayOwnScene(ctx, 0)).toBe('At work (Sales manager in software): negotiation');
-    expect(sayOwnScene(ctx, 1)).toBe('At work (Sales manager in software): client email');
-    expect(sayOwnScene(ctx, 2)).toBe('At work (Sales manager in software): negotiation');
-    expect(sayOwnScene({ role: 'Controller', field: '', sit: [] }, 0)).toBe('At work as Controller');
-    expect(sayOwnScene(null, 0)).toBe('At work: a normal day at the office');
+    expect(sayOwnScene(ctx, 0)).toBe('Your role: Sales manager in software. Situation: negotiation.');
+    expect(sayOwnScene(ctx, 1)).toBe('Your role: Sales manager in software. Situation: client email.');
+    expect(sayOwnScene(ctx, 2)).toBe('Your role: Sales manager in software. Situation: negotiation.');
+    expect(sayOwnScene({ role: 'Controller', field: '', sit: [] }, 0)).toBe('Your role: Controller. Situation: a normal workday.');
+    expect(sayOwnScene(null, 0)).toBe('Situation: a normal day at the office.');
+    expect(sayOwnScene({ role: '', field: '', sit: ['Budgetrunde.'] }, 0)).toBe('Situation: Budgetrunde.');
     expect(sayOwnScene({ role: 'x'.repeat(200), field: '', sit: ['y'] }, 0).length).toBeLessThanOrEqual(160);
   });
   it('Anfrage: activate-check@1 als Mini-Szene mit genau einem gezeigten Zielwort, Eingabe weit unter 64 KiB, Schema prüft die Antwort', () => {
     const c = cards[0]!;
-    const vars = sayOwnVars(c, 'We need to settle the invoice before Friday.', 'At work: client email', 'de');
+    const vars = sayOwnVars(c, 'We need to settle the invoice before Friday.', 'Situation: client email.', 'de');
     expect(vars.task.fmt).toBe('sc');
     expect(vars.targets).toEqual([{ word: 'settle', meaning: 'settle (de)', kind: 'word', shown: true }]);
     const prompt = activateCheck.build(vars);
-    expect(prompt).toContain('Situation: At work: client email');
+    expect(prompt).toContain('Situation: client email.');
+    expect(prompt).not.toContain('Situation: Situation');
     expect(prompt).toContain('Learner text: We need to settle the invoice before Friday.');
     expect(new TextEncoder().encode(prompt).length).toBeLessThan(64 * 1024);
     const ok = activateCheck.schema(vars).safeParse({
