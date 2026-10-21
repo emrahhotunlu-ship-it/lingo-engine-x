@@ -105,6 +105,8 @@ type SessionState = {
   acts: ReadonlyMap<string, DueStep>;
   /** P52: „Welches Wort passt?“ (Kontrast) kam in dieser Runde schon (höchstens 1 je Runde). */
   contrasted: boolean;
+  /** Wort-Lernen 2, „Abend-Check“: nur freier Abruf (tippen ohne Anfangsbuchstaben), keine Werkstatt, keine Aktivierung. */
+  free: boolean;
 };
 
 const EXTRA_TARGET = 10;
@@ -150,6 +152,7 @@ export const useSession = create<SessionState>(() => ({
   catchUp: false,
   acts: new Map(),
   contrasted: false,
+  free: false,
 }));
 
 /** Heutige Einträge: Datenbank und noch nicht gespeicherter Puffer. */
@@ -179,7 +182,7 @@ function sceneLookup(lang: Lang): SceneLookup {
   };
 }
 
-type ExCtx = Pick<SessionState, 'cards' | 'pool' | 'lang' | 'day' | 'shown' | 'recentEx' | 'env' | 'mode' | 'dir' | 'controls' | 'ctlWeek' | 'ctlDay' | 'catchUp' | 'acts' | 'contrasted'>;
+type ExCtx = Pick<SessionState, 'cards' | 'pool' | 'lang' | 'day' | 'shown' | 'recentEx' | 'env' | 'mode' | 'dir' | 'controls' | 'ctlWeek' | 'ctlDay' | 'catchUp' | 'acts' | 'contrasted' | 'free'>;
 
 /** Modus je Karte nach anki-regeln §1 (`pickMode`, die Regel steht nur in domain/srs/flip.ts). */
 export function modeFor(s: ExCtx, card: TrainCard, item: QueueItem): PickedMode {
@@ -229,6 +232,13 @@ function exerciseFor(s: ExCtx, item: QueueItem): Exercise | null {
   }
   const hit = takePrebuilt(s, item);
   if (hit) return hit;
+  // „Abend-Check“: nur freier Abruf ohne Stütze (Wort: Lücke frei, sonst tippen; Wendung: ein Wort frei, Lücke, tippen).
+  if (s.free) {
+    const n = s.pool.length - 1;
+    const order: readonly ExerciseId[] = card.kind === 'chunk' ? ['cloze_part', 'cloze', 'type'] : ['cloze', 'type'];
+    const ex = order.find((x) => supports(card, x, s.lang, n, s.env));
+    if (ex) return build(s, card, ex);
+  }
   // N35 Hör-Modus: die Sprachausgabe spricht, getippt wird in die Lücke (sonst die Leiter).
   if (s.mode === 'listen') {
     const lx = listenExercise(card, s.lang, s.pool.length - 1, s.env);
@@ -387,6 +397,8 @@ export type SessionOpts = {
   label?: string;
   /** Block 1 der Tageseinheit. */
   unit?: boolean;
+  /** Nur freier Abruf („Abend-Check“, Wort-Lernen 2): keine Werkstatt, keine Aktivierung, keine Stütze. */
+  free?: boolean;
 };
 
 /** Modus und Richtung ohne ausdrückliche Angabe: Stapel-Merker, sonst Standard (Einstellungen „Wortschatz“). */
@@ -494,8 +506,9 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
   const ctl = mode === 'flip' ? controlCounts(docs, now) : { week: 0, day: 0 };
   const catchUp = mode === 'auto' && catchUpOn(overdueCount(pool, now));
   // Wort-Werkstatt (Wort-Lernen 2): fällige Karten, die haken, werden erst neu verankert – vor dem Fahrplan, damit sie keine Aktivierung bekommen.
-  markWerkstatt({ queue, cards: byKey, pool, day, mode, lang, catchUp, ctl });
-  const acts = actPlanFor({ queue, cards: byKey, pool, day, now, mode, env, lang, catchUp, ctl });
+  const free = opts.free === true;
+  if (!free) markWerkstatt({ queue, cards: byKey, pool, day, mode, lang, catchUp, ctl });
+  const acts = free ? new Map<string, DueStep>() : actPlanFor({ queue, cards: byKey, pool, day, now, mode, env, lang, catchUp, ctl });
   const base: SessionState = {
     active: true,
     status: 'running',
@@ -530,6 +543,7 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
     catchUp,
     acts,
     contrasted: false,
+    free,
   };
   prebuilt = null;
   const next = { ...base, ...settle(base, 0) };
@@ -1073,6 +1087,8 @@ export type TrainerSnapshot = {
   doneBefore: number;
   unit: boolean;
   controls: number;
+  /** „Abend-Check“ (nur freier Abruf). */
+  free?: boolean;
 };
 
 const RESULTS_MAX = 100;
@@ -1098,6 +1114,7 @@ export function trainerSnapshot(): TrainerSnapshot | null {
     doneBefore: s.doneBefore,
     unit: s.unit,
     controls: s.controls,
+    ...(s.free ? { free: true } : {}),
   };
 }
 
@@ -1160,8 +1177,9 @@ export function restoreTrainer(snap: TrainerSnapshot): boolean {
     unit: snap.unit === true,
     only: null,
     catchUp: false,
-    acts: actPlanFor({ queue: queue.slice(pos), cards: byKey, pool, day, now, mode: snap.mode, env: currentEnv(), lang: useSettings.getState().lang, catchUp: false, ctl }),
+    acts: snap.free ? new Map<string, DueStep>() : actPlanFor({ queue: queue.slice(pos), cards: byKey, pool, day, now, mode: snap.mode, env: currentEnv(), lang: useSettings.getState().lang, catchUp: false, ctl }),
     contrasted: queue.some((q) => q.reason === 'contrast'),
+    free: snap.free === true,
   };
   prebuilt = null;
   const next = { ...base, ...settle(base, pos) };
