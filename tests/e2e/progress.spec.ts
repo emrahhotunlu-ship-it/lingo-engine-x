@@ -336,8 +336,10 @@ test('Fortschritt Wörter: Fest-Zahl im Kopf, höchstens drei Karten, Messwerte 
   await openOverview(page);
   await expect(page.locator('h1')).toHaveText('Fortschritt');
   // Kopf: Fest statt „Wörter gesamt“. Fest braucht seit Paket ST Stufe 5, 21 Tage und einen Beleg im neuen Satz (zwei verschiedene Sätze frei richtig):
-  // In den Seed-Daten erfüllen fünf Karten das (alte Einträge ohne Abfrageart werden aus dem Modus gelesen) (vorher: 12 nach der alten Regel „Stufe ≥ 4 und 21 Tage“).
-  await expect(page.getByTestId('stand-fest')).toHaveText('5');
+  // In den Seed-Daten erfüllten fünf Karten das (vorher: 12 nach der alten Regel „Stufe ≥ 4 und 21 Tage“).
+  // Wort-Lernen 2 (21.10.2026): Fest verlangt zusätzlich einen freien richtigen Abruf nach ≥ 21 Tagen Pause. Keine Seed-Karte hat diese Pause
+  // im Verlauf – ehrlich 0, die Erklärzeile unten sagt, warum.
+  await expect(page.getByTestId('stand-fest')).toHaveText('0');
   await expect(page.getByTestId('vocab-total')).toHaveCount(0);
   await tab(page, 'path');
   const seg = page.getByTestId('seg-words');
@@ -347,8 +349,9 @@ test('Fortschritt Wörter: Fest-Zahl im Kopf, höchstens drei Karten, Messwerte 
   await expect(seg.getByTestId('quality-card')).toBeVisible();
   // Ohne Tagesbilder mit Fest-Zahl keine erfundene Prognose und kein Zuwachs.
   // Mit Fest-Karten, aber ohne Verlauf nach der neuen Regel: „… nach etwa drei Wochen“, dazu die Erklärzeile zur strengeren Zählung.
-  await expect(page.getByTestId('fest-growth')).toContainText('drei Wochen');
-  await expect(page.getByTestId('fest-rule-note')).toContainText('Fest zählt seit heute strenger');
+  // Wort-Lernen 2: ohne Fest-Karten der ehrliche Leerzustand (vorher mit fünf Fest-Karten „… nach etwa drei Wochen“).
+  await expect(page.getByTestId('fest-growth')).toContainText('Noch kein Wort ist fest');
+  await expect(page.getByTestId('fest-rule-note')).toContainText('nach mindestens 3 Wochen Pause');
   await expect(page.getByTestId('fest-forecast')).toHaveCount(0);
   await expect(page.getByTestId('expected-known')).not.toHaveText('–');
   // Behaltensquote: zu wenig Antworten → Strich und Hinweis, keine Zahl.

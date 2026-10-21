@@ -143,6 +143,8 @@ export function recallStep(c: { isNew: boolean; doc: Doc }, day: string): Recall
   if (intro === day) return rows.some((r) => dayKey(r.t) === day && (r.g ?? 0) >= FREE_MIN_GRADE) ? 'free' : 'hint';
   if (intro === null || intro > day) return null;
   // Gestern-Check: seit dem Einführungstag keine Antwort an einem anderen Tag (auch nach „Kenne ich“, das erst am nächsten Tag zählt).
+  // Ohne jeden Verlaufseintrag (alte Karte, Verlauf leer) ist nichts belegt: gewöhnliche Leiter.
+  if (rowsOf(c.doc).length === 0) return null;
   return rows.every((r) => dayKey(r.t) === intro) ? 'check' : null;
 }
 

@@ -201,6 +201,8 @@ describe('Gestern-Check am Anfang der Pflichtrunde', () => {
     const q = buildQueue({ cards, nowMs: NOW, target: 4, newQuotaLeft: 0, exclude: new Set(), lang: 'de' });
     expect(q[0]?.key).toBe(fresh.key);
     expect(recallStep(fresh, DAY)).toBe('check');
+    // Alte Karte mit Einführungstag, aber leerem Verlauf: kein Gestern-Check (nichts belegt), gewöhnliche Leiter.
+    expect(recallStep({ isNew: false, doc: { intro: '2026-09-01', hist: [] } }, DAY)).toBeNull();
   });
 });
 

@@ -34,7 +34,8 @@ test('Trockenlauf zeigt alles, schreibt nichts; nach Bestätigung ist die Umstel
   // Kurs x/24 steht nicht mehr im Kopf (Fokus-Umbau); die Kursdaten bleiben in der Datenbank.
   await expect(page.getByTestId('course-done')).toHaveCount(0);
   // Kopfzahl ist „Fest“ (Paket ST: Stufe 5, Stabilität ≥ 21 Tage, im neuen Satz gekonnt; Seed: 5 Karten, wie acceptance/progress), nicht mehr „Wörter gesamt“ inkl. Neuer.
-  await expect(page.getByTestId('stand-fest')).toHaveText('5');
+  // Wort-Lernen 2 (21.10.2026): zusätzlich ein freier richtiger Abruf nach ≥ 21 Tagen Pause – den hat keine Seed-Karte, also ehrlich 0.
+  await expect(page.getByTestId('stand-fest')).toHaveText('0');
   await expect(page.getByTestId('vocab-total')).toHaveCount(0);
   await expect(page.getByText('Umgestellt am 20. September 2026')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Umstellung ausführen' })).toHaveCount(0);
