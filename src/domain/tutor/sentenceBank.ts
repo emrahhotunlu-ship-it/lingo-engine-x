@@ -128,6 +128,73 @@ export function effectiveGate(gate: SbGate): SbGate {
   return ok ? gate : { ...gate, on: false };
 }
 
+// ------------------------------------------------------------------ Befund eintragen (Einstellungen › KI-Stichprobe, 21.10.2026)
+
+/** Warum ein Befund (noch) nicht eingetragen werden kann. */
+export type ReviewFault = 'no_start' | 'too_early' | 'no_sample' | 'bad_count' | 'over_sample';
+
+/** Ehrlicher Stand der Freigabe für die Anzeige: was ist erfüllt, was fehlt noch. `gate` = gespeicherter Schalter (`readGate`), nicht der wirksame. */
+export type GateStatus = {
+  /** Erster gesammelter Claude-Satz (Beginn der Sammelzeit) oder `null`. */
+  start: number | null;
+  /** Sammelzeit von 4 Wochen ab `start` vorbei? */
+  quarantineOver: boolean;
+  /** Ab wann ein Befund frühestens zählt (`start` + 28 Tage) oder `null`. */
+  releaseFrom: number | null;
+  /** Ganze Tage bis `releaseFrom` (0, wenn vorbei). */
+  daysLeft: number;
+  /** Sätze in der Stichprobe für den Lehrer (höchstens 30). */
+  sampleN: number;
+  /** Wirksam freigegeben (`effectiveGate`). */
+  on: boolean;
+  /** Zuletzt eingetragener Befund, sein Zeitpunkt und ob er die Schwelle besteht. */
+  review: SbReview | null;
+  checkedAt: number | null;
+  passes: boolean | null;
+};
+
+export function gateStatus(gate: SbGate, nowMs: number, sampleN: number): GateStatus {
+  const releaseFrom = gate.start !== null ? gate.start + QUARANTINE_DAYS * DAY_MS : null;
+  return {
+    start: gate.start,
+    quarantineOver: quarantineOver(gate, nowMs),
+    releaseFrom,
+    daysLeft: releaseFrom === null ? QUARANTINE_DAYS : Math.max(0, Math.ceil((releaseFrom - nowMs) / DAY_MS)),
+    sampleN,
+    on: effectiveGate(gate).on,
+    review: gate.review ?? null,
+    checkedAt: gate.checkedAt ?? null,
+    passes: gate.review ? reviewPasses(gate.review) : null,
+  };
+}
+
+/**
+ * Darf dieser Befund eingetragen werden? Erst wenn Claude-Sätze gesammelt sind, die 4 Wochen Sammelzeit vorbei sind und es eine Stichprobe gibt;
+ * die Zahlen sind ganze Zahlen ≥ 0 und zusammen nicht mehr als Sätze in der Stichprobe. `null` = in Ordnung.
+ */
+export function reviewFault(gate: SbGate, nowMs: number, review: SbReview, sampleN: number): ReviewFault | null {
+  if (gate.start === null) return 'no_start';
+  if (!quarantineOver(gate, nowMs)) return 'too_early';
+  if (sampleN <= 0) return 'no_sample';
+  if (count(review.hard) === null || count(review.unclear) === null) return 'bad_count';
+  if (review.hard + review.unclear > sampleN) return 'over_sample';
+  return null;
+}
+
+/**
+ * Neuer Wert für `app/profile.sbGate` nach dem Befund (`releaseGate`): `on` nur bei bestandener Schwelle, `checkedAt` und `review` immer. Fremde
+ * Felder des gespeicherten Schalters bleiben stehen (nie still verlieren). `null` = nicht erlaubt (`reviewFault`) oder nichts Neues (derselbe Befund
+ * mit demselben Ergebnis wurde vor weniger als einem Tag schon eingetragen).
+ */
+export function gateReviewPatch(raw: unknown, nowMs: number, review: SbReview, sampleN: number): Record<string, unknown> | null {
+  const gate = readGate(raw);
+  if (reviewFault(gate, nowMs, review, sampleN)) return null;
+  const next = releaseGate(gate, nowMs, review);
+  const prev = gate.review;
+  if (prev && prev.hard === review.hard && prev.unclear === review.unclear && gate.on === next.on && gate.checkedAt && nowMs - gate.checkedAt < DAY_MS) return null;
+  return { ...(isObj(raw) ? raw : {}), start: gate.start, on: next.on, checkedAt: next.checkedAt, review: next.review };
+}
+
 /** Darf der Satz gezeigt werden? Gemeldete nie; Lesetext/C1 sofort; Claude-Sätze erst nach der Freigabe UND 4 Wochen nach ihrer Erzeugung. */
 export const sbVisible = (e: SbEntry, gate: SbGate, nowMs: number): boolean =>
   e.bad !== 1 && (e.src !== 'ai' || (gate.on && sentenceQuarantineOver(e, nowMs)));
@@ -359,4 +426,11 @@ export function bankSample(vocab: ReadonlyMap<string, Doc> | undefined, gate: Sb
   }
   const since = gate.on ? (gate.checkedAt ?? 0) : 0;
   return { gate, n: total, quarantined, sample: teacherSample(cards, n, since) };
+}
+
+/** Claude-Sätze (nicht gemeldet), deren eigene 4 Wochen ab Erzeugung noch laufen – unabhängig vom Schalter (Anzeige der Freigabe). */
+export function sbWaiting(vocab: ReadonlyMap<string, Doc> | undefined, nowMs: number): number {
+  let n = 0;
+  for (const doc of vocab?.values() ?? []) n += readSb(doc).filter((e) => e.src === 'ai' && e.bad !== 1 && !sentenceQuarantineOver(e, nowMs)).length;
+  return n;
 }

@@ -11,7 +11,7 @@ import { hasGapPlaceholder } from '../../domain/srs/context';
 import { storedExamples } from '../../domain/srs/examples';
 import type { TrainCard } from '../../domain/srs/types';
 import { tutorCtx } from '../../domain/tutor/ctx';
-import { acceptBankItem, bankKeys, effectiveGate, gateStartPatch, markSbBad, needsBank, readGate, readSb, sbPatch, type SbEntry, type SbGate } from '../../domain/tutor/sentenceBank';
+import { acceptBankItem, bankKeys, effectiveGate, gateReviewPatch, gateStartPatch, markSbBad, needsBank, readGate, readSb, reviewFault, sbPatch, type ReviewFault, type SbEntry, type SbGate, type SbReview } from '../../domain/tutor/sentenceBank';
 import { useCapabilities } from '../../platform/capabilities';
 import { logError, logWarn } from '../../platform/diagnostics';
 import { WORD_BANK_MAX_CARDS, wordBank, type WordBankCard } from '../../prompts/wordBank';
@@ -107,6 +107,45 @@ export async function noteGateStart(nowMs: number): Promise<boolean> {
     return false;
   }
   return wrote;
+}
+
+/** Ergebnis von „Befund eintragen“: freigegeben · eingetragen, Bank bleibt zu · schon so eingetragen · nicht erlaubt (Grund) · Profil unlesbar · Fehler. */
+export type GateReviewResult = { r: 'released' | 'closed' | 'same' | 'failed' | 'invalid' } | { r: 'fault'; fault: ReviewFault };
+
+/**
+ * Befund der Lehrer-Stichprobe eintragen (Einstellungen › KI-Stichprobe): `releaseGate` setzt `on` nur bei bestandener Schwelle, `checkedAt` und
+ * `review` immer. Ein Schreibweg (`writer.transform('app/profile')`), nur bei Änderung, nie in ein fehlendes oder ungültiges Profil und nie über einen
+ * Schalter in unbekannter Form (kein Objekt): dann wird nichts geschrieben (data-guard).
+ */
+export async function saveGateReview(review: SbReview, sampleN: number, nowMs: number): Promise<GateReviewResult> {
+  const writer = getWriter();
+  if (!writer) return { r: 'failed' };
+  let out: GateReviewResult = { r: 'same' };
+  try {
+    await writer.transform('app/profile', (cur) => {
+      if (!cur || !validateDoc('app/profile', cur).ok || (cur.sbGate !== undefined && cur.sbGate !== null && !isObj(cur.sbGate))) {
+        out = { r: 'invalid' };
+        return null;
+      }
+      const gate = readGate(cur.sbGate);
+      const fault = reviewFault(gate, nowMs, review, sampleN);
+      if (fault) {
+        out = { r: 'fault', fault };
+        return null;
+      }
+      const next = gateReviewPatch(cur.sbGate, nowMs, review, sampleN);
+      if (!next || jsonEqual(next, cur.sbGate)) {
+        out = { r: 'same' };
+        return null;
+      }
+      out = { r: next.on === true ? 'released' : 'closed' };
+      return { update: { sbGate: next } };
+    });
+  } catch (err) {
+    logError('tutor:word-bank-review', err, 'app/profile');
+    return { r: 'failed' };
+  }
+  return out;
 }
 
 /** „Melden“ an einem Satz der Bank: `bad: 1` am Eintrag (nichts gelöscht); der Satz wird nie mehr gezeigt. */
