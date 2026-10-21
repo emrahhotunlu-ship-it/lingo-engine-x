@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { addDays } from '../../src/domain/date';
+import { addDays, dayKey } from '../../src/domain/date';
+import { struggling } from '../../src/domain/srs/werkstatt';
 import { FEST_DAYS, FEST_STAGE, buildTrainCards, counts, dueCount, isDue, isFest, isOverdue, overdueCount, streak, streakWeek, unitState, UNIT_STATES, festCount, retention28, expectedKnown } from '../../src/domain/metrics';
 import { buildOverview } from '../../src/domain/overview';
 import { streakView } from '../../src/domain/progress/weekDots';
-import { buildQueue, dueCards } from '../../src/domain/srs/queue';
+import { LEECH_MAX, buildQueue, dueCards } from '../../src/domain/srs/queue';
 import { deckCounts, isDueCard } from '../../src/domain/srs/decks';
 import { toTrainCard } from '../../src/domain/srs/cards';
 import { vocabStatistics } from '../../src/domain/srs/retention';
@@ -58,9 +59,12 @@ describe('Fällig: eine Definition, überall dieselbe Zahl', () => {
         expect(dc.due + dc.learning).toBe(n);
         expect(vocabStats(cards, now, '2000-01-01', 5).due).toBe(n);
         expect(filterCards(cards, { filter: 'due', query: '', sort: 'az', nowMs: now }).length).toBe(n);
-        // Runde ohne neue Karten: genau die fälligen (Dauerfehler-Kappe greift erst ab 5 Fehlversuchen, die es hier nicht gibt).
+        // Runde ohne neue Karten: genau die fälligen – bis auf hakende Karten über der Kappe (`capLeeches`, seit Wort-Lernen 2 = Werkstatt-Auslöser):
+        // Sie bleiben für die nächsten Tage fällig, ihr Platz wird mit vorgezogenen Karten (`ahead`) aufgefüllt.
         const q = buildQueue({ cards, nowMs: now, target: n, newQuotaLeft: 0, exclude: new Set(), lang: 'de' });
-        expect(q.filter((x) => x.reason === 'due').length).toBe(q.length);
+        const capped = Math.max(0, visible.filter((c) => isDueCard(c, now) && struggling(c.doc, dayKey(now))).length - LEECH_MAX);
+        expect(q.filter((x) => x.reason === 'due').length).toBe(q.length - q.filter((x) => x.reason === 'ahead').length);
+        expect(q.filter((x) => x.reason === 'ahead').length).toBeLessThanOrEqual(capped);
         expect(q.length).toBeLessThanOrEqual(n);
         if (cards[0]?.word.startsWith('w')) expect(q.length).toBe(n);
         // Die Übersicht „Dein Stand“ rechnet aus den rohen Dokumenten und kommt auf dieselbe Anzahl.
