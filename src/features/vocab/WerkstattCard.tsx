@@ -124,7 +124,7 @@ export function WerkstattCard({ card, onDone }: { card: TrainCard; onDone: (kind
               )}
               {lines.length > 0 &&
                 row(
-                  t('pxWwContrastLabel'),
+                  lines.some((l) => l.en) ? t('pxWwMeaningLabel') : t('pxWwContrastLabel'),
                   <ul className="m-0 flex list-none flex-col gap-1.5 p-0" data-testid="werkstatt-contrast">
                     {lines.map((l, i) => (
                       <li key={i} className={`flex flex-wrap items-baseline gap-x-2 ${l.mine ? 'text-fg' : 'text-muted'}`} data-mine={l.mine ? '1' : '0'}>

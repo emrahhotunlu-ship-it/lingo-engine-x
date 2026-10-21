@@ -28,8 +28,8 @@ export function sayOwnVars(card: TrainCard, sentence: string, scene: string, lan
     targets: [{ word: card.word, meaning: meaningForTask(card, lang) ?? '', kind: card.kind === 'chunk' ? 'phrase' : 'word', shown: true }],
     sentence,
     uiLang: lang,
-    // Die Anfrage setzt selbst „Situation: …“ davor: die sichtbare Szenenzeile ohne doppeltes „Situation:“.
-    task: { fmt: 'sc', scene: scene.replace(/^Situation:\s*/, ''), counterpart: '', textType: '', tone: 'free', tense: 'free', shape: 'free' },
+    // Die Anfrage setzt selbst „Situation: …“ davor: kein doppeltes „Situation:“. Profilzeile „Your role: X. Situation: Y.“ wird zu „Y (learner role: X)“.
+    task: { fmt: 'sc', scene: scene.replace(/^Situation:\s*/, '').replace(/^Your role: (.+?)\. Situation: (.+?)\.?$/, '$2 (learner role: $1)'), counterpart: '', textType: '', tone: 'free', tense: 'free', shape: 'free' },
   };
 }
 

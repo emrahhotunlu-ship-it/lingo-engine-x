@@ -35,7 +35,7 @@ const CTX_MAX = 300;
 
 /** Beispielantwort im Prompt; muss selbst das Schema bestehen (Test). */
 export const MNEMONIC_OPTIONS_EXAMPLE =
-  '{"items":[{"id":"v_leverage","options":["In leverage steckt lever – der Hebel. Du setzt etwas, das du schon hast, als Hebel ein.","Im Preisgespräch sagst du: „Let\'s leverage last quarter\'s numbers.“ Du setzt die guten Zahlen als Hebel für den besseren Preis ein."]}]}';
+  '{"items":[{"id":"v_leverage","options":["In leverage steckt lever – der Hebel. Du setzt etwas, das du schon hast, als Hebel ein.","Vor dem Preisgespräch sagst du zum Team: „Let\'s leverage last quarter\'s numbers.“ Die guten Zahlen sind dein Hebel für einen besseren Preis."]}]}';
 
 const ID = 'mnemonic-options';
 const VERSION = 1;

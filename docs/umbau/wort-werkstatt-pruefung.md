@@ -50,6 +50,8 @@ Frage an den Lehrer: Ist die Zeile „Deutsch denkt: nutzen → Englisch sagt: l
 
 ## 3. Merkhilfe
 
+> Hinweis: Das Beispiel „Hebel-Ritsch“ unten ist ersetzt durch die Korrekturrunde (siehe Abschnitt „Korrekturrunde“ am Ende).
+
 | Schlüssel | Deutsch | Englisch |
 |---|---|---|
 | pxWwMemoLabel | Merkhilfe | Memory aid |
@@ -135,6 +137,8 @@ Frage an den Lehrer: Reicht „Zielwort vorhanden + 3 Wörter“ als Wertung „
 
 ## 6. Freiwillige Angebote im Reiter „Wörter“ (Gruppe „Wenn du magst“)
 
+> Hinweis: Die alte Szenenzeile („At work (…): …“) ist ersetzt durch die Korrekturrunde.
+
 | Schlüssel | Deutsch | Englisch |
 |---|---|---|
 | pxWwOffersLabel | Wenn du magst | If you like |
@@ -163,6 +167,8 @@ Frage an den Lehrer: Reicht „Zielwort vorhanden + 3 Wörter“ als Wertung „
 Frage an den Lehrer: Klingt „At work (Sales manager in software): negotiation“ als Szenenzeile natürlich genug, oder lieber „You are a sales manager in software. Situation: a negotiation.“?
 
 ## 7. Berufsprofil in den Satzanfragen
+
+> Hinweis: Die alte Regel für `card-examples@4` ist ersetzt durch die Korrekturrunde.
 
 - In den Einstellungen sind 5 Situationen wählbar (bisher 3 in der Anfrage). Alle 5 gehen über `tutorCtx()` in jede Satzanfrage: `word-bank@1`, `mnemonic-options@1` und „Sag es selbst“.
 - **`card-examples@4`** (neu, vorher @3) hat zwei zusätzliche Zeilen, nur wenn ein Profil da ist:

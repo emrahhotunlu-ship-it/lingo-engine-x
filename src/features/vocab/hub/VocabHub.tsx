@@ -273,7 +273,7 @@ export function VocabHub() {
               data={{ 'data-n': String(evening.length) }}
             />
           )}
-          {sayOwnN > 0 && <Row icon="sparkle" channel="cards" title={t('pxWwSayOwnTitle')} sub={t('pxWwSayOwnLead')} chevron onClick={() => openSheet('x:say-own')} testId="ws-say-own" />}
+          {sayOwnN > 0 && <Row icon="sparkle" channel="cards" title={t('pxWwSayOwnTitle')} sub={sayOwnN === 1 ? t('pxWwSayOwnLeadOne') : t('pxWwSayOwnLead')} chevron onClick={() => openSheet('x:say-own')} testId="ws-say-own" />}
         </RowList>
       )}
 

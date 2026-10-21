@@ -77,6 +77,16 @@ describe('Sag es selbst', () => {
     expect(sayOwnScene({ role: '', field: '', sit: ['Budgetrunde.'] }, 0)).toBe('Situation: Budgetrunde.');
     expect(sayOwnScene({ role: 'x'.repeat(200), field: '', sit: ['y'] }, 0).length).toBeLessThanOrEqual(160);
   });
+  it('sayOwnVars: Szene ohne doppeltes „Situation:“ (Profil mit/ohne Situation, ohne Profil)', () => {
+    const c = cards[0]!;
+    const sc = (s: string) => sayOwnVars(c, 'x', s, 'de').task.scene;
+    expect(sc('Your role: sales manager. Situation: a negotiation.')).toBe('a negotiation (learner role: sales manager)');
+    expect(sc('Your role: sales manager. Situation: a normal workday.')).toBe('a normal workday (learner role: sales manager)');
+    expect(sc('Situation: a normal day at the office.')).toBe('a normal day at the office.');
+    const prompt = activateCheck.build(sayOwnVars(c, 'x', 'Your role: nurse. Situation: a night shift.', 'de'));
+    expect(prompt).not.toContain('Situation: Your role');
+    expect(prompt).not.toMatch(/Situation:[^\n]*Situation:/);
+  });
   it('Anfrage: activate-check@1 als Mini-Szene mit genau einem gezeigten Zielwort, Eingabe weit unter 64 KiB, Schema prüft die Antwort', () => {
     const c = cards[0]!;
     const vars = sayOwnVars(c, 'We need to settle the invoice before Friday.', 'Situation: client email.', 'de');
