@@ -2,6 +2,7 @@ import { dayKey } from '../date';
 import { logWarn } from '../../platform/diagnostics';
 import { FREE_ANSWER, FREE_MIN_GRADE } from './variety';
 import type { TrainCard } from './types';
+import { wordKernLine, wordKernStats } from '../metrics/wordKern';
 
 // Diagnosewerte zum Paket WL (19.10.2026), nur Lesen: Kommt der Satzwechsel an, und staut sich das Tor?
 
@@ -49,4 +50,12 @@ export function reportWlDiagnostics(cards: readonly TrainCard[], day: string): v
   const jam = gateJam(cards);
   const sc = sentenceChangeShare(cards);
   logWarn('wl', { code: 'wl_stats', message: `Tor-Stau: ${jam} Karten · Satzwechsel ab Tag 2: ${sc.share === null ? 'keine Messwerte' : `${Math.round(sc.share * 100)} % von ${sc.n}`}` });
+}
+
+let kernReportedFor = '';
+/** Wort-Lernen 2, Paket „Kern“: die sechs Kennzahlen (`metrics/wordKern.ts`) einmal je Lerntag ins Diagnose-Protokoll (nur Zahlen, keine Inhalte). */
+export function reportWordKern(cards: readonly TrainCard[], day: string): void {
+  if (kernReportedFor === day) return;
+  kernReportedFor = day;
+  logWarn('wl', { code: 'wk_stats', message: wordKernLine(wordKernStats(cards, day)) });
 }

@@ -146,6 +146,11 @@ export type Exercise = {
   situation?: SituationTask;
   /** Anki (anki-regeln §1): getippte Kontrolle nach „Leicht“ bzw. Prüfabfrage nach „Gut“. */
   check?: 'control' | 'probe' | 'known';
+  /**
+   * Wort-Lernen 2 (`spacing.ts`, `recallStep`): Abruf 1 bzw. 2 am Einführungstag (`day0a`, `day0b`) oder der erste Abruf nach dem
+   * Einführungstag (`yesterday` = „Gestern-Check“, `first` = späterer erster Abruf). Nur Beschriftung; die Planung kennt es nicht.
+   */
+  recall?: 'day0a' | 'day0b' | 'yesterday' | 'first';
   /** Nur `flip`: Richtung der Karte (§8). */
   dir?: 'de-en' | 'en-de';
   /** `complete`: Satzanfang aus dem Paket (sonst frei). */

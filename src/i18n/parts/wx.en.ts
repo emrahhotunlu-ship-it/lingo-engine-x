@@ -3,7 +3,7 @@
 export const wxEn = {
   wxKnownTask: 'Type the word into the gap – without help.',
   wxKnownKind: '“I know it” check',
-  wxKnownSaved: 'Saved – the word comes back in 10 days.',
+  wxKnownSaved: 'Saved – tomorrow the app asks for the word once more from memory. If you get it then, it counts as known.',
   wxFamFrom: 'Form it from the {pos}:',
   wxFam_noun: 'noun',
   wxFam_verb: 'verb',

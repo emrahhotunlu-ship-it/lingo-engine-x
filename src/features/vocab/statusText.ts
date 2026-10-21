@@ -20,7 +20,7 @@ function proof(s: CardStatus, t: Tr, dateShort: (ms: number) => string): string 
     case 'firm':
       return t('stxDetailFirm');
     case 'safe':
-      return t('stxDetailFree', { n: days });
+      return s.onlyGap ? t('stxDetailLongGap') : t('stxDetailFree', { n: days });
     case 'wobbly':
       return s.lastWasWrong ? t('stxDetailWobblyWrong', { date: dateShort(s.lastWrong ?? 0) }) : s.unrecovered ? t('stxDetailWobblyRecover') : t('stxDetailWobblyGap');
     case 'learning':

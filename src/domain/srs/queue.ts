@@ -5,6 +5,9 @@ import { isLearningState, retrievability } from './scheduler';
 import { chunkParts } from './chunkCards';
 import type { Lang, QueueItem, TrainCard } from './types';
 import { lapsesOf } from './lapses';
+import { dayKey } from '../date';
+import { pickDissimilar } from './similar';
+import { recallStep } from './spacing';
 
 // Runde „Wiederholen" (Lern-Entwurf §3): fällige Karten nach Dringlichkeit, dazu neue Karten
 // im Tageskontingent – auch an Tagen mit vielen Fälligen (Kap. 15) – früh eingemischt.
@@ -273,15 +276,18 @@ export function buildQueue(i: {
   const fresh = newCards(act, i.mix ?? {});
   const nNew = Math.min(Math.max(0, i.newQuotaLeft), fresh.length, i.target);
   const reviews: QueueItem[] = [];
-  for (const c of capLeeches(dueCards(act, i.nowMs))) {
+  // Wort-Lernen 2: Der erste Abruf nach dem Einführungstag („Gestern-Check“) steht am Anfang der Runde – vor den übrigen fälligen Karten.
+  const day = dayKey(i.nowMs);
+  const due = dueCards(act, i.nowMs);
+  const isCheck = (c: TrainCard): boolean => recallStep(c, day) === 'check';
+  for (const c of capLeeches([...due.filter(isCheck), ...due.filter((c) => !isCheck(c))])) {
     if (reviews.length >= i.target - nNew) break;
     if (claim(c)) reviews.push({ key: c.key, reason: 'due', phase: 'quiz' });
   }
-  const news: QueueItem[] = [];
-  for (const c of fresh) {
-    if (news.length >= nNew) break;
-    if (claim(c)) news.push({ key: c.key, reason: 'new', phase: c.stage === 0 ? 'intro' : 'quiz' });
-  }
+  // Wort-Lernen 2: keine zwei Wörter mit ähnlicher Bedeutung am selben Einführungstag (auch nicht zu heute schon eingeführten); reicht der Vorrat nicht,
+  // wird aufgefüllt – die Zahl neuer Karten bleibt (`similar.ts`).
+  const introducedToday = i.cards.filter((c) => c.intro === day && !c.isNew && !c.hidden);
+  const news: QueueItem[] = pickDissimilar(fresh, nNew, introducedToday, claim).map((c) => ({ key: c.key, reason: 'new', phase: c.stage === 0 ? 'intro' : 'quiz' }));
   if (reviews.length + news.length < i.target) {
     for (const c of aheadCards(act, i.nowMs)) {
       if (reviews.length + news.length >= i.target) break;

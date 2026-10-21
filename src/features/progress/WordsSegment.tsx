@@ -7,6 +7,9 @@ import { Card } from '../../ui/Card';
 import { Disclosure } from '../../ui/Disclosure';
 import { activationRates, ratePct, readyCount } from '../../domain/activation/ready';
 import { useActs } from '../vocab/actStore';
+import { buildChunkCards } from '../../domain/srs/chunkCards';
+import { WK_MIN_N, WK_TARGETS, wordKernStats, type Rate } from '../../domain/metrics/wordKern';
+import type { MessageKey } from '../../i18n';
 import { PathTab } from './PathTab';
 import { StatsTab } from './StatsTab';
 
@@ -171,6 +174,67 @@ function TestsMeasures() {
   );
 }
 
+type WkRow = { id: string; label: MessageKey; value: string | null; target: MessageKey; ok: boolean | null };
+
+/**
+ * Wort-Lernen 2 (Paket „Kern“): sechs Kennzahlen in Worten – gemessen am freien Abruf, nicht am Erkennen (`metrics/wordKern.ts`).
+ * Vokabeln und Wendungen. Unter 5 Messpunkten steht „noch zu wenige Messwerte“ statt einer Zahl.
+ */
+function WordKernMeasure({ cards, now }: { cards: ReturnType<typeof useVocabMetrics>['cards']; now: number }) {
+  const { t, num } = useT();
+  const today = useClock((s) => s.today);
+  const chunkDocs = useLive((s) => s.collections.chunk) ?? EMPTY;
+  const invalid = useLive((s) => s.invalid);
+  const chunks = useMemo(() => buildChunkCards(chunkDocs, now, invalidIdsOf(invalid, 'chunk')), [chunkDocs, now, invalid]);
+  const st = useMemo(() => wordKernStats([...cards, ...chunks], today), [cards, chunks, today]);
+  const pctOf = (r: Rate): string | null => (r.share === null || r.n < WK_MIN_N ? null : t('pxWkPct', { pct: num(Math.round(r.share * 100)), n: num(r.n) }));
+  const atLeast = (r: Rate, goal: number): boolean | null => (r.share === null || r.n < WK_MIN_N ? null : r.share >= goal);
+  const rows: WkRow[] = [
+    { id: 'next-day', label: 'pxWkNextDayLabel', value: pctOf(st.nextDay), target: 'pxWkTargetNextDay', ok: atLeast(st.nextDay, WK_TARGETS.nextDay) },
+    { id: 'chunk-first', label: 'pxWkChunkFirstLabel', value: pctOf(st.chunkFirst), target: 'pxWkTargetChunkFirst', ok: atLeast(st.chunkFirst, WK_TARGETS.chunkFirst) },
+    { id: 'long-gap', label: 'pxWkLongGapLabel', value: pctOf(st.longGap), target: 'pxWkTargetLongGap', ok: atLeast(st.longGap, WK_TARGETS.longGap) },
+    {
+      id: 'median-safe',
+      label: 'pxWkMedianSafeLabel',
+      value: st.medianSafe.days === null || st.medianSafe.n < WK_MIN_N ? null : t(Math.round(st.medianSafe.days) === 1 ? 'pxWkDays_one' : 'pxWkDays_other', { n: num(Math.round(st.medianSafe.days)), k: num(st.medianSafe.n) }),
+      target: 'pxWkTargetMedianSafe',
+      ok: st.medianSafe.days === null || st.medianSafe.n < WK_MIN_N ? null : st.medianSafe.days <= WK_TARGETS.medianSafeDays,
+    },
+    {
+      id: 'problem',
+      label: 'pxWkProblemLabel',
+      value: st.problem.share === null || st.problem.of < WK_MIN_N ? null : t('pxWkProblemValue', { pct: num(Math.round(st.problem.share * 100)), n: num(st.problem.n), of: num(st.problem.of) }),
+      target: 'pxWkTargetProblem',
+      ok: st.problem.share === null || st.problem.of < WK_MIN_N ? null : st.problem.share < WK_TARGETS.problemShare,
+    },
+    {
+      id: 'ratio',
+      label: 'pxWkRatioLabel',
+      value: st.ratio.free + st.ratio.recog < WK_MIN_N ? null : t('pxWkRatioValue', { free: num(st.ratio.free), recog: num(st.ratio.recog) }),
+      target: 'pxWkTargetRatio',
+      ok: st.ratio.free + st.ratio.recog < WK_MIN_N ? null : st.ratio.free >= WK_TARGETS.freeToRecog * st.ratio.recog,
+    },
+  ];
+  return (
+    <div className="flex flex-col gap-2" data-testid="word-kern-measure">
+      <h3 className="text-sm font-semibold">{t('pxWkTitle')}</h3>
+      <p className="text-xs text-subtle">{t('pxWkLead')}</p>
+      <ul className="flex flex-col gap-2">
+        {rows.map((r) => (
+          <li key={r.id} className="flex flex-col gap-0.5" data-testid={`wk-${r.id}`} data-ok={r.ok === null ? '' : r.ok ? '1' : '0'}>
+            <span className="text-sm text-muted">{t(r.label)}</span>
+            <span className="lx-tnum text-sm font-medium">{r.value ?? t('pxWkNoData')}</span>
+            <span className="text-xs text-subtle">
+              {t(r.target)}
+              {r.ok !== null && ` · ${t(r.ok ? 'pxWkOnTarget' : 'pxWkOffTarget')}`}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 export function WordsSegment() {
   const { t } = useT();
   const { cards, fest, now } = useVocabMetrics();
@@ -181,6 +245,7 @@ export function WordsSegment() {
       <QualityCard cards={cards} now={now} />
       <Disclosure label={t('nbProfilMeasures')} testId="measures-words">
         <div className="flex flex-col gap-6">
+          <WordKernMeasure cards={cards} now={now} />
           <ReadyMeasure cards={cards} />
           <TestsMeasures />
           <StatsTab />
