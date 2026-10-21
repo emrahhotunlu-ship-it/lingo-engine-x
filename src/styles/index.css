@@ -366,7 +366,7 @@ body {
   overflow-wrap: break-word;
 }
 
-/* Hintergrund: das Lichtfeld (Canvas, `engine/fx/AmbientLight.tsx`) und die Rauschebene darüber (`.lx-ambient-dither`, r6a.css) sind die einzige Quelle. */
+/* Hintergrund: das Lichtfeld (CSS-Radialverläufe in voller Auflösung, `engine/fx/AmbientLight.tsx`) und die Rauschebene darüber (`.lx-ambient-dither`, r6a.css) sind die einzige Quelle. */
 
 #root {
   min-height: 100dvh;

@@ -75,6 +75,8 @@ export type ExplainWordInput = {
   examples?: readonly ExplainExample[];
   /** Fast richtig, weil die Antwort eine Variante aus `alt` ist. */
   alt?: boolean;
+  /** Richtig mit einer gleichwertigen Fassung der ganzen Wendung (`content/chunkAlt.ts`): „Auch richtig“ und die Lernform. */
+  alsoRight?: boolean;
   /** Die Frage (oder die Rückseite) zeigt die deutsche Bedeutung schon: „Merke“ nennt sie nicht noch einmal (Kap. 15). */
   meaningShown?: boolean;
   /** `contrast` (P52): die Begründung von Claude in der Oberflächensprache; sie ist die Warum-Zeile, auch bei richtiger Antwort. */
@@ -236,7 +238,8 @@ export function explainWord(i: ExplainWordInput): ExplanationModel {
 
   // 6. Hinweise: US-Form, „Auch möglich“, Register
   if (i.check.variant === 'uk' && i.check.us) lines.push({ k: 'note', text: pick({ de: `US-Schreibweise: ${i.check.us}`, en: `US spelling: ${i.check.us}` }, lang) });
-  if (i.alt || (i.verdict === 'near' && isAltAnswer(card, i.given))) lines.push({ k: 'note', text: pick({ de: `Auch möglich: ${i.given.trim()} (gleichwertig mit ${solution}).`, en: `Also possible: ${i.given.trim()} (equivalent to ${solution}).` }, lang) });
+  if (i.alsoRight && i.given.trim()) lines.push({ k: 'note', text: pick({ de: `Auch richtig: ${i.given.trim()}. Die Lernform ist ${solution}.`, en: `Also correct: ${i.given.trim()}. The form you are learning is ${solution}.` }, lang) });
+  else if (i.alt || (i.verdict === 'near' && isAltAnswer(card, i.given))) lines.push({ k: 'note', text: pick({ de: `Auch möglich: ${i.given.trim()} (gleichwertig mit ${solution}).`, en: `Also possible: ${i.given.trim()} (equivalent to ${solution}).` }, lang) });
   else if (extra?.alt?.length) lines.push({ k: 'note', text: pick({ de: `Auch möglich: ${extra.alt.join(', ')}`, en: `Also possible: ${extra.alt.join(', ')}` }, lang) });
   if (reg && reg !== 'neutral' && !formula) lines.push({ k: 'note', text: pick({ de: `Register: ${pick(REGISTER[reg] as Bi, 'de')}`, en: `Register: ${pick(REGISTER[reg] as Bi, 'en')}` }, lang) });
 

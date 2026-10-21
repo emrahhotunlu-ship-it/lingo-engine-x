@@ -489,6 +489,7 @@ export function OrderItemView({ item, ctx, day, profile, onDone }: ItemProps<Ord
               {...(fb ? { marks } : {})}
               labels={{ line: t('drTileLine'), pool: t('drTilePool') }}
               markLabels={{ ok: t('drMarkOk'), near: t('drMarkNear'), off: t('drMarkOff') }}
+              dupLabel={(k, n) => t('drTileDup', { k, n })}
               slots={slots}
             />
             {!fb && profile === 'keys' && (

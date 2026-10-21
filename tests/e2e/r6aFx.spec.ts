@@ -79,7 +79,7 @@ const rafCount = (page: Page): Promise<number> => page.evaluate(() => (window as
 
 /** Standbild, sobald Bildschirm und Bereichsfarbe stehen (zwei gleiche Lesungen im Abstand von 300 ms). */
 async function stillFrame(page: Page): Promise<string> {
-  const read = (): Promise<string> => page.getByTestId('ambient').evaluate((c) => (c as HTMLCanvasElement).toDataURL());
+  const read = (): Promise<string> => page.getByTestId('ambient').evaluate((el) => getComputedStyle(el).backgroundImage);
   let prev = await read();
   for (let i = 0; i < 20; i++) {
     await page.waitForTimeout(300);

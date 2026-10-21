@@ -3,7 +3,7 @@ import { join, relative } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { dayMoment, levelUpFor, markSeen, nextLevelUp, numberRolls, parseSeen, roundSparks, SEEN_MAX, stateUps } from '../../src/domain/moments/detect';
 import { AXIS_LOCK_PX, followPose, lockAxis, MAX_ROTATE, RELEASE_PX, releaseDecision, TINT_PX } from '../../src/engine/cardSwipe';
-import { ACTIVE_MS, blobsAt, FPS, phaseOf, SCALE } from '../../src/engine/fx/AmbientLight';
+import { ACTIVE_MS, ambientBackground, blobsAt, FPS, phaseOf } from '../../src/engine/fx/AmbientLight';
 import { LINES_MAX, MOMENT_MAX_MS, momentLine, momentLines, momentStats, pushLine, resetMeasure } from '../../src/engine/fx/measure';
 import { SPARK_MAX } from '../../src/engine/fx/moments';
 import { ARC_GAP_DEG, dutyFills, ringArcs } from '../../src/ui/DayRing';
@@ -169,7 +169,7 @@ describe('P57 Lichtfeld', () => {
     expect(blobsAt(3, phaseOf('2026-10-07'), 0.16)).toEqual(blobsAt(3, phaseOf('2026-10-07'), 0.16));
   });
 
-  it('Wege bleiben klein, in Übungen gedimmt, 24 fps in 1/6 Auflösung, 12 s Bewegung', () => {
+  it('Wege bleiben klein, in Übungen gedimmt, 24 fps, 12 s Bewegung', () => {
     const p = phaseOf('x');
     for (let t = 0; t < 70; t += 1.7) {
       const [a] = blobsAt(t, p, 0.16);
@@ -177,8 +177,17 @@ describe('P57 Lichtfeld', () => {
     }
     expect(blobsAt(0, p, 0.16, 0.5)[0].a).toBeCloseTo(0.08, 6);
     expect(FPS).toBe(24);
-    expect(SCALE).toBe(6);
     expect(ACTIVE_MS).toBe(12_000);
+  });
+
+  it('Hintergrund in voller Auflösung: drei CSS-Radialverläufe, Radius in vw, Lage in %, gleiche Farbe auf Deckkraft 0 (Emrahs Meldung 21.10.2026)', () => {
+    const bg = ambientBackground(blobsAt(0, 0, 0.16), ['rgb(10, 20, 30)', 'rgb(40, 200, 220)', 'rgb(5, 8, 12)']);
+    const layers = bg.split(/,\s*(?=radial-gradient)/);
+    expect(layers).toHaveLength(3);
+    // Oberste Ebene zuerst: Schatten, Cyan, Bereichsfarbe (wie die frühere Malreihenfolge).
+    expect(layers[0]).toContain('rgba(5,8,12,0.280)');
+    expect(layers[2]).toBe('radial-gradient(circle 95vw at 50% -8.15%, rgba(10,20,30,0.160), rgba(10,20,30,0.000))');
+    expect(bg).not.toMatch(/px|blur/);
   });
 });
 

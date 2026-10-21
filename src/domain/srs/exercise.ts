@@ -1,6 +1,7 @@
 import { collocAlternatives } from './collocEquiv';
 import { hash32, mulberry32, shuffle } from '../random';
 import { typedForm } from '../chunks/situation';
+import { acceptedWithAlternatives } from '../chunks/alternatives';
 import { meaningForTask, shortMeaning } from './cards';
 import { exerciseDef } from './modes';
 import { familyFrom, partnerOf, trapTask } from './partner';
@@ -200,6 +201,81 @@ export function tilesAnswer(tiles: readonly Tile[], placed: readonly number[], m
   return mode === 'words' ? parts.join(' ') : parts.join('');
 }
 
+export type TileMark = 'ok' | 'near' | 'off';
+
+/** Vergleichseinheiten: Wörter (Bindestrich trennt, Groß/klein und Satzzeichen am Rand egal) bzw. Buchstaben. */
+const unitsOf = (s: string, mode: 'letters' | 'words'): string[] =>
+  mode === 'letters' ? Array.from(s.replace(/\s+/g, '').toLowerCase()) : s.split(/[\s-]+/).map((w) => tileKey(w)).filter(Boolean);
+
+/** Längste gemeinsame Teilfolge: welche Stellen von `a` gehören dazu (gleiche Einheiten sind gleichwertig, z. B. zwei „a“). */
+function lcsHits(a: readonly string[], b: readonly string[]): boolean[] {
+  const n = a.length;
+  const m = b.length;
+  const dp: number[][] = Array.from({ length: n + 1 }, () => new Array<number>(m + 1).fill(0));
+  for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--) dp[i]![j] = a[i] === b[j] ? dp[i + 1]![j + 1]! + 1 : Math.max(dp[i + 1]![j]!, dp[i]![j + 1]!);
+  const hit = new Array<boolean>(n).fill(false);
+  let i = 0;
+  let j = 0;
+  while (i < n && j < m) {
+    if (a[i] === b[j]) {
+      hit[i] = true;
+      i++;
+      j++;
+    } else if (dp[i + 1]![j]! >= dp[i]![j + 1]!) i++;
+    else j++;
+  }
+  return hit;
+}
+
+/**
+ * Markierung je gelegtem Baustein nach dem Prüfen (Emrahs Meldung 21.10.2026: nicht mehr alles rot). Verglichen wird mit der nächstliegenden gültigen
+ * Lösung (`targets`, längste gemeinsame Teilfolge); gleiche Bausteine (zwei „a“) sind gleichwertig und vertauschbar.
+ * `ok` = steht in der richtigen Reihenfolge, `near` = Wort der Lösung an falscher Stelle, `off` = gehört nicht hinein (Ablenker, zu viel).
+ */
+export function tileMarks(tiles: readonly Tile[], placed: readonly number[], targets: readonly string[], mode: 'letters' | 'words'): Record<number, TileMark> {
+  const byId = new Map(tiles.map((t) => [t.id, t.text]));
+  const per = placed.map((id) => unitsOf(byId.get(id) ?? '', mode));
+  const flat = per.flat();
+  const owner = per.flatMap((u, k) => u.map(() => k));
+  let best: { hit: boolean[]; units: string[]; score: number } | null = null;
+  for (const t of targets) {
+    const units = unitsOf(t, mode);
+    if (!units.length) continue;
+    const hit = lcsHits(flat, units);
+    const n = hit.filter(Boolean).length;
+    // Mehr Treffer gewinnt; bei Gleichstand die Lösung, deren Länge näher an der gelegten liegt (die erste Lösung bei völligem Gleichstand).
+    const score = n * 1000 - Math.abs(units.length - flat.length);
+    if (!best || score > best.score) best = { hit, units, score };
+  }
+  const out: Record<number, TileMark> = {};
+  if (!best) {
+    for (const id of placed) out[id] = 'off';
+    return out;
+  }
+  const win = best;
+  // Was von der Lösung noch nicht getroffen ist (Mehrfachmenge): ein Baustein daraus steht an falscher Stelle.
+  const rest = new Map<string, number>();
+  for (const u of win.units) rest.set(u, (rest.get(u) ?? 0) + 1);
+  flat.forEach((u, i) => {
+    if (win.hit[i]) rest.set(u, (rest.get(u) ?? 0) - 1);
+  });
+  placed.forEach((id, k) => {
+    const idx = owner.flatMap((o, i) => (o === k ? [i] : []));
+    if (idx.length && idx.every((i) => win.hit[i])) {
+      out[id] = 'ok';
+      return;
+    }
+    const misplaced = idx.some((i) => {
+      const u = flat[i] as string;
+      if (win.hit[i] || (rest.get(u) ?? 0) <= 0) return false;
+      rest.set(u, (rest.get(u) ?? 0) - 1);
+      return true;
+    });
+    out[id] = misplaced || idx.some((i) => win.hit[i]) ? 'near' : 'off';
+  });
+  return out;
+}
+
 /** Zeitgrenze für `speed`: clamp(4000 + 400·Länge, 6000, 14000) ms. */
 export const speedLimitMs = (solution: string): number => Math.min(14_000, Math.max(6_000, 4_000 + 400 * solution.length));
 
@@ -222,6 +298,9 @@ function situationTask(card: TrainCard, lang: Lang, sceneOf?: SceneLookup): Situ
 function pickColloc(card: TrainCard, rng: () => number): Colloc | null {
   return partnerOf(card, Math.floor(rng() * 1000));
 }
+
+/** Lösungen einer Wendungs-Abfrage: die Lösung, dazu gleichwertige Fassungen, wenn die Lücke die ganze Wendung ist (`content/chunkAlt.ts`). */
+const chunkAccepted = (card: TrainCard, answer: string): string[] => (card.kind === 'chunk' ? acceptedWithAlternatives(card.word, answer) : [answer]);
 
 /** Lösungsform einer freistehenden Abfrage (ohne Satz): Wort bzw. Wendung ohne „…“. */
 const bareAnswer = (card: TrainCard): string => (card.kind === 'chunk' ? typedForm(card.word) : card.word);
@@ -375,7 +454,8 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
       const answer = ctx?.gap ?? (card.kind === 'chunk' ? typedForm(card.word) : card.lemma);
       const others = pool.filter((c) => c.key !== card.key).map((c) => c.lemma);
       const { tiles } = buildTiles(answer, others, rng);
-      return { ...base, sentence: ctx, tiles, accepted: [answer] };
+      // Gleichwertige Fassungen der ganzen Wendung gelten auch (Emrah 21.10.2026: „a quarter percentage point“), soweit die Bausteine sie hergeben.
+      return { ...base, sentence: ctx, tiles, accepted: chunkAccepted(card, answer) };
     }
     case 'dictation': {
       const gap = ctx?.gap ?? card.word;
@@ -441,10 +521,10 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
     case 'cloze_part':
     case 'cloze': {
       const gap = ctx?.gap ?? card.word;
-      return { ...base, sentence: ctx, firstLetter: ex === 'cloze_hint' ? gap.slice(0, 1) : null, accepted: [gap] };
+      return { ...base, sentence: ctx, firstLetter: ex === 'cloze_hint' ? gap.slice(0, 1) : null, accepted: chunkAccepted(card, gap) };
     }
     case 'type': {
-      const accepted = [bareAnswer(card)];
+      const accepted = chunkAccepted(card, bareAnswer(card));
       if (card.lemma !== card.word) accepted.push(card.lemma);
       return { ...base, accepted };
     }

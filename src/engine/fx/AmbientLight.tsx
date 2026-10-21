@@ -3,15 +3,15 @@ import { subscribe } from './events';
 import { useFxLevel } from './level';
 
 // Lichtfeld (Lernplattform 3.0 P57, Erlebnis-Engine §5.1): drei weiche Lichtflecken hinter allen Reitern – Bereichsfarbe oben (wie die freigegebene
-// Vorschau: eine ruhige Lichtquelle oben mittig), Cyan rechts und ein dunkler Schattenfleck für Tiefe. Canvas 2D in 1/6 der Auflösung, per CSS gestreckt
-// (das weiche Hochskalieren ist der Weichzeichner), 24 Bilder je Sekunde. Nach jedem Bildschirmwechsel oder Moment 12 s Bewegung auf Lissajous-Bahnen,
+// Vorschau: eine ruhige Lichtquelle oben mittig), Cyan rechts und ein dunkler Schattenfleck für Tiefe. Gezeichnet als drei CSS-Radialverläufe in voller
+// Auflösung (Emrahs Meldung 21.10.2026: das frühere Canvas in 1/6 Auflösung wurde auf großen Bildschirmen sichtbar pixelig und gestuft; der Browser rechnet
+// CSS-Verläufe je Gerätepixel und glättet die Stufen selbst). Radien in vw, Lagen in %: unabhängig von Fenstergröße und Pixeldichte. 24 Bilder je Sekunde. Nach jedem Bildschirmwechsel oder Moment 12 s Bewegung auf Lissajous-Bahnen,
 // danach Standbild ohne einen einzigen rAF-Aufruf. In Übungen gedimmt (50 %) und still; Stufe „Ruhig“/„Aus“, reduzierte Bewegung und verdeckter Tab:
 // Standbild. Das Standbild ist deterministisch (Startphase aus dem Lerntag). Ersetzt den festen `body::before`-Verlauf (`html[data-ambient]`).
 
 /** So lange bewegt sich das Licht nach einem Wechsel. */
 export const ACTIVE_MS = 12_000;
 export const FPS = 24;
-export const SCALE = 6;
 
 export type Blob = { x: number; y: number; r: number; a: number };
 
@@ -62,20 +62,19 @@ function mix(a: string, b: string, k: number): string {
   return `rgb(${[0, 1, 2].map((i) => Math.round((x[i] ?? 0) + ((y[i] ?? 0) - (x[i] ?? 0)) * k)).join(',')})`;
 }
 
-function draw(ctx: CanvasRenderingContext2D, w: number, h: number, blobs: readonly Blob[], c: Colors, field: string): void {
-  ctx.clearRect(0, 0, w, h);
-  const cols = [field, c.cyan, c.shade];
-  blobs.forEach((b, i) => {
-    const x = b.x * w;
-    const y = b.y * h;
-    const r = Math.max(8, b.r * w);
-    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
-    const col = cols[i] ?? field;
-    g.addColorStop(0, withAlpha(col, b.a));
-    g.addColorStop(1, withAlpha(col, 0));
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, w, h);
-  });
+/**
+ * CSS-Hintergrund der drei Flecken (rein, für Tests): oberste Ebene zuerst, also Schatten, Cyan, Bereichsfarbe – dieselbe Malreihenfolge wie früher im
+ * Canvas. Radius als Anteil der Fensterbreite (vw), Lage in Prozent des Fensters. Jeder Verlauf geht in derselben Farbe auf Deckkraft 0 (kein Grauschleier).
+ */
+export function ambientBackground(blobs: readonly Blob[], cols: readonly [string, string, string]): string {
+  const f = (n: number): string => String(Math.round(n * 10_000) / 100);
+  return blobs
+    .map((b, i) => {
+      const col = cols[i] ?? cols[0];
+      return `radial-gradient(circle ${f(b.r)}vw at ${f(b.x)}% ${f(b.y)}%, ${withAlpha(col, b.a)}, ${withAlpha(col, 0)})`;
+    })
+    .reverse()
+    .join(', ');
 }
 
 type Props = {
@@ -89,7 +88,7 @@ type Props = {
 
 export function AmbientLight({ scene, exercise, day }: Props) {
   const level = useFxLevel();
-  const canvas = useRef<HTMLCanvasElement>(null);
+  const field = useRef<HTMLDivElement>(null);
   const probe = useRef<HTMLSpanElement>(null);
   const kick = useRef<() => void>(() => undefined);
 
@@ -102,30 +101,27 @@ export function AmbientLight({ scene, exercise, day }: Props) {
   }, []);
 
   useEffect(() => {
-    const cv = canvas.current;
+    const el = field.current;
     const pr = probe.current;
-    const ctx = cv?.getContext('2d') ?? null;
-    if (!cv || !pr || !ctx) return;
+    if (!el || !pr) return;
     const phase = phaseOf(day);
     const moving = level === 'full' && !exercise;
     let colors = readColors(pr);
     let shownField = colors.field;
     let fromField = colors.field;
     let fieldAt = 0;
-    let w = 0;
-    let h = 0;
+    let shown = '';
     let raf = 0;
     let started = 0;
     let lastDraw = 0;
     let t = 0;
-    const size = (): void => {
-      w = Math.max(1, Math.ceil(window.innerWidth / SCALE));
-      h = Math.max(1, Math.ceil(window.innerHeight / SCALE));
-      if (cv.width !== w) cv.width = w;
-      if (cv.height !== h) cv.height = h;
-    };
     const paint = (): void => {
-      draw(ctx, w, h, blobsAt(t, phase, colors.strength, exercise ? 0.5 : 1), colors, shownField);
+      const next = ambientBackground(blobsAt(t, phase, colors.strength, exercise ? 0.5 : 1), [shownField, colors.cyan, colors.shade]);
+      // Nur schreiben, wenn sich das Bild ändert (kein Neuzeichnen ohne Grund).
+      if (next !== shown) {
+        shown = next;
+        el.style.backgroundImage = next;
+      }
     };
     const frame = (now: number): void => {
       raf = 0;
@@ -151,13 +147,8 @@ export function AmbientLight({ scene, exercise, day }: Props) {
       if (!raf) raf = requestAnimationFrame(frame);
     };
     kick.current = start;
-    size();
     paint();
     start();
-    const onResize = (): void => {
-      size();
-      paint();
-    };
     const obs = new MutationObserver(() => {
       const next = readColors(pr);
       if (next.field !== colors.field) {
@@ -172,7 +163,6 @@ export function AmbientLight({ scene, exercise, day }: Props) {
     const onVis = (): void => {
       if (!document.hidden) start();
     };
-    window.addEventListener('resize', onResize);
     document.addEventListener('visibilitychange', onVis);
     // Momente beleben das Licht ebenfalls für 12 s.
     const off = subscribe((e) => {
@@ -182,7 +172,6 @@ export function AmbientLight({ scene, exercise, day }: Props) {
       if (raf) cancelAnimationFrame(raf);
       obs.disconnect();
       off();
-      window.removeEventListener('resize', onResize);
       document.removeEventListener('visibilitychange', onVis);
       kick.current = () => undefined;
     };
@@ -194,7 +183,7 @@ export function AmbientLight({ scene, exercise, day }: Props) {
 
   return (
     <>
-      <canvas ref={canvas} className="lx-ambient" aria-hidden="true" data-testid="ambient" data-exercise={exercise ? 'true' : undefined} />
+      <div ref={field} className="lx-ambient" aria-hidden="true" data-testid="ambient" data-exercise={exercise ? 'true' : undefined} />
       <span className="lx-ambient-dither" aria-hidden="true" data-testid="ambient-dither" />
       <span ref={probe} className="lx-ambient-probe" aria-hidden="true" />
     </>

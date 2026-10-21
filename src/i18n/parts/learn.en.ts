@@ -169,6 +169,8 @@ export const learnEn: Record<keyof typeof learnDe, string> = {
   drMarkOk: 'Right place',
   drMarkNear: 'Wrong place',
   drMarkOff: 'Wrong',
+  drTileDup: '(same tile {k} of {n}, interchangeable)',
+  trSubAlsoRight: 'Also correct. The form you are learning: {form}',
   drSprintIntro: 'Mistakes do not end the round. At the end you see everything again.',
   drSprintGo: 'Go',
   drSprintType: 'English word',
