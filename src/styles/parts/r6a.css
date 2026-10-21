@@ -10,6 +10,9 @@
   z-index: -1;
   pointer-events: none;
   display: block;
+  /* Deckend in der Grundfarbe: die drei Verläufe (Inline-Stil aus AmbientLight.tsx) werden in einem Schritt auf diese Fläche gemalt. */
+  background-color: var(--lx-bg);
+  background-repeat: no-repeat;
 }
 .lx-ambient-probe {
   position: absolute;
@@ -19,7 +22,7 @@
   visibility: hidden;
   pointer-events: none;
 }
-/* Rauschebene (Dithering) über dem Canvas: bricht die Stufen des hochskalierten Verlaufs, bleibt in jedem Lichtstufen-Modus stehen. Kein Bewegtbild. */
+/* Rauschebene (Dithering) über den Verläufen: sehr leichtes, festes Korn gegen Reststufen auf 8-Bit-Bildschirmen, in jedem Lichtstufen-Modus gleich. Kein Bewegtbild. */
 .lx-ambient-dither {
   position: fixed;
   inset: 0;
