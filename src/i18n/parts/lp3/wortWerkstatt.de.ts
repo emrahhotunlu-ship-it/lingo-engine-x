@@ -53,7 +53,6 @@ export const wortWerkstattDe = {
   pxWwSpeakNewSetting: 'Neue Wörter beim Kennenlernen einmal vorlesen',
   // „Sag es“
   pxWwSayItIntent: 'Das willst du sagen',
-  pxWwSayItHint: 'Tipp auf das Mikrofon deiner Tastatur und sprich. Tippen geht auch.',
   pxWwSayItPlaceholder: 'Dein englischer Satz …',
   pxWwSayItModel: 'So könnte man es sagen',
   pxWwSayItFound: '„{word}“ ist in deinem Satz.',

@@ -53,7 +53,6 @@ export const wortWerkstattEn = {
   pxWwSpeakNewSetting: 'Read new words aloud once when you first meet them',
   // "Say it"
   pxWwSayItIntent: 'What you want to say',
-  pxWwSayItHint: 'Tap the microphone on your keyboard and speak. Typing works too.',
   pxWwSayItPlaceholder: 'Your English sentence …',
   pxWwSayItModel: 'One way to say it',
   pxWwSayItFound: '"{word}" is in your sentence.',
