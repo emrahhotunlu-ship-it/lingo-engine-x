@@ -173,6 +173,8 @@ export const learnDe = {
   drMarkOk: 'Richtige Stelle',
   drMarkNear: 'Falsche Stelle',
   drMarkOff: 'Falsch',
+  drTileDup: '(gleicher Baustein {k} von {n}, vertauschbar)',
+  trSubAlsoRight: 'Auch richtig. Gelernt wird: {form}',
   drSprintIntro: 'Fehler beenden die Runde nicht. Am Ende siehst du alles noch einmal.',
   drSprintGo: 'Los',
   drSprintType: 'Englisches Wort',

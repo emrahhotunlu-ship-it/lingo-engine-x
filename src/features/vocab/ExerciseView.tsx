@@ -16,6 +16,7 @@ import { formKind } from '../../domain/answer/form';
 import { checkTyped, checkWithHint } from '../../domain/answer/check';
 import { maskOf } from '../../domain/answer/mask';
 import { normalize } from '../../domain/answer/normalize';
+import { chunkAlternatives } from '../../domain/chunks/alternatives';
 import { retryHint, type RetryHint } from '../../domain/answer/retryHint';
 import { checkSituation, typedForm } from '../../domain/chunks/situation';
 import { scoreDictation } from '../../domain/drills/dictation';
@@ -24,7 +25,7 @@ import type { ExplainExample, ExplanationModel, ResultVerdict } from '../../doma
 import { wordStatus } from '../../domain/tutor/learnerWords';
 import { useClock } from '../../app/clock';
 import { statusDetail } from './statusText';
-import { choiceVerdict, exTextKey, gapCue, tilesAnswer } from '../../domain/srs/exercise';
+import { choiceVerdict, exTextKey, gapCue, tileMarks, tilesAnswer } from '../../domain/srs/exercise';
 import { cardExamples, OWN_EXAMPLE_MIN_STAGE, storedTranslation, wantsEnrichment } from '../../domain/srs/examples';
 import { explainWord, isAltAnswer } from '../../domain/srs/explainWord';
 import { posKey } from '../../domain/srs/explain';
@@ -242,6 +243,7 @@ export function ExerciseView({
   const isTiles = e.input === 'tiles' && !!e.tiles;
   const shownSentence = isTyped || isChoice || isSpot ? (e.sentence?.sentence ?? null) : null;
   const solution = e.accepted[0] ?? card.word;
+  const tileMode: 'letters' | 'words' = /\s/.test(solution) ? 'words' : 'letters';
   const meaningText = lang === 'de' ? (card.de ?? card.def) : (card.def ?? card.de);
 
   // ------------------------------------------------------------------ Tipp-Leiter
@@ -356,8 +358,8 @@ export function ExerciseView({
     }
     if (isTiles && e.tiles) {
       if (!placed.length) return;
-      const given = tilesAnswer(e.tiles, placed, /\s/.test(solution) ? 'words' : 'letters');
-      finish(checkTyped(given, e.accepted, { lemma: card.lemma }), given, null);
+      const given = tilesAnswer(e.tiles, placed, tileMode);
+      finish(checkTyped(given, e.accepted, { lemma: card.lemma, alt }), given, null);
       return;
     }
     if (isSentence) {
@@ -633,6 +635,9 @@ export function ExerciseView({
     // eslint-disable-next-line react-hooks/exhaustive-deps -- nur bei neuer Aufgabe oder neuen Beispielen
   }, [card, shownSentence, extras]);
 
+  // Gleichwertige Fassung der ganzen Wendung (`content/chunkAlt.ts`): richtig, mit „Auch richtig“ und der Lernform (Emrah 21.10.2026).
+  const alsoRight = !!fb && fb.result.verdict === 'correct' && !fb.override && card.kind === 'chunk' && !!fb.given && checkTyped(fb.given, chunkAlternatives(card.word), { lemma: '' }).verdict === 'correct' && checkTyped(fb.given, [solution], { lemma: '' }).verdict !== 'correct';
+
   const model: ExplanationModel | null = useMemo(() => {
     if (!fb) return null;
     if (fb.sentence) return sentenceModel(fb, card, exampleItems, t, e.act);
@@ -653,6 +658,7 @@ export function ExerciseView({
       ...(MEANING_SHOWN.has(e.ex) && (e.ex !== 'match' || !e.sentence) ? { meaningShown: true } : {}),
       ...(other ? { otherMeaning: lang === 'de' ? (other.de ?? other.def) : (other.def ?? other.de) } : {}),
       ...(isAlt ? { alt: true } : {}),
+      ...(alsoRight ? { alsoRight: true } : {}),
       ...(e.ex === 'fits' && e.fits ? { fits: e.fits } : {}),
       ...(e.ex === 'contrast' && e.contrastWhy ? { contrastWhy: e.contrastWhy[lang] } : {}),
       ...(e.ex === 'contrast' ? { contrastOther: contrastOtherOf(e) } : {}),
@@ -795,7 +801,7 @@ export function ExerciseView({
       </div>
     );
   } else if (isTiles && e.tiles) {
-    // Bausteine: Der Satz zeigt die Lücke als Ablagezeile, der Vorrat steht darunter. Die Zahl der Plätze verrät die Wortzahl nicht (immer einer mehr als gelegt).
+    // Bausteine: Der Satz zeigt die Lücke als Ablagezeile, der Vorrat steht darunter. Die Ablagezeile zeigt so viele leere Plätze, wie die Lösung Bausteine hat.
     const line = (
       <Tiles
         tiles={e.tiles}
@@ -805,10 +811,13 @@ export function ExerciseView({
           setPlaced(p);
         }}
         locked={!!fb}
-        {...(fb ? { marks: Object.fromEntries(e.tiles.filter((x) => placed.includes(x.id)).map((x) => [x.id, fb.result.verdict === 'correct' ? 'ok' : 'off'] as const)) } : {})}
+        // Emrahs Meldung 21.10.2026: nur wirklich falsch gelegte Bausteine sind rot; richtige grün, Wörter der Lösung an falscher Stelle ↔ (gleiche Bausteine vertauschbar).
+        {...(fb ? { marks: fb.result.verdict === 'correct' ? Object.fromEntries(placed.map((id) => [id, 'ok'] as const)) : tileMarks(e.tiles, placed, e.accepted, tileMode) } : {})}
         labels={{ line: t('drTileLine'), pool: t('drTilePool') }}
         markLabels={{ ok: t('drMarkOk'), near: t('drMarkNear'), off: t('drMarkOff') }}
-        slots={placed.length + 1}
+        dupLabel={(k, n) => t('drTileDup', { k, n })}
+        // So viele Plätze, wie die Lösung Bausteine hat: vorab sichtbar, wie viele gebraucht werden (Emrahs Meldung 21.10.2026).
+        slots={e.tiles.filter((x) => !x.distractor).length}
         {...(e.sentence ? { poolTarget: poolEl, inline: true } : {})}
       />
     );
@@ -1002,6 +1011,8 @@ export function ExerciseView({
               : t('trProduceLocalNote')
           : fb.sentence?.out && fb.sentence.out.errType && fb.sentence.out.errType !== 'other' && fb.sentence.out.verdict !== 'correct'
             ? t('trProduceErrMain', { type: t(`trErr_${fb.sentence.out.errType}` as MessageKey) })
+          : alsoRight
+            ? t('trSubAlsoRight', { form: solution })
           : c.variant === 'uk' && c.us
             ? t('trUsHint', { us: c.us })
             : c.kind === 'typo'

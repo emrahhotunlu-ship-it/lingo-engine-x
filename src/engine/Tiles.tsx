@@ -30,14 +30,28 @@ type Props = {
   poolTarget?: HTMLElement | null;
   /** Antwortzeile als Teil des Satzes (inline in der Lücke). */
   inline?: boolean;
+  /** Gleiche Bausteine (zwei „a“): Zusatz für Screenreader „gleicher Baustein k von n“. Sie sind vertauschbar, gewertet wird der Text. */
+  dupLabel?: (k: number, n: number) => string;
 };
+
+/** Gleiche Bausteine (Groß/klein egal): je Baustein die laufende Nummer und die Anzahl seiner Gruppe; einzelne fehlen. */
+export function dupIndex(tiles: readonly Tile[]): ReadonlyMap<number, { k: number; n: number }> {
+  const groups = new Map<string, number[]>();
+  for (const t of tiles) {
+    const key = t.text.trim().toLowerCase();
+    groups.set(key, [...(groups.get(key) ?? []), t.id]);
+  }
+  const out = new Map<number, { k: number; n: number }>();
+  for (const ids of groups.values()) if (ids.length > 1) [...ids].sort((a, b) => a - b).forEach((id, i) => out.set(id, { k: i + 1, n: ids.length }));
+  return out;
+}
 
 /** Zeichen je Markierung: Farbe allein reicht nicht (WCAG 1.4.1). */
 const MARK_GLYPH: Readonly<Record<Mark, string>> = { ok: '✓', near: '↔', off: '✕' };
 
 type Drag = { id: number; from: 'pool' | 'line'; x0: number; y0: number; dx: number; dy: number; moved: boolean; pointer: number; t0: number; kind: 'touch' | 'mouse' };
 
-export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabels, slots, poolTarget = null, inline = false }: Props) {
+export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabels, slots, poolTarget = null, inline = false, dupLabel }: Props) {
   const reduce = useReducedMotion();
   const fx = useFxLevel();
   const line = useRef<HTMLDivElement>(null);
@@ -46,6 +60,7 @@ export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabe
   const [over, setOver] = useState(false);
   const justDragged = useRef(false);
   const byId = new Map(tiles.map((t) => [t.id, t]));
+  const dups = dupIndex(tiles);
   const slotCount = slots ?? tiles.filter((x) => !x.distractor).length;
   const emptySlots = locked ? 0 : Math.max(0, slotCount - placed.length);
   // Plätze in Bausteinhöhe (Plan §4.4): Die Ablagezeile ist so hoch wie die Zeilen, die die gelegten Bausteine brauchen – nicht
@@ -170,6 +185,7 @@ export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabe
     if (!t) return null;
     const dragging = drag?.id === id && drag.moved;
     const mark = marks?.[id];
+    const dup = dups.get(id);
     return (
       <motion.button
         key={id}
@@ -186,6 +202,7 @@ export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabe
         data-testid="tile"
         data-tile={t.text}
         data-where={where}
+        data-dup={dup ? `${dup.k}/${dup.n}` : undefined}
         data-state={mark}
         data-selected={(where === 'line' && !mark && !locked) || undefined}
         data-dragging={dragging || undefined}
@@ -216,6 +233,7 @@ export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabe
           </>
         )}
         {t.text}
+        {dup && dupLabel && <span className="sr-only"> {dupLabel(dup.k, dup.n)}</span>}
       </motion.button>
     );
   };
