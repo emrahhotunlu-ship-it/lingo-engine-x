@@ -5,7 +5,7 @@ import { invalidIdsOf, useLive } from '../../data/live';
 import { dayKey } from '../../domain/date';
 import { mergeEntries, type DayEntry } from '../../domain/plan/buildPlan';
 import { applyUpdate, cardPatch, chunkPatch, contrastMissOp, isPartnerMiss } from '../../domain/srs/applyReview';
-import { introWasYesterday, recallStep } from '../../domain/srs/spacing';
+import { introWasYesterday, recallStep, wantsFreeRecall } from '../../domain/srs/spacing';
 import { buildTrainCards } from '../../domain/metrics';
 import { toTrainCard } from '../../domain/srs/cards';
 import { buildChunkCards, toChunkCard } from '../../domain/srs/chunkCards';
@@ -311,6 +311,7 @@ const FREE_TYPED: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['type', 'cloze'
  *   getippte Termin FREI (ohne Anfangsbuchstaben) – sonst läuft Stufe 3 zweimal mit Hilfe und der erste freie Abruf käme erst am 4. Termin.
  * - L4: Reife Karten (Stufe 5, Stabilität ≥ 21 Tage) bekommen die volle „Frei anwenden“-Form nur bei jeder dritten Wiederholung;
  *   sonst genügt freies Tippen (Stufe 4).
+ * - Wort-Lernen 2 (S3): Tag 2–21 frei, solange die Karte 1–2 freie Tage hat und die letzte Antwort nicht falsch war (`wantsFreeRecall`).
  */
 function lighterExercise(s: ExCtx, card: TrainCard): ExerciseId | null {
   if (s.mode !== 'auto') return null;
@@ -323,6 +324,8 @@ function lighterExercise(s: ExCtx, card: TrainCard): ExerciseId | null {
     const last = lastRating(card.doc);
     if (last && (last.x === 'cloze_hint' || last.x === 'tiles') && (last.g ?? 0) >= 3 && dayKey(last.t) !== s.day) return freeOne();
   }
+  // Wort-Lernen 2 (S3): Tag 2–21 mit mindestens einem, aber weniger als drei freien Tagen und ohne Fehler zuletzt: frei statt Stütze oder Auswahl.
+  if (card.stage <= 3 && wantsFreeRecall(card.doc)) return freeOne();
   const reps = typeof card.doc.reps === 'number' ? card.doc.reps : 0;
   if (card.stage >= 5 && card.fsrs.stability >= MAINTENANCE_S && reps % MAINTENANCE_EVERY !== 0) return freeOne();
   return null;

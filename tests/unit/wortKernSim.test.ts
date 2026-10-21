@@ -3,7 +3,7 @@ import { addDays, dayKey, daysBetween, learningDayEnd } from '../../src/domain/d
 import { applyUpdate, reviewWrite } from '../../src/domain/srs/applyReview';
 import { readFsrs } from '../../src/domain/srs/scheduler';
 import { toTrainCard } from '../../src/domain/srs/cards';
-import { CAP_STEPS, recallStep } from '../../src/domain/srs/spacing';
+import { CAP_STEPS, recallStep, wantsFreeRecall } from '../../src/domain/srs/spacing';
 import { isFest, unitState } from '../../src/domain/metrics/definitions';
 import type { AnswerEvent, ExerciseId } from '../../src/domain/srs/types';
 import { berlin } from './helpers';
@@ -32,7 +32,7 @@ const gapDays = (doc: Doc, day: string, t: number): number => daysBetween(day, d
 
 type Step = { day: string; n: number; ex: ExerciseId; gap: number; stage: number; state: string };
 
-function run(exFor: (n: number, dayN: number) => ExerciseId, days: number) {
+function run(exFor: (n: number, dayN: number, doc: Doc) => ExerciseId, days: number) {
   sxN = 0;
   let doc = fresh();
   const path: Step[] = [];
@@ -52,7 +52,7 @@ function run(exFor: (n: number, dayN: number) => ExerciseId, days: number) {
     if (!(f.due < learningDayEnd(t))) continue;
     n++;
     if (n === 1) expect(recallStep({ isNew: false, doc }, day), 'Tag 1 ist der Gestern-Check').toBe('check');
-    const ex = exFor(n, i);
+    const ex = exFor(n, i, doc);
     doc = answer(doc, t, day, ex, 3);
     path.push({ day, n, ex, gap: gapDays(doc, day, t), stage: Number(doc.stage), state: String(readFsrs(doc, t).state) });
     const card = toTrainCard('leverage', doc, true, t);
@@ -115,5 +115,55 @@ describe('Simulation: eine Karte vom Tag 0 bis „Fest“ (Wort-Lernen 2)', () =
     doc = answer(doc, berlin(START, 9) + 15 * MIN, START, 'cloze', 3);
     const card = toTrainCard('leverage', doc, true, berlin(START, 10))!;
     expect(unitState(card, berlin(START, 10))).not.toBe('firm');
+  });
+
+  it('Leiter mit Stütze (realistischer, S3): nach dem Gestern-Check frei, solange 1–2 freie Tage und kein Fehler zuletzt; sonst Stütze bzw. Auswahl', () => {
+    // So wählt die Runde (`session.ts` → `lighterExercise`): frei bei `wantsFreeRecall`, sonst die Leiter der Stufe (Stufe ≤ 2 Auswahl, Stufe 3 Stütze, ab 4 frei).
+    const ladder = (n: number, _i: number, doc: Doc): ExerciseId => {
+      if (n === 1 || wantsFreeRecall(doc)) return 'cloze';
+      const st = Number(doc.stage);
+      return st <= 2 ? 'mc_en' : st === 3 ? 'cloze_hint' : 'cloze';
+    };
+    const { path, fest } = run(ladder, 120);
+    // Nach dem Gestern-Check ist jeder Termin bis zum Deckel 21 frei: keine Stütze, keine Auswahl.
+    const until21 = path.slice(1, path.findIndex((p) => p.gap >= 21) + 1);
+    expect(until21.length).toBeGreaterThan(0);
+    for (const p of until21) expect(p.ex, JSON.stringify(p)).toBe('cloze');
+    expect(path.map((p) => daysBetween(START, p.day))).toEqual([0, 1, 4, 11, 32]);
+    expect(fest).toBe('2026-11-23');
+  });
+  it('Leiter mit Stütze und einem Fehler: nach dem Fehler Stütze/Auswahl, danach wieder frei; Fest später, aber erreicht', () => {
+    let wrongDone = false;
+    const ladder = (n: number, _i: number, doc: Doc): ExerciseId => {
+      if (n === 3 && !wrongDone) return 'mc_en';
+      if (wantsFreeRecall(doc)) return 'cloze';
+      const st = Number(doc.stage);
+      return st <= 2 ? 'mc_en' : st === 3 ? 'cloze_hint' : 'cloze';
+    };
+    sxN = 0;
+    let doc = fresh();
+    let t = berlin(START, 9);
+    doc = answer(doc, t, START, 'cloze_hint', 3);
+    doc = answer(doc, t + 15 * MIN, START, 'cloze', 3);
+    const seen: { day: string; ex: ExerciseId; g: number }[] = [];
+    let fest: string | null = null;
+    let n = 0;
+    for (let i = 1; i <= 160; i++) {
+      const day = addDays(START, i);
+      t = berlin(day, 9);
+      if (!(readFsrs(doc, t).due < learningDayEnd(t))) continue;
+      n++;
+      const ex = n === 1 ? 'cloze' : ladder(n, i, doc);
+      const g = n === 3 ? 1 : 3;
+      if (n === 3) wrongDone = true;
+      doc = answer(doc, t, day, n === 3 ? 'cloze' : ex, g as 1 | 3);
+      seen.push({ day, ex: n === 3 ? 'cloze' : ex, g });
+      const card = toTrainCard('leverage', doc, true, t);
+      if (!fest && card && isFest(card, t)) fest = day;
+    }
+    // Direkt nach dem Fehler: keine freie Abfrage (Stütze oder Auswahl).
+    expect(['mc_en', 'cloze_hint']).toContain(seen[3]!.ex);
+    expect(seen.slice(4).some((s) => s.ex === 'cloze')).toBe(true);
+    expect(fest).not.toBeNull();
   });
 });

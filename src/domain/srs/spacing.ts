@@ -173,6 +173,19 @@ export function recallStep(c: { isNew: boolean; doc: Doc }, day: string): Recall
   return rows.every((r) => dayKey(r.t) === intro) ? 'check' : null;
 }
 
+/**
+ * Tag 2–21 (Prüfung Lernwissenschaft S3, „jeder Termin eine freie Produktion“): Hat die Karte schon mindestens einen späteren Tag mit freiem Abruf,
+ * aber noch keine drei (Deckel unter 21 Tagen), und war die letzte Antwort nicht falsch, kommt die Wiederholung FREI statt mit Stütze oder Auswahl.
+ * Nur so bewegt jeder Termin den Deckel. Nach einem Fehler gilt die gewöhnliche Leiter (Stütze oder Auswahl). Partnerwort und „Welches Wort passt?“ zählen nicht als letzte Antwort.
+ */
+export function wantsFreeRecall(doc: Doc): boolean {
+  if (doc.state === 'new') return false;
+  const free = freeLaterDays(doc);
+  if (free < 1 || evidenceDays(doc) >= CAP_STEPS.length - 1) return false;
+  const last = rowsOf(doc).filter((r) => !r.known && !r.ci && r.x !== 'contrast').at(-1);
+  return !!last && last.g !== 1;
+}
+
 /** War der Einführungstag genau der Vortag (Beschriftung „Gestern-Check“ statt „Erster Abruf“)? */
 export const introWasYesterday = (doc: Doc, day: string): boolean => introDayOf(doc) === addDays(day, -1);
 

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { applyUpdate, reviewWrite, stageStep } from '../../src/domain/srs/applyReview';
 import { toTrainCard } from '../../src/domain/srs/cards';
 import { isFest } from '../../src/domain/metrics/definitions';
+import { wantsFreeRecall } from '../../src/domain/srs/spacing';
 import type { AnswerEvent, ExerciseId } from '../../src/domain/srs/types';
 import { berlin } from './helpers';
 
@@ -107,5 +108,21 @@ describe('Soll 4: Fehler am Einführungstag sind kein Rückfall', () => {
     const intro = reviewDoc({ state: 'learning', stage: 1, intro: '2026-10-21', last: at('2026-10-21', 8), hist: [row('2026-10-21', 'cloze_hint')], lapses: 0 });
     expect(write(intro, ev('2026-10-21', 'cloze', 1)).lapses).toBe(0);
     expect(write(intro, ev('2026-10-22', 'cloze', 1)).lapses).toBe(1);
+  });
+});
+
+describe('Soll 3: Tag 2–21 frei, sobald ein freier Tag belegt ist', () => {
+  const learning = (hist: Doc[]): Doc => reviewDoc({ state: 'review', stage: 3, intro: '2026-10-01', hist });
+  it('ein freier Folgetag und letzte Antwort richtig → frei abfragen', () => {
+    expect(wantsFreeRecall(learning([row('2026-10-01', 'cloze_hint'), row('2026-10-02', 'cloze')]))).toBe(true);
+  });
+  it('noch kein freier Tag → Leiter der Stufe', () => {
+    expect(wantsFreeRecall(learning([row('2026-10-01', 'cloze_hint'), row('2026-10-02', 'cloze_hint')]))).toBe(false);
+  });
+  it('letzte Antwort falsch → Leiter der Stufe (Stütze/Auswahl)', () => {
+    expect(wantsFreeRecall(learning([row('2026-10-01', 'cloze_hint'), row('2026-10-02', 'cloze'), row('2026-10-05', 'cloze', 1)]))).toBe(false);
+  });
+  it('neue Karte → nie', () => {
+    expect(wantsFreeRecall(reviewDoc({ state: 'new', hist: [] }))).toBe(false);
   });
 });
