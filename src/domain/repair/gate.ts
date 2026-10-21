@@ -161,16 +161,34 @@ export function newlyGated(list: readonly RepairItem[]): Array<{ id: string; hit
 /** Eine Zeile der Lehrer-Liste (Einstellungen › Diagnose › KI-Stichprobe): zurückgehaltene Fehlersätze zum Gegenlesen. */
 export type HeldRepairRow = { id: string; wrong: string; right: string; why: string; src: string; reason: string; detail: string; t: number };
 
+/** Grund für einen ruhenden Eintrag, dessen `held` roh (unbekannte Form) stehen geblieben ist (`readRepairs`). */
+export const HELD_RAW_REASON = 'held_raw';
+
+/**
+ * Ruhe-Merker tolerant lesen: `readRepairs` lässt ein unbekanntes `held` roh stehen (nie still verlieren). Dann gibt es keinen lesbaren Grund,
+ * keine Fundstelle und keinen Zeitpunkt – die Zeile nennt `held_raw` und den Zeitpunkt des Eintrags, nie `undefined` oder `NaN`.
+ */
+function heldHit(e: RepairItem): { reason: string; detail: string; t: number } | null {
+  const h: unknown = e.held;
+  // Gleiche Regel wie `dueRepairs` (`!e.held`): nur ein gesetzter Merker heißt „ruht“.
+  if (!h) return null;
+  const o = typeof h === 'object' && !Array.isArray(h) ? (h as Record<string, unknown>) : null;
+  const r = typeof o?.r === 'string' && o.r.trim() ? o.r.trim() : HELD_RAW_REASON;
+  const d = typeof o?.d === 'string' ? o.d : '';
+  const t = typeof o?.t === 'number' && Number.isFinite(o.t) && o.t > 0 ? o.t : e.t;
+  return { reason: r, detail: d, t };
+}
+
 /** Alle ruhenden bzw. jetzt gesperrten Fehlersätze, neueste zuerst. Rein. */
 export function heldRepairRows(list: readonly RepairItem[]): HeldRepairRow[] {
   const out: HeldRepairRow[] = [];
   for (const e of list) {
-    const hit = e.held ? { reason: e.held.r, detail: e.held.d ?? '' } : (() => {
+    const hit = heldHit(e) ?? (() => {
       const h = e.done || e.unclear ? null : repairGate(e);
-      return h ? { reason: h.reason, detail: h.detail } : null;
+      return h ? { reason: h.reason, detail: h.detail, t: e.t } : null;
     })();
     if (!hit) continue;
-    out.push({ id: e.id, wrong: e.wrong, right: e.right, why: e.why ?? '', src: e.src, reason: hit.reason, detail: hit.detail, t: e.held?.t ?? e.t });
+    out.push({ id: e.id, wrong: e.wrong, right: e.right, why: e.why ?? '', src: e.src, reason: hit.reason, detail: hit.detail, t: hit.t });
   }
   return out.sort((a, b) => b.t - a.t || a.id.localeCompare(b.id));
 }

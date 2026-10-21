@@ -70,7 +70,8 @@ export function FkB1Item({ task, area, source, status = null, onNext, onUnclear,
   const model: ExplanationModel | null = res
     ? { lines: [...(patLine(task.pat, lang) ? [patLine(task.pat, lang)!] : []), { k: 'why' as const, text: why }], examples: [], mark: [], ai: false, source: 'task' }
     : null;
-  const comparison = res && res.v !== 'ok' ? (res.given ? { given: res.given, ops: alignWords(res.given, task.model), correct: task.model } : null) : null;
+  // Die richtige Fassung steht nach dem Prüfen genau einmal da: oben als Satz (`repair-right`), im Vergleich ohne zweite „Richtig:“-Zeile.
+  const comparison = res && res.v !== 'ok' ? (res.given ? { given: res.given, ops: alignWords(res.given, task.model), hideCorrect: true } : null) : null;
   const secondary: ShellSecondary[] = res
     ? []
     : [
@@ -193,7 +194,7 @@ export function FkB2Item({ task, area, source, status = null, onNext, onUnclear,
   const model: ExplanationModel | null = res
     ? { lines: [...(patLine(task.pat, lang) ? [patLine(task.pat, lang)!] : []), { k: 'why' as const, text: `„${task.good}“ – ${why}` }], examples: [], mark: [], ai: false, source: 'task' }
     : null;
-  const comparison = res && res.v !== 'ok' && res.given ? { given: res.given, ops: alignWords(res.given, fullRight), correct: fullRight } : null;
+  const comparison = res && res.v !== 'ok' && res.given ? { given: res.given, ops: alignWords(res.given, fullRight), hideCorrect: true } : null;
   const secondary: ShellSecondary[] =
     res || step !== 'pick' || pickShown
       ? []

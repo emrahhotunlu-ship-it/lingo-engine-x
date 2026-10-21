@@ -5,7 +5,8 @@ import { heldRepairRows } from '../../domain/repair/gate';
 import { readRepairs } from '../../domain/repair/repair';
 import { fitAltRows } from '../../domain/tutor/fitAlt';
 import { sampleFile, shownSample, totalQuality } from '../../domain/tutor/quality';
-import { bankSample } from '../../domain/tutor/sentenceBank';
+import { bankSample, readGate, sbWaiting } from '../../domain/tutor/sentenceBank';
+import { SbGatePanel } from './SbGatePanel';
 import { currentGate } from '../vocab/sentenceBank';
 import { useT } from '../../i18n';
 import { saveFile } from '../../platform/downloads';
@@ -31,6 +32,9 @@ export function StichprobeSection() {
   const profile = useLive((s) => s.docs['app/profile']);
   const now = useClock((s) => s.now);
   const bank = useMemo(() => bankSample(vocab, currentGate(profile), now), [vocab, profile, now]);
+  // Freigabe eintragen (21.10.2026): gespeicherter Schalter (nicht der wirksame) und die Sätze, deren eigene 4 Wochen noch laufen.
+  const stored = useMemo(() => readGate(profile?.sbGate), [profile]);
+  const waiting = useMemo(() => sbWaiting(vocab, now), [vocab, now]);
   const [n, setN] = useState(() => shownSample().length);
   const [busy, setBusy] = useState(false);
   if (downloads !== 'ready') return null;
@@ -74,6 +78,7 @@ export function StichprobeSection() {
           {t('ttSampleSave')}
         </Button>
       </div>
+      <SbGatePanel gate={stored} sampleN={bank.sample.length} quarantined={waiting} now={now} />
     </section>
   );
 }

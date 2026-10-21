@@ -113,6 +113,47 @@ test.describe('Satzbank', () => {
     await expect(row).toHaveAttribute('data-on', '0');
     await expect(row).toContainText('3 Sätze von Claude gesammelt, 3 davon noch in der 4-Wochen-Prüfzeit');
   });
+
+  test('Freigabe eintragen: ehrlicher Stand, Befund in der Schwelle gibt frei (ein Schreibvorgang, fremde Felder bleiben)', async ({ page }) => {
+    const { errors } = await boot(page, {
+      migrated: true,
+      fake: { patch: { 'app/profile': { sbGate: { start: NOW - 40 * DAY, extra: 'x' } }, 'vocab/convince': { sb: [sb(OLD, NOW - 40 * DAY), sb(FRESH, NOW - 2 * DAY)] } } },
+    });
+    await screen(page, 'today');
+    await openSettings(page);
+    const panel = page.getByRole('dialog').getByTestId('sbg');
+    await panel.scrollIntoViewIfNeeded();
+    await expect(panel).toHaveAttribute('data-on', '0');
+    await expect(panel.getByTestId('sbg-wait')).toHaveAttribute('data-ok', '1');
+    await expect(panel.getByTestId('sbg-sample')).toContainText('2 Sätze');
+    await expect(panel.getByTestId('sbg-state')).toHaveAttribute('data-ok', '0');
+    await expect(panel.getByTestId('sbg-per-sentence')).toContainText('Gerade warten: 1 Satz');
+    // Touch-Ziele mindestens 44 px.
+    const box = await panel.getByTestId('sbg-unclear-more').boundingBox();
+    expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
+    await panel.getByTestId('sbg-unclear-more').click();
+    await expect(panel.getByTestId('sbg-unclear-value')).toHaveText('1');
+    await panel.getByTestId('sbg-save').click();
+    await expect(page.getByText('Satzbank freigegeben.')).toBeVisible();
+    await expect.poll(async () => (await dump(page))['app/profile']?.sbGate).toEqual({ start: NOW - 40 * DAY, extra: 'x', on: true, checkedAt: NOW, review: { hard: 0, unclear: 1 } });
+    await expect(panel).toHaveAttribute('data-on', '1');
+    await expect(page.getByRole('dialog').getByTestId('ai-sb')).toHaveAttribute('data-on', '1');
+    expect(errors).toEqual([]);
+  });
+
+  test('Freigabe zu früh: Grund sichtbar, Zähler und Knopf gesperrt, nichts geschrieben', async ({ page }) => {
+    const gate = { start: NOW - 10 * DAY };
+    await boot(page, { migrated: true, fake: { patch: { 'app/profile': { sbGate: gate }, 'vocab/convince': { sb: [sb(FRESH, NOW - 2 * DAY)] } } } });
+    await screen(page, 'today');
+    await openSettings(page);
+    const panel = page.getByRole('dialog').getByTestId('sbg');
+    await expect(panel.getByTestId('sbg-wait')).toHaveAttribute('data-ok', '0');
+    await expect(panel.getByTestId('sbg-wait')).toContainText('noch 18 Tage');
+    await expect(panel.getByTestId('sbg-fault')).toHaveAttribute('data-fault', 'too_early');
+    await expect(panel.getByTestId('sbg-save')).toBeDisabled();
+    await expect(panel.getByTestId('sbg-hard-more')).toBeDisabled();
+    expect((await dump(page))['app/profile']?.sbGate).toEqual(gate);
+  });
 });
 
 // Bildschirmfotos (390/1440, dunkel/hell) nur auf Zuruf: LX_SHOTS=1 LX_SHOTS_DIR=<Ordner>.
@@ -133,6 +174,15 @@ for (const s of [
       // Erst nach der Öffnungs-Animation fotografieren.
       await page.waitForTimeout(450);
       await page.screenshot({ path: `${SHOTS}/satzbank-${s.name}.png` });
+    });
+    test('Freigabe eintragen (Einstellungen)', async ({ page }) => {
+      await boot(page, { migrated: true, theme: s.theme, fake: { patch: { 'app/profile': { sbGate: { start: NOW - 40 * DAY } }, 'vocab/convince': { sb: [sb(OLD, NOW - 40 * DAY), sb(FRESH, NOW - 2 * DAY)] } } } });
+      await screen(page, 'today');
+      await openSettings(page);
+      const panel = page.getByRole('dialog').getByTestId('sbg');
+      await panel.scrollIntoViewIfNeeded();
+      await page.waitForTimeout(450);
+      await page.screenshot({ path: `${SHOTS}/satzbank-freigabe-${s.name}.png` });
     });
   });
 }

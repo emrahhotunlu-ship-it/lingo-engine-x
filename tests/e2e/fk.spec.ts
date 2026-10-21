@@ -170,8 +170,12 @@ test.describe('Neue Aufgabenformen', () => {
     await page.getByTestId('fk-b2-choices').getByTestId('choice').first().click();
     await page.getByTestId('repair-check').click();
     await expect(page.getByTestId('result')).toHaveAttribute('data-verdict', 'wrong');
-    // „Richtig:“ zeigt die Musterlösung des neuen Satzes, nicht die eigene Eingabe (W-3/W-5).
-    await expect(page.getByTestId('diff-correct')).toHaveText(await page.getByTestId('repair-right').innerText());
+    // Die Musterlösung des neuen Satzes steht genau EINMAL da (oben, `repair-right`), nicht die eigene Eingabe (W-3/W-5);
+    // der Vergleich darunter zeigt nur „Deine“ ohne zweite „Richtig:“-Zeile (Rückmeldung Emrah 21.10.2026).
+    await expect(page.getByTestId('repair-right')).toHaveText("I used to use the old tool every day, so I'm still getting used to using the new one.");
+    await expect(page.getByTestId('sentence-diff')).toBeVisible();
+    await expect(page.getByTestId('diff-correct')).toHaveCount(0);
+    await expect(page.getByText("I used to use the old tool every day, so I'm still getting used to using the new one.", { exact: true })).toHaveCount(1);
     await expect.poll(async () => ((await dump(page))['grammar/used-to']?.errors as Doc[] | undefined)?.[0]?.box).toBe(0);
     expect(errors).toEqual([]);
   });

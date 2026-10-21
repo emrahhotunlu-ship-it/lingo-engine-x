@@ -103,7 +103,8 @@ export function GrammarSessionScreen() {
           <StepBoundary resetKey={`g-${s.step}`} scope="grammarSession" onSkip={skipGrammar}>
             {/* Tutor-Engine v3 (S2/S3): Statuszeile nach dem Tausch gegen etwas Bekanntes; „Warum diese Aufgabe?“ steht im ⓘ – nicht im Vortest, im Test und in der Wiederholung. */}
             <div className="flex flex-col gap-3">
-              {tutorOn && <WinLine task={task} />}
+              {/* Platz immer reserviert (auch ohne Tutor): die Aufgabe steht in jeder Runde an derselben Stelle. */}
+              <WinLine task={task} on={tutorOn} />
               <GrammarItem task={task} ctx={s.ctx} day={s.day} onDone={commitGrammar} profile={s.profile} noHelp={vortest || inTest} badgeTone={inTest ? 'hint' : undefined} topicRound={s.mode === 'topic' || (!!s.intro && s.intro.topic === task.topic && !!task.pat && s.intro.pats.includes(task.pat))} badge={badge} tutor={tutorOn && !s.fixed} reason={reason} />
             </div>
           </StepBoundary>

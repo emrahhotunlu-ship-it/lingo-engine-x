@@ -35,6 +35,10 @@ const patches = (): Record<string, Record<string, unknown>> => ({
   'grammar/pres-simple-cont': doc('pres-simple-cont', 0.95, { 'psc.now': strong, 'psc.habit': strong, 'psc.state': strong }),
 });
 
+/** Abstand der Aufgabe vom Rundenkopf (unabhängig vom Scrollen): muss vor und nach dem Tausch gleich sein (kein Sprung). */
+const itemTop = async (page: Page): Promise<number> =>
+  page.getByTestId('gr-item').evaluate((el) => Math.round(el.getBoundingClientRect().top - (el.closest('[data-testid="grammar-session"]') as HTMLElement).getBoundingClientRect().top));
+
 const total = async (page: Page): Promise<string | null> => page.getByTestId('exercise-bar').getByRole('progressbar').getAttribute('aria-valuemax');
 
 test('drei getippte Fehler in Folge: etwas Bekanntes, die Runde wird nicht kürzer', async ({ page }) => {
@@ -42,6 +46,8 @@ test('drei getippte Fehler in Folge: etwas Bekanntes, die Runde wird nicht kürz
   await expect(page.getByTestId('gr-item')).toBeVisible();
   const before = await total(page);
   expect(Number(before)).toBeGreaterThan(3);
+  await page.waitForTimeout(500); // Karte fertig eingeschoben (CardStack ≤ 300 ms)
+  const top0 = await itemTop(page);
   let typedWrong = 0;
   for (let i = 0; i < 6 && typedWrong < 3; i++) {
     const { type } = await answerGrammar(page, solve, { wrong: true });
@@ -52,6 +58,8 @@ test('drei getippte Fehler in Folge: etwas Bekanntes, die Runde wird nicht kürz
   }
   expect(typedWrong).toBe(3);
   await expect(page.getByTestId('tutor-win')).toHaveText('Kurz etwas Bekanntes, dann weiter.');
+  // Platz reserviert (Rückmeldung 21.10.2026): die Statuszeile schiebt die Aufgabe nicht nach unten.
+  await expect.poll(() => itemTop(page)).toBe(top0);
   await expect(page.getByTestId('gr-item')).toHaveAttribute('data-topic', 'pres-simple-cont');
   // Der Grund steht schon als Statuszeile da: im ⓘ kein zweiter Grund.
   await page.getByTestId('purpose-info').click();
