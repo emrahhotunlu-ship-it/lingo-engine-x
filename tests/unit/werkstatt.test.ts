@@ -3,7 +3,8 @@ import { addDays, dayKey } from '../../src/domain/date';
 import { applyUpdate, reviewWrite } from '../../src/domain/srs/applyReview';
 import { toTrainCard } from '../../src/domain/srs/cards';
 import { availableExercises, canListen, makeEnv, supports, SAY_IT_FREE_DAYS } from '../../src/domain/srs/modes';
-import { checkSayIt, SAY_IT_MIN_WORDS } from '../../src/domain/srs/sayIt';
+import { exDeKey } from '../../src/domain/srs/examples';
+import { checkSayIt, sayItIntent, SAY_IT_MIN_WORDS } from '../../src/domain/srs/sayIt';
 import type { AnswerEvent, TrainCard } from '../../src/domain/srs/types';
 import {
   askNeed,
@@ -252,13 +253,21 @@ describe('„Sag es“ und Hören', () => {
     expect(checkSayIt('wir können unser Netzwerk leverage nutzen', c, de)).toMatchObject({ found: false, german: true, noteOnly: true });
     expect(checkSayIt('We can leverage our network.', c, de)).toMatchObject({ found: true, verified: true });
   });
-  it('„Sag es“ erst ab 2 freien Lerntagen nach der Einführung', () => {
+  it('„Sag es“ erst ab 2 freien Lerntagen nach der Einführung und nur mit gespeicherter deutscher Absicht', () => {
     const env = makeEnv(true, false, true);
-    const zero = card('lev', { hist: [good('2026-10-01')] });
+    const exDe = { [exDeKey('We can leverage our network.')]: 'Wir können unser Netzwerk nutzen.' };
+    const zero = card('lev', { exDe, hist: [good('2026-10-01')] });
     expect(supports(zero, 'say_it', 'de', 8, env)).toBe(false);
-    const two = card('lev', { hist: [good('2026-10-01'), good('2026-10-05'), good('2026-10-10')] });
+    const hist = [good('2026-10-01'), good('2026-10-05'), good('2026-10-10')];
+    const two = card('lev', { exDe, hist });
     expect(SAY_IT_FREE_DAYS).toBe(2);
     expect(supports(two, 'say_it', 'de', 8, env)).toBe(true);
+    expect(sayItIntent(two)).toEqual({ de: 'Wir können unser Netzwerk nutzen.', model: 'We can leverage our network.' });
+    // UX-Prüfung M3: Ohne Übersetzung kein „Sag es“ (keine englische Erklärung als Ersatz-Absicht).
+    const bare = card('lev', { hist });
+    expect(sayItIntent(bare)).toBeNull();
+    expect(supports(bare, 'say_it', 'de', 8, env)).toBe(false);
+    expect(supports(bare, 'say_it', 'en', 8, env)).toBe(false);
   });
   it('Hören auch am Handy, wenn die Sprachausgabe da ist; ohne Sprachausgabe nie', () => {
     expect(canListen(makeEnv(true, false, true))).toBe(true);

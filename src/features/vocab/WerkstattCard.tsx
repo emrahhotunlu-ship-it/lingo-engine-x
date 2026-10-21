@@ -9,6 +9,7 @@ import { lapsesOf } from '../../domain/srs/lapses';
 import { askNeed, canPause, contrastLines, diagnose, partsCoreFirst, readWk } from '../../domain/srs/werkstatt';
 import type { TrainCard } from '../../domain/srs/types';
 import { useT, type MessageKey } from '../../i18n';
+import { PrimaryAction } from '../../ui/ActionBar';
 import { Button } from '../../ui/Button';
 import { toast } from '../../ui/Toast';
 import { ExerciseShell } from '../../ui/exercise';
@@ -87,6 +88,31 @@ export function WerkstattCard({ card, onDone }: { card: TrainCard; onDone: (kind
         keysHint={null}
         status={{ area: 'words', state: null, kindLabel: t('pxWwKind') }}
         task={{ text: t('pxWwTitle'), purpose: t('pxWwPurpose'), open: true }}
+        // UX-Prüfung M1: Die Frage „Brauchst du das Wort?“ steht direkt unter dem Titel, ihre zwei Antworten SIND die Leiste – kein gesperrtes „Weiter“ ohne sichtbaren Grund.
+        aid={
+          need === 'ask' ? (
+            <div className="flex flex-col gap-1 rounded-xl border border-line-strong bg-surface p-3" role="group" aria-labelledby={`wk-need-${card.id}`} data-testid="werkstatt-need">
+              <p id={`wk-need-${card.id}`} className="lx-t-body font-semibold" lang={lang}>
+                {t('pxWwNeedQ')}
+              </p>
+              <p className="lx-t-meta text-muted" lang={lang}>
+                {t('pxWwNeedHint', { n: rounds })}
+              </p>
+            </div>
+          ) : null
+        }
+        barOverride={
+          need === 'ask' ? (
+            <>
+              <Button variant="secondary" size="lg" className="lx-actionbar-main" onClick={pause} data-testid="werkstatt-need-no">
+                {t('pxWwNeedNo')}
+              </Button>
+              <PrimaryAction onClick={() => setNeed('yes')} testId="werkstatt-need-yes">
+                {t('pxWwNeedYes')}
+              </PrimaryAction>
+            </>
+          ) : undefined
+        }
         prompt={
           <div className="flex flex-col gap-1">
             <p className="flex items-center gap-2" lang="en" data-testid="werkstatt-word">
@@ -128,8 +154,9 @@ export function WerkstattCard({ card, onDone }: { card: TrainCard; onDone: (kind
                   <ul className="m-0 flex list-none flex-col gap-1.5 p-0" data-testid="werkstatt-contrast">
                     {lines.map((l, i) => (
                       <li key={i} className={`flex flex-wrap items-baseline gap-x-2 ${l.mine ? 'text-fg' : 'text-muted'}`} data-mine={l.mine ? '1' : '0'}>
-                        <span className="sr-only">{t('pxWwThink')}:</span>
-                        <span lang={diag.kind === 'false_friend' || l.en ? 'en' : lang}>{l.think}</span>
+                        {/* UX-Prüfung S6: Die linke Seite ist entweder Deutsch (lang=de, auch in der englischen Oberfläche) oder eine englische Bedeutung – Ansage und Sprache passen dazu. */}
+                        <span className="sr-only">{l.en ? t('pxWwMeans') : t('pxWwThink')}:</span>
+                        <span lang={diag.kind === 'false_friend' || l.en ? 'en' : 'de'}>{l.think}</span>
                         <span aria-hidden="true" className="text-subtle">
                           →
                         </span>
@@ -174,30 +201,12 @@ export function WerkstattCard({ card, onDone }: { card: TrainCard; onDone: (kind
                 </div>
               </div>
             )}
-            {need === 'ask' && (
-              <div className="flex flex-col gap-2 rounded-xl bg-surface p-3" role="group" aria-labelledby={`wk-need-${card.id}`} data-testid="werkstatt-need">
-                <p id={`wk-need-${card.id}`} className="lx-t-body font-semibold" lang={lang}>
-                  {t('pxWwNeedQ')}
-                </p>
-                <p className="lx-t-meta text-muted" lang={lang}>
-                  {t('pxWwNeedHint', { n: rounds })}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <Button variant="secondary" onClick={() => setNeed('yes')} data-testid="werkstatt-need-yes">
-                    {t('pxWwNeedYes')}
-                  </Button>
-                  <Button variant="ghost" onClick={pause} data-testid="werkstatt-need-no">
-                    {t('pxWwNeedNo')}
-                  </Button>
-                </div>
-              </div>
-            )}
             <p className="lx-t-meta text-subtle" lang={lang}>
               {t('pxWwRest')}
             </p>
           </div>
         }
-        primary={{ label: t('pxWwRecall'), onClick: recall, testId: 'werkstatt-recall', disabled: need === 'ask' }}
+        primary={{ label: t('pxWwRecall'), onClick: recall, testId: 'werkstatt-recall' }}
       />
     </div>
   );

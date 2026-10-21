@@ -236,7 +236,7 @@ export const nbWsEn: Record<keyof typeof nbWsDe, string> = {
   nbWsHReviewBtn_one: 'Review · {n} word',
   nbWsHReviewBtn_other: 'Review · {n} words',
   nbWsHReviewBtnNone: 'All reviewed for today',
-  nbWsHNewToday: 'New words today',
+  nbWsHNewToday: "New words in today's plan",
   nbWsHNewTodayValue: '{n} left',
   nbWsHAllDecks: 'All decks',
   nbWsHAllDecksTitle: 'All decks',

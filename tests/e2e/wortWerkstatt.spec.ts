@@ -4,6 +4,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { boot, layoutProblems, openSettings, openTab, screen } from './fixtures';
 import { RECALLED, TYPE_MODE, answerCurrent, dump, planPatch } from './trainerHelpers';
 import { ankiPatch } from './wortschatzHelpers';
+import { exDeKey } from '../../src/domain/srs/examples';
 
 // Wort-Lernen 2, Teil 2 (21.10.2026): Wort-Werkstatt im Trainer, Vorlesen neuer Wörter und „Sag es einmal laut“, Übung „Sag es“ (Diktiertaste),
 // Berufsprofil in den Einstellungen, freiwillige Angebote „Abend-Check“ und „Sag es selbst“ im Reiter Wörter. Handy 390 px und Laptop 1440 px, mit axe.
@@ -29,6 +30,9 @@ function only(cards: Record<string, Doc>, profile: Doc = planPatch(1)): Record<s
 }
 
 /** „to avoid“: hakt (drei freie Fehlversuche an zwei Lerntagen, zuletzt „prevent“ getippt), lange fällig. */
+/** Gespeicherte deutsche Übersetzung des Ursprungssatzes von „to avoid“ (`exDe`). */
+const SAY_IT_DE: Doc = { [exDeKey('Try to avoid driving in rush hour.')]: 'Versuche, Fahrten im Berufsverkehr zu vermeiden.' };
+
 const STRUGGLING: Doc = {
   ...SEED['vocab/avoid'],
   state: 'review',
@@ -123,7 +127,8 @@ for (const vp of [
     });
 
     test('„Sag es“: deutsche Absicht, eigener Satz, Zielwort geprüft, sonst ehrlich ungeprüft', async ({ page }) => {
-      const sayIt: Doc = { ...SEED['vocab/avoid'], state: 'learning', stage: 4, S: 1, D: 5, due: 1_690_000_000_000, last: 1_689_900_000_000, reps: 3, lapses: 0, na: 9, fsrs: undefined, hist: RECALLED, intro: '2023-07-01', xs: { say_it: { c: 0, w: 6 }, cloze: { c: 6, w: 0 }, type: { c: 6, w: 0 }, colloc: { c: 6, w: 0 }, produce: { c: 6, w: 0 }, dictation: { c: 6, w: 0 } } };
+      // „Sag es“ gibt es nur mit gespeicherter deutscher Übersetzung des Satzes (UX-Prüfung M3).
+      const sayIt: Doc = { ...SEED['vocab/avoid'], state: 'learning', stage: 4, S: 1, D: 5, due: 1_690_000_000_000, last: 1_689_900_000_000, reps: 3, lapses: 0, na: 9, fsrs: undefined, hist: RECALLED, intro: '2023-07-01', exDe: SAY_IT_DE, xs: { say_it: { c: 0, w: 6 }, cloze: { c: 6, w: 0 }, type: { c: 6, w: 0 }, colloc: { c: 6, w: 0 }, produce: { c: 6, w: 0 }, dictation: { c: 6, w: 0 } } };
       const { errors } = await boot(page, { migrated: true, fake: { patch: only({ 'vocab/avoid': sayIt }) } });
       await screen(page, 'today');
       await page.getByTestId('start').click();
@@ -139,6 +144,11 @@ for (const vp of [
       await page.getByTestId('check').click();
       await expect(page.getByTestId('verdict')).toBeVisible();
       await expect(page.getByTestId('verdict')).not.toHaveAttribute('data-verdict', 'unchecked');
+      // Ehrliche Stufe statt „Richtig“, der Hinweis genau einmal, der Satz zur Absicht als erstes „Beispiel“.
+      await expect(page.getByTestId('verdict')).toContainText('Zielwort drin');
+      await expect(page.getByTestId('result')).not.toContainText('ist in deinem Satz');
+      await expect(page.getByTestId('result')).not.toContainText('Mustersatz');
+      await expect(page.getByTestId('result')).toContainText('Try to avoid driving in rush hour.');
       await page.screenshot({ path: `${OUT}/ww-05-sag-es-ergebnis-${vp.w}.png`, fullPage: true });
       await axe(page);
       expect(errors).toEqual([]);

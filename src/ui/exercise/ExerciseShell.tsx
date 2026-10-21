@@ -113,6 +113,8 @@ export type ExerciseShellProps = {
   barOverride?: ReactNode;
   feedback?: ShellFeedback | null;
   side?: ReactNode | null;
+  /** Text der ruhigen Seitenkarte am Laptop vor dem Prüfen (Standard: „Die Regel kommt nach dem Prüfen“ – passt nur, wo es eine Regel gibt; UX-Prüfung S9). */
+  sideNote?: string;
   layout?: 'auto' | 'stack' | 'split';
   /** Hülle nur um Vorlage und Antwort (Anki: die wischbare Karte, UX-Prüfung W6 – Kopf und Aufgabe bleiben beim Wischen stehen). */
   wrapCard?: (card: ReactNode) => ReactNode;
@@ -135,7 +137,7 @@ export function deriveShellState(p: Pick<ExerciseShellProps, 'loading' | 'state'
 }
 
 export function ExerciseShell(props: ExerciseShellProps) {
-  const { meta, status, task, aid = null, prompt, answer, hint = null, secondary = [], primary, barOverride, feedback = null, side = null, layout = 'auto', keysHint, choiceCount, wrapCard } = props;
+  const { meta, status, task, aid = null, prompt, answer, hint = null, secondary = [], primary, barOverride, feedback = null, side = null, sideNote, layout = 'auto', keysHint, choiceCount, wrapCard } = props;
   const { t } = useT();
   const state = deriveShellState(props);
   const keyRange = typeof choiceCount === 'number' ? choiceKeyRange(choiceCount) : null;
@@ -441,7 +443,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
         </div>
         {split && (
           <aside data-col="side" className="flex min-w-0 flex-col gap-4" aria-label={t('exSideLabel')}>
-            {feedback ? result : (side ?? <p className="lx-t-support lx-inset text-muted" data-testid="side-placeholder">{t('exSidePlaceholder')}</p>)}
+            {feedback ? result : (side ?? <p className="lx-t-support lx-inset text-muted" data-testid="side-placeholder">{sideNote ?? t('exSidePlaceholder')}</p>)}
           </aside>
         )}
       </div>

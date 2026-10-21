@@ -3,6 +3,7 @@ import { useAiAvailable } from '../../ai/scope';
 import { useAsk } from '../../ai/useAsk';
 import { useT, type MessageKey } from '../../i18n';
 import { Choices } from '../../engine/Choices';
+import { choiceKeyRange } from '../../engine/choiceKeys';
 import { Tiles } from '../../engine/Tiles';
 import { EnglishText } from '../../engine/EnglishText';
 import { useHiddenInput } from '../../engine/HiddenInput';
@@ -651,7 +652,7 @@ export function ExerciseView({
 
   const model: ExplanationModel | null = useMemo(() => {
     if (!fb) return null;
-    if (fb.sentence?.sayIt) return sayItModel(fb.sentence.sayIt, card, e.sayIt?.model ?? null, exampleItems, t);
+    if (fb.sentence?.sayIt) return sayItModel(fb.sentence.sayIt, card, e.sayIt?.model ?? null, e.sayIt?.de ?? null, exampleItems, t);
     if (fb.sentence) return sentenceModel(fb, card, exampleItems, t, e.act);
     const picked = fb.chosen ? { label: fb.chosen.label, ...(fb.chosen.fromWord ? { fromWord: fb.chosen.fromWord } : {}), ...(fb.chosen.fromMeaning ? { fromMeaning: fb.chosen.fromMeaning } : {}) } : null;
     const isAlt = fb.result.verdict !== 'correct' && isAltAnswer(card, fb.given);
@@ -860,15 +861,12 @@ export function ExerciseView({
     ) : e.ex === 'say_it' ? (
       <div className="flex flex-col gap-2" data-testid="say-it">
         <p className="lx-t-meta text-subtle">{t('pxWwSayItIntent')}</p>
+        {/* UX-Prüfung M3: nur die gespeicherte deutsche Absicht – ohne sie bietet die App „Sag es“ gar nicht an (`sayItIntent`). */}
         {e.sayIt?.de ? (
           <p className="lx-t-prompt" lang="de" data-testid="say-it-intent">
             {e.sayIt.de}
           </p>
-        ) : (
-          <p className="lx-t-prompt" lang={lang} data-testid="say-it-intent">
-            {meaningText}
-          </p>
-        )}
+        ) : null}
         {!fb && (
           <p className="lx-t-meta text-subtle" data-testid="say-it-tip">
             {t('pxWwSayItTip')}
@@ -1125,6 +1123,8 @@ export function ExerciseView({
       );
     feedback = {
       verdict: rv,
+      // UX-Prüfung M3: „Sag es“ prüft nur das Zielwort – ehrliche Stufe „Zielwort drin“ statt eines großen „Richtig“.
+      ...(e.ex === 'say_it' && !fb.override && !fb.dontKnow && fb.sentence?.sayIt?.verified && fb.sentence.sayIt.found ? { title: t('pxWwSayItTitle') } : {}),
       sub,
       comparison,
       ...(right ? { right } : {}),
@@ -1212,6 +1212,12 @@ export function ExerciseView({
         primary={primary}
         feedback={feedback}
         state={retry && !fb ? 'retry' : undefined}
+        // UX-Prüfung S9: Wortübungen haben keine „Regel“ und keine Tasten T/? – Seitenkarte und Tastenzeile sagen nur, was es hier gibt.
+        sideNote={t('exSideWord')}
+        keysHint={(() => {
+          const range = isChoice ? choiceKeyRange(e.options.length) : null;
+          return range ? t('exKeysHintWordN', range) : t('exKeysHintWord');
+        })()}
         {...(isChoice ? { choiceCount: e.options.length } : {})}
       />
     </div>
@@ -1254,13 +1260,17 @@ function sentenceModel(fb: Feedback, card: Exercise['card'], examples: ExplainEx
   return { lines, examples, mark: [card.word, card.lemma], ai: !!out, source: 'card' };
 }
 
-/** Erklär-Karte zu „Sag es“: ob das Zielwort im Satz steht (bzw. warum nicht geprüft), dann der Mustersatz zum Vergleichen. */
-function sayItModel(c: SayItCheck, card: Exercise['card'], model: string | null, examples: ExplainExample[], t: (k: MessageKey, v?: Record<string, string | number>) => string): ExplanationModel {
+/**
+ * Erklär-Karte zu „Sag es“. UX-Prüfung M3/S10: Steht das Zielwort im Satz, sagt das schon die Zeile unter dem Urteil („Geprüft ist nur …“) – keine
+ * zweite „Richtig, weil“-Zeile. Sonst erklärt die eine Zeile, was fehlt. Der englische Satz zur Absicht steht als erstes „Beispiel“ (so heißt er auch im Text).
+ */
+function sayItModel(c: SayItCheck, card: Exercise['card'], model: string | null, de: string | null, examples: ExplainExample[], t: (k: MessageKey, v?: Record<string, string | number>) => string): ExplanationModel {
   const word = card.kind === 'chunk' ? typedForm(card.word) : card.word;
   const lines: ExplanationModel['lines'] = [{ k: 'pattern', name: card.word, formula: null }];
-  lines.push({ k: 'why', text: c.german ? t('pxWwSayItGerman') : !c.found ? t('pxWwSayItMissing', { word }) : !c.longEnough ? t('pxWwSayItShort') : t('pxWwSayItFound', { word }) });
-  if (model) lines.push({ k: 'note', text: `${t('pxWwSayItModel')}: ${model}` });
-  return { lines, examples: model ? examples.filter((x) => x.en !== model) : examples, mark: [card.word, card.lemma], ai: false, source: 'card' };
+  const found = c.found && c.longEnough && !c.german;
+  if (!found) lines.push({ k: 'why', text: c.german ? t('pxWwSayItGerman') : !c.found ? t('pxWwSayItMissing', { word }) : t('pxWwSayItShort') });
+  const rest = model ? examples.filter((x) => x.en !== model) : examples;
+  return { lines, examples: model ? [{ en: model, de: de || null }, ...rest] : rest, mark: [card.word, card.lemma], ai: false, source: 'card' };
 }
 
 /**

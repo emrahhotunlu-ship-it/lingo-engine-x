@@ -263,7 +263,7 @@ export function VocabHub() {
         <RowList title={t('pxWwOffersLabel')} testId="ws-offers">
           {evening.length > 0 && (
             <Row
-              icon="check"
+              icon="moon"
               channel="cards"
               title={t('pxWwEveningTitle')}
               sub={evening.length === 1 ? t('pxWwEveningLeadOne') : t('pxWwEveningLead', { n: evening.length })}

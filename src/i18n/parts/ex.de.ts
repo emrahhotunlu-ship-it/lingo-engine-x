@@ -85,6 +85,9 @@ export const exDe = {
   exKeysHintN: 'Enter prüft und geht weiter · {letters} oder {nums} wählen · T Tipp · ? Regel',
   exKeysHintTyped: 'Enter prüft und geht weiter · T Tipp · ? Regel',
   exSidePlaceholder: 'Erst selbst entscheiden. Die Regel kommt nach dem Prüfen.',
+  exSideWord: 'Erst selbst versuchen. Die Erklärung zum Wort kommt nach dem Prüfen.',
+  exKeysHintWord: 'Enter prüft und geht weiter',
+  exKeysHintWordN: 'Enter prüft und geht weiter · {letters} oder {nums} wählen',
   // Rundenende mit Zuwachs
   exEndFacts: 'Was neu sitzt',
   exEndMistakes: 'Deine Fehler',

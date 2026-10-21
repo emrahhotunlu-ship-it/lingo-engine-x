@@ -6,6 +6,8 @@ const paths = {
   sliders: 'M4 7h9M17 7h3M4 12h3M11 12h9M4 17h11M19 17h1M15 5v4M9 10v4M17 15v4',
   close: 'M6 6l12 12M18 6L6 18',
   check: 'M5 12.5l4.5 4.5L19 7.5',
+  // Abend (UX-Prüfung S3: der freiwillige Abend-Check ist kein Häkchen – ein Häkchen hieße „erledigt“).
+  moon: 'M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z',
   arrowRight: 'M5 12h14M13 6l6 6-6 6',
   chevronDown: 'M6 9l6 6 6-6',
   sort: 'M7 4v16M4 17l3 3 3-3M17 20V4M14 7l3-3 3 3',

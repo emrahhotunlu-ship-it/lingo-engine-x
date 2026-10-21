@@ -2,6 +2,7 @@ import { packExtraOf } from '../c1pack/packFields';
 import { meaningForTask } from './cards';
 import { activationReady } from './brief';
 import { freeLaterDays } from './spacing';
+import { sayItIntent } from './sayIt';
 import { gapUsable, lemmaFor } from './gapFit';
 import { familyFrom, hasPartner, trapTask } from './partner';
 import { distinctForms, familyOf, FEST_MIN_FORMS, FREE_ANSWER, freeCorrectDays, freeDaysNeeded, partDaysOf, varietyBias, varietyOf } from './variety';
@@ -132,7 +133,8 @@ export function supports(card: TrainCard, ex: ExerciseId, lang: Lang, poolSize: 
       return canListen(env) && gapOk(card);
     case 'say_it':
       // Wie die Aktivierung erst, wenn das Wort an zwei Tagen nach der Einführung frei abgerufen wurde (Barcroft-Grenze).
-      return !!meaning && freeLaterDays(card.doc) >= SAY_IT_FREE_DAYS;
+      // UX-Prüfung M3: nur mit einer gespeicherten deutschen Absicht (Satz mit Übersetzung) – nie mit der englischen Erklärung als Ersatz.
+      return !!meaning && freeLaterDays(card.doc) >= SAY_IT_FREE_DAYS && sayItIntent(card) !== null;
     case 'produce':
       // Leitplanke (Barcroft, tagesaufbau.md T2): nie bei einer Karte, die noch nicht an mindestens zwei Tagen richtig abgerufen wurde.
       return env.ai && !!meaning && activationReady(card);

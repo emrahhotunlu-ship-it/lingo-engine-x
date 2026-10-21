@@ -14,7 +14,7 @@ import { findContext, formsOf, locate } from './context';
 import { gapUsable, lemmaFor } from './gapFit';
 import { readCfx, readWx } from '../tutor/acceptWordCtx';
 import { poolNorm } from '../drills/orderPool';
-import { storedTranslation } from './examples';
+import { sayItIntent } from './sayIt';
 import type { CheckResult, Colloc, Exercise, ExerciseId, Lang, Option, SituationTask, Stage, Tile, TrainCard } from './types';
 
 // Übung aus Karte und Art bauen (Lern-Entwurf §4.4 Ablenker). Zufall mit Startwert:
@@ -505,11 +505,11 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
       return { ...base, sentence: rawCtx, options: shuffle([correct, ...meaningDistractors(card, pool, lang, rng).slice(0, 2)], rng), accepted: [label] };
     }
     case 'say_it': {
-      // Deutsche Absicht: die gespeicherte Übersetzung des Satzes (Ursprung bzw. gewechselter Satz), sonst nur die Bedeutung. Der englische Satz ist das Muster.
-      const model = rawCtx?.sentence ?? card.context?.sentence ?? null;
-      const de = model ? storedTranslation(card.doc, model) : null;
+      // Deutsche Absicht: die gespeicherte Übersetzung eines Satzes der Karte (`sayItIntent`, zuerst der Satz der Übung). Der englische Satz ist das Beispiel.
+      // Ohne Übersetzung bietet `supports` die Übung nicht an; der leere Fall bleibt nur als Absicherung (die Oberfläche zeigt dann keine Absicht).
+      const intent = sayItIntent(card, rawCtx);
       const target = card.kind === 'chunk' ? typedForm(card.word) : card.word;
-      return { ...base, sentence: null, accepted: [target], sayIt: { de: de ?? '', model } };
+      return { ...base, sentence: null, accepted: [target], sayIt: { de: intent?.de ?? '', model: intent?.model ?? null } };
     }
     case 'complete': {
       const starts = packExtraOf(card)?.starts ?? [];

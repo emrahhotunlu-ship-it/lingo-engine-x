@@ -51,40 +51,45 @@ export function WordExtras({
       {part !== 'more' && (
       <div className="flex flex-wrap items-center gap-2" data-testid="word-head" data-contrast={other ? '' : undefined}>
         {other && (
-          <span className="inline-flex items-center gap-2 whitespace-nowrap" data-testid="contrast-group">
-            <span className="lx-t-answer" lang="en" data-testid="contrast-word">
-              {other}
+          <span className="flex min-w-0 max-w-full flex-wrap items-center gap-x-2 gap-y-0.5" data-testid="contrast-group">
+            <span className="inline-flex min-w-0 max-w-full items-center gap-2">
+              <span className="lx-t-answer min-w-0 break-words" lang="en" data-testid="contrast-word">
+                {other}
+              </span>
+              <SpeakButton text={other} testId="contrast-listen" />
             </span>
-            <SpeakButton text={other} testId="contrast-listen" />
             {otherIpa && (
-              <span className="lx-t-meta text-muted" lang="en" data-testid="contrast-ipa">
+              <span className="lx-t-meta basis-full text-muted" lang="en" data-testid="contrast-ipa">
                 {otherIpa}
               </span>
             )}
           </span>
         )}
         {phrase && (
-          <span className="inline-flex items-center gap-2" data-testid="phrase-group">
-            <span className="lx-t-answer" lang="en" data-testid="phrase-text">
+          <span className="inline-flex min-w-0 max-w-full items-center gap-2" data-testid="phrase-group">
+            <span className="lx-t-answer min-w-0 break-words" lang="en" data-testid="phrase-text">
               {phrase}
             </span>
             <SpeakButton text={phrase} testId="phrase-listen" />
           </span>
         )}
-        {/* Das „≠“ gehört zur Gruppe des Kartenworts: Bricht die Zeile um, steht es vorn in der zweiten Zeile, nie allein am Zeilenende. */}
-        <span className="inline-flex items-center gap-2 whitespace-nowrap" data-testid="word-group">
-          {other && (
-            <span className="lx-t-answer pr-1 text-subtle" data-testid="contrast-ne">
-              <span aria-hidden="true">≠</span>
-              <span className="sr-only">{t('wxNotSame')}</span>
+        {/* Das „≠“ gehört zur Gruppe des Kartenworts: Bricht die Zeile um, steht es vorn in der zweiten Zeile, nie allein am Zeilenende.
+            UX-Prüfung M2: Lange Wendungen brechen innerhalb der Gruppe um (nie abgeschnitten), die Lautschrift steht in einer eigenen Zeile. */}
+        <span className="flex min-w-0 max-w-full flex-wrap items-center gap-x-2 gap-y-0.5" data-testid="word-group">
+          <span className="inline-flex min-w-0 max-w-full items-center gap-2">
+            {other && (
+              <span className="lx-t-answer flex-none pr-1 text-subtle" data-testid="contrast-ne">
+                <span aria-hidden="true">≠</span>
+                <span className="sr-only">{t('wxNotSame')}</span>
+              </span>
+            )}
+            <span className={`min-w-0 break-words ${phrase ? 'lx-t-meta font-medium text-muted' : 'lx-t-answer'}`} lang="en" data-testid="word-text">
+              {card.word}
             </span>
-          )}
-          <span className={phrase ? 'lx-t-meta font-medium text-muted' : 'lx-t-answer'} lang="en" data-testid="word-text">
-            {card.word}
+            <SpeakButton text={card.word} testId="word-listen" />
           </span>
-          <SpeakButton text={card.word} testId="word-listen" />
           {ipa && (
-            <span className="lx-t-meta text-muted" lang="en" data-testid="word-ipa">
+            <span className="lx-t-meta basis-full text-muted" lang="en" data-testid="word-ipa">
               {ipa}
             </span>
           )}

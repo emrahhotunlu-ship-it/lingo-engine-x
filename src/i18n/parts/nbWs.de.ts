@@ -245,7 +245,7 @@ export const nbWsDe = {
   nbWsHReviewBtn_one: 'Wiederholen · {n} Wort',
   nbWsHReviewBtn_other: 'Wiederholen · {n} Wörter',
   nbWsHReviewBtnNone: 'Heute alles wiederholt',
-  nbWsHNewToday: 'Neue Wörter heute',
+  nbWsHNewToday: 'Neue Wörter im Tagesplan',
   nbWsHNewTodayValue: 'noch {n}',
   nbWsHAllDecks: 'Alle Stapel',
   nbWsHAllDecksTitle: 'Alle Stapel',
