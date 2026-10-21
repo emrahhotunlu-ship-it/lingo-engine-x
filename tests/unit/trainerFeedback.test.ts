@@ -43,7 +43,7 @@ describe('automatische Note', () => {
 describe('Status (Paket ST): neu · lernt · wackelt · sicher · fest', () => {
   const base = { v: 1, due: NOW, stability: 10, difficulty: 5, state: 2, reps: 5, lapses: 0, last: NOW - 10 * DAY, scheduledDays: 10, learningSteps: 0, src: 'lx' };
   const free = (dt: number, g = 3, s = 'sA') => ({ t: NOW - dt * DAY, g, x: 'cloze', s });
-  const tier = (stage: number, fsrs: typeof base, hist: unknown[], na = 0) => cardStatus({ isNew: false, stage: stage as 0, fsrs, doc: { hist, na } }, NOW).tier;
+  const tier = (stage: number, fsrs: typeof base, hist: unknown[], na = 0, lg?: string) => cardStatus({ isNew: false, stage: stage as 0, fsrs, doc: { hist, na, ...(lg ? { lg } : {}) } }, NOW).tier;
   it('neu', () => expect(cardStatus({ isNew: true, stage: 0, fsrs: { ...base, state: 0 }, doc: {} }, NOW).tier).toBe('new'));
   it('lernt, bis an 2 verschiedenen Tagen frei richtig abgerufen wurde', () => {
     expect(tier(3, base, [])).toBe('learning');
@@ -61,10 +61,12 @@ describe('Status (Paket ST): neu · lernt · wackelt · sicher · fest', () => {
   });
   it('fest: Stufe 5, 21 Tage Stabilität und im neuen Satz (2 verschiedene Sätze frei richtig) oder selbst benutzt; Stufe 4 nie', () => {
     const f = { ...base, stability: 40, last: NOW - 5 * DAY };
-    // Wort-Lernen 2 (21.10.2026): zusätzlich ein freier richtiger Abruf nach ≥ 21 Tagen Pause (`gap` = Antwort vor 40 Tagen, dann frei vor 9).
+    // Wort-Lernen 2 (21.10.2026): zusätzlich ein freier richtiger Abruf nach ≥ 21 Tagen Pause – belegt allein über das Feld `lg` (Korrektur 21.10.2026);
+    // eine Lücke im Verlauf (`gap` = Antwort vor 40 Tagen, dann frei vor 9) reicht nicht.
     const gap = { t: NOW - 40 * DAY, g: 3, x: 'mc_en' };
-    expect(tier(5, f, [gap, free(9, 3, 'sOne'), free(5, 3, 'sTwo')])).toBe('firm');
-    expect(tier(5, f, [gap, free(9, 3, 'sOne'), free(5, 3, 'sOne')], 1)).toBe('firm');
+    expect(tier(5, f, [gap, free(9, 3, 'sOne'), free(5, 3, 'sTwo')], 0, '2026-09-10')).toBe('firm');
+    expect(tier(5, f, [gap, free(9, 3, 'sOne'), free(5, 3, 'sOne')], 1, '2026-09-10')).toBe('firm');
+    expect(tier(5, f, [gap, free(9, 3, 'sOne'), free(5, 3, 'sTwo')])).toBe('safe');
     expect(tier(5, f, [free(9, 3, 'sOne'), free(5, 3, 'sTwo')])).toBe('safe');
     expect(tier(4, f, [free(9, 3, 'sOne'), free(5, 3, 'sTwo')])).toBe('safe');
     // Nur in einem einzigen Satz gekonnt (vielleicht auswendig): sicher, nicht fest.

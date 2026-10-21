@@ -43,8 +43,8 @@ const CASES: Array<[string, TrainCard, UnitState]> = [
   ['nur Auswahl-Antworten, Stufe 3', mk('auswahl', { stage: 3, S: 8, last: NOW - 3 * D, hist: [choice(9), choice(3)] }), 'learning'],
   ['Anki-Karte (Aufdecken)', mk('anki', { stage: 2, S: 9, last: NOW - 4 * D, hist: [{ t: NOW - 9 * D, g: 3, x: 'flip' }, { t: NOW - 4 * D, g: 3, x: 'flip' }] }), 'learning'],
   // Wort-Lernen 2: `choice(40)` liefert die Pause ≥ 21 Tage vor dem freien Abruf, die „Fest“ zusätzlich verlangt.
-  ['Stufe 5, fest, im neuen Satz', mk('fest', { stage: 5, S: 40, last: NOW - 5 * D, hist: [choice(40), free(12, 3, 'sA'), free(5, 3, 'sB')] }), 'firm'],
-  ['Stufe 5, Stabilität 40, ein anderer Satz als der Ursprungssatz', mk('einsatz', { stage: 5, S: 40, last: NOW - 5 * D, hist: [choice(40), free(12, 3, 'sA'), free(5, 3, 'sA')] }), 'firm'],
+  ['Stufe 5, fest, im neuen Satz', mk('fest', { stage: 5, S: 40, last: NOW - 5 * D, lg: '2026-09-01', hist: [choice(40), free(12, 3, 'sA'), free(5, 3, 'sB')] }), 'firm'],
+  ['Stufe 5, Stabilität 40, ein anderer Satz als der Ursprungssatz', mk('einsatz', { stage: 5, S: 40, last: NOW - 5 * D, lg: '2026-09-01', hist: [choice(40), free(12, 3, 'sA'), free(5, 3, 'sA')] }), 'firm'],
   ['Stufe 5, im neuen Satz, aber noch ohne Abruf nach 3 Wochen Pause', mk('ohnepause', { stage: 5, S: 40, last: NOW - 5 * D, hist: [free(12, 3, 'sA'), free(5, 3, 'sB')] }), 'safe'],
   ['Stufe 5, Stabilität 40, nur im Ursprungssatz gekonnt', mk('ursprung', { stage: 5, S: 40, last: NOW - 5 * D, hist: [free(12, 3, sentKey('We ursprung it.')), free(5, 3, sentKey('We ursprung it.'))] }), 'safe'],
   ['Stufe 5 ohne Verlauf (alte Karte)', mk('alt', { stage: 5, S: 60, last: NOW - 5 * D, hist: [] }), 'learning'],

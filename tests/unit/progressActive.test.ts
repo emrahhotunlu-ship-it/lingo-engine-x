@@ -15,8 +15,8 @@ describe('Fortschritt: fest / sicher / erwartet', () => {
   it('Fest nur mit Stufe 5, 21 Tagen und Beleg im neuen Satz; neue Karten nie', () => {
     const cs = [
       // Wort-Lernen 2: Fest verlangt einen freien Abruf nach ≥ 21 Tagen Pause (`free(30)` → `free(6)` = 24 Tage).
-      doc(1, { stage: 5, S: 40, hist: [free(30, 'mc_en', 'sNEW0'), free(6, 'cloze', 'sNEW1'), free(4, 'cloze', 'sNEW2'), free(2, 'cloze', 'sNEW3')] }), // fest
-      doc(2, { stage: 5, S: 25, hist: [free(30, 'mc_en', 'sNEW0'), free(6, 'cloze', 'sNEW1'), free(4, 'cloze', 'sNEW2')] }), // fest
+      doc(1, { stage: 5, S: 40, lg: '2026-09-01', hist: [free(30, 'mc_en', 'sNEW0'), free(6, 'cloze', 'sNEW1'), free(4, 'cloze', 'sNEW2'), free(2, 'cloze', 'sNEW3')] }), // fest
+      doc(2, { stage: 5, S: 25, lg: '2026-09-01', hist: [free(30, 'mc_en', 'sNEW0'), free(6, 'cloze', 'sNEW1'), free(4, 'cloze', 'sNEW2')] }), // fest
       doc(3, { stage: 4, S: 30, hist: [free(6, 'cloze', 'sNEW1'), free(4, 'cloze', 'sNEW2')] }), // sicher (Stufe 4 ist nie fest)
       doc(4, { stage: 5, S: 10, hist: [free(6, 'cloze', 'sNEW1'), free(4, 'cloze', 'sNEW2')] }), // sicher (Stabilität zu jung)
       doc(5, { stage: 5, S: 90, hist: [] }), // lernt (kein Beleg, nur alte Stufe)

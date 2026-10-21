@@ -8,7 +8,7 @@ import { FREE_ANSWER, FREE_MIN_GRADE } from './variety';
 //  1. Tag 0: Am Einführungstag zählt „Leicht“ als „Gut“, und nur ein FREIER richtiger Abruf (getippt, ohne Auswahl, ohne Stütze, ohne Tipp)
 //     beendet die Lernphase. Aufdecken, Auswahl und die Lücke mit Anfangsbuchstaben halten die Karte im letzten Lernschritt (10 Min.).
 //  2. Abstands-Deckel (nach FSRS, kürzt nur): ≤ 1 Tag, bis an einem späteren Tag als dem Einführungstag ein freier Abruf gelang; ≤ 3 Tage bis
-//     2 solche Tage; ≤ 7 bis 3; danach ≤ 21, bis die Karte „Fest“ ist ODER der freie Abruf nach ≥ 21 Tagen Pause gelungen ist (`longGapProven`):
+//     2 solche Tage; ≤ 7 bis 3; danach ≤ 21, bis die Karte „Fest“ ist ODER der freie Abruf nach ≥ 21 Tagen Pause gelungen ist (`longGapProven`, Feld `lg`):
 //     Danach hat der Deckel nichts mehr zu beweisen – sonst hinge eine Karte ohne zweiten Satz für immer an 21 Tagen.
 //     Erkennen und Aufdecken heben den Abstand nie über den Deckel. Die Stufe zählt als Mindest-Beleg (`evidenceDays`): Das Tor der freien Tage
 //     verlangt für Stufe 4 zwei und für Stufe 5 drei freie Tage, und der Verlauf hat höchstens 12 Einträge – so fallen gereifte Karten
@@ -31,7 +31,8 @@ export const DAY0_HOLD_MS = 10 * 60_000;
 const REVIEW = 2;
 const LEARNING = 1;
 
-type Row = { t: number; g: number | null; x: string | null; u: boolean; ci: boolean; known: boolean };
+/** `h` = mit Tipp beantwortet (Verlauf `h` ≥ 1): kein freier Beleg. */
+type Row = { t: number; g: number | null; x: string | null; u: boolean; ci: boolean; h: boolean; known: boolean };
 
 /** Alte Einträge ohne `x` (nur `m`): getippt (`type`) und eigener Satz (`produce`) waren frei (wie `cardStatus.ts`). */
 const LEGACY_FREE: Readonly<Record<string, string>> = { type: 'type', produce: 'produce' };
@@ -45,7 +46,7 @@ export function rowsOf(doc: Doc): Row[] {
     const o = h as Record<string, unknown>;
     if (typeof o.t !== 'number' || !Number.isFinite(o.t)) continue;
     const x = typeof o.x === 'string' ? o.x : typeof o.m === 'string' ? (LEGACY_FREE[o.m] ?? null) : null;
-    out.push({ t: o.t, g: typeof o.g === 'number' && Number.isFinite(o.g) ? o.g : null, x, u: o.u === 1, ci: typeof o.ci === 'number' && o.ci >= 0, known: o.m === 'known' || o.x === 'known' });
+    out.push({ t: o.t, g: typeof o.g === 'number' && Number.isFinite(o.g) ? o.g : null, x, u: o.u === 1, ci: typeof o.ci === 'number' && o.ci >= 0, h: typeof o.h === 'number' && o.h > 0, known: o.m === 'known' || o.x === 'known' });
   }
   return out.sort((a, b) => a.t - b.t);
 }
@@ -55,16 +56,18 @@ export type FreshAnswer = { t: number; ex: string; grade: number; colIndex?: num
 
 /** Freier Abruf: getippt oder selbst gebildet, ohne Auswahl, ohne Stütze, geprüft; Treffer am Partnerwort zählt nicht für das Hauptwort. */
 export const isFreeForm = (x: string | null, ci = false): boolean => x !== null && FREE_ANSWER.has(x) && !(x === 'colloc' && ci);
-const rowFreeGood = (r: Row): boolean => !r.known && !r.u && r.g !== null && r.g >= FREE_MIN_GRADE && isFreeForm(r.x, r.ci);
+/** Guter freier Abruf im Verlauf: nicht „Kenne ich“, geprüft (`u`), ohne Tipp (`h`), Note ≥ 3, freie Form. */
+export const rowFreeGood = (r: Row): boolean => !r.known && !r.u && !r.h && r.g !== null && r.g >= FREE_MIN_GRADE && isFreeForm(r.x, r.ci);
 /** Ist die Antwort, die gerade gegeben wird, ein guter freier Abruf (ohne Tipp)? */
 export const freshFreeGood = (a: FreshAnswer): boolean =>
   !a.unverified && !(a.hint && a.hint > 0) && a.grade >= FREE_MIN_GRADE && isFreeForm(a.ex, a.colIndex !== undefined && a.colIndex >= 0);
 
-/** Einführungstag: `intro`, sonst der Tag der ersten Antwort (ohne „Kenne ich“), sonst `null`. */
+/**
+ * Einführungstag: nur das gespeicherte `intro`, sonst `null` (Prüfung Lernwissenschaft 21.10.2026). Der Verlauf hält nur 12 Einträge;
+ * ein aus dem ältesten Eintrag geschätzter Tag würde mit jeder Antwort nach vorn wandern.
+ */
 export function introDayOf(doc: Doc): string | null {
-  if (isDayKey(doc.intro)) return doc.intro;
-  const first = rowsOf(doc).find((r) => !r.known);
-  return first ? dayKey(first.t) : null;
+  return isDayKey(doc.intro) ? doc.intro : null;
 }
 
 /**
@@ -93,13 +96,35 @@ export function evidenceDays(doc: Doc, extra?: FreshAnswer, introDay: string | n
 }
 
 /**
- * Ist der freie Abruf nach ≥ 21 Lerntagen Pause belegt? Im Verlauf (guter freier Abruf, ≥ 21 Lerntage nach der Antwort davor) oder dauerhaft
- * über den ersten Fest-Tag `ff` ab `KERN_FROM` (seitdem verlangt „Fest“ genau diesen Beleg; der Verlauf hat höchstens 12 Einträge).
+ * Ist der freie Abruf nach ≥ 21 Lerntagen Pause belegt? Nur über das eigene Feld `lg` (Korrektur 21.10.2026, Prüfung Lernwissenschaft M2 und Datenprüfer S1/S2):
+ * Es schreibt allein dieser Code (`longGapDay` in `applyReview.ts`), beim ersten belegten Abruf nach der Pause. Ein Fest-Tag `ff` ist nie ein Beleg –
+ * Karten, die vor dem Stichtag nach der alten Regel fest wurden, müssen die Pause erst einmal zeigen. Der Verlauf allein reicht nicht (höchstens 12 Einträge,
+ * Altdaten ohne Prüfmerkmale).
  */
 export function longGapProven(doc: Doc): boolean {
-  if (isDayKey(doc.ff) && doc.ff >= KERN_FROM) return true;
-  const rows = rowsOf(doc);
-  return rows.some((r, i) => i > 0 && r.x !== 'cloze_part' && rowFreeGood(r) && daysBetweenKeys(dayKey((rows[i - 1] as Row).t), dayKey(r.t)) >= LONG_GAP_DAYS);
+  return isDayKey(doc.lg);
+}
+
+/**
+ * Antworten, die eine Pause NICHT unterbrechen: „Kenne ich“, Fehler am Partnerwort (`ci`) und „Welches Wort passt?“ (`contrast`) – sie schreiben nur den Verlauf,
+ * nicht die Planung, und fragen das Wort selbst nicht ab.
+ */
+const breaksPause = (r: Row): boolean => !r.known && !r.ci && r.x !== 'contrast';
+
+/** Lerntag der letzten Antwort vor `t`, die eine Pause unterbricht (`null` = keine). */
+export function lastPauseBreak(doc: Doc, t: number): string | null {
+  const prev = rowsOf(doc).filter((r) => r.t < t && breaksPause(r)).at(-1);
+  return prev ? dayKey(prev.t) : null;
+}
+
+/**
+ * Belegt diese Antwort den freien Abruf nach ≥ 21 Lerntagen Pause? Guter freier Abruf (ohne Tipp, geprüft, nicht nur ein Wort einer Wendung),
+ * und die letzte Antwort davor (ohne Partnerwort, „Welches Wort passt?“ und „Kenne ich“) liegt ≥ 21 Lerntage zurück. Ohne Antwort davor: nein.
+ */
+export function longGapNow(doc: Doc, a: FreshAnswer): boolean {
+  if (a.ex === 'cloze_part' || !freshFreeGood(a)) return false;
+  const prev = lastPauseBreak(doc, a.t);
+  return prev !== null && daysBetweenKeys(prev, dayKey(a.t)) >= LONG_GAP_DAYS;
 }
 
 /** Deckel in Tagen (ohne Ausnahme für „Fest“): 1, 3, 7 oder 21. */

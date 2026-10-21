@@ -1,7 +1,7 @@
 import { addDays, dayKey, daysBetween } from '../date';
 import { CATALOG } from '../srs/modes';
 import { lapsesOf } from '../srs/lapses';
-import { introDayOf, isFreeForm, LONG_GAP_DAYS, rowsOf } from '../srs/spacing';
+import { introDayOf, isFreeForm, KERN_FROM, LONG_GAP_DAYS, rowsOf } from '../srs/spacing';
 import { FREE_MIN_GRADE } from '../srs/variety';
 import type { TrainCard } from '../srs/types';
 
@@ -18,6 +18,8 @@ export const WK_WINDOW_DAYS = 28;
 export const WK_LONG_WINDOW_DAYS = 90;
 /** Ab so vielen Messpunkten nennt die Anzeige eine Quote. */
 export const WK_MIN_N = 5;
+/** „Folgetag frei“: der erste Abruf nach dem Einführungstag zählt nur, wenn er höchstens so viele Lerntage danach liegt. */
+export const WK_NEXT_DAY_MAX = 2;
 /** „Problemwort“: so oft (oder öfter) vergessen. */
 export const PROBLEM_LAPSES = 2;
 
@@ -29,7 +31,7 @@ const RECOG: ReadonlySet<string> = new Set([...CATALOG.filter((d) => d.input ===
 
 export type Rate = { n: number; ok: number; share: number | null };
 export type WordKernStats = {
-  /** Erster Abruf an einem Tag nach dem Einführungstag, frei: Anteil richtig. */
+  /** Erster Abruf an einem Tag nach dem Einführungstag (höchstens 2 Lerntage danach, nur Karten mit gespeichertem `intro` ab `KERN_FROM`), frei: Anteil richtig. */
   nextDay: Rate;
   /** Erste freie Antwort je Wendung: Anteil richtig. */
   chunkFirst: Rate;
@@ -44,7 +46,9 @@ export type WordKernStats = {
 };
 
 const rate = (n: number, ok: number): Rate => ({ n, ok, share: n ? ok / n : null });
-const verifiedFree = (r: Row): boolean => !r.known && !r.u && isFreeForm(r.x, r.ci);
+const verifiedFree = (r: Row): boolean => !r.known && !r.u && !r.h && isFreeForm(r.x, r.ci);
+/** Antworten, die eine Pause nicht unterbrechen (wie `spacing.ts`): Partnerwort-Fehler und „Welches Wort passt?“. */
+const breaksPause = (r: Row): boolean => !r.ci && r.x !== 'contrast';
 const good = (r: Row): boolean => (r.g ?? 0) >= FREE_MIN_GRADE;
 
 function median(xs: number[]): number | null {
@@ -77,8 +81,9 @@ export function wordKernStats(cards: readonly Card[], today: string): WordKernSt
     const rows = rowsOf(c.doc).filter((r) => !r.known);
     const intro = introDayOf(c.doc);
     if (intro !== null) {
-      const first = rows.find((r) => dayKey(r.t) > intro);
-      if (first && dayKey(first.t) >= from && verifiedFree(first)) {
+      // Prüfung Lernwissenschaft S10: nur Karten, deren Einführungstag der neue Code gespeichert hat, und nur ein Abruf kurz danach.
+      const first = intro >= KERN_FROM ? rows.find((r) => dayKey(r.t) > intro) : undefined;
+      if (first && dayKey(first.t) >= from && daysBetween(intro, dayKey(first.t)) <= WK_NEXT_DAY_MAX && verifiedFree(first)) {
         nd++;
         if (good(first)) ndOk++;
       }
@@ -93,18 +98,19 @@ export function wordKernStats(cards: readonly Card[], today: string): WordKernSt
         if (good(f)) cfOk++;
       }
     }
-    rows.forEach((r, i) => {
+    let prev: Row | undefined;
+    for (const r of rows) {
       const d = dayKey(r.t);
       if (d >= from) {
         if (verifiedFree(r)) free++;
         else if (r.x !== null && RECOG.has(r.x)) recog++;
       }
-      const prev = rows[i - 1];
-      if (prev && d >= fromLong && verifiedFree(r) && daysBetween(dayKey(prev.t), d) >= LONG_GAP_DAYS) {
+      if (prev && d >= fromLong && verifiedFree(r) && r.x !== 'cloze_part' && daysBetween(dayKey(prev.t), d) >= LONG_GAP_DAYS) {
         lg++;
         if (good(r)) lgOk++;
       }
-    });
+      if (breaksPause(r)) prev = r;
+    }
   }
   return {
     nextDay: rate(nd, ndOk),
@@ -121,7 +127,7 @@ const pct = (r: Rate): string => (r.share === null ? 'keine Messwerte' : `${Math
 /** Eine Zeile fürs Diagnose-Protokoll (nur Zahlen, keine Inhalte). */
 export function wordKernLine(s: WordKernStats): string {
   return [
-    `Folgetag frei: ${pct(s.nextDay)} (Ziel ≥ 70 %)`,
+    `Folgetag frei (≤ 2 Lerntage, neue Karten): ${pct(s.nextDay)} (Ziel ≥ 70 %)`,
     `erste freie Antwort Wendung: ${pct(s.chunkFirst)} (Ziel ≥ 55 %)`,
     `frei nach ≥ 21 Tagen: ${pct(s.longGap)} (Ziel ≥ 85 %)`,
     `Median bis Sicher: ${s.medianSafe.days === null ? 'keine Messwerte' : `${s.medianSafe.days} Tage bei ${s.medianSafe.n}`} (Ziel ≤ 14)`,

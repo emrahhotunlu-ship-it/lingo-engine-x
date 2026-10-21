@@ -140,11 +140,24 @@ export const FREE_DAYS_FOR_ADVANCE = 2;
 /** Wie viele richtige freie Tage der Aufstieg auf die Stufe `next` braucht: Stufe 4 zwei, Stufe 5 einen mehr (Prüfung M2: Stufe 5 ist strenger als Stufe 4). */
 export const freeDaysNeeded = (next: number): number => FREE_DAYS_FOR_ADVANCE + (next >= 5 ? 1 : 0);
 
-type Answer = { t: number; ex: string; grade: number; /** Index des Partnerworts (Treffer am Partnerwort ist kein freier Beleg für das Hauptwort). */ ci?: number };
+type Answer = {
+  t: number;
+  ex: string;
+  grade: number;
+  /** Index des Partnerworts (Treffer am Partnerwort ist kein freier Beleg für das Hauptwort). */
+  ci?: number;
+  /** Mit Tipp beantwortet (Korrektur 21.10.2026): kein freier Beleg. */
+  hint?: number;
+  /** Ungeprüft (wie `u: 1` im Verlauf): kein freier Beleg. */
+  unverified?: boolean;
+};
+
+/** Mit Tipp beantwortet? (Verlauf `h` ≥ 1, Korrektur 21.10.2026.) */
+const hinted = (r: Record<string, unknown>): boolean => typeof r.h === 'number' && r.h > 0;
 
 /**
  * Wie viele verschiedene Tage haben eine gute (Note ≥ 3, `FREE_MIN_GRADE`) freie Antwort in den letzten gespeicherten Antworten (`hist`, höchstens 12)?
- * `extra` = die Antwort, die gerade gegeben wird. Ungeprüfte Antworten (`u: 1`: Aktivierung ohne Claude, Satz ohne Prüfung) zählen nicht, ebenso wenig
+ * `extra` = die Antwort, die gerade gegeben wird. Ungeprüfte Antworten (`u: 1`: Aktivierung ohne Claude, Satz ohne Prüfung) und Antworten mit Tipp (`h`) zählen nicht, ebenso wenig
  * Treffer am Partnerwort (`colloc` mit `ci`): sie zeigen das Partnerwort, nicht den freien Abruf des Hauptworts (Lernwissenschaft M3).
  * `cloze_part` (ein Wort einer Wendung als freie Lücke, WL) zählt nur für den Aufstieg auf Stufe 4 (`next` = 4) und dort für höchstens EINEN Tag;
  * der zweite Tag muss eine ganze Wendung sein. Für Stufe 5 und ohne `next` zählt es nie.
@@ -158,11 +171,11 @@ export function freeCorrectDays(doc: Readonly<Record<string, unknown>>, extra?: 
     const r = h as Record<string, unknown>;
     if (typeof r.t !== 'number' || typeof r.x !== 'string' || typeof r.g !== 'number') continue;
     // WL (19.10.2026): „Schwer“ (2) ist kein freier Beleg – nur Gut (3) und Leicht (4) zählen.
-    if (r.u === 1 || !FREE_ANSWER.has(r.x) || r.g < FREE_MIN_GRADE) continue;
+    if (r.u === 1 || hinted(r) || !FREE_ANSWER.has(r.x) || r.g < FREE_MIN_GRADE) continue;
     if (r.x === 'colloc' && typeof r.ci === 'number') continue;
     (r.x === 'cloze_part' ? partDays : days).add(dayKey(r.t));
   }
-  if (extra && FREE_ANSWER.has(extra.ex) && extra.grade >= FREE_MIN_GRADE && !(extra.ex === 'colloc' && extra.ci !== undefined && extra.ci >= 0)) (extra.ex === 'cloze_part' ? partDays : days).add(dayKey(extra.t));
+  if (extra && !extra.unverified && !(extra.hint && extra.hint > 0) && FREE_ANSWER.has(extra.ex) && extra.grade >= FREE_MIN_GRADE && !(extra.ex === 'colloc' && extra.ci !== undefined && extra.ci >= 0)) (extra.ex === 'cloze_part' ? partDays : days).add(dayKey(extra.t));
   if (next === 4) {
     const extraDay = [...partDays].find((d) => !days.has(d));
     if (extraDay) days.add(extraDay);
@@ -173,5 +186,5 @@ export function freeCorrectDays(doc: Readonly<Record<string, unknown>>, extra?: 
 /** Wie viele verschiedene Tage haben eine gute `cloze_part`-Antwort? (Für die Wahl der Art bei Wendungen auf Stufe 3.) */
 export function partDaysOf(doc: Readonly<Record<string, unknown>>): number {
   const raw = Array.isArray(doc.hist) ? (doc.hist as unknown[]) : [];
-  return new Set(raw.flatMap((h) => (h && typeof h === 'object' && (h as Record<string, unknown>).x === 'cloze_part' && typeof (h as Record<string, unknown>).t === 'number' && ((h as Record<string, unknown>).g as number) >= FREE_MIN_GRADE && (h as Record<string, unknown>).u !== 1 ? [dayKey((h as { t: number }).t)] : []))).size;
+  return new Set(raw.flatMap((h) => (h && typeof h === 'object' && (h as Record<string, unknown>).x === 'cloze_part' && typeof (h as Record<string, unknown>).t === 'number' && ((h as Record<string, unknown>).g as number) >= FREE_MIN_GRADE && (h as Record<string, unknown>).u !== 1 && !hinted(h as Record<string, unknown>) ? [dayKey((h as { t: number }).t)] : []))).size;
 }

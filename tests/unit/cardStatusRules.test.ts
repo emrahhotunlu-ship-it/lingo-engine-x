@@ -60,7 +60,9 @@ describe('B3: alte Einträge ohne x werden beim Lesen zugeordnet (nichts wird ge
     // Pause (die längste Pause hier: 20 Tage) – ehrlich neu eingeordnet als „Sicher“, die Statuszeile nennt genau das (`onlyGap`).
     expect(s.tier).toBe('safe');
     expect(s.onlyGap).toBe(true);
-    expect(cardStatus(mk('approach2', { stage: 5, S: 22.7, last: NOW - 3 * D, hist: [...hist.slice(0, 1), { t: NOW - 19 * D, g: 3, m: 'type' }, ...hist.slice(2)] }), NOW).tier).toBe('firm');
+    // Korrektur 21.10.2026: Eine Lücke im (alten) Verlauf belegt die Pause nicht mehr; nur das Feld `lg`, das der neue Schreibweg setzt.
+    expect(cardStatus(mk('approach2', { stage: 5, S: 22.7, last: NOW - 3 * D, hist: [...hist.slice(0, 1), { t: NOW - 19 * D, g: 3, m: 'type' }, ...hist.slice(2)] }), NOW).tier).toBe('safe');
+    expect(cardStatus(mk('approach3', { stage: 5, S: 22.7, last: NOW - 3 * D, lg: '2026-09-15', hist }), NOW).tier).toBe('firm');
     expect(JSON.stringify(card.doc)).toBe(before);
   });
   it('„significant“: S 41,9, 0 Rückfälle, nur alte Einträge → nicht Lernt wegen fehlendem x', () => {
@@ -85,8 +87,8 @@ describe('Satz-Beleg gegen den Ursprungssatz', () => {
   const origin = sentKey('We ursprung it.');
   const base = { stage: 5, S: 40, last: NOW - 3 * D };
   it('ein freier Treffer in einem anderen Satz genügt', () => {
-    // Wort-Lernen 2: e(40, mc_en) liefert die Pause ≥ 21 Tage vor dem freien Abruf, die „Fest“ zusätzlich verlangt.
-    expect(cardStatus(mk('ursprung', { ...base, hist: [e(40, 'mc_en', 3), e(9, 'cloze', 3, { s: origin }), e(3, 'cloze', 3, { s: 'sX' })] }), NOW).tier).toBe('firm');
+    // Wort-Lernen 2: `lg` belegt den freien Abruf nach ≥ 21 Tagen Pause, den „Fest“ zusätzlich verlangt (Korrektur 21.10.2026: nur das Feld, nicht der Verlauf).
+    expect(cardStatus(mk('ursprung', { ...base, lg: '2026-09-01', hist: [e(40, 'mc_en', 3), e(9, 'cloze', 3, { s: origin }), e(3, 'cloze', 3, { s: 'sX' })] }), NOW).tier).toBe('firm');
     expect(cardStatus(mk('ursprung', { ...base, hist: [e(9, 'cloze', 3, { s: origin }), e(3, 'cloze', 3, { s: 'sX' })] }), NOW).tier).toBe('safe');
   });
   it('nur im Ursprungssatz: kein Beleg', () => {

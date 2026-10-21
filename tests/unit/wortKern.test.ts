@@ -16,6 +16,7 @@ import {
   introDayOf,
   introWasYesterday,
   knownConfirmed,
+  longGapNow,
   longGapProven,
   recallStep,
 } from '../../src/domain/srs/spacing';
@@ -110,10 +111,17 @@ describe('Abstands-Deckel', () => {
     expect(freeLaterDays(doc, { t: at('2026-10-12'), ex: 'cloze', grade: 3 })).toBe(3);
     expect(freeLaterDays(doc, { t: at('2026-10-12'), ex: 'mc_en', grade: 3 })).toBe(2);
   });
-  it('introDayOf ohne `intro`: Tag der ersten Antwort (ohne „Kenne ich“, beide Formen der Markierung)', () => {
-    expect(introDayOf({ hist: [row('2026-10-03', 'known'), row('2026-10-04', 'cloze')] })).toBe('2026-10-04');
-    expect(introDayOf({ hist: [{ t: at('2026-10-03'), m: 'known', g: 3 }, row('2026-10-04', 'cloze')] })).toBe('2026-10-04');
+  it('introDayOf ohne `intro`: null (kein aus dem Verlauf geschätzter Tag, Korrektur 21.10.2026); dann zählen alle freien Tage', () => {
+    expect(introDayOf({ hist: [row('2026-10-03', 'known'), row('2026-10-04', 'cloze')] })).toBeNull();
+    expect(introDayOf({ intro: 'gestern', hist: [row('2026-10-04', 'cloze')] })).toBeNull();
     expect(introDayOf({})).toBeNull();
+    expect(freeLaterDays({ hist: [row('2026-10-04', 'cloze'), row('2026-10-06', 'type')] })).toBe(2);
+  });
+  it('Antworten mit Tipp (`h`) sind kein freier Beleg (Verlauf und gerade gegebene Antwort)', () => {
+    const doc = { intro: '2026-10-01', hist: [row('2026-10-02', 'cloze', 3, { h: 1 }), row('2026-10-03', 'type', 4, { h: 2 }), row('2026-10-04', 'cloze')] };
+    expect(freeLaterDays(doc)).toBe(1);
+    expect(freeLaterDays(doc, { t: at('2026-10-06'), ex: 'cloze', grade: 3, hint: 1 })).toBe(1);
+    expect(freshFreeGood({ t: NOW, ex: 'cloze', grade: 3, hint: 1 })).toBe(false);
   });
   it('evidenceDays: die Stufe zählt als Mindest-Beleg (Tor: Stufe 4 = 2, Stufe 5 = 3 freie Tage), auch wenn der Verlauf alte Belege verloren hat', () => {
     expect(evidenceDays({ state: 'review', stage: 3, hist: [] })).toBe(0);
@@ -121,14 +129,26 @@ describe('Abstands-Deckel', () => {
     expect(evidenceDays({ state: 'review', stage: 5, hist: [] })).toBe(3);
     expect(evidenceDays({ state: 'new', stage: 5, hist: [] })).toBe(0);
   });
-  it('longGapProven: freier guter Abruf ≥ 21 Lerntage nach der Antwort davor – oder erster Fest-Tag `ff` ab Stichtag', () => {
-    expect(longGapProven({ hist: [row('2026-09-01', 'mc_en'), row('2026-09-22', 'cloze')] })).toBe(true);
-    expect(longGapProven({ hist: [row('2026-09-01', 'mc_en'), row('2026-09-21', 'cloze')] })).toBe(false);
-    expect(longGapProven({ hist: [row('2026-09-01', 'mc_en'), row('2026-09-22', 'mc_de')] })).toBe(false);
-    expect(longGapProven({ hist: [row('2026-09-01', 'mc_en'), row('2026-09-22', 'cloze', 2)] })).toBe(false);
-    expect(longGapProven({ hist: [row('2026-09-01', 'mc_en'), row('2026-09-22', 'cloze_part')] })).toBe(false);
-    expect(longGapProven({ ff: KERN_FROM, hist: [] })).toBe(true);
+  it('longGapProven: nur das Feld `lg` (Korrektur 21.10.2026); weder der Verlauf noch der Fest-Tag `ff` (auch ab Stichtag) zählen', () => {
+    expect(longGapProven({ lg: '2026-11-12', hist: [] })).toBe(true);
+    expect(longGapProven({ lg: 'irgendwann', hist: [] })).toBe(false);
+    expect(longGapProven({ hist: [row('2026-09-01', 'mc_en'), row('2026-09-22', 'cloze')] })).toBe(false);
+    expect(longGapProven({ ff: KERN_FROM, hist: [] })).toBe(false);
     expect(longGapProven({ ff: '2026-10-19', hist: [] })).toBe(false);
+  });
+  it('longGapNow: guter freier Abruf ≥ 21 Lerntage nach der letzten Antwort (Partnerwort, „Welches Wort passt?“ und „Kenne ich“ unterbrechen die Pause nicht)', () => {
+    const base = { hist: [row('2026-09-01', 'mc_en')] };
+    expect(longGapNow(base, { t: at('2026-09-22'), ex: 'cloze', grade: 3 })).toBe(true);
+    expect(longGapNow(base, { t: at('2026-09-21'), ex: 'cloze', grade: 3 })).toBe(false);
+    expect(longGapNow(base, { t: at('2026-09-22'), ex: 'mc_de', grade: 3 })).toBe(false);
+    expect(longGapNow(base, { t: at('2026-09-22'), ex: 'cloze', grade: 2 })).toBe(false);
+    expect(longGapNow(base, { t: at('2026-09-22'), ex: 'cloze_part', grade: 3 })).toBe(false);
+    expect(longGapNow(base, { t: at('2026-09-22'), ex: 'cloze', grade: 3, hint: 1 })).toBe(false);
+    expect(longGapNow(base, { t: at('2026-09-22'), ex: 'produce', grade: 3, unverified: true })).toBe(false);
+    expect(longGapNow({ hist: [] }, { t: at('2026-09-22'), ex: 'cloze', grade: 3 })).toBe(false);
+    const between = { hist: [row('2026-09-01', 'mc_en'), row('2026-09-10', 'colloc', 1, { ci: 0 }), row('2026-09-12', 'contrast', 1), row('2026-09-14', 'known')] };
+    expect(longGapNow(between, { t: at('2026-09-22'), ex: 'cloze', grade: 3 })).toBe(true);
+    expect(longGapNow({ hist: [row('2026-09-01', 'mc_en'), row('2026-09-10', 'mc_de')] }, { t: at('2026-09-22'), ex: 'cloze', grade: 3 })).toBe(false);
   });
 });
 
@@ -215,21 +235,25 @@ describe('Kennzahlen (Diagnose und „Messwerte dahinter“)', () => {
       mk('v', { intro: '2026-11-20', hist: [row('2026-11-20', 'cloze_hint'), row('2026-11-20', 'cloze'), row('2026-11-21', 'cloze'), row('2026-11-24', 'mc_en')] }),
       // Folgetag frei falsch; 2 Rückfälle (Problemwort)
       mk('v', { intro: '2026-11-20', lapses: 2, hist: [row('2026-11-20', 'cloze'), row('2026-11-21', 'cloze', 1), row('2026-11-22', 'type')] }),
-      // Wendung: erste freie Antwort falsch, dann Abruf nach 25 Tagen Pause richtig
+      // Wendung: erste freie Antwort falsch, dann Abruf nach 25 Tagen Pause richtig (kein Folgetag: 25 Tage nach der Einführung)
       mk('chunk', { intro: '2026-11-04', hist: [row('2026-11-04', 'tiles'), row('2026-11-04', 'cloze_part', 1), row('2026-11-29', 'cloze')] }),
+      // Zweiter Lerntag nach der Einführung, frei richtig: zählt noch als „Folgetag“
+      mk('v', { intro: '2026-11-25', hist: [row('2026-11-25', 'cloze'), row('2026-11-27', 'type')] }),
+      // Einführung vor dem Stichtag: zählt für „Folgetag“ nie; mit Tipp kein freier Abruf
+      mk('v', { intro: '2026-10-10', hist: [row('2026-10-10', 'cloze'), row('2026-10-11', 'cloze', 3, { h: 1 })] }),
       mk('v', { state: 'new' }, true),
     ];
     const s = wordKernStats(cards, today);
-    // Folgetag: a richtig, b falsch, c (erste Antwort nach dem Einführungstag ist der richtige Abruf nach 25 Tagen) richtig.
+    // Folgetag (≤ 2 Lerntage, Einführung ab Stichtag): a richtig, b falsch, d richtig; c (25 Tage) und e (vor dem Stichtag) nicht.
     expect(s.nextDay).toEqual({ n: 3, ok: 2, share: 2 / 3 });
     expect(s.chunkFirst).toEqual({ n: 1, ok: 0, share: 0 });
     expect(s.longGap).toEqual({ n: 1, ok: 1, share: 1 });
-    expect(s.medianSafe.n).toBe(2);
-    expect(s.problem).toEqual({ n: 1, of: 3, share: 1 / 3 });
+    expect(s.medianSafe.n).toBe(3);
+    expect(s.problem).toEqual({ n: 1, of: 5, share: 1 / 5 });
     expect(s.ratio.recog).toBe(1);
     expect(s.ratio.free).toBeGreaterThanOrEqual(6);
     const line = wordKernLine(s);
-    expect(line).toContain('Folgetag frei: 67 % von 3');
+    expect(line).toContain('Folgetag frei (≤ 2 Lerntage, neue Karten): 67 % von 3');
     expect(line).toContain('Ziel ≥ 70 %');
     expect(line).not.toMatch(/leverage|negotiate/);
   });

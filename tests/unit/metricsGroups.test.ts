@@ -11,7 +11,7 @@ const NOW = berlin('2026-10-05', 10);
 const D = 86_400_000;
 // Wort-Lernen 2: der erste Eintrag (vor 40 Tagen) liefert die Pause ≥ 21 Tage vor dem freien Abruf, die „Fest“ jetzt verlangt.
 const mk = (id: string, ref: string, over: Record<string, unknown> = {}): TrainCard =>
-  toTrainCard(id, { word: id, de: 'x', def: 'x y', ex: `We [${id}] it.`, pos: 'verb', state: 'review', S: 30, D: 5, due: NOW + D, last: NOW - D, stage: 5, reps: 6, lapses: 0, src: 'lookup', added: '2026-06-01', hist: [{ t: NOW - 40 * D, g: 3, x: 'mc_en' }, { t: NOW - 9 * D, g: 3, x: 'cloze', s: 'sA' }, { t: NOW - 5 * D, g: 3, x: 'cloze', s: 'sB' }], origin: { v: 1, kind: 'pack', ref }, ...over }, true, NOW)!;
+  toTrainCard(id, { word: id, de: 'x', def: 'x y', ex: `We [${id}] it.`, pos: 'verb', state: 'review', S: 30, D: 5, due: NOW + D, last: NOW - D, stage: 5, reps: 6, lapses: 0, src: 'lookup', added: '2026-06-01', lg: '2026-09-01', hist: [{ t: NOW - 40 * D, g: 3, x: 'mc_en' }, { t: NOW - 9 * D, g: 3, x: 'cloze', s: 'sA' }, { t: NOW - 5 * D, g: 3, x: 'cloze', s: 'sB' }], origin: { v: 1, kind: 'pack', ref }, ...over }, true, NOW)!;
 
 describe('groupMastery', () => {
   const entries = [

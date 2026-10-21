@@ -23,15 +23,15 @@ const FIRM = [{ t: NOW - 40 * D, g: 3, x: 'mc_en' }, { t: NOW - 9 * D, g: 3, x: 
 describe('festCount', () => {
   it('Fest = Stufe 5, Stabilität ≥ 21 Tage und im neuen Satz gekonnt; Neue, Ausgeblendete, Stufe 4 und Karten ohne Beleg nie', () => {
     const cards = [
-      card({ stage: 5, S: 21, hist: FIRM }, 'a'),
-      card({ stage: 5, S: 80, hist: FIRM }, 'b'),
-      card({ stage: 3, S: 40, hist: FIRM }, 'c'),
-      card({ stage: 5, S: 20.9, hist: FIRM }, 'd'),
-      card({ stage: 5, S: 40, hidden: true, hist: FIRM }, 'e'),
+      card({ stage: 5, S: 21, hist: FIRM, lg: '2026-09-01' }, 'a'),
+      card({ stage: 5, S: 80, hist: FIRM, lg: '2026-09-01' }, 'b'),
+      card({ stage: 3, S: 40, hist: FIRM, lg: '2026-09-01' }, 'c'),
+      card({ stage: 5, S: 20.9, hist: FIRM, lg: '2026-09-01' }, 'd'),
+      card({ stage: 5, S: 40, hidden: true, hist: FIRM, lg: '2026-09-01' }, 'e'),
       card({ state: 'new', stage: 0, S: 0, due: 0, last: 0 }, 'f'),
-      card({ stage: 4, S: 40, hist: FIRM }, 'g'),
+      card({ stage: 4, S: 40, hist: FIRM, lg: '2026-09-01' }, 'g'),
       card({ stage: 5, S: 40, hist: [] }, 'h'),
-      card({ stage: 5, S: 40, hist: [...FIRM, { t: NOW - 3 * D, g: 1, x: 'cloze', s: 'sC' }] }, 'i'),
+      card({ stage: 5, S: 40, lg: '2026-09-01', hist: [...FIRM, { t: NOW - 3 * D, g: 1, x: 'cloze', s: 'sC' }] }, 'i'),
     ];
     expect(festCount(cards)).toBe(2);
   });

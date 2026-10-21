@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { fsrsSchema, type FsrsStored } from '../../data/schemas';
 import { validateDoc } from '../../data/validate';
-import { dayKey } from '../date';
+import { dayKey, isDayKey } from '../date';
 import { naOf } from './actBase';
 import { flipStage } from './flip';
 import { wordFest } from '../tutor/learnerWords';
@@ -11,7 +11,7 @@ import { stageOf, nextStage } from './ladder';
 import { freeCorrectDays, freeDaysNeeded } from './variety';
 import { exerciseDef } from './modes';
 import { readFsrs, reviewFsrs, isFutureFsrs } from './scheduler';
-import { capDaysOf, capDue, dayStartOf, day0Grade, evidenceDays, freshFreeGood, holdOnDay0, introDayOf, knownConfirmed, longGapProven, type FreshAnswer } from './spacing';
+import { capDaysOf, capDue, dayStartOf, day0Grade, evidenceDays, freshFreeGood, holdOnDay0, introDayOf, knownConfirmed, longGapNow, longGapProven, type FreshAnswer } from './spacing';
 import { noteWeight } from './weight';
 import { nextWk, restDay, WRONG_MAX } from './werkstatt';
 import type { AnswerEvent, ExerciseId, LegacyMode } from './types';
@@ -35,7 +35,7 @@ const chargeCollocSchema = z
   .strict();
 const chargeColSchema = z.array(chargeCollocSchema).min(1).max(COL_MAX);
 /** Wort-Werkstatt (`werkstatt.ts`): Runden, Zeitpunkt, Lerntag. `p` (pausiert) schreibt nur „pausieren“, nie eine Antwort. */
-const wkSchema = z.object({ n: z.number().int().min(1).max(99), t: z.number().int().positive(), d: z.string().regex(/^\d{4}-\d{2}-\d{2}$/) }).strict();
+const wkSchema = z.object({ n: z.number().int().min(1).max(99), t: z.number().int().positive(), d: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), p: z.literal(1).optional() }).strict();
 
 /** Streng, nur für die geschriebenen Felder (Daten-Entwurf §1.5). Die Lese-Schemas bleiben locker. */
 export const cardPatchSchema = z
@@ -53,6 +53,7 @@ export const cardPatchSchema = z
     hist: z.array(z.looseObject({ t: z.number(), g: z.number().optional() })).max(HIST_MAX),
     intro: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
     ff: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    lg: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
     pa: z.number().min(0).max(1).optional(),
     ac: z.number().min(0).max(1).optional(),
     co: z.number().min(0).max(1).optional(),
@@ -85,6 +86,7 @@ export const chunkPatchSchema = z
     hist: z.array(z.looseObject({ t: z.number(), g: z.number().optional() })).max(HIST_MAX),
     intro: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
     ff: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    lg: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
     // Wort-Lernen 2: Aktivierung A1/A2 auch für Wendungen.
     na: z.number().int().min(0).max(99).optional(),
     wk: wkSchema.optional(),
@@ -232,7 +234,8 @@ function ladderStep(cur: Doc, a: StageAnswer): { stage: number; missing: number 
   // auf Stufe 5 mit einem weiteren freien Tag. Nur der Aufstieg wird strenger; Karten, die schon höher stehen, werden nie zurückgestuft (hier wird nur `next` begrenzt).
   if (next > now && next >= 4) {
     const need = freeDaysNeeded(next);
-    const have = freeCorrectDays(cur, { t: a.t, ex: a.ex, grade: a.grade, ...(a.colIndex !== undefined ? { ci: a.colIndex } : {}) }, next);
+    const fresh = freshOf(a);
+    const have = freeCorrectDays(cur, { t: a.t, ex: a.ex, grade: a.grade, ...(a.colIndex !== undefined ? { ci: a.colIndex } : {}), ...(fresh.hint ? { hint: fresh.hint } : {}), ...(fresh.unverified ? { unverified: true } : {}) }, next);
     if (have < need) return { stage: now, missing: need - have };
   }
   return { stage: next, missing: 0 };
@@ -246,10 +249,13 @@ const answeredOn = (cur: Doc, day: string): boolean => typeof cur.last === 'numb
  * der eigenen – sie prüft Gehör und Schreibung, nicht die Bedeutung. Auf Stufe 4–5 (Leiter) ändert
  * das nichts; im Hör-Modus hebt eine junge Karte so je Antwort nur um eine Stufe und fällt nie tiefer.
  */
-/** Verlaufseintrag; `s` = Schlüssel des gezeigten Satzes (V1, nur wenn die Abfrage einen Satz hatte), `a` = Code der Vorgabe eines eigenen Satzes, `u` = ungeprüfte Aktivierung, `ci` = Index des Partnerworts (Treffer am Partnerwort ist kein freier Beleg für das Hauptwort). */
+/**
+ * Verlaufseintrag; `s` = Schlüssel des gezeigten Satzes (V1, nur wenn die Abfrage einen Satz hatte), `a` = Code der Vorgabe eines eigenen Satzes, `u` = ungeprüfte Aktivierung,
+ * `ci` = Index des Partnerworts (Treffer am Partnerwort ist kein freier Beleg für das Hauptwort), `h` = Zahl der Tipps (1–2; Korrektur 21.10.2026: mit Tipp kein freier Beleg).
+ */
 function histEntry(a: AnswerEvent, mode: LegacyMode): Record<string, unknown> {
   const v = a.grade === 1 && a.wrong ? a.wrong.trim().slice(0, WRONG_MAX) : '';
-  return { t: a.t, m: mode, g: a.grade, x: a.ex, ...(a.sx ? { s: a.sx } : {}), ...(a.act ? { a: a.act } : {}), ...((a.actStep && a.actUnverified) || a.unverified ? { u: 1 } : {}), ...(a.colIndex !== undefined && a.colIndex >= 0 ? { ci: a.colIndex } : {}), ...(v ? { v } : {}) };
+  return { t: a.t, m: mode, g: a.grade, x: a.ex, ...(a.sx ? { s: a.sx } : {}), ...(a.act ? { a: a.act } : {}), ...((a.actStep && a.actUnverified) || a.unverified ? { u: 1 } : {}), ...(a.colIndex !== undefined && a.colIndex >= 0 ? { ci: a.colIndex } : {}), ...(a.hint ? { h: a.hint } : {}), ...(v ? { v } : {}) };
 }
 
 export function levelFor(ex: ExerciseId, stage: number): number {
@@ -276,6 +282,18 @@ function festAfter(cur: Doc, patch: Doc): boolean {
 
 /** Gespeicherter Wert von `lapses` (Feld der alten App), nur um +1 bei einem echten Rückfall erhöht; das Maximum mit `fsrs.lapses` bildet allein der Leser (`lapsesOf`). */
 const storedLapses = (cur: Doc): number => Math.max(0, Math.round(num(cur.lapses)));
+
+/** Echter Rückfall: „Nochmal“ bei einer Karte, die nicht neu ist, und nicht am Einführungstag (dort ist ein Fehler Teil des Lernens, Korrektur 21.10.2026). */
+const isLapse = (cur: Doc, a: AnswerEvent): boolean => a.grade === 1 && cur.state !== 'new' && introDayFor(cur, a) !== a.day;
+
+/**
+ * Pausenbeleg `lg` (Korrektur 21.10.2026): beim ersten guten freien Abruf nach ≥ 21 Lerntagen Pause der Lerntag dieser Antwort; einmal gesetzt, nie überschrieben.
+ * Vor `capPatch` und `festPatch`, damit dieselbe Antwort den Deckel aufhebt und „Fest“ möglich macht.
+ */
+function lgPatch(cur: Doc, patch: Doc, a: AnswerEvent): void {
+  if (isDayKey(cur.lg)) return;
+  if (longGapNow(cur, freshOf(a))) patch.lg = a.day;
+}
 
 /** Fehler am Partnerwort einer Kollokation (Index ≥ 0) bei einer Karte, die nicht neu ist. */
 export function isPartnerMiss(cur: Doc, a: Pick<AnswerEvent, 'ex' | 'grade' | 'colIndex'>): boolean {
@@ -338,7 +356,7 @@ export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
     last: a.t,
     state: f.state === 2 ? 'review' : 'learning',
     reps: Math.max(0, Math.round(num(cur.reps))) + 1,
-    lapses: storedLapses(cur) + (a.grade === 1 && !wasNew ? 1 : 0),
+    lapses: storedLapses(cur) + (isLapse(cur, a) ? 1 : 0),
     stage: stageAfter(cur, a),
     modes: { [def.mode]: { c: Math.round(num(prevMode.c)) + ok, w: Math.round(num(prevMode.w)) + (1 - ok) } },
     xs: { [a.ex]: { c: Math.round(num(prevXs.c)) + ok, w: Math.round(num(prevXs.w)) + (1 - ok) } },
@@ -350,6 +368,7 @@ export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
   };
   // Nur ergänzen: ein vorhandenes Einführungsdatum der alten App bleibt stehen (Kap. 9, Regel 2).
   if (wasNew && (typeof cur.intro !== 'string' || !cur.intro)) patch.intro = a.day;
+  lgPatch(cur, patch, a);
   capPatch(cur, patch, a);
   wkPatch(cur, patch, a);
   festPatch(cur, patch, a.day);
@@ -373,7 +392,7 @@ export function chunkPatch(cur: Doc, a: AnswerEvent): Doc {
     last: a.t,
     state: f.state === 2 ? 'review' : 'learning',
     reps: Math.max(0, Math.round(num(cur.reps))) + 1,
-    lapses: storedLapses(cur) + (a.grade === 1 && !wasNew ? 1 : 0),
+    lapses: storedLapses(cur) + (isLapse(cur, a) ? 1 : 0),
     stage: stageAfter(cur, a),
     xs: { [a.ex]: { c: Math.round(num(prevXs.c)) + ok, w: Math.round(num(prevXs.w)) + (1 - ok) } },
     hist: [...hist, histEntry(a, def.mode)].slice(-HIST_MAX),
@@ -386,6 +405,7 @@ export function chunkPatch(cur: Doc, a: AnswerEvent): Doc {
     patch.modes = { [mode]: { c: Math.round(num(prev.c)) + ok, w: Math.round(num(prev.w)) + (1 - ok) } };
   }
   if (wasNew && (typeof cur.intro !== 'string' || !cur.intro)) patch.intro = a.day;
+  lgPatch(cur, patch, a);
   capPatch(cur, patch, a);
   wkPatch(cur, patch, a);
   festPatch(cur, patch, a.day);

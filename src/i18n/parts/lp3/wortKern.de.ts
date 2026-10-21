@@ -9,7 +9,7 @@ export const wortKernDe = {
   // Messwerte dahinter: Wie gut bleiben Wörter hängen?
   pxWkTitle: 'Wie gut Wörter hängen bleiben',
   pxWkLead: 'Hier zählt nur, was du frei aus dem Kopf getippt hast. Auswahl und Aufdecken zählen nicht, weil Erkennen leichter ist als Abrufen.',
-  pxWkNextDayLabel: 'Am Tag nach dem Lernen frei gewusst',
+  pxWkNextDayLabel: '1–2 Tage nach dem Lernen frei gewusst (neue Wörter)',
   pxWkChunkFirstLabel: 'Wendungen beim ersten freien Versuch gewusst',
   pxWkLongGapLabel: 'Nach 3 Wochen Pause frei gewusst',
   pxWkMedianSafeLabel: 'Tage, bis ein Wort „sicher“ ist (meistens)',

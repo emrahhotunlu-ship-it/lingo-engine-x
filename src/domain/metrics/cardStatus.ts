@@ -1,7 +1,7 @@
-import { dayKey, daysBetween } from '../date';
+import { dayKey } from '../date';
 import { isLearningState, retrievability } from '../srs/scheduler';
 import type { TrainCard } from '../srs/types';
-import { KERN_FROM, LONG_GAP_DAYS } from '../srs/spacing';
+import { longGapProven } from '../srs/spacing';
 import { FREE_ANSWER, FREE_MIN_GRADE, sentKey } from '../srs/variety';
 
 // EIN ehrlicher Status je Wort- oder Wendungskarte (Paket ST, docs/umbau/wort-lernen-plan.md). Alles wird beim Lesen aus dem Verlauf
@@ -14,7 +14,7 @@ import { FREE_ANSWER, FREE_MIN_GRADE, sentKey } from '../srs/variety';
 //             ODER die Abrufwahrscheinlichkeit liegt unter 70 % (nur mit belastbarem Abstand)
 //   Sicher  = an mindestens 2 verschiedenen Tagen frei richtig abgerufen (getippt, ohne Auswahl und ohne Stütze)
 //   Fest    = Stufe 5 ∧ Stabilität ≥ 21 Tage ∧ im neuen Satz gekonnt (richtig frei in mindestens 2 verschiedenen Sätzen) oder selbst benutzt ∧ kein unerholter Fehler
-//             ∧ (seit Wort-Lernen 2, `FEST_RULE_FROM`) mindestens ein freier richtiger Abruf nach ≥ 21 Lerntagen Pause (`longGap`): Gedächtnis gemessen, nicht geschätzt
+//             ∧ (seit Wort-Lernen 2, `FEST_RULE_FROM`) mindestens ein freier richtiger Abruf nach ≥ 21 Lerntagen Pause (`longGap` = Feld `lg`): Gedächtnis gemessen, nicht geschätzt
 // „Wackelt“ geht vor „Sicher“ und „Fest“: Ein Rückfall nimmt „Fest“ und „Sicher“ sofort, eine sehr lange Pause (Abruf unter 70 %,
 // bei einer festen Karte erst nach Monaten) ebenfalls. So steht nie „Sicher“ oder „Fest“ neben „Jetzt im Kopf: wackelig“.
 
@@ -73,7 +73,18 @@ export type CardStatus = {
   onlyGap: boolean;
 };
 
-type Entry = { t: number; g: number | null; x: string | null; s: string | null; u: boolean; ci: boolean; /** `x` fehlte und wurde aus dem Modus `m` der alten App abgeleitet. */ legacy: boolean };
+type Entry = {
+  t: number;
+  g: number | null;
+  x: string | null;
+  s: string | null;
+  u: boolean;
+  ci: boolean;
+  /** Mit Tipp beantwortet (`h` ≥ 1): kein freier Beleg. */
+  h: boolean;
+  /** `x` fehlte und wurde aus dem Modus `m` der alten App abgeleitet. */
+  legacy: boolean;
+};
 
 /**
  * Alte Verlaufseinträge (nur `m`, kein `x`) beim LESEN einer Abfrageart zuordnen (altapp-analyse „modeBonus“); es wird nichts geschrieben:
@@ -98,6 +109,7 @@ function entriesOf(doc: Readonly<Record<string, unknown>>): Entry[] {
       s: typeof o.s === 'string' && o.s ? o.s : null,
       u: o.u === 1,
       ci: typeof o.ci === 'number',
+      h: typeof o.h === 'number' && o.h > 0,
       legacy: ownX === null,
     });
   }
@@ -120,8 +132,8 @@ export function reliableR(c: Pick<TrainCard, 'isNew' | 'fsrs'>, nowMs: number): 
   return retrievability(c.fsrs, nowMs);
 }
 
-/** Eine gute freie Antwort (Note ≥ `FREE_MIN_GRADE`, nie „Schwer“; ohne Auswahl, ohne Stütze, geprüft; Treffer am Partnerwort und `cloze_part` zählen nicht). Wie `freeCorrectDays`, aber ohne die Stufe-4-Ausnahme für `cloze_part`. */
-const isFreeCorrect = (h: Entry): boolean => h.x !== null && h.g !== null && h.g >= FREE_MIN_GRADE && !h.u && h.x !== 'cloze_part' && FREE_ANSWER.has(h.x) && !(h.x === 'colloc' && h.ci);
+/** Eine gute freie Antwort (Note ≥ `FREE_MIN_GRADE`, nie „Schwer“; ohne Auswahl, ohne Stütze, ohne Tipp, geprüft; Treffer am Partnerwort und `cloze_part` zählen nicht). Wie `freeCorrectDays`, aber ohne die Stufe-4-Ausnahme für `cloze_part`. */
+const isFreeCorrect = (h: Entry): boolean => h.x !== null && h.g !== null && h.g >= FREE_MIN_GRADE && !h.u && !h.h && h.x !== 'cloze_part' && FREE_ANSWER.has(h.x) && !(h.x === 'colloc' && h.ci);
 
 /** Der gemeinsame Beleg-Teil (ohne Uhrzeit): reicht für `isFest`. */
 function evidence(c: StatusCard) {
@@ -162,10 +174,10 @@ function evidence(c: StatusCard) {
   // Ein Fehler setzt den Beleg zurück: Erst wenn nach dem letzten Fehler an 2 verschiedenen Tagen wieder frei richtig geantwortet wurde, gilt die Karte nicht mehr als „unerholt“.
   const unrecovered = lastWrong !== null && freeOn(lastWrong) < SAFE_FREE_DAYS;
   const flipOnly = hist.length > 0 && hist.every((h) => h.x === 'flip' || h.x === 'known');
-  // Wort-Lernen 2: ein freier richtiger Abruf nach ≥ 21 Lerntagen Pause seit der Antwort davor. Der Verlauf hat höchstens 12 Einträge; damit eine feste
-  // Karte den Beleg nicht später verliert, gilt auch der erste Fest-Tag `ff` ab `KERN_FROM` (seitdem verlangt „Fest“ genau diesen Beleg).
-  const ff = c.doc.ff;
-  const longGap = (typeof ff === 'string' && ff >= KERN_FROM) || hist.some((h, i) => i > 0 && isFreeCorrect(h) && daysBetween(dayKey((hist[i - 1] as Entry).t), dayKey(h.t)) >= LONG_GAP_DAYS);
+  // Wort-Lernen 2 (Korrektur 21.10.2026): ein freier richtiger Abruf nach ≥ 21 Lerntagen Pause, belegt allein durch das Feld `lg`. Es schreibt nur der neue Code
+  // beim ersten solchen Abruf (`applyReview.ts`). Weder der erste Fest-Tag `ff` noch alte Verlaufslücken zählen: Karten, die nach der alten Regel fest waren,
+  // müssen die Pause einmal zeigen (die Statuszeile erklärt das, `stxFestRuleNote`).
+  const longGap = longGapProven(c.doc);
   return { recognizes, helped, newSentence, own: na > 0, lastWrong, lastWasWrong, unrecovered, freeDays, noHistory: hist.length === 0, flipOnly, longGap };
 }
 

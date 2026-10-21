@@ -17,8 +17,8 @@ describe('roundGrowth', () => {
   it('Aufgestiegene mit Namen und neuem Zustand, Rückfälle als Zahl', () => {
     // Wort-Lernen 2 (21.10.2026): „Fest“ verlangt zusätzlich einen freien richtigen Abruf nach ≥ 21 Lerntagen Pause – der erste Eintrag (Auswahl vor 40 Tagen) liefert die Pause.
     const firmHist = [{ t: NOW - 40 * D, g: 3, x: 'mc_en' }, { t: NOW - 9 * D, g: 3, x: 'cloze', s: 'sA' }, { t: NOW - 5 * D, g: 3, x: 'cloze', s: 'sB' }];
-    const before = [card('a', { stage: 4, S: 10, hist: firmHist }), card('b', { stage: 5, S: 30, hist: firmHist }), card('c')];
-    const after = [answered('a', 40, { stage: 5, S: 40, hist: firmHist }), answered('b', 2, { stage: 2, S: 2, hist: [...firmHist, { t: NOW, g: 1, x: 'cloze', s: 'sC' }] }), answered('c', 6)];
+    const before = [card('a', { stage: 4, S: 10, hist: firmHist, lg: '2026-09-01' }), card('b', { stage: 5, S: 30, hist: firmHist, lg: '2026-09-01' }), card('c')];
+    const after = [answered('a', 40, { stage: 5, S: 40, hist: firmHist, lg: '2026-09-01' }), answered('b', 2, { stage: 2, S: 2, hist: [...firmHist, { t: NOW, g: 1, x: 'cloze', s: 'sC' }] }), answered('c', 6)];
     const g = roundGrowth(before, after, NOW);
     expect(g.up.map((u) => [u.word, u.to])).toEqual([['a', 'firm']]);
     expect(g.down).toBe(1);

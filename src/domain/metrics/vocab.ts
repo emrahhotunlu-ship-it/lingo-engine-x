@@ -70,7 +70,7 @@ export type Retention28 = {
   recognition: RetentionPart;
 };
 
-/** Erkennen: Antworten mit Auswahl oder Aufdecken. Frei: `FREE_ANSWER` (ohne ungeprüfte Sätze). Alles andere (Stütze, alter Verlauf ohne Art) zählt in keinem von beiden. */
+/** Erkennen: Antworten mit Auswahl oder Aufdecken. Frei: `FREE_ANSWER` (ohne ungeprüfte Sätze und ohne Antworten mit Tipp). Alles andere (Stütze, alter Verlauf ohne Art) zählt in keinem von beiden. */
 const RECOGNITION: ReadonlySet<string> = new Set(['mc_en', 'ctx_mc', 'listen_mc', 'mc_de', 'match', 'contrast', 'flip', 'spot', 'find_trap']);
 
 /**
@@ -87,7 +87,12 @@ export function retention28(cards: readonly CardLike[], nowMs: number): Retentio
     const hist = histOf(c.doc);
     const raw = Array.isArray(c.doc.hist) ? (c.doc.hist as unknown[]) : [];
     const unchecked = new Set<number>();
-    for (const h of raw) if (h && typeof h === 'object' && (h as Record<string, unknown>).u === 1 && typeof (h as Record<string, unknown>).t === 'number') unchecked.add((h as Record<string, number>).t as number);
+    // Ungeprüft (`u`) oder mit Tipp (`h`, Korrektur 21.10.2026): kein freier Beleg.
+    for (const h of raw) {
+      if (!h || typeof h !== 'object') continue;
+      const o = h as Record<string, unknown>;
+      if (typeof o.t === 'number' && (o.u === 1 || (typeof o.h === 'number' && o.h > 0))) unchecked.add(o.t);
+    }
     const seen = new Set<string>();
     for (let i = 1; i < hist.length; i++) {
       const h = hist[i]!;

@@ -54,11 +54,25 @@ const base = (over: Doc = {}): Doc => ({
 const card = (key: string, over: Doc = {}): TrainCard => toTrainCard(key, base(over), true, NOW) as TrainCard;
 
 describe('Auslöser', () => {
-  it('3 freie Fehlversuche seit der letzten Werkstatt lösen aus, 2 nicht', () => {
+  it('3 freie Fehlversuche seit der letzten Werkstatt lösen aus, 2 nicht; je Lerntag zählen höchstens 2 (also an mindestens 2 Tagen)', () => {
     const two = base({ hist: [fail('2026-10-21'), fail('2026-10-21', 'type')] });
     expect(struggling(two, DAY)).toBe(false);
-    const three = base({ hist: [fail('2026-10-21'), fail('2026-10-21', 'type'), fail('2026-10-21', 'cloze')] });
-    expect(struggling(three, DAY)).toBe(true);
+    // Drei Fehlversuche an EINEM Tag: nur 2 zählen (Lehrer-Prüfung 21.10.2026).
+    const oneDay = base({ hist: [fail('2026-10-21'), fail('2026-10-21', 'type'), fail('2026-10-21', 'cloze')] });
+    expect(struggling(oneDay, DAY)).toBe(false);
+    // Über 14 Tage verteilt (die Regel „2 Fehlertage in 14 Tagen“ greift nicht): 2 + 1 an zwei Tagen lösen aus.
+    const spread = base({ hist: [fail('2026-10-02'), fail('2026-10-02', 'type'), fail('2026-10-21', 'cloze')] });
+    expect(struggling(spread, DAY)).toBe(true);
+    expect(struggling(base({ hist: [fail('2026-10-02'), fail('2026-10-02', 'type'), fail('2026-10-02', 'cloze')] }), DAY)).toBe(false);
+  });
+  it('ein einzelner Ein-Buchstaben-Tippfehler zählt nicht mit; wiederholt zählt er (Diagnose „Schreibung“)', () => {
+    const once = base({ hist: [fail('2026-10-02', 'type', { v: 'leverag' }), fail('2026-10-02', 'type', { v: 'use' }), fail('2026-10-21', 'cloze', { v: 'exploit' })] });
+    expect(struggling(once, DAY)).toBe(false);
+    const twice = base({ hist: [fail('2026-10-02', 'type', { v: 'leverag' }), fail('2026-10-02', 'type', { v: 'leverag' }), fail('2026-10-21', 'cloze', { v: 'exploit' })] });
+    expect(struggling(twice, DAY)).toBe(true);
+    expect(diagnose(card('vocab/leverage', { hist: [fail('2026-10-02', 'type', { v: 'leverag' }), fail('2026-10-05', 'type', { v: 'leverag' })] }), []).kind).toBe('form');
+    // Ein Tippfehler an einem zweiten Tag macht allein keinen Fehlertag.
+    expect(struggling(base({ hist: [fail('2026-10-15', 'type', { v: 'leverge' }), fail('2026-10-20', 'mc_de')] }), DAY)).toBe(false);
   });
   it('Fehler an 2 verschiedenen Lerntagen in 14 Tagen lösen aus; älter als 14 Tage zählt nicht', () => {
     expect(struggling(base({ hist: [fail('2026-10-15', 'mc_de'), fail('2026-10-20', 'mc_de')] }), DAY)).toBe(true);
@@ -73,7 +87,7 @@ describe('Auslöser', () => {
     expect(struggling(unverified, DAY)).toBe(false);
   });
   it('neue und ausgeblendete Karten nie; eine wieder eingeblendete pausierte Karte wieder', () => {
-    const hist = [fail('2026-10-21'), fail('2026-10-21'), fail('2026-10-21')];
+    const hist = [fail('2026-10-20'), fail('2026-10-21'), fail('2026-10-21')];
     expect(struggling(base({ state: 'new', hist }), DAY)).toBe(false);
     expect(struggling(base({ hidden: true, hist, wk: { n: 1, t: at('2026-10-10'), d: '2026-10-10', p: 1 } }), DAY)).toBe(false);
     expect(struggling(base({ hidden: false, hist, wk: { n: 1, t: at('2026-10-10'), d: '2026-10-10', p: 1 } }), DAY)).toBe(true);

@@ -206,7 +206,8 @@ describe('Abfrageart je Stufe: mindestens zwei, Stufe 5 mit eigenem Satz, Rückf
   it('Stufe 5 „Sicher anwenden“: eigener Satz nur mit KI (auch am Handy) und nach zwei Abruf-Tagen, Diktat nur mit Sprachausgabe', () => {
     // Zwei richtige Abrufe an verschiedenen Tagen: erst dann darf der eigene Satz kommen (Barcroft-Leitplanke).
     const hist = [{ t: T - 3 * 86_400_000, g: 3, x: 'cloze' }, { t: T - 86_400_000, g: 3, x: 'cloze' }];
-    const c = vcard({ stage: 5, hist });
+    // Einführungstag gespeichert (`intro`): der erste Abruf-Tag ist der Einführungstag und zählt für „Sag es“ nicht mit.
+    const c = vcard({ stage: 5, hist, intro: '2026-09-17' });
     expect(availableExercises(c, 'de', 100, { tts: true, ai: true })).toEqual(['cloze', 'dictation', 'produce']);
     expect(availableExercises(c, 'de', 100, { tts: false, ai: true })).toEqual(['cloze', 'produce']);
     // Am Handy (touch): Hören seit Wort-Lernen 2 auch, wenn die Sprachausgabe da ist; ohne Sprachausgabe nicht.

@@ -292,12 +292,14 @@ const schedulingFields = {
   intro: str,
   /** Erster Fest-Tag (Lernplattform 3.0 P22, `JJJJ-MM-TT`), rein ergänzend, einmal gesetzt. */
   ff: str,
+  /** Neu (Wort-Lernen 2, Korrektur 21.10.2026): Lerntag des ersten belegten freien Abrufs nach ≥ 21 Lerntagen Pause (`spacing.ts` → `longGapProven`), einmal gesetzt. Tolerant gelesen. */
+  lg: loose,
   hidden: bool,
   fsrs: fsrsSchema.nullish(),
   /** Neu: Trefferbilanz je Übungsart der neuen App. */
   xs: z.record(z.string(), z.looseObject({ c: num, w: num }).nullish()).nullish(),
-  /** Neu (Wort-Lernen 2, Wort-Werkstatt): `{n, t, d, p?}` Runden, Zeitpunkt und Lerntag der letzten Runde, `p: 1` = pausiert (`werkstatt.ts`). */
-  wk: z.looseObject({ n: num, t: num, d: str, p: num }).nullish(),
+  /** Neu (Wort-Lernen 2, Wort-Werkstatt): `{n, t, d, p?}` Runden, Zeitpunkt und Lerntag der letzten Runde, `p: 1` = pausiert (`werkstatt.ts`). Tolerant gelesen (`readWk`): ein falscher Typ macht die Karte nicht ungültig. */
+  wk: loose,
 };
 
 export const vocabSchema = z.looseObject({
@@ -325,7 +327,7 @@ export const vocabSchema = z.looseObject({
   /** Neu (02.10.2026): deutsche Übersetzungen der Beispielsätze `{<Schlüssel>: text}`, einmal von Claude erzeugt, nur ergänzt. */
   exDe: z.record(z.string(), z.unknown()).nullish(),
   /** Neu (Phase 2, M3): Merkhilfe von Claude für hartnäckige Wörter `{text, lang, t}`, einmal erzeugt. */
-  mnemo: z.looseObject({ text: str, lang: str, t: num, own: num }).nullish(),
+  mnemo: z.looseObject({ text: str, lang: str, t: num, own: loose }).nullish(),
   /** Neu (Lernplattform 3.0 P26, nur ergänzend): Erklärungen von Claude zu falschen Antworten `[{g, y, w, ex, sig, cf, alt, pv, t, bad}]` (≤ 3), tolerant gelesen. */
   axs: z.array(z.unknown()).nullish(),
   /** Neu (Lernplattform 3.0 P52, nur ergänzend): neue Claude-Sätze für schwache Wörter `[{en, de, sit, t, pv, bad?}]` (≤ 4), tolerant gelesen. */
@@ -354,7 +356,7 @@ export const chunkSchema = z.looseObject({
   origin: z.looseObject({ v: num, kind: str, ref: str, title: str, t: num }).nullish(),
   seen: loose,
   /** Neu (Wort-Lernen 2): Merkhilfe `{text, lang, t, own?}` wie bei Vokabeln und geschaffte Aktivierungen A1/A2 (`na`). */
-  mnemo: z.looseObject({ text: str, lang: str, t: num, own: num }).nullish(),
+  mnemo: z.looseObject({ text: str, lang: str, t: num, own: loose }).nullish(),
   na: num,
   ...schedulingFields,
 });

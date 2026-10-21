@@ -7,7 +7,7 @@ export const wortKernEn = {
   pxWkRecallFirst: 'First recall since learning',
   pxWkTitle: 'How well words stick',
   pxWkLead: 'Only what you typed from memory counts here. Choices and flipping do not count, because recognizing is easier than recalling.',
-  pxWkNextDayLabel: 'Recalled from memory the day after learning',
+  pxWkNextDayLabel: 'Recalled from memory 1–2 days after learning (new words)',
   pxWkChunkFirstLabel: 'Phrases right on the first try from memory',
   pxWkLongGapLabel: 'Recalled from memory after a 3-week break',
   pxWkMedianSafeLabel: 'Days until a word is "safe" (typically)',

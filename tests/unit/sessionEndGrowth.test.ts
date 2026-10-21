@@ -23,8 +23,8 @@ describe('Rundenende Wachstum', () => {
     const ids = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
     // Wort-Lernen 2 (21.10.2026): „Fest“ verlangt zusätzlich einen freien richtigen Abruf nach ≥ 21 Lerntagen Pause – der erste Eintrag (Auswahl vor 40 Tagen) liefert die Pause.
     const firmHist = [{ t: NOW - 40 * D, g: 3, x: 'mc_en' }, { t: NOW - 9 * D, g: 3, x: 'cloze', s: 'sA' }, { t: NOW - 5 * D, g: 3, x: 'cloze', s: 'sB' }];
-    const before = ids.map((id) => mk(id, { stage: 4, S: 10, hist: firmHist }));
-    const after = ids.map((id) => answered(id, 40, { stage: 5, S: 40, hist: firmHist }));
+    const before = ids.map((id) => mk(id, { stage: 4, S: 10, hist: firmHist, lg: '2026-09-01' }));
+    const after = ids.map((id) => answered(id, 40, { stage: 5, S: 40, hist: firmHist, lg: '2026-09-01' }));
     const rg = roundGrowth(before, after);
     expect(rg.up).toHaveLength(8);
     const out = html({ up: rg.up, memory: rg.memory, down: rg.down, hard: false });

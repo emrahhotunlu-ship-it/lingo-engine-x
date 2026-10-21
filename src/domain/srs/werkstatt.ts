@@ -10,7 +10,8 @@ import type { Lang, TrainCard } from './types';
 // Wort-Lernen 2, Teil 2: Wort-Werkstatt (docs/umbau/wort-fest-plan.md). Rein und ohne Seiteneffekte.
 //
 // Ein Wort, das nicht hängen bleibt, wird nicht einfach öfter abgefragt, sondern neu verankert:
-//  - Auslöser: seit der letzten Werkstatt 3 freie Fehlversuche ODER Fehler an 2 verschiedenen Lerntagen innerhalb von 14 Tagen
+//  - Auslöser: seit der letzten Werkstatt 3 freie Fehlversuche (je Lerntag höchstens 2 gezählt; ein einzelner Ein-Buchstaben-Tippfehler zählt nicht)
+//    ODER Fehler an 2 verschiedenen Lerntagen innerhalb von 14 Tagen
 //    (ersetzt „Dauerfehler ab 5 Vergessen“ und „Merkhilfe ab 4 Vergessen“). Der Einführungstag zählt nie (dort ist Fehlen normal).
 //  - Diagnose aus vorhandenen Daten: falsche Eingaben (`hist[].v`), Verwechslung mit einem anderen eigenen Wort, Deutsch-Falle,
 //    Partnerwort, Schreibung (Tippabstand ≤ 2), Klang (Hörübungen) – sonst Bedeutung.
@@ -75,22 +76,42 @@ function wrows(doc: Doc): WRow[] {
   return out.sort((a, b) => a.t - b.t);
 }
 
-/** Fehler seit der letzten Werkstatt, ohne Einführungstag, ohne Partnerwort und ohne „Welches Wort passt?“. */
+/** Je Lerntag zählen höchstens so viele freie Fehlversuche (Lehrer-Prüfung 21.10.2026: 3 Fehlversuche an mindestens 2 Tagen). */
+export const WK_FAILS_PER_DAY = 2;
+
+/** Zielform der Karte (Vokabel `word`, Wendung `en`), normalisiert; leer, wenn keine. */
+const targetOf = (doc: Doc): string => {
+  const w = typeof doc.word === 'string' ? doc.word : typeof doc.en === 'string' ? doc.en : '';
+  return withoutTo(normalize(w));
+};
+
+/** Ein einzelner Tippfehler: genau ein Buchstabe Abstand zum Wort (ab 3 Buchstaben). */
+const oneLetterOff = (v: string | null, target: string): boolean => !!v && target.length >= 3 && editDistance(withoutTo(normalize(v)), target) === 1;
+
+/**
+ * Fehler seit der letzten Werkstatt, ohne Einführungstag, ohne Partnerwort und ohne „Welches Wort passt?“. Ein einzelner Ein-Buchstaben-Tippfehler zählt nicht mit;
+ * kommt so ein Tippfehler wiederholt vor, zählen alle (die Diagnose heißt dann „Schreibung“).
+ */
 function failsSince(doc: Doc): WRow[] {
   const intro = introDayOf(doc);
   const since = readWk(doc)?.t ?? 0;
-  return wrows(doc).filter((r) => r.t > since && r.g === 1 && !r.ci && r.x !== 'contrast' && (intro === null || r.day > intro));
+  const fails = wrows(doc).filter((r) => r.t > since && r.g === 1 && !r.ci && r.x !== 'contrast' && (intro === null || r.day > intro));
+  const target = targetOf(doc);
+  const typos = fails.filter((r) => oneLetterOff(r.v, target));
+  return typos.length >= 2 ? fails : fails.filter((r) => !typos.includes(r));
 }
 
 /**
- * Hakt das Wort (unabhängig von Ruhe und Tageshöchstzahl)? 3 freie Fehlversuche seit der letzten Werkstatt oder Fehler an 2 Lerntagen
- * innerhalb von 14 Tagen bis `day`. Neue, ausgeblendete und pausierte Karten nie.
+ * Hakt das Wort (unabhängig von Ruhe und Tageshöchstzahl)? 3 freie Fehlversuche seit der letzten Werkstatt (je Lerntag höchstens 2 gezählt, also an mindestens 2 Tagen)
+ * oder Fehler an 2 Lerntagen innerhalb von 14 Tagen bis `day`. Neue, ausgeblendete und pausierte Karten nie.
  */
 export function struggling(doc: Doc, day: string): boolean {
   // `p` (pausiert) wirkt über `hidden`: Blendet Emrah das Wort in der Liste wieder ein, darf die Werkstatt es wieder aufnehmen.
   if (doc.state === 'new' || doc.hidden === true) return false;
   const fails = failsSince(doc);
-  if (fails.filter((r) => !r.u && isFreeForm(r.x)).length >= WK_FREE_FAILS) return true;
+  const perDay = new Map<string, number>();
+  for (const r of fails) if (!r.u && isFreeForm(r.x)) perDay.set(r.day, Math.min(WK_FAILS_PER_DAY, (perDay.get(r.day) ?? 0) + 1));
+  if ([...perDay.values()].reduce((a, b) => a + b, 0) >= WK_FREE_FAILS) return true;
   const from = addDays(day, -(WK_WINDOW_DAYS - 1));
   return new Set(fails.filter((r) => r.day >= from && r.day <= day).map((r) => r.day)).size >= WK_LAPSE_DAYS;
 }
@@ -212,8 +233,11 @@ export function partsCoreFirst(card: Pick<TrainCard, 'kind' | 'word'>): ChunkPar
   return parts.map((p, i) => ({ p, i })).sort((a, b) => order[a.p.kind] - order[b.p.kind] || a.i - b.i).map((x) => x.p);
 }
 
-/** Werkstatt-Stand nach einer Runde (Abruf am Ende der Werkstatt). */
+/** Höchste gespeicherte Zahl der Werkstatt-Runden (Schreib-Schema). */
+export const WK_N_MAX = 99;
+
+/** Werkstatt-Stand nach einer Runde (Abruf am Ende der Werkstatt). Vorhandene Felder (`p`) bleiben stehen; `n` höchstens 99. */
 export function nextWk(doc: Doc, t: number, day: string): Wk {
   const prev = readWk(doc);
-  return { n: (prev?.n ?? 0) + 1, t, d: day };
+  return { ...(prev ?? {}), n: Math.min(WK_N_MAX, (prev?.n ?? 0) + 1), t, d: day };
 }

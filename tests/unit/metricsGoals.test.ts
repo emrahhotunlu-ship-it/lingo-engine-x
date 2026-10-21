@@ -91,7 +91,7 @@ describe('festUnits', () => {
   const NOW = berlin('2026-10-05', 10);
   // Wort-Lernen 2: der erste Eintrag (vor 40 Tagen) liefert die Pause ≥ 21 Tage vor dem freien Abruf, die „Fest“ jetzt verlangt.
   const mk = (id: string, over: Record<string, unknown> = {}) =>
-    toTrainCard(id, { word: id, de: 'x', def: 'x y', ex: `We [${id}] it.`, pos: 'verb', state: 'review', S: 30, D: 5, due: NOW + 86_400_000, last: NOW - 86_400_000, stage: 5, reps: 6, lapses: 0, src: 'lookup', added: '2026-06-01', hist: [{ t: NOW - 40 * 86_400_000, g: 3, x: 'mc_en' }, { t: NOW - 9 * 86_400_000, g: 3, x: 'cloze', s: 'sA' }, { t: NOW - 5 * 86_400_000, g: 3, x: 'cloze', s: 'sB' }], ...over }, true, NOW)!;
+    toTrainCard(id, { word: id, de: 'x', def: 'x y', ex: `We [${id}] it.`, pos: 'verb', state: 'review', S: 30, D: 5, due: NOW + 86_400_000, last: NOW - 86_400_000, stage: 5, reps: 6, lapses: 0, src: 'lookup', added: '2026-06-01', lg: '2026-09-01', hist: [{ t: NOW - 40 * 86_400_000, g: 3, x: 'mc_en' }, { t: NOW - 9 * 86_400_000, g: 3, x: 'cloze', s: 'sA' }, { t: NOW - 5 * 86_400_000, g: 3, x: 'cloze', s: 'sB' }], ...over }, true, NOW)!;
   it('zählt Wörter und Wendungen zusammen, Neue und Ausgeblendete nie', () => {
     expect(festUnits([mk('a'), mk('b'), mk('c', { hidden: true }), mk('d', { stage: 3 })])).toBe(2);
   });
