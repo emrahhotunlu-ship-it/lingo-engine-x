@@ -40,7 +40,7 @@ export const ttJudgeDe = {
   ttJgAltErr: 'Andere Stelle, auch richtig korrigiert.',
   ttJgFitAltRow: 'Gelernte „Auch richtig“-Antworten: {n}',
   ttHeldRepairsRow: 'Zurückgehaltene Fehlersätze (Korrektur fragwürdig, ruhen ohne Wertung): {n}',
-  ttSbSampleRow: 'Satzbank: {ns} von Claude gesammelt, {q} davon noch in der 4-Wochen-Prüfzeit. Freigabe: {state}. Stichprobe für den Lehrer: {ss}.',
+  ttSbSampleRow: 'Satzbank: {ns} von Claude gesammelt, {q} davon noch in der 4-Wochen-Prüfzeit. Stichprobe für den Lehrer: {ss}.',
   ttSbSentence1: '1 Satz',
   ttSbSentences: '{n} Sätze',
   ttSbGateOn: 'an',

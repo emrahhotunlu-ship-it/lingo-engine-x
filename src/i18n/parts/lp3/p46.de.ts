@@ -69,7 +69,7 @@ export const ttP46De = {
   ttWpSave: 'Speichern',
   ttWpSaved: 'Gespeichert.',
   ttWpSaveFailed: 'Speichern hat nicht geklappt.',
-  ttWpFree: 'Dein bisheriger Freitext bleibt unverändert.',
+  ttWpFree: 'Dein freier Text unter „Beruflicher Kontext“ in den Einstellungen bleibt bestehen. Diese Angaben überschreiben ihn nicht.',
   ttWpWhoCFO: 'Finanzchef (CFO)',
   ttWpWhoIT: 'IT-Leitung',
   ttWpWhoProc: 'Einkauf',

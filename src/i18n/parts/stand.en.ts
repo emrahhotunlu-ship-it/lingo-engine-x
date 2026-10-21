@@ -55,7 +55,8 @@ export const standEn = {
   ctxPlaceholder: 'e.g. project lead for cloud software at a mid-sized company, lots of client meetings',
   ctxCount: '{n} of {max} characters',
   ctxSave: 'Save',
-  ctxSaved: 'Work context saved',
+  ctxSaved: 'Saved.',
+  ctxSaveFailed: 'Saving did not work.',
 
   // Weekly report as a Preply lesson (M18)
 

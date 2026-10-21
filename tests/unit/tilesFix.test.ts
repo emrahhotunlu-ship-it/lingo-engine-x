@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { checkTyped } from '../../src/domain/answer/check';
 import { acceptedWithAlternatives, chunkAlternatives } from '../../src/domain/chunks/alternatives';
 import { toChunkCard } from '../../src/domain/srs/chunkCards';
-import { buildExercise, buildTiles, tileMarks, tilesAnswer } from '../../src/domain/srs/exercise';
+import { buildExercise, buildTiles, tileMarks, tileMissing, tileShorterAlt, tilesAnswer } from '../../src/domain/srs/exercise';
 import { mulberry32 } from '../../src/domain/random';
 import type { Tile } from '../../src/domain/srs/types';
 import { dupIndex } from '../../src/engine/Tiles';
@@ -129,5 +129,24 @@ describe('Gleiche Bausteine sind erkennbar gezählt', () => {
     expect(d.get(0)).toEqual({ k: 1, n: 2 });
     expect(d.get(3)).toEqual({ k: 2, n: 2 });
     expect(d.has(1)).toBe(false);
+  });
+});
+
+describe('Anzeige nach dem Prüfen und Zahl der Plätze (UX-Prüfung WL2 S1/S2)', () => {
+  it('fehlende Wörter der nächstliegenden Lösung: „a quarter of a percentage risen“ → fehlt „point“', () => {
+    expect(tileMissing(TILES, [0, 1, 2, 3, 4, 7], ACC, 'words')).toEqual(['point']);
+  });
+  it('kürzere Fassung als Maßstab: „a quarter percentage risen“ → fehlt nur „point“; richtig gelegt → nichts fehlt', () => {
+    expect(tileMissing(TILES, [0, 1, 4, 7], ACC, 'words')).toEqual(['point']);
+    expect(tileMissing(TILES, [3, 1, 2, 0, 4, 5], ACC, 'words')).toEqual([]);
+  });
+  it('Buchstaben-Bausteine: keine „fehlt“-Plätze', () => {
+    expect(tileMissing(TILES, [0], ACC, 'letters')).toEqual([]);
+  });
+  it('kürzere gültige Fassung aus denselben Bausteinen → „bis zu“; nur eine Fassung → nicht', () => {
+    expect(tileShorterAlt(TILES, ACC, 'words')).toBe(true);
+    expect(tileShorterAlt(TILES, ['a quarter of a percentage point'], 'words')).toBe(false);
+    // Eine kürzere Fassung, die sich aus den Bausteinen nicht legen lässt, zählt nicht.
+    expect(tileShorterAlt(TILES, ['a quarter of a percentage point', 'a tiny point'], 'words')).toBe(false);
   });
 });

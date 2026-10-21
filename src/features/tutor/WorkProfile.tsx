@@ -1,10 +1,10 @@
 import { useId, useState } from 'react';
 import { useLive } from '../../data/live';
-import { cleanCtx2, CTX2_LIMITS, saveCtx2, SIT_CHIPS, SIT_PICK_MAX, startCtx2, WHO_CHIPS } from '../../domain/tutor/ctx2';
+import { cleanCtx2, CTX2_LIMITS, readCtx2, sameCtx2, saveCtx2, SIT_CHIPS, SIT_PICK_MAX, startCtx2, WHO_CHIPS, type Ctx2 } from '../../domain/tutor/ctx2';
 import { useT, type MessageKey } from '../../i18n';
 import { useCapabilities } from '../../platform/capabilities';
 import { Button } from '../../ui/Button';
-import { toast } from '../../ui/Toast';
+import { SaveStatus } from '../../ui/SaveStatus';
 
 // „Mein Arbeitsalltag“ (Lernplattform 3.0 P46, KI-Tutor T4): Rolle, Branche, Gesprächspartner, Situationen und Fachwörter als Daten statt Freitext, gespeichert in
 // `app/profile.ctx2`. Der bisherige Freitext `app/profile.ctx` (Einstellungen) bleibt unverändert; das Formular wird daraus nur vorbelegt. Gespeichert wird erst auf
@@ -55,7 +55,8 @@ function ChipPicker({ legend, presets, label, values, max, maxLen, onChange, tes
         {all.map((v) => {
           const on = values.includes(v);
           return (
-            <button key={v} type="button" aria-pressed={on} onClick={() => toggle(v)} data-value={v} className={`${CHIP} ${on ? 'bg-accent-soft font-semibold text-accent-text' : 'bg-surface-strong text-fg hover:bg-surface'}`}>
+            // UX-Prüfung WL2 S8: nicht gewählte Chips mit Rand (im hellen Modus sonst kaum als Knopf zu sehen).
+            <button key={v} type="button" aria-pressed={on} onClick={() => toggle(v)} data-value={v} className={`${CHIP} border ${on ? 'border-transparent bg-accent-soft font-semibold text-accent-text' : 'border-line-strong bg-surface-strong text-fg hover:bg-surface'}`}>
               {label(v)}
             </button>
           );
@@ -101,18 +102,27 @@ export function WorkProfile() {
   const [sit, setSit] = useState(start.sit);
   const [terms, setTerms] = useState(start.terms.join('\n'));
   const [busy, setBusy] = useState(false);
+  // UX-Prüfung WL2 S8: ein Speichern-Muster wie beim freien Text – aktiv, solange etwas Neues zu speichern ist (auch die erste, nur vorbelegte Fassung).
+  const [stored, setStored] = useState<Ctx2 | null>(() => readCtx2(profile));
+  const [status, setStatus] = useState<'saved' | 'failed' | null>(null);
   const roleId = useId();
   const fieldId = useId();
   const termsId = useId();
   if (db !== 'ready') return null;
 
+  // Der Zeitstempel zählt beim Vergleich nicht (`sameCtx2`); gesetzt wird er erst beim Speichern.
+  const next = (at: number): Ctx2 => cleanCtx2({ role, field, who, sit, terms: terms.split(/[,\n]/) }, at);
+  const changed = stored === null || !sameCtx2(next(0), stored);
   const save = async (): Promise<void> => {
     setBusy(true);
-    const next = cleanCtx2({ role, field, who, sit, terms: terms.split(/[,\n]/) }, Date.now());
-    const r = await saveCtx2(next);
+    setStatus(null);
+    const value = next(Date.now());
+    const r = await saveCtx2(value);
     setBusy(false);
-    if (r === 'saved' || r === 'unchanged') toast(t('ttWpSaved'));
-    else toast(t('ttWpSaveFailed'), 'error');
+    if (r === 'saved' || r === 'unchanged') {
+      setStored(value);
+      setStatus('saved');
+    } else setStatus('failed');
   };
 
   const input = 'lx-glass min-h-11 w-full rounded-[var(--radius-control)] px-3 text-base text-fg placeholder:text-subtle';
@@ -141,8 +151,9 @@ export function WorkProfile() {
         <p className="lx-t-meta m-0 text-subtle">{t('ttWpTermsHint')}</p>
       </div>
       <p className="lx-t-meta m-0 text-subtle">{t('ttWpFree')}</p>
-      <div>
-        <Button variant="primary" onClick={() => void save()} busy={busy} data-testid="wp-save">
+      <div className="flex flex-wrap items-center justify-end gap-3">
+        <SaveStatus status={status === 'saved' && changed ? null : status} saved={t('ttWpSaved')} failed={t('ttWpSaveFailed')} testId="wp-status" />
+        <Button variant="secondary" onClick={() => void save()} disabled={!changed} busy={busy} data-testid="wp-save">
           {t('ttWpSave')}
         </Button>
       </div>

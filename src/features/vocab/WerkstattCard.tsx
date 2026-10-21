@@ -226,17 +226,27 @@ function MemoPanel({ card, bundle }: { card: TrainCard; bundle: readonly MemoCar
   const [draft, setDraft] = useState('');
   const [busy, setBusy] = useState(false);
   const [open, setOpen] = useState(false);
+  // UX-Prüfung WL2 S7: Mit gespeicherter Merkhilfe ist das Feld zu („Ändern“ öffnet es); die Rückmeldung steht im Feld selbst, nicht unter der Leiste.
+  const [editing, setEditing] = useState(initial === null);
+  const [status, setStatus] = useState<'saved' | 'failed' | null>(null);
   const save = async (text: string) => {
     const v = text.trim().slice(0, MNEMO_MAX);
     if (!v || busy) return;
     setBusy(true);
+    setStatus(null);
     const ok = await saveOwnMemo(card, v, lang);
     setBusy(false);
     if (ok) {
       setOwn(v);
       setDraft('');
-      toast(t('pxWwMemoSaved'));
-    } else toast(t('pxWwMemoSaveFailed'), 'error');
+      setEditing(false);
+      setStatus('saved');
+    } else setStatus('failed');
+  };
+  const edit = () => {
+    setDraft(own ?? '');
+    setStatus(null);
+    setEditing(true);
   };
   const ask = () => {
     setOpen(true);
@@ -247,12 +257,17 @@ function MemoPanel({ card, bundle }: { card: TrainCard; bundle: readonly MemoCar
   return (
     <section className="flex flex-col gap-2 rounded-xl bg-surface p-3" aria-label={t('pxWwMemoLabel')} data-testid="werkstatt-memo">
       <p className="lx-eyebrow">{t('pxWwMemoLabel')}</p>
-      {own && (
-        <div className="flex flex-col gap-0.5" data-testid="werkstatt-memo-own">
-          <p className="lx-t-meta text-subtle">{t('pxWwMemoOwnLabel')}</p>
-          <p className="lx-t-body" lang={lang}>
-            {own}
-          </p>
+      {own && !editing && (
+        <div className="flex items-start justify-between gap-3" data-testid="werkstatt-memo-own">
+          <div className="flex min-w-0 flex-col gap-0.5">
+            <p className="lx-t-meta text-subtle">{t('pxWwMemoOwnLabel')}</p>
+            <p className="lx-t-body break-words" lang={lang}>
+              {own}
+            </p>
+          </div>
+          <Button variant="ghost" className="flex-none" onClick={edit} data-testid="werkstatt-memo-edit">
+            {t('pxWwMemoEdit')}
+          </Button>
         </div>
       )}
       {!own && older && (
@@ -263,27 +278,37 @@ function MemoPanel({ card, bundle }: { card: TrainCard; bundle: readonly MemoCar
           </p>
         </div>
       )}
-      <div className="flex flex-col gap-1.5">
-        <label htmlFor={fieldId} className="lx-t-meta text-subtle">
-          {t('pxWwMemoOwnLabel')}
-        </label>
-        <textarea
-          id={fieldId}
-          className="lx-field min-h-16"
-          lang={lang}
-          rows={2}
-          value={draft}
-          maxLength={MNEMO_MAX}
-          placeholder={t('pxWwMemoOwnPh')}
-          onChange={(e) => setDraft(e.target.value)}
-          data-testid="werkstatt-memo-input"
-        />
-        <div>
-          <Button variant="secondary" onClick={() => void save(draft)} disabled={!draft.trim()} busy={busy} data-testid="werkstatt-memo-save">
-            {t('pxWwMemoSave')}
-          </Button>
+      {editing && (
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor={fieldId} className="lx-t-meta text-subtle">
+            {t('pxWwMemoOwnLabel')}
+          </label>
+          <textarea
+            id={fieldId}
+            className="lx-field min-h-16"
+            lang={lang}
+            rows={2}
+            value={draft}
+            maxLength={MNEMO_MAX}
+            placeholder={t('pxWwMemoOwnPh')}
+            onChange={(e) => setDraft(e.target.value)}
+            data-testid="werkstatt-memo-input"
+          />
+          <div className="flex flex-wrap gap-2">
+            <Button variant="secondary" onClick={() => void save(draft)} disabled={!draft.trim() || draft.trim() === own} busy={busy} data-testid="werkstatt-memo-save">
+              {t('pxWwMemoSave')}
+            </Button>
+            {own && (
+              <Button variant="ghost" onClick={() => setEditing(false)} data-testid="werkstatt-memo-cancel">
+                {t('pxWwMemoCancel')}
+              </Button>
+            )}
+          </div>
         </div>
-      </div>
+      )}
+      <p className={`lx-t-meta ${status === 'failed' ? 'text-danger-text' : 'text-ok-text'} ${status ? '' : 'sr-only'}`} role="status" lang={lang} data-testid="werkstatt-memo-status">
+        {status === 'saved' ? t('pxWwMemoSaved') : status === 'failed' ? t('pxWwMemoSaveFailed') : ''}
+      </p>
       <div className="flex flex-col gap-1.5 border-t border-line pt-2" data-testid="werkstatt-memo-ideas" data-phase={entry?.phase ?? (ai ? 'idle' : 'noai')}>
         <p className="lx-t-meta text-subtle">{t('pxWwMemoIdeas')}</p>
         {!ai ? (

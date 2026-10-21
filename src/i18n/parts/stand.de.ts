@@ -56,7 +56,8 @@ export const standDe = {
   ctxPlaceholder: 'z. B. Projektleiter für Cloud-Software im Mittelstand, viele Kundentermine',
   ctxCount: '{n} von {max} Zeichen',
   ctxSave: 'Speichern',
-  ctxSaved: 'Beruflicher Kontext gespeichert',
+  ctxSaved: 'Gespeichert.',
+  ctxSaveFailed: 'Speichern hat nicht geklappt.',
 
   // Wochenbericht als Preply-Stunde (M18)
 

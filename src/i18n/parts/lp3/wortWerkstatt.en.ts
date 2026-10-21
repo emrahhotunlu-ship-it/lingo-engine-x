@@ -24,6 +24,8 @@ export const wortWerkstattEn = {
   pxWwMemoLabel: 'Memory aid',
   pxWwMemoOwnLabel: 'Your own memory aid',
   pxWwMemoOwnPh: 'Write your own memory aid …',
+  pxWwMemoEdit: 'Edit',
+  pxWwMemoCancel: 'Cancel',
   pxWwMemoSave: 'Save',
   pxWwMemoSaved: 'Saved. Your memory aid now comes first.',
   pxWwMemoSaveFailed: "Couldn't save. Please try again.",

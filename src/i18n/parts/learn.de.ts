@@ -165,6 +165,8 @@ export const learnDe = {
   drSprintEmpty: 'Für einen Sprint brauchst du mehr sicher gelernte Wörter und Themen.',
   drTileLine: 'Dein Satz',
   drTilePool: 'Bausteine',
+  drTileMissing: 'fehlt:',
+  drTileUpTo: 'Bis zu {n} Bausteine. Eine kürzere richtige Fassung zählt auch.',
   drReset: 'Neu legen',
   drEnd: 'Der Satz endet mit {end}.',
   drEndDot: 'einem Punkt',

@@ -179,7 +179,7 @@ function Learn({ card, onDone }: { card: TrainCard; onDone: (kind: FirstKind) =>
             )}
             {/* Freiwillig, ohne Bewertung und ohne Speichern: ein Häkchen für sich selbst (Wort-Lernen 2). */}
             <div className="mt-1 flex flex-wrap items-center gap-2">
-              <Button variant="ghost" icon={saidAloud ? 'check' : 'mic'} aria-pressed={saidAloud} onClick={() => setSaidAloud((v) => !v)} data-testid="intro-say-aloud">
+              <Button variant="ghost" icon={saidAloud ? 'check' : 'chat'} aria-pressed={saidAloud} onClick={() => setSaidAloud((v) => !v)} data-testid="intro-say-aloud">
                 {saidAloud ? t('pxWwSayAloudDone') : t('pxWwSayAloud')}
               </Button>
               <span className="lx-t-meta text-subtle" lang={lang}>

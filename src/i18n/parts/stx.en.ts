@@ -33,7 +33,7 @@ export const stxEn = {
   stxMindNoGapHint: 'The app can only tell how well it sticks after a day of break.',
   stxMindNew: 'not learned yet',
   stxRawStage: 'Highest level',
-  stxFestRuleNote: 'Firm now counts more strictly: a word is only firm once you recalled it from memory after a break of at least 3 weeks – measured, not estimated. As before, the app also needs proof in a different sentence or a sentence of your own. That is why the number is smaller right now. It says nothing about what you have forgotten: the words come back for a check on their own.',
+  stxFestRuleNote: "Firm is stricter now: a word only counts once you still recall it from memory after a break of at least 3 weeks. That's why the number is lower for now.",
   stxGoalSafe: 'safe',
   stxGoalFirm: 'firm',
   stxFilterLearning: 'Learning',

@@ -69,7 +69,7 @@ export const ttP46En = {
   ttWpSave: 'Save',
   ttWpSaved: 'Saved.',
   ttWpSaveFailed: 'Saving did not work.',
-  ttWpFree: 'Your free text stays as it is.',
+  ttWpFree: 'Your free text under "Work context" in Settings stays as it is. These details don\'t overwrite it.',
   ttWpWhoCFO: 'CFO',
   ttWpWhoIT: 'IT lead',
   ttWpWhoProc: 'Procurement',

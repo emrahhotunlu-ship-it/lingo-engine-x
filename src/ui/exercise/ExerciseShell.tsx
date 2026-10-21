@@ -350,7 +350,8 @@ export function ExerciseShell(props: ExerciseShellProps) {
       </div>
       <div ref={taskRef} data-slot="task" className="flex scroll-mt-4 flex-col gap-1">
         {task.open && (
-          <p className="lx-t-meta m-0 text-muted" data-testid="purpose" data-open="">
+          // UX-Prüfung WL2 K1: offener Zweck mit etwas Abstand zum Titel.
+          <p className="lx-t-meta m-0 pb-1.5 text-muted" data-testid="purpose" data-open="">
             {task.purpose}
             {status.state && status.detail && (
               <span className="mt-0.5 block text-subtle" data-testid="status-detail">

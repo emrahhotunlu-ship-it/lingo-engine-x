@@ -4,7 +4,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { boot, layoutProblems, openSettings, openTab, screen } from './fixtures';
 import { RECALLED, TYPE_MODE, answerCurrent, dump, planPatch } from './trainerHelpers';
 import { ankiPatch } from './wortschatzHelpers';
-import { exDeKey } from '../../src/domain/srs/examples';
+import { exDeKey } from '../../src/domain/srs/exDeKey';
 
 // Wort-Lernen 2, Teil 2 (21.10.2026): Wort-Werkstatt im Trainer, Vorlesen neuer Wörter und „Sag es einmal laut“, Übung „Sag es“ (Diktiertaste),
 // Berufsprofil in den Einstellungen, freiwillige Angebote „Abend-Check“ und „Sag es selbst“ im Reiter Wörter. Handy 390 px und Laptop 1440 px, mit axe.
@@ -72,6 +72,13 @@ for (const vp of [
       await page.getByTestId('werkstatt-memo-input').fill('a-VOID: ins Leere ausweichen');
       await page.getByTestId('werkstatt-memo-save').click();
       await expect(page.getByTestId('werkstatt-memo-own')).toContainText('a-VOID');
+      // UX-Prüfung WL2 S7: danach ist das Feld zu, „Gespeichert“ steht im Feld, „Ändern“ öffnet es wieder mit dem Text.
+      await expect(page.getByTestId('werkstatt-memo-input')).toHaveCount(0);
+      await expect(page.getByTestId('werkstatt-memo-status')).toContainText('Gespeichert');
+      await page.getByTestId('werkstatt-memo-edit').click();
+      await expect(page.getByTestId('werkstatt-memo-input')).toHaveValue('a-VOID: ins Leere ausweichen');
+      await page.getByTestId('werkstatt-memo-cancel').click();
+      await expect(page.getByTestId('werkstatt-memo-input')).toHaveCount(0);
       await expect.poll(async () => ((await dump(page))['vocab/avoid']?.mnemo as Doc | undefined)?.own).toBe(1);
 
       // Vorschläge von Claude (ein gebündelter Aufruf auf Knopfdruck, ohne vorherige Zustimmung nie automatisch).

@@ -26,7 +26,7 @@ import type { ExplainExample, ExplanationModel, ResultVerdict } from '../../doma
 import { wordStatus } from '../../domain/tutor/learnerWords';
 import { useClock } from '../../app/clock';
 import { statusDetail } from './statusText';
-import { choiceVerdict, exTextKey, gapCue, tileMarks, tilesAnswer } from '../../domain/srs/exercise';
+import { choiceVerdict, exTextKey, gapCue, tileMarks, tileMissing, tileShorterAlt, tilesAnswer } from '../../domain/srs/exercise';
 import { cardExamples, OWN_EXAMPLE_MIN_STAGE, storedTranslation, wantsEnrichment } from '../../domain/srs/examples';
 import { explainWord, isAltAnswer } from '../../domain/srs/explainWord';
 import { posKey } from '../../domain/srs/explain';
@@ -832,8 +832,17 @@ export function ExerciseView({
         // So viele Plätze, wie die Lösung Bausteine hat: vorab sichtbar, wie viele gebraucht werden (Emrahs Meldung 21.10.2026).
         slots={e.tiles.filter((x) => !x.distractor).length}
         {...(e.sentence ? { poolTarget: poolEl, inline: true } : {})}
+        // UX-Prüfung WL2 S1: Was in der Zeile fehlt, steht nach dem Prüfen als gestrichelter Platz „fehlt: …“ darin.
+        {...(fb && fb.result.verdict !== 'correct' ? { missing: tileMissing(e.tiles, placed, e.accepted, tileMode), missingLabel: t('drTileMissing') } : {})}
       />
     );
+    // UX-Prüfung WL2 S2: Gilt auch eine kürzere Fassung aus denselben Bausteinen, sagen die Plätze „bis zu“, nicht „genau so viele“.
+    const upTo =
+      !fb && tileShorterAlt(e.tiles, e.accepted, tileMode) ? (
+        <p className="lx-t-meta text-subtle" lang={lang} data-testid="tiles-upto">
+          {t('drTileUpTo', { n: e.tiles.filter((x) => !x.distractor).length })}
+        </p>
+      ) : null;
     prompt = (
       <div className="flex flex-col gap-3" data-testid="tiles-task">
         {!e.sentence && e.meaning && (
@@ -842,6 +851,7 @@ export function ExerciseView({
           </p>
         )}
         {e.sentence ? sentence(e.sentence, line) : null}
+        {upTo}
         {e.sentence && cue()}
       </div>
     );

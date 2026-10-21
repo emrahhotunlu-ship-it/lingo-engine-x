@@ -1,4 +1,4 @@
-import { hash32 } from '../random';
+import { exampleKey, exDeKey } from './exDeKey';
 import { stripGapMarks } from '../text/tokenize';
 import { containsPhrase } from '../chunks/newChunk';
 import { fixDashes, hasGapPlaceholder, locate, lemmaOf } from './context';
@@ -23,13 +23,7 @@ export const EXAMPLES_MIN = 2;
 /** Höchstens so viele KI-Beispiele werden gespeichert. */
 export const X_EX_MAX = 3;
 
-const key = (s: string) =>
-  s
-    .toLowerCase()
-    .replace(/[’‘]/g, "'")
-    .replace(/[^a-z0-9' ]+/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+const key = exampleKey;
 
 const clean = (s: unknown): string => (typeof s === 'string' ? stripGapMarks(s).text.replace(/\s+/g, ' ').trim() : '');
 
@@ -115,8 +109,7 @@ export function examplesPatch(cur: Readonly<Record<string, unknown>> | undefined
 /** Höchstens so viele Übersetzungen je Karte (Dokumentgröße, A6.6). */
 export const EX_DE_MAX = 8;
 
-/** Schlüssel der Übersetzung eines Beispielsatzes: Hash des normalisierten englischen Satzes. */
-export const exDeKey = (en: string): string => `s${hash32(key(en)).toString(36)}`;
+export { exDeKey };
 
 /** Gespeicherte deutsche Übersetzung eines Beispielsatzes (`exDe`), tolerant gelesen. */
 export function storedTranslation(doc: Readonly<Record<string, unknown>>, en: string): string | null {

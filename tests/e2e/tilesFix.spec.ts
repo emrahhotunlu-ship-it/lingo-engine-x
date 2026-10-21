@@ -58,6 +58,8 @@ for (const vp of [{ width: 390, height: 844 }, { width: 1440, height: 900 }]) {
       await openQuarter(page);
       // Vorab: 6 leere Plätze (so viele Wörter hat die Lösung), die zwei „a“ als gleiche Bausteine gekennzeichnet.
       await expect(page.getByTestId('tile-slot')).toHaveCount(6);
+      // UX-Prüfung WL2 S2: Es gibt kürzere gültige Fassungen – die Plätze heißen „bis zu 6“, nicht „genau 6“.
+      await expect(page.getByTestId('tiles-upto')).toContainText('Bis zu 6 Bausteine');
       await expect(page.locator('[data-testid="tile"][data-where="pool"][data-dup]')).toHaveCount(2);
       if (SHOTS) await page.screenshot({ path: `${SHOTS}/tiles-${vp.width}-1-start.png`, fullPage: true });
       await lay(page, ['a', 'quarter']);
@@ -86,6 +88,24 @@ for (const vp of [{ width: 390, height: 844 }, { width: 1440, height: 900 }]) {
       await expect(page.locator('[data-testid="tile"][data-where="line"][data-state="off"]')).toHaveCount(1);
       await expect(page.locator(`[data-testid="tile"][data-where="line"][data-tile="${distractor}"]`)).toHaveAttribute('data-state', 'off');
       if (SHOTS) await page.screenshot({ path: `${SHOTS}/tiles-${vp.width}-3-one-wrong.png`, fullPage: true });
+    });
+
+    test('UX-Prüfung WL2 S1: Ablenker statt „point“ – die Zeile bleibt nach dem Prüfen gleich hoch, „fehlt: point“ steht darin', async ({ page }) => {
+      await openQuarter(page);
+      const distractor = await page
+        .locator('[data-testid="tile"][data-where="pool"]')
+        .evaluateAll((els) => els.map((e) => e.getAttribute('data-tile') ?? '').find((x) => !['a', 'quarter', 'of', 'percentage', 'point'].includes(x)) ?? '');
+      await lay(page, ['a', 'quarter', 'of', 'a', 'percentage', distractor]);
+      const before = (await page.getByTestId('tile-line').boundingBox())?.height ?? 0;
+      await page.getByTestId('check').click();
+      await expect(page.getByTestId('result')).toBeVisible();
+      await page.evaluate(() => Promise.all(document.getAnimations().map((a) => a.finished.catch(() => null))));
+      const after = (await page.getByTestId('tile-line').boundingBox())?.height ?? 0;
+      expect(after).toBeLessThanOrEqual(before + 1);
+      await expect(page.getByTestId('tile-missing')).toHaveCount(1);
+      await expect(page.getByTestId('tile-missing')).toContainText('fehlt:');
+      await expect(page.getByTestId('tile-missing')).toHaveAttribute('data-tile', 'point');
+      await expect(page.getByTestId('tiles-upto')).toHaveCount(0);
     });
 
     test('vertauschte „a“ in der vollen Lösung: richtig, alle grün', async ({ page }) => {

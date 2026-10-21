@@ -32,6 +32,10 @@ type Props = {
   inline?: boolean;
   /** Gleiche Bausteine (zwei „a“): Zusatz für Screenreader „gleicher Baustein k von n“. Sie sind vertauschbar, gewertet wird der Text. */
   dupLabel?: (k: number, n: number) => string;
+  /** Nach dem Prüfen (UX-Prüfung WL2 S1): fehlende Wörter der Lösung als gestrichelte Plätze „fehlt: …“ am Ende der Zeile. */
+  missing?: readonly string[];
+  /** Vorsatz in Oberflächensprache („fehlt:“), das Wort selbst steht englisch daneben. */
+  missingLabel?: string;
 };
 
 /** Gleiche Bausteine (Groß/klein egal): je Baustein die laufende Nummer und die Anzahl seiner Gruppe; einzelne fehlen. */
@@ -51,7 +55,7 @@ const MARK_GLYPH: Readonly<Record<Mark, string>> = { ok: '✓', near: '↔', off
 
 type Drag = { id: number; from: 'pool' | 'line'; x0: number; y0: number; dx: number; dy: number; moved: boolean; pointer: number; t0: number; kind: 'touch' | 'mouse' };
 
-export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabels, slots, poolTarget = null, inline = false, dupLabel }: Props) {
+export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabels, slots, poolTarget = null, inline = false, dupLabel, missing, missingLabel }: Props) {
   const reduce = useReducedMotion();
   const fx = useFxLevel();
   const line = useRef<HTMLDivElement>(null);
@@ -85,9 +89,19 @@ export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabe
       const th = Math.max(0, ...placedEls.map((n) => n.offsetHeight), ...poolEls.map((n) => n.offsetHeight)) || (el.firstElementChild as HTMLElement | null)?.offsetHeight || 0;
       if (!(th > 0)) return;
       // Zeilen der schon gelegten Bausteine (tatsächlich) und aller Bausteine (Schätzung, nur solange der Vorrat sichtbar ist).
-      const placedRows = new Set(placedEls.map((n) => Math.round(n.offsetTop))).size;
+      // Zeilen mit Toleranz zählen (UX-Prüfung WL2 S1): Nach dem Prüfen tragen Bausteine ein Zeichen; versetzt sich einer dabei um ein Pixel,
+      // ist das keine neue Zeile (vorher wuchs die Zeile so von 165 auf 320 px).
+      const tops = placedEls.map((n) => n.offsetTop).sort((x, y) => x - y);
+      let placedRows = 0;
+      let rowTop = -Infinity;
+      for (const top of tops) {
+        if (top > rowTop + th / 2) {
+          placedRows++;
+          rowTop = top;
+        }
+      }
       let guess = 1;
-      if (avail > 0 && poolEls.length === tiles.length) {
+      if (!locked && avail > 0 && poolEls.length === tiles.length) {
         // Auch der Fallen-Baustein zählt: Man kann ihn legen, dann braucht die Zeile Platz für alle Bausteine des Vorrats.
         const widths = tiles.map((_, k) => (poolEls[k]?.offsetWidth ?? 0) + 4);
         const pack = (ws: number[]): number => {
@@ -262,6 +276,16 @@ export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabe
         {Array.from({ length: emptySlots }, (_, k) => (
           <span key={`slot-${k}`} className="lx-tile-slot" aria-hidden="true" data-testid="tile-slot" />
         ))}
+        {locked &&
+          missingLabel &&
+          missing?.map((w, k) => (
+            <span key={`miss-${k}`} className="lx-tile-slot lx-tile-missing" data-testid="tile-missing" data-tile={w}>
+              {missingLabel}&nbsp;
+              <span lang="en" className="font-semibold text-fg">
+                {w}
+              </span>
+            </span>
+          ))}
       </div>
       {poolTarget ? (poolNode ? createPortal(poolNode, poolTarget) : null) : poolNode}
     </div>

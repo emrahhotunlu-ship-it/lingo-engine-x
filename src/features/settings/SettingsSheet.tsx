@@ -75,9 +75,12 @@ export function SettingsSheet({ open, onClose }: { open: boolean; onClose: () =>
           <Registered groups={['voice']} />
         </Group>
         <Group title={t('nbProfilSetContext')} testId="set-group-context">
-          <WorkProfileSection />
-          <WorkContextSection />
-          <Registered groups={['context']} />
+          {/* UX-Prüfung WL2 S8: drei Bereiche in fester Reihenfolge (Arbeitsalltag, freier Text, „Claude merkt sich“), je mit Trennlinie. */}
+          <div className="flex flex-col gap-6 [&>*+*]:border-t [&>*+*]:border-line [&>*+*]:pt-6">
+            <WorkProfileSection />
+            <WorkContextSection />
+            <Registered groups={['context']} />
+          </div>
         </Group>
         <Group title={t('nbProfilSetLook')} testId="set-group-look">
           <Appearance />

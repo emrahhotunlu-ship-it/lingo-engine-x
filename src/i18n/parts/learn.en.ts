@@ -161,6 +161,8 @@ export const learnEn: Record<keyof typeof learnDe, string> = {
   drSprintEmpty: 'A sprint needs more words and topics you already know well.',
   drTileLine: 'Your sentence',
   drTilePool: 'Tiles',
+  drTileMissing: 'missing:',
+  drTileUpTo: 'Up to {n} pieces. A shorter correct version counts too.',
   drReset: 'Start over',
   drEnd: 'The sentence ends with {end}.',
   drEndDot: 'a period',

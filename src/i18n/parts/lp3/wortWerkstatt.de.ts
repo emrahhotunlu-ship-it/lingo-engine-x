@@ -24,6 +24,8 @@ export const wortWerkstattDe = {
   pxWwMemoLabel: 'Merkhilfe',
   pxWwMemoOwnLabel: 'Deine eigene Merkhilfe',
   pxWwMemoOwnPh: 'Eigene Eselsbrücke schreiben …',
+  pxWwMemoEdit: 'Ändern',
+  pxWwMemoCancel: 'Abbrechen',
   pxWwMemoSave: 'Speichern',
   pxWwMemoSaved: 'Gespeichert. Deine Merkhilfe steht ab jetzt an erster Stelle.',
   pxWwMemoSaveFailed: 'Konnte nicht gespeichert werden. Bitte versuch es noch einmal.',

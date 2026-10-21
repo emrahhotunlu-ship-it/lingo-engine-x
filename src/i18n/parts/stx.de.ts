@@ -38,7 +38,7 @@ export const stxDe = {
   // Messwerte dahinter
   stxRawStage: 'Höchste Stufe',
   // Erklärzeile zur strengeren Fest-Zählung (gilt ab 20.10.2026, einige Wochen sichtbar)
-  stxFestRuleNote: 'Fest zählt jetzt strenger: Ein Wort ist erst fest, wenn du es nach mindestens 3 Wochen Pause noch frei aus dem Kopf wusstest – gemessen, nicht geschätzt. Dazu braucht die App wie bisher einen Beleg im anderen oder eigenen Satz. Deshalb ist die Zahl gerade kleiner. Das sagt nichts darüber, was du vergessen hast: Die Wörter kommen von selbst zur Probe.',
+  stxFestRuleNote: 'Fest zählt jetzt strenger: Ein Wort zählt erst, wenn du es nach mindestens 3 Wochen Pause noch frei wusstest. Darum ist die Zahl gerade kleiner.',
   stxGoalSafe: 'sicher',
   stxGoalFirm: 'fest',
   // Filter der Wortliste

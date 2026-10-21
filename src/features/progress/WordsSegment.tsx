@@ -5,6 +5,7 @@ import { FEST_GOAL, festNoteActive, buildTrainCards, checkMean, expectedKnown, f
 import { useT } from '../../i18n';
 import { Card } from '../../ui/Card';
 import { Disclosure } from '../../ui/Disclosure';
+import { Icon } from '../../ui/Icon';
 import { activationRates, ratePct, readyCount } from '../../domain/activation/ready';
 import { useActs } from '../vocab/actStore';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
@@ -59,17 +60,19 @@ function FestCard({ fest }: { fest: number }) {
         </p>
       )}
       {growth && growth.delta < 0 && <p className="text-sm text-muted">{t('nbProfilFestPause')}</p>}
-      <p className="text-xs text-subtle">{t('nbProfilFestExplain')}</p>
-      {festNoteActive(today) && (
-        <p className="text-sm text-muted" data-testid="fest-rule-note">
+      {/* UX-Prüfung WL2 S4: entweder die Erklärung oder (in der Übergangszeit) der kurze Hinweis zur strengeren Zählung, nie beides. */}
+      {festNoteActive(today) ? (
+        <p className="text-xs text-subtle" data-testid="fest-rule-note">
           {t('stxFestRuleNote')}
         </p>
+      ) : (
+        <p className="text-xs text-subtle">{t('nbProfilFestExplain')}</p>
       )}
     </Card>
   );
 }
 
-function QualityCard({ cards, now }: { cards: ReturnType<typeof useVocabMetrics>['cards']; now: number }) {
+function QualityCard({ cards, now, kern }: { cards: ReturnType<typeof useVocabMetrics>['cards']; now: number; kern: WkStats }) {
   const { t, num } = useT();
   const expected = useMemo(() => expectedKnown(cards, now), [cards, now]);
   const learned = useMemo(() => cards.filter((c) => !c.hidden && !c.isNew).length, [cards]);
@@ -102,6 +105,7 @@ function QualityCard({ cards, now }: { cards: ReturnType<typeof useVocabMetrics>
               {t('stxRetentionRecognition', { pct: num(Math.round(ret.recognition.rate * 100)), n: num(ret.recognition.n) })}
             </span>
           )}
+          <LongGapLine st={kern} />
         </div>
       </div>
     </Card>
@@ -175,24 +179,58 @@ function TestsMeasures() {
 }
 
 type WkRow = { id: string; label: MessageKey; value: string | null; target: MessageKey; ok: boolean | null };
+type WkStats = ReturnType<typeof wordKernStats>;
 
-/**
- * Wort-Lernen 2 (Paket „Kern“): sechs Kennzahlen in Worten – gemessen am freien Abruf, nicht am Erkennen (`metrics/wordKern.ts`).
- * Vokabeln und Wendungen. Unter 5 Messpunkten steht „noch zu wenige Messwerte“ statt einer Zahl.
- */
-function WordKernMeasure({ cards, now }: { cards: ReturnType<typeof useVocabMetrics>['cards']; now: number }) {
-  const { t, num } = useT();
+/** Wort-Lernen 2: Kennzahlen aus Vokabeln und Wendungen, einmal je Segment berechnet (Liste und „Wie gut sitzt es?“). */
+function useWordKern(cards: ReturnType<typeof useVocabMetrics>['cards'], now: number): WkStats {
   const today = useClock((s) => s.today);
   const chunkDocs = useLive((s) => s.collections.chunk) ?? EMPTY;
   const invalid = useLive((s) => s.invalid);
   const chunks = useMemo(() => buildChunkCards(chunkDocs, now, invalidIdsOf(invalid, 'chunk')), [chunkDocs, now, invalid]);
-  const st = useMemo(() => wordKernStats([...cards, ...chunks], today), [cards, chunks, today]);
+  return useMemo(() => wordKernStats([...cards, ...chunks], today), [cards, chunks, today]);
+}
+
+const enoughRate = (r: Rate): boolean => r.share !== null && r.n >= WK_MIN_N;
+
+/** Zielerreichung mit Zeichen und Farbe (UX-Prüfung WL2 S5), nie nur als Text. */
+function GoalMark({ ok }: { ok: boolean }) {
+  const { t } = useT();
+  return (
+    <span className={`inline-flex items-center gap-1 text-xs font-medium ${ok ? 'text-ok-text' : 'text-near-text'}`} data-testid="wk-goal">
+      <Icon name={ok ? 'check' : 'alert'} size={14} />
+      {t(ok ? 'pxWkOnTarget' : 'pxWkOffTarget')}
+    </span>
+  );
+}
+
+/** Behalten nach 3 Wochen Pause: steht bei „Frei abgerufen nach Pause“ (eine Stelle für beide Pausen-Werte, UX-Prüfung WL2 S5). */
+function LongGapLine({ st }: { st: WkStats }) {
+  const { t, num } = useT();
+  const r = st.longGap;
+  const ok = enoughRate(r) && r.share !== null ? r.share >= WK_TARGETS.longGap : null;
+  return (
+    <span className="flex flex-col gap-0.5 border-t border-line pt-2 text-xs text-subtle" data-testid="wk-long-gap" data-ok={ok === null ? '' : ok ? '1' : '0'}>
+      <span className="lx-tnum text-muted">
+        {t('pxWkLongGapLine', { value: enoughRate(r) && r.share !== null ? t('pxWkPct', { pct: num(Math.round(r.share * 100)), n: num(r.n) }) : t('pxWkNoData') })}
+      </span>
+      <span>{t('pxWkTargetLongGap')}</span>
+      {ok !== null && <GoalMark ok={ok} />}
+    </span>
+  );
+}
+
+/**
+ * Wort-Lernen 2 (Paket „Kern“): Kennzahlen in Worten – gemessen am freien Abruf, nicht am Erkennen (`metrics/wordKern.ts`).
+ * Vokabeln und Wendungen. Unter 5 Messpunkten steht „noch zu wenige Messwerte“ statt einer Zahl. „Nach 3 Wochen Pause“ steht
+ * bei der Behaltensquote oben (keine zwei Pausen-Werte untereinander).
+ */
+function WordKernMeasure({ st }: { st: WkStats }) {
+  const { t, num } = useT();
   const pctOf = (r: Rate): string | null => (r.share === null || r.n < WK_MIN_N ? null : t('pxWkPct', { pct: num(Math.round(r.share * 100)), n: num(r.n) }));
   const atLeast = (r: Rate, goal: number): boolean | null => (r.share === null || r.n < WK_MIN_N ? null : r.share >= goal);
   const rows: WkRow[] = [
     { id: 'next-day', label: 'pxWkNextDayLabel', value: pctOf(st.nextDay), target: 'pxWkTargetNextDay', ok: atLeast(st.nextDay, WK_TARGETS.nextDay) },
     { id: 'chunk-first', label: 'pxWkChunkFirstLabel', value: pctOf(st.chunkFirst), target: 'pxWkTargetChunkFirst', ok: atLeast(st.chunkFirst, WK_TARGETS.chunkFirst) },
-    { id: 'long-gap', label: 'pxWkLongGapLabel', value: pctOf(st.longGap), target: 'pxWkTargetLongGap', ok: atLeast(st.longGap, WK_TARGETS.longGap) },
     {
       id: 'median-safe',
       label: 'pxWkMedianSafeLabel',
@@ -219,14 +257,16 @@ function WordKernMeasure({ cards, now }: { cards: ReturnType<typeof useVocabMetr
     <div className="flex flex-col gap-2" data-testid="word-kern-measure">
       <h3 className="text-sm font-semibold">{t('pxWkTitle')}</h3>
       <p className="text-xs text-subtle">{t('pxWkLead')}</p>
-      <ul className="flex flex-col gap-2">
+      <ul className="flex flex-col divide-y divide-line">
         {rows.map((r) => (
-          <li key={r.id} className="flex flex-col gap-0.5" data-testid={`wk-${r.id}`} data-ok={r.ok === null ? '' : r.ok ? '1' : '0'}>
-            <span className="text-sm text-muted">{t(r.label)}</span>
-            <span className="lx-tnum text-sm font-medium">{r.value ?? t('pxWkNoData')}</span>
-            <span className="text-xs text-subtle">
-              {t(r.target)}
-              {r.ok !== null && ` · ${t(r.ok ? 'pxWkOnTarget' : 'pxWkOffTarget')}`}
+          <li key={r.id} className="flex items-start justify-between gap-3 py-2.5" data-testid={`wk-${r.id}`} data-ok={r.ok === null ? '' : r.ok ? '1' : '0'}>
+            <span className="flex min-w-0 flex-col gap-0.5">
+              <span className="text-sm">{t(r.label)}</span>
+              <span className="text-xs text-subtle">{t(r.target)}</span>
+            </span>
+            <span className="flex max-w-[45%] flex-none flex-col items-end gap-0.5 text-right">
+              <span className={r.value === null ? 'text-xs text-subtle' : 'lx-tnum text-sm font-semibold'}>{r.value ?? t('pxWkNoData')}</span>
+              {r.ok !== null && <GoalMark ok={r.ok} />}
             </span>
           </li>
         ))}
@@ -238,14 +278,16 @@ function WordKernMeasure({ cards, now }: { cards: ReturnType<typeof useVocabMetr
 export function WordsSegment() {
   const { t } = useT();
   const { cards, fest, now } = useVocabMetrics();
+  const kern = useWordKern(cards, now);
   return (
     <div className="flex flex-col gap-4" data-testid="seg-words">
       <FestCard fest={fest} />
       <PathTab part="goal" />
-      <QualityCard cards={cards} now={now} />
+      <QualityCard cards={cards} now={now} kern={kern} />
       <Disclosure label={t('nbProfilMeasures')} testId="measures-words">
-        <div className="flex flex-col gap-6">
-          <WordKernMeasure cards={cards} now={now} />
+        {/* UX-Prüfung WL2 S5: Abschnitte mit Trennlinie, damit die Liste nicht als ein Block liest. */}
+        <div className="flex flex-col gap-5 [&>*+*]:border-t [&>*+*]:border-line [&>*+*]:pt-5">
+          <WordKernMeasure st={kern} />
           <ReadyMeasure cards={cards} />
           <TestsMeasures />
           <StatsTab />

@@ -277,6 +277,60 @@ export function tileMarks(tiles: readonly Tile[], placed: readonly number[], tar
   return out;
 }
 
+/**
+ * Anzeige nach dem Prüfen (UX-Prüfung WL2 S1): Wörter der nächstliegenden Lösung, die weder richtig noch an falscher Stelle liegen – sie fehlen in der Zeile.
+ * Gleiche Auswahl der Lösung wie `tileMarks` (Bewertung unverändert). Nur für Wort-Bausteine; Buchstaben-Bausteine geben nichts zurück.
+ */
+export function tileMissing(tiles: readonly Tile[], placed: readonly number[], targets: readonly string[], mode: 'letters' | 'words'): string[] {
+  if (mode !== 'words') return [];
+  const byId = new Map(tiles.map((t) => [t.id, t.text]));
+  const flat = placed.flatMap((id) => unitsOf(byId.get(id) ?? '', mode));
+  let best: { hit: boolean[]; target: string; units: string[]; score: number } | null = null;
+  for (const t of targets) {
+    const units = unitsOf(t, mode);
+    if (!units.length) continue;
+    const hit = lcsHits(flat, units);
+    const score = hit.filter(Boolean).length * 1000 - Math.abs(units.length - flat.length);
+    if (!best || score > best.score) best = { hit, target: t, units, score };
+  }
+  if (!best) return [];
+  const win = best;
+  const rest = new Map<string, number>();
+  for (const u of win.units) rest.set(u, (rest.get(u) ?? 0) + 1);
+  // Getroffene und an falscher Stelle gelegte Wörter der Lösung sind da; der Rest fehlt.
+  flat.forEach((u) => {
+    if ((rest.get(u) ?? 0) > 0) rest.set(u, (rest.get(u) ?? 0) - 1);
+  });
+  const out: string[] = [];
+  for (const w of win.target.split(/[\s-]+/)) {
+    const u = tileKey(w);
+    if (!u || (rest.get(u) ?? 0) <= 0) continue;
+    rest.set(u, (rest.get(u) ?? 0) - 1);
+    out.push(w.replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, '') || w);
+  }
+  return out;
+}
+
+/**
+ * Gibt es eine gültige, kürzere Lösung, die sich aus den Bausteinen legen lässt (UX-Prüfung WL2 S2)? Dann darf die Zahl der Plätze nicht als
+ * „genau so viele“ gelesen werden – die Ansicht sagt „bis zu …“.
+ */
+export function tileShorterAlt(tiles: readonly Tile[], targets: readonly string[], mode: 'letters' | 'words'): boolean {
+  const full = tiles.filter((t) => !t.distractor).flatMap((t) => unitsOf(t.text, mode)).length;
+  const pool = new Map<string, number>();
+  for (const t of tiles) for (const u of unitsOf(t.text, mode)) pool.set(u, (pool.get(u) ?? 0) + 1);
+  return targets.some((target) => {
+    const units = unitsOf(target, mode);
+    if (!units.length || units.length >= full) return false;
+    const left = new Map(pool);
+    return units.every((u) => {
+      const n = left.get(u) ?? 0;
+      left.set(u, n - 1);
+      return n > 0;
+    });
+  });
+}
+
 /** Zeitgrenze für `speed`: clamp(4000 + 400·Länge, 6000, 14000) ms. */
 export const speedLimitMs = (solution: string): number => Math.min(14_000, Math.max(6_000, 4_000 + 400 * solution.length));
 

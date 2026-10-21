@@ -71,7 +71,7 @@ export function StichprobeSection() {
         {t('ttHeldRepairsRow', { n: num(heldRows.length) })}
       </p>
       <p className="m-0 text-xs text-subtle" data-testid="ai-sb" data-n={bank.n} data-sample={bank.sample.length} data-on={bank.gate.on ? '1' : '0'}>
-        {t('ttSbSampleRow', { ns: sentences(bank.n), q: num(bank.quarantined), ss: sentences(bank.sample.length), state: t(bank.gate.on ? 'ttSbGateOn' : 'ttSbGateOff') })}
+        {t('ttSbSampleRow', { ns: sentences(bank.n), q: num(bank.quarantined), ss: sentences(bank.sample.length) })}
       </p>
       <div>
         <Button variant="secondary" onClick={() => void save()} busy={busy} data-testid="ai-sample-save">
