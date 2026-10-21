@@ -12,6 +12,7 @@ import { grammarItems } from './grammarItems';
 import { grammarFit } from './grammarFit';
 import { grammarJudge } from './grammarJudge';
 import { mnemonic } from './mnemonic';
+import { mnemonicOptions } from './mnemonicOptions';
 import { NB_TEMPLATES } from './nb';
 import { produceCheckV2 } from './produceCheckV2';
 import { activateCheck } from './activateCheck';
@@ -91,6 +92,8 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   wordCtx,
   // Tutor-Engine S4 (E6): Satzbank je Karte (Quarantäne in `domain/tutor/sentenceBank.ts`)
   wordBank,
+  // Wort-Lernen 2, Wort-Werkstatt: zwei Merkhilfen zur Auswahl je hakendem Wort (gebündelt, höchstens 2 Wörter)
+  mnemonicOptions,
   // Lesen (13.10.2026): Artikel und Themenvorschläge, Modul src/modules/read
   ...READ_TEMPLATES,
 ];

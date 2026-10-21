@@ -8,16 +8,14 @@ import { useT } from '../../i18n';
 import { logError } from '../../platform/diagnostics';
 import { mnemonic } from '../../prompts/mnemonic';
 import { Button } from '../../ui/Button';
-import { lapsesOf } from '../../domain/srs/lapses';
+import { dayKey } from '../../domain/date';
+import { readWk, struggling } from '../../domain/srs/werkstatt';
 
-// Merkhilfe für hartnäckige Wörter (Funktionsabgleich M3): Knopf nur nach dem Prüfen und nur
-// bei Karten, die mindestens viermal vergessen wurden. Einmal von Claude erzeugt und an der Karte
-// gespeichert (`mnemo {text, lang, t}`, nur ergänzt bzw. in der anderen Sprache ersetzt).
+// Merkhilfe für hartnäckige Wörter (Funktionsabgleich M3): Knopf nur bei Karten, die haken (Auslöser der Wort-Werkstatt, Wort-Lernen 2:
+// 3 freie Fehlversuche oder Fehler an 2 Lerntagen in 14 Tagen) oder schon einmal in der Werkstatt waren. Von Claude erzeugt und an der Karte
+// gespeichert (`mnemo {text, lang, t}`, nur ergänzt bzw. in der anderen Sprache ersetzt). Eine eigene Merkhilfe (`own: 1`) überschreibt Claude nie.
 
 type Doc = Record<string, unknown>;
-
-export const LEECH_LAPSES = 4;
-
 
 export function storedMnemo(doc: Readonly<Doc>, lang: 'de' | 'en'): string | null {
   const m = doc.mnemo;
@@ -29,11 +27,26 @@ export function storedMnemo(doc: Readonly<Doc>, lang: 'de' | 'en'): string | nul
 /** Pure: Patch für `vocab/<id>` – nur, wenn die Karte existiert, nicht ausgeblendet ist und noch keine Merkhilfe in dieser Sprache hat. */
 export function mnemoPatch(cur: Readonly<Doc> | undefined, path: string, m: { text: string; lang: 'de' | 'en'; t: number }): { update: Doc } | null {
   if (!cur || cur.hidden === true || !validateDoc(path, cur).ok) return null;
-  if (storedMnemo(cur, m.lang)) return null;
+  if (storedMnemo(cur, m.lang) || isOwnMnemo(cur)) return null;
   return { update: { mnemo: { text: m.text, lang: m.lang, t: m.t } } };
 }
 
-export const isLeech = (doc: Readonly<Doc>): boolean => lapsesOf(doc) >= LEECH_LAPSES;
+/** Hat Emrah die Merkhilfe selbst geschrieben oder ausgewählt (`mnemo.own = 1`)? */
+export const isOwnMnemo = (doc: Readonly<Doc>): boolean => !!doc.mnemo && typeof doc.mnemo === 'object' && (doc.mnemo as Doc).own === 1;
+
+/**
+ * Pure: Merkhilfe aus der Werkstatt (selbst geschrieben oder aus Claudes Vorschlägen gewählt) – ersetzt eine vorhandene, `own: 1`.
+ * Nur bei Änderung, nie in ein ungültiges oder ausgeblendetes Dokument, höchstens 240 Zeichen.
+ */
+export function ownMnemoPatch(cur: Readonly<Doc> | undefined, path: string, m: { text: string; lang: 'de' | 'en'; t: number }): { update: Doc } | null {
+  const text = m.text.trim().slice(0, MNEMO_MAX);
+  if (!text || !cur || cur.hidden === true || !validateDoc(path, cur).ok) return null;
+  if (isOwnMnemo(cur) && storedMnemo(cur, m.lang) === text) return null;
+  return { update: { mnemo: { text, lang: m.lang, t: m.t, own: 1 } } };
+}
+export const MNEMO_MAX = 240;
+
+export const isLeech = (doc: Readonly<Doc>, day: string = dayKey(Date.now())): boolean => readWk(doc) !== null || struggling(doc, day);
 
 export function MnemonicBlock({ card, always = false }: { card: TrainCard; always?: boolean }) {
   const { t, lang } = useT();
