@@ -8,7 +8,8 @@ import { useT } from '../../i18n';
 // `typo`: gold unterstrichen. Nie Farbe allein: durch-/unterstrichen bzw. gestrichelter Rahmen.
 
 /** `compact`: die Lücke im Satz zeigt deine Antwort schon (durchgestrichen, Lösung darin) – hier steht nur noch „Richtig: …“ (Design-Lead, Vorschau ref-s5). */
-export function Comparison({ given, ops, compact = false, label, correct: solution }: { given: string; ops: readonly WordOp[]; compact?: boolean; label?: string; /** Musterlösung direkt (statt aus dem Vergleich rekonstruiert). */ correct?: string }) {
+/** `hideCorrect`: die richtige Fassung steht schon als Satz über dem Ergebnis (z. B. `repair-right` in „Fehler korrigieren“) – keine zweite „Richtig:“-Zeile. */
+export function Comparison({ given, ops, compact = false, label, correct: solution, hideCorrect = false }: { given: string; ops: readonly WordOp[]; compact?: boolean; label?: string; /** Musterlösung direkt (statt aus dem Vergleich rekonstruiert). */ correct?: string; hideCorrect?: boolean }) {
   const { t } = useT();
   const empty = !given.trim();
   const correct = solution?.trim() ? solution.trim() : ops
@@ -71,7 +72,7 @@ export function Comparison({ given, ops, compact = false, label, correct: soluti
           {empty ? <span className="text-muted">–</span> : ops.length ? parts : given}
         </span>
       </p>
-      {correct && (
+      {correct && !hideCorrect && (
         <p>
           <span className="text-muted">{t('exCmpExpected')}: </span>
           <EnglishText as="span" text={correct} area="trainer" testId="diff-correct" className="font-semibold" />

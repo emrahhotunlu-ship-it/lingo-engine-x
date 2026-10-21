@@ -57,7 +57,7 @@ export type ShellFeedback = {
   /** Zusätzlich unter „Mehr“ (z. B. 'pattern') bzw. immer offen (z. B. 'contrast'); `unfold` gewinnt. */
   fold?: ReadonlyArray<ExplainLine['k']>;
   unfold?: ReadonlyArray<ExplainLine['k']>;
-  comparison?: { given: string; ops: WordOp[]; compact?: boolean; label?: string; correct?: string } | null;
+  comparison?: { given: string; ops: WordOp[]; compact?: boolean; label?: string; correct?: string; hideCorrect?: boolean } | null;
   explanation?: ExplanationModel | null;
   depth: ExplainDepth;
   menu?: Partial<Record<ShellMenuId, () => void>>;
@@ -267,7 +267,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
         {feedback.right && <div data-slot="right">{feedback.right}</div>}
         {feedback.comparison && (
           <div data-slot="comparison">
-            <Comparison given={feedback.comparison.given} ops={feedback.comparison.ops} compact={!!feedback.comparison.compact} {...(feedback.comparison.label ? { label: feedback.comparison.label } : {})} {...(feedback.comparison.correct ? { correct: feedback.comparison.correct } : {})} />
+            <Comparison given={feedback.comparison.given} ops={feedback.comparison.ops} compact={!!feedback.comparison.compact} {...(feedback.comparison.label ? { label: feedback.comparison.label } : {})} {...(feedback.comparison.correct ? { correct: feedback.comparison.correct } : {})} hideCorrect={!!feedback.comparison.hideCorrect} />
           </div>
         )}
         {feedback.why && <div data-slot="why">{feedback.why}</div>}

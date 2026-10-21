@@ -224,8 +224,8 @@ export function RepairItem({ item, mode, area, source, status = null, profile: p
   const comparison =
     res && res.verdict !== 'exact' && res.verdict !== 'ok'
       ? res.given
-        ? { given: res.given, ops: alignWords(res.given, item.right) }
-        : { given: item.wrong, ops: alignWords(item.wrong, item.right), label: t('fxRCmpWrong') }
+        ? { given: res.given, ops: alignWords(res.given, item.right), hideCorrect: true }
+        : { given: item.wrong, ops: alignWords(item.wrong, item.right), label: t('fxRCmpWrong'), hideCorrect: true }
       : null;
   const alsoOk =
     res && res.verdict === 'ok' && res.given && res.given.trim() !== item.right.trim() ? (
