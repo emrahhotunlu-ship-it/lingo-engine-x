@@ -173,12 +173,14 @@ for (const vp of [
     });
 
     test('Angebote im Reiter Wörter: Abend-Check (heute eingeführt, nur freier Abruf) und „Sag es selbst“ (Claude prüft, nichts gespeichert)', async ({ page }) => {
-      const learned = (word: string, de: string, intro: string, i: number): Doc => ({ word, de, def: `to ${word}`, ex: `We [${word}] it every week.`, pos: 'verb', state: 'learning', stage: 1, S: 1, D: 5, due: at('2026-09-22'), last: at(intro, 9), reps: 1, lapses: 0, src: 'lookup', added: intro, intro, order: i, hist: [] });
+      const learned = (word: string, de: string, intro: string, i: number, hist: Doc[] = []): Doc => ({ word, de, def: `to ${word}`, ex: `We [${word}] it every week.`, pos: 'verb', state: 'learning', stage: 1, S: 1, D: 5, due: at('2026-09-22'), last: at(intro, 9), reps: 1, lapses: 0, src: 'lookup', added: intro, intro, order: i, hist });
+      // „Sag es selbst“ nur für Wörter, die schon an einem Folgetag frei gewusst wurden (Lernwissenschaft S9).
+      const freeNext = (d: string): Doc => ({ t: at(d, 5), m: 'cloze', g: 3, x: 'cloze' });
       const cards = {
         'vocab/settle': learned('settle', 'begleichen', '2026-09-20', 1),
         'vocab/verify': learned('verify', 'überprüfen', '2026-09-20', 2),
-        'vocab/submit': learned('submit', 'einreichen', '2026-09-19', 3),
-        'vocab/obtain': learned('obtain', 'erhalten', '2026-09-18', 4),
+        'vocab/submit': learned('submit', 'einreichen', '2026-09-19', 3, [freeNext('2026-09-20')]),
+        'vocab/obtain': learned('obtain', 'erhalten', '2026-09-18', 4, [freeNext('2026-09-19')]),
       };
       const profile = { ...planPatch(0), ctx2: { v: 1, role: 'Account manager', field: 'B2B software', who: [], sit: ['client email'], terms: [], t: 1 } };
       const { errors } = await boot(page, { migrated: true, fake: { patch: only(cards, profile) } });
