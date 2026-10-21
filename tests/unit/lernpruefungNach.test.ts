@@ -124,7 +124,10 @@ describe('„Wieder in …“ zeigt genau den gespeicherten Abstand', () => {
     S.startSession('pflicht');
     const a: Answer = { grade: 3, given: 'x', ms: 2000, ok: true, hint: 0 };
     const r = await commitAndRead(a, a);
-    expect(r.stored).toBeGreaterThan(DAY_MS);
+    // Wort-Lernen 2 (21.10.2026): Abstands-Deckel – ohne freien Abruf an einem späteren Tag höchstens bis zum nächsten Lerntag (04:00), danach 3/7/21 Tage.
+    // Früher > 1 Tag; geprüft wird weiter, dass Vorschau und Speichern denselben (gedeckelten) Abstand zeigen.
+    expect(r.stored).toBeGreaterThan(0);
+    expect(r.stored).toBeLessThanOrEqual(4 * DAY_MS);
     expect(r.shown).toBe(r.stored);
   });
 
@@ -134,16 +137,18 @@ describe('„Wieder in …“ zeigt genau den gespeicherten Abstand', () => {
     // Erst als falsch bewertet (Note 1, Hilfe 2), dann Einspruch: gespeichert wird Note 3 ohne Hilfe.
     const r = await commitAndRead({ grade: 3, given: 'x', ms: 2000, ok: true, override: true }, { grade: 1, given: 'x', ms: 2000, ok: true, override: true, hint: 2 });
     expect(r.shown).toBe(r.stored);
-    expect(r.stored).toBeGreaterThan(DAY_MS);
+    expect(r.stored).toBeGreaterThan(0);
   });
 
-  it('„Kenne ich“ bestanden: 10 Tage angezeigt und gespeichert', async () => {
+  // Wort-Lernen 2: Die Prüffrage in der Einführung zählt erst am nächsten Lerntag (früher: 10 Tage). Angezeigt und gespeichert: bis 04:00 morgen.
+  it('„Kenne ich“ bestanden: bis zum nächsten Lerntag angezeigt und gespeichert (gleicher Wert)', async () => {
     boot(new Map(Array.from({ length: 6 }, (_, i) => [`word${i}`, fresh(i)] as [string, Doc])));
     S.startSession('pflicht');
     expect(S.startKnownProbe()).toBe('typed');
     const a: Answer = { grade: 3, given: 'word0', ms: 2000, ok: true, hint: 0 };
     const r = await commitAndRead(a, a);
-    expect(r.shown).toBe(10 * DAY_MS);
-    expect(r.stored).toBe(10 * DAY_MS);
+    expect(r.shown).toBe(r.stored);
+    expect(r.stored).toBeGreaterThan(0);
+    expect(r.stored).toBeLessThanOrEqual(DAY_MS);
   });
 });

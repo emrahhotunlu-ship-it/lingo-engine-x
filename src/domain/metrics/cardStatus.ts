@@ -1,7 +1,7 @@
 import { dayKey, daysBetween } from '../date';
 import { isLearningState, retrievability } from '../srs/scheduler';
 import type { TrainCard } from '../srs/types';
-import { LONG_GAP_DAYS } from '../srs/spacing';
+import { KERN_FROM, LONG_GAP_DAYS } from '../srs/spacing';
 import { FREE_ANSWER, FREE_MIN_GRADE, sentKey } from '../srs/variety';
 
 // EIN ehrlicher Status je Wort- oder Wendungskarte (Paket ST, docs/umbau/wort-lernen-plan.md). Alles wird beim Lesen aus dem Verlauf
@@ -162,8 +162,10 @@ function evidence(c: StatusCard) {
   // Ein Fehler setzt den Beleg zurück: Erst wenn nach dem letzten Fehler an 2 verschiedenen Tagen wieder frei richtig geantwortet wurde, gilt die Karte nicht mehr als „unerholt“.
   const unrecovered = lastWrong !== null && freeOn(lastWrong) < SAFE_FREE_DAYS;
   const flipOnly = hist.length > 0 && hist.every((h) => h.x === 'flip' || h.x === 'known');
-  // Wort-Lernen 2: ein freier richtiger Abruf nach ≥ 21 Lerntagen Pause seit der Antwort davor (der Verlauf hat höchstens 12 Einträge).
-  const longGap = hist.some((h, i) => i > 0 && isFreeCorrect(h) && daysBetween(dayKey((hist[i - 1] as Entry).t), dayKey(h.t)) >= LONG_GAP_DAYS);
+  // Wort-Lernen 2: ein freier richtiger Abruf nach ≥ 21 Lerntagen Pause seit der Antwort davor. Der Verlauf hat höchstens 12 Einträge; damit eine feste
+  // Karte den Beleg nicht später verliert, gilt auch der erste Fest-Tag `ff` ab `KERN_FROM` (seitdem verlangt „Fest“ genau diesen Beleg).
+  const ff = c.doc.ff;
+  const longGap = (typeof ff === 'string' && ff >= KERN_FROM) || hist.some((h, i) => i > 0 && isFreeCorrect(h) && daysBetween(dayKey((hist[i - 1] as Entry).t), dayKey(h.t)) >= LONG_GAP_DAYS);
   return { recognizes, helped, newSentence, own: na > 0, lastWrong, lastWasWrong, unrecovered, freeDays, noHistory: hist.length === 0, flipOnly, longGap };
 }
 

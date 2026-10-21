@@ -117,15 +117,22 @@ describe('pickMode: alle 7 Regeln in ihrer Reihenfolge', () => {
   it('6: auto nach Aufdecken + Gut → Prüfabfrage', () => {
     expect(pickMode({ ...base, card: reviewed(2, hist([NOW - 5 * D, 3, 'flip'])), requested: 'auto' })).toBe('probe');
   });
-  it('7: sonst Aufdecken (neu, Stufe 1–2, nach Nochmal oder Schwer)', () => {
-    expect(pickMode({ ...base, card: card(), requested: 'auto' })).toBe('flip');
-    expect(pickMode({ ...base, card: reviewed(2, hist([NOW - 5 * D, 1, 'flip'])), requested: 'auto' })).toBe('flip');
-    expect(pickMode({ ...base, card: reviewed(1, hist([NOW - 5 * D, 2, 'flip'])), requested: 'auto' })).toBe('flip');
+  // Wort-Lernen 2 (21.10.2026, Paket „Kern“): Regel 7 war „sonst Aufdecken“. Die Pflichtrunde (auto) fragt neue Karten und Stufe 0–2
+  // jetzt getippt (Leiter); Aufdecken bleibt im eigenen Stapel (`flip`, Regel 3).
+  it('7: sonst Tippen (neu, Stufe 1–2, nach Nochmal oder Schwer) – kein Aufdecken mehr in der Pflichtrunde', () => {
+    expect(pickMode({ ...base, card: card(), requested: 'auto' })).toBe('type');
+    expect(pickMode({ ...base, card: reviewed(2, hist([NOW - 5 * D, 1, 'flip'])), requested: 'auto' })).toBe('type');
+    expect(pickMode({ ...base, card: reviewed(1, hist([NOW - 5 * D, 2, 'flip'])), requested: 'auto' })).toBe('type');
+    expect(pickMode({ ...base, card: card(), requested: 'flip' })).toBe('flip');
   });
-  it('Wendung mit gespeicherter Stufe 2 wird aufgedeckt', () => {
+  it('Wendung mit gespeicherter Stufe 2 wird getippt (auto), im Stapel aufgedeckt', () => {
     const c = toChunkCard('c1', chunkDoc({ state: 'review', stage: 2, reps: 2, S: 3, D: 5, due: NOW - 1000, last: NOW - 3 * D, hist: [] }), NOW) as TrainCard;
     expect(c.stage).toBe(2);
-    expect(pickMode({ ...base, card: c, requested: 'auto' })).toBe('flip');
+    expect(pickMode({ ...base, card: c, requested: 'auto' })).toBe('type');
+    expect(pickMode({ ...base, card: c, requested: 'flip' })).toBe('flip');
+  });
+  it('heute schon aufgedeckt (Stufe < 3, auto) → trotzdem Tippen', () => {
+    expect(pickMode({ ...base, card: reviewed(2, hist([NOW - 60_000, 3, 'flip'])), requested: 'auto' })).toBe('type');
   });
 });
 

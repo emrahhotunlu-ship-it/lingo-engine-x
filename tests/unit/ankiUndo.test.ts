@@ -39,7 +39,8 @@ beforeEach(() => {
   holder.db = h.db;
   holder.writer = createWriter(h.db);
   holder.done = [];
-  useDecks.setState({ decks: readDecks({ v: 1, prefs: { mode: 'auto' } }) });
+  // Wort-Lernen 2 (21.10.2026): Aufdecken mit Selbsturteil gibt es nur noch im Anki-Modus (`flip`); `auto` tippt Stufe 0–2.
+  useDecks.setState({ decks: readDecks({ v: 1, prefs: { mode: 'flip' } }) });
   useLive.setState({ day: null, docs: { 'app/profile': { newPerDay: 0 } }, collections: { vocab: vocab(8), chunk: new Map() } });
   store.useTodayPlan.setState({ day: DAY, plan: plan(6), status: 'ready', exhausted: null });
   vi.spyOn(console, 'error').mockImplementation(() => undefined);

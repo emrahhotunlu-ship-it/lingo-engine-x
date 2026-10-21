@@ -6,12 +6,17 @@ import { useLive } from '../../src/data/live';
 import { dayKey } from '../../src/domain/date';
 import { isFest } from '../../src/domain/metrics/definitions';
 import { toTrainCard } from '../../src/domain/srs/cards';
-import { knownOp } from '../../src/domain/srs/vocabList';
+import { knownOp, knownPendingDue } from '../../src/domain/srs/vocabList';
+import { applyUpdate, cardPatch } from '../../src/domain/srs/applyReview';
+import { addDays } from '../../src/domain/date';
 import { readDecks } from '../../src/domain/srs/decks';
 import type { StoredPlan } from '../../src/domain/plan/types';
 
 // „Kenne ich“ (Lernplattform 2.0 §4.8): keine Behauptung, sondern eine Prüffrage. Richtig ohne Hilfe → Stufe 3, 10 Tage, `hist m:'known'`
 // statt eines erfundenen `{m:'type', g:4}`. Die Karte ist danach nicht „Fest“. Falsch → wie jede andere Antwort.
+// Wort-Lernen 2 (21.10.2026): Die Prüffrage in der Einführung kommt direkt nach dem Zeigen und prüft nur das Kurzzeitgedächtnis. Sie zählt deshalb
+// erst am nächsten Lerntag: Stufe bleibt (mindestens 1), fällig um 04:00 des nächsten Lerntags; dort hebt ein freier richtiger Abruf auf Stufe 3.
+// Aus der Wortliste („Ich kenne es schon“) bleibt es bei Stufe 3 und 10 Tagen.
 
 type Doc = Record<string, unknown>;
 const holder = vi.hoisted(() => ({ writer: null as Writer | null, db: null as Db | null }));
@@ -46,6 +51,20 @@ describe('knownOp: Stufe 3, 10 Tage, nichts Erfundenes', () => {
     const c = toTrainCard('word1', { ...fresh(1), ...p }, true, NOW);
     expect(c && isFest(c)).toBe(false);
   });
+  it('pending (Prüffrage in der Einführung): Stufe 1, fällig um 04:00 des nächsten Lerntags; am nächsten Tag frei richtig → Stufe 3, falsch → keine Abkürzung', () => {
+    const p = (knownOp(fresh(3), 'vocab/word3', null, NOW, DAY, { pending: true }) as { update: Doc }).update;
+    expect(p.stage).toBe(1);
+    expect(p.due).toBe(knownPendingDue(DAY));
+    expect((p.fsrs as { due: number }).due).toBe(p.due);
+    expect(p.intro).toBe(DAY);
+    const after = applyUpdate(fresh(3), p);
+    const tomorrow = knownPendingDue(DAY) + 5 * 3_600_000;
+    const ev = { t: tomorrow, day: addDays(DAY, 1), kind: 'v' as const, id: 'word3', ex: 'cloze' as const, given: 'word3', ans: 'word3', ms: 3000, lang: 'de' as const, ctx: 'rev' as const };
+    expect(cardPatch(after, { ...ev, grade: 3 }).stage).toBe(3);
+    expect(cardPatch(after, { ...ev, grade: 1 }).stage).toBeLessThanOrEqual(1);
+    // Am selben Tag zählt sie nicht.
+    expect(cardPatch(after, { ...ev, t: NOW + 60_000, day: DAY, grade: 3 }).stage).toBeLessThan(3);
+  });
   it('bestehende Einträge der alten Regel (m:type) bleiben unverändert stehen', () => {
     const old = { ...fresh(2), hist: [{ t: 1, m: 'type', g: 4 }] };
     const hist = (knownOp(old, 'vocab/word2', null, NOW, DAY) as { update: Doc }).update.hist as Array<{ m: string }>;
@@ -75,7 +94,7 @@ describe('Prüffrage in der Runde', () => {
     S.useSession.setState({ active: false });
   });
 
-  it('richtig ohne Hilfe → Stufe 3 und m:known; die Karte kommt heute nicht noch einmal', async () => {
+  it('richtig ohne Hilfe → m:known, Stufe 1, fällig morgen 04:00 (zählt erst am nächsten Lerntag); die Karte kommt heute nicht noch einmal', async () => {
     S.startSession('pflicht');
     expect(S.useSession.getState().queue[0]?.phase).toBe('intro');
     const key = S.useSession.getState().queue[0]?.key ?? '';
@@ -87,7 +106,8 @@ describe('Prüffrage in der Runde', () => {
     await persist.flush();
     await settle();
     const doc = h.dump()[key] as Doc;
-    expect(doc.stage).toBe(3);
+    expect(doc.stage).toBe(1);
+    expect(doc.due).toBe(knownPendingDue(DAY));
     expect((doc.hist as Array<{ m: string }>).at(-1)?.m).toBe('known');
     expect(S.useSession.getState().queue.filter((q) => q.key === key)).toHaveLength(1);
   });

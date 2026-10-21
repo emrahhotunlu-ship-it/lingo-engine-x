@@ -56,8 +56,11 @@ describe('B3: alte Einträge ohne x werden beim Lesen zugeordnet (nichts wird ge
     expect(s.freeDays).toBe(3);
     expect(s.unrecovered).toBe(false);
     expect(s.tier).not.toBe('wobbly');
-    // produce zählt als eigener Satz → im neuen Satz gekonnt → Fest.
-    expect(s.tier).toBe('firm');
+    // produce zählt als eigener Satz → im neuen Satz gekonnt. Seit Wort-Lernen 2 (21.10.2026) fehlt für „Fest“ noch der freie Abruf nach ≥ 21 Tagen
+    // Pause (die längste Pause hier: 20 Tage) – ehrlich neu eingeordnet als „Sicher“, die Statuszeile nennt genau das (`onlyGap`).
+    expect(s.tier).toBe('safe');
+    expect(s.onlyGap).toBe(true);
+    expect(cardStatus(mk('approach2', { stage: 5, S: 22.7, last: NOW - 3 * D, hist: [...hist.slice(0, 1), { t: NOW - 19 * D, g: 3, m: 'type' }, ...hist.slice(2)] }), NOW).tier).toBe('firm');
     expect(JSON.stringify(card.doc)).toBe(before);
   });
   it('„significant“: S 41,9, 0 Rückfälle, nur alte Einträge → nicht Lernt wegen fehlendem x', () => {
@@ -82,7 +85,9 @@ describe('Satz-Beleg gegen den Ursprungssatz', () => {
   const origin = sentKey('We ursprung it.');
   const base = { stage: 5, S: 40, last: NOW - 3 * D };
   it('ein freier Treffer in einem anderen Satz genügt', () => {
-    expect(cardStatus(mk('ursprung', { ...base, hist: [e(9, 'cloze', 3, { s: origin }), e(3, 'cloze', 3, { s: 'sX' })] }), NOW).tier).toBe('firm');
+    // Wort-Lernen 2: e(40, mc_en) liefert die Pause ≥ 21 Tage vor dem freien Abruf, die „Fest“ zusätzlich verlangt.
+    expect(cardStatus(mk('ursprung', { ...base, hist: [e(40, 'mc_en', 3), e(9, 'cloze', 3, { s: origin }), e(3, 'cloze', 3, { s: 'sX' })] }), NOW).tier).toBe('firm');
+    expect(cardStatus(mk('ursprung', { ...base, hist: [e(9, 'cloze', 3, { s: origin }), e(3, 'cloze', 3, { s: 'sX' })] }), NOW).tier).toBe('safe');
   });
   it('nur im Ursprungssatz: kein Beleg', () => {
     expect(cardStatus(mk('ursprung', { ...base, hist: [e(9, 'cloze', 3, { s: origin }), e(3, 'cloze', 3, { s: origin })] }), NOW).newSentence).toBe(false);

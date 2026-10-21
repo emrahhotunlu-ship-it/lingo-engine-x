@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { preloadC1x, resetC1Store } from '../../src/domain/c1x/preload';
 import { PACK, packDoc } from '../../src/domain/c1pack/pack';
-import { dayKey } from '../../src/domain/date';
+import { dayKey, learningDayEnd } from '../../src/domain/date';
 import { mulberry32 } from '../../src/domain/random';
 import { applyUpdate, cardPatch } from '../../src/domain/srs/applyReview';
 import { toTrainCard } from '../../src/domain/srs/cards';
@@ -57,7 +57,9 @@ function simulate(env: ExerciseEnv, days: number, cardsN: number, seed: number):
     for (const id of ids) {
       const d = docs.get(id)!;
       if (d.state === 'new') continue;
-      if (typeof d.due === 'number' && d.due <= now + DAY - 1) queue.push(id);
+      // Fällig wie in der App (`isDue`): vor dem Ende des heutigen Lerntags (04:00 Uhr morgen). Früher bis 09:00 Uhr morgen – damit kam eine Karte mit
+      // Deckel 21 Tage (fällig 04:00 Uhr an Tag +21) schon an Tag +20 und nie nach 21 Tagen Pause (Wort-Lernen 2).
+      if (typeof d.due === 'number' && d.due < learningDayEnd(now)) queue.push(id);
     }
     for (let k = 0; k < 4 && introduced < ids.length; k++) queue.push(ids[introduced++]!);
     const recent: ExerciseId[] = [];
@@ -168,10 +170,13 @@ describe.each([
     // Auswertung 15.10.2026: strengerer Aufstieg (zwei freie Antworten), daher etwas weniger feste Karten in 60 Tagen (vorher > 10).
     // Paket ST: Fest braucht zusätzlich den Beleg im neuen Satz (zwei verschiedene Sätze frei richtig), deshalb weniger Karten als vorher (7).
     // Mit 15 % Fehlern im Test erholt sich eine Karte selten (nach jedem Fehler 2 freie Tage), deshalb nur noch wenige Fest-Karten.
-    expect(sim.fest.length).toBeGreaterThanOrEqual(1);
-    const short = sim.fest.filter((f) => f.forms < f.cap);
+    // Wort-Lernen 2 (21.10.2026): Fest braucht zusätzlich einen freien Abruf nach ≥ 21 Tagen Pause, und der Abstands-Deckel (1/3/7/21 Tage) führt
+    // erst dorthin – vor Tag ~40 wird keine Karte fest. Geprüft wird deshalb über 100 Tage (eigener Lauf).
+    const long = simulate(env, 100, 60, 4711);
+    expect(long.fest.length).toBeGreaterThanOrEqual(1);
+    const short = long.fest.filter((f) => f.forms < f.cap);
     expect(short).toEqual([]);
-  });
+  }, 60_000);
 
   it('der Verlauf bleibt klein: höchstens 12 Einträge je Karte, nur kurze Felder (Kapazitätsgrenze A6.6)', () => {
     for (const d of sim.docs.values()) {

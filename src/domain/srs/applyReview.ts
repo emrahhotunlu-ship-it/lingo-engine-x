@@ -11,7 +11,7 @@ import { stageOf, nextStage } from './ladder';
 import { freeCorrectDays, freeDaysNeeded } from './variety';
 import { exerciseDef } from './modes';
 import { readFsrs, reviewFsrs, isFutureFsrs } from './scheduler';
-import { capDaysOf, capDue, day0Grade, freeLaterDays, freshFreeGood, holdOnDay0, introDayOf, knownConfirmed, type FreshAnswer } from './spacing';
+import { capDaysOf, capDue, day0Grade, evidenceDays, freshFreeGood, holdOnDay0, introDayOf, knownConfirmed, longGapProven, type FreshAnswer } from './spacing';
 import { noteWeight } from './weight';
 import type { AnswerEvent, ExerciseId, LegacyMode } from './types';
 
@@ -165,13 +165,13 @@ function plannedFsrs(cur: Doc, a: AnswerEvent): FsrsStored {
 }
 
 /**
- * Abstands-Deckel (Wort-Lernen 2): Nach FSRS wird die Fälligkeit höchstens gekürzt – ≤ 1/3/7/21 Tage je nach Zahl der späteren Tage mit freiem Abruf,
- * bis die Karte nach dieser Antwort „Fest“ ist. `fsrs.due` und `due` bleiben gleich (Schema); Stabilität und Schwierigkeit bleiben unberührt.
+ * Abstands-Deckel (Wort-Lernen 2): Nach FSRS wird die Fälligkeit höchstens gekürzt – ≤ 1/3/7/21 Tage je nach Zahl der späteren Tage mit freiem Abruf
+ * (mindestens, was die Stufe garantiert), bis die Karte nach dieser Antwort „Fest“ ist oder der freie Abruf nach ≥ 21 Tagen Pause belegt ist. `fsrs.due` und `due` bleiben gleich (Schema); Stabilität und Schwierigkeit bleiben unberührt.
  */
 function capPatch(cur: Doc, patch: Doc, a: AnswerEvent): void {
   const f = patch.fsrs as FsrsStored;
-  if (f.state !== 2 || festAfter(cur, patch)) return;
-  const capped = capDue(f, a.t, capDaysOf(freeLaterDays(cur, freshOf(a), introDayFor(cur, a))));
+  if (f.state !== 2 || festAfter(cur, patch) || longGapProven({ ...cur, ...patch })) return;
+  const capped = capDue(f, a.t, capDaysOf(evidenceDays(cur, freshOf(a), introDayFor(cur, a))));
   if (capped === f) return;
   patch.fsrs = capped;
   patch.due = capped.due;

@@ -2,7 +2,7 @@ import { addDays, dayKey, learningDayStart } from '../date';
 import { meaningOf } from './cards';
 import { stageOf } from './ladder';
 import { CATCHUP_MIN_S, CATCHUP_TYPED_EVERY } from '../unit/backlog';
-import { CAP_STEPS, freeLaterDays } from './spacing';
+import { CAP_STEPS, evidenceDays } from './spacing';
 import type { Grade, Lang, TrainCard } from './types';
 
 // Anki-Modus „Aufdecken“ (docs/neubau/anki-regeln.md, verbindlich): Modus-Regel für `auto`,
@@ -107,7 +107,7 @@ export function pickMode(i: PickInput): PickedMode {
   const easyFlip = isFlipEntry(last) && last?.g === 4;
   if (i.requested === 'flip') return easyFlip && i.due && i.controlAllowed === true ? 'control' : 'flip';
   if (easyFlip && i.due) return 'control';
-  if (i.catchUp && i.due && stageOf(i.card.doc) >= 3 && (num(i.card.doc.S) ?? 0) >= CATCHUP_MIN_S && freeLaterDays(i.card.doc) >= CAP_STEPS.length - 1 && !(histOf(i.card.doc).slice(-2).length === 2 && histOf(i.card.doc).slice(-2).every(isFlipEntry)) && !everyNth(i.key ?? (typeof i.card.doc.id === 'string' ? i.card.doc.id : ''), i.day, CATCHUP_TYPED_EVERY)) return 'flip';
+  if (i.catchUp && i.due && stageOf(i.card.doc) >= 3 && (num(i.card.doc.S) ?? 0) >= CATCHUP_MIN_S && evidenceDays(i.card.doc) >= CAP_STEPS.length - 1 && !(histOf(i.card.doc).slice(-2).length === 2 && histOf(i.card.doc).slice(-2).every(isFlipEntry)) && !everyNth(i.key ?? (typeof i.card.doc.id === 'string' ? i.card.doc.id : ''), i.day, CATCHUP_TYPED_EVERY)) return 'flip';
   if (stageOf(i.card.doc) >= 3) return 'type';
   if (isFlipEntry(last) && last?.g === 3) return 'probe';
   return 'type';
