@@ -61,8 +61,11 @@ describe('Status (Paket ST): neu · lernt · wackelt · sicher · fest', () => {
   });
   it('fest: Stufe 5, 21 Tage Stabilität und im neuen Satz (2 verschiedene Sätze frei richtig) oder selbst benutzt; Stufe 4 nie', () => {
     const f = { ...base, stability: 40, last: NOW - 5 * DAY };
-    expect(tier(5, f, [free(9, 3, 'sOne'), free(5, 3, 'sTwo')])).toBe('firm');
-    expect(tier(5, f, [free(9, 3, 'sOne'), free(5, 3, 'sOne')], 1)).toBe('firm');
+    // Wort-Lernen 2 (21.10.2026): zusätzlich ein freier richtiger Abruf nach ≥ 21 Tagen Pause (`gap` = Antwort vor 40 Tagen, dann frei vor 9).
+    const gap = { t: NOW - 40 * DAY, g: 3, x: 'mc_en' };
+    expect(tier(5, f, [gap, free(9, 3, 'sOne'), free(5, 3, 'sTwo')])).toBe('firm');
+    expect(tier(5, f, [gap, free(9, 3, 'sOne'), free(5, 3, 'sOne')], 1)).toBe('firm');
+    expect(tier(5, f, [free(9, 3, 'sOne'), free(5, 3, 'sTwo')])).toBe('safe');
     expect(tier(4, f, [free(9, 3, 'sOne'), free(5, 3, 'sTwo')])).toBe('safe');
     // Nur in einem einzigen Satz gekonnt (vielleicht auswendig): sicher, nicht fest.
     expect(tier(5, f, [free(9, 3, 'sOne'), free(5, 3, 'sOne')])).toBe('safe');

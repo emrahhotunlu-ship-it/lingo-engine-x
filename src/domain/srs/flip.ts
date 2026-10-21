@@ -2,6 +2,7 @@ import { addDays, dayKey, learningDayStart } from '../date';
 import { meaningOf } from './cards';
 import { stageOf } from './ladder';
 import { CATCHUP_MIN_S, CATCHUP_TYPED_EVERY } from '../unit/backlog';
+import { CAP_STEPS, evidenceDays } from './spacing';
 import type { Grade, Lang, TrainCard } from './types';
 
 // Anki-Modus „Aufdecken“ (docs/neubau/anki-regeln.md, verbindlich): Modus-Regel für `auto`,
@@ -90,24 +91,26 @@ function everyNth(key: string, day: string, every: number): boolean {
 /**
  * Modus je Karte (§1, der erste Treffer entscheidet):
  * 1 `type` gewünscht oder keine Bedeutung in der Oberflächensprache → Tippen
- * 2 heute schon bewertet → derselbe Modus wie diese Bewertung
+ * 2 heute schon bewertet → derselbe Modus wie diese Bewertung (in `auto` Aufdecken nur bei reifen Karten ab Stufe 3, Aufholmodus)
  * 3 `flip` gewünscht (Stapel) → Aufdecken, Ausnahme Kontrolle (§4, gedeckelt)
  * 4 auto: zuletzt Aufdecken + Leicht (und fällig) → Kontrolle
- * 5 auto: gespeicherte Stufe ≥ 3 (`stageOf(doc)`, nie die Anzeige-Stufe) → Tippen
- * 6 auto: zuletzt Aufdecken + Gut → Prüfabfrage (Stufe 3 mit Stütze)
- * 7 sonst → Aufdecken
+ * 5 auto, Aufholmodus: reife fällige Karte, deren Abstand nicht mehr am Deckel hängt (≥ 3 spätere Tage mit freiem Abruf) → Aufdecken (jede vierte getippt)
+ * 6 auto: gespeicherte Stufe ≥ 3 (`stageOf(doc)`, nie die Anzeige-Stufe) → Tippen
+ * 7 auto: zuletzt Aufdecken + Gut → Prüfabfrage (Stufe 3 mit Stütze)
+ * 8 sonst → Tippen (Leiter). Wort-Lernen 2 (21.10.2026): Die Pflichtrunde fragt neue Karten und Stufe 0–2 nie mehr per Aufdeckkarte mit
+ *   Selbsturteil – das Selbsturteil überschätzt, und FSRS übernahm die Note voll. Aufdecken bleibt im Anki-Modus (eigene Stapel, `flip`).
  */
 export function pickMode(i: PickInput): PickedMode {
   if (i.requested === 'type' || i.requested === 'listen' || !meaningOf(i.card, i.lang)) return 'type';
   const last = lastRating(i.card.doc);
-  if (last && dayKey(last.t) === i.day) return isFlipEntry(last) ? 'flip' : 'type';
+  if (last && dayKey(last.t) === i.day) return isFlipEntry(last) && (i.requested === 'flip' || stageOf(i.card.doc) >= 3) ? 'flip' : 'type';
   const easyFlip = isFlipEntry(last) && last?.g === 4;
   if (i.requested === 'flip') return easyFlip && i.due && i.controlAllowed === true ? 'control' : 'flip';
   if (easyFlip && i.due) return 'control';
-  if (i.catchUp && i.due && stageOf(i.card.doc) >= 3 && (num(i.card.doc.S) ?? 0) >= CATCHUP_MIN_S && !(histOf(i.card.doc).slice(-2).length === 2 && histOf(i.card.doc).slice(-2).every(isFlipEntry)) && !everyNth(i.key ?? (typeof i.card.doc.id === 'string' ? i.card.doc.id : ''), i.day, CATCHUP_TYPED_EVERY)) return 'flip';
+  if (i.catchUp && i.due && stageOf(i.card.doc) >= 3 && (num(i.card.doc.S) ?? 0) >= CATCHUP_MIN_S && evidenceDays(i.card.doc) >= CAP_STEPS.length - 1 && !(histOf(i.card.doc).slice(-2).length === 2 && histOf(i.card.doc).slice(-2).every(isFlipEntry)) && !everyNth(i.key ?? (typeof i.card.doc.id === 'string' ? i.card.doc.id : ''), i.day, CATCHUP_TYPED_EVERY)) return 'flip';
   if (stageOf(i.card.doc) >= 3) return 'type';
   if (isFlipEntry(last) && last?.g === 3) return 'probe';
-  return 'flip';
+  return 'type';
 }
 
 export type SuggestInput = {
@@ -147,9 +150,13 @@ export function flipStage(s0: number, grade: Grade): number {
   return Math.max(1, s, Math.min(2, s + 1));
 }
 
-/** Wiedervorlage nach „Nochmal“: Aufdecken nach 5 anderen Karten, Tippen nach 3 (höchstens ans Ende). */
-export const againPos = (pos: number, queueLen: number, flip: boolean, passed = false): number =>
-  Math.min(queueLen, pos + Math.max(flip ? FLIP.againGap : TYPE_AGAIN_GAP, passed ? PASSED_AGAIN_GAP : 0));
+/** Wiedervorlage nach „Nochmal“: Aufdecken nach 5 anderen Karten, Tippen nach 3 (höchstens ans Ende). `minGap`: Tag 0 nach Abruf 1 (`DAY0_SECOND_GAP`). */
+export const againPos = (pos: number, queueLen: number, flip: boolean, passed = false, minGap = 0): number =>
+  Math.min(queueLen, pos + Math.max(flip ? FLIP.againGap : TYPE_AGAIN_GAP, passed ? PASSED_AGAIN_GAP : 0, minGap));
+/** Tag 0 (Wort-Lernen 2): Abruf 2 kommt nach gelungenem Abruf 1 frühestens nach 8 weiteren Karten (pos + 9). */
+export const DAY0_SECOND_GAP = 9;
+/** Tag 0: Abruf 1 kommt nach der Einführung nach 3 anderen Karten (pos + 4). */
+export const DAY0_FIRST_GAP = 4;
 /** Nach „Gut“ im Lernschritt (kurze Wiedervorlage nach 10 Min.) mindestens 8 Karten dazwischen – sonst prüft die Wiedervorlage nur das Kurzzeitgedächtnis. */
 export const PASSED_AGAIN_GAP = 8;
 

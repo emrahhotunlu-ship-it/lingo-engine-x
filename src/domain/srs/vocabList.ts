@@ -7,6 +7,8 @@ import type { TrainCard } from './types';
 import { CATALOG } from './modes';
 import { clampStage, stageOf } from './ladder';
 import { lapsesOf } from './lapses';
+import { addDays } from '../date';
+import { dayStartOf } from './spacing';
 
 // Wortschatz-Bereich (Funktionsabgleich M1, M2, M9): Liste mit Suche, Filtern und Sortierung,
 // Stapel der freien Runde und die Aktionen am Wort. Rein und testbar; geschrieben wird im
@@ -138,22 +140,28 @@ export function resetOp(cur: Readonly<Doc> | undefined, path: string, nowMs: num
 }
 
 /**
- * „Kenne ich“ nach bestandener Prüffrage (Lernplattform 2.0 §4.8): Stufe 3, Stabilität 10 Tage, fällig in 10 Tagen. Die Karte ist
- * danach nicht „Fest“ (Fest braucht Stufe 4 und 21 Tage) und wird noch frei abgefragt. In `hist` steht `m:'known'` – nichts Erfundenes.
+ * „Kenne ich“ (Lernplattform 2.0 §4.8): Stabilität 10 Tage, in `hist` steht `m:'known'` – nichts Erfundenes. Die Karte ist danach nicht „Fest“.
+ * - Aus der Wortliste (Behauptung): Stufe 3, fällig in 10 Tagen.
+ * - Nach bestandener Prüffrage in der Einführung (`pending`, Wort-Lernen 2, 21.10.2026): Die Prüffrage kam direkt nach dem Zeigen und prüft nur das
+ *   Kurzzeitgedächtnis. Sie zählt deshalb erst am nächsten Lerntag: fällig um 04:00 Uhr des nächsten Lerntags, Stufe bleibt (mindestens 1). Gelingt dort
+ *   der freie Abruf, steigt die Karte auf Stufe 3 (`applyReview.ts`, `knownConfirmed`); sonst lernt sie wie jede andere.
  */
 export const KNOWN_DAYS = 10;
 export const KNOWN_STAGE = 3;
+/** Fälligkeit nach bestandener Prüffrage in der Einführung: Beginn des nächsten Lerntags (04:00 Uhr). */
+export const knownPendingDue = (day: string): number => dayStartOf(addDays(day, 1));
 
-export function knownOp(cur: Readonly<Doc> | undefined, path: string, seed: Readonly<Doc> | null, nowMs: number, day: string): CardOp {
+export function knownOp(cur: Readonly<Doc> | undefined, path: string, seed: Readonly<Doc> | null, nowMs: number, day: string, opts: { pending?: boolean } = {}): CardOp {
   const base = cur ?? seed;
   if (!base) return null;
   if (cur && (cur.hidden === true || !validateDoc(path, cur).ok)) return null;
   const prev = readFsrs(base, nowMs);
-  const due = nowMs + KNOWN_DAYS * DAY;
+  const pending = opts.pending === true;
+  const due = pending ? knownPendingDue(day) : nowMs + KNOWN_DAYS * DAY;
   const S = Math.max(num(base.S), KNOWN_DAYS);
   const D = Math.min(10, Math.max(1, num(base.D) || 5));
   const reps = Math.max(0, Math.round(num(base.reps))) + 1;
-  const fsrs = { v: FSRS_VERSION, due, stability: S, difficulty: D, state: 2, reps: Math.max(prev.reps, 0) + 1, lapses: prev.lapses, last: nowMs, scheduledDays: KNOWN_DAYS, learningSteps: 0, src: 'lx' };
+  const fsrs = { v: FSRS_VERSION, due, stability: S, difficulty: D, state: 2, reps: Math.max(prev.reps, 0) + 1, lapses: prev.lapses, last: nowMs, scheduledDays: pending ? 1 : KNOWN_DAYS, learningSteps: 0, src: 'lx' };
   const hist = Array.isArray(base.hist) ? (base.hist as unknown[]) : [];
   const patch: Doc = {
     S,
@@ -162,7 +170,7 @@ export function knownOp(cur: Readonly<Doc> | undefined, path: string, seed: Read
     last: nowMs,
     state: 'review',
     reps,
-    stage: Math.max(stageOf(base), clampStage(KNOWN_STAGE)),
+    stage: Math.max(stageOf(base), pending ? 1 : clampStage(KNOWN_STAGE)),
     hist: [...hist, { t: nowMs, m: 'known', g: 3 }].slice(-12),
     fsrs,
   };

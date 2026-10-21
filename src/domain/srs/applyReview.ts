@@ -11,6 +11,7 @@ import { stageOf, nextStage } from './ladder';
 import { freeCorrectDays, freeDaysNeeded } from './variety';
 import { exerciseDef } from './modes';
 import { readFsrs, reviewFsrs, isFutureFsrs } from './scheduler';
+import { capDaysOf, capDue, day0Grade, evidenceDays, freshFreeGood, holdOnDay0, introDayOf, knownConfirmed, longGapProven, type FreshAnswer } from './spacing';
 import { noteWeight } from './weight';
 import type { AnswerEvent, ExerciseId, LegacyMode } from './types';
 
@@ -138,7 +139,43 @@ function skillPatch(cur: Doc, mode: LegacyMode, grade: number, colIndex: number 
   return out;
 }
 
-type StageAnswer = Pick<AnswerEvent, 't' | 'day' | 'ex' | 'grade' | 'colIndex' | 'interrupted'>;
+type StageAnswer = Pick<AnswerEvent, 't' | 'day' | 'ex' | 'grade' | 'colIndex' | 'interrupted'> & Partial<Pick<AnswerEvent, 'hint' | 'unverified' | 'actStep' | 'actUnverified'>>;
+
+/** Die Antwort in der Form der Abstands-Regeln (`spacing.ts`). Ungeprüfte Antworten (wie `u: 1` im Verlauf) sind kein freier Beleg. */
+const freshOf = (a: StageAnswer): FreshAnswer => ({
+  t: a.t,
+  ex: a.ex,
+  grade: a.grade,
+  ...(a.colIndex !== undefined ? { colIndex: a.colIndex } : {}),
+  ...(a.hint ? { hint: a.hint } : {}),
+  ...((a.actStep && a.actUnverified) || a.unverified ? { unverified: true } : {}),
+});
+
+/** Einführungstag der Karte: bei einer neuen Karte der Tag dieser Antwort. */
+const introDayFor = (cur: Doc, a: Pick<AnswerEvent, 'day'>): string | null => (cur.state === 'new' ? a.day : introDayOf(cur));
+
+/**
+ * FSRS-Stand nach der Antwort mit der Tag-0-Regel (Wort-Lernen 2, `spacing.ts`): Am Einführungstag zählt „Leicht“ als „Gut“, und nur ein guter
+ * freier Abruf beendet die Lernphase. Die Dämpfung (`weight.ts`) gilt auch beim Übergang aus der Lernphase (`reviewFsrs`).
+ */
+function plannedFsrs(cur: Doc, a: AnswerEvent): FsrsStored {
+  const onIntro = introDayFor(cur, a) === a.day;
+  const f = reviewFsrs(readFsrs(cur, a.t), day0Grade(a.grade, onIntro), a.t, noteWeight(a.ex, a.hint ?? 0, a.catchUp === true, a.free === true));
+  return onIntro ? holdOnDay0(f, a.t, freshFreeGood(freshOf(a))) : f;
+}
+
+/**
+ * Abstands-Deckel (Wort-Lernen 2): Nach FSRS wird die Fälligkeit höchstens gekürzt – ≤ 1/3/7/21 Tage je nach Zahl der späteren Tage mit freiem Abruf
+ * (mindestens, was die Stufe garantiert), bis die Karte nach dieser Antwort „Fest“ ist oder der freie Abruf nach ≥ 21 Tagen Pause belegt ist. `fsrs.due` und `due` bleiben gleich (Schema); Stabilität und Schwierigkeit bleiben unberührt.
+ */
+function capPatch(cur: Doc, patch: Doc, a: AnswerEvent): void {
+  const f = patch.fsrs as FsrsStored;
+  if (f.state !== 2 || festAfter(cur, patch) || longGapProven({ ...cur, ...patch })) return;
+  const capped = capDue(f, a.t, capDaysOf(evidenceDays(cur, freshOf(a), introDayFor(cur, a))));
+  if (capped === f) return;
+  patch.fsrs = capped;
+  patch.due = capped.due;
+}
 
 /**
  * Neue Stufe: Aufdecken (`flip`) nach der Stufenregel aus anki-regeln.md §3 (höchstens bis 2, je
@@ -150,6 +187,16 @@ function stageAfter(cur: Doc, a: StageAnswer): number {
 
 /** Neue Stufe und, wenn nur das Tor der freien Antworten den Aufstieg verhindert, wie viele freie Tage noch fehlen (für die Erklärung, Lernwissenschaft M1). */
 export function stageStep(cur: Doc, a: StageAnswer): { stage: number; missing: number } {
+  const step = ladderStep(cur, a);
+  // Wort-Lernen 2: „Kenne ich“ zählt erst am nächsten Lerntag. Gelingt dann der freie Abruf, gilt die Karte als bekannt (Stufe 3).
+  if (step.stage < KNOWN_CONFIRMED_STAGE && knownConfirmed(cur, freshOf(a))) return { stage: KNOWN_CONFIRMED_STAGE, missing: 0 };
+  return step;
+}
+
+/** Stufe nach „Kenne ich“ und bestandenem freiem Abruf am nächsten Lerntag (wie früher die Prüffrage allein). */
+export const KNOWN_CONFIRMED_STAGE = 3;
+
+function ladderStep(cur: Doc, a: StageAnswer): { stage: number; missing: number } {
   const now = stageOf(cur);
   const next = a.ex === 'flip' ? flipStage(now, a.grade) : nextStage(now, levelFor(a.ex, now), a.grade);
   // Tagesbremse (phase1-plan §4, Prüfung Lernwissenschaft 02.10.2026): höchstens EIN Aufstieg je Karte und Lerntag. Wiederholungen
@@ -189,13 +236,18 @@ export function levelFor(ex: ExerciseId, stage: number): number {
 /** Erster Fest-Tag (`ff`, P22): einmal gesetzt, sobald die Karte nach dieser Antwort fest sitzt (dieselbe Regel wie die Anzeige: Stufe 5, Stabilität ≥ 21 Tage, im neuen Satz gekonnt, Paket ST); nie überschrieben. */
 function festPatch(cur: Doc, patch: Doc, day: string): void {
   if (typeof cur.ff === 'string' && cur.ff) return;
+  if (festAfter(cur, patch)) patch.ff = day;
+}
+
+/** Sitzt die Karte nach dieser Antwort fest (Stand `cur` + `patch`, ohne Uhrzeit)? Dieselbe Regel wie die Anzeige (`wordFest`). */
+function festAfter(cur: Doc, patch: Doc): boolean {
   const f = patch.fsrs as FsrsStored | undefined;
-  if (typeof patch.stage !== 'number' || !f) return;
+  if (typeof patch.stage !== 'number' || !f) return false;
   // Ursprungssatz wie in der Anzeige: Vokabel = Satz in `ex`, Wendung = aufgewertete Fassung (`src.upgraded`).
   const up = (cur.src as { upgraded?: unknown } | undefined)?.upgraded;
   const hit = typeof cur.ex === 'string' && typeof cur.word === 'string' ? findContext(cur.ex, cur.word) : null;
   const context = hit ? { sentence: hit.sentence } : typeof up === 'string' && up ? { sentence: up } : null;
-  if (wordFest({ isNew: false, stage: patch.stage as 0, fsrs: f, doc: { ...cur, ...patch }, context })) patch.ff = day;
+  return wordFest({ isNew: false, stage: patch.stage as 0, fsrs: f, doc: { ...cur, ...patch }, context });
 }
 
 /** Gespeicherter Wert von `lapses` (Feld der alten App), nur um +1 bei einem echten Rückfall erhöht; das Maximum mit `fsrs.lapses` bildet allein der Leser (`lapsesOf`). */
@@ -244,8 +296,7 @@ export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
   // Es wird NUR der Verlauf geschrieben (`hist`, `modes`, `xs`, `co`): `stage`, `fsrs`, `due`, `reps`, `last`, `lapses`, Stabilität und Schwierigkeit bleiben stehen,
   // auch der Abstand zur letzten Wiederholung (sonst würde die nächste echte Antwort mit falschem Abstand gerechnet). Die schwache Abfrageart wird weiter geübt (Punkt 4).
   if (isPartnerMiss(cur, a)) return partnerMissPatch(cur, a);
-  const prevFsrs = readFsrs(cur, a.t);
-  const f = reviewFsrs(prevFsrs, a.grade, a.t, noteWeight(a.ex, a.hint ?? 0, a.catchUp === true, a.free === true));
+  const f = plannedFsrs(cur, a);
   const modes = isObj(cur.modes) ? cur.modes : {};
   const prevMode = isObj(modes[def.mode]) ? (modes[def.mode] as Doc) : {};
   const xs = isObj(cur.xs) ? cur.xs : {};
@@ -275,6 +326,7 @@ export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
   };
   // Nur ergänzen: ein vorhandenes Einführungsdatum der alten App bleibt stehen (Kap. 9, Regel 2).
   if (wasNew && (typeof cur.intro !== 'string' || !cur.intro)) patch.intro = a.day;
+  capPatch(cur, patch, a);
   festPatch(cur, patch, a.day);
   return patch;
 }
@@ -283,7 +335,7 @@ export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
 export function chunkPatch(cur: Doc, a: AnswerEvent): Doc {
   const def = exerciseDef(a.ex);
   const wasNew = cur.state === 'new';
-  const f = reviewFsrs(readFsrs(cur, a.t), a.grade, a.t, noteWeight(a.ex, a.hint ?? 0, a.catchUp === true, a.free === true));
+  const f = plannedFsrs(cur, a);
   const xs = isObj(cur.xs) ? cur.xs : {};
   const prevXs = isObj(xs[a.ex]) ? (xs[a.ex] as Doc) : {};
   const ok = a.grade > 1 ? 1 : 0;
@@ -308,6 +360,7 @@ export function chunkPatch(cur: Doc, a: AnswerEvent): Doc {
     patch.modes = { [mode]: { c: Math.round(num(prev.c)) + ok, w: Math.round(num(prev.w)) + (1 - ok) } };
   }
   if (wasNew && (typeof cur.intro !== 'string' || !cur.intro)) patch.intro = a.day;
+  capPatch(cur, patch, a);
   festPatch(cur, patch, a.day);
   return patch;
 }

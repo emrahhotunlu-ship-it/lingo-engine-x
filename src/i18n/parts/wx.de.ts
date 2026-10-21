@@ -3,7 +3,7 @@
 export const wxDe = {
   wxKnownTask: 'Schreib das Wort in die Lücke – ohne Hilfe.',
   wxKnownKind: 'Prüffrage „Kenne ich“',
-  wxKnownSaved: 'Gespeichert – das Wort kommt in 10 Tagen wieder.',
+  wxKnownSaved: 'Gespeichert – morgen fragt die App das Wort noch einmal frei ab. Klappt es dann, gilt es als bekannt.',
   wxFamFrom: 'Bilde aus dem {pos}:',
   wxFam_noun: 'Nomen',
   wxFam_verb: 'Verb',

@@ -121,11 +121,12 @@ function brokenPromises(seen: readonly Seen[]): string[] {
 }
 
 /** Aufholmodus: über 40 überfällige, reife Karten (Stufe 3, Stabilität ≥ 7 Tage) – sie werden aufgedeckt statt getippt. */
+// Wort-Lernen 2 (21.10.2026): Im Aufholmodus wird nur aufgedeckt, wenn der Abstands-Deckel nicht mehr greift (Stufe 5 = 3 freie Tage belegt); deshalb Stufe 5 statt 3.
 function backlog(): Map<string, Doc> {
   const out = new Map<string, Doc>();
   for (let i = 0; i < 45; i++) {
     const w = `term${i}`;
-    out.set(w, { word: w, de: `Begriff ${i}`, def: `term number ${i}`, ex: `We use [${w}] in the weekly report.`, pos: 'noun', src: 'lookup', added: '2026-07-01', order: i, reps: 6, lapses: 0, state: 'review', stage: 3, S: 8 + (i % 10), D: 5, last: NOW - (20 + i) * DAY_MS, due: NOW - (3 + (i % 5)) * DAY_MS, hist: [], intro: '2026-07-01' });
+    out.set(w, { word: w, de: `Begriff ${i}`, def: `term number ${i}`, ex: `We use [${w}] in the weekly report.`, pos: 'noun', src: 'lookup', added: '2026-07-01', order: i, reps: 6, lapses: 0, state: 'review', stage: 5, S: 8 + (i % 10), D: 5, last: NOW - (20 + i) * DAY_MS, due: NOW - (3 + (i % 5)) * DAY_MS, hist: [], intro: '2026-07-01' });
   }
   return out;
 }

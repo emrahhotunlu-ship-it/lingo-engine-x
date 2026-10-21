@@ -10,6 +10,7 @@ export const stxDe = {
   stxDetailWobblyRecover: 'seit dem Fehler noch nicht an 2 Tagen wieder frei richtig',
   stxDetailWobblyGap: 'nach langer Pause nicht mehr sicher',
   stxDetailFirm: 'im neuen Satz gekonnt',
+  stxDetailLongGap: 'fehlt nur noch: nach 3 Wochen Pause frei abrufen',
   stxDetailOld: 'Stand aus der alten App, noch nicht neu belegt',
   stxDetailFlip: 'im Kopf abgerufen (selbst bewertet), noch nicht getippt',
   stxDetailStart: 'wird gerade gelernt',
@@ -22,9 +23,10 @@ export const stxDe = {
   stxStepFreeOf: '{n} von 3 Tagen',
   stxStepNewSentence: 'Im neuen Satz',
   stxStepOwn: 'Selbst benutzt (von Claude geprüft)',
+  stxStepLongGap: 'Nach 3 Wochen Pause frei gewusst',
   stxYes: 'ja',
   stxNot: 'noch nicht',
-  stxExplain: 'Sicher: an 2 Tagen frei abgerufen. Fest: an 3 Tagen frei abgerufen, 3 Wochen haltbar und im neuen Satz gekonnt oder selbst benutzt. Wackelt: nach einem Fehler oder langer Pause noch nicht wieder bestätigt.',
+  stxExplain: 'Sicher: an 2 Tagen frei abgerufen. Fest: an 3 Tagen frei abgerufen, im neuen Satz gekonnt oder selbst benutzt und nach mindestens 3 Wochen Pause noch frei gewusst. Wackelt: nach einem Fehler oder langer Pause noch nicht wieder bestätigt.',
   // Jetzt im Kopf
   stxMindLabel: 'Jetzt im Kopf',
   stxMindGood: 'gut',
@@ -36,7 +38,7 @@ export const stxDe = {
   // Messwerte dahinter
   stxRawStage: 'Höchste Stufe',
   // Erklärzeile zur strengeren Fest-Zählung (gilt ab 20.10.2026, einige Wochen sichtbar)
-  stxFestRuleNote: 'Fest zählt seit heute strenger: Die App braucht jetzt einen Beleg, dass du das Wort auch in einem anderen Satz oder in einem eigenen Satz ohne Hilfe weißt. Viele ältere Antworten wurden dafür noch nicht aufgezeichnet – deshalb ist die Zahl gerade klein. Das sagt nichts darüber, was du vergessen hast.',
+  stxFestRuleNote: 'Fest zählt jetzt strenger: Ein Wort ist erst fest, wenn du es nach mindestens 3 Wochen Pause noch frei aus dem Kopf wusstest – gemessen, nicht geschätzt. Dazu braucht die App wie bisher einen Beleg im anderen oder eigenen Satz. Deshalb ist die Zahl gerade kleiner. Das sagt nichts darüber, was du vergessen hast: Die Wörter kommen von selbst zur Probe.',
   stxGoalSafe: 'sicher',
   stxGoalFirm: 'fest',
   // Filter der Wortliste

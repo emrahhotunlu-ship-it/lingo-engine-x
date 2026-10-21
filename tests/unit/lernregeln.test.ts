@@ -68,18 +68,21 @@ describe('Aufholmodus', () => {
     expect(catchUpOn(CATCHUP_AT - 1)).toBe(false);
     expect(catchUpOn(CATCHUP_AT)).toBe(true);
   });
+  // Wort-Lernen 2 (21.10.2026): Aufgedeckt wird nur, wenn der Abstands-Deckel nicht mehr greift (≥ 3 spätere Tage mit freiem Abruf; die Stufe zählt
+  // als Mindest-Beleg: Stufe 5 = 3 Tage). Früher genügte Stufe 4 – deren Abstand hängt jetzt noch am Deckel und braucht freie Abrufe.
   it('reife fällige Karten werden aufgedeckt, jede vierte bleibt getippt; ohne Aufholmodus immer getippt', () => {
     let flips = 0;
     let types = 0;
     for (let i = 0; i < 80; i++) {
-      const m = pickMode({ ...base, card: { doc: doc(12), de: 'x', def: 'y' }, key: `vocab/w${i}`, catchUp: true });
+      expect(pickMode({ ...base, card: { doc: doc(12, 4), de: 'x', def: 'y' }, key: `vocab/w${i}`, catchUp: true })).toBe('type');
+      const m = pickMode({ ...base, card: { doc: doc(12, 5), de: 'x', def: 'y' }, key: `vocab/w${i}`, catchUp: true });
       if (m === 'flip') flips++;
       else if (m === 'type') types++;
     }
     expect(flips + types).toBe(80);
     expect(types).toBeGreaterThan(10);
     expect(types).toBeLessThan(35);
-    expect(pickMode({ ...base, card: { doc: doc(12), de: 'x', def: 'y' }, key: 'vocab/w1' })).toBe('type');
+    expect(pickMode({ ...base, card: { doc: doc(12, 5), de: 'x', def: 'y' }, key: 'vocab/w1' })).toBe('type');
   });
   it('junge Karten (S < 7) und nicht fällige bleiben beim Tippen', () => {
     for (let i = 0; i < 20; i++) {

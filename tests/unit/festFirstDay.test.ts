@@ -12,7 +12,8 @@ type Doc = Record<string, unknown>;
 const NOW = berlin('2026-10-05', 10);
 const DAY = dayKey(NOW);
 const D = 86_400_000;
-const doc = (over: Doc = {}): Doc => ({ word: 'leverage', de: 'nutzen', def: 'to use', ex: 'We can [leverage] it.', pos: 'verb', state: 'review', S: 30, D: 5, due: NOW - D, last: NOW - 30 * D, stage: 4, reps: 6, lapses: 0, src: 'lookup', added: '2026-06-01', hist: [{ t: NOW - 9 * D, m: 'type', g: 3, x: 'type', s: 'sA' }, { t: NOW - 6 * D, m: 'type', g: 3, x: 'type', s: 'sB' }], ...over });
+// Wort-Lernen 2 (21.10.2026): Die letzte Antwort liegt 30 Tage zurück; die Antwort heute ist damit der freie Abruf nach ≥ 21 Tagen Pause, den „Fest“ verlangt.
+const doc = (over: Doc = {}): Doc => ({ word: 'leverage', de: 'nutzen', def: 'to use', ex: 'We can [leverage] it.', pos: 'verb', state: 'review', S: 30, D: 5, due: NOW - D, last: NOW - 30 * D, stage: 4, reps: 6, lapses: 0, src: 'lookup', added: '2026-06-01', hist: [{ t: NOW - 36 * D, m: 'type', g: 3, x: 'type', s: 'sA' }, { t: NOW - 30 * D, m: 'type', g: 3, x: 'type', s: 'sB' }], ...over });
 const ans = (over: Partial<AnswerEvent> = {}): AnswerEvent => ({ t: NOW, day: DAY, kind: 'v', id: 'leverage', ex: 'type', grade: 3, given: 'leverage', ans: 'leverage', ms: 3000, lang: 'de', ctx: 'rev', ...over });
 
 function write(cur: Doc, a: AnswerEvent, path = 'vocab/leverage'): Doc {
@@ -37,13 +38,19 @@ describe('ff (erster Fest-Tag)', () => {
     expect(noProof.ff).toBeUndefined();
   });
 
+  it('wird nicht gesetzt ohne freien Abruf nach ≥ 21 Tagen Pause (Wort-Lernen 2)', () => {
+    const short = write(doc({ hist: [{ t: NOW - 9 * D, m: 'type', g: 3, x: 'type', s: 'sA' }, { t: NOW - 6 * D, m: 'type', g: 3, x: 'type', s: 'sB' }] }), ans());
+    expect(short.stage).toBe(5);
+    expect(short.ff).toBeUndefined();
+  });
+
   it('wird nicht gesetzt, solange die Karte nicht fest ist', () => {
     const low = write(doc({ stage: 1, S: 2, last: NOW - 2 * D }), ans({ ex: 'mc_en' }));
     expect(low.ff).toBeUndefined();
   });
 
   it('Wendungen bekommen `ff` ebenso', () => {
-    const chunk: Doc = { en: 'push back on', de: 'sich wehren', state: 'review', S: 30, D: 5, due: NOW - D, last: NOW - 30 * D, stage: 4, reps: 5, lapses: 0, hist: [{ t: NOW - 9 * D, m: 'cloze', g: 3, x: 'cloze', s: 'sA' }, { t: NOW - 6 * D, m: 'cloze', g: 3, x: 'cloze', s: 'sB' }], src: { kind: 'scene', upgraded: 'Their CFO will push back on the price.' } };
+    const chunk: Doc = { en: 'push back on', de: 'sich wehren', state: 'review', S: 30, D: 5, due: NOW - D, last: NOW - 30 * D, stage: 4, reps: 5, lapses: 0, hist: [{ t: NOW - 36 * D, m: 'cloze', g: 3, x: 'cloze', s: 'sA' }, { t: NOW - 30 * D, m: 'cloze', g: 3, x: 'cloze', s: 'sB' }], src: { kind: 'scene', upgraded: 'Their CFO will push back on the price.' } };
     const w = reviewWrite('chunk/c1', chunk, ans({ kind: 'chunk', id: 'c1', q: 'push back on' }), null);
     expect(w.kind).toBe('update');
     if (w.kind === 'update') expect(w.patch.ff).toBe(DAY);

@@ -17,7 +17,8 @@ const doc = (over: Doc = {}): Doc => ({ word: 'leverage', de: 'nutzen', def: 'to
 const card = (over: Doc = {}, id = 'w'): TrainCard => toTrainCard(id, doc(over), true, NOW) as TrainCard;
 
 // Im neuen Satz gekonnt (Paket ST): richtig frei in mindestens 2 verschiedenen Sätzen.
-const FIRM = [{ t: NOW - 9 * D, g: 3, x: 'cloze', s: 'sA' }, { t: NOW - 5 * D, g: 3, x: 'cloze', s: 'sB' }];
+// Wort-Lernen 2 (21.10.2026): „Fest“ verlangt zusätzlich einen freien richtigen Abruf nach ≥ 21 Lerntagen Pause – der erste Eintrag (Auswahl vor 40 Tagen) liefert die Pause.
+const FIRM = [{ t: NOW - 40 * D, g: 3, x: 'mc_en' }, { t: NOW - 9 * D, g: 3, x: 'cloze', s: 'sA' }, { t: NOW - 5 * D, g: 3, x: 'cloze', s: 'sB' }];
 
 describe('festCount', () => {
   it('Fest = Stufe 5, Stabilität ≥ 21 Tage und im neuen Satz gekonnt; Neue, Ausgeblendete, Stufe 4 und Karten ohne Beleg nie', () => {

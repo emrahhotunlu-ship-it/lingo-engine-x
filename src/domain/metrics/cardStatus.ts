@@ -1,6 +1,7 @@
-import { dayKey } from '../date';
+import { dayKey, daysBetween } from '../date';
 import { isLearningState, retrievability } from '../srs/scheduler';
 import type { TrainCard } from '../srs/types';
+import { KERN_FROM, LONG_GAP_DAYS } from '../srs/spacing';
 import { FREE_ANSWER, FREE_MIN_GRADE, sentKey } from '../srs/variety';
 
 // EIN ehrlicher Status je Wort- oder Wendungskarte (Paket ST, docs/umbau/wort-lernen-plan.md). Alles wird beim Lesen aus dem Verlauf
@@ -13,6 +14,7 @@ import { FREE_ANSWER, FREE_MIN_GRADE, sentKey } from '../srs/variety';
 //             ODER die Abrufwahrscheinlichkeit liegt unter 70 % (nur mit belastbarem Abstand)
 //   Sicher  = an mindestens 2 verschiedenen Tagen frei richtig abgerufen (getippt, ohne Auswahl und ohne Stütze)
 //   Fest    = Stufe 5 ∧ Stabilität ≥ 21 Tage ∧ im neuen Satz gekonnt (richtig frei in mindestens 2 verschiedenen Sätzen) oder selbst benutzt ∧ kein unerholter Fehler
+//             ∧ (seit Wort-Lernen 2, `FEST_RULE_FROM`) mindestens ein freier richtiger Abruf nach ≥ 21 Lerntagen Pause (`longGap`): Gedächtnis gemessen, nicht geschätzt
 // „Wackelt“ geht vor „Sicher“ und „Fest“: Ein Rückfall nimmt „Fest“ und „Sicher“ sofort, eine sehr lange Pause (Abruf unter 70 %,
 // bei einer festen Karte erst nach Monaten) ebenfalls. So steht nie „Sicher“ oder „Fest“ neben „Jetzt im Kopf: wackelig“.
 
@@ -65,6 +67,10 @@ export type CardStatus = {
   noHistory: boolean;
   /** Nur Aufdecken-Belege (Anki, selbst bewertet), nie getippt. */
   flipOnly: boolean;
+  /** Frei richtig abgerufen nach mindestens 21 Lerntagen Pause (seit der Antwort davor). Pflicht für „Fest“ (Wort-Lernen 2). */
+  longGap: boolean;
+  /** „Sicher“, und für „Fest“ fehlt nur noch der freie Abruf nach ≥ 21 Tagen Pause (`longGap`): für die Zeile „fehlt nur noch …“. */
+  onlyGap: boolean;
 };
 
 type Entry = { t: number; g: number | null; x: string | null; s: string | null; u: boolean; ci: boolean; /** `x` fehlte und wurde aus dem Modus `m` der alten App abgeleitet. */ legacy: boolean };
@@ -156,11 +162,15 @@ function evidence(c: StatusCard) {
   // Ein Fehler setzt den Beleg zurück: Erst wenn nach dem letzten Fehler an 2 verschiedenen Tagen wieder frei richtig geantwortet wurde, gilt die Karte nicht mehr als „unerholt“.
   const unrecovered = lastWrong !== null && freeOn(lastWrong) < SAFE_FREE_DAYS;
   const flipOnly = hist.length > 0 && hist.every((h) => h.x === 'flip' || h.x === 'known');
-  return { recognizes, helped, newSentence, own: na > 0, lastWrong, lastWasWrong, unrecovered, freeDays, noHistory: hist.length === 0, flipOnly };
+  // Wort-Lernen 2: ein freier richtiger Abruf nach ≥ 21 Lerntagen Pause seit der Antwort davor. Der Verlauf hat höchstens 12 Einträge; damit eine feste
+  // Karte den Beleg nicht später verliert, gilt auch der erste Fest-Tag `ff` ab `KERN_FROM` (seitdem verlangt „Fest“ genau diesen Beleg).
+  const ff = c.doc.ff;
+  const longGap = (typeof ff === 'string' && ff >= KERN_FROM) || hist.some((h, i) => i > 0 && isFreeCorrect(h) && daysBetween(dayKey((hist[i - 1] as Entry).t), dayKey(h.t)) >= LONG_GAP_DAYS);
+  return { recognizes, helped, newSentence, own: na > 0, lastWrong, lastWasWrong, unrecovered, freeDays, noHistory: hist.length === 0, flipOnly, longGap };
 }
 
 const festByEvidence = (c: StatusCard, e: ReturnType<typeof evidence>, r: number | null): boolean =>
-  !c.isNew && c.stage >= FEST_STAGE && c.fsrs.stability >= FEST_DAYS && !isLearningState(c.fsrs) && !e.unrecovered && (e.newSentence || e.own) && !(r !== null && r < WOBBLY_R);
+  !c.isNew && c.stage >= FEST_STAGE && c.fsrs.stability >= FEST_DAYS && !isLearningState(c.fsrs) && !e.unrecovered && (e.newSentence || e.own) && e.longGap && !(r !== null && r < WOBBLY_R);
 
 /** Erfüllt die Karte (ohne `hidden`) die Fest-Regel? Auch für den Schreibweg (`ff`, erster Fest-Tag) mit dem Stand nach der Antwort. */
 export const isFestState = (c: StatusCard, nowMs?: number): boolean => festByEvidence(c, evidence(c), nowMs === undefined ? null : reliableR(c, nowMs));
@@ -205,5 +215,5 @@ export function cardStatusFrom(c: StatusCard, e: CardEvidence, nowMs: number): C
   else if (wobbly) tier = 'wobbly';
   else if (e.freeDays >= SAFE_FREE_DAYS && !isLearningState(c.fsrs) && !e.unrecovered) tier = 'safe';
   else tier = 'learning';
-  return { tier, recognizes: e.recognizes, helped: e.helped, freeDays: e.freeDays, newSentence: e.newSentence, own: e.own, mind, r, lastWrong: e.lastWrong, lastWasWrong: e.lastWasWrong, unrecovered: e.unrecovered, noHistory: e.noHistory, flipOnly: e.flipOnly };
+  return { tier, recognizes: e.recognizes, helped: e.helped, freeDays: e.freeDays, newSentence: e.newSentence, own: e.own, mind, r, lastWrong: e.lastWrong, lastWasWrong: e.lastWasWrong, unrecovered: e.unrecovered, noHistory: e.noHistory, flipOnly: e.flipOnly, longGap: e.longGap, onlyGap: tier === 'safe' && !e.longGap && festByEvidence(c, { ...e, longGap: true }, r) };
 }

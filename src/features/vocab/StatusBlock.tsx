@@ -47,6 +47,7 @@ export function StatusLadder({ card, now }: { card: Card; now: number }) {
     ['free', t('stxStepFree'), st.freeDays > 0, headFree ? null : t('stxStepFreeOf', { n: Math.min(FREE_DAYS_GOAL, st.freeDays) })],
     ['sentence', t('stxStepNewSentence'), st.newSentence, null],
     ['own', t('stxStepOwn'), st.own, null],
+    ['longGap', t('stxStepLongGap'), st.longGap, null],
   ];
   return (
     <section className="flex flex-col gap-1.5" data-testid="word-ladder">

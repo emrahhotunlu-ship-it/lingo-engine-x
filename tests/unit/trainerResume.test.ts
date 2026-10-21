@@ -48,7 +48,12 @@ afterEach(() => {
 });
 
 describe('Modus je Karte', () => {
-  it('auto: Stufe 1 wird aufgedeckt, Tippen-Standard tippt', () => {
+  // Wort-Lernen 2 (21.10.2026): Die Pflichtrunde (auto) fragt Stufe 0–2 nie mehr per Aufdeckkarte mit Selbsturteil, sondern nach der Leiter.
+  // Aufdecken bleibt im Anki-Modus (`flip`).
+  it('auto: Stufe 1 wird nach der Leiter gefragt (kein Aufdecken); Anki-Modus deckt auf; Tippen-Standard tippt', () => {
+    S.startSession('pflicht');
+    expect(S.useSession.getState().exercise?.ex).not.toBe('flip');
+    useDecks.setState({ decks: readDecks({ v: 1, prefs: { mode: 'flip' } }) });
     S.startSession('pflicht');
     expect(S.useSession.getState().exercise?.ex).toBe('flip');
     expect(S.useSession.getState().exercise?.dir).toBe('de-en');

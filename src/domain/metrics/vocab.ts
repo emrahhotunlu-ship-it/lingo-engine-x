@@ -1,6 +1,7 @@
 import { dayKey, daysBetween, isDayKey } from '../date';
 import { histOf } from '../srs/flip';
 import { retrievability } from '../srs/scheduler';
+import { KERN_FROM } from '../srs/spacing';
 import { FREE_ANSWER } from '../srs/variety';
 import type { TrainCard } from '../srs/types';
 import { wordFest } from '../tutor/learnerWords';
@@ -25,7 +26,9 @@ export const FEST_GOAL = 1500;
  * wurden nach der alten Regel gezählt: Ein Unterschied zwischen alt und neu ist kein Rückgang. Zuwachs und Wochenzahl vergleichen deshalb nur
  * Werte ab diesem Tag (kein neues Speicherfeld nötig). Die Erklärzeile zur neuen Zählung steht `FEST_NOTE_DAYS` Tage lang.
  */
-export const FEST_RULE_FROM = '2026-10-19';
+// Wort-Lernen 2 (21.10.2026, Paket „Kern“): Fest braucht zusätzlich einen freien richtigen Abruf nach ≥ 21 Tagen Pause (`cardStatus.ts`, `longGap`).
+// Stichtag deshalb neu (vorher 2026-10-19, Paket ST): Tagesbilder davor zählten nach der vorigen Regel. Soll auf den Tag des Live-Gangs zeigen.
+export const FEST_RULE_FROM = KERN_FROM;
 export const FEST_NOTE_DAYS = 42;
 /** Die Grenze gilt erst, wenn der Tag selbst nach ihr liegt (vor dem Stichtag gibt es noch keine Werte der neuen Regel; so bleiben Testwelten und Vorabstände unverändert). */
 export const ruleCut = (day: string, ruleFrom: string = FEST_RULE_FROM): string => (day >= ruleFrom ? ruleFrom : '');

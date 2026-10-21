@@ -66,7 +66,8 @@ test('Kap. 14: alle bisherigen Daten sichtbar, Serie läuft weiter', async ({ pa
   await expect(page.getByTestId('course-done')).toHaveCount(0);
   // Kopfzahl ist „Fest“, nicht mehr „Wörter gesamt“ inkl. Neuer. Seit Paket ST (19.10.2026) gilt die strengere Regel
   // (Stufe 5, Stabilität ≥ 21 Tage, im neuen Satz gekonnt, kein offener Fehler): in den Seed-Daten 5 statt 12.
-  await expect(page.getByTestId('stand-fest')).toHaveText('5');
+  // Wort-Lernen 2 (21.10.2026): zusätzlich ein freier richtiger Abruf nach ≥ 21 Tagen Pause – den hat keine Seed-Karte, also ehrlich 0.
+  await expect(page.getByTestId('stand-fest')).toHaveText('0');
   await expect(page.getByTestId('vocab-total')).toHaveCount(0);
 });
 

@@ -60,12 +60,12 @@ export async function saveContrastMiss(path: string, a: AnswerEvent): Promise<bo
   }
 }
 
-/** „Kenne ich“ nach bestandener Prüffrage: Stufe 3, 10 Tage, `hist m:'known'` (`knownOp`). Ein `transform` auf dem frischen Stand. */
+/** „Kenne ich“ nach bestandener Prüffrage: `hist m:'known'`, zählt erst am nächsten Lerntag (`knownOp` mit `pending`). Ein `transform` auf dem frischen Stand. */
 export async function saveKnown(path: string, day: string, seedDefault: Doc | null, nowMs: number = Date.now()): Promise<boolean> {
   const writer = getWriter();
   if (!writer) return false;
   try {
-    await writer.transform(path, (cur) => knownOp(cur, path, seedDefault, nowMs, day));
+    await writer.transform(path, (cur) => knownOp(cur, path, seedDefault, nowMs, day, { pending: true }));
     return true;
   } catch (err) {
     logError('trainer:known', err, path);

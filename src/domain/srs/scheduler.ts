@@ -69,15 +69,19 @@ const REVIEW = 2;
 const DAY_MS = 86_400_000;
 
 /**
- * Nächster FSRS-Stand. `weight` (`weight.ts`) gewichtet den Zuwachs der Stabilität nur bei einer gelungenen Wiederholung einer
- * Karte im Review-Zustand: S' = S + w · (S_fsrs − S). Das Intervall folgt dem Verhältnis Intervall/Stabilität von FSRS
+ * Nächster FSRS-Stand. `weight` (`weight.ts`) gewichtet den Zuwachs der Stabilität bei einer gelungenen Wiederholung einer
+ * Karte im Review-Zustand (S' = S + w · (S_fsrs − S)) und beim Übergang aus der Lernphase in den Review-Zustand (S' = w · S_fsrs). Das Intervall folgt dem Verhältnis Intervall/Stabilität von FSRS
  * (bei Zielquote 0,9 gilt Intervall ≈ Stabilität; Streuung und Grenzen bleiben erhalten). Lernschritte und „Nochmal“ bleiben unberührt.
  */
 export function reviewFsrs(f: FsrsStored, grade: Grade, nowMs: number, weight = 1): FsrsStored {
   const next = scheduler.next(toTsFsrsCard(f, nowMs), new Date(nowMs), grade);
   const out = toStored(next.card, nowMs);
-  if (weight === 1 || f.state !== REVIEW || out.state !== REVIEW || grade < 2 || !(f.stability > 0) || !(out.stability > 0)) return out;
-  const s = round4(Math.min(365, Math.max(0.1, f.stability + weight * (out.stability - f.stability))));
+  if (weight === 1 || out.state !== REVIEW || grade < 2 || !(out.stability > 0)) return out;
+  // Wort-Lernen 2 (21.10.2026): auch beim Übergang aus der Lernphase (Neu/Lernt → Review). Die Start-Stabilität wird sonst an einem leichten Erfolg
+  // (Auswahl, Stütze) geeicht und trägt die erste Pause. Beim Übergang gilt S' = w · S_fsrs; Wiederholungen im Review wie bisher S' = S + w · (S_fsrs − S).
+  const entering = f.state === NEW || f.state === LEARNING;
+  if (!entering && (f.state !== REVIEW || !(f.stability > 0))) return out;
+  const s = round4(Math.min(365, Math.max(0.1, entering ? weight * out.stability : f.stability + weight * (out.stability - f.stability))));
   const ratio = out.scheduledDays > 0 ? out.scheduledDays / out.stability : 1;
   const days = Math.min(365, Math.max(1, Math.round(s * ratio)));
   return { ...out, stability: s, scheduledDays: days, due: Math.round(nowMs + days * DAY_MS) };

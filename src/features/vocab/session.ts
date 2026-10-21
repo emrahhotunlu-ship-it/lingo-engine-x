@@ -4,7 +4,8 @@ import { useSettings } from '../../app/settings';
 import { invalidIdsOf, useLive } from '../../data/live';
 import { dayKey } from '../../domain/date';
 import { mergeEntries, type DayEntry } from '../../domain/plan/buildPlan';
-import { applyUpdate, cardPatch, contrastMissOp, isPartnerMiss } from '../../domain/srs/applyReview';
+import { applyUpdate, cardPatch, chunkPatch, contrastMissOp, isPartnerMiss } from '../../domain/srs/applyReview';
+import { introWasYesterday, recallStep } from '../../domain/srs/spacing';
 import { buildTrainCards } from '../../domain/metrics';
 import { toTrainCard } from '../../domain/srs/cards';
 import { buildChunkCards, toChunkCard } from '../../domain/srs/chunkCards';
@@ -17,12 +18,12 @@ import { planActivations, type DueStep } from '../../domain/srs/fahrplan';
 import { actId, type ActEntry, type ActVerdict, type TargetVerdict } from '../../domain/activation/actDoc';
 import { reusableSentencesOf, saveActEntry } from './actStore';
 import { sentKey } from '../../domain/srs/variety';
-import { reportWlDiagnostics } from '../../domain/srs/wlDiagnose';
+import { reportWlDiagnostics, reportWordKern } from '../../domain/srs/wlDiagnose';
 import { availableExercises, chooseExercise, makeEnv, NO_ENV, supports, type ExerciseEnv } from '../../domain/srs/modes';
 import { inputProfile } from '../../platform/input';
-import { KNOWN_DAYS, knownOp } from '../../domain/srs/vocabList';
+import { knownOp, knownPendingDue } from '../../domain/srs/vocabList';
 import { catchUpOn, overdueCount } from '../../domain/unit/backlog';
-import { againPos, calibration, controlAllowed, controlCounts, dirFor, lastRating, pickMode, weekStartMs, type FlipDir, type PickedMode, type RequestedMode } from '../../domain/srs/flip';
+import { againPos, calibration, controlAllowed, controlCounts, DAY0_FIRST_GAP, DAY0_SECOND_GAP, dirFor, lastRating, pickMode, weekStartMs, type FlipDir, type PickedMode, type RequestedMode } from '../../domain/srs/flip';
 import { deckCards, isBuiltinDeck, type DeckCtx } from '../../domain/srs/decks';
 import { listenExercise } from '../../domain/srs/listen';
 import { unitDone } from '../../app/unit/done';
@@ -234,6 +235,11 @@ function exerciseFor(s: ExCtx, item: QueueItem): Exercise | null {
   }
   const picked = modeFor(s, card, item);
   if (picked === 'flip') return { ...build(s, card, 'flip'), dir: dirFor(card.key, s.dir, s.day) };
+  // Wort-Lernen 2: Tag 0 (Abruf 1 mit Anfangsbuchstaben, Abruf 2 frei) und der erste Abruf an einem späteren Tag („Gestern-Check“, frei) – vor der Leiter.
+  if (picked === 'type' && (s.mode === 'auto' || s.mode === 'type')) {
+    const r = recallExercise(s, card);
+    if (r) return r;
+  }
   if (picked === 'control') {
     // Kontrolle (§4): frei (`cloze`), ohne Satz `type`; die App bewertet. WL: nicht im Ursprungssatz, sondern im Satz der Vorderseite (Tag 1) bzw. in einem dritten Satz.
     const n = s.pool.length - 1;
@@ -264,6 +270,25 @@ function exerciseFor(s: ExCtx, item: QueueItem): Exercise | null {
     if (alt) return build(s, card, alt);
   }
   return build(s, card, ex);
+}
+
+/**
+ * Abruf nach `recallStep` (`domain/srs/spacing.ts`), getippt und nie per Aufdecken/Auswahl:
+ *  - `hint`  Abruf 1 am Tag 0: Lücke mit Anfangsbuchstaben im Ursprungssatz; Wendung: ein Wort der Wendung (mit Anfangsbuchstaben), sonst Bausteine
+ *  - `free`  Abruf 2 am Tag 0: freie Lücke, ohne Satz Deutsch → Englisch; Wendung: ein Wort frei, sonst die ganze Wendung
+ *  - `check` erster Abruf an einem späteren Tag: wie `free`
+ * Fällt die Art beim Wächter durch, gilt dessen Ersatz (wie überall).
+ */
+function recallExercise(s: ExCtx, card: TrainCard): Exercise | null {
+  const step = recallStep(card, s.day);
+  if (!step) return null;
+  const n = s.pool.length - 1;
+  const order: readonly ExerciseId[] =
+    step === 'hint' ? (card.kind === 'chunk' ? ['cloze_hint', 'tiles'] : ['cloze_hint', 'type']) : card.kind === 'chunk' ? ['cloze_part', 'cloze', 'type'] : ['cloze', 'type'];
+  const ex = order.find((x) => supports(card, x, s.lang, n, s.env));
+  if (!ex) return null;
+  const recall: NonNullable<Exercise['recall']> = step === 'hint' ? 'day0a' : step === 'free' ? 'day0b' : introWasYesterday(card.doc, s.day) ? 'yesterday' : 'first';
+  return { ...build(s, card, ex, step === 'hint'), recall };
 }
 
 /** Frei getippte Arten (Stufe 4) – ohne Auswahl und ohne Stütze. */
@@ -402,6 +427,7 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
   const byKey = new Map(cards.map((c) => [c.key, c]));
   const pool = cards.filter((c) => !c.hidden);
   reportWlDiagnostics(cards, day);
+  reportWordKern(cards, day);
   const entries = todayEntries(day);
   // B3 (Phase-3-Plan): nur Vokabel-Einträge zählen als „Wiederholen“, nie Sprech- oder Business-Einträge.
   // Wendungen zählen wie Vokabeln (Schlüssel `chunk/<id>`).
@@ -552,7 +578,7 @@ function finish(s: SessionState, aborted: boolean): void {
   if (n > 0) requestWordBank({ answered: s.answered, cards: s.cards, pool: s.pool, catchUp: s.catchUp });
 }
 
-/** Einführung einer neuen Karte gesehen: die erste Abfrage folgt zwei Karten später. */
+/** Einführung einer neuen Karte gesehen: Abruf 1 folgt nach drei anderen Karten (Wort-Lernen 2, `DAY0_FIRST_GAP`; höchstens ans Ende). */
 export function continueIntro(): FirstKind {
   touch();
   commitHeld();
@@ -560,7 +586,7 @@ export function continueIntro(): FirstKind {
   const item = s.queue[s.pos];
   if (!item) return null;
   const queue = [...s.queue];
-  queue.splice(Math.min(queue.length, s.pos + 3), 0, { key: item.key, reason: item.reason, phase: 'quiz' });
+  queue.splice(Math.min(queue.length, s.pos + DAY0_FIRST_GAP), 0, { key: item.key, reason: item.reason, phase: 'quiz' });
   return advanceFrom({ ...s, queue });
 }
 
@@ -636,10 +662,21 @@ const flipCatchUp = (s: Pick<SessionState, 'catchUp'>, card: Pick<TrainCard, 'st
  * Vorher zeigte der Knopf im Aufholmodus den ungewichteten Abstand („Gut – 7 Tage“), gespeichert wurde ein kürzerer.
  */
 export function flipIntervals(card: TrainCard, t: number): Record<Grade, number> {
-  return previewIntervals(card.fsrs, t, noteWeight('flip', 0, flipCatchUp(useSession.getState(), card)));
+  const s = useSession.getState();
+  const out = previewIntervals(card.fsrs, t, noteWeight('flip', 0, flipCatchUp(s, card)));
+  // Wort-Lernen 2: Tag-0-Regel und Abstands-Deckel wie beim Speichern (`cardPatch`) – derselbe reine Weg, nur ohne Schreiben.
+  for (const g of [1, 2, 3, 4] as const) out[g] = plannedDueIn(card, { t, day: s.day || dayKey(t), ex: 'flip', grade: g, ...(flipCatchUp(s, card) ? { catchUp: true as const } : {}) }) ?? out[g];
+  return out;
 }
 
-/** „Kenne ich“: richtig ohne Hilfe → die Karte bekommt Stufe 3 und 10 Tage statt der gewöhnlichen Planung (`knownOp`). */
+/** Abstand bis zur Fälligkeit, den `cardPatch`/`chunkPatch` für diese Antwort speichern würde (rein; `null`, wenn der Patch keine Fälligkeit setzt). */
+function plannedDueIn(card: TrainCard, p: Pick<AnswerEvent, 't' | 'day' | 'ex' | 'grade'> & Partial<Pick<AnswerEvent, 'hint' | 'catchUp' | 'free' | 'unverified' | 'colIndex'>>): number | null {
+  const a: AnswerEvent = { kind: card.kind === 'chunk' ? 'chunk' : 'v', id: card.id, given: '', ans: card.word, ms: 0, lang: 'de', ctx: 'rev', ...p };
+  const patch = (card.kind === 'chunk' ? chunkPatch : cardPatch)({ ...card.doc }, a);
+  return typeof patch.due === 'number' ? Math.max(0, patch.due - p.t) : null;
+}
+
+/** „Kenne ich“: richtig ohne Hilfe → die Prüffrage zählt erst am nächsten Lerntag (`knownOp` mit `pending`, Wort-Lernen 2). */
 const isKnownPass = (e: Pick<Exercise, 'check' | 'card'>, ans: Pick<Answer, 'ok' | 'hint' | 'override'>): boolean => e.check === 'known' && ans.ok && !ans.hint && !ans.override && e.card.kind === 'vocab';
 
 /** „Satz vervollständigen“ ohne Satzanfang: ein ganzer eigener Satz (Gewicht wie `produce`). Die App baut es nicht mehr; alte Daten bleiben lesbar. */
@@ -649,13 +686,28 @@ const isFreeSentence = (e: Pick<Exercise, 'ex' | 'start'>): boolean => e.ex === 
  * „Wieder in …“ (Lernprüfung 10.10.2026): genau der Abstand, den `commitAnswer` → `cardPatch` bzw. `knownOp` zum Zeitpunkt `t` speichert –
  * dieselbe Note (Einspruch = 3), dasselbe Gewicht, derselbe Zeitpunkt (die ts-fsrs-Streuung hängt von der Zeit ab). EINE Regel für Anzeige und Speichern.
  */
-export function answerDueIn(e: Exercise, ans: Pick<Answer, 'grade' | 'ok' | 'override' | 'hint'>, t: number): number {
-  if (isKnownPass(e, ans)) return KNOWN_DAYS * 86_400_000;
+export function answerDueIn(e: Exercise, ans: Pick<Answer, 'grade' | 'ok' | 'override' | 'hint' | 'unverified'>, t: number): number {
+  const s = useSession.getState();
+  const day = s.day || dayKey(t);
+  if (isKnownPass(e, ans)) return Math.max(0, knownPendingDue(day) - t);
   const grade: Grade = ans.override ? 3 : ans.grade;
   const hint = ans.override ? 0 : (ans.hint ?? 0);
-  const catchUp = e.ex === 'flip' && flipCatchUp(useSession.getState(), e.card);
+  const catchUp = e.ex === 'flip' && flipCatchUp(s, e.card);
   // Fehler am Partnerwort: Fälligkeit der Hauptkarte bleibt, wie sie war.
   if (e.card.kind === 'vocab' && (e.ex === 'colloc' || e.ex === 'colloc_gap') && e.colloc && isPartnerMiss(e.card.doc, { ex: e.ex, grade, colIndex: e.colloc.index })) return Math.max(0, readFsrs(e.card.doc, t).due - t);
+  // Wort-Lernen 2: Tag-0-Regel und Abstands-Deckel – derselbe reine Weg wie beim Speichern (`cardPatch`/`chunkPatch`).
+  const planned = plannedDueIn(e.card, {
+    t,
+    day,
+    ex: e.ex,
+    grade,
+    ...(hint ? { hint } : {}),
+    ...(catchUp ? { catchUp: true as const } : {}),
+    ...(isFreeSentence(e) ? { free: true as const } : {}),
+    ...(ans.unverified ? { unverified: true as const } : {}),
+    ...(e.colloc && e.colloc.index >= 0 && (e.ex === 'colloc' || e.ex === 'colloc_gap') ? { colIndex: e.colloc.index } : {}),
+  });
+  if (planned !== null) return planned;
   const after = reviewFsrs(readFsrs(e.card.doc, t), grade, t, noteWeight(e.ex, hint, catchUp, isFreeSentence(e)));
   return Math.max(0, after.due - t);
 }
@@ -733,7 +785,7 @@ export function commitAnswer(ans: Answer): FirstKind {
   }
 
   // Lokal sofort weiterrechnen (optimistisch); gespeichert wird auf dem frischen Stand.
-  const knownDoc = knownPass ? knownOp({ ...card.doc }, card.path, null, a.t, s.day) : null;
+  const knownDoc = knownPass ? knownOp({ ...card.doc }, card.path, null, a.t, s.day, { pending: true }) : null;
   const nextDoc = knownDoc && 'update' in knownDoc ? applyUpdate({ ...card.doc }, knownDoc.update) : applyUpdate({ ...card.doc }, cardPatch({ ...card.doc }, a));
   const updated = (card.kind === 'chunk' ? toChunkCard(card.id, nextDoc, a.t) : toTrainCard(card.id, nextDoc, true, a.t)) ?? card;
   const cards = new Map(s.cards);
@@ -747,7 +799,9 @@ export function commitAnswer(ans: Answer): FirstKind {
   const partnerOnly = card.kind === 'vocab' && isPartnerMiss(card.doc, a);
   const again = !partnerOnly && isLearningState(updated.fsrs) && updated.fsrs.due - a.t <= AGAIN_WINDOW_MS && (shown[card.key] ?? 0) < MAX_SHOWN;
   // anki-regeln §2: Aufdecken nach 5 anderen Karten (pos + 6), Tippen nach 3 (pos + 4).
-  if (again) queue.splice(againPos(s.pos, queue.length, e.ex === 'flip', ans.grade >= 3), 0, { key: card.key, reason: 'again', phase: 'quiz' });
+  // Wort-Lernen 2: Nach gelungenem Abruf 1 am Tag 0 kommt Abruf 2 frühestens nach 8 weiteren Karten (`DAY0_SECOND_GAP`).
+  const day0Passed = e.recall === 'day0a' && ans.grade >= 3;
+  if (again) queue.splice(againPos(s.pos, queue.length, e.ex === 'flip', ans.grade >= 3, day0Passed ? DAY0_SECOND_GAP : 0), 0, { key: card.key, reason: 'again', phase: 'quiz' });
   // P52: Kontrast ZUSÄTZLICH direkt nach der regulären Abfrage (die reguläre Abfrage benotet die Karte wie immer), nur wenn sie richtig war,
   // höchstens 1 je Runde, nie bei neuen Karten, im Anki- oder Hör-Modus und nicht nach Kontrolle/Prüfabfrage; beide Karten mindestens Stufe 2.
   const addContrast = ans.ok && !s.contrasted && e.ex !== 'flip' && !e.check && item.reason !== 'new' && s.mode !== 'listen' && contrastReady(updated, s.pool);

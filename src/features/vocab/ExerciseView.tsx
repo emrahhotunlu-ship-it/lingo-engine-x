@@ -97,7 +97,10 @@ type Feedback = {
   sentence?: { out: SentenceOut | null; self: SelfCheck | null; /** Vorprüfung ohne Claude: Mangel, der den Satz als „Noch nicht“ beendet. */ issue?: PrecheckIssue | ActIssue; hints?: GermanHintId[]; /** A2–A5: Die Vorprüfung hatte schon einen Hinweis gegeben. */ helped?: boolean };
 };
 
-const PURPOSE: Record<number, MessageKey> = { 1: 'purpose1', 2: 'purpose2', 3: 'purpose3', 4: 'purpose4', 5: 'purpose5' };
+/** Wort-Lernen 2: Beschriftung der Abrufe am Tag 0 und des ersten Abrufs danach („Gestern-Check“). */
+// Abruf 1/2 sagen schon, wie gefragt wird („mit Anfangsbuchstaben“, „frei“): ohne den Namen der Übung (sonst doppelt und am Handy zweizeilig).
+const RECALL_LABEL: Record<NonNullable<Exercise['recall']>, MessageKey> = { day0a: 'pxWkRecallDay0a', day0b: 'pxWkRecallDay0b', yesterday: 'pxWkRecallYesterday', first: 'pxWkRecallFirst' };
+const PURPOSE: Record<number, MessageKey> ={ 1: 'purpose1', 2: 'purpose2', 3: 'purpose3', 4: 'purpose4', 5: 'purpose5' };
 /** Freie Tipp-Arten: „Tipp“ deckt Platzhalter bzw. den ersten Buchstaben auf (zählt als Hilfe). */
 const FREE_TYPED: ReadonlySet<ExerciseId> = new Set(['cloze', 'cloze_part', 'type', 'situation', 'colloc', 'wordfam']);
 /**
@@ -1131,7 +1134,7 @@ export function ExerciseView({
   }
 
   const kindLabel =
-    e.check === 'control' ? t('nbWsControl') : e.check === 'probe' ? `${t('nbWsProbe')} · ${t(`exName_${exTextKey(e)}` as MessageKey)}` : e.check === 'known' ? t('wxKnownKind') : e.act ? t(`actName_${e.act.fmt}` as MessageKey) : t(`exName_${exTextKey(e)}` as MessageKey);
+    e.check === 'control' ? t('nbWsControl') : e.check === 'probe' ? `${t('nbWsProbe')} · ${t(`exName_${exTextKey(e)}` as MessageKey)}` : e.check === 'known' ? t('wxKnownKind') : e.recall ? (e.recall === 'day0a' || e.recall === 'day0b' ? t(RECALL_LABEL[e.recall]) : `${t(RECALL_LABEL[e.recall])} · ${t(`exName_${exTextKey(e)}` as MessageKey)}`) : e.act ? t(`actName_${e.act.fmt}` as MessageKey) : t(`exName_${exTextKey(e)}` as MessageKey);
   const def = exerciseDef(e.ex);
   const purposeKey: MessageKey =
     e.act
