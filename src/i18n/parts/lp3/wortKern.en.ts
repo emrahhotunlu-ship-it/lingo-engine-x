@@ -10,7 +10,7 @@ export const wortKernEn = {
   pxWkNextDayLabel: 'Recalled from memory 1–2 days after learning (new words)',
   pxWkChunkFirstLabel: 'Phrases right on the first try from memory',
   pxWkLongGapLine: 'Recalled from memory after a 3-week break: {value}',
-  pxWkMedianSafeLabel: 'Days until you recalled a word from memory on two days',
+  pxWkMedianSafeLabel: 'Median days until you recalled a word from memory on two separate days',
   pxWkProblemLabel: 'Words you have forgotten twice or more',
   pxWkRatioLabel: 'Typed from memory vs. only recognized (last 4 weeks)',
   pxWkPct: '{pct}% of {n}',

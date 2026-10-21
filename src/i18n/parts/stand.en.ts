@@ -56,7 +56,7 @@ export const standEn = {
   ctxCount: '{n} of {max} characters',
   ctxSave: 'Save',
   ctxSaved: 'Saved.',
-  ctxSaveFailed: 'Saving did not work.',
+  ctxSaveFailed: "Couldn't save. Please try again.",
 
   // Weekly report as a Preply lesson (M18)
 

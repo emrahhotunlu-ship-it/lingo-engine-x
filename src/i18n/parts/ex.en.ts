@@ -81,7 +81,7 @@ export const exEn = {
   exSidePlaceholder: 'Decide on your own first. The rule appears after you check.',
   exSideWord: 'Try it on your own first. The explanation appears after you check.',
   exKeysHintWord: 'Enter checks and moves on',
-  exKeysHintWordN: 'Enter checks and moves on · {letters} or {nums} choose',
+  exKeysHintWordN: 'Enter checks and moves on · {letters} or {nums} to choose',
   exEndFacts: 'What stuck today',
   exEndMistakes: 'Your mistakes',
   exEndWhen: 'comes back {when}',

@@ -12,7 +12,7 @@ export const wortKernDe = {
   pxWkNextDayLabel: '1–2 Tage nach dem Lernen frei gewusst (neue Wörter)',
   pxWkChunkFirstLabel: 'Wendungen beim ersten freien Versuch gewusst',
   pxWkLongGapLine: 'Nach 3 Wochen Pause frei gewusst: {value}',
-  pxWkMedianSafeLabel: 'Tage, bis du ein Wort an zwei Tagen frei wusstest',
+  pxWkMedianSafeLabel: 'Mittlere Zahl Tage, bis du ein Wort an zwei verschiedenen Tagen frei wusstest',
   pxWkProblemLabel: 'Wörter, die du zweimal oder öfter vergessen hast',
   pxWkRatioLabel: 'Frei getippt zu nur erkannt (letzte 4 Wochen)',
   pxWkPct: '{pct} % von {n}',

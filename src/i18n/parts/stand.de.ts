@@ -57,7 +57,7 @@ export const standDe = {
   ctxCount: '{n} von {max} Zeichen',
   ctxSave: 'Speichern',
   ctxSaved: 'Gespeichert.',
-  ctxSaveFailed: 'Speichern hat nicht geklappt.',
+  ctxSaveFailed: 'Speichern hat nicht geklappt. Versuch es noch einmal.',
 
   // Wochenbericht als Preply-Stunde (M18)
 
