@@ -182,3 +182,14 @@ Unverändert bleiben:
 - der FSRS-Kern, die Tagesbremse und die Barcroft-Grenze (Aktivierung und „Sag es“ erst ab 2 freien Tagen);
 - mindestens 2 neue Wörter je Tag;
 - die Quarantäne der Satzbank.
+
+## Korrekturrunde nach der Prüfung (21.10.2026, Zweig `claude/umbau-wort-werkstatt2`)
+
+Umgesetzt (Abschnitte oben beschreiben teils noch den Stand vor der Korrektur; maßgeblich sind die Texte in `src/i18n/parts/lp3/wortWerkstatt.*.ts`):
+- **Schwelle:** 3 Fehlversuche an mindestens 2 Tagen (je Lerntag höchstens 2 gezählt); ein einzelner Ein-Buchstaben-Tippfehler zählt nicht.
+- **Ablauf:** „Weiter“ statt „Jetzt abrufen“; der Abruf kommt drei Karten später, bei „Nochmal“ einmal erneut drei Karten später. Ruhe 2–3 Tage nur nach gelungenem Abruf.
+- **Gegenüberstellung:** geprüfte Wortpartner-Verbindung der Karte (z. B. „unser Netzwerk gezielt einsetzen → leverage our network“), sonst eine deutsche Wendung aus mehreren Wörtern oder die englische Definition – nie ein einzelnes deutsches Grundwort.
+- **Merkhilfe:** eigene zuerst, Claudes Vorschläge zugeklappt („Vorschläge ansehen“); Etiketten „Eselsbrücke“/„Szene aus deinem Job“ (EN „Memory hook“/„Work scene“). Prompt `mnemonic-options@1` mit dem neuen Beispiel („In leverage steckt lever – der Hebel …“), Regel „Option 1 (hook)“ und den fünf Zusatzregeln; bei Partnerwort-Diagnose geht die verfehlte Verbindung mit.
+- **„Sag es“:** Tipp zur Diktier-Tastatur; „Gut“ mit Hinweis „Geprüft ist nur, dass „{word}“ vorkommt …“; ohne erkanntes Zielwort nur eine Notiz im Verlauf; gleichwertige Fassungen der Wendung zählen (`chunkAlt.ts` mit 25 Basispunkten und „to hike/increase rates“, ohne „25 percent“, „a quarter percent“, „to rise interest rates“).
+- **„Sag es selbst“:** nur Wörter mit mindestens einem freien Tag nach dem Lernen; Szenenzeile „Your role: … Situation: …“; „Besser so“ / „Auch natürlich“.
+- **card-examples@4:** „Set up to two sentences in the learner work context above, but only where the word naturally occurs there …“. **activate-check:** already/yet/just mit Present Perfect und Simple Past beide richtig.

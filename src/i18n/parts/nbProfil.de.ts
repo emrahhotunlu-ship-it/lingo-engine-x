@@ -105,7 +105,7 @@ export const nbProfilDe = {
   nbProfilFestUnit_one: 'Wort fest',
   nbProfilFestUnit_other: 'Wörter fest',
   nbProfilFestTitle: 'Fest: so wächst es',
-  nbProfilFestExplain: 'Fest heißt: Du hast das Wort an mehreren Tagen selbst getippt, es in einem neuen Satz gekonnt, und es bleibt voraussichtlich mindestens 21 Tage im Kopf.',
+  nbProfilFestExplain: 'Fest heißt: Du hast das Wort an mehreren Tagen selbst getippt, es in einem neuen Satz gekonnt, und du wusstest es nach mindestens 3 Wochen Pause noch frei aus dem Kopf.',
   nbProfilFestGrow: '+{n} in 28 Tagen',
   nbProfilFestShrink: '{n} in 28 Tagen',
   nbProfilFestSame: 'Gleich viele wie vor 28 Tagen',

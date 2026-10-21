@@ -106,7 +106,7 @@ export const nbProfilEn: Record<keyof typeof nbProfilDe, string> = {
   nbProfilFestUnit_one: 'word firm',
   nbProfilFestUnit_other: 'words firm',
   nbProfilFestTitle: 'Firm: how it grows',
-  nbProfilFestExplain: 'Firm means: you have typed the word yourself on several days, it works in a new sentence, and it should stay in your head for at least 21 days.',
+  nbProfilFestExplain: 'Firm means: you have typed the word yourself on several days, it works in a new sentence, and you still recalled it from memory after a break of at least 3 weeks.',
   nbProfilFestGrow: '+{n} in 28 days',
   nbProfilFestShrink: '{n} in 28 days',
   nbProfilFestSame: 'Same as 28 days ago',

@@ -563,3 +563,12 @@ Auslöser: Emrahs Rückmeldung vom 19.10.2026 und die Echtdaten-Analyse (Wendung
 - **Angebote:** „Abend-Check“ (Extra-Runde, nur freier Abruf, schreibt Antworten wie jede Extra-Runde) und „Sag es selbst“ (prüft mit `activate-check@1`, speichert nichts) im Reiter Wörter, nicht im Heute-Extra-Blatt (dort höchstens 3 Zeilen).
 - Berufsprofil: 5 Situationen in jeder Satzanfrage (`card-examples@4`), Satzbank-Vorprüfung `sense`/`gap` vor der Quarantäne. „Ich kenne es schon“ in der Liste wirkt wie „Kenne ich“ im Trainer (Prüffrage am nächsten Lerntag).
 - Unverändert: Pflicht, Serie, Tagesziel, Planversion, FSRS-Kern, Tagesbremse, Barcroft-Grenze, mindestens 2 neue Wörter je Tag. Texte zur Gegenlesung: `docs/umbau/wort-werkstatt-pruefung.md`.
+
+### Wort-Lernen 2: Korrekturrunde nach Lernwissenschaft, Lehrer und Datenprüfer (21.10.2026)
+- **Tipp ist kein freier Beleg:** `hist[].h` speichert Tipps; Antworten mit Tipp oder ungeprüft zählen nirgends als freier Abruf (Abstands-Deckel, Status, Stufe-4-Tor, Kennzahlen).
+- **„Fest“ nur mit gemessenem langen Abstand:** eigenes Feld `lg` (erster gelungener freier Abruf nach ≥ 21 Lerntagen Pause), statt Bindung an `ff`/Stichtag. Karten, die nach der alten Regel fest wurden, werden ehrlich neu eingeordnet (Statuszeile `stxFestRuleNote`).
+- **Tag 2–21 frei:** ab einem freien Tag (weniger als 3) und ohne Fehler zuletzt wird frei abgefragt; Stütze/Auswahl nur nach einem Fehler. Fehler am Einführungstag sind kein Rückfall (`lapses`).
+- **Werkstatt:** Abruf drei Karten nach der Infokarte (nicht sofort), bei „Nochmal“ einmal erneut drei Karten später; 2–3 Tage Ruhe nur nach gelungenem verzögertem Abruf. Schwelle: je Lerntag höchstens 2 Fehlversuche, einzelner Ein-Buchstaben-Tippfehler zählt nicht. Eigene Merkhilfe zuerst, Claudes Vorschläge zugeklappt.
+- **„Sag es“:** Zielwort fehlt → nur Verlaufseintrag, keine Planänderung; gleichwertige Fassungen der Wendung zählen; deutscher Satz zählt nicht. Bei „Gut“ sagt die App ehrlich, dass nur das Zielwort geprüft ist.
+- **Merkhilfen-Prompt:** echte Wortteile oder echte Klangähnlichkeit, nie erfundene Gleichklänge oder Herkunft; Werkstatt-Gegenüberstellung zeigt eine geprüfte Wortpartner-Verbindung oder die Definition, nie ein einzelnes deutsches Grundwort („nutzen → leverage“).
+- **Nicht umgesetzt (KANN):** sanfte Bremse über aktive Pflicht-Minuten – sie würde die Zahl neuer Wörter im Tagesplan ändern (Tagesplan/Tagesbremse bleiben in dieser Runde unverändert); eigener Schritt bei Bedarf.
