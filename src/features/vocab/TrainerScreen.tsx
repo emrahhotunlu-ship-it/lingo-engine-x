@@ -7,6 +7,8 @@ import { useHotkeys } from '../../engine/useHotkeys';
 import { normalize } from '../../domain/answer/normalize';
 import { ExerciseView } from './ExerciseView';
 import { IntroCard } from './IntroCard';
+import { WerkstattCard } from './WerkstattCard';
+import { abortWkMemos } from './werkstattMemo';
 import { Summary } from './Summary';
 import { abortExamples } from './examples';
 import { flush } from './persist';
@@ -55,7 +57,13 @@ export function TrainerScreen() {
   }, [active, back]);
 
   // Bildschirmwechsel: laufende KI-Anfragen für Beispielsätze abbrechen (A6.2).
-  useEffect(() => () => abortExamples(), []);
+  useEffect(
+    () => () => {
+      abortExamples();
+      abortWkMemos();
+    },
+    [],
+  );
   // B4: Wer den Trainer verlässt, schreibt eine zurückgehaltene Bewertung sofort fest.
   useEffect(() => () => commitHeld(), []);
 
@@ -74,6 +82,7 @@ export function TrainerScreen() {
 
   const item = queue[pos];
   const introCard = status === 'running' && item?.phase === 'intro' ? cards.get(item.key) : undefined;
+  const wkCard = status === 'running' && item?.phase === 'werkstatt' ? cards.get(item.key) : undefined;
   const progress = useSession(useShallow(roundProgress));
   const onDone = () => undefined;
   const skip = () => {
@@ -106,6 +115,8 @@ export function TrainerScreen() {
           <StepBoundary resetKey={step} scope="trainer" detail={item?.key ?? 'round'} onSkip={skip}>
             {introCard ? (
               <IntroCard card={introCard} onDone={onDone} />
+            ) : wkCard ? (
+              <WerkstattCard card={wkCard} onDone={onDone} />
             ) : exercise?.ex === 'flip' ? (
               <FlipCard key={`${exercise.card.key}-${step}`} exercise={exercise} again={item?.reason === 'again'} onDone={onDone} behind={queue.length - pos - 1} />
             ) : exercise ? (

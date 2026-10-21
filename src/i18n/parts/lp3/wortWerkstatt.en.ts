@@ -27,6 +27,7 @@ export const wortWerkstattEn = {
   pxWwMemoSaveFailed: "Couldn't save. Please try again.",
   pxWwMemoIdeas: 'Ideas from Claude',
   pxWwMemoPick: 'Use this one',
+  pxWwMemoChosen: 'Chosen',
   pxWwMemoKeyword: 'Keyword',
   pxWwMemoScene: 'Mental picture',
   pxWwMemoAsk: 'Get ideas',
