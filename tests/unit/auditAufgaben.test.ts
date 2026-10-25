@@ -50,8 +50,10 @@ describe('Lücke verdeckt genau das Wort der Karte (Klasse „beliebiges Objekt�
     const c = card({ id: 'pour', word: 'to pour', pos: 'verb', de: 'gießen', def: 'to make liquid flow', ex: 'Imagine [pouring] water into a bucket. You can pour faster and faster.' });
     expect(c.context?.gap).toBe('pouring');
     expect(gapUsable(c.context, c.lemma)).toBe(false);
-    expect(supports(c, 'cloze', 'de', 8, KEYS)).toBe(false);
-    expect(supports(c, 'type', 'de', 8, KEYS)).toBe(true);
+    // Seit 25.10.2026 (Emrahs Meldung, `gapSentence.ts`) zeigt die Lücke nur den Satz der Lücke – das zweite „pour“ steht dann nicht mehr da.
+    const e = buildExercise(c, 'cloze', 'de', [c, ...fill()], '2026-10-12|0');
+    expect(e.sentence?.sentence).toBe('Imagine pouring water into a bucket.');
+    expect(gapUsable(e.sentence, c.lemma)).toBe(true);
   });
 });
 

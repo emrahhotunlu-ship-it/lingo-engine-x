@@ -68,9 +68,16 @@ export function Comparison({ given, ops, compact = false, label, correct: soluti
     <div className="lx-t-support flex flex-col gap-1.5" data-testid="sentence-diff" data-slot-inner="comparison">
       <p className={compact ? 'sr-only' : undefined}>
         <span className="text-muted">{label ?? t('exCmpYours')}: </span>
-        <span lang="en" data-testid="diff-given">
-          {empty ? <span className="text-muted">–</span> : ops.length ? parts : given}
-        </span>
+        {/* Übersprungen (nichts getippt): in Worten statt eines Strichs (Emrahs Meldung 25.10.2026). */}
+        {empty ? (
+          <span className="text-muted" data-testid="diff-given" data-empty="">
+            {t('pxGcNone')}
+          </span>
+        ) : (
+          <span lang="en" data-testid="diff-given">
+            {ops.length ? parts : given}
+          </span>
+        )}
       </p>
       {correct && !hideCorrect && (
         <p>

@@ -4,6 +4,7 @@ import { activationReady } from './brief';
 import { freeLaterDays } from './spacing';
 import { sayItIntent } from './sayIt';
 import { gapUsable, lemmaFor } from './gapFit';
+import { gapContextsOf, originGap } from './rotate';
 import { familyFrom, hasPartner, trapTask } from './partner';
 import { distinctForms, familyOf, FEST_MIN_FORMS, FREE_ANSWER, freeCorrectDays, freeDaysNeeded, partDaysOf, varietyBias, varietyOf } from './variety';
 import type { Counts, ExerciseId, InputKind, Lang, LegacyMode, Stage, TrainCard } from './types';
@@ -81,8 +82,14 @@ export const retiredFor = (card: Pick<TrainCard, 'kind'>, ex: ExerciseId): boole
 /** Arten, die für Wendungen nicht taugen (phase1-plan §4.2, Spalte „Chunk"). */
 const NOT_FOR_CHUNKS: ReadonlySet<ExerciseId> = new Set(['spot', 'wordfam']);
 
-/** Ursprungssatz vorhanden und als Lücke brauchbar (verdeckt genau das Wort der Karte, `gapFit.ts`)? */
-const gapOk = (card: TrainCard): boolean => !!card.context && gapUsable(card.context, lemmaFor(card));
+/**
+ * Gibt es einen Satz, der als Lücke taugt? Er verdeckt genau das Wort der Karte (`gapFit.ts`) und ist EIN vollständiger, kurzer Satz (`gapSentence.ts`,
+ * Emrahs Meldung 25.10.2026): der Ursprungssatz bzw. sein Satz der Lücke – oder, wenn der Ursprungssatz nur zu lang bzw. abgeschnitten ist (die Lücke
+ * selbst wäre fair), ein anderer Satz der Karte (`gapContextsOf`). Verdeckt die Lücke im Ursprungssatz mehr als das Wort, bleibt es wie bisher bei
+ * Arten ohne Satz (z. B. Deutsch → Englisch tippen). Sonst keine Lückenaufgabe.
+ */
+const gapOk = (card: TrainCard): boolean =>
+  !!card.context && (originGap(card) !== null || (gapUsable(card.context, lemmaFor(card)) && gapContextsOf(card).length > 0));
 
 /** Was eine Übungsart an Kartendaten und Umgebung braucht. */
 export function supports(card: TrainCard, ex: ExerciseId, lang: Lang, poolSize: number, env: ExerciseEnv = NO_ENV): boolean {

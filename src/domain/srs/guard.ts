@@ -4,6 +4,7 @@ import { formsOf, hasGapPlaceholder, locate, senseFits } from './context';
 import { buildExercise, gapCue, meaningParts, tongueOf } from './exercise';
 import type { SceneLookup } from './exercise';
 import { coreWords, gapUsable, lemmaFor } from './gapFit';
+import { GAP_SENTENCE_MAX_WORDS, gapSentenceIssues, isCleanGapSentence } from './gapSentence';
 import { availableExercises, CATALOG, exerciseDef, NO_ENV, retiredFor, supports } from './modes';
 import type { ExerciseEnv } from './modes';
 import { toUS } from '../answer/spelling';
@@ -48,6 +49,8 @@ const toks = (s: string): string[] => s.split(/\s+/).filter(Boolean);
 const GAP_EX: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['cloze', 'cloze_part', 'cloze_hint', 'wordfam', 'dictation', 'tiles', 'speed', 'match']);
 /** Übungen, in denen die Bedeutung die Frage ist und die Antwort das Wort/die Wendung: der Hinweis darf es nicht enthalten. */
 const WORD_ANSWER: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['cloze', 'cloze_part', 'cloze_hint', 'wordfam', 'tiles', 'match', 'mc_de', 'type', 'speed', 'say_it']);
+/** Freie bzw. gestützte Lücken im Satz: ohne Satz sind sie keine Lücke, und der Satz muss genau EIN kurzer, vollständiger Satz sein (`gapSentence.ts`). */
+const SENTENCE_GAP_EX: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['cloze', 'cloze_part', 'cloze_hint', 'wordfam', 'dictation']);
 const MEANING_OPTIONS: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['mc_en', 'ctx_mc', 'listen_mc']);
 const WORD_OPTIONS: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['mc_de', 'match', 'colloc_gap', 'colloc', 'contrast']);
 
@@ -171,6 +174,12 @@ export function checkExercise(e: Exercise, card: TrainCard, lang: Lang): Violati
     if (cue && sol.length >= 3 && locate(cue.text, sol)) add('R4', 'Hinweis enthält die Lösung');
   } else if (isColloc) {
     add('R3', 'Wortpartner-Aufgabe ohne Wortpartner');
+  }
+
+  // ---- Lückensatz (R7, Emrahs Meldung 25.10.2026): EIN vollständiger Satz ohne „…“, höchstens GAP_SENTENCE_MAX_WORDS Wörter; Lücken ohne Satz gibt es nicht.
+  if (SENTENCE_GAP_EX.has(e.ex) || ((e.ex === 'tiles' || e.ex === 'speed') && e.sentence)) {
+    if (!e.sentence) add('R2', 'Lückenaufgabe ohne Satz');
+    else if (!isCleanGapSentence(e.sentence)) add('R7', `Lückensatz nicht eindeutig lesbar (${gapSentenceIssues(e.sentence).join(',') || 'Mini-Kontext zu lang'}; höchstens ${GAP_SENTENCE_MAX_WORDS} Wörter, kein „…“)`);
   }
 
   // ---- Sätze (R6, R7)
