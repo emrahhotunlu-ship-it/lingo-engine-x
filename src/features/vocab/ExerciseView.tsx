@@ -26,7 +26,7 @@ import type { ExplainExample, ExplanationModel, ResultVerdict } from '../../doma
 import { wordStatus } from '../../domain/tutor/learnerWords';
 import { useClock } from '../../app/clock';
 import { statusDetail } from './statusText';
-import { choiceVerdict, exTextKey, gapCue, tileMarks, tileMissing, tileShorterAlt, tilesAnswer } from '../../domain/srs/exercise';
+import { choiceVerdict, exTextKey, gapCue, meaningTwins, tileMarks, tileMissing, tileShorterAlt, tilesAnswer } from '../../domain/srs/exercise';
 import { cardExamples, OWN_EXAMPLE_MIN_STAGE, storedTranslation, wantsEnrichment } from '../../domain/srs/examples';
 import { explainWord, isAltAnswer } from '../../domain/srs/explainWord';
 import { posKey } from '../../domain/srs/explain';
@@ -113,6 +113,8 @@ const ANSWER_IS_DE: ReadonlySet<ExerciseId> = new Set(['mc_en', 'ctx_mc', 'liste
 /** Arten, deren Frage die deutsche Bedeutung nach dem Prüfen noch zeigt: „Merke“ wiederholt sie nicht. */
 const MEANING_SHOWN: ReadonlySet<ExerciseId> = new Set(['mc_de', 'type', 'match', 'situation']);
 const LISTEN: ReadonlySet<ExerciseId> = new Set(['listen_mc', 'dictation']);
+/** Getippte Arten ohne „Gesucht: …“-Zeile: Deutsch → Englisch zeigt die Bedeutung schon groß, Diktat verriete die Lösung, Situation hat ihre Absicht. */
+const SOUGHT_SKIP: ReadonlySet<ExerciseId> = new Set(['type', 'dictation', 'situation']);
 /** „Erst ein Hinweis, dann die Lösung“: getippte Arten mit zweitem Versuch. Nicht Diktat, nicht Auswahl, nie im Wochen-Check (`noHelp`). */
 const RETRY_EX: ReadonlySet<ExerciseId> = new Set(['cloze_hint', 'cloze', 'cloze_part', 'type', 'situation', 'colloc', 'wordfam']);
 /** Arten mit einer Satzantwort (Claude prüft, lokal nur eine grobe Prüfung). */
@@ -341,7 +343,8 @@ export function ExerciseView({
     return true;
   };
 
-  const alt = useMemo(() => packExtraOf(card)?.alt ?? [], [card]);
+  // Gleichwertige Varianten (Paket) und Bedeutungs-Zwillinge aus deinem Wortschatz (gleiche deutsche Hauptbedeutung): „fast richtig“, nicht falsch.
+  const alt = useMemo(() => [...(packExtraOf(card)?.alt ?? []), ...meaningTwins(card, useSession.getState().pool)], [card]);
 
   const check = () => {
     if (fb) return;
@@ -732,6 +735,15 @@ export function ExerciseView({
         {t(gc.kind === 'phrase' ? 'trHintPhrase' : 'trHint', { meaning: gc.text })}
       </p>
     ) : null;
+  // Emrahs Meldung 25.10.2026: Bei einer Lücke im Satz ist die deutsche Bedeutung die Frage („Gesucht: Einstellung“), kein Tipp. Sie steht als
+  // ruhige Zeile direkt unter der Aufgabe (über dem Satz, am Handy nicht von der Tastatur verdeckt) und bleibt nach dem Prüfen stehen.
+  const soughtFor = isTyped ? !!e.sentence && !SOUGHT_SKIP.has(e.ex) && e.check !== 'known' : isTiles && !!e.tiles && !!e.sentence;
+  const sought =
+    gc && soughtFor ? (
+      <p className="lx-t-support text-muted" data-testid="cue" data-kind={gc.kind === 'phrase' ? 'phrase' : 'sought'} lang={lang}>
+        {gc.kind === 'phrase' ? t('trHintPhrase', { meaning: gc.text }) : t(card.kind === 'chunk' ? 'pxGcSoughtPhrase' : 'pxGcSought', { meaning: gc.text })}
+      </p>
+    ) : null;
 
   const gapState: GapState = !fb ? 'input' : fb.result.verdict;
   const mask = placeholdersOnly
@@ -810,7 +822,7 @@ export function ExerciseView({
             {gapNode}
           </p>
         )}
-        {e.ex !== 'type' && e.ex !== 'dictation' && e.ex !== 'situation' && e.check !== 'known' && cue()}
+        {!e.sentence && !SOUGHT_SKIP.has(e.ex) && e.check !== 'known' && cue()}
       </div>
     );
   } else if (isTiles && e.tiles) {
@@ -852,7 +864,6 @@ export function ExerciseView({
         )}
         {e.sentence ? sentence(e.sentence, line) : null}
         {upTo}
-        {e.sentence && cue()}
       </div>
     );
     answer = e.sentence ? <div ref={setPoolEl} data-testid="tiles-pool" /> : line;
@@ -1215,6 +1226,7 @@ export function ExerciseView({
         meta={{ ex: e.ex, id: card.id, stage: e.stage, kind: card.kind }}
         status={{ area: 'words', state: state0, detail: statusDetail(stat0, t, dateShort), kindLabel, badge: again ? t('trAgainBadge') : contrastBadge }}
         task={{ text: taskText, purpose: contrastPurpose ?? t(purposeKey), ...(e.act || e.ex === 'produce' ? { open: true } : {}) }}
+        aid={sought}
         prompt={prompt}
         answer={answer}
         hint={hint}

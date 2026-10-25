@@ -47,6 +47,6 @@ test('Aufdeck-Karte: ein Satz, in dem das Wort zweimal steht, zeigt vorn nur die
 
 test('Hinweis über der Lücke enthält das englische Wort nicht (Lehnwort in der Bedeutung)', async ({ page }) => {
   const errors = await open(page, { word: 'nuance', pos: 'noun', de: 'feiner Unterschied, Nuance', def: 'a small difference in meaning', stage: 4, ex: 'He noticed the [nuance] in her answer at once.' }, { mode: 'type', weak: 'cloze' });
-  await expect(page.getByTestId('cue')).toHaveText('Bedeutung: feiner Unterschied');
+  await expect(page.getByTestId('cue')).toHaveText('Gesucht: feiner Unterschied');
   expect(errors).toEqual([]);
 });
