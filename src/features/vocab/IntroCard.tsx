@@ -134,20 +134,29 @@ function Learn({ card, onDone }: { card: TrainCard; onDone: (kind: FirstKind) =>
       <dd className="lx-t-support m-0 min-w-0">{body}</dd>
     </div>
   );
-  // Der Ursprungssatz gehört zur Karte und steht auch ohne Bedeutung da (eigene Zeile), sonst unter der Bedeutung.
+  // Emrahs Meldung 25.10.2026 („die Bedeutung auf Deutsch ist oft nicht zu sehen“): Wort → Bedeutung groß und fett → Lautschrift →
+  // Beispielsatz kleiner, das Wort darin markiert. Der Satz kommt nur, wenn er zur Wortart der Karte passt (`senseFits`, „Adjusted earnings“ ≠ „to adjust“).
   const originSentence = card.context ? (
-    <EnglishText
-      as="p"
-      className={meanings.length > 0 ? 'mt-1' : undefined}
-      testId="origin-sentence"
-      text={card.context.sentence}
-      area="intro"
-      source={card.path}
-      title={card.word}
-      highlight={[card.context.start, card.context.end]}
-    />
+    <div className="mt-1 border-l-2 border-line pl-3" data-testid="intro-example">
+      <EnglishText
+        as="p"
+        className="lx-t-support text-muted"
+        testId="origin-sentence"
+        text={card.context.sentence}
+        area="intro"
+        source={card.path}
+        title={card.word}
+        highlight={[card.context.start, card.context.end]}
+      />
+      {card.doc.exMark === 'atlas' && (
+        <span className="lx-t-meta mt-0.5 block text-subtle" data-testid="intro-atlas-note">
+          {t('wxExFromAtlas')}
+        </span>
+      )}
+    </div>
   ) : null;
-  const secondary: ShellSecondary[] = card.kind === 'vocab' ? [{ id: 'skip', label: t('wxIntroKnown'), onClick: known, testId: 'intro-known' }] : [];
+  const secondary: ShellSecondary[] = card.kind === 'vocab' ? [{ id: 'skip', label: t('wxIntroKnown'), onClick: known, testId: 'intro-known', variant: 'secondary' }] : [];
+  const hasRows = parts.length > 1 || !!chunkReason || !!col || !!reg || !!trap || fam.length > 1;
   return (
     <div data-testid="intro" data-card={card.id}>
       <ExerciseShell
@@ -161,7 +170,7 @@ function Learn({ card, onDone }: { card: TrainCard; onDone: (kind: FirstKind) =>
         prompt={
           <div className="flex flex-col gap-1">
             <p className="flex items-center gap-2" lang="en" data-testid="intro-word">
-              <span className="lx-t-title" data-testid="intro-title">
+              <span className="lx-t-title min-w-0" data-testid="intro-title">
                 {/* Umbruch nur zwischen den Wörtern, nie im Bindestrich („go-“ / „live“). */}
                 {card.word.split(' ').map((w, i) => (
                   <span key={i} className="whitespace-nowrap">
@@ -172,13 +181,26 @@ function Learn({ card, onDone }: { card: TrainCard; onDone: (kind: FirstKind) =>
               </span>
               <SpeakButton text={card.word} testId="intro-listen" />
             </p>
+            {meanings.length > 0 && (
+              <p className="m-0 flex flex-wrap items-baseline gap-x-2" data-testid="intro-row-meaning">
+                <span lang={lang} className="lx-t-prompt font-bold leading-tight text-fg" data-testid="intro-meaning">
+                  {meanings.map((m) => shortMeaning(m, lang)).join(' · ')}
+                </span>
+                {pk && (
+                  <span className="lx-t-meta text-muted" lang={lang} data-testid="intro-pos">
+                    {t(pk as MessageKey)}
+                  </span>
+                )}
+              </p>
+            )}
             {ipa && (
               <p className="lx-t-meta text-muted" lang="en" data-testid="intro-ipa">
                 {ipa}
               </p>
             )}
+            {originSentence}
             {/* Freiwillig, ohne Bewertung und ohne Speichern: ein Häkchen für sich selbst (Wort-Lernen 2). */}
-            <div className="mt-1 flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-x-2">
               <Button variant="ghost" icon={saidAloud ? 'check' : 'chat'} aria-pressed={saidAloud} onClick={() => setSaidAloud((v) => !v)} data-testid="intro-say-aloud">
                 {saidAloud ? t('pxWwSayAloudDone') : t('pxWwSayAloud')}
               </Button>
@@ -189,25 +211,8 @@ function Learn({ card, onDone }: { card: TrainCard; onDone: (kind: FirstKind) =>
           </div>
         }
         answer={
+          hasRows ? (
           <dl className="m-0 flex flex-col">
-            {meanings.length > 0 &&
-              row(
-                t('wxIntroMeaning'),
-                <>
-                  <span lang={lang} className="lx-t-body" data-testid="intro-meaning">
-                    {meanings.map((m) => shortMeaning(m, lang)).join(' · ')}
-                    {pk && <span className="text-muted"> · {t(pk as MessageKey)}</span>}
-                  </span>
-                  {originSentence}
-                  {card.doc.exMark === 'atlas' && (
-                    <span className="lx-t-meta mt-0.5 block text-subtle" data-testid="intro-atlas-note">
-                      {t('wxExFromAtlas')}
-                    </span>
-                  )}
-                </>,
-                'intro-row-meaning',
-              )}
-            {meanings.length === 0 && originSentence && row(t('wxIntroSentence'), originSentence, 'intro-row-sentence')}
             {parts.length > 1 &&
               row(
                 t('wxIntroParts'),
@@ -270,6 +275,7 @@ function Learn({ card, onDone }: { card: TrainCard; onDone: (kind: FirstKind) =>
                 'intro-row-family',
               )}
           </dl>
+          ) : null
         }
         secondary={secondary}
         primary={{ label: t('introContinue'), onClick: go, testId: 'intro-continue' }}

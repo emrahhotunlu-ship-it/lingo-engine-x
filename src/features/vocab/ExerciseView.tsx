@@ -30,6 +30,7 @@ import { choiceVerdict, exTextKey, gapCue, tileMarks, tileMissing, tileShorterAl
 import { cardExamples, OWN_EXAMPLE_MIN_STAGE, storedTranslation, wantsEnrichment } from '../../domain/srs/examples';
 import { explainWord, isAltAnswer } from '../../domain/srs/explainWord';
 import { posKey } from '../../domain/srs/explain';
+import { meaningOf, shortMeaning } from '../../domain/srs/cards';
 import { autoGrade, produceGrade } from '../../domain/srs/grade';
 import { wasInterrupted } from '../../domain/grade';
 import { exerciseDef } from '../../domain/srs/modes';
@@ -650,6 +651,13 @@ export function ExerciseView({
   // Gleichwertige Fassung der ganzen Wendung (`content/chunkAlt.ts`): richtig, mit „Auch richtig“ und der Lernform (Emrah 21.10.2026).
   const alsoRight = !!fb && fb.result.verdict === 'correct' && !fb.override && card.kind === 'chunk' && !!fb.given && checkTyped(fb.given, chunkAlternatives(card.word), { lemma: '' }).verdict === 'correct' && checkTyped(fb.given, [solution], { lemma: '' }).verdict !== 'correct';
 
+  // Emrahs Meldung 25.10.2026: die deutsche Bedeutung groß direkt unter dem Wort im Kopf der Ergebnis-Karte (nicht bei Kontrast und Wortpartner –
+  // dort hat der Kopf ein anderes Paar, und „Merke“ nennt die Verbindung). „Merke“ wiederholt sie dann nicht (`meaningShown`).
+  const headMeaning = useMemo(() => {
+    if (e.ex === 'contrast' || e.ex === 'colloc' || e.ex === 'colloc_gap') return null;
+    const m = (meaningOf(card, lang) ?? '').split(/\s*;\s*/).filter(Boolean).map((x) => shortMeaning(x, lang)).join(' · ');
+    return m || null;
+  }, [card, lang, e.ex]);
   const model: ExplanationModel | null = useMemo(() => {
     if (!fb) return null;
     if (fb.sentence?.sayIt) return sayItModel(fb.sentence.sayIt, card, e.sayIt?.model ?? null, e.sayIt?.de ?? null, exampleItems, t);
@@ -668,7 +676,7 @@ export function ExerciseView({
       lang,
       solution,
       examples: exampleItems,
-      ...(MEANING_SHOWN.has(e.ex) && (e.ex !== 'match' || !e.sentence) ? { meaningShown: true } : {}),
+      ...(headMeaning || (MEANING_SHOWN.has(e.ex) && (e.ex !== 'match' || !e.sentence)) ? { meaningShown: true } : {}),
       ...(other ? { otherMeaning: lang === 'de' ? (other.de ?? other.def) : (other.def ?? other.de) } : {}),
       ...(isAlt ? { alt: true } : {}),
       ...(alsoRight ? { alsoRight: true } : {}),
@@ -1150,7 +1158,7 @@ export function ExerciseView({
       stageNote: e.ex !== 'contrast' && fb.hold && !fb.override ? tn('awStageHold', fb.hold, { goal: t(card.stage + 1 >= 5 ? 'stxGoalFirm' : 'stxGoalSafe') }) : null,
       // Design-Lead: Wort, Vorlesen, Lautschrift und „Zum Wort“ stehen in der Ergebnis-Karte, genau einmal, direkt unter dem Urteil.
       // R5: im Kontrast-Schritt heißt der Kopf „avoid ≠ convince“ (richtiges Wort zuerst, beide mit Aussprache).
-      head: <WordExtras card={card} open={moreOpen} lang={lang} extras={extras} part="head" other={e.ex === 'contrast' ? (contrastOtherOf(e)?.word ?? null) : null} phrase={collocPhrase} />,
+      head: <WordExtras card={card} open={moreOpen} lang={lang} extras={extras} part="head" other={e.ex === 'contrast' ? (contrastOtherOf(e)?.word ?? null) : null} phrase={collocPhrase} meaning={fb.sentence ? null : headMeaning} pos={posKey(card.pos)} />,
       // „War das auch richtig?“ als ruhige Zeile im Ergebnis-Block (Design-Lead), nicht mehr lose über der Karte.
       parts: !fb.override && fb.result.verdict === 'wrong' && isTyped && ai && e.ex !== 'situation' ? <SynonymAsk card={card} given={fb.given} onOk={override} /> : undefined,
       foot: <WordExtras card={card} open={moreOpen} lang={lang} extras={extras} part="more" />,

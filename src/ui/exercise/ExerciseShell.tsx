@@ -47,7 +47,7 @@ export type ShellStatus = {
   noInfo?: boolean;
 };
 export type ShellAction = { /** Pfeil auch ohne Ergebnis (z. B. „Weiter“ mitten in der Aufgabe). */ arrow?: boolean; label: string; onClick: () => void; testId: string; disabled?: boolean; busy?: boolean; busyLabel?: string };
-export type ShellSecondary = { id: 'hint' | 'dontKnow' | 'unclear' | 'noError' | 'skip' | 'replay' | 'reset' | 'noSound'; label: string; onClick: () => void; testId: string; disabled?: boolean };
+export type ShellSecondary = { id: 'hint' | 'dontKnow' | 'unclear' | 'noError' | 'skip' | 'replay' | 'reset' | 'noSound'; label: string; onClick: () => void; testId: string; disabled?: boolean; /** Umrandeter Knopf statt Textknopf (Einführungskarte „Kenne ich“). */ variant?: 'ghost' | 'secondary' };
 export type ShellMenuId = 'override' | 'copyOnce' | 'showMe' | 'translate' | 'moreInfo' | 'askClaude' | 'wholeTopic' | 'report';
 export type ShellFeedback = {
   verdict: ResultVerdict;
@@ -203,7 +203,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
     showSecondary.length > 0 && !feedback ? (
       <div className="flex flex-wrap items-center gap-x-2" data-slot="secondary" role="group" aria-label={t('exSecondaryLabel')}>
         {showSecondary.map((s) => (
-          <Button key={s.id} variant="ghost" onClick={s.onClick} disabled={s.disabled} data-testid={s.testId} data-secondary={s.id}>
+          <Button key={s.id} variant={s.variant ?? 'ghost'} onClick={s.onClick} disabled={s.disabled} data-testid={s.testId} data-secondary={s.id}>
             {s.label}
           </Button>
         ))}

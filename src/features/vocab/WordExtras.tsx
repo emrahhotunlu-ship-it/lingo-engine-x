@@ -5,7 +5,7 @@ import { ipaOf } from '../../domain/lexicon/pron';
 import { cardExamples } from '../../domain/srs/examples';
 import type { StoredExample } from '../../domain/srs/examples';
 import type { TrainCard } from '../../domain/srs/types';
-import { useT } from '../../i18n';
+import { useT, type MessageKey } from '../../i18n';
 import { useExamples } from './examples';
 import { ExampleTranslation } from './ExampleTranslation';
 import { MnemonicBlock } from './mnemonic';
@@ -25,6 +25,8 @@ export function WordExtras({
   part = 'all',
   other = null,
   phrase = null,
+  meaning = null,
+  pos = null,
 }: {
   card: TrainCard;
   open: boolean;
@@ -34,6 +36,10 @@ export function WordExtras({
   other?: string | null;
   /** Rückmeldung 3 („Wortpartner“): die geübte Verbindung („overcome objections“) steht groß mit Vorlesen; das Kartenwort klein als Zusatz. */
   phrase?: string | null;
+  /** Emrahs Meldung 25.10.2026: deutsche Bedeutung groß und fett direkt unter dem Wort (nur im Kopf, nach der Antwort). */
+  meaning?: string | null;
+  /** i18n-Schlüssel der Wortart (`posKey`), klein neben der Bedeutung. */
+  pos?: string | null;
 }) {
   const { t } = useT();
   const [open, setOpen] = useState(false);
@@ -88,6 +94,18 @@ export function WordExtras({
             </span>
             <SpeakButton text={card.word} testId="word-listen" />
           </span>
+          {meaning && !other && !phrase && (
+            <span className="flex basis-full flex-wrap items-baseline gap-x-2" data-testid="word-meaning-row">
+              <span className="lx-t-task font-bold text-fg" lang={lang} data-testid="word-meaning">
+                {meaning}
+              </span>
+              {pos && (
+                <span className="lx-t-meta text-muted" lang={lang} data-testid="word-pos">
+                  {t(pos as MessageKey)}
+                </span>
+              )}
+            </span>
+          )}
           {ipa && (
             <span className="lx-t-meta basis-full text-muted" lang="en" data-testid="word-ipa">
               {ipa}
