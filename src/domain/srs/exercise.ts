@@ -6,7 +6,7 @@ import { meaningForTask, shortMeaning } from './cards';
 import { exerciseDef } from './modes';
 import { familyFrom, partnerOf, trapTask } from './partner';
 import { packExtraOf } from '../c1pack/packFields';
-import { isTruncated, rotatedContext } from './rotate';
+import { GAP_EX, gapContext, isTruncated, rotatedContext } from './rotate';
 import { chunkGapWords } from './chunkCards';
 import type { ActTask } from './actTask';
 import { briefCodesOf, pickBrief } from './brief';
@@ -39,10 +39,26 @@ export function meaningParts(m: string | null | undefined): string[] {
 }
 
 /** Überschneiden sich zwei Bedeutungen (eine enthält die andere)? */
-function meaningsOverlap(a: string | null | undefined, b: string | null | undefined): boolean {
+export function meaningsOverlap(a: string | null | undefined, b: string | null | undefined): boolean {
   const pa = meaningParts(a);
   const pb = meaningParts(b);
   return pa.some((x) => pb.some((y) => x === y || (x.length >= 5 && y.includes(x)) || (y.length >= 5 && x.includes(y))));
+}
+
+/**
+ * Bedeutungs-Zwillinge (Emrahs Meldung 25.10.2026, „Gesucht: …“): andere Karten derselben Art und Wortart, deren deutsche Hauptbedeutung genau
+ * gleich ist („put off“ und „to postpone“: verschieben). Bei „Gesucht: verschieben“ passt dann beides; die Antwort mit dem Zwilling ist „fast
+ * richtig“ (wie eine gleichwertige Variante), nicht falsch. Streng: nur die jeweils erste Bedeutung, genau gleich. Rein, sortiert, ohne Dubletten.
+ */
+export function meaningTwins(card: Pick<TrainCard, 'kind' | 'pos' | 'lemma' | 'de'>, pool: readonly Pick<TrainCard, 'kind' | 'pos' | 'lemma' | 'de' | 'hidden'>[]): string[] {
+  const head = meaningParts(card.de)[0];
+  if (!head) return [];
+  const out = new Set<string>();
+  for (const o of pool) {
+    if (o.hidden || o.kind !== card.kind || (o.pos ?? '') !== (card.pos ?? '') || norm(o.lemma) === norm(card.lemma)) continue;
+    if (meaningParts(o.de)[0] === head) out.add(o.lemma);
+  }
+  return [...out].sort();
 }
 
 /** Gleicher deutscher Wortanfang (überzeug-/überred-): höchstens als Notlösung Ablenker. */
@@ -444,7 +460,8 @@ function buildRaw(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly Tr
   const base: Exercise = { ex, input: def.input, card, stage, sentence: null, meaning: CUE_EX.has(ex) ? cueMeaning(card, meaning) : meaning, firstLetter: null, colloc: null, options: [], accepted: [] };
   // Eine Lücke, die mehr verdeckt als das Wort der Karte (beliebiges Objekt) oder das Wort ein zweites Mal zeigt, ist keine Lücke (`gapFit.ts`).
   const day = /^(\d{4}-\d{2}-\d{2})\|/.exec(seed)?.[1];
-  const rawCtx = opts.origin ? card.context : rotatedContext(card, ex, day);
+  // Lückenaufgaben (Emrahs Meldung 25.10.2026): nur EIN vollständiger, kurzer Satz; der Ursprungssatz bleibt Anker, wenn er das ist (`gapContext`).
+  const rawCtx = GAP_EX.has(ex) ? gapContext(card, day, !!opts.origin) : opts.origin ? card.context : rotatedContext(card, ex, day);
   // Wendungen (WL): Bis Stufe 2 ist nur EIN Wort der Wendung die Lücke (Stütze, Bausteine); `cloze_part` (Stufe 3) ist ein freies Einzelwort. Das wechselnde Wort ergibt sich aus der
   // Zahl der bisherigen Wiederholungen; Stufe 3 zeigt sonst die ganze Wendung mit Stütze (Anfangsbuchstabe je Wort, Bausteine); `cloze` ist immer die ganze Wendung (Tor: Stufe 3 erst
   // nach einem `cloze_part`-Tag, `modes.ts`). Findet sich kein einzelnes Wort, gibt es nie still eine ganze Wendung ohne Satz (Kap. 15): `cloze_part` wird zur Stütz-Lücke (`cloze_hint`).

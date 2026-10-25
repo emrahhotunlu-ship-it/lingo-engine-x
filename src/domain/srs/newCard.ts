@@ -1,6 +1,7 @@
 import { mayCreateDoc } from '../capacity/docGuard';
 import { slug } from '../content';
 import { fixDashes, hasGapPlaceholder, locate, lemmaOf } from './context';
+import { sentencePieces } from './gapSentence';
 
 // Neue Karte aus Wort-Antippen (Plan §3.4, Portierung von `cardFromAI` der alten App).
 // Der Ursprungssatz ist Pflicht (Kap. 15: keine Karten ohne Ursprungssatz). Kein `fsrs`:
@@ -55,6 +56,15 @@ export function bracketExample(sentence: string, surface: string | null | undefi
   if (!hit) return '';
   let start = hit.start;
   let end = hit.end;
+  // Ein ganzer Absatz (Wort-Antippen im Leser): nur der Satz des Worts wird Ursprungssatz, solange er vollständig ist (Emrahs Meldung 25.10.2026,
+  // abgeschnittene Auszüge mit „…“ machten Lückenaufgaben unlösbar). Ist er selbst abgeschnitten, bleibt es beim Auszug darum herum.
+  const pieces = sentencePieces(s);
+  const own = pieces.length > 1 ? pieces.find((p) => start >= p.start && end <= p.end) : undefined;
+  if (own && !own.cutStart && !own.cutEnd && own.text.length <= 200) {
+    s = own.text;
+    start -= own.start;
+    end -= own.start;
+  }
   if (s.length > 200) {
     const from = Math.max(0, s.lastIndexOf(' ', Math.max(0, start - 80)) + 1);
     const to = s.indexOf(' ', Math.min(s.length, end + 80));
