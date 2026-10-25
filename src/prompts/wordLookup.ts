@@ -81,6 +81,7 @@ export const wordLookup: PromptTemplate<WordLookupVars, WordLookupOut> = {
       '- sense: what the word means in THIS sentence, written in the explanation language, max 25 words.',
       '- note: one usage tip in the explanation language (typical preposition, collocation or register), max 20 words, or "" if there is nothing useful to add.',
       '- In German texts, put English words and phrases in “…”.',
+      '- "___" in the sentence hides part of an open exercise: never guess, name or hint at what it hides.',
     ].join('\n');
   },
   schema: (vars) => schemaFor(vars.uiLang),

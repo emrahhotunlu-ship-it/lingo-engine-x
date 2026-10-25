@@ -1,4 +1,5 @@
 import dictRaw from '../../content/legacy/dict.json?raw';
+import senseExtraRaw from '../../content/lexicon/sense-extra.json?raw';
 import { logError } from '../../platform/diagnostics';
 import { isIrregularForm, lemmaCandidates, usSpelling } from '../text/lemma';
 import { normalizeWord } from '../text/tokenize';
@@ -9,6 +10,8 @@ import { hasIpa } from './pron';
 // Eingebettet als Text, geparst beim ersten Gebrauch (Entwurf §10.2).
 // Indiziert über die US-Schreibweise: color findet colour, organize findet organise (Lerndesign §0).
 // Angezeigt wird die US-Form (`word`), der Schlüssel der alten App bleibt als `headword` erhalten.
+// Ergänzung `content/lexicon/sense-extra.json` (Sinn-Prüfung 25.10.2026): fehlende Wortarten häufiger Wörter („feature“ als Verb …),
+// gleiches Format, wird an die Einträge der alten App angehängt (deren Reihenfolge bleibt).
 
 export type DictSense = { pos: string; de: string; def: string };
 export type DictEntry = {
@@ -36,27 +39,37 @@ function toSense(raw: unknown): DictSense | null {
   return typeof pos === 'string' && typeof de === 'string' && typeof def === 'string' ? { pos, de, def } : null;
 }
 
+function addAll(idx: Index, raw: string, label: string): void {
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object') return;
+    for (const [headword, list] of Object.entries(parsed)) {
+      const senses = Array.isArray(list) ? list.map(toSense).filter((s): s is DictSense => s !== null) : [];
+      if (!senses.length) continue;
+      const hw = normalizeWord(headword);
+      const known = idx.senses.get(hw);
+      if (known) {
+        // Ergänzung: nur Bedeutungen, deren Wortart und Übersetzung es noch nicht gibt.
+        for (const s of senses) if (!known.some((k) => k.pos === s.pos && k.de === s.de)) known.push(s);
+        continue;
+      }
+      idx.senses.set(hw, senses);
+      idx.order.push(hw);
+      const key = usSpelling(hw);
+      const group = idx.byKey.get(key);
+      if (group) group.push(hw);
+      else idx.byKey.set(key, [hw]);
+    }
+  } catch (err) {
+    logError('lexicon:dict', err, `${label} nicht lesbar`);
+  }
+}
+
 function load(): Index {
   if (index) return index;
   const idx: Index = { byKey: new Map(), senses: new Map(), order: [] };
-  try {
-    const parsed: unknown = JSON.parse(dictRaw);
-    if (parsed && typeof parsed === 'object') {
-      for (const [headword, list] of Object.entries(parsed)) {
-        const senses = Array.isArray(list) ? list.map(toSense).filter((s): s is DictSense => s !== null) : [];
-        if (!senses.length) continue;
-        const hw = normalizeWord(headword);
-        idx.senses.set(hw, senses);
-        idx.order.push(hw);
-        const key = usSpelling(hw);
-        const group = idx.byKey.get(key);
-        if (group) group.push(hw);
-        else idx.byKey.set(key, [hw]);
-      }
-    }
-  } catch (err) {
-    logError('lexicon:dict', err, 'dict.json nicht lesbar');
-  }
+  addAll(idx, dictRaw, 'dict.json');
+  addAll(idx, senseExtraRaw, 'sense-extra.json');
   index = idx;
   return idx;
 }
@@ -85,6 +98,26 @@ export function dictLookup(word: string, posHint?: string | null): DictEntry | n
   let senses = ordered.flatMap((h) => idx.senses.get(h) ?? []);
   if (posHint) senses = [...senses.filter((s) => s.pos === posHint), ...senses.filter((s) => s.pos !== posHint)];
   return { word: key, headword, senses };
+}
+
+const posCache = new Map<string, readonly string[]>();
+
+/** Wortarten eines Worts (auch gebeugt: „reviewed“ → verb) laut Wörterbuch, für die Satzstellung beim Antippen. */
+export function dictPosOf(word: string): readonly string[] {
+  const n = normalizeWord(word);
+  const hit = posCache.get(n);
+  if (hit) return hit;
+  let out: readonly string[] = [];
+  for (const cand of lemmaCandidates(n)) {
+    const e = dictLookup(cand);
+    if (e) {
+      out = [...new Set(e.senses.map((s) => s.pos))];
+      break;
+    }
+  }
+  if (posCache.size > 5000) posCache.clear();
+  posCache.set(n, out);
+  return out;
 }
 
 /** Einzelwort (ohne Leerzeichen, Bindestrich erlaubt) im Wörterbuch? */

@@ -39,6 +39,20 @@ function irregularLemmas(form: string): readonly string[] {
   return irregularIndex.get(form) ?? [];
 }
 
+let pastForms: Set<string> | null = null;
+
+/** Unregelmäßige Vergangenheits-/Partizipform eines Verbs („rose“, „fell“, „taken“), die nicht zugleich Grundform ist (nicht „put“, „set“). */
+export function isIrregularPast(form: string): boolean {
+  if (!pastForms) {
+    const out = new Set<string>();
+    for (const forms of Object.values(IRREGULAR.verbs)) {
+      for (const f of [...(forms.past ?? []), ...(forms.pp ?? [])]) if (!(f in IRREGULAR.verbs)) out.add(f);
+    }
+    pastForms = out;
+  }
+  return pastForms.has(normalizeWord(form));
+}
+
 /** Alle unregelmäßigen Formen (für „ist ein echtes Wort"). */
 export function isIrregularForm(word: string): boolean {
   return irregularLemmas(normalizeWord(word)).length > 0;

@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { useAiAvailable } from '../../ai/scope';
+import { takeTutorCall } from '../../ai/tutorBudget';
 import { useAsk } from '../../ai/useAsk';
 import { invalidIdsOf, useLive } from '../../data/live';
 import { slug } from '../../domain/content';
@@ -8,7 +9,8 @@ import { dayKey } from '../../domain/date';
 import { resolveWord, posHint, type CardInfo } from '../../domain/lookup/resolve';
 import { cardSrcFor } from '../../domain/lookup/cardSrc';
 import { mergedVocab } from '../../domain/overview';
-import { lemmaOf } from '../../domain/srs/context';
+import { targetPart } from '../../domain/lookup/sense';
+import { lemmaOf, locate } from '../../domain/srs/context';
 import { posKey } from '../../domain/srs/explain';
 import { stageOf } from '../../domain/srs/ladder';
 import { bracketExample } from '../../domain/srs/newCard';
@@ -25,7 +27,7 @@ import { DURATION, EASE_OUT } from '../../ui/motion';
 import { SheetGrip, useSheetDrag } from '../../ui/sheetDrag';
 import { ensureLookupLoaded, saveLookupCard, storeLookup, useLookupData } from './store';
 import { openCompanion } from '../companion/store';
-import { PhraseBody, PickBar } from './PhraseLookup';
+import { blanked, PhraseBody, PickBar } from './PhraseLookup';
 
 // Nachschlage-Fenster (Kap. 6.11, Plan §5.6): am Desktop verankert unter dem Wort, am Handy
 // als Blatt von unten. Bedeutung aus eigener Karte, Zwischenspeicher oder eingebautem
@@ -36,20 +38,23 @@ import { PhraseBody, PickBar } from './PhraseLookup';
 type Doc = Readonly<Record<string, unknown>>;
 const str = (v: unknown): string | null => (typeof v === 'string' && v.trim() ? v.trim() : null);
 
-function useCardIndex(): ReadonlyMap<string, CardInfo> {
+/** Eigene Karten nach Grundform (Nachschlagen) und nach Kennung (Ziel-Karte des Übungssatzes, `req.source` = `vocab/<id>`). */
+function useCardIndex(): { byLemma: ReadonlyMap<string, CardInfo>; byId: ReadonlyMap<string, CardInfo> } {
   const vocab = useLive((s) => s.collections.vocab);
   const invalid = useLive((s) => s.invalid);
   return useMemo(() => {
-    const out = new Map<string, CardInfo>();
+    const byLemma = new Map<string, CardInfo>();
+    const byId = new Map<string, CardInfo>();
     const all = mergedVocab(vocab ?? new Map<string, Doc>(), invalidIdsOf(invalid, 'vocab'));
     for (const [id, doc] of all) {
       const word = str(doc.word);
       if (!word) continue;
       const info: CardInfo = { id, word, de: str(doc.de), def: str(doc.def), pos: str(doc.pos), stage: stageOf(doc), hidden: doc.hidden === true };
+      byId.set(id, info);
       const k = normalizeWord(lemmaOf(word));
-      if (!out.has(k)) out.set(k, info);
+      if (!byLemma.has(k)) byLemma.set(k, info);
     }
-    return out;
+    return { byLemma, byId };
   }, [vocab, invalid]);
 }
 
@@ -77,7 +82,8 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
   const [pos, setPos] = useState<CSSProperties>({ visibility: 'hidden' });
   const ai = useAiAvailable();
   const speech = useSpeech((s) => s.status);
-  const cards = useCardIndex();
+  const index = useCardIndex();
+  const cards = index.byLemma;
   const cache = useLookupData((s) => s.doc);
   const savedIds = useLookupData((s) => s.saved);
   const auto = useAsk(wordLookup);
@@ -89,8 +95,23 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
   }, []);
 
   const hint = posHint(req.tokens, req.index);
-  const resolved = useMemo(() => resolveWord(req.surface, hint, { cards, cache, uiLang: lang }), [req.surface, hint, cards, cache, lang]);
+  // Satz ohne verdeckte Stellen (Lücke, Lösung während der Frage): nur so geht er an Claude (nie die Lösung verraten).
+  const sentence = useMemo(() => blanked(req.text, 0, req.text.length, req.gaps), [req.text, req.gaps]);
+  // Ziel-Karte des Übungssatzes: gehört das Wort zu ihr, steht ihre Bedeutung vorn (nie in einer offenen Aufgabe, `targetPart`).
+  const target = useMemo(() => {
+    const id = req.source?.startsWith('vocab/') ? req.source.slice('vocab/'.length) : null;
+    const c = id ? index.byId.get(id) : undefined;
+    return c ? targetPart(req.text, req.start, req.end, req.gaps, c, locate) : null;
+  }, [req.source, req.text, req.start, req.end, req.gaps, index.byId]);
+  const resolved = useMemo(
+    () => resolveWord(req.surface, hint, { cards, cache, uiLang: lang, context: { tokens: req.tokens, index: req.index }, target }),
+    [req.surface, hint, cards, cache, lang, req.tokens, req.index, target],
+  );
   const aiData: WordLookupOut | null = auto.data;
+  // „Bedeutung im Satz“ ausdrücklich gefragt: Claudes Antwort zum Satz ersetzt die unsichere Wörterbuch-Bedeutung.
+  const [senseAsked, setSenseAsked] = useState(false);
+  const [senseLimit, setSenseLimit] = useState(false);
+  const fromAi = senseAsked && !!aiData;
 
   // Nichts gefunden: gleich Claude fragen (einmal je Öffnen; das Antippen ist die Handlung).
   const autoRun = auto.run;
@@ -98,10 +119,10 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
   const needAi = !phrase && resolved.source === 'none' && ai;
   useEffect(() => {
     if (!needAi) return;
-    void autoRun({ word: req.surface, sentence: req.text, uiLang: useSettings.getState().lang }).then((out) => {
+    void autoRun({ word: req.surface, sentence, uiLang: useSettings.getState().lang }).then((out) => {
       if (out) void storeLookup(req.surface, out, useSettings.getState().lang);
     });
-  }, [needAi, autoRun, req.surface, req.text]);
+  }, [needAi, autoRun, req.surface, sentence]);
 
   // Esc, Schließen-Knopf und Klick außerhalb schließen; der Fokus geht dabei synchron zurück
   // (vorheriger Fokus, sonst das Wort – closeLookup).
@@ -183,14 +204,20 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
   }, [sheet, req.anchor]);
 
   const headword = resolved.source === 'none' && aiData ? aiData.lemma : resolved.headword;
-  const posLabel = (() => {
-    const p = resolved.pos ?? aiData?.pos ?? null;
+  const posName = (p: string | null): string | null => {
     const k = posKey(p);
     return k ? t(k as MessageKey) : null;
-  })();
+  };
+  const posLabel = posName(fromAi ? (aiData?.pos ?? null) : (resolved.pos ?? aiData?.pos ?? null));
   const ipa = resolved.ipa ?? (aiData?.ipa || null);
-  const de = resolved.de ?? aiData?.de ?? null;
-  const def = resolved.def ?? aiData?.def ?? null;
+  const de = fromAi ? (aiData?.de ?? null) : (resolved.de ?? aiData?.de ?? null);
+  const def = fromAi ? (aiData?.def ?? null) : (resolved.def ?? aiData?.def ?? null);
+  const part = resolved.part;
+  const also = resolved.also && !fromAi ? resolved.also : null;
+  const alsoText = also ? (lang === 'de' ? (also.de ?? also.def) : (also.def ?? also.de)) : null;
+  const alsoPos = also ? posName(also.pos) : null;
+  // Mehrdeutig oder keine passende Bedeutung: ehrlich sagen und „Bedeutung im Satz“ anbieten (Claude, Tagesbremse).
+  const unsure = !part && !fromAi && (resolved.fit === 'unsure' || resolved.fit === 'mismatch');
   const note = auto.data?.note || resolved.note;
   const sense = auto.data?.sense ?? null;
   const formDiffers = normalizeWord(req.surface) !== normalizeWord(headword);
@@ -237,14 +264,26 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
     // Nach einem Fehler: „Erneut versuchen" fragt Claude wirklich neu (sonst spielte `sample` 24 h
     // dieselbe ungültige Antwort ab, contract/sample.d.ts `refresh`).
     if (auto.error) {
-      void auto.run({ word: req.surface, sentence: req.text, uiLang: lang }, { refresh: true }).then((out) => {
+      void auto.run({ word: req.surface, sentence, uiLang: lang }, { refresh: true }).then((out) => {
         if (out) void storeLookup(req.surface, out, lang);
       });
       return;
     }
     closeLookup();
     const word = aiData?.lemma || resolved.headword || req.surface;
-    openCompanion({ attach: { kind: 'word', word, sentence: req.text, source: req.source }, send: t('askWordAuto', { word }) });
+    openCompanion({ attach: { kind: 'word', word, sentence, source: req.source }, send: t('askWordAuto', { word }) });
+  };
+
+  const askSense = () => {
+    if (!takeTutorCall()) {
+      setSenseLimit(true);
+      return;
+    }
+    setSenseAsked(true);
+    const ui = useSettings.getState().lang;
+    void auto.run({ word: req.surface, sentence, uiLang: ui }).then((out) => {
+      if (out) void storeLookup(req.surface, out, ui);
+    });
   };
 
   // Mehrere Wörter markieren: nur in einem Satz mit mindestens zwei Wörtern.
@@ -296,26 +335,51 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
           {t('lkForm', { form: req.surface })}
         </p>
       )}
+      {part && (part.de || part.def) && (
+        <div className="flex flex-col gap-0.5 rounded-xl bg-surface px-3 py-2" data-testid="lk-part">
+          <p className="text-xs text-subtle">{t('ttSnPartOf', { phrase: part.phrase })}</p>
+          <p className="text-base font-semibold" lang={lang === 'de' && part.de ? 'de' : 'en'} data-testid="lk-part-meaning">
+            {lang === 'de' ? (part.de ?? part.def) : (part.def ?? part.de)}
+          </p>
+        </div>
+      )}
       {(de || def) && (
         <div className="flex flex-col gap-0.5">
           {lang === 'de' && de && (
             <p className="text-base" lang="de" data-testid="lk-meaning">
+              {part && <span className="text-xs text-subtle">{t('ttSnThisWord')}: </span>}
               {de}
             </p>
           )}
-          {def && (
+          {def && !(part && lang === 'de') && (
             <p className={lang === 'de' ? 'text-sm text-muted' : 'text-base'} lang="en" data-testid={lang === 'de' ? 'lk-def' : 'lk-meaning'}>
+              {part && lang !== 'de' && <span className="text-xs text-subtle">{t('ttSnThisWord')}: </span>}
               {def}
             </p>
           )}
         </div>
       )}
-      {resolved.source === 'dict' && !sense && (de || def) && (
+      {also && alsoText && alsoPos && (
+        <p className="text-sm text-muted" data-testid="lk-also" data-pos={also.pos ?? undefined}>
+          {t('ttSnAlso', { pos: alsoPos, meaning: alsoText })}
+        </p>
+      )}
+      {unsure && !busy && (
+        <p className="text-xs text-subtle" data-testid="lk-unsure" data-fit={resolved.fit}>
+          {ai ? t('ttSnUnsure') : t('lkDictNote')}
+        </p>
+      )}
+      {senseLimit && (
+        <p className="text-sm text-muted" role="status" data-testid="lk-sense-limit">
+          {t('ttSnLimit')}
+        </p>
+      )}
+      {!unsure && resolved.source === 'dict' && !sense && (de || def) && (
         <p className="text-xs text-subtle" data-testid="lk-dict-note">
           {t('lkDictNote')}
         </p>
       )}
-      {!de && !def && !busy && !needAi && (
+      {!de && !def && !busy && !needAi && !also && (
         <p className="text-sm text-muted" data-testid="lk-notfound">
           {t('lkNotFound')}
         </p>
@@ -360,6 +424,11 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
               {t('lkSave')}
             </Button>
           )
+        )}
+        {ai && unsure && !senseLimit && (
+          <Button variant="secondary" icon="sparkle" onClick={askSense} disabled={!!busy} data-testid="lk-sense-ask" data-ai="">
+            {t('ttSnAsk')}
+          </Button>
         )}
         {ai && (
           <Button variant="ghost" icon="sparkle" onClick={ask} disabled={!!busy} data-testid="lk-ask" data-ai="">
