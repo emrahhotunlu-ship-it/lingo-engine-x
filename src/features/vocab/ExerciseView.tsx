@@ -656,8 +656,9 @@ export function ExerciseView({
 
   // Emrahs Meldung 25.10.2026: die deutsche Bedeutung groß direkt unter dem Wort im Kopf der Ergebnis-Karte (nicht bei Kontrast und Wortpartner –
   // dort hat der Kopf ein anderes Paar, und „Merke“ nennt die Verbindung). „Merke“ wiederholt sie dann nicht (`meaningShown`).
+  // Situation: Die Bedeutung steht schon als Absicht („Du willst sagen: …“) und bleibt nach dem Prüfen stehen – nicht noch einmal im Kopf (Kap. 15).
   const headMeaning = useMemo(() => {
-    if (e.ex === 'contrast' || e.ex === 'colloc' || e.ex === 'colloc_gap') return null;
+    if (e.ex === 'contrast' || e.ex === 'colloc' || e.ex === 'colloc_gap' || e.ex === 'situation') return null;
     const m = (meaningOf(card, lang) ?? '').split(/\s*;\s*/).filter(Boolean).map((x) => shortMeaning(x, lang)).join(' · ');
     return m || null;
   }, [card, lang, e.ex]);
