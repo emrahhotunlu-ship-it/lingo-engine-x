@@ -4,7 +4,7 @@ export const ttSenseDe = {
   ttSnPartOf: 'Teil von „{phrase}“',
   ttSnThisWord: 'Das Wort allein',
   ttSnAlso: 'Auch: {pos} – {meaning}',
-  ttSnUnsure: 'Bedeutung hier nicht sicher – Claude fragen',
+  ttSnUnsure: 'Welche Bedeutung hier passt, ist unsicher – frag Claude',
   ttSnAsk: 'Bedeutung im Satz',
   ttSnLimit: 'Die Claude-Fragen für heute sind aufgebraucht (20 am Tag).',
 };

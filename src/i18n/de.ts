@@ -437,7 +437,7 @@ export const de = {
   lkAddedToast: 'Satz an deiner Karte ergänzt',
   lkExistsToast: 'Diese Karte gibt es schon – nichts geändert',
   lkExists: 'Schon in deinen Karten',
-  lkDictNote: 'Aus dem Wörterbuch – ohne Satzbezug',
+  lkDictNote: 'Aus dem Wörterbuch',
   lkSaveFailed: 'Speichern hat nicht geklappt. Versuch es noch einmal.',
   lkAsk: 'Claude fragen',
   lkNotFound: 'Nicht im eingebauten Wörterbuch.',
