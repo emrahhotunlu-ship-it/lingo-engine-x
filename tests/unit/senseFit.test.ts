@@ -108,6 +108,10 @@ describe('Sinn-Auswahl: Bausteine', () => {
     expect(guessIn('The revised plan is ready.', 'revised').pos).toBe('adj');
     expect(guessIn('We revised the plan.', 'revised').pos).toBe('verb');
   });
+  it('guessPos: nach „remain/seem“ ein Eigenschaftswort, nach „are“ bleibt -ly ein Adverb', () => {
+    expect(guessIn('Growth in Europe remains sluggish.', 'sluggish').pos).toBe('adj');
+    expect(guessIn('Our customers are predominantly mid-sized companies.', 'predominantly').pos).toBe('adv');
+  });
   it('guessPos: -ly ist kein Adverb bei supply/reply', () => {
     expect(guessIn('The supply of chips is low.', 'supply').pos).toBe('noun');
     expect(guessIn('She answered quickly.', 'quickly').pos).toBe('adv');

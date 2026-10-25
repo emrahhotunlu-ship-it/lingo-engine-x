@@ -30,7 +30,7 @@ const MODALS = set("can could will would shall should may might must do does did
 const SUBJ = set('i you we they he she who');
 const BE = set("am is are was were be been being isn't aren't wasn't weren't");
 const HAVE = set("has have had haven't hasn't hadn't");
-const GET = set('get gets got gotten become becomes became');
+const GET = set('get gets got gotten become becomes became remain remains remained stay stays stayed seem seems seemed');
 const PREPS = set('of in on at for with by from about into onto over under between among against during without within through after before since until toward towards across behind beyond despite upon via per throughout amid');
 const OBJ = set('me him them us it');
 const SKIP = set('not never always also just often still already only even really usually sometimes rarely ever soon then now quickly simply finally actually');
@@ -150,7 +150,7 @@ export function guessPos(tokens: readonly Token[], index: number, posOf: (w: str
     else if (ed) {
       s.verb += 2;
       s.adj += 1.5;
-    } else {
+    } else if (!/[a-z]{3,}ly$/.test(w) || LY_NOT_ADV.has(w)) {
       s.adj += 2.5;
       s.noun += 1;
       s.verb -= 1;

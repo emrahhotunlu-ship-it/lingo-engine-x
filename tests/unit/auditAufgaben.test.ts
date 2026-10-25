@@ -84,6 +84,14 @@ describe('Satz passt zur Wortart der Karte (Klasse „Wortart“, Rückmeldung 6
     expect(senseFits(at('He was killed by a blunt weapon.', 'blunt'), 'verb')).toBe(false);
     expect(senseFits(at('Please blunt the edge first.', 'blunt'), 'verb')).toBe(true);
   });
+  it('Verb-Karte: kein Partizip als Eigenschaftswort vor einem Nomen („Adjusted earnings“, Emrahs Meldung 25.10.2026)', () => {
+    expect(senseFits(at('Adjusted earnings came to $1.08 per share.', 'Adjusted'), 'verb')).toBe(false);
+    expect(senseFits(at('We did it with limited resources.', 'limited'), 'verb')).toBe(false);
+    expect(senseFits(at('We adjusted the budget twice.', 'adjusted'), 'verb')).toBe(true);
+    expect(senseFits(at('Checked the doors twice, she left.', 'Checked'), 'verb')).toBe(true);
+    expect(senseFits(at('Signed by both parties, the contract is valid.', 'Signed'), 'verb')).toBe(true);
+    expect(senseFits(at('Adjusted carefully, the chair fits.', 'Adjusted'), 'verb')).toBe(true);
+  });
   it('Karte „mistake“ mit dem Satz „I was mistaken …“ bekommt diesen Satz nicht als Ursprungssatz, sondern einen passenden', () => {
     const c = card({ id: 'mistake', word: 'mistake', pos: 'noun', de: 'Fehler', ex: 'I think I was [mistaken] about the cutoff date.', xEx: [{ en: 'She admitted her mistake during the meeting.', t: 1 }] });
     expect(c.context?.sentence).toBe('She admitted her mistake during the meeting.');

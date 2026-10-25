@@ -199,8 +199,25 @@ export function senseFits(hit: Pick<ContextSpan, 'sentence' | 'start' | 'end'>, 
     const w = hit.sentence.slice(hit.start, hit.end).toLowerCase();
     return !(BE_BEFORE.test(before) && /(?:ed|ken|ten|sen|ven|wn)$/.test(w) && !/\s/.test(w));
   }
-  if (p === 'verb') return !DET_BEFORE.test(before);
+  if (p === 'verb') return !DET_BEFORE.test(before) && !attributiveEd(hit, before);
   return true;
+}
+
+const PREP_BEFORE = /(?:^|\s)(?:with|without|in|of|for|on|at|from|under)\s+$/i;
+/** Wörter, nach denen ein -ed-Wort am Satzanfang Verb bleibt („Checked the doors“, „Moved back home“, „Signed by both“). */
+const NOT_A_NOUN =
+  /^(?:the|a|an|this|that|these|those|my|your|his|her|its|our|their|him|them|me|us|it|you|to|by|for|with|in|on|at|from|of|and|or|but|up|down|out|off|away|back|home|over|into|onto|about|as|than|so|too|very|well|again|early|late|here|there|now|then|together|apart|is|are|was|were|be|been|has|have|had|will|would|can|could|should|may|might|must|not)$/i;
+/**
+ * Partizip als Eigenschaftswort vor einem Hauptwort am Satzanfang oder nach einer Präposition („Adjusted earnings came to …“,
+ * „with limited resources“): das ist nicht die Verb-Bedeutung der Karte („to adjust“ = anpassen; Emrahs Meldung 25.10.2026).
+ * Nur -ed: bei -ing ist „Managing teams is hard“ (Verb mit Objekt) von „Growing demand …“ ohne Bedeutung nicht zu trennen.
+ */
+function attributiveEd(hit: Pick<ContextSpan, 'sentence' | 'start' | 'end'>, before: string): boolean {
+  const w = hit.sentence.slice(hit.start, hit.end);
+  if (/\s/.test(w) || !/[a-z]{2,}ed$/i.test(w)) return false;
+  if (!(/^\s*["'“‘(]?\s*$/.test(before) || PREP_BEFORE.test(before))) return false;
+  const next = /^\s+([A-Za-z][A-Za-z'-]*)/.exec(hit.sentence.slice(hit.end))?.[1];
+  return !!next && !NOT_A_NOUN.test(next) && !/ly$/i.test(next);
 }
 
 /** Gedankenstrich statt Bindestrich zwischen Leerzeichen (gleiche Länge, Spannen bleiben gültig). */
