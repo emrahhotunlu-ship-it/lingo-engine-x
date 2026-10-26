@@ -32,7 +32,7 @@ test.beforeAll(async () => {
   if (!existsSync(RUNTIME_URL)) await build({ root: ROOT, configFile: `${ROOT}vite.runtime.config.ts`, logLevel: 'error' });
 });
 
-type Opts = { id?: string; lang?: 'de' | 'en'; theme?: Theme; state?: Doc; prefs?: Doc; article?: Doc; width?: number; height?: number; at?: number };
+type Opts = { id?: string; lang?: 'de' | 'en'; theme?: Theme; state?: Doc; prefs?: Doc; article?: Doc; width?: number; height?: number; at?: number; noSample?: boolean };
 
 async function open(page: Page, o: Opts = {}): Promise<{ external: string[]; errors: string[] }> {
   const external: string[] = [];
@@ -65,7 +65,7 @@ async function open(page: Page, o: Opts = {}): Promise<{ external: string[]; err
     (window as unknown as { __skip: (ms: number) => void }).__skip = (ms) => {
       off += ms;
     };
-  }, { seed: 'empty', patch });
+  }, { seed: 'empty', patch, ...(o.noSample ? { capabilities: { sample: false } } : {}) });
   await page.addInitScript({ content: readFileSync(RUNTIME_URL, 'utf8') });
   await page.goto(`${ORIGIN}/#id=${encodeURIComponent(o.id ?? ID)}&lang=${o.lang ?? 'de'}${o.at ? `&at=${o.at}` : ''}&theme=${o.theme ?? 'dark'}`);
   return { external, errors };
@@ -402,6 +402,92 @@ test.describe('Leser Englisch', () => {
     await expect(sentence(page, 2).getByTestId('rdr-marker')).toHaveAttribute('aria-label', 'Show German for sentence 2');
     await expect(page.getByTestId('rdr-meta')).toContainText('min');
   });
+});
+
+// Kartenqualität (26.10.2026, Emrahs Meldung „adaptive attempts“): Eine freie Wortgruppe aus dem Artikel wird nicht als Karte gespeichert.
+const FREE_SENT = 'In the red-team report, the model was jailbroken across 15 adaptive attempts.';
+const ADAPT_SENT = 'Engineers had to adapt to unfamiliar hardware within a single week.';
+const FREE_ART: Doc = {
+  ...ART,
+  paras: ART.paras.map((p, i) => (i === 0 ? p.map((x, j) => (j === 0 ? { ...x, e: FREE_SENT } : j === 1 ? { ...x, e: ADAPT_SENT } : x)) : p)),
+  keyWords: [
+    { w: 'adaptive attempts', de: 'adaptive Versuche', i: [0, 0] },
+    { w: 'adapt to unfamiliar hardware', de: 'sich an fremde Hardware anpassen', i: [0, 1] },
+    ...ART.keyWords.slice(0, 3),
+  ],
+};
+const unitCalls = (page: Page): Promise<number> =>
+  page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { sampleCalls: Array<{ id: string | null }> } }).__LINGO_FAKE__.sampleCalls.filter((c) => c.id === 'lexical-unit-check').length);
+const kw = (page: Page, w: string) => page.locator(`[data-testid="rdr-kw"][data-w="${w}"]`);
+
+test.describe('Kartenqualität: nur feste Wendungen als Karte', () => {
+  test('mit Claude: freie Gruppe → Hinweis mit üblicher Fassung, keine Karte; Einzelwort als Ausweg; feste Einträge ohne Aufruf', async ({ page }) => {
+    const { errors } = await open(page, { article: FREE_ART });
+    await ready(page);
+    const free = kw(page, 'adaptive attempts');
+    await free.scrollIntoViewIfNeeded();
+    await free.getByTestId('rdr-kw-save').click();
+    const note = free.getByTestId('rdr-kw-notunit');
+    await expect(note).toBeVisible();
+    await expect(note).toHaveAttribute('data-by', 'claude');
+    await expect(note).toContainText('Keine feste Wendung, darum keine Karte.');
+    await expect(free.getByTestId('rdr-kw-better')).toContainText('Üblich ist: adaptive attacks');
+    await expect(note).toContainText('Einschätzung von Claude');
+    // „adaptive“ steht in keinem Wörterbuch: kein Einzelwort-Ausweg ohne gesicherte Bedeutung.
+    await expect(free.getByTestId('rdr-kw-single')).toHaveCount(0);
+    await expect(free.getByTestId('rdr-kw-save')).toHaveCount(0);
+
+    const grp = kw(page, 'adapt to unfamiliar hardware');
+    await grp.getByTestId('rdr-kw-save').click();
+    await expect(grp.getByTestId('rdr-kw-notunit')).toBeVisible();
+    await grp.getByTestId('rdr-kw-single').click();
+    await expect(grp.getByTestId('rdr-kw-single-saved')).toHaveText('„adapt“ gespeichert');
+
+    // feste bzw. einzelne Wörter: wie bisher, ohne Claude
+    await kw(page, 'tiers').getByTestId('rdr-kw-save').click();
+    await expect(kw(page, 'tiers').getByTestId('rdr-kw-saved')).toHaveText('Gespeichert');
+
+    const db = await dump(page);
+    const vocab = Object.keys(db).filter((k) => k.startsWith('vocab/')).sort();
+    expect(vocab).toEqual(['vocab/adapt', 'vocab/tiers']);
+    expect(db['vocab/adapt']).toMatchObject({ word: 'to adapt', src: 'read', origin: { kind: 'read', ref: ID } });
+    expect(String(db['vocab/adapt']?.ex)).toBe('Engineers had to [adapt] to unfamiliar hardware within a single week.');
+    expect(await unitCalls(page)).toBe(2);
+    expect(errors).toEqual([]);
+  });
+
+  test('ohne Claude entscheidet die Prüfung: freie Gruppe wird nicht gespeichert, kein Aufruf', async ({ page }) => {
+    const { errors } = await open(page, { article: FREE_ART, noSample: true, lang: 'en' });
+    await ready(page);
+    const free = kw(page, 'adaptive attempts');
+    await free.scrollIntoViewIfNeeded();
+    await free.getByTestId('rdr-kw-save').click();
+    const note = free.getByTestId('rdr-kw-notunit');
+    await expect(note).toHaveAttribute('data-by', 'rule');
+    await expect(note).toContainText('Not a fixed phrase, so no card.');
+    await expect(free.getByTestId('rdr-kw-better')).toContainText('The usual phrase is: adaptive attacks');
+    await expect(note).not.toContainText('Claude');
+    expect(Object.keys(await dump(page)).filter((k) => k.startsWith('vocab/'))).toEqual([]);
+    expect(await unitCalls(page)).toBe(0);
+    expect(errors).toEqual([]);
+  });
+
+  for (const theme of ['dark', 'light'] as const) {
+    test(`axe · Hinweis „keine feste Wendung“ · ${theme}`, async ({ page }) => {
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+      await open(page, { article: FREE_ART, theme });
+      await ready(page);
+      for (const w of ['adaptive attempts', 'adapt to unfamiliar hardware']) {
+        await kw(page, w).scrollIntoViewIfNeeded();
+        await kw(page, w).getByTestId('rdr-kw-save').click();
+        await expect(kw(page, w).getByTestId('rdr-kw-notunit')).toBeVisible();
+      }
+      const box = await kw(page, 'adapt to unfamiliar hardware').getByTestId('rdr-kw-single').boundingBox();
+      expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
+      const res = await new AxeBuilder({ page }).include('[data-testid="rdr-keywords"]').withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+      expect(res.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
+    });
+  }
 });
 
 test.describe('Barrierefreiheit (axe)', () => {
