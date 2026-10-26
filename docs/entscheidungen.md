@@ -572,3 +572,6 @@ Auslöser: Emrahs Rückmeldung vom 19.10.2026 und die Echtdaten-Analyse (Wendung
 - **„Sag es“:** Zielwort fehlt → nur Verlaufseintrag, keine Planänderung; gleichwertige Fassungen der Wendung zählen; deutscher Satz zählt nicht. Bei „Gut“ sagt die App ehrlich, dass nur das Zielwort geprüft ist.
 - **Merkhilfen-Prompt:** echte Wortteile oder echte Klangähnlichkeit, nie erfundene Gleichklänge oder Herkunft; Werkstatt-Gegenüberstellung zeigt eine geprüfte Wortpartner-Verbindung oder die Definition, nie ein einzelnes deutsches Grundwort („nutzen → leverage“).
 - **Nicht umgesetzt (KANN):** sanfte Bremse über aktive Pflicht-Minuten – sie würde die Zahl neuer Wörter im Tagesplan ändern (Tagesplan/Tagesbremse bleiben in dieser Runde unverändert); eigener Schritt bei Bedarf.
+
+## 26.10.2026 – Masterplan 9,5
+Emrah: „Beides ja“ → (1) Pflicht ~28 statt ~23 Min (Sprechen/Flüssigkeit + Input mit Lernwörtern), ändert die Entscheidung vom 04.10.; (2) Artefakt bleibt, kein Cloudflare. Ziel 9,5/10 (UI/UX, Bedienung, Intelligenz, Vielfalt, roter Faden C1). Plan: `docs/umbau/masterplan-9-5.md`. Live weiter nur nach „Ja live“.
