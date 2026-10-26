@@ -30,6 +30,22 @@ describe('lexicalUnit mit den eingebauten Daten', () => {
     }
   });
 
+  it('Lehrer-Sperrliste (Gegenlesung 26.10.2026): überstimmt jede Regel, mit der festen Einheit darin als Vorschlag', () => {
+    expect(lexicalUnit('adapt to unfamiliar hardware')).toMatchObject({ verdict: 'check', reason: 'free_combo', detail: 'teacher list', better: 'adapt to' });
+    expect(lexicalUnit('hesitate to share')).toMatchObject({ verdict: 'check', detail: 'teacher list', better: 'hesitate to' });
+    expect(lexicalUnit('hard to shut down')).toMatchObject({ verdict: 'check', better: 'shut down' });
+    expect(lexicalUnit('spread on their own')).toMatchObject({ verdict: 'check', better: "on one's own" });
+    for (const p of ['plausible trajectory', 'addresses the tension', 'sound confident', 'handle routine chores', 'low-risk tasks', 'name the constraints', 'satisfied peer', 'committed base volume', 'company-wide rollout', 'false sense of progress']) {
+      expect(lexicalUnit(p), p).toMatchObject({ verdict: 'check', detail: 'teacher list' });
+    }
+    // die feste Einheit selbst bleibt ok
+    for (const p of ['adapt to', 'hesitate to', 'shut down', 'draw conclusions', 'security updates', 'volume commitment', 'a growing number of', 'make a case for', 'make the case for', 'codebase', 'cost-cutting']) {
+      expect(lexicalUnit(p).verdict, p).toBe('ok');
+    }
+    // wörtlich belegt: keine abgeleitete Grundform
+    expect(lexicalUnit('a growing number of')).not.toHaveProperty('base');
+  });
+
   it('Grundform eines gebeugten Verbs am Anfang', () => {
     expect(lexicalUnit('adds up')).toMatchObject({ verdict: 'ok', base: 'add up' });
     expect(lexicalUnit('addresses the tension').base).toBe('address the tension');

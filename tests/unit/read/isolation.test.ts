@@ -22,7 +22,7 @@ const ALLOWED_SHARED: RegExp[] = [
   /^src\/platform\/(speech|diagnostics|storage|input|capabilities)$/,
   /^src\/ai\/(gate|useAsk|scope|errors|types)$/,
   /^src\/prompts\/(common|types)$/,
-  /^src\/domain\/(date|lang\/detect|text\/(tokenize|british)|capacity\/docGuard)$/,
+  /^src\/domain\/(date|lang\/detect|text\/(tokenize|british)|capacity\/docGuard|lexicon\/unitKnown)$/,
   /^src\/data(\/(writer|validate|live|reads))?$/,
   /^src\/app\/(nav|registry)$/,
   /^src\/features\/lookup\/store$/,

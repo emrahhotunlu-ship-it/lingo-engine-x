@@ -15,7 +15,7 @@ import { lexicalUnitWith, phraseShapeWith, singular, unitKey, type PhraseShape, 
 
 export type UnitSource = 'pack' | 'col' | 'nb' | 'legacy' | 'units';
 
-type Index = { bySource: Map<string, Set<UnitSource>>; byFirst: Map<string, string[]> };
+type Index = { bySource: Map<string, Set<UnitSource>>; byFirst: Map<string, string[]>; free: Map<string, string> };
 let index: Index | null = null;
 
 const strs = (v: unknown): string[] => (Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string') : typeof v === 'string' ? [v] : []);
@@ -61,7 +61,13 @@ function build(): Index {
     list.push(k);
     byFirst.set(first, list);
   }
-  return { bySource, byFirst };
+  // Lehrer-Sperrliste: gelistete Gruppen gelten nie als belegt, auch wenn eine Quelle sie enthält.
+  const free = new Map<string, string>();
+  for (const f of recs((unitsJson as { free?: unknown }).free)) {
+    const w = strs(f.w)[0];
+    if (w) free.set(unitKey(w), strs(f.better)[0] ?? '');
+  }
+  return { bySource, byFirst, free };
 }
 
 const load = (): Index => (index ??= build());
@@ -115,6 +121,7 @@ export function unitDeps(exclude?: UnitSource): UnitDeps {
     startingWith: (first) => (idx.byFirst.get(first) ?? []).filter(ok),
     pos: posOf,
     dictPhrase: (p) => isDictPhrase(p),
+    free: (k) => idx.free.get(k) ?? null,
   };
 }
 

@@ -7,12 +7,13 @@ import type { PromptTemplate, UiLang } from './types';
 // lexical-unit-check@1 (Kartenqualität 26.10.2026, docs/umbau/card-quality.md): Ist eine Wortgruppe aus einem Artikel eine feste Einheit
 // (Kollokation, Fachbegriff, Wendung), die sich als Karte lohnt – oder ein zufälliger Ausschnitt wie „adaptive attempts“? Nur auf
 // Knopfdruck („Als Karte“), nur wenn die reine Prüfung `lexicalUnit` unsicher ist, `quick`, 24 h zwischengespeichert, Tutor-Tagesbremse.
-// `better`: die übliche Fassung („adaptive attacks“) oder null. `why`: ein kurzer Grund in der Oberflächensprache. Nie automatisch wiederholt.
+// `better`: die feste Einheit in der Gruppe („adapt to“) oder die übliche Fassung („adaptive attack“), Wörterbuchform, sonst null. `why`: höchstens
+// 15 Wörter in der Oberflächensprache, nennt richtiges Englisch nie falsch. Regeln nach der Lehrer-Gegenlesung (26.10.2026). Nie automatisch wiederholt.
 
 export type LexicalUnitVars = { phrase: string; sentence: string; uiLang: UiLang };
 export type LexicalUnitOut = { isUnit: boolean; better: string | null; why: string };
 
-export const LEXICAL_UNIT_EXAMPLE = '{"isUnit":false,"better":"adaptive attacks","why":"…"}';
+export const LEXICAL_UNIT_EXAMPLE = '{"isUnit":false,"better":"adaptive attack","why":"…"}';
 
 const ID = 'lexical-unit-check';
 const VERSION = 1;
@@ -46,9 +47,10 @@ export const lexicalUnitCheck: PromptTemplate<LexicalUnitVars, LexicalUnitOut> =
       'Reply with only one JSON object:',
       LEXICAL_UNIT_EXAMPLE,
       'Rules:',
-      '- isUnit: true only if the word group is an established unit in English (you would find it in a collocation dictionary or as a term), not just grammatical.',
-      '- better: if isUnit is false and a closely related established unit exists that fits this sentence (often the usual wording, e.g. "adaptive attacks" instead of "adaptive attempts"), give it in base form; otherwise null. Never invent a phrase.',
-      '- why: one short sentence in the explanation language: why it is or is not a unit. Do not translate the word group.',
+      '- Judge the dictionary form: ignore inflection, articles and possessives ("adds up" = "add up", "punch above their weight" = "punch above one\'s weight").',
+      '- isUnit: true if it is a collocation, phrasal verb, idiom, fixed frame or discourse marker ("that said", "it remains to be seen whether"), or an established technical or business term, including industry jargon (e.g. "audit trail", "retention period"). Not just grammatical.',
+      '- better: only if isUnit is false. Either the fixed unit contained in the group ("adapt to" from "adapt to unfamiliar hardware") or the usual wording with the same meaning in this sentence ("adaptive attacks" for "adaptive attempts"). Dictionary form; plural only if the unit is normally plural ("billable hours"). Never invent a phrase; otherwise null.',
+      '- why: max. 15 words in the explanation language. The phrase may be perfectly correct English: never call it wrong; say it is a free combination. Do not translate the word group.',
     ].join('\n');
   },
   schema: (v) => schemaFor(v),

@@ -407,6 +407,17 @@ describe('Stil (Tor 8) und Schlüsselwörter (Tor 6): Lehrer-Gegenlesung', () =>
     expect(acceptArticle(goodRaw()).ok).toBe(true);
   });
 
+  it('Schlüsselwörter: freie Gruppen („prüfen“) zählen nicht als mehrteilig, werden gemeldet, aber nicht verworfen', () => {
+    const a = goodRaw();
+    a.keyWords[4] = { w: 'internal features', de: 'interne Funktionen', i: [2, 1] };
+    expect(messages(a).join('\n')).toMatch(/at least 2 key words must be multi-word collocations .*got 1 \(not set phrases, so not counted: "internal features"\)/);
+    const lenient = acceptArticle(a, { lenient: true });
+    expect(lenient.ok && lenient.notSetPhrase).toEqual(['internal features']);
+    expect(lenient.ok && lenient.article.keyWords.map((k) => k.w)).toContain('internal features');
+    const good = acceptArticle(goodRaw());
+    expect(good.ok && good.notSetPhrase).toEqual([]);
+  });
+
   it('Schlüsselwörter: im Deutschen gleich aussehende Wörter sind zu leicht', () => {
     const a = goodRaw();
     a.paras[0]![1]!.e = a.paras[0]![1]!.e.replace('pricing', 'routine');

@@ -15,6 +15,8 @@ export type { PromptTemplate } from '../../prompts/types';
 // Sprachtreue, Datum, Kapazität
 export { britishSpelling } from '../../domain/text/british';
 export { detectLang, isWrongLang, wordCount } from '../../domain/lang/detect';
+// Kartenqualität (26.10.2026): Ist ein Schlüsselwort eine feste Einheit? Nur Urteil, für die Annahme (Tor 6).
+export { lexicalUnit } from '../../domain/lexicon/unitKnown';
 export { addDays, dayKey, isDayKey, isoWeek } from '../../domain/date';
 export { DOC_BLOCK_TOTAL, DOC_WARN_TOTAL, docGateOf, docTotal } from '../../domain/capacity/docGuard';
 export type { DocGate } from '../../domain/capacity/docGuard';

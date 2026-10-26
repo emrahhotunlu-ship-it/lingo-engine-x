@@ -413,7 +413,7 @@ const FREE_ART: Doc = {
   keyWords: [
     { w: 'adaptive attempts', de: 'adaptive Versuche', i: [0, 0] },
     { w: 'adapt to unfamiliar hardware', de: 'sich an fremde Hardware anpassen', i: [0, 1] },
-    ...ART.keyWords.slice(0, 3),
+    ...(ART.keyWords ?? []).slice(0, 3),
   ],
 };
 const unitCalls = (page: Page): Promise<number> =>
@@ -421,7 +421,7 @@ const unitCalls = (page: Page): Promise<number> =>
 const kw = (page: Page, w: string) => page.locator(`[data-testid="rdr-kw"][data-w="${w}"]`);
 
 test.describe('Kartenqualität: nur feste Wendungen als Karte', () => {
-  test('mit Claude: freie Gruppe → Hinweis mit üblicher Fassung, keine Karte; Einzelwort als Ausweg; feste Einträge ohne Aufruf', async ({ page }) => {
+  test('mit Claude: freie Gruppe → Hinweis mit fester Wendung dazu, keine Karte; Einzelwort als Ausweg; Lehrer-Sperrliste und feste Einträge ohne Aufruf', async ({ page }) => {
     const { errors } = await open(page, { article: FREE_ART });
     await ready(page);
     const free = kw(page, 'adaptive attempts');
@@ -430,8 +430,8 @@ test.describe('Kartenqualität: nur feste Wendungen als Karte', () => {
     const note = free.getByTestId('rdr-kw-notunit');
     await expect(note).toBeVisible();
     await expect(note).toHaveAttribute('data-by', 'claude');
-    await expect(note).toContainText('Keine feste Wendung, darum keine Karte.');
-    await expect(free.getByTestId('rdr-kw-better')).toContainText('Üblich ist: adaptive attacks');
+    await expect(note).toContainText('Richtiges Englisch, aber keine feste Wendung. Darum keine Karte.');
+    await expect(free.getByTestId('rdr-kw-better')).toContainText('Feste Wendung dazu: adaptive attack');
     await expect(note).toContainText('Einschätzung von Claude');
     // „adaptive“ steht in keinem Wörterbuch: kein Einzelwort-Ausweg ohne gesicherte Bedeutung.
     await expect(free.getByTestId('rdr-kw-single')).toHaveCount(0);
@@ -440,6 +440,9 @@ test.describe('Kartenqualität: nur feste Wendungen als Karte', () => {
     const grp = kw(page, 'adapt to unfamiliar hardware');
     await grp.getByTestId('rdr-kw-save').click();
     await expect(grp.getByTestId('rdr-kw-notunit')).toBeVisible();
+    // Lehrer-Sperrliste (units.json `free`): Urteil der Regel, kein Claude-Aufruf, die feste Einheit darin als Vorschlag.
+    await expect(grp.getByTestId('rdr-kw-notunit')).toHaveAttribute('data-by', 'rule');
+    await expect(grp.getByTestId('rdr-kw-better')).toContainText('Feste Wendung dazu: adapt to');
     await grp.getByTestId('rdr-kw-single').click();
     await expect(grp.getByTestId('rdr-kw-single-saved')).toHaveText('„adapt“ gespeichert');
 
@@ -452,7 +455,7 @@ test.describe('Kartenqualität: nur feste Wendungen als Karte', () => {
     expect(vocab).toEqual(['vocab/adapt', 'vocab/tiers']);
     expect(db['vocab/adapt']).toMatchObject({ word: 'to adapt', src: 'read', origin: { kind: 'read', ref: ID } });
     expect(String(db['vocab/adapt']?.ex)).toBe('Engineers had to [adapt] to unfamiliar hardware within a single week.');
-    expect(await unitCalls(page)).toBe(2);
+    expect(await unitCalls(page)).toBe(1);
     expect(errors).toEqual([]);
   });
 
@@ -464,8 +467,8 @@ test.describe('Kartenqualität: nur feste Wendungen als Karte', () => {
     await free.getByTestId('rdr-kw-save').click();
     const note = free.getByTestId('rdr-kw-notunit');
     await expect(note).toHaveAttribute('data-by', 'rule');
-    await expect(note).toContainText('Not a fixed phrase, so no card.');
-    await expect(free.getByTestId('rdr-kw-better')).toContainText('The usual phrase is: adaptive attacks');
+    await expect(note).toContainText('Correct English, but not a set phrase, so no card.');
+    await expect(free.getByTestId('rdr-kw-better')).toContainText('Related set phrase: adaptive attacks');
     await expect(note).not.toContainText('Claude');
     expect(Object.keys(await dump(page)).filter((k) => k.startsWith('vocab/'))).toEqual([]);
     expect(await unitCalls(page)).toBe(0);

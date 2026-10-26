@@ -10,7 +10,8 @@ import { normalizeWord } from '../text/tokenize';
 //  ok:     single (ein Wort) · known (belegt) · phrasal (Verb + Partikel) · fixed (feste Struktur mit Funktionswort: come to terms with)
 //          · verb_phrase (Verb + Ergänzung) · compound (Nomen + Nomen, Bindestrich-Wort + Nomen) · adj_noun (Adjektiv + Nomen, kein Anzeichen)
 //          · phrase (sonst)
-//  check:  free_combo (Adjektiv + allgemeines Nomen bzw. allgemeines Adjektiv + Nomen, nicht belegt: „adaptive attempts“, „cheap hardware“)
+//  check:  free_combo (Lehrer-Sperrliste `units.json` → `free`; Adjektiv + allgemeines Nomen bzw. allgemeines Adjektiv + Nomen, nicht
+//          belegt: „adaptive attempts“, „cheap hardware“)
 //          · fragment (enthält eine Zahl wie „15“, mehr als 8 Wörter: ein Satzausschnitt, keine Wendung)
 //  Artikel am Anfang zählen nicht („a viable option“ = „viable option“); Rahmen mit Funktionswort („it seems to me that“) bleiben ok.
 //
@@ -32,6 +33,11 @@ export type UnitDeps = {
   pos(word: string): readonly UPos[];
   /** Mehrwort-Eintrag des eingebauten Wörterbuchs (carry out, according to)? */
   dictPhrase(phrase: string): boolean;
+  /**
+   * Lehrer-Sperrliste (`units.json` → `free`, Gegenlesung 26.10.2026): `null` = nicht gelistet; sonst die feste Einheit darin bzw. die
+   * übliche Fassung (leer, wenn es keine gibt). Geht vor jedem Beleg und jeder Regel.
+   */
+  free?(key: string): string | null;
 };
 /** Nur die Wortarten (für `phraseShapeWith`, ohne den Index der belegten Gruppen). */
 export type PosDeps = Pick<UnitDeps, 'pos'>;
@@ -164,7 +170,12 @@ export function lexicalUnitWith(phrase: string, deps: UnitDeps): UnitVerdict {
   })();
   const withBase = (v: UnitVerdict): UnitVerdict => (base ? { ...v, base } : v);
 
-  if (deps.known(unitKey(phrase)) || deps.dictPhrase(t.join(' ')) || (base && (deps.known(unitKey(base)) || deps.dictPhrase(base)))) return withBase({ verdict: 'ok', reason: 'known' });
+  const listed = deps.free?.(unitKey(phrase)) ?? (base ? (deps.free?.(unitKey(base)) ?? null) : null);
+  if (listed !== null) return withBase({ verdict: 'check', reason: 'free_combo', detail: 'teacher list', ...(listed ? { better: listed } : {}) });
+
+  // Wörtlich belegt: das ist schon die Wörterbuchform, keine Grundform ableiten („a growing number of“ bleibt so, nicht „grow number of“).
+  if (deps.known(unitKey(phrase))) return { verdict: 'ok', reason: 'known' };
+  if (deps.dictPhrase(t.join(' ')) || (base &&(deps.known(unitKey(base)) || deps.dictPhrase(base)))) return withBase({ verdict: 'ok', reason: 'known' });
 
   // Bruchstücke
   if (t.some((w) => /^\d+(?:[.,]\d+)?%?$/.test(w))) return withBase({ verdict: 'check', reason: 'fragment', detail: 'number' });

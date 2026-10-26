@@ -54,8 +54,8 @@ export const rdrDe = {
   rdrCardFailed: 'Nicht gespeichert. Tippe, um es noch einmal zu versuchen.',
   rdrCardNoSentence: 'Kein passender Satz',
   // Kartenqualität (26.10.2026): Wortgruppe ohne feste Einheit
-  rdrNotUnit: 'Keine feste Wendung, darum keine Karte.',
-  rdrNotUnitBetter: 'Üblich ist:',
+  rdrNotUnit: 'Richtiges Englisch, aber keine feste Wendung. Darum keine Karte.',
+  rdrNotUnitBetter: 'Feste Wendung dazu:',
   rdrNotUnitClaude: 'Einschätzung von Claude, kann Fehler enthalten.',
   rdrSaveSingle: 'Nur „{word}“ speichern',
   rdrSingleSaved: '„{word}“ gespeichert',

@@ -196,9 +196,19 @@ describe('checkCardUnit (Sperre vor dem Speichern)', () => {
     const no = await checkCardUnit({ word: 'adaptive attempts', sentence: SENTENCE, uiLang: 'de', src: 'read' });
     expect(no).toMatchObject({ kind: 'not_unit', by: 'claude', better: 'adaptive attacks', why: 'Freie Verbindung.' });
     askJson.mockResolvedValueOnce({ data: { isUnit: true, better: null, why: 'Feste Verbindung.' } });
-    const yes = await checkCardUnit({ word: 'plausible trajectory', sentence: 'Analysts see a plausible trajectory for prices.', uiLang: 'de', src: 'read' });
+    const yes = await checkCardUnit({ word: 'steady trajectory', sentence: 'Analysts see a steady trajectory for prices.', uiLang: 'de', src: 'read' });
     expect(yes).toMatchObject({ kind: 'ok', lu: { ok: true, by: 'claude' } });
     expect(askJson).toHaveBeenCalledTimes(2);
+  });
+
+  it('Lehrer-Sperrliste: Urteil steht fest, kein Claude-Aufruf; Vorschlag ist die feste Einheit in der Gruppe', async () => {
+    useCapabilities.setState({ sample: 'ready', sampleRevoked: false });
+    const d = await checkCardUnit({ word: 'adapt to unfamiliar hardware', sentence: 'They may also adapt to unfamiliar hardware.', uiLang: 'de', src: 'read' });
+    expect(d).toMatchObject({ kind: 'not_unit', by: 'rule', better: 'adapt to' });
+    const p = await checkCardUnit({ word: 'plausible trajectory', sentence: 'Analysts see a plausible trajectory for prices.', uiLang: 'de', src: 'read' });
+    expect(p).toMatchObject({ kind: 'not_unit', by: 'rule' });
+    expect(p).not.toHaveProperty('better');
+    expect(askJson).not.toHaveBeenCalled();
   });
 
   it('Fehler von Claude: Regel entscheidet, kein zweiter Versuch', async () => {

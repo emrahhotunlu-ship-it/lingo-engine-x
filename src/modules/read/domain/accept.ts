@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { britishSpelling, detectLang, isWrongLang, wordCount } from '../shared';
+import { britishSpelling, detectLang, isWrongLang, lexicalUnit, wordCount } from '../shared';
 import { ARTICLE_KINDS, TOPIC_KEYS } from '../schemas';
 import type { ArticleKind, Check, KeyWord, Sentence, TopicKey } from '../schemas';
 import { countWords, normKey, normalizeDashes } from './text';
@@ -70,7 +70,11 @@ export type AcceptedArticle = {
 };
 
 export type Dropped = { what: 'check' | 'keyWord'; reason: string };
-export type AcceptResult = { ok: true; article: AcceptedArticle; dropped: Dropped[]; repaired: string[] } | { ok: false; issues: Issue[] };
+/**
+ * `notSetPhrase` (Kartenqualität 26.10.2026): mehrteilige Schlüsselwörter, die die Prüfung `lexicalUnit` als freie Gruppe meldet. Sie bleiben im
+ * Artikel (nie ein Ablehnungsgrund für sich), zählen aber nicht als „mehrteilig“ (`keyWordsMultiMin`); der Leser speichert sie nicht als Karte.
+ */
+export type AcceptResult = { ok: true; article: AcceptedArticle; dropped: Dropped[]; repaired: string[]; notSetPhrase: string[] } | { ok: false; issues: Issue[] };
 
 // ---------------------------------------------------------------- Tor 1: Form (zod-Schema der Antwort)
 
@@ -358,12 +362,15 @@ export function acceptArticle(raw: unknown, ctx: AcceptCtx = {}): AcceptResult {
     checkSpell(kw.value.w, ['keyWords', idx, 'w']);
     keyWords.push(kw.value);
   });
+  const isMulti = (k: KeyWord): boolean => k.w.split(' ').length >= 2;
+  const notSetPhrase = keyWords.filter((k) => isMulti(k) && lexicalUnit(k.w).verdict === 'check').map((k) => k.w);
   if (ctx.lenient) {
     if (keyWords.length < LIMITS.keyWordsLenientMin) push(issues, 'keywords', ['keyWords'], `needs at least ${LIMITS.keyWordsLenientMin} valid key words, got ${keyWords.length}`);
   } else {
     if (a.keyWords.length !== LIMITS.keyWords) push(issues, 'keywords', ['keyWords'], `needs exactly ${LIMITS.keyWords} key words, got ${a.keyWords.length}`);
-    const multi = keyWords.filter((k) => k.w.split(' ').length >= 2).length;
-    if (multi < LIMITS.keyWordsMultiMin) push(issues, 'keywords', ['keyWords'], `at least ${LIMITS.keyWordsMultiMin} key words must be multi-word collocations (verb + noun, adjective + noun, fixed phrases), got ${multi}`);
+    const multi = keyWords.filter(isMulti).length - notSetPhrase.length;
+    const loose = notSetPhrase.length ? ` (not set phrases, so not counted: ${notSetPhrase.map((w) => `"${w}"`).join(', ')})` : '';
+    if (multi < LIMITS.keyWordsMultiMin) push(issues, 'keywords', ['keyWords'], `at least ${LIMITS.keyWordsMultiMin} key words must be multi-word collocations (verb + noun, adjective + noun, fixed phrases), got ${multi}${loose}`);
   }
 
   if (issues.length > 0) return { ok: false, issues: limitPerGate(issues, 3).slice(0, 12) };
@@ -382,7 +389,7 @@ export function acceptArticle(raw: unknown, ctx: AcceptCtx = {}): AcceptResult {
   let summary = Array.from(normalizeDashes((a.summary ?? '').replace(/\s+/g, ' ').trim())).slice(0, LIMITS.summaryChars).join('').trimEnd();
   if (summary && isWrongLang(summary, 'de')) summary = '';
   const article: AcceptedArticle = { title, topic, kind, level, asOf, summary, paras, keyWords, ...(check ? { check } : {}) };
-  return { ok: true, article, dropped, repaired };
+  return { ok: true, article, dropped, repaired, notSetPhrase };
 }
 
 // ---------------------------------------------------------------- Tor 6 im Einzelnen

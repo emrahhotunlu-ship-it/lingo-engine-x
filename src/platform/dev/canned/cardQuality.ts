@@ -8,8 +8,9 @@ function line(input: string, key: string): string {
 }
 
 /**
- * Keine Einheit, wenn die Gruppe auf „attempt(s)“ endet oder „unfamiliar“ enthält (freie Gruppen der Testdaten); bei „adaptive …“ mit der
- * üblichen Fassung „adaptive attacks“. Sonst eine Einheit. Grund kurz in der Oberflächensprache.
+ * Keine Einheit, wenn die Gruppe auf „attempt(s)“ endet oder „unfamiliar“ enthält (freie Gruppen der Testdaten); `better` in Wörterbuchform:
+ * bei „adaptive …“ die übliche Fassung „adaptive attack“, bei „adapt to …“ die Einheit darin. Sonst eine Einheit. Grund kurz (höchstens
+ * 15 Wörter) in der Oberflächensprache, nennt richtiges Englisch nie falsch.
  */
 export function lexicalUnitCheckReply(input: string): string {
   const phrase = line(input, 'Word group').toLowerCase();
@@ -18,8 +19,8 @@ export function lexicalUnitCheckReply(input: string): string {
   if (!free) return JSON.stringify({ isUnit: true, better: null, why: de ? 'Das ist eine feste Verbindung, die man als Ganzes lernt.' : 'This is a fixed combination you learn as a whole.' });
   return JSON.stringify({
     isUnit: false,
-    better: phrase.startsWith('adaptive ') ? 'adaptive attacks' : null,
-    why: de ? 'Die Wörter stehen hier nur zufällig zusammen; jedes behält seine normale Bedeutung.' : 'The words only happen to stand together here; each keeps its normal meaning.',
+    better: phrase.startsWith('adaptive ') ? 'adaptive attack' : phrase.startsWith('adapt to ') ? 'adapt to' : null,
+    why: de ? 'Richtiges Englisch, aber eine freie Verbindung: Jedes Wort behält seine normale Bedeutung.' : 'Correct English, but a free combination: each word keeps its normal meaning.',
   });
 }
 

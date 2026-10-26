@@ -44,7 +44,7 @@ test('ruhende Lesekarte: Zahl und Liste in der KI-Stichprobe, „Doch lernen“ 
   const items = sample.getByTestId('ai-held-unit');
   await expect(items).toHaveCount(1);
   await expect(items.first()).toHaveAttribute('data-w', 'adaptive attempts');
-  await expect(items.first()).toContainText('Üblich ist: adaptive attacks');
+  await expect(items.first()).toContainText('Feste Wendung dazu: adaptive attacks');
   const before = (await dump(page))['vocab/adaptive-attempts']!;
   expect(before.lu).toBeUndefined();
 
@@ -67,7 +67,7 @@ for (const theme of ['dark', 'light'] as const) {
       const { sample } = await openSample(page, { theme, lang });
       await sample.getByTestId('ai-held-units-toggle').click();
       await expect(sample.getByTestId('ai-held-unit')).toHaveCount(1);
-      if (lang === 'en') await expect(sample.getByTestId('ai-held-units-row')).toHaveText('Resting reading cards (not a fixed phrase): 1');
+      if (lang === 'en') await expect(sample.getByTestId('ai-held-units-row')).toHaveText('Paused reading cards (not a set phrase): 1');
       await page.waitForTimeout(300);
       const res = await new AxeBuilder({ page }).include('[data-testid="ai-sample"]').withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
       expect(res.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);

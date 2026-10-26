@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { validateDoc } from '../../../src/data/validate';
+import { lexicalUnit } from '../../../src/domain/lexicon/unitKnown';
 import { createWriter } from '../../../src/data/writer';
 import { createMemoryDb } from '../../../src/platform/dev/memoryDb';
 import { routineBackupPaths } from '../../../src/modules/read/domain/backup';
@@ -84,6 +85,8 @@ describe('Anleitung: das Beispiel-JSON besteht den Prüfer der App', () => {
     const raw = doc.items[0]!;
     const rawKw = raw.keyWords as Array<{ w: string; i: [number, number] }>;
     expect(item.keyWords!.map((k) => k.i)).toEqual(rawKw.map((k) => k.i));
+    // Gegenlesung 26.10.2026: das Vorbild enthält nur feste Einheiten (keine freien Satzausschnitte wie „hard to shut down“).
+    expect(item.keyWords!.filter((k) => lexicalUnit(k.w).verdict !== 'ok').map((k) => k.w)).toEqual([]);
   });
 
   it('die Anleitung nennt die festen Themen-Schlüssel und die Grenzen, die der Prüfer wirklich hat', () => {

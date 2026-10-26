@@ -77,8 +77,21 @@ describe('Audit Wortgruppen ohne feste Einheit', () => {
     expect(flagged.length).toBeGreaterThan(0);
     // Die Prüfung soll klar die Ausnahme sein, nicht die Regel (hohe Trefferquote vor Vollständigkeit).
     expect(flagged.length / all.length).toBeLessThan(0.15);
-    expect(flagged.some((r) => r.source === 'seed/read-routine' && r.phrase === 'adapt to unfamiliar hardware')).toBe(true);
+    // Kurs-Seed (Beispiel der Kurs-Routine, unverändert): Gruppen der Lehrer-Sperrliste werden gemeldet.
+    expect(flagged.some((r) => r.source === 'seed/read-courses' && r.phrase === 'handle routine chores')).toBe(true);
     expect(all.find((r) => r.phrase === 'weak link')?.v.verdict).toBe('ok');
+  });
+
+  it('Gegenlesung 26.10.2026: die vier freien Artikel-Gruppen gelten nach dem Streichen aus units.json als „prüfen“', () => {
+    const d = unitDeps();
+    for (const p of ['plausible trajectory', 'adapt to unfamiliar hardware', 'hesitate to share', 'addresses the tension']) expect(lexicalUnitWith(p, d).verdict, p).toBe('check');
+    // gestrichene Einträge belegen nichts mehr
+    for (const p of ['spread on their own', 'hard to shut down', 'false sense of progress', 'company-wide rollout', 'different approach']) expect(lexicalUnitWith(p, d).verdict, p).toBe('check');
+  });
+
+  it('Lese-Routine-Seed und Test-Antwort der Lese-KI: jede mehrteilige Schlüsselwendung ist eine feste Einheit', () => {
+    const bad = all.filter((r) => (r.source === 'seed/read-routine' || r.source === 'dev/canned read') && r.v.verdict === 'check');
+    expect(bad.map((r) => r.phrase)).toEqual([]);
   });
 
   it('schreibt auf Wunsch den Bericht (AUDIT_OUT)', () => {

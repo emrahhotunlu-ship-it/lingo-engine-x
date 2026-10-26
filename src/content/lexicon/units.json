@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "note": "Feste Einheiten (Kollokationen, Fachbegriffe, Wendungen) aus den Themen der Lese-Artikel (ai, saas, bizdev, economy, architecture, management). Nur Belege für die Prüffunktion lexicalUnit (src/domain/lexicon/unit.ts): eine Wortgruppe, die hier steht, gilt als feste Einheit. Grundform, US-Englisch, ohne Artikel am Anfang. Gegenlesung english-teacher: docs/umbau/card-quality.md.",
+  "note": "Feste Einheiten (Kollokationen, Fachbegriffe, Wendungen) aus den Themen der Lese-Artikel (ai, saas, bizdev, economy, architecture, management). Nur Belege für die Prüffunktion lexicalUnit (src/domain/lexicon/unit.ts): eine Wortgruppe, die hier steht, gilt als feste Einheit. Grundform, US-Englisch, ohne Artikel am Anfang. Gegenlesung english-teacher: docs/umbau/card-quality.md. `free`: Lehrer-Sperrliste (Gegenlesung 26.10.2026): Wortgruppen aus Artikeln und Kursen, die keine feste Einheit sind, mit der festen Einheit darin bzw. der üblichen Fassung (`better`, sonst leer).",
   "items": [
     "adaptive attack",
     "adversarial attack",
@@ -58,9 +58,8 @@
     "first step",
     "key factor",
     "major issue",
-    "growing number",
+    "a growing number of",
     "fresh approach",
-    "different approach",
     "concerted effort",
     "joint effort",
     "failed attempt",
@@ -142,7 +141,7 @@
     "single source of truth",
     "source code",
     "code review",
-    "code base",
+    "codebase",
     "test coverage",
     "unit test",
     "integration test",
@@ -202,13 +201,9 @@
     "hard deadline",
     "sense of urgency",
     "false sense of security",
-    "false sense of progress",
     "track record",
     "rollout",
-    "company-wide rollout",
     "phased rollout",
-    "spread on their own",
-    "hard to shut down",
     "plausible scenario",
     "worst-case scenario",
     "best-case scenario",
@@ -226,7 +221,7 @@
     "headcount",
     "hiring freeze",
     "layoffs",
-    "cost cutting",
+    "cost-cutting",
     "cost savings",
     "budget cut",
     "return on investment",
@@ -261,6 +256,98 @@
     "viable alternative",
     "compelling case",
     "strong case",
-    "make a case"
+    "make a case for",
+    "make the case for",
+    "customer lifetime value",
+    "retention policy",
+    "single sign-on",
+    "renewal rate",
+    "net revenue retention",
+    "upsell opportunity",
+    "document management system",
+    "data residency"
+  ],
+  "free": [
+    {
+      "w": "spread on their own",
+      "better": "on one's own"
+    },
+    {
+      "w": "hard to shut down",
+      "better": "shut down"
+    },
+    {
+      "w": "plausible trajectory"
+    },
+    {
+      "w": "adapt to unfamiliar hardware",
+      "better": "adapt to"
+    },
+    {
+      "w": "hesitate to share",
+      "better": "hesitate to"
+    },
+    {
+      "w": "addresses the tension"
+    },
+    {
+      "w": "sound confident"
+    },
+    {
+      "w": "handle routine chores"
+    },
+    {
+      "w": "low-risk tasks"
+    },
+    {
+      "w": "name the constraints"
+    },
+    {
+      "w": "scheduling another meeting"
+    },
+    {
+      "w": "keeps the discussion focused",
+      "better": "keep the discussion on track"
+    },
+    {
+      "w": "satisfied peer"
+    },
+    {
+      "w": "shape the rhythm"
+    },
+    {
+      "w": "notorious pitfall",
+      "better": "common pitfall"
+    },
+    {
+      "w": "we won't prejudge"
+    },
+    {
+      "w": "a dose of accommodation",
+      "better": "policy accommodation"
+    },
+    {
+      "w": "leverage for investment"
+    },
+    {
+      "w": "data quality is critical",
+      "better": "data quality"
+    },
+    {
+      "w": "to streamline cross-border trade",
+      "better": "cross-border trade"
+    },
+    {
+      "w": "committed base volume",
+      "better": "volume commitment"
+    },
+    {
+      "w": "false sense of progress",
+      "better": "false sense of security"
+    },
+    {
+      "w": "company-wide rollout",
+      "better": "rollout"
+    }
   ]
 }

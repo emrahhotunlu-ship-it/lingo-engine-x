@@ -22,7 +22,7 @@ export const CANNED_PARAS: CannedSentence[][] = [
     { e: 'Usage-based models track the delivered value more closely, which makes them attractive to buyers who dislike paying for shelfware.', d: 'Nutzungsabhängige Modelle bilden den gelieferten Wert genauer ab und sind deshalb für Käufer attraktiv, die nicht für ungenutzte Software zahlen wollen.' },
     { e: 'The price of that fairness is volatility: revenue now moves with the workload of the customer, and finance teams must explain why a quarter came in lower than planned.', d: 'Der Preis dieser Fairness ist Schwankung: Der Umsatz folgt nun dem Arbeitsaufkommen des Kunden, und die Finanzabteilung muss erklären, warum ein Quartal niedriger ausfiel als geplant.' },
     { e: 'Buyers face the same problem from the other side, since a budget owner cannot sign off on an invoice that nobody can predict.', d: 'Die Käufer haben dasselbe Problem von der anderen Seite, denn wer ein Budget verantwortet, kann keine Rechnung freigeben, die niemand vorhersagen kann.' },
-    { e: 'Many vendors therefore compromise with a committed base volume plus overage fees, arguably the least elegant but most workable option.', d: 'Viele Anbieter einigen sich deshalb auf einen vereinbarten Grundumfang plus Mehrverbrauchsgebühren, wohl die unelegantste, aber praktikabelste Lösung.' },
+    { e: 'Many vendors therefore compromise with a volume commitment plus overage fees, arguably the least elegant but most workable option.', d: 'Viele Anbieter einigen sich deshalb auf eine Mindestabnahme plus Mehrverbrauchsgebühren, wohl die unelegantste, aber praktikabelste Lösung.' },
   ],
   [
     { e: 'A third lever is packaging, because three tiers let a prospect compare options without negotiating from scratch.', d: 'Ein dritter Hebel ist die Paketierung, denn mit drei Stufen können Interessenten Optionen vergleichen, ohne bei null zu verhandeln.' },
@@ -51,7 +51,7 @@ export const CANNED_SUMMARY = 'Der Artikel zeigt, wie die Wahl des Preismodells 
 export const CANNED_KEYWORDS: Array<{ w: string; de: string; i: [number, number] }> = [
   { w: 'shelfware', de: 'ungenutzte Software', i: [2, 0] },
   { w: 'sign off on', de: 'freigeben', i: [2, 2] },
-  { w: 'committed base volume', de: 'vereinbarter Grundumfang', i: [2, 3] },
+  { w: 'volume commitment', de: 'Mindestabnahme, Abnahmeverpflichtung', i: [2, 3] },
   { w: 'breach of trust', de: 'Vertrauensbruch', i: [4, 1] },
   { w: 'erodes margins', de: 'schmälert die Margen', i: [4, 2] },
 ];

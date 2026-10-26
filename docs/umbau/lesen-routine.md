@@ -81,7 +81,7 @@ Regeln für die Auswahl: mindestens 4 verschiedene Themen pro Tag; `ai` und `cla
 - Idiomatisches, natürliches Deutsch, nicht Wort für Wort. Fachbegriffe so, wie man sie im deutschen Berufsalltag sagt (Smart-TV, Update, Vertrieb).
 - Alle **Zahlen** des englischen Satzes stehen im deutschen Satz (15 bleibt 15, 5.57 wird 5,57), Eigennamen bleiben erhalten. Der deutsche Text ist insgesamt 0,85- bis 1,35-mal so lang wie der englische.
 
-**Schlüsselwörter (`keyWords`).** 3 bis 5, Ziel 5. Mindestens 2 davon mehrteilige Wendungen (Verb + Nomen, Adjektiv + Nomen, feste Wendungen: „hard to shut down“, „weak link“). Keine Wörter, die im Deutschen gleich aussehen und heißen (team, system, plan, manager). `w` steht **genau so** (Endungen sind erlaubt) in einem englischen Satz des Artikels, `de` ist die deutsche Bedeutung im Zusammenhang (höchstens 60 Zeichen), `i` ist `[Absatz, Satz]` des Satzes, in dem es steht, nullbasiert (`[0, 2]` = dritter Satz im ersten Absatz). Dieser Satz wird später der Ursprungssatz der Lernkarte.
+**Schlüsselwörter (`keyWords`).** 3 bis 5, Ziel 5. Jede Wendung ist eine **feste Einheit**, die ein Muttersprachler als Ganzes kennt und in anderen Texten wieder verwendet. Wähle in dieser Reihenfolge: (1) Verb-Nomen-Kollokationen, die man im Geschäftsgespräch wiederverwenden kann („raise concerns“, „draw conclusions“, „mitigate a risk“); (2) Fachbegriffe zum Thema des Artikels („prompt injection“, „security update“, „recurring revenue“); (3) Phrasal Verbs und Verb + Präposition („roll out“, „adapt to“); (4) Redewendungen und Diskursmarker („at face value“, „in other words“). **Kein beliebiger Ausschnitt des Satzes.** Gegenbeispiele: „adaptive attempts“ (üblich: „adaptive attacks“), „adapt to unfamiliar hardware“ (Einheit: „adapt to“), „hard to shut down“ (Einheit: „shut down“). Ein allgemeines Nomen (attempt, effort, way, thing, case, step) mit einem frei gewählten Adjektiv ist keine Einheit, außer die Verbindung steht so im Kollokationswörterbuch („concerted effort“, „next step“). Prüfe jede Wendung: Würde Oxford Collocations oder ein Wörterbuch sie so aufführen? Im Zweifel nimm das **Einzelwort**, aber nur, wenn es auf C1-Niveau lohnt. Mindestens 2 mehrteilige Wendungen nur, wenn der Artikel so viele echte Einheiten hat. Keine Wörter, die im Deutschen gleich aussehen und dasselbe heißen (team, system, plan, manager). `w` steht **genau so** (Endungen sind erlaubt) in einem englischen Satz des Artikels. `de` ist die deutsche Bedeutung **der Wendung selbst** in der Grundform (Infinitiv, Einzahl, höchstens 60 Zeichen, wie im Wörterbuch), nicht die Übersetzung des Satzausschnitts. `i` ist `[Absatz, Satz]` des Satzes, in dem es steht, nullbasiert (`[0, 2]` = dritter Satz im ersten Absatz). Dieser Satz wird später der Ursprungssatz der Lernkarte.
 
 **Prüffragen (`check`).** Genau 3, je 3 Antworten in `o`, `a` ist der Index der richtigen Antwort (0, 1 oder 2; wechsle die Lage, nicht immer dieselbe). Frage 1 prüft die **Kernaussage**, Frage 2 eine **Schlussfolgerung** (was folgt daraus, was ist nicht belegt), Frage 3 eine **Wendung im Kontext** (was bedeutet „…“ hier). Frage `q` und Antworten `o` sind Englisch (US), kurz, die Falschantworten plausibel und etwa gleich lang wie die richtige, nie offensichtlich absurd, keine „alle/keine der obigen“. `why` ist Deutsch, ein bis zwei Sätze, erklärt **warum** die Antwort stimmt.
 
@@ -90,7 +90,7 @@ Regeln für die Auswahl: mindestens 4 verschiedene Themen pro Tag; `ai` und `cla
 2. Jede Zahl des Englischen steht im Deutschen.
 3. `source` ist ein Name, `url` beginnt mit `https://` und ist die Seite, die du gelesen hast.
 4. Nichts aus der Quelle wörtlich kopiert; kein Satz mit erfundenen Angaben.
-5. Jedes `keyWords.w` kommt in einem englischen Satz vor, `i` stimmt.
+5. Jedes `keyWords.w` kommt in einem englischen Satz vor, `i` stimmt. Jede mehrteilige `keyWords.w` ist eine feste Einheit (Kollokation, Phrasal Verb, feste Wendung, Fachbegriff), kein Satzausschnitt, im Zweifel durch das Einzelwort ersetzt; `de` passt zur Grundform, nicht zum Satz.
 6. Das ganze Dokument ist gültiges JSON (Anführungszeichen in Texten mit `\"` schützen), kleiner als 150 KB.
 
 **Schritt 6: Schreiben.** Rufe `ArtifactData` mit der Aktion `set` auf Sammlung `read`, Dokument `read/r-<heute>` auf, mit genau diesem Aufbau (ein ganzes Dokument, nicht in Teilen):
@@ -176,7 +176,7 @@ Schreibe **nur** `read/r-<heute>`. Schreibe nie in `read/m-…`, `read/d-…`, `
         ],
         [
           {
-            "e": "It is worth reading the headline carefully before drawing conclusions.",
+            "e": "It is worth reading the headline carefully before you draw conclusions.",
             "d": "Es lohnt sich, die Schlagzeile genau zu lesen, bevor man Schlüsse zieht."
           },
           {
@@ -233,43 +233,43 @@ Schreibe **nur** `read/r-<heute>`. Schreibe nie in `read/m-…`, `read/d-…`, `
       ],
       "keyWords": [
         {
-          "w": "spread on their own",
-          "de": "sich selbstständig verbreiten",
-          "i": [
-            0,
-            2
-          ]
-        },
-        {
-          "w": "hard to shut down",
-          "de": "schwer abzuschalten",
+          "w": "shut down",
+          "de": "abschalten, stilllegen",
           "i": [
             0,
             5
           ]
         },
         {
-          "w": "adapt to unfamiliar hardware",
-          "de": "sich an unbekannte Hardware anpassen",
+          "w": "adapt to",
+          "de": "sich anpassen an",
           "i": [
             1,
             3
           ]
         },
         {
-          "w": "plausible trajectory",
-          "de": "plausible Entwicklung",
+          "w": "draw conclusions",
+          "de": "Schlüsse ziehen",
           "i": [
             2,
-            3
+            0
           ]
         },
         {
           "w": "weak link",
-          "de": "schwaches Glied",
+          "de": "Schwachstelle, schwaches Glied",
           "i": [
             3,
             1
+          ]
+        },
+        {
+          "w": "security updates",
+          "de": "Sicherheitsupdate",
+          "i": [
+            3,
+            4
           ]
         }
       ],

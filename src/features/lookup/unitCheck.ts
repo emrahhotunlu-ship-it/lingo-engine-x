@@ -15,7 +15,7 @@ import { lexicalUnitCheck } from '../../prompts/lexicalUnitCheck';
 // Sperre „nur feste Einheiten als Wendungs-Karte“ (Kartenqualität 26.10.2026, docs/umbau/card-quality.md) – vor dem Speichern einer
 // Wortgruppe aus einem Artikel oder dem Leser (`src:'read'`):
 //  1. Reine Prüfung `lexicalUnit`: belegt bzw. klar gebaut → speichern. Klar frei („adaptive attempts“) oder Adjektiv + Nomen ohne Beleg → 2.
-//  2. Claude fragen (`lexical-unit-check@1`, quick), nur wenn die KI bereitsteht und die Tutor-Tagesbremse Platz hat; die erste Nutzung fragt
+//  2. Claude fragen (`lexical-unit-check@1`, quick; nie bei Gruppen der Lehrer-Sperrliste), nur wenn die KI bereitsteht und die Tutor-Tagesbremse Platz hat; die erste Nutzung fragt
 //     über die Plattform nach Zustimmung (der Knopf „Als Karte“ ist die ausdrückliche Handlung). Kein Neuversuch aus dem Code.
 //  3. Ohne Claude entscheidet die Regel: „prüfen“ → nicht als Wendung speichern; Adjektiv + Nomen → speichern.
 // Nicht gespeicherte Gruppen bekommen höchstens das tragende Einzelwort als Ausweg (mit Bedeutung aus Wörterbuch oder Atlas).
@@ -57,6 +57,8 @@ export async function checkCardUnit(i: { word: string; sentence: string; uiLang:
   const byRule = (): UnitDecision =>
     v.verdict === 'check' ? { kind: 'not_unit', by: 'rule', ...(v.better ? { better: v.better } : {}), single: singleWordOf(i.word, i.sentence) } : { kind: 'ok' };
 
+  // Lehrer-Sperrliste (`units.json` → `free`): das Urteil steht fest, kein Claude-Aufruf (spart Budget, Claude überstimmt den Lehrer nicht).
+  if (v.detail === 'teacher list') return byRule();
   if (!selectAiAvailable(useCapabilities.getState()) || !takeTutorCall()) return byRule();
   try {
     const r = await askJson({ template: lexicalUnitCheck, vars: { phrase: i.word.trim(), sentence: i.sentence, uiLang: i.uiLang }, signal: i.signal ?? new AbortController().signal });

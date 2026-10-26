@@ -1,8 +1,8 @@
 // Kartenqualität (26.10.2026, docs/umbau/card-quality.md): Wortgruppen nur als feste Einheit speichern, ruhende Lesekarten. Präfix `ttCq`.
 
 export const ttCardQualityDe = {
-  ttCqNotUnit: 'Keine feste Wendung, darum keine Karte.',
-  ttCqBetterLabel: 'Üblich ist:',
+  ttCqNotUnit: 'Richtiges Englisch, aber keine feste Wendung. Darum keine Karte.',
+  ttCqBetterLabel: 'Feste Wendung dazu:',
   ttCqByClaude: 'Einschätzung von Claude, kann Fehler enthalten.',
   ttCqSaveSingle: 'Nur „{word}“ speichern',
   ttCqSingleSaved: '„{word}“ gespeichert',

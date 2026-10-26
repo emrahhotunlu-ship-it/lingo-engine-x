@@ -1117,10 +1117,10 @@ const R1 = readItem(
     ],
   ],
   [
-    { w: 'hesitate to share', de: 'zögern, zu teilen', i: [1, 0] },
+    { w: 'hesitate to', de: 'zögern, etw. zu tun', i: [1, 0] },
     { w: 'billable hours', de: 'abrechenbare Stunden', i: [2, 1] },
-    { w: 'addresses the tension', de: 'spricht die Spannung an', i: [2, 4] },
-    { w: 'false sense of progress', de: 'trügerisches Gefühl von Fortschritt', i: [4, 0] },
+    { w: 'tension', de: 'Spannung, Spannungsverhältnis', i: [2, 4] },
+    { w: 'counterargument', de: 'Gegenargument', i: [4, 0] },
     { w: 'early adopter', de: 'früher Anwender', i: [4, 1] },
   ],
   [
@@ -1155,10 +1155,10 @@ const R2 = readItem(
     ],
   ],
   [
-    { w: 'sound confident', de: 'selbstsicher klingen', i: [1, 1] },
+    { w: 'by hand', de: 'von Hand', i: [2, 2] },
     { w: 'first draft', de: 'erster Entwurf', i: [1, 2] },
     { w: 'at scale', de: 'im großen Maßstab', i: [2, 0] },
-    { w: 'company-wide rollout', de: 'unternehmensweite Einführung', i: [2, 1] },
+    { w: 'use cases', de: 'Anwendungsfall', i: [2, 1] },
     { w: 'adds up', de: 'summiert sich', i: [0, 2] },
   ],
   [
@@ -1192,9 +1192,9 @@ const R3 = readItem(
     ],
   ],
   [
-    { w: 'scheduling another meeting', de: 'ein weiteres Meeting ansetzen', i: [0, 0] },
+    { w: 'respond to', de: 'reagieren auf', i: [0, 0] },
     { w: 'at a fraction of the cost', de: 'zu einem Bruchteil der Kosten', i: [0, 2] },
-    { w: 'keeps the discussion focused', de: 'hält die Diskussion fokussiert', i: [2, 1] },
+    { w: 'at once', de: 'gleichzeitig, auf einmal', i: [2, 0] },
     { w: 'move the work forward', de: 'die Arbeit voranbringen', i: [2, 2] },
     { w: 'uncertainty', de: 'Unsicherheit', i: [0, 0] },
   ],
