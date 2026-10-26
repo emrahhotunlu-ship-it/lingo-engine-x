@@ -487,3 +487,5 @@ Lehre: Für Aufgabenfragen mit Gestaltungsspielraum zuerst Emrah mit Vorschau fr
 - **LIVE 21.10.2026 (abends):** `JLL8…` v83 `1792603578-db27` (Wort-Lernen 2 + Fixes), Rückweg v82 `1792478473-c5ee`. Test-Link v70. KERN_FROM = 2026-10-22: Fest-Neueinordnung wirkt ab morgen.
 
 - **LIVE 25.10.2026:** `JLL8…` v84 `1792951763-665a` (Sinn-Auswahl, Einführungskarte, Lücken), Rückweg v83 `1792603578-db27`.
+
+- **LIVE 26.10.2026:** `JLL8…` v85 `1793030281-a776` (Kartenqualität), Rückweg v84 `1792951763-665a`. Routinen Lesen/Kurse: Prompt geändert (Rückweg: Dateien `*-prompt-alt.txt` im Scratchpad der Sitzung; ggf. aus docs/umbau/lesen-routine.md rekonstruieren).
