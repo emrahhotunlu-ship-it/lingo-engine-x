@@ -16,12 +16,14 @@ import { wordLookup, type WordLookupOut } from '../../prompts/wordLookup';
 import { Button, IconButton } from '../../ui/Button';
 import { toast } from '../../ui/Toast';
 import { openCompanion } from '../companion/store';
-import { saveLookupCard, storeLookup, useLookupData } from './store';
+import { checkCardUnit, saveLookupCard, storeLookup, useLookupData, type UnitDecision } from './store';
 
 // Mehrwort-Markierung (Emrahs Wunsch, 21.10.2026): Inhalt des Nachschlage-Fensters für eine Wortgruppe. Bedeutung zuerst aus eigener Karte,
 // Zwischenspeicher oder Wörterbuch; sonst fragt es Claude einmal (word-lookup, quick) mit dem Satz – das zählt zur Tagesbremse (20 am Tag).
 // Ohne Claude oder nach der Tagesbremse: ehrlicher Hinweis und die einzelnen Wörter aus dem Wörterbuch. „Als Karte merken“ legt eine
 // Wendungs-Karte mit Ursprungssatz an (neue Karten landen im Eingangskorb), über denselben Schreibweg wie das Einzelwort, nie doppelt.
+// Kartenqualität (26.10.2026): Aus Artikel/Leser wird eine Wortgruppe nur als feste Einheit gespeichert (`checkCardUnit`); sonst Hinweis
+// und höchstens das tragende Einzelwort.
 
 type Doc = Readonly<Record<string, unknown>>;
 type Span = readonly [number, number];
@@ -52,6 +54,10 @@ export function PhraseBody({ req, cards, cache }: { req: WordTapRequest; cards: 
   const [limit, setLimit] = useState(false);
   const [saveState, setSaveState] = useState<'idle' | 'busy' | 'failed'>('idle');
   const [saveNote, setSaveNote] = useState<'added' | 'exists' | null>(null);
+  const [notUnit, setNotUnit] = useState<Extract<UnitDecision, { kind: 'not_unit' }> | null>(null);
+  const [singleSaved, setSingleSaved] = useState(false);
+  const unitCtl = useRef<AbortController | null>(null);
+  useEffect(() => () => unitCtl.current?.abort(), []);
 
   // Nicht gefunden: Claude einmal je Öffnen fragen (das Markieren ist die Handlung), gebremst durch die Tagesbremse.
   const asked = useRef(false);
@@ -101,6 +107,15 @@ export function PhraseBody({ req, cards, cache }: { req: WordTapRequest; cards: 
   const save = async () => {
     if (!de || !exSentence) return;
     setSaveState('busy');
+    const src = cardSrcFor(req.area);
+    unitCtl.current?.abort();
+    unitCtl.current = new AbortController();
+    const d = await checkCardUnit({ word: headword, sentence: exSentence, uiLang: lang, signal: unitCtl.current.signal, src });
+    if (d.kind === 'not_unit') {
+      setNotUnit(d);
+      setSaveState('idle');
+      return;
+    }
     const r = await saveLookupCard({
       word: headword,
       de,
@@ -109,7 +124,8 @@ export function PhraseBody({ req, cards, cache }: { req: WordTapRequest; cards: 
       level: aiData?.level || resolved.level || null,
       ex: exSentence,
       surface: phrase,
-      src: cardSrcFor(req.area),
+      src,
+      ...(d.lu ? { lu: d.lu } : {}),
       origin: { v: 1, kind: req.area, t: Date.now(), ...(req.source ? { ref: req.source } : {}), ...(req.title ? { title: req.title } : {}) },
       today: dayKey(Date.now()),
       ...(aiData?.note ? { keep: { tip: aiData.note } } : {}),
@@ -121,6 +137,29 @@ export function PhraseBody({ req, cards, cache }: { req: WordTapRequest; cards: 
       setSaveState('idle');
       setSaveNote(r);
       toast(t(r === 'added' ? 'lkAddedToast' : 'lkExistsToast'));
+    } else if (r === 'not_unit') {
+      setNotUnit({ kind: 'not_unit', by: 'rule', single: null });
+      setSaveState('idle');
+    } else setSaveState('failed');
+  };
+
+  const saveSingle = async () => {
+    const one = notUnit?.single;
+    if (!one || !exSentence) return;
+    setSaveState('busy');
+    const r = await saveLookupCard({
+      word: one.word,
+      de: one.de,
+      ...(one.pos ? { pos: one.pos } : {}),
+      ex: exSentence,
+      surface: one.surface,
+      src: cardSrcFor(req.area),
+      origin: { v: 1, kind: req.area, t: Date.now(), ...(req.source ? { ref: req.source } : {}), ...(req.title ? { title: req.title } : {}) },
+      today: dayKey(Date.now()),
+    });
+    if (r === 'saved' || r === 'added' || r === 'exists') {
+      setSaveState('idle');
+      setSingleSaved(true);
     } else setSaveState('failed');
   };
 
@@ -238,13 +277,47 @@ export function PhraseBody({ req, cards, cache }: { req: WordTapRequest; cards: 
           </ul>
         </div>
       )}
+      {notUnit && (
+        <div className="flex flex-col gap-1.5" data-testid="ph-notunit" data-by={notUnit.by}>
+          <p className="text-sm font-medium" role="status">
+            {t('ttCqNotUnit')}
+          </p>
+          {notUnit.better && (
+            <p className="text-sm text-muted" data-testid="ph-better">
+              {t('ttCqBetterLabel')}{' '}
+              <span className="font-semibold text-fg" lang="en">
+                {notUnit.better}
+              </span>
+            </p>
+          )}
+          {notUnit.why && (
+            <p className="text-xs text-muted" lang={lang}>
+              {notUnit.why}
+            </p>
+          )}
+          {notUnit.by === 'claude' && <p className="text-2xs text-subtle">{t('ttCqByClaude')}</p>}
+          {notUnit.single &&
+            (singleSaved ? (
+              <p className="inline-flex min-h-11 items-center text-sm font-medium text-accent-text" role="status" data-testid="ph-single-saved">
+                {t('ttCqSingleSaved', { word: notUnit.single.word })}
+              </p>
+            ) : (
+              <div>
+                <Button variant="secondary" icon="bookmarkPlus" onClick={() => void saveSingle()} busy={saveState === 'busy'} data-testid="ph-single">
+                  {t('ttCqSaveSingle', { word: notUnit.single.word })}
+                </Button>
+              </div>
+            ))}
+        </div>
+      )}
       <div className="flex flex-wrap gap-2">
         {exists ? (
           <p className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-accent-text" data-testid="lk-saved" data-note={saveNote ?? undefined}>
             {saveNote === 'exists' ? t('lkExists') : t('lkSaved')}
           </p>
         ) : (
-          canSave && (
+          canSave &&
+          !notUnit && (
             <Button variant="secondary" icon="bookmarkPlus" onClick={() => void save()} busy={saveState === 'busy'} data-testid="lk-save">
               {t('ttPhSave')}
             </Button>

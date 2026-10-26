@@ -54,6 +54,11 @@ export const rdrEn: Record<RdrKey, string> = {
   rdrCardExists: 'Already there',
   rdrCardFailed: 'Not saved. Tap to try again.',
   rdrCardNoSentence: 'No matching sentence',
+  rdrNotUnit: 'Not a fixed phrase, so no card.',
+  rdrNotUnitBetter: 'The usual phrase is:',
+  rdrNotUnitClaude: 'Claude’s assessment, may contain mistakes.',
+  rdrSaveSingle: 'Save only “{word}”',
+  rdrSingleSaved: '“{word}” saved',
   rdrInSentence: 'Sentence {n}',
 
   rdrCheck: 'Quick check',

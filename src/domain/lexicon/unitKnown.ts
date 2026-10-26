@@ -7,7 +7,7 @@ import { logError } from '../../platform/diagnostics';
 import { atlasEntries } from '../atlas/atlas';
 import { normalizeWord } from '../text/tokenize';
 import { dictPosOf, isDictPhrase } from './dict';
-import { lexicalUnitWith, singular, unitKey, type UPos, type UnitDeps, type UnitVerdict } from './unit';
+import { lexicalUnitWith, phraseShapeWith, singular, unitKey, type PhraseShape, type UPos, type UnitDeps, type UnitVerdict } from './unit';
 
 // Wissen für `lexicalUnit`: alle in den Inhalten belegten Wortgruppen (C1-Paket mit Alternativen und Wortpartnern, Wortpartner-Charge,
 // Kollokationen der Business-Suite, Wortpartner der Startvokabeln, `content/lexicon/units.json`) und die Wortarten aus Wörterbuch und
@@ -66,23 +66,30 @@ function build(): Index {
 
 const load = (): Index => (index ??= build());
 
-let atlasPos: Map<string, UPos[]> | null = null;
+type AtlasInfo = { w: string; pos: UPos[]; de: string; r: number };
+let atlasMap: Map<string, AtlasInfo> | null = null;
 const ATLAS_POS: Readonly<Record<string, UPos>> = { noun: 'noun', verb: 'verb', adjective: 'adj', adverb: 'adv' };
 const DICT_POS: Readonly<Record<string, UPos>> = { noun: 'noun', verb: 'verb', adj: 'adj', adv: 'adv', prep: 'prep', phrasal: 'verb' };
 
-function atlasPosOf(w: string): readonly UPos[] {
-  if (!atlasPos) {
-    atlasPos = new Map();
+/** Atlas-Eintrag eines Worts (auch Mehrzahl): Wortarten, deutsche Bedeutung, Häufigkeitsrang. */
+export function atlasInfo(word: string): AtlasInfo | null {
+  if (!atlasMap) {
+    atlasMap = new Map();
     for (const e of atlasEntries()) {
       const p = ATLAS_POS[e.p];
-      if (!p) continue;
-      const list = atlasPos.get(e.w) ?? [];
-      if (!list.includes(p)) list.push(p);
-      atlasPos.set(e.w, list);
+      const hit = atlasMap.get(e.w);
+      if (hit) {
+        if (p && !hit.pos.includes(p)) hit.pos.push(p);
+        continue;
+      }
+      atlasMap.set(e.w, { w: e.w, pos: p ? [p] : [], de: e.d, r: e.r });
     }
   }
-  return atlasPos.get(w) ?? atlasPos.get(singular(w)) ?? [];
+  const w = normalizeWord(word);
+  return atlasMap.get(w) ?? atlasMap.get(singular(w)) ?? null;
 }
+
+const atlasPosOf = (w: string): readonly UPos[] => atlasInfo(w)?.pos ?? [];
 
 const posCache = new Map<string, readonly UPos[]>();
 function posOf(word: string): readonly UPos[] {
@@ -109,6 +116,18 @@ export function unitDeps(exclude?: UnitSource): UnitDeps {
     pos: posOf,
     dictPhrase: (p) => isDictPhrase(p),
   };
+}
+
+const shapeCache = new Map<string, PhraseShape>();
+/** Bauform eines Kartenworts (für Ablenker), zwischengespeichert; braucht nur Wörterbuch und Atlas, nicht den Index der Gruppen. */
+export function phraseShape(phrase: string): PhraseShape {
+  const k = phrase.trim().toLowerCase();
+  const hit = shapeCache.get(k);
+  if (hit) return hit;
+  const s = phraseShapeWith(k, { pos: posOf });
+  if (shapeCache.size > 5000) shapeCache.clear();
+  shapeCache.set(k, s);
+  return s;
 }
 
 /** Ist die Wortgruppe eine feste Einheit? Nur Urteil („ok“ oder „prüfen“), löscht und ändert nichts. */

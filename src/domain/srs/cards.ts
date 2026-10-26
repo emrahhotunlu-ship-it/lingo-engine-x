@@ -1,4 +1,5 @@
 import { dayKey } from '../date';
+import { unitHeld } from '../lexicon/unitHeld';
 import { mergedVocab } from '../overview';
 import { chargeCollocsFor } from './collocs';
 import { findContext, lemmaOf, parseCollocs, senseFits } from './context';
@@ -82,6 +83,7 @@ export function toTrainCard(id: string, doc: Doc, inDb: boolean, nowMs: number):
   const fsrs = readFsrs(doc, nowMs);
   const hist = Array.isArray(doc.hist) ? doc.hist : [];
   const last = hist[hist.length - 1] as Record<string, unknown> | undefined;
+  const held = unitHeld(doc) !== null;
   return {
     kind: 'vocab',
     key: `vocab/${id}`,
@@ -99,7 +101,8 @@ export function toTrainCard(id: string, doc: Doc, inDb: boolean, nowMs: number):
     fsrs,
     stage: stageOf(doc),
     isNew: isNewState(fsrs),
-    hidden: doc.hidden === true,
+    hidden: doc.hidden === true || held,
+    ...(held ? { held: true as const } : {}),
     xs: counts(doc.xs),
     modes: counts(doc.modes),
     lastMode: last && typeof last.m === 'string' ? last.m : null,

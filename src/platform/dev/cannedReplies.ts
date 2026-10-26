@@ -24,6 +24,7 @@ import { registerS4Replies } from './canned/s4';
 import { registerWerkstattReplies } from './canned/werkstatt';
 import { registerTeacherFeedbackReply } from './canned/teacherFeedback';
 import { registerReadReplies } from './canned/read';
+import { registerCardQualityReplies } from './canned/cardQuality';
 import { registerActReplies } from './canned/act';
 
 // Feste, realistische Antworten des Entwicklungs-Adapters für die Vorlagen word-lookup@2,
@@ -328,6 +329,8 @@ export function registerCannedReplies(): void {
   registerNbReplies();
   // Lesen (13.10.2026): read-article, read-topics
   registerReadReplies();
+  // Kartenqualität (26.10.2026): lexical-unit-check@1
+  registerCardQualityReplies();
 }
 
 // ---------------------------------------------------------------- Aufrufprotokoll

@@ -15,6 +15,8 @@ import { gapUsable, lemmaFor } from './gapFit';
 import { readCfx, readWx } from '../tutor/acceptWordCtx';
 import { poolNorm } from '../drills/orderPool';
 import { sayItIntent } from './sayIt';
+import { phraseShape } from '../lexicon/unitKnown';
+import type { PhraseShape } from '../lexicon/unit';
 import type { CheckResult, Colloc, Exercise, ExerciseId, Lang, Option, SituationTask, Stage, Tile, TrainCard } from './types';
 
 // Übung aus Karte und Art bauen (Lern-Entwurf §4.4 Ablenker). Zufall mit Startwert:
@@ -131,20 +133,37 @@ function meaningDistractors(card: TrainCard, pool: readonly TrainCard[], lang: L
 /** Sprache der Bedeutungs-Optionen: die Oberflächensprache, bei fehlender Bedeutung die andere (gleichwertig, `meaningForTask`). */
 export const tongueOf = (card: Pick<TrainCard, 'de' | 'def'>, lang: Lang): Lang => ((lang === 'de' ? card.de : card.def) ? lang : lang === 'de' ? 'en' : 'de');
 
-/** Drei englische Wörter anderer Karten als Ablenker. */
+/**
+ * Bauform-Nähe (Kartenqualität 26.10.2026, Emrahs Meldung: „adaptive attempts“ zwischen „keep up with“, „digitalization“, „come to terms with“):
+ * gleiche Bauform (Adjektiv + Nomen, Verb + Partikel, verb-geführt, Einzelwort mit Wortart …) zählt stark, gleiche Wortzahl mittel,
+ * Einzelwort gegen Wortgruppe deutlich weniger. Sonst verrät die Form die Lösung.
+ */
+export function shapeScore(a: PhraseShape, b: PhraseShape): number {
+  return (a.kind === b.kind ? 5 : 0) + (a.n === b.n ? 2 : 0) - ((a.n === 1) !== (b.n === 1) ? 4 : 0);
+}
+
+/** Drei englische Wörter anderer Karten als Ablenker (gleiche Bauform bevorzugt). */
 function wordDistractors(card: TrainCard, pool: readonly TrainCard[], lang: Lang, rng: () => number, skip?: (c: TrainCard) => boolean): Option[] {
   const cands: Scored[] = [];
   const head = norm(card.lemma).slice(0, 5);
   const target = meaningForTask(card, lang) ?? '';
+  const shape = phraseShape(card.word);
   for (const c of pool) {
     if (c.key === card.key || skip?.(c)) continue;
     if (norm(c.lemma) === norm(card.lemma) || norm(c.lemma).slice(0, 5) === head) continue;
     const cm = meaningForTask(c, lang);
     if (cm && target && sharesWord(cm, target)) continue;
     if (tooClose(card, c)) continue;
-    // Wendungen bekommen Wendungen als Ablenker, Wörter Wörter (sonst verrät die Länge die Lösung).
-    const sameKind = c.kind === card.kind ? 4 : 0;
-    const score = sameKind + (c.pos && c.pos === card.pos ? 3 : 0) + (Math.abs(c.word.length - card.word.length) <= 3 ? 2 : 0) + (c.stage === card.stage ? 1 : 0) + rng() * 0.5 - stemPenalty(card, c);
+    // Wendungen bekommen Wendungen als Ablenker, Wörter Wörter (sonst verrät die Länge die Lösung). Die Art wiegt mehr als die Bauform (höchstens 7).
+    const sameKind = c.kind === card.kind ? 8 : 0;
+    const score =
+      sameKind +
+      (c.pos && c.pos === card.pos ? 3 : 0) +
+      shapeScore(shape, phraseShape(c.word)) +
+      (Math.abs(c.word.length - card.word.length) <= 3 ? 2 : 0) +
+      (c.stage === card.stage ? 1 : 0) +
+      rng() * 0.5 -
+      stemPenalty(card, c);
     cands.push({ card: c, label: c.kind === 'chunk' ? typedForm(c.word) : c.word, score });
   }
   return pick(cands, 3).map((d, i) => ({ id: `d${i}`, label: d.label, lang: 'en', correct: false, fromWord: d.card.word, fromMeaning: m(d.card, lang) }));

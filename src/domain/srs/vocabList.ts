@@ -56,7 +56,8 @@ export function inDeck(c: TrainCard, deck: Deck): boolean {
 }
 
 export function matchesFilter(c: TrainCard, f: VocabFilter, nowMs: number): boolean {
-  if (f === 'hidden') return c.hidden;
+  // Ruhende Lesekarten (`held`) stehen nicht unter „Ausgeblendet“: „Wieder aufnehmen“ ginge dort ins Leere; Freigabe in der Lehrer-Liste.
+  if (f === 'hidden') return c.hidden && !c.held;
   if (c.hidden) return false;
   switch (f) {
     case 'all':

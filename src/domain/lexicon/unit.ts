@@ -33,6 +33,8 @@ export type UnitDeps = {
   /** Mehrwort-Eintrag des eingebauten Wörterbuchs (carry out, according to)? */
   dictPhrase(phrase: string): boolean;
 };
+/** Nur die Wortarten (für `phraseShapeWith`, ohne den Index der belegten Gruppen). */
+export type PosDeps = Pick<UnitDeps, 'pos'>;
 
 const ARTICLES: ReadonlySet<string> = new Set(['a', 'an', 'the']);
 const DETERMINERS: ReadonlySet<string> = new Set([...ARTICLES, 'this', 'that', 'these', 'those', 'another', 'some', 'any', 'each', 'every', 'my', 'your', 'our', 'their', 'its', 'his', 'her', 'no']);
@@ -64,6 +66,12 @@ const LIGHT_VERBS: ReadonlySet<string> = new Set(['make', 'take', 'have', 'give'
 const ADJ_SUFFIX = /(?:ive|ible|able|ous|ful|less|ical|ic|ary|al|ish|ent|ant)$/;
 const NOUN_SUFFIX = /(?:tion|sion|ment|ness|ity|ance|ence|ship|ism|ist|age|ure|ery|ory|er|or)$/;
 
+/** Wort ohne Eigengewicht (Funktionswort, allgemeines Nomen oder Adjektiv): taugt nicht als Einzelkarte anstelle der Gruppe. */
+export const isWeakWord = (w: string): boolean => {
+  const n = w.toLowerCase();
+  return n.length < 3 || FUNCTION.has(n) || GENERAL_NOUNS.has(singular(n)) || GENERAL_ADJS.has(n) || LIGHT_VERBS.has(n);
+};
+
 /** Kleine Grundform für Schlüssel: Mehrzahl und 3. Person auf -s fallen weg (companies → company, attacks → attack, adds → add). */
 export function singular(w: string): string {
   if (w.length <= 3 || /(?:ss|us|is|ous|'s)$/.test(w)) return w;
@@ -94,7 +102,7 @@ export function unitKey(phrase: string): string {
     .join(' ');
 }
 
-function posGuess(w: string, deps: UnitDeps): ReadonlySet<UPos> {
+function posGuess(w: string, deps: PosDeps): ReadonlySet<UPos> {
   const known = deps.pos(w);
   if (known.length) return new Set(known);
   const out = new Set<UPos>();
@@ -106,12 +114,12 @@ function posGuess(w: string, deps: UnitDeps): ReadonlySet<UPos> {
 }
 
 /** Adjektiv, auch Partizip vor dem Nomen (failed attempt, growing number). */
-const isAdj = (w: string, deps: UnitDeps): boolean => w.includes('-') || posGuess(w, deps).has('adj') || (w.length > 4 && /(?:ed|ing)$/.test(w));
-const isNoun = (w: string, deps: UnitDeps): boolean => posGuess(w, deps).has('noun');
-const isVerb = (w: string, deps: UnitDeps): boolean => posGuess(w, deps).has('verb');
+const isAdj = (w: string, deps: PosDeps): boolean => w.includes('-') || posGuess(w, deps).has('adj') || (w.length > 4 && /(?:ed|ing)$/.test(w));
+const isNoun = (w: string, deps: PosDeps): boolean => posGuess(w, deps).has('noun');
+const isVerb = (w: string, deps: PosDeps): boolean => posGuess(w, deps).has('verb');
 
 /** Grundform eines gebeugten Verbs am Anfang (adds → add, keeps → keep, scheduling → schedule) – nur wenn das Wörterbuch die Grundform als Verb kennt. */
-function baseVerb(first: string, deps: UnitDeps): string | null {
+function baseVerb(first: string, deps: PosDeps): string | null {
   const cands: string[] = [];
   if (/[^s]s$/.test(first) && first.length > 3) cands.push(singular(first));
   if (/ing$/.test(first) && first.length > 5) cands.push(first.slice(0, -3), `${first.slice(0, -3)}e`, first.slice(0, -4));
@@ -202,4 +210,39 @@ export function lexicalUnitWith(phrase: string, deps: UnitDeps): UnitVerdict {
   if (t.some((w) => FUNCTION.has(w))) return withBase({ verdict: 'ok', reason: 'fixed' });
   if (isVerb(head, deps)) return withBase({ verdict: 'ok', reason: 'verb_phrase' });
   return withBase({ verdict: 'ok', reason: 'phrase' });
+}
+
+/**
+ * Bauform eines Kartenworts für Ablenker (Kartenqualität 26.10.2026, Emrahs Meldung „adaptive attempts“ zwischen „keep up with“ und
+ * „digitalization“): Optionen sollen dieselbe Bauform haben, sonst verrät die Form die Lösung.
+ * `n`: Wortzahl ohne „to“/Artikel am Anfang (höchstens 4). `kind`: Einzelwort mit Wortart, Verb + Partikel, verb-geführt, Adjektiv + Nomen,
+ * Nomen + Nomen, Präposition vorn, sonst `group`.
+ */
+export type PhraseShape = { n: number; kind: 'w-noun' | 'w-verb' | 'w-adj' | 'w-other' | 'phrasal' | 'verb-led' | 'adj-noun' | 'compound' | 'prep-led' | 'group' };
+
+export function phraseShapeWith(phrase: string, deps: PosDeps): PhraseShape {
+  let t = tokensOf(phrase);
+  const toLed = t[0] === 'to' && t.length > 1;
+  if (toLed) t = t.slice(1);
+  while (t.length > 1 && ARTICLES.has(t[0] ?? '')) t = t.slice(1);
+  const n = Math.min(4, Math.max(1, t.length));
+  const first = t[0] ?? '';
+  if (t.length <= 1) {
+    if (toLed) return { n, kind: 'w-verb' };
+    const p = posGuess(first, deps);
+    return { n, kind: p.has('verb') && !p.has('noun') ? 'w-verb' : p.has('adj') && !p.has('noun') ? 'w-adj' : p.has('noun') ? 'w-noun' : 'w-other' };
+  }
+  const rest = t.slice(1);
+  const head = baseVerb(first, deps) ?? first;
+  const verbish = toLed || deps.pos(head).includes('verb');
+  if (verbish && rest.length <= 2 && rest.every((w) => PARTICLES.has(w))) return { n, kind: 'phrasal' };
+  if (t.length === 2) {
+    const [a, b] = t as [string, string];
+    // Partizip oder Adjektiv vor einem Nomen (adaptive attacks, failed attempt) geht vor der Verb-Lesart.
+    if (!toLed && !FUNCTION.has(b) && isAdj(a, deps) && isNoun(b, deps) && (!deps.pos(a).includes('verb') || /(?:ed|ing)$/.test(a))) return { n, kind: 'adj-noun' };
+    if (!toLed && !verbish && isNoun(a, deps) && isNoun(b, deps)) return { n, kind: 'compound' };
+  }
+  if (verbish) return { n, kind: 'verb-led' };
+  if (PARTICLES.has(first) || first === 'under' || first === 'without' || first === 'beyond') return { n, kind: 'prep-led' };
+  return { n, kind: 'group' };
 }

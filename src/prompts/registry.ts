@@ -17,6 +17,7 @@ import { NB_TEMPLATES } from './nb';
 import { produceCheckV2 } from './produceCheckV2';
 import { activateCheck } from './activateCheck';
 import { synonymCheck } from './synonymCheck';
+import { lexicalUnitCheck } from './lexicalUnitCheck';
 import { wordGen } from './wordGen';
 import { companionChat } from './companionChat';
 import { translate } from './translate';
@@ -96,6 +97,8 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   mnemonicOptions,
   // Lesen (13.10.2026): Artikel und Themenvorschläge, Modul src/modules/read
   ...READ_TEMPLATES,
+  // Kartenqualität (26.10.2026): feste Einheit? (nur auf „Als Karte“, wenn die reine Prüfung unsicher ist)
+  lexicalUnitCheck,
 ];
 
 /** Gesprächsvorlagen (Freitext, gestreamt über src/ai/stream.ts; Phase 3 und 5). */

@@ -102,7 +102,10 @@ export type TrainCard = {
   fsrs: FsrsStored;
   stage: Stage;
   isNew: boolean;
+  /** Nicht abgefragt: von Emrah ausgeblendet (`doc.hidden`) ODER ruhende Lesekarte ohne feste Einheit (`held`). */
   hidden: boolean;
+  /** Ruhende Lesekarte (Kartenqualität 26.10.2026, `domain/lexicon/unitHeld.ts`): Wortgruppe ohne feste Einheit; Freigabe in der Lehrer-Liste. */
+  held?: true;
   xs: Record<string, Counts>;
   modes: Record<string, Counts>;
   lastMode: string | null;

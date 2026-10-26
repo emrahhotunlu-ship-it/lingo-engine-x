@@ -3,6 +3,7 @@ import { getWriter } from '../../data';
 import { readOnce } from '../../data/snapshot';
 import { cacheEntry, cachePatch, lookupKey } from '../../domain/lookup/cache';
 import { mayCreateDoc } from '../../domain/capacity/docGuard';
+import { cardUnitVerdict, isReadGroup } from '../../domain/lexicon/unitHeld';
 import { newVocabDoc, saveCardOp, type NewVocabInput } from '../../domain/srs/newCard';
 import type { WordLookupOut } from '../../prompts/wordLookup';
 import { getDb } from '../../platform/capabilities';
@@ -57,11 +58,19 @@ export async function storeLookup(word: string, out: WordLookupOut, uiLang: 'de'
   }
 }
 
-/** saved = neu angelegt · added = Satz an bestehender Karte ergänzt · exists = nichts geändert. */
-export type SaveResult = 'saved' | 'added' | 'exists' | 'invalid' | 'failed';
+/** saved = neu angelegt · added = Satz an bestehender Karte ergänzt · exists = nichts geändert · not_unit = keine feste Einheit, nicht gespeichert. */
+export type SaveResult = 'saved' | 'added' | 'exists' | 'invalid' | 'failed' | 'not_unit';
 
-/** „Als Karte speichern": anlegen, falls es die Karte nicht gibt; sonst höchstens Satz ergänzen. */
+// Prüfung „feste Einheit?“ vor dem Speichern (auch für das Lesen-Modul, das nur diese Datei erreicht).
+export { checkCardUnit, type SingleOption, type UnitDecision } from './unitCheck';
+
+/**
+ * „Als Karte speichern": anlegen, falls es die Karte nicht gibt; sonst höchstens Satz ergänzen.
+ * Sperre (Kartenqualität 26.10.2026): Eine Wortgruppe aus Artikel/Leser (`src:'read'`), die die reine Prüfung als freie Gruppe einstuft,
+ * wird nur mit Bestätigung (`lu.ok`, von Claude über `checkCardUnit`) gespeichert, sonst `not_unit` (nichts geschrieben).
+ */
 export async function saveLookupCard(input: NewVocabInput): Promise<SaveResult> {
+  if (isReadGroup(input.src, input.word) && !input.lu?.ok && cardUnitVerdict(input.word).verdict === 'check') return 'not_unit';
   const writer = getWriter();
   const made = newVocabDoc(input);
   if (!made) return 'invalid';

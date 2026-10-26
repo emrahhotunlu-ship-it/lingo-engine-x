@@ -1,4 +1,5 @@
 import { local } from '../../platform/storage';
+import type { HeldUnitRow } from '../lexicon/unitHeld';
 import type { HeldRepairRow } from '../repair/gate';
 import type { FitAltRow } from './fitAlt';
 import type { BankSample } from './sentenceBank';
@@ -111,7 +112,13 @@ export const shownSample = (): ShownItem[] => readShown();
  * Inhalt der Datei „KI-Stichprobe“ (JSON). `fitAlt`: die gemerkten „Auch richtig“-Antworten aller Themen (Tutor-Engine v3 §3.2) für die
  * Gegenlesung durch den Englischlehrer; nur ergänzend, die Datei bleibt `v: 1`.
  */
-export function sampleFile(now: number = Date.now(), fitAlt: readonly FitAltRow[] = [], held: readonly HeldRepairRow[] = [], bank: BankSample | null = null): { name: string; data: string } {
+export function sampleFile(
+  now: number = Date.now(),
+  fitAlt: readonly FitAltRow[] = [],
+  held: readonly HeldRepairRow[] = [],
+  bank: BankSample | null = null,
+  heldUnits: readonly HeldUnitRow[] = [],
+): { name: string; data: string } {
   const body = {
     v: 1,
     at: new Date(now).toISOString(),
@@ -120,6 +127,8 @@ export function sampleFile(now: number = Date.now(), fitAlt: readonly FitAltRow[
     ...(fitAlt.length ? { fitAlt: fitAlt.map((r) => ({ ...r, at: new Date(r.t).toISOString() })) } : {}),
     // Eintritts-Wächter (19.10.2026): zurückgehaltene Fehlersätze zum Gegenlesen durch den Englischlehrer.
     ...(held.length ? { heldRepairs: held.map((r) => ({ ...r, at: new Date(r.t).toISOString() })) } : {}),
+    // Kartenqualität (26.10.2026): ruhende Lesekarten (Wortgruppe ohne feste Einheit) zum Gegenlesen.
+    ...(heldUnits.length ? { heldUnits: heldUnits.map((r) => ({ ...r })) } : {}),
     // Satzbank (Engine-Verdrahtung 19.10.2026): Stichprobe von 30 Claude-Sätzen; Befund `{hard, unclear}` setzt die Hauptsitzung in `app/profile.sbGate`.
     ...(bank && bank.n
       ? {

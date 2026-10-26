@@ -1,4 +1,5 @@
 import { mayCreateDoc } from '../capacity/docGuard';
+import type { CardUnitMark } from '../lexicon/unitHeld';
 import { slug } from '../content';
 import { fixDashes, hasGapPlaceholder, locate, lemmaOf } from './context';
 import { sentencePieces } from './gapSentence';
@@ -42,6 +43,8 @@ export type NewVocabInput = {
    * und Wortfamilie. Bestehende Karten werden nie beschrieben; ihre fehlenden Felder legt `packExtraOf` beim Lesen darüber.
    */
   keep?: { register?: 'formal' | 'neutral' | 'informal'; why?: string; tip?: string; alt?: readonly string[]; fam?: Readonly<Record<string, string>> };
+  /** Kartenqualität (26.10.2026): Ergebnis der Einheiten-Prüfung einer Lesekarte (`domain/lexicon/unitHeld.ts`), nur bei neuen Karten. */
+  lu?: CardUnitMark;
 };
 
 const VALID_EX = /^[^[\]]*\[[^[\]]+\][^[\]]*$/;
@@ -122,6 +125,7 @@ export function newVocabDoc(i: NewVocabInput): { id: string; doc: Record<string,
       ...(i.lesson ? { lesson: i.lesson } : {}),
       ...(i.core ? { core: true } : {}),
       ...keepFields(i.keep),
+      ...(i.lu ? { lu: { ok: i.lu.ok, by: i.lu.by, t: i.lu.t, ...(i.lu.better ? { better: i.lu.better.slice(0, 60) } : {}) } } : {}),
     },
   };
 }
@@ -145,7 +149,9 @@ export function saveCardOp(cur: Readonly<Record<string, unknown>> | undefined, m
   if (!cur) return mayCreateDoc('vocab') ? { set: made.doc } : null;
   if (cur.hidden === true) return null;
   const ex = typeof cur.ex === 'string' ? cur.ex.trim() : '';
-  if (!ex && cur.origin === undefined) return { update: { ex: made.doc.ex, origin: made.doc.origin } };
-  if (!ex) return { update: { ex: made.doc.ex } };
-  return null;
+  // Kartenqualität: Bestätigung „feste Einheit“ an einer schon vorhandenen (ruhenden) Lesekarte nachtragen, nur ergänzend.
+  const lu = made.doc.lu && typeof made.doc.lu === 'object' && (made.doc.lu as { ok?: unknown }).ok === true && cur.lu === undefined ? { lu: made.doc.lu } : {};
+  if (!ex && cur.origin === undefined) return { update: { ex: made.doc.ex, origin: made.doc.origin, ...lu } };
+  if (!ex) return { update: { ex: made.doc.ex, ...lu } };
+  return 'lu' in lu ? { update: lu } : null;
 }

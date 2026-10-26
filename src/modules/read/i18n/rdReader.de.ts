@@ -53,6 +53,12 @@ export const rdrDe = {
   rdrCardExists: 'Schon da',
   rdrCardFailed: 'Nicht gespeichert. Tippe, um es noch einmal zu versuchen.',
   rdrCardNoSentence: 'Kein passender Satz',
+  // Kartenqualität (26.10.2026): Wortgruppe ohne feste Einheit
+  rdrNotUnit: 'Keine feste Wendung, darum keine Karte.',
+  rdrNotUnitBetter: 'Üblich ist:',
+  rdrNotUnitClaude: 'Einschätzung von Claude, kann Fehler enthalten.',
+  rdrSaveSingle: 'Nur „{word}“ speichern',
+  rdrSingleSaved: '„{word}“ gespeichert',
   rdrInSentence: 'Satz {n}',
 
   rdrCheck: 'Kurz prüfen',

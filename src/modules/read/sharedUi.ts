@@ -35,6 +35,9 @@ export { speak, stopSpeech, unlockSpeech } from '../../platform/speech';
 
 // Karten aus Wörtern (Dublettenregel und Dokument-Wächter stecken in saveLookupCard)
 export { saveLookupCard } from '../../features/lookup/store';
+// Kartenqualität (26.10.2026): Wortgruppen nur als feste Einheit speichern (Prüfung und, wenn nötig, Claude)
+export { checkCardUnit } from '../../features/lookup/store';
+export type { SingleOption, UnitDecision } from '../../features/lookup/store';
 
 // KI: Abbruch je Bildschirm, Verfügbarkeit
 export { useAiAvailable, useAiScope } from '../../ai/scope';

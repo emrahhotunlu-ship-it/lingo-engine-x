@@ -336,6 +336,11 @@ export const vocabSchema = z.looseObject({
   cfx: z.array(z.unknown()).nullish(),
   /** Neu (Satzbank, Engine-Verdrahtung 19.10.2026, nur ergänzend): Beispielsätze `[{en, de, sit, k, src, t, pv, bad?}]` (≤ 8), tolerant gelesen (`readSb`). */
   sb: z.array(z.unknown()).nullish(),
+  /**
+   * Neu (Kartenqualität 26.10.2026, nur ergänzend): Einheiten-Prüfung einer Lesekarte `{ok, by: 'rule'|'claude'|'user', t, better?}`, tolerant
+   * gelesen (`unitMarkOf`). `ok: true` = feste Einheit bestätigt bzw. von Emrah freigegeben („Doch lernen“).
+   */
+  lu: loose,
   ...schedulingFields,
 });
 
