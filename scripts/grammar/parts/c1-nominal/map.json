@@ -152,7 +152,7 @@
       ]
     }
   },
-  "Upon ___ of the contract, we will send you the access data.": {
+  "Upon ___ of the contract, we will send you your login credentials.": {
     "pat": "nm.following",
     "why": {
       "ok": {

@@ -1107,7 +1107,7 @@
    ]
   }
  },
- "c1-discourse|thepriceishigherthantheoldsystemyousaveonhardwareandmaintenance": {
+ "c1-discourse|thelicensefeeishigherthanfortheoldsystemyousaveonhardwareandmaintenance": {
   "pat": "dm.contrast",
   "why": {
    "ok": {
@@ -2397,7 +2397,7 @@
    ]
   }
  },
- "c1-nominal|uponofthecontractwewillsendyoutheaccessdata": {
+ "c1-nominal|uponofthecontractwewillsendyouyourlogincredentials": {
   "pat": "nm.following",
   "why": {
    "ok": {
@@ -2996,7 +2996,7 @@
    ]
   }
  },
- "c1-participle|havingsignthecontractthecustomerreceivedtheaccessdata": {
+ "c1-participle|havingsignthecontractthecustomerreceivedthelogincredentials": {
   "pat": "cp.having",
   "why": {
    "ok": {
@@ -3107,7 +3107,7 @@
  },
  "c1-participle|havingreviewtheofferthecfoaskedforadiscount": {
   "pat": "cp.having",
-  "dup": "c1-participle|havingsignthecontractthecustomerreceivedtheaccessdata",
+  "dup": "c1-participle|havingsignthecontractthecustomerreceivedthelogincredentials",
   "why": {
    "ok": {
     "de": "Richtig: Having reviewed. Nach Having steht die 3. Form.",
@@ -3301,12 +3301,12 @@
    ]
   }
  },
- "c1-precision|thecloudversioncostsoftheonpremiselicense": {
+ "c1-precision|thecloudversioncostsofwhattheonpremiselicensecosts": {
   "pat": "cp.approx",
   "why": {
    "ok": {
-    "de": "Richtig: a fraction of = nur ein kleiner Teil davon, hier des alten Preises.",
-    "en": "Right: a fraction of = only a small part of it, here of the old price."
+    "de": "Richtig: a fraction of = nur ein kleiner Teil davon, hier des Lizenzpreises.",
+    "en": "Right: a fraction of = only a small part of it, here of the license price."
    },
    "wrong": [
     {
@@ -3321,8 +3321,8 @@
     },
     {
      "opt": "a little",
-     "de": "„A little“ passt zu Unzählbarem und nicht vor „of the license“ als Preisanteil.",
-     "en": "“A little” suits uncountable things, not a price share before “of the license”."
+     "de": "„A little“ passt zu Unzählbarem, nicht als Anteil vor „of what …“.",
+     "en": "“A little” suits uncountable things, not a share before “of what …”."
     }
    ]
   }
@@ -3437,7 +3437,7 @@
    ]
   }
  },
- "c1-precision|therolloutmustbefinishedbeforeseptemberatthelatesttherolloutmustbefinishedseptem": {
+ "c1-precision|therolloutmustbefinishedthedeadlineisseptembertherolloutmustbefinishedseptember": {
   "pat": "cp.by-until",
   "why": {
    "ok": {
@@ -3457,8 +3457,8 @@
      "if": [
       "before"
      ],
-     "de": "„Before“ schließt den 30. aus. Die Frist at the latest meint den 30. selbst: by.",
-     "en": "“Before” excludes the 30th. The at the latest deadline includes the 30th itself: by."
+     "de": "„Before“ schließt den 30. aus. Die Frist ist der 30. selbst: by.",
+     "en": "“Before” excludes the 30th. The deadline is the 30th itself: by."
     },
     {
      "not": [
@@ -3690,7 +3690,7 @@
    ]
   }
  },
- "comparison|ourcompetitorspricesarefarthanourssowewincustomers": {
+ "comparison|ourpricesarefarthanourcompetitorssowewincustomers": {
   "pat": "cmp.degree",
   "why": {
    "ok": {
@@ -5478,12 +5478,12 @@
    ]
   }
  },
- "countable|pleasemakesureyouhaveenoughforthetrip": {
+ "countable|wehavetoomuchforonetaxi": {
   "pat": "cnt.uncount",
   "why": {
    "ok": {
-    "de": "Richtig: luggage ist unzählbar, deshalb enough luggage ohne -s.",
-    "en": "Right: luggage is uncountable, so enough luggage with no -s."
+    "de": "Richtig: luggage ist unzählbar: kein -s, und davor much statt many.",
+    "en": "Right: luggage is uncountable: no -s, and much, not many, before it."
    },
    "wrong": [
     {
@@ -5612,7 +5612,7 @@
    ]
   }
  },
- "countable|thestaffareveryfriendlybuttheinformationsonthewebsiteareoutdated": {
+ "countable|thewebsitelooksgreatbuttheinformationsonitareoutdated": {
   "pat": "cnt.verb",
   "why": {
    "ok": {
@@ -8211,7 +8211,7 @@
    ]
   }
  },
- "linkers|thesalesteamhititstargetthesupportteammissedtheirs": {
+ "linkers|thesalesteamhititstargetthesupportteamfellshort": {
   "pat": "lk.whereas",
   "why": {
    "ok": {
@@ -13448,7 +13448,7 @@
    ]
   }
  },
- "phrasal-syntax|themeetingwascalledbecausetheceowasill": {
+ "phrasal-syntax|themeetingwascalledbecausetheceowassick": {
   "pat": "ph.particle",
   "why": {
    "ok": {
@@ -13555,8 +13555,8 @@
   "pat": "ph.separable",
   "why": {
    "ok": {
-    "de": "Richtig: fill in oder fill out = ausfüllen. Das Nomen darf auch davor stehen.",
-    "en": "Right: fill in or fill out = complete. The noun can also go before the particle."
+    "de": "Richtig: fill out (US) oder fill in (britisch) = ausfüllen. Das Nomen darf auch davor stehen.",
+    "en": "Right: fill out (US) or fill in (British) = complete. The noun can also go before the particle."
    },
    "wrong": [
     {
@@ -13579,8 +13579,8 @@
       "in",
       "out"
      ],
-     "de": "Gesucht ist in oder out: fill in this form.",
-     "en": "You need in or out: fill in this form."
+     "de": "Gesucht ist in oder out: fill out this form.",
+     "en": "You need in or out: fill out this form."
     }
    ]
   }
@@ -13706,12 +13706,12 @@
    ]
   }
  },
- "phrasal-syntax|shequicklygotonwellhernewteam": {
+ "phrasal-syntax|shequicklygotalongwellhernewteam": {
   "pat": "ph.three-word",
   "why": {
    "ok": {
-    "de": "Richtig: get on with = sich verstehen mit. Die Präposition with fehlte.",
-    "en": "Right: get on with = have a good relationship with. The preposition with was missing."
+    "de": "Richtig: get along with (britisch: get on with) = sich verstehen mit. Es fehlte with.",
+    "en": "Right: get along with (British: get on with) = have a good relationship with. With was missing."
    },
    "wrong": [
     {
@@ -13726,8 +13726,8 @@
       "with",
       "well"
      ],
-     "de": "well steht vor with: got on well with her new team.",
-     "en": "Well goes before with: got on well with her new team."
+     "de": "well steht vor with: got along well with her new team.",
+     "en": "Well goes before with: got along well with her new team."
     }
    ]
   }
@@ -14345,7 +14345,7 @@
    ]
   }
  },
- "prep-time|pleasefinishthedraftbeforethursdaypleasefinishthedraftthursday": {
+ "prep-time|pleasefinishthedraftthursdayisthedeadlinepleasefinishthedraftthursday": {
   "pat": "pt.by-until",
   "why": {
    "ok": {
@@ -14365,8 +14365,8 @@
      "if": [
       "before"
      ],
-     "de": "Dieses Wort steht schon im Ausgangssatz. Gesucht ist die Präposition der Frist: by.",
-     "en": "That word is already in the first sentence. The task wants the deadline preposition: by."
+     "de": "„before Thursday“ hieße spätestens Mittwoch. Die Frist ist Donnerstag selbst: by.",
+     "en": "“Before Thursday” would mean Wednesday at the latest. The deadline is Thursday itself: by."
     }
    ]
   }
@@ -18913,12 +18913,12 @@
    ]
   }
  },
- "time-clauses|donotswitchofftheserveruntilthebackupcompleted": {
+ "time-clauses|donotshutdowntheserveruntilthebackupcompleted": {
   "pat": "tc.present-perfect",
   "why": {
    "ok": {
-    "de": "Richtig: Nach „until“ steht has been completed: erst fertig, dann abschalten.",
-    "en": "Right: after “until”, has been completed: finished first, then switch off."
+    "de": "Richtig: Nach „until“ steht has been completed: erst fertig, dann herunterfahren.",
+    "en": "Right: after “until”, has been completed: finished first, then shut down."
    },
    "wrong": [
     {
@@ -20290,28 +20290,28 @@
    ]
   }
  },
- "word-order|weareholdingtheworkshop": {
-  "pat": "wo.place-time",
+ "word-order|wethesignedcontractfromtheclient": {
+  "pat": "wo.verb-object",
   "why": {
    "ok": {
-    "de": "Richtig: Ort vor Zeit ist üblich, beides hinter dem Objekt: in Munich tomorrow.",
-    "en": "Right: place before time is usual, both after the object: in Munich tomorrow."
+    "de": "Richtig: Bei Verneinung steht still vor dem Hilfsverb: We still haven't received …",
+    "en": "Right: in a negative, still goes before the auxiliary: We still haven't received …"
    },
    "wrong": [
     {
-     "opt": "in tomorrow Munich",
-     "de": "„in“ und Munich gehören zusammen. Die Zeit tomorrow darf nicht dazwischen stehen.",
-     "en": "“in” and Munich belong together. The time word tomorrow cannot sit between them."
+     "opt": "haven't still received",
+     "de": "Das deutsche „weiterhin nicht“ verleitet dazu. Bei Verneinung steht still vor haven't.",
+     "en": "German “noch immer nicht” tempts you here. In a negative, still goes before haven't."
     },
     {
-     "opt": "Munich in tomorrow",
-     "de": "Die Präposition steht vor ihrem Nomen: in Munich, nicht Munich in.",
-     "en": "The preposition comes before its noun: in Munich, not Munich in."
+     "opt": "haven't received still",
+     "de": "Am Satzende klingt still hier falsch. Es steht vor dem Hilfsverb: still haven't.",
+     "en": "At the end, still sounds wrong here. It goes before the auxiliary: still haven't."
     },
     {
-     "opt": "tomorrow Munich in",
-     "de": "Die Reihenfolge ist ganz verdreht. Die Präposition in gehört direkt vor Munich.",
-     "en": "The order is scrambled. The preposition in belongs directly before Munich."
+     "opt": "didn't still receive",
+     "de": "Zwei Fehler: still gehört vor das Hilfsverb, und „bis jetzt“ verlangt das Present Perfect.",
+     "en": "Two errors: still goes before the auxiliary, and “up to now” needs the present perfect."
     }
    ]
   }
@@ -20577,6 +20577,31 @@
      ],
      "de": "Das Objekt the plan folgt direkt auf explained. Das Adverb steht davor oder dahinter.",
      "en": "The object the plan follows explained directly. The adverb goes before or after."
+    }
+   ]
+  }
+ },
+ "word-order|wehavenotstillreceivedthepayment": {
+  "pat": "wo.verb-object",
+  "why": {
+   "ok": {
+    "de": "Richtig: Bei Verneinung steht still vor dem Hilfsverb: We still haven't received …",
+    "en": "Right: in a negative, still goes before the auxiliary: We still haven't received …"
+   },
+   "wrong": [
+    {
+     "if": [
+      "haven't still"
+     ],
+     "de": "Das deutsche „weiterhin nicht“ verleitet dazu. Bei Verneinung steht still vor haven't.",
+     "en": "German “noch immer nicht” tempts you here. In a negative, still goes before haven't."
+    },
+    {
+     "not": [
+      "still haven't"
+     ],
+     "de": "Gesucht ist die Stellung still haven't: still steht vor dem Hilfsverb.",
+     "en": "The order still haven't is needed: still goes before the auxiliary."
     }
    ]
   }

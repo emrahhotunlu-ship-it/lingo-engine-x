@@ -243,7 +243,7 @@
    ]
   }
  },
- "Please finish the draft before Thursday. → Please finish the draft ___ Thursday.": {
+ "Please finish the draft. Thursday is the deadline. → Please finish the draft ___ Thursday.": {
   "pat": "pt.by-until",
   "why": {
    "ok": {
@@ -263,8 +263,8 @@
      "if": [
       "before"
      ],
-     "de": "Dieses Wort steht schon im Ausgangssatz. Gesucht ist die Präposition der Frist: by.",
-     "en": "That word is already in the first sentence. The task wants the deadline preposition: by."
+     "de": "„before Thursday“ hieße spätestens Mittwoch. Die Frist ist Donnerstag selbst: by.",
+     "en": "“Before Thursday” would mean Wednesday at the latest. The deadline is Thursday itself: by."
     }
    ]
   }

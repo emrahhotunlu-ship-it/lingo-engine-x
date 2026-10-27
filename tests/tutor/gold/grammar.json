@@ -55,7 +55,7 @@
     { "id": "ma-had-better", "topic": "modals-advice", "prompt": "It would be wise to back up the data. → You ___ back up the data.", "given": "'d better", "note": "Etwas stärker, aber gültig." },
     { "id": "ma-mustnt-send", "topic": "modals-advice", "prompt": "Don't send that email while you're angry. → You ___ send that email while you're angry.", "given": "mustn't", "note": "Verbot: mustn’t ist gültig." },
     { "id": "tc-gone-through", "topic": "time-clauses", "prompt": "I'll send you the report after I ___ the numbers.", "given": "have gone through", "note": "Present Perfect im Zeitsatz, Synonym." },
-    { "id": "pt-no-later-than", "topic": "prep-time", "prompt": "Please finish the draft before Thursday. → Please finish the draft ___ Thursday.", "given": "no later than", "note": "Frist: no later than ist gültig." },
+    { "id": "pt-no-later-than", "topic": "prep-time", "prompt": "Please finish the draft. Thursday is the deadline. → Please finish the draft ___ Thursday.", "given": "no later than", "note": "Frist: no later than ist gültig." },
     { "id": "pt-for-almost", "topic": "prep-time", "prompt": "We've been waiting for the delivery ___ three weeks.", "given": "for almost", "note": "for + Gradadverb ist gültig." },
     { "id": "art-our-lack", "topic": "articles", "prompt": "There are many reasons for the delay. The main one is that we don't have enough staff. → The main reason for the delay is ___ lack of staff.", "given": "our", "note": "Possessivbegleiter statt Artikel ist gültig." },
     { "id": "ppc-been-in", "topic": "pres-perf-cont", "prompt": "How long do you work in this industry?", "given": "How long have you been in this industry?" },

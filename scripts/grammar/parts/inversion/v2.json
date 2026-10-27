@@ -117,7 +117,8 @@
      "en": "Without only the stress is missing. The gap needs Only when."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "inv-k4",
@@ -156,7 +157,8 @@
      "en": "The key word only belongs at the start."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "inv-k5",
@@ -195,7 +197,8 @@
      "en": "It is no sooner, with no."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "inv-k6",
@@ -234,7 +237,8 @@
      "en": "The key word hardly must come first."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "inv-k7",
@@ -271,7 +275,8 @@
      "en": "After Should you there is no will, only the base form."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "inv-k8",

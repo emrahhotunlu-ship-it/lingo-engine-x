@@ -272,7 +272,7 @@
    "rule_en": "Before a noun, measurements stay singular with a hyphen: “a 10-page report”. Several adjectives follow a fixed order: opinion, size, age, color, origin, material.",
    "ex": [
     "We signed a three-year contract.",
-    "She bought a new black German laptop."
+    "They hired a small new German software company."
    ]
   },
   {
@@ -296,11 +296,11 @@
    "p0": 0.45,
    "name": "Satzstellung und Inversion",
    "name_en": "Word order and inversion",
-   "rule": "Ort steht meist vor Zeit („in Munich tomorrow“). Nach verneinenden Einleitungen wie „never“, „rarely“, „not only“ folgt die Frage-Stellung: „Rarely have we seen …“.",
-   "rule_en": "Place usually comes before time (“in Munich tomorrow”). After negative openers like never, rarely and not only, question word order follows: “Rarely have we seen …”.",
+   "rule": "Verb und Objekt bleiben zusammen, das Adverb steht davor oder dahinter. „already“, „also“ und „always“ stehen nach dem ersten Hilfsverb, „still“ steht bei Verneinung vor dem Hilfsverb („We still haven't …“). Nach verneinenden Einleitungen wie „never“, „rarely“, „not only“ folgt die Frage-Stellung: „Rarely have we seen …“.",
+   "rule_en": "Keep the verb and its object together; the adverb goes before or after. “Already”, “also” and “always” go after the first auxiliary; in negatives, “still” goes before the auxiliary (“We still haven't …”). After negative openers like never, rarely and not only, question word order follows: “Rarely have we seen …”.",
    "ex": [
     "Never have we seen such a strong response.",
-    "We will meet in Berlin next week."
+    "We still haven't received the signed contract."
    ]
   },
   {
@@ -999,7 +999,7 @@
       "Proportion"
      ],
      "a fraction of / twice as + adjective + as",
-     "The cloud version costs a fraction of the old license."
+     "The cloud version costs a fraction of what the old license cost."
     ],
     [
      [
@@ -1709,7 +1709,7 @@
       "Stop"
      ],
      "stop + -ing / stop + to + verb",
-     "She stopped checking emails on holiday."
+     "She stopped checking emails on vacation."
     ],
     [
      [
@@ -1733,7 +1733,7 @@
      "look forward to + -ing",
      [
       "sich freuen auf",
-      "to anticipate"
+      "to be excited about something ahead"
      ]
     ],
     [
@@ -1901,7 +1901,7 @@
       "Uncountable"
      ],
      "much / a little / some + singular",
-     "We have little information."
+     "We don't have much information yet."
     ],
     [
      [
@@ -2164,7 +2164,7 @@
       "Partizip",
       "Participle"
      ],
-     "well-/highly-/user- + Partizip",
+     "well-/user- + Partizip; -ly-Adverb ohne Bindestrich (highly skilled)",
      "a highly skilled engineer"
     ],
     [
@@ -2301,8 +2301,8 @@
   },
   "word-order": {
    "core": [
-    "Zwischen Verb und Objekt steht kein Adverb: „I like coffee very much.“ (nicht: I like very much coffee). Der Ort kommt vor der Zeit. Nach never, rarely, seldom, hardly, not only und no sooner steht das Hilfsverb vor dem Subjekt: „Rarely have we seen this.“",
-    "Do not put an adverb between the verb and its object: “I like coffee very much.” (not: I like very much coffee). Place comes before time. After never, rarely, seldom, hardly, not only and no sooner the auxiliary goes before the subject: “Rarely have we seen this.”"
+    "Zwischen Verb und Objekt steht kein Adverb: „We discussed the proposal in detail.“ (nicht: We discussed in detail the proposal). already, also und always stehen nach dem ersten Hilfsverb; „still“ steht bei Verneinung vor dem Hilfsverb: „We still haven't heard back.“ Nach never, rarely, seldom, hardly, not only und no sooner steht das Hilfsverb vor dem Subjekt: „Rarely have we seen this.“",
+    "Do not put an adverb between the verb and its object: “We discussed the proposal in detail.” (not: We discussed in detail the proposal). Already, also and always go after the first auxiliary; in negatives, “still” goes before the auxiliary: “We still haven't heard back.” After never, rarely, seldom, hardly, not only and no sooner the auxiliary goes before the subject: “Rarely have we seen this.”"
    ],
    "why": [
     "Inversion gibt Sätzen Nachdruck und gehört zum gehobenen Stil, etwa in Präsentationen und Berichten.",
@@ -2317,13 +2317,13 @@
      "Steht ein verneinendes Adverb am Satzanfang? Dann Inversion.",
      "Hilfsverb vor das Subjekt; fehlt eines, „do/does/did“ ergänzen.",
      "Verb und Objekt zusammenlassen, Adverb davor oder dahinter.",
-     "Reihenfolge am Satzende: Art und Weise, Ort, Zeit."
+     "already/also/always nach dem ersten Hilfsverb; bei Verneinung „still“ vor das Hilfsverb."
     ],
     [
      "Does a negative adverb open the sentence? Use inversion.",
      "Auxiliary before the subject; if there is none, add do/does/did.",
      "Keep verb and object together, adverb before or after.",
-     "Order at the end: manner, place, time."
+     "Already/also/always after the first auxiliary; with a negative, “still” before the auxiliary."
     ]
    ],
    "forms": [
@@ -2345,11 +2345,11 @@
     ],
     [
      [
-      "Ort und Zeit",
-      "Place and time"
+      "Adverb-Stellung",
+      "Adverb position"
      ],
-     "Ort vor Zeit",
-     "We meet in Munich tomorrow."
+     "S + still + Hilfsverb-n't + Verb · S + Hilfsverb + already/also + Verb",
+     "We still haven't received the payment."
     ]
    ],
    "signals": [
@@ -2383,6 +2383,14 @@
      "why": [
       "Verb und Objekt werden nicht durch ein Adverb getrennt.",
       "A verb and its object are not separated by an adverb."
+     ]
+    },
+    {
+     "bad": "We haven't still received the payment.",
+     "good": "We still haven't received the payment.",
+     "why": [
+      "„still“ steht bei Verneinung vor dem Hilfsverb. Das deutsche „weiterhin nicht“ verleitet zu „haven't still“.",
+      "In negatives, “still” goes before the auxiliary. German “noch immer nicht” tempts learners to say “haven't still”."
      ]
     }
    ]
@@ -2437,7 +2445,7 @@
       "Sentence link"
      ],
      "; however, / . Therefore,",
-     "Costs rose; therefore, we reacted."
+     "Costs rose; therefore, we adjusted our prices."
     ]
    ],
    "signals": [
@@ -2509,7 +2517,7 @@
       "Equal"
      ],
      "as + Adjektiv + as",
-     "This is as fast as that."
+     "The new scanner is as fast as the old one."
     ],
     [
      [
@@ -2517,7 +2525,7 @@
       "Difference"
      ],
      "Komparativ + than",
-     "It is faster than that."
+     "The cloud version is faster than the on-premise one."
     ],
     [
      [
@@ -2752,7 +2760,7 @@
    ],
    "signals": [
     [
-     "i do / we do",
+     "I do / we do",
      [
       "Emphatisches do",
       "Emphatic do"
@@ -2773,7 +2781,7 @@
      ]
     ],
     [
-     "this we / that i",
+     "this we / that I",
      [
       "Objekt voranstellen",
       "Fronting the object"
@@ -2876,7 +2884,7 @@
    ],
    "signals": [
     [
-     "i think so / i hope so",
+     "I think so / I hope so",
      [
       "so und not statt eines Satzes",
       "so and not instead of a clause"
@@ -2897,7 +2905,7 @@
      ]
     ],
     [
-     "i'd love to / i would like to",
+     "I'd love to / I would like to",
      [
       "to und Hilfsverb allein",
       "bare to and bare auxiliary"
@@ -3276,7 +3284,7 @@
      ]
     ],
     [
-     "i was hoping / i am hoping",
+     "I was hoping / I am hoping",
      [
       "was hoping, was wondering",
       "was hoping, was wondering"
@@ -3290,7 +3298,7 @@
      ]
     ],
     [
-     "we need / i understand",
+     "we need / I understand",
      [
       "know, need, belong",
       "know, need, belong"
@@ -3757,9 +3765,7 @@
    "answer": "were hoping",
    "accepted": [
     "are hoping",
-    "hope",
-    "hoped",
-    "had been hoping"
+    "hope"
    ],
    "hint": "(hope)",
    "expl": "„We were hoping …“ klingt weicher als „We want …“.",
@@ -3865,8 +3871,7 @@
    "prompt": "We want a discount. → We ___ hoping for a small discount.",
    "answer": "were",
    "accepted": [
-    "are",
-    "had been"
+    "are"
    ],
    "expl": "„We were hoping for …“ macht aus der Forderung einen Wunsch.",
    "expl_en": "“We were hoping for …” turns the demand into a wish."
@@ -4095,7 +4100,7 @@
   {
    "topic": "c1-discourse",
    "type": "mc",
-   "prompt": "The price is higher than the old system. ___, you save on hardware and maintenance.",
+   "prompt": "The license fee is higher than for the old system. ___, you save on hardware and maintenance.",
    "options": [
     "On the other hand",
     "Moreover",
@@ -4225,7 +4230,7 @@
   {
    "topic": "c1-nominal",
    "type": "mc",
-   "prompt": "Upon ___ of the contract, we will send you the access data.",
+   "prompt": "Upon ___ of the contract, we will send you your login credentials.",
    "options": [
     "receipt",
     "receive",
@@ -4368,7 +4373,7 @@
     "Approve"
    ],
    "answer": "Approved",
-   "expl": "Der Prozess wurde geprüft. Das ist passiv, deshalb steht nur die 3. Verbform: Approved by the auditors, …",
+   "expl": "Der Prozess wurde freigegeben. Das ist passiv, deshalb steht nur die 3. Verbform: Approved by the auditors, …",
    "expl_en": "The process was approved. That is passive, so use only the past participle: Approved by the auditors, …"
   },
   {
@@ -4418,8 +4423,8 @@
   {
    "topic": "c1-participle",
    "type": "correct",
-   "prompt": "Having sign the contract, the customer received the access data.",
-   "answer": "Having signed the contract, the customer received the access data.",
+   "prompt": "Having sign the contract, the customer received the login credentials.",
+   "answer": "Having signed the contract, the customer received the login credentials.",
    "expl": "Nach „Having“ folgt die 3. Verbform, hier „signed“: Having signed the contract, …",
    "expl_en": "After “Having” use the past participle, here “signed”: Having signed the contract, …"
   },
@@ -4494,7 +4499,7 @@
   {
    "topic": "c1-precision",
    "type": "mc",
-   "prompt": "The cloud version costs ___ of the on-premise license.",
+   "prompt": "The cloud version costs ___ of what the on-premise license costs.",
    "options": [
     "a fraction",
     "a part",
@@ -4556,13 +4561,13 @@
     "Around",
     "Approximately"
    ],
-   "expl": "„Roughly“ ist im Geschäftsenglisch üblicher als „about“ und kündigt eine gerundete Zahl an.",
-   "expl_en": "“Roughly” is more common than “about” in business English and signals a rounded figure."
+   "expl": "„Roughly“, „around“ und „approximately“ ersetzen „about“ ohne Bedeutungsunterschied. Im Gespräch sind „about“ und „around“ am häufigsten, „approximately“ klingt förmlich (Berichte, Folien). Wichtig ist, zu zeigen, dass die Zahl gerundet ist.",
+   "expl_en": "“Roughly”, “around” and “approximately” replace “about” with no change in meaning. In conversation “about” and “around” are the most common; “approximately” sounds formal (reports, slides). What matters is signaling that the figure is rounded."
   },
   {
    "topic": "c1-precision",
    "type": "transform",
-   "prompt": "The rollout must be finished before September 30 at the latest. → The rollout must be finished ___ September 30.",
+   "prompt": "The rollout must be finished. The deadline is September 30. → The rollout must be finished ___ September 30.",
    "answer": "by",
    "accepted": [
     "no later than",
@@ -4696,7 +4701,7 @@
   {
    "topic": "time-clauses",
    "type": "gap",
-   "prompt": "Don't switch off the server until the backup ___ completed.",
+   "prompt": "Don't shut down the server until the backup ___ completed.",
    "answer": "has been",
    "accepted": [
     "is",
@@ -5981,14 +5986,14 @@
   {
    "topic": "countable",
    "type": "gap",
-   "prompt": "Please make sure you have enough ___ for the trip.",
+   "prompt": "We have too much ___ for one taxi.",
    "answer": "luggage",
    "accepted": [
     "baggage"
    ],
    "hint": "(Gepäck)",
-   "expl": "„luggage“ ist unzählbar; „enough“ passt zu beiden Arten.",
-   "expl_en": "“Luggage” is uncountable; “enough” works with both kinds."
+   "expl": "„luggage“ ist unzählbar: kein -s, und davor „much“, nicht „many“.",
+   "expl_en": "“Luggage” is uncountable: no -s, and “much”, not “many”, before it."
   },
   {
    "topic": "countable",
@@ -6026,12 +6031,10 @@
   {
    "topic": "countable",
    "type": "correct",
-   "prompt": "The staff are very friendly, but the informations on the website are outdated.",
-   "answer": "The staff are very friendly, but the information on the website is outdated.",
+   "prompt": "The website looks great, but the informations on it are outdated.",
+   "answer": "The website looks great, but the information on it is outdated.",
    "accepted": [
-    "The staff is very friendly, but the information on the website is outdated.",
-    "The staff are very friendly, but the information on the website is out of date.",
-    "The staff is very friendly, but the information on the website is out of date."
+    "The website looks great, but the information on it is out of date."
    ],
    "expl": "„information“ ist unzählbar: kein „-s“, Verb im Singular.",
    "expl_en": "“Information” is uncountable: no -s, singular verb."
@@ -6296,11 +6299,10 @@
   {
    "topic": "prep-time",
    "type": "transform",
-   "prompt": "Please finish the draft before Thursday. → Please finish the draft ___ Thursday.",
+   "prompt": "Please finish the draft. Thursday is the deadline. → Please finish the draft ___ Thursday.",
    "answer": "by",
    "accepted": [
-    "no later than",
-    "before"
+    "no later than"
    ],
    "expl": "„by“ nennt die Frist.",
    "expl_en": "“By” names the deadline."
@@ -6526,7 +6528,7 @@
   {
    "topic": "phrasal-syntax",
    "type": "mc",
-   "prompt": "The meeting was called ___ because the CEO was ill.",
+   "prompt": "The meeting was called ___ because the CEO was sick.",
    "options": [
     "out",
     "up",
@@ -6563,13 +6565,13 @@
    "topic": "phrasal-syntax",
    "type": "gap",
    "prompt": "Please fill ___ this form and send it back to HR.",
-   "answer": "in",
+   "answer": "out",
    "accepted": [
-    "out"
+    "in"
    ],
    "hint": "(ausfüllen)",
-   "expl": "„fill in“ oder „fill out“ heißt „ausfüllen“.",
-   "expl_en": "“Fill in” or “fill out” means to complete."
+   "expl": "„fill out“ (US) oder „fill in“ (britisch) heißt „ausfüllen“.",
+   "expl_en": "“Fill out” (US) or “fill in” (British) means to complete."
   },
   {
    "topic": "phrasal-syntax",
@@ -6617,13 +6619,13 @@
   {
    "topic": "phrasal-syntax",
    "type": "correct",
-   "prompt": "She quickly got on well her new team.",
-   "answer": "She quickly got on well with her new team.",
+   "prompt": "She quickly got along well her new team.",
+   "answer": "She quickly got along well with her new team.",
    "accepted": [
-    "She quickly got along well with her new team."
+    "She quickly got on well with her new team."
    ],
-   "expl": "„get on with“ braucht die Präposition „with“.",
-   "expl_en": "“Get on with” needs the preposition “with”."
+   "expl": "„get along with“ (US; britisch „get on with“) braucht die Präposition „with“.",
+   "expl_en": "“Get along with” (US; British “get on with”) needs the preposition “with”."
   },
   {
    "topic": "word-order",
@@ -6642,16 +6644,16 @@
   {
    "topic": "word-order",
    "type": "mc",
-   "prompt": "We are holding the workshop ___.",
+   "prompt": "We ___ the signed contract from the client.",
    "options": [
-    "in Munich tomorrow",
-    "in tomorrow Munich",
-    "Munich in tomorrow",
-    "tomorrow Munich in"
+    "still haven't received",
+    "haven't still received",
+    "haven't received still",
+    "didn't still receive"
    ],
-   "answer": "in Munich tomorrow",
-   "expl": "Ort steht vor Zeit.",
-   "expl_en": "Place comes before time."
+   "answer": "still haven't received",
+   "expl": "Bei Verneinung steht „still“ vor dem Hilfsverb: „We still haven't received …“. Das deutsche „weiterhin nicht“ verleitet zu „haven't still“.",
+   "expl_en": "With a negative, “still” goes before the auxiliary: “We still haven't received …”. German “noch immer nicht” tempts learners to say “haven't still”."
   },
   {
    "topic": "word-order",
@@ -6785,7 +6787,7 @@
   {
    "topic": "linkers",
    "type": "mc",
-   "prompt": "The sales team hit its target, ___ the support team missed theirs.",
+   "prompt": "The sales team hit its target, ___ the support team fell short.",
    "options": [
     "in spite",
     "therefore",
@@ -7003,7 +7005,7 @@
   {
    "topic": "comparison",
    "type": "gap",
-   "prompt": "Our competitor's prices are far ___ than ours, so we win customers.",
+   "prompt": "Our prices are far ___ than our competitor's, so we win customers.",
    "answer": "lower",
    "accepted": [
     "cheaper"

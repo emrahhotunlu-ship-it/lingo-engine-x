@@ -49,7 +49,8 @@
      "en": "Without be the passive is missing: must be checked."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "pp-mod-k2",
@@ -403,7 +404,8 @@
      "en": "The passive needs was + participle: was fixed."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "pp-per-f1",
@@ -899,7 +901,8 @@
      "en": "Active: he was the one asked, not the asker. Needed: being + participle."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "pp-bei-f1",

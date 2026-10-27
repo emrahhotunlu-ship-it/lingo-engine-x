@@ -164,12 +164,12 @@
    ]
   }
  },
- "Please make sure you have enough ___ for the trip.": {
+ "We have too much ___ for one taxi.": {
   "pat": "cnt.uncount",
   "why": {
    "ok": {
-    "de": "Richtig: luggage ist unzählbar, deshalb enough luggage ohne -s.",
-    "en": "Right: luggage is uncountable, so enough luggage with no -s."
+    "de": "Richtig: luggage ist unzählbar: kein -s, und davor much statt many.",
+    "en": "Right: luggage is uncountable: no -s, and much, not many, before it."
    },
    "wrong": [
     {
@@ -298,7 +298,7 @@
    ]
   }
  },
- "The staff are very friendly, but the informations on the website are outdated.": {
+ "The website looks great, but the informations on it are outdated.": {
   "pat": "cnt.verb",
   "why": {
    "ok": {

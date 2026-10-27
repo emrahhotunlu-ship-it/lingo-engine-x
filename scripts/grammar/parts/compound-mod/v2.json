@@ -41,7 +41,8 @@
      "en": "Before the noun: a, then number and singular with a hyphen, so a two-day."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "cm-mea-k2",
@@ -85,7 +86,8 @@
      "en": "Before the noun: a, then number and singular with a hyphen, so a 30-minute."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "cm-mea-f1",
@@ -413,7 +415,8 @@
      "en": "Size first, then age or style: small modern."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "cm-ord-k2",
@@ -447,7 +450,8 @@
      "en": "Age first, then color: new black."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "cm-ord-f1",
@@ -599,7 +603,8 @@
      "en": "Before the noun comes the fixed block with a hyphen: a short-term."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "cm-fix-k2",
@@ -641,7 +646,8 @@
      "en": "Before the noun comes the fixed block with a hyphen: a cost-effective."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "cm-fix-f1",
@@ -737,9 +743,9 @@
   "id": "cm-par-k1",
   "type": "kwt",
   "pat": "cm.participle",
-  "from": "Everyone knows her work very well.",
+  "from": "Many people in our industry know this designer.",
   "key": "KNOWN",
-  "frame": "She is ___ designer.",
+  "frame": "She is ___ designer in our industry.",
   "answer": "a well-known",
   "accepted": [
    "a widely known"
@@ -775,7 +781,8 @@
      "en": "Before the noun comes adverb plus participle: a well-known."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "cm-par-k2",
@@ -816,7 +823,8 @@
      "en": "Before the noun comes noun plus participle: a time-consuming."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "cm-par-f1",

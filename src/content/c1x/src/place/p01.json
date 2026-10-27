@@ -2813,11 +2813,11 @@
    "kind": "err",
    "area": "gram",
    "topic": "word-order",
-   "level": "B2+",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pool": "place",
-   "b": 0.6,
+   "b": 0,
    "pat": "wo.place-time",
    "why": {
     "ok": {

@@ -32,7 +32,7 @@
       ]
     }
   },
-  "The meeting was called ___ because the CEO was ill.": {
+  "The meeting was called ___ because the CEO was sick.": {
     "pat": "ph.particle",
     "why": {
       "ok": { "de": "Richtig: call off = absagen. Die Partikel off bleibt direkt am Verb.", "en": "Right: call off = cancel. The particle off stays right next to the verb." },
@@ -69,11 +69,11 @@
   "Please fill ___ this form and send it back to HR.": {
     "pat": "ph.separable",
     "why": {
-      "ok": { "de": "Richtig: fill in oder fill out = ausfüllen. Das Nomen darf auch davor stehen.", "en": "Right: fill in or fill out = complete. The noun can also go before the particle." },
+      "ok": { "de": "Richtig: fill out (US) oder fill in (britisch) = ausfüllen. Das Nomen darf auch davor stehen.", "en": "Right: fill out (US) or fill in (British) = complete. The noun can also go before the particle." },
       "wrong": [
         { "if": ["up"], "pat": "ph.particle", "de": "„fill up“ heißt vollmachen, etwa einen Tank. Formulare füllt man mit in oder out aus.", "en": "“Fill up” means make full, like a tank. For forms use in or out." },
         { "if": ["on"], "de": "„fill on“ gibt es nicht. Ausfüllen heißt fill in oder fill out.", "en": "“Fill on” does not exist. To complete a form use fill in or fill out." },
-        { "not": ["in", "out"], "de": "Gesucht ist in oder out: fill in this form.", "en": "You need in or out: fill in this form." }
+        { "not": ["in", "out"], "de": "Gesucht ist in oder out: fill out this form.", "en": "You need in or out: fill out this form." }
       ]
     }
   },
@@ -119,13 +119,13 @@
       ]
     }
   },
-  "She quickly got on well her new team.": {
+  "She quickly got along well her new team.": {
     "pat": "ph.three-word",
     "why": {
-      "ok": { "de": "Richtig: get on with = sich verstehen mit. Die Präposition with fehlte.", "en": "Right: get on with = have a good relationship with. The preposition with was missing." },
+      "ok": { "de": "Richtig: get along with (britisch: get on with) = sich verstehen mit. Es fehlte with.", "en": "Right: get along with (British: get on with) = have a good relationship with. With was missing." },
       "wrong": [
         { "not": ["with"], "de": "Es fehlt with: get on with = sich verstehen mit.", "en": "The with is missing: get on with = have a good relationship with." },
-        { "if": ["with", "well"], "de": "well steht vor with: got on well with her new team.", "en": "Well goes before with: got on well with her new team." }
+        { "if": ["with", "well"], "de": "well steht vor with: got along well with her new team.", "en": "Well goes before with: got along well with her new team." }
       ]
     }
   }

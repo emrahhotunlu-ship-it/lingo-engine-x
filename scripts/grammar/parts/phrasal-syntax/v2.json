@@ -303,7 +303,8 @@
           "en": "The particle is missing: fall through = fail."
         }
       ]
-    }
+    },
+    "practiceOnly": true
   },
   {
     "id": "ph-tog-f1",

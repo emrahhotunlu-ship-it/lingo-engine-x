@@ -69,7 +69,7 @@
       ]
     }
   },
-  "Our competitor's prices are far ___ than ours, so we win customers.": {
+  "Our prices are far ___ than our competitor's, so we win customers.": {
     "pat": "cmp.degree",
     "why": {
       "ok": {

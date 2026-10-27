@@ -44,7 +44,8 @@
      "en": "The key word WHO must stay unchanged in the gap."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "rc-ww-k2",
@@ -91,7 +92,8 @@
      "en": "The key word WHICH must stay unchanged in the gap."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "rc-ww-f1",
@@ -222,7 +224,8 @@
      "en": "The key word WHOSE must stay unchanged in the gap."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "rc-wh-k2",
@@ -398,7 +401,8 @@
      "en": "The key word WHICH must stay unchanged in the gap."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "rc-cm-k2",
@@ -445,7 +449,8 @@
      "en": "The key word WHICH must stay unchanged in the gap."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "rc-cm-f1",

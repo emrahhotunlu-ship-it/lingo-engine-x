@@ -1,41 +1,39 @@
 {
  "topic": "word-order",
  "canDo": {
-  "de": "Ich kann Sätze genau bauen: Verb und Objekt zusammenhalten, meist Ort vor Zeit setzen und nach never, not only, hardly, no sooner und only förmlich invertieren.",
-  "en": "I can build sentences precisely: keep verb and object together, put place before time, and invert formally after never, not only, hardly, no sooner and only."
+  "de": "Ich kann Sätze genau bauen: Verb und Objekt zusammenhalten und nach never, not only, hardly, no sooner und only förmlich invertieren.",
+  "en": "I can build sentences precisely: keep verb and object together and invert formally after never, not only, hardly, no sooner and only."
  },
  "order": [
   "wo.verb-object",
-  "wo.place-time",
   "wo.neg-inv",
   "wo.not-only",
   "wo.hardly-sooner",
-  "wo.only-inv"
+  "wo.only-inv",
+  "wo.place-time"
  ],
  "introPlan": [
   [
    "wo.verb-object",
+   "wo.neg-inv"
+  ],
+  [
+   "wo.not-only",
+   "wo.hardly-sooner"
+  ],
+  [
+   "wo.only-inv",
    "wo.place-time"
-  ],
-  [
-   "wo.neg-inv",
-   "wo.not-only"
-  ],
-  [
-   "wo.hardly-sooner",
-   "wo.only-inv"
   ]
  ],
  "decide": {
   "de": [
    "Steht ein verneinendes oder einschränkendes Wort (never, only after) am Satzanfang? Dann Hilfsverb vor das Subjekt.",
-   "Hängt das Adverb zwischen Verb und Objekt? Dann davor oder dahinter setzen.",
-   "Folgen mehrere Angaben am Satzende? Meist Art und Weise, dann Ort, dann Zeit."
+   "Hängt das Adverb zwischen Verb und Objekt? Dann davor oder dahinter setzen."
   ],
   "en": [
    "Does a negative or limiting word (never, only after) open the sentence? Then put the auxiliary before the subject.",
-   "Is the adverb between verb and object? Move it before the verb or after the object.",
-   "Do several details close the sentence? Usually manner, then place, then time."
+   "Is the adverb between verb and object? Move it before the verb or after the object."
   ]
  },
  "patterns": [

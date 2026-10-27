@@ -67,7 +67,17 @@ export const PatternMapSchema = z.record(
 );
 
 /** Neue Aufgabenarten (§3.4). */
-const Base = { id: z.string(), topic: z.string(), pat: PatternId, why: TaskWhySchema };
+const Base = {
+  id: z.string(),
+  topic: z.string(),
+  pat: PatternId,
+  why: TaskWhySchema,
+  /**
+   * Nur Übung: die Aufgabe taugt nicht für Tests und Checks (Umformung mit weniger als 3 Wörtern in der Lücke, B1-Stoff, ohne Lernwert).
+   * Beim Üben ändert sich nichts. Ohne diese Schema-Zeile würde zod das Feld still verwerfen.
+   */
+  practiceOnly: z.literal(true).optional(),
+};
 export const V2TaskSchema = z.discriminatedUnion('type', [
   z.object({
     ...Base,

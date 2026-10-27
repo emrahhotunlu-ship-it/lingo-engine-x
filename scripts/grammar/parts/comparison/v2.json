@@ -513,7 +513,8 @@
           "en": "More is missing: long adjectives take more."
         }
       ]
-    }
+    },
+    "practiceOnly": true
   },
   {
     "id": "cmp-form-f1",
@@ -887,7 +888,8 @@
           "en": "Far names a big difference. The sentence says: only a small one."
         }
       ]
-    }
+    },
+    "practiceOnly": true
   },
   {
     "id": "cmp-deg-k2",
@@ -945,7 +947,8 @@
           "en": "“More faster” doubles the comparison. Faster is already comparative."
         }
       ]
-    }
+    },
+    "practiceOnly": true
   },
   {
     "id": "cmp-deg-f1",

@@ -657,7 +657,8 @@
      "en": "After a past reporting verb the tense moves back: will → would."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "pp-rep-k2",
@@ -750,7 +751,8 @@
      "en": "After a past reporting verb the earlier event moves back: had + participle."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "pp-rep-f1",

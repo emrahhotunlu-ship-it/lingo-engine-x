@@ -11,6 +11,8 @@ import {
 } from '../../src/domain/grammar/patternTypes.ts';
 
 const read = (f) => JSON.parse(readFileSync(f, 'utf8'));
+/** Muster, die als B1-Stoff herabgestuft sind und keine 2 find-Aufgaben mehr brauchen. */
+const DEMOTED_B1 = new Set(['wo.place-time']);
 export const PARTS = join(ROOT, 'scripts/grammar/parts');
 export const PATTERNS = join(ROOT, 'src/content/grammar/patterns');
 
@@ -226,7 +228,8 @@ export function validateTopic(topic) {
   }
   for (const [pid, c] of Object.entries(per)) {
     if (c.kwt < 2) bad(`${pid}: weniger als 2 kwt (${c.kwt})`);
-    if (c.find < 2) bad(`${pid}: weniger als 2 find (${c.find})`);
+    // Ausnahme: B1-Muster, absichtlich herabgestuft (Relaunch Stufe 1, Korrekturliste Punkt 4: wo-pt-f1/f2 gehören jetzt zu wo.verb-object).
+    if (c.find < 2 && !DEMOTED_B1.has(pid)) bad(`${pid}: weniger als 2 find (${c.find})`);
     if (c.meaning < 1) bad(`${pid}: kein meaning`);
   }
   if (finds && (clean / finds < 0.15 || clean / finds > 0.35)) bad(`fehlerfreie find-Aufgaben: ${clean} von ${finds} (erwartet etwa ein Viertel)`);
