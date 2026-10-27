@@ -89,7 +89,7 @@ Fünf Beispiele aus dem Vertrieb:
 
 Typische Falle:
 - falsch: ~~Have you sent the quote yesterday?~~ → richtig: **Did you send the quote yesterday?**
-- „Auch in Fragen: Steht ein Zeitpunkt dabei, fragst du mit *did*.“
+- **[L-27]** „Auch in Fragen: Steht ein vergangener Zeitpunkt dabei, fragst du mit *did*.“
 - **[L-17]** „Auch bei *When …?* fragst du mit *did*: ~~When have you sent it?~~ → **When did you send it?**“
 
 **[L-4]** Eigener Fehler aus Schritt 1 (passt zu Satz 3): ~~We have won three new customers last month.~~ → *We won three new customers last month.*
@@ -210,4 +210,6 @@ Was sich verbessert hat: Zeitform korrigiert · Großschreibung nach der Anrede 
 ---
 
 ## 9. Hinweis zur Zeitlinie
-Nicht Teil der Geschichte und deshalb unverändert: die Beispiel-Daten der App selbst. Das sind der Wochenstreifen (heute = Donnerstag), „Mission der Woche · Freitag in deiner Pflicht“ und der eigene Kundentermin des Lerners auf der Termin-Seite („Donnerstag Call mit Einkauf“). Sie zeigen Emrahs Kalender, nicht die Tage der Geschichte um Laura.
+Nicht Teil der Geschichte und deshalb unverändert: die Beispiel-Daten der App selbst. Das sind der Wochenstreifen (heute = Donnerstag), „Mission der Woche · Freitag in deiner Pflicht“ und der eigene Kundentermin des Lerners auf der Termin-Seite („Dienstag Call mit Einkauf“, Mission am Freitag bereitet darauf vor). Sie zeigen den Kalender des Lerners, nicht die Tage der Geschichte um Laura. Der eigene Termin liegt bewusst nicht auf Donnerstag, damit er sich nicht mit Lauras Frist *before Thursday* vermischt (Lehrer-Nachprüfung).
+
+Nachprüfung Lehrer: freigegeben nach drei Restbefunden (Warum-Zeile *past time expression*, Typische Falle „vergangener Zeitpunkt“, Termin auf Dienstag), alle eingearbeitet.

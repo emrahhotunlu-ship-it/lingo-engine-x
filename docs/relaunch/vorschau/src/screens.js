@@ -16,7 +16,7 @@ const WORD = {
   }
 };
 const WHY_GRAM = () => L('Ein vergangener Zeitpunkt wie yesterday oder last week verlangt past simple. Present perfect passt hier nicht.',
-  'A past time like yesterday or last week needs the past simple. The present perfect doesn’t fit here.');
+  'A past time expression like yesterday or last week needs the past simple. The present perfect doesn’t fit here.');
 const GRAM = {
   right: 'sent',
   you: { ok: 'sent', typo: 'snet', wrong: 'have sent', idk: '' },
@@ -345,7 +345,7 @@ function explainBody() {
     '<div class="card stack s8"><div class="lbl">' + L('Typische Falle', 'Common trap') + '</div><div class="contrast en">' +
     '<span class="k" style="color:var(--bad)">' + ic('cross', 'xs') + '</span><span class="no">Have you sent the quote yesterday?</span>' +
     '<span class="k" style="color:var(--ok)">' + ic('check', 'xs') + '</span><span><b>Did you send the quote yesterday?</b></span></div>' +
-    '<p class="p2">' + L('Auch in Fragen: Steht ein Zeitpunkt dabei, fragst du mit <em class="en">did</em>.', 'In questions too: with a time word, ask with <em>did</em>.') + '</p>' +
+    '<p class="p2">' + L('Auch in Fragen: Steht ein vergangener Zeitpunkt dabei, fragst du mit <em class="en">did</em>.', 'In questions too: with a past time expression, ask with <em>did</em>.') + '</p>' +
     '<p class="p2">' + L('Auch bei <em class="en">When …?</em> fragst du mit <em class="en">did</em>: <s class="en" style="text-decoration-color:var(--bad);color:var(--fg-2)">When have you sent it?</s> → <b class="en">When did you send it?</b>', 'With <em>When …?</em> you also ask with <em>did</em>: <s>When have you sent it?</s> → <b>When did you send it?</b>') + '</p></div>' +
     '<div class="notice">' + ic('pen', 'sm') + '<span>' + L('Dein Satz aus Schritt 1: <span class="en" style="text-decoration:line-through;text-decoration-color:var(--bad);color:var(--fg-2)">We have won three new customers last month.</span> → <em class="en">We won three new customers last month.</em>', 'Your sentence from step 1: <s>We have won three new customers last month.</s> → <em>We won three new customers last month.</em>') + '</span></div>';
 }
@@ -774,7 +774,7 @@ reg('h13', {
       '<div class="h2 disp" style="font-size:22px;line-height:28px">' + L('Preis-Einwand beim Einkauf', 'Price objection from purchasing') + '</div>' +
       '<p class="p2">' + L('Ziel: den Preis halten, ohne den nächsten Termin zu verlieren.', 'Goal: hold the price without losing the next meeting.') + '</p>' +
       '<div class="checklist" style="padding:2px 0 0">' + [L('Bedarf erfragen', 'Ask about needs'), L('Einwand Preis behandeln', 'Handle the price objection'), L('nächsten Termin fixieren', 'Fix the next meeting')].map(t => '<div class="ci" style="font-size:14px;min-height:26px"><span class="ck" style="width:16px;height:16px"></span>' + t + '</div>').join('') + '</div></div>' +
-      sec([L('Sprechen', 'Speaking'), 'sp'], [['cal', L('Mein nächster Termin', 'My next meeting'), L('Donnerstag Call mit Einkauf · ändern', 'Thursday call with purchasing · change'), 'termin-filled'], ['speak', L('Freie Mission', 'Optional mission'), L('Rückfrage zum Liefertermin', 'Question about the delivery date')], ['spark', L('Hot Seat', 'Hot seat'), L('eine unerwartete Kundenfrage', 'one unexpected client question')]]) +
+      sec([L('Sprechen', 'Speaking'), 'sp'], [['cal', L('Mein nächster Termin', 'My next meeting'), L('Dienstag Call mit Einkauf · ändern', 'Tuesday call with purchasing · change'), 'termin-filled'], ['speak', L('Freie Mission', 'Optional mission'), L('Rückfrage zum Liefertermin', 'Question about the delivery date')], ['spark', L('Hot Seat', 'Hot seat'), L('eine unerwartete Kundenfrage', 'one unexpected client question')]]) +
       sec([L('Hören', 'Listening'), 'li'], [['ear', L('Sprachnachrichten', 'Voicemails'), L('3 neue aus dem Einkauf', '3 new from purchasing')], ['repeat', 'Shadowing', L('kurze Sätze nachsprechen', 'repeat short sentences')]]) +
       sec([L('Lesen', 'Reading'), 're'], [['book', L('Tagesartikel', 'Daily article'), L('Lieferketten unter Druck · 4 Min.', 'Supply chains under pressure · 4 min'), 'h13-reader'], ['list', L('Kurse', 'Courses'), L('Verhandeln auf Englisch · Lektion 3', 'Negotiating in English · lesson 3')]]) +
       '</div></div>' + tabbar('h13');
@@ -849,7 +849,7 @@ reg('h15', {
     if (v === 'claude') {
       body = '<div class="stack s16"><span class="chip" style="align-self:flex-start">' + ic('info', 'xs') + L('Aufgabe + deine Antwort sind dabei', 'Task + your answer included') + '</span>' +
         '<div class="bubble me" style="max-width:92%">' + L('Warum nicht <span class="en">have sent</span>? Es ist doch gerade erst passiert.', 'Why not have sent? It only just happened.') + '</div>' +
-        '<div class="p" style="line-height:24px">' + L('Weil <em class="en">yesterday</em> im Satz steht. Ein vergangener Zeitpunkt macht die Handlung abgeschlossen, egal wie kurz sie her ist. Ohne Zeitangabe wäre <em class="en">We’ve sent the revised quote</em> richtig. Ist es eben erst passiert: <em class="en">We’ve just sent it</em> (US auch <em class="en">We just sent it</em>).', 'Because yesterday is in the sentence. A past time makes the action finished, however recent. Without a time word, We’ve sent the revised quote would be right. If it only just happened: We’ve just sent it (US also We just sent it).') + '</div></div>';
+        '<div class="p" style="line-height:24px">' + L('Weil <em class="en">yesterday</em> im Satz steht. Ein vergangener Zeitpunkt macht die Handlung abgeschlossen, egal wie kurz sie her ist. Ohne Zeitangabe wäre <em class="en">We’ve sent the revised quote</em> richtig. Ist es eben erst passiert: <em class="en">We’ve just sent it</em> (US auch <em class="en">We just sent it</em>).', 'Because yesterday is in the sentence. A past time expression makes the action finished, however recent. Without a time word, We’ve sent the revised quote would be right. If it only just happened: We’ve just sent it (US also We just sent it).') + '</div></div>';
     } else {
       body = '<div class="stack s16"><div class="field" style="min-height:76px">Wir haben die Lieferzeit bereits verkürzt.</div>' +
         '<div class="card stack s8"><p class="p en" style="font-weight:600;font-size:18px">We’ve already reduced the lead time.</p><p class="p2 en">also: We’ve already shortened the lead time. · We’ve already cut the lead time.</p>' +
@@ -901,7 +901,7 @@ reg('termin', {
     return exTop(blocks, 4, 0.02) + '<div class="ex-body gx">' + blockLine('s', L('Sag es · erste Sprechaufgabe der Woche', 'Say it · first speaking task of the week')) +
       '<div class="stagec" style="gap:16px"><div class="disp" style="font-size:28px;line-height:34px;font-weight:700;text-wrap:balance">' + L('Steht ein echter Kundentermin an?', 'Is a real client meeting coming up?') + '</div>' +
       '<p class="p" style="color:var(--fg-2)">' + L('In 1–2 Sätzen diktieren. Block 5 und die Mission bauen darauf auf.', 'Dictate it in 1–2 sentences. Block 5 and the mission build on it.') + '</p>' +
-      '<div class="field" style="min-height:96px;' + (filled ? '' : 'color:var(--fg-3)') + '">' + (filled ? 'Donnerstag Call mit dem Einkauf, sie wollen über den Preis reden.' : L('z. B. Donnerstag Call mit Einkauf, Preis-Einwand erwartet', 'e.g. Thursday call with purchasing, price objection expected')) + '</div>' +
+      '<div class="field" style="min-height:96px;' + (filled ? '' : 'color:var(--fg-3)') + '">' + (filled ? 'Dienstag Call mit dem Einkauf, sie wollen über den Preis reden.' : L('z. B. Dienstag Call mit Einkauf, Preis-Einwand erwartet', 'e.g. Tuesday call with purchasing, price objection expected')) + '</div>' +
       '<p class="p2" style="display:flex;gap:8px;align-items:flex-start;font-size:13px">' + ic('lock', 'xs') + L('Bitte ohne Namen. Der Text bleibt nur in deiner Datenbank.', 'Please no names. The text stays only in your database.') + '</p></div></div>' +
       exFoot(btnSec('skip', L('Überspringen', 'Skip'), 'data-go="h8-scenario"') + (filled ? btnPri('send', L('Senden', 'Send'), 'h8-scenario') : btnPri('speak', L('Sprechen', 'Speak'), 'termin-filled')));
   }
