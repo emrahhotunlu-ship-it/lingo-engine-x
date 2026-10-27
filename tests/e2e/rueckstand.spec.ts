@@ -15,8 +15,8 @@ test.describe('Handy 390', () => {
     const { errors, external } = await boot(page, { migrated: true, now: TUE_9, fake: { patch: { ...WEEK_W39, ...patch } } });
     await screen(page, 'today');
     const first = page.getByTestId('duty').first();
-    // UX-Audit U1: nicht „überfällig“ (nur ein Teil der geplanten Karten ist überfällig), sondern der Grund in Worten.
-    await expect(first.getByTestId('reason')).toContainText('Karten · Rückstand wird abgebaut');
+    // UX-Audit U1: nicht „überfällig“ (nur ein Teil der geplanten Karten ist überfällig), sondern der Grund in Worten; Glossar 3.6: kein Altwort „Rückstand“.
+    await expect(first.getByTestId('reason')).toContainText('Karten · du holst auf');
     const planned = ((await first.getByTestId('reason').innerText()).match(/(\d+)\s*Karten/) ?? [])[1] ?? '';
     expect(planned).not.toBe('');
     // Die Minuten von Block 1 wachsen mit dem Rückstand (mehr als die 8 des Grundplans).

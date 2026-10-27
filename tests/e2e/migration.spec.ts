@@ -37,7 +37,8 @@ test('Trockenlauf zeigt alles, schreibt nichts; nach Bestätigung ist die Umstel
   // Wort-Lernen 2 (21.10.2026): zusätzlich ein freier richtiger Abruf nach ≥ 21 Tagen Pause – den hat keine Seed-Karte, also ehrlich 0.
   await expect(page.getByTestId('stand-fest')).toHaveAttribute('data-fest', '0');
   await expect(page.getByTestId('vocab-total')).toHaveCount(0);
-  await expect(page.getByText('Umgestellt am 20. September 2026')).toBeVisible();
+  // UX-Audit U1 (Alltagssprache): statt „Umgestellt am …“ sagt die Zeile, seit wann die alten Daten hier sind – dasselbe Datum.
+  await expect(page.getByText('Deine Daten aus der alten App sind seit 20. September 2026 hier.')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Umstellung ausführen' })).toHaveCount(0);
 
   const dump = await page.evaluate(() => (window as FakeWindow).__LINGO_FAKE__?.db.dump() ?? {});

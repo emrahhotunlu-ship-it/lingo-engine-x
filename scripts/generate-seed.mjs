@@ -564,6 +564,10 @@ put('app/radar', {
     return { c: tp.id, s: pick(['g', 'w', 'v', 's', 'r']), t: now - i * 11 * 3_600_000, q: a.slice(0, 160), g: g.slice(0, 100), a: a.slice(0, 100) };
   }),
 });
+/** Ziel-Satz je „Satz verbessern“-Aufgabe des Pools (zweisprachig, wie `grammar-items@5`). */
+const POOL_GOAL = {
+  'I am used to get up early.': { de: 'Früh aufzustehen ist für mich normal.', en: 'Getting up early is normal for me.' },
+};
 put('app/pool', {
   t: now - 3 * 3_600_000,
   items: grammar.seedGrammar.slice(20, 30).map((g) => ({
@@ -573,9 +577,12 @@ put('app/pool', {
     options: g.type === 'mc' ? g.options : null,
     answer: g.answer,
     accepted: [],
-    hint_de: '',
+    // Wie der Tagesauftrag heute (`grammar-items@5`): Lücken nennen das Verb im Hinweis, „Satz verbessern“ trägt einen Ziel-Satz.
+    // Sonst hält das Qualitätstor (E1a, `domain/quality/gate.ts`) die Aufgaben zurück, und jeder Start meldet Warnungen.
+    hint_de: g.hint ?? '',
     explanation_de: g.expl,
     explanation_en: g.expl_en,
+    ...(POOL_GOAL[g.prompt] ? { goal: POOL_GOAL[g.prompt] } : {}),
     src: 'seed',
   })),
 });

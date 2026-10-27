@@ -305,6 +305,10 @@
     "hint_de": "",
     "explanation_de": "Nach „be used to“ steht die -ing-Form (getting), nicht der Infinitiv – hier ist „to“ eine Präposition.",
     "explanation_en": "After \"be used to\" we need the -ing form (getting), not the infinitive – here \"to\" is a preposition.",
+    "goal": {
+     "de": "Früh aufzustehen ist für mich normal.",
+     "en": "Getting up early is normal for me."
+    },
     "src": "seed"
    },
    {
@@ -314,7 +318,7 @@
     "options": null,
     "answer": "rains",
     "accepted": [],
-    "hint_de": "",
+    "hint_de": "(rain)",
     "explanation_de": "First Conditional: If + Present Simple, will + Infinitiv. Kein „will“ im if-Teil!",
     "explanation_en": "First conditional: if + Present Simple, will + infinitive. No \"will\" in the if-clause!",
     "src": "seed"
@@ -343,7 +347,7 @@
     "options": null,
     "answer": "would not have missed",
     "accepted": [],
-    "hint_de": "",
+    "hint_de": "(not / miss)",
     "explanation_de": "Third Conditional (Vergangenheit, nicht mehr änderbar): If + Past Perfect, would have + Partizip.",
     "explanation_en": "Third conditional (past, can't be changed): if + Past Perfect, would have + past participle.",
     "src": "seed"
@@ -372,7 +376,7 @@
     "options": null,
     "answer": "had not said",
     "accepted": [],
-    "hint_de": "",
+    "hint_de": "(not / say)",
     "explanation_de": "Bedauern über die Vergangenheit: wish + Past Perfect.",
     "explanation_en": "Regret about the past: wish + Past Perfect.",
     "src": "seed"
@@ -401,7 +405,7 @@
     "options": null,
     "answer": "was built",
     "accepted": [],
-    "hint_de": "",
+    "hint_de": "(build)",
     "explanation_de": "Passiv im Past Simple: was/were + Partizip (build – built – built).",
     "explanation_en": "Past simple passive: was/were + past participle (build – built – built).",
     "src": "seed"

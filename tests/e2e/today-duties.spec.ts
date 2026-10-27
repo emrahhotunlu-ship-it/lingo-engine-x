@@ -57,8 +57,9 @@ async function checkConsistent(page: Page, done: ReadonlySet<string>): Promise<v
     await expect(page.getByTestId('duty')).toHaveCount(0);
     await expect(page.getByTestId('today-card').locator('button')).toHaveCount(0);
   } else {
-    await expect(status).toHaveText(new RegExp(`^${n} von 2 · noch ca\\. \\d+ Min\\.$`));
-    await expect(status).toHaveAttribute('data-status', 'open');
+    // UX-Audit U1: die Zeile zählt nur Schritte, die Restminuten stehen allein im Ring (eine Zahl je Ort).
+    await expect(status).toHaveText(`Schritte: ${n} von 2 erledigt`);
+    await expect(page.getByTestId('today-min')).toHaveText(/^\d+$/);    await expect(status).toHaveAttribute('data-status', 'open');
     // Häkchen: genau die erledigten Punkte, in Plan-Reihenfolge.
     const items = page.getByTestId('duty');
     await expect(items).toHaveCount(2);

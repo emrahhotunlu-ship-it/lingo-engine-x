@@ -89,8 +89,10 @@ test.describe('Desktop', () => {
       expect((d.hist as Doc[]).at(-1)).toMatchObject({ x: 'flip', m: 'recog', g: 3 });
       expect(d.word).toBeTruthy();
     }
-    const log = ((db[`log/${DAY}`]?.entries as Doc[] | undefined) ?? []).filter((e) => ids.includes(String(e.id)) && e.m === 'tr-flip');
-    expect(log.length).toBe(40);
+    // Das Protokoll `log/<tag>` schreibt die Sammel-Warteschlange (`features/progress/persist.ts`: je 4 Antworten oder nach 8 s Ruhe),
+    // getrennt von den Karten: auf den Zustand warten statt einmal zu lesen (unter Last fehlten sonst die letzten Einträge, 38 statt 40).
+    const flipLog = async () => (((await dump(page))[`log/${DAY}`]?.entries as Doc[] | undefined) ?? []).filter((e) => ids.includes(String(e.id)) && e.m === 'tr-flip').length;
+    await expect.poll(flipLog, { timeout: 15_000 }).toBe(40);
     expect(errors).toEqual([]);
     expect(external).toEqual([]);
   });

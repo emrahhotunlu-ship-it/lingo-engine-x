@@ -38,11 +38,11 @@ describe('Mehrzahl', () => {
     for (const [k, v] of Object.entries(EN)) expect(PLURAL_EN.test(v), `${k}: ${v}`).toBe(false);
   });
 
-  it('Grund des Wiederhol-Schritts: 1 Karte in der Einzahl, Rückstand ohne „überfällig“', () => {
+  it('Grund des Wiederhol-Schritts: 1 Karte in der Einzahl, Rückstand ohne „überfällig“ und ohne Altwort „Rückstand“ (Glossar 3.6)', () => {
     const b = { block: 1, kind: 'review', opts: {} } as unknown as Parameters<typeof blockWhy>[0];
     expect(blockWhy(b, t('de'), 1)).toBe('1 Karte · Fällige zuerst');
-    expect(blockWhy(b, t('de'), 1, true)).toBe('1 Karte · Rückstand wird abgebaut');
-    expect(blockWhy(b, t('de'), 52, true)).toBe('52 Karten · Rückstand wird abgebaut');
+    expect(blockWhy(b, t('de'), 1, true)).toBe('1 Karte · du holst auf');
+    expect(blockWhy(b, t('de'), 52, true)).toBe('52 Karten · du holst auf');
     expect(blockWhy(b, t('en'), 1)).toBe('1 card · due first');
     for (const n of [1, 2, 40]) for (const behind of [false, true]) expect(blockWhy(b, t('de'), n, behind)).not.toMatch(/überfällig/);
   });
