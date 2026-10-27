@@ -1,6 +1,6 @@
 # Relaunch-Konzept Lingo-Engine X
 
-**Stand:** 27.10.2026, **Entwurf 2** (Leitung). Er enthält alle Vetos aus der Prüfung (Lena 7, James 6, Tarek 4, Nora 5) und Kais Lücken je Facette. **Status:** bereit für die **eine** gezielte Nachprüfung der geänderten Stellen. Was danach noch strittig ist, entscheidet Emrah (Ablauf nach `docs/relaunch/team.md`).
+**Stand:** 27.10.2026, **Entwurf 2.1 nach Nachprüfung** (Leitung). Er enthält alle Vetos aus der Prüfung (Lena 7, James 6, Tarek 4, Nora 5), Kais Lücken je Facette und alle Ersatztexte der Nachprüfung (0.2). **Status:** alle Vetos aufgehoben; als Nächstes Kais Neubewertung, dann entscheidet Emrah (19). Ablauf nach `docs/relaunch/team.md`.
 
 **Grundlagen:** `docs/relaunch/recherche/` (Mara, Ilias, Nora, Lena, Tarek, Kai, James, Mikrofon-Probe) und `docs/relaunch/pruefung/` (Lena, James, Tarek, Nora, Kai). Wo dieses Konzept einer Rolle folgt, steht das Kürzel in eckigen Klammern, z. B. [Lena V1] = Lenas Veto 1, [Kai F5] = Kais Lücke zu Facette 5, [Nora V3], [Tarek V2], [James V4].
 
@@ -62,6 +62,19 @@
 5. **Testtag-Blöcke:** James' Tagestyp-Tabelle (Block 2 = 7, Block 3 = 10 Min.) gilt; Lenas Vorschlag (Block 2 = 4, Block 3 = 8) ist dadurch abgelöst, weil ein Test mit 15 Aufgaben etwa 10 Minuten braucht.
 6. **Zwischenstand neben der Hauptzahl:** „Bildest du selbst“ zählt nur S5 (Lena V1). Direkt darunter steht in zweiter Größe „auf dem Weg: x“ (Kai F8). Das ist größer als Lenas „Unterzeile“ und kleiner als Kais „groß“; beide prüfen nach.
 
+### 0.2 Was die Nachprüfung geändert hat (Entwurf 2.1)
+
+Die gezielte Nachprüfung (`pruefung/*-nach.md`) ist abgeschlossen. **Alle Vetos sind aufgehoben**, weil die Leitung jeden Ersatztext übernommen hat. Markiert sind die Stellen mit [Lena-N], [Tarek-N], [James-N], [Nora-N]. Die wichtigsten Änderungen:
+1. **Wörter ab S3 aus früheren Wochen:** Mail und Mission verlangen Wörter, die schon sitzen (letzte 3 Wochen). Wörter der laufenden Woche sind ein Angebot (James, Lena).
+2. **Ehrliche Grammatik-Dauer:** 18–22 Wochen statt 16–20, belegt durch eine Simulation; Thema-Start auch am Schreib- und Missionstag (James).
+3. **Mission hat Vorrang** am Freitag und ist erst ab Stufe 5 Pflicht (James).
+4. **Zeitgrenze für „sicher“:** das Kleinere von 2 × Basis und 15 s; gesprochene Basis nur bei reinem Diktat, eigener Median erst ab 10 Werten, Erkennung vorher auf Emrahs iPhone geprüft (Tarek, Lena).
+5. **Termin und Wochenfrage nicht auf Heute:** Der Termin wird einmal pro Woche vor der ersten Sprechaufgabe abgefragt, die Wochenfrage ist eine Seite im Wochenabschluss (Nora).
+6. **Ring und Balken** haben so viele Abschnitte wie der Tag Blöcke; die Mission ist ein Abschnitt, kein eigener Eintrag (Nora).
+7. **Größen und Rückweg** für alle neuen Felder festgelegt (Tarek), Rückweg-Schalter je Messgröße (Lena).
+
+Offen bleibt nur, was Emrah entscheidet (19). **Bedingung:** Lehnt Emrah den ehrlichen Neustart der Wortzahl (19 Nr. 6) ab, lebt Lenas Veto 1 wieder auf.
+
 ---
 
 ## 1. Emrahs Kritik → Mechanismus → Messgröße
@@ -84,15 +97,16 @@
 ### 2.1 Heute: eine Karte, ein Knopf [Nora V5]
 
 - **Am Handy genau eine Karte:**
-  - ein **Ring mit 6 Abschnitten** (je Block einer), in der Mitte die Restzeit;
+  - ein **Ring mit so vielen Abschnitten, wie der Tag Blöcke hat** (5 oder 6, Länge nach Minuten), in der Mitte die Restzeit [Nora-N W1];
   - das **Tagesthema** in einer Zeile;
   - „Als Nächstes: Grammatik · *indirekte Fragen*“;
   - ein großer Knopf **„Weiter“** (am Tagesanfang „Los geht's“).
-- **Ring antippen** zeigt die sechs Blöcke als Zustandsliste **ohne Knöpfe** (erledigt ✓, läuft, offen).
+- **Ring antippen** zeigt die Blöcke dieses Tages als Zustandsliste **ohne Knöpfe** (erledigt ✓, läuft, offen; z. B. „Themen-Test“, „Mission“).
 - Darunter ein schmaler **Wochenstreifen** mit der Serie, dann die Trennlinie **„Wenn du mehr willst“** mit höchstens 3 Einträgen (Lesen, Kurse, Wort-Werkstatt, freiwillige Zusatzrunde). Kein Datum als Überschrift.
 - **Erledigt heißt erledigt:** Ist die Pflicht geschafft, ist der Ring geschlossen, es gibt keinen Pflicht-Knopf mehr, nur noch „Wenn du mehr willst“ (Kap. 2.2).
 - **Aufholen** steht nur als Unterzeile („noch 3 Tage Aufholen, danach normal“), nie als eigene Karte.
-- **Mein nächster Termin** [Kai F6]: Ein kleiner Eintrag unter dem Wochenstreifen. Emrah diktiert in 1–2 Sätzen einen echten anstehenden Kundentermin („Donnerstag Call mit Einkauf, Preis-Einwand erwartet“). Der nächste Block 5 und die Mission bauen darauf auf. Ohne Namen, nur in seiner Datenbank.
+- **Missionstag** [Nora-N 3.1]: Die Mission ist der letzte und längste Abschnitt des Rings, mit Missions-Symbol. Unter dem Tagesthema steht als Unterzeile: „Heute mit Mission: *Preis-Einwand beim Einkauf*“. Sie ist kein eigener Eintrag und hat keinen zweiten Knopf. Unter „Wenn du mehr willst“ steht an diesem Tag keine Mission.
+- **Mein nächster Termin** [Kai F6, Nora-N 3.3] steht **nicht auf Heute**. Die App fragt einmal pro Woche danach, als überspringbare erste Seite der ersten Sprechaufgabe der Woche: „Steht ein echter Kundentermin an? In 1–2 Sätzen diktieren · Überspringen“ (z. B. „Donnerstag Call mit Einkauf, Preis-Einwand erwartet“). Der nächste Block 5 und die Mission bauen darauf auf. Ändern lässt er sich unter Praxis → Sprechen. Auf Heute zeigt sich nur die Wirkung, in der Unterzeile des Missionstags: „Heute mit Mission: dein Call mit dem Einkauf“. Am Laptop darf er in der Kontextspalte von Heute stehen, denn dort gibt es keinen Hauptknopf. Ohne Namen (Hinweis in der Oberfläche), nur in seiner Datenbank.
 
 ### 2.2 Sechs Blöcke, ein Thema, 28 Minuten [Lena 3.6, James V1]
 
@@ -287,7 +301,7 @@ Wendungen (Chunks) laufen durch dieselbe Leiter. **Bausteine gibt es nur in S1 a
 **offen → (bestätigt | in Arbeit → abgeschlossen) → gefestigt.** Rückfall: zurück auf „in Arbeit“.
 - **Bestätigt:** Die Diagnose zeigt ≥ 90 %. Das Thema geht direkt zum verzögerten Check nach ≥ 21 Tagen; bei Bestehen ist es „gefestigt“. Ein bestätigtes Thema zählt für den Kapitelabschluss wie ein bestandenes.
 - **Test offen** heißt: Test nicht bestanden, Thema wartet auf den nächsten Versuch.
-- Der Zustand ist auf der Grammatik-Karte und im Fortschritt sichtbar. Dazu steht im Block-Kopf und auf der Karte **„Du bist hier“** [Kai F3]: „Thema *indirekte Fragen* · Schritt 3 von 7 · noch 4 richtige bis frei“.
+- Der Zustand ist auf der Grammatik-Karte und im Fortschritt sichtbar. **„Du bist hier“** [Kai F3, Nora-N W3] steht vollständig auf der Grammatik-Karte („Thema *indirekte Fragen* · Schritt 3 von 7 · noch 4 richtige bis frei“) und auf der Abschlusskarte (vorher → nachher). In der Übung steht es nur in der Blockzeile der ersten Grammatik-Aufgabe: „Grammatik · *indirekte Fragen* · Schritt 3 von 7“.
 
 ### 4.2 Themenablauf
 
@@ -365,7 +379,7 @@ Die Probe vom 27.10.2026 zeigt: Die App bekommt kein Mikrofon (`getUserMedia` ge
 - **Höchstens 2 Tipps je gesprochener Antwort** („Sprechen“ → Senden). Erkennt die App eine Diktat-Einfügung, wird „Senden“ zum großen Knopf. Ein E2E-Test prüft das mit simulierter Einfügung [Kai F5, F10].
 - **Diktat ist bewertet.** „Laut gesagt (ohne Wertung)“ ist ein Nebenknopf nur in Block 6 und in der Mission, als Ausweg (z. B. im Zug). Er ist kein Beleg, fällige Termine bleiben fällig. In Tests zählt E9 nur per Diktat [Lena P6].
 - **Block 5 ist an Normaltagen gesprochen**, am Schreibtag getippt [James V5].
-- **Laptop:** Hinweis „Mac: Diktier- oder Globus-Taste zweimal drücken · Windows: Win + H“. Solange das Diktieren am Laptop in claude.ai nicht geprobt ist, heißt es ehrlich: „Am Laptop tippst du Block 5. Gesprochen wird am Handy.“ [Kai F11]
+- **Laptop** [Kai F11, Nora-N 3.4]: Solange das Diktieren am Laptop in claude.ai nicht geprobt ist, gibt es dort keinen Knopf „Sprechen“. Das Feld ist direkt offen. Einmal je Sitzung steht über dem ersten Antwortfeld eine neutrale Zeile: „Am Laptop tippst du deine Antworten. Gesprochen wird am Handy.“ Das gilt für Block 5, Block 6 und die Mission. Der Hinweis „Mac: Diktier- oder Globus-Taste zweimal drücken · Windows: Win + H“ ersetzt diese Zeile erst nach einer erfolgreichen Probe; beide stehen nie gleichzeitig da. Getippte Antworten am Laptop zählen nicht für F1 (bewertetes **Sprechen**); sie zählen als Output wie Schreiben.
 - Die Liste der Plattform-Fähigkeiten wird bei jedem Vertrags-Upgrade neu auf ein Mikrofon geprüft [Kai F5].
 
 ### 6.2 Flüssigkeit (Block 6) [James Verb. 2, Kai F5]
@@ -407,6 +421,7 @@ Die Probe vom 27.10.2026 zeigt: Die App bekommt kein Mikrofon (`getUserMedia` ge
 - Lob nur mit Beleg (Zitat aus seiner Antwort), nie „Great job!“ bei Fehlern.
 - Claude knickt bei Widerspruch nicht ein, wenn die Korrektur sicher war, und gibt zu, wenn sie unsicher war.
 - **Wochenfrage** [Kai F12]: einmal pro Woche mit einem Tipp „Wie sicher fühlst du dich im englischen Kundengespräch?“ (1–5), als Kurve im Fortschritt. Das ist keine Selbstbewertung einer Antwort (A7 bleibt), sondern misst Emrahs Ziel „confident“ direkt.
+  - **Ort** [Nora-N 3.3]: nie auf Heute. Sie ist eine Seite am Ende der Pflicht des Wochenabschlusses, vor der Abschlusskarte: die Frage in einer Zeile und fünf Flächenknöpfe 1–5 (1 „unsicher“, 5 „sicher“). Ein Tipp speichert und geht weiter. Darunter steht klein „Diesmal nicht“. Fällt der Samstag aus, kommt sie am Ende des nächsten Lerntags. Es gibt keine Erinnerung.
 
 ---
 
@@ -552,7 +567,7 @@ Jede Zahl auf jedem Bildschirm kommt aus `domain/metrics`. Handy und Laptop zeig
 Fester Aufbau, eine klare Rangfolge:
 1. **Oben** die C1-Schätzung als ein Satz mit Band-Grafik: „C1 voraussichtlich zwischen Oktober 2027 und Januar 2028“, abgeleitet aus Belegen (Meilensteine, Kann-Beschreibungen), nie aus Kursfortschritt. Bei dünner Datenlage: „noch zu wenig Belege“.
 2. **Darunter vier Kacheln (2 × 2):** Wörter, Grammatik, Hören, Sprechen. Jede zeigt **eine Zahl, eine Zeile und einen Trendpfeil** gegen vor 4 Wochen.
-   - **Wörter** als ein Doppelbalken: „Erkennst du“ lang, „Bildest du selbst“ darin kürzer, die Lücke sichtbar. **„Bildest du selbst“ = Wörter und Wendungen in S5.** Direkt darunter in zweiter Größe: **„auf dem Weg: x“** (S3 + S4, „frei an 2 Tagen“).
+   - **Wörter** [Nora-N 3.2]: **„Bildest du selbst“ = Wörter und Wendungen in S5** als Hauptzahl (Handy 32 px, Gewicht 600). 4 px darunter in zweiter Größe (17 px, Gewicht 500, Zweitfarbe) **„auf dem Weg: x“** (S3 + S4, „frei an 2 Tagen“), nie mit „+“, nie addiert. Darunter ein Balken (8 px) mit drei Füllständen: Umriss-Spur = „Erkennst du“, voll = S5, halbtonig (40 %) daneben = S3 + S4; keine Handlungs- oder Zustandsfarbe. Dann eine Zeile „erkennst du: 412“. Laptop 40/20/15 px. **Nur die Wörter-Kachel hat eine zweite Zahl und den Balken**; die anderen Kacheln haben dieselbe Höhe ohne Füllgrafik.
    - **Grammatik:** „Kapitel x von 8“ mit Zustand.
    - **Hören:** Hörzahl (5.3) und Stufe.
    - **Sprechen:** Antworttempo und korrekte Sätze (6.4).
@@ -619,7 +634,11 @@ Fester Aufbau, eine klare Rangfolge:
 
 ### 12.1 Der Übungsrahmen (gleicher Ablauf, je Gerät eigene Gestalt) [Nora V1, V3, V5]
 
-**Eine Sitzung, ein Rahmen:** Die sechs Blöcke laufen in **einem** Übungsrahmen. Der Balken oben ist in **6 Abschnitte** geteilt (gleich dem Ring); er ist die einzige Fortschrittsangabe. Jeder Block hat seine eigene Bühne.
+**Eine Sitzung, ein Rahmen:** Die Blöcke des Tages laufen in **einem** Übungsrahmen. Der Balken oben hat so viele Abschnitte, wie der Tag Blöcke hat (5 oder 6, gleich dem Ring) [Nora-N W1]; er ist die einzige Fortschrittsangabe. **Der laufende Abschnitt des Balkens füllt sich je Aufgabe** [Nora-N V5].
+
+**Eigene Bühne je Block:** Wörter = Karte mit Lücke · Grammatik = Satz mit Muster-Leiste · Hören = große Abspielfläche mit Tempo-Stufe · Sag/Schreib es = Szenario-Karte mit großem Antwortfeld · Flüssigkeit = reduzierte Bühne mit Zeitlinie · Mission = Gesprächsbühne mit Persona.
+
+**Mission im Rahmen** [Nora-N 3.1]: Sie läuft als letzter Block mit dem Blockwechsel „Weiter: Mission“. Vorbereiten ist ihre erste Seite, das Gespräch ihre Bühne, der Bericht ihre Seitenfolge. Alles füllt denselben Abschnitt des Balkens, es gibt keinen zweiten Balken. Die Abhakliste steht am Handy als einklappbare Zeile unter dem Balken (✓ ○ ○), am Laptop offen in der Kontextspalte. Danach kommt die Abschlusskarte des Tages, kein eigener Missions-Abschluss. „Pause, später weiter“ steht am Missionstag vor der Mission, nie mitten im Gespräch.
 
 **Blockwechsel:** Knopf „Weiter: Grammatik“, ein Lichtimpuls im Balken (300 ms), dann eine Blockzeile über der ersten Aufgabe (Block und Thema). Keine Zwischenkarte. **Pause:** nach Block 3 der Nebenknopf „Pause, später weiter“; das X schließt ohne Rückfrage; Heute zeigt danach „Weiter mit Hören“.
 
@@ -637,26 +656,27 @@ Fester Aufbau, eine klare Rangfolge:
   - Darunter höchstens 2 Nebenknöpfe („Mehr“, „War das auch richtig?“); „Erklär mir meine Antwort“, „Warum diese Aufgabe?“ und Claude hinter „…“; dann **Weiter**.
   - Das Band ist höchstens 45 % der Höhe hoch, scrollt nie und verschwindet nie von selbst [Lena Veto 15].
   - **„Mehr“** öffnet ein Blatt bis 85 % der Höhe mit „Weiter“ am Fuß.
-  - **Hinweis-Runde** („Fast. Welche Zeitform?“) als niedriges einzeiliges Band ohne Rot, dann zweiter Versuch. Die **Kontrastkarte** ist eine eigene Aufgabe, kein Band.
+  - Die Aufgabe rückt nach oben und bleibt mit der eigenen Antwort sichtbar [Nora-N V1].
+  - **Hinweis-Runde** („Fast. Welche Zeitform?“) als niedriges einzeiliges Band ohne Rot, dann zweiter Versuch. Die Lücke bleibt bearbeitbar, der Knopf heißt wieder „Prüfen“. Das volle Band kommt erst nach dem zweiten Versuch. Die **Kontrastkarte** ist eine eigene Aufgabe, kein Band.
   - Die 120-Zeichen-Grenze prüfen das Schema und das Qualitätstor. Ein E2E-Test zeigt die **längste** Rückmeldung des Bestands auf 390 × 844 und mit der in der Claude-App gemessenen Höhe ohne Scrollen [Kai 10b].
-- **Seitenfolge statt Band** für Sag-es-Rückmeldung, Wochen-Mail, Themen-Test und Missionsbericht: Seite 1 (Urteil, Häkchen, Stärke mit Zitat, „2 Punkte üben“), eine Seite je Arbeitspunkt, letzte Seite mit Wendungen und „Nochmal, aber besser“. Seite 1 passt ohne Scrollen.
+- **Seitenfolge statt Band** für Sag-es-Rückmeldung, Wochen-Mail, Themen-Test und Missionsbericht: Seite 1 (Urteil, Häkchen, Stärke mit Zitat, „2 Punkte üben“), eine Seite je Arbeitspunkt, letzte Seite mit Wendungen und „Nochmal, aber besser“. Seite 1 passt ohne Scrollen. Geblättert wird mit Wischen oder „Weiter“. Kleine Seitenpunkte stehen über „Weiter“, nie oben, denn oben steht nur der Balken [Nora-N V1].
 
 **Laptop (ab 1024 px):**
 - **Feste Knopfzeile unten in der Bühne:** Tipp `T`, Weiß ich nicht `W` | Prüfen `⏎` / Weiter `⏎`. Die Kürzel stehen sichtbar am Knopf.
 - **Urteil und Vergleich** erscheinen in der Bühne direkt unter der Aufgabe.
 - **Warum, Merke und der Inhalt von „Mehr“** stehen offen in der Kontextspalte rechts.
-- Längere Rückmeldungen (Seitenfolge) laufen in der Bühne, die Arbeitspunkte in der Kontextspalte.
+- **Seitenfolgen werden in der Bühne geblättert**, auch die Übungsseiten je Arbeitspunkt. Die Kontextspalte zeigt die Übersicht: Abhakliste, Arbeitspunkte mit Häkchen, bei der Wochen-Mail die vier Kategorien. Am Schreibtag ist Seite 1 der eigene Text mit markierten Stellen [Nora-N W4].
 
 ### 12.2 Die Vorschau (Stufe 0) [Nora 3, Kai F3, F9]
 
 - **Eigenes Test-Artefakt ohne Fähigkeiten** (kein `db`, kein `sample`), erfundene Daten, nichts von außen geladen, keine fremden Marken. Klickbar, aber ohne Lernkern: Eine Vorführleiste („richtig / Tippfehler / falsch / weiß nicht“) zeigt alle Zustände. Dunkel ist Standard.
 - **Laptop-Ansicht auch am Handy** als verkleinerte 1440 × 900-Fläche mit dem Hinweis „Handy quer halten“; am echten Laptop in voller Breite.
 - **Schalter:** Modus, Bewegung, Handlungsfarbe A/B, Reiter „Praxis“/„Sprechen“, DE/EN, „Start nachspielen“, „Höhe messen“ (die sichtbare Höhe in der Claude-App geht an Kai für Test 10b).
-- **Bildschirme:** Handy H1–H16 (Heute in allen Zuständen, Wörter-Block, Blockwechsel, Grammatik-Block mit längster Warum-Zeile, Grammatik-Erklärung, Reiter Grammatik, Hören, Sag/Schreib es mit Diktier-Anleitung und offener Tastatur, Flüssigkeit, Abschlusskarte, Mission, Reiter Wörter, Reiter Praxis, Reiter Fortschritt, Blatt „Fragen“, Ausfälle) und Laptop L1–L10 (inkl. Breitenproben 768/1024/2560 px).
+- **Bildschirme:** Handy H1–H16 (Heute in allen Zuständen, Wörter-Block, Blockwechsel, Grammatik-Block mit längster Warum-Zeile, Grammatik-Erklärung, Reiter Grammatik, Hören, Sag/Schreib es mit Diktier-Anleitung und offener Tastatur, Flüssigkeit, Abschlusskarte, Mission als Abschnitt im Rahmen (H11), Reiter Wörter, Reiter Praxis, Reiter Fortschritt, Blatt „Fragen“, Ausfälle) und Laptop L1–L10 (inkl. Breitenproben 768/1024/2560 px). **Dazu** [Nora-N]: H1 auch als Missionstag, H14 Wörter-Kachel nach 9.2, die Termin-Seite und die Wochenfrage-Seite, damit Emrah 19 Nr. 4, 6, 7 und 8 am Bild entscheidet.
 - **Die schwierigsten Bildschirme sind Pflicht** [Kai F9]: Fortschritt-Seite, Band mit langer Erklärung, Grammatik-Erklärung als Muster-Tabelle, Diktier-Ablauf mit offener Tastatur.
 - **Kapitel 1 mit echtem Inhalt** [Kai F3]: eine echte Erklärung mit Deutsch-Kontrast und „Problem zuerst“, von `english-teacher` gegengelesen.
 - **Blindtest als Tor** [Kai F9]: Emrah legt H1, H2 mit Band, H5, H14 und L2 neben Speak (Handy) und Linear (Laptop) auf seinem Gerät. **Stufe 1 beginnt erst, wenn er mindestens 4 von 5 als „gleich hochwertig“ einordnet.**
-- **Emrah sagt** Ja/Nein zur Gesamtwirkung und trifft drei Entscheidungen: Handlungsfarbe, Reitername, Ablauf mit sechs Blöcken ohne Zwischenkarten.
+- **Emrah sagt** Ja/Nein zur Gesamtwirkung und trifft drei Entscheidungen: Handlungsfarbe, Reitername, Ablauf mit 5–6 Blöcken ohne Zwischenkarten.
 
 ---
 
@@ -665,7 +685,7 @@ Fester Aufbau, eine klare Rangfolge:
 ### 13.1 Handy (bis 599 px)
 
 - **Unten 5 Reiter:** **Heute · Wörter · Grammatik · Praxis · Fortschritt.** Jeder mit Symbol und Wort, auf fester, deckender Fläche (kein Glas). Der aktive Reiter trägt die Handlungsfarbe. **In Übungen ist die Leiste ausgeblendet.**
-- **Praxis:** oben die Mission der Woche, darunter Sprechen / Hören / Lesen mit je höchstens 3 Einträgen und „Alle …“. Kurse liegen unter Lesen.
+- **Praxis:** oben die Mission der Woche als **Zustand** („Freitag in deiner Pflicht“ / „erledigt ✓“), mit Ziel und Abhakliste zum Ansehen, ohne Start-Knopf [Nora-N W2]. Freiwillige Missionen stehen unter Sprechen. Darunter Sprechen / Hören / Lesen mit je höchstens 3 Einträgen und „Alle …“. Kurse liegen unter Lesen.
 - **Kopf:** Titel links, rechts höchstens **ein** Symbol „Fragen“ (Blatt mit Claude | Übersetzen, wegziehbar) auf Heute, Wörter, Grammatik und Praxis.
 - **Einstellungen** (mit Diagnose) nur als Zahnrad oben rechts auf **Fortschritt**, nirgends sonst.
 - **In der Übung** hinter „…“: Claude, Übersetzer, „So sprichst du“. Im Wort-Fenster: „Claude fragen“.
@@ -689,7 +709,7 @@ Grundschrift ab 1920 px 18 px statt 16 px, ab 2400 px 20 px, alles in rem. Bei 2
 - **Seitenleiste** mit denselben Namen: Heute, Wörter, Grammatik, Praxis (aufklappbar: Sprechen, Hören, Lesen), Fortschritt. Unten abgesetzt: Claude, Übersetzer, Einstellungen. Einklappbar zur Rail.
 - **Bühne** in Lesebreite; **Kontextspalte je Bildschirm:** in der Übung Warum/Merke/Mehr und die Regel des Themas; auf Heute Wochenplan, Kapitelstand und „Wenn du mehr willst“; in Listen (Wörter, Grammatik) das Detail neben der Liste.
 - **Claude in der Kontextspalte** verdrängt deren Inhalt, **nie die Bühne**, und bekommt die aktuelle Aufgabe und Emrahs Antwort automatisch mit, ohne Kopieren [Kai F11].
-- **Schreibtag als Laptop-Stärke:** Wochen-Mail links in der Bühne, Rückmeldung nach den vier Kategorien rechts in der Kontextspalte, Register-Stellen im Text markiert.
+- **Schreibtag als Laptop-Stärke:** Die Rückmeldung zur Wochen-Mail wird in der Bühne geblättert (Seite 1 = der eigene Text mit markierten Register-Stellen); die Kontextspalte zeigt die vier Kategorien als Übersicht (12.1).
 - **Tastatur zuerst:** Enter prüft und geht weiter, Ziffern 1–4 wählen, T = Tipp, W = Weiß ich nicht, Esc schließt, `?` zeigt alle Kürzel. Hover-Zustände und Tooltips nur hier.
 - **Technik:** ein Rahmen je Gerät (`ShellPhone`, `ShellRail`, `ShellDesk`), getrennt nachgeladen; die Bausteine in der Mitte sind dieselben und richten sich nach ihrem Behälter.
 
@@ -873,8 +893,8 @@ Inhalte entstehen nach dem Vorlauf in 8.7, je Test-Link höchstens ein neuer Inh
 4. **Mission als Pflicht** einmal pro Woche (~9 Min. statt Block 5 + 6), ab Stufe 5; vorher ist der Missionstag ein normaler Lerntag.
 5. **Länge der Pflicht:** 28 Minuten an jedem Lerntag (nach einer Pause anteilig auf 20 gekürzt), oder dauerhaft 20 Minuten mit denselben Anteilen.
 6. **Ehrlicher Neustart der Wortzahl:** „Bildest du selbst“ zählt nur feste Wörter (S5) und startet deutlich niedriger als heute; darunter steht „auf dem Weg: x“. *Hinweis: Lehnst du das ab, lebt Lenas Einspruch wieder auf; dann müssten wir die Zählweise neu klären.*
-7. **„Mein nächster Termin“:** echte Kundentermine in 1–2 Sätzen diktieren (ohne Namen, nur in deiner Datenbank).
-8. **Wochenfrage zur Selbstsicherheit** (1–5, ein Tipp pro Woche).
+7. **„Mein nächster Termin“:** einmal pro Woche vor der ersten Sprechaufgabe einen echten Kundentermin in 1–2 Sätzen diktieren oder überspringen (ohne Namen, nur in deiner Datenbank). Block 5 und Mission bauen darauf auf.
+8. **Wochenfrage zur Selbstsicherheit** (1–5, ein Tipp pro Woche am Ende des Wochenabschlusses).
 9. **Zeitgrenze für gesprochene Wendungen:** Eine gesprochene Wendung gilt als „sicher“, wenn du sie in höchstens **15 Sekunden** sagst (strenger, wie beim Tippen) oder in höchstens **20 Sekunden** (großzügiger, weil Diktieren länger dauert). Tarek empfiehlt, mit 15 zu starten und nach 4 Wochen Messung zu prüfen.
 
 **Zur Kenntnis (ehrliche Grenzen):**
