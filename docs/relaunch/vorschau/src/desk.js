@@ -106,7 +106,8 @@ reg('l1', {
 function l2Stage(v) {
   const blocks = dayBlocks('normal');
   const checked = v === 'checked' || S.ui.checked;
-  const st = checked ? (S.typed != null && S.ui.ownInput ? judge(S.typed, WORD.right) : S.demo) : null;
+  const WD = wordData('recall');
+  const st = checked ? (S.typed != null && S.ui.ownInput ? judge(S.typed, WD.right, WD.alts) : S.demo) : null;
   const shown = checked ? (st === 'idk' ? WORD.right : (S.typed && S.ui.ownInput ? S.typed : WORD.you[st])) : (S.typed || '');
   const you = Object.assign({}, WORD.you, S.typed && S.ui.ownInput ? { [st]: esc(S.typed) } : {});
   let s = dTop(blocks, 1, checked ? 0.6 : 0.45) + '<div class="dscroll" style="display:flex;flex-direction:column;padding-top:1em">' +
@@ -114,7 +115,7 @@ function l2Stage(v) {
     '<div class="stack s16" style="padding:3.5em 0 2em;align-items:flex-start"><div class="prompt disp">' + L('die Lieferzeit', 'die Lieferzeit') + '</div><div class="hintline" id="d-hint">' + L('im Einkauf · 2 Wörter', 'in purchasing · 2 words') + '</div>' +
     '<div style="padding-top:.5em">' + gapHtml(shown, { big: true, caret: !checked, input: !checked, st: checked ? ({ ok: 'ok', typo: 'near', wrong: 'bad', idk: 'idk' }[st]) : '' }) + '</div></div>';
   if (checked) {
-    s += '<div class="dverdict ' + stCls(st) + '" id="d-verdict" role="status">' + verdictRow(st) + cmpLine(st, you[st], WORD.right) + '<p class="whyl" style="margin:.2em 0 0">' + WORD.why[st] + '</p>' +
+    s += '<div class="dverdict ' + stCls(st) + '" id="d-verdict" role="status">' + verdictRow(st) + cmpLine(st, you[st], WORD.right) + '<p class="whyl" style="margin:.2em 0 0">' + WD.why[st] + '</p>' +
       '<div class="bandbtns" style="padding-top:.5em;max-width:28em"><button class="btn sec sm" id="d-more" data-act="noop">' + L('Mehr', 'More') + '</button>' + (st === 'wrong' || st === 'typo' ? '<button class="btn sec sm" id="d-also" data-go="l7">' + L('War das auch richtig?', 'Was mine also right?') + '</button>' : '') + '</div></div>';
   }
   s += '</div>';
@@ -239,7 +240,7 @@ reg('l6', {
         stage: dTop(blocks, 4, 0.9) + '<div class="dscroll stack s16" style="padding-top:1em">' + blockLine('s', L('Mission · Bericht', 'Mission · report')) +
           '<div class="verdict" style="color:var(--ok)"><span class="vi" style="background:color-mix(in oklch, var(--ok) 20%, transparent)">' + ic('check', 'xs') + '</span>' + L('Einwand gut behandelt, Termin noch offen', 'Objection handled well, meeting still open') + '</div>' +
           '<div class="stack s8"><div class="lbl">' + L('Das war stark', 'That was strong') + '</div><div class="quote en">„We’ve already reduced the lead time to eight weeks.“</div><p class="p2" style="margin:0">' + L('Ergebnis zuerst, ohne Zeitpunkt: genau richtig im present perfect.', 'Result first, no time given: exactly right in the present perfect.') + '</p></div>' +
-          '<div class="stack s8"><div class="lbl">' + L('2 Punkte üben', 'Practise 2 points') + '</div><div class="p">1&nbsp; ' + L('Termin aktiv vorschlagen: <em class="en">Could we pencil in Thursday at ten?</em>', 'Suggest the meeting yourself: <em>Could we pencil in Thursday at ten?</em>') + '</div><div class="p">2&nbsp; <s class="en" style="color:var(--fg-2)">We have met last year</s> → <b class="en">We met last year</b></div></div>' +
+          '<div class="stack s8"><div class="lbl">' + L('2 Punkte üben', 'Practise 2 points') + '</div><div class="p">1&nbsp; ' + L('Termin aktiv vorschlagen: <em class="en">Could we pencil in Monday at ten?</em>', 'Suggest the meeting yourself: <em>Could we pencil in Monday at ten?</em>') + '</div><div class="p">2&nbsp; <s class="en" style="color:var(--fg-2)">We have met last year</s> → <b class="en">We met last year</b></div></div>' +
           pageDots(4, 0) + '</div>' + dKeys('<button class="btn pri" id="d-next" data-go="l1-done">' + L('Weiter', 'Continue') + kb('⏎') + '</button>'),
         ctx: missionCtx([1, 1, 0], true)
       };
@@ -250,7 +251,7 @@ reg('l6', {
         '<div class="stack s8" style="flex:1;justify-content:flex-end;display:flex;flex-direction:column;gap:.7em">' +
         '<div class="bubble them en">Thanks for calling back. I’ll be honest: your price is still too high for us.</div>' +
         '<div class="bubble me en">I understand. Could you tell me which offer you’re comparing us with?</div>' +
-        '<div class="bubble them en">Another supplier quoted twelve percent less, and they can deliver in six weeks.</div></div>' +
+        '<div class="bubble them en">Another supplier quoted about 10 percent less, and they can deliver in six weeks.</div></div>' +
         '<div class="notice" style="font-size:.92em">' + ic('laptop', 'sm') + '<span>' + L('Am Laptop tippst du deine Antworten. Gesprochen wird am Handy.', 'On the laptop you type your answers. Speaking happens on the phone.') + '</span></div>' +
         (phone ? '<div class="notice" style="font-size:.92em">' + ic('phone', 'sm') + '<span>' + L('Öffne Lingo am Handy. Die Mission steht dort an derselben Stelle bereit, hier geht es danach weiter.', 'Open Lingo on your phone. The mission waits at the same point there and continues here afterwards.') + '</span></div>' : '') +
         '<div class="fieldwrap"><textarea class="field en" id="d-answer" rows="3" style="min-height:5.5em" placeholder="' + esc(L('Deine Antwort …', 'Your answer …')) + '"></textarea><div class="timeline"><i style="width:22%"></i></div></div></div>' +
@@ -272,11 +273,11 @@ reg('l7', {
     if (v === 'claude') {
       body = '<span class="chip" style="align-self:flex-start">' + ic('info', 'xs') + L('Aufgabe + deine Antwort sind dabei', 'Task + your answer included') + '</span>' +
         '<div class="bubble me" style="max-width:92%">' + L('Warum nicht <span class="en">have sent</span>? Es ist doch gerade erst passiert.', 'Why not have sent? It only just happened.') + '</div>' +
-        '<div class="p" style="line-height:1.55">' + L('Weil <em class="en">yesterday</em> im Satz steht. Sobald ein fester Zeitpunkt genannt ist, gilt die Handlung als abgeschlossen, egal wie kurz sie her ist. Ohne <em class="en">yesterday</em> wäre <em class="en">We’ve just sent the revised quote</em> richtig.', 'Because yesterday is in the sentence. Once a fixed time is named, the action counts as finished. Without yesterday, We’ve just sent the revised quote would be right.') + '</div>' +
+        '<div class="p" style="line-height:1.55">' + L('Weil <em class="en">yesterday</em> im Satz steht. Ein vergangener Zeitpunkt macht die Handlung abgeschlossen, egal wie kurz sie her ist. Ohne Zeitangabe wäre <em class="en">We’ve sent the revised quote</em> richtig. Ist es eben erst passiert: <em class="en">We’ve just sent it</em> (US auch <em class="en">We just sent it</em>).', 'Because yesterday is in the sentence. A past time makes the action finished, however recent. Without a time word, We’ve sent the revised quote would be right. If it only just happened: We’ve just sent it (US also We just sent it).') + '</div>' +
         '<div style="flex:1"></div><div style="display:flex;gap:.5em"><textarea class="field" id="d-claude-in" rows="1" style="min-height:3em;padding:.7em .9em" placeholder="' + esc(L('Frag Claude …', 'Ask Claude …')) + '"></textarea><button class="btn pri" id="d-claude-send" data-act="noop" aria-label="' + esc(L('Senden', 'Send')) + '" style="width:3.2em;padding:0">' + ic('send', 'sm') + '</button></div>';
     } else {
       body = '<textarea class="field" id="d-trans-in" rows="2" style="min-height:4.5em">Wir haben die Lieferzeit bereits verkürzt.</textarea>' +
-        '<div class="card stack s8"><p class="p en" style="font-weight:600;font-size:1.1em;margin:0">We’ve already shortened the lead time.</p><p class="p2 en" style="margin:0">also: We have already reduced the lead time.</p><p class="p2" style="margin:0">' + L('Kein Zeitpunkt, Ergebnis zählt: present perfect.', 'No time named, result matters: present perfect.') + '</p></div>' +
+        '<div class="card stack s8"><p class="p en" style="font-weight:600;font-size:1.1em;margin:0">We’ve already reduced the lead time.</p><p class="p2 en" style="margin:0">also: We’ve already shortened the lead time. · We’ve already cut the lead time.</p><p class="p2" style="margin:0">' + L('Kein Zeitpunkt, Ergebnis zählt: present perfect.', 'No time named, result matters: present perfect.') + '</p></div>' +
         '<button class="btn sec" id="d-tr-add" data-act="noop" style="align-self:flex-start">' + ic('plus', 'sm') + L('In die Wörter', 'Add to words') + '</button>';
     }
     return { stage: l3Stage('band', true), ctx: head + '<div class="stack s16" style="flex:1;display:flex;flex-direction:column">' + body + '</div>' };
@@ -303,8 +304,8 @@ reg('l8', {
 const CATS = () => [
   ['mark-good', 'var(--ok)', L('Inhalt und Wirkung', 'Content and impact'), L('Preisnachlass als Ergebnis genannt, klarer nächster Schritt. Das wirkt.', 'Discount stated as a result, clear next step. That works.')],
   ['mark-reg', 'var(--ch-gram)', L('Register', 'Register'), L('<em class="en">is difficult</em> klingt hart. Weicher: <em class="en">would be difficult for us</em>.', '<em>is difficult</em> sounds blunt. Softer: <em>would be difficult for us</em>.')],
-  ['mark-str', 'var(--ch-listen)', L('Aufbau', 'Structure'), L('Erst Lieferzeit, dann Preis, dann Termin: gute Reihenfolge. Ein Satz zum Einstieg in den Preis fehlt.', 'Lead time, then price, then meeting: good order. One sentence leading into the price is missing.')],
-  ['mark-lang', 'var(--bad)', L('Sprache', 'Language'), L('<s class="en">I have checked … yesterday</s> → <b class="en">I checked … yesterday</b>. Fester Zeitpunkt, also past simple.', '<s>I have checked … yesterday</s> → <b>I checked … yesterday</b>. Fixed time, so past simple.')]
+  ['mark-str', 'var(--ch-listen)', L('Aufbau', 'Structure'), L('Erst Lieferzeit, dann Preis, dann Termin: gute Reihenfolge. <em class="en">Regarding the price:</em> mit Doppelpunkt wirkt wie eine Stichpunktliste. Im Fließtext leitest du so über: <em class="en">As for the price, …</em>', 'Lead time, then price, then meeting: good order. <em>Regarding the price:</em> with a colon reads like a bullet list. In running text, lead in like this: <em>As for the price, …</em>')],
+  ['mark-lang', 'var(--bad)', L('Sprache', 'Language'), L('<s class="en">I have checked … yesterday</s> → <b class="en">I checked … yesterday</b>. Vergangener Zeitpunkt, also past simple. Nach <em class="en">Hi Laura,</em> beginnt die nächste Zeile im Englischen groß: <em class="en">Thanks …</em>', '<s>I have checked … yesterday</s> → <b>I checked … yesterday</b>. Past time, so past simple. After <em>Hi Laura,</em> the next line starts with a capital letter: <em>Thanks …</em>')]
 ];
 reg('l9', {
   code: 'L9', name: 'Schreibtag', kind: 'desk', nav: 'heute',
@@ -315,18 +316,18 @@ reg('l9', {
       return {
         stage: dTop(blocks, 4, 1) + '<div class="dscroll stack s16" style="padding-top:1em">' + blockLine('s', L('Schreibtag · deine überarbeitete Fassung', 'Writing day · your revised version')) +
           '<div class="verdict" style="color:var(--ok)"><span class="vi" style="background:color-mix(in oklch, var(--ok) 20%, transparent)">' + ic('check', 'xs') + '</span>' + L('Bereit zum Abschicken', 'Ready to send') + '</div>' +
-          '<div class="card mailtext en"><p>Hi Laura,</p><p>Thank you for your call on Tuesday. I <b>checked</b> the numbers with our logistics team yesterday, and we can offer a lead time of eight weeks instead of ten.</p><p>On the price side, we’ve already reduced it by 5 percent in the revised quote. A further discount <b>would be difficult for us</b>, but we could offer a two-year contract with fixed prices.</p><p>Could we have a quick call on Thursday to go through the details?</p><p>Best regards</p></div>' +
-          '<p class="p2" style="margin:0">' + L('Zwei Wendungen gehen in deine Wörter: <em class="en">on the price side</em>, <em class="en">would be difficult for us</em>.', 'Two phrases go into your words: <em>on the price side</em>, <em>would be difficult for us</em>.') + '</p></div>' +
+          '<div class="card mailtext en"><p>Hi Laura,</p><p><b>Thanks</b> for taking the time to talk on Wednesday. I <b>checked</b> the numbers with our logistics team yesterday, and we can offer a lead time of eight weeks instead of ten.</p><p><b>As for the price,</b> we’ve already reduced it by 5 percent in the revised quote. A further discount <b>would be difficult for us</b>, but we could offer a two-year contract with fixed prices.</p><p>Could we have a quick call on Monday to go through the details?</p><p>Best regards,</p></div>' +
+          '<p class="p2" style="margin:0">' + L('Zwei Wendungen gehen in deine Wörter: <em class="en">as for the price</em>, <em class="en">would be difficult for us</em>.', 'Two phrases go into your words: <em>as for the price</em>, <em>would be difficult for us</em>.') + '</p></div>' +
           dKeys('<button class="btn sec" id="d-copy" data-act="copy">' + L('Text kopieren', 'Copy text') + '</button><button class="btn pri" id="d-next" data-go="h10-day">' + L('Weiter', 'Continue') + kb('⏎') + '</button>'),
-        ctx: ctxBlock(L('Was sich verbessert hat', 'What improved'), '<div class="checklist" style="padding:0">' + [L('Zeitform korrigiert', 'Tense fixed'), L('Ton weicher', 'Softer tone'), L('Überleitung zum Preis', 'Lead-in to the price')].map(t => '<div class="ci" style="font-size:.92em"><span class="ck y">' + ic('check', 'xs') + '</span>' + t + '</div>').join('') + '</div>')
+        ctx: ctxBlock(L('Was sich verbessert hat', 'What improved'), '<div class="checklist" style="padding:0">' + [L('Zeitform korrigiert', 'Tense fixed'), L('Großschreibung nach der Anrede', 'Capital after the greeting'), L('Ton weicher', 'Softer tone'), L('Überleitung zum Preis', 'Lead-in to the price')].map(t => '<div class="ci" style="font-size:.92em"><span class="ck y">' + ic('check', 'xs') + '</span>' + t + '</div>').join('') + '</div>')
       };
     }
     return {
       stage: dTop(blocks, 4, 0.55) + '<div class="dscroll stack s16" style="padding-top:1em">' + blockLine('s', L('Schreibtag · Projekt-Update an den Einkauf', 'Writing day · project update to purchasing')) +
         instr(L('Lies die Markierungen, dann überarbeite die Mail.', 'Read the marks, then revise the email.'), 'd-why') +
-        '<div class="card mailtext en"><p>Hi Laura,</p><p>thank you for your call on Tuesday. <span class="mark-lang">I have checked the numbers with our logistics team yesterday</span>, and we can offer a lead time of eight weeks instead of ten.</p>' +
+        '<div class="card mailtext en"><p>Hi Laura,</p><p><span class="mark-lang">thanks</span> for taking the time to talk on Wednesday. <span class="mark-lang">I have checked the numbers with our logistics team yesterday</span>, and we can offer a lead time of eight weeks instead of ten.</p>' +
         '<p><span class="mark-str">Regarding the price:</span> <span class="mark-good">we have already reduced it by 5 percent in the revised quote.</span> A further discount <span class="mark-reg">is difficult</span>, but we could offer a two-year contract with fixed prices.</p>' +
-        '<p><span class="mark-good">Could we have a quick call on Thursday to go through the details?</span></p><p>Best regards</p></div></div>' +
+        '<p><span class="mark-good">Could we have a quick call on Monday to go through the details?</span></p><p>Best regards,</p></div></div>' +
         dKeys('<button class="btn sec" id="d-askmail" data-go="l7">' + ic('claude', 'sm') + L('Claude fragen', 'Ask Claude') + '</button><button class="btn pri" id="d-revise" data-go="l9-end">' + L('Überarbeiten', 'Revise') + kb('⏎') + '</button>'),
       ctx: ctxBlock(L('Rückmeldung in vier Bereichen', 'Feedback in four areas'), '<div>' + CATS().map(c => '<div class="cat"><div class="ct"><span class="sw ' + c[0] + '" style="box-shadow:none;background:' + c[1] + '"></span>' + c[2] + '</div><div class="p2" style="font-size:.92em">' + c[3] + '</div></div>').join('') + '</div>')
     };

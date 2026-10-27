@@ -15,14 +15,26 @@ const WORD = {
     };
   }
 };
-const WHY_GRAM = () => L('Ein fester Zeitpunkt wie yesterday oder last week verlangt past simple. Present perfect steht nie mit solchen Angaben.',
-  'A fixed time like yesterday or last week needs the past simple. The present perfect never goes with such time words.');
+const WHY_GRAM = () => L('Ein vergangener Zeitpunkt wie yesterday oder last week verlangt past simple. Present perfect passt hier nicht.',
+  'A past time like yesterday or last week needs the past simple. The present perfect doesn’t fit here.');
 const GRAM = {
   right: 'sent',
   you: { ok: 'sent', typo: 'snet', wrong: 'have sent', idk: '' },
   get why() { const w = WHY_GRAM(); return { ok: w, typo: w, wrong: w, idk: w }; }
 };
 const typedFor = (data, st) => data.you[st];
+/* Auch richtig (Lehrer-Gegenlesung L-10, L-11): andere Formen zählen als richtig, mit eigener Warum-Zeile. */
+const ALSO = {
+  recall: () => ({ 'delivery time': L('Richtig. Im Einkauf ist <em class="en">lead time</em> das Standardwort.', 'Correct. In purchasing, <em>lead time</em> is the standard word.') }),
+  gap: () => { const t = L('Auch richtig. Im Einkauf hörst du meist <em class="en">lead time</em>.', 'Also correct. In purchasing you usually hear <em>lead time</em>.'); return { 'delivery time': t, 'turnaround time': t }; }
+};
+function wordData(kind) {
+  const m = ALSO[kind]();
+  const t = (S.typed || '').trim().toLowerCase();
+  const d = Object.assign({}, WORD, { alts: Object.keys(m), why: Object.assign({}, WORD.why) });
+  if (S.ui.ownInput && m[t]) d.why.ok = m[t];
+  return d;
+}
 function curSt(data) {
   if (S.typed != null && S.ui.ownInput) return judge(S.typed, data.right, data.alts);
   return S.demo;
@@ -148,25 +160,28 @@ function h2(v) {
   }
   if (v === 'type') {
     const checked = S.ui.checked;
-    const st = checked ? curSt(WORD) : null;
+    const D = wordData('recall');
+    const st = checked ? curSt(D) : null;
     const shown = checked ? (st === 'idk' ? WORD.right : (S.typed && S.ui.ownInput ? S.typed : WORD.you[st])) : (S.typed || '');
     return top + '<div class="ex-body gx' + (checked ? ' with-band' : '') + '">' + bl + instr(L('Wie heißt das auf Englisch?', 'What is this in English?')) +
       '<div class="stagec"><div class="prompt disp">' + L('die Lieferzeit', 'die Lieferzeit') + '</div><div class="hintline">' + L('im Einkauf · 2 Wörter', 'in purchasing · 2 words') + '</div>' +
       '<div style="padding-top:8px">' + gapHtml(shown, { big: true, caret: !checked, input: !checked, st: checked ? ({ ok: 'ok', typo: 'near', wrong: 'bad', idk: 'idk' }[st]) : '' }) + '</div></div></div>' +
-      (checked ? band(st, Object.assign({}, WORD, { you: Object.assign({}, WORD.you, S.typed ? { [st]: esc(S.typed) } : {}) }), { next: 'h2-gap' }) :
+      (checked ? band(st, Object.assign({}, D, { you: Object.assign({}, WORD.you, S.typed ? { [st]: esc(S.typed) } : {}) }), { next: 'h2-gap' }) :
         exFoot(btnSec('hint', L('Tipp', 'Hint'), 'data-act="tip"') + btnSec('idk', L('Weiß ich nicht', 'Don’t know'), 'data-act="idk"') + btnPri('check', L('Prüfen', 'Check'), '', ' data-act="check"'), true) + drawnKbd({ go: 'go' })) +
       overlays({ whyTask, checked });
   }
-  // gap / band / more / menu / word: Lückensatz
+  // gap / band / also / more / menu / word: Lückensatz
+  if (v === 'also') { S.typed = 'delivery time'; S.ui.ownInput = true; S.ui.checked = true; }
   const checked = v === 'band' || v === 'more' || S.ui.checked;
-  const st = checked ? curSt(WORD) : null;
+  const D = wordData('gap');
+  const st = checked ? curSt(D) : null;
   const shown = checked ? (st === 'idk' ? WORD.right : (S.typed && S.ui.ownInput ? S.typed : WORD.you[st])) : (S.typed || '');
   const gapSt = checked ? ({ ok: 'ok', typo: 'near', wrong: 'bad', idk: 'idk' }[st]) : '';
   let s = top + '<div class="ex-body gx' + (checked ? ' with-band' : '') + '">' + bl + instr(L('Setz das fehlende Wort ein.', 'Fill in the missing word.')) +
     '<div class="stagec"><div class="sent en" id="sent">' + words('Can you') + ' <span class="w' + (v === 'word' ? ' sel' : '') + '" data-go="h2-word">reduce</span> ' + words('the') + ' ' +
     gapHtml(shown, { caret: !checked, input: !checked, st: gapSt }) + ' ' + words('to four weeks?') + '</div>' +
     '<div class="hintline">' + L('Gesucht: Lieferzeit', 'Wanted: Lieferzeit') + '</div></div></div>';
-  if (checked) s += band(st, Object.assign({}, WORD, { you: Object.assign({}, WORD.you, S.typed && S.ui.ownInput ? { [st]: esc(S.typed) } : {}) }), { next: 'h3-before' });
+  if (checked) s += band(st, Object.assign({}, D, { you: Object.assign({}, WORD.you, S.typed && S.ui.ownInput ? { [st]: esc(S.typed) } : {}) }), { next: 'h3-before' });
   else s += exFoot(btnSec('hint', L('Tipp', 'Hint'), 'data-act="tip"') + btnSec('idk', L('Weiß ich nicht', 'Don’t know'), 'data-act="idk"') + btnPri('check', L('Prüfen', 'Check'), '', ' data-act="check"'), true) + drawnKbd({ go: 'go' });
   if (v === 'more' || S.ui.sheet === 'more') s += moreWordSheet();
   if (v === 'word') s += wordPopup();
@@ -177,7 +192,7 @@ function h2(v) {
 function moreWordSheet() {
   return sheet('more-sheet', L('Mehr zu lead time', 'More about lead time'),
     '<div class="stack s16"><div class="stack s6"><div class="lbl">' + L('Bedeutung', 'Meaning') + '</div><p class="p">' + L('Die Zeit zwischen Bestellung und Lieferung. Im Einkauf das Standardwort, oft in Wochen angegeben.', 'The time between order and delivery. The standard word in purchasing, usually given in weeks.') + '</p></div>' +
-    '<div class="stack s6"><div class="lbl">' + L('Beispiele', 'Examples') + '</div><div class="ex-list en"><div><b>Our standard lead time is ten weeks.</b><span>' + L('Unsere normale Lieferzeit beträgt zehn Wochen.', 'Normal delivery time.') + '</span></div><div><b>We’ve already reduced the lead time to eight weeks.</b><span>' + L('Wir haben die Lieferzeit schon auf acht Wochen verkürzt.', 'Present perfect, no fixed time.') + '</span></div></div></div>' +
+    '<div class="stack s6"><div class="lbl">' + L('Beispiele', 'Examples') + '</div><div class="ex-list en"><div><b>Our standard lead time is ten weeks.</b><span>' + L('Unsere normale Lieferzeit beträgt zehn Wochen.', 'Normal delivery time.') + '</span></div><div><b>We’ve already reduced the lead time to eight weeks.</b><span>' + L('Wir haben die Lieferzeit schon auf acht Wochen verkürzt.', 'Present perfect, no past time named.') + '</span></div></div></div>' +
     '<div class="stack s6"><div class="lbl">' + L('Wortpartner', 'Collocations') + '</div><p class="p en">reduce · shorten · quote a lead time</p></div>' +
     '<div class="stack s6"><div class="lbl">' + L('Typische Falle', 'Common trap') + '</div><p class="p">' + L('<em class="en">delivery</em> ist die Lieferung selbst, nicht ihre Dauer. <em class="en">delivery time</em> geht auch, im Einkauf hörst du meist <em class="en">lead time</em>.', '<em>delivery</em> is the delivery itself, not its duration.') + '</p></div></div>',
     '<button class="btn pri full" id="more-next" data-go="h3-before">' + L('Weiter', 'Continue') + '</button>', { h: '85%' });
@@ -192,7 +207,7 @@ function wordPopup() {
 }
 reg('h2', {
   code: 'H2', name: 'Wörter-Block', kind: 'phone', demo: true,
-  variants: [['intro', 'Neues Wort'], ['type', 'frei tippen'], ['gap', 'Lücke'], ['band', 'Band'], ['more', '„Mehr“-Blatt'], ['menu', 'Menü „…“'], ['word', 'Wort angetippt']],
+  variants: [['intro', 'Neues Wort'], ['type', 'frei tippen'], ['gap', 'Lücke'], ['band', 'Band'], ['also', 'Band: auch richtig'], ['more', '„Mehr“-Blatt'], ['menu', 'Menü „…“'], ['word', 'Wort angetippt']],
   render: h2,
   after(v) {
     if (v === 'type' || v === 'gap') {
@@ -225,7 +240,7 @@ reg('h3', {
       const shown = st === 'idk' ? WORD.right : WORD.you[st];
       return exTop(blocks, 1, 1) + '<div class="ex-body gx with-band">' + blockLine('w', L('Wörter · ', 'Words · ') + TOPIC()) + instr(L('Setz das fehlende Wort ein.', 'Fill in the missing word.')) +
         '<div class="stagec"><div class="sent en">' + words('Can you reduce the') + ' ' + gapHtml(shown, { st: { ok: 'ok', typo: 'near', wrong: 'bad', idk: 'idk' }[st] }) + ' ' + words('to four weeks?') + '</div></div></div>' +
-        band(st, WORD, { next: 'h3-after', nextLabel: L('Weiter: Grammatik', 'Continue: Grammar') });
+        band(st, wordData('gap'), { next: 'h3-after', nextLabel: L('Weiter: Grammatik', 'Continue: Grammar') });
     }
     return gramTask({ pulse: 1, flash: true });
   }
@@ -311,7 +326,7 @@ reg('h4', {
    ========================================================= */
 function explainBody() {
   return '<h2 class="disp" style="font-size:28px;line-height:34px;font-weight:700;margin:6px 0 0">' + L('Abgeschlossen oder bis jetzt?', 'Finished or up to now?') + '</h2>' +
-    '<p class="p" style="color:var(--fg-2)">' + L('Im Deutschen sagst du fast immer „habe … gemacht“. Im Englischen entscheidet die Zeitangabe, welche Form du brauchst.', 'In German you almost always say “habe … gemacht”. In English the time word decides which form you need.') + '</p>' +
+    '<p class="p" style="color:var(--fg-2)">' + L('Im gesprochenen Deutsch sagst du fast immer „habe … gemacht“. Im Englischen entscheidest du: Ist die Zeit vorbei (gestern, letzte Woche), oder reicht sie bis jetzt?', 'In spoken German you almost always say “habe … gemacht”. In English you decide: is the time over (yesterday, last week), or does it reach up to now?') + '</p>' +
     '<div class="card stack s8"><div class="lbl">' + L('Deutsch → Englisch', 'German → English') + '</div><div class="contrast en">' +
     '<span class="k">DE</span><span style="font-family:var(--font)">Ich habe den Vertrag gestern unterschrieben.</span>' +
     '<span class="k" style="color:var(--ok)">' + ic('check', 'xs') + '</span><span><b>I signed the contract yesterday.</b></span>' +
@@ -319,27 +334,29 @@ function explainBody() {
     '<div class="card" style="padding:14px 16px 6px"><table class="tbl en"><thead><tr><th></th><th>past simple</th><th>present perfect</th></tr></thead><tbody>' +
     '<tr><td>' + L('Form', 'Form') + '</td><td class="hl">sent · signed</td><td class="hl">have / has sent</td></tr>' +
     '<tr><td>' + L('Wann', 'When') + '</td><td style="font-family:var(--font)">' + L('abgeschlossen, Zeitpunkt genannt oder klar', 'finished, time named or clear') + '</td><td style="font-family:var(--font)">' + L('bis jetzt, Zeitpunkt offen', 'up to now, time open') + '</td></tr>' +
-    '<tr><td>' + L('Signal', 'Signal') + '</td><td>yesterday, last week, on Monday, ago, in 2025</td><td>yet, already, so far, ever, since, for</td></tr>' +
+    '<tr><td>' + L('Signal (typisch)', 'Signal (typical)') + '</td><td>yesterday, last week, on Monday, two days ago, in 2025 <span style="font-family:var(--font)">' + L('(vorbei)', '(over)') + '</span></td><td>yet, already, so far, ever (Have you ever …?), since, for <span style="font-family:var(--font)">' + L('(bis heute)', '(up to today)') + '</span></td></tr>' +
     '<tr><td>' + L('Beispiel', 'Example') + '</td><td>We sent the quote on Monday.</td><td>We’ve already sent the quote.</td></tr></tbody></table></div>' +
     '<div class="stack s6"><div class="lbl">' + L('Aus dem Vertrieb', 'From sales') + '</div><div class="ex-list en">' +
-    '<div><b>We sent the revised quote on Tuesday.</b><span>' + L('Zeitpunkt genannt → past simple', 'time named → past simple') + '</span></div>' +
-    '<div><b>The buyer hasn’t approved the budget yet.</b><span>' + L('bis jetzt, noch offen → present perfect', 'up to now, still open → present perfect') + '</span></div>' +
+    '<div><b>We sent the revised quote on Monday.</b><span>' + L('Zeitpunkt genannt → past simple', 'time named → past simple') + '</span></div>' +
+    '<div><b>Finance hasn’t signed off on the budget yet.</b><span>' + L('bis jetzt, noch offen → present perfect', 'up to now, still open → present perfect') + '</span></div>' +
     '<div><b>We’ve already reduced the price by 5 percent.</b><span>' + L('Ergebnis zählt, kein Zeitpunkt → present perfect', 'result matters, no time → present perfect') + '</span></div>' +
     '<div><b>Last quarter, we closed 14 deals in the region.</b><span>' + L('abgeschlossener Zeitraum → past simple', 'finished period → past simple') + '</span></div>' +
     '<div><b>Have you had a chance to look at our proposal?</b><span>' + L('höfliche Nachfrage, bis jetzt → present perfect', 'polite follow-up, up to now → present perfect') + '</span></div></div></div>' +
     '<div class="card stack s8"><div class="lbl">' + L('Typische Falle', 'Common trap') + '</div><div class="contrast en">' +
     '<span class="k" style="color:var(--bad)">' + ic('cross', 'xs') + '</span><span class="no">Have you sent the quote yesterday?</span>' +
     '<span class="k" style="color:var(--ok)">' + ic('check', 'xs') + '</span><span><b>Did you send the quote yesterday?</b></span></div>' +
-    '<p class="p2">' + L('Auch in Fragen: Steht ein Zeitpunkt dabei, fragst du mit <em class="en">did</em>.', 'In questions too: with a time word, ask with <em>did</em>.') + '</p></div>' +
-    '<div class="notice">' + ic('pen', 'sm') + '<span>' + L('Dein Satz aus Schritt 1: <span class="en" style="text-decoration:line-through;text-decoration-color:var(--bad);color:var(--fg-2)">We have spoken to the buyer last week.</span> → <em class="en">We spoke to the buyer last week.</em>', 'Your sentence from step 1: <s>We have spoken to the buyer last week.</s> → <em>We spoke to the buyer last week.</em>') + '</span></div>';
+    '<p class="p2">' + L('Auch in Fragen: Steht ein Zeitpunkt dabei, fragst du mit <em class="en">did</em>.', 'In questions too: with a time word, ask with <em>did</em>.') + '</p>' +
+    '<p class="p2">' + L('Auch bei <em class="en">When …?</em> fragst du mit <em class="en">did</em>: <s class="en" style="text-decoration-color:var(--bad);color:var(--fg-2)">When have you sent it?</s> → <b class="en">When did you send it?</b>', 'With <em>When …?</em> you also ask with <em>did</em>: <s>When have you sent it?</s> → <b>When did you send it?</b>') + '</p></div>' +
+    '<div class="notice">' + ic('pen', 'sm') + '<span>' + L('Dein Satz aus Schritt 1: <span class="en" style="text-decoration:line-through;text-decoration-color:var(--bad);color:var(--fg-2)">We have won three new customers last month.</span> → <em class="en">We won three new customers last month.</em>', 'Your sentence from step 1: <s>We have won three new customers last month.</s> → <em>We won three new customers last month.</em>') + '</span></div>';
 }
 function explainMoreSheet() {
   return sheet('more-sheet', L('Mehr zu diesem Thema', 'More on this topic'),
     '<div class="stack s16">' +
     '<div class="stack s6"><div class="lbl">' + L('Zeitraum läuft noch', 'Period still running') + '</div><p class="p">' + L('Mit <em class="en">this week</em>, <em class="en">today</em> oder <em class="en">this year</em> geht present perfect, solange der Zeitraum noch läuft: <em class="en">We’ve had three calls this week.</em>', 'With this week, today or this year, use present perfect while the period is still running.') + '</p></div>' +
-    '<div class="stack s6"><div class="lbl">' + L('US- und britisches Englisch', 'US and British English') + '</div><p class="p">' + L('Im US-Englisch hörst du oft <em class="en">Did you get my email yet?</em> und <em class="en">I just sent it.</em> Britisch eher <em class="en">I’ve just sent it.</em> In der App gilt beides als richtig.', 'US English often uses Did you get my email yet? and I just sent it. British English prefers I’ve just sent it. Both count as correct here.') + '</p></div>' +
+    '<div class="stack s6"><div class="lbl">' + L('US- und britisches Englisch', 'US and British English') + '</div><p class="p">' + L('Im amerikanischen Alltagsenglisch hörst du oft <em class="en">Did you get my email yet?</em> und <em class="en">I just sent it.</em> Mit present perfect (<em class="en">Have you received my email yet?</em> · <em class="en">I’ve just sent it.</em>) liegst du in beiden Varianten richtig, besonders schriftlich. Das gilt nur für <em class="en">just, already, yet</em>: Mit <em class="en">yesterday</em> oder <em class="en">last week</em> bleibt present perfect falsch.', 'In everyday American English you often hear Did you get my email yet? and I just sent it. With the present perfect (Have you received my email yet? · I’ve just sent it.) you are right in both varieties, especially in writing. This only applies to just, already, yet: with yesterday or last week the present perfect stays wrong.') + '</p></div>' +
     '<div class="stack s6"><div class="lbl">' + L('Neuigkeit, dann Einzelheiten', 'News first, then details') + '</div><p class="p">' + L('Die Neuigkeit kommt im present perfect, die Einzelheiten im past simple: <em class="en">We’ve signed the contract. We signed it on Friday after a short call.</em>', 'News in the present perfect, details in the past simple.') + '</p></div>' +
-    '<div class="stack s6"><div class="lbl">since · for</div><p class="p">' + L('Für etwas, das bis heute andauert: <em class="en">I’ve known the buyer since 2019.</em> · <em class="en">We’ve worked with them for six years.</em> Nicht: <span class="en" style="text-decoration:line-through;text-decoration-color:var(--bad);color:var(--fg-2)">I know the buyer since 2019.</span>', 'For something that continues until today: I’ve known the buyer since 2019.') + '</p></div></div>',
+    '<div class="stack s6"><div class="lbl">since · for</div><p class="p">' + L('Für etwas, das bis heute andauert: <em class="en">I’ve known the buyer since 2019.</em> · <em class="en">We’ve worked with them for six years.</em> Nicht: <span class="en" style="text-decoration:line-through;text-decoration-color:var(--bad);color:var(--fg-2)">I know the buyer since 2019.</span>', 'For something that continues until today: I’ve known the buyer since 2019.') + '</p>' +
+    '<p class="p">' + L('Auch <em class="en">since yesterday</em> oder <em class="en">since last week</em> heißt „bis jetzt“: <em class="en">We haven’t heard from them since last week.</em> Und: <em>seit sechs Jahren</em> heißt <em class="en">for six years</em>, nicht <s class="en" style="text-decoration-color:var(--bad);color:var(--fg-2)">since six years</s>.', 'since yesterday or since last week also means “up to now”: We haven’t heard from them since last week. And: seit sechs Jahren is for six years, not <s>since six years</s>.') + '</p></div></div>',
     '<button class="btn pri full" id="more-next" data-act="closesheet">' + L('Weiter', 'Continue') + '</button>', { h: '85%' });
 }
 reg('h5', {
@@ -430,7 +447,7 @@ function player(o) {
       [['slow', '0,8×', L('langsam', 'slow')], ['normal', '1,0×', L('normal', 'normal')], ['fast', '1,2×', L('schnell', 'fast')]].map(x =>
         '<button id="sp-' + x[0] + '" data-act="speed" data-v="' + x[0] + '" class="' + ((S.ui.speed || o.def || 'normal') === x[0] ? 'on' : '') + '">' + x[1] + '<small>' + x[2] + '</small></button>').join('') + '</div>') + '</div>';
 }
-const VOICEMAIL = 'Hi, this is Laura Keller from procurement. Thanks for sending over the revised quote on Monday. I’ve gone through it with my team, and to be honest, we’re not quite there yet. The total is still about twelve percent above our budget for this year. Another supplier has also offered us a lead time of six weeks, and yours is ten. I’m not saying no, but I can’t get this approved in its current form. Could you call me back before Thursday? Any time after two works for me. If there’s any flexibility on price or delivery, that would really help. Thanks, talk soon.';
+const VOICEMAIL = 'Hi, this is Laura Keller from procurement. Thanks for sending over the revised quote on Monday. I’ve gone through it with my team, and to be honest, we’re not quite there yet. The total is still about 12 percent above our budget for this year. Another supplier has also offered us a lead time of six weeks, and yours is ten. I’m not saying no, but I can’t get this approved in its current form. Could you call me back before Thursday? Any time after two works for me. If there’s any flexibility on price or delivery, that would really help. Thanks, talk soon.';
 function h7(v) {
   const blocks = NORMAL();
   const top = exTop(blocks, 3, { dictation: 0.1, dictres: 0.25, predict: 0.4, play: 0.55, question: 0.7, read: 0.85 }[v] || 0.1);
@@ -443,11 +460,11 @@ function h7(v) {
   }
   if (v === 'dictres') {
     return top + '<div class="ex-body gx with-band">' + bl(L('Mini-Diktat 1 von 2', 'Mini dictation 1 of 2')) + instr(L('Hör zu und schreib den Satz genau auf.', 'Listen and write the sentence exactly.')) +
-      '<div class="stagec" style="gap:16px"><div class="card stack s8"><div class="lbl">' + L('Dein Satz', 'Your sentence') + '</div><div class="diffw en">We <span class="x">send</span> the revised quote on March <span class="x">third</span>.</div>' +
-      '<div class="hr"></div><div class="lbl">' + L('Gesprochen', 'Spoken') + '</div><div class="diffw en">We <b>sent</b> the revised quote on March <b>3</b>.</div></div></div></div>' +
+      '<div class="stagec" style="gap:16px"><div class="card stack s8"><div class="lbl">' + L('Dein Satz', 'Your sentence') + '</div><div class="diffw en">We <span class="x">send</span> the revised quote on Monday.</div>' +
+      '<div class="hr"></div><div class="lbl">' + L('Gesprochen', 'Spoken') + '</div><div class="diffw en">We <b>sent</b> the revised quote on Monday.</div></div></div></div>' +
       '<div class="band gx s-near" id="band"><div class="verdict"><span class="vi">' + ic('near', 'xs') + '</span>' + L('Fast', 'Almost') + '</div>' +
-      '<div class="cmp">' + L('Nicht gehört:', 'Missed:') + ' <b class="en">sent</b> · ' + L('Datum als Wort statt Zahl', 'date as word instead of number') + '</div>' +
-      '<p class="whyl">' + L('Das -t von sent geht beim schnellen Sprechen fast unter. Höre auf die Zeitform, sie trägt die Nachricht.', 'The -t in sent almost disappears in fast speech. Listen for the tense, it carries the message.') + '</p>' +
+      '<div class="cmp">' + L('Nicht gehört:', 'Missed:') + ' <b class="en">sent</b></div>' +
+      '<p class="whyl">' + L('Das -t von <em class="en">sent</em> geht beim schnellen Sprechen fast unter. Hilfe: <em class="en">on Monday</em> ist vergangen, also <em class="en">sent</em>.', 'The -t in <em>sent</em> almost disappears in fast speech. Clue: <em>on Monday</em> is past, so <em>sent</em>.') + '</p>' +
       '<div class="bandbtns"><button class="btn sec sm" id="replay-slow" data-act="noop">' + ic('speaker', 'sm') + L('Langsam anhören', 'Play slowly') + '</button></div>' +
       '<button class="btn pri full" id="band-next" data-go="h7-predict">' + L('Weiter', 'Continue') + '</button></div>';
   }
@@ -471,7 +488,7 @@ function h7(v) {
       '<div class="stagec" style="justify-content:flex-start;padding-top:20px"><div class="stack s8">' + ch.map((c, i) => '<button class="choice' + (chosen != null && i === 1 ? ' ok' : '') + (chosen === i && i !== 1 ? ' sel' : '') + '" id="q-' + i + '" data-act="choose" data-i="' + i + '"><span class="n num">' + (i + 1) + '</span>' + c + '</button>').join('') + '</div></div></div>' +
       (chosen != null ? '<div class="band gx ' + (chosen === 1 ? 's-ok' : 's-bad') + '" id="band">' + verdictRow(chosen === 1 ? 'ok' : 'wrong') +
         '<div class="cmp en">„Could you call me back before Thursday? Any time after two works for me.“</div>' +
-        '<p class="whyl">' + L('Any time after two heißt: jederzeit ab 14 Uhr.', 'Any time after two means: any time from 2 pm.') + '</p>' +
+        '<p class="whyl">' + L('<em class="en">before Thursday</em> = spätestens Mittwoch (<em class="en">by Thursday</em> wäre: bis einschließlich Donnerstag). <em class="en">Any time after two</em> = jederzeit ab 14 Uhr.', '<em>before Thursday</em> = Wednesday at the latest (<em>by Thursday</em> would include Thursday). <em>Any time after two</em> = any time from 2 pm.') + '</p>' +
         '<button class="btn pri full" id="band-next" data-go="h7-read">' + L('Weiter: Mitlesen', 'Continue: read along') + '</button></div>' : '');
   }
   // read
@@ -509,7 +526,7 @@ function tickPlay() {
 /* =========================================================
    H8 Sag es (Diktiertaste)
    ========================================================= */
-const SAY_TEXT = 'Hi Laura, thanks for your message. I have sent you the revised quote on Monday. Since then we have talked to our logistics team, and we can reduce the lead time to eight weeks. Can we have a short call on Thursday to follow up?';
+const SAY_TEXT = 'Hi Laura, thanks for your message. I have sent you the revised quote on Monday. Since then we have talked to our logistics team, and we can reduce the lead time to eight weeks. Can we have a short call on Wednesday afternoon to follow up?';
 function sayTaskCard() {
   return '<div class="card stack s8"><div class="persona"><span class="avatar">LK</span><div><b>' + L('Rückruf beim Einkauf', 'Calling purchasing back') + '</b><div class="p2" style="font-size:13px">Laura Keller · ' + L('erfunden', 'invented') + '</div></div></div>' +
     '<p class="p">' + L('Laura hat dein Angebot noch nicht freigegeben. Sag, wann du es geschickt hast, was seitdem passiert ist, und schlag einen Termin vor.', 'Laura hasn’t approved your quote yet. Say when you sent it, what has happened since, and suggest a call.') + '</p>' +
@@ -524,7 +541,7 @@ function h8(v) {
   const top = exTop(blocks, 4, { scenario: 0.1, guide: 0.15, keyboard: 0.4, german: 0.4, p1: 0.7, p2: 0.8, p3: 0.9, p4: 0.95 }[v] || 0.2);
   const bl = blockLine('s', L('Sag es · ', 'Say it · ') + TOPIC());
   if (v === 'scenario') {
-    return top + '<div class="ex-body gx">' + bl + instr(L('Sprich 3 bis 5 Sätze. Nutze beide Wörter und die Zeitform.', 'Say 3 to 5 sentences. Use both words and the tense.')) +
+    return top + '<div class="ex-body gx">' + bl + instr(L('Sprich 3 bis 5 Sätze. Nutze <em class="en">follow up</em> und <em class="en">lead time</em> und beide Zeitformen.', 'Say 3 to 5 sentences. Use <em>follow up</em> and <em>lead time</em> and both tenses.')) +
       '<div class="stagec">' + sayTaskCard() + '<p class="p2" style="text-align:center">' + L('30 Sekunden zum Überlegen, dann sprichst du.', '30 seconds to think, then you speak.') + '</p></div></div>' +
       exFoot(btnSec('type-instead', L('Lieber tippen', 'Type instead'), 'data-go="h8-keyboard"') + btnPri('speak', L('Sprechen', 'Speak'), 'h8-keyboard')) + overlays({ whyTask: L('Hier verwendest du die neuen Wörter und die Zeitform selbst. Das ist der Beleg, dass du sie im Gespräch bildest.', 'Here you use the new words and the tense yourself. That is the proof you can produce them in a conversation.') });
   }
@@ -555,7 +572,7 @@ function h8(v) {
       '<div class="stack s8"><div class="lbl">' + L('Das war stark', 'That was strong') + '</div><div class="quote en">„Since then we have talked to our logistics team.“</div><p class="p2">' + L('Genau so verbindest du das Damals mit dem Jetzt.', 'This is exactly how you connect then and now.') + '</p></div>' +
       '<div class="stack s8"><div class="lbl">' + L('2 Punkte üben', 'Practise 2 points') + '</div>' +
       '<div class="p en"><span class="num" style="color:var(--fg-3)">1</span>&nbsp; <s style="text-decoration-color:var(--bad);color:var(--fg-2)">I have sent you … on Monday</s> → <b>I sent you … on Monday</b></div>' +
-      '<div class="p en"><span class="num" style="color:var(--fg-3)">2</span>&nbsp; <span style="color:var(--fg-2)">Can we have a short call</span> → <b>Could we have a quick call</b></div></div>' +
+      '<div class="p en"><span class="num" style="color:var(--fg-3)">2</span>&nbsp; <span style="color:var(--fg-2)">Can we have a short call</span> → <b>Could we have a short call</b></div></div>' +
       '<p class="p2" style="font-size:13px">' + L('Antworttempo 94 Wörter pro Minute', 'Response pace 94 words per minute') + '</p></div>', 'h8-p2');
   }
   if (v === 'p2' || v === 'p3') {
@@ -563,16 +580,16 @@ function h8(v) {
     return top + reportPage(one ? 1 : 2, 4,
       blockLine('s', L('Punkt ', 'Point ') + (one ? '1' : '2') + L(' von 2', ' of 2')) +
       '<div class="stack s16" style="padding-top:14px"><div class="h2 disp" style="font-size:24px;line-height:30px">' + (one ? L('Zeitpunkt genannt, also past simple', 'Time named, so past simple') : L('Höflicher vorschlagen', 'Suggest more politely')) + '</div>' +
-      '<div class="card stack s8"><div class="lbl">' + L('Du hast gesagt', 'You said') + '</div><p class="p en" style="color:var(--fg-2)">' + (one ? 'I have sent you the revised quote on Monday.' : 'Can we have a short call on Thursday?') + '</p><div class="hr"></div>' +
-      '<div class="lbl">' + L('Besser so', 'Better') + '</div><div style="display:flex;align-items:center;gap:10px"><p class="p en" style="font-weight:600;flex:1">' + (one ? 'I sent you the revised quote on Monday.' : 'Could we have a quick call on Thursday?') + '</p><button class="iconbtn" id="say-better" data-act="noop" style="margin:0" aria-label="' + esc(L('Anhören', 'Listen')) + '">' + ic('speaker', 'sm') + '</button></div></div>' +
-      '<p class="p2">' + (one ? L('<em class="en">on Monday</em> ist ein fester Zeitpunkt. Damit steht das present perfect nie.', '<em>on Monday</em> is a fixed time. The present perfect never goes with it.') : L('<em class="en">Could</em> klingt im Kundengespräch weicher als <em class="en">can</em>. <em class="en">quick</em> nimmt dem Kunden die Sorge um seine Zeit.', '<em>Could</em> sounds softer than <em>can</em> with clients. <em>quick</em> eases worries about their time.')) + '</p>' +
+      '<div class="card stack s8"><div class="lbl">' + L('Du hast gesagt', 'You said') + '</div><p class="p en" style="color:var(--fg-2)">' + (one ? 'I have sent you the revised quote on Monday.' : 'Can we have a short call on Wednesday afternoon?') + '</p><div class="hr"></div>' +
+      '<div class="lbl">' + L('Besser so', 'Better') + '</div><div style="display:flex;align-items:center;gap:10px"><p class="p en" style="font-weight:600;flex:1">' + (one ? 'I sent you the revised quote on Monday.' : 'Could we have a short call on Wednesday afternoon?') + '</p><button class="iconbtn" id="say-better" data-act="noop" style="margin:0" aria-label="' + esc(L('Anhören', 'Listen')) + '">' + ic('speaker', 'sm') + '</button></div></div>' +
+      '<p class="p2">' + (one ? L('<em class="en">on Monday</em> ist ein vergangener Zeitpunkt. Dazu passt past simple.', '<em>on Monday</em> is a past time. That calls for the past simple.') : L('Kein Fehler, nur ein Ton-Tipp: <em class="en">Could</em> klingt bei einer Bitte an die Kundin eine Spur höflicher.', 'Not a mistake, just a tone tip: <em>Could</em> sounds a touch more polite when asking the client.')) + '</p>' +
       '<button class="btn sec full" id="say-again" data-go="h8-keyboard">' + ic('mic', 'sm') + L('Nachsprechen', 'Say it again') + '</button></div>', one ? 'h8-p3' : 'h8-p4');
   }
   // p4
-  const ph = ['Since then, we’ve …', 'Could we have a quick call on …?', 'We can reduce the lead time to …'];
+  const ph = [['Since then, we’ve …'], ['Could we have a quick call on …?', L('<em class="en">quick call</em> ist die häufigste Verbindung', '<em>quick call</em> is the most common combination')], ['We can reduce the lead time to …']];
   return top + reportPage(3, 4,
     blockLine('s', L('Wendungen zum Mitnehmen', 'Phrases to keep')) +
-    '<div class="stack s8" style="padding-top:14px">' + ph.map((p, i) => '<div class="row" style="min-height:56px"><span class="rt"><b class="en">' + p + '</b></span><button class="iconbtn" id="ph-add-' + i + '" data-act="noop" aria-label="' + esc(L('In die Wörter', 'Add to words')) + '" style="margin:0">' + ic('plus', 'sm') + '</button></div>').join('') +
+    '<div class="stack s8" style="padding-top:14px">' + ph.map((p, i) => '<div class="row" style="min-height:56px"><span class="rt"><b class="en">' + p[0] + '</b>' + (p[1] ? '<span>' + p[1] + '</span>' : '') + '</span><button class="iconbtn" id="ph-add-' + i + '" data-act="noop" aria-label="' + esc(L('In die Wörter', 'Add to words')) + '" style="margin:0">' + ic('plus', 'sm') + '</button></div>').join('') +
     '<p class="p2" style="padding-top:8px">' + L('Ein Tipp aufs Plus legt die Wendung in deine Wörter.', 'Tap plus to add the phrase to your words.') + '</p></div>',
     'h9-antic', L('Weiter: Flüssigkeit', 'Continue: Fluency'), btnSec('again-better', L('Nochmal, aber besser', 'Again, but better'), 'data-go="h8-keyboard"'));
 }
@@ -591,14 +608,14 @@ function h9(v) {
   const top = exTop(blocks, 5, { antic: 0.2, serial: 0.45, quick: 0.75, end: 1 }[v] || 0.2);
   if (v === 'antic') {
     return top + '<div class="ex-body gx">' + blockLine('s', L('Flüssigkeit · Antizipation · 3 von 8', 'Fluency · anticipation · 3 of 8')) + instr(L('Sag es sofort auf Englisch.', 'Say it in English right away.'), false) +
-      '<div class="stagec" style="gap:18px"><div class="p2">' + L('Der Einkauf sagt:', 'Purchasing says:') + '</div><div class="prompt disp" style="font-size:26px;line-height:33px">' + L('„Ihr Wettbewerber ist zehn Prozent günstiger.“', '“Your competitor is ten percent cheaper.”') + '</div>' +
-      '<p class="p">' + L('Bleib ruhig und frag höflich nach, welches Angebot sie vergleichen.', 'Stay calm and ask politely which offer they’re comparing.') + '</p>' +
+      '<div class="stagec" style="gap:18px"><div class="p2">' + L('Der Einkauf sagt:', 'Purchasing says:') + '</div><div class="prompt disp" style="font-size:26px;line-height:33px">' + L('„Ihr Wettbewerber ist 10 Prozent günstiger.“', '“Your competitor is 10 percent cheaper.”') + '</div>' +
+      '<p class="p">' + L('Bleib ruhig und frag höflich nach, mit welchem Angebot sie euch vergleichen.', 'Stay calm and ask politely which offer they’re comparing you with.') + '</p>' +
       '<div class="fieldwrap"><div class="field" style="min-height:72px;color:var(--fg-3)">' + L('Deine Antwort …', 'Your answer …') + '</div><div class="timeline"><i></i></div></div></div></div>' +
       exFoot(btnSec('aloud', L('Laut gesagt', 'Said aloud'), 'data-go="h9-serial"') + btnPri('speak', L('Sprechen', 'Speak'), 'h9-serial'));
   }
   if (v === 'serial') {
-    return top + '<div class="pinned gx">' + ic('spark', 'xs') + '<b>' + L('4 von 8 · „Wir haben den Preis schon um fünf Prozent gesenkt.“', '4 of 8 · “We’ve already lowered the price by five percent.”') + '</b></div>' +
-      '<div class="ex-body gx" style="justify-content:flex-start"><div class="fieldwrap"><textarea class="field en" id="serial-field" rows="3" style="min-height:96px">We’ve already lowered the price by five</textarea><div class="timeline"><i style="width:48%"></i></div></div>' +
+    return top + '<div class="pinned gx">' + ic('spark', 'xs') + '<b>' + L('4 von 8 · „Wir haben den Preis schon um 5 Prozent gesenkt.“', '4 of 8 · “We’ve already reduced the price by 5 percent.”') + '</b></div>' +
+      '<div class="ex-body gx" style="justify-content:flex-start"><div class="fieldwrap"><textarea class="field en" id="serial-field" rows="3" style="min-height:96px">We’ve already reduced the price by 5</textarea><div class="timeline"><i style="width:48%"></i></div></div>' +
       '<p class="p2" style="padding-top:10px;display:flex;align-items:center;gap:6px">' + ic('mic', 'xs') + L('unten rechts · Feld und Tastatur bleiben offen', 'bottom right · field and keyboard stay open') + '</p></div>' +
       '<div class="ex-foot gx abovekb">' + btnSec('type-instead', L('Lieber tippen', 'Type instead'), 'data-act="noop"') + btnPri('send', L('Senden', 'Send'), 'h9-quick') + '</div>' + drawnKbd({ mic: true, go: 'return' });
   }
@@ -608,7 +625,7 @@ function h9(v) {
       '<div class="timeline" style="position:relative;left:0;right:0;height:2px;width:200px"><i style="width:70%"></i></div></div></div>' +
       exFoot(btnPri('check', L('Prüfen', 'Check'), 'h9-end'), true) + drawnKbd({ go: 'go' });
   }
-  const ph = [['That’s a fair question. Could you tell me which offer you’re comparing us with?', L('höflich nachfragen', 'ask politely')], ['We’ve already lowered the price by five percent.', L('Ergebnis, kein Zeitpunkt', 'result, no time')], ['We sent the quote on Monday.', L('fester Zeitpunkt', 'fixed time')]];
+  const ph = [['Thanks for being upfront about that. Could you tell me which offer you’re comparing us with?', L('höflich nachfragen · auch richtig: <em>comparing us to</em>', 'ask politely · also right: <em>comparing us to</em>')], ['We’ve already reduced the price by 5 percent.', L('Ergebnis, kein Zeitpunkt · auch <em>lowered</em>, <em>cut</em>', 'result, no time · also <em>lowered</em>, <em>cut</em>')], ['We sent the quote on Monday.', L('vergangener Zeitpunkt', 'past time')]];
   return top + '<div class="ex-body gx">' + blockLine('s', L('Flüssigkeit · Sammelkarte', 'Fluency · summary card')) +
     '<div class="stagec" style="gap:18px"><div class="h2 disp" style="font-size:26px;line-height:32px">' + L('8 von 8 gesprochen, 7 auf Anhieb richtig.', '8 of 8 spoken, 7 right first time.') + '</div>' +
     '<div class="card" style="padding:4px 18px">' + '<div class="ex-list en">' + ph.map(p => '<div><b>' + p[0] + '</b><span style="font-family:var(--font)">' + p[1] + '</span></div>').join('') + '</div></div>' +
@@ -676,7 +693,7 @@ function h11(v) {
       '<div class="ex-body gx" style="gap:10px;justify-content:flex-end;padding-bottom:8px">' +
       '<div class="bubble them en">Thanks for calling back. I’ll be honest: your price is still too high for us.</div>' +
       '<div class="bubble me en">I understand. Could you tell me which offer you’re comparing us with?</div>' +
-      '<div class="bubble them en">Another supplier quoted twelve percent less, and they can deliver in six weeks.</div>' +
+      '<div class="bubble them en">Another supplier quoted about 10 percent less, and they can deliver in six weeks.</div>' +
       '<div class="fieldwrap" style="margin-top:6px"><div class="field" style="min-height:64px;color:var(--fg-3)">' + L('Deine Antwort …', 'Your answer …') + '</div><div class="timeline"><i style="width:22%"></i></div></div></div>' +
       exFoot(btnSec('aloud', L('Laut gesagt', 'Said aloud'), 'data-act="noop"') + btnPri('speak', L('Sprechen', 'Speak'), 'h11-report'));
   }
@@ -743,7 +760,7 @@ reg('h13', {
   render(v) {
     const title = S.tab4 === 'praxis' ? L('Praxis', 'Practice') : L('Sprechen', 'Speaking');
     if (v === 'reader') {
-      const para = ['Mid-sized manufacturers have spent the past two years rebuilding their supply chains. Many of them have moved part of their <span class="mk1">procurement</span> closer to home, and some have already cut their average <span class="mk2">lead time</span> by a third.',
+      const para = ['Mid-sized manufacturers have spent the past two years rebuilding their supply chains. Many of them have moved part of their <span class="mk1">procurement</span> to suppliers closer to home, and some have already cut their average <span class="mk2">lead time</span> by a third.',
         'Last spring, a packaging supplier in the region lost two large contracts because it could not deliver on time. Since then, the company has invested in a second warehouse and has hired a team to <span class="mk3">follow up</span> on every open order within 48 hours.'];
       return '<header class="phead gx"><button class="iconbtn" id="r-back" data-go="h13-main" aria-label="' + esc(L('Zurück', 'Back')) + '" style="margin-left:-10px;margin-right:0">' + ic('chevL') + '</button>' + askBtn() + '</header>' +
         '<div class="scroll gx" style="padding-bottom:28px"><style>.mk1{background:color-mix(in oklch,var(--ch-words) 30%,transparent);border-radius:4px}.mk2{background:color-mix(in oklch,var(--ch-words) 18%,transparent);border-radius:4px}.mk3{background:color-mix(in oklch,var(--ch-words) 10%,transparent);border-radius:4px}</style>' +
@@ -832,10 +849,10 @@ reg('h15', {
     if (v === 'claude') {
       body = '<div class="stack s16"><span class="chip" style="align-self:flex-start">' + ic('info', 'xs') + L('Aufgabe + deine Antwort sind dabei', 'Task + your answer included') + '</span>' +
         '<div class="bubble me" style="max-width:92%">' + L('Warum nicht <span class="en">have sent</span>? Es ist doch gerade erst passiert.', 'Why not have sent? It only just happened.') + '</div>' +
-        '<div class="p" style="line-height:24px">' + L('Weil <em class="en">yesterday</em> im Satz steht. Sobald ein fester Zeitpunkt genannt ist, gilt die Handlung als abgeschlossen, egal wie kurz sie her ist. Ohne <em class="en">yesterday</em> wäre <em class="en">We’ve just sent the revised quote</em> richtig.', 'Because yesterday is in the sentence. Once a fixed time is named, the action counts as finished, however recent. Without yesterday, We’ve just sent the revised quote would be right.') + '</div></div>';
+        '<div class="p" style="line-height:24px">' + L('Weil <em class="en">yesterday</em> im Satz steht. Ein vergangener Zeitpunkt macht die Handlung abgeschlossen, egal wie kurz sie her ist. Ohne Zeitangabe wäre <em class="en">We’ve sent the revised quote</em> richtig. Ist es eben erst passiert: <em class="en">We’ve just sent it</em> (US auch <em class="en">We just sent it</em>).', 'Because yesterday is in the sentence. A past time makes the action finished, however recent. Without a time word, We’ve sent the revised quote would be right. If it only just happened: We’ve just sent it (US also We just sent it).') + '</div></div>';
     } else {
       body = '<div class="stack s16"><div class="field" style="min-height:76px">Wir haben die Lieferzeit bereits verkürzt.</div>' +
-        '<div class="card stack s8"><p class="p en" style="font-weight:600;font-size:18px">We’ve already shortened the lead time.</p><p class="p2 en">also: We have already reduced the lead time.</p>' +
+        '<div class="card stack s8"><p class="p en" style="font-weight:600;font-size:18px">We’ve already reduced the lead time.</p><p class="p2 en">also: We’ve already shortened the lead time. · We’ve already cut the lead time.</p>' +
         '<p class="p2">' + L('Kein Zeitpunkt, Ergebnis zählt: present perfect.', 'No time named, result matters: present perfect.') + '</p></div></div>';
     }
     const foot = v === 'claude' ? '<div style="display:flex;gap:8px"><div class="field" style="min-height:48px;flex:1;padding:12px 14px;color:var(--fg-3)">' + L('Frag Claude …', 'Ask Claude …') + '</div><button class="btn pri" id="ask-send" data-act="noop" aria-label="' + esc(L('Senden', 'Send')) + '" style="width:52px;padding:0">' + ic('send', 'sm') + '</button></div>'
