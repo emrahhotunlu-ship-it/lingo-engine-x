@@ -8,8 +8,10 @@ const ABSOLUTE = /\b(immer|nie|niemals|nur|ausschließlich|grundsätzlich|always
 /** Gefundene absolute Wörter (klein, ohne Doppelte). „nicht nur“/„not only“ (Aufzählung) zählt nicht. */
 export function absoluteClaims(text: string): string[] {
   const out = new Set<string>();
-  for (const m of text.matchAll(ABSOLUTE)) {
-    const before = text.slice(Math.max(0, m.index - 6), m.index).toLowerCase();
+  // Zitate in „…“ / “…” sind Beispieltexte (z. B. „noch immer nicht“), keine Regelaussage: gleich lang durch Leerzeichen ersetzen.
+  const plain = text.replace(/[„“][^„“”]*[“”]/gu, (q) => ' '.repeat(q.length));
+  for (const m of plain.matchAll(ABSOLUTE)) {
+    const before = plain.slice(Math.max(0, m.index - 6), m.index).toLowerCase();
     const w = m[0].toLowerCase();
     if ((w === 'nur' && /nicht\s$/.test(before)) || (w === 'only' && /not\s$/.test(before))) continue;
     out.add(w);

@@ -248,7 +248,7 @@
   "why": {
    "ok": {
     "de": "Richtig: Die Frist heißt spätestens bis Donnerstag: by Thursday.",
-    "en": "Right: the deadline is no later than Thursday: by Thursday."
+    "en": "Right: by Thursday = no later than Thursday, a deadline."
    },
    "wrong": [
     {

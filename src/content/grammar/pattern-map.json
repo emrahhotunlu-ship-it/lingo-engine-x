@@ -1111,14 +1111,14 @@
   "pat": "dm.contrast",
   "why": {
    "ok": {
-    "de": "Richtig: On the other hand stellt Nachteil und Vorteil gegenüber: höherer Preis, aber Ersparnis.",
-    "en": "Right: On the other hand sets drawback against benefit: higher price, but savings."
+    "de": "Richtig: On the other hand stellt Nachteil und Vorteil gegenüber: höhere Lizenzgebühr, aber Ersparnis.",
+    "en": "Right: On the other hand sets drawback against benefit: higher fee, but savings."
    },
    "wrong": [
     {
      "opt": "Moreover",
-     "de": "„Moreover“ fügt Gleichgerichtetes an. Hier steht aber ein Vorteil gegen den hohen Preis.",
-     "en": "“Moreover” adds something pointing the same way. Here a benefit offsets the high price."
+     "de": "„Moreover“ fügt Gleichgerichtetes an. Hier steht aber ein Vorteil gegen die hohe Gebühr.",
+     "en": "“Moreover” adds something pointing the same way. Here a benefit offsets the high fee."
     },
     {
      "opt": "As a result",
@@ -3316,8 +3316,8 @@
     },
     {
      "opt": "a few",
-     "de": "„A few“ zählt einzelne Dinge (a few users), nicht den Anteil einer Lizenz.",
-     "en": "“A few” counts single things (a few users), not a share of a license."
+     "de": "„A few“ zählt einzelne Dinge (a few users), nicht einen Anteil am Preis.",
+     "en": "“A few” counts single things (a few users), not a share of a price."
     },
     {
      "opt": "a little",
@@ -3450,8 +3450,8 @@
       "until"
      ],
      "pat": "cp.by-until",
-     "de": "„Until“ meint eine Dauer ohne Pause. Der Rollout soll aber spätestens fertig sein.",
-     "en": "“Until” means a duration without a break. The rollout must be finished at the latest."
+     "de": "„Until“ meint eine Dauer ohne Pause. Der Rollout soll aber bis dahin fertig sein.",
+     "en": "“Until” means a duration without a break. But the rollout has to be done by that date."
     },
     {
      "if": [
@@ -13564,7 +13564,7 @@
       "up"
      ],
      "pat": "ph.particle",
-     "de": "„fill up“ heißt vollmachen, etwa einen Tank. Formulare füllt man mit in oder out aus.",
+     "de": "„fill up“ heißt vollmachen, etwa einen Tank. Formulare füllt man mit out (US) oder in aus.",
      "en": "“Fill up” means make full, like a tank. For forms use in or out."
     },
     {
@@ -13718,8 +13718,8 @@
      "not": [
       "with"
      ],
-     "de": "Es fehlt with: get on with = sich verstehen mit.",
-     "en": "The with is missing: get on with = have a good relationship with."
+     "de": "Es fehlt with: get along with = sich verstehen mit.",
+     "en": "With is missing: get along with = have a good relationship with."
     },
     {
      "if": [
@@ -14350,7 +14350,7 @@
   "why": {
    "ok": {
     "de": "Richtig: Die Frist heißt spätestens bis Donnerstag: by Thursday.",
-    "en": "Right: the deadline is no later than Thursday: by Thursday."
+    "en": "Right: by Thursday = no later than Thursday, a deadline."
    },
    "wrong": [
     {
@@ -20300,7 +20300,7 @@
    "wrong": [
     {
      "opt": "haven't still received",
-     "de": "Das deutsche „weiterhin nicht“ verleitet dazu. Bei Verneinung steht still vor haven't.",
+     "de": "Das deutsche „noch immer nicht“ verleitet dazu. Bei Verneinung steht still vor haven't.",
      "en": "German “noch immer nicht” tempts you here. In a negative, still goes before haven't."
     },
     {
@@ -20593,7 +20593,7 @@
      "if": [
       "haven't still"
      ],
-     "de": "Das deutsche „weiterhin nicht“ verleitet dazu. Bei Verneinung steht still vor haven't.",
+     "de": "Das deutsche „noch immer nicht“ verleitet dazu. Bei Verneinung steht still vor haven't.",
      "en": "German “noch immer nicht” tempts you here. In a negative, still goes before haven't."
     },
     {

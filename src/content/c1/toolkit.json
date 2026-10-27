@@ -2388,8 +2388,11 @@
     {
      "bad": "We haven't still received the payment.",
      "good": "We still haven't received the payment.",
+     "alt": [
+      "We haven't received the payment yet."
+     ],
      "why": [
-      "„still“ steht bei Verneinung vor dem Hilfsverb. Das deutsche „weiterhin nicht“ verleitet zu „haven't still“.",
+      "„still“ steht bei Verneinung vor dem Hilfsverb. Das deutsche „noch immer nicht“ verleitet zu „haven't still“.",
       "In negatives, “still” goes before the auxiliary. German “noch immer nicht” tempts learners to say “haven't still”."
      ]
     }
@@ -6652,7 +6655,7 @@
     "didn't still receive"
    ],
    "answer": "still haven't received",
-   "expl": "Bei Verneinung steht „still“ vor dem Hilfsverb: „We still haven't received …“. Das deutsche „weiterhin nicht“ verleitet zu „haven't still“.",
+   "expl": "Bei Verneinung steht „still“ vor dem Hilfsverb: „We still haven't received …“. Das deutsche „noch immer nicht“ verleitet zu „haven't still“.",
    "expl_en": "With a negative, “still” goes before the auxiliary: “We still haven't received …”. German “noch immer nicht” tempts learners to say “haven't still”."
   },
   {
