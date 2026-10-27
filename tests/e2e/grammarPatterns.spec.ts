@@ -39,7 +39,7 @@ const visibleWords = (page: Page): Promise<number> =>
       c.querySelectorAll('.lx-t-meta, [aria-hidden="true"], button').forEach((x) => x.remove());
       return (c.textContent ?? '').split(/\s+/).filter(Boolean).length;
     };
-    const lines = [...document.querySelectorAll('[data-testid="explanation"] > ul > li[data-line], [data-testid="explanation"] > p[data-line]')].reduce((n, e) => n + count(e), 0);
+    const lines = [...document.querySelectorAll('[data-testid="explanation"] [data-line]')].reduce((n, e) => n + count(e), 0);
     const ex = document.querySelector('[data-testid="examples"] [data-testid="example"]');
     return lines + (ex ? count(ex.firstElementChild ?? ex) : 0);
   });

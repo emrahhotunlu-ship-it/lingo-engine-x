@@ -32,7 +32,8 @@ export function WordExtras({
   open: boolean;
   lang: 'de' | 'en';
   extras: readonly StoredExample[];
-  part?: 'all' | 'head' | 'more';
+  /** 'body' (U3): nur der Inhalt von „Zum Wort“ ohne eigenen Aufklapper – er steht schon unter dem einen „Mehr“ der Ergebnis-Karte. */
+  part?: 'all' | 'head' | 'more' | 'body';
   other?: string | null;
   /** Rückmeldung 3 („Wortpartner“): die geübte Verbindung („overcome objections“) steht groß mit Vorlesen; das Kartenwort klein als Zusatz. */
   phrase?: string | null;
@@ -51,10 +52,10 @@ export function WordExtras({
   // Eigene Wortpartner der Karte; fehlen sie, zeigt „Zum Wort“ sofort, was Claude eben ergänzt hat (gespeichert, `ai`).
   const col = (card.col.length ? card.col.map((c) => ({ p: c.p, de: c.de, ai: !!c.ai })) : (fresh ?? []).map((c) => ({ p: c.p, de: c.de, ai: true }))).filter((c) => c.p).slice(0, 3);
   const src = { area: 'trainer' as const, source: card.path, title: card.word };
-  const shown = open || forced;
+  const shown = open || forced || part === 'body';
   return (
     <div className="flex flex-col gap-2" data-testid="word-extras" data-open={shown ? '' : undefined}>
-      {part !== 'more' && (
+      {part !== 'more' && part !== 'body' && (
       <div className="flex flex-wrap items-center gap-2" data-testid="word-head" data-contrast={other ? '' : undefined}>
         {other && (
           <span className="flex min-w-0 max-w-full flex-wrap items-center gap-x-2 gap-y-0.5" data-testid="contrast-group">
@@ -114,7 +115,7 @@ export function WordExtras({
         </span>
       </div>
       )}
-      {part !== 'head' && (
+      {part !== 'head' && part !== 'body' && (
       <button
         type="button"
         className="lx-t-support -mx-1 flex min-h-11 items-center justify-between gap-2 self-stretch rounded-[var(--radius-inline)] px-1 font-semibold text-muted hover:text-fg"

@@ -26,7 +26,7 @@ import { programChapters } from '../../domain/c1/chapters';
 import { chapterRunOn } from '../../app/flags';
 import { useClock } from '../../app/clock';
 import { useLive } from '../../data/live';
-import { useWhyReason, WinLine } from '../tutor/WhyLine';
+import { useWhyReason, useWinOn } from '../tutor/WhyLine';
 import { proofText, sureNote } from '../tutor/whyText';
 import { scheduleLearner, useLearner } from '../tutor/learnerLive';
 import { cardsDue, commitGrammar, grammarProgress, inRepeat, inVortest, leaveGrammar, patternGrowth, reportGrammarDone, skipGrammar, startAfterIntro, touchGrammar, useGrammarSession, type TestState } from './session';
@@ -76,7 +76,8 @@ export function GrammarSessionScreen() {
   const inTest = s.status === 'running' && !!s.test && s.pos < s.test.n;
   const tutorOn = !vortest && !inTest && !inRepeat(s);
   const reason = useWhyReason(task ?? null, tutorOn && s.status === 'running');
-  const badge = inTest && s.test ? t('pxKTestBadge') : vortest ? t('gxBadgeVortest', { n: s.pos + 1, total: s.intro?.vtN ?? 2 }) : inRepeat(s) ? t('nbLernenRepeatBadge') : task?.errorT !== null && task ? t('grReviewBadge') : null;
+  const win = useWinOn(task ?? null, tutorOn);
+  const badge = win ? t('ttWin') : inTest && s.test ? t('pxKTestBadge') : vortest ? t('gxBadgeVortest', { n: s.pos + 1, total: s.intro?.vtN ?? 2 }) : inRepeat(s) ? t('nbLernenRepeatBadge') : task?.errorT !== null && task ? t('grReviewBadge') : null;
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="grammar-session" data-mode={s.mode} data-ctx={s.ctx} data-profile={s.profile}>
       <RoundTop onClose={leave} progress={grammarProgress(s)} ctx={s.ctx} duty="ch:gram" />
@@ -101,12 +102,8 @@ export function GrammarSessionScreen() {
           />
         ) : s.status === 'running' && task ? (
           <StepBoundary resetKey={`g-${s.step}`} scope="grammarSession" onSkip={skipGrammar}>
-            {/* Tutor-Engine v3 (S2/S3): Statuszeile nach dem Tausch gegen etwas Bekanntes; „Warum diese Aufgabe?“ steht im ⓘ – nicht im Vortest, im Test und in der Wiederholung. */}
-            <div className="flex flex-col gap-3">
-              {/* Platz immer reserviert (auch ohne Tutor): die Aufgabe steht in jeder Runde an derselben Stelle. */}
-              <WinLine task={task} on={tutorOn} />
-              <GrammarItem task={task} ctx={s.ctx} day={s.day} onDone={commitGrammar} profile={s.profile} noHelp={vortest || inTest} badgeTone={inTest ? 'hint' : undefined} topicRound={s.mode === 'topic' || (!!s.intro && s.intro.topic === task.topic && !!task.pat && s.intro.pats.includes(task.pat))} badge={badge} tutor={tutorOn && !s.fixed} reason={reason} />
-            </div>
+            {/* Tutor-Engine v3 (S2/S3): nach dem Tausch „Kurz etwas Bekanntes“ als Plakette in der Statuszeile (U3: kein reservierter Platz); „Warum diese Aufgabe?“ steht im ⓘ – nicht im Vortest, im Test und in der Wiederholung. */}
+            <GrammarItem task={task} ctx={s.ctx} day={s.day} onDone={commitGrammar} profile={s.profile} noHelp={vortest || inTest} badgeTone={win || inTest ? 'hint' : undefined} topicRound={s.mode === 'topic' || (!!s.intro && s.intro.topic === task.topic && !!task.pat && s.intro.pats.includes(task.pat))} badge={badge} {...(win ? { badgeTestId: 'tutor-win' } : {})} tutor={tutorOn && !s.fixed} reason={reason} />
           </StepBoundary>
         ) : (
           <div data-testid="summary">

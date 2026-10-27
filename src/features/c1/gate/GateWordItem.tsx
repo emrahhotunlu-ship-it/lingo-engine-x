@@ -46,7 +46,7 @@ export function GateWordItem({ word, onAnswer }: { word: GateWord; onAnswer: (ri
         <PrimaryAction iconAfter="arrowRight" disabled={!value.trim()} onClick={() => send(value)} testId="gate-word-next">
           {t('pxPlNext')}
         </PrimaryAction>
-        <Button variant="ghost" onClick={() => send('')} data-testid="gate-word-dontknow">
+        <Button variant="quiet" onClick={() => send('')} data-testid="gate-word-dontknow">
           {t('pxPlDontKnow')}
         </Button>
       </ActionBar>

@@ -16,10 +16,10 @@ import { ExerciseMenu } from './ExerciseMenu';
 import { ExerciseStatus } from './ExerciseStatus';
 import { FoldToggle } from './FoldToggle';
 import { Examples } from './Examples';
-import { Explanation } from './Explanation';
+import { MoreItems, ResultBlocks } from './ResultBlocks';
+import { planResult, type ResultPlan } from './resultPlan';
 import { HintLine } from './HintLine';
 import { shouldAutoAdvance } from './autoAdvance';
-import { liftLines, visibleLines } from './explainDepth';
 import { choiceKeyRange } from '../../engine/choiceKeys';
 import { useAutoAdvance } from './useAutoAdvance';
 import { Verdict } from './Verdict';
@@ -43,11 +43,13 @@ export type ShellStatus = {
   badge?: string | null;
   /** Farbe des Zusatzes: `near` (Bernstein, Standard: „deine Fehler“, „noch einmal“) oder `hint` (Cyan, neutral, z. B. „Themen-Test“). */
   badgeTone?: 'near' | 'hint' | 'neutral';
+  /** Kennung der Plakette (Standard `again-badge`). */
+  badgeTestId?: string;
   /** Ohne Hilfe (Themen-Test, Vortest, Messung): kein ⓘ mit Zweck und Muster – die Aufgabe selbst nennt den Hinweis. */
   noInfo?: boolean;
 };
 export type ShellAction = { /** Pfeil auch ohne Ergebnis (z. B. „Weiter“ mitten in der Aufgabe). */ arrow?: boolean; label: string; onClick: () => void; testId: string; disabled?: boolean; busy?: boolean; busyLabel?: string };
-export type ShellSecondary = { id: 'hint' | 'dontKnow' | 'unclear' | 'noError' | 'skip' | 'replay' | 'reset' | 'noSound'; label: string; onClick: () => void; testId: string; disabled?: boolean; /** Umrandeter Knopf statt Textknopf (Einführungskarte „Kenne ich“). */ variant?: 'ghost' | 'secondary' };
+export type ShellSecondary = { id: 'hint' | 'dontKnow' | 'unclear' | 'noError' | 'skip' | 'replay' | 'reset' | 'noSound'; label: string; onClick: () => void; testId: string; disabled?: boolean; /** Standard `quiet` (leise Knopfform, U3); umrandeter Glasknopf für die Einführungskarte „Kenne ich“. */ variant?: 'quiet' | 'ghost' | 'secondary' };
 export type ShellMenuId = 'override' | 'copyOnce' | 'showMe' | 'translate' | 'moreInfo' | 'askClaude' | 'wholeTopic' | 'report';
 export type ShellFeedback = {
   verdict: ResultVerdict;
@@ -88,6 +90,8 @@ export type ShellFeedback = {
    * ≠ false (`shouldAutoAdvance`) läuft dann der 4-s-Zeitgeber; ein Menü oder Aufklappbereich hält ihn an.
    */
   auto?: boolean;
+  /** „Mehr“ aufklappen (Menü „Mehr Infos“ der Wörter: der Inhalt von „Zum Wort“ steht dort). */
+  moreOpen?: boolean;
 };
 export type ShellState = 'loading' | 'answering' | 'busy' | 'retry' | 'result' | 'aiError';
 export type ExerciseShellProps = {
@@ -172,7 +176,9 @@ export function ExerciseShell(props: ExerciseShellProps) {
     const res = resultRef.current;
     if (!res) return;
     const r = res.getBoundingClientRect();
-    if (r.top >= 0 && r.bottom <= window.innerHeight) return;
+    // U3: Pflicht im Bild sind Urteil, Lösung und „Warum“ – „Merke“ und „Mehr“ dürfen darunter liegen.
+    const must = (res.querySelector('[data-block="why"]') ?? res.querySelector('[data-block="verdict"]') ?? res).getBoundingClientRect();
+    if (r.top >= 0 && must.bottom <= window.innerHeight) return;
     const task = taskRef.current;
     if (task && task.getBoundingClientRect().top < r.top) task.scrollIntoView?.({ block: 'start', behavior: 'auto' });
     else res.scrollIntoView?.({ block: 'start', behavior: 'auto' });
@@ -201,9 +207,9 @@ export function ExerciseShell(props: ExerciseShellProps) {
   const showSecondary = secondary.slice(0, 2);
   const secondaryNode =
     showSecondary.length > 0 && !feedback ? (
-      <div className="flex flex-wrap items-center gap-x-2" data-slot="secondary" role="group" aria-label={t('exSecondaryLabel')}>
+      <div className="flex flex-wrap items-center gap-2" data-slot="secondary" role="group" aria-label={t('exSecondaryLabel')}>
         {showSecondary.map((s) => (
-          <Button key={s.id} variant={s.variant ?? 'ghost'} onClick={s.onClick} disabled={s.disabled} data-testid={s.testId} data-secondary={s.id}>
+          <Button key={s.id} variant={s.variant ?? 'quiet'} onClick={s.onClick} disabled={s.disabled} data-testid={s.testId} data-secondary={s.id}>
             {s.label}
           </Button>
         ))}
@@ -211,8 +217,9 @@ export function ExerciseShell(props: ExerciseShellProps) {
     ) : null;
   const asideSecondary = tablet && secondaryNode;
 
-  // UX-Prüfung W2 (07.10.2026): EINE Rückmeldekarte für alle Arten – Urteil (+ „Wieder in“) → Du → Richtig → Muster → Richtig, weil → Beispiel → „Mehr“.
-  // Unter „Mehr“: Typischer Fehler, Nicht verwechseln, Hinweise, „Warum nicht …?“ und die Zählweise (`after`), weitere Beispiele.
+  // Bauplan der Ergebnis-Karte (UX-Audit U3, 27.10.2026) – für alle Übungsarten gleich, höchstens drei Blöcke in fester Reihenfolge:
+  // 1. Urteil + Lösung (Urteil, Kopf, „Richtig: …“, Vergleich) · 2. „Warum“ · 3. „Merke“. Alles Weitere hinter EINEM „Mehr“
+  // (Typischer Fehler, Nicht verwechseln, Hinweise, „Warum nicht …?“, Beispiele, „Zum Wort“). Handlungen (`act`, Tutor) stehen über „Mehr“.
   // R5: Im Kontrast-Schritt („Welches Wort passt?“) IST „Nicht verwechseln“ der Inhalt – die Zeile steht dort offen, nie unter „Mehr“.
   const contrastStep = meta.ex === 'contrast';
   // Rückmeldung 7: Eine Übung kann Zeilen zusätzlich einklappen (`feedback.fold`, z. B. die Muster-Fachsprache bei „Fehler finden“) oder öffnen (`feedback.unfold`, das Kontrastbeispiel).
@@ -221,96 +228,73 @@ export function ExerciseShell(props: ExerciseShellProps) {
     (k): k is ExplainLine['k'] => !unfoldExtra.includes(k as ExplainLine['k']),
   );
   const UNFOLD: ReadonlyArray<ExplainLine['k']> | undefined = contrastStep || unfoldExtra.length ? [...(contrastStep ? (['contrast'] as const) : []), ...unfoldExtra] : undefined;
-  const depthLines = feedback?.explanation ? liftLines(visibleLines(feedback.explanation, feedback.depth, { learning }), feedback.explanation, UNFOLD) : null;
-  const moreLines = depthLines ? depthLines.folded.length + depthLines.open.filter((l) => FOLD.includes(l.k)).length : 0;
-  const explainProps = feedback?.explanation
-    ? { model: feedback.explanation, depth: feedback.depth, learning, hideWord: status.area === 'words', fold: FOLD, verdict: feedback.verdict, ...(UNFOLD ? { unfold: UNFOLD } : {}) }
-    : null;
-  const moreExtra =
-    explainProps && (moreLines > 0 || feedback?.after) ? (
-      <>
-        {moreLines > 0 && <Explanation {...explainProps} only="folded" />}
-        {feedback?.after && <div data-slot="after">{feedback.after}</div>}
-      </>
-    ) : feedback?.after ? (
-      <div data-slot="after">{feedback.after}</div>
-    ) : undefined;
+  const plan: ResultPlan = feedback?.explanation ? planResult(feedback.explanation, feedback.depth, { learning, fold: FOLD, unfold: UNFOLD }) : { why: [], remember: [], more: [] };
+  const examples = feedback?.explanation?.examples ?? [];
+  const hasMore = !!feedback && (plan.more.length > 0 || examples.length > 0 || !!feedback.after || !!feedback.foot);
   const result =
     feedback !== null ? (
       <motion.section
         key={resultKey}
         ref={resultRef}
-        className="lx-card relative flex scroll-mt-4 flex-col gap-3 overflow-hidden p-4"
+        className="lx-card relative flex scroll-mt-4 flex-col gap-4 overflow-hidden p-4"
         data-testid="result"
         aria-label={t('exExplanationLabel')}
         data-verdict={feedback.verdict}
-        {...(reduce ? {} : { initial: { opacity: 0, y: -6 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.22 } })}
+        {...(reduce ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.15 } } : { initial: { opacity: 0, y: -6 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.22 } })}
       >
-        <div data-slot="verdict" className={`-mx-4 -mt-4 px-4 py-3.5 pr-14 ${feedback.verdict === 'ok' ? 'bg-ok-soft' : feedback.verdict === 'near' ? 'bg-near-soft' : feedback.verdict === 'wrong' ? 'bg-wrong-soft' : ''}`}>
-          <Verdict verdict={feedback.verdict} sub={feedback.sub ?? null} title={feedback.title ?? null} />
-          {feedback.parts}
-          {feedback.nextIn && (
-            <p className="lx-t-meta mt-0.5 text-muted" data-testid="next-in">
-              {feedback.nextIn}
-            </p>
-          )}
-          {feedback.stageNote && (
-            <p className="lx-t-meta mt-0.5 text-muted" data-testid="stage-hold">
-              {feedback.stageNote}
-            </p>
+        <div data-block="verdict" className="flex flex-col gap-4">
+          <div data-slot="verdict" className={`-mx-4 -mt-4 px-4 py-4 pr-14 ${feedback.verdict === 'ok' ? 'bg-ok-soft' : feedback.verdict === 'near' ? 'bg-near-soft' : feedback.verdict === 'wrong' ? 'bg-wrong-soft' : ''}`}>
+            <Verdict verdict={feedback.verdict} sub={feedback.sub ?? null} title={feedback.title ?? null} />
+            {feedback.parts}
+            {feedback.nextIn && (
+              <p className="lx-t-meta mt-1 text-muted" data-testid="next-in">
+                {feedback.nextIn}
+              </p>
+            )}
+            {feedback.stageNote && (
+              <p className="lx-t-meta mt-1 text-muted" data-testid="stage-hold">
+                {feedback.stageNote}
+              </p>
+            )}
+          </div>
+          {feedback.head && <div data-slot="head">{feedback.head}</div>}
+          {feedback.right && <div data-slot="right">{feedback.right}</div>}
+          {feedback.comparison && (
+            <div data-slot="comparison">
+              <Comparison given={feedback.comparison.given} ops={feedback.comparison.ops} compact={!!feedback.comparison.compact} {...(feedback.comparison.label ? { label: feedback.comparison.label } : {})} {...(feedback.comparison.correct ? { correct: feedback.comparison.correct } : {})} hideCorrect={!!feedback.comparison.hideCorrect} />
+            </div>
           )}
         </div>
-        {feedback.head && <div data-slot="head">{feedback.head}</div>}
-        {explainProps && (
-          <div data-slot="yours">
-            <Explanation {...explainProps} only="yours" />
-          </div>
-        )}
-        {feedback.right && <div data-slot="right">{feedback.right}</div>}
-        {feedback.comparison && (
-          <div data-slot="comparison">
-            <Comparison given={feedback.comparison.given} ops={feedback.comparison.ops} compact={!!feedback.comparison.compact} {...(feedback.comparison.label ? { label: feedback.comparison.label } : {})} {...(feedback.comparison.correct ? { correct: feedback.comparison.correct } : {})} hideCorrect={!!feedback.comparison.hideCorrect} />
-          </div>
-        )}
-        {feedback.why && <div data-slot="why">{feedback.why}</div>}
-        {explainProps && (
-          <div data-slot="explanation">
-            <Explanation {...explainProps} onFoldChange={onFold} only="open" skipYours />
-          </div>
-        )}
-        {feedback.explanation && feedback.explanation.examples.length > 0 ? (
-          <div data-slot="examples">
-            <Examples
-              items={feedback.explanation.examples}
-              open={depthLines?.examplesOpen ?? 0}
-              onFoldChange={onFold}
-              more={{
-                label: t('exMore'),
-                before:
-                  feedback.tutor || feedback.act ? (
-                    <div className="flex flex-col gap-3">
-                      {feedback.act && <div data-slot="act">{feedback.act}</div>}
-                      {feedback.tutor && <div data-slot="tutor">{feedback.tutor}</div>}
-                    </div>
-                  ) : undefined,
-                extra: moreExtra,
-              }}
-            />
-          </div>
-        ) : (
-          <>
+        <ResultBlocks
+          plan={plan}
+          area="trainer"
+          ai={!!feedback.explanation?.ai}
+          {...(feedback.explanation ? { source: feedback.explanation.source } : {})}
+          depth={feedback.depth}
+          {...(feedback.why ? { before: <div data-slot="why">{feedback.why}</div> } : {})}
+        />
+        {(feedback.act || feedback.tutor) && (
+          <div className="flex flex-col gap-2" data-block="act">
             {feedback.act && <div data-slot="act">{feedback.act}</div>}
             {feedback.tutor && <div data-slot="tutor">{feedback.tutor}</div>}
-            {moreExtra && (
-              <div data-slot="more" className="-mx-4 border-t border-line px-4 pt-1">
-                <FoldToggle label={t('exMore')} onOpenChange={onFold} testId="explanation-more">
-                  {moreExtra}
-                </FoldToggle>
-              </div>
-            )}
-          </>
+          </div>
         )}
-        {feedback.foot && <div data-slot="foot">{feedback.foot}</div>}
+        {hasMore && (
+          <div data-slot="more" className="-mx-4 -mb-2 border-t border-line px-4">
+            <FoldToggle label={t('exMore')} onOpenChange={onFold} testId="explanation-more" openSignal={!!feedback.moreOpen}>
+              <div className="flex flex-col gap-4 pb-2">
+                <MoreItems items={plan.more} />
+                {feedback.after && <div data-slot="after">{feedback.after}</div>}
+                {examples.length > 0 && (
+                  <div data-slot="examples">
+                    <Examples items={examples} open={examples.length} />
+                  </div>
+                )}
+                {feedback.foot && <div data-slot="foot">{feedback.foot}</div>}
+              </div>
+            </FoldToggle>
+          </div>
+        )}
         {feedback.menu && Object.keys(feedback.menu).length > 0 && (
           <div className="absolute right-1 top-2">
             <ExerciseMenu items={feedback.menu} onOpenChange={setMenuOpen} />

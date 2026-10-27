@@ -177,7 +177,7 @@ export function PlacementItem({ item, onAnswer }: Props) {
         <PrimaryAction iconAfter="arrowRight" disabled={!resp} onClick={() => send(resp)} testId="place-next">
           {t('pxPlNext')}
         </PrimaryAction>
-        <Button variant="ghost" onClick={() => send(null)} data-testid="place-dontknow">
+        <Button variant="quiet" onClick={() => send(null)} data-testid="place-dontknow">
           {t('pxPlDontKnow')}
         </Button>
       </ActionBar>

@@ -36,7 +36,7 @@ for (const vp of [
     }
     expect(found, `keine Mini-Lektion nach ${wrongs} Formfehlern`).toBe(true);
     expect(wrongs).toBeGreaterThanOrEqual(2);
-    await expect(page.getByTestId('verdict-sub')).toContainText('Abfragen hilft hier gerade nicht');
+    await expect(page.getByTestId('verdict-sub')).toContainText('Kurz die Regel, dann geht’s weiter');
     const ex = page.getByTestId('explanation');
     await expect(ex).toBeVisible();
     // Regel in Kürze: höchstens drei Zeilen ohne die Zielzeile, keine Doppelung der Formel.

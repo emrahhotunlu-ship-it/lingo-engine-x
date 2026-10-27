@@ -24,8 +24,8 @@ export const ttPolicyDe = {
   ttWhy_known: 'Kurz etwas Bekanntes, dann weiter.',
   ttWhy_freer: 'Deine letzten Antworten saßen. Darum ist diese Form eine Stufe freier.',
   ttWhy_supported: 'Eine Stufe leichter, damit die Regel erst einmal sicher sitzt.',
-  ttWin: 'Kurz etwas Bekanntes, dann weiter.',
-  ttLessonWhy: 'Abfragen hilft hier gerade nicht. Die Regel in Kürze:',
+  ttWin: 'Kurz etwas Bekanntes',
+  ttLessonWhy: 'Kurz die Regel, dann geht’s weiter.',
   ttProof: '{name}: vor {weeks} Wochen {thenOk} von {thenN} sicher richtig, jetzt {nowOk} von {nowN}.',
   ttSureNote: 'Sicher heißt: ohne Leitfrage, Formel oder ersten Buchstaben, im ersten Versuch und im üblichen Tempo.',
 };

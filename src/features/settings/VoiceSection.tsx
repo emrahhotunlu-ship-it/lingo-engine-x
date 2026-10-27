@@ -99,7 +99,7 @@ export function VoiceSection() {
                     <span>{v.name}</span>
                     <span className="text-xs text-muted">{v.lang}</span>
                   </button>
-                  <Button variant="ghost" icon="speaker" onClick={() => void previewVoice(v.name)} data-testid="voice-preview" aria-label={`${t('voicePreview')}: ${v.name}`}>
+                  <Button variant="quiet" icon="speaker" onClick={() => void previewVoice(v.name)} data-testid="voice-preview" aria-label={`${t('voicePreview')}: ${v.name}`}>
                     {t('voicePreview')}
                   </Button>
                 </div>

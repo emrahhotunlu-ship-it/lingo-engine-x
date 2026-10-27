@@ -19,6 +19,8 @@ export const exEn = {
   exLineContrast: "Don't mix up",
   exLineNote: 'Note',
   exLineWhyNot: 'Why is that?',
+  exBlockWhy: 'Why',
+  exBlockRemember: 'Remember',
   // Find the mistake: result header (feedback 7)
   exFindSpotted: 'Spotted it',
   exFindNotQuite: 'Not quite',

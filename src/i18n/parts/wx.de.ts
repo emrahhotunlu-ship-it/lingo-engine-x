@@ -51,7 +51,6 @@ export const wxDe = {
   wxExFromAtlas: 'Beispielsatz aus dem Wörterbuch',
   wxSubTypo: 'Tippfehler',
   wxSubForm: 'Andere Form',
-  wxFormWhy: 'Warum',
   wxFormOf: 'von {lemma}',
   wxSubSynonym: 'Gleichwertig',
 } as const;

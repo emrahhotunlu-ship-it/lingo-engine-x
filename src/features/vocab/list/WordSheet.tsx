@@ -211,7 +211,7 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
         </p>
         {tts && (
           <div>
-            <Button variant="ghost" icon="speaker" onClick={() => void speak(card.word)} data-testid="word-speak">
+            <Button variant="quiet" icon="speaker" onClick={() => void speak(card.word)} data-testid="word-speak">
               {t('lkListen')}
             </Button>
           </div>

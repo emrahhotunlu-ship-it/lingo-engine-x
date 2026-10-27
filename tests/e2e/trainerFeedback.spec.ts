@@ -61,13 +61,14 @@ test('Status statt Erklärtexten, Platzhalter je Buchstabe, keine Bewertungsknö
   await expect(page.locator('button[data-grade]')).toHaveCount(0);
   await expect(page.getByTestId('rating')).toHaveCount(0);
   // Die Erklär-Karte nennt Wort, Wortart und „Merke“; die Bedeutung steht schon als Hinweis in der Frage und kommt nicht noch einmal als eigene Zeile.
-  await expect(page.getByTestId('explanation')).toContainText('avoid');
-  await expect(page.getByTestId('explanation')).toContainText('Verb');
+  // U3: Wort und Wortart stehen im Kopf der Karte (Urteil + Lösung); die Wortarten-Chips nur noch unter „Mehr“.
+  await expect(page.getByTestId('word-head')).toContainText('avoid');
+  await expect(page.getByTestId('word-pos')).toContainText('Verb');
   await expect(page.getByTestId('next-in')).toHaveText(/^Wieder in \d+ (Min\.|Std\.|Tagen?)$/);
   // Richtig, aber Stufe 4 braucht freie Antworten an anderen Tagen: die Karte sagt es (Auswertung 15.10., Prüfung M1).
   await expect(page.getByTestId('stage-hold')).toContainText('dann gilt das Wort als sicher');
   // Beispiele: Kollokationssätze, nicht der schon sichtbare Satz (bei dieser Stufe unter „Weitere Beispiele“).
-  await page.getByTestId('examples-more').click();
+  await page.getByTestId('explanation-more').click();
   await expect(page.getByTestId('examples').getByTestId('example')).toHaveCount(3);
   await expect(page.getByTestId('examples')).not.toContainText('Try to avoid driving');
   expect(await layoutProblems(page)).toEqual([]);
@@ -155,7 +156,7 @@ test('fehlende Beispiele ergänzt Claude einmal (quick) und speichert sie an der
   await page.keyboard.type('avoid', { delay: 20 });
   await page.keyboard.press('Enter');
   // Beispiele von Claude stehen in der Erklär-Karte (unter „Weitere Beispiele“); die Übersetzungen unter „Zum Wort“.
-  await page.getByTestId('examples-more').click();
+  await page.getByTestId('explanation-more').click();
   await expect(page.getByTestId('examples').getByTestId('example')).toHaveCount(3);
   const calls = (await sampleCalls(page)).filter((c) => c.id === 'card-examples');
   expect(calls).toHaveLength(1);

@@ -1125,8 +1125,8 @@ export function ExerciseView({
     const fk = solution && !fb.override && fb.result.verdict !== 'correct' && !partnerEx ? formKind(solution, card.word, card.pos ?? null) : null;
     const formWhy =
       fk && fk !== 'misc' ? (
+        // U3: steht im Block „Warum“ – keine zweite Überschrift „Warum:“ davor.
         <p className="lx-t-support m-0" data-testid="word-form-why" data-form={fk}>
-          <span className="text-muted">{t('wxFormWhy')}: </span>
           <span lang="en" className="font-semibold">
             {solution}
           </span>{' '}
@@ -1173,7 +1173,8 @@ export function ExerciseView({
       head: <WordExtras card={card} open={moreOpen} lang={lang} extras={extras} part="head" other={e.ex === 'contrast' ? (contrastOtherOf(e)?.word ?? null) : null} phrase={collocPhrase} meaning={fb.sentence ? null : headMeaning} pos={posKey(card.pos)} />,
       // „War das auch richtig?“ als ruhige Zeile im Ergebnis-Block (Design-Lead), nicht mehr lose über der Karte.
       parts: !fb.override && fb.result.verdict === 'wrong' && isTyped && ai && e.ex !== 'situation' ? <SynonymAsk card={card} given={fb.given} onOk={override} /> : undefined,
-      foot: <WordExtras card={card} open={moreOpen} lang={lang} extras={extras} part="more" />,
+      foot: <WordExtras card={card} open={moreOpen} lang={lang} extras={extras} part="body" />,
+      moreOpen,
       auto: fb.hint === 0 && !fb.override && !fb.sentence && !fb.dontKnow,
     };
   }

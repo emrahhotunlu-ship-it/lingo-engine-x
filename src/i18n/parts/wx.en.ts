@@ -51,7 +51,6 @@ export const wxEn = {
   wxExFromAtlas: 'Example sentence from the dictionary',
   wxSubTypo: 'Typo',
   wxSubForm: 'Different form',
-  wxFormWhy: 'Why',
   wxFormOf: 'of {lemma}',
   wxSubSynonym: 'Equivalent',
 } as const;

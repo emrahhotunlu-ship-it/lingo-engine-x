@@ -167,7 +167,7 @@
   --lx-gold-soft: rgba(180, 83, 9, 0.1);
   --lx-cyan-soft: rgba(8, 145, 178, 0.1);
   --lx-focus: #0e1320;
-  --lx-track: rgba(15, 23, 42, 0.08);
+  --lx-track: rgba(15, 23, 42, 0.13);
   --lx-shadow: 0 1px 0 0 var(--lx-edge) inset, 0 12px 32px -18px rgba(15, 23, 42, 0.25);
   --lx-scrim: rgba(15, 23, 42, 0.32);
   --lx-ok: #047857;

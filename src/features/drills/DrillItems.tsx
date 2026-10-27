@@ -145,7 +145,7 @@ export function DictationItem({ item, ctx, day, profile, onDone }: ItemProps<{ s
       <EnglishText as="p" text={item.s} area="trainer" source={item.ref} testId="dictate-sentence" />
       {tts && (
         <div>
-          <Button variant="ghost" icon="speaker" onClick={() => void speak(item.s)} data-testid="drill-listen-again">
+          <Button variant="quiet" icon="speaker" onClick={() => void speak(item.s)} data-testid="drill-listen-again">
             {t('drListenAgain')}
           </Button>
         </div>
