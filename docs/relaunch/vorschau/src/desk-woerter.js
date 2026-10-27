@@ -27,7 +27,7 @@ function twDHelp() {
 /* ---------- L11 Trainer-Start ---------- */
 function l11Preview(v) {
   const list = v === 'new-words'
-    ? [['upfront', L('offen, ehrlich (vorab)', 'open, honest'), L('neu', 'new')]].concat(TW_ROUND().slice(0, 9).map(w => [w[0], w[1], w[2]]))
+    ? [['upfront', L('offen, ehrlich (be upfront about); auch: im Voraus (pay upfront)', 'open, honest (be upfront about); also: in advance (pay upfront)'), L('neu', 'new')]].concat(TW_ROUND().slice(0, 9).map(w => [w[0], w[1], w[2]]))
     : TW_ROUND().map(w => [w[0], w[1], w[2]]);
   return '<div class="card tw-prev" style="padding:.3em 1em">' + list.map((w, i) => '<div class="tw-pv"><span class="num tw-pn">' + (i + 1) + '</span><b class="en">' + w[0] + '</b><span class="tw-pm">' + w[1] + '</span><span class="stagepill' + (w[2] === 'S5' ? ' s5' : '') + '">' + w[2] + '</span></div>').join('') + '</div>';
 }
@@ -121,7 +121,7 @@ function l12Contrast() {
     '<div class="stack s16" style="padding:2.2em 0 1.5em"><div class="card tw-ctr"><div class="contrast en"><span class="k">A</span><span><b>delivery</b> <span class="tw-de">' + L('die Lieferung selbst', 'the delivery itself') + '</span></span><span class="k">B</span><span><b>lead time</b> <span class="tw-de">' + L('die Dauer bis zur Lieferung', 'the time until delivery') + '</span></span></div></div>' +
     '<div class="sent en">' + words('Our standard') + ' ' + gapHtml(checked ? pick : '', { st: checked ? TW_GAPST[st] : '' }) + ' ' + words('is ten weeks.') + '</div>' +
     (checked ? '' : '<div class="stack s8" style="max-width:24em">' + [['delivery', 1], ['lead time', 2]].map(c => '<button class="choice en" id="d-c' + c[1] + '" data-act="pick" data-v="' + c[0] + '"><span class="n">' + c[1] + '</span>' + c[0] + '</button>').join('') + '</div>') + '</div>';
-  if (checked) s += '<div class="dverdict ' + stCls(st) + '" role="status">' + verdictRow(st) + cmpLine(st, pick, 'lead time') + '<p class="whyl" style="margin:.2em 0 0">' + (st === 'ok' ? L('Es geht um die Dauer, also <em class="en">lead time</em>.', 'It is about duration, so <em>lead time</em>.') : L('Zehn Wochen sind eine Dauer: <em class="en">lead time</em>.', 'Ten weeks is a duration: <em>lead time</em>.')) + '</p><p class="tw-lage">' + ic('clock', 'xs') + '<span>' + L('Auswahl nach dem Fehler ist Rettung: Übung, keine Wirkung auf die Stufe.', 'A choice after a mistake is a rescue: practice, no effect on the stage.') + '</span></p></div>';
+  if (checked) s += '<div class="dverdict ' + stCls(st) + '" role="status">' + verdictRow(st) + cmpLine(st, pick, 'lead time') + '<p class="whyl" style="margin:.2em 0 0">' + (st === 'ok' ? L('Es geht um die Dauer, also <em class="en">lead time</em>.', 'It is about duration, so <em>lead time</em>.') : L('Zehn Wochen sind eine Dauer: <em class="en">lead time</em>.', 'Ten weeks is a duration: <em>lead time</em>.')) + '</p><p class="tw-lage">' + ic('clock', 'xs') + '<span>' + TW_CTR_LAGE() + '</span></p></div>';
   s += '</div>' + dKeys(checked ? '<button class="btn pri" id="d-next" data-go="l14">' + L('Zum Ergebnis', 'See result') + kb('⏎') + '</button>' : '<span class="p2" style="font-size:.9em">' + L('Taste 1 oder 2', 'Press 1 or 2') + '</span>');
   return s;
 }
@@ -130,7 +130,9 @@ function l12Ctx(v) {
   const checked = v === 'checked' || v === 'checked-early' || !!S.ui.checked || (v === 'contrast' && !!S.ui.pick);
   const st = checked ? (v === 'contrast' ? (S.ui.pick === 'lead time' ? 'ok' : 'wrong') : twSt(t)) : null;
   const m = t.more || {};
-  const lage = t.lage === 'early' || v === 'contrast'
+  const lage = v === 'contrast'
+    ? L('<b>Kontrast nach Widerspruch.</b> Das feste Wort <em class="en">delivery</em> (S5) ging daneben. Die Auswahl ist Übung, keine Wirkung auf die Stufe.', '<b>Contrast after a contradiction.</b> The solid word <em>delivery</em> (S5) went wrong. The choice is practice, no effect on the stage.')
+    : t.lage === 'early'
     ? L('<b>Noch nicht fällig.</b> Schwierig-Runde: Übung, der nächste Termin wird ab jetzt gerechnet. Falsch zählt trotzdem.', '<b>Not due yet.</b> Hard-words round: practice, the next review is counted from now. Wrong still counts.')
     : L('<b>Fällig.</b> Zählt für deinen Plan, Erkennen zählt für „Erkennst du“.', '<b>Due.</b> Counts for your plan; recognition counts toward “you recognize”.');
   /* Merke und Mehr wiederholen die Warum-Zeile der Bühne nicht: Merke = Falle oder Wortpartner, Mehr = Bedeutung und Beispiel. */
@@ -141,7 +143,7 @@ function l12Ctx(v) {
   const mehr = checked
     ? '<div class="stack s6"><p class="p2" style="margin:0">' + m.meaning + '</p>' + (m.ex ? '<p class="p2 en" style="margin:0;color:var(--fg)">' + m.ex[0] + '</p>' : '') + (m.trap && m.partners ? '<p class="p2 en" style="margin:0">' + m.partners + '</p>' : '') + '</div>'
     : '<p class="p2" style="margin:0;color:var(--fg-3)">' + L('Bedeutung, Beispiel und Wortpartner nach dem Prüfen.', 'Meaning, example and collocations after you check.') + '</p>';
-  return ctxBlock(L('Warum', 'Why'), '<p class="p2" style="margin:0">' + t.why + '</p>') +
+  return ctxBlock(L('Warum', 'Why'), '<p class="p2" style="margin:0">' + (v === 'contrast' ? TW_CTR_WHY() : t.why) + '</p>') +
     ctxBlock(L('Merke', 'Remember'), merke) +
     ctxBlock(L('Mehr', 'More'), mehr) +
     ctxBlock(L('Diese Runde', 'This round'), l12Round(v)) +

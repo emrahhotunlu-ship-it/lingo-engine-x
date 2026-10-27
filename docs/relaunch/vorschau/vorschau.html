@@ -2655,23 +2655,23 @@ function TW_T() {
       whyl: {
         ok: L('<em class="en">approval</em> ist die Freigabe. Im Einkauf wartet ein Angebot oft auf die <em class="en">budget approval</em>.', '<em>approval</em> is the sign-off. In purchasing, a quote often waits for <em>budget approval</em>.'),
         typo: L('Das Wort sitzt. Achte auf das doppelte p: a-p-p-r-o-v-a-l.', 'You know the word. Watch the double p: a-p-p-r-o-v-a-l.'),
-        wrong: L('<em class="en">release</em> heißt freigeben im Sinn von loslassen. Für Geld, das genehmigt wird, sagt man <em class="en">approval</em>.', '<em>release</em> means letting go. For money that gets approved, say <em>approval</em>.'),
+        wrong: L('<em class="en">release</em> heißt eher Geld bereitstellen (<em class="en">release funds</em>). Die Genehmigung selbst heißt <em class="en">approval</em>.', '<em>release</em> means making money available (<em>release funds</em>). The sign-off itself is <em>approval</em>.'),
         idk: L('<em class="en">budget approval</em> = Budgetfreigabe. Von <em class="en">approve</em>, genehmigen.', '<em>budget approval</em> comes from <em>approve</em>.')
       },
       why: dueWhy + ' ' + L('budget approval ist von deinen fälligen Wörtern das, das du am ehesten vergessen hast. Deshalb kommt es zuerst, frei und ohne Satz.', 'Of your due words, budget approval is the one you are most likely to have forgotten. That is why it comes first, free and without a sentence.'),
-      more: { meaning: L('Die Genehmigung, Geld aus einem Budget auszugeben.', 'Permission to spend money from a budget.'), partners: 'get · wait for · need budget approval', trap: L('<em class="en">budget release</em> ist kein fester Ausdruck.', '<em>budget release</em> is not a set phrase.') },
+      more: { meaning: L('Die Genehmigung, Geld aus einem Budget auszugeben.', 'Permission to spend money from a budget.'), partners: 'get · wait for · need budget approval', trap: L('<em class="en">budget release</em> ist selten. Die Genehmigung heißt <em class="en">budget approval</em>, Geld bereitstellen heißt <em class="en">release funds</em>.', '<em>budget release</em> is rare. The sign-off is <em>budget approval</em>; making money available is <em>release funds</em>.') },
       next: 'h18-partner'
     },
     partner: {
       n: 2, lage: 'due', word: 'revise a quote', form: 'sent',
       bl: L('Wörter üben · fällig · Wortpartner', 'Practice words · due · collocation'),
-      instr: L('Welches Verb passt? Ein Angebot überarbeiten.', 'Which verb fits? Revise a quote.'),
+      instr: L('Welches Verb passt? Du änderst das Angebot und schickst es neu.', 'Which verb fits? You change a quote and send it again.'),
       before: '', after: 'a quote', hint: L('Gesucht: überarbeiten · 1 Wort', 'Wanted: überarbeiten · 1 word'),
-      tip: L('Tipp: daher kommt <em class="en">the re… quote</em>', 'Hint: that is where <em>the re… quote</em> comes from'),
-      right: 'revise', rightShow: 'revise', alts: ['update'],
+      tip: L('Tipp: wie in <em class="en">the re… quote</em> vom Montag', 'Hint: think of <em>the re… quote</em> from Monday'),
+      right: 'revise', rightShow: 'revise', alts: ['update', 'amend', 'rework'],
       you: { ok: 'revise', typo: 'revice', wrong: 'review', idk: '' },
       whyl: {
-        ok: L('Ein Angebot schickt man (<em class="en">send</em>), überarbeitet es (<em class="en">revise</em>) und nimmt es an (<em class="en">accept</em>).', 'You send a quote, revise it and accept it.'),
+        ok: L('Ein Angebot schickt man (<em class="en">send</em>), überarbeitet es (<em class="en">revise</em>), und der Kunde nimmt es an (<em class="en">accept</em>).', 'You send a quote, revise it, and the client accepts it.'),
         typo: L('Fast: <em class="en">revise</em> schreibt sich mit s.', 'Almost: <em>revise</em> is spelled with an s.'),
         wrong: L('<em class="en">review</em> heißt prüfen. Wer das Angebot ändert, <em class="en">revises</em> it.', '<em>review</em> means check. If you change the quote, you <em>revise</em> it.'),
         idk: L('<em class="en">revise a quote</em> = ein Angebot überarbeiten. Daher <em class="en">the revised quote</em>.', 'Hence <em>the revised quote</em>.')
@@ -2687,11 +2687,14 @@ function TW_T() {
       hint: L('mit <em class="en">follow up</em> · ein Satz · Angebot vom Montag', 'with <em>follow up</em> · one sentence · quote from Monday'),
       tip: L('Tipp: <em class="en">I’m following up on …</em>', 'Hint: <em>I’m following up on …</em>'),
       right: 'i\'m following up on the quote we sent on monday.', rightShow: 'I’m following up on the quote we sent on Monday.',
-      judge(t) { const x = twNorm(t); if (!x) return 'idk'; if (/follow(ing)? up on/.test(x)) return 'ok'; if (/follow(ing)? up/.test(x)) return 'typo'; return 'wrong'; },
-      you: { ok: 'I’m following up on the quote we sent on Monday.', typo: 'I’m following up the quote we sent on Monday.', wrong: 'I’m asking about the quote we sent on Monday.', idk: '' },
+      judge(t) { const x = twNorm(t); if (!x) return 'idk'; if (/follow(ing)? up (on|with|about|regarding)\b/.test(x) || /follow(ing)? up (the|our|my|your)\b/.test(x)) return 'ok'; if (/follow(ing)?( up)?\b/.test(x)) return 'typo'; return 'wrong'; },
+      /* follow up + the … ohne on gilt als richtig, mit Hinweis auf die übliche Form. */
+      alsoIf: x => /follow(ing)? up (the|our|my|your)\b/.test(x),
+      alsoOk: L('Auch richtig. Im US-Business hörst du meist <em class="en">follow up on</em>.', 'Also correct. In US business you usually hear <em>follow up on</em>.'),
+      you: { ok: 'I’m following up on the quote we sent on Monday.', typo: 'I’m following up to the quote we sent on Monday.', wrong: 'I’m asking about the quote we sent on Monday.', idk: '' },
       whyl: {
         ok: L('<em class="en">follow up on</em> + Sache: höflich nachfassen. Dazu past simple, weil Montag ein vergangener Zeitpunkt ist.', '<em>follow up on</em> + thing: a polite nudge. Past simple, because Monday is a past time.'),
-        typo: L('Fast: Mit einer Sache danach heißt es <em class="en">follow up on</em> the quote.', 'Almost: with a thing after it, say <em>follow up on</em> the quote.'),
+        typo: L('Fast: Nach <em class="en">follow up</em> kommt <em class="en">on</em> + Sache: <em class="en">follow up on</em> the quote.', 'Almost: <em>follow up</em> takes <em>on</em> before a thing: <em>follow up on</em> the quote.'),
         wrong: L('Verständlich, aber das gesuchte Wort fehlt. Im Vertrieb sagt man <em class="en">I’m following up on …</em>', 'Clear, but the word you are practicing is missing. In sales, say <em>I’m following up on …</em>'),
         idk: L('<em class="en">I’m following up on …</em> ist der übliche Einstieg, wenn du nachfasst.', '<em>I’m following up on …</em> is the usual opener when you follow up.')
       },
@@ -2705,7 +2708,7 @@ function TW_T() {
       instr: L('Was heißt das auf Deutsch?', 'What does this mean in German?'),
       prompt: 'sign off on', hint: L('Verb mit zwei Partikeln · im Einkauf', 'verb with two particles · in purchasing'),
       tip: L('Tipp: Die Chefin muss das Budget noch …', 'Hint: the boss still has to … the budget'),
-      right: 'freigeben', rightShow: 'freigeben, absegnen', alts: ['absegnen', 'genehmigen', 'abzeichnen', 'freigeben, absegnen'],
+      right: 'freigeben', rightShow: 'freigeben, absegnen', alts: ['absegnen', 'genehmigen', 'abzeichnen', 'freigeben, absegnen', 'abnicken', 'zustimmen'],
       you: { ok: 'freigeben', typo: 'freigebn', wrong: 'abmelden', idk: '' },
       whyl: {
         ok: L('<em class="en">sign off on</em> + Sache: offiziell freigeben, zum Beispiel ein Budget oder ein Angebot.', '<em>sign off on</em> + thing: officially approve, e.g. a budget or a quote.'),
@@ -2714,8 +2717,8 @@ function TW_T() {
         idk: L('<em class="en">sign off on</em> = freigeben, absegnen.', '<em>sign off on</em> = approve.')
       },
       why: dueWhy + ' ' + L('Jeder zweite Termin fragt die Bedeutung ab. Das zählt für „Erkennst du“, damit du das Wort auch beim Hören sicher verstehst.', 'Every other review asks for the meaning. That counts toward “you recognize”, so you understand the word when you hear it.'),
-      more: { meaning: L('etwas offiziell genehmigen, oft mit Unterschrift', 'officially approve something, often with a signature'), partners: 'sign off on a budget · sign off on a quote', trap: L('<em class="en">sign off</em> ohne <em class="en">on</em>: sich verabschieden, abmelden.', '<em>sign off</em> without <em>on</em>: say goodbye, log off.') },
-      next: 'h18-listen'
+      more: { meaning: L('etwas offiziell genehmigen, oft mit Unterschrift', 'officially approve something, often with a signature'), partners: 'sign off on a budget · sign off on a quote', trap: L('<em class="en">sign off</em> ohne Objekt heißt oft auch freigeben (<em class="en">Has finance signed off?</em>). Am Ende einer Mail oder Sendung heißt es: sich verabschieden.', '<em>sign off</em> with no object often means approve too (<em>Has finance signed off?</em>). At the end of an email or show, it means saying goodbye.') },
+      next: 'h18-return'
     },
     listen: {
       n: 5, lage: 'due', word: 'procurement', form: 'listen',
@@ -2723,7 +2726,7 @@ function TW_T() {
       instr: L('Hör dir das Wort an. Was heißt es?', 'Listen to the word. What does it mean?'),
       hint: L('ein Wort · eine Abteilung', 'one word · a department'),
       tip: L('Tipp: Laura Keller arbeitet dort.', 'Hint: Laura Keller works there.'),
-      right: 'einkauf', rightShow: 'Einkauf, Beschaffung', alts: ['beschaffung', 'der einkauf', 'die beschaffung', 'einkauf, beschaffung'],
+      right: 'einkauf', rightShow: 'Einkauf, Beschaffung', alts: ['beschaffung', 'der einkauf', 'die beschaffung', 'einkauf, beschaffung', 'einkaufsabteilung', 'beschaffungswesen'],
       you: { ok: 'Einkauf', typo: 'Einkuaf', wrong: 'Produktion', idk: '' },
       whyl: {
         ok: L('<em class="en">procurement</em> ist der Einkauf eines Unternehmens: Lieferanten finden, Preise verhandeln, bestellen.', '<em>procurement</em> is a company’s purchasing: finding suppliers, negotiating, ordering.'),
@@ -2742,20 +2745,22 @@ function TW_T() {
       prompt: L('„Wir haben den Preis schon um 5 Prozent gesenkt.“', '“Wir haben den Preis schon um 5 Prozent gesenkt.”'),
       hint: L('Tippe aufs Mikrofon und sprich den ganzen Satz.', 'Tap the mic and say the whole sentence.'),
       right: 'we\'ve already reduced the price by 5 percent.', rightShow: 'We’ve already reduced the price by 5 percent.',
-      judge(t) { const x = twNorm(t); if (!x) return 'idk'; if (/reduced the price by/.test(x)) return 'ok'; if (/reduce the price by/.test(x)) return 'typo'; return 'wrong'; },
+      judge(t) { const x = twNorm(t); if (!x) return 'idk'; if (/reduced (the |our )?prices? by/.test(x)) return 'ok'; if (/reduce (the |our )?prices? by/.test(x)) return 'typo'; return 'wrong'; },
+      /* Die Zeile zu by/of nur, wenn in der eigenen Eingabe wirklich of steht. */
+      whyFix(why, st, x) { if (st === 'wrong' && x != null && !/\bof\b/.test(x)) why.wrong = L('Gesucht ist <em class="en">reduce … by</em>: <em class="en">We’ve already reduced the price by 5 percent.</em>', 'The target is <em>reduce … by</em>: <em>We’ve already reduced the price by 5 percent.</em>'); },
       you: { ok: 'We’ve already reduced the price by 5 percent.', typo: 'We’ve already reduce the price by 5 percent.', wrong: 'We’ve already reduced the price of 5 percent.', idk: '' },
       whyl: {
         ok: L('Ergebnis ohne Zeitpunkt: present perfect mit <em class="en">already</em>. Um 5 Prozent heißt <em class="en">by</em> 5 percent.', 'A result with no time: present perfect with <em>already</em>. The amount takes <em>by</em>.'),
         typo: L('Fast: Nach <em class="en">have</em> kommt die dritte Form, <em class="en">reduced</em>.', 'Almost: after <em>have</em> comes the past participle, <em>reduced</em>.'),
-        wrong: L('Um 5 Prozent heißt <em class="en">by 5 percent</em>. <em class="en">of 5 percent</em> wäre ein Preis von 5 Prozent.', 'The change takes <em>by</em>. <em>of 5 percent</em> would be a price of 5 percent.'),
+        wrong: L('Beim Verb heißt es <em class="en">reduce by 5 percent</em>. <em class="en">of</em> gehört zum Nomen: <em class="en">a reduction of 5 percent</em>.', 'With the verb, use <em>by</em>: reduce by 5 percent. <em>of</em> goes with the noun: <em>a reduction of 5 percent</em>.'),
         idk: L('<em class="en">reduce the price by 5 percent</em>: um 5 Prozent senken.', 'reduce … by: lower by an amount.')
       },
       why: dueWhy + ' ' + L('reduce sitzt beim Tippen. Gesprochen zählt es erst, wenn das Diktat es unverändert und richtig erkennt.', 'You type reduce reliably. Spoken, it only counts if dictation picks it up unchanged and correct.'),
       more: { meaning: L('senken, verringern; mit <em class="en">by</em> für die Menge', 'lower, cut; with <em>by</em> for the amount'), ex: ['We’ve already reduced the lead time to eight weeks.', L('Wir haben die Lieferzeit schon auf acht Wochen verkürzt.', '<em>to</em> for the new value.')], partners: 'reduce the price by · reduce the lead time to' },
-      next: 'h18-return'
+      next: 'h20-normal'
     },
     'return': {
-      n: 7, plus: 1, lage: 'seen', word: 'budget approval', form: 'big',
+      n: 4, plus: 1, lage: 'seen', word: 'budget approval', form: 'big',
       bl: L('Wörter üben · kommt zurück', 'Practice words · coming back'),
       instr: L('Noch einmal: Wie heißt das auf Englisch?', 'Once more: what is this in English?'),
       prompt: L('die Budgetfreigabe', 'die Budgetfreigabe'), hint: L('im Einkauf · 2 Wörter', 'in purchasing · 2 words'),
@@ -2768,9 +2773,9 @@ function TW_T() {
         wrong: L('<em class="en">approval</em>, nicht <em class="en">release</em>. Morgen kommt das Wort wieder.', '<em>approval</em>, not <em>release</em>. It comes back tomorrow.'),
         idk: L('<em class="en">budget approval</em>. Morgen kommt das Wort wieder.', 'It comes back tomorrow.')
       },
-      why: L('Kommt zurück, weil es vorhin nicht ganz saß. Abschreiben direkt nach dem Fehler hilft nicht, deshalb liegen 5 Karten dazwischen.', 'Coming back because it wasn’t quite right earlier. Copying right after a mistake doesn’t help, so 5 cards sit in between.'),
+      why: L('Kommt zurück, weil es vorhin nicht ganz saß. Abschreiben direkt nach dem Fehler hilft nicht, deshalb liegen 3 Karten dazwischen.', 'Coming back because it wasn’t quite right earlier. Copying right after a mistake doesn’t help, so 3 cards sit in between.'),
       more: { meaning: L('Die Genehmigung, Geld aus einem Budget auszugeben.', 'Permission to spend money from a budget.'), partners: 'get · wait for · need budget approval' },
-      next: 'h20-normal', nextLabel: L('Weiter', 'Continue')
+      next: 'h18-listen', nextLabel: L('Weiter', 'Continue')
     },
     gap: {
       n: 3, total: 9, lage: 'early', word: 'lead time', form: 'sent',
@@ -2818,7 +2823,8 @@ function twLageLine(t, st) {
 function twBand(t, st) {
   const you = Object.assign({}, t.you, S.typed && S.ui.ownInput ? { [st]: esc(S.typed) } : {});
   const why = Object.assign({}, t.whyl);
-  if (st === 'ok' && S.ui.ownInput && t.alsoOk && t.alts.indexOf(twNorm(S.typed)) >= 0) why.ok = t.alsoOk;
+  if (st === 'ok' && S.ui.ownInput && t.alsoOk && (t.alsoIf ? t.alsoIf(twNorm(S.typed)) : t.alts.indexOf(twNorm(S.typed)) >= 0)) why.ok = t.alsoOk;
+  if (t.whyFix) t.whyFix(why, st, S.ui.ownInput && S.typed ? twNorm(S.typed) : null);
   const next = (st === 'wrong' || st === 'idk') && t.nextWrong ? t.nextWrong : t.next;
   return band(st, { you, right: t.rightShow, why }, { next, nextLabel: next.indexOf('h20') === 0 ? L('Zum Ergebnis', 'See result') : t.nextLabel })
     .replace('<div class="bandbtns">', twLageLine(t, st) + '<div class="bandbtns">');
@@ -2867,7 +2873,10 @@ function h18(v) {
   s += twOverlays({ why: t.why, checked, task: t });
   return s;
 }
-/* Kontrastkarte: Fehler bei einem schwierigen Wort → sofort eigene Aufgabe (VT 3.9). */
+/* Kontrastkarte: Widerspruch, ein S4/S5-Wort geht daneben → sofort eigene Aufgabe (VT 3.8, 3.9).
+   Hier: das feste Wort delivery (S5) stand dort, wo lead time gesucht war. */
+const TW_CTR_WHY = () => L('<em class="en">delivery</em> sitzt bei dir fest (S5). Eben stand es dort, wo <em class="en">lead time</em> gesucht war. Geht ein festes Wort so daneben, hilft ein direkter Vergleich mehr als eine Wiederholung.', '<em>delivery</em> is solid for you (S5). Just now it stood where <em>lead time</em> was wanted. When a solid word goes wrong like this, a direct comparison helps more than a repeat.');
+const TW_CTR_LAGE = () => L('Kontrast, weil das feste Wort <em class="en">delivery</em> danebenging. Die Auswahl ist Übung, keine Wirkung auf die Stufe.', 'Contrast because the solid word <em>delivery</em> went wrong. The choice is practice, no effect on the stage.');
 function twContrast() {
   const pick = S.ui.pick;
   const checked = !!pick;
@@ -2880,9 +2889,9 @@ function twContrast() {
     (checked ? '' : '<div class="stack s8">' + [['delivery', 1], ['lead time', 2]].map(c => '<button class="choice en" id="tw-c' + c[1] + '" data-act="pick" data-v="' + c[0] + '"><span class="n">' + c[1] + '</span>' + c[0] + '</button>').join('') + '</div>') + '</div></div>';
   if (checked) {
     const D = { you: { ok: 'lead time', wrong: 'delivery' }, right: 'lead time', why: { ok: L('Richtig. Es geht um die Dauer, also <em class="en">lead time</em>. Die Lieferung selbst kommt danach.', 'Correct. It is about duration, so <em>lead time</em>.'), wrong: L('Zehn Wochen sind eine Dauer. Die Dauer bis zur Lieferung heißt <em class="en">lead time</em>.', 'Ten weeks is a duration: <em>lead time</em>.') } };
-    s += band(st, D, { next: 'h20-all-early', nextLabel: L('Zum Ergebnis', 'See result') }).replace('<div class="bandbtns">', '<p class="tw-lage">' + ic('clock', 'xs') + '<span>' + L('Auswahl ist Rettung nach dem Fehler: Übung, keine Wirkung auf die Stufe.', 'A choice after a mistake is a rescue: practice, no effect on the stage.') + '</span></p><div class="bandbtns">');
+    s += band(st, D, { next: 'h20-all-early', nextLabel: L('Zum Ergebnis', 'See result') }).replace('<div class="bandbtns">', '<p class="tw-lage">' + ic('clock', 'xs') + '<span>' + TW_CTR_LAGE() + '</span></p><div class="bandbtns">');
   }
-  s += twOverlays({ why: L('Du hast <em class="en">delivery</em> geschrieben, obwohl <em class="en">lead time</em> gesucht war. Bei Wörtern, die sich so nah sind, hilft ein direkter Vergleich mehr als eine Wiederholung.', 'You wrote <em>delivery</em> where <em>lead time</em> was wanted. With words this close, a direct comparison helps more than a repeat.'), checked, task: t, finish: 'h20-all-early' });
+  s += twOverlays({ why: TW_CTR_WHY(), checked, task: t, finish: 'h20-all-early' });
   return s;
 }
 function twFieldType(text) {
@@ -2894,7 +2903,7 @@ function twFieldType(text) {
 }
 reg('h18', {
   code: 'H18', name: 'Trainer-Aufgabe', kind: 'phone', demo: true,
-  variants: [['free', 'frei ohne Satz'], ['partner', 'Wortpartner'], ['situation', 'Situation'], ['recognize', 'Erkennen'], ['listen', 'Hören'], ['speak', 'Sprechen'], ['return', 'Rückkehrer (+1)'], ['gap', 'Lücke, nicht fällig'], ['band-early', 'Band: nicht fällig'], ['contrast', 'Kontrastkarte'], ['word', 'Dieses Wort üben (5/5)']],
+  variants: [['free', 'frei ohne Satz'], ['partner', 'Wortpartner'], ['situation', 'Situation'], ['recognize', 'Erkennen'], ['return', 'Rückkehrer (+1)'], ['listen', 'Hören'], ['speak', 'Sprechen'], ['gap', 'Lücke, nicht fällig'], ['band-early', 'Band: nicht fällig'], ['contrast', 'Kontrastkarte'], ['word', 'Dieses Wort üben (5/5)']],
   render: h18,
   after(v) {
     if (v === 'contrast' || v === 'band-early' || S.ui.checked) return;
@@ -2982,7 +2991,7 @@ function twStartHero(v, c, idp) {
   if (v === 'brake') {
     return '<div class="tw-hero"><div class="lbl">' + L('Neue Wörter', 'New words') + '</div><div class="tw-big disp">' + L('Heute keine neuen.', 'No new words today.') + '</div>' +
       '<p class="p">' + L('Erst sitzen lassen, was neu ist.', 'Let what’s new settle first.') + '</p>' +
-      '<p class="p2">' + L('Im Gestern-Check saßen heute 4 von 7. Unter 70 % warten neue Wörter, bis die letzten frei kommen.', 'Today’s yesterday check: 4 of 7. Below 70 %, new words wait until the last ones come freely.') + '</p></div>' +
+      '<p class="p2">' + L('Im Gestern-Check saßen heute 4 von 7. Unter 70 % warten neue Wörter, bis die letzten frei kommen.', 'Yesterday check today: 4 of 7. Below 70%, new words wait until you can recall the last ones freely.') + '</p></div>' +
       '<div class="tw-hero tw-sub"><div class="lbl">' + L('Stattdessen', 'Instead') + '</div><div class="tw-mid disp">' + L('10 fällige Wörter', '10 due words') + '</div>' + twPreview(round.slice(0, 6).concat(['…'])) +
       '<button class="btn pri full" id="' + idp + 'tw-go" data-go="h18-free">' + L('Los: 10 fällige Wörter', 'Go: 10 due words') + '</button></div>';
   }
@@ -2998,7 +3007,7 @@ function twStartHero(v, c, idp) {
   if (v === 'new-words') {
     return '<div class="tw-hero"><div class="lbl">' + L('Vorschlag · Neue Wörter', 'Suggestion · new words') + '</div><div class="tw-big disp">' + L('1 neues + 9 fällige', '1 new + 9 due') + '</div>' +
       '<p class="p2">' + L('Heute kamen schon 4 neue in deinem Plan. 5 am Tag ist die Grenze, also ist noch 1 Platz frei.', 'Your plan already brought 4 new words today. The limit is 5 a day, so 1 spot is left.') + '</p>' +
-      '<div class="tw-newcard"><div><b class="en">upfront</b><span>' + L('offen, ehrlich (vorab)', 'open, honest (in advance)') + '</span></div><span class="tw-tag">' + L('aus dem Thema', 'from the topic') + '</span></div>' +
+      '<div class="tw-newcard"><div><b class="en">upfront</b><span>' + L('offen, ehrlich (be upfront about); auch: im Voraus (pay upfront)', 'open, honest (be upfront about); also: in advance (pay upfront)') + '</span></div><span class="tw-tag">' + L('aus dem Thema', 'from the topic') + '</span></div>' +
       '<p class="tw-note">' + ic('cal', 'xs') + '<span>' + L('Morgen kommt es im Gestern-Check (+1 Min.).', 'Tomorrow it comes up in the yesterday check (+1 min).') + '</span></p>' +
       '<button class="btn pri full" id="' + idp + 'tw-go" data-go="' + btn[1] + '">' + btn[0] + '</button></div>';
   }
@@ -3151,14 +3160,14 @@ const TW_ART = () => '<p class="sent en tw-art">' + words('Last spring, a packag
 function twReader(v) {
   const art = TW_ART().replace(v === 'phrase' ? '<span class="w sel" data-act="noop">warehouse</span>' : '@@', '<span class="w">warehouse</span>');
   return '<header class="phead gx"><div class="tw-hl"><button class="iconbtn" id="tw-back" data-go="h13-reader" aria-label="' + esc(L('Zurück', 'Back')) + '" style="margin-left:-10px;margin-right:0">' + ic('chevL') + '</button><h1 class="disp" style="font-size:22px">' + L('Lesen', 'Reading') + '</h1></div></header>' +
-    '<div class="scroll gx"><div class="lbl" style="padding-top:6px">' + L('Lieferketten unter Druck · Absatz 2', 'Supply chains under pressure · paragraph 2') + '</div>' + art + '</div>';
+    '<div class="scroll gx"><div class="lbl" style="padding-top:6px">' + L('Shorter supply chains, faster answers · Absatz 2', 'Shorter supply chains, faster answers · paragraph 2') + '</div>' + art + '</div>';
 }
 function twSenses(sel) {
-  const s = [[L('das Lager, die Lagerhalle', 'storage building'), L('passt zum Satz', 'fits the sentence')], [L('der Großmarkt (US)', 'wholesale store (US)'), '']];
+  const s = [[L('das Lager, die Lagerhalle', 'storage building'), L('passt zum Satz', 'fits the sentence')], [L('das Datenlager (data warehouse, IT)', 'data store (data warehouse, IT)'), '']];
   return '<div class="stack s8">' + s.map((x, i) => '<button class="choice' + (i === sel ? ' sel' : '') + '" id="tw-sense-' + i + '" data-act="sense" data-v="' + i + '"><span class="n">' + (i + 1) + '</span><span style="flex:1">' + x[0] + '</span>' + (x[1] ? '<span class="tw-tag">' + x[1] + '</span>' : '') + '</button>').join('') + '</div>';
 }
 function twChoose(full) {
-  const quota = full ? '<p class="tw-note">' + ic('info', 'xs') + '<span>' + L('Heute schon 5 neue. Weitere kommen als „erkennst du“ dazu, aktiv lernen geht ab morgen.', 'Already 5 new today. More come in as “you recognize”; active learning works from tomorrow.') + '</span></p>'
+  const quota = full ? '<p class="tw-note">' + ic('info', 'xs') + '<span>' + L('Heute schon 5 neue. Weitere kommen als „erkennst du“ dazu, aktiv lernen geht ab morgen.', 'Already 5 new today. More come in as “you recognize”; you can learn them actively from tomorrow.') + '</span></p>'
     : '<p class="tw-note">' + ic('cal', 'xs') + '<span>' + L('Kommt nach deiner Pflicht dran, heute noch 1 Platz frei.', 'Comes after your daily plan; 1 spot left today.') + '</span></p>';
   const pick = S.ui.mode || (full ? 'rec' : 'act');
   return '<div class="stack s8"><div class="lbl">' + L('Wie willst du es lernen?', 'How do you want to learn it?') + '</div><div class="tw-modes">' +
@@ -3168,7 +3177,7 @@ function twChoose(full) {
 function twAddSheet(full) {
   return sheet('tw-add-sheet', L('In deine Wörter', 'Add to your words'),
     '<div class="stack s16"><div class="stack s6"><div class="lbl">' + L('Wort', 'Word') + '</div><div class="field tw-in en">backlog</div></div>' +
-    '<div class="stack s6"><div class="lbl">' + L('Bedeutung', 'Meaning') + '</div><div class="field tw-in">' + L('der Rückstand, unerledigte Aufträge', 'backlog of open orders') + '</div></div>' +
+    '<div class="stack s6"><div class="lbl">' + L('Bedeutung', 'Meaning') + '</div><div class="field tw-in">' + L('der Rückstand, unerledigte Aufträge', 'unfinished work or orders') + '</div></div>' +
     '<div class="stack s6"><div class="lbl">' + L('Satz', 'Sentence') + ' <span class="tw-tag">' + ic('claude', 'xs') + L('Vorschlag von Claude', 'suggested by Claude') + '</span></div><div class="field tw-in en" style="min-height:0">We’re still working through a backlog of open orders.</div>' +
     '<p class="p2" style="font-size:13px">' + L('Ohne Satz keine Karte. Ändere ihn ruhig, oder nimm einen eigenen.', 'No sentence, no card. Feel free to change it or use your own.') + '</p></div>' +
     twChoose(full) + '</div>',
@@ -3212,8 +3221,10 @@ reg('h21', {
 
 /* ---------- H22 Tempo ---------- */
 const TW_TEMPO = () => [
-  ['die Frist', 'deadline', 'deadline'], ['Einkauf, Beschaffung', 'procurement', 'procurement'], ['freigeben, absegnen', 'sign off on', 'sign off'], ['senken, verringern', 'reduce', 'reduce'],
-  ['das Preisangebot (schriftlich)', 'quote', 'quote'], ['nachfassen', 'follow up', 'follow up'], ['der Lieferant', 'supplier', 'suplier'], ['pünktlich liefern', 'deliver on time', 'deliver in time']
+  ['die Frist', 'deadline', 'deadline'], ['Einkauf, Beschaffung', 'procurement', 'procurement'], ['freigeben, absegnen', 'sign off on', 'sign off on'], ['senken, verringern', 'reduce', 'reduce'],
+  ['die Rechnung', 'invoice', 'invoice'], ['die Lieferung', 'delivery', 'delivery'],
+  ['der Vertrag', 'contract', 'contact', L('<em class="en">contract</em> mit r: der Vertrag. <em class="en">contact</em> ist der Kontakt.', '<em>contract</em> has an r: the agreement. <em>contact</em> is a person you are in touch with.')],
+  ['der Preis', 'price', 'prize', L('<em class="en">price</em> mit c: was etwas kostet. <em class="en">prize</em> ist ein Gewinn, etwa bei einem Wettbewerb.', '<em>price</em> with a c: what something costs. <em>prize</em> is something you win.')]
 ];
 reg('h22', {
   code: 'H22', name: 'Tempo', kind: 'phone',
@@ -3233,7 +3244,7 @@ reg('h22', {
       '<div class="card tw-tlist" style="padding:2px 16px">' + list.map((x, i) => {
         const bad = x[1] !== x[2];
         return '<div class="tw-ti' + (bad ? ' bad' : '') + '"><div class="tw-tr"><span class="ck' + (bad ? '' : ' y') + '"' + (bad ? ' style="color:var(--bad);box-shadow:0 0 0 1.5px var(--bad) inset"' : '') + '>' + ic(bad ? 'cross' : 'check', 'xs') + '</span><span class="tw-tq">' + L(x[0], x[0]) + '</span><b class="en">' + x[1] + '</b></div>' +
-          (bad ? '<div class="tw-tx"><div class="cmp en"><span class="you">' + L('Du:', 'You:') + '</span> <s>' + x[2] + '</s> <span class="you">→</span> <b>' + x[1] + '</b></div><p class="p2">' + (x[1] === 'supplier' ? L('Doppeltes p: <em class="en">supplier</em>, von <em class="en">supply</em>.', 'Double p: <em>supplier</em>, from <em>supply</em>.') : L('<em class="en">on time</em> = pünktlich. <em class="en">in time</em> = rechtzeitig, noch bevor es zu spät ist.', '<em>on time</em> = punctual. <em>in time</em> = early enough.')) + '</p></div>' : '') + '</div>';
+          (bad ? '<div class="tw-tx"><div class="cmp en"><span class="you">' + L('Du:', 'You:') + '</span> <s>' + x[2] + '</s> <span class="you">→</span> <b>' + x[1] + '</b></div><p class="p2">' + x[3] + '</p></div>' : '') + '</div>';
       }).join('') + '<div class="tw-ti"><div class="tw-tr" style="color:var(--fg-3)">' + L('+ 4 weitere richtig', '+ 4 more correct') + '</div></div></div>' +
       '<p class="p2">' + L('Fehler bringen das Wort morgen zurück. Langsame Antworten zählen nicht als Fehler.', 'Mistakes bring the word back tomorrow. Slow answers don’t count as mistakes.') + '</p></div></div>' +
       exFoot(btnPri('tw-done', L('Fertig', 'Done'), 'h12-list'));
@@ -5008,7 +5019,7 @@ function twDHelp() {
 /* ---------- L11 Trainer-Start ---------- */
 function l11Preview(v) {
   const list = v === 'new-words'
-    ? [['upfront', L('offen, ehrlich (vorab)', 'open, honest'), L('neu', 'new')]].concat(TW_ROUND().slice(0, 9).map(w => [w[0], w[1], w[2]]))
+    ? [['upfront', L('offen, ehrlich (be upfront about); auch: im Voraus (pay upfront)', 'open, honest (be upfront about); also: in advance (pay upfront)'), L('neu', 'new')]].concat(TW_ROUND().slice(0, 9).map(w => [w[0], w[1], w[2]]))
     : TW_ROUND().map(w => [w[0], w[1], w[2]]);
   return '<div class="card tw-prev" style="padding:.3em 1em">' + list.map((w, i) => '<div class="tw-pv"><span class="num tw-pn">' + (i + 1) + '</span><b class="en">' + w[0] + '</b><span class="tw-pm">' + w[1] + '</span><span class="stagepill' + (w[2] === 'S5' ? ' s5' : '') + '">' + w[2] + '</span></div>').join('') + '</div>';
 }
@@ -5102,7 +5113,7 @@ function l12Contrast() {
     '<div class="stack s16" style="padding:2.2em 0 1.5em"><div class="card tw-ctr"><div class="contrast en"><span class="k">A</span><span><b>delivery</b> <span class="tw-de">' + L('die Lieferung selbst', 'the delivery itself') + '</span></span><span class="k">B</span><span><b>lead time</b> <span class="tw-de">' + L('die Dauer bis zur Lieferung', 'the time until delivery') + '</span></span></div></div>' +
     '<div class="sent en">' + words('Our standard') + ' ' + gapHtml(checked ? pick : '', { st: checked ? TW_GAPST[st] : '' }) + ' ' + words('is ten weeks.') + '</div>' +
     (checked ? '' : '<div class="stack s8" style="max-width:24em">' + [['delivery', 1], ['lead time', 2]].map(c => '<button class="choice en" id="d-c' + c[1] + '" data-act="pick" data-v="' + c[0] + '"><span class="n">' + c[1] + '</span>' + c[0] + '</button>').join('') + '</div>') + '</div>';
-  if (checked) s += '<div class="dverdict ' + stCls(st) + '" role="status">' + verdictRow(st) + cmpLine(st, pick, 'lead time') + '<p class="whyl" style="margin:.2em 0 0">' + (st === 'ok' ? L('Es geht um die Dauer, also <em class="en">lead time</em>.', 'It is about duration, so <em>lead time</em>.') : L('Zehn Wochen sind eine Dauer: <em class="en">lead time</em>.', 'Ten weeks is a duration: <em>lead time</em>.')) + '</p><p class="tw-lage">' + ic('clock', 'xs') + '<span>' + L('Auswahl nach dem Fehler ist Rettung: Übung, keine Wirkung auf die Stufe.', 'A choice after a mistake is a rescue: practice, no effect on the stage.') + '</span></p></div>';
+  if (checked) s += '<div class="dverdict ' + stCls(st) + '" role="status">' + verdictRow(st) + cmpLine(st, pick, 'lead time') + '<p class="whyl" style="margin:.2em 0 0">' + (st === 'ok' ? L('Es geht um die Dauer, also <em class="en">lead time</em>.', 'It is about duration, so <em>lead time</em>.') : L('Zehn Wochen sind eine Dauer: <em class="en">lead time</em>.', 'Ten weeks is a duration: <em>lead time</em>.')) + '</p><p class="tw-lage">' + ic('clock', 'xs') + '<span>' + TW_CTR_LAGE() + '</span></p></div>';
   s += '</div>' + dKeys(checked ? '<button class="btn pri" id="d-next" data-go="l14">' + L('Zum Ergebnis', 'See result') + kb('⏎') + '</button>' : '<span class="p2" style="font-size:.9em">' + L('Taste 1 oder 2', 'Press 1 or 2') + '</span>');
   return s;
 }
@@ -5111,7 +5122,9 @@ function l12Ctx(v) {
   const checked = v === 'checked' || v === 'checked-early' || !!S.ui.checked || (v === 'contrast' && !!S.ui.pick);
   const st = checked ? (v === 'contrast' ? (S.ui.pick === 'lead time' ? 'ok' : 'wrong') : twSt(t)) : null;
   const m = t.more || {};
-  const lage = t.lage === 'early' || v === 'contrast'
+  const lage = v === 'contrast'
+    ? L('<b>Kontrast nach Widerspruch.</b> Das feste Wort <em class="en">delivery</em> (S5) ging daneben. Die Auswahl ist Übung, keine Wirkung auf die Stufe.', '<b>Contrast after a contradiction.</b> The solid word <em>delivery</em> (S5) went wrong. The choice is practice, no effect on the stage.')
+    : t.lage === 'early'
     ? L('<b>Noch nicht fällig.</b> Schwierig-Runde: Übung, der nächste Termin wird ab jetzt gerechnet. Falsch zählt trotzdem.', '<b>Not due yet.</b> Hard-words round: practice, the next review is counted from now. Wrong still counts.')
     : L('<b>Fällig.</b> Zählt für deinen Plan, Erkennen zählt für „Erkennst du“.', '<b>Due.</b> Counts for your plan; recognition counts toward “you recognize”.');
   /* Merke und Mehr wiederholen die Warum-Zeile der Bühne nicht: Merke = Falle oder Wortpartner, Mehr = Bedeutung und Beispiel. */
@@ -5122,7 +5135,7 @@ function l12Ctx(v) {
   const mehr = checked
     ? '<div class="stack s6"><p class="p2" style="margin:0">' + m.meaning + '</p>' + (m.ex ? '<p class="p2 en" style="margin:0;color:var(--fg)">' + m.ex[0] + '</p>' : '') + (m.trap && m.partners ? '<p class="p2 en" style="margin:0">' + m.partners + '</p>' : '') + '</div>'
     : '<p class="p2" style="margin:0;color:var(--fg-3)">' + L('Bedeutung, Beispiel und Wortpartner nach dem Prüfen.', 'Meaning, example and collocations after you check.') + '</p>';
-  return ctxBlock(L('Warum', 'Why'), '<p class="p2" style="margin:0">' + t.why + '</p>') +
+  return ctxBlock(L('Warum', 'Why'), '<p class="p2" style="margin:0">' + (v === 'contrast' ? TW_CTR_WHY() : t.why) + '</p>') +
     ctxBlock(L('Merke', 'Remember'), merke) +
     ctxBlock(L('Mehr', 'More'), mehr) +
     ctxBlock(L('Diese Runde', 'This round'), l12Round(v)) +
