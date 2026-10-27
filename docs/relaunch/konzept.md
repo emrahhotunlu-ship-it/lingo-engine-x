@@ -1,6 +1,6 @@
 # Relaunch-Konzept Lingo-Engine X
 
-**Stand:** 27.10.2026, Entwurf 1 (Leitung). **Status:** zur Prüfung durch Lena, James, Nora und Tarek (je Veto) und Kai (Bewertung je Facette), Ablauf nach `docs/relaunch/team.md`.
+**Stand:** 27.10.2026, Entwurf 1 mit Lehrplan von James (Leitung). **Status:** zur Prüfung durch Lena, James, Nora und Tarek (je Veto) und Kai (Bewertung je Facette), Ablauf nach `docs/relaunch/team.md`.
 
 **Grundlagen:** `docs/relaunch/recherche/` (Mara, Ilias, Nora, Lena, Tarek, Kai, James). Wo dieses Konzept einer Rolle folgt, steht das Kürzel in eckigen Klammern, z. B. [Lena 3.2], [Nora M1], [Kai 2b], [Tarek 3.5], [Ilias 5.4], [Mara M6], [James …].
 
@@ -74,7 +74,7 @@ Das **Tagesthema** stammt aus einem Wochen-Szenario (z. B. Woche „Preisgesprä
 - **1× pro Woche** gibt es einen längeren Hörtext (3–5 Min.) mit Vorhersage, zweimal hören und Abgleich, anstelle von Block 4 + 5.
 - **1× pro Woche** (freiwillig, empfohlen) eine **Mission** (Rollenspiel mit Auftrag, 6.3) zum Wochen-Szenario.
 - **Alle 4 Wochen:** Sprechprobe und Vorher-Nachher (9.4).
-- **Alle 6 Wochen:** Einstufung (9.3).
+- **Alle 4 Wochen:** Meilenstein-Test (9.3), verteilt auf 2 Tage, ersetzt in dieser Woche den Samstag.
 - Ein Ruhetag je Kalenderwoche bricht die Serie nicht (A7).
 
 ### 2.4 Ohne Mikrofon, ohne KI, nach einer Pause
@@ -169,6 +169,8 @@ Wendungen (Chunks) laufen durch dieselbe Leiter. In S1 gelten Bausteine als Hilf
 
 ## 4. Grammatik als Kurs
 
+> **Begriff (nach James 8.2):** Der Ablauf unten gilt **je Thema** (z. B. *indirekte Fragen*). Ein Kapitel bündelt 3–4 Kernthemen über 2 Wochen und ist abgeschlossen, wenn alle Kernthemen bestanden sind und die Kapitelaufgabe (Mail + Sprechen) erfüllt ist. Wo unten „Kapitel“ steht, ist für Ablauf, Test und Tempo das Thema gemeint.
+
 ### 4.1 Kapitel-Zustand [Lena 3.5]
 
 **offen → in Arbeit → abgeschlossen → gefestigt** (Rückfall: zurück auf „in Arbeit“). Der Zustand ist auf der Grammatik-Karte und im Fortschritt sichtbar, mit Prozent je Kapitel [Kai 3b].
@@ -213,17 +215,18 @@ Die heutigen 7 Kapitel (`content/grammar/path.json`) mit ihren Themen und 1.270 
 
 ### 5.2 Drei Hörstufen [Kai 4b, Ilias 5.8–5.9]
 
-- **Langsam** (0,8×), **normal** (1,0×), **natürlich** (1,1× und, wo das Gerät eine zweite Stimme hat, ein anderer Akzent, z. B. britisch).
+- **Langsam** (0,85×, etwa 130 Wörter/Min.), **normal** (1,0×, etwa 155), **schnell** (1,1×, etwa 170, Ziel ab Woche 9) [James 4.4]. US-Englisch ist Standard, einmal pro Woche britisch, ab Woche 9 auch andere Akzente, wo das Gerät die Stimme hat.
 - Start bei normal. Die Stufe passt sich an: Diktat zweimal hintereinander ≥ 90 % → nächste Stufe; zweimal unter 60 % → eine Stufe langsamer. Jeder Hörblock **endet bei normalem Tempo oder schneller** [Lena Veto 22].
 - Stimmen kommen vom Gerät (`speechSynthesis`, Tarek 4.2). Welche Stimmen es gibt, zeigt die Mikrofon-Probe. Gibt es nur eine englische Stimme, entfällt der Akzentwechsel, Tempo bleibt; die App sagt das in den Einstellungen offen.
 
 ### 5.3 Eigene Hörzahl
 
-Im Fortschritt hat Hören eine **eigene Zahl**: Diktat-Genauigkeit bei normalem Tempo (gleitend über 14 Tage) und die aktuelle Hörstufe, dazu alle 6 Wochen der Hörtest C5 [Kai 4b].
+Im Fortschritt hat Hören eine **eigene Zahl**: Diktat-Genauigkeit bei normalem Tempo (gleitend über 14 Tage) und die aktuelle Hörstufe, dazu der Hörteil jedes Meilensteins [Kai 4b].
 
 ### 5.4 Woher die Hörtexte kommen
 
-- **Ohne KI und ohne Netz:** ein geprüfter Bestand an Hörtexten je Wochen-Szenario (James schreibt den Rahmen, Claude die Texte in Chargen, `english-teacher` gegenliest). Ziel für den Start: mindestens 5 Texte je Szenario für die ersten 12 Szenarien.
+- **Ohne KI und ohne Netz:** ein geprüfter Bestand an Hörtexten je Wochen-Szenario (James schreibt den Rahmen, Claude die Texte in Chargen, `english-teacher` gegenliest). Menge nach James: 6 kurze und 1 langer Text je Woche plus 12 Diktatsätze, also ~112 Texte und ~190 Sätze für 16 Wochen (8.6). Textarten: Voicemail, Kunde im Call, Meeting-Ausschnitt mit 2–3 Stimmen, Präsentation, Branchennews.
+- **Ehrliche Grenze:** Gerätestimmen verschleifen kaum und zögern nie. Echtes Hören mit Akzenten und Unterbrechungen bleibt Aufgabe der Preply-Stunden (8.5).
 - **Mit KI (Zusatz):** Eine Satz-Pumpe baut Hörsätze aus Emrahs fälligen Wörtern [Mara M11]; jeder KI-Satz läuft durch das Qualitätstor, bevor er gehört wird.
 - **Längerer Hörtext der Woche:** kann aus den Lese-Artikeln der Routine kommen (vorlesen lassen), weil die schon geprüft und thematisch sind.
 
@@ -297,25 +300,81 @@ Jede Aufgabe kann auf Antippen sagen, warum sie jetzt kommt („Gestern im Satz 
 
 ---
 
-## 8. Lehrplan und Inhalte (James)
+## 8. Lehrplan und Inhalte [James]
 
-> Dieser Abschnitt wird mit James' Bericht `docs/relaunch/recherche/james-lehrplan.md` gefüllt: Kapitel-Reihenfolge B2 → C1, Kernwortliste, Wochen-Szenarien, Mengen und Prüfregeln. Bis dahin gelten die Platzhalter unten.
+Quelle: `docs/relaunch/recherche/james-lehrplan.md`. Hier nur, was das Konzept festlegt.
 
-### 8.1 Wochen-Szenarien
-12 Startszenarien aus Emrahs Berufswelt (Vertrieb/Business), je Woche eins, je Tag ein Unterthema. Liefert das Tagesthema für alle sechs Blöcke.
+### 8.1 Grundurteil zum Bestand
+- **Erklärungen gut, Üben schwach:** 47 Musterdateien und 1.088 Prüfungsaufgaben (`c1x`) bleiben. Von 2.458 Grammatikaufgaben verlangen nur etwa 60 einen ganzen eigenen Satz. Deshalb übt Emrah heute fast nur Erkennen.
+- **Atlas nur zum Nachschlagen:** 60 % der Einträge liegen jenseits von Rang 9.000, Beispielsätze von Tatoeba. Lernstoff kommt aus Redemitteln, Wortpartnern und Business-Kern.
+- **Vor jedem Test-Link zu korrigieren:** `c1/toolkit.json` (c1-precision: „roughly üblicher als about“ ist falsch), `tasks-v2` `cm-par-k1` (Bedeutung verschoben), Umformungen mit nur 2 Wörtern (Cambridge verlangt 3–6), Wortstellung „in Munich tomorrow“ (B1), fehlende Kapitelprüfung für die alten Kapitel 4–7.
 
-### 8.2 Kapitel-Reihenfolge
-James legt fest, welche Kapitel in welcher Reihenfolge kommen und welche als „bestätigt“ per Diagnose übersprungen werden dürfen.
+### 8.2 Grammatik: 8 Kapitel, 27 Kernthemen, 16 Wochen
 
-### 8.3 Inhaltsmengen und Prüfweg
-- Satzbank: ≥ 5 geprüfte Sätze je aktivem Wort (8 bei Kernwörtern), Leck-Prüfung.
-- Grammatik: je Kapitel Diagnose, Problem-zuerst, Erklärung, Freie-Aufgaben, Itembank Test und Check.
-- Hören: ≥ 5 Texte je Szenario für die ersten 12 Szenarien.
-- Missionen: je Szenario eine Mission.
-- Einstufung: eigene Itembanks, nie Übungsmaterial.
-- **Prüfweg für jede Charge:** Qualitätstor → `english-teacher` → Stichprobe. **Ziel: unter 1 % sprachliche Fehler in 200 zufälligen Sätzen** [Kai 13a].
+**Begriffe:** Ein **Kapitel** umfasst 2 Wochen. Ein **Thema** ist die Lerneinheit mit eigenem Ablauf nach 4.2 (Diagnose bis verzögerter Check). Ein Kapitel ist abgeschlossen, wenn alle Kernthemen bestanden sind und die Kapitelaufgabe (Mail + Sprechen) erfüllt ist. Die Themen-Kennungen bleiben, nur die Zuordnung in `path.json` ändert sich. Reihenfolge nach Schaden im Kundengespräch, nicht nach Lehrbuch.
 
----
+| Kap. | Wochen | Titel | Kernthemen | Ergänzung (2. Durchgang) |
+|---|---|---|---|---|
+| 1 | 1–2 | Zeiten im Projektverlauf | past-simple-perfect, pres-perf-cont, prep-time, past-perfect | pres-simple-cont, stative-adv, used-to |
+| 2 | 3–4 | Fragen, Wortstellung, Artikel, Präpositionen (vorgezogen) | questions, word-order, articles, prepositions | countable, prep-noun, quant-neg |
+| 3 | 5–6 | Zukunft, Pläne, Präzision | future-forms, time-clauses, c1-precision | future-perf-cont, future-past |
+| 4 | 7–8 | Bedingen, Verhandeln, Diplomatie | conditionals, cond-alt, c1-diplomacy | mixed-cond |
+| 5 | 9–10 | Modalität und Hedging | modals-deduction, modals-advice, c1-hedging | modals-prob |
+| 6 | 11–12 | Verbmuster, Relativsätze, Verbindungen | gerund-inf, relative, linkers | verb-patterns, phrasal-syntax |
+| 7 | 13–14 | Passiv, Berichten, Nominalstil | passive, report-verbs, c1-nominal | passive-plus, reported, mandative |
+| 8 | 15–16 | Satzbau für Wirkung | c1-emphasis, inversion, c1-participle, c1-discourse | emph-plus, ellipsis, noun-phrase, compound-mod, comparison |
+
+Was die Einstufung als beherrscht zeigt, gilt als „abgeschlossen (Einstufung)“ und bekommt nur den verzögerten Check. Realistisch bis C1: **12–15 Monate**.
+
+**Aufgabenleiter je Thema (E1–E9):** Erkennen → Unterscheiden → Ergänzen → Umformen (3–6 Wörter) → Korrigieren → Bauen → **Sag es richtig** (deutsche Absicht → eigener Satz) → **Schreiben** (60–150 Wörter) → **Sprechen** (Diktiertaste). E1 dient der Diagnose, E2 „Problem zuerst“, E3–E6 dem gelenkten Teil, E7–E9 dem freien Teil. Der Themen-Test (15 ungesehene Aufgaben, ≥ 5 aus E7–E9, ≥ 5 mit Zeit, ≥ 80 %) hat einen **getrennten Pool** für den Wiederholungstest.
+
+### 8.3 Wörter: was und wie viel
+- **Rangfolge:** Redemittel und Wortpartner vor Einzelwörtern (*raise a concern, iron out the details, I take your point, but …*). Gruppen: Redemittel Meeting/Verhandlung/Einwand/E-Mail, Zeit gewinnen, Wortpartner, Phrasal Verbs, Business-Kern (Vertrieb/SaaS), C1-Diskurs, rezeptiv Fachwörter. Klischee-Idiome und Buzzwords nur rezeptiv.
+- **Menge:** je Woche **20 aktiv** (6 Redemittel, 5 Wortpartner, 3 Phrasal Verbs, 4 C1-Diskurs, 2 Business-Kern) und **40 rezeptiv**; je Lerntag 3–4 neu aktiv. Nach 16 Wochen 320 aktiv / 640 rezeptiv, bis C1 etwa 1.200 / 3.000. Das liegt in Lenas Rahmen (2–5 neu je Tag) und ihre Bremse gilt weiter.
+- **Jede aktive Karte hängt an Woche, Kapitel, Szene und Zielgrammatik.** Ihre Sätze nutzen die Grammatik dieser Woche, in der Mission derselben Woche ist sie ein Punkt der Abhakliste.
+- **Die gute Wortkarte, 10 Pflichtfelder:** Form und Ton, Bedeutung, Wortart, Register, Wortpartner, 3 Sätze in 3 verschiedenen Lagen, typischer Fehler Deutscher, Auslöser aus der deutschen Absicht, Szene/Woche, Zielgrammatik (Beispiele *push back on*, *procurement* in James 3.4). Heute hat jede Karte nur einen Satz.
+- **Vorrat:** etwa 650 Kandidaten aus `pack`, `col`, `nb/extras`, `units`; rund 25 Kernwörter fehlen (*procurement, renewal, churn, concede, albeit, whereby* …).
+
+### 8.4 Wochen-Szenarien (16, entlang des Verkaufsablaufs)
+
+| Wo. | Szene | Kapitel | Wo. | Szene | Kapitel |
+|---|---|---|---|---|---|
+| 1 | Small Talk Messe | 1 | 9 | Einwand Risiko/Regulierung (ViDA) | 5 |
+| 2 | Projektstatus intern | 1 | 10 | Forecast intern | 5 |
+| 3 | Bedarf erfragen | 2 | 11 | Abschluss/Verlängerung/Upsell | 6 |
+| 4 | Fachklärung IT/DSGVO | 2 | 12 | Partner/Reseller | 6 |
+| 5 | Präsentieren/Demo | 3 | 13 | Eskalation/Beschwerde | 7 |
+| 6 | Wert/ROI | 3 | 14 | Nachbericht/Protokoll | 7 |
+| 7 | Einwand Preis | 4 | 15 | Vorstand/Storytelling | 8 |
+| 8 | Verhandeln Rabatt gegen Laufzeit | 4 | 16 | Meinung/Branchennews | 8 |
+
+Jede Szene hat Redemittel, Zielgrammatik und eine **Mission mit Abhakliste** (6.3). Die bestehenden Inhalte (16 Themen, 16 Szenen in `nb`, 25 Einwände) sind die Grundlage. „Unterwegs“ und „Alltag regeln“ bleiben freiwillig.
+
+**Takt der Woche:** Mo neues Thema (Diagnose, Problem zuerst, Erklärung) · Di–Do gelenkt → frei, Hörtext, Mission vorbereiten · Fr Themen-Test, wenn reif, und Mission · Sa gemischte Wiederholung, volles 4/3/2, langer Hörtext · So Ruhetag oder freiwillig. Der Test kommt, wenn das Thema reif ist, nicht nach Kalender. Fällt er zweimal durch, kommt die zweite Erklärung und das nächste Thema wartet; **die Szene läuft weiter**, damit das Wochenthema nicht reißt.
+
+Ein ausgearbeiteter Beispieltag (Woche 3, Mittwoch) steht in James 5.2.
+
+### 8.5 Brücke zu Preply
+Jede Woche erzeugt die App einen Zettel für die Preply-Stunde: Wochenthema, 5 Redemittel, Zielgrammatik, die 3 häufigsten eigenen Fehler, eine Rollenspielvorlage für den Lehrer auf Englisch. Der Lehrer bewertet dieselben Kann-Beschreibungen (9.3) und ist der **menschliche Maßstab für Aussprache und echtes Hören**, die die App nicht leisten kann.
+
+### 8.6 Inhaltsmengen für den ersten Durchgang
+
+| Inhalt | Neu zu schreiben |
+|---|---:|
+| E7 „Sag es richtig“ (freie Sätze) | ~350 |
+| Prüfungsformate für Themen ohne `c1x` | ~240 |
+| Kapitelprüfungen Kap. 2, 5, 6, 7 | 80 |
+| Wiederholungstest-Pool (Rest nach Bestand) | ~150 |
+| Mail- und Sprechlagen | ~65 |
+| zweite Erklärung mit Deutsch-Kontrast | ~15 |
+| Beispielsätze für Wortkarten (+3 je Karte) | ~960 |
+| fehlende Kernwörter | ~25 |
+| Hörtexte (6 kurze + 1 langer je Woche) | ~112 |
+| Diktatsätze (12 je Woche) | ~190 |
+| Missionen | 16 (aus Bestand ausbauen) |
+| Ankeraufgaben und Meilenstein-Itembanks | 4 Meilensteine + Einstufung |
+
+**Prüfweg jeder Charge:** Qualitätstor → Leck-Prüfung (Sätze) → `english-teacher` mit Protokoll geprüft/geändert/gestrichen → Stichprobe. **Ziel: unter 1 % sprachliche Fehler in 200 zufälligen Sätzen** [Kai 13a]. Die Inhalte entstehen in Chargen entlang der Wochen: Für einen Test-Link reichen die Wochen, die er zeigt; Woche 1–4 vollständig vor Stufe 4.
 
 ## 9. Roter Faden zu C1 und ehrlicher Fortschritt
 
@@ -332,13 +391,17 @@ Jede Zahl auf jedem Bildschirm kommt aus `domain/metrics` [Tarek Leitplanke 7]. 
 - **C1-Schätzung mit Datum und Band:** „C1 voraussichtlich zwischen März und Juni 2027“, abgeleitet aus Belegen (Ebene A–C) mit Belastbarkeit, nie aus Kursfortschritt [Lena Veto 26, Mara M14]. Bei dünner Datenlage steht „noch zu wenig Belege“.
 - **Nicht gezeigt:** XP, gesehene Wörter, Minuten als Leistung, Lektionen als Niveau [Lena 3.9].
 
-### 9.3 Einstufung alle 6 Wochen [Lena 3.9 C, Kai 8b]
+### 9.3 Einstufung und Meilensteine [James 6, Lena 3.9 C, Kai 8b]
 
-Freiwillig, empfohlen, je ≤ 10 Min.: Wortschatz rezeptiv (Bedeutung nennen je Häufigkeitsband), Wortschatz produktiv (Lücke mit Anfangsbuchstabe je Band), Grammatik (20 Aufgaben, ungetaktet und getaktet getrennt), Hören (Diktat + Fragen zu 2 Min. Audio), Sprechprobe (alle 4 Wochen). Ergebnisse immer mit Band, als Verlaufskurve. Testmaterial ist nie Übungsmaterial.
+- **Einstufung vor dem Start** (Woche 0, zwei Sitzungen à ~25 Min.): Use of English adaptiv (30), Wortschatz rezeptiv nach Häufigkeitsband (40), produktiv mit Anfangsbuchstabe (18), eine Mail nach Cambridge-Skala, Sprechen per Diktat (3 Fragen + 1 Min. Long Turn), Hören (2 Texte + 6 Sätze nachsprechen). Ergebnis: Ausgangswerte und welche Kernthemen übersprungen werden.
+- **Meilenstein alle 4 Wochen** (Woche 4, 8, 12, 16, je ~35 Min. auf 2 Tage): Use of English Teil 1–4 (Umformung mit 3–6 Wörtern), Schreiben (Mail → Bericht → Vorschlag → Meinungsessay), Sprechen per Diktat (Rückmeldung in Worten), Hören. 70 % aus den letzten 4 Wochen, 30 % früher. **Dieselben 4 Ankeraufgaben** in jedem Meilenstein, Parallelform beim Schreiben. Woche 16 wiederholt die Einstufung.
+- **Darstellung:** Punkte je Teil plus Stufe in Worten („B2 sicher / C1-Grenze / C1“), als Verlaufskurve mit Band, beschriftet „Trend, nicht geeicht“. Testmaterial ist nie Übungsmaterial.
+- **12 Kann-Beschreibungen** (James 6.3, z. B. „Ich kann einen Preis-Einwand würdigen → nachfragen → antworten → absichern“) gelten erst mit **Beleg** (bestandener Test, Missionsprotokoll, bewertete Mail). Sie sind die Niveau-Aussage in Worten (Kap. 2.3); die C1-Schätzung in 9.2 stützt sich auf sie und auf die Meilensteine.
+- *Abstimmung:* Kai verlangt 4–6 Wochen, Lena schlug 6–8 vor, James 4. Das Konzept nimmt 4 Wochen, weil Vorher-Nachher ohnehin alle 4 Wochen läuft und beides an einem Termin weniger Last ist. *(Prüfpunkt für Lena.)*
 
 ### 9.4 Vorher-Nachher alle 4 Wochen
 
-Dieselbe Mini-Aufgabe wie vor 4 Wochen im direkten Vergleich: dieselbe Sprechaufgabe (Tempo, Korrektheit), 10 damals neue Wörter frei abrufen (damals 0/10 → heute x/10), ein Satz aus einem damals neuen Kapitel. Das ist die direkte Antwort auf „ich merke keinen Fortschritt“ [Lena 3.9].
+Teil des Meilensteins. Dieselbe Mini-Aufgabe wie vor 4 Wochen im direkten Vergleich: dieselbe Sprechaufgabe (Tempo, Korrektheit), 10 damals neue Wörter frei abrufen (damals 0/10 → heute x/10), ein Satz aus einem damals neuen Kapitel. Das ist die direkte Antwort auf „ich merke keinen Fortschritt“ [Lena 3.9].
 
 ### 9.5 Wochenbericht
 
