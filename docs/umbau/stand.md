@@ -501,3 +501,6 @@ Vier Opus-Prüfungen (Technik, Lernmethoden, Inhalt, UI/UX), Plan `masterplan-9-
 
 ## 27.10.2026 – Relaunch gestartet (nach Live v86)
 Emrah: weiterhin 5–6/10 in allen Facetten, will keinen Schnellschuss, sondern tiefe Recherche am Markt in allen Facetten mit einem Agenten-Team (Namen, Rollen, Befugnisse). Team und Ablauf: `docs/relaunch/team.md`. Runde 1 läuft: Mara (Lernmethodik-Markt), Ilias (Sprechen/Hören-Markt), Nora (Design). Ergebnisse nach `docs/relaunch/recherche/`. Masterplan 9,5 (E2–E7, U4–U7) ruht, bis das Relaunch-Konzept steht.
+
+## 27.10.2026 – Relaunch-Konzept Entwurf 2.1 fertig geprüft
+Konzept `docs/relaunch/konzept.md` (Entwurf 2.1): Prüfung, eine Überarbeitung, eine Nachprüfung (`docs/relaunch/pruefung/*-nach.md`). Alle Vetos (Lena, James, Tarek, Nora) aufgehoben, alle Ersatztexte übernommen (Abschnitt 0.2). Kai: Gesamt 8,8 (heute 4,9), freigegeben für Emrah; offen benannte Lücken: Hören und Sprechen 8 (kein Mikrofon), Optik 8 bis zum Blindtest. Nächster Schritt: Emrah entscheidet Abschnitt 19 (9 Fragen), danach Noras Vorschau (Stufe 0) als separates Test-Artefakt.

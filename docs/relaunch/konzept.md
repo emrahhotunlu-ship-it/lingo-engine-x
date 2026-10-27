@@ -1,6 +1,6 @@
 # Relaunch-Konzept Lingo-Engine X
 
-**Stand:** 27.10.2026, **Entwurf 2.1 nach Nachprüfung** (Leitung). Er enthält alle Vetos aus der Prüfung (Lena 7, James 6, Tarek 4, Nora 5), Kais Lücken je Facette und alle Ersatztexte der Nachprüfung (0.2). **Status:** alle Vetos aufgehoben; als Nächstes Kais Neubewertung, dann entscheidet Emrah (19). Ablauf nach `docs/relaunch/team.md`.
+**Stand:** 27.10.2026, **Entwurf 2.1 nach Nachprüfung** (Leitung). Er enthält alle Vetos aus der Prüfung (Lena 7, James 6, Tarek 4, Nora 5), Kais Lücken je Facette und alle Ersatztexte der Nachprüfung (0.2). **Status:** alle Vetos aufgehoben, Kai hat freigegeben (8,8, erwartet 9,0 mit seinen übernommenen Ersatztexten); jetzt entscheidet Emrah (19). Ablauf nach `docs/relaunch/team.md`.
 
 **Grundlagen:** `docs/relaunch/recherche/` (Mara, Ilias, Nora, Lena, Tarek, Kai, James, Mikrofon-Probe) und `docs/relaunch/pruefung/` (Lena, James, Tarek, Nora, Kai). Wo dieses Konzept einer Rolle folgt, steht das Kürzel in eckigen Klammern, z. B. [Lena V1] = Lenas Veto 1, [Kai F5] = Kais Lücke zu Facette 5, [Nora V3], [Tarek V2], [James V4].
 
@@ -72,6 +72,7 @@ Die gezielte Nachprüfung (`pruefung/*-nach.md`) ist abgeschlossen. **Alle Vetos
 5. **Termin und Wochenfrage nicht auf Heute:** Der Termin wird einmal pro Woche vor der ersten Sprechaufgabe abgefragt, die Wochenfrage ist eine Seite im Wochenabschluss (Nora).
 6. **Ring und Balken** haben so viele Abschnitte wie der Tag Blöcke; die Mission ist ein Abschnitt, kein eigener Eintrag (Nora).
 7. **Größen und Rückweg** für alle neuen Felder festgelegt (Tarek), Rückweg-Schalter je Messgröße (Lena).
+8. **Kais Neubewertung** (`pruefung/kai-nach.md`): Gesamt 8,8 (heute 4,9), **freigegeben für Emrah** unter der Auflage seiner fünf Ersatztexte, die übernommen sind [Kai-N N1–N5]: Hörblock passt in 4 Minuten (kürzerer Text, Wörter im Mitlesen), S4-Wörter nie in Block 5/6/Mission, klare Regel „Wer bestimmt was“ (Szene, Grammatik-Thema, Termin), Sprechteil am Laptop aufs Handy legbar plus Laptop-Diktat-Probe in Stufe 1, Polster der ehrlichen Wortzahl kommen in derselben Stufe wie die Zahl. Offen benannte Lücken: Hören und Sprechen 8 (Plattform-Grenze), Optik 8 bis zum Blindtest.
 
 Offen bleibt nur, was Emrah entscheidet (19). **Bedingung:** Lehnt Emrah den ehrlichen Neustart der Wortzahl (19 Nr. 6) ab, lebt Lenas Veto 1 wieder auf.
 
@@ -119,11 +120,13 @@ Das **Tagesthema** stammt aus dem Wochen-Szenario (8.4). **Neue Wörter, Hörtex
 | 1 | **Gestern-Check und Reparatur** | 3 | Alle Wörter von gestern frei abrufen, ohne Satz. Dann der wichtigste offene Fehler aus der Fehlerschleife: Prompt → Erklärung → 2 Varianten. Auch Grammatik-Fehlersätze, die nicht in Block 3 passen. | Vorbereiten |
 | 2 | **Wörter** | 7 | Fällige Abrufe nach niedrigster Abrufwahrscheinlichkeit, neue aktive Wörter des Themas eingestreut (Einführung, Abruf A, Abruf B). Formen nach Stufe (3.2). | Vorbereiten + Üben |
 | 3 | **Grammatik** | 5 | Der nächste Schritt des aktuellen Themas (4.2). Fehlersätze höchstens 30 % des Blocks, der Rest geht in Block 1 [Kai F3]. | Üben |
-| 4 | **Hören** | 4 | Mini-Diktat (2 Sätze, oft mit Zahlen, Preisen, Daten) → Hörtext 60–90 s zum Thema: Vorhersage → hören → Frage → mitlesen → ohne Text, letzte Runde eine Stufe schneller (5.1). | Üben |
-| 5 | **Sag/Schreib es** | 4 | Mini-Aufgabe zum Szenario (3–5 Sätze), in der **2 Wörter ab S3** (bevorzugt zum Thema, aus den letzten 3 Wochen) und die Struktur des aktuellen Themas nötig sind [Lena V3, James-N 1]. Gibt es keine passenden Wörter ab S3, nimmt die App Wörter ab S3 aus Emrahs Bestand oder verlangt nur die Struktur. Wörter der laufenden Woche sind ein Angebot, kein Beleg. 30 s Vorbereitung, dann **gesprochen per Diktiertaste** (6.1). Rückmeldung als Seitenfolge (12.1). | **Anwenden** |
+| 4 | **Hören** | 4 | Mini-Diktat (2 Sätze, oft mit Zahlen, Preisen, Daten) → Hörtext 45–60 s zum Thema: Vorhersage → hören → Frage → mitlesen ohne erneutes Abspielen (R-Termine hier) → ohne Text, letzte Runde eine Stufe schneller (5.1) [Kai-N N1]. | Üben |
+| 5 | **Sag/Schreib es** | 4 | Mini-Aufgabe zum Szenario (3–5 Sätze), in der **2 Wörter auf S3 oder S5** (bevorzugt zum Thema, aus den letzten 3 Wochen) und die Struktur des aktuellen Themas nötig sind [Lena V3, James-N 1, Kai-N N2]. Gibt es keine passenden, nimmt die App Wörter auf S3 oder S5 aus Emrahs Bestand oder verlangt nur die Struktur. Wörter der laufenden Woche sind ein Angebot, kein Beleg. 30 s Vorbereitung, dann **gesprochen per Diktiertaste** (6.1). Rückmeldung als Seitenfolge (12.1). | **Anwenden** |
 | 6 | **Flüssigkeit** | 5 | Rotation (6.2): Antizipation, Hot Seat, 4/3/2-Kurzform, Shadowing, Schnellabruf. **Diktiert und bewertet** als Standard [Kai F5]. Nur gesicherter Stoff. Endet mit einer Sammelkarte und einem Erfolgsmoment. | **Anwenden** |
 
-**Anwenden-Regel** [Kai F1]: Block 5 und 6 verlangen zusammen **mindestens 3 Wörter ab S3** (Thema oder fällig), **soweit vorhanden; sonst nur die Struktur** [Lena-N V3], und **1 Grammatikpunkt** des aktuellen Themas. Wörter unter S3 dürfen dort nicht verlangt werden; sie stehen höchstens als Wendungskarte zum Hören und Nachsprechen bereit, ihr Gebrauch ist kein Beleg [Lena V3].
+**Anwenden-Regel** [Kai F1]: Block 5 und 6 verlangen zusammen **mindestens 3 Wörter auf S3 oder S5** (Thema oder fällig; S4 ist im 21-Tage-Fenster gesperrt, 3.2) [Kai-N N2], **soweit vorhanden; sonst nur die Struktur** [Lena-N V3], und **1 Grammatikpunkt** des aktuellen Themas. Wörter unter S3 dürfen dort nicht verlangt werden; sie stehen höchstens als Wendungskarte zum Hören und Nachsprechen bereit, ihr Gebrauch ist kein Beleg [Lena V3].
+
+**Wer bestimmt was** [Kai-N N3]: Lage, Redemittel und Wörter kommen aus der **Szene** der Woche. Die **Zielstruktur** von Block 5, Wochen-Mail, Mission und Satzbank ist immer die des **aktuellen Grammatik-Themas** (4.1), nie die geplante Zielgrammatik der Szene; liegt die Grammatik hinter dem Plan, passt die App die Aufgabe an die Struktur an, nicht umgekehrt. **Mein nächster Termin** bestimmt nur Anlass und Gesprächspartner von Block 5 und Mission; Zielstruktur und Abhakliste bleiben. Passt der Termin gar nicht zur Szene, bietet die App ihn als freiwillige Mission unter Praxis → Sprechen an. **Meilensteine** ziehen 70 % aus Themen, die in den letzten 4 Wochen bestanden, bestätigt oder in Arbeit waren, 30 % aus früher bestandenen, nie aus einem Thema im Zustand „offen“; die 4 Ankeraufgaben bleiben gleich. Der Meilenstein-Pool liegt deshalb je Thema vor, nicht je Kalenderwoche (8.7).
 
 **Anteile am Normaltag:** Sprachfokus 15 Min. (54 %), Hören 4 (14 %), Output 4 (14 %), Flüssigkeit 5 (18 %). Über die Woche gleichen die Tagestypen (2.3) die Stränge aus.
 
@@ -131,7 +134,7 @@ Das **Tagesthema** stammt aus dem Wochen-Szenario (8.4). **Neue Wörter, Hörtex
 
 **Grundregel:** Jeder Lerntag hat 28 Minuten. Meilenstein-Tage dürfen bis 35 Minuten dauern und werden vorher angekündigt. **Jeder Lerntag enthält fünf Stränge:** Gestern-Check, Wörter, Grammatik (≥ 3 Min., davon ≥ 70 % aktuelles Thema), Hören (≥ 2 Min.), Sprechen/Flüssigkeit (≥ 2 Min., **diktiert und bewertet**).
 
-**Anteile je Woche** [Lena-N N3]: Flüssigkeit ≥ 15 % und Block 1–3 ≤ 60 % gelten **je Kalenderwoche** (der freie Teil des Themen-Tests zählt als Output). Je Lerntag gelten die fünf Stränge. **An Aufholtagen gilt die Regel je Tag** (2.4); dort entfällt der Themen-Test, er rückt auf den ersten normalen Lerntag.
+**Anteile je Woche** [Lena-N N3]: Flüssigkeit ≥ 15 % und Block 1–3 ≤ 60 % gelten **je Kalenderwoche** (der freie Teil des Themen-Tests zählt als Output). In Meilenstein-Wochen wird ohne die beiden Meilenstein-Tage gerechnet [Kai-N]. Je Lerntag gelten die fünf Stränge. **An Aufholtagen gilt die Regel je Tag** (2.4); dort entfällt der Themen-Test, er rückt auf den ersten normalen Lerntag.
 
 | Tagestyp | Wann | B1 | B2 | B3 | B4 | B5 | B6 | Min. |
 |---|---|---:|---:|---|---|---|---|---:|
@@ -164,7 +167,7 @@ Das **Tagesthema** stammt aus dem Wochen-Szenario (8.4). **Neue Wörter, Hörtex
 
 ### 2.5 Schreiben [James V5]
 
-- **Schreibtag (Donnerstag), Block 5 = Wochen-Mail:** 80–150 Wörter, getippt, Lage aus der Szene der Woche. Nötig sind **2 Wörter ab S3 aus den letzten 3 Wochen**, bevorzugt zur Szene [Lena V3, James-N 1], und die Zielstruktur. Wörter der laufenden Woche sind ein Angebot, kein Beleg (ein Montagswort erreicht S3 frühestens am Freitag). In der 2. Woche eines Kapitels ist die Wochen-Mail die **Kapitelaufgabe Schreiben**.
+- **Schreibtag (Donnerstag), Block 5 = Wochen-Mail:** 80–150 Wörter, getippt, Lage aus der Szene der Woche. Nötig sind **2 Wörter auf S3 oder S5 aus den letzten 3 Wochen**, bevorzugt zur Szene [Lena V3, James-N 1], und die Zielstruktur. Wörter der laufenden Woche sind ein Angebot, kein Beleg (ein Montagswort erreicht S3 frühestens am Freitag). In der 2. Woche eines Kapitels ist die Wochen-Mail die **Kapitelaufgabe Schreiben**.
 - **Rückmeldung** nach vier Kategorien: Inhalt/Wirkung · Register · Aufbau · Sprache. Eine Stärke mit Zitat, höchstens 3 Arbeitspunkte, eine umformulierte Fassung. Fehler gehen in die Fehlerschleife.
 - **Je Kapitel mindestens 2 E2-Aufgaben „Welche Fassung schickst du?“** (Register-Vergleich). Erklärungen nennen immer auch „wann nicht“.
 - Am Laptop ist der Schreibtag die Stärke des großen Bildschirms (13.3).
@@ -204,7 +207,7 @@ Das **Tagesthema** stammt aus dem Wochen-Szenario (8.4). **Neue Wörter, Hörtex
 - Je Lerntag 3–4 neue aktive Wörter aus dem Thema, **höchstens 5**. Wochendeckel 20 neue aktive (mit Nachholern höchstens 25).
 - **Bremsen setzen auf 2, nie auf 0:** Folgetag-Abruf der letzten 7 Tage unter 70 %, Korridor unter 70 %, Zeitbremse (Block 2 läuft über). Was liegen bleibt, rutscht in die nächsten Tage. **Nachholer nur, solange keine Bremse greift.** Kein Bericht spricht von einem nicht geschafften Paket [Lena-N P4].
 - Nie zwei verwechselbare Wörter am selben Tag (Feld „verwechselbar mit“).
-- Die 40 rezeptiven Wörter der Woche kommen **nicht** in Block 2. Sie stehen im Hör- und Lesetext; ihre R-Termine laufen in Block 4 (höchstens 1 Minute).
+- Die 40 rezeptiven Wörter der Woche kommen **nicht** in Block 2. Sie stehen im Hör- und Lesetext; ihre R-Termine laufen im Mitlesen von Block 4.
 
 **Zwischenstand und Können** [Lena V1]: Ab S3 erscheint ein Wort im Wochenbericht als **„frei an 2 Tagen“** (Zwischenstand). „Kannst du“, „bildest du selbst“ und „fest“ sagt die App erst ab **S5** (21-Tage-Regel). Die Hauptzahl „Bildest du selbst“ (9.2) zählt nur S5. S3 und S4 erscheinen als „auf dem Weg: x“ (9.2).
 
@@ -341,7 +344,7 @@ Die heutigen 7 Kapitel (`content/grammar/path.json`) mit ihren Themen und **1.27
 ### 5.1 Block 4 jeden Tag
 
 1. **Mini-Diktat (Entschlüsseln):** 2 Sätze aus dem Thema hören, tippen, Unterschiede Wort für Wort markiert. Bewertet. Oft mit Zahlen, Preisen und Daten [James Verb. 7].
-2. **Hörtext 60–90 s:** Business-Dialog oder Sprachnachricht zum Thema. Ablauf: Vorhersage → hören auf der aktuellen Stufe → Verständnisfrage (gilt nur fürs Hören, nie für „bildest du“) → mitlesen mit antippbaren Wörtern → **letzte Runde ohne Text eine Stufe schneller, mindestens 1,0×** [James Verb. 3, Kai F4].
+2. **Hörtext 45–60 s** [Kai-N N1]: Business-Dialog oder Sprachnachricht zum Thema. Ablauf: Vorhersage (ein Tipp) → hören auf der aktuellen Stufe → Verständnisfrage (gilt nur fürs Hören, nie für „bildest du“) → **mitlesen ohne erneutes Abspielen** (einzelne Sätze antippbar) → **letzte Runde ohne Text eine Stufe schneller, mindestens 1,0×** [James Verb. 3, Kai F4]. Die R-Termine der rezeptiven Wörter laufen **im Mitlesen** (Antippen = Termin), nicht als eigene Minute. Ein Unit-Test rechnet die Blockdauer aus Textlänge × Durchgängen + Diktat und hält ≤ 4 Min. ± 20 %. Längere Texte gibt es am Wochenabschluss (7 Min.).
 3. Die Rückmeldung zeigt, **welche** Wörter er beim Diktat nicht gehört hat. Diese Wörter bekommen einen R-Termin „per Ton“.
 4. **Zusammenfassen** 2× pro Woche: Nach dem Hörtext sagt Emrah in 2–3 Sätzen per Diktat, worum es ging (bewertet als Sprechen).
 
@@ -380,22 +383,23 @@ Die Probe vom 27.10.2026 zeigt: Die App bekommt kein Mikrofon (`getUserMedia` ge
 - **Diktat ist bewertet.** „Laut gesagt (ohne Wertung)“ ist ein Nebenknopf nur in Block 6 und in der Mission, als Ausweg (z. B. im Zug). Er ist kein Beleg, fällige Termine bleiben fällig. In Tests zählt E9 nur per Diktat [Lena P6].
 - **Block 5 ist an Normaltagen gesprochen**, am Schreibtag getippt [James V5].
 - **Laptop** [Kai F11, Nora-N 3.4]: Solange das Diktieren am Laptop in claude.ai nicht geprobt ist, gibt es dort keinen Knopf „Sprechen“. Das Feld ist direkt offen. Einmal je Sitzung steht über dem ersten Antwortfeld eine neutrale Zeile: „Am Laptop tippst du deine Antworten. Gesprochen wird am Handy.“ Das gilt für Block 5, Block 6 und die Mission. Der Hinweis „Mac: Diktier- oder Globus-Taste zweimal drücken · Windows: Win + H“ ersetzt diese Zeile erst nach einer erfolgreichen Probe; beide stehen nie gleichzeitig da. Getippte Antworten am Laptop zählen nicht für F1 (bewertetes **Sprechen**); sie zählen als Output wie Schreiben.
+- **Sprechteil aufs Handy legen** [Kai-N N4]: Erreicht Emrah am Laptop Block 5 an einem Normaltag, Block 6 oder die Mission, steht über dem Feld ein Nebenknopf „Am Handy sprechen“. Er wirkt wie „Pause, später weiter“: Heute am Handy führt mit „Weiter“ genau zu diesem Block (13.1). Die Wochen-Mail ist davon ausgenommen. Getippt am Laptop bleibt erlaubt; der Wochenbericht nennt Tage, an denen nur getippt wurde, ohne Vorwurf.
 - Die Liste der Plattform-Fähigkeiten wird bei jedem Vertrags-Upgrade neu auf ein Mikrofon geprüft [Kai F5].
 
 ### 6.2 Flüssigkeit (Block 6) [James Verb. 2, Kai F5]
 
-- **Antizipation** (Standard): Deutsche Situation lesen oder hören → sofort englisch sagen (diktiert) → Vorbild hören. 8–12 Wendungen ab S3. **Diktiert und bewertet.**
+- **Antizipation** (Standard): Deutsche Situation lesen oder hören → sofort englisch sagen (diktiert) → Vorbild hören. 8–12 Wendungen auf S3 oder S5. **Diktiert und bewertet.**
 - **Hot Seat** (2× pro Woche): eine unerwartete Kundenfrage, 5 s Bedenkzeit, dann diktiert antworten.
 - **4/3/2-Kurzform:** dieselbe Aufgabe wie gestern in Block 5, dreimal mit kürzer werdender Zeit (2 / 1,5 / 1 Min.). Wiederholt wird der **Inhalt**, nicht die Zielstruktur [Lena Verb.]. Fällt das Diktat aus, gibt es den Rückfall „laut mit Zeitmesser ohne Bewertung“.
 - **Shadowing** (1× pro Woche): kurzen Satz hören und gleich nachsprechen (diktiert, verglichen).
-- **Schnellabruf** unter sanftem Zeitdruck aus sicheren Wörtern.
+- **Schnellabruf** unter sanftem Zeitdruck aus Wörtern **auf S5** [Kai-N N2].
 - Am Ende eine **Sammelkarte** mit den Wendungen des Blocks [Lena Verb.].
 - Keine sichtbare Uhr; der ruhige Zeitbalken läuft als dünne Linie an der Unterkante des Feldes [Nora Verb. 4].
 
 ### 6.3 Missionen (Rollenspiele mit Auftrag) [Ilias 5.1–5.4, Kai F5, F12]
 
 **Einmal pro Woche Pflicht** am Missionstag (2.3), ~9 Minuten, diktiert. Weitere Missionen sind freiwillig.
-- **Vorbereiten:** Ziel und eine **Abhakliste mit der Zielstruktur und 3 Kernwörtern ab S3 aus den letzten Wochen** („Bedarf erfragen · Einwand Preis behandeln · nächsten Termin fixieren“) [Lena V3, James-N 1]. Die Kernwörter der laufenden Woche stehen als Wendungskarte zum Hören und Nachsprechen bereit; ihr Gebrauch ist kein Beleg. Sie kommen auf die Abhakliste der nächsten Mission, in der sie ab S3 sind.
+- **Vorbereiten:** Ziel und eine **Abhakliste mit der Zielstruktur und 3 Kernwörtern auf S3 oder S5 aus den letzten Wochen** („Bedarf erfragen · Einwand Preis behandeln · nächsten Termin fixieren“) [Lena V3, James-N 1]. Die Kernwörter der laufenden Woche stehen als Wendungskarte zum Hören und Nachsprechen bereit; ihr Gebrauch ist kein Beleg. Sie kommen auf die Abhakliste der nächsten Mission, in der sie auf S3 oder S5 sind.
 - **Mein nächster Termin** (2.1): Liegt einer vor, baut die Mission darauf auf.
 - **Üben:** Gespräch mit Persona aus dem Szenario, Antworten per Diktat. **Keine Zeit in den ersten 2 Zügen**, danach höchstens die dünne Zeitlinie [Kai 5b]. Im Gespräch keine Korrektur, höchstens eine unauffällige Umformulierung.
 - **Bericht als Seitenfolge** (12.1): Seite 1 Urteil, Abhakliste, Stärke mit Zitat, „2 Punkte üben“; eine Seite je Arbeitspunkt mit Prompt-Runde und „besser so“-Fassung zum Nachsprechen; letzte Seite mit Wendungen (ein Tipp in die Wörter) und „Nochmal, aber besser“.
@@ -486,7 +490,7 @@ Ein **Kapitel** umfasst etwa 2 Wochen (Planwert; ehrlich eher 2–3 Wochen, sieh
 
 - **Rangfolge:** Redemittel und Wortpartner vor Einzelwörtern (*raise a concern, iron out the details, I take your point, but …*). Gruppen: Redemittel Meeting/Verhandlung/Einwand/E-Mail, Zeit gewinnen, Wortpartner, Phrasal Verbs, Business-Kern (Vertrieb/SaaS), C1-Diskurs, rezeptiv Fachwörter. Klischee-Idiome und Buzzwords nur rezeptiv.
 - **Menge:** je Woche **20 aktiv** (6 Redemittel, 5 Wortpartner, 3 Phrasal Verbs, 4 C1-Diskurs, 2 Business-Kern) und **40 rezeptiv**; je Lerntag 3–4 neu aktiv, höchstens 5, Wochendeckel 20 (mit Nachholern 25). Nach 16 Wochen 320 aktiv / 640 rezeptiv, bis C1 etwa 1.200 / 3.000.
-- **Kernwörter:** je Woche 5 (2 Business-Kern + 3 Redemittel der Szene), nach 16 Wochen 80. Sie kommen auf die Abhakliste der nächsten Mission, in der sie ab S3 sind (spätestens 3 Wochen später); in ihrer eigenen Woche stehen sie als Wendungskarte bereit [Lena-N V3, James-N 1].
+- **Kernwörter:** je Woche 5 (2 Business-Kern + 3 Redemittel der Szene), nach 16 Wochen 80. Sie kommen auf die Abhakliste der nächsten Mission, in der sie auf S3 oder S5 sind (spätestens 3 Wochen später); in ihrer eigenen Woche stehen sie als Wendungskarte bereit [Lena-N V3, James-N 1]. Erreicht ein Kernwort vor seiner Mission S4, wartet es bis S5 [Kai-N N2].
 - **Die Wortkarte, 10 Pflichtfelder:**
   1. Einheit (Wort oder feste Wendung)
   2. Bedeutung auf Deutsch + kurze englische Erklärung
@@ -514,7 +518,7 @@ Ein **Kapitel** umfasst etwa 2 Wochen (Planwert; ehrlich eher 2–3 Wochen, sieh
 | 7 | Einwand Preis | 4 | 15 | Vorstand/Storytelling | 8 |
 | 8 | Verhandeln Rabatt gegen Laufzeit | 4 | 16 | Meinung/Branchennews | 8 |
 
-Jede Szene hat Redemittel, Zielgrammatik, eine Wochen-Mail-Lage und eine **Mission mit Abhakliste** (6.3). Die bestehenden Inhalte (16 Themen, 16 Szenen in `nb`, 25 Einwände) sind die Grundlage. „Unterwegs“ und „Alltag regeln“ bleiben freiwillig.
+Jede Szene hat Redemittel, eine geplante Zielgrammatik (maßgeblich ist das aktuelle Thema, 2.2 „Wer bestimmt was“), eine Wochen-Mail-Lage und eine **Mission mit Abhakliste** (6.3). Die bestehenden Inhalte (16 Themen, 16 Szenen in `nb`, 25 Einwände) sind die Grundlage. „Unterwegs“ und „Alltag regeln“ bleiben freiwillig.
 
 **Takt:** nach den Tagestypen in 2.3 (Thema nach Reife, Szene montags, Schreibtag donnerstags, Missionstag einmal pro Woche, Wochenabschluss samstags). Fällt ein Themen-Test zweimal durch, kommt die zweite Erklärung und das nächste Thema wartet; **die Szene läuft weiter**, damit das Wochenthema nicht reißt. Bei mehr als 1 Thema Rückstand kommt eine Vertiefungswoche. Ein ausgearbeiteter Beispieltag (Woche 3, Mittwoch) steht in James 5.2.
 
@@ -578,7 +582,7 @@ Fester Aufbau, eine klare Rangfolge:
 ### 9.3 Einstufung und Meilensteine [James 6, Lena P2, Kai F8]
 
 - **Einstufung vor Woche 1** (Woche 0, zwei Sitzungen à ~25 Min.; sie zählen als Pflicht für die Serie): Use of English adaptiv (30), Wortschatz rezeptiv nach Häufigkeitsband (40), produktiv mit Anfangsbuchstabe (18), eine Mail nach Cambridge-Skala, Sprechen per Diktat (3 Fragen + 1 Min. Long Turn), Hören (2 Texte + 6 Sätze nachsprechen). Ergebnis: Ausgangswerte und ein **Vorschlag**, welche Themen bestätigt werden könnten (4.1). Die Wortschatzgröße wird nur in Woche 0 und Woche 16 gemessen.
-- **Meilenstein alle 4 Wochen** (Woche 4, 8, 12, 16) an zwei Tagen, die die Pflicht ersetzen: **Meilenstein A** (Samstag: Use of English Teil 1–4, Hören) und **Meilenstein B** (Mittwoch: Schreiben Mail → Bericht → Vorschlag → Meinungsessay, Sprechen Long Turn, Vorher-Nachher). 70 % aus den letzten 4 Wochen, 30 % früher. Use of English wird **mit und ohne Zeit** getrennt ausgewertet.
+- **Meilenstein alle 4 Wochen** (Woche 4, 8, 12, 16) an zwei Tagen, die die Pflicht ersetzen: **Meilenstein A** (Samstag: Use of English Teil 1–4, Hören) und **Meilenstein B** (Mittwoch: Schreiben Mail → Bericht → Vorschlag → Meinungsessay, Sprechen Long Turn, Vorher-Nachher). 70 % aus Themen der letzten 4 Wochen (bestanden, bestätigt oder in Arbeit), 30 % früher, nie aus offenen Themen (2.2, „Wer bestimmt was“). Use of English wird **mit und ohne Zeit** getrennt ausgewertet.
 - **Dieselben 4 Ankeraufgaben** in jedem Meilenstein; Emrah sieht davon **nur die Gesamtpunkte, nie die Lösung**. Parallelform beim Schreiben. Testmaterial ist nie Übungsmaterial.
 - **Woche 16** legt Meilenstein 4 und die zweite Einstufung zusammen.
 - **Darstellung:** Punkte je Teil plus Stufe in Worten („B2 sicher / C1-Grenze / C1“), als Verlaufskurve mit Band, beschriftet „Trend, nicht geeicht“. **Ein Trend erscheint erst ab der 2. Messung** (Woche 8).
@@ -609,7 +613,7 @@ Fester Aufbau, eine klare Rangfolge:
 ## 11. Motivation und Gefühl [Nora Verb. 8, Kai F12]
 
 - **Tagesring**, der sich schließt, mit zählender Zahl im Takt. Mehr als die Pflicht zeigt sich als Überlappung, nie als Druck.
-- **Abschlusskarte des Tages** mit genau drei Zeilen unter dem Ring: eine gemessene Sache („Heute zum ersten Mal frei an 2 Tagen: *leverage*, *pushback*“), Thema-% vorher → nachher (4.3), Serie. In den **ersten 3 Wochen** bevorzugt Zwischenstände. Einmal pro Woche ersetzt der Anpassungs-Satz (7.1) die erste Zeile.
+- **Abschlusskarte des Tages** mit genau drei Zeilen unter dem Ring: eine gemessene Sache („Heute zum ersten Mal frei an 2 Tagen: *leverage*, *pushback*“), Thema-% vorher → nachher (4.3), Serie. In den **ersten 3 Wochen nach dem Live-Gang von Stufe 2** bevorzugt Zwischenstände [Kai-N N5]. Einmal pro Woche ersetzt der Anpassungs-Satz (7.1) die erste Zeile.
 - **Die Mission ist Pflicht** und damit das wöchentliche Erlebnis „ich kann das im Gespräch“ (6.3).
 - **Meilenstein-Momente sparsam:** höchstens einer je Tag. Als Vollbild nur bei erster Woche, erstem Monat, 100 Tagen, erstem abgeschlossenem Kapitel und Einstufung; sonst eine kleine Bestätigung im Band. Kein Konfetti, kein Maskottchen.
 - **Erschwernis ehrlich ankündigen** (3.2) und der ehrliche Neustart der Wortzahl in einem Satz (3.7).
@@ -830,7 +834,7 @@ Jeder Startwert ist eine Setzung, wird **einmal** gegen die Messwerte geprüft u
 
 | Kai | Erfüllt in | Prüfung |
 |---|---|---|
-| 1a Drei Phasen; Block 5 + 6 mit ≥ 3 Wörtern ab S3 und 1 Grammatikpunkt | 2.2 | E2E: Pflicht enthält Vorbereiten-, Üben- und Anwenden-Block; Unit: Anwenden-Regel |
+| 1a Drei Phasen; Block 5 + 6 mit ≥ 3 Wörtern auf S3 oder S5 und 1 Grammatikpunkt | 2.2 | E2E: Pflicht enthält Vorbereiten-, Üben- und Anwenden-Block; Unit: Anwenden-Regel; Unit: kein S4-Wort in Block 5, Block 6 oder Mission |
 | 1b Erfolgsquote im Korridor 75–90 %, gemessen und gezeigt | 7.1, 9.5 | Unit: Korridor-Regel; Wochenbericht zeigt den Wert |
 | 2a Gelernt = 2 Tage frei, mindestens einmal ohne Satz | 3.2 | Unit: Stufenwechsel S2→S3 |
 | 2b Auswahl ≤ 20 %, frei ≥ 40 % | 3.5 | Simulation 30 Tage |
@@ -870,13 +874,13 @@ Jede Stufe endet mit einem Test-Link (`AXHkh6…`, mit Datenkopie), Prüfung dur
 | Stufe | Inhalt | Wer prüft | Was Emrah merkt |
 |---|---|---|---|
 | **0 Vorschau** | Klickbare Design-Vorschau Handy + Laptop (12.2), Kapitel 1 mit echtem Inhalt. **Tor:** Blindtest 4 von 5 | Nora, Kai, english-teacher | sieht und klickt das neue Aussehen, bevor gebaut wird |
-| **1 Fundament** | Token-System, Rahmen Handy/Rail/Laptop, Übungsrahmen mit Band, Startbild aus `app/today`, Kennzahlen-Schicht, Budget-Tor, **Zeitaufzeichnung je Versuch** (`fk`/`ms`/`in`) | Nora, Tarek, platform-guard | App sieht neu aus und startet schneller; Inhalte noch wie heute |
+| **1 Fundament** | Token-System, Rahmen Handy/Rail/Laptop, Übungsrahmen mit Band, Startbild aus `app/today`, Kennzahlen-Schicht, Budget-Tor, **Zeitaufzeichnung je Versuch** (`fk`/`ms`/`in`), **Laptop-Diktat-Probe** (Mac und Windows in claude.ai im Browser; bei Erfolg ersetzt der Mac/Windows-Hinweis die Zeile „Gesprochen wird am Handy“, und diktierte Laptop-Antworten zählen für F1) [Kai-N N4] | Nora, Tarek, platform-guard | App sieht neu aus und startet schneller; Inhalte noch wie heute |
 | **vor Stufe 2** | Rückweg-Test (v86 gegen neue Daten), Pfade registriert, Dokumentzahl gemessen, Bestandsfehler (Zwillinge, Wortart) korrigiert | Tarek, data-guard, Kai | – |
-| **2 Wörter neu** | **vorher:** Diktat-Erkennung auf Emrahs iPhone geprüft (3.3); **zuerst das Speichermodell** (`vs`, Wächter, Kappungstest), dann zwei Spuren, Stufen, Notentabelle, Rate-Signale, Satzbank-Regeln, Gestern-Check, Umrechnung mit Trockenlauf; der alte Planer liest die neue Wortlogik | Lena, Tarek, data-guard | Wörter fühlen sich anders an: frei abrufen, kaum noch Auswahl; ehrliche Zahl |
+| **2 Wörter neu** | **vorher:** Diktat-Erkennung auf Emrahs iPhone geprüft (3.3); **zuerst das Speichermodell** (`vs`, Wächter, Kappungstest), dann zwei Spuren, Stufen, Notentabelle, Rate-Signale, Satzbank-Regeln, Gestern-Check, Umrechnung mit Trockenlauf; der alte Planer liest die neue Wortlogik; **mit der ehrlichen Zahl zugleich ihre Polster** [Kai-N N5]: Erklärsatz beim ersten Öffnen (3.7), „auf dem Weg: x“ direkt unter jeder Stelle, die „bildest du selbst“ zeigt, Zwischenstände („heute x Wörter zum ersten Mal frei an 2 Tagen“) auf der Ergebniskarte | Lena, Tarek, data-guard | Wörter fühlen sich anders an: frei abrufen, kaum noch Auswahl; ehrliche Zahl mit „auf dem Weg“ |
 | **3 Grammatik-Kurs** | Themen-Zustand, Ablauf 0–7, Gate, Kapitel 1 und 2 vollständig, Einstufungs-Itembank | Lena, James, english-teacher | Grammatik ist ein Kurs mit Abschluss |
-| **4 Der Tag** | sechs Blöcke mit Tagestypen, Hören mit Stufen und Stimmenliste, Sag/Schreib es per Diktat, Schreibtag, Flüssigkeits-Rotation, eine Fehlerschleife, Aufholen, **Einstufung vor Woche 1**, Woche 1–4 vollständig | Lena, James, Kai, ux-reviewer | ein Knopf, 28 Minuten, alles am selben Thema, Hören und Sprechen täglich |
+| **4 Der Tag** | sechs Blöcke mit Tagestypen, Hören mit Stufen und Stimmenliste, Sag/Schreib es per Diktat, Schreibtag, Flüssigkeits-Rotation, eine Fehlerschleife, Aufholen, **Einstufung vor Woche 1**, Woche 1–4 vollständig, **Mini-Vorher-Nachher nach 7 Tagen** (10 Wörter vom ersten Tag von Woche 1) [Kai-N N5] | Lena, James, Kai, ux-reviewer | ein Knopf, 28 Minuten, alles am selben Thema, Hören und Sprechen täglich |
 | **5 Missionen** | Mission als Wochen-Pflicht (bis Stufe 5 live ist, ist der Missionstag ein Normaltag; „jede Woche genau eine Mission“ gilt ab Stufe 5) [James-N 2], Bericht als Seitenfolge, Fehler herauslocken, „Mein nächster Termin“, Sprechkurve | Lena, Kai | Sprechen mit Auftrag und Bericht |
-| **6 Fortschritt** | Fortschritt-Seite, Darstellung von Einstufung und Meilensteinen, Vorher-Nachher (7 Tage, 4 Wochen), Wochenbericht, Wochenfrage, Preply-Formular, C1-Schätzung | Lena, Kai | ehrliches Bild, sichtbares Besserwerden |
+| **6 Fortschritt** | Gestaltung der neuen Fortschritt-Seite (die Zahlen gibt es vorher schon aus derselben Kennzahlen-Schicht) [Kai-N N5], Darstellung von Einstufung und Meilensteinen, Vorher-Nachher (4 Wochen), Wochenbericht, Wochenfrage, Preply-Formular, C1-Schätzung | Lena, Kai | ehrliches Bild, sichtbares Besserwerden |
 
 Inhalte entstehen nach dem Vorlauf in 8.7, je Test-Link höchstens ein neuer Inhaltsstrang, jede Charge mit `english-teacher`-Gegenlesung und Stichprobe.
 
@@ -895,7 +899,7 @@ Inhalte entstehen nach dem Vorlauf in 8.7, je Test-Link höchstens ein neuer Inh
 6. **Ehrlicher Neustart der Wortzahl:** „Bildest du selbst“ zählt nur feste Wörter (S5) und startet deutlich niedriger als heute; darunter steht „auf dem Weg: x“. *Hinweis: Lehnst du das ab, lebt Lenas Einspruch wieder auf; dann müssten wir die Zählweise neu klären.*
 7. **„Mein nächster Termin“:** einmal pro Woche vor der ersten Sprechaufgabe einen echten Kundentermin in 1–2 Sätzen diktieren oder überspringen (ohne Namen, nur in deiner Datenbank). Block 5 und Mission bauen darauf auf.
 8. **Wochenfrage zur Selbstsicherheit** (1–5, ein Tipp pro Woche am Ende des Wochenabschlusses).
-9. **Zeitgrenze für gesprochene Wendungen:** Eine gesprochene Wendung gilt als „sicher“, wenn du sie in höchstens **15 Sekunden** sagst (strenger, wie beim Tippen) oder in höchstens **20 Sekunden** (großzügiger, weil Diktieren länger dauert). Tarek empfiehlt, mit 15 zu starten und nach 4 Wochen Messung zu prüfen.
+9. **Zeitgrenze für gesprochene Wendungen:** Eine gesprochene Wendung gilt als „sicher“, wenn du sie in höchstens **15 Sekunden** sagst (strenger, wie beim Tippen) oder in höchstens **20 Sekunden** (großzügiger, weil Diktieren länger dauert). Tarek und Kai empfehlen, mit 15 zu starten; nach 4 Wochen wird auf 20 umgestellt, wenn mehr als 30 % der richtigen gesprochenen Wendungen zwischen 15 und 20 Sekunden liegen.
 
 **Zur Kenntnis (ehrliche Grenzen):**
 10. **API-Guthaben:** Fremde Sprachdienste (bezahlte Spracherkennung oder Stimmen) sind im Artefakt nicht nutzbar: Es darf nichts von außen geladen werden, und Schlüssel gehören nicht in die App. Die KI läuft weiter über das Claude-Abo. Emrahs Wunsch „am liebsten ohne API“ ist damit erfüllt.
