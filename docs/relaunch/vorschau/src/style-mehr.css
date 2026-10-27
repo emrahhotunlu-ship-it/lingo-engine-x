@@ -1,1 +1,133 @@
-/* style-mehr.css: siehe bauliste.md */
+/* Paket B „Rund um den Tag“ (H24–H32, L15–L17). Nur tm-Klassen, nur Tokens aus style.css. */
+
+/* Unterseiten-Titel */
+.tm-title { margin: 0; font-size: 30px; line-height: 36px; font-weight: 700; }
+.tm-sub { font-size: 15px; line-height: 21px; color: var(--fg-2); margin: 0; }
+
+/* Einstellungs-Gruppen: Zeilenliste in einer Karte */
+.tm-group { display: flex; flex-direction: column; gap: 6px; }
+.tm-group > .lbl { padding: 0 2px; }
+.tm-list { background: var(--surface); border-radius: var(--r); padding: 0 16px; }
+.tm-row { display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 8px 0; border-bottom: 1px solid var(--line); width: 100%; text-align: left; font-size: 16px; line-height: 21px; color: var(--fg); }
+.tm-row:last-child { border-bottom: 0; }
+.tm-row .tm-k { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.tm-row .tm-k small { font-size: 13px; line-height: 18px; color: var(--fg-2); }
+.tm-row .tm-v { flex: none; max-width: 52%; text-align: right; font-size: 15px; color: var(--fg-2); }
+.tm-row .tm-fix { flex: none; font-size: 12px; font-weight: 650; padding: 3px 8px; border-radius: 7px; background: var(--surface-2); color: var(--fg-2); }
+.tm-row .chev { color: var(--fg-3); flex: none; }
+.tm-row.tm-tall { align-items: flex-start; padding: 12px 0; }
+
+/* Schalter */
+.tm-sw { flex: none; width: 46px; height: 28px; border-radius: 14px; background: var(--surface-3); position: relative; transition: background 200ms var(--ease-soft); }
+.tm-sw::after { content: ''; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: var(--fg); transition: transform 260ms var(--ease-spring); box-shadow: 0 1px 3px oklch(0 0 0 / 0.25); }
+.tm-sw.on { background: var(--act); }
+.tm-sw.on::after { transform: translateX(18px); background: var(--act-fg); }
+
+/* Segmentwahl mit beliebig vielen Teilen */
+.tm-seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; background: var(--surface-2); border-radius: 12px; padding: 3px; gap: 3px; }
+.tm-seg button { min-height: 38px; border-radius: 10px; font-size: 14px; font-weight: 600; color: var(--fg-2); padding: 0 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.15; }
+.tm-seg button small { font-size: 11px; font-weight: 500; color: var(--fg-3); }
+.tm-seg button.on { background: var(--surface); color: var(--fg); box-shadow: 0 1px 3px oklch(0 0 0 / 0.2); }
+
+/* Auswahl-Kreis (Stimme, Fokus) */
+.tm-radio { flex: none; width: 22px; height: 22px; border-radius: 50%; box-shadow: 0 0 0 1.5px var(--line-2) inset; display: grid; place-items: center; }
+.tm-radio.on { box-shadow: 0 0 0 2px var(--act) inset; }
+.tm-radio.on::after { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--act); }
+
+/* Schlüssel-Wert-Liste (Diagnose, Messwerte) */
+.tm-kv { display: grid; grid-template-columns: fit-content(58%) minmax(0, 1fr); gap: 0; font-size: 15px; line-height: 21px; }
+.tm-kv > * { padding: 10px 0; border-top: 1px solid var(--line); }
+.tm-kv > :nth-child(-n+2) { border-top: 0; }
+.tm-kv .tm-kl { color: var(--fg-2); }
+.tm-kv .tm-kr { text-align: right; font-weight: 600; padding-left: 12px; }
+.tm-log { font-size: 13px; line-height: 19px; color: var(--fg-2); display: flex; flex-direction: column; gap: 6px; }
+.tm-log span { color: var(--fg-3); margin-right: 6px; }
+
+/* Ampelzeilen und Zustands-Chips */
+.tm-light { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); font-size: 16px; line-height: 22px; }
+.tm-light:first-child { border-top: 0; }
+.tm-light i { flex: none; width: 10px; height: 10px; border-radius: 50%; margin-top: 6px; }
+.tm-light i.g { background: var(--ok); }
+.tm-light i.y { background: var(--near); }
+.tm-light i.r { background: var(--bad); }
+.tm-light small { display: block; font-size: 13px; line-height: 18px; color: var(--fg-2); margin-top: 2px; }
+.tm-light .tm-lv { margin-left: auto; flex: none; font-weight: 650; padding-left: 8px; }
+.tm-state { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 650; padding: 3px 8px; border-radius: 7px; background: var(--surface-2); color: var(--fg-2); white-space: nowrap; }
+.tm-state.open { color: var(--fg); }
+.tm-state.rec { background: color-mix(in oklch, var(--near) 18%, transparent); color: var(--near); }
+.tm-state.fixed, .tm-state.firm { background: color-mix(in oklch, var(--ok) 16%, transparent); color: var(--ok); }
+
+/* Fehlerzeilen */
+.tm-err { display: flex; flex-direction: column; gap: 4px; padding: 12px 0; border-bottom: 1px solid var(--line); width: 100%; text-align: left; }
+.tm-err:last-child { border-bottom: 0; }
+.tm-err .tm-w { font-size: 15px; line-height: 21px; color: var(--fg-2); text-decoration: line-through; text-decoration-color: var(--bad); text-decoration-thickness: 1.5px; }
+.tm-err .tm-r { font-size: 16px; line-height: 22px; font-weight: 600; }
+.tm-err .tm-m { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--fg-2); flex-wrap: wrap; }
+
+/* Kleine Punktreihe (Fortschritt einer Regel, Stufen) */
+.tm-pips { display: flex; gap: 4px; }
+.tm-pips i { flex: 1; height: 6px; border-radius: 3px; background: var(--surface-3); }
+.tm-pips i.on { background: var(--act); }
+.tm-pips i.ok { background: var(--ok); }
+
+/* Vorher → nachher */
+.tm-ba { display: grid; grid-template-columns: auto 1fr auto; gap: 8px 12px; align-items: center; font-size: 14px; color: var(--fg-2); }
+.tm-ba .tm-track { height: 8px; border-radius: 4px; background: var(--surface-3); position: relative; overflow: hidden; }
+.tm-ba .tm-track b { position: absolute; inset: 0 auto 0 0; border-radius: 4px; background: var(--fg-3); }
+.tm-ba .tm-track b.now { background: var(--act); animation: tmGrow 700ms var(--ease-soft) both; transform-origin: left center; }
+.tm-ba .tm-n { color: var(--fg); font-weight: 650; text-align: right; }
+@keyframes tmGrow { from { transform: scaleX(0); } to { transform: none; } }
+
+/* Mail am Handy: nur die Markierungen der aktuellen Kategorie */
+.tm-mail { font-size: 16px; line-height: 26px; }
+.tm-mail p { margin: 0 0 10px; }
+.tm-mail p:last-child { margin-bottom: 0; }
+.tm-mail .tm-off { background: none; box-shadow: none; }
+.tm-mail [class^="mark-"] { transition: background 220ms var(--ease-soft), box-shadow 220ms var(--ease-soft); }
+.tm-count { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 13px; color: var(--fg-2); min-height: 32px; }
+.tm-count .ck { width: 16px; height: 16px; }
+.tm-count span { display: inline-flex; align-items: center; gap: 6px; }
+
+/* Vollbild-Moment Kapitel */
+.tm-badge { width: 112px; height: 112px; border-radius: 50%; display: grid; place-items: center; margin: 0 auto; background: var(--act-soft); color: var(--act-text); box-shadow: 0 0 0 1px var(--line) inset; animation: springOpen 520ms var(--ease-spring) both; }
+.tm-badge b { font-size: 44px; line-height: 1; font-weight: 700; }
+
+/* Meilenstein-Kurve */
+.tm-curve { position: relative; }
+.tm-curve svg { width: 100%; height: 170px; display: block; overflow: visible; }
+.tm-curve .tm-yl { position: absolute; left: 0; font-size: 11px; color: var(--fg-3); font-weight: 600; transform: translateY(-50%); }
+
+/* Laptop: Gruppen links, Inhalt rechts */
+.tm-split { display: grid; grid-template-columns: 13em minmax(0, 1fr); gap: 2em; align-items: start; }
+.tm-gnav { display: flex; flex-direction: column; gap: 0.2em; position: sticky; top: 0; }
+.tm-gnav button { display: flex; align-items: center; gap: 0.7em; min-height: 2.5em; padding: 0 0.8em; border-radius: 0.6em; color: var(--fg-2); font-size: 0.95em; font-weight: 550; text-align: left; }
+.tm-gnav button:hover { background: var(--surface); color: var(--fg); }
+.tm-gnav button.on { background: var(--surface); color: var(--fg); box-shadow: 0 0 0 1px var(--line) inset; }
+.desk .tm-title { font-size: 1.9em; line-height: 1.2; }
+.desk .tm-list { padding: 0 1.1em; }
+.desk .tm-row { min-height: 3.3em; font-size: 1em; line-height: 1.35; padding: 0.55em 0; }
+.desk .tm-row .tm-k small { font-size: 0.85em; line-height: 1.35; }
+.desk .tm-row .tm-v { font-size: 0.95em; }
+.desk .tm-kv { font-size: 0.95em; line-height: 1.4; }
+.desk .tm-kv > * { padding: 0.6em 0; }
+.desk .tm-light { font-size: 1em; line-height: 1.4; padding: 0.75em 0; }
+.desk .tm-light small { font-size: 0.85em; }
+.desk .tm-err { padding: 0.75em 0; }
+.desk .tm-err .tm-w { font-size: 0.95em; }
+.desk .tm-err .tm-r { font-size: 1em; }
+.desk .tm-err .tm-m { font-size: 0.85em; }
+.desk .tm-seg button { min-height: 2.4em; font-size: 0.9em; }
+.desk .tm-ba { font-size: 0.9em; }
+.desk .tm-err.tm-sel { background: var(--surface-2); padding-left: 0.75em; padding-right: 0.75em; border-radius: 10px; box-shadow: inset 3px 0 0 var(--act); }
+
+@media (prefers-reduced-motion: reduce) {
+  .tm-ba .tm-track b.now, .tm-badge { animation: none; }
+}
+[data-motion="off"] .tm-ba .tm-track b.now, [data-motion="off"] .tm-badge { animation: none; }
+
+/* Ergänzungen */
+.tm-light i.n { background: var(--surface-3); }
+.tm-chips { display: flex; gap: 6px; overflow-x: auto; margin: 0 -20px; padding: 0 20px; scrollbar-width: none; }
+.tm-chips::-webkit-scrollbar { display: none; }
+.desk .tm-chips { margin: 0; padding: 0; flex-wrap: wrap; overflow: visible; }
+.desk .tm-err { border-bottom-color: var(--line); }
