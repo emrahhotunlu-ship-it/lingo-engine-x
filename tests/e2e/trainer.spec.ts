@@ -91,6 +91,15 @@ test('die fliegenden Buchstaben landen in der Lücke; falsche Antwort zeigt die 
   await screen(page, 'today');
   await page.getByTestId('start').click();
   await expect(page.getByTestId('exercise')).toHaveAttribute('data-ex', 'cloze_hint');
+  // Erst tippen, wenn die Übung steht: Während des Flugs von der Heldenkarte (src/engine/shared.tsx, ≈ 250 ms) wandert die
+  // Lücke noch, ein Flieger zielte dann auf eine alte Stelle (Wackler unter Last, nicht das hier geprüfte Verhalten).
+  await page.waitForFunction(() =>
+    [document.querySelector('[data-testid="exercise"]'), document.querySelector('[data-step]')].every((el) => {
+      if (!el) return true;
+      const cs = getComputedStyle(el);
+      return cs.opacity === '1' && (cs.transform === 'none' || cs.transform === 'matrix(1, 0, 0, 1, 0, 0)');
+    }),
+  );
   // Letzte Position jedes Fliegers vor dem Entfernen mitschreiben.
   await page.evaluate(() => {
     const w = window as unknown as { __flights: Array<{ x: number; y: number; w: number; h: number }> };

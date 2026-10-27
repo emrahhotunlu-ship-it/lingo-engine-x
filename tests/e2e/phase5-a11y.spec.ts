@@ -74,9 +74,16 @@ test('Fokusfalle und Esc-Reihenfolge: Nachschlagen → Begleiter', async ({ page
   await boot(page, { migrated: true });
   await screen(page, 'today');
   await page.getByTestId('open-companion').click();
-  // Tab bleibt im Dialog.
-  for (let i = 0; i < 25; i++) await page.keyboard.press('Tab');
-  expect(await page.evaluate(() => !!document.activeElement?.closest('[data-testid="companion"]'))).toBe(true);
+  // Seit dem Schwebefenster (16.10.2026) hat nur das Vollbild eine Fokusfalle (aria-modal); das schwebende Fenster lässt die
+  // Seite bewusst bedienbar. Also erst ins Vollbild wechseln (vorher lag der Fokus nach 25 Tabs nur zufällig im Fenster).
+  await page.getByTestId('companion-mode').click();
+  await expect(page.getByTestId('companion')).toHaveAttribute('data-mode', 'full');
+  await page.getByTestId('companion-mode').focus();
+  // Tab bleibt im Dialog – nach jedem einzelnen Schritt.
+  for (let i = 0; i < 25; i++) {
+    await page.keyboard.press('Tab');
+    expect(await page.evaluate(() => !!document.activeElement?.closest('[data-testid="companion"]')), `Tab ${i + 1}`).toBe(true);
+  }
   await page.locator('[data-testid="chat-msg"][data-role="assistant"] button.lx-word').first().click();
   await expect(page.getByTestId('lookup')).toBeVisible();
   await page.keyboard.press('Escape');

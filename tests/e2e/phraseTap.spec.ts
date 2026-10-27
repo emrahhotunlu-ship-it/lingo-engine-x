@@ -25,6 +25,10 @@ async function startTrainer(page: Page, o: { sample?: boolean; localStorage?: Re
   await screen(page, 'today');
   await page.getByTestId('start').click();
   await screen(page, 'trainer');
+  // Die Übung fliegt von der Heldenkarte heran (src/engine/shared.tsx, ≈ 250 ms): erst danach stehen die Wörter dort, wo gezogen wird.
+  await expect
+    .poll(() => page.getByTestId('exercise').evaluate((el) => getComputedStyle(el).transform))
+    .toMatch(/^(none|matrix\(1, 0, 0, 1, 0, 0\))$/);
   return booted;
 }
 

@@ -69,10 +69,10 @@ test.describe('Laptop', () => {
     // Bei richtiger Antwort ohne Auswahlmöglichkeiten gibt es keine „Warum nicht …?“-Liste (die Falle wird nur gezeigt, wenn sie getroffen wurde).
     await expect(item.getByTestId('why-list')).toHaveCount(0);
     await nextItem(page);
-    const d = await dump(page);
-    const doc = d['grammar/passive-plus'] as Doc;
-    const err = (doc.errors as Doc[])[0] as Doc;
-    expect(err.box).toBe(1);
+    // Auf den geschriebenen Zustand warten (nextItem wartet nicht; unter Last kam der Abzug vor dem Schreiben).
+    const errBox = async () => ((((await dump(page))['grammar/passive-plus'] as Doc).errors as Doc[])[0] as Doc).box;
+    await expect.poll(errBox).toBe(1);
+    const doc = (await dump(page))['grammar/passive-plus'] as Doc;
     expect(doc.seen).toContain('c1:kwt-9001');
     const e = await entryOf(page, 'kwt-9001');
     expect(e).toMatchObject({ ok: true, pts: [2, 2], c1k: 'kwt', cid: 'kwt-9001', pat: 'pp.personal', free: true, dev: 'k' });

@@ -24,6 +24,9 @@ mkdirSync(SHOTS, { recursive: true });
 
 const GERMAN_IN_EN = /[äöüÄÖÜß]|\b(und|nicht|wird|Karten|Tage|Einstellungen|Serie|Passiv|Indirekte|Relativsätze|Modalverben|Zukunft|Infinitiv|Artikel)\b/;
 const ENGLISH_UI_IN_DE = /\b(Settings|Loading|Streak|Vocabulary|Course|Assessment|Where you stand)\b/;
+// Seit U2 steht das eingebettete App-Skript am Ende von <body> (scripts/vite-boot-first.mjs). Skript- und Stil-Quelltext ist keine
+// Oberfläche: Die Textprüfungen über einen Klon von <body> entfernen ihn, denn textContent bzw. innerText eines nicht gerenderten
+// Klons liefert sonst den ganzen Quelltext (6 MB) mit.
 
 for (const vp of VIEWPORTS) {
   for (const theme of THEMES) {
@@ -88,6 +91,7 @@ for (const vp of VIEWPORTS) {
           // (Satzbau: „Du willst sagen“ mit der deutschen Bedeutung) ist als lang="de" ausgezeichnet und gehört dazu.
           const body = await page.evaluate(() => {
             const copy = document.body.cloneNode(true) as HTMLElement;
+            copy.querySelectorAll('script, style, template, noscript').forEach((e) => e.remove());
             copy.querySelectorAll('[lang="de"]').forEach((e) => e.remove());
             return copy.textContent ?? '';
           });
@@ -129,6 +133,7 @@ for (const vp of VIEWPORTS) {
           // Englische Inhalte (lang="en") und Zitate gehören nicht zur Oberfläche.
           const text = await page.evaluate(() => {
             const clone = document.body.cloneNode(true) as HTMLElement;
+            clone.querySelectorAll('script, style, template, noscript').forEach((el) => el.remove());
             clone.querySelectorAll('[lang="en"]').forEach((el) => el.remove());
             return clone.innerText;
           });
@@ -267,6 +272,7 @@ for (const vp of VIEWPORTS) {
           expect(await layoutProblems(page), name).toEqual([]);
           const text = await page.evaluate(() => {
             const clone = document.body.cloneNode(true) as HTMLElement;
+            clone.querySelectorAll('script, style, template, noscript').forEach((el) => el.remove());
             clone.querySelectorAll('[lang]').forEach((n) => {
               if (n.getAttribute('lang') !== document.documentElement.lang) n.remove();
             });

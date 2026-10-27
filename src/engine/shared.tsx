@@ -89,6 +89,9 @@ export function useSharedTarget<T extends HTMLElement>(id: string): { ref: RefOb
     const d = flipFrom(from, docRect(el));
     if (!d) return;
     el.style.transformOrigin = '0 0';
+    // Startlage sofort setzen: framer wendet das erste Schlüsselbild erst im nächsten Bild an. Bis dahin stünde das Ziel
+    // (unter Last mehrere Bilder lang) schon fertig an seinem Platz und spränge dann zur Quelle zurück.
+    el.style.transform = `translateX(${d.x}px) translateY(${d.y}px) scaleX(${d.scaleX}) scaleY(${d.scaleY})`;
     const controls = animate(el, { x: [d.x, 0], y: [d.y, 0], scaleX: [d.scaleX, 1], scaleY: [d.scaleY, 1] }, { duration: FLIGHT_S, ease: EASE_OUT });
     return () => controls.stop();
   }, [from]);
