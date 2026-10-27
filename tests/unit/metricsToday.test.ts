@@ -4,8 +4,9 @@ import { addDays } from '../../src/domain/date';
 import { addError } from '../../src/domain/grammar/errors';
 import { AGAIN_OLD, againSource } from '../../src/domain/repair/unit';
 import { dueFehlersaetze } from '../../src/domain/repair/fehlersaetze';
-import { atlasSize, buildTrainCards, dayLeft, fehlersaetzeDue, festNow, fixAll, fixToday, grammarErrorsDue, laptopDeepen, newToday, reviewAll, reviewToday, vocabEstimate, wordsToday } from '../../src/domain/metrics';
+import { atlasSize, buildTrainCards, dayLeft, fehlersaetzeDue, festNow, fixAll, fixToday, grammarErrorsDue, laptopDeepen, dueLineSplit, newToday, reviewAll, reviewFigures, reviewToday, vocabEstimate, wordsToday } from '../../src/domain/metrics';
 import { deckCounts } from '../../src/domain/srs/decks';
+import { dueCount } from '../../src/domain/metrics/definitions';
 import { newQuotaLeft } from '../../src/domain/srs/queue';
 import { expectedNewPerDay } from '../../src/domain/unit/backlog';
 import { FIX_LIMIT } from '../../src/domain/unit/planFor';
@@ -61,6 +62,25 @@ describe('Wörter: reviewAll, reviewToday, newToday', () => {
     const extra = reviewToday({ plan: null, cards, nowMs: NOW, quotaLeft: 5 });
     expect(extra.total).toBeLessThanOrEqual(20);
     expect(extra.total).toBe(Math.min(20, reviewAll(cards, NOW, 5)));
+  });
+
+  it('UX-Audit U1 (eine Zahl überall): reviewFigures liefert „fällig“ und „heute im Plan“ für Heute, Wörter-Reiter und Wortliste', () => {
+    const plan = stored(2, 5);
+    const visible = cards.filter((c) => !c.hidden);
+    const f = reviewFigures({ plan, cards, nowMs: NOW });
+    // „heute im Plan“ ist genau der Pflichtumfang, den die Heute-Karte nennt; „fällig“ genau die Zählung der Wortliste.
+    expect(f.planned).toBe(plan.goal.review);
+    expect(f.planned).toBe(reviewToday({ plan, cards: visible, nowMs: NOW }).total);
+    expect(f.due).toBe(dueCount(visible, NOW));
+    expect(f.left).toBe(f.planned);
+    expect(reviewFigures({ plan, cards, nowMs: NOW, done: 10 }).left).toBe(f.planned - 10);
+    // Ohne Pflichtschritt gibt es keine Plan-Zahl, also auch keine zweite Zahl in der Zeile.
+    const none = reviewFigures({ plan: null, cards, nowMs: NOW });
+    expect(none.planned).toBe(0);
+    expect(dueLineSplit(none)).toBe(false);
+    expect(dueLineSplit({ due: 62, planned: 52 })).toBe(true);
+    expect(dueLineSplit({ due: 40, planned: 40 })).toBe(false);
+    expect(dueLineSplit({ due: 20, planned: 24 })).toBe(false);
   });
 
   it('newToday: nach Plan eingefroren, sonst Kontingent und Bremse; nie mehr als vorhanden', () => {
