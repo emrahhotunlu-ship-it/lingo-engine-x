@@ -77,10 +77,10 @@ function inField() { const a = document.activeElement; return a && (a.tagName ==
 
 /* ---------- L1 Heute ---------- */
 /* L1-Varianten: main (Donnerstag, Normaltag), done, writing (Schreibtag), review (Samstag, Wochenabschluss). */
-const L1_GO = { main: 'l3', writing: 'l9-p1', review: 'l17-report' };
+const L1_GO = { start: 'l2', main: 'l3', writing: 'l9-p1', review: 'l17-report' };
 function l1Stage(v, idp) {
   const blocks = dayBlocks(v === 'writing' || v === 'review' ? v : 'normal');
-  const done = v === 'done' ? blocks.length : v === 'writing' || v === 'review' ? 4 : 2;
+  const done = v === 'done' ? blocks.length : v === 'writing' || v === 'review' ? 4 : v === 'start' ? 0 : 2;
   const partial = v === 'review' ? 0.9 : v === 'main' ? 0.4 : 0;
   const total = blocks.reduce((a, b) => a + b.m, 0);
   const rem = Math.round(total - blocks.slice(0, done).reduce((a, b) => a + b.m, 0) - (blocks[done] ? blocks[done].m * partial : 0));
@@ -93,6 +93,7 @@ function l1Stage(v, idp) {
     review: L('Wochenabschluss: dein Rückblick auf die Woche.', 'Week review: a look back at your week.')
   }[v];
   const next = {
+    start: ['w', L('Als Nächstes: Gestern-Check · <em>6 Wörter</em>', 'Next: yesterday check · <em>6 words</em>')],
     main: ['g', L('Als Nächstes: Grammatik · <em>past simple vs. present perfect</em>', 'Next: grammar · <em>past simple vs. present perfect</em>')],
     writing: ['s', L('Als Nächstes: Wochen-Mail · <em>Rückmeldung zu deinem Entwurf</em>', 'Next: weekly email · <em>feedback on your draft</em>')],
     review: ['s', L('Zum Schluss: dein Wochenbericht und die Wochenfrage', 'Last step: your weekly report and the week question')]
@@ -104,7 +105,7 @@ function l1Stage(v, idp) {
     '<div class="stack s16" style="flex:1;min-width:0">' + (S.ui.ring ? l1Blocks(blocks, done, partial) : '<div class="dtopic" style="text-align:left"><div class="t disp" style="font-size:1.6em;line-height:1.2">' + TOPIC() + '</div>' +
     (sub ? '<div class="sub">' + sub + '</div>' : '') + '</div>') +
     (v === 'done' ? '' : '<div class="nextl" style="justify-content:flex-start"><span class="dot ' + next[0] + '"></span><span>' + next[1] + '</span></div>' +
-      '<div><button class="btn pri" id="' + idp + 'd-go" data-go="' + L1_GO[v] + '" style="min-width:12em">' + L('Weiter', 'Continue') + kb('⏎') + '</button></div>') + '</div></div>' +
+      '<div><button class="btn pri" id="' + idp + 'd-go" data-go="' + L1_GO[v] + '" style="min-width:12em">' + (v === 'start' ? L('Los geht’s', 'Let’s go') : L('Weiter', 'Continue')) + kb('⏎') + '</button></div>') + '</div></div>' +
     l1Mid(idp) + '</div>';
 }
 /* Ring angetippt: Blöcke von heute statt Thema. */
@@ -134,7 +135,7 @@ function l1Ctx(idp, v) {
 }
 reg('l1', {
   code: 'L1', name: 'Heute', kind: 'desk', nav: 'heute',
-  variants: [['main', 'unterwegs'], ['done', 'erledigt'], ['writing', 'Schreibtag (Do)'], ['review', 'Wochenabschluss (Sa)']],
+  variants: [['main', 'unterwegs'], ['start', 'Tagesanfang'], ['done', 'erledigt'], ['writing', 'Schreibtag (Do)'], ['review', 'Wochenabschluss (Sa)']],
   render(v, o) { return { stage: l1Stage(v, o.idp), ctx: l1Ctx(o.idp, v) }; },
   keys(e) { const t = L1_GO[curVariant()]; if (e.key === 'Enter' && !inField() && t) go(t); }
 });

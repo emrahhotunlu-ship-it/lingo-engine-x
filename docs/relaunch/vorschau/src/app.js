@@ -406,7 +406,8 @@ function setPref(k, val) {
 
 /* ---------- Vorführleiste ---------- */
 /* Versionen, die in der Vorschau nur über die Vorführleiste erreichbar sind (kein Weg in der App führt hin). */
-const STATE_ONLY = new Set([]);
+/* Tagessituationen, Systemzustände und Ergebnisse, die von der Lage abhängen (Datum, Netz, Testergebnis), nicht von einem Klick. */
+const STATE_ONLY = new Set(['h1-catchup', 'h1-termin', 'h1-skeleton', 'h1-resume', 'h1-pause', 'h1-writing', 'h1-test', 'h1-review', 'l1-start', 'l1-writing', 'l1-review', 'h10-adapt', 'h12-list-before', 'h12-list-nothing-due', 'h14-thin', 'h16-noai', 'h16-tts', 'h16-empty', 'h16-nosave', 'termin-ask', 'woche-ask', 'h17-before-duty', 'h17-brake', 'h17-nothing-due', 'l11-before-duty', 'h18-contrast', 'l12-contrast', 'h21-quota-full', 'h26-empty', 'h31-failed', 'h31-chapter', 'h31-milestone', 'l10-all']);
 function toolHtml() {
   const def = curDef(), v = curVariant();
   const opt = (k, val, label) => '<button id="t-' + k + '-' + val + '" data-set="' + k + ':' + val + '" class="' + (S[k] === val ? 'on' : '') + '">' + label + '</button>';
