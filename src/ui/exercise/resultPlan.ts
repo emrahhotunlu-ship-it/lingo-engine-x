@@ -1,4 +1,4 @@
-import type { ExplainDepth, ExplainLine, ExplanationModel } from '../../domain/explain/types';
+import type { ExplainDepth, ExplainExample, ExplainLine, ExplanationModel } from '../../domain/explain/types';
 import { liftLines, visibleLines } from './explainDepth';
 import { splitHead, splitWhy } from './wordParts';
 
@@ -24,7 +24,8 @@ export type BlockItem =
   /** Wortkarte: Wortart und Register als Chips (die Wortart steht schon im Kopf, deshalb nur unter „Mehr“). */
   | { t: 'chips'; word: string; chips: string[]; formula: string | null };
 
-export type ResultPlan = { why: BlockItem[]; remember: BlockItem[]; more: BlockItem[] };
+/** `example`: der erste Beispielsatz steht offen im Merke-Block, wenn es sonst nichts zu merken gibt (Kap. 15: „Karten ohne Ursprungssatz“). */
+export type ResultPlan = { why: BlockItem[]; remember: BlockItem[]; more: BlockItem[]; example: ExplainExample | null };
 
 export type PlanOpts = {
   learning?: boolean;
@@ -44,8 +45,9 @@ const toItem = (l: ExplainLine): BlockItem => {
     case 'yours':
       return { t: 'text', k: 'yours', text: l.text, lead: l.head };
     case 'why':
-      // Eine eigene Überschrift („Claude sagt“) entfällt: der Block heißt immer „Warum“; die KI-Kennzeichnung bleibt.
-      return { t: 'text', k: 'why', text: l.text, ai: l.ai };
+      // Die Überschrift „Claude sagt“ entfällt (der Block heißt immer „Warum“, die KI-Kennzeichnung bleibt an der Zeile);
+      // eine andere eigene Überschrift (z. B. „Nur auf Deutsch“) bleibt als Vorspann.
+      return { t: 'text', k: 'why', text: l.text, ai: l.ai, ...(l.head && !l.ai ? { lead: l.head } : {}) };
     case 'note':
       return { t: 'text', k: 'note', text: l.text };
     case 'mistake':
@@ -108,7 +110,8 @@ export function planResult(model: ExplanationModel, depth: ExplainDepth, opts: P
     else if (l.k === 'mistake') more.push(it);
     else why.push(it);
   }
-  return { why, remember, more };
+  const example = !remember.length ? (model.examples[0] ?? null) : null;
+  return { why, remember, more, example };
 }
 
 /** Wie oft ein Ausdruck in einem Text vorkommt (ganze Wörter, ohne Groß/klein). Für den Test „Lernwort höchstens zweimal“. */

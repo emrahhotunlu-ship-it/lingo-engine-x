@@ -8,7 +8,7 @@ import { FoldToggle } from './FoldToggle';
 // Beispiele (§4.3): `open` (0 oder 1) sichtbar, der Rest unter „Weitere Beispiele ▸“. Rechts ein kleines „DE“,
 // das die Übersetzung zeigt (Beschriftung für Screenreader aus i18n).
 
-function Item({ ex, area }: { ex: ExplainExample; area: WordTapArea }) {
+export function ExampleItem({ ex, area }: { ex: ExplainExample; area: WordTapArea }) {
   const { t, lang } = useT();
   const [de, setDe] = useState(false);
   return (
@@ -74,7 +74,7 @@ export function Examples({
             <p className="lx-t-label">{t('exExampleLabel')}</p>
             <ul className="flex flex-col gap-1.5">
               {shown.map((ex) => (
-                <Item key={ex.en} ex={ex} area={area} />
+                <ExampleItem key={ex.en} ex={ex} area={area} />
               ))}
             </ul>
           </>
@@ -89,7 +89,7 @@ export function Examples({
                   <p className="lx-t-label">{t('exMoreExamples')}</p>
                   <ul className="flex flex-col gap-1.5">
                     {rest.map((ex) => (
-                      <Item key={ex.en} ex={ex} area={area} />
+                      <ExampleItem key={ex.en} ex={ex} area={area} />
                     ))}
                   </ul>
                 </>
@@ -107,7 +107,7 @@ export function Examples({
           <p className="lx-t-label">{t('exExampleLabel')}</p>
           <ul className="flex flex-col gap-1.5">
             {shown.map((ex) => (
-              <Item key={ex.en} ex={ex} area={area} />
+              <ExampleItem key={ex.en} ex={ex} area={area} />
             ))}
           </ul>
         </>
@@ -116,7 +116,7 @@ export function Examples({
         <FoldToggle label={t('exMoreExamples')} {...(onFoldChange ? { onOpenChange: onFoldChange } : {})} testId="examples-more">
           <ul className="flex flex-col gap-1.5">
             {rest.map((ex) => (
-              <Item key={ex.en} ex={ex} area={area} />
+              <ExampleItem key={ex.en} ex={ex} area={area} />
             ))}
           </ul>
         </FoldToggle>

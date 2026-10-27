@@ -3,7 +3,7 @@ import type { ExplainLine } from '../../domain/explain/types';
 import { EnglishText } from '../../engine/EnglishText';
 import type { WordTapArea } from '../../engine/wordTap';
 import { useT, type MessageKey } from '../../i18n';
-import { Slot } from '../../app/slots';
+import { ExampleItem } from './Examples';
 import { lineLabel } from './lineLabel';
 import type { BlockItem, ResultPlan } from './resultPlan';
 
@@ -143,7 +143,7 @@ function Item({ it, body, labeled }: { it: BlockItem; body: (it: BlockItem) => R
 }
 
 function Block({ name, title, items, body, before, after }: { name: 'why' | 'remember'; title: string; items: BlockItem[]; body: (it: BlockItem) => ReactNode; before?: ReactNode; after?: ReactNode }) {
-  if (!items.length && !before) return null;
+  if (!items.length && !before && !after) return null;
   return (
     <section className="-mx-4 flex flex-col gap-2 border-t border-line px-4 pt-4" data-block={name} aria-label={title}>
       <h3 className="lx-eyebrow m-0 text-subtle">{title}</h3>
@@ -171,16 +171,35 @@ export function ResultBlocks({ plan, area = 'trainer', before, source, depth, ai
         {t('exAiNote')}
       </p>
     ) : null;
-  const why = (
-    <Block name="why" title={t('exBlockWhy')} items={plan.why} body={body} before={before} after={plan.why.length ? aiNote : null} />
+  const whyShown = plan.why.length > 0 || !!before;
+  const why = <Block name="why" title={t('exBlockWhy')} items={plan.why} body={body} before={before} after={whyShown ? aiNote : null} />;
+  // Ohne eigenes Merke-Stück: der Beispielsatz (antippbar) ist das, was bleibt.
+  const example = plan.example ? (
+    <ul className="m-0 flex list-none flex-col gap-2 p-0 lx-t-support" data-testid="examples">
+      <ExampleItem ex={plan.example} area={area} />
+    </ul>
+  ) : null;
+  const remember = (
+    <Block
+      name="remember"
+      title={t('exBlockRemember')}
+      items={plan.remember}
+      body={body}
+      after={
+        example || (!whyShown && aiNote) ? (
+          <>
+            {example}
+            {!whyShown && aiNote}
+          </>
+        ) : null
+      }
+    />
   );
-  const remember = <Block name="remember" title={t('exBlockRemember')} items={plan.remember} body={body} />;
-  if (!plan.why.length && !plan.remember.length && !before) return null;
+  if (!whyShown && !plan.remember.length && !example) return null;
   return (
     <div className="flex flex-col gap-4" data-testid="explanation" data-slot="explanation" data-source={source} data-depth={depth}>
       {why}
       {remember}
-      <Slot name="explain.after" />
     </div>
   );
 }

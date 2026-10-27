@@ -103,6 +103,18 @@ describe('planResult', () => {
     expect([...p.why, ...p.remember, ...p.more]).toEqual([]);
   });
 
+  it('ohne Merke-Stück steht der erste Beispielsatz offen im Merke-Block (Ursprungssatz), sonst nicht', () => {
+    const noMerke: ExplanationModel = { ...word, lines: [{ k: 'pattern', name: 'avoid · Verb', formula: null }, { k: 'why', text: 'avoid = vermeiden' }], examples: [{ en: 'Try to avoid driving in rush hour.' }] };
+    expect(planResult(noMerke, 'full').example).toEqual({ en: 'Try to avoid driving in rush hour.' });
+    expect(planResult(word, 'full').example).toBeNull();
+    expect(planResult(grammar, 'full', { fold: SHELL_FOLD }).example).toBeNull();
+  });
+
+  it('eine eigene Überschrift ohne KI („Nur auf Deutsch“) bleibt, „Claude sagt“ entfällt', () => {
+    const m: ExplanationModel = { ...grammar, lines: [{ k: 'why', text: 'Weil …', head: 'Nur auf Deutsch' }] };
+    expect(planResult(m, 'full').why).toEqual([{ t: 'text', k: 'why', text: 'Weil …', ai: undefined, lead: 'Nur auf Deutsch' }]);
+  });
+
   it('eigene Überschrift einer Antwortzeile („Deine Wertung“) bleibt als Vorspann erhalten', () => {
     const m: ExplanationModel = { ...grammar, lines: [{ k: 'yours', given: '', text: 'Du hast gesagt, deine Antwort stimmt.', head: 'Deine Wertung' }] };
     expect(planResult(m, 'full').why).toEqual([{ t: 'text', k: 'yours', text: 'Du hast gesagt, deine Antwort stimmt.', lead: 'Deine Wertung' }]);

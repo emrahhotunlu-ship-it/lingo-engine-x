@@ -191,8 +191,8 @@ test('Eigener Satz: abgeschrieben (Beispielsatz) wird ohne Claude abgewiesen; dr
   await expect(page.getByTestId('verdict-sub')).toContainText('Wichtigster Fehler');
   const note = page.getByTestId('ai-note');
   await expect(note).toBeVisible();
-  const pad = await note.evaluate((el) => parseFloat(getComputedStyle(el).paddingLeft));
-  expect(pad).toBeGreaterThan(0);
+  // U3: die Kennzeichnung steht in der Ergebnis-Karte bei der Begründung (Block „Warum“ bzw. „Merke“), nicht lose unter der Karte.
+  await expect(page.getByTestId('result').locator('[data-block="why"], [data-block="remember"]').getByTestId('ai-note')).toHaveCount(1);
   expect(errors).toEqual([]);
   await close();
 });

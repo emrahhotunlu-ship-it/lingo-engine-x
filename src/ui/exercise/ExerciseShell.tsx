@@ -228,8 +228,9 @@ export function ExerciseShell(props: ExerciseShellProps) {
     (k): k is ExplainLine['k'] => !unfoldExtra.includes(k as ExplainLine['k']),
   );
   const UNFOLD: ReadonlyArray<ExplainLine['k']> | undefined = contrastStep || unfoldExtra.length ? [...(contrastStep ? (['contrast'] as const) : []), ...unfoldExtra] : undefined;
-  const plan: ResultPlan = feedback?.explanation ? planResult(feedback.explanation, feedback.depth, { learning, fold: FOLD, unfold: UNFOLD }) : { why: [], remember: [], more: [] };
-  const examples = feedback?.explanation?.examples ?? [];
+  const plan: ResultPlan = feedback?.explanation ? planResult(feedback.explanation, feedback.depth, { learning, fold: FOLD, unfold: UNFOLD }) : { why: [], remember: [], more: [], example: null };
+  // Der offene Beispielsatz (Merke-Block) steht nicht noch einmal unter „Mehr“.
+  const examples = (feedback?.explanation?.examples ?? []).slice(plan.example ? 1 : 0);
   const hasMore = !!feedback && (plan.more.length > 0 || examples.length > 0 || !!feedback.after || !!feedback.foot);
   const result =
     feedback !== null ? (
