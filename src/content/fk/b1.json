@@ -1720,7 +1720,7 @@
       },
       "intent": {
         "de": "Ich habe mich gefragt, ob Sie uns einen Rabatt geben könnten.",
-        "en": "Politely say that you were wondering whether he could give you a discount."
+        "en": "Politely say that you were wondering whether they could give you a discount."
       },
       "hint": {
         "de": "Höflichkeit bei einer Bitte",
@@ -1733,7 +1733,9 @@
         "I was wondering if you would be able to give us a discount.",
         "I was wondering if you could give us a bit of a discount.",
         "We were wondering if you could give us a discount.",
-        "I was wondering whether you could offer us a discount."
+        "I was wondering whether you could offer us a discount.",
+        "I was wondering if you might be able to give us a discount.",
+        "We were wondering whether you could give us a discount."
       ],
       "bad": "I asked myself if you could give us a discount.",
       "why": {
