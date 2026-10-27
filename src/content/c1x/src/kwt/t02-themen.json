@@ -15,7 +15,29 @@
      "de": "may well reject. Well steht direkt hinter may.",
      "en": "may well reject. Well stands right after may."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "be"
+      ],
+      "de": "Be ist zu viel. Well steht direkt hinter dem Modalverb: may well reject.",
+      "en": "Be is too much. Well goes right after the modal: may well reject."
+     },
+     {
+      "if": [
+       "to"
+      ],
+      "de": "Nach may steht die Grundform ohne to: may well reject.",
+      "en": "After may comes the base form without to: may well reject."
+     },
+     {
+      "if": [
+       "good"
+      ],
+      "de": "Good passt nicht. Die feste Form ist may well + Grundform.",
+      "en": "Good does not fit. The fixed form is may well + base form."
+     }
+    ]
    },
    "lead": "It is quite possible that the regulator will reject our proposal.",
    "key": "WELL",
@@ -58,7 +80,29 @@
      "de": "could well be. Well steht direkt hinter dem Modalverb.",
      "en": "could well be. Well stands right after the modal."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "to"
+      ],
+      "de": "Nach could steht die Grundform ohne to: could well be.",
+      "en": "After could comes the base form without to: could well be."
+     },
+     {
+      "if": [
+       "very"
+      ],
+      "de": "Very passt nicht. Well steht direkt hinter dem Modalverb: could well be.",
+      "en": "Very does not fit. Well goes right after the modal: could well be."
+     },
+     {
+      "if": [
+       "good"
+      ],
+      "de": "Good passt nicht. Die feste Form ist could well + Grundform.",
+      "en": "Good does not fit. The fixed form is could well + base form."
+     }
+    ]
    },
    "lead": "Maybe this will turn out to be the best vacation of our lives.",
    "key": "WELL",
@@ -144,7 +188,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "modals-prob",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "mp.likely",
@@ -153,7 +197,29 @@
      "de": "is likely to be. Nach likely steht to und die Grundform.",
      "en": "is likely to be. After likely comes to and the base form."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "are"
+      ],
+      "de": "The update ist Einzahl, darum is: is likely to be.",
+      "en": "The update is singular, so is: is likely to be."
+     },
+     {
+      "if": [
+       "that"
+      ],
+      "de": "Mit dem Subjekt vorn folgt likely to, kein that: is likely to be.",
+      "en": "With the subject first, likely to follows, no that: is likely to be."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "For passt nicht. Nach likely steht to + Grundform.",
+      "en": "For does not fit. After likely comes to + base form."
+     }
+    ]
    },
    "lead": "Most probably the update will be ready by Friday.",
    "key": "LIKELY",
@@ -185,7 +251,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "modals-prob",
-   "level": "C1",
+   "level": "B2",
    "dom": "life",
    "src": "seed",
    "pat": "mp.chance",
@@ -194,7 +260,29 @@
      "de": "There is a good chance (that) … Danach folgt ein Satz, das that kann wegfallen.",
      "en": "There is a good chance (that) … A clause follows; that can be left out."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "exists"
+      ],
+      "de": "It exists ist Deutsch gedacht. Englisch sagt There is a good chance.",
+      "en": "It exists is German thinking. English says There is a good chance."
+     },
+     {
+      "if": [
+       "it"
+      ],
+      "de": "Englisch sagt there is, nicht it is: There is a good chance.",
+      "en": "English says there is, not it is: There is a good chance."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "Chance for passt nicht vor einen Satz. Es heißt a good chance (that).",
+      "en": "Chance for does not go before a clause. Say a good chance (that)."
+     }
+    ]
    },
    "lead": "My landlord will probably agree to a lower rent.",
    "key": "CHANCE",
@@ -237,7 +325,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "modals-prob",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "mp.likely",
@@ -246,7 +334,29 @@
      "de": "unlikely to affect. Nach unlikely steht to und die Grundform.",
      "en": "unlikely to affect. After unlikely comes to and the base form."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "not"
+      ],
+      "de": "Unlikely ist schon verneint, not ist zu viel: is unlikely to affect.",
+      "en": "Unlikely is already negative, not is too much: is unlikely to affect."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "For passt nicht. Nach unlikely steht to + Grundform.",
+      "en": "For does not fit. After unlikely comes to + base form."
+     },
+     {
+      "not": [
+       "to"
+      ],
+      "de": "Nach unlikely fehlt to: unlikely to affect.",
+      "en": "To is missing after unlikely: unlikely to affect."
+     }
+    ]
    },
    "lead": "The delay probably will not affect the launch.",
    "key": "UNLIKELY",
@@ -278,7 +388,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "stative-adv",
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "pat": "sa.trend",
@@ -287,7 +397,29 @@
      "de": "are seeing a sharp rise. Die Verlaufsform zeigt die laufende Entwicklung.",
      "en": "are seeing a sharp rise. The continuous shows the change under way."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "see"
+      ],
+      "de": "Die Entwicklung läuft gerade, darum die Verlaufsform: are seeing.",
+      "en": "The trend is happening now, so the progressive: are seeing."
+     },
+     {
+      "if": [
+       "saw"
+      ],
+      "de": "Es geht um diesen Monat, nicht um die Vergangenheit: are seeing.",
+      "en": "It is about this month, not the past: are seeing."
+     },
+     {
+      "if": [
+       "seen"
+      ],
+      "de": "Vor seeing steht are, nicht seen: We are seeing a sharp rise.",
+      "en": "Are goes before seeing, not seen: We are seeing a sharp rise."
+     }
+    ]
    },
    "lead": "Orders are going up fast this month.",
    "key": "SEEING",
@@ -326,7 +458,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "stative-adv",
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "pat": "sa.soft",
@@ -335,7 +467,22 @@
      "de": "was hoping you could. Die Verlaufsform macht die Bitte weicher.",
      "en": "was hoping you could. The continuous softens the request."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "to"
+      ],
+      "de": "Hoping to heißt „ich hoffe, zu …“. Gemeint ist du: hoping you could.",
+      "en": "Hoping to means you hope to do it. You mean the other person: hoping you could."
+     },
+     {
+      "not": [
+       "you"
+      ],
+      "de": "Gemeint ist die andere Person, darum braucht es you: hoping you could.",
+      "en": "The other person is meant, so you need you: hoping you could."
+     }
+    ]
    },
    "lead": "Could you confirm the venue for the workshop?",
    "key": "HOPING",
@@ -370,7 +517,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "stative-adv",
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "pat": "sa.being",
@@ -379,7 +526,29 @@
      "de": "is being very difficult. Being zeigt Verhalten für begrenzte Zeit.",
      "en": "is being very difficult. Being shows behavior for a limited time."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "been"
+      ],
+      "de": "Is been gibt es nicht. Für Verhalten gerade jetzt steht is being.",
+      "en": "Is been does not exist. For behavior right now use is being."
+     },
+     {
+      "if": [
+       "has"
+      ],
+      "de": "Has being gibt es nicht. Es heißt is being difficult.",
+      "en": "Has being does not exist. Say is being difficult."
+     },
+     {
+      "not": [
+       "is"
+      ],
+      "de": "Vor being fehlt is: The client is being difficult.",
+      "en": "Is is missing before being: The client is being difficult."
+     }
+    ]
    },
    "lead": "The client is making life very hard for us today.",
    "key": "BEING",
@@ -473,7 +642,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "stative-adv",
-   "level": "C1",
+   "level": "B2",
    "dom": "life",
    "src": "seed",
    "pat": "sa.trend",
@@ -482,7 +651,29 @@
      "de": "are getting more expensive. Die Verlaufsform zeigt die laufende Entwicklung.",
      "en": "are getting more expensive. The continuous shows the change under way."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "get"
+      ],
+      "de": "Nach are steht die -ing-Form: are getting more expensive.",
+      "en": "After are comes the -ing form: are getting more expensive."
+     },
+     {
+      "if": [
+       "got"
+      ],
+      "de": "Nach are steht die -ing-Form: are getting more expensive.",
+      "en": "After are comes the -ing form: are getting more expensive."
+     },
+     {
+      "not": [
+       "more"
+      ],
+      "de": "Es geht um einen Vergleich, darum more expensive.",
+      "en": "It is a comparison, so more expensive."
+     }
+    ]
    },
    "lead": "Houses in this area become more expensive every year.",
    "key": "GETTING",
@@ -514,7 +705,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "stative-adv",
-   "level": "C1",
+   "level": "B2",
    "dom": "life",
    "src": "seed",
    "pat": "sa.soft",
@@ -523,7 +714,29 @@
      "de": "are hoping you can come. Die Verlaufsform macht die Einladung freundlicher.",
      "en": "are hoping you can come. The continuous makes the invitation friendlier."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "to"
+      ],
+      "de": "Hoping to heißt „wir hoffen, zu …“. Gemeint sind die Gäste: hoping you can.",
+      "en": "Hoping to means we hope to do it. The guests are meant: hoping you can."
+     },
+     {
+      "not": [
+       "you"
+      ],
+      "de": "Gemeint sind die Gäste, darum braucht es you: are hoping you can.",
+      "en": "The guests are meant, so you need you: are hoping you can."
+     },
+     {
+      "not": [
+       "are"
+      ],
+      "de": "Vor hoping fehlt are: We are hoping you can come.",
+      "en": "Are is missing before hoping: We are hoping you can come."
+     }
+    ]
    },
    "lead": "We hope you can come to our housewarming party.",
    "key": "HOPING",
@@ -560,7 +773,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "future-past",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "fp.was-going",
@@ -569,7 +782,29 @@
      "de": "were going to open. Were going to nennt den Plan von damals.",
      "en": "were going to open. Were going to names the plan from back then."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "are"
+      ],
+      "de": "Der Plan liegt in der Vergangenheit, darum were: were going to open.",
+      "en": "The plan is in the past, so were: were going to open."
+     },
+     {
+      "if": [
+       "went"
+      ],
+      "de": "Went heißt „gingen“. Für den Plan steht were going to open.",
+      "en": "Went means physically going. For the plan use were going to open."
+     },
+     {
+      "if": [
+       "gone"
+      ],
+      "de": "Gone passt nicht. Für den Plan von damals steht were going to.",
+      "en": "Gone does not fit. For the plan from back then use were going to."
+     }
+    ]
    },
    "lead": "We planned to open a second office in Vienna, but the lease fell through.",
    "key": "GOING",
@@ -602,7 +837,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "future-past",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "fp.about-to",
@@ -611,7 +846,29 @@
      "de": "was about to submit. Nach about steht to und die Grundform.",
      "en": "was about to submit. After about comes to and the base form."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "submitting"
+      ],
+      "de": "Nach about to steht die Grundform: about to submit.",
+      "en": "After about to comes the base form: about to submit."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "For passt nicht. Die feste Form ist about to + Grundform.",
+      "en": "For does not fit. The fixed form is about to + base form."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "At passt nicht. Die feste Form ist about to + Grundform.",
+      "en": "At does not fit. The fixed form is about to + base form."
+     }
+    ]
    },
    "lead": "The team was on the point of submitting the report when the server crashed.",
    "key": "ABOUT",
@@ -652,7 +909,29 @@
      "de": "would become CFO. Aus der Vergangenheit auf Späteres blickt would.",
      "en": "would become CFO. Would looks from the past at something later."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "will"
+      ],
+      "de": "Die Geschichte spielt in der Vergangenheit. Der Blick nach vorn von damals heißt would.",
+      "en": "The story is in the past. Looking ahead from then uses would."
+     },
+     {
+      "if": [
+       "became"
+      ],
+      "de": "Nach would steht die Grundform: would become.",
+      "en": "After would comes the base form: would become."
+     },
+     {
+      "if": [
+       "is"
+      ],
+      "de": "Is passt nicht. Nach would steht become: would become CFO.",
+      "en": "Is does not fit. After would comes become: would become CFO."
+     }
+    ]
    },
    "lead": "He joined the firm in 2014 and became CFO six years later.",
    "key": "WOULD",
@@ -693,7 +972,29 @@
      "de": "was to take place. Was to nennt das Vorgesehene.",
      "en": "was to take place. Was to names what was meant to be."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "should"
+      ],
+      "de": "Should heißt „sollte“ als Rat. Für den Plan von damals steht was to.",
+      "en": "Should gives advice. For the plan back then use was to."
+     },
+     {
+      "if": [
+       "is"
+      ],
+      "de": "Der Plan liegt in der Vergangenheit, darum was: was to take place.",
+      "en": "The plan is in the past, so was: was to take place."
+     },
+     {
+      "if": [
+       "were"
+      ],
+      "de": "The conference ist Einzahl, darum was: was to take place.",
+      "en": "The conference is singular, so was: was to take place."
+     }
+    ]
    },
    "lead": "The conference had been planned for September, but a strike forced a delay.",
    "key": "WAS",
@@ -733,7 +1034,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "future-past",
-   "level": "C1",
+   "level": "B2",
    "dom": "life",
    "src": "seed",
    "pat": "fp.about-to",
@@ -742,7 +1043,29 @@
      "de": "was about to fall asleep. Nach about steht to und die Grundform.",
      "en": "was about to fall asleep. After about comes to and the base form."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "falling"
+      ],
+      "de": "Nach about to steht die Grundform: about to fall asleep.",
+      "en": "After about to comes the base form: about to fall asleep."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "For passt nicht. Die feste Form ist about to + Grundform.",
+      "en": "For does not fit. The fixed form is about to + base form."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "At passt nicht. Die feste Form ist about to + Grundform.",
+      "en": "At does not fit. The fixed form is about to + base form."
+     }
+    ]
    },
    "lead": "I almost fell asleep when the phone rang.",
    "key": "ABOUT",
@@ -775,7 +1098,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "future-past",
-   "level": "C1",
+   "level": "B2",
    "dom": "life",
    "src": "seed",
    "pat": "fp.was-going",
@@ -784,7 +1107,29 @@
      "de": "was going to bake. Was going to nennt den Plan von damals.",
      "en": "was going to bake. Was going to names the plan from back then."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "am"
+      ],
+      "de": "Der Plan liegt in der Vergangenheit, darum was: was going to bake.",
+      "en": "The plan is in the past, so was: was going to bake."
+     },
+     {
+      "if": [
+       "went"
+      ],
+      "de": "Went heißt „ging“. Für den Plan steht was going to bake.",
+      "en": "Went means physically going. For the plan use was going to bake."
+     },
+     {
+      "if": [
+       "gone"
+      ],
+      "de": "Gone passt nicht. Für den Plan von damals steht was going to.",
+      "en": "Gone does not fit. For the plan from back then use was going to."
+     }
+    ]
    },
    "lead": "I intended to bake a cake for your birthday, but I ran out of time.",
    "key": "GOING",
@@ -817,7 +1162,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "quant-neg",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "qn.none",
@@ -826,7 +1171,29 @@
      "de": "Neither of the proposals meets … Neither of steht bei genau zwei Dingen.",
      "en": "Neither of the proposals meets … Neither of is used with exactly two things."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "none"
+      ],
+      "de": "None of steht bei drei und mehr. Bei genau zwei steht Neither of.",
+      "en": "None of is for three or more. For exactly two use Neither of."
+     },
+     {
+      "if": [
+       "no"
+      ],
+      "de": "No passt nicht vor of. Bei zwei Dingen steht Neither of.",
+      "en": "No does not go before of. For two things use Neither of."
+     },
+     {
+      "if": [
+       "not"
+      ],
+      "de": "Neither ist schon verneint, not ist zu viel.",
+      "en": "Neither is already negative, not is too much."
+     }
+    ]
    },
    "lead": "Both proposals fail to meet our requirements.",
    "key": "NEITHER",
@@ -860,7 +1227,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "quant-neg",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "qn.hardly",
@@ -869,7 +1236,29 @@
      "de": "hardly had any time. Hardly ist schon verneint.",
      "en": "hardly had any time. Hardly is already negative."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "not"
+      ],
+      "de": "Hardly ist schon verneint, not ist zu viel: hardly had any time.",
+      "en": "Hardly is already negative, not is too much: hardly had any time."
+     },
+     {
+      "if": [
+       "no"
+      ],
+      "de": "Nach hardly steht any, nicht no: hardly had any time.",
+      "en": "After hardly comes any, not no: hardly had any time."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "Did ist hier unnötig: We hardly had any time.",
+      "en": "Did is not needed here: We hardly had any time."
+     }
+    ]
    },
    "lead": "There was almost no time to prepare the presentation.",
    "key": "HARDLY",
@@ -910,7 +1299,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "quant-neg",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "qn.no-longer",
@@ -919,7 +1308,29 @@
      "de": "no longer supports. No longer steht vor dem Verb.",
      "en": "no longer supports. No longer stands before the verb."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "not"
+      ],
+      "de": "Die feste Form heißt no longer, nicht not longer.",
+      "en": "The fixed form is no longer, not not longer."
+     },
+     {
+      "if": [
+       "more"
+      ],
+      "de": "More passt nicht zu LONGER. Es heißt no longer supports.",
+      "en": "More does not go with LONGER. Say no longer supports."
+     },
+     {
+      "if": [
+       "supported"
+      ],
+      "de": "Es geht um heute, darum Präsens: no longer supports.",
+      "en": "It is about now, so present simple: no longer supports."
+     }
+    ]
    },
    "lead": "The vendor stopped supporting this version last year.",
    "key": "LONGER",
@@ -951,7 +1362,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "quant-neg",
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "pat": "qn.number",
@@ -960,7 +1371,29 @@
      "de": "A number of clients have asked. A number of nimmt das Verb im Plural.",
      "en": "A number of clients have asked. A number of takes a plural verb."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "has"
+      ],
+      "de": "A number of nimmt das Verb im Plural: clients have asked.",
+      "en": "A number of takes a plural verb: clients have asked."
+     },
+     {
+      "if": [
+       "amount"
+      ],
+      "de": "Amount steht bei Unzählbarem. Kunden zählt man: a number of.",
+      "en": "Amount is for uncountables. Clients can be counted: a number of."
+     },
+     {
+      "if": [
+       "deal"
+      ],
+      "de": "A great deal of steht bei Unzählbarem. Kunden zählt man: a number of.",
+      "en": "A great deal of is for uncountables. Clients can be counted: a number of."
+     }
+    ]
    },
    "lead": "Many clients have asked for a refund this month.",
    "key": "NUMBER",
@@ -1004,7 +1437,29 @@
      "de": "scarcely ever watch. Scarcely ever heißt „fast nie“.",
      "en": "scarcely ever watch. Scarcely ever means “almost never”."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "not"
+      ],
+      "de": "Scarcely ist schon verneint, not ist zu viel: scarcely ever watch.",
+      "en": "Scarcely is already negative, not is too much: scarcely ever watch."
+     },
+     {
+      "if": [
+       "never"
+      ],
+      "de": "Scarcely never ist doppelt verneint. Es heißt scarcely ever.",
+      "en": "Scarcely never is a double negative. Say scarcely ever."
+     },
+     {
+      "not": [
+       "ever"
+      ],
+      "de": "Für „fast nie“ braucht es ever: scarcely ever watch.",
+      "en": "For “almost never” you need ever: scarcely ever watch."
+     }
+    ]
    },
    "lead": "I almost never watch television in the evening.",
    "key": "SCARCELY",
@@ -1036,7 +1491,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "quant-neg",
-   "level": "C1",
+   "level": "B2",
    "dom": "life",
    "src": "seed",
    "pat": "qn.none",
@@ -1045,7 +1500,29 @@
      "de": "None of my neighbors has a car. None of heißt „keiner von“.",
      "en": "None of my neighbors has a car. None of means “not one of”."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "no"
+      ],
+      "de": "No steht nicht vor of. Für „keiner von“ steht None of.",
+      "en": "No never goes before of. For “not one of” use None of."
+     },
+     {
+      "if": [
+       "nobody"
+      ],
+      "de": "Nobody steht nicht vor of. Für „keiner von“ steht None of.",
+      "en": "Nobody does not go before of. For “not one of” use None of."
+     },
+     {
+      "if": [
+       "not"
+      ],
+      "de": "None ist schon verneint, not ist zu viel.",
+      "en": "None is already negative, not is too much."
+     }
+    ]
    },
    "lead": "Nobody among my neighbors owns a car.",
    "key": "NONE",

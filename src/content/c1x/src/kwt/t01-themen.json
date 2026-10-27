@@ -241,7 +241,29 @@
      "de": "Had it not been for + Nomen heißt „wenn nicht … gewesen wäre“ und bezieht sich auf die Vergangenheit.",
      "en": "Had it not been for + noun means “if it had not been for” and refers to the past."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "was"
+      ],
+      "de": "Nach Had folgt it not been for. Was passt nicht in diese Form.",
+      "en": "After Had comes it not been for. Was does not fit this pattern."
+     },
+     {
+      "if": [
+       "without"
+      ],
+      "de": "Without steht schon in Satz A. Mit HAD wird daraus Had it not been for.",
+      "en": "Without is already in sentence A. With HAD it becomes Had it not been for."
+     },
+     {
+      "not": [
+       "not"
+      ],
+      "de": "Hier fehlt not: Had it not been for = wenn es … nicht gegeben hätte.",
+      "en": "Not is missing: Had it not been for = if there had not been."
+     }
+    ]
    },
    "lead": "Without the support of our partners, we could not have finished on time.",
    "key": "HAD",
@@ -629,7 +651,29 @@
      "de": "Much as I would like to help … räumt etwas ein.",
      "en": "Much as I would like to help … concedes a point."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "so"
+      ],
+      "de": "So much as heißt etwas anderes. Für das Einräumen steht Much as I would like to help.",
+      "en": "So much as means something else. To concede, use Much as I would like to help."
+     },
+     {
+      "if": [
+       "that"
+      ],
+      "de": "Nach Much as folgt direkt das Subjekt, ohne that: Much as I would like.",
+      "en": "After Much as the subject follows directly, without that: Much as I would like."
+     },
+     {
+      "if": [
+       "of"
+      ],
+      "de": "Of passt nicht. Die feste Form ist Much as + Satz.",
+      "en": "Of does not fit. The fixed form is Much as + clause."
+     }
+    ]
    },
    "lead": "Although I would like to help, I cannot approve this request.",
    "key": "MUCH",
@@ -671,7 +715,29 @@
      "de": "Surprising as it sounds, … Das Adjektiv steht vor as, dann die normale Stellung.",
      "en": "Surprising as it sounds, … The adjective stands before as, then the normal order."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "that"
+      ],
+      "de": "Nach Surprising as folgt direkt das Subjekt, ohne that: Surprising as it sounds.",
+      "en": "After Surprising as the subject follows directly, without that: Surprising as it sounds."
+     },
+     {
+      "if": [
+       "so"
+      ],
+      "de": "Die feste Form ist Adjektiv + as + Satz: Surprising as it sounds.",
+      "en": "The fixed form is adjective + as + clause: Surprising as it sounds."
+     },
+     {
+      "not": [
+       "as"
+      ],
+      "de": "Hinter dem Adjektiv fehlt as: Surprising as it sounds.",
+      "en": "As is missing after the adjective: Surprising as it sounds."
+     }
+    ]
    },
    "lead": "Even though it sounds unexpected, the old tool is faster.",
    "key": "SURPRISING",
@@ -713,7 +779,29 @@
      "de": "Such was the demand that … Das Verb steht vor dem Subjekt.",
      "en": "Such was the demand that … The verb stands before the subject."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "so"
+      ],
+      "de": "Mit SUCH heißt es Such was the demand that … So passt zu so high.",
+      "en": "With SUCH it is Such was the demand that … So goes with so high."
+     },
+     {
+      "if": [
+       "very"
+      ],
+      "de": "Very passt nicht. Such was the demand reicht für den Nachdruck.",
+      "en": "Very does not fit. Such was the demand already adds the emphasis."
+     },
+     {
+      "not": [
+       "was"
+      ],
+      "de": "Nach Such steht das Verb vor dem Subjekt: Such was the demand.",
+      "en": "After Such the verb goes before the subject: Such was the demand."
+     }
+    ]
    },
    "lead": "The demand was so high that we ran out of stock.",
    "key": "SUCH",
@@ -818,7 +906,29 @@
      "de": "Tempting as the offer is, … Das Adjektiv steht vor as, dann die normale Stellung.",
      "en": "Tempting as the offer is, … The adjective stands before as, then the normal order."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "that"
+      ],
+      "de": "Nach Tempting as folgt direkt das Subjekt, ohne that: Tempting as the offer is.",
+      "en": "After Tempting as the subject follows directly, without that: Tempting as the offer is."
+     },
+     {
+      "if": [
+       "so"
+      ],
+      "de": "Die feste Form ist Adjektiv + as + Satz: Tempting as the offer is.",
+      "en": "The fixed form is adjective + as + clause: Tempting as the offer is."
+     },
+     {
+      "if": [
+       "it"
+      ],
+      "de": "It ist hier zu ungenau. Gemeint ist das Angebot: Tempting as the offer is.",
+      "en": "It is too vague here. The offer is meant: Tempting as the offer is."
+     }
+    ]
    },
    "lead": "Although the offer sounds attractive, I will stay home tonight.",
    "key": "TEMPTING",
@@ -959,7 +1069,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "ellipsis",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "el.so-not",
@@ -968,7 +1078,29 @@
      "de": "I hope not. Not steht direkt hinter dem Verb und ersetzt den Gedanken.",
      "en": "I hope not. Not follows the verb directly and replaces the thought."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "so"
+      ],
+      "de": "I hope so heißt das Gegenteil. Für „hoffentlich nicht“ steht I hope not.",
+      "en": "I hope so means the opposite. For “hopefully not” use I hope not."
+     },
+     {
+      "if": [
+       "that"
+      ],
+      "de": "Hope that not gibt es nicht. Es heißt einfach I hope not.",
+      "en": "Hope that not does not exist. Simply say I hope not."
+     },
+     {
+      "if": [
+       "no"
+      ],
+      "de": "No passt nicht nach hope. Es heißt I hope not.",
+      "en": "No does not follow hope. Say I hope not."
+     }
+    ]
    },
    "lead": "I hope they will never renew the contract.",
    "key": "NOT",
@@ -1171,7 +1303,29 @@
      "de": "Those of ersetzt das Pluralnomen fees im Vergleich.",
      "en": "Those of replaces the plural noun fees in the comparison."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "that"
+      ],
+      "de": "Fees ist Mehrzahl, darum those, nicht that: lower than those of.",
+      "en": "Fees is plural, so those, not that: lower than those of."
+     },
+     {
+      "if": [
+       "ones"
+      ],
+      "de": "The ones of ist unüblich. Vor of steht those: lower than those of.",
+      "en": "The ones of is unusual. Before of use those: lower than those of."
+     },
+     {
+      "not": [
+       "of"
+      ],
+      "de": "Hinter those fehlt of: lower than those of the old provider.",
+      "en": "Of is missing after those: lower than those of the old provider."
+     }
+    ]
    },
    "lead": "The fees of the new provider are lower than the fees of the old provider.",
    "key": "THOSE",
@@ -1205,7 +1359,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "ellipsis",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "el.to-aux",
@@ -1214,7 +1368,29 @@
      "de": "I'd love to. Das Verb join entfällt, to bleibt.",
      "en": "I'd love to. The verb join is dropped, to stays."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "it"
+      ],
+      "de": "Love it passt nicht als Antwort auf eine Einladung. Es heißt I would love to.",
+      "en": "Love it does not answer an invitation. Say I would love to."
+     },
+     {
+      "if": [
+       "so"
+      ],
+      "de": "So passt hier nicht. Das Verb entfällt, to bleibt: I would love to.",
+      "en": "So does not fit here. The verb is dropped, to stays: I would love to."
+     },
+     {
+      "not": [
+       "to"
+      ],
+      "de": "Am Ende muss to stehen bleiben: I would love to.",
+      "en": "To must stay at the end: I would love to."
+     }
+    ]
    },
    "lead": "Yes, I would like to join you for lunch, but I have another meeting.",
    "key": "LOVE",
@@ -1354,7 +1530,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "ellipsis",
-   "level": "C1",
+   "level": "B2",
    "dom": "life",
    "src": "seed",
    "pat": "el.one-ones",
@@ -1363,7 +1539,29 @@
      "de": "The ones ersetzt das Pluralnomen apples.",
      "en": "The ones replaces the plural noun apples."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "those"
+      ],
+      "de": "Vor einem Relativsatz klingt the ones natürlicher, und der Schlüssel ist ONES.",
+      "en": "Before a relative clause the ones sounds more natural, and the key word is ONES."
+     },
+     {
+      "if": [
+       "what"
+      ],
+      "de": "What leitet keinen Relativsatz nach einem Nomen ein. Es heißt the ones that.",
+      "en": "What never follows a noun. Say the ones that."
+     },
+     {
+      "not": [
+       "the"
+      ],
+      "de": "Vor ones fehlt the: the ones that we bought.",
+      "en": "The is missing before ones: the ones that we bought."
+     }
+    ]
    },
    "lead": "These apples are sweeter than the apples that we bought last week.",
    "key": "ONES",
@@ -1396,7 +1594,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "noun-phrase",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "np.contact",
@@ -1405,7 +1603,29 @@
      "de": "the most useful training I have attended. Das Pronomen that darf fehlen.",
      "en": "the most useful training I have attended. The pronoun that may be dropped."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "what"
+      ],
+      "de": "What leitet keinen Relativsatz nach einem Nomen ein. Nach training steht that oder nichts.",
+      "en": "What never follows a noun. After training use that or nothing."
+     },
+     {
+      "if": [
+       "which"
+      ],
+      "de": "Nach einem Superlativ steht that oder nichts, kaum which.",
+      "en": "After a superlative use that or nothing, hardly ever which."
+     },
+     {
+      "not": [
+       "have"
+      ],
+      "de": "Es geht um alle bisherigen Kurse, darum Present Perfect: I have attended.",
+      "en": "It is about all courses so far, so present perfect: I have attended."
+     }
+    ]
    },
    "lead": "That was the most useful training that I have ever joined.",
    "key": "ATTENDED",
@@ -1442,7 +1662,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "noun-phrase",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "np.contact",
@@ -1451,7 +1671,29 @@
      "de": "the proposal they sent us. Das Pronomen that darf fehlen.",
      "en": "the proposal they sent us. The pronoun that may be dropped."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "what"
+      ],
+      "de": "What leitet keinen Relativsatz nach einem Nomen ein. Nach proposal steht that, which oder nichts.",
+      "en": "What never follows a noun. After proposal use that, which or nothing."
+     },
+     {
+      "if": [
+       "who"
+      ],
+      "de": "Who steht für Personen. Ein Angebot ist eine Sache: that, which oder nichts.",
+      "en": "Who is for people. A proposal is a thing: that, which or nothing."
+     },
+     {
+      "if": [
+       "it"
+      ],
+      "de": "It ist zu viel: Der Relativsatz hat schon sein Objekt. Es heißt they sent us.",
+      "en": "It is one word too many: the clause already has its object. Say they sent us."
+     }
+    ]
    },
    "lead": "The proposal which they handed to us last week was far too expensive.",
    "key": "SENT",
@@ -1486,7 +1728,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "noun-phrase",
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "pat": "np.participle",
@@ -1495,7 +1737,29 @@
      "de": "the employees working on the pilot. Das aktive Partizip ersetzt who work.",
      "en": "the employees working on the pilot. The active participle replaces who work."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "who"
+      ],
+      "de": "Mit WORKING fällt who weg: the employees working on the pilot.",
+      "en": "With WORKING, who is dropped: the employees working on the pilot."
+     },
+     {
+      "if": [
+       "are"
+      ],
+      "de": "Are ist zu viel. Das Partizip steht allein: employees working on.",
+      "en": "Are is too much. The participle stands alone: employees working on."
+     },
+     {
+      "if": [
+       "work"
+      ],
+      "de": "Der Schlüssel ist WORKING. Mit work bräuchte es who: who work on.",
+      "en": "The key word is WORKING. With work you would need who: who work on."
+     }
+    ]
    },
    "lead": "The employees who work on the pilot received a bonus.",
    "key": "WORKING",
@@ -1527,7 +1791,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "noun-phrase",
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "pat": "np.participle",
@@ -1536,7 +1800,29 @@
      "de": "the documents sent to the client. Das passive Partizip ersetzt that were sent.",
      "en": "the documents sent to the client. The passive participle replaces that were sent."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "mailing"
+      ],
+      "de": "Die Dokumente werden verschickt, also passives Partizip: documents sent to.",
+      "en": "The documents are sent, so the passive participle: documents sent to."
+     },
+     {
+      "if": [
+       "are"
+      ],
+      "de": "Are ist zu viel. Das Partizip steht allein hinter dem Nomen: documents sent to.",
+      "en": "Are is too much. The participle stands alone after the noun: documents sent to."
+     },
+     {
+      "not": [
+       "to"
+      ],
+      "de": "Hinter sent fehlt to: documents sent to the client.",
+      "en": "To is missing after sent: documents sent to the client."
+     }
+    ]
    },
    "lead": "All the documents that we mailed to the client are listed below.",
    "key": "SENT",
@@ -1576,7 +1862,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "noun-phrase",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "np.of-s",
@@ -1585,7 +1871,36 @@
      "de": "Bei Zeitangaben steht ’s: today’s meeting. Danach folgt has been canceled.",
      "en": "With time words ’s is used: today’s meeting. Has been canceled follows."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "of"
+      ],
+      "de": "The meeting of today ist unüblich. Zeitangaben nehmen ’s: today’s meeting.",
+      "en": "The meeting of today is unusual. Time words take ’s: today’s meeting."
+     },
+     {
+      "if": [
+       "from"
+      ],
+      "de": "From passt nicht. Zeitangaben nehmen ’s: today’s meeting.",
+      "en": "From does not fit. Time words take ’s: today’s meeting."
+     },
+     {
+      "if": [
+       "the"
+      ],
+      "de": "Vor today’s steht kein the: today’s meeting has been canceled.",
+      "en": "No the before today’s: today’s meeting has been canceled."
+     },
+     {
+      "not": [
+       "been"
+      ],
+      "de": "Das Treffen wird abgesagt, also Passiv: has been canceled.",
+      "en": "The meeting is canceled by someone, so passive: has been canceled."
+     }
+    ]
    },
    "lead": "We need to know whether the meeting that was planned for today has been canceled.",
    "key": "TODAY'S",
@@ -1618,7 +1933,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "noun-phrase",
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "pat": "np.to-inf",
@@ -1627,7 +1942,29 @@
      "de": "the only applicant to pass. Nach only steht to + Grundform.",
      "en": "the only applicant to pass. After only comes to + base form."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "who"
+      ],
+      "de": "Mit TO fällt who weg: the only applicant to pass.",
+      "en": "With TO, who is dropped: the only applicant to pass."
+     },
+     {
+      "if": [
+       "passed"
+      ],
+      "de": "Nach to steht die Grundform: to pass, nicht to passed.",
+      "en": "After to comes the base form: to pass, not to passed."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "For passt nicht. Nach the only + Nomen steht to + Grundform.",
+      "en": "For does not fit. After the only + noun comes to + base form."
+     }
+    ]
    },
    "lead": "Ms. Lee was the only applicant who passed all three tests.",
    "key": "TO",
@@ -1669,7 +2006,29 @@
      "de": "the extent to which. Nach extent steht to which.",
      "en": "the extent to which. After extent comes to which."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "of"
+      ],
+      "de": "The extent of passt vor ein Nomen. Vor einem Satz steht the extent to which.",
+      "en": "The extent of goes before a noun. Before a clause use the extent to which."
+     },
+     {
+      "if": [
+       "that"
+      ],
+      "de": "Nach extent steht kein that. Die feste Form ist the extent to which.",
+      "en": "No that after extent. The fixed form is the extent to which."
+     },
+     {
+      "if": [
+       "how"
+      ],
+      "de": "How steht in Satz A. Mit EXTENT wird daraus the extent to which.",
+      "en": "How is in sentence A. With EXTENT it becomes the extent to which."
+     }
+    ]
    },
    "lead": "The study measures how strongly customers trust our brand.",
    "key": "EXTENT",
@@ -1701,7 +2060,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "noun-phrase",
-   "level": "C1",
+   "level": "B2",
    "dom": "life",
    "src": "seed",
    "pat": "np.contact",
@@ -1710,7 +2069,29 @@
      "de": "the best flight I could find. Das Pronomen that darf fehlen.",
      "en": "the best flight I could find. The pronoun that may be dropped."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "what"
+      ],
+      "de": "What leitet keinen Relativsatz nach einem Nomen ein. Nach flight steht that oder nichts.",
+      "en": "What never follows a noun. After flight use that or nothing."
+     },
+     {
+      "if": [
+       "who"
+      ],
+      "de": "Who steht für Personen. Ein Flug ist eine Sache: that oder nichts.",
+      "en": "Who is for people. A flight is a thing: that or nothing."
+     },
+     {
+      "if": [
+       "it"
+      ],
+      "de": "It ist zu viel: Der Relativsatz hat schon sein Objekt. Es heißt I could find.",
+      "en": "It is one word too many: the clause already has its object. Say I could find."
+     }
+    ]
    },
    "lead": "This is the best flight that my search turned up.",
    "key": "FIND",
@@ -1742,7 +2123,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "noun-phrase",
-   "level": "C1",
+   "level": "B2+",
    "dom": "life",
    "src": "seed",
    "pat": "np.participle",
@@ -1751,7 +2132,29 @@
      "de": "everyone invited to the wedding. Das passive Partizip ersetzt who is invited.",
      "en": "everyone invited to the wedding. The passive participle replaces who is invited."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "who"
+      ],
+      "de": "Mit INVITED fällt who is weg: everyone invited to the wedding.",
+      "en": "With INVITED, who is is dropped: everyone invited to the wedding."
+     },
+     {
+      "if": [
+       "is"
+      ],
+      "de": "Is ist zu viel. Das Partizip steht allein: everyone invited to.",
+      "en": "Is is too much. The participle stands alone: everyone invited to."
+     },
+     {
+      "if": [
+       "inviting"
+      ],
+      "de": "Die Gäste werden eingeladen, also passives Partizip: invited.",
+      "en": "The guests are invited, so the passive participle: invited."
+     }
+    ]
    },
    "lead": "Everyone who received an invitation to the wedding must reply by Friday.",
    "key": "INVITED",
@@ -1784,7 +2187,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "noun-phrase",
-   "level": "C1",
+   "level": "B2+",
    "dom": "life",
    "src": "seed",
    "pat": "np.to-inf",
@@ -1793,7 +2196,29 @@
      "de": "the only person to answer. Nach only steht to + Grundform.",
      "en": "the only person to answer. After only comes to + base form."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "if": [
+       "who"
+      ],
+      "de": "Mit TO fällt who weg: the only person to answer.",
+      "en": "With TO, who is dropped: the only person to answer."
+     },
+     {
+      "if": [
+       "answered"
+      ],
+      "de": "Nach to steht die Grundform: to answer, nicht to answered.",
+      "en": "After to comes the base form: to answer, not to answered."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "For passt nicht. Nach the only + Nomen steht to + Grundform.",
+      "en": "For does not fit. After the only + noun comes to + base form."
+     }
+    ]
    },
    "lead": "Anna was the only person who answered the question.",
    "key": "TO",
