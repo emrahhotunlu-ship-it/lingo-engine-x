@@ -588,3 +588,13 @@ Emrah: „Alles wie empfohlen“. Damit gilt:
 8. Wochenfrage zur Selbstsicherheit (1–5) am Ende des Wochenabschlusses.
 9. Grenze „sicher“ für gesprochene Wendungen 15 s; nach 4 Wochen 20 s, wenn > 30 % der richtigen gesprochenen Wendungen zwischen 15 und 20 s liegen.
 Zur Kenntnis genommen: Hören/Sprechen bis ~8 (kein Mikrofon), Grammatik 18–22 Wochen, Mission erst ab Stufe 5 Pflicht. Nächster Schritt: Noras Vorschau (Stufe 0) als separates Test-Artefakt ohne Fähigkeiten, Blindtest-Tor 4 von 5.
+
+## 27.10.2026 – Relaunch: Vorschau v2 abgenommen, Fragen 15–19, Start Stufe 1
+Emrah zur Vorschau v2 (`WBft3EEx7jYYv4QHdepuNm` Version 2 `1793137833-35a1`): „Ja tut es alles wie vorgeschlagen genau so bitte. Go!“ Damit gilt:
+- **Blindtest bestanden** (Tor vor Stufe 1, Konzept 12.2): Die Vorschau wirkt so hochwertig wie Speak/Linear. Stufe 1 startet.
+- **15.** Neue Wörter auf Abruf im Trainer nach der Pflicht, zusammen mit der Pflicht höchstens 5 je Tag; weitere Funde als „erkennst du“.
+- **16.** Anki: Englisch → Deutsch mit 4 Knöpfen und echten Abständen; Deutsch → Englisch nur „Wusste ich / Wusste ich nicht“ ohne Wirkung auf den Plan.
+- **17.** Abend-Check fällt weg.
+- **18.** „Wörter üben“ auf Heute erst nach der Pflicht; im Reiter Wörter immer.
+- **19.** Eigene Funde höchstens 1 je Tag in der Pflicht, weitere über den Trainer.
+- **Offene Punkte aus Vorschau v1, wie vorgeschlagen:** Eingabetaste am iPhone darf „go/Los“ heißen (der Browser erlaubt kein „Prüfen“; „Prüfen“ steht als Knopf über der Tastatur); „Pause, später weiter“ im Menü „…“; Dunkel ist Standard; „Höhe messen“ und Startzeit misst Emrah nach Stufe 1 am iPhone (Foto der Diagnose).

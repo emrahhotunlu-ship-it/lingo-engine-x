@@ -940,7 +940,7 @@ Inhalte entstehen nach dem Vorlauf in 8.7, je Test-Link höchstens ein neuer Inh
 13. **Dauer:** erster Durchgang durch die 8 Kapitel ehrlich nachgerechnet **18–22 Wochen** (vorher 16–20; feste Tage wie Schreib-, Missions- und Meilensteintag lassen weniger Platz für Themenstarts). C1 realistisch weiter in 12–15 Monaten.
 14. **Mission erst ab Stufe 5:** Bis die Missionen gebaut sind, ist der Freitag ein normaler Lerntag.
 
-**Offen (Nachtrag 27.10.2026, Vorschläge von Lena, Mara und Kai):**
+**Emrah hat entschieden (Nachtrag 27.10.2026, „alles wie vorgeschlagen“; Blindtest bestanden):**
 15. **Neue Wörter auf Abruf:** Du kannst im Trainer nach der Pflicht jederzeit neue Wörter dazunehmen, aber zusammen mit der Pflicht höchstens 5 am Tag. Mehr würde der Gestern-Check am nächsten Morgen nicht mehr sauber prüfen. Weitere Funde kommen als „erkennst du“ dazu. **Vorschlag: so.**
 16. **Anki-Modus:** Englisch → Deutsch mit 4 Knöpfen und echten Abständen; Deutsch → Englisch nur „Wusste ich / Wusste ich nicht“ ohne Wirkung auf den Plan. **Vorschlag: so.**
 17. **Abend-Check fällt weg**, damit der Test am nächsten Morgen ehrlich bleibt. **Vorschlag: so.**
