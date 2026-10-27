@@ -19813,12 +19813,10 @@
    "type": "kwt",
    "pat": "lk.whereas",
    "from": "Anna prefers email, but Ben prefers calls.",
-   "key": "ANNA",
+   "key": "WHEREAS",
    "frame": "___ email, Ben prefers calls.",
    "answer": "Whereas Anna prefers",
-   "accepted": [
-    "While Anna prefers"
-   ],
+   "accepted": [],
    "words": [
     3,
     3
@@ -19831,10 +19829,10 @@
     "wrong": [
      {
       "not": [
-       "anna"
+       "whereas"
       ],
-      "de": "Das Schlüsselwort anna muss unverändert in der Lücke stehen.",
-      "en": "The key word anna must stay unchanged in the gap."
+      "de": "Das Schlüsselwort whereas muss unverändert in der Lücke stehen.",
+      "en": "The key word whereas must stay unchanged in the gap."
      },
      {
       "if": [
@@ -19856,8 +19854,8 @@
       "if": [
        "but"
       ],
-      "de": "But verbindet zwei Hauptsätze und kann keinen Satz vorn einleiten. Gesucht ist ein Bindewort für den Vergleich.",
-      "en": "But joins two main clauses and cannot open the first clause here. A linker for the comparison is needed."
+      "de": "But kann hier nicht den ersten Teilsatz einleiten. Gesucht ist ein Bindewort für den Vergleich.",
+      "en": "But cannot open the first clause here. A linker for the comparison is needed."
      }
     ]
    },
@@ -19911,8 +19909,8 @@
       "if": [
        "but"
       ],
-      "de": "But verbindet zwei Hauptsätze und kann keinen Satz vorn einleiten. Gesucht ist ein Bindewort für den Vergleich.",
-      "en": "But joins two main clauses and cannot open the first clause here. A linker for the comparison is needed."
+      "de": "But kann hier nicht den ersten Teilsatz einleiten. Gesucht ist ein Bindewort für den Vergleich.",
+      "en": "But cannot open the first clause here. A linker for the comparison is needed."
      }
     ]
    },
