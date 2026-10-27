@@ -26,28 +26,28 @@
    ]
   }
  },
- "We are holding the workshop ___.": {
-  "pat": "wo.place-time",
+ "We ___ the signed contract from the client.": {
+  "pat": "wo.verb-object",
   "why": {
    "ok": {
-    "de": "Richtig: Ort vor Zeit ist üblich, beides hinter dem Objekt: in Munich tomorrow.",
-    "en": "Right: place before time is usual, both after the object: in Munich tomorrow."
+    "de": "Richtig: Bei Verneinung steht still vor dem Hilfsverb: We still haven't received …",
+    "en": "Right: in a negative, still goes before the auxiliary: We still haven't received …"
    },
    "wrong": [
     {
-     "opt": "in tomorrow Munich",
-     "de": "„in“ und Munich gehören zusammen. Die Zeit tomorrow darf nicht dazwischen stehen.",
-     "en": "“in” and Munich belong together. The time word tomorrow cannot sit between them."
+     "opt": "haven't still received",
+     "de": "Das deutsche „weiterhin nicht“ verleitet dazu. Bei Verneinung steht still vor haven't.",
+     "en": "German “noch immer nicht” tempts you here. In a negative, still goes before haven't."
     },
     {
-     "opt": "Munich in tomorrow",
-     "de": "Die Präposition steht vor ihrem Nomen: in Munich, nicht Munich in.",
-     "en": "The preposition comes before its noun: in Munich, not Munich in."
+     "opt": "haven't received still",
+     "de": "Am Satzende klingt still hier falsch. Es steht vor dem Hilfsverb: still haven't.",
+     "en": "At the end, still sounds wrong here. It goes before the auxiliary: still haven't."
     },
     {
-     "opt": "tomorrow Munich in",
-     "de": "Die Reihenfolge ist ganz verdreht. Die Präposition in gehört direkt vor Munich.",
-     "en": "The order is scrambled. The preposition in belongs directly before Munich."
+     "opt": "didn't still receive",
+     "de": "Zwei Fehler: still gehört vor das Hilfsverb, und „bis jetzt“ verlangt das Present Perfect.",
+     "en": "Two errors: still goes before the auxiliary, and “up to now” needs the present perfect."
     }
    ]
   }
@@ -313,6 +313,31 @@
      ],
      "de": "Das Objekt the plan folgt direkt auf explained. Das Adverb steht davor oder dahinter.",
      "en": "The object the plan follows explained directly. The adverb goes before or after."
+    }
+   ]
+  }
+ },
+ "We haven't still received the payment.": {
+  "pat": "wo.verb-object",
+  "why": {
+   "ok": {
+    "de": "Richtig: Bei Verneinung steht still vor dem Hilfsverb: We still haven't received …",
+    "en": "Right: in a negative, still goes before the auxiliary: We still haven't received …"
+   },
+   "wrong": [
+    {
+     "if": [
+      "haven't still"
+     ],
+     "de": "Das deutsche „weiterhin nicht“ verleitet dazu. Bei Verneinung steht still vor haven't.",
+     "en": "German “noch immer nicht” tempts you here. In a negative, still goes before haven't."
+    },
+    {
+     "not": [
+      "still haven't"
+     ],
+     "de": "Gesucht ist die Stellung still haven't: still steht vor dem Hilfsverb.",
+     "en": "The order still haven't is needed: still goes before the auxiliary."
     }
    ]
   }

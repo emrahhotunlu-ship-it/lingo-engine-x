@@ -45,7 +45,8 @@
      "en": "The key word said must stay unchanged in the gap."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "dm-con-k2",
@@ -82,7 +83,8 @@
      "en": "“Even though” needs a full clause. Here a new sentence follows: Even so."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "dm-con-f1",
@@ -288,7 +290,8 @@
      "en": "The key word contrast must stay unchanged in the gap."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "dm-ctr-f1",
@@ -821,7 +824,8 @@
      "en": "The key word short must stay unchanged in the gap."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "dm-sum-k2",

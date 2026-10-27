@@ -47,7 +47,8 @@
      "en": "Having been read is passive. You read the contract yourself: Having read."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "cp-hav-k2",
@@ -96,7 +97,8 @@
      "en": "Having been approved is passive. The client approves it himself: having approved."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "cp-hav-f1",
@@ -253,7 +255,8 @@
      "en": "Being working is not a form. The participle is simply Working."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "cp-ing-k2",
@@ -299,7 +302,8 @@
      "en": "Having walked means: walked first. Here both happen together: Walking to."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "cp-ing-f1",
@@ -438,7 +442,8 @@
      "en": "Was designed is a finite verb phrase. The participle stands alone: Designed for."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "cp-pp-k2",
@@ -486,7 +491,8 @@
      "en": "As does not belong in the gap: the participle replaces the whole clause."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "cp-pp-f1",
@@ -646,7 +652,8 @@
      "en": "Waited for is the simple past and does not replace a clause."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "cp-sub-k2",
@@ -693,7 +700,8 @@
      "en": "Having been checked is passive. Here you check yourself: Having checked."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "cp-sub-f1",

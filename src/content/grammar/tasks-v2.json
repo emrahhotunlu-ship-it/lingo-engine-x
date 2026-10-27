@@ -52,7 +52,8 @@
      }
     ]
    },
-   "topic": "articles"
+   "topic": "articles",
+   "practiceOnly": true
   },
   {
    "id": "art-ind-k2",
@@ -105,7 +106,8 @@
      }
     ]
    },
-   "topic": "articles"
+   "topic": "articles",
+   "practiceOnly": true
   },
   {
    "id": "art-ind-f1",
@@ -259,7 +261,8 @@
      }
     ]
    },
-   "topic": "articles"
+   "topic": "articles",
+   "practiceOnly": true
   },
   {
    "id": "art-snd-k2",
@@ -313,7 +316,8 @@
      }
     ]
    },
-   "topic": "articles"
+   "topic": "articles",
+   "practiceOnly": true
   },
   {
    "id": "art-snd-f1",
@@ -657,7 +661,8 @@
      }
     ]
    },
-   "topic": "articles"
+   "topic": "articles",
+   "practiceOnly": true
   },
   {
    "id": "art-uni-k2",
@@ -694,7 +699,8 @@
      }
     ]
    },
-   "topic": "articles"
+   "topic": "articles",
+   "practiceOnly": true
   },
   {
    "id": "art-uni-f1",
@@ -879,7 +885,8 @@
      }
     ]
    },
-   "topic": "articles"
+   "topic": "articles",
+   "practiceOnly": true
   },
   {
    "id": "art-zer-f1",
@@ -1025,7 +1032,8 @@
      }
     ]
    },
-   "topic": "articles"
+   "topic": "articles",
+   "practiceOnly": true
   },
   {
    "id": "art-fix-k2",
@@ -1476,7 +1484,8 @@
      }
     ]
    },
-   "topic": "c1-diplomacy"
+   "topic": "c1-diplomacy",
+   "practiceOnly": true
   },
   {
    "id": "dp-ho-f1",
@@ -2029,7 +2038,8 @@
      }
     ]
    },
-   "topic": "c1-discourse"
+   "topic": "c1-discourse",
+   "practiceOnly": true
   },
   {
    "id": "dm-con-k2",
@@ -2067,7 +2077,8 @@
      }
     ]
    },
-   "topic": "c1-discourse"
+   "topic": "c1-discourse",
+   "practiceOnly": true
   },
   {
    "id": "dm-con-f1",
@@ -2279,7 +2290,8 @@
      }
     ]
    },
-   "topic": "c1-discourse"
+   "topic": "c1-discourse",
+   "practiceOnly": true
   },
   {
    "id": "dm-ctr-f1",
@@ -2828,7 +2840,8 @@
      }
     ]
    },
-   "topic": "c1-discourse"
+   "topic": "c1-discourse",
+   "practiceOnly": true
   },
   {
    "id": "dm-sum-k2",
@@ -3032,7 +3045,8 @@
      }
     ]
    },
-   "topic": "c1-emphasis"
+   "topic": "c1-emphasis",
+   "practiceOnly": true
   },
   {
    "id": "em-wc-k2",
@@ -3823,7 +3837,8 @@
      }
     ]
    },
-   "topic": "c1-emphasis"
+   "topic": "c1-emphasis",
+   "practiceOnly": true
   },
   {
    "id": "em-oi-k2",
@@ -3860,7 +3875,8 @@
      }
     ]
    },
-   "topic": "c1-emphasis"
+   "topic": "c1-emphasis",
+   "practiceOnly": true
   },
   {
    "id": "em-oi-f1",
@@ -4035,7 +4051,8 @@
      }
     ]
    },
-   "topic": "c1-hedging"
+   "topic": "c1-hedging",
+   "practiceOnly": true
   },
   {
    "id": "hg-mod-k2",
@@ -4083,7 +4100,8 @@
      }
     ]
    },
-   "topic": "c1-hedging"
+   "topic": "c1-hedging",
+   "practiceOnly": true
   },
   {
    "id": "hg-mod-f1",
@@ -4551,7 +4569,8 @@
      }
     ]
    },
-   "topic": "c1-hedging"
+   "topic": "c1-hedging",
+   "practiceOnly": true
   },
   {
    "id": "hg-inc-f1",
@@ -4965,7 +4984,8 @@
      }
     ]
    },
-   "topic": "c1-hedging"
+   "topic": "c1-hedging",
+   "practiceOnly": true
   },
   {
    "id": "hg-dow-k2",
@@ -5010,7 +5030,8 @@
      }
     ]
    },
-   "topic": "c1-hedging"
+   "topic": "c1-hedging",
+   "practiceOnly": true
   },
   {
    "id": "hg-dow-f1",
@@ -5179,7 +5200,8 @@
      }
     ]
    },
-   "topic": "c1-nominal"
+   "topic": "c1-nominal",
+   "practiceOnly": true
   },
   {
    "id": "nm-nf-k2",
@@ -5219,7 +5241,8 @@
      }
     ]
    },
-   "topic": "c1-nominal"
+   "topic": "c1-nominal",
+   "practiceOnly": true
   },
   {
    "id": "nm-nf-f1",
@@ -5379,7 +5402,8 @@
      }
     ]
    },
-   "topic": "c1-nominal"
+   "topic": "c1-nominal",
+   "practiceOnly": true
   },
   {
    "id": "nm-oo-k2",
@@ -5641,7 +5665,8 @@
      }
     ]
    },
-   "topic": "c1-nominal"
+   "topic": "c1-nominal",
+   "practiceOnly": true
   },
   {
    "id": "nm-fo-f1",
@@ -5805,7 +5830,8 @@
      }
     ]
    },
-   "topic": "c1-nominal"
+   "topic": "c1-nominal",
+   "practiceOnly": true
   },
   {
    "id": "nm-np-k2",
@@ -6034,7 +6060,8 @@
      }
     ]
    },
-   "topic": "c1-participle"
+   "topic": "c1-participle",
+   "practiceOnly": true
   },
   {
    "id": "cp-hav-k2",
@@ -6084,7 +6111,8 @@
      }
     ]
    },
-   "topic": "c1-participle"
+   "topic": "c1-participle",
+   "practiceOnly": true
   },
   {
    "id": "cp-hav-f1",
@@ -6246,7 +6274,8 @@
      }
     ]
    },
-   "topic": "c1-participle"
+   "topic": "c1-participle",
+   "practiceOnly": true
   },
   {
    "id": "cp-ing-k2",
@@ -6293,7 +6322,8 @@
      }
     ]
    },
-   "topic": "c1-participle"
+   "topic": "c1-participle",
+   "practiceOnly": true
   },
   {
    "id": "cp-ing-f1",
@@ -6441,7 +6471,8 @@
      }
     ]
    },
-   "topic": "c1-participle"
+   "topic": "c1-participle",
+   "practiceOnly": true
   },
   {
    "id": "cp-pp-k2",
@@ -6490,7 +6521,8 @@
      }
     ]
    },
-   "topic": "c1-participle"
+   "topic": "c1-participle",
+   "practiceOnly": true
   },
   {
    "id": "cp-pp-f1",
@@ -6655,7 +6687,8 @@
      }
     ]
    },
-   "topic": "c1-participle"
+   "topic": "c1-participle",
+   "practiceOnly": true
   },
   {
    "id": "cp-sub-k2",
@@ -6703,7 +6736,8 @@
      }
     ]
    },
-   "topic": "c1-participle"
+   "topic": "c1-participle",
+   "practiceOnly": true
   },
   {
    "id": "cp-sub-f1",
@@ -6920,7 +6954,8 @@
      }
     ]
    },
-   "topic": "c1-precision"
+   "topic": "c1-precision",
+   "practiceOnly": true
   },
   {
    "id": "cp-bu-k2",
@@ -7063,7 +7098,8 @@
      }
     ]
    },
-   "topic": "c1-precision"
+   "topic": "c1-precision",
+   "practiceOnly": true
   },
   {
    "id": "cp-as-k1",
@@ -8442,7 +8478,8 @@
      }
     ]
    },
-   "topic": "comparison"
+   "topic": "comparison",
+   "practiceOnly": true
   },
   {
    "id": "cmp-form-f1",
@@ -8826,7 +8863,8 @@
      }
     ]
    },
-   "topic": "comparison"
+   "topic": "comparison",
+   "practiceOnly": true
   },
   {
    "id": "cmp-deg-k2",
@@ -8885,7 +8923,8 @@
      }
     ]
    },
-   "topic": "comparison"
+   "topic": "comparison",
+   "practiceOnly": true
   },
   {
    "id": "cmp-deg-f1",
@@ -9057,7 +9096,8 @@
      }
     ]
    },
-   "topic": "compound-mod"
+   "topic": "compound-mod",
+   "practiceOnly": true
   },
   {
    "id": "cm-mea-k2",
@@ -9102,7 +9142,8 @@
      }
     ]
    },
-   "topic": "compound-mod"
+   "topic": "compound-mod",
+   "practiceOnly": true
   },
   {
    "id": "cm-mea-f1",
@@ -9440,7 +9481,8 @@
      }
     ]
    },
-   "topic": "compound-mod"
+   "topic": "compound-mod",
+   "practiceOnly": true
   },
   {
    "id": "cm-ord-k2",
@@ -9475,7 +9517,8 @@
      }
     ]
    },
-   "topic": "compound-mod"
+   "topic": "compound-mod",
+   "practiceOnly": true
   },
   {
    "id": "cm-ord-f1",
@@ -9632,7 +9675,8 @@
      }
     ]
    },
-   "topic": "compound-mod"
+   "topic": "compound-mod",
+   "practiceOnly": true
   },
   {
    "id": "cm-fix-k2",
@@ -9675,7 +9719,8 @@
      }
     ]
    },
-   "topic": "compound-mod"
+   "topic": "compound-mod",
+   "practiceOnly": true
   },
   {
    "id": "cm-fix-f1",
@@ -9774,9 +9819,9 @@
    "id": "cm-par-k1",
    "type": "kwt",
    "pat": "cm.participle",
-   "from": "Everyone knows her work very well.",
+   "from": "Many people in our industry know this designer.",
    "key": "KNOWN",
-   "frame": "She is ___ designer.",
+   "frame": "She is ___ designer in our industry.",
    "answer": "a well-known",
    "accepted": [
     "a widely known"
@@ -9813,7 +9858,8 @@
      }
     ]
    },
-   "topic": "compound-mod"
+   "topic": "compound-mod",
+   "practiceOnly": true
   },
   {
    "id": "cm-par-k2",
@@ -9855,7 +9901,8 @@
      }
     ]
    },
-   "topic": "compound-mod"
+   "topic": "compound-mod",
+   "practiceOnly": true
   },
   {
    "id": "cm-par-f1",
@@ -10608,7 +10655,8 @@
      }
     ]
    },
-   "topic": "cond-alt"
+   "topic": "cond-alt",
+   "practiceOnly": true
   },
   {
    "id": "ca-buf-k2",
@@ -10648,7 +10696,8 @@
      }
     ]
    },
-   "topic": "cond-alt"
+   "topic": "cond-alt",
+   "practiceOnly": true
   },
   {
    "id": "ca-buf-f1",
@@ -11624,7 +11673,8 @@
      }
     ]
    },
-   "topic": "conditionals"
+   "topic": "conditionals",
+   "practiceOnly": true
   },
   {
    "id": "cn-s-k2",
@@ -11862,7 +11912,8 @@
      }
     ]
    },
-   "topic": "conditionals"
+   "topic": "conditionals",
+   "practiceOnly": true
   },
   {
    "id": "cn-w-f1",
@@ -12014,7 +12065,8 @@
      }
     ]
    },
-   "topic": "conditionals"
+   "topic": "conditionals",
+   "practiceOnly": true
   },
   {
    "id": "cn-t-k2",
@@ -12482,7 +12534,8 @@
      }
     ]
    },
-   "topic": "countable"
+   "topic": "countable",
+   "practiceOnly": true
   },
   {
    "id": "cnt-unc-f1",
@@ -13253,7 +13306,8 @@
      }
     ]
    },
-   "topic": "countable"
+   "topic": "countable",
+   "practiceOnly": true
   },
   {
    "id": "cnt-dbl-k2",
@@ -13457,7 +13511,8 @@
      }
     ]
    },
-   "topic": "ellipsis"
+   "topic": "ellipsis",
+   "practiceOnly": true
   },
   {
    "id": "el-k2",
@@ -13504,7 +13559,8 @@
      }
     ]
    },
-   "topic": "ellipsis"
+   "topic": "ellipsis",
+   "practiceOnly": true
   },
   {
    "id": "el-k3",
@@ -13542,7 +13598,8 @@
      }
     ]
    },
-   "topic": "ellipsis"
+   "topic": "ellipsis",
+   "practiceOnly": true
   },
   {
    "id": "el-k4",
@@ -13662,7 +13719,8 @@
      }
     ]
    },
-   "topic": "ellipsis"
+   "topic": "ellipsis",
+   "practiceOnly": true
   },
   {
    "id": "el-k7",
@@ -13702,7 +13760,8 @@
      }
     ]
    },
-   "topic": "ellipsis"
+   "topic": "ellipsis",
+   "practiceOnly": true
   },
   {
    "id": "el-k8",
@@ -13732,7 +13791,8 @@
      }
     ]
    },
-   "topic": "ellipsis"
+   "topic": "ellipsis",
+   "practiceOnly": true
   },
   {
    "id": "el-f1",
@@ -14130,7 +14190,8 @@
      }
     ]
    },
-   "topic": "emph-plus"
+   "topic": "emph-plus",
+   "practiceOnly": true
   },
   {
    "id": "ep-k2",
@@ -14168,7 +14229,8 @@
      }
     ]
    },
-   "topic": "emph-plus"
+   "topic": "emph-plus",
+   "practiceOnly": true
   },
   {
    "id": "ep-k3",
@@ -14208,7 +14270,8 @@
      }
     ]
    },
-   "topic": "emph-plus"
+   "topic": "emph-plus",
+   "practiceOnly": true
   },
   {
    "id": "ep-k4",
@@ -14248,7 +14311,8 @@
      }
     ]
    },
-   "topic": "emph-plus"
+   "topic": "emph-plus",
+   "practiceOnly": true
   },
   {
    "id": "ep-k5",
@@ -14288,7 +14352,8 @@
      }
     ]
    },
-   "topic": "emph-plus"
+   "topic": "emph-plus",
+   "practiceOnly": true
   },
   {
    "id": "ep-k6",
@@ -14328,7 +14393,8 @@
      }
     ]
    },
-   "topic": "emph-plus"
+   "topic": "emph-plus",
+   "practiceOnly": true
   },
   {
    "id": "ep-k7",
@@ -14368,7 +14434,8 @@
      }
     ]
    },
-   "topic": "emph-plus"
+   "topic": "emph-plus",
+   "practiceOnly": true
   },
   {
    "id": "ep-k8",
@@ -14398,7 +14465,8 @@
      }
     ]
    },
-   "topic": "emph-plus"
+   "topic": "emph-plus",
+   "practiceOnly": true
   },
   {
    "id": "ep-f1",
@@ -14816,7 +14884,8 @@
      }
     ]
    },
-   "topic": "future-forms"
+   "topic": "future-forms",
+   "practiceOnly": true
   },
   {
    "id": "ff-wn-k2",
@@ -14876,7 +14945,8 @@
      }
     ]
    },
-   "topic": "future-forms"
+   "topic": "future-forms",
+   "practiceOnly": true
   },
   {
    "id": "ff-wn-f1",
@@ -15540,7 +15610,8 @@
      }
     ]
    },
-   "topic": "future-forms"
+   "topic": "future-forms",
+   "practiceOnly": true
   },
   {
    "id": "ff-ft-k2",
@@ -15817,7 +15888,8 @@
      }
     ]
    },
-   "topic": "future-forms"
+   "topic": "future-forms",
+   "practiceOnly": true
   },
   {
    "id": "ff-ab-f1",
@@ -16292,7 +16364,8 @@
      }
     ]
    },
-   "topic": "future-past"
+   "topic": "future-past",
+   "practiceOnly": true
   },
   {
    "id": "fp-k4",
@@ -16332,7 +16405,8 @@
      }
     ]
    },
-   "topic": "future-past"
+   "topic": "future-past",
+   "practiceOnly": true
   },
   {
    "id": "fp-k5",
@@ -16377,7 +16451,8 @@
      }
     ]
    },
-   "topic": "future-past"
+   "topic": "future-past",
+   "practiceOnly": true
   },
   {
    "id": "fp-k6",
@@ -16417,7 +16492,8 @@
      }
     ]
    },
-   "topic": "future-past"
+   "topic": "future-past",
+   "practiceOnly": true
   },
   {
    "id": "fp-k7",
@@ -16457,7 +16533,8 @@
      }
     ]
    },
-   "topic": "future-past"
+   "topic": "future-past",
+   "practiceOnly": true
   },
   {
    "id": "fp-k8",
@@ -17884,7 +17961,8 @@
      }
     ]
    },
-   "topic": "gerund-inf"
+   "topic": "gerund-inf",
+   "practiceOnly": true
   },
   {
    "id": "gi-ing-k2",
@@ -17926,7 +18004,8 @@
      }
     ]
    },
-   "topic": "gerund-inf"
+   "topic": "gerund-inf",
+   "practiceOnly": true
   },
   {
    "id": "gi-ing-f1",
@@ -18356,7 +18435,8 @@
      }
     ]
    },
-   "topic": "gerund-inf"
+   "topic": "gerund-inf",
+   "practiceOnly": true
   },
   {
    "id": "gi-prep-f1",
@@ -18520,7 +18600,8 @@
      }
     ]
    },
-   "topic": "gerund-inf"
+   "topic": "gerund-inf",
+   "practiceOnly": true
   },
   {
    "id": "gi-mean-k2",
@@ -19013,7 +19094,8 @@
      }
     ]
    },
-   "topic": "inversion"
+   "topic": "inversion",
+   "practiceOnly": true
   },
   {
    "id": "inv-k4",
@@ -19053,7 +19135,8 @@
      }
     ]
    },
-   "topic": "inversion"
+   "topic": "inversion",
+   "practiceOnly": true
   },
   {
    "id": "inv-k5",
@@ -19093,7 +19176,8 @@
      }
     ]
    },
-   "topic": "inversion"
+   "topic": "inversion",
+   "practiceOnly": true
   },
   {
    "id": "inv-k6",
@@ -19133,7 +19217,8 @@
      }
     ]
    },
-   "topic": "inversion"
+   "topic": "inversion",
+   "practiceOnly": true
   },
   {
    "id": "inv-k7",
@@ -19171,7 +19256,8 @@
      }
     ]
    },
-   "topic": "inversion"
+   "topic": "inversion",
+   "practiceOnly": true
   },
   {
    "id": "inv-k8",
@@ -21733,7 +21819,8 @@
      }
     ]
    },
-   "topic": "mixed-cond"
+   "topic": "mixed-cond",
+   "practiceOnly": true
   },
   {
    "id": "mc.kwt2",
@@ -21785,7 +21872,8 @@
      }
     ]
    },
-   "topic": "mixed-cond"
+   "topic": "mixed-cond",
+   "practiceOnly": true
   },
   {
    "id": "mc.kwt3",
@@ -21918,7 +22006,8 @@
      }
     ]
    },
-   "topic": "mixed-cond"
+   "topic": "mixed-cond",
+   "practiceOnly": true
   },
   {
    "id": "mc.kwt6",
@@ -22006,7 +22095,8 @@
      }
     ]
    },
-   "topic": "mixed-cond"
+   "topic": "mixed-cond",
+   "practiceOnly": true
   },
   {
    "id": "mc.kwt8",
@@ -22047,7 +22137,8 @@
      }
     ]
    },
-   "topic": "mixed-cond"
+   "topic": "mixed-cond",
+   "practiceOnly": true
   },
   {
    "id": "mc.kwt9",
@@ -22089,7 +22180,8 @@
      }
     ]
    },
-   "topic": "mixed-cond"
+   "topic": "mixed-cond",
+   "practiceOnly": true
   },
   {
    "id": "mc.kwt10",
@@ -22180,7 +22272,8 @@
      }
     ]
    },
-   "topic": "mixed-cond"
+   "topic": "mixed-cond",
+   "practiceOnly": true
   },
   {
    "id": "mc.kwt12",
@@ -22221,7 +22314,8 @@
      }
     ]
    },
-   "topic": "mixed-cond"
+   "topic": "mixed-cond",
+   "practiceOnly": true
   },
   {
    "id": "mc.find1",
@@ -22957,7 +23051,8 @@
      }
     ]
    },
-   "topic": "modals-advice"
+   "topic": "modals-advice",
+   "practiceOnly": true
   },
   {
    "id": "ma-sho-k2",
@@ -23949,7 +24044,8 @@
      }
     ]
    },
-   "topic": "modals-deduction"
+   "topic": "modals-deduction",
+   "practiceOnly": true
   },
   {
    "id": "md-mn-f1",
@@ -24140,7 +24236,8 @@
      }
     ]
    },
-   "topic": "modals-deduction"
+   "topic": "modals-deduction",
+   "practiceOnly": true
   },
   {
    "id": "md-cn-f1",
@@ -24337,7 +24434,8 @@
      }
     ]
    },
-   "topic": "modals-deduction"
+   "topic": "modals-deduction",
+   "practiceOnly": true
   },
   {
    "id": "md-mi-f1",
@@ -25079,7 +25177,8 @@
      }
     ]
    },
-   "topic": "modals-prob"
+   "topic": "modals-prob",
+   "practiceOnly": true
   },
   {
    "id": "mp-k2",
@@ -25122,7 +25221,8 @@
      }
     ]
    },
-   "topic": "modals-prob"
+   "topic": "modals-prob",
+   "practiceOnly": true
   },
   {
    "id": "mp-k3",
@@ -25162,7 +25262,8 @@
      }
     ]
    },
-   "topic": "modals-prob"
+   "topic": "modals-prob",
+   "practiceOnly": true
   },
   {
    "id": "mp-k4",
@@ -25202,7 +25303,8 @@
      }
     ]
    },
-   "topic": "modals-prob"
+   "topic": "modals-prob",
+   "practiceOnly": true
   },
   {
    "id": "mp-k5",
@@ -25324,7 +25426,8 @@
      }
     ]
    },
-   "topic": "modals-prob"
+   "topic": "modals-prob",
+   "practiceOnly": true
   },
   {
    "id": "mp-k8",
@@ -25364,7 +25467,8 @@
      }
     ]
    },
-   "topic": "modals-prob"
+   "topic": "modals-prob",
+   "practiceOnly": true
   },
   {
    "id": "mp-f1",
@@ -25765,7 +25869,8 @@
      }
     ]
    },
-   "topic": "noun-phrase"
+   "topic": "noun-phrase",
+   "practiceOnly": true
   },
   {
    "id": "np-k2",
@@ -25805,7 +25910,8 @@
      }
     ]
    },
-   "topic": "noun-phrase"
+   "topic": "noun-phrase",
+   "practiceOnly": true
   },
   {
    "id": "np-k3",
@@ -25886,7 +25992,8 @@
      }
     ]
    },
-   "topic": "noun-phrase"
+   "topic": "noun-phrase",
+   "practiceOnly": true
   },
   {
    "id": "np-k5",
@@ -26487,7 +26594,8 @@
      }
     ]
    },
-   "topic": "noun-phrase"
+   "topic": "noun-phrase",
+   "practiceOnly": true
   },
   {
    "id": "np-f9",
@@ -26670,7 +26778,8 @@
      }
     ]
    },
-   "topic": "passive"
+   "topic": "passive",
+   "practiceOnly": true
   },
   {
    "id": "pv-sim-k2",
@@ -27815,7 +27924,8 @@
      }
     ]
    },
-   "topic": "passive-plus"
+   "topic": "passive-plus",
+   "practiceOnly": true
   },
   {
    "id": "pp-mod-k2",
@@ -28178,7 +28288,8 @@
      }
     ]
    },
-   "topic": "passive-plus"
+   "topic": "passive-plus",
+   "practiceOnly": true
   },
   {
    "id": "pp-per-f1",
@@ -28688,7 +28799,8 @@
      }
     ]
    },
-   "topic": "passive-plus"
+   "topic": "passive-plus",
+   "practiceOnly": true
   },
   {
    "id": "pp-bei-f1",
@@ -29515,7 +29627,8 @@
      }
     ]
    },
-   "topic": "past-perfect"
+   "topic": "past-perfect",
+   "practiceOnly": true
   },
   {
    "id": "pp-rep-k2",
@@ -29610,7 +29723,8 @@
      }
     ]
    },
-   "topic": "past-perfect"
+   "topic": "past-perfect",
+   "practiceOnly": true
   },
   {
    "id": "pp-rep-f1",
@@ -31115,7 +31229,8 @@
      }
     ]
    },
-   "topic": "phrasal-syntax"
+   "topic": "phrasal-syntax",
+   "practiceOnly": true
   },
   {
    "id": "ph-tog-f1",
@@ -31698,7 +31813,8 @@
      }
     ]
    },
-   "topic": "prep-noun"
+   "topic": "prep-noun",
+   "practiceOnly": true
   },
   {
    "id": "pn-for-k2",
@@ -31744,7 +31860,8 @@
      }
     ]
    },
-   "topic": "prep-noun"
+   "topic": "prep-noun",
+   "practiceOnly": true
   },
   {
    "id": "pn-for-f1",
@@ -31906,7 +32023,8 @@
      }
     ]
    },
-   "topic": "prep-noun"
+   "topic": "prep-noun",
+   "practiceOnly": true
   },
   {
    "id": "pn-in-k2",
@@ -31952,7 +32070,8 @@
      }
     ]
    },
-   "topic": "prep-noun"
+   "topic": "prep-noun",
+   "practiceOnly": true
   },
   {
    "id": "pn-in-f1",
@@ -32093,7 +32212,8 @@
      }
     ]
    },
-   "topic": "prep-noun"
+   "topic": "prep-noun",
+   "practiceOnly": true
   },
   {
    "id": "pn-of-k2",
@@ -32139,7 +32259,8 @@
      }
     ]
    },
-   "topic": "prep-noun"
+   "topic": "prep-noun",
+   "practiceOnly": true
   },
   {
    "id": "pn-of-f1",
@@ -32307,7 +32428,8 @@
      }
     ]
    },
-   "topic": "prep-noun"
+   "topic": "prep-noun",
+   "practiceOnly": true
   },
   {
    "id": "pn-ab-k2",
@@ -32355,7 +32477,8 @@
      }
     ]
    },
-   "topic": "prep-noun"
+   "topic": "prep-noun",
+   "practiceOnly": true
   },
   {
    "id": "pn-ab-f1",
@@ -32524,7 +32647,8 @@
      }
     ]
    },
-   "topic": "prep-noun"
+   "topic": "prep-noun",
+   "practiceOnly": true
   },
   {
    "id": "pn-to-k2",
@@ -32570,7 +32694,8 @@
      }
     ]
    },
-   "topic": "prep-noun"
+   "topic": "prep-noun",
+   "practiceOnly": true
   },
   {
    "id": "pn-to-f1",
@@ -32711,7 +32836,8 @@
      }
     ]
    },
-   "topic": "prep-noun"
+   "topic": "prep-noun",
+   "practiceOnly": true
   },
   {
    "id": "pn-at-k2",
@@ -32757,7 +32883,8 @@
      }
     ]
    },
-   "topic": "prep-noun"
+   "topic": "prep-noun",
+   "practiceOnly": true
   },
   {
    "id": "pn-at-f1",
@@ -32903,7 +33030,8 @@
      }
     ]
    },
-   "topic": "prep-time"
+   "topic": "prep-time",
+   "practiceOnly": true
   },
   {
    "id": "pt-ai-k2",
@@ -32956,7 +33084,8 @@
      }
     ]
    },
-   "topic": "prep-time"
+   "topic": "prep-time",
+   "practiceOnly": true
   },
   {
    "id": "pt-ai-f1",
@@ -33309,7 +33438,8 @@
      }
     ]
    },
-   "topic": "prep-time"
+   "topic": "prep-time",
+   "practiceOnly": true
   },
   {
    "id": "pt-bu-k2",
@@ -33356,7 +33486,8 @@
      }
     ]
    },
-   "topic": "prep-time"
+   "topic": "prep-time",
+   "practiceOnly": true
   },
   {
    "id": "pt-bu-f1",
@@ -33523,7 +33654,8 @@
      }
     ]
    },
-   "topic": "prep-time"
+   "topic": "prep-time",
+   "practiceOnly": true
   },
   {
    "id": "pt-dw-k2",
@@ -33729,7 +33861,8 @@
      }
     ]
    },
-   "topic": "prepositions"
+   "topic": "prepositions",
+   "practiceOnly": true
   },
   {
    "id": "prp-ver-k2",
@@ -33790,7 +33923,8 @@
      }
     ]
    },
-   "topic": "prepositions"
+   "topic": "prepositions",
+   "practiceOnly": true
   },
   {
    "id": "prp-ver-f1",
@@ -33995,7 +34129,8 @@
      }
     ]
    },
-   "topic": "prepositions"
+   "topic": "prepositions",
+   "practiceOnly": true
   },
   {
    "id": "prp-adj-k2",
@@ -34052,7 +34187,8 @@
      }
     ]
    },
-   "topic": "prepositions"
+   "topic": "prepositions",
+   "practiceOnly": true
   },
   {
    "id": "prp-adj-f1",
@@ -34250,7 +34386,8 @@
      }
     ]
    },
-   "topic": "prepositions"
+   "topic": "prepositions",
+   "practiceOnly": true
   },
   {
    "id": "prp-nop-k2",
@@ -34301,7 +34438,8 @@
      }
     ]
    },
-   "topic": "prepositions"
+   "topic": "prepositions",
+   "practiceOnly": true
   },
   {
    "id": "prp-nop-f1",
@@ -34545,7 +34683,8 @@
      }
     ]
    },
-   "topic": "prepositions"
+   "topic": "prepositions",
+   "practiceOnly": true
   },
   {
    "id": "prp-per-f1",
@@ -34780,7 +34919,8 @@
      }
     ]
    },
-   "topic": "prepositions"
+   "topic": "prepositions",
+   "practiceOnly": true
   },
   {
    "id": "prp-ing-f1",
@@ -36259,7 +36399,8 @@
      }
     ]
    },
-   "topic": "pres-simple-cont"
+   "topic": "pres-simple-cont",
+   "practiceOnly": true
   },
   {
    "id": "psc-hab-k2",
@@ -36312,7 +36453,8 @@
      }
     ]
    },
-   "topic": "pres-simple-cont"
+   "topic": "pres-simple-cont",
+   "practiceOnly": true
   },
   {
    "id": "psc-hab-f1",
@@ -36777,7 +36919,8 @@
      }
     ]
    },
-   "topic": "pres-simple-cont"
+   "topic": "pres-simple-cont",
+   "practiceOnly": true
   },
   {
    "id": "psc-sta-f1",
@@ -36951,7 +37094,8 @@
      }
     ]
    },
-   "topic": "pres-simple-cont"
+   "topic": "pres-simple-cont",
+   "practiceOnly": true
   },
   {
    "id": "psc-dua-k2",
@@ -37396,7 +37540,8 @@
      }
     ]
    },
-   "topic": "quant-neg"
+   "topic": "quant-neg",
+   "practiceOnly": true
   },
   {
    "id": "qn-k2",
@@ -37436,7 +37581,8 @@
      }
     ]
    },
-   "topic": "quant-neg"
+   "topic": "quant-neg",
+   "practiceOnly": true
   },
   {
    "id": "qn-k3",
@@ -37476,7 +37622,8 @@
      }
     ]
    },
-   "topic": "quant-neg"
+   "topic": "quant-neg",
+   "practiceOnly": true
   },
   {
    "id": "qn-k4",
@@ -37516,7 +37663,8 @@
      }
     ]
    },
-   "topic": "quant-neg"
+   "topic": "quant-neg",
+   "practiceOnly": true
   },
   {
    "id": "qn-k5",
@@ -37556,7 +37704,8 @@
      }
     ]
    },
-   "topic": "quant-neg"
+   "topic": "quant-neg",
+   "practiceOnly": true
   },
   {
    "id": "qn-k6",
@@ -37596,7 +37745,8 @@
      }
     ]
    },
-   "topic": "quant-neg"
+   "topic": "quant-neg",
+   "practiceOnly": true
   },
   {
    "id": "qn-k7",
@@ -38089,7 +38239,8 @@
      }
     ]
    },
-   "topic": "questions"
+   "topic": "questions",
+   "practiceOnly": true
   },
   {
    "id": "qu-ind-k2",
@@ -38325,7 +38476,8 @@
      }
     ]
    },
-   "topic": "questions"
+   "topic": "questions",
+   "practiceOnly": true
   },
   {
    "id": "qu-iw-k2",
@@ -38380,7 +38532,8 @@
      }
     ]
    },
-   "topic": "questions"
+   "topic": "questions",
+   "practiceOnly": true
   },
   {
    "id": "qu-iw-f1",
@@ -38609,7 +38762,8 @@
      }
     ]
    },
-   "topic": "questions"
+   "topic": "questions",
+   "practiceOnly": true
   },
   {
    "id": "qu-sub-f1",
@@ -38779,7 +38933,8 @@
      }
     ]
    },
-   "topic": "questions"
+   "topic": "questions",
+   "practiceOnly": true
   },
   {
    "id": "qu-dir-k2",
@@ -38824,7 +38979,8 @@
      }
     ]
    },
-   "topic": "questions"
+   "topic": "questions",
+   "practiceOnly": true
   },
   {
    "id": "qu-dir-f1",
@@ -39002,7 +39158,8 @@
      }
     ]
    },
-   "topic": "questions"
+   "topic": "questions",
+   "practiceOnly": true
   },
   {
    "id": "qu-tag-k2",
@@ -39050,7 +39207,8 @@
      }
     ]
    },
-   "topic": "questions"
+   "topic": "questions",
+   "practiceOnly": true
   },
   {
    "id": "qu-tag-f1",
@@ -39214,7 +39372,8 @@
      }
     ]
    },
-   "topic": "relative"
+   "topic": "relative",
+   "practiceOnly": true
   },
   {
    "id": "rc-ww-k2",
@@ -39262,7 +39421,8 @@
      }
     ]
    },
-   "topic": "relative"
+   "topic": "relative",
+   "practiceOnly": true
   },
   {
    "id": "rc-ww-f1",
@@ -39397,7 +39557,8 @@
      }
     ]
    },
-   "topic": "relative"
+   "topic": "relative",
+   "practiceOnly": true
   },
   {
    "id": "rc-wh-k2",
@@ -39578,7 +39739,8 @@
      }
     ]
    },
-   "topic": "relative"
+   "topic": "relative",
+   "practiceOnly": true
   },
   {
    "id": "rc-cm-k2",
@@ -39626,7 +39788,8 @@
      }
     ]
    },
-   "topic": "relative"
+   "topic": "relative",
+   "practiceOnly": true
   },
   {
    "id": "rc-cm-f1",
@@ -40328,7 +40491,8 @@
      }
     ]
    },
-   "topic": "report-verbs"
+   "topic": "report-verbs",
+   "practiceOnly": true
   },
   {
    "id": "rv-ad-k2",
@@ -40381,7 +40545,8 @@
      }
     ]
    },
-   "topic": "report-verbs"
+   "topic": "report-verbs",
+   "practiceOnly": true
   },
   {
    "id": "rv-ad-f1",
@@ -40561,7 +40726,8 @@
      }
     ]
    },
-   "topic": "report-verbs"
+   "topic": "report-verbs",
+   "practiceOnly": true
   },
   {
    "id": "rv-sr-k2",
@@ -40625,7 +40791,8 @@
      }
     ]
    },
-   "topic": "report-verbs"
+   "topic": "report-verbs",
+   "practiceOnly": true
   },
   {
    "id": "rv-sr-f1",
@@ -42232,7 +42399,8 @@
      }
     ]
    },
-   "topic": "reported"
+   "topic": "reported",
+   "practiceOnly": true
   },
   {
    "id": "rs-tl-f1",
@@ -42540,7 +42708,8 @@
      }
     ]
    },
-   "topic": "stative-adv"
+   "topic": "stative-adv",
+   "practiceOnly": true
   },
   {
    "id": "sa-k2",
@@ -42580,7 +42749,8 @@
      }
     ]
    },
-   "topic": "stative-adv"
+   "topic": "stative-adv",
+   "practiceOnly": true
   },
   {
    "id": "sa-k3",
@@ -42623,7 +42793,8 @@
      }
     ]
    },
-   "topic": "stative-adv"
+   "topic": "stative-adv",
+   "practiceOnly": true
   },
   {
    "id": "sa-k4",
@@ -42663,7 +42834,8 @@
      }
     ]
    },
-   "topic": "stative-adv"
+   "topic": "stative-adv",
+   "practiceOnly": true
   },
   {
    "id": "sa-k5",
@@ -42703,7 +42875,8 @@
      }
     ]
    },
-   "topic": "stative-adv"
+   "topic": "stative-adv",
+   "practiceOnly": true
   },
   {
    "id": "sa-k6",
@@ -42743,7 +42916,8 @@
      }
     ]
    },
-   "topic": "stative-adv"
+   "topic": "stative-adv",
+   "practiceOnly": true
   },
   {
    "id": "sa-k7",
@@ -42783,7 +42957,8 @@
      }
     ]
    },
-   "topic": "stative-adv"
+   "topic": "stative-adv",
+   "practiceOnly": true
   },
   {
    "id": "sa-k8",
@@ -42823,7 +42998,8 @@
      }
     ]
    },
-   "topic": "stative-adv"
+   "topic": "stative-adv",
+   "practiceOnly": true
   },
   {
    "id": "sa-f1",
@@ -44352,7 +44528,8 @@
      }
     ]
    },
-   "topic": "used-to"
+   "topic": "used-to",
+   "practiceOnly": true
   },
   {
    "id": "ut-wld-k2",
@@ -45248,7 +45425,8 @@
      }
     ]
    },
-   "topic": "verb-patterns"
+   "topic": "verb-patterns",
+   "practiceOnly": true
   },
   {
    "id": "vp-ing-f1",
@@ -45867,7 +46045,8 @@
      }
     ]
    },
-   "topic": "verb-patterns"
+   "topic": "verb-patterns",
+   "practiceOnly": true
   },
   {
    "id": "vp-rf-k2",
@@ -46077,7 +46256,8 @@
      }
     ]
    },
-   "topic": "verb-patterns"
+   "topic": "verb-patterns",
+   "practiceOnly": true
   },
   {
    "id": "vp-st-k2",
@@ -46361,7 +46541,8 @@
      }
     ]
    },
-   "topic": "verb-patterns"
+   "topic": "verb-patterns",
+   "practiceOnly": true
   },
   {
    "id": "vp-rg-f1",
@@ -46720,7 +46901,8 @@
      }
     ]
    },
-   "topic": "word-order"
+   "topic": "word-order",
+   "practiceOnly": true
   },
   {
    "id": "wo-pt-k2",
@@ -46760,12 +46942,13 @@
      }
     ]
    },
-   "topic": "word-order"
+   "topic": "word-order",
+   "practiceOnly": true
   },
   {
    "id": "wo-pt-f1",
    "type": "find",
-   "pat": "wo.place-time",
+   "pat": "wo.verb-object",
    "prompt": "We are meeting in Denver the client tomorrow.",
    "err": [
     3,
@@ -46797,7 +46980,7 @@
   {
    "id": "wo-pt-f2",
    "type": "find",
-   "pat": "wo.place-time",
+   "pat": "wo.verb-object",
    "prompt": "We will visit in Boston the client next week.",
    "err": [
     3,
@@ -46845,7 +47028,8 @@
      }
     ]
    },
-   "topic": "word-order"
+   "topic": "word-order",
+   "practiceOnly": true
   },
   {
    "id": "wo-pt-m1",
@@ -46876,7 +47060,8 @@
      }
     ]
    },
-   "topic": "word-order"
+   "topic": "word-order",
+   "practiceOnly": true
   },
   {
    "id": "wo-ni-k1",

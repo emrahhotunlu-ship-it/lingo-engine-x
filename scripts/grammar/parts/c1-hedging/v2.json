@@ -55,7 +55,8 @@
      "en": "After might use the base form with no -s: might miss."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "hg-mod-k2",
@@ -102,7 +103,8 @@
      "en": "For the past use might have + participle, not might had."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "hg-mod-f1",
@@ -558,7 +560,8 @@
      "en": "The to is already in the frame. The gap only takes the phrase up to inclined."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "hg-inc-f1",
@@ -961,7 +964,8 @@
      "en": "With time after it, a slightly longer or slightly more fits."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "hg-dow-k2",
@@ -1005,7 +1009,8 @@
      "en": "“very” strengthens. Here the doubt should sound milder."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "hg-dow-f1",

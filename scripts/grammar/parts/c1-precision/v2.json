@@ -43,7 +43,8 @@
      "en": "“Within” needs a span; a weekday follows here."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "cp-bu-k2",
@@ -183,7 +184,8 @@
      "en": "“Until” means a duration. The auditors work toward an end."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "cp-as-k1",

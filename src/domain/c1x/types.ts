@@ -31,6 +31,8 @@ export type C1Base = {
   seq?: number;
   /** Nur C1-Check; nie im Training. */
   probe?: true;
+  /** Nur Übung: nie in Tests, Checks und Prüfungen (z. B. Umformung mit weniger als 3 Wörtern). Das Üben selbst bleibt unverändert. */
+  practiceOnly?: true;
   form?: string;
   /** Kapitelprüfung (`gate`) bzw. Einstufung (`place`); nie im Training. */
   pool?: 'gate' | 'place';

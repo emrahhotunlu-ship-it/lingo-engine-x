@@ -80,7 +80,7 @@
    ]
   }
  },
- "The price is higher than the old system. ___, you save on hardware and maintenance.": {
+ "The license fee is higher than for the old system. ___, you save on hardware and maintenance.": {
   "pat": "dm.contrast",
   "why": {
    "ok": {

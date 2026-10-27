@@ -33,6 +33,7 @@ function kwtFrom(t: KwtTask, n: number): Kwt {
     dom: 'biz',
     why: t.why,
     src: 'seed',
+    ...(t.practiceOnly ? { practiceOnly: true as const } : {}),
     lead: t.from,
     key: t.key,
     before: before.trim(),
@@ -49,7 +50,7 @@ function kwtFrom(t: KwtTask, n: number): Kwt {
 }
 
 function errFrom(t: FindTask, n: number): Err {
-  const base = { id: `err-v2-${n}`, kind: 'err' as const, area: 'gram' as const, pat: t.pat, topic: t.topic, level: 'B2' as const, dom: 'biz' as const, why: t.why, src: 'seed' as const, text: t.prompt, ...(t.hint ? { goal: { de: t.hint.de, en: t.hint.en } } : {}) };
+  const base = { id: `err-v2-${n}`, kind: 'err' as const, area: 'gram' as const, pat: t.pat, topic: t.topic, level: 'B2' as const, dom: 'biz' as const, why: t.why, src: 'seed' as const, ...(t.practiceOnly ? { practiceOnly: true as const } : {}), text: t.prompt, ...(t.hint ? { goal: { de: t.hint.de, en: t.hint.en } } : {}) };
   if (!t.err) return { ...base, bad: null };
   const words = splitWords(t.prompt);
   const [from, to] = t.err;

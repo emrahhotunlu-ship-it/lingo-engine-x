@@ -36,7 +36,8 @@
           "en": "The noun for implement is needed: implementation of."
         }
       ]
-    }
+    },
+    "practiceOnly": true
   },
   {
     "id": "nm-nf-k2",
@@ -75,7 +76,8 @@
           "en": "The noun receipt is needed: receipt of the contract."
         }
       ]
-    }
+    },
+    "practiceOnly": true
   },
   {
     "id": "nm-nf-f1",
@@ -230,7 +232,8 @@
           "en": "Of is missing after review: the object attaches with of."
         }
       ]
-    }
+    },
+    "practiceOnly": true
   },
   {
     "id": "nm-oo-k2",
@@ -485,7 +488,8 @@
           "en": "The noun receipt is needed after upon."
         }
       ]
-    }
+    },
+    "practiceOnly": true
   },
   {
     "id": "nm-fo-f1",
@@ -644,7 +648,8 @@
           "en": "After increase, in names the area, while of rather names an amount."
         }
       ]
-    }
+    },
+    "practiceOnly": true
   },
   {
     "id": "nm-np-k2",

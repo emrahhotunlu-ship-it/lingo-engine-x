@@ -614,7 +614,8 @@
      "en": "The key word but must appear: but for + noun."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "ca-buf-k2",
@@ -653,7 +654,8 @@
      "en": "“Been” needs for after it: if it hadn't been for + noun."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "ca-buf-f1",

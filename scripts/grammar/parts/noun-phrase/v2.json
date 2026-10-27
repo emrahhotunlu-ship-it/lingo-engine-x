@@ -37,7 +37,8 @@
      "en": "The key word sent must be in the gap."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "np-k2",
@@ -76,7 +77,8 @@
      "en": "The key word best belongs before offer."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "np-k3",
@@ -155,7 +157,8 @@
      "en": "The noun questions stands before the participle."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "np-k5",
@@ -738,7 +741,8 @@
      "en": "After tailored you need to."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "np-f9",

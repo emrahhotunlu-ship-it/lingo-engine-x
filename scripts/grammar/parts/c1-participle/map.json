@@ -375,7 +375,7 @@
    ]
   }
  },
- "Having sign the contract, the customer received the access data.": {
+ "Having sign the contract, the customer received the login credentials.": {
   "pat": "cp.having",
   "why": {
    "ok": {
@@ -486,7 +486,7 @@
  },
  "Having review the offer, the CFO asked for a discount.": {
   "pat": "cp.having",
-  "dup": "Having sign the contract, the customer received the access data.",
+  "dup": "Having sign the contract, the customer received the login credentials.",
   "why": {
    "ok": {
     "de": "Richtig: Having reviewed. Nach Having steht die 3. Form.",

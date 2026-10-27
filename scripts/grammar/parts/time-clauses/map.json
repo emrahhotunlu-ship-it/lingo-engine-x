@@ -173,12 +173,12 @@
    ]
   }
  },
- "Don't switch off the server until the backup ___ completed.": {
+ "Don't shut down the server until the backup ___ completed.": {
   "pat": "tc.present-perfect",
   "why": {
    "ok": {
-    "de": "Richtig: Nach „until“ steht has been completed: erst fertig, dann abschalten.",
-    "en": "Right: after “until”, has been completed: finished first, then switch off."
+    "de": "Richtig: Nach „until“ steht has been completed: erst fertig, dann herunterfahren.",
+    "en": "Right: after “until”, has been completed: finished first, then shut down."
    },
    "wrong": [
     {

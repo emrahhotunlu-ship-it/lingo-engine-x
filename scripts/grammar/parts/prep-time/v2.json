@@ -47,7 +47,8 @@
      "en": "The preposition before a day of the week is needed: on Tuesday."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "pt-ai-k2",
@@ -99,7 +100,8 @@
      "en": "The preposition before a month is needed: in early June."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "pt-ai-f1",
@@ -442,7 +444,8 @@
      "en": "The preposition for the deadline is needed: by Wednesday."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "pt-bu-k2",
@@ -488,7 +491,8 @@
      "en": "The preposition for a lasting state is needed: until Monday."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "pt-bu-f1",
@@ -650,7 +654,8 @@
      "en": "Within + time frame is needed: within two business days."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "pt-dw-k2",

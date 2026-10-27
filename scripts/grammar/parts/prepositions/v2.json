@@ -55,7 +55,8 @@
      "en": "The fixed preposition for depend is needed: on."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "prp-ver-k2",
@@ -115,7 +116,8 @@
      "en": "The fixed preposition for insist is needed: on (formal upon)."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "prp-ver-f1",
@@ -315,7 +317,8 @@
      "en": "The preposition for familiar is needed: with."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "prp-adj-k2",
@@ -371,7 +374,8 @@
      "en": "The preposition for interested is needed: in."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "prp-adj-f1",
@@ -564,7 +568,8 @@
      "en": "A negative plus attend is needed: didn’t attend."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "prp-nop-k2",
@@ -614,7 +619,8 @@
      "en": "A negative plus mention is needed: didn’t mention."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "prp-nop-f1",
@@ -852,7 +858,8 @@
      "en": "With announce the person needs to: announced to the team."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "prp-per-f1",
@@ -1082,7 +1089,8 @@
      "en": "Without + -ing is needed: without reading."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "prp-ing-f1",

@@ -61,7 +61,8 @@
      "en": "After admit use -ing: skipping, not skipped."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "rv-ad-k2",
@@ -113,7 +114,8 @@
      "en": "Deny takes no to + verb. Use seeing."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "rv-ad-f1",
@@ -288,7 +290,8 @@
      "en": "Suggest takes no to + verb. -ing or a that-clause follows."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "rv-sr-k2",
@@ -351,7 +354,8 @@
      "en": "Recommend takes no to + verb: starting or a that-clause."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "rv-sr-f1",

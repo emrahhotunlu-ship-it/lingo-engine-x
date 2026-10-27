@@ -49,7 +49,8 @@
      "en": "Where is missing; it opens the embedded question."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "qu-ind-k2",
@@ -279,7 +280,8 @@
      "en": "If or whether is missing; it opens the yes/no question."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "qu-iw-k2",
@@ -333,7 +335,8 @@
      "en": "If or whether is missing before the report was ready."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "qu-iw-f1",
@@ -556,7 +559,8 @@
      "en": "After What comes a verb directly, matching last week."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "qu-sub-f1",
@@ -721,7 +725,8 @@
      "en": "Did is missing: a direct simple past question needs did before the subject."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "qu-dir-k2",
@@ -765,7 +770,8 @@
      "en": "After are you use -ing (meeting) or going to + meet."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "qu-dir-f1",
@@ -938,7 +944,8 @@
      "en": "Anna is picked up in the tag with she: does she?"
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "qu-tag-k2",
@@ -985,7 +992,8 @@
      "en": "Nobody is picked up in the tag with they: did they?"
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "qu-tag-f1",

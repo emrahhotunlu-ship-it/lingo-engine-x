@@ -49,7 +49,8 @@
      "en": "The article is missing: a singular job (one of many lawyers) needs a/an."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "art-ind-k2",
@@ -101,7 +102,8 @@
      "en": "The a is missing: such great idea does not work in the singular."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "art-ind-f1",
@@ -251,7 +253,8 @@
      "en": "The duration needs an hour or one hour, not another article."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "art-snd-k2",
@@ -304,7 +307,8 @@
      "en": "A degree in the singular needs an article or a possessive."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "art-snd-f1",
@@ -639,7 +643,8 @@
      "en": "A superlative needs the article the: the best option."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "art-uni-k2",
@@ -675,7 +680,8 @@
      "en": "Before only you need the article the: the only person."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "art-uni-f1",
@@ -855,7 +861,8 @@
      "en": "“an information” fails: information is uncountable and needs no an."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "art-zer-f1",
@@ -997,7 +1004,8 @@
      "en": "After go comes to: go to work."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "art-fix-k2",

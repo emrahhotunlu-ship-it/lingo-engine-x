@@ -673,7 +673,8 @@
      "en": "The key word said must stay unchanged in the gap."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "rs-tl-f1",

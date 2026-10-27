@@ -49,7 +49,8 @@
      "en": "After Julia (she) the verb needs an -s: usually checks."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "psc-hab-k2",
@@ -101,7 +102,8 @@
      "en": "After CFO (he/she) approve needs an -s: never approves."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "psc-hab-f1",
@@ -555,7 +557,8 @@
      "en": "The negative needs do or can: I don't understand."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "psc-sta-f1",
@@ -724,7 +727,8 @@
      "en": "The negative uses do: I don't think the offer is fair."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "psc-dua-k2",

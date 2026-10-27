@@ -54,7 +54,8 @@
      "en": "After will use the base form: will take, not will taking."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "ff-wn-k2",
@@ -113,7 +114,8 @@
      "en": "After will use the base form: will get, not will got."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "ff-wn-f1",
@@ -762,7 +764,8 @@
      "en": "will meeting does not work: after will use be meeting or the base form."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "ff-ft-k2",
@@ -1032,7 +1035,8 @@
      "en": "to is missing after about: about to + base form."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "ff-ab-f1",

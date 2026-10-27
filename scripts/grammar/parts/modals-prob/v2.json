@@ -39,7 +39,8 @@
      "en": "Without well the strengthening is missing: may well."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "mp-k2",
@@ -81,7 +82,8 @@
      "en": "Without well the strengthening is missing: could well."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "mp-k3",
@@ -120,7 +122,8 @@
      "en": "After bound you need to: bound to rise."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "mp-k4",
@@ -159,7 +162,8 @@
      "en": "After sure you need to: sure to notice."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "mp-k5",
@@ -278,7 +282,8 @@
      "en": "After chance comes that and the clause."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "mp-k8",
@@ -317,7 +322,8 @@
      "en": "After highly you need probable."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "mp-f1",

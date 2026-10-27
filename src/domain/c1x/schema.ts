@@ -29,6 +29,7 @@ const base = z.object({
   set: z.string().optional(),
   seq: z.number().int().min(1).optional(),
   probe: z.literal(true).optional(),
+  practiceOnly: z.literal(true).optional(),
   form: z.string().regex(/^[A-L]$/).optional(),
   pool: z.enum(['gate', 'place']).optional(),
   b: z.number().optional(),

@@ -39,8 +39,11 @@ class V2:
         wrong = [{'not': [key.lower()], 'de': f'Das Schlüsselwort {key.lower()} muss unverändert in der Lücke stehen.', 'en': f'The key word {key.lower()} must stay unchanged in the gap.'}]
         for r in rules:
             wrong.append(r)
-        self.items.append({'id': self._id('k'), 'type': 'kwt', 'pat': pat, 'from': frm, 'key': key, 'frame': frame, 'answer': answer, 'accepted': list(accepted), 'words': list(words),
-                           'why': {'ok': B(*ok), 'wrong': wrong}})
+        item = {'id': self._id('k'), 'type': 'kwt', 'pat': pat, 'from': frm, 'key': key, 'frame': frame, 'answer': answer, 'accepted': list(accepted), 'words': list(words),
+                'why': {'ok': B(*ok), 'wrong': wrong}}
+        if len(answer.split()) < 3:  # Umformung mit weniger als 3 Wörtern in der Lücke: nur Übung (Relaunch Stufe 1, Korrekturliste Punkt 3)
+            item['practiceOnly'] = True
+        self.items.append(item)
 
     def find(self, pat, prompt, err, answer, fixed, ok, hint):
         """err = (a, b) | None; hint = (de, en) Kurzerklärung für die Rückmeldungen."""
@@ -77,6 +80,6 @@ def rules_from(patterns, core, why, contrast, steps):
     signals = []
     for p in patterns:
         s = p['signals']
-        signals.append([' / '.join(s[:2]), [p['name']['de'].split('·')[0].strip(), p['name']['en'].split('·')[0].strip()]])
+        signals.append([re.sub(r'\bi\b', 'I', ' / '.join(s[:2])), [p['name']['de'].split('·')[0].strip(), p['name']['en'].split('·')[0].strip()]])
     traps = [{'bad': p['trap']['bad'], 'good': p['trap']['good'], 'why': [p['trap']['cause']['de'], p['trap']['cause']['en']]} for p in patterns[:4]]
     return {'core': list(core), 'why': list(why), 'contrast': list(contrast), 'steps': [list(steps[0]), list(steps[1])], 'forms': forms, 'signals': signals, 'traps': traps}

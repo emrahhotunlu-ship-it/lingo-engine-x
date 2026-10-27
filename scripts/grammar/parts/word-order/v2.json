@@ -250,7 +250,8 @@
      "en": "The object results comes first. Place and time follow it."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "wo-pt-k2",
@@ -289,12 +290,13 @@
      "en": "The noun office comes first. Place and time follow it."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "wo-pt-f1",
   "type": "find",
-  "pat": "wo.place-time",
+  "pat": "wo.verb-object",
   "prompt": "We are meeting in Denver the client tomorrow.",
   "err": [
    3,
@@ -325,7 +327,7 @@
  {
   "id": "wo-pt-f2",
   "type": "find",
-  "pat": "wo.place-time",
+  "pat": "wo.verb-object",
   "prompt": "We will visit in Boston the client next week.",
   "err": [
    3,
@@ -371,7 +373,8 @@
      "en": "No error: place and time follow the object, with place before time."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "wo-pt-m1",
@@ -401,7 +404,8 @@
      "en": "Sentence b is right, but a gives the same facts: place and time may swap here."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "wo-ni-k1",

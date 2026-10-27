@@ -37,7 +37,8 @@
      "en": "The was is already in the frame. The gap needs What + verb."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "em-wc-k2",
@@ -806,7 +807,8 @@
      "en": "The meaning is “not before”: Only after."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "em-oi-k2",
@@ -842,7 +844,8 @@
      "en": "The time phrase from the original sentence is missing: until Friday."
     }
    ]
-  }
+  },
+  "practiceOnly": true
  },
  {
   "id": "em-oi-f1",

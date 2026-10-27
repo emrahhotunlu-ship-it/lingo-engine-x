@@ -160,12 +160,12 @@
    ]
   }
  },
- "The cloud version costs ___ of the on-premise license.": {
+ "The cloud version costs ___ of what the on-premise license costs.": {
   "pat": "cp.approx",
   "why": {
    "ok": {
-    "de": "Richtig: a fraction of = nur ein kleiner Teil davon, hier des alten Preises.",
-    "en": "Right: a fraction of = only a small part of it, here of the old price."
+    "de": "Richtig: a fraction of = nur ein kleiner Teil davon, hier des Lizenzpreises.",
+    "en": "Right: a fraction of = only a small part of it, here of the license price."
    },
    "wrong": [
     {
@@ -180,8 +180,8 @@
     },
     {
      "opt": "a little",
-     "de": "„A little“ passt zu Unzählbarem und nicht vor „of the license“ als Preisanteil.",
-     "en": "“A little” suits uncountable things, not a price share before “of the license”."
+     "de": "„A little“ passt zu Unzählbarem, nicht als Anteil vor „of what …“.",
+     "en": "“A little” suits uncountable things, not a share before “of what …”."
     }
    ]
   }
@@ -296,7 +296,7 @@
    ]
   }
  },
- "The rollout must be finished before September 30 at the latest. → The rollout must be finished ___ September 30.": {
+ "The rollout must be finished. The deadline is September 30. → The rollout must be finished ___ September 30.": {
   "pat": "cp.by-until",
   "why": {
    "ok": {
@@ -316,8 +316,8 @@
      "if": [
       "before"
      ],
-     "de": "„Before“ schließt den 30. aus. Die Frist at the latest meint den 30. selbst: by.",
-     "en": "“Before” excludes the 30th. The at the latest deadline includes the 30th itself: by."
+     "de": "„Before“ schließt den 30. aus. Die Frist ist der 30. selbst: by.",
+     "en": "“Before” excludes the 30th. The deadline is the 30th itself: by."
     },
     {
      "not": [
