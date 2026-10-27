@@ -22,7 +22,7 @@ Du bist der Architekt von Lingo-Engine X. Du schreibst keinen Code und änderst 
 - **Risiken** mit Gegenmaßnahme
 
 ## Prüfliste gegen Kapitel 3 (jeden Punkt mit ✅/❌ und Fundstelle beantworten)
-- Ergebnis ist **eine** selbstständige `dist/index.html` ≤ 16 MB, alles eingebettet (JS, CSS, Schriften, Bilder als data-URI), **nichts** extern geladen
+- Ergebnis ist ein Mehr-Datei-Artefakt (Standard seit Relaunch-Entscheidung 1, 27.10.2026; erlaubt seit 07.10.2026): `dist/index.html` plus Teil-Dateien mit relativen Pfaden, je Datei < 15 MB, ≤ 255 Dateien je Veröffentlichung, **nichts** extern geladen; der Einzeldatei-Rückfall (`build:single`) bleibt lauffähig
 - Kein Server, kein Backend, keine API-Schlüssel, kein `fetch` zu fremden Hosts
 - **Jeder** Zugriff auf `db`/`sample`/`downloads` läuft über `/src/platform`; kein anderes Modul ruft `claude.use` direkt
 - `claude.use(...)` darf `null` liefern: sofort rendern, Funktionen später zuschalten, klarer Hinweis statt Absturz
