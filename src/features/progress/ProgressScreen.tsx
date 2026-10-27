@@ -18,7 +18,7 @@ import { GrammarSegment } from './GrammarSegment';
 import { HistoryTab } from './HistoryTab';
 import { JudgeTab } from './JudgeTab';
 import { StandLevels } from './StandHeader';
-import { WordsSegment, useVocabMetrics } from './WordsSegment';
+import { FestZero, WordsSegment, useVocabMetrics } from './WordsSegment';
 import { Slot } from '../../app/slots';
 
 // „Fortschritt" (Kap. 6.13, Neubau plan.md §1.3; Fokus-Umbau 3.5: ohne Kurs, ohne „Wörter gesamt“): Kopf Fest · Niveau-Skala, darunter drei
@@ -70,7 +70,7 @@ export function ProgressScreen() {
   const docs = useLive((s) => s.docs);
   const vocab = useLive((s) => s.collections.vocab) ?? EMPTY;
   const status = useLive((s) => s.status);
-  const { fest } = useVocabMetrics();
+  const { fest, onWay } = useVocabMetrics();
   const grammar = useLive((s) => s.collections.grammar) ?? EMPTY;
   const archive = useLive((s) => s.collections.archive) ?? EMPTY;
   const [tab, setTab] = useState<Segment>(() => {
@@ -120,7 +120,7 @@ export function ProgressScreen() {
       {/* plan.md §1.3: EINE Kopfkarte – Wörter · Niveau, darunter die Niveau-Skala. */}
       <motion.section variants={item} aria-label={t('ovTitle')} aria-busy={status === 'waiting'} className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-4 sm:p-6" data-testid="stand-head">
         {/* UX-Prüfung W7: „Fest · 12 Wörter fest“ sagte „fest“ zweimal – die Einheit trägt es allein. */}
-        <Stat label="" value={num(fest)} unit={t(fest === 1 ? 'nbProfilFestUnit_one' : 'nbProfilFestUnit_other')} testId="stand-fest" />
+        {fest === 0 ? <FestZero onWay={onWay} testId="stand-fest" /> : <Stat label="" value={num(fest)} unit={t(fest === 1 ? 'nbProfilFestUnit_one' : 'nbProfilFestUnit_other')} testId="stand-fest" />}
         <div className="border-t border-line pt-4">
           <StandLevels dims={(assess?.data.dims ?? []).filter((d) => (FOCUS_DIMS as readonly string[]).includes(d.id))} cefr={assess?.data.cefr ?? null} sameLang={!assess || assess.lang === lang} />
         </div>

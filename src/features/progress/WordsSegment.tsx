@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useClock } from '../../app/clock';
 import { invalidIdsOf, useLive } from '../../data/live';
-import { FEST_GOAL, festNoteActive, buildTrainCards, checkMean, expectedKnown, festCount, festForecast, festGrowth28, retention28, vtestView } from '../../domain/metrics';
+import { FEST_GOAL, festNoteActive, buildTrainCards, checkMean, expectedKnown, festCount, festForecast, festGrowth28, onTheWay, retention28, vtestView } from '../../domain/metrics';
 import { useT } from '../../i18n';
 import { Card } from '../../ui/Card';
 import { Disclosure } from '../../ui/Disclosure';
@@ -28,7 +28,24 @@ export function useVocabMetrics() {
   const invalid = useLive((s) => s.invalid);
   const cards = useMemo(() => buildTrainCards(vocab, now, invalidIdsOf(invalid, 'vocab')), [vocab, now, invalid]);
   const fest = useMemo(() => festCount(cards, now), [cards, now]);
-  return { cards, fest, now };
+  const onWay = useMemo(() => onTheWay(cards, now), [cards, now]);
+  return { cards, fest, onWay, now };
+}
+
+/**
+ * Kopfzeile „Wörter fest“ ohne nackte Null (UX-Audit U1, Kap. 2.3 Urteil statt Punktestand): Solange noch kein Wort fest ist, steht ein ruhiges
+ * Urteil („Auf dem Weg · 118 Wörter im Lernen“) statt „0 Wörter fest“. Die Fest-Zahl bleibt am Element (`data-fest`), nichts wird geschönt.
+ */
+export function FestZero({ onWay, testId }: { onWay: number; testId: string }) {
+  const { tn, t } = useT();
+  return (
+    <div className="flex min-w-0 flex-col gap-0.5" data-testid={testId} data-fest="0">
+      <span className="text-2xl font-semibold tracking-tight">{t('nbProfilFestZeroTitle')}</span>
+      <span className="text-sm text-muted" data-testid="fest-zero-sub">
+        {onWay > 0 ? tn('nbProfilFestZeroSub', onWay) : t('nbProfilFestZeroNone')}
+      </span>
+    </div>
+  );
 }
 
 function FestCard({ fest }: { fest: number }) {

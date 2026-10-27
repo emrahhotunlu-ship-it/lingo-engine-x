@@ -7,7 +7,7 @@ export { computeStreak } from '../streak';
 export { FEST_DAYS, FEST_STAGE, UNIT_RANK, UNIT_STATES, counts, dueCount, isDue, isOverdue, overdueCount, unitState, type CardCounts, type UnitState } from './definitions';
 export { WEEK_GOAL, restInfo, streak, streakInputOf, streakWeek, weekGoal, type RestInfo, type StreakDocs, type WeekGoal } from './streak';
 // Fortschritt (Gesamtkonzept 3.5): reine Zahlen für die Seite „Fortschritt“.
-export { FEST_GOAL, FEST_RULE_FROM, festNoteActive, expectedKnown, festCount, festForecast, festGrowth28, festGrowthUnits, festUnits, isFest, retention28, type FestForecast, type FestGrowth, type Retention28 } from './vocab';
+export { FEST_GOAL, FEST_RULE_FROM, festNoteActive, expectedKnown, festCount, festForecast, festGrowth28, festGrowthUnits, festUnits, isFest, onTheWay, retention28, type FestForecast, type FestGrowth, type Retention28 } from './vocab';
 export { errorSentenceStats, grammarDistribution, topicStage, type ErrorSentenceStats, type GrammarDistribution, type TopicStage } from './grammar';
 export { checkMean, vtestView, type CheckMean, type VtestView } from './tests';
 // Lernplattform 2.0 (§4.9): Zahlen von Heute, Wörtern und Grammatik, Musterzustand, Messwerte.

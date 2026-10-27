@@ -24,10 +24,10 @@ function Mini({ value, tone }: { value: number; tone: 'words' | 'grammar' }) {
 }
 
 export function StandSide() {
-  const { t, num, lang } = useT();
+  const { t, tn, num, lang } = useT();
   const now = useClock((s) => s.now);
   const today = useClock((s) => s.today);
-  const { fest } = useVocabMetrics();
+  const { fest, onWay } = useVocabMetrics();
   const docs = useLive((s) => s.collections.grammar) ?? EMPTY;
   const path = useMemo(() => {
     const due = new Map<string, number>();
@@ -40,12 +40,20 @@ export function StandSide() {
       <h2 className="lx-eyebrow m-0">{t('ovTitle')}</h2>
       <div className="flex flex-col gap-1.5">
         <span className="lx-t-meta text-muted">{t('hxStandWords')}</span>
-        <span className="flex items-baseline gap-2">
-          <span className="lx-tnum text-3xl leading-none font-semibold tracking-tight" style={{ color: 'var(--lx-ch-cards)' }}>
-            <CountUp text={num(fest)} />
+        {fest === 0 ? (
+          // UX-Audit U1: keine nackte Null als Kopfzahl, sondern ein ruhiges Urteil (wie auf „Fortschritt“).
+          <span className="flex flex-col gap-0.5" data-fest="0">
+            <span className="text-xl leading-tight font-semibold tracking-tight">{t('nbProfilFestZeroTitle')}</span>
+            <span className="text-sm text-muted">{onWay > 0 ? tn('nbProfilFestZeroSub', onWay) : t('nbProfilFestZeroNone')}</span>
           </span>
-          <span className="text-sm text-muted">{t(fest === 1 ? 'nbProfilFestUnit_one' : 'nbProfilFestUnit_other')}</span>
-        </span>
+        ) : (
+          <span className="flex items-baseline gap-2">
+            <span className="lx-tnum text-3xl leading-none font-semibold tracking-tight" style={{ color: 'var(--lx-ch-cards)' }}>
+              <CountUp text={num(fest)} />
+            </span>
+            <span className="text-sm text-muted">{t(fest === 1 ? 'nbProfilFestUnit_one' : 'nbProfilFestUnit_other')}</span>
+          </span>
+        )}
         <Mini value={fest / FEST_GOAL} tone="words" />
       </div>
       {cur && (
