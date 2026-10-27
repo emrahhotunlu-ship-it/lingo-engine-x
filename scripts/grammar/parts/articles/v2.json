@@ -14,8 +14,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: as a lawyer. Ein Beruf nach as braucht im Singular a/an.",
-    "en": "Right: as a lawyer. A singular job after as takes a/an."
+    "de": "Richtig: as a lawyer. Nennt as einen Beruf im Singular, steht a/an. Bei einer einmaligen Rolle oder einem Titel fehlt er: as Head of Sales.",
+    "en": "Right: as a lawyer. A singular job after as takes a/an. A unique role or title takes no article: as Head of Sales."
    },
    "wrong": [
     {
@@ -45,8 +45,8 @@
      "not": [
       "a"
      ],
-     "de": "Es fehlt der Artikel: Ein Beruf im Singular braucht a/an.",
-     "en": "The article is missing: a singular job needs a/an."
+     "de": "Es fehlt der Artikel: Ein Beruf im Singular (einer von vielen Anwälten) braucht a/an.",
+     "en": "The article is missing: a singular job (one of many lawyers) needs a/an."
     }
    ]
   }

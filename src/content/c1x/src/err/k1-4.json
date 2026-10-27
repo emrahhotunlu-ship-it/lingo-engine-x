@@ -1215,8 +1215,7 @@
     "span": "will fail",
     "fix": [
      "fails",
-     "should fail",
-     "were to fail"
+     "should fail"
     ],
     "choices": [
      "fail",
@@ -1232,8 +1231,8 @@
     "wrong": [
      {
       "opt": "fail",
-      "de": "Nach in case steht ein finites Verb mit -s: fails.",
-      "en": "After in case comes a finite verb with -s: fails."
+      "de": "The projector ist 3. Person Singular, darum braucht das Present ein -s: fails.",
+      "en": "The projector is third person singular, so the present needs -s: fails."
      },
      {
       "opt": "to fail",

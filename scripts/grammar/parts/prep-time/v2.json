@@ -105,18 +105,18 @@
   "id": "pt-ai-f1",
   "type": "find",
   "pat": "pt.at-on-in",
-  "prompt": "The training session takes place at the 14th of March.",
+  "prompt": "The training session takes place at March 14.",
   "err": [
    5,
    5
   ],
   "answer": "on",
-  "fixed": "The training session takes place on the 14th of March.",
+  "fixed": "The training session takes place on March 14.",
   "accepted": [],
   "why": {
    "ok": {
-    "de": "Der Fehler: Vor einem Datum steht on: on the 14th of March.",
-    "en": "The error: a date takes on: on the 14th of March."
+    "de": "Der Fehler: Vor einem Datum steht on: on March 14 (britisch auch on the 14th of March).",
+    "en": "The error: a date takes on: on March 14 (British also on the 14th of March)."
    },
    "wrong": [
     {
@@ -126,8 +126,8 @@
     },
     {
      "tap": "*",
-     "de": "Der Fehler liegt bei „at“: at steht nur vor Uhrzeiten.",
-     "en": "The error is “at”: at only goes before clock times."
+     "de": "Der Fehler liegt bei „at“: at steht vor Uhrzeiten (at 9 a.m.), vor einem Datum steht on.",
+     "en": "The error is “at”: at goes before clock times (at 9 a.m.), a date takes on."
     }
    ]
   }

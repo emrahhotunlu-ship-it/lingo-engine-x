@@ -1715,8 +1715,8 @@
       "id": "b1-dip-01",
       "pat": "dip.wondering",
       "sit": {
-        "de": "Du verhandelst höflich mit einem Kunden und bittest um einen Rabatt.",
-        "en": "You negotiate politely with a customer and ask for a discount."
+        "de": "Du verhandelst höflich mit einem Lieferanten und bittest um einen Rabatt.",
+        "en": "You negotiate politely with a supplier and ask for a discount."
       },
       "intent": {
         "de": "Ich habe mich gefragt, ob Sie uns einen Rabatt geben könnten.",

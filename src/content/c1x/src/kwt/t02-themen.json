@@ -191,8 +191,8 @@
    "pat": "mp.chance",
    "why": {
     "ok": {
-     "de": "There is a good chance that … Danach folgt ein that-Satz.",
-     "en": "There is a good chance that … A that-clause follows."
+     "de": "There is a good chance (that) … Danach folgt ein Satz, das that kann wegfallen.",
+     "en": "There is a good chance (that) … A clause follows; that can be left out."
     },
     "wrong": []
    },
@@ -210,7 +210,11 @@
       "good chance that",
       "fair chance that",
       "high chance that",
-      "strong chance that"
+      "strong chance that",
+      "good chance",
+      "fair chance",
+      "high chance",
+      "strong chance"
      ]
     }
    ],

@@ -16,8 +16,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: as a lawyer. Ein Beruf nach as braucht im Singular a/an.",
-     "en": "Right: as a lawyer. A singular job after as takes a/an."
+     "de": "Richtig: as a lawyer. Nennt as einen Beruf im Singular, steht a/an. Bei einer einmaligen Rolle oder einem Titel fehlt er: as Head of Sales.",
+     "en": "Right: as a lawyer. A singular job after as takes a/an. A unique role or title takes no article: as Head of Sales."
     },
     "wrong": [
      {
@@ -47,8 +47,8 @@
       "not": [
        "a"
       ],
-      "de": "Es fehlt der Artikel: Ein Beruf im Singular braucht a/an.",
-      "en": "The article is missing: a singular job needs a/an."
+      "de": "Es fehlt der Artikel: Ein Beruf im Singular (einer von vielen Anwälten) braucht a/an.",
+      "en": "The article is missing: a singular job (one of many lawyers) needs a/an."
      }
     ]
    },
@@ -2575,10 +2575,10 @@
    "type": "meaning",
    "pat": "dm.build",
    "a": "Anna proposed a pilot. To build on that, we could add a second team.",
-   "b": "Anna proposed a pilot. Despite that, we could add a second team.",
+   "b": "Anna proposed a pilot. On the other hand, we could add a second team.",
    "q": {
-    "de": "Welcher Text führt Annas Idee weiter, statt gegen sie zu argumentieren?",
-    "en": "Which text extends Anna's idea instead of arguing against it?"
+    "de": "Welcher Text führt Annas Idee weiter, statt eine andere Möglichkeit daneben zu stellen?",
+    "en": "Which text extends Anna's idea instead of setting another option next to it?"
    },
    "answer": "a",
    "why": {
@@ -2589,14 +2589,14 @@
     "wrong": [
      {
       "opt": "b",
-      "pat": "dm.concede",
-      "de": "In b zeigt Despite that einen Gegensatz zu Annas Pilot. Die Idee wird nicht weitergeführt.",
-      "en": "In b, Despite that signals a contrast to Anna's pilot. The idea is not developed."
+      "pat": "dm.contrast",
+      "de": "In b stellt On the other hand eine andere Möglichkeit neben Annas Pilot: Pilot oder zweites Team. Ihre Idee wird nicht weitergeführt.",
+      "en": "In b, On the other hand sets another option next to Anna's pilot: pilot or second team. Her idea is not developed."
      },
      {
       "opt": "both",
-      "de": "Nicht gleich: Despite that setzt einen Einwand, to build on that eine Ergänzung.",
-      "en": "Not the same: Despite that sets an objection, to build on that an addition."
+      "de": "Nicht gleich: On the other hand zeigt die Gegenseite, to build on that eine Ergänzung.",
+      "en": "Not the same: On the other hand shows the other side, to build on that an addition."
      }
     ]
    },
@@ -19618,8 +19618,8 @@
       "if": [
        "but"
       ],
-      "de": "Mit but davor entsteht ein Kommafehler. Although trägt den Gegensatz schon.",
-      "en": "With but in front you get a comma splice. Although already carries the contrast."
+      "de": "Although und but zusammen sind doppelt: although trägt den Gegensatz schon, but fällt weg.",
+      "en": "Although and but together say the same thing twice: although already carries the contrast, so drop but."
      }
     ]
    },
@@ -19856,8 +19856,8 @@
       "if": [
        "but"
       ],
-      "de": "Mit but vorn entsteht ein Kommafehler. Gesucht ist ein Bindewort für den Vergleich.",
-      "en": "But at the start gives a comma splice. A linker for the comparison is needed."
+      "de": "But verbindet zwei Hauptsätze und kann keinen Satz vorn einleiten. Gesucht ist ein Bindewort für den Vergleich.",
+      "en": "But joins two main clauses and cannot open the first clause here. A linker for the comparison is needed."
      }
     ]
    },
@@ -19911,8 +19911,8 @@
       "if": [
        "but"
       ],
-      "de": "Mit but vorn entsteht ein Kommafehler. Gesucht ist ein Bindewort für den Vergleich.",
-      "en": "But at the start gives a comma splice. A linker for the comparison is needed."
+      "de": "But verbindet zwei Hauptsätze und kann keinen Satz vorn einleiten. Gesucht ist ein Bindewort für den Vergleich.",
+      "en": "But joins two main clauses and cannot open the first clause here. A linker for the comparison is needed."
      }
     ]
    },
@@ -31076,35 +31076,36 @@
    "type": "kwt",
    "pat": "ph.together",
    "from": "The merger failed at the last minute.",
-   "key": "MERGER",
-   "frame": "At the last minute, the ___.",
-   "answer": "merger fell through",
+   "key": "FELL",
+   "frame": "At the last minute, the merger ___.",
+   "answer": "fell through",
    "accepted": [
-    "merger fell apart"
+    "fell apart"
    ],
    "words": [
-    3,
-    3
+    2,
+    2
    ],
    "why": {
     "ok": {
-     "de": "Richtig: fall through = scheitern. Ohne Objekt steht through am Ende.",
-     "en": "Right: fall through = fail. With no object, through comes last."
+     "de": "Richtig: fall through = scheitern (Pläne, Geschäfte). Ohne Objekt steht through am Ende. Fell apart passt auch.",
+     "en": "Right: fall through = fail (plans, deals). With no object, through comes last. Fell apart also works."
     },
     "wrong": [
      {
       "not": [
-       "merger"
+       "fell"
       ],
-      "de": "Das Schlüsselwort merger muss unverändert in der Lücke stehen.",
-      "en": "The key word merger must stay unchanged in the gap."
+      "de": "Das Schlüsselwort fell muss unverändert in der Lücke stehen.",
+      "en": "The key word fell must stay unchanged in the gap."
      },
      {
       "if": [
-       "failed"
+       "fell",
+       "down"
       ],
-      "de": "Richtig gedacht, doch gefragt ist ein Phrasal Verb: fall through.",
-      "en": "Good thinking, but a phrasal verb is asked for: fall through."
+      "de": "Fall down heißt hinfallen. Für ein gescheitertes Geschäft sagt man fall through.",
+      "en": "Fall down means to fall to the ground. A failed deal falls through."
      },
      {
       "not": [
@@ -32963,18 +32964,18 @@
    "id": "pt-ai-f1",
    "type": "find",
    "pat": "pt.at-on-in",
-   "prompt": "The training session takes place at the 14th of March.",
+   "prompt": "The training session takes place at March 14.",
    "err": [
     5,
     5
    ],
    "answer": "on",
-   "fixed": "The training session takes place on the 14th of March.",
+   "fixed": "The training session takes place on March 14.",
    "accepted": [],
    "why": {
     "ok": {
-     "de": "Der Fehler: Vor einem Datum steht on: on the 14th of March.",
-     "en": "The error: a date takes on: on the 14th of March."
+     "de": "Der Fehler: Vor einem Datum steht on: on March 14 (britisch auch on the 14th of March).",
+     "en": "The error: a date takes on: on March 14 (British also on the 14th of March)."
     },
     "wrong": [
      {
@@ -32984,8 +32985,8 @@
      },
      {
       "tap": "*",
-      "de": "Der Fehler liegt bei „at“: at steht nur vor Uhrzeiten.",
-      "en": "The error is “at”: at only goes before clock times."
+      "de": "Der Fehler liegt bei „at“: at steht vor Uhrzeiten (at 9 a.m.), vor einem Datum steht on.",
+      "en": "The error is “at”: at goes before clock times (at 9 a.m.), a date takes on."
      }
     ]
    },

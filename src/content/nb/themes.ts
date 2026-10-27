@@ -148,7 +148,7 @@ export const THEMES: readonly WeekTheme[] = [
       { en: 'hosted in EU data centers', de: 'in Rechenzentren in der EU betrieben', def: 'the servers are located inside the EU' },
       { en: 'encrypted at rest and in transit', de: 'verschlüsselt – im Speicher und bei der Übertragung', def: 'data is protected both when stored and when sent' },
       { en: 'role-based access', de: 'rollenbasierte Zugriffsrechte', def: 'people only see what their role allows' },
-      { en: 'audit-proof archiving', de: 'revisionssichere Archivierung', def: 'archiving that cannot be changed later and passes an audit (US customers often say tamper-proof or immutable archiving)' },
+      { en: 'tamper-proof archiving', de: 'revisionssichere Archivierung', def: 'legally compliant archiving: records cannot be changed later ("audit-proof" is a German-English term)' },
       { en: 'Let me double-check that and get back to you', de: 'Das prüfe ich noch einmal und melde mich bei Ihnen', def: 'promises a verified answer later instead of guessing' },
     ],
     keywords: ['security', 'secure', 'gdpr', 'gobd', 'compliance', 'complian', 'encrypt', 'data center', 'hosting', 'access', 'audit', 'certificate', 'certification', 'backup', 'privacy'],

@@ -197,20 +197,42 @@
    "pat": "inv.sooner",
    "why": {
     "ok": {
-     "de": "Nach No sooner steht had vor dem Subjekt: No sooner had we left.",
-     "en": "After No sooner, had stands before the subject: No sooner had we left."
+     "de": "Nach No sooner am Satzanfang kommt das Hilfsverb vor das Subjekt: No sooner had we left (auch: did we leave).",
+     "en": "After a fronted No sooner, the auxiliary comes before the subject: No sooner had we left (also: did we leave)."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "we left",
+      "de": "Nach No sooner fehlt hier die Umstellung: Hilfsverb vor das Subjekt, also had we left.",
+      "en": "No sooner needs inversion here: auxiliary before the subject, so had we left."
+     },
+     {
+      "opt": "have we left",
+      "de": "Die Umstellung stimmt, aber die Zeit nicht: Die Geschichte spielt in der Vergangenheit, also had we left.",
+      "en": "The inversion is right but the tense is not: the story is in the past, so had we left."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „we had left“, nicht hier.",
+      "en": "The mistake is at “we had left”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „we had left“ braucht die Umstellung.",
+      "en": "There is a mistake: “we had left” needs inversion."
+     }
+    ]
    },
    "bad": {
     "span": "we had left",
     "fix": [
-     "had we left"
+     "had we left",
+     "did we leave"
     ],
     "choices": [
      "had we left",
      "we left",
-     "did we leave"
+     "have we left"
     ]
    },
    "text": "No sooner we had left the house than we remembered the keys."
