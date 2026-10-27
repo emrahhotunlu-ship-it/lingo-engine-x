@@ -179,3 +179,8 @@ Mon · Tue · Wed · Thu · Fri · Sat · Sun · Monday … Saturday · Feb 2027
 | H29 Szenen | One scene per week, independent of where you are in grammar. 8 more scenes from week 9. | Kai E |
 | H26 | fixed · solid | Kai G, Status „gefestigt“ |
 | H26 | topic back in progress | Kai G, Kopf der Themengruppe |
+
+## Runde K3 (Lehrer-Nachprüfung, nicht blockierend, umgesetzt)
+- H18 speak: „Nicht ganz“ nur bei have/’ve/has + reduce, sonst „Noch nicht“.
+- H18 speak, Warum (ok): „Use <em>by</em> for the amount.“
+- H29: „8 more scenes starting in week 9.“

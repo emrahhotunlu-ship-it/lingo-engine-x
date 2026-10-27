@@ -631,7 +631,7 @@ function h29(v) {
     return tmSub('h29-list', 'h13', tmTitle(L('Szene wählen', 'Choose a scene'), L('Die Szene der Woche kommt in deiner Pflicht. Hier übst du sie oder jede andere frei, als Extra.', 'The scene of the week comes up in your daily plan. Here you can practice it or any other one freely, as extra.')) +
       '<div class="stack s8">' + sc.map((c, i) => '<button class="choice" id="tm-sc-' + c[0] + '" data-act="tmscene" data-i="' + i + '" style="min-height:62px;' + (sel === i ? 'box-shadow:0 0 0 2px var(--act) inset' : '') + '"><span class="n num">' + c[0] + '</span><span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span>' + c[1] + '</span><span style="font-size:13px;color:var(--fg-2);font-weight:500">' + tmSceneWhen(c) + '</span></span>' +
         (c[3] === 'done' ? '<span class="tm-state fixed">' + L('geübt', 'practiced') + '</span>' : c[3] === 'now' ? '<span class="tm-state">' + L('diese Woche', 'this week') + '</span>' : '') + '</button>').join('') +
-      '<p class="p2" style="font-size:13px;text-align:center;padding-top:4px">' + L('Eine Szene pro Woche, unabhängig von deinem Grammatik-Stand. 8 weitere Szenen ab Woche 9.', 'One scene per week, independent of where you are in grammar. 8 more scenes from week 9.') + '</p></div>' +
+      '<p class="p2" style="font-size:13px;text-align:center;padding-top:4px">' + L('Eine Szene pro Woche, unabhängig von deinem Grammatik-Stand. 8 weitere Szenen ab Woche 9.', 'One scene per week, independent of where you are in grammar. 8 more scenes starting in week 9.') + '</p></div>' +
       '<button class="btn pri full" id="tm-sc-go" data-go="h11-prep">' + L('Szene starten', 'Start scene') + ': ' + sc[sel][1] + '</button>', askBtn());
   }
   const open = !!S.ui.time;

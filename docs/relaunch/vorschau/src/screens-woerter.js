@@ -173,7 +173,7 @@ function TW_T() {
       prompt: L('„Wir haben den Preis schon um 5 Prozent gesenkt.“', '“Wir haben den Preis schon um 5 Prozent gesenkt.”'),
       hint: L('Tippe aufs Mikrofon und sprich den ganzen Satz.', 'Tap the mic and say the whole sentence.'),
       right: 'we\'ve already reduced the price by 5 percent.', rightShow: 'We’ve already reduced the price by 5 percent.',
-      judge(t) { const x = twNorm(t); if (!x) return 'idk'; if (/reduced (the |our )?prices? by/.test(x)) return 'ok'; if (/reduce (the |our )?prices? by/.test(x)) return 'typo'; return 'wrong'; },
+      judge(t) { const x = twNorm(t); if (!x) return 'idk'; if (/reduced (the |our )?prices? by/.test(x)) return 'ok'; if (/(have|['’]ve|has) (already )?reduce (the |our )?prices? by/.test(x)) return 'typo'; return 'wrong'; },
       /* Die Zeile zu by/of nur, wenn in der eigenen Eingabe wirklich of steht. */
       whyFix(why, st, x) {
         /* Die Warum-Zeile passt sich der eigenen Antwort an: past simple ist im US-Englisch auch richtig, „schon“ = already. */
@@ -182,7 +182,7 @@ function TW_T() {
         if (st === 'wrong' && x != null && !/\bof\b/.test(x)) why.wrong = L('Gesucht ist <em class="en">reduce … by</em>: <em class="en">We’ve already reduced the price by 5 percent.</em>', 'The target is <em>reduce … by</em>: <em>We’ve already reduced the price by 5 percent.</em>'); },
       you: { ok: 'We’ve already reduced the price by 5 percent.', typo: 'We’ve already reduce the price by 5 percent.', wrong: 'We’ve already reduced the price of 5 percent.', idk: '' },
       whyl: {
-        ok: L('Ergebnis ohne Zeitpunkt: present perfect mit <em class="en">already</em>. Um 5 Prozent heißt <em class="en">by</em> 5 percent.', 'A result with no time: present perfect with <em>already</em>. The amount takes <em>by</em>.'),
+        ok: L('Ergebnis ohne Zeitpunkt: present perfect mit <em class="en">already</em>. Um 5 Prozent heißt <em class="en">by</em> 5 percent.', 'A result with no time: present perfect with <em>already</em>. Use <em>by</em> for the amount.'),
         /* Lehrer M2: „have reduce“ ist ein Formfehler, kein „Fast“. Er führt zu „Noch einmal sprechen“, nicht zur Herabstufung. */
         typo: L('Nicht ganz: Nach <em class="en">have</em> kommt die dritte Form, <em class="en">reduced</em>. Sprich das -d vor <em class="en">the</em> deutlich und sag den Satz noch einmal.', 'Not quite: after <em>have</em> comes the past participle, <em>reduced</em>. Say the -d clearly before <em>the</em> and try once more.'),
         wrong: L('Beim Verb heißt es <em class="en">reduce by 5 percent</em>. <em class="en">of</em> gehört zum Nomen: <em class="en">a reduction of 5 percent</em>.', 'With the verb, use <em>by</em>: reduce by 5 percent. <em>of</em> goes with the noun: <em>a reduction of 5 percent</em>.'),
