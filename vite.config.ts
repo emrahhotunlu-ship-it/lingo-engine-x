@@ -5,6 +5,7 @@ import { viteSingleFile } from 'vite-plugin-singlefile';
 import { execSync } from 'node:child_process';
 import { rawJsonZip } from './scripts/vite-raw-json-zip.mjs';
 import { contentStore } from './scripts/content/vite-plugin.mjs';
+import { bootFirst } from './scripts/vite-boot-first.mjs';
 
 // Versionskennung für die Diagnose (Emrah sieht, ob er den neuesten Stand offen hat).
 const commit = (() => {
@@ -26,7 +27,8 @@ const MULTI = process.env.LX_BUILD === 'multi';
 // und wird im Build als toter Zweig entfernt; scripts/check-platform.mjs prüft das.
 export default defineConfig({
   define: { __LX_BUILD__: JSON.stringify(BUILD_ID) },
-  plugins: [contentStore({ multi: MULTI }), rawJsonZip(), react(), tailwindcss(), ...(MULTI ? [] : [viteSingleFile({ removeViteModuleLoader: true })])],
+  // bootFirst (U2) steht NACH viteSingleFile: es schiebt das eingebettete Skript hinter das Start-Bild (scripts/vite-boot-first.mjs).
+  plugins: [contentStore({ multi: MULTI }), rawJsonZip(), react(), tailwindcss(), ...(MULTI ? [] : [viteSingleFile({ removeViteModuleLoader: true }), bootFirst()])],
   build: {
     target: ['es2022', 'safari16'],
     outDir: 'dist',

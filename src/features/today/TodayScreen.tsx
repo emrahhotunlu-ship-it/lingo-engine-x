@@ -14,10 +14,11 @@ import { noteDayOpen } from './dayMoment';
 import { topicName } from '../grammar/topicUi';
 import type { GrammarDay } from '../../domain/plan/types';
 import { ExtraRow } from './ExtraRow';
-import { Skeleton } from '../../ui/Skeleton';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { invalidIdsOf, useLive } from '../../data/live';
-import { dayKeyNoon, addDays } from '../../domain/date';
+import { addDays } from '../../domain/date';
+import { dateLabelOf } from './dateLabel';
+import { TodaySkeletonCard } from '../system/HomeSkeleton';
 import { dutyChannelMinutes, dutyMinutes } from '../../domain/plan/buildPlan';
 import { pflichtMarked } from '../../domain/plan/pflicht';
 import type { DutyId, StoredPlan, WhyKey } from '../../domain/plan/types';
@@ -56,6 +57,8 @@ import { StandSide } from './StandSide';
 // und ein leiser Verweis „Mehr üben ›“. Alles andere lebt in den Reitern.
 
 let statusMarked = false;
+/** U2: Die erste Heute-Ansicht nach dem Seitenstart ersetzt das Start-Bild/Ladeskelett an derselben Stelle – ohne Ein-Animation (kein Rutschen). */
+let firstMount = true;
 const obj = (v: unknown): Record<string, unknown> => (v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : {});
 
 const item = {
@@ -127,10 +130,6 @@ function legacyRows(plan: StoredPlan, items: TodayView['duties']['items'], t: T,
   });
 }
 
-/** Lerntag (Wechsel um 04:00), dieselbe Datumsfunktion wie der Plan: nachts gilt noch der Vortag. Der Titel von Heute ist das Datum (§2.2). */
-function dateLabelOf(today: string, lang: Lang): string {
-  return new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { weekday: 'long', day: 'numeric', month: 'long' }).format(dayKeyNoon(today));
-}
 
 function BlockDot({ state, kind }: { state: CardRow['state']; kind?: string }) {
   // Design-Lead: der nächste Schritt trägt seine Bereichsfarbe (Wörter violett, sonst Grammatik blau), wie in der Vorschau.
@@ -171,7 +170,7 @@ function nextTitle(now: CardRow | null, gt: GrammarDay | null, t: T, lang: Lang)
 }
 
 /** Die Tageskarte (offen): Ring mit einem Segment je Pflichtschritt, „Als Nächstes“, Pflichtschritte als Zustand und der EINE Knopf. `fixNone`: „Fehler korrigieren“ entfällt, weil nichts fällig ist. */
-function UnitCard({ view, rows, minLeft, fixNone }: { view: TodayView; rows: CardRow[]; minLeft: number; fixNone: boolean }) {
+function UnitCard({ view, rows, minLeft, fixNone, settled }: { view: TodayView; rows: CardRow[]; minLeft: number; fixNone: boolean; settled: boolean }) {
   const { t, lang } = useT();
   const done = view.duties.done;
   const total = view.duties.total;
@@ -180,7 +179,8 @@ function UnitCard({ view, rows, minLeft, fixNone }: { view: TodayView; rows: Car
   const title = nextTitle(now, view.plan?.u?.gt ?? null, t, lang);
   return (
     <section
-      className="lx-card flex flex-col gap-4 p-[1.125rem] sm:p-6"
+      className="lx-card lx-today-card flex flex-col gap-4 p-[1.125rem] sm:p-6"
+      data-settled={settled ? '' : undefined}
       aria-labelledby="td-unit-title"
       data-testid="today-card"
       data-shape={view.plan?.u?.shape ?? 'legacy'}
@@ -243,10 +243,13 @@ function UnitCard({ view, rows, minLeft, fixNone }: { view: TodayView; rows: Car
           </p>
         )}
       </div>
-      <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={start} data-testid="start" data-duty={now?.id} className="w-full">
+      {/* U2: Knopf unten in der Karte mit fester Mindesthöhe (.lx-today-card), Fußzeile hat immer ihre Zeile – der Knopf steht dort, wo das Skelett ihn zeigte. */}
+      <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={start} data-testid="start" data-duty={now?.id} className="mt-auto w-full">
         {done > 0 && now ? t('nbHeuteContinue', { block: now.name }) : t('nbHeuteStart')}
       </Button>
-      <StreakFoot />
+      <div className="min-h-4">
+        <StreakFoot />
+      </div>
     </section>
   );
 }
@@ -379,6 +382,13 @@ export function TodayScreen() {
   }, [today, unit, t]);
 
   const ok = ready && dayLoaded;
+  // U2: Erste Heute-Ansicht nach dem Start (Datum und Skelett standen schon da) bzw. Karte ersetzt ein Skelett: ohne Ein-Animation.
+  const [boot] = useState(() => firstMount);
+  const [sawSkeleton] = useState(() => !ok);
+  useEffect(() => {
+    firstMount = false;
+  }, []);
+  const settled = boot || sawSkeleton;
   const wide = useMediaQuery('(min-width: 1024px)');
   const gap = useMemo(() => comebackGap(obj(profile), today), [profile, today]);
   const comeback = comebackBand(gap);
@@ -403,7 +413,7 @@ export function TodayScreen() {
   const restartDay = ret && ret.gap >= RESTART_GAP && ret.since < RESTART_DAYS ? ret.since + 1 : null;
 
   return (
-    <motion.div className="mx-auto flex w-full max-w-[46rem] flex-col gap-5 pt-4 pb-10 sm:pt-8 lg:max-w-[70rem]" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.03 } } }}>
+    <motion.div className="mx-auto flex w-full max-w-[46rem] flex-col gap-5 pt-4 pb-10 sm:pt-8 lg:max-w-[70rem]" initial={boot ? false : 'hidden'} animate="show" variants={{ show: { transition: { staggerChildren: 0.03 } } }}>
       <motion.div variants={item}>
         <TabTitle title={dateLabelOf(today, lang)} testId="today-date" />
       </motion.div>
@@ -411,6 +421,35 @@ export function TodayScreen() {
       <div className="lg:grid lg:grid-cols-12 lg:items-start lg:gap-8">
       <div className="flex flex-col gap-5 lg:col-span-7">
 
+      {planStatus === 'error' && (
+        <div role="alert" className="flex flex-col items-start gap-3" data-testid="plan-error">
+          <p className="text-base text-muted">{t('tdPlanError')}</p>
+          <Button onClick={() => retryPlan(Date.now())} icon="refresh">
+            {t('tdPlanRetry')}
+          </Button>
+        </div>
+      )}
+
+      {!ok && planStatus !== 'error' && (
+        <div role="status" aria-label={t('tdLoading')}>
+          <TodaySkeletonCard />
+        </div>
+      )}
+
+      {welcome && (
+        <motion.div variants={item}>
+          <RestartCard view={view} gap={gap ?? 0} overdue={overdueNow} minutes={minLeft} />
+        </motion.div>
+      )}
+
+      {ok && !done && !welcome && view.duties.total > 0 && (
+        <motion.div variants={item} initial={settled ? false : undefined}>
+          <UnitCard view={view} rows={rows} minLeft={minLeft} fixNone={fixNone} settled={settled} />
+        </motion.div>
+      )}
+
+      {/* U2: Hinweis-Bänder (Wiedereinstieg, Wochenrückblick) stehen UNTER der Tageskarte: Sie erscheinen erst mit den Daten und
+          dürfen die Karte und ihren Knopf nicht nach unten schieben (Audit 26.10.: Knopf rutschte ~14 px). */}
       {ok && !done && !welcome && comeback !== 'none' && comeback !== 'restart' && (
         <motion.p variants={item} className="lx-glass rounded-[var(--radius-card)] px-4 py-3 text-sm text-muted" role="status" data-testid="comeback-band" data-band={comeback}>
           {t(comeback === 'short' ? 'nbHeuteComebackShort' : 'nbHeuteComebackLong')}
@@ -426,34 +465,6 @@ export function TodayScreen() {
 
       {ok && comeback === 'none' && restartDay === null && <WeeklyBand today={today} />}
 
-      {planStatus === 'error' && (
-        <div role="alert" className="flex flex-col items-start gap-3" data-testid="plan-error">
-          <p className="text-base text-muted">{t('tdPlanError')}</p>
-          <Button onClick={() => retryPlan(Date.now())} icon="refresh">
-            {t('tdPlanRetry')}
-          </Button>
-        </div>
-      )}
-
-      {!ok && planStatus !== 'error' && (
-        <div role="status" aria-label={t('tdLoading')} className="lx-glass flex flex-col gap-4 rounded-[var(--radius-card)] p-4 sm:p-5">
-          <Skeleton className="h-4 w-40" />
-          <Skeleton className="h-6 w-64 max-w-full" />
-          <Skeleton className="h-40 w-full" />
-        </div>
-      )}
-
-      {welcome && (
-        <motion.div variants={item}>
-          <RestartCard view={view} gap={gap ?? 0} overdue={overdueNow} minutes={minLeft} />
-        </motion.div>
-      )}
-
-      {ok && !done && !welcome && view.duties.total > 0 && (
-        <motion.div variants={item}>
-          <UnitCard view={view} rows={rows} minLeft={minLeft} fixNone={fixNone} />
-        </motion.div>
-      )}
 
       {ok && done && (
         <motion.div variants={item} className="flex flex-col gap-5">

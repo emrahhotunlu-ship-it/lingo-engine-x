@@ -432,6 +432,26 @@ h3 {
     border-radius: var(--radius-card);
   }
 
+  /* U2: feste Mindesthöhe der Tageskarte („Heute“). Start-Bild (index.html), Ladeskelett und echte Karte sind gleich hoch;
+     der Start-Knopf steht unten (`mt-auto`) – so springt er beim Laden nicht (Test: perf.spec „Start-Bild“). Wert = Karte mit
+     vier Schritten (Werte bei --lx-today-card-h). */
+  .lx-today-card {
+    min-height: var(--lx-today-card-h);
+  }
+
+  /* U2: Platzhalter der Reiterleiste im Start-Bild (gleiche Höhe wie die Knöpfe der echten Leiste). */
+  .lx-boot-tabs {
+    display: block;
+    width: 100%;
+    min-height: 3rem;
+  }
+  @media (min-width: 48rem) {
+    .lx-boot-tabs {
+      width: 30rem;
+      min-height: 2.75rem;
+    }
+  }
+
   .lx-eyebrow {
     font-size: var(--text-2xs);
     line-height: var(--text-2xs--line-height);
@@ -1136,6 +1156,17 @@ h3 {
    steht, bekommt der Inhalt Polster in Leistenhöhe, damit nichts darunter verschwindet. */
 :root {
   --lx-bar-h: 72px;
+  /* U2: Mindesthöhe der Tageskarte (.lx-today-card) = echte Karte mit vier Schritten (Gründe zweizeilig): 360–430 px breit 596 px, ab 640 px 530 px (gemessen 27.10.2026). */
+  --lx-today-card-h: 37.25rem;
+}
+@media (min-width: 40rem) {
+  :root {
+    --lx-today-card-h: 33.125rem;
+  }
+}
+/* U2: Die Tageskarte, die das Ladeskelett ersetzt, steigt nicht noch einmal auf (sonst rutscht der Start-Knopf 8 px). */
+:root[data-fx] [data-layer='tab'] .lx-card[data-settled] {
+  animation: none;
 }
 .lx-actionbar {
   position: fixed;

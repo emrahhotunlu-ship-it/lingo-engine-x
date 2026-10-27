@@ -28,6 +28,7 @@ function reducedMotion(): boolean {
 
 /** Bildlauf je Ebene (nur im Speicher). */
 const scrollMemo = new Map<string, number>();
+let firstLayer = true;
 let scrollTopNext = false;
 
 /** Tipp auf den aktiven Reiter mit Seiten im Stapel: die Wurzel beginnt oben. */
@@ -40,6 +41,11 @@ function Container({ name, kind, visible, children }: { name: RouteName; kind: L
   useLayoutEffect(() => {
     const el = ref.current;
     if (!visible || !el || reducedMotion() || typeof el.animate !== 'function') return;
+    // U2: Die erste Ebene nach dem Seitenstart ersetzt das Ladeskelett an derselben Stelle – kein Einblenden aus 0 (sonst blitzt es leer auf).
+    if (firstLayer) {
+      firstLayer = false;
+      return;
+    }
     // Design-Lead (EE B3): eine Seite schiebt sich von rechts herein (räumliche Richtung: tiefer im Stapel), nur bei Effekten full/calm.
     // Übungen bleiben ohne Transform (Heldenkarten-Flug und Prüfen-Leiste), Reiter ebenso (dort steigen die Karten gestaffelt auf, dz.css).
     const slide = kind === 'page' && document.documentElement.dataset.fx !== 'off';

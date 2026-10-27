@@ -122,11 +122,12 @@ function Frame() {
       </a>
       {/* Bei offenem Blatt ist der Hintergrund inert: kein Fokus, kein VoiceOver-Wischen dorthin. */}
       <div className="relative mx-auto flex min-h-dvh w-full max-w-[76rem] flex-col px-4 pt-[env(safe-area-inset-top)] sm:px-6 lg:px-10" inert={sheetOpen || companionOpen}>
-        {!system && !exercise && <TabBar />}
+        {/* U2: Beim Laden steht die Reiterleiste schon da (wie im Start-Bild, index.html) – sonst schiebt sie am Laptop alles nach unten. */}
+        {(!system || screen === 'loading') && !exercise && <TabBar />}
         {tabRoot && <TopBar />}
-        {/* System-Bildschirme haben keine Reiter: Einstellungen mit Diagnose und Sicherung oben rechts. */}
+        {/* System-Bildschirme haben keine Reiter: Einstellungen mit Diagnose und Sicherung oben rechts (gleiche Höhe wie der Kopf, U2). */}
         {system && (
-          <div className="flex justify-end pt-3" data-testid="system-actions">
+          <div className="flex min-h-11 items-center justify-end gap-3 pt-3" data-testid="system-actions">
             <SettingsButton />
           </div>
         )}
