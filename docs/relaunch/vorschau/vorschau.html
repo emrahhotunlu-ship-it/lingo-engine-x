@@ -2064,7 +2064,7 @@ function wordActions(idp) {
   idp = idp || '';
   const paused = !!S.ui.wpause;
   const sec = (id, icon, label, attr) => '<button class="tw-wa" id="' + idp + id + '" ' + attr + '>' + ic(icon, 'sm') + '<span>' + label + '</span></button>';
-  return '<div class="stack s10 tw-wact">' +
+  return '<div class="stack s16 tw-wact">' +
     (paused ? '<div class="notice tw-notice">' + ic('pause', 'sm') + '<span>' + L('<b>Pausiert.</b> Setzt keine Termine, kommt in keiner Übung. Alles bleibt gespeichert.', '<b>Paused.</b> No dates are set and it won’t appear in exercises. Everything is kept.') + '</span></div>'
       : '<button class="btn pri full" id="' + idp + 'w-practice" data-go="h18-word">' + L('Dieses Wort üben', 'Practice this word') + '</button>' +
       '<p class="tw-note">' + ic('info', 'xs') + '<span>' + L('5 Karten, <em class="en">lead time</em> kommt als letzte. Noch nicht fällig: Übung, der Termin startet ab jetzt neu.', '5 cards, <em>lead time</em> comes last. Not due yet: practice, the review restarts from now.') + '</span></p>') +
@@ -2123,10 +2123,10 @@ reg('h12', {
   render(v) {
     if (v === 'detail') {
       return '<header class="phead gx"><button class="iconbtn" id="w-back" data-go="h12-list" aria-label="' + esc(L('Zurück', 'Back')) + '" style="margin-left:-10px;margin-right:0">' + ic('chevL') + '</button>' + askBtn() + '</header>' +
-        '<div class="scroll gx stack s22" style="padding-bottom:24px">' + wordDetail() + wordActions() + '</div>' + tabbar('h12');
+        '<div class="scroll gx stack s24" style="padding-bottom:24px">' + wordDetail() + wordActions() + '</div>' + tabbar('h12');
     }
     if (v === 'resting-sheet') {
-      return h12List('list') + sheet('w-rest-sheet', '<span class="en">flexibility</span>', restingSheetBody(),
+      return h12List('list') + sheet('w-rest-sheet', 'flexibility', restingSheetBody(),
         '<div class="stack s8"><button class="btn pri full" id="w-rest-back" data-go="h12-list">' + L('Zurück', 'Back') + '</button><button class="btn ghost full" id="w-rest-open" data-go="h12-list">' + L('Trotzdem öffnen', 'Open anyway') + '</button></div>', { h: '44%', closeAct: 'tolist' });
     }
     if (v === 'filter') {
@@ -2231,8 +2231,10 @@ reg('h14', {
    ========================================================= */
 reg('h15', {
   code: 'H15', name: 'Blatt „Fragen“', kind: 'phone',
-  variants: [['claude', 'Claude'], ['translate', 'Übersetzen']],
+  variants: [['claude', 'Claude'], ['translate', 'Übersetzen'], ['saved', 'In die Wörter gespeichert']],
   render(v) {
+    const saved = v === 'saved';
+    if (saved) v = 'translate';
     S.typed = null; S.ui.checked = true;
     const under = gramTask({ checked: true, st: 'wrong' });
     const seg = '<div class="seg2" role="tablist"><button id="ask-claude" data-go="h15-claude" class="' + (v === 'claude' ? 'on' : '') + '" role="tab">Claude</button><button id="ask-trans" data-go="h15-translate" class="' + (v === 'translate' ? 'on' : '') + '" role="tab">' + L('Übersetzen', 'Translate') + '</button></div>';
@@ -2247,7 +2249,8 @@ reg('h15', {
         '<p class="p2">' + L('Kein Zeitpunkt, Ergebnis zählt: present perfect.', 'No time named, result matters: present perfect.') + '</p></div></div>';
     }
     const foot = v === 'claude' ? '<div style="display:flex;gap:8px"><div class="field" style="min-height:48px;flex:1;padding:12px 14px;color:var(--fg-3)">' + L('Frag Claude …', 'Ask Claude …') + '</div><button class="btn pri" id="ask-send" data-act="noop" aria-label="' + esc(L('Senden', 'Send')) + '" style="width:52px;padding:0">' + ic('send', 'sm') + '</button></div>'
-      : '<div style="display:flex;gap:8px"><button class="btn sec" id="tr-add" data-act="noop" style="flex:1">' + L('In die Wörter', 'Add to words') + '</button><button class="btn pri" id="tr-done" data-go="h4-band" style="flex:1">' + L('Fertig', 'Done') + '</button></div>';
+      : (saved ? '<div class="tw-saved" role="status" id="tr-saved"><span class="tw-savedic">' + ic('check', 'xs') + '</span><span><b class="en">reduce the lead time</b>' + L(' ist in deinen Wörtern · erkennst du', ' is in your words · you recognize') + '</span><button class="link" id="tr-undo" data-go="h15-translate">' + L('Rückgängig', 'Undo') + '</button></div>' : '') +
+        '<div style="display:flex;gap:8px">' + (saved ? '' : '<button class="btn sec" id="tr-add" data-go="h15-saved" style="flex:1">' + L('In die Wörter', 'Add to words') + '</button>') + '<button class="btn pri" id="tr-done" data-go="h4-band" style="flex:1">' + L('Fertig', 'Done') + '</button></div>';
     return under + '<div class="scrim" data-go="h4-band"></div><div class="sheet" id="ask-sheet" role="dialog" aria-label="' + esc(L('Fragen', 'Ask')) + '" style="height:78%"><div class="grab"></div><div class="gx" style="padding-bottom:6px">' + seg + '</div><div class="sb gx">' + body + '</div><div class="sf gx">' + foot + '</div></div>';
   }
 });
@@ -2257,8 +2260,13 @@ reg('h15', {
    ========================================================= */
 reg('h16', {
   code: 'H16', name: 'Ausfälle', kind: 'phone',
-  variants: [['noai', 'Claude nicht erreichbar'], ['tts', 'Vorlesen geht nicht'], ['empty', 'leere Liste']],
+  variants: [['noai', 'Claude nicht erreichbar'], ['tts', 'Vorlesen geht nicht'], ['empty', 'leere Liste'], ['nosave', 'Speichern geht gerade nicht']],
   render(v) {
+    if (v === 'nosave') {
+      S.ui.checked = true; S.ui.ownInput = false;
+      const note = '<div class="notice tw-notice tw-nosave" role="status">' + ic('offline', 'sm') + '<span>' + L('<b>Speichern geht gerade nicht.</b> Deine Antworten bleiben auf diesem Gerät und gehen von selbst hoch, sobald es wieder geht. Nichts geht verloren.', '<b>Saving isn’t working right now.</b> Your answers stay on this device and upload on their own once it works again. Nothing is lost.') + '</span></div>';
+      return h18('free').replace('<div class="ex-body gx with-band">', '<div class="ex-body gx with-band">' + note);
+    }
     if (v === 'noai') {
       const blocks = NORMAL();
       return exTop(blocks, 4, 0.7) + '<div class="ex-body gx">' + blockLine('s', L('Sag es · Rückmeldung', 'Say it · feedback')) +
@@ -2370,7 +2378,7 @@ const twActsBase = {
 };
 function twMoreSheet(t) {
   const m = t.more || {};
-  return sheet('tw-more-sheet', L('Mehr zu ', 'More about ') + '<span class="en">' + t.word + '</span>',
+  return sheet('tw-more-sheet', L('Mehr zu ', 'More about ') + t.word,
     '<div class="stack s16"><div class="stack s6"><div class="lbl">' + L('Bedeutung', 'Meaning') + '</div><p class="p">' + (m.meaning || '') + '</p></div>' +
     (m.ex ? '<div class="stack s6"><div class="lbl">' + L('Beispiel', 'Example') + '</div><div class="tw-trans"><b class="en">' + m.ex[0] + '</b><span>' + m.ex[1] + '</span></div></div>' : '') +
     (m.partners ? '<div class="stack s6"><div class="lbl">' + L('Wortpartner', 'Collocations') + '</div><p class="p en">' + m.partners + '</p></div>' : '') +
@@ -2526,6 +2534,21 @@ function TW_T() {
       why: earlyWhy + ' ' + L('Schwieriges Wort: zweimal danebengelegen in 30 Tagen.', 'Hard word: missed twice in 30 days.'),
       more: { meaning: L('Die Zeit zwischen Bestellung und Lieferung, meist in Wochen.', 'The time between order and delivery, usually in weeks.'), ex: ['Our standard lead time is ten weeks.', L('Unsere normale Lieferzeit beträgt zehn Wochen.', 'Normal delivery time.')], partners: 'reduce · shorten · quote a lead time', trap: L('<em class="en">delivery</em> ist die Lieferung selbst, nicht ihre Dauer.', '<em>delivery</em> is the delivery itself, not its duration.') },
       next: 'h20-all-early', nextWrong: 'h18-contrast'
+    },
+    /* „Dieses Wort üben“ aus dem Wort-Detail: 5 Karten, das Wort an Stelle 5 (VT 3.7). */
+    word: {
+      n: 5, total: 5, lage: 'early', word: 'lead time', form: 'sent',
+      bl: L('Dieses Wort üben · nicht fällig', 'Practice this word · not due'),
+      instr: L('Setz das fehlende Wort ein.', 'Fill in the missing word.'),
+      before: 'Our standard', after: 'is ten weeks.', hint: L('Gesucht: Lieferzeit', 'Wanted: Lieferzeit'),
+      tip: L('Tipp: beginnt mit <em class="en">l</em>, zwei Wörter', 'Hint: starts with <em>l</em>, two words'),
+      right: 'lead time', rightShow: 'lead time', alts: ['delivery time', 'turnaround time'],
+      alsoOk: L('Auch richtig. Im Einkauf hörst du meist <em class="en">lead time</em>.', 'Also correct. In purchasing you usually hear <em>lead time</em>.'),
+      you: { ok: 'lead time', typo: 'lead tme', wrong: 'delivery', idk: '' },
+      whyl: WORD.why,
+      why: earlyWhy + ' ' + L('Du hast es aus dem Wort-Detail geöffnet. Vier andere Karten kamen vorher, damit es nicht direkt aus dem Gedächtnis abgeschrieben ist.', 'You opened it from the word detail. Four other cards came first so you aren’t just copying from short-term memory.'),
+      more: { meaning: L('Die Zeit zwischen Bestellung und Lieferung, meist in Wochen.', 'The time between order and delivery, usually in weeks.'), ex: ['Our standard lead time is ten weeks.', L('Unsere normale Lieferzeit beträgt zehn Wochen.', 'Normal delivery time.')], partners: 'reduce · shorten · quote a lead time' },
+      next: 'h12-detail', nextLabel: L('Zurück zum Wort', 'Back to the word')
     }
   };
 }
@@ -2620,7 +2643,7 @@ function twFieldType(text) {
 }
 reg('h18', {
   code: 'H18', name: 'Trainer-Aufgabe', kind: 'phone', demo: true,
-  variants: [['free', 'frei ohne Satz'], ['partner', 'Wortpartner'], ['situation', 'Situation'], ['recognize', 'Erkennen'], ['listen', 'Hören'], ['speak', 'Sprechen'], ['return', 'Rückkehrer (+1)'], ['gap', 'Lücke, nicht fällig'], ['band-early', 'Band: nicht fällig'], ['contrast', 'Kontrastkarte']],
+  variants: [['free', 'frei ohne Satz'], ['partner', 'Wortpartner'], ['situation', 'Situation'], ['recognize', 'Erkennen'], ['listen', 'Hören'], ['speak', 'Sprechen'], ['return', 'Rückkehrer (+1)'], ['gap', 'Lücke, nicht fällig'], ['band-early', 'Band: nicht fällig'], ['contrast', 'Kontrastkarte'], ['word', 'Dieses Wort üben (5/5)']],
   render: h18,
   after(v) {
     if (v === 'contrast' || v === 'band-early' || S.ui.checked) return;
@@ -3003,7 +3026,7 @@ function h23(v) {
   }
   const base = twWordHead('h12-detail') + '<div class="scroll"><div class="gx" style="padding-bottom:24px">' + twManageRows() + '</div></div>' + tabbar('h12');
   if (v === 'delete-confirm') {
-    return base + sheet('tw-del-sheet', L('<span class="en">lead time</span> löschen?', 'Delete <span class="en">lead time</span>?'),
+    return base + sheet('tw-del-sheet', L('lead time löschen?', 'Delete lead time?'),
       '<div class="stack s16"><p class="p">' + L('Löschen ist endgültig: Stand, Verlauf und Sätze gehen verloren. Ausblenden behält alles und nimmt das Wort trotzdem aus jeder Übung.', 'Deleting is final: status, history and sentences are lost. Hiding keeps everything and still removes the word from every exercise.') + '</p></div>',
       '<div class="stack s8"><button class="btn pri full" id="tw-hide-inst" data-go="h23-hidden">' + L('Lieber ausblenden', 'Hide instead') + '</button><button class="btn ghost full tw-delbtn" id="tw-del-ok" data-go="h12-list">' + L('Endgültig löschen', 'Delete for good') + '</button></div>', { h: '46%', closeAct: 'closedel' });
   }
@@ -3373,8 +3396,8 @@ function tmErrDetail(p, id) {
     e2: L('<em class="en">on Monday</em> ist ein vergangener Zeitpunkt, also past simple.', '<em>on Monday</em> is a finished time, so past simple.'),
     e3: L('<em class="en">last year</em> ist vorbei, also past simple. Dieser Fehler kam in 30 Tagen zum dritten Mal, deshalb ist das Thema wieder „in Arbeit“.', '<em>last year</em> is over, so past simple. This error came up for the third time in 30 days, so the topic is back “in progress”.'),
     e4: L('Mit <em class="en">yesterday</em> fragst du mit <em class="en">did</em>.', 'With <em>yesterday</em>, ask with <em>did</em>.'),
-    e5: L('Ein Zeitraum bis jetzt: <em class="en">for</em> plus Dauer, dazu present perfect continuous.', 'A period up to now: <em>for</em> plus a length of time, with present perfect continuous.'),
-    e6: L('Ein Rabatt wird angeboten oder gewährt: <em class="en">offer</em> oder <em class="en">give a discount</em>.', 'You offer or give a discount.')
+    e5: L('Ein Zeitraum bis jetzt: <em class="en">for</em> plus Dauer (<em class="en">for two weeks</em>), <em class="en">since</em> nur mit Zeitpunkt (<em class="en">since Monday</em>). Dazu present perfect continuous, nicht present.', 'A period up to now: <em>for</em> plus a length of time (<em>for two weeks</em>), <em>since</em> only with a point in time (<em>since Monday</em>). Use present perfect continuous, not present.'),
+    e6: L('Ein Rabatt wird angeboten oder gewährt: <em class="en">offer</em> oder <em class="en">give a discount</em>. „Rabatt machen“ heißt nicht <em class="en">make a discount</em>.', 'You offer or give a discount, not <em>make</em> one.')
   }[e.id];
   const done = e.st === 'fixed' || e.st === 'firm' ? 2 : 0;
   return '<div class="stack s16">' +
@@ -3434,7 +3457,7 @@ function tmTopicLinks(p, desk) {
     '<div class="stack s6"><div class="lbl">' + L('Frühere Themen wiederholen', 'Review earlier topics') + '</div><p class="p2">' + L('Noch keins. Sobald ein Thema bestanden ist, kannst du es hier jederzeit üben.', 'None yet. Once a topic is passed, you can practice it here any time.') + '</p></div>';
 }
 function tmLookupBody() {
-  const sig = [['past simple', 'yesterday · last week · on Monday · two days ago · in 2025 · When …?'], ['present perfect', 'yet · already · so far · ever · since · for']];
+  const sig = [['past simple', 'yesterday · last week · on Monday · two days ago · in 2025 · When …?'], ['present perfect', 'yet · already · so far · ever · since … · for … (up to now)']];
   return '<div class="stack s8"><div class="lbl">' + L('Muster', 'Pattern') + '</div>' + gramPattern(true) + '</div>' +
     '<div class="card stack s8"><div class="lbl">' + L('Deutsch-Falle', 'German trap') + '</div><div class="contrast en">' +
     '<span class="k">DE</span><span style="font-family:var(--font)">Ich habe den Vertrag gestern unterschrieben.</span>' +
@@ -3468,7 +3491,7 @@ function h27(v) {
       '<div class="stack s8" style="text-align:center;align-items:center"><div class="lbl">' + L('Extra-Runde · <span class="en">past simple vs. present perfect</span>', 'Extra round · past simple vs. present perfect') + '</div>' +
       '<div class="disp num" style="font-size:34px;line-height:40px;font-weight:700">' + L('8 von 10 richtig', '8 of 10 correct') + '</div></div>' +
       '<div class="card stack s8"><div class="lbl">' + L('Zwei waren noch nicht richtig', 'Two weren’t right yet') + '</div>' + miss.map(m => '<div class="contrast en" style="padding:6px 0"><span class="k" style="color:var(--bad)">' + ic('cross', 'xs') + '</span><span class="no">' + m[0] + '</span><span class="k" style="color:var(--ok)">' + ic('check', 'xs') + '</span><span><b>' + m[1] + '</b></span></div>').join('') +
-      '<p class="p2">' + L('Beide Male stand ein vergangener Zeitpunkt dabei. Sie kommen in deine Fehler und morgen in der Pflicht zuerst dran.', 'Both times a finished time was named. They go to your errors and come first in tomorrow’s daily plan.') + '</p></div>' +
+      '<p class="p2">' + L('Beide Male ging es um einen vergangenen Zeitpunkt: <em class="en">When …?</em> fragt danach, <em class="en">in June</em> nennt ihn. Sie kommen in deine Fehler und morgen in der Pflicht zuerst dran.', 'Both times it was about a finished time: <em>When …?</em> asks for it, <em>in June</em> names it. They go to your errors and come first in tomorrow’s daily plan.') + '</p></div>' +
       '<p class="p2" style="text-align:center;font-size:13px">' + L('Zählt als Extra. Dein Tagesziel und Schritt 3 von 7 bleiben, wie sie sind.', 'Counts as extra. Your daily goal and step 3 of 7 stay as they are.') + '</p></div></div>' +
       exFoot(btnSec('tm-again', L('Noch eine Runde', 'One more round'), 'data-go="h27-free-round"') + btnPri('tm-done', L('Fertig', 'Done'), 'h27-topic'));
   }
@@ -3510,7 +3533,7 @@ function tmTeacherSeg(cur) {
   return '<div class="tm-seg" role="tablist" id="tm-tseg">' + [['paste', L('Einfügen', 'Paste')], ['note', L('Zettel', 'Notes')], ['monthly', L('Monat', 'Monthly')]].map(x =>
     '<button role="tab" id="tm-tseg-' + x[0] + '" data-go="h28-' + x[0] + '" class="' + (cur === x[0] || (cur === 'confirm' && x[0] === 'paste') ? 'on' : '') + '">' + x[1] + '</button>').join('') + '</div>';
 }
-const TM_NOTE = 'Week 44 · Following up on a quote\n\nPhrases: quote · lead time · follow up · discount · sign off on\nGrammar: past simple vs. present perfect\n\nMy most frequent errors:\n1. Present perfect with a finished time (“I have sent it on Monday”)\n2. “since” instead of “for” with a length of time (“since two weeks”)\n3. Present perfect in questions with a time (“When have you sent it?”)\n\nRole-play for you: You are the head of procurement. Our price is about 10 percent above a competitor’s. Push back on the price, ask about the lead time, and agree to a follow-up call only if I suggest a specific time.';
+const TM_NOTE = 'Week 44 · Following up on a quote\n\nPhrases: quote · lead time · follow up · discount · sign off on\nGrammar: past simple vs. present perfect\n\nMy most frequent errors:\n1. Present perfect with a finished time (“I have sent it on Monday”)\n2. “since” instead of “for” with a length of time (“since two weeks”)\n3. Present perfect in “When …?” questions (“When have you sent it?”)\n\nRole-play for you: You are the head of procurement. Our price is about 10 percent above a competitor’s. Push back on the price, ask about the lead time, and agree to a follow-up call only if I suggest a specific time.';
 function h28(v) {
   const head = tmTitle(L('Lehrerin', 'Teacher'), L('Preply · jeden Mittwoch', 'Preply · every Wednesday')) + tmTeacherSeg(v);
   if (v === 'confirm') {
@@ -3590,8 +3613,8 @@ function h29(v) {
       (said ? '' : '<div class="fieldwrap"><div class="field" style="min-height:72px;color:var(--fg-3)">' + L('Deine Rückfrage …', 'Your question …') + '</div></div>' +
         '<p class="hintline">' + L('Stufe 2 ohne Uhr. Ab Stufe 4 läuft die Zeit.', 'Level 2 has no timer. From level 4 the clock runs.') + '</p>') + '</div></div>';
     if (said) {
-      const you = 'Too long compared to what? Which lead time would work for you?';
-      s += band('ok', { you: { ok: you }, right: you, why: { ok: L('Du fragst zuerst nach dem Maßstab. So erfährst du, worum es wirklich geht, bevor du nachgibst.', 'You ask for the benchmark first. That way you learn what it’s really about before you give anything away.') } }, { next: 'h29-list' });
+      const you = 'I understand. What lead time would work for you?';
+      s += band('ok', { you: { ok: you }, right: you, why: { ok: L('Du fragst zuerst, was sie brauchen. So erfährst du, worum es wirklich geht, bevor du nachgibst.', 'You ask what they need first. That way you learn what it’s really about before you give anything away.') } }, { next: 'h29-list' });
     } else {
       s += exFoot(btnSec('tm-aloud', L('Laut gesagt', 'Said aloud'), 'data-act="tmsay"') + btnPri('tm-speak', L('Sprechen', 'Speak'), '', ' data-act="tmsay"'));
     }
@@ -3921,7 +3944,7 @@ function tsWorkshop() {
     '<div class="ts-vc on"><div class="ts-vh"><b class="en">commission</b><span>' + L('die Provision', 'share of a sale') + '</span></div><p class="en">Our sales team earns a <b>commission</b> on every new contract.</p></div>' +
     '<div class="ts-vc"><div class="ts-vh"><b class="en">provision</b><span>' + L('die Bestimmung im Vertrag', 'a clause in a contract') + '</span></div><p class="en">The contract includes a <b>provision</b> for price changes.</p></div></div>' +
     '<div class="notice">' + ic('bulb', 'sm') + '<span>' + L('<b>Deutsch-Falle:</b> „Provision“ sieht aus wie <span class="en">provision</span>, heißt aber <span class="en">commission</span>. Merksatz: Die <span class="en">commission</span> bringt Geld, die <span class="en">provision</span> steht im Vertrag.', '<b>German trap:</b> the German word “Provision” looks like provision but means commission. Memory hook: the commission brings money, the provision sits in the contract.') + '</span></div>' +
-    '<div class="stack s6"><div class="lbl">' + L('Wortpartner', 'Collocations') + '</div><p class="p en">earn · pay · a commission on</p></div>' +
+    '<div class="stack s6"><div class="lbl">' + L('Wortpartner', 'Collocations') + '</div><p class="p en">earn a commission · pay a commission · a commission on sales</p></div>' +
     tsAi() +
     '<p class="p2">' + L('Am Samstag fragt dich die App wieder, neu ab Stufe S2.', 'On Saturday the app asks you again, restarting at stage S2.') + '</p></div></div>' +
     exFoot(btnSec('ts-listen', ic('speaker', 'sm') + L('Anhören', 'Listen'), 'data-act="noop"') + btnPri('ts-ws-next', L('Weiter', 'Continue'), 'h33-result')) +
@@ -4100,7 +4123,7 @@ function tsCourse() {
 const TS_TEXT = [
   ['In a negotiation, every concession should buy you something.', 'In einer Verhandlung sollte dir jedes Zugeständnis etwas einbringen.'],
   ['If you lower your price, ask for something <b>in return</b>: a longer contract, a larger order, or faster payment.', 'Wenn du mit dem Preis heruntergehst, verlange etwas dafür: einen längeren Vertrag, eine größere Bestellung oder schnellere Zahlung.'],
-  ['The easiest way to do this is a <b>conditional offer</b>: “If you can <b>commit to</b> two years, we can reduce the price by 5 percent.”', 'Am einfachsten geht das mit einem Angebot unter einer Bedingung: „Wenn Sie sich auf zwei Jahre festlegen, können wir den Preis um 5 Prozent senken.“'],
+  ['The easiest way to do this is with a <b>conditional offer</b>: “If you can <b>commit to</b> two years, we can reduce the price by 5 percent.”', 'Am einfachsten geht das mit einem Angebot unter einer Bedingung: „Wenn Sie sich auf zwei Jahre festlegen, können wir den Preis um 5 Prozent senken.“'],
   ['The other side hears two things at once: you are <b>willing to move</b>, but only if they move too.', 'Die andere Seite hört zwei Dinge zugleich: Du bist bereit, dich zu bewegen, aber nur, wenn sie sich auch bewegt.'],
   ['A common mistake is to offer a discount first and hope for goodwill later.', 'Ein häufiger Fehler: erst einen Rabatt anbieten und dann auf Entgegenkommen hoffen.'],
   ['Experienced buyers will accept the discount and then ask for more.', 'Erfahrene Einkäufer nehmen den Rabatt an und fordern dann mehr.']
@@ -4115,7 +4138,7 @@ function tsLesson() {
     '<p class="p2">' + L('Ziel: Du bietest ein Zugeständnis nur gegen eine Gegenleistung an.', 'Goal: you only offer a concession in exchange for something.') + '</p></div>' +
     '<div class="stack s8"><div class="lbl">' + L('Schlüsselwendungen', 'Key phrases') + '</div><div class="ts-chips en"><span class="chip">in return</span><span class="chip">commit to</span><span class="chip">a conditional offer</span><span class="chip">be willing to move</span></div></div>' +
     '<div class="stack s8"><div class="lbl">' + L('Text · Satz antippen für Deutsch', 'Text · tap a sentence for German') + '</div>' +
-    '<article class="ts-art en"><h3 class="disp">Never give a concession for free</h3>' +
+    '<article class="ts-art en"><h3 class="disp">Never make a concession for free</h3>' +
     '<p>' + sent(0) + ' ' + sent(1) + '</p><p>' + sent(2) + ' ' + sent(3) + '</p><p>' + sent(4) + ' ' + sent(5) + '</p></article></div>' +
     '<div class="card stack s8"><div class="lbl">' + ic('bulb', 'xs') + ' ' + L('Sprachtipp', 'Language tip') + '</div>' +
     '<p class="p"><b class="en">If you can …, we can …</b></p><p class="p2">' + L('Erst die Bedingung, dann dein Zugeständnis. So hört die andere Seite zuerst, was du dafür willst. Mehr dazu in Kapitel 4.', 'Condition first, then your concession. That way the other side first hears what you want for it. More in chapter 4.') + '</p></div>' +
@@ -4195,7 +4218,7 @@ function tsClinic() {
     '<div class="field ts-mine en">We ' + tsMark(1, 'have received') + ' your feedback last week and will send you an answer ' + tsMark(2, 'until') + ' Friday.</div></div>' +
     tsPurpose(3) +
     tsVerdict(L('Fast richtig · 2 Stellen', 'Almost right · 2 spots')) +
-    '<div class="card stack s6"><div class="lbl">' + L('Richtig wäre', 'Correct would be') + '</div><p class="p en" style="font-size:18px;line-height:26px">We <b class="ts-fix">received</b> your feedback last week and will send you an answer <b class="ts-fix">by</b> Friday.</p></div>' +
+    '<div class="card stack s6"><div class="lbl">' + L('Richtig wäre', 'Correct version') + '</div><p class="p en" style="font-size:18px;line-height:26px">We <b class="ts-fix">received</b> your feedback last week and will send you an answer <b class="ts-fix">by</b> Friday.</p></div>' +
     '<div>' + tsSpot(1, 'have received', 'received', L('<em class="en">last week</em> ist ein vergangener Zeitpunkt. Dazu passt past simple.', '<em>last week</em> is a past time expression. It goes with the past simple.'), 'past simple + last week') +
     tsSpot(2, 'until Friday', 'by Friday', L('„Bis Freitag“ als Frist heißt <em class="en">by Friday</em>. <em class="en">until</em> heißt: die ganze Zeit bis dahin.', 'A deadline is <em>by Friday</em>. <em>until</em> means: the whole time up to then.'), 'by + deadline') + '</div>' +
     '<button class="ts-tog" id="ts-c1" data-act="c1" aria-expanded="' + open + '"><span>' + L('C1-Fassung', 'C1 version') + '</span>' + ic(open ? 'chevU' : 'chevD', 'sm') + '</button>' +
@@ -4210,7 +4233,7 @@ function tsMail() {
     [L('Inhalt und Wirkung', 'Content and impact'), L('Klar: was fehlt, seit wann und was du brauchst. Die Bitte steht am Ende, gut so.', 'Clear: what’s missing, since when and what you need. The request comes last, good.')],
     [L('Register', 'Register'), L('<s class="en ts-no">Many greetings</s> ist wörtlich aus „Viele Grüße“. Üblich: <b class="en">Best regards</b>. Mit <b class="en">Could you</b> klingt die Bitte höflicher.', '<s class="ts-no">Many greetings</s> is a literal translation from German. Usual: <b>Best regards</b>. <b>Could you</b> makes the request more polite.')],
     [L('Aufbau', 'Structure'), L('Kurz und in guter Reihenfolge. Nach <em class="en">Hello Mr. Brandt,</em> beginnt die nächste Zeile groß: <b class="en">Thank you</b>.', 'Short and well ordered. After <em>Hello Mr. Brandt,</em> the next line starts with a capital: <b>Thank you</b>.')],
-    [L('Sprache', 'Language'), L('<s class="en ts-no">have ordered them already on</s> → <b class="en">ordered them on</b>: vergangener Zeitpunkt, also past simple. <s class="en ts-no">until when</s> → <b class="en">when</b>: „bis wann“ fragst du mit <em class="en">when</em>.', '<s class="ts-no">have ordered them already on</s> → <b>ordered them on</b>: a past point in time, so past simple. <s class="ts-no">until when</s> → <b>when</b>.')]
+    [L('Sprache', 'Language'), L('<s class="en ts-no">have ordered them already on</s> → <b class="en">ordered them on</b>: vergangener Zeitpunkt, also past simple. <s class="en ts-no">until when</s> → <b class="en">when</b>: „bis wann“ fragst du mit <em class="en">when</em>. Natürlicher klingt <b class="en">we still haven’t received</b>, und nach <em class="en">Unfortunately</em> steht ein Komma.', '<s class="ts-no">have ordered them already on</s> → <b>ordered them on</b>: a past point in time, so past simple. <s class="ts-no">until when</s> → <b>when</b>. <b>we still haven’t received</b> sounds more natural, and <em>Unfortunately</em> takes a comma.')]
   ];
   return '<div class="stack s16">' +
     '<div class="stack s6"><div class="ts-fl"><span class="lbl">' + L('Deine Mail', 'Your email') + '</span><span class="lbl num">' + TS_MAIL_RAW.length + ' / 1500</span></div>' +
@@ -4506,19 +4529,43 @@ reg('l4', {
 });
 
 /* ---------- L5 Reiter Wörter ---------- */
+/* Kopf mit „Üben ⏎“ und „Hinzufügen“; Kontextspalte zeigt das Wortfenster (main), das ruhende Wort (resting) oder Verwalten (manage). */
+function l5Stage(v, idp) {
+  const filters = WF_STAND().slice(0, 3).concat([WF_STAND()[4]]);
+  const sel = v === 'resting' ? 'flexibility' : 'lead time';
+  const rows = wordRows(idp + 'd', 'l5-main', 'l5-resting').replace(new RegExp('(<button class="row[^"]*)(" id="[^"]*" data-go="[^"]*" data-w="' + sel + '")'), '$1 tw-selrow$2');
+  return '<div class="dscroll"><div class="tw-dhead"><h1 class="dh1 disp" style="margin:0">' + L('Wörter', 'Words') + '</h1><span class="grow"></span>' +
+    '<button class="btn sec" id="' + idp + 'dw-add" data-go="h21-search-empty">' + ic('plus', 'sm') + L('Hinzufügen', 'Add') + '</button>' +
+    '<button class="btn pri" id="' + idp + 'dw-practice" data-go="l11-default">' + L('Üben', 'Practice') + kb('⏎') + '</button></div>' +
+    '<p class="p2 tw-dsub">' + L('14 fällig · zählt als Extra', '14 due · counts as extra') + '</p><div class="stack s16">' +
+    '<label class="field" style="min-height:2.9em;display:flex;align-items:center;gap:.6em;padding:0 1em;color:var(--fg-3)">' + ic('search', 'sm') + '<input id="' + idp + 'dw-search" placeholder="' + esc(L('Wort suchen', 'Search words')) + '" style="border:0;background:transparent;outline:none;flex:1;min-width:0;font-size:1em;color:var(--fg)" autocomplete="off"></label>' +
+    '<div style="display:flex;gap:.4em;flex-wrap:wrap">' + filters.map((f, i) => '<button class="chip" id="' + idp + 'dwf-' + i + '" style="' + (i === 0 ? 'background:var(--act-soft);color:var(--act-text)' : '') + '">' + f[0] + ' <span class="num" style="opacity:.7">' + f[1] + '</span></button>').join('') +
+    '<button class="chip" id="' + idp + 'dwf-more" data-go="h12-filter">' + ic('list', 'xs') + L('Filter', 'Filter') + '</button></div>' +
+    '<div id="' + idp + 'dw-rows">' + rows + '</div><div id="' + idp + 'dw-found"></div></div></div>';
+}
+function l5Ctx(v, idp) {
+  if (v === 'resting') {
+    return '<div class="stack s16"><div class="stack s6"><div class="prompt disp en" style="font-size:2em">flexibility</div><div class="p2"><span class="tw-lockic">' + ic('lock', 'xs') + '</span> ' + L('ruht bis 12.11.', 'rests until Nov 12') + '</div></div>' +
+      '<div class="card">' + restingSheetBody() + '</div>' +
+      '<div class="stack s8"><button class="btn pri full" id="' + idp + 'dr-back" data-go="l5-main">' + L('Zurück', 'Back') + kb('Esc') + '</button><button class="btn ghost full" id="' + idp + 'dr-open" data-go="l5-main">' + L('Trotzdem öffnen', 'Open anyway') + '</button></div></div>';
+  }
+  if (v === 'manage') {
+    return '<div class="stack s16"><div style="display:flex;align-items:center;justify-content:space-between"><div class="prompt disp en" style="font-size:1.7em">lead time</div><span class="stagepill">S3</span></div>' +
+      twManageRows(idp + 'd', true) + '<button class="btn sec full" id="' + idp + 'dm-back" data-go="l5-main">' + L('Zurück zum Wort', 'Back to the word') + kb('Esc') + '</button></div>';
+  }
+  return wordDetail() + wordActions(idp + 'd').replace('data-go="h18-word"', 'data-go="l12-task"').replace('data-go="h23-actions"', 'data-go="l5-manage"').replace('data-go="h15-claude"', 'data-go="l7"');
+}
 reg('l5', {
   code: 'L5', name: 'Reiter Wörter', kind: 'desk', nav: 'woerter',
-  variants: [['main', 'Liste + Wort']],
-  render() {
-    const filters = [[L('Alle', 'All'), 491], [L('Bildest du selbst', 'You produce'), 38], [L('Auf dem Weg', 'On the way'), 41], [L('Erkennst du', 'You recognize'), 412]];
-    return {
-      stage: '<div class="dscroll"><h1 class="dh1 disp">' + L('Wörter', 'Words') + '</h1><div class="stack s16">' +
-        '<label class="field" style="min-height:2.9em;display:flex;align-items:center;gap:.6em;padding:0 1em;color:var(--fg-3)">' + ic('search', 'sm') + '<input id="dw-search" placeholder="' + esc(L('Wort suchen', 'Search words')) + '" style="border:0;background:transparent;outline:none;flex:1;min-width:0;font-size:1em;color:var(--fg)" autocomplete="off"></label>' +
-        '<div style="display:flex;gap:.4em;flex-wrap:wrap">' + filters.map((f, i) => '<button class="chip" id="dwf-' + i + '" style="' + (i === 0 ? 'background:var(--act-soft);color:var(--act-text)' : '') + '">' + f[0] + ' <span class="num" style="opacity:.7">' + f[1] + '</span></button>').join('') + '</div>' +
-        '<div>' + WORDLIST().map((w, i) => '<button class="row" id="dw-' + i + '" data-act="noop" style="' + (i === 1 ? 'background:var(--surface);margin:0 -1em;padding:.5em 1em;width:calc(100% + 2em);border-radius:var(--r)' : '') + '"><span class="rt"><b class="en">' + w[0] + '</b><span>' + w[1] + ' · ' + w[3] + '</span></span><span class="stagepill' + (w[2] === 'S5' ? ' s5' : '') + '">' + w[2] + '</span></button>').join('') + '</div></div></div>',
-      ctx: wordDetail()
-    };
-  }
+  variants: [['main', 'Liste + Wort'], ['resting', 'ruhendes Wort'], ['manage', 'Wort verwalten']],
+  render(v, o) { return { stage: l5Stage(v, o.idp || ''), ctx: '<div class="stack s24">' + l5Ctx(v, o.idp || '') + '</div>' }; },
+  after() { wireWordSearch('d', 'l12-task', 'h21-search-empty'); },
+  keys(e) {
+    if (inField()) { if (e.key === 'Escape') document.activeElement.blur(); return; }
+    if (e.key === 'Escape' && curVariant() !== 'main') go('l5-main');
+    else if (e.key === 'Enter') { e.preventDefault(); go('l11-default'); }
+  },
+  acts: { wpause() { S.ui.wpause = !S.ui.wpause; render(); } }
 });
 
 /* ---------- L6 Mission ---------- */
@@ -4663,7 +4710,281 @@ reg('l10', {
   }
 });
 
-// desk-woerter.js: siehe bauliste.md
+/* Paket A „Wörter“ am Laptop (Nora-A): L11 Trainer-Start, L12 Trainer-Aufgabe, L13 Anki, L14 Ergebnis.
+   Gleiche Inhalte und Regeln wie H17–H20; Tasten ⏎, T, W, Esc, Leertaste, 1–4, Z. */
+
+/* Handy-Ziele auf die Laptop-Gegenstücke abbilden. */
+function twDeskGo(t) {
+  if (/^h18-gap|^h18-situation/.test(t)) return 'l12-task';
+  if (/^h18-/.test(t)) return 'l12-task';
+  if (t === 'h19-recognize-front') return 'l13-recognize';
+  if (t === 'h19-produce-front') return 'l13-produce';
+  if (t === 'h17-new-words') return 'l11-new-words';
+  return t;
+}
+function twDTop(cur, total, o) {
+  o = o || {};
+  const fill = Math.max(0.04, Math.min(1, (cur - (o.done ? 0 : 0.65)) / total));
+  return '<div class="dtop tw-top"><button class="iconbtn" id="dx-close" data-go="' + (o.closeTo || 'l5') + '" aria-label="' + esc(L('Schließen', 'Close')) + '">' + ic('close') + '</button>' +
+    '<div class="tw-bar" role="progressbar" aria-valuemin="0" aria-valuemax="' + total + '" aria-valuenow="' + cur + '" aria-label="' + esc(L('Fortschritt der Runde', 'Round progress')) + '"><i style="width:' + Math.round(fill * 100) + '%"></i></div>' +
+    '<span class="tw-count num">' + L(cur + ' von ' + total, cur + ' of ' + total) + (o.plus ? ' <em>+' + o.plus + '</em>' : '') + '</span><span class="tw-badge">Extra</span>' +
+    '<button class="btn ghost tw-fin" id="dx-finish" data-go="' + (o.finish || 'l14') + '">' + L('Fertig', 'Done') + kb('Esc') + '</button></div>';
+}
+function twDHelp() {
+  if (!S.ui.help) return '';
+  const rows = [['⏎', L('Prüfen, dann Weiter', 'Check, then continue')], ['T', L('Tipp', 'Hint')], ['W', L('Weiß ich nicht', 'Don’t know')], ['1–4', L('Auswahl · Anki-Bewertung', 'Choice · Anki rating')], [L('Leer', 'Space'), L('Anki: aufdecken', 'Anki: reveal')], ['Z', L('Anki: rückgängig (5 s)', 'Anki: undo (5 s)')], ['Esc', L('Feld verlassen, dann Runde beenden', 'Leave the field, then end the round')], ['?', L('Diese Hilfe', 'This help')]];
+  return '<div class="kbdhelp" data-act="khelp"><div class="card" role="dialog" aria-label="' + esc(L('Tastenkürzel', 'Shortcuts')) + '"><div class="h2 disp">' + L('Tastenkürzel im Trainer', 'Trainer shortcuts') + '</div><dl>' + rows.map(r => '<dt><span>' + r[0] + '</span></dt><dd>' + r[1] + '</dd>').join('') + '</dl></div></div>';
+}
+
+/* ---------- L11 Trainer-Start ---------- */
+function l11Preview(v) {
+  const list = v === 'new-words'
+    ? [['upfront', L('offen, ehrlich (vorab)', 'open, honest'), L('neu', 'new')]].concat(TW_ROUND().slice(0, 9).map(w => [w[0], w[1], w[2]]))
+    : TW_ROUND().map(w => [w[0], w[1], w[2]]);
+  return '<div class="card tw-prev" style="padding:.3em 1em">' + list.map((w, i) => '<div class="tw-pv"><span class="num tw-pn">' + (i + 1) + '</span><b class="en">' + w[0] + '</b><span class="tw-pm">' + w[1] + '</span><span class="stagepill' + (w[2] === 'S5' ? ' s5' : '') + '">' + w[2] + '</span></div>').join('') + '</div>';
+}
+function l11Counts() {
+  return '<div class="stack s8 tw-counts">' +
+    '<p class="tw-cl"><span class="tw-ci ok">' + ic('check', 'xs') + '</span><span>' + L('<b>Fällig</b> zählt voll: bis 4 Uhr morgens.', '<b>Due</b> counts fully, until 4 a.m.') + '</span></p>' +
+    '<p class="tw-cl"><span class="tw-ci">' + ic('clock', 'xs') + '</span><span>' + L('<b>Noch nicht fällig</b> ist Übung: der nächste Termin wird ab jetzt gerechnet.', '<b>Not due yet</b> is practice: the next review is counted from now.') + '</span></p>' +
+    '<p class="tw-cl"><span class="tw-ci bad">' + ic('cross', 'xs') + '</span><span>' + L('<b>Falsch</b> zählt immer: Nochmal, morgen wieder dran.', '<b>Wrong</b> always counts: again, back tomorrow.') + '</span></p></div>';
+}
+reg('l11', {
+  code: 'L11', name: 'Trainer-Start', kind: 'desk', nav: 'woerter',
+  variants: [['default', 'Vorschlag'], ['before-duty', 'Pflicht noch offen'], ['new-words', 'neue Wörter (noch 1)']],
+  render(v, o) {
+    const c = twCfg();
+    const idp = (o.idp || '') + 'd';
+    const target = v === 'new-words' ? ['', 'l12-task'] : twStartBtn(c, v);
+    let hero = twStartHero(v, c, idp);
+    hero = hero.replace(/(id="dtw-go" data-go=")([^"]*)("[^>]*>)([\s\S]*?)<\/button>/, (m, a, g, b, lbl) => a + twDeskGo(g) + b + lbl + kb('⏎') + '</button>');
+    const pre = v === 'before-duty' ? '<div class="notice tw-notice">' + ic('info', 'sm') + '<span>' + L('<b>Deine Pflicht ist noch offen.</b> Hier übst du zusätzlich. Die Wörter deines Plans bleiben für die Pflicht.', '<b>Your daily plan is still open.</b> This is extra practice. Your plan’s words stay reserved for it.') + '</span></div>' : '';
+    const adj = v === 'new-words' ? '' : '<div class="tw-adjd"><div class="lbl" style="padding-bottom:.4em">' + L('Anpassen', 'Adjust') + '</div>' + twAdjust(c, idp).replace('springopen', '') + '</div>';
+    return {
+      stage: '<div class="dscroll"><div class="tw-dhead"><h1 class="dh1 disp" style="margin:0">' + L('Wörter üben', 'Practice words') + '</h1><span class="tw-badge">Extra</span></div>' +
+        '<div class="stack s16 tw-l11">' + pre + hero + adj + twLockLine(v) + '</div></div>',
+      ctx: ctxBlock(L('Was zählt?', 'What counts?'), l11Counts()) +
+        ctxBlock(v === 'new-words' ? L('Diese Runde', 'This round') : L('Die ersten 10', 'The first 10'), l11Preview(v)) +
+        (v === 'new-words' ? '' : '<p class="p2" style="margin:0;font-size:.85em">' + L('Sortiert nach der niedrigsten Chance, dass du sie noch weißt.', 'Sorted by lowest chance you still remember them.') + '</p>'),
+      over: twDHelp(),
+      target: twDeskGo(target[1])
+    };
+  },
+  keys(e) {
+    if (inField()) return;
+    if (e.key === 'Enter') { e.preventDefault(); const b = $('#dtw-go'); if (b) go(b.getAttribute('data-go')); }
+    else if (e.key === 'Escape') go('l5');
+    else if (e.key === '?') act('khelp');
+  },
+  acts: {
+    cfg(el) {
+      const c = twCfg(); const k = el.getAttribute('data-k'), val = el.getAttribute('data-v');
+      c[k] = val;
+      if (k === 'art' && val === 'tempo') c.dir = 'produce';
+      if (k === 'was' && val === 'new') { go('l11-new-words'); return; }
+      render();
+    }
+  }
+});
+
+/* ---------- L12 Trainer-Aufgabe ---------- */
+function l12Round(v) {
+  const done = v === 'checked-early' || v === 'contrast'
+    ? [['shortlist', 'ok'], ['deadline', 'near'], ['lead time', v === 'contrast' ? 'bad' : 'run'], ['upfront', ''], ['invoice', ''], ['reach out', ''], ['in stock', ''], ['ship', ''], ['on hold', '']]
+    : [['budget approval', 'near'], ['revise a quote', 'ok'], ['follow up', 'ok'], ['sign off on', 'run'], ['procurement', ''], ['reduce', ''], ['discount', ''], ['supplier', ''], ['call back', ''], ['deliver on time', '']];
+  const mk = { ok: ['ok', 'check'], near: ['near', 'near'], bad: ['bad', 'cross'] };
+  return '<div class="card" style="padding:.3em 1em">' + done.map(w => {
+    const m = mk[w[1]];
+    return '<div class="st ' + (w[1] === 'run' ? 'run' : (m ? 'done' : 'open')) + ' tw-rr" style="min-height:2.35em;font-size:.92em"><span class="mk' + (m ? ' tw-mk-' + m[0] : '') + '">' + (m ? ic(m[1], 'xs') : '') + '</span><span class="nm en">' + w[0] + '</span>' + (w[1] === 'run' ? '<span class="sm">' + L('jetzt', 'now') + '</span>' : '') + '</div>';
+  }).join('') + '</div><p class="p2 tw-legend" style="margin:.5em 0 0;font-size:.85em">' + ic('check', 'xs') + L(' richtig · ', ' right · ') + ic('near', 'xs') + L(' nah dran · ', ' close · ') + ic('cross', 'xs') + L(' kommt wieder', ' comes back') + '</p>';
+}
+function l12Stage(v) {
+  if (v === 'contrast') return l12Contrast();
+  const t = TW_T()[v === 'checked-early' ? 'gap' : 'recognize'];
+  const checked = v === 'checked' || v === 'checked-early' || !!S.ui.checked;
+  const st = checked ? twSt(t) : null;
+  const shown = twShown(t, st, checked);
+  const you = Object.assign({}, t.you, S.typed && S.ui.ownInput ? { [st]: esc(S.typed) } : {});
+  const why = Object.assign({}, t.whyl);
+  if (st === 'ok' && S.ui.ownInput && t.alsoOk && t.alts.indexOf(twNorm(S.typed)) >= 0) why.ok = t.alsoOk;
+  const gst = checked ? TW_GAPST[st] : '';
+  let s = twDTop(t.n, t.total || 10, { done: checked }) + '<div class="dscroll" style="display:flex;flex-direction:column;padding-top:1em">' + blockLine('w', t.bl) + instr(t.instr, 'd-why');
+  if (t.form === 'sent') {
+    s += '<div class="stack s16" style="padding:3.5em 0 2em;align-items:flex-start"><div class="sent en">' + words(t.before) + ' ' + gapHtml(shown, { caret: !checked, input: !checked, st: gst }) + ' ' + words(t.after) + '</div><div class="hintline" id="d-hint">' + t.hint + '</div></div>';
+  } else {
+    s += '<div class="stack s16" style="padding:3.5em 0 2em;align-items:flex-start"><div style="display:flex;align-items:center;gap:.75em"><div class="prompt disp en">' + t.prompt + '</div><button class="iconbtn" id="d-say" data-act="noop" aria-label="' + esc(L('Anhören', 'Listen')) + '" style="margin:0;background:var(--surface-2)">' + ic('speaker', 'sm') + '</button></div><div class="hintline" id="d-hint">' + t.hint + '</div>' +
+      '<div style="padding-top:.5em">' + gapHtml(shown, { big: true, caret: !checked, input: !checked, st: gst }) + '</div></div>';
+  }
+  if (checked) {
+    s += '<div class="dverdict ' + stCls(st) + '" id="d-verdict" role="status">' + verdictRow(st) + cmpLine(st, you[st], t.rightShow) + '<p class="whyl" style="margin:.2em 0 0">' + why[st] + '</p>' + twLageLine(t, st) + '</div>';
+  }
+  s += '</div>';
+  const next = (st === 'wrong' || st === 'idk') && v === 'checked-early' ? 'l12-contrast' : (v === 'checked-early' ? 'l14' : 'l12-task');
+  s += dKeys(checked ? '<button class="btn pri" id="d-next" data-go="' + next + '">' + L('Weiter', 'Continue') + kb('⏎') + '</button>'
+    : '<button class="btn sec" id="d-tip" data-act="tip">' + L('Tipp', 'Hint') + kb('T') + '</button><button class="btn sec" id="d-idk" data-act="idk">' + L('Weiß ich nicht', 'Don’t know') + kb('W') + '</button><button class="btn pri" id="d-check" data-act="check">' + L('Prüfen', 'Check') + kb('⏎') + '</button>');
+  return s;
+}
+function l12Contrast() {
+  const pick = S.ui.pick;
+  const checked = !!pick;
+  const st = pick === 'lead time' ? 'ok' : 'wrong';
+  let s = twDTop(4, 9, { done: checked }) + '<div class="dscroll" style="display:flex;flex-direction:column;padding-top:1em">' + blockLine('w', L('Wörter üben · Kontrast', 'Practice words · contrast')) +
+    instr(L('Was passt in die Lücke?', 'What fits the gap?'), 'd-why') +
+    '<div class="stack s16" style="padding:2.2em 0 1.5em"><div class="card tw-ctr"><div class="contrast en"><span class="k">A</span><span><b>delivery</b> <span class="tw-de">' + L('die Lieferung selbst', 'the delivery itself') + '</span></span><span class="k">B</span><span><b>lead time</b> <span class="tw-de">' + L('die Dauer bis zur Lieferung', 'the time until delivery') + '</span></span></div></div>' +
+    '<div class="sent en">' + words('Our standard') + ' ' + gapHtml(checked ? pick : '', { st: checked ? TW_GAPST[st] : '' }) + ' ' + words('is ten weeks.') + '</div>' +
+    (checked ? '' : '<div class="stack s8" style="max-width:24em">' + [['delivery', 1], ['lead time', 2]].map(c => '<button class="choice en" id="d-c' + c[1] + '" data-act="pick" data-v="' + c[0] + '"><span class="n">' + c[1] + '</span>' + c[0] + '</button>').join('') + '</div>') + '</div>';
+  if (checked) s += '<div class="dverdict ' + stCls(st) + '" role="status">' + verdictRow(st) + cmpLine(st, pick, 'lead time') + '<p class="whyl" style="margin:.2em 0 0">' + (st === 'ok' ? L('Es geht um die Dauer, also <em class="en">lead time</em>.', 'It is about duration, so <em>lead time</em>.') : L('Zehn Wochen sind eine Dauer: <em class="en">lead time</em>.', 'Ten weeks is a duration: <em>lead time</em>.')) + '</p><p class="tw-lage">' + ic('clock', 'xs') + '<span>' + L('Auswahl nach dem Fehler ist Rettung: Übung, keine Wirkung auf die Stufe.', 'A choice after a mistake is a rescue: practice, no effect on the stage.') + '</span></p></div>';
+  s += '</div>' + dKeys(checked ? '<button class="btn pri" id="d-next" data-go="l14">' + L('Zum Ergebnis', 'See result') + kb('⏎') + '</button>' : '<span class="p2" style="font-size:.9em">' + L('Taste 1 oder 2', 'Press 1 or 2') + '</span>');
+  return s;
+}
+function l12Ctx(v) {
+  const t = v === 'contrast' ? TW_T().gap : TW_T()[v === 'checked-early' ? 'gap' : 'recognize'];
+  const checked = v === 'checked' || v === 'checked-early' || !!S.ui.checked || (v === 'contrast' && !!S.ui.pick);
+  const st = checked ? (v === 'contrast' ? (S.ui.pick === 'lead time' ? 'ok' : 'wrong') : twSt(t)) : null;
+  const m = t.more || {};
+  const lage = t.lage === 'early' || v === 'contrast'
+    ? L('<b>Noch nicht fällig.</b> Schwierig-Runde: Übung, der nächste Termin wird ab jetzt gerechnet. Falsch zählt trotzdem.', '<b>Not due yet.</b> Hard-words round: practice, the next review is counted from now. Wrong still counts.')
+    : L('<b>Fällig.</b> Zählt für deinen Plan, Erkennen zählt für „Erkennst du“.', '<b>Due.</b> Counts for your plan; recognition counts toward “you recognize”.');
+  const merke = checked
+    ? '<p class="p2" style="margin:0">' + (v === 'contrast' ? L('<em class="en">delivery</em> ist die Lieferung, <em class="en">lead time</em> die Dauer bis dahin.', '<em>delivery</em> is the delivery, <em>lead time</em> the time until it.') : t.whyl[st]) + '</p>'
+    : '<p class="p2" style="margin:0;color:var(--fg-3)">' + L('Erscheint nach dem Prüfen.', 'Appears after you check.') + '</p>';
+  const mehr = checked
+    ? '<div class="stack s6"><p class="p2" style="margin:0">' + m.meaning + '</p>' + (m.partners ? '<p class="p2 en" style="margin:0">' + m.partners + '</p>' : '') + (m.trap ? '<p class="p2" style="margin:0">' + m.trap + '</p>' : '') + '</div>'
+    : '<p class="p2" style="margin:0;color:var(--fg-3)">' + L('Bedeutung, Wortpartner und typische Falle nach dem Prüfen.', 'Meaning, collocations and common trap after you check.') + '</p>';
+  return ctxBlock(L('Warum', 'Why'), '<p class="p2" style="margin:0">' + t.why + '</p>') +
+    ctxBlock(L('Merke', 'Remember'), merke) +
+    ctxBlock(L('Mehr', 'More'), mehr) +
+    ctxBlock(L('Diese Runde', 'This round'), l12Round(v)) +
+    ctxBlock(L('Lage', 'Status'), '<p class="p2" style="margin:0">' + lage + '</p>');
+}
+reg('l12', {
+  code: 'L12', name: 'Trainer-Aufgabe', kind: 'desk', nav: 'woerter', demo: true,
+  variants: [['task', 'Aufgabe'], ['checked', 'geprüft'], ['checked-early', 'geprüft, nicht fällig'], ['contrast', 'Kontrastkarte']],
+  render(v) { return { stage: l12Stage(v), ctx: l12Ctx(v), over: twDHelp() }; },
+  after(v) {
+    if (v !== 'task' || S.ui.checked) return;
+    wireGap('gap', () => act('check'));
+    if (S.typed == null && !S.ui.help) { const x = TW_T().recognize.you[S.demo]; if (x) autoType('gap', x); }
+  },
+  keys(e) {
+    const v = curVariant();
+    if (S.ui.help && (e.key === 'Escape' || e.key === '?')) { e.preventDefault(); act('khelp'); return; }
+    if (e.key === 'Escape') { if (inField()) document.activeElement.blur(); else go('l14'); return; }
+    if (inField()) return;
+    if (v === 'contrast') {
+      if (!S.ui.pick && (e.key === '1' || e.key === '2')) { S.ui.pick = e.key === '1' ? 'delivery' : 'lead time'; render(); }
+      else if (S.ui.pick && e.key === 'Enter') { e.preventDefault(); go('l14'); }
+      return;
+    }
+    const checked = v !== 'task' || S.ui.checked;
+    if (e.key === 'Enter') { e.preventDefault(); if (checked) { const b = $('#d-next'); if (b) go(b.getAttribute('data-go')); } else act('check'); }
+    else if (!checked && (e.key === 't' || e.key === 'T')) act('tip');
+    else if (!checked && (e.key === 'w' || e.key === 'W')) act('idk');
+    else if (e.key === '?') act('khelp');
+  },
+  acts: {
+    check() { const t = TW_T().recognize; const inp = $('#gap-in'); if (inp && inp.value && inp.value !== t.you[S.demo]) { S.ui.ownInput = true; S.typed = inp.value; } S.ui.checked = true; render(); },
+    idk() { S.ui.ownInput = false; S.demo = 'idk'; S.ui.checked = true; render(); },
+    tip() { const h = $('#d-hint'); const t = TW_T()[curVariant() === 'checked-early' ? 'gap' : 'recognize']; if (h) h.innerHTML = t.tip; },
+    pick(el) { S.ui.pick = el.getAttribute('data-v'); render(); },
+    whysheet() {}
+  }
+});
+
+/* ---------- L13 Anki ---------- */
+function l13Stage(v) {
+  const rec = v === 'recognize';
+  const back = !!S.ui.rev;
+  const undo = S.ui.undo;
+  let s = twDTop(3, 10, { done: back }) + '<div class="dscroll" style="display:flex;flex-direction:column;padding-top:1em">' +
+    '<div style="display:flex;align-items:center;gap:1em;justify-content:space-between"><div>' + blockLine('w', rec ? L('Anki · Erkennen · zählt nur für „Erkennst du“', 'Anki · recognize · counts only toward “you recognize”') : L('Anki · Bilden · plant nichts', 'Anki · produce · schedules nothing')) + '</div>' +
+    '<div class="seg2" role="tablist" style="width:16em;flex:none"><button id="d-seg-rec" data-go="l13-recognize" role="tab" class="' + (rec ? 'on' : '') + '">' + L('Erkennen', 'Recognize') + '</button><button id="d-seg-prod" data-go="l13-produce" role="tab" class="' + (rec ? '' : 'on') + '">' + L('Bilden', 'Produce') + '</button></div></div>' +
+    '<div class="stagec" style="padding:2em 0"><div class="tw-card' + (back ? ' flipped' : '') + '" style="max-width:34em;margin:0 auto;width:100%">';
+  if (rec) {
+    s += '<div style="display:flex;align-items:center;gap:.75em;justify-content:center"><div class="prompt disp en">discount</div><button class="iconbtn" id="d-say" data-act="noop" aria-label="' + esc(L('Anhören', 'Listen')) + '" style="margin:0;background:var(--surface-2)">' + ic('speaker', 'sm') + '</button></div>' +
+      '<p class="tw-cardsent en">A further discount would be difficult for us, but we could offer a two-year contract with fixed prices.</p>' +
+      (back ? '<div class="tw-cardline"></div><div class="tw-back"><div class="disp tw-mean">' + L('der Rabatt', 'der Rabatt') + '</div><div class="p2"><span class="en">' + L('Nomen', 'noun') + '</span> · <span class="en">offer · give · a further discount</span></div></div>' : '');
+  } else {
+    s += '<div class="prompt disp" style="text-align:center">' + L('die Frist', 'die Frist') + '</div><div class="hintline" style="text-align:center">' + L('bis wann etwas fertig sein muss', 'by when something must be done') + '</div>' +
+      (back ? '<div class="tw-cardline"></div><div class="tw-back"><div class="disp tw-mean en">deadline</div><div class="p2 en">meet · miss · extend a deadline</div></div>' : '');
+  }
+  s += '</div></div>';
+  if (undo) s += '<div class="tw-undo tw-undo-d" role="status"><span>' + L('<em class="en">discount</em> · ' + undo + ' · Rückgängig mit Z', '<em>discount</em> · ' + undo + ' · undo with Z') + '</span><button class="link" id="d-undo" data-act="undo">' + L('Rückgängig', 'Undo') + kb('Z') + '</button><i></i></div>';
+  s += '</div>';
+  let keys;
+  if (!back) keys = '<button class="btn pri" id="d-reveal" data-act="reveal">' + L('Aufdecken', 'Reveal') + kb(L('Leer', 'Space')) + '</button>';
+  else if (rec) keys = [['again', L('Nochmal', 'Again'), L('1 T', '1 d')], ['hard', L('Schwer', 'Hard'), L('3 T', '3 d')], ['good', L('Gut', 'Good'), L('9 T', '9 d')], ['easy', L('Leicht', 'Easy'), L('21 T', '21 d')]]
+    .map((x, i) => '<button class="btn sec tw-drb" id="d-r-' + x[0] + '" data-act="rate" data-v="' + i + '"><span>' + x[1] + '</span><span class="tw-iv num">' + x[2] + '</span>' + kb(String(i + 1)) + '</button>').join('');
+  else keys = '<button class="btn sec" id="d-no" data-act="rate" data-v="0">' + L('Wusste ich nicht', 'Didn’t know') + kb('1') + '</button><button class="btn sec" id="d-yes" data-act="rate" data-v="1">' + L('Wusste ich', 'Knew it') + kb('2') + '</button>';
+  return s + dKeys(keys);
+}
+const TW_RATE = () => [L('Nochmal · morgen', 'Again · tomorrow'), L('Schwer · in 3 Tagen', 'Hard · in 3 days'), L('Gut · in 9 Tagen', 'Good · in 9 days'), L('Leicht · in 21 Tagen, Kontrolle beim nächsten Termin', 'Easy · in 21 days, checked at the next due date')];
+reg('l13', {
+  code: 'L13', name: 'Anki', kind: 'desk', nav: 'woerter',
+  variants: [['recognize', 'Erkennen'], ['produce', 'Bilden']],
+  render(v) {
+    const rec = v === 'recognize';
+    return {
+      stage: l13Stage(v),
+      ctx: ctxBlock(L('Was das plant', 'What this schedules'), '<p class="p2" style="margin:0">' + (rec
+        ? L('Erkennen plant nur, wann du das Wort wieder <b>erkennen</b> sollst. Die Abstände stehen an den Knöpfen. Stufen steigen hier nie: dafür braucht es eine Antwort, die die App prüft.', 'Recognize only schedules when you should <b>recognize</b> the word again. Intervals are on the buttons. Stages never go up here; that takes an answer the app checks.')
+        : L('Bilden plant nichts. Zählen tut das freie Tippen. Fällige Wörter übst du im Modus Normal, dort zählen sie.', 'Produce schedules nothing. Free typing is what counts. Practice due words in Normal mode, that is where they count.')) + '</p>') +
+        ctxBlock(L('Ehrlich bleiben', 'Staying honest'), '<p class="p2" style="margin:0">' + (rec
+          ? L('Nach „Leicht“ fragt die App beim nächsten Termin selbst nach, nie vorher.', 'After “easy”, the app checks for itself at the next due date, never earlier.')
+          : L('Aufdecken unter 0,8 Sekunden zählt nicht als Versuch. Erst denken, dann Leertaste.', 'Revealing in under 0.8 seconds doesn’t count as a try. Think first, then Space.')) + '</p>') +
+        ctxBlock(L('Tasten', 'Keys'), '<p class="p2" style="margin:0">' + (rec ? L('Leertaste deckt auf · 1–4 bewertet · Z macht 5 Sekunden lang rückgängig', 'Space reveals · 1–4 rates · Z undoes for 5 seconds') : L('Leertaste deckt auf · 1 Wusste ich nicht · 2 Wusste ich · Z macht rückgängig', 'Space reveals · 1 didn’t know · 2 knew it · Z undoes')) + '</p>'),
+      over: twDHelp()
+    };
+  },
+  keys(e) {
+    const rec = curVariant() === 'recognize';
+    if (S.ui.help && (e.key === 'Escape' || e.key === '?')) { e.preventDefault(); act('khelp'); return; }
+    if (e.key === 'Escape') { go('l14'); return; }
+    if (e.key === ' ' && !S.ui.rev) { e.preventDefault(); act('reveal'); return; }
+    if ((e.key === 'z' || e.key === 'Z') && S.ui.undo) { act('undo'); return; }
+    const n = parseInt(e.key, 10);
+    if (S.ui.rev && n >= 1 && n <= (rec ? 4 : 2)) { const el = document.createElement('i'); el.setAttribute('data-v', String(n - 1)); act('rate', el); }
+    else if (e.key === '?') act('khelp');
+  },
+  acts: {
+    reveal() { S.ui.rev = true; S.ui.undo = null; render(); },
+    rate(el) {
+      const i = +el.getAttribute('data-v');
+      const rec = curVariant() === 'recognize';
+      S.ui.rev = false;
+      S.ui.undo = rec ? TW_RATE()[i] : (i ? L('Wusste ich', 'Knew it') : L('Wusste ich nicht', 'Didn’t know'));
+      render();
+      clearTimeout(window.twUndoT);
+      window.twUndoT = setTimeout(() => { if (S.ui.undo) { S.ui.undo = null; render(); } }, 5000);
+    },
+    undo() { clearTimeout(window.twUndoT); S.ui.undo = null; S.ui.rev = true; render(); }
+  }
+});
+
+/* ---------- L14 Ergebnis ---------- */
+const TW_NEXT = () => [
+  ['budget approval', L('morgen, 30.10.', 'tomorrow, Oct 30'), 'near'], ['discount', L('morgen, 30.10.', 'tomorrow, Oct 30'), 'bad'], ['call back', L('Sa 31.10.', 'Sat Oct 31'), 'ok'],
+  ['follow up', L('So 1.11.', 'Sun Nov 1'), 'ok'], ['revise a quote', L('Mo 2.11.', 'Mon Nov 2'), 'ok'], ['supplier', L('Di 3.11.', 'Tue Nov 3'), 'ok'], ['deliver on time', L('Mi 4.11.', 'Wed Nov 4'), 'ok'],
+  ['reduce', L('Sa 14.11.', 'Sat Nov 14'), 'ok'], ['sign off on', L('Mi 18.11.', 'Wed Nov 18'), 'ok'], ['procurement', L('Sa 21.11.', 'Sat Nov 21'), 'ok']
+];
+reg('l14', {
+  code: 'L14', name: 'Trainer-Ergebnis', kind: 'desk', nav: 'woerter',
+  variants: [['normal', 'normal']],
+  render() {
+    const mk = { ok: ['ok', 'check'], near: ['near', 'near'], bad: ['bad', 'cross'] };
+    return {
+      stage: '<div class="dscroll" style="display:flex;flex-direction:column;justify-content:center;gap:1.6em;max-width:32em;margin:0 auto;width:100%">' +
+        '<div class="tw-resicon"><span>' + ic('check') + '</span></div>' +
+        '<div class="stack s6" style="text-align:center"><div class="disp" style="font-size:2em;line-height:1.2;font-weight:700">' + L('Runde fertig', 'Round done') + '</div><div class="p2"><span class="tw-badge">Extra</span> ' + L('zählt nicht zur Pflicht und nicht zur Serie', 'doesn’t count toward your plan or streak') + '</div></div>' +
+        twResultCard('normal').replace('style="padding:6px 18px"', 'style="padding:.4em 1.2em"').replace(/min-height:56px;gap:14px;font-size:16px;line-height:22px/g, 'min-height:3.4em;gap:.9em;font-size:1em;line-height:1.4') + '</div>' +
+        dKeys('<button class="btn sec" id="d-more4" data-go="l12-task">' + L('Noch 4', '4 more') + '</button><button class="btn pri" id="d-done" data-go="l5">' + L('Fertig', 'Done') + kb('⏎') + '</button>'),
+      ctx: ctxBlock(L('Wann jedes Wort wiederkommt', 'When each word comes back'), '<div class="card" style="padding:.3em 1em">' + TW_NEXT().map(w => '<div class="st done tw-rr" style="min-height:2.4em;font-size:.92em"><span class="mk tw-mk-' + mk[w[2]][0] + '">' + ic(mk[w[2]][1], 'xs') + '</span><span class="nm en">' + w[0] + '</span><span class="sm num">' + w[1] + '</span></div>').join('') + '</div>') +
+        '<p class="p2" style="margin:0;font-size:.85em">' + L('Falsch heißt: morgen wieder. Richtig heißt: Abstand wächst.', 'Wrong means: back tomorrow. Right means: the gap grows.') + '</p>',
+      over: helpOverlay()
+    };
+  },
+  keys(e) { if (e.key === 'Enter') { e.preventDefault(); go('l5'); } else if (e.key === '?') act('khelp'); }
+});
 
 /* Lingo Vorschau · Paket B am Laptop: L15–L17. Nutzt die tm-Bausteine aus screens-mehr.js. */
 

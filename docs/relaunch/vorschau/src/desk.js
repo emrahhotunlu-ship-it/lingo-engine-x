@@ -207,19 +207,43 @@ reg('l4', {
 });
 
 /* ---------- L5 Reiter Wörter ---------- */
+/* Kopf mit „Üben ⏎“ und „Hinzufügen“; Kontextspalte zeigt das Wortfenster (main), das ruhende Wort (resting) oder Verwalten (manage). */
+function l5Stage(v, idp) {
+  const filters = WF_STAND().slice(0, 3).concat([WF_STAND()[4]]);
+  const sel = v === 'resting' ? 'flexibility' : 'lead time';
+  const rows = wordRows(idp + 'd', 'l5-main', 'l5-resting').replace(new RegExp('(<button class="row[^"]*)(" id="[^"]*" data-go="[^"]*" data-w="' + sel + '")'), '$1 tw-selrow$2');
+  return '<div class="dscroll"><div class="tw-dhead"><h1 class="dh1 disp" style="margin:0">' + L('Wörter', 'Words') + '</h1><span class="grow"></span>' +
+    '<button class="btn sec" id="' + idp + 'dw-add" data-go="h21-search-empty">' + ic('plus', 'sm') + L('Hinzufügen', 'Add') + '</button>' +
+    '<button class="btn pri" id="' + idp + 'dw-practice" data-go="l11-default">' + L('Üben', 'Practice') + kb('⏎') + '</button></div>' +
+    '<p class="p2 tw-dsub">' + L('14 fällig · zählt als Extra', '14 due · counts as extra') + '</p><div class="stack s16">' +
+    '<label class="field" style="min-height:2.9em;display:flex;align-items:center;gap:.6em;padding:0 1em;color:var(--fg-3)">' + ic('search', 'sm') + '<input id="' + idp + 'dw-search" placeholder="' + esc(L('Wort suchen', 'Search words')) + '" style="border:0;background:transparent;outline:none;flex:1;min-width:0;font-size:1em;color:var(--fg)" autocomplete="off"></label>' +
+    '<div style="display:flex;gap:.4em;flex-wrap:wrap">' + filters.map((f, i) => '<button class="chip" id="' + idp + 'dwf-' + i + '" style="' + (i === 0 ? 'background:var(--act-soft);color:var(--act-text)' : '') + '">' + f[0] + ' <span class="num" style="opacity:.7">' + f[1] + '</span></button>').join('') +
+    '<button class="chip" id="' + idp + 'dwf-more" data-go="h12-filter">' + ic('list', 'xs') + L('Filter', 'Filter') + '</button></div>' +
+    '<div id="' + idp + 'dw-rows">' + rows + '</div><div id="' + idp + 'dw-found"></div></div></div>';
+}
+function l5Ctx(v, idp) {
+  if (v === 'resting') {
+    return '<div class="stack s16"><div class="stack s6"><div class="prompt disp en" style="font-size:2em">flexibility</div><div class="p2"><span class="tw-lockic">' + ic('lock', 'xs') + '</span> ' + L('ruht bis 12.11.', 'rests until Nov 12') + '</div></div>' +
+      '<div class="card">' + restingSheetBody() + '</div>' +
+      '<div class="stack s8"><button class="btn pri full" id="' + idp + 'dr-back" data-go="l5-main">' + L('Zurück', 'Back') + kb('Esc') + '</button><button class="btn ghost full" id="' + idp + 'dr-open" data-go="l5-main">' + L('Trotzdem öffnen', 'Open anyway') + '</button></div></div>';
+  }
+  if (v === 'manage') {
+    return '<div class="stack s16"><div style="display:flex;align-items:center;justify-content:space-between"><div class="prompt disp en" style="font-size:1.7em">lead time</div><span class="stagepill">S3</span></div>' +
+      twManageRows(idp + 'd', true) + '<button class="btn sec full" id="' + idp + 'dm-back" data-go="l5-main">' + L('Zurück zum Wort', 'Back to the word') + kb('Esc') + '</button></div>';
+  }
+  return wordDetail() + wordActions(idp + 'd').replace('data-go="h18-word"', 'data-go="l12-task"').replace('data-go="h23-actions"', 'data-go="l5-manage"').replace('data-go="h15-claude"', 'data-go="l7"');
+}
 reg('l5', {
   code: 'L5', name: 'Reiter Wörter', kind: 'desk', nav: 'woerter',
-  variants: [['main', 'Liste + Wort']],
-  render() {
-    const filters = [[L('Alle', 'All'), 491], [L('Bildest du selbst', 'You produce'), 38], [L('Auf dem Weg', 'On the way'), 41], [L('Erkennst du', 'You recognize'), 412]];
-    return {
-      stage: '<div class="dscroll"><h1 class="dh1 disp">' + L('Wörter', 'Words') + '</h1><div class="stack s16">' +
-        '<label class="field" style="min-height:2.9em;display:flex;align-items:center;gap:.6em;padding:0 1em;color:var(--fg-3)">' + ic('search', 'sm') + '<input id="dw-search" placeholder="' + esc(L('Wort suchen', 'Search words')) + '" style="border:0;background:transparent;outline:none;flex:1;min-width:0;font-size:1em;color:var(--fg)" autocomplete="off"></label>' +
-        '<div style="display:flex;gap:.4em;flex-wrap:wrap">' + filters.map((f, i) => '<button class="chip" id="dwf-' + i + '" style="' + (i === 0 ? 'background:var(--act-soft);color:var(--act-text)' : '') + '">' + f[0] + ' <span class="num" style="opacity:.7">' + f[1] + '</span></button>').join('') + '</div>' +
-        '<div>' + WORDLIST().map((w, i) => '<button class="row" id="dw-' + i + '" data-act="noop" style="' + (i === 1 ? 'background:var(--surface);margin:0 -1em;padding:.5em 1em;width:calc(100% + 2em);border-radius:var(--r)' : '') + '"><span class="rt"><b class="en">' + w[0] + '</b><span>' + w[1] + ' · ' + w[3] + '</span></span><span class="stagepill' + (w[2] === 'S5' ? ' s5' : '') + '">' + w[2] + '</span></button>').join('') + '</div></div></div>',
-      ctx: wordDetail()
-    };
-  }
+  variants: [['main', 'Liste + Wort'], ['resting', 'ruhendes Wort'], ['manage', 'Wort verwalten']],
+  render(v, o) { return { stage: l5Stage(v, o.idp || ''), ctx: '<div class="stack s24">' + l5Ctx(v, o.idp || '') + '</div>' }; },
+  after() { wireWordSearch('d', 'l12-task', 'h21-search-empty'); },
+  keys(e) {
+    if (inField()) { if (e.key === 'Escape') document.activeElement.blur(); return; }
+    if (e.key === 'Escape' && curVariant() !== 'main') go('l5-main');
+    else if (e.key === 'Enter') { e.preventDefault(); go('l11-default'); }
+  },
+  acts: { wpause() { S.ui.wpause = !S.ui.wpause; render(); } }
 });
 
 /* ---------- L6 Mission ---------- */
