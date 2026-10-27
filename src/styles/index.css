@@ -477,10 +477,10 @@ h3 {
     background: var(--lx-wrong-soft);
     box-shadow: inset 0 -2px 0 0 var(--lx-wrong);
   }
-  /* Auswahl falsch: die Lücke zeigt die Lösung – nie rot (H1). */
+  /* Falsch: die Lücke zeigt die Lösung – nie rot (H1) und nie grün (UX-Audit U1: falsch sieht nie nach Erfolg aus). Neutral. */
   .lx-gap[data-state='reveal'] {
-    background: var(--lx-ok-soft);
-    box-shadow: inset 0 -2px 0 0 var(--lx-ok);
+    background: var(--lx-surface-strong);
+    box-shadow: inset 0 -2px 0 0 var(--lx-fg-muted);
   }
   .lx-gap {
     max-width: 100%;
@@ -759,6 +759,11 @@ h3 {
   }
   .lx-choice[data-state='dim'] {
     opacity: 0.55;
+  }
+  /* Lösung nach falscher Wahl oder „Weiß ich nicht“: neutraler Rahmen, kein Grün, kein Häkchen (UX-Audit U1). */
+  .lx-choice[data-state='answer'] {
+    background: var(--lx-surface-strong);
+    border: 2px solid var(--lx-fg-muted);
   }
   @media (pointer: coarse) {
     .lx-choice-key:not(.lx-choice-letter) {
@@ -1414,7 +1419,7 @@ html[data-actionbar] #main {
 .lx-gap-reveal {
   display: inline-block;
   font-weight: 600;
-  color: var(--lx-ok-text);
+  color: var(--lx-fg);
 }
 .lx-gap-given {
   display: block;

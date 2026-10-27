@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { dayKeyNoon } from '../../domain/date';
+import { dayKeyNoon, weekdayShort } from '../../domain/date';
 import { levelBar, SCALE } from '../../domain/assessment/levelBar';
 import { levelRank, type AssessData, type AssessDim, type Level } from '../../domain/assessment/types';
 import type { WeekDay, WeekDayState } from '../../domain/streak';
@@ -18,9 +18,8 @@ const CONF_KEY = { thin: 'confThin', fair: 'confFair', good: 'confGood' } as con
 export function WeekStrip({ week, summary }: { week: readonly WeekDay[]; summary?: { text: string; testId?: string } }) {
   const { t, tn, lang } = useT();
   const fmt = useMemo(() => {
-    const short = new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { weekday: 'short' });
     const long = new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { weekday: 'long', day: 'numeric', month: 'long' });
-    return { short: (d: string) => short.format(dayKeyNoon(d)).replace(/\.$/, ''), long: (d: string) => long.format(dayKeyNoon(d)) };
+    return { short: (d: string) => weekdayShort(d, lang), long: (d: string) => long.format(dayKeyNoon(d)) };
   }, [lang]);
   const done = week.filter((d) => d.state === 'done').length;
   const rest = week.filter((d) => d.state === 'rest').length;

@@ -30,6 +30,10 @@
   border-color: var(--lx-wrong);
   background: var(--lx-wrong-soft);
 }
+.cx-chip[data-state='answer'] {
+  border-color: var(--lx-fg-muted);
+  background: var(--lx-surface-strong);
+}
 .cx-chip[data-state='dim'] {
   opacity: 0.55;
 }

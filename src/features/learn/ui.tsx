@@ -97,7 +97,7 @@ export function ScreenHeader({
   );
 }
 
-/** Kleines Wort unter dem Balken: „Pflicht · 2 von 3" (M11, Schritt laut `dutyStep`), sonst „Pflicht". */
+/** Kleines Wort unter dem Balken: „Pflicht“. Die Schrittzahl steht nur noch in `data-n` (UX-Audit U1: höchstens ein Zähler je Bildschirm, der Balken zählt schon). */
 export function DutyBar({ ctx, duty = null }: { ctx: Ctx | 'extra'; duty?: DutyId | null }) {
   const { t } = useT();
   const st = useToday();
@@ -106,7 +106,7 @@ export function DutyBar({ ctx, duty = null }: { ctx: Ctx | 'extra'; duty?: DutyI
   const n = dutyStep(st.duties, duty);
   return (
     <span data-testid="duty-bar" data-n={n} data-total={st.duties.total}>
-      {t('nvDutyStep', { n, total: st.duties.total })}
+      {t('nvDuty')}
     </span>
   );
 }

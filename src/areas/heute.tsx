@@ -45,7 +45,7 @@ function useOpenDuties(): number {
 }
 
 /**
- * Zeile unter dem Balken: „Tageseinheit · Block 2 von 5“, solange eine Übung ein Block der Einheit ist.
+ * Zeile unter dem Balken: „Heute · Pflicht“, solange eine Übung ein Block der Einheit ist.
  * Nicht auf der Zwischen-/Bestätigungskarte: Die nennt den Stand selbst (Kap. 2.2, eine Zahl).
  */
 function useUnitNote(route: Route): string | null {
@@ -57,7 +57,8 @@ function useUnitNote(route: Route): string | null {
   const duties = useToday((s) => s.plan?.duty);
   if (route.name === 'unitCard' || runDay !== today || !duty || !duties || (runRoute !== route.name && route.name !== 'unitStep')) return null;
   const n = duties.indexOf(duty as (typeof duties)[number]) + 1;
-  return n > 0 ? t('nbHeuteNote', { n, total: duties.length }) : null;
+  // Ohne Schrittzahl (UX-Audit U1: „3 von 52“ und „Schritt 1 von 4“ standen übereinander; der Balken ist der eine Zähler).
+  return n > 0 ? t('nbHeuteNote') : null;
 }
 
 type UnitSnap = Pick<UnitRun, 'day' | 'block' | 'duty' | 'kind' | 'via' | 'watch' | 'routeName' | 'route' | 'sentences' | 'phrases' | 'task' | 'offline' | 'at' | 'draft'>;

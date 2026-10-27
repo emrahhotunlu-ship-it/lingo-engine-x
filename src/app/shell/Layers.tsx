@@ -1,6 +1,6 @@
 import { Activity, Fragment, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { markNavPainted } from '../perf';
-import { savedScroll, useNav } from '../nav';
+import { savedScroll, takeForward, useNav } from '../nav';
 import { kindOf, screenOf } from '../registry';
 import type { Route, RouteName } from '../router/types';
 import { ScreenBoundary } from './Boundary';
@@ -98,8 +98,11 @@ function useScrollMemo(key: string, name: RouteName): void {
   }, []);
   useLayoutEffect(() => {
     current.current = key;
-    const y = scrollTopNext ? 0 : (scrollMemo.get(key) ?? savedScroll(name));
+    // Ein Schritt tiefer (neue Seite oder Übung) beginnt oben; Zurück und Reiterwechsel stellen den gemerkten Bildlauf her (UX-Audit U1).
+    const forward = takeForward();
+    const y = scrollTopNext || forward ? 0 : (scrollMemo.get(key) ?? savedScroll(name));
     scrollTopNext = false;
+    if (forward) scrollMemo.set(key, 0);
     if (Math.abs(window.scrollY - y) > 1) window.scrollTo({ top: y });
     markNavPainted();
     // Ist die Seite beim ersten Bild noch zu kurz (Inhalt kommt einen Takt später), wird der

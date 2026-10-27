@@ -51,14 +51,14 @@ test('Neustart-Woche, Tag 2: Plan bleibt klein, ein ruhiges Band „Tag 2 von 7�
   expect(errors).toEqual([]);
 });
 
-test('Kein Fehlersatz fällig: der Schritt „Fehler korrigieren“ entfällt, auf Heute steht „keine fällig ✓“, Pflicht bleibt erfüllbar', async ({ page }) => {
+test('Kein Fehlersatz fällig: der Schritt „Fehler korrigieren“ entfällt, auf Heute steht „heute nichts fällig“ (ein Häkchen, nicht zwei), Pflicht bleibt erfüllbar', async ({ page }) => {
   const { errors } = await boot(page, {
     migrated: true,
     now: '2026-10-05T09:00:00+02:00',
     fake: { seed: 'empty', patch: { 'app/profile': { name: 'Test', days: { '2026-10-04': 3 }, pflicht: { '2026-10-04': 1 } } } },
   });
   await screen(page, 'today');
-  await expect(page.getByTestId('fix-none')).toContainText('Fehler korrigieren: keine fällig ✓');
+  await expect(page.getByTestId('fix-none')).toContainText('Fehler korrigieren: heute nichts fällig');
   await expect(page.locator('[data-testid="duty"][data-duty="ch:u-again"]')).toHaveCount(0);
   await expect.poll(async () => ((await dump(page))['app/profile']?.plan as Doc | undefined)?.d).toBe('2026-10-05');
   const plan = (await dump(page))['app/profile']?.plan as { duty: string[]; u: { b: Array<[number, string, number]>; min: number } };
@@ -104,7 +104,7 @@ test('Abschluss: eine Zahl, Wahrheitszeile nur mit belegten Teilen, Meilenstein 
   await screen(page, 'today');
   await expect(page.getByTestId('today-card')).toHaveAttribute('data-done', 'true');
   // §5.10: nie eine Antwortzahl, sondern Gefestigtes bzw. die Schritte.
-  await expect(page.getByTestId('balance')).toHaveText(/^(\+\d+ (Wörter|Muster) sicher|\d+ von \d+ Schritten)$/);
+  await expect(page.getByTestId('balance')).toHaveText(/^(\+\d+ (Wörter|Muster) sicher|\d+ Schritte? geschafft)$/);
   const truth = page.getByTestId('today-truth');
   await expect(truth).toContainText('Fehlersätze erledigt: 1');
   await expect(truth).toContainText('überfällig −');

@@ -6,7 +6,7 @@ import { useLive } from '../../../data/live';
 import { readAssess } from '../../../domain/assessment/envelope';
 import { lastVtest } from '../../../domain/assessment/sources';
 import { checkDoneThisWeek, compareLast, readChecks } from '../../../domain/check/record';
-import { dayKey, dayKeyNoon } from '../../../domain/date';
+import { dayKey, dayKeyNoon, weekdayShort } from '../../../domain/date';
 import { firstSentence, streakView, type DotState } from '../../../domain/progress/weekDots';
 import { useT, type MessageKey } from '../../../i18n';
 import { useCapabilities } from '../../../platform/capabilities';
@@ -74,9 +74,9 @@ export function ProfileHead() {
     return { cefr: a.data.cefr, sentence };
   }, [assessDoc, lang]);
   const fmt = useMemo(() => {
-    const short = new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { weekday: 'narrow' });
+    // Dieselben Kurznamen wie der Wochenstreifen auf Heute (UX-Audit U1).
     const long = new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { weekday: 'long', day: 'numeric', month: 'long' });
-    return { short: (d: string) => short.format(dayKeyNoon(d)), long: (d: string) => long.format(dayKeyNoon(d)) };
+    return { short: (d: string) => weekdayShort(d, lang), long: (d: string) => long.format(dayKeyNoon(d)) };
   }, [lang]);
   const restFree = !view.dots.some((d) => d.dot === 'rest');
   const count = view.streak.count;

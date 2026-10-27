@@ -339,7 +339,7 @@ test('Fortschritt Wörter: Fest-Zahl im Kopf, höchstens drei Karten, Messwerte 
   // In den Seed-Daten erfüllten fünf Karten das (vorher: 12 nach der alten Regel „Stufe ≥ 4 und 21 Tage“).
   // Wort-Lernen 2 (21.10.2026): Fest verlangt zusätzlich einen freien richtigen Abruf nach ≥ 21 Tagen Pause. Keine Seed-Karte hat diese Pause
   // im Verlauf – ehrlich 0, die Erklärzeile unten sagt, warum.
-  await expect(page.getByTestId('stand-fest')).toHaveText('0');
+  await expect(page.getByTestId('stand-fest')).toHaveAttribute('data-fest', '0');
   await expect(page.getByTestId('vocab-total')).toHaveCount(0);
   await tab(page, 'path');
   const seg = page.getByTestId('seg-words');

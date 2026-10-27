@@ -24,6 +24,8 @@ export const rdEn = {
   rdWeekNone: 'Nothing read this week yet',
   rdEarlier: 'Earlier articles',
   rdEmptyTitle: 'Your first article is waiting',
+  rdEmptyTodayTitle: 'No article for today yet',
+  rdEmptyTodayBody: 'Tap the button and Claude writes you one (about a minute). Your earlier articles are further down.',
   rdEmptyBody: 'Every morning Claude puts current news from your topics here: English, with the German translation alongside. If nothing is here yet today, tap the button. Claude then writes you an article (about a minute).',
   rdAiOff: 'Claude isn’t available here right now. You can still read the articles you already have.',
   rdLoadFailed: 'The articles could not be loaded.',

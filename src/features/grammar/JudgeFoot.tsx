@@ -124,20 +124,35 @@ function Sure({ sure, busy, phase, onSkip }: { sure: NonNullable<Props['sure']>;
   );
 }
 
-/** „Schreib es einmal mit …“: ein Feld, ein Knopf; die App bewertet selbst, ein Versuch. */
+/**
+ * „Schreib es einmal mit …“: ein Feld, ein Knopf; die App bewertet selbst, ein Versuch. Das Feld erscheint erst auf Wunsch (UX-Audit U1:
+ * Zusatz-Eingabe nur bei Bedarf) – vorher steht nur ein ruhiger Knopf „Mit dem geübten Muster üben“.
+ */
 function TargetForm({ want, gap, form, target, onTarget }: { want: string | null; gap: boolean; form: string; target: TargetState; onTarget: (given: string) => void }) {
   const { t } = useT();
   const [value, setValue] = useState('');
+  const [open, setOpen] = useState(false);
   const done = target !== null;
+  if (!open && !done)
+    return (
+      <div className="flex w-full flex-col gap-2" data-testid="target-form" data-open="0">
+        <div>
+          <Button variant="secondary" onClick={() => setOpen(true)} data-testid="target-open">
+            {t('ttJgTargetOpen')}
+          </Button>
+        </div>
+      </div>
+    );
   const go = (): void => {
     if (!done && value.trim()) onTarget(value);
   };
   return (
-    <div className="flex w-full flex-col gap-2" data-testid="target-form">
+    <div className="flex w-full flex-col gap-2" data-testid="target-form" data-open="1">
       <label className="flex flex-col gap-1">
         <span className="lx-t-support text-muted">{want ? t('ttJgTargetLabel', { want }) : t(gap ? 'ttJgTargetLabelPat' : 'ttJgTargetLabelPatSentence')}</span>
         <input
           className="lx-field"
+          autoFocus={!done}
           lang="en"
           autoCapitalize="off"
           autoComplete="off"

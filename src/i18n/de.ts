@@ -225,7 +225,7 @@ export const de = {
   measuresMastery: 'Beherrschung (Schätzwert)',
   measuresAnswers_one: '{n} Antwort',
   measuresAnswers_other: '{n} Antworten',
-  migratedOn: 'Umgestellt am {date}',
+  migratedOn: 'Deine Daten aus der alten App sind seit {date} hier.',
 
   settingsLanguage: 'Sprache',
   settingsAppearance: 'Darstellung',

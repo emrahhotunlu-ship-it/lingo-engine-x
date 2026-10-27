@@ -17,6 +17,8 @@ type Probe = {
   spotSelected: { bg: string; shadow: string };
   tileSelected: { border: string; bg: string };
   tileOk: { border: string; bg: string };
+  /** UX-Audit U1 „Falsch ist nie grün“: aufgedeckte Lösung, eigene falsche Antwort, gesuchte Option nach falscher Wahl. */
+  wrongSide: { gapReveal: string[]; revealText: string; given: string; choiceAnswer: string[]; chipAnswer: string[]; tapAnswer: string[] };
 };
 
 async function probe(page: Page, theme: string, palette: string): Promise<Probe> {
@@ -39,7 +41,12 @@ async function probe(page: Page, theme: string, palette: string): Promise<Probe>
         <span id="g-correct" class="lx-gap" data-state="correct"></span>
         <span id="s-sel" class="lx-spot" data-selected></span>
         <span id="t-sel" class="lx-tile" data-selected></span>
-        <span id="t-ok" class="lx-tile" data-state="ok"></span>`;
+        <span id="t-ok" class="lx-tile" data-state="ok"></span>
+        <span id="g-reveal" class="lx-gap" data-state="reveal"><span id="g-reveal-text" class="lx-gap-reveal">answer</span></span>
+        <span id="g-given" class="lx-gap-given">mine</span>
+        <button id="c-answer" class="lx-choice" data-state="answer"></button>
+        <button id="x-answer" class="cx-chip" data-state="answer"></button>
+        <button id="f-answer" class="lx-fm-tap" data-state="answer"></button>`;
       document.body.appendChild(host);
       const q = (id: string) => getComputedStyle(host.querySelector(`#${id}`) as HTMLElement);
       const out: Probe = {
@@ -51,6 +58,14 @@ async function probe(page: Page, theme: string, palette: string): Promise<Probe>
         spotSelected: { bg: q('s-sel').backgroundColor, shadow: q('s-sel').boxShadow },
         tileSelected: { border: q('t-sel').borderTopColor, bg: q('t-sel').backgroundColor },
         tileOk: { border: q('t-ok').borderTopColor, bg: q('t-ok').backgroundColor },
+        wrongSide: {
+          gapReveal: [q('g-reveal').backgroundColor, q('g-reveal').boxShadow],
+          revealText: q('g-reveal-text').color,
+          given: q('g-given').color,
+          choiceAnswer: [q('c-answer').borderTopColor, q('c-answer').backgroundColor],
+          chipAnswer: [q('x-answer').borderTopColor, q('x-answer').backgroundColor],
+          tapAnswer: [q('f-answer').color, q('f-answer').backgroundColor],
+        },
       };
       host.remove();
       return out;
@@ -83,6 +98,12 @@ for (const palette of PALETTES) {
       expect(p.spotSelected.shadow).not.toContain(p.tokens.ok);
       expect(p.tileSelected.border).toBe(p.tokens.fg);
       expect(p.tileSelected.bg).toBe(p.tokens.lineStrong);
+      // Falsch ist nie grün (UX-Audit U1): Lösung neben einer falschen Antwort neutral, eigene Antwort rot.
+      const green = [p.tokens.ok, p.tokens.okSoft, p.tokens.okText];
+      const w = p.wrongSide;
+      for (const c of [...w.gapReveal, w.revealText, ...w.choiceAnswer, ...w.chipAnswer, ...w.tapAnswer]) for (const g of green) expect(c).not.toContain(g);
+      expect(w.given).not.toBe(p.tokens.okText);
+      expect(w.given).not.toBe(p.tokens.ok);
     });
   }
 }

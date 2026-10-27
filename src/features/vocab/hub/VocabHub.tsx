@@ -5,7 +5,7 @@ import { openSheet } from '../../../app/sheets';
 import { useLive } from '../../../data/live';
 import { addDays } from '../../../domain/date';
 import { meaningOf } from '../../../domain/srs/cards';
-import { EXTRA_ROUND_MAX, atlasCounts, newToday, reviewAll, reviewToday } from '../../../domain/metrics';
+import { EXTRA_ROUND_MAX, atlasCounts, dueLineSplit, newToday, reviewAll, reviewFigures } from '../../../domain/metrics';
 import { estimateRoundMinutes } from '../../../domain/srs/cost';
 import { deckCards, deckCounts, prefsOp, visibleDecks, type BuiltinDeck, type DeckCounts } from '../../../domain/srs/decks';
 import { backlogBraked, catchUpOn, overdueCount } from '../../../domain/unit/backlog';
@@ -97,7 +97,8 @@ export function VocabHub() {
   const dutyDone = useToday((s) => s.review.done);
   const plan = useToday((s) => s.plan);
   const dutyRound = dutyOpen && dutyTotal > 0;
-  const rt = reviewToday({ plan, cards: visible, nowMs: now, done: dutyDone, quotaLeft: quota.left });
+  // Eine Quelle (UX-Audit U1): dieselben Zahlen wie Heute-Karte und Wortliste.
+  const rt = reviewFigures({ plan, cards: visible, nowMs: now, done: dutyDone, quotaLeft: quota.left });
   // Der Knopf nennt, was er startet: die offene Pflichtrunde, sonst alle fälligen Karten.
   const startCount = dutyRound ? rt.left : total;
   const minutes = dutyRound ? rt.minutes : extraMinutes;
@@ -176,8 +177,9 @@ export function VocabHub() {
       >
         <span data-testid="ws-counts" data-total={total} data-new={allShown.new} data-learning={allShown.learning} data-due={allShown.due} hidden />
         {behind > 0 && (
-          <p className="m-0 text-sm text-muted" data-testid="ws-behind" data-n={behind}>
-            {tn('nbWsBehind', behind)}
+          <p className="m-0 text-sm text-muted" data-testid="ws-behind" data-n={behind} data-due={rt.due} data-planned={rt.planned}>
+            {/* UX-Audit U1: nicht mehr „46 Karten sind schon länger fällig“ neben „52“ und „62“ – dieselbe Zeile wie in der Wortliste. */}
+            {dueLineSplit(rt) ? t('vcDuePlan', { n: rt.due, plan: rt.planned }) : tn('vocabDue', rt.due)}
             {braked && (
               <span className="block text-muted" data-testid="ws-braked">
                 {t('nbWsBraked')}

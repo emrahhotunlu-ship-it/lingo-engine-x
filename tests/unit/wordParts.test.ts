@@ -22,6 +22,10 @@ describe('splitWhy', () => {
       ],
     });
   });
+  it('UX-Audit U1: Satzpunkt am Ende des Gegenstücks fällt weg („formeller discontinue.“)', () => {
+    const w = splitWhy('Merke: phase out a product · neutral. Phase out = schrittweise abschaffen; formeller: discontinue.', 'phase out');
+    expect(w.rest[1]).toEqual({ label: 'formeller', text: 'discontinue' });
+  });
   it('Merke mit Bedeutung, ohne Rest', () => {
     expect(splitWhy('Merke: avoid = vermeiden', 'avoid')).toEqual({ label: 'Merke', main: 'avoid = vermeiden', rest: [] });
   });

@@ -123,7 +123,7 @@ export function splitHero(text: string): [string, string] | null {
 }
 
 export function DoneCard3({ view, tomorrow, tomorrowTopic = '', today }: { view: TodayView; tomorrow: string; tomorrowTopic?: string; today: string }) {
-  const { t, lang } = useT();
+  const { t, tn, lang } = useT();
   const facts = useDoneFacts(view, true);
   const grammar = useLive((s) => s.collections.grammar);
   const profile = useLive((s) => s.docs['app/profile']);
@@ -157,7 +157,7 @@ export function DoneCard3({ view, tomorrow, tomorrowTopic = '', today }: { view:
     const id = setTimeout(() => offerLevelUp([msId], msN), play ? LEVEL_AFTER_DAY_MS : 0);
     return () => clearTimeout(id);
   }, [msId, msN, play]);
-  const heroText = big ? t(big.kind === 'words' ? 'hxDoneBigWords' : 'hxDoneBigPatterns', { n: big.n }) : t('nbHeuteDoneSteps', { blocks });
+  const heroText = big ? t(big.kind === 'words' ? 'hxDoneBigWords' : 'hxDoneBigPatterns', { n: big.n }) : tn('nbHeuteDoneSteps', blocks);
   const hero = splitHero(heroText);
   return (
     <section className="dz-done-card lx-card flex flex-col gap-3.5 p-[1.125rem] sm:p-6" data-play={play ? '' : undefined} data-testid="today-card" data-done="true" data-back={back ? 'true' : undefined} aria-labelledby="td-done-title">

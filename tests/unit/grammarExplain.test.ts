@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { grammarExplanation } from '../../src/domain/grammar/explain';
+import { fillGap, filledSentence, grammarExplanation } from '../../src/domain/grammar/explain';
 import { grammarRetryHint } from '../../src/domain/grammar/retryHint';
 import { patternOf, patternsOf, whyFor } from '../../src/domain/grammar/patterns';
 import { seedTasks } from '../../src/domain/grammar/tasks';
@@ -148,6 +148,25 @@ describe('Zweitversuch-Hinweis (nudge)', () => {
       if (h.kind !== 'nudge') continue;
       const ans = t.answer.toLowerCase();
       if (ans.split(/\s+/).length >= 2) expect(h.text.toLowerCase(), t.prompt).not.toContain(ans);
+    }
+  });
+});
+
+// UX-Audit U1: Stichwort-Reste. Der Hinweis in Klammern direkt nach der Lücke steht nie im fertigen Satz.
+describe('Stichwort-Reste', () => {
+  it('„___ (have)“ wird zu „have“ ohne Klammer', () => {
+    expect(fillGap('We used to ___ (have) a paper archive.', 'have')).toBe('We used to have a paper archive.');
+    expect(fillGap('She ___ (already / send) it.', 'has already sent')).toBe('She has already sent it.');
+  });
+  it('Klammern an anderer Stelle bleiben stehen', () => {
+    expect(fillGap('Call me (if needed) when you ___ .', 'arrive')).toBe('Call me (if needed) when you arrive .');
+  });
+  it('kein gefüllter Satz aus dem Bestand enthält einen Stichwort-Rest', () => {
+    for (const t of seedTasks()) {
+      if (!/_{3,}\s*\(/.test(t.prompt)) continue;
+      const s = filledSentence(t);
+      expect(s, t.prompt).not.toMatch(/_{3,}/);
+      expect(s.includes(`${t.answer} (`), t.prompt).toBe(false);
     }
   });
 });

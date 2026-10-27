@@ -25,6 +25,8 @@ export const rdDe = {
   rdWeekNone: 'Diese Woche noch nichts gelesen',
   rdEarlier: 'Frühere Artikel',
   rdEmptyTitle: 'Dein erster Artikel wartet',
+  rdEmptyTodayTitle: 'Für heute noch kein Artikel',
+  rdEmptyTodayBody: 'Tippe auf den Knopf, dann schreibt Claude dir einen (etwa eine Minute). Deine früheren Artikel stehen weiter unten.',
   rdEmptyBody: 'Jeden Morgen legt Claude hier aktuelle Meldungen aus deinen Themen bereit: Englisch, mit deutscher Übersetzung daneben. Ist heute noch nichts da, tippe auf den Knopf. Dann schreibt Claude dir einen Artikel (etwa eine Minute).',
   rdAiOff: 'Claude ist hier gerade nicht verfügbar. Schon geholte Artikel kannst du weiter lesen.',
   rdLoadFailed: 'Die Artikel konnten nicht geladen werden.',

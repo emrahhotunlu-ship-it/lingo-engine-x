@@ -4,7 +4,7 @@ import { useNav } from '../../../app/nav';
 import { openSheet } from '../../../app/sheets';
 import { useLive } from '../../../data/live';
 import { meaningOf } from '../../../domain/srs/cards';
-import { reviewToday } from '../../../domain/metrics';
+import { dueLineSplit, reviewFigures } from '../../../domain/metrics';
 import { wordStatus } from '../../../domain/tutor/learnerWords';
 import { addIdsOp, isLeechCard, visibleDecks } from '../../../domain/srs/decks';
 import { filterCards, VOCAB_FILTERS, vocabStats, type VocabFilter, type VocabSort } from '../../../domain/srs/vocabList';
@@ -73,10 +73,10 @@ export function VocabScreen({ filter: initialFilter, q: initialQ }: { filter?: s
   const sortLabel = t(sort === 'stage' ? 'vcSortStage' : 'vcSortAz');
   const newLine = stats.stockEmpty ? t('vcStockEmpty') : t('vcNewToday', { n: Math.min(stats.newToday, stats.quota), total: stats.quota });
   const own = visibleDecks(decks);
-  // „46 fällig, davon 30 heute im Plan“: dieselbe Pflichtzahl wie auf Heute (`reviewToday`), nie zwei Zahlen ohne Verbindung.
+  // „46 fällig, davon 30 heute im Plan“: dieselbe Pflichtzahl wie auf Heute (`reviewFigures`, UX-Audit U1), nie zwei Zahlen ohne Verbindung.
   const plan = useToday((s) => s.plan);
-  const planned = useMemo(() => (plan && plan.duty.includes('review') ? reviewToday({ plan, cards: cards.filter((c) => !c.hidden), nowMs: now }).total : 0), [plan, cards, now]);
-  const dueLine = planned > 0 && planned < stats.due ? t('vcDuePlan', { n: stats.due, plan: planned }) : tn('vocabDue', stats.due);
+  const fig = useMemo(() => reviewFigures({ plan, cards, nowMs: now }), [plan, cards, now]);
+  const dueLine = dueLineSplit(fig) ? t('vcDuePlan', { n: fig.due, plan: fig.planned }) : tn('vocabDue', fig.due);
 
   const toggle = (key: string) =>
     setSelected((s) => {

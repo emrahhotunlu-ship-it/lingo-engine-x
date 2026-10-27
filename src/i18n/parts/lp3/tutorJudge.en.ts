@@ -10,6 +10,7 @@ export const ttJudgeEn = {
   ttJgTargetLabelPat: 'Fill the gap once with the practiced pattern',
   ttJgTargetLabelPatSentence: 'Write the sentence once with the practiced pattern',
   ttJgTargetCheck: 'Check',
+  ttJgTargetOpen: 'Practice with the target pattern',
   ttJgTargetOk: 'Correct. Counts half because it was the second try.',
   ttJgTargetWrong: 'Not the practiced pattern yet. This would be right: {form}.',
   ttJgAiYes: 'Claude: This is also correct.',

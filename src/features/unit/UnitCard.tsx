@@ -53,7 +53,7 @@ function Next() {
     <section className="flex flex-col gap-5" data-testid="unit-between" data-next={nextRow.id}>
       <div className="lx-glass flex flex-col items-center gap-2 rounded-[var(--radius-card)] px-5 py-7 text-center">
         {prev && <p className="lx-eyebrow text-accent-text">✓ {t('nbHeuteBetweenDone', { block: blockName(prev.kind, prev.block, t, prev.fmt) })}</p>}
-        <h2 className="text-xl font-semibold tracking-tight">{t('nbHeuteRing', { done: view.duties.done, total: view.duties.total, min: rows.filter((r) => r.state !== 'done').reduce((s, r) => s + r.min, 0) })}</h2>
+        <h2 className="text-xl font-semibold tracking-tight" data-testid="unit-between-head">{t('nbHeuteBetweenHead', { done: view.duties.done, total: view.duties.total, min: rows.filter((r) => r.state !== 'done').reduce((s, r) => s + r.min, 0) })}</h2>
         <p className="text-sm text-muted">{t('nbHeuteBetweenNext', { block: blockName(nextRow.kind, nextRow.block, t, nextRow.fmt), why: b ? blockWhy(b, t, plan.goal.review, b.kind === 'review' && b.min * 60 > up.reviewSec) : '' })}</p>
       </div>
       <Button variant="primary" size="lg" className="w-full" iconAfter="arrowRight" onClick={() => continueUnit(api)} data-testid="unit-next">
@@ -65,11 +65,10 @@ function Next() {
 
 export function UnitCardScreen({ route }: ScreenProps<'unitCard'>) {
   const { t } = useT();
-  const total = useToday((s) => s.duties.total);
-  const done = useToday((s) => s.duties.done);
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-5 py-4 sm:py-8" data-testid="unit-card" data-step={route.step}>
-      <ExerciseTop onClose={() => leaveToToday(t)} closeLabel={t('nbHeuteClose')} closeTestId="unit-close" progress={total ? { n: Math.min(total, done), total } : null} ctx="duty" />
+      {/* Ohne Balkenzahl: die Karte nennt den Stand selbst (UX-Audit U1, vorher „1 von 4“, „Pflicht · 2 von 4“ und „1 von 4 · …“ auf einem Bildschirm). */}
+      <ExerciseTop onClose={() => leaveToToday(t)} closeLabel={t('nbHeuteClose')} closeTestId="unit-close" progress={null} ctx="duty" />
       <StepBoundary resetKey={route.step} scope="unitCard" onSkip={() => leaveToToday(t)}>
         <Next />
       </StepBoundary>

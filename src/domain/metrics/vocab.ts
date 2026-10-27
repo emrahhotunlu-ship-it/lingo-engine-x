@@ -45,6 +45,13 @@ export function festCount(cards: readonly FestLike[], nowMs?: number): number {
   return n;
 }
 
+/** „Auf dem Weg“ (UX-Audit U1, Urteil statt nackter Null): gelernte, sichtbare Karten, die noch nicht fest sind. Dieselbe Fest-Regel wie `festCount`. */
+export function onTheWay(cards: readonly FestLike[], nowMs?: number): number {
+  let n = 0;
+  for (const c of cards) if (!c.hidden && !c.isNew && !wordFest(c, nowMs)) n++;
+  return n;
+}
+
 /** Erwartet gekonnt: Summe der Abrufwahrscheinlichkeiten aller gelernten Karten, gerundet. Sinkt bei Pausen. */
 export function expectedKnown(cards: readonly Pick<TrainCard, 'hidden' | 'isNew' | 'fsrs'>[], nowMs: number): number {
   let sum = 0;

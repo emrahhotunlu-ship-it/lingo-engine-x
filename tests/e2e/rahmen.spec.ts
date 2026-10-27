@@ -75,6 +75,8 @@ test('Rückweg zur Herkunft: Seite „‹ Wortschatz“, Übung ✕ zurück zur 
   expect(y).toBeGreaterThan(0);
   await page.getByTestId('ws-all').click();
   await screen(page, 'vocabList');
+  // Ein Schritt tiefer beginnt oben (UX-Audit U1: neue Seite öffnete mitten im Inhalt).
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
   await page.getByTestId('back').first().click();
   await screen(page, 'vocab');
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(y);
@@ -84,6 +86,26 @@ test('Rückweg zur Herkunft: Seite „‹ Wortschatz“, Übung ✕ zurück zur 
   await page.getByTestId('tab-vocab').click();
   await screen(page, 'vocab');
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+  expect(errors).toEqual([]);
+});
+
+test('Übungskopf bleibt stehen (UX-Audit U1): beim Bildlauf nach unten bleibt die Übungsleiste oben sichtbar', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true });
+  await screen(page, 'today');
+  await openVtest(page);
+  const bar = page.getByTestId('exercise-bar');
+  await expect(bar).toBeVisible();
+  // Die Übung künstlich verlängern (im selben Behälter wie die Leiste), damit sich die Seite sicher scrollen lässt.
+  await bar.evaluate((el) => {
+    const pad = document.createElement('div');
+    pad.style.height = '3000px';
+    el.parentElement?.appendChild(pad);
+  });
+  await page.evaluate(() => window.scrollTo(0, 2000));
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(500);
+  const box = await bar.boundingBox();
+  expect(box?.y ?? -1).toBeGreaterThanOrEqual(-1);
+  expect(box?.y ?? 99).toBeLessThan(8);
   expect(errors).toEqual([]);
 });
 

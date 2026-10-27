@@ -15,6 +15,7 @@ import { topicById } from '../../domain/content';
 import { isNewTopic, introTopic, stepDownTasks } from '../../domain/grammar/path';
 import { SKIP_TEST_N, SKIP_TEST_PASS, skipTopicsOf } from '../../domain/c1/placement/run';
 import { patternsOf } from '../../domain/grammar/patterns';
+import { fillGap } from '../../domain/grammar/explain';
 import { TT_MIN, TT_N, ttPassed } from '../../domain/grammar/topicTest';
 import { programChapters } from '../../domain/c1/chapters';
 import {
@@ -456,7 +457,7 @@ export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
     pat: a.task.pat ?? null,
     help: a.help.level > 0 || a.firstWrong !== undefined,
     given: a.firstWrong ?? a.given,
-    right: a.task.x?.kind === 'find' && a.task.x.fixed ? a.task.x.fixed : a.task.prompt.includes('___') ? a.task.prompt.replace(/_{3,}/, a.task.answer) : a.task.answer,
+    right: a.task.x?.kind === 'find' && a.task.x.fixed ? a.task.x.fixed : a.task.prompt.includes('___') ? fillGap(a.task.prompt, a.task.answer) : a.task.answer,
     dontKnow: a.dontKnow,
     clean: cleanAnswer(a),
   };

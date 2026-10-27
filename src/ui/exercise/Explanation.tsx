@@ -172,7 +172,7 @@ export function Explanation({ model, depth, learning = true, area = 'trainer', o
           {w.rest.map((r, k) =>
             r.label ? (
               <span key={k} className="lx-t-support flex min-w-0 items-baseline gap-2">
-                <span className="lx-t-meta flex-none font-medium text-subtle">{r.label}</span>
+                <span className="lx-t-meta flex-none font-medium text-subtle">{`${r.label.charAt(0).toUpperCase()}${r.label.slice(1)}:`}</span>
                 <span className="min-w-0 font-semibold text-fg" lang="en">
                   {en(r.text)}
                 </span>

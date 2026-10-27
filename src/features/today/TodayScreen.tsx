@@ -189,7 +189,9 @@ function UnitCard({ view, rows, minLeft, fixNone }: { view: TodayView; rows: Car
       <div className="flex items-center gap-3.5">
         <DayRing fills={dutyFills(view.duties.items)} size={112} stroke={8} label={t('nbHeuteRingLabel', { done, total })}>
           <span className="flex flex-col items-center gap-0.5">
-            <span className="text-2xl leading-none font-semibold tracking-tight">{minLeft}</span>
+            <span className="text-2xl leading-none font-semibold tracking-tight" data-testid="today-min">
+              {minLeft}
+            </span>
             <span className="text-xs font-normal text-subtle">{t('hxTodayRingOpen')}</span>
           </span>
         </DayRing>
@@ -198,7 +200,7 @@ function UnitCard({ view, rows, minLeft, fixNone }: { view: TodayView; rows: Car
             {title}
           </h2>
           <span data-testid="today-status" data-status={view.status} data-done={done} data-total={total} className="lx-tnum text-xs text-muted">
-            {t('nbHeuteRing', { done, total, min: minLeft })}
+            {t('nbHeuteRing', { done, total })}
           </span>
         </div>
       </div>

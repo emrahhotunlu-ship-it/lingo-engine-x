@@ -181,7 +181,20 @@ export function assessExample(v: Pick<AssessVars, 'lang' | 'ids' | 'allowed'>): 
       { title: de ? 'Gemischte Bedingungssätze' : 'Mixed conditionals', why: de ? 'Auf C1 erwartet man, Vergangenheit und Gegenwart sauber zu verknüpfen.' : 'At C1 you are expected to link past and present cleanly.', fix: 'If we had tested earlier, we would not be in this situation now.', action: a0, ev: e },
       { title: de ? 'Verlaufsform im Present Perfect' : 'Present perfect continuous', why: de ? 'Laufende Entwicklungen klingen im Present Simple unnatürlich.' : 'Ongoing developments sound unnatural in the present simple.', fix: 'We have been working on the migration since March.', action: a1, ev: e },
     ],
-    dims: FOCUS_DIMS.map((id) => ({ id, level: 'B2', confidence: 'fair', why: de ? 'Mehrere Belege der letzten Wochen.' : 'Several pieces of evidence from recent weeks.' })),
+    // UX-Audit U1: das Beispiel zeigt eine konkrete Alltagsbegründung je Bereich (nicht „Mehrere Belege …“), das Modell ahmt den Ton nach.
+    dims: FOCUS_DIMS.map((id) => ({
+      id,
+      level: 'B2',
+      confidence: 'fair',
+      why:
+        id === 'grammar'
+          ? de
+            ? 'Zeitformen sitzen meistens, unter Zeitdruck rutschen dir noch Fehler hinein.'
+            : 'Tenses are mostly right; under time pressure a few mistakes still slip in.'
+          : de
+            ? 'Im Berufsalltag findest du fast immer das passende Wort, gehobene Ausdrücke fehlen noch.'
+            : 'At work you almost always find the right word; more advanced expressions are still missing.',
+    })),
     focus: { title: de ? 'Gemischte Bedingungssätze' : 'Mixed conditionals', why: de ? 'Größter Abstand zu C1 bei hoher Bedeutung für Verhandlungen.' : 'Biggest gap to C1 and highly relevant for negotiations.', action: a0, days: 3 },
   };
 }

@@ -99,7 +99,7 @@ export const learnDe = {
   grRewriteLabel: 'Dein umgeformter Satz',
   grJudging: 'Claude prüft deine Antwort …',
   grUnsure: 'Nicht sicher prüfbar – zählt nicht gegen dich',
-  grVerdictDontKnow: 'Kein Problem – so geht es:',
+  grVerdictDontKnow: 'Kein Problem – so\u00a0geht’s:',
   grVerdictContraction: 'Richtig – Kurzform',
   exAlsoRight: 'Auch richtig',
   grAltWanted: 'Geübt wird hier: {want}. {why}.',

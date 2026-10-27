@@ -43,7 +43,8 @@ export function splitWhy(text: string, word: string): WordWhy {
     const item = raw.trim();
     if (!item) continue;
     const m = LABELED.exec(item);
-    if (m && m[1] && m[2]) rest.push({ label: m[1], text: m[2] });
+    // UX-Audit U1 („formeller discontinue.“): ein Satzpunkt am Ende eines einzelnen Ausdrucks fällt weg, er gehört nicht zum Wort.
+    if (m && m[1] && m[2]) rest.push({ label: m[1], text: m[2].replace(/\.$/, '') });
     else rest.push({ label: null, text: item });
   }
   return { label, main, rest };

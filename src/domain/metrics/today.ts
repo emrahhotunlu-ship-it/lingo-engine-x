@@ -3,7 +3,7 @@ import { dayKey } from '../date';
 import { dueFehlersaetze, grammarFehlersaetzeDue } from '../repair/fehlersaetze';
 import { AGAIN_OLD } from '../repair/unit';
 import { entryCardKey } from '../progress/logPatch';
-import { isDue, isOverdue } from './definitions';
+import { dueCount, isDue, isOverdue } from './definitions';
 import { festCount } from './vocab';
 import { backlogBraked, expectedNewPerDay } from '../unit/backlog';
 import { FIX_LIMIT, fixLimitFor } from '../unit/planFor';
@@ -47,6 +47,21 @@ export function reviewToday(i: { plan: StoredPlan | null; cards: readonly TrainC
   const stored = i.plan.u?.b.find(([, kind]) => kind === 'review')?.[2] ?? 0;
   return { total, left, minutes: left === total ? stored : Math.ceil(stored * (left / total)) };
 }
+
+/**
+ * Die Wiederhol-Zahlen für ALLE Stellen (UX-Audit U1: vorher 46 / 52 / 62 an drei Orten): `due` = alle heute fälligen Karten (Wortliste,
+ * Wörter-Reiter), `planned` = davon heute in der Pflicht (Heute-Karte, Zwischenkarte, Wörter-Reiter, Wortliste; 0 ohne Pflichtschritt),
+ * `left`/`minutes` = noch offen (Knopf). Wer eine dieser Zahlen zeigt, nimmt sie von hier.
+ */
+export function reviewFigures(i: { plan: StoredPlan | null; cards: readonly TrainCard[]; nowMs: number; done?: number; quotaLeft?: number }): { due: number; planned: number; left: number; minutes: number } {
+  const visible = i.cards.filter((c) => !c.hidden);
+  const duty = !!i.plan && i.plan.duty.includes('review') && i.plan.goal.review > 0;
+  const rt = reviewToday({ ...i, cards: visible });
+  return { due: dueCount(visible, i.nowMs), planned: duty ? rt.total : 0, left: rt.left, minutes: rt.minutes };
+}
+
+/** Die Zeile „62 fällig, davon 52 heute im Plan“ (bzw. „62 heute fällig“): welche Form gilt? Eine Regel für Wörter-Reiter und Wortliste. */
+export const dueLineSplit = (f: { due: number; planned: number }): boolean => f.planned > 0 && f.planned < f.due;
 
 /** Neue Wörter, die heute wirklich kommen: nach Plan (eingefroren), sonst nach Kontingent und Bremse. `cap` = Kontingent für heute. */
 export function newToday(i: { plan: StoredPlan | null; cards: readonly TrainCard[]; nowMs: number; newPerDay: unknown; lang?: 'de' | 'en' }): { n: number; cap: number; braked: boolean; reason: 'backlog' | 'pack' | null } {

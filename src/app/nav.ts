@@ -132,11 +132,37 @@ export function goBack(c: Core): Core {
 
 const initialCore: Core = { tab: START_TAB, stacks: initialStacks(), overlay: null };
 
+/**
+ * Führt ein Übergang tiefer (neue Seite, neue Übung, ersetzter Eintrag)? Dann beginnt der Bildschirm oben (UX-Audit U1: Sprechen öffnete
+ * mitten in der Liste). Zurück und Reiterwechsel stellen den gemerkten Bildlauf her. Rein.
+ */
+export function isForward(prev: Core, next: Core): boolean {
+  if (next.overlay) return !prev.overlay || prev.overlay.route !== next.overlay.route;
+  if (next.tab !== prev.tab) return false;
+  const a = prev.stacks[next.tab];
+  const b = next.stacks[next.tab];
+  if (b.length > a.length) return true;
+  return b.length === a.length && top(b) !== top(a) && !prev.overlay;
+}
+
+/** Ziel des letzten Schritts tiefer (dasselbe Route-Objekt wie `route`), sonst null. */
+let forwardTo: Route | null = null;
+/**
+ * Einmal abholen (Rahmen, `Layers`, beim Wechsel der sichtbaren Ebene): wurde der sichtbare Bildschirm gerade durch einen Schritt tiefer
+ * erreicht? Ein veralteter Wert schadet nicht – er gilt nur für genau dieses Route-Objekt.
+ */
+export function takeForward(): boolean {
+  const f = forwardTo !== null && forwardTo === useNav.getState().route;
+  forwardTo = null;
+  return f;
+}
+
 export const useNav = create<NavState>((set, get) => {
-  const apply = (next: Core) => {
+  const apply = (next: Core, deeper = false) => {
     const { route: cur, scroll } = get();
     const d = derive(next);
     if (d.route === cur && next.stacks === get().stacks && next.overlay === get().overlay && next.tab === get().tab) return;
+    forwardTo = deeper && isForward(get(), next) ? d.route : null;
     set({ ...next, ...d, scroll: keepScroll(cur, scroll) });
   };
   return {
@@ -144,7 +170,7 @@ export const useNav = create<NavState>((set, get) => {
     ...derive(initialCore),
     scroll: {},
     go(route) {
-      apply(navigate(get(), route));
+      apply(navigate(get(), route), true);
     },
     back() {
       apply(goBack(get()));
@@ -152,11 +178,11 @@ export const useNav = create<NavState>((set, get) => {
     replace(route) {
       const c = get();
       if (c.overlay) {
-        apply({ ...c, overlay: { route, origin: c.overlay.origin } });
+        apply({ ...c, overlay: { route, origin: c.overlay.origin } }, true);
         return;
       }
       const s = c.stacks[c.tab];
-      apply({ ...c, stacks: withStack(c, c.tab, [...s.slice(0, -1), route]) });
+      apply({ ...c, stacks: withStack(c, c.tab, [...s.slice(0, -1), route]) }, true);
     },
     switchTab(tab) {
       const c = get();

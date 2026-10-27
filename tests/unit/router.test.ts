@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { z } from 'zod';
-import { goBack, navigate } from '../../src/app/nav';
+import { goBack, isForward, navigate } from '../../src/app/nav';
 import { installAreas, kindOf, screenOf, type AreaDef } from '../../src/app/registry';
 import { parseRoute, routeFromHash, routeToString } from '../../src/app/router/deeplink';
 import type { Route } from '../../src/app/router/types';
@@ -143,5 +143,20 @@ describe('Deep-Links', () => {
     expect(routeFromHash(`#go=${encodeURIComponent('overview?tab=history')}`, lookup)).toEqual({ name: 'overview', tab: 'history' });
     expect(routeFromHash('#go=trainer?round=extra', lookup)).toEqual({ name: 'trainer', round: 'extra' });
     expect(routeFromHash('#main', lookup)).toBeNull();
+  });
+});
+
+// UX-Audit U1: Ein Schritt tiefer (Seite, Übung) beginnt oben; Zurück und Reiterwechsel stellen den Bildlauf her.
+describe('Bildlauf: Schritt tiefer', () => {
+  it('neue Seite und neue Übung sind „tiefer“, Zurück und Reiterwechsel nicht', () => {
+    const a = start();
+    const page = navigate(a, { name: 'grammar' });
+    expect(isForward(a, page)).toBe(true);
+    const ex = navigate(page, { name: 'grammarSession', mode: 'duty' });
+    expect(isForward(page, ex)).toBe(true);
+    expect(isForward(ex, goBack(ex))).toBe(false);
+    expect(isForward(page, goBack(page))).toBe(false);
+    const tab = navigate(a, { name: 'vocab' });
+    expect(isForward(a, tab)).toBe(false);
   });
 });

@@ -66,19 +66,15 @@ export function Comparison({ given, ops, compact = false, label, correct: soluti
   });
   return (
     <div className="lx-t-support flex flex-col gap-1.5" data-testid="sentence-diff" data-slot-inner="comparison">
-      <p className={compact ? 'sr-only' : undefined}>
-        <span className="text-muted">{label ?? t('exCmpYours')}: </span>
-        {/* Übersprungen (nichts getippt): in Worten statt eines Strichs (Emrahs Meldung 25.10.2026). */}
-        {empty ? (
-          <span className="text-muted" data-testid="diff-given" data-empty="">
-            {t('pxGcNone')}
-          </span>
-        ) : (
+      {/* Übersprungen (nichts getippt, „Weiß ich nicht“): keine Zeile „Deine Antwort: Nicht beantwortet“ – das Urteil sagt es schon (UX-Audit U1). */}
+      {!empty && (
+        <p className={compact ? 'sr-only' : undefined}>
+          <span className="text-muted">{label ?? t('exCmpYours')}: </span>
           <span lang="en" data-testid="diff-given">
             {ops.length ? parts : given}
           </span>
-        )}
-      </p>
+        </p>
+      )}
       {correct && !hideCorrect && (
         <p>
           <span className="text-muted">{t('exCmpExpected')}: </span>

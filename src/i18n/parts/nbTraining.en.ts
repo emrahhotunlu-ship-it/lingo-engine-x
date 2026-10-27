@@ -93,7 +93,7 @@ export const nbTrainingEn: Record<keyof typeof nbTrainingDe, string> = {
   nbTrainingStarters: 'Openers that work',
   nbTrainingResumeHotseat: 'Hot seat · question {n} of {total}',
   nbTrainingResumeBuytime: 'Buying time · question {n} of {total}',
-  nbTrainingLevel: 'Level {n} of 5 · {name}',
+  nbTrainingLevel: 'Level {n} · {name}',
   nbTrainingLevel_1: 'Model',
   nbTrainingLevel_2: 'Guided',
   nbTrainingLevel_3: 'Sentence starters',

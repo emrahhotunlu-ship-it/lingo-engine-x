@@ -20,7 +20,9 @@ export function blockName(kind: UnitBlockKind, block: number, t: T, fmt?: Step3F
 export function blockWhy(b: Pick<UnitBlock, 'block' | 'kind' | 'opts'> & { args?: UnitBlock['args'] }, t: T, reviewTotal = 0, behind = false): string {
   switch (b.kind) {
     case 'review':
-      return reviewTotal > 0 ? t(behind ? 'nbHeuteWhy_reviewBehind' : 'nbHeuteWhy_review', { n: reviewTotal }) : t('nbHeuteWhy_reviewNone');
+      if (reviewTotal <= 0) return t('nbHeuteWhy_reviewNone');
+      if (reviewTotal === 1) return t(behind ? 'nbHeuteWhy_reviewBehindOne' : 'nbHeuteWhy_reviewOne');
+      return t(behind ? 'nbHeuteWhy_reviewBehind' : 'nbHeuteWhy_review', { n: reviewTotal });
     case 'task.check':
       return t('nbHeuteWhy_check');
     case 'focus':
